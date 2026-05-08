@@ -2,6 +2,7 @@ import * as React from 'react';
 import { AppState } from '../../app.reducer';
 import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import areAllFoldersCollapsed from '@joplin/lib/models/utils/areAllFoldersCollapsed';
+import getCanBeCollapsedFolderIds from '@joplin/lib/models/utils/getCanBeCollapsedFolderIds';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -9,7 +10,7 @@ import { useMemo, useRef, useState } from 'react';
 import ItemList from '../ItemList';
 import useElementHeight from '../hooks/useElementHeight';
 import useSidebarListData from './hooks/useSidebarListData';
-import useSelectedSidebarIndex from './hooks/useSelectedSidebarIndex';
+import useSelectedSidebarIndexes from './hooks/useSelectedSidebarIndexes';
 import useOnSidebarKeyDownHandler from './hooks/useOnSidebarKeyDownHandler';
 import useFocusHandler from './hooks/useFocusHandler';
 import useOnRenderItem from './hooks/useOnRenderItem';
@@ -26,7 +27,9 @@ interface Props {
 	tags: TagsWithNoteCountEntity[];
 	folders: FolderEntity[];
 	notesParentType: string;
+	selectedTagIds: string[];
 	selectedTagId: string;
+	selectedFolderIds: string[];
 	selectedFolderId: string;
 	selectedSmartFilterId: string;
 	collapsedFolderIds: string[];
@@ -37,7 +40,7 @@ interface Props {
 
 const FolderAndTagList: React.FC<Props> = props => {
 	const listItems = useSidebarListData(props);
-	const { selectedIndex, updateSelectedIndex } = useSelectedSidebarIndex({
+	const { selectedIndex, selectedIndexes, updateSelectedIndex } = useSelectedSidebarIndexes({
 		...props,
 		listItems: listItems,
 	});
@@ -46,10 +49,16 @@ const FolderAndTagList: React.FC<Props> = props => {
 		return areAllFoldersCollapsed(props.folders, props.collapsedFolderIds);
 	}, [props.collapsedFolderIds, props.folders]);
 
+	const hasSubFolders = useMemo(() => {
+		return getCanBeCollapsedFolderIds(props.folders).length > 0;
+	}, [props.folders]);
+
+
 	const listContainerRef = useRef<HTMLDivElement|null>(null);
 	const onRenderItem = useOnRenderItem({
 		...props,
 		selectedIndex,
+		selectedIndexes,
 		listItems,
 		containerRef: listContainerRef,
 	});
@@ -58,6 +67,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 		dispatch: props.dispatch,
 		listItems: listItems,
 		selectedIndex,
+		selectedIndexes,
 		updateSelectedIndex,
 		collapsedFolderIds: props.collapsedFolderIds,
 	});
@@ -72,7 +82,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 	const listHeight = useElementHeight(itemListContainer);
 	const listStyle = useMemo(() => ({ height: listHeight }), [listHeight]);
 
-	const onRenderContentWrapper = useOnRenderListWrapper({ allFoldersCollapsed, selectedIndex, onKeyDown: onKeyEventHandler });
+	const onRenderContentWrapper = useOnRenderListWrapper({ allFoldersCollapsed, selectedIndex, onKeyDown: onKeyEventHandler, hasSubFolders });
 
 	return (
 		<div
@@ -107,6 +117,8 @@ const mapStateToProps = (state: AppState) => {
 		tags: state.tags,
 		folders: state.folders,
 		notesParentType: mainWindowState.notesParentType,
+		selectedFolderIds: mainWindowState.selectedFolderIds,
+		selectedTagIds: mainWindowState.selectedTagIds,
 		selectedFolderId: mainWindowState.selectedFolderId,
 		selectedTagId: mainWindowState.selectedTagId,
 		collapsedFolderIds: state.collapsedFolderIds,

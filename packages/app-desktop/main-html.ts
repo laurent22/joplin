@@ -9,7 +9,7 @@
 	onCommitFiberRoot: function() {},
 	onCommitFiberUnmount: function() {},
 };
-
+import './utils/initReact';
 import './utils/sourceMapSetup';
 import app from './app';
 import Folder from '@joplin/lib/models/Folder';
@@ -31,12 +31,15 @@ import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
 import * as React from 'react';
 import nodeSqlite = require('sqlite3');
 import initLib from '@joplin/lib/initLib';
+import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 const pdfJs = require('pdfjs-dist');
 const { isAppleSilicon } = require('is-apple-silicon');
 require('@sentry/electron/renderer');
 
 // Allows components to use React as a global
 window.React = React;
+
+const perfLogger = PerformanceLogger.create();
 
 
 const main = async () => {
@@ -106,7 +109,7 @@ const main = async () => {
 	}
 };
 
-main().catch((error) => {
+perfLogger.track('main', main).catch((error) => {
 	const env = bridge().env();
 	console.error(error);
 

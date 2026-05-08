@@ -104,6 +104,7 @@ keycodes
 keymapping
 keymaps
 keytar
+KHTML
 Kibris
 kickass
 Kinyarwanda
@@ -171,6 +172,7 @@ Madagasikara
 Magdy
 Magyarország
 Maininterface
+mailparser
 majax
 Mals
 managebutton
@@ -212,6 +214,7 @@ mkdir
 mkdirp
 mknote
 mktodo
+MLKEM
 MMYY
 mmproj
 mnop

@@ -1,6 +1,8 @@
 import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import BaseItem from './BaseItem';
 import type FolderClass from './Folder';
+import type ResourceClass from './Resource';
+import type RevisionClass from './Revision';
 import ItemChange from './ItemChange';
 import Setting from './Setting';
 import shim from '../shim';
@@ -9,7 +11,6 @@ import markdownUtils from '../markdownUtils';
 import { FolderEntity, NoteEntity } from '../services/database/types';
 import Tag from './Tag';
 const { sprintf } = require('sprintf-js');
-import Resource from './Resource';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import { toFileProtocolPath, toForwardSlashes } from '../path-utils';
 const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
@@ -45,6 +46,7 @@ export interface PreviewsOptions {
 
 export default class Note extends BaseItem {
 
+	public static defaultIntevalBetweenNotes = 60 * 60 * 1000;
 	public static updateGeolocationEnabled_ = true;
 	private static geolocationUpdating_ = false;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -181,7 +183,7 @@ export default class Note extends BaseItem {
 		// this.logger().debug('replaceResourceInternalToExternalLinks', 'options:', options, 'body:', body);
 
 		const resourceIds = await this.linkedResourceIds(body);
-		const Resource = this.getClass('Resource');
+		const Resource = this.getClass<typeof ResourceClass>('Resource');
 
 		for (let i = 0; i < resourceIds.length; i++) {
 			const id = resourceIds[i];
@@ -216,6 +218,7 @@ export default class Note extends BaseItem {
 			pathsToTry.push(`file://${shim.pathRelativeToCwd(resourceDir)}`);
 			pathsToTry.push(`file:///${shim.pathRelativeToCwd(resourceDir)}`);
 		} else {
+			const Resource = this.getClass<typeof ResourceClass>('Resource');
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
 
@@ -242,6 +245,7 @@ export default class Note extends BaseItem {
 		pathsToTry = temp;
 
 		// this.logger().debug('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry);
+		const Resource = this.getClass<typeof ResourceClass>('Resource');
 
 		for (const basePath of pathsToTry) {
 			const reStrings = [
@@ -408,7 +412,7 @@ export default class Note extends BaseItem {
 			}
 		}
 
-		const Folder: typeof FolderClass = BaseItem.getClass('Folder');
+		const Folder = BaseItem.getClass<typeof FolderClass>('Folder');
 
 		const parentFolder: FolderEntity = await Folder.load(parentId, { fields: ['id', 'deleted_time'] });
 		const parentInTrash = parentFolder ? !!parentFolder.deleted_time : false;
@@ -615,7 +619,8 @@ export default class Note extends BaseItem {
 	}
 
 	public static async copyToFolder(noteId: string, folderId: string) {
-		if (folderId === this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
+		const Folder = this.getClass<typeof FolderClass>('Folder');
+		if (folderId === Folder.conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', Folder.conflictFolderTitle()));
 
 		return Note.duplicate(noteId, {
 			changes: {
@@ -627,7 +632,8 @@ export default class Note extends BaseItem {
 	}
 
 	public static async moveToFolder(noteId: string, folderId: string, saveOptions: SaveOptions|null = null) {
-		if (folderId === this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
+		const Folder = this.getClass<typeof FolderClass>('Folder');
+		if (folderId === Folder.conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', Folder.conflictFolderTitle()));
 
 		// When moving a note to a different folder, the user timestamp is not
 		// updated. However updated_time is updated so that the note can be
@@ -702,6 +708,7 @@ export default class Note extends BaseItem {
 	private static async duplicateNoteResources(noteBody: string): Promise<string> {
 		const resourceIds = await this.linkedResourceIds(noteBody);
 		let newBody: string = noteBody;
+		const Resource = this.getClass<typeof ResourceClass>('Resource');
 
 		for (const resourceId of resourceIds) {
 			const newResource = await Resource.duplicateResource(resourceId);
@@ -800,13 +807,28 @@ export default class Note extends BaseItem {
 		// This is necessary for example so that the folder list is not refreshed every time a note is changed.
 		// Now it can look at the properties and refresh only if the "parent_id" property is changed.
 		// Trying to fix: https://github.com/laurent22/joplin/issues/3893
+
+		// 2025-09-22: Because we previously only stored the latest previous note contents, this meant that
+		// the original note contents would be overwritten if save is called multiple times on a note, between
+		// revision collections. In order to retain the original note contents at the point of the last revision
+		// collection (which may not have created a revision due to the intervalBetweenRevisions restriction), we
+		// now cache note ids for notes which were changed since the last collection, in order to determine whether
+		// we should set beforeNoteJson to the current contents in the database, or the last value which was stored
+		// in the item_changes table
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
 
 		syncDebugLog.info('Save Note: P:', oldNote);
 
 		let beforeNoteJson = null;
-		if (oldNote && this.revisionService().isOldNote(o.id)) {
-			beforeNoteJson = JSON.stringify(oldNote);
+		// Only update the beforeNoteJson if encryption is not applied, to avoid creating a faulty revision if an encrypted profile
+		// has just been downloaded from the sync target and save is invoked when the note has not yet been decrypted
+		if (oldNote && !oldNote.encryption_applied) {
+			const changedSinceCollection = this.revisionService().changedSinceCollection(o.id);
+			if (changedSinceCollection) {
+				beforeNoteJson = await ItemChange.oldNoteContent(o.id);
+			} else {
+				beforeNoteJson = JSON.stringify(oldNote);
+			}
 		}
 
 		const changedFields = [];
@@ -917,6 +939,10 @@ export default class Note extends BaseItem {
 				actionLogger.addDescription(`titles: ${JSON.stringify(noteTitles)}`);
 
 				await super.batchDelete(processIds, { ...options, sourceDescription: actionLogger });
+				const Revision = this.getClass<typeof RevisionClass>('Revision');
+				// No need to call additional logic in RevisionService, as new change events are already sent via the code below, and additional clearing
+				// is not relevant for deleted notes
+				await Revision.deleteHistoryForNote(processIds, { ...options, sourceDescription: actionLogger });
 			}
 
 			for (let i = 0; i < processIds.length; i++) {
@@ -1100,19 +1126,18 @@ export default class Note extends BaseItem {
 			// and the increment between the order values of each inserted notes.
 			let newOrder = 0;
 			let intervalBetweenNotes = 0;
-			const defaultIntevalBetweenNotes = 60 * 60 * 1000;
 
 			if (!relevantExistingNoteCount) { // If there's no (relevant) notes in the target notebook
 				newOrder = Date.now();
-				intervalBetweenNotes = defaultIntevalBetweenNotes;
+				intervalBetweenNotes = this.defaultIntevalBetweenNotes;
 			} else if (index > lastRelevantNoteIndex) { // Insert at the end (of relevant group)
 				intervalBetweenNotes = notes[lastRelevantNoteIndex].order / (noteIds.length + 1);
 				newOrder = notes[lastRelevantNoteIndex].order - intervalBetweenNotes;
 			} else if (index <= firstRelevantNoteIndex) { // Insert at the beginning (of relevant group)
 				const firstNoteOrder = notes[firstRelevantNoteIndex].order;
 				if (firstNoteOrder >= Date.now()) {
-					intervalBetweenNotes = defaultIntevalBetweenNotes;
-					newOrder = firstNoteOrder + defaultIntevalBetweenNotes;
+					intervalBetweenNotes = this.defaultIntevalBetweenNotes;
+					newOrder = firstNoteOrder + this.defaultIntevalBetweenNotes;
 				} else {
 					intervalBetweenNotes = (Date.now() - firstNoteOrder) / (noteIds.length + 1);
 					newOrder = firstNoteOrder + intervalBetweenNotes * noteIds.length;
@@ -1126,7 +1151,7 @@ export default class Note extends BaseItem {
 					for (let i = index; i >= 0; i--) {
 						const n = notes[i];
 						if (n.order <= previousOrder) {
-							const o = previousOrder + defaultIntevalBetweenNotes;
+							const o = previousOrder + this.defaultIntevalBetweenNotes;
 							const updatedNote = await this.updateNoteOrder_(n, o);
 							notes[i] = { ...n, ...updatedNote };
 							previousOrder = o;
@@ -1177,5 +1202,16 @@ export default class Note extends BaseItem {
 		conflictNote.is_conflict = 1;
 		conflictNote.conflict_original_id = sourceNote.id;
 		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });
+	}
+
+	public static async getNextOrderValue(folderId: string) {
+		const reverse = Setting.value('notes.sortOrder.reverse');
+		if (reverse) {
+			const folder = await this.modelSelectOne('SELECT MAX(`order`) as `order` FROM notes WHERE parent_id = ?', [folderId]);
+			return Number(folder.order ?? 0) + this.defaultIntevalBetweenNotes;
+		} else {
+			const folder = await this.modelSelectOne('SELECT MIN(`order`) as `order` FROM notes WHERE parent_id = ?', [folderId]);
+			return Number(folder.order ?? 0) - this.defaultIntevalBetweenNotes;
+		}
 	}
 }

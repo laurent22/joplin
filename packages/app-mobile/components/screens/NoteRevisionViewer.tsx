@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { View, StyleSheet, TextInput, ScrollView, Text as TextNative } from 'react-native';
 import { AppState } from '../../utils/types';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import Revision from '@joplin/lib/models/Revision';
@@ -22,6 +22,8 @@ import { themeStyle } from '../global-style';
 import getHelpMessage from '@joplin/lib/components/shared/NoteRevisionViewer/getHelpMessage';
 import { DialogContext } from '../DialogManager';
 import useDeleteHistoryClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick';
+import { OnScrollCallback } from '../NoteBodyViewer/types';
+import TextWrapCalculator from './Notes/TextWrapCalculator';
 
 interface Props {
 	themeId: number;
@@ -102,18 +104,16 @@ const useStyles = (themeId: number) => {
 			root: {
 				...theme.rootStyle,
 			},
-			titleContainer: {
+			titleViewContainer: {
 				paddingLeft: theme.marginLeft,
-				paddingRight: theme.marginRight,
 				borderTopColor: theme.dividerColor,
 				borderTopWidth: 1,
 				borderBottomColor: theme.dividerColor,
 				borderBottomWidth: 1,
-			},
-			titleViewContainer: {
 				flex: 0,
 				flexDirection: 'row',
 				flexBasis: 'auto',
+				maxHeight: '40%',
 			},
 			titleText: {
 				flex: 1,
@@ -139,6 +139,9 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const { note, resources } = useRevisionNote(revisions, currentRevisionId);
 	const [initialScroll, setInitialScroll] = useState(0);
 	const [hasRevisions, setHasRevisions] = useState(false);
+	const [multiline, setMultiline] = useState(false);
+	const [showMultilineToggle, setShowMultilineToggle] = useState<boolean | null>(null);
+	const [titleContainerWidth, setTitleContainerWidth] = useState(0);
 
 	const options = useMemo(() => {
 		const result = [];
@@ -153,6 +156,10 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 		setHasRevisions(result.length > 0);
 		return result;
 	}, [revisions]);
+
+	const onScroll: OnScrollCallback = useCallback((event) => {
+		setInitialScroll(event.fraction);
+	}, []);
 
 	const onOptionSelected = useCallback((value: string) => {
 		setCurrentRevisionId(value);
@@ -201,6 +208,9 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const onHelpPress = useCallback(() => {
 		void dialogs.info(helpMessageText);
 	}, [helpMessageText, dialogs]);
+	const onToggleTitlePress = useCallback(() => {
+		void setMultiline(!multiline);
+	}, [multiline]);
 
 	const styles = useStyles(props.themeId);
 	const dropdownLabelText = _('Revision:');
@@ -212,14 +222,60 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 		>{restoreButtonTitle}</PrimaryButton>
 	);
 
+	const textWrapCalculator_updateState = (showToggle: boolean, enableMultiline: boolean) => {
+		setShowMultilineToggle(showToggle);
+		setMultiline(enableMultiline);
+	};
+
+	const titleToggleButton = !showMultilineToggle ? null :
+		<IconButton
+			icon={(!multiline && 'menu-down') || (multiline && 'menu-up')}
+			accessibilityLabel={(!multiline && _('Expand title')) || (multiline && _('Collapse title'))}
+			onPress={onToggleTitlePress}
+			size={30}
+			style={{ width: 30, height: 30, alignSelf: 'center' }}
+		/>;
+
 	const titleComponent = (
-		<SafeAreaView style={styles.titleContainer}>
-			<ScrollView horizontal showsHorizontalScrollIndicator={false}>
-				<View style={styles.titleViewContainer}>
-					<Text style={styles.titleText}>{note?.title ?? ''}</Text>
-				</View>
-			</ScrollView>
-		</SafeAreaView>
+		<View
+			style={styles.titleViewContainer}
+			onLayout={(e) => {
+				const width = e.nativeEvent.layout.width;
+				if (width !== titleContainerWidth) {
+					setTitleContainerWidth(width);
+				}
+			}}
+		>
+			<TextWrapCalculator
+				textCompStyle={styles.titleText}
+				textCompContainerWidth={titleContainerWidth}
+				showMultilineToggle={showMultilineToggle}
+				multiline={multiline}
+				text={note?.title ?? ''}
+				updateState={textWrapCalculator_updateState}
+				readOnly={true}
+			/>
+			{
+				multiline ?
+					<ScrollView
+						style={{ flex: 1 }}
+						showsVerticalScrollIndicator={false}
+					>
+						<TextNative
+							selectable
+							style={styles.titleText}
+						>
+							{note?.title ?? ''}
+						</TextNative>
+					</ScrollView> :
+					<TextInput
+						style={styles.titleText}
+						value={note?.title ?? ''}
+						editable={false}
+					/>
+			}
+			{ titleToggleButton }
+		</View>
 	);
 
 	return <View style={styles.root}>
@@ -254,8 +310,8 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 			noteResources={resources}
 			highlightedKeywords={emptyStringList}
 			paddingBottom={0}
-			initialScroll={initialScroll}
-			onScroll={setInitialScroll}
+			initialScrollPercent={initialScroll}
+			onScroll={onScroll}
 			noteHash={''}
 		/>
 	</View>;

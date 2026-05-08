@@ -1,4 +1,5 @@
 import { Models } from '../models/factory';
+import { connectDb } from '../db';
 import { TaskId } from '../services/database/types';
 import TaskService, { Task, taskIdToLabel } from '../services/TaskService';
 import { Services } from '../services/types';
@@ -7,7 +8,12 @@ import { Config, Env } from './types';
 import { Day } from './time';
 
 export default async function(env: Env, models: Models, config: Config, services: Services): Promise<TaskService> {
-	const taskService = new TaskService(env, models, config, services);
+	// In production, use a separate DB connection pool for task state
+	// management so that it is not affected by failed transactions in the
+	// main connection pool. In dev/test, we reuse the main connection to
+	// avoid exhausting Postgres connection slots in CI.
+	const taskStateDb = env === Env.Prod ? await connectDb({ ...config.database, maxConnections: 1 }) : null;
+	const taskService = new TaskService(env, models, config, services, taskStateDb);
 
 	let tasks: Task[] = [
 		{
@@ -50,13 +56,6 @@ export default async function(env: Env, models: Models, config: Config, services
 		},
 
 		{
-			id: TaskId.DeleteExpiredSessions,
-			description: taskIdToLabel(TaskId.DeleteExpiredSessions),
-			schedule: '0 */6 * * *',
-			run: (models: Models) => models.session().deleteExpiredSessions(),
-		},
-
-		{
 			id: TaskId.ProcessOrphanedItems,
 			description: taskIdToLabel(TaskId.ProcessOrphanedItems),
 			schedule: '15 * * * *',
@@ -90,7 +89,23 @@ export default async function(env: Env, models: Models, config: Config, services
 			schedule: '*/15 * * * *',
 			run: (models: Models) => models.user().deleteExpiredAuthCodes(),
 		},
+
+		{
+			id: TaskId.DeleteArchivedBackups,
+			description: taskIdToLabel(TaskId.DeleteArchivedBackups),
+			schedule: '0 0 * * *',
+			run: (models: Models) => models.backupItem().deleteOldAccountBackups(),
+		},
 	];
+
+	if (config.DELETE_EXPIRED_SESSIONS_SCHEDULE) {
+		tasks.push({
+			id: TaskId.DeleteExpiredSessions,
+			description: taskIdToLabel(TaskId.DeleteExpiredSessions),
+			schedule: config.DELETE_EXPIRED_SESSIONS_SCHEDULE,
+			run: (models: Models) => models.session().deleteExpiredSessions(),
+		});
+	}
 
 	if (config.USER_DATA_AUTO_DELETE_ENABLED) {
 		tasks.push({

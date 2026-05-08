@@ -146,6 +146,9 @@ async function main() {
 	}
 
 	function acceptOrigin(origin: string): boolean {
+		// Origin can be string "null"
+		if (origin === 'null') return false;
+
 		const hostname = (new URL(origin)).hostname;
 		const userContentDomain = envVariables.USER_CONTENT_BASE_URL ? (new URL(envVariables.USER_CONTENT_BASE_URL)).hostname : '';
 
@@ -243,6 +246,7 @@ async function main() {
 			return `%(date_time)s: ${instancePrefix}[%(level)s] %(prefix)s: %(message)s`;
 		},
 	});
+	globalLogger.setLevel(Logger.levelStringToId(config().LOG_LEVEL));
 	Logger.initializeGlobalLogger(globalLogger);
 	initLib(globalLogger);
 

@@ -1,24 +1,21 @@
 import * as React from 'react';
 
 import useOnMessage, { HandleMessageCallback, OnMarkForDownloadCallback } from './hooks/useOnMessage';
-import { useRef, useCallback, useState, useMemo } from 'react';
+import { useRef, useCallback } from 'react';
 import { View, ViewStyle } from 'react-native';
 import ExtendedWebView from '../ExtendedWebView';
 import { WebViewControl } from '../ExtendedWebView/types';
 import useOnResourceLongPress from './hooks/useOnResourceLongPress';
-import useRenderer from './hooks/useRenderer';
-import { OnWebViewMessageHandler } from './types';
 import useRerenderHandler, { ResourceInfo } from './hooks/useRerenderHandler';
 import useSource from './hooks/useSource';
-import Setting from '@joplin/lib/models/Setting';
-import uuid from '@joplin/lib/uuid';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-import useContentScripts from './hooks/useContentScripts';
 import { MarkupLanguage } from '@joplin/renderer';
 import shim from '@joplin/lib/shim';
 import CommandService from '@joplin/lib/services/CommandService';
 import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
+import useWebViewSetup from '../../contentScripts/rendererBundle/useWebViewSetup';
+import { OnScrollCallback } from '../../contentScripts/rendererBundle/types';
 
 interface Props {
 	themeId: number;
@@ -29,14 +26,15 @@ interface Props {
 	highlightedKeywords: string[];
 	noteResources: Record<string, ResourceInfo>;
 	paddingBottom: number;
-	initialScroll: number|null;
+	initialScrollPercent: number|null;
 	noteHash: string;
 	onCheckboxChange?: HandleMessageCallback;
 	onRequestEditResource?: HandleMessageCallback;
 	onMarkForDownload?: OnMarkForDownloadCallback;
-	onScroll: (scrollTop: number)=> void;
+	onScroll: OnScrollCallback;
 	onLoadEnd?: ()=> void;
 	pluginStates: PluginStates;
+	showNoteLinkIcon: boolean;
 }
 
 const onJoplinLinkClick = async (message: string) => {
@@ -50,9 +48,7 @@ const onJoplinLinkClick = async (message: string) => {
 function NoteBodyViewer(props: Props) {
 	const webviewRef = useRef<WebViewControl>(null);
 
-	const onScroll = useCallback(async (scrollTop: number) => {
-		props.onScroll(scrollTop);
-	}, [props.onScroll]);
+	const onScroll = props.onScroll;
 
 	const onResourceLongPress = useOnResourceLongPress(
 		{
@@ -69,26 +65,13 @@ function NoteBodyViewer(props: Props) {
 		onResourceLongPress,
 	});
 
-	const [webViewLoaded, setWebViewLoaded] = useState(false);
-	const [onWebViewMessage, setOnWebViewMessage] = useState<OnWebViewMessageHandler>(()=>()=>{});
-
-
-	// The renderer can write to whichever temporary directory we choose. As such,
-	// we use a subdirectory of the main temporary directory for security reasons.
-	const tempDir = useMemo(() => {
-		return `${Setting.value('tempDir')}/${uuid.createNano()}`;
-	}, []);
-
-	const renderer = useRenderer({
-		webViewLoaded,
-		onScroll,
+	const { api: renderer, pageSetup, webViewEventHandlers, hasPluginScripts } = useWebViewSetup({
 		webviewRef,
+		onBodyScroll: onScroll,
 		onPostMessage,
-		setOnWebViewMessage,
-		tempDir,
+		pluginStates: props.pluginStates,
+		themeId: props.themeId,
 	});
-
-	const contentScripts = useContentScripts(props.pluginStates);
 
 	useRerenderHandler({
 		renderer,
@@ -99,19 +82,18 @@ function NoteBodyViewer(props: Props) {
 		highlightedKeywords: props.highlightedKeywords,
 		noteResources: props.noteResources,
 		noteHash: props.noteHash,
-		initialScroll: props.initialScroll,
+		initialScrollPercent: props.initialScrollPercent,
 
 		paddingBottom: props.paddingBottom,
-
-		contentScripts,
+		showNoteLinkIcon: props.showNoteLinkIcon,
 	});
 
 	const onLoadEnd = useCallback(() => {
-		setWebViewLoaded(true);
+		webViewEventHandlers.onLoadEnd();
 		if (props.onLoadEnd) props.onLoadEnd();
-	}, [props.onLoadEnd]);
+	}, [props.onLoadEnd, webViewEventHandlers]);
 
-	const { html, injectedJs } = useSource(tempDir, props.themeId);
+	const { html, js } = useSource(pageSetup, props.themeId);
 
 	return (
 		<View style={props.style}>
@@ -121,10 +103,11 @@ function NoteBodyViewer(props: Props) {
 				testID='NoteBodyViewer'
 				html={html}
 				allowFileAccessFromJs={true}
-				injectedJavaScript={injectedJs}
+				injectedJavaScript={js}
 				mixedContentMode="always"
 				onLoadEnd={onLoadEnd}
-				onMessage={onWebViewMessage}
+				onMessage={webViewEventHandlers.onMessage}
+				hasPluginScripts={hasPluginScripts}
 			/>
 		</View>
 	);
@@ -134,4 +117,5 @@ export default connect((state: AppState) => ({
 	themeId: state.settings.theme,
 	fontSize: state.settings['style.viewer.fontSize'],
 	pluginStates: state.pluginService.plugins,
+	showNoteLinkIcon: state.settings['notes.showNoteLinkIcon'],
 }))(NoteBodyViewer);

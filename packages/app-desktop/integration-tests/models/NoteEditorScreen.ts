@@ -2,8 +2,9 @@ import { ElectronApplication, Locator, Page } from '@playwright/test';
 import { expect } from '../util/test';
 import activateMainMenuItem from '../util/activateMainMenuItem';
 import EditorCodeDialog from './EditorCodeDialog';
+import setSettingValue from '../util/setSettingValue';
 
-export default class NoteEditorPage {
+export default class NoteEditorScreen {
 	public readonly codeMirrorEditor: Locator;
 	public readonly noteViewerContainer: Locator;
 	public readonly editorPluginFrame: Locator;
@@ -24,8 +25,9 @@ export default class NoteEditorPage {
 
 	private readonly containerLocator: Locator;
 
-	public constructor(page: Page) {
-		this.containerLocator = page.locator('.rli-editor');
+	public constructor(private page_: Page) {
+		// .rli-editor is used in the main window, .note-editor-wrapper in secondary windows
+		this.containerLocator = page_.locator('.rli-editor, .note-editor-wrapper');
 		this.codeMirrorEditor = this.containerLocator.locator('.cm-editor');
 		this.richTextEditor = this.containerLocator.locator('iframe[title="Rich Text Area"]');
 		this.editorPluginFrame = this.containerLocator.locator('iframe[id^="plugin-view-"]');
@@ -41,7 +43,7 @@ export default class NoteEditorPage {
 		this.disableTabNavigationButton = this.containerLocator.getByRole('button', { name: 'Tab moves focus' });
 		this.toggleEditorPluginButton = this.containerLocator.getByRole('button', { name: 'Toggle editor plugin' });
 
-		this.richTextCodeEditor = new EditorCodeDialog(page);
+		this.richTextCodeEditor = new EditorCodeDialog(page_);
 	}
 
 	public toolbarButtonLocator(title: string) {
@@ -65,12 +67,24 @@ export default class NoteEditorPage {
 		}
 	}
 
-	public async expectToHaveText(content: string) {
+	public async disableInlineRendering(electronApp: ElectronApplication) {
+		await setSettingValue(electronApp, this.page_, 'editor.inlineRendering', false);
+	}
+
+	public async expectToHaveText(expected: string|RegExp) {
 		// expect(...).toHaveText can fail in the Rich Text Editor (perhaps due to frame locators).
 		// Using expect.poll refreshes the locator on each attempt, which seems to prevent flakiness.
-		await expect.poll(
-			async () => (await this.contentLocator()).textContent(),
-		).toBe(content);
+		const expectResult = expect.poll(
+			// Use .innerText: textContent doesn't handle line breaks correctly in the CodeMirror
+			// editor.
+			async () => (await this.contentLocator()).innerText(),
+		);
+		// Allow `expected` to be either an exact match (a string) or a pattern
+		if (typeof expected === 'string') {
+			await expectResult.toBe(expected);
+		} else {
+			await expectResult.toMatch(expected);
+		}
 	}
 
 	public getNoteViewerFrameLocator() {
@@ -116,5 +130,15 @@ export default class NoteEditorPage {
 		const backButton = this.toolbarButtonLocator('Back');
 		await expect(backButton).not.toBeDisabled();
 		await backButton.click();
+	}
+
+	public async toggleEditorLayout() {
+		await this.toggleEditorLayoutButton.click();
+	}
+
+	public async hideViewer() {
+		await expect(this.noteViewerContainer).toBeVisible();
+		await this.toggleEditorLayout();
+		await expect(this.noteViewerContainer).not.toBeVisible();
 	}
 }

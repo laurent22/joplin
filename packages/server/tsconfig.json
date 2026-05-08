@@ -1,9 +1,10 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"outDir": "dist"
+		"outDir": "dist",
+		"rootDir": "./src/",
+		"types": ["node", "jest", "jest-expect-message"]
 	},
-	"rootDir": ".",
 	"include": [
         "**/*.ts",
         "**/*.tsx",

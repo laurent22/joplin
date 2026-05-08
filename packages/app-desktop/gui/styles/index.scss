@@ -1,6 +1,9 @@
 
+@use './base-text.scss';
+@use './base-button.scss';
 @use './dialog-modal-layer.scss';
 @use './user-webview-dialog.scss';
+@use './note-property-box.scss';
 @use './prompt-dialog.scss';
 @use './flat-button.scss';
 @use './link-button.scss';
@@ -18,3 +21,6 @@
 @use './joplin-cloud-sign-up.scss';
 @use './popup-notification-list.scss';
 @use './popup-notification-item.scss';
+@use './multi-note-actions.scss';
+@use './share-note-dialog.scss';
+@use './shared-note-list-item.scss';

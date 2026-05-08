@@ -4,6 +4,9 @@ import OcrDriverBase from '../OcrDriverBase';
 import { Minute } from '@joplin/utils/time';
 import shim from '../../../shim';
 import Logger from '@joplin/utils/Logger';
+import filterOcrText from '../utils/filterOcrText';
+import Resource from '../../../models/Resource';
+import { ResourceOcrDriverId, ResourceOcrStatus } from '../../database/types';
 
 const logger = Logger.create('OcrDriverTesseract');
 
@@ -55,6 +58,10 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 		this.languageDataPath_ = languageDataPath;
 	}
 
+	public get driverId() {
+		return ResourceOcrDriverId.PrintedText;
+	}
+
 	public static async clearLanguageDataCache() {
 		if (typeof indexedDB === 'undefined') {
 			throw new Error('Missing indexedDB access!');
@@ -101,6 +108,12 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 
 		const createWorkerOptions: Partial<WorkerOptions> = {
 			workerBlobURL: false,
+
+			// Sometimes Tesseract stops working (especially in dev mode?) as the worker is stuck
+			// loading the language file. In that case, setting the cacheMode to "none" fixes the
+			// issue.
+
+			// cacheMethod: 'none',
 		};
 
 		if (this.workerPath_) createWorkerOptions.workerPath = this.workerPath_;
@@ -161,12 +174,7 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 			let result: TesseractRecognizeResult = null;
 
 			try {
-				result = await worker.instance.recognize(filePath, {}, {
-					text: false,
-					blocks: true,
-					hocr: false,
-					tsv: false,
-				});
+				result = await worker.instance.recognize(filePath, {}, { text: false, blocks: true });
 			} catch (e) {
 				const error: Error = typeof e === 'string' ? new Error(e) : e;
 				error.message = `Recognition failed on: ${filePath}: ${error.message}`;
@@ -187,45 +195,67 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 			const goodParagraphs: GoodParagraph[] = [];
 			let goodLines: RecognizeResultLine[] = [];
 
-			for (const paragraph of result.data.paragraphs) {
-				const lines: RecognizeResultLine[] = [];
+			for (const block of result.data.blocks) {
 
-				for (const line of paragraph.lines) {
-					// If the line confidence is above the threshold we keep the
-					// whole text. The confidence of individual words will vary and
-					// may be below the treshold, but there's a chance they will
-					// still be correct if the line as a whole is well recognised.
-					if (line.confidence < minConfidence) continue;
+				for (const paragraph of block.paragraphs) {
+					const lines: RecognizeResultLine[] = [];
 
-					const goodWords: RecognizeResultWord[] = line.words.map(w => {
-						const output: RecognizeResultWord = {
-							t: w.text,
-							bb: formatTesseractBoundingBox(w.bbox),
+					for (const line of paragraph.lines) {
+						// If the line confidence is above the threshold we keep the
+						// whole text. The confidence of individual words will vary and
+						// may be below the treshold, but there's a chance they will
+						// still be correct if the line as a whole is well recognised.
+						if (line.confidence < minConfidence) continue;
+
+						const lineBaselineAt = (x: number, top: boolean) => {
+							const dy = line.baseline.y1 - line.baseline.y0;
+							const dx = line.baseline.x1 - line.baseline.x0;
+							// Avoid division by zero
+							if (dx === 0) {
+								return top ? line.baseline.y0 : line.baseline.y1;
+							} else {
+								const slope = dy / dx;
+								return slope * (x - line.baseline.x0) + line.baseline.y0;
+							}
 						};
 
-						if (w.baseline && w.baseline.has_baseline) output.bl = formatTesseractBoundingBox(w.baseline);
+						const goodWords: RecognizeResultWord[] = line.words
+							.map(w => {
+								const baselineX1 = w.bbox.x0;
+								const baselineY1 = lineBaselineAt(baselineX1, true);
+								const baselineX2 = w.bbox.x1;
+								const baselineY2 = lineBaselineAt(baselineX2, false);
 
-						return output;
+								const output: RecognizeResultWord = {
+									t: w.text,
+									bb: formatTesseractBoundingBox(w.bbox),
+									bl: [baselineX1, baselineX2, baselineY1, baselineY2],
+								};
+
+								return output;
+							});
+
+						lines.push({
+							words: goodWords,
+						});
+					}
+
+					goodParagraphs.push({
+						text: lines.map(l => l.words.map(w => w.t).join(' ')).join('\n'),
 					});
 
-					lines.push({
-						words: goodWords,
-					});
+					goodLines = goodLines.concat(lines);
 				}
-
-				goodParagraphs.push({
-					text: lines.map(l => l.words.map(w => w.t).join(' ')).join('\n'),
-				});
-
-				goodLines = goodLines.concat(lines);
 			}
 
 			resolve({
 				// Note that Tesseract provides a `.text` property too, but it's the
 				// concatenation of all lines, even those with a low confidence
 				// score, so we recreate it here based on the good lines.
-				text: goodParagraphs.map(p => p.text).join('\n'),
-				lines: goodLines,
+				ocr_text: filterOcrText(goodParagraphs.map(p => p.text).join('\n')),
+				ocr_details: Resource.serializeOcrDetails(goodLines),
+				ocr_status: ResourceOcrStatus.Done,
+				ocr_error: '',
 			});
 		});
 	}

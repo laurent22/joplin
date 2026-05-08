@@ -1,0 +1,26 @@
+
+.joplin-dialog {
+	display: flex;
+	flex-direction: column;
+	background-color: var(--joplin-background-color);
+	border: none;
+	border-radius: 16px;
+	box-shadow: 0px 0px 3px var(--joplin-color);
+	color: var(--joplin-color);
+
+	width: min(80vw, 600px);
+	padding: 16px;
+}
+
+.joplin-dialog > button.done {
+	color: var(--joplin-color);
+	background-color: var(--joplin-background-color3);
+	border: 1px solid var(--joplin-border-color4);
+
+	border-radius: 8px;
+	min-height: 36px;
+	height: 38px;
+
+	bottom: 0;
+	position: sticky;
+}

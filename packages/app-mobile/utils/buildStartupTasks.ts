@@ -1,6 +1,6 @@
 import PluginAssetsLoader from '../PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
-import Logger, { TargetType } from '@joplin/utils/Logger';
+import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
 import ResourceService from '@joplin/lib/services/ResourceService';
@@ -67,10 +67,10 @@ import MigrationService from '@joplin/lib/services/MigrationService';
 import { clearSharedFilesCache } from '../utils/ShareUtils';
 import setIgnoreTlsErrors from '../utils/TlsUtils';
 import ShareService from '@joplin/lib/services/share/ShareService';
-import { loadMasterKeysFromSettings, migrateMasterPassword } from '@joplin/lib/services/e2ee/utils';
-import { setRSA } from '@joplin/lib/services/e2ee/ppk';
+import { loadMasterKeysFromSettings, migrateMasterPassword, migratePpk } from '@joplin/lib/services/e2ee/utils';
+import { setRSA } from '@joplin/lib/services/e2ee/ppk/ppk';
 import RSA from '../services/e2ee/RSA.react-native';
-import { runIntegrationTests as runRsaIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
+import { runIntegrationTests as runRsaIntegrationTests } from '@joplin/lib/services/e2ee/ppk/ppkTestUtils';
 import { runIntegrationTests as runCryptoIntegrationTests } from '@joplin/lib/services/e2ee/cryptoTestUtils';
 import { getCurrentProfile } from '@joplin/lib/services/profileConfig';
 import { getDatabaseName, getPluginDataDir, getProfilesRootDir, getResourceDir } from '../services/profiles';
@@ -90,6 +90,9 @@ import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import { Profile } from '@joplin/lib/services/profileConfig/types';
 import shim from '@joplin/lib/shim';
 import { Platform } from 'react-native';
+import VoiceTyping from '../services/voiceTyping/VoiceTyping';
+import whisper from '../services/voiceTyping/whisper';
+import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -148,16 +151,16 @@ const buildStartupTasks = (
 	let singleInstanceLock: Promise<void>;
 
 
-	addTask('prepare single instance lock', async () => {
+	addTask('buildStartupTasks/prepare single instance lock', async () => {
 		// The single instance lock involves waiting for messages -- start checking
 		// the lock as early as possible.
 		singleInstanceLock = lockToSingleInstance();
 	});
 
-	addTask('shimInit', async () => {
+	addTask('buildStartupTasks/shimInit', async () => {
 		shimInit();
 	});
-	addTask('initProfile', async () => {
+	addTask('buildStartupTasks/initProfile', async () => {
 		const profile = await initProfile(getProfilesRootDir());
 		isSubProfile = profile.isSubProfile;
 		currentProfile = getCurrentProfile(profile.profileConfig);
@@ -167,7 +170,7 @@ const buildStartupTasks = (
 			value: profile.profileConfig,
 		});
 	});
-	addTask('set constants', async () => {
+	addTask('buildStartupTasks/set constants', async () => {
 		Setting.setConstant('env', __DEV__ ? Env.Dev : Env.Prod);
 		Setting.setConstant('appId', 'net.cozic.joplin-mobile');
 		Setting.setConstant('appType', AppType.Mobile);
@@ -178,16 +181,19 @@ const buildStartupTasks = (
 		Setting.setConstant('pluginAssetDir', `${Setting.value('resourceDir')}/pluginAssets`);
 		Setting.setConstant('pluginDir', `${getProfilesRootDir()}/plugins`);
 		Setting.setConstant('pluginDataDir', getPluginDataDir(currentProfile, isSubProfile));
+		Setting.setConstant('sync.9.apiKey', '');
+		Setting.setConstant('sync.10.apiKey', '');
+		Setting.setConstant('sync.11.apiKey', '');
 	});
-	addTask('make resource directory', async () => {
+	addTask('buildStartupTasks/make resource directory', async () => {
 		await shim.fsDriver().mkdir(Setting.value('resourceDir'));
 	});
-	addTask('singleInstanceLock', async () => {
+	addTask('buildStartupTasks/singleInstanceLock', async () => {
 		// Do as much setup as possible before checking the lock -- the lock intentionally waits for
 		// messages from other clients for several hundred ms.
 		await singleInstanceLock;
 	});
-	addTask('set up logger', async () => {
+	addTask('buildStartupTasks/set up logger', async () => {
 		logDatabase = new Database(new DatabaseDriverReactNative());
 		await logDatabase.open({ name: 'log.sqlite' });
 		await logDatabase.exec(Logger.databaseCreateTableSql());
@@ -195,11 +201,8 @@ const buildStartupTasks = (
 		const mainLogger = new Logger();
 		mainLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
 		mainLogger.setLevel(Logger.LEVEL_INFO);
-
-		if (Setting.value('env') === 'dev') {
-			mainLogger.addTarget(TargetType.Console);
-			mainLogger.setLevel(Logger.LEVEL_DEBUG);
-		}
+		mainLogger.addTarget(TargetType.Console);
+		mainLogger.setLevel(Setting.value('env') === 'dev' ? LogLevel.Debug : LogLevel.Info);
 
 		Logger.initializeGlobalLogger(mainLogger);
 		initLib(mainLogger);
@@ -207,7 +210,7 @@ const buildStartupTasks = (
 		BaseService.logger_ = mainLogger;
 		PerformanceLogger.setLogger(mainLogger);
 	});
-	addTask('set up database', async () => {
+	addTask('buildStartupTasks/set up database', async () => {
 		reg.setShowErrorMessageBoxHandler((message: string) => { alert(message); });
 		reg.setDispatch(dispatch);
 
@@ -229,7 +232,7 @@ const buildStartupTasks = (
 		db.setLogger(dbLogger);
 		reg.setDb(db);
 	});
-	addTask('initialize item classes', async () => {
+	addTask('buildStartupTasks/initialize item classes', async () => {
 		// reg.dispatch = dispatch;
 		BaseModel.dispatch = dispatch;
 		BaseSyncTarget.dispatch = dispatch;
@@ -250,20 +253,15 @@ const buildStartupTasks = (
 		Resource.fsDriver_ = shim.fsDriver();
 		FileApiDriverLocal.fsDriver_ = shim.fsDriver();
 	});
-	addTask('initializeAlarmService', async () => {
+	addTask('buildStartupTasks/initializeAlarmService', async () => {
 		AlarmService.setLogger(reg.logger());
 		AlarmService.setDriver(new AlarmServiceDriver(reg.logger()));
 	});
-	addTask('openDatabase', async () => {
-		if (Setting.value('env') === 'prod') {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
-		} else {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-20240127-1') });
-
-			// await db.clearForTesting();
-		}
+	addTask('buildStartupTasks/openDatabase', async () => {
+		await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
+		// if (Setting.value('env') === 'dev') await db.clearForTesting();
 	});
-	addTask('setUpSettings', async () => {
+	addTask('buildStartupTasks/setUpSettings', async () => {
 		await loadKeychainServiceAndSettings([]);
 		await migrateMasterPassword();
 
@@ -286,10 +284,10 @@ const buildStartupTasks = (
 				logger.info('First start on web: Set resource download mode to auto and disabled location tracking.');
 			}
 
-			Setting.skipDefaultMigrations();
+			Setting.skipMigrations();
 			Setting.setValue('firstStart', false);
 		} else {
-			Setting.applyDefaultMigrations();
+			await Setting.applyMigrations();
 		}
 
 		if (Setting.value('env') === Env.Dev) {
@@ -314,12 +312,6 @@ const buildStartupTasks = (
 			Setting.setValue('welcome.enabled', false);
 		}
 
-		// Note: for now we hard-code the folder sort order as we need to
-		// create a UI to allow customisation (started in branch mobile_add_sidebar_buttons)
-		Setting.setValue('folders.sortOrder.field', 'title');
-		Setting.setValue('folders.sortOrder.reverse', false);
-
-
 		reg.logger().info(`Sync target: ${Setting.value('sync.target')}`);
 
 		setLocale(Setting.value('locale'));
@@ -331,14 +323,14 @@ const buildStartupTasks = (
 			}
 		}
 	});
-	addTask('import plugin assets', async () => {
+	addTask('buildStartupTasks/import plugin assets', async () => {
 		await PluginAssetsLoader.instance().importAssets();
 	});
-	addTask('set up command & keymap services', async () => {
+	addTask('buildStartupTasks/set up command & keymap services', async () => {
 		initializeCommandService(store);
 		KeymapService.instance().initialize();
 	});
-	addTask('set up E2EE', async () => {
+	addTask('buildStartupTasks/set up E2EE', async () => {
 		setRSA(RSA);
 
 		EncryptionService.fsDriver_ = shim.fsDriver();
@@ -353,10 +345,16 @@ const buildStartupTasks = (
 		await loadMasterKeysFromSettings(EncryptionService.instance());
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', decryptionWorker_resourceMetadataButNotBlobDecrypted);
 	});
-	addTask('set up sharing', async () => {
+	addTask('buildStartupTasks/set up sharing', async () => {
 		await ShareService.instance().initialize(store, EncryptionService.instance());
 	});
-	addTask('load folders', async () => {
+	addTask('buildStartupTasks/migrate PPK', async () => {
+		await migratePpk();
+	});
+	addTask('buildStartupTasks/set up voice typing', async () => {
+		VoiceTyping.initialize([whisper]);
+	});
+	addTask('buildStartupTasks/load folders', async () => {
 		await refreshFolders(dispatch, '');
 
 		dispatch({
@@ -364,7 +362,20 @@ const buildStartupTasks = (
 			ids: Setting.value('collapsedFolderIds'),
 		});
 	});
-	addTask('load tags', async () => {
+	addTask('buildStartupTasks/initialize note visible panes', async () => {
+		const panes = Setting.value('noteVisiblePanes') || ['viewer'];
+
+		dispatch({
+			type: 'NOTE_VISIBLE_PANES_SET',
+			panes: panes,
+		});
+
+		dispatch({
+			type: 'NOTE_EDITOR_VISIBLE_CHANGE',
+			visible: panes.includes('editor'),
+		});
+	});
+	addTask('buildStartupTasks/load tags', async () => {
 		const tags = await Tag.allWithNotes();
 
 		dispatch({
@@ -372,8 +383,11 @@ const buildStartupTasks = (
 			items: tags,
 		});
 	});
-	addTask('clear shared files cache', clearSharedFilesCache);
-	addTask('go: initial route', async () => {
+	addTask('buildStartupTasks/clear shared files cache', clearSharedFilesCache);
+	addTask('buildStartupTasks/initialize PerFolderSortOrderService', async () => {
+		PerFolderSortOrderService.initialize();
+	});
+	addTask('buildStartupTasks/go: initial route', async () => {
 		const folder = await getInitialActiveFolder();
 
 		const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
@@ -390,15 +404,15 @@ const buildStartupTasks = (
 			});
 		}
 	});
-	addTask('set up search', async () => {
+	addTask('buildStartupTasks/set up search', async () => {
 		SearchEngine.instance().setDb(reg.db());
 		SearchEngine.instance().setLogger(reg.logger());
 		SearchEngine.instance().scheduleSyncTables();
 	});
-	addTask('run migrations', async () => {
+	addTask('buildStartupTasks/run migrations', async () => {
 		await MigrationService.instance().run();
 	});
-	addTask('set up background tasks', async () => {
+	addTask('buildStartupTasks/set up background tasks', async () => {
 		initializeUserFetcher();
 		PoorManIntervals.setInterval(() => { void userFetcher(); }, 1000 * 60 * 60);
 
@@ -414,29 +428,32 @@ const buildStartupTasks = (
 		ResourceFetcher.instance().on('downloadComplete', resourceFetcher_downloadComplete);
 		void ResourceFetcher.instance().start();
 
-		// Collect revisions more frequently on mobile because it doesn't auto-save
-		// and it cannot collect anything when the app is not active.
-		RevisionService.instance().runInBackground(1000 * 30);
-
 		reg.setupRecurrentSync();
 
 		// When the app starts we want the full sync to
 		// start almost immediately to get the latest data.
 		// doWifiConnectionCheck set to true so initial sync
 		// doesn't happen on mobile data
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-		void reg.scheduleSync(100, null, true).then(() => {
-			// Wait for the first sync before updating the notifications, since synchronisation
-			// might change the notifications.
-			void AlarmService.updateAllNotifications();
+		setTimeout(() => {
+			// Schedule sync with a delay of 0 and wrap with the desired timeout, as shim.setTimeout may not fire on first run or after an upgrade
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+			void reg.scheduleSync(0, null, true).then(() => {
+				// Wait for the first sync before updating the notifications, since synchronisation
+				// might change the notifications.
+				void AlarmService.updateAllNotifications();
 
-			void DecryptionWorker.instance().scheduleStart();
-		});
+				void DecryptionWorker.instance().scheduleStart();
+
+				// Collect revisions more frequently on mobile because it doesn't auto-save
+				// and it cannot collect anything when the app is not active.
+				RevisionService.instance().runInBackground(1000 * 30);
+			});
+		}, 100);
 	});
-	addTask('set up welcome utils', async () => {
+	addTask('buildStartupTasks/set up welcome utils', async () => {
 		await WelcomeUtils.install(Setting.value('locale'), dispatch);
 	});
-	addTask('set up plugin service', async () => {
+	addTask('buildStartupTasks/set up plugin service', async () => {
 		// Even if there are no plugins, we need to initialize the PluginService so that
 		// plugin search can work.
 		const platformImplementation = PlatformImplementation.instance();
@@ -452,7 +469,7 @@ const buildStartupTasks = (
 		const updatedSettings = pluginService.clearUpdateState(pluginSettings);
 		Setting.setValue('plugins.states', updatedSettings);
 	});
-	addTask('run startup tests', async () => {
+	addTask('buildStartupTasks/run startup tests', async () => {
 		// ----------------------------------------------------------------------------
 		// On desktop and CLI we run various tests to check that node-rsa is working
 		// as expected. On mobile however we cannot run test units directly on
@@ -463,11 +480,7 @@ const buildStartupTasks = (
 		// just print some messages in the console.
 		// ----------------------------------------------------------------------------
 		if (Setting.value('env') === 'dev') {
-			if (Platform.OS !== 'web') {
-				await runRsaIntegrationTests();
-			} else {
-				logger.info('Skipping encryption tests -- not supported on web.');
-			}
+			await runRsaIntegrationTests();
 			await runCryptoIntegrationTests();
 			await runOnDeviceFsDriverTests();
 		}
@@ -488,6 +501,14 @@ const buildStartupTasks = (
 		// await checkTestData(testData);
 
 		// await printTestData();
+	});
+	addTask('buildStartupTasks/optionally show sync wizard', async () => {
+		if (Setting.value('sync.wizard.autoShowOnStartup') && Setting.value('sync.target') === 0) {
+			dispatch({
+				type: 'SYNC_WIZARD_VISIBLE_CHANGE',
+				visible: true,
+			});
+		}
 	});
 
 	return startupTasks;

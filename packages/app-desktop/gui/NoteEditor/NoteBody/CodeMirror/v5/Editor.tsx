@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useImperativeHandle, useState, useRef, useCallback, forwardRef } from 'react';
+import { useEffect, useImperativeHandle, useState, useRef, useCallback, forwardRef, RefObject } from 'react';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 
 import CodeMirror from 'codemirror';
@@ -16,7 +16,7 @@ import useListIdent from './utils/useListIdent';
 import useScrollUtils from './utils/useScrollUtils';
 import useCursorUtils from './utils/useCursorUtils';
 import useLineSorting from './utils/useLineSorting';
-import useEditorSearch from '../utils/useEditorSearchExtension';
+import { OnSetMarkers } from '../utils/useEditorSearchExtension';
 import useJoplinMode from './utils/useJoplinMode';
 import useKeymap from './utils/useKeymap';
 import useExternalPlugins from './utils/useExternalPlugins';
@@ -67,11 +67,17 @@ import 'codemirror/mode/diff/diff';
 import 'codemirror/mode/erlang/erlang';
 import 'codemirror/mode/sql/sql';
 
+interface ExtendedWindow {
+	CodeMirror?: unknown;
+}
+declare const window: ExtendedWindow;
+
 
 export interface EditorProps {
 	value: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	searchMarkers: any;
+	onSetMarkersRef: RefObject<OnSetMarkers>;
 	mode: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	style: any;
@@ -100,13 +106,20 @@ function Editor(props: EditorProps, ref: any) {
 	const editorParent = useRef(null);
 	const lastEditTime = useRef(NaN);
 
+	useEffect(() => {
+		window.CodeMirror = CodeMirror;
+
+		return () => {
+			window.CodeMirror = undefined;
+		};
+	}, []);
+
 	// Codemirror plugins add new commands to codemirror (or change it's behavior)
 	// This command adds the smartListIndent function which will be bound to tab
 	useListIdent(CodeMirror);
 	useScrollUtils(CodeMirror);
 	useCursorUtils(CodeMirror);
 	useLineSorting(CodeMirror);
-	useEditorSearch(CodeMirror);
 	useJoplinMode(CodeMirror);
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const pluginOptions: any = useExternalPlugins(CodeMirror, props.plugins);
@@ -215,7 +228,7 @@ function Editor(props: EditorProps, ref: any) {
 		// It's possible for searchMarkers to be available before the editor
 		// In these cases we set the markers asap so the user can see them as
 		// soon as the editor is ready
-		if (props.searchMarkers) { cm.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options); }
+		if (props.searchMarkers) { props.onSetMarkersRef.current(cm, props.searchMarkers.keywords, props.searchMarkers.options); }
 
 		return () => {
 			// Clean up codemirror

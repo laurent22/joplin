@@ -1,12 +1,14 @@
 const stringToStream = require('string-to-stream');
-// const cleanHtml = require('clean-html');
 const resourceUtils = require('./resourceUtils.js');
 const { cssValue } = require('./import-enex-md-gen');
 const htmlUtils = require('./htmlUtils').default;
 const Entities = require('html-entities').AllHtmlEntities;
+const { fixAttributes } = require('@joplin/utils/html');
 const htmlentities = new Entities().encode;
 
 function addResourceTag(lines, resource, attributes) {
+	attributes = fixAttributes(attributes);
+
 	// Note: refactor to use Resource.markdownTag
 	if (!attributes.alt) attributes.alt = resource.title;
 	if (!attributes.alt) attributes.alt = resource.filename;
@@ -137,7 +139,7 @@ function enexXmlToHtml_(stream, resources) {
 
 		saxStream.on('closetag', (node) => {
 			const tagName = node ? node.toLowerCase() : node;
-			if (!htmlUtils.isSelfClosingTag(tagName)) section.lines.push(`</${tagName}>`);
+			if (!htmlUtils.isSelfClosingTag(tagName) && tagName !== 'en-media' && tagName !== 'en-todo') section.lines.push(`</${tagName}>`);
 		});
 
 		saxStream.on('attribute', () => {});

@@ -202,6 +202,18 @@ describe('import-enex-md-gen', () => {
 		expect(Resource.fullPath(resource).endsWith('.mscz')).toBe(true);
 	});
 
+	it('should handle resources without encoding', async () => {
+		// Handle case where the resource has a certain extension, eg. "mscz"
+		// and a mime type that doesn't really match (application/zip). In that
+		// case we want to make sure that the file is not converted to a .zip
+		// file. Fixes https://discourse.joplinapp.org/t/import-issue-evernote-enex-containing-musescore-file-mscz/31394/1
+		await importEnexFile('resource_with_missing_encoding.enex');
+		const resource = (await Resource.all())[0];
+		const resourcePath = Resource.fullPath(resource);
+		const content = await readFile(resourcePath, 'utf-8');
+		expect(content).toBe('{ "test": 123 }');
+	});
+
 	it('should sanitize resource filenames with slashes', async () => {
 		await importEnexFile('resource_filename_with_slashes.enex');
 		const resource: ResourceEntity = (await Resource.all())[0];
@@ -235,4 +247,13 @@ describe('import-enex-md-gen', () => {
 		expect(note4.body).toBe('[Note 5](https://joplinapp.org)');
 	});
 
+	it('should remove empty hidden divs from imported notes', async () => {
+		const empty = await enexXmlToMd('<div style="display:none;--en-chs:&quot;metadata&quot;"> </div><div>Test content</div>', [], []);
+		const withContent = await enexXmlToMd('<div style="display:none;">Important data</div><div>Visible text</div>', [], []);
+
+		expect(empty).not.toContain('<div style="display: none;">');
+		expect(empty).toContain('Test content');
+		expect(withContent).toContain('<div style="display: none;">');
+		expect(withContent).toContain('Important data');
+	});
 });

@@ -1,4 +1,6 @@
 // AUTO-GENERATED using `gulp buildScriptIndexes`
+import * as convertHtmlToMarkdown from './convertHtmlToMarkdown';
+import * as convertNoteToMarkdown from './convertNoteToMarkdown';
 import * as deleteNote from './deleteNote';
 import * as historyBackward from './historyBackward';
 import * as historyForward from './historyForward';
@@ -12,6 +14,8 @@ import * as toggleAllFolders from './toggleAllFolders';
 import * as toggleEditorPlugin from './toggleEditorPlugin';
 
 const index: any[] = [
+	convertHtmlToMarkdown,
+	convertNoteToMarkdown,
 	deleteNote,
 	historyBackward,
 	historyForward,

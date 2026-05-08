@@ -179,8 +179,8 @@ export default class WebviewController extends ViewController {
 	public emitUpdate(event: EditorUpdateEvent) {
 		if (!this.updateListener_) return;
 
-		if (this.containerType_ === ContainerType.Editor && (!this.isActive() || !this.isVisible())) {
-			logger.info('emitMessage: Not emitting update because editor is disabled or hidden:', this.pluginId, this.handle, this.isActive(), this.isVisible());
+		if (this.containerType_ === ContainerType.Editor && (!this.active || !this.visible)) {
+			logger.info('emitMessage: Not emitting update because editor is disabled or hidden:', this.pluginId, this.handle, this.active, this.visible);
 			return;
 		}
 
@@ -196,6 +196,77 @@ export default class WebviewController extends ViewController {
 		this.updateListener_ = callback;
 	}
 
+	public get visible(): boolean {
+		const appState = this.store.getState();
+
+		if (this.containerType_ === ContainerType.Panel) {
+			// Mobile: There is no appState.mainLayout
+			if (!this.showWithAppLayout()) {
+				return this.storeView.opened;
+			}
+
+			const mainLayout = appState.mainLayout;
+			const item = findItemByKey(mainLayout, this.handle);
+			return item ? item.visible : false;
+		} else if (this.containerType_ === ContainerType.Editor) {
+			const state = this.storeView as PluginEditorViewState;
+			return state.active && state.opened;
+		} else if (this.containerType_ === ContainerType.Dialog) {
+			return this.storeView.opened;
+		}
+
+		const exhaustivenessCheck: never = this.containerType_;
+		throw new Error(`Unknown container type: ${exhaustivenessCheck}`);
+	}
+
+	public setOpen(show = true): null|Promise<DialogResult|null> {
+		this.setStoreProp('opened', show);
+
+		if (this.containerType_ === ContainerType.Panel) {
+			if (this.showWithAppLayout()) {
+				this.store.dispatch({
+					type: 'MAIN_LAYOUT_SET_ITEM_PROP',
+					itemKey: this.handle,
+					propName: 'visible',
+					propValue: show,
+				});
+			}
+			return null;
+		} else if (this.containerType_ === ContainerType.Dialog) {
+			if (this.closeResponse_) {
+				this.closeResponse_.resolve(null);
+				this.closeResponse_ = null;
+			}
+
+			if (show) {
+				this.store.dispatch({
+					type: 'VISIBLE_DIALOGS_ADD',
+					name: this.handle,
+				});
+
+				return new Promise<DialogResult>((resolve, reject) => {
+					this.closeResponse_ = { resolve, reject };
+				});
+			} else {
+				this.store.dispatch({
+					type: 'VISIBLE_DIALOGS_REMOVE',
+					name: this.handle,
+				});
+
+				return null;
+			}
+		} else if (this.containerType_ === ContainerType.Editor) {
+			return null;
+		}
+
+		const exhaustivenessCheck: never = this.containerType_;
+		throw new Error(`Unknown container type: ${exhaustivenessCheck}`);
+	}
+
+	public async hide(): Promise<void> {
+		await this.setOpen(false);
+	}
+
 	// ---------------------------------------------
 	// Specific to panels
 	// ---------------------------------------------
@@ -204,72 +275,24 @@ export default class WebviewController extends ViewController {
 		return this.containerType === ContainerType.Panel && !!this.store.getState().mainLayout;
 	}
 
-	public async show(show = true): Promise<void> {
-		if (this.showWithAppLayout()) {
-			this.store.dispatch({
-				type: 'MAIN_LAYOUT_SET_ITEM_PROP',
-				itemKey: this.handle,
-				propName: 'visible',
-				propValue: show,
-			});
-		} else {
-			this.setStoreProp('opened', show);
-		}
-	}
-
-	public async hide(): Promise<void> {
-		return this.show(false);
-	}
-
-	public get visible(): boolean {
-		const appState = this.store.getState();
-
-		// Mobile: There is no appState.mainLayout
-		if (!this.showWithAppLayout()) {
-			return this.storeView.opened;
-		}
-
-		const mainLayout = appState.mainLayout;
-		const item = findItemByKey(mainLayout, this.handle);
-		return item ? item.visible : false;
-	}
 
 	// ---------------------------------------------
 	// Specific to dialogs
 	// ---------------------------------------------
 
-	public async open(): Promise<DialogResult> {
-		if (this.closeResponse_) {
-			this.closeResponse_.resolve(null);
-			this.closeResponse_ = null;
-		}
-
-		this.store.dispatch({
-			type: 'VISIBLE_DIALOGS_ADD',
-			name: this.handle,
-		});
-
-		this.setStoreProp('opened', true);
-
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		return new Promise((resolve: Function, reject: Function) => {
-			this.closeResponse_ = { resolve, reject };
-		});
-	}
-
 	public close() {
-		this.store.dispatch({
-			type: 'VISIBLE_DIALOGS_REMOVE',
-			name: this.handle,
-		});
-
-		this.setStoreProp('opened', false);
+		void this.setOpen(false);
 	}
 
 	public closeWithResponse(result: DialogResult) {
-		this.close();
-		this.closeResponse_.resolve(result);
+		const responseCallback = this.closeResponse_;
+		// Clear the closeResponse_ to prevent the default behavior
+		// (which sends a response of null).
 		this.closeResponse_ = null;
+
+		this.close();
+
+		responseCallback?.resolve(result);
 	}
 
 	public get buttons(): ButtonSpec[] {
@@ -300,18 +323,14 @@ export default class WebviewController extends ViewController {
 		this.setStoreProp('active', active);
 	}
 
-	public isActive(): boolean {
+	public get active(): boolean {
+		// For compatibility with older versions of Joplin
+		if (this.containerType_ !== ContainerType.Editor) {
+			return this.visible;
+		}
+
 		const state = this.storeView as PluginEditorViewState;
 		return state.active;
-	}
-
-	public setOpened(visible: boolean) {
-		this.setStoreProp('opened', visible);
-	}
-
-	public isVisible(): boolean {
-		const state = this.storeView as PluginEditorViewState;
-		return state.active && state.opened;
 	}
 
 	public async requestSaveNote(event: SaveNoteEvent) {

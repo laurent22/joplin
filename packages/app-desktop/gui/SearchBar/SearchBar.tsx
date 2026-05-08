@@ -27,6 +27,7 @@ interface Props {
 	dispatch?: Function;
 	selectedNoteId: string;
 	isFocused?: boolean;
+	globalQuery?: string;
 }
 
 function SearchBar(props: Props) {
@@ -163,6 +164,22 @@ function SearchBar(props: Props) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
+	// if the globalQuery is not undefined and is not equal to the current value of query changes the query to global query. Else the current query remains the same.
+	// used  setQuery((previousQuery)=>{}) to prevent linter error asking to have [query] in the dependency array, since this useEffect would then run every time the query is changed
+	useEffect(() => {
+		if (props.globalQuery !== undefined) {
+			setQuery((previousQuery) => {
+				if (props.globalQuery !== previousQuery) {
+					if (props.globalQuery.length > 0) {
+						setSearchStarted(true);
+					}
+					return props.globalQuery;
+				}
+				return previousQuery;
+			});
+		}
+	}, [props.globalQuery]);
+
 	return (
 		<Root className="search-bar">
 			<SearchInput
@@ -186,10 +203,20 @@ interface OwnProps {
 
 const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
 	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
+
+	let globalQuery = '';
+	if (windowState.notesParentType === 'Search' && windowState.selectedSearchId) {
+		const activeSearch = state.searches.find((s: { id: string; query_pattern: string }) => s.id === windowState.selectedSearchId);
+		if (activeSearch && activeSearch.query_pattern) {
+			globalQuery = activeSearch.query_pattern;
+		}
+	}
+
 	return {
 		notesParentType: windowState.notesParentType,
 		selectedNoteId: stateUtils.selectedNoteId(windowState),
 		isFocused: state.focusedField === 'globalSearch',
+		globalQuery: globalQuery,
 	};
 };
 

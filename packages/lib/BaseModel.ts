@@ -214,7 +214,7 @@ class BaseModel {
 		return fields.indexOf(name) >= 0;
 	}
 
-	public static fieldNames(withPrefix = false) {
+	public static fieldNames(withPrefix: string|boolean = false) {
 		const output = this.db().tableFieldNames(this.tableName());
 		if (!withPrefix) return output;
 

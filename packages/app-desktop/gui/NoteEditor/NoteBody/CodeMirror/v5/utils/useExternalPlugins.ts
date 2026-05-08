@@ -1,11 +1,24 @@
 import { useEffect, useState } from 'react';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import bridge from '../../../../../../services/bridge';
 import { contentScriptsToCodeMirrorPlugin } from '@joplin/lib/services/plugins/utils/loadContentScripts';
 import { extname } from 'path';
 import shim from '@joplin/lib/shim';
 import uuid from '@joplin/lib/uuid';
 
 import { reg } from '@joplin/lib/registry';
+
+const addPluginDependency = (path: string) => {
+	const id = `content-script-${encodeURIComponent(path)}`;
+	if (document.getElementById(id)) {
+		return;
+	}
+
+	const element = document.createElement('script');
+	element.setAttribute('id', id);
+	element.setAttribute('src', path);
+	document.head.appendChild(element);
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export default function useExternalPlugins(CodeMirror: any, plugins: PluginStates) {
@@ -23,7 +36,14 @@ export default function useExternalPlugins(CodeMirror: any, plugins: PluginState
 				if (mod.codeMirrorResources) {
 					for (const asset of mod.codeMirrorResources) {
 						try {
-							require(`codemirror/${asset}`);
+							let assetPath = shim.fsDriver().resolveRelativePathWithinDir(`${bridge().vendorDir()}/lib/codemirror/`, asset);
+
+							// Compatibility with old versions of Joplin, where the file extension was automatically added by require().
+							if (extname(assetPath) === '') {
+								assetPath += '.js';
+							}
+
+							addPluginDependency(assetPath);
 						} catch (error) {
 							error.message = `${asset} is not a valid CodeMirror asset, keymap or mode. You can find a list of valid assets here: https://codemirror.net/doc/manual.html#addons`;
 							throw error;

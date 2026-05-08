@@ -219,10 +219,7 @@
 				$('.feature-description-' + featureId).toggle(200);
 			});
 		});
-	</script>
 
-
-	<script>
 		const setHostingType = (type) => {
 			const other = type === 'managed' ? 'self' : 'managed';
 			$('.toggle-button-' + type).addClass('active');
@@ -244,6 +241,7 @@
 			setHostingType('self');
 		});
 
-		setHostingType('managed');
+		const initialHostingType = urlQuery.get('hosting') ? urlQuery.get('hosting') : 'managed';
+		setHostingType(initialHostingType);
 	</script>
 </div>

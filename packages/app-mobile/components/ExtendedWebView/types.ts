@@ -31,6 +31,7 @@ export interface Props {
 
 	// If HTML is still being loaded, [html] should be an empty string.
 	html: string;
+	css?: string;
 
 	// Initial javascript. Must evaluate to true.
 	injectedJavaScript: string;

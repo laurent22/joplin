@@ -1,6 +1,6 @@
 
-import MarkupToHtml, { MarkupLanguage } from '@joplin/renderer/MarkupToHtml';
-import { RenderResult } from '@joplin/renderer/types';
+import MarkupToHtml from '@joplin/renderer/MarkupToHtml';
+import { RenderResult, MarkupLanguage } from '@joplin/renderer/types';
 
 describe('MarkupToHtml', () => {
 
@@ -52,7 +52,7 @@ describe('MarkupToHtml', () => {
 			pluginAssets: [],
 		};
 
-		expect(await service.render(MarkupLanguage.Html, testString, {}, {})).toMatchObject(expectedOutput);
-		expect(await service.render(MarkupLanguage.Markdown, testString, {}, {})).toMatchObject(expectedOutput);
+		expect(await service.render(MarkupLanguage.Html, testString, {}, { })).toMatchObject(expectedOutput);
+		expect(await service.render(MarkupLanguage.Markdown, testString, {}, { })).toMatchObject(expectedOutput);
 	});
 });

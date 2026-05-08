@@ -8,15 +8,18 @@ export interface ParseOptions {
 	anchorNames?: string[];
 	preserveImageTagsWithSize?: boolean;
 	preserveNestedTables?: boolean;
+	preserveTableStyles?: boolean;
 	preserveColorStyles?: boolean;
 	baseUrl?: string;
 	disableEscapeContent?: boolean;
 	convertEmbeddedPdfsToLinks?: boolean;
+	tightLists?: boolean;
+	collapseMultipleBlankLines?: boolean;
 }
 
 export default class HtmlToMd {
 
-	public parse(html: string, options: ParseOptions = {}) {
+	public parse(html: string|HTMLElement, options: ParseOptions = {}) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const turndownOpts: any = {
 			headingStyle: 'atx',
@@ -24,6 +27,7 @@ export default class HtmlToMd {
 			codeBlockStyle: 'fenced',
 			preserveImageTagsWithSize: !!options.preserveImageTagsWithSize,
 			preserveNestedTables: !!options.preserveNestedTables,
+			preserveTableStyles: !!options.preserveTableStyles,
 			preserveColorStyles: !!options.preserveColorStyles,
 			bulletListMarker: '-',
 			emDelimiter: '*',
@@ -36,6 +40,8 @@ export default class HtmlToMd {
 			br: '  ',
 
 			disableEscapeContent: 'disableEscapeContent' in options ? options.disableEscapeContent : false,
+			tightLists: !!options.tightLists,
+			collapseMultipleBlankLines: !!options.collapseMultipleBlankLines,
 		};
 		if (options.convertEmbeddedPdfsToLinks) {
 			// Turndown ignores empty <object> tags, so we need to handle this case separately

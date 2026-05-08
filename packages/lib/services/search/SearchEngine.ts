@@ -19,7 +19,7 @@ const { sprintf } = require('sprintf-js');
 import { pregQuote, scriptType, removeDiacritics } from '../../string-utils';
 import PerformanceLogger from '../../PerformanceLogger';
 
-const perfLogger = PerformanceLogger.create('SearchEngine');
+const perfLogger = PerformanceLogger.create();
 
 enum SearchType {
 	Auto = 'auto',
@@ -192,7 +192,7 @@ export default class SearchEngine {
 	private async syncTables_() {
 		if (this.isIndexing_) return;
 
-		const syncTask = perfLogger.taskStart('syncTables');
+		const syncTask = perfLogger.taskStart('SearchEngine/syncTables');
 
 		this.isIndexing_ = true;
 
@@ -544,6 +544,10 @@ export default class SearchEngine {
 
 		let allTerms: Term[] = [];
 
+		if (query.length && query[0] === '/') {
+			query = query.substring(1);
+		}
+
 		try {
 			allTerms = filterParser(query);
 		} catch (error) {
@@ -815,7 +819,7 @@ export default class SearchEngine {
 					};
 				});
 
-				if (!queryHasFilters) {
+				if (!queryHasFilters && Setting.value('ocr.searchInExtractedContent')) {
 					const toSearch = parsedQuery.allTerms.map(t => t.value).join(' ');
 
 					let itemRows: ProcessResultsRow[] = [];

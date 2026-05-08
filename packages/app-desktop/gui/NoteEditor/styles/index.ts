@@ -69,6 +69,10 @@ export default function styles(props: NoteEditorProps) {
 				marginTop: 0,
 				marginBottom: 10,
 			},
+			resourceWatchBannerAction: {
+				textDecoration: 'underline',
+				color: theme.colorWarnUrl,
+			},
 		};
 	});
 }

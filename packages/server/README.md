@@ -60,7 +60,8 @@ Ensure that the provided database and user exist as Joplin Server will not creat
 
 1. Using the [sample docker-compose file](https://raw.githubusercontent.com/laurent22/joplin/dev/docker-compose.server.yml), create a docker compose file in the location of your Docker configuration files. Example: /home/[user]/docker/docker-compose.yml
 2. Update the fields in the docker-compose file as seen in the sample file.
-
+3. Note that there is two profiles - one is `full` which runs Joplin Server and the Transcribe server, and other is `server` which is only Joplin Server.
+4. To choose the profile that you want, pass for example `--profile server` when using docker compose.
 
 ## Setup reverse proxy
 

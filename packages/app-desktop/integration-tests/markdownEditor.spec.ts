@@ -6,26 +6,41 @@ import setFilePickerResponse from './util/setFilePickerResponse';
 import activateMainMenuItem from './util/activateMainMenuItem';
 import setSettingValue from './util/setSettingValue';
 import { toForwardSlashes } from '@joplin/utils/path';
+import mockClipboard from './util/mockClipboard';
+import { ElectronApplication, Page } from '@playwright/test';
 
+const importAndOpenHtmlExport = async (mainWindow: Page, electronApp: ElectronApplication, noteTitle: string) => {
+	const mainScreen = await new MainScreen(mainWindow).setup();
+	await mainScreen.waitFor();
+
+	await mainScreen.importHtmlDirectory(electronApp, join(__dirname, 'resources', 'html-import'));
+	const importedFolder = mainScreen.sidebar.container.getByText('html-import');
+	await importedFolder.waitFor();
+
+	// Retry -- focusing the imported-folder may fail in some cases
+	await expect(async () => {
+		await importedFolder.click();
+
+		await mainScreen.noteList.focusContent(electronApp);
+
+		const importedHtmlFileItem = mainScreen.noteList.getNoteItemByTitle(noteTitle);
+		await importedHtmlFileItem.click({ timeout: 300 });
+	}).toPass();
+
+	return { mainScreen };
+};
 
 test.describe('markdownEditor', () => {
+	test('editor should render the full content of HTML notes', async ({ mainWindow, electronApp }) => {
+		const { mainScreen } = await importAndOpenHtmlExport(mainWindow, electronApp, 'test-html-file-with-spans');
+
+		const editor = mainScreen.noteEditor.codeMirrorEditor;
+		// Regression test: The <span> should not be hidden by inline Markdown rendering (since this is an HTML note):
+		await expect(editor).toHaveText('<p><span style="margin-left: 100px;">test</span></p>');
+	});
+
 	test('preview pane should render images in HTML notes', async ({ mainWindow, electronApp }) => {
-		const mainScreen = await new MainScreen(mainWindow).setup();
-		await mainScreen.waitFor();
-
-		await mainScreen.importHtmlDirectory(electronApp, join(__dirname, 'resources', 'html-import'));
-		const importedFolder = mainScreen.sidebar.container.getByText('html-import');
-		await importedFolder.waitFor();
-
-		// Retry -- focusing the imported-folder may fail in some cases
-		await expect(async () => {
-			await importedFolder.click();
-
-			await mainScreen.noteList.focusContent(electronApp);
-
-			const importedHtmlFileItem = mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
-			await importedHtmlFileItem.click({ timeout: 300 });
-		}).toPass();
+		const { mainScreen } = await importAndOpenHtmlExport(mainWindow, electronApp, 'test-html-file-with-image');
 
 		const viewerFrame = mainScreen.noteEditor.getNoteViewerFrameLocator();
 		// Should render headers
@@ -160,7 +175,7 @@ test.describe('markdownEditor', () => {
 		const viewer = noteEditor.getNoteViewerFrameLocator();
 		await expect(viewer.locator('h1')).toHaveText('Testing');
 
-		const matches = viewer.locator('mark');
+		const matches = viewer.locator('mark-ghost');
 		await expect(matches).toHaveCount(0);
 
 		await mainWindow.keyboard.press(process.platform === 'darwin' ? 'Meta+f' : 'Control+f');
@@ -180,8 +195,8 @@ test.describe('markdownEditor', () => {
 		await expect(matches).toHaveCount(1);
 
 		// Should continue searching after switching to view-only mode
-		await noteEditor.toggleEditorLayoutButton.click();
-		await noteEditor.toggleEditorLayoutButton.click();
+		await noteEditor.toggleEditorLayout();
+		await noteEditor.toggleEditorLayout();
 		await expect(noteEditor.codeMirrorEditor).not.toBeVisible();
 		await expect(noteEditor.editorSearchInput).not.toBeVisible();
 		await expect(noteEditor.viewerSearchInput).toBeVisible();
@@ -194,7 +209,7 @@ test.describe('markdownEditor', () => {
 		await expect(matches).toHaveCount(0);
 
 		// After showing the viewer again, search should still be hidden
-		await noteEditor.toggleEditorLayoutButton.click();
+		await noteEditor.toggleEditorLayout();
 		await expect(noteEditor.codeMirrorEditor).toBeVisible();
 		await expect(noteEditor.editorSearchInput).not.toBeVisible();
 	});
@@ -274,5 +289,166 @@ test.describe('markdownEditor', () => {
 		expect(imageSize[0]).toBeGreaterThan(0);
 		expect(imageSize[1]).toBeGreaterThan(0);
 	});
-});
 
+	test('ctrl-clicking on note links should open the linked note (when the viewer is hidden)', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow);
+		// Workaround: Required for extracting content accurately from the Markdown editor
+		await mainScreen.noteEditor.disableInlineRendering(electronApp);
+
+		await mainScreen.setup();
+		await mainScreen.createNewNote('Original');
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.hideViewer();
+
+		await noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('# Test');
+		await mainWindow.keyboard.press('Enter');
+		await mainWindow.keyboard.type('## Test 2');
+		await mainWindow.keyboard.press('Enter');
+		await mainWindow.keyboard.type('### Test 3');
+
+		const editorContent = await noteEditor.contentLocator();
+
+		// Extract the note ID
+		const note1Locator = mainScreen.noteList.getNoteItemByTitle('Original');
+		await note1Locator.dragTo(editorContent);
+		const linkExpression = /\[[^\]]*\]\(:\/([a-z0-9]{32})\)/;
+		await noteEditor.expectToHaveText(linkExpression);
+		const targetNoteId = (await editorContent.textContent()).match(linkExpression)[1];
+
+		await mainScreen.createNewNote('Test note links');
+
+		// Create a new link to a header
+		await noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.press('Enter');
+		await mainWindow.keyboard.press('Enter');
+		await mainWindow.keyboard.type('[link](:/');
+		await mainWindow.keyboard.type(targetNoteId);
+		await mainWindow.keyboard.type('#test-2');
+		await mainWindow.keyboard.type(')');
+		await mainWindow.keyboard.press('Enter');
+
+		// Clicking the link should navigate to note1
+		const link = editorContent.getByText(/\[?link\]?/);
+		await link.click({ modifiers: ['ControlOrMeta'] });
+		await expect(noteEditor.noteTitleInput).toHaveValue('Original');
+		await noteEditor.expectToHaveText(/^# Test/);
+		await expect.poll(() => editorContent.evaluate(async editor => {
+			const selection = getSelection();
+			return editor.contains(selection.anchorNode);
+		})).toBe(true);
+
+		// The cursor should be positioned on the linked-to header
+		await expect.poll(async () => {
+			await mainWindow.keyboard.type('[[cursor]]');
+			await noteEditor.expectToHaveText(/## Test 2\[\[cursor\]\]/);
+			return true;
+		}).toBe(true);
+	});
+
+	test('should still support the legacy Markdown editor', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await setSettingValue(electronApp, mainWindow, 'editor.legacyMarkdown', true);
+		await mainScreen.createNewNote('Test');
+
+		// Should show the legacy editor
+		await expect(mainWindow.locator('.rli-editor .CodeMirror5')).toBeVisible();
+	});
+
+	test('should support the textCopy command', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.createNewNote('Test copy');
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('Test content.');
+
+		const { expectClipboardToMatch } = await mockClipboard(electronApp, 'original');
+
+		await mainScreen.goToAnything.runCommand(electronApp, 'textCopy');
+		await expectClipboardToMatch('Test content.\n');
+	});
+
+	test('should support the textCut and textPaste commands', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.createNewNote('Test paste');
+		const { expectClipboardToMatch } = await mockClipboard(electronApp, 'test!');
+		await expectClipboardToMatch('test!');
+
+		// Should paste text using the textPaste command
+		const goToAnything = mainScreen.goToAnything;
+		await goToAnything.runCommand(electronApp, 'textPaste');
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.expectToHaveText('test!');
+
+		// Should cut text using the textCut command
+		await mainScreen.createNewNote('Test cut');
+		await noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('Test (new content!)');
+
+		await goToAnything.runCommand(electronApp, 'textCut');
+		await noteEditor.expectToHaveText('\n');
+		await expectClipboardToMatch('Test (new content!)\n');
+
+		// Should paste the content again with textPaste
+		await goToAnything.runCommand(electronApp, 'textPaste');
+		await noteEditor.expectToHaveText(/^Test \(new content!\)[\n]+/);
+	});
+
+	test('the undo and redo menu items should work', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.createNewNote('Test undo/redo');
+
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.focusCodeMirrorEditor();
+
+		await mainWindow.keyboard.type('A');
+		await noteEditor.expectToHaveText('A');
+
+		await activateMainMenuItem(electronApp, 'Undo');
+		await noteEditor.expectToHaveText('\n');
+
+		await activateMainMenuItem(electronApp, 'Redo');
+		await noteEditor.expectToHaveText('A');
+	});
+
+	test('copying from the preview pane should not include theme background color and should preserve bold formatting', async ({ mainWindow, electronApp }) => {
+		// Set dark theme so background-color would be present in clipboard without the fix
+		await setSettingValue(electronApp, mainWindow, 'theme', 2);
+
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.createNewNote('Test copy formatting');
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('**hello**');
+
+		const viewerFrame = noteEditor.getNoteViewerFrameLocator();
+		await expect(viewerFrame.locator('strong')).toHaveText('hello');
+
+		// Double-click selects the text node inside <strong>, not <strong> itself.
+		// Without the ancestor re-wrapping fix, <strong> would be dropped.
+		await viewerFrame.locator('strong').dblclick();
+		const modifier = process.platform === 'darwin' ? 'Meta' : 'Control';
+		await mainWindow.keyboard.press(`${modifier}+c`);
+
+		const clipboardHtml = await mainWindow.evaluate(() => {
+			const { clipboard } = require('electron');
+			return clipboard.readHTML();
+		});
+
+		expect(clipboardHtml).toContain('hello');
+		// Dark theme background (#1D2024) must not leak into clipboard
+		expect(clipboardHtml).not.toMatch(/1D2024/i);
+		expect(clipboardHtml).toContain('<strong');
+		expect(clipboardHtml).toMatch(/font-weight/i);
+	});
+});

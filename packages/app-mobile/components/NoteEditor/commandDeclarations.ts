@@ -2,12 +2,37 @@ import { EditorCommandType } from '@joplin/editor/types';
 import { _ } from '@joplin/lib/locale';
 import { CommandDeclaration } from '@joplin/lib/services/CommandService';
 
-export const enabledCondition = (_commandName: string) => {
-	const output = [
-		'!noteIsReadOnly',
-	];
+const markdownEditorOnlyCommands = [
+	EditorCommandType.DuplicateLine,
+	EditorCommandType.SortSelectedLines,
+	EditorCommandType.SwapLineUp,
+	EditorCommandType.SwapLineDown,
+].map(command => `editor.${command}`);
 
-	return output.filter(c => !!c).join(' && ');
+
+
+const richTextEditorOnlyCommands = [
+	EditorCommandType.InsertCodeBlock,
+].map(command => `editor.${command}`);
+
+export const visibleCondition = (commandName: string) => {
+	const output = [];
+
+	if (markdownEditorOnlyCommands.includes(commandName)) {
+		output.push('!richTextEditorVisible');
+	}
+
+	if (richTextEditorOnlyCommands.includes(commandName)) {
+		output.push('!markdownEditorPaneVisible');
+	}
+
+	return output.join(' && ');
+};
+
+export const enabledCondition = (commandName: string) => {
+	return [
+		visibleCondition(commandName), '!noteIsReadOnly',
+	].filter(c => !!c).join('&&');
 };
 
 const headerDeclarations = () => {
@@ -88,14 +113,24 @@ const declarations: CommandDeclaration[] = [
 		iconName: 'material format-list-checks',
 	},
 	{
+		name: `editor.${EditorCommandType.InsertTable}`,
+		label: () => _('Table'),
+		iconName: 'material table',
+	},
+	{
+		name: `editor.${EditorCommandType.InsertCodeBlock}`,
+		label: () => _('Block code'),
+		iconName: 'material code-tags',
+	},
+	{
 		name: EditorCommandType.IndentLess,
 		label: () => _('Decrease indent level'),
-		iconName: 'ant indent-left',
+		iconName: 'material format-indent-decrease',
 	},
 	{
 		name: EditorCommandType.IndentMore,
 		label: () => _('Increase indent level'),
-		iconName: 'ant indent-right',
+		iconName: 'material format-indent-increase',
 	},
 	{
 		name: `editor.${EditorCommandType.SwapLineDown}`,
@@ -131,6 +166,16 @@ const declarations: CommandDeclaration[] = [
 		name: EditorCommandType.EditLink,
 		label: () => _('Link'),
 		iconName: 'material link',
+	},
+	{
+		name: `editor.${EditorCommandType.GoDocStart}`,
+		label: () => _('Go to start of note'),
+		iconName: 'material page-first',
+	},
+	{
+		name: `editor.${EditorCommandType.GoDocEnd}`,
+		label: () => _('Go to end of note'),
+		iconName: 'material page-last',
 	},
 ];
 

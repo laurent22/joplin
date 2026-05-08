@@ -4,10 +4,9 @@ import { createTempDir, mockMobilePlatform, setupDatabaseAndSynchronizer, switch
 import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../../utils/testing/testingLibrary';
 
 import PluginService, { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
-import pluginServiceSetup from './testUtils/pluginServiceSetup';
 import { writeFile } from 'fs-extra';
 import { join } from 'path';
-import shim from '@joplin/lib/shim';
+import shim, { MobilePlatform } from '@joplin/lib/shim';
 import { resetRepoApi } from './utils/useRepoApi';
 import { Store } from 'redux';
 import { AppState } from '../../../../utils/types';
@@ -15,6 +14,7 @@ import createMockReduxStore from '../../../../utils/testing/createMockReduxStore
 import WrappedPluginStates from './testUtils/WrappedPluginStates';
 import mockRepositoryApiConstructor from './testUtils/mockRepositoryApiConstructor';
 import Setting from '@joplin/lib/models/Setting';
+import mockPluginServiceSetup from '../../../../utils/testing/mockPluginServiceSetup';
 
 
 let reduxStore: Store<AppState> = null;
@@ -56,10 +56,10 @@ describe('PluginStates.installed', () => {
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
 		reduxStore = createMockReduxStore();
-		pluginServiceSetup(reduxStore);
+		mockPluginServiceSetup(reduxStore);
 		resetRepoApi();
 
-		await mockMobilePlatform('android');
+		await mockMobilePlatform(MobilePlatform.Android);
 		await mockRepositoryApiConstructor();
 
 		// Fake timers are necessary to prevent a warning.
@@ -73,8 +73,8 @@ describe('PluginStates.installed', () => {
 	});
 
 	it.each([
-		'android',
-		'ios',
+		MobilePlatform.Android,
+		MobilePlatform.Ios,
 	])('should not allow updating a plugin that is not recommended on iOS, but should on Android (on %s)', async (platform) => {
 		await mockMobilePlatform(platform);
 		expect(shim.mobilePlatform()).toBe(platform);

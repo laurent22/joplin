@@ -1,5 +1,5 @@
 import { _ } from '../../../locale';
-import Revision from '../../../models/Revision';
+import RevisionService from '../../../services/RevisionService';
 import shim, { MessageBoxType } from '../../../shim';
 const { useCallback } = shim.react();
 
@@ -23,7 +23,7 @@ const useDeleteHistoryClick = ({
 		if (response === 0) {
 			setDeleting(true);
 			try {
-				await Revision.deleteHistoryForNote(noteId);
+				await RevisionService.instance().deleteHistoryForNote(noteId, { sourceDescription: 'useDeleteHistoryClick' });
 				await shim.showMessageBox(_('Note history has been deleted.'), { type: MessageBoxType.Info });
 			} finally {
 				setDeleting(false);

@@ -39,6 +39,7 @@ apidoc
 apidox
 apos
 appiconset
+appimage
 appimages
 applewebkit
 approot

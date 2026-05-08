@@ -30,7 +30,7 @@
 		"%d catatan akan dihapus selamanya. Lanjutkan?"
 	],
 	"%d photo(s) taken": [
-		""
+		"%d foto diambil"
 	],
 	"%s": [
 		"%s"
@@ -70,6 +70,9 @@
 	],
 	"%s cannot be less than %s": [
 		"%s tidak boleh kurang dari %s"
+	],
+	"%s from %s": [
+		"%s dari %s"
 	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s tidak dioptimalkan untuk menyelaraskan banyak berkas kecil sehingga penyelarasan awal akan menjadi lambat."
@@ -132,7 +135,7 @@
 		"(Tidak ada)"
 	],
 	"(Read-only)": [
-		""
+		"(Hanya baca)"
 	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
@@ -155,8 +158,14 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> dapat berupa \"toggle\" atau \"clear\". Gunakan \"toggle\" untuk beralih dari dan ke status selesai dan belum selesai pada tugas yang dipilih (jika sasaran adalah catatan biasa, maka ia akan diubah menjadi tugas). Gunakan \"clear\" untuk mengubah tugas kembali menjadi catatan biasa."
 	],
+	"[None]": [
+		"[Tidak ada]"
+	],
+	"A brief description of the image:": [
+		"Penjelasan singkat tentang gambar:"
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
-		""
+		"Daftar kata yang dipisah dengan koma. Dapat digunakan untuk kata-kata yang tidak umum, untuk membantu pengetikan suara mengejanya dengan benar."
 	],
 	"A new update (%s) is available": [
 		"Pembaruan (%s) tersedia"
@@ -169,6 +178,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		"Tentang"
@@ -190,6 +202,12 @@
 	],
 	"Accepted invitations": [
 		"Undangan yang diterima"
+	],
+	"Accepted: Notebook %s from %s": [
+		"Diterima: Buku catatan: %s dari %s"
+	],
+	"Accepting share...": [
+		"Menerima benda yang dibagikan..."
 	],
 	"Access denied: Please check your username and password": [
 		"Akses ditolak: Periksa nama pengguna dan kata sandi Anda"
@@ -221,6 +239,9 @@
 	"Add body": [
 		"Tambahkan isi"
 	],
+	"Add column": [
+		"Tambah kolom"
+	],
 	"Add new": [
 		"Tambah baru"
 	],
@@ -230,8 +251,11 @@
 	"Add recipient:": [
 		"Tambah penerima:"
 	],
-	"Add tag %s to note": [
-		"Tambah label %s ke catatan"
+	"Add row": [
+		"Tambah baris"
+	],
+	"Add tags:": [
+		"Tambah label:"
 	],
 	"Add title": [
 		"Tambahkan judul"
@@ -241,6 +265,15 @@
 	],
 	"Add to note": [
 		"Tambahkan ke catatan"
+	],
+	"Added new: %s": [
+		"Baru ditambahkan: %s"
+	],
+	"Added tag: %s": [
+		"Ditambahkan ke label: %s"
+	],
+	"Adds tag": [
+		"Menambahkan label"
 	],
 	"Admin": [
 		"Admin"
@@ -273,7 +306,7 @@
 		"Semua porta yang memungkinkan sedang digunakan - silakan laporkan masalah ini di %s"
 	],
 	"All shared folders:": [
-		""
+		"Semua folder yang dibagikan:"
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		"Bolehkan debug untuk plugin ponsel. Lihat %s untuk selengkapnya."
@@ -308,6 +341,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Telah ditemukan gambar yang disimpan otomatis. Lampirkan salinan gambar ke catatan?"
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		"Sebuah galat terjadi ketika mengirim tanggapan. Hal ini dapat terjadi jika aplikasi sedang luring atau tidak dapat tersambung ke server.\nGalat: %s"
+	],
 	"An error occurred: %s": [
 		"Sebuah galat telah terjadi: %s"
 	],
@@ -332,6 +368,9 @@
 	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
 		"Anda yakin bahwa Anda ingin memulihkan tata letak bilah alat bawaan?\nPerubahan ini tidak dapat dikembalikan."
 	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
+		"Anda yakin bahwa Anda ingin menghapus semua riwayat untuk catatan ini? Perubahan ini tidak dapat dikembalikan."
+	],
 	"Are you sure you want to renew the authorisation token?": [
 		"Anda yakin ingin memperbarui token otorisasi?"
 	],
@@ -343,6 +382,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		"Label terkait:"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"Saat ini, Joplin Web hanya dapat dibuka dalam satu tab di waktu yang sama. Mohon tutup tab Joplin lainnya."
@@ -424,6 +466,9 @@
 	],
 	"Beta": [
 		"Beta"
+	],
+	"Block code": [
+		""
 	],
 	"Bold": [
 		"Tebal"
@@ -563,6 +608,9 @@
 	"Checking... Please wait.": [
 		"Sedang memeriksa… Mohon tunggu."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Pilih salah satu"
 	],
@@ -638,6 +686,9 @@
 	"Collapse all notebooks": [
 		"Lipat semua buku catatan"
 	],
+	"Collapse title": [
+		"Lipat judul"
+	],
 	"Collapsed": [
 		"Terlipat"
 	],
@@ -653,6 +704,9 @@
 	"Command": [
 		"Perintah"
 	],
+	"COMMAND": [
+		""
+	],
 	"Command palette": [
 		"Palet perintah"
 	],
@@ -660,7 +714,7 @@
 		"Palet perintah..."
 	],
 	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
-		""
+		"Perintah: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`."
 	],
 	"Compact": [
 		"Rapat"
@@ -717,7 +771,7 @@
 		"Sambungkan ke Joplin Cloud"
 	],
 	"Connect using your organisation account": [
-		""
+		"Sambungkan menggunakan akun organisasi Anda"
 	],
 	"Consolidated billing": [
 		"Penagihan gabungan"
@@ -736,6 +790,9 @@
 	],
 	"Control character": [
 		"Karakter kendali"
+	],
+	"Convert it": [
+		"Ubah"
 	],
 	"Convert to note": [
 		"Ubah ke catatan"
@@ -821,8 +878,14 @@
 	"Create a notebook": [
 		"Buat buku catatan"
 	],
+	"Create new notebook": [
+		"Buat buku catatan baru"
+	],
 	"Create new profile...": [
 		"Buat profil baru..."
+	],
+	"Create note": [
+		"Buat catatan"
 	],
 	"Create notebook": [
 		"Buat buku catatan"
@@ -871,6 +934,12 @@
 	],
 	"Creating new to-do...": [
 		"Membuat tugas baru..."
+	],
+	"Creating note \"%s\"...": [
+		"Membuat catatan \"%s\"..."
+	],
+	"Creating note.": [
+		"Membuat catatan."
 	],
 	"Creating report...": [
 		"Membuat laporan..."
@@ -941,6 +1010,9 @@
 	"Default": [
 		"Bawaan"
 	],
+	"Default title to use for documents created by the scanner.": [
+		"Judul bawaan untuk digunakan pada dokumen yang dibuat oleh pemindai."
+	],
 	"Default: %s": [
 		"Bawaan: %s"
 	],
@@ -950,11 +1022,17 @@
 	"Delete attachment \"%s\"?": [
 		"Hapus lampiran \"%s\"?"
 	],
+	"Delete column": [
+		"Hapus kolom"
+	],
 	"Delete expired sessions": [
 		"Hapus sesi kadaluarsa"
 	],
 	"Delete expired tokens": [
 		"Hapus token kadaluarsa"
+	],
+	"Delete history": [
+		"Hapus riwayat"
 	],
 	"Delete line": [
 		"Hapus baris"
@@ -974,8 +1052,14 @@
 	"Delete profile \"%s\"": [
 		"Hapus profil \"%s\"?"
 	],
+	"Delete row": [
+		"Hapus baris"
+	],
 	"Delete selected notes": [
 		"Hapus catatan terpilih"
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Hapus buku catatan Kotak Masuk?\n\nJika Anda menghapus buku catatan Kotak Masuk, sebarang email yang baru saja terkirim mungkin akan hilang."
@@ -1082,6 +1166,9 @@
 	"Displays the complete information about note.": [
 		"Menampilkan informasi lengkap tentang catatan."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Menampilkan catatan yang diberikan."
 	],
@@ -1100,11 +1187,23 @@
 	"Do not ask for confirmation.": [
 		"Jangan minta persetujuan."
 	],
+	"Do not ask for user confirmation.": [
+		"Jangan minta persetujuan."
+	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Jangan sampai kehilangan kata sandi, sebagai alasan keamanan, ini akan menjadi *satu-satunya* cara untuk mendekripsi data! Untuk menyalakan enkripsi, masukkan kata sandi Anda di bawah."
 	],
+	"Do you find the Joplin web app useful?": [
+		"Apakah aplikasi web Joplin berguna untuk Anda?"
+	],
+	"Document scanner: Title template": [
+		"Pemindai dokumen: Templat judul"
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
-		""
+		"Jangan izinkan penerima untuk membuat perubahan pada buku catatan yang dibagikan. Hanya berlaku untuk perintah `add`."
+	],
+	"Don't show this message again": [
+		"Jangan tampilkan pesan ini lagi"
 	],
 	"Donate, website": [
 		"Menyumbang, situs web"
@@ -1180,6 +1279,12 @@
 	],
 	"Edit": [
 		"Sunting"
+	],
+	"Edit as Markdown": [
+		"Sunting sebagai Markdown"
+	],
+	"Edit as Rich Text": [
+		"Sunting sebagai Teks Kaya"
 	],
 	"Edit link": [
 		"Sunting tautan"
@@ -1282,6 +1387,12 @@
 	],
 	"Enable Fountain syntax support": [
 		"Nyalakan dukungan sintaksis Fountain"
+	],
+	"Enable handwritten transcription": [
+		"Nyalakan transkripsi tulisan tangan"
+	],
+	"Enable HTML-to-Markdown conversion banner": [
+		"Nyalakan spanduk penukaran HTML-ke-Markdown"
 	],
 	"Enable Linkify": [
 		"Nyalakan Linkify"
@@ -1391,6 +1502,12 @@
 	"Enter password": [
 		"Masukkan kata sandi"
 	],
+	"Enter the code": [
+		"Masukkan kode"
+	],
+	"Enter the code:": [
+		"Masukkan kode:"
+	],
 	"Entering selection mode": [
 		"Masuk ke mode pemilihan"
 	],
@@ -1404,7 +1521,7 @@
 		"Galat saat membuka catatan di penyunting: %s"
 	],
 	"Error starting camera: %s": [
-		""
+		"Galat memulai kamera: %s"
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Galat. Periksa bahwa URL, nama pengguna, kata sandi, dll. sudah benar dan sasaran penyelarasan dapat diakses. Galat yang dilaporkan adalah:"
@@ -1435,6 +1552,9 @@
 	],
 	"Expand all notebooks": [
 		"Buka semua buku catatan"
+	],
+	"Expand title": [
+		"Bentangkan judul"
 	],
 	"Expanded": [
 		"Terbuka"
@@ -1491,13 +1611,16 @@
 		"Gagal-aman: Penyelarasan dihentikan untuk mencegah kehilangan data, karena sasaran penyelarasan kosong atau rusak. Untuk menimpa perilaku ini matikan gagal-aman pada pengaturan penyelarasan."
 	],
 	"Failed to connect to your account. Please try again.": [
-		""
+		"Gagal menyambungkan ke akun Anda. Silakan coba lagi."
 	],
 	"Fatal error:": [
 		"Galat fatal:"
 	],
 	"Feature flags": [
 		"Penanda fitur"
+	],
+	"Feedback": [
+		"Umpan balik"
 	],
 	"Fetched items: %d/%d.": [
 		"Benda yang diambil: %d/%d."
@@ -1513,9 +1636,6 @@
 	],
 	"Filter": [
 		"Penyaring"
-	],
-	"Filter tags": [
-		"Saring label"
 	],
 	"Find": [
 		"Cari"
@@ -1545,7 +1665,7 @@
 		"Fokus pada judul"
 	],
 	"Folder \"%s\" is shared with:": [
-		""
+		"Folder \"%s\" dibagikan dengan:"
 	],
 	"Follow link": [
 		"Ikuti tautan"
@@ -1596,7 +1716,7 @@
 		"Geolokasi, pemeriksa ejaan, penyunting bilah alat, pengatur ulang ukuran gambar"
 	],
 	"Get a quote": [
-		""
+		"Dapatkan penawaran"
 	],
 	"Get it now:": [
 		"Dapatkan sekarang:"
@@ -1608,7 +1728,7 @@
 		"Mengambil atau menyetel sebuah nilai pengaturan. Jika [value] tidak tersedia, maka akan menampilkan nilai dari [name]. Jika tidak ada [name] atau [value] yang tersedia, maka akan menampilkan daftar pengaturan saat ini."
 	],
 	"Glossary:": [
-		""
+		"Glosarium:"
 	],
 	"go": [
 		"pergi"
@@ -1670,6 +1790,9 @@
 	"Hide password": [
 		"Sembunyikan kata sandi"
 	],
+	"Hides warning": [
+		"Sembunyikan peringatan"
+	],
 	"Highlight": [
 		"Sorotan"
 	],
@@ -1699,6 +1822,9 @@
 	],
 	"Idle": [
 		"Menganggur"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		"Jika sebuah lampiran foto berada pada barisnya sendiri dan diikuti oleh sebuah baris kosong, lampiran tersebut akan ditampilkan tepat di bawah sumber Markdownnya."
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Jika Anda telah memberi izin, silakan tunggu aplikasi menyelaraskan ke Joplin Cloud."
@@ -1754,9 +1880,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"Dalam perintah apa pun, catatan atau buku catatan dapat dirujuk dengan judul atau ID, atau bisa juga dengan pintasan seperti `$n` atau `$b` untuk catatan atau buku catatan yang saat ini terpilih. `$c` dapat digunakan untuk merujuk pada benda yang saat ini terpilih."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Untuk menghubungkan geolokasi dengan catatan, aplikasi perlu izin dari Anda untuk mengakses lokasi Anda.\n\nAnda dapat mematikan pilihan ini kapan saja di layar Pengaturan."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Untuk melakukannya, seluruh data Anda harus dienkripsi and diselaraskan, lebih baik jika menjalankannya semalaman.\n\nUntuk memulai, silakan ikuti langkah-langkah berikut:\n\n1. Selaraskan semua perangkat Anda.\n2. Klik \"%s\".\n3. Biarkan proses berjalan sampai selesai. Saat proses berjalan, hindari mengubah catatan apa pun di perangkat Anda yang lain, untuk menghindari perbedaan.\n4. Ketika penyelarasan telah selesai pada perangkat ini, selaraskan semua perangkat Anda dan biarkan proses berjalan sampai selesai.\n\nPenting: Anda hanya perlu menjalankan ini SEKALI pada satu perangkat."
 	],
@@ -1774,6 +1897,9 @@
 	],
 	"In: %s": [
 		"Di: %s"
+	],
+	"Incoming shares:": [
+		"Pembagian yang akan diterima:"
 	],
 	"Incompatible": [
 		"Tidak cocok"
@@ -1878,7 +2004,7 @@
 		"Joplin Cloud"
 	],
 	"Joplin Cloud Login": [
-		"Masuk Joplin Cloud"
+		"Login Joplin Cloud"
 	],
 	"Joplin Desktop": [
 		"Joplin Desktop"
@@ -1907,20 +2033,32 @@
 	"Joplin Server": [
 		"Server Joplin"
 	],
+	"Joplin Server (SAML)": [
+		"Joplin Server (SAML)"
+	],
+	"Joplin Server Business": [
+		"Bisnis Joplin Server"
+	],
 	"Joplin Server email": [
 		"Surel Joplin Server"
+	],
+	"Joplin Server Login": [
+		"Login Joplin Server"
 	],
 	"Joplin Server password": [
 		"Kata sandi Joplin Server"
 	],
 	"Joplin Server URL": [
-		"URL Server Joplin"
+		"URL Joplin Server"
 	],
 	"Joplin SSO Authentication": [
-		""
+		"Otentikasi SSO Joplin"
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		"Joplin mendukung penyimpanan lokasi tempat di mana catatan disimpan atau dibuat. Apakah Anda ingin menyalakannya? Ini dapat diubah kapan saja di pengaturan."
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
-		"Web Clipper Joplin membolehkan untuk menyimpan halaman web dan tangkapan layar dari peramban web Anda ke Joplin."
+		"Web Clipper Joplin memungkinkan untuk menyimpan halaman web dan tangkapan layar dari peramban web Anda ke Joplin."
 	],
 	"Joplin website": [
 		"Situs web Joplin"
@@ -1946,8 +2084,14 @@
 	"Keychain Supported: %s": [
 		"Rantai kunci yang Didukung: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Kunci-kunci yang perlu ditingkatkan"
+	],
+	"Label": [
+		"Cap"
 	],
 	"Landscape": [
 		"Mendatar"
@@ -2006,6 +2150,9 @@
 	"Link": [
 		"Tautan"
 	],
+	"Link created!": [
+		"Tautan dibuat!"
+	],
 	"Link description": [
 		"Keterangan tautan"
 	],
@@ -2017,6 +2164,9 @@
 	],
 	"Link to note...": [
 		"Tautkan ke buku catatan..."
+	],
+	"Links": [
+		"Tautan"
 	],
 	"List item": [
 		"Daftar benda"
@@ -2035,6 +2185,9 @@
 	],
 	"Log": [
 		"Log"
+	],
+	"Log in with your web browser": [
+		"Masuk dengan peramban web Anda"
 	],
 	"Login to Joplin Cloud.": [
 		"Masuk ke Joplin Cloud."
@@ -2078,6 +2231,9 @@
 	"Manage your plugins": [
 		"Kelola plugin Anda"
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Mengelola konfigurasi E2EE. Perintah yang tersedia yaitu `enable`, `disable`, `decrypt`, `status`, `decrypt-file` dan `target-status`."
 	],
@@ -2092,6 +2248,15 @@
 	],
 	"Markdown editor": [
 		"Penyunting Markdown"
+	],
+	"Markdown editor: Highlight active line": [
+		"Penyunting Markdown: Sorot baris saat ini"
+	],
+	"Markdown editor: Render images": [
+		"Penyunting Markdown: Tampilkan gambar"
+	],
+	"Markdown editor: Render markup in editor": [
+		"Penyunting Markdown: Tampilkan markup pada penyunting"
 	],
 	"Marks a to-do as done.": [
 		"Tandai tugas telah selesai."
@@ -2234,6 +2399,9 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Buku catatan baru \"%s\" akan dibuat dan berkas \"%s\" akan diimpor ke dalamnya"
 	],
+	"New notebook title": [
+		"Judul buku catatan baru"
+	],
 	"New photo": [
 		"Foto baru"
 	],
@@ -2243,9 +2411,6 @@
 	"New sub-notebook": [
 		"Sub-buku catatan baru"
 	],
-	"New tags:": [
-		"Label baru:"
-	],
 	"New to-do": [
 		"Tugas baru"
 	],
@@ -2254,6 +2419,9 @@
 	],
 	"next": [
 		"selanjutnya"
+	],
+	"Next": [
+		"Selanjutnya"
 	],
 	"Next match": [
 		"Kecocokan selanjutnya"
@@ -2286,7 +2454,7 @@
 		"Belum ada buku catatan yang ditentukan."
 	],
 	"No notebook selected.": [
-		"Tidak ada buku catatan yang terpilih."
+		"Tidak ada buku catatan yang dipilih."
 	],
 	"No notes in here. Create one by clicking on \"New note\".": [
 		"Tidak ada catatan di sini. Buat catatan dengan menekan tombol \"Catatan baru\"."
@@ -2300,6 +2468,9 @@
 	"No results": [
 		"Tidak ada hasil"
 	],
+	"No revision selected": [
+		"Tidak ada perubahan yang dipilih"
+	],
 	"No such command: %s": [
 		"Tidak ada perintah semacam ini: %s"
 	],
@@ -2307,13 +2478,19 @@
 		"Tidak ada saran"
 	],
 	"No tab selected": [
-		"Tidak ada tab yang terpilih"
+		"Tidak ada tab yang dipilih"
+	],
+	"No tags": [
+		"Tidak ada label"
 	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Tidak ada penyunting teks yang diatur. Silakan atur menggunakan `config editor <editor-path>`"
 	],
 	"No updates available": [
 		"Tidak ada pembaruan tersedia"
+	],
+	"No URL for SAML authentication set.": [
+		""
 	],
 	"None": [
 		"Tidak ada"
@@ -2335,6 +2512,9 @@
 	],
 	"Not now": [
 		"Tidak sekarang"
+	],
+	"Not useful": [
+		"Tidak berguna"
 	],
 	"note": [
 		"catatan"
@@ -2363,8 +2543,14 @@
 	"Note has been saved.": [
 		"Catatan telah disimpan."
 	],
+	"Note history": [
+		"Riwayat catatan"
+	],
 	"Note History": [
 		"Riwayat Catatan"
+	],
+	"Note history has been deleted.": [
+		"Riwayat catatan telah dihapus."
 	],
 	"Note is not a to-do: \"%s\"": [
 		"Catatan bukan sebuah tugas: \"%s\""
@@ -2377,6 +2563,12 @@
 	],
 	"Note list style": [
 		"Gaya daftar catatan"
+	],
+	"Note not published: %s": [
+		"Catatan yang tidak diterbitkan: %s"
+	],
+	"Note preview": [
+		"Pratinjau catatan"
 	],
 	"Note properties": [
 		"Properti catatan"
@@ -2435,8 +2627,8 @@
 	"OCR: Language data URL or path": [
 		"OCR: Jalur atau URL data bahasa"
 	],
-	"Ok": [
-		""
+	"OCR: Search in extracted content": [
+		"OCR: Cari di isi yang diambil"
 	],
 	"OK": [
 		"Baik"
@@ -2510,6 +2702,9 @@
 	"Open Sync Wizard...": [
 		"Buka Pemandu Penyelarasan…"
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Buka..."
 	],
@@ -2531,8 +2726,14 @@
 	"Options": [
 		"Pilihan"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
 		"Daftar berurutan"
+	],
+	"Other": [
+		"Lainnya"
 	],
 	"Other applications...": [
 		"Aplikasi lain..."
@@ -2594,8 +2795,8 @@
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Hapus buku catatan selamanya, bukan ke tong sampah."
 	],
-	"Permission needed": [
-		"Perlu izin"
+	"Photo %d": [
+		"Foto %d"
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Silakan tekan pada \"%s\" untuk melanjutkan atau tentukan kata sandi pada daftar \"%s\" di bawah."
@@ -2640,7 +2841,7 @@
 		"Silakan tunggu sampai semua lampiran telah diunduh dan didekripsi. Anda juga bisa beralih ke %s untuk menyunting catatan."
 	],
 	"Please wait while we load your organisation sign-in page...": [
-		""
+		"Silakan tunggu sementara kami memuat halaman masuk organisasi Anda..."
 	],
 	"Please wait...": [
 		"Mohon tunggu..."
@@ -2682,7 +2883,7 @@
 		"Nilai yang mungkin: %s."
 	],
 	"Prefer JSON output.": [
-		""
+		"Utamakan keluaran JSON."
 	],
 	"Preferences": [
 		"Pilihan"
@@ -2695,9 +2896,6 @@
 	],
 	"Preferred light theme": [
 		"Tema terang yang dipilih"
-	],
-	"Preferred voice typing provider": [
-		"Penyedia pengetikan suara yang dipilih"
 	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		"Pertahankan warna ketika menempel teks di Penyunting Teks Kaya"
@@ -2719,6 +2917,9 @@
 	],
 	"Previous match": [
 		"Kecocokan sebelumnya"
+	],
+	"Previous versions": [
+		"Versi sebelumnya"
 	],
 	"Previous versions of this note": [
 		"Versi sebelumnya dari catatan ini"
@@ -2780,6 +2981,12 @@
 	"Public-private key pair:": [
 		"Pasangan kunci publik-privat:"
 	],
+	"Publish Note": [
+		"Terbitkan catatan"
+	],
+	"Publish note \"%s\" (in notebook \"%s\")?": [
+		"Terbitkan catatan \"%s\" (pada buku catatan \"%s\")?"
+	],
 	"Publish note...": [
 		"Menerbitkan catatan…"
 	],
@@ -2790,7 +2997,13 @@
 		"Terbitkan catatan ke internet"
 	],
 	"Publish/unpublish": [
-		""
+		"Terbitkan/Batal terbitkan"
+	],
+	"Published at URL: %s": [
+		"Diterbitkan pada URL: %s"
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		"Menerbitkan sebuah catatan ke Joplin Server atau Joplin Cloud"
 	],
 	"QR Code": [
 		"Kode QR"
@@ -2813,11 +3026,17 @@
 	"Re-upload local data to sync target": [
 		"Unggah ulang data lokal ke sasaran penyelerasan"
 	],
+	"Read more": [
+		"Baca selebihnya"
+	],
 	"Read more about it": [
 		"Baca lebih lanjut"
 	],
 	"Read time: %s min": [
 		"Waktu baca: %s menit"
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
+		"Membaca perintah dari masukan standar hanya tersedia pada mode CLI."
 	],
 	"Recipient has accepted the invitation": [
 		"Penerima telah menerima undangan"
@@ -2830,6 +3049,12 @@
 	],
 	"Recipients:": [
 		"Penerima:"
+	],
+	"Recognise text:": [
+		"Mengenali teks:"
+	],
+	"Recognize handwritten image": [
+		"Kenali gambar dari tulisan tangan"
 	],
 	"Recommended": [
 		"Disarankan"
@@ -2858,8 +3083,14 @@
 	"Reject": [
 		"Tolak"
 	],
+	"Rejecting share...": [
+		"Menolak pembagian..."
+	],
 	"Remove": [
 		"Hapus"
+	],
+	"Remove %s": [
+		"Hapus %s"
 	],
 	"Remove %s from share": [
 		"Hapus \"%s\" dari berbagi"
@@ -2869,6 +3100,12 @@
 	],
 	"Remove this search from the sidebar?": [
 		"Hapus pencarian ini dari bilah samping?"
+	],
+	"Removed %s from share.": [
+		"Telah menghapus %s dari berbagi."
+	],
+	"Removed tag: %s": [
+		"Label terhapus: %s"
 	],
 	"Rename": [
 		"Ganti nama"
@@ -2881,6 +3118,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Mengganti nama <item> yang diberikan (catatan atau buku catatan) menjadi <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		"Tampilkan markup pada semua baris yang tidak menyertakan penunjuk."
 	],
 	"Renew token": [
 		"Perbarui token"
@@ -2984,6 +3224,9 @@
 	"Reverses the sorting order.": [
 		"Membalikkan urutan."
 	],
+	"Revision:": [
+		"Perubahan:"
+	],
 	"Revision: %s (%s)": [
 		"Revisi: %s (%s)"
 	],
@@ -3038,6 +3281,12 @@
 	"Save geo-location with notes": [
 		"Simpan geolokasi dengan catatan"
 	],
+	"Save geolocation?": [
+		"Simpan geolokasi?"
+	],
+	"Scan notebook": [
+		"Pindai buku catatan"
+	],
 	"Scanned code": [
 		"Kode yang dipindai"
 	],
@@ -3066,7 +3315,10 @@
 		"Hasil pencarian"
 	],
 	"Search shown": [
-		"Pencarian menampilkan"
+		"Pencarian ditampilkan"
+	],
+	"Search tags": [
+		"Label pencarian"
 	],
 	"Search...": [
 		"Pencarian…"
@@ -3086,6 +3338,9 @@
 	"Select": [
 		"Pilih"
 	],
+	"Select a revision...": [
+		"Pilih perubahan..."
+	],
 	"Select all": [
 		"Pilih semua"
 	],
@@ -3095,8 +3350,20 @@
 	"Select file...": [
 		"Pilih berkas..."
 	],
+	"Select notebook": [
+		"Pilih buku catatan"
+	],
+	"Select one of the other supported sync targets.": [
+		"Pilih salah satu dari sasaran penyelarasan lainnya yang didukung."
+	],
 	"Select parent notebook": [
 		"Pilih buku catatan induk"
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
+	"Selected: %s": [
+		"Dipilih: %s"
 	],
 	"Selection deleted": [
 		"Pilihan telah dihapus"
@@ -3105,7 +3372,7 @@
 		"Pilih buku catatan"
 	],
 	"Self-hosted": [
-		""
+		"Hosting sendiri"
 	],
 	"Send bug report": [
 		"Kirim laporan bug"
@@ -3165,7 +3432,7 @@
 		"Dibagikan"
 	],
 	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
-		""
+		"Bagikan atau batal bagikan [notebook] berikut dengan [user]. Memerlukan Joplin Cloud atau Joplin Server."
 	],
 	"Sharing notebook...": [
 		"Membagikan buku catatan…"
@@ -3290,11 +3557,17 @@
 	"Source": [
 		"Sumber"
 	],
+	"Source code available": [
+		"Kode sumber tersedia"
+	],
 	"Source format: %s": [
 		"Format sumber: %s"
 	],
 	"Source: ": [
 		"Sumber: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Pemberi ruang"
@@ -3416,11 +3689,17 @@
 	"Switch to the legacy editor": [
 		"Beralih ke penyunting lama"
 	],
+	"Switch to the new editor": [
+		"Beralih ke penyunting baru"
+	],
 	"Switch to to-do type": [
 		"Beralih ke jenis tugas"
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Beralih ke [notebook] - semua kegiatan selanjutnya akan terjadi dalam buku catatan ini."
+	],
+	"Sync": [
+		"Selaraskan"
 	],
 	"Sync as many devices as you want": [
 		"Selaraskan ke banyak perangkat sebanyak yang Anda mau"
@@ -3491,9 +3770,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		"label1, label2, ..."
-	],
 	"Tagged: %d.": [
 		"Diberi label: %d."
 	],
@@ -3502,6 +3778,9 @@
 	],
 	"Take photo": [
 		"Ambil foto"
+	],
+	"Take survey": [
+		"Ikut survei"
 	],
 	"Task \"%s\" failed with error: %s": [
 		"Tugas “%s” gagal dengan galat: %s"
@@ -3520,6 +3799,9 @@
 	],
 	"Text editor command": [
 		"Perintah penyunting teks"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		"Terima kasih atas umpan balik yang telah diberikan!\nApakah Anda bersedia untuk mengikuti survei singkat?"
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Profil yang aktif tidak dapat dihapus. Pindah ke profil yang berbeda dan coba kembali."
@@ -3582,7 +3864,7 @@
 		"Kunci dengan ID berikut digunakan mengenkripsi beberapa benda Anda, namun saat ini aplikasi tidak memiliki akses ke benda-benda tersebut. Sepertinya mereka pada akhirnya akan diunduh melalui penyelarasan."
 	],
 	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
-		""
+		"Penyunting Markdown yang telah usang sepertinya telah bertabrakan yang disebabkan oleh ketidakcocokan dengan sebuah pengaya. Kami sarankan untuk menggunakan penyunting yang baru."
 	],
 	"The master key has been upgraded successfully!": [
 		"Kunci utama telah berhasil ditingkatkan!"
@@ -3695,6 +3977,15 @@
 	"This drawing may have unsaved changes.": [
 		"Gambaran ini mungkin memiliki perubahan yang belum disimpan."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		"Fitur ini dimatikan secara bawaan, Anda perlu menyalakannya secara manual dengan menyalakan pilihan untuk 'Menyalakan transkripsi tulisan tangan'."
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		"Fitur ini hanya tersedia pada Joplin Cloud dan Joplin Server."
+	],
+	"This image type is not supported by the recognition system.": [
+		"Jenis gambar ini tidak didukung oleh sistem pengenalan."
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Ini adalah perkakas lanjutan untuk menampilkan lampiran yang terhubung dengan catatan Anda. Harap berhati-hati saat menghapus salah satunya karena mereka tidak dapat dipulihkan setelahnya."
 	],
@@ -3718,6 +4009,9 @@
 	],
 	"This note has no history": [
 		"Catatan ini tidak memiliki riwayat"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		"Catatan ini berada dalam format HTML. Ubah catatan ke Markdown untuk menyuntingnya dengan lebih mudah."
 	],
 	"This plugin doesn't support %s.": [
 		"Plugin ini tidak mendukung %s."
@@ -3758,8 +4052,14 @@
 	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
 		"Untuk mengizinkan Joplin menyelaraskan dengan Joplin Cloud, silakan masuk dengan URL berikut:"
 	],
+	"To allow Joplin to synchronise with your account, please follow these steps:": [
+		"Untuk mengizinkan Joplin menyelaraskan dengan akun Anda, silakan ikuti langkah-langkah berikut:"
+	],
 	"To continue, please enter your master password below.": [
 		"Untuk melanjutkan, silakan masukkan kata sandi utama di bawah."
+	],
+	"To create a new tag, type the name and press enter.": [
+		"Untuk membuat sebuah label, ketik nama dan tekan enter."
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Untuk menghapus sebuah label, hapus label dari catatan terkait."
@@ -3872,6 +4172,9 @@
 	"Try it now": [
 		"Coba sekarang"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Ketik `help [command]` untuk informasi lebih banyak tentang sebuah perintah; atau ketik `help all` untuk informasi penggunaan secara lengkap."
 	],
@@ -3884,9 +4187,6 @@
 	"Type a note title to search for it.": [
 		"Ketik sebuah judul catatan untuk mencarinya."
 	],
-	"Type new tags or select from list": [
-		"Ketik label baru atau pilih dari daftar"
-	],
 	"Type: %s.": [
 		"Ketik: %s."
 	],
@@ -3895,6 +4195,9 @@
 	],
 	"Unable to share log data. Reason: %s": [
 		"Tidak dapat membagikan data log. Alasan: %s"
+	],
+	"Unable to share note data. Reason: %s": [
+		"Tidak dapat membagikan data catatan. Alasan: %s"
 	],
 	"Unchecked": [
 		"Tidak diperiksa"
@@ -3926,6 +4229,12 @@
 	"Unordered list": [
 		"Daftar tidak berurutan"
 	],
+	"Unpublish": [
+		"Batal terbitkan"
+	],
+	"Unpublish \"%s\"": [
+		"Batal terbitkan \"%s\""
+	],
 	"Unpublish note": [
 		"Batalkan penerbitan catatan"
 	],
@@ -3933,7 +4242,7 @@
 		"Berhenti berbagi"
 	],
 	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
-		""
+		"Batal bagikan buku catatan \"%\"? Ini dapat menyebabkan pengguna lain kehilangan akses ke buku catatan."
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"Berhenti membagikan buku catatan ini? Penerima tidak akan lagi memiliki akses ke isinya."
@@ -3995,6 +4304,9 @@
 	"Upgrade the sync target to the latest version.": [
 		"Tingkatkan sasaran penyelarasan ke versi terakhir."
 	],
+	"Upload photo": [
+		"Unggah foto"
+	],
 	"URL": [
 		"URL"
 	],
@@ -4031,6 +4343,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Digunakan di mana fonta lebar tetap diperlukan untuk meletakkan teks dengan jelas (misalnya tabel, kotak centang, kode). Jika tidak ditemukan, fonta generik monospace (lebar tetap) digunakan."
 	],
+	"Useful": [
+		"Berguna"
+	],
 	"User deletions": [
 		"Dihapus oleh pengguna"
 	],
@@ -4058,6 +4373,9 @@
 	"Viewer": [
 		"Penampil"
 	],
+	"Viewer and Rich Text Editor font family": [
+		"Keluarga font pada penampil dan Penyunting Teks Kaya"
+	],
 	"Viewer font size": [
 		"Ukuran font pada penampil"
 	],
@@ -4073,11 +4391,14 @@
 	"Voice typing...": [
 		"Pengetikan suara…"
 	],
-	"Vosk": [
-		"Vosk"
+	"Voice typing: Glossary": [
+		"Pengetikan suara: Glosarium"
 	],
 	"Waiting for authorisation...": [
 		"Sedang menunggu otorisasi…"
+	],
+	"Waiting: Notebook %s from %s": [
+		"Menunggu: Buku catatan: %s dari %s"
 	],
 	"Warning": [
 		"Peringatan"
@@ -4130,11 +4451,11 @@
 	"When creating a new to-do:": [
 		"Ketika membuat tugas baru:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		"Ketika dinyalakan, minta agar gambar pada catatan untuk ditranskripsi dengan sebuah layanan transkripsi pada server yang berkualitas lebih tinggi. Memerlukan penyelarasan dengan sebuah salinan dari aplikasi destop."
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Ketika dinyalakan, aplikasi akan memindai lampiran Anda dan mengambil teks darinya. Ini akan membuat Anda mampu mencari teks pada lampiran tersebut."
-	],
-	"Whisper": [
-		"Whisper"
 	],
 	"Window unresponsive.": [
 		"Jendela tetap."
@@ -4161,10 +4482,10 @@
 		"Anda telah masuk ke Joplin Cloud, Anda dapat meninggalkan layar ini."
 	],
 	"You are now logged into your account.": [
-		""
+		"Anda sekarang telah masuk ke akun Anda."
 	],
 	"You are now using the latest version of the Markdown editor.": [
-		""
+		"Anda sekarang menggunakan versi terbaru dari penyunting Markdown."
 	],
 	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		"Anda menjalankan versi Intel dari Joplin pada sebuah prosesor Apple Silicon. Untuk versi Apple Silicon untuk kinerja yang lebih baik."

@@ -192,9 +192,23 @@ const processStartFlags = async (argv: string[], setDefaults = true) => {
 			continue;
 		}
 
+		if (arg === '--force-renderer-accessibility') {
+			// Electron-specific flag - ignore it
+			// Allows users to force-enable accessibility support
+			argv.splice(0, 1);
+			continue;
+		}
+
 		if (arg === '--updated') {
 			// Electron-specific flag - ignore it
 			// Allows to restart with the updated application after the update option is selected by the user
+			argv.splice(0, 1);
+			continue;
+		}
+
+		if (arg.startsWith('--lang=')) {
+			// Electron-specific flag - ignore it
+			// Allows the user to specify a custom initial locale
 			argv.splice(0, 1);
 			continue;
 		}

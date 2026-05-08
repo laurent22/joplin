@@ -1,5 +1,10 @@
-import { MarkupLanguage } from './MarkupToHtml';
 import { Options as NoteStyleOptions } from './noteStyle';
+
+export enum MarkupLanguage {
+	Markdown = 1,
+	Html = 2,
+	Any = 3,
+}
 
 export type ItemIdToUrlHandler = (resourceId: string, urlParameters?: string)=> string;
 
@@ -32,6 +37,20 @@ export interface FsDriver {
 	cacheCssToFile: (cssStrings: string[])=> Promise<any>;
 }
 
+export interface RenderOptionsGlobalSettings {
+	'markdown.plugin.abc.options': string;
+}
+
+interface SettingModel {
+	value: <T>(key: string)=> T;
+}
+
+export const getGlobalSettings = (settingModel?: SettingModel): RenderOptionsGlobalSettings => {
+	return {
+		'markdown.plugin.abc.options': settingModel ? settingModel.value<string>('markdown.plugin.abc.options') : '',
+	};
+};
+
 export interface RenderOptions {
 	contentMaxWidth?: number;
 	scrollbarSize?: number;
@@ -62,20 +81,23 @@ export interface RenderOptions {
 	vendorDir?: string;
 	itemIdToUrl?: ItemIdToUrlHandler;
 	allowedFilePrefixes?: string[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	settingValue?: (pluginId: string, key: string)=> any;
+	settingValue?: (pluginId: string, key: string)=> unknown;
 
 	resources?: ResourceInfos;
 
-	onResourceLoaded?: ()=> void;
 	editPopupFiletypes?: string[];
 	createEditPopupSyntax?: string;
 	destroyEditPopupSyntax?: string;
 
 	platformName?: string;
 
+	showNoteLinkIcon?: boolean;
+
 	// HtmlToHtml only
 	whiteBackgroundNoteRendering?: boolean;
+
+	// This can be used to give access to global settings to Markdown renderer plugins
+	globalSettings?: RenderOptionsGlobalSettings;
 }
 
 export interface RenderResultPluginAsset {

@@ -18,18 +18,19 @@ function initTestState(folders: FolderEntity[], selectedFolderIndex: number, not
 	if (notes !== null) {
 		state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: notes, noteSource: 'test' });
 	}
+	if (tags !== null) {
+		state = reducer(state, { type: 'TAG_UPDATE_ALL', items: tags });
+	}
+	if (selectedTagIndex !== null) {
+		state = reducer(state, { type: 'TAG_SELECT', id: tags[selectedTagIndex].id });
+	}
+	// Select notes last: Selecting a tag or folder can clear the note selection
 	if (selectedNoteIndexes !== null) {
 		const selectedIds = [];
 		for (let i = 0; i < selectedNoteIndexes.length; i++) {
 			selectedIds.push(notes[selectedNoteIndexes[i]].id);
 		}
 		state = reducer(state, { type: 'NOTE_SELECT', ids: selectedIds });
-	}
-	if (tags !== null) {
-		state = reducer(state, { type: 'TAG_UPDATE_ALL', items: tags });
-	}
-	if (selectedTagIndex !== null) {
-		state = reducer(state, { type: 'TAG_SELECT', id: tags[selectedTagIndex].id });
 	}
 
 	return state;
@@ -390,6 +391,104 @@ describe('reducer', () => {
 		expect(state.selectedTagId).toEqual(expected.selectedIds[0]);
 	}));
 
+	it('should remove note from list when tag is removed', (async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(3, folders[0]);
+		const tags = await createNTestTags(1);
+
+		// Current view is the tag we're about to remove from a note
+		let state = initTestState(folders, 0, notes, [0], tags, 0);
+
+		expect(state.notes.length).toBe(3);
+		expect(state.notesParentType).toBe('Tag');
+		expect(state.selectedTagId).toBe(tags[0].id);
+
+		// Remove tag from the first note
+		state = reducer(state, { type: 'NOTE_TAG_REMOVE', item: tags[0], noteId: notes[0].id });
+
+		// Expect the note to be removed from state.notes
+		expect(state.notes.length).toBe(2);
+		expect(state.notes.map(n => n.id)).not.toContain(notes[0].id);
+	}));
+
+	it.each([false, true])('should select multiple folders (extend:%j)', async (extendSelection) => {
+		const folders = await createNTestFolders(3);
+		let state = initTestState(folders, 0, [], []);
+
+		if (extendSelection) {
+			state = reducer(state, { type: 'FOLDER_SELECT_ADD', id: folders[1].id });
+		} else {
+			state = reducer(state, { type: 'FOLDER_SELECT', ids: [folders[0].id, folders[1].id] });
+		}
+
+		const expected = createExpectedState(folders, [0, 1, 2], [0, 1]);
+
+		expect(getIds(state.folders)).toEqual(getIds(expected.items));
+		expect(state.selectedFolderIds).toEqual(expected.selectedIds);
+		// Should match the last-added item
+		expect(state.selectedFolderId).toBe(expected.selectedIds[expected.selectedIds.length - 1]);
+	});
+
+	it.each([false, true])('should select multiple tags (extend:%j)', async (extendSelection) => {
+		const tags = await createNTestTags(3);
+		let state = initTestState([], null, [], [], tags, 0);
+
+		if (extendSelection) {
+			state = reducer(state, { type: 'TAG_SELECT_ADD', id: tags[2].id });
+		} else {
+			state = reducer(state, { type: 'TAG_SELECT', ids: [tags[0].id, tags[2].id] });
+		}
+
+		const expected = createExpectedState(tags, [0, 1, 2], [0, 2]);
+
+		expect(getIds(state.tags)).toEqual(getIds(expected.items));
+		expect(state.selectedTagIds).toEqual(expected.selectedIds);
+		expect(state.selectedTagId).toBe(expected.selectedIds[expected.selectedIds.length - 1]);
+	});
+
+	it('should not clear the selected note IDs when adding folders to the selection', async () => {
+		const folders = await createNTestFolders(3);
+		const notes = await createNTestNotes(1, folders[0]);
+		const expectedSelection = createExpectedState(notes, [0], [0]).selectedIds;
+
+		let state = initTestState(folders, 0, notes, [0]);
+		expect(state.selectedNoteIds).toEqual(expectedSelection);
+
+		state = reducer(state, { type: 'FOLDER_SELECT_ADD', id: folders[1].id });
+
+		expect(state.selectedNoteIds).toEqual(expectedSelection);
+	});
+
+	it('should clear the selected note IDs if adding a folder to the selection changes the selection type', async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(1, folders[0]);
+		const tags = await createNTestTags(1);
+		const expectedSelection = createExpectedState(notes, [0], [0]).selectedIds;
+
+		let state = initTestState(folders, 0, notes, [0], tags, 0);
+
+		expect(state.selectedNoteIds).toEqual(expectedSelection);
+		expect(state.notesParentType).toBe('Tag');
+
+		state = reducer(state, { type: 'FOLDER_SELECT_ADD', id: folders[0].id });
+
+		expect(state.notesParentType).toBe('Folder');
+		expect(state.selectedNoteIds).toEqual([]);
+	});
+
+	it('should add and remove a folders from the selection', async () => {
+		const folders = await createNTestFolders(3);
+		let state = initTestState(folders, 0, [], []);
+
+		state = reducer(state, { type: 'FOLDER_SELECT_ADD', ids: [folders[1].id, folders[2].id] });
+		expect(state.selectedFolderIds).toEqual([folders[0].id, folders[1].id, folders[2].id]);
+		expect(state.selectedFolderId).toBe(folders[2].id);
+
+		state = reducer(state, { type: 'FOLDER_SELECT_REMOVE', id: folders[0].id });
+		expect(state.selectedFolderIds).toEqual([folders[1].id, folders[2].id]);
+		expect(state.selectedFolderId).toBe(folders[2].id);
+	});
+
 	it('should select all notes', (async () => {
 		const folders = await createNTestFolders(2);
 		const notes = [];
@@ -708,7 +807,6 @@ describe('reducer', () => {
 		}
 	});
 
-	// Regression test for #10589.
 	it.each([
 		[true, false],
 		[undefined, false],
@@ -845,5 +943,45 @@ describe('reducer', () => {
 		// The other window should be focused
 		expect(state.windowId).toBe(defaultWindowId);
 		expect(state.selectedNoteIds).toEqual([notes[0].id]);
+	});
+
+	it.each([
+		undefined,
+		false,
+	])('should not change selected note in background window when active window note moves folders (preserveSelection: %j)', async (
+		preserveSelectionOption,
+	) => {
+		const folders = await createNTestFolders(2);
+		const notes = await createNTestNotes(3, folders[0]);
+
+		// select the 1st folder and the 1st note in the primary window
+		let state = initTestState(folders, 0, notes, [0]);
+
+		// open note[2] in a background (secondary) window
+		const secondaryWindowId = 'window1';
+		state = createBackgroundWindow(state, secondaryWindowId, notes[2], notes);
+
+		// background window should be on notes[2]
+		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+
+		BaseModel.dispatch = jest.fn((action: unknown) => {
+			state = reducer(state, action);
+		});
+
+		// move notes[0] (selected in primary window) to a different folder
+		await Note.moveToFolder(
+			state.selectedNoteIds[0],
+			folders[1].id,
+			{ dispatchOptions: { preserveSelection: preserveSelectionOption } },
+		);
+
+		expect(BaseModel.dispatch).toHaveBeenCalled();
+
+		// primary window should have switched away from the moved note
+		expect(state.notes.every(n => n.id !== notes[0].id)).toBe(true);
+
+		// background window should still be on notes[2], not have jumped to whatever
+		// the primary window selected next
+		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
 	});
 });

@@ -158,11 +158,13 @@ export const imageReplacement = function(ResourceModel: OptionsResourceModel, ma
 		}
 
 		// contenteditable="false": Improves support for the Rich Text Editor -- without this,
-		// users can add content within the <div>, which breaks the html-to-md conversion.
+		// users can add content within the <span>, which breaks the html-to-md conversion.
+		//
+		// Use a <span> and not a <div> to allow the placeholder to appear in <p> elements.
 		return (
-			`<div ${attributesHtml(attrs)} contenteditable="false">`
+			`<span ${attributesHtml(attrs)} contenteditable="false">`
 				+ `<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>`
-			+ '</div>'
+			+ '</span>'
 		);
 	}
 	const mime = resource.mime ? resource.mime.toLowerCase() : '';

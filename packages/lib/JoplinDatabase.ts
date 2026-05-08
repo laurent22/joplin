@@ -1,6 +1,6 @@
 import Resource from './models/Resource';
 import shim from './shim';
-import Database from './database';
+import Database, { Row } from './database';
 import { SqlQuery } from './services/database/types';
 import addMigrationFile from './services/database/addMigrationFile';
 import sqlStringToLines from './services/database/sqlStringToLines';
@@ -264,6 +264,7 @@ export default class JoplinDatabase extends Database {
 					todo_due: sp('When the todo is due. An alarm will be triggered on that date.'),
 					todo_completed: sp('Tells whether todo is completed or not. This is a timestamp in milliseconds.'),
 					source_url: sp('The full URL where the note comes from.'),
+					is_shared: sp('Whether the note is published.'),
 				},
 				folders: {},
 				resources: {},
@@ -288,6 +289,7 @@ export default class JoplinDatabase extends Database {
 				this.tableDescriptions_[n].updated_time = sp('When the %s was last updated.', singular);
 				this.tableDescriptions_[n].user_created_time = sp('When the %s was created. It may differ from created_time as it can be manually set by the user.', singular);
 				this.tableDescriptions_[n].user_updated_time = sp('When the %s was last updated. It may differ from updated_time as it can be manually set by the user.', singular);
+				this.tableDescriptions_[n].share_id = sp('The ID of the Joplin Server/Cloud share containing the %s. Empty if not shared.', singular);
 			}
 		}
 
@@ -312,34 +314,44 @@ export default class JoplinDatabase extends Database {
 			throw new Error(`\`notes_fts\` (${countFieldsNotesFts} fields) must have the same number of fields as \`items_fts\` (${countFieldsItemsFts} fields) for the search engine BM25 algorithm to work`);
 		}
 
-		const tableRows = await this.selectAll('SELECT name FROM sqlite_master WHERE type=\'table\'');
+		interface TableRow {
+			name: string;
+		}
+
+		const tableRows: TableRow[] = await this.selectAll('SELECT name FROM sqlite_master WHERE type=\'table\'');
 
 		for (let i = 0; i < tableRows.length; i++) {
+			let pragmas: Row[] = [];
 			const tableName = tableRows[i].name;
-			if (tableName === 'android_metadata') continue;
-			if (tableName === 'table_fields') continue;
-			if (tableName === 'sqlite_sequence') continue;
-			if (tableName.indexOf('notes_fts') === 0) continue;
-			if (tableName.indexOf('items_fts') === 0) continue;
-			if (tableName === 'notes_spellfix') continue;
-			if (tableName === 'search_aux') continue;
+			try {
+				if (tableName === 'android_metadata') continue;
+				if (tableName === 'table_fields') continue;
+				if (tableName.startsWith('sqlite_')) continue;
+				if (tableName.indexOf('notes_fts') === 0) continue;
+				if (tableName.indexOf('items_fts') === 0) continue;
+				if (tableName === 'notes_spellfix') continue;
+				if (tableName === 'search_aux') continue;
 
-			const pragmas = await this.selectAll(`PRAGMA table_info("${tableName}")`);
+				pragmas = await this.selectAll(`PRAGMA table_info("${tableName}")`);
 
-			for (let i = 0; i < pragmas.length; i++) {
-				const item = pragmas[i];
-				// In SQLite, if the default value is a string it has double quotes around it, so remove them here
-				let defaultValue = item.dflt_value;
-				if (typeof defaultValue === 'string' && defaultValue.length >= 2 && defaultValue[0] === '"' && defaultValue[defaultValue.length - 1] === '"') {
-					defaultValue = defaultValue.substr(1, defaultValue.length - 2);
+				for (let i = 0; i < pragmas.length; i++) {
+					const item = pragmas[i];
+					// In SQLite, if the default value is a string it has double quotes around it, so remove them here
+					let defaultValue = item.dflt_value;
+					if (typeof defaultValue === 'string' && defaultValue.length >= 2 && defaultValue[0] === '"' && defaultValue[defaultValue.length - 1] === '"') {
+						defaultValue = defaultValue.substr(1, defaultValue.length - 2);
+					}
+					const q = Database.insertQuery('table_fields', {
+						table_name: tableName,
+						field_name: item.name,
+						field_type: Database.enumId('fieldType', item.type),
+						field_default: defaultValue,
+					});
+					queries.push(q);
 				}
-				const q = Database.insertQuery('table_fields', {
-					table_name: tableName,
-					field_name: item.name,
-					field_type: Database.enumId('fieldType', item.type),
-					field_default: defaultValue,
-				});
-				queries.push(q);
+			} catch (error) {
+				error.message = `On table: ${tableName}: Pragma: ${JSON.stringify(pragmas)}: ${error.message}`;
+				throw error;
 			}
 		}
 

@@ -1,18 +1,17 @@
 import { MenuItemLocation } from '../plugins/api/types';
-import CommandService from '../CommandService';
+import CommandService, { MenuItemRole } from '../CommandService';
 import KeymapService from '../KeymapService';
 import { PluginStates, utils as pluginUtils } from '../plugins/reducer';
 import propsHaveChanged from './propsHaveChanged';
+import { WhenClauseContextOptions } from './stateToWhenClauseContext';
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
 
 export interface MenuItem {
 	id?: string;
 	label?: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	click?: ()=> void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	role?: any;
+	role?: MenuItemRole;
 	type?: 'normal'|'separator'|'submenu';
 	accelerator?: string;
 	checked?: boolean;
@@ -24,13 +23,11 @@ interface MenuItems {
 }
 
 interface MenuItemProps {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	[key: string]: any;
+	[key: string]: { enabled: boolean };
 }
 
 interface MenuItemPropsCache {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	[key: string]: any;
+	[key: string]: { enabled: boolean };
 }
 
 interface MenuItemCache {
@@ -39,8 +36,7 @@ interface MenuItemCache {
 
 const createShallowObjectEqualSelector = createSelectorCreator(
 	defaultMemoize,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(prev: any, next: any) => {
+	(prev: Record<string, unknown>, next: Record<string, unknown>) => {
 		if (Object.keys(prev).length !== Object.keys(next).length) return false;
 		for (const n in prev) {
 			if (prev[n] !== next[n]) return false;
@@ -52,13 +48,10 @@ const createShallowObjectEqualSelector = createSelectorCreator(
 // This selector ensures that for the given command names, the same toolbar
 // button array is returned if the underlying toolbar buttons have not changed.
 const selectObjectByCommands = createCachedSelector(
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(state: any) => state.array,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(array: any[]) => array,
+	(state: { array: MenuItemProps }) => state.array,
+	(array: MenuItemProps) => array,
 )({
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	keySelector: (_state: any, commandNames: string[]) => {
+	keySelector: (_state: { array: MenuItemProps }, commandNames: string[]) => {
 		return commandNames.join('_');
 	},
 	selectorCreator: createShallowObjectEqualSelector,
@@ -103,11 +96,11 @@ export default class MenuUtils {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public commandToStatefulMenuItem(commandName: string, ...args: any[]): MenuItem {
-		const whenClauseContext = this.service.currentWhenClauseContext();
+	public commandToStatefulMenuItem(commandName: string, commandTarget?: any, options?: WhenClauseContextOptions): MenuItem {
+		const whenClauseContext = this.service.currentWhenClauseContext(options);
 
 		const menuItem = this.commandToMenuItem(commandName, () => {
-			return this.service.execute(commandName, ...args);
+			return this.service.execute(commandName, commandTarget);
 		});
 		menuItem.enabled = this.service.isEnabled(commandName, whenClauseContext);
 		return menuItem;
@@ -131,7 +124,7 @@ export default class MenuUtils {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- WhenClauseContext can be partial in tests
 	public commandsToMenuItemProps(commandNames: string[], whenClauseContext: any): MenuItemProps {
 		const output: MenuItemProps = {};
 
@@ -163,8 +156,7 @@ export default class MenuUtils {
 			output.push(menuItem);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (output.length) output.splice(0, 0, { type: 'separator' } as any);
+		if (output.length) output.splice(0, 0, { type: 'separator' } as MenuItem);
 
 		return output;
 	}

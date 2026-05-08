@@ -61,6 +61,10 @@ export interface Constants {
 	syncVersion: number;
 	startupDevPlugins: string[];
 	isSubProfile: boolean;
+
+	'sync.9.apiKey': string;
+	'sync.10.apiKey': string;
+	'sync.11.apiKey': string;
 }
 
 interface SettingSections {
@@ -123,6 +127,35 @@ const defaultMigrations: DefaultMigration[] = [
 	},
 ];
 
+// Global migrations migrate a setting from a global (all-profile) setting to a
+// local (per-profile) setting. When adding a new global migration, the setting
+// should be set to "isGlobal: true" in "builtInMetadata.ts".
+interface GlobalMigration {
+	name: string;
+	// At present, this should always be true:
+	wasGlobal: true;
+}
+
+// The array index is the migration ID -- items should not be removed from this array.
+const globalMigrations: GlobalMigration[] = [
+	{
+		name: 'ui.layout',
+		wasGlobal: true,
+	},
+	{
+		name: 'notes.sortOrder.field',
+		wasGlobal: true,
+	},
+	{
+		name: 'notes.sortOrder.reverse',
+		wasGlobal: true,
+	},
+	{
+		name: 'notes.listRendererId',
+		wasGlobal: true,
+	},
+];
+
 // "UserSettingMigration" are used to migrate existing user setting to a new setting. With a way
 // to transform existing value of the old setting to value and type of the new setting.
 interface UserSettingMigration {
@@ -130,6 +163,17 @@ interface UserSettingMigration {
 	newName: string;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	transformValue: Function;
+
+	// Currently the migration code only supports migrating a plugin setting to the regular settings
+	// (not a plugin setting to a different name). So "oldName" should be the plugin setting name
+	// and "newName" should be the regular setting name. Additionally, it's expected that the
+	// setting is stored in the database (as they all are as of Nov 2025).
+	isPluginSetting: boolean;
+}
+
+interface SubValuesOptions {
+	includeBaseKeyInName?: boolean;
+	includeConstants?: boolean;
 }
 
 const userSettingMigration: UserSettingMigration[] = [
@@ -137,6 +181,37 @@ const userSettingMigration: UserSettingMigration[] = [
 		oldName: 'spellChecker.language',
 		newName: 'spellChecker.languages',
 		transformValue: (value: string) => { return [value]; },
+		isPluginSetting: false,
+	},
+	{
+		oldName: 'plugin-org.joplinapp.plugins.AbcSheetMusic.options',
+		newName: 'markdown.plugin.abc.options',
+		transformValue: (value: string) => { return value; },
+		isPluginSetting: true,
+	},
+];
+
+// Certain settings for similar (or the same) functionality can conflict. This map
+// allows automatically adjusting settings when conflicting settings are changed.
+// See https://github.com/laurent22/joplin/issues/13048
+const conflictingSettings = [
+	{
+		key1: 'plugin-io.github.personalizedrefrigerator.codemirror6-settings.hideMarkdown',
+		value1: 'some',
+		alternate1: 'none',
+
+		key2: 'editor.inlineRendering',
+		value2: true,
+		alternate2: false,
+	},
+	{
+		key1: 'plugin-plugin.calebjohn.rich-markdown.inlineImages',
+		value1: true,
+		alternate1: false,
+
+		key2: 'editor.imageRendering',
+		value2: true,
+		alternate2: false,
 	},
 ];
 
@@ -230,6 +305,10 @@ class Setting extends BaseModel {
 		syncVersion: 3,
 		startupDevPlugins: [],
 		isSubProfile: false,
+
+		'sync.9.apiKey': '',
+		'sync.10.apiKey': '',
+		'sync.11.apiKey': '',
 	};
 
 	public static autoSaveEnabled = true;
@@ -342,44 +421,100 @@ class Setting extends BaseModel {
 		return `${this.value('rootProfileDir')}/${filename}`;
 	}
 
-	public static skipDefaultMigrations() {
+	public static skipMigrations() {
 		logger.info('Skipping all default migrations...');
 
 		this.setValue('lastSettingDefaultMigration', defaultMigrations.length - 1);
+		this.setValue('lastSettingGlobalMigration', globalMigrations.length - 1);
 	}
 
-	public static applyDefaultMigrations() {
-		logger.info('Applying default migrations...');
-		const lastSettingDefaultMigration: number = this.value('lastSettingDefaultMigration');
+	public static async applyMigrations() {
+		const applyDefaultMigrations = () => {
+			logger.info('Applying default migrations...');
+			const lastSettingDefaultMigration: number = this.value('lastSettingDefaultMigration');
 
-		for (let i = 0; i < defaultMigrations.length; i++) {
-			if (i <= lastSettingDefaultMigration) continue;
+			for (let i = 0; i < defaultMigrations.length; i++) {
+				if (i <= lastSettingDefaultMigration) continue;
 
-			const migration = defaultMigrations[i];
+				const migration = defaultMigrations[i];
 
-			logger.info(`Applying default migration: ${migration.name}`);
+				logger.info(`Applying default migration: ${migration.name}`);
 
-			if (this.isSet(migration.name)) {
-				logger.info('Skipping because value is already set');
-				continue;
-			} else {
-				logger.info(`Applying previous default: ${migration.previousDefault}`);
-				this.setValue(migration.name, migration.previousDefault);
+				if (this.isSet(migration.name)) {
+					logger.info('Skipping because value is already set');
+					continue;
+				} else {
+					logger.info(`Applying previous default: ${migration.previousDefault}`);
+					this.setValue(migration.name, migration.previousDefault);
+				}
 			}
-		}
 
-		this.setValue('lastSettingDefaultMigration', defaultMigrations.length - 1);
-	}
+			this.setValue('lastSettingDefaultMigration', defaultMigrations.length - 1);
+		};
 
-	public static applyUserSettingMigration() {
-		// Function to translate existing user settings to new setting.
-		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
-		userSettingMigration.forEach(userMigration => {
-			if (!this.isSet(userMigration.newName) && this.isSet(userMigration.oldName)) {
-				this.setValue(userMigration.newName, userMigration.transformValue(this.value(userMigration.oldName)));
-				logger.info(`Migrating ${userMigration.oldName} to ${userMigration.newName}`);
+		const applyGlobalMigrations = async () => {
+			const lastGlobalMigration = this.value('lastSettingGlobalMigration');
+			let rootFileSettings_: SettingValues|null = null;
+			const rootFileSettings = async () => {
+				rootFileSettings_ ??= await this.rootFileHandler.load();
+				return rootFileSettings_;
+			};
+
+			for (let i = 0; i < globalMigrations.length; i++) {
+				if (i <= lastGlobalMigration) continue;
+				const migration = globalMigrations[i];
+
+				// Skip migrations if the setting is stored in the database and thus
+				// probably can't be fetched from the root profile. This is, for example,
+				// the case on mobile.
+				if (this.keyStorage(migration.name) !== SettingStorage.File) {
+					logger.info('Skipped global value migration -- setting is not stored as a file.');
+					continue;
+				}
+
+				logger.info(`Applying global migration: ${migration.name}`);
+				if (!migration.wasGlobal) {
+					throw new Error('Converting a non-global setting to a global setting is not supported.');
+				}
+
+				const rootSettings = await rootFileSettings();
+				if (Object.prototype.hasOwnProperty.call(rootSettings, migration.name)) {
+					this.setValue(migration.name, rootSettings[migration.name]);
+				}
 			}
-		});
+
+			this.setValue('lastSettingGlobalMigration', globalMigrations.length - 1);
+		};
+
+		const applyUserSettingMigrations = async () => {
+			for (const migration of userSettingMigration) {
+				let applyMigration = false;
+				let newValue: unknown = null;
+
+				if (migration.isPluginSetting) {
+					const oldItem = await this.loadOneFromDb(migration.oldName);
+
+					if (oldItem) {
+						if (!this.isSet(migration.newName)) {
+							newValue = oldItem.value;
+							applyMigration = true;
+						}
+					}
+				} else if (!this.isSet(migration.newName) && this.isSet(migration.oldName)) {
+					newValue = this.value(migration.oldName);
+					applyMigration = true;
+				}
+
+				if (applyMigration) {
+					this.setValue(migration.newName, migration.transformValue(newValue));
+					logger.info(`applyUserSettingMigrations: Migrated ${migration.oldName} to ${migration.newName}`);
+				}
+			}
+		};
+
+		applyDefaultMigrations();
+		await applyGlobalMigrations();
+		await applyUserSettingMigrations();
 	}
 
 	public static featureFlagKeys(appType: AppType): string[] {
@@ -504,6 +639,14 @@ class Setting extends BaseModel {
 
 	public static isPublic(key: string) {
 		return this.keys(true).indexOf(key) >= 0;
+	}
+
+	// This allows loading a setting without doing any check on anything - this can be useful to
+	// retrieve a value for a setting that was previously registered, but no longer is. Also to
+	// retrieve setting values for plugins before the plugin is actually loaded.
+	private static async loadOneFromDb(key: string): Promise<CacheItem | null> {
+		const row = await this.modelSelectOne('SELECT key, value FROM settings WHERE key = ?', [key]);
+		return row ? row : null;
 	}
 
 	// Low-level method to load a setting directly from the database. Should not be used in most cases.
@@ -654,65 +797,82 @@ class Setting extends BaseModel {
 	public static setValue<T extends string>(key: T, value: SettingValueType<T>) {
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
 
-		value = this.formatValue(key, value);
-		value = this.filterValue(key, value);
-
 		const md = this.settingMetadata(key);
-		const enforceLimits = (value: SettingValueType<T>) => {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
-			if ('minimum' in md && value < md.minimum) value = md.minimum as any;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
-			if ('maximum' in md && value > md.maximum) value = md.maximum as any;
+		const processValue = <Key extends string> (value: SettingValueType<Key>) => {
+			value = this.formatValue(key, value);
+			value = this.filterValue(key, value);
+
+			if ('minimum' in md && value < md.minimum) value = md.minimum as SettingValueType<Key>;
+			if ('maximum' in md && value > md.maximum) value = md.maximum as SettingValueType<Key>;
+
 			return value;
 		};
 
-		for (let i = 0; i < this.cache_.length; i++) {
-			const c = this.cache_[i];
-			if (c.key === key) {
-				if (md.isEnum === true) {
-					if (!this.isAllowedEnumOption(key, value)) {
-						throw new Error(_('Invalid option value: "%s". Possible values are: %s.', value, this.enumOptionsDoc(key)));
+		const setValueInternal = <Key extends string> (key: Key, value: SettingValueType<Key>) => {
+			value = processValue(value);
+			for (let i = 0; i < this.cache_.length; i++) {
+				const c = this.cache_[i];
+				if (c.key === key) {
+					if (md.isEnum === true) {
+						if (!this.isAllowedEnumOption(key, value)) {
+							throw new Error(_('Invalid option value: "%s". Possible values are: %s.', value, this.enumOptionsDoc(key)));
+						}
 					}
+
+					if (c.value === value) return;
+
+					this.changedKeys_.push(key);
+
+					// Don't log this to prevent sensitive info (passwords, auth tokens...) to end up in logs
+					// logger.info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
+
+					c.value = value;
+
+					this.dispatch({
+						type: 'SETTING_UPDATE_ONE',
+						key: key,
+						value: c.value,
+					});
+
+					this.scheduleSave();
+					this.scheduleChangeEvent();
+					return;
 				}
+			}
 
-				if (c.value === value) return;
+			this.cache_.push({
+				key: key,
+				value: this.formatValue(key, value),
+			});
 
-				this.changedKeys_.push(key);
+			this.dispatch({
+				type: 'SETTING_UPDATE_ONE',
+				key: key,
+				value: this.formatValue(key, value),
+			});
 
-				// Don't log this to prevent sensitive info (passwords, auth tokens...) to end up in logs
-				// logger.info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
+			this.changedKeys_.push(key);
 
-				c.value = enforceLimits(value);
+			this.scheduleSave();
+			this.scheduleChangeEvent();
+		};
 
-				this.dispatch({
-					type: 'SETTING_UPDATE_ONE',
-					key: key,
-					value: c.value,
-				});
+		const setValueInternalIfExists = <Key extends string> (key: Key, value: SettingValueType<Key>) => {
+			if (!this.keyExists(key)) return;
+			setValueInternal(key, value);
+		};
 
-				this.scheduleSave();
-				this.scheduleChangeEvent();
-				return;
+		setValueInternal(key, value);
+
+		// Prevent conflicts. Use setValueInternal to avoid infinite recursion in the case
+		// where conflictingSettings has invalid data.
+		for (const conflict of conflictingSettings) {
+			if (conflict.key1 === key && conflict.value1 === value) {
+				setValueInternalIfExists(conflict.key2, conflict.alternate2);
+			} else if (conflict.key2 === key && conflict.value2 === value) {
+				setValueInternalIfExists(conflict.key1, conflict.alternate1);
 			}
 		}
-
-		value = enforceLimits(value);
-
-		this.cache_.push({
-			key: key,
-			value: this.formatValue(key, value),
-		});
-
-		this.dispatch({
-			type: 'SETTING_UPDATE_ONE',
-			key: key,
-			value: this.formatValue(key, value),
-		});
-
-		this.changedKeys_.push(key);
-
-		this.scheduleSave();
-		this.scheduleChangeEvent();
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -945,28 +1105,33 @@ class Setting extends BaseModel {
 	// and baseKey is 'sync.5', the function will return
 	// { path: 'http://example', username: 'testing' }
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static subValues(baseKey: string, settings: Partial<SettingsRecord>, options: any = null) {
+	public static subValues(baseKey: string, settings: Partial<SettingsRecord>, options: SubValuesOptions|null = null) {
 		const includeBaseKeyInName = !!options && !!options.includeBaseKeyInName;
+
+		const subKey = (key: string) => {
+			return includeBaseKeyInName ? key : key.substring(baseKey.length + 1);
+		};
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const output: any = {};
-		for (const key in settings) {
-			if (!settings.hasOwnProperty(key)) continue;
-			if (key.indexOf(baseKey) === 0) {
-				const subKey = includeBaseKeyInName ? key : key.substr(baseKey.length + 1);
-				output[subKey] = settings[key];
+		for (const [key, value] of Object.entries(settings)) {
+			if (key.startsWith(baseKey)) {
+				output[subKey(key)] = value;
 			}
 		}
+
+		if (options?.includeConstants) {
+			for (const [key, value] of Object.entries(this.constants_)) {
+				if (key.startsWith(baseKey)) {
+					output[subKey(key)] = value;
+				}
+			}
+		}
+
 		return output;
 	}
 
-	public static async saveAll() {
-		if (Setting.autoSaveEnabled && !this.saveTimeoutId_) return Promise.resolve();
-
-		logger.debug('Saving settings...');
-		shim.clearTimeout(this.saveTimeoutId_);
-		this.saveTimeoutId_ = null;
-
+	private static async getFileValuesAndDbUpdateQueries() {
 		const keys = this.keys();
 
 		const valuesForFile: SettingValues = {};
@@ -1012,6 +1177,18 @@ class Setting extends BaseModel {
 			}
 		}
 
+		return { valuesForFile, queries };
+	}
+
+	public static async saveAll() {
+		if (Setting.autoSaveEnabled && !this.saveTimeoutId_) return Promise.resolve();
+
+		logger.debug('Saving settings...');
+		shim.clearTimeout(this.saveTimeoutId_);
+		this.saveTimeoutId_ = null;
+
+		const { valuesForFile, queries } = await Setting.getFileValuesAndDbUpdateQueries();
+
 		await BaseModel.db().transactionExecBatch(queries);
 
 		if (this.canUseFileStorage()) {
@@ -1035,6 +1212,15 @@ class Setting extends BaseModel {
 		}
 
 		logger.debug('Settings have been saved.');
+	}
+
+	public static async resetDefaultProfileSettings() {
+		const { valuesForFile } = await Setting.getFileValuesAndDbUpdateQueries();
+
+		if (this.canUseFileStorage()) {
+			const { globalSettings } = splitGlobalAndLocalSettings(valuesForFile);
+			await this.rootFileHandler.save(globalSettings, { overwrite: true });
+		}
 	}
 
 	public static scheduleChangeEvent() {
@@ -1120,6 +1306,7 @@ class Setting extends BaseModel {
 			'sync',
 			'encryption',
 			'joplinCloud',
+			'editor',
 			'plugins',
 			'markdownPlugins',
 			'note',
@@ -1181,6 +1368,7 @@ class Setting extends BaseModel {
 		if (name === 'general') return _('General');
 		if (name === 'sync') return _('Synchronisation');
 		if (name === 'appearance') return _('Appearance');
+		if (name === 'editor') return _('Editor');
 		if (name === 'note') return _('Note');
 		if (name === 'folder') return _('Notebook');
 		if (name === 'markdownPlugins') return _('Markdown');
@@ -1217,11 +1405,12 @@ class Setting extends BaseModel {
 		// TODO: This is currently specific to the mobile app
 		const sectionNameToSummary: Record<string, string> = {
 			'general': _('Language, date format'),
-			'appearance': _('Themes, editor font'),
+			'appearance': _('Themes, notebook sort order'),
 			'sync': _('Sync, encryption, proxy'),
 			'joplinCloud': _('Email To Note, login information'),
+			'editor': _('Typography, spellcheck, layout'),
 			'markdownPlugins': _('Media player, math, diagrams, table of contents'),
-			'note': _('Geolocation, spellcheck, editor toolbar, image resize'),
+			'note': _('Geolocation, image resize'),
 			'revisionService': _('Toggle note history, keep notes for'),
 			'tools': _('Logs, profiles, sync status'),
 			'importOrExport': _('Import or export your data'),
@@ -1255,6 +1444,7 @@ class Setting extends BaseModel {
 			'general': 'icon-general',
 			'sync': 'icon-sync',
 			'appearance': 'icon-appearance',
+			'editor': 'fas fa-edit',
 			'note': 'icon-note',
 			'folder': 'icon-notebooks',
 			'plugins': 'icon-plugins',
@@ -1279,6 +1469,7 @@ class Setting extends BaseModel {
 			'general': 'fa fa-sliders-h',
 			'sync': 'fa fa-sync',
 			'appearance': 'fa fa-ruler',
+			'editor': 'fas fa-pen',
 			'note': 'fa fa-sticky-note',
 			'revisionService': 'far fa-history',
 			'plugins': 'fa fa-puzzle-piece',

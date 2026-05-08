@@ -1,15 +1,15 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
-import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage, Menu, MenuItemConstructorOptions, MenuItem } from 'electron';
+import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage, Menu, MenuItemConstructorOptions, MenuItem, BrowserWindowConstructorOptions, FileFilter, SaveDialogOptions, globalShortcut } from 'electron';
 import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
 import * as Sentry from '@sentry/electron/main';
 import { homedir } from 'os';
 import { msleep } from '@joplin/utils/time';
-import { pathExists, pathExistsSync, writeFileSync } from 'fs-extra';
-import { extname, normalize } from 'path';
+import { pathExists, pathExistsSync, writeFileSync, ensureDirSync } from 'fs-extra';
+import { extname, normalize, join } from 'path';
 import isSafeToOpen from './utils/isSafeToOpen';
 import { closeSync, openSync, readSync, statSync } from 'fs';
 import { KB } from '@joplin/utils/bytes';
@@ -25,8 +25,7 @@ interface OpenDialogOptions {
 	properties?: string[];
 	defaultPath?: string;
 	createDirectory?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	filters?: any[];
+	filters?: FileFilter[];
 }
 
 type OnAllowedExtensionsChange = (newExtensions: string[])=> void;
@@ -47,6 +46,7 @@ export class Bridge {
 
 	private extraAllowedExtensions_: string[] = [];
 	private onAllowedExtensionsChangeListener_: OnAllowedExtensionsChange = ()=>{};
+	private registeredGlobalHotkey_ = '';
 
 	public constructor(electronWrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean, altInstanceId: string) {
 		this.electronWrapper_ = electronWrapper;
@@ -65,6 +65,30 @@ export class Bridge {
 
 	public setLogFilePath(v: string) {
 		this.logFilePath_ = v;
+	}
+
+	private getCrashDumpDirectory(): string {
+		try {
+			const platformName = shim.platformName();
+			switch (platformName) {
+			case 'win32':
+				// Windows: Use %LOCALAPPDATA%\CrashDumps
+				return join(process.env.LOCALAPPDATA || join(homedir(), 'AppData', 'Local'), 'CrashDumps');
+			case 'darwin':
+				// macOS: Use ~/Library/Logs/DiagnosticReports
+				return join(homedir(), 'Library', 'Logs', 'DiagnosticReports');
+			case 'linux':
+				// Linux: Use XDG_STATE_HOME (for logs) or fallback to ~/.local/state
+				return join(process.env.XDG_STATE_HOME || join(homedir(), '.local', 'state'), 'joplin');
+			default:
+				// For unknown platforms, default to the home directory
+				return homedir();
+			}
+		} catch (error) {
+			// If we can't get the platform name, fallback to the home directory
+			return homedir();
+		}
+
 	}
 
 	private sentryInit() {
@@ -109,7 +133,10 @@ export class Bridge {
 						log: logAttachment ? logAttachment.data.trim().split('\n') : [],
 					};
 
-					writeFileSync(`${homedir()}/joplin_crash_dump_${date}.json`, JSON.stringify(errorEventWithLog, null, '\t'), 'utf-8');
+					const crashDumpDir = this.getCrashDumpDirectory();
+					ensureDirSync(crashDumpDir);
+					const crashDumpPath = join(crashDumpDir, `joplin_crash_dump_${date}.json`);
+					writeFileSync(crashDumpPath, JSON.stringify(errorEventWithLog, null, '\t'), 'utf-8');
 				} catch (error) {
 					// Ignore the error since we can't handle it here
 				}
@@ -181,8 +208,55 @@ export class Bridge {
 		this.onAllowedExtensionsChangeListener_ = listener;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async captureException(error: any) {
+	public updateGlobalHotkey(accelerator: string) {
+		// Skip if the accelerator hasn't changed
+		if (accelerator === this.registeredGlobalHotkey_) return;
+
+		// Unregister the previous shortcut (only Joplin's own)
+		this.unregisterGlobalHotkey();
+
+		if (!accelerator) return;
+
+		try {
+			const registered = globalShortcut.register(accelerator, () => {
+				const win = this.mainWindow();
+				if (!win) return;
+
+				if (win.isVisible() && win.isFocused()) {
+					win.hide();
+				} else {
+					if (win.isMinimized()) win.restore();
+					win.show();
+					// eslint-disable-next-line no-restricted-properties
+					win.focus();
+				}
+			});
+
+			if (registered) {
+				this.registeredGlobalHotkey_ = accelerator;
+			} else {
+				// eslint-disable-next-line no-console
+				console.warn(`Bridge: Failed to register global shortcut: ${accelerator}`);
+			}
+		} catch (error) {
+			// eslint-disable-next-line no-console
+			console.error(`Bridge: Error registering global shortcut "${accelerator}":`, error);
+		}
+	}
+
+	public unregisterGlobalHotkey() {
+		if (this.registeredGlobalHotkey_) {
+			try {
+				globalShortcut.unregister(this.registeredGlobalHotkey_);
+			} catch (error) {
+				// eslint-disable-next-line no-console
+				console.warn('Bridge: Error removing global shortcut:', error);
+			}
+			this.registeredGlobalHotkey_ = '';
+		}
+	}
+
+	public async captureException(error: unknown) {
 		Sentry.captureException(error);
 		// We wait to give the "beforeSend" event handler time to process the crash dump and write
 		// it to file.
@@ -308,8 +382,7 @@ export class Bridge {
 		return require('electron').shell.showItemInFolder(toSystemSlashes(fullPath));
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public newBrowserWindow(options: any) {
+	public newBrowserWindow(options: BrowserWindowConstructorOptions) {
 		return new BrowserWindow(options);
 	}
 
@@ -326,8 +399,7 @@ export class Bridge {
 		return this.activeWindow().webContents.closeDevTools();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async showSaveDialog(options: any) {
+	public async showSaveDialog(options: SaveDialogOptions) {
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPaths_.file) options.defaultPath = this.lastSelectedPaths_.file;
 		const { filePath } = await dialog.showSaveDialog(this.activeWindow(), options);
@@ -354,8 +426,7 @@ export class Bridge {
 	}
 
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private showMessageBox_(window: any, options: MessageDialogOptions): number {
+	private showMessageBox_(window: BrowserWindow, options: MessageDialogOptions): number {
 		if (!window) window = this.activeWindow();
 		return dialog.showMessageBoxSync(window, { message: '', ...options });
 	}
@@ -401,8 +472,7 @@ export class Bridge {
 		return result;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public showInfoMessageBox(message: string, options: any = {}) {
+	public showInfoMessageBox(message: string, options: MessageDialogOptions = {}) {
 		const result = this.showMessageBox_(this.activeWindow(), { type: 'info',
 			message: message,
 			buttons: [_('OK')], ...options });
@@ -413,12 +483,16 @@ export class Bridge {
 		setLocale(locale);
 	}
 
+	public setEnableUnresponsiveCheck(enabled: boolean) {
+		this.electronWrapper_.setEnableUnresponsiveCheck(enabled);
+	}
+
 	public get Menu() {
-		return require('electron').Menu;
+		return Menu;
 	}
 
 	public get MenuItem() {
-		return require('electron').MenuItem;
+		return MenuItem;
 	}
 
 	public async openExternal(url: string) {
@@ -532,7 +606,7 @@ export class Bridge {
 			});
 
 			if (buttonIndex === 1) {
-				void this.openItem(this.electronApp().ipcLoggerFilePath());
+				void this.openItem(this.electronApp().mainProcessLogFilePath());
 			}
 		}
 	}
@@ -556,6 +630,11 @@ export class Bridge {
 				execPath: process.env.PORTABLE_EXECUTABLE_FILE,
 			};
 			app.relaunch(options);
+		} else if (process.env.APPIMAGE && !this.altInstanceId_) {
+			app.relaunch({
+				execPath: process.env.APPIMAGE,
+				args: ['--appimage-extract-and-run'],
+			});
 		} else if (this.altInstanceId_) {
 			// Couldn't get it to work using relaunch() - it would just "close" the app, but it
 			// would still be open in the tray except unusable. Or maybe it reopens it quickly but

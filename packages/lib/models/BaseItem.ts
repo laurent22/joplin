@@ -28,6 +28,7 @@ export interface ItemsThatNeedDecryptionResult {
 export interface ItemThatNeedSync {
 	id: string;
 	sync_time: number;
+	remote_item_updated_time: number;
 	type_: ModelType;
 	updated_time: number;
 	encryption_applied: number;
@@ -38,6 +39,11 @@ export interface ItemsThatNeedSyncResult {
 	hasMore: boolean;
 	items: ItemThatNeedSync[];
 	neverSyncedItemIds: string[];
+}
+
+export interface RemoteItemMetadata {
+	item_id: string;
+	updated_time: number;
 }
 
 export interface EncryptedItemsStats {
@@ -125,7 +131,7 @@ export default class BaseItem extends BaseModel {
 	}
 
 	// Need to dynamically load the classes like this to avoid circular dependencies
-	public static getClass(name: string) {
+	public static getClass<T extends typeof BaseItem>(name: string): T {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
 			if (BaseItem.syncItemDefinitions_[i].className === name) {
 				const classRef = BaseItem.syncItemDefinitions_[i].classRef;
@@ -203,6 +209,20 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
+	public static async remoteItemMetadata(syncTarget: number): Promise<Map<string, RemoteItemMetadata>> {
+		if (!syncTarget) throw new Error('No syncTarget specified');
+		const temp = await this.db().selectAll('SELECT item_id, remote_item_updated_time FROM sync_items WHERE sync_time > 0 AND sync_target = ?', [syncTarget]);
+		const output = new Map<string, RemoteItemMetadata>();
+		for (let i = 0; i < temp.length; i++) {
+			const metadata: RemoteItemMetadata = {
+				item_id: temp[i].item_id,
+				updated_time: temp[i].remote_item_updated_time,
+			};
+			output.set(temp[i].item_id, metadata);
+		}
+		return output;
+	}
+
 	public static async syncItem(syncTarget: number, itemId: string, options: LoadOptions = null): Promise<SyncItemEntity> {
 		options = {
 			fields: '*',
@@ -253,6 +273,18 @@ export default class BaseItem extends BaseModel {
 			output = output.concat(models);
 		}
 		return output;
+	}
+
+	public static async loadItemsByIdsOrFail(ids: string[]) {
+		const items = await this.loadItemsByIds(ids);
+		if (items.length < ids.length) {
+			for (let i = 0; i < ids.length; i++) {
+				if (items[i]?.id !== ids[i]) {
+					throw new Error(`No such item: ${ids[i]}`);
+				}
+			}
+		}
+		return items;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -558,28 +590,24 @@ export default class BaseItem extends BaseModel {
 		const lines = content.split('\n');
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		let output: any = {};
-		let state = 'readingProps';
-		const body: string[] = [];
+		let body: string[] = [];
 
 		for (let i = lines.length - 1; i >= 0; i--) {
 			let line = lines[i];
 
-			if (state === 'readingProps') {
-				line = line.trim();
+			line = line.trim();
 
-				if (line === '') {
-					state = 'readingBody';
-					continue;
-				}
-
-				const p = line.indexOf(':');
-				if (p < 0) throw new Error(`Invalid property format: ${line}: ${content}`);
-				const key = line.substr(0, p).trim();
-				const value = line.substr(p + 1).trim();
-				output[key] = value;
-			} else if (state === 'readingBody') {
-				body.splice(0, 0, line);
+			// Props are separated from the body by a single blank line
+			if (line === '') {
+				body = lines.slice(0, i);
+				break;
 			}
+
+			const p = line.indexOf(':');
+			if (p < 0) throw new Error(`Invalid property format: ${line}: ${content}`);
+			const key = line.substr(0, p).trim();
+			const value = line.substr(p + 1).trim();
+			output[key] = value;
 		}
 
 		if (!output.type_) throw new Error(`Missing required property: type_: ${content}`);
@@ -710,8 +738,7 @@ export default class BaseItem extends BaseModel {
 			// // CHANGED:
 			// 'SELECT * FROM [ITEMS] items JOIN sync_items s ON s.item_id = items.id WHERE sync_target = ? AND'
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			let extraWhere: any = [];
+			let extraWhere: string[]|string = [];
 			if (className === 'Note') extraWhere.push('is_conflict = 0');
 			if (className === 'Resource') extraWhere.push('encryption_blob_encrypted = 0');
 			if (ItemClass.encryptionSupported()) extraWhere.push('encryption_applied = 0');
@@ -752,6 +779,7 @@ export default class BaseItem extends BaseModel {
 
 			if (newLimit > 0) {
 				fieldNames.push('sync_time');
+				fieldNames.push('remote_item_updated_time');
 
 				const sql = sprintf(
 					`
@@ -774,8 +802,7 @@ export default class BaseItem extends BaseModel {
 				changedItems = await ItemClass.modelSelectAll(sql);
 			}
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const neverSyncedItemIds = neverSyncedItem.map((it: any) => it.id);
+			const neverSyncedItemIds = neverSyncedItem.map((it: BaseItemEntity) => it.id);
 			const items = neverSyncedItem.concat(changedItems);
 
 			if (i >= classNames.length - 1) {
@@ -852,7 +879,7 @@ export default class BaseItem extends BaseModel {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
+	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
 		const itemType = item.type_;
 		const itemId = item.id;
 		if (!itemType || !itemId || syncTime === undefined) throw new Error(sprintf('Invalid parameters in updateSyncTimeQueries(): %d, %s, %d', syncTarget, JSON.stringify(item), syncTime));
@@ -865,22 +892,23 @@ export default class BaseItem extends BaseModel {
 				params: [syncTarget, itemType, itemId],
 			},
 			{
-				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?, ?)',
-				params: [syncTarget, itemType, itemId, itemLocation, syncTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`],
+				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, remote_item_updated_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+				params: [syncTarget, itemType, itemId, itemLocation, syncTime, remoteItemUpdatedTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`],
 			},
 		];
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async saveSyncTime(syncTarget: number, item: any, syncTime: number) {
-		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime);
+	public static async saveSyncTime(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0) {
+		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime, remoteItemUpdatedTime);
 		return this.db().transactionExecBatch(queries);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static async saveSyncDisabled(syncTargetId: number, item: any, syncDisabledReason: string, itemLocation: number = null) {
 		const syncTime = 'sync_time' in item ? item.sync_time : 0;
-		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, true, syncDisabledReason, itemLocation);
+		const remoteItemUpdatedTime = 'remote_item_updated_time' in item ? item.remote_item_updated_time : 0;
+		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, remoteItemUpdatedTime, true, syncDisabledReason, itemLocation);
 		return this.db().transactionExecBatch(queries);
 	}
 
@@ -987,7 +1015,7 @@ export default class BaseItem extends BaseModel {
 
 		const isNew = this.isNew(o, options);
 
-		if (needsShareReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache)) {
+		if (needsShareReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache, options.disableReadOnlyCheck)) {
 			if (!isNew) {
 				const previousItem = await this.loadItemByTypeAndId(this.modelType(), o.id, { fields: ['id', 'share_id'] });
 				checkIfItemCanBeChanged(this.modelType(), options.changeSource, previousItem, this.syncShareCache);
@@ -1028,6 +1056,16 @@ export default class BaseItem extends BaseModel {
 	public static isMarkdownTag(md: any) {
 		if (!md) return false;
 		return !!md.match(/^\[.*?\]\(:\/[0-9a-zA-Z]{32}\)$/);
+	}
+
+	// When needing to set sync_time to the updated_time of the remote item (after an item is downloaded from remote), because this timestamp usually originates
+	// from another device, we need to cap it at the local device time, to avoid sync issues if there is time drift. In all other cases use the remote updated_time,
+	// as syncing an incoming change to a note can happen much later than the change was actually made, and if we use the device time in all cases, this can result
+	// in conflicts not occurring when they should.
+	// Please note: The remoteUpdatedTime must come from the updated_time within the server object, not the RemoteItem updated_time from the result of the delta api
+	public static remoteItemSyncTime(remoteUpdatedTime: number) {
+		const currentTime = Date.now();
+		return remoteUpdatedTime > currentTime ? currentTime : remoteUpdatedTime;
 	}
 
 }

@@ -380,6 +380,13 @@ class AppGui {
 		this.widget('noteList').toggleShowIds();
 	}
 
+	toggleFolderCollapse() {
+		const folderList = this.widget('folderList');
+		if (folderList && folderList.toggleFolderCollapse) {
+			folderList.toggleFolderCollapse();
+		}
+	}
+
 	widget(name) {
 		if (name === 'root') return this.rootWidget_;
 		return this.rootWidget_.childByName(name);
@@ -506,6 +513,8 @@ class AppGui {
 			this.toggleNoteMetadata();
 		} else if (cmd === 'toggle_ids') {
 			this.toggleFolderIds();
+		} else if (cmd === 'toggle_folder_collapse') {
+			this.toggleFolderCollapse();
 		} else if (cmd === 'enter_command_line_mode') {
 			const cmd = await this.widget('statusBar').prompt();
 			if (!cmd) return;

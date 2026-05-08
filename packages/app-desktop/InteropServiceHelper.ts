@@ -11,7 +11,7 @@ import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 const { friendlySafeFilename } = require('@joplin/lib/path-utils');
 import time from '@joplin/lib/time';
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
 const md5 = require('md5');
 const url = require('url');
 
@@ -58,12 +58,15 @@ export default class InteropServiceHelper {
 			const exportOptions = {
 				customCss: options.customCss ? options.customCss : '',
 				plugins: options.plugins,
+				shouldEmbedOnlyImages: true,
 			};
 
 			htmlFile = await this.exportNoteToHtmlFile(noteId, exportOptions);
 
-			const windowOptions = {
-				show: false,
+			const windowOptions: BrowserWindowConstructorOptions = {
+				// Work around a printing issue: As of Electron 39, if the window is initially hidden, printing crashes the app.
+				// This only seems to be necessary on Linux.
+				show: shim.isLinux(),
 			};
 
 			win = bridge().newBrowserWindow(windowOptions);
@@ -86,8 +89,17 @@ export default class InteropServiceHelper {
 								// pdfs.
 								// https://github.com/laurent22/joplin/issues/6254.
 								await win.webContents.executeJavaScript('document.querySelectorAll(\'details\').forEach(el=>el.setAttribute(\'open\',\'\'))');
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-								const data = await win.webContents.printToPDF(options as any);
+								const data = await win.webContents.printToPDF({
+									...options,
+									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code before rule was applied
+									pageSize: options.pageSize as any,
+									// Allows users to override the CSS page size.
+									// See https://github.com/laurent22/joplin/issues/13096
+									preferCSSPageSize: true,
+
+									// Include accessibility information in the output:
+									generateTaggedPDF: true,
+								});
 								resolve(data);
 							} catch (error) {
 								reject(error);
@@ -114,6 +126,9 @@ export default class InteropServiceHelper {
 							//
 							// 2025-05-03: Windows and MacOS also need the window.print() workaround.
 							// See https://github.com/electron/electron/pull/46937.
+							//
+							// 2025-10-30: window.print() now causes a crash on Linux -- switch back to the
+							// other method.
 
 							const applyWorkaround = true;
 							if (applyWorkaround) {

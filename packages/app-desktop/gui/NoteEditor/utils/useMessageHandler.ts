@@ -1,14 +1,15 @@
-import { useCallback } from 'react';
-import { FormNote, HtmlToMarkdownHandler, MarkupToHtmlHandler, ScrollOptions } from './types';
+import { RefObject, useCallback } from 'react';
+import { FormNote, HtmlToMarkdownHandler, MarkupToHtmlHandler, ScrollOptions, MessageEvent } from './types';
 import contextMenu from './contextMenu';
 import CommandService from '@joplin/lib/services/CommandService';
 import PostMessageService from '@joplin/lib/services/PostMessageService';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { reg } from '@joplin/lib/registry';
 import bridge from '../../../services/bridge';
+import { resolveContextMenuItemType } from './contextMenuUtils';
 
 export default function useMessageHandler(
-	scrollWhenReady: ScrollOptions|null,
+	scrollWhenReadyRef: RefObject<ScrollOptions|null>,
 	clearScrollWhenReady: ()=> void,
 	windowId: string,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -21,8 +22,7 @@ export default function useMessageHandler(
 	htmlToMd: HtmlToMarkdownHandler,
 	mdToHtml: MarkupToHtmlHandler,
 ) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return useCallback(async (event: any) => {
+	return useCallback(async (event: MessageEvent) => {
 		const msg = event.channel ? event.channel : '';
 		const args = event.args;
 		const arg0 = args && args.length >= 1 ? args[0] : null;
@@ -35,8 +35,8 @@ export default function useMessageHandler(
 			s.splice(0, 1);
 			reg.logger().error(s.join(':'));
 		} else if (msg === 'noteRenderComplete') {
-			if (scrollWhenReady) {
-				const options = { ...scrollWhenReady };
+			if (scrollWhenReadyRef.current) {
+				const options = { ...scrollWhenReadyRef.current };
 				clearScrollWhenReady();
 				editorRef.current.scrollTo(options);
 			}
@@ -47,9 +47,11 @@ export default function useMessageHandler(
 			if (s.length < 2) throw new Error(`Invalid message: ${msg}`);
 			void ResourceFetcher.instance().markForDownload(s[1]);
 		} else if (msg === 'contextMenu') {
+			const resourceId = arg0.resourceId;
+			const itemType = await resolveContextMenuItemType(arg0 && arg0.type, resourceId);
 			const menu = await contextMenu({
-				itemType: arg0 && arg0.type,
-				resourceId: arg0.resourceId,
+				itemType,
+				resourceId: resourceId,
 				filename: arg0.filename,
 				mime: arg0.mime,
 				linkToOpen: null,
@@ -78,5 +80,5 @@ export default function useMessageHandler(
 			// bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
 		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [dispatch, setLocalSearchResultCount, scrollWhenReady, formNote]);
+	}, [dispatch, setLocalSearchResultCount, scrollWhenReadyRef, formNote]);
 }

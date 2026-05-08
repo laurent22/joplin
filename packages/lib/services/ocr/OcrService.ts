@@ -1,13 +1,12 @@
-import { toIso639Alpha3 } from '../../locale';
+import { countryCodeOnly, languageCodeOnly, toIso639Alpha3 } from '../../locale';
 import Resource from '../../models/Resource';
 import Setting from '../../models/Setting';
 import shim from '../../shim';
-import { ResourceEntity, ResourceOcrStatus } from '../database/types';
+import { ResourceEntity, ResourceOcrDriverId, ResourceOcrStatus } from '../database/types';
 import OcrDriverBase from './OcrDriverBase';
-import { RecognizeResult } from './utils/types';
+import { emptyRecognizeResult, PdfOcrDetails, PdfOcrPage, RecognizeResult, RecognizeResultLine } from './utils/types';
 import { Minute } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
-import filterOcrText from './utils/filterOcrText';
 import TaskQueue from '../../TaskQueue';
 import eventManager, { EventName } from '../../eventManager';
 
@@ -24,25 +23,55 @@ export const supportedMimeTypes = [
 	'image/x-portable-bitmap',
 ];
 
+// Tesseract uses its own language codes that don't always match ISO 639-3.
+// For example, the ISO 639-3 code for Chinese is "zho" but Tesseract uses
+// "chi_sim" (Simplified) and "chi_tra" (Traditional), and Norwegian Bokmål
+// is "nob" in ISO 639-3 but "nor" in Tesseract.
+const iso639ToTesseractOverrides: Record<string, string> = {
+	'nob': 'nor',
+};
+
+const localeToTesseractLanguage = (locale: string): string => {
+	const lang = languageCodeOnly(locale);
+	if (lang === 'zh') {
+		const country = countryCodeOnly(locale).toUpperCase();
+		return country === 'TW' ? 'chi_tra' : 'chi_sim';
+	}
+	const alpha3 = toIso639Alpha3(locale);
+	return iso639ToTesseractOverrides[alpha3] || alpha3;
+};
+
 const resourceInfo = (resource: ResourceEntity) => {
 	return `${resource.id} (type ${resource.mime})`;
 };
 
+const getOcrDriverId = (resource: ResourceEntity) => {
+	// Default to PrintedText. When syncing with certain (older?) clients, resources can be assigned an
+	// ocr_driver_id of zero.
+	// https://github.com/laurent22/joplin/issues/13043
+	return resource.ocr_driver_id === 0 ? ResourceOcrDriverId.PrintedText : resource.ocr_driver_id;
+};
+
 export default class OcrService {
 
-	private driver_: OcrDriverBase;
+	private drivers_: OcrDriverBase[];
 	private isRunningInBackground_ = false;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private maintenanceTimer_: any = null;
 	private pdfExtractDir_: string = null;
 	private isProcessingResources_ = false;
-	private recognizeQueue_: TaskQueue = null;
+	private printedTextQueue_: TaskQueue = null;
+	private handwrittenTextQueue_: TaskQueue = null;
 
-	public constructor(driver: OcrDriverBase) {
-		this.driver_ = driver;
-		this.recognizeQueue_ = new TaskQueue('recognize', logger);
-		this.recognizeQueue_.setConcurrency(5);
-		this.recognizeQueue_.keepTaskResults = false;
+	public constructor(drivers: OcrDriverBase[]) {
+		this.drivers_ = drivers;
+		this.printedTextQueue_ = new TaskQueue('printed', logger);
+		this.printedTextQueue_.setConcurrency(5);
+		this.printedTextQueue_.keepTaskResults = false;
+
+		this.handwrittenTextQueue_ = new TaskQueue('handwritten', logger);
+		this.handwrittenTextQueue_.setConcurrency(1);
+		this.handwrittenTextQueue_.keepTaskResults = false;
 	}
 
 	private async pdfExtractDir(): Promise<string> {
@@ -57,47 +86,97 @@ export default class OcrService {
 		return this.runInBackground;
 	}
 
-	private async recognize(language: string, resource: ResourceEntity): Promise<RecognizeResult> {
+	private async recognize(language: string, resource: ResourceEntity): Promise<RecognizeResult|null> {
 		if (resource.encryption_applied) throw new Error(`Cannot OCR encrypted resource: ${resource.id}`);
+
+		if (getOcrDriverId(resource) === ResourceOcrDriverId.HandwrittenText && !Setting.value('ocr.handwrittenTextDriverEnabled')) {
+			logger.debug('Skipping OCR of', resource.id, 'with the HandwrittenText driver. The HTR driver has been disabled by the user.');
+			return null;
+		}
 
 		const resourceFilePath = Resource.fullPath(resource);
 
-		if (resource.mime === 'application/pdf') {
-			// OCR can be slow for large PDFs.
-			// Skip it if the PDF already includes text.
-			const pageTexts = await shim.pdfExtractEmbeddedText(resourceFilePath);
-			const pagesWithText = pageTexts.filter(text => !!text.trim().length);
+		const driver = this.drivers_.find(d => d.driverId === getOcrDriverId(resource));
+		if (!driver) throw new Error(`Unknown driver ID: ${resource.ocr_driver_id}`);
 
-			if (pagesWithText.length > 0) {
-				return {
-					text: pageTexts.join('\n'),
-				};
+		if (resource.mime === 'application/pdf') {
+			// Save OCR details if the setting is enabled OR if this specific resource
+			// was marked with TodoAccessible status (requesting accessible PDF creation)
+			const saveOcrDetails = Setting.value('ocr.pdfMode') === 'accessible' || resource.ocr_status === ResourceOcrStatus.TodoAccessible;
+
+			// OCR can be slow for large PDFs.
+			// Skip it if the PDF already includes text (unless accessible processing is requested)
+			if (!saveOcrDetails) {
+				const pageTexts = await shim.pdfExtractEmbeddedText(resourceFilePath);
+				const pagesWithText = pageTexts.filter(text => !!text.trim().length);
+
+				if (pagesWithText.length > 0) {
+					return {
+						...emptyRecognizeResult(),
+						ocr_status: ResourceOcrStatus.Done,
+						ocr_text: pageTexts.join('\n'),
+					};
+				}
 			}
 
 			const imageFilePaths = await shim.pdfToImages(resourceFilePath, await this.pdfExtractDir());
-			const results: RecognizeResult[] = [];
 
-			let pageIndex = 0;
-			for (const imageFilePath of imageFilePaths) {
-				logger.info(`Recognize: ${resourceInfo(resource)}: Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
-				results.push(await this.driver_.recognize(language, imageFilePath));
-				pageIndex++;
+			const results: RecognizeResult[] = [];
+			const pdfOcrPages: PdfOcrPage[] = [];
+
+			try {
+				let pageIndex = 0;
+				for (const imagePath of imageFilePaths) {
+					logger.info(`Recognize: ${resourceInfo(resource)}: Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
+					const result = await driver.recognize(language, imagePath, resource.id);
+					results.push(result);
+
+					if (saveOcrDetails) {
+						// Parse OCR details for this page
+						let pageLines: RecognizeResultLine[] = [];
+						try {
+							pageLines = Resource.unserializeOcrDetails(result.ocr_details) || [];
+						} catch (error) {
+							logger.warn(`Failed to parse OCR details for page ${pageIndex + 1}: ${error.message}`);
+						}
+						pdfOcrPages.push({
+							lines: pageLines,
+						});
+					}
+
+					pageIndex++;
+				}
+			} finally {
+				for (const imagePath of imageFilePaths) {
+					await shim.fsDriver().remove(imagePath);
+				}
 			}
 
-			for (const imageFilePath of imageFilePaths) {
-				await shim.fsDriver().remove(imageFilePath);
+			// Only create PDF OCR details structure if setting is enabled
+			let ocrDetails = '';
+			if (saveOcrDetails) {
+				const pdfOcrDetails: PdfOcrDetails = {
+					version: 1,
+					pages: pdfOcrPages,
+				};
+				ocrDetails = JSON.stringify(pdfOcrDetails);
 			}
 
 			return {
-				text: results.map(r => r.text).join('\n'),
+				...emptyRecognizeResult(),
+				ocr_status: ResourceOcrStatus.Done,
+				ocr_text: results.map(r => r.ocr_text).join('\n'),
+				ocr_details: ocrDetails,
 			};
 		} else {
-			return this.driver_.recognize(language, resourceFilePath);
+			return driver.recognize(language, resourceFilePath, resource.id);
 		}
 	}
 
 	public async dispose() {
-		await this.driver_.dispose();
+		for (const d of this.drivers_) {
+			await d.dispose();
+		}
 	}
 
 	public async processResources() {
@@ -106,7 +185,6 @@ export default class OcrService {
 		this.isProcessingResources_ = true;
 
 		const totalResourcesToProcess = await Resource.needOcrCount(supportedMimeTypes);
-		const inProcessResourceIds: string[] = [];
 		const skippedResourceIds: string[] = [];
 
 		logger.info(`Found ${totalResourcesToProcess} resources to process...`);
@@ -115,7 +193,7 @@ export default class OcrService {
 			return async () => {
 				logger.info(`Processing resource ${totalProcessed + 1} / ${totalResourcesToProcess}: ${resourceInfo(resource)}...`);
 
-				const toSave: ResourceEntity = {
+				let toSave: ResourceEntity = {
 					id: resource.id,
 				};
 
@@ -132,11 +210,13 @@ export default class OcrService {
 						return;
 					}
 
-					const result = await this.recognize(language, resource);
-					toSave.ocr_status = ResourceOcrStatus.Done;
-					toSave.ocr_text = filterOcrText(result.text);
-					toSave.ocr_details = Resource.serializeOcrDetails(result.lines);
-					toSave.ocr_error = '';
+					const recognizeResult = await this.recognize(language, resource);
+					if (recognizeResult) {
+						toSave = {
+							...toSave,
+							...recognizeResult,
+						};
+					}
 				} catch (error) {
 					const errorMessage = typeof error === 'string' ? error : error?.message;
 					logger.warn(`Could not process resource ${resourceInfo(resource)}`, error);
@@ -151,30 +231,51 @@ export default class OcrService {
 		};
 
 		try {
-			const language = toIso639Alpha3(Setting.value('locale'));
+			const language = localeToTesseractLanguage(Setting.value('locale'));
+			const processedResourceIds: string[] = [];
 
-			let totalProcessed = 0;
+			// Queue all resources for processing
+			let lastProcessedCount = -1;
+			while (processedResourceIds.length > lastProcessedCount) {
+				lastProcessedCount = processedResourceIds.length;
 
-			while (true) {
-				const resources = await Resource.needOcr(supportedMimeTypes, skippedResourceIds.concat(inProcessResourceIds), 100, {
+				const resources = await Resource.needOcr(supportedMimeTypes, skippedResourceIds.concat(processedResourceIds), 100, {
 					fields: [
 						'id',
 						'mime',
 						'file_extension',
 						'encryption_applied',
+						'ocr_driver_id',
+						'ocr_status',
 					],
 				});
 
-				if (!resources.length) break;
-
 				for (const resource of resources) {
-					inProcessResourceIds.push(resource.id);
-					await this.recognizeQueue_.pushAsync(resource.id, makeQueueAction(totalProcessed++, language, resource));
+					const makeCurrentQueueAction = () => makeQueueAction(processedResourceIds.length, language, resource);
+
+					let processed = true;
+					if (getOcrDriverId(resource) === ResourceOcrDriverId.PrintedText) {
+						await this.printedTextQueue_.pushAsync(resource.id, makeCurrentQueueAction());
+					} else if (getOcrDriverId(resource) === ResourceOcrDriverId.HandwrittenText) {
+						await this.handwrittenTextQueue_.pushAsync(resource.id, makeCurrentQueueAction());
+					} else {
+						logger.info('Skipped processing', resource.id, 'with OCR: Unsupported ocr_driver_id', resource.ocr_driver_id);
+						processed = false;
+					}
+
+					if (processed) {
+						processedResourceIds.push(resource.id);
+					} else {
+						skippedResourceIds.push(resource.id);
+					}
 				}
 			}
 
-			await this.recognizeQueue_.waitForAll();
+			// Wait for processing to finish
+			await this.printedTextQueue_.waitForAll();
+			await this.handwrittenTextQueue_.waitForAll();
 
+			const totalProcessed = processedResourceIds.length;
 			if (totalProcessed) {
 				eventManager.emit(EventName.OcrServiceResourcesProcessed);
 			}
@@ -212,7 +313,8 @@ export default class OcrService {
 		if (this.maintenanceTimer_) shim.clearInterval(this.maintenanceTimer_);
 		this.maintenanceTimer_ = null;
 		this.isRunningInBackground_ = false;
-		await this.recognizeQueue_.stop();
+		await this.printedTextQueue_.stop();
+		await this.handwrittenTextQueue_.stop();
 	}
 
 }

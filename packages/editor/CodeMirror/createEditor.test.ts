@@ -8,8 +8,21 @@ import { forceParsing } from '@codemirror/language';
 import loadLanguages from './testing/loadLanguages';
 
 import { expect, describe, it } from '@jest/globals';
-import createEditorSettings from './testing/createEditorSettings';
+import createEditorSettings from '../testing/createEditorSettings';
+import { ContentScriptLoadOptions } from '../types';
 
+const getMockContentScriptSource = (context: ContentScriptLoadOptions) => {
+	return {
+		sourceJs: `
+			${context.contentScriptStartJs}
+			exports.default = context => {
+				context.postMessage(context.pluginId);
+				return {};
+			};
+			${context.contentScriptEndJs}
+		`,
+	};
+};
 
 describe('createEditor', () => {
 	beforeAll(() => {
@@ -40,7 +53,9 @@ describe('createEditor', () => {
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onLocalize: input => input,
 			onPasteFile: null,
+			resolveImageSrc: src => Promise.resolve(src),
 		});
 
 		// Force the generation of the syntax tree now.
@@ -48,7 +63,7 @@ describe('createEditor', () => {
 
 		const headerLine = document.body.querySelector('.cm-headerLine')!;
 		expect(headerLine.textContent).toBe(headerLineText);
-		expect(getComputedStyle(headerLine).fontSize).toBe('1.6em');
+		expect(getComputedStyle(headerLine).fontSize).toBe('1.5em');
 
 		// CodeMirror nests the tag that styles the header within .cm-headerLine:
 		//  <div class='cm-headerLine'><span class='someclass'>Testing...</span></div>
@@ -69,16 +84,13 @@ describe('createEditor', () => {
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onLocalize: input => input,
 			onPasteFile: null,
+			resolveImageSrc: src=>Promise.resolve(src),
 		});
 
-		const getContentScriptJs = jest.fn(async () => {
-			return `
-				exports.default = context => {
-					context.postMessage(context.pluginId);
-					return {};
-				};
-			`;
+		const getContentScriptJs = jest.fn(async (context) => {
+			return getMockContentScriptSource(context);
 		});
 		const postMessageHandler = jest.fn();
 
@@ -138,16 +150,13 @@ describe('createEditor', () => {
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onLocalize: input => input,
 			onPasteFile: null,
+			resolveImageSrc: src=>Promise.resolve(src),
 		});
 
-		const getContentScriptJs = jest.fn(async () => {
-			return `
-				exports.default = context => {
-					context.postMessage(context.pluginId);
-					return {};
-				};
-			`;
+		const getContentScriptJs = jest.fn(async (context) => {
+			return getMockContentScriptSource(context);
 		});
 		const postMessageHandler = jest.fn();
 
@@ -188,7 +197,9 @@ describe('createEditor', () => {
 			settings: editorSettings,
 			onEvent: () => {},
 			onLogMessage: () => {},
+			onLocalize: input => input,
 			onPasteFile: null,
+			resolveImageSrc: src=>Promise.resolve(src),
 		});
 		const editorState = editor.editor.state;
 		const idFacet = editor.joplinExtensions.noteIdFacet;

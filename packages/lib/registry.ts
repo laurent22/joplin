@@ -3,6 +3,7 @@ import Setting from './models/Setting';
 import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
+import Synchronizer from './Synchronizer';
 
 class Registry {
 
@@ -70,6 +71,20 @@ class Registry {
 		return this.syncTarget(SyncTargetRegistry.nameToId('nextcloud'));
 	}
 
+	// There is a delay of at least 1 second to avoid using excessive data usage, as the full note contents are uploaded every time a change is made.
+	// On desktop this delay is longer, to avoid distraction to the user due to the sync button continually stopping and starting spinning
+	public syncAsYouTypeInterval() {
+		if (shim.isElectron()) {
+			return 15 * 1000;
+		} else {
+			return 1000;
+		}
+	}
+
+	public defaultScheduleInterval() {
+		return 1000 * 10;
+	}
+
 	public syncTarget = (syncTargetId: number = null) => {
 		if (syncTargetId === null) syncTargetId = Setting.value('sync.target');
 		if (this.syncTargets_[syncTargetId]) return this.syncTargets_[syncTargetId];
@@ -107,7 +122,7 @@ class Registry {
 		this.schedSyncCalls_.push(true);
 
 		try {
-			if (delay === null) delay = 1000 * 10;
+			if (delay === null) delay = this.defaultScheduleInterval();
 			if (syncOptions === null) syncOptions = {};
 
 			// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -121,6 +136,15 @@ class Registry {
 				this.scheduleSyncId_ = null;
 			}
 
+			const syncTargetId = Setting.value('sync.target');
+			const isAuthenticated = syncTargetId ? await this.syncTarget(syncTargetId).isAuthenticated() : false;
+			const isPartialSync = syncOptions.syncSteps?.toString() === Synchronizer.partialSyncSteps.toString();
+
+			if (isAuthenticated && isPartialSync) {
+				// Only dispatch the event if a partial sync is scheduled, which is triggered by making a change
+				this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: true });
+			}
+
 			if (Setting.value('env') === 'dev' && delay !== 0) {
 				// this.logger().info('Schedule sync DISABLED!!!');
 				// return;
@@ -130,6 +154,8 @@ class Registry {
 
 			const timeoutCallback = async () => {
 				this.timerCallbackCalls_.push(true);
+				let newContext;
+
 				try {
 					this.scheduleSyncId_ = null;
 					this.logger().info('Preparing scheduled sync');
@@ -187,11 +213,12 @@ class Registry {
 									Setting.setValue(contextKey, JSON.stringify(newContext));
 								};
 							}
-							const newContext = await sync.start(options);
+							newContext = await sync.start(options);
 							Setting.setValue(contextKey, JSON.stringify(newContext));
 						} catch (error) {
 							if (error.code === 'alreadyStarted') {
 								this.logger().info(error.message);
+								newContext = null; // Prevent resetting syncPending to false if another sync is triggered while one is in progress
 							} else {
 								promiseResolve();
 								throw error;
@@ -205,6 +232,11 @@ class Registry {
 					promiseResolve();
 
 				} finally {
+					if (newContext === undefined) {
+						// If the logic in the try block returns before executing the sync, ensure syncPending is reset back to false
+						this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: false });
+					}
+
 					this.timerCallbackCalls_.pop();
 				}
 			};

@@ -69,7 +69,7 @@ const audioElement = ({ src, alt, id }) =>
 		`    ${alt || src || id || 'Download audio'}`,
 		'  </a>',
 		'</p>',
-	].join('');
+	].map(s => s.trim()).join('');
 
 const resourceUtils = {
 	imgElement,

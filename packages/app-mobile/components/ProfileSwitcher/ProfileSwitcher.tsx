@@ -6,16 +6,20 @@ import ScreenHeader from '../ScreenHeader';
 import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import useProfileConfig from './useProfileConfig';
 import { _ } from '@joplin/lib/locale';
-import { deleteProfileById } from '@joplin/lib/services/profileConfig';
-import { saveProfileConfig, switchProfile } from '../../services/profiles';
+import { switchProfile } from '../../services/profiles';
 import { themeStyle } from '../global-style';
 import shim from '@joplin/lib/shim';
 import { DialogContext } from '../DialogManager';
-import { FAB, List, Portal } from 'react-native-paper';
+import { FAB, List } from 'react-native-paper';
 import { TextStyle } from 'react-native';
 import useOnLongPressProps from '../../utils/hooks/useOnLongPressProps';
 import { Dispatch } from 'redux';
 import NavService from '@joplin/lib/services/NavService';
+import Logger from '@joplin/utils/Logger';
+import deleteProfile from './utils/deleteProfile';
+import DatabaseDriverReactNative from '../../utils/database-driver-react-native';
+
+const logger = Logger.create('ProfileSwitcher');
 
 interface Props {
 	themeId: number;
@@ -34,6 +38,9 @@ const useStyle = (themeId: number) => {
 				right: 0,
 				bottom: 0,
 			},
+			profileList: {
+				flex: 1,
+			},
 			profileListItem: {
 				paddingLeft: theme.margin,
 				paddingRight: theme.margin,
@@ -41,6 +48,7 @@ const useStyle = (themeId: number) => {
 		});
 	}, [themeId]);
 };
+
 
 interface ProfileItemProps {
 	themeId: number;
@@ -61,7 +69,7 @@ const ProfileListItem: React.FC<ProfileItemProps> = ({ profile, profileConfig, s
 			}
 		};
 
-		const switchProfileMessage = _('To switch the profile, the app is going to close and you will need to restart it.');
+		const switchProfileMessage = _('To switch the profile, the app is going to restart.');
 		if (shim.mobilePlatform() === 'web') {
 			if (confirm(switchProfileMessage)) {
 				void doIt();
@@ -95,10 +103,14 @@ const ProfileListItem: React.FC<ProfileItemProps> = ({ profile, profileConfig, s
 	const onDeleteProfile = useCallback(async (profile: Profile) => {
 		const doIt = async () => {
 			try {
-				const newConfig = deleteProfileById(profileConfig, profile.id);
-				await saveProfileConfig(newConfig);
+				await deleteProfile({
+					toDelete: profile,
+					profileConfig,
+					databaseDriver: new DatabaseDriverReactNative(),
+				});
 				setProfileConfigTime(Date.now());
 			} catch (error) {
+				logger.error(error);
 				dialogs.prompt(_('Error'), error.message);
 			}
 		};
@@ -197,28 +209,26 @@ export default (props: Props) => {
 	return (
 		<View style={style.root}>
 			<ScreenHeader title={_('Profiles')} showSaveButton={false} showSideMenuButton={false} showSearchButton={false} />
-			<View>
-				<FlatList
-					data={profiles}
-					renderItem={renderProfileItem}
-					keyExtractor={profile => profile.id}
-					// Needed so that the list rerenders when its dependencies change:
-					extraData={extraListItemData}
-				/>
-			</View>
-			<Portal>
-				<FAB
-					icon="plus"
-					accessibilityLabel={_('New profile')}
-					style={style.fab}
-					onPress={() => {
-						props.dispatch({
-							type: 'NAV_GO',
-							routeName: 'ProfileEditor',
-						});
-					}}
-				/>
-			</Portal>
+			<FlatList
+				style={style.profileList}
+				data={profiles}
+				renderItem={renderProfileItem}
+				keyExtractor={profile => profile.id}
+				// Needed so that the list rerenders when its dependencies change:
+				extraData={extraListItemData}
+				contentContainerStyle={{ paddingBottom: 80 }}
+			/>
+			<FAB
+				icon="plus"
+				accessibilityLabel={_('New profile')}
+				style={style.fab}
+				onPress={() => {
+					props.dispatch({
+						type: 'NAV_GO',
+						routeName: 'ProfileEditor',
+					});
+				}}
+			/>
 		</View>
 	);
 };

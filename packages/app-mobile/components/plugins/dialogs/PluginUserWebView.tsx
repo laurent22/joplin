@@ -101,6 +101,8 @@ const PluginUserWebView = (props: Props) => {
 		return `
 			if (!window.backgroundPageLoaded) {
 				${shim.injectedJs('pluginBackgroundPage')}
+				window.pluginBackgroundPage = pluginBackgroundPage;
+
 				pluginBackgroundPage.initializeDialogWebView(
 					${JSON.stringify(messageChannelId)}
 				);
@@ -120,6 +122,7 @@ const PluginUserWebView = (props: Props) => {
 		<ExtendedWebView
 			style={props.style}
 			baseDirectory={plugin.baseDir}
+			testID='joplin__PluginDialogWebView'
 			webviewInstanceId='joplin__PluginDialogWebView'
 			html={html}
 			hasPluginScripts={true}

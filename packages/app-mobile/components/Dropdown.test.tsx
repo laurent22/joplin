@@ -5,6 +5,24 @@ import { describe, it, expect, jest } from '@jest/globals';
 import { fireEvent, render, screen, waitFor } from '../utils/testing/testingLibrary';
 
 import Dropdown, { DropdownListItem } from './Dropdown';
+import TestProviderStack from './testing/TestProviderStack';
+import createMockReduxStore from '../utils/testing/createMockReduxStore';
+
+interface WrappedDropdownProps {
+	items: DropdownListItem[];
+	selectedValue: string;
+	onValueChange: (value: string)=> void;
+	coverableChildrenRight?: React.ReactElement;
+}
+
+const store = createMockReduxStore();
+
+const WrappedDropdown: React.FC<WrappedDropdownProps> = props => {
+	// A provider stack is needed here to to prevent "No safe area value available" render errors
+	return <TestProviderStack store={store}>
+		<Dropdown {...props}/>
+	</TestProviderStack>;
+};
 
 describe('Dropdown', () => {
 	it('should open the dropdown on click', async () => {
@@ -16,7 +34,7 @@ describe('Dropdown', () => {
 		const onValueChange = jest.fn();
 
 		render(
-			<Dropdown
+			<WrappedDropdown
 				items={items}
 				selectedValue={'1'}
 				onValueChange={onValueChange}
@@ -56,7 +74,7 @@ describe('Dropdown', () => {
 
 	it('should hide coverableChildren to increase space', async () => {
 		render(
-			<Dropdown
+			<WrappedDropdown
 				items={[{ label: 'Test1', value: '1' }, { label: 'Test2', value: '2' }, { label: 'Test3', value: '3' }]}
 				selectedValue={'1'}
 				onValueChange={()=>{}}

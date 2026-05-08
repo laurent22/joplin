@@ -1,5 +1,93 @@
 # Joplin Server Changelog
 
+## [server-v3.6.1](https://github.com/laurent22/joplin/releases/tag/server-v3.6.1) - 2026-04-20T16:54:33Z
+
+- New: Add support for MFA (#14081)
+- Improved: Downgrade password reset log for non-existent users to info (#15139)
+- Improved: Downgrade unsupported image format log to info level (02d9222)
+- Improved: Improve name generation for uploaded files (#14392 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Move deletion of objects outside of transaction block (#14898)
+- Improved: Optimize orphaned items query using NOT EXISTS (#15138)
+- Improved: Performance: Improve performance of share maintenance task (#14484 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Remove support for DELTA_INCLUDES_ITEMS (#14393 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @rollup/plugin-commonjs (v28.0.9), @rollup/plugin-node-resolve (v16.0.3), @rollup/plugin-replace (v6.0.3), dayjs (v1.11.19), form-data (v4.0.5), fs-extra (v11.3.3), glob (v11.1.0), katex (v0.16.23), ldapts (v8.0.36), qrcode (v1.5.4), rate-limiter-flexible (v7.4.0), raw-body (v3.0.2), react (v19.1.5), samlify (v2.10.2), sass (v1.95.1), sharp (v0.34.5), short-uuid (v5), style-to-js (v1.1.21), turndown (v7.2.2)
+- Fixed: Admin emails sorting fails due to invalid user_id column (#14399) (#14355 by [@devanmolx](https://github.com/devanmolx))
+- Fixed: Allow changing the password for the admin account when SAML is enabled (#14135) (#14131 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix certain note content is corrupted when uploaded to the server (#14379) (#14343 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix delta API can return changes in wrong order (#14713 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix new clients on an existing account can download previously unshared items (#14289) (#14110 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix savepoint not being rolled back on unique constraint errors during sync (#15140)
+- Fixed: Fix share processing task failure (#14795 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix tasks getting permanently stuck after database errors (#15137)
+- Fixed: Fix user can incorrectly retain access to shared items in some cases (#14438 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix user can incorrectly retain access to shared items in some cases (#14445 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix warning when unsharing folder (#14134) (#14107 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed heartbeat task hanging (#15136)
+- Fixed: Redirect to correct share when following links between independently published notes (#14963) (#583 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Remove warning logged on first startup (#14401) (#14384 by [@yugalkaushik](https://github.com/yugalkaushik))
+- Fixed: Update item ownership information when the original owner no longer has access (#14469) (#14107 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [server-v3.5.2](https://github.com/laurent22/joplin/releases/tag/server-v3.5.2) - 2025-12-19T21:28:39Z
+
+- Improved: Ensure that shared items are processed in the correct order (#13858 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Periodically delete old backups for archived accounts (#13741 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages fs-extra (v11.3.2), mermaid (v11.10.1), sharp (v0.34.4)
+- Fixed: Confusing error message if a published note has not been synced to the server (#13059)
+
+## [server-v3.5.1](https://github.com/laurent22/joplin/releases/tag/server-v3.5.1) - 2025-12-03T11:56:31Z
+
+- New: Add support for DELETE_EXPIRED_SESSIONS_SCHEDULE to prevent auto-logout when using SAML login (ae289be)
+- Improved: Add LOG_LEVEL env var to control logging verbosity (#13503) (#13147 by [@bartolomeo](https://github.com/bartolomeo))
+- Improved: Database: Adjust connection pool configuration, make connection pool size configurable (#13681 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Enable publish and share notebook for SAML login (defe36b)
+- Improved: Improve SAML login error handling and add doc regarding email and displayName attributes (98effef)
+- Improved: Improve error message when font file cannot be loaded (#13682 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve error when attempting to load certain routes that do not exist (#13683 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Optimise delta query (#13650)
+- Improved: Optimise delta sub-query (#13633)
+- Improved: Performance: Improve performance of requests-per-minute logger (#13670 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Performance: Improve performance of updating shared items, generating reports (#13674 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Remove query optimisation that now seems to be slower with newer versions of Postgres (66fa3fc)
+- Improved: SAML users cannot modify their own profile at all (#13378) (#13369)
+- Improved: Save and query less data when creating and updating items (#13739 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Slightly improve delta performance (#13730 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update `@aws-sdk/client-s3` to v3.928.0 (#13673 by [@saturneric](https://github.com/saturneric))
+- Improved: Updated packages @adobe/css-tools (v4.4.4), dayjs (v1.11.18), follow-redirects (v1.15.11), form-data (v4.0.4), koa (v2.16.2), ldapts (v8.0.9), mermaid (v11.9.0), pg (v8.16.3), rate-limiter-flexible (v7.2.0), raw-body (v3.0.1), samlify (v2.10.1), sharp (v0.34.3), turndown (v7.2.1)
+- Improved: Upgrade NodeJS to v24 (#13701 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Upgrade koa to v2.16.3 (#13626 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Cannot login with SAML when already logged in on the browser (#13368)
+- Fixed: Fix items can be incorrectly unshared on conflicting update (#13691) (#13686 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix password fields are always disabled (#13401) (#13400 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix report service fails when there are a very large number of items to be processed (#13721 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix slow delta queries (#13639)
+- Fixed: Make server less likely to generate non-unique SSO codes (#13501) (#13490 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [server-v3.4.4](https://github.com/laurent22/joplin/releases/tag/server-v3.4.4) - 2025-09-25T13:19:10Z
+
+- Improved: Clean-up SAML login section (4cb6b01)
+- Improved: Pin pm2-logrotate version to prevent supply chain attacks (#13235)
+- Improved: Provide more logging information for each request to help debugging issues (1ef8fd5)
+- Improved: Updated packages @rollup/plugin-commonjs (v28.0.6), form-data (v4.0.3), glob (v11.0.3), node-mocks-http (v1.17.2), pg (v8.16.2), sass (v1.93.0), style-to-js (v1.1.17)
+- Improved: Use "lax" cookies when using external authentication like SAML or LDAP (6705712)
+
+## [server-v3.4.3](https://github.com/laurent22/joplin/releases/tag/server-v3.4.3) - 2025-09-09T08:47:12Z
+
+- Improved: Remove the need to install pm2-logrotate on startup so that image can work in a closed environment (#13149)
+- Improved: Updated packages pg (v8.15.6), sass (v1.87.0), sharp (v0.34.2)
+- Fixed: Fix unique constraint error when multiple `createSharedFolderUserItems` are run concurrently (#13112 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Improve handling of concurrent deletion requests for the same item (#13092) (#12984 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Not handling correctly non JSON error responses from Transcribe (#12986) (#12983 by [@pedr](https://github.com/pedr))
+
+## [server-v3.4.2](https://github.com/laurent22/joplin/releases/tag/server-v3.4.2) - 2025-08-18T16:51:55Z
+
+- New: Add transcribe functionality (#12670 by [@pedr](https://github.com/pedr))
+- Improved: Trying to fix a request parsing error that can potentially crash the server (#12860)
+- Improved: Updated packages @adobe/css-tools (v4.4.3), bulma (v1.0.4), glob (v11.0.2), jsdom (v26.1.0), ldapts (v7.4.0), mermaid (v11.6.0), sharp (v0.34.1)
+- Fixed: Fix notebooks remain shared after being permanently deleted by the share owner (#12583 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed broken "Delete expired authentication codes" task (#12737)
+- Fixed: Fixed incorrectly named database migration that prevents new migrations from being applied (91b0ea6)
+- Fixed: Skip CORS check for SAML callback (#12948 by [@yuudi](https://github.com/yuudi))
+
 ## [server-v3.4.1](https://github.com/laurent22/joplin/releases/tag/server-v3.4.1) - 2025-07-17T09:28:41Z
 
 - New: Add Joplin Server SAML support (#11865 by [@ttcchhmm](https://github.com/ttcchhmm))

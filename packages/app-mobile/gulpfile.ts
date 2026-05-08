@@ -27,22 +27,14 @@ utils.registerGulpTasks(gulp, tasks);
 
 gulp.task('buildInjectedJs', gulp.series(
 	'beforeBundle',
-	'buildCodeMirrorEditor',
-	'buildJsDrawEditor',
-	'buildPluginBackgroundScript',
-	'buildNoteViewerBundle',
+	'buildBundledJs',
 	'copyWebviewLib',
 ));
 
 gulp.task('watchInjectedJs', gulp.series(
 	'beforeBundle',
 	'copyWebviewLib',
-	gulp.parallel(
-		'watchCodeMirrorEditor',
-		'watchJsDrawEditor',
-		'watchPluginBackgroundScript',
-		'watchNoteViewerBundle',
-	),
+	'watchBundledJs',
 ));
 
 gulp.task('build', gulp.series(

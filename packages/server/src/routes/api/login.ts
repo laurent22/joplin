@@ -39,6 +39,7 @@ router.post('api/saml', async (_path: SubPath, ctx: AppContext) => {
 
 	// Load the user
 	const user = await ctx.joplin.models.user().ssoLogin(email, displayName);
+	if (!user) throw new ErrorForbidden(`Could not login using email "${email}" and displayName "${displayName}"`);
 
 	if (fields.RelayState) {
 		switch (fields.RelayState) {

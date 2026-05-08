@@ -16,10 +16,11 @@ import Setting from '@joplin/lib/models/Setting';
 import ClipperServer from '@joplin/lib/ClipperServer';
 import DialogTitle from './DialogTitle';
 import DialogButtonRow, { ButtonSpec, ClickEvent, ClickEventHandler } from './DialogButtonRow';
-import Dialog from './Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import StyleSheetContainer from './StyleSheets/StyleSheetContainer';
 import ImportScreen from './ImportScreen';
 import ResourceScreen from './ResourceScreen';
+import ProfileEditor from './ProfileEditor';
 import Navigator from './Navigator';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
@@ -71,7 +72,7 @@ async function initialize() {
 		panes: Setting.value('noteVisiblePanes'),
 	});
 
-	InteropService.instance().document = document;
+	InteropService.instance().domParser = new DOMParser();
 	InteropService.instance().xmlSerializer = new XMLSerializer();
 }
 
@@ -165,6 +166,7 @@ class RootComponent extends React.Component<Props, any> {
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
 			Resources: { screen: ResourceScreen, title: () => _('Note attachments') },
+			ProfileEditor: { screen: ProfileEditor, title: () => _('Manage profiles') },
 			Status: { screen: StatusScreen, title: () => _('Synchronisation Status') },
 		};
 

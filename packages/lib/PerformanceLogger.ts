@@ -87,15 +87,13 @@ export default class PerformanceLogger {
 	}
 
 	private lastLogTime_ = 0;
-	public static create(prefix: string) {
-		return new PerformanceLogger(prefix);
+	public static create() {
+		return new PerformanceLogger();
 	}
 
-	private constructor(private readonly prefix_: string) { }
+	private constructor() { }
 
 	public mark(name: string) {
-		name = `${this.prefix_}/${name}`;
-
 		// If available, make it possible to inspect the performance mark from the F12
 		// developer tools.
 		if (hasPerformanceMarkApi) {
@@ -117,29 +115,32 @@ export default class PerformanceLogger {
 		}
 	}
 
+	private startCounter_ = 0;
 	public taskStart(name: string) {
-		name = `${this.prefix_}/${name}`;
+		// To prevent incorrect output in the browser's visual performance graph, the IDs
+		// passed to "performance.mark" need to be unique (or at least no other task with
+		// the same ID should be running at the same time). Add a counter to the task name
+		// to handle the case where two tasks with the otherwise same name run at the same
+		// time:
+		const uniqueTaskId = `${name}-${(this.startCounter_++)}`;
 
 		if (typeof performance.mark === 'function') {
-			performance.mark(`${name}-start`);
+			performance.mark(`${uniqueTaskId}-start`);
 		}
 
 		const startTime = performance.now();
-		PerformanceLogger.logDebug_(`${name}: Start at ${formatAbsoluteTime(startTime)}`);
+		this.lastLogTime_ = startTime;
+		PerformanceLogger.log_(`${name}: Start at ${formatAbsoluteTime(startTime)}`);
 
 		const onEnd = () => {
 			const now = performance.now();
+			this.lastLogTime_ = now;
 			if (hasPerformanceMarkApi) {
-				performance.mark(`${name}-end`);
-				performance.measure(name, `${name}-start`, `${name}-end`);
+				performance.mark(`${uniqueTaskId}-end`);
+				performance.measure(name, `${uniqueTaskId}-start`, `${uniqueTaskId}-end`);
 			}
 
-			const duration = now - startTime;
-			// Increase the log level for long-running tasks
-			const isLong = duration >= Second / 10;
-			const log = isLong ? PerformanceLogger.log_ : PerformanceLogger.logDebug_;
-
-			log(`${name}: End at ${formatAbsoluteTime(now)} (took ${formatTaskDuration(now - startTime)})`);
+			PerformanceLogger.log_(`${name}: End at ${formatAbsoluteTime(now)} (took ${formatTaskDuration(now - startTime)})`);
 		};
 		return {
 			onEnd,

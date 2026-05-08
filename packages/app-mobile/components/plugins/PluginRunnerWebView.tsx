@@ -16,6 +16,7 @@ import usePrevious from '@joplin/lib/hooks/usePrevious';
 import PlatformImplementation from '../../services/plugins/PlatformImplementation';
 import AccessibleView from '../accessibility/AccessibleView';
 import useOnDevPluginsUpdated from './utils/useOnDevPluginsUpdated';
+import { ViewStyle } from 'react-native';
 
 const logger = Logger.create('PluginRunnerWebView');
 
@@ -98,6 +99,17 @@ interface Props {
 	themeId: number;
 }
 
+// The WebView needs to have a non-zero size to be rendered by
+// newer React Native versions. This style makes it visually hidden.
+const hiddenStyle: ViewStyle = {
+	width: 1,
+	height: 1,
+	opacity: 0,
+	position: 'absolute',
+	top: 0,
+	zIndex: -1,
+};
+
 const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	const webviewRef = useRef<WebViewControl>(null);
 
@@ -158,6 +170,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 		const injectedJs = `
 			if (!window.loadedBackgroundPage) {
 				${shim.injectedJs('pluginBackgroundPage')}
+				window.pluginBackgroundPage = pluginBackgroundPage;
 				console.log('Loaded PluginRunnerWebView.');
 
 				// Necessary, because React Native WebView can re-run injectedJs
@@ -173,6 +186,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 					html={html}
 					injectedJavaScript={injectedJs}
 					hasPluginScripts={true}
+					allowFileAccessFromJs={true}
 					onMessage={pluginRunner.onWebviewMessage}
 					onLoadEnd={onLoadEnd}
 					onLoadStart={onLoadStart}
@@ -188,7 +202,7 @@ const PluginRunnerWebViewComponent: React.FC<Props> = props => {
 	};
 
 	return (
-		<AccessibleView style={{ display: 'none' }} inert={true}>
+		<AccessibleView style={hiddenStyle} inert={true}>
 			{renderWebView()}
 		</AccessibleView>
 	);

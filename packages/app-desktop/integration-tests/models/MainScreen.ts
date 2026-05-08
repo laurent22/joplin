@@ -7,6 +7,7 @@ import setFilePickerResponse from '../util/setFilePickerResponse';
 import NoteList from './NoteList';
 import { expect } from '../util/test';
 import ChangeAppLayoutScreen from './ChangeAppLayoutScreen';
+import waitForNextWindowMatching from '../util/waitForNextWindowMatching';
 
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
@@ -34,13 +35,14 @@ export default class MainScreen {
 	}
 
 	public async waitFor() {
-		await this.newNoteButton.waitFor();
 		await this.noteList.waitFor();
 	}
 
 	// Follows the steps a user would use to create a new note.
 	public async createNewNote(title: string) {
 		await this.waitFor();
+		// The new note button is only visible when a folder is selected -- wait for it explicitly.
+		await this.newNoteButton.waitFor();
 
 		// Create the new note. Retry this -- creating new notes can sometimes fail if done just after
 		// application startup.
@@ -63,13 +65,34 @@ export default class MainScreen {
 		await activateMainMenuItem(electronApp, /^(Preferences\.\.\.|Options)$/);
 	}
 
+	public async openNewWindow(electronApp: ElectronApplication) {
+		const pagePromise = waitForNextWindowMatching(/^Joplin -/, electronApp);
+
+		await activateMainMenuItem(electronApp, 'Open in new window');
+		return pagePromise;
+	}
+
 	public async search(text: string) {
 		const searchBar = this.page.getByPlaceholder('Search...');
 		await searchBar.fill(text);
 	}
 
-	public async importHtmlDirectory(electronApp: ElectronApplication, path: string) {
+	private async importFromModule_(electronApp: ElectronApplication, moduleName: string, path: string) {
 		await setFilePickerResponse(electronApp, [path]);
-		await activateMainMenuItem(electronApp, 'HTML - HTML document (Directory)', 'Import');
+		await activateMainMenuItem(electronApp, moduleName, 'Import');
+	}
+
+	public async importHtmlDirectory(electronApp: ElectronApplication, path: string) {
+		return this.importFromModule_(electronApp, 'HTML - HTML document (Directory)', path);
+	}
+
+	public async importHtmlFile(electronApp: ElectronApplication, path: string) {
+		return this.importFromModule_(electronApp, 'HTML - HTML document (File)', path);
+	}
+
+	public async pluginPanelLocator(pluginId: string) {
+		return this.page.locator(
+			`iframe[id^=${JSON.stringify(`plugin-view-${pluginId}`)}]`,
+		);
 	}
 }

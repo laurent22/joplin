@@ -73,6 +73,7 @@ const useSettingButtonInfo = (setSettingsVisible: SetSettingsVisible) => {
 		name: 'showToolbarSettings',
 		tooltip: _('Settings'),
 		iconName: 'material cogs',
+		visible: true,
 		enabled: true,
 		onClick: () => setSettingsVisible(true),
 		title: '',
@@ -132,6 +133,7 @@ const EditorToolbar: React.FC<Props> = props => {
 			style={styles.content}
 			contentContainerStyle={styles.contentContainer}
 			onLayout={onContainerLayout}
+			keyboardShouldPersistTaps="always"
 		>
 			{buttonInfos.map(renderButton)}
 			<View style={styles.spacer}/>

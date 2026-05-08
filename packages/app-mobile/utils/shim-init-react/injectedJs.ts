@@ -1,9 +1,10 @@
 
 const injectedJs = {
-	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),
-	codeMirrorBundle: require('../../lib/rnInjectedJs/codeMirrorBundle.bundle'),
-	svgEditorBundle: require('../../lib/rnInjectedJs/svgEditorBundle.bundle'),
+	webviewLib: require('../../lib/rnInjectedJs/webviewLib'),
+	markdownEditorBundle: require('../../lib/rnInjectedJs/markdownEditorBundle.bundle'),
+	richTextEditorBundle: require('../../lib/rnInjectedJs/richTextEditorBundle.bundle'),
+	imageEditorBundle: require('../../lib/rnInjectedJs/imageEditorBundle.bundle'),
 	pluginBackgroundPage: require('../../lib/rnInjectedJs/pluginBackgroundPage.bundle'),
-	noteBodyViewerBundle: require('../../lib/rnInjectedJs/noteBodyViewerBundle.bundle'),
+	rendererBundle: require('../../lib/rnInjectedJs/rendererBundle.bundle'),
 };
 export default injectedJs;

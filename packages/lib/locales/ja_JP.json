@@ -128,6 +128,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command>は、\"toggle\"または\"clear\"を指定できます。\"toggle\"を指定すると、指定したToDoの完了済み/未完を反転できます。指定したノートが通常のノートであれば、ToDoに変換されます。\"clear\"を指定すると、ToDoを通常のノートに変換できます。"
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -139,6 +142,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		"詳細"
@@ -182,6 +188,9 @@
 	"Add body": [
 		"本文を追加"
 	],
+	"Add column": [
+		""
+	],
 	"Add new": [
 		"新規追加"
 	],
@@ -191,14 +200,20 @@
 	"Add recipient:": [
 		"受信者を追加:"
 	],
-	"Add tag %s to note": [
-		""
+	"Add tags:": [
+		"タグを追加:"
 	],
 	"Add title": [
 		"題名を追加"
 	],
 	"Add to dictionary": [
 		"辞書に追加"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		"タグを追加"
 	],
 	"Admin": [
 		"管理者"
@@ -260,6 +275,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
+	],
 	"An error occurred: %s": [
 		"エラーが発生しました: %s"
 	],
@@ -292,6 +310,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		"関連タグ:"
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -366,6 +387,9 @@
 		"Basic"
 	],
 	"Beta": [
+		"ベータ版"
+	],
+	"Block code": [
 		""
 	],
 	"Bold": [
@@ -390,7 +414,7 @@
 		""
 	],
 	"Camera": [
-		""
+		"カメラ"
 	],
 	"Can Share": [
 		"共有可能"
@@ -497,6 +521,9 @@
 	"Checking... Please wait.": [
 		"確認中...お待ちください。"
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"オプションを選択"
 	],
@@ -569,6 +596,9 @@
 	"Command": [
 		"コマンド"
 	],
+	"COMMAND": [
+		""
+	],
 	"Command palette": [
 		"コマンドパレット"
 	],
@@ -594,7 +624,7 @@
 		"完了: %s (%s)"
 	],
 	"completion date": [
-		""
+		"完了日"
 	],
 	"Compress old changes": [
 		"古い変更を圧縮する"
@@ -827,6 +857,9 @@
 	"Default": [
 		"標準"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"既定値: %s"
 	],
@@ -863,6 +896,9 @@
 	"Delete selected notes": [
 		"選択したノートを削除"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Inboxノートブックを削除しますか?\n\nInboxノートブックを削除すると、最近メール送信によって作成したノートが失われる可能性があります。"
 	],
@@ -893,6 +929,9 @@
 	"Deletes the notes without asking for confirmation.": [
 		"ノートを確認なしで削除します。"
 	],
+	"Deletion log": [
+		"削除ログ"
+	],
 	"Destination format: %s": [
 		"場所の形式: %s"
 	],
@@ -900,7 +939,7 @@
 		"詳細"
 	],
 	"Device: %s": [
-		""
+		"デバイス: %s"
 	],
 	"Directory": [
 		"ディレクトリ"
@@ -947,6 +986,9 @@
 	"Displays the complete information about note.": [
 		"ノートに関するすべての情報を表示します。"
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"選択したノートを表示します。"
 	],
@@ -968,7 +1010,16 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"パスワードはなくさないようにしてください。セキュリティ上、このパスワードがデータを復号する*唯一*の方法になるためです！ 暗号化を有効にするには、下にパスワードを入力してください。"
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -1005,10 +1056,10 @@
 		"Dracula"
 	],
 	"Draw picture": [
-		""
+		"絵を描く"
 	],
 	"Drawing": [
-		""
+		"描画"
 	],
 	"Drop notes or files here": [
 		"ノートやファイルをここにドロップします"
@@ -1039,6 +1090,9 @@
 	],
 	"Edit": [
 		"編集"
+	],
+	"Edit as Rich Text": [
+		"リッチテキストとして編集"
 	],
 	"Edit link": [
 		"リンクの編集"
@@ -1322,6 +1376,9 @@
 	"Feature flags": [
 		"フィーチャーフラグ"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"取得したアイテム: %d/%d."
 	],
@@ -1333,9 +1390,6 @@
 	],
 	"File system": [
 		"ファイルシステム"
-	],
-	"Filter tags": [
-		"フィルタータグ"
 	],
 	"Find: ": [
 		"検索文字列: "
@@ -1511,6 +1565,9 @@
 	"Idle": [
 		"待機中"
 	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
 	],
@@ -1538,6 +1595,9 @@
 	"Import notes from a JEX (Joplin Export) file.": [
 		"JEX(Joplin エクスポート)ファイルからノートをインポートします。"
 	],
+	"Import or export your data": [
+		"データのインポートまたはエクスポート"
+	],
 	"Imported successfully!": [
 		"インポート成功!"
 	],
@@ -1558,9 +1618,6 @@
 	],
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"すべてのコマンドで、ノートまたはノートブックは、題名またはID、または選択中の物はそれぞれショートカット`$n`または`$b`で指定できます。`$c`で選択中のアイテムを参照できます。"
-	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"ノートに位置情報を保存するには、ユーザーの許可が必要です。\n\n位置情報を保存するかどうかは、設定画面でいつでも変更できます。"
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"この処理では、既存データをすべて再暗号化し、同期しなおす必要がありますので、夜間等の実行をおすすめします。\n\nデータを再暗号化するには以下の手順にしたがってください。\n\n1. すべてのデバイスで同期を取ります。\n2. \"%s\" をクリックします。\n3. 再暗号化処理が完了するまでお待ちください。不整合を避けるため、処理中に他のデバイスでノートを変更しないように気をつけてください。\n4. 本デバイスの同期が完了したら、他のデバイスをすべて同期してください。\n\n重要: 再暗号化はどれか一つのデバイスで一回だけ実行してください。"
@@ -1694,6 +1751,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin WebクリッパーはブラウザーからWebページとスクリーンショットをJoplinへ保存します。"
 	],
@@ -1705,6 +1765,9 @@
 	],
 	"Keep note history for": [
 		"ノート履歴の保存期間"
+	],
+	"Keep notes in the trash for": [
+		"ゴミ箱の保存期間"
 	],
 	"Keyboard Mode": [
 		"キーバインド"
@@ -1718,8 +1781,14 @@
 	"Keychain Supported: %s": [
 		"キーチェーンのサポート: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"アップグレードが必要なキー"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"横"
@@ -1835,6 +1904,9 @@
 	"Manage your plugins": [
 		"プラグインを管理"
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"エンドツーエンド暗号化(E2EE)の設定コマンドです。`enable`, `disable`, `decrypt`, `status`, `decrypt-file`, `target-status` があります。"
 	],
@@ -1846,6 +1918,9 @@
 	],
 	"Markdown + Front Matter": [
 		"Markdown + Front Matter"
+	],
+	"Markdown editor: Render markup in editor": [
+		""
 	],
 	"Marks a to-do as done.": [
 		"ToDoを完了としてマークします。"
@@ -1964,9 +2039,6 @@
 	"New sub-notebook": [
 		"新しいサブノートブック"
 	],
-	"New tags:": [
-		"新しいタグ:"
-	],
 	"New to-do": [
 		"新しいToDo"
 	],
@@ -2030,6 +2102,12 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"テキストエディターが定義されていません。`config editor <editor-path>`で設定を行ってください"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
+	"None": [
+		"なし"
+	],
 	"Nord": [
 		"Nord"
 	],
@@ -2047,6 +2125,9 @@
 	],
 	"Not now": [
 		"あとで"
+	],
+	"Not useful": [
+		""
 	],
 	"note": [
 		"ノート"
@@ -2135,9 +2216,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"OK"
 	],
@@ -2195,6 +2273,9 @@
 	"Open Sync Wizard...": [
 		"同期ウィザードを開く..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"開く..."
 	],
@@ -2207,8 +2288,14 @@
 	"Options": [
 		"オプション"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
 		"番号付きリスト"
+	],
+	"Other": [
+		""
 	],
 	"Other applications...": [
 		"その他のアプリケーション..."
@@ -2252,8 +2339,8 @@
 	"PDF File": [
 		"PDF ファイル"
 	],
-	"Permission needed": [
-		"許可が必要"
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"\"%s\"をクリックして続行するか、以下の\"%s\"リストでパスワードを設定してください。"
@@ -2345,9 +2432,6 @@
 	"Preferred light theme": [
 		"優先ライトテーマ"
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -2435,6 +2519,9 @@
 	"Publish/unpublish": [
 		""
 	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
 	"Quit": [
 		"終了"
 	],
@@ -2475,7 +2562,10 @@
 		"おすすめのプラグイン"
 	],
 	"Record audio": [
-		""
+		"音声を録音"
+	],
+	"Recording": [
+		"録音"
 	],
 	"Redo": [
 		"やり直す"
@@ -2509,6 +2599,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"<item> (ノートまたはノートブック)の名前を、<name>に変更します。"
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"トークンを更新する"
@@ -2684,8 +2777,14 @@
 	"Select file...": [
 		"ファイルの選択..."
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
 		"親ノートブックを選択"
+	],
+	"Select the type of file to be imported:": [
+		""
 	],
 	"Self-hosted": [
 		""
@@ -2849,6 +2948,9 @@
 	"Source: ": [
 		"ソース: "
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -2960,6 +3062,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"ノートブック [notebook]に切り替え - これ以降の作業は、指定のノートブック内で行われます。"
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"同期対象デバイス数無制限"
 	],
@@ -3029,9 +3134,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		"タグ1, タグ2, ..."
-	],
 	"Tagged: %d.": [
 		"タグ付き: %d."
 	],
@@ -3055,6 +3157,9 @@
 	],
 	"Text editor command": [
 		"テキストエディターのコマンド"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"使用中のプロファイルは削除できません。他のプロファイルに切り替えてから削除してください。"
@@ -3209,6 +3314,15 @@
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"この認証トークンはサードパーティのアプリケーションにJoplinへのアクセスを許可するときにだけ使用します。"
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"ここではノートに添付されているファイルの一覧を見ることができます。添付ファイルの削除も可能ですが、削除後の復元はできませんのでご注意ください。"
 	],
@@ -3232,6 +3346,9 @@
 	],
 	"This note has no history": [
 		"このノートに履歴はありません"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -3271,6 +3388,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"続行するには、マスターパスワードを入力してください。"
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"タグを削除するには、関連するノートからタグを外してください。"
@@ -3368,6 +3488,9 @@
 	"Try it now": [
 		"今すぐ試す"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"コマンドのさらなる情報は、`help [command]`で見ることができます；または、`help all`ですべての使用方法の情報を表示できます。"
 	],
@@ -3376,9 +3499,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"題名や本文の一部を入力してノートを検索し、そのノートに移動できます。また、「#タグ名」で該当タグ付きノートの一覧に、「@ノートブック名」で該当ノートブックに移動できます。あるいは「:」でコマンドを検索して実行できます。"
-	],
-	"Type new tags or select from list": [
-		"新しいタグを入力するか、リストから選択してください"
 	],
 	"Type: %s.": [
 		"種類: %s."
@@ -3503,6 +3623,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"表、チェックボックス、コードなど、等幅フォントのほうが読みやすい場所に使用。指定フォントが見つからない場合は一般的な等幅フォントを使用します。"
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"ユーザー削除"
 	],
@@ -3530,6 +3653,9 @@
 	"Viewer": [
 		"ビューアー"
 	],
+	"Viewer font size": [
+		"ビューアーのフォントサイズ"
+	],
 	"Vim": [
 		"Vim"
 	],
@@ -3542,8 +3668,8 @@
 	"Voice typing...": [
 		"音声入力…"
 	],
-	"Vosk": [
-		""
+	"Voice typing: Glossary": [
+		"音声入力: 用語集"
 	],
 	"Warning": [
 		"警告"
@@ -3593,10 +3719,10 @@
 	"When creating a new to-do:": [
 		"新しいToDoを作成した場合:"
 	],
-	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		""
 	],
-	"Whisper": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

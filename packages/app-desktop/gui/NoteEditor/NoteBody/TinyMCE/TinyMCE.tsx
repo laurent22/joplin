@@ -23,7 +23,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import { loadScript } from '../../../utils/loadScript';
 import bridge from '../../../../services/bridge';
 import { TinyMceEditorEvents } from './utils/types';
-import type { Editor, EditorEvent } from 'tinymce';
+import type { Bookmark, Editor, EditorEvent } from 'tinymce';
 import { joplinCommandToTinyMceCommands, TinyMceCommand } from './utils/joplinCommandToTinyMceCommands';
 import shouldPasteResources from './utils/shouldPasteResources';
 import lightTheme from '@joplin/lib/themes/light';
@@ -40,13 +40,14 @@ const supportedLocales = require('./supportedLocales');
 import { hasProtocol } from '@joplin/utils/url';
 import useTabIndenter from './utils/useTabIndenter';
 import useKeyboardRefocusHandler from './utils/useKeyboardRefocusHandler';
-import useDocument from '../../../hooks/useDocument';
+import useDocument from '@joplin/lib/hooks/dom/useDocument';
 import useEditDialog from './utils/useEditDialog';
 import useEditDialogEventListeners from './utils/useEditDialogEventListeners';
 import Setting from '@joplin/lib/models/Setting';
 import useTextPatternsLookup, { TextPatternContext } from './utils/useTextPatternsLookup';
 import { toFileProtocolPath } from '@joplin/utils/path';
 import { RenderResultPluginAsset } from '@joplin/renderer/types';
+import useCursorPositioning from './utils/useCursorPositioning';
 
 const logger = Logger.create('TinyMCE');
 
@@ -293,6 +294,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 						window.requestAnimationFrame(() => editor.undoManager.add());
 					},
 					pasteAsText: () => editor.fire(TinyMceEditorEvents.PasteAsText),
+
+					'editor.undo': () => {
+						editor.undoManager.undo();
+					},
+					'editor.redo': () => {
+						editor.undoManager.redo();
+					},
 				};
 
 				if (additionalCommands[cmd.name]) {
@@ -697,6 +705,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const containerWindow = editorContainerDom.defaultView as any;
+			const isDefaultEnglishLocale = ['en_US', 'en_GB'].includes(language);
+
+			if (!isDefaultEnglishLocale) {
+				await loadScript({
+					id: `tinyMceLang_${language}`,
+					src: `${bridge().vendorDir()}/lib/tinymce/langs/${language}.js`,
+				}, editorContainerDom);
+			}
+
 			const editors = await containerWindow.tinymce.init({
 				selector: `#${editorContainer.id}`,
 
@@ -727,7 +744,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				// Handle the first table row as table header.
 				// https://www.tiny.cloud/docs/plugins/table/#table_header_type
 				table_header_type: 'sectionCells',
-				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
+				language: isDefaultEnglishLocale ? undefined : language,
 				toolbar: toolbar.join(' '),
 				localization_function: _,
 				// See https://www.tiny.cloud/docs/tinymce/latest/tinymce-and-csp/#content_security_policy
@@ -741,7 +758,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					'media-src \'self\' blob: data: *', // Audio and video players
 
 					// Disallow certain unused features
-					'child-src \'none\'', // Should not contain sub-frames
+					'child-src https://*.youtube.com https://*.youtube-nocookie.com', // Allow YouTube embeds
 					'object-src \'none\'', // Objects can be used for script injection
 					'form-action \'none\'', // No submitting forms
 
@@ -879,6 +896,30 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					editor.addShortcut('Meta+Shift+8', '', () => editor.execCommand('InsertUnorderedList'));
 					editor.addShortcut('Meta+Shift+9', '', () => editor.execCommand('InsertJoplinChecklist'));
 
+					// Override ScrollIntoView to scroll to the cursor's character position
+					// instead of the start of the paragraph.
+					// See: https://github.com/laurent22/joplin/issues/14143
+					editor.on('ScrollIntoView', (event) => {
+						const sel = editor.getDoc().getSelection();
+						if (!sel || sel.rangeCount === 0) return;
+
+						const rect = sel.getRangeAt(0).getBoundingClientRect();
+						const win = editor.getWin();
+						const viewHeight = win.innerHeight;
+
+						if (rect.top < 0) {
+							win.scrollBy(0, rect.top);
+						} else if (rect.bottom > viewHeight) {
+							win.scrollBy(0, rect.bottom - viewHeight);
+						} else if (rect.top === 0 && rect.height === 0) {
+							// Handles edge case where rect is not rendered
+							// See: https://stackoverflow.com/a/14384220/5757550
+							return;
+						}
+						event.preventDefault();
+						return;
+					});
+
 					// TODO: remove event on unmount?
 					editor.on('drop', (event) => {
 						// Prevent the message "Dropped file type is not supported" from showing up.
@@ -918,8 +959,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 					editor.on('SetContent', () => {
 						preprocessContent();
-
-						props_onMessage.current({ channel: 'noteRenderComplete' });
 					});
 				},
 			});
@@ -1046,6 +1085,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		return true;
 	}
 
+	const { onRestoreCursorPosition } = useCursorPositioning({
+		initialCursorLocation: props.initialCursorLocation.richText as Bookmark,
+		onCursorUpdate: props.onCursorMotion,
+		editor,
+	});
+
+	const noteChangeTimeRef = useRef(Date.now());
 	const lastNoteIdRef = useRef(props.noteId);
 	useEffect(() => {
 		if (!editor) return () => {};
@@ -1063,6 +1109,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			// Use nextOnChangeEventInfo's noteId -- lastOnChangeEventInfo can be slightly out-of-date.
 			const differentNoteId = lastNoteIdRef.current !== props.noteId;
 			const differentContent = lastOnChangeEventInfo.current.content !== props.content;
+
+			if (differentNoteId) noteChangeTimeRef.current = Date.now();
+
 			if (differentNoteId || differentContent || !resourcesEqual) {
 				const result = await props.markupToHtml(
 					props.contentMarkupLanguage,
@@ -1113,8 +1162,12 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					// times would result in an empty note.
 					// https://github.com/laurent22/joplin/issues/3534
 					editor.undoManager.reset();
+
+					// Only restore the cursor position from the global state when switching notes.
+					// See https://github.com/laurent22/joplin/issues/13579
+					onRestoreCursorPosition();
 				} else {
-					// Restore the cursor location
+					// Restore the cursor location from the current note
 					editor.selection.bookmarkManager.moveToBookmark(bookmark);
 				}
 
@@ -1123,6 +1176,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					resourceInfos: props.resourceInfos,
 					contentKey: props.contentKey,
 				};
+				props_onMessage.current({ channel: 'noteRenderComplete' });
 			}
 
 			const allAssetsOptions: NoteStyleOptions = {
@@ -1305,13 +1359,35 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const onSetAttrib = (event: EditorEvent<any>) => {
-			// Dispatch onChange when a link is edited
+			// Dispatch onChange when a link or table-related formatting is edited
 			const target = Array.isArray(event.attrElm) ? event.attrElm[0] : event.attrElm;
+			if (!target) return;
+
 			if (target.nodeName === 'A') {
 				if (event.attrName === 'title' || event.attrName === 'href' || event.attrName === 'rel') {
 					onChangeHandler();
 				}
 			}
+
+			if (['TABLE', 'TR', 'TD', 'TH'].includes(target.nodeName)) {
+				const attributeName = (event.attrName ?? '').toLowerCase();
+				if (
+					attributeName === 'style' ||
+					attributeName === 'class' ||
+					attributeName === 'bgcolor' ||
+					attributeName === 'bordercolor' ||
+					attributeName === 'background' ||
+					attributeName === 'cellpadding' ||
+					attributeName === 'cellspacing'
+				) {
+					onChangeHandler();
+				}
+			}
+		};
+
+		// Table plugin fires this on structure/style changes from dialogs.
+		const onTableModified = () => {
+			onChangeHandler();
 		};
 
 		// Keypress means that a printable key (letter, digit, etc.) has been
@@ -1330,7 +1406,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		// keep it this way for now.
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		function onKeyUp(event: any) {
-			if (['Backspace', 'Delete', 'Enter', 'Tab'].includes(event.key)) {
+			const timeSinceNoteChange = Date.now() - noteChangeTimeRef.current;
+
+			// A key that is pressed before the editor is opened, and that is released after it is
+			// opened is going to be processed here. For example if the user presses Enter in
+			// GotoAnything to arrive here. But in that case, we don't want the change handler to be
+			// activated, because that would change the note timestamp. So we take into account how
+			// long the note has been loaded before we process the key. Fixes
+			// https://github.com/laurent22/joplin/issues/12367
+			if (['Backspace', 'Delete', 'Enter', 'Tab'].includes(event.key) && timeSinceNoteChange > 200) {
 				onChangeHandler();
 			}
 		}
@@ -1387,16 +1471,18 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		async function onCopy(event: any) {
 			const copiedContent = editor.selection.getContent();
+			if (!copiedContent) return;
 			copyHtmlToClipboard(copiedContent);
 			event.preventDefault();
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		async function onCut(event: any) {
+			event.preventDefault();
 			const selectedContent = editor.selection.getContent();
+			if (!selectedContent) return;
 			copyHtmlToClipboard(selectedContent);
 			editor.insertContent('');
-			event.preventDefault();
 			onChangeHandler();
 		}
 
@@ -1406,6 +1492,23 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				editor.insertContent(plainTextToHtml(pastedText));
 			}
 		}
+
+		const clearInheritedCheckedStateOnChecklistEnter = () => {
+			const currentNode = editor.selection.getStart();
+			const currentListItem = editor.dom.getParent(currentNode, 'li') as HTMLLIElement;
+			if (!currentListItem) return;
+
+			const parentChecklist = editor.dom.getParent(currentListItem, 'ul.joplin-checklist');
+			if (!parentChecklist) return;
+
+			if (!currentListItem.classList.contains('checked')) return;
+
+			const textContent = (currentListItem.textContent ?? '').replace(/\u200B/g, '').trim();
+			if (textContent !== '') return;
+
+			currentListItem.classList.remove('checked');
+			onChangeHandler();
+		};
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		async function onKeyDown(event: any) {
@@ -1421,6 +1524,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
 				event.preventDefault();
 				pasteAsPlainText(null);
+			}
+
+			if (event.key === 'Enter' && !event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey && !event.isComposing) {
+				shim.setTimeout(() => {
+					if (!editor || !editor.getDoc()) return;
+					clearInheritedCheckedStateOnChecklistEnter();
+				}, 0);
 			}
 		}
 
@@ -1444,12 +1554,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		// `compositionend` means that a user has finished entering a Chinese
 		// (or other languages that require IME) character.
 		editor.on(TinyMceEditorEvents.CompositionEnd, onChangeHandler);
-		editor.on(TinyMceEditorEvents.Cut, onCut);
+		editor.on(TinyMceEditorEvents.Cut, onCut, true);
 		editor.on(TinyMceEditorEvents.JoplinChange, onChangeHandler);
 		editor.on(TinyMceEditorEvents.Undo, onChangeHandler);
 		editor.on(TinyMceEditorEvents.Redo, onChangeHandler);
 		editor.on(TinyMceEditorEvents.ExecCommand, onExecCommand);
 		editor.on(TinyMceEditorEvents.SetAttrib, onSetAttrib);
+		editor.on('TableModified', onTableModified);
 
 		return () => {
 			try {
@@ -1466,6 +1577,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				editor.off(TinyMceEditorEvents.Redo, onChangeHandler);
 				editor.off(TinyMceEditorEvents.ExecCommand, onExecCommand);
 				editor.off(TinyMceEditorEvents.SetAttrib, onSetAttrib);
+				editor.off('TableModified', onTableModified);
 			} catch (error) {
 				console.warn('Error removing events', error);
 			}

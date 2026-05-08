@@ -112,6 +112,7 @@ export const withDerivedColors = (theme: Theme) => {
 		borderColor4: rgbString(Color(theme.color).alpha(0.3)),
 		iconColor: rgbString(Color(theme.color).alpha(0.8)),
 		focusOutlineColor: theme.colorWarn,
+		focusOutlineColorDimmed: rgbString(Color(theme.colorWarn).alpha(0.4)),
 
 		backgroundColor5,
 		backgroundColorHover5: hexString(Color(backgroundColor5).darken(0.2)),
@@ -331,7 +332,7 @@ export function extraStyles(theme: ThemeAndDerivedColors) {
 			padding: 10,
 			fontSize: baseFontSize,
 		},
-		dialogTitle: { ...h1Style, marginBottom: '1.2em' },
+		dialogTitle: { ...h1Style, marginBottom: '1.2em', marginTop: '0' },
 		dropdownList: { ...inputStyle },
 		colorHover: theme.color,
 		backgroundHover: `${theme.selectedColor2}44`,

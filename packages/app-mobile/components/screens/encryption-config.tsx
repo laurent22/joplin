@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, ScrollView } from 'react-native';
+import { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, ScrollView, TextStyle } from 'react-native';
 import { connect } from 'react-redux';
 import ScreenHeader from '../ScreenHeader';
 import { themeStyle } from '../global-style';
@@ -95,10 +95,13 @@ const EncryptionConfigScreen = (props: Props) => {
 		const passwordOk = passwordChecks[mk.id] === true;
 		const passwordOkIcon = passwordOk ? '✔' : '❌';
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const inputStyle: any = { flex: 1, marginRight: 10, color: theme.color };
-		inputStyle.borderBottomWidth = 1;
-		inputStyle.borderBottomColor = theme.dividerColor;
+		const inputStyle: TextStyle = {
+			flex: 1,
+			marginRight: 10,
+			color: theme.color,
+			borderBottomWidth: 1,
+			borderBottomColor: theme.dividerColor,
+		};
 
 		const renderPasswordInput = (masterKeyId: string) => {
 			if (masterPasswordKeys[masterKeyId] || !passwordChecks['master']) {
@@ -112,6 +115,10 @@ const EncryptionConfigScreen = (props: Props) => {
 							selectionColor={theme.textSelectionColor}
 							keyboardAppearance={theme.keyboardAppearance}
 							secureTextEntry={true}
+							autoCapitalize='none'
+							autoCorrect={false}
+							textContentType='newPassword'
+							importantForAutofill='yes'
 							value={password}
 							onChangeText={(text: string) => onInputPasswordChange(mk, text)}
 							style={inputStyle}
@@ -151,9 +158,14 @@ const EncryptionConfigScreen = (props: Props) => {
 			try {
 				const password = passwordPromptAnswer;
 				if (!password) throw new Error(_('Password cannot be empty'));
-				const password2 = passwordPromptConfirmAnswer;
-				if (!password2) throw new Error(_('Confirm password cannot be empty'));
-				if (password !== password2) throw new Error(_('Passwords do not match!'));
+				if (!props.masterKeys.length) {
+					const password2 = passwordPromptConfirmAnswer;
+					if (!password2) throw new Error(_('Confirm password cannot be empty'));
+					if (password !== password2) throw new Error(_('Passwords do not match!'));
+				} else if (!masterKey) {
+					// If a different master password is entered in this scenario, it would be accepted, but would create a new key which won't be able to be decrypted
+					throw new Error(_('Encryption was setup previously, but all keys have been disabled. To continue, please use the desktop app to enable a key.'));
+				}
 				await toggleAndSetupEncryption(EncryptionService.instance(), true, masterKey, password);
 				// await generateMasterKeyAndEnableEncryption(EncryptionService.instance(), password);
 				setPasswordPromptShow(false);
@@ -180,24 +192,36 @@ const EncryptionConfigScreen = (props: Props) => {
 					keyboardAppearance={theme.keyboardAppearance}
 					style={styles.normalTextInput}
 					secureTextEntry={true}
+					autoCapitalize='none'
+					autoCorrect={false}
+					textContentType='password'
+					importantForAutofill='yes'
 					value={passwordPromptAnswer}
 					onChangeText={(text: string) => {
 						setPasswordPromptAnswer(text);
 					}}
 				></TextInput>
 
-				<Text nativeID={confirmPasswordLabelId} style={styles.normalText}>{_('Confirm password:')}</Text>
-				<TextInput
-					accessibilityLabelledBy={confirmPasswordLabelId}
-					selectionColor={theme.textSelectionColor}
-					keyboardAppearance={theme.keyboardAppearance}
-					style={styles.normalTextInput}
-					secureTextEntry={true}
-					value={passwordPromptConfirmAnswer}
-					onChangeText={(text: string) => {
-						setPasswordPromptConfirmAnswer(text);
-					}}
-				></TextInput>
+				{!props.masterKeys.length && (
+					<>
+						<Text nativeID={confirmPasswordLabelId} style={styles.normalText}>{_('Confirm password:')}</Text>
+						<TextInput
+							accessibilityLabelledBy={confirmPasswordLabelId}
+							selectionColor={theme.textSelectionColor}
+							keyboardAppearance={theme.keyboardAppearance}
+							style={styles.normalTextInput}
+							secureTextEntry={true}
+							autoCapitalize='none'
+							autoCorrect={false}
+							textContentType='newPassword'
+							importantForAutofill='yes'
+							value={passwordPromptConfirmAnswer}
+							onChangeText={(text: string) => {
+								setPasswordPromptConfirmAnswer(text);
+							}}
+						></TextInput>
+					</>
+				)}
 				<View style={{ flexDirection: 'row' }}>
 					<View style={{ flex: 1, marginRight: 10 }}>
 						<Button
@@ -223,10 +247,13 @@ const EncryptionConfigScreen = (props: Props) => {
 	const renderMasterPassword = () => {
 		if (!props.encryptionEnabled && !props.masterKeys.length) return null;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const inputStyle: any = { flex: 1, marginRight: 10, color: theme.color };
-		inputStyle.borderBottomWidth = 1;
-		inputStyle.borderBottomColor = theme.dividerColor;
+		const inputStyle: TextStyle = {
+			flex: 1,
+			marginRight: 10,
+			color: theme.color,
+			borderBottomWidth: 1,
+			borderBottomColor: theme.dividerColor,
+		};
 
 		if (passwordChecks['master']) {
 			return (
@@ -249,6 +276,10 @@ const EncryptionConfigScreen = (props: Props) => {
 							selectionColor={theme.textSelectionColor}
 							keyboardAppearance={theme.keyboardAppearance}
 							secureTextEntry={true}
+							autoCapitalize='none'
+							autoCorrect={false}
+							textContentType='password'
+							importantForAutofill='yes'
 							value={inputMasterPassword}
 							onChangeText={(text: string) => onMasterPasswordChange(text)}
 							style={inputStyle}

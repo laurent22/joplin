@@ -42,20 +42,6 @@ const geoipServices: Record<string, GeoipService> = {
 		};
 	},
 
-	geoplugin: async (): Promise<CurrentPositionResponse> => {
-		const r = await fetchJson('http://www.geoplugin.net/json.gp');
-		if (!('geoplugin_latitude' in r) || !('geoplugin_longitude' in r)) throw new Error(`Invalid geolocation response: ${r ? JSON.stringify(r) : '<null>'}`);
-
-		return {
-			timestamp: Date.now(),
-			coords: {
-				longitude: Number(r.geoplugin_longitude),
-				altitude: 0,
-				latitude: Number(r.geoplugin_latitude),
-			},
-		};
-	},
-
 };
 
 export default class {

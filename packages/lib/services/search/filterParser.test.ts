@@ -157,4 +157,15 @@ describe('filterParser should be correct filter for keyword', () => {
 		expect(() => filterParser(searchString)).toThrow(new Error('iscompleted can\'t be negated'));
 
 	});
+
+	it('unclosed quote in search query', () => {
+		const searchString = '"hello';
+		expect(filterParser(searchString)).toContainEqual(makeTerm('text', '"hello"', false, true));
+	});
+
+	it('unclosed quote in multi term search query', () => {
+		const searchString = '"hello" "you';
+		expect(filterParser(searchString)).toContainEqual(makeTerm('text', '"hello"', false, true));
+		expect(filterParser(searchString)).toContainEqual(makeTerm('text', '"you"', false, true));
+	});
 });

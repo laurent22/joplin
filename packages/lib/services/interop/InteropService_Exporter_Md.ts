@@ -10,29 +10,31 @@ import { MarkupToHtml } from '@joplin/renderer';
 
 export default class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
-	private destDir_: string;
+	protected destDir_: string;
 	private resourceDir_: string;
 	private createdDirs_: string[];
+	private folderPaths_: Map<string, string>;
 
 	public async init(destDir: string) {
 		this.destDir_ = destDir;
 		this.resourceDir_ = destDir ? `${destDir}/_resources` : null;
 		this.createdDirs_ = [];
+		this.folderPaths_ = new Map();
 
 		await shim.fsDriver().mkdir(this.destDir_);
 		await shim.fsDriver().mkdir(this.resourceDir_);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async makeDirPath_(item: any, pathPart: string = null, findUniqueFilename = true) {
+	protected async makeDirPath_(item: any, pathPart: string = null) {
 		let output = '';
 		while (true) {
 			if (item.type_ === BaseModel.TYPE_FOLDER) {
 				if (pathPart) {
 					output = `${pathPart}/${output}`;
 				} else {
-					output = `${friendlySafeFilename(item.title, null)}/${output}`;
-					if (findUniqueFilename) output = await shim.fsDriver().findUniqueFilename(output, null, true);
+					const folderName = this.folderPaths_.get(item.id) || friendlySafeFilename(item.title, null);
+					output = `${folderName}/${output}`;
 				}
 			}
 			if (!item.parent_id) return output;
@@ -83,6 +85,26 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public async prepareForProcessingItemType(itemType: number, itemsToExport: any[]) {
+		if (itemType === BaseModel.TYPE_FOLDER) {
+			const namesByParent: Record<string, string[]> = {};
+			// Pre-compute unique folder names grouped by parent, so that folders whose titles sanitise to the same name get distinct export paths
+			for (let i = 0; i < itemsToExport.length; i++) {
+				if (itemsToExport[i].type !== itemType) continue;
+				const itemOrId = itemsToExport[i].itemOrId;
+				const folder = typeof itemOrId === 'object' ? itemOrId : await Folder.load(itemOrId);
+				if (!folder) continue;
+
+				const parentId = folder.parent_id || '';
+				if (!namesByParent[parentId]) namesByParent[parentId] = [];
+				const safeName = friendlySafeFilename(folder.title, null);
+				const fullPath = shim.fsDriver().resolve(this.destDir_, safeName);
+				const uniquePath = await shim.fsDriver().findUniqueFilename(fullPath, namesByParent[parentId], true);
+				const uniqueName = basename(uniquePath);
+				namesByParent[parentId].push(uniquePath);
+				this.folderPaths_.set(folder.id, uniqueName);
+			}
+		}
+
 		if (itemType === BaseModel.TYPE_NOTE) {
 			// Create unique file path for the note
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -100,7 +122,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 				if (!note) continue;
 
 				const ext = note.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML ? 'html' : 'md';
-				let notePath = `${await this.makeDirPath_(note, null, false)}${friendlySafeFilename(note.title, null)}.${ext}`;
+				let notePath = `${await this.makeDirPath_(note)}${friendlySafeFilename(note.title, null)}.${ext}`;
 				notePath = await shim.fsDriver().findUniqueFilename(`${this.destDir_}/${notePath}`, Object.values(context.notePaths), true);
 				context.notePaths[note.id] = notePath;
 			}

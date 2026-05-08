@@ -11,7 +11,10 @@ import ItemChangeUtils from './ItemChangeUtils';
 import time from '../time';
 import eventManager, { EventName } from '../eventManager';
 import { ItemChangeEntity } from './database/types';
+import PerformanceLogger from '../PerformanceLogger';
 const { sprintf } = require('sprintf-js');
+
+const perfLogger = PerformanceLogger.create();
 
 export default class ResourceService extends BaseService {
 
@@ -34,6 +37,7 @@ export default class ResourceService extends BaseService {
 		}
 
 		this.isIndexing_ = true;
+		const task = perfLogger.taskStart('ResourceService/indexNoteResources');
 
 		try {
 			await ItemChange.waitForAllSaved();
@@ -110,6 +114,7 @@ export default class ResourceService extends BaseService {
 		}
 
 		this.isIndexing_ = false;
+		task.onEnd();
 
 		eventManager.emit(EventName.NoteResourceIndexed);
 
@@ -123,6 +128,8 @@ export default class ResourceService extends BaseService {
 
 	public async deleteOrphanResources(expiryDelay: number = null) {
 		if (expiryDelay === null) expiryDelay = Setting.value('revisionService.ttlDays') * 24 * 60 * 60 * 1000;
+		const task = perfLogger.taskStart('ResourceService/deleteOrphanResources');
+
 		const resourceIds = await NoteResource.orphanResources(expiryDelay);
 		this.logger().info('ResourceService::deleteOrphanResources:', resourceIds);
 		for (let i = 0; i < resourceIds.length; i++) {
@@ -138,6 +145,8 @@ export default class ResourceService extends BaseService {
 				await Resource.delete(resourceId, { sourceDescription: 'deleteOrphanResources' });
 			}
 		}
+
+		task.onEnd();
 	}
 
 	private static async autoSetFileSize(resourceId: string, filePath: string, waitTillExists = true) {

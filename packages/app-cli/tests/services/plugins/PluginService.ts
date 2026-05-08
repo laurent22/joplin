@@ -2,7 +2,7 @@ import PluginRunner from '../../../app/services/plugins/PluginRunner';
 import PluginService, { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import MdToHtml from '@joplin/renderer/MdToHtml';
-import shim from '@joplin/lib/shim';
+import shim, { MobilePlatform } from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import * as fs from 'fs-extra';
 import Note from '@joplin/lib/models/Note';
@@ -10,6 +10,7 @@ import Folder from '@joplin/lib/models/Folder';
 import { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir, supportDir, mockMobilePlatform } from '@joplin/lib/testing/test-utils';
 import { newPluginScript } from '../../testUtils';
 import { join } from 'path';
+import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 
 const testPluginDir = `${supportDir}/plugins`;
 
@@ -310,7 +311,7 @@ describe('services_PluginService', () => {
 
 		let resetPlatformMock = () => {};
 		if (!isDesktop) {
-			resetPlatformMock = mockMobilePlatform('android').reset;
+			resetPlatformMock = mockMobilePlatform(MobilePlatform.Android).reset;
 		}
 
 		try {
@@ -471,5 +472,19 @@ describe('services_PluginService', () => {
 		} finally {
 			await fs.remove(testDir);
 		}
+	});
+
+	it('should report a missing app_min_version field specifically', () => {
+		const service = newPluginService();
+		const manifest = {
+			manifest_version: 1,
+			id: 'test.plugin',
+			name: 'Test Plugin',
+			version: '1.0.0',
+			// Missing app_min_version
+		};
+
+		const error = service.describeIncompatibility(manifest as unknown as PluginManifest);
+		expect(error).toContain('Invalid plugin manifest: Missing required field: app_min_version');
 	});
 });

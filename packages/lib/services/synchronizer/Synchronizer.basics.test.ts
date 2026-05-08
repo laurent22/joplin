@@ -4,7 +4,7 @@ import { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSyn
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
-import WelcomeUtils from '../../WelcomeUtils';
+import WelcomeUtils, { WelcomeAssetPlatform } from '../../WelcomeUtils';
 import { NoteEntity } from '../database/types';
 import { fetchSyncInfo, setAppMinVersion, uploadSyncInfo } from './syncInfoUtils';
 import { ErrorCode } from '../../errors';
@@ -283,6 +283,26 @@ describe('Synchronizer.basics', () => {
 		expect(conflictNote.id).not.toBe(note.id);
 	}));
 
+	it('should revert local changes to read-only folders', (async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		await synchronizerStart();
+		await Folder.save({
+			id: folder.id,
+			title: 'folder (changed)',
+			share_id: 'some-incorrect-share-id',
+		});
+		synchronizer().testingHooks_ = ['itemIsReadOnly'];
+		await synchronizerStart();
+		synchronizer().testingHooks_ = [];
+
+		const reloadedFolder = await Folder.load(folder.id);
+		expect(reloadedFolder.title).toBe('folder');
+		expect(reloadedFolder.share_id).toBe('');
+
+		// Should not have created a conflict
+		expect(await Folder.all()).toHaveLength(1);
+	}));
+
 	it('should allow duplicate folder titles', (async () => {
 		await Folder.save({ title: 'folder' });
 
@@ -355,12 +375,12 @@ describe('Synchronizer.basics', () => {
 	it('should create a new Welcome notebook on each client', (async () => {
 		// Create the Welcome items on two separate clients
 
-		await WelcomeUtils.createWelcomeItems('en_GB');
+		await WelcomeUtils.createWelcomeItems('en_GB', WelcomeAssetPlatform.Cli);
 		await synchronizerStart();
 
 		await switchClient(2);
 
-		await WelcomeUtils.createWelcomeItems('en_GB');
+		await WelcomeUtils.createWelcomeItems('en_GB', WelcomeAssetPlatform.Cli);
 		const beforeFolderCount = (await Folder.all()).length;
 		const beforeNoteCount = (await Note.all()).length;
 		expect(beforeFolderCount === 1).toBe(true);

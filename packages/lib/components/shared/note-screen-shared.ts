@@ -29,6 +29,7 @@ export interface Props {
 	noteId: string;
 	folders: FolderEntity[];
 	sharedData: SharedData|undefined;
+	noteVisiblePanes: string[];
 }
 
 export interface BaseState {
@@ -76,7 +77,7 @@ interface Shared {
 	attachedResources?: (noteBody: string)=> Promise<any>;
 	isModified?: (comp: BaseNoteScreenComponent)=> boolean;
 	initState?: (comp: BaseNoteScreenComponent)=> Promise<void>;
-	toggleIsTodo_onPress?: (comp: BaseNoteScreenComponent)=> void;
+	toggleIsTodo_onPress?: (comp: BaseNoteScreenComponent)=> NoteEntity;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	toggleCheckboxRange?: (ipcMessage: string, noteBody: string)=> any;
 	toggleCheckbox?: (ipcMessage: string, noteBody: string)=> string;
@@ -151,7 +152,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 
 	const savedNote = 'fields' in saveOptions && !saveOptions.fields.length ? { ...note } : await Note.save(note, saveOptions);
 
-	const stateNote = state.note;
+	const stateNote = comp.state.note;
 
 	// Note was reloaded while being saved.
 	if (!recreatedNote && (!stateNote || stateNote.id !== savedNote.id)) return releaseMutex();
@@ -293,7 +294,8 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 
 	const note = await Note.load(comp.props.noteId);
 
-	let mode = 'view';
+	const panes = comp.props.noteVisiblePanes;
+	let mode = panes.includes('editor') ? 'edit' : 'view';
 
 	if (isProvisionalNote && !comp.props.sharedData) {
 		mode = 'edit';
@@ -302,7 +304,10 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 
 	const fromShare = !!comp.props.sharedData;
 	if (note) {
-		const folder = Folder.byId(comp.props.folders, note.parent_id);
+		let folder = Folder.byId(comp.props.folders, note.parent_id);
+		if (!folder && note.parent_id) {
+			folder = await Folder.load(note.parent_id);
+		}
 		comp.setState({
 			lastSavedNote: { ...note },
 			note: note,
@@ -335,12 +340,24 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 shared.initState = async function(comp: BaseNoteScreenComponent) {
 	const note = await shared.reloadNote(comp);
 
-	if (comp.props.sharedData) {
+	if (comp.props.sharedData && note) {
+		// Use the note returned by reloadNote directly to avoid a race condition where
+		// comp.state.note is still the initial empty note (Note.new() with parent_id='')
+		// because React hasn't flushed reloadNote's setState yet. Without this, the
+		// scheduled save would overwrite parent_id with an empty string in the DB.
+		const updatedNote = { ...note };
+		const fieldsToSave: NoteEntity = { id: note.id };
 		if (comp.props.sharedData.title) {
-			this.noteComponent_change(comp, 'title', comp.props.sharedData.title);
+			updatedNote.title = comp.props.sharedData.title;
+			fieldsToSave.title = comp.props.sharedData.title;
 		}
 		if (comp.props.sharedData.text) {
-			this.noteComponent_change(comp, 'body', comp.props.sharedData.text);
+			updatedNote.body = comp.props.sharedData.text;
+			fieldsToSave.body = comp.props.sharedData.text;
+		}
+		if (fieldsToSave.title !== undefined || fieldsToSave.body !== undefined) {
+			await Note.save(fieldsToSave);
+			comp.setState({ note: updatedNote, lastSavedNote: updatedNote });
 		}
 		if (comp.props.sharedData.resources) {
 			for (let i = 0; i < comp.props.sharedData.resources.length; i++) {
@@ -349,7 +366,7 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 				await comp.attachFile({
 					uri: resource.uri,
 					type: resource.mimeType,
-					name: resource.name,
+					fileName: resource.name,
 				}, null);
 			}
 		}
@@ -360,9 +377,7 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 };
 
 shared.toggleIsTodo_onPress = function(comp: BaseNoteScreenComponent) {
-	const newNote = Note.toggleIsTodo(comp.state.note);
-	const newState = { note: newNote };
-	comp.setState(newState);
+	return Note.toggleIsTodo(comp.state.note);
 };
 
 function toggleCheckboxLine(ipcMessage: string, noteBody: string) {

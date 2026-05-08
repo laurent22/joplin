@@ -14,7 +14,7 @@ import useFormNote, { OnLoadEvent, OnSetFormNote } from './utils/useFormNote';
 import useEffectiveNoteId from './utils/useEffectiveNoteId';
 import useFolder from './utils/useFolder';
 import styles_ from './styles';
-import { NoteEditorProps, FormNote, OnChangeEvent, AllAssetsOptions, NoteBodyEditorRef, NoteBodyEditorPropsAndRef } from './utils/types';
+import { NoteEditorProps, FormNote, OnChangeEvent, AllAssetsOptions, NoteBodyEditorRef, NoteBodyEditorPropsAndRef, NoteBodyEditorType } from './utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import Button, { ButtonLevel } from '../Button/Button';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
@@ -50,12 +50,15 @@ import WarningBanner from './WarningBanner/WarningBanner';
 import UserWebview from '../../services/plugins/UserWebview';
 import Logger from '@joplin/utils/Logger';
 import usePluginEditorView from './utils/usePluginEditorView';
-import { stateUtils } from '@joplin/lib/reducer';
+import { defaultWindowId, stateUtils } from '@joplin/lib/reducer';
 import { WindowIdContext } from '../NewWindowOrIFrame';
 import useResourceUnwatcher from './utils/useResourceUnwatcher';
 import StatusBar from './StatusBar';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
 import useConnectToEditorPlugin from './utils/useConnectToEditorPlugin';
+import getResourceBaseUrl from './utils/getResourceBaseUrl';
+import useInitialCursorLocation from './utils/useInitialCursorLocation';
+import NotePositionService, { EditorCursorLocations } from '@joplin/lib/services/NotePositionService';
 
 const debounce = require('debounce');
 
@@ -169,7 +172,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		const theme = themeStyle(options.themeId ? options.themeId : props.themeId);
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml(props.plugins, {
-			resourceBaseUrl: `joplin-content://note-viewer/${Setting.value('resourceDir')}/`,
+			resourceBaseUrl: getResourceBaseUrl(),
 			customCss: props.customCss,
 		});
 
@@ -328,13 +331,13 @@ function NoteEditorContent(props: NoteEditorProps) {
 		});
 	}, [formNote, setFormNote, handleProvisionalFlag, props.dispatch]);
 
-	const { scrollWhenReady, clearScrollWhenReady } = useScrollWhenReadyOptions({
+	const { scrollWhenReadyRef, clearScrollWhenReady } = useScrollWhenReadyOptions({
 		noteId: formNote.id,
 		selectedNoteHash: props.selectedNoteHash,
-		lastEditorScrollPercents: props.lastEditorScrollPercents,
 		editorRef,
+		editorName: props.bodyEditor,
 	});
-	const onMessage = useMessageHandler(scrollWhenReady, clearScrollWhenReady, windowId, editorRef, setLocalSearchResultCount, props.dispatch, formNote, htmlToMarkdown, markupToHtml);
+	const onMessage = useMessageHandler(scrollWhenReadyRef, clearScrollWhenReady, windowId, editorRef, setLocalSearchResultCount, props.dispatch, formNote, htmlToMarkdown, markupToHtml);
 
 	useResourceUnwatcher({ noteId: formNote.id, windowId });
 
@@ -398,15 +401,14 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, [setShowRevisions]);
 
 	const onScroll = useCallback((event: { percent: number }) => {
-		props.dispatch({
-			type: 'EDITOR_SCROLL_PERCENT_SET',
-			// In callbacks of setTimeout()/setInterval(), props/state cannot be used
-			// to refer the current value, since they would be one or more generations old.
-			// For the purpose, useRef value should be used.
-			noteId: formNoteRef.current.id,
-			percent: event.percent,
-		});
-	}, [props.dispatch]);
+		const noteId = formNoteRef.current.id;
+		NotePositionService.instance().updateScrollPosition(noteId, windowId, event.percent);
+	}, [windowId]);
+
+	const onCursorMotion = useCallback((location: EditorCursorLocations) => {
+		const noteId = formNoteRef.current.id;
+		NotePositionService.instance().updateCursorPosition(noteId, windowId, location);
+	}, [windowId]);
 
 	function renderNoNotes(rootStyle: React.CSSProperties) {
 		const emptyDivStyle = {
@@ -418,6 +420,9 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}
 
 	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId, props.highlightedWords);
+	const initialCursorLocation = useInitialCursorLocation({
+		noteId: props.noteId,
+	});
 
 	const markupLanguage = formNote.markup_language;
 	const editorProps: NoteBodyEditorPropsAndRef = {
@@ -431,6 +436,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		content: formNote.body,
 		contentMarkupLanguage: markupLanguage,
 		contentOriginalCss: formNote.originalCss,
+		initialCursorLocation,
 		resourceInfos: resourceInfos,
 		resourceDirectory: Setting.value('resourceDir'),
 		htmlToMarkdown: htmlToMarkdown,
@@ -441,6 +447,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		dispatch: props.dispatch,
 		noteToolbar: null,
 		onScroll: onScroll,
+		onCursorMotion,
 		setLocalSearchResultCount: setLocalSearchResultCount,
 		setLocalSearch: localSearch_change,
 		setShowLocalSearch,
@@ -466,6 +473,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 		// It is currently used to remember pdf scroll position for each attachments of each note uniquely.
 		noteId: props.noteId,
 		watchedNoteFiles: props.watchedNoteFiles,
+		enableHtmlToMarkdownBanner: props.enableHtmlToMarkdownBanner,
+		showNoteLinkIcon: props.showNoteLinkIcon,
 	};
 
 	let editor = null;
@@ -487,6 +496,17 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const noteRevisionViewer_onBack = useCallback(() => {
 		setShowRevisions(false);
 	}, []);
+
+	const onBannerConvertItToMarkdown = useCallback(async (event: React.MouseEvent<HTMLAnchorElement>) => {
+		event.preventDefault();
+		if (!props.selectedNoteIds || props.selectedNoteIds.length === 0) return;
+		await CommandService.instance().execute('convertNoteToMarkdown', props.selectedNoteIds[0]);
+	}, [props.selectedNoteIds]);
+
+	const onHideBannerConvertItToMarkdown = async (event: React.MouseEvent<HTMLAnchorElement>) => {
+		event.preventDefault();
+		Setting.setValue('editor.enableHtmlToMarkdownBanner', false);
+	};
 
 	const onBannerResourceClick = useCallback(async (event: React.MouseEvent<HTMLAnchorElement>) => {
 		event.preventDefault();
@@ -632,9 +652,30 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const theme = themeStyle(props.themeId);
 
+	function renderConvertHtmlToMarkdown(): React.ReactNode {
+		if (!props.enableHtmlToMarkdownBanner) return null;
+
+		const note = props.notes.find(n => n.id === props.selectedNoteIds[0]);
+		if (!note) return null;
+		if (note.markup_language !== MarkupLanguage.Html) return null;
+
+		return (
+			<div style={styles.resourceWatchBanner}>
+				<p style={styles.resourceWatchBannerLine}>
+					{_('This note is in HTML format. Convert it to Markdown to edit it more easily.')}
+					&nbsp;
+					<a href="#" style={styles.resourceWatchBannerAction} onClick={onBannerConvertItToMarkdown}>{`${_('Convert it')}`}</a>
+					{' / '}
+					<a href="#" style={styles.resourceWatchBannerAction} onClick={onHideBannerConvertItToMarkdown}>{_('Don\'t show this message again')}</a>
+				</p>
+			</div>
+		);
+	}
+
 	return (
 		<div style={styles.root} onDragOver={onDragOver} onDrop={onDrop} ref={containerRef}>
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+				{renderConvertHtmlToMarkdown()}
 				{renderResourceWatchingNotification()}
 				{renderResourceInSearchResultsNotification()}
 				<NoteTitleBar
@@ -675,12 +716,14 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
 	const noteId = stateUtils.selectedNoteId(windowState);
 
-	let bodyEditor = windowState.editorCodeView ? 'CodeMirror6' : 'TinyMCE';
+	let bodyEditor = windowState.editorCodeView ? NoteBodyEditorType.CodeMirror6 : NoteBodyEditorType.TinyMce;
 	if (state.settings.isSafeMode) {
-		bodyEditor = 'PlainText';
+		bodyEditor = NoteBodyEditorType.PlainText;
 	} else if (windowState.editorCodeView && state.settings['editor.legacyMarkdown']) {
-		bodyEditor = 'CodeMirror5';
+		bodyEditor = NoteBodyEditorType.CodeMirror5;
 	}
+
+	const mainWindowState = stateUtils.windowStateById(state, defaultWindowId);
 
 	return {
 		noteId,
@@ -694,14 +737,15 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		watchedNoteFiles: state.watchedNoteFiles,
 		notesParentType: windowState.notesParentType,
 		selectedNoteTags: windowState.selectedNoteTags,
-		lastEditorScrollPercents: state.lastEditorScrollPercents,
 		selectedNoteHash: windowState.selectedNoteHash,
 		searches: state.searches,
 		selectedSearchId: windowState.selectedSearchId,
 		customCss: state.customViewerCss,
 		noteVisiblePanes: windowState.noteVisiblePanes,
 		watchedResources: windowState.watchedResources,
-		highlightedWords: state.highlightedWords,
+		// For now, only the main window has search UI. Show the same search markers in all
+		// windows:
+		highlightedWords: mainWindowState.highlightedWords,
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons([
@@ -722,6 +766,9 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		syncUserId: state.settings['sync.userId'],
 		shareCacheSetting: state.settings['sync.shareCache'],
 		searchResults: state.searchResults,
+		enableHtmlToMarkdownBanner: state.settings['editor.enableHtmlToMarkdownBanner'],
+		enableInEditorRendering: state.settings['editor.inlineRendering'],
+		showNoteLinkIcon: state.settings['notes.showNoteLinkIcon'],
 	};
 };
 

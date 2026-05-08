@@ -8,6 +8,7 @@ import getMainWindow from './util/getMainWindow';
 import setFilePickerResponse from './util/setFilePickerResponse';
 import setMessageBoxResponse from './util/setMessageBoxResponse';
 import getImageSourceSize from './util/getImageSourceSize';
+import setSettingValue from './util/setSettingValue';
 
 
 test.describe('main', () => {
@@ -17,6 +18,13 @@ test.describe('main', () => {
 
 		const mainPage = await new MainScreen(mainWindow).setup();
 		await mainPage.waitFor();
+	});
+
+	test('app should support French localization', async ({ mainWindow, electronApp }) => {
+		await setSettingValue(electronApp, mainWindow, 'locale', 'fr_FR');
+		// The "Notebooks" header should be localized
+		const localizedText = mainWindow.getByText('Carnets').first();
+		await expect(localizedText).toBeAttached();
 	});
 
 	test('should be able to create and edit a new note', async ({ mainWindow }) => {
@@ -203,6 +211,35 @@ test.describe('main', () => {
 		await expect(safeModeDisableLink).toBeInViewport();
 
 		await electronApp.close();
+	});
+
+	test('should import an HTML directory', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.importHtmlDirectory(electronApp, join(__dirname, 'resources', 'html-import'));
+		const importedFolder = mainScreen.sidebar.container.getByText('html-import');
+		await importedFolder.click();
+		await mainScreen.noteList.focusContent(electronApp);
+
+		const importedNote1 = mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
+		const importedNote2 = mainScreen.noteList.getNoteItemByTitle('test-html-file-2');
+		await expect.poll(async () => importedNote1.count(), { timeout: 60_000 }).toBeGreaterThan(0);
+		await expect.poll(async () => importedNote2.count(), { timeout: 60_000 }).toBeGreaterThan(0);
+
+		await expect(importedNote1).toBeVisible();
+		await expect(importedNote2).toBeVisible();
+	});
+
+	test('should import a single HTML file', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.importHtmlFile(electronApp, join(__dirname, 'resources', 'html-import', 'test-html-file-with-image.html'));
+
+		const importedNote = mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
+		await expect.poll(async () => importedNote.count(), { timeout: 60_000 }).toBeGreaterThan(0);
+		await expect(importedNote).toBeVisible({ timeout: 60_000 });
 	});
 });
 

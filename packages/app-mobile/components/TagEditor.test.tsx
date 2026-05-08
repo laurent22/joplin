@@ -89,7 +89,7 @@ describe('TagEditor', () => {
 
 		const searchResult = screen.getByRole('button', { name: 'new tag 1' });
 		fireEvent.press(searchResult);
-		expect(currentTags).toEqual(['test', 'new tag 1']);
+		expect(currentTags).toEqual(['new tag 1', 'test']);
 
 		// Manually unmount to prevent warnings
 		unmount();
@@ -115,7 +115,7 @@ describe('TagEditor', () => {
 
 		const addNewButton = screen.getByRole('button', { name: 'Add new' });
 		fireEvent.press(addNewButton);
-		expect(currentTags).toEqual(['test', 'create']);
+		expect(currentTags).toEqual(['create', 'test']);
 
 		unmount();
 	});

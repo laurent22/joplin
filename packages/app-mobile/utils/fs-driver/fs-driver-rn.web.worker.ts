@@ -236,15 +236,20 @@ export class WorkerApi {
 		const folderName = removeReservedWords(basename(path));
 
 		let handle: FileSystemDirectoryHandle;
-		try {
-			handle = await parent.getDirectoryHandle(folderName, { create });
-			this.directoryHandleCache_.set(path, handle);
-		} catch (error) {
-			if (!isNotFoundError(error)) {
-				throw error;
-			}
-
+		if (!parent) {
+			logger.debug('Parent not found for path', path);
 			handle = null;
+		} else {
+			try {
+				handle = await parent.getDirectoryHandle(folderName, { create });
+				this.directoryHandleCache_.set(path, handle);
+			} catch (error) {
+				if (!isNotFoundError(error)) {
+					throw error;
+				}
+
+				handle = null;
+			}
 		}
 
 		return handle;
@@ -305,7 +310,7 @@ export class WorkerApi {
 					at = writer.getSize();
 				}
 
-				write = (data: ArrayBufferLike) => writer.write(data, { at });
+				write = (data: BufferSource) => writer.write(data, { at });
 				close = () => writer.close();
 			} catch (error) {
 				// In some cases, createSyncAccessHandle isn't available. In other cases,
@@ -313,7 +318,7 @@ export class WorkerApi {
 
 				logger.warn('Failed to createSyncAccessHandle', error);
 				const writer = await handle.createWritable({ keepExistingData: options?.keepExistingData });
-				write = (data: ArrayBufferLike) => writer.write(data);
+				write = (data: BufferSource) => writer.write(data);
 				close = () => writer.close();
 			}
 

@@ -6,6 +6,7 @@ export enum ErrorCode {
 	NoSub = 'no_sub',
 	NoStripeSub = 'no_stripe_sub',
 	InvalidOrigin = 'invalidOrigin',
+	IsReadOnly = 'isReadOnly',
 	TaskAlreadyRunning = 'taskAlreadyRunning',
 }
 
@@ -141,6 +142,37 @@ export class ErrorTooManyRequests extends ApiError {
 		Object.setPrototypeOf(this, ErrorTooManyRequests.prototype);
 	}
 }
+
+export class ErrorNotImplemented extends ApiError {
+	public static httpCode = 501;
+	public retryAfterMs = 0;
+
+	public constructor(message = 'Not Implemented', options: ErrorOptions = null) {
+		super(message, ErrorNotImplemented.httpCode, options);
+		Object.setPrototypeOf(this, ErrorNotImplemented.prototype);
+	}
+}
+
+export class ErrorBadGateway extends ApiError {
+	public static httpCode = 502;
+	public retryAfterMs = 0;
+
+	public constructor(message = 'Bad Gateway', options: ErrorOptions = null) {
+		super(message, ErrorBadGateway.httpCode, options);
+		Object.setPrototypeOf(this, ErrorBadGateway.prototype);
+	}
+}
+
+export class ErrorServiceUnavailable extends ApiError {
+	public static httpCode = 503;
+	public retryAfterMs = 0;
+
+	public constructor(message = 'Service Unavailable', options: ErrorOptions = null) {
+		super(message, ErrorServiceUnavailable.httpCode, options);
+		Object.setPrototypeOf(this, ErrorServiceUnavailable.prototype);
+	}
+}
+
 
 export function errorToString(error: Error): string {
 	// const msg: string[] = [];

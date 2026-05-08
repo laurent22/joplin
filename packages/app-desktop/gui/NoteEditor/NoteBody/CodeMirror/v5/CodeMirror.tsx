@@ -252,6 +252,23 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 							reg.logger().warn('"editor.scrollToText" is unsupported in legacy editor - please use the new editor');
 							return false;
 						},
+						// Table editing commands are only supported in the v6 editor
+						'editor.tableAddRow': () => {
+							reg.logger().warn('Table editing commands are not supported in the legacy editor');
+							return false;
+						},
+						'editor.tableAddColumn': () => {
+							reg.logger().warn('Table editing commands are not supported in the legacy editor');
+							return false;
+						},
+						'editor.tableDeleteRow': () => {
+							reg.logger().warn('Table editing commands are not supported in the legacy editor');
+							return false;
+						},
+						'editor.tableDeleteColumn': () => {
+							reg.logger().warn('Table editing commands are not supported in the legacy editor');
+							return false;
+						},
 					};
 
 					if (commands[cmd.name]) {
@@ -338,7 +355,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	}, [editorPasteText, onEditorPaste]);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const loadScript = async (script: any) => {
+	const loadScript = async (script: any, document: Document) => {
 		return new Promise((resolve) => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			let element: any = document.createElement('script');
@@ -367,6 +384,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	};
 
 	useEffect(() => {
+		if (!editorRoot) return () => { };
 		let cancelled = false;
 
 		async function loadScripts() {
@@ -393,13 +411,14 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				});
 			}
 
+			const ownerDoc = editorRoot.ownerDocument;
 			for (const s of scriptsToLoad) {
-				if (document.getElementById(s.id)) {
+				if (ownerDoc.getElementById(s.id)) {
 					s.loaded = true;
 					continue;
 				}
 
-				await loadScript(s);
+				await loadScript(s, ownerDoc);
 				if (cancelled) return;
 
 				s.loaded = true;
@@ -411,7 +430,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		return () => {
 			cancelled = true;
 		};
-	}, [styles.editor.codeMirrorTheme]);
+	}, [styles.editor.codeMirrorTheme, editorRoot]);
 
 	useEffect(() => {
 		if (!editorRoot) return () => {};
@@ -646,6 +665,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				useCustomPdfViewer: props.useCustomPdfViewer,
 				noteId: props.noteId,
 				vendorDir: bridge().vendorDir(),
+				showNoteLinkIcon: props.showNoteLinkIcon,
 			}));
 
 			if (cancelled) return;
@@ -666,7 +686,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			shim.clearTimeout(timeoutId);
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.content, props.contentKey, renderedBodyContentKey, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml]);
+	}, [props.content, props.contentKey, renderedBodyContentKey, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml, props.showNoteLinkIcon]);
 
 	useEffect(() => {
 		if (!webviewReady) return;
@@ -695,7 +715,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [renderedBody, webviewReady]);
 
-	useEditorSearchHandler({
+	const { onSetInitialMarkersRef } = useEditorSearchHandler({
 		setLocalSearchResultCount: props.setLocalSearchResultCount,
 		searchMarkers: props.searchMarkers,
 		webviewRef,
@@ -722,6 +742,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	useContextMenu({
 		plugins: props.plugins,
+		dispatch: props.dispatch,
 		editorCutText, editorCopyText, editorPaste,
 		editorRef,
 		editorClassName: 'codeMirrorEditor',
@@ -737,6 +758,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				<Editor
 					value={props.content}
 					searchMarkers={props.searchMarkers}
+					onSetMarkersRef={onSetInitialMarkersRef}
 					ref={editorRef}
 					mode={props.contentMarkupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML ? 'xml' : 'joplin-markdown'}
 					codeMirrorTheme={styles.editor.codeMirrorTheme}

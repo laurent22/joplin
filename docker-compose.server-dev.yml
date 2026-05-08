@@ -1,8 +1,6 @@
 # This compose file can be used in development to run both the database and app
 # within Docker.
 
-version: '3'
-
 services:
     app:
         build:

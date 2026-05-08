@@ -9,10 +9,12 @@ import { reg } from '@joplin/lib/registry';
 import { State } from '@joplin/lib/reducer';
 import BackButtonService from '../../../services/BackButtonService';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import BaseScreenComponent from '../../base-screen';
 import * as shared from '@joplin/lib/components/shared/config/config-shared';
+import { shouldShowBySearch, hasNormalizedQuery } from '@joplin/lib/components/shared/config/config-search-text';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
 import configScreenStyles, { ConfigScreenStyles } from './configScreenStyles';
@@ -29,7 +31,7 @@ import { TextInput, List } from 'react-native-paper';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
-import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
+import NoteImportButton, { importedFolderTitle } from './NoteExportSection/NoteImportButton';
 import SectionDescription from './SectionDescription';
 import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
 import getVersionInfoText from '../../../utils/getVersionInfoText';
@@ -37,6 +39,9 @@ import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './J
 import shim from '@joplin/lib/shim';
 import SettingsToggle from './SettingsToggle';
 import { UpdateSettingValueCallback } from './types';
+import Folder from '@joplin/lib/models/Folder';
+import { FolderEntity } from '@joplin/lib/services/database/types';
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
@@ -44,6 +49,7 @@ interface ConfigScreenState {
 	changedSettingKeys: string[];
 
 	searchQuery: string;
+	searchSectionFilter: string|null;
 	searching: boolean;
 
 	fixingSearchIndex: boolean;
@@ -52,6 +58,7 @@ interface ConfigScreenState {
 
 	selectedSectionName: string|null;
 	sidebarWidth: number;
+	activeFolder: FolderEntity;
 }
 
 interface ConfigScreenProps {
@@ -60,6 +67,7 @@ interface ConfigScreenProps {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	navigation: any;
+	dispatch: Dispatch;
 }
 
 class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, ConfigScreenState> {
@@ -82,6 +90,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			sidebarWidth: 100,
 			searchQuery: '',
 			searching: false,
+			activeFolder: null,
 		};
 
 		this.scrollViewRef_ = React.createRef<ScrollView>();
@@ -126,6 +135,13 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		void NavService.go('EncryptionConfig');
 	};
 
+	private onShowSyncWizard_ = () => {
+		this.props.dispatch({
+			type: 'SYNC_WIZARD_VISIBLE_CHANGE',
+			visible: true,
+		});
+	};
+
 	private saveButton_press = async () => {
 		if (this.state.changedSettingKeys.includes('sync.target') && this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem')) {
 			if (Platform.OS === 'android') {
@@ -156,6 +172,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	private manageProfilesButtonPress_ = () => {
 		void NavService.go('ProfileSwitcher');
+	};
+
+	private noteResourcesButtonPress_ = () => {
+		void NavService.go('NoteResources');
 	};
 
 	private fixSearchEngineIndexButtonPress_ = async () => {
@@ -231,11 +251,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			// Not implemented yet
 			return true;
 		}
-		return await checkPermissions(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
+		return await checkPermissions(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, { rationale: {
 			title: _('Information'),
 			message: _('In order to use file system synchronisation your permission to write to external storage is required.'),
 			buttonPositive: _('OK'),
-		});
+		} });
 	}
 
 	public UNSAFE_componentWillMount() {
@@ -322,7 +342,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return false;
 	};
 
-	public componentDidMount() {
+	public async componentDidMount() {
 		if (this.props.navigation.state.sectionName) {
 			this.setState({ selectedSectionName: this.props.navigation.state.sectionName });
 			setTimeout(() => {
@@ -338,6 +358,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		NavService.addHandler(this.handleNavigateToNewScreen);
 		Dimensions.addEventListener('change', this.updateSidebarWidth);
 		this.updateSidebarWidth();
+
+		const activeFolder = await Folder.getValidActiveFolder();
+		this.setState({ activeFolder });
 	}
 
 	public componentWillUnmount() {
@@ -377,22 +400,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		const matchesSearchQuery = (relatedText: string|string[]) => {
-			let searchThrough;
-			if (Array.isArray(relatedText)) {
-				searchThrough = relatedText.join('\n');
-			} else {
-				searchThrough = relatedText;
-			}
-			searchThrough = searchThrough.toLocaleLowerCase();
-
-			const searchQuery = this.state.searchQuery.toLocaleLowerCase().trim();
-
-			const hasSearchMatches =
-				headerTitle.toLocaleLowerCase() === searchQuery
-				|| searchThrough.includes(searchQuery);
-
-			// Don't show results when the search input is empty
-			return this.state.searchQuery.length > 0 && hasSearchMatches;
+			return shouldShowBySearch(this.state.searchQuery, headerTitle, relatedText);
 		};
 
 		const addSettingComponent = (
@@ -400,7 +408,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			relatedText: string|string[],
 			settingMetadata?: { advanced?: boolean },
 		) => {
-			const hiddenBySearch = this.state.searching && !matchesSearchQuery(relatedText);
+			const hiddenBySearch = this.state.searching && hasNormalizedQuery(this.state.searchQuery) && !matchesSearchQuery(relatedText);
 			if (component && !hiddenBySearch) {
 				if (settingMetadata?.advanced) {
 					advancedSettingComps.push(component);
@@ -545,6 +553,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		if (section.name === 'sync') {
+			addSettingButton('sync_wizard_button', _('Open Sync Wizard...'), this.onShowSyncWizard_);
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
 		}
 
@@ -564,6 +573,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 		if (section.name === 'tools') {
 			addSettingButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_);
+			addSettingButton('note_resources_button', _('Note attachments'), this.noteResourcesButtonPress_);
 			addSettingButton('status_button', _('Sync Status'), this.syncStatusButtonPress_);
 			addSettingButton('log_button', _('Log'), this.logButtonPress_);
 			addSettingButton('deletion_log_button', _('Deletion log'), this.deletionLogButtonPress_);
@@ -579,9 +589,21 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				<NoteExportButton key='export_as_jex_button' styles={this.styles()} />,
 				[exportButtonDefaultTitle(), exportButtonDescription()],
 			);
+			const importJexLabel = () => _('Import from JEX');
+			const importJexDescription = () => _('Import notes from a JEX (Joplin Export) file.');
 			addSettingComponent(
-				<NoteImportButton key='import_as_jex_button' styles={this.styles()} />,
-				[importButtonDefaultTitle(), importButtonDescription()],
+				<NoteImportButton key='import_as_jex_button' styles={this.styles()} defaultTitle={importJexLabel()} description={importJexDescription()} format='jex' />,
+				[importJexLabel(), importJexDescription()],
+			);
+			const importTxtLabel = () => _('Import from TXT');
+			const importTxtDescription = () => {
+				let folderTitle = importedFolderTitle();
+				if (this.state.activeFolder) folderTitle = this.state.activeFolder.title;
+				return _('Import a note from a Text file. The note will be imported into notebook \'%s\'.', substrWithEllipsis(folderTitle, 0, 32));
+			};
+			addSettingComponent(
+				<NoteImportButton key='import_as_txt_button' styles={this.styles()} defaultTitle={importTxtLabel()} description={importTxtDescription()} format='txt' activeFolder={this.state.activeFolder} />,
+				[importTxtLabel(), importTxtDescription()],
 			);
 			addSettingComponent(
 				<ExportDebugReportButton key='export_report_button' styles={this.styles()}/>,
@@ -619,9 +641,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				);
 			}
 
-			addSettingLink('donate_link', _('Make a donation'), 'https://joplinapp.org/donate/');
+			if (Platform.OS !== 'ios') addSettingLink('donate_link', _('Make a donation'), 'https://joplinapp.org/donate/');
 			addSettingLink('website_link', _('Joplin website'), 'https://joplinapp.org/');
 			addSettingLink('privacy_link', _('Privacy Policy'), 'https://joplinapp.org/privacy/');
+			addSettingLink('license_link', _('Open-source licences'), 'https://raw.githubusercontent.com/laurent22/joplin/refs/heads/dev/readme/licenses.md');
 
 			const versionInfoText = getVersionInfoText(settings['plugins.states']);
 
@@ -803,6 +826,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				placeholder={_('Search...')}
 				onChangeText={this.onSearchUpdate_}
 				autoFocus={true}
+				autoCapitalize='none'
+				autoComplete='off'
+				autoCorrect={false}
 			/>;
 
 			currentSection = (

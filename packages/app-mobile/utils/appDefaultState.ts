@@ -16,6 +16,9 @@ const appDefaultState: AppState = {
 	isOnMobileData: false,
 	disableSideMenuGestures: false,
 	showPanelsDialog: false,
+	noteEditorVisible: false,
+	syncWizardVisible: false,
+	noteVisiblePanes: ['viewer'],
 	...defaultState,
 
 	// On mobile, it's possible to select notes that aren't in the selected folder/tag/etc.

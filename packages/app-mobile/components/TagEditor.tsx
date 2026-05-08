@@ -10,6 +10,7 @@ import { TagEntity } from '@joplin/lib/services/database/types';
 import { Divider } from 'react-native-paper';
 import focusView from '../utils/focusView';
 import { msleep } from '@joplin/utils/time';
+import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
 
 export enum TagEditorMode {
 	Large,
@@ -38,11 +39,13 @@ const useStyles = (themeId: number, headerStyle: TextStyle|undefined) => {
 				color: theme.color3,
 				flexDirection: 'row',
 				alignItems: 'center',
+				maxWidth: '100%',
 				gap: 4,
 			},
 			tagText: {
 				color: theme.color3,
 				fontSize: theme.fontSize,
+				flexShrink: 1,
 			},
 			removeTagButton: {
 				color: theme.color3,
@@ -51,7 +54,6 @@ const useStyles = (themeId: number, headerStyle: TextStyle|undefined) => {
 			},
 			tagBoxRoot: {
 				flexDirection: 'column',
-				flexGrow: 1,
 				flexShrink: 1,
 			},
 			tagBoxScrollView: {
@@ -83,6 +85,7 @@ const useStyles = (themeId: number, headerStyle: TextStyle|undefined) => {
 				backgroundColor: theme.dividerColor,
 			},
 			tagSearch: {
+				flexGrow: 1,
 				flexShrink: 1,
 			},
 			noTagsLabel: {
@@ -122,7 +125,11 @@ const TagCard: React.FC<TagChipProps> = props => {
 		style={props.styles.tag}
 		role='listitem'
 	>
-		<Text style={props.styles.tagText}>{props.title}</Text>
+		<Text
+			ellipsizeMode='tail'
+			numberOfLines={1}
+			style={props.styles.tagText}
+		>{props.title}</Text>
 		<IconButton
 			pressableRef={removeButtonRef}
 			themeId={props.themeId}
@@ -144,23 +151,32 @@ interface TagsBoxProps {
 }
 
 const TagsBox: React.FC<TagsBoxProps> = props => {
+	const collatorLocale = getCollatorLocale();
+	const collator = useMemo(() => {
+		return getCollator(collatorLocale);
+	}, [collatorLocale]);
+
 	const onRemoveTag = useCallback((tag: string) => {
 		props.onRemoveTag(tag);
 	}, [props.onRemoveTag]);
 
 	const renderContent = () => {
 		if (props.tags.length) {
-			return props.tags.map(tag => (
-				<TagCard
-					key={`tag-${tag}`}
-					title={tag}
-					styles={props.styles}
-					themeId={props.themeId}
-					onRemove={onRemoveTag}
-					autofocus={props.autofocusTag === tag}
-					onAutoFocusComplete={props.onAutoFocusComplete}
-				/>
-			));
+			return props.tags
+				.sort((a, b) => {
+					return collator.compare(a, b);
+				})
+				.map(tag => (
+					<TagCard
+						key={`tag-${tag}`}
+						title={tag}
+						styles={props.styles}
+						themeId={props.themeId}
+						onRemove={onRemoveTag}
+						autofocus={props.autofocusTag === tag}
+						onAutoFocusComplete={props.onAutoFocusComplete}
+					/>
+				));
 		} else {
 			return <Text
 				style={props.styles.noTagsLabel}
@@ -171,6 +187,7 @@ const TagsBox: React.FC<TagsBoxProps> = props => {
 	return <View style={props.styles.tagBoxRoot}>
 		<Text style={props.styles.header} role='heading'>{_('Associated tags:')}</Text>
 		<ScrollView
+			keyboardShouldPersistTaps="handled"
 			style={props.styles.tagBoxScrollView}
 			// On web, specifying aria-live here announces changes to the associated tags.
 			// However, on Android (and possibly iOS), this breaks focus behavior:
@@ -188,24 +205,31 @@ const TagsBox: React.FC<TagsBoxProps> = props => {
 	</View>;
 };
 
-const normalizeTag = (tagText: string) => tagText.trim().toLowerCase();
-
 const TagEditor: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId, props.headerStyle);
 
 	const comboBoxItems = useMemo(() => {
+		const seenTitles = new Set();
+
 		return props.allTags
 			// Exclude tags already associated with the note
-			.filter(tag => !props.tags.includes(tag.title))
+			.filter(tag => {
+				const tagTitle = (tag.title || '').trim().normalize('NFC').toLowerCase();
+				return !props.tags.some(o => (o || '').trim().normalize('NFC').toLowerCase() === tagTitle);
+			})
 			.map((tag): Option => {
-				const title = tag.title ?? 'Untitled';
+				const title = (tag.title || '').trim().normalize('NFC');
+				const key = title.toLowerCase();
+				if (!title || seenTitles.has(key)) return null;
+				seenTitles.add(key);
 				return {
 					title,
 					icon: null,
 					accessibilityHint: _('Adds tag'),
 					willRemoveOnPress: true,
 				};
-			});
+			})
+			.filter((item): item is Option => !!item);
 	}, [props.tags, props.allTags]);
 
 	const [autofocusTag, setAutofocusTag] = useState('');
@@ -215,12 +239,16 @@ const TagEditor: React.FC<Props> = props => {
 	}, []);
 
 	const onAddTag = useCallback((title: string) => {
-		AccessibilityInfo.announceForAccessibility(_('Added tag: %s', title));
-		props.onTagsChange([...props.tags, normalizeTag(title)]);
+		const trimmedTitle = (title || '').trim();
+		if (!trimmedTitle) return;
+		AccessibilityInfo.announceForAccessibility(_('Added tag: %s', trimmedTitle));
+		props.onTagsChange([...props.tags, trimmedTitle]);
 	}, [props.tags, props.onTagsChange]);
 
 	const onRemoveTag = useCallback(async (title: string) => {
-		const previousTagIndex = props.tags.indexOf(title);
+		if (!title) return;
+		const normalizedTitle = title.trim().normalize('NFC').toLowerCase();
+		const previousTagIndex = props.tags.findIndex(item => (item || '').trim().normalize('NFC').toLowerCase() === normalizedTitle);
 		const targetTag = props.tags[previousTagIndex + 1] ?? props.tags[previousTagIndex - 1];
 		setAutofocusTag(targetTag);
 
@@ -228,7 +256,7 @@ const TagEditor: React.FC<Props> = props => {
 		// prevent focus from occasionally jumping away from the tag box.
 		await msleep(100);
 		AccessibilityInfo.announceForAccessibility(_('Removed tag: %s', title));
-		props.onTagsChange(props.tags.filter(tag => tag !== title));
+		props.onTagsChange(props.tags.filter(tag => (tag || '').trim().normalize('NFC').toLowerCase() !== normalizedTitle));
 	}, [props.tags, props.onTagsChange]);
 
 	const onComboBoxSelect = useCallback((item: { title: string }) => {
@@ -236,16 +264,18 @@ const TagEditor: React.FC<Props> = props => {
 		return { willRemove: true };
 	}, [onAddTag]);
 
-	const allTagsSet = useMemo(() => {
+	const allTagsSetNormalized = useMemo(() => {
 		return new Set([
-			...props.allTags.map(tag => tag.title),
-			...props.tags,
+			...props.allTags.map(tag => (tag.title || '').trim().normalize('NFC').toLowerCase()),
+			...props.tags.map(tag => (tag || '').trim().normalize('NFC').toLowerCase()),
 		]);
 	}, [props.allTags, props.tags]);
 
 	const onCanAddTag = useCallback((tag: string) => {
-		return !allTagsSet.has(normalizeTag(tag));
-	}, [allTagsSet]);
+		const normalized = (tag || '').trim().normalize('NFC');
+		if (!normalized) return false;
+		return !allTagsSetNormalized.has(normalized.toLowerCase());
+	}, [allTagsSetNormalized]);
 
 	const showAssociatedTags = props.mode === TagEditorMode.Large || props.tags.length > 0;
 

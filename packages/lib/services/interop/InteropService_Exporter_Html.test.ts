@@ -8,6 +8,7 @@ import { tempFilePath } from '../../testing/test-utils';
 import { ContentScriptType } from '../../services/plugins/api/types';
 import { ExportModuleOutputFormat, FileSystemItem } from './types';
 import { readFile } from 'fs/promises';
+import shim from '../../shim';
 
 async function recreateExportDir() {
 	const dir = exportDir();
@@ -137,6 +138,30 @@ describe('interop/InteropService_Exporter_Html', () => {
 
 		const content = await readFile(filePath, 'utf-8');
 		expect(content).toContain('<a data-from-md="" title="/" href="" download="">a link starts with slash</a>');
+	}));
+
+	test('should not embed zip file for pdf', (async () => {
+		const service = InteropService.instance();
+		const folder1 = await Folder.save({ title: 'folder1' });
+
+		const zipPath = tempFilePath('zip');
+		await fs.writeFile(zipPath, 'fake zip content', 'utf8');
+		const resource = await shim.createResourceFromPath(zipPath);
+
+		const note = await Note.save({ title: 'note1', parent_id: folder1.id, body: `[archive.zip](:/${resource.id})` });
+		await Note.save({ id: note.id });
+
+		const filePath = `${exportDir()}/test.html`;
+
+		await service.export({
+			path: filePath,
+			format: ExportModuleOutputFormat.Html,
+			target: FileSystemItem.File,
+			shouldEmbedOnlyImages: true,
+		});
+
+		const content = await readFile(filePath, 'utf-8');
+		expect(content).not.toContain('data:application/zip');
 	}));
 
 });

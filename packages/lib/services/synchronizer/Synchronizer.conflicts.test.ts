@@ -23,6 +23,10 @@ describe('Synchronizer.conflicts', () => {
 		await switchClient(2);
 
 		await synchronizerStart();
+
+		let syncItem = await BaseItem.syncItem(syncTargetId(), note1.id, { fields: ['sync_time'] });
+		expect(syncItem.sync_time).toBe(note1.updated_time);
+
 		let note2 = await Note.load(note1.id);
 		note2.title = 'Updated on client 2';
 		await Note.save(note2);
@@ -36,6 +40,10 @@ describe('Synchronizer.conflicts', () => {
 		await Note.save(note2conf);
 		note2conf = await Note.load(note1.id);
 		await synchronizerStart();
+
+		syncItem = await BaseItem.syncItem(syncTargetId(), note2.id, { fields: ['sync_time'] });
+		expect(syncItem.sync_time).toBe(note2.updated_time);
+
 		const conflictedNotes = await Note.conflictedNotes();
 		expect(conflictedNotes.length).toBe(1);
 
@@ -57,6 +65,19 @@ describe('Synchronizer.conflicts', () => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			expect((noteUpdatedFromRemote as any)[n]).toBe((note2 as any)[n]);
 		}
+	}));
+
+	it('should cap sync_time to the current device time in the delta step', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id, updated_time: time.unixMs() + 100_000 }, { autoTimestamp: false });
+		await synchronizerStart();
+
+		await switchClient(2);
+
+		await synchronizerStart();
+
+		const syncItem = await BaseItem.syncItem(syncTargetId(), note1.id, { fields: ['sync_time'] });
+		expect(syncItem.sync_time).toBeLessThan(note1.updated_time);
 	}));
 
 	it('should resolve folders conflicts', (async () => {
@@ -169,8 +190,9 @@ describe('Synchronizer.conflicts', () => {
 
 	it('should handle conflict when remote folder is deleted then local folder is renamed', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
-		await Folder.save({ title: 'folder2' });
-		await Note.save({ title: 'un', parent_id: folder1.id });
+		const folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder2.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder1.id });
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -179,7 +201,7 @@ describe('Synchronizer.conflicts', () => {
 
 		await sleep(0.1);
 
-		await Folder.delete(folder1.id);
+		await Folder.delete(folder1.id, { deleteChildren: false });
 
 		await synchronizerStart();
 
@@ -192,9 +214,15 @@ describe('Synchronizer.conflicts', () => {
 
 		await synchronizerStart();
 
-		const items = await allNotesFolders();
+		const remainingFolder1 = await Folder.load(folder1.id);
+		const remainingFolder2 = await Folder.load(folder2.id);
+		const remainingNote1 = await Note.load(note1.id);
+		const remainingNote2 = await Note.load(note2.id);
 
-		expect(items.length).toBe(1);
+		expect(remainingFolder1).toBeUndefined();
+		expect(remainingFolder2?.id).toBe(folder2.id);
+		expect(remainingNote1?.id).toBe(note1.id);
+		expect(remainingNote2?.id).toBe(note2.id);
 	}));
 
 	it('should not sync notes with conflicts', (async () => {

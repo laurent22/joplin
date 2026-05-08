@@ -4,6 +4,7 @@ import { ChangeType, Event } from './services/database/types';
 import { DatabaseConfig, DatabaseConfigClient } from './utils/types';
 import { createDb } from './tools/dbTools';
 import { msleep } from './utils/time';
+import { FolderEntity } from '@joplin/lib/services/database/types';
 
 const eventId1 = '4f405391-bd72-4a4f-809f-344fc6cd4b31';
 const eventId2 = '4f405391-bd72-4a4f-809f-344fc6cd4b32';
@@ -20,8 +21,12 @@ const event2 = {
 	id: eventId2,
 };
 
+let testIndex = 0;
 const beforeTest = async (envValues: Record<string, string> = null) => {
-	await beforeAllDb('db.replication', envValues ? { envValues } : null);
+	// Use `beforeAllDb` in `beforeEach` to ensure each test has its own database.
+	// To work around file locking issues on Windows, each test needs its own database instance:
+	const databaseKey = `db.replication.${testIndex ++}`;
+	await beforeAllDb(databaseKey, envValues ? { envValues } : null);
 	await beforeEachDb();
 };
 
@@ -30,6 +35,10 @@ const afterTest = async () => {
 };
 
 describe('db.replication', () => {
+
+	afterEach(async () => {
+		await afterTest();
+	});
 
 	it('should reconnect a database', async () => {
 		if (getDatabaseClientType() === DatabaseConfigClient.PostgreSQL) return;
@@ -56,12 +65,12 @@ describe('db.replication', () => {
 			expect(results.length).toBe(2);
 			expect([results[0].id, results[1].id].sort()).toEqual([eventId1, eventId2]);
 		}
-
-		await afterTest();
 	});
 
 	it('should manually sync an SQLite slave instance', async () => {
 		if (getDatabaseClientType() === DatabaseConfigClient.PostgreSQL) return;
+
+		await beforeTest();
 
 		const masterConfig: DatabaseConfig = {
 			client: DatabaseConfigClient.SQLite,
@@ -115,7 +124,7 @@ describe('db.replication', () => {
 		expect(result.items.length).toBe(0);
 
 		// But we still get the item because it doesn't use the slave database
-		expect((await models().item().loadAsJoplinItem(folderItem.id)).title).toBe('title 1');
+		expect((await models().item().loadAsJoplinItem<FolderEntity>(folderItem.id)).title).toBe('title 1');
 
 		// After sync, we should get the change
 		await sqliteSyncSlave(db(), dbSlave());
@@ -130,7 +139,7 @@ describe('db.replication', () => {
 		expect(result.items.length).toBe(0);
 
 		// But we get the latest item if requesting it directly
-		expect((await models().item().loadAsJoplinItem(folderItem.id)).title).toBe('title 2');
+		expect((await models().item().loadAsJoplinItem<FolderEntity>(folderItem.id)).title).toBe('title 2');
 
 		// After sync, we should get the change
 		await sqliteSyncSlave(db(), dbSlave());
@@ -138,8 +147,6 @@ describe('db.replication', () => {
 
 		expect(result.items.length).toBe(1);
 		expect(result.items[0].type).toBe(ChangeType.Update);
-
-		await afterTest();
 	});
 
 });

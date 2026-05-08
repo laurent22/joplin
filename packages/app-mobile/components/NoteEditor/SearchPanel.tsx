@@ -33,8 +33,7 @@ export interface SearchPanelProps {
 }
 
 interface ActionButtonProps {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	styles: any;
+	styles: ReturnType<typeof useStyles>;
 	themeId: number;
 	iconName: string;
 	title: string;
@@ -55,8 +54,7 @@ const ActionButton = (props: ActionButtonProps) => {
 };
 
 interface ToggleButtonProps {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	styles: any;
+	styles: ReturnType<typeof useStyles>;
 	themeId: number;
 	iconName: string;
 	title: string;
@@ -116,10 +114,13 @@ const useStyles = (theme: Theme) => {
 				backgroundColor: theme.backgroundColor3,
 			},
 			input: {
+				flexBasis: 0,
 				flexGrow: 1,
 				height: buttonSize,
 				backgroundColor: theme.backgroundColor4,
 				color: theme.color4,
+				margin: 2,
+				width: 90, // Reduce the min width for mobile screens in portrait
 			},
 			buttonText: buttonTextStyle,
 			activeButtonText: {
@@ -136,6 +137,13 @@ const useStyles = (theme: Theme) => {
 				justifyContent: 'center',
 				marginLeft: 10,
 			},
+			panelContainer: {
+				// Workaround for the editor disappearing when dismissing search on Android.
+				// See https://github.com/laurent22/joplin/issues/12781
+				//
+				// It may be possible to remove this line after upgrading to React Native's New Architecture.
+				borderColor: 'transparent',
+			},
 		});
 	}, [theme]);
 };
@@ -150,8 +158,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 	const state = props.searchState;
 	const control = props.searchControl;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const updateSearchState = (changedData: any) => {
+	const updateSearchState = (changedData: Partial<SearchState>) => {
 		const newState = { ...state, ...changedData };
 		control.setSearchState(newState);
 	};
@@ -171,6 +178,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 				returnKeyType='search'
 				blurOnSubmit={false}
 				onSubmitEditing={control.findNext}
+				selectTextOnFocus={true}
 			/>
 		);
 	};
@@ -192,7 +200,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 	}, [state.dialogVisible, control]);
 
 
-	const themeId = props.editorSettings.themeId;
+	const themeId = props.editorSettings.themeData.themeId;
 	const closeButton = (
 		<ActionButton
 			themeId={themeId}
@@ -334,7 +342,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 	);
 
 	const simpleLayout = (
-		<View style={{ flexDirection: 'row' }}>
+		<View style={{ flexDirection: 'row', flexShrink: 1 }}>
 			{ closeButton }
 			{ searchTextInput }
 			{ showDetailsButton }
@@ -344,7 +352,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 	);
 
 	const advancedLayout = (
-		<View style={{ flexDirection: 'column', alignItems: 'center' }}>
+		<View style={{ flexDirection: 'column', flexShrink: 1 }}>
 			<View style={{ flexDirection: 'row' }}>
 				{ closeButton }
 				{ labeledSearchInput }
@@ -366,7 +374,9 @@ export const SearchPanel = (props: SearchPanelProps) => {
 		return null;
 	}
 
-	return showingAdvanced ? advancedLayout : simpleLayout;
+	return <View style={styles.panelContainer}>
+		{showingAdvanced ? advancedLayout : simpleLayout}
+	</View>;
 };
 
 export default SearchPanel;

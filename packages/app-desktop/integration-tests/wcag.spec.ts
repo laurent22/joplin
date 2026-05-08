@@ -2,6 +2,7 @@ import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import AxeBuilder from '@axe-core/playwright';
 import { Page } from '@playwright/test';
+import SettingsScreen from './models/SettingsScreen';
 
 const createScanner = (page: Page) => {
 	return new AxeBuilder({ page })
@@ -33,30 +34,46 @@ const expectNoViolations = async (page: Page) => {
 	// random failure in CI.
 	await expect.poll(async () => {
 		const results = await scanner.analyze();
+		if (results.violations.length > 0) {
+			// Keep CI failures actionable with compact, structured rule/selector details.
+			const violationSummary = results.violations.map(violation => ({
+				rule: violation.id,
+				impact: violation.impact,
+				description: violation.description,
+				help: violation.help,
+				helpUrl: violation.helpUrl,
+				nodes: violation.nodes.map(node => ({
+					target: node.target,
+					failureSummary: node.failureSummary,
+				})),
+			}));
+
+			console.error('WCAG violations detected:');
+			console.error(JSON.stringify(violationSummary, null, 2));
+		}
 		return results.violations;
 	}).toEqual([]);
 };
 
 test.describe('wcag', () => {
-	// Disabled due to random failure in CI:
-// for (const tabName of ['General', 'Plugins']) {
-// 	test(`should not detect significant issues in the settings screen ${tabName} tab`, async ({ electronApp, mainWindow }) => {
-// 		const mainScreen = await new MainScreen(mainWindow).setup();
-// 		await mainScreen.waitFor();
-//
-// 		await mainScreen.openSettings(electronApp);
-//
-// 		// Should be on the settings screen
-// 		const settingsScreen = new SettingsScreen(mainWindow);
-// 		await settingsScreen.waitFor();
-//
-// 		const tabLocator = settingsScreen.getTabLocator(tabName);
-// 		await tabLocator.click();
-// 		await expect(tabLocator).toBeFocused();
-//
-// 		await expectNoViolations(mainWindow);
-// 	});
-// }
+	for (const tabName of ['General', 'Plugins']) {
+		test(`should not detect significant issues in the settings screen ${tabName} tab`, async ({ electronApp, mainWindow }) => {
+			const mainScreen = await new MainScreen(mainWindow).setup();
+			await mainScreen.waitFor();
+
+			await mainScreen.openSettings(electronApp);
+
+			// Should be on the settings screen
+			const settingsScreen = new SettingsScreen(mainWindow);
+			await settingsScreen.waitFor();
+
+			const tabLocator = settingsScreen.getTabLocator(tabName);
+			await tabLocator.click();
+			await expect(tabLocator).toBeFocused();
+
+			await expectNoViolations(mainWindow);
+		});
+	}
 
 	test('should not detect significant issues in the main screen with an open note', async ({ mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
@@ -78,6 +95,17 @@ test.describe('wcag', () => {
 		// Should not find issues with the Rich Text Editor
 		await mainScreen.noteEditor.toggleEditorsButton.click();
 		await mainScreen.noteEditor.richTextEditor.click();
+
+		await expectNoViolations(mainWindow);
+	});
+
+	test('should not detect significant issues in the note properties screen', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Test');
+		await mainScreen.goToAnything.runCommand(electronApp, 'showNoteProperties');
+
+		const header = mainScreen.dialog.locator('h1');
+		await expect(header).toBeVisible();
 
 		await expectNoViolations(mainWindow);
 	});

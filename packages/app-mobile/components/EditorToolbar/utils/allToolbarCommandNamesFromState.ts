@@ -20,6 +20,9 @@ const builtInCommandNames = [
 	EditorCommandType.ToggleBulletedList,
 	EditorCommandType.ToggleCheckList,
 	'-',
+	`editor.${EditorCommandType.InsertTable}`,
+	`editor.${EditorCommandType.InsertCodeBlock}`,
+	'-',
 	EditorCommandType.IndentLess,
 	EditorCommandType.IndentMore,
 	`editor.${EditorCommandType.SwapLineDown}`,
@@ -34,6 +37,9 @@ const builtInCommandNames = [
 	'setTags',
 	EditorCommandType.ToggleSearch,
 	'hideKeyboard',
+	'-',
+	`editor.${EditorCommandType.GoDocStart}`,
+	`editor.${EditorCommandType.GoDocEnd}`,
 ];
 
 

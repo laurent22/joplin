@@ -1,0 +1,13 @@
+<strong>Joplin</strong> je besplatan program otvorenog koda za bilješke i popis zadataka koji može obraditi veliki broj bilješki organizirane u bilježnice. Bilješke se mogu pretraživati, kopirati, označavati i mijenjati izravno iz programa ili iz vlastitog uređivača teksta.
+
+Bilješke su u <a href="https://joplinapp.org/help/apps/markdown">Markdown formatu</a>.
+
+Iz Evernotea izvezene bilješke <a href="https://joplinapp.org/help/apps/import_export">mogu se uvesti</a> u Joplin, uključujući formatirani sadržaj (koji se pretvara u Markdown), resurse (slike, privitke itd.) i potpune metapodatke (geografski podaci mjesta, vrijeme aktualiziranja, vrijeme stvaranja itd.). Mogu se uvesti i obične Markdown datoteke.
+
+Joplin radi ponajprije s lokalnim podacima (offline first), što znači da uvijek imaš sve svoje podatke na mobitelu ili računalu. To osigurava da su tvoje bilješke uvijek dostupne, bez obzira je li imaš internetsku vezu ili ne.</p>
+
+Bilješke se mogu sigurno <a href="https://joplinapp.org/help/apps/sync">sinkronizirati</a> pomoću <a href="https://joplinapp.org/help/apps/sync/e2ee">sveobuhvatnog šifriranja</a> s raznim uslugama u oblaku, uključujući Nextcloud, Dropbox, OneDrive i <a href="https://joplinapp.org/plans/">Joplin Cloud</a>.
+
+Pretraživanje cijelog teksta dostupno je na svim platformama za brzo pronalaženje potrebnih informacija. Program se može prilagoditi pomoću dodataka i tema, a možeš stvoriti i vlastite.
+
+Program je dostupan za Windows, Linux, macOS, Android i iOS sustave. <a href="https://joplinapp.org/help/apps/clipper">Web Clipper</a>, za spremanje web stranica i snimaka ekrana iz tvog preglednika, je također dostupan za <a href="https://addons.mozilla.org/firefox/addon/joplin-web-clipper/">Firefox</a> i <a href="https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek">Chrome</a>.

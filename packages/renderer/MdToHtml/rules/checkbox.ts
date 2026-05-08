@@ -204,6 +204,8 @@ function checkboxPlugin(markdownIt: any, options: RuleOptions) {
 						currentListItem.attrSet('class', (`${currentListItem.attrGet('class') || ''} checked`).trim());
 					}
 				}
+
+				currentList.attrSet('data-is-checklist', '1');
 			}
 		}
 	});

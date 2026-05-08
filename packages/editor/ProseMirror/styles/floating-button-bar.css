@@ -1,0 +1,49 @@
+
+.floating-button-bar {
+	position: absolute;
+	z-index: 1;
+
+	display: flex;
+	flex-direction: row;
+	box-sizing: border-box;
+
+	background-color: var(--joplin-background-color3);
+	color: var(--joplin-color);
+
+	box-shadow: 0px 0px 2px var(--joplin-color);
+}
+
+.floating-button-bar.-hidden {
+	display: none;
+}
+
+.floating-button-bar > .action {
+	background: transparent;
+	color: inherit;
+	border: none;
+}
+
+
+.floating-button-bar.-floating {
+	border-radius: 64px;
+	height: 64px;
+	padding: 8px;
+	gap: 4px;
+}
+
+.floating-button-bar.-anchored {
+	border-radius: 48px;
+	padding: 0px;
+	gap: 4px;
+
+	opacity: 0.9;
+	transition: opacity 0.2s ease;
+}
+
+.floating-button-bar.-anchored > .action {
+	padding: 8px;
+}
+
+.floating-button-bar.-anchored:focus-within, .floating-button-bar.-anchored:hover {
+	opacity: 1;
+}

@@ -1,25 +1,36 @@
 import Logger from '@joplin/utils/Logger';
 
-const { Platform, PermissionsAndroid } = require('react-native');
+import { Platform, PermissionsAndroid, Permission } from 'react-native';
 const logger = Logger.create('checkPermissions');
 
-type rationale = {
+type Rationale = {
 	title: string;
 	message: string;
-	buttonPositive?: string;
+	buttonPositive: string;
 	buttonNegative?: string;
 	buttonNeutral?: string;
 };
 
-export default async (permissions: string, rationale?: rationale) => {
+interface Options {
+	rationale?: Rationale;
+	onRequestConfirmation?: ()=> Promise<boolean>;
+}
+
+export default async (permissions: Permission, { rationale, onRequestConfirmation }: Options = {}) => {
 	// On iOS, permissions are prompted for by the system, so here we assume it's granted.
 	if (Platform.OS !== 'android') return PermissionsAndroid.RESULTS.GRANTED;
 
-	let result = await PermissionsAndroid.check(permissions);
-	logger.info('Checked permission:', result);
-	if (result !== PermissionsAndroid.RESULTS.GRANTED) {
-		result = await PermissionsAndroid.request(permissions, rationale);
+	const granted = await PermissionsAndroid.check(permissions);
+	logger.info('Checked permission:', granted);
+	if (granted) {
+		return PermissionsAndroid.RESULTS.GRANTED;
+	} else {
+		if (onRequestConfirmation && !await onRequestConfirmation()) {
+			return PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN;
+		}
+
+		const result = await PermissionsAndroid.request(permissions, rationale);
 		logger.info('Requested permission:', result);
+		return result;
 	}
-	return result;
 };

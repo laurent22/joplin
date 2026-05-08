@@ -225,7 +225,7 @@ const Button = React.forwardRef(({
 			animation={iconAnimation}
 			mr={iconOnly ? '0' : '6px'}
 			color={color}
-			className={iconName}
+			className={`${iconName} icon`}
 			role='img'
 		/>;
 	}

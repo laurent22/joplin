@@ -118,4 +118,4 @@ The application was originally written in JavaScript, however it has slowly been
 
 ## Troubleshooting
 
-Please read for the [Build Troubleshooting Document](https://github.com/laurent22/joplin/blob/dev/readme/dev/build_troubleshooting.md) for various tips on how to get the build working.
+Please read the [Build Troubleshooting Document](https://github.com/laurent22/joplin/blob/dev/readme/dev/build_troubleshooting.md) for various tips on how to get the build working.

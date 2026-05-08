@@ -434,8 +434,30 @@ export interface EditorPluginCallbacks {
 
 export type VisibleHandler = ()=> Promise<void>;
 
+/**
+ * Identifies the type of element that was right-clicked in the editor context menu.
+ */
+export enum ContextMenuItemType {
+	None = '',
+	Image = 'image',
+	Resource = 'resource',
+	Text = 'text',
+	Link = 'link',
+	NoteLink = 'noteLink',
+}
+
 export interface EditContextMenuFilterObject {
 	items: MenuItem[];
+	/**
+	 * Context about what was right-clicked. Plugins should use this instead of
+	 * checking the editor cursor position, as the cursor may not reflect the
+	 * actual click location.
+	 */
+	context?: {
+		resourceId?: string;
+		itemType?: ContextMenuItemType;
+		textToCopy?: string;
+	};
 }
 
 export interface EditorActivationCheckFilterObject {
@@ -587,6 +609,30 @@ export interface SettingSection {
  * - **[2]**: (Optional) Resource link.
  */
 export type Path = string[];
+
+// =================================================================
+// Clipboard API types
+// =================================================================
+
+/**
+ * Represents content that can be written to the clipboard in multiple formats.
+ */
+export interface ClipboardContent {
+	/**
+	 * Plain text representation of the content
+	 */
+	text?: string;
+
+	/**
+	 * HTML representation of the content
+	 */
+	html?: string;
+
+	/**
+	 * Image in [data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format
+	 */
+	image?: string;
+}
 
 // =================================================================
 // Content Script types

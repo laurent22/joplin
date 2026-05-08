@@ -37,6 +37,7 @@ const useStyles = (themeId: number) => {
 
 		const listItemPressable: ViewStyle = {
 			flexGrow: 1,
+			flexShrink: 1,
 			alignSelf: 'stretch',
 		};
 		const listItemPressableWithCheckbox: ViewStyle = {
@@ -167,10 +168,10 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 	};
 	return (
 		<MultiTouchableOpacity
+			{...pressableProps}
 			containerProps={{
 				style: [selectionWrapperStyle, opacityStyle, styles.listItem],
 			}}
-			pressableProps={pressableProps}
 			onPress={onPress}
 			beforePressable={todoCheckbox}
 		>

@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { DragEventHandler, MouseEventHandler, useCallback, useMemo, useRef } from 'react';
 import { ItemClickListener, ItemDragListener, ListItem, ListItemType } from '../types';
-import TagItem, { TagLinkClickEvent } from '../listItemComponents/TagItem';
+import TagItem from '../listItemComponents/TagItem';
 import { Dispatch } from 'redux';
 import { clipboard } from 'electron';
+import type { MenuItem as MenuItemType } from 'electron';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import Tag from '@joplin/lib/models/Tag';
 import { _ } from '@joplin/lib/locale';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
-import { AppState } from '../../../app.reducer';
-import { store } from '@joplin/lib/reducer';
 import Folder from '@joplin/lib/models/Folder';
 import bridge from '../../../services/bridge';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
@@ -18,9 +17,8 @@ import CommandService from '@joplin/lib/services/CommandService';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import InteropServiceHelper from '../../../InteropServiceHelper';
-import stateToWhenClauseContext from '@joplin/lib/services/commands/stateToWhenClauseContext';
 import Setting from '@joplin/lib/models/Setting';
-import PerFolderSortOrderService from '../../../services/sortOrder/PerFolderSortOrderService';
+import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
@@ -29,12 +27,13 @@ import Logger from '@joplin/utils/Logger';
 import onFolderDrop from '@joplin/lib/models/utils/onFolderDrop';
 import HeaderItem from '../listItemComponents/HeaderItem';
 import AllNotesItem from '../listItemComponents/AllNotesItem';
-import ListItemWrapper from '../listItemComponents/ListItemWrapper';
+import ListItemWrapper, { ItemSelectionState } from '../listItemComponents/ListItemWrapper';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import shim from '@joplin/lib/shim';
+import useOnItemClick from './useOnItemClick';
 
 const Menu = bridge().Menu;
-const MenuItem = bridge().MenuItem;
+const MenuItem: typeof MenuItemType = bridge().MenuItem;
 
 const logger = Logger.create('useOnRenderItem');
 
@@ -47,6 +46,7 @@ interface Props {
 	containerRef: React.RefObject<HTMLDivElement>;
 
 	selectedIndex: number;
+	selectedIndexes: number[];
 	listItems: ListItem[];
 }
 
@@ -54,16 +54,51 @@ type ItemContextMenuListener = MouseEventHandler<HTMLElement>;
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
+// Checks whether an element is at least partially visible within a scrollable
+// container by comparing their bounding rectangles.
+const isElementVisibleInContainer = (element: HTMLElement, container: HTMLElement) => {
+	const elementRect = element.getBoundingClientRect();
+	const containerRect = container.getBoundingClientRect();
+
+	return elementRect.bottom > containerRect.top && elementRect.top < containerRect.bottom;
+};
+
 const focusListItem = (item: HTMLElement|null) => {
 	if (item) {
-		// Avoid scrolling to the selected item when refocusing the note list. Such a refocus
-		// can happen if the note list rerenders and the selection is scrolled out of view and
-		// can cause scroll to change unexpectedly.
-		focus('useOnRenderItem', item, { preventScroll: true });
+		const activeElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+		const itemList = item.closest('.item-list');
+		const activeTreeItem = activeElement?.closest('[role="treeitem"]');
+		const focusWasLost = activeElement === document.body;
+
+		// If the currently focused element is a tree item inside the same list,
+		// the user is navigating with the keyboard — always allow focus to move
+		// to the newly selected item so arrow-key scrolling is not interrupted.
+		const isKeyboardNavigating = !!activeTreeItem && itemList?.contains(activeTreeItem);
+
+		// Avoid disturbing scroll while user is manually scrolling through the list.
+		// However, if focus was lost (activeElement -> <body>), or the user is
+		// navigating with the keyboard, allow re-focusing even when the selected
+		// item is currently out of view.
+		if (itemList instanceof HTMLElement && !isElementVisibleInContainer(item, itemList) && !focusWasLost && !isKeyboardNavigating) {
+			return;
+		}
+
+		// Move focus only if needed: either focus was lost, or selection changed
+		// to a different tree item.
+		if (focusWasLost || activeTreeItem !== item) {
+			// preventScroll: true avoids a secondary scroll caused by the focus() call
+			// itself when the item is near the edge of the visible area.
+			focus('useOnRenderItem', item, { preventScroll: true });
+		}
 	}
 };
 
 const noFocusListItem = () => {};
+
+const folderCommandToMenuItem = (commandId: string, folderIds: string|string[]) => {
+	const options = Array.isArray(folderIds) ? { commandFolderIds: folderIds } : { commandFolderId: folderIds };
+	return new MenuItem(menuUtils.commandToStatefulMenuItem(commandId, folderIds, options));
+};
 
 const useOnRenderItem = (props: Props) => {
 
@@ -71,13 +106,6 @@ const useOnRenderItem = (props: Props) => {
 	pluginsRef.current = props.plugins;
 	const foldersRef = useRef<FolderEntity[]>(null);
 	foldersRef.current = props.folders;
-
-	const tagItem_click = useCallback(({ tag }: TagLinkClickEvent) => {
-		props.dispatch({
-			type: 'TAG_SELECT',
-			id: tag ? tag.id : null,
-		});
-	}, [props.dispatch]);
 
 	const onTagDrop_: DragEventHandler<HTMLElement> = useCallback(async event => {
 		const tagId = event.currentTarget.getAttribute('data-tag-id');
@@ -94,6 +122,24 @@ const useOnRenderItem = (props: Props) => {
 		}
 	}, []);
 
+	const selectedIndexesRef = useRef(props.selectedIndexes);
+	selectedIndexesRef.current = props.selectedIndexes;
+	const itemsRef = useRef(props.listItems);
+	itemsRef.current = props.listItems;
+	const getSelectedIds = useCallback(() => {
+		return selectedIndexesRef.current.map(index => {
+			const item = itemsRef.current[index];
+			if (item.kind === ListItemType.Folder) {
+				return item.folder.id;
+			} else if (item.kind === ListItemType.Tag) {
+				return item.tag.id;
+			}
+			return null;
+		}).filter(id => !!id);
+	}, []);
+
+	const onItemClick = useOnItemClick({ dispatch: props.dispatch, selectedIndexesRef, itemsRef });
+
 	const onItemContextMenu: ItemContextMenuListener = useCallback(async event => {
 		const itemId = event.currentTarget.getAttribute('data-id');
 		if (itemId === Folder.conflictFolderId()) return;
@@ -101,14 +147,22 @@ const useOnRenderItem = (props: Props) => {
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
 		if (!itemId || !itemType) throw new Error('No data on element');
 
-		const state: AppState = store().getState();
+		let itemIds = [itemId];
+		const itemIndex = Number(event.currentTarget.getAttribute('data-index'));
+		if (selectedIndexesRef.current.includes(itemIndex)) {
+			itemIds = getSelectedIds();
+		}
 
 		let deleteMessage = '';
 		const deleteButtonLabel = _('Remove');
 
 		if (itemType === BaseModel.TYPE_TAG) {
-			const tag = await Tag.load(itemId);
-			deleteMessage = _('Remove tag "%s" from all notes?', substrWithEllipsis(tag.title, 0, 32));
+			if (itemIds.length === 1) {
+				const tag = await Tag.load(itemId);
+				deleteMessage = _('Remove tag "%s" from all notes?', substrWithEllipsis(tag.title, 0, 32));
+			} else {
+				deleteMessage = _('Remove %d tags from all notes? This cannot be undone.', itemIds.length);
+			}
 		} else if (itemType === BaseModel.TYPE_SEARCH) {
 			deleteMessage = _('Remove this search from the sidebar?');
 		}
@@ -131,16 +185,13 @@ const useOnRenderItem = (props: Props) => {
 		const isDeleted = item ? !!item.deleted_time : false;
 
 		if (!isDeleted) {
-			if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
-				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem('newFolder', itemId)),
-				);
+			const isDecryptedFolder = itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied;
+			if (isDecryptedFolder && itemIds.length === 1) {
+				menu.append(folderCommandToMenuItem('newFolder', itemId));
 			}
 
 			if (itemType === BaseModel.TYPE_FOLDER) {
-				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem('deleteFolder', itemId)),
-				);
+				menu.append(folderCommandToMenuItem('deleteFolder', itemIds));
 			} else {
 				menu.append(
 					new MenuItem({
@@ -153,7 +204,9 @@ const useOnRenderItem = (props: Props) => {
 							if (!ok) return;
 
 							if (itemType === BaseModel.TYPE_TAG) {
-								await Tag.untagAll(itemId);
+								for (const itemId of itemIds) {
+									await Tag.untagAll(itemId);
+								}
 							} else if (itemType === BaseModel.TYPE_SEARCH) {
 								props.dispatch({
 									type: 'SEARCH_DELETE',
@@ -165,15 +218,18 @@ const useOnRenderItem = (props: Props) => {
 				);
 			}
 
-			if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
+			if (isDecryptedFolder) {
+				const whenClause = CommandService.instance().currentWhenClauseContext({ commandFolderIds: itemIds });
 				menu.append(new MenuItem({
-					...menuUtils.commandToStatefulMenuItem('moveToFolder', [itemId]),
-					// By default, enabled is based on the selected folder. However, the right-click
-					// menu can be shown for unselected folders.
-					enabled: true,
+					...menuUtils.commandToStatefulMenuItem('moveToFolder', itemIds),
+					// By default, moveToFolder's enabled condition is based on the selected notes. However, the right-click
+					// menu item applies to folders. For now, use a custom condition:
+					enabled: !whenClause.foldersIncludeReadOnly,
 				}));
+			}
 
-				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('openFolderDialog', { folderId: itemId })));
+			if (isDecryptedFolder && itemIds.length === 1) {
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('openFolderDialog', { folderId: itemId }, { commandFolderId: itemId })));
 
 				menu.append(new MenuItem({ type: 'separator' }));
 
@@ -188,25 +244,17 @@ const useOnRenderItem = (props: Props) => {
 						new MenuItem({
 							label: module.fullLabel(),
 							click: async () => {
-								await InteropServiceHelper.export(props.dispatch, module, { sourceFolderIds: [itemId], plugins: pluginsRef.current });
+								await InteropServiceHelper.export(props.dispatch, module, { sourceFolderIds: itemIds, plugins: pluginsRef.current });
 							},
 						}),
 					);
 				}
 
-				// We don't display the "Share notebook" menu item for sub-notebooks
-				// that are within a shared notebook. If user wants to do this,
-				// they'd have to move the notebook out of the shared notebook
-				// first.
-				const whenClause = stateToWhenClauseContext(state, { commandFolderId: itemId });
-
-				if (CommandService.instance().isEnabled('showShareFolderDialog', whenClause)) {
-					menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('showShareFolderDialog', itemId)));
-				}
-
-				if (CommandService.instance().isEnabled('leaveSharedFolder', whenClause)) {
-					menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('leaveSharedFolder', itemId)));
-				}
+				// Only show the share/leave share actions for top-level folders
+				const shareFolderItem = folderCommandToMenuItem('showShareFolderDialog', itemId);
+				if (shareFolderItem.enabled) menu.append(shareFolderItem);
+				const leaveSharedFolderItem = folderCommandToMenuItem('leaveSharedFolder', itemId);
+				if (leaveSharedFolderItem.enabled) menu.append(leaveSharedFolderItem);
 
 				menu.append(
 					new MenuItem({
@@ -216,14 +264,14 @@ const useOnRenderItem = (props: Props) => {
 				);
 				if (Setting.value('notes.perFolderSortOrderEnabled')) {
 					menu.append(new MenuItem({
-						...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', itemId),
+						...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', itemId, { commandFolderId: itemId }),
 						type: 'checkbox',
 						checked: PerFolderSortOrderService.isSet(itemId),
 					}));
 				}
 			}
 
-			if (itemType === BaseModel.TYPE_FOLDER) {
+			if (itemType === BaseModel.TYPE_FOLDER && itemIds.length === 1) {
 				menu.append(
 					new MenuItem({
 						label: _('Copy external link'),
@@ -234,7 +282,7 @@ const useOnRenderItem = (props: Props) => {
 				);
 			}
 
-			if (itemType === BaseModel.TYPE_TAG) {
+			if (itemType === BaseModel.TYPE_TAG && itemIds.length === 1) {
 				menu.append(new MenuItem(
 					menuUtils.commandToStatefulMenuItem('renameTag', itemId),
 				));
@@ -253,24 +301,22 @@ const useOnRenderItem = (props: Props) => {
 			for (const view of pluginViews) {
 				const location = view.location;
 
-				if (itemType === ModelType.Tag && location === MenuItemLocation.TagContextMenu ||
-					itemType === ModelType.Folder && location === MenuItemLocation.FolderContextMenu
-				) {
+				if (itemType === ModelType.Tag && location === MenuItemLocation.TagContextMenu) {
 					menu.append(
 						new MenuItem(menuUtils.commandToStatefulMenuItem(view.commandName, itemId)),
 					);
+				} else if (itemType === ModelType.Folder && location === MenuItemLocation.FolderContextMenu) {
+					menu.append(folderCommandToMenuItem(view.commandName, itemId));
 				}
 			}
 		} else {
 			if (itemType === BaseModel.TYPE_FOLDER) {
-				menu.append(
-					new MenuItem(menuUtils.commandToStatefulMenuItem('restoreFolder', itemId)),
-				);
+				menu.append(folderCommandToMenuItem('restoreFolder', itemIds));
 			}
 		}
 
 		menu.popup({ window: bridge().activeWindow() });
-	}, [props.dispatch, pluginsRef]);
+	}, [props.dispatch, pluginsRef, getSelectedIds]);
 
 
 
@@ -278,10 +324,16 @@ const useOnRenderItem = (props: Props) => {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
 		if (!folderId) return;
 
+		let itemIds = [folderId];
+		const itemIndex = Number(event.currentTarget.getAttribute('data-index'));
+		if (selectedIndexesRef.current.includes(itemIndex)) {
+			itemIds = getSelectedIds();
+		}
+
 		event.dataTransfer.setDragImage(new Image(), 1, 1);
 		event.dataTransfer.clearData();
-		event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify([folderId]));
-	}, []);
+		event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify(itemIds));
+	}, [getSelectedIds]);
 
 	const onFolderDragOver_: ItemDragListener = useCallback(event => {
 		if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
@@ -323,13 +375,6 @@ const useOnRenderItem = (props: Props) => {
 		});
 	}, [props.dispatch]);
 
-	const folderItem_click = useCallback((folderId: string) => {
-		props.dispatch({
-			type: 'FOLDER_SELECT',
-			id: folderId ? folderId : null,
-		});
-	}, [props.dispatch]);
-
 	// If at least one of the folder has an icon, then we display icons for all
 	// folders (those without one will get the default icon). This is so that
 	// visual alignment is correct for all folders, otherwise the folder tree
@@ -338,24 +383,34 @@ const useOnRenderItem = (props: Props) => {
 		return Folder.shouldShowFolderIcons(props.folders);
 	}, [props.folders]);
 
-	const selectedIndexRef = useRef(props.selectedIndex);
-	selectedIndexRef.current = props.selectedIndex;
-
 	const itemCount = props.listItems.length;
 	return useCallback((item: ListItem, index: number) => {
-		const selected = props.selectedIndex === index;
-		const focusInList = document.hasFocus() && props.containerRef.current?.contains(document.activeElement);
-		const anchorRef = (focusInList && selected) ? focusListItem : noFocusListItem;
+		const primarySelected = props.selectedIndex === index;
+		const selected = primarySelected || props.selectedIndexes.includes(index);
+		const selectionState: ItemSelectionState = {
+			primarySelected,
+			selected,
+			multipleItemsSelected: props.selectedIndexes.length > 1,
+		};
+
+		const sidebarContainsFocus = props.containerRef.current?.contains(document.activeElement);
+		// Focus moves to <body> when the previously-focused element is removed
+		// from the DOM (e.g. scrolled out of the virtualized list). We still
+		// want to restore focus to the newly-selected item in that case.
+		const focusLostFromDom = document.activeElement === document.body;
+		const focusInList = document.hasFocus() && (sidebarContainsFocus || focusLostFromDom);
+		const anchorRef = (focusInList && primarySelected) ? focusListItem : noFocusListItem;
 
 		if (item.kind === ListItemType.Tag) {
 			const tag = item.tag;
 			return <TagItem
 				key={item.key}
 				anchorRef={anchorRef}
-				selected={selected}
-				onClick={tagItem_click}
+				selectionState={selectionState}
+				onClick={onItemClick}
 				onTagDrop={onTagDrop_}
 				onContextMenu={onItemContextMenu}
+				label={item.label}
 				tag={tag}
 				itemCount={itemCount}
 				index={index}
@@ -382,9 +437,9 @@ const useOnRenderItem = (props: Props) => {
 			return <FolderItem
 				key={item.key}
 				anchorRef={anchorRef}
-				selected={selected}
+				selectionState={selectionState}
 				folderId={folder.id}
-				folderTitle={Folder.displayTitle(folder)}
+				folderTitle={item.label}
 				folderIcon={Folder.unserializeIcon(folder.icon)}
 				depth={item.depth}
 				isExpanded={isExpanded}
@@ -394,7 +449,7 @@ const useOnRenderItem = (props: Props) => {
 				onFolderDragOver_={onFolderDragOver_}
 				onFolderDrop_={onFolderDrop_}
 				itemContextMenu={onItemContextMenu}
-				folderItem_click={folderItem_click}
+				folderItem_click={onItemClick}
 				onFolderToggleClick_={onFolderToggleClick_}
 				shareId={folder.share_id}
 				parentId={folder.parent_id}
@@ -407,7 +462,7 @@ const useOnRenderItem = (props: Props) => {
 				key={item.id}
 				anchorRef={anchorRef}
 				item={item}
-				isSelected={selected}
+				selectionState={selectionState}
 				onDrop={item.supportsFolderDrop ? onFolderDrop_ : null}
 				index={index}
 				itemCount={itemCount}
@@ -416,7 +471,7 @@ const useOnRenderItem = (props: Props) => {
 			return <AllNotesItem
 				key={item.key}
 				anchorRef={anchorRef}
-				selected={selected}
+				selectionState={selectionState}
 				item={item}
 				index={index}
 				itemCount={itemCount}
@@ -427,7 +482,7 @@ const useOnRenderItem = (props: Props) => {
 					key={item.key}
 					containerRef={anchorRef}
 					depth={1}
-					selected={selected}
+					selectionState={selectionState}
 					itemIndex={index}
 					itemCount={itemCount}
 					highlightOnHover={false}
@@ -441,7 +496,7 @@ const useOnRenderItem = (props: Props) => {
 			return exhaustivenessCheck;
 		}
 	}, [
-		folderItem_click,
+		onItemClick,
 		onFolderDragOver_,
 		onFolderDragStart_,
 		onFolderDrop_,
@@ -451,8 +506,8 @@ const useOnRenderItem = (props: Props) => {
 		props.collapsedFolderIds,
 		props.folders,
 		showFolderIcons,
-		tagItem_click,
 		props.selectedIndex,
+		props.selectedIndexes,
 		props.containerRef,
 		itemCount,
 	]);

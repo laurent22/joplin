@@ -4,7 +4,6 @@ import BaseItem from '../../../models/BaseItem';
 import ItemChange from '../../../models/ItemChange';
 import Note from '../../../models/Note';
 import Resource from '../../../models/Resource';
-import time from '../../../time';
 import { SyncAction, conflictActions } from './types';
 
 const logger = Logger.create('handleConflictAction');
@@ -26,16 +25,21 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		if (remoteExists) {
 			local = remoteContent;
 
-			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
+			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteContent.updated_time), remoteContent.updated_time);
 			await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 		} else {
+			// If the item is a folder, avoid deleting child notes and folders, as this could cause massive data loss where this conflict happens unexpectedly
 			await ItemClass.delete(local.id, {
 				changeSource: ItemChange.SOURCE_SYNC,
 				sourceDescription: 'sync: handleConflictAction: non-note conflict',
 				trackDeleted: false,
+				deleteChildren: false,
 			});
 		}
 	} else if (action === SyncAction.NoteConflict) {
+		// Reload the note, to ensure the latest version is used to create the conflict
+		local = await Note.load(local.id);
+
 		// ------------------------------------------------------------------------------
 		// First find out if the conflict matters. For example, if the conflict is on the title or body
 		// we want to preserve all the changes. If it's on todo_completed it doesn't really matter
@@ -80,7 +84,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 
 		if (remoteExists) {
 			local = remoteContent;
-			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
+			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteContent.updated_time), remoteContent.updated_time);
 			await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 
 			if (local.encryption_applied) dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });

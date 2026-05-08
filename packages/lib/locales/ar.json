@@ -125,6 +125,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"يمكن أن يكون <todo-command> (أمر قائمة المهام) \"toggle\" (تبديل) أو \"clear\" (مسح) فقط. استخدم \"toggle\" لتبديل حال قائمة المهام المعطاة بين مكتملة و غير مكتملة (إذا كانت الملاحظة المقصودة عادية فسيتم تحويلها إلى قائمة مهام). استخدم \"clear\" لتحويل قائمة المهام ثانيةً إلى ملاحظة عادية."
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -136,6 +139,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		""
@@ -179,6 +185,9 @@
 	"Add body": [
 		"أضف الجسم"
 	],
+	"Add column": [
+		""
+	],
 	"Add new": [
 		"إضافة جديدة"
 	],
@@ -188,14 +197,17 @@
 	"Add recipient:": [
 		"أضِف المستلم:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"أضف العنوان"
 	],
 	"Add to dictionary": [
 		"أضف إلى القاموس"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"المشرف"
@@ -248,6 +260,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
+	],
 	"An error occurred: %s": [
 		""
 	],
@@ -280,6 +295,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -354,6 +372,9 @@
 		""
 	],
 	"Beta": [
+		""
+	],
+	"Block code": [
 		""
 	],
 	"Bold": [
@@ -482,6 +503,9 @@
 	"Checking... Please wait.": [
 		"التحقق جارٍ... فضلاً انتظر."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"إختر خيار"
 	],
@@ -553,6 +577,9 @@
 	],
 	"Command": [
 		"أمر"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"لوحة الأوامر"
@@ -805,6 +832,9 @@
 	"Default": [
 		"تلقائي"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"التلقائية: %s"
 	],
@@ -840,6 +870,9 @@
 	],
 	"Delete selected notes": [
 		"حدف الملاحظات المحددة"
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
@@ -928,6 +961,9 @@
 	"Displays the complete information about note.": [
 		"يعرض المعلومات الكاملة عن الملاحظة."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"يعرض الملاحظة المعطاة."
 	],
@@ -946,7 +982,16 @@
 	"Do not ask for confirmation.": [
 		"لا تطلب التأكيد."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Done": [
@@ -1011,6 +1056,9 @@
 	],
 	"Edit": [
 		"تحرير"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"تحرير الرابط"
@@ -1285,6 +1333,9 @@
 	"Feature flags": [
 		"علامات الميزة"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"العناصر المجلوبة: %d/%d."
 	],
@@ -1296,9 +1347,6 @@
 	],
 	"File system": [
 		"نظام الملفات"
-	],
-	"Filter tags": [
-		"تصفية العلامات"
 	],
 	"Find: ": [
 		"بحث:"
@@ -1464,6 +1512,9 @@
 	"Idle": [
 		"خامل"
 	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
 	],
@@ -1502,9 +1553,6 @@
 	],
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"في أي أمر ، يمكن الإشارة إلى ملاحظة أو دفتر ملاحظات بعنوانه أو بمعرّفه ، أو باستخدام الاختصارات `$n` أو `$b` التي تشير ، على الترتيب ، إلى الملاحظة أو دفتر الملاحظات المختار حالياً. يمكن استخدام `$c` للإشارة إلى العنصر المختار حالياً."
-	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"لربط الموقع الجغرافي بالملاحظة ، يحتاج التطبيق إلى إذنك للوصول إلى موقعك.\n\nيمكنك إيقاف تشغيل هذا الخيار في أي وقت في شاشة الإعدادات."
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"للقيام بذلك، يجب تشفير مجموعة بياناتك بالكامل ومزامنتها، لذا من الأفضل تشغيلها خلال الليل.\n\nللبدء، يرجى اتباع هذه التعليمات:\n\n1. قم بمزامنة جميع أجهزتك.\n2. انقر فوق \"%s\" \n3. دعها تعمل حتى الاكتمال. أثناء تشغيله، تجنب تغيير أي ملاحظة على أجهزتك الأخرى، لتجنب التعارضات.\n4. بمجرد إتمام المزامنة على هذا الجهاز، قم بمزامنة جميع أجهزتك الأخرى واتركها تعمل حتى الاكتمال.\n\nهام: ما عليك سوى تشغيل هذا مرة واحدة على جهاز واحد."
@@ -1638,6 +1686,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"تتيح Joplin Web clipper حفظ صفحات الويب ولقطات الشاشة من مستعرضك إلى Joplin."
 	],
@@ -1662,8 +1713,14 @@
 	"Keychain Supported: %s": [
 		"سلسلة المفاتيح المدعومة: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"المفاتيح التي تحتاج إلى ترقية"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"عرضي"
@@ -1772,6 +1829,9 @@
 	"Manage your plugins": [
 		"إدارة الإضافات الخاصة بك"
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manual": [
 		"يدوي"
 	],
@@ -1779,6 +1839,9 @@
 		"تنسيق Markdown"
 	],
 	"Markdown + Front Matter": [
+		""
+	],
+	"Markdown editor: Render markup in editor": [
 		""
 	],
 	"Marks a to-do as done.": [
@@ -1883,9 +1946,6 @@
 	"New sub-notebook": [
 		"دفتر ملاحظات فرعي جديد"
 	],
-	"New tags:": [
-		"وسوم جديدة:"
-	],
 	"New to-do": [
 		"قائمة جديدة للمهام"
 	],
@@ -1949,6 +2009,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"لم يعرَّف محرر نصوص. فضلاً اضبطه باستخدام `config editor <editor-path>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"Nord"
 	],
@@ -1966,6 +2029,9 @@
 	],
 	"Not now": [
 		"ليس الآن"
+	],
+	"Not useful": [
+		""
 	],
 	"note": [
 		"ملاحظة"
@@ -2048,9 +2114,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"موافق"
 	],
@@ -2105,6 +2168,9 @@
 	"Open Sync Wizard...": [
 		"فتح معالج المزامنة..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"فتح..."
 	],
@@ -2116,6 +2182,12 @@
 	],
 	"Options": [
 		"خيارات"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
+	"Other": [
+		""
 	],
 	"Other applications...": [
 		"تطبيقات أخزى..."
@@ -2162,8 +2234,8 @@
 	"Per user. Minimum of 2 users.": [
 		""
 	],
-	"Permission needed": [
-		"مطلوب الإذن"
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		""
@@ -2249,9 +2321,6 @@
 	"Preferred light theme": [
 		"التنسيق الغامق المفضّل"
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -2330,6 +2399,9 @@
 	"Publish/unpublish": [
 		""
 	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
 	"Quit": [
 		"إغلاق"
 	],
@@ -2395,6 +2467,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"يعيد تسمية <item> (عنصر) معطى (ملاحظة أو دفتر ملاحظات) ليصبح <name> (اسم)."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"تجديد الرمز المميز"
@@ -2527,6 +2602,12 @@
 	],
 	"Select all": [
 		"اختيار الكل"
+	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
+	"Select the type of file to be imported:": [
+		""
 	],
 	"Self-hosted": [
 		""
@@ -2666,6 +2747,9 @@
 	"Source: ": [
 		"المصدر: "
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -2771,6 +2855,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"التبديل إلى [notebook] - جميع العمليات التالية ستجري في هذا الدفتر."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		""
 	],
@@ -2837,9 +2924,6 @@
 	"Tabloid": [
 		"صحيفة شعبية"
 	],
-	"tag1, tag2, ...": [
-		""
-	],
 	"Tagged: %d.": [
 		"تم وسمها: %d."
 	],
@@ -2860,6 +2944,9 @@
 	],
 	"Text editor command": [
 		"أمر محرر النصوص"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
@@ -3005,6 +3092,15 @@
 	"This drawing may have unsaved changes.": [
 		""
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"هذه أداة متقدمة لإظهار المرفقات المرتبطة بملاحظاتك. يرجى توخّي الحذر عند حذف أحدها حيث لا يمكن استعادتها بعد ذلك."
 	],
@@ -3019,6 +3115,9 @@
 	],
 	"This note has no history": [
 		"هذه المذكرة ليس لها تاريخ"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -3052,6 +3151,9 @@
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"يرجى اتباع الخطوات التالية للسماح لـ Joplin بالمزامنة مع Dropbox:"
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"لتحذف الوسم، أزل الوسم عن الملاحظات التي وسمت به."
@@ -3125,6 +3227,9 @@
 	"Try again": [
 		"حاول ثانية"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"أكتب `help [command]` للمزيد من المعلومات عن أمر ما ، أو `help all` لمعلومات الاستخدام الكاملة."
 	],
@@ -3134,9 +3239,6 @@
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"اكتب عنوان ملاحظة أو جزء من محتواه للانتقال إليه. أو اكتب # متبوعاً بإسم وسم، أو @ متبوعاً باسم دفتر ملاحظات. أو اكتب : للبحث عن الأوامر."
 	],
-	"Type new tags or select from list": [
-		"أكتب وسوماً جديدة أو اخترها من القائمة"
-	],
 	"Type: %s.": [
 		"النوع: %s."
 	],
@@ -3144,6 +3246,9 @@
 		""
 	],
 	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Unable to share note data. Reason: %s": [
 		""
 	],
 	"Unchecked": [
@@ -3254,6 +3359,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"الخط المستخدم عند الحاجة إلى خط ثابت العرض لوضع النص بصورة مقروءة (في الجداول وخانات الاختيار والشفرة البرمجية مثلاً). عندما لا يُعثر عليه سيتم استخدام خط عامّ أحادي المسافة (ثابت العرض)."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		""
 	],
@@ -3294,9 +3402,6 @@
 		""
 	],
 	"Voice typing: Glossary": [
-		""
-	],
-	"Vosk": [
 		""
 	],
 	"Warning": [
@@ -3341,10 +3446,10 @@
 	"When creating a new to-do:": [
 		"عند إنشاء قائمة جديدة للمهام:"
 	],
-	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		""
 	],
-	"Whisper": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

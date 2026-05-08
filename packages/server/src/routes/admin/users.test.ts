@@ -4,6 +4,7 @@ import { execRequest } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
 import { uuidgen } from '@joplin/lib/uuid';
 import { ErrorForbidden } from '../../utils/errors';
+import { AccountType } from '../../models/UserModel';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 async function postUser(sessionId: string, email: string, password: string = null, props: any = null): Promise<User> {
@@ -151,12 +152,56 @@ describe('admin/users', () => {
 		expect(result).toContain(user2.email);
 	});
 
+	test('should search users by stripe_subscription_id', async () => {
+		const password = '!abc123456';
+		const { user: admin } = await models().subscription().saveUserAndSubscription(
+			'user@localhost',
+			'user full name',
+			AccountType.Pro,
+			'STRIPE_USER_ID',
+			'STRIPE_SUB_ID',
+		);
+		const { user } = await createUserAndSession(1, false);
+		await models().user().save({ id: admin.id, password, is_admin: 1 });
+		const session = await models().session().authenticate(admin.email, password, '');
+		const result = await execRequest(session.id, 'GET', 'admin/users', null, {
+			query: {
+				query: 'STRIPE_SUB_ID',
+			},
+		});
+		expect(result).toContain(admin.email);
+		expect(result).not.toContain(user.email);
+	});
+
+	test('should not return users when passing an invalid stripe_subscription_id', async () => {
+		const password = '!abc123456';
+		const { user: admin } = await models().subscription().saveUserAndSubscription(
+			'user@localhost',
+			'user full name',
+			AccountType.Pro,
+			'STRIPE_USER_ID',
+			'STRIPE_SUB_ID',
+		);
+		const { user } = await createUserAndSession(1, false);
+		await models().user().save({ id: admin.id, password, is_admin: 1 });
+		const session = await models().session().authenticate(admin.email, password, null);
+		const result = await execRequest(session.id, 'GET', 'admin/users', null, {
+			query: {
+				query: 'INVALID_STRIPE_SUB_ID',
+			},
+		});
+		expect(result).not.toContain(admin.email);
+		expect(result).not.toContain(user.email);
+	});
+
 	test('should delete sessions when changing password', async () => {
 		const { user, session, password } = await createUserAndSession(1);
 
-		await models().session().authenticate(user.email, password);
-		await models().session().authenticate(user.email, password);
-		await models().session().authenticate(user.email, password);
+		const mfaCode = '';
+
+		await models().session().authenticate(user.email, password, mfaCode);
+		await models().session().authenticate(user.email, password, mfaCode);
+		await models().session().authenticate(user.email, password, mfaCode);
 
 		expect(await models().session().count()).toBe(4);
 
@@ -180,6 +225,27 @@ describe('admin/users', () => {
 
 		// cannot delete own user
 		await expectHttpError(async () => execRequest(adminSession.id, 'POST', `admin/users/${admin.id}`, { disable_button: true }), ErrorForbidden.httpCode);
+	});
+
+	test('should delete all applications when changing password to enforce user login', async () => {
+		const { user, session } = await createUserAndSession(1);
+
+		await models().application().createPreLoginRecord('random-string', '');
+		await models().application().onAuthorizeUse('random-string', user.id);
+
+		await models().application().createPreLoginRecord('random-string2', '');
+		await models().application().onAuthorizeUse('random-string2', user.id);
+
+		expect(await models().application().count()).toBe(2);
+
+		await patchUser(session.id, {
+			id: user.id,
+			email: 'changed@example.com',
+			password: '111111',
+			password2: '111111',
+		}, '/admin/users/me');
+
+		expect(await models().application().count()).toBe(0);
 	});
 
 });

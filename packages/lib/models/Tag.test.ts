@@ -212,11 +212,55 @@ describe('models/Tag', () => {
 		expect(commonTagIds.includes(tagc.id)).toBe(true);
 	});
 
-	it('should allow finding tags even with special Unicode characters', async () => {
+	it('should allow finding tags when case does not match, for standard ASCII characters', async () => {
 		const note1 = await Note.save({});
-		await Tag.setNoteTagsByTitles(note1.id, ['Ökonomie']);
-		const tag1 = await Tag.loadByTitle('Ökonomie');
-		const tag2 = await Tag.loadByTitle('ökonomie');
+		await Tag.setNoteTagsByTitles(note1.id, ['Hello']);
+		const tag1 = await Tag.loadByTitle('Hello');
+		const tag2 = await Tag.loadByTitle('hello');
 		expect(tag1).toStrictEqual(tag2);
+	});
+
+	it('should not create duplicate tags when tagging with existing titles (issue #14540)', async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+
+		// Test 1: Simple existing tag
+		const tag1 = await Tag.save({ title: 'meetings' });
+		await Tag.setNoteTagsByTitles(note1.id, ['meetings']);
+		let allTags = await Tag.all();
+		expect(allTags.length).toBe(1);
+		expect(allTags[0].id).toBe(tag1.id);
+
+		// Test 2: Whitespace issues
+		await Tag.setNoteTagsByTitles(note1.id, ['meetings ']);
+		allTags = await Tag.all();
+		expect(allTags.length).toBe(1);
+
+		// Test 3: Normalization issues
+		const composed = '\u00E9';
+		const decomposed = '\u0065\u0301';
+		await Tag.save({ title: composed });
+		await Tag.setNoteTagsByTitles(note1.id, [decomposed]);
+		allTags = await Tag.all();
+		// In addition to 'meetings', we should have only one 'é' tag
+		expect(allTags.length).toBe(2);
+
+		// Test 4: Case change should not create new tag but match existing
+		await Tag.setNoteTagsByTitles(note1.id, ['MEETINGS']);
+		allTags = await Tag.all();
+		expect(allTags.length).toBe(2);
+	});
+
+	it('should prefer an exact legacy tag match before the normalized fallback', async () => {
+		const decomposed = '\u0065\u0301';
+		const composed = '\u00E9';
+		const legacyTagId = Tag.generateUuid();
+		const normalizedTag = await Tag.save({ title: composed });
+
+		await Tag.db().exec('INSERT INTO tags (id, title, created_time, updated_time) VALUES (?, ?, ?, ?)', [legacyTagId, decomposed, 1, 1]);
+
+		const loadedTag = await Tag.loadByTitle(decomposed);
+		expect(loadedTag.id).toBe(legacyTagId);
+		expect(loadedTag.id).not.toBe(normalizedTag.id);
 	});
 });

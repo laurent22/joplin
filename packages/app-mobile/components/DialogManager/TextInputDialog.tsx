@@ -29,7 +29,7 @@ const useStyles = () => {
 
 const TextInputDialog: React.FC<Props> = ({ dialog, containerStyle, themeId }) => {
 	const styles = useStyles();
-	const [text, setText] = useState('');
+	const [text, setText] = useState(dialog.initialValue ?? '');
 	const labelId = useId();
 
 	return (
@@ -63,7 +63,7 @@ const TextInputDialog: React.FC<Props> = ({ dialog, containerStyle, themeId }) =
 				/>
 				<PromptButton
 					buttonSpec={{
-						text: _('Okay'),
+						text: _('OK'),
 						onPress: () => dialog.onSubmit(text),
 					}}
 					themeId={themeId}

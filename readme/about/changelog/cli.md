@@ -1,5 +1,42 @@
 # Joplin Terminal App Changelog
 
+## [cli-v3.5.1](https://github.com/laurent22/joplin/releases/tag/cli-v3.5.1) - 2025-10-18T09:11:42Z
+
+- Improved: Avoid excessive data usage when automatically triggering another sync (#13261 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Correctly import Evernote resources that do not have the encoding specified (3097c3e)
+- Improved: Delete all note revisions when the note is permanently deleted (#12609) (#8718 by [@pedr](https://github.com/pedr))
+- Improved: Remove Beta mention for Joplin Server (#13367)
+- Improved: Support accepting shares with a new key format (#12829 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update translations (5f66c51 by Helmut K. C. Tessarek)
+- Improved: Updated packages @rollup/plugin-commonjs (v28.0.6), form-data (v4.0.4), glob (v11.0.3), sass (v1.93.0), sharp (v0.34.3), style-to-js (v1.1.17)
+- Fixed: Ensure notebook conflicts do not delete child notes and notebooks when resolved (#13167) (#11902 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Ensure the sync shows an error when the server is down, when using a local WebDAV server (#13301 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix "use" command when not in TUI mode (#13091) (#13086 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix last change sometimes lost when not in TUI mode (#13090 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix notes are moved to the conflict folder when a folder is unshared (#12993 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed importing certain Evernote images that have invalid dimension attributes (#13472)
+- Fixed: Implement the config check for Joplin Server with SAML enabled (#13360) (#13328 by [@ttcchhmm](https://github.com/ttcchhmm))
+- Fixed: Prevent Joplin from missing changes when syncing with file system or WebDAV (#13054) (#6517 by [@mrjo118](https://github.com/mrjo118))
+
+## [cli-v3.4.1](https://github.com/laurent22/joplin/releases/tag/cli-v3.4.1) - 2025-08-27T06:48:52Z
+
+- New: Add Joplin Server SAML support (#11865 by [@ttcchhmm](https://github.com/ttcchhmm))
+- New: Add collapsible notebooks functionality (#12718 by [@miguelammatos](https://github.com/miguelammatos))
+- New: Add commands for publishing and unpublishing notes with Joplin Server (#13060 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Add information about failing tests of OneNote importer inside test names  (#12159) (#12157 by [@pedr](https://github.com/pedr))
+- Improved: Falls back to filename for the title when importing Markdown files with FrontMatter (#12698 by [@khemarato](https://github.com/khemarato))
+- Improved: If no notebook is provided when importing a file, use the default one (30000c3)
+- Improved: Refresh shares when running the sync command (#12667 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Set new encryption methods as default (#12229 by Self Not Found)
+- Improved: Support managing shared notebooks (#12637 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update translations (9f649c9 by Helmut K. C. Tessarek)
+- Improved: Updated packages @adobe/css-tools (v4.4.3), @rollup/plugin-commonjs (v28.0.3), @rollup/plugin-node-resolve (v16.0.1), @rollup/plugin-replace (v6.0.2), dayjs (v1.11.13), domutils (v3.2.2), form-data (v4.0.2), glob (v11.0.2), highlight.js (v11.11.1), jsdom (v26.1.0), katex (v0.16.22), license-checker-rseidelsohn (v4.4.2), mermaid (v11.6.0), nanoid (v3.3.9), node (v18.20.7), react, sass (v1.87.0), sharp (v0.34.2), standard (v17.1.2), style-to-js (v1.1.16), terminal-kit (v3.1.2), tesseract.js (v5.1.1), uuid (v11.1.0)
+- Fixed: Fix Yinxiang HTML imported notes being enclosed by a open anchor tag (#12395) (#12363 by [@pedr](https://github.com/pedr))
+- Fixed: Fix data API failure when including both conflicts and deleted notes in results (#12650 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix unshare action requires two syncs to be reflected locally (#12999) (#12648 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Moving sub-notebook of shared notebook should unshare it (#12647) (#12089)
+- Fixed: Shared folders: Fix moving shared subfolder to top-level briefly marks it as a top-level share (#12964 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [cli-v3.3.1](https://github.com/laurent22/joplin/releases/tag/cli-v3.3.1) - 2025-05-01T21:18:35Z
 
 - New: Add plural forms for notes, users, hours, minutes, days (#12171 by [@SilverGreen93](https://github.com/SilverGreen93))

@@ -9,7 +9,7 @@ const shimInitCli = (options: ShimInitOptions) => {
 
 	shim.showMessageBox = async (message: string, options: ShowMessageBoxOptions) => {
 		const gui = app()?.gui();
-		let answers = options.buttons ?? [_('Ok'), _('Cancel')];
+		let answers = options.buttons ?? [_('OK'), _('Cancel')];
 
 		if (options.type === 'error' || options.type === 'info') {
 			answers = [];

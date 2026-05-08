@@ -2,7 +2,7 @@
 
 This package is used to process OneNote backup files and output HTML that Joplin can import.
 
-The code is based on the projects created by https://github.com/msiemens
+The code is based on the `one2html` and `onenote.rs` projects created by https://github.com/msiemens.
 
 We adapted it to target WebAssembly, adding Node.js functions that could interface with the host machine. For that to happen we are using custom-made functions (see `node_functions.js`) and the Node.js standard library (see `src/utils.rs`).
 
@@ -43,6 +43,8 @@ After this, the HTML should look the same and is ready to be imported by the Imp
     - package.json              -> where the project is built
     - node_functions.js         -> where the custom-made functions used inside rust goes
     ...
+    - tests                     -> Integration tests
+    ...
     - pkg                       -> artifact folder generated in the build step
         - onenote_converter.js  -> main file
     ...
@@ -56,20 +58,55 @@ To work with the project you will need:
 
 - Rust https://www.rust-lang.org/learn/get-started
 
+### Building
+
+For most setups, the OneNote converter must be built manually:
+- Development build: `yarn buildDev`.
+    - Includes additional logging.
+    - Faster compilation.
+    - Slower at runtime.
+- Production build: `IS_CONTINUOUS_INTEGRATION=1 yarn build`
+    - **Important**: The `IS_CONTINUOUS_INTEGRATION` environment variable must be set. To simplify the development process for contributors without Rust installed, `yarn build` is disabled unless `IS_CONTINUOUS_INTEGRATION` is set.
+
 ### Running tests
 
-Tests for the project are located in the `lib` packages, but to make it work it is necessary to build this project first:
-
-`IS_CONTINUOUS_INTEGRATION=1 yarn build # for production build`
-or 
-`IS_CONTINUOUS_INTEGRATION=1 yarn buildDev # for build with more logs and compiles faster`
-
-After that you should navigate to `lib` package and run the tests of `InteropService_Importer_OneNote.test.` file
+Most tests for this project are located in the `lib` package. After building the project, set the `IS_CONTINUOUS_INTEGRATION` environment variable and run the tests in `InteropService_Importer_OneNote.test.ts` file:
 
 ```
 cd ../lib
 IS_CONTINUOUS_INTEGRATION=1 yarn test services/interop/InteropService_Importer_OneNote.test.
 ```
+
+Other tests are written in Rust. To run these tests, use `cargo test`:
+```
+cd packages/onenote-converter
+cargo test
+```
+
+### Debugging tests
+
+Suppose that the importer's Rust code is failing to parse a specific `example.one` file. In this case, it may be useful to step through part of the import process in a debugger. If using VSCode, this can be done by:
+1. Adding a new test to `tests/convert.rs` that runs `convert()` on the `example.one` file.
+2. Setting up Rust and Rust debugging. See [the relevant VSCode documentation](https://code.visualstudio.com/docs/languages/rust#_debugging) for details.
+3. Clicking the "Debug" button for the test added in step 1. This button should be provided by extensions set up in step 2.
+
+### Inspecting `.one` files
+
+The `inspect` binary target of the `parser` crate allows inspecting `.one` file data.
+
+For example, to inspect lower-level OneStore data:
+```console
+bash$ cd parser/
+bash$ cargo run -- ../test-data/ink.one --onestore
+```
+
+To inspect higher-level (parsed) section data:
+```console
+bash$ cd parser/
+bash$ cargo run -- ../test-data/ink.one --section
+```
+
+**Note**: `inspect`'s output is unstable and should not be relied upon by scripts.
 
 ### Developing
 

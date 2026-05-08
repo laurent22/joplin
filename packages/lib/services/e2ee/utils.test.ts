@@ -1,9 +1,10 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, expectNotThrow, expectThrow, kvStore, msleep } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { activeMasterKeySanityCheck, migrateMasterPassword, resetMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
-import { localSyncInfo, masterKeyById, masterKeyEnabled, setActiveMasterKeyId, setMasterKeyEnabled, setPpk } from '../synchronizer/syncInfoUtils';
+import { activeMasterKeySanityCheck, migrateMasterPassword, migratePpk, resetMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
+import { localSyncInfo, masterKeyById, masterKeyEnabled, saveLocalSyncInfo, setActiveMasterKeyId, setMasterKeyEnabled, setPpk } from '../synchronizer/syncInfoUtils';
 import Setting from '../../models/Setting';
-import { generateKeyPair, ppkPasswordIsValid } from './ppk';
+import { generateKeyPair, generateKeyPairWithAlgorithm, getPpkAlgorithm, ppkPasswordIsValid, testing__setPpkMigrations_ } from './ppk/ppk';
+import { PublicKeyAlgorithm } from './types';
 
 describe('e2ee/utils', () => {
 
@@ -40,6 +41,38 @@ describe('e2ee/utils', () => {
 		const syncInfo = localSyncInfo();
 		syncInfo.masterKeys = [];
 		expect(showMissingMasterKeyMessage(syncInfo, [mk1.id, mk2.id])).toBe(false);
+	});
+
+	it('should do ppk migration', async () => {
+		const { reset } = testing__setPpkMigrations_([PublicKeyAlgorithm.RsaV1, PublicKeyAlgorithm.RsaV2]);
+
+		try {
+			const syncInfo = localSyncInfo();
+			const testPassword = 'test--TEST';
+			Setting.setValue('encryption.masterPassword', testPassword);
+			syncInfo.ppk = await generateKeyPairWithAlgorithm(PublicKeyAlgorithm.RsaV1, encryptionService(), testPassword);
+			saveLocalSyncInfo(syncInfo);
+
+			expect(getPpkAlgorithm(localSyncInfo().ppk)).toBe(PublicKeyAlgorithm.RsaV1);
+			await migratePpk();
+			expect(getPpkAlgorithm(localSyncInfo().ppk)).toBe(PublicKeyAlgorithm.RsaV2);
+		} finally {
+			reset();
+		}
+	});
+
+	it('should not migrate ppk if the key is up-to-date', async () => {
+		const syncInfo = localSyncInfo();
+		const testPassword = 'test 🔑';
+		Setting.setValue('encryption.masterPassword', testPassword);
+		const originalPpk = await generateKeyPair(encryptionService(), testPassword);
+		syncInfo.ppk = originalPpk;
+		saveLocalSyncInfo(syncInfo);
+
+		const lastChangeTime = localSyncInfo().keyTimestamp('ppk');
+		await migratePpk();
+		expect(localSyncInfo().keyTimestamp('ppk')).toBe(lastChangeTime);
+		expect(localSyncInfo().ppk.createdTime).toBe(originalPpk.createdTime);
 	});
 
 	it('should do the master password migration', async () => {

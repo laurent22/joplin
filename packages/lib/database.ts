@@ -65,6 +65,14 @@ export default class Database {
 		this.logger().info('Database was open successfully');
 	}
 
+	public async close() {
+		try {
+			await this.driver().close?.();
+		} catch (error) {
+			this.logger().warn('Failed to close database', error);
+		}
+	}
+
 	public escapeField(field: string) {
 		if (field === '*') return '*';
 		const p = field.split('.');

@@ -76,7 +76,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		}
 	}
 
-	private async isDirectoryEmpty(dirPath: string) {
+	protected async isDirectoryEmpty(dirPath: string) {
 		const supportedFileExtension = this.metadata().fileExtensions;
 		const innerStats = await shim.fsDriver().readDirStats(dirPath);
 		for (let i = 0; i < innerStats.length; i++) {
@@ -126,8 +126,12 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				// Handle anchor links appropriately
 				const linkPosix = toForwardSlashes(link);
 				const trimmedLink = this.trimAnchorLink(linkPosix);
-				const attachmentPath = filename(`${dirname(filePath)}/${trimmedLink}`, true);
-				const pathWithExtension = `${attachmentPath}.${fileExtension(trimmedLink)}`;
+				const pathWithExtension = shim.fsDriver().resolve(`${dirname(filePath)}/${trimmedLink}`);
+
+				// This check also means that non-files, such as web URLs, will not be processed by
+				// the code below and simply inserted as links.
+				if (!(await shim.fsDriver().exists(pathWithExtension))) continue;
+
 				const stat = await shim.fsDriver().stat(pathWithExtension);
 				const isDir = stat ? stat.isDirectory() : false;
 				if (stat && !isDir) {

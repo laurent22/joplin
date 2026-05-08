@@ -1,56 +1,66 @@
-import type Client from './Client';
+import type Client from './ipc/Client';
+import type FolderRecord from './model/FolderRecord';
+import { NoteData, FolderData, ItemId, ResourceData, DetailedFolderData, TreeItem } from './model/types';
 
-export type Json = string|number|Json[]|{ [key: string]: Json };
+export type Json = string|boolean|number|Json[]|{ [key: string]: Json };
 
 export type HttpMethod = 'GET'|'POST'|'DELETE'|'PUT'|'PATCH';
 
-export type ItemId = string;
-export type NoteData = {
-	parentId: ItemId;
-	id: ItemId;
-	title: string;
-	body: string;
-};
-export type FolderMetadata = {
-	parentId: ItemId;
-	id: ItemId;
-	title: string;
-};
-export type FolderData = FolderMetadata & {
-	childIds: ItemId[];
-	isShareRoot: boolean;
-};
-export type TreeItem = NoteData|FolderData;
-
-export const isFolder = (item: TreeItem): item is FolderData => {
-	return 'childIds' in item;
-};
-
 export interface FuzzContext {
 	serverUrl: string;
+	isJoplinCloud: boolean;
+	keepAccounts: boolean;
+	enableE2ee: boolean;
 	baseDir: string;
-	execApi: (method: HttpMethod, route: string, debugAction: Json)=> Promise<Json>;
+
+	currentStep(): number;
+
 	randInt: (low: number, high: number)=> number;
+	randomString: (targetLength: number)=> string;
+	randomId: ()=> string;
+	randomFrom: <T> (data: T[], weights?: number[])=> T;
+
+	execApi(method: HttpMethod, route: string, body: Json|undefined): Promise<Json>;
 }
 
 export interface RandomFolderOptions {
-	filter?: (folder: FolderData)=> boolean;
+	includeReadOnly: boolean;
+	filter?: (folder: FolderRecord)=> boolean;
+}
+
+export interface RandomNoteOptions {
+	includeReadOnly: boolean;
+	filter?: (note: NoteData)=> boolean;
+}
+
+export interface ShareOptions {
+	readOnly: boolean;
 }
 
 export interface ActionableClient {
-	createFolder(data: FolderMetadata): Promise<void>;
-	shareFolder(id: ItemId, shareWith: Client): Promise<void>;
+	createFolder(data: FolderData): Promise<void>;
+	shareFolder(id: ItemId, shareWith: Client, options: ShareOptions): Promise<void>;
+	removeFromShare(id: string, shareWith: Client): Promise<void>;
+	deleteAssociatedShare(id: string): Promise<void>;
 	deleteFolder(id: ItemId): Promise<void>;
+	deleteNote(id: ItemId): Promise<void>;
 	createNote(data: NoteData): Promise<void>;
 	updateNote(data: NoteData): Promise<void>;
+	attachResource(note: NoteData, resource: ResourceData): Promise<NoteData>;
+	createResource(resource: ResourceData): Promise<void>;
 	moveItem(itemId: ItemId, newParentId: ItemId): Promise<void>;
+	publishNote(id: ItemId): Promise<void>;
+	unpublishNote(id: ItemId): Promise<void>;
 	sync(): Promise<void>;
 
 	listNotes(): Promise<NoteData[]>;
-	listFolders(): Promise<FolderMetadata[]>;
+	listFolders(): Promise<DetailedFolderData[]>;
+	listResources(): Promise<ResourceData[]>;
 	allFolderDescendants(parentId: ItemId): Promise<ItemId[]>;
-	randomFolder(options: RandomFolderOptions): Promise<FolderMetadata>;
-	randomNote(): Promise<NoteData>;
+	randomFolder(options: RandomFolderOptions): Promise<FolderRecord>;
+	randomNote(options: RandomNoteOptions): Promise<NoteData>;
+	itemById(id: ItemId): TreeItem;
+	itemExists(id: ItemId): boolean;
 }
 
 export interface UserData {

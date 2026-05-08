@@ -55,7 +55,7 @@ export default class SyncTargetRegistry {
 	}
 
 	public static allIds() {
-		return Object.keys(this.reg);
+		return Object.keys(this.reg).map(key => Number(key));
 	}
 
 	public static nameToId(name: string) {
@@ -95,6 +95,14 @@ export default class SyncTargetRegistry {
 			'7', // Dropbox
 			'3', // OneDrive
 		];
+	}
+
+	public static isJoplinServerOrCloud(id: number) {
+		return [
+			SyncTargetRegistry.nameToId('joplinServer'),
+			SyncTargetRegistry.nameToId('joplinCloud'),
+			SyncTargetRegistry.nameToId('joplinServerSaml'),
+		].includes(id);
 	}
 
 }

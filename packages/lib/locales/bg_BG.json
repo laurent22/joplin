@@ -113,6 +113,9 @@
 	"[None]": [
 		""
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -123,6 +126,9 @@
 		""
 	],
 	"A5": [
+		""
+	],
+	"ABC musical notation: Options": [
 		""
 	],
 	"About": [
@@ -167,16 +173,22 @@
 	"Add body": [
 		""
 	],
+	"Add column": [
+		""
+	],
 	"Add or remove tags:": [
 		"Добавяне и махане на тагове:"
 	],
 	"Add recipient:": [
 		""
 	],
-	"Add tag %s to note": [
+	"Add to dictionary": [
 		""
 	],
-	"Add to dictionary": [
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
 		""
 	],
 	"Admin": [
@@ -224,6 +236,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
+	],
 	"An error occurred: %s": [
 		""
 	],
@@ -261,6 +276,9 @@
 		""
 	],
 	"Aritim Dark": [
+		""
+	],
+	"Associated tags:": [
 		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
@@ -315,6 +333,9 @@
 		""
 	],
 	"Beta": [
+		""
+	],
+	"Block code": [
 		""
 	],
 	"Bold": [
@@ -422,6 +443,9 @@
 	"Checking... Please wait.": [
 		"Проверявам... Моля изчакайте."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Chrome Web Store": [
 		""
 	],
@@ -482,6 +506,9 @@
 	"Command": [
 		""
 	],
+	"COMMAND": [
+		""
+	],
 	"Command palette": [
 		""
 	],
@@ -505,6 +532,9 @@
 	],
 	"Configuration": [
 		"Настройки"
+	],
+	"Configured keyboard shortcuts:": [
+		""
 	],
 	"Configures the size of scrollbars used in the app.": [
 		""
@@ -656,6 +686,9 @@
 	"Decrypting items: %d/%d": [
 		"Декриптиране на обекти: %d/%d"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Стойност по подразбиране: %s"
 	],
@@ -663,6 +696,9 @@
 		"Изтрий"
 	],
 	"Delete local data and re-download from sync target": [
+		""
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
 		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
@@ -746,6 +782,9 @@
 	"Displays the complete information about note.": [
 		"Показва пълната информация за бележката."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Показва зададената бележка."
 	],
@@ -764,7 +803,16 @@
 	"Do not ask for confirmation.": [
 		"Не питай за потвърждение."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Done": [
@@ -814,6 +862,9 @@
 	],
 	"Edit": [
 		"Редактиране"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit note.": [
 		"Редактиране на бележка."
@@ -1016,6 +1067,9 @@
 	"Feature flags": [
 		""
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Взети обекти: %d/%d."
 	],
@@ -1142,6 +1196,9 @@
 	"Hide disabled keys": [
 		""
 	],
+	"Hides warning": [
+		""
+	],
 	"Highlight": [
 		""
 	],
@@ -1165,6 +1222,9 @@
 	],
 	"Idle": [
 		"В момента не прави нищо"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
@@ -1207,9 +1267,6 @@
 	],
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"Във всяка команда може да реферирате бележка или тетрадка по заглавие или по идентификатор, или използвайки някоя от кратките команди `$n` и `$b`, представляващи съответно настоящата бележка и настоящата тетрадка. `$c` може да се ползва за рефериране на избрания обект."
-	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		""
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		""
@@ -1316,6 +1373,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Уеб-клиперът на Joplin позволява за да запазвате уеб-страници и снимки на екрана от браузъра директно в Joplin."
 	],
@@ -1340,7 +1400,13 @@
 	"Keychain Supported: %s": [
 		""
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
+		""
+	],
+	"Label": [
 		""
 	],
 	"Landscape": [
@@ -1424,6 +1490,9 @@
 	"Manage your plugins": [
 		""
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manual": [
 		"Ръчен"
 	],
@@ -1431,6 +1500,9 @@
 		"Markdown"
 	],
 	"Markdown + Front Matter": [
+		""
+	],
+	"Markdown editor: Render markup in editor": [
 		""
 	],
 	"Marks a to-do as done.": [
@@ -1514,9 +1586,6 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Нова тетрадка \"%s\" ще бъде създадена и файл \"%s\" ще бъде импортиран в нея"
 	],
-	"New tags:": [
-		"Нови тагове:"
-	],
 	"New to-do": [
 		"Нова задача"
 	],
@@ -1577,6 +1646,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Няма зададен текстови редактор. Моля задайте го с командата: `config editor <път-до-редактора>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		""
 	],
@@ -1596,6 +1668,9 @@
 		""
 	],
 	"Not now": [
+		""
+	],
+	"Not useful": [
 		""
 	],
 	"note": [
@@ -1658,9 +1733,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"Добре"
 	],
@@ -1700,6 +1772,9 @@
 	"Open Sync Wizard...": [
 		""
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Отвори..."
 	],
@@ -1711,6 +1786,12 @@
 	],
 	"Options": [
 		"Конфигурация"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
+	"Other": [
+		""
 	],
 	"Page orientation for PDF export": [
 		""
@@ -1746,6 +1827,9 @@
 		"PDF файл"
 	],
 	"Per user. Minimum of 2 users.": [
+		""
+	],
+	"Photo %d": [
 		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
@@ -1826,9 +1910,6 @@
 	"Preferred light theme": [
 		""
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -1898,6 +1979,12 @@
 	"Publish/unpublish": [
 		""
 	],
+	"Published at URL: %s": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
 	"Quit": [
 		"Изход"
 	],
@@ -1905,6 +1992,9 @@
 		""
 	],
 	"Re-upload local data to sync target": [
+		""
+	],
+	"Read more": [
 		""
 	],
 	"Read more about it": [
@@ -1923,6 +2013,9 @@
 		""
 	],
 	"Recipients:": [
+		""
+	],
+	"Recognize handwritten image": [
 		""
 	],
 	"Recommended": [
@@ -1963,6 +2056,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Преименува дадения <обект> (бележка или тетрадка) на <име>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		""
@@ -2099,6 +2195,12 @@
 	"Select all": [
 		"Избери всичко"
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2219,6 +2321,9 @@
 	"Source format: %s": [
 		"Формат на източника: %s"
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -2324,6 +2429,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Превключва на [тетрадка] - всички нататъчни команди ще се извършват в тази тетрадка."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		""
 	],
@@ -2375,9 +2483,6 @@
 	"Tabloid": [
 		""
 	],
-	"tag1, tag2, ...": [
-		""
-	],
 	"Tagged: %d.": [
 		"Тагнати: %d."
 	],
@@ -2398,6 +2503,9 @@
 	],
 	"Text editor command": [
 		"Команда за стартиране на текстов редактор"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
@@ -2550,6 +2658,15 @@
 	"This drawing may have unsaved changes.": [
 		""
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		""
 	],
@@ -2564,6 +2681,9 @@
 	],
 	"This note has no history": [
 		"Тази бележка няма история"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -2597,6 +2717,9 @@
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"За да позволите на Joplin да синхронизира с Dropbox, моля изпълнете следните стъпки:"
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"За да изтриете таг, премахнете го от всички бележки."
@@ -2658,14 +2781,14 @@
 	"Try it now": [
 		""
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Въведете `help [команда]` за повече информация относно командата, или въведете `help all` за пълната информация за ползването на командния ред."
 	],
 	"Type `joplin help` for usage information.": [
 		"Въведете `joplin help` за информация за употребата."
-	],
-	"Type new tags or select from list": [
-		"Напишете нови тагове или изберете от списъка"
 	],
 	"Type: %s.": [
 		"Тип: %s."
@@ -2674,6 +2797,9 @@
 		""
 	],
 	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Unable to share note data. Reason: %s": [
 		""
 	],
 	"Unchecked": [
@@ -2763,6 +2889,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		""
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		""
 	],
@@ -2794,9 +2923,6 @@
 		""
 	],
 	"Voice typing: Glossary": [
-		""
-	],
-	"Vosk": [
 		""
 	],
 	"Warning": [
@@ -2838,10 +2964,10 @@
 	"When creating a new to-do:": [
 		"Когато се създава нова задача:"
 	],
-	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		""
 	],
-	"Whisper": [
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
 	"Window unresponsive.": [

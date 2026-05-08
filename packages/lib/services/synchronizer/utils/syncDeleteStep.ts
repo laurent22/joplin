@@ -7,10 +7,10 @@ import time from '../../../time';
 import resourceRemotePath from './resourceRemotePath';
 import { ApiCallFunction, LogSyncOperationFunction, SyncAction } from './types';
 
-export default async (syncTargetId: number, cancelling: boolean, logSyncOperation: LogSyncOperationFunction, apiCall: ApiCallFunction, dispatch: Dispatch) => {
+export default async (syncTargetId: number, cancelling: ()=> boolean, logSyncOperation: LogSyncOperationFunction, apiCall: ApiCallFunction, dispatch: Dispatch) => {
 	const deletedItems = await BaseItem.deletedItems(syncTargetId);
 	for (let i = 0; i < deletedItems.length; i++) {
-		if (cancelling) break;
+		if (cancelling()) break;
 
 		const item = deletedItems[i];
 		const path = BaseItem.systemPath(item.item_id);
@@ -32,6 +32,7 @@ export default async (syncTargetId: number, cancelling: boolean, logSyncOperatio
 				if (remoteContent) {
 					remoteContent = await BaseItem.unserialize(remoteContent);
 					const ItemClass = BaseItem.itemClass(item.item_type);
+					// For remote deletion, remoteItemUpdatedTime can be reset to 0
 					let nextQueries = BaseItem.updateSyncTimeQueries(syncTargetId, remoteContent, time.unixMs());
 
 					if (isResource) {

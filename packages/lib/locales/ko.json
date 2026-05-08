@@ -131,6 +131,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command>로 \"toggle\" 이나 \"clear\"를 사용하실 수 있습니다. \"toggle\"은 주어진 목록의 상태를 '완료됨' 또는 '완료되지 않음'으로 바꾸는 데 사용됩니다.(만약 대상이 일반적인 노트일 경우에는 목록으로 전환됩니다).\"clear\"는 목록을 일반적인 노트로 변환하는 데 사용됩니다."
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -142,6 +145,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		"정보"
@@ -185,6 +191,9 @@
 	"Add body": [
 		"내용 추가"
 	],
+	"Add column": [
+		""
+	],
 	"Add new": [
 		"새로 추가"
 	],
@@ -194,14 +203,17 @@
 	"Add recipient:": [
 		"받는 사람 추가:"
 	],
-	"Add tag %s to note": [
-		""
-	],
 	"Add title": [
 		"제목 추가"
 	],
 	"Add to dictionary": [
 		"사전에 추가"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"관리자"
@@ -260,6 +272,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"자동 저장된 그림을 찾았습니다. 노트에 사본을 첨부하시겠습니까?"
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
+	],
 	"An error occurred: %s": [
 		"오류가 발생했습니다: %s"
 	],
@@ -292,6 +307,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
@@ -369,6 +387,9 @@
 		"기초"
 	],
 	"Beta": [
+		""
+	],
+	"Block code": [
 		""
 	],
 	"Bold": [
@@ -500,6 +521,9 @@
 	"Checking... Please wait.": [
 		"확인 중입니다... 잠시만 기다리세요."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"옵션 선택"
 	],
@@ -574,6 +598,9 @@
 	],
 	"Command": [
 		"명령"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"명령 팔레트"
@@ -836,6 +863,9 @@
 	"Default": [
 		"기본값"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"기본값:  %s"
 	],
@@ -871,6 +901,9 @@
 	],
 	"Delete selected notes": [
 		"선택된 노트 삭제"
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"인박스 노트북을 삭제하시겠습니까?\n\n인박스 노트북을 삭제하면 최근에 해당 노트북으로 전송된 모든 이메일이 손실될 수 있습니다."
@@ -962,6 +995,9 @@
 	"Displays the complete information about note.": [
 		"노트와 관련된 모든 정보를 표시합니다."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"주어진 노트를 표시합니다."
 	],
@@ -983,7 +1019,16 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"비밀번호는 데이터를 복호화할 수 있는 *유일한* 수단이므로 절대로 비밀번호를 잃어버리지 마세요.암호화를 사용하려면 아래에 비밀번호를 넣어주세요."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -1051,6 +1096,9 @@
 	],
 	"Edit": [
 		"편집"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"링크 편집"
@@ -1340,6 +1388,9 @@
 	"Feature flags": [
 		"기능 플래그"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"가져온 항목: %d/%d."
 	],
@@ -1354,9 +1405,6 @@
 	],
 	"Filter": [
 		"필터"
-	],
-	"Filter tags": [
-		"태그 필터"
 	],
 	"Find: ": [
 		"찾기: "
@@ -1532,6 +1580,9 @@
 	"Idle": [
 		"대기"
 	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"이미 승인하셨다면, 애플리케이션이 Joplin Cloud에 동기화될 때까지 기다려주세요Joplin Cloud."
 	],
@@ -1570,9 +1621,6 @@
 	],
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"어느 명령어에서든, 노트 또는 노트북에서 제목이나 ID를 통해 참조할 수 있습니다. 현재 선택된 노트 또는 노트북의 경우 `$n` 이나 `$b`같은 바로가기로, 현재 선택된 항목의 경우 `$c`로 참조할 수 있습니다."
-	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"노트에 지리적 위치 정보를 포함하기 위해서는 위치 정보에 접근이 필요하고, 이를 위해선 권한이 요구됩니다.\n\n설정 화면에서 언제든지 이 설정을 끌 수 있습니다."
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"전체 데이터가 암호 및 동기화되므로, 충분한 시간을 가지고 실행하는게 좋습니다.\n시작하기 위해 아래 방법으로 할 수 있습니다.\n\n1. 모든 디바이스를 동기화.\n2. Click \"%s\".\n3. 충돌을 방지하기 위해, 암호화가 진행되는 동안 다른 장치에서 노트를 변경하지 말아주세요.\n4. 하나의 디바이스에서 동기화가 완료되면, 다른 모든 디바이스에서 동기화하세요.\n\n중요: 암호화는 하나의 디바이스에서만 실행하면 됩니다."
@@ -1709,6 +1757,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin 웹 수집기는 브라우저에서 웹 페이지 및 스크린샷을 Joplin에 저장할 수 있게 해줍니다."
 	],
@@ -1736,8 +1787,14 @@
 	"Keychain Supported: %s": [
 		"키체인 지원: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"키 업그레이드가 필요합니다"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"가로 방향"
@@ -1850,6 +1907,9 @@
 	"Manage your plugins": [
 		"플러그인 관리"
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"E2EE(종단간 암호화) 설정을 관리합니다. `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, `target-status`와 같은 명령들이 있습니다."
 	],
@@ -1861,6 +1921,9 @@
 	],
 	"Markdown + Front Matter": [
 		"마크다운 + Front Matter"
+	],
+	"Markdown editor: Render markup in editor": [
+		""
 	],
 	"Marks a to-do as done.": [
 		"목록 항목을 완료로 표시합니다."
@@ -1982,9 +2045,6 @@
 	"New sub-notebook": [
 		"새 하위 노트북"
 	],
-	"New tags:": [
-		"새 태그:"
-	],
 	"New to-do": [
 		"새 목록"
 	],
@@ -2048,6 +2108,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"텍스트 편집기가 지정되지 않았습니다. `config editor <editor-path>` 명령어로 지정해주세요"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"노드"
 	],
@@ -2065,6 +2128,9 @@
 	],
 	"Not now": [
 		"지금은 아닙니다"
+	],
+	"Not useful": [
+		""
 	],
 	"note": [
 		"노트"
@@ -2153,9 +2219,6 @@
 	"OCR: Clear cache and re-download language data files": [
 		""
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"확인"
 	],
@@ -2210,6 +2273,9 @@
 	"Open Sync Wizard...": [
 		"동기화 마법사 열기..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"열기..."
 	],
@@ -2222,8 +2288,14 @@
 	"Options": [
 		"옵션"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
 		"정렬 목록"
+	],
+	"Other": [
+		""
 	],
 	"Other applications...": [
 		"다른 애플리케이션..."
@@ -2273,8 +2345,8 @@
 	"Permanently delete note \"%s\"?": [
 		"\"%s\" 노트를 영구적으로 삭제하시겠습니까?"
 	],
-	"Permission needed": [
-		"권한 요구"
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"계속하려면 \"%s\"(을)를 클릭하거나 아래 \"%s\" 목록에서 비밀번호를 설정하세요."
@@ -2366,9 +2438,6 @@
 	"Preferred light theme": [
 		"선호하는 밝은 테마"
 	],
-	"Preferred voice typing provider": [
-		""
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
@@ -2456,6 +2525,9 @@
 	"Publish/unpublish": [
 		""
 	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
 	"Quit": [
 		"종료"
 	],
@@ -2527,6 +2599,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"해당 <item> (노트 또는 노트북)의 이름을 <name>로 바꿉니다."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"인증 토큰 새로 고침"
@@ -2720,8 +2795,14 @@
 	"Select file...": [
 		"파일 선택..."
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
 		"상위 노트북 선택"
+	],
+	"Select the type of file to be imported:": [
+		""
 	],
 	"Self-hosted": [
 		""
@@ -2891,6 +2972,9 @@
 	"Source: ": [
 		"원본: "
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -3002,6 +3086,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"[notebook]으로 전환 - 앞으로의 모든 작업은 이 노트북 안에서만 해당됩니다."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"원하는 만큼 많은 장치를 동기화하세요"
 	],
@@ -3071,9 +3158,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		"태그1, 태그2, ..."
-	],
 	"Tagged: %d.": [
 		"태그됨: %d."
 	],
@@ -3100,6 +3184,9 @@
 	],
 	"Text editor command": [
 		"텍스트 편집기 명령어"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"활성 프로필은 삭제할 수 없습니다. 다른 프로필로 전환하고 다시 시도하세요."
@@ -3269,6 +3356,15 @@
 	"This drawing may have unsaved changes.": [
 		"이 그림에는 저장되지 않은 변경사항이 있을 수 있습니다."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"노트에 링크된 첨부 파일을 보여주는 고급 도구입니다. 여기에서 보여지는 항목을 삭제할 경우, 나중에 복원할 수 없으므로 주의하시기 바랍니다."
 	],
@@ -3292,6 +3388,9 @@
 	],
 	"This note has no history": [
 		"이 노트의 변경 내역이 없습니다"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -3334,6 +3433,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"계속하려면 아래에 마스터 비밀번호를 입력해주세요."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"태그를 삭제하려면 먼저 연결된 노트의 태그를 해제해주세요."
@@ -3428,6 +3530,9 @@
 	"Try it now": [
 		"지금 시도하기"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"명령어에 관한 정보는 `help [command]`를 입력하시면 찾으실 수 있습니다. 'help all'을 입력하시면 완전한 명령어 용법에 대한 정보를 보실 수 있습니다."
 	],
@@ -3436,9 +3541,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"노트 제목이나 내용의 일부를 입력하여 바로 이동하세요. 혹은 #으로 시작하는 태그 이름이나 @로 시작하는 노트북 이름을 입력하거나, :을 입력하여 명령을 검색하세요."
-	],
-	"Type new tags or select from list": [
-		"새 태그를 입력하거나 목록에서 선택하세요"
 	],
 	"Type: %s.": [
 		"형태: %s."
@@ -3566,6 +3668,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"텍스트를 읽기 쉽게 폭이 변경될 글꼴을 선택합니다 (표, 체크박스, 코드 등). 글꼴을 찾지 못할 경우, 기본 모노스페이스 (폭이 변경된) 글꼴이 사용됩니다."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"사용자 삭제"
 	],
@@ -3604,9 +3709,6 @@
 	],
 	"Voice typing...": [
 		"음성 입력 중..."
-	],
-	"Vosk": [
-		""
 	],
 	"Waiting for authorisation...": [
 		"승인을 기다리는 중..."
@@ -3656,11 +3758,11 @@
 	"When creating a new to-do:": [
 		"새 목록을 만들 때:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"이 기능을 활성화하면 애플리케이션이 첨부파일을 스캔하고 첨부파일에서 텍스트를 추출합니다. 이렇게 하면 첨부 파일에 있는 텍스트를 검색할 수 있습니다."
-	],
-	"Whisper": [
-		""
 	],
 	"Window unresponsive.": [
 		"창이 응답하지 않습니다."

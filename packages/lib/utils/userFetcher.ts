@@ -1,6 +1,6 @@
-import SyncTargetRegistry from '../SyncTargetRegistry';
 import eventManager, { EventName } from '../eventManager';
 import Setting from '../models/Setting';
+import isJoplinServerVariant from '../models/utils/isJoplinServerVariant';
 import { reg } from '../registry';
 import Logger from '@joplin/utils/Logger';
 
@@ -17,10 +17,7 @@ interface UserApiResponse {
 }
 
 const userFetcher = async () => {
-
-	if (Setting.value('sync.target') !== SyncTargetRegistry.nameToId('joplinCloud')) {
-		return;
-	}
+	if (!isJoplinServerVariant(Setting.value('sync.target'))) return;
 
 	const syncTarget = reg.syncTarget();
 	const fileApi = await syncTarget.fileApi();

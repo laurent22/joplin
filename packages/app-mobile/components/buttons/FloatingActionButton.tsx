@@ -6,7 +6,7 @@ import { Dispatch } from 'redux';
 import { AccessibilityActionEvent, AccessibilityActionInfo, View } from 'react-native';
 import { connect } from 'react-redux';
 import BottomDrawer from '../BottomDrawer';
-const Icon = require('react-native-vector-icons/Ionicons').default;
+import { Ionicons as Icon } from '@react-native-vector-icons/ionicons';
 
 type OnButtonPress = ()=> void;
 interface ButtonSpec {
@@ -32,8 +32,7 @@ interface ActionButtonProps {
 
 // Returns a render function compatible with React Native Paper.
 const getIconRenderFunction = (iconName: string) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return (props: any) => <Icon name={iconName} {...props} />;
+	return (props: Omit<React.ComponentProps<typeof Icon>, 'name'>) => <Icon name={iconName} {...props} />;
 };
 
 const useIcon = (iconName: string) => {

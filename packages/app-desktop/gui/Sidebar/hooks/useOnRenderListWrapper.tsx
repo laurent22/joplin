@@ -7,6 +7,7 @@ interface Props {
 	selectedIndex: number;
 	onKeyDown: React.KeyboardEventHandler;
 	allFoldersCollapsed: boolean;
+	hasSubFolders: boolean;
 }
 
 const onAddFolderButtonClick = () => {
@@ -19,6 +20,7 @@ const onToggleAllFolders = (allFoldersCollapsed: boolean) => {
 
 interface CollapseExpandAllButtonProps {
 	allFoldersCollapsed: boolean;
+	hasSubFolders: boolean;
 }
 
 const CollapseExpandAllButton = (props: CollapseExpandAllButtonProps) => {
@@ -27,7 +29,12 @@ const CollapseExpandAllButton = (props: CollapseExpandAllButtonProps) => {
 	const icon = props.allFoldersCollapsed ? 'far fa-caret-square-right' : 'far fa-caret-square-down';
 	const label = props.allFoldersCollapsed ? _('Expand all notebooks') : _('Collapse all notebooks');
 
-	return <button onClick={() => onToggleAllFolders(props.allFoldersCollapsed)} className='sidebar-header-button -collapseall'>
+	return <button
+		onClick={() => onToggleAllFolders(props.allFoldersCollapsed)}
+		className={`sidebar-header-button -collapseall ${props.hasSubFolders ? '' : '-disabled'}`}
+		title={label}
+		disabled={!props.hasSubFolders}
+	>
 		<i
 			aria-label={label}
 			role='img'
@@ -39,9 +46,11 @@ const CollapseExpandAllButton = (props: CollapseExpandAllButtonProps) => {
 const NewFolderButton = () => {
 	// To allow it to be accessed by accessibility tools, the new folder button
 	// is not included in the portion of the list with role='tree'.
-	return <button onClick={onAddFolderButtonClick} className='sidebar-header-button -newfolder'>
+	const label = _('New notebook');
+
+	return <button onClick={onAddFolderButtonClick} className='sidebar-header-button -newfolder' title={label}>
 		<i
-			aria-label={_('New notebook')}
+			aria-label={label}
 			role='img'
 			className='fas fa-plus'
 		/>
@@ -53,7 +62,7 @@ const useOnRenderListWrapper = (props: Props) => {
 		const listHasValidSelection = props.selectedIndex >= 0;
 		const allowContainerFocus = !listHasValidSelection;
 		return <>
-			<CollapseExpandAllButton allFoldersCollapsed={props.allFoldersCollapsed}/>
+			<CollapseExpandAllButton allFoldersCollapsed={props.allFoldersCollapsed} hasSubFolders={props.hasSubFolders}/>
 			<NewFolderButton/>
 			<div
 				role='tree'
@@ -64,7 +73,7 @@ const useOnRenderListWrapper = (props: Props) => {
 				{...listItems}
 			</div>
 		</>;
-	}, [props.selectedIndex, props.onKeyDown, props.allFoldersCollapsed]);
+	}, [props.selectedIndex, props.onKeyDown, props.allFoldersCollapsed, props.hasSubFolders]);
 };
 
 export default useOnRenderListWrapper;

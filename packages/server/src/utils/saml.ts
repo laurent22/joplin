@@ -5,6 +5,7 @@ import config from '../config';
 import { PostBindingContext } from 'samlify/types/src/entity';
 import { _ } from '@joplin/lib/locale';
 import { SamlRelayState } from './types';
+import { User } from '../services/database/types';
 
 const checkIfSamlIsEnabled = () => {
 	if (!config().saml.enabled) {
@@ -69,4 +70,12 @@ export const generateRedirectHtml = async (relayState: SamlRelayState = null) =>
     </script>
 </body>
 </html>`;
+};
+
+export const samlOwnedUserProperties = (): (keyof User)[] => {
+	return [
+		'full_name',
+		'email',
+		'password',
+	];
 };

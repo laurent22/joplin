@@ -1,0 +1,20 @@
+
+.link-tooltip.-hidden {
+	display: none;
+}
+
+.link-tooltip {
+	position: absolute;
+	border-radius: 4px;
+	padding: 3px;
+	background-color: var(--joplin-background-color3);
+	color: var(--joplin-color3);
+}
+
+.link-tooltip > .link {
+	text-decoration: underline;
+	cursor: pointer;
+	color: var(--joplin-url-color);
+	background-color: transparent;
+	border: none;
+}

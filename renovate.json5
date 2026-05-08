@@ -49,6 +49,9 @@
 	],
 	"ignoreDeps": [
 		"@babel/core",
+		// ProseMirror and CodeMirror often need to be deduplicated after updating (e.g. with
+		// yarn dedupe 'prosemirror-*'). Renovate doesn't do this, and, without the deduplication,
+		// multiple instances of some parts of the libraries can be loaded, breaking parts of the editor. 
 		"@codemirror/autocomplete",
 		"@codemirror/commands",
 		"@codemirror/lang-cpp",
@@ -69,6 +72,12 @@
 		"@lezer/common",
 		"@lezer/highlight",
 		"@lezer/markdown",
+		"prosemirror-model",
+		"prosemirror-state",
+		"prosemirror-view",
+		"prosemirror-tables",
+		// Does not use semver
+		"@dr.pogodin/react-native-fs",
 		"@fortawesome/fontawesome-svg-core",
 		"@fortawesome/free-solid-svg-icons",
 		"@svgr/webpack",
@@ -79,7 +88,7 @@
 		"browserify",
 		"codemirror",
 		"cspell",
-		"expo-av", // Must be updated with expo
+		"expo-audio", // Must be updated with expo
 		"file-loader",
 		"gradle",
 		"html-webpack-plugin",
@@ -119,6 +128,9 @@
 		// upgrading React Native.
 		"@babel/preset-env",
 		"@babel/runtime",
+		"@react-native-community/cli",
+		"@react-native-community/cli-platform-android",
+		"@react-native-community/cli-platform-ios",
 		"@tsconfig/react-native",
 		"@types/react-native",
 		"@testing-library/react-native",
@@ -136,6 +148,8 @@
 		"react-native",
 		"activesupport",
 		"cocoapods",
+		"@react-native/metro-config",
+		"@react-native/babel-preset",
 
 		// We currently don't have automated tests that verify that the
 		// sidemenus work correctly in the mobile app. Because an update to
@@ -157,6 +171,8 @@
 		"@rmp135/sql-ts",
 		"file-type",
 		"builtin-modules",
+		"yargs-parser",
+		"yargs",
 
 		// Formidable v3 is broken:
 		// https://github.com/node-formidable/formidable/issues/958
@@ -203,11 +219,6 @@
 		"@aws-sdk/client-s3",
 		"@aws-sdk/s3-request-presigner",
 
-		// 2.x appears to have breaking changes since the generated HTML is
-		// different. Not important enough to fix since the package is only used
-		// for tests.
-		"clean-html",
-
 		// We are too many versions behind so it needs to be manually upgraded.
 		"immer",
 
@@ -221,14 +232,34 @@
 		// https://github.com/TryGhost/node-sqlite3/issues/1747
 		"sqlite3",
 
-		// They refactored it with undocumented breaking changes.
-		"react-native-vosk",
-
 		// Used by onenote-converter but has many breaking changes and we don't test it on CI, so
 		// would need to be manually upgraded and tested.
 		"bat",
+
+		"react-test-renderer",
+
+		// Don't upgrade katex and mermaid automatically because we need to run
+		// `yarn buildAssets` after the package has been updated
+		"katex",
+		"mermaid",
+
+		// We keep using v5 for now. Upgrading to v7 would require updating the icon names.
+		"@fortawesome/fontawesome-free",
 	],
 	"packageRules": [
+		// The React Monorepo rule appears to be automatically enabled, but the PR will usually fail
+		// as there are too many packages at the same time. It also keeps recreating it when it's
+		// closed so here we're trying to disable it.
+		{
+			"matchPackagePatterns": [
+				"react",
+				"react-*",
+				"@types/react",
+				"@types/react-*",
+			],
+			"groupName": null,
+		},
+
 		{
 			"matchUpdateTypes": ["patch"],
 			"automerge": true,

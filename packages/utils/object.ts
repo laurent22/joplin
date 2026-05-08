@@ -15,3 +15,9 @@ export function checkObjectHasProperties(object: any, properties: string[]) {
 		if (!(prop in object)) throw new Error(`Missing property "${prop}": ${JSON.stringify(object)}`);
 	}
 }
+
+export const hasOwnProperty = <T extends object, Property extends string>(
+	object: T, property: Property,
+): object is T & Record<Property, unknown> => {
+	return !!object && Object.prototype.hasOwnProperty.call(object, property);
+};

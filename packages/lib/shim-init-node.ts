@@ -1,4 +1,5 @@
-import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, PdfInfo } from './shim';
+import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, PdfInfo, PdfPageImage } from './shim';
+import createAccessiblePdf from './services/ocr/utils/createAccessiblePdf';
 import GeolocationNode from './geolocation-node';
 import { setLocale, defaultLocale, closestSupportedLocale } from './locale';
 import FsDriverNode from './fs-driver-node';
@@ -18,6 +19,8 @@ import * as mimeUtils from './mime-utils';
 import BaseItem from './models/BaseItem';
 import { Size } from '@joplin/utils/types';
 import { cpus } from 'os';
+import { pathToFileURL } from 'url';
+import * as tls from 'tls';
 import type PdfJs from './utils/types/pdfJs';
 const { _ } = require('./locale');
 const http = require('http');
@@ -217,9 +220,9 @@ function shimInit(options: ShimInitOptions = null) {
 
 	shim.showMessageBox = async (message, options = null) => {
 		if (shim.isElectron()) {
-			return shim.electronBridge().showMessageBox(message, options);
+			return shim.electronBridge().showMessageBox(message, options ?? {});
 		} else {
-			throw new Error('Not implemented');
+			throw new Error(`Not implemented: showMessageBox(${JSON.stringify(message)})`);
 		}
 	};
 
@@ -236,7 +239,7 @@ function shimInit(options: ShimInitOptions = null) {
 			// original code).
 
 			const image = new Image();
-			image.src = filePath;
+			image.src = pathToFileURL(filePath).href;
 			await new Promise<void>((resolve, reject) => {
 				image.onload = () => resolve();
 				image.onerror = () => reject(new Error(`Image at ${filePath} failed to load.`));
@@ -527,7 +530,7 @@ function shimInit(options: ShimInitOptions = null) {
 			throw new Error(`Not a valid URL: ${url}`);
 		}
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
-		options.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : null;
+		options.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : shim.httpAgent(url);
 		return shim.fetchWithRetry(() => {
 			return nodeFetch(url, options);
 		}, options);
@@ -582,7 +585,7 @@ function shimInit(options: ShimInitOptions = null) {
 		};
 
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
-		requestOptions.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url.href, resolvedProxyUrl) : null;
+		requestOptions.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url.href, resolvedProxyUrl) : shim.httpAgent(url.href);
 
 		const doFetchOperation = async () => {
 			return new Promise((resolve, reject) => {
@@ -699,12 +702,24 @@ function shimInit(options: ShimInitOptions = null) {
 
 	shim.httpAgent_ = null;
 
+	// X25519MLKEM768 is a post-quantum cryptography key exchange, details:
+	// https://developers.cloudflare.com/ssl/post-quantum-cryptography/
+	// Not supported on by all SSL stacks and versions, detect support at runtime.
+	let tlsEcdhCurve: string;
+	try {
+		tls.createSecureContext({ ecdhCurve: 'X25519MLKEM768:X25519:P-256:P-384' });
+		tlsEcdhCurve = 'X25519MLKEM768:X25519:P-256:P-384';
+	} catch {
+		tlsEcdhCurve = 'auto';
+	}
+
 	shim.httpAgent = url => {
 		if (!shim.httpAgent_) {
 			const AgentSettings = {
 				keepAlive: true,
 				maxSockets: 1,
 				keepAliveMsecs: 5000,
+				ecdhCurve: tlsEcdhCurve,
 			};
 			shim.httpAgent_ = {
 				http: new http.Agent(AgentSettings),
@@ -721,6 +736,7 @@ function shimInit(options: ShimInitOptions = null) {
 			keepAliveMsecs: 5000,
 			proxy: proxyUrl,
 			timeout: proxySettings.proxyTimeout * 1000,
+			ecdhCurve: tlsEcdhCurve,
 		};
 
 		// Based on https://github.com/delvedor/hpagent#usage
@@ -837,7 +853,7 @@ function shimInit(options: ShimInitOptions = null) {
 		return textByPage;
 	};
 
-	shim.pdfToImages = async (pdfPath: string, outputDirectoryPath: string, options?: CreatePdfFromImagesOptions): Promise<string[]> => {
+	shim.pdfToImagesWithDimensions = async (pdfPath: string, outputDirectoryPath: string, options?: CreatePdfFromImagesOptions): Promise<PdfPageImage[]> => {
 		if (typeof HTMLCanvasElement === 'undefined') {
 			throw new Error('Unsupported -- the Canvas element is required.');
 		}
@@ -850,7 +866,7 @@ function shimInit(options: ShimInitOptions = null) {
 			const quality = 0.8;
 			const canvasToBlob = async (canvas: HTMLCanvasElement): Promise<Blob> => {
 				return new Promise(resolve => {
-					canvas.toBlob(blob => resolve(blob), 'image/jpg', quality);
+					canvas.toBlob(blob => resolve(blob), 'image/jpeg', quality);
 				});
 			};
 
@@ -859,7 +875,7 @@ function shimInit(options: ShimInitOptions = null) {
 		};
 
 		const filePrefix = `page_${Date.now()}`;
-		const output: string[] = [];
+		const output: PdfPageImage[] = [];
 		const doc = await loadPdf(pdfPath);
 
 		try {
@@ -882,9 +898,14 @@ function shimInit(options: ShimInitOptions = null) {
 
 				const buffer = await canvasToBuffer(canvas);
 				const filePath = `${outputDirectoryPath}/${filePrefix}_${pageNum.toString().padStart(4, '0')}.jpg`;
-				output.push(filePath);
 				await writeFile(filePath, buffer, 'binary');
 				if (!(await shim.fsDriver().exists(filePath))) throw new Error(`Could not write to file: ${filePath}`);
+
+				output.push({
+					path: filePath,
+					width: viewport.width,
+					height: viewport.height,
+				});
 			}
 		} finally {
 			await doc.destroy();
@@ -893,9 +914,44 @@ function shimInit(options: ShimInitOptions = null) {
 		return output;
 	};
 
+	shim.pdfToImages = async (pdfPath: string, outputDirectoryPath: string, options?: CreatePdfFromImagesOptions): Promise<string[]> => {
+		const pagesWithDimensions = await shim.pdfToImagesWithDimensions(pdfPath, outputDirectoryPath, options);
+		return pagesWithDimensions.map(p => p.path);
+	};
+
 	shim.pdfInfo = async (pdfPath: string): Promise<PdfInfo> => {
 		const doc = await loadPdf(pdfPath);
 		return { pageCount: doc.numPages };
+	};
+
+	shim.createAccessiblePdf = async (originalPdfPath: string, ocrDetails: string, outputPath: string, tempDir: string): Promise<void> => {
+		const workDir = `${tempDir}/accessible_pdf_${Date.now()}`;
+		await shim.fsDriver().mkdir(workDir);
+
+		try {
+			// Convert PDF pages to images with dimensions
+			const pageImages = await shim.pdfToImagesWithDimensions(originalPdfPath, workDir);
+
+			// Read all images into buffers with their dimensions
+			const pageImagesWithBuffers: { buffer: Buffer; width: number; height: number }[] = [];
+			for (const pageImage of pageImages) {
+				const buffer = await fs.readFile(pageImage.path);
+				pageImagesWithBuffers.push({
+					buffer,
+					width: pageImage.width,
+					height: pageImage.height,
+				});
+			}
+
+			// Create the accessible PDF
+			const pdfBytes = await createAccessiblePdf(pageImagesWithBuffers, ocrDetails);
+
+			// Write the output file
+			await writeFile(outputPath, pdfBytes);
+		} finally {
+			// Clean up work directory
+			await shim.fsDriver().remove(workDir);
+		}
 	};
 }
 

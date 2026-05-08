@@ -1,11 +1,10 @@
 import * as React from 'react';
 import TextInput from './TextInput';
-import { View, StyleSheet, TextInputProps, ViewStyle, TextInput as ReactNativeTextInput } from 'react-native';
+import { View, StyleSheet, TextInputProps, ViewStyle, TextInput as ReactNativeTextInput, Keyboard } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { Ref, useCallback, useMemo } from 'react';
 import { themeStyle } from './global-style';
 import IconButton from './IconButton';
-import Icon from './Icon';
 
 
 interface SearchInputProps extends TextInputProps {
@@ -22,12 +21,13 @@ const useStyles = (themeId: number, hasContent: boolean) => {
 		return StyleSheet.create({
 			root: {
 				flexDirection: 'row',
-				justifyContent: 'center',
+				justifyContent: 'flex-start',
 				alignItems: 'center',
 			},
 			inputStyle: {
 				fontSize: theme.fontSize,
-				flexGrow: 1,
+				flex: 1,
+				minWidth: 0,
 				borderWidth: 0,
 				borderBlockColor: 'transparent',
 				paddingLeft: 0,
@@ -58,11 +58,12 @@ const SearchInput: React.FC<SearchInputProps> = ({ inputRef, themeId, value, con
 	}, [onChangeText]);
 
 	return <View style={[styles.root, containerStyle]}>
-		<Icon
-			aria-hidden={true}
-			name='material magnify'
-			accessibilityLabel={null}
-			style={styles.icon}
+		<IconButton
+			iconName='material magnify'
+			onPress={() => Keyboard.dismiss()}
+			description={_('Hide keyboard')}
+			iconStyle={styles.icon}
+			themeId={themeId}
 		/>
 		<TextInput
 			ref={inputRef}

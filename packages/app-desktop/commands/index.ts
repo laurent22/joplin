@@ -1,6 +1,7 @@
 // AUTO-GENERATED using `gulp buildScriptIndexes`
 import * as copyDevCommand from './copyDevCommand';
 import * as copyToClipboard from './copyToClipboard';
+import * as createAccessibleDocument from './createAccessibleDocument';
 import * as editProfileConfig from './editProfileConfig';
 import * as emptyTrash from './emptyTrash';
 import * as exportDeletionLog from './exportDeletionLog';
@@ -13,6 +14,7 @@ import * as openProfileDirectory from './openProfileDirectory';
 import * as openSecondaryAppInstance from './openSecondaryAppInstance';
 import * as replaceMisspelling from './replaceMisspelling';
 import * as restoreNoteRevision from './restoreNoteRevision';
+import * as showProfileEditor from './showProfileEditor';
 import * as startExternalEditing from './startExternalEditing';
 import * as stopExternalEditing from './stopExternalEditing';
 import * as switchProfile from './switchProfile';
@@ -26,6 +28,7 @@ import * as toggleTabMovesFocus from './toggleTabMovesFocus';
 const index: any[] = [
 	copyDevCommand,
 	copyToClipboard,
+	createAccessibleDocument,
 	editProfileConfig,
 	emptyTrash,
 	exportDeletionLog,
@@ -38,6 +41,7 @@ const index: any[] = [
 	openSecondaryAppInstance,
 	replaceMisspelling,
 	restoreNoteRevision,
+	showProfileEditor,
 	startExternalEditing,
 	stopExternalEditing,
 	switchProfile,

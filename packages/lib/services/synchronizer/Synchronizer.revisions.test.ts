@@ -4,6 +4,7 @@ import { synchronizerStart, revisionService, setupDatabaseAndSynchronizer, synch
 import Note from '../../models/Note';
 import Revision from '../../models/Revision';
 import { loadMasterKeysFromSettings, setupAndEnableEncryption } from '../e2ee/utils';
+import { onRevisionServiceSettingsChanged } from './syncInfoUtils';
 
 describe('Synchronizer.revisions', () => {
 
@@ -47,7 +48,7 @@ describe('Synchronizer.revisions', () => {
 
 		await synchronizerStart();
 		await Note.delete(n1.id);
-		await revisionService().collectRevisions(); // REV 1
+		await revisionService().collectRevisions(); // One revision is created here because it is an "old note", see revisionService
 		{
 			const allRevs = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
 			expect(allRevs.length).toBe(1);
@@ -59,7 +60,7 @@ describe('Synchronizer.revisions', () => {
 		await synchronizerStart(); // The local note gets deleted here, however a new rev is *not* created
 		{
 			const allRevs = await Revision.allByType(BaseModel.TYPE_NOTE, n1.id);
-			expect(allRevs.length).toBe(1);
+			expect(allRevs.length).toBe(0);
 		}
 
 		const notes = await Note.all();
@@ -230,4 +231,98 @@ describe('Synchronizer.revisions', () => {
 
 		jest.useRealTimers();
 	});
+
+	it('should sync both deleted and merged revisions to remote, when revision deletion retains some revisions locally', async () => {
+		// - C1 creates note 1
+		// - C1 modifies note 1 over a period of time - 2 revisions are created
+		// - C1 sync
+		// - C2 sync
+		// - C2 receives note 1 with the revisions
+		// - C2 deletes the oldest of the 2 revisions, leaving 1 merged revision
+		// - C2 sync
+		// - C1 sync
+		// - C1 receives 1 merged revision and the older one is deleted
+		//
+		// When at least one, but not all revisions are deleted for a note, the new oldest revision must be a merge of all
+		// previous revisions which were deleted. So in addition to verifying that old revision deletions are synced so that
+		// other clients will delete those revisions, we also need to verify that a merged revision is synced and is then updated
+		// when another client receives it
+		Setting.setValue('revisionService.intervalBetweenRevisions', 100);
+		jest.useFakeTimers({ advanceTimers: true });
+
+		const note = await Note.save({ title: 'note' });
+		const getNoteRevisions = () => {
+			return Revision.allByType(BaseModel.TYPE_NOTE, note.id);
+		};
+		jest.advanceTimersByTime(500);
+
+		await Note.save({ id: note.id, title: 'note REV0' });
+		jest.advanceTimersByTime(500);
+
+		await revisionService().collectRevisions(); // REV0
+		expect(await getNoteRevisions()).toHaveLength(1);
+
+		const interimTime = Date.now();
+		jest.advanceTimersByTime(500);
+
+		await Note.save({ id: note.id, title: 'note REV1' });
+		await revisionService().collectRevisions(); // REV1
+		expect(await getNoteRevisions()).toHaveLength(2);
+
+		// Should sync the revisions
+		await synchronizerStart();
+		await switchClient(2);
+		await synchronizerStart();
+
+		// Prevent a race condition whereby a revision is downloaded via the sync, then one of the same revisions is updated within the same millisecond via
+		// deleteOldRevisions, and therefore is not uploaded via the sync because the sync_time matches
+		jest.advanceTimersByTime(500);
+
+		const revisions = await getNoteRevisions();
+		expect(revisions).toHaveLength(2);
+		expect(revisions[0].title_diff).toBe('[{"diffs":[[1,"note REV0"]],"start1":0,"start2":0,"length1":0,"length2":9}]');
+		expect(revisions[1].title_diff).toBe('[{"diffs":[[0," REV"],[-1,"0"],[1,"1"]],"start1":4,"start2":4,"length1":5,"length2":5}]');
+
+		await revisionService().deleteOldRevisions(Date.now() - interimTime);
+		expect(await getNoteRevisions()).toHaveLength(1);
+
+		await synchronizerStart();
+		expect(await getNoteRevisions()).toHaveLength(1);
+
+		// After switching back to the original client, syncing should locally delete
+		// the remotely deleted revisions and update the merged revision.
+		await switchClient(1);
+		expect(await getNoteRevisions()).toHaveLength(2);
+		await synchronizerStart();
+
+		const revisionsAfterSync = await getNoteRevisions();
+		expect(revisionsAfterSync).toHaveLength(1);
+		expect(revisionsAfterSync[0].title_diff).toBe('[{"diffs":[[1,"note REV1"]],"start1":0,"start2":0,"length1":0,"length2":9}]');
+		expect(revisionsAfterSync[0].updated_time).toBeGreaterThan(revisions[0].updated_time);
+
+		jest.useRealTimers();
+	});
+
+	it('should sync revision service settings across clients', (async () => {
+		const changeSetting = (key: string, value: unknown) => {
+			Setting.setValue(key, value);
+			onRevisionServiceSettingsChanged(key, value);
+		};
+
+		changeSetting('revisionService.enabled', false);
+		await synchronizerStart();
+		await switchClient(2);
+
+		expect(Setting.value('revisionService.enabled')).toBe(true);
+		await synchronizerStart();
+		expect(Setting.value('revisionService.enabled')).toBe(false);
+
+		changeSetting('revisionService.enabled', true);
+		await synchronizerStart();
+		await switchClient(1);
+
+		expect(Setting.value('revisionService.enabled')).toBe(false);
+		await synchronizerStart();
+		expect(Setting.value('revisionService.enabled')).toBe(true);
+	}));
 });

@@ -35,6 +35,10 @@
 		ul ul, ul ol, ol ul, ol ol   {
 			margin-bottom: 0px;			
 		}
+		::highlight(search-results) {
+    		background-color: #f7d26e;
+    		color: black;
+		}
 	</style>
 </head>
 
@@ -369,7 +373,7 @@
 		ipc.focus = (event) => {
 			const dummyID = 'joplin-content-focus-dummy';
 			if (! document.getElementById(dummyID)) {
-				const focusDummy = '<div style="width: 0; height: 0; overflow: hidden"><a id="' + dummyID + '" href="#">Note viewer top</a></div>';
+				const focusDummy = '<div style="width: 0; height: 0; overflow: hidden"><a id="' + dummyID + '" href="#" aria-label="Note viewer top"></a></div>';
 				contentElement.insertAdjacentHTML("afterbegin", focusDummy);
 			}
 			const scrollTop = contentElement.scrollTop;
@@ -503,7 +507,7 @@
 			if (!options) options = {};
 
 			// TODO: Add support for scriptType on mobile and CLI
-
+			CSS.highlights.clear();
 			if (!mark_) {
 				mark_ = new Mark(document.getElementById('joplin-container-content'), {
 					exclude: ['img'],
@@ -519,7 +523,8 @@
 
 			let selectedElement = null;
 			let elementIndex = 0;
-
+			
+			const allRanges = [];
 			const markKeywordOptions = {};
 
 			if ('separateWordSearch' in options) markKeywordOptions.separateWordSearch = options.separateWordSearch;
@@ -527,9 +532,17 @@
 			try {
 				for (const keyword of keywords) {
 					markJsUtils.markKeyword(mark_, keyword, {
-						pregQuote: pregQuote,
-						replaceRegexDiacritics: replaceRegexDiacritics,
-					}, markKeywordOptions);
+                        pregQuote: pregQuote,
+                        replaceRegexDiacritics: replaceRegexDiacritics,
+                    }, {
+                        ...markKeywordOptions,
+                        element: 'mark-ghost',
+                        each: (node) => {
+                            const range = new Range();
+                            range.selectNodeContents(node);
+                            allRanges.push(range);
+                        }
+                    });
 				}
 			} catch (error) {
 				if (error.name !== 'SyntaxError') {
@@ -539,6 +552,10 @@
 				// when the input is really big, this catch is here to avoid the application crashing
 				// https://github.com/laurent22/joplin/issues/7634
 				console.error('Error while trying to highlight words from search: ', error);
+			}
+			if (allRanges.length > 0) {
+				const searchResultsHighlight = new Highlight(...allRanges);
+            	CSS.highlights.set("search-results", searchResultsHighlight);
 			}
 		}
 
@@ -807,6 +824,107 @@
 				}
 			}
 			);
+		}));
+
+		// By default, Chromium inlines body styles (e.g. theme background color) into the clipboard HTML.
+		// Intercept the copy event and write only the selected content with inlined light-theme styles to bypass this behaviour.
+		const clipboardCssProps = [
+			'font-family', 'font-size', 'font-weight', 'font-style',
+			'text-decoration-line', 'line-height', 'color',
+			'background-color',
+			'margin-top', 'margin-bottom', 'margin-left', 'margin-right',
+			'padding-top', 'padding-bottom', 'padding-left', 'padding-right',
+			'border-top', 'border-bottom', 'border-left', 'border-right',
+			'border-collapse', 'border-radius',
+			'list-style-type',
+			'white-space', 'text-align',
+			'opacity',
+		];
+
+		const lightThemeOverrideCss = [
+			'body, #joplin-container-content, #rendered-md { background-color: transparent !important; color: #32373F !important; }',
+			'html *, html *::before, html *::after { background-color: transparent !important; }',
+			'a { color: #155BDA !important; }',
+			'code, .inline-code, .mce-content-body code { color: rgb(0,0,0) !important; background-color: rgb(243,243,243) !important; border-color: rgb(220,220,220) !important; }',
+			'pre.hljs { background-color: rgb(243,243,243) !important; }',
+			'pre.hljs code { background-color: transparent !important; }',
+			'kbd { color: rgb(0,0,0) !important; background-color: rgb(243,243,243) !important; }',
+			'table, table thead, table tbody, table tr, table td, table th { background-color: transparent !important; color: #32373F !important; }',
+			'table th { background-color: rgb(247,247,247) !important; }',
+			'table:has(thead) tr:nth-child(even) { background-color: rgb(247,247,247) !important; }',
+			'table td, table th { border-color: rgb(220,220,220) !important; }',
+			'blockquote { border-left-color: rgb(220,220,220) !important; opacity: 0.7 !important; }',
+			'h1 { border-bottom-color: #dddddd !important; }',
+			'mark { background-color: #F3B717 !important; color: black !important; }',
+		].join('\n');
+
+		document.addEventListener('copy', webviewLib.logEnabledEventHandler(e => {
+			const selection = window.getSelection();
+			if (!selection || selection.isCollapsed) return;
+			if (selection.rangeCount === 0 || !e.clipboardData) return;
+
+			const range = selection.getRangeAt(0);
+			const wrapper = document.createElement('div');
+			wrapper.appendChild(range.cloneContents());
+
+
+			wrapper.querySelectorAll('style').forEach(s => s.remove());
+
+			// The hidden attribute on .joplin-source helps some apps, but many
+			// external editors (Word, Google Docs) ignore hidden/display:none
+			// when pasting clipboard HTML. Remove them explicitly as a fallback.
+			wrapper.querySelectorAll('.joplin-source').forEach(s => s.remove());
+
+			// Remove the accessibility focus dummy link container.
+			const focusDummy = wrapper.querySelector('#joplin-content-focus-dummy');
+			if (focusDummy && focusDummy.parentElement) focusDummy.parentElement.remove();
+
+
+			const inlineTags = new Set(['STRONG', 'EM', 'CODE', 'S', 'DEL', 'INS', 'MARK', 'SUP', 'SUB', 'U', 'SPAN', 'A']);
+			let node = range.commonAncestorContainer;
+			if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
+
+			while (node && node !== document.body && node.id !== 'rendered-md' && node.id !== 'joplin-container-content') {
+				if (inlineTags.has(node.tagName)) {
+					const el = node.cloneNode(false);
+					while (wrapper.firstChild) el.appendChild(wrapper.firstChild);
+					wrapper.appendChild(el);
+				}
+				node = node.parentElement;
+			}
+
+			const overrideStyle = document.createElement('style');
+			overrideStyle.textContent = lightThemeOverrideCss;
+			document.head.appendChild(overrideStyle);
+
+			const renderedMd = document.getElementById('rendered-md') || contentElement;
+			wrapper.style.cssText = 'position:absolute;left:-9999px;visibility:hidden;pointer-events:none';
+			renderedMd.appendChild(wrapper);
+
+			try {
+				const elements = wrapper.querySelectorAll('*');
+				for (const el of elements) {
+					let cs;
+					try { cs = window.getComputedStyle(el); } catch (_) { continue; }
+
+					const parts = [];
+					for (const prop of clipboardCssProps) {
+						const val = cs.getPropertyValue(prop);
+						if (val) parts.push(`${prop}: ${val}`);
+					}
+					if (parts.length > 0) {
+						el.setAttribute('style', parts.join('; '));
+					}
+				}
+			} finally {
+				renderedMd.removeChild(wrapper);
+				overrideStyle.remove();
+				wrapper.style.cssText = '';
+			}
+
+			e.clipboardData.setData('text/html', wrapper.innerHTML);
+			e.clipboardData.setData('text/plain', selection.toString());
+			e.preventDefault();
 		}));
 
 		let lastClientWidth_ = NaN, lastClientHeight_ = NaN, lastScrollTop_ = NaN;

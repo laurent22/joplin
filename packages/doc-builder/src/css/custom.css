@@ -71,3 +71,13 @@ pre code {
 .sidebarItemLinkActive_node_modules-\@docusaurus-theme-classic-lib-theme-BlogSidebar-Desktop-styles-module {
 	font-weight: bold;
 }
+
+@media print {
+	.donate-links {
+		display: none;
+	}
+
+	.theme-edit-this-page {
+		display: none;
+	}
+}

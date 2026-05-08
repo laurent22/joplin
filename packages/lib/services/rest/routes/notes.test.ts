@@ -6,7 +6,9 @@ import { readFile, readdir, remove, writeFile } from 'fs-extra';
 import Resource from '../../../models/Resource';
 import Api, { RequestMethod } from '../Api';
 import Note from '../../../models/Note';
-import { setupDatabase, switchClient } from '../../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
+import Revision from '../../../models/Revision';
+import { ModelType } from '../../../BaseModel';
 const md5 = require('md5');
 
 const imagePath = `${__dirname}/../../../images/SideMenuHeader.png`;
@@ -16,7 +18,7 @@ describe('routes/notes', () => {
 
 	beforeEach(async () => {
 		jest.resetAllMocks();
-		await setupDatabase(1);
+		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 	});
 
@@ -218,6 +220,15 @@ describe('routes/notes', () => {
 			const notes = await api.route(RequestMethod.GET, 'notes', { include_conflicts: '1' });
 			expect(notes.items.length).toBe(2);
 		}
+	});
+
+	test('should be able to delete revisions for a note', async () => {
+		const api = new Api();
+		const note = await Note.save({});
+		const revision = await Revision.save({ item_id: note.id, item_type: ModelType.Note, item_updated_time: note.updated_time });
+		await api.route(RequestMethod.DELETE, `notes/${note.id}/revisions`);
+
+		expect(await Revision.load(revision.id)).toBeFalsy();
 	});
 
 });

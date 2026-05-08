@@ -2,7 +2,7 @@
 
 The Joplin applications automatically save previous versions of your notes at regular intervals. These versions are synced across devices and can be viewed from the desktop application.
 
-A common complain with many sync-based note taking apps is that they work in an opaque way - sometimes notes are changed or they disappear and it's not clear why - it could be a user error, or some bug, but regardless it makes it hard to trust the app with thousands of notes. So this feature give transparency over what's happening - if some note seems to be gone or changed when it shouldn't, the redundant data allows investigating the issue and restoring content.
+A common complaint with many sync-based note taking apps is that they work in an opaque way - sometimes notes are changed or they disappear and it's not clear why - it could be a user error, or some bug, but regardless it makes it hard to trust the app with thousands of notes. So this feature gives transparency over what's happening - if some note seems to be gone or changed when it shouldn't, the redundant data allows investigating the issue and restoring content.
 
 ### How does it work?
 
@@ -10,7 +10,7 @@ All the apps save a version of the modified notes every 10 minutes. These revisi
 
 ### How to view the history of a note?
 
-While all the apps save revisions, currently only the desktop one allow viewing these revisions.
+While all the apps save revisions, currently only the desktop one allows viewing these revisions.
 
 To do so, click on the Information icon in the toolbar, then select "Previous version of this note".
 

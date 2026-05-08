@@ -1,0 +1,1 @@
+Program za bilješke i popis zadataka sa sinkronizacijom između Linuxa, macOS-a, Windowsa i mobitela

@@ -17,6 +17,7 @@ import { Portal, ProgressBar, Snackbar } from 'react-native-paper';
 import useBackHandler from '../../../utils/hooks/useBackHandler';
 import Logger from '@joplin/utils/Logger';
 import NavService from '@joplin/lib/services/NavService';
+import { ResourceOcrDriverId, ResourceOcrStatus } from '@joplin/lib/services/database/types';
 
 const logger = Logger.create('DocumentScanner');
 
@@ -77,13 +78,24 @@ const DocumentScanner: React.FC<Props> = ({ themeId, dispatch }) => {
 	const onCreateNote = useCallback(async (event: CreateNoteEvent) => {
 		setSnackbarMessage(_('Creating note "%s"...', event.title));
 		setCreatingNote(true);
+		logger.info('Creating note', event.queueForTranscription ? '(with transcription)' : '');
 
 		try {
 			const resources = [];
 			for (const image of photos) {
 				resources.push(await shim.createResourceFromPath(
 					image.uri,
-					{ title: event.title, mime: image.type },
+					{
+						...(event.queueForTranscription ? {
+							ocr_status: ResourceOcrStatus.Todo,
+							ocr_driver_id: ResourceOcrDriverId.HandwrittenText,
+							ocr_details: '',
+							ocr_error: '',
+							ocr_text: '',
+						} : {}),
+						title: event.title,
+						mime: image.type,
+					},
 				));
 			}
 

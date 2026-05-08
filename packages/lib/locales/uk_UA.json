@@ -134,6 +134,9 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> може бути “toggle” або “clear”. Використовуйте “toggle”, щоб переключити дане завдання між завершеним та незавершеним станом (якщо ціль - звичайна нотатка, вона буде перетворена на завдання). Використовуйте “clear”, щоб перетворити завдання назад на звичайну нотатку."
 	],
+	"A brief description of the image:": [
+		""
+	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		""
 	],
@@ -148,6 +151,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		"Про нас"
@@ -200,6 +206,9 @@
 	"Add body": [
 		"Додати тіло"
 	],
+	"Add column": [
+		""
+	],
 	"Add new": [
 		"Додати нове"
 	],
@@ -209,9 +218,6 @@
 	"Add recipient:": [
 		"Додати одержувача:"
 	],
-	"Add tag %s to note": [
-		"Додати тег %s до примітки"
-	],
 	"Add title": [
 		"Додати заголовок"
 	],
@@ -220,6 +226,9 @@
 	],
 	"Add to note": [
 		"Додати до примітки"
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"Адміністратор"
@@ -284,6 +293,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"Знайдено автоматично збережений малюнок. Прикріпити його копію до нотатки?"
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
+	],
 	"An error occurred: %s": [
 		"Виникла помилка: %s"
 	],
@@ -319,6 +331,9 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
 	],
 	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		"Наразі Joplin Web можна відкрити лише в одній вкладці одночасно. Будь ласка, закрийте інший екземпляр Joplin."
@@ -397,6 +412,9 @@
 	],
 	"Beta": [
 		"Beta"
+	],
+	"Block code": [
+		""
 	],
 	"Bold": [
 		"Жирний"
@@ -530,6 +548,9 @@
 	"Checking... Please wait.": [
 		"Перевірка… Будь ласка, зачекайте."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Виберіть варіант"
 	],
@@ -610,6 +631,9 @@
 	],
 	"Command": [
 		"Команда"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Панель команд"
@@ -894,6 +918,9 @@
 	"Default": [
 		"За замовчуванням"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"За замовчуванням: %s"
 	],
@@ -929,6 +956,9 @@
 	],
 	"Delete selected notes": [
 		"Видалити вибрані нотатки"
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Видалити блокнот \"Вхідні\"?\n\nЯкщо ви видалите блокнот \"Вхідні\", всі листи, які нещодавно були надіслані до нього, можуть бути втрачені."
@@ -1032,6 +1062,9 @@
 	"Displays the complete information about note.": [
 		"Відображає повну інформацію про нотатку."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Відображає дану нотатку."
 	],
@@ -1053,7 +1086,16 @@
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"Не втрачайте пароль, оскільки з міркувань безпеки це буде *єдиний* спосіб розшифрувати дані! Щоб увімкнути шифрування, введіть свій пароль нижче."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
+	"Document scanner: Title template": [
+		""
+	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -1434,6 +1476,9 @@
 	"Feature flags": [
 		"Функціональні прапорці"
 	],
+	"Feedback": [
+		""
+	],
 	"Fetched items: %d/%d.": [
 		"Отримано елементів: %d/%d."
 	],
@@ -1448,9 +1493,6 @@
 	],
 	"Filter": [
 		"Фільтр"
-	],
-	"Filter tags": [
-		"Фільтри тегів"
 	],
 	"Find": [
 		"Знайти"
@@ -1637,6 +1679,9 @@
 	"Idle": [
 		"Бездіяльність"
 	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
+	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"Якщо ви вже авторизувалися, зачекайте, поки додаток синхронізується з Joplin Cloud."
 	],
@@ -1690,9 +1735,6 @@
 	],
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"У будь-якій команді, нотатці або блокноті можна посилатись за назвою чи ідентифікатором або за допомогою комбінацій клавіш `$n` або`$b` для відповідно обраної в даний час нотатки чи блокнота. `$c` може використовуватися для посилання на поточно вибраний елемент."
-	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"Для того, щоб пов’язати геолокацію з приміткою, додатку потрібен ваш дозвіл на доступ до вашого місцезнаходження.\n\nВи можете будь-коли вимкнути цю опцію на екрані конфігурації."
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"Для цього весь ваш набір даних доведеться зашифрувати та синхронізувати, тому найкраще запустити його на ніч.\n\nДля початку виконайте такі вказівки:\n\n1. Синхронізуйте всі свої пристрої.\n2. Клацніть “% s”.\n3. Нехай він працює до кінця. Поки він працює, уникайте зміни будь-якої нотатки на інших пристроях, щоб уникнути конфліктів.\n4. Після завершення синхронізації на цьому пристрої синхронізуйте всі інші пристрої та дайте йому завершитися.\n\nВажливо: вам потрібно запустити ЦЕ ОДНАЗ на одному пристрої."
@@ -1853,6 +1895,9 @@
 	"Joplin SSO Authentication": [
 		""
 	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper дозволяє зберігати веб-сторінки та знімки екрана з вашого браузера в Joplin."
 	],
@@ -1880,8 +1925,14 @@
 	"Keychain Supported: %s": [
 		"Підтримка Keychain: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Ключі, які потребують оновлення"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"Горизонтально"
@@ -2011,6 +2062,9 @@
 	"Manage your plugins": [
 		"Керування розширеннями"
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Керує конфігурацією E2EE. Команди: `enable`,` disable`, `decrypt`,` status`, `decrypt-file` та` target-status`."
 	],
@@ -2025,6 +2079,9 @@
 	],
 	"Markdown editor": [
 		"Редактор Markdown"
+	],
+	"Markdown editor: Render markup in editor": [
+		""
 	],
 	"Marks a to-do as done.": [
 		"Позначити завдання як виконане."
@@ -2161,9 +2218,6 @@
 	"New sub-notebook": [
 		"Новий вкладений блокнот"
 	],
-	"New tags:": [
-		"Нові теги:"
-	],
 	"New to-do": [
 		"Нове завдання"
 	],
@@ -2233,6 +2287,9 @@
 	"No updates available": [
 		"Немає доступних оновлень"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Нічого"
 	],
@@ -2253,6 +2310,9 @@
 	],
 	"Not now": [
 		"Не зараз"
+	],
+	"Not useful": [
+		""
 	],
 	"note": [
 		"нотатка"
@@ -2347,9 +2407,6 @@
 	"OCR: Language data URL or path": [
 		"OCR: Посилання або шлях до мовних даних"
 	],
-	"Ok": [
-		""
-	],
 	"OK": [
 		"OK"
 	],
@@ -2413,6 +2470,9 @@
 	"Open Sync Wizard...": [
 		"Відкрити майстер синхронізації..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Відкрити..."
 	],
@@ -2434,8 +2494,14 @@
 	"Options": [
 		"Властивості"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
 		"Упорядкований список"
+	],
+	"Other": [
+		""
 	],
 	"Other applications...": [
 		"Інші програми..."
@@ -2491,8 +2557,8 @@
 	"Permanently deletes the notebook, skipping the trash.": [
 		"Видаляє назавжди нотаток, пропускаючи кошик."
 	],
-	"Permission needed": [
-		"Потрібен дозвіл"
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"Натисніть \"%s\", щоб продовжити, або встановіть паролі в списку \"%s\" нижче."
@@ -2593,9 +2659,6 @@
 	"Preferred light theme": [
 		"Улюблена світла тема"
 	],
-	"Preferred voice typing provider": [
-		"Бажаний постачальник послуг голосового введення"
-	],
 	"Preserve colours when pasting text in Rich Text Editor": [
 		"Зберігайте кольори під час вставлення тексту в форматованому текстовому редакторі"
 	],
@@ -2689,6 +2752,9 @@
 	"Publish/unpublish": [
 		""
 	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
 	"QR Code": [
 		"QR код"
 	],
@@ -2772,6 +2838,9 @@
 	],
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Перейменовує даний <item> (нотатку або блокнот) на <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
 	],
 	"Renew token": [
 		"Оновити токен"
@@ -2983,8 +3052,14 @@
 	"Select file...": [
 		"Виберіть файл..."
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
 		"Виберіть батьківський блокнот"
+	],
+	"Select the type of file to be imported:": [
+		""
 	],
 	"Selection deleted": [
 		"Вибір видалено"
@@ -3178,6 +3253,9 @@
 	"Source: ": [
 		"Джерело: "
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		"Роздільник"
 	],
@@ -3298,6 +3376,9 @@
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Перемикається на [блокнот] - усі подальші операції відбуватимуться в цьому блокноті."
 	],
+	"Sync": [
+		""
+	],
 	"Sync as many devices as you want": [
 		"Синхронізуйте скільки завгодно пристроїв"
 	],
@@ -3367,9 +3448,6 @@
 	"Tabloid": [
 		"Tabloid"
 	],
-	"tag1, tag2, ...": [
-		"тег1, тег2, ..."
-	],
 	"Tagged: %d.": [
 		"З тегами: %d."
 	],
@@ -3396,6 +3474,9 @@
 	],
 	"Text editor command": [
 		"Команда текстового редактора"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Активний профіль не можна видалити. Перейдіть на інший профіль та повторіть спробу."
@@ -3572,6 +3653,15 @@
 	"This drawing may have unsaved changes.": [
 		"Цей малюнок може мати незбережені зміни."
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"Це вдосконалений інструмент для показу вкладених файлів, пов’язаних із вашими нотатками. Будьте обережні, видаляючи один із них, оскільки згодом їх неможливо відновити."
 	],
@@ -3601,6 +3691,9 @@
 	],
 	"This note has no history": [
 		"Ця примітка не має історії"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		"Цей плагін не підтримує %s."
@@ -3643,6 +3736,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"Щоб продовжити, введіть свій головний пароль нижче."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"Щоб видалити тег, зніміть позначки з відповідних нотаток."
@@ -3743,6 +3839,9 @@
 	"Try it now": [
 		"Спробувати зараз"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Введіть `help [command]` для отримання додаткової інформації про команду; або введіть `help all` для отримання повної інформації про використання."
 	],
@@ -3751,9 +3850,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"Введіть заголовок нотатки або частину її вмісту, щоб перейти до неї. Або введіть # а потім ім'я тега, або @, а потім ім'я блокнота. Або введіть : для пошуку команд."
-	],
-	"Type new tags or select from list": [
-		"Введіть нові теги або виберіть зі списку"
 	],
 	"Type: %s.": [
 		"Тип: %s."
@@ -3899,6 +3995,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"Використовується там, де потрібен шрифт фіксованої ширини для розбірливого розміщення тексту (наприклад, таблиць, прапорців, коду). Якщо не знайдено, використовується загальний моноширинний (з фіксованою шириною) шрифт."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"Видалення користувача"
 	],
@@ -3937,9 +4036,6 @@
 	],
 	"Voice typing...": [
 		"Голосовий набір..."
-	],
-	"Vosk": [
-		""
 	],
 	"Waiting for authorisation...": [
 		"Очікуємо на авторизацію..."
@@ -3995,11 +4091,11 @@
 	"When creating a new to-do:": [
 		"Коли створюжться новий список справ:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Якщо цю опцію увімкнено, програма скануватиме ваші вкладені файли і витягуватиме з них текст. Це дозволить вам шукати текст у цих вкладеннях."
-	],
-	"Whisper": [
-		""
 	],
 	"Window unresponsive.": [
 		"Вікно не реагує."

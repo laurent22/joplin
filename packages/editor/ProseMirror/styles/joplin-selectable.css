@@ -1,0 +1,26 @@
+
+.joplin-selectable {
+	position: relative;
+}
+
+.joplin-selectable > .actions {
+	position: absolute;
+	top: 0;
+	right: 0;
+	opacity: 0;
+
+	display: none;
+
+	transition-behavior: allow-discrete;
+	transition-duration: 0.2s;
+	transition-property: opacity, display;
+}
+
+.joplin-selectable.-selected {
+	outline: 4px solid var(--joplin-text-selection-color);
+}
+
+.joplin-selectable.-selected > .actions, .joplin-selectable:focus-within > .actions {
+	display: block;
+	opacity: 0.9;
+}

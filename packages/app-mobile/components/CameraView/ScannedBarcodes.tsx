@@ -4,7 +4,7 @@ import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { BarcodeScanner } from './utils/useBarcodeScanner';
 import { LinkButton, PrimaryButton } from '../buttons';
 import { _ } from '@joplin/lib/locale';
-import DismissibleDialog, { DialogSize } from '../DismissibleDialog';
+import DismissibleDialog, { DialogVariant } from '../DismissibleDialog';
 import { Chip, Text } from 'react-native-paper';
 import { isCallbackUrl, parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -84,7 +84,7 @@ const ScannedBarcodes: React.FC<Props> = props => {
 			visible={dialogVisible}
 			onDismiss={onHideDialog}
 			themeId={props.themeId}
-			size={DialogSize.Small}
+			size={DialogVariant.Small}
 		>
 			<ScrollView>
 				<Text variant='titleMedium' role='heading'>{_('Scanned code')}</Text>

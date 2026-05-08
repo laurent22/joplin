@@ -23,65 +23,6 @@ describe('ItemModel', () => {
 		await beforeEachDb();
 	});
 
-	// test('should find exclusively owned items 1', async function() {
-	// 	const { user: user1 } = await createUserAndSession(1, true);
-	// 	const { session: session2, user: user2 } = await createUserAndSession(2);
-
-	// 	const tree: any = {
-	// 		'000000000000000000000000000000F1': {
-	// 			'00000000000000000000000000000001': null,
-	// 		},
-	// 	};
-
-	// 	await createItemTree(user1.id, '', tree);
-	// 	await createItem(session2.id, 'root:/test.txt:', 'testing');
-
-	// 	{
-	// 		const itemIds = await models().item().exclusivelyOwnedItemIds(user1.id);
-	// 		expect(itemIds.length).toBe(2);
-
-	// 		const item1 = await models().item().load(itemIds[0]);
-	// 		const item2 = await models().item().load(itemIds[1]);
-
-	// 		expect([item1.jop_id, item2.jop_id].sort()).toEqual(['000000000000000000000000000000F1', '00000000000000000000000000000001'].sort());
-	// 	}
-
-	// 	{
-	// 		const itemIds = await models().item().exclusivelyOwnedItemIds(user2.id);
-	// 		expect(itemIds.length).toBe(1);
-	// 	}
-	// });
-
-	// test('should find exclusively owned items 2', async function() {
-	// 	const { session: session1, user: user1 } = await createUserAndSession(1, true);
-	// 	const { session: session2, user: user2 } = await createUserAndSession(2);
-
-	// 	await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
-	// 		'000000000000000000000000000000F1': {
-	// 			'00000000000000000000000000000001': null,
-	// 		},
-	// 	});
-
-	// 	await createFolder(session2.id, { id: '000000000000000000000000000000F2' });
-
-	// 	{
-	// 		const itemIds = await models().item().exclusivelyOwnedItemIds(user1.id);
-	// 		expect(itemIds.length).toBe(0);
-	// 	}
-
-	// 	{
-	// 		const itemIds = await models().item().exclusivelyOwnedItemIds(user2.id);
-	// 		expect(itemIds.length).toBe(1);
-	// 	}
-
-	// 	await models().user().delete(user2.id);
-
-	// 	{
-	// 		const itemIds = await models().item().exclusivelyOwnedItemIds(user1.id);
-	// 		expect(itemIds.length).toBe(2);
-	// 	}
-	// });
-
 	test('should find all items within a shared folder', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
@@ -607,6 +548,30 @@ describe('ItemModel', () => {
 		expect((await models().userItem().byUserId(user2.id)).length).toBe(1);
 	});
 
+	test('should process orphaned items in batches', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree3(user1.id, '', '', [
+			{ id: '000000000000000000000000000000F1' },
+			{ id: '000000000000000000000000000000F2' },
+			{ id: '000000000000000000000000000000F3' },
+			{ id: '000000000000000000000000000000F4' },
+			{ id: '000000000000000000000000000000F5' },
+		]);
+
+		await db()('user_items').where('user_id', '=', user1.id).delete();
+
+		expect(await models().item().count()).toBe(5);
+		expect(await models().userItem().count()).toBe(0);
+
+		// Process with batch size of 2 - should require 3 batches to process all 5 items
+		await models().item().processOrphanedItems({ batchSize: 2 });
+
+		expect(await models().item().count()).toBe(5);
+		expect(await models().userItem().count()).toBe(5);
+		expect((await models().userItem().byUserId(user1.id)).length).toBe(5);
+	});
+
 	test('should return multiple item contents', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
@@ -632,6 +597,16 @@ describe('ItemModel', () => {
 
 		const jopItems = items.map(it => models().item().itemToJoplinItem(it));
 		expect(jopItems.map(it => it.title).sort()).toEqual(['Folder 1', 'Note 1', 'Note 2']);
+	});
+
+	test('should allow ignoring no-op deletions', async () => {
+		await createUserAndSession(1);
+
+		await expect((async () => {
+			await models().item().delete('00000000000000000000000000000003', { allowNoOp: false });
+		})()).rejects.toThrow();
+
+		await models().item().delete('00000000000000000000000000000003', { allowNoOp: true });
 	});
 
 });

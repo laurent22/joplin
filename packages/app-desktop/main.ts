@@ -53,6 +53,10 @@ const { rootProfileDir } = determineBaseAppDirs(profileFromArgs, appName, altIns
 // various places early in the initialisation code.
 mkdirpSync(rootProfileDir);
 
+// Required for correct display of Windows notifications. Should be done near the beginning of startup. See
+// https://www.electron.build/nsis.html#guid-vs-application-name
+electronApp.setAppUserModelId(appId);
+
 const settingsPath = `${rootProfileDir}/settings.json`;
 let autoUploadCrashDumps = false;
 

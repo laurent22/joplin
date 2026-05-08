@@ -8,6 +8,10 @@ interface Options {
 	appName: string;
 }
 
+const shouldUseElectronNotifications = () => {
+	return shim.isElectron();
+};
+
 export default class AlarmServiceDriverNode {
 
 	private appName_: string;
@@ -67,8 +71,8 @@ export default class AlarmServiceDriverNode {
 		});
 	}
 
-	private displayMacNotification(notification: Notification) {
-		// On macOS, node-notifier is broken:
+	private displayElectronNotification(notification: Notification) {
+		// On Electron, node-notifier is broken:
 		//
 		// https://github.com/mikaelbr/node-notifier/issues/352
 		//
@@ -77,7 +81,6 @@ export default class AlarmServiceDriverNode {
 		//
 		// https://www.electronjs.org/docs/tutorial/notifications
 		//
-		// In fact it's likely that we could use this on other platforms too
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const options: any = {
@@ -88,7 +91,7 @@ export default class AlarmServiceDriverNode {
 				},
 			};
 
-			this.logger().info('AlarmServiceDriverNode::displayMacNotification: Triggering notification (macOS):', notification.title, options);
+			this.logger().info('AlarmServiceDriverNode::displayMacNotification: Triggering notification (electron):', notification.title, options);
 
 			new Notification(notification.title, options);
 		} catch (error) {
@@ -97,7 +100,7 @@ export default class AlarmServiceDriverNode {
 	}
 
 	private async checkPermission() {
-		if (shim.isMac() && shim.isElectron()) {
+		if (shouldUseElectronNotifications()) {
 			this.logger().info(`AlarmServiceDriverNode::checkPermission: Permission in settings is "${Setting.value('notificationPermission')}"`);
 
 			if (Setting.value('notificationPermission') !== '') return Setting.value('notificationPermission');
@@ -123,9 +126,12 @@ export default class AlarmServiceDriverNode {
 			// if a user doesn't want notifications, they can simply not set
 			// alarms.
 
-			new Notification('Checking permissions...', {
-				body: 'Permission has been granted',
-			});
+			// Notification permissions are only needed on MacOS:
+			if (shim.isMac()) {
+				new Notification('Checking permissions...', {
+					body: 'Permission has been granted',
+				});
+			}
 
 			Setting.setValue('notificationPermission', 'granted');
 		}
@@ -172,8 +178,8 @@ export default class AlarmServiceDriverNode {
 			}, maxInterval);
 		} else {
 			timeoutId = shim.setTimeout(() => {
-				if (shim.isMac() && shim.isElectron()) {
-					this.displayMacNotification(notification);
+				if (shouldUseElectronNotifications()) {
+					this.displayElectronNotification(notification);
 				} else {
 					this.displayDefaultNotification(notification);
 				}

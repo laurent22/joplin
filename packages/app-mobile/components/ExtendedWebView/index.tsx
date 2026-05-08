@@ -12,6 +12,8 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { Props, WebViewControl } from './types';
+import useCss from './utils/useCss';
+import { Platform } from 'react-native';
 
 const logger = Logger.create('ExtendedWebView');
 
@@ -98,6 +100,9 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 		}, 250);
 	}, []);
 
+	const { injectedJs: cssInjectedJs } = useCss(webviewRef.current?.injectJavaScript, props.css);
+	const injectedJavaScript = props.injectedJavaScript + cssInjectedJs;
+
 	// - `setSupportMultipleWindows` must be `true` for security reasons:
 	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
 
@@ -131,13 +136,14 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			allowFileAccess={true}
 			allowFileAccessFromFileURLs={props.allowFileAccessFromJs}
 			webviewDebuggingEnabled={allowWebviewDebugging}
-			injectedJavaScript={props.injectedJavaScript}
+			injectedJavaScript={injectedJavaScript}
 			onMessage={props.onMessage}
 			onError={props.onError ?? onError}
 			onLoadEnd={props.onLoadEnd}
 			onContentProcessDidTerminate={refreshWebViewAfterCrash}
 			onRenderProcessGone={refreshWebViewAfterCrash}
-			decelerationRate='normal'
+			// See https://github.com/react-native-webview/react-native-webview/issues/3814
+			decelerationRate={Platform.OS === 'ios' ? 'normal' : undefined}
 		/>
 	);
 };

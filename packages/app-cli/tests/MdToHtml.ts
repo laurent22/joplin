@@ -12,6 +12,7 @@ function newTestMdToHtml(options: any = null) {
 		ResourceModel: {
 			isResourceUrl: isResourceUrl,
 			urlToId: resourceUrlToId,
+			fullPath: () => '/some/path/here',
 		},
 		fsDriver: shim.fsDriver(),
 		...options,
@@ -56,6 +57,21 @@ describe('MdToHtml', () => {
 				mdToHtmlOptions.mapsToLine = true;
 			} else if (mdFilename.startsWith('resource_')) {
 				mdToHtmlOptions.resources = {};
+			} else if (mdFilename.startsWith('pdf_')) {
+				mdToHtmlOptions.resources = {
+					'00000000000000000000000000000001': {
+						item: { mime: 'application/pdf' },
+						localState: { },
+					},
+				};
+				mdToHtmlOptions.pdfViewerEnabled = true;
+			} else if (mdFilename.startsWith('video_')) {
+				mdToHtmlOptions.resources = {
+					'00000000000000000000000000000001': {
+						item: { mime: 'video/mp4' },
+						localState: { },
+					},
+				};
 			}
 
 			const markdown = await shim.fsDriver().readFile(mdFilePath);
@@ -83,10 +99,14 @@ describe('MdToHtml', () => {
 					'',
 				];
 
+				// Use this to generate the needed file:
+
+				// await writeFile('/path/to/actual.html', actualHtml, 'utf-8');
+
 				// eslint-disable-next-line no-console
 				console.info(msg.join('\n'));
 
-				expect(false).toBe(true);
+				expect(actualHtml).toBe(expectedHtml);
 				// return;
 			} else {
 				expect(true).toBe(true);
@@ -318,7 +338,7 @@ describe('MdToHtml', () => {
 		for (const [tex, input] of tests) {
 			const html = await mdToHtml.render(input, null, { bodyOnly: true });
 
-			const opening = '<pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">';
+			const opening = '<pre class="joplin-source" hidden data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">';
 			const closing = '</pre>';
 
 			// Remove any single leading and trailing newlines, those are included in data-joplin-source-open

@@ -1,9 +1,10 @@
 import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
-import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
+import Setting from '@joplin/lib/models/Setting';
 
-export const newNoteEnabledConditions = 'oneFolderSelected && !inConflictFolder && !folderIsReadOnly && !folderIsTrash';
+export const newNoteEnabledConditions = 'oneFolderSelected && selectedFolderIsValid && !inConflictFolder && !folderIsReadOnly && !folderIsTrash';
 
 export const declaration: CommandDeclaration = {
 	name: 'newNote',
@@ -14,14 +15,22 @@ export const declaration: CommandDeclaration = {
 export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: CommandContext, body = '', isTodo = false) => {
-			const folderId = Setting.value('activeFolderId');
-			if (!folderId) return;
+			const folder = await Folder.getValidActiveFolder();
+			if (!folder) return;
 
 			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
 
-			let newNote = { ...defaultValues, parent_id: folderId,
+			let order;
+			if (Setting.value('notes.sortOrder.field') === 'order') {
+				order = await Note.getNextOrderValue(folder.id);
+			}
+
+			let newNote = {
+				...defaultValues, parent_id: folder.id,
 				is_todo: isTodo ? 1 : 0,
-				body: body };
+				body: body,
+				...(order !== undefined ? { order } : {}),
+			};
 
 			newNote = await Note.save(newNote, { provisional: true });
 

@@ -9,7 +9,6 @@ import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import versionInfo, { PackageInfo } from '@joplin/lib/versionInfo';
-import makeDiscourseDebugUrl from '@joplin/lib/makeDiscourseDebugUrl';
 import { ImportModule } from '@joplin/lib/services/interop/Module';
 import InteropServiceHelper from '../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
@@ -29,6 +28,8 @@ import { EventName } from '@joplin/lib/eventManager';
 import { ipcRenderer } from 'electron';
 import NavService from '@joplin/lib/services/NavService';
 import Logger from '@joplin/utils/Logger';
+import { ImportCommandOptions } from './WindowCommandsAndDialogs/commands/importFrom';
+import { FileSystemItem } from '@joplin/lib/services/interop/types';
 
 const logger = Logger.create('MenuBar');
 
@@ -116,7 +117,7 @@ const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: an
 
 		switchProfileMenuItems.push({ type: 'separator' });
 		switchProfileMenuItems.push(menuItemDic.addProfile);
-		switchProfileMenuItems.push(menuItemDic.editProfileConfig);
+		switchProfileMenuItems.push(menuItemDic.showProfileEditor);
 
 		return switchProfileMenuItems;
 	}, [profileConfig, menuItemDic]);
@@ -183,6 +184,7 @@ interface Props {
 	windowId: string;
 	secondaryWindowFocused: boolean;
 	showMenuBar: boolean;
+	syncPending: boolean;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -198,6 +200,11 @@ function menuItemSetEnabled(id: string, enabled: boolean) {
 	const menu = Menu.getApplicationMenu();
 	const menuItem = menu.getMenuItemById(id);
 	if (!menuItem) return;
+	// Don't disable menu items that have a role (e.g. copy, paste, cut,
+	// selectAll). Since Electron 40, disabling a role-based menu item also
+	// prevents the native role behaviour, which breaks clipboard operations
+	// in non-editor input fields such as the Settings screen.
+	if (!enabled && menuItem.role) return;
 	menuItem.enabled = enabled;
 }
 
@@ -304,83 +311,16 @@ function useMenu(props: Props) {
 		void CommandService.instance().execute(commandName);
 	}, []);
 
-	const onImportModuleClick = useCallback(async (module: ImportModule, moduleSource: string) => {
-		let path = null;
-
-		if (moduleSource === 'file') {
-			path = await bridge().showOpenDialog({
-				filters: [{ name: module.description, extensions: module.fileExtensions }],
-			});
-		} else {
-			path = await bridge().showOpenDialog({
-				properties: ['openDirectory', 'createDirectory'],
-			});
-		}
-
-		if (!path || (Array.isArray(path) && !path.length)) return;
-
-		if (Array.isArray(path)) path = path[0];
-
-		const modalMessage = _('Importing from "%s" as "%s" format. Please wait...', path, module.format);
-
-		void CommandService.instance().execute('showModalMessage', modalMessage);
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const errors: any[] = [];
-
-		const importOptions = {
-			path,
-			format: module.format,
-			outputFormat: module.outputFormat,
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			onProgress: (status: any) => {
-				const statusStrings: string[] = Object.keys(status).map((key: string) => {
-					return `${key}: ${status[key]}`;
-				});
-
-				void CommandService.instance().execute('showModalMessage', `${modalMessage}\n\n${statusStrings.join('\n')}`);
-			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			onError: (error: any) => {
-				errors.push(error);
-				console.warn(error);
-			},
+	const onImportModuleClick = useCallback(async (module: ImportModule, moduleSource: FileSystemItem) => {
+		const options: ImportCommandOptions = {
 			destinationFolderId: !module.isNoteArchive && moduleSource === 'file' ? props.selectedFolderId : null,
+			sourcePath: undefined, // Show a file picker
+			sourceType: moduleSource,
+			importFormat: module.format,
+			outputFormat: module.outputFormat,
 		};
-
-		const service = InteropService.instance();
-		try {
-			const result = await service.import(importOptions);
-			// eslint-disable-next-line no-console
-			console.info('Import result: ', result);
-		} catch (error) {
-			bridge().showErrorMessageBox(error.message);
-		}
-
-		void CommandService.instance().execute('hideModalMessage');
-
-		if (errors.length) {
-			const response = bridge().showErrorMessageBox('There was some errors importing the notes - check the console for more details.\n\nPlease consider sending a bug report to the forum!', {
-				buttons: [_('Close'), _('Send bug report')],
-			});
-
-			props.dispatch({ type: 'NOTE_DEVTOOLS_SET', value: true });
-
-			if (response === 1) {
-				const url = makeDiscourseDebugUrl(
-					`Error importing notes from format: ${module.format}`,
-					`- Input format: ${module.format}\n- Output format: ${module.outputFormat}`,
-					errors,
-					packageInfo,
-					PluginService.instance(),
-					props.pluginSettings,
-				);
-
-				void bridge().openExternal(url);
-			}
-		}
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.selectedFolderId, props.pluginSettings]);
+		await CommandService.instance().execute('importFrom', options);
+	}, [props.selectedFolderId]);
 
 	const onMenuItemClickRef = useRef(null);
 	onMenuItemClickRef.current = onMenuItemClick;
@@ -428,7 +368,12 @@ function useMenu(props: Props) {
 			const quitMenuItem = {
 				label: _('Quit'),
 				accelerator: keymapService.getAccelerator('quit'),
-				click: () => { void bridge().electronApp().quit(); },
+				click: () => {
+					bridge().electronApp().quitWithSyncCheck(
+						(action: { type: string; [key: string]: unknown }) => props.dispatch(action),
+						props.syncPending,
+					);
+				},
 			};
 
 			const sortNoteFolderItems = (type: string) => {
@@ -681,6 +626,18 @@ function useMenu(props: Props) {
 
 				...(shim.isMac() ? [] : profilesAndAppInstancesItems),
 
+				shim.isMac() ? noItem : {
+					type: 'separator',
+				},
+
+				shim.isMac() ? noItem : {
+					label: _('Close Window'),
+					accelerator: keymapService.getAccelerator('closeWindow'),
+					click: () => {
+						bridge().activeWindow()?.close();
+					},
+				},
+
 				shim.isMac() ? {
 					label: _('Hide %s', 'Joplin'),
 					platforms: ['darwin'],
@@ -757,19 +714,11 @@ function useMenu(props: Props) {
 						menuItemDic.textCut,
 						menuItemDic.textPaste,
 						menuItemDic.pasteAsText,
+						menuItemDic.pasteAsMarkdown,
 						menuItemDic.textSelectAll,
 						separator(),
-						// Using the generic "undo"/"redo" roles mean the menu
-						// item will work in every text fields, whether it's the
-						// editor or a regular text field.
-						{
-							role: 'undo',
-							label: _('Undo'),
-						},
-						{
-							role: 'redo',
-							label: _('Redo'),
-						},
+						menuItemDic.globalUndo,
+						menuItemDic.globalRedo,
 						separator(),
 						menuItemDic.textBold,
 						menuItemDic.textItalic,
@@ -803,6 +752,7 @@ function useMenu(props: Props) {
 						menuItemDic.toggleNoteList,
 						menuItemDic.toggleVisiblePanes,
 						menuItemDic.toggleEditorPlugin,
+						menuItemDic.toggleEditors,
 						{
 							label: _('Layout button sequence'),
 							submenu: layoutButtonSequenceMenuItems,
@@ -878,6 +828,12 @@ function useMenu(props: Props) {
 								Setting.incValue('windowContentZoomFactor', -10);
 							},
 							accelerator: 'CommandOrControl+-',
+						}, {
+							type: 'separator',
+							visible: shim.isMac(),
+						}, {
+							role: 'togglefullscreen',
+							visible: shim.isMac(),
 						}],
 				},
 				go: {
@@ -906,6 +862,7 @@ function useMenu(props: Props) {
 						separator(),
 						menuItemDic.setTags,
 						menuItemDic.showShareNoteDialog,
+						menuItemDic.convertNoteToMarkdown,
 						separator(),
 						menuItemDic.showNoteProperties,
 						menuItemDic.showNoteContentProperties,
@@ -1100,6 +1057,7 @@ function useMenu(props: Props) {
 		props.profileConfig,
 		switchProfileMenuItems,
 		menuItemDic,
+		props.syncPending,
 	]);
 
 	useMenuStates(menu, props);
@@ -1186,6 +1144,7 @@ const mapStateToProps = (state: AppState): Partial<Props> => {
 		noteListRendererIds: state.noteListRendererIds,
 		noteListRendererId: state.settings['notes.listRendererId'],
 		showMenuBar: state.settings.showMenuBar,
+		syncPending: state.syncPending,
 	};
 };
 

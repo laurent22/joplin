@@ -66,12 +66,12 @@ describe('ComboBox', () => {
 		unmount();
 	});
 
-	test('changing the search query should limit which items are visible', () => {
+	test('changing the search query should limit which items are visible and be case insensitive', () => {
 		const testItems = [
 			{ title: 'a' },
 			{ title: 'b' },
 			{ title: 'c' },
-			{ title: 'aa' },
+			{ title: 'Aa' },
 		];
 		const { unmount } = render(
 			<WrappedComboBox items={testItems}/>,
@@ -82,7 +82,7 @@ describe('ComboBox', () => {
 
 		const updatedResults = getSearchResults();
 		expect(updatedResults[0]).toHaveTextContent('a');
-		expect(updatedResults[1]).toHaveTextContent('aa');
+		expect(updatedResults[1]).toHaveTextContent('Aa');
 		expect(updatedResults).toHaveLength(2);
 
 		unmount();

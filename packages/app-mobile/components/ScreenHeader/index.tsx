@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { PureComponent, ReactElement } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ViewStyle, Platform } from 'react-native';
-const Icon = require('react-native-vector-icons/Ionicons').default;
+import { View, Text, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 import BackButtonService from '../../services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
 import { _, _n } from '@joplin/lib/locale';
@@ -21,11 +20,11 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { Dispatch } from 'redux';
 import WarningBanner from './WarningBanner';
-import WebBetaButton from './WebBetaButton';
 
 import Menu, { MenuOptionType } from './Menu';
 import shim from '@joplin/lib/shim';
 import CommandService from '@joplin/lib/services/CommandService';
+import Icon from '../Icon';
 export { MenuOptionType };
 
 // Rather than applying a padding to the whole bar, it is applied to each
@@ -42,6 +41,12 @@ export interface FolderPickerOptions {
 	selectedFolderId?: string;
 	onValueChange?: OnValueChangedListener;
 	mustSelect?: boolean;
+}
+
+export enum ViewToggleButtonMode {
+	Hidden = 'hidden',
+	ShowViewer = 'show-viewer',
+	ShowEditor = 'show-editor',
 }
 
 interface ScreenHeaderProps {
@@ -71,6 +76,8 @@ interface ScreenHeaderProps {
 	showContextMenuButton?: boolean;
 	showPluginEditorButton?: boolean;
 	showBackButton?: boolean;
+	viewToggleButtonMode?: ViewToggleButtonMode;
+	onViewTogglePress?: OnPressCallback;
 
 	saveButtonDisabled?: boolean;
 	showSaveButton?: boolean;
@@ -85,8 +92,7 @@ interface ScreenHeaderState {
 }
 
 class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeaderState> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private cachedStyles: any;
+	private cachedStyles: Record<number, ReturnType<typeof StyleSheet.create>>;
 	public constructor(props: ScreenHeaderProps) {
 		super(props);
 		this.cachedStyles = {};
@@ -101,11 +107,23 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const styleObject: any = {
-			container: {
+			outerContainer: {
 				flexDirection: 'column',
+			},
+			innerContainer: {
+				flexDirection: 'row',
+				alignItems: 'center',
 				backgroundColor: theme.backgroundColor2,
 				shadowColor: '#000000',
 				elevation: 5,
+			},
+			// A small border above the header: Covers the part of the shadow that would otherwise
+			// be shown above the header on Android.
+			aboveHeader: {
+				backgroundColor: theme.backgroundColor2,
+				paddingBottom: 6,
+				marginTop: -6,
+				zIndex: 2,
 			},
 			sideMenuButton: {
 				flex: 1,
@@ -129,7 +147,10 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				flex: 0,
 				flexDirection: 'row',
 				alignItems: 'center',
-				padding: 10,
+				justifyContent: 'center',
+				minWidth: 40,
+				minHeight: 40,
+
 				borderWidth: 1,
 				borderColor: theme.colorBright2,
 				borderRadius: 4,
@@ -147,12 +168,13 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				height: 18,
 			},
 			saveButtonIcon: {
-				width: 18,
-				height: 18,
+				...theme.icon,
+				fontSize: 25,
+				color: theme.colorBright2,
 			},
 			contextMenuTrigger: {
 				fontSize: 30,
-				paddingLeft: 10,
+				paddingLeft: 5,
 				paddingRight: theme.marginRight,
 				color: theme.color2,
 				fontWeight: 'bold',
@@ -266,7 +288,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					accessibilityHint={_('Show/hide the sidebar')}
 					accessibilityRole="button">
 					<View style={styles.sideMenuButton}>
-						<Icon name="menu" style={styles.topIcon} />
+						<Icon name="ionicon menu" style={styles.topIcon} accessibilityLabel={null} />
 					</View>
 				</TouchableOpacity>
 			);
@@ -283,8 +305,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					accessibilityRole="button">
 					<View style={disabled ? styles.backButtonDisabled : styles.backButton}>
 						<Icon
-							name="arrow-back"
+							name="ionicon arrow-back"
 							style={styles.topIcon}
+							accessibilityLabel={null}
 						/>
 					</View>
 				</TouchableOpacity>
@@ -297,18 +320,18 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		) {
 			if (!show) return null;
 
-			const icon = disabled ? <Icon name="checkmark" style={styles.savedButtonIcon} /> : <Image style={styles.saveButtonIcon} source={require('./SaveIcon.png')} />;
-
 			return (
-				<TouchableOpacity
+				<IconButton
 					onPress={onPress}
-					disabled={disabled}
-					style={{ padding: 0 }}
 
-					accessibilityLabel={_('Save changes')}
-					accessibilityRole="button">
-					<View style={disabled ? styles.saveButtonDisabled : styles.saveButton}>{icon}</View>
-				</TouchableOpacity>
+					themeId={themeId}
+					description={_('Save changes')}
+					disabled={disabled}
+					contentWrapperStyle={disabled ? styles.saveButtonDisabled : styles.saveButton}
+					iconStyle={disabled ? styles.savedButtonIcon : styles.saveButtonIcon}
+
+					iconName={disabled ? 'ionicon checkmark' : 'material content-save'}
+				/>
 			);
 		}
 
@@ -354,6 +377,18 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				description: _('Redo'),
 				onPress: this.props.onRedoButtonPress,
 				visible: this.props.showRedoButton,
+			});
+		};
+
+		const renderViewToggleButton = () => {
+			const mode = this.props.viewToggleButtonMode ?? ViewToggleButtonMode.Hidden;
+			if (mode === ViewToggleButtonMode.Hidden || !this.props.onViewTogglePress) return null;
+
+			return renderTopButton({
+				iconName: mode === ViewToggleButtonMode.ShowViewer ? 'ionicon book' : 'ionicon pencil',
+				description: mode === ViewToggleButtonMode.ShowViewer ? _('Stop editing') : _('Edit'),
+				onPress: this.props.onViewTogglePress,
+				visible: true,
 			});
 		};
 
@@ -422,18 +457,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 					iconName="ionicon extension-puzzle"
 					iconStyle={styles.topIcon}
-				/>
-			);
-		};
-
-		const betaIconButton = () => {
-			if (Platform.OS !== 'web') return null;
-
-			return (
-				<WebBetaButton
-					themeId={themeId}
-					wrapperStyle={this.styles().iconButton}
-					iconStyle={this.styles().topIcon}
 				/>
 			);
 		};
@@ -636,7 +659,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
 		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
 		const pluginPanelsComp = pluginPanelToggleButton(this.styles(), () => this.pluginPanelToggleButton_press());
-		const betaIconComp = betaIconButton();
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
 		const customDeleteButtonComp = this.props.onDeleteButtonPress ? customDeleteButton(this.styles(), this.props.onDeleteButtonPress) : null;
@@ -650,8 +672,12 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		// space while in use, we allow certain buttons to be hidden.
 		const hideableRightComponents = <>
 			{pluginPanelsComp}
-			{betaIconComp}
 			{togglePluginEditorButton}
+			{selectAllButtonComp}
+			{searchButtonComp}
+			{deleteButtonComp}
+			{customDeleteButtonComp}
+			{renderViewToggleButton()}
 		</>;
 
 		const titleComp = createTitleComponent(hideableRightComponents);
@@ -667,15 +693,23 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const menuComp =
 			!menuOptions.length || !showContextMenuButton ? null : (
 				<Menu themeId={this.props.themeId} options={menuOptions}>
-					<View style={contextMenuStyle} accessibilityLabel={_('Actions')}>
-						<Icon name="ellipsis-vertical" style={this.styles().contextMenuTrigger} />
+					<View style={contextMenuStyle}>
+						<Icon name="ionicon ellipsis-vertical" style={this.styles().contextMenuTrigger} accessibilityLabel={_('Actions')}/>
 					</View>
 				</Menu>
 			);
 
+		// Updating the state of this component can result in the left most element becoming hidden, so add a dummy as the first element to prevent this
+		// See https://github.com/laurent22/joplin/issues/14153
+		const zeroWidthSpacer = (
+			<View style={{ width: 0 }} pointerEvents="none"/>
+		);
+
 		return (
-			<View style={this.styles().container}>
-				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+			<View style={this.styles().outerContainer}>
+				<View style={this.styles().aboveHeader}/>
+				<View style={this.styles().innerContainer}>
+					{zeroWidthSpacer}
 					{sideMenuComp}
 					{backButtonComp}
 					{renderUndoButton()}
@@ -689,10 +723,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 						this.props.showSaveButton === true,
 					)}
 					{titleComp}
-					{selectAllButtonComp}
-					{searchButtonComp}
-					{deleteButtonComp}
-					{customDeleteButtonComp}
 					{restoreButtonComp}
 					{duplicateButtonComp}
 					{sortButtonComp}

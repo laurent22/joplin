@@ -6,7 +6,7 @@ import Setting, { AppType, Env } from '../models/Setting';
 import BaseService from '../services/BaseService';
 import FsDriverNode from '../fs-driver-node';
 import time from '../time';
-import shim from '../shim';
+import shim, { MobilePlatform } from '../shim';
 import uuid from '../uuid';
 import ResourceService from '../services/ResourceService';
 import KeymapService from '../services/KeymapService';
@@ -46,7 +46,7 @@ import EncryptionService from '../services/e2ee/EncryptionService';
 import DecryptionWorker from '../services/DecryptionWorker';
 import RevisionService from '../services/RevisionService';
 import ResourceFetcher from '../services/ResourceFetcher';
-const WebDavApi = require('../WebDavApi');
+import WebDavApi from '../WebDavApi';
 const DropboxApi = require('../DropboxApi');
 import JoplinServerApi, { Session } from '../JoplinServerApi';
 import { FolderEntity, ResourceEntity } from '../services/database/types';
@@ -57,10 +57,10 @@ import { loadKeychainServiceAndSettings } from '../services/SettingUtils';
 import { setActiveMasterKeyId, setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import Synchronizer from '../Synchronizer';
 import SyncTargetNone from '../SyncTargetNone';
-import { setRSA } from '../services/e2ee/ppk';
+import { setRSA } from '../services/e2ee/ppk/ppk';
 const md5 = require('md5');
 const { Dirnames } = require('../services/synchronizer/utils/types');
-import RSA from '../services/e2ee/RSA.node';
+import RSA from '../services/e2ee/ppk/RSA.node';
 import { State as ShareState } from '../services/share/reducer';
 import initLib from '../initLib';
 import OcrDriverTesseract from '../services/ocr/drivers/OcrDriverTesseract';
@@ -70,6 +70,8 @@ import { reg } from '../registry';
 import { Store } from 'redux';
 import { dirname } from '@joplin/utils/path';
 import SyncTargetJoplinServerSAML from '../SyncTargetJoplinServerSAML';
+import { MarkupLanguage } from '@joplin/renderer';
+import SearchEngine from '../services/search/SearchEngine';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -286,6 +288,7 @@ async function switchClient(id: number, options: any = null) {
 	currentClient_ = id;
 	BaseModel.setDb(databases_[id]);
 	KvStore.instance().setDb(databases_[id]);
+	SearchEngine.instance().setDb(databases_[id]);
 
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];
@@ -443,15 +446,17 @@ function pluginDir(id: number = null) {
 
 export interface CreateNoteAndResourceOptions {
 	path?: string;
+	markupLanguage?: MarkupLanguage;
 }
 
 const createNoteAndResource = async (options: CreateNoteAndResourceOptions = null) => {
 	options = {
 		path: `${supportDir}/photo.jpg`,
+		markupLanguage: MarkupLanguage.Markdown,
 		...options,
 	};
 
-	let note = await Note.save({});
+	let note = await Note.save({ markup_language: options.markupLanguage });
 	note = await shim.attachFileToNote(note, options.path);
 	const resourceIds = await Note.linkedItemIds(note.body);
 	const resource: ResourceEntity = await Resource.load(resourceIds[0]);
@@ -701,6 +706,7 @@ async function initFileApi() {
 			userContentBaseUrl: () => joplinServerAuth.userContentBaseUrl,
 			username: () => joplinServerAuth.email,
 			password: () => joplinServerAuth.password,
+			apiKey: () => '',
 			session: (): Session => null,
 		});
 
@@ -1113,10 +1119,10 @@ const simulateReadOnlyShareEnv = (shareIds: string[]|string, store?: Store) => {
 
 export const newOcrService = () => {
 	const driver = new OcrDriverTesseract({ createWorker }, { workerPath: null, corePath: null, languageDataPath: null });
-	return new OcrService(driver);
+	return new OcrService([driver]);
 };
 
-export const mockMobilePlatform = (platform: string) => {
+export const mockMobilePlatform = (platform: MobilePlatform) => {
 	const originalMobilePlatform = shim.mobilePlatform;
 	const originalIsNode = shim.isNode;
 
@@ -1129,34 +1135,6 @@ export const mockMobilePlatform = (platform: string) => {
 			shim.isNode = originalIsNode;
 		},
 	};
-};
-
-// Waits for callback to not throw. Similar to react-native-testing-library's waitFor, but works better
-// with Joplin's mix of real and fake Jest timers.
-const realSetTimeout = setTimeout;
-export const waitFor = async (callback: ()=> Promise<void>) => {
-	const timeout = 10_000;
-	const startTime = performance.now();
-	let passed = false;
-	let lastError: Error|null = null;
-
-	while (!passed && performance.now() - startTime < timeout) {
-		try {
-			await callback();
-			passed = true;
-			lastError = null;
-		} catch (error) {
-			lastError = error;
-
-			await new Promise<void>(resolve => {
-				realSetTimeout(() => resolve(), 10);
-			});
-		}
-	}
-
-	if (lastError) {
-		throw lastError;
-	}
 };
 
 export const runWithFakeTimers = async (callback: ()=> Promise<void>) => {
@@ -1190,21 +1168,59 @@ export const runWithFakeTimers = async (callback: ()=> Promise<void>) => {
 	}
 };
 
+// null => Use default
+type MockFetchRequestHandler = (request: Request)=> Response|null;
+
+// Mocks shim.fetch, but may not mock other fetch-related methods
+export const mockFetch = (requestHandler: MockFetchRequestHandler) => {
+	const originalFetch = shim.fetch;
+
+	shim.fetch = (url: string, options) => {
+		const request = new Request(url, options);
+		const mockResponse = requestHandler(request);
+		if (mockResponse) {
+			return Promise.resolve(mockResponse);
+		} else {
+			return originalFetch(url, options);
+		}
+	};
+
+	return {
+		reset: () => {
+			shim.fetch = originalFetch;
+		},
+	};
+};
+
 export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> Promise<T>): Promise<T> => {
-	// See https://jestjs.io/docs/jest-object#spied-methods-and-the-using-keyword, which
-	// shows how to use .spyOn to hide warnings
-	let warningMock;
-	try {
-		warningMock = jest.spyOn(console, 'warn');
-		warningMock.mockImplementation((message, ...args) => {
+	type MockSlice = { mockRestore(): void };
+	const mocks: MockSlice[] = [];
+
+	const mockConsoleFunction = (key: 'warn'|'error') => {
+		const mock = jest.spyOn(console, key);
+		mocks.push(mock);
+
+		// See https://jestjs.io/docs/jest-object#spied-methods-and-the-using-keyword, which
+		// shows how to use .spyOn to hide warnings
+		mock.mockImplementation((message?: unknown, ...args: unknown[]) => {
 			const fullMessage = [message, ...args].join(' ');
 			if (!fullMessage.match(warningRegex)) {
-				console.error(`Unexpected warning: ${message}`, ...args);
+				// Avoid recursively calling the mock:
+				mock.mockRestore();
+
+				console.error(`Unexpected warning: ${message}\nNote: Further warnings will not be silenced.`, ...args);
 			}
 		});
+	};
+
+	try {
+		mockConsoleFunction('warn');
+		mockConsoleFunction('error');
 		return await task();
 	} finally {
-		warningMock.mockRestore();
+		for (const mock of mocks) {
+			mock.mockRestore();
+		}
 	}
 };
 

@@ -1,0 +1,21 @@
+# Add a minSdkVersion to prevent the dangerous READ_PHONE_STATE
+# permission from being added.
+# See:
+# - Upstream issue report: https://github.com/oblador/react-native-vector-icons/issues/1861
+# - About the permission: https://developer.android.com/reference/android/Manifest.permission#READ_PHONE_STATE
+# - StackOverflow post with discussion and alternate workarounds: https://stackoverflow.com/questions/39668549/why-has-the-read-phone-state-permission-been-added
+diff --git a/android/build.gradle b/android/build.gradle
+index d42bd23123644cc324051e9c7ec4635de286315a..640996df60fe7769f69b30b35f771eb9cf0b75d4 100644
+--- a/android/build.gradle
++++ b/android/build.gradle
+@@ -37,6 +37,10 @@ android {
+   }
+ 
+   compileSdkVersion safeExtGet('compileSdkVersion', 31)
++  
++  defaultConfig {
++    minSdkVersion safeExtGet('minSdkVersion', 24)
++  }
+ }
+ 
+ dependencies {

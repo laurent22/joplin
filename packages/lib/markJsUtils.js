@@ -60,6 +60,15 @@ markJsUtils.markKeyword = (mark, keyword, stringUtils, extraOptions = null) => {
 				//
 				// https://github.com/joplin/plugin-abc-sheet-music
 				if (isInsideContainer(node, 'SVG')) return false;
+
+				// We exclude joplin-source because it contains the raw source
+				// for editable blocks (mermaid diagrams, etc.). If we highlight
+				// inside these elements, the <mark> tags corrupt the source code
+				// and cause rendering to fail when switching editors.
+				//
+				// https://github.com/laurent22/joplin/issues/14142
+				if (node.parentElement?.closest('.joplin-source')) return false;
+
 				return true;
 			},
 			...extraOptions,

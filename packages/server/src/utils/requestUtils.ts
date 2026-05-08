@@ -4,6 +4,7 @@ import { AppContext } from './types';
 import * as formidable from 'formidable';
 import { Fields, Files } from 'formidable';
 import { IncomingMessage } from 'http';
+import { uuidgen } from './uuid';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export type BodyFields = Record<string, any>;
@@ -75,29 +76,59 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 	// headers
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	return new Promise((resolve: Function, reject: Function) => {
+		let promiseCompleted = false;
+
 		const form = formidable({
 			allowEmptyFiles: true,
 			minFileSize: 0,
+			filename: (_name) => {
+				// Joplin uses a version of Formidable in which the default filename generation
+				// logic is insecure. See:
+				// 1. https://github.com/node-formidable/formidable/commit/022c2c5577dfe14d2947f10909d81b03b6070bf5
+				// 2. https://github.com/node-formidable/formidable/commit/720cdfdfb9d8c8ae99817f2b70ac76153d50ad13
+				//
+				// Issue 2 should only impact Joplin if returning untrusted values from `filename`. Issue 1
+				// is related to possible collisions in how formidable generates random filenames.
+				return `upload-${uuidgen()}`;
+			},
 		});
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		form.parse(req, (error: any, fields: Fields, files: Files) => {
-			if (error) {
-				error.message = `Could not parse form: ${error.message}`;
-				reject(error);
-				return;
-			}
 
-			// Formidable seems to be doing some black magic and once a request
-			// has been parsed it cannot be parsed again. Doing so will do
-			// nothing, the code will just end there, or maybe wait
-			// indefinitely. So we cache the result on success and return it if
-			// some code somewhere tries again to parse the form.
-			req.__parsed = {
-				fields: isFormContentType ? convertFieldsToKeyValue(fields) : fields,
-				files: convertFieldsToKeyValue(files),
-			};
-			resolve(req.__parsed);
-		});
+		try {
+			form.on('error', (error) => {
+				if (promiseCompleted) return;
+				promiseCompleted = true;
+				const wrapped = new Error(`Could not parse form (1): ${error.message}`);
+				reject(wrapped);
+			});
+
+			form.parse(req, (error: Error, fields: Fields, files: Files) => {
+				if (promiseCompleted) return;
+				promiseCompleted = true;
+
+				if (error) {
+					error.message = `Could not parse form (2): ${error.message}`;
+					reject(error);
+					return;
+				}
+
+				// Formidable seems to be doing some black magic and once a request
+				// has been parsed it cannot be parsed again. Doing so will do
+				// nothing, the code will just end there, or maybe wait
+				// indefinitely. So we cache the result on success and return it if
+				// some code somewhere tries again to parse the form.
+				req.__parsed = {
+					fields: isFormContentType ? convertFieldsToKeyValue(fields) : fields,
+					files: convertFieldsToKeyValue(files),
+				};
+				resolve(req.__parsed);
+			});
+		} catch (error) {
+			if (promiseCompleted) return;
+			promiseCompleted = true;
+
+			const wrapped = new Error(`Could not parse form (3): ${error.message}`);
+			reject(wrapped);
+		}
 	});
 }
 

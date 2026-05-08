@@ -60,6 +60,8 @@ Pre-built models that can be included as `model.bin` are present [on whisper.cpp
 
 Vosk voice typing can be enabled in settings, under the "Note" tab, by changing the "Preferred voice typing provider" to "Vosk".
 
+Due to [compatibility issues](https://github.com/laurent22/joplin/issues/13113), voice typing with Vosk is deprecated and will be removed in Joplin >= v3.5.
+
 ### Comparison with Whisper
 
 - **No punctuation**: Vosk's output is all-lowercase text, without punctuation.
