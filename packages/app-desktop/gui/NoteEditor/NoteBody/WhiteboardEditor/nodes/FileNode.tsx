@@ -4,13 +4,17 @@ import { Handle, NodeProps, NodeResizer, Position } from '@xyflow/react';
 import { MarkupLanguage } from '@joplin/renderer';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
+import ItemChange from '@joplin/lib/models/ItemChange';
 import { ModelType } from '@joplin/lib/BaseModel';
 import attachedResources from '@joplin/lib/utils/attachedResources';
+import Logger from '@joplin/utils/Logger';
 import { FileCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 import { isInternalRef } from '@joplin/lib/services/whiteboard/resolveRef';
 import { useWhiteboardContext } from '../WhiteboardContext';
 import { WhiteboardNodeData } from '../canvasFlow';
 import useCheckboxToggle from '../useCheckboxToggle';
+
+const logger = Logger.create('WhiteboardFileNode');
 
 const cardStyle = (selected: boolean): CSSProperties => ({
 	width: '100%',
@@ -76,6 +80,10 @@ interface ResolvedItem {
 	kind: 'note' | 'resource' | 'unknown';
 	title: string;
 	body?: string;
+	// Note metadata used to gate writes from this card (e.g. checkbox
+	// toggling) and to enable conflict detection on save.
+	userUpdatedTime?: number;
+	deletedTime?: number;
 }
 
 const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch: ()=> void } => {
@@ -102,6 +110,8 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 						kind: 'note',
 						title: item.title || 'Untitled',
 						body: item.body || '',
+						userUpdatedTime: item.user_updated_time,
+						deletedTime: item.deleted_time,
 					});
 				} else if (item.type_ === ModelType.Resource) {
 					setResolved({
@@ -166,11 +176,37 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 	// editor's own state — once the body is saved, refetching `resolved`
 	// happens via `useResolvedRef` which is keyed on `node.file`.
 	const linkedNoteId = resolved?.kind === 'note' ? node.file.slice(2).split('#')[0] : null;
+	const linkedNoteUserUpdatedTime = resolved?.kind === 'note' ? resolved.userUpdatedTime : undefined;
+	const linkedNoteDeletedTime = resolved?.kind === 'note' ? resolved.deletedTime : undefined;
 	const onLinkedNoteBodyChange = useCallback(async (newBody: string) => {
 		if (!linkedNoteId) return;
-		await Note.save({ id: linkedNoteId, body: newBody });
-		refetch();
-	}, [linkedNoteId, refetch]);
+		// Don't write to deleted (in-trash) notes — Note.save would either
+		// fail or, worse, silently resurrect the note via the timestamp bump.
+		if (linkedNoteDeletedTime) {
+			logger.info(`Ignoring checkbox toggle on deleted note: ${linkedNoteId}`);
+			return;
+		}
+		try {
+			// Pass user_updated_time so the save layer can detect concurrent
+			// edits (e.g. the same note open in another window). changeSource
+			// is set explicitly so sync/telemetry can attribute the write.
+			await Note.save(
+				{
+					id: linkedNoteId,
+					body: newBody,
+					...(linkedNoteUserUpdatedTime ? { user_updated_time: linkedNoteUserUpdatedTime } : {}),
+				},
+				{ changeSource: ItemChange.SOURCE_UNSPECIFIED },
+			);
+			refetch();
+		} catch (error) {
+			// Read-only / shared-without-write-permission notes throw here.
+			// Log and leave the preview as-is — the next refetch will revert
+			// the visible checkbox state to match the on-disk body.
+			logger.warn(`Could not save linked note ${linkedNoteId}:`, error);
+			refetch();
+		}
+	}, [linkedNoteId, linkedNoteUserUpdatedTime, linkedNoteDeletedTime, refetch]);
 	const checkboxRef = useCheckboxToggle({
 		body: resolved?.kind === 'note' ? (resolved.body ?? '') : '',
 		onChange: onLinkedNoteBodyChange,
