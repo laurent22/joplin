@@ -4,7 +4,6 @@ import { NoteBodyEditorProps, NoteBodyEditorRef } from '../../utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import Note from '@joplin/lib/models/Note';
 import { Canvas, CanvasNode, FileCanvasNode, TextCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
-import { isInternalRef } from '@joplin/lib/services/whiteboard/resolveRef';
 import { parseWhiteboard } from '@joplin/lib/services/whiteboard/parse';
 import { serializeWhiteboard } from '@joplin/lib/services/whiteboard/serialize';
 import { WhiteboardContext } from './WhiteboardContext';
@@ -69,12 +68,11 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 	}, []);
 
 	const onOpenRef = useCallback((value: string) => {
-		if (isInternalRef(value)) {
-			const id = value.slice(2).split('#')[0];
-			void CommandService.instance().execute('openItem', `:/${id}`);
-		} else if (/^https?:\/\//i.test(value)) {
-			void CommandService.instance().execute('openItem', value);
-		}
+		if (!value) return;
+		// `openItem` already handles every supported link form: `:/id`,
+		// `joplin://`, `file://`, any other URL scheme (http/https/mailto/
+		// ftp/...), and shows a user-facing error for unsupported strings.
+		void CommandService.instance().execute('openItem', value);
 	}, []);
 
 	// Promote a text card to a real Joplin note: create a note in the same
