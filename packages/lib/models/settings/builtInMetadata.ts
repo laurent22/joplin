@@ -106,7 +106,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Bool,
 			public: true,
 			section: 'note',
-			appTypes: [AppType.Desktop, AppType.Mobile],
+			// Desktop only for v1 — mobile editing is a v1.1 follow-up.
+			appTypes: [AppType.Desktop],
 			storage: SettingStorage.File,
 			isGlobal: true,
 			label: () => _('Enable Whiteboard editor'),
