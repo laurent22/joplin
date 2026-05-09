@@ -181,6 +181,11 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 	const linkedNoteId = resolved?.kind === 'note' ? node.file.slice(2).split('#')[0] : null;
 	const linkedNoteUserUpdatedTime = resolved?.kind === 'note' ? resolved.userUpdatedTime : undefined;
 	const linkedNoteDeletedTime = resolved?.kind === 'note' ? resolved.deletedTime : undefined;
+	// Per-card in-flight flag. Rapid checkbox toggles can otherwise overwrite
+	// each other because all clicks read from the same stale `resolved.body`
+	// until refetch completes. While a save is pending we drop further
+	// toggles; the user retries once the preview catches up.
+	const savingRef = useRef(false);
 	const onLinkedNoteBodyChange = useCallback(async (newBody: string) => {
 		if (!linkedNoteId) return;
 		// Don't write to deleted (in-trash) notes — Note.save would either
@@ -189,6 +194,11 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 			logger.info(`Ignoring checkbox toggle on deleted note: ${linkedNoteId}`);
 			return;
 		}
+		if (savingRef.current) {
+			logger.info(`Dropped concurrent toggle on ${linkedNoteId} — a save is in flight`);
+			return;
+		}
+		savingRef.current = true;
 		try {
 			// Pass user_updated_time so the save layer can detect concurrent
 			// edits (e.g. the same note open in another window). changeSource
@@ -208,6 +218,8 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 			// the visible checkbox state to match the on-disk body.
 			logger.warn(`Could not save linked note ${linkedNoteId}:`, error);
 			refetch();
+		} finally {
+			savingRef.current = false;
 		}
 	}, [linkedNoteId, linkedNoteUserUpdatedTime, linkedNoteDeletedTime, refetch]);
 	const checkboxRef = useCheckboxToggle({
