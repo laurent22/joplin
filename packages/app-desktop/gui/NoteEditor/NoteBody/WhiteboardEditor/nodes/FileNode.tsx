@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CSSProperties, useCallback, useEffect, useState } from 'react';
+import { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
 import { Handle, NodeProps, NodeResizer, Position } from '@xyflow/react';
 import * as path from 'path';
 import { pathToFileURL } from 'url';
@@ -103,12 +103,23 @@ interface ResolvedItem {
 const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch: ()=> void } => {
 	const [resolved, setResolved] = useState<ResolvedItem | null>(null);
 	const [refetchCount, setRefetchCount] = useState(0);
+	const lastLoadedFileRef = useRef<string | null>(null);
 
 	useEffect(() => {
 		let cancelled = false;
 		if (!isInternalRef(file)) {
 			setResolved(null);
+			lastLoadedFileRef.current = null;
 			return undefined;
+		}
+		// Clear any previously-resolved item before loading when the ref has
+		// changed, so switching from one internal ref to another doesn't show
+		// stale content during the async load. Skip the clear on a refetch
+		// of the same ref (e.g. after a checkbox toggle saves the note) —
+		// otherwise the preview would flicker on every refetch.
+		if (lastLoadedFileRef.current !== file) {
+			setResolved(null);
+			lastLoadedFileRef.current = file;
 		}
 		const id = file.slice(2).split('#')[0];
 		void (async () => {
