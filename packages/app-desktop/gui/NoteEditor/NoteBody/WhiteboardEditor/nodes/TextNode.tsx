@@ -3,6 +3,7 @@ import { CSSProperties, KeyboardEvent, useCallback, useEffect, useRef, useState 
 import { Handle, NodeProps, NodeResizer, Position } from '@xyflow/react';
 import { MarkupLanguage } from '@joplin/renderer';
 import { focus } from '@joplin/lib/utils/focusHandler';
+import { _ } from '@joplin/lib/locale';
 import { TextCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 import { useWhiteboardContext, WhiteboardContextValue } from '../WhiteboardContext';
 import { WhiteboardNodeData } from '../canvasFlow';
@@ -193,7 +194,7 @@ const TextNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbText'
 				) : (
 					node.text
 						? <div ref={checkboxRef} className="wb-card-md" style={renderedHtmlStyle} dangerouslySetInnerHTML={{ __html: html }} />
-						: <div style={{ color: '#bbb' }}>{'(empty — double-click to edit)'}</div>
+						: <div style={{ color: '#bbb' }}>{_('(empty — double-click to edit)')}</div>
 				)}
 			</div>
 			{selected && !editing && node.text ? (
@@ -201,7 +202,7 @@ const TextNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbText'
 					type="button"
 					onClick={onPromote}
 					className="nodrag"
-					title="Convert this card into a Joplin note"
+					title={_('Convert this card into a Joplin note')}
 					style={{
 						position: 'absolute',
 						top: -10,
@@ -216,7 +217,7 @@ const TextNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbText'
 						zIndex: 5,
 					}}
 				>
-					Promote to note
+					{_('Promote to note')}
 				</button>
 			) : null}
 		</>
