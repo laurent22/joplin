@@ -168,13 +168,16 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 	}, [ctx, node.file]);
 
 	const { resolved, refetch } = useResolvedRef(node.file);
-	// External (non-internal) refs may carry an extension in the path, so
-	// fall back to a regex on `node.file` for those. Internal refs go through
-	// the resolved mime + file_extension pulled from the database.
+	// Internal refs go through the resolved mime + file_extension pulled
+	// from the database. External refs may already be URLs (http/https/file),
+	// in which case we use them as-is for rendering; bare paths from other
+	// tools (e.g. Obsidian's vault-relative `Notes/foo.md`) can't be
+	// resolved here so we leave url null and fall back to the text branch.
 	const isInternal = isInternalRef(node.file);
+	const externalLooksLikeUrl = !isInternal && /^(https?:|file:)\/\//i.test(node.file);
 	const url = isInternal
 		? resourceUrlFor(node.file, ctx.resourceDirectory, resolved?.fileExtension)
-		: null;
+		: (externalLooksLikeUrl ? node.file : null);
 	const isPdf = isInternal
 		? resolved?.mime === 'application/pdf'
 		: /\.pdf(\?|$|#)/i.test(node.file);
