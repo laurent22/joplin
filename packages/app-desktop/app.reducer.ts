@@ -216,7 +216,10 @@ export default function(state: AppState, action: any) {
 			break;
 
 		case 'WHITEBOARD_FORCE_MARKDOWN_TOGGLE': {
-			const id: string = action.noteId;
+			const id: unknown = action.noteId;
+			// Guard against dispatchers forgetting to pass a noteId — writing
+			// an `undefined` key into the map would persist a junk entry.
+			if (typeof id !== 'string' || !id) break;
 			const current = !!state.whiteboardForceMarkdown?.[id];
 			newState = {
 				...state,
