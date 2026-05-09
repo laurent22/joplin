@@ -115,7 +115,8 @@ const inputStyle: CSSProperties = {
 	border: '1px solid #d8d8d8',
 	borderRadius: 4,
 	margin: '0 4px',
-	outline: 'none',
+	// Keep the browser's default focus ring for keyboard accessibility — do
+	// not set `outline: 'none'`.
 };
 
 interface ActionInputProps {
