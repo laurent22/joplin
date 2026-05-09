@@ -20,6 +20,7 @@ import {
 	useReactFlow,
 } from '@xyflow/react';
 import ensureReactFlowCss from './loadReactFlowCss';
+import { _, _n } from '@joplin/lib/locale';
 import { Canvas, CanvasEdge, CanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 
 ensureReactFlowCss();
@@ -268,26 +269,26 @@ const InnerSurface = ({ canvas, onChange, onAddNode }: Props) => {
 				<MiniMap pannable zoomable style={{ width: 160, height: 100 }} />
 
 				<ActionPanel position="top-right">
-					<ActionButton onClick={onAddText} title="Add a text card">+ Text</ActionButton>
+					<ActionButton onClick={onAddText} title={_('Add a text card')}>{_('+ Text')}</ActionButton>
 				</ActionPanel>
 
 				{selectedEdges.length > 0 ? (
 					<ActionPanel
 						position="bottom-center"
-						caption={`${selectedEdges.length} connection${selectedEdges.length === 1 ? '' : 's'}`}
+						caption={_n('%d connection', '%d connections', selectedEdges.length, selectedEdges.length)}
 					>
-						<ActionButton onClick={() => setArrowMode('none')} active={currentArrowMode === 'none'} title="No arrow">—</ActionButton>
-						<ActionButton onClick={() => setArrowMode('forward')} active={currentArrowMode === 'forward'} title="Arrow at target">→</ActionButton>
-						<ActionButton onClick={() => setArrowMode('backward')} active={currentArrowMode === 'backward'} title="Arrow at source">←</ActionButton>
-						<ActionButton onClick={() => setArrowMode('both')} active={currentArrowMode === 'both'} title="Bidirectional">↔</ActionButton>
+						<ActionButton onClick={() => setArrowMode('none')} active={currentArrowMode === 'none'} title={_('No arrow')}>—</ActionButton>
+						<ActionButton onClick={() => setArrowMode('forward')} active={currentArrowMode === 'forward'} title={_('Arrow at target')}>→</ActionButton>
+						<ActionButton onClick={() => setArrowMode('backward')} active={currentArrowMode === 'backward'} title={_('Arrow at source')}>←</ActionButton>
+						<ActionButton onClick={() => setArrowMode('both')} active={currentArrowMode === 'both'} title={_('Bidirectional')}>↔</ActionButton>
 						<ActionDivider />
-						<ActionButton onClick={flipDirection} title="Swap source and target">Flip</ActionButton>
+						<ActionButton onClick={flipDirection} title={_('Swap source and target')}>{_('Flip')}</ActionButton>
 						{selectedEdges.length === 1 ? (
 							<>
 								<ActionDivider />
 								<ActionInput
 									value={typeof selectedEdges[0].label === 'string' ? selectedEdges[0].label : ''}
-									placeholder="Label"
+									placeholder={_('Label')}
 									onChange={setEdgeLabel}
 								/>
 							</>
@@ -298,7 +299,7 @@ const InnerSurface = ({ canvas, onChange, onAddNode }: Props) => {
 				{selectedNodes.length > 0 && selectedEdges.length === 0 ? (
 					<ActionPanel
 						position="bottom-center"
-						caption={`${selectedNodes.length} card${selectedNodes.length === 1 ? '' : 's'}`}
+						caption={_n('%d card', '%d cards', selectedNodes.length, selectedNodes.length)}
 					>
 						{/* Per-card actions can be added here later (colour, alignment, etc.). */}
 					</ActionPanel>
