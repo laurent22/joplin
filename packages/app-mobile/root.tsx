@@ -784,27 +784,27 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-				<SideMenu
-					menu={sideMenuContent}
-					edgeHitWidth={menuEdgeHitWidth}
-					toleranceX={4}
-					toleranceY={20}
-					openMenuOffset={this.state.sideMenuWidth}
-					menuPosition={menuPosition}
-					onChange={this.sideMenu_change}
-					isOpen={this.props.showSideMenu}
-					disableGestures={disableSideMenuGestures}
-				>
-					<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
-						<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor2}>
+				<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
+					<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor2}>
+						<SideMenu
+							menu={sideMenuContent}
+							edgeHitWidth={menuEdgeHitWidth}
+							toleranceX={4}
+							toleranceY={20}
+							openMenuOffset={this.state.sideMenuWidth}
+							menuPosition={menuPosition}
+							onChange={this.sideMenu_change}
+							isOpen={this.props.showSideMenu}
+							disableGestures={disableSideMenuGestures}
+						>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
 							<SyncWizard/>
-						</SafeAreaView>
-						<DropdownAlertWrapper alert={(func) => { this.dropdownAlert_ = func; }} />
-					</View>
-				</SideMenu>
+						</SideMenu>
+					</SafeAreaView>
+					<DropdownAlertWrapper alert={(func) => { this.dropdownAlert_ = func; }} />
+				</View>
 				<PluginRunnerWebView />
 				<PluginNotification/>
 			</View>
