@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { CSSProperties, KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { Handle, NodeProps, NodeResizer, Position } from '@xyflow/react';
+import { Handle, NodeProps, NodeResizer } from '@xyflow/react';
 import { MarkupLanguage } from '@joplin/renderer';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { _ } from '@joplin/lib/locale';
@@ -8,18 +8,14 @@ import { TextCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 import { useWhiteboardContext, WhiteboardContextValue } from '../WhiteboardContext';
 import { WhiteboardNodeData } from '../canvasFlow';
 import useCheckboxToggle from '../useCheckboxToggle';
+import injectStyle from '../injectStyle';
+import { HANDLE_COLOR, SELECTION_COLOR } from '../theme';
+import { cardStyle as baseCardStyle, handlePositions } from './sharedStyles';
 
-const cardStyle = (selected: boolean): CSSProperties => ({
-	width: '100%',
-	height: '100%',
-	border: selected ? '2px solid #4a90e2' : '1px solid #d0d0d0',
-	borderRadius: 6,
-	background: '#ffffff',
-	overflow: 'auto',
-	boxShadow: selected ? '0 4px 12px rgba(74,144,226,0.25)' : '0 1px 3px rgba(0,0,0,0.08)',
-	boxSizing: 'border-box',
-	display: 'flex',
-	flexDirection: 'column',
+// Text cards put content directly inside the card div (no inner body wrapper)
+// so we extend the shared card style with text-content tokens.
+const textCardStyle = (selected: boolean): CSSProperties => ({
+	...baseCardStyle(selected, 'auto'),
 	padding: 8,
 	fontSize: 13,
 	lineHeight: 1.4,
@@ -47,7 +43,10 @@ const renderedHtmlStyle: CSSProperties = {
 	lineHeight: 1.4,
 };
 
-const RENDERED_CSS = `
+// Scope Markdown styling to text cards. The renderer's HTML uses note viewer
+// CSS variables that don't exist outside the iframe, so we provide a
+// card-sized override.
+injectStyle('wb-card-md-style', `
 .wb-card-md h1 { font-size: 16px; margin: 4px 0; }
 .wb-card-md h2 { font-size: 15px; margin: 4px 0; }
 .wb-card-md h3 { font-size: 14px; margin: 3px 0; }
@@ -66,26 +65,8 @@ const RENDERED_CSS = `
 .wb-card-md table { font-size: 12px; border-collapse: collapse; }
 .wb-card-md th, .wb-card-md td { padding: 2px 6px; border: 1px solid #ddd; }
 .wb-card-md hr { margin: 6px 0; }
-.wb-card-md a { color: #4a90e2; }
-`;
-
-const STYLE_ID = 'wb-card-md-style';
-const ensureCardStyle = () => {
-	if (typeof document === 'undefined') return;
-	if (document.getElementById(STYLE_ID)) return;
-	const el = document.createElement('style');
-	el.id = STYLE_ID;
-	el.textContent = RENDERED_CSS;
-	document.head.appendChild(el);
-};
-ensureCardStyle();
-
-const handlePositions: { id: string; position: Position }[] = [
-	{ id: 'top', position: Position.Top },
-	{ id: 'right', position: Position.Right },
-	{ id: 'bottom', position: Position.Bottom },
-	{ id: 'left', position: Position.Left },
-];
+.wb-card-md a { color: ${SELECTION_COLOR}; }
+`);
 
 const useRenderedMarkdown = (md: string, ctx: WhiteboardContextValue) => {
 	const [html, setHtml] = useState<string>('');
@@ -178,9 +159,9 @@ const TextNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbText'
 		<>
 			<NodeResizer minWidth={80} minHeight={40} isVisible={selected && !editing} />
 			{handlePositions.map(({ id: hid, position }) => (
-				<Handle key={hid} type="source" position={position} id={hid} style={{ background: '#888' }} />
+				<Handle key={hid} type="source" position={position} id={hid} style={{ background: HANDLE_COLOR }} />
 			))}
-			<div style={cardStyle(!!selected)} onDoubleClick={onDoubleClick}>
+			<div style={textCardStyle(!!selected)} onDoubleClick={onDoubleClick}>
 				{editing ? (
 					<textarea
 						ref={textareaRef}
@@ -209,10 +190,10 @@ const TextNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbText'
 						right: -10,
 						padding: '2px 8px',
 						fontSize: 11,
-						border: '1px solid #4a90e2',
+						border: `1px solid ${SELECTION_COLOR}`,
 						borderRadius: 10,
 						background: '#fff',
-						color: '#4a90e2',
+						color: SELECTION_COLOR,
 						cursor: 'pointer',
 						zIndex: 5,
 					}}

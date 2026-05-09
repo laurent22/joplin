@@ -8,10 +8,9 @@ import { GotoAnythingOptions, UiType } from './gotoAnything';
 import { parseWhiteboard } from '@joplin/lib/services/whiteboard/parse';
 import { serializeWhiteboard } from '@joplin/lib/services/whiteboard/serialize';
 import { CanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
+import generateId from '../../NoteEditor/NoteBody/WhiteboardEditor/generateId';
 
 const logger = Logger.create('addNoteToWhiteboard');
-
-const generateId = () => `n${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
 
 export const declaration: CommandDeclaration = {
 	name: 'addNoteToWhiteboard',
@@ -81,6 +80,9 @@ export const runtime = (): CommandRuntime => {
 			const newBody = serializeWhiteboard(fresh.body || '', nextCanvas);
 			await Note.save({ id: targetId, body: newBody });
 		},
-		enabledCondition: 'oneNoteSelected && noteIsWhiteboard && !noteIsReadOnly',
+		// `activeNoteIsWhiteboard` (set by NoteEditor when it detects a fence)
+		// is reliable; `noteIsWhiteboard` from the lib whenClause is not, since
+		// it depends on `selectedNote.body` which isn't in redux preview fields.
+		enabledCondition: 'oneNoteSelected && activeNoteIsWhiteboard && !noteIsReadOnly',
 	};
 };

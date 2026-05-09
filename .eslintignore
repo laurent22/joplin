@@ -307,10 +307,14 @@ packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardContext.
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardEditor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/canvasFlow.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/generateId.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/injectStyle.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/loadReactFlowCss.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/LinkNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/sharedStyles.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/theme.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.test.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.js
 packages/app-desktop/gui/NoteEditor/NoteEditor.js

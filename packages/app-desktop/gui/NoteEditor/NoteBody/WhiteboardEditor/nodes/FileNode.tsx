@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
-import { Handle, NodeProps, NodeResizer, Position } from '@xyflow/react';
+import { Handle, NodeProps, NodeResizer } from '@xyflow/react';
 import * as path from 'path';
 import { pathToFileURL } from 'url';
 import { MarkupLanguage } from '@joplin/renderer';
@@ -15,31 +15,10 @@ import { isInternalRef } from '@joplin/lib/services/whiteboard/resolveRef';
 import { useWhiteboardContext } from '../WhiteboardContext';
 import { WhiteboardNodeData } from '../canvasFlow';
 import useCheckboxToggle from '../useCheckboxToggle';
+import { HANDLE_COLOR } from '../theme';
+import { bodyStyle, cardStyle, handlePositions, headerStyle } from './sharedStyles';
 
 const logger = Logger.create('WhiteboardFileNode');
-
-const cardStyle = (selected: boolean): CSSProperties => ({
-	width: '100%',
-	height: '100%',
-	border: selected ? '2px solid #4a90e2' : '1px solid #d0d0d0',
-	borderRadius: 6,
-	background: '#ffffff',
-	overflow: 'hidden',
-	boxShadow: selected ? '0 4px 12px rgba(74,144,226,0.25)' : '0 1px 3px rgba(0,0,0,0.08)',
-	boxSizing: 'border-box',
-	display: 'flex',
-	flexDirection: 'column',
-});
-
-const headerStyle: CSSProperties = {
-	fontSize: 11,
-	color: '#888',
-	padding: '4px 8px',
-	borderBottom: '1px solid #eee',
-	textTransform: 'uppercase',
-	letterSpacing: 0.5,
-	flexShrink: 0,
-};
 
 // Header showing the linked note's title — replaces the generic "NOTE" badge
 // when we know the title. Truncated with ellipsis on overflow.
@@ -54,22 +33,6 @@ const noteHeaderStyle: CSSProperties = {
 	overflow: 'hidden',
 	textOverflow: 'ellipsis',
 };
-
-const bodyStyle: CSSProperties = {
-	flex: 1,
-	padding: 8,
-	overflow: 'auto',
-	wordBreak: 'break-word',
-	fontSize: 13,
-	lineHeight: 1.4,
-};
-
-const handlePositions = [
-	{ id: 'top', position: Position.Top },
-	{ id: 'right', position: Position.Right },
-	{ id: 'bottom', position: Position.Bottom },
-	{ id: 'left', position: Position.Left },
-];
 
 // Build a file:// URL pointing at the resource's blob on disk. Joplin stores
 // resources as `${id}.${file_extension}`, so the extension (or, failing that,
@@ -295,7 +258,7 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 		<>
 			<NodeResizer minWidth={80} minHeight={40} isVisible={!!selected} />
 			{handlePositions.map(({ id: hid, position }) => (
-				<Handle key={hid} type="source" position={position} id={hid} style={{ background: '#888' }} />
+				<Handle key={hid} type="source" position={position} id={hid} style={{ background: HANDLE_COLOR }} />
 			))}
 			<div style={cardStyle(!!selected)} onDoubleClick={onDoubleClick}>
 				{renderContent()}

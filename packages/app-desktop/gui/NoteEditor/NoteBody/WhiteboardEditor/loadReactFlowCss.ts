@@ -2,6 +2,9 @@
 // CSS imports through a loader, so we read the stylesheet at runtime and
 // inject it into the document head once.
 
+import injectStyle from './injectStyle';
+import { SELECTION_COLOR } from './theme';
+
 const STYLE_ELEMENT_ID = 'whiteboard-react-flow-css';
 
 let injected = false;
@@ -9,10 +12,6 @@ let injected = false;
 const ensureReactFlowCss = () => {
 	if (injected) return;
 	if (typeof document === 'undefined') return;
-	if (document.getElementById(STYLE_ELEMENT_ID)) {
-		injected = true;
-		return;
-	}
 
 	try {
 		// require() at runtime so this resolves through Node, which is fine in
@@ -25,29 +24,24 @@ const ensureReactFlowCss = () => {
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const pkgPath = require.resolve('@xyflow/react/package.json');
 		const cssPath = path.join(path.dirname(pkgPath), 'dist', 'style.css');
-		const css = fs.readFileSync(cssPath, 'utf8');
+		const baseCss = fs.readFileSync(cssPath, 'utf8');
 
-		const el = document.createElement('style');
-		el.id = STYLE_ELEMENT_ID;
 		// React Flow base styles, then our overrides. Selected edges should
-		// stand out as clearly as selected cards (which use #4a90e2).
-		el.textContent = `${css}
+		// stand out as clearly as selected cards, and connection handles are
+		// hidden until hover/selection so the canvas isn't littered with dots.
+		const overrides = `
 .react-flow__edge.selected .react-flow__edge-path,
 .react-flow__edge:focus .react-flow__edge-path,
 .react-flow__edge:focus-visible .react-flow__edge-path {
-	stroke: #4a90e2 !important;
+	stroke: ${SELECTION_COLOR} !important;
 	stroke-width: 2 !important;
 }
 .react-flow__edge.selected .react-flow__edge-textbg {
-	fill: #4a90e2;
+	fill: ${SELECTION_COLOR};
 }
 .react-flow__edge.selected .react-flow__edge-text {
 	fill: #ffffff;
 }
-/* Hide connection handles by default; reveal on hover, when the node is
-   selected, and on the source/target handle of an active connection drag
-   (React Flow sets .connectingfrom on the source handle, .connectingto on
-   the hovered target handle). */
 .react-flow__node .react-flow__handle {
 	opacity: 0;
 	transition: opacity 120ms ease;
@@ -59,7 +53,7 @@ const ensureReactFlowCss = () => {
 	opacity: 1;
 }
 `;
-		document.head.appendChild(el);
+		injectStyle(STYLE_ELEMENT_ID, `${baseCss}${overrides}`);
 		injected = true;
 	} catch (error) {
 		// eslint-disable-next-line no-console

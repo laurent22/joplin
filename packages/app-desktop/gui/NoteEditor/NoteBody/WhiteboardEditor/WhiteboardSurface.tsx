@@ -20,6 +20,7 @@ import {
 	useReactFlow,
 } from '@xyflow/react';
 import ensureReactFlowCss from './loadReactFlowCss';
+import generateId from './generateId';
 import { _, _n } from '@joplin/lib/locale';
 import { Canvas, CanvasEdge, CanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 
@@ -39,7 +40,6 @@ const containerStyle: CSSProperties = {
 	outline: 'none',
 };
 
-const generateId = () => `n${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
 // `markerUnits: 'userSpaceOnUse'` keeps the arrowhead at an absolute size,
 // independent of the edge's stroke width. Without it, selected edges (which
 // have a thicker stroke) would render a proportionally bigger arrow.

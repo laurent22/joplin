@@ -54,12 +54,15 @@ const useCheckboxToggle = ({ body, onChange }: Options) => {
 	onChangeRef.current = onChange;
 
 	const observerRef = useRef<MutationObserver | null>(null);
+	// Track which checkbox elements have already been wired up. WeakSet so
+	// removed elements can be GC'd without leaking entries.
+	const wiredRef = useRef<WeakSet<HTMLInputElement>>(new WeakSet());
 
 	const wireUp = useCallback((root: HTMLElement) => {
 		const checkboxes = root.querySelectorAll<HTMLInputElement>('input[type=checkbox]');
 		for (const cb of Array.from(checkboxes)) {
-			if ((cb as HTMLInputElement & { _wbWired?: boolean })._wbWired) continue;
-			(cb as HTMLInputElement & { _wbWired?: boolean })._wbWired = true;
+			if (wiredRef.current.has(cb)) continue;
+			wiredRef.current.add(cb);
 			cb.disabled = false;
 			cb.removeAttribute('disabled');
 			// Strip the renderer's inline onclick — it tries to call
