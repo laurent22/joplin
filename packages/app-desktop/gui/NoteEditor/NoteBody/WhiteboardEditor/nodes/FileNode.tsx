@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { CSSProperties, useCallback, useEffect, useState } from 'react';
 import { Handle, NodeProps, NodeResizer, Position } from '@xyflow/react';
+import * as path from 'path';
+import { pathToFileURL } from 'url';
 import { MarkupLanguage } from '@joplin/renderer';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
@@ -72,13 +74,14 @@ const handlePositions = [
 // Build a file:// URL pointing at the resource's blob on disk. Joplin stores
 // resources as `${id}.${file_extension}`, so the extension (or, failing that,
 // a mime-derived one) must be appended — without it the URL points to a
-// non-existent file.
+// non-existent file. Uses path.join + pathToFileURL so Windows paths and
+// special characters in the resource directory are encoded correctly.
 const resourceUrlFor = (file: string, resourceDirectory: string, fileExtension?: string): string | null => {
 	if (!isInternalRef(file)) return null;
 	if (!resourceDirectory) return null;
 	const id = file.slice(2).split('#')[0];
-	const ext = fileExtension ? `.${fileExtension}` : '';
-	return `file://${resourceDirectory}/${id}${ext}`;
+	const filename = fileExtension ? `${id}.${fileExtension}` : id;
+	return pathToFileURL(path.join(resourceDirectory, filename)).href;
 };
 
 interface ResolvedItem {
