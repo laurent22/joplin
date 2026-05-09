@@ -24,7 +24,9 @@ interface Options {
 // Windows line endings.
 const checkboxRegex = /(?<=(?:^|\r?\n)[ \t]*-[ \t]+)\[([ xX])\]/g;
 
-const flipNthCheckbox = (body: string, index: number): string | null => {
+// Exported for tests. Returns the body with the Nth `- [ ]` / `- [x]`
+// flipped, or null if there's no Nth checkbox.
+export const flipNthCheckbox = (body: string, index: number): string | null => {
 	let count = 0;
 	let result = '';
 	let lastIndex = 0;

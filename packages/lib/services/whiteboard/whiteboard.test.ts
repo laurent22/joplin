@@ -93,6 +93,41 @@ describe('whiteboard format module', () => {
 		expect(result.canvas.edges).toEqual([]);
 	});
 
+	test('round-trips edge fromEnd / toEnd / sides without losing or flipping them', () => {
+		const canvas: Canvas = {
+			nodes: [
+				{ id: 'a', type: 'text', x: 0, y: 0, width: 100, height: 100, text: 'a' },
+				{ id: 'b', type: 'text', x: 200, y: 0, width: 100, height: 100, text: 'b' },
+			],
+			edges: [
+				{ id: 'forward', fromNode: 'a', toNode: 'b', toEnd: 'arrow' },
+				{ id: 'backward', fromNode: 'a', toNode: 'b', fromEnd: 'arrow', toEnd: 'none' },
+				{ id: 'both', fromNode: 'a', toNode: 'b', fromEnd: 'arrow', toEnd: 'arrow' },
+				{ id: 'sided', fromNode: 'a', toNode: 'b', fromSide: 'right', toSide: 'left' },
+			],
+		};
+		const body = serializeWhiteboard('', canvas);
+		const result = parseWhiteboard(body);
+		expect(result.hasCanvas).toBe(true);
+		expect(result.canvas.edges).toEqual(canvas.edges);
+	});
+
+	test('preserves group nodes through parse + serialize', () => {
+		// Joplin's editor doesn't render group nodes but must not silently
+		// drop them on save — Obsidian-authored canvases may contain them.
+		const canvas: Canvas = {
+			nodes: [
+				{ id: 'g', type: 'group', x: -50, y: -50, width: 400, height: 300, label: 'Phase 1', background: '#eee' },
+				{ id: 't', type: 'text', x: 0, y: 0, width: 100, height: 60, text: 'inside' },
+			],
+			edges: [],
+		};
+		const body = serializeWhiteboard('', canvas);
+		const result = parseWhiteboard(body);
+		expect(result.hasCanvas).toBe(true);
+		expect(result.canvas.nodes).toEqual(canvas.nodes);
+	});
+
 	test.each([
 		[':/0123456789abcdef0123456789abcdef', RefKind.Resource, '0123456789abcdef0123456789abcdef'],
 		['https://example.com/foo.pdf', RefKind.External, 'https://example.com/foo.pdf'],
