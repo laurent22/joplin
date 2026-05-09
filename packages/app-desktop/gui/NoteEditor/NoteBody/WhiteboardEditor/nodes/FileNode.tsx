@@ -69,11 +69,16 @@ const handlePositions = [
 	{ id: 'left', position: Position.Left },
 ];
 
-const resourceUrlFor = (file: string, resourceDirectory: string): string | null => {
+// Build a file:// URL pointing at the resource's blob on disk. Joplin stores
+// resources as `${id}.${file_extension}`, so the extension (or, failing that,
+// a mime-derived one) must be appended — without it the URL points to a
+// non-existent file.
+const resourceUrlFor = (file: string, resourceDirectory: string, fileExtension?: string): string | null => {
 	if (!isInternalRef(file)) return null;
-	const id = file.slice(2).split('#')[0];
 	if (!resourceDirectory) return null;
-	return `file://${resourceDirectory}/${id}`;
+	const id = file.slice(2).split('#')[0];
+	const ext = fileExtension ? `.${fileExtension}` : '';
+	return `file://${resourceDirectory}/${id}${ext}`;
 };
 
 interface ResolvedItem {
@@ -84,6 +89,12 @@ interface ResolvedItem {
 	// toggling) and to enable conflict detection on save.
 	userUpdatedTime?: number;
 	deletedTime?: number;
+	// Resource metadata: needed to build a working file URL (Joplin stores
+	// resources on disk as `${id}.${file_extension}`) and to detect image /
+	// PDF resources for inline rendering. The bare `:/id` ref carries no
+	// extension or mime info.
+	mime?: string;
+	fileExtension?: string;
 }
 
 const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch: ()=> void } => {
@@ -117,6 +128,8 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 					setResolved({
 						kind: 'resource',
 						title: item.title || file,
+						mime: item.mime,
+						fileExtension: item.file_extension,
 					});
 				} else {
 					setResolved({ kind: 'unknown', title: file });
@@ -141,9 +154,19 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 	}, [ctx, node.file]);
 
 	const { resolved, refetch } = useResolvedRef(node.file);
-	const url = resourceUrlFor(node.file, ctx.resourceDirectory);
-	const isPdf = /\.pdf(\?|$|#)/i.test(node.file);
-	const isImage = /\.(png|jpe?g|gif|webp|svg|bmp)(\?|$|#)/i.test(node.file);
+	// External (non-internal) refs may carry an extension in the path, so
+	// fall back to a regex on `node.file` for those. Internal refs go through
+	// the resolved mime + file_extension pulled from the database.
+	const isInternal = isInternalRef(node.file);
+	const url = isInternal
+		? resourceUrlFor(node.file, ctx.resourceDirectory, resolved?.fileExtension)
+		: null;
+	const isPdf = isInternal
+		? resolved?.mime === 'application/pdf'
+		: /\.pdf(\?|$|#)/i.test(node.file);
+	const isImage = isInternal
+		? !!resolved?.mime?.startsWith('image/')
+		: /\.(png|jpe?g|gif|webp|svg|bmp)(\?|$|#)/i.test(node.file);
 
 	// Render note bodies as compiled HTML, like the TextNode does. Resources
 	// linked from the note body need to be resolved separately — the editor's
