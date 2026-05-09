@@ -40,6 +40,9 @@ export interface AppWindowState extends WindowState {
 	devToolsVisible: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	watchedResources: any;
+	// Note IDs for which the user has chosen to view the underlying Markdown
+	// instead of the Whiteboard editor. Per-window, in-memory only.
+	whiteboardForceMarkdown: Record<string, boolean>;
 }
 
 interface BackgroundWindowStates {
@@ -72,6 +75,7 @@ export const createAppDefaultWindowState = (): AppWindowState => {
 		editorCodeView: true,
 		devToolsVisible: false,
 		watchedResources: {},
+		whiteboardForceMarkdown: {},
 	};
 };
 
@@ -204,6 +208,16 @@ export default function(state: AppState, action: any) {
 				editorCodeView: action.value,
 			};
 			break;
+
+		case 'WHITEBOARD_FORCE_MARKDOWN_TOGGLE': {
+			const id: string = action.noteId;
+			const current = !!state.whiteboardForceMarkdown?.[id];
+			newState = {
+				...state,
+				whiteboardForceMarkdown: { ...(state.whiteboardForceMarkdown || {}), [id]: !current },
+			};
+			break;
+		}
 
 		case 'MAIN_LAYOUT_SET':
 

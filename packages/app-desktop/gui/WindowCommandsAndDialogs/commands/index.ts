@@ -1,6 +1,8 @@
 // AUTO-GENERATED using `gulp buildScriptIndexes`
+import * as addNoteToWhiteboard from './addNoteToWhiteboard';
 import * as addProfile from './addProfile';
 import * as commandPalette from './commandPalette';
+import * as convertNoteToWhiteboard from './convertNoteToWhiteboard';
 import * as deleteFolder from './deleteFolder';
 import * as duplicateNote from './duplicateNote';
 import * as editAlarm from './editAlarm';
@@ -16,6 +18,7 @@ import * as newFolder from './newFolder';
 import * as newNote from './newNote';
 import * as newSubFolder from './newSubFolder';
 import * as newTodo from './newTodo';
+import * as newWhiteboard from './newWhiteboard';
 import * as openFolder from './openFolder';
 import * as openFolderDialog from './openFolderDialog';
 import * as openItem from './openItem';
@@ -48,10 +51,13 @@ import * as toggleNotesSortOrderReverse from './toggleNotesSortOrderReverse';
 import * as togglePerFolderSortOrder from './togglePerFolderSortOrder';
 import * as toggleSideBar from './toggleSideBar';
 import * as toggleVisiblePanes from './toggleVisiblePanes';
+import * as toggleWhiteboardEditor from './toggleWhiteboardEditor';
 
 const index: any[] = [
+	addNoteToWhiteboard,
 	addProfile,
 	commandPalette,
+	convertNoteToWhiteboard,
 	deleteFolder,
 	duplicateNote,
 	editAlarm,
@@ -67,6 +73,7 @@ const index: any[] = [
 	newNote,
 	newSubFolder,
 	newTodo,
+	newWhiteboard,
 	openFolder,
 	openFolderDialog,
 	openItem,
@@ -99,6 +106,7 @@ const index: any[] = [
 	togglePerFolderSortOrder,
 	toggleSideBar,
 	toggleVisiblePanes,
+	toggleWhiteboardEditor,
 ];
 
 export default index;

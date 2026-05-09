@@ -1,0 +1,226 @@
+import * as React from 'react';
+import { CSSProperties, KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { Handle, NodeProps, NodeResizer, Position } from '@xyflow/react';
+import { MarkupLanguage } from '@joplin/renderer';
+import { focus } from '@joplin/lib/utils/focusHandler';
+import { TextCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
+import { useWhiteboardContext, WhiteboardContextValue } from '../WhiteboardContext';
+import { WhiteboardNodeData } from '../canvasFlow';
+import useCheckboxToggle from '../useCheckboxToggle';
+
+const cardStyle = (selected: boolean): CSSProperties => ({
+	width: '100%',
+	height: '100%',
+	border: selected ? '2px solid #4a90e2' : '1px solid #d0d0d0',
+	borderRadius: 6,
+	background: '#ffffff',
+	overflow: 'auto',
+	boxShadow: selected ? '0 4px 12px rgba(74,144,226,0.25)' : '0 1px 3px rgba(0,0,0,0.08)',
+	boxSizing: 'border-box',
+	display: 'flex',
+	flexDirection: 'column',
+	padding: 8,
+	fontSize: 13,
+	lineHeight: 1.4,
+	color: '#222',
+});
+
+const editTextareaStyle: CSSProperties = {
+	width: '100%',
+	height: '100%',
+	border: 'none',
+	outline: 'none',
+	resize: 'none',
+	fontFamily: 'inherit',
+	fontSize: 13,
+	lineHeight: 1.4,
+	color: '#222',
+	background: 'transparent',
+};
+
+const renderedHtmlStyle: CSSProperties = {
+	flex: 1,
+	overflow: 'auto',
+	wordBreak: 'break-word',
+	fontSize: 13,
+	lineHeight: 1.4,
+};
+
+const RENDERED_CSS = `
+.wb-card-md h1 { font-size: 16px; margin: 4px 0; }
+.wb-card-md h2 { font-size: 15px; margin: 4px 0; }
+.wb-card-md h3 { font-size: 14px; margin: 3px 0; }
+.wb-card-md h4, .wb-card-md h5, .wb-card-md h6 { font-size: 13px; margin: 3px 0; }
+.wb-card-md p { margin: 4px 0; }
+.wb-card-md ul, .wb-card-md ol { margin: 4px 0; padding-left: 20px; }
+.wb-card-md li { margin: 2px 0; }
+.wb-card-md li.md-checkbox, .wb-card-md li.joplin-checkbox { list-style: none; margin-left: -20px; }
+.wb-card-md li.md-checkbox input[type=checkbox] { margin-right: 6px; vertical-align: middle; }
+.wb-card-md .checkbox-wrapper { display: inline; }
+.wb-card-md pre { margin: 4px 0; padding: 6px; font-size: 12px; background: #f5f5f5; border-radius: 4px; overflow: auto; }
+.wb-card-md code { font-size: 12px; background: #f0f0f0; padding: 1px 4px; border-radius: 3px; }
+.wb-card-md pre code { background: transparent; padding: 0; }
+.wb-card-md blockquote { margin: 4px 0; padding-left: 8px; border-left: 3px solid #ddd; color: #555; }
+.wb-card-md img { max-width: 100%; height: auto; }
+.wb-card-md table { font-size: 12px; border-collapse: collapse; }
+.wb-card-md th, .wb-card-md td { padding: 2px 6px; border: 1px solid #ddd; }
+.wb-card-md hr { margin: 6px 0; }
+.wb-card-md a { color: #4a90e2; }
+`;
+
+const STYLE_ID = 'wb-card-md-style';
+const ensureCardStyle = () => {
+	if (typeof document === 'undefined') return;
+	if (document.getElementById(STYLE_ID)) return;
+	const el = document.createElement('style');
+	el.id = STYLE_ID;
+	el.textContent = RENDERED_CSS;
+	document.head.appendChild(el);
+};
+ensureCardStyle();
+
+const handlePositions: { id: string; position: Position }[] = [
+	{ id: 'top', position: Position.Top },
+	{ id: 'right', position: Position.Right },
+	{ id: 'bottom', position: Position.Bottom },
+	{ id: 'left', position: Position.Left },
+];
+
+const useRenderedMarkdown = (md: string, ctx: WhiteboardContextValue) => {
+	const [html, setHtml] = useState<string>('');
+
+	useEffect(() => {
+		let cancelled = false;
+		if (!md) {
+			setHtml('');
+			return undefined;
+		}
+		void (async () => {
+			try {
+				const result = await ctx.markupToHtml(MarkupLanguage.Markdown, md, {
+					resourceInfos: ctx.resourceInfos,
+				});
+				if (!cancelled) setHtml(result?.html ?? '');
+			} catch {
+				if (!cancelled) setHtml('');
+			}
+		})();
+		return () => { cancelled = true; };
+	}, [md, ctx]);
+
+	return html;
+};
+
+const TextNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbText'; data: WhiteboardNodeData; position: { x: number; y: number } }>) => {
+	const ctx = useWhiteboardContext();
+	const node = data.canvasNode as TextCanvasNode;
+
+	const [editing, setEditing] = useState(false);
+	const [draft, setDraft] = useState(node.text);
+	const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+	useEffect(() => {
+		if (!editing) setDraft(node.text);
+	}, [editing, node.text]);
+
+	useEffect(() => {
+		if (editing && textareaRef.current) {
+			focus('WhiteboardTextNode::beginEdit', textareaRef.current);
+			textareaRef.current.select();
+		}
+	}, [editing]);
+
+	const html = useRenderedMarkdown(node.text, ctx);
+
+	const beginEdit = useCallback(() => {
+		setDraft(node.text);
+		setEditing(true);
+	}, [node.text]);
+
+	const commit = useCallback(() => {
+		if (!editing) return;
+		if (draft !== node.text) ctx.onUpdateNode(id, { text: draft });
+		setEditing(false);
+	}, [editing, draft, node.text, ctx, id]);
+
+	const cancel = useCallback(() => setEditing(false), []);
+
+	const onKeyDown = useCallback((e: KeyboardEvent<HTMLTextAreaElement>) => {
+		if (e.key === 'Escape') {
+			e.preventDefault();
+			cancel();
+		} else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+			e.preventDefault();
+			commit();
+		}
+	}, [commit, cancel]);
+
+	const onDoubleClick = useCallback((e: React.MouseEvent) => {
+		e.stopPropagation();
+		beginEdit();
+	}, [beginEdit]);
+
+	const onPromote = useCallback((e: React.MouseEvent) => {
+		e.stopPropagation();
+		ctx.onPromoteTextNode(id);
+	}, [ctx, id]);
+
+	const onCheckboxToggleBody = useCallback((newBody: string) => {
+		ctx.onUpdateNode(id, { text: newBody });
+	}, [ctx, id]);
+	const checkboxRef = useCheckboxToggle({
+		body: node.text,
+		onChange: onCheckboxToggleBody,
+	});
+
+	return (
+		<>
+			<NodeResizer minWidth={80} minHeight={40} isVisible={selected && !editing} />
+			{handlePositions.map(({ id: hid, position }) => (
+				<Handle key={hid} type="source" position={position} id={hid} style={{ background: '#888' }} />
+			))}
+			<div style={cardStyle(!!selected)} onDoubleClick={onDoubleClick}>
+				{editing ? (
+					<textarea
+						ref={textareaRef}
+						style={editTextareaStyle}
+						value={draft}
+						onChange={e => setDraft(e.target.value)}
+						onBlur={commit}
+						onKeyDown={onKeyDown}
+						className="nodrag"
+					/>
+				) : (
+					node.text
+						? <div ref={checkboxRef} className="wb-card-md" style={renderedHtmlStyle} dangerouslySetInnerHTML={{ __html: html }} />
+						: <div style={{ color: '#bbb' }}>{'(empty — double-click to edit)'}</div>
+				)}
+			</div>
+			{selected && !editing && node.text ? (
+				<button
+					type="button"
+					onClick={onPromote}
+					className="nodrag"
+					title="Convert this card into a Joplin note"
+					style={{
+						position: 'absolute',
+						top: -10,
+						right: -10,
+						padding: '2px 8px',
+						fontSize: 11,
+						border: '1px solid #4a90e2',
+						borderRadius: 10,
+						background: '#fff',
+						color: '#4a90e2',
+						cursor: 'pointer',
+						zIndex: 5,
+					}}
+				>
+					Promote to note
+				</button>
+			) : null}
+		</>
+	);
+};
+
+export default TextNode;

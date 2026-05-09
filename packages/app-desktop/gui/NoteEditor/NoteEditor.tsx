@@ -42,6 +42,8 @@ import ItemChange from '@joplin/lib/models/ItemChange';
 import PlainEditor from './NoteBody/PlainEditor/PlainEditor';
 import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
 import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
+import WhiteboardEditor from './NoteBody/WhiteboardEditor/WhiteboardEditor';
+import { hasWhiteboardFence } from '@joplin/lib/services/whiteboard/parse';
 import { openItemById } from './utils/contextMenu';
 import { MarkupLanguage } from '@joplin/renderer';
 import useScrollWhenReadyOptions from './utils/useScrollWhenReadyOptions';
@@ -479,7 +481,15 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	let editor = null;
 
-	if (builtInEditorVisible) {
+	const useWhiteboardEditor = builtInEditorVisible
+		&& Setting.value('whiteboard.enabled')
+		&& markupLanguage === MarkupLanguage.Markdown
+		&& hasWhiteboardFence(formNote.body)
+		&& !props.whiteboardForceMarkdown?.[formNote.id];
+
+	if (useWhiteboardEditor) {
+		editor = <WhiteboardEditor {...editorProps}/>;
+	} else if (builtInEditorVisible) {
 		if (props.bodyEditor === 'TinyMCE') {
 			editor = <TinyMCE {...editorProps}/>;
 		} else if (props.bodyEditor === 'PlainText') {
@@ -752,6 +762,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 			'historyBackward',
 			'historyForward',
 			'toggleEditors',
+			'toggleWhiteboardEditor',
 			'toggleExternalEditing',
 		], whenClauseContext),
 		setTagsToolbarButtonInfo: toolbarButtonUtils.commandsToToolbarButtons([
@@ -769,6 +780,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		enableHtmlToMarkdownBanner: state.settings['editor.enableHtmlToMarkdownBanner'],
 		enableInEditorRendering: state.settings['editor.inlineRendering'],
 		showNoteLinkIcon: state.settings['notes.showNoteLinkIcon'],
+		whiteboardForceMarkdown: windowState.whiteboardForceMarkdown ?? {},
 	};
 };
 

@@ -267,3 +267,11 @@ pdate
 coderabbitai
 cleanup
 Rygaa
+xyflow
+jsoncanvas
+pannable
+zoomable
+webp
+nodrag
+Outro
+parseable

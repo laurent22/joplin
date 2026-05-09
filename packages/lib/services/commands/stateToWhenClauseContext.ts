@@ -3,6 +3,7 @@ import BaseModel, { ModelType } from '../../BaseModel';
 import Folder from '../../models/Folder';
 import MarkupToHtml from '@joplin/renderer/MarkupToHtml';
 import { isRootSharedFolder, isSharedFolderOwner } from '../share/reducer';
+import { hasWhiteboardFence } from '../whiteboard/parse';
 import { NoteEntity } from '../database/types';
 import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
@@ -41,6 +42,7 @@ export interface WhenClauseContext {
 	noteIsDeleted: boolean;
 	noteIsHtml: boolean;
 	noteIsMarkdown: boolean;
+	noteIsWhiteboard: boolean;
 	noteIsReadOnly: boolean;
 	noteIsTodo: boolean;
 	notesAreBeingSaved: boolean;
@@ -114,6 +116,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		noteTodoCompleted: selectedNote ? !!selectedNote.todo_completed : false,
 		noteIsMarkdown: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN : false,
 		noteIsHtml: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML : false,
+		noteIsWhiteboard: selectedNote ? hasWhiteboardFence(selectedNote.body || '') : false,
 		noteIsReadOnly: selectedNote ? itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, selectedNote as ItemSlice, settings['sync.userId'], state.shareService) : false,
 		noteIsDeleted: selectedNote ? !!selectedNote.deleted_time : false,
 

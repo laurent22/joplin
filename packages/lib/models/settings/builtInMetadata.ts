@@ -101,6 +101,18 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'whiteboard.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'note',
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			storage: SettingStorage.File,
+			isGlobal: true,
+			label: () => _('Enable Whiteboard editor'),
+			description: () => _('When enabled, notes containing a Whiteboard block are opened in the Whiteboard editor.'),
+		},
+
 		'sync.openSyncWizard': {
 			value: null as boolean,
 			type: SettingItemType.Button,
