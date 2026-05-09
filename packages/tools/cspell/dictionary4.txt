@@ -265,3 +265,5 @@ onestore
 macshot
 pdate
 coderabbitai
+cleanup
+Rygaa

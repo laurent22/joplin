@@ -6,24 +6,37 @@ If this is a Google Summer of Code pull request, please read the [GSoC pull requ
 
 ---
 
-**Pull request title**: Please prefix the title with the platform you are targetting.
+**Pull request title**: Please prefix the title with the area you are targeting, then add the issue you are addressing.
 
-Here are some examples of good titles:
+The format is:
+
+    <Prefix>: <Fixes|Resolves> #<issue>: <description>
+
+Use "Resolves #123" for new features or improvements, and "Fixes #123" for bug fixes.
+
+Examples of good titles:
 
 - Desktop: Resolves #123: Added new setting to change font
 - Mobile, Desktop: Fixes #456: Fixed config screen error
 - All: Resolves #777: Made synchronisation faster
 
-And here's an explanation of the title format:
+Valid prefixes:
 
-- "Desktop" for the Windows/macOS/Linux app (Electron app)
-- "Mobile" for the mobile app (or "Android" / "iOS" if the pull request only applies to one of the mobile platforms)
-- "CLI" for the CLI app
+- `All` — change applies to all client apps (Desktop, Mobile and CLI)
+- `Desktop` — the Windows/macOS/Linux app (Electron app)
+- `Mobile` — the mobile app (both Android and iOS)
+- `Android` — only the Android app
+- `iOS` — only the iOS app
+- `Cli` — the command line app
+- `Server` — the Joplin Server
+- `Clipper` — the web clipper browser extension
+- `Plugins` — the plugin API or built-in plugins
+- `Plugin Repo` — the plugin repository
+- `Tools` — internal scripts and build tools
+- `CI` — continuous integration and GitHub workflows
+- `Doc` — documentation, README, website content
+- `Chore` — maintenance work that does not fit any of the above (dependency bumps, refactoring, cleanup)
 
-If it's two platforms, separate them with commas - "Desktop, Mobile" or if it's for all platforms, prefix with "All".
-
-If it's not related to any platform (such as a translation, change to the documentation, etc.), simply don't add a platform.
-
-Then please append the issue that you've addressed or fixed. Use "Resolves #123" for new features or improvements and "Fixes #123" for bug fixes.
+If the change targets two areas, separate them with commas — for example "Desktop, Mobile". If it applies to all client apps, use "All".
 
 -->

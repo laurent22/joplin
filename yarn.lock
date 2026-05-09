@@ -7984,7 +7984,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:6.5.4, @codemirror/state@npm:^6.0.0, @codemirror/state@npm:^6.4.0":
+"@codemirror/state@npm:6.5.4":
   version: 6.5.4
   resolution: "@codemirror/state@npm:6.5.4"
   dependencies:
@@ -7993,14 +7993,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.35.0, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.35.0":
-  version: 6.35.0
-  resolution: "@codemirror/view@npm:6.35.0"
+"@codemirror/view@npm:6.39.9":
+  version: 6.39.9
+  resolution: "@codemirror/view@npm:6.39.9"
   dependencies:
-    "@codemirror/state": "npm:^6.4.0"
+    "@codemirror/state": "npm:^6.5.0"
+    crelt: "npm:^1.0.6"
     style-mod: "npm:^4.1.0"
     w3c-keyname: "npm:^2.2.4"
-  checksum: 10/edf9cb81cf2c5d80cc852f924d2d86299bf30aa009cf36afb370a8e2b4b0d03ceeda2de9a809c06aa8c06fcf1c8ba0d857c3d5292813808742446435d2ed533c
+  checksum: 10/9e86b35f31fd4f8b4c2fe608fa6116ddc71261acd842c405de41de1f752268c47ea8e0c400818b4d0481a629e1f773dda9e6f0d24d38ed6a9f6b3d58b2dff669
   languageName: node
   linkType: hard
 
@@ -12429,7 +12430,7 @@ __metadata:
     react-native-image-picker: "npm:8.2.1"
     react-native-localize: "npm:3.6.1"
     react-native-modal-datetime-picker: "npm:18.0.0"
-    react-native-nitro-modules: "npm:0.33.5"
+    react-native-nitro-modules: "npm:0.33.7"
     react-native-paper: "npm:5.14.5"
     react-native-popup-menu: "npm:0.17.0"
     react-native-quick-actions: "npm:0.3.13"
@@ -12522,7 +12523,7 @@ __metadata:
     "@codemirror/lint": "npm:6.9.2"
     "@codemirror/search": "npm:6.5.8"
     "@codemirror/state": "npm:6.5.4"
-    "@codemirror/view": "npm:6.35.0"
+    "@codemirror/view": "npm:6.39.9"
     "@joplin/fork-uslug": "npm:^2.0.0"
     "@joplin/lib": "npm:~3.6"
     "@joplin/utils": "npm:~3.6"
@@ -12815,7 +12816,7 @@ __metadata:
     "@types/json5": "npm:2.2.0"
     "@types/markdown-it": "npm:13.0.9"
     "@types/node": "npm:18.19.130"
-    abcjs: "npm:6.5.2"
+    abcjs: "npm:6.6.0"
     font-awesome-filetypes: "npm:2.1.0"
     fs-extra: "npm:11.3.3"
     highlight.js: "npm:11.11.1"
@@ -13071,7 +13072,7 @@ __metadata:
     nitrogen: "npm:0.33.7"
     react: "npm:19.1.5"
     react-native: "npm:0.81.6"
-    react-native-nitro-modules: "npm:0.33.5"
+    react-native-nitro-modules: "npm:0.33.7"
     typescript: "npm:5.9.3"
   peerDependencies:
     react: "*"
@@ -20520,10 +20521,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"abcjs@npm:6.5.2":
-  version: 6.5.2
-  resolution: "abcjs@npm:6.5.2"
-  checksum: 10/9e746c7127cd1feeb509c2cc4edcefd52f2b0de2940831800ccf3217bf8e55207bbff40cd45ac95c60b307a82523e0074d87519762bd3e48498cfbeaf4056399
+"abcjs@npm:6.6.0":
+  version: 6.6.0
+  resolution: "abcjs@npm:6.6.0"
+  checksum: 10/9c260f13384224b4961e557fb573b1956c32ede6ea287772ce469916540b40f86deaa1d52bafd0c2de11ad0019716521eef9d5685225fe08b34856d514008143
   languageName: node
   linkType: hard
 
@@ -26253,7 +26254,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crelt@npm:^1.0.0":
+"crelt@npm:^1.0.0, crelt@npm:^1.0.6":
   version: 1.0.6
   resolution: "crelt@npm:1.0.6"
   checksum: 10/5ed326ca6bd243b1dba6b943f665b21c2c04be03271824bc48f20dba324b0f8233e221f8c67312526d24af2b1243c023dc05a41bd8bd05d1a479fd2c72fb39c3
@@ -49197,13 +49198,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-nitro-modules@npm:0.33.5":
-  version: 0.33.5
-  resolution: "react-native-nitro-modules@npm:0.33.5"
+"react-native-nitro-modules@npm:0.33.7":
+  version: 0.33.7
+  resolution: "react-native-nitro-modules@npm:0.33.7"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/5d1baf5facaf1255c31f194ee1d98bac066cd9c24fc71fb449f9728dfd6442e9e08ba24bb523dd8e167336615a96c1288c766debccc35573fc9627fb0e14ce6f
+  checksum: 10/b78a42dfd9a9f9982d65280b6e4a90f2bd092193c0244a182e60d84ebb0c9076208ff9f2868c213150d55cbb999a400ff369d962dfd00b35eef45ea7e7d869b1
   languageName: node
   linkType: hard
 
