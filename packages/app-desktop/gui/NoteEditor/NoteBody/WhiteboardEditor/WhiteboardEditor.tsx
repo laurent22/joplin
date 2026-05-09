@@ -18,6 +18,10 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 
 	const initialCanvas = useMemo(() => parseWhiteboard(props.content).canvas, [props.content]);
 	const [canvas, setCanvas] = useState<Canvas>(initialCanvas);
+	// Mirror the canvas state in a ref so async handlers can read the latest
+	// version without going through a setCanvas updater (which must stay pure).
+	const canvasRef = useRef<Canvas>(initialCanvas);
+	canvasRef.current = canvas;
 
 	// Reload when the body switches to a different note, or when the body has
 	// changed underneath us (external write — e.g. the "add note to whiteboard"
@@ -80,35 +84,42 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 	const onPromoteTextNode = useCallback(async (canvasNodeId: string) => {
 		const noteId = props.noteId;
 		if (!noteId) return;
+
+		// Read the latest canvas state directly — never inside a setCanvas
+		// updater, since updaters must stay pure (React 18 strict mode runs
+		// them twice in dev, which would create the note twice).
+		const node = canvasRef.current.nodes.find(n => n.id === canvasNodeId) as TextCanvasNode | undefined;
+		if (!node || node.type !== 'text') return;
+
 		const parentNote = await Note.load(noteId);
 		if (!parentNote) return;
 
-		setCanvas(prev => {
-			const node = prev.nodes.find(n => n.id === canvasNodeId) as TextCanvasNode | undefined;
-			if (!node || node.type !== 'text') return prev;
-			const title = (node.text.split('\n').find(l => l.trim().length) || '').replace(/^#+\s*/, '').trim() || 'Untitled';
-			void (async () => {
-				const created = await Note.save({
-					parent_id: parentNote.parent_id,
-					title,
-					body: node.text,
-				});
-				const replacement: FileCanvasNode = {
-					id: node.id,
-					type: 'file',
-					x: node.x,
-					y: node.y,
-					width: node.width,
-					height: node.height,
-					file: `:/${created.id}`,
-				};
-				setCanvas(curr => ({
-					...curr,
-					nodes: curr.nodes.map(n => n.id === node.id ? replacement : n),
-				}));
-			})();
-			return prev;
+		const title = (node.text.split('\n').find(l => l.trim().length) || '').replace(/^#+\s*/, '').trim() || 'Untitled';
+		const created = await Note.save({
+			parent_id: parentNote.parent_id,
+			title,
+			body: node.text,
 		});
+
+		// Re-locate the node from the latest state in case it moved/resized
+		// between the promote click and the save returning. If it was deleted
+		// in the meantime, drop the operation silently.
+		const latest = canvasRef.current.nodes.find(n => n.id === canvasNodeId) as TextCanvasNode | undefined;
+		if (!latest || latest.type !== 'text') return;
+
+		const replacement: FileCanvasNode = {
+			id: latest.id,
+			type: 'file',
+			x: latest.x,
+			y: latest.y,
+			width: latest.width,
+			height: latest.height,
+			file: `:/${created.id}`,
+		};
+		setCanvas(curr => ({
+			...curr,
+			nodes: curr.nodes.map(n => n.id === latest.id ? replacement : n),
+		}));
 	}, [props.noteId]);
 
 	const contextValue = useMemo(() => ({
