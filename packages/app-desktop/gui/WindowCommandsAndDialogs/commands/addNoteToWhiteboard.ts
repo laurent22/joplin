@@ -27,11 +27,11 @@ export const runtime = (): CommandRuntime => {
 			const targetId = context.state.selectedNoteIds?.[0];
 			if (!targetId) return;
 
-			const target = await Note.load(targetId);
-			if (!target) return;
-
-			const parsed = parseWhiteboard(target.body || '');
-			if (!parsed.hasCanvas) {
+			// Quick gate before opening the picker — if the active note isn't
+			// a whiteboard, bail out without disturbing the user.
+			const initial = await Note.load(targetId);
+			if (!initial) return;
+			if (!parseWhiteboard(initial.body || '').hasCanvas) {
 				logger.warn('Active note is not a whiteboard:', targetId);
 				return;
 			}
@@ -41,6 +41,18 @@ export const runtime = (): CommandRuntime => {
 			if (!result) return;
 			if (result.type !== ModelType.Note) {
 				logger.warn('Selected item is not a note:', result);
+				return;
+			}
+
+			// Reload the note after the picker resolves: between opening the
+			// picker and now, the whiteboard editor (or a sync) may have
+			// written a newer body, and we want to append onto the freshest
+			// persisted state — not the snapshot we read before the prompt.
+			const fresh = await Note.load(targetId);
+			if (!fresh) return;
+			const parsed = parseWhiteboard(fresh.body || '');
+			if (!parsed.hasCanvas) {
+				logger.warn('Active note is no longer a whiteboard:', targetId);
 				return;
 			}
 
@@ -66,7 +78,7 @@ export const runtime = (): CommandRuntime => {
 				...parsed.canvas,
 				nodes: [...parsed.canvas.nodes, newNode],
 			};
-			const newBody = serializeWhiteboard(target.body || '', nextCanvas);
+			const newBody = serializeWhiteboard(fresh.body || '', nextCanvas);
 			await Note.save({ id: targetId, body: newBody });
 		},
 		enabledCondition: 'oneNoteSelected && noteIsWhiteboard && !noteIsReadOnly',
