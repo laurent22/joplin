@@ -26,7 +26,10 @@ const sideToHandle = (side: CanvasNodeSide | undefined): string | undefined => {
 	return side; // React Flow handle ids match side names ('top', 'right', 'bottom', 'left').
 };
 
-const arrowMarker = () => ({ type: MarkerType.ArrowClosed, width: 18, height: 18 });
+// `markerUnits: 'userSpaceOnUse'` keeps the arrowhead at an absolute size,
+// independent of the edge's stroke width. Without it, selected edges (which
+// have a thicker stroke) would render a proportionally bigger arrow.
+const arrowMarker = () => ({ type: MarkerType.ArrowClosed, width: 27, height: 27, markerUnits: 'userSpaceOnUse' });
 
 export interface CanvasToFlowResult {
 	nodes: WhiteboardFlowNode[];

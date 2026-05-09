@@ -29,7 +29,36 @@ const ensureReactFlowCss = () => {
 
 		const el = document.createElement('style');
 		el.id = STYLE_ELEMENT_ID;
-		el.textContent = css;
+		// React Flow base styles, then our overrides. Selected edges should
+		// stand out as clearly as selected cards (which use #4a90e2).
+		el.textContent = `${css}
+.react-flow__edge.selected .react-flow__edge-path,
+.react-flow__edge:focus .react-flow__edge-path,
+.react-flow__edge:focus-visible .react-flow__edge-path {
+	stroke: #4a90e2 !important;
+	stroke-width: 2 !important;
+}
+.react-flow__edge.selected .react-flow__edge-textbg {
+	fill: #4a90e2;
+}
+.react-flow__edge.selected .react-flow__edge-text {
+	fill: #ffffff;
+}
+/* Hide connection handles by default; reveal on hover, when the node is
+   selected, and on the source/target handle of an active connection drag
+   (React Flow sets .connectingfrom on the source handle, .connectingto on
+   the hovered target handle). */
+.react-flow__node .react-flow__handle {
+	opacity: 0;
+	transition: opacity 120ms ease;
+}
+.react-flow__node:hover .react-flow__handle,
+.react-flow__node.selected .react-flow__handle,
+.react-flow__handle.connectingfrom,
+.react-flow__handle.connectingto {
+	opacity: 1;
+}
+`;
 		document.head.appendChild(el);
 		injected = true;
 	} catch (error) {

@@ -275,3 +275,6 @@ webp
 nodrag
 Outro
 parseable
+connectingfrom
+connectingto
+textbg

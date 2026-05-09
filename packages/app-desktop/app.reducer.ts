@@ -43,6 +43,11 @@ export interface AppWindowState extends WindowState {
 	// Note IDs for which the user has chosen to view the underlying Markdown
 	// instead of the Whiteboard editor. Per-window, in-memory only.
 	whiteboardForceMarkdown: Record<string, boolean>;
+	// Whether the currently-active note in this window contains a whiteboard
+	// fence. Set by the NoteEditor when it loads / saves the body, used by
+	// the toolbar to show the editor toggle button. (We can't compute this
+	// from the redux note list because `body` isn't in the preview fields.)
+	activeNoteIsWhiteboard: boolean;
 }
 
 interface BackgroundWindowStates {
@@ -76,6 +81,7 @@ export const createAppDefaultWindowState = (): AppWindowState => {
 		devToolsVisible: false,
 		watchedResources: {},
 		whiteboardForceMarkdown: {},
+		activeNoteIsWhiteboard: false,
 	};
 };
 
@@ -218,6 +224,13 @@ export default function(state: AppState, action: any) {
 			};
 			break;
 		}
+
+		case 'WHITEBOARD_ACTIVE_NOTE_SET':
+			newState = {
+				...state,
+				activeNoteIsWhiteboard: !!action.value,
+			};
+			break;
 
 		case 'MAIN_LAYOUT_SET':
 

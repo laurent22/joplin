@@ -39,7 +39,10 @@ const containerStyle: CSSProperties = {
 };
 
 const generateId = () => `n${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
-const makeArrowMarker = () => ({ type: MarkerType.ArrowClosed, width: 18, height: 18 });
+// `markerUnits: 'userSpaceOnUse'` keeps the arrowhead at an absolute size,
+// independent of the edge's stroke width. Without it, selected edges (which
+// have a thicker stroke) would render a proportionally bigger arrow.
+const makeArrowMarker = () => ({ type: MarkerType.ArrowClosed, width: 27, height: 27, markerUnits: 'userSpaceOnUse' });
 
 type ArrowMode = 'none' | 'forward' | 'backward' | 'both' | 'mixed';
 const arrowModeFor = (e: WhiteboardFlowEdge): Exclude<ArrowMode, 'mixed'> => {
@@ -147,6 +150,19 @@ const InnerSurface = ({ canvas, onChange, onAddNode }: Props) => {
 	const selectedEdges = useMemo(() => flowEdges.filter(e => e.selected), [flowEdges]);
 	const selectedNodes = useMemo(() => flowNodes.filter(n => n.selected), [flowNodes]);
 
+	// Edges fed to React Flow. For selected edges we override marker colour
+	// to match the selection blue — markers are SVG <marker> defs that don't
+	// inherit stroke colour from the edge path automatically.
+	const SELECTED_EDGE_COLOR = '#4a90e2';
+	const renderedEdges = useMemo<WhiteboardFlowEdge[]>(() => {
+		return flowEdges.map(e => {
+			if (!e.selected) return e;
+			const tint = (m: WhiteboardFlowEdge['markerEnd']) =>
+				(m && typeof m === 'object') ? { ...m, color: SELECTED_EDGE_COLOR } : m;
+			return { ...e, markerEnd: tint(e.markerEnd), markerStart: tint(e.markerStart) };
+		});
+	}, [flowEdges]);
+
 	const updateSelectedEdges = useCallback((patch: (e: WhiteboardFlowEdge)=> WhiteboardFlowEdge) => {
 		setFlowEdges(prev => prev.map(e => e.selected ? patch(e) : e));
 	}, []);
@@ -230,7 +246,7 @@ const InnerSurface = ({ canvas, onChange, onAddNode }: Props) => {
 		>
 			<ReactFlow
 				nodes={flowNodes as unknown as Node[]}
-				edges={flowEdges as unknown as Edge[]}
+				edges={renderedEdges as unknown as Edge[]}
 				nodeTypes={nodeTypes}
 				defaultEdgeOptions={defaultEdgeOptions}
 				connectionMode={ConnectionMode.Loose}

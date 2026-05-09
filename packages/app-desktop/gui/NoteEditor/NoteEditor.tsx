@@ -481,11 +481,20 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	let editor = null;
 
+	const noteHasWhiteboardFence = markupLanguage === MarkupLanguage.Markdown
+		&& hasWhiteboardFence(formNote.body);
+
 	const useWhiteboardEditor = builtInEditorVisible
 		&& Setting.value('whiteboard.enabled')
-		&& markupLanguage === MarkupLanguage.Markdown
-		&& hasWhiteboardFence(formNote.body)
+		&& noteHasWhiteboardFence
 		&& !props.whiteboardForceMarkdown?.[formNote.id];
+
+	// Mirror "active note is a whiteboard" to redux so the NoteToolbar can
+	// show the editor toggle. We can't compute this from the redux note list
+	// because note bodies aren't in the preview fields.
+	useEffect(() => {
+		props.dispatch({ type: 'WHITEBOARD_ACTIVE_NOTE_SET', value: noteHasWhiteboardFence });
+	}, [noteHasWhiteboardFence, props.dispatch]);
 
 	if (useWhiteboardEditor) {
 		editor = <WhiteboardEditor {...editorProps}/>;
@@ -762,7 +771,6 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 			'historyBackward',
 			'historyForward',
 			'toggleEditors',
-			'toggleWhiteboardEditor',
 			'toggleExternalEditing',
 		], whenClauseContext),
 		setTagsToolbarButtonInfo: toolbarButtonUtils.commandsToToolbarButtons([
