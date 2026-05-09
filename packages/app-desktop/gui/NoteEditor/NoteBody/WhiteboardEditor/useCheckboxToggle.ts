@@ -56,9 +56,8 @@ const useCheckboxToggle = ({ body, onChange }: Options) => {
 	const observerRef = useRef<MutationObserver | null>(null);
 
 	const wireUp = useCallback((root: HTMLElement) => {
-		const checkboxes = Array.from(root.querySelectorAll<HTMLInputElement>('input[type=checkbox]'));
-		for (let index = 0; index < checkboxes.length; index++) {
-			const cb = checkboxes[index];
+		const checkboxes = root.querySelectorAll<HTMLInputElement>('input[type=checkbox]');
+		for (const cb of Array.from(checkboxes)) {
 			if ((cb as HTMLInputElement & { _wbWired?: boolean })._wbWired) continue;
 			(cb as HTMLInputElement & { _wbWired?: boolean })._wbWired = true;
 			cb.disabled = false;
@@ -67,10 +66,16 @@ const useCheckboxToggle = ({ body, onChange }: Options) => {
 			// ipcProxySendToHost, which we don't expose in this context.
 			cb.removeAttribute('onclick');
 			(cb as HTMLInputElement & { onclick: unknown }).onclick = null;
-			const fixedIndex = index;
 			cb.addEventListener('click', (e) => {
 				e.stopPropagation();
-				const next = flipNthCheckbox(bodyRef.current, fixedIndex);
+				// Recompute the checkbox's current position at click time —
+				// the wire-time index goes stale after DOM insertions or
+				// removals (e.g. an external edit added/removed a list item
+				// before this one).
+				const current = Array.from(root.querySelectorAll<HTMLInputElement>('input[type=checkbox]'));
+				const currentIndex = current.indexOf(cb);
+				if (currentIndex < 0) return;
+				const next = flipNthCheckbox(bodyRef.current, currentIndex);
 				if (next !== null) onChangeRef.current(next);
 			});
 			cb.addEventListener('mousedown', (e) => e.stopPropagation());
