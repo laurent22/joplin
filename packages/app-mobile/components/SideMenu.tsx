@@ -7,7 +7,6 @@ import AccessibleView from './accessibility/AccessibleView';
 import { _ } from '@joplin/lib/locale';
 import useReduceMotionEnabled from '../utils/hooks/useReduceMotionEnabled';
 import { themeStyle } from './global-style';
-import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 
 export enum SideMenuPosition {
 	Left = 'left',
@@ -41,7 +40,6 @@ interface UseStylesProps {
 
 const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStylesProps) => {
 	const { height: windowHeight, width: windowWidth } = useWindowDimensions();
-	const safeAreaInsets = useSafeAreaPadding();
 
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
@@ -81,11 +79,6 @@ const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStyl
 				bottom: 0,
 				width: menuWidth,
 
-				paddingLeft: isLeftMenu ? safeAreaInsets.paddingLeft : 0,
-				paddingRight: isLeftMenu ? 0 : safeAreaInsets.paddingRight,
-				paddingTop: safeAreaInsets.paddingTop,
-				paddingBottom: safeAreaInsets.paddingBottom,
-
 				// In React Native, RTL replaces `left` with `right` and `right` with `left`.
 				// As such, we need to reverse the normal direction in RTL mode.
 				...(isLeftMenu === !I18nManager.isRTL ? {
@@ -117,7 +110,7 @@ const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStyl
 				width: windowWidth,
 			},
 		});
-	}, [themeId, isLeftMenu, windowWidth, windowHeight, menuWidth, menuOpenFraction, safeAreaInsets]);
+	}, [themeId, isLeftMenu, windowWidth, windowHeight, menuWidth, menuOpenFraction]);
 };
 
 interface UseAnimationsProps {

@@ -60,7 +60,7 @@ import ItemModel from './ItemModel';
 import UserModel from './UserModel';
 import UserItemModel from './UserItemModel';
 import SessionModel from './SessionModel';
-import ChangeModel from './ChangeModel';
+import ChangeModel from './ChangeModel/ChangeModel';
 import NotificationModel from './NotificationModel';
 import ShareModel from './ShareModel';
 import EmailModel from './EmailModel';

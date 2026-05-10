@@ -365,6 +365,16 @@ export interface User extends WithDates, WithUuid {
 	sso_auth_code_expire_at?: number;
 }
 
+export interface Change2 extends WithDates, WithUuid {
+	counter?: number;
+	item_id?: Uuid;
+	user_id?: Uuid;
+	item_name?: string;
+	previous_share_id?: Uuid;
+	item_type?: ItemType;
+	type?: ChangeType;
+}
+
 export const databaseSchema: DatabaseTables = {
 	sessions: {
 		id: { type: 'string', defaultValue: null },
@@ -602,6 +612,18 @@ export const databaseSchema: DatabaseTables = {
 		is_external: { type: 'number', defaultValue: 0 },
 		sso_auth_code: { type: 'string', defaultValue: '' },
 		sso_auth_code_expire_at: { type: 'string', defaultValue: 0 },
+	},
+	changes_2: {
+		counter: { type: 'number', defaultValue: null },
+		id: { type: 'string', defaultValue: null },
+		item_id: { type: 'string', defaultValue: null },
+		user_id: { type: 'string', defaultValue: '' },
+		item_name: { type: 'string', defaultValue: '' },
+		previous_share_id: { type: 'string', defaultValue: '' },
+		item_type: { type: 'number', defaultValue: null },
+		type: { type: 'number', defaultValue: null },
+		updated_time: { type: 'string', defaultValue: null },
+		created_time: { type: 'string', defaultValue: null },
 	},
 };
 // AUTO-GENERATED-TYPES

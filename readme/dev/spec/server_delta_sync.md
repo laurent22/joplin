@@ -33,6 +33,31 @@ Compression works at a page-level so depending on how many items are requested v
 
 Due to this compression, the `limit` query parameter is only advisory. There's no guarantee that exactly `limit` items will be returned as some items might have been removed after compression. There's however a guarantee that no more than `limit` items will be returned.
 
+## Legacy changes
+
+On the server, changes are split between a legacy `changes` table and a newer `changes_2` table:
+- `changes` contains records for old change events.
+	- In this table, `Update` changes may be accessible by multiple different users, depending on which users the change's item is shared with.
+	- Relies on a 4-byte index, limiting the maximum number of entries to just over two billion.
+- `changes_2` contains records for newer change events.
+	- Unlike events in `changes`, `Update` events are per-user. Users can only access changes with a matching `user_id`.
+	- More events can be stored in `changes_2`.
+
+All new change events are written to `changes_2`. However, database queries in `ChangeModel` must usually be able to check both tables.
+
+### Migration
+
+A planned migration to remove the legacy `changes` table exists in `packages/server/src/migrations/planned/regroup_changes`. In November 2026, at least 6 months after the `changes_2` table was created:
+1. The `regroup_changes` migration should be enabled. This can be done by moving it to the `packages/server/src/migrations/` folder and giving it a name that matches the other migrations.
+	- This migration may take a long time for a large number of changes. It should be safe to run while the server is up.
+2. Prepare a new migration to migrate the remaining changes to `changes_3` and, at the same time, switch the server over to `changes_3`:
+	- Remove `ChangeModel.old.ts`. `ChangeModel.old` is responsible for interacting with the legacy changes table.
+	- Update `ChangeModel.new.ts` to interact with `changes_3` instead of `changes_2`.
+	- Create a migration that reruns `regroup_changes`. This migration will need to run while the server is down to ensure that all changes are migrated.
+3. Remove the old changes tables: Create a new migration to `drop` the `changes` and `changes_2` tables. The planned `regroup_changes` migration preserves `changes` and `changes_2` to allow reverting the `regroup_changes` migration, if necessary.
+
+The 6-month timeline is important: Any Joplin clients with delta cursors that still point to changes in `changes` will be forced to do a full resync.
+
 ## Delete event limitation
 
 There's currently a known limitation regarding delete events. When looking at a particular event page, the server might find that a "create" or "update" event is associated with a non-existing file, which would have been deleted. In that case, the server will send back a "delete" event. When looking at following pages, the server will eventually process the actual "delete" event for that item - and send again a "delete" event for it.

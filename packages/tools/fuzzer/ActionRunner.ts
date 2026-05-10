@@ -218,18 +218,22 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 
 	const undefinedId = (): ItemId|undefined => undefined;
 
-	addAction('newSubfolder', async ({ parentId, id }) => {
-		await client.createRandomFolder({ parentId, id, quiet: false });
+	addAction('newSubfolder', async ({ parentId, id, title }) => {
+		await client.createRandomFolder({ parentId, id, title, quiet: false });
 		return true;
 	}, {
 		parentId: selectOrCreateWriteableFolder,
 		id: undefinedId,
+		title: () => undefined,
 	});
 
-	addAction('newToplevelFolder', async ({ id }) => {
-		await client.createRandomFolder({ parentId: '', id, quiet: false });
+	addAction('newToplevelFolder', async ({ id, title }) => {
+		await client.createRandomFolder({ parentId: '', id, title, quiet: false });
 		return true;
-	}, { id: undefinedId });
+	}, {
+		id: undefinedId,
+		title: () => undefined,
+	});
 
 	addAction('newNote', async ({ parentId, id }) => {
 		await client.createRandomNote({ parentId, id });
