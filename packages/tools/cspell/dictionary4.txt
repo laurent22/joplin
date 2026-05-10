@@ -281,3 +281,4 @@ textbg
 updaters
 plused
 connectionline
+precheck

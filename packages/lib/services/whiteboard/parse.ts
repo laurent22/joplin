@@ -20,8 +20,14 @@ export interface ParseResult {
 	hasCanvas: boolean;
 }
 
+// Cheap precheck — `fenceRegex` uses lazy [\s\S]*? matching that's O(n) on
+// strings without a fence, so a literal-substring check first lets us bail
+// out without touching the regex engine for any note that isn't a whiteboard.
+const fenceMarker = `\`\`\`${fenceTag}`;
+
 export const hasWhiteboardFence = (body: string): boolean => {
 	if (!body) return false;
+	if (body.indexOf(fenceMarker) === -1) return false;
 	return fenceRegex.test(body);
 };
 
