@@ -33,28 +33,61 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 		setCanvas(parsed.canvas);
 	}, [props.content, props.contentKey]);
 
-	// Debounced save.
+	// Debounced save. We split "schedule" from "unmount" cleanup because the
+	// effect's normal cleanup runs whenever `canvas` changes — that's a
+	// re-schedule, not a reason to drop the pending save. Only an actual
+	// unmount (or an explicit caller via `content()`) should flush.
 	const lastSerializedRef = useRef<string>(JSON.stringify(canvas));
+	const pendingSerializedRef = useRef<string | null>(null);
+	const pendingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const onChangeRef = useRef(props.onChange);
+	onChangeRef.current = props.onChange;
+
+	const flushPendingSave = useCallback((): string => {
+		if (pendingTimeoutRef.current !== null) {
+			clearTimeout(pendingTimeoutRef.current);
+			pendingTimeoutRef.current = null;
+		}
+		const serialized = pendingSerializedRef.current;
+		if (serialized === null) return bodyRef.current;
+		pendingSerializedRef.current = null;
+		lastSerializedRef.current = serialized;
+		const newBody = serializeWhiteboard(bodyRef.current, JSON.parse(serialized) as Canvas);
+		bodyRef.current = newBody;
+		lastEmittedBodyRef.current = newBody;
+		onChangeRef.current({ changeId: null, content: newBody });
+		return newBody;
+	}, []);
+
 	useEffect(() => {
 		const serialized = JSON.stringify(canvas);
 		if (serialized === lastSerializedRef.current) return undefined;
-		const handle = setTimeout(() => {
-			lastSerializedRef.current = serialized;
-			const newBody = serializeWhiteboard(bodyRef.current, canvas);
-			bodyRef.current = newBody;
-			lastEmittedBodyRef.current = newBody;
-			props.onChange({ changeId: null, content: newBody });
+		pendingSerializedRef.current = serialized;
+		// Replace any prior pending timeout — we'll re-schedule from the new
+		// canvas. Crucially we do NOT clear the pending serialised payload
+		// here, so the unmount-flush effect can still see it.
+		if (pendingTimeoutRef.current !== null) clearTimeout(pendingTimeoutRef.current);
+		pendingTimeoutRef.current = setTimeout(() => {
+			pendingTimeoutRef.current = null;
+			flushPendingSave();
 		}, SAVE_DEBOUNCE_MS);
-		return () => clearTimeout(handle);
-	}, [canvas, props.onChange]);
+		return undefined;
+	}, [canvas, flushPendingSave]);
+
+	// Flush on unmount. The empty-deps effect's cleanup only fires once.
+	useEffect(() => {
+		return () => { flushPendingSave(); };
+	}, [flushPendingSave]);
 
 	useImperativeHandle(ref, () => ({
-		content: () => bodyRef.current,
+		// Callers that read `content()` (e.g. the form-note save flow) get
+		// the latest body even if a debounced save is still pending.
+		content: () => flushPendingSave(),
 		resetScroll: () => { /* not applicable */ },
 		scrollTo: () => { /* not applicable */ },
 		supportsCommand: () => false,
 		execCommand: async () => { /* not applicable */ },
-	}), []);
+	}), [flushPendingSave]);
 
 	const onAddNode = useCallback((node: CanvasNode) => {
 		setCanvas(prev => ({ ...prev, nodes: [...prev.nodes, node] }));
