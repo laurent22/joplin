@@ -19,7 +19,7 @@ import {
 	applyNodeChanges,
 	useReactFlow,
 } from '@xyflow/react';
-import ensureReactFlowCss from './loadReactFlowCss';
+import ensureReactFlowCss, { applyReactFlowTheme } from './loadReactFlowCss';
 import generateId from './generateId';
 import { _, _n } from '@joplin/lib/locale';
 import { Canvas, CanvasEdge, CanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
@@ -30,15 +30,8 @@ import TextNode from './nodes/TextNode';
 import FileNode from './nodes/FileNode';
 import LinkNode from './nodes/LinkNode';
 import { ActionButton, ActionDivider, ActionInput, ActionPanel } from './ActionPanel';
-
-const containerStyle: CSSProperties = {
-	position: 'relative',
-	flex: 1,
-	width: '100%',
-	height: '100%',
-	background: '#f4f4f4',
-	outline: 'none',
-};
+import { useWhiteboardContext } from './WhiteboardContext';
+import { whiteboardColors } from './theme';
 
 // `markerUnits: 'userSpaceOnUse'` keeps the arrowhead at an absolute size,
 // independent of the edge's stroke width. Without it, selected edges (which
@@ -68,6 +61,24 @@ const nodeTypes: NodeTypes = {
 };
 
 const InnerSurface = ({ canvas, onChange, onAddNode }: Props) => {
+	const ctx = useWhiteboardContext();
+	const colors = useMemo(() => whiteboardColors(ctx.themeId), [ctx.themeId]);
+
+	// Re-apply React Flow's CSS custom properties whenever the theme changes
+	// so edges, minimap, controls and dot grid follow the active Joplin theme.
+	useEffect(() => {
+		applyReactFlowTheme(colors);
+	}, [colors]);
+
+	const containerStyle: CSSProperties = useMemo(() => ({
+		position: 'relative',
+		flex: 1,
+		width: '100%',
+		height: '100%',
+		background: colors.surfaceBackground,
+		outline: 'none',
+	}), [colors]);
+
 	const initial = useMemo(() => canvasToFlow(canvas), [canvas]);
 	const [flowNodes, setFlowNodes] = useState<WhiteboardFlowNode[]>(initial.nodes);
 	const [flowEdges, setFlowEdges] = useState<WhiteboardFlowEdge[]>(initial.edges);

@@ -1,11 +1,14 @@
 // React Flow ships CSS as a separate file. Joplin's desktop build doesn't run
 // CSS imports through a loader, so we read the stylesheet at runtime and
-// inject it into the document head once.
+// inject it into the document head once. We also expose a theme-aware
+// override that overrides React Flow's CSS custom properties (--xy-*) so
+// edges, minimap and dot grid follow the active Joplin theme.
 
-import injectStyle from './injectStyle';
-import { SELECTION_COLOR } from './theme';
+import injectStyle, { replaceStyle } from './injectStyle';
+import { SELECTION_COLOR, WhiteboardThemeColors } from './theme';
 
 const STYLE_ELEMENT_ID = 'whiteboard-react-flow-css';
+const THEME_STYLE_ELEMENT_ID = 'whiteboard-react-flow-theme';
 
 let injected = false;
 
@@ -15,8 +18,7 @@ const ensureReactFlowCss = () => {
 
 	try {
 		// require() at runtime so this resolves through Node, which is fine in
-		// Electron's renderer process. The path resolves relative to this
-		// module via the bundler/Node module resolution.
+		// Electron's renderer process.
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const fs = require('fs');
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -59,6 +61,32 @@ const ensureReactFlowCss = () => {
 		// eslint-disable-next-line no-console
 		console.error('Failed to load React Flow CSS', error);
 	}
+};
+
+// Apply the active Joplin theme to React Flow by setting its `--xy-*` CSS
+// custom properties at the `.react-flow` root. Re-injected on every theme
+// change so dark mode actually looks dark. Scoped via a class so we don't
+// accidentally affect other React Flow instances if Joplin ever embeds one.
+export const applyReactFlowTheme = (colors: WhiteboardThemeColors) => {
+	const css = `
+.react-flow {
+	--xy-background-color-default: ${colors.surfaceBackground};
+	--xy-background-pattern-dots-color-default: ${colors.dividerColor};
+	--xy-edge-stroke-default: ${colors.dividerColor};
+	--xy-edge-stroke-selected-default: ${SELECTION_COLOR};
+	--xy-connectionline-stroke-default: ${colors.handleColor};
+	--xy-attribution-background-color-default: ${colors.cardBackground};
+	--xy-minimap-background-color-default: ${colors.cardBackground};
+	--xy-minimap-mask-background-color-default: ${colors.surfaceBackground};
+	--xy-minimap-node-background-color-default: ${colors.handleColor};
+	--xy-node-color-default: ${colors.textColor};
+	--xy-node-background-color-default: ${colors.cardBackground};
+	--xy-controls-button-background-color-default: ${colors.cardBackground};
+	--xy-controls-button-color-default: ${colors.textColor};
+	--xy-controls-button-border-color-default: ${colors.dividerColor};
+}
+`;
+	replaceStyle(THEME_STYLE_ELEMENT_ID, css);
 };
 
 export default ensureReactFlowCss;

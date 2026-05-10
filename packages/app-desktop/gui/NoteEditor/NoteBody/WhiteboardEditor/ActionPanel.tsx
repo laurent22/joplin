@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, ReactNode, useMemo } from 'react';
+import { useWhiteboardContext } from './WhiteboardContext';
+import { whiteboardColors, WhiteboardThemeColors } from './theme';
 
 interface Props {
 	// Where to anchor the panel relative to its positioned ancestor.
@@ -11,48 +13,51 @@ interface Props {
 	children?: ReactNode;
 }
 
-const baseStyle: CSSProperties = {
-	position: 'absolute',
-	zIndex: 10,
-	display: 'flex',
-	alignItems: 'center',
-	gap: 0,
-	padding: 4,
-	background: '#ffffff',
-	border: '1px solid #d8d8d8',
-	borderRadius: 8,
-	boxShadow: '0 4px 12px rgba(0,0,0,0.10)',
-	fontSize: 12,
-	height: 36,
-};
-
 const positionStyles: Record<NonNullable<Props['position']>, CSSProperties> = {
 	'bottom-center': { bottom: 16, left: '50%', transform: 'translateX(-50%)' },
 	'top-center': { top: 16, left: '50%', transform: 'translateX(-50%)' },
 	'top-right': { top: 8, right: 8 },
 };
 
-const captionStyle: CSSProperties = {
-	color: '#666',
+const baseStyle = (colors: WhiteboardThemeColors): CSSProperties => ({
+	position: 'absolute',
+	zIndex: 10,
+	display: 'flex',
+	alignItems: 'center',
+	gap: 0,
+	padding: 4,
+	background: colors.cardBackground,
+	border: `1px solid ${colors.cardBorder}`,
+	borderRadius: 8,
+	boxShadow: '0 4px 12px rgba(0,0,0,0.10)',
+	fontSize: 12,
+	height: 36,
+	color: colors.textColor,
+});
+
+const captionStyle = (colors: WhiteboardThemeColors): CSSProperties => ({
+	color: colors.mutedColor,
 	padding: '0 10px',
 	whiteSpace: 'nowrap',
-};
+});
 
-const dividerStyle: CSSProperties = {
+const dividerStyle = (colors: WhiteboardThemeColors): CSSProperties => ({
 	width: 1,
 	height: 20,
-	background: '#e5e5e5',
+	background: colors.dividerColor,
 	margin: '0 4px',
-};
+});
 
 export const ActionPanel = ({ position = 'bottom-center', caption, children }: Props) => {
-	const style: CSSProperties = { ...baseStyle, ...positionStyles[position] };
+	const ctx = useWhiteboardContext();
+	const colors = useMemo(() => whiteboardColors(ctx.themeId), [ctx.themeId]);
+	const style: CSSProperties = { ...baseStyle(colors), ...positionStyles[position] };
 	return (
 		<div style={style}>
 			{caption ? (
 				<>
-					<div style={captionStyle}>{caption}</div>
-					<div style={dividerStyle} />
+					<div style={captionStyle(colors)}>{caption}</div>
+					<div style={dividerStyle(colors)} />
 				</>
 			) : null}
 			{children}
@@ -60,20 +65,20 @@ export const ActionPanel = ({ position = 'bottom-center', caption, children }: P
 	);
 };
 
-const buttonBase: CSSProperties = {
+const buttonBase = (colors: WhiteboardThemeColors): CSSProperties => ({
 	height: 28,
 	padding: '0 10px',
 	fontSize: 12,
 	border: 'none',
 	background: 'transparent',
-	color: '#333',
+	color: colors.textColor,
 	cursor: 'pointer',
 	borderRadius: 6,
 	display: 'inline-flex',
 	alignItems: 'center',
 	gap: 4,
 	whiteSpace: 'nowrap',
-};
+});
 
 interface ActionButtonProps {
 	onClick: ()=> void;
@@ -84,10 +89,17 @@ interface ActionButtonProps {
 }
 
 export const ActionButton = ({ onClick, active, disabled, title, children }: ActionButtonProps) => {
+	const ctx = useWhiteboardContext();
+	const colors = useMemo(() => whiteboardColors(ctx.themeId), [ctx.themeId]);
+	// "Active" tint is a translucent brand blue overlay so it reads on both
+	// light and dark backgrounds without needing a second hex value.
+	const activeBg = 'rgba(74, 144, 226, 0.18)';
+	const activeFg = '#2766b8';
+	const hoverBg = 'rgba(127,127,127,0.12)';
 	const style: CSSProperties = {
-		...buttonBase,
-		background: active ? '#eef4fc' : 'transparent',
-		color: active ? '#2766b8' : '#333',
+		...buttonBase(colors),
+		background: active ? activeBg : 'transparent',
+		color: active ? activeFg : colors.textColor,
 		opacity: disabled ? 0.45 : 1,
 		cursor: disabled ? 'default' : 'pointer',
 	};
@@ -98,7 +110,7 @@ export const ActionButton = ({ onClick, active, disabled, title, children }: Act
 			disabled={disabled}
 			title={title}
 			style={style}
-			onMouseEnter={e => { if (!disabled && !active) (e.currentTarget.style.background = '#f3f3f3'); }}
+			onMouseEnter={e => { if (!disabled && !active) (e.currentTarget.style.background = hoverBg); }}
 			onMouseLeave={e => { if (!active) (e.currentTarget.style.background = 'transparent'); }}
 		>
 			{children}
@@ -106,18 +118,24 @@ export const ActionButton = ({ onClick, active, disabled, title, children }: Act
 	);
 };
 
-export const ActionDivider = () => <div style={dividerStyle} />;
+export const ActionDivider = () => {
+	const ctx = useWhiteboardContext();
+	const colors = useMemo(() => whiteboardColors(ctx.themeId), [ctx.themeId]);
+	return <div style={dividerStyle(colors)} />;
+};
 
-const inputStyle: CSSProperties = {
+const inputStyle = (colors: WhiteboardThemeColors): CSSProperties => ({
 	height: 24,
 	padding: '0 8px',
 	fontSize: 12,
-	border: '1px solid #d8d8d8',
+	border: `1px solid ${colors.cardBorder}`,
 	borderRadius: 4,
 	margin: '0 4px',
+	background: colors.cardBackground,
+	color: colors.textColor,
 	// Keep the browser's default focus ring for keyboard accessibility — do
 	// not set `outline: 'none'`.
-};
+});
 
 interface ActionInputProps {
 	value: string;
@@ -126,12 +144,16 @@ interface ActionInputProps {
 	onChange: (value: string)=> void;
 }
 
-export const ActionInput = ({ value, placeholder, width = 140, onChange }: ActionInputProps) => (
-	<input
-		type="text"
-		value={value}
-		placeholder={placeholder}
-		onChange={e => onChange(e.target.value)}
-		style={{ ...inputStyle, width }}
-	/>
-);
+export const ActionInput = ({ value, placeholder, width = 140, onChange }: ActionInputProps) => {
+	const ctx = useWhiteboardContext();
+	const colors = useMemo(() => whiteboardColors(ctx.themeId), [ctx.themeId]);
+	return (
+		<input
+			type="text"
+			value={value}
+			placeholder={placeholder}
+			onChange={e => onChange(e.target.value)}
+			style={{ ...inputStyle(colors), width }}
+		/>
+	);
+};

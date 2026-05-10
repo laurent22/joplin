@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
+import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Handle, NodeProps, NodeResizer } from '@xyflow/react';
 import * as path from 'path';
 import { pathToFileURL } from 'url';
@@ -15,24 +15,24 @@ import { isInternalRef } from '@joplin/lib/services/whiteboard/resolveRef';
 import { useWhiteboardContext } from '../WhiteboardContext';
 import { WhiteboardNodeData } from '../canvasFlow';
 import useCheckboxToggle from '../useCheckboxToggle';
-import { HANDLE_COLOR } from '../theme';
+import { whiteboardColors } from '../theme';
 import { bodyStyle, cardStyle, handlePositions, headerStyle } from './sharedStyles';
 
 const logger = Logger.create('WhiteboardFileNode');
 
 // Header showing the linked note's title — replaces the generic "NOTE" badge
 // when we know the title. Truncated with ellipsis on overflow.
-const noteHeaderStyle: CSSProperties = {
+const noteHeaderStyle = (textColor: string, dividerColor: string): CSSProperties => ({
 	fontSize: 12,
 	fontWeight: 600,
-	color: '#444',
+	color: textColor,
 	padding: '5px 8px',
-	borderBottom: '1px solid #eee',
+	borderBottom: `1px solid ${dividerColor}`,
 	flexShrink: 0,
 	whiteSpace: 'nowrap',
 	overflow: 'hidden',
 	textOverflow: 'ellipsis',
-};
+});
 
 // Build a file:// URL pointing at the resource's blob on disk. Joplin stores
 // resources as `${id}.${file_extension}`, so the extension (or, failing that,
@@ -124,6 +124,7 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; data: WhiteboardNodeData; position: { x: number; y: number } }>) => {
 	const ctx = useWhiteboardContext();
 	const node = data.canvasNode as FileCanvasNode;
+	const colors = useMemo(() => whiteboardColors(ctx.themeId), [ctx.themeId]);
 
 	const onDoubleClick = useCallback((e: React.MouseEvent) => {
 		e.stopPropagation();
@@ -241,8 +242,8 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 		if (resolved?.kind === 'note') {
 			return (
 				<>
-					<div style={noteHeaderStyle} title={resolved.title}>{resolved.title}</div>
-					<div ref={checkboxRef} className="wb-card-md" style={bodyStyle} dangerouslySetInnerHTML={{ __html: noteHtml }} />
+					<div style={noteHeaderStyle(colors.textColor, colors.dividerColor)} title={resolved.title}>{resolved.title}</div>
+					<div ref={checkboxRef} className="wb-card-md" style={bodyStyle(colors)} dangerouslySetInnerHTML={{ __html: noteHtml }} />
 				</>
 			);
 		}
@@ -251,8 +252,8 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 		if (resolved?.kind === 'resource') {
 			return (
 				<>
-					<div style={headerStyle}>Resource</div>
-					<div style={bodyStyle}>{resolved.title}</div>
+					<div style={headerStyle(colors)}>Resource</div>
+					<div style={bodyStyle(colors)}>{resolved.title}</div>
 				</>
 			);
 		}
@@ -260,8 +261,8 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 		// Loading or external file path.
 		return (
 			<>
-				<div style={headerStyle}>{node.file.startsWith(':/') ? 'Note / Resource' : 'File'}</div>
-				<div style={bodyStyle}>{resolved === null && node.file.startsWith(':/') ? 'Loading…' : node.file}</div>
+				<div style={headerStyle(colors)}>{node.file.startsWith(':/') ? 'Note / Resource' : 'File'}</div>
+				<div style={bodyStyle(colors)}>{resolved === null && node.file.startsWith(':/') ? 'Loading…' : node.file}</div>
 			</>
 		);
 	};
@@ -270,9 +271,9 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 		<>
 			<NodeResizer minWidth={80} minHeight={40} isVisible={!!selected} />
 			{handlePositions.map(({ id: hid, position }) => (
-				<Handle key={hid} type="source" position={position} id={hid} style={{ background: HANDLE_COLOR }} />
+				<Handle key={hid} type="source" position={position} id={hid} style={{ background: colors.handleColor }} />
 			))}
-			<div style={cardStyle(!!selected)} onDoubleClick={onDoubleClick}>
+			<div style={cardStyle(colors, !!selected)} onDoubleClick={onDoubleClick}>
 				{renderContent()}
 			</div>
 		</>
