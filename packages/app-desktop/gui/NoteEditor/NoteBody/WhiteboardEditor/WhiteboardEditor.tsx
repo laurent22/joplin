@@ -25,17 +25,6 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 	const canvasRef = useRef<Canvas>(initialCanvas);
 	canvasRef.current = canvas;
 
-	// Reload when the body switches to a different note, or when the body has
-	// changed underneath us (external write — e.g. the "add note to whiteboard"
-	// command — which produces a body we didn't emit).
-	const lastEmittedBodyRef = useRef<string>(props.content);
-	useEffect(() => {
-		if (props.content === lastEmittedBodyRef.current) return;
-		lastEmittedBodyRef.current = props.content;
-		const parsed = parseWhiteboard(props.content);
-		setCanvas(parsed.canvas);
-	}, [props.content, props.contentKey]);
-
 	// Debounced save. We split "schedule" from "unmount" cleanup because the
 	// effect's normal cleanup runs whenever `canvas` changes — that's a
 	// re-schedule, not a reason to drop the pending save. Only an actual
@@ -45,6 +34,20 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 	const pendingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const onChangeRef = useRef(props.onChange);
 	onChangeRef.current = props.onChange;
+
+	// Reload when the body switches to a different note, or when the body has
+	// changed underneath us (external write — e.g. the "add note to whiteboard"
+	// command — which produces a body we didn't emit).
+	const lastEmittedBodyRef = useRef<string>(props.content);
+	useEffect(() => {
+		if (props.content === lastEmittedBodyRef.current) return;
+		lastEmittedBodyRef.current = props.content;
+		const parsed = parseWhiteboard(props.content);
+		setCanvas(parsed.canvas);
+		// Mark the freshly-loaded canvas as already-synced so the debounced
+		// save effect doesn't echo it straight back as a write.
+		lastSerializedRef.current = JSON.stringify(parsed.canvas);
+	}, [props.content, props.contentKey]);
 
 	const flushPendingSave = useCallback((): string => {
 		if (pendingTimeoutRef.current !== null) {
