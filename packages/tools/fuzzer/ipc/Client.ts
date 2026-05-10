@@ -134,6 +134,10 @@ interface CreateRandomItemOptions extends CreateOrUpdateOptions {
 	quiet?: boolean;
 }
 
+interface CreateRandomFolderOptions extends CreateRandomItemOptions {
+	title?: string;
+}
+
 interface CreateOrUpdateManyOptions {
 	createProbability: number;
 	updateProbability: number;
@@ -763,12 +767,12 @@ class Client implements ActionableClient {
 		bar.complete();
 	}
 
-	public async createRandomFolder({ quiet, parentId, id }: CreateRandomItemOptions) {
+	public async createRandomFolder({ quiet, parentId, id, title }: CreateRandomFolderOptions) {
 		const titleLength = this.context_.randInt(1, 128);
 		const folder = {
 			parentId: parentId,
 			id: id ?? this.context_.randomId(),
-			title: this.context_.randomString(titleLength).replace(/\n/g, ' '),
+			title: title ?? this.context_.randomString(titleLength).replace(/\n/g, ' '),
 		};
 
 		await this.createFolder(folder, { quiet });
@@ -1177,15 +1181,17 @@ class Client implements ActionableClient {
 			}
 		};
 
-		const assertSameBodies = (actualSorted: NoteData[], expectedSorted: NoteData[], assertionLabel: string) => {
+		const assertStringPropertyMatches = <Key extends string, Entity extends Record<Key|'id', string>> (
+			key: Key, actualSorted: Entity[], expectedSorted: Entity[], assertionLabel: string,
+		) => {
 			if (actualSorted.length !== expectedSorted.length) {
 				throw new Error(`Input arrays have different lengths (in: ${assertionLabel})`);
 			}
 
 			const differentItems = [];
 			for (let i = 0; i < actualSorted.length; i++) {
-				const actualBody = actualSorted[i].body;
-				const expectedBody = expectedSorted[i].body;
+				const actualBody = actualSorted[i][key];
+				const expectedBody = expectedSorted[i][key];
 
 				if (actualBody !== expectedBody) {
 					differentItems.push([actualSorted[i], expectedSorted[i]]);
@@ -1196,11 +1202,11 @@ class Client implements ActionableClient {
 				const message = [`Some items have different bodies (in: ${assertionLabel})`];
 				for (const [actual, expected] of differentItems) {
 					message.push(`- item: ${actual.id}${actual.id !== expected.id ? ` (compare ${expected.id}) ` : ''}:`);
-					message.push(` ${hangingIndent(getDiffDebugMessage(actual.body, expected.body))}`);
+					message.push(` ${hangingIndent(getDiffDebugMessage(actual[key], expected[key]))}`);
 
-					// Only display full bodies for easy-to-inspect content:
-					const simpleBodyExp = /^[a-z0-9;.,!?[\]() \t\n"']{0,200}$/i;
-					if (actual.body.match(simpleBodyExp) && expected.body.match(simpleBodyExp)) {
+					// Only display the full value for easy-to-inspect content:
+					const simpleContentExp = /^[a-z0-9;.,!?[\]() \t\n"']{0,200}$/i;
+					if (actual[key].match(simpleContentExp) && expected[key].match(simpleContentExp)) {
 						message.push(`  actual:  ${JSON.stringify(actual)}`);
 						message.push(`  expected:${JSON.stringify(expected)}`);
 					}
@@ -1219,7 +1225,7 @@ class Client implements ActionableClient {
 			assertNoAdjacentEqualIds(notes, 'notes');
 			assertNoAdjacentEqualIds(expectedNotes, 'expectedNotes');
 			await assertSameIds(notes, expectedNotes, 'Note IDs should match');
-			assertSameBodies(notes, expectedNotes, 'should have the same note bodies');
+			assertStringPropertyMatches('body', notes, expectedNotes, 'should have the same note bodies');
 			assert.deepEqual(notes, expectedNotes, 'should have the same notes as the expected state');
 		};
 
@@ -1233,6 +1239,7 @@ class Client implements ActionableClient {
 			assertNoAdjacentEqualIds(folders, 'folders');
 			assertNoAdjacentEqualIds(expectedFolders, 'expectedFolders');
 			await assertSameIds(folders, expectedFolders, 'Folder IDs should match');
+			assertStringPropertyMatches('title', folders, expectedFolders, 'should have the same folder titles');
 			assert.deepEqual(folders, expectedFolders, 'should have the same folders as the expected state');
 		};
 

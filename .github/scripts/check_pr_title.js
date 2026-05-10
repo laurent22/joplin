@@ -5,13 +5,20 @@
 // - Users in `softCheckUsers` get a relaxed check (issue number optional)
 //   and only ever receive a comment, never a close.
 // - Everyone else must match the strict format. Invalid titles get a
-//   comment and the PR is closed.
+//   comment and the PR is closed. We also apply a marker label so that
+//   we can later tell our closures apart from any other closure.
+// - If the title becomes valid and the marker label is present, the PR
+//   is reopened and the label is removed. Closures by humans (or by
+//   another workflow) lack the label and are never overturned.
 //
 // Invoked from .github/workflows/check-pr-title.yml via actions/github-script.
-// Required inputs come from `env`: PR_AUTHOR, PR_NUMBER, PR_TITLE.
+// Required inputs come from `env`: PR_AUTHOR, PR_NUMBER. The title is
+// fetched from the API rather than passed via env to avoid YAML expansion
+// silently stripping leading whitespace from `${{ ... }}`.
 
 module.exports = async ({ github, context, core }) => {
 	const softCheckUsers = ['laurent22', 'personalizedrefrigerator', 'mrjo118', 'tessus', 'CalebJohn', 'Rygaa'];
+	const autoClosedLabel = 'auto-closed: invalid-title';
 
 	const prefix = '(Desktop|Mobile|All|Cli|Tools|Chore|Clipper|Server|Android|iOS|Plugins|CI|Plugin Repo|Doc)';
 	const prefixList = `${prefix}(,\\s*${prefix})*`;
@@ -20,7 +27,15 @@ module.exports = async ({ github, context, core }) => {
 
 	const author = process.env.PR_AUTHOR;
 	const prNumber = Number(process.env.PR_NUMBER);
-	const title = process.env.PR_TITLE;
+
+	const { data: pr } = await github.rest.pulls.get({
+		owner: context.repo.owner,
+		repo: context.repo.repo,
+		pull_number: prNumber,
+	});
+	const title = pr.title;
+	core.info(`Title (length=${title.length}): ${JSON.stringify(title)}`);
+
 	const isSoft = softCheckUsers.includes(author);
 
 	// listFiles returns up to 30 files per page; a pure translation PR is
@@ -41,6 +56,46 @@ module.exports = async ({ github, context, core }) => {
 	const regex = isSoft || isDocOnly ? softRegex : strictRegex;
 	if (regex.test(title)) {
 		core.info('Title is valid.');
+
+		// If we previously closed this PR for an invalid title and the
+		// title is now valid, reopen it. We only reopen if our marker
+		// label is present, so closures by humans (or other workflows)
+		// are never overturned. A maintainer can also remove the label
+		// by hand to lock a PR closed regardless of future fixes.
+		const wasAutoClosed = pr.state === 'closed' && pr.labels.some(l => l.name === autoClosedLabel);
+		if (wasAutoClosed) {
+			try {
+				await github.rest.pulls.update({
+					owner: context.repo.owner,
+					repo: context.repo.repo,
+					pull_number: prNumber,
+					state: 'open',
+				});
+			} catch (error) {
+				// GitHub refuses to reopen a PR when another open PR
+				// already exists from the same head→base branch pair.
+				// In that case the contributor has already opened a
+				// replacement, so leave this PR closed.
+				if (error.status === 422) {
+					core.info('Cannot reopen — another PR is already open from the same branch.');
+					return;
+				}
+				throw error;
+			}
+			await github.rest.issues.removeLabel({
+				owner: context.repo.owner,
+				repo: context.repo.repo,
+				issue_number: prNumber,
+				name: autoClosedLabel,
+			});
+			await github.rest.issues.createComment({
+				owner: context.repo.owner,
+				repo: context.repo.repo,
+				issue_number: prNumber,
+				body: `@${author} thanks for fixing the title — this PR has been reopened.`,
+			});
+			core.info('PR reopened after title was fixed.');
+		}
 		return;
 	}
 
@@ -57,7 +112,7 @@ module.exports = async ({ github, context, core }) => {
 		'',
 		isSoft
 			? '_This PR has been left open — please update the title when you have a moment._'
-			: '_This PR has been closed automatically. Please update the title and reopen it, or open a new pull request._',
+			: '_This PR has been closed automatically. Once you update the title to match the format above, the PR will be reopened automatically._',
 	].join('\n');
 
 	await github.rest.issues.createComment({
@@ -68,6 +123,13 @@ module.exports = async ({ github, context, core }) => {
 	});
 
 	if (!isSoft) {
+		// Label first so the marker is set before the close event lands.
+		await github.rest.issues.addLabels({
+			owner: context.repo.owner,
+			repo: context.repo.repo,
+			issue_number: prNumber,
+			labels: [autoClosedLabel],
+		});
 		await github.rest.pulls.update({
 			owner: context.repo.owner,
 			repo: context.repo.repo,

@@ -1897,6 +1897,7 @@ packages/tools/fuzzer/ipc/Client.js
 packages/tools/fuzzer/ipc/ClientPool.js
 packages/tools/fuzzer/ipc/Server.js
 packages/tools/fuzzer/model/ActionTracker.js
+packages/tools/fuzzer/model/FolderRecord.test.js
 packages/tools/fuzzer/model/FolderRecord.js
 packages/tools/fuzzer/model/NoteRecord.js
 packages/tools/fuzzer/model/ResourceRecord.js

@@ -1,5 +1,13 @@
 # Joplin Desktop Changelog
 
+## [v3.6.11](https://github.com/laurent22/joplin/releases/tag/v3.6.11) - 2026-05-08T14:28:46Z
+
+- Improved: Importing from OneNote: Convert an ink-related import error to a warning ([#15197](https://github.com/laurent22/joplin/issues/15197) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Importing from OneNote: Import created/updated timestamps and support special characters in titles ([#15213](https://github.com/laurent22/joplin/issues/15213) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Importing from OneNote: Support large attachments ([#15195](https://github.com/laurent22/joplin/issues/15195) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Rich Text Editor fails to load in secondary windows ([#15190](https://github.com/laurent22/joplin/issues/15190)) ([#15189](https://github.com/laurent22/joplin/issues/15189) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix positioning of nested ink containers ([#15196](https://github.com/laurent22/joplin/issues/15196)) ([#15194](https://github.com/laurent22/joplin/issues/15194) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.6.10](https://github.com/laurent22/joplin/releases/tag/v3.6.10) (Pre-release) - 2026-04-25T07:58:25Z
 
 - Improved: Add sync status icon and collapsible sync report to sidebar ([#15115](https://github.com/laurent22/joplin/issues/15115)) ([#14788](https://github.com/laurent22/joplin/issues/14788))
