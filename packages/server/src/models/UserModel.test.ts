@@ -303,6 +303,25 @@ describe('UserModel', () => {
 		}
 	});
 
+	test('should not send emails when an account\'s size limit has been manually increased', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		const totalSize = Math.round(accountByType(AccountType.Basic).max_total_item_size * 0.85);
+		await models().user().save({
+			id: user1.id,
+			account_type: AccountType.Basic,
+			total_item_size: totalSize,
+			max_total_item_size: totalSize * 2,
+		});
+
+		const emailBeforeCount = (await models().email().all()).length;
+
+		await models().user().handleOversizedAccounts();
+
+		const emailAfterCount = (await models().email().all()).length;
+		expect(emailAfterCount).toBe(emailBeforeCount);
+	});
+
 	test('should get the user public key', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);

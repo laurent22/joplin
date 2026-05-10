@@ -260,6 +260,7 @@ payant
 llamacpp
 bgcolor
 bordercolor
+randomblob
 togglefullscreen
 onestore
 macshot
@@ -283,3 +284,4 @@ plused
 connectionline
 precheck
 unparseable
+setval

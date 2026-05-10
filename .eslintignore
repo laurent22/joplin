@@ -1943,6 +1943,7 @@ packages/tools/fuzzer/ipc/Client.js
 packages/tools/fuzzer/ipc/ClientPool.js
 packages/tools/fuzzer/ipc/Server.js
 packages/tools/fuzzer/model/ActionTracker.js
+packages/tools/fuzzer/model/FolderRecord.test.js
 packages/tools/fuzzer/model/FolderRecord.js
 packages/tools/fuzzer/model/NoteRecord.js
 packages/tools/fuzzer/model/ResourceRecord.js
@@ -1963,6 +1964,7 @@ packages/tools/fuzzer/utils/openDebugSession.js
 packages/tools/fuzzer/utils/randomId.test.js
 packages/tools/fuzzer/utils/randomId.js
 packages/tools/fuzzer/utils/randomString.js
+packages/tools/fuzzer/utils/removeInvalidUtf8.js
 packages/tools/fuzzer/utils/retryWithCount.js
 packages/tools/generate-database-types.js
 packages/tools/generate-images.js
