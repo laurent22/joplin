@@ -692,8 +692,6 @@ function shimInit(options: ShimInitOptions = null) {
 		return Buffer.byteLength(string, 'utf-8');
 	};
 
-	shim.Buffer = Buffer;
-
 	shim.openUrl = url => {
 		// Returns true if it opens the file successfully; returns false if it could
 		// not find the file.

@@ -427,9 +427,6 @@ const shim = {
 	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	Buffer: null as any,
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	openUrl: (_url: string): any => {
 		throw new Error('Not implemented: openUrl');
 	},
