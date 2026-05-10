@@ -165,7 +165,7 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 			y: cy - 50,
 			width: 200,
 			height: 100,
-			text: 'New text card',
+			text: _('New text card'),
 		});
 	}, [rf, addCanvasNode]);
 
