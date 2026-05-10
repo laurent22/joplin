@@ -49,6 +49,8 @@ const useLoadedPluginIds = () => {
 			setLoadedPluginIds(getLoadedPlugins());
 		});
 
+		setLoadedPluginIds(getLoadedPlugins());
+
 		return () => {
 			remove();
 		};
