@@ -91,6 +91,17 @@ export const StyledShareIcon = styled.i`
 
 export const StyledSynchronizeButton = styled(Button)`
 	width: 100%;
+
+	&.-error,
+	&.-error:hover,
+	&.-error:active {
+		border-color: ${(props: StyleProps) => props.theme.colorError2};
+		color: ${(props: StyleProps) => props.theme.colorError2};
+
+		.icon {
+			color: ${(props: StyleProps) => props.theme.colorError2};
+		}
+	}
 `;
 
 export const StyledAddButton = styled(Button)`

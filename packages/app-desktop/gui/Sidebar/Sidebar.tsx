@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { themeStyle } from '@joplin/lib/theme';
 import { Dispatch } from 'redux';
 import FolderAndTagList from './FolderAndTagList';
+import synchronizeButtonState from './synchronizeButtonState';
 
 
 interface Props {
@@ -24,23 +25,16 @@ interface Props {
 	syncPending: boolean;
 	syncReportIsVisible: boolean;
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- The generated report does not currently have a type
-const syncCompletedWithoutError = (syncReport: any) => {
-	return syncReport.completedTime && (!syncReport.errors || !syncReport.errors.length);
-};
-
 const SidebarComponent = (props: Props) => {
 	const renderSynchronizeButton = (type: string) => {
 		const label = type === 'sync' ? _('Synchronise') : _('Cancel');
-		const nothingToSync = type === 'sync' && !props.syncPending && syncCompletedWithoutError(props.syncReport);
-		const iconName = nothingToSync ? 'fas fa-check' : 'icon-sync';
+		const buttonState = synchronizeButtonState(type, props.syncPending, props.syncReport);
 
 		return (
 			<StyledSynchronizeButton
 				level={ButtonLevel.SidebarSecondary}
-				className={`sidebar-sync-button ${type === 'sync' ? '' : '-syncing'} ${nothingToSync ? '-synced' : ''}`}
-				iconName={iconName}
+				className={buttonState.className}
+				iconName={buttonState.iconName}
 				key="sync_button"
 				title={label}
 				onClick={() => {

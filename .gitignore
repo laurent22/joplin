@@ -415,6 +415,7 @@ packages/app-desktop/gui/SearchBar/SearchBar.js
 packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js
 packages/app-desktop/gui/ShareNoteDialog.js
 packages/app-desktop/gui/Sidebar/FolderAndTagList.js
+packages/app-desktop/gui/Sidebar/Sidebar.test.js
 packages/app-desktop/gui/Sidebar/Sidebar.js
 packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js
 packages/app-desktop/gui/Sidebar/commands/index.js
@@ -437,6 +438,7 @@ packages/app-desktop/gui/Sidebar/listItemComponents/ListItemWrapper.js
 packages/app-desktop/gui/Sidebar/listItemComponents/NoteCount.js
 packages/app-desktop/gui/Sidebar/listItemComponents/TagItem.js
 packages/app-desktop/gui/Sidebar/styles/index.js
+packages/app-desktop/gui/Sidebar/synchronizeButtonState.js
 packages/app-desktop/gui/Sidebar/types.js
 packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.js
 packages/app-desktop/gui/StatusScreen/StatusScreen.js
