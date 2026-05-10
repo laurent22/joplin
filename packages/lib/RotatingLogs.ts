@@ -15,7 +15,7 @@ export default class RotatingLogs {
 
 	public async cleanActiveLogFile() {
 		const stats: Stat = await this.fsDriver().stat(this.logFileFullpath());
-		if (!stats) return; // log.txt doesn't exist yet (e.g. fresh install) — nothing to rotate
+		if (!stats) return;
 		if (stats.size >= this.maxFileSize) {
 			const newLogFile: string = this.logFileFullpath(this.getNameToNonActiveLogFile());
 			await this.fsDriver().move(this.logFileFullpath(), newLogFile);
