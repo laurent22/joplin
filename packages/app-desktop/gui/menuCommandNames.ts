@@ -18,7 +18,6 @@ export default function() {
 		'newSubFolder',
 		'newTodo',
 		'newWhiteboard',
-		'convertNoteToWhiteboard',
 		'toggleWhiteboardEditor',
 		'addNoteToWhiteboard',
 		'openProfileDirectory',

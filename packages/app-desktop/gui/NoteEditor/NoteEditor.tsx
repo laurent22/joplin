@@ -485,7 +485,6 @@ function NoteEditorContent(props: NoteEditorProps) {
 		&& hasWhiteboardFence(formNote.body);
 
 	const useWhiteboardEditor = builtInEditorVisible
-		&& Setting.value('whiteboard.enabled')
 		&& noteHasWhiteboardFence
 		&& !props.whiteboardForceMarkdown?.[formNote.id];
 

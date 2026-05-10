@@ -20,6 +20,6 @@ export const runtime = (): CommandRuntime => {
 				updateGeolocation: false,
 			});
 		},
-		enabledCondition: `${newNoteEnabledConditions} && whiteboardEnabled`,
+		enabledCondition: newNoteEnabledConditions,
 	};
 };

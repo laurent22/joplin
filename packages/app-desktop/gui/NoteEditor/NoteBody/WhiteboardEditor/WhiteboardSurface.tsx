@@ -82,7 +82,7 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 	const [flowNodes, setFlowNodes] = useState<WhiteboardFlowNode[]>(initial.nodes);
 	const [flowEdges, setFlowEdges] = useState<WhiteboardFlowEdge[]>(initial.edges);
 	// JSONCanvas group nodes are not rendered, but we preserve them through
-	// round-trip so importing a canvas from another tool (e.g. Obsidian) and
+	// round-trip so importing a canvas from another tool and
 	// re-saving doesn't silently drop them.
 	const preservedGroupsRef = useRef<CanvasNode[]>(initial.preservedGroups);
 	const containerRef = useRef<HTMLDivElement | null>(null);

@@ -127,7 +127,7 @@ describe('whiteboard format module', () => {
 
 	test('preserves group nodes through parse + serialize', () => {
 		// Joplin's editor doesn't render group nodes but must not silently
-		// drop them on save — Obsidian-authored canvases may contain them.
+		// drop them on save — other tools may contain them.
 		const canvas: Canvas = {
 			nodes: [
 				{ id: 'g', type: 'group', x: -50, y: -50, width: 400, height: 300, label: 'Phase 1', background: '#eee' },

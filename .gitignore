@@ -473,7 +473,6 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/WindowCommandsAndDialogs.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addNoteToWhiteboard.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/commandPalette.js
-packages/app-desktop/gui/WindowCommandsAndDialogs/commands/convertNoteToWhiteboard.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/duplicateNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/editAlarm.js

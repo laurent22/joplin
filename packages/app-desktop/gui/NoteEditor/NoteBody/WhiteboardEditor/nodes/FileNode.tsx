@@ -130,8 +130,7 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 	// Internal refs go through the resolved resource (which carries mime +
 	// file_extension from the database). External refs may already be URLs
 	// (http/https/file), in which case we use them as-is for rendering;
-	// bare paths from other tools (e.g. Obsidian's vault-relative
-	// `Notes/foo.md`) can't be resolved here so we leave url null and fall
+	// bare paths from other tools can't be resolved here so we leave url null and fall
 	// back to the text branch.
 	const isInternal = isInternalRef(node.file);
 	const url = isInternal

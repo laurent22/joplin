@@ -29,7 +29,7 @@ export interface TextCanvasNode extends BaseCanvasNode {
 export interface FileCanvasNode extends BaseCanvasNode {
 	type: 'file';
 	// In Joplin, this can be `:/<noteId>` or `:/<resourceId>` as well as a
-	// regular path (for cross-vault interop with Obsidian).
+	// regular path (for cross-vault interop with other apps).
 	file: string;
 	subpath?: string;
 }

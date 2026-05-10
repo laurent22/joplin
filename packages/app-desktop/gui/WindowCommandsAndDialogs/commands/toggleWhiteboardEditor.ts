@@ -14,6 +14,6 @@ export const runtime = (): CommandRuntime => {
 			if (!id) return;
 			context.dispatch({ type: 'WHITEBOARD_FORCE_MARKDOWN_TOGGLE', noteId: id });
 		},
-		enabledCondition: 'oneNoteSelected && whiteboardEnabled',
+		enabledCondition: 'oneNoteSelected',
 	};
 };
