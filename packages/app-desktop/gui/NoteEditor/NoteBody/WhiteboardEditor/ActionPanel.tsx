@@ -109,6 +109,12 @@ export const ActionButton = ({ onClick, active, disabled, title, children }: Act
 			onClick={onClick}
 			disabled={disabled}
 			title={title}
+			// Many ActionButtons render only a glyph (—, →, ↔ …) whose Unicode
+			// name isn't a useful accessible name. Mirror `title` into
+			// aria-label so screen readers and voice-control users get the
+			// human-readable label the tooltip already shows.
+			aria-label={title}
+			aria-pressed={active}
 			style={style}
 			onMouseEnter={e => { if (!disabled && !active) (e.currentTarget.style.background = hoverBg); }}
 			onMouseLeave={e => { if (!active) (e.currentTarget.style.background = 'transparent'); }}
@@ -152,6 +158,9 @@ export const ActionInput = ({ value, placeholder, width = 140, onChange }: Actio
 			type="text"
 			value={value}
 			placeholder={placeholder}
+			// Without a visible <label> the placeholder is the only label a
+			// screen reader / voice-control user has to identify the field.
+			aria-label={placeholder}
 			onChange={e => onChange(e.target.value)}
 			style={{ ...inputStyle(colors), width }}
 		/>

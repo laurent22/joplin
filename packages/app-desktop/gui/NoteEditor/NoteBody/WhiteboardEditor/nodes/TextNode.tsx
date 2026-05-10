@@ -150,6 +150,18 @@ const TextNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbText'
 		beginEdit();
 	}, [beginEdit]);
 
+	// Keyboard equivalent of double-click: when the card is focused (React
+	// Flow makes nodes focusable for tab navigation), Enter or F2 opens the
+	// editor. Skip when already editing — the textarea has its own handler.
+	const onCardKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+		if (editing) return;
+		if (e.key === 'Enter' || e.key === 'F2') {
+			e.preventDefault();
+			e.stopPropagation();
+			beginEdit();
+		}
+	}, [editing, beginEdit]);
+
 	const onPromote = useCallback((e: React.MouseEvent) => {
 		e.stopPropagation();
 		ctx.onPromoteTextNode(id);
@@ -169,7 +181,7 @@ const TextNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbText'
 			{handlePositions.map(({ id: hid, position }) => (
 				<Handle key={hid} type="source" position={position} id={hid} style={{ background: colors.handleColor }} />
 			))}
-			<div style={textCardStyle(colors, !!selected)} onDoubleClick={onDoubleClick}>
+			<div style={textCardStyle(colors, !!selected)} onDoubleClick={onDoubleClick} onKeyDown={onCardKeyDown}>
 				{editing ? (
 					<textarea
 						ref={textareaRef}
