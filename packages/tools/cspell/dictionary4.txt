@@ -282,3 +282,4 @@ updaters
 plused
 connectionline
 precheck
+unparseable

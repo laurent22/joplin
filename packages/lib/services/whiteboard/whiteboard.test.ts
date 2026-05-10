@@ -42,6 +42,19 @@ describe('whiteboard format module', () => {
 		expect(result.hasCanvas).toBe(false);
 		expect(result.canvas.nodes).toHaveLength(0);
 		expect(result.canvas.edges).toHaveLength(0);
+		expect(result.parseError).toMatch(/^Invalid JSON: /);
+	});
+
+	test('reports a schema error when the JSON is valid but not a JSONCanvas object', () => {
+		const body = '```jsoncanvas\n[]\n```';
+		const result = parseWhiteboard(body);
+		expect(result.hasCanvas).toBe(false);
+		expect(result.parseError).toMatch(/JSONCanvas/);
+	});
+
+	test('parseError is null when there is no fence at all', () => {
+		expect(parseWhiteboard('').parseError).toBeNull();
+		expect(parseWhiteboard('plain note').parseError).toBeNull();
 	});
 
 	test('drops invalid nodes and edges that reference unknown nodes', () => {

@@ -6,6 +6,7 @@ import Note from '@joplin/lib/models/Note';
 import { Canvas, CanvasNode, FileCanvasNode, TextCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 import { parseWhiteboard } from '@joplin/lib/services/whiteboard/parse';
 import { serializeWhiteboard } from '@joplin/lib/services/whiteboard/serialize';
+import { themeStyle } from '@joplin/lib/theme';
 import { WhiteboardContext } from './WhiteboardContext';
 import WhiteboardSurface from './WhiteboardSurface';
 
@@ -15,7 +16,9 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 	const bodyRef = useRef(props.content);
 	bodyRef.current = props.content;
 
-	const initialCanvas = useMemo(() => parseWhiteboard(props.content).canvas, [props.content]);
+	const initialParse = useMemo(() => parseWhiteboard(props.content), [props.content]);
+	const initialCanvas = initialParse.canvas;
+	const parseError = initialParse.parseError;
 	const [canvas, setCanvas] = useState<Canvas>(initialCanvas);
 	// Mirror the canvas state in a ref so async handlers can read the latest
 	// version without going through a setCanvas updater (which must stay pure).
@@ -60,6 +63,10 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 	}, []);
 
 	useEffect(() => {
+		// Never write back when the source body had an unparseable fence —
+		// otherwise opening a corrupt note would silently overwrite the
+		// user's recoverable JSON with an empty canvas.
+		if (parseError) return undefined;
 		const serialized = JSON.stringify(canvas);
 		if (serialized === lastSerializedRef.current) return undefined;
 		pendingSerializedRef.current = serialized;
@@ -72,7 +79,7 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 			flushPendingSave();
 		}, SAVE_DEBOUNCE_MS);
 		return undefined;
-	}, [canvas, flushPendingSave]);
+	}, [canvas, flushPendingSave, parseError]);
 
 	// Flush on unmount. The empty-deps effect's cleanup only fires once.
 	useEffect(() => {
@@ -158,6 +165,19 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 		onUpdateNode,
 		onPromoteTextNode,
 	}), [props.markupToHtml, props.resourceInfos, props.resourceDirectory, props.themeId, onOpenRef, onUpdateNode, onPromoteTextNode]);
+
+	if (parseError) {
+		const theme = themeStyle(props.themeId);
+		return (
+			<div style={{ ...props.style, display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, padding: 24, overflow: 'auto' }}>
+				<div style={{ backgroundColor: theme.warningBackgroundColor, color: theme.color, padding: 16, borderRadius: 4, display: 'flex', flexDirection: 'column', gap: 12 }}>
+					<div style={{ fontWeight: 600 }}>This whiteboard could not be loaded</div>
+					<div style={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: 12 }}>{parseError}</div>
+					<div>Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.</div>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div style={{ ...props.style, display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>

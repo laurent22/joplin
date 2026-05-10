@@ -18,6 +18,11 @@ export interface ParseResult {
 	// True if the fence existed and parsed cleanly. False means the body has
 	// no fence, or the fence content is not valid JSONCanvas.
 	hasCanvas: boolean;
+	// When the fence existed but could not be parsed, this carries a
+	// human-readable explanation (the JSON parser's message, or a description
+	// of the schema violation). Null when there's no fence at all, or when
+	// parsing succeeded.
+	parseError: string | null;
 }
 
 // Cheap precheck — `fenceRegex` uses lazy [\s\S]*? matching that's O(n) on
@@ -69,8 +74,8 @@ const validateEdge = (raw: unknown): CanvasEdge | null => {
 	return raw as unknown as CanvasEdge;
 };
 
-const validateCanvas = (raw: unknown): Canvas | null => {
-	if (!isObject(raw)) return null;
+const validateCanvas = (raw: unknown): Canvas | string => {
+	if (!isObject(raw)) return 'Top-level JSONCanvas value must be an object with `nodes` and `edges` arrays.';
 	const rawNodes = Array.isArray(raw.nodes) ? raw.nodes : [];
 	const rawEdges = Array.isArray(raw.edges) ? raw.edges : [];
 	const nodes: CanvasNode[] = [];
@@ -90,26 +95,27 @@ const validateCanvas = (raw: unknown): Canvas | null => {
 };
 
 export const parseWhiteboard = (body: string): ParseResult => {
-	if (!body) return { canvas: emptyCanvas(), prefix: '', suffix: '', hasCanvas: false };
+	if (!body) return { canvas: emptyCanvas(), prefix: '', suffix: '', hasCanvas: false, parseError: null };
 
 	// Same precheck as hasWhiteboardFence — skip the O(n) backtracking regex
 	// scan when the literal opening marker isn't even present.
-	if (body.indexOf(fenceMarker) === -1) return { canvas: emptyCanvas(), prefix: body, suffix: '', hasCanvas: false };
+	if (body.indexOf(fenceMarker) === -1) return { canvas: emptyCanvas(), prefix: body, suffix: '', hasCanvas: false, parseError: null };
 
 	const match = body.match(fenceRegex);
-	if (!match) return { canvas: emptyCanvas(), prefix: body, suffix: '', hasCanvas: false };
+	if (!match) return { canvas: emptyCanvas(), prefix: body, suffix: '', hasCanvas: false, parseError: null };
 
 	const [, prefix, jsonText, suffix] = match;
 
 	let parsed: unknown;
 	try {
 		parsed = JSON.parse(jsonText);
-	} catch {
-		return { canvas: emptyCanvas(), prefix, suffix, hasCanvas: false };
+	} catch (error) {
+		const message = error instanceof Error ? error.message : String(error);
+		return { canvas: emptyCanvas(), prefix, suffix, hasCanvas: false, parseError: `Invalid JSON: ${message}` };
 	}
 
 	const canvas = validateCanvas(parsed);
-	if (!canvas) return { canvas: emptyCanvas(), prefix, suffix, hasCanvas: false };
+	if (typeof canvas === 'string') return { canvas: emptyCanvas(), prefix, suffix, hasCanvas: false, parseError: canvas };
 
-	return { canvas, prefix, suffix, hasCanvas: true };
+	return { canvas, prefix, suffix, hasCanvas: true, parseError: null };
 };

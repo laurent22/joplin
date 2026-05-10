@@ -20,7 +20,7 @@ import {
 	useReactFlow,
 } from '@xyflow/react';
 import ensureReactFlowCss, { applyReactFlowTheme } from './loadReactFlowCss';
-import generateId from './generateId';
+import generateId from '@joplin/lib/services/whiteboard/generateId';
 import { _, _n } from '@joplin/lib/locale';
 import { Canvas, CanvasEdge, CanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 

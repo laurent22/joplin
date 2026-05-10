@@ -307,7 +307,6 @@ packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardContext.
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardEditor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/canvasFlow.js
-packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/generateId.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/injectStyle.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/loadReactFlowCss.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.js
@@ -1779,6 +1778,7 @@ packages/lib/services/trash/permanentlyDeleteOldItems.test.js
 packages/lib/services/trash/permanentlyDeleteOldItems.js
 packages/lib/services/trash/restoreItems.test.js
 packages/lib/services/trash/restoreItems.js
+packages/lib/services/whiteboard/generateId.js
 packages/lib/services/whiteboard/jsoncanvas.js
 packages/lib/services/whiteboard/parse.js
 packages/lib/services/whiteboard/resolveRef.js
