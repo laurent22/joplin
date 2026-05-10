@@ -92,6 +92,10 @@ const validateCanvas = (raw: unknown): Canvas | null => {
 export const parseWhiteboard = (body: string): ParseResult => {
 	if (!body) return { canvas: emptyCanvas(), prefix: '', suffix: '', hasCanvas: false };
 
+	// Same precheck as hasWhiteboardFence — skip the O(n) backtracking regex
+	// scan when the literal opening marker isn't even present.
+	if (body.indexOf(fenceMarker) === -1) return { canvas: emptyCanvas(), prefix: body, suffix: '', hasCanvas: false };
+
 	const match = body.match(fenceRegex);
 	if (!match) return { canvas: emptyCanvas(), prefix: body, suffix: '', hasCanvas: false };
 

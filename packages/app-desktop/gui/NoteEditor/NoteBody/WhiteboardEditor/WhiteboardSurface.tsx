@@ -25,7 +25,7 @@ import { _, _n } from '@joplin/lib/locale';
 import { Canvas, CanvasEdge, CanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 
 ensureReactFlowCss();
-import { canvasToFlow, flowToCanvas, WhiteboardFlowEdge, WhiteboardFlowNode } from './canvasFlow';
+import { canvasNodeToFlowNode, canvasToFlow, flowToCanvas, WhiteboardFlowEdge, WhiteboardFlowNode } from './canvasFlow';
 import TextNode from './nodes/TextNode';
 import FileNode from './nodes/FileNode';
 import LinkNode from './nodes/LinkNode';
@@ -51,7 +51,6 @@ const arrowModeFor = (e: WhiteboardFlowEdge): Exclude<ArrowMode, 'mixed'> => {
 interface Props {
 	canvas: Canvas;
 	onChange: (canvas: Canvas)=> void;
-	onAddNode: (node: CanvasNode)=> void;
 }
 
 const nodeTypes: NodeTypes = {
@@ -60,7 +59,7 @@ const nodeTypes: NodeTypes = {
 	wbLink: LinkNode as unknown as NodeTypes[string],
 };
 
-const InnerSurface = ({ canvas, onChange, onAddNode }: Props) => {
+const InnerSurface = ({ canvas, onChange }: Props) => {
 	const ctx = useWhiteboardContext();
 	const colors = useMemo(() => whiteboardColors(ctx.themeId), [ctx.themeId]);
 
@@ -142,12 +141,19 @@ const InnerSurface = ({ canvas, onChange, onAddNode }: Props) => {
 		markerEnd: makeArrowMarker(),
 	}), []);
 
+	// Append a freshly-created canvas node to the surface's local flow state.
+	// The render-cycle effect at flowToCanvas → onChange propagates the new
+	// node up to the parent, so we don't need an explicit onAddNode prop.
+	const addCanvasNode = useCallback((n: Exclude<CanvasNode, { type: 'group' }>) => {
+		setFlowNodes(prev => [...prev, canvasNodeToFlowNode(n)]);
+	}, []);
+
 	const onAddText = useCallback(() => {
 		const view = rf.getViewport();
 		const rect = containerRef.current?.getBoundingClientRect();
 		const cx = rect ? (rect.width / 2 - view.x) / view.zoom : 0;
 		const cy = rect ? (rect.height / 2 - view.y) / view.zoom : 0;
-		onAddNode({
+		addCanvasNode({
 			id: generateId(),
 			type: 'text',
 			x: cx - 100,
@@ -156,7 +162,7 @@ const InnerSurface = ({ canvas, onChange, onAddNode }: Props) => {
 			height: 100,
 			text: 'New text card',
 		});
-	}, [rf, onAddNode]);
+	}, [rf, addCanvasNode]);
 
 	// Selection summaries for the action panels.
 	const selectedEdges = useMemo(() => flowEdges.filter(e => e.selected), [flowEdges]);
@@ -236,7 +242,7 @@ const InnerSurface = ({ canvas, onChange, onAddNode }: Props) => {
 		];
 		let offset = 0;
 		for (const id of ids) {
-			onAddNode({
+			addCanvasNode({
 				id: generateId(),
 				type: 'file',
 				x: drop.x - 120 + offset,
@@ -247,7 +253,7 @@ const InnerSurface = ({ canvas, onChange, onAddNode }: Props) => {
 			});
 			offset += 24;
 		}
-	}, [rf, onAddNode]);
+	}, [rf, addCanvasNode]);
 
 	return (
 		<div

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Handle, NodeProps, NodeResizer } from '@xyflow/react';
-import * as path from 'path';
 import { pathToFileURL } from 'url';
 import { MarkupLanguage } from '@joplin/renderer';
 import BaseItem from '@joplin/lib/models/BaseItem';
@@ -10,8 +9,10 @@ import ItemChange from '@joplin/lib/models/ItemChange';
 import { ModelType } from '@joplin/lib/BaseModel';
 import attachedResources from '@joplin/lib/utils/attachedResources';
 import Logger from '@joplin/utils/Logger';
+import { resourceFullPath } from '@joplin/lib/models/utils/resourceUtils';
+import { ResourceEntity } from '@joplin/lib/services/database/types';
 import { FileCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
-import { isInternalRef } from '@joplin/lib/services/whiteboard/resolveRef';
+import { isInternalRef, RefKind, resolveFileRef } from '@joplin/lib/services/whiteboard/resolveRef';
 import { useWhiteboardContext } from '../WhiteboardContext';
 import { WhiteboardNodeData } from '../canvasFlow';
 import useCheckboxToggle from '../useCheckboxToggle';
@@ -34,17 +35,14 @@ const noteHeaderStyle = (textColor: string, dividerColor: string): CSSProperties
 	textOverflow: 'ellipsis',
 });
 
-// Build a file:// URL pointing at the resource's blob on disk. Joplin stores
-// resources as `${id}.${file_extension}`, so the extension (or, failing that,
-// a mime-derived one) must be appended — without it the URL points to a
-// non-existent file. Uses path.join + pathToFileURL so Windows paths and
-// special characters in the resource directory are encoded correctly.
-const resourceUrlFor = (file: string, resourceDirectory: string, fileExtension?: string): string | null => {
-	if (!isInternalRef(file)) return null;
-	if (!resourceDirectory) return null;
-	const id = file.slice(2).split('#')[0];
-	const filename = fileExtension ? `${id}.${fileExtension}` : id;
-	return pathToFileURL(path.join(resourceDirectory, filename)).href;
+// Build a file:// URL pointing at the resource's blob on disk. Delegates
+// the path-on-disk computation to resourceFullPath so we get the same
+// extension logic as the rest of Joplin (file_extension first, then a
+// mime → extension fallback for resources missing an explicit extension).
+// pathToFileURL handles Windows separators and special-character encoding.
+const resourceUrlFor = (resource: ResourceEntity | null, resourceDirectory: string): string | null => {
+	if (!resource || !resourceDirectory) return null;
+	return pathToFileURL(resourceFullPath(resource, resourceDirectory)).href;
 };
 
 interface ResolvedItem {
@@ -55,12 +53,10 @@ interface ResolvedItem {
 	// toggling) and to enable conflict detection on save.
 	userUpdatedTime?: number;
 	deletedTime?: number;
-	// Resource metadata: needed to build a working file URL (Joplin stores
-	// resources on disk as `${id}.${file_extension}`) and to detect image /
-	// PDF resources for inline rendering. The bare `:/id` ref carries no
-	// extension or mime info.
-	mime?: string;
-	fileExtension?: string;
+	// The full resource entity for `kind: 'resource'` items, so we can pass
+	// it straight to resourceFullPath / resourceFilename (which know how to
+	// fall back from missing file_extension to a mime-derived one).
+	resource?: ResourceEntity;
 }
 
 const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch: ()=> void } => {
@@ -70,7 +66,8 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 
 	useEffect(() => {
 		let cancelled = false;
-		if (!isInternalRef(file)) {
+		const ref = resolveFileRef(file);
+		if (ref.kind === RefKind.External) {
 			setResolved(null);
 			lastLoadedFileRef.current = null;
 			return undefined;
@@ -84,10 +81,9 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 			setResolved(null);
 			lastLoadedFileRef.current = file;
 		}
-		const id = file.slice(2).split('#')[0];
 		void (async () => {
 			try {
-				const item = await BaseItem.loadItemById(id);
+				const item = await BaseItem.loadItemById(ref.id);
 				if (cancelled) return;
 				if (!item) {
 					setResolved({ kind: 'unknown', title: file });
@@ -105,8 +101,7 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 					setResolved({
 						kind: 'resource',
 						title: item.title || file,
-						mime: item.mime,
-						fileExtension: item.file_extension,
+						resource: item as ResourceEntity,
 					});
 				} else {
 					setResolved({ kind: 'unknown', title: file });
@@ -132,21 +127,22 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 	}, [ctx, node.file]);
 
 	const { resolved, refetch } = useResolvedRef(node.file);
-	// Internal refs go through the resolved mime + file_extension pulled
-	// from the database. External refs may already be URLs (http/https/file),
-	// in which case we use them as-is for rendering; bare paths from other
-	// tools (e.g. Obsidian's vault-relative `Notes/foo.md`) can't be
-	// resolved here so we leave url null and fall back to the text branch.
+	// Internal refs go through the resolved resource (which carries mime +
+	// file_extension from the database). External refs may already be URLs
+	// (http/https/file), in which case we use them as-is for rendering;
+	// bare paths from other tools (e.g. Obsidian's vault-relative
+	// `Notes/foo.md`) can't be resolved here so we leave url null and fall
+	// back to the text branch.
 	const isInternal = isInternalRef(node.file);
-	const externalLooksLikeUrl = !isInternal && /^(https?:|file:)\/\//i.test(node.file);
 	const url = isInternal
-		? resourceUrlFor(node.file, ctx.resourceDirectory, resolved?.fileExtension)
-		: (externalLooksLikeUrl ? node.file : null);
+		? resourceUrlFor(resolved?.resource ?? null, ctx.resourceDirectory)
+		: (/^(https?:|file:)\/\//i.test(node.file) ? node.file : null);
+	const mime = resolved?.resource?.mime;
 	const isPdf = isInternal
-		? resolved?.mime === 'application/pdf'
+		? mime === 'application/pdf'
 		: /\.pdf(\?|$|#)/i.test(node.file);
 	const isImage = isInternal
-		? !!resolved?.mime?.startsWith('image/')
+		? !!mime?.startsWith('image/')
 		: /\.(png|jpe?g|gif|webp|svg|bmp)(\?|$|#)/i.test(node.file);
 
 	// Render note bodies as compiled HTML, like the TextNode does. Resources
@@ -179,7 +175,7 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 	// other commands (e.g. addNoteToWhiteboard) update notes outside the
 	// editor's own state — once the body is saved, refetching `resolved`
 	// happens via `useResolvedRef` which is keyed on `node.file`.
-	const linkedNoteId = resolved?.kind === 'note' ? node.file.slice(2).split('#')[0] : null;
+	const linkedNoteId = resolved?.kind === 'note' ? resolveFileRef(node.file).id : null;
 	const linkedNoteUserUpdatedTime = resolved?.kind === 'note' ? resolved.userUpdatedTime : undefined;
 	const linkedNoteDeletedTime = resolved?.kind === 'note' ? resolved.deletedTime : undefined;
 	// Per-card in-flight flag. Rapid checkbox toggles can otherwise overwrite

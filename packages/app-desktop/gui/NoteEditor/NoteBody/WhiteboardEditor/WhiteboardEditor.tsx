@@ -89,10 +89,6 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 		execCommand: async () => { /* not applicable */ },
 	}), [flushPendingSave]);
 
-	const onAddNode = useCallback((node: CanvasNode) => {
-		setCanvas(prev => ({ ...prev, nodes: [...prev.nodes, node] }));
-	}, []);
-
 	const onUpdateNode = useCallback((nodeId: string, patch: Record<string, unknown>) => {
 		setCanvas(prev => ({
 			...prev,
@@ -169,7 +165,6 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 				<WhiteboardSurface
 					canvas={canvas}
 					onChange={setCanvas}
-					onAddNode={onAddNode}
 				/>
 			</WhiteboardContext.Provider>
 		</div>

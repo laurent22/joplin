@@ -21,6 +21,21 @@ const flowTypeForCanvasType = (type: 'text' | 'file' | 'link'): string => {
 	}
 };
 
+// Convert a single (non-group) JSONCanvas node into the React Flow shape.
+// Used both by the bulk converter at load time and by the surface when the
+// user creates a new node interactively.
+export const canvasNodeToFlowNode = (n: Exclude<CanvasNode, { type: 'group' }>): WhiteboardFlowNode => ({
+	id: n.id,
+	type: flowTypeForCanvasType(n.type),
+	position: { x: n.x, y: n.y },
+	data: { canvasNode: n },
+	style: { width: n.width, height: n.height },
+	width: n.width,
+	height: n.height,
+	selectable: true,
+	draggable: true,
+});
+
 const sideToHandle = (side: CanvasNodeSide | undefined): string | undefined => {
 	if (!side) return undefined;
 	return side; // React Flow handle ids match side names ('top', 'right', 'bottom', 'left').
@@ -48,17 +63,7 @@ export const canvasToFlow = (canvas: Canvas): CanvasToFlowResult => {
 			preservedGroups.push(n);
 			continue;
 		}
-		nodes.push({
-			id: n.id,
-			type: flowTypeForCanvasType(n.type),
-			position: { x: n.x, y: n.y },
-			data: { canvasNode: n },
-			style: { width: n.width, height: n.height },
-			width: n.width,
-			height: n.height,
-			selectable: true,
-			draggable: true,
-		});
+		nodes.push(canvasNodeToFlowNode(n));
 	}
 
 	const edges: WhiteboardFlowEdge[] = canvas.edges.map(e => ({
