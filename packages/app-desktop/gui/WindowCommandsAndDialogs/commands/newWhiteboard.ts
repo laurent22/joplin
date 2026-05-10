@@ -5,7 +5,7 @@ import { createNoteInActiveFolder, newNoteEnabledConditions } from './newNote';
 
 export const declaration: CommandDeclaration = {
 	name: 'newWhiteboard',
-	label: () => _('New whiteboard'),
+	label: () => _('Create whiteboard'),
 	iconName: 'fa-th',
 };
 

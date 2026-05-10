@@ -10,7 +10,7 @@ Whiteboard editing is available on the desktop app only. Mobile read/edit suppor
 
 ## Creating a whiteboard
 
-To create a new whiteboard, open **Tools → New Whiteboard**.
+To create a new whiteboard, open **Tools → Create whiteboard**.
 
 ## The editor
 
@@ -19,7 +19,7 @@ A whiteboard note opens directly in the editor. The view supports panning (click
 ### Adding cards
 
 - **+ Text** (top-right action panel) — adds a new text card near the centre of the visible viewport. Double-click the card or press **Enter** when it's focused to edit; the body supports Markdown, including headings, lists, code blocks, and checkboxes.
-- **Drag and drop** — drop an image, PDF, or any file from your filesystem onto the whiteboard to create a file card.
+- **Drag and drop from Joplin** — drag a note from the note list, or an attachment, onto the whiteboard to create a card linking to it.
 - **Tools → Add note to whiteboard** — opens the note picker and adds a card linking to the chosen Joplin note. The card shows the note's title and a live preview of its body, with working checkboxes.
 
 ### Connecting cards
