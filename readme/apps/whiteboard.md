@@ -1,4 +1,4 @@
-## Whiteboard
+# Whiteboard support
 
 Whiteboards, also known as "canvas", allow organising notes spatially on an infinite zoomable surface. Instead of editing prose top-to-bottom, you arrange text cards, images, PDFs, links and references to other notes anywhere on a 2D surface, and connect them with labelled arrows.
 
