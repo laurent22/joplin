@@ -34,7 +34,7 @@
     "@joplin/fork-uslug": "^2.0.3",
     "@joplin/utils": "~3.6",
     "@types/json5": "2.2.0",
-    "abcjs": "6.6.0",
+    "abcjs": "6.6.1",
     "font-awesome-filetypes": "2.1.0",
     "fs-extra": "11.3.3",
     "highlight.js": "11.11.1",
