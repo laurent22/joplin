@@ -90,15 +90,20 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 
 	// When the incoming canvas changes (note loaded externally), reload state
 	// — but skip if it's the same canvas we just emitted (avoid feedback loops).
-	const lastEmittedRef = useRef<string>(JSON.stringify(canvas));
+	// Seed with the *round-tripped* serialization so optional edge fields
+	// (fromEnd/toEnd) added by flowToCanvas don't make the very first push-back
+	// effect see the canvas as "different" and emit a spurious onChange.
+	const lastEmittedRef = useRef<string>(JSON.stringify(flowToCanvas(initial.nodes, initial.edges, initial.preservedGroups)));
 	useEffect(() => {
 		const incoming = JSON.stringify(canvas);
 		if (incoming === lastEmittedRef.current) return;
-		lastEmittedRef.current = incoming;
 		const next = canvasToFlow(canvas);
 		setFlowNodes(next.nodes);
 		setFlowEdges(next.edges);
 		preservedGroupsRef.current = next.preservedGroups;
+		// Stamp with the round-tripped form too, for the same reason as the
+		// initial seed above.
+		lastEmittedRef.current = JSON.stringify(flowToCanvas(next.nodes, next.edges, next.preservedGroups));
 	}, [canvas]);
 
 	// Push changes back to the parent whenever the local flow state changes.
