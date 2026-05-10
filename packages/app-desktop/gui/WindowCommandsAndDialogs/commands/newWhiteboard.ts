@@ -1,10 +1,7 @@
-import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
+import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
-import Note from '@joplin/lib/models/Note';
-import Folder from '@joplin/lib/models/Folder';
-import Setting from '@joplin/lib/models/Setting';
 import { newWhiteboardBody } from '@joplin/lib/services/whiteboard/serialize';
-import { newNoteEnabledConditions } from './newNote';
+import { createNoteInActiveFolder, newNoteEnabledConditions } from './newNote';
 
 export const declaration: CommandDeclaration = {
 	name: 'newWhiteboard',
@@ -15,29 +12,13 @@ export const declaration: CommandDeclaration = {
 export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: CommandContext, title?: string) => {
-			const folder = await Folder.getValidActiveFolder();
-			if (!folder) return;
-
-			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
-
-			let order;
-			if (Setting.value('notes.sortOrder.field') === 'order') {
-				order = await Note.getNextOrderValue(folder.id);
-			}
-
-			let newNote = {
-				...defaultValues,
-				parent_id: folder.id,
-				is_todo: 0,
+			await createNoteInActiveFolder({
 				title: title || _('Untitled whiteboard'),
 				body: newWhiteboardBody(),
-				...(order !== undefined ? { order } : {}),
-			};
-
-			newNote = await Note.save(newNote, { provisional: true });
-
-			utils.store.dispatch({ type: 'NOTE_SELECT', id: newNote.id });
-			utils.store.dispatch({ type: 'NOTE_SORT' });
+				// A whiteboard isn't a place-stamped capture; skip the
+				// reverse-geocode lookup that fires for ordinary new notes.
+				updateGeolocation: false,
+			});
 		},
 		enabledCondition: `${newNoteEnabledConditions} && whiteboardEnabled`,
 	};
