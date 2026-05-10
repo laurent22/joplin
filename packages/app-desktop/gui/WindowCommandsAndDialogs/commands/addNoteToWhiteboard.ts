@@ -80,9 +80,6 @@ export const runtime = (): CommandRuntime => {
 			const newBody = serializeWhiteboard(fresh.body || '', nextCanvas);
 			await Note.save({ id: targetId, body: newBody });
 		},
-		// `activeNoteIsWhiteboard` (set by NoteEditor when it detects a fence)
-		// is reliable; `noteIsWhiteboard` from the lib whenClause is not, since
-		// it depends on `selectedNote.body` which isn't in redux preview fields.
 		enabledCondition: 'oneNoteSelected && activeNoteIsWhiteboard && !noteIsReadOnly',
 	};
 };

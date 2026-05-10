@@ -14,11 +14,6 @@ export const runtime = (): CommandRuntime => {
 			if (!id) return;
 			context.dispatch({ type: 'WHITEBOARD_FORCE_MARKDOWN_TOGGLE', noteId: id });
 		},
-		// Note: we don't gate on `noteIsWhiteboard` here because that requires
-		// the note's body to be present in the redux state, which it isn't —
-		// only preview fields are. Gating on selection + setting is enough; the
-		// flag the command flips is per-note and only takes effect when the
-		// active note actually contains a jsoncanvas fence.
 		enabledCondition: 'oneNoteSelected && whiteboardEnabled',
 	};
 };
