@@ -2,6 +2,7 @@ import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } fr
 import { _ } from '@joplin/lib/locale';
 import { ModelType } from '@joplin/lib/BaseModel';
 import Note from '@joplin/lib/models/Note';
+import ItemChange from '@joplin/lib/models/ItemChange';
 import Logger from '@joplin/utils/Logger';
 import { Mode } from '../../../plugins/GotoAnything';
 import { GotoAnythingOptions, UiType } from './gotoAnything';
@@ -78,7 +79,18 @@ export const runtime = (): CommandRuntime => {
 				nodes: [...parsed.canvas.nodes, newNode],
 			};
 			const newBody = serializeWhiteboard(fresh.body || '', nextCanvas);
-			await Note.save({ id: targetId, body: newBody });
+			// Pass user_updated_time so the save layer can detect concurrent
+			// edits (the whiteboard editor's own debounced save, or a sync
+			// write between Note.load above and Note.save here). Mirrors the
+			// linked-note write path in FileNode.tsx.
+			await Note.save(
+				{
+					id: targetId,
+					body: newBody,
+					...(fresh.user_updated_time ? { user_updated_time: fresh.user_updated_time } : {}),
+				},
+				{ changeSource: ItemChange.SOURCE_UNSPECIFIED },
+			);
 		},
 		enabledCondition: 'oneNoteSelected && activeNoteIsWhiteboard && !noteIsReadOnly',
 	};
