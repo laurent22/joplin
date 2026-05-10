@@ -18,6 +18,14 @@ describe('file-api-driver', () => {
 		expect(content).toBe('testing');
 	}));
 
+	it('should preserve unicode content when uploading text files', (async () => {
+		// U+D800~U+DFFF are not guaranteed because they are not valid in UTF-8
+		const content = '中文にっぽんご한국어😀\0\r\nenglish 01234567890';
+		await fileApi().put('unicode.txt', content);
+		const uploadedContent = await fileApi().get('unicode.txt');
+		expect(uploadedContent).toBe(content);
+	}));
+
 	it('should get a file info', (async () => {
 		await fileApi().put('test1.txt', 'testing');
 		await fileApi().mkdir('sub');
