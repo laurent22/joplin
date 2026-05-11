@@ -39,10 +39,7 @@ For each disable comment encountered:
   - After each package is completed: update the **Status** table row (Removed / Remaining / Status / Session date).
   - For large packages (e.g. `lib`, `app-desktop`, `app-cli`), also update the table row at intermediate checkpoints (e.g. every ~20 files) so a hard cutoff loses at most one checkpoint's worth of detail.
 - Commit the progress file alongside (or as part of) the package's cleanup PR.
-- **After each commit that updates this file, also sync the PR body** so reviewers see the latest progress without opening the file. Run:
-  ```
-  gh pr edit <PR-number> --body-file readme/dev/any_cleanup_progress.md
-  ```
+- **After each commit that updates this file, also sync the PR body** so reviewers see the latest progress without opening the file. Run: `gh pr edit <PR-number> --body-file readme/dev/any_cleanup_progress.md`.
   Find the PR number with `gh pr list --head <branch> --json number`. The current PR for this cleanup is **#15339** on branch `any_refactor_2`.
 - If a session stops mid-package, the **Per-package detail** section records exactly which files were processed so the next session can resume cleanly.
 - At the start of any new session, re-read this file before resuming — it is the source of truth, not conversational memory.
