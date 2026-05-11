@@ -2,7 +2,7 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import uuid from '@joplin/lib/uuid';
 import { join } from 'path';
-import FsDriverBase from '@joplin/lib/fs-driver-base';
+import FsDriverBase, { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
 import Logger from '@joplin/utils/Logger';
 import { Buffer } from 'buffer';
 import createFilesFromPathRecord from './testUtil/createFilesFromPathRecord';
@@ -264,21 +264,25 @@ const testReadDirStats = async (tempDir: string) => {
 	await fsDriver.writeFile(`${parentDir}/file1.txt`, 'test', 'utf-8');
 	await fsDriver.writeFile(`${parentDir}/file2.txt`, 'test', 'utf-8');
 	await fsDriver.mkdir(`${parentDir}/dir1`);
+	await fsDriver.writeFile(`${parentDir}/dir1/file3.txt`, 'test', 'utf-8');
 
-	const sortedDirectoryStats = async (directory: string) => {
-		return (await fsDriver.readDirStats(directory)).sort((a, b) => {
+	const sortedDirectoryStats = async (directory: string, options: ReadDirStatsOptions|undefined) => {
+		return (await fsDriver.readDirStats(directory, options)).sort((a, b) => {
 			if (a.path < b.path) return -1;
 			if (a.path === b.path) return 0;
 			return 1;
 		});
 	};
 
-	const stats = await sortedDirectoryStats(parentDir);
-	await expectToBe(stats.length, 3);
-	await expectToBe(stats.map(s => s.path).join(';'), 'dir1;file1.txt;file2.txt');
-	await expectToBe(stats[0].isDirectory(), true);
-	await expectToBe(stats[1].isDirectory(), false);
-	await expectToBe(stats[2].isDirectory(), false);
+	const nonRecursiveStats = await sortedDirectoryStats(parentDir, undefined);
+	await expectToBe(nonRecursiveStats.length, 3);
+	await expectToBe(nonRecursiveStats.map(s => s.path).join(';'), 'dir1;file1.txt;file2.txt');
+	await expectToBe(nonRecursiveStats[0].isDirectory(), true);
+	await expectToBe(nonRecursiveStats[1].isDirectory(), false);
+	await expectToBe(nonRecursiveStats[2].isDirectory(), false);
+
+	const recursiveStats = await sortedDirectoryStats(parentDir, { recursive: true });
+	await expectToBe(recursiveStats.map(s => s.path).join(';'), 'dir1;dir1/file3.txt;file1.txt;file2.txt');
 };
 
 // In the past, some fs-driver functionality has worked correctly on some devices and not others.
