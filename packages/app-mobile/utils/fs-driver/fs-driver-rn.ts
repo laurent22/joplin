@@ -130,7 +130,18 @@ export default class FsDriverRN extends FsDriverBase {
 		let output: any[] = [];
 		for (let i = 0; i < stats.length; i++) {
 			const stat = stats[i];
-			const relativePath = (isScoped ? stat.uri : stat.path).substr(path.length + 1);
+			let relativePath;
+			if (isScoped) {
+				relativePath = stat.uri;
+			} else {
+				relativePath = stat.path;
+				// Workaround: Paths returned by stat can include a leading /private/, when this isn't included
+				// in the original path variable:
+				if (stat.path.startsWith('/private/') && !path.startsWith('/private/')) {
+					relativePath = relativePath.replace(/^\/private/, '');
+				}
+				relativePath = relativePath.substring(path.length + 1);
+			}
 			const standardStat = this.rnfsStatToStd_(stat, relativePath);
 			output.push(standardStat);
 
