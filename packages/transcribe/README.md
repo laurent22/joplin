@@ -27,36 +27,6 @@ docker run --rm --env-file .env-transcribe -p 4567:4567 \
 	joplin/transcribe:amd64-latest
 ```
 
-### GPU support
-
-The server uses CPU by default. For NVIDIA GPU, run a GPU-capable image with `--gpus all` and set `HTR_CLI_GPU_LAYERS=9999`.
-
-```shell
-docker run --rm --gpus all --env-file .env-transcribe -p 4567:4567 \
-	-e HTR_CLI_GPU_LAYERS=9999 \
-	-v ./data:/data \
-	joplin/transcribe:gpu-latest
-```
-
-This needs NVIDIA Container Toolkit on the host. Use `0` or leave it unset for CPU.
-
-### Native macOS/Metal
-
-Apple Silicon GPU acceleration stays native. Use a macOS ARM64 `llama-mtmd-cli` binary with Metal support, then set `HTR_CLI_GPU_LAYERS` so the server can pass the GPU layer count to it.
-
-The model files still need to be available under `$DATA_DIR/models`:
-
-```env
-DATA_DIR=/path/to/transcribe-data
-HTR_CLI_BINARY_PATH=/path/to/llama-mtmd-cli
-HTR_CLI_GPU_LAYERS=9999
-API_KEY=...
-QUEUE_DRIVER=sqlite
-```
-
-With this setup, the server passes `-ngl 9999` to `llama-mtmd-cli`. Metal support comes from the binary.
-
-
 The container automatically creates the following inside `/data`:
 - `images/` - uploaded images
 - `models/` - AI models (you provide these)
@@ -120,6 +90,40 @@ The following paths are automatically derived from `DATA_DIR`:
 - `$DATA_DIR/images` - uploaded images
 - `$DATA_DIR/models` - AI models
 - `$DATA_DIR/queue.sqlite3` - SQLite database (when using sqlite driver)
+
+### GPU support
+
+The server uses CPU by default. For NVIDIA GPU, run a GPU-capable image with `--gpus all` and set `HTR_CLI_GPU_LAYERS=9999`.
+
+```shell
+docker run --rm --gpus all --env-file .env-transcribe -p 4567:4567 \
+	-e HTR_CLI_GPU_LAYERS=9999 \
+	-v ./data:/data \
+	joplin/transcribe:gpu-latest
+```
+
+This needs NVIDIA Container Toolkit on the host. Use `0` or leave it unset for CPU.
+
+### Native Windows/CUDA without Docker
+
+On Windows, GPU acceleration can run in Docker using the NVIDIA instructions above, or natively on the host. For a native run, use a Windows x64 CUDA build of llama-mtmd-cli.exe, then set HTR_CLI_GPU_LAYERS to the number of layers you want offloaded to the GPU.
+
+### Native macOS/Metal
+
+On Apple Silicon, GPU acceleration runs natively on the host (Docker can't expose Metal to containers). Use a macOS ARM64 build of llama-mtmd-cli with Metal support, then set HTR_CLI_GPU_LAYERS to the number of layers you want offloaded to the GPU.
+
+### Native GPU configuration
+
+You can download the binary from the official llama.cpp releases page: <https://github.com/ggml-org/llama.cpp/releases>.
+
+Native GPU settings:
+
+```env
+HTR_CLI_BINARY_PATH=/path/to/llama-mtmd-cli
+HTR_CLI_GPU_LAYERS=9999
+```
+
+With this setup, the server passes `-ngl 9999` to `llama-mtmd-cli`. Metal support comes from the binary.
 
 # API Endpoints
 

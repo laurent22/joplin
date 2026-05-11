@@ -255,6 +255,7 @@ mtmd
 gguf
 armor
 clearsign
+CUDA
 ligne
 payant
 llamacpp
