@@ -12573,7 +12573,7 @@ __metadata:
     domelementtype: "npm:2.3.0"
     domhandler: "npm:5.0.3"
     domutils: "npm:3.2.2"
-    entities: "npm:2.2.0"
+    entities: "npm:7.0.0"
     eslint: "npm:8.57.1"
     jest: "npm:29.7.0"
     prettier: "npm:3.7.4"
@@ -29438,7 +29438,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"entities@npm:2.2.0, entities@npm:^2.0.0":
+"entities@npm:7.0.0":
+  version: 7.0.0
+  resolution: "entities@npm:7.0.0"
+  checksum: 10/048cae50a2988411aa28db596392b04cb591f73cbc86d623383fe3cb9c307d666d045a2d1efe97bc07f5ffc8d8579408a4a2e867a005a8d7770cf83aad6eab70
+  languageName: node
+  linkType: hard
+
+"entities@npm:^2.0.0":
   version: 2.2.0
   resolution: "entities@npm:2.2.0"
   checksum: 10/2c765221ee324dbe25e1b8ca5d1bf2a4d39e750548f2e85cbf7ca1d167d709689ddf1796623e66666ae747364c11ed512c03b48c5bbe70968d30f2a4009509b7

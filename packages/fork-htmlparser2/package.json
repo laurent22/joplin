@@ -42,7 +42,7 @@
     "domelementtype": "2.3.0",
     "domhandler": "5.0.3",
     "domutils": "3.2.2",
-    "entities": "2.2.0"
+    "entities": "7.0.0"
   },
   "devDependencies": {
     "@types/jest": "29.5.14",
