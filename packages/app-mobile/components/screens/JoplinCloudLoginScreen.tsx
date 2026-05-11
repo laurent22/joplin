@@ -103,24 +103,24 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		setIntervalIdentifier(interval);
 	};
 
-	const onButtonUsed = () => {
+	const onButtonUsed = async () => {
 		if (state.next === 'LINK_USED') {
 			dispatch({ type: 'LINK_USED' });
 		}
-		saveApplicationAuthId(applicationAuthId);
+		await saveApplicationAuthId(applicationAuthId);
 		periodicallyCheckForCredentials();
 	};
 
 	const onAuthoriseClicked = async () => {
 		const url = await generateApplicationConfirmUrl(confirmUrl(applicationAuthId));
+		await onButtonUsed();
 		await Linking.openURL(url);
-		onButtonUsed();
 	};
 
 	const onCopyToClipboardClicked = async () => {
 		const url = await generateApplicationConfirmUrl(confirmUrl(applicationAuthId));
+		await onButtonUsed();
 		Clipboard.setString(url);
-		onButtonUsed();
 	};
 
 	React.useEffect(() => {

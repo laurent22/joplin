@@ -93,8 +93,9 @@ export const generateApplicationConfirmUrl = async (confirmUrl: string) => {
 	return `${confirmUrl}?${searchParams.toString()}`;
 };
 
-export const saveApplicationAuthId = (applicationAuthId: string) => {
+export const saveApplicationAuthId = async (applicationAuthId: string) => {
 	Setting.setValue('sync.10.pendingAuthId', applicationAuthId);
+	await Setting.saveAll();
 };
 
 // We have isWaitingResponse inside the function to avoid any state from lingering
