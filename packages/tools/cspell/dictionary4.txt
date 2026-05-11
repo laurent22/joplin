@@ -287,3 +287,4 @@ unparseable
 setval
 cutoff
 typeof
+readline
