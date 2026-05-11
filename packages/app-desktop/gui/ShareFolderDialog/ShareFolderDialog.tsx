@@ -102,6 +102,7 @@ interface Props {
 	shares: StateShare[];
 	shareUsers: Record<string, StateShareUser[]>;
 	canUseSharePermissions: boolean;
+	canUseRecipientAutocomplete: boolean;
 }
 
 interface RecipientDeleteEvent {
@@ -175,7 +176,7 @@ function ShareFolderDialog(props: Props) {
 		let cancelled = false;
 
 		const loadSuggestions = async () => {
-			if (!recipientEmail) return;
+			if (!props.canUseRecipientAutocomplete || !recipientEmail) return;
 			try {
 				const result = await ShareService.instance().loadTeamUsers('me', recipientEmail);
 
@@ -198,7 +199,7 @@ function ShareFolderDialog(props: Props) {
 			cancelled = true;
 			debouncedLoad.clear();
 		};
-	}, [recipientEmail]);
+	}, [props.canUseRecipientAutocomplete, recipientEmail]);
 
 	const permissionsFromString = (p: string): SharePermissions => {
 		return {
@@ -471,6 +472,13 @@ const mapStateToProps = (state: State) => {
 		shares: state.shareService.shares,
 		shareUsers: state.shareService.shareUsers,
 		canUseSharePermissions: getCanUseSharePermissions(state.settings),
+		// Autocomplete is in the same context as share permissions.
+		// We discussed to reuse sync.10.canUseSharePermissions because adding
+		// sync.10.canUseRecipientAutocomplete would need too many changes,
+		// I decided to have a different local prop with the same value, so it's
+		// separated to be easier to update when premium features handling change.
+
+		canUseRecipientAutocomplete: getCanUseSharePermissions(state.settings),
 	};
 };
 
