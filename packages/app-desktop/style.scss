@@ -5,6 +5,7 @@
 @use 'gui/lib/SearchInput/style.scss' as search-input;
 @use 'gui/JoplinCloudConfigScreen.scss' as joplin-cloud-config-screen;
 @use 'gui/Dropdown/style.scss' as dropdown-control;
+@use 'gui/ShareFolderDialog/style.scss' as share-folder-dialog;
 @use 'gui/NoteList/style.scss' as note-list;
 @use 'gui/SsoLoginScreen/SsoLoginScreen.scss' as sso-login-screen;
 @use 'gui/JoplinCloudLoginScreen.scss' as joplin-cloud-login-screen;
