@@ -165,7 +165,7 @@
     "async-mutex": "0.5.0",
     "axios": "^1.7.7",
     "codemirror": "5.65.9",
-    "color": "3.2.1",
+    "color": "5.0.2",
     "compare-versions": "6.1.1",
     "debounce": "1.2.1",
     "electron": "40.9.2",

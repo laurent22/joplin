@@ -44,7 +44,7 @@
     "@react-native-vector-icons/material-icons": "patch:@react-native-vector-icons/material-icons@npm%3A12.4.0#~/.yarn/patches/@react-native-vector-icons-material-icons-npm-12.4.0-94138e627b.patch",
     "assert-browserify": "2.0.0",
     "buffer": "6.0.3",
-    "color": "3.2.1",
+    "color": "5.0.2",
     "constants-browserify": "1.0.0",
     "crypto-browserify": "3.12.1",
     "deprecated-react-native-prop-types": "5.0.0",
