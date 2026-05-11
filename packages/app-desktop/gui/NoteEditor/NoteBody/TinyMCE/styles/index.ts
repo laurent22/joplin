@@ -5,17 +5,9 @@ import { buildStyle } from '@joplin/lib/theme';
 export default function styles(props: NoteBodyEditorProps) {
 	const leftExtraToolbarContainerWidth = props.watchedNoteFiles.length > 0 ? 120 : 80;
 	return buildStyle(['TinyMCE', props.style.width, props.style.height, leftExtraToolbarContainerWidth], props.themeId, theme => {
-		const extraToolbarContainer = {
-			boxSizing: 'content-box',
-			backgroundColor: theme.backgroundColor3,
-			display: 'flex',
-			flexDirection: 'row',
-			position: 'absolute',
-			height: theme.toolbarHeight,
-			zIndex: 2,
-			top: 0,
-			padding: theme.toolbarPadding,
-		};
+		const toolbarHeight = theme.toolbarHeight + theme.toolbarPadding * 2;
+		const leftExtraToolbarContainerTotalWidth = leftExtraToolbarContainerWidth + theme.toolbarPadding * 2;
+		const rightExtraToolbarContainerTotalWidth = 70 + theme.toolbarPadding + theme.mainPadding;
 
 		return {
 			disabledOverlay: {
@@ -37,18 +29,49 @@ export default function styles(props: NoteBodyEditorProps) {
 				width: props.style.width,
 				height: props.style.height,
 			},
-			leftExtraToolbarContainer: {
-				...extraToolbarContainer,
-				width: leftExtraToolbarContainerWidth,
+			toolbarContainer: {
+				position: 'absolute',
+				top: 0,
 				left: 0,
+				right: 0,
+				height: toolbarHeight,
+				display: 'flex',
+				alignItems: 'stretch',
+				zIndex: 10,
+				overflow: 'hidden',
+				pointerEvents: 'none',
+			},
+			leftExtraToolbarContainer: {
+				boxSizing: 'border-box',
+				display: 'flex',
+				flex: '0 0 auto',
+				width: leftExtraToolbarContainerTotalWidth,
+				position: 'static',
+				padding: theme.toolbarPadding,
+				backgroundColor: theme.backgroundColor3,
+				overflow: 'hidden',
+				pointerEvents: 'auto',
+			},
+			tinyMceToolbarContainer: {
+				flex: '1 1 auto',
+				minWidth: 0,
 			},
 			rightExtraToolbarContainer: {
-				...extraToolbarContainer,
-				alignItems: 'center',
-				justifyContent: 'flex-end',
-				width: 70,
-				right: 0,
+				boxSizing: 'border-box',
+				display: 'flex',
+				flex: '0 0 auto',
+				width: rightExtraToolbarContainerTotalWidth,
+				position: 'static',
+				padding: theme.toolbarPadding,
 				paddingRight: theme.mainPadding,
+				backgroundColor: theme.backgroundColor3,
+				overflow: 'hidden',
+				pointerEvents: 'auto',
+			},
+			editorContainer: {
+				width: '100%',
+				height: '100%',
+				boxSizing: 'border-box',
 			},
 			extraToolbarButton: {
 				display: 'flex',

@@ -421,8 +421,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		editorContainerDom.head.appendChild(element);
 		element.appendChild(editorContainerDom.createTextNode(`
 			.joplin-tinymce .tox-editor-header.tox-editor-header {
-				margin-left: ${styles.leftExtraToolbarContainer.width + styles.leftExtraToolbarContainer.padding * 2}px;
-				margin-right: ${styles.rightExtraToolbarContainer.width + styles.rightExtraToolbarContainer.padding * 2}px;
+				margin-left: ${styles.leftExtraToolbarContainer.width}px;
+				margin-right: ${styles.rightExtraToolbarContainer.width}px;
 				padding: 0;
 				box-shadow: none;
 			}
@@ -1678,12 +1678,24 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	const containerId = useMemo(() => {
 		return `tinymce-container-${Math.ceil(Math.random() * 1000)}-${Date.now()}`;
 	}, []);
+
 	return (
 		<div style={styles.rootStyle} className="joplin-tinymce">
 			{renderDisabledOverlay()}
-			{renderLeftExtraToolbarButtons()}
-			{renderRightExtraToolbarButtons()}
-			<div style={{ width: '100%', height: '100%' }} id={containerId} ref={setEditorContainer}/>
+
+			<div style={styles.toolbarContainer}>
+				{renderLeftExtraToolbarButtons()}
+
+				<div style={styles.tinyMceToolbarContainer}/>
+
+				{renderRightExtraToolbarButtons()}
+			</div>
+
+			<div
+				style={styles.editorContainer}
+				id={containerId}
+				ref={setEditorContainer}
+			/>
 		</div>
 	);
 };
