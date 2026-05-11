@@ -60,7 +60,7 @@ Counts captured 2026-05-11 before any work.
 | # | Package | Files w/ comments | Comments (start) | Removed | Remaining | Status |
 |---|---|---:|---:|---:|---:|---|
 | 1 | pdf-viewer | 3 | 5 | 5 | 0 | done (2026-05-11) |
-| 2 | editor | 5 | 21 | 0 | 21 | not started |
+| 2 | editor | 5 | 21 | 6 | 15 | done (2026-05-11) |
 | 3 | utils | 9 | 28 | 0 | 28 | not started |
 | 4 | react-native-saf-x | 1 | 1 | 1 | 0 | done (2026-05-11) |
 | 5 | default-plugins | 1 | 4 | 4 | 0 | done (2026-05-11) |
@@ -129,3 +129,21 @@ Files processed:
 - `build.ts` — 4 removed, 0 left. Imported `Argv` and `ArgumentsCamelCase` from `yargs`; typed builder callbacks as `(yargs: Argv) => ...` and handler args as `ArgumentsCamelCase<{ outputDir: string }>` / `ArgumentsCamelCase<{ plugin: string }>`.
 
 Verification: `yarn tsc --noEmit` clean, `yarn linter-ci packages/default-plugins/` clean.
+
+### packages/editor
+Session date: 2026-05-11
+
+Files processed:
+- `CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.ts` — 2 removed, 6 left.
+  - Removed: `isPosition` type guard now uses `Partial<DocumentPosition>` instead of `any`; `removeOverlay` overlay param uses `OverlayType<unknown>` instead of `OverlayType<any>`.
+  - Left: `OptionUpdateCallback` `newVal/oldVal: any` (coupled to API-driven `value: any`); `addOverlay` return type (intentional `any` per surrounding comment about codemirror-vim API mismatch); `commands as any` cast (intentional per surrounding comment about base class extension); and the 4 entries already tagged "CodeMirror 5 API requires any" / "Must match base class signature".
+- `CodeMirror/pluginApi/PluginLoader.ts` — 4 removed, 1 left.
+  - Removed: introduced `PluginLoaderWindow` type alias (`Window & { __pluginLoaderScriptLoadCallbacks: Record<number, OnScriptLoadCallback>; __pluginLoaderRequireFunctions: Record<number, typeof codeMirrorRequire> }`); replaced four `(window as any).__pluginLoader…` casts with `(window as unknown as PluginLoaderWindow).…`.
+  - Left: `OnScriptLoadCallback` `exports: any` (already tagged "Plugin exports have dynamic structure").
+
+Files skipped entirely (only non-"Old code" tags inside):
+- `types.ts` — `execCommand`/varying argument types.
+- `CodeMirror/editorCommands/editorCommands.ts` — `EditorCommandFunction` varying argument types.
+- `CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.test.ts` — dynamic-extension test casts.
+
+Verification: `yarn tsc --noEmit` clean, `yarn linter-ci packages/editor/` clean.

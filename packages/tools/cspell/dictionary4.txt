@@ -286,3 +286,4 @@ precheck
 unparseable
 setval
 cutoff
+typeof
