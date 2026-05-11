@@ -14,7 +14,8 @@ For each disable comment encountered:
    - An existing imported/exported type fits, or
    - The type is obvious from local context (literal, known SDK return, etc.)
 2. **Leave the comment in place** (skip) when:
-   - Replacing would require new type definitions, refactoring call sites, or changing logic.
+   - Replacing would require **significant refactoring** (e.g. changing many call sites, splitting a class, restructuring control flow). Introducing a small new type definition (e.g. a local interface or type alias, or a type that would only be used in a few places) is fine and not considered significant refactoring.
+   - Replacing would require **changing code logic**.
    - The comment's reason is something other than `Old code before rule was applied` (e.g. `No better type available`, `CodeMirror 5 API requires any`, `would be too big of a refactoring`).
    - The correct type is genuinely `unknown` and would force narrowing changes (that's a logic change).
 3. When `any` is removed, **delete the disable comment** as well.
@@ -136,7 +137,7 @@ Session date: 2026-05-11
 Files processed:
 - `CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation.ts` — 2 removed, 6 left.
   - Removed: `isPosition` type guard now uses `Partial<DocumentPosition>` instead of `any`; `removeOverlay` overlay param uses `OverlayType<unknown>` instead of `OverlayType<any>`.
-  - Left: `OptionUpdateCallback` `newVal/oldVal: any` (coupled to API-driven `value: any`); `addOverlay` return type (intentional `any` per surrounding comment about codemirror-vim API mismatch); `commands as any` cast (intentional per surrounding comment about base class extension); and the 4 entries already tagged "CodeMirror 5 API requires any" / "Must match base class signature".
+  - Left: `OptionUpdateCallback` `newVal/oldVal: any` (the source is `value: any`, which is API-driven; narrowing in callbacks would be a logic change); `addOverlay` return type (the `any` structurally deceives the base-class signature `SearchQuery | undefined` to allow returning `{ clear: () => void }` from the decorator branch — fixing it is a class-hierarchy refactor, not a typing tweak); `commands as any` cast (same kind of structural deception of the base class); and the 4 entries already tagged "CodeMirror 5 API requires any" / "Must match base class signature". Re-checked after the rule was clarified to allow small new type definitions — none of these are amenable to that.
 - `CodeMirror/pluginApi/PluginLoader.ts` — 4 removed, 1 left.
   - Removed: introduced `PluginLoaderWindow` type alias (`Window & { __pluginLoaderScriptLoadCallbacks: Record<number, OnScriptLoadCallback>; __pluginLoaderRequireFunctions: Record<number, typeof codeMirrorRequire> }`); replaced four `(window as any).__pluginLoader…` casts with `(window as unknown as PluginLoaderWindow).…`.
   - Left: `OnScriptLoadCallback` `exports: any` (already tagged "Plugin exports have dynamic structure").
