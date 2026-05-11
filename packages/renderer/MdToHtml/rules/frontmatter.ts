@@ -120,6 +120,8 @@ const assets = () => {
 				.joplin-frontmatter-rendered pre.hljs {
 					margin: 0;
 					border-radius: 0;
+					white-space: pre-wrap;
+					word-break: break-word;
 				}
 				.joplin-frontmatter-marker {
 					margin: 0;
