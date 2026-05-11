@@ -11,7 +11,7 @@ import { requestPagination } from '../../models/utils/pagination';
 import { AclAction } from '../../models/BaseModel';
 import { safeRemove } from '../../utils/fileUtils';
 import { formatBytes, MB } from '../../utils/bytes';
-import { requestDeltaPagination } from '../../models/ChangeModel';
+import { requestDeltaPagination } from '../../models/ChangeModel/ChangeModel';
 
 const router = new Router(RouteType.Api);
 

@@ -530,12 +530,16 @@ function useMenu(props: Props) {
 			];
 
 			// the following menu items will be available for all OS under Tools
-			const toolsItemsAll = [{
-				label: _('Note attachments...'),
-				click: () => {
-					navigateTo('Resources');
+			const toolsItemsAll = [
+				menuItemDic.newWhiteboard,
+				separator(),
+				{
+					label: _('Note attachments...'),
+					click: () => {
+						navigateTo('Resources');
+					},
 				},
-			}];
+			];
 
 			if (!shim.isMac()) {
 				toolsItems = toolsItems.concat(toolsItemsWindowsLinux);

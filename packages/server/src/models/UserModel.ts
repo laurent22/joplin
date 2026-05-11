@@ -685,7 +685,6 @@ export default class UserModel extends BaseModel<User> {
 		await this.withTransaction(async () => {
 			for (const user of users) {
 				const maxTotalItemSize = getMaxTotalItemSize(user);
-				const account = accountByType(user.account_type);
 
 				if (user.total_item_size > maxTotalItemSize * alertLimitMax) {
 					await this.models().email().push({
@@ -699,7 +698,7 @@ export default class UserModel extends BaseModel<User> {
 					});
 
 					await this.models().userFlag().add(user.id, UserFlagType.AccountOverLimit);
-				} else if (maxTotalItemSize > account.max_total_item_size * alertLimit1) {
+				} else if (user.total_item_size > maxTotalItemSize * alertLimit1) {
 					await this.models().email().push({
 						...oversizedAccount1({
 							percentLimit: alertLimit1 * 100,

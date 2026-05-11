@@ -1,10 +1,38 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createFolder, createItemTree3, expectNotThrow, createNote, updateNote } from '../utils/testing/testUtils';
-import { ChangeType } from '../services/database/types';
-import { Day, msleep } from '../utils/time';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createFolder, createItemTree3, expectNotThrow, createNote, updateNote, db, dbSlave, createItemTree } from '../../utils/testing/testUtils';
+import { ChangeType, Item, Session, ShareType, User } from '../../services/database/types';
+import { Day, msleep } from '../../utils/time';
 import { ChangePagination } from './ChangeModel';
-import { SqliteMaxVariableNum } from '../db';
+import { SqliteMaxVariableNum, truncateTables } from '../../db';
+import { defaultDeltaPagination } from './ChangeModel';
+import ChangeModelOld from './ChangeModel.old';
+import config from '../../config';
+import { runWithFakeTimers } from '@joplin/lib/testing/test-utils';
+import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
-describe('ChangeModel', () => {
+const oldChangeModel = () => {
+	return new ChangeModelOld(
+		db(), dbSlave(), models, config(),
+	);
+};
+
+const recordLegacyChange = (user: User, item: Item, type: ChangeType) => {
+	return oldChangeModel().recordChange({
+		itemId: item.id,
+		itemName: item.name,
+		itemType: item.jop_type,
+		previousItem: { jop_share_id: item.jop_share_id },
+		sourceUserId: user.id,
+		shareId: item.jop_share_id,
+		type,
+	});
+};
+
+const clearChanges = () => {
+	return truncateTables(db(), ['changes', 'changes_2']);
+};
+
+describe('ChangeModel/index', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('ChangeModel');
@@ -20,12 +48,11 @@ describe('ChangeModel', () => {
 
 	test('should track changes - create only', async () => {
 		const { session, user } = await createUserAndSession(1, true);
-		const changeModel = models().change();
 
 		const item1 = await createFolder(session.id, { title: 'folder' });
 
 		{
-			const changes = (await changeModel.delta(user.id)).items;
+			const changes = (await models().change().delta(user.id)).items;
 			expect(changes.length).toBe(1);
 			expect(changes[0].item_id).toBe(item1.id);
 			expect(changes[0].type).toBe(ChangeType.Create);
@@ -35,7 +62,6 @@ describe('ChangeModel', () => {
 	test('should track changes - create, then update', async () => {
 		const { user } = await createUserAndSession(1, true);
 		const itemModel = models().item();
-		const changeModel = models().change();
 
 		await msleep(1); const item1 = await models().item().makeTestItem(user.id, 1); // [1] CREATE 1
 		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: '0000000000000000000000000000001A.md', content: Buffer.from('') }); // [2] UPDATE 1a
@@ -47,7 +73,7 @@ describe('ChangeModel', () => {
 		await msleep(1); const item3 = await models().item().makeTestItem(user.id, 3); // [8] CREATE 3
 
 		// Check that the 8 changes were created
-		const allUncompressedChanges = await changeModel.all();
+		const allUncompressedChanges = await models().change().all();
 		expect(allUncompressedChanges.length).toBe(8);
 
 		{
@@ -56,7 +82,7 @@ describe('ChangeModel', () => {
 			//   DELETE 1.
 			// - We don't get any UPDATE event since they've been compressed
 			//   down to the CREATE events.
-			const changes = (await changeModel.delta(user.id)).items;
+			const changes = (await models().change().delta(user.id)).items;
 			expect(changes.length).toBe(3);
 			expect(changes[0].item_id).toBe(item2.id);
 			expect(changes[0].type).toBe(ChangeType.Create);
@@ -67,27 +93,22 @@ describe('ChangeModel', () => {
 		}
 
 		{
-			const pagination: ChangePagination = { limit: 3 };
+			const pagination: ChangePagination = { limit: 5 };
 
 			// Internally, when we request the first three changes, we get back:
 			//
 			// - CREATE 1
+			// - UPDATE 1
+			// - UPDATE 1
 			// - CREATE 2
 			// - UPDATE 2a
 			//
 			// We don't get back UPDATE 1a and 1b because the associated item
 			// has been deleted.
 			//
-			// Unlike CREATE events, which come from "user_items" and are
-			// associated with a user, UPDATE events comes from "items" and are
-			// not associated with any specific user. Only if the user has a
-			// corresponding user_item do they get UPDATE events. But in this
-			// case, since the item has been deleted, there's no longer
-			// "user_items" objects.
-			//
 			// Then CREATE 1 is removed since item 1 has been deleted and UPDATE
 			// 2a is compressed down to CREATE 2.
-			const page1 = (await changeModel.delta(user.id, pagination));
+			const page1 = (await models().change().delta(user.id, pagination));
 			let changes = page1.items;
 			expect(changes.length).toBe(1);
 			expect(page1.has_more).toBe(true);
@@ -96,12 +117,9 @@ describe('ChangeModel', () => {
 
 			// In the second page, we get all the expected events since nothing
 			// has been compressed.
-			const page2 = (await changeModel.delta(user.id, { ...pagination, cursor: page1.cursor }));
+			const page2 = (await models().change().delta(user.id, { ...pagination, cursor: page1.cursor }));
 			changes = page2.items;
 			expect(changes.length).toBe(3);
-			// Although there are no more changes, it's not possible to know
-			// that without running the next query
-			expect(page2.has_more).toBe(true);
 			expect(changes[0].item_id).toBe(item1.id);
 			expect(changes[0].type).toBe(ChangeType.Delete);
 			expect(changes[1].item_id).toBe(item2.id);
@@ -109,8 +127,11 @@ describe('ChangeModel', () => {
 			expect(changes[2].item_id).toBe(item3.id);
 			expect(changes[2].type).toBe(ChangeType.Create);
 
+			// There should be no more changes
+			expect(page2.has_more).toBe(false);
+
 			// Check that we indeed reached the end of the feed.
-			const page3 = (await changeModel.delta(user.id, { ...pagination, cursor: page2.cursor }));
+			const page3 = (await models().change().delta(user.id, { ...pagination, cursor: page2.cursor }));
 			expect(page3.items.length).toBe(0);
 			expect(page3.has_more).toBe(false);
 		}
@@ -119,13 +140,12 @@ describe('ChangeModel', () => {
 	test('should throw an error if cursor is invalid', async () => {
 		const { user } = await createUserAndSession(1, true);
 		const itemModel = models().item();
-		const changeModel = models().change();
 
 		let i = 1;
 		await msleep(1); const item1 = await models().item().makeTestItem(user.id, 1); // CREATE 1
 		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: `test_mod${i++}`, content: Buffer.from('') }); // UPDATE 1
 
-		await expectThrow(async () => changeModel.delta(user.id, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
+		await expectThrow(async () => models().change().delta(user.id, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
 	});
 
 	test('should tell that there are more changes even when current page is empty', async () => {
@@ -190,7 +210,80 @@ describe('ChangeModel', () => {
 		expect(result.has_more).toBe(true);
 	});
 
-	test('should delete old changes', async () => {
+	test('should retrieve changes that span the old and new tables', async () => {
+		const { user } = await createUserAndSession(1, true);
+
+		await msleep(1);
+		const { id: itemId } = await models().item().makeTestItem(user.id, 1); // [1] CREATE 1
+		const item = await models().item().load(itemId);
+		await msleep(1);
+		await models().item().saveForUser(user.id, { id: item.id, name: '0000000000000000000000000000001A.md', content: Buffer.from('') });
+
+		// Clear all changes
+		await models().change().delete((await models().change().all()).map(change => change.id));
+
+		let changes = await models().change().allFromId('');
+		expect(changes.items).toHaveLength(0);
+
+		// Create changes in the old table
+		await recordLegacyChange(user, item, ChangeType.Create);
+		await recordLegacyChange(user, item, ChangeType.Update);
+		await recordLegacyChange(user, item, ChangeType.Update);
+
+		// Create changes in the new table
+		await msleep(1);
+		await models().item().saveForUser(user.id, { id: item.id, name: '0000000000000000000000000000001A.md', content: Buffer.from('') });
+
+		// allFromId should query from both tables:
+		changes = await models().change().allFromId('');
+		expect(changes.items).toHaveLength(4);
+		changes = await models().change().allFromId(changes.cursor);
+		expect(changes.items).toHaveLength(0);
+
+		// delta should query from both tables
+		changes = await models().change().delta(user.id);
+		// Change compression results in 1 change initially, since the creates and
+		// updates are compressed:
+		expect(changes.items).toHaveLength(1);
+
+		// Adding a new item with a different ID should add a new item to the delta results
+		await models().item().makeTestItem(user.id, 1);
+		changes = await models().change().delta(user.id);
+		expect(changes.items).toHaveLength(2);
+	});
+
+	test('should delete old changes in the legacy changes table', () => runWithFakeTimers(async () => {
+		const { session, user } = await createUserAndSession(1);
+		const note1 = await createNote(session.id, {});
+		await clearChanges();
+
+		const t1 = new Date('2020-01-01').getTime();
+		jest.setSystemTime(t1);
+
+		await recordLegacyChange(user, note1, ChangeType.Create);
+
+		jest.setSystemTime(t1 + Day * 10);
+		await recordLegacyChange(user, note1, ChangeType.Update);
+
+		jest.setSystemTime(t1 + Day * 20);
+		await recordLegacyChange(user, note1, ChangeType.Update);
+
+		jest.setSystemTime(t1 + Day * 300);
+
+		// Compressing old changes should remove the second-to-last update:
+		expect(await models().change().all()).toMatchObject([
+			{ type: ChangeType.Create },
+			{ type: ChangeType.Update },
+			{ type: ChangeType.Update },
+		]);
+		await models().change().compressOldChanges();
+		expect(await models().change().all()).toMatchObject([
+			{ type: ChangeType.Create },
+			{ type: ChangeType.Update },
+		]);
+	}));
+
+	test('should delete old changes in the new changes table', async () => {
 		// Create the following events:
 		//
 		// T1   2020-01-01    U1 Create
@@ -255,10 +348,10 @@ describe('ChangeModel', () => {
 		// been made later
 		expect((await models().change().all()).filter(c => c.item_id === note2.id).length).toBe(3);
 
-		// Between T5 and T6, 90 days later - nothing should happen because
+		// Between T5 and T6, just under 90 days later - nothing should happen because
 		// there's only one note 2 change that is older than 90 days at this
 		// point.
-		jest.setSystemTime(new Date(t5 + changeTtl).getTime());
+		jest.setSystemTime(new Date(t5 + changeTtl - 4 * Day).getTime());
 		await models().change().compressOldChanges();
 		expect(await models().change().count()).toBe(5);
 
@@ -275,10 +368,95 @@ describe('ChangeModel', () => {
 		jest.useRealTimers();
 	});
 
+	test('should preserve last updates for shared items when deleting old changes', () => runWithFakeTimers(async () => {
+		// Create the following events:
+		//
+		// T1   2025-01-01    U1 Create    U2 Create
+		// T2   2025-02-01    U1 Update    U2 Update
+		// T3   2025-02-02    U2 Update    U2 Update
+
+		const t1 = new Date('2025-01-01').getTime();
+		jest.setSystemTime(t1);
+
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2, user: user2 } = await createUserAndSession(2);
+
+		await createItemTree(session1.user_id, '', {
+			'000000000000000000000000000000F1': { },
+		});
+		const shareRoot = await models().item().loadByJopId(session1.user_id, '000000000000000000000000000000F1');
+		const { share } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, shareRoot);
+
+		const note = await createNote(session1.id, {
+			title: 'test',
+			share_id: share.id,
+			is_shared: 1,
+		});
+
+		await models().share().updateSharedItems3();
+
+		// One creation event for each item
+		const changesForNote = async () => (await models().change().all()).filter(c => c.item_id === note.id);
+		expect(await changesForNote()).toMatchObject([
+			{ type: ChangeType.Create, user_id: session1.user_id },
+			{ type: ChangeType.Create, user_id: session2.user_id },
+		]);
+
+		let updateCounter = 0;
+		const updateAtTime = async (session: Session, timeString: string) => {
+			const time = new Date(timeString).getTime();
+			jest.setSystemTime(time);
+			const joplinNote = await models().item().loadAsJoplinItem<NoteEntity>(note.id);
+			await updateNote(session.id, {
+				...joplinNote,
+				title: `Updated (x${updateCounter++})`,
+			});
+			return { time };
+		};
+
+		// Each updateAtTime should create **two** update events (one per user)
+		await updateAtTime(session1, '2025-02-01');
+		const { time: lastUpdateTime } = await updateAtTime(session2, '2025-02-02');
+
+		expect(await changesForNote()).toMatchObject([
+			{ type: ChangeType.Create },
+			{ type: ChangeType.Create },
+
+			{ type: ChangeType.Update },
+			{ type: ChangeType.Update },
+
+			{ type: ChangeType.Update },
+			{ type: ChangeType.Update },
+		]);
+
+		const t4 = new Date('2040-08-16').getTime();
+		jest.setSystemTime(t4);
+
+		await models().change().compressOldChanges();
+
+		const compressedChanges = await changesForNote();
+		expect(compressedChanges).toMatchObject([
+			{ type: ChangeType.Create },
+			{ type: ChangeType.Create },
+			// One change should remain for each user
+			{ type: ChangeType.Update, user_id: session2.user_id },
+			{ type: ChangeType.Update, user_id: session1.user_id },
+		]);
+
+		// Remaining updates should be those that occurred just
+		// after lastUpdateTime
+		const update1 = compressedChanges[compressedChanges.length - 2];
+		const update2 = compressedChanges[compressedChanges.length - 1];
+		expect(update1.created_time).toBeGreaterThanOrEqual(lastUpdateTime);
+		expect(update1.created_time).toBeLessThan(lastUpdateTime + Day);
+		expect(update2.created_time).toBeGreaterThanOrEqual(lastUpdateTime);
+		expect(update2.created_time).toBeLessThan(lastUpdateTime + Day);
+	}));
+
 	test('should not return the whole item', async () => {
 		const { user } = await createUserAndSession(1, true);
 
-		const changeModel = await models().change();
+		const changeModel = models().change();
 
 		await createItemTree3(user.id, '', '', [
 			{
@@ -287,7 +465,7 @@ describe('ChangeModel', () => {
 			},
 		]);
 
-		const result = await changeModel.delta(user.id);
+		const result = await changeModel.delta(user.id, defaultDeltaPagination());
 		expect('jopItem' in result.items[0]).toBe(false);
 	});
 
@@ -348,27 +526,27 @@ describe('ChangeModel', () => {
 		{
 			label: 'should not compress updates that change the share ID',
 			changes: [
-				{ type: ChangeType.Update, previous_item: '{ "jop_share_id": "a" }' },
-				{ type: ChangeType.Update, previous_item: '{ "jop_share_id": "b" }' },
+				{ type: ChangeType.Update, previous_share_id: 'a' },
+				{ type: ChangeType.Update, previous_share_id: 'b' },
 			],
 			expected: [
-				{ type: ChangeType.Update, previous_item: '{ "jop_share_id": "a" }' },
-				{ type: ChangeType.Update, previous_item: '{ "jop_share_id": "b" }' },
+				{ type: ChangeType.Update, previous_share_id: 'a' },
+				{ type: ChangeType.Update, previous_share_id: 'b' },
 			],
 		},
 		{
 			label: 'should keep the latest change when compressing updates',
 			changes: [
-				{ type: ChangeType.Update, item_id: '1', previous_item: '{ "jop_share_id": "a" }', counter: 1 },
-				{ type: ChangeType.Update, item_id: '1', previous_item: '{ "jop_share_id": "b" }', counter: 2 },
-				{ type: ChangeType.Update, item_id: '1', previous_item: '{ "jop_share_id": "b" }', counter: 3 },
-				{ type: ChangeType.Update, item_id: '2', previous_item: '{ "jop_share_id": "a" }', counter: 4 },
-				{ type: ChangeType.Update, item_id: '2', previous_item: '{ "jop_share_id": "a" }', counter: 5 },
+				{ type: ChangeType.Update, item_id: '1', previous_share_id: 'a', counter: 1 },
+				{ type: ChangeType.Update, item_id: '1', previous_share_id: 'b', counter: 2 },
+				{ type: ChangeType.Update, item_id: '1', previous_share_id: 'b', counter: 3 },
+				{ type: ChangeType.Update, item_id: '2', previous_share_id: 'a', counter: 4 },
+				{ type: ChangeType.Update, item_id: '2', previous_share_id: 'a', counter: 5 },
 			],
 			expected: [
-				{ type: ChangeType.Update, item_id: '1', previous_item: '{ "jop_share_id": "a" }', counter: 1 },
-				{ type: ChangeType.Update, item_id: '1', previous_item: '{ "jop_share_id": "b" }', counter: 3 },
-				{ type: ChangeType.Update, item_id: '2', previous_item: '{ "jop_share_id": "a" }', counter: 5 },
+				{ type: ChangeType.Update, item_id: '1', previous_share_id: 'a', counter: 1 },
+				{ type: ChangeType.Update, item_id: '1', previous_share_id: 'b', counter: 3 },
+				{ type: ChangeType.Update, item_id: '2', previous_share_id: 'a', counter: 5 },
 			],
 		},
 		{
@@ -390,8 +568,24 @@ describe('ChangeModel', () => {
 			...change,
 		}));
 
-		const changeModel = models().change();
-		expect(changeModel.compressChanges_(changes)).toMatchObject(expected);
+		expect(models().change().compressChanges_(changes)).toMatchObject(expected);
 	});
 
+	test('changesForUserQuery should split totals across the old/new changes boundary', async () => {
+		const { user, session } = await createUserAndSession(1, true);
+
+		const note = await createNote(session.id, { id: 'A0000000000000000000000000000000' });
+		await clearChanges(); // The first changes should be in the legacy changes table
+
+		await recordLegacyChange(user, note, ChangeType.Create);
+		await recordLegacyChange(user, note, ChangeType.Update);
+		await recordLegacyChange(user, note, ChangeType.Update);
+
+		await models().item().makeTestItems(user.id, 500);
+
+		const doCountQuery = true;
+		const counts = await models().change().changesForUserQuery(user.id, 0, 999, doCountQuery);
+		expect(counts).toMatchObject([{ total: 3 }, { total: 500 }]);
+	});
 });
+

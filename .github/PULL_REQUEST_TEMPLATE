@@ -30,6 +30,7 @@ Valid prefixes:
 - `Cli` — the command line app
 - `Server` — the Joplin Server
 - `Clipper` — the web clipper browser extension
+- `Transcribe` — the Transcribe server
 - `Plugins` — the plugin API or built-in plugins
 - `Plugin Repo` — the plugin repository
 - `Tools` — internal scripts and build tools
