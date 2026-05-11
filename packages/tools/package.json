@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@docusaurus/plugin-sitemap": "3.9.2",
-    "@joplin/fork-htmlparser2": "^4.1.60",
+    "@joplin/fork-htmlparser2": "^4.1.63",
     "@rmp135/sql-ts": "1.18.1",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.14",
@@ -67,5 +67,5 @@
     "ts-node": "10.9.2",
     "typescript": "5.9.3"
   },
-  "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
+  "gitHead": "500e4c02809d3ebe463aa590e86f541d1ef0661c"
 }

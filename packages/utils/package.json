@@ -90,7 +90,7 @@
   "author": "",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@joplin/fork-htmlparser2": "^4.1.60",
+    "@joplin/fork-htmlparser2": "^4.1.63",
     "async-mutex": "0.5.0",
     "dayjs": "1.11.19",
     "execa": "5.1.1",
@@ -112,5 +112,5 @@
     "ts-jest": "29.4.6",
     "typescript": "5.9.3"
   },
-  "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
+  "gitHead": "500e4c02809d3ebe463aa590e86f541d1ef0661c"
 }

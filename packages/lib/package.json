@@ -45,15 +45,15 @@
     "@adobe/css-tools": "4.4.4",
     "@aws-sdk/client-s3": "3.296.0",
     "@aws-sdk/s3-request-presigner": "3.296.0",
-    "@joplin/fork-htmlparser2": "^4.1.60",
-    "@joplin/fork-sax": "^1.2.64",
-    "@joplin/fork-uslug": "^2.0.3",
-    "@joplin/htmlpack": "~3.7",
-    "@joplin/onenote-converter": "~3.7",
-    "@joplin/renderer": "~3.7",
-    "@joplin/turndown": "^4.0.82",
-    "@joplin/turndown-plugin-gfm": "^1.0.64",
-    "@joplin/utils": "~3.7",
+    "@joplin/fork-htmlparser2": "^4.1.63",
+    "@joplin/fork-sax": "^1.2.67",
+    "@joplin/fork-uslug": "^2.0.6",
+    "@joplin/htmlpack": "^3.7",
+    "@joplin/onenote-converter": "^3.7",
+    "@joplin/renderer": "^3.7",
+    "@joplin/turndown": "^4.0.85",
+    "@joplin/turndown-plugin-gfm": "^1.0.67",
+    "@joplin/utils": "^3.7",
     "adm-zip": "0.5.16",
     "async-mutex": "0.5.0",
     "base-64": "1.0.0",
@@ -105,5 +105,5 @@
     "word-wrap": "1.2.5",
     "xml2js": "0.4.23"
   },
-  "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
+  "gitHead": "500e4c02809d3ebe463aa590e86f541d1ef0661c"
 }

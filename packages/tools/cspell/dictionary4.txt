@@ -267,6 +267,7 @@ macshot
 pdate
 coderabbitai
 cleanup
+Calibri
 Rygaa
 xyflow
 jsoncanvas
@@ -292,3 +293,4 @@ vendored
 Errno
 keyof
 readdir
+keybinds

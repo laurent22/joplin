@@ -12373,11 +12373,11 @@ __metadata:
     "@react-native-community/netinfo": "npm:11.4.1"
     "@react-native-community/push-notification-ios": "npm:1.12.0"
     "@react-native-documents/picker": "npm:10.1.7"
-    "@react-native-vector-icons/fontawesome5": "patch:@react-native-vector-icons/fontawesome5@npm%3A12.3.0#~/.yarn/patches/@react-native-vector-icons-fontawesome5-npm-12.3.0-a1ca46610f.patch"
+    "@react-native-vector-icons/fontawesome5": "npm:12.3.0"
     "@react-native-vector-icons/get-image": "npm:12.3.0"
-    "@react-native-vector-icons/ionicons": "patch:@react-native-vector-icons/ionicons@npm%3A12.3.0#~/.yarn/patches/@react-native-vector-icons-ionicons-npm-12.3.0-9bd4746f3f.patch"
-    "@react-native-vector-icons/material-design-icons": "patch:@react-native-vector-icons/material-design-icons@npm%3A12.4.0#~/.yarn/patches/@react-native-vector-icons-material-design-icons-npm-12.4.0-890f7f618b.patch"
-    "@react-native-vector-icons/material-icons": "patch:@react-native-vector-icons/material-icons@npm%3A12.4.0#~/.yarn/patches/@react-native-vector-icons-material-icons-npm-12.4.0-94138e627b.patch"
+    "@react-native-vector-icons/ionicons": "npm:12.3.0"
+    "@react-native-vector-icons/material-design-icons": "npm:12.4.0"
+    "@react-native-vector-icons/material-icons": "npm:12.4.0"
     "@react-native/babel-preset": "npm:0.81.6"
     "@react-native/metro-config": "npm:0.81.6"
     "@react-native/typescript-config": "npm:0.83.1"
@@ -12388,7 +12388,7 @@ __metadata:
     "@types/node": "npm:18.19.130"
     "@types/react": "npm:19.1.10"
     "@types/react-redux": "npm:7.1.34"
-    "@types/serviceworker": "npm:0.0.185"
+    "@types/serviceworker": "npm:0.0.186"
     "@types/tar-stream": "npm:3.1.4"
     assert-browserify: "npm:2.0.0"
     babel-jest: "npm:29.7.0"
@@ -12561,7 +12561,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-htmlparser2@npm:^4.1.60, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
+"@joplin/fork-htmlparser2@npm:^4.1.63, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
@@ -12582,7 +12582,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-sax@npm:^1.2.64, @joplin/fork-sax@workspace:packages/fork-sax":
+"@joplin/fork-sax@npm:^1.2.67, @joplin/fork-sax@workspace:packages/fork-sax":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-sax@workspace:packages/fork-sax"
   dependencies:
@@ -12591,7 +12591,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-uslug@npm:^2.0.0, @joplin/fork-uslug@npm:^2.0.3, @joplin/fork-uslug@workspace:packages/fork-uslug":
+"@joplin/fork-uslug@npm:^2.0.0, @joplin/fork-uslug@npm:^2.0.6, @joplin/fork-uslug@workspace:packages/fork-uslug":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-uslug@workspace:packages/fork-uslug"
   dependencies:
@@ -12603,12 +12603,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/htmlpack@npm:~3.7, @joplin/htmlpack@workspace:packages/htmlpack":
+"@joplin/htmlpack@npm:^3.7, @joplin/htmlpack@workspace:packages/htmlpack":
   version: 0.0.0-use.local
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
     "@adobe/css-tools": "npm:4.4.4"
-    "@joplin/fork-htmlparser2": "npm:^4.1.60"
+    "@joplin/fork-htmlparser2": "npm:^4.1.63"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     datauri: "npm:4.1.0"
@@ -12626,15 +12626,15 @@ __metadata:
     "@adobe/css-tools": "npm:4.4.4"
     "@aws-sdk/client-s3": "npm:3.296.0"
     "@aws-sdk/s3-request-presigner": "npm:3.296.0"
-    "@joplin/fork-htmlparser2": "npm:^4.1.60"
-    "@joplin/fork-sax": "npm:^1.2.64"
-    "@joplin/fork-uslug": "npm:^2.0.3"
-    "@joplin/htmlpack": "npm:~3.7"
-    "@joplin/onenote-converter": "npm:~3.7"
-    "@joplin/renderer": "npm:~3.7"
-    "@joplin/turndown": "npm:^4.0.82"
-    "@joplin/turndown-plugin-gfm": "npm:^1.0.64"
-    "@joplin/utils": "npm:~3.7"
+    "@joplin/fork-htmlparser2": "npm:^4.1.63"
+    "@joplin/fork-sax": "npm:^1.2.67"
+    "@joplin/fork-uslug": "npm:^2.0.6"
+    "@joplin/htmlpack": "npm:^3.7"
+    "@joplin/onenote-converter": "npm:^3.7"
+    "@joplin/renderer": "npm:^3.7"
+    "@joplin/turndown": "npm:^4.0.85"
+    "@joplin/turndown-plugin-gfm": "npm:^1.0.67"
+    "@joplin/utils": "npm:^3.7"
     "@testing-library/dom": "npm:10.4.1"
     "@testing-library/react": "npm:16.3.2"
     "@types/adm-zip": "npm:0.5.7"
@@ -12712,7 +12712,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/onenote-converter@npm:~3.7, @joplin/onenote-converter@workspace:packages/onenote-converter":
+"@joplin/onenote-converter@npm:^3.7, @joplin/onenote-converter@npm:~3.7, @joplin/onenote-converter@workspace:packages/onenote-converter":
   version: 0.0.0-use.local
   resolution: "@joplin/onenote-converter@workspace:packages/onenote-converter"
   dependencies:
@@ -12806,12 +12806,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/renderer@npm:~3.7, @joplin/renderer@workspace:packages/renderer":
+"@joplin/renderer@npm:^3.7, @joplin/renderer@npm:~3.7, @joplin/renderer@workspace:packages/renderer":
   version: 0.0.0-use.local
   resolution: "@joplin/renderer@workspace:packages/renderer"
   dependencies:
-    "@joplin/fork-htmlparser2": "npm:^4.1.60"
-    "@joplin/fork-uslug": "npm:^2.0.3"
+    "@joplin/fork-htmlparser2": "npm:^4.1.63"
+    "@joplin/fork-uslug": "npm:^2.0.6"
     "@joplin/utils": "npm:~3.7"
     "@types/jest": "npm:29.5.14"
     "@types/json5": "npm:2.2.0"
@@ -12879,7 +12879,7 @@ __metadata:
     bulma: "npm:1.0.4"
     compare-versions: "npm:6.1.1"
     dayjs: "npm:1.11.19"
-    formidable: "patch:formidable@npm%3A2.1.2#~/.yarn/patches/formidable-npm-2.1.2-40ba18d67f.patch"
+    formidable: "npm:2.1.2"
     fs-extra: "npm:11.3.3"
     gulp: "npm:4.0.2"
     html-entities: "npm:1.4.0"
@@ -12921,7 +12921,7 @@ __metadata:
   resolution: "@joplin/tools@workspace:packages/tools"
   dependencies:
     "@docusaurus/plugin-sitemap": "npm:3.9.2"
-    "@joplin/fork-htmlparser2": "npm:^4.1.60"
+    "@joplin/fork-htmlparser2": "npm:^4.1.63"
     "@joplin/lib": "npm:~3.7"
     "@joplin/renderer": "npm:~3.7"
     "@joplin/utils": "npm:~3.7"
@@ -12995,7 +12995,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/turndown-plugin-gfm@npm:^1.0.64, @joplin/turndown-plugin-gfm@npm:~1.0.62, @joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm":
+"@joplin/turndown-plugin-gfm@npm:^1.0.67, @joplin/turndown-plugin-gfm@npm:~1.0.62, @joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm":
   version: 0.0.0-use.local
   resolution: "@joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm"
   dependencies:
@@ -13007,7 +13007,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/turndown@npm:^4.0.82, @joplin/turndown@npm:~4.0.80, @joplin/turndown@workspace:packages/turndown":
+"@joplin/turndown@npm:^4.0.85, @joplin/turndown@npm:~4.0.80, @joplin/turndown@workspace:packages/turndown":
   version: 0.0.0-use.local
   resolution: "@joplin/turndown@workspace:packages/turndown"
   dependencies:
@@ -13024,26 +13024,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/utils@npm:~2.12":
-  version: 2.12.1
-  resolution: "@joplin/utils@npm:2.12.1"
-  dependencies:
-    async-mutex: "npm:0.4.0"
-    execa: "npm:5.1.1"
-    fs-extra: "npm:11.1.1"
-    glob: "npm:10.3.3"
-    moment: "npm:2.29.4"
-    node-fetch: "npm:2.6.7"
-    sprintf-js: "npm:1.1.2"
-  checksum: 10/7ac4e8a82551ca78fe0e23081a05bfd1b38fa7a353fc037224144fa40c4825924ada8a5026c0bb4e5959de6d28173829a7e2e8dcd6e774d09d852a94c158bdbf
-  languageName: node
-  linkType: hard
-
-"@joplin/utils@npm:~3.7, @joplin/utils@workspace:packages/utils":
+"@joplin/utils@npm:^3.7, @joplin/utils@npm:~3.7, @joplin/utils@workspace:packages/utils":
   version: 0.0.0-use.local
   resolution: "@joplin/utils@workspace:packages/utils"
   dependencies:
-    "@joplin/fork-htmlparser2": "npm:^4.1.60"
+    "@joplin/fork-htmlparser2": "npm:^4.1.63"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     "@types/markdown-it": "npm:13.0.9"
@@ -13064,6 +13049,21 @@ __metadata:
     typescript: "npm:5.9.3"
   languageName: unknown
   linkType: soft
+
+"@joplin/utils@npm:~2.12":
+  version: 2.12.1
+  resolution: "@joplin/utils@npm:2.12.1"
+  dependencies:
+    async-mutex: "npm:0.4.0"
+    execa: "npm:5.1.1"
+    fs-extra: "npm:11.1.1"
+    glob: "npm:10.3.3"
+    moment: "npm:2.29.4"
+    node-fetch: "npm:2.6.7"
+    sprintf-js: "npm:1.1.2"
+  checksum: 10/7ac4e8a82551ca78fe0e23081a05bfd1b38fa7a353fc037224144fa40c4825924ada8a5026c0bb4e5959de6d28173829a7e2e8dcd6e774d09d852a94c158bdbf
+  languageName: node
+  linkType: hard
 
 "@joplin/whisper-voice-typing@npm:~3.7, @joplin/whisper-voice-typing@workspace:packages/whisper-voice-typing":
   version: 0.0.0-use.local
@@ -19233,10 +19233,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/serviceworker@npm:0.0.185":
-  version: 0.0.185
-  resolution: "@types/serviceworker@npm:0.0.185"
-  checksum: 10/b971eedf57d1004c19d2ef62ef7121d851d07524e364cd5285747da27c09fb1173f01942f1e81db456fddf60400bb8eeed6e90c7472e2b280364c2b9137c908c
+"@types/serviceworker@npm:0.0.186":
+  version: 0.0.186
+  resolution: "@types/serviceworker@npm:0.0.186"
+  checksum: 10/144263d77448407d6df45bd36f5c90c875f028c3de0a5a590d7f14272aa86f1dd15b90cbf6a096626a05b6f46521b0ffa30721247751af76384359c889c1c461
   languageName: node
   linkType: hard
 

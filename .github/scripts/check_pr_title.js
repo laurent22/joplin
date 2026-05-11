@@ -99,7 +99,12 @@ module.exports = async ({ github, context, core }) => {
 		return;
 	}
 
+	// Hidden marker so we can detect a previous nag and avoid reposting on
+	// every `synchronize` event (push to the PR branch).
+	const commentMarker = '<!-- joplin-bot:invalid-pr-title -->';
+
 	const helpMessage = [
+		commentMarker,
 		`@${author} the pull request title does not match the required format.`,
 		'',
 		'Please prefix the title with the area you are targeting, then add the issue you are addressing. For example:',
@@ -115,12 +120,24 @@ module.exports = async ({ github, context, core }) => {
 			: '_This PR has been closed automatically. Once you update the title to match the format above, the PR will be reopened automatically._',
 	].join('\n');
 
-	await github.rest.issues.createComment({
+	const existingComments = await github.paginate(github.rest.issues.listComments, {
 		owner: context.repo.owner,
 		repo: context.repo.repo,
 		issue_number: prNumber,
-		body: helpMessage,
+		per_page: 100,
 	});
+	const alreadyCommented = existingComments.some(c => c.body && c.body.includes(commentMarker));
+
+	if (!alreadyCommented) {
+		await github.rest.issues.createComment({
+			owner: context.repo.owner,
+			repo: context.repo.repo,
+			issue_number: prNumber,
+			body: helpMessage,
+		});
+	} else {
+		core.info('Invalid-title comment already posted — not commenting again.');
+	}
 
 	if (!isSoft) {
 		// Label first so the marker is set before the close event lands.

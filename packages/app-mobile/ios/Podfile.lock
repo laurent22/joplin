@@ -1416,7 +1416,7 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
-  - react-native-alarm-notification (3.6.0):
+  - react-native-alarm-notification (3.7.0):
     - React
   - react-native-document-picker (10.1.7):
     - hermes-engine
@@ -1492,7 +1492,7 @@ PODS:
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-saf-x (3.6.0):
+  - react-native-saf-x (3.7.0):
     - React-Core
   - react-native-safe-area-context (5.6.2):
     - hermes-engine
@@ -2136,7 +2136,7 @@ PODS:
   - SDWebImageWebPCoder (0.15.0):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.17)
-  - WhisperVoiceTyping (3.6.0):
+  - WhisperVoiceTyping (3.7.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2570,7 +2570,7 @@ SPEC CHECKSUMS:
   React-logger: 6655e8067cf5b86a8b165fecb0395f65ddddfe6b
   React-Mapbuffer: 90837747b018e7061eca67d45bc7e5dab93c4a06
   React-microtasksnativemodule: f86ccf2ec5f619f6df1dd06ae770c326e3eca0b8
-  react-native-alarm-notification: 846df1df72eca38e711409b9c064a5c635ff1c32
+  react-native-alarm-notification: 5236274a333fd40a14c3faafd8984edfc1b6ec62
   react-native-document-picker: 4aa06b45d0f6dfc7fac5bcb5d1cee4f45af5d68a
   react-native-geolocation: cfc39041210bd9f591ec2beb7d417291251da8e5
   react-native-get-random-values: d16467cf726c618e9c7a8c3c39c31faa2244bbba
@@ -2578,7 +2578,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-quick-base64: 6568199bb2ac8e72ecdfdc73a230fbc5c1d3aac4
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
-  react-native-saf-x: 50d176763ed692b379c190bf55ae7293a3ee09bb
+  react-native-saf-x: 5f4d6aed7554454033c39c81d951962dadc8dc5a
   react-native-safe-area-context: 37e680fc4cace3c0030ee46e8987d24f5d3bdab2
   react-native-sqlite-storage: 0c84826214baaa498796c7e46a5ccc9a82e114ed
   react-native-vector-icons: 8215b0e62bf79d3be628cf658ec23777f9bec53c
@@ -2633,7 +2633,7 @@ SPEC CHECKSUMS:
   RNSVG: 7612f5bc575eab5da3364d44abe9f0d5db2cde03
   SDWebImage: e9c98383c7572d713c1a0d7dd2783b10599b9838
   SDWebImageWebPCoder: 0e06e365080397465cc73a7a9b472d8a3bd0f377
-  WhisperVoiceTyping: 343ea840cbde2a5f3508f8b016ebcf1c089179ea
+  WhisperVoiceTyping: 29015e8468ff2fd2786d3aaace16fcbdd6a712d6
   Yoga: 786fa7d9d2ff6060b4e688062243fa69c323d140
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 

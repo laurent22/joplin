@@ -1,4 +1,62 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 23 Feb 2026 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 23 Feb 2026 00:00:00 GMT</pubDate><item><title><![CDATA[Introducing our Warrant Canary]]></title><description><![CDATA[<p>We have introduced a publicly signed warrant canary for Joplin.</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Tue, 05 May 2026 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Tue, 05 May 2026 00:00:00 GMT</pubDate><item><title><![CDATA[What's new in Joplin 3.6]]></title><description><![CDATA[<p>Joplin 3.6 brings a more polished editing experience, a much improved OneNote importer, and a clearer view of what's happening when the app syncs. Mobile also gains a number of features that previously were only available on desktop.</p>
+<h2>Improvements across desktop and mobile<a name="improvements-across-desktop-and-mobile" href="#improvements-across-desktop-and-mobile" class="heading-anchor">🔗</a></h2>
+<h3>A more visual Markdown editor<a name="a-more-visual-markdown-editor" href="#a-more-visual-markdown-editor" class="heading-anchor">🔗</a></h3>
+<p>The Markdown editor now renders formatting directly in the editor by default, which means headings, bold and italic text, links, images and other elements now appear styled as you type, instead of as raw Markdown. This brings the editing experience much closer to the final rendered note, while keeping all the speed and predictability of plain Markdown.</p>
+<hr>
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20260505-markdown-rendering.png" width="300" alt="Joplin Markdown editor with in-editor rendering enabled, showing styled headings, bold/italic text and inline images while the underlying Markdown is still being typed."/>
+<hr>
+<p>In addition, inline HTML such as colored text, superscript, subscript and strikethrough is now rendered live, and YAML frontmatter blocks are displayed as a clean styled block rather than raw text. Code block highlighting in the editor has also been brought closer to what you see in the viewer.</p>
+<p>Markdown formatting commands such as bold or italic now also apply correctly across multi-line selections, formatting each line individually rather than wrapping the whole block at once.</p>
+<h3>Embedded videos and media time ranges<a name="embedded-videos-and-media-time-ranges" href="#embedded-videos-and-media-time-ranges" class="heading-anchor">🔗</a></h3>
+<p>It is now possible to embed external content directly in notes, with YouTube videos being the most visible example - paste a link and the video plays inline.</p>
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20260505-youtube-embed.png" width="300" alt="A Joplin note with an embedded YouTube video player rendered directly inside the note."/>
+<p>Audio, video and PDF attachments can now also be linked to a specific section using start and end times, making it easy to point readers to a particular passage instead of the full file.</p>
+<h3>Significantly improved OneNote import<a name="significantly-improved-onenote-import" href="#significantly-improved-onenote-import" class="heading-anchor">🔗</a></h3>
+<p>The <a href="https://joplinapp.org/help/apps/import_export#importing-from-onenote">OneNote importer</a> received a large amount of work this cycle. Importing <code>.onepkg</code> files now works on Linux and macOS, not just Windows, and large <code>.one</code> files with many attachments are now handled correctly. Handwriting and ink import has been substantially improved, with better positioning, scaling and support for nested ink containers.</p>
+<p>Many smaller fidelity issues have also been fixed: bold and italic now convert properly to Markdown, fonts are handled more sensibly when Calibri is unavailable, PDF printouts are imported correctly, cross-page links are preserved, and notebooks with non-ASCII characters in their titles no longer fail to import. Overall, migrating from OneNote to Joplin should now be noticeably smoother and more faithful to the original content.</p>
+<h3>Fewer unexpected sync conflicts<a name="fewer-unexpected-sync-conflicts" href="#fewer-unexpected-sync-conflicts" class="heading-anchor">🔗</a></h3>
+<p>Several long-standing causes of unexpected conflicts have been addressed, including conflicts that could appear during sync, after a full sync, or due to resource duplication. Resource processing in read-only shared notebooks has also been made more reliable.</p>
+<h2>Desktop-specific improvements<a name="desktop-specific-improvements" href="#desktop-specific-improvements" class="heading-anchor">🔗</a></h2>
+<h3>Clearer sync status<a name="clearer-sync-status" href="#clearer-sync-status" class="heading-anchor">🔗</a></h3>
+<p>The sidebar now includes a sync status icon and a collapsible sync report, giving you a clear view of what Joplin is doing without having to open the log. A new toggle button also lets you hide or show the sync panel at any time. Together these changes make sync activity much more transparent in day-to-day use.</p>
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20260505-sync-status.png" width="300" alt="Joplin desktop sidebar showing the new sync status icon and the collapsible sync report."/>
+<h3>Quality of life: zoom, shortcuts and viewer copy<a name="quality-of-life-zoom-shortcuts-and-viewer-copy" href="#quality-of-life-zoom-shortcuts-and-viewer-copy" class="heading-anchor">🔗</a></h3>
+<p>A number of small improvements add up to a more comfortable desktop experience:</p>
+<ul>
+<li>A <strong>full-screen shortcut</strong> (Ctrl+Cmd+F) and a <strong>global show/hide Joplin shortcut</strong> have been added.</li>
+<li>On Windows and Linux, a <strong>Close Window</strong> shortcut and menu item are now available.</li>
+<li>Toolbar button tooltips now include keyboard shortcuts.</li>
+<li><strong>Copy</strong> and <strong>Select All</strong> &quot;Edit&quot; menu items now work in the note viewer and in read-only mode.</li>
+<li>The detailed note list now displays the <strong>percentage completion</strong> of checkbox lists.</li>
+<li>Editor settings have been moved to a dedicated section in the preferences screen, making them easier to find.</li>
+</ul>
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20260505-checkbox-percentage.png" width="300" alt="Joplin note list in detailed view showing the percentage completion indicator on notes that contain checkbox lists."/>
+<h3>Accessible PDF export and OCR improvements<a name="accessible-pdf-export-and-ocr-improvements" href="#accessible-pdf-export-and-ocr-improvements" class="heading-anchor">🔗</a></h3>
+<p>Exported PDFs now include accessibility information, and <a href="https://joplinapp.org/help/apps/optical_character_recognition">OCR'd PDFs</a> gain a text layer that makes them searchable and screen-reader friendly. OCR also now supports Chinese and Norwegian.</p>
+<h2>Mobile-specific improvements<a name="mobile-specific-improvements" href="#mobile-specific-improvements" class="heading-anchor">🔗</a></h2>
+<h3>Per-notebook sorting<a name="per-notebook-sorting" href="#per-notebook-sorting" class="heading-anchor">🔗</a></h3>
+<p>It is now possible to set a separate sort order for each notebook on mobile, matching the behaviour that has long been available on desktop. This is particularly useful when different notebooks need different sorting (e.g. a journal sorted by date, a reference notebook sorted alphabetically).</p>
+<h3>A dedicated attachments management screen<a name="a-dedicated-attachments-management-screen" href="#a-dedicated-attachments-management-screen" class="heading-anchor">🔗</a></h3>
+<p>A new screen lists all attachments across your notes, making it much easier to review what's stored, find a specific file, or delete attachments you no longer need. It's available from <strong>Configuration → Tools → Note attachments</strong>.</p>
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20260505-mobile-attachments.png" width="350" alt="Joplin mobile attachments management screen listing the files attached to notes."/>
+<h3>A more capable editor toolbar<a name="a-more-capable-editor-toolbar" href="#a-more-capable-editor-toolbar" class="heading-anchor">🔗</a></h3>
+<p>Two improvements make the mobile editor toolbar more flexible:</p>
+<ul>
+<li>New <strong>&quot;Go to start of note&quot;</strong> and <strong>&quot;Go to end of note&quot;</strong> buttons make navigating long notes much faster.</li>
+<li>The toolbar buttons can now be <strong>reordered</strong> using up/down arrows, so you can put the actions you use most within easy reach.</li>
+</ul>
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20260505-mobile-toolbar.png" width="350" alt="Joplin mobile toolbar customization screen with up and down arrows used to reorder buttons."/>
+<h3>Other mobile improvements<a name="other-mobile-improvements" href="#other-mobile-improvements" class="heading-anchor">🔗</a></h3>
+<p>A few additional changes worth mentioning:</p>
+<ul>
+<li>Joplin now <strong>remembers whether you were viewing or editing</strong> each note, instead of always reopening in view mode.</li>
+<li>A new <strong>&quot;Reveal in notebook&quot;</strong> option helps you locate a note in the sidebar from a search result or any other view.</li>
+<li>Plain text <code>.txt</code> files can now be <strong>imported directly</strong> on mobile.</li>
+</ul>
+<h2>Bug fixes and security fixes across platforms<a name="bug-fixes-and-security-fixes-across-platforms" href="#bug-fixes-and-security-fixes-across-platforms" class="heading-anchor">🔗</a></h2>
+<p>Joplin 3.6 also includes a large number of bug fixes across desktop and mobile, addressing issues in editing, syncing, importing, rendering and general stability. Several security-related improvements have also been made, including a stronger Content Security Policy on desktop.</p>
+<p>For the full list of changes, see <a href="https://joplinapp.org/help/about/changelog/desktop/">the desktop changelog</a> and <a href="https://joplinapp.org/help/about/changelog/android/">the mobile changelog</a>.</p>
+]]></description><link>https://joplinapp.org/news/20260505-release-3-6</link><guid isPermaLink="false">20260505-release-3-6</guid><pubDate>Tue, 05 May 2026 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Introducing our Warrant Canary]]></title><description><![CDATA[<p>We have introduced a publicly signed warrant canary for Joplin.</p>
 <p>A warrant canary is a regularly updated statement confirming that, as of the stated date, the project has not received secret legal orders, gag orders, or demands requiring the introduction of backdoors into the software or its infrastructure.</p>
 <p>The canary is:</p>
 <ul>
@@ -525,7 +583,4 @@ sys 0m38.013s</p>
 <p>Our mobile app now has an improved search function that performs text searches in real time! No more waiting for the search results to load, they'll appear instantly as you type.</p>
 <h3>Improved filesystem sync performance<a name="improved-filesystem-sync-performance" href="#improved-filesystem-sync-performance" class="heading-anchor">🔗</a></h3>
 <p>Thanks to the hard work of jd1378, the sync no longer freezes during filesystem synchronisation. We know how frustrating that can be, and we're thrilled to have solved this issue. Getting filesystem sync to work on Android is never easy due to the restrictions put in place by Google, especially since they frequently change, but we're committed to delivering the best possible experience for our Android users.</p>
-]]></description><link>https://joplinapp.org/news/20230508-release-2-10</link><guid isPermaLink="false">20230508-release-2-10</guid><pubDate>Wed, 10 May 2023 12:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.10</twitter-text></item><item><title><![CDATA[Joplin will participate in JdLL 2023!]]></title><description><![CDATA[<p>On 1 and 2 April 2023, we will have a stand for Joplin at the <a href="https://www.jdll.org/">Journées du Logiciel Libre</a> in Lyon, France. The JdLL has been taking place in Lyon for 24 years and is a popular open source conference in France. We had a stand in 2020 and 2021 but that was cancelled due to Covid, so this year is a first for Joplin!</p>
-<p>Admission is free, so don't hesitate to come and meet us, exchange ideas and learn more about Joplin!</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230202-jdll.jpg" alt="Joplin at JdLL 2023"></p>
-]]></description><link>https://joplinapp.org/news/20230302-jdll-2023</link><guid isPermaLink="false">20230302-jdll-2023</guid><pubDate>Thu, 02 Mar 2023 00:00:00 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>
+]]></description><link>https://joplinapp.org/news/20230508-release-2-10</link><guid isPermaLink="false">20230508-release-2-10</guid><pubDate>Wed, 10 May 2023 12:00:00 GMT</pubDate><twitter-text>What&apos;s new in Joplin 2.10</twitter-text></item></channel></rss>
