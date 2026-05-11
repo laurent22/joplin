@@ -12829,7 +12829,7 @@ __metadata:
     katex: "npm:0.16.23"
     markdown-it: "npm:13.0.2"
     markdown-it-abbr: "npm:1.0.4"
-    markdown-it-anchor: "npm:5.3.0"
+    markdown-it-anchor: "npm:9.2.0"
     markdown-it-deflist: "npm:2.1.0"
     markdown-it-emoji: "npm:2.0.2"
     markdown-it-expand-tabs: "npm:1.0.13"
@@ -40592,12 +40592,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-anchor@npm:5.3.0":
-  version: 5.3.0
-  resolution: "markdown-it-anchor@npm:5.3.0"
+"markdown-it-anchor@npm:9.2.0":
+  version: 9.2.0
+  resolution: "markdown-it-anchor@npm:9.2.0"
   peerDependencies:
+    "@types/markdown-it": "*"
     markdown-it: "*"
-  checksum: 10/d4ca4e683e59e378710ee9a0b1eea8fc733baa904b559a36a0f67e8fa085e5a78892c9f268df8b8764eb2bb55c1ebfc3b04d8a79b28ac01a506ea6bf7b4b7fc0
+  checksum: 10/ececb857a621946be9da08a9abdec98b954fa2f14493261293bf1868146f840d419042be7028317851940ecb7f6d2db318916d13bd38c9d398507c7802d6f70f
   languageName: node
   linkType: hard
 
