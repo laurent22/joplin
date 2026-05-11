@@ -10,6 +10,7 @@ import { uuidgen } from '../../uuid';
 import shim from '../../shim';
 import { unique } from '../../ArrayUtils';
 import Note from '../../models/Note';
+import { type Stat } from '../../fs-driver-base';
 
 const logger = Logger.create('InteropService_Importer_OneNote');
 
@@ -48,6 +49,7 @@ interface NoteMetadata {
 	// Saving the title in the metadata allows using special characters not supported by the file
 	// system in imported note titles (e.g. "/")
 	title: string;
+	order?: number;
 }
 
 // See onenote-converter README.md for more information
@@ -216,6 +218,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 	private async postprocessGeneratedHtmlInFolder_(baseFolder: string) {
 		const htmlFiles = await this.getValidHtmlFiles_(resolve(baseFolder));
 		const idMap = await this.buildIdMap_(baseFolder);
+		const fileToOrder = await this.buildFileToOrderMap_(baseFolder, htmlFiles);
 		const fileToMetadata = new Map<string, NoteMetadata>();
 
 		for (const file of htmlFiles) {
@@ -227,10 +230,52 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 				await shim.fsDriver().writeFile(fileLocation, html, 'utf-8');
 			}
 
-			fileToMetadata.set(resolve(fileLocation), metadata);
+			fileToMetadata.set(resolve(fileLocation), {
+				...metadata,
+				order: fileToOrder.get(resolve(fileLocation)),
+			});
 		}
 
 		return fileToMetadata;
+	}
+
+	private async buildFileToOrderMap_(baseFolder: string, htmlFiles: Stat[]) {
+		const fileToOrder = new Map<string, number>();
+		const maxOrder = Date.now();
+		let orderOffset = 0;
+
+		for (const file of htmlFiles) {
+			const fileLocation = join(baseFolder, file.path);
+			const html: string = await shim.fsDriver().readFile(fileLocation);
+			const dom = this.domParser.parseFromString(html, 'text/html');
+
+			// Section index pages rendered by the converter contain a navigation list
+			// with links in the same order as OneNote's page list.
+			for (const link of dom.querySelectorAll<HTMLAnchorElement>('nav a[href]')) {
+				const href = link.getAttribute('href');
+				if (!href || href.startsWith('onenote:')) continue;
+
+				let decodedHref = href;
+				try {
+					decodedHref = decodeURI(href);
+				} catch {
+					// Keep the encoded URL if it can't be decoded.
+				}
+
+				const relativeTarget = decodedHref.split('#')[0].replace(/^[/\\]+/, '');
+				const targetPath = resolve(dirname(fileLocation), relativeTarget);
+				if (!targetPath.endsWith('.html')) continue;
+
+				// Custom order sorts by note.order DESC, so earlier OneNote pages need
+				// larger order values.
+				if (!fileToOrder.has(targetPath)) {
+					fileToOrder.set(targetPath, maxOrder - orderOffset);
+					orderOffset += 1;
+				}
+			}
+		}
+
+		return fileToOrder;
 	}
 
 	// Public to allow testing
@@ -432,6 +477,7 @@ class OneNoteHtmlImporter extends InteropService_Importer_Md {
 					user_updated_time: metadata.updated.getTime(),
 					user_created_time: metadata.created.getTime(),
 					title: metadata.title || note.title,
+					...(metadata.order !== undefined ? { order: metadata.order } : {}),
 				};
 
 				const noteItem = await Note.save(updatedNote, { isNew: false, autoTimestamp: false });

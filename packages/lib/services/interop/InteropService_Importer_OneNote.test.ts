@@ -123,6 +123,21 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(menuLines[7].trim()).toBe(`<li class="l2"><a href=":/${pageTwoB.id}" target="content" title="Page 2-b">${pageTwoB.title}</a>`);
 	});
 
+	it('should preserve OneNote page order when notes use custom sort order', async () => {
+		const notes = await importNote(`${supportDir}/onenote/subpages.zip`);
+
+		const sectionPage = notes.find(n => n.title === 'Section');
+		const pageIdsInOneNoteOrder = [...sectionPage.body.matchAll(/<a href=":\/([^"]+)"/g)].map(match => match[1]);
+		const pagesFolderId = notes.find(n => n.title === 'Page 2')!.parent_id;
+		const pagesInCustomOrder = Note.sortNotes(
+			notes.filter(n => n.parent_id === pagesFolderId),
+			Note.customOrderByColumns(),
+			false,
+		);
+
+		expectWithInstructions(pagesInCustomOrder.map(note => note.id)).toEqual(pageIdsInOneNoteOrder);
+	});
+
 	it('should created subsections', async () => {
 		const notes = await importNote(`${supportDir}/onenote/subsections.zip`);
 		const folders = await Folder.all();
