@@ -12643,7 +12643,7 @@ __metadata:
     "@types/jest-expect-message": "npm:1.1.0"
     "@types/js-yaml": "npm:4.0.9"
     "@types/jsdom": "npm:21.1.7"
-    "@types/markdown-it": "npm:13.0.9"
+    "@types/markdown-it": "npm:14.1.2"
     "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.130"
     "@types/node-rsa": "npm:1.1.4"
@@ -12674,7 +12674,7 @@ __metadata:
     jest-expect-message: "npm:1.1.3"
     js-yaml: "npm:4.1.1"
     jsdom: "npm:26.1.0"
-    markdown-it: "npm:13.0.2"
+    markdown-it: "npm:14.1.0"
     md5: "npm:2.3.0"
     md5-file: "npm:5.0.0"
     moment: "npm:2.30.1"
@@ -12815,7 +12815,7 @@ __metadata:
     "@joplin/utils": "npm:~3.7"
     "@types/jest": "npm:29.5.14"
     "@types/json5": "npm:2.2.0"
-    "@types/markdown-it": "npm:13.0.9"
+    "@types/markdown-it": "npm:14.1.2"
     "@types/node": "npm:18.19.130"
     abcjs: "npm:6.6.1"
     font-awesome-filetypes: "npm:2.1.0"
@@ -12827,7 +12827,7 @@ __metadata:
     json-stringify-safe: "npm:5.0.1"
     json5: "npm:2.2.3"
     katex: "npm:0.16.23"
-    markdown-it: "npm:13.0.2"
+    markdown-it: "npm:14.1.0"
     markdown-it-abbr: "npm:1.0.4"
     markdown-it-anchor: "npm:5.3.0"
     markdown-it-deflist: "npm:2.1.0"
@@ -12867,7 +12867,7 @@ __metadata:
     "@types/jest-expect-message": "npm:1.1.0"
     "@types/jsdom": "npm:21.1.7"
     "@types/koa": "npm:2.15.0"
-    "@types/markdown-it": "npm:13.0.9"
+    "@types/markdown-it": "npm:14.1.2"
     "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.130"
     "@types/nodemailer": "npm:6.4.22"
@@ -12890,7 +12890,7 @@ __metadata:
     knex: "npm:3.1.0"
     koa: "npm:2.16.3"
     ldapts: "npm:8.1.6"
-    markdown-it: "npm:13.0.2"
+    markdown-it: "npm:14.1.0"
     mustache: "npm:4.2.0"
     node-cron: "npm:3.0.3"
     node-mocks-http: "npm:1.17.2"
@@ -12929,7 +12929,7 @@ __metadata:
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     "@types/js-yaml": "npm:4.0.9"
-    "@types/markdown-it": "npm:13.0.9"
+    "@types/markdown-it": "npm:14.1.2"
     "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.130"
     "@types/node-fetch": "npm:2.6.13"
@@ -12946,7 +12946,7 @@ __metadata:
     jest: "npm:29.7.0"
     js-yaml: "npm:4.1.1"
     license-checker-rseidelsohn: "npm:4.4.2"
-    markdown-it: "npm:13.0.2"
+    markdown-it: "npm:14.1.0"
     md5-file: "npm:5.0.0"
     moment: "npm:2.30.1"
     mustache: "npm:4.2.0"
@@ -13031,7 +13031,7 @@ __metadata:
     "@joplin/fork-htmlparser2": "npm:^4.1.63"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/markdown-it": "npm:13.0.9"
+    "@types/markdown-it": "npm:14.1.2"
     "@types/node-fetch": "npm:2.6.13"
     async-mutex: "npm:0.5.0"
     dayjs: "npm:1.11.19"
@@ -13040,7 +13040,7 @@ __metadata:
     glob: "npm:11.1.0"
     html-entities: "npm:1.4.0"
     jest: "npm:29.7.0"
-    markdown-it: "npm:13.0.2"
+    markdown-it: "npm:14.1.0"
     moment: "npm:2.30.1"
     node-fetch: "npm:2.6.7"
     sprintf-js: "npm:1.1.3"
@@ -18780,20 +18780,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/linkify-it@npm:^3":
-  version: 3.0.5
-  resolution: "@types/linkify-it@npm:3.0.5"
-  checksum: 10/fac28f41a6e576282300a459d70ea0d33aab70dbb77c3d09582bb0335bb00d862b6de69585792a4d590aae4173fbab0bf28861e2d90ca7b2b1439b52688e9ff6
+"@types/linkify-it@npm:^5":
+  version: 5.0.0
+  resolution: "@types/linkify-it@npm:5.0.0"
+  checksum: 10/c3919044d4876f9d71d037e861745cd2485c95ac8c36a4fa67b132d4e60eb1d067e123cc7965c9cf5110eea351517d767f0d306af5e9147d6d0af87bc374ddcf
   languageName: node
   linkType: hard
 
-"@types/markdown-it@npm:13.0.9":
-  version: 13.0.9
-  resolution: "@types/markdown-it@npm:13.0.9"
+"@types/markdown-it@npm:14.1.2":
+  version: 14.1.2
+  resolution: "@types/markdown-it@npm:14.1.2"
   dependencies:
-    "@types/linkify-it": "npm:^3"
-    "@types/mdurl": "npm:^1"
-  checksum: 10/c8ad045cc5a4fd9179007ef3c00c35c7515ed76408790cdb04dfe5171850573c39d68a504136ea5df0ea17e9fd0158c2b274ef1346aac3e5f404bc0b9b114f9c
+    "@types/linkify-it": "npm:^5"
+    "@types/mdurl": "npm:^2"
+  checksum: 10/ca2f239c8d59610b9f936fd40261a6ccf2fa1ae27a21816c031e5712542dcf9ee01e2fe29b31118df90716e11ade54e47d92a498e9b6488800e77ca8827255a2
   languageName: node
   linkType: hard
 
@@ -18815,10 +18815,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mdurl@npm:^1":
-  version: 1.0.5
-  resolution: "@types/mdurl@npm:1.0.5"
-  checksum: 10/e8e872e8da8f517a9c748b06cec61c947cb73fd3069e8aeb0926670ec5dfac5d30549b3d0f1634950401633e812f9b7263f2d5dbe7e98fce12bcb2c659aa4b21
+"@types/mdurl@npm:^2":
+  version: 2.0.0
+  resolution: "@types/mdurl@npm:2.0.0"
+  checksum: 10/78746e96c655ceed63db06382da466fd52c7e9dc54d60b12973dfdd110cae06b9439c4b90e17bb8d4461109184b3ea9f3e9f96b3e4bf4aa9fe18b6ac35f283c8
   languageName: node
   linkType: hard
 
@@ -29473,13 +29473,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"entities@npm:~3.0.1":
-  version: 3.0.1
-  resolution: "entities@npm:3.0.1"
-  checksum: 10/3706e0292ea3f3679720b3d3b1ed6290b164aaeb11116691a922a3acea144503871e0de2170b47671c3b735549b8b7f4741d0d3c2987e8f985ccaa0dd3762eba
-  languageName: node
-  linkType: hard
-
 "env-editor@npm:^0.4.1":
   version: 0.4.2
   resolution: "env-editor@npm:0.4.2"
@@ -39649,12 +39642,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"linkify-it@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "linkify-it@npm:4.0.1"
+"linkify-it@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "linkify-it@npm:5.0.0"
   dependencies:
-    uc.micro: "npm:^1.0.1"
-  checksum: 10/d0a786d2e3f02f46b6f4a9b466af9eb936fb68e86b7cd305933d5457b12fdc53a4d0e0b697b02dc2e7d84a51d2425d719598bb7b47af7e01911e492e07a97957
+    uc.micro: "npm:^2.0.0"
+  checksum: 10/ef3b7609dda6ec0c0be8a7b879cea195f0d36387b0011660cd6711bba0ad82137f59b458b7e703ec74f11d88e7c1328e2ad9b855a8500c0ded67461a8c4519e6
   languageName: node
   linkType: hard
 
@@ -40673,18 +40666,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it@npm:13.0.2":
-  version: 13.0.2
-  resolution: "markdown-it@npm:13.0.2"
+"markdown-it@npm:14.1.0":
+  version: 14.1.0
+  resolution: "markdown-it@npm:14.1.0"
   dependencies:
     argparse: "npm:^2.0.1"
-    entities: "npm:~3.0.1"
-    linkify-it: "npm:^4.0.1"
-    mdurl: "npm:^1.0.1"
-    uc.micro: "npm:^1.0.5"
+    entities: "npm:^4.4.0"
+    linkify-it: "npm:^5.0.0"
+    mdurl: "npm:^2.0.0"
+    punycode.js: "npm:^2.3.1"
+    uc.micro: "npm:^2.1.0"
   bin:
-    markdown-it: bin/markdown-it.js
-  checksum: 10/4f48271bbd44d16502efd4148d7c05ca1fb4b50719a07d34c91e8d16f8d065c558fed0fafe07cd13ca5958096bfe295b37cd4f042add7ec49f73c70154e75f58
+    markdown-it: bin/markdown-it.mjs
+  checksum: 10/f34f921be178ed0607ba9e3e27c733642be445e9bb6b1dba88da7aafe8ba1bc5d2f1c3aa8f3fc33b49a902da4e4c08c2feadfafb290b8c7dda766208bb6483a9
   languageName: node
   linkType: hard
 
@@ -41104,10 +41098,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mdurl@npm:^1.0.0, mdurl@npm:^1.0.1":
+"mdurl@npm:^1.0.0":
   version: 1.0.1
   resolution: "mdurl@npm:1.0.1"
   checksum: 10/ada367d01c9e81d07328101f187d5bd8641b71f33eab075df4caed935a24fa679e625f07108801d8250a5e4a99e5cd4be7679957a11424a3aa3e740d2bb2d5cb
+  languageName: node
+  linkType: hard
+
+"mdurl@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "mdurl@npm:2.0.0"
+  checksum: 10/1720349d4a53e401aa993241368e35c0ad13d816ad0b28388928c58ca9faa0cf755fa45f18ccbf64f4ce54a845a50ddce5c84e4016897b513096a68dac4b0158
   languageName: node
   linkType: hard
 
@@ -48482,6 +48483,13 @@ __metadata:
     inherits: "npm:^2.0.3"
     pump: "npm:^3.0.0"
   checksum: 10/54bfdd04a30f459de5f1d1d022dc729e7257748900adf567a3b009f5aefe4a862ca91f3fb272f86c621eae631c4cc41f0efe5ee270752e2f9a90e7e63a9f8570
+  languageName: node
+  linkType: hard
+
+"punycode.js@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "punycode.js@npm:2.3.1"
+  checksum: 10/f0e946d1edf063f9e3d30a32ca86d8ff90ed13ca40dad9c75d37510a04473340cfc98db23a905cc1e517b1e9deb0f6021dce6f422ace235c60d3c9ac47c5a16a
   languageName: node
   linkType: hard
 
@@ -57123,10 +57131,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uc.micro@npm:^1.0.1, uc.micro@npm:^1.0.5":
-  version: 1.0.6
-  resolution: "uc.micro@npm:1.0.6"
-  checksum: 10/6898bb556319a38e9cf175e3628689347bd26fec15fc6b29fa38e0045af63075ff3fea4cf1fdba9db46c9f0cbf07f2348cd8844889dd31ebd288c29fe0d27e7a
+"uc.micro@npm:^2.0.0, uc.micro@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "uc.micro@npm:2.1.0"
+  checksum: 10/37197358242eb9afe367502d4638ac8c5838b78792ab218eafe48287b0ed28aaca268ec0392cc5729f6c90266744de32c06ae938549aee041fc93b0f9672d6b2
   languageName: node
   linkType: hard
 
