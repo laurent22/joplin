@@ -12828,7 +12828,7 @@ __metadata:
     json5: "npm:2.2.3"
     katex: "npm:0.16.23"
     markdown-it: "npm:13.0.2"
-    markdown-it-abbr: "npm:1.0.4"
+    markdown-it-abbr: "npm:2.0.0"
     markdown-it-anchor: "npm:5.3.0"
     markdown-it-deflist: "npm:2.1.0"
     markdown-it-emoji: "npm:2.0.2"
@@ -40585,10 +40585,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-abbr@npm:1.0.4":
-  version: 1.0.4
-  resolution: "markdown-it-abbr@npm:1.0.4"
-  checksum: 10/ee7d5ec4a99f17433f0071c9a8e16e8b79e3dd8ce89618a6d6e3aa1d04120965906d17e4cba1de5b29b3d1938b04d33693b936df0dd6fc1f093177b9625b95de
+"markdown-it-abbr@npm:2.0.0":
+  version: 2.0.0
+  resolution: "markdown-it-abbr@npm:2.0.0"
+  checksum: 10/23ca311db1261ec3459a5d87e07bf8b4b1312f4d268102d081d5a76acbd01cc83b9697a7af22dec244807826d83c7f92f5cf88088c40cabb6be8708ed44679dd
   languageName: node
   linkType: hard
 
