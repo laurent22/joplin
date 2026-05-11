@@ -5730,7 +5730,7 @@ msgstr "Jelszó megjelenítése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:837
 msgid "Show sort order buttons"
-msgstr "Rendszerezési sorrend gombjainak megjelenítése"
+msgstr "Rendezési sorrend gombjainak megjelenítése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1133
 msgid "Show tray icon"
@@ -7283,7 +7283,7 @@ msgstr ""
 #: packages/app-desktop/gui/MainScreen.tsx:794
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
-"A nyilak segítségével mozgathatja az elrendezési elemeket. A kilépéshez nyomja"
+"A nyilak segítségével mozgathatja az elemek elrendezését. A kilépéshez nyomja"
 " meg az „ESC” gombot."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1563
