@@ -21,7 +21,7 @@ jobs:
           sparse-checkout-cone-mode: false
 
       - name: Check title
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
