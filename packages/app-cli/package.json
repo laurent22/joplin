@@ -45,7 +45,7 @@
     "@joplin/renderer": "~3.7",
     "@joplin/utils": "~3.7",
     "aws-sdk": "2.1340.0",
-    "chalk": "4.1.2",
+    "chalk": "5.6.2",
     "compare-version": "0.1.2",
     "file-type": "16.5.4",
     "fs-extra": "11.3.3",
