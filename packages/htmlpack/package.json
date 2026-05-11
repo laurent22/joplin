@@ -33,7 +33,7 @@
     "@joplin/fork-htmlparser2": "^4.1.60",
     "datauri": "4.1.0",
     "fs-extra": "11.3.3",
-    "html-entities": "1.4.0"
+    "html-entities": "2.6.0"
   },
   "devDependencies": {
     "@types/fs-extra": "11.0.4",

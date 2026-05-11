@@ -38,7 +38,7 @@
     "font-awesome-filetypes": "2.1.0",
     "fs-extra": "11.3.3",
     "highlight.js": "11.11.1",
-    "html-entities": "1.4.0",
+    "html-entities": "2.6.0",
     "json-stringify-safe": "5.0.1",
     "json5": "2.2.3",
     "katex": "0.16.23",

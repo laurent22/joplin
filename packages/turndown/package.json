@@ -11,7 +11,7 @@
   "dependencies": {
     "@adobe/css-tools": "4.4.4",
     "@mixmark-io/domino": "2.2.0",
-    "html-entities": "1.4.0"
+    "html-entities": "2.6.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "28.0.9",

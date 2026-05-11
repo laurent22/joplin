@@ -70,7 +70,7 @@
     "form-data": "4.0.5",
     "fs-extra": "11.3.3",
     "hpagent": "1.2.0",
-    "html-entities": "1.4.0",
+    "html-entities": "2.6.0",
     "html-minifier": "4.0.0",
     "image-data-uri": "2.0.1",
     "immer": "9.0.21",
