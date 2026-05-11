@@ -300,9 +300,9 @@ const runOnDeviceTests = async () => {
 		await testAppendFile(tempDir);
 		await testReadWriteFileUtf8(tempDir);
 		await testReadFileChunkUtf8(tempDir);
-		await testTarCreateAndExtract(tempDir);
 		await testMd5File(tempDir);
 		await testReadDirStats(tempDir);
+		await testTarCreateAndExtract(tempDir);
 
 		logger.info('Done');
 	} catch (error) {
