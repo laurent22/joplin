@@ -57,7 +57,7 @@ Counts captured 2026-05-11 before any work.
 | 1 | pdf-viewer | 3 | 5 | 5 | 0 | done (2026-05-11) |
 | 2 | editor | 5 | 21 | 0 | 21 | not started |
 | 3 | utils | 9 | 28 | 0 | 28 | not started |
-| 4 | react-native-saf-x | 1 | 1 | 0 | 1 | not started |
+| 4 | react-native-saf-x | 1 | 1 | 1 | 0 | done (2026-05-11) |
 | 5 | default-plugins | 1 | 4 | 0 | 4 | not started |
 | 6 | renderer | 25 | 99 | 0 | 99 | not started |
 | 7 | tools | 23 | 49 | 0 | 49 | not started |
@@ -108,3 +108,11 @@ Files processed:
 - `PdfDocument.ts` — 3 removed, 0 left. Imported `PDFDocumentProxy` and `PDFPageProxy` from `pdfjs-dist`; typed `doc`, `pages` (as `Record<number, PDFPageProxy>`) and the local `pdfDocument`.
 
 Verification: `yarn tsc --noEmit` clean, `yarn linter-ci packages/pdf-viewer/` clean.
+
+### packages/react-native-saf-x
+Session date: 2026-05-11
+
+Files processed:
+- `src/index.ts` — 1 removed, 0 left. Replaced `{} as any` with `{} as SafxInterface` (the interface declared in the same file).
+
+Verification: `yarn tsc --noEmit` clean, `yarn linter-ci packages/react-native-saf-x/` clean.
