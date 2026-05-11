@@ -40,16 +40,7 @@ const StyledFolder = styled.div`
 const StyledRecipientControls = styled.div`
 	display: flex;
 	flex-direction: row;
-`;
-
-const StyledRecipientField = styled.div`
-	flex: 1;
-	min-width: 0;
-	margin-right: 10px;
-`;
-
-const StyledRecipientPermissions = styled(Dropdown)`
-	margin-right: 10px;
+	gap: 10px;
 `;
 
 const StyledAddRecipient = styled.div`
@@ -270,6 +261,10 @@ function ShareFolderDialog(props: Props) {
 		setRecipientEmail(value);
 	}, []);
 
+	const renderRecipientSuggestion = useCallback((suggestedValue: string) => {
+		return <div>{suggestedValue}</div>;
+	}, []);
+
 	async function recipient_delete(event: RecipientDeleteEvent) {
 		if (!await shim.showConfirmationDialog(_('Delete this invitation? The recipient will no longer have access to this shared notebook.'))) return;
 
@@ -298,23 +293,21 @@ function ShareFolderDialog(props: Props) {
 	function renderAddRecipient() {
 		const disabled = shareState !== ShareState.Idle && shareState !== ShareState.Synchronizing;
 
-		const dropdown = !props.canUseSharePermissions ? null : <StyledRecipientPermissions options={permissionOptions} value={recipientPermissions} onChange={recipientPermissions_change}/>;
+		const dropdown = !props.canUseSharePermissions ? null : <Dropdown className="-share-recipient" options={permissionOptions} value={recipientPermissions} onChange={recipientPermissions_change}/>;
 
 		return (
 			<StyledAddRecipient>
 				<StyledFormLabel>{_('Add recipient:')}</StyledFormLabel>
 				<StyledRecipientControls>
-					<StyledRecipientField>
-						<InlineCombobox
-							value={recipientEmail}
-							onChange={recipientEmail_change}
-							suggestedValues={disabled ? [] : recipientSuggestions}
-							renderOption={suggestedValue => <div>{suggestedValue}</div>}
-							inputStyle={{}}
-							inputId='share-folder-dialog-recipient-email'
-							className='-share-recipient'
-						/>
-					</StyledRecipientField>
+					<InlineCombobox
+						value={recipientEmail}
+						onChange={recipientEmail_change}
+						suggestedValues={disabled ? [] : recipientSuggestions}
+						renderOption={renderRecipientSuggestion}
+						inputStyle={{}}
+						inputId='share-folder-dialog-recipient-email'
+						className='-share-recipient'
+					/>
 					{dropdown}
 					<Button size={ButtonSize.Small} disabled={disabled} title={_('Share')} onClick={shareRecipient_click}></Button>
 				</StyledRecipientControls>
