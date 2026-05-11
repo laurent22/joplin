@@ -251,6 +251,20 @@ describe('services_KeymapService', () => {
 			});
 		});
 
+		it('should import legacy undo and redo command names', () => {
+			keymapService.initialize([], 'win32');
+			const customKeymapItems = [
+				{ command: 'editor.undo', accelerator: 'Ctrl+Z' },
+				{ command: 'editor.redo', accelerator: 'Ctrl+Shift+Z' },
+			];
+
+			expect(() => keymapService.overrideKeymap(customKeymapItems)).not.toThrow();
+			expect(keymapService.getAccelerator('globalUndo')).toEqual('Ctrl+Z');
+			expect(keymapService.getAccelerator('globalRedo')).toEqual('Ctrl+Shift+Z');
+			expect(keymapService.getCommandNames()).not.toContain('editor.undo');
+			expect(keymapService.getCommandNames()).not.toContain('editor.redo');
+		});
+
 		it('should throw when the required properties are missing', () => {
 			const customKeymaps = [
 				[
