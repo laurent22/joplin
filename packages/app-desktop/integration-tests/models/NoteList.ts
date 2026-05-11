@@ -26,6 +26,10 @@ export default class NoteList {
 	public async focusContent(electronApp: ElectronApplication) {
 		await activateMainMenuItem(electronApp, 'Note list', 'Focus');
 		await expect(this.container.locator(':focus')).toBeAttached();
+		// Wait for the list to have rendered a selected item before the caller
+		// tries to navigate with arrow keys. Without this, the aria-selected
+		// attribute may not be set yet on slow CI runners.
+		await expect(this.container.locator('[aria-selected="true"]')).toBeAttached();
 	}
 
 	// The resultant locator may fail to resolve if the item is not visible

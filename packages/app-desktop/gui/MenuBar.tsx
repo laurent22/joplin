@@ -200,6 +200,11 @@ function menuItemSetEnabled(id: string, enabled: boolean) {
 	const menu = Menu.getApplicationMenu();
 	const menuItem = menu.getMenuItemById(id);
 	if (!menuItem) return;
+	// Don't disable menu items that have a role (e.g. copy, paste, cut,
+	// selectAll). Since Electron 40, disabling a role-based menu item also
+	// prevents the native role behaviour, which breaks clipboard operations
+	// in non-editor input fields such as the Settings screen.
+	if (!enabled && menuItem.role) return;
 	menuItem.enabled = enabled;
 }
 
@@ -525,12 +530,16 @@ function useMenu(props: Props) {
 			];
 
 			// the following menu items will be available for all OS under Tools
-			const toolsItemsAll = [{
-				label: _('Note attachments...'),
-				click: () => {
-					navigateTo('Resources');
+			const toolsItemsAll = [
+				menuItemDic.newWhiteboard,
+				separator(),
+				{
+					label: _('Note attachments...'),
+					click: () => {
+						navigateTo('Resources');
+					},
 				},
-			}];
+			];
 
 			if (!shim.isMac()) {
 				toolsItems = toolsItems.concat(toolsItemsWindowsLinux);

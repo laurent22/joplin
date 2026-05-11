@@ -3,7 +3,7 @@
 //!
 //! Provides interfaces that are implemented by the different OneStore parsers.
 
-use std::rc::Rc;
+use std::{io::Seek, io::SeekFrom, rc::Rc};
 
 use crate::{
     fsshttpb_onestore::{self, packaging::OneStorePackaging},
@@ -39,16 +39,16 @@ pub fn parse_onestore<'a>(reader: &mut Reader<'a>) -> Result<Rc<dyn OneStore>> {
     // Try parsing as the standard format first.
     // Clone the reader to save the original offset. When retrying parsing with
     // a different format, parsing should start from the same location.
-    let mut reader_1 = reader.clone();
-    let onestore_local = OneStoreFile::parse(&mut reader_1);
+    reader.seek(SeekFrom::Start(0))?;
+    let onestore_local = OneStoreFile::parse(reader);
 
     match onestore_local {
         Ok(onestore) => Ok(Rc::new(onestore)),
         Err(Error {
             kind: ErrorKind::NotLocalOneStore(_),
         }) => {
-            let mut reader_2 = reader.clone();
-            let packaging = OneStorePackaging::parse(&mut reader_2)?;
+            reader.seek(SeekFrom::Start(0))?;
+            let packaging = OneStorePackaging::parse(reader)?;
             let store = fsshttpb_onestore::parse_store(&packaging)?;
             Ok(Rc::new(store))
         }

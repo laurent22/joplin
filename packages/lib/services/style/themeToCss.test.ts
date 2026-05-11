@@ -11,6 +11,7 @@ const input: Theme = {
 	oddBackgroundColor: '#eeeeee',
 	color: '#32373F', // For regular text
 	colorError: 'red',
+	colorErrorSelected: '#d00000',
 	colorCorrect: 'green',
 	colorWarn: 'rgb(228,86,0)',
 	colorWarnUrl: '#155BDA',
@@ -87,6 +88,7 @@ const expected = `
 	--joplin-color-correct: green;
 	--joplin-color-error: red;
 	--joplin-color-error2: #ff6c6c;
+	--joplin-color-error-selected: #d00000;
 	--joplin-color-faded: #7C8B9E;
 	--joplin-color-warn: rgb(228,86,0);
 	--joplin-color-warn2: #ffcb81;

@@ -28,6 +28,9 @@ extern "C" {
     #[wasm_bindgen(js_name = normalizeAndWriteFile, catch)]
     fn write_file(path: &str, data: &[u8]) -> std::result::Result<JsValue, JsValue>;
 
+    #[wasm_bindgen(js_name = normalizeAndAppendFile, catch)]
+    fn append_file(path: &str, data: &[u8]) -> std::result::Result<JsValue, JsValue>;
+
     #[wasm_bindgen(js_name = isDirectory, catch)]
     fn is_directory(path: &str) -> std::result::Result<bool, JsValue>;
 
@@ -48,12 +51,12 @@ extern "C" {
     #[wasm_bindgen(structural, method, catch)]
     fn read(
         this: &JsFileHandle,
-        offset: usize,
-        size: usize,
+        offset: u64,
+        size: u64,
     ) -> std::result::Result<Uint8Array, JsValue>;
 
     #[wasm_bindgen(structural, method)]
-    fn size(this: &JsFileHandle) -> usize;
+    fn size(this: &JsFileHandle) -> u64;
 
     #[wasm_bindgen(structural, method, catch)]
     fn close(this: &JsFileHandle) -> std::result::Result<(), JsValue>;
@@ -145,6 +148,43 @@ impl FileApiDriver for FileApiDriverImpl {
         }
     }
 
+    fn stream_to_file(&self, path: &str, data: &mut dyn std::io::Read) -> ApiResult<()> {
+        // Create and clear the file. This is important for zero-size files
+        self.write_file(path, &[])?;
+
+        let mut chunk_size = 1024 * 1024; // 1 MB
+        let max_chunk_size = 50 * 1024 * 1024;
+        let mut buffer = vec![0; chunk_size];
+
+        loop {
+            let size = match data.read(&mut buffer) {
+                Ok(size) => size,
+                // Interrupted errors can be retried
+                Err(err) if err.kind() == std::io::ErrorKind::Interrupted => {
+                    continue;
+                }
+                Err(err) => {
+                    return Err(err);
+                }
+            };
+
+            if size == 0 {
+                break;
+            }
+
+            if let Err(error) = append_file(path, &buffer[0..size]) {
+                return Err(handle_error(error, &format!("writing file {}", path)));
+            }
+
+            // For performance, try to increase the chunk size
+            if size == chunk_size && chunk_size < max_chunk_size {
+                chunk_size = (chunk_size * 2).min(max_chunk_size);
+                buffer.resize(chunk_size, 0);
+            }
+        }
+        Ok(())
+    }
+
     fn exists(&self, path: &str) -> ApiResult<bool> {
         match exists(path) {
             Ok(exists) => Ok(exists),
@@ -181,7 +221,7 @@ impl FileApiDriver for FileApiDriverImpl {
 
 struct SeekableFileHandle {
     handle: JsFileHandle,
-    offset: usize,
+    offset: u64,
 }
 
 impl Read for SeekableFileHandle {
@@ -193,12 +233,12 @@ impl Read for SeekableFileHandle {
             0
         };
 
-        let maximum_read_size = bytes_remaining.min(out.len());
+        let maximum_read_size = bytes_remaining.min(out.len() as u64);
         match self.handle.read(self.offset, maximum_read_size) {
             Ok(data) => {
                 let data = data.to_vec();
                 let size = data.len();
-                self.offset += size;
+                self.offset += size as u64;
 
                 // Verify that handle.read respected the maximum length:
                 if size > out.len() {
@@ -228,25 +268,25 @@ impl Seek for SeekableFileHandle {
     fn seek(&mut self, pos: SeekFrom) -> std::io::Result<u64> {
         match pos {
             SeekFrom::Start(pos) => {
-                self.offset = pos as usize;
+                self.offset = pos;
             }
             SeekFrom::Current(offset) => {
                 // Disallow seeking to a negative position
-                if offset < 0 && (-offset) as usize > self.offset {
+                if offset < 0 && offset.unsigned_abs() > self.offset {
                     return Err(std::io::Error::new(
                         std::io::ErrorKind::InvalidInput,
                         "Attempted to seek before the beginning of the file.",
                     ));
                 }
 
-                self.offset = (self.offset as i64 + offset) as usize;
+                self.offset = (self.offset as i64 + offset) as u64;
             }
             SeekFrom::End(offset) => {
                 self.offset = self.handle.size();
                 self.seek(SeekFrom::Current(offset))?;
             }
         }
-        Ok(self.offset as u64)
+        Ok(self.offset)
     }
 }
 
@@ -261,4 +301,8 @@ impl Drop for SeekableFileHandle {
     }
 }
 
-impl FileHandle for BufReader<SeekableFileHandle> {}
+impl FileHandle for BufReader<SeekableFileHandle> {
+    fn byte_length(&self) -> u64 {
+        self.get_ref().handle.size()
+    }
+}

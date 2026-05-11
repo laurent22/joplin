@@ -134,7 +134,7 @@ const expectToBeEditing = async (editing: boolean) => {
 };
 
 const openEditor = async () => {
-	const editToggle = await screen.findByLabelText('Toggle view/edit');
+	const editToggle = await screen.findByLabelText('Edit');
 
 	fireEvent.press(editToggle);
 	await expectToBeEditing(true);
@@ -383,10 +383,10 @@ describe('screens/Note', () => {
 		unmount();
 	});
 
-	it('should show toggle button', async () => {
+	it('should show edit button', async () => {
 		const { unmount } = await setupNoteWithPanes(['viewer']);
-		const toggleButton = await screen.findByLabelText('Toggle view/edit');
-		expect(toggleButton).toBeVisible();
+		const editButton = await screen.findByLabelText('Edit');
+		expect(editButton).toBeVisible();
 		unmount();
 	});
 
@@ -398,7 +398,7 @@ describe('screens/Note', () => {
 		const expectedEditing = !initialEditing;
 		const { unmount } = await setupNoteWithPanes(panes);
 		await expectToBeEditing(initialEditing);
-		const toggleButton = await screen.findByLabelText('Toggle view/edit');
+		const toggleButton = await screen.findByLabelText(/Edit|Stop editing/);
 		fireEvent.press(toggleButton);
 		await expectToBeEditing(expectedEditing);
 		unmount();

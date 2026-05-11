@@ -46,12 +46,18 @@ export default class PluginRunner extends BasePluginRunner {
 			return false;
 		});
 
+		// On native mobile, pass a file path so the WebView can load the
+		// script directly from the filesystem (avoids transferring the full
+		// script text across the React Native bridge). On web, file:// URLs
+		// are blocked by CSP so we pass the script text directly.
+		const scriptFilePath = plugin.scriptText ? '' : `${plugin.baseDir}/index.js`;
 		this.webviewRef.current.injectJS(`
 			pluginBackgroundPage.runPlugin(
 				${JSON.stringify(shim.injectedJs('pluginBackgroundPage'))},
-				${JSON.stringify(plugin.scriptText)},
+				${JSON.stringify(scriptFilePath)},
 				${JSON.stringify(messageChannelId)},
 				${JSON.stringify(plugin.id)},
+				${JSON.stringify(plugin.scriptText)},
 			);
 		`);
 

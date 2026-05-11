@@ -19,6 +19,11 @@ const uslug = require('@joplin/fork-uslug');
 
 const logger = Logger.create('PluginService');
 
+interface PluginExtractionState {
+	size: number;
+	timestamp: number;
+}
+
 // Plugin data is split into two:
 //
 // - First there's the service `plugins` property, which contains the
@@ -105,6 +110,7 @@ export default class PluginService extends BaseService {
 	private startedPlugins_: Record<string, boolean> = {};
 	private isSafeMode_ = false;
 	private pluginsChangeListeners_: LoadedPluginsChangeListener[] = [];
+	private extractionStates_: Record<string, PluginExtractionState> = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
@@ -197,6 +203,31 @@ export default class PluginService extends BaseService {
 		await shim.fsDriver().remove(plugin.baseDir);
 	}
 
+	private extractionStatePath(): string {
+		return `${Setting.value('cacheDir')}/plugin-extraction-state.json`;
+	}
+
+	private async loadExtractionStates(): Promise<Record<string, PluginExtractionState>> {
+		if (!this.extractionStates_) {
+			try {
+				const text = await shim.fsDriver().readFile(this.extractionStatePath(), 'utf8');
+				this.extractionStates_ = JSON.parse(text);
+			} catch {
+				this.extractionStates_ = {};
+			}
+		}
+		return this.extractionStates_;
+	}
+
+	private async saveExtractionStates(states: Record<string, PluginExtractionState>): Promise<void> {
+		this.extractionStates_ = states;
+		try {
+			await shim.fsDriver().writeFile(this.extractionStatePath(), JSON.stringify(states), 'utf8');
+		} catch (error) {
+			logger.error('Failed to save extraction states:', error);
+		}
+	}
+
 	public pluginById(id: string): Plugin {
 		if (!this.plugins_[id]) throw new Error(`Plugin not found: ${id}`);
 
@@ -287,19 +318,38 @@ export default class PluginService extends BaseService {
 		return this.loadPlugin(baseDir, r.manifestText, r.scriptText, pluginIdIfNotSpecified);
 	}
 
-	public async loadPluginFromPackage(baseDir: string, path: string): Promise<Plugin> {
+	public async loadPluginFromPackage(baseDir: string, path: string, manifestOnly = false): Promise<Plugin> {
 		baseDir = rtrimSlashes(baseDir);
 
 		const fname = filename(path);
-		const hash = await shim.fsDriver().md5File(path);
-
 		const unpackDir = `${Setting.value('cacheDir')}/${fname}`;
 		const manifestFilePath = `${unpackDir}/manifest.json`;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let manifest: any = await this.loadManifestToObject(manifestFilePath);
+		// Use file size + mtime to check if the .jpl has changed, to
+		// avoid computing an MD5 hash of the full file on every startup.
+		const stat = await shim.fsDriver().stat(path);
+		const extractionStates = await this.loadExtractionStates();
+		const extractionState = extractionStates[fname];
+		const scriptFilePath = `${unpackDir}/index.js`;
+		const extractionValid = extractionState
+			&& extractionState.size === stat.size
+			&& extractionState.timestamp === stat.mtime.getTime()
+			&& await shim.fsDriver().exists(manifestFilePath)
+			&& (manifestOnly || await shim.fsDriver().exists(scriptFilePath));
 
-		if (!manifest || manifest._package_hash !== hash) {
+		if (manifestOnly && extractionValid) {
+			// When loading only the manifest (e.g. for disabled plugins), use
+			// the already-extracted manifest from cache to avoid the tar
+			// extraction.
+			const manifest = await this.loadManifestToObject(manifestFilePath);
+			if (manifest) {
+				return this.loadPlugin(unpackDir, JSON.stringify(manifest), '', makePluginId(fname));
+			}
+		}
+
+		if (!extractionValid) {
+			logger.info(`Extracting plugin: ${fname}`);
+
 			await shim.fsDriver().remove(unpackDir);
 			await shim.fsDriver().mkdir(unpackDir);
 
@@ -310,15 +360,19 @@ export default class PluginService extends BaseService {
 				cwd: unpackDir,
 			});
 
-			manifest = await this.loadManifestToObject(manifestFilePath);
+			const manifest = await this.loadManifestToObject(manifestFilePath);
 			if (!manifest) throw new Error(`Missing manifest file at: ${manifestFilePath}`);
 
-			manifest._package_hash = hash;
-
-			await shim.fsDriver().writeFile(manifestFilePath, JSON.stringify(manifest, null, '\t'), 'utf8');
+			extractionStates[fname] = {
+				size: stat.size,
+				timestamp: stat.mtime.getTime(),
+			};
+			await this.saveExtractionStates(extractionStates);
+		} else {
+			logger.info(`Using already extracted plugin: ${fname}`);
 		}
 
-		return this.loadPluginFromPath(unpackDir);
+		return this.loadPluginFromPath(unpackDir, manifestOnly);
 	}
 
 	// Loads the manifest as a simple object with no validation. Used only
@@ -333,7 +387,7 @@ export default class PluginService extends BaseService {
 		}
 	}
 
-	public async loadPluginFromPath(path: string): Promise<Plugin> {
+	public async loadPluginFromPath(path: string, manifestOnly = false): Promise<Plugin> {
 		path = rtrimSlashes(path);
 
 		const fsDriver = shim.fsDriver();
@@ -341,7 +395,7 @@ export default class PluginService extends BaseService {
 		if (path.toLowerCase().endsWith('.js')) {
 			return this.loadPluginFromJsBundle(dirname(path), await fsDriver.readFile(path), filename(path));
 		} else if (path.toLowerCase().endsWith('.jpl')) {
-			return this.loadPluginFromPackage(dirname(path), path);
+			return this.loadPluginFromPackage(dirname(path), path, manifestOnly);
 		} else {
 			let distPath = path;
 			if (!(await fsDriver.exists(`${distPath}/manifest.json`))) {
@@ -350,8 +404,16 @@ export default class PluginService extends BaseService {
 
 			logger.info(`Loading plugin from ${path}`);
 
-			const scriptText = await fsDriver.readFile(`${distPath}/index.js`);
 			const manifestText = await fsDriver.readFile(`${distPath}/manifest.json`);
+			// On mobile, plugin scripts are loaded directly by the WebView
+			// from the filesystem, so we don't need to read them here.
+			const indexPath = `${distPath}/index.js`;
+			if (shim.mobilePlatform()) {
+				if (!(await fsDriver.exists(indexPath))) {
+					throw new Error(`Plugin bundle not found at: ${indexPath}`);
+				}
+			}
+			const scriptText = (manifestOnly || shim.mobilePlatform()) ? '' : await fsDriver.readFile(indexPath);
 			const pluginId = makePluginId(filename(path));
 
 			return this.loadPlugin(distPath, manifestText, scriptText, pluginId);
@@ -449,8 +511,16 @@ export default class PluginService extends BaseService {
 			}
 
 			try {
-				const plugin = await this.loadPluginFromPath(pluginPath);
+				// Load only the manifest first to check if the plugin is
+				// enabled before doing the expensive full load.
+				let plugin = await this.loadPluginFromPath(pluginPath, true);
 				const enabled = this.pluginEnabled(settings, plugin.id);
+				if (enabled) {
+					logger.info(`Loading full plugin: ${plugin.id}`);
+					plugin = await this.loadPluginFromPath(pluginPath, false);
+				} else {
+					logger.info(`Loading manifest only for disabled plugin: ${plugin.id}`);
+				}
 
 				const existingPlugin = this.plugins_[plugin.id];
 				if (existingPlugin) {
@@ -495,6 +565,7 @@ export default class PluginService extends BaseService {
 				logger.error(`Could not load plugin: ${pluginPath}`, error);
 			}
 		}
+
 	}
 
 	public async loadAndRunDevPlugins(settings: PluginSettings) {

@@ -39,7 +39,7 @@
     "react-dom": "19.1.5",
     "sharp": "0.34.5",
     "tesseract.js": "6.0.1",
-    "typescript": "5.8.3"
+    "typescript": "5.9.3"
   },
   "dependencies": {
     "@adobe/css-tools": "4.4.4",

@@ -537,7 +537,7 @@ class ActionTracker extends Serializable<typeof schema> {
 				this.checkRep_();
 				return Promise.resolve();
 			},
-			updateNote: (data: NoteData) => {
+			updateNote: (data: NoteData, options = {}) => {
 				assertWriteable(data.parentId);
 
 				const oldItem = this.idToItem_.get(data.id) as NoteData;
@@ -557,7 +557,11 @@ class ActionTracker extends Serializable<typeof schema> {
 					});
 
 				removeChild(oldItem.parentId, data.id);
-				updateItem(data.id, new NoteRecord(data), `updated (changed fields: ${JSON.stringify(changedFields)})`);
+				updateItem(
+					data.id,
+					new NoteRecord(data),
+					`updated (changed fields: ${JSON.stringify(changedFields)})${options?.message ? `, ${options.message}` : ''}`,
+				);
 				addChild(data.parentId, data.id);
 				updateResourceReferences(oldItem, data);
 

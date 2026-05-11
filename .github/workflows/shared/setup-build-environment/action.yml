@@ -70,6 +70,6 @@ runs:
     # Python to an earlier version.
     # Fixes error `ModuleNotFoundError: No module named 'distutils'`
     # Ref: https://github.com/nodejs/node-gyp/issues/2869
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       with:
         python-version: '3.14'

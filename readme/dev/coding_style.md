@@ -481,6 +481,30 @@ const rows = await service.fetchAll();
 // ...
 ```
 
+## GitHub Actions
+
+### Avoid `${{ }}` within `run` blocks
+
+When used incorrectly, `${{ }}` within `run` blocks can allow script injection within GitHub actions. To make actions easier to audit, prefer passing arguments to `run` blocks as environment variables.
+
+See also: [GitHub Security Lab: Handling untrusted input](https://securitylab.github.com/resources/github-actions-untrusted-input/#remediation)
+
+**Bad:**
+```yml
+    - name: Print PR title
+    run: |
+        echo "Title: ${{ github.event.pull_request.title }}"
+```
+
+**Good:**
+```yml
+    - name: Print PR title
+    env:
+        PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
+    run: |
+        echo "Title: $PULL_REQUEST_TITLE"
+```
+
 ## See also
 
 ### **Other** projects' style guides

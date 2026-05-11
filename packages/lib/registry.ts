@@ -81,6 +81,10 @@ class Registry {
 		}
 	}
 
+	public defaultScheduleInterval() {
+		return 1000 * 10;
+	}
+
 	public syncTarget = (syncTargetId: number = null) => {
 		if (syncTargetId === null) syncTargetId = Setting.value('sync.target');
 		if (this.syncTargets_[syncTargetId]) return this.syncTargets_[syncTargetId];
@@ -118,7 +122,7 @@ class Registry {
 		this.schedSyncCalls_.push(true);
 
 		try {
-			if (delay === null) delay = 1000 * 10;
+			if (delay === null) delay = this.defaultScheduleInterval();
 			if (syncOptions === null) syncOptions = {};
 
 			// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied

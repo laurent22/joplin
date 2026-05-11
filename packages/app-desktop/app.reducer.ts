@@ -40,6 +40,14 @@ export interface AppWindowState extends WindowState {
 	devToolsVisible: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	watchedResources: any;
+	// Note IDs for which the user has chosen to view the underlying Markdown
+	// instead of the Whiteboard editor. Per-window, in-memory only.
+	whiteboardForceMarkdown: Record<string, boolean>;
+	// Whether the currently-active note in this window contains a whiteboard
+	// fence. Set by the NoteEditor when it loads / saves the body, used by
+	// the toolbar to show the editor toggle button. (We can't compute this
+	// from the redux note list because `body` isn't in the preview fields.)
+	activeNoteIsWhiteboard: boolean;
 }
 
 interface BackgroundWindowStates {
@@ -72,6 +80,8 @@ export const createAppDefaultWindowState = (): AppWindowState => {
 		editorCodeView: true,
 		devToolsVisible: false,
 		watchedResources: {},
+		whiteboardForceMarkdown: {},
+		activeNoteIsWhiteboard: false,
 	};
 };
 
@@ -202,6 +212,26 @@ export default function(state: AppState, action: any) {
 			newState = {
 				...state,
 				editorCodeView: action.value,
+			};
+			break;
+
+		case 'WHITEBOARD_FORCE_MARKDOWN_TOGGLE': {
+			const id: unknown = action.noteId;
+			// Guard against dispatchers forgetting to pass a noteId — writing
+			// an `undefined` key into the map would persist a junk entry.
+			if (typeof id !== 'string' || !id) break;
+			const current = !!state.whiteboardForceMarkdown?.[id];
+			newState = {
+				...state,
+				whiteboardForceMarkdown: { ...(state.whiteboardForceMarkdown || {}), [id]: !current },
+			};
+			break;
+		}
+
+		case 'WHITEBOARD_ACTIVE_NOTE_SET':
+			newState = {
+				...state,
+				activeNoteIsWhiteboard: !!action.value,
 			};
 			break;
 

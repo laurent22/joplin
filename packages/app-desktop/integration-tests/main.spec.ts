@@ -220,11 +220,15 @@ test.describe('main', () => {
 		await mainScreen.importHtmlDirectory(electronApp, join(__dirname, 'resources', 'html-import'));
 		const importedFolder = mainScreen.sidebar.container.getByText('html-import');
 		await importedFolder.click();
+		await mainScreen.noteList.focusContent(electronApp);
 
-		const importedNote1 = await mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
-		await expect(importedNote1).toBeAttached();
-		const importedNote2 = await mainScreen.noteList.getNoteItemByTitle('test-html-file-2');
-		await expect(importedNote2).toBeAttached();
+		const importedNote1 = mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
+		const importedNote2 = mainScreen.noteList.getNoteItemByTitle('test-html-file-2');
+		await expect.poll(async () => importedNote1.count(), { timeout: 60_000 }).toBeGreaterThan(0);
+		await expect.poll(async () => importedNote2.count(), { timeout: 60_000 }).toBeGreaterThan(0);
+
+		await expect(importedNote1).toBeVisible();
+		await expect(importedNote2).toBeVisible();
 	});
 
 	test('should import a single HTML file', async ({ mainWindow, electronApp }) => {
@@ -232,8 +236,10 @@ test.describe('main', () => {
 		await mainScreen.waitFor();
 
 		await mainScreen.importHtmlFile(electronApp, join(__dirname, 'resources', 'html-import', 'test-html-file-with-image.html'));
-		const importedNote = await mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
-		await expect(importedNote).toBeAttached();
+
+		const importedNote = mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
+		await expect.poll(async () => importedNote.count(), { timeout: 60_000 }).toBeGreaterThan(0);
+		await expect(importedNote).toBeVisible({ timeout: 60_000 });
 	});
 });
 

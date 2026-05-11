@@ -1,9 +1,31 @@
 name: Check pull request title
-on: [pull_request]
+on:
+  pull_request_target:
+    types: [opened, edited, reopened, synchronize]
+
 jobs:
   main:
+    # Skip the check entirely for these automation accounts.
+    if: github.event.pull_request.user.login != 'renovate[bot]'
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
     steps:
-      - uses: Slashgear/action-check-pr-title@v5.0.1
+      # Sparse checkout so we only pull the script, not the full repo.
+      # `pull_request_target` checks out the base branch by default,
+      # which is what we want — we never execute PR-supplied code.
+      - uses: actions/checkout@v4
         with:
-          regexp: "(Desktop|Mobile|All|Cli|Tools|Chore|Clipper|Server|Android|iOS|Plugins|CI|Plugin Repo|Doc): (Fixes|Resolves) #[0-9]+: .+"
+          sparse-checkout: .github/scripts
+          sparse-checkout-cone-mode: false
+
+      - name: Check title
+        uses: actions/github-script@v8
+        env:
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        with:
+          script: |
+            const check = require('./.github/scripts/check_pr_title.js');
+            await check({ github, context, core });

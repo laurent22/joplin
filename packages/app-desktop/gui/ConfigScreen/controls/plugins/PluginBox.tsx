@@ -173,7 +173,7 @@ export default function(props: Props) {
 			themeId={props.themeId}
 			value={item.enabled}
 			onToggle={() => props.onToggle({ item })}
-			aria-label={_('Enabled')}
+			aria-label={item.enabled ? _('Disable %s', item.manifest.name) : _('Enable %s', item.manifest.name)}
 		/>;
 	}
 

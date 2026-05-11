@@ -909,7 +909,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.String,
 			isEnum: true,
 			public: true,
-			appTypes: [AppType.Cli],
+			appTypes: [AppType.Cli, AppType.Mobile],
+			section: 'appearance',
 			label: () => _('Sort notebooks by'),
 			options: () => {
 				const Folder = require('../Folder').default;
@@ -923,7 +924,24 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			},
 			storage: SettingStorage.File,
 		},
-		'folders.sortOrder.reverse': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
+		'folders.sortOrder.reverse': {
+			value: false,
+			type: SettingItemType.Bool,
+			storage: SettingStorage.File,
+			isGlobal: true,
+			public: true,
+			section: 'appearance',
+			label: () => {
+				if (mobilePlatform) {
+					// For config screen on mobile, there is no sections for notebooks
+					// Explicitly mark it as an option for notebook order
+					return _('Reverse notebook sort order');
+				} else {
+					return _('Reverse sort order');
+				}
+			},
+			appTypes: [AppType.Cli, AppType.Mobile],
+		},
 		trackLocation: { value: true, type: SettingItemType.Bool, section: 'note', storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Save geo-location with notes') },
 
 		'editor.usePlainText': {
@@ -1481,7 +1499,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		noteVisiblePanes: { value: ['editor', 'viewer'], type: SettingItemType.Array, storage: SettingStorage.File, isGlobal: true, public: false, appTypes: [AppType.Desktop] },
 		tagHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
 		folderHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
-		syncReportLogExpanded: { value: false, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
+		syncReportIsVisible: { value: false, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
 		editor: { value: '', type: SettingItemType.String, subType: 'file_path_and_args', storage: SettingStorage.File, isGlobal: true, public: true, appTypes: [AppType.Cli, AppType.Desktop], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
 		'export.pdfPageSize': { value: 'A4', type: SettingItemType.String, advanced: true, storage: SettingStorage.File, isGlobal: true, isEnum: true, public: true, appTypes: [AppType.Desktop], label: () => _('Page size for PDF export'), options: () => {
 			return {
@@ -1551,6 +1569,16 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			label: () => _('Markdown editor: Render markup in editor'),
 			description: () => _('Renders markup on all lines that don\'t include the cursor.'),
+			section: 'editor',
+			storage: SettingStorage.File,
+		},
+		'editor.tableEditing': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			label: () => _('Markdown editor: Interactive table editing'),
+			description: () => _('When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.'),
 			section: 'editor',
 			storage: SettingStorage.File,
 		},

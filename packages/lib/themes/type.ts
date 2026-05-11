@@ -13,6 +13,7 @@ export interface Theme {
 	oddBackgroundColor: string;
 	color: string; // For regular text
 	colorError: string;
+	colorErrorSelected: string; // On a selectedColor background
 	colorCorrect: string;
 	colorWarn: string;
 	colorWarnUrl: string; // For URL displayed over a warningBackgroundColor
