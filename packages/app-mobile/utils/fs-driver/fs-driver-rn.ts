@@ -8,7 +8,8 @@ import tarExtract from './tarExtract';
 import JoplinError from '@joplin/lib/JoplinError';
 const md5 = require('md5');
 import { resolve } from 'path';
-
+import Logger from '@joplin/utils/Logger';
+const logger = Logger.create('fs-driver-rn');
 
 const ANDROID_URI_PREFIX = 'content://';
 
@@ -135,11 +136,17 @@ export default class FsDriverRN extends FsDriverBase {
 				relativePath = stat.uri;
 			} else {
 				relativePath = stat.path;
-				// Workaround: Paths returned by stat can include a leading /private/, when this isn't included
+
+				// Workaround: Paths returned by RNFS.readDir can include a leading /private/, when this isn't included
 				// in the original path variable:
 				if (stat.path.startsWith('/private/') && !path.startsWith('/private/')) {
 					relativePath = relativePath.replace(/^\/private/, '');
 				}
+
+				if (!relativePath.startsWith(path)) {
+					logger.warn('readDirStats: Relative path does not start with original:', { relativePath, path });
+				}
+
 				relativePath = relativePath.substring(path.length + 1);
 			}
 			const standardStat = this.rnfsStatToStd_(stat, relativePath);
