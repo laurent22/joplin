@@ -291,3 +291,4 @@ readline
 vendored
 Errno
 keyof
+readdir

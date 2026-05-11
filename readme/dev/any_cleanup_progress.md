@@ -69,7 +69,7 @@ Counts captured 2026-05-11 before any work.
 | 5 | default-plugins | 1 | 4 | 4 | 0 | done (2026-05-11) |
 | 6 | renderer | 25 | 99 | 87 | 12 | done (2026-05-11) |
 | 7 | tools | 23 | 49 | 45 | 4 | done (2026-05-11) |
-| 8 | plugin-repo-cli | 11 | 33 | 0 | 33 | not started |
+| 8 | plugin-repo-cli | 11 | 33 | 33 | 0 | done (2026-05-11) |
 | 9 | app-mobile | 37 | 131 | 0 | 131 | not started |
 | 10 | server | 67 | 227 | 0 | 227 | not started |
 | 11 | app-cli | 90 | 742 | 0 | 742 | not started |
@@ -247,3 +247,26 @@ Files processed:
 Verification: package `yarn tsc --noEmit` clean, `yarn linter-ci packages/tools/` clean, root `yarn tsc --noEmit` clean.
 
 Summary: 49 → 4 disable comments; in-scope 46 → 1 (3 are inside `node_modules/` vendored copies, not touched). The single in-scope remaining one is `build-release-stats.ts`, where fixing would require widening `createMarkdownTable`'s signature in `@joplin/lib`.
+
+### packages/plugin-repo-cli
+Session date: 2026-05-11
+
+Shared work: imported `PluginManifest` from `@joplin/lib/services/plugins/utils/types` (plugin-repo-cli already depends on `@joplin/lib`). Most `manifest: any` and `manifests: any` parameters became `PluginManifest` and `Record<string, PluginManifest>`. The `*.test.ts` files in this package frequently use partial manifest fixtures, so a few `as unknown as PluginManifest` casts at call sites were needed to keep tests typing without bulking up every fixture with the full `manifest_version`/`name`/`app_min_version` set. Two helper functions were widened structurally (rather than via casts) where they only read a subset of fields: `gitCompareUrl` now takes `Pick<PluginManifest, 'repository_url' | '_publish_commit'>`, and `getObsoleteManifests` became a generic `<T extends { _obsolete?: boolean }>` so the existing-test fixtures still type-check.
+
+Files processed:
+- `index.ts` — 13 removed, 0 left. `extractPluginFilesFromPackage` typed `existingManifests: PluginManifests`, return `Promise<PluginManifest>`; `files.find((f: any) => …)` → `(f: string)` (since `fs.readdir` returns `string[]`); `commitMessage` parameters typed (`manifest: PluginManifest | null`, `previousManifest: PluginManifest | null`, `error: Error | null`); `readManifests`/`writeManifests` return/take `PluginManifests`; the four `let X: any = {}` locals in `processNpmPackage` typed; the yargs handlers refactored — `setSelectedCommand` and the three command handlers now share a `CommandArgs` type matching the `{ pluginRepoDir, dryRun }` shape both `commandBuild` and `commandUpdateRelease` expect (the previous `selectedCommandArgs = ''` declaration also implicitly drifted from string → object); `commands: Record<string, Function>` replaced with `Record<string, (args: CommandArgs)=> Promise<void>>`. The two `await readJsonFile(...)` callers in this file pass an explicit type parameter (`readJsonFile<PluginManifest>(...)`, `readJsonFile<{ version: string }>(...)`) since `readJsonFile` is now generic.
+- `commands/updateRelease.ts` — 3 removed, 0 left. `(error: Error, assets: any)` → `assets: unknown` (return is not consumed by callers); `(resolve: Function, reject: Function)` ban-types disable replaced with explicit `(assets: unknown)=> void` / `(error: Error)=> void`; introduced local `PluginVersionStats` and `PluginStats` types and used them for `createStats`/`saveStats`.
+- `lib/checkIfPluginCanBeAdded.ts` — 2 removed, 0 left. `caseInsensitiveFindManifest`/default-export both typed via `PluginManifests` and `PluginManifest`.
+- `lib/overrideUtils.ts` — 3 removed, 0 left. `applyManifestOverrides(manifests: PluginManifests, …)`; the inner `manifest[propName] = propValue` write uses `as PluginManifest & Record<string, unknown>` because we mutate via a `for...of` over `Object.entries(override)` keys. `getObsoleteManifests` made generic over `<T extends { _obsolete?: boolean }>` so the existing test (which passes manifest-shaped fixtures rather than `ManifestOverride`-shaped ones) types correctly without rewriting its data.
+- `lib/errorsHaveChanged.test.ts` — 1 removed, 0 left. `testCases: any[][]` → `[ImportErrors, ImportErrors, boolean][]`; dropped the `as any` cast in the destructuring loop.
+- `lib/validateUntrustedManifest.ts` — 1 removed, 0 left. Parameters typed `manifest: PluginManifest`, `existingManifests: Record<string, PluginManifest>`.
+- `lib/updateReadme.test.ts` — 1 removed, 0 left. `manifests: any` → `Record<string, PluginManifest>`.
+- `lib/updateReadme.ts` — 2 removed, 0 left. Parameter `manifests: Record<string, PluginManifest>`; the `rows.push(manifests[pluginId])` line uses an `as unknown as MarkdownTableRow` cast (the existing code stores PluginManifest objects inside a `MarkdownTableRow[]` and `createMarkdownTable` is typed for `Record<string, string>` rows — the same impedance mismatch documented on `build-release-stats.ts` last session); the `rows.sort((a: any, b: any) => …)` callback's args type-infer from `MarkdownTableRow` directly.
+- `lib/utils.ts` — 2 removed, 0 left. `readJsonFile` made generic `<T = unknown>(manifestPath, defaultValue: T = null): Promise<T>`; `isJoplinPluginPackage(pack: any)` → `{ keywords?: string[]; name: string }` (matches the two fields it reads).
+- `lib/overrideUtils.test.ts` — 2 removed, 0 left. First test's `manifestOverrides: any` → `Record<string, { _obsolete?: boolean; description?: string; [key: string]: unknown }>` (matches the heterogeneous fixture). Second test's `manifests: any` → inferred from the literal.
+- `lib/gitCompareUrl.ts` — 1 removed, 0 left. Widened to `Pick<PluginManifest, 'repository_url' | '_publish_commit'>` (matches the fields the function actually reads, so the test fixtures don't need to spell out the whole `PluginManifest`).
+- `lib/checkIfPluginCanBeAdded.test.ts` — needed touching even though it had no disable comments: the test passes partial fixtures, so call sites cast via `as unknown as Parameters<typeof checkIfPluginCanBeAdded>[0/1]`. Same pattern in `lib/validateUntrustedManifest.test.ts` (`as unknown as PluginManifest`) and `lib/gitCompareUrl.test.ts` (where the tuple is typed `[GitCompareManifest, GitCompareManifest | null, string | null]`).
+
+Verification: package `yarn tsc --noEmit` clean, `yarn linter-ci packages/plugin-repo-cli/` clean, root `yarn tsc --noEmit` clean, `yarn test` (in plugin-repo-cli) clean — all 13 tests pass.
+
+Summary: 33 → 0 disable comments. Every one was tagged `Old code before rule was applied` and could be replaced with `PluginManifest`, `ImportErrors`, structural picks, or generics.
