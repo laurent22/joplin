@@ -288,3 +288,6 @@ setval
 cutoff
 typeof
 readline
+vendored
+Errno
+keyof

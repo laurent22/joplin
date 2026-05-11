@@ -13,14 +13,16 @@ For each disable comment encountered:
 1. **Replace `any` with a real type** only if:
    - An existing imported/exported type fits, or
    - The type is obvious from local context (literal, known SDK return, etc.)
-2. **Leave the comment in place** (skip) when:
+2. **Prefer types exported by the library over hand-rolled ones.** When `any` describes a value that comes from a third-party package (e.g. `@rmp135/sql-ts` `Table`/`Column`, `yargs` `Arguments`, `markdown-it` `Token` / `StateCore`), check the package's `.d.ts` files (`node_modules/<pkg>/**/*.d.ts`) before defining a new local interface. Importing the existing type is preferable because it stays accurate as the library evolves and matches what the runtime actually produces. Only fall back to a local type when the library doesn't export one, the exported type is significantly broader/narrower than needed, or importing it would pull in a heavy dependency the file otherwise doesn't need.
+3. **Leave the comment in place** (skip) when:
    - Replacing would require **significant refactoring** (e.g. changing many call sites, splitting a class, restructuring control flow). Introducing a small new type definition (e.g. a local interface or type alias, or a type that would only be used in a few places) is fine and not considered significant refactoring.
    - Replacing would require **changing code logic**.
    - The comment's reason is something other than `Old code before rule was applied` (e.g. `No better type available`, `CodeMirror 5 API requires any`, `would be too big of a refactoring`).
    - The correct type is genuinely `unknown` and would force narrowing changes (that's a logic change).
-3. When `any` is removed, **delete the disable comment** as well.
-4. Do not make whitespace-only changes to surrounding code (per `CLAUDE.md`).
-5. After each package, run `yarn tsc --noEmit` and `yarn lint` for that package to verify nothing broke.
+4. When `any` is removed, **delete the disable comment** as well.
+5. Do not make whitespace-only changes to surrounding code (per `CLAUDE.md`).
+6. **Don't add explanatory comments unless really needed.** A cast or local type usually speaks for itself — don't write a paragraph explaining what a reader can already see from the code. Only add a comment when the *why* is non-obvious and would otherwise mislead a future change (e.g. a cast that exists to avoid a runtime-changing fix). When you do leave a disable comment, the inline `-- reason` is enough; don't pair it with an extra block comment.
+7. After each package, run `yarn tsc --noEmit` and `yarn lint` for that package to verify nothing broke.
 
 ## Files to never touch
 
@@ -66,7 +68,7 @@ Counts captured 2026-05-11 before any work.
 | 4 | react-native-saf-x | 1 | 1 | 1 | 0 | done (2026-05-11) |
 | 5 | default-plugins | 1 | 4 | 4 | 0 | done (2026-05-11) |
 | 6 | renderer | 25 | 99 | 87 | 12 | done (2026-05-11) |
-| 7 | tools | 23 | 49 | 0 | 49 | not started |
+| 7 | tools | 23 | 49 | 45 | 4 | done (2026-05-11) |
 | 8 | plugin-repo-cli | 11 | 33 | 0 | 33 | not started |
 | 9 | app-mobile | 37 | 131 | 0 | 131 | not started |
 | 10 | server | 67 | 227 | 0 | 227 | not started |
@@ -214,3 +216,34 @@ Files processed:
 Verification: package `yarn tsc --noEmit` clean, `yarn linter-ci packages/renderer/` clean, root `yarn tsc --noEmit` clean.
 
 Summary: 99 → 12 disable comments. The 12 remaining are all either documented skip cases (cache values, `as any` to pass extra args to typed `renderToken`, `output: any` that mutates `delete output.cssStrings`, `cacheCssToFile` return used loosely, `loadPlugin` accepting both functions and `{ default }` wrappers, the non-standard `highlight()` return shape, generic in-memory cache) or genuinely cannot be replaced without code-logic changes that are out of scope for this PR.
+
+### packages/tools
+Session date: 2026-05-11
+
+Note: the starting count of **49** included 3 disables inside `packages/tools/node_modules/` (docusaurus and one in `node_modules/@docusaurus/utils`) which are vendored copies of third-party code and not in scope. In-scope was **46**; after this session, **1** in-scope and **3** vendored remain (total **4**).
+
+Files processed:
+- `postPreReleasesToForum.ts` — 1 removed, 0 left. `processedReleases: Record<string, any>` → `Record<string, boolean>` (the stored value is always `true`).
+- `generate-images.ts` — 1 removed, 0 left. `output: any[]` → `(string | number | undefined)[]` (matches the heterogeneous values pushed from `Operation`).
+- `generate-database-types.ts` — 5 removed, 0 left. Imported `Table` and `Column` from `@rmp135/sql-ts/dist/Typings`; `createRuntimeObject`/`generateListRenderDependencyType`/the two `.map()` callbacks all typed via those. The column-push uses `as Column` because adding the missing `ColumnDefinition` fields explicitly may change `sql-ts.fromObject()` output.
+- `update-readme-contributors.ts` — 1 removed, 0 left. The `request` callback typed `(error: Error | null, response: { statusCode: number }, data: Contributor[])`.
+- `release-clipper.ts` — 1 removed, 0 left. Introduced local `Manifest = Record<string, unknown> & { background?, browser_specific_settings? }`; `removeManifestKeys(manifest: Manifest): Manifest`.
+- `update-readme-download.ts` — 1 removed, 0 left. `main(argv: any)` → `main(argv: string[])` (called as `main(process.argv)`).
+- `setupNewRelease.ts` — 1 removed, 0 left. yargs `.argv` cast to `{ _: string[]; updateVersion?: string; updateDependenciesVersion?: string }` (rather than `yargs.Arguments<T>`, because `Arguments._` is `Array<string | number>` and `parse-numbers: false` guarantees strings at runtime — using the library type would require a `_[0] as string` cast at every call site).
+- `tool-utils.ts` — 11 removed, 0 left. `saveGitHubUsernameCache(cache: any)` → `Record<string, string>`; `execCommand` options typed `{ cwd?; env?; maxBuffer? }` and its callback `(error: (Error & {signal?: string}) | null, stdout: string, stderr: string)`; `execCommandWithPipes` `error: Error`, `code: number | null`; `setPackagePrivateField(value: any)` → `boolean`; `downloadFile`'s `https.get` callback `response: import('http').IncomingMessage`, `error: Error`; `fileSha256` stream `data: Buffer` and `error: Error`; `fileExists` stat callback `error: NodeJS.ErrnoException | null`; `gitHubLatestRelease`/`gitHubLatestRelease_KeepInCaseMicrosoftBreaksTheApiAgain` `response: any` deleted (node-fetch's inferred `Response` works fine); `githubRelease(options: any)` → `{ isDraft?: boolean; isPreRelease?: boolean }`.
+- `build-release-stats.ts` — 0 removed, 1 left. `createMarkdownTable` is typed `(headers, rows: MarkdownTableRow[])` where `MarkdownTableRow = Record<string, string>`. `Release` rows contain numeric counts (`windows_count`, etc.), so the cast `rows as any[]` masks a real type mismatch. Tightening would require widening `createMarkdownTable` in `@joplin/lib` (cross-package change). Updated reason.
+- `licenses/licenseChecker.ts` — 1 removed, 0 left. `enforceString(line: any)` → `string | string[] | undefined | null` (matches the `Array.isArray(line) ? line.join(', ') : ...` branches).
+- `website/updateNews.ts` — 1 removed, 0 left. Introduced local `RssFeedItem` interface (`rss` is untyped); `feedItems: RssFeedItem[]`.
+- `website/processDocs.ts` — 3 removed, 0 left. `currentLinkAttrs?: any` → `[string, string][] | null`; imported `Token` from `markdown-it/lib/token` so `processToken(token: Token, …)`; `onopentag` `attrs: Record<string, any>` → `Record<string, string>` (matches `htmlentities(attrs[n])` usage and the local `attributesHtml` signature).
+- `website/build.ts` — 1 removed, 0 left. `scriptsToImport: any[]` → `{ id: string; sourcePath: string; md5: string; filename: string }[]` (the entries are all commented out, but the shape is implied by the loop that follows).
+- `website/utils/applyTranslations.ts` — 1 removed, 0 left. `onopentag` `attrs: any` → `Record<string, string>`.
+- `website/utils/convertLinksToLocale.test.ts` — 1 removed, 0 left. `[string, any, string][]` → `[string, Partial<Locale>, string][]` with a `locale as Locale` cast at the call site (the test cases only supply `pathPrefix`, not the full `Locale` shape).
+- `website/utils/frontMatter.ts` — 3 removed, 0 left. `yaml.load(...)` cast directly to `FrontMatter`; `formatFrontMatterValue(value: any)` → `FrontMatter[keyof FrontMatter]`; the `(header as any)[key] = …` assignment refactored to a separate `Record<string, string>` output map.
+- `website/utils/frontMatter.test.ts` — 1 removed, 0 left. `testCases: any[][]` → `[string, FrontMatter, string, string][]`.
+- `website/utils/render.ts` — 1 removed, 0 left. `state: any` → `StateCore` (imported from `markdown-it/lib/rules_core/state_core`).
+- `utils/translation.ts` — 1 removed, 0 left. Introduced local `GettextTranslation` and `GettextParsed` interfaces capturing only the fields read (`gettext-parser` is `require`-d and has no types). `serializeTranslation`'s parameter in `build-translation.ts` was incorrectly typed as `string` — corrected to `Parameters<typeof parseTranslations>[0]`.
+- `utils/discourse.ts` — 5 removed, 0 left. Introduced `DiscourseApiError extends Error { apiObject; status }`; `new Error(...) as DiscourseApiError` then setting `error.apiObject`/`error.status` directly. `response.json() as any` deleted — node-fetch's inferred return works fine for the downstream `.error.status === 404` reads. `createTopic`/`createPost`/`updatePost` body params → `Record<string, string | number>` (matches `execApi`).
+
+Verification: package `yarn tsc --noEmit` clean, `yarn linter-ci packages/tools/` clean, root `yarn tsc --noEmit` clean.
+
+Summary: 49 → 4 disable comments; in-scope 46 → 1 (3 are inside `node_modules/` vendored copies, not touched). The single in-scope remaining one is `build-release-stats.ts`, where fixing would require widening `createMarkdownTable`'s signature in `@joplin/lib`.
