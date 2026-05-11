@@ -11,6 +11,11 @@ const modifiersRegExp = {
 	default: /^(Ctrl|Alt|AltGr|Shift|Super)$/,
 };
 
+const legacyCommandAliases = {
+	'editor.undo': 'globalUndo',
+	'editor.redo': 'globalRedo',
+};
+
 const defaultKeymapItems = {
 	darwin: [
 		{ accelerator: 'Cmd+N', command: 'newNote' },
@@ -226,7 +231,11 @@ export default class KeymapService extends BaseService {
 	}
 
 	public acceleratorExists(command: string) {
-		return !!this.keymap[command];
+		return !!this.keymap[this.normalizeCommandName(command)];
+	}
+
+	private normalizeCommandName(commandName: string) {
+		return legacyCommandAliases[commandName] ?? commandName;
 	}
 
 	private convertToPlatform(accelerator: string) {
@@ -237,6 +246,8 @@ export default class KeymapService extends BaseService {
 	}
 
 	public registerCommandAccelerator(commandName: string, accelerator: string) {
+		commandName = this.normalizeCommandName(commandName);
+
 		// If the command is already registered, we don't register it again and
 		// we don't update the accelerator. This is because it might have been
 		// modified by the user and we don't want the plugin to overwrite this.
@@ -254,10 +265,11 @@ export default class KeymapService extends BaseService {
 	}
 
 	public setAccelerator(command: string, accelerator: string) {
-		this.keymap[command].accelerator = accelerator;
+		this.keymap[this.normalizeCommandName(command)].accelerator = accelerator;
 	}
 
 	public getAccelerator(command: string) {
+		command = this.normalizeCommandName(command);
 		const item = this.keymap[command];
 		if (!item) throw new Error(`KeymapService: "${command}" command does not exist!`);
 
@@ -265,6 +277,7 @@ export default class KeymapService extends BaseService {
 	}
 
 	public getDefaultAccelerator(command: string) {
+		command = this.normalizeCommandName(command);
 		const defaultItem = this.defaultKeymapItems.find((item => item.command === command));
 		if (!defaultItem) throw new Error(`KeymapService: "${command}" command does not exist!`);
 
@@ -308,7 +321,10 @@ export default class KeymapService extends BaseService {
 	public overrideKeymap(customKeymapItems: KeymapItem[]) {
 		try {
 			for (let i = 0; i < customKeymapItems.length; i++) {
-				const item = customKeymapItems[i];
+				const item = {
+					...customKeymapItems[i],
+					command: this.normalizeCommandName(customKeymapItems[i].command),
+				};
 				// Validate individual custom keymap items
 				// Throws if there are any issues in the keymap item
 				this.validateKeymapItem(item);
