@@ -11,7 +11,7 @@ export default function styles(props: NoteBodyEditorProps) {
 
 		return {
 			disabledOverlay: {
-				zIndex: 10,
+				zIndex: 11,
 				position: 'absolute',
 				backgroundColor: theme.backgroundColor,
 				opacity: theme.appearance === ThemeAppearance.Light ? 0.7 : 0.9,
