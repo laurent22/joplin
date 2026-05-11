@@ -93,7 +93,7 @@ The following paths are automatically derived from `DATA_DIR`:
 
 ### GPU support
 
-The server uses CPU by default. For NVIDIA CUDA GPU, run a CUDA-capable image with `--gpus all` and set `HTR_CLI_GPU_LAYERS=9999`.
+The server uses CPU by default. For NVIDIA GPU, run a CUDA-capable image with `--gpus all` and set `HTR_CLI_GPU_LAYERS=9999`.
 
 ```shell
 docker run --rm --gpus all --env-file .env-transcribe -p 4567:4567 \
