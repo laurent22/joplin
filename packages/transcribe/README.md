@@ -104,9 +104,9 @@ docker run --rm --gpus all --env-file .env-transcribe -p 4567:4567 \
 
 This needs NVIDIA Container Toolkit on the host. Use `0` or leave it unset for CPU.
 
-### Native Windows/CUDA without Docker
+### Native Windows without Docker
 
-On Windows, GPU acceleration can run in Docker using the NVIDIA instructions above, or natively on the host. For a native run, use a Windows x64 CUDA build of llama-mtmd-cli.exe, then set HTR_CLI_GPU_LAYERS to the number of layers you want offloaded to the GPU.
+On Windows, GPU acceleration can run in Docker using the NVIDIA instructions above, or natively on the host. For a native run, use a Windows x64 GPU-enabled build of llama-mtmd-cli.exe, then set HTR_CLI_GPU_LAYERS to the number of layers you want offloaded to the GPU.
 
 ### Native macOS/Metal
 
@@ -123,7 +123,7 @@ HTR_CLI_BINARY_PATH=/path/to/llama-mtmd-cli
 HTR_CLI_GPU_LAYERS=9999
 ```
 
-With this setup, the server passes `-ngl 9999` to `llama-mtmd-cli`. Metal support comes from the binary.
+With this setup, the server passes `-ngl 9999` to `llama-mtmd-cli`. GPU support comes from the selected binary.
 
 # API Endpoints
 
