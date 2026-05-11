@@ -93,7 +93,7 @@ The following paths are automatically derived from `DATA_DIR`:
 
 ### GPU support
 
-The server uses CPU by default. For NVIDIA GPU, run a GPU-capable image with `--gpus all` and set `HTR_CLI_GPU_LAYERS=9999`.
+The server uses CPU by default. For NVIDIA CUDA GPU, run a CUDA-capable image with `--gpus all` and set `HTR_CLI_GPU_LAYERS=9999`.
 
 ```shell
 docker run --rm --gpus all --env-file .env-transcribe -p 4567:4567 \
@@ -106,7 +106,7 @@ This needs NVIDIA Container Toolkit on the host. Use `0` or leave it unset for C
 
 ### Native Windows without Docker
 
-On Windows, GPU acceleration can run in Docker using the NVIDIA instructions above, or natively on the host. For a native run, use a Windows x64 GPU-enabled build of llama-mtmd-cli.exe, then set HTR_CLI_GPU_LAYERS to the number of layers you want offloaded to the GPU.
+On Windows, CUDA GPU acceleration can run in Docker using the NVIDIA instructions above, or natively on the host. For a native run, use a Windows x64 CUDA-enabled build of llama-mtmd-cli.exe, then set HTR_CLI_GPU_LAYERS to the number of layers you want offloaded to the GPU.
 
 ### Native macOS/Metal
 
