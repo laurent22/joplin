@@ -253,6 +253,34 @@ const testMd5File = async (tempDir: string) => {
 	await expectToBe(await fsDriver.md5File(testFilePath), 'ba11ba1be5042133a71874731e3d42cd');
 };
 
+const testReadDirStats = async (tempDir: string) => {
+	logger.info('Testing fsDriver.readDirStats...');
+	const fsDriver = shim.fsDriver();
+
+	const parentDir = `${tempDir}/parent-dir`;
+	await fsDriver.mkdir(parentDir);
+	await expectToBe(await fsDriver.exists(parentDir), true);
+
+	await fsDriver.writeFile(`${parentDir}/file1.txt`, 'test', 'utf-8');
+	await fsDriver.writeFile(`${parentDir}/file2.txt`, 'test', 'utf-8');
+	await fsDriver.mkdir(`${parentDir}/dir1`);
+
+	const sortedDirectoryStats = async (directory: string) => {
+		return (await fsDriver.readDirStats(directory)).sort((a, b) => {
+			if (a.path < b.path) return -1;
+			if (a.path === b.path) return 0;
+			return 1;
+		});
+	};
+
+	const stats = await sortedDirectoryStats(parentDir);
+	await expectToBe(stats.length, 3);
+	await expectToBe(stats.map(s => s.path).join(';'), 'dir1;file1.txt;file2.txt');
+	await expectToBe(stats[0].isDirectory(), true);
+	await expectToBe(stats[1].isDirectory(), false);
+	await expectToBe(stats[2].isDirectory(), false);
+};
+
 // In the past, some fs-driver functionality has worked correctly on some devices and not others.
 // As such, we need to be able to run some tests on-device.
 const runOnDeviceTests = async () => {
@@ -270,6 +298,7 @@ const runOnDeviceTests = async () => {
 		await testReadFileChunkUtf8(tempDir);
 		await testTarCreateAndExtract(tempDir);
 		await testMd5File(tempDir);
+		await testReadDirStats(tempDir);
 
 		logger.info('Done');
 	} catch (error) {
