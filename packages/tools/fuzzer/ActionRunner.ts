@@ -277,6 +277,25 @@ const getActions = (context: FuzzContext, clientPool: ClientPool, client: Client
 		resourceId: () => context.randomId(),
 	});
 
+	addAction('updateResource', async ({ resourceId }) => {
+		if (!resourceId) return false;
+
+		const titleLength = context.randInt(0, 1024);
+		const resourceData: ResourceData = {
+			id: resourceId,
+			mimeType: context.randomFrom(['text/plain', context.randomString(8), '', 'text/html']),
+			title: context.randomString(titleLength),
+		};
+		await client.updateResource(resourceData);
+
+		return true;
+	}, {
+		resourceId: async () => {
+			const resource = await client.randomResource({ includeReadOnly: false });
+			return resource?.id;
+		},
+	});
+
 	addAction('moveNote', async ({ noteId, targetFolderId }) => {
 		const note = noteById(noteId);
 		const newParent = await folderByIdOrRandom(targetFolderId, {
