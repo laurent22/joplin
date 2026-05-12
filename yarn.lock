@@ -12988,7 +12988,7 @@ __metadata:
     knex: "npm:3.1.0"
     koa: "npm:2.16.3"
     koa-body: "npm:6.0.1"
-    pg-boss: "npm:10.4.2"
+    pg-boss: "npm:11.1.1"
     sharp: "npm:0.34.5"
     sqlite3: "npm:5.1.6"
     typescript: "npm:5.9.3"
@@ -26307,12 +26307,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cron-parser@npm:^4.9.0":
-  version: 4.9.0
-  resolution: "cron-parser@npm:4.9.0"
+"cron-parser@npm:^5.4.0":
+  version: 5.5.0
+  resolution: "cron-parser@npm:5.5.0"
   dependencies:
-    luxon: "npm:^3.2.1"
-  checksum: 10/ffca5e532a5ee0923412ee6e4c7f9bbceacc6ddf8810c16d3e9fb4fe5ec7e2de1b6896d7956f304bb6bc96b0ce37ad7e3935304179d52951c18d84107184faa7
+    luxon: "npm:^3.7.1"
+  checksum: 10/ee2c710ba9ad07a1e9fd2cc5615a5d998cef08558a66f4a33915f971c124966df8f4fb164484220e7b55c79b84f2d6447f863dacd32839e62361a984095e263d
   languageName: node
   linkType: hard
 
@@ -40273,10 +40273,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:^3.2.1":
-  version: 3.6.1
-  resolution: "luxon@npm:3.6.1"
-  checksum: 10/35aad425607708c87af110a52c949190bc35b987770079ec8007ef2365cd29639413db3360d2883777aa01cb3ca5bdb37f42ee3e8e5a0dd277fe22e90cc8a786
+"luxon@npm:^3.7.1":
+  version: 3.7.2
+  resolution: "luxon@npm:3.7.2"
+  checksum: 10/b24cd205ed306ce7415991687897dcc4027921ae413c9116590bc33a95f93b86ce52cf74ba72b4f5c5ab1c10090517f54ac8edfb127c049e0bf55b90dc2260be
   languageName: node
   linkType: hard
 
@@ -46021,14 +46021,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-boss@npm:10.4.2":
-  version: 10.4.2
-  resolution: "pg-boss@npm:10.4.2"
+"pg-boss@npm:11.1.1":
+  version: 11.1.1
+  resolution: "pg-boss@npm:11.1.1"
   dependencies:
-    cron-parser: "npm:^4.9.0"
+    cron-parser: "npm:^5.4.0"
     pg: "npm:^8.16.3"
     serialize-error: "npm:^8.1.0"
-  checksum: 10/4f2952c6f2ab00834c8572577c9dec01b1d84a04e055aba4d439a6a0a5ecf5e899aec3930b57559ee5e547c563cf0b34f7943c537b20d443929dfb0f7a149908
+  checksum: 10/c3c4b0e18957fef86550c3c1c83ffcdde3eff80556878e119cf869618e25c1b778fcdcd2de64e34d768d7ec49d76e13ee6930ebf662ff51666659769a52c122f
   languageName: node
   linkType: hard
 
