@@ -6,10 +6,10 @@ import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('appReducer');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Routes/actions are heterogeneous redux NAV payloads (NAV_GO/NAV_BACK with optional folderId/tagId/noteId/isDeleted/etc.); typing them requires defining a discriminated action union across the mobile codebase
 const navHistory: any[] = [];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Routes/actions are heterogeneous redux NAV payloads (NAV_GO/NAV_BACK with optional folderId/tagId/noteId/isDeleted/etc.); typing them requires defining a discriminated action union across the mobile codebase
 function historyCanGoBackTo(route: any) {
 	if (route.routeName === 'Folder') return false;
 
@@ -44,7 +44,7 @@ function removeLatestFolderIfSelected(items: any[], route: any) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Routes/actions are heterogeneous redux NAV payloads (NAV_GO/NAV_BACK with optional folderId/tagId/noteId/isDeleted/etc.); typing them requires defining a discriminated action union across the mobile codebase
 const appReducer = (state = appDefaultState, action: any) => {
 	let newState = state;
 	let historyGoingBack = false;

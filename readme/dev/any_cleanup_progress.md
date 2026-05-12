@@ -68,7 +68,7 @@ Counts captured 2026-05-11 before any work.
 | 6 | renderer | 25 | 99 | 87 | 12 | done (2026-05-11) |
 | 7 | tools | 23 | 49 | 45 | 4 | done (2026-05-11) |
 | 8 | plugin-repo-cli | 11 | 33 | 33 | 0 | done (2026-05-11) |
-| 9 | app-mobile | 37 | 131 | 60 | 71 | in progress (2026-05-12) |
+| 9 | app-mobile | 37 | 131 | 98 | 33 | done (2026-05-12) |
 | 10 | server | 67 | 227 | 0 | 227 | not started |
 | 11 | app-cli | 90 | 742 | 0 | 742 | not started |
 | 12 | app-desktop | 149 | 477 | 0 | 477 | not started |

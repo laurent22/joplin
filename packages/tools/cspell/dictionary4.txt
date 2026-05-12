@@ -294,3 +294,4 @@ Errno
 keyof
 readdir
 keybinds
+unobserve

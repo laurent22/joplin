@@ -10,8 +10,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 
 
 interface Components {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	[key: string]: any;
+	[key: string]: unknown;
 }
 
 // PlatformImplementation provides access to platform specific dependencies,
@@ -59,8 +58,7 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public registerComponent(name: string, component: any) {
+	public registerComponent(name: string, component: unknown) {
 		this.components_[name] = component;
 	}
 
@@ -86,7 +84,7 @@ export default class PlatformImplementation extends BasePlatformImplementation {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Matches BasePlatformImplementation.nativeImage's `any` return; tightening here would require updating the base class first
 	public get nativeImage(): any {
 		return null;
 	}

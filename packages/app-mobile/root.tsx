@@ -129,10 +129,10 @@ const DropdownAlertWrapper = ({ alert }: DropdownAlertWrapperProps) => {
 	return <DropdownAlert alert={alert} translucent alertViewStyle={{ padding: 8, marginTop: insets.top }} />;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux actions in this codebase don't have a single typed union; tightening would require a coordinated rewrite of every dispatched action across the mobile app
 let storeDispatch: any = function(_action: any) {};
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See storeDispatch above; action shapes are heterogeneous
 const logReducerAction = function(action: any) {
 	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) >= 0) return;
 
@@ -146,7 +146,7 @@ const biometricsEnabled = (sensorInfo: SensorInfo): boolean => {
 	return !!sensorInfo && sensorInfo.enabled;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux middleware; store/next/action types would need to come from a typed action union — see storeDispatch above
 const generalMiddleware = (store: any) => (next: any) => async (action: any) => {
 	logReducerAction(action);
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
@@ -155,7 +155,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	const newState: AppState = store.getState();
 	let doRefreshFolders: boolean | string = false;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- storeDispatch is `any` (see top of file); cast required to satisfy reduxSharedMiddleware's Dispatch parameter
 	await reduxSharedMiddleware(store, next, action, storeDispatch as any);
 
 	if (action.type === 'NAV_GO') Keyboard.dismiss();
@@ -324,7 +324,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	private onAppStateChange_: ()=> void;
 	private backButtonHandler_: BackButtonHandler;
 	private handleNewShare_: ()=> void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See the implementation below: ShareExtension.shareURL has a pre-existing typing inconsistency (declared as `()=> string` but assigned as a string), so typing the event would expose that unrelated bug
 	private handleOpenURL_: any;
 
 	public constructor(props: AppComponentProps) {

@@ -127,8 +127,7 @@ const useEditorControl = (
 			supportsCommand(command: EditorCommandType) {
 				return editorRef.current.supportsCommand(command);
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			execCommand(command, ...args: any[]) {
+			execCommand(command, ...args: unknown[]) {
 				logger.debug('execCommand', command);
 				return editorRef.current.execCommand(command, ...args);
 			},
