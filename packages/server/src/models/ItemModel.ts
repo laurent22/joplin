@@ -50,8 +50,7 @@ export interface SaveFromRawContentItem {
 
 export interface SaveFromRawContentResultItem {
 	item: Item;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	error: any;
+	error: (Error & { httpCode?: number; code?: string }) | { httpCode?: number; code?: string; message?: string; stack?: string } | null;
 }
 
 export type SaveFromRawContentResult = Record<string, SaveFromRawContentResultItem>;
@@ -156,8 +155,7 @@ export default class ItemModel extends BaseModel<Item> {
 		const output: Item = {};
 		const propNames = ['id', 'name', 'updated_time', 'created_time'];
 		for (const k of Object.keys(object)) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			if (propNames.includes(k)) (output as any)[k] = (object as any)[k];
+			if (propNames.includes(k)) (output as Record<string, unknown>)[k] = (object as Record<string, unknown>)[k];
 		}
 		return output;
 	}
@@ -557,7 +555,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Returns either a NoteEntity / FolderEntity / ResourceEntity / TagEntity etc. depending on jop_type; callers consume specific properties without narrowing
 	public itemToJoplinItem(itemRow: Item): any {
 		if (itemRow.jop_type <= 0) throw new Error(`Not a Joplin item: ${itemRow.id}`);
 		if (!itemRow.content) throw new Error('Item content is missing');
@@ -593,7 +591,7 @@ export default class ItemModel extends BaseModel<Item> {
 			error: Error;
 			resourceIds?: string[];
 			isNote?: boolean;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous Joplin entity types (Note/Folder/Resource/Tag) — see itemToJoplinItem
 			joplinItem?: any;
 		}
 
@@ -636,7 +634,7 @@ export default class ItemModel extends BaseModel<Item> {
 						name: rawItem.name,
 					};
 
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See itemToJoplinItem - heterogeneous entity type
 					let joplinItem: any = null;
 
 					let resourceIds: string[] = [];
@@ -882,14 +880,11 @@ export default class ItemModel extends BaseModel<Item> {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async allForDebug(): Promise<any[]> {
+	public async allForDebug(): Promise<(Omit<Item, 'content'> & { content?: string | Buffer })[]> {
 		const items = await this.all({ fields: ['*'] });
 		return items.map(i => {
 			if (!i.content) return i;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			i.content = i.content.toString() as any;
-			return i;
+			return { ...i, content: i.content.toString() };
 		});
 	}
 
