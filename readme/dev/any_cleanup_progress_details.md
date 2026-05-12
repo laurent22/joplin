@@ -259,3 +259,20 @@ Files attempted but reverted (still `any`):
 - `config.ts` — `initConfig(overrides: any)`. Tried `Partial<Config>`, but `Config.resourceDir: string` is required and only set by some test overrides; the existing spread relies on `any` to bypass the missing-field issue. Reason updated.
 
 Verification at checkpoint: package `yarn tsc --noEmit` clean. 227 → 217 disable comments (10 removed).
+
+Second batch:
+- `models/KeyValueModel.ts` — 3 removed, 0 left. The two `as any` casts in `value<T>` use the existing type parameter (`as T`). The local `value: any` in `readThenWrite` becomes `await this.value<Value>(key)` — the explicit type param uses the public `Value = number | string` already defined in the file.
+- `models/BackupItemModel.ts` — 1 removed, 0 left. `add(content: any)` → `string | Buffer` (the only runtime caller passes a JSON string; the storage type is `Buffer`). Inner assignment uses `content as Buffer`.
+- `models/UserItemModel.ts` — 1 removed, 0 left. Dropped `as any` on `loadByIds(options.byUserItemIds as any)` — `byUserItemIds` is already typed `number[]` and `loadByIds` accepts `string[] | number[]`.
+- `models/UserDeletionModel.ts` — 0 removed, 1 left. `end(error: any)`: tried `Error`, but tests pass plain strings. Tried `Error | string`, but `errorToString` requires `Error`; wrapping strings in `new Error()` changes runtime output (adds a `stack` field to the serialized payload). Reason updated.
+- `models/utils/pagination.ts` — 4 removed, 0 left. `requestPaginationOrder(query: any)` → `ParsedUrlQuery | PaginationQueryParams` with `as string` / `as PaginationOrderDir` narrowing on the read fields; `requestPagination(query: any)` → `(Pagination & PaginationQueryParams) | null`; `filterPaginationQueryParams(query: any)` → `PaginationQueryParams | null`; `paginateDbQuery` made generic over `<T = unknown>` for `PaginatedResults<T>` and the local `orderSql: any[]` inferred from `.map`.
+- `utils/views/table.ts` — 2 removed, 0 left. `Table.requestQuery?: any` → `PaginationQueryParams`; `makeTablePagination(query: any)` → `ParsedUrlQuery` (imported from `querystring`).
+- `utils/views/select.ts` — 0 removed, 2 left. Tried `Record<string, unknown>`, but callers pass concrete entity types like `User` (no index signature). Reason updated.
+- `models/ChangeModel/ChangeModel.ts` — 1 removed, 0 left. `requestDeltaPagination(query: any)` → `ChangePagination | null`.
+- `models/ShareModel.ts` — 2 removed, 0 left. `shareUrl(query: any)` → `Record<string, string | number>`; `itemCountByShareIdPerUser`'s `groupBy('user_id') as any` → `as unknown as { item_count: number; user_id: Uuid }[]` (Knex's typed builder doesn't carry the aggregate column shape through `db.raw`).
+- `utils/testing/koa/FakeRequest.ts` — 2 removed, 0 left. Introduced local `FakeNodeRequest { method?: string }` (the only field used).
+- `utils/testing/koa/FakeResponse.ts` — 4 removed, 0 left. `body: any` → `unknown`; `headers_: any` → `Record<string, string>`; `set`/`get` params/return → `string`.
+- `utils/testing/fileApiUtils.ts` — 2 removed, 0 left. `getDelta` return type and inner cast `PaginatedResults<any>` → `PaginatedResults<unknown>`.
+- `models/items/storage/testUtils.ts` — 1 removed, 0 left. `let error: any = null` → `Error & { code?: CustomErrorCode }`.
+
+Verification at checkpoint: package `yarn tsc --noEmit` clean. 227 → 193 disable comments (34 removed).
