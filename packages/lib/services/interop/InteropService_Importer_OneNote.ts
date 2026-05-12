@@ -349,9 +349,13 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		const link = dom.createElement('a');
 
 		link.setAttribute('href', src);
+		for (const attribute of ['class', 'style']) {
+			const value = image.getAttribute(attribute);
+			if (value) link.setAttribute(attribute, value);
+		}
 		link.textContent = displayedPageNumber === null
 			? 'XPS printout: Open original XPS file'
-			: `XPS printout page ${displayedPageNumber}: Open original XPS file`;
+			: `XPS printout page ${displayedPageNumber + 1}: Open original XPS file`;
 
 		image.replaceWith(link);
 	}
@@ -410,6 +414,9 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 				}
 			});
 
+			childProcess.stdin.on('error', () => {
+				// PowerShell may exit before reading the script. The process close/error events report the result.
+			});
 			childProcess.stdin.end(xpsToPngPowerShellScript);
 		});
 	}
