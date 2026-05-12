@@ -12443,7 +12443,7 @@ __metadata:
     react-native-share: "npm:12.2.5"
     react-native-sqlite-storage: "npm:6.0.1"
     react-native-svg: "npm:15.15.3"
-    react-native-url-polyfill: "npm:2.0.0"
+    react-native-url-polyfill: "npm:3.0.0"
     react-native-version-info: "npm:1.1.1"
     react-native-web: "npm:0.21.2"
     react-native-webview: "npm:13.16.0"
@@ -49394,14 +49394,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-url-polyfill@npm:2.0.0":
-  version: 2.0.0
-  resolution: "react-native-url-polyfill@npm:2.0.0"
+"react-native-url-polyfill@npm:3.0.0":
+  version: 3.0.0
+  resolution: "react-native-url-polyfill@npm:3.0.0"
   dependencies:
     whatwg-url-without-unicode: "npm:8.0.0-3"
   peerDependencies:
     react-native: "*"
-  checksum: 10/6a8d605eeb1b0ee9b0f47f1866acc2edfa2131a4a8fb1ea3839ceb507e225b894ed66f49a3bd826fc964f2c8005b3678c9d3b65d07eb0a3b979be830cb618686
+  checksum: 10/62457a360745bb65fda2349bb95d2a90ad70f87005aa464fa8dd4919fa34bf2007f64bf6bbb1a76b5cdb579e3df9da6a23040a0eddf64456cadf6e766069854f
   languageName: node
   linkType: hard
 
