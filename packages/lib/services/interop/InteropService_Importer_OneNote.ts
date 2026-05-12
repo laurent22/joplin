@@ -343,21 +343,32 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		}
 	}
 
-	private replaceXpsPrintoutImageWithLink_(dom: Document, image: HTMLImageElement) {
-		const src = image.getAttribute('src') ?? '';
-		const displayedPageNumber = this.xpsPrintoutDisplayedPageNumber_(image);
-		const link = dom.createElement('a');
+	private replaceXpsPrintoutImagesWithFallbackLinks_(dom: Document, images: HTMLImageElement[]) {
+		const sortedImages = [...images]
+			.sort((a, b) => (this.xpsPrintoutDisplayedPageNumber_(a) ?? 0) - (this.xpsPrintoutDisplayedPageNumber_(b) ?? 0));
+		const container = dom.createElement('div');
+		container.style.display = 'flex';
+		container.style.flexDirection = 'column';
+		container.style.gap = '1em';
+		if (sortedImages[0].style.top) container.style.paddingTop = sortedImages[0].style.top;
+		if (sortedImages[0].style.left) container.style.paddingLeft = sortedImages[0].style.left;
 
-		link.setAttribute('href', src);
-		for (const attribute of ['class', 'style']) {
-			const value = image.getAttribute(attribute);
-			if (value) link.setAttribute(attribute, value);
-		}
-		link.textContent = displayedPageNumber === null
-			? 'XPS printout: Open original XPS file'
-			: `XPS printout page ${displayedPageNumber + 1}: Open original XPS file`;
+		const links = sortedImages
+			.map(image => {
+				const displayedPageNumber = this.xpsPrintoutDisplayedPageNumber_(image);
+				const link = dom.createElement('a');
 
-		image.replaceWith(link);
+				link.setAttribute('href', image.getAttribute('src') ?? '');
+				link.textContent = displayedPageNumber === null
+					? 'XPS printout: Open original XPS file'
+					: `XPS printout page ${displayedPageNumber + 1}: Open original XPS file`;
+				link.style.display = 'block';
+				return link;
+			});
+
+		container.append(...links);
+		images[0].replaceWith(container);
+		for (const image of images.slice(1)) image.remove();
 	}
 
 	private async convertXpsPrintoutPagesToImages_(sourcePath: string, conversions: XpsPrintoutPageConversion[]) {
@@ -426,9 +437,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		if (!images.length) return false;
 
 		if (!shim.isWindows()) {
-			for (const image of images) {
-				this.replaceXpsPrintoutImageWithLink_(dom, image);
-			}
+			this.replaceXpsPrintoutImagesWithFallbackLinks_(dom, images);
 			return true;
 		}
 
