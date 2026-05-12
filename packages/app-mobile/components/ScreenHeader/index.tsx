@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PureComponent, ReactElement } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import BackButtonService from '../../services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
 import { _, _n } from '@joplin/lib/locale';
@@ -106,8 +106,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		const theme = themeStyle(themeId);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous mix of ViewStyle/TextStyle/IconStyle entries built incrementally; tightening would require splitting into multiple typed objects
-		const styleObject: Record<string, any> = {
+		const styleObject: Record<string, ViewStyle | TextStyle | ImageStyle> = {
 			outerContainer: {
 				flexDirection: 'column',
 			},
@@ -193,10 +192,8 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		};
 
 
-		styleObject.topIcon = { ...theme.icon };
-		styleObject.topIcon.flex = 1;
-		styleObject.topIcon.textAlignVertical = 'center';
-		styleObject.topIcon.color = theme.colorBright2;
+		const topIcon: TextStyle = { ...theme.icon, flex: 1, textAlignVertical: 'center', color: theme.colorBright2 };
+		styleObject.topIcon = topIcon;
 
 		styleObject.backButton = { ...styleObject.iconButton };
 		styleObject.backButton.marginRight = 1;
