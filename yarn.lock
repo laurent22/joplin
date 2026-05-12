@@ -12833,7 +12833,7 @@ __metadata:
     markdown-it-deflist: "npm:2.1.0"
     markdown-it-emoji: "npm:2.0.2"
     markdown-it-expand-tabs: "npm:1.0.13"
-    markdown-it-footnote: "npm:3.0.3"
+    markdown-it-footnote: "npm:4.0.0"
     markdown-it-ins: "npm:4.0.0"
     markdown-it-mark: "npm:3.0.1"
     markdown-it-multimd-table: "npm:4.2.3"
@@ -40624,10 +40624,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-footnote@npm:3.0.3":
-  version: 3.0.3
-  resolution: "markdown-it-footnote@npm:3.0.3"
-  checksum: 10/0e319295da1f7ad3d970e931f46c53f94beba313516df5d5da8cf9d6039a1c6fab1e4993e8f32b516d55b58d2e2c6d071090a97f46e734aaffbe8443ce54f7a5
+"markdown-it-footnote@npm:4.0.0":
+  version: 4.0.0
+  resolution: "markdown-it-footnote@npm:4.0.0"
+  checksum: 10/775e9d0a67fd268422bd2c141bbb88de94f6c08234ee0a76e719fe8753213ca6b82590f76e2643bf32104c7489adcbd37cddc33dbd2baef19dccff3e836a6da9
   languageName: node
   linkType: hard
 
