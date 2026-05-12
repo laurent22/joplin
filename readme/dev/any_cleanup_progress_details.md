@@ -333,3 +333,21 @@ Sixth batch:
 - `routes/admin/users.ts` — 5 removed, 0 left. `boolOrDefaultToValue`/`intOrDefaultToValue`/`makeUser` `fields: any` → `Record<string, unknown>`. The field reads in `makeUser` cast via `as string` / `as number` per User shape. `error: any` on `admin/users/:id` route handler → `Error | null`. `accountTypeOptions().map((o: any))` → `(o: { value: number; selected?: boolean })`. The `formParse().fields` is cast `as unknown as Record<string, unknown> & { id?: Uuid }` at the makeUser call.
 
 Verification at checkpoint: package `yarn tsc --noEmit` clean; lint clean. 227 → 36 disable comments (191 removed).
+
+Final batch:
+- `routes/index/stripe.ts` — 4 removed, 0 left. `stripeEvent(req: any)` → `IncomingMessage`; `StripeRouteHandler` return → `Promise<unknown>`; the two `(postHandlers as any)[path.id]` casts collapsed into a single typed lookup.
+- `env.ts` — 4 removed, 0 left. `parseEnv(defaultOverrides: any)` → `Partial<EnvVariables>`. The three `(output as any)[key]` writes go through a single `outputAsRecord = output as unknown as Record<string, unknown>` alias.
+- `routes/index/users.ts` — 3 removed, 0 left. `makeUser(fields: any)` → `Record<string, unknown>` with `as string` narrowing on field reads; `error: any` on `users/:id` GET → `Error | null`; `accountTypeOptions().map((o: any))` → `(o: { value: number; selected?: boolean })`.
+- `models/UserModel.ts` — 2 removed, 1 left. `(resource as any)[key]` / `(previousResource as any)[key]` → `as Record<string, unknown>`. `syncInfo(): Promise<any>` → `Promise<{ ppk?: { value: PublicPrivateKeyPair } }>`. Left: `checkMaxItemSizeLimit(joplinItem: any)` — same heterogeneous itemToJoplinItem return as ItemModel.
+- `middleware/routeHandler.ts` — 1 removed, 0 left. `const r: any = { error }` → typed `{ error: string; stack?: string; code?: string }`.
+
+Verification: package `yarn tsc --noEmit` clean; `yarn linter-ci packages/server/src/` clean; root `yarn tsc --noEmit` (all workspaces) clean.
+
+Summary: 227 → 22 disable comments (205 removed). Zero remaining `Old code before rule was applied` disables — all 22 left have descriptive reasons explaining why they can't be tightened. They fall into these categories:
+- **Heterogeneous redux/Koa shapes** (5): `BaseCommand.run(argv: any)` (per-command Argv narrowing forbids the base type from being typed without making the class generic); `routeUtils.RouteHandler` (per-route argument types); `joplinUtils.renderOptions` (renderer package's RenderOptions is loose); `MustacheService.View.content` (each view contributes different fields); `testUtils.appContext` (Koa mock only provides a subset).
+- **Heterogeneous Joplin item types** (3): `ItemModel.itemToJoplinItem` plus the two `joplinItem: any` locals it feeds; `UserModel.checkMaxItemSizeLimit.joplinItem`.
+- **Heterogeneous error shapes** (1): `UserDeletionModel.end(error: any)` — tests pass strings while runtime callers pass Errors.
+- **Concrete entity types without index signatures** (3): `urlUtils.setQueryParameters(query: any)`; `select.ts` `yesNoOptions`/`yesNoDefaultOptions`; `app.ts` config initConfig overrides.
+- **Loose lib-typed defaults** (1): `config.ts` `initConfig(overrides: any)` — `Partial<Config>` requires `resourceDir`.
+- **Heterogeneous test fixtures / API call results** (3): `testRouters.curl` and `response` in `main` (parsed JSON responses); `array.ts` `unique` (TS can't unify `T` across `string[] | number[]`).
+- **TypeScript pattern limitations** (6): `testUtils.AppContextTestOptions.request`; the 4 in `requestUtils.ts` (`BodyFields`, `FormParseResult.files`, `FormParseRequest.body`, `convertFieldsToKeyValue` — all centered on formidable's `Fields | Files` union not allowing narrowing).
