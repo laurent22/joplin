@@ -589,6 +589,7 @@ export default class Synchronizer {
 					(fnName, ...args) => {
 						return this.apiCall(fnName, ...args);
 					},
+					this.api(),
 					action => { return this.dispatch(action); },
 				);
 			} // DELETE_REMOTE STEP

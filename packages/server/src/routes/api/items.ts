@@ -5,13 +5,14 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
-import { ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound, ErrorPayloadTooLarge, errorToPlainObject } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound, ErrorPayloadTooLarge, errorToPlainObject } from '../../utils/errors';
 import ItemModel, { ItemSaveOption, SaveFromRawContentItem } from '../../models/ItemModel';
 import { requestPagination } from '../../models/utils/pagination';
 import { AclAction } from '../../models/BaseModel';
 import { safeRemove } from '../../utils/fileUtils';
 import { formatBytes, MB } from '../../utils/bytes';
 import { requestDeltaPagination } from '../../models/ChangeModel/ChangeModel';
+import { hasOwnProperty } from '@joplin/utils/object';
 
 const router = new Router(RouteType.Api);
 
@@ -75,6 +76,68 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 	return output;
 }
 
+export async function delItems(path: SubPath, ctx: AppContext, isBatch: boolean) {
+	const checkCanDelete = async (item: Item) => {
+		await ctx.joplin.models.item().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, item);
+	};
+
+	const toDelete: Item[] = [];
+
+	const batchResponse = Object.create(null);
+	if (isBatch) {
+		const parsedBody = await formParse(ctx.req);
+		const bodyFields = parsedBody.fields;
+
+		const batchMaxDeleteCount = 100;
+		if (!Array.isArray(bodyFields.items)) throw new ErrorBadRequest('body.items must be an array');
+		if (bodyFields.items.length > batchMaxDeleteCount) {
+			throw new ErrorPayloadTooLarge(`Unable to delete more than ${batchMaxDeleteCount} items at a time`);
+		}
+		for (const item of bodyFields.items) {
+			if (typeof item !== 'string') {
+				throw new ErrorBadRequest('array entry is not a string (in body.items)');
+			}
+		}
+
+		const loadedItems = await ctx.joplin.models.item().loadByNames(
+			ctx.joplin.owner.id, bodyFields.items,
+		);
+
+		for (const item of loadedItems) {
+			try {
+				await checkCanDelete(item);
+				toDelete.push(item);
+				batchResponse[item.name] = {};
+			} catch (error) {
+				batchResponse[item.name] = { error };
+			}
+		}
+
+		for (const item of bodyFields.items) {
+			const wasLoaded: boolean = hasOwnProperty(batchResponse, item);
+			if (!wasLoaded) {
+				batchResponse[item] = {
+					error: new ErrorNotFound(`Not found: ${item}`),
+				};
+			}
+		}
+	} else {
+		const item = await itemFromPath(ctx.joplin.owner.id, ctx.joplin.models.item(), path);
+		await checkCanDelete(item);
+		toDelete.push(item);
+	}
+
+	await ctx.joplin.models.item().deleteForUser(
+		ctx.joplin.owner.id,
+		toDelete,
+		// Even though item has already been fetched, a no-op can
+		// still happen if two users try to delete the item at the same time.
+		{ allowNoOp: true },
+	);
+
+	return isBatch ? batchResponse : null;
+}
+
 // Note about access control:
 //
 // - All these calls are scoped to a user, which is derived from the session
@@ -107,15 +170,7 @@ router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 			if (ctx.joplin.env !== 'dev') throw new ErrorMethodNotAllowed('Deleting the root is not allowed');
 			await ctx.joplin.models.item().deleteAll(ctx.joplin.owner.id);
 		} else {
-			const item = await itemFromPath(ctx.joplin.owner.id, ctx.joplin.models.item(), path);
-			await ctx.joplin.models.item().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, item);
-			await ctx.joplin.models.item().deleteForUser(
-				ctx.joplin.owner.id,
-				item,
-				// Even though item has already been fetched, a no-op can
-				// still happen if two users try to delete the item at the same time.
-				{ allowNoOp: true },
-			);
+			await delItems(path, ctx, false);
 		}
 	} catch (error) {
 		if (error instanceof ErrorNotFound) {

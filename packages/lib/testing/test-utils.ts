@@ -447,6 +447,7 @@ function pluginDir(id: number = null) {
 export interface CreateNoteAndResourceOptions {
 	path?: string;
 	markupLanguage?: MarkupLanguage;
+	parentId?: string;
 }
 
 const createNoteAndResource = async (options: CreateNoteAndResourceOptions = null) => {
@@ -456,7 +457,10 @@ const createNoteAndResource = async (options: CreateNoteAndResourceOptions = nul
 		...options,
 	};
 
-	let note = await Note.save({ markup_language: options.markupLanguage });
+	let note = await Note.save({
+		markup_language: options.markupLanguage,
+		parent_id: options.parentId ?? '',
+	});
 	note = await shim.attachFileToNote(note, options.path);
 	const resourceIds = await Note.linkedItemIds(note.body);
 	const resource: ResourceEntity = await Resource.load(resourceIds[0]);

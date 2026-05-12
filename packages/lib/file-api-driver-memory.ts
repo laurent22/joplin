@@ -27,6 +27,10 @@ export default class FileApiDriverMemory {
 		return true;
 	}
 
+	public get supportsMultiDelete() {
+		return true;
+	}
+
 	public get supportsAccurateTimestamp() {
 		return true;
 	}
@@ -154,6 +158,30 @@ export default class FileApiDriverMemory {
 			} catch (error) {
 				output.items[item.name] = {
 					item: null,
+					error: error,
+				};
+			}
+		}
+
+		return output;
+	}
+
+	public async multiDelete(itemNames: string[]) {
+		type ItemOutput = {
+			[id: string]: { error?: Error };
+		};
+		const output = {
+			items: Object.create(null) as ItemOutput,
+		};
+
+		for (const name of itemNames) {
+			try {
+				await this.delete(`/root/${name}`);
+				output.items[name] = {
+					error: null,
+				};
+			} catch (error) {
+				output.items[name] = {
 					error: error,
 				};
 			}

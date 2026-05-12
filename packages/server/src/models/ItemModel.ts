@@ -966,28 +966,37 @@ export default class ItemModel extends BaseModel<Item> {
 		if (storageDriverFallback) await storageDriverFallback.delete(ids, { models: this.models() });
 	}
 
-	public async deleteForUser(userId: Uuid, item: Item, options: DeleteOptions = {}): Promise<void> {
-		if (this.isRootSharedFolder(item)) {
-			const share = await this.models().share().byItemId(item.id);
-			if (!share) {
-				// In that case we don't do anything - the item is going to be
-				// deleted locally anyway. And we can't delete a root folder,
-				// otherwise it will potentially delete it for other users too.
-				modelLogger.warn(`Trying to delete a root folder associated with a share that no longer exists: ${item.id}`);
-				return;
-			}
-			const userShare = await this.models().shareUser().byShareAndUserId(share.id, userId);
-
-			if (userShare) {
-				// Leave the share, but keep the notebook for the owner
-				await this.models().shareUser().delete(userShare.id);
-			} else if (share.owner_id === userId) {
-				// Delete the share for everyone
-				await this.delete(item.id, options);
-			}
-		} else {
-			await this.delete(item.id, options);
+	public async deleteForUser(userId: Uuid, items: Item|Item[], options: DeleteOptions = {}): Promise<void> {
+		if (!Array.isArray(items)) {
+			items = [items];
 		}
+
+		const toDelete = [];
+		for (const item of items) {
+			if (this.isRootSharedFolder(item)) {
+				const share = await this.models().share().byItemId(item.id);
+				if (!share) {
+					// In that case we don't do anything - the item is going to be
+					// deleted locally anyway. And we can't delete a root folder,
+					// otherwise it will potentially delete it for other users too.
+					modelLogger.warn(`Trying to delete a root folder associated with a share that no longer exists: ${item.id}`);
+					continue;
+				}
+				const userShare = await this.models().shareUser().byShareAndUserId(share.id, userId);
+
+				if (userShare) {
+					// Leave the share, but keep the notebook for the owner
+					await this.models().shareUser().delete(userShare.id);
+				} else if (share.owner_id === userId) {
+					// Delete the share for everyone
+					toDelete.push(item.id);
+				}
+			} else {
+				toDelete.push(item.id);
+			}
+		}
+
+		await this.delete(toDelete, options);
 	}
 
 	public async makeTestItem(userId: Uuid, num: number) {

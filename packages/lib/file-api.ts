@@ -187,6 +187,12 @@ class FileApi {
 		return !!this.driver().supportsMultiPut;
 	}
 
+	// This can be true if the driver implements deleting multiple items at once. Will
+	// probably only be supported by Joplin Server.
+	public get supportsMultiDelete(): boolean {
+		return !!this.driver().supportsMultiDelete;
+	}
+
 	// This can be true when the sync target timestamps (updated_time) provided
 	// in the delta call are guaranteed to be accurate. That requires
 	// explicitly setting the timestamp, which is not done anymore on any sync
@@ -402,6 +408,12 @@ class FileApi {
 	public async multiPut(items: MultiPutItem[], options: any = null) {
 		if (!this.driver().supportsMultiPut) throw new Error('Multi PUT not supported');
 		return tryAndRepeat(() => this.driver_.multiPut(items, options), this.requestRepeatCount());
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public async multiDelete(paths: MultiPutItem[], options: any = null) {
+		if (!this.supportsMultiDelete) throw new Error('Multi DELETE not supported');
+		return tryAndRepeat(() => this.driver_.multiDelete(paths, options), this.requestRepeatCount());
 	}
 
 	public delete(path: string) {

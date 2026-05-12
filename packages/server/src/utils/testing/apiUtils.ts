@@ -44,8 +44,12 @@ export async function deleteApiC(sessionId: string, path: string, options: ExecR
 	return execApiC(sessionId, 'DELETE', path, null, options);
 }
 
-export async function deleteApi<T>(sessionId: string, path: string, options: ExecRequestOptions = null): Promise<T> {
-	return execApi<T>(sessionId, 'DELETE', path, null, options);
+interface DeleteRequestOptions extends ExecRequestOptions {
+	body?: Record<string, unknown>;
+}
+
+export async function deleteApi<T>(sessionId: string, path: string, options: DeleteRequestOptions = null): Promise<T> {
+	return execApi<T>(sessionId, 'DELETE', path, options?.body ?? null, options);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied

@@ -37,6 +37,10 @@ export default class FileApiDriverJoplinServer {
 		return true;
 	}
 
+	public get supportsMultiDelete() {
+		return true;
+	}
+
 	public get supportsAccurateTimestamp() {
 		return true;
 	}
@@ -234,6 +238,12 @@ export default class FileApiDriverJoplinServer {
 		}
 
 		return output;
+	}
+
+	public async multiDelete(paths: string[]) {
+		return await this.api().exec(
+			'DELETE', 'api/batch_items', null, { items: paths },
+		);
 	}
 
 	public async delete(path: string) {

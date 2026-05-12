@@ -1,18 +1,35 @@
 import { Dispatch } from 'redux';
-import BaseModel from '../../../BaseModel';
+import BaseModel, { ModelType } from '../../../BaseModel';
 import BaseItem from '../../../models/BaseItem';
 import ItemChange from '../../../models/ItemChange';
 import Resource from '../../../models/Resource';
 import time from '../../../time';
 import resourceRemotePath from './resourceRemotePath';
 import { ApiCallFunction, LogSyncOperationFunction, SyncAction } from './types';
+import { FileApi } from '../../../file-api';
+import Logger from '@joplin/utils/Logger';
+import { DeletedItemEntity } from '../../database/types';
+const logger = Logger.create('syncDeleteStep');
 
-export default async (syncTargetId: number, cancelling: ()=> boolean, logSyncOperation: LogSyncOperationFunction, apiCall: ApiCallFunction, dispatch: Dispatch) => {
-	const deletedItems = await BaseItem.deletedItems(syncTargetId);
-	for (let i = 0; i < deletedItems.length; i++) {
+export default async (
+	syncTargetId: number,
+	cancelling: ()=> boolean,
+	logSyncOperation: LogSyncOperationFunction,
+	apiCall: ApiCallFunction,
+	api: FileApi,
+	dispatch: Dispatch,
+) => {
+	const supportsBatchDelete = api.supportsMultiDelete;
+	let toDelete = await BaseItem.deletedItems(syncTargetId);
+
+	if (supportsBatchDelete) {
+		toDelete = await batchDeleteStep(toDelete, syncTargetId, cancelling, apiCall, logSyncOperation);
+	}
+
+	for (let i = 0; i < toDelete.length; i++) {
 		if (cancelling()) break;
 
-		const item = deletedItems[i];
+		const item = toDelete[i];
 		const path = BaseItem.systemPath(item.item_id);
 		const isResource = item.item_type === BaseModel.TYPE_RESOURCE;
 
@@ -50,6 +67,77 @@ export default async (syncTargetId: number, cancelling: ()=> boolean, logSyncOpe
 			}
 		}
 
-		await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
+		await BaseItem.remoteDeletedItems(syncTargetId, [item.item_id]);
 	}
+};
+
+const isReadOnlyError = (error: Error) => 'code' in error && error.code === 'isReadOnly';
+const isNotFoundError = (error: Error) => 'httpCode' in error && error.httpCode === 404;
+
+const batchDeleteStep = async (
+	toDelete: DeletedItemEntity[],
+	syncTargetId: number,
+	cancellingSync: ()=> boolean,
+	apiCall: ApiCallFunction,
+	logSyncOperation: LogSyncOperationFunction,
+) => {
+	let supported = true;
+	const cancelling = () => {
+		return !supported || cancellingSync();
+	};
+	const needsIndividualDelete: DeletedItemEntity[] = [];
+	const handleError = (error: Error, items: DeletedItemEntity[]) => {
+		if (!isReadOnlyError(error)) {
+			logger.warn('Failed to batch delete item(s)', items.map(item => item.id), error, 'Retrying with individual item deletion...');
+		}
+		if (error.message?.startsWith('Not allowed: DELETE')) {
+			supported = false;
+		}
+		needsIndividualDelete.push(...items);
+	};
+
+	const batchSize = 20;
+	for (let i = 0; i < toDelete.length; i += batchSize) {
+		const batch = toDelete.slice(i, i + batchSize);
+		if (cancelling()) {
+			needsIndividualDelete.push(...batch);
+			continue;
+		}
+
+		const paths = [];
+		const pathToItems = new Map<string, DeletedItemEntity>();
+		for (const item of batch) {
+			const itemPath = BaseItem.systemPath(item);
+			paths.push(itemPath);
+			pathToItems.set(itemPath, item);
+
+			if (item.item_type === ModelType.Resource) {
+				const resourcePath = resourceRemotePath(item.item_id);
+				paths.push(resourcePath);
+				pathToItems.set(resourcePath, item);
+			}
+		}
+
+		try {
+			const response = await apiCall('multiDelete', paths);
+			const itemsResponse = response.items as Record<string, { error?: Error }>;
+			const successfulItems = [];
+			for (const [itemName, { error }] of Object.entries(itemsResponse)) {
+				const item = pathToItems.get(itemName);
+				// If the item is not found, it has already been deleted:
+				const isSuccess = !error || isNotFoundError(error);
+				if (!isSuccess) {
+					handleError(error, [item]);
+				} else {
+					successfulItems.push(item);
+					logSyncOperation(SyncAction.DeleteRemote, null, { id: item.item_id }, 'local has been deleted');
+				}
+			}
+			await BaseItem.remoteDeletedItems(syncTargetId, successfulItems.map(item => item.item_id));
+		} catch (error) {
+			handleError(error, batch);
+		}
+	}
+
+	return needsIndividualDelete;
 };
