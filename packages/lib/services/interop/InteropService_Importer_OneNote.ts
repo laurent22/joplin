@@ -2,15 +2,16 @@ import { ImportExportResult, ImportModuleOutputFormat, ImportOptions } from './t
 
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { NoteEntity } from '../database/types';
-import { rtrimSlashes } from '../../path-utils';
+import { rtrimSlashes, toForwardSlashes } from '../../path-utils';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 import { join, resolve, normalize, sep, extname, basename, relative, dirname } from 'path';
 import Logger from '@joplin/utils/Logger';
 import { uuidgen } from '../../uuid';
 import shim from '../../shim';
 import { unique } from '../../ArrayUtils';
+import xpsToPngPowerShellScript from './xpsToPngPowerShellScript';
 
-// cspell:ignore oxps Pbgra
+// cspell:ignore oxps
 
 const logger = Logger.create('InteropService_Importer_OneNote');
 
@@ -20,90 +21,6 @@ const xpsPrintoutPageNumberAttributes = [
 	'data-joplin-onenote-page-number',
 ];
 
-const xpsToPngPowerShellScript = String.raw`
-$ErrorActionPreference = 'Stop'
-
-$assemblies = @(
-	'PresentationCore',
-	'PresentationFramework',
-	'ReachFramework',
-	'System.Xaml',
-	'WindowsBase'
-)
-
-foreach ($assembly in $assemblies) {
-	Add-Type -AssemblyName $assembly
-}
-
-Add-Type -ReferencedAssemblies $assemblies -TypeDefinition @"
-using System;
-using System.IO;
-using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Xps.Packaging;
-
-namespace Joplin {
-	public static class XpsConverter {
-		public static void RenderPage(string inputPath, string outputPath, int pageNumber, double scale) {
-			if (String.IsNullOrEmpty(inputPath)) {
-				throw new ArgumentException("Missing input path.", "inputPath");
-			}
-
-			if (String.IsNullOrEmpty(outputPath)) {
-				throw new ArgumentException("Missing output path.", "outputPath");
-			}
-
-			if (pageNumber < 1) {
-				throw new ArgumentOutOfRangeException("pageNumber");
-			}
-
-			using (XpsDocument document = new XpsDocument(inputPath, FileAccess.Read)) {
-				FixedDocumentSequence sequence = document.GetFixedDocumentSequence();
-				DocumentPaginator paginator = sequence.DocumentPaginator;
-				paginator.ComputePageCount();
-
-				int pageIndex = pageNumber - 1;
-				if (pageIndex >= paginator.PageCount) {
-					throw new ArgumentOutOfRangeException("pageNumber");
-				}
-
-				DocumentPage page = paginator.GetPage(pageIndex);
-				try {
-					Size pageSize = page.Size;
-					int pixelWidth = Math.Max(1, (int)Math.Ceiling(pageSize.Width * scale));
-					int pixelHeight = Math.Max(1, (int)Math.Ceiling(pageSize.Height * scale));
-
-					DrawingVisual visual = new DrawingVisual();
-					using (DrawingContext context = visual.RenderOpen()) {
-						context.DrawRectangle(Brushes.White, null, new Rect(new Point(0, 0), pageSize));
-						context.PushTransform(new ScaleTransform(scale, scale));
-						context.DrawRectangle(new VisualBrush(page.Visual), null, new Rect(new Point(0, 0), pageSize));
-						context.Pop();
-					}
-
-					RenderTargetBitmap bitmap = new RenderTargetBitmap(pixelWidth, pixelHeight, 96, 96, PixelFormats.Pbgra32);
-					bitmap.Render(visual);
-
-					PngBitmapEncoder encoder = new PngBitmapEncoder();
-					encoder.Frames.Add(BitmapFrame.Create(bitmap));
-
-					using (FileStream stream = new FileStream(outputPath, FileMode.Create, FileAccess.Write)) {
-						encoder.Save(stream);
-					}
-				} finally {
-					page.Dispose();
-				}
-			}
-		}
-	}
-}
-"@
-
-[Joplin.XpsConverter]::RenderPage($env:JOPLIN_XPS_INPUT, $env:JOPLIN_XPS_OUTPUT, [int]$env:JOPLIN_XPS_PAGE_NUMBER, 2.0)
-`;
-
 export type SvgXml = {
 	title: string;
 	content: string;
@@ -112,6 +29,10 @@ export type SvgXml = {
 type PageResolutionResult = { path: string };
 type PageIdMap = {
 	get: (pageId: string|null)=> PageResolutionResult|null;
+};
+type XpsPrintoutPageConversion = {
+	pageNumber: number;
+	outputPath: string;
 };
 
 type NativeOneNoteConverter = (notebookPath: string, outputDirectory: string, baseDir: string)=> Promise<void>;
@@ -426,10 +347,8 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		const src = image.getAttribute('src') ?? '';
 		const displayedPageNumber = this.xpsPrintoutDisplayedPageNumber_(image);
 		const link = dom.createElement('a');
-		const style = image.getAttribute('style');
 
 		link.setAttribute('href', src);
-		if (style) link.setAttribute('style', style);
 		link.textContent = displayedPageNumber === null
 			? 'XPS printout: Open original XPS file'
 			: `XPS printout page ${displayedPageNumber}: Open original XPS file`;
@@ -437,8 +356,13 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		image.replaceWith(link);
 	}
 
-	private async convertXpsPrintoutPageToImage_(sourcePath: string, outputPath: string, pageNumber: number) {
-		if (await shim.fsDriver().exists(outputPath)) return;
+	private async convertXpsPrintoutPagesToImages_(sourcePath: string, conversions: XpsPrintoutPageConversion[]) {
+		const pendingConversions: XpsPrintoutPageConversion[] = [];
+		for (const conversion of conversions) {
+			if (!await shim.fsDriver().exists(conversion.outputPath)) pendingConversions.push(conversion);
+		}
+
+		if (!pendingConversions.length) return;
 
 		const { spawn } = shim.requireDynamic('child_process') as typeof import('child_process');
 
@@ -446,8 +370,10 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			const processEnv = {
 				...process.env,
 				JOPLIN_XPS_INPUT: sourcePath,
-				JOPLIN_XPS_OUTPUT: outputPath,
-				JOPLIN_XPS_PAGE_NUMBER: `${pageNumber}`,
+				JOPLIN_XPS_PAGES: JSON.stringify(pendingConversions.map(conversion => ({
+					PageNumber: conversion.pageNumber,
+					OutputPath: conversion.outputPath,
+				}))),
 			};
 
 			const childProcess = spawn('PowerShell.exe', [
@@ -499,7 +425,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			return true;
 		}
 
-		const conversions = new Map<string, Promise<string|null>>();
+		const conversions = new Map<string, Map<number, string>>();
 		let changed = false;
 
 		for (const image of images) {
@@ -508,23 +434,32 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			const pageNumber = displayedPageNumber === null ? 1 : displayedPageNumber + 1;
 			const sourcePath = resolve(baseFolder, this.safeDecodeFileSrc_(src));
 			const outputPath = join(dirname(sourcePath), this.xpsPrintoutOutputFilename_(sourcePath, pageNumber));
-			const conversionKey = `${sourcePath}:${pageNumber}`;
-
-			if (!conversions.has(conversionKey)) {
-				conversions.set(conversionKey, (async () => {
-					try {
-						await this.convertXpsPrintoutPageToImage_(sourcePath, outputPath, pageNumber);
-						return outputPath;
-					} catch (error) {
-						logger.warn('Failed to convert OneNote XPS printout page:', sourcePath, pageNumber, error);
-						return null;
-					}
-				})());
+			let sourceConversions = conversions.get(sourcePath);
+			if (!sourceConversions) {
+				sourceConversions = new Map();
+				conversions.set(sourcePath, sourceConversions);
 			}
+			sourceConversions.set(pageNumber, outputPath);
+		}
 
-			const convertedPath = await conversions.get(conversionKey);
-			if (convertedPath) {
-				image.setAttribute('src', relative(baseFolder, convertedPath).split(sep).join('/'));
+		for (const [sourcePath, pageMap] of conversions) {
+			try {
+				const pageConversions = Array.from(pageMap.entries()).map(([pageNumber, outputPath]) => ({ pageNumber, outputPath }));
+				await this.convertXpsPrintoutPagesToImages_(sourcePath, pageConversions);
+			} catch (error) {
+				logger.warn('Failed to convert OneNote XPS printout pages:', sourcePath, error);
+			}
+		}
+
+		for (const image of images) {
+			const src = image.getAttribute('src') ?? '';
+			const displayedPageNumber = this.xpsPrintoutDisplayedPageNumber_(image);
+			const pageNumber = displayedPageNumber === null ? 1 : displayedPageNumber + 1;
+			const sourcePath = resolve(baseFolder, this.safeDecodeFileSrc_(src));
+			const convertedPath = conversions.get(sourcePath)?.get(pageNumber);
+
+			if (convertedPath && await shim.fsDriver().exists(convertedPath)) {
+				image.setAttribute('src', toForwardSlashes(relative(baseFolder, convertedPath)));
 				this.removeXpsPrintoutPageNumberAttributes_(image);
 				changed = true;
 			}

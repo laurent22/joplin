@@ -10,6 +10,10 @@ import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 import { JSDOM } from 'jsdom';
 import { ImportModuleOutputFormat, ImportOptions } from './types';
 import HtmlToMd from '../../HtmlToMd';
+import Resource from '../../models/Resource';
+import * as sharp from 'sharp';
+
+// cspell:ignore xpsdocument
 
 const instructionMessage = `
 --------------------------------------
@@ -101,6 +105,36 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(mainNote.title).toBe('Page title');
 		expectWithInstructions(mainNote.markup_language).toBe(MarkupToHtml.MARKUP_LANGUAGE_HTML);
 		expectWithInstructions(normalizeNoteForSnapshot(mainNote.body)).toMatchSnapshot(mainNote.title);
+	});
+
+	it('should convert XPS printouts to image resources on Windows', async () => {
+		if (process.platform !== 'win32') return;
+
+		const notes = await withWarningSilenced(/OneNoteConverter:/, async () => importNote(`${supportDir}/onenote/simple-xps.one`));
+		const resources = await Resource.all();
+		const note = notes.find(note => note.title === 'Printout');
+
+		expectWithInstructions(note).toBeTruthy();
+
+		const imageResourceIds = [
+			...note.body.matchAll(/!\[[^\]]*\]\(:\/([a-f0-9]{32})\)/g),
+			...note.body.matchAll(/<img[^>]+src=["']:\/([a-f0-9]{32})["']/g),
+		].map(match => match[1]);
+
+		const imageResources = await Promise.all(imageResourceIds.map(resourceId => Resource.load(resourceId)));
+
+		expectWithInstructions(imageResources.length).toBe(1);
+
+		for (const resource of imageResources) {
+			expectWithInstructions(resource.mime).toMatch(/^image\//);
+			const content = await Resource.content(resource);
+			const metadata = await sharp(content).metadata();
+			expectWithInstructions(metadata.width).toBeGreaterThan(0);
+			expectWithInstructions(metadata.height).toBeGreaterThan(0);
+		}
+
+		expectWithInstructions(resources.map(resource => resource.mime)).not.toContain('application/vnd.ms-xpsdocument');
+		expectWithInstructions(note.body).not.toMatch(/\.xps/i);
 	});
 
 	it('should preserve indentation of subpages in Section page', async () => {
