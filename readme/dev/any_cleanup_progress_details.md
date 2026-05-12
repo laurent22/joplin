@@ -276,3 +276,18 @@ Second batch:
 - `models/items/storage/testUtils.ts` — 1 removed, 0 left. `let error: any = null` → `Error & { code?: CustomErrorCode }`.
 
 Verification at checkpoint: package `yarn tsc --noEmit` clean. 227 → 193 disable comments (34 removed).
+
+Third batch:
+- `utils/prettycron.ts` — 17 removed, 0 left. All `numbers: any[]` → `number[]`; `numberToDateName(value: any, type: any)` → `(value: number | string, type: 'dow' | 'mon')` (the function does `value - 1`, so wrapping in `Number()`); `dateList(numbers: any[], type: any)` → `(numbers: number[], type: 'dow' | 'mon')`; introduced local `type LaterSchedule = Record<string, number[]>` and used it for `removeFromSchedule`, `scheduleToSentence`; `removeFromSchedule(schedule, member: any, length: any)` → `(LaterSchedule, string, number)`; the four `cronspec: any`/`numDates: any` handlers typed as `string` / `number`; the final `(window as any).prettyCron` cast tightened to `(window as Window & { prettyCron?: Record<string, unknown> }).prettyCron`.
+- `utils/routeUtils.test.ts` — 4 removed, 0 left. Three `testCases: any[]` typed as tuple arrays (`[string, string, string, ItemAddressingType][]`, `[string, {...}][]`, `[string, string[]][]`). `routes: Record<string, any>` typed `Record<string, number>` with three `as unknown as Parameters<typeof findMatchingRoute>[1]` casts at call sites (the test injects numbers in place of `Router` instances).
+- `routes/api/sessions.test.ts` — 8 removed, 0 left. Eight `(context.response.body as any).id` casts → `as { id: string }`.
+- `routes/api/items.test.ts` — 4 removed, 0 left. `tree: any` → `Record<string, Record<string, null>>`; `PaginatedResults<any>` (×2) → `<unknown>`; `result.items as any` → `as unknown as SaveFromRawContentResult`.
+- `routes/api/shares.test.ts` — 3 removed, 0 left. `tree: any` → `Record<string, Record<string, null>>`; both `PaginatedResults<any>` → `<Share>` and `<{ user: { email: string }; status: ShareUserStatus }>` (the test only reads those fields).
+- `routes/index/users.test.ts` — 3 removed, 0 left. `postUser(props: any)` → `Partial<User>`; `patchUser(user: any)` → `Partial<User> & Record<string, unknown>`; `as any).value` on a `querySelector` → `querySelector<HTMLInputElement>('input[name=email]').value`.
+- `routes/admin/users.test.ts` — 2 removed, 0 left. `postUser(props: any)` / `patchUser(user: any)` typed `Record<string, unknown>` (tests intentionally pass `max_item_size: ''` which `Partial<User>` would reject).
+- `routes/index/stripe.test.ts` — 2 removed, 0 left. `WebhookOptions.stripe?: any` → `ReturnType<typeof mockStripe>`; `simulateWebhook(object: any)` → `Record<string, unknown>`.
+- `routes/index/shares.link.test.ts` — 2 removed, 0 left. `getShareContent(query: any)` → `Record<string, string>`; the inner `as any` return cast → `as string | Buffer`.
+- `routes/api/share_users.ts` — 2 removed, 0 left. `bodyFields<any>` → `bodyFields<{ status?: number }>`; `items: any[]` → `Record<string, unknown>[]`.
+- `routes/api/share_users.test.ts` — 1 removed, 0 left. `PaginatedResults<any>` → `<{ share: { id: string } }>`.
+
+Verification at checkpoint: package `yarn tsc --noEmit` clean; spellcheck clean. 227 → 145 disable comments (82 removed).
