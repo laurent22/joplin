@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Component } from 'react';
 
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import { FlatList, Text, StyleSheet, Button, View } from 'react-native';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
@@ -15,8 +16,7 @@ import { themeStyle } from './global-style';
 
 interface NoteListProps {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	dispatch: (action: any)=> void;
+	dispatch: Dispatch;
 	notesSource: string;
 	items: NoteEntity[];
 	folders: FolderEntity[];
@@ -26,7 +26,7 @@ interface NoteListProps {
 
 class NoteListComponent extends Component<NoteListProps> {
 	private rootRef_: FlatList;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- StyleSheet.NamedStyles<T> requires T to be the style record being passed; `any` matches the existing pattern in other mobile components
 	private styles_: Record<string, StyleSheet.NamedStyles<any>>;
 
 	public constructor(props: NoteListProps) {

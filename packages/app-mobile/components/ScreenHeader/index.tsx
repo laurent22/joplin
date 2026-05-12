@@ -34,6 +34,7 @@ export { MenuOptionType };
 const PADDING_V = 10;
 
 type OnPressCallback=()=> void;
+type ScreenHeaderStyles = ReturnType<typeof StyleSheet.create>;
 
 export interface FolderPickerOptions {
 	visible: boolean;
@@ -105,8 +106,8 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		const theme = themeStyle(themeId);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const styleObject: any = {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous mix of ViewStyle/TextStyle/IconStyle entries built incrementally; tightening would require splitting into multiple typed objects
+		const styleObject: Record<string, any> = {
 			outerContainer: {
 				flexDirection: 'column',
 			},
@@ -278,8 +279,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 	public render() {
 		const themeId = this.props.themeId;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function sideMenuButton(styles: any, onPress: OnPressCallback) {
+		function sideMenuButton(styles: ScreenHeaderStyles, onPress: OnPressCallback) {
 			return (
 				<TouchableOpacity
 					onPress={onPress}
@@ -294,8 +294,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function backButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
+		function backButton(styles: ScreenHeaderStyles, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<TouchableOpacity
 					onPress={onPress}
@@ -315,8 +314,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		}
 
 		function saveButton(
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			styles: any, onPress: OnPressCallback, disabled: boolean, show: boolean,
+			styles: ScreenHeaderStyles, onPress: OnPressCallback, disabled: boolean, show: boolean,
 		) {
 			if (!show) return null;
 
@@ -392,8 +390,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			});
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function selectAllButton(styles: any, onPress: OnPressCallback) {
+		function selectAllButton(styles: ScreenHeaderStyles, onPress: OnPressCallback) {
 			return (
 				<IconButton
 					onPress={onPress}
@@ -408,8 +405,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function searchButton(styles: any, onPress: OnPressCallback) {
+		function searchButton(styles: ScreenHeaderStyles, onPress: OnPressCallback) {
 			return (
 				<IconButton
 					onPress={onPress}
@@ -424,8 +420,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const customDeleteButton = (styles: any, onPress: OnPressCallback) => {
+		const customDeleteButton = (styles: ScreenHeaderStyles, onPress: OnPressCallback) => {
 			return (
 				<IconButton
 					onPress={onPress}
@@ -440,8 +435,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const pluginPanelToggleButton = (styles: any, onPress: OnPressCallback) => {
+		const pluginPanelToggleButton = (styles: ScreenHeaderStyles, onPress: OnPressCallback) => {
 			const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
 			const allVisiblePanels = allPluginViews.filter(
 				view => view.containerType === ContainerType.Panel && view.opened,
@@ -461,8 +455,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const renderTogglePluginEditorButton = (styles: any, onPress: OnPressCallback, disabled: boolean) => {
+		const renderTogglePluginEditorButton = (styles: ScreenHeaderStyles, onPress: OnPressCallback, disabled: boolean) => {
 			if (!this.props.showPluginEditorButton) return null;
 
 			return (
@@ -480,8 +473,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function deleteButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
+		function deleteButton(styles: ScreenHeaderStyles, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<IconButton
 					onPress={onPress}
@@ -500,8 +492,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function restoreButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
+		function restoreButton(styles: ScreenHeaderStyles, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<IconButton
 					onPress={onPress}
@@ -520,8 +511,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function duplicateButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
+		function duplicateButton(styles: ScreenHeaderStyles, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<IconButton
 					onPress={onPress}
@@ -539,8 +529,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function sortButton(styles: any, onPress: OnPressCallback) {
+		function sortButton(styles: ScreenHeaderStyles, onPress: OnPressCallback) {
 			return (
 				<IconButton
 					onPress={onPress}

@@ -719,7 +719,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return <SettingsToggle
 			key={key}
 			settingId={key}
-			value={value}
+			value={!!value}
 			label={label}
 			updateSettingValue={updateSettingValue}
 			styles={this.styles()}
