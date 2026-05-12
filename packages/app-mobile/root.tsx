@@ -324,8 +324,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	private onAppStateChange_: ()=> void;
 	private backButtonHandler_: BackButtonHandler;
 	private handleNewShare_: ()=> void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See the implementation below: ShareExtension.shareURL has a pre-existing typing inconsistency (declared as `()=> string` but assigned as a string), so typing the event would expose that unrelated bug
-	private handleOpenURL_: any;
+	private handleOpenURL_: (event: { url: string })=> void;
 
 	public constructor(props: AppComponentProps) {
 		super(props);
@@ -346,14 +345,15 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			PoorManIntervals.update();
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ShareExtension.shareURL has a pre-existing typing inconsistency
-		this.handleOpenURL_ = (event: any) => {
+		this.handleOpenURL_ = (event: { url: string }) => {
 			// logger.info('Sharing: handleOpenURL_: start');
 
 			// If this is called while biometrics haven't been done yet, we can
 			// ignore the call, because handleShareData() will be called once
 			// biometricsDone is `true`.
-			if (event.url === ShareExtension.shareURL && this.props.biometricsDone) {
+			// ShareExtension.shareURL is declared as `()=> string` in the library typings but is
+			// actually assigned a string at runtime — isolate that typing inconsistency here.
+			if (event.url === (ShareExtension.shareURL as unknown as string) && this.props.biometricsDone) {
 				logger.info('Sharing: handleOpenURL_: Processing share data');
 				void this.handleShareData();
 			} else if (isCallbackUrl(event.url)) {
