@@ -238,3 +238,24 @@ Summary: 131 → 33 disable comments (98 removed). The 33 remaining all fall int
 - `NamedStyles<any>` in `NoteList.tsx` (1) — TypeScript pattern limitation.
 - `console[key] = ... as any` in `wrapConsoleLog.ts` (1) — TypeScript pattern limitation (intersection of console method signatures).
 - `output: any[]` in `fs-driver-rn.ts` (1) — `readDirStats` output mixes SAF `DocumentFileDetail` and normalized `Stat`-shaped entries.
+
+## packages/server
+Session date: 2026-05-12
+
+Starting baseline 2026-05-12 matches the progress doc: 227 disable comments across 67 files, all tagged `Old code before rule was applied`.
+
+General observation (different from prior packages): many of the server's `any`s sit at junction points (Koa context, Knex query callbacks, view contents, error payloads) where tightening propagates through many call sites. So this package will have a much lower remove-rate than the front-end packages.
+
+First batch:
+- `utils/strings.ts` — 1 removed, 0 left. `yesOrNo(value: any)` → `unknown`.
+- `utils/array.ts` — 1 removed, 1 left. `removeElement` typed generically as `<T>(array: T[], element: T)`. Left: `unique(array: any[])` — tried generic `<T>`, but `BaseModel.loadByIds` calls it with `string[] | number[]` and TS can't unify `T` across the union, forcing a cast at the call site (a wider blast radius). Reason updated.
+- `utils/cache.ts` — 4 removed, 0 left. `CacheEntry.object: any` → `string` (always JSON-stringified); `setAny/setObject` `o: any` → `unknown`; `getAny` return `Promise<any>` → `Promise<unknown>` (existing `as object` cast at the one public consumer remains valid).
+- `utils/errors.ts` — 3 removed, 0 left. `ErrorOptions.details?: any` → `unknown`; `ApiError.details: any` → `unknown`; `errorToPlainObject(error: any)` → `unknown` with `'httpCode' in error` narrowing followed by `(error as { httpCode?: number }).httpCode` casts on each field read (TS's `in` operator doesn't narrow `unknown` to a typed shape, only to `object`).
+- `services/MustacheService.ts` — 1 removed, 1 left. The local `layoutView: any` in `renderView` → `Record<string, unknown>`. Left: `View.content?: any` — tried tightening to `Record<string, unknown>`, but `routeHandler.ts:61` reads `view.content.error.httpCode` and other dynamic paths; views contribute heterogeneous content shapes per route. Reason updated.
+
+Files attempted but reverted (still `any`):
+- `commands/BaseCommand.ts` — `run(argv: any)`. Tried `yargs.Arguments`, but subclasses (e.g. `CompressOldChangesCommand`, `StorageCommand`) narrow `argv` to a per-command `Argv` interface, and TS function-parameter contravariance forbids that without making the whole class generic — which would propagate through every `BaseCommand[]` consumer. Reason updated.
+- `utils/urlUtils.ts` — `setQueryParameters(query: any)`. Callers pass Koa `ParsedUrlQuery` (`Record<string, string | string[]>`), pagination shapes with numbers, and plain string records. Tightening forces fixes at every call site. Reason updated.
+- `config.ts` — `initConfig(overrides: any)`. Tried `Partial<Config>`, but `Config.resourceDir: string` is required and only set by some test overrides; the existing spread relies on `any` to bypass the missing-field issue. Reason updated.
+
+Verification at checkpoint: package `yarn tsc --noEmit` clean. 227 → 217 disable comments (10 removed).

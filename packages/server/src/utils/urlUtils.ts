@@ -4,7 +4,7 @@ import { Uuid } from '../services/database/types';
 import { isHttpOrHttpsUrl } from '@joplin/utils/url';
 import { ReportType } from '../services/reports/types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Callers pass heterogeneous shapes (Koa ParsedUrlQuery with `string | string[]`, table pagination with numbers, and plain string records); a tighter type forces fixes at every call site
 export function setQueryParameters(url: string, query: any): string {
 	if (!query) return url;
 

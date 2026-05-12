@@ -31,7 +31,7 @@ export default abstract class BaseCommand {
 		return {};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each subclass defines its own narrow `Argv` shape; using `yargs.Arguments` as the base parameter type would break subclass narrowing (contravariance forbids it without a generic, which then propagates through every BaseCommand[] consumer)
 	public abstract run(argv: any, context: RunContext): Promise<void>;
 
 }
