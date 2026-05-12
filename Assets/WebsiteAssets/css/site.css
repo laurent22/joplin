@@ -4,8 +4,18 @@ html {
 }
 
 * {
-	outline: none;
 	font-family: "Montserrat", sans-serif;
+}
+
+/* Make keyboard focus visible across links, buttons, and custom controls. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+	outline: 3px solid #ffbf47;
+	outline-offset: 3px;
 }
 
 html,
