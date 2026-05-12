@@ -3,7 +3,7 @@ import * as React from 'react';
 import { UpdateSettingValueCallback } from './types';
 import { View, Text } from 'react-native';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
-import Dropdown, { DropdownListItem } from '../../Dropdown';
+import Dropdown from '../../Dropdown';
 import { ConfigScreenStyles } from './configScreenStyles';
 import SettingsToggle from './SettingsToggle';
 import FileSystemPathSelector from './FileSystemPathSelector';
@@ -52,7 +52,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 					</Text>
 					<Dropdown
 						key="control"
-						items={items as unknown as DropdownListItem[]}
+						items={items}
 						selectedValue={value}
 						itemListStyle={{
 							backgroundColor: theme.backgroundColor,
