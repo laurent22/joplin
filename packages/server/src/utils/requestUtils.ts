@@ -6,12 +6,12 @@ import { Fields, Files } from 'formidable';
 import { IncomingMessage } from 'http';
 import { uuidgen } from './uuid';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Many route handlers read fields without narrowing (e.g. `body.fields.email`); tightening to `unknown` propagates casts through every handler
 export type BodyFields = Record<string, any>;
 
 interface FormParseResult {
 	fields: BodyFields;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Callers access `.filepath` on the value which is `File | File[]` in the typed Files; narrowing forces casts at every call site
 	files: any;
 }
 
@@ -24,8 +24,7 @@ interface FormParseRequest extends IncomingMessage {
 	__isMocked: boolean;
 	__parsed: ParsedBody;
 	files: Files;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	body: any;
+	body: unknown;
 }
 
 // Previously Formidable would return the files and fields as key/value pairs. With v3, the value
@@ -38,8 +37,9 @@ interface FormParseRequest extends IncomingMessage {
 //
 // As of 2024-01-18, this may no longer be necessary since we reverted to Formidable v2, but keeping
 // it anyway just in case.
-const convertFieldsToKeyValue = (fields: Files | Fields) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Returned in place of `Fields`/`Files` and consumed by callers expecting those types; tightening to `unknown` cascades through to formidable's API
+const convertFieldsToKeyValue = (fields: Files | Fields): Record<string, any> => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See convertFieldsToKeyValue return type
 	const convertedFields: Record<string, any> = {};
 	for (const [k, v] of Object.entries(fields)) {
 		if (Array.isArray(v)) {
@@ -54,18 +54,16 @@ const convertFieldsToKeyValue = (fields: Files | Fields) => {
 
 // Input should be Koa ctx.req, which corresponds to the native Node request
 export async function formParse(request: IncomingMessage): Promise<FormParseResult> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const req: FormParseRequest = request as any;
+	const req: FormParseRequest = request as unknown as FormParseRequest;
 
 	// It's not clear how to get mocked requests to be parsed successfully by
 	// formidable so we use this small hack. If it's mocked, we are running test
 	// units and the request body is already an object and can be returned.
 	if (req.__isMocked) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {};
+		const output: Partial<FormParseResult> = {};
 		if (req.files) output.files = req.files;
-		output.fields = req.body || {};
-		return output;
+		output.fields = (req.body || {}) as BodyFields;
+		return output as FormParseResult;
 	}
 
 	if (req.__parsed) return req.__parsed;
@@ -132,14 +130,12 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 	});
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function bodyFields<T>(req: any/* , filter:string[] = null*/): Promise<T> {
+export async function bodyFields<T>(req: IncomingMessage/* , filter:string[] = null*/): Promise<T> {
 	const form = await formParse(req);
 	return form.fields as T;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const bodyFiles = async <T>(req: any/* , filter:string[] = null*/): Promise<T> => {
+export const bodyFiles = async <T>(req: IncomingMessage/* , filter:string[] = null*/): Promise<T> => {
 	const form = await formParse(req);
 	return form.files as T;
 };
@@ -148,9 +144,8 @@ export function ownerRequired(ctx: AppContext) {
 	if (!ctx.joplin.owner) throw new ErrorForbidden();
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function headerSessionId(headers: any): string {
-	return headers['x-api-auth'] ? headers['x-api-auth'] : '';
+export function headerSessionId(headers: Record<string, string | string[]>): string {
+	return headers['x-api-auth'] ? headers['x-api-auth'] as string : '';
 }
 
 export function contextSessionId(ctx: AppContext, throwIfNotFound = true): string {

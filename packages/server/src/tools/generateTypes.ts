@@ -22,8 +22,7 @@ const config: Config = {
 	],
 	'interfaceNameFormat': '${table}',
 	'singularTableNames': true,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	'tableNameCasing': 'pascal' as any,
+	'tableNameCasing': 'pascal' as Config['tableNameCasing'],
 	'filename': './db',
 	'columnSortOrder': 'source',
 	'extends': {

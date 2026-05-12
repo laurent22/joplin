@@ -53,7 +53,7 @@ export default async function(ctx: AppContext) {
 		const { response: responseObject, path } = await execRequest(ctx.joplin.routes, ctx);
 
 		if (responseObject instanceof Response) {
-			ctx.response = responseObject.response;
+			ctx.response = responseObject.response as typeof ctx.response;
 		} else if (isView(responseObject)) {
 			const impersonatorAdminSessionId = getImpersonatorAdminSessionId(ctx);
 

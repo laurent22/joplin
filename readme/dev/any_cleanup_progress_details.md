@@ -291,3 +291,28 @@ Third batch:
 - `routes/api/share_users.test.ts` — 1 removed, 0 left. `PaginatedResults<any>` → `<{ share: { id: string } }>`.
 
 Verification at checkpoint: package `yarn tsc --noEmit` clean; spellcheck clean. 227 → 145 disable comments (82 removed).
+
+Fourth batch:
+- `routes/api/batch.ts` — 3 removed, 0 left. `SubRequest.body: any` / `SubRequestResponse.body: any` → `unknown`; `SubRequestResponse.header: Record<string, any>` → `Record<string, unknown>`.
+- `routes/api/batch_items.ts` — 2 removed, 0 left. `PaginatedResults<any>` → `<unknown>`; the inner `as any` cast → `as unknown as unknown[]`.
+- `models/UserModel.test.ts` — 3 removed, 0 left. The three `syncInfo*: any` test fixtures share a single inline object-shape type with optional `ppk` (the third variant deletes it).
+- `routes/index/login.ts` — 1 removed, 0 left. `makeView(error: any)` → `Error | null`.
+- `routes/index/home.test.ts` — 1 removed, 0 left. `context.response.body as any` → `as string`.
+- `routes/index/items.test.ts` — 1 removed, 0 left. `items: any` → `Record<string, Record<string, never>>`.
+- `models/items/storage/StorageDriverS3.ts` — 2 removed, 0 left. Introduced local `ReadableLike` interface (only the 3 listener overloads used) so `stream2buffer` is typed; the S3 SDK return is an opaque union, so cast at the call site: `stream2buffer(response.Body as ReadableLike)`.
+- `models/items/storage/StorageDriverS3.test.ts` — 1 removed, 0 left. `parse: any` → `StorageDriverConfig & { enabled?: boolean }`.
+- `routes/api/users.ts` — 1 removed, 0 left. `bodyFields<any>` → `bodyFields<Partial<User>>` (`fromApiInput` accepts a partial user).
+- `routes/api/users.test.ts` — 1 removed, 0 left. `results: any` → `getApi<{ items: User[] }>`.
+- `routes/api/ping.test.ts` — 1 removed, 0 left. `body as any` → `as { status: string; message: string }`.
+- `models/LockModel.test.ts` — 2 removed, 0 left. `'wrongtype' as any` → `as unknown as LockType` (and the same for `LockClientType`).
+- `db.migrations.test.ts` — 2 removed, 0 left. `dbSchemaSnapshot` return → `Awaited<ReturnType<typeof sqlts.toTypeScript>>`; the `db as any` cast → `as unknown as Parameters<typeof sqlts.toTypeScript>[1]`.
+- `utils/testing/testUtils.ts` — 4 removed, 3 left. `createItemTree(tree: any)` → `Record<string, unknown>`; `createItemTree3(tree: any[])` → local `ItemTree3Node` interface; `checkContextError`'s `body: any` → cast through `as { code?: ErrorCode }`; `setupAppContext({} as any, ...)` → `as unknown as AppContext`. Left: `AppContextTestOptions.request: any` (`httpMocks.RequestOptions` is too narrow; callers pass `files: { file: { path: string } }` and free-form bodies); `appContext: any` inside `koaAppContext` (intentionally mocks only a subset of `AppContext`, cast at return); the `createBaseAppContext` one was removed. Reasons updated on the two remaining ones.
+- `utils/requestUtils.ts` — 2 removed, 7 left. Two safe removals: the outer `IncomingMessage` cast in `formParse` uses `as unknown as FormParseRequest`; the `bodyFields`/`bodyFiles` `req: any` typed `IncomingMessage`. The other entries (`BodyFields`, `FormParseResult.files`, `FormParseRequest.body`, `convertFieldsToKeyValue` return) were attempted but reverted — `Record<string, unknown>` breaks `Fields`/`Files` compatibility (formidable's `File | File[]` union surfaces `.filepath` access errors), and `BodyFields` widening propagates to every route handler that reads `body.fields.email` etc. without narrowing. Reasons updated on the remaining ones.
+- `utils/routeUtils.ts` — 5 removed, 1 left. `Response.response: any` / `constructor(response: any)` → `unknown`; `internalRedirect(...args: any[])` → `unknown[]`; `ExecRequestResult.response: any` → `unknown`; `respondWithItemContent(koaResponse: any)` → local `KoaResponseLike` interface with just `body` and `set()`. Left: `RouteHandler`'s `...args: any[], Promise<any>` — concrete handlers (login, mfa, users) narrow `args` to per-route field types; tightening propagates through every route. Reason updated. (Plus a downstream cast `responseObject.response as typeof ctx.response` in `routeHandler.ts:56` for the now-`unknown` response.)
+- `models/ChangeModel/ChangeModel.test.ts` — 1 removed, 0 left. `itemsToCreate: any[]` → `{ id: string; children: never[] }[]`.
+- `models/ChangeModel/ChangeModel.old.ts` — 1 removed, 0 left. `Knex.Raw<any>` → `Knex.Raw<unknown>`.
+- `routes/api/items.ts` — 1 removed, 0 left. `bodyFields.items.map((item: any))` → `(item: { name: string; body?: string })`.
+- `tools/generateTypes.ts` — 1 removed, 0 left. `'pascal' as any` → `as Config['tableNameCasing']`.
+- `models/utils/pagination.test.ts` — 2 removed, 0 left. `testCases: any` → `[Record<string, unknown> | null, Pagination][]`; the inline `input: any` removed by inferring from the tuple. Inner literal `dir: 'asc'` switched to `PaginationOrderDir.ASC`.
+
+Verification at checkpoint: package `yarn tsc --noEmit` clean; spellcheck clean. 227 → 102 disable comments (125 removed).
