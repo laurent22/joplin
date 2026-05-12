@@ -40,7 +40,7 @@ For each disable comment encountered:
   - For large packages (e.g. `lib`, `app-desktop`, `app-cli`), also update the table row at intermediate checkpoints (e.g. every ~20 files) so a hard cutoff loses at most one checkpoint's worth of detail.
 - Commit the progress file alongside (or as part of) the package's cleanup PR.
 - **After each commit that updates this file, also sync the PR body** so reviewers see the latest progress without opening the file. Run: `gh pr edit <PR-number> --body-file readme/dev/any_cleanup_progress.md`.
-  Find the PR number with `gh pr list --head <branch> --json number`. The current PR for this cleanup is **#15339** on branch `any_refactor_2`.
+  Find the PR number with `gh pr list --head <branch> --json number`. The current branch for this cleanup is `any_refactor_3` (no PR opened yet — previous PR #15339 on `any_refactor_2` was merged).
 - If a session stops mid-package, the **Per-package detail** section records exactly which files were processed so the next session can resume cleanly.
 - At the start of any new session, re-read this file before resuming — it is the source of truth, not conversational memory.
 
@@ -68,7 +68,7 @@ Counts captured 2026-05-11 before any work.
 | 6 | renderer | 25 | 99 | 87 | 12 | done (2026-05-11) |
 | 7 | tools | 23 | 49 | 45 | 4 | done (2026-05-11) |
 | 8 | plugin-repo-cli | 11 | 33 | 33 | 0 | done (2026-05-11) |
-| 9 | app-mobile | 37 | 131 | 0 | 131 | not started |
+| 9 | app-mobile | 37 | 131 | 32 | 99 | in progress (2026-05-12) |
 | 10 | server | 67 | 227 | 0 | 227 | not started |
 | 11 | app-cli | 90 | 742 | 0 | 742 | not started |
 | 12 | app-desktop | 149 | 477 | 0 | 477 | not started |

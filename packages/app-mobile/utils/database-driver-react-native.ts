@@ -1,10 +1,23 @@
 const SQLite = require('react-native-sqlite-storage');
 import DatabaseDriver, { DatabaseCloseOptions, DatabaseOpenOptions } from '@joplin/lib/database-driver';
 
+interface SqliteResultSet {
+	rows: { length: number; item: (i: number)=> unknown };
+	insertId?: string;
+}
+
+interface SqliteDb {
+	executeSql: (
+		sql: string,
+		params: unknown,
+		success: (r: SqliteResultSet)=> void,
+		error: (e: Error)=> void,
+	)=> void;
+}
+
 export default class DatabaseDriverReactNative implements DatabaseDriver {
 	private lastInsertId_: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private db_: any;
+	private db_: SqliteDb;
 	public constructor() {
 		this.lastInsertId_ = null;
 	}
@@ -14,8 +27,7 @@ export default class DatabaseDriverReactNative implements DatabaseDriver {
 		return new Promise<void>((resolve, reject) => {
 			SQLite.openDatabase(
 				{ name: options.name },
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(db: any) => {
+				(db: SqliteDb) => {
 					this.db_ = db;
 					resolve();
 				},
@@ -49,8 +61,7 @@ export default class DatabaseDriverReactNative implements DatabaseDriver {
 			this.db_.executeSql(
 				sql,
 				params,
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(r: any) => {
+				(r: SqliteResultSet) => {
 					resolve(r.rows.length ? r.rows.item(0) : null);
 				},
 				(error: Error) => {
@@ -76,12 +87,11 @@ export default class DatabaseDriverReactNative implements DatabaseDriver {
 	}
 
 	public exec(sql: string, params: unknown = null) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied
-		return new Promise<any>((resolve, reject) => {
+		return new Promise<SqliteResultSet>((resolve, reject) => {
 			this.db_.executeSql(
 				sql,
 				params,
-				(r: { insertId: string }) => {
+				(r: SqliteResultSet) => {
 					if ('insertId' in r) this.lastInsertId_ = r.insertId;
 					resolve(r);
 				},

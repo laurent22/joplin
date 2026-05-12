@@ -256,8 +256,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		if (doRefreshFolders === 'now') {
 			await refreshFolders(storeDispatch, newState.selectedFolderId);
 		} else {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			await scheduleRefreshFolders((action: any) => storeDispatch(action), newState.selectedFolderId);
+			await scheduleRefreshFolders(storeDispatch, newState.selectedFolderId);
 		}
 	}
 
@@ -298,6 +297,7 @@ interface AppComponentProps {
 	historyCanGoBack: boolean;
 	showSideMenu: boolean;
 	noteSelectionEnabled: boolean;
+	syncStarted: boolean;
 }
 
 interface AppComponentState {
@@ -324,7 +324,8 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	private onAppStateChange_: ()=> void;
 	private backButtonHandler_: BackButtonHandler;
 	private handleNewShare_: ()=> void;
-	private handleOpenURL_: (event: unknown)=> void;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private handleOpenURL_: any;
 
 	public constructor(props: AppComponentProps) {
 		super(props);
@@ -345,7 +346,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			PoorManIntervals.update();
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ShareExtension.shareURL has a pre-existing typing inconsistency
 		this.handleOpenURL_ = (event: any) => {
 			// logger.info('Sharing: handleOpenURL_: start');
 
@@ -575,8 +576,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async componentDidUpdate(prevProps: any) {
+	public async componentDidUpdate(prevProps: AppComponentProps) {
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
 			logger.info('Sharing: componentDidUpdate: biometricsDone');
 			void this.handleShareData();
@@ -677,11 +677,9 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		this.setState({ sideMenuWidth: this.getSideMenuWidth() });
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public UNSAFE_componentWillReceiveProps(newProps: any) {
+	public UNSAFE_componentWillReceiveProps(newProps: AppComponentProps) {
 		if (newProps.syncStarted !== this.lastSyncStarted_) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			if (!newProps.syncStarted) void refreshFolders((action: any) => this.props.dispatch(action), this.props.selectedFolderId);
+			if (!newProps.syncStarted) void refreshFolders((action) => this.props.dispatch(action), this.props.selectedFolderId);
 			this.lastSyncStarted_ = newProps.syncStarted;
 		}
 	}

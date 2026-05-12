@@ -2,6 +2,9 @@ import FsDriverBase, { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
 const RNFetchBlob = require('rn-fetch-blob').default;
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import RNSAF, { DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
+import type { StatResultT, ReadDirResItemT } from '@dr.pogodin/react-native-fs';
+
+type RnfsStatLike = StatResultT | ReadDirResItemT | DocumentFileDetail;
 import { Platform } from 'react-native';
 import tarCreate from './tarCreate';
 import tarExtract from './tarExtract';
@@ -57,8 +60,7 @@ export default class FsDriverRN extends FsDriverBase {
 	// Requires that the file already exists.
 	// TODO: Update for compatibility with fs-driver-node's appendFile (which does not
 	//       require that the file exists).
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public appendFile(path: string, content: any, rawEncoding = 'base64') {
+	public appendFile(path: string, content: string, rawEncoding = 'base64') {
 		const encoding = normalizeEncoding(rawEncoding);
 
 		if (isScopedUri(path)) {
@@ -68,8 +70,7 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	// Encoding can be either "utf8", "utf-8", or "base64"
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public writeFile(path: string, content: any, rawEncoding = 'base64') {
+	public writeFile(path: string, content: string, rawEncoding = 'base64') {
 		const encoding = normalizeEncoding(rawEncoding);
 
 		if (isScopedUri(path)) {
@@ -87,36 +88,34 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	// Returns a format compatible with Node.js format
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private rnfsStatToStd_(stat: any, path: string) {
+	private rnfsStatToStd_(stat: RnfsStatLike, path: string) {
 		let birthtime;
-		const mtime = stat.lastModified ? new Date(stat.lastModified) : stat.mtime;
-		if (stat.lastModified) {
-			birthtime = new Date(stat.lastModified);
-		} else if (stat.ctime) {
+		const lastModified = 'lastModified' in stat ? stat.lastModified : undefined;
+		const ctime = 'ctime' in stat ? stat.ctime : undefined;
+		const mtime = lastModified ? new Date(lastModified) : ('mtime' in stat ? stat.mtime : undefined);
+		if (lastModified) {
+			birthtime = new Date(lastModified);
+		} else if (ctime) {
 			// Confusingly, "ctime" normally means "change time" but here it's used as "creation time". Also sometimes it is null
-			birthtime = stat.ctime;
+			birthtime = ctime;
 		} else {
-			birthtime = stat.mtime;
+			birthtime = 'mtime' in stat ? stat.mtime : undefined;
 		}
 		return {
 			birthtime,
 			mtime,
-			isDirectory: () => stat.type ? stat.type === 'directory' : stat.isDirectory(),
+			isDirectory: () => 'type' in stat && stat.type ? stat.type === 'directory' : ('isDirectory' in stat ? stat.isDirectory() : false),
 			path: path,
 			size: stat.size,
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async readDirStats(path: string, options: any = null) {
-		if (!options) options = {};
-		if (!('recursive' in options)) options.recursive = false;
+	public async readDirStats(path: string, options: ReadDirStatsOptions = null) {
+		if (!options) options = { recursive: false };
 
 		const isScoped = isScopedUri(path);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let stats: any[] = [];
+		let stats: RnfsStatLike[] = [];
 		try {
 			if (isScoped) {
 				stats = await RNSAF.listFiles(path);
@@ -127,19 +126,20 @@ export default class FsDriverRN extends FsDriverBase {
 			throw new Error(`Could not read directory: ${path}: ${error.message}`);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Output combines DocumentFileDetail (SAF) or normalized Stat (RNFS) entries
 		let output: any[] = [];
 		for (let i = 0; i < stats.length; i++) {
 			const stat = stats[i];
 			let relativePath;
 			if (isScoped) {
-				relativePath = stat.uri;
+				relativePath = (stat as DocumentFileDetail).uri;
 			} else {
-				relativePath = stat.path;
+				const rnfsStat = stat as StatResultT | ReadDirResItemT;
+				relativePath = rnfsStat.path;
 
 				// Workaround: Paths returned by RNFS.readDir can include a leading /private/, when this isn't included
 				// in the original path variable:
-				if (stat.path.startsWith('/private/') && !path.startsWith('/private/')) {
+				if (rnfsStat.path.startsWith('/private/') && !path.startsWith('/private/')) {
 					relativePath = relativePath.replace(/^\/private/, '');
 				}
 
@@ -155,7 +155,7 @@ export default class FsDriverRN extends FsDriverBase {
 			if (isScoped) {
 				// readUriDirStatsHandleRecursion_ expects stat to have a URI property.
 				// Use the original stat.
-				output = await this.readUriDirStatsHandleRecursion_(stat, output, options);
+				output = await this.readUriDirStatsHandleRecursion_(stat as DocumentFileDetail, output, options);
 			} else {
 				output = await this.readDirStatsHandleRecursion_(path, standardStat, output, options);
 			}
@@ -251,8 +251,7 @@ export default class FsDriverRN extends FsDriverBase {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public close(_handle: any): Promise<void> {
+	public close(_handle: unknown): Promise<void> {
 		// Nothing
 		return null;
 	}
@@ -307,8 +306,7 @@ export default class FsDriverRN extends FsDriverBase {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async readFileChunk(handle: any, length: number, rawEncoding = 'base64') {
+	public async readFileChunk(handle: { path: string; offset: number; mode: string; stat: { size: number } | null }, length: number, rawEncoding = 'base64') {
 		if (!handle?.stat) {
 			throw new JoplinError('File does not exist (reading file chunk).', 'ENOENT');
 		}
@@ -340,16 +338,14 @@ export default class FsDriverRN extends FsDriverBase {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async tarExtract(options: any) {
+	public async tarExtract(options: Omit<Parameters<typeof tarExtract>[0], 'cwd'> & { cwd?: string }) {
 		await tarExtract({
 			cwd: RNFS.DocumentDirectoryPath,
 			...options,
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async tarCreate(options: any, filePaths: string[]) {
+	public async tarCreate(options: Omit<Parameters<typeof tarCreate>[0], 'cwd'> & { cwd?: string }, filePaths: string[]) {
 		await tarCreate({
 			cwd: RNFS.DocumentDirectoryPath,
 			...options,

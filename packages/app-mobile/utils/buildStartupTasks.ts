@@ -95,8 +95,7 @@ import whisper from '../services/voiceTyping/whisper';
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function resourceFetcher_downloadComplete(event: any) {
+function resourceFetcher_downloadComplete(event: { id: string; encrypted: boolean }) {
 	if (event.encrypted) {
 		void DecryptionWorker.instance().scheduleStart();
 	}
