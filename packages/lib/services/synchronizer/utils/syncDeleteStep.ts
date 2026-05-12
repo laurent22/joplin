@@ -30,7 +30,7 @@ export default async (
 		if (cancelling()) break;
 
 		const item = toDelete[i];
-		const path = BaseItem.systemPath(item.item_id);
+		const path = systemPath(item);
 		const isResource = item.item_type === BaseModel.TYPE_RESOURCE;
 
 		try {
@@ -71,6 +71,7 @@ export default async (
 	}
 };
 
+const systemPath = (deletedItem: DeletedItemEntity) => BaseItem.systemPath(deletedItem.item_id);
 const isReadOnlyError = (error: Error) => 'code' in error && error.code === 'isReadOnly';
 const isNotFoundError = (error: Error) => 'httpCode' in error && error.httpCode === 404;
 
@@ -87,7 +88,7 @@ const batchDeleteStep = async (
 	};
 	const needsIndividualDelete: DeletedItemEntity[] = [];
 	const handleError = (error: Error, items: DeletedItemEntity[]) => {
-		if (!isReadOnlyError(error)) {
+		if (!isReadOnlyError(error) && !isNotFoundError(error)) {
 			logger.warn('Failed to batch delete item(s)', items.map(item => item.id), error, 'Retrying with individual item deletion...');
 		}
 		if (error.message?.startsWith('Not allowed: DELETE')) {
@@ -107,7 +108,7 @@ const batchDeleteStep = async (
 		const paths = [];
 		const pathToItems = new Map<string, DeletedItemEntity>();
 		for (const item of batch) {
-			const itemPath = BaseItem.systemPath(item);
+			const itemPath = systemPath(item);
 			paths.push(itemPath);
 			pathToItems.set(itemPath, item);
 
@@ -124,9 +125,7 @@ const batchDeleteStep = async (
 			const successfulItems = [];
 			for (const [itemName, { error }] of Object.entries(itemsResponse)) {
 				const item = pathToItems.get(itemName);
-				// If the item is not found, it has already been deleted:
-				const isSuccess = !error || isNotFoundError(error);
-				if (!isSuccess) {
+				if (error) {
 					handleError(error, [item]);
 				} else {
 					successfulItems.push(item);

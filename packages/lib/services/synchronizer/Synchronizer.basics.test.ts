@@ -104,7 +104,7 @@ describe('Synchronizer.basics', () => {
 		await synchronizerStart();
 
 		const remotes = await remoteNotesAndFolders();
-		expect(remotes.length).toBe(1);
+		expect(remotes).toHaveLength(1);
 		expect(remotes[0].id).toBe(folder1.id);
 
 		const deletedItems = await BaseItem.deletedItems(syncTargetId());
