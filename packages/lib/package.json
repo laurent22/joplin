@@ -84,7 +84,7 @@
     "nanoid": "3.3.11",
     "node-fetch": "2.6.7",
     "node-notifier": "10.0.1",
-    "node-persist": "3.1.3",
+    "node-persist": "4.0.4",
     "node-rsa": "1.1.1",
     "pdf-lib": "1.17.1",
     "query-string": "7.1.3",
