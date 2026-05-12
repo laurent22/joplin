@@ -12688,7 +12688,7 @@ __metadata:
     pdf-lib: "npm:1.17.1"
     pdfjs-dist: "npm:3.11.174"
     query-string: "npm:7.1.3"
-    re-reselect: "npm:4.0.1"
+    re-reselect: "npm:5.1.0"
     react: "npm:19.1.5"
     react-dom: "npm:19.1.5"
     redux: "npm:4.2.1"
@@ -48870,12 +48870,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"re-reselect@npm:4.0.1":
-  version: 4.0.1
-  resolution: "re-reselect@npm:4.0.1"
+"re-reselect@npm:5.1.0":
+  version: 5.1.0
+  resolution: "re-reselect@npm:5.1.0"
   peerDependencies:
-    reselect: ">1.0.0"
-  checksum: 10/d7c1ec107245c9d0b7f25f020e51ee37c8a8d3d743c296db3d02f386d543cc98f3ef5e98a017e201f583d014023318c0d2df39ffcedaa15bb413d87ef5e9b1db
+    reselect: ^5.0.0
+  checksum: 10/027f0c0f698e5e3d347fd56612ba3846fdb053ad5fedccd3d7e71281745ff30335e2f523997e514753b9b7e3b3a6659625c1d92d2c6f68e401a85d6899edd1c3
   languageName: node
   linkType: hard
 
