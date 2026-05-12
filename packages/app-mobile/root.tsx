@@ -679,7 +679,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 
 	public UNSAFE_componentWillReceiveProps(newProps: AppComponentProps) {
 		if (newProps.syncStarted !== this.lastSyncStarted_) {
-			if (!newProps.syncStarted) void refreshFolders((action) => this.props.dispatch(action), this.props.selectedFolderId);
+			if (!newProps.syncStarted) void refreshFolders(this.props.dispatch, this.props.selectedFolderId);
 			this.lastSyncStarted_ = newProps.syncStarted;
 		}
 	}
