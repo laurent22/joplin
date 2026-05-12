@@ -125,7 +125,8 @@ const batchDeleteStep = async (
 			const successfulItems = [];
 			for (const [itemName, { error }] of Object.entries(itemsResponse)) {
 				const item = pathToItems.get(itemName);
-				if (error) {
+				const isSuccessful = !error || isNotFoundError(error);
+				if (!isSuccessful) {
 					handleError(error, [item]);
 				} else {
 					successfulItems.push(item);
