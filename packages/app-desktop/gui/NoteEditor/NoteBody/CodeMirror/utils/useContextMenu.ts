@@ -348,7 +348,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 				menu.append(extraItem);
 			}
 
-			// eslint-disable-next-line github/array-foreach, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
+			// eslint-disable-next-line github/array-foreach, @typescript-eslint/no-explicit-any -- forEach used historically; lib's MenuItem shape doesn't structurally satisfy Electron's MenuItemConstructorOptions
 			menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
 				menu.append(new MenuItem(item));
 			});

@@ -527,3 +527,29 @@ Checkpoint 10 (2026-05-13):
 - `gui/MenuBar.tsx` — 0 removed, 23 left. All 23 `any` usages reason-updated: Electron `MenuItemConstructorOptions` has heterogeneous shapes (submenu/role/type/click vary by item kind) and the menu structure is built dynamically.
 
 Verification at checkpoint: package `yarn tsc --noEmit` clean; lint clean on changed files; spellcheck clean. 202 → 179 disable comments (23 removed; cumulative 298/477).
+
+Checkpoint 11 (2026-05-13) — final:
+- `gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx` — 2 removed, 18 left. `stripMarkup.options: any` → `{ collapseWhiteSpaces?: boolean }`; `dispatchDidUpdateIID_: any` → `ReturnType<typeof setTimeout> | null`. All 18 remaining `any`s reason-updated to mention TinyMCE editor instance/event types being looser than @types/tinymce (we use APIs like getDoc/getWin/formatter/ui.registry/undoManager extensions that aren't in the published types).
+- `gui/MenuBar.tsx` — already updated reasons in checkpoint 10.
+- `gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts` — 0 removed, 1 left. Combined `github/array-foreach` + `no-explicit-any` disable kept on one line (lint requires consecutive `disable-next-line` directives to be merged); reason updated to mention lib's MenuItem shape vs Electron's MenuItemConstructorOptions.
+- `gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollHandler.ts` — already in checkpoint 8. Inline disable consolidated.
+- `gui/NoteEditor/utils/useSearchMarkers.ts` — 0 removed, 1 left. Combined `ban-types` + `no-explicit-any` disable kept on one line; reason explains `searches: any[]` matches lib reducer and `highlightedWords` is heterogeneous (string[] at call site, keyword shapes inside).
+
+Verification at checkpoint: package `yarn tsc --noEmit` clean; lint clean on changed files; spellcheck clean. 179 → 177 disable comments (2 removed; cumulative 300/477 — 63% reduction).
+
+## Summary
+
+app-desktop final state: **177 disable comments remaining out of 477 (300 removed, 63% reduction)**.
+
+All 177 remaining disables now have **descriptive `-- reason` comments** explaining why they can't be tightened. They fall into these categories:
+
+1. **CodeMirror 5 dynamic loader / dynamic editor / scrollInfo / line-handle types** — no `@types/codemirror` in this monorepo. Files: `useJoplinMode.ts` (7), `useCursorUtils.ts` (5), `useListIdent.ts` (9), `useScrollHandler.ts` (7), `v5/CodeMirror.tsx` (3), `Editor.tsx` (17), and several smaller utils.
+2. **TinyMCE editor / event types** — looser than `@types/tinymce` (we use APIs not in the published types). File: `TinyMCE.tsx` (18).
+3. **Electron MenuItemConstructorOptions** — heterogeneous shapes (submenu/role/type/click vary by item kind). Files: `MenuBar.tsx` (23), `NoteListUtils.ts` (11), `app.ts` (a few).
+4. **react-select style/theme factories** — library's own provided styles, tightening requires importing each StyleConfig generic. File: `PromptDialog.tsx` (9).
+5. **Redux actions / middleware** — heterogeneous action types; tightening would require an action-type union and base class signature change. Files: `app.ts`, `app.reducer.ts`, `MainScreen.tsx`.
+6. **Legacy class components without props/state interfaces** — `Root.tsx`, `OneDriveLoginScreen.tsx`, `DropboxLoginScreen.tsx`, `ConfigScreen.tsx`, `PromptDialog.tsx`.
+7. **Heterogeneous editor commands** — `EditorCommand.value` / `CommandValue.args/value` / `ScrollOptions.value` / `OnChangeEvent.content` — each editor dispatches different shapes by name.
+8. **Library API mismatches** — Electron's `@electron/notarize` types missing `appBundleId`; `WebPreferences.enableRemoteModule` removed; Electron's `OpenDialogOptions.properties` is a strict union but the app uses `string[]`.
+9. **Heterogeneous test fixtures / external library shapes** — `electron-context-menu`'s actions/props, PluginManager dynamic menu items, `tesseract.js` dynamic loader.
+10. **CSS / styling** — `styled-components.attrs` typing conflicts; `styles_` blocks that mix CSSProperties with computed numbers.
