@@ -35,15 +35,13 @@ class Command extends BaseCommand {
 		return false;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async action(args: any) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const schema: Record<string, any> = {
+	public async action(args: { file: string }) {
+		const schema: Record<string, unknown> = {
 			title: 'JSON schema for Joplin setting files',
 			'$id': Setting.schemaUrl,
 			'$schema': 'https://json-schema.org/draft-07/schema#',
 			type: 'object',
-			properties: {},
+			properties: {} as Record<string, unknown>,
 		};
 
 		const metadata = Setting.metadata();
@@ -54,8 +52,7 @@ class Command extends BaseCommand {
 			const type = settingTypeToSchemaType(md.type);
 			if (!type) continue;
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const props: Record<string, any> = {};
+			const props: Record<string, unknown> = {};
 			props.type = type;
 			props.default = md.value;
 
@@ -64,12 +61,11 @@ class Command extends BaseCommand {
 			if (md.description && md.description(AppType.Desktop)) description.push(md.description(AppType.Desktop));
 
 			if (description.length) props.description = description.join('. ');
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			if (md.isEnum) props.enum = Object.keys(md.options()).map((v: any) => Setting.formatValue(key, v));
+			if (md.isEnum) props.enum = Object.keys(md.options()).map(v => Setting.formatValue(key, v));
 			if ('minimum' in md) props.minimum = md.minimum;
 			if ('maximum' in md) props.maximum = md.maximum;
 			if (!md.public || md.storage !== SettingStorage.File) props['$comment'] = 'private';
-			schema.properties[key] = props;
+			(schema.properties as Record<string, unknown>)[key] = props;
 		}
 
 		const outFilePath = args['file'];

@@ -13,8 +13,7 @@ class Command extends BaseCommand {
 		return _('Displays a geolocation URL for the note.');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { note: string }) {
 		const title = args['note'];
 
 		const item = await app().loadItem(ModelType.Note, title, { parent: app().currentFolder() });

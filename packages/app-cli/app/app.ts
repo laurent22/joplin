@@ -14,6 +14,7 @@ import { pathExists, readFile, readdirSync } from 'fs-extra';
 import RevisionService from '@joplin/lib/services/RevisionService';
 import shim from '@joplin/lib/shim';
 import setupCommand from './setupCommand';
+import BaseCommand from './base-command';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 
 type FolderOrNoteType = ModelType.Note | ModelType.Folder | 'folderOrNote';
@@ -123,7 +124,7 @@ class Application extends BaseApplication {
 		return [];
 	}
 
-	public setupCommand(cmd: string) {
+	public setupCommand(cmd: BaseCommand) {
 		return setupCommand(cmd, (t: string) => this.stdout(t), () => this.store(), () => this.gui());
 	}
 

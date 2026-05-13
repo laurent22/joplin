@@ -351,6 +351,7 @@ Summary: 227 → 22 disable comments (205 removed). Zero remaining `Old code bef
 - **Loose lib-typed defaults** (1): `config.ts` `initConfig(overrides: any)` — `Partial<Config>` requires `resourceDir`.
 - **Heterogeneous test fixtures / API call results** (3): `testRouters.curl` and `response` in `main` (parsed JSON responses); `array.ts` `unique` (TS can't unify `T` across `string[] | number[]`).
 - **TypeScript pattern limitations** (6): `testUtils.AppContextTestOptions.request`; the 4 in `requestUtils.ts` (`BodyFields`, `FormParseResult.files`, `FormParseRequest.body`, `convertFieldsToKeyValue` — all centered on formidable's `Fields | Files` union not allowing narrowing).
+
 ## packages/app-desktop
 Session date: 2026-05-13
 Branch: any_refactor_6
@@ -553,3 +554,55 @@ All 177 remaining disables now have **descriptive `-- reason` comments** explain
 8. **Library API mismatches** — Electron's `@electron/notarize` types missing `appBundleId`; `WebPreferences.enableRemoteModule` removed; Electron's `OpenDialogOptions.properties` is a strict union but the app uses `string[]`.
 9. **Heterogeneous test fixtures / external library shapes** — `electron-context-menu`'s actions/props, PluginManager dynamic menu items, `tesseract.js` dynamic loader.
 10. **CSS / styling** — `styled-components.attrs` typing conflicts; `styles_` blocks that mix CSSProperties with computed numbers.
+
+## packages/app-cli
+Session date: 2026-05-13
+
+Files processed:
+- `app/command-cp.ts` — 1 removed, 0 left. Typed `action({ note, notebook? })`.
+- `app/command-mv.ts` — 1 removed, 0 left. Typed `action({ item, notebook })`.
+- `app/command-ren.ts` — 1 removed, 0 left. Typed `action({ item, name })`.
+- `app/command-rmbook.ts` — 1 removed, 0 left. Typed `action({ notebook, options? })`.
+- `app/command-rmnote.ts` — 1 removed, 0 left. Typed `action({ 'note-pattern', options? })`.
+- `app/command-restore.ts` — 1 removed, 0 left. Typed `action({ pattern })`.
+- `app/command-edit.ts` — 1 removed, 0 left. Typed `action({ note })`.
+- `app/command-import.ts` — 1 removed, 0 left. Typed `action({ path, notebook?, options })`; outputFormat assignment now requires `as ImportModuleOutputFormat`.
+- `app/command-mkbook.ts` — 1 removed, 0 left. Typed `action({ 'new-notebook', options })`.
+- `app/command-help.ts` — 1 removed, 0 left. Typed `action({ command? })`.
+- `app/command-use.ts` — 1 removed, 0 left. Typed `action({ notebook })`.
+- `app/command-attach.ts` — 1 removed, 0 left. Typed `action({ note, file })`.
+- `app/command-cat.ts` — 1 removed, 0 left. Typed `action({ note, options })`.
+- `app/command-geoloc.ts` — 1 removed, 0 left. Typed `action({ note })`.
+- `app/command-apidoc.ts` — 1 removed, 0 left. Typed `action({ file })`.
+- `app/command-done.ts` — 2 removed, 0 left. Typed `handleAction(args: { note })` and `action(args: { note })`.
+- `app/command-set.ts` — 2 removed, 0 left. Typed `action(args: { note, name, value? })`; `newNote: any` → `Record<string, unknown>` (still accepted by `Note.save`).
+- `app/command-ls.ts` — 1 removed, 1 left. Typed `action` args; left `queryOptions: any` because it is fed to both `Folder.all` (FolderLoadOptions) and `Note.previews` (PreviewsOptions) and the union has fields that neither type carries (`caseInsensitive`, `orderBy`). Comment reason updated.
+- `app/setupCommand.ts` — 2 removed, 0 left. Typed `cmd: BaseCommand`, introduced local `PromptOptions`; the dispatcher arg is inferred from `BaseCommand.setDispatcher(fn: DispatcherFn)` (added in base-command.ts edit), eliminating the last `any` here. Side fix: `App.setupCommand(cmd: string)` was a wrong-pre-existing-annotation, now typed `BaseCommand`.
+- `app/command-e2ee.ts` — 2 removed, 0 left. Typed `action` args; typed `askForMasterKey(error: { masterKeyId })`.
+- `app/command-config.ts` — 3 removed, 0 left. `chunks: any` → `Buffer[]`; typed action args; `Record<string, any>` → `Record<string, unknown>` for resultObj.
+- `app/command-export.ts` — 3 removed, 0 left. Typed action args; `n.id` map callbacks now infer entity types from `loadItems`; format assignment uses `ExportModuleOutputFormat.Jex`.
+- `app/gui/FolderListWidget.ts` — 3 removed, 0 left. Introduced local `FolderListItem = FolderEntity | TagEntity | SearchItem | '-'` for `itemRenderer` and `newItems`; replaced `(this.folders[i] as any).note_count` with `FolderEntity & { note_count?: number }`.
+- `app/command-settingschema.ts` — 4 removed, 0 left. Typed action args; `Record<string, any>` → `Record<string, unknown>` for schema, props; removed unused `v: any` annotation.
+- `app/gui/StatusBarWidget.ts` — 2 removed, 2 left. Typed `prompt(promptString: string, options)` and `textStyle: (s: string) => s`. Left 2 `any` for tkwidgets terminal-kit `inputField` options/callback — no published types and tkwidgets has no .d.ts. Comments updated with reason.
+- `app/LinkSelector.ts` — 5 removed, 0 left. Introduced local `TextWidget` interface for tk text widget shape; replaced `(lines[i] as any).matchAll` with direct call (`String.prototype.matchAll` is well-typed).
+- `app/command-sync.ts` — 3 removed, 2 left. Typed `action` args, `log(...s: string[])`. Left `options: any` and `report: any` because `Synchronizer.start(options: any)` and `Synchronizer.reportToLines(report: any)` in lib are themselves `any` — tightening here would diverge from lib. Comments updated.
+- `app/command-testing.ts` — 5 removed, 0 left. `randomElement` → generic `<T>(array: T[]): T | null`; `itemCount(args: { arg0 })`; `options(): [string, string][]`; typed `action` args; `promises: Promise<unknown>[]`.
+- `app/app.ts` — 0 removed, 6 left. All disables had descriptive reasons (`Dynamic command loading system`, `Dynamic command metadata`, `Dynamic command type`, `Dynamic GUI type with many optional methods`, `Redux dispatch type requires AnyAction`) — none were `Old code before rule was applied`, so out of scope per rule 3. Side fix in checkpoint 1: `App.setupCommand(cmd: string)` annotation corrected to `BaseCommand`.
+- `app/services/plugins/PluginRunner.ts` — 6 removed, 0 left. `wrapper: any` → `Record<string, (...args: unknown[]) => unknown>` with final cast to `typeof Console` to match `SandboxProxy.console`; arg arrays → `unknown[]`; `activeSandboxCalls_: any` → `Record<string, boolean>`.
+- `app/base-command.ts` — 4 removed, 4 left. Introduced typed `StdoutFn`/`PromptFn`/`DispatcherFn` aliases; typed `stdout_`/`prompt_`/`dispatcher_` fields; typed `encryptionCheck(item: { encryption_applied? })`. Left `action(_args: any)` and `options(): unknown[]`: parameters are contravariant so tightening base would break all subclass overrides. The 3 remaining `any` are now centralized in the type aliases at the top of the file (with reasons): stdout accepts arbitrary message values, prompt response varies, dispatch action shape varies; tests pass sync mocks that don't return Promises.
+- `tests/HtmlToMd.ts` — 1 removed, 0 left. `htmlToMdOptions: any` → `ParseOptions` (exported from `@joplin/lib/HtmlToMd`).
+- `tests/MdToHtml.ts` — 3 removed, 0 left. `newTestMdToHtml(options: any)` → `Partial<MdToHtmlConstructorOptions>`; the `ResourceModel` mock requires `as unknown as` cast because it intentionally omits `filename` and `isSupportedImageMimeType`. `mdToHtmlOptions` already had a real type, just a stale disable comment. `pluginOptions: any` → `Record<string, { enabled: boolean }>`.
+- `tests/testUtils.ts` — 1 removed, 0 left. `Record<string, any>` → `Record<string, unknown>` on `PluginServiceOptions.getState`.
+- `tests/services/keychain/KeychainService.ts` — 1 removed, 0 left. `describeIfCompatible(fn: any, elseFn: any)` → `() => void`.
+- `tests/services/plugins/PluginService.ts` — 1 removed, 0 left. `(f: any) => f.title` → inferred `FolderEntity` (from `Folder.all()`).
+- `tests/services/plugins/api/JoplinWorkspace.ts` — 2 removed, 0 left. `appState: Record<string, any>` → `Record<string, string[]>`; `result: any` → `{ id: string; event: number }`.
+- `tests/services/plugins/sandboxProxy.ts` — 4 removed, 0 left. `args: any[]` → `unknown[]`; `target: any` → inferred function type (both `it` blocks).
+
+Verification: package `yarn tsc --noEmit` clean; `yarn linter-ci packages/app-cli/` clean; root `yarn tsc --noEmit` (all workspaces) clean; spellcheck clean.
+
+Summary: 90 → 16 disable comments (74 removed). Zero remaining `Old code before rule was applied` disables — all 16 left have descriptive reasons explaining why they cannot be tightened. They fall into these categories:
+- **Base-class contravariance** (4): `base-command.ts` — `StdoutFn`, `PromptFn`, `DispatcherFn` aliases at the top of the file (centralized) and the `action(_args: any)` method. Parameters are contravariant; subclasses narrow per-command, so the base must stay permissive. Tests pass synchronous mocks that don't return Promises.
+- **Heterogeneous query options** (1): `command-ls.ts` `queryOptions` is passed to both `Folder.all` (FolderLoadOptions) and `Note.previews` (PreviewsOptions) and the union has fields neither type carries; splitting would be a structural refactor.
+- **Loose lib-typed APIs** (2): `command-sync.ts` — `Synchronizer.start(options: any)` and `Synchronizer.reportToLines(report: any)` in lib are themselves `any`; tightening here would diverge from lib.
+- **No published types for JS modules** (3): `StatusBarWidget` (tkwidgets terminal-kit `inputField` options + callback) and `command-sync.ts` `oneDriveApiUtils_` (`onedrive-api-node-utils.js` is plain JS).
+- **Dynamic command/state shapes already documented** (6): all of `app.ts` was already annotated with descriptive non-"Old code" reasons before this pass — `commands_`, `commandMetadata_`, `activeCommand_`, `gui_`, dynamic command type at L175, and the redux dispatch type.

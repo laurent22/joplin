@@ -13,8 +13,7 @@ class Command extends BaseCommand {
 		return _('Attaches the given file to the note.');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { note: string; file: string }) {
 		const title = args['note'];
 
 		const note = await app().loadItem(ModelType.Note, title, { parent: app().currentFolder() });

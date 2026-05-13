@@ -1,4 +1,4 @@
-import MdToHtml, { LinkRenderingType } from '@joplin/renderer/MdToHtml';
+import MdToHtml, { LinkRenderingType, Options as MdToHtmlConstructorOptions } from '@joplin/renderer/MdToHtml';
 const { filename } = require('@joplin/lib/path-utils');
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import shim from '@joplin/lib/shim';
@@ -6,19 +6,18 @@ import { RenderOptions } from '@joplin/renderer/types';
 import { isResourceUrl, resourceUrlToId } from '@joplin/lib/models/utils/resourceUtils';
 const { themeStyle } = require('@joplin/lib/theme');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function newTestMdToHtml(options: any = null) {
-	options = {
+function newTestMdToHtml(options: Partial<MdToHtmlConstructorOptions> = null) {
+	const merged: MdToHtmlConstructorOptions = {
 		ResourceModel: {
 			isResourceUrl: isResourceUrl,
 			urlToId: resourceUrlToId,
 			fullPath: () => '/some/path/here',
-		},
+		} as unknown as MdToHtmlConstructorOptions['ResourceModel'],
 		fsDriver: shim.fsDriver(),
 		...options,
 	};
 
-	return new MdToHtml(options);
+	return new MdToHtml(merged);
 }
 
 describe('MdToHtml', () => {
@@ -42,7 +41,6 @@ describe('MdToHtml', () => {
 
 			// if (mdFilename !== 'sanitize_9.md') continue;
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const mdToHtmlOptions: RenderOptions = {
 				bodyOnly: true,
 			};
@@ -115,8 +113,7 @@ describe('MdToHtml', () => {
 	}));
 
 	it('should return enabled plugin assets', (async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const pluginOptions: any = {};
+		const pluginOptions: Record<string, { enabled: boolean }> = {};
 		const pluginNames = MdToHtml.pluginNames();
 
 		for (const n of pluginNames) pluginOptions[n] = { enabled: false };

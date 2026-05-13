@@ -2,8 +2,7 @@ import PluginService from '@joplin/lib/services/plugins/PluginService';
 import PluginRunner from '../app/services/plugins/PluginRunner';
 
 export interface PluginServiceOptions {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	getState?(): Record<string, any>;
+	getState?(): Record<string, unknown>;
 }
 
 export function newPluginService(appVersion = '1.4', options: PluginServiceOptions = null): PluginService {
