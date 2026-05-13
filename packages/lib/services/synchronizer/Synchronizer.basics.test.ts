@@ -149,7 +149,10 @@ describe('Synchronizer.basics', () => {
 		await Resource.delete(resource.id);
 
 		await synchronizerStart();
+		expect(await Resource.load(resource.id)).toBe(undefined);
 
+		await switchClient(1);
+		await synchronizerStart();
 		expect(await Resource.load(resource.id)).toBe(undefined);
 	}));
 
