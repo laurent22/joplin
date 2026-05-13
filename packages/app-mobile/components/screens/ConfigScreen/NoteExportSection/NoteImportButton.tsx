@@ -64,7 +64,7 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 			default: sourceFileUri,
 			ios: decodeURIComponent(sourceFileUri),
 		});
-		// Note: Don't use importFiles[0].fileName here: It can be null in some situations (e.g. on iOS)
+		// Note: Don't use importFiles[0].fileName here: It is null on iOS and potentially in other cases
 		const sourceFileName = basename(sourceFilePath);
 
 		const importTargetPath = join(await makeImportExportCacheDirectory(), sourceFileName);
