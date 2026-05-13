@@ -94,7 +94,7 @@ class Application extends BaseApplication {
 		return true;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux actions are heterogeneous; typing would require an action-type union and base class signature change
 	public reducer(state: AppState = appDefaultState, action: any) {
 		let newState = appReducer(state, action);
 		newState = resourceEditWatcherReducer(newState, action);
@@ -123,7 +123,7 @@ class Application extends BaseApplication {
 		htmlContainer.setAttribute('lang', htmlLang);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux middleware signature; matches the base class which takes heterogeneous action types
 	protected async generalMiddleware(store: any, next: any, action: any) {
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'locale' || action.type === 'SETTING_UPDATE_ALL') {
 			this.updateLanguage();
@@ -245,16 +245,15 @@ class Application extends BaseApplication {
 		// The context menu must be setup in renderer process because that's where
 		// the spell checker service lives.
 		electronContextMenu({
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			shouldShowMenu: (_event: any, params: any) => {
+			shouldShowMenu: (_event: unknown, params: { isEditable: boolean; inputFieldType: string }) => {
 				// params.inputFieldType === 'none' when right-clicking the text editor. This is a bit of a hack to detect it because in this
 				// case we don't want to use the built-in context menu but a custom one.
 				return params.isEditable && params.inputFieldType !== 'none';
 			},
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- electron-context-menu's actions/props don't have public types in this version
 			menu: (actions: any, props: any) => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- contextMenuItems returns a heterogeneous menu shape that doesn't satisfy Electron's MenuItemConstructorOptions structurally
 				const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions).map((item: any) => new MenuItem(item));
 
 				const output = [
@@ -375,7 +374,7 @@ class Application extends BaseApplication {
 		if (Setting.value('ocr.enabled')) {
 
 			if (!this.ocrService_) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- tesseract.js is loaded via <script> onto window; the published createWorker type is stricter than the runtime accepts
 				const Tesseract = (window as any).Tesseract;
 
 				const drivers: OcrDriverBase[] = [];
@@ -687,7 +686,7 @@ class Application extends BaseApplication {
 
 			ResourceEditWatcher.instance().initialize(
 				reg.logger(),
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux action — heterogeneous; tightening would require a typed action union shared with the store
 				(action: any) => { this.store().dispatch(action); },
 				(path: string) => bridge().openItem(path),
 				() => this.store().getState().windowId,
@@ -695,8 +694,7 @@ class Application extends BaseApplication {
 
 			// Forwards the local event to the global event manager, so that it can
 			// be picked up by the plugin manager.
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			ResourceEditWatcher.instance().on('resourceChange', (event: any) => {
+			ResourceEditWatcher.instance().on('resourceChange', (event: { id: string }) => {
 				eventManager.emit(EventName.ResourceChange, event);
 			});
 		});
@@ -704,8 +702,7 @@ class Application extends BaseApplication {
 		// Make it available to the console window - useful to call revisionService.collectRevisions()
 		if (Setting.value('env') === 'dev') {
 			addTask('app/add debug variables', () => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(window as any).joplin = {
+				(window as unknown as Record<string, unknown>).joplin = {
 					revisionService: RevisionService.instance(),
 					migrationService: MigrationService.instance(),
 					decryptionWorker: DecryptionWorker.instance(),
@@ -772,7 +769,7 @@ class Application extends BaseApplication {
 		return tasks;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Matches the base class signature (BaseApplication.start returns Promise<any>)
 	public async start(argv: string[], startOptions: StartOptions = null): Promise<any> {
 		const startupTask = perfLogger.taskStart('app/start');
 
