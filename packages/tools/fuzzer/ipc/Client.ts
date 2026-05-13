@@ -1,5 +1,5 @@
 import uuid, { createSecureRandom } from '@joplin/lib/uuid';
-import { ActionableClient, FuzzContext, HttpMethod, Json, RandomFolderOptions, RandomNoteOptions, RandomResourceOptions, ShareOptions } from '../types';
+import { ActionableClient, FuzzContext, HttpMethod, Json, RandomFolderOptions, RandomNoteOptions, ShareOptions } from '../types';
 import { assertIsNote, assertIsNoteData, FolderData, ItemId, NoteData, ResourceData } from '../model/types';
 import { join } from 'path';
 import { copy, exists, mkdir, remove } from 'fs-extra';
@@ -903,26 +903,6 @@ class Client implements ActionableClient {
 		await this.execCliCommand_('rmnote', '--permanent', '--force', id);
 	}
 
-	public async updateResource(resource: ResourceData, { quiet = false }: CreateOrUpdateOptions = { }) {
-		if (!quiet) {
-			logger.info('Update resource', resource.id);
-		}
-		await this.tracker_.updateResource(resource);
-
-		// TODO: Track the updated body in the state
-		const newBody = this.context_.randomString(this.context_.randInt(0, 1024));
-
-		const resourceForm = new FormData();
-		resourceForm.append('data', new Blob([newBody], { type: resource.mimeType }));
-		resourceForm.append('props', JSON.stringify({
-			title: resource.title,
-			id: resource.id,
-			mime: resource.mimeType,
-		}));
-
-		await this.execApiCommand_('PUT', `/resources/${resource.id}`, resourceForm);
-	}
-
 	public async attachResource(note: NoteData, resource: ResourceData): Promise<NoteData> {
 		logger.info('Attach resource', resource.id, 'to note', note.id);
 		const updatedNote = await this.tracker_.attachResource(note, resource);
@@ -1141,10 +1121,6 @@ class Client implements ActionableClient {
 
 	public async randomNote(options: RandomNoteOptions) {
 		return this.tracker_.randomNote(options);
-	}
-
-	public async randomResource(options: RandomResourceOptions) {
-		return this.tracker_.randomResource(options);
 	}
 
 	public itemById(itemId: ItemId) {

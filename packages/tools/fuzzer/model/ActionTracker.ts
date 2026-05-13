@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert';
-import { ActionableClient, FuzzContext, RandomItemOptions, ShareOptions } from '../types';
-import { FolderData, ItemId, NoteData, TreeItem, assertIsFolder, assertIsNote, isFolder, isNote, isResource } from './types';
+import { ActionableClient, FuzzContext, ShareOptions } from '../types';
+import { FolderData, ItemId, NoteData, TreeItem, assertIsFolder, isFolder, isNote, isResource } from './types';
 import FolderRecord from './FolderRecord';
 import { extractResourceUrls } from '@joplin/lib/urlUtils';
 import ResourceRecord from './ResourceRecord';
@@ -435,20 +435,6 @@ class ActionTracker extends Serializable<typeof schema> {
 
 		const isReadOnly = (item: ItemId|TreeItem) => {
 			if (item === '') return false;
-			if (typeof item === 'string') item = this.idToItem_.get(item);
-
-			if (isResource(item)) {
-				// A resource is read-only iff one of its references is
-				for (const referenceId of item.referencedBy) {
-					const reference = this.idToItem_.get(referenceId);
-					assertIsNote(reference);
-					if (isReadOnly(reference)) {
-						return true;
-					}
-				}
-
-				return false;
-			}
 
 			const toplevelItem = this.getToplevelParent_(item);
 			assertIsFolder(toplevelItem);
@@ -538,20 +524,6 @@ class ActionTracker extends Serializable<typeof schema> {
 			}
 		};
 
-		const randomItemFrom = <ItemType extends { id: ItemId }> (
-			items: ItemType[], options: RandomItemOptions<ItemType>,
-		) => {
-			if (options.filter) {
-				items = items.filter(options.filter);
-			}
-			if (!options.includeReadOnly) {
-				items = items.filter(item => !isReadOnly(item.id));
-			}
-
-			const itemIndex = this.context_.randInt(0, items.length);
-			return items.length ? items[itemIndex] : null;
-		};
-
 		const tracker: ActionableClient = {
 			createNote: (data: NoteData) => {
 				assertWriteable(data.parentId);
@@ -605,22 +577,6 @@ class ActionTracker extends Serializable<typeof schema> {
 				}
 				await tracker.updateNote(withAttached);
 				return withAttached;
-			},
-			updateResource: async (resource) => {
-				const existing = this.idToItem_.get(resource.id);
-				if (!existing) throw new Error(`Resource not found: ${resource.id}`);
-				if (!isResource(existing)) throw new Error(`Not a resource: ${resource.id}`);
-
-				updateItem(
-					resource.id,
-					new ResourceRecord({
-						referencedBy: existing.referencedBy,
-						...resource,
-					}),
-					'updated',
-				);
-				this.checkRep_();
-				return Promise.resolve();
 			},
 			createResource: async (resource) => {
 				if (tracker.itemExists(resource.id)) {
@@ -850,16 +806,27 @@ class ActionTracker extends Serializable<typeof schema> {
 				return Promise.resolve(descendants);
 			},
 			randomFolder: async (options) => {
-				const folders = getAllFolders();
-				return randomItemFrom(folders, options);
+				let folders = getAllFolders();
+				if (options.filter) {
+					folders = folders.filter(options.filter);
+				}
+				if (!options.includeReadOnly) {
+					folders = folders.filter(folder => !isReadOnly(folder.id));
+				}
+
+				return folders.length ? this.context_.randomFrom(folders) : null;
 			},
 			randomNote: async (options) => {
-				const notes = await tracker.listNotes();
-				return randomItemFrom(notes, options);
-			},
-			randomResource: async (options) => {
-				const resources = await tracker.listResources();
-				return randomItemFrom(resources, options);
+				let notes = await tracker.listNotes();
+				if (options.filter) {
+					notes = notes.filter(options.filter);
+				}
+				if (!options.includeReadOnly) {
+					notes = notes.filter(note => !isReadOnly(note.id));
+				}
+
+				const noteIndex = this.context_.randInt(0, notes.length);
+				return notes.length ? notes[noteIndex] : null;
 			},
 			// Note: Does not verify that the current client has access to the item
 			itemById: (id: ItemId) => {

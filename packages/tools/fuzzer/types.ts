@@ -23,14 +23,15 @@ export interface FuzzContext {
 	execApi(method: HttpMethod, route: string, body: Json|undefined): Promise<Json>;
 }
 
-export interface RandomItemOptions<ItemType> {
+export interface RandomFolderOptions {
 	includeReadOnly: boolean;
-	filter?: (folder: ItemType)=> boolean;
+	filter?: (folder: FolderRecord)=> boolean;
 }
 
-export type RandomFolderOptions = RandomItemOptions<FolderRecord>;
-export type RandomNoteOptions = RandomItemOptions<NoteData>;
-export type RandomResourceOptions = RandomItemOptions<ResourceData>;
+export interface RandomNoteOptions {
+	includeReadOnly: boolean;
+	filter?: (note: NoteData)=> boolean;
+}
 
 export interface ShareOptions {
 	readOnly: boolean;
@@ -50,7 +51,6 @@ export interface ActionableClient {
 	createNote(data: NoteData): Promise<void>;
 	updateNote(data: NoteData, options?: UpdateNoteOptions): Promise<void>;
 	attachResource(note: NoteData, resource: ResourceData): Promise<NoteData>;
-	updateResource(resource: ResourceData): Promise<void>;
 	createResource(resource: ResourceData): Promise<void>;
 	moveItem(itemId: ItemId, newParentId: ItemId): Promise<void>;
 	publishNote(id: ItemId): Promise<void>;
@@ -63,7 +63,6 @@ export interface ActionableClient {
 	allFolderDescendants(parentId: ItemId): Promise<ItemId[]>;
 	randomFolder(options: RandomFolderOptions): Promise<FolderRecord>;
 	randomNote(options: RandomNoteOptions): Promise<NoteData>;
-	randomResource(options: RandomResourceOptions): Promise<ResourceData>;
 	itemById(id: ItemId): TreeItem;
 	itemExists(id: ItemId): boolean;
 }

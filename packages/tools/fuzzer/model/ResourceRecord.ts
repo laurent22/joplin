@@ -2,7 +2,7 @@ import { ItemId, ResourceData } from './types';
 import Serializable, { BaseSchema } from './Serializable';
 
 interface InitializationOptions extends ResourceData {
-	referencedBy: readonly ItemId[];
+	referencedBy: ItemId[];
 }
 
 const schema = {
