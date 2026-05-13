@@ -351,3 +351,32 @@ Summary: 227 → 22 disable comments (205 removed). Zero remaining `Old code bef
 - **Loose lib-typed defaults** (1): `config.ts` `initConfig(overrides: any)` — `Partial<Config>` requires `resourceDir`.
 - **Heterogeneous test fixtures / API call results** (3): `testRouters.curl` and `response` in `main` (parsed JSON responses); `array.ts` `unique` (TS can't unify `T` across `string[] | number[]`).
 - **TypeScript pattern limitations** (6): `testUtils.AppContextTestOptions.request`; the 4 in `requestUtils.ts` (`BodyFields`, `FormParseResult.files`, `FormParseRequest.body`, `convertFieldsToKeyValue` — all centered on formidable's `Fields | Files` union not allowing narrowing).
+## packages/app-cli
+Session date: 2026-05-13
+
+Files processed:
+- `app/command-cp.ts` — 1 removed, 0 left. Typed `action({ note, notebook? })`.
+- `app/command-mv.ts` — 1 removed, 0 left. Typed `action({ item, notebook })`.
+- `app/command-ren.ts` — 1 removed, 0 left. Typed `action({ item, name })`.
+- `app/command-rmbook.ts` — 1 removed, 0 left. Typed `action({ notebook, options? })`.
+- `app/command-rmnote.ts` — 1 removed, 0 left. Typed `action({ 'note-pattern', options? })`.
+- `app/command-restore.ts` — 1 removed, 0 left. Typed `action({ pattern })`.
+- `app/command-edit.ts` — 1 removed, 0 left. Typed `action({ note })`.
+- `app/command-import.ts` — 1 removed, 0 left. Typed `action({ path, notebook?, options })`; outputFormat assignment now requires `as ImportModuleOutputFormat`.
+- `app/command-mkbook.ts` — 1 removed, 0 left. Typed `action({ 'new-notebook', options })`.
+- `app/command-help.ts` — 1 removed, 0 left. Typed `action({ command? })`.
+- `app/command-use.ts` — 1 removed, 0 left. Typed `action({ notebook })`.
+- `app/command-attach.ts` — 1 removed, 0 left. Typed `action({ note, file })`.
+- `app/command-cat.ts` — 1 removed, 0 left. Typed `action({ note, options })`.
+- `app/command-geoloc.ts` — 1 removed, 0 left. Typed `action({ note })`.
+- `app/command-apidoc.ts` — 1 removed, 0 left. Typed `action({ file })`.
+- `app/command-done.ts` — 2 removed, 0 left. Typed `handleAction(args: { note })` and `action(args: { note })`.
+- `app/command-set.ts` — 2 removed, 0 left. Typed `action(args: { note, name, value? })`; `newNote: any` → `Record<string, unknown>` (still accepted by `Note.save`).
+- `app/command-ls.ts` — 1 removed, 1 left. Typed `action` args; left `queryOptions: any` because it is fed to both `Folder.all` (FolderLoadOptions) and `Note.previews` (PreviewsOptions) and the union has fields that neither type carries (`caseInsensitive`, `orderBy`). Comment reason updated.
+- `app/setupCommand.ts` — 2 removed, 1 left. Typed `cmd: BaseCommand`, introduced local `PromptOptions`; left `action: any` to dispatcher because action shape varies per command. Side fix: `App.setupCommand(cmd: string)` was a wrong-pre-existing-annotation, now typed `BaseCommand`.
+- `app/command-e2ee.ts` — 2 removed, 0 left. Typed `action` args; typed `askForMasterKey(error: { masterKeyId })`.
+- `app/command-config.ts` — 3 removed, 0 left. `chunks: any` → `Buffer[]`; typed action args; `Record<string, any>` → `Record<string, unknown>` for resultObj.
+- `app/command-export.ts` — 3 removed, 0 left. Typed action args; `n.id` map callbacks now infer entity types from `loadItems`; format assignment uses `ExportModuleOutputFormat.Jex`.
+- `app/gui/FolderListWidget.ts` — 3 removed, 0 left. Introduced local `FolderListItem = FolderEntity | TagEntity | SearchItem | '-'` for `itemRenderer` and `newItems`; replaced `(this.folders[i] as any).note_count` with `FolderEntity & { note_count?: number }`.
+- `app/command-settingschema.ts` — 4 removed, 0 left. Typed action args; `Record<string, any>` → `Record<string, unknown>` for schema, props; removed unused `v: any` annotation.
+- `app/gui/StatusBarWidget.ts` — 2 removed, 2 left. Typed `prompt(promptString: string, options)` and `textStyle: (s: string) => s`. Left 2 `any` for tkwidgets terminal-kit `inputField` options/callback — no published types and tkwidgets has no .d.ts. Comments updated with reason.

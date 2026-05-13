@@ -41,7 +41,7 @@ For each disable comment encountered:
   - For large packages (e.g. `lib`, `app-desktop`, `app-cli`), also update the table row at intermediate checkpoints (e.g. every ~20 files) so a hard cutoff loses at most one checkpoint's worth of detail.
 - Commit the progress file alongside (or as part of) the package's cleanup PR.
 - **After each commit that updates this file, also sync the PR body** so reviewers see the latest progress without opening the file. Run: `gh pr edit <PR-number> --body-file readme/dev/any_cleanup_progress.md`.
-  Find the PR number with `gh pr list --head <branch> --json number`. The current branch for this cleanup is `any_refactor_4` (no PR opened yet — previous PR #15377 on `any_refactor_3` was merged).
+  Find the PR number with `gh pr list --head <branch> --json number`. The current branch for this cleanup is `any_refactor_5` (no PR opened yet — previous PR on `any_refactor_4` was merged).
 - If a session stops mid-package, the **Per-package detail** section records exactly which files were processed so the next session can resume cleanly.
 - At the start of any new session, re-read this file before resuming — it is the source of truth, not conversational memory.
 
@@ -57,7 +57,7 @@ Large packages can consume enough context in a single session that Claude either
 
 ## Status
 
-Counts captured 2026-05-11 before any work.
+Counts captured 2026-05-11 before any work. Note: the original `app-cli` row counted 742 comments across 90 files, but that included `build/` (compiled JS), `app/*.js` (compiled JS), and `tests/support/plugins/*/api/` (regenerated plugin API copies — listed under "Files to never touch"). The in-scope `.ts`/`.tsx` source contains 90 comments across 38 files; the table was corrected on 2026-05-13.
 
 | # | Package | Files w/ comments | Comments (start) | Removed | Remaining | Status |
 |---|---|---:|---:|---:|---:|---|
@@ -71,7 +71,7 @@ Counts captured 2026-05-11 before any work.
 | 8 | plugin-repo-cli | 11 | 33 | 33 | 0 | done (2026-05-11) |
 | 9 | app-mobile | 37 | 131 | 98 | 33 | done (2026-05-12) |
 | 10 | server | 67 | 227 | 205 | 22 | done (2026-05-12) |
-| 11 | app-cli | 90 | 742 | 0 | 742 | not started |
+| 11 | app-cli | 38 | 90 | 39 | 51 | in progress (2026-05-13) |
 | 12 | app-desktop | 149 | 477 | 0 | 477 | not started |
 | 13 | lib | 213 | 1140 | 0 | 1140 | not started |
 | — | generator-joplin | 2 | 27 | — | — | excluded (template) |
