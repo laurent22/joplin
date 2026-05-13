@@ -92,15 +92,15 @@ export async function delItems(path: SubPath, ctx: AppContext, isBatch: boolean)
 		const parsedBody = await formParse(ctx.req);
 		const bodyFields = parsedBody.fields;
 
-		const batchMaxDeleteCount = 100;
 		if (!Array.isArray(bodyFields.items)) throw new ErrorBadRequest('body.items must be an array');
-		if (bodyFields.items.length > batchMaxDeleteCount) {
-			throw new ErrorPayloadTooLarge(`Unable to delete more than ${batchMaxDeleteCount} items at a time`);
-		}
 		for (const item of bodyFields.items) {
 			if (typeof item !== 'string') {
 				throw new ErrorBadRequest('array entry is not a string (in body.items)');
 			}
+		}
+		const batchMaxDeleteCount = 100;
+		if (bodyFields.items.length > batchMaxDeleteCount) {
+			throw new ErrorPayloadTooLarge(`Unable to delete more than ${batchMaxDeleteCount} items at a time`);
 		}
 
 		const loadedItems = await ctx.joplin.models.item().loadByNames(
