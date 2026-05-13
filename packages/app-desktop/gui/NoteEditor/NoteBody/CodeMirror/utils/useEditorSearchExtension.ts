@@ -21,7 +21,7 @@ export type OnSetMarkers = (cm: CodeMirror5Emulation, keywords: Keyword[], optio
 
 // Modified from codemirror/addons/search/search.js
 const searchOverlay = (query: RegExp) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 StringStream; no @types/codemirror available so the overlay token signature must stay loose
 	return { token: function(stream: any) {
 		query.lastIndex = stream.pos;
 		const match = query.exec(stream.string);
@@ -81,12 +81,10 @@ export default function useEditorSearchExtension() {
 	// Highlights the currently active found work
 	// It's possible to get tricky with this functions and just use findNext/findPrev
 	// but this is fast enough and works more naturally with the current search logic
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	function highlightSearch(cm: CodeMirror5Emulation, searchTerm: RegExp, index: number, scrollTo: boolean, withSelection: boolean) {
 		const cursor = cm.getSearchCursor(searchTerm);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let match: any = null;
+		let match: { from: { line: number; ch: number }; to: { line: number; ch: number } } | null = null;
 		for (let j = 0; j < index + 1; j++) {
 			if (!cursor.findNext()) {
 				// If we run out of matches then just highlight the final match
@@ -114,8 +112,7 @@ export default function useEditorSearchExtension() {
 		return keyword.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	function getSearchTerm(keyword: any) {
+	function getSearchTerm(keyword: Keyword) {
 		const value = escapeRegExp(keyword.value);
 		return new RegExp(value, 'gi');
 	}
@@ -145,8 +142,7 @@ export default function useEditorSearchExtension() {
 		// HIGHLIGHT KEYWORDS
 		// When doing a global search it's possible to have multiple keywords
 		// This means we need to highlight each one
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const marks: any = [];
+		const marks: ReturnType<typeof highlightSearch>[] = [];
 		for (let i = 0; i < keywords.length; i++) {
 			const keyword = keywords[i];
 

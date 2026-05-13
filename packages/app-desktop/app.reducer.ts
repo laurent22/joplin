@@ -38,8 +38,7 @@ export interface AppWindowState extends WindowState {
 	visibleDialogs: VisibleDialogs;
 	dialogs: AppStateDialog[];
 	devToolsVisible: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	watchedResources: any;
+	watchedResources: Record<string, unknown>;
 	// Note IDs for which the user has chosen to view the underlying Markdown
 	// instead of the Whiteboard editor. Per-window, in-memory only.
 	whiteboardForceMarkdown: Record<string, boolean>;
@@ -58,8 +57,7 @@ export interface AppState extends State, AppWindowState {
 	backgroundWindows: BackgroundWindowStates;
 
 	route: AppStateRoute;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	navHistory: any[];
+	navHistory: AppStateRoute[];
 	watchedNoteFiles: string[];
 	focusedField: string;
 	layoutMoveMode: boolean;
@@ -85,11 +83,11 @@ export const createAppDefaultWindowState = (): AppWindowState => {
 	};
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function createAppDefaultState(resourceEditWatcherDefaultState: any): AppState {
+export function createAppDefaultState(resourceEditWatcherDefaultState: Partial<AppState>): AppState {
 	return {
 		...defaultState,
 		...createAppDefaultWindowState(),
+		backgroundWindows: {},
 		route: {
 			type: 'NAV_GO',
 			routeName: 'Main',
@@ -117,7 +115,7 @@ const hideBackgroundDialogsWithId = produce((state: AppState, id: string) => {
 	}
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux actions are heterogeneous; typing this would require an action-type union and many narrowing casts inside the switch
 export default function(state: AppState, action: any) {
 	let newState = state;
 
@@ -172,8 +170,7 @@ export default function(state: AppState, action: any) {
 		case 'NOTE_VISIBLE_PANES_TOGGLE':
 
 			{
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const getNextLayout = (currentLayout: any) => {
+				const getNextLayout = (currentLayout: string | string[]) => {
 					currentLayout = panes.length === 2 ? 'both' : currentLayout[0];
 
 					let paneOptions;
@@ -255,8 +252,7 @@ export default function(state: AppState, action: any) {
 								logger.warn('MAIN_LAYOUT_SET_ITEM_PROP: Found an empty item in layout: ', JSON.stringify(state.mainLayout));
 							} else {
 								if (item.key === action.itemKey) {
-									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-									(item as any)[action.propName] = action.propValue;
+									(item as unknown as Record<string, unknown>)[action.propName] = action.propValue;
 									return false;
 								}
 							}

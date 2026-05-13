@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, useMemo, useContext } from 'react';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 import TinyMCE from './NoteBody/TinyMCE/TinyMCE';
 import { connect } from 'react-redux';
 import MultiNoteActions from '../MultiNoteActions';
@@ -208,8 +209,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		props.onTitleChange?.(formNote.title);
 	}, [formNote.title, props.onTitleChange]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onFieldChange = useCallback(async (field: string, value: any, changeId = 0) => {
+	const onFieldChange = useCallback(async (field: string, value: string, changeId = 0) => {
 		if (!isMountedRef.current) {
 			// When the component is unmounted, various actions can happen which can
 			// trigger onChange events, for example the textarea might be cleared.
@@ -264,8 +264,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const onBodyChange = useCallback((event: OnChangeEvent) => onFieldChange('body', event.content, event.changeId), [onFieldChange]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onTitleChange = useCallback((event: any) => onFieldChange('title', event.target.value), [onFieldChange]);
+	const onTitleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => onFieldChange('title', event.target.value), [onFieldChange]);
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	useWindowCommandHandler({
@@ -314,8 +313,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		}
 	}, [formNote.id, props.syncUserId, shareCache]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onBodyWillChange = useCallback((event: any) => {
+	const onBodyWillChange = useCallback((event: { changeId: number }) => {
 		handleProvisionalFlag();
 
 		setFormNote(prev => {
@@ -343,8 +341,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	useResourceUnwatcher({ noteId: formNote.id, windowId });
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const externalEditWatcher_noteChange = useCallback((event: any) => {
+	const externalEditWatcher_noteChange = useCallback((event: { id: string; note: NoteEntity }) => {
 		if (event.id === formNote.id) {
 			const newFormNote = {
 				...formNote,
@@ -356,17 +353,16 @@ function NoteEditorContent(props: NoteEditorProps) {
 		}
 	}, [formNote, setFormNote]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onNotePropertyChange = useCallback((event: any) => {
+	const onNotePropertyChange = useCallback((event: { note: NoteEntity }) => {
 		setFormNote(formNote => {
 			if (formNote.id !== event.note.id) return formNote;
 
 			const newFormNote: FormNote = { ...formNote };
 
-			for (const key in event.note) {
+			const noteAsRecord = event.note as unknown as Record<string, unknown>;
+			for (const key in noteAsRecord) {
 				if (key === 'id') continue;
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(newFormNote as any)[key] = event.note[key];
+				(newFormNote as unknown as Record<string, unknown>)[key] = noteAsRecord[key];
 			}
 
 			return newFormNote;
