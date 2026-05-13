@@ -161,6 +161,8 @@ const execMultiDelete = async (apiCall: ApiCallFunction, pathToItem: Map<string,
 	const itemIdToErrors = new Map<string, ErrorLike[]>();
 	for (const [itemName, { error }] of Object.entries(itemsResponse)) {
 		const item = pathToItem.get(itemName);
+		if (!item) throw new Error(`Invalid response: Item ${itemName} was not requested for deletion.`);
+
 		if (error) {
 			const errors = itemIdToErrors.get(item.item_id) ?? [];
 			errors.push(error);
