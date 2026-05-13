@@ -33,6 +33,8 @@ const baseStyle = (colors: WhiteboardThemeColors): CSSProperties => ({
 	fontSize: 12,
 	height: 36,
 	color: colors.textColor,
+	userSelect: 'none',
+	WebkitUserSelect: 'none',
 });
 
 const captionStyle = (colors: WhiteboardThemeColors): CSSProperties => ({
@@ -78,6 +80,8 @@ const buttonBase = (colors: WhiteboardThemeColors): CSSProperties => ({
 	alignItems: 'center',
 	gap: 4,
 	whiteSpace: 'nowrap',
+	userSelect: 'none',
+	WebkitUserSelect: 'none',
 });
 
 interface ActionButtonProps {
