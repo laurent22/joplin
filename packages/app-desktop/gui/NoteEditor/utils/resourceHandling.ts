@@ -13,6 +13,7 @@ import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
 import markupRenderOptions from './markupRenderOptions';
 import { fileExtension, filename, safeFileExtension, safeFilename } from '@joplin/utils/path';
 const joplinRendererUtils = require('@joplin/renderer').utils;
+import type { NativeImage } from 'electron';
 const { clipboard } = require('electron');
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import bridge from '../../../services/bridge';
@@ -29,8 +30,13 @@ export async function handleResourceDownloadMode(noteBody: string) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function commandAttachFileToBody(body: string, filePaths: string[] = null, options: any = null) {
+interface CommandAttachFileToBodyOptions {
+	createFileURL?: boolean;
+	position?: number;
+	markupLanguage?: MarkupLanguage;
+}
+
+export async function commandAttachFileToBody(body: string, filePaths: string[] = null, options: CommandAttachFileToBodyOptions = null) {
 	options = {
 		createFileURL: false,
 		position: 0,
@@ -79,8 +85,7 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 	return body;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function resourcesStatus(resourceInfos: any) {
+export function resourcesStatus(resourceInfos: import('@joplin/renderer/types').ResourceInfos) {
 	let lowestIndex = joplinRendererUtils.resourceStatusIndex('ready');
 	for (const id in resourceInfos) {
 		const s = joplinRendererUtils.resourceStatus(Resource, resourceInfos[id]);
@@ -90,8 +95,7 @@ export function resourcesStatus(resourceInfos: any) {
 	return joplinRendererUtils.resourceStatusName(lowestIndex);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const clipboardImageToResource = async (image: any, mime: string) => {
+const clipboardImageToResource = async (image: NativeImage, mime: string) => {
 	const fileExt = mimeUtils.toFileExtension(mime);
 	const filePath = `${Setting.value('tempDir')}/${md5(Date.now())}.${fileExt}`;
 	await shim.writeImageToFile(image, mime, filePath);
@@ -103,8 +107,7 @@ const clipboardImageToResource = async (image: any, mime: string) => {
 	}
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function getResourcesFromPasteEvent(event: any) {
+export async function getResourcesFromPasteEvent(event: { preventDefault: ()=> void } | null) {
 	const output = [];
 	const formats = clipboard.availableFormats();
 	for (let i = 0; i < formats.length; i++) {

@@ -90,8 +90,7 @@ const SettingComponent: React.FC<Props> = props => {
 				<CustomSettingComponent
 					value={props.value}
 					themeId={props.themeId}
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					onChange={(event: any) => {
+					onChange={(event: { value: unknown }) => {
 						updateSettingValue(key, event.value);
 					}}
 				/>
@@ -167,8 +166,7 @@ const SettingComponent: React.FC<Props> = props => {
 	} else if (md.type === Setting.TYPE_STRING) {
 		const value = props.value as string;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const inputStyle: any = { ...textInputBaseStyle, width: '50%',
+		const inputStyle: React.CSSProperties = { ...textInputBaseStyle, width: '50%',
 			minWidth: '20em' };
 		const inputType = md.secure === true ? 'password' : 'text';
 

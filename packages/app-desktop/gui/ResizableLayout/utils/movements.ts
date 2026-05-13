@@ -16,8 +16,7 @@ enum MovementDirection {
 	Vertical = 2,
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function array_move(arr: any[], old_index: number, new_index: number) {
+function array_move<T>(arr: T[], old_index: number, new_index: number) {
 	arr = arr.slice();
 	if (new_index >= arr.length) {
 		let k = new_index - arr.length + 1;
@@ -81,8 +80,7 @@ function moveItem(direction: MovementDirection, layout: LayoutItem, key: string,
 		return !itemParents[item.key];
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const updatedLayout = produce(layout, (draft: any) => {
+	const updatedLayout = produce(layout, (draft: LayoutItem) => {
 		iterateItems(draft, (itemIndex: number, item: LayoutItem, parent: LayoutItem) => {
 			itemParents[item.key] = parent;
 
@@ -123,8 +121,7 @@ function moveItem(direction: MovementDirection, layout: LayoutItem, key: string,
 
 						// The new container takes the size of the item it
 						// replaces.
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						const newSize: any = {};
+						const newSize: { width?: number; height?: number } = {};
 						if (direction === MovementDirection.Horizontal) {
 							if ('width' in targetChild) newSize.width = targetChild.width;
 						} else {

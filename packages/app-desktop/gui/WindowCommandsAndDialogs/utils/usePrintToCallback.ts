@@ -55,7 +55,7 @@ const usePrintToCallback = (props: Props): PrintCallback => {
 					customCss: props.customCss,
 					plugins: props.plugins,
 				});
-				await shim.fsDriver().writeFile(options.path, pdfData, 'buffer');
+				await shim.fsDriver().writeFile(options.path, pdfData as unknown as string, 'buffer');
 			} catch (error) {
 				console.error(error);
 				bridge().showErrorMessageBox(error.message);
