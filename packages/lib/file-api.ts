@@ -410,10 +410,9 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.multiPut(items, options), this.requestRepeatCount());
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async multiDelete(paths: MultiPutItem[], options: any = null) {
+	public async multiDelete(paths: MultiPutItem[]) {
 		if (!this.supportsMultiDelete) throw new Error('Multi DELETE not supported');
-		return tryAndRepeat(() => this.driver_.multiDelete(paths, options), this.requestRepeatCount());
+		return tryAndRepeat(() => this.driver_.multiDelete(paths), this.requestRepeatCount());
 	}
 
 	public delete(path: string) {
