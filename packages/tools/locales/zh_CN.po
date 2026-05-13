@@ -285,7 +285,7 @@ msgstr ""
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
-msgstr ""
+msgstr "图片简介:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1993
 msgid ""
@@ -557,6 +557,8 @@ msgid ""
 "offline or cannot connect to the server.\n"
 "Error: %s"
 msgstr ""
+"发送响应时发生错误。这可能是因为应用处于离线状态或无法连接到服务器。"
+"错误：%s"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:190
 msgid "An error occurred: %s"
@@ -1258,7 +1260,6 @@ msgid "Configuration"
 msgstr "设置"
 
 #: packages/app-cli/app/command-keymap.ts:24
-#, fuzzy
 msgid "Configured keyboard shortcuts:"
 msgstr "键盘快捷键"
 
@@ -1334,7 +1335,6 @@ msgid "Convert it"
 msgstr "转换"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:18
-#, fuzzy
 msgid "Convert to Markdown"
 msgstr "将笔记转换为 Markdown"
 
@@ -1440,7 +1440,6 @@ msgid "Could not connect to plugin repository."
 msgstr "无法连接到插件库。"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:70
-#, fuzzy
 msgid "Could not convert notes to Markdown: %s"
 msgstr "无法将笔记 %s 转换为 Markdown"
 
@@ -3045,9 +3044,8 @@ msgid "Import or export your data"
 msgstr "导入或导出数据"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:20
-#, fuzzy
 msgid "Import..."
-msgstr "正在导入……"
+msgstr "导入..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
 msgid "Imported successfully!"
@@ -3345,9 +3343,8 @@ msgid "Joplin Server"
 msgstr "Joplin 服务器"
 
 #: packages/lib/SyncTargetJoplinServerSAML.ts:68
-#, fuzzy
 msgid "Joplin Server (SAML)"
-msgstr "Joplin 服务器 (SAML)"
+msgstr "Joplin服务器 (SAML)"
 
 #: packages/lib/utils/joplinCloud/index.ts:454
 msgid "Joplin Server Business"
@@ -3379,7 +3376,7 @@ msgstr "Joplin 单点登录（SSO）身份验证"
 msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
-msgstr ""
+msgstr "Joplin 支持保存笔记创建或编辑时的位置信息。是否启用该功能？您可以随时在设置中更改此项。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
@@ -3683,7 +3680,6 @@ msgid "Markdown editor"
 msgstr "Markdown 编辑器"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1519
-#, fuzzy
 msgid "Markdown editor: Highlight active line"
 msgstr "Markdown 编辑器：高亮当前行"
 
@@ -4053,7 +4049,7 @@ msgstr "没有更新可用"
 
 #: packages/lib/components/shared/SamlShared.ts:12
 msgid "No URL for SAML authentication set."
-msgstr ""
+msgstr "未设置 SAML 身份验证的 URL"
 
 #: packages/app-cli/app/command-share.ts:188
 #: packages/app-cli/app/command-share.ts:208
@@ -4392,7 +4388,7 @@ msgstr "打开同步向导……"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:635
 msgid "Open-source licences"
-msgstr ""
+msgstr "开源许可协议"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:87
 msgid "Open..."
@@ -4430,7 +4426,7 @@ msgstr "选项"
 msgid ""
 "Options that should be used whenever rendering ABC code. It must be a JSON5 "
 "object. The full list of options is available at: %s"
-msgstr ""
+msgstr "渲染 ABC 代码时使用的选项。必须为 JSON5 对象。完整选项列表请参考：%s"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:103
 msgid "Ordered list"
@@ -4916,9 +4912,8 @@ msgid "Recipients:"
 msgstr "受邀人："
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:162
-#, fuzzy
 msgid "Recognise text:"
-msgstr "强调文本"
+msgstr "识别文字"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
 msgid "Recognize handwritten image"
@@ -6208,7 +6203,6 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "笔记“%s”已成功恢复到笔记本“%s”中。"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:64
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
@@ -7206,7 +7200,7 @@ msgid ""
 "When enabled, requests that the images in the note be transcribed with a "
 "higher-quality on-server transcription service. Requires sync with a copy of "
 "the desktop app."
-msgstr ""
+msgstr "启用后，笔记中的图像将请求通过更高质量的服务端识别服务进行处理。此功能需要与桌面版应用进行同步。"
 
 #: packages/lib/models/settings/builtInMetadata.ts:577
 msgid ""
