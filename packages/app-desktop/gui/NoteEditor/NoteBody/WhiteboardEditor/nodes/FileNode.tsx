@@ -253,6 +253,18 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 			);
 		}
 
+		// Internal ref that didn't resolve to any item — the linked note or
+		// resource has been permanently deleted (locally or via sync). Show a
+		// placeholder rather than leaking the raw `:/<id>` string.
+		if (isInternal && resolved?.kind === 'unknown') {
+			return (
+				<>
+					<div style={headerStyle(colors)}>Deleted</div>
+					<div style={bodyStyle(colors)}>This note or resource no longer exists.</div>
+				</>
+			);
+		}
+
 		// Loading or external file path.
 		return (
 			<>
