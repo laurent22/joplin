@@ -36,6 +36,7 @@ export interface ExecOptions {
 	target?: ExecOptionsTarget;
 	path?: string;
 	source?: string;
+	ignoreError?: (error: Error)=> boolean;
 }
 
 export interface Session {
@@ -293,7 +294,9 @@ export default class JoplinServerApi {
 			// Don't print error info for file not found (handled by the
 			// driver), or lock-acquisition errors because it's handled by
 			// LockHandler.
-			if (![404, 'hasExclusiveLock', 'hasSyncLock'].includes(error.code)) {
+			// Errors with code explicitly set to 'methodNotSupported' are also
+			// handled by the caller.
+			if (![404, 'hasExclusiveLock', 'hasSyncLock'].includes(error.code) && !options?.ignoreError?.(error)) {
 				logger.warn(this.requestToCurl_(url, fetchOptions));
 				logger.warn('Code:', error.code);
 				logger.warn(error);

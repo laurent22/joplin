@@ -86,6 +86,9 @@ function requestCanBeRepeated(error: any) {
 	// The target is explicitly rejecting the item so repeating wouldn't make a difference.
 	if (errorCode === 'rejectedByTarget' || errorCode === 'isReadOnly') return false;
 
+	// The target doesn't support this route
+	if (errorCode === 'methodNotSupported') return false;
+
 	// We don't repeat failSafe errors because it's an indication of an issue at the
 	// server-level issue which usually cannot be fixed by repeating the request.
 	// Also we print the previous requests and responses to the log in this case,

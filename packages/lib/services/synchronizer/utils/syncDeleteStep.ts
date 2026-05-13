@@ -91,7 +91,7 @@ const batchDeleteStep = async (
 		if (!isReadOnlyError(error) && !isNotFoundError(error)) {
 			logger.warn('Failed to batch delete item(s)', items.map(item => item.id), error, 'Retrying with individual item deletion...');
 		}
-		if (error.message?.startsWith('Not allowed: DELETE')) {
+		if ('code' in error && error.code === 'methodNotSupported') {
 			supported = false;
 		}
 		needsIndividualDelete.push(...items);
