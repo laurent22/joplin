@@ -72,7 +72,7 @@ Counts captured 2026-05-11 before any work.
 | 9 | app-mobile | 37 | 131 | 98 | 33 | done (2026-05-12) |
 | 10 | server | 67 | 227 | 205 | 22 | done (2026-05-12) |
 | 11 | app-cli | 90 | 742 | 0 | 742 | not started |
-| 12 | app-desktop | 149 | 477 | 14 | 463 | in progress (2026-05-13) |
+| 12 | app-desktop | 149 | 477 | 24 | 453 | in progress (2026-05-13) |
 | 13 | lib | 213 | 1140 | 0 | 1140 | not started |
 | — | generator-joplin | 2 | 27 | — | — | excluded (template) |
 

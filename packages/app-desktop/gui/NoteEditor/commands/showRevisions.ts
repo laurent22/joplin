@@ -4,8 +4,12 @@ export const declaration: CommandDeclaration = {
 	name: 'showRevisions',
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const runtime = (comp: any): CommandRuntime => {
+interface ShowRevisionsDependencies {
+	setShowRevisions: (show: boolean)=> void;
+	isInFocusedDocument: ()=> boolean;
+}
+
+export const runtime = (comp: ShowRevisionsDependencies): CommandRuntime => {
 	return {
 		execute: async () => {
 			comp.setShowRevisions(true);

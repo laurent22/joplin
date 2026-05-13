@@ -374,3 +374,17 @@ Files processed:
 - `gui/NoteEditor/NoteBody/CodeMirror/utils/types.ts` — 1 removed, 0 left. `pluginAssets: any[]` → `RenderResultPluginAsset[]` (from `@joplin/renderer/types`).
 - `gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts` — 0 removed, 1 left. `(editorRef.current as any).alignSelection` — CodeMirror 5 runtime method not in the type. Reason updated.
 - `gui/NoteEditor/NoteBody/CodeMirror/v5/utils/useExternalPlugins.ts` — 0 removed, 1 left. `CodeMirror: any` — receives dynamically-loaded CM5 namespace used for plugin registration; @types/codemirror's signature is too narrow. Reason updated.
+- `gui/NoteEditor/commands/focusElementNoteBody.ts` — 1 removed, 0 left. `comp: any` → `WindowCommandDependencies`.
+- `gui/NoteEditor/commands/pasteAsMarkdown.ts` — 1 removed, 0 left. Same.
+- `gui/NoteEditor/commands/pasteAsText.ts` — 1 removed, 0 left. Same.
+- `gui/NoteEditor/commands/showLocalSearch.ts` — 1 removed, 0 left. Same.
+- `gui/NoteEditor/commands/showRevisions.ts` — 1 removed, 0 left. Introduced local `ShowRevisionsDependencies` (NoteEditor passes a different shape with `setShowRevisions`/`isInFocusedDocument` for this command only — not registered via `useWindowCommandHandler`).
+- `gui/NoteEditor/NoteBody/CodeMirror/v5/utils/useJoplinCommands.ts` — 0 removed, 1 left. `CodeMirror: any` — same reason as `useExternalPlugins.ts`. Reason updated.
+- `gui/NoteEditor/NoteBody/CodeMirror/v5/utils/useKeymap.ts` — 0 removed, 1 left. Same.
+- `gui/NoteEditor/NoteBody/CodeMirror/v5/utils/useScrollUtils.ts` — 0 removed, 1 left. Same.
+- `gui/NoteEditor/NoteBody/CodeMirror/v6/utils/useContentScriptRegistration.ts` — 1 removed, 0 left. `postMessageHandler(message: any)` → `unknown` (consumed by `emitContentScriptMessage` which already accepts `unknown`).
+- `gui/NoteEditor/NoteBody/PlainEditor/PlainEditor.tsx` — 1 removed, 0 left. `onChange(event: any)` → `React.ChangeEvent<HTMLTextAreaElement>`.
+- `gui/NoteEditor/NoteBody/TinyMCE/utils/joplinCommandToTinyMceCommands.ts` — 1 removed, 0 left. `value?: any` → `string` (every literal in the file uses string values).
+- `gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.ts` — 0 removed, 1 left. `onSubmit(dialogApi: any)` — TinyMCE dialog API not in published types. Reason updated.
+- `gui/NoteEditor/editorCommandDeclarations.test.ts` — 1 removed, 0 left. `Record<string, any>` → `Record<string, boolean>` (every literal in the file is a boolean).
+- `gui/NoteEditor/utils/contextMenu.ts` — 1 removed, 0 left. `saveFileData(data: any)` → `string | NodeJS.ArrayBufferView` (matches `fs.writeFile`'s accepted data types).

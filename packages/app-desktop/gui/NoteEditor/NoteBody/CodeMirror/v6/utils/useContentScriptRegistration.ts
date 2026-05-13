@@ -54,8 +54,7 @@ const useContentScriptRegistration = ({ editor, pluginStates }: Props) => {
 						const path = shim.fsDriver().resolveRelativePathWithinDir(assetPath, name);
 						return shim.fsDriver().readFile(path, 'utf8');
 					},
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					postMessageHandler: (message: any) => {
+					postMessageHandler: (message: unknown) => {
 						const plugin = PluginService.instance().pluginById(pluginId);
 						return plugin.emitContentScriptMessage(contentScript.id, message);
 					},
