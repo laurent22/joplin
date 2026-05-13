@@ -2,7 +2,7 @@ import shim from '@joplin/lib/shim';
 const os = require('os');
 import { readFile } from 'fs/promises';
 const { filename } = require('@joplin/lib/path-utils');
-import HtmlToMd from '@joplin/lib/HtmlToMd';
+import HtmlToMd, { ParseOptions } from '@joplin/lib/HtmlToMd';
 
 describe('HtmlToMd', () => {
 
@@ -22,8 +22,7 @@ describe('HtmlToMd', () => {
 
 			// if (htmlFilename.indexOf('image_preserve_size') !== 0) continue;
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const htmlToMdOptions: any = {};
+			const htmlToMdOptions: ParseOptions = {};
 
 			if (htmlFilename === 'anchor_local.html') {
 				// Normally the list of anchor names in the document are retrieved from the HTML code

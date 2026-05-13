@@ -14,8 +14,7 @@ export default (cmd: BaseCommand, stdout: Function, store: Function, gui: Functi
 		return stdout(text);
 	});
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Action shape varies per dispatched command
-	cmd.setDispatcher((action: any) => {
+	cmd.setDispatcher(action => {
 		if (store()) {
 			return store().dispatch(action);
 		} else {
