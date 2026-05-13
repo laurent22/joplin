@@ -413,7 +413,7 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.multiPut(items, options), this.requestRepeatCount());
 	}
 
-	public async multiDelete(paths: MultiPutItem[]) {
+	public async multiDelete(paths: string[]) {
 		if (!this.supportsMultiDelete) throw new Error('Multi DELETE not supported');
 		return tryAndRepeat(() => this.driver_.multiDelete(paths), this.requestRepeatCount());
 	}
