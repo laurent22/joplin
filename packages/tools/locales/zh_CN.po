@@ -557,7 +557,8 @@ msgid ""
 "offline or cannot connect to the server.\n"
 "Error: %s"
 msgstr ""
-"发送响应时发生错误。这可能是因为应用处于离线状态或无法连接到服务器。"
+msgstr ""
+"发送响应时发生错误。这可能是因为应用处于离线状态或无法连接到服务器。\n"
 "错误：%s"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:190
