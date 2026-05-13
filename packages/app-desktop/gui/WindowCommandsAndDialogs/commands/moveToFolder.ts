@@ -7,6 +7,7 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import Logger from '@joplin/utils/Logger';
 import shim from '@joplin/lib/shim';
 import showFolderPicker from '../utils/showFolderPicker';
+import { WindowControl } from '../utils/useWindowControl';
 
 const logger = Logger.create('commands/moveToFolder');
 
@@ -15,8 +16,7 @@ export const declaration: CommandDeclaration = {
 	label: () => _('Move to notebook'),
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const runtime = (comp: any): CommandRuntime => {
+export const runtime = (comp: WindowControl): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext, itemIds: string[] = null) => {
 			itemIds = itemIds || context.state.selectedNoteIds;

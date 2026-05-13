@@ -219,7 +219,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		const pluginIds = Object.keys(plugins);
 		const itemsToRemove: string[] = [];
 		iterateItems(newLayout, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
-			if (item.context && item.context.pluginId && !pluginIds.includes(item.context.pluginId)) {
+			if (item.context && item.context.pluginId && !pluginIds.includes(item.context.pluginId as string)) {
 				itemsToRemove.push(item.key);
 			}
 			return true;

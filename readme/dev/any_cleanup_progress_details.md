@@ -388,3 +388,18 @@ Files processed:
 - `gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.ts` — 0 removed, 1 left. `onSubmit(dialogApi: any)` — TinyMCE dialog API not in published types. Reason updated.
 - `gui/NoteEditor/editorCommandDeclarations.test.ts` — 1 removed, 0 left. `Record<string, any>` → `Record<string, boolean>` (every literal in the file is a boolean).
 - `gui/NoteEditor/utils/contextMenu.ts` — 1 removed, 0 left. `saveFileData(data: any)` → `string | NodeJS.ArrayBufferView` (matches `fs.writeFile`'s accepted data types).
+- `gui/WindowCommandsAndDialogs/commands/addProfile.ts` — 1 removed, 0 left. `comp: any` → `WindowControl`; `onClose(answer: string)` → `unknown` with `as string` (matches `PromptOptions.onClose` shape).
+- `gui/WindowCommandsAndDialogs/commands/moveToFolder.ts` — 1 removed, 0 left. Same — `WindowControl`.
+- `gui/WindowCommandsAndDialogs/commands/renameFolder.ts` — 1 removed, 0 left. Same; onClose answer narrowed via cast.
+- `gui/WindowCommandsAndDialogs/commands/renameTag.ts` — 1 removed, 0 left. Same.
+- `gui/OneDriveLoginScreen.tsx` — 0 removed, 1 left. `React.Component<any, any>` — old class component without state/props refactor. Reason updated.
+- `gui/ResizableLayout/ResizableLayout.tsx` — 1 removed, 0 left. `newSize: any` → `{ width?: number; height?: number }`.
+- `gui/ResizableLayout/utils/layoutItemProp.ts` — 1 removed, 0 left. `(item as any)[propName]` → `propName: keyof LayoutItem`; `item[propName]` is typed; caller (MainScreen.tsx) needs `as string` for previously-loose `item.context.pluginId`.
+- `gui/ResizableLayout/utils/persist.test.ts` — 1 removed, 0 left. `layout: any` → `LayoutItem` (the type was already imported).
+- `gui/ResizableLayout/utils/style.ts` — 0 removed, 1 left. styled-components `.attrs` typing collides with the dynamic style attrs (`props.size`). Reason updated; `(props: any)` callback now typed inline.
+- `gui/ResizableLayout/utils/types.ts` — 1 removed, 0 left. `context?: any` → `Record<string, unknown>`.
+- `gui/ResizableLayout/utils/useWindowResizeEvent.ts` — 1 removed, 0 left. `eventEmitter: any` → `{ current: { emit: (name: string) => void } }`.
+- `gui/Root.tsx` — 0 removed, 1 left. `React.Component<Props, any>` — implicit state shape; tightening requires structural refactor. Reason updated.
+- `gui/Sidebar/styles/index.ts` — 1 removed, 0 left. `type StyleProps = any` → local interface with theme + item discriminators.
+- `gui/StatusScreen/StatusScreen.tsx` — 0 removed, 1 left. `style: any` is spread into `theme.containerStyle` (loosely typed). Reason updated.
+- `gui/SyncWizard/Dialog.tsx` — 1 removed, 0 left. `boxes: any[]` → `React.ReactNode[]`.
