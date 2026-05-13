@@ -4913,7 +4913,7 @@ msgstr "受邀人："
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:162
 msgid "Recognise text:"
-msgstr "识别文字"
+msgstr "识别文字："
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:142
 msgid "Recognize handwritten image"
