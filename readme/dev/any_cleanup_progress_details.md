@@ -403,3 +403,14 @@ Files processed:
 - `gui/Sidebar/styles/index.ts` — 1 removed, 0 left. `type StyleProps = any` → local interface with theme + item discriminators.
 - `gui/StatusScreen/StatusScreen.tsx` — 0 removed, 1 left. `style: any` is spread into `theme.containerStyle` (loosely typed). Reason updated.
 - `gui/SyncWizard/Dialog.tsx` — 1 removed, 0 left. `boxes: any[]` → `React.ReactNode[]`.
+- `gui/NoteEditor/utils/useDropHandler.ts` — 1 removed, 0 left. `editorRef: any` → `RefObject<NoteBodyEditorRef>`. Tightening exposed two `execCommand()` floating-Promise calls; fixed with `void` (same `void` pattern as showLocalSearch).
+- `gui/NoteEditor/utils/useMessageHandler.ts` — 1 removed, 0 left. `editorRef: any` → `RefObject<NoteBodyEditorRef>`.
+- `gui/NoteEditor/utils/useNoteSearchBar.ts` — 1 removed, 0 left. `noteSearchBarRef: MutableRefObject<any>` → `MutableRefObject<HTMLInputElement | null>`.
+- `gui/NoteEditor/utils/usePluginServiceRegistration.ts` — 1 removed, 0 left. `ref: any` → `Ref<unknown>` (must use `Ref`, not `RefObject`, to accept `ForwardedRef` callers).
+- `gui/NoteEditor/utils/useSearchMarkers.ts` — 1 removed, 0 left. `keywords: any[]` → `{ value: string; type?: string; accuracy?: string }[]` (matches both `Keyword`-consuming code and the literal from `useNoteSearchBar`).
+- `gui/NoteList/utils/useOnNoteClick.ts` — 1 removed, 0 left. `(event.target as any)` → `HTMLElement`.
+- `gui/NoteList/utils/useScroll.ts` — 1 removed, 0 left. `event: any` → `React.UIEvent<HTMLDivElement>`; switched `event.target` to `event.currentTarget` (target is `EventTarget` without scrollTop).
+- `gui/NoteListControls/commands/focusSearch.ts` — 1 removed, 0 left. `searchBarRef: any` → `{ current: { select: ()=> void } | null }`.
+- `gui/NoteListHeader/useDragAndDrop.test.ts` — 1 removed, 0 left. `as any` → `as InsertAt` (now exported from `useDragAndDrop`).
+- `gui/NoteListHeader/utils/validateColumns.test.ts` — 1 removed, 0 left. `(props: any)` → `Partial<NoteListColumn>[]`.
+- `gui/WindowCommandsAndDialogs/commands/showNoteContentProperties.ts` — 1 removed, 0 left. `comp: any` → `WindowControl`.

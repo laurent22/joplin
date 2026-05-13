@@ -8,8 +8,7 @@ interface SearchMarkersOptions {
 }
 
 export interface SearchMarkers {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	keywords: any[];
+	keywords: { value: string; type?: string; accuracy?: string }[];
 	options: SearchMarkersOptions;
 }
 

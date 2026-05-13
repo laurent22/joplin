@@ -9,7 +9,7 @@ interface DraggedHeader {
 	name: string;
 }
 
-interface InsertAt {
+export interface InsertAt {
 	columnName: NoteListColumn['name'];
 	location: 'before' | 'after';
 	x: number;
