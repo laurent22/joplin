@@ -6,8 +6,7 @@ import { _ } from '@joplin/lib/locale';
 import StyledInput from '../../style/StyledInput';
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	inputRef?: any;
+	inputRef?: React.Ref<HTMLInputElement>;
 	value: string;
 	onChange(event: OnChangeEvent): void;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -34,8 +33,7 @@ export default function(props: Props) {
 	const iconName = !props.searchStarted ? CommandService.instance().iconName('search') : 'fa fa-times';
 	const iconLabel = !props.searchStarted ? _('Search') : _('Clear search');
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onChange = useCallback((event: any) => {
+	const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		props.onChange({ value: event.currentTarget.value });
 	}, [props.onChange]);
 

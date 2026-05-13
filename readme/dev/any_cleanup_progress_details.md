@@ -414,3 +414,52 @@ Files processed:
 - `gui/NoteListHeader/useDragAndDrop.test.ts` — 1 removed, 0 left. `as any` → `as InsertAt` (now exported from `useDragAndDrop`).
 - `gui/NoteListHeader/utils/validateColumns.test.ts` — 1 removed, 0 left. `(props: any)` → `Partial<NoteListColumn>[]`.
 - `gui/WindowCommandsAndDialogs/commands/showNoteContentProperties.ts` — 1 removed, 0 left. `comp: any` → `WindowControl`.
+
+Checkpoint 5 (2026-05-13):
+- `gui/WindowCommandsAndDialogs/commands/showNoteProperties.ts` — 1 removed, 0 left. `comp: any` → `WindowControl`.
+- `gui/WindowCommandsAndDialogs/commands/showShareFolderDialog.ts` — 1 removed, 0 left. Same.
+- `gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts` — 1 removed, 0 left. Same.
+- `gui/WindowCommandsAndDialogs/commands/showSpellCheckerMenu.ts` — 0 removed, 1 left. `Menu.buildFromTemplate(menuItems as any)` — `spellCheckerConfigMenuItems` returns a heterogeneous menu shape that doesn't satisfy Electron's `MenuItemConstructorOptions` structurally. Reason updated.
+- `gui/WindowCommandsAndDialogs/commands/toggleNotesSortOrderField.ts` — 1 removed, 0 left. `field?: string | any[]` → `string | [string, boolean]`.
+- `gui/WindowCommandsAndDialogs/utils/useWindowControl.ts` — 1 removed, 0 left. `onClose(answer: any)` → `unknown` with `as PromptSuggestion<T>` cast inside.
+- `gui/dialogs.ts` — 1 removed, 0 left. `options: any = null` → `Record<string, unknown>`.
+- `gui/hooks/usePrevious.ts` — 1 removed, 0 left. Dangling disable comment (no `any` in the body) — removed.
+- `gui/style/StyledInput.tsx` — 1 removed, 0 left. `type StyleProps = any` → local interface with theme fields.
+- `gui/utils/convertToScreenCoordinates.ts` — 1 removed, 0 left. `o: any` → `unknown` with internal `Record<string, unknown>` narrowing after `JSON.parse(JSON.stringify(o))`.
+- `integration-tests/util/setMessageBoxResponse.ts` — 0 removed, 1 left. Mock return cast prevents breakage when Electron's `MessageBoxReturnValue` shape evolves. Reason updated; redundant block comment removed.
+- `tools/notarizeMacApp.ts` — 0 removed, 1 left. `appBundleId` is no longer in `@electron/notarize`'s `NotaryToolStartOptions` but still required at runtime. Reason updated.
+- `utils/checkForUpdatesUtilsTestData.ts` — 3 removed, 0 left. `releases1/2/3: any` → `unknown as GitHubRelease[]` cast at the end of each array literal (fixtures include extra GitHub API fields not in `GitHubRelease`).
+- `utils/checkForUpdatesUtils.test.ts` — 1 removed, 0 left. `testCases: [any, …][]` → `[GitHubRelease[], …][]`.
+- `gui/Navigator.tsx` — 0 removed, 1 left. `ScreenProps = any`: heterogeneous per-screen prop shapes; the navigator just spreads them. Reason updated.
+- `gui/NewWindowOrIFrame.tsx` — 1 removed, 0 left. `createPortal(...) as any` cast wasn't needed; `ReactPortal` already assignable to `ReactNode`.
+- `gui/DropboxLoginScreen.tsx` — 0 removed, 2 left. Reasons updated (old class component + JS module without exported type).
+- `gui/Sidebar/Sidebar.tsx` — 0 removed, 2 left. `syncReport: any` matches the lib reducer shape; the inner `syncCompletedWithoutError` already had a descriptive reason. Both reasons now explain why they can't be tightened locally.
+- `gui/Button/Button.tsx` — 2 removed, 0 left. `type StyleProps = any` → local theme interface; `ref: any` → `React.Ref<HTMLButtonElement>`.
+- `gui/ExtensionBadge.tsx` — 2 removed, 0 left. `style?: any` → `React.CSSProperties`; `themeSelector(_state: any, props: any)` → typed by `Props`.
+- `gui/ImportScreen.tsx` — 2 removed, 0 left. Local `ProgressState` interface; `onError(error: any)` → `Error`.
+- `gui/MultiNoteActions.tsx` — 2 removed, 0 left. `notes: any[]` → `NoteEntity[]`; `multiNotesButton_click(item: any)` → `MenuItem` (electron).
+- `gui/NoteRevisionViewer.tsx` — 2 removed, 0 left. Dangling disable on `revisionList_onChange` removed; `webview_ipcMessage(event: any)` → `{ channel?: string; args?: unknown[] }`.
+- `gui/ResizableLayout/utils/setLayoutItemProps.ts` — 2 removed, 0 left. `props: any` → `Partial<LayoutItem>`; `(item as any)[n]` → `(item as unknown as Record<string, unknown>)[n]`.
+- `gui/ResizableLayout/utils/useLayoutItemSizes.ts` — 2 removed, 0 left. `noWidth/HeightChildren: any[]` → `{ item: LayoutItem; parent: LayoutItem }[]`.
+- `gui/ToggleEditorsButton/styles/index.ts` — 2 removed, 0 left. `innerButton/output: any` → `CSSProperties` / `Record<string, CSSProperties>`.
+- `gui/WindowCommandsAndDialogs/commands/gotoAnything.ts` — 2 removed, 0 left. Local `PluginMenuItem` interface for `PluginManager.menuItems().find(...)`.
+- `gui/WindowCommandsAndDialogs/commands/importFrom.ts` — 2 removed, 0 left. `errors: any[]` → `(string|Error)[]`; `onProgress(status: any)` → `Record<string, unknown>`.
+- `gui/hooks/useEffectDebugger.ts` — 2 removed, 0 left. `effectHook/dependencies/dependencyNames` typed as `EffectCallback`/`unknown[]`/`string[]`; reduce accum typed.
+- `gui/hooks/useImperativeHandlerDebugger.ts` — 2 removed, 0 left. Made generic over T; `ref: Ref<T>`, `effectHook: ()=> T`, deps typed.
+- `gui/hooks/usePropsDebugger.ts` — 2 removed, 0 left. `props: any` → `Record<string, unknown>`; `dependencies: any[]` → `unknown[]`.
+- `gui/lib/SearchInput/SearchInput.tsx` — 2 removed, 0 left. `inputRef?: any` → `React.Ref<HTMLInputElement>`; `onChange(event: any)` → `React.ChangeEvent<HTMLInputElement>`.
+- `gui/utils/loadScript.ts` — 2 removed, 0 left. `attrs?: Record<string, any>` → `Record<string, string>`; `element: any` → typed `HTMLLinkElement | HTMLScriptElement | null` with branch-specific locals.
+- `services/plugins/PlatformImplementation.ts` — 2 removed, 0 left. `Components` index → `unknown`; `registerComponent(_, component: any)` → `unknown`.
+- `services/plugins/UserWebview.tsx` — 2 removed, 0 left. `theme?: any` → `Record<string, unknown>`; `ref: any` → `React.Ref<UserWebviewRef>` (new exported interface).
+- `gui/NoteEditor/NoteBody/CodeMirror/utils/useEditorSearchHandler.ts` — 2 removed, 0 left. `searchMarkers: any` → `SearchMarkers`; `webviewRef: RefObject<any>` → `RefObject<NoteViewerControl>`.
+- `gui/NoteEditor/NoteBody/CodeMirror/utils/useWebviewIpcMessage.ts` — 2 removed, 0 left. Local `WebviewIpcEvent { channel?; args? }` used for both `onMessage` parameter and the returned callback; `arg0` cast `as number` at the `percentScroll` call.
+- `gui/NoteEditor/NoteBody/CodeMirror/v5/utils/useLineSorting.ts` — 0 removed, 2 left. Same dynamic CM5 loader / runtime instance reason as the other v5 utils. Reasons updated.
+- `gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts` — 0 removed, 2 left. TinyMCE editor + ToggleButton api types not in published types. Reasons updated.
+- `gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.ts` — 1 removed, 1 left. `scheduleOnScroll(event: any)` → `{ percent: number }`; `editor: any` stays (TinyMCE Editor type narrower than getDoc/getWin usage). Reason updated.
+- `gui/NoteEditor/utils/useFormNote.ts` — 2 removed, 0 left. `editorRef: any` → `RefObject<NoteBodyEditorRef>` (exposed a floating Promise in `handleAutoFocus`; fixed with `void`); `onResourceChange(event: any)` → `{ id: string }`.
+- `gui/NoteEditor/utils/useWindowCommandHandler.ts` — 2 removed, 0 left. `noteSearchBarRef: any` → `MutableRefObject<HTMLInputElement | null>`; `execute(..., ...args: any[])` → `unknown[]`.
+- `gui/NoteList/utils/types.ts` — 2 removed, 1 left. `themeId: any` → `number`; `resizableLayoutEventEmitter: any` → `EventEmitter`; `searches: any[]` left with descriptive reason (matches lib reducer shape).
+- `gui/NoteListWrapper/NoteListWrapper.tsx` — 1 removed, 0 left. `resizableLayoutEventEmitter: any` → `EventEmitter`; `depNameToNoteProp(event.name as any)` → `as ListRendererDependency`.
+- `gui/Sidebar/hooks/useOnRenderItem.tsx` — 2 removed, 0 left. `(folder as any).note_count` → `(folder as FolderEntity & { note_count?: number }).note_count` (dynamic SQL-only field).
+
+Verification at checkpoint: package `yarn tsc --noEmit` clean; lint clean on changed files; spellcheck clean. 431 → 368 disable comments (63 removed; cumulative 109/477).

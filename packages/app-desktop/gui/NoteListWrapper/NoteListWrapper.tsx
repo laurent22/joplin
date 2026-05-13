@@ -1,6 +1,7 @@
 import { themeStyle } from '@joplin/lib/theme';
 import * as React from 'react';
 import { useMemo, useState, useEffect, useCallback, useContext } from 'react';
+import { EventEmitter } from 'events';
 import NoteList2 from '../NoteList/NoteList2';
 import NoteListControls from '../NoteListControls/NoteListControls';
 import { Size } from '../ResizableLayout/utils/types';
@@ -13,7 +14,7 @@ import { BaseBreakpoint, Breakpoints } from '../NoteList/utils/types';
 import { ButtonSize, buttonSizePx } from '../Button/Button';
 import Setting from '@joplin/lib/models/Setting';
 import { OnItemClickHander } from '../NoteListHeader/types';
-import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
+import { ListRendererDependency, NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import depNameToNoteProp from '@joplin/lib/services/noteList/depNameToNoteProp';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
 import usePrevious from '../hooks/usePrevious';
@@ -22,8 +23,7 @@ import { WindowIdContext } from '../NewWindowOrIFrame';
 const logger = Logger.create('NoteListWrapper');
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	resizableLayoutEventEmitter: any;
+	resizableLayoutEventEmitter: EventEmitter;
 	size: Size;
 	visible: boolean;
 	themeId: number;
@@ -135,8 +135,7 @@ export default function NoteListWrapper(props: Props) {
 	}, [props.size, noteListControlsHeight, theme.noteListHeaderHeight, isMultiColumns]);
 
 	const onHeaderItemClick: OnItemClickHander = useCallback(event => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const field = depNameToNoteProp(event.name as any).split('.')[1];
+		const field = depNameToNoteProp(event.name as ListRendererDependency).split('.')[1];
 
 		if (!Setting.isAllowedEnumOption('notes.sortOrder.field', field)) {
 			logger.warn(`Unsupported sorting option: ${field}`);

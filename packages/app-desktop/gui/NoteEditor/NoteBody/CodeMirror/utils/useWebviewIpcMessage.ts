@@ -2,9 +2,13 @@ import type CodeMirror5Emulation from '@joplin/editor/CodeMirror/CodeMirror5Emul
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 import { useCallback, RefObject } from 'react';
 
+interface WebviewIpcEvent {
+	channel?: string;
+	args?: unknown[];
+}
+
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	onMessage(event: any): void;
+	onMessage(event: WebviewIpcEvent): void;
 	getLineScrollPercent(): number;
 	setEditorPercentScroll(fraction: number): void;
 	editorRef: RefObject<CodeMirror5Emulation>;
@@ -14,8 +18,7 @@ interface Props {
 const useWebviewIpcMessage = (props: Props) => {
 	const editorRef = props.editorRef;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return useCallback((event: any) => {
+	return useCallback((event: WebviewIpcEvent) => {
 		const msg = event.channel ? event.channel : '';
 		const args = event.args;
 		const arg0 = args && args.length >= 1 ? args[0] : null;
@@ -31,8 +34,7 @@ const useWebviewIpcMessage = (props: Props) => {
 				props.setEditorPercentScroll(percent);
 			}
 		} else if (msg === 'percentScroll') {
-			const percent = arg0;
-			props.setEditorPercentScroll(percent);
+			props.setEditorPercentScroll(arg0 as number);
 		} else {
 			props.onMessage(event);
 		}

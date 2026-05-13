@@ -1,8 +1,8 @@
 // Duplicates AceEditors line sorting function
 // https://discourse.joplinapp.org/t/sort-lines/8874/2
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 export default function useLineSorting(CodeMirror: any) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CM5 editor instance used inside a registered command; signature must match the lib's runtime call
 	CodeMirror.commands.sortSelectedLines = function(cm: any) {
 		const ranges = cm.listSelections();
 		// Batches the insert operations, if this wasn't done the inserts

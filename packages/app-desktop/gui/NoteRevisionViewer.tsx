@@ -134,7 +134,6 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		if (onBack) onBack();
 	}, [onBack]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const revisionList_onChange: React.ChangeEventHandler<HTMLSelectElement> = useCallback((event) => {
 		const value = event.target.value;
 
@@ -145,8 +144,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		}
 	}, [onBack]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const webview_ipcMessage = useCallback(async (event: any) => {
+	const webview_ipcMessage = useCallback(async (event: { channel?: string; args?: unknown[] }) => {
 		// For the revision view, we only support a minimal subset of the IPC messages.
 		// For example, we don't need interactive checkboxes or sync between viewer and editor view.
 		// We try to get most links work though, except for internal (joplin://) links.
