@@ -74,6 +74,7 @@ export default async (
 const systemPath = (deletedItem: DeletedItemEntity) => BaseItem.systemPath(deletedItem.item_id);
 const isReadOnlyError = (error: Error) => 'code' in error && error.code === 'isReadOnly';
 const isNotFoundError = (error: Error) => 'httpCode' in error && error.httpCode === 404;
+const isNotSupportedError = (error: Error) => 'code' in error && error.code === 'methodNotSupported';
 
 const batchDeleteStep = async (
 	toDelete: DeletedItemEntity[],
@@ -88,10 +89,11 @@ const batchDeleteStep = async (
 	};
 	const needsIndividualDelete: DeletedItemEntity[] = [];
 	const handleError = (error: Error, items: DeletedItemEntity[]) => {
-		if (!isReadOnlyError(error) && !isNotFoundError(error)) {
-			logger.warn('Failed to batch delete item(s)', items.map(item => item.id), error, 'Retrying with individual item deletion...');
+		if (!isReadOnlyError(error) && !isNotFoundError(error) && !isNotSupportedError(error)) {
+			logger.warn('Failed to batch delete item(s)', items.map(item => item.item_id), error, 'Retrying with individual item deletion...');
 		}
-		if ('code' in error && error.code === 'methodNotSupported') {
+		if (isNotSupportedError(error)) {
+			logger.info('Batch deletion not supported');
 			supported = false;
 		}
 		needsIndividualDelete.push(...items);
