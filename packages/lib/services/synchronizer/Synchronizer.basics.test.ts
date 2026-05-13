@@ -9,6 +9,7 @@ import { NoteEntity } from '../database/types';
 import { fetchSyncInfo, setAppMinVersion, uploadSyncInfo } from './syncInfoUtils';
 import { ErrorCode } from '../../errors';
 import Resource from '../../models/Resource';
+import { exists } from 'fs-extra';
 
 describe('Synchronizer.basics', () => {
 
@@ -140,6 +141,14 @@ describe('Synchronizer.basics', () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const { resource } = await createNoteAndResource({ parentId: folder1.id });
 
+		const expectResourceExists = async (expected: boolean) => {
+			expect(!!await Resource.load(resource.id)).toBe(expected);
+			const resourcePath = Resource.fullPath(resource);
+			expect(await exists(resourcePath)).toBe(expected);
+		};
+
+		await expectResourceExists(true);
+
 		await synchronizerStart();
 		await switchClient(2);
 		await synchronizerStart();
@@ -149,11 +158,12 @@ describe('Synchronizer.basics', () => {
 		await Resource.delete(resource.id);
 
 		await synchronizerStart();
-		expect(await Resource.load(resource.id)).toBe(undefined);
+		await expectResourceExists(false);
 
 		await switchClient(1);
+
 		await synchronizerStart();
-		expect(await Resource.load(resource.id)).toBe(undefined);
+		await expectResourceExists(false);
 	}));
 
 	it('should not created deleted_items entries for items deleted via sync', (async () => {
