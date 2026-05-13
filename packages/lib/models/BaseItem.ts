@@ -393,8 +393,13 @@ export default class BaseItem extends BaseModel {
 		};
 	}
 
-	public static remoteDeletedItems(syncTarget: number, itemIds: string[]) {
-		return this.db().exec(`DELETE FROM deleted_items WHERE item_id IN (${this.escapeIdsForSql(itemIds)}) AND sync_target = ?`, [syncTarget]);
+	public static async remoteDeletedItems(syncTarget: number, itemIds: string[]) {
+		if (itemIds.length === 0) return;
+
+		await this.db().exec(
+			`DELETE FROM deleted_items WHERE item_id IN (${this.escapeIdsForSql(itemIds)}) AND sync_target = ?`,
+			[syncTarget],
+		);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
