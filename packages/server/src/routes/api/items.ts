@@ -76,6 +76,10 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 	return output;
 }
 
+interface DelItemsResponse {
+	[itemName: string]: { error?: unknown };
+}
+
 export async function delItems(path: SubPath, ctx: AppContext, isBatch: boolean) {
 	const checkCanDelete = async (item: Item) => {
 		await ctx.joplin.models.item().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, item);
@@ -83,7 +87,7 @@ export async function delItems(path: SubPath, ctx: AppContext, isBatch: boolean)
 
 	const toDelete: Item[] = [];
 
-	const batchResponse = Object.create(null);
+	const batchResponse: DelItemsResponse = Object.create(null);
 	if (isBatch) {
 		const parsedBody = await formParse(ctx.req);
 		const bodyFields = parsedBody.fields;
@@ -109,7 +113,9 @@ export async function delItems(path: SubPath, ctx: AppContext, isBatch: boolean)
 				toDelete.push(item);
 				batchResponse[item.name] = {};
 			} catch (error) {
-				batchResponse[item.name] = { error };
+				batchResponse[item.name] = {
+					error: errorToPlainObject(error),
+				};
 			}
 		}
 
@@ -117,7 +123,9 @@ export async function delItems(path: SubPath, ctx: AppContext, isBatch: boolean)
 			const wasLoaded: boolean = hasOwnProperty(batchResponse, item);
 			if (!wasLoaded) {
 				batchResponse[item] = {
-					error: new ErrorNotFound(`Not found: ${item}`),
+					error: errorToPlainObject(
+						new ErrorNotFound(`Not found: ${item}`),
+					),
 				};
 			}
 		}
