@@ -19,7 +19,7 @@ router.put('api/batch_items', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.del('api/batch_items', async (path: SubPath, ctx: AppContext) => {
-	const output: PaginatedResults<{ error: Error }> = {
+	const output = {
 		items: await delItems(path, ctx, true),
 		has_more: false,
 	};
