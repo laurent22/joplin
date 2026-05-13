@@ -113,37 +113,23 @@ const batchDeleteStep = async (
 			continue;
 		}
 
-		const paths = [];
 		const pathToItem = new Map<string, DeletedItemEntity>();
 		for (const item of batch) {
 			const itemPath = systemPath(item);
-			paths.push(itemPath);
 			pathToItem.set(itemPath, item);
 
 			if (item.item_type === ModelType.Resource) {
 				const resourcePath = resourceRemotePath(item.item_id);
-				paths.push(resourcePath);
 				pathToItem.set(resourcePath, item);
 			}
 		}
 
 		try {
-			const response = await apiCall('multiDelete', paths);
-			const itemsResponse = response.items as Record<string, { error?: BatchError }>;
-
-			const itemIdToErrors = new Map<number, ErrorLike[]>();
-			for (const [itemName, { error }] of Object.entries(itemsResponse)) {
-				const item = pathToItem.get(itemName);
-				if (error) {
-					const errors = itemIdToErrors.get(item.id) ?? [];
-					errors.push(error);
-					itemIdToErrors.set(item.id, errors);
-				}
-			}
+			const { itemIdToErrors } = await execMultiDelete(apiCall, pathToItem);
 
 			const successfulItems = [];
 			for (const item of batch) {
-				const errors = itemIdToErrors.get(item.id) ?? [];
+				const errors = itemIdToErrors.get(item.item_id) ?? [];
 
 				// "Not found" errors often indicate that the item is already deleted. They can be ignored:
 				const successful = errors.every(error => isNotFoundError(error));
@@ -165,4 +151,22 @@ const batchDeleteStep = async (
 	}
 
 	return toRetryIndividually;
+};
+
+const execMultiDelete = async (apiCall: ApiCallFunction, pathToItem: Map<string, DeletedItemEntity>) => {
+	const paths = [...pathToItem.keys()];
+	const response = await apiCall('multiDelete', paths);
+	const itemsResponse = response.items as Record<string, { error?: BatchError }>;
+
+	const itemIdToErrors = new Map<string, ErrorLike[]>();
+	for (const [itemName, { error }] of Object.entries(itemsResponse)) {
+		const item = pathToItem.get(itemName);
+		if (error) {
+			const errors = itemIdToErrors.get(item.item_id) ?? [];
+			errors.push(error);
+			itemIdToErrors.set(item.item_id, errors);
+		}
+	}
+
+	return { itemIdToErrors };
 };
