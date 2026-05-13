@@ -351,3 +351,26 @@ Summary: 227 → 22 disable comments (205 removed). Zero remaining `Old code bef
 - **Loose lib-typed defaults** (1): `config.ts` `initConfig(overrides: any)` — `Partial<Config>` requires `resourceDir`.
 - **Heterogeneous test fixtures / API call results** (3): `testRouters.curl` and `response` in `main` (parsed JSON responses); `array.ts` `unique` (TS can't unify `T` across `string[] | number[]`).
 - **TypeScript pattern limitations** (6): `testUtils.AppContextTestOptions.request`; the 4 in `requestUtils.ts` (`BodyFields`, `FormParseResult.files`, `FormParseRequest.body`, `convertFieldsToKeyValue` — all centered on formidable's `Fields | Files` union not allowing narrowing).
+## packages/app-desktop
+Session date: 2026-05-13
+Branch: any_refactor_6
+
+Files processed:
+- `commands/exportFolders.ts` — 1 removed, 0 left. `_context: any` → `CommandContext`.
+- `commands/exportNotes.ts` — 1 removed, 0 left. `_context: any` → `CommandContext`.
+- `commands/focusElement.ts` — 1 removed, 0 left. `_context: any` → `CommandContext`.
+- `commands/toggleExternalEditing.ts` — 1 removed, 0 left. `mapStateToTitle(state: any)` → `AppState`.
+- `checkForUpdates.ts` — 0 removed, 1 left. `parentWindow: any` is passed to `bridge().showMessageBox(parentWindow, ...)` but the bridge signature is `showMessageBox(message: string, ...)` — tightening would expose a pre-existing call-site mismatch (logic change). Reason updated.
+- `gui/ConfigScreen/ButtonBar.tsx` — 1 removed, 0 left. `type StyleProps = any` → local interface with theme fields used in template literals.
+- `gui/ConfigScreen/controls/plugins/PluginBox.tsx` — 1 removed, 0 left. `styled.div<{ mb: any }>` → `string | number`.
+- `gui/ConfigScreen/controls/plugins/SearchPlugins.tsx` — 1 removed, 0 left. `onPluginSettingsChange(event: any)` → `OnPluginSettingChangeEvent` (already used by callers).
+- `gui/DialogButtonRow.tsx` — 1 removed, 0 left. `okButtonRef?: any` → `React.Ref<HTMLButtonElement>`.
+- `gui/DialogButtonRow/useKeyboardHandler.ts` — 1 removed, 0 left. `isInSubModal(targetElement: any)` → `EventTarget | null`.
+- `gui/Dropdown/Dropdown.tsx` — 1 removed, 0 left. `onChange(event: any)` → `React.ChangeEvent<HTMLSelectElement>`.
+- `gui/EditFolderDialog/Dialog.tsx` — 1 removed, 0 left. `onFolderTitleChange(event: any)` → `React.ChangeEvent<HTMLInputElement>`.
+- `gui/EditFolderDialog/IconSelector.tsx` — 0 removed, 1 left. `(window as any).EmojiButton` — emoji-button library is dynamically loaded onto window with no published types. Reason updated.
+- `gui/ErrorBoundary.tsx` — 1 removed, 0 left. `componentDidCatch(error: any)` → `Error | string` (matches the `typeof === 'string'` narrowing already in the body); needs `as Error` after the narrowing branch.
+- `gui/NoteEditor/NoteBody/CodeMirror/utils/index.ts` — 1 removed, 0 left. `cursorPos: any` → `{ line: number; ch: number }` (CodeMirror 5 position shape used inside the function).
+- `gui/NoteEditor/NoteBody/CodeMirror/utils/types.ts` — 1 removed, 0 left. `pluginAssets: any[]` → `RenderResultPluginAsset[]` (from `@joplin/renderer/types`).
+- `gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts` — 0 removed, 1 left. `(editorRef.current as any).alignSelection` — CodeMirror 5 runtime method not in the type. Reason updated.
+- `gui/NoteEditor/NoteBody/CodeMirror/v5/utils/useExternalPlugins.ts` — 0 removed, 1 left. `CodeMirror: any` — receives dynamically-loaded CM5 namespace used for plugin registration; @types/codemirror's signature is too narrow. Reason updated.

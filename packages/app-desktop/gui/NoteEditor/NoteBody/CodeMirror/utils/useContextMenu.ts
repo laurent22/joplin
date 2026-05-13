@@ -330,7 +330,7 @@ const useContextMenu = (props: ContextMenuProps) => {
 			// So in this situation, we use must manually align the internal codemirror selection
 			// to the contextmenu selection
 			if (editorRef.current && !editorRef.current.cm6 && spellCheckerMenuItems.length > 0) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 editor's runtime alignSelection method is not in the type
 				(editorRef.current as any).alignSelection(params);
 			}
 
