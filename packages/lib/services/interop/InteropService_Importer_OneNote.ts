@@ -380,56 +380,62 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		if (!pendingConversions.length) return;
 
 		const { spawn } = shim.requireDynamic('child_process') as typeof import('child_process');
+		const pagesJsonPath = join(dirname(pendingConversions[0].outputPath), `${uuidgen(10)}.xps-pages.json`);
+		await shim.fsDriver().writeFile(pagesJsonPath, JSON.stringify(pendingConversions.map(conversion => ({
+			PageNumber: conversion.pageNumber,
+			OutputPath: conversion.outputPath,
+		}))), 'utf-8');
 
-		await new Promise<void>((resolve, reject) => {
-			const processEnv = {
-				...process.env,
-				JOPLIN_XPS_INPUT: sourcePath,
-				JOPLIN_XPS_PAGES: JSON.stringify(pendingConversions.map(conversion => ({
-					PageNumber: conversion.pageNumber,
-					OutputPath: conversion.outputPath,
-				}))),
-			};
+		try {
+			await new Promise<void>((resolve, reject) => {
+				const processEnv = {
+					...process.env,
+					JOPLIN_XPS_INPUT: sourcePath,
+					JOPLIN_XPS_PAGES_FILE: pagesJsonPath,
+				};
 
-			const childProcess = spawn('PowerShell.exe', [
-				'-NoProfile',
-				'-NonInteractive',
-				'-ExecutionPolicy',
-				'Bypass',
-				'-Sta',
-				'-Command',
-				'-',
-			], {
-				env: processEnv,
-				windowsHide: true,
-			});
+				const childProcess = spawn('PowerShell.exe', [
+					'-NoProfile',
+					'-NonInteractive',
+					'-ExecutionPolicy',
+					'Bypass',
+					'-Sta',
+					'-Command',
+					'-',
+				], {
+					env: processEnv,
+					windowsHide: true,
+				});
 
-			let stderr = '';
-			let stdout = '';
+				let stderr = '';
+				let stdout = '';
 
-			childProcess.stderr.on('data', data => {
-				stderr += data.toString();
-			});
-			childProcess.stdout.on('data', data => {
-				stdout += data.toString();
-			});
-			childProcess.on('error', error => {
-				reject(error);
-			});
-			childProcess.on('close', code => {
-				if (code === 0) {
-					resolve();
-				} else {
-					const output = (stderr || stdout).trim();
-					reject(new Error(`PowerShell.exe exited with code ${code}.${output ? ` Output: ${output}` : ''}`));
-				}
-			});
+				childProcess.stderr.on('data', data => {
+					stderr += data.toString();
+				});
+				childProcess.stdout.on('data', data => {
+					stdout += data.toString();
+				});
+				childProcess.on('error', error => {
+					reject(error);
+				});
+				childProcess.on('close', code => {
+					if (code === 0) {
+						resolve();
+					} else {
+						const output = (stderr || stdout).trim();
+						reject(new Error(`PowerShell.exe exited with code ${code}.${output ? ` Output: ${output}` : ''}`));
+					}
+				});
 
-			childProcess.stdin.on('error', () => {
-				// PowerShell may exit before reading the script. The process close/error events report the result.
+				childProcess.stdin.on('error', () => {
+					// PowerShell may exit before reading the script. The process close/error events report the result.
+				});
+				childProcess.stdin.end(xpsToPngPowerShellScript);
 			});
-			childProcess.stdin.end(xpsToPngPowerShellScript);
-		});
+		} finally {
+			await shim.fsDriver().remove(pagesJsonPath);
+		}
 	}
 
 	private async convertXpsPrintoutsToImages_(dom: Document, baseFolder: string) {

@@ -28,6 +28,8 @@ using System.Windows.Xps.Packaging;
 
 namespace Joplin {
 	public static class XpsConverter {
+		private const double MaxRenderedPixels = 16000000;
+
 		public static void RenderPages(string inputPath, int[] pageNumbers, string[] outputPaths, double scale) {
 			if (String.IsNullOrEmpty(inputPath)) {
 				throw new ArgumentException("Missing input path.", "inputPath");
@@ -48,7 +50,6 @@ namespace Joplin {
 			using (XpsDocument document = new XpsDocument(inputPath, FileAccess.Read)) {
 				FixedDocumentSequence sequence = document.GetFixedDocumentSequence();
 				DocumentPaginator paginator = sequence.DocumentPaginator;
-				paginator.ComputePageCount();
 
 				for (int i = 0; i < pageNumbers.Length; i++) {
 					RenderPage(paginator, pageNumbers[i], outputPaths[i], scale);
@@ -66,20 +67,21 @@ namespace Joplin {
 			}
 
 			int pageIndex = pageNumber - 1;
-			if (pageIndex >= paginator.PageCount) {
-				throw new ArgumentOutOfRangeException("pageNumber");
-			}
-
 			DocumentPage page = paginator.GetPage(pageIndex);
 			try {
 				Size pageSize = page.Size;
-				int pixelWidth = Math.Max(1, (int)Math.Ceiling(pageSize.Width * scale));
-				int pixelHeight = Math.Max(1, (int)Math.Ceiling(pageSize.Height * scale));
+				double renderScale = scale;
+				double unscaledPixels = pageSize.Width * pageSize.Height;
+				if (unscaledPixels * renderScale * renderScale > MaxRenderedPixels) {
+					renderScale = Math.Sqrt(MaxRenderedPixels / unscaledPixels);
+				}
+				int pixelWidth = Math.Max(1, (int)Math.Ceiling(pageSize.Width * renderScale));
+				int pixelHeight = Math.Max(1, (int)Math.Ceiling(pageSize.Height * renderScale));
 
 				DrawingVisual visual = new DrawingVisual();
 				using (DrawingContext context = visual.RenderOpen()) {
 					context.DrawRectangle(Brushes.White, null, new Rect(new Point(0, 0), pageSize));
-					context.PushTransform(new ScaleTransform(scale, scale));
+					context.PushTransform(new ScaleTransform(renderScale, renderScale));
 					context.DrawRectangle(new VisualBrush(page.Visual), null, new Rect(new Point(0, 0), pageSize));
 					context.Pop();
 				}
@@ -101,8 +103,9 @@ namespace Joplin {
 }
 "@
 
-# The TypeScript side passes page/output pairs as JSON in an environment variable.
-$pages = $env:JOPLIN_XPS_PAGES | ConvertFrom-Json
+# The TypeScript side passes page/output pairs as JSON in a file. This avoids
+# environment variable size limits for large printouts with many pages.
+$pages = Get-Content -LiteralPath $env:JOPLIN_XPS_PAGES_FILE -Raw | ConvertFrom-Json
 if ($pages -isnot [array]) {
 	$pages = @($pages)
 }
