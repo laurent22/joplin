@@ -20,7 +20,7 @@ import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEdito
 import Logger from '@joplin/utils/Logger';
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import Resource from '@joplin/lib/models/Resource';
-import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
+import { FolderEntity, NoteEntity, ResourceEntity, TagEntity } from '@joplin/lib/services/database/types';
 import Dialog from '@joplin/lib/components/Dialog';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 
@@ -56,8 +56,7 @@ export enum Mode {
 
 export interface UserDataCallbackEvent {
 	type: ModelType;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	item: any;
+	item: NoteEntity | FolderEntity | ResourceEntity | TagEntity;
 }
 
 export type UserDataCallbackResolve = (event: UserDataCallbackEvent)=> void;
@@ -77,8 +76,7 @@ interface Props {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	folders: any[];
+	folders: FolderEntity[];
 	showCompletedTodos: boolean;
 	userData: GotoAnythingUserData;
 }
@@ -136,13 +134,10 @@ class GotoAnything {
 
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public dispatch: Function;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static Dialog: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static manifest: any;
+	public static Dialog: React.ComponentType<Props>;
+	public static manifest: { name: string; menuItems: { id: string; name?: string; parent?: string; label?: string; accelerator?: ()=> string; screens?: string[]; userData?: { startString?: string } }[] };
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public onTrigger(event: any) {
+	public onTrigger(event: { userData: GotoAnythingUserData }) {
 		this.dispatch({
 			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: true,
@@ -155,12 +150,10 @@ class GotoAnything {
 
 class DialogComponent extends React.PureComponent<Props, State> {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous style blocks; styles_ holds different shapes per styling key
 	private styles_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private inputRef: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private itemListRef: any;
+	private inputRef: React.RefObject<HTMLInputElement>;
+	private itemListRef: React.RefObject<ItemList<GotoAnythingSearchResult>>;
 	private listUpdateQueue_: AsyncActionQueue;
 	private markupToHtml_: MarkupToHtml;
 	private userCallback_: UserDataCallback|null = null;
@@ -289,8 +282,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		this.setState({ showHelp: !this.state.showHelp });
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private input_onChange(event: any) {
+	private input_onChange(event: React.ChangeEvent<HTMLInputElement>) {
 		this.setState({ query: event.target.value });
 
 		this.scheduleListUpdate();
@@ -353,7 +345,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 			} else if (this.state.query.indexOf('#') === 0) { // TAGS
 				listType = BaseModel.TYPE_TAG;
 				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
-				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery });
+				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery }) as unknown as GotoAnythingSearchResult[];
 			} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
 				listType = BaseModel.TYPE_FOLDER;
 				searchQuery = this.state.query.substr(1).trim();
@@ -367,18 +359,16 @@ class DialogComponent extends React.PureComponent<Props, State> {
 					if (normalizedSearchQuery && normalizedTitle.indexOf(normalizedSearchQuery) < 0) continue;
 
 					const path = Folder.folderPathString(this.props.folders, folder.parent_id);
-					results.push({ ...folder, path: path ? path : '/' });
+					results.push({ ...folder, path: path ? path : '/' } as unknown as GotoAnythingSearchResult);
 				}
 			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;
 				searchQuery = gotoAnythingStyleQuery(this.state.query);
 				// SearchEngine returns the title normalized, that is why we need to
 				// override this field below with the original title
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				results = (await SearchEngine.instance().search(searchQuery)) as any[];
+				results = (await SearchEngine.instance().search(searchQuery)) as unknown as GotoAnythingSearchResult[];
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
+				resultsInBody = !!results.find((row) => row.fields.includes('body'));
 
 				if (this.mode_ === Mode.TitleOnly) {
 					resultsInBody = false;
@@ -391,8 +381,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 				const resources = await Resource.resourceOcrTextsByIds(resourceIds);
 
 				if (!resultsInBody || this.state.query.length <= 1) {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					const notes = await Note.byIds(results.map((result: any) => result.id), { fields: ['id', 'title'] });
+					const notes = await Note.byIds(results.map(result => result.id), { fields: ['id', 'title'] });
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
 						const path = Folder.folderPathString(this.props.folders, row.parent_id);
@@ -406,15 +395,14 @@ class DialogComponent extends React.PureComponent<Props, State> {
 					// going to apply a limit to the number of fetched notes.
 					// https://github.com/laurent22/joplin/issues/9944
 					if (!this.props.showCompletedTodos) {
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						results = results.filter((row: any) => !row.is_todo || !row.todo_completed);
+						results = results.filter((row: GotoAnythingSearchResult & { is_todo?: boolean; todo_completed?: number }) => !row.is_todo || !row.todo_completed);
 					}
 
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					const notes = await Note.byIds(results.map((result: any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed', 'title'] });
-					// Can't make any sense of this code so...
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					const notesById = notes.reduce((obj, { id, body, markup_language, title }) => ((obj[[id] as any] = { id, body, markup_language, title }), obj), {});
+					const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed', 'title'] });
+					const notesById = notes.reduce((obj: Record<string, { id: string; body: string; markup_language: number; title: string }>, { id, body, markup_language, title }) => {
+						obj[id] = { id, body, markup_language, title };
+						return obj;
+					}, {});
 
 					// Filter out search results that are associated with non-existing notes.
 					// https://github.com/laurent22/joplin/issues/5417
@@ -457,8 +445,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 								// e.g. 'Joplin is a free, open source' and 'open source note taking application'
 								// will result in 'Joplin is a free, open source note taking application'
 								const mergedIndices = mergeOverlappingIntervals(indices, 3);
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-								fragments = mergedIndices.map((f: any) => body.slice(f[0], f[1])).join(' ... ');
+								fragments = mergedIndices.map((f: [number, number]) => body.slice(f[0], f[1])).join(' ... ');
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
 								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
 							};
@@ -511,8 +498,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		this.itemListRef.current.makeItemIndexVisible(index);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async gotoItem(item: any) {
+	public async gotoItem(item: GotoAnythingSearchResult & { commandArgs?: string[] }) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
 			type: 'PLUGINLEGACY_DIALOG_SET',
@@ -575,8 +561,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private listItem_onClick(event: any) {
+	private listItem_onClick(event: React.MouseEvent<HTMLDivElement>) {
 		const targetResultId = event.currentTarget.getAttribute('id');
 		void this.gotoItem(this.selectedItem(targetResultId));
 	}
@@ -628,8 +613,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public selectedItemIndex(results: any[] = undefined, itemId: string = undefined) {
+	public selectedItemIndex(results: GotoAnythingSearchResult[] = undefined, itemId: string = undefined) {
 		if (typeof results === 'undefined') results = this.state.results;
 		if (typeof itemId === 'undefined') itemId = this.state.selectedItemId;
 		for (let i = 0; i < results.length; i++) {
@@ -645,8 +629,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		return { ...this.state.results[index], commandArgs: this.state.commandArgs };
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private input_onKeyDown(event: any) {
+	private input_onKeyDown(event: React.KeyboardEvent) {
 		const keyCode = event.keyCode;
 
 		if (this.state.results.length > 0 && (keyCode === 40 || keyCode === 38)) { // DOWN / UP

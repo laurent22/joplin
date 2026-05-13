@@ -67,7 +67,7 @@ function getPluginCommandNames(plugins: PluginStates): string[] {
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemClick: Function) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 	const output: any = {
 		label: label,
 		submenu: [],
@@ -84,16 +84,16 @@ function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemCl
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: any) => {
 	return useMemo(() => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 		const switchProfileMenuItems: any[] = [];
 
 		for (let i = 0; i < profileConfig.profiles.length; i++) {
 			const profile = profileConfig.profiles[i];
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 			let menuItem: any = {};
 			const profileNum = i + 1;
 
@@ -124,11 +124,11 @@ const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: an
 };
 
 const useNoteListMenuItems = (noteListRendererIds: string[]) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 	const [menuItems, setMenuItems] = useState<any[]>([]);
 
 	useAsyncEffect(async (event) => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 		const output: any[] = [];
 		for (const id of noteListRendererIds) {
 			const renderer = getListRendererById(id);
@@ -154,7 +154,7 @@ const useNoteListMenuItems = (noteListRendererIds: string[]) => {
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 	menuItemProps: any;
 	mainScreenVisible: boolean;
 	selectedFolderId: string;
@@ -167,9 +167,9 @@ interface Props {
 	uncompletedTodosOnTop: boolean;
 	showCompletedTodos: boolean;
 	tabMovesFocus: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 	pluginMenuItems: any[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 	pluginMenus: any[];
 	['spellChecker.enabled']: boolean;
 	['spellChecker.languages']: string[];
@@ -217,10 +217,10 @@ const applyMenuBarVisibility = (windowId: string, showMenuBar: boolean) => {
 	window.setMenuBarVisibility(showMenuBar);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 function useMenuStates(menu: any, props: Props) {
 	useEffect(() => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 		let timeoutId: any = null;
 
 		function scheduleUpdate() {
@@ -250,12 +250,12 @@ function useMenuStates(menu: any, props: Props) {
 				const sortOptions = Setting.enumOptions(`${type}.sortOrder.field`);
 				for (const field in sortOptions) {
 					if (!sortOptions.hasOwnProperty(field)) continue;
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 					menuItemSetChecked(`sort:${type}:${field}`, (props as any)[`${type}.sortOrder.field`] === field);
 				}
 
 				const id = type === 'notes' ? 'toggleNotesSortOrderReverse' : `sort:${type}:reverse`;
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 				menuItemSetChecked(id, (props as any)[`${type}.sortOrder.reverse`]);
 			}
 
@@ -328,7 +328,7 @@ function useMenu(props: Props) {
 	const onImportModuleClickRef = useRef(null);
 	onImportModuleClickRef.current = onImportModuleClick;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 	const pluginCommandNames = useMemo(() => props.pluginMenuItems.map((view: any) => view.commandName), [props.pluginMenuItems]);
 
 	const menuItemDic = useMemo(() => {
@@ -340,13 +340,13 @@ function useMenu(props: Props) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [commandNames, pluginCommandNames, props.locale]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 	const switchProfileMenuItems: any[] = useSwitchProfileMenuItems(props.profileConfig, menuItemDic);
 
 	const noteListMenuItems = useNoteListMenuItems(props.noteListRendererIds);
 
 	useEffect(() => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 		let timeoutId: any = null;
 
 		function updateMenu() {
@@ -442,7 +442,7 @@ function useMenu(props: Props) {
 							label: module.fullLabel(),
 							click: async () => {
 								await InteropServiceHelper.export(
-									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 									(action: any) => props.dispatch(action),
 									module,
 									{
@@ -513,11 +513,11 @@ function useMenu(props: Props) {
 				switchProfileItem,
 			];
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 			let toolsItems: any[] = [];
 
 			// we need this workaround, because on macOS the menu is different
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 			const toolsItemsWindowsLinux: any[] = [
 				{
 					label: _('Options'),
@@ -708,7 +708,7 @@ function useMenu(props: Props) {
 				});
 			}
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 			const rootMenus: any = {
 				edit: {
 					id: 'edit',
@@ -956,7 +956,7 @@ function useMenu(props: Props) {
 			// It seems the "visible" property of separators is ignored by Electron, making
 			// it display separators that we want hidden. So this function iterates through
 			// them and remove them completely.
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 			const cleanUpSeparators = (items: any[]) => {
 				const output = [];
 				for (const item of items) {
@@ -1027,7 +1027,7 @@ function useMenu(props: Props) {
 							menuItemDic.textCut,
 							menuItemDic.textPaste,
 							menuItemDic.textSelectAll,
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 						] as any,
 					},
 				]));
@@ -1093,7 +1093,7 @@ function useMenu(props: Props) {
 	return menu;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 function MenuBar(props: Props): any {
 	const menu = useMenu(props);
 
