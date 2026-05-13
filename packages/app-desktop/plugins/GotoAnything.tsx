@@ -229,6 +229,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 				borderBottomStyle: 'solid',
 				borderBottomColor: theme.dividerColor,
 				boxSizing: 'border-box',
+				cursor: 'pointer',
 			},
 			inputHelpWrapper: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
 		};

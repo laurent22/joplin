@@ -32,6 +32,10 @@ import LinkNode from './nodes/LinkNode';
 import { ActionButton, ActionDivider, ActionInput, ActionPanel } from './ActionPanel';
 import { useWhiteboardContext } from './WhiteboardContext';
 import { whiteboardColors } from './theme';
+import { GotoAnythingOptions, UiType } from '../../../WindowCommandsAndDialogs/commands/gotoAnything';
+import { Mode } from '../../../../plugins/GotoAnything';
+import CommandService from '@joplin/lib/services/CommandService';
+import { ModelType } from '@joplin/lib/BaseModel';
 
 // `markerUnits: 'userSpaceOnUse'` keeps the arrowhead at an absolute size,
 // independent of the edge's stroke width. Without it, selected edges (which
@@ -169,6 +173,27 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 		});
 	}, [rf, addCanvasNode]);
 
+	const onAddNote = useCallback(async ()=> {
+		const options: GotoAnythingOptions = { mode: Mode.TitleOnly };
+		const result = await CommandService.instance().execute('gotoAnything', UiType.ControlledApi, options);
+		if (!result || result.type !== ModelType.Note) return;
+
+		const view = rf.getViewport();
+		const rect = containerRef.current?.getBoundingClientRect();
+		const cx = rect ? (rect.width / 2 - view.x) / view.zoom : 0;
+		const cy = rect ? (rect.height / 2 - view.y) / view.zoom : 0;
+
+		addCanvasNode({
+			id: generateId(),
+			type: 'file',
+			x: cx - 120,
+			y: cy - 80,
+			width: 200,
+			height: 100,
+			file: `:/${result.item.id}`,
+		});
+	}, [rf, addCanvasNode]);
+
 	// Selection summaries for the action panels.
 	const selectedEdges = useMemo(() => flowEdges.filter(e => e.selected), [flowEdges]);
 	const selectedNodes = useMemo(() => flowNodes.filter(n => n.selected), [flowNodes]);
@@ -292,6 +317,8 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 
 				<ActionPanel position="top-right">
 					<ActionButton onClick={onAddText} title={_('Add a text card')}>{_('+ Text')}</ActionButton>
+					<ActionDivider />
+					<ActionButton onClick={onAddNote} title={_('Add an existing note')}>{_('+ Note')}</ActionButton>
 				</ActionPanel>
 
 				{selectedEdges.length > 0 ? (
