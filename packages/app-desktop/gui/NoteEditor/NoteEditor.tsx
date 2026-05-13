@@ -591,7 +591,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	function renderResourceWatchingNotification() {
 		if (!Object.keys(props.watchedResources).length) return null;
-		const resourceTitles = Object.keys(props.watchedResources).map(id => props.watchedResources[id].title);
+		const resourceTitles = Object.keys(props.watchedResources).map(id => (props.watchedResources[id] as { title: string }).title);
 		return (
 			<div style={styles.resourceWatchBanner}>
 				<p style={styles.resourceWatchBannerLine}>{_('The following attachments are being watched for changes:')} <strong>{resourceTitles.join(', ')}</strong></p>
