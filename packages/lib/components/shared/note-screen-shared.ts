@@ -297,6 +297,11 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 	const panes = comp.props.noteVisiblePanes;
 	let mode = panes.includes('editor') ? 'edit' : 'view';
 
+	// Prevent trashed notes from opening in edit mode.
+	if (note?.deleted_time) {
+		mode = 'view';
+	}
+
 	if (isProvisionalNote && !comp.props.sharedData) {
 		mode = 'edit';
 		comp.scheduleFocusUpdate();

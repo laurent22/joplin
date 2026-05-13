@@ -129,10 +129,10 @@ const DropdownAlertWrapper = ({ alert }: DropdownAlertWrapperProps) => {
 	return <DropdownAlert alert={alert} translucent alertViewStyle={{ padding: 8, marginTop: insets.top }} />;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux actions in this codebase don't have a single typed union; tightening would require a coordinated rewrite of every dispatched action across the mobile app
 let storeDispatch: any = function(_action: any) {};
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See storeDispatch above; action shapes are heterogeneous
 const logReducerAction = function(action: any) {
 	if (['SIDE_MENU_OPEN_PERCENT', 'SYNC_REPORT_UPDATE'].indexOf(action.type) >= 0) return;
 
@@ -146,16 +146,16 @@ const biometricsEnabled = (sensorInfo: SensorInfo): boolean => {
 	return !!sensorInfo && sensorInfo.enabled;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux middleware; store/next/action types would need to come from a typed action union — see storeDispatch above
 const generalMiddleware = (store: any) => (next: any) => async (action: any) => {
 	logReducerAction(action);
 	PoorManIntervals.update(); // This function needs to be called regularly so put it here
 
 	const result = next(action);
 	const newState: AppState = store.getState();
-	let doRefreshFolders = false;
+	let doRefreshFolders: boolean | string = false;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- storeDispatch is `any` (see top of file); cast required to satisfy reduxSharedMiddleware's Dispatch parameter
 	await reduxSharedMiddleware(store, next, action, storeDispatch as any);
 
 	if (action.type === 'NAV_GO') Keyboard.dismiss();
@@ -248,9 +248,16 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 		Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
 	}
 
+	if (action.type === 'SETTING_UPDATE_ONE' && action.key.indexOf('folders.sortOrder') === 0) {
+		doRefreshFolders = 'now';
+	}
+
 	if (doRefreshFolders) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		await scheduleRefreshFolders((action: any) => storeDispatch(action), newState.selectedFolderId);
+		if (doRefreshFolders === 'now') {
+			await refreshFolders(storeDispatch, newState.selectedFolderId);
+		} else {
+			await scheduleRefreshFolders(storeDispatch, newState.selectedFolderId);
+		}
 	}
 
 	return result;
@@ -290,6 +297,7 @@ interface AppComponentProps {
 	historyCanGoBack: boolean;
 	showSideMenu: boolean;
 	noteSelectionEnabled: boolean;
+	syncStarted: boolean;
 }
 
 interface AppComponentState {
@@ -316,7 +324,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 	private onAppStateChange_: ()=> void;
 	private backButtonHandler_: BackButtonHandler;
 	private handleNewShare_: ()=> void;
-	private handleOpenURL_: (event: unknown)=> void;
+	private handleOpenURL_: (event: { url: string })=> void;
 
 	public constructor(props: AppComponentProps) {
 		super(props);
@@ -337,14 +345,15 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			PoorManIntervals.update();
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		this.handleOpenURL_ = (event: any) => {
+		this.handleOpenURL_ = (event: { url: string }) => {
 			// logger.info('Sharing: handleOpenURL_: start');
 
 			// If this is called while biometrics haven't been done yet, we can
 			// ignore the call, because handleShareData() will be called once
 			// biometricsDone is `true`.
-			if (event.url === ShareExtension.shareURL && this.props.biometricsDone) {
+			// ShareExtension.shareURL is declared as `()=> string` in the library typings but is
+			// actually assigned a string at runtime — isolate that typing inconsistency here.
+			if (event.url === (ShareExtension.shareURL as unknown as string) && this.props.biometricsDone) {
 				logger.info('Sharing: handleOpenURL_: Processing share data');
 				void this.handleShareData();
 			} else if (isCallbackUrl(event.url)) {
@@ -567,8 +576,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async componentDidUpdate(prevProps: any) {
+	public async componentDidUpdate(prevProps: AppComponentProps) {
 		if (this.props.biometricsDone !== prevProps.biometricsDone && this.props.biometricsDone) {
 			logger.info('Sharing: componentDidUpdate: biometricsDone');
 			void this.handleShareData();
@@ -669,11 +677,9 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		this.setState({ sideMenuWidth: this.getSideMenuWidth() });
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public UNSAFE_componentWillReceiveProps(newProps: any) {
+	public UNSAFE_componentWillReceiveProps(newProps: AppComponentProps) {
 		if (newProps.syncStarted !== this.lastSyncStarted_) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			if (!newProps.syncStarted) void refreshFolders((action: any) => this.props.dispatch(action), this.props.selectedFolderId);
+			if (!newProps.syncStarted) void refreshFolders(this.props.dispatch, this.props.selectedFolderId);
 			this.lastSyncStarted_ = newProps.syncStarted;
 		}
 	}
@@ -776,27 +782,27 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
-				<SideMenu
-					menu={sideMenuContent}
-					edgeHitWidth={menuEdgeHitWidth}
-					toleranceX={4}
-					toleranceY={20}
-					openMenuOffset={this.state.sideMenuWidth}
-					menuPosition={menuPosition}
-					onChange={this.sideMenu_change}
-					isOpen={this.props.showSideMenu}
-					disableGestures={disableSideMenuGestures}
-				>
-					<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
-						<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor2}>
+				<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
+					<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor2}>
+						<SideMenu
+							menu={sideMenuContent}
+							edgeHitWidth={menuEdgeHitWidth}
+							toleranceX={4}
+							toleranceY={20}
+							openMenuOffset={this.state.sideMenuWidth}
+							menuPosition={menuPosition}
+							onChange={this.sideMenu_change}
+							isOpen={this.props.showSideMenu}
+							disableGestures={disableSideMenuGestures}
+						>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								{ shouldShowMainContent && <AppNav screens={appNavInit} dispatch={this.props.dispatch} /> }
 							</View>
 							<SyncWizard/>
-						</SafeAreaView>
-						<DropdownAlertWrapper alert={(func) => { this.dropdownAlert_ = func; }} />
-					</View>
-				</SideMenu>
+						</SideMenu>
+					</SafeAreaView>
+					<DropdownAlertWrapper alert={(func) => { this.dropdownAlert_ = func; }} />
+				</View>
 				<PluginRunnerWebView />
 				<PluginNotification/>
 			</View>

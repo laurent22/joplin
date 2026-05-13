@@ -1,5 +1,43 @@
 # Joplin Desktop Changelog
 
+## [v3.6.13](https://github.com/laurent22/joplin/releases/tag/v3.6.13) - 2026-05-12T11:16:40Z
+
+- Improved: Front matter: Wrap long lines in the viewer ([#15356](https://github.com/laurent22/joplin/issues/15356)) ([#15328](https://github.com/laurent22/joplin/issues/15328))
+- Fixed: Fix fatal startup crash when sync target upgrade is required ([#15348](https://github.com/laurent22/joplin/issues/15348)) ([#15346](https://github.com/laurent22/joplin/issues/15346))
+- Fixed: Fix importing legacy keyboard shortcuts ([#15308](https://github.com/laurent22/joplin/issues/15308))
+- Fixed: Note list: Don't detect checkbox-like markup in tables and paragraphs as checkboxes ([#15357](https://github.com/laurent22/joplin/issues/15357)) ([#15307](https://github.com/laurent22/joplin/issues/15307) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Prevent trashed notes from opening in edit mode ([#15248](https://github.com/laurent22/joplin/issues/15248))
+- Fixed: Rich Text Editor: Fix find/replace dialog fails to scroll to the next match ([#15298](https://github.com/laurent22/joplin/issues/15298)) ([#15297](https://github.com/laurent22/joplin/issues/15297) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [v3.7.1](https://github.com/laurent22/joplin/releases/tag/v3.7.1) (Pre-release) - 2026-05-11T13:57:38Z
+
+- New: Add support for post-quantum cryptography (PQS) TLS ([#15055](https://github.com/laurent22/joplin/issues/15055) by Alex Martens)
+- New: Add support for whiteboards ([#15305](https://github.com/laurent22/joplin/issues/15305)) ([#15193](https://github.com/laurent22/joplin/issues/15193))
+- Improved: Add settings search to config screen ([#14820](https://github.com/laurent22/joplin/issues/14820)) ([#14763](https://github.com/laurent22/joplin/issues/14763) by [@slimuCS](https://github.com/slimuCS))
+- Improved: Add table editing commands (add/delete rows and columns) ([#14519](https://github.com/laurent22/joplin/issues/14519)) ([#12372](https://github.com/laurent22/joplin/issues/12372) by [@kanishka0411](https://github.com/kanishka0411))
+- Improved: Display inline error instead of smalltalk dialog for invalid master password ([#15236](https://github.com/laurent22/joplin/issues/15236) by [@himanshumishra1309](https://github.com/himanshumishra1309))
+- Improved: Do not load plugin if it is disabled ([#15083](https://github.com/laurent22/joplin/issues/15083))
+- Improved: Exclude user_data from note revisions ([#15245](https://github.com/laurent22/joplin/issues/15245) by [@alondmnt](https://github.com/alondmnt))
+- Improved: Speed up app startup by skipping unnecessary plugin file processing ([#15085](https://github.com/laurent22/joplin/issues/15085)) ([#15081](https://github.com/laurent22/joplin/issues/15081))
+- Improved: Update Disable Encryption dialog ([#15211](https://github.com/laurent22/joplin/issues/15211) by [@himanshumishra1309](https://github.com/himanshumishra1309))
+- Improved: Upgrade Electron to v40.9.2 ([#15192](https://github.com/laurent22/joplin/issues/15192) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Add the ability to delete the default profile ([#15153](https://github.com/laurent22/joplin/issues/15153)) ([#14506](https://github.com/laurent22/joplin/issues/14506) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Avoid OOM when printing notes with large attachment links ([#15026](https://github.com/laurent22/joplin/issues/15026)) ([#13903](https://github.com/laurent22/joplin/issues/13903) by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Fix inability to cancel the sync during the deletion step ([#15243](https://github.com/laurent22/joplin/issues/15243) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix inconsistent note order upon note creation, when custom order is set ([#14656](https://github.com/laurent22/joplin/issues/14656)) ([#14647](https://github.com/laurent22/joplin/issues/14647) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix potential unresolved promise race conditions when scheduling the sync ([#15216](https://github.com/laurent22/joplin/issues/15216) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix silent sync failure which prevents new changes being synced, when a single server object has an updated_time in the future ([#15262](https://github.com/laurent22/joplin/issues/15262) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Preserve timestamps when converting HTML notes ([#15275](https://github.com/laurent22/joplin/issues/15275)) ([#15263](https://github.com/laurent22/joplin/issues/15263) by [@izumedonabe](https://github.com/izumedonabe))
+- Fixed: When a note is deleted, tags can still be added or removed ([#15253](https://github.com/laurent22/joplin/issues/15253)) ([#15247](https://github.com/laurent22/joplin/issues/15247) by [@Vinayreddy765](https://github.com/Vinayreddy765))
+
+## [v3.6.11](https://github.com/laurent22/joplin/releases/tag/v3.6.11) - 2026-05-08T14:28:46Z
+
+- Improved: Importing from OneNote: Convert an ink-related import error to a warning ([#15197](https://github.com/laurent22/joplin/issues/15197) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Importing from OneNote: Import created/updated timestamps and support special characters in titles ([#15213](https://github.com/laurent22/joplin/issues/15213) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Importing from OneNote: Support large attachments ([#15195](https://github.com/laurent22/joplin/issues/15195) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Rich Text Editor fails to load in secondary windows ([#15190](https://github.com/laurent22/joplin/issues/15190)) ([#15189](https://github.com/laurent22/joplin/issues/15189) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix positioning of nested ink containers ([#15196](https://github.com/laurent22/joplin/issues/15196)) ([#15194](https://github.com/laurent22/joplin/issues/15194) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.6.10](https://github.com/laurent22/joplin/releases/tag/v3.6.10) (Pre-release) - 2026-04-25T07:58:25Z
 
 - Improved: Add sync status icon and collapsible sync report to sidebar ([#15115](https://github.com/laurent22/joplin/issues/15115)) ([#14788](https://github.com/laurent22/joplin/issues/14788))

@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { readJsonFile } from './utils';
+import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 
 export interface ManifestOverride {
 	_obsolete?: boolean;
@@ -8,12 +9,11 @@ export interface ManifestOverride {
 }
 
 export type ManifestOverrides = Record<string, ManifestOverride>;
+type PluginManifests = Record<string, PluginManifest>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function applyManifestOverrides(manifests: any, overrides: ManifestOverrides) {
+export function applyManifestOverrides(manifests: PluginManifests, overrides: ManifestOverrides) {
 	for (const [pluginId, override] of Object.entries(overrides)) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const manifest: any = manifests[pluginId];
+		const manifest = manifests[pluginId] as PluginManifest & Record<string, unknown>;
 
 		if (!manifest) {
 			// If the manifest does not exist in the destination, it means the
@@ -33,9 +33,8 @@ export function applyManifestOverrides(manifests: any, overrides: ManifestOverri
 	return manifests;
 }
 
-export function getObsoleteManifests(overrides: ManifestOverrides) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = {};
+export function getObsoleteManifests<T extends { _obsolete?: boolean }>(overrides: Record<string, T>): Record<string, T> {
+	const output: Record<string, T> = {};
 
 	for (const [pluginId, override] of Object.entries(overrides)) {
 		if (override._obsolete) {

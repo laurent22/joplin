@@ -1,5 +1,10 @@
 # Joplin Android Changelog
 
+## [android-v3.6.18](https://github.com/laurent22/joplin/releases/tag/android-v3.6.18) - 2026-05-05T14:39:28Z
+
+- Fixed: Fix images fail to be resized (#15208) (#15205 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Rich Text Editor: Fix undo/redo keyboard shortcuts (#15207) (#15206 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.6.17](https://github.com/laurent22/joplin/releases/tag/android-v3.6.17) - 2026-04-24T15:22:08Z
 
 - Improved: Accessibility: View/edit toggle: Improve screen reader accessibility (#15167 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

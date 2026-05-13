@@ -42,6 +42,8 @@ import ItemChange from '@joplin/lib/models/ItemChange';
 import PlainEditor from './NoteBody/PlainEditor/PlainEditor';
 import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
 import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
+import WhiteboardEditor from './NoteBody/WhiteboardEditor/WhiteboardEditor';
+import { hasWhiteboardFence } from '@joplin/lib/services/whiteboard/parse';
 import { openItemById } from './utils/contextMenu';
 import { MarkupLanguage } from '@joplin/renderer';
 import useScrollWhenReadyOptions from './utils/useScrollWhenReadyOptions';
@@ -479,7 +481,23 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	let editor = null;
 
-	if (builtInEditorVisible) {
+	const noteHasWhiteboardFence = markupLanguage === MarkupLanguage.Markdown
+		&& hasWhiteboardFence(formNote.body);
+
+	const useWhiteboardEditor = builtInEditorVisible
+		&& noteHasWhiteboardFence
+		&& !props.whiteboardForceMarkdown?.[formNote.id];
+
+	// Mirror "active note is a whiteboard" to redux so the NoteToolbar can
+	// show the editor toggle. We can't compute this from the redux note list
+	// because note bodies aren't in the preview fields.
+	useEffect(() => {
+		props.dispatch({ type: 'WHITEBOARD_ACTIVE_NOTE_SET', value: noteHasWhiteboardFence });
+	}, [noteHasWhiteboardFence, props.dispatch]);
+
+	if (useWhiteboardEditor) {
+		editor = <WhiteboardEditor {...editorProps}/>;
+	} else if (builtInEditorVisible) {
 		if (props.bodyEditor === 'TinyMCE') {
 			editor = <TinyMCE {...editorProps}/>;
 		} else if (props.bodyEditor === 'PlainText') {
@@ -769,6 +787,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		enableHtmlToMarkdownBanner: state.settings['editor.enableHtmlToMarkdownBanner'],
 		enableInEditorRendering: state.settings['editor.inlineRendering'],
 		showNoteLinkIcon: state.settings['notes.showNoteLinkIcon'],
+		whiteboardForceMarkdown: windowState.whiteboardForceMarkdown ?? {},
 	};
 };
 

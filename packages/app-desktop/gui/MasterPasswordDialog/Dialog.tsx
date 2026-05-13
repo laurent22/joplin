@@ -12,6 +12,7 @@ import KvStore from '@joplin/lib/services/KvStore';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import LabelledPasswordInput from '../PasswordInput/LabelledPasswordInput';
 import shim from '@joplin/lib/shim';
+import time from '@joplin/lib/time';
 
 interface Props {
 	themeId: number;
@@ -23,6 +24,11 @@ enum Mode {
 	Set = 1,
 	Reset = 2,
 }
+
+const syncAfterDefaultInterval = async () => {
+	await time.msleep(reg.defaultScheduleInterval());
+	await reg.waitForSyncFinishedThenSync();
+};
 
 export default function(props: Props) {
 	const [status, setStatus] = useState(MasterPasswordStatus.NotSet);
@@ -78,7 +84,8 @@ export default function(props: Props) {
 				} else {
 					throw new Error(`Unknown mode: ${mode}`);
 				}
-				void reg.waitForSyncFinishedThenSync(null);
+				// We need to defer the sync, as enabling encryption may take a few seconds to complete
+				void syncAfterDefaultInterval();
 				onClose();
 			} catch (error) {
 				void shim.showErrorDialog(error.message);

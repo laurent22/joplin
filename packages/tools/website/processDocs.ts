@@ -6,6 +6,7 @@ import * as MarkdownIt from 'markdown-it';
 import { htmlentities, isSelfClosingTag } from '@joplin/utils/html';
 import { compileWithFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
 import StateCore = require('markdown-it/lib/rules_core/state_core');
+import Token = require('markdown-it/lib/token');
 import { copy, mkdirp, remove, pathExists } from 'fs-extra';
 import { basename, dirname } from 'path';
 import markdownUtils, { MarkdownTable } from '@joplin/lib/markdownUtils';
@@ -36,8 +37,7 @@ interface Context {
 	inHeader?: boolean;
 	listStack?: List[];
 	listStarting?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	currentLinkAttrs?: any;
+	currentLinkAttrs?: [string, string][] | null;
 	inFence?: boolean;
 	fenceStarting?: string;
 	processedFiles?: string[];
@@ -79,8 +79,7 @@ const parseHtml = (html: string) => {
 
 	const parser = new htmlparser2.Parser({
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		onopentag: (name: string, attrs: Record<string, any>) => {
+		onopentag: (name: string, attrs: Record<string, string>) => {
 			tagStack.push({ name });
 
 			const closingSign = isSelfClosingTag(name) ? '/>' : '>';
@@ -133,8 +132,7 @@ const paragraphBreak = '///PARAGRAPH_BREAK///';
 const blockQuoteStart = '///BLOCK_QUOTE_START///';
 const blockQuoteEnd = '///BLOCK_QUOTE_END///';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const processToken = (token: any, output: string[], context: Context): void => {
+const processToken = (token: Token, output: string[], context: Context): void => {
 	if (!context.listStack) context.listStack = [];
 
 	let contentProcessed = false;

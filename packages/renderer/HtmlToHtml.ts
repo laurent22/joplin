@@ -4,7 +4,7 @@ import * as utils from './utils';
 import InMemoryCache from './InMemoryCache';
 import noteStyle, { whiteBackgroundNoteStyle } from './noteStyle';
 import { Options as NoteStyleOptions } from './noteStyle';
-import { FsDriver, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult } from './types';
+import { FsDriver, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RendererTheme } from './types';
 const md5 = require('md5');
 
 // Renderered notes can potentially be quite large (for example
@@ -18,7 +18,7 @@ export interface SplittedHtml {
 }
 
 interface Options {
-	ResourceModel: OptionsResourceModel;
+	ResourceModel?: OptionsResourceModel;
 	resourceBaseUrl?: string;
 	fsDriver?: FsDriver;
 }
@@ -63,8 +63,7 @@ export default class HtmlToHtml implements MarkupRenderer {
 		return this.fsDriver_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async allAssets(theme: any, noteStyleOptions: NoteStyleOptions = null) {
+	public async allAssets(theme: RendererTheme, noteStyleOptions: NoteStyleOptions = null) {
 		let cssStrings: string[] = [];
 
 		if (noteStyleOptions.whiteBackgroundNoteRendering) {
@@ -83,8 +82,7 @@ export default class HtmlToHtml implements MarkupRenderer {
 	// Note: the "theme" variable is ignored and instead the light theme is
 	// always used for HTML notes.
 	// See: https://github.com/laurent22/joplin/issues/3698
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async render(markup: string, theme: any, options: RenderOptions): Promise<RenderResult> {
+	public async render(markup: string, theme: RendererTheme, options: RenderOptions): Promise<RenderResult> {
 		options = {
 			splitted: false,
 			postMessageSyntax: 'postMessage',

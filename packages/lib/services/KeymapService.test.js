@@ -251,6 +251,25 @@ describe('services_KeymapService', () => {
 			});
 		});
 
+		it('should import legacy undo and redo command names', () => {
+			// Regression test for #15308: keymap files saved before 3.6.11 used
+			// "editor.undo" / "editor.redo" for the global undo/redo accelerators.
+			// In 3.6.11 these were renamed to "globalUndo" / "globalRedo", so
+			// importing the old file would clash with the new defaults that
+			// already bind Ctrl+Z / Ctrl+Y to the renamed commands.
+			keymapService.initialize([], 'win32');
+			const customKeymapItems = [
+				{ command: 'editor.undo', accelerator: 'Ctrl+Z' },
+				{ command: 'editor.redo', accelerator: 'Ctrl+Y' },
+			];
+
+			expect(() => keymapService.overrideKeymap(customKeymapItems)).not.toThrow();
+			expect(keymapService.getAccelerator('globalUndo')).toEqual('Ctrl+Z');
+			expect(keymapService.getAccelerator('globalRedo')).toEqual('Ctrl+Y');
+			expect(keymapService.getCommandNames()).not.toContain('editor.undo');
+			expect(keymapService.getCommandNames()).not.toContain('editor.redo');
+		});
+
 		it('should throw when the required properties are missing', () => {
 			const customKeymaps = [
 				[

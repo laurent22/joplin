@@ -30,8 +30,7 @@ const entitiesInstance = new Entities();
 export const htmlentities = entitiesInstance.encode;
 export const htmlentitiesDecode = entitiesInstance.decode;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const attributesHtml = (attr: Record<string, any>) => {
+export const attributesHtml = (attr: Record<string, string>) => {
 	const output = [];
 
 	for (const n in attr) {

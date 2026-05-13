@@ -44,17 +44,20 @@ export type PublicKeyCryptoProvider = Record<PublicKeyAlgorithm, PublicKeyCrypto
 
 export interface Crypto {
 	randomBytes(size: number): Promise<CryptoBuffer>;
-	digest(algorithm: Digest, data: Uint8Array): Promise<CryptoBuffer>;
-	generateNonce(nonce: Uint8Array): Promise<Uint8Array>;
-	increaseNonce(nonce: Uint8Array): Promise<Uint8Array>;
+	digest(algorithm: Digest, data: CryptoBuffer): Promise<CryptoBuffer>;
+	generateNonce(nonce: CryptoBuffer): Promise<CryptoBuffer>;
+	increaseNonce(nonce: CryptoBuffer): Promise<CryptoBuffer>;
 	encrypt(password: string, salt: CryptoBuffer, data: CryptoBuffer, options: EncryptionParameters): Promise<EncryptionResult>;
-	decrypt(password: string, data: EncryptionResult, options: EncryptionParameters): Promise<Buffer>;
-	encryptString(password: string, salt: CryptoBuffer, data: string, encoding: BufferEncoding, options: EncryptionParameters): Promise<EncryptionResult>;
+	decrypt(password: string, data: EncryptionResult, options: EncryptionParameters): Promise<CryptoBuffer>;
+	encryptString(password: string, salt: CryptoBuffer, data: string, encoding: CryptoBufferEncoding, options: EncryptionParameters): Promise<EncryptionResult>;
+	bufferToString(buffer: CryptoBuffer, encoding: CryptoBufferEncoding): string;
 }
 
-export interface CryptoBuffer extends Uint8Array {
-	toString(encoding?: BufferEncoding, start?: number, end?: number): string;
-}
+// Reject views backed by SharedArrayBuffer
+// https://github.com/nodejs/node/issues/59688 (see `Web Cryptography` row)
+export type CryptoBuffer = Uint8Array<ArrayBuffer>;
+// For EncryptionMethod.KeyV1/FileV1/StringV1
+export type CryptoBufferEncoding = 'hex' | 'base64' | 'utf16le';
 
 // A subset of react-native-quick-crypto.HashAlgorithm, supported by Web Crypto API
 export enum Digest {
@@ -81,6 +84,6 @@ export interface EncryptionParameters {
 	authTagLength: number; // in bytes
 	digestAlgorithm: Digest;
 	keyLength: number; // in bytes
-	associatedData: Uint8Array;
+	associatedData: CryptoBuffer;
 	iterationCount: number;
 }

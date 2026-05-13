@@ -16,8 +16,8 @@ const countCheckboxes = (body: string): CheckboxStats | null => {
 	if (!body) return null;
 
 	// Match unchecked: - [ ] and checked: - [x] or - [X]
-	const uncheckedMatches = body.match(/- \[ \]/g);
-	const checkedMatches = body.match(/- \[[xX]\]/g);
+	const uncheckedMatches = body.match(/(^|\n)[ \t>]*- \[ \]/g);
+	const checkedMatches = body.match(/(^|\n)[ \t>]*- \[[xX]\]/g);
 
 	const unchecked = uncheckedMatches ? uncheckedMatches.length : 0;
 	const checked = checkedMatches ? checkedMatches.length : 0;

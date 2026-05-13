@@ -37,7 +37,7 @@ describe('checkIfPluginCanBeAdded', () => {
 
 			let hasThrown = false;
 			try {
-				checkIfPluginCanBeAdded(existingManifests, manifest);
+				checkIfPluginCanBeAdded(existingManifests as unknown as Parameters<typeof checkIfPluginCanBeAdded>[0], manifest as unknown as Parameters<typeof checkIfPluginCanBeAdded>[1]);
 			} catch (error) {
 				hasThrown = true;
 			}
@@ -81,7 +81,7 @@ describe('checkIfPluginCanBeAdded', () => {
 
 			let hasThrown = false;
 			try {
-				checkIfPluginCanBeAdded(existingManifests, manifest);
+				checkIfPluginCanBeAdded(existingManifests as unknown as Parameters<typeof checkIfPluginCanBeAdded>[0], manifest as unknown as Parameters<typeof checkIfPluginCanBeAdded>[1]);
 			} catch (error) {
 				hasThrown = true;
 			}

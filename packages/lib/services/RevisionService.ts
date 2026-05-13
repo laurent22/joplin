@@ -65,7 +65,7 @@ export default class RevisionService extends BaseService {
 	}
 
 	private noteMetadata_(note: NoteEntity) {
-		const excludedFields = ['type_', 'title', 'body', 'created_time', 'updated_time', 'encryption_applied', 'encryption_cipher_text', 'is_conflict'];
+		const excludedFields = ['type_', 'title', 'body', 'created_time', 'updated_time', 'encryption_applied', 'encryption_cipher_text', 'is_conflict', 'user_data'];
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const md: any = {};
 		for (const k in note) {

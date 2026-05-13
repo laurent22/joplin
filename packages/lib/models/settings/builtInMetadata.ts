@@ -445,6 +445,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			secure: true,
 		},
 
+		'sync.10.pendingAuthId': { value: '', type: SettingItemType.String, public: false },
+
 		'sync.10.inboxEmail': { value: '', type: SettingItemType.String, public: false },
 
 		'sync.10.inboxId': { value: '', type: SettingItemType.String, public: false },
@@ -907,7 +909,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.String,
 			isEnum: true,
 			public: true,
-			appTypes: [AppType.Cli],
+			appTypes: [AppType.Cli, AppType.Mobile],
+			section: 'appearance',
 			label: () => _('Sort notebooks by'),
 			options: () => {
 				const Folder = require('../Folder').default;
@@ -921,7 +924,24 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			},
 			storage: SettingStorage.File,
 		},
-		'folders.sortOrder.reverse': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
+		'folders.sortOrder.reverse': {
+			value: false,
+			type: SettingItemType.Bool,
+			storage: SettingStorage.File,
+			isGlobal: true,
+			public: true,
+			section: 'appearance',
+			label: () => {
+				if (mobilePlatform) {
+					// For config screen on mobile, there is no sections for notebooks
+					// Explicitly mark it as an option for notebook order
+					return _('Reverse notebook sort order');
+				} else {
+					return _('Reverse sort order');
+				}
+			},
+			appTypes: [AppType.Cli, AppType.Mobile],
+		},
 		trackLocation: { value: true, type: SettingItemType.Bool, section: 'note', storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Save geo-location with notes') },
 
 		'editor.usePlainText': {
@@ -1549,6 +1569,16 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			label: () => _('Markdown editor: Render markup in editor'),
 			description: () => _('Renders markup on all lines that don\'t include the cursor.'),
+			section: 'editor',
+			storage: SettingStorage.File,
+		},
+		'editor.tableEditing': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			label: () => _('Markdown editor: Interactive table editing'),
+			description: () => _('When enabled, tables are rendered as an interactive widget in the editor. Disable this if you prefer to edit tables as raw Markdown.'),
 			section: 'editor',
 			storage: SettingStorage.File,
 		},

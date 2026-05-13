@@ -1,3 +1,5 @@
+import removeInvalidUtf8 from './removeInvalidUtf8';
+
 type OnRandomInt = (low: number, high: number)=> number;
 
 const randomString = (nextRandomInteger: OnRandomInt) => (length: number) => {
@@ -14,7 +16,7 @@ const randomString = (nextRandomInteger: OnRandomInt) => (length: number) => {
 	text = text.replace(/\p{C}/ug, '-'); // Other control characters
 
 	// Remove invalid UTF-8
-	text = new TextDecoder().decode(new TextEncoder().encode(text));
+	text = removeInvalidUtf8(text);
 
 	// Attempt to work around issues related to unexpected differences in items when reading from
 	// the Joplin client: Remove certain invalid unicode:

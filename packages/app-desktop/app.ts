@@ -48,6 +48,7 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
+import { completePendingAuthentication } from '@joplin/lib/services/joplinCloudUtils';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
 import path = require('path');
 import { afterDefaultPluginsLoaded, loadAndRunDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
@@ -605,6 +606,10 @@ class Application extends BaseApplication {
 			} else {
 				bridge().mainWindow().show();
 			}
+		});
+
+		addTask('app/complete pending Joplin Cloud auth', async () => {
+			await completePendingAuthentication();
 		});
 
 		addTask('app/start maintenance tasks', () => {

@@ -200,6 +200,7 @@ packages/app-desktop/gui/ClipperConfigScreen.js
 packages/app-desktop/gui/ConfigScreen/ButtonBar.js
 packages/app-desktop/gui/ConfigScreen/ConfigScreen.js
 packages/app-desktop/gui/ConfigScreen/Sidebar.js
+packages/app-desktop/gui/ConfigScreen/configSearch.js
 packages/app-desktop/gui/ConfigScreen/controls/FontSearch.js
 packages/app-desktop/gui/ConfigScreen/controls/GlobalHotkeyInput.test.js
 packages/app-desktop/gui/ConfigScreen/controls/GlobalHotkeyInput.js
@@ -212,6 +213,8 @@ packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js
+packages/app-desktop/gui/ConfigScreen/searchHighlight.test.js
+packages/app-desktop/gui/ConfigScreen/searchHighlight.js
 packages/app-desktop/gui/DialogButtonRow.js
 packages/app-desktop/gui/DialogButtonRow/useKeyboardHandler.js
 packages/app-desktop/gui/DialogTitle.js
@@ -299,6 +302,20 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useTabIndenter.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useTextPatternsLookup.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useWebViewApi.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/ActionPanel.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardContext.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardEditor.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/canvasFlow.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/injectStyle.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/loadReactFlowCss.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/LinkNode.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/sharedStyles.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/theme.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.test.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.js
 packages/app-desktop/gui/NoteEditor/NoteEditor.js
 packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js
 packages/app-desktop/gui/NoteEditor/StatusBar.js
@@ -476,6 +493,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/AppDialogs.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/ModalMessageOverlay.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/PluginDialogs.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/WindowCommandsAndDialogs.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addNoteToWhiteboard.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/commandPalette.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.js
@@ -491,9 +509,11 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/index.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/linkToNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/moveToFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newFolder.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newNote.test.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newSubFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newTodo.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newWhiteboard.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolderDialog.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.js
@@ -527,6 +547,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNotesSortOrderR
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/togglePerFolderSortOrder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleSideBar.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleVisiblePanes.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleWhiteboardEditor.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/utils/canUseNativeUndo.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/types.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/appDialogs.js
@@ -1060,6 +1081,8 @@ packages/editor/CodeMirror/editorCommands/markdownCommands.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.test.js
 packages/editor/CodeMirror/editorCommands/sortSelectedLines.js
 packages/editor/CodeMirror/editorCommands/supportsCommand.js
+packages/editor/CodeMirror/editorCommands/tableCommands.test.js
+packages/editor/CodeMirror/editorCommands/tableCommands.js
 packages/editor/CodeMirror/extensions/biDirectionalTextExtension.js
 packages/editor/CodeMirror/extensions/ctrlClickActionExtension.js
 packages/editor/CodeMirror/extensions/ctrlClickCheckboxExtension.js
@@ -1088,6 +1111,7 @@ packages/editor/CodeMirror/extensions/overwriteModeExtension.js
 packages/editor/CodeMirror/extensions/rendering/addFormattingClasses.js
 packages/editor/CodeMirror/extensions/rendering/renderBlockImages.test.js
 packages/editor/CodeMirror/extensions/rendering/renderBlockImages.js
+packages/editor/CodeMirror/extensions/rendering/renderTables.js
 packages/editor/CodeMirror/extensions/rendering/renderingExtension.js
 packages/editor/CodeMirror/extensions/rendering/replaceBackslashEscapes.js
 packages/editor/CodeMirror/extensions/rendering/replaceBulletLists.js
@@ -1148,6 +1172,8 @@ packages/editor/CodeMirror/utils/markdown/getCheckboxAtPosition.js
 packages/editor/CodeMirror/utils/markdown/renumberSelectedLists.test.js
 packages/editor/CodeMirror/utils/markdown/renumberSelectedLists.js
 packages/editor/CodeMirror/utils/markdown/stripBlockquote.js
+packages/editor/CodeMirror/utils/markdown/tableUtils.test.js
+packages/editor/CodeMirror/utils/markdown/tableUtils.js
 packages/editor/CodeMirror/utils/markdown/toggleCheckboxAt.js
 packages/editor/CodeMirror/utils/setupVim.js
 packages/editor/CodeMirror/vendor/announceSearchMatch.js
@@ -1248,6 +1274,8 @@ packages/generator-joplin/tools/updateCategories.js
 packages/htmlpack/index.test.js
 packages/htmlpack/index.js
 packages/htmlpack/packToString.js
+packages/htmlpack/packToWriter.test.js
+packages/htmlpack/packToWriter.js
 packages/htmlpack/utils/parseHtmlAsync.js
 packages/lib/ArrayUtils.js
 packages/lib/AsyncActionQueue.test.js
@@ -1323,6 +1351,8 @@ packages/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage.js
 packages/lib/components/shared/ShareNoteDialog/useOnShareLinkClick.js
 packages/lib/components/shared/ShareNoteDialog/useShareStatusMessage.js
 packages/lib/components/shared/SsoScreenShared.js
+packages/lib/components/shared/config/config-search-text.js
+packages/lib/components/shared/config/config-search.test.js
 packages/lib/components/shared/config/config-shared.js
 packages/lib/components/shared/config/plugins/types.js
 packages/lib/components/shared/config/plugins/useOnDeleteHandler.js
@@ -1747,6 +1777,12 @@ packages/lib/services/trash/permanentlyDeleteOldItems.test.js
 packages/lib/services/trash/permanentlyDeleteOldItems.js
 packages/lib/services/trash/restoreItems.test.js
 packages/lib/services/trash/restoreItems.js
+packages/lib/services/whiteboard/generateId.js
+packages/lib/services/whiteboard/jsoncanvas.js
+packages/lib/services/whiteboard/parse.js
+packages/lib/services/whiteboard/resolveRef.js
+packages/lib/services/whiteboard/serialize.js
+packages/lib/services/whiteboard/whiteboard.test.js
 packages/lib/shim-init-node.test.js
 packages/lib/shim-init-node.js
 packages/lib/shim.js
@@ -1907,6 +1943,7 @@ packages/tools/fuzzer/ipc/Client.js
 packages/tools/fuzzer/ipc/ClientPool.js
 packages/tools/fuzzer/ipc/Server.js
 packages/tools/fuzzer/model/ActionTracker.js
+packages/tools/fuzzer/model/FolderRecord.test.js
 packages/tools/fuzzer/model/FolderRecord.js
 packages/tools/fuzzer/model/NoteRecord.js
 packages/tools/fuzzer/model/ResourceRecord.js
@@ -1927,6 +1964,7 @@ packages/tools/fuzzer/utils/openDebugSession.js
 packages/tools/fuzzer/utils/randomId.test.js
 packages/tools/fuzzer/utils/randomId.js
 packages/tools/fuzzer/utils/randomString.js
+packages/tools/fuzzer/utils/removeInvalidUtf8.js
 packages/tools/fuzzer/utils/retryWithCount.js
 packages/tools/generate-database-types.js
 packages/tools/generate-images.js

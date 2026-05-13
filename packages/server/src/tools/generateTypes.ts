@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 import sqlts, { Config, Table } from '@rmp135/sql-ts';
+import { hasOwnProperty } from '@joplin/utils/object';
 
 require('source-map-support').install();
 
@@ -29,6 +30,7 @@ const config: Config = {
 		'main.api_clients': 'WithDates, WithUuid',
 		'main.backup_items': 'WithCreatedDate',
 		'main.changes': 'WithDates, WithUuid',
+		'main.changes_2': 'WithDates, WithUuid',
 		'main.emails': 'WithDates',
 		'main.events': 'WithUuid',
 		'main.items': 'WithDates, WithUuid',
@@ -49,6 +51,7 @@ const propertyTypes: Record<string, string> = {
 	'*.item_type': 'ItemType',
 	'backup_items.content': 'Buffer',
 	'changes.type': 'ChangeType',
+	'changes_2.type': 'ChangeType',
 	'emails.sender_id': 'EmailSender',
 	'emails.sent_time': 'number',
 	'events.created_time': 'number',
@@ -73,6 +76,10 @@ const propertyTypes: Record<string, string> = {
 	'users.max_total_item_size': 'number | null',
 	'users.total_item_size': 'number',
 	'users.sso_auth_code_expire_at': 'number',
+};
+
+const interfaceNameOverrides: Record<string, string> = {
+	'Changes2': 'Change2',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {
@@ -119,7 +126,12 @@ function createTypeString(table: Table) {
 	}
 
 	const header = ['export interface'];
-	header.push(table.interfaceName);
+
+	let interfaceName = table.interfaceName;
+	if (hasOwnProperty(interfaceNameOverrides, interfaceName)) {
+		interfaceName = interfaceNameOverrides[interfaceName];
+	}
+	header.push(interfaceName);
 
 	if (table.extends) header.push(`extends ${table.extends}`);
 

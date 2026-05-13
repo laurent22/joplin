@@ -30,8 +30,7 @@ const createCsvLine = (items: string[]) => {
 	}
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const enforceString = (line: any): string => {
+const enforceString = (line: string | string[] | undefined | null): string => {
 	if (Array.isArray(line)) return line.join(', ');
 	return line ? (`${line}`) : '';
 };

@@ -8,7 +8,8 @@ import { connect } from 'react-redux';
 import { buildStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
 import getActivePluginEditorView from '@joplin/lib/services/plugins/utils/getActivePluginEditorView';
-import { AppState } from '../../app.reducer';
+import { stateUtils } from '@joplin/lib/reducer';
+import { AppState, AppWindowState } from '../../app.reducer';
 
 interface NoteToolbarProps {
 	themeId: number;
@@ -51,6 +52,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const whenClauseContext = stateToWhenClauseContext(state, { windowId: ownProps.windowId });
 
 	const { editorPlugin } = getActivePluginEditorView(state.pluginService.plugins, ownProps.windowId);
+	const windowState = stateUtils.windowStateById(state, ownProps.windowId) as AppWindowState;
 
 	const commands = [
 		'showSpellCheckerMenu',
@@ -59,7 +61,10 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		'showNoteProperties',
 	];
 
-	if (editorPlugin) commands.push('toggleEditorPlugin');
+	// `toggleEditorPlugin` shows for plugin editors; we extend it to also
+	// toggle the core whiteboard editor on whiteboard notes (see the command's
+	// runtime). The button is the same eye icon either way.
+	if (editorPlugin || windowState.activeNoteIsWhiteboard) commands.push('toggleEditorPlugin');
 
 	return {
 		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons(commands

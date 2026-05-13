@@ -34,7 +34,7 @@ jobs:
 
           for REVIEW_ID in $REVIEW_IDS; do
             gh api -X PUT "repos/${REPO}/pulls/${PR_NUMBER}/reviews/${REVIEW_ID}" \
-              -f body="" 2>/dev/null || true
+              -f body="."
           done
 
           # Delete all CodeRabbit issue comments on this PR
@@ -42,5 +42,5 @@ jobs:
             --jq '[.[] | select(.user.login == "coderabbitai[bot]") | .url] | .[]')
 
           for URL in $COMMENT_URLS; do
-            gh api -X DELETE "$URL" 2>/dev/null || true
+            gh api -X DELETE "$URL"
           done

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import useSyncTargetUpgrade, { SyncTargetUpgradeResult } from '@joplin/lib/services/synchronizer/gui/useSyncTargetUpgrade';
 
-const { render } = require('react-dom');
+import { createRoot } from 'react-dom/client';
 const ipcRenderer = require('electron').ipcRenderer;
 import Setting from '@joplin/lib/models/Setting';
 import restart from '../services/restart';
@@ -101,4 +101,5 @@ function Root_UpgradeSyncTarget() {
 	);
 }
 
-render(<Root_UpgradeSyncTarget />, document.getElementById('react-root'));
+const root = createRoot(document.getElementById('react-root'));
+root.render(<Root_UpgradeSyncTarget />);

@@ -1,6 +1,7 @@
 import { Link } from '../MdToHtml';
 import { toForwardSlashes } from '@joplin/utils/path';
 import { LinkIndexes } from './rules/link_close';
+import { RendererTheme } from '../types';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 
@@ -11,8 +12,7 @@ export interface Options {
 	useCustomPdfViewer: boolean;
 	noteId: string;
 	vendorDir: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	theme: any;
+	theme: RendererTheme;
 }
 
 function resourceUrl(resourceFullPath: string): string {

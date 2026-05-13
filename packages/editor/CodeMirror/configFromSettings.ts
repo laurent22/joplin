@@ -15,6 +15,7 @@ import { vim } from '@replit/codemirror-vim';
 import { indentUnit } from '@codemirror/language';
 import insertNewlineContinueMarkup from './editorCommands/insertNewlineContinueMarkup';
 import renderingExtension from './extensions/rendering/renderingExtension';
+import renderTables from './extensions/rendering/renderTables';
 import { RenderedContentContext } from './extensions/rendering/types';
 import highlightActiveLineExtension from './extensions/highlightActiveLineExtension';
 import renderBlockImages from './extensions/rendering/renderBlockImages';
@@ -112,7 +113,11 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 	// Only enable in-editor rendering for Markdown notes. In-editor rendering can result in
 	// confusing output in HTML notes (e.g. some, but not most, tags hidden).
 	if (settings.inlineRenderingEnabled && settings.language === EditorLanguageType.Markdown) {
-		extensions.push(renderingExtension());
+		extensions.push(renderingExtension(settings.tableEditingEnabled));
+	} else if (settings.tableEditingEnabled && settings.language === EditorLanguageType.Markdown) {
+		// Table editing can work independently of inline rendering so users
+		// who disable inline rendering can still use the interactive widget.
+		extensions.push(renderTables);
 	}
 
 	if (settings.imageRenderingEnabled) {

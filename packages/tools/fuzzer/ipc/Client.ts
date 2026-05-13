@@ -28,6 +28,7 @@ import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import hangingIndent from '../utils/hangingIndent';
 import { readFile, writeFile } from 'fs/promises';
 import { hasOwnProperty } from '@joplin/utils/object';
+import removeInvalidUtf8 from '../utils/removeInvalidUtf8';
 
 const logger = Logger.create('Client');
 
@@ -126,12 +127,17 @@ const cliProcessPromptString = 'command> ';
 
 interface CreateOrUpdateOptions {
 	quiet?: boolean;
+	message?: string;
 }
 
 interface CreateRandomItemOptions extends CreateOrUpdateOptions {
 	parentId: ItemId;
 	id?: ItemId;
 	quiet?: boolean;
+}
+
+interface CreateRandomFolderOptions extends CreateRandomItemOptions {
+	title?: string;
 }
 
 interface CreateOrUpdateManyOptions {
@@ -729,15 +735,23 @@ class Client implements ActionableClient {
 
 				await this.createRandomNote({ parentId, quiet: true });
 			},
-			update: async (targetNote: NoteData) => {
+			update: async (targetNote: NoteData, step: number) => {
 				const keep = targetNote.body.substring(
 					0, this.context_.randInt(0, targetNote.body.length),
 				);
 				const append = this.context_.randomString(this.context_.randInt(0, 5000));
+
+				let body = keep + append;
+				// Only keep unicode that can be represented as UTF-8 to prevent false-positive fuzzer failures
+				body = removeInvalidUtf8(body);
+
 				await this.updateNote({
 					...targetNote,
-					body: keep + append,
-				}, { quiet: true });
+					body,
+				}, {
+					quiet: true,
+					message: `sub-step: ${step}: keep: ${keep.length}, append: ${append.length}`,
+				});
 			},
 			delete: async (targetNote: NoteData) => {
 				await this.deleteNote(targetNote.id, { quiet: true });
@@ -757,18 +771,18 @@ class Client implements ActionableClient {
 
 			const actionId = this.context_.randomFrom(actionKeys, actionWeights);
 			if (actionId) {
-				await actions[actionId](targetNote);
+				await actions[actionId](targetNote, i);
 			}
 		}
 		bar.complete();
 	}
 
-	public async createRandomFolder({ quiet, parentId, id }: CreateRandomItemOptions) {
+	public async createRandomFolder({ quiet, parentId, id, title }: CreateRandomFolderOptions) {
 		const titleLength = this.context_.randInt(1, 128);
 		const folder = {
 			parentId: parentId,
 			id: id ?? this.context_.randomId(),
-			title: this.context_.randomString(titleLength).replace(/\n/g, ' '),
+			title: title ?? this.context_.randomString(titleLength).replace(/\n/g, ' '),
 		};
 
 		await this.createFolder(folder, { quiet });
@@ -865,12 +879,12 @@ class Client implements ActionableClient {
 		await this.assertNoteMatchesState_(note);
 	}
 
-	public async updateNote(note: NoteData, { quiet = false }: CreateOrUpdateOptions = { }) {
+	public async updateNote(note: NoteData, { message, quiet = false }: CreateOrUpdateOptions = { }) {
 		if (!quiet) {
 			logger.info('Update note', note.id, 'in', `${note.parentId}/${this.label}`);
 		}
 
-		await this.tracker_.updateNote(note);
+		await this.tracker_.updateNote(note, { message });
 		await this.execApiCommand_('PUT', `/notes/${encodeURIComponent(note.id)}`, {
 			title: note.title,
 			body: note.body,
@@ -1177,15 +1191,17 @@ class Client implements ActionableClient {
 			}
 		};
 
-		const assertSameBodies = (actualSorted: NoteData[], expectedSorted: NoteData[], assertionLabel: string) => {
+		const assertStringPropertyMatches = <Key extends string, Entity extends Record<Key|'id', string>> (
+			key: Key, actualSorted: Entity[], expectedSorted: Entity[], assertionLabel: string,
+		) => {
 			if (actualSorted.length !== expectedSorted.length) {
 				throw new Error(`Input arrays have different lengths (in: ${assertionLabel})`);
 			}
 
 			const differentItems = [];
 			for (let i = 0; i < actualSorted.length; i++) {
-				const actualBody = actualSorted[i].body;
-				const expectedBody = expectedSorted[i].body;
+				const actualBody = actualSorted[i][key];
+				const expectedBody = expectedSorted[i][key];
 
 				if (actualBody !== expectedBody) {
 					differentItems.push([actualSorted[i], expectedSorted[i]]);
@@ -1196,11 +1212,11 @@ class Client implements ActionableClient {
 				const message = [`Some items have different bodies (in: ${assertionLabel})`];
 				for (const [actual, expected] of differentItems) {
 					message.push(`- item: ${actual.id}${actual.id !== expected.id ? ` (compare ${expected.id}) ` : ''}:`);
-					message.push(` ${hangingIndent(getDiffDebugMessage(actual.body, expected.body))}`);
+					message.push(` ${hangingIndent(getDiffDebugMessage(actual[key], expected[key]))}`);
 
-					// Only display full bodies for easy-to-inspect content:
-					const simpleBodyExp = /^[a-z0-9;.,!?[\]() \t\n"']{0,200}$/i;
-					if (actual.body.match(simpleBodyExp) && expected.body.match(simpleBodyExp)) {
+					// Only display the full value for easy-to-inspect content:
+					const simpleContentExp = /^[a-z0-9;.,!?[\]() \t\n"']{0,200}$/i;
+					if (actual[key].match(simpleContentExp) && expected[key].match(simpleContentExp)) {
 						message.push(`  actual:  ${JSON.stringify(actual)}`);
 						message.push(`  expected:${JSON.stringify(expected)}`);
 					}
@@ -1219,7 +1235,7 @@ class Client implements ActionableClient {
 			assertNoAdjacentEqualIds(notes, 'notes');
 			assertNoAdjacentEqualIds(expectedNotes, 'expectedNotes');
 			await assertSameIds(notes, expectedNotes, 'Note IDs should match');
-			assertSameBodies(notes, expectedNotes, 'should have the same note bodies');
+			assertStringPropertyMatches('body', notes, expectedNotes, 'should have the same note bodies');
 			assert.deepEqual(notes, expectedNotes, 'should have the same notes as the expected state');
 		};
 
@@ -1233,6 +1249,7 @@ class Client implements ActionableClient {
 			assertNoAdjacentEqualIds(folders, 'folders');
 			assertNoAdjacentEqualIds(expectedFolders, 'expectedFolders');
 			await assertSameIds(folders, expectedFolders, 'Folder IDs should match');
+			assertStringPropertyMatches('title', folders, expectedFolders, 'should have the same folder titles');
 			assert.deepEqual(folders, expectedFolders, 'should have the same folders as the expected state');
 		};
 

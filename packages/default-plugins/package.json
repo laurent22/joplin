@@ -1,6 +1,6 @@
 {
   "name": "@joplin/default-plugins",
-  "version": "3.6.0",
+  "version": "3.7.0",
   "description": "Default plugins bundler",
   "private": true,
   "scripts": {
@@ -16,10 +16,10 @@
     "@types/yargs": "17.0.35",
     "joplin-plugin-freehand-drawing": "4.3.0",
     "ts-node": "10.9.2",
-    "typescript": "5.8.3"
+    "typescript": "5.9.3"
   },
   "dependencies": {
-    "@joplin/utils": "~3.6",
+    "@joplin/utils": "~3.7",
     "fs-extra": "11.3.3",
     "yargs": "17.7.2"
   }

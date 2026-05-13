@@ -1,12 +1,12 @@
 import * as fs from 'fs-extra';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '@joplin/lib/markdownUtils';
+import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default async function(readmePath: string, manifests: any) {
+export default async function(readmePath: string, manifests: Record<string, PluginManifest>) {
 	let rows: MarkdownTableRow[] = [];
 
 	for (const pluginId in manifests) {
-		rows.push(manifests[pluginId]);
+		rows.push(manifests[pluginId] as unknown as MarkdownTableRow);
 	}
 
 	rows = rows.map(row => {
@@ -51,8 +51,7 @@ export default async function(readmePath: string, manifests: any) {
 		},
 	];
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	rows.sort((a: any, b: any) => {
+	rows.sort((a, b) => {
 		return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : +1;
 	});
 

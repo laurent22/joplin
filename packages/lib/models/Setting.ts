@@ -24,10 +24,12 @@ export type SettingValueType<T extends string> = (
 		: (T extends keyof Constants ? Constants[T] : any)
 );
 
-interface OptionsToValueLabelsOptions {
-	valueKey: string;
-	labelKey: string;
+interface OptionsToValueLabelsOptions<TValueKey extends string = 'value', TLabelKey extends string = 'label'> {
+	valueKey: TValueKey;
+	labelKey: TLabelKey;
 }
+
+type EnumValueLabel<TValueKey extends string, TLabelKey extends string> = { [K in TValueKey | TLabelKey]: string };
 
 interface KeysOptions {
 	secureOnly?: boolean;
@@ -925,22 +927,22 @@ class Setting extends BaseModel {
 		}
 	}
 
-	public static enumOptionsToValueLabels(enumOptions: Record<string, string>, order: string[], options: OptionsToValueLabelsOptions = null) {
-		options = {
-			labelKey: 'label',
-			valueKey: 'value',
+	public static enumOptionsToValueLabels<TValueKey extends string = 'value', TLabelKey extends string = 'label'>(enumOptions: Record<string, string>, order: string[], options: OptionsToValueLabelsOptions<TValueKey, TLabelKey> = null): EnumValueLabel<TValueKey, TLabelKey>[] {
+		const resolvedOptions = {
+			labelKey: 'label' as TLabelKey,
+			valueKey: 'value' as TValueKey,
 			...options,
 		};
 
-		const output = [];
+		const output: EnumValueLabel<TValueKey, TLabelKey>[] = [];
 
 		for (const value of order) {
 			if (!Object.prototype.hasOwnProperty.call(enumOptions, value)) continue;
 
 			output.push({
-				[options.valueKey]: value,
-				[options.labelKey]: enumOptions[value],
-			});
+				[resolvedOptions.valueKey]: value,
+				[resolvedOptions.labelKey]: enumOptions[value],
+			} as EnumValueLabel<TValueKey, TLabelKey>);
 		}
 
 		for (const k in enumOptions) {
@@ -948,9 +950,9 @@ class Setting extends BaseModel {
 			if (order.includes(k)) continue;
 
 			output.push({
-				[options.valueKey]: k,
-				[options.labelKey]: enumOptions[k],
-			});
+				[resolvedOptions.valueKey]: k,
+				[resolvedOptions.labelKey]: enumOptions[k],
+			} as EnumValueLabel<TValueKey, TLabelKey>);
 		}
 
 		return output;
@@ -1131,13 +1133,7 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	public static async saveAll() {
-		if (Setting.autoSaveEnabled && !this.saveTimeoutId_) return Promise.resolve();
-
-		logger.debug('Saving settings...');
-		shim.clearTimeout(this.saveTimeoutId_);
-		this.saveTimeoutId_ = null;
-
+	private static async getFileValuesAndDbUpdateQueries() {
 		const keys = this.keys();
 
 		const valuesForFile: SettingValues = {};
@@ -1183,6 +1179,18 @@ class Setting extends BaseModel {
 			}
 		}
 
+		return { valuesForFile, queries };
+	}
+
+	public static async saveAll() {
+		if (Setting.autoSaveEnabled && !this.saveTimeoutId_) return Promise.resolve();
+
+		logger.debug('Saving settings...');
+		shim.clearTimeout(this.saveTimeoutId_);
+		this.saveTimeoutId_ = null;
+
+		const { valuesForFile, queries } = await Setting.getFileValuesAndDbUpdateQueries();
+
 		await BaseModel.db().transactionExecBatch(queries);
 
 		if (this.canUseFileStorage()) {
@@ -1206,6 +1214,15 @@ class Setting extends BaseModel {
 		}
 
 		logger.debug('Settings have been saved.');
+	}
+
+	public static async resetDefaultProfileSettings() {
+		const { valuesForFile } = await Setting.getFileValuesAndDbUpdateQueries();
+
+		if (this.canUseFileStorage()) {
+			const { globalSettings } = splitGlobalAndLocalSettings(valuesForFile);
+			await this.rootFileHandler.save(globalSettings, { overwrite: true });
+		}
 	}
 
 	public static scheduleChangeEvent() {
@@ -1390,7 +1407,7 @@ class Setting extends BaseModel {
 		// TODO: This is currently specific to the mobile app
 		const sectionNameToSummary: Record<string, string> = {
 			'general': _('Language, date format'),
-			'appearance': _('Themes'),
+			'appearance': _('Themes, notebook sort order'),
 			'sync': _('Sync, encryption, proxy'),
 			'joplinCloud': _('Email To Note, login information'),
 			'editor': _('Typography, spellcheck, layout'),

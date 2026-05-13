@@ -76,6 +76,7 @@ export interface NoteEditorProps {
 	startupPluginsLoaded: boolean;
 	enableHtmlToMarkdownBanner: boolean;
 	showNoteLinkIcon: boolean;
+	whiteboardForceMarkdown: Record<string, boolean>;
 }
 
 export interface NoteBodyEditorRef {

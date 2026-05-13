@@ -5,7 +5,7 @@ import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializ
 import { ModelType } from '@joplin/lib/BaseModel';
 import { ApiError, CustomErrorCode, ErrorConflict, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity, ErrorCode, ErrorBadRequest } from '../utils/errors';
 import { Knex } from 'knex';
-import { ChangePreviousItem } from './ChangeModel';
+import { ChangePreviousItem } from './ChangeModel/ChangeModel';
 import { unique } from '../utils/array';
 import StorageDriverBase, { Context } from './items/storage/StorageDriverBase';
 import { DbConnection, isUniqueConstraintError, returningSupported } from '../db';
@@ -1134,18 +1134,18 @@ export default class ItemModel extends BaseModel<Item> {
 
 			if (isNew) await this.models().userItem().add(userId, item.id);
 
-			// We only record updates. This because Create and Update events are
-			// per user, whenever a user_item is created or deleted.
+			// We only record updates. Create and Delete events are recorded elsewhere.
 			const changeItemName = item.name || previousName;
 
 			if (!isNew && this.shouldRecordChange(changeItemName)) {
-				await this.models().change().save({
-					item_type: this.itemType,
-					item_id: item.id,
-					item_name: changeItemName,
-					type: isNew ? ChangeType.Create : ChangeType.Update,
-					previous_item: previousItem ? this.models().change().serializePreviousItem(previousItem) : '',
-					user_id: userId,
+				await this.models().change().recordChange({
+					itemId: item.id,
+					sourceUserId: userId,
+					shareId: item.jop_share_id ?? '',
+					previousItem,
+					itemName: changeItemName,
+					type: ChangeType.Update,
+					itemType: this.itemType,
 				});
 			}
 

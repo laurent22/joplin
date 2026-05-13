@@ -22,6 +22,7 @@ import {
 	toggleBolded, toggleCode,
 	toggleItalicized, toggleMath,
 } from './editorCommands/markdownCommands';
+import { tableNextCell, tablePreviousCell } from './editorCommands/tableCommands';
 import decoratorExtension from './extensions/markdownDecorationExtension';
 import computeSelectionFormatting from './utils/formatting/computeSelectionFormatting';
 import { selectionFormattingEqual } from '../SelectionFormatting';
@@ -203,6 +204,11 @@ const createEditor = (
 				return false;
 			}
 
+			// Try table cell navigation first
+			if (tableNextCell(view)) {
+				return true;
+			}
+
 			if (settings.autocompleteMarkup) {
 				return insertOrIncreaseIndent(view);
 			}
@@ -212,6 +218,11 @@ const createEditor = (
 		keyCommand('Shift-Tab', (view) => {
 			if (settings.tabMovesFocus) {
 				return false;
+			}
+
+			// Try table cell navigation first
+			if (tablePreviousCell(view)) {
+				return true;
 			}
 
 			// When at the beginning of the editor, allow shift-tab to act

@@ -64,11 +64,19 @@ const getPostContent = async (post: Post): Promise<PostContent> => {
 	}
 };
 
+interface RssFeedItem {
+	title: string;
+	description: string;
+	url: string;
+	guid: string;
+	date: Date;
+	custom_elements: { [key: string]: string }[];
+}
+
 const generateRssFeed = async (posts: Post[]) => {
 	let pubDate = null;
 	let postCount = 0;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const feedItems: any[] = [];
+	const feedItems: RssFeedItem[] = [];
 	for (const post of posts.reverse()) {
 		const content = await getPostContent(post);
 		const postDate = getNewsDate(content.parsed.header, post.path);

@@ -1,5 +1,5 @@
 import Setting from '../../models/Setting';
-import PluginService from '../../services/plugins/PluginService';
+import PluginService, { defaultPluginSetting } from '../../services/plugins/PluginService';
 import { setupDatabaseAndSynchronizer, switchClient, withWarningSilenced } from '../../testing/test-utils';
 import loadPlugins, { Props as LoadPluginsProps } from './loadPlugins';
 import MockPluginRunner from './testing/MockPluginRunner';
@@ -8,6 +8,10 @@ import { Action, createStore } from 'redux';
 import MockPlatformImplementation from './testing/MockPlatformImplementation';
 import createTestPlugin from '../../testing/plugins/createTestPlugin';
 import Plugin from './Plugin';
+import shim from '../../shim';
+import { PluginManifest } from './utils/types';
+import { writeFile, mkdirp } from 'fs-extra';
+import { join } from 'path';
 
 const createMockReduxStore = () => {
 	return createStore((state: State = defaultState, action: Action<string>) => {
@@ -134,6 +138,71 @@ describe('loadPlugins', () => {
 		// if not enabled previously.
 		expect(pluginRunner.stopCalledTimes).toBe(disabledCount + enabledCount);
 		expect([...pluginRunner.runningPluginIds].sort()).toMatchObject(expectedRunningIds);
+	});
+
+	test('should skip extraction when jpl has not changed', async () => {
+		const pluginId = 'joplin.test.plugin.packed';
+		await createTestPlugin({
+			...defaultManifestProperties,
+			id: pluginId,
+			name: 'Test JPL Plugin',
+		}, { format: 'jpl' });
+
+		const pluginRunner = new MockPluginRunner();
+		const store = createMockReduxStore();
+		const service = PluginService.instance();
+		service.initialize('2.3.4', platformImplementation, pluginRunner, store);
+
+		const tarExtractSpy = jest.spyOn(shim.fsDriver(), 'tarExtract');
+
+		// First load should extract
+		await service.loadAndRunPlugins(Setting.value('pluginDir'), Setting.value('plugins.states'));
+		expect(tarExtractSpy).toHaveBeenCalledTimes(1);
+
+		// Second load with same file should skip extraction
+		await service.unloadPlugin(pluginId);
+		await service.loadAndRunPlugins(Setting.value('pluginDir'), Setting.value('plugins.states'));
+		expect(tarExtractSpy).toHaveBeenCalledTimes(1);
+
+		// Recreating the jpl (different mtime/size) should trigger re-extraction
+		await service.unloadPlugin(pluginId);
+		await createTestPlugin({
+			...defaultManifestProperties,
+			id: pluginId,
+			name: 'Test JPL Plugin',
+		}, { format: 'jpl', onStart: '/* changed */' });
+
+		await service.loadAndRunPlugins(Setting.value('pluginDir'), Setting.value('plugins.states'));
+		expect(tarExtractSpy).toHaveBeenCalledTimes(2);
+
+		tarExtractSpy.mockRestore();
+	});
+
+	test('should not load the script for disabled plugins', async () => {
+		const createDirPlugin = async (manifest: PluginManifest, enabled: boolean) => {
+			const dir = join(Setting.value('pluginDir'), manifest.id);
+			await mkdirp(dir);
+			await writeFile(join(dir, 'manifest.json'), JSON.stringify(manifest), 'utf-8');
+			await writeFile(join(dir, 'index.js'), 'joplin.plugins.register({ onStart: async function() {} });', 'utf-8');
+			const newStates = {
+				...Setting.value('plugins.states'),
+				[manifest.id]: { ...defaultPluginSetting(), enabled },
+			};
+			Setting.setValue('plugins.states', newStates);
+		};
+
+		const enabledId = 'joplin.test.plugin.enabled';
+		const disabledId = 'joplin.test.plugin.disabled';
+		await createDirPlugin({ ...defaultManifestProperties, id: enabledId, name: 'Enabled' }, true);
+		await createDirPlugin({ ...defaultManifestProperties, id: disabledId, name: 'Disabled' }, false);
+
+		const pluginRunner = new MockPluginRunner();
+		const store = createMockReduxStore();
+		PluginService.instance().initialize('2.3.4', platformImplementation, pluginRunner, store);
+		await PluginService.instance().loadAndRunPlugins(Setting.value('pluginDir'), Setting.value('plugins.states'));
+
+		expect(PluginService.instance().plugins[disabledId].scriptText).toBe('');
+		expect(PluginService.instance().plugins[enabledId].scriptText).not.toBe('');
 	});
 
 	test('should not block allPluginsStarted when a plugin fails to start', async () => {
