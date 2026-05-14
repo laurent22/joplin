@@ -110,8 +110,7 @@ describe('ShareService', () => {
 		}
 	});
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	function testShareFolderService(extraExecHandlers: Record<string, Function> = {}) {
+	function testShareFolderService(extraExecHandlers: Record<string, (query: unknown, body: unknown)=> unknown> = {}) {
 		let nextShareId = 1;
 		let shares: ApiShare[] = [];
 		const shareByFolderId = (folderId: string) => {
@@ -119,8 +118,7 @@ describe('ShareService', () => {
 		};
 
 		return mockShareService({
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			onExec: async (method: string, path: string, query: Record<string, any>, body: any) => {
+			onExec: async (method: string, path: string, query: Record<string, unknown>, body: unknown) => {
 				if (extraExecHandlers[`${method} ${path}`]) return extraExecHandlers[`${method} ${path}`](query, body);
 
 				if (method === 'GET' && path === 'api/shares') {
@@ -130,9 +128,10 @@ describe('ShareService', () => {
 				}
 
 				if (method === 'POST' && path === 'api/shares') {
+					const b = body as { folder_id: string; master_key_id: string };
 					// Return the existing share, if it exists. This is to match the behavior
 					// of Joplin Server.
-					const existingShare = shareByFolderId(body.folder_id);
+					const existingShare = shareByFolderId(b.folder_id);
 					if (existingShare) {
 						return existingShare;
 					}
@@ -142,8 +141,8 @@ describe('ShareService', () => {
 
 					const share = {
 						id,
-						master_key_id: body.master_key_id,
-						folder_id: body.folder_id,
+						master_key_id: b.master_key_id,
+						folder_id: b.folder_id,
 					};
 					shares.push(share);
 					return share;
@@ -152,7 +151,7 @@ describe('ShareService', () => {
 				if (method === 'DELETE' && path.startsWith('api/shares/')) {
 					const id = path.replace(/^api\/shares\//, '');
 					shares = shares.filter(share => share.id !== id);
-					return;
+					return undefined;
 				}
 
 				throw new Error(`Unhandled: ${method} ${path}`);
@@ -257,14 +256,13 @@ describe('ShareService', () => {
 		let uploadedMasterKey: MasterKeyEntity = null;
 
 		const service = testShareFolderService({
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			'GET api/users/toto%40example.com/public_key': async (_query: Record<string, any>, _body: any) => {
+			'GET api/users/toto%40example.com/public_key': async (_query, _body) => {
 				return recipientPpk;
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			'POST api/shares/share_1/users': async (_query: Record<string, any>, body: any) => {
-				uploadedEmail = body.email;
-				uploadedMasterKey = JSON.parse(body.master_key);
+			'POST api/shares/share_1/users': async (_query, body) => {
+				const b = body as { email: string; master_key: string };
+				uploadedEmail = b.email;
+				uploadedMasterKey = JSON.parse(b.master_key);
 			},
 		});
 
@@ -328,8 +326,7 @@ describe('ShareService', () => {
 		Setting.setValue('sync.target', 9);
 
 		const service = testShareFolderService({
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			'GET api/shares': async (_query: Record<string, any>, _body: any): Promise<any> => {
+			'GET api/shares': async (_query, _body) => {
 				return {
 					items: [],
 					has_more: false,

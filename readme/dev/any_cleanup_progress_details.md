@@ -768,4 +768,20 @@ Checkpoint 7 (2026-05-14): 949 → 929 (20 removed).
 - `services/plugins/reducer.ts` — 3 removed, 2 left. `(view as any)` casts on `PLUGIN_VIEW_PROP_SET`/`_PUSH` → `as unknown as Record<string, unknown[]>` etc. The reducer's `action: any` keeps a reason (heterogeneous PLUGIN_* action shapes). `viewsByType` returns `any[]` with reason (menu views have menuItems not on PluginViewState).
 - `JoplinDatabase.ts` — 4 removed, 2 left. `TableField.default: any` → `string | number | boolean | null`; `tableDescriptions_: any` → `Record<string, Record<string, string>>`; `open.options: any` → `Record<string, unknown>`; `tableFields.options: any` → `{ includeDescription?: boolean }`; `createDefaultRow.row: any` → `Record<string, unknown>`. `constructor(driver: any)` kept with reason — base Database.driver is `any` across multiple driver implementations (sqlite/better-sqlite3/web).
 
+Checkpoint 8 (2026-05-14): 929 → 886 (43 removed).
+
+- `models/utils/paginatedFeed.ts` — 2 removed, 1 left. `db: any` → `JoplinDatabase`; `WhereQuery.params` → `(string|number|boolean)[]`. The `items: any[]` stays with new reason (callers receive Note/Folder/Resource entities without index signatures).
+- `models/settings/settingValidations.ts` — 2 removed, 1 left. `validateSetting.oldValue/newValue`, `newValues` typed `unknown` / `Record<string, unknown>`. The `ValidationHandler` type alias keeps `any` with a new reason — settings are heterogeneous; each validator narrows from this base.
+- `services/DecryptionWorker.ts` — 5 removed, 0 left. Introduced local `DecryptionWorkerStartOptions` interface; `dispatchReport.report: any` → `Record<string, unknown>`; `dispatch: Function` → `(action: { type; ... })`; `on`/`off` callbacks updated reasons (heterogeneous payloads by event name).
+- `models/Folder.test.ts` — 3 removed, 0 left. `foldersById: any` → `Record<string, FolderEntity & { note_count?: number }>`.
+- `services/search/SearchEngineUtils.test.ts` — 3 removed, 0 left. `searchEngine: any` → `SearchEngine`; `options: any` → `NotesForQueryOptions`.
+- `services/search/SearchEngine.test.ts` — 4 removed, 0 left. Introduced local `ExpectedTerms` interface; helper `extractValue` narrows `string | { value: string }`.
+- `services/share/ShareService.test.ts` — 5 removed, 0 left. `extraExecHandlers` callbacks typed; per-handler body casts to specific shapes; `Function` ban-types disable goes away with the explicit-any ones.
+- `services/ExternalEditWatcher/utils.ts` — 4 removed, 0 left. `spawnCommand.options: any` → `SpawnOptions` from `child_process`; `wrapError.error: any` → `Error | null`; `subProcess.on('error')` callback typed `Error`; introduced local `ExternalBridge { openItem }` interface.
+- `services/interop/InteropService_Importer_Raw.ts` — 4 removed, 0 left. `itemIdMap/createdResources: any` → `Record<string, string>` / `Record<string, ResourceEntity>`; `folderExists.stats: any[]` → `Stat[]`; `defaultFolder_: any` → `FolderEntity | null`.
+- `services/plugins/ViewController.ts` — 2 removed, 2 left. `emitMessage` returns `Promise<unknown>`, `postMessage.message: any` → `unknown`. The other two disables (Store state heterogeneous; storeView shape varies) keep updated reasons.
+- `services/spellChecker/SpellCheckerService.ts` — 2 removed, 2 left. Removed `(a: any, b: any) => ...` sort callbacks (already-typed array items work). Two stay with updated reasons (Electron MenuItemConstructorOptions union not imported in lib).
+- `services/WhenClause.ts` — 6 removed, 0 left. `AdvancedExpression.subExpressions: any` → `Record<string, string>`; `evaluate`/`validate.context: any` → `object` (matches existing callers that pass `WhenClauseContext`); `createContext.getValue` uses generic `<T>` to match `IContext.getValue<T>`.
+- `services/plugins/api/JoplinData.ts` — 6 removed, 0 left. `api_: any` → `Api`; `serializeApiBody.body: any` → `unknown`; route calls typed with `RequestMethod` enum and `RequestFile[]`.
+
 

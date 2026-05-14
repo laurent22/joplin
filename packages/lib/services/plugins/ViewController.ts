@@ -46,13 +46,12 @@ export default class ViewController {
 		throw new Error('Must be overriden');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async emitMessage(event: EmitMessageEvent): Promise<any> {
+	public async emitMessage(event: EmitMessageEvent): Promise<unknown> {
 		console.warn('Calling ViewController.emitMessage - but not implemented', event);
+		return undefined;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public postMessage(message: any) {
+	public postMessage(message: unknown) {
 		console.warn('Calling ViewController.postMessage - but not implemented', message);
 	}
 
