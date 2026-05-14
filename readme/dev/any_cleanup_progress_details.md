@@ -705,4 +705,28 @@ Follow-up edits in other packages (caused by lib tightenings):
 - `app-desktop/gui/NoteListItem/utils/useRootElement.ts` — call `waitForElement<HTMLDivElement>(...)` explicitly.
 - `app-desktop/plugins/GotoAnything.tsx` — annotated local `indices: [number, number][]`.
 
+Checkpoint 3 (2026-05-14): 1053 → 1004 (49 removed).
+
+Plugin-API files (mostly thanks to the new `PluginStore` / `MessageListenerCallback` aliases from checkpoint 1):
+- `services/plugins/api/JoplinClipboard.ts` — 3 removed, 0 left. Local `ElectronClipboardLike` / `ElectronNativeImageLike` interfaces (electron module not available in non-desktop packages).
+- `services/plugins/api/JoplinViews.ts` — 3 removed, 0 left. `implementation` now `BasePlatformImplementation.JoplinViews` (the actual sub-object passed in); `store` → `PluginStore`.
+- `services/plugins/api/JoplinViewsDialogs.ts` — 3 removed, 0 left. Introduced `ShowOpenDialogOptions` in `BasePlatformImplementation`; tightened return to `string[] | null`.
+- `services/plugins/api/JoplinViewsEditor.ts` — 4 removed, 0 left. `store` → `PluginStore`; `onMessage.callback: Function` → `MessageListenerCallback`; `postMessage.message: any` → `unknown`.
+- `services/plugins/api/JoplinViewsPanels.ts` — 3 removed, 0 left. Same pattern (`PluginStore` / `MessageListenerCallback` / `unknown`).
+- `services/plugins/api/JoplinViewsToolbarButtons.ts` — 3 removed, 0 left. `store` → `PluginStore`; deprecation cast typed.
+- `services/plugins/api/JoplinViewsMenus.ts` — 4 removed, 0 left. `store` → `PluginStore`; deprecation casts typed.
+- `services/plugins/api/JoplinViewsMenuItems.ts` — 4 removed, 0 left. Same.
+- `services/plugins/api/JoplinSettings.ts` — 4 removed, 0 left. All four setting-value returns/inputs → `unknown`.
+- `services/plugins/api/JoplinPlugins.ts` — already in batch 2.
+- `services/plugins/api/Joplin.ts` — follow-up: cast `implementation.clipboard/.nativeImage` to the JoplinClipboard constructor parameter shapes.
+- `services/plugins/BasePlatformImplementation.ts` — 4 removed, 0 left. Introduced `ShowOpenDialogOptions`; `clipboard`/`nativeImage`/`registerComponent` returns/params → `unknown`.
+- `services/plugins/api/noteListType.ts` — 1 removed, 2 left. `OnChangeEvent.value: any` → `unknown`. `RenderNoteView` and `OnRenderNoteHandler.props` kept `any` with updated reasons (heterogeneous per-renderer shape).
+
+Top-level lib files:
+- `eventManager.ts` — 0 removed, 3 left. Reason updated on `filterEmit.object: any` (filter objects vary per filter name). Two `Partial refactor` reasons already in scope; no change.
+- `hooks/useEventListener.ts` — 4 removed, 0 left. Introduced local `EventHandler = (event: Event) => void`; typed `element` as `RefObject<EventTarget | null>` (type-only import from react).
+- `services/AlarmService.ts` — 3 removed, 0 left. Introduced exported `AlarmServiceDriver` interface; `updateNoteNotification.noteOrId` typed `NoteEntity | string`.
+- `models/Alarm.ts` — follow-up: `selectAll` cast updated to `{ id: number }[]` (alarm IDs are integers, unlike note IDs); `batchDelete` call now casts the resulting `number[]` (the function's signature accepts `string[]` for note-style IDs).
+- `services/KvStore.ts` — 4 removed, 0 left. Introduced `JoplinDatabase` and `MutexInterface` imports for typed fields; `formatValues_` callers cast the `Row[]` results to `KvStoreKeyValue[]`.
+
 

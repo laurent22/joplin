@@ -62,7 +62,7 @@ export default class Joplin {
 		this.interop_ = new JoplinInterop();
 		this.settings_ = new JoplinSettings(plugin);
 		this.contentScripts_ = new JoplinContentScripts(plugin);
-		this.clipboard_ = new JoplinClipboard(implementation.clipboard, implementation.nativeImage);
+		this.clipboard_ = new JoplinClipboard(implementation.clipboard as ConstructorParameters<typeof JoplinClipboard>[0], implementation.nativeImage as ConstructorParameters<typeof JoplinClipboard>[1]);
 		this.window_ = new JoplinWindow(plugin, store);
 	}
 

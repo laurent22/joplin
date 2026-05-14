@@ -1,8 +1,9 @@
 /* eslint-disable multiline-comment-style */
 
 import { defaultWindowId } from '../../../reducer';
-import Plugin from '../Plugin';
+import Plugin, { MessageListenerCallback } from '../Plugin';
 import createViewHandle from '../utils/createViewHandle';
+import { PluginStore } from '../ViewController';
 import WebviewController, { ContainerType } from '../WebviewController';
 import { ViewHandle } from './types';
 
@@ -22,12 +23,10 @@ import { ViewHandle } from './types';
  */
 export default class JoplinViewsPanels {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private store: any;
+	private store: PluginStore;
 	private plugin: Plugin;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(plugin: Plugin, store: any) {
+	public constructor(plugin: Plugin, store: PluginStore) {
 		this.store = store;
 		this.plugin = plugin;
 	}
@@ -84,8 +83,7 @@ export default class JoplinViewsPanels {
 	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages) for more details.
 	 *
 	 */
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public async onMessage(handle: ViewHandle, callback: Function): Promise<void> {
+	public async onMessage(handle: ViewHandle, callback: MessageListenerCallback): Promise<void> {
 		return this.controller(handle).onMessage(callback);
 	}
 
@@ -105,8 +103,7 @@ export default class JoplinViewsPanels {
 	 *
 	 * It is particularly useful when the webview needs to react to events emitted by the plugin or the joplin api.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public postMessage(handle: ViewHandle, message: any): void {
+	public postMessage(handle: ViewHandle, message: unknown): void {
 		return this.controller(handle).postMessage(message);
 	}
 

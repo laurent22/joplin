@@ -29,7 +29,7 @@ export default class Alarm extends BaseModel {
 
 	public static async alarmIdsWithoutNotes() {
 		// https://stackoverflow.com/a/4967229/561309
-		const alarms = await this.db().selectAll('SELECT alarms.id FROM alarms LEFT JOIN notes ON alarms.note_id = notes.id WHERE notes.id IS NULL') as { id: string }[];
+		const alarms = await this.db().selectAll('SELECT alarms.id FROM alarms LEFT JOIN notes ON alarms.note_id = notes.id WHERE notes.id IS NULL') as { id: number }[];
 		return alarms.map(a => {
 			return a.id;
 		});

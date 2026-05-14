@@ -139,7 +139,7 @@ export class EventManager {
 		return this.emitter_.off(`filter:${filterName}`, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Filter objects vary per-filter (notes, settings, search results, etc.); the EventManager treats them opaquely
 	public async filterEmit(filterName: string, object: any) {
 		let output = object;
 		const listeners = this.emitter_.listeners(`filter:${filterName}`);
