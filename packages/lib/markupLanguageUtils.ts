@@ -46,7 +46,7 @@ export class MarkupLanguageUtils {
 		const subValues = Setting.subValues('markdown.plugin', Setting.toPlainObject());
 		const pluginOptions: Record<string, { enabled: boolean }> = {};
 		for (const n in subValues) {
-			pluginOptions[n] = { enabled: subValues[n] };
+			pluginOptions[n] = { enabled: !!subValues[n] };
 		}
 
 		options = { ResourceModel: Resource,

@@ -272,7 +272,7 @@ describe('models/Note', () => {
 		const resourceDirE = markdownUtils.escapeLinkUrl(toForwardSlashes(resourceDir));
 		const fileProtocol = `file://${process.platform === 'win32' ? '/' : ''}`;
 
-		const testCases = [
+		const testCases: [boolean, string, string][] = [
 			[
 				false,
 				'',
@@ -312,7 +312,7 @@ describe('models/Note', () => {
 
 		for (const testCase of testCases) {
 			const [useAbsolutePaths, input, expected] = testCase;
-			const internalToExternal = await Note.replaceResourceInternalToExternalLinks(input as string, { useAbsolutePaths });
+			const internalToExternal = await Note.replaceResourceInternalToExternalLinks(input, { useAbsolutePaths });
 			expect(internalToExternal).toBe(expected);
 
 			const externalToInternal = await Note.replaceResourceExternalToInternalLinks(internalToExternal, { useAbsolutePaths });
