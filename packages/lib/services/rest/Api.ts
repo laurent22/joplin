@@ -59,17 +59,15 @@ export interface Request {
 	method: RequestMethod;
 	path: string;
 	query: RequestQuery;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Body is parsed lazily via bodyJson(); raw value is whatever the request supplied (string, Buffer, parsed object)
 	body: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Cached parsed body shape varies per route (NoteEntity, FolderEntity, etc.)
 	bodyJson_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See bodyJson_
 	bodyJson: any;
 	files: RequestFile[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	params: any[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	action?: any;
+	params: string[];
+	action?: string;
 }
 
 export enum AuthTokenStatus {
@@ -84,13 +82,12 @@ interface AuthToken {
 }
 
 export interface RequestContext {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: (action: { type: string; [key: string]: unknown })=> void;
 	authToken: AuthToken;
 	token: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each route returns a route-specific shape (NoteEntity, FolderEntity[], etc.)
 type RouteFunction = (request: Request, id: string, link: string, context: RequestContext)=> Promise<any | void>;
 
 interface ResourceNameToRoute {
@@ -99,19 +96,16 @@ interface ResourceNameToRoute {
 
 export default class Api {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private token_: string | Function;
+	private token_: string | (()=> string);
 	private authToken_: AuthToken = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private knownNounces_: any = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private knownNounces_: Record<string, string> = {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- actionApi is the handler bag set up by ClipperServer.initialize for desktop's command service; its shape varies per consumer
 	private actionApi_: any;
 	private resourceNameToRoute_: ResourceNameToRoute = {};
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private dispatch_: Function;
+	private dispatch_: (action: { type: string; [key: string]: unknown })=> void;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-	public constructor(token: string | Function = null, dispatch: Function = null, actionApi: any = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See actionApi_ above
+	public constructor(token: string | (()=> string) = null, dispatch: (action: { type: string; [key: string]: unknown })=> void = null, actionApi: any = null) {
 		this.token_ = token;
 		this.actionApi_ = actionApi;
 		this.dispatch_ = dispatch;
@@ -137,11 +131,10 @@ export default class Api {
 		return typeof this.token_ === 'function' ? this.token_() : this.token_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private dispatch(action: any) {
+	private dispatch(action: { type: string; [key: string]: unknown }) {
 		if (action.type === 'API_AUTH_TOKEN_SET') {
 			this.authToken_ = {
-				value: action.value,
+				value: action.value as string,
 				status: AuthTokenStatus.Waiting,
 			};
 
@@ -182,7 +175,7 @@ export default class Api {
 	}
 
 	// Response can be any valid JSON object, so a string, and array or an object (key/value pairs).
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Body is per-route; the response shape is per-route (entity/list/null); the consumer narrows
 	public async route(method: RequestMethod, path: string, query: RequestQuery = null, body: any = null, files: RequestFile[] = null): Promise<any> {
 		if (!files) files = [];
 		if (!query) query = {};
@@ -275,8 +268,7 @@ export default class Api {
 		if (request.query.token !== this.token) throw new ErrorForbidden('Invalid "token" parameter');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async execServiceActionFromRequest_(externalApi: any, request: Request) {
+	private async execServiceActionFromRequest_(externalApi: Record<string, (args: Omit<Request, 'action'>)=> unknown>, request: Request) {
 		const action = externalApi[request.action];
 		if (!action) throw new ErrorNotFound(`Invalid action: ${request.action}`);
 		const args = { ...request };
