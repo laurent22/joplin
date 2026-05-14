@@ -12431,7 +12431,7 @@ __metadata:
     react-native-image-picker: "npm:8.2.1"
     react-native-localize: "npm:3.6.1"
     react-native-modal-datetime-picker: "npm:18.0.0"
-    react-native-nitro-modules: "npm:0.33.7"
+    react-native-nitro-modules: "npm:0.33.9"
     react-native-paper: "npm:5.14.5"
     react-native-popup-menu: "npm:0.17.0"
     react-native-quick-actions: "npm:0.3.13"
@@ -13073,7 +13073,7 @@ __metadata:
     nitrogen: "npm:0.33.7"
     react: "npm:19.1.5"
     react-native: "npm:0.81.6"
-    react-native-nitro-modules: "npm:0.33.7"
+    react-native-nitro-modules: "npm:0.33.9"
     typescript: "npm:5.9.3"
   peerDependencies:
     react: "*"
@@ -49235,17 +49235,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-nitro-modules@npm:0.33.7":
-  version: 0.33.7
-  resolution: "react-native-nitro-modules@npm:0.33.7"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 10/b78a42dfd9a9f9982d65280b6e4a90f2bd092193c0244a182e60d84ebb0c9076208ff9f2868c213150d55cbb999a400ff369d962dfd00b35eef45ea7e7d869b1
-  languageName: node
-  linkType: hard
-
-"react-native-nitro-modules@npm:^0.33.7":
+"react-native-nitro-modules@npm:0.33.9, react-native-nitro-modules@npm:^0.33.7":
   version: 0.33.9
   resolution: "react-native-nitro-modules@npm:0.33.9"
   peerDependencies:
