@@ -743,4 +743,14 @@ Checkpoint 4 (2026-05-14): 1004 → 977 (27 removed).
 
 Follow-up: `htmlUtils2.test.ts` typed cast; `app-desktop/.../resourceHandling.ts` doesn't need changes (return type of its `replaceImageUrls` callback is `void`, which `ReplaceUrlCallback` now allows).
 
+Checkpoint 5 (2026-05-14): 977 → 965 (12 removed across a handful of larger files).
+
+- `services/share/ShareService.ts` — 4 removed, 0 left. `formatShareInvitations.invitations: any[]` → typed shape using `ShareInvitation`/`MasterKeyEntity`; `store_: Store<any>` → `Store<unknown>`; `state` getter narrows via `as Record<string, unknown>`.
+- `services/ExternalEditWatcher.ts` — 5 removed, 3 left. Introduced local `DispatchFn`/`BridgeFn`; `eventEmitter_` typed via `EventEmitter` (switched to ES import). `chokidar_`/`watcher_` stay `any` with a single shared reason (chokidar typings vary across platforms; we use a small subset structurally). `on`/`off` callbacks stay `any` with reason (EventEmitter payloads vary per event name; per-event union would require touching every caller).
+- `theme.ts` — 2 removed, 1 left. `cachedStyles_` shape typed (`themeId`, indexed `styles` record); `buildStyle.cacheKey: any` → `string | (string | number)[]`. `BuildStyleCallback` return stays `any` (heterogeneous: CSSProperties, styled-components objects, plain CSS strings).
+- `services/share/reducer.ts` — 2 removed, 1 left. `parseShareCache.raw: any` → `Partial<State>`. The reducer's `action: any` keeps a reason about heterogeneous SHARE_* action shapes. `(draft.shareUsers as any)` cast removed.
+- `services/interop/types.ts` — 2 removed, 1 left. `ImportOptions.destinationFolder: any` → `FolderEntity`; `onError: (error: any)` → `Error`. `onProgress` stays `any` with reason — Importer/Exporter share this options bag, export side passes ExportProgressState here.
+- `services/plugins/PluginService.ts` — 3 removed, 2 left. `loadManifestToObject(path): Promise<any>` → `Promise<Record<string, unknown>>`; `plugin dispatch` action typed via `Plugin.PluginDispatchCallback`; `readDirStats` filter/map untyped. The `store_` and `platformImplementation_` fields stay `any` with reason — test fixtures across app-cli/app-mobile pass partial shapes (`{ joplin: {} }`, `{ dispatch, getState }`) that the strict interfaces don't accept.
+- `services/plugins/Plugin.ts` — 2 removed, 0 left. Introduced exported `PluginDispatchCallback`; `dispatch_`/constructor `dispatch` parameter typed; `eventEmitter_: any` → `InstanceType<typeof EventEmitter>`.
+
 

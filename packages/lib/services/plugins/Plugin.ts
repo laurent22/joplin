@@ -23,6 +23,7 @@ interface ContentScripts {
 
 type OnUnloadListener = ()=> void;
 export type MessageListenerCallback = (message: unknown)=> Promise<unknown>;
+export type PluginDispatchCallback = (action: { type: string; [key: string]: unknown })=> void;
 
 export default class Plugin {
 
@@ -31,10 +32,8 @@ export default class Plugin {
 	private scriptText_: string;
 	private viewControllers_: ViewControllers = {};
 	private contentScripts_: ContentScripts = {};
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private dispatch_: Function;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private eventEmitter_: any;
+	private dispatch_: PluginDispatchCallback;
+	private eventEmitter_: InstanceType<typeof EventEmitter>;
 	private devMode_ = false;
 	private builtIn_ = false;
 	private messageListener_: MessageListenerCallback = null;
@@ -45,8 +44,7 @@ export default class Plugin {
 	private running_ = false;
 	private onUnloadListeners_: OnUnloadListener[] = [];
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function, dataDir: string) {
+	public constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: PluginDispatchCallback, dataDir: string) {
 		this.baseDir_ = shim.fsDriver().resolve(baseDir);
 		this.manifest_ = manifest;
 		this.scriptText_ = scriptText;
