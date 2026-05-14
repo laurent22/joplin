@@ -7,7 +7,7 @@ import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import Resource from '../../models/Resource';
 import * as fs from 'fs-extra';
-import { FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
+import { BaseItemEntity, FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
 import { ModelType } from '../../BaseModel';
 import * as ArrayUtils from '../../ArrayUtils';
 import InteropService_Importer_Custom from './InteropService_Importer_Custom';
@@ -20,10 +20,9 @@ async function recreateExportDir() {
 	await fs.mkdirp(dir);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function fieldsEqual(model1: any, model2: any, fieldNames: string[]) {
+function fieldsEqual<T extends object>(model1: T, model2: T, fieldNames: string[]) {
 	for (let i = 0; i < fieldNames.length; i++) {
-		const f = fieldNames[i];
+		const f = fieldNames[i] as keyof T;
 		expect(model1[f]).toBe(model2[f]);
 	}
 }
@@ -31,8 +30,7 @@ function fieldsEqual(model1: any, model2: any, fieldNames: string[]) {
 function memoryExportModule() {
 	interface Item {
 		type: number;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		object: any;
+		object: unknown;
 	}
 
 	interface Resource {
@@ -62,16 +60,14 @@ function memoryExportModule() {
 				result.destPath = context.destPath;
 			},
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			onProcessItem: async (_context: CustomExportContext, itemType: number, item: any) => {
+			onProcessItem: async (_context: CustomExportContext, itemType: number, item: BaseItemEntity) => {
 				result.items.push({
 					type: itemType,
 					object: item,
 				});
 			},
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			onProcessResource: async (_context: CustomExportContext, resource: any, filePath: string) => {
+			onProcessResource: async (_context: CustomExportContext, resource: ResourceEntity, filePath: string) => {
 				result.resources.push({
 					filePath: filePath,
 					object: resource,
@@ -142,9 +138,8 @@ describe('services_InteropService', () => {
 
 		await service.import({ path: filePath });
 
-		const allFolders = await Folder.all();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(allFolders.map((f: any) => f.title).sort().join(' - ')).toBe('folder - folder (1)');
+		const allFolders: FolderEntity[] = await Folder.all();
+		expect(allFolders.map(f => f.title).sort().join(' - ')).toBe('folder - folder (1)');
 	}));
 
 	it('should import folders, and only de-duplicate titles when needed', (async () => {
@@ -596,8 +591,14 @@ describe('services_InteropService', () => {
 
 		const filePath = `${exportDir()}/example.test`;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const result: any = {
+		const result: {
+			destPath: string;
+			itemTypes: number[];
+			items: BaseItemEntity[];
+			resources: ResourceEntity[];
+			filePaths: string[];
+			closeCalled: boolean;
+		} = {
 			destPath: '',
 			itemTypes: [],
 			items: [],
@@ -609,8 +610,7 @@ describe('services_InteropService', () => {
 		const module: Module = makeExportModule({
 			type: ModuleType.Exporter,
 			description: 'Test Export Module',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			format: 'testing' as any,
+			format: 'testing' as ExportModuleOutputFormat,
 			fileExtensions: ['test'],
 		}, () => {
 			return new InteropService_Exporter_Custom({
@@ -618,14 +618,12 @@ describe('services_InteropService', () => {
 					result.destPath = context.destPath;
 				},
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				onProcessItem: async (_context: CustomExportContext, itemType: number, item: any) => {
+				onProcessItem: async (_context: CustomExportContext, itemType: number, item: BaseItemEntity) => {
 					result.itemTypes.push(itemType);
 					result.items.push(item);
 				},
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				onProcessResource: async (_context: CustomExportContext, resource: any, filePath: string) => {
+				onProcessResource: async (_context: CustomExportContext, resource: ResourceEntity, filePath: string) => {
 					result.resources.push(resource);
 					result.filePaths.push(filePath);
 				},
@@ -639,16 +637,14 @@ describe('services_InteropService', () => {
 		const service = InteropService.instance();
 		service.registerModule(module);
 		await service.export({
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			format: 'testing' as any,
+			format: 'testing' as ExportModuleOutputFormat,
 			path: filePath,
 		});
 
 		expect(result.destPath).toBe(filePath);
 		expect(result.itemTypes.sort().join('_')).toBe('1_1_2_4');
 		expect(result.items.length).toBe(4);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(result.items.map((o: any) => o.title).sort().join('_')).toBe('folder1_note1_note2_photo.jpg');
+		expect(result.items.map(o => (o as NoteEntity | FolderEntity | ResourceEntity).title).sort().join('_')).toBe('folder1_note1_note2_photo.jpg');
 		expect(result.resources.length).toBe(1);
 		expect(result.resources[0].title).toBe('photo.jpg');
 		expect(result.filePaths.length).toBe(1);
