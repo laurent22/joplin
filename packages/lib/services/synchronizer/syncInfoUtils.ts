@@ -72,10 +72,9 @@ export async function migrateLocalSyncInfo(db: JoplinDatabase) {
 	// TODO: if the sync info is changed, there should be steps to migrate from
 	// v3 to v4, v4 to v5, etc.
 
-	const masterKeys = await db.selectAll('SELECT * FROM master_keys');
+	const masterKeys: MasterKeyEntity[] = await db.selectAll('SELECT * FROM master_keys');
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const masterKeyMap: Record<string, any> = {};
+	const masterKeyMap: Record<string, MasterKeyEntity> = {};
 	for (const mk of masterKeys) masterKeyMap[mk.id] = mk;
 
 	const syncInfo = new SyncInfo();
@@ -113,8 +112,7 @@ export async function fetchSyncInfo(api: FileApi): Promise<SyncInfo> {
 	const syncTargetInfoText = await api.get('info.json');
 
 	// Returns version 0 if the sync target is empty
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	let output: any = { version: 0 };
+	let output: { version: number; [key: string]: unknown } = { version: 0 };
 
 	if (syncTargetInfoText) {
 		output = JSON.parse(syncTargetInfoText);
@@ -296,8 +294,7 @@ export class SyncInfo {
 		if (serialized) this.load(serialized);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public toObject(): any {
+	public toObject() {
 		return {
 			version: this.version,
 			e2ee: this.e2ee_,
@@ -336,7 +333,7 @@ export class SyncInfo {
 
 	public load(serialized: string) {
 		// We probably should add validation after parsing at some point, but for now we are going to keep it simple
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Parsed JSON shape varies by sync target version (v0/v1/v2/v3 migrations); fields are validated per-field below via 'in' checks
 		let s: any = {};
 		try {
 			s = JSON.parse(serialized);
@@ -362,11 +359,9 @@ export class SyncInfo {
 	}
 
 	public setWithTimestamp(fromSyncInfo: SyncInfo, propName: string) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (!(propName in (this as any))) throw new Error(`Invalid prop name: ${propName}`);
+		if (!(propName in (this as unknown as Record<string, unknown>))) throw new Error(`Invalid prop name: ${propName}`);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		(this as any)[propName] = (fromSyncInfo as any)[propName];
+		(this as unknown as Record<string, unknown>)[propName] = (fromSyncInfo as unknown as Record<string, unknown>)[propName];
 		this.setKeyTimestamp(propName, fromSyncInfo.keyTimestamp(propName));
 	}
 
@@ -449,17 +444,15 @@ export class SyncInfo {
 	}
 
 	public keyTimestamp(name: string): number {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (!(`${name}_` in (this as any))) throw new Error(`Invalid name: ${name}`);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return (this as any)[`${name}_`].updatedTime;
+		const self = this as unknown as Record<string, { updatedTime: number }>;
+		if (!(`${name}_` in self)) throw new Error(`Invalid name: ${name}`);
+		return self[`${name}_`].updatedTime;
 	}
 
 	public setKeyTimestamp(name: string, timestamp: number) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (!(`${name}_` in (this as any))) throw new Error(`Invalid name: ${name}`);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		(this as any)[`${name}_`].updatedTime = timestamp;
+		const self = this as unknown as Record<string, { updatedTime: number }>;
+		if (!(`${name}_` in self)) throw new Error(`Invalid name: ${name}`);
+		self[`${name}_`].updatedTime = timestamp;
 	}
 }
 

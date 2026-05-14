@@ -5,7 +5,10 @@ import { SqlParams, SqlQuery, StringOrSqlQuery } from './services/database/types
 
 const Mutex = require('async-mutex').Mutex;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// Row values come back as SQLite primitives (string|number|null|Buffer for BLOBs)
+// but per-table column shapes vary, and callers across the codebase index without
+// runtime narrowing; widening here would require dozens of casts at call sites.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See above
 export type Row = Record<string, any>;
 
 export default class Database {
@@ -17,7 +20,7 @@ export default class Database {
 
 	protected debugMode_ = false;
 	private sqlQueryLogEnabled_ = false;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Driver shape varies per platform (better-sqlite3, web sqlite, RN sqlite) and exposes additional non-interface methods like sqliteErrorToJsError, close, loadExtension
 	private driver_: any;
 	private logger_ = new Logger();
 	private logExcludedQueryTypes_: string[] = [];
@@ -25,7 +28,7 @@ export default class Database {
 	private profilingEnabled_ = false;
 	private queryId_ = 1;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See driver_ above
 	public constructor(driver: any) {
 		this.driver_ = driver;
 	}
@@ -37,8 +40,7 @@ export default class Database {
 	// Converts the SQLite error to a regular JS error
 	// so that it prints a stacktrace when passed to
 	// console.error()
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public sqliteErrorToJsError(error: any, sql: string = null, params: SqlParams = null) {
+	public sqliteErrorToJsError(error: Error & { code?: string }, sql: string = null, params: SqlParams = null) {
 		return this.driver().sqliteErrorToJsError(error, sql, params);
 	}
 
@@ -54,7 +56,7 @@ export default class Database {
 		return this.driver_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Open options vary per driver: better-sqlite3 expects { name }, web/RN drivers accept additional fields
 	public async open(options: any) {
 		try {
 			await this.driver().open(options);
@@ -192,7 +194,7 @@ export default class Database {
 		return this.tryCall('selectAll', sql, params);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Field values are heterogeneous per query (string ids, numbers, booleans); callers across models narrow at use-site
 	public async selectAllFields(sql: string, params: SqlParams, field: string): Promise<any[]> {
 		const rows = await this.tryCall('selectAll', sql, params);
 		const output = [];
@@ -246,8 +248,7 @@ export default class Database {
 			if (s) s = s.toUpperCase();
 			if (s === 'INTEGER') s = 'INT';
 			if (!(`TYPE_${s}` in this)) throw new Error(`Unknown fieldType: ${s}`);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			return (this as any)[`TYPE_${s}`];
+			return (this as unknown as Record<string, number>)[`TYPE_${s}`];
 		}
 		if (type === 'syncTarget') {
 			if (s === 'memory') return 1;
@@ -270,7 +271,7 @@ export default class Database {
 		return undefined;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Input/output flow into TableField.default which is string|number|boolean; narrowing to unknown breaks downstream consumers
 	public static formatValue(type: number, value: any) {
 		if (value === null || value === undefined) return null;
 		if (type === this.TYPE_INT) return Number(value);
@@ -293,7 +294,7 @@ export default class Database {
 		if (params !== null && params.length) this.logger().debug(JSON.stringify(params));
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- data is an arbitrary entity slice (e.g. NoteEntity, FolderEntity); narrowing forces index-signature errors at call sites
 	public static insertQuery(tableName: string, data: Record<string, any>) {
 		if (!data || !Object.keys(data).length) throw new Error('Data is empty');
 
@@ -315,7 +316,7 @@ export default class Database {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See insertQuery above
 	public static updateQuery(tableName: string, data: Record<string, any>, where: string | Record<string, any>) {
 		if (!data || !Object.keys(data).length) throw new Error('Data is empty');
 
@@ -375,8 +376,7 @@ export default class Database {
 		return sql.trim().split('\n');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public wrapQueries(queries: any[]) {
+	public wrapQueries(queries: (string | SqlQuery | [string, SqlParams?])[]) {
 		const output = [];
 		for (let i = 0; i < queries.length; i++) {
 			output.push(this.wrapQuery(queries[i]));
@@ -384,8 +384,7 @@ export default class Database {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public wrapQuery(sql: any, params: SqlParams = null): SqlQuery {
+	public wrapQuery(sql: string | SqlQuery | [string, SqlParams?], params: SqlParams = null): SqlQuery {
 		if (!sql) throw new Error(`Cannot wrap empty string: ${sql}`);
 
 		if (Array.isArray(sql)) {

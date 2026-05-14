@@ -149,6 +149,13 @@ export interface PutOptions {
 	source?: string;
 }
 
+export interface ListOptions {
+	includeHidden?: boolean;
+	includeDirs?: boolean;
+	syncItemsOnly?: boolean;
+	context?: { cursor?: string } | null;
+}
+
 export interface ItemStat {
 	path: string;
 	updated_time: number;
@@ -331,8 +338,7 @@ class FileApi {
 	}
 
 	// DRIVER MUST RETURN PATHS RELATIVE TO `path`
-	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async list(path = '', options: any = null): Promise<PaginatedList> {
+	public async list(path = '', options: ListOptions = null): Promise<PaginatedList> {
 		if (!options) options = {};
 		if (!('includeHidden' in options)) options.includeHidden = false;
 		if (!('context' in options)) options.context = null;

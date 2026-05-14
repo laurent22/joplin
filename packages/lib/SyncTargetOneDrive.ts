@@ -16,8 +16,8 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 		return 3;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(db: any, options: any = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See BaseSyncTarget.db_: subclasses pass JoplinDatabase or test mocks
+	public constructor(db: any, options: Record<string, unknown> = null) {
 		super(db, options);
 		this.api_ = null;
 	}
