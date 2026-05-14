@@ -12706,7 +12706,7 @@ __metadata:
     typescript: "npm:5.9.3"
     uglifycss: "npm:0.0.29"
     url-parse: "npm:1.5.10"
-    uuid: "npm:11.1.0"
+    uuid: "npm:13.0.0"
     word-wrap: "npm:1.2.5"
     xml2js: "npm:0.4.23"
   languageName: unknown
@@ -12910,7 +12910,7 @@ __metadata:
     sqlite3: "npm:5.1.6"
     stripe: "npm:13.9.0"
     typescript: "npm:5.9.3"
-    uuid: "npm:11.1.0"
+    uuid: "npm:13.0.0"
     yargs: "npm:17.7.2"
     zxcvbn: "npm:4.4.2"
   languageName: unknown
@@ -58194,21 +58194,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:*":
+"uuid@npm:*, uuid@npm:13.0.0":
   version: 13.0.0
   resolution: "uuid@npm:13.0.0"
   bin:
     uuid: dist-node/bin/uuid
   checksum: 10/2742b24d1e00257e60612572e4d28679423469998cafbaf1fe9f1482e3edf9c40754b31bfdb3d08d71b29239f227a304588f75210b3b48f2609f0673f1feccef
-  languageName: node
-  linkType: hard
-
-"uuid@npm:11.1.0, uuid@npm:^11.1.0":
-  version: 11.1.0
-  resolution: "uuid@npm:11.1.0"
-  bin:
-    uuid: dist/esm/bin/uuid
-  checksum: 10/d2da43b49b154d154574891ced66d0c83fc70caaad87e043400cf644423b067542d6f3eb641b7c819224a7cd3b4c2f21906acbedd6ec9c6a05887aa9115a9cf5
   languageName: node
   linkType: hard
 
@@ -58218,6 +58209,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 10/5086c43bbe11e2337d9bb9a3b3a156311e5f5ba5da2de8152da9e00cfd5fbbf626d36e6a2838dde06e2105ac563bc298470acc0e4800c96fa2d50565c5782f8a
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^11.1.0":
+  version: 11.1.0
+  resolution: "uuid@npm:11.1.0"
+  bin:
+    uuid: dist/esm/bin/uuid
+  checksum: 10/d2da43b49b154d154574891ced66d0c83fc70caaad87e043400cf644423b067542d6f3eb641b7c819224a7cd3b4c2f21906acbedd6ec9c6a05887aa9115a9cf5
   languageName: node
   linkType: hard
 
