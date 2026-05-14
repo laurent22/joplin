@@ -20,7 +20,7 @@ module.exports = async ({ github, context, core }) => {
 	const softCheckUsers = ['laurent22', 'personalizedrefrigerator', 'mrjo118', 'tessus', 'CalebJohn', 'Rygaa'];
 	const autoClosedLabel = 'auto-closed: invalid-title';
 
-	const prefix = '(Desktop|Mobile|All|Cli|Tools|Chore|Clipper|Server|Android|iOS|Transcribe|Plugins|CI|Plugin Repo|Doc)';
+	const prefix = '(Desktop|Mobile|All|Cli|Tools|Chore|Clipper|Server|Android|iOS|Web|Transcribe|Plugins|CI|Plugin Repo|Doc)';
 	const prefixList = `${prefix}(,\\s*${prefix})*`;
 	const strictRegex = new RegExp(`^${prefixList}: (Fixes|Resolves) #[0-9]+: .+`);
 	const softRegex = new RegExp(`^${prefixList}: ((Fixes|Resolves) #[0-9]+: )?.+`);
