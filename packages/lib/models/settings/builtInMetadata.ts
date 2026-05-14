@@ -1300,6 +1300,23 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 					isGlobal: true,
 					subType: SettingItemSubType.FontFamily,
 				},
+		'editor.mobile.defaultEditState': {
+			value: 'last',
+			type: SettingItemType.String,
+			isEnum: true,
+			section: 'editor',
+			public: true,
+			appTypes: [AppType.Mobile],
+			label: () => _('Default view / edit state'),
+			options: () => {
+				return {
+					view: _('View mode'),
+					edit: _('Edit mode'),
+					last: _('Last used'),
+				};
+			},
+			storage: SettingStorage.File,
+		},
 		'style.editor.monospaceFontFamily': {
 			value: '',
 			type: SettingItemType.String,
