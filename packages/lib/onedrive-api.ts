@@ -9,17 +9,23 @@ const Buffer = require('buffer').Buffer;
 
 const logger = Logger.create('OneDriveApi');
 
+interface OneDriveAuth {
+	access_token: string;
+	refresh_token?: string;
+	token_type?: string;
+	expires_in?: number;
+}
+
+type ListenerCallback = (param: unknown)=> void;
+
 export default class OneDriveApi {
 
 	private clientId_: string;
 	private clientSecret_: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private auth_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private accountProperties_: any = null;
+	private auth_: OneDriveAuth = null;
+	private accountProperties_: Record<string, unknown> = null;
 	private isPublic_: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private listeners_: Record<string, any>;
+	private listeners_: Record<string, ListenerCallback[]>;
 
 	// `isPublic` is to tell OneDrive whether the application is a "public" one (Mobile and desktop
 	// apps are considered "public"), in which case the secret should not be sent to the API.
@@ -40,16 +46,14 @@ export default class OneDriveApi {
 		return this.isPublic_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public dispatch(eventName: string, param: any) {
+	public dispatch(eventName: string, param: unknown) {
 		const ls = this.listeners_[eventName];
 		for (let i = 0; i < ls.length; i++) {
 			ls[i](param);
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	public on(eventName: string, callback: ListenerCallback) {
 		this.listeners_[eventName].push(callback);
 	}
 
@@ -61,13 +65,11 @@ export default class OneDriveApi {
 		return 'https://login.microsoftonline.com/common/oauth2/nativeclient';
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public auth(): any {
+	public auth(): OneDriveAuth {
 		return this.auth_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setAuth(auth: any) {
+	public setAuth(auth: OneDriveAuth) {
 		this.auth_ = auth;
 		this.dispatch('authRefreshed', this.auth());
 	}
@@ -102,8 +104,7 @@ export default class OneDriveApi {
 	}
 
 	public async execTokenRequest(code: string, redirectUri: string) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const body: any = {};
+		const body: Record<string, string> = {};
 		body['client_id'] = this.clientId();
 		if (!this.isPublic()) body['client_secret'] = this.clientSecret();
 		body['code'] = code;
@@ -134,14 +135,13 @@ export default class OneDriveApi {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public oneDriveErrorResponseToError(errorResponse: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Returned error is augmented downstream with code/error/request/headers/body fields by the exec retry loop
+	public oneDriveErrorResponseToError(errorResponse: { error?: { message?: string; code?: string; innerError?: unknown } } | null): any {
 		if (!errorResponse) return new Error('Undefined error');
 
 		if (errorResponse.error) {
 			const e = errorResponse.error;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const output: any = new Error(e.message);
+			const output = new Error(e.message) as Error & { code?: string; innerError?: unknown };
 			if (e.code) output.code = e.code;
 			if (e.innerError) output.innerError = e.innerError;
 			return output;
@@ -150,7 +150,7 @@ export default class OneDriveApi {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- handle is platform-specific fs handle; buffer is Buffer | string; options is the FetchOptions bag passed to shim.fetch with extra contentLength/startByte fields
 	public async uploadChunk(url: string, handle: any, buffer: any, options: any) {
 		options = { ...options };
 		if (!options.method) { options.method = 'POST'; }
@@ -173,7 +173,7 @@ export default class OneDriveApi {
 		return response;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- options is a FetchOptions bag with headers/body/path used by uploadChunk and shim.fetch
 	public async uploadBigFile(url: string, options: any) {
 		const response = await shim.fetch(url, {
 			method: 'POST',
@@ -245,11 +245,7 @@ export default class OneDriveApi {
 	//   { Authorization: "token here" }
 	// Intended to be used for before logging objects that could potentially have an
 	// Authorization token.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public authorizationTokenRemoved(data: any, depth = 0) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const newData: any = {};
-
+	public authorizationTokenRemoved(data: unknown, depth = 0): unknown {
 		if (!data || typeof data !== 'object') {
 			return data;
 		}
@@ -258,18 +254,20 @@ export default class OneDriveApi {
 			return '[[depth-exceeded]]';
 		}
 
-		for (const key in data) {
+		const newData: Record<string, unknown> = {};
+		const dataObj = data as Record<string, unknown>;
+		for (const key in dataObj) {
 			if (key === 'Authorization') {
 				newData[key] = '[[DELETED]]';
 			} else {
-				newData[key] = this.authorizationTokenRemoved(data[key], depth + 1);
+				newData[key] = this.authorizationTokenRemoved(dataObj[key], depth + 1);
 			}
 		}
 
 		return newData;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- query is route-specific URL params; data is the request body (string|object|Buffer); options is the FetchOptions bag
 	public async exec(method: string, path: string, query: any = null, data: any = null, options: any = null) {
 		if (!path) throw new Error('Path is required');
 
@@ -311,7 +309,7 @@ export default class OneDriveApi {
 			options.headers['Authorization'] = `bearer ${this.token()}`;
 			options.headers['User-Agent'] = `ISV|Joplin|Joplin/${shim.appVersion()}`;
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- error here is a network/HTTP error with platform-specific fields (code, error, request, headers, body) accessed by later catch blocks
 			const handleRequestRepeat = async (error: any, sleepSeconds: number = null) => {
 				sleepSeconds ??= (i + 1) * 5;
 				logger.info(`Got error below - retrying (${i})...`);
@@ -424,8 +422,7 @@ export default class OneDriveApi {
 		throw new Error(`Could not execute request after multiple attempts: ${method} ${url}`);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setAccountProperties(accountProperties: any) {
+	public setAccountProperties(accountProperties: Record<string, unknown>) {
 		this.accountProperties_ = accountProperties;
 	}
 
@@ -441,7 +438,7 @@ export default class OneDriveApi {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See exec above
 	public async execJson(method: string, path: string, query: any = null, data: any = null) {
 		const response = await this.exec(method, path, query, data);
 		const errorResponseText = await response.text();
@@ -455,7 +452,7 @@ export default class OneDriveApi {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See exec above
 	public async execText(method: string, path: string, query: any = null, data: any = null) {
 		const response = await this.exec(method, path, query, data);
 		const output = await response.text();
@@ -468,8 +465,7 @@ export default class OneDriveApi {
 			throw new Error(_('Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.'));
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const body: any = {};
+		const body: Record<string, string> = {};
 		body['client_id'] = this.clientId();
 		if (!this.isPublic()) body['client_secret'] = this.clientSecret();
 		body['refresh_token'] = this.auth_.refresh_token;
