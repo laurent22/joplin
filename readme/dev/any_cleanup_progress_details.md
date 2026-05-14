@@ -943,3 +943,20 @@ Scatter cleanup chasing remaining "Old code before rule was applied" comments ac
 - `services/rest/Api.test.ts` — 2 removed, 0 left. `response: any` → `NoteEntity`; sort callback typed `{ id: string }`.
 - `utils/ipc/utils/mergeCallbacksAndSerializable.test.ts` — 1 left with reason (mergeCallbacksAndSerializable return shape).
 
+## packages/lib summary
+
+Final: 1138 → 272 (**866 removed, 76% reduction**), processed in 28 batches over 2026-05-13 → 2026-05-14.
+
+Of the 272 remaining disables, 270 have descriptive `-- reason` comments. The 2 without are inside commented-out code in `services/synchronizer/synchronizer_LockHandler.test.ts:103-105`.
+
+The remaining `any` annotations cluster into a handful of structural reasons that resist simple narrowing:
+
+1. **Per-app polymorphism**: `shim.ts` and `shim-init-node.ts` cross-platform shims (sharp, keytar, react, electron bridge, nodeSqlite, fsDriver, httpAgent, proxyAgent, node datagram module), redux store/state/dispatch differing across cli/desktop/mobile, FileApi driver subclass shapes.
+2. **Plugin API surface**: `services/plugins/api/types.ts`, `Joplin.ts`, `JoplinCommands.ts`, command/script/content-script entry points where args/returns are arbitrary by design — narrowing would break plugin authors.
+3. **External library types not imported here**: markdown-it, CodeMirror 6 (EditorView/Extension/CompletionSource), sax stream callbacks, node http/https request bag, css-tools declarations, sharp instance.
+4. **BaseModel/BaseItem subclass variance**: `byId`, `modelIndexById`, `save`, `serialize`, `filter`, etc. are overridden by every subclass with stricter per-entity types; narrowing the base forces subclass return-type incompatibilities or many call-site casts.
+5. **Reducer action unions**: `reducer.ts` matches dynamically on `action.type` across all redux actions in the app; the action union diverges across cli/desktop/mobile so a strict union here would not compose.
+6. **Test fixtures**: a handful of tests pass loose `{ id: 1, type_: ... }` objects with `id` as `number`, mocked stores without `dispatch`, or partial entity slices that don't satisfy the production-typed signatures.
+
+All `yarn tsc --noEmit` and `yarn linter-ci packages/lib/` runs pass for every batch commit.
+
