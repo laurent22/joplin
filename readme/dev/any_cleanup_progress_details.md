@@ -925,3 +925,21 @@ Scatter cleanup across many smaller files:
 - `utils/ipc/RemoteMessenger.test.ts` — 2 removed, 0 left. `transfer.o: any` made generic `<T>`; `testObjects: any[]` → `Record<string, unknown>[]`.
 - Side fix: `services/interop/InteropService_Importer_Md.test.ts` uses `ImportModuleOutputFormat` enum members rather than raw string literals.
 
+Checkpoint 28 (2026-05-14): 293 → 272 (21 removed).
+
+Scatter cleanup chasing remaining "Old code before rule was applied" comments across many files:
+- `models/Note.ts` — 5 removed, 7 left. `previewFieldsWithDefaultValues.options` typed; `(n as any)[field]` and `(o as any)[field]` patterns → `Record<string, unknown>` casts; `beforeChangeItems: any` → `Record<string, string | null>`; `updateNoteOrder_.order` → `number`; `handleTitleNaturalSorting.options` typed.
+- `models/BaseItem.ts` — 4 removed, 16 left. `displayTitle.item` typed structurally; `items.map((item: any))` typed via `modelSelectAll<{ id: string }>`; `markdownTag.itemOrId/isMarkdownTag.md` typed structurally; `save.o` reason updated.
+- `BaseModel.ts` — 3 removed, 16 left. `isNew.object/options` typed; `filterArray`/`filter` reasons updated; static enum loop uses `Record<string, ModelType>` cast.
+- `models/Folder.ts` — 1 removed, 0 left. `report: any` → `Record<string, number>`.
+- `services/plugins/Plugin.ts` — 1 removed, 0 left. `emit.event: any` → `unknown`.
+- `services/plugins/api/JoplinPlugins.ts` — 1 removed, 0 left. `script.onStart.catch.error: any` typed structurally.
+- `services/commands/MenuUtils.ts` — 1 removed, 0 left. `commandToStatefulMenuItem.commandTarget: any` → `unknown`.
+- `services/interop/InteropService_Exporter_Md_frontmatter.ts` — 0 removed (reason updated).
+- `import-enex.ts` — 1 removed, 2 left. saxStream cdata callback typed `string`.
+- `testing/test-utils-synchronizer.ts` — 0 removed (kept with reason matching the heterogeneous test fixtures).
+- `services/CommandService.test.ts` — 1 removed, 1 left. `createCommand.options` kept `any` with reason (test fixtures), execute mock kept with reason.
+- `services/synchronizer/Synchronizer.conflicts.test.ts` — 2 removed, 0 left. dynamic field iteration uses `Record<string, unknown>` casts.
+- `services/rest/Api.test.ts` — 2 removed, 0 left. `response: any` → `NoteEntity`; sort callback typed `{ id: string }`.
+- `utils/ipc/utils/mergeCallbacksAndSerializable.test.ts` — 1 left with reason (mergeCallbacksAndSerializable return shape).
+

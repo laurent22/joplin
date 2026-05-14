@@ -684,8 +684,7 @@ class BaseModel {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static isNew(object: any, options: any) {
+	public static isNew(object: { id?: string }, options: { isNew?: boolean | 'auto' }) {
 		if (options && 'isNew' in options) {
 			// options.isNew can be "auto" too
 			if (options.isNew === true) return true;
@@ -695,7 +694,7 @@ class BaseModel {
 		return !object.id;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- models is an array of per-table entities; filter() casts SQL values to JS types in-place
 	public static filterArray(models: any[]) {
 		const output = [];
 		for (let i = 0; i < models.length; i++) {
@@ -704,7 +703,7 @@ class BaseModel {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See filterArray; iterates dynamically over entity fields
 	public static filter(model: any) {
 		if (!model) return model;
 
@@ -766,8 +765,7 @@ class BaseModel {
 
 for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 	const e = BaseModel.typeEnum_[i];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(BaseModel as any)[e[0]] = e[1];
+	(BaseModel as unknown as Record<string, ModelType>)[e[0]] = e[1];
 }
 
 export default BaseModel;

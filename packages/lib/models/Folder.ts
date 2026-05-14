@@ -778,8 +778,7 @@ export default class Folder extends BaseItem {
 			'resources': Resource,
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const report: any = {};
+		const report: Record<string, number> = {};
 
 		for (const tableName of ['folders', 'notes', 'resources']) {
 			const ItemClass = tableNameToClasses[tableName];

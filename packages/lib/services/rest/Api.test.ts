@@ -173,8 +173,7 @@ describe('services/rest/Api', () => {
 	}));
 
 	it('should allow setting note properties', (async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let response: any = null;
+		let response: NoteEntity = null;
 		const f = await Folder.save({ title: 'mon carnet' });
 
 		response = await api.route(RequestMethod.POST, 'notes', null, JSON.stringify({
@@ -585,8 +584,7 @@ describe('services/rest/Api', () => {
 		expect(response3.items.length).toBe(2);
 
 		// Also check that it only returns the required fields
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		response3.items.sort((a: any, b: any) => {
+		response3.items.sort((a: { id: string }, b: { id: string }) => {
 			return a.id < b.id ? -1 : +1;
 		});
 

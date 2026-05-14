@@ -602,8 +602,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 			}
 		}));
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		saxStream.on('cdata', handleSaxStreamEvent((data: any) => {
+		saxStream.on('cdata', handleSaxStreamEvent((data: string) => {
 			const n = currentNodeName();
 
 			if (noteResourceRecognition) {

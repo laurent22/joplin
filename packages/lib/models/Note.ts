@@ -339,8 +339,7 @@ export default class Note extends BaseItem {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static previewFieldsWithDefaultValues(options: any = null) {
+	public static previewFieldsWithDefaultValues(options: { includeTimestamps?: boolean } = null) {
 		return Note.defaultValues(this.previewFields(options));
 	}
 
@@ -508,8 +507,7 @@ export default class Note extends BaseItem {
 			results = results.map(n => {
 				n = { ...n };
 				for (const field of autoAddedFields) {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					delete (n as any)[field];
+					delete (n as Record<string, unknown>)[field];
 				}
 				return n;
 			});
@@ -826,8 +824,7 @@ export default class Note extends BaseItem {
 		if (oldNote) {
 			for (const field in o) {
 				if (!o.hasOwnProperty(field)) continue;
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				if ((o as any)[field] !== (oldNote as any)[field]) {
+				if ((o as Record<string, unknown>)[field] !== (oldNote as Record<string, unknown>)[field]) {
 					changedFields.push(field);
 				}
 			}
@@ -891,8 +888,7 @@ export default class Note extends BaseItem {
 			const processIds = ids.splice(0, 50);
 
 			const notes = await Note.byIds(processIds);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const beforeChangeItems: any = {};
+			const beforeChangeItems: Record<string, string | null> = {};
 			for (const note of notes) {
 				beforeChangeItems[note.id] = toTrash ? null : JSON.stringify(note);
 			}
@@ -1011,8 +1007,7 @@ export default class Note extends BaseItem {
 
 	// Update the note "order" field without changing the user timestamps,
 	// which is generally what we want.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static async updateNoteOrder_(note: NoteEntity, order: any) {
+	private static async updateNoteOrder_(note: NoteEntity, order: number) {
 		return Note.save({ ...note, order: order,
 			user_updated_time: note.user_updated_time,
 			updated_time: time.unixMs() }, { autoTimestamp: false, dispatchUpdateAction: false });
@@ -1176,8 +1171,7 @@ export default class Note extends BaseItem {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static handleTitleNaturalSorting(items: NoteEntity[], options: any) {
+	public static handleTitleNaturalSorting(items: NoteEntity[], options: { order?: { by: string; dir: string }[] }) {
 		if (options.order.length > 0 && options.order[0].by === 'title') {
 			const collator = getCollator();
 			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));

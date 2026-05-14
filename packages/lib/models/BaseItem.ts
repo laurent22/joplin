@@ -940,8 +940,7 @@ export default class BaseItem extends BaseModel {
 		await this.db().transactionExecBatch(queries);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static displayTitle(item: any) {
+	public static displayTitle(item: { title?: string; encryption_applied?: number | boolean }) {
 		if (!item) return '';
 		if (item.encryption_applied) return `🔑 ${_('Encrypted')}`;
 		return item.title ? item.title : _('Untitled');
@@ -962,11 +961,8 @@ export default class BaseItem extends BaseModel {
 				this.db().escapeField(ItemClass.tableName()),
 			);
 
-			const items = await ItemClass.modelSelectAll(sql);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const ids = items.map((item: any) => {
-				return item.id;
-			});
+			const items = await ItemClass.modelSelectAll<{ id: string }>(sql);
+			const ids = items.map(item => item.id);
 			if (!ids.length) continue;
 
 			await this.db().exec(`UPDATE sync_items SET force_sync = 1 WHERE item_id IN (${this.escapeIdsForSql(ids)})`);
@@ -1000,7 +996,7 @@ export default class BaseItem extends BaseModel {
 		await this.db().exec('UPDATE sync_items SET force_sync = 1');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- save() accepts any BaseItemEntity subclass plus disable-readonly options; subclasses override with stricter per-entity types
 	public static async save(o: any, options: SaveOptions = null) {
 		if (!options) options = {};
 
@@ -1032,9 +1028,8 @@ export default class BaseItem extends BaseModel {
 		return super.save(o, options);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static markdownTag(itemOrId: any) {
-		const item = typeof itemOrId === 'object' ? itemOrId : {
+	public static markdownTag(itemOrId: string | { id?: string; title?: string }) {
+		const item: { id: string; title: string } = typeof itemOrId === 'object' ? { id: itemOrId.id, title: itemOrId.title ?? '' } : {
 			id: itemOrId,
 			title: '',
 		};
@@ -1047,8 +1042,7 @@ export default class BaseItem extends BaseModel {
 		return output.join('');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static isMarkdownTag(md: any) {
+	public static isMarkdownTag(md: string | null | undefined) {
 		if (!md) return false;
 		return !!md.match(/^\[.*?\]\(:\/[0-9a-zA-Z]{32}\)$/);
 	}

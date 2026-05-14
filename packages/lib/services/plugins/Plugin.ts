@@ -130,8 +130,7 @@ export default class Plugin {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public emit(eventName: string, event: any = null) {
+	public emit(eventName: string, event: unknown = null) {
 		return this.eventEmitter_.emit(eventName, event);
 	}
 
