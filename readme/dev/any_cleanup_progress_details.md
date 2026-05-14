@@ -784,4 +784,18 @@ Checkpoint 8 (2026-05-14): 929 → 886 (43 removed).
 - `services/WhenClause.ts` — 6 removed, 0 left. `AdvancedExpression.subExpressions: any` → `Record<string, string>`; `evaluate`/`validate.context: any` → `object` (matches existing callers that pass `WhenClauseContext`); `createContext.getValue` uses generic `<T>` to match `IContext.getValue<T>`.
 - `services/plugins/api/JoplinData.ts` — 6 removed, 0 left. `api_: any` → `Api`; `serializeApiBody.body: any` → `unknown`; route calls typed with `RequestMethod` enum and `RequestFile[]`.
 
+Checkpoint 9 (2026-05-14): 886 → 829 (57 removed).
+
+- `models/settings/types.ts` — 3 removed, 3 left. `value: any` keeps a new reason (settings heterogeneous, each consumer narrows); `options/show` left `any` with reasons (varying per setting/heterogeneous setting access). `unitLabel/filter` left where parameters are contravariant per-setting.
+- `services/plugins/utils/executeSandboxCall.ts` — 4 removed, 2 left. `EventHandler.args: any[]` → `unknown[]`; nested `args: any[]` → `unknown[]`. Recursive walker `arg` and dotted-path `parent/fn` left `any` with new reasons (heterogeneous sandbox object shape).
+- `services/interop/InteropService_Exporter_Custom.ts` — 5 removed, 1 left. Each `CustomImporter` method typed: `context: ExportContext`, `item: BaseItemEntity`, `resource: ResourceEntity`.
+- `services/debug/populateDatabase.ts` — 6 removed, 0 left. `randomIndex/randomElement/randomElements` made generic `<T>`; `db: any` → `JoplinDatabase & { clearForTesting }`; `folder/note: any` → `FolderEntity` / `NoteEntity`.
+- `database-driver-better-sqlite.ts` — 6 removed, 0 left. Introduced local `BetterSqliteDatabase` / `PreparedStatement` / `SqliteError` / `WrappedError` / `SqlParams` types.
+- `fs-driver-base.ts` — 5 removed, 3 left. Introduced exported `FileHandle = unknown` (drivers use different concrete shapes) and `TarOptions { strict?, portable?, file, cwd }`. `appendFile/open/close/readFileChunk*` typed. `ReadDirStatsOptions.recursive` made optional. `readFile` stays `any` with reason — widening to `string|Buffer` cascades broken call sites across many lib files.
+- `fs-driver-node.ts` — 9 removed, 0 left. Introduced `FsError`/`WrappedFsError`; `fsErrorToJsError_`, `setTimestamp`, `readDirStats`, `open`, `close`, `readFileChunk`, `tarExtract`, `tarCreate` typed.
+- `services/AlarmServiceDriverNode.ts` — 7 removed, 0 left. Introduced `StoredNotification` (extends Notification with timeoutId); `notifications_/service_/setService` typed; `displayDefault/electron` notification options typed with proper interface; `notifier.notify` callback typed.
+- `services/plugins/WebviewController.ts` — 6 removed, 3 left. Introduced local `LayoutItem` for `findItemByKey`; `CloseResponse.resolve/reject` typed; `messageListener_/onMessage` use `MessageListenerCallback`; `store` → `PluginStore`; `postMessage/setStoreProp` value typed `unknown`.
+- `registry.ts` — 9 removed, 2 left. Various private fields typed (`scheduleSyncId_`/`recurrentSyncId_`/`db_`/`showErrorMessageBoxHandler_`); `setShowErrorMessageBoxHandler`/`setDb`/`saveContextHandler` typed; `promiseResolve` typed. `syncTargets_/scheduleSync.syncOptions` keep `any` with reasons (heterogeneous sync target API and Synchronizer.start options).
+- Side fix: `app-cli/app/command-apidoc.ts` — cast `tableFields` to `MarkdownTableRow[]` (now that `TableField` no longer has an index signature compatible with MarkdownTableRow).
+
 

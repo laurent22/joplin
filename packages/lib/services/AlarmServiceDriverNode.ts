@@ -1,4 +1,5 @@
 import eventManager, { EventName } from '../eventManager';
+import AlarmService from './AlarmService';
 import { Notification } from '../models/Alarm';
 import shim from '../shim';
 import Setting from '../models/Setting';
@@ -8,6 +9,10 @@ interface Options {
 	appName: string;
 }
 
+interface StoredNotification extends Notification {
+	timeoutId?: ReturnType<typeof shim.setTimeout>;
+}
+
 const shouldUseElectronNotifications = () => {
 	return shim.isElectron();
 };
@@ -15,10 +20,8 @@ const shouldUseElectronNotifications = () => {
 export default class AlarmServiceDriverNode {
 
 	private appName_: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private notifications_: any = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private service_: any = null;
+	private notifications_: Record<number, StoredNotification> = {};
+	private service_: typeof AlarmService = null;
 
 	public constructor(options: Options) {
 		// Note: appName is required to get the notification to work. It must be the same as the appId defined in package.json
@@ -26,8 +29,7 @@ export default class AlarmServiceDriverNode {
 		this.appName_ = options.appName;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setService(s: any) {
+	public setService(s: typeof AlarmService) {
 		this.service_ = s;
 	}
 
@@ -50,8 +52,7 @@ export default class AlarmServiceDriverNode {
 	}
 
 	private displayDefaultNotification(notification: Notification) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const o: any = {
+		const o: { appID: string; title: string; icon: string; message?: string } = {
 			appID: this.appName_,
 			title: notification.title,
 			icon: `${shim.electronBridge().electronApp().buildDir()}/icons/512x512.png`,
@@ -65,8 +66,7 @@ export default class AlarmServiceDriverNode {
 
 		this.logger().info('AlarmServiceDriverNode::scheduleNotification: Triggering notification (default):', o);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		notifier.notify(o, (error: any, response: any) => {
+		notifier.notify(o, (error: Error | null, response: unknown) => {
 			this.logger().info('AlarmServiceDriverNode::scheduleNotification: node-notifier response:', error, response);
 		});
 	}
@@ -82,11 +82,9 @@ export default class AlarmServiceDriverNode {
 		// https://www.electronjs.org/docs/tutorial/notifications
 		//
 		try {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const options: any = {
+			const options = {
 				body: notification.body ? notification.body : '-',
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				onerror: (error: any) => {
+				onerror: (error: Error) => {
 					this.logger().error('AlarmServiceDriverNode::displayMacNotification', error);
 				},
 			};

@@ -125,7 +125,7 @@ INSERT INTO version (version) VALUES (1);
 export interface TableField {
 	name: string;
 	type: number;
-	default: string | number | boolean | null;
+	default?: string | number | boolean | null;
 	description?: string;
 }
 

@@ -250,7 +250,7 @@ async function fetchAllNotes() {
 
 			lines.push('### Properties');
 			lines.push('');
-			lines.push(this.createPropertiesTable(tableFields));
+			lines.push(this.createPropertiesTable(tableFields as unknown as MarkdownTableRow[]));
 			lines.push('');
 
 			lines.push(`### GET /${tableName}`);
@@ -426,7 +426,7 @@ async function fetchAllNotes() {
 			lines.push('');
 			lines.push('### Properties');
 			lines.push('');
-			lines.push(this.createPropertiesTable(tableFields));
+			lines.push(this.createPropertiesTable(tableFields as unknown as MarkdownTableRow[]));
 			lines.push('');
 			lines.push('### GET /events');
 			lines.push('');
