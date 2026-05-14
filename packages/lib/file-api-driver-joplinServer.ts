@@ -1,6 +1,6 @@
-import { MultiPutItem } from './file-api';
+import { MultiPutItem, RemoteItem } from './file-api';
 import JoplinError from './JoplinError';
-import JoplinServerApi from './JoplinServerApi';
+import JoplinServerApi, { ExecOptions } from './JoplinServerApi';
 import { trimSlashes } from './path-utils';
 import { Lock, LockClientType, LockType } from './services/synchronizer/LockHandler';
 
@@ -53,10 +53,9 @@ export default class FileApiDriverJoplinServer {
 		return 3;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private metadataToStat_(md: any, path: string, isDeleted = false, rootPath: string) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {
+	private metadataToStat_(md: { updated_time?: number; jop_updated_time?: number; jopItem?: unknown }, path: string, isDeleted = false, rootPath: string): RemoteItem {
+		const output: RemoteItem = {
+			id: '',
 			path: rootPath ? path.substr(rootPath.length + 1) : path,
 			updated_time: md.updated_time,
 			jop_updated_time: md.jop_updated_time,
@@ -72,8 +71,7 @@ export default class FileApiDriverJoplinServer {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private metadataToStats_(mds: any[], rootPath: string) {
+	private metadataToStats_(mds: { name: string; updated_time?: number; jop_updated_time?: number; jopItem?: unknown }[], rootPath: string) {
 		const output = [];
 		for (let i = 0; i < mds.length; i++) {
 			output.push(this.metadataToStat_(mds[i], mds[i].name, false, rootPath));
@@ -97,8 +95,7 @@ export default class FileApiDriverJoplinServer {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async delta(path: string, options: any) {
+	public async delta(path: string, options: { context?: { cursor?: string } } = null) {
 		const context = options ? options.context : null;
 		let cursor = context ? context.cursor : null;
 
@@ -107,8 +104,7 @@ export default class FileApiDriverJoplinServer {
 				const query = cursor ? { cursor } : {};
 				const response = await this.api().exec('GET', `${this.apiFilePath_(path)}/delta`, query);
 				const stats = response.items
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					.filter((item: any) => {
+					.filter((item: { item_name: string }) => {
 						// We don't need to know about lock changes, since this
 						// is handled by the LockHandler.
 						if (item.item_name.indexOf('locks/') === 0) return false;
@@ -123,8 +119,7 @@ export default class FileApiDriverJoplinServer {
 						if (item.item_name.indexOf('.resource/') === 0) return false;
 						return true;
 					})
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					.map((item: any) => {
+					.map((item: { item_name: string; type: number; updated_time?: number; jop_updated_time?: number; jopItem?: unknown }) => {
 						return this.metadataToStat_(item, item.item_name, item.type === 3, '');
 					});
 
@@ -146,8 +141,7 @@ export default class FileApiDriverJoplinServer {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async list(path: string, options: any = null) {
+	public async list(path: string, options: { context?: { cursor?: string } } = null) {
 		options = {
 			context: null,
 			...options,
@@ -164,22 +158,19 @@ export default class FileApiDriverJoplinServer {
 
 		const results = await this.api().exec('GET', `${this.apiFilePath_(searchPath)}/children`, query);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const newContext: any = {};
+		const newContext: { cursor?: string } = {};
 		if (results.cursor) newContext.cursor = results.cursor;
 
 		return {
 			items: this.metadataToStats_(results.items, isUsingWildcard ? path : ''),
 			hasMore: results.has_more,
 			context: newContext,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		} as any;
+		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async get(path: string, options: any) {
+	public async get(path: string, options: ExecOptions = null) {
 		if (!options) options = {};
-		if (!options.responseFormat) options.responseFormat = 'text';
+		if (!options.responseFormat) options.responseFormat = 'text' as ExecOptions['responseFormat'];
 		try {
 			const response = await this.api().exec('GET', `${this.apiFilePath_(path)}/content`, null, null, null, options);
 			return response;
@@ -194,18 +185,15 @@ export default class FileApiDriverJoplinServer {
 		// they can have names such as ".resources/xxxxxxxxxx'
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private isRejectedBySyncTargetError(error: any) {
+	private isRejectedBySyncTargetError(error: { code?: number | string; httpCode?: number }) {
 		return error.code === 413 || error.code === 409 || error.httpCode === 413 || error.httpCode === 409;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private isReadyOnlyError(error: any) {
+	private isReadyOnlyError(error: { code?: string }) {
 		return error && error.code === 'isReadOnly';
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async put(path: string, content: any, options: any = null) {
+	public async put(path: string, content: string | Buffer | null, options: ExecOptions & { shareId?: string } = null) {
 		try {
 			const output = await this.api().exec('PUT', `${this.apiFilePath_(path)}/content`, options && options.shareId ? { share_id: options.shareId } : null, content, {
 				'Content-Type': 'application/octet-stream',
@@ -224,15 +212,13 @@ export default class FileApiDriverJoplinServer {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async multiPut(items: MultiPutItem[], options: any = null) {
+	public async multiPut(items: MultiPutItem[], options: ExecOptions = null) {
 		const output = await this.api().exec('PUT', 'api/batch_items', null, { items: items }, null, options);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		for (const [, response] of Object.entries<any>(output.items)) {
+		for (const [, response] of Object.entries<{ error?: { code?: string | number; httpCode?: number } }>(output.items)) {
 			if (response.error && this.isRejectedBySyncTargetError(response.error)) {
 				response.error.code = 'rejectedByTarget';
-			} else if (response.error && this.isReadyOnlyError(response.error)) {
+			} else if (response.error && this.isReadyOnlyError(response.error as { code?: string })) {
 				response.error.code = 'isReadOnly';
 			}
 		}
@@ -318,6 +304,6 @@ export default class FileApiDriverJoplinServer {
 
 		await this.api().exec('POST', 'api/debug', null, { action: 'clearKeyValues' });
 
-		if (response.has_more) throw new Error('has_more support not implemented');
+		if (response.hasMore) throw new Error('has_more support not implemented');
 	}
 }
