@@ -24,7 +24,9 @@ const useWebviewIpcMessage = (props: Props) => {
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 
 		if (msg.indexOf('checkboxclick:') === 0) {
-			const { line, from, to } = shared.toggleCheckboxRange(msg, props.content);
+			const result = shared.toggleCheckboxRange(msg, props.content);
+			if (typeof result === 'string') return;
+			const { line, from, to } = result;
 			if (editorRef.current) {
 				// To cancel CodeMirror's layout drift, the scroll position
 				// is recorded before updated, and then it is restored.
