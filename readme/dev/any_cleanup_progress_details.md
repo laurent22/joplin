@@ -729,4 +729,18 @@ Top-level lib files:
 - `models/Alarm.ts` — follow-up: `selectAll` cast updated to `{ id: number }[]` (alarm IDs are integers, unlike note IDs); `batchDelete` call now casts the resulting `number[]` (the function's signature accepts `string[]` for note-style IDs).
 - `services/KvStore.ts` — 4 removed, 0 left. Introduced `JoplinDatabase` and `MutexInterface` imports for typed fields; `formatValues_` callers cast the `Row[]` results to `KvStoreKeyValue[]`.
 
+Checkpoint 4 (2026-05-14): 1004 → 977 (27 removed).
+
+- `TaskQueue.ts` — 3 removed, 0 left. `TaskCallback`/`TaskResult.result`/`completeTask.result` → `unknown`.
+- `HtmlToMd.ts` — 3 removed, 0 left. `turndownOpts: any` → `Record<string, unknown>`; `blankReplacement`/`replacement` callbacks typed with `HTMLElement`.
+- `InMemoryCache.ts` — 3 removed, 0 left. `Record.value`/`value()`/`setValue()` → `unknown`.
+- `SyncTargetOneDrive.ts` — 2 removed, 1 left. `api_: any` → `OneDriveApi`; `(a: any)` → `unknown`. Left the inherited `db/options` constructor params (BaseSyncTarget still uses `any` there).
+- `htmlUtils.ts` — 3 removed, 5 left (4 of the 5 are existing `ban-types` Function disables and now-typed callbacks via new `ReplaceUrlCallback` / `ProcessImageTagCallback` aliases). `attributesHtml.attr: any` → `Record<string, string>`; `headAndBodyHtml.doc: any` → `Document`. One test (`htmlUtils2.test.ts`) gets a typed cast. The `Function`-typed `processImageTags`/`replaceImageUrls`/`replaceEmbedUrls`/`replaceMediaUrls` callbacks are now typed via new aliases — the ban-types disables go away with the explicit-any ones.
+- `downloadController.ts` — 3 removed, 0 left. Introduced local `DownloadRequest` / `DownloadChunk` interfaces.
+- `services/interop/InteropService_Exporter_Base.ts` — 3 removed, 1 left. `prepareForProcessingItemType.itemsToExport: any[]` → `BaseItemEntity[]`; `processItem.item: any` → `BaseItemEntity`; `processResource.resource: any` → `ResourceEntity`; `updateContext.context: any` → `object`. The `context_` field stays `any` with updated reason — shape is exporter-specific (Html has `cssStrings/customAssets`, Md has `noteTags/tagTitles`) and indexed dynamically by subclasses.
+- `services/interop/InteropService_Exporter_Jex.ts` — 3 removed, 0 left. `processItem`/`processResource` now match the tightened base; `readDirStats.filter/map` callbacks no longer need a cast.
+- `services/interop/InteropService_Exporter_Html.ts` — 3 removed, 0 left. `style_: any` → `ThemeStyle`; `init.options: any` → `ExportOptions`; `processItem.item: any` → `NoteEntity`.
+
+Follow-up: `htmlUtils2.test.ts` typed cast; `app-desktop/.../resourceHandling.ts` doesn't need changes (return type of its `replaceImageUrls` callback is `void`, which `ReplaceUrlCallback` now allows).
+
 

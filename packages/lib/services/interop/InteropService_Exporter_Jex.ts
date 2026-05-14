@@ -2,6 +2,7 @@ import { _ } from '../../locale';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 import InteropService_Exporter_Raw from './InteropService_Exporter_Raw';
 import shim from '../../shim';
+import { BaseItemEntity, ResourceEntity } from '../database/types';
 
 export default class InteropService_Exporter_Jex extends InteropService_Exporter_Base {
 
@@ -18,20 +19,17 @@ export default class InteropService_Exporter_Jex extends InteropService_Exporter
 		await this.rawExporter_.init(this.tempDir_);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async processItem(itemType: number, item: any) {
+	public async processItem(itemType: number, item: BaseItemEntity) {
 		return this.rawExporter_.processItem(itemType, item);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async processResource(resource: any, filePath: string) {
+	public async processResource(resource: ResourceEntity, filePath: string) {
 		return this.rawExporter_.processResource(resource, filePath);
 	}
 
 	public async close() {
 		const stats = await shim.fsDriver().readDirStats(this.tempDir_, { recursive: true });
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const filePaths = stats.filter((a: any) => !a.isDirectory()).map((a: any) => a.path);
+		const filePaths = stats.filter(a => !a.isDirectory()).map(a => a.path);
 
 		if (!filePaths.length) throw new Error(_('There is no data to export.'));
 
