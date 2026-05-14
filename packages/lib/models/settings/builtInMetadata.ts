@@ -62,8 +62,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 	// public for the mobile and desktop apps because they are handled separately in menus.
 
 	const themeOptions = () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {};
+		const output: Record<number, string> = {};
 		output[Setting.THEME_LIGHT] = _('Light');
 		output[Setting.THEME_DARK] = _('Dark');
 		output[Setting.THEME_DRACULA] = _('Dracula');
@@ -155,17 +154,15 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				try {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem');
 				} catch (error) {
 					return false;
 				}
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			filter: (value: any) => {
-				return value ? rtrimSlashes(value) : '';
+			filter: value => {
+				return value ? rtrimSlashes(value as string) : '';
 			},
 			public: true,
 			label: () => _('Directory to synchronise with (absolute path)'),
@@ -177,8 +174,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 			},
 			public: true,
@@ -190,8 +186,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 			},
 			public: true,
@@ -202,8 +197,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('nextcloud');
 			},
 			public: true,
@@ -215,8 +209,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 			},
 			public: true,
@@ -228,8 +221,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 			},
 			public: true,
@@ -240,8 +232,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('webdav');
 			},
 			public: true,
@@ -253,8 +244,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				try {
 					return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 				} catch (error) {
@@ -273,8 +263,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: 'https://s3.amazonaws.com/',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 			},
 			filter: value => {
@@ -288,8 +277,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 			},
 			filter: value => {
@@ -303,8 +291,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 			},
 			public: true,
@@ -315,8 +302,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 			},
 			public: true,
@@ -327,8 +313,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: false,
 			type: SettingItemType.Bool,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('amazon_s3');
 			},
 			public: true,
@@ -339,8 +324,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 			},
 			public: true,
@@ -358,8 +342,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 			},
 			public: true,
@@ -370,8 +353,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServer');
 			},
 			public: true,
@@ -382,8 +364,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: '',
 			type: SettingItemType.String,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return settings['sync.target'] === SyncTargetRegistry.nameToId('joplinServerSaml');
 			},
 			public: true,
@@ -535,8 +516,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			label: () => _('Date format'),
 			options: () => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const options: any = {};
+				const options: Record<string, string> = {};
 				const now = new Date('2017-01-30T12:00:00').getTime();
 				options[Setting.DATE_FORMAT_1] = time.formatMsToLocal(now, Setting.DATE_FORMAT_1);
 				options[Setting.DATE_FORMAT_2] = time.formatMsToLocal(now, Setting.DATE_FORMAT_2);
@@ -559,8 +539,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			label: () => _('Time format'),
 			options: () => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const options: any = {};
+				const options: Record<string, string> = {};
 				const now = new Date('2017-01-30T20:30:00').getTime();
 				options[Setting.TIME_FORMAT_1] = time.formatMsToLocal(now, Setting.TIME_FORMAT_1);
 				options[Setting.TIME_FORMAT_2] = time.formatMsToLocal(now, Setting.TIME_FORMAT_2);
@@ -743,8 +722,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			options: () => {
 				const Note = require('../Note').default;
 				const noteSortFields = ['user_updated_time', 'user_created_time', 'title', 'order', 'todo_due', 'todo_completed'];
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const options: any = {};
+				const options: Record<string, string> = {};
 				for (let i = 0; i < noteSortFields.length; i++) {
 					options[noteSortFields[i]] = toTitleCase(Note.fieldToLabel(noteSortFields[i]));
 				}
@@ -897,8 +875,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 		},
 		'notes.sharedSortOrder': {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code from before rule was applied.
-			value: {} as Record<string, any>,
+			value: {} as Record<string, unknown>,
 			type: SettingItemType.Object,
 			section: 'folder',
 			public: false,
@@ -915,8 +892,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			options: () => {
 				const Folder = require('../Folder').default;
 				const folderSortFields = ['title', 'last_note_user_updated_time'];
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const options: any = {};
+				const options: Record<string, string> = {};
 				for (let i = 0; i < folderSortFields.length; i++) {
 					options[folderSortFields[i]] = toTitleCase(Folder.fieldToLabel(folderSortFields[i]));
 				}
@@ -1540,8 +1516,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			advanced: true,
 			label: () => _('Keyboard Mode'),
 			options: () => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const output: any = {};
+				const output: Record<string, string> = {};
 				output[''] = _('Default');
 				output['emacs'] = _('Emacs');
 				output['vim'] = _('Vim');
@@ -1669,8 +1644,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.String,
 			section: 'sync',
 			advanced: true,
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return [
 					SyncTargetRegistry.nameToId('amazon_s3'),
 					SyncTargetRegistry.nameToId('nextcloud'),
@@ -1689,8 +1663,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Bool,
 			advanced: true,
 			section: 'sync',
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => {
+			show: settings => {
 				return (shim.isNode() || shim.mobilePlatform() === 'android') &&
 					[
 						SyncTargetRegistry.nameToId('amazon_s3'),
@@ -2122,8 +2095,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			unitLabel: (value: number = null) => {
 				return value === null ? _('days') : _n('%d day', '%d days', value, value);
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			show: (settings: any) => settings['trash.autoDeletionEnabled'],
+			show: settings => !!settings['trash.autoDeletionEnabled'],
 			label: () => _('Keep notes in the trash for'),
 			storage: SettingStorage.File,
 			isGlobal: false,

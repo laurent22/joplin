@@ -181,7 +181,7 @@ export default class PerFolderSortOrderService {
 
 	private static loadSharedSortOrder() {
 		const validFields = notesSortOrderFieldArray();
-		const value = Setting.value('notes.sharedSortOrder');
+		const value = Setting.value('notes.sharedSortOrder') as { field?: string; reverse?: boolean } & Record<string, string | boolean>;
 		for (const key in this.sharedSortOrder) {
 			if (value.hasOwnProperty(key)) {
 				if (key !== 'field' || validFields.includes(value.field)) {
