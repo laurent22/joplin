@@ -276,8 +276,7 @@ const settingFilename = (id: number): string => {
 	return `settings-${id}.json`;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function switchClient(id: number, options: any = null) {
+async function switchClient(id: number, options: { keychainEnabled?: boolean } = null) {
 	options = { keychainEnabled: false, ...options };
 
 	if (!databases_[id]) throw new Error(`Call setupDatabaseAndSynchronizer(${id}) first!!`);
@@ -348,8 +347,7 @@ async function clearDatabase(id: number = null) {
 	await databases_[id].transactionExecBatch(queries);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function setupDatabase(id: number = null, options: any = null) {
+async function setupDatabase(id: number = null, options: { keychainEnabled?: boolean } = null) {
 	options = { keychainEnabled: false, ...options };
 
 	if (id === null) id = currentClient_;
@@ -400,8 +398,13 @@ async function clearSettingFile(id: number) {
 	await fs.remove(Setting.settingFilePath);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function createFolderTree(parentId: string, tree: any[], num = 0): Promise<FolderEntity> {
+interface FolderTreeNode {
+	title?: string;
+	body?: string;
+	children?: FolderTreeNode[];
+	[key: string]: unknown;
+}
+export async function createFolderTree(parentId: string, tree: FolderTreeNode[], num = 0): Promise<FolderEntity> {
 	let rootFolder: FolderEntity = null;
 
 	for (const item of tree) {
@@ -467,8 +470,7 @@ const createNoteAndResource = async (options: CreateNoteAndResourceOptions = nul
 	return { note, resource };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
+async function setupDatabaseAndSynchronizer(id: number, options: { keychainEnabled?: boolean } = null) {
 	if (id === null) id = currentClient_;
 
 	BaseService.logger_ = logger;
@@ -526,7 +528,7 @@ function synchronizer(id: number = null) {
 // This is like calling synchronizer.start() but it handles the
 // complexity of passing around the sync context depending on
 // the client.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Synchronizer.start takes any options; tightening here would diverge from lib
 async function synchronizerStart(id: number = null, extraOptions: any = null) {
 	if (id === null) id = currentClient_;
 
@@ -729,8 +731,7 @@ function fileApi() {
 	return fileApis_[syncTargetId_];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function objectsEqual(o1: any, o2: any) {
+function objectsEqual(o1: Record<string, unknown>, o2: Record<string, unknown>) {
 	if (Object.getOwnPropertyNames(o1).length !== Object.getOwnPropertyNames(o2).length) return false;
 	for (const n in o1) {
 		if (!o1.hasOwnProperty(n)) continue;
@@ -739,8 +740,7 @@ function objectsEqual(o1: any, o2: any) {
 	return true;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function checkThrowAsync(asyncFn: Function) {
+async function checkThrowAsync(asyncFn: ()=> Promise<unknown>) {
 	let hasThrown = false;
 	try {
 		await asyncFn();
@@ -750,8 +750,7 @@ async function checkThrowAsync(asyncFn: Function) {
 	return hasThrown;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-async function expectThrow(asyncFn: Function, errorCode: any = undefined, errorMessage: string = undefined) {
+async function expectThrow(asyncFn: ()=> unknown | Promise<unknown>, errorCode: string | number = undefined, errorMessage: string = undefined) {
 	let hasThrown = false;
 	let thrownError = null;
 	try {
@@ -777,8 +776,7 @@ async function expectThrow(asyncFn: Function, errorCode: any = undefined, errorM
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function expectNotThrow(asyncFn: Function) {
+async function expectNotThrow(asyncFn: ()=> Promise<unknown>) {
 	let thrownError = null;
 	try {
 		await asyncFn();
@@ -794,8 +792,7 @@ async function expectNotThrow(asyncFn: Function) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-function checkThrow(fn: Function) {
+function checkThrow(fn: ()=> unknown) {
 	let hasThrown = false;
 	try {
 		fn();
@@ -844,23 +841,19 @@ async function allSyncTargetItemsEncrypted() {
 	return totalCount === encryptedCount;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function id(a: any) {
+function id(a: { id?: string }) {
 	return a.id;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function ids(a: any[]) {
+function ids(a: { id?: string }[]) {
 	return a.map(n => n.id);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function sortedIds(a: any[]) {
+function sortedIds(a: { id?: string }[]) {
 	return ids(a).sort();
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function at(a: any[], indexes: any[]) {
+function at<T>(a: T[], indexes: number[]) {
 	const out = [];
 	for (let i = 0; i < indexes.length; i++) {
 		out.push(a[indexes[i]]);
@@ -878,8 +871,7 @@ async function createNTestFolders(n: number) {
 	return folders;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function createNTestNotes(n: number, folder: any, tagIds: string[] = null, title = 'note') {
+async function createNTestNotes(n: number, folder: FolderEntity, tagIds: string[] = null, title = 'note') {
 	const notes = [];
 	for (let i = 0; i < n; i++) {
 		const title_ = n > 1 ? `${title}${i}` : title;
@@ -964,8 +956,7 @@ export async function naughtyStrings() {
 class TestApp extends BaseApplication {
 
 	private hasGui_: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private middlewareCalls_: any[];
+	private middlewareCalls_: boolean[];
 	private logger_: LoggerWrapper;
 
 	public constructor(hasGui = true) {
@@ -981,8 +972,7 @@ class TestApp extends BaseApplication {
 		return this.hasGui_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async start(argv: any[]) {
+	public async start(argv: string[]) {
 		this.logger_.info('Test app starting...');
 
 		if (!argv.includes('--profile')) {
@@ -1003,7 +993,7 @@ class TestApp extends BaseApplication {
 		this.logger_.info('Test app started...');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Matches the base class signature with heterogeneous action union
 	public async generalMiddleware(store: any, next: any, action: any) {
 		this.middlewareCalls_.push(true);
 		try {
