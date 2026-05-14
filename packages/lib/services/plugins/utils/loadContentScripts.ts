@@ -16,10 +16,10 @@ export interface ExtraContentScript {
 }
 
 function postMessageHandler(pluginId: string, scriptType: ContentScriptType, contentScriptId: string): PostMessageHandler {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return (message: any) => {
+	return async (message: unknown) => {
 		if (scriptType === ContentScriptType.MarkdownItPlugin) {
 			logger.error('context.postMessage is not available to renderer content scripts');
+			return undefined;
 		} else {
 			const plugin = PluginService.instance().pluginById(pluginId);
 			return plugin.emitContentScriptMessage(contentScriptId, message);

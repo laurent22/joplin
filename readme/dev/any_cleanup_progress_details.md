@@ -606,3 +606,58 @@ Summary: 90 → 16 disable comments (74 removed). Zero remaining `Old code befor
 - **Loose lib-typed APIs** (2): `command-sync.ts` — `Synchronizer.start(options: any)` and `Synchronizer.reportToLines(report: any)` in lib are themselves `any`; tightening here would diverge from lib.
 - **No published types for JS modules** (3): `StatusBarWidget` (tkwidgets terminal-kit `inputField` options + callback) and `command-sync.ts` `oneDriveApiUtils_` (`onedrive-api-node-utils.js` is plain JS).
 - **Dynamic command/state shapes already documented** (6): all of `app.ts` was already annotated with descriptive non-"Old code" reasons before this pass — `commands_`, `commandMetadata_`, `activeCommand_`, `gui_`, dynamic command type at L175, and the redux dispatch type.
+
+## packages/lib
+Session date: 2026-05-14
+
+Starting count: 1138 disable comments across 212 files (excluding `node_modules/`).
+
+Checkpoint 1 (2026-05-14): 1138 → 1101 (37 removed across ~25 files).
+
+Files processed:
+- `SyncTargetNone.ts` — 1 removed, 0 left. `null as any` → `null as unknown as Synchronizer` with type-only import.
+- `components/shared/config/shouldShowMissingPasswordWarning.ts` — 1 removed, 0 left. `settings: any` → `Record<string, unknown>`.
+- `folders-screen-utils.ts` — 1 removed, 0 left. `scheduleRefreshFoldersIID_: any` → `ReturnType<typeof shim.setTimeout>`.
+- `geolocation-node.ts` — 1 removed, 0 left. `fetchJson` return → `Record<string, unknown>` (and renamed shadowed `let r` to `const response` to keep types straight after `.json()`).
+- `hooks/useAsyncEffect.ts` — 1 removed, 0 left. `dependencies: any[]` → `DependencyList` (type-only import from react).
+- `hooks/useElementSize.ts` — 1 removed, 0 left. `elementRef: any` → `RefObject<HTMLElement>` (type-only import from react).
+- `markdownUtils.ts` — 1 removed, 0 left. `searchUrls(tokens: any[])` → `MarkdownItType.Token[]` (already had type-only import).
+- `markupLanguageUtils.ts` — 1 removed, 0 left. `pluginOptions: any` → `Record<string, { enabled: boolean }>`.
+- `models/Note.test.ts` — 1 removed, 0 left. `t[0]` cast `as NoteEntity` instead of inner `let input: any`.
+- `models/NoteResource.ts` — 1 removed, 0 left. Introduced exported `AssociatedResourceNote = Partial<NoteEntity> & { resource_id; note_id }` to reflect the join shape.
+- `models/Revision.test.ts` — 1 removed, 0 left. `input as any` → `input as RevisionEntity`.
+- `models/Revision.ts` — 0 removed, 1 left. Tried `unknown[]` for parsePatch; broke `patchItem.diffs` access. Reverted with updated reason — diff-match-patch JSON shape, no installed `@types/diff-match-patch`.
+- `models/Setting.test.ts` — 1 removed, 0 left. `loadSettingsFromFile(): Promise<any>` → `Promise<Record<string, unknown>>`.
+- `models/settings/FileHandler.ts` — 1 removed, 0 left. `SettingValues = Record<string, any>` → `Record<string, unknown>`.
+- `ntp.ts` — 1 removed, 0 left. `error: any` → `Error | null` in the NTP callback signature.
+- `services/ResourceEditWatcher/reducer.ts` — 0 removed, 1 left. Reason updated (heterogeneous redux state composed across desktop/mobile; action types untyped).
+- `services/database/isSqliteSyntaxError.ts` — 1 removed, 0 left. `sqliteError: any` → `{ message?: string }`.
+- `services/interop/InteropService_Importer_EnexToMd.ts` — 1 removed, 0 left. `options: any` → `ImportOptions`.
+- `services/interop/InteropService_Importer_Raw.test.ts` — 1 removed, 0 left. Introduced local `FolderEntityWithChildren` interface; `tree: any` → typed cast.
+- `services/interop/Module.test.ts` — 1 removed, 0 left. `format: ... as any` → `as ExportModuleOutputFormat`.
+- `services/interop/Module.ts` — 1 removed, 0 left. `format: '' as any` → `as ExportModuleOutputFormat`.
+- `services/joplinCloudUtils.ts` — 1 removed, 0 left. `Action.payload?: any` → `string` (only ever holds errorMessage).
+- `services/noteList/defaultMultiColumnsRenderer.ts` — 0 removed, 1 left. Reason updated (matches OnRenderNoteHandler which is `any` by design; props heterogeneous per renderer's itemProps).
+- `services/noteList/renderTemplate.test.ts` — 1 removed, 0 left. `name: '…' as any` → `as ColumnName`.
+- `services/noteList/renderViewProps.ts` — 1 removed, 0 left. `value: any` → `unknown` with inner narrowing casts.
+- `services/ocr/OcrService.ts` — 1 removed, 0 left. `maintenanceTimer_: any` → `ReturnType<typeof shim.setInterval>`.
+- `services/plugins/MenuController.ts` — 1 removed, 0 left. `store: any` → `PluginStore` (new exported alias from `ViewController`).
+- `services/plugins/MenuItemController.ts` — 1 removed, 0 left. Same fix via `PluginStore`.
+- `services/plugins/ToolbarButtonController.ts` — 1 removed, 0 left. Same fix via `PluginStore`.
+- `services/plugins/ViewController.ts` — 3 removed, 1 left. Introduced exported `PluginStore = Store<any>` (state heterogeneous across desktop/mobile — `mainLayout` lives on AppState only); typed `store_`/`store`/`message`. `storeView` stays `any` (controllers index different view shapes).
+- `services/plugins/Plugin.ts` — 4 removed, 0 left. Introduced exported `MessageListenerCallback = (message: unknown)=> Promise<unknown>`; typed `messageListener_`, `contentScriptMessageListeners_`, `emitMessage`, `onMessage`, `onContentScriptMessage`, `emitContentScriptMessage`.
+- `services/plugins/RepositoryApi.ts` — 1 removed, 0 left. `(manifest as any)[field]` → `as const` tuple + direct indexing.
+- `services/plugins/api/JoplinContentScripts.ts` — 1 removed, 0 left. `callback: any` → `MessageListenerCallback`.
+- `services/plugins/api/JoplinInterop.ts` — 1 removed, 0 left. `...module as any` → spread + `format: module.format as ExportModuleOutputFormat`.
+- `services/plugins/utils/loadContentScripts.ts` — 1 removed, 1 left. `postMessageHandler` now async returning `Promise<unknown>`. The `loadedModule.codeMirrorResources/codeMirrorOptions` access kept `as any` with updated reason — these properties are not on `ContentScriptModule`.
+- `services/interop/InteropService_Importer_EnexToHtml.ts` — follow-up fix: `outputFormat: 'html'` → `ImportModuleOutputFormat.Html` (caused by ImportOptions tightening).
+
+Files skipped entirely:
+- `database-driver.ts` — `SelectResult = any` already tagged "Partial refactor"; out of scope.
+- `file-api-driver-local.ts` — already tagged "Partial refactor".
+- `services/interop/InteropService_Importer_Md_frontmatter.ts` — `parseRawYamlToFolderIcon` already tagged "The raw YAML output is untyped".
+- `services/e2ee/ppk/RSA.node.ts` — already tagged "Workaround for incorrect types".
+- `services/e2ee/types.ts` — already tagged "Partial refactor".
+- `services/commands/ToolbarButtonUtils.ts` — already tagged "WhenClauseContext can be partial in tests".
+
+

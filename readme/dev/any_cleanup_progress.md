@@ -41,7 +41,7 @@ For each disable comment encountered:
   - For large packages (e.g. `lib`, `app-desktop`, `app-cli`), also update the table row at intermediate checkpoints (e.g. every ~20 files) so a hard cutoff loses at most one checkpoint's worth of detail.
 - Commit the progress file alongside (or as part of) the package's cleanup PR.
 - **After each commit that updates this file, also sync the PR body** so reviewers see the latest progress without opening the file. Run: `gh pr edit <PR-number> --body-file readme/dev/any_cleanup_progress.md`.
-  Find the PR number with `gh pr list --head <branch> --json number`. The current branch for this cleanup is `any_refactor_5` (no PR opened yet — previous PR on `any_refactor_4` was merged).
+  Find the PR number with `gh pr list --head <branch> --json number`. The current branch for this cleanup is `any_refactor_7` (no PR opened yet — previous PRs on `any_refactor_*` were merged).
 - If a session stops mid-package, the **Per-package detail** section records exactly which files were processed so the next session can resume cleanly.
 - At the start of any new session, re-read this file before resuming — it is the source of truth, not conversational memory.
 
@@ -73,7 +73,7 @@ Counts captured 2026-05-11 before any work. Note: the original `app-cli` row cou
 | 10 | server | 67 | 227 | 205 | 22 | done (2026-05-12) |
 | 11 | app-cli | 38 | 90 | 74 | 16 | done (2026-05-13) |
 | 12 | app-desktop | 149 | 477 | 300 | 177 | done (2026-05-13) |
-| 13 | lib | 213 | 1140 | 0 | 1140 | not started |
+| 13 | lib | 212 | 1138 | 37 | 1101 | in progress (2026-05-14) |
 | — | generator-joplin | 2 | 27 | — | — | excluded (template) |
 
 Total in-scope comments at start: **2,952** across **633 files**.

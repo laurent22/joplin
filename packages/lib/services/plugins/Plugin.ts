@@ -22,6 +22,7 @@ interface ContentScripts {
 }
 
 type OnUnloadListener = ()=> void;
+export type MessageListenerCallback = (message: unknown)=> Promise<unknown>;
 
 export default class Plugin {
 
@@ -36,10 +37,8 @@ export default class Plugin {
 	private eventEmitter_: any;
 	private devMode_ = false;
 	private builtIn_ = false;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private messageListener_: Function = null;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private contentScriptMessageListeners_: Record<string, Function> = {};
+	private messageListener_: MessageListenerCallback = null;
+	private contentScriptMessageListeners_: Record<string, MessageListenerCallback> = {};
 	private dataDir_: string;
 	private dataDirCreated_ = false;
 	private hasErrors_ = false;
@@ -201,19 +200,16 @@ export default class Plugin {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public emitMessage(message: any) {
-		if (!this.messageListener_) return;
+	public emitMessage(message: unknown) {
+		if (!this.messageListener_) return undefined;
 		return this.messageListener_(message);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public onMessage(callback: any) {
+	public onMessage(callback: MessageListenerCallback) {
 		this.messageListener_ = callback;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public onContentScriptMessage(id: string, callback: any) {
+	public onContentScriptMessage(id: string, callback: MessageListenerCallback) {
 		if (!this.contentScriptById(id)) {
 			// The script could potentially be registered later on, but still
 			// best to print a warning to notify the user of a possible bug.
@@ -223,9 +219,8 @@ export default class Plugin {
 		this.contentScriptMessageListeners_[id] = callback;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public emitContentScriptMessage(id: string, message: any) {
-		if (!this.contentScriptMessageListeners_[id]) return;
+	public emitContentScriptMessage(id: string, message: unknown) {
+		if (!this.contentScriptMessageListeners_[id]) return undefined;
 		return this.contentScriptMessageListeners_[id](message);
 	}
 

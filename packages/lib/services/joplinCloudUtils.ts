@@ -13,8 +13,7 @@ const logger = Logger.create('joplinCloudUtils');
 type ActionType = 'LINK_USED' | 'COMPLETED' | 'ERROR';
 type Action = {
 	type: ActionType;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	payload?: any;
+	payload?: string;
 };
 
 type DefaultState = {

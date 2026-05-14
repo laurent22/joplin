@@ -412,8 +412,8 @@ export default class Revision extends BaseItem {
 		return existingRev && existingRev.item_updated_time === updatedTime;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static parsePatch(patch: any): any[] {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- patchArray items have a diff-match-patch shape (.diffs as [number, string][]); no installed @types/diff-match-patch
+	private static parsePatch(patch: string): any[] {
 		return patch ? JSON.parse(patch) : [];
 	}
 
