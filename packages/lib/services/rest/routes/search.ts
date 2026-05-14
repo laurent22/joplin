@@ -20,18 +20,18 @@ export default async function(request: Request) {
 
 	if (modelType !== BaseItem.TYPE_NOTE) {
 		const ModelClass = BaseItem.getClassByItemType(modelType);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const options: any = {};
+		const options: { fields?: string[]; where: string; whereParams: string[]; caseInsensitive: boolean } = {
+			where: 'title LIKE ?',
+			whereParams: [query.replace(/\*/g, '%')],
+			caseInsensitive: true,
+		};
 		const fields = requestFields(request, modelType);
 		if (fields.length) options.fields = fields;
-		const sqlQueryPart = query.replace(/\*/g, '%');
-		options.where = 'title LIKE ?';
-		options.whereParams = [sqlQueryPart];
-		options.caseInsensitive = true;
 		results = await ModelClass.all(options);
 	} else {
+		const loadOptions = defaultLoadOptions(request, ModelType.Note);
 		const options: NotesForQueryOptions = {
-			...defaultLoadOptions(request, ModelType.Note),
+			fields: Array.isArray(loadOptions.fields) ? loadOptions.fields : (loadOptions.fields ? [loadOptions.fields] : undefined),
 			appendWildCards: true,
 		};
 		results = (await SearchEngineUtils.notesForQuery(query, false, options)).notes;

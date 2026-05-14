@@ -80,12 +80,11 @@ const syncOptions = (noteId: string, localUpdatedTime: number, contextTimestamp:
 		return metadataMap;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const syncContext: any = {
+	const syncContext = {
 		timestamp: syncContextTimestamp,
 		filesAtTimestamp: filesAtTimestamp,
-		statsCache: null,
-		statIdsCache: null,
+		statsCache: null as unknown,
+		statIdsCache: null as unknown,
 		deletedItemsProcessed: false,
 	};
 

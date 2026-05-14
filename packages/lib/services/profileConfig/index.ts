@@ -3,8 +3,20 @@ import shim from '../../shim';
 import { CurrentProfileVersion, defaultProfile, defaultProfileConfig, DefaultProfileId, Profile, ProfileConfig } from './types';
 import { customAlphabet } from 'nanoid/non-secure';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const migrateProfileConfig = (profileConfig: any, toVersion: number): ProfileConfig => {
+interface MigratingProfile {
+	id?: string;
+	path?: string;
+	name?: string;
+}
+
+interface MigratingProfileConfig {
+	version: number;
+	profiles: MigratingProfile[];
+	currentProfile?: number;
+	currentProfileId?: string;
+}
+
+export const migrateProfileConfig = (profileConfig: MigratingProfileConfig, toVersion: number): ProfileConfig => {
 	let version = 2;
 
 	while (profileConfig.version < toVersion) {
@@ -27,7 +39,7 @@ export const migrateProfileConfig = (profileConfig: any, toVersion: number): Pro
 		version++;
 	}
 
-	return profileConfig;
+	return profileConfig as ProfileConfig;
 };
 
 export const loadProfileConfig = async (profileConfigPath: string): Promise<ProfileConfig> => {

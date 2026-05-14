@@ -591,7 +591,7 @@ export default class PluginService extends BaseService {
 	}
 
 	private validateManifest(manifest: unknown): void {
-		manifestFromObject(manifest);
+		manifestFromObject(manifest as Record<string, unknown>);
 	}
 
 	public describeIncompatibility(manifest: PluginManifest) {

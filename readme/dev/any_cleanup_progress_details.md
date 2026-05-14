@@ -660,4 +660,49 @@ Files skipped entirely:
 - `services/e2ee/types.ts` — already tagged "Partial refactor".
 - `services/commands/ToolbarButtonUtils.ts` — already tagged "WhenClauseContext can be partial in tests".
 
+Checkpoint 2 (2026-05-14): 1101 → 1053 (48 removed across ~25 files).
+
+- `services/plugins/api/JoplinPlugins.ts` — 1 removed, 0 left. `require(_path): any` → `unknown` (stub).
+- `services/plugins/utils/manifestFromObject.ts` — 1 removed, 0 left. `(o: any)` → `Record<string, unknown>`; PluginService.validateManifest now casts on the caller side.
+- `services/plugins/utils/mapEventHandlersToIds.ts` — 0 removed, 1 left. Reason updated (recursive walker; tightening to `unknown` forces narrowing at every branch and recursive call).
+- `services/plugins/utils/validatePluginPlatforms.test.ts` — 1 removed, 0 left. `platforms: any` → `unknown`; inner cast in call.
+- `services/profileConfig/index.ts` — 1 removed, 0 left. Introduced local `MigratingProfile`/`MigratingProfileConfig` interfaces describing the v1→v2 transition.
+- `services/rest/ApiResponse.ts` — 1 removed, 0 left. `body: any` → `unknown`.
+- `services/rest/routes/auth.ts` — 1 removed, 0 left. `output: any` → inline `{ status: AuthTokenStatus; token?: string }`.
+- `services/rest/routes/search.ts` — 1 removed, 0 left. Restructured to construct the options as a typed object literal; NotesForQueryOptions branch narrows the LoadOptions.fields union to string[].
+- `services/rest/utils/defaultAction.ts` — 1 removed, 0 left. `getOneModel.options: any` → `LoadOptions`.
+- `services/rest/utils/defaultLoadOptions.ts` — 1 removed, 0 left. Return → `LoadOptions`.
+- `services/rest/utils/defaultSaveOptions.ts` — 1 removed, 0 left. Introduced exported `DefaultSaveOptions { userSideValidation; isNew?; autoTimestamp? }`; callers set `autoTimestamp` after construction.
+- `services/search/SearchFilter.test.ts` — 1 removed, 0 left. `let engine: any` → `SearchEngine`.
+- `services/sortOrder/PerFolderSortOrderService.ts` — 1 removed, 0 left. `event: any` → `{ value: string }`.
+- `services/style/loadCssToTheme.ts` — 1 removed, 0 left. Removed `(f: any)` annotation — readDirStats returns typed Stat[].
+- `services/synchronizer/ItemUploader.ts` — 1 removed, 0 left. `preUploadedItems_: Record<string, any>` → `Record<string, { error?: { message?; code? } }>`.
+- `services/synchronizer/MigrationHandler.ts` — 1 removed, 0 left. `autoLockError: any` / `error: any` → `Error | null`.
+- `services/synchronizer/gui/useSyncTargetUpgrade.ts` — 1 removed, 0 left. `error: any` → `Error | null`.
+- `services/synchronizer/migrations/1.ts` and `2.ts` — 2 removed, 0 left. `api: any` → `FileApi`.
+- `services/synchronizer/utils/handleConflictAction.ts` — 1 removed, 0 left. `remoteContent/local: any` → `BaseItemEntity`.
+- `utils/ipc/types.ts` — 0 removed, 1 left. Reason updated (structural constraint can't express "args extend SerializableData[]" without index-signature errors).
+- `utils/ipc/utils/mergeCallbacksAndSerializable.ts` — 1 removed, 0 left. `OnAfterCallbackCreated` callback typed properly.
+- `utils/ipc/utils/separateCallbacksFromSerializable.test.ts` — 1 removed, 0 left. `as any[]` → `as string[]`.
+- `file-api-driver.test.ts` — 1 removed, 0 left. Removed `(f: any)` from map; items typed already.
+- `file-api.test.ts` — 1 removed, 0 left. `syncContext: any` → inferred from literal with `null as unknown` for cache fields.
+- `ArrayUtils.ts` — 2 removed, 0 left. `mergeOverlappingIntervals` typed `[number, number][]`; one caller (`GotoAnything.tsx`) annotated its `indices` accordingly.
+- `JoplinError.ts` — 2 removed, 0 left. Introduced exported `JoplinErrorCode = string | number | null`.
+- `ObjectUtils.ts` — 2 removed, 0 left. `output: any` in `sortByValue` and `convertValuesToFunctions` → `Record<string, ...>` with final cast to the typed return type.
+- `dom.ts` — 2 removed, 0 left. `isInsideContainer(node: any)` → `EventTarget | Node | null`; `waitForElement` made generic `<T extends HTMLElement>` returning `T | null`. One caller (`useRootElement.ts`) now uses the generic explicitly.
+- `errorUtils.ts` — 2 removed, 0 left. Introduced local `WrapErrorInput` and `WrappedError` interfaces.
+- `net-utils.ts` — 2 removed, 0 left. Introduced `TcpPortUsed { check(port): Promise<boolean> }`; `Record<string, any>` → `Record<string, string>` for headers.
+- `models/utils/types.ts` — 2 removed, 0 left. `LoadOptions.whereParams: any[]` → `(string|number|boolean)[]`; `SaveOptions.oldItem: any` → `Record<string, unknown>`; added `SaveOptions.fields?: string[]` (used by `BaseModel.save` and at least one renameTag caller).
+- `models/Alarm.ts` — 2 removed, 0 left. `selectAll` cast to `{ id: string }[]`; `makeNotification(alarm, note)` → `AlarmEntity`/`NoteEntity`.
+- `models/Tag.ts` — 2 removed, 0 left. `searchAllWithNotes(options: any)` → `SearchOptions` (new exported interface in `BaseModel`); `save.options: any` → `SaveOptions`.
+- `models/utils/readOnly.ts` — 2 removed, 0 left. `Folder: any` → `typeof import('../Folder').default`; `BaseItem: any` → `typeof import('../BaseItem').default`.
+- `components/shared/config/config-shared.ts` — 1 removed, 1 left. `updateSettingValue.value: any` → `unknown`. The `setState` field is left `any` with a new reason — mirrors React.Component.setState (Pick<S, K>); narrowing breaks subclass `this` assignment to the interface in app-mobile's class-based ConfigScreen.
+- `components/shared/config/plugins/useOnInstallHandler.ts` — 2 removed, 0 left. Both `setInstallingPluginIds((prev: any))` callbacks rely on the `React.Dispatch<SetStateAction<...>>` inferred type.
+- `components/shared/reduxSharedMiddleware.ts` — 1 removed, 1 left. `sortNoteListTimeout: any` → `ReturnType<typeof shim.setTimeout>`; `store/_next` typed (Store<State>/Dispatch); `action: any` kept with new reason explaining the heterogeneous action union.
+- New shared types: `BaseModel.SearchOptions`; `JoplinError.JoplinErrorCode`; `models/NoteResource.AssociatedResourceNote`; `services/plugins/ViewController.PluginStore`; `services/plugins/Plugin.MessageListenerCallback`; `services/rest/utils/defaultSaveOptions.DefaultSaveOptions`.
+
+Follow-up edits in other packages (caused by lib tightenings):
+- `app-desktop/gui/NoteListItem/utils/useRootElement.ts` — call `waitForElement<HTMLDivElement>(...)` explicitly.
+- `app-desktop/plugins/GotoAnything.tsx` — annotated local `indices: [number, number][]`.
+
 

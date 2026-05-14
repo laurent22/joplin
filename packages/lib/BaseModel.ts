@@ -28,6 +28,15 @@ export enum ModelType {
 	Command = 16,
 }
 
+export interface SearchOptions {
+	fields?: string | string[];
+	conditions?: string[];
+	conditionsParams?: (string | number | boolean)[];
+	titlePattern?: string;
+	limit?: number;
+	order?: { by: string; dir: string }[];
+}
+
 export interface DeleteOptions {
 	idFieldName?: string;
 	changeSource?: number;
@@ -360,13 +369,12 @@ class BaseModel {
 		return this.modelSelectAll(q.sql);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async search(options: any = null) {
+	public static async search(options: SearchOptions = null) {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
 
 		const conditions = options.conditions ? options.conditions.slice(0) : [];
-		const params = options.conditionsParams ? options.conditionsParams.slice(0) : [];
+		const params: (string | number | boolean)[] = options.conditionsParams ? options.conditionsParams.slice(0) : [];
 
 		if (options.titlePattern) {
 			const pattern = options.titlePattern.replace(/\*/g, '%');

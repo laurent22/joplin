@@ -427,7 +427,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 							let fragments = '...';
 
 							const loadFragments = (markupLanguage: MarkupLanguage, content: string) => {
-								const indices = [];
+								const indices: [number, number][] = [];
 								const body = this.markupToHtml().stripMarkup(markupLanguage, content, { collapseWhiteSpaces: true });
 								const normalizedBody = removeDiacritics(body);
 

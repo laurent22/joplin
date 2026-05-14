@@ -84,9 +84,9 @@ export default class JoplinPlugins {
 	/**
 	 * @deprecated Use joplin.require()
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public require(_path: string): any {
+	public require(_path: string): unknown {
 		// Just a stub. Implementation has to be done within plugin process, in plugin_index.js
+		return undefined;
 	}
 
 }
