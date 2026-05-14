@@ -804,4 +804,9 @@ Checkpoint 10 (2026-05-14): 829 → 816 (13 removed).
 - `JoplinServerApi.ts` — 5 removed, 3 left. `connectionErrorMessage.error` → `Error | null`; `requestToCurl_.options` typed inline; `exec/exec_.query/headers` typed `Record<string, unknown>` / `Record<string, string>`; `responseJson_` → `Record<string, unknown>`. Three stay with reasons — `body` and `fetchOptions.body` flow through `shim.fetch/fetchBlob/uploadBlob` (FetchOptions) which type body as `string`; `hidePasswords` accepts both stringified bodies and header records; `response` is the shim/blob return.
 - `services/ResourceFetcher.ts` — 9 removed, 4 left. `dispatch: Function` typed via the action shape; `queue_/autoAddResourcesCalls_` typed; timer IDs typed via `ReturnType<typeof shim.setTimeout>`; `on`/`off` reasons updated; the `as any` cast on `notifyDisabledSyncItems` callback replaced with a typed adapter. Four stay with reasons (`fetchingItems_` mixed bool/Entity; `fileApi_/setFileApi/constructor` widened for test mocks).
 
+Checkpoint 11 (2026-05-14): 816 → 805 (11 removed).
+
+- `services/RevisionService.ts` — 7 removed, 0 left. `changedSinceCollectionCache_`/`maintenanceCalls_`/`maintenanceTimer1_`/`maintenanceTimer2_` typed; `noteMetadata_.md` → `Record<string, unknown>`; `output.type_` cast uses `NoteEntity & { type_? }`.
+- `BaseSyncTarget.ts` — 8 removed, 2 left. `dispatch: Function` typed via action shape; `initState_/options_` typed; `option`/`unsupportedPlatforms`/`checkConfig` typed. Two stay (`db_/fileApi_/constructor.db/setFileApi.v/initFileApi`) with reasons — sync target subclasses each pass concrete shapes (FileApi subclasses, FileApiOptions) so tightening here forces every subclass to match.
+
 
