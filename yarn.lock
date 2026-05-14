@@ -12327,7 +12327,7 @@ __metadata:
     react-toggle-button: "npm:2.2.0"
     react-tooltip: "npm:4.5.1"
     redux: "npm:4.2.1"
-    reselect: "npm:4.1.8"
+    reselect: "npm:5.1.1"
     roboto-fontface: "npm:0.10.0"
     smalltalk: "npm:2.5.1"
     source-map-support: "npm:0.5.21"
@@ -12693,7 +12693,7 @@ __metadata:
     react-dom: "npm:19.1.5"
     redux: "npm:4.2.1"
     relative: "npm:3.0.2"
-    reselect: "npm:4.1.8"
+    reselect: "npm:5.1.1"
     server-destroy: "npm:1.0.1"
     sharp: "npm:0.34.5"
     sprintf-js: "npm:1.1.3"
@@ -50950,10 +50950,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reselect@npm:4.1.8":
-  version: 4.1.8
-  resolution: "reselect@npm:4.1.8"
-  checksum: 10/199984d9872f71cd207f4aa6e6fd2bd48d95154f7aa9b3aee3398335f39f5491059e732f28c12e9031d5d434adab2c458dc8af5afb6564d0ad37e1644445e09c
+"reselect@npm:5.1.1":
+  version: 5.1.1
+  resolution: "reselect@npm:5.1.1"
+  checksum: 10/1fdae11a39ed9c8d85a24df19517c8372ee24fefea9cce3fae9eaad8e9cefbba5a3d4940c6fe31296b6addf76e035588c55798f7e6e147e1b7c0855f119e7fa5
   languageName: node
   linkType: hard
 
