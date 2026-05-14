@@ -798,4 +798,10 @@ Checkpoint 9 (2026-05-14): 886 → 829 (57 removed).
 - `registry.ts` — 9 removed, 2 left. Various private fields typed (`scheduleSyncId_`/`recurrentSyncId_`/`db_`/`showErrorMessageBoxHandler_`); `setShowErrorMessageBoxHandler`/`setDb`/`saveContextHandler` typed; `promiseResolve` typed. `syncTargets_/scheduleSync.syncOptions` keep `any` with reasons (heterogeneous sync target API and Synchronizer.start options).
 - Side fix: `app-cli/app/command-apidoc.ts` — cast `tableFields` to `MarkdownTableRow[]` (now that `TableField` no longer has an index signature compatible with MarkdownTableRow).
 
+Checkpoint 10 (2026-05-14): 829 → 816 (13 removed).
+
+- `services/UndoRedoService.ts` — 8 removed, 2 left. `UndoQueue.inner_` and methods → `unknown`; `state/redoState/undoState/push.state/schedulePush.state` → `unknown`; `dispatch: Function` removed (no usage). Two `on`/`off` callbacks stay `any` with reason (EventEmitter payloads vary). Follow-up in `app-mobile/.../Note.tsx` casts the undo state to its concrete shape.
+- `JoplinServerApi.ts` — 5 removed, 3 left. `connectionErrorMessage.error` → `Error | null`; `requestToCurl_.options` typed inline; `exec/exec_.query/headers` typed `Record<string, unknown>` / `Record<string, string>`; `responseJson_` → `Record<string, unknown>`. Three stay with reasons — `body` and `fetchOptions.body` flow through `shim.fetch/fetchBlob/uploadBlob` (FetchOptions) which type body as `string`; `hidePasswords` accepts both stringified bodies and header records; `response` is the shim/blob return.
+- `services/ResourceFetcher.ts` — 9 removed, 4 left. `dispatch: Function` typed via the action shape; `queue_/autoAddResourcesCalls_` typed; timer IDs typed via `ReturnType<typeof shim.setTimeout>`; `on`/`off` reasons updated; the `as any` cast on `notifyDisabledSyncItems` callback replaced with a typed adapter. Four stay with reasons (`fetchingItems_` mixed bool/Entity; `fileApi_/setFileApi/constructor` widened for test mocks).
+
 

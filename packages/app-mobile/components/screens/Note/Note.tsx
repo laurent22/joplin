@@ -418,7 +418,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private async undoRedo(type: 'undo'|'redo') {
-		const undoState = await this.undoRedoService_[type](this.undoState());
+		const undoState = await this.undoRedoService_[type](this.undoState()) as { body: string } | undefined;
 		if (!undoState) return;
 
 		this.setState((state) => {
