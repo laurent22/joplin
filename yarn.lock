@@ -21121,7 +21121,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-styles@npm:^3.0.0, ansi-styles@npm:^3.2.0, ansi-styles@npm:^3.2.1":
+"ansi-styles@npm:^3.2.0, ansi-styles@npm:^3.2.1":
   version: 3.2.1
   resolution: "ansi-styles@npm:3.2.1"
   dependencies:
@@ -24371,7 +24371,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^1.0.0, chalk@npm:^1.1.3":
+"chalk@npm:^1.1.3":
   version: 1.1.3
   resolution: "chalk@npm:1.1.3"
   dependencies:
@@ -24802,13 +24802,6 @@ __metadata:
     parent-module: "npm:^2.0.0"
     resolve-from: "npm:^5.0.0"
   checksum: 10/4931f0c461f5d7b9b79f62c2d1bc31c37f7f1d33b4e95eef7080a83955c0374f4c180f5a96cc4d63bbefc64a9aa5d12b155641109e8e489dfa50fd5820e5101f
-  languageName: node
-  linkType: hard
-
-"cli-boxes@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "cli-boxes@npm:1.0.0"
-  checksum: 10/101cfd6464a418a76523c332665eaf0641522f30ecc2492de48263ada6b0852333b2ed47b2998ddda621e7008471c51f597f813be798db237c33ba45b27e802a
   languageName: node
   linkType: hard
 
@@ -29280,6 +29273,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"emoji-regex@npm:^10.2.1":
+  version: 10.6.0
+  resolution: "emoji-regex@npm:10.6.0"
+  checksum: 10/98cc0b0e1daed1ed25afbf69dcb921fee00f712f51aab93aa1547e4e4e8171725cc4f0098aaa645b4f611a19da11ec9f4623eb6ff2b72314b39a8f2ae7c12bf2
+  languageName: node
+  linkType: hard
+
 "emoji-regex@npm:^10.3.0":
   version: 10.3.0
   resolution: "emoji-regex@npm:10.3.0"
@@ -33122,7 +33122,7 @@ __metadata:
     slugify: "npm:1.6.6"
     ts-node: "npm:10.9.2"
     yeoman-generator: "npm:5.10.0"
-    yosay: "npm:2.0.2"
+    yosay: "npm:3.0.0"
   languageName: unknown
   linkType: soft
 
@@ -41173,6 +41173,13 @@ __metadata:
   version: 6.0.0
   resolution: "memoize-one@npm:6.0.0"
   checksum: 10/28feaf7e9a870efef1187df110b876ce42deaf86c955f4111d72d23b96e44eed573469316e6ad0d2cc7fa3b1526978215617b126158015f957242c7493babca9
+  languageName: node
+  linkType: hard
+
+"meow@npm:^12.1.1":
+  version: 12.1.1
+  resolution: "meow@npm:12.1.1"
+  checksum: 10/8594c319f4671a562c1fef584422902f1bbbad09ea49cdf9bb26dc92f730fa33398dd28a8cf34fcf14167f1d1148d05a867e50911fc4286751a4fb662fdd2dc2
   languageName: node
   linkType: hard
 
@@ -54173,7 +54180,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-width@npm:^2.0.0, string-width@npm:^2.1.0, string-width@npm:^2.1.1":
+"string-width@npm:^2.1.0, string-width@npm:^2.1.1":
   version: 2.1.1
   resolution: "string-width@npm:2.1.1"
   dependencies:
@@ -54202,6 +54209,17 @@ __metadata:
     emoji-regex: "npm:^9.2.2"
     strip-ansi: "npm:^7.0.1"
   checksum: 10/7369deaa29f21dda9a438686154b62c2c5f661f8dda60449088f9f980196f7908fc39fdd1803e3e01541970287cf5deae336798337e9319a7055af89dafa7193
+  languageName: node
+  linkType: hard
+
+"string-width@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "string-width@npm:6.1.0"
+  dependencies:
+    eastasianwidth: "npm:^0.2.0"
+    emoji-regex: "npm:^10.2.1"
+    strip-ansi: "npm:^7.0.1"
+  checksum: 10/8aefb456a230c8d7fe254049b1b2d62603da1a3b6c7fc9f3332f6779583cc1c72653f9b6e4cd0c1c92befee1565d4a0a7542d09ba4ceb6d96af02fbd8425bb03
   languageName: node
   linkType: hard
 
@@ -55077,16 +55095,6 @@ __metadata:
   version: 1.0.0
   resolution: "tagged-tag@npm:1.0.0"
   checksum: 10/e37653df3e495daa7ea7790cb161b810b00075bba2e4d6c93fb06a709e747e3ae9da11a120d0489833203926511b39e038a2affbd9d279cfb7a2f3fcccd30b5d
-  languageName: node
-  linkType: hard
-
-"taketalk@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "taketalk@npm:1.0.0"
-  dependencies:
-    get-stdin: "npm:^4.0.1"
-    minimist: "npm:^1.1.0"
-  checksum: 10/b9a6ae2d6e41573a18958b7ac76ab89a6f703a3abfb24fc1613171bece8b6bb76e68fa39da6077ed6cac22d0d39530e40e9078aea93f3cf9285f48b05e046a2b
   languageName: node
   linkType: hard
 
@@ -60424,22 +60432,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yosay@npm:2.0.2":
-  version: 2.0.2
-  resolution: "yosay@npm:2.0.2"
+"yosay@npm:3.0.0":
+  version: 3.0.0
+  resolution: "yosay@npm:3.0.0"
   dependencies:
-    ansi-regex: "npm:^2.0.0"
-    ansi-styles: "npm:^3.0.0"
-    chalk: "npm:^1.0.0"
-    cli-boxes: "npm:^1.0.0"
+    ansi-regex: "npm:^6.0.1"
+    ansi-styles: "npm:^6.2.1"
+    chalk: "npm:^5.3.0"
+    cli-boxes: "npm:^3.0.0"
+    meow: "npm:^12.1.1"
     pad-component: "npm:0.0.1"
-    string-width: "npm:^2.0.0"
-    strip-ansi: "npm:^3.0.0"
-    taketalk: "npm:^1.0.0"
-    wrap-ansi: "npm:^2.0.0"
+    string-width: "npm:^6.1.0"
+    strip-ansi: "npm:^7.1.0"
+    wrap-ansi: "npm:^8.1.0"
   bin:
     yosay: cli.js
-  checksum: 10/142a8fc03fb21235162453be0952196d0c916ff734be3690d85635476454f1b9000cdc9dc2cfc9961d51c7da4d19db897c198df97fa4961e4f11a24b5fe9b69b
+  checksum: 10/7bfc4f34980cbe431495e6f9f536cbddf67c4fc0497e6035535551eaa2a1c8605316a9ba2f8fb7da40c0f0ab77bd409247ca103d909f772fe88b4aca95c7e608
   languageName: node
   linkType: hard
 
