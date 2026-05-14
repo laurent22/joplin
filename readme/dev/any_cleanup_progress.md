@@ -73,7 +73,7 @@ Counts captured 2026-05-11 before any work. Note: the original `app-cli` row cou
 | 10 | server | 67 | 227 | 205 | 22 | done (2026-05-12) |
 | 11 | app-cli | 38 | 90 | 74 | 16 | done (2026-05-13) |
 | 12 | app-desktop | 149 | 477 | 300 | 177 | done (2026-05-13) |
-| 13 | lib | 212 | 1138 | 173 | 965 | in progress (2026-05-14) |
+| 13 | lib | 212 | 1138 | 189 | 949 | in progress (2026-05-14) |
 | — | generator-joplin | 2 | 27 | — | — | excluded (template) |
 
 Total in-scope comments at start: **2,952** across **633 files**.

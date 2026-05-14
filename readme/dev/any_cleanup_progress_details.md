@@ -753,4 +753,11 @@ Checkpoint 5 (2026-05-14): 977 → 965 (12 removed across a handful of larger fi
 - `services/plugins/PluginService.ts` — 3 removed, 2 left. `loadManifestToObject(path): Promise<any>` → `Promise<Record<string, unknown>>`; `plugin dispatch` action typed via `Plugin.PluginDispatchCallback`; `readDirStats` filter/map untyped. The `store_` and `platformImplementation_` fields stay `any` with reason — test fixtures across app-cli/app-mobile pass partial shapes (`{ joplin: {} }`, `{ dispatch, getState }`) that the strict interfaces don't accept.
 - `services/plugins/Plugin.ts` — 2 removed, 0 left. Introduced exported `PluginDispatchCallback`; `dispatch_`/constructor `dispatch` parameter typed; `eventEmitter_: any` → `InstanceType<typeof EventEmitter>`.
 
+Checkpoint 6 (2026-05-14): 965 → 949 (16 removed).
+
+- `services/rest/utils/collectionToPaginatedResults.ts` — 3 removed, 1 left. `items` callbacks and sort comparator typed; the outer `items: any[]` stays with a new reason — callers pass entity types (NoteEntity, FolderEntity) without index signatures.
+- `services/plugins/api/JoplinImaging.ts` — 4 removed, 0 left. Introduced local `NativeImageLike` interface (toPNG/toJPEG/resize/crop/getSize); `cacheImage` and `Image.data` typed; `toJpgResource`/`toPngResource.resourceProps` → `Partial<ResourceEntity>`.
+- `testing/syncTargetUtils.ts` — 4 removed, 0 left. Introduced local `TestDataNode` / `TestData` types for the recursive test data structure.
+- `time.ts` — 5 removed, 1 left. `formatLocalToMs`/`anythingToDateTime`/`anythingToMs`/`goBackInTime`/`goForwardInTime` typed using `string | number | Date | { toDate }` unions; added type-only `MomentTypes` import for `unitOfTime` namespace. `msleep` switched from `Promise((resolve: Function))` to `Promise<void>(resolve => ...)` (removes the ban-types disable too).
+
 
