@@ -814,4 +814,9 @@ Checkpoint 12 (2026-05-14): 805 → 789 (16 removed).
 - `models/Resource.ts` — 9 removed, 0 left. `fsDriver_: any` → `FsDriverBase`; `fetchStatuses` return → typed shape; `markupTag.resource` typed `ResourceEntity & { alt? }`; `localState`/`setLocalStateQueries`/`setLocalState.resourceOrId` → `ResourceEntity | string`; `itemCanBeEncrypted` cast uses `Parameters<...>`; `params: any[]` → `(string|number)[]`; `resourceConflictFolder` return type inferred.
 - `models/Folder.ts` — 7 removed, 0 left. `fieldsToLabels: any` → `Record<string, string>`; `tableNameToClasses: Record<string, any>` → `Record<string, typeof BaseItem>` (2 places); `handleTitleNaturalSorting.options` typed; `allAsTree.options` → `FolderLoadOptions & { includeNotes? }`; `idToFolders.any` → `FolderEntityWithChildren`; `save.options: any` → `SaveOptions & {duplicateCheck?, reservedTitleCheck?, stripLeftSlashes?}`.
 
+Checkpoint 13 (2026-05-14): 789 → 777 (12 removed).
+
+- `WebDavApi.ts` — 4 removed, 5 left. `RequestInfo.options` typed via `FetchOptions & ...`; `_requestToCurl.options` typed; `serializeRequest` callback body uses `Record<string, unknown>`. Five remain with updated reasons (xml2js heterogeneous output, url-parse Url shape, JsonValue alias, fetchOptions/response are platform-specific shapes via shim).
+- `file-api.ts` — 8 removed, 5 left. `RemoteItem.isDir` added (used by list filter); `requestCanBeRepeated.error` typed; `tryAndRepeat` made generic `<T>` with `Function`→`()=> T|Promise<T>`; `list` filter callbacks typed; `put.content: any` → `string | Buffer | null`; `multiPut.options: any` → `{ source? }`; introduced `BasicDeltaContext` and typed the helper; `getDirStatFn: Function` → `(path) => ItemStat[]|Promise<ItemStat[]>`; sort/map callbacks typed. Five stay with reasons: `RemoteItem.jopItem`, `PaginatedList.context`, `driver_`, constructor `driver`, and the `output: any[]` mixed array of ItemStat + deleted-items.
+
 

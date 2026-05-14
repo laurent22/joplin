@@ -24,6 +24,7 @@ export interface RemoteItem {
 	path?: string;
 	type_?: number;
 	isDeleted?: boolean;
+	isDir?: boolean;
 
 	// This the time when the file was created on the server. It is used for
 	// example for the locking mechanim or any file that's not an actual Joplin
@@ -36,14 +37,14 @@ export interface RemoteItem {
 	// exact Joplin item updated_time value.
 	jop_updated_time?: number;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- jopItem holds the decrypted Joplin item shape (NoteEntity, FolderEntity, ResourceEntity, etc.); narrowing here forces every delta consumer to discriminate
 	jopItem?: any;
 }
 
 export interface PaginatedList {
 	items: RemoteItem[];
 	hasMore: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Sync context shape varies by driver (timestamp, files cache, deltaToken, etc.); used opaquely by the file-api
 	context: any;
 }
 
@@ -75,8 +76,7 @@ export const enableEnhancedBasicDeltaAlgorithm = () => {
 	}
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function requestCanBeRepeated(error: any) {
+function requestCanBeRepeated(error: { code?: string | number } | null) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
 
 	// Unauthorized/forbidden error - means username or password is incorrect or other
@@ -98,8 +98,7 @@ function requestCanBeRepeated(error: any) {
 	return true;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function tryAndRepeat(fn: Function, count: number) {
+async function tryAndRepeat<T>(fn: ()=> Promise<T> | T, count: number): Promise<T> {
 	let retryCount = 0;
 
 	// Don't use internal fetch retry mechanim since we
@@ -158,9 +157,8 @@ export interface ItemStat {
 
 class FileApi {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private baseDir_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private baseDir_: string | (()=> string);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each FileApi driver (joplinServer, onedrive, webdav, memory, local) has a distinct structural shape; narrowing here would force a union across many implementations
 	private driver_: any;
 	private logger_: Logger = new Logger();
 	private syncTargetId_: number = null;
@@ -171,8 +169,8 @@ class FileApi {
 	private remoteDateMutex_ = new Mutex();
 	private initialized_ = false;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-	public constructor(baseDir: string | Function, driver: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See driver_ above
+	public constructor(baseDir: string | (()=> string), driver: any) {
 		this.baseDir_ = baseDir;
 		this.driver_ = driver;
 		this.driver_.fileApi_ = this;
@@ -354,13 +352,11 @@ class FileApi {
 		}
 
 		if (!options.includeDirs) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			result.items = result.items.filter((f: any) => !f.isDir);
+			result.items = result.items.filter(f => !f.isDir);
 		}
 
 		if (options.syncItemsOnly) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			result.items = result.items.filter((f: any) => !f.isDir && BaseItem.isSystemPath(f.path));
+			result.items = result.items.filter(f => !f.isDir && BaseItem.isSystemPath(f.path));
 		}
 
 		return result;
@@ -396,8 +392,7 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.get(this.fullPath(path), options), this.requestRepeatCount());
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async put(path: string, content: any, options: PutOptions = null) {
+	public async put(path: string, content: string | Buffer | null, options: PutOptions = null) {
 		logger.debug(`put ${this.fullPath(path)}`, options);
 
 		if (options && options.source === 'file') {
@@ -407,8 +402,7 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.put(this.fullPath(path), content, options), this.requestRepeatCount());
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async multiPut(items: MultiPutItem[], options: any = null) {
+	public async multiPut(items: MultiPutItem[], options: { source?: string } = null) {
 		if (!this.driver().supportsMultiPut) throw new Error('Multi PUT not supported');
 		return tryAndRepeat(() => this.driver_.multiPut(items, options), this.requestRepeatCount());
 	}
@@ -460,10 +454,16 @@ class FileApi {
 
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function basicDeltaContextFromOptions_(options: any) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = {
+interface BasicDeltaContext {
+	timestamp: number;
+	filesAtTimestamp: string[];
+	statsCache: ItemStat[] | null;
+	statIdsCache: string[] | null;
+	deletedItemsProcessed: boolean;
+}
+
+function basicDeltaContextFromOptions_(options: DeltaOptions & { context?: Partial<BasicDeltaContext> }) {
+	const output: BasicDeltaContext = {
 		timestamp: 0,
 		filesAtTimestamp: [],
 		statsCache: null,
@@ -487,8 +487,7 @@ function basicDeltaContextFromOptions_(options: any) {
 // This is the basic delta algorithm, which can be used in case the cloud service does not have
 // a built-in delta API. OneDrive and Dropbox have one for example, but Nextcloud and obviously
 // the file system do not.
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOptions) {
+async function basicDelta(path: string, getDirStatFn: (path: string)=> ItemStat[] | Promise<ItemStat[]>, options: DeltaOptions) {
 	const outputLimit = 50;
 	const itemIds: string[] = await options.allItemIdsHandler();
 
@@ -514,16 +513,13 @@ async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOp
 	// Stats are cached until all items have been processed (until hasMore is false)
 	if (newContext.statsCache === null) {
 		newContext.statsCache = await getDirStatFn(path);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		newContext.statsCache.sort((a: any, b: any) => {
-			return a.updated_time - b.updated_time;
-		});
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		newContext.statIdsCache = newContext.statsCache.filter((item: any) => BaseItem.isSystemPath(item.path)).map((item: any) => BaseItem.pathToId(item.path));
+		newContext.statsCache.sort((a, b) => a.updated_time - b.updated_time);
+		newContext.statIdsCache = newContext.statsCache.filter(item => BaseItem.isSystemPath(item.path)).map(item => BaseItem.pathToId(item.path));
 		newContext.statIdsCache.sort(); // Items must be sorted to use binary search below
 	}
 
-	let output = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mixed array of ItemStat (sync items) and { path; isDeleted } (deleted items) returned to the sync engine
+	let output: any[] = [];
 
 	const updateReport = {
 		timestamp: context.timestamp,
