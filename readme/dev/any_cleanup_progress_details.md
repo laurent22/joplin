@@ -809,4 +809,9 @@ Checkpoint 11 (2026-05-14): 816 → 805 (11 removed).
 - `services/RevisionService.ts` — 7 removed, 0 left. `changedSinceCollectionCache_`/`maintenanceCalls_`/`maintenanceTimer1_`/`maintenanceTimer2_` typed; `noteMetadata_.md` → `Record<string, unknown>`; `output.type_` cast uses `NoteEntity & { type_? }`.
 - `BaseSyncTarget.ts` — 8 removed, 2 left. `dispatch: Function` typed via action shape; `initState_/options_` typed; `option`/`unsupportedPlatforms`/`checkConfig` typed. Two stay (`db_/fileApi_/constructor.db/setFileApi.v/initFileApi`) with reasons — sync target subclasses each pass concrete shapes (FileApi subclasses, FileApiOptions) so tightening here forces every subclass to match.
 
+Checkpoint 12 (2026-05-14): 805 → 789 (16 removed).
+
+- `models/Resource.ts` — 9 removed, 0 left. `fsDriver_: any` → `FsDriverBase`; `fetchStatuses` return → typed shape; `markupTag.resource` typed `ResourceEntity & { alt? }`; `localState`/`setLocalStateQueries`/`setLocalState.resourceOrId` → `ResourceEntity | string`; `itemCanBeEncrypted` cast uses `Parameters<...>`; `params: any[]` → `(string|number)[]`; `resourceConflictFolder` return type inferred.
+- `models/Folder.ts` — 7 removed, 0 left. `fieldsToLabels: any` → `Record<string, string>`; `tableNameToClasses: Record<string, any>` → `Record<string, typeof BaseItem>` (2 places); `handleTitleNaturalSorting.options` typed; `allAsTree.options` → `FolderLoadOptions & { includeNotes? }`; `idToFolders.any` → `FolderEntityWithChildren`; `save.options: any` → `SaveOptions & {duplicateCheck?, reservedTitleCheck?, stripLeftSlashes?}`.
+
 
