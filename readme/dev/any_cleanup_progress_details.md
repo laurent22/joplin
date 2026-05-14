@@ -696,9 +696,9 @@ Checkpoint 2 (2026-05-14): 1101 → 1053 (48 removed across ~25 files).
 - `models/Alarm.ts` — 2 removed, 0 left. `selectAll` cast to `{ id: string }[]`; `makeNotification(alarm, note)` → `AlarmEntity`/`NoteEntity`.
 - `models/Tag.ts` — 2 removed, 0 left. `searchAllWithNotes(options: any)` → `SearchOptions` (new exported interface in `BaseModel`); `save.options: any` → `SaveOptions`.
 - `models/utils/readOnly.ts` — 2 removed, 0 left. `Folder: any` → `typeof import('../Folder').default`; `BaseItem: any` → `typeof import('../BaseItem').default`.
-- `components/shared/config/config-shared.ts` — 1 removed, 1 left. `updateSettingValue.value: any` → `unknown`. The `setState` field is left `any` with a new reason — mirrors React.Component.setState (Pick<S, K>); narrowing breaks subclass `this` assignment to the interface in app-mobile's class-based ConfigScreen.
+- `components/shared/config/config-shared.ts` — 1 removed, 1 left. `updateSettingValue.value: any` → `unknown`. The `setState` field is left `any` with a new reason — mirrors `React.Component.setState` (`Pick<S, K>`); narrowing breaks subclass `this` assignment to the interface in app-mobile's class-based ConfigScreen.
 - `components/shared/config/plugins/useOnInstallHandler.ts` — 2 removed, 0 left. Both `setInstallingPluginIds((prev: any))` callbacks rely on the `React.Dispatch<SetStateAction<...>>` inferred type.
-- `components/shared/reduxSharedMiddleware.ts` — 1 removed, 1 left. `sortNoteListTimeout: any` → `ReturnType<typeof shim.setTimeout>`; `store/_next` typed (Store<State>/Dispatch); `action: any` kept with new reason explaining the heterogeneous action union.
+- `components/shared/reduxSharedMiddleware.ts` — 1 removed, 1 left. `sortNoteListTimeout: any` → `ReturnType<typeof shim.setTimeout>`; `store/_next` typed (`Store<State>`/`Dispatch`); `action: any` kept with new reason explaining the heterogeneous action union.
 - New shared types: `BaseModel.SearchOptions`; `JoplinError.JoplinErrorCode`; `models/NoteResource.AssociatedResourceNote`; `services/plugins/ViewController.PluginStore`; `services/plugins/Plugin.MessageListenerCallback`; `services/rest/utils/defaultSaveOptions.DefaultSaveOptions`.
 
 Follow-up edits in other packages (caused by lib tightenings):
