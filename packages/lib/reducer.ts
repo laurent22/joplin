@@ -8,6 +8,16 @@ import { Store } from 'redux';
 import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
 import { FolderEntity, NoteEntity, NoteTagEntity } from './services/database/types';
+import { MasterKeyEntity } from './services/e2ee/types';
+
+interface SearchEntry {
+	id: string;
+	type_: number;
+	title: string;
+	query_pattern: string;
+	query_type: number;
+	parent_id?: string;
+}
 import { getListRendererIds } from './services/noteList/renderers';
 import { ProcessResultsRow } from './services/search/SearchEngine';
 import { getDisplayParentId } from './services/trash';
@@ -22,8 +32,17 @@ const { createCachedSelector } = require('re-reselect');
 
 const logger = Logger.create('lib/reducer');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const additionalReducers: any[] = [];
+// Reducers from plugins/share are immer-based and mutate Draft<State> in-place; the per-sub-state shapes
+// differ across consumers so we keep this loosely typed at the registration layer.
+interface AdditionalReducer {
+	stateRootKey: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See above
+	defaultState: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See above
+	reducer: (state: any, action: any)=> any;
+}
+
+const additionalReducers: AdditionalReducer[] = [];
 
 additionalReducers.push({
 	stateRootKey: pluginServiceStateRootKey,
@@ -38,12 +57,9 @@ additionalReducers.push({
 });
 
 interface StateLastSelectedNotesIds {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	Folder: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	Tag: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	Search: any;
+	Folder: Record<string, string[]>;
+	Tag: Record<string, string[]>;
+	Search: Record<string, string[]>;
 }
 
 interface StateClipperServer {
@@ -55,8 +71,7 @@ export interface StateDecryptionWorker {
 	state: string;
 	itemIndex: number;
 	itemCount: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	decryptedItemCounts: any;
+	decryptedItemCounts: Record<string, number>;
 	decryptedItemCount: number;
 	skippedItemCount: number;
 }
@@ -136,23 +151,19 @@ export interface State extends WindowState {
 
 	folders: FolderEntity[];
 	tags: NoteTagEntity[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	masterKeys: any[];
+	masterKeys: MasterKeyEntity[];
 	notLoadedMasterKeys: string[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	searches: any[];
+	searches: SearchEntry[];
 	showSideMenu: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	screens: any;
+	screens: Record<string, { screen: string; props?: Record<string, unknown> }>;
 	historyCanGoBack: boolean;
 	syncStarted: boolean;
 	syncPending: boolean;
 	showQuitSyncDialog: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	syncReport: any;
+	syncReport: Record<string, unknown>;
 	searchResults: ProcessResultsRow[];
 	settings: Partial<SettingsRecord>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sharedData is mostly used in CLI for cross-screen scratch state; tightening forces touching the affected commands
 	sharedData: any;
 	appState: string;
 	biometricsDone: boolean;
@@ -164,8 +175,7 @@ export interface State extends WindowState {
 	clipperServer: StateClipperServer;
 	decryptionWorker: StateDecryptionWorker;
 	resourceFetcher: StateResourceFetcher;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	pluginsLegacy: any;
+	pluginsLegacy: Record<string, unknown>;
 	provisionalNoteIds: string[];
 	editorNoteStatuses: EditorNoteStatuses;
 	isInsertingNotes: boolean;
@@ -263,43 +273,39 @@ export const defaultState: State = {
 };
 
 for (const additionalReducer of additionalReducers) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(defaultState as any)[additionalReducer.stateRootKey] = additionalReducer.defaultState;
+	(defaultState as unknown as Record<string, unknown>)[additionalReducer.stateRootKey] = additionalReducer.defaultState;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Store is parametrised per-app (cli/desktop/mobile extend State); referenced loosely here
 let store_: Store<any> = null;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See store_ above
 export function setStore(v: Store<any>) {
 	store_ = v;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See store_ above
 export function store(): Store<any> {
 	return store_;
 }
 
 export const MAX_HISTORY = 200;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const derivedStateCache_: any = {};
+const derivedStateCache_: Record<string, unknown> = {};
 
 // Allows, for a given state, to return the same derived
 // objects, to prevent unnecessary updates on calling components.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const cacheEnabledOutput = (key: string, output: any) => {
+const cacheEnabledOutput = <T>(key: string, output: T): T => {
 	key = `${key}_${JSON.stringify(output)}`;
-	if (derivedStateCache_[key]) return derivedStateCache_[key];
+	if (derivedStateCache_[key]) return derivedStateCache_[key] as T;
 
 	derivedStateCache_[key] = output;
-	return derivedStateCache_[key];
+	return derivedStateCache_[key] as T;
 };
 
 const createShallowArrayEqualSelector = createSelectorCreator(
 	defaultMemoize,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(prev: any[], next: any[]) => {
+	(prev: unknown[], next: unknown[]) => {
 		if (prev.length !== next.length) return false;
 		for (let i = 0; i < prev.length; i++) {
 			if (prev[i] !== next[i]) return false;
@@ -309,13 +315,10 @@ const createShallowArrayEqualSelector = createSelectorCreator(
 );
 
 const selectArrayShallow = createCachedSelector(
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(state: any) => state.array,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(array: any[]) => array,
+	(state: { array: unknown[] }) => state.array,
+	(array: unknown[]) => array,
 )({
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	keySelector: (_state: any, cacheKey: any) => {
+	keySelector: (_state: { array: unknown[] }, cacheKey: string) => {
 		return cacheKey;
 	},
 	selectorCreator: createShallowArrayEqualSelector,
@@ -325,8 +328,7 @@ class StateUtils {
 
 	// Given an input array, this selector ensures that the same array is returned
 	// if its content hasn't changed.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public selectArrayShallow(props: any, cacheKey: any) {
+	public selectArrayShallow(props: { array: unknown[] }, cacheKey: string) {
 		return selectArrayShallow(props, cacheKey);
 	}
 
@@ -334,8 +336,7 @@ class StateUtils {
 		return state.selectedNoteIds.length === 1;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public notesOrder(stateSettings: any) {
+	public notesOrder(stateSettings: Partial<SettingsRecord>) {
 		if (stateSettings['notes.sortOrder.field'] === 'order') {
 			return cacheEnabledOutput('notesOrder', [
 				{
@@ -357,8 +358,7 @@ class StateUtils {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public foldersOrder(stateSettings: any) {
+	public foldersOrder(stateSettings: Partial<SettingsRecord>) {
 		return cacheEnabledOutput('foldersOrder', [
 			{
 				by: stateSettings['folders.sortOrder.field'],
@@ -387,8 +387,7 @@ class StateUtils {
 	public lastSelectedNoteIds(state: WindowState): string[] {
 		const parent = this.parentItem(state);
 		if (!parent) return [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output = (state.lastSelectedNotesIds as any)[parent.type][parent.id];
+		const output = (state.lastSelectedNotesIds as unknown as Record<string, Record<string, string[]>>)[parent.type][parent.id];
 		return output ? output : [];
 	}
 
@@ -445,8 +444,7 @@ class StateUtils {
 
 export const stateUtils: StateUtils = new StateUtils();
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function arrayHasEncryptedItems(array: any[]) {
+function arrayHasEncryptedItems(array: { encryption_applied?: number | boolean }[]) {
 	for (let i = 0; i < array.length; i++) {
 		if (array[i].encryption_applied) return true;
 	}
@@ -460,7 +458,7 @@ function stateHasEncryptedItems(state: State) {
 	return false;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- action shape varies (FOLDER_TOGGLE/FOLDER_SET_COLLAPSED); see handleItemDelete above
 function folderSetCollapsed(draft: Draft<State>, action: any) {
 	if (action.ids) {
 		draft.collapsedFolderIds = action.ids;
@@ -481,14 +479,12 @@ function folderSetCollapsed(draft: Draft<State>, action: any) {
 	draft.collapsedFolderIds = collapsedFolderIds;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function removeAdjacentDuplicates(items: any[]) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return items.filter((item: any, idx: number) => (idx >= 1) ? items[idx - 1].id !== item.id : true);
+function removeAdjacentDuplicates<T extends { id?: string }>(items: T[]) {
+	return items.filter((item: T, idx: number) => (idx >= 1) ? items[idx - 1].id !== item.id : true);
 }
 
 // When deleting a note, tag or folder
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- action varies per type (FOLDER_DELETE, NOTE_DELETE, TAG_DELETE, SEARCH_DELETE) and carries the item id; reducer matches dynamically by type
 function handleItemDelete(draft: Draft<State>, action: any) {
 	type SelectionKey = 'selectedFolderId'|'selectedNoteIds'|'selectedTagId'|'selectedSearchId';
 	const map: Record<string, [keyof State, SelectionKey, boolean]> = {
@@ -547,16 +543,14 @@ function handleItemDelete(draft: Draft<State>, action: any) {
 		}
 
 		if (listKey in windowDraft) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			(windowDraft as any)[listKey] = newItems;
+			(windowDraft as unknown as Record<string, unknown[]>)[listKey] = newItems;
 		}
 
 		const newIds = [];
 		for (let i = 0; i < newSelectedIndexes.length; i++) {
 			newIds.push(newItems[newSelectedIndexes[i]].id);
 		}
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		(windowDraft as any)[selectedItemKey] = isSingular ? newIds[0] : newIds;
+		(windowDraft as unknown as Record<string, unknown>)[selectedItemKey] = isSingular ? newIds[0] : newIds;
 
 		if ((newIds.length === 0) && windowDraft.notesParentType !== 'Folder') {
 			windowDraft.notesParentType = 'Folder';
@@ -564,7 +558,7 @@ function handleItemDelete(draft: Draft<State>, action: any) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- action shape varies per case (TAG_UPDATE_ONE, FOLDER_UPDATE_ONE, MASTERKEY_UPDATE_ONE, plus per-window variants); each carries a typed `item`
 function updateOneItem(draft: Draft<State|WindowState>, action: any, keyName = '') {
 	let itemsKey = null;
 	if (keyName) { itemsKey = keyName; } else {
@@ -573,8 +567,8 @@ function updateOneItem(draft: Draft<State|WindowState>, action: any, keyName = '
 		if (action.type === 'MASTERKEY_UPDATE_ONE') itemsKey = 'masterKeys';
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const newItems = (draft as any)[itemsKey].slice();
+	const draftRecord = draft as unknown as Record<string, { id: string }[]>;
+	const newItems = draftRecord[itemsKey].slice();
 	const item = action.item;
 
 	let found = false;
@@ -589,8 +583,7 @@ function updateOneItem(draft: Draft<State|WindowState>, action: any, keyName = '
 
 	if (!found) newItems.push(item);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(draft as any)[itemsKey] = newItems;
+	draftRecord[itemsKey] = newItems;
 }
 
 function updateSelectedNotesFromExistingNotes(draft: Draft<State>) {
@@ -672,7 +665,7 @@ interface ChangeSelectedTagOrFolderOptions {
 }
 
 function changeSelectedTagOrFolder(
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- action shape varies per FOLDER_SELECT*/TAG_SELECT* type (id, folderId, tagId, ids); discriminated dynamically
 	draft: Draft<State>, action: any, { extendSelection = false }: ChangeSelectedTagOrFolderOptions = {},
 ) {
 	const isFolder = action.type.startsWith('FOLDER');
@@ -714,18 +707,17 @@ function changeSelectedTagOrFolder(
 }
 
 function recordLastSelectedNoteIds(draft: Draft<State>, noteIds: string[]) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const newOnes: any = { ...draft.lastSelectedNotesIds };
+	const newOnes: Record<string, Record<string, string[]>> = { ...(draft.lastSelectedNotesIds as unknown as Record<string, Record<string, string[]>>) };
 	const parent = stateUtils.parentItem(draft);
 	if (!parent) return;
 
 	newOnes[parent.type] = { ...newOnes[parent.type] };
 	newOnes[parent.type][parent.id] = noteIds.slice();
 
-	draft.lastSelectedNotesIds = newOnes;
+	draft.lastSelectedNotesIds = newOnes as unknown as StateLastSelectedNotesIds;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- NOTE_SELECT/NOTE_SELECT_ADD/NOTE_SELECT_REMOVE action shapes vary; options bag holds reducer-internal flags
 function changeSelectedNotes(draft: Draft<State>, action: any, options: any = null) {
 	if (!options) options = {};
 
@@ -768,8 +760,7 @@ function changeSelectedNotes(draft: Draft<State>, action: any, options: any = nu
 	recordLastSelectedNoteIds(draft, draft.selectedNoteIds);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function removeItemFromArray(array: any[], property: any, value: any) {
+function removeItemFromArray<T extends Record<string, unknown>>(array: T[], property: string, value: unknown) {
 	for (let i = 0; i !== array.length; ++i) {
 		const currentItem = array[i];
 		if (currentItem[property] === value) {
@@ -781,10 +772,9 @@ function removeItemFromArray(array: any[], property: any, value: any) {
 	return array;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- history note entries are NoteEntity augmented with `notesParentType` and the selected* fields above
 const getContextFromHistory = (ctx: any) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const result: any = {};
+	const result: Record<string, unknown> = {};
 	result.notesParentType = ctx.notesParentType;
 	if (result.notesParentType === 'Folder') {
 		result.selectedFolderId = ctx.selectedFolderId;
@@ -822,7 +812,7 @@ function getNoteHistoryInfo(state: State) {
 	return null;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- HISTORY_BACKWARD/FORWARD action shapes vary; reducer matches dynamically by type
 function handleHistory(draft: Draft<State>, action: any) {
 	const currentNote = getNoteHistoryInfo(draft);
 	switch (action.type) {
@@ -1018,7 +1008,7 @@ const handleWindowActions = (draft: Draft<State>, action: WindowAction) => {
 };
 
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Top-level reducer action is the union of all redux actions across the app; matched case-by-case below
 const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 	// const reducer = (state:State = defaultState, action:any) => {
@@ -1077,13 +1067,11 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 
 		case 'NOTE_SELECT_ALL':
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			draft.selectedNoteIds = draft.notes.map((n: any) => n.id);
+			draft.selectedNoteIds = draft.notes.map(n => n.id);
 			break;
 
 		case 'NOTE_SELECT_ALL_TOGGLE': {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const allSelected = draft.notes.every((n: any) => draft.selectedNoteIds.includes(n.id));
+			const allSelected = draft.notes.every(n => draft.selectedNoteIds.includes(n.id));
 			if (allSelected) {
 				draft.selectedNoteIds = [];
 			} else {
@@ -1210,8 +1198,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 								for (const n in modNote) {
 									if (!modNote.hasOwnProperty(n)) continue;
-									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-									(newNotes[i] as any)[n] = (modNote as any)[n];
+									(newNotes[i] as unknown as Record<string, unknown>)[n] = (modNote as Record<string, unknown>)[n];
 								}
 							} else {
 								// Note has moved to a different folder
@@ -1535,8 +1522,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				const decryptionWorker = { ...draft.decryptionWorker };
 				for (const n in action) {
 					if (!action.hasOwnProperty(n) || n === 'type') continue;
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					(decryptionWorker as any)[n] = action[n];
+					(decryptionWorker as unknown as Record<string, unknown>)[n] = action[n];
 				}
 				draft.decryptionWorker = decryptionWorker;
 			}
@@ -1570,8 +1556,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'PLUGINLEGACY_DIALOG_SET':
 			{
 				if (!action.pluginName) throw new Error('action.pluginName not specified');
+				const existingPlugin = draft.pluginsLegacy[action.pluginName] as Record<string, unknown> | undefined;
 				const newPluginsLegacy = { ...draft.pluginsLegacy };
-				const newPlugin = draft.pluginsLegacy[action.pluginName] ? { ...draft.pluginsLegacy[action.pluginName] } : {};
+				const newPlugin: Record<string, unknown> = existingPlugin ? { ...existingPlugin } : {};
 				if ('open' in action) newPlugin.dialogOpen = action.open;
 				if ('userData' in action) newPlugin.userData = action.userData;
 				newPluginsLegacy[action.pluginName] = newPlugin;
