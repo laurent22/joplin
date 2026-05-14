@@ -760,4 +760,12 @@ Checkpoint 6 (2026-05-14): 965 → 949 (16 removed).
 - `testing/syncTargetUtils.ts` — 4 removed, 0 left. Introduced local `TestDataNode` / `TestData` types for the recursive test data structure.
 - `time.ts` — 5 removed, 1 left. `formatLocalToMs`/`anythingToDateTime`/`anythingToMs`/`goBackInTime`/`goForwardInTime` typed using `string | number | Date | { toDate }` unions; added type-only `MomentTypes` import for `unitOfTime` namespace. `msleep` switched from `Promise((resolve: Function))` to `Promise<void>(resolve => ...)` (removes the ban-types disable too).
 
+Checkpoint 7 (2026-05-14): 949 → 929 (20 removed).
+
+- `services/plugins/api/JoplinWorkspace.ts` — 4 removed, 2 left. `store` → `PluginStore`; `onNoteChange` wrapper event typed; `selectedNote(): Promise<any>` → `Promise<NoteEntity | null>`. Two left (one is "No plugin-api-accessible Note type defined" reason already; one is the `Function` ban-types in `onNoteSelectionChange`).
+- `services/PostMessageService.ts` — 4 removed, 1 left. `MessageResponse.response/.error` → `unknown` / `Error | null`; `Message.content` and `sendResponse.responseContent` → `unknown`. `ViewMessageHandler` left `any` with updated reason — callers register handlers with concrete payload types (MessageResponse, SerializableData); making this generic would force changes at every dispatch site.
+- `locale.ts` — 5 removed, 0 left. `supportedLocales_` typed `Record<string, Record<string, string[]>>`; `localeStats_` typed `Record<string, Record<string, unknown>>` (per-locale stats include pluralForms function); `_/_n/stringByLocale` rest args → `unknown[]`. Single inner cast `as ParsePluralFormFunction` for the plural-forms field.
+- `services/plugins/reducer.ts` — 3 removed, 2 left. `(view as any)` casts on `PLUGIN_VIEW_PROP_SET`/`_PUSH` → `as unknown as Record<string, unknown[]>` etc. The reducer's `action: any` keeps a reason (heterogeneous PLUGIN_* action shapes). `viewsByType` returns `any[]` with reason (menu views have menuItems not on PluginViewState).
+- `JoplinDatabase.ts` — 4 removed, 2 left. `TableField.default: any` → `string | number | boolean | null`; `tableDescriptions_: any` → `Record<string, Record<string, string>>`; `open.options: any` → `Record<string, unknown>`; `tableFields.options: any` → `{ includeDescription?: boolean }`; `createDefaultRow.row: any` → `Record<string, unknown>`. `constructor(driver: any)` kept with reason — base Database.driver is `any` across multiple driver implementations (sqlite/better-sqlite3/web).
+
 
