@@ -901,3 +901,27 @@ Checkpoint 26 (2026-05-14): 361 → 323 (38 removed).
 - `services/search/SearchEngine.ts` — 22 removed, 0 left. `ComplexTerm.scriptType: any` → `string`. `dispatch: Function` → action-shape dispatch. `syncCalls_: any[]` → `boolean[]`. `scheduleSyncTablesIID_` typed via `ReturnType<typeof shim.setTimeout>`. `setDb.db: any` → `JoplinDatabase`. `fieldNamesFromOffsets_.offsets: any[]` → `number[]`. `hitsThisRow`/`docsWithHits` typed `Uint32Array`. `processBasicSearchResults_`/`processResults_` typed `ProcessResultsRow[]` + `ParsedQuery`. `queryTermToRegex.term: any` → `string`. `basicSearch.searchOptions: any` typed structurally; `determineSearchType_.preferredSearchType` → `SearchType`; `allTerms: any[]` → `Term[]`. Side: added `fuzziness?: number` to `ProcessResultsRow` (was being assigned at runtime but not declared).
 - `import-enex-md-gen.ts` — 16 removed, 5 left. `Section.lines: any[]` kept `any` with reason (mixed strings/Section/Hr objects). `ParserState.{anchorAttributes,spanAttributes}: any[]` → `Record<string, string>[]`. `collapseWhiteSpaceAndAppend.state: any` → `ParserState`. Introduced `SaxContext` type alias; `cssValue/isInvisibleBlock/isHighlight/isCodeBlock/displaySaxWarning` typed via `SaxContext` and `{ style?: string }`. `attributeToLowerCase.node` typed structurally. `isSpanWithStyle/isSpanStyleBold/isSpanStyleItalic.attributes` typed. `saxStream.on('error')` typed `Error`; `saxStream.on('opentag')` `node: any` → `{ name; attributes? }`. `captionLines: any[]` lets inference do the work. `enexXmlToMdArray.stream`, `renderLine/renderLines.lines`, and `currentCells` keep `any` with descriptive reasons (sax stream / heterogeneous nested Section objects).
 
+Checkpoint 27 (2026-05-14): 323 → 293 (30 removed).
+
+Scatter cleanup across many smaller files:
+- `services/synchronizer/LockHandler.ts` — 2 removed, 0 left. `RefreshTimer.id: any` → `ReturnType<typeof shim.setInterval>`. `lockFileToObject.file: any` typed structurally with optional path/updated_time.
+- `services/synchronizer/utils/types.ts` — 1 removed, 1 left with updated reason. `LogSyncOperationFunction.local: any` typed structurally; `ApiCallFunction` keeps `any[]`/`any` (dispatches by name across drivers).
+- `services/style/themeToCss.ts` — 2 removed, 0 left. `isColor.v` typed `unknown` with type predicate; theme indexing via `Record<string, unknown>` cast.
+- `services/style/cssToTheme.ts` — 2 removed, 0 left. `declarations`/`output` typed; final return cast `as unknown as Theme`.
+- `services/profileConfig/mergeGlobalAndLocalSettings.ts` — 2 removed, 0 left. `rootSettings`/`subProfileSettings`/`output` all `Record<string, unknown>`.
+- `utils/attachedResources.ts` — 2 removed, 0 left. `resourceCache_`/`output: any` → `AttachedResources`.
+- `services/noteList/renderTemplate.ts` — 2 removed, 0 left. `Cell.value: any` → `unknown`; `valueToString.value: any` → `unknown` (using `String(value)`).
+- `services/plugins/api/JoplinWindow.ts` — 2 removed, 0 left. Introduced local `DispatchStore` type for store_.
+- `services/plugins/api/Global.ts` — 2 removed, 0 left. `implementation: any` → `BasePlatformImplementation`; `store: any` → `Store<any>` with descriptive reason; `process: any` → `NodeJS.Process`.
+- `services/plugins/api/Joplin.ts` — 1 removed, 1 left with updated reason. `store: any` → `Store<any>` with reason. `require.return: any` kept with plugin-API reason.
+- `services/plugins/api/JoplinCommands.ts` — 2 removed (reasons updated).
+- `services/plugins/utils/loadContentScripts.ts` — 1 removed, 1 left. `loadedModule as any` cast → typed extension. `ExtraContentScript.module: any` kept with descriptive reason.
+- `services/ResourceService.ts` — 2 removed, 0 left. `maintenanceTimer1_/maintenanceTimer2_: any` → `ReturnType<typeof shim.setTimeout/setInterval>`.
+- `services/KeymapService.ts` — 2 removed, 0 left. `modifiersRegExp: any` → `RegExp`; `domToElectronAccelerator.event: any` typed structurally with the 5 fields actually read.
+- `services/interop/InteropService_Importer_Base.ts` — 2 removed, 0 left. `setMetadata.md: any` → `Partial<ImportMetadata>` with cast; `init.options: any` → `ImportOptions`.
+- `services/interop/InteropService_Importer_Custom.ts` — 2 removed, 0 left. `options: any` → `Record<string, unknown>` on `CustomImporter.onExec.context.options` and `processedOptions`.
+- `services/interop/InteropService_Exporter_Raw.ts` — 2 removed, 0 left. `processItem.item/processResource.resource` typed via `BaseItemEntity`/`ResourceEntity`.
+- `utils/ipc/utils/mergeCallbacksAndSerializable.test.ts` — 1 removed, 1 left. `data: any` typed inline.
+- `utils/ipc/RemoteMessenger.test.ts` — 2 removed, 0 left. `transfer.o: any` made generic `<T>`; `testObjects: any[]` → `Record<string, unknown>[]`.
+- Side fix: `services/interop/InteropService_Importer_Md.test.ts` uses `ImportModuleOutputFormat` enum members rather than raw string literals.
+
