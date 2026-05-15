@@ -29,6 +29,14 @@ const CTX = 'cm-tw-ctx';
 // heights correctly for scroll position and coordinate mapping.
 const tableHeightCache = new Map<string, number>();
 
+// Remembers the last-focused cell coordinates per table widget, keyed by
+// the widget's document start position. Used to restore focus when the
+// widget is rebuilt without an explicit refocus path — for example after
+// an undo (Cmd+Z) reverts a cell edit. Cleared opportunistically when a
+// widget at the same `from` mounts but the coordinates fall outside the
+// new table's bounds.
+const lastFocusedCellByFrom = new Map<number, { r: number; c: number }>();
+
 // HTML-escape a string so captured cell text can be safely embedded into the
 // HTML fragment we hand to DOMPurify. DOMPurify is the actual safety net for
 // tag/attribute/URL filtering; this just keeps angle brackets and quotes in
@@ -137,7 +145,10 @@ class TableWidget extends WidgetType {
 	// A trailing newline is appended when needed to ensure a blank line
 	// separates the table from subsequent text, preventing the parser
 	// from absorbing later lines as extra table rows.
-	private apply(view: EditorView, newTable: Table | null) {
+	// `userEvent` lets the caller tag the dispatch so CM's history can
+	// group adjacent typing-style transactions into one undo step (the
+	// live-sync flush uses 'input.type' for this reason).
+	private apply(view: EditorView, newTable: Table | null, userEvent?: string) {
 		if (!newTable) return;
 		this.saveAndRestoreScroll(view);
 		const newText = serializeTable(newTable);
@@ -147,6 +158,7 @@ class TableWidget extends WidgetType {
 		const insert = needsBlankLine ? `${newText}\n` : newText;
 		view.dispatch({
 			changes: { from: this.from, to: this.to, insert },
+			userEvent,
 		});
 	}
 
@@ -261,7 +273,7 @@ class TableWidget extends WidgetType {
 					if (!container.isConnected) return;
 					const newText = serializeTable(table);
 					if (newText === this.tableText) return;
-					this.apply(view, table);
+					this.apply(view, table, 'input.type');
 					// Rebuild discards this DOM — locate the same cell in the
 					// new widget and restore focus + caret.
 					requestAnimationFrame(() => {
@@ -314,6 +326,7 @@ class TableWidget extends WidgetType {
 			// swap the rendered DOM for the raw markdown source for editing.
 			textDiv.onfocus = () => {
 				lastFocusedTextDiv = textDiv;
+				lastFocusedCellByFrom.set(this.from, { r, c });
 				// Replace formatted DOM with raw text. Use the current model
 				// entry rather than the stale `text` closure so that edits
 				// to other cells in this table are reflected.
@@ -568,6 +581,26 @@ class TableWidget extends WidgetType {
 		}
 		tableEl.appendChild(tbody);
 		container.appendChild(tableEl);
+
+		// If this widget mounts at a position where a cell was focused just
+		// before a rebuild (e.g. undo triggered the rebuild from outside),
+		// restore focus to that cell. The map is in-memory only and only
+		// populated by an actual focus event, so there is no risk of
+		// stealing focus on a fresh document load.
+		const remembered = lastFocusedCellByFrom.get(this.from);
+		if (remembered) {
+			const { r: rr, c: cc } = remembered;
+			const targetRow = allCells[rr];
+			const targetCell = targetRow ? targetRow[cc] : undefined;
+			const targetText = targetCell?.querySelector('.cm-tw-text') as HTMLElement | null;
+			if (targetText) {
+				requestAnimationFrame(() => focus('TableWidget', targetText));
+			} else {
+				// Coordinates no longer fit (row/column was removed) — drop the
+				// stale entry.
+				lastFocusedCellByFrom.delete(this.from);
+			}
+		}
 
 		// ---- Highlight helpers ----
 		const highlightRow = (rowIdx: number) => {
