@@ -8,6 +8,7 @@
 import { EditorView, ViewPlugin, ViewUpdate, WidgetType } from '@codemirror/view';
 import { EditorState } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
+import { getSearchQuery, searchPanelOpen, SearchQuery } from '@codemirror/search';
 import makeBlockReplaceExtension from './utils/makeBlockReplaceExtension';
 import { focus, blur } from '@joplin/lib/utils/focusHandler';
 import {
@@ -727,6 +728,11 @@ const tableTheme = EditorView.theme({
 		backgroundColor: 'var(--joplin-selected-color, rgba(0,120,255,0.18))',
 		borderRadius: '4px',
 	},
+	// Search match highlight on a cell whose text matches the active query.
+	['& .cm-tw-text.cm-tw-match']: {
+		backgroundColor: 'var(--joplin-search-marker-background-color, rgba(255, 220, 0, 0.45))',
+		color: 'var(--joplin-search-marker-color, inherit)',
+	},
 
 	// Cells
 	[`& .${CELL}`]: {
@@ -861,10 +867,71 @@ const selectionHighlight = ViewPlugin.fromClass(class {
 	}
 });
 
+// View plugin that highlights table cells whose text contains the active
+// search query, and scrolls the table's internal horizontal overflow so
+// the cell containing the current match (the document selection) is
+// visible. Block-replaced widgets normally swallow CM6's match
+// highlights, so this brings basic search feedback to tables.
+const searchHighlight = ViewPlugin.fromClass(class {
+	private lastQuerySig_ = '';
+	public constructor(view: EditorView) { this.update_(view, true); }
+	public update(update: ViewUpdate) {
+		const q = getSearchQuery(update.state);
+		const open = searchPanelOpen(update.state);
+		const sig = `${open ? '1' : '0'}|${q.search}|${q.caseSensitive}|${q.regexp}|${q.wholeWord}|${q.valid}`;
+		const queryChanged = sig !== this.lastQuerySig_;
+		if (queryChanged) this.lastQuerySig_ = sig;
+		if (queryChanged || update.selectionSet || update.docChanged || update.viewportChanged) {
+			this.update_(update.view, queryChanged);
+		}
+	}
+	private buildMatcher(q: SearchQuery): ((s: string)=> boolean) | null {
+		if (!q.valid || !q.search) return null;
+		const flags = q.caseSensitive ? 'g' : 'gi';
+		try {
+			const pattern = q.regexp ? q.search : q.search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+			const wrapped = q.wholeWord ? `\\b(?:${pattern})\\b` : pattern;
+			const re = new RegExp(wrapped, flags);
+			return (s: string) => { re.lastIndex = 0; return re.test(s); };
+		} catch (_) {
+			return null;
+		}
+	}
+	private update_(view: EditorView, scrollIfActive = false) {
+		const q = getSearchQuery(view.state);
+		// Treat search as inactive when the panel is closed, so closing the
+		// panel clears the cell highlights even if the query string is
+		// retained in state.
+		const matcher = searchPanelOpen(view.state) ? this.buildMatcher(q) : null;
+		const sel = view.state.selection.main;
+		const containers = view.dom.querySelectorAll<HTMLElement>(`.${W}`);
+		for (const container of containers) {
+			const from = Number(container.dataset.from);
+			const to = Number(container.dataset.to);
+			const selInTable = !Number.isNaN(from) && sel.from >= from && sel.to <= to;
+			let firstMatch: HTMLElement | null = null;
+			const cells = container.querySelectorAll<HTMLElement>('.cm-tw-text');
+			for (const cell of cells) {
+				const text = cell.textContent ?? '';
+				const isMatch = matcher ? matcher(text) : false;
+				cell.classList.toggle('cm-tw-match', isMatch);
+				if (isMatch && !firstMatch) firstMatch = cell;
+			}
+			// When search lands the document selection inside this table,
+			// nudge the table's internal horizontal overflow so a matching
+			// cell is at least partially visible.
+			if (scrollIfActive && selInTable && firstMatch) {
+				firstMatch.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+			}
+		}
+	}
+});
+
 // ===================== EXTENSION =====================
 const renderTables = [
 	tableTheme,
 	selectionHighlight,
+	searchHighlight,
 	EditorView.domEventHandlers({
 		mousedown: (event) => {
 			if ((event.target as Element).closest(`.${W}`)) return true;
