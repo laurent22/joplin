@@ -1,8 +1,8 @@
 declare module 'node-persist' {
 	export interface InitOptions {
 		dir?: string;
-		stringify?: (data: any) => string;
-		parse?: (data: string) => any;
+		stringify?: (data: unknown)=> string;
+		parse?: (data: string)=> unknown;
 		encoding?: string;
 		logging?: boolean;
 		ttl?: number | boolean;
@@ -11,12 +11,14 @@ declare module 'node-persist' {
 	}
 
 	export function init(options?: InitOptions): Promise<void>;
-	export function getItem(key: string): Promise<any>;
-	export function setItem(key: string, value: any, options?: any): Promise<void>;
+	export function getItem(key: string): Promise<unknown>;
+	export function setItem(key: string, value: unknown, options?: unknown): Promise<void>;
 	export function removeItem(key: string): Promise<void>;
 	export function clear(): Promise<void>;
-	export function values(): Promise<any[]>;
+	export function values(): Promise<unknown[]>;
 	export function keys(): Promise<string[]>;
 	export function length(): Promise<number>;
-	export function forEach(callback: (value: any, key: string) => Promise<void>): Promise<void>;
+	export function forEach(
+		callback: (value: unknown, key: string)=> Promise<void>
+	): Promise<void>;
 }
