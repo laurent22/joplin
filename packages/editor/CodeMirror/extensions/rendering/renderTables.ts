@@ -8,6 +8,7 @@
 import { EditorView, ViewPlugin, ViewUpdate, WidgetType } from '@codemirror/view';
 import { EditorState } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
+import sanitizeHtml from '../../../ProseMirror/utils/sanitizeHtml';
 import makeBlockReplaceExtension from './utils/makeBlockReplaceExtension';
 import { focus, blur } from '@joplin/lib/utils/focusHandler';
 import {
@@ -28,54 +29,70 @@ const CTX = 'cm-tw-ctx';
 // heights correctly for scroll position and coordinate mapping.
 const tableHeightCache = new Map<string, number>();
 
+// Remembers the last-focused cell coordinates per table widget, keyed by
+// the widget's document start position. Used to restore focus when the
+// widget is rebuilt without an explicit refocus path — for example after
+// an undo (Cmd+Z) reverts a cell edit. Cleared opportunistically when a
+// widget at the same `from` mounts but the coordinates fall outside the
+// new table's bounds.
+const lastFocusedCellByFrom = new Map<number, { r: number; c: number }>();
+
+// HTML-escape a string so captured cell text can be safely embedded into the
+// HTML fragment we hand to DOMPurify. DOMPurify is the actual safety net for
+// tag/attribute/URL filtering; this just keeps angle brackets and quotes in
+// the input from being interpreted as markup at all.
+const escapeHtml = (s: string): string => {
+	return s
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#39;');
+};
+
 // Render a small subset of inline markdown into DOM children appended to
 // `parent`. Supports: **bold**, *italic* / _italic_, `code`, ~~strike~~,
 // [label](url), and literal <br> as a line break. Escaped pipes (\|) are
-// shown as plain |. Anything not matched is emitted as plain text, so
-// untrusted input cannot inject HTML.
+// shown as plain |. The assembled HTML is run through DOMPurify before
+// insertion, so unsafe URL schemes (javascript:, data:, ...) and any tags
+// or attributes that slipped through the regex are removed.
 export const renderInlineMarkdown = (parent: HTMLElement, text: string) => {
-	const doc = parent.ownerDocument;
 	// Normalise: escaped pipes → |, and split on literal <br> for soft breaks.
 	const normalised = text.replace(/\\\|/g, '|');
 	const segments = normalised.split(/<br\s*\/?>/i);
+	const parts: string[] = [];
 	for (let s = 0; s < segments.length; s++) {
-		if (s > 0) parent.appendChild(doc.createElement('br'));
+		if (s > 0) parts.push('<br>');
 		const segment = segments[s];
 		// Single regex with alternatives, scanned left-to-right. Each branch
-		// captures its inner content.
-		const re = /\*\*([^*]+)\*\*|__([^_]+)__|\*([^*]+)\*|_([^_]+)_|`([^`]+)`|~~([^~]+)~~|\[([^\]]+)\]\(([^)\s]+)\)/g;
+		// captures its inner content. Single * and _ emphasis use word-
+		// boundary guards so identifiers like `foo_bar_baz` or `a*b*c` are
+		// not rendered as emphasis.
+		const re = /\*\*([^*]+)\*\*|__([^_]+)__|(?<![A-Za-z0-9])\*([^*]+)\*(?![A-Za-z0-9])|(?<![A-Za-z0-9])_([^_]+)_(?![A-Za-z0-9])|`([^`]+)`|~~([^~]+)~~|\[([^\]]+)\]\(([^)\s]+)\)/g;
 		let lastIdx = 0;
 		let m: RegExpExecArray | null;
 		while ((m = re.exec(segment)) !== null) {
 			if (m.index > lastIdx) {
-				parent.appendChild(doc.createTextNode(segment.slice(lastIdx, m.index)));
+				parts.push(escapeHtml(segment.slice(lastIdx, m.index)));
 			}
-			let node: HTMLElement;
 			if (m[1] !== undefined || m[2] !== undefined) {
-				node = doc.createElement('strong');
-				node.textContent = (m[1] ?? m[2])!;
+				parts.push(`<strong>${escapeHtml((m[1] ?? m[2])!)}</strong>`);
 			} else if (m[3] !== undefined || m[4] !== undefined) {
-				node = doc.createElement('em');
-				node.textContent = (m[3] ?? m[4])!;
+				parts.push(`<em>${escapeHtml((m[3] ?? m[4])!)}</em>`);
 			} else if (m[5] !== undefined) {
-				node = doc.createElement('code');
-				node.textContent = m[5];
+				parts.push(`<code>${escapeHtml(m[5])}</code>`);
 			} else if (m[6] !== undefined) {
-				node = doc.createElement('del');
-				node.textContent = m[6];
+				parts.push(`<del>${escapeHtml(m[6])}</del>`);
 			} else {
-				const a = doc.createElement('a');
-				a.textContent = m[7]!;
-				a.setAttribute('href', m[8]!);
-				node = a;
+				parts.push(`<a href="${escapeHtml(m[8]!)}">${escapeHtml(m[7]!)}</a>`);
 			}
-			parent.appendChild(node);
 			lastIdx = m.index + m[0].length;
 		}
 		if (lastIdx < segment.length) {
-			parent.appendChild(doc.createTextNode(segment.slice(lastIdx)));
+			parts.push(escapeHtml(segment.slice(lastIdx)));
 		}
 	}
+	parent.innerHTML = sanitizeHtml(parts.join(''));
 };
 
 class TableWidget extends WidgetType {
@@ -130,7 +147,10 @@ class TableWidget extends WidgetType {
 	// A trailing newline is appended when needed to ensure a blank line
 	// separates the table from subsequent text, preventing the parser
 	// from absorbing later lines as extra table rows.
-	private apply(view: EditorView, newTable: Table | null) {
+	// `userEvent` lets the caller tag the dispatch so CM's history can
+	// group adjacent typing-style transactions into one undo step (the
+	// live-sync flush uses 'input.type' for this reason).
+	private apply(view: EditorView, newTable: Table | null, userEvent?: string) {
 		if (!newTable) return;
 		this.saveAndRestoreScroll(view);
 		const newText = serializeTable(newTable);
@@ -140,6 +160,7 @@ class TableWidget extends WidgetType {
 		const insert = needsBlankLine ? `${newText}\n` : newText;
 		view.dispatch({
 			changes: { from: this.from, to: this.to, insert },
+			userEvent,
 		});
 	}
 
@@ -256,7 +277,7 @@ class TableWidget extends WidgetType {
 					if (!container.isConnected) return;
 					const newText = serializeTable(table);
 					if (newText === this.tableText) return;
-					this.apply(view, table);
+					this.apply(view, table, 'input.type');
 					// Rebuild discards this DOM — locate the same cell in the
 					// new widget and restore focus + caret.
 					requestAnimationFrame(() => {
@@ -296,11 +317,28 @@ class TableWidget extends WidgetType {
 				}, 500);
 			};
 
-			textDiv.oninput = scheduleLiveSync;
+			// Track IME composition so we don't rebuild the cell DOM
+			// mid-composition — rebuilding would cancel the IME and drop
+			// any in-progress candidates.
+			let isComposing = false;
+			textDiv.addEventListener('compositionstart', () => {
+				isComposing = true;
+				cancelLiveSync();
+			});
+			textDiv.addEventListener('compositionend', () => {
+				isComposing = false;
+				scheduleLiveSync();
+			});
+
+			textDiv.oninput = () => {
+				if (isComposing) return;
+				scheduleLiveSync();
+			};
 			// Some browsers do not fire `input` reliably when non-text nodes
 			// (e.g. <img>) are removed via Backspace inside contentEditable.
 			// A MutationObserver catches DOM-level changes that `input` misses.
 			const mo = new win.MutationObserver(() => {
+				if (isComposing) return;
 				if (doc.activeElement === textDiv) scheduleLiveSync();
 			});
 			mo.observe(textDiv, { childList: true, characterData: true, subtree: true });
@@ -309,6 +347,7 @@ class TableWidget extends WidgetType {
 			// swap the rendered DOM for the raw markdown source for editing.
 			textDiv.onfocus = () => {
 				lastFocusedTextDiv = textDiv;
+				lastFocusedCellByFrom.set(this.from, { r, c });
 				// Replace formatted DOM with raw text. Use the current model
 				// entry rather than the stale `text` closure so that edits
 				// to other cells in this table are reflected.
@@ -563,6 +602,55 @@ class TableWidget extends WidgetType {
 		}
 		tableEl.appendChild(tbody);
 		container.appendChild(tableEl);
+
+		// If this widget mounts at a position where a cell was focused just
+		// before a rebuild (e.g. undo triggered the rebuild from outside),
+		// restore focus to that cell. The map is cleared when focus leaves
+		// the container (see focusout below), so a stale entry can only
+		// exist while the user is actively editing this table — there is no
+		// risk of stealing focus from unrelated work.
+		const remembered = lastFocusedCellByFrom.get(this.from);
+		if (remembered) {
+			const { r: rr, c: cc } = remembered;
+			const targetRow = allCells[rr];
+			const targetCell = targetRow ? targetRow[cc] : undefined;
+			const targetText = targetCell?.querySelector('.cm-tw-text') as HTMLElement | null;
+			if (targetText) {
+				requestAnimationFrame(() => {
+					// Re-check the map and DOM before stealing focus — the
+					// user may have clicked elsewhere between mount and the
+					// next frame, in which case the entry is gone.
+					if (!lastFocusedCellByFrom.has(this.from)) return;
+					if (!targetText.isConnected) return;
+					focus('TableWidget', targetText);
+				});
+			} else {
+				// Coordinates no longer fit (row/column was removed) — drop the
+				// stale entry.
+				lastFocusedCellByFrom.delete(this.from);
+			}
+		}
+
+		// Clear the remembered cell when focus leaves the table container,
+		// so a later rebuild (e.g. from an unrelated document edit) does
+		// not steal focus back. The deletion is deferred so a widget
+		// rebuild — which detaches the old cell DOM and fires focusout for
+		// that reason alone — does not lose the entry before the new
+		// widget can consume it (this is what makes Cmd+Z restore focus).
+		container.addEventListener('focusout', (e: FocusEvent) => {
+			const next = e.relatedTarget as Node | null;
+			if (next && container.contains(next)) return;
+			const fromAtBlur = this.from;
+			// Defer two frames so any rebuild-driven refocus (which is
+			// itself scheduled via requestAnimationFrame from the new
+			// widget's toDOM) has a chance to land before we decide that
+			// focus genuinely left the table.
+			requestAnimationFrame(() => requestAnimationFrame(() => {
+				const newActive = doc.activeElement as HTMLElement | null;
+				if (newActive?.classList.contains('cm-tw-text')) return;
+				lastFocusedCellByFrom.delete(fromAtBlur);
+			}));
+		});
 
 		// ---- Highlight helpers ----
 		const highlightRow = (rowIdx: number) => {
