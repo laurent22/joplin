@@ -27,8 +27,7 @@ type_: 4`,
 
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function getShareContent(shareId: string, query: any = {}): Promise<string | Buffer> {
+async function getShareContent(shareId: string, query: Record<string, string> = {}): Promise<string | Buffer> {
 	const context = await koaAppContext({
 		request: {
 			method: 'GET',
@@ -38,8 +37,7 @@ async function getShareContent(shareId: string, query: any = {}): Promise<string
 	});
 	await routeHandler(context);
 	await checkContextError(context);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return context.response.body as any;
+	return context.response.body as string | Buffer;
 }
 
 describe('shares.link', () => {

@@ -90,18 +90,15 @@ type EventListenerCallbacks = {
 };
 export type EventListenerCallback<Name extends EventName> = EventListenerCallbacks[Name];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied
-type AppStateChangeCallback = (event: { value: any })=> void;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied
-type FilterObject = any;
-export type FilterHandler = (object: FilterObject)=> FilterObject;
+type AppStateChangeCallback<T = unknown> = (event: { value: T })=> void;
+export type FilterHandler<T = unknown> = (object: T)=> T | Promise<T>;
 
 export class EventManager {
 
 	private emitter_: EventEmitter;
 	private appStatePrevious_: Record<string, AppState[keyof AppState]>;
 	private appStateWatchedProps_: string[];
-	private appStateListeners_: Record<string, AppStateChangeCallback[]>;
+	private appStateListeners_: Record<string, AppStateChangeCallback<unknown>[]>;
 
 	public constructor() {
 		this.reset();
@@ -131,16 +128,15 @@ export class EventManager {
 		return this.removeListener(eventName, callback);
 	}
 
-	public filterOn(filterName: string, callback: FilterHandler) {
-		return this.emitter_.on(`filter:${filterName}`, callback);
+	public filterOn<T = unknown>(filterName: string, callback: FilterHandler<T>) {
+		return this.emitter_.on(`filter:${filterName}`, callback as FilterHandler<unknown>);
 	}
 
-	public filterOff(filterName: string, callback: FilterHandler) {
-		return this.emitter_.off(`filter:${filterName}`, callback);
+	public filterOff<T = unknown>(filterName: string, callback: FilterHandler<T>) {
+		return this.emitter_.off(`filter:${filterName}`, callback as FilterHandler<unknown>);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async filterEmit(filterName: string, object: any) {
+	public async filterEmit<T = unknown>(filterName: string, object: T): Promise<T> {
 		let output = object;
 		const listeners = this.emitter_.listeners(`filter:${filterName}`);
 		for (const listener of listeners) {
@@ -168,21 +164,21 @@ export class EventManager {
 		return output;
 	}
 
-	public appStateOn(propName: string, callback: AppStateChangeCallback) {
+	public appStateOn<T = unknown>(propName: string, callback: AppStateChangeCallback<T>) {
 		if (!this.appStateListeners_[propName]) {
 			this.appStateListeners_[propName] = [];
 			this.appStateWatchedProps_.push(propName);
 		}
 
-		this.appStateListeners_[propName].push(callback);
+		this.appStateListeners_[propName].push(callback as AppStateChangeCallback<unknown>);
 	}
 
-	public appStateOff(propName: string, callback: AppStateChangeCallback) {
+	public appStateOff<T = unknown>(propName: string, callback: AppStateChangeCallback<T>) {
 		if (!this.appStateListeners_[propName]) {
 			throw new Error('EventManager: Trying to unregister a state prop watch for a non-watched prop (1)');
 		}
 
-		const idx = this.appStateListeners_[propName].indexOf(callback);
+		const idx = this.appStateListeners_[propName].indexOf(callback as AppStateChangeCallback<unknown>);
 		if (idx < 0) throw new Error('EventManager: Trying to unregister a state prop watch for a non-watched prop (2)');
 
 		this.appStateListeners_[propName].splice(idx, 1);
@@ -190,11 +186,10 @@ export class EventManager {
 
 	private stateValue_(state: AppState, propName: string) {
 		const parts = propName.split('.');
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code from before rule was applied.
-		let s: any = state;
+		let s: Record<string, unknown> = state as unknown as Record<string, unknown>;
 		for (const p of parts) {
 			if (!(p in s)) throw new Error(`Invalid state property path: ${propName}`);
-			s = s[p];
+			s = s[p] as Record<string, unknown>;
 		}
 		return s;
 	}

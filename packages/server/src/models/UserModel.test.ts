@@ -303,14 +303,32 @@ describe('UserModel', () => {
 		}
 	});
 
+	test('should not send emails when an account\'s size limit has been manually increased', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		const totalSize = Math.round(accountByType(AccountType.Basic).max_total_item_size * 0.85);
+		await models().user().save({
+			id: user1.id,
+			account_type: AccountType.Basic,
+			total_item_size: totalSize,
+			max_total_item_size: totalSize * 2,
+		});
+
+		const emailBeforeCount = (await models().email().all()).length;
+
+		await models().user().handleOversizedAccounts();
+
+		const emailAfterCount = (await models().email().all()).length;
+		expect(emailAfterCount).toBe(emailBeforeCount);
+	});
+
 	test('should get the user public key', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
 		const { user: user3 } = await createUserAndSession(3);
 		const { user: user4 } = await createUserAndSession(4);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const syncInfo1: any = {
+		const syncInfo1: { version: number; e2ee: { value: boolean; updatedTime: number }; ppk?: { value: { publicKey: string; privateKey: { encryptionMode: number; ciphertext: string } }; updatedTime: number } } = {
 			'version': 3,
 			'e2ee': {
 				'value': false,
@@ -328,12 +346,10 @@ describe('UserModel', () => {
 			},
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const syncInfo2: any = JSON.parse(JSON.stringify(syncInfo1));
+		const syncInfo2: typeof syncInfo1 = JSON.parse(JSON.stringify(syncInfo1));
 		syncInfo2.ppk.value.publicKey = 'PUBLIC_KEY_2';
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const syncInfo3: any = JSON.parse(JSON.stringify(syncInfo1));
+		const syncInfo3: typeof syncInfo1 = JSON.parse(JSON.stringify(syncInfo1));
 		delete syncInfo3.ppk;
 
 		await models().item().saveFromRawContent(user1, {

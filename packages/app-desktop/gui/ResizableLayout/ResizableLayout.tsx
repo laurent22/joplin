@@ -97,8 +97,7 @@ function ResizableLayout(props: Props) {
 			const newWidth = Math.max(itemMinWidth, resizedItem.initialWidth + delta.width);
 			const newHeight = Math.max(itemMinHeight, resizedItem.initialHeight + delta.height);
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const newSize: any = {};
+			const newSize: { width?: number; height?: number } = {};
 
 			if (item.width) newSize.width = item.width;
 			if (item.height) newSize.height = item.height;

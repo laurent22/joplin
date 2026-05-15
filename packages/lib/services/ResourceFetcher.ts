@@ -5,35 +5,30 @@ import ResourceService from './ResourceService';
 import Logger from '@joplin/utils/Logger';
 import shim from '../shim';
 import notifyDisabledSyncItems from './synchronizer/utils/checkDisabledSyncItemsNotification';
+import { GetOptionsTarget } from '../file-api';
 const { Dirnames } = require('./synchronizer/utils/types');
-const EventEmitter = require('events');
+import { EventEmitter } from 'events';
 
 export default class ResourceFetcher extends BaseService {
 
 	public static instance_: ResourceFetcher;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-	public dispatch: Function = (_o: any) => {};
+	public dispatch: (action: { type: string; [key: string]: unknown })=> void = () => {};
 	private logger_: Logger = new Logger();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private queue_: any[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private queue_: { id: string }[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mixed usage: stores both boolean placeholders and ResourceEntity values; queuedItemIndex_ also iterates this as an array (legacy bug)
 	private fetchingItems_: any = {};
 	private maxDownloads_ = 3;
 	private addingResources_ = false;
 	private eventEmitter_ = new EventEmitter();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private autoAddResourcesCalls_: any[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private fileApi_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private updateReportIID_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private scheduleQueueProcessIID_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private scheduleAutoAddResourcesIID_: any;
+	private autoAddResourcesCalls_: boolean[] = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Tests pass partial FileApi mocks (only .get); narrowing forces touching every test fixture
+	private fileApi_: any = null;
+	private updateReportIID_: ReturnType<typeof shim.setTimeout> = null;
+	private scheduleQueueProcessIID_: ReturnType<typeof shim.setTimeout> = null;
+	private scheduleAutoAddResourcesIID_: ReturnType<typeof shim.setTimeout> = null;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See fileApi_ above
 	public constructor(fileApi: any = null) {
 		super();
 		this.setFileApi(fileApi);
@@ -45,13 +40,13 @@ export default class ResourceFetcher extends BaseService {
 		return ResourceFetcher.instance_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- EventEmitter events carry heterogeneous payloads by name
+	public on(eventName: string, callback: (...args: any[])=> void) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: string, callback: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See on() above
+	public off(eventName: string, callback: (...args: any[])=> void) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
@@ -63,7 +58,7 @@ export default class ResourceFetcher extends BaseService {
 		return this.logger_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See fileApi_ above
 	public setFileApi(v: any) {
 		if (v !== null && typeof v !== 'function') throw new Error(`fileApi must be a function that returns the API. Type is ${typeof v}`);
 		this.fileApi_ = v;
@@ -193,7 +188,7 @@ export default class ResourceFetcher extends BaseService {
 		this.eventEmitter_.emit('downloadStarted', { id: resource.id });
 
 		try {
-			await fileApi.get(remoteResourceContentPath, { path: localResourceContentPath, target: 'file' });
+			await fileApi.get(remoteResourceContentPath, { path: localResourceContentPath, target: GetOptionsTarget.File });
 			if (!(await shim.fsDriver().exists(localResourceContentPath))) throw new Error(`Resource not found: ${resource.id}`);
 
 			await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_DONE });
@@ -253,8 +248,10 @@ export default class ResourceFetcher extends BaseService {
 
 			this.logger().info(`ResourceFetcher: Auto-added resources: ${count}`);
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			await notifyDisabledSyncItems((action: any) => this.dispatch(action));
+			await notifyDisabledSyncItems((action => {
+				this.dispatch(action as { type: string });
+				return action;
+			}) as import('redux').Dispatch);
 		} finally {
 			this.addingResources_ = false;
 			this.autoAddResourcesCalls_.pop();

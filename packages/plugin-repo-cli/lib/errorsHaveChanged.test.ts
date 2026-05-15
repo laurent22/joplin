@@ -1,9 +1,10 @@
 import errorsHaveChanged from './errorsHaveChanged';
+import { ImportErrors } from './types';
 
 describe('errorsHaveChanged', () => {
 
 	test('should tell if an errors object has changed', () => {
-		const testCases = [
+		const testCases: [ImportErrors, ImportErrors, boolean][] = [
 			[
 				{
 					'one': '111',
@@ -55,8 +56,7 @@ describe('errorsHaveChanged', () => {
 		];
 
 		for (const t of testCases) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const [oldErrors, newErrors, expected] = t as any;
+			const [oldErrors, newErrors, expected] = t;
 
 			const result = errorsHaveChanged(oldErrors, newErrors);
 			expect(result).toBe(expected);

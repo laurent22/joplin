@@ -21,7 +21,7 @@ function newService(): CommandService {
 	return service;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Test options bag accepts loose execute functions that return undefined/void; matches the historical test fixtures
 function createCommand(name: string, options: any): TestCommand {
 	const declaration: CommandDeclaration = {
 		name: name,
@@ -272,7 +272,7 @@ describe('services_CommandService', () => {
 		let propValue = null;
 
 		registerCommand(service, createCommand('test1', {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Test mock; CommandRuntime.execute is per-command
 			execute: (_context: any, greeting: string) => {
 				propValue = greeting;
 			},

@@ -170,7 +170,7 @@ export const isUsingExternalAuth = (env: EnvVariables) => {
 
 let config_: Config = null;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- `Partial<Config>` would be ideal, but `Config` requires `resourceDir: string` which is only set via `overrides` in some test paths — tightening would expose a pre-existing missing-field issue
 export async function initConfig(envType: Env, env: EnvVariables, overrides: any = null) {
 	runningInDocker_ = !!env.RUNNING_IN_DOCKER;
 

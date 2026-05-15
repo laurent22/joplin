@@ -18,6 +18,7 @@ import JoplinFs from './JoplinFs';
 import { themeStyle } from '../../../theme';
 import Setting from '../../../models/Setting';
 import { ThemeAppearance } from '../../../themes/type';
+import type { Store } from 'redux';
 
 /**
  * This is the main entry point to the Joplin API. You can access various services using the provided accessors.
@@ -48,8 +49,8 @@ export default class Joplin {
 	private window_: JoplinWindow = null;
 	private implementation_: BasePlatformImplementation = null;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(implementation: BasePlatformImplementation, plugin: Plugin, store: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux store is parametrised per-app (AppState differs across cli/desktop/mobile); see PluginStore
+	public constructor(implementation: BasePlatformImplementation, plugin: Plugin, store: Store<any>) {
 		this.implementation_ = implementation;
 		this.data_ = new JoplinData(plugin);
 		this.plugins_ = new JoplinPlugins(plugin);
@@ -62,7 +63,7 @@ export default class Joplin {
 		this.interop_ = new JoplinInterop();
 		this.settings_ = new JoplinSettings(plugin);
 		this.contentScripts_ = new JoplinContentScripts(plugin);
-		this.clipboard_ = new JoplinClipboard(implementation.clipboard, implementation.nativeImage);
+		this.clipboard_ = new JoplinClipboard(implementation.clipboard as ConstructorParameters<typeof JoplinClipboard>[0], implementation.nativeImage as ConstructorParameters<typeof JoplinClipboard>[1]);
 		this.window_ = new JoplinWindow(plugin, store);
 	}
 
@@ -138,7 +139,7 @@ export default class Joplin {
 	 *
 	 * <span class="platform-desktop">desktop</span>
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: returns whatever native module the plugin requires; concretely replaced inside the sandbox
 	public require(_path: string): any {
 		// Just a stub. Implementation has to be done within plugin process, in plugin_index.js
 	}

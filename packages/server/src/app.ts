@@ -21,7 +21,7 @@ import clickJackingHandler from './middleware/clickJackingHandler';
 import newModelFactory from './models/factory';
 import setupCommands from './utils/setupCommands';
 import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
-import { parseEnv } from './env';
+import { parseEnv, EnvVariables } from './env';
 import { parseEnvFile } from '@joplin/utils/env';
 import storageConnectionCheck from './utils/storageConnectionCheck';
 import { setLocale } from '@joplin/lib/locale';
@@ -41,8 +41,7 @@ const cors = require('@koa/cors');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit({ nodeSqlite });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const defaultEnvVariables: Record<Env, any> = {
+const defaultEnvVariables: Record<Env, Partial<EnvVariables>> = {
 	dev: {
 		// To test with the Postgres database, uncomment DB_CLIENT below and
 		// comment out SQLITE_DATABASE. Then start the Postgres server using
@@ -68,26 +67,24 @@ function appLogger(): LoggerWrapper {
 	return appLogger_;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function markPasswords(o: Record<string, any>): Record<string, any> {
-	if (!o) return o;
+function markPasswords(o: object): Record<string, unknown> {
+	if (!o) return o as Record<string, unknown>;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: Record<string, any> = {};
+	const output: Record<string, unknown> = {};
+	const input = o as Record<string, unknown>;
 
-	for (const k of Object.keys(o)) {
+	for (const k of Object.keys(input)) {
 		if (k.toLowerCase().includes('password') || k.toLowerCase().includes('secret') || k.toLowerCase().includes('connectionstring')) {
 			output[k] = '********';
 		} else {
-			output[k] = o[k];
+			output[k] = input[k];
 		}
 	}
 
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function getEnvFilePath(env: Env, argv: any): Promise<string> {
+async function getEnvFilePath(env: Env, argv: { envFile?: string }): Promise<string> {
 	if (argv.envFile) return argv.envFile;
 
 	if (env === Env.Dev) {
@@ -100,8 +97,7 @@ async function getEnvFilePath(env: Env, argv: any): Promise<string> {
 async function main() {
 	const { selectedCommand, argv: yargsArgv } = await setupCommands();
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const argv: Argv = yargsArgv as any;
+	const argv: Argv = yargsArgv as unknown as Argv;
 	const env: Env = argv.env as Env || Env.Prod;
 
 	const envFilePath = await getEnvFilePath(env, argv);
@@ -274,8 +270,7 @@ async function main() {
 	if (selectedCommand) {
 		const commandArgv = {
 			...argv,
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			_: (argv as any)._.slice(),
+			_: (argv as Argv & { _: string[] })._.slice(),
 		};
 		commandArgv._.splice(0, 1);
 
@@ -385,8 +380,7 @@ async function main() {
 	if (runCommandAndExitApp) process.exit(0);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-main().catch((error: any) => {
+main().catch((error: Error) => {
 	console.error(error);
 	process.exit(1);
 });

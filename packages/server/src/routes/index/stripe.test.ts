@@ -48,8 +48,7 @@ function mockStripe(options: StripeOptions = null) {
 }
 
 interface WebhookOptions {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	stripe?: any;
+	stripe?: ReturnType<typeof mockStripe>;
 	eventId?: string;
 	subscriptionId?: string;
 	customerId?: string;
@@ -59,8 +58,7 @@ interface WebhookOptions {
 	quantity?: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function simulateWebhook(ctx: AppContext, type: string, object: any, options: WebhookOptions = {}) {
+async function simulateWebhook(ctx: AppContext, type: string, object: Record<string, unknown>, options: WebhookOptions = {}) {
 	options = {
 		stripe: mockStripe({ userEmail: options.userEmail }),
 		eventId: uuidgen(),

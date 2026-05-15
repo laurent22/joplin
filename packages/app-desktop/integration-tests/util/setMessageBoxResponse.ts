@@ -28,9 +28,7 @@ const setMessageBoxResponse = (electronApp: ElectronApplication, responseMatch: 
 		dialog.showMessageBox = async (...args: DialogArgsType) => ({
 			response: getMatchingButton(args),
 			checkboxChecked: false,
-		// We're mocking, so include "as any" to prevent this from breaking when we upgrade
-		// Electron.
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mock return; cast prevents breakage when Electron's MessageBoxReturnValue shape evolves
 		} as any);
 	}, responseMatch);
 };

@@ -125,8 +125,7 @@ INSERT INTO version (version) VALUES (1);
 export interface TableField {
 	name: string;
 	type: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	default: any;
+	default?: string | number | boolean | null;
 	description?: string;
 }
 
@@ -140,10 +139,9 @@ export default class JoplinDatabase extends Database {
 	private tableFields_: Record<string, TableField[]> = null;
 	private version_: number = null;
 	private tableFieldNames_: Record<string, string[]> = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private tableDescriptions_: any;
+	private tableDescriptions_: Record<string, Record<string, string>>;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Base Database class uses `any` for driver — different drivers (sqlite, better-sqlite3, web) have different shapes
 	public constructor(driver: any) {
 		super(driver);
 	}
@@ -152,8 +150,7 @@ export default class JoplinDatabase extends Database {
 		return this.initialized_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async open(options: any) {
+	public async open(options: Record<string, unknown>) {
 		await super.open(options);
 		return this.initialize();
 	}
@@ -171,8 +168,7 @@ export default class JoplinDatabase extends Database {
 		return output.slice();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public tableFields(tableName: string, options: any = null) {
+	public tableFields(tableName: string, options: { includeDescription?: boolean } = null) {
 		if (options === null) options = {};
 
 		if (!this.tableFields_) throw new Error('Fields have not been loaded yet');
@@ -229,8 +225,7 @@ export default class JoplinDatabase extends Database {
 	}
 
 	public createDefaultRow(tableName: string) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const row: any = {};
+		const row: Record<string, unknown> = {};
 		const fields = this.tableFields(tableName);
 		for (let i = 0; i < fields.length; i++) {
 			const f = fields[i];

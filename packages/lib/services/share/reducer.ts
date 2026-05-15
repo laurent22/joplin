@@ -66,11 +66,9 @@ export const defaultState: State = {
 };
 
 export const parseShareCache = (serialized: string): State => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	let raw: any = {};
+	let raw: Partial<State> = {};
 	try {
-		raw = JSON.parse(serialized);
-		if (!raw) raw = {};
+		raw = JSON.parse(serialized) || {};
 	} catch (error) {
 		logger.info('Could not load share cache from settings - will return a default value. Error was:', error);
 	}
@@ -99,7 +97,7 @@ export function isRootSharedFolder(folder: FolderEntity): boolean {
 	return !!folder.share_id && !folder.parent_id;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous redux action shape across SHARE_* types; typed action union would require touching every dispatch site
 const reducer = (draftRoot: Draft<RootState>, action: any) => {
 	if (action.type.indexOf('SHARE_') !== 0) return;
 
@@ -121,12 +119,11 @@ const reducer = (draftRoot: Draft<RootState>, action: any) => {
 		case 'SHARE_USER_UPDATE_ONE':
 
 			{
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const shareUser = (draft.shareUsers as any)[action.shareId].find((su: StateShareUser) => su.id === action.shareUser.id);
+				const shareUser = draft.shareUsers[action.shareId].find((su: StateShareUser) => su.id === action.shareUser.id);
 				if (!shareUser) throw new Error(`No such user: ${JSON.stringify(action)}`);
 
 				for (const [name, value] of Object.entries(action.shareUser)) {
-					shareUser[name] = value;
+					(shareUser as Record<string, unknown>)[name] = value;
 				}
 			}
 			break;

@@ -8,12 +8,10 @@ interface Props {
 	themeId: number;
 	type: string;
 	url: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	style?: any;
+	style?: React.CSSProperties;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const themeSelector = (_state: any, props: any) => themeStyle(props.themeId);
+const themeSelector = (_state: unknown, props: Props) => themeStyle(props.themeId);
 
 const styleSelector = createSelector(
 	themeSelector,

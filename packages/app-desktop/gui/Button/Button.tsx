@@ -2,8 +2,31 @@ import * as React from 'react';
 const styled = require('styled-components').default;
 const { space } = require('styled-system');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-type StyleProps = any;
+interface StyleProps {
+	theme: {
+		toolbarIconSize: number;
+		backgroundColor3: string;
+		backgroundColor4: string;
+		backgroundColor5: string;
+		backgroundColorActive3: string;
+		backgroundColorActive4: string;
+		backgroundColorActive5: string;
+		backgroundColorHover4: string;
+		backgroundColorHover5: string;
+		backgroundColorHoverDim3: string;
+		borderColor4: string;
+		color: string;
+		color2: string;
+		color3: string;
+		color4: string;
+		color5: string;
+		colorActive2: string;
+		colorHover2: string;
+		warningBackgroundColor: string;
+	};
+	disabled?: boolean;
+	animation?: string;
+}
 
 export enum ButtonLevel {
 	Primary = 'primary',
@@ -211,8 +234,7 @@ function buttonClass(level: ButtonLevel) {
 
 const Button = React.forwardRef(({
 	iconName, iconLabel, iconAnimation, color, title, level, fontSize, isSquare, tooltip, disabled, onClick: propsOnClick, ...unusedProps
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-}: Props, ref: any) => {
+}: Props, ref: React.Ref<HTMLButtonElement>) => {
 	const iconOnly = iconName && !title;
 
 	const StyledButton = buttonClass(level);

@@ -4,15 +4,15 @@ import markdownUtils from '@joplin/lib/markdownUtils';
 // If the current line starts with `markup.list` token,
 // hitting `Tab` key indents the line instead of inserting tab at cursor.
 // hitting enter will insert a new list element, and unindent/delete an empty element
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 export default function useListIdent(CodeMirror: any) {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 	function isSelection(anchor: any, head: any) {
 		return anchor.line !== head.line || anchor.ch !== head.ch;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 	function getIndentLevel(cm: any, line: number) {
 		const tokens = cm.getLineTokens(line);
 		let indentLevel = 0;
@@ -23,7 +23,7 @@ export default function useListIdent(CodeMirror: any) {
 		return indentLevel;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 	function newListToken(cm: any, line: number) {
 		const currentToken = markdownUtils.extractListToken(cm.getLine(line));
 		const indentLevel = getIndentLevel(cm, line);
@@ -52,7 +52,7 @@ export default function useListIdent(CodeMirror: any) {
 	}
 
 	// Gets the character coordinates of the start and end of a list token
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 	function getListSpan(listTokens: any, line: string) {
 		let start = listTokens[0].start;
 		const token = markdownUtils.extractListToken(line);
@@ -64,7 +64,7 @@ export default function useListIdent(CodeMirror: any) {
 		return { start: start, end: start + token.length };
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 	CodeMirror.commands.smartListIndent = function(cm: any) {
 		if (cm.getOption('disableInput')) return CodeMirror.Pass;
 
@@ -99,7 +99,7 @@ export default function useListIdent(CodeMirror: any) {
 		});
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 	CodeMirror.commands.smartListUnindent = function(cm: any) {
 		if (cm.getOption('disableInput')) return CodeMirror.Pass;
 
@@ -136,7 +136,7 @@ export default function useListIdent(CodeMirror: any) {
 	// This is a special case of insertList element because it happens when
 	// vim is in normal mode and input is disabled and the cursor is not
 	// necessarily at the end of line (but it should pretend it is
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 	CodeMirror.commands.vimInsertListElement = function(cm: any) {
 		cm.setOption('disableInput', false);
 
@@ -152,7 +152,7 @@ export default function useListIdent(CodeMirror: any) {
 		CodeMirror.Vim.handleKey(cm, 'i', 'macro');
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
 	CodeMirror.commands.insertListElement = function(cm: any) {
 		if (cm.getOption('disableInput')) return CodeMirror.Pass;
 

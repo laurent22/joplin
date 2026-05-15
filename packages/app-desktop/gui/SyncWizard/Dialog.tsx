@@ -264,8 +264,7 @@ export default function(props: Props) {
 	}, [props.dispatch, closeDialog]);
 
 	function renderContent() {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const boxes: any[] = [];
+		const boxes: React.ReactNode[] = [];
 
 		for (const name of syncTargetNames) {
 			const info = SyncTargetRegistry.infoByName(name);

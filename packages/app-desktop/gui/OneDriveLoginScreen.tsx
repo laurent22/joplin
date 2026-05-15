@@ -13,7 +13,7 @@ interface Props {
 	themeId: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old class component without state/props refactor; tightening requires structural change to the screen
 class OneDriveLoginScreenComponent extends React.Component<any, any> {
 	public constructor(props: Props) {
 		super(props);

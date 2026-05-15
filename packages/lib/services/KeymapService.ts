@@ -11,6 +11,13 @@ const modifiersRegExp = {
 	default: /^(Ctrl|Alt|AltGr|Shift|Super)$/,
 };
 
+// Maps legacy command names (used in keymap files saved before 3.6.11) to their
+// current equivalents, so old custom keymaps can still be imported.
+const legacyCommandAliases: Record<string, string> = {
+	'editor.undo': 'globalUndo',
+	'editor.redo': 'globalRedo',
+};
+
 const defaultKeymapItems = {
 	darwin: [
 		{ accelerator: 'Cmd+N', command: 'newNote' },
@@ -142,8 +149,7 @@ export default class KeymapService extends BaseService {
 	private customKeymapPath: string;
 	private defaultKeymapItems: KeymapItem[];
 	private lastSaveTime_: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private modifiersRegExp: any;
+	private modifiersRegExp: RegExp;
 
 	public constructor() {
 		super();
@@ -313,12 +319,16 @@ export default class KeymapService extends BaseService {
 				// Throws if there are any issues in the keymap item
 				this.validateKeymapItem(item);
 
+				// Rewrite legacy command names so keymaps saved before 3.6.11
+				// still import cleanly.
+				const command = legacyCommandAliases[item.command] || item.command;
+
 				// If the command does not exist in the keymap, we are loading a new
 				// command accelerator so we need to register it.
-				if (!this.keymap[item.command]) {
-					this.registerCommandAccelerator(item.command, item.accelerator);
+				if (!this.keymap[command]) {
+					this.registerCommandAccelerator(command, item.accelerator);
 				} else {
-					this.setAccelerator(item.command, item.accelerator);
+					this.setAccelerator(command, item.accelerator);
 				}
 			}
 
@@ -399,8 +409,7 @@ export default class KeymapService extends BaseService {
 		if (!isValid) throw new Error(_('Accelerator "%s" is not valid.', accelerator));
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public domToElectronAccelerator(event: any) {
+	public domToElectronAccelerator(event: { keyCode: number; ctrlKey: boolean; metaKey: boolean; altKey: boolean; shiftKey: boolean }) {
 		const parts = [];
 
 		// We use the "keyCode" and not "key" because the modifier keys

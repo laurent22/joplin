@@ -5,6 +5,15 @@ interface LinkStoreEntry {
 	noteY: number;
 }
 
+interface TextWidget {
+	noteId: string;
+	scrollTop_: number;
+	renderedText_: string;
+	innerHeight: number;
+	pageUp(): void;
+	pageDown(): void;
+}
+
 class LinkSelector {
 	private noteId_: string;
 	private scrollTop_: number;
@@ -41,8 +50,7 @@ class LinkSelector {
 		const newLinkStore: LinkStoreEntry[] = [];
 		const lines: string[] = renderedText.split('\n');
 		for (let i = 0; i < lines.length; i++) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const r = (lines[i] as any).matchAll(this.linkRegex_);
+			const r = lines[i].matchAll(this.linkRegex_);
 			const matches = [...r];
 			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			matches.forEach((_e, n) => {
@@ -64,15 +72,13 @@ class LinkSelector {
 		this.linkStore_ = this.findLinks(this.renderedText_);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public updateNote(textWidget: any): void {
+	public updateNote(textWidget: TextWidget): void {
 		this.noteId_ = textWidget.noteId;
 		this.scrollTop_ = textWidget.scrollTop_;
 		this.updateText(textWidget.renderedText_);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public scrollWidget(textWidget: any): void {
+	public scrollWidget(textWidget: TextWidget): void {
 		if (this.currentLinkIndex_ === null) return;
 
 		const noteY = this.linkStore_[this.currentLinkIndex_].noteY;
@@ -97,8 +103,7 @@ class LinkSelector {
 		return;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public changeLink(textWidget: any, offset: number): void | null {
+	public changeLink(textWidget: TextWidget, offset: number): void | null {
 		if (textWidget.noteId !== this.noteId_) {
 			this.updateNote(textWidget);
 			this.changeLink(textWidget, offset);
@@ -128,8 +133,7 @@ class LinkSelector {
 		return;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public openLink(textWidget: any): void {
+	public openLink(textWidget: TextWidget): void {
 		if (textWidget.noteId !== this.noteId_) return;
 		if (textWidget.renderedText_ !== this.renderedText_) return;
 		if (textWidget.scrollTop_ !== this.scrollTop_) return;

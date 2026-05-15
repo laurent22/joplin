@@ -36,6 +36,7 @@ export interface ExecOptions {
 	target?: ExecOptionsTarget;
 	path?: string;
 	source?: string;
+	ignoreError?: (error: Error)=> boolean;
 }
 
 export interface Session {
@@ -116,13 +117,12 @@ export default class JoplinServerApi {
 		return this.session_ ? this.session_.user_id : '';
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static connectionErrorMessage(error: any) {
+	public static connectionErrorMessage(error: Error | null) {
 		const msg = error && error.message ? error.message : 'Unknown error';
 		return _('Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s', msg);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Accepts both JSON-stringified bodies and header records; mutates the object then returns the same shape
 	private hidePasswords(o: any): any {
 		if (typeof o === 'string') {
 			try {
@@ -141,8 +141,7 @@ export default class JoplinServerApi {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private requestToCurl_(url: string, options: any) {
+	private requestToCurl_(url: string, options: { method?: string; headers?: Record<string, string>; body?: unknown }) {
 		const output = [];
 		output.push('curl');
 		output.push('-v');
@@ -163,8 +162,8 @@ export default class JoplinServerApi {
 		return output.join(' ');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async exec_(method: string, path = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- body and fetchOptions.body flow into shim.fetch/fetchBlob/uploadBlob (FetchOptions) which type body: string; widening here forces casts at every call site
+	private async exec_(method: string, path = '', query: Record<string, unknown> = null, body: any = null, headers: Record<string, string> = null, options: ExecOptions = null) {
 		if (headers === null) headers = {};
 		if (options === null) options = {};
 		if (!options.responseFormat) options.responseFormat = ExecOptionsResponseFormat.Json;
@@ -178,10 +177,8 @@ export default class JoplinServerApi {
 		if (sessionId) headers['X-API-AUTH'] = sessionId;
 		headers['X-API-MIN-VERSION'] = '2.6.0'; // Need server 2.6 for new lock support
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const fetchOptions: any = {};
-		fetchOptions.headers = headers;
-		fetchOptions.method = method;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See exec_.body above
+		const fetchOptions: { headers: Record<string, string>; method: string; path?: string; body?: any } = { headers, method };
 		if (options.path) fetchOptions.path = options.path;
 
 		if (body) {
@@ -209,7 +206,7 @@ export default class JoplinServerApi {
 				logger.debug(this.requestToCurl_(url, fetchOptions));
 			}
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- shim.fetch / shim.uploadBlob / shim.fetchBlob return slightly different response shapes (node-fetch vs blob); narrowing here forces per-branch typing
 			let response: any = null;
 
 			if (options.source === 'file' && (method === 'POST' || method === 'PUT')) {
@@ -244,8 +241,7 @@ export default class JoplinServerApi {
 				return new JoplinError(message, code, `${method} ${path}: ${message} (${code}): ${shortResponseText()}`);
 			};
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			let responseJson_: any = null;
+			let responseJson_: Record<string, unknown> | null = null;
 			const loadResponseJson = async () => {
 				if (!responseText) return null;
 				if (responseJson_) return responseJson_;
@@ -293,7 +289,7 @@ export default class JoplinServerApi {
 			// Don't print error info for file not found (handled by the
 			// driver), or lock-acquisition errors because it's handled by
 			// LockHandler.
-			if (![404, 'hasExclusiveLock', 'hasSyncLock'].includes(error.code)) {
+			if (![404, 'hasExclusiveLock', 'hasSyncLock'].includes(error.code) && !options?.ignoreError?.(error)) {
 				logger.warn(this.requestToCurl_(url, fetchOptions));
 				logger.warn('Code:', error.code);
 				logger.warn(error);
@@ -303,8 +299,8 @@ export default class JoplinServerApi {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async exec(method: string, path = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See exec_.body above
+	public async exec(method: string, path = '', query: Record<string, unknown> = null, body: any = null, headers: Record<string, string> = null, options: ExecOptions = null) {
 		for (let i = 0; i < 2; i++) {
 			try {
 				const response = await this.exec_(method, path, query, body, headers, options);

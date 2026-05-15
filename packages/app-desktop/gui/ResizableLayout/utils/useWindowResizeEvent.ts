@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 const debounce = require('debounce');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default function useWindowResizeEvent(eventEmitter: any) {
+export default function useWindowResizeEvent(eventEmitter: { current: { emit: (name: string)=> void } }) {
 	useEffect(() => {
 		const window_resize = debounce(() => {
 			eventEmitter.current.emit('resize');

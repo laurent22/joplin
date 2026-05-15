@@ -1,5 +1,6 @@
 import type * as MarkdownIt from 'markdown-it';
 import * as JSON5 from 'json5';
+import { RuleOptions } from '../../MdToHtml';
 
 interface AbcContent {
 	options: object;
@@ -41,8 +42,7 @@ const parseGlobalOptions = (content: string) => {
 	}
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we still don't have a type for ruleOptions (and it's not RuleOptions)
-const plugin = (markdownIt: MarkdownIt, ruleOptions: any) => {
+const plugin = (markdownIt: MarkdownIt, ruleOptions: RuleOptions) => {
 	const defaultRender = markdownIt.renderer.rules.fence || function(tokens, idx, options, env, self) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Imported from ABC plugin and don't want to change the function signature as I'm not sure if it's a type issue or if env and self really aren't needed
 		return (self.renderToken as any)(tokens, idx, options, env, self);

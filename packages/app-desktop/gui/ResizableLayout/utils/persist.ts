@@ -3,8 +3,7 @@ import { produce } from 'immer';
 import iterateItems from './iterateItems';
 import validateLayout from './validateLayout';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function saveLayout(layout: LayoutItem): any {
+export function saveLayout(layout: LayoutItem): Partial<LayoutItem> {
 	const propertyWhiteList = [
 		'visible',
 		'width',
@@ -14,26 +13,23 @@ export function saveLayout(layout: LayoutItem): any {
 		'context',
 	];
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return produce(layout, (draft: any) => {
+	return produce(layout, (draft: LayoutItem) => {
 		delete draft.width;
 		delete draft.height;
 		iterateItems(draft, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
 			for (const k of Object.keys(item)) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				if (!propertyWhiteList.includes(k)) delete (item as any)[k];
+				if (!propertyWhiteList.includes(k)) delete (item as unknown as Record<string, unknown>)[k];
 			}
 			return true;
 		});
 	});
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function loadLayout(layout: any, defaultLayout: LayoutItem, rootSize: Size): LayoutItem {
+export function loadLayout(layout: Partial<LayoutItem> | null, defaultLayout: LayoutItem, rootSize: Size): LayoutItem {
 	let output: LayoutItem = null;
 
 	if (layout) {
-		output = { ...layout };
+		output = { ...layout } as LayoutItem;
 	} else {
 		output = { ...defaultLayout };
 	}

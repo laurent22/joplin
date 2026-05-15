@@ -1,3 +1,4 @@
+import { type RefObject } from 'react';
 import shim from '../shim';
 const { useCallback, useEffect, useState } = shim.react();
 import useEventListener from './useEventListener';
@@ -7,8 +8,7 @@ interface Size {
 	height: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function useElementSize(elementRef: any): Size {
+function useElementSize(elementRef: RefObject<HTMLElement>): Size {
 	const [size, setSize] = useState({
 		width: 0,
 		height: 0,

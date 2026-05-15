@@ -109,7 +109,7 @@ const PluginDialogWebView: React.FC<Props> = props => {
 			formData = await dialogControl.getFormData();
 		}
 
-		closeWithResponse({ id: button.id, formData });
+		closeWithResponse({ id: button.id, formData: formData as Record<string, unknown> });
 		button.onClick?.();
 	}, [dialogControl, plugin, viewId, view.containerType]);
 

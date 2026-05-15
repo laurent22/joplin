@@ -47,8 +47,7 @@ const StyledAddRecipient = styled.div`
 	margin-bottom: 1em;
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const StyledRecipient = styled(StyledMessage)<any>`
+const StyledRecipient = styled(StyledMessage)<{ index: number }>`
 	display: flex;
 	flex-direction: row;
 	padding: .6em 1em;
@@ -69,8 +68,9 @@ const StyledRecipients = styled.div`
 	margin-bottom: 10px;
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-type StyleProps = any;
+interface StyleProps {
+	theme: { dividerColor: string };
+}
 
 const StyledRecipientList = styled.div`
 	border: 1px solid ${(props: StyleProps) => props.theme.dividerColor};
@@ -85,8 +85,7 @@ const StyledError = styled(StyledMessage)`
 	margin-bottom: 1em;
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const StyledShareState = styled(StyledMessage)<any>`
+const StyledShareState = styled(StyledMessage)`
 	word-break: break-all;
 	margin-bottom: 1em;
 `;
@@ -214,15 +213,13 @@ function ShareFolderDialog(props: Props) {
 
 		let errorSet = false;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const handleError = (error: any) => {
+		const handleError = (error: Error) => {
 			if (!errorSet) setLatestError(error);
 			errorSet = true;
 			logger.error(error);
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const defer = (error: any) => {
+		const defer = (error: Error | null) => {
 			if (error) handleError(error);
 			setShareState(ShareState.Idle);
 		};
@@ -350,7 +347,7 @@ function ShareFolderDialog(props: Props) {
 		const dropdown = !props.canUseSharePermissions ? null : <Dropdown disabled={!enabled} className="permission-dropdown" value={permission} options={permissionOptions} variant={DropdownVariant.NoBorder} onChange={event => recipient_permissionChange(shareUser.id, event.value)}/>;
 
 		return (
-			<StyledRecipient key={shareUser.user.email} index={index}>
+			<StyledRecipient type="info" key={shareUser.user.email} index={index}>
 				<StyledRecipientName>{shareUser.user.email}</StyledRecipientName>
 				{dropdown}
 				<StyledRecipientStatusIcon title={statusToMessage[shareUser.status]} className={statusToIcon[shareUser.status]}></StyledRecipientStatusIcon>
@@ -400,7 +397,7 @@ function ShareFolderDialog(props: Props) {
 		if (!message) throw new Error(`Unsupported state: ${shareState}`);
 
 		return (
-			<StyledShareState>
+			<StyledShareState type="info">
 				{message}
 			</StyledShareState>
 		);

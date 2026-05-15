@@ -1,9 +1,9 @@
 import Logger from '@joplin/utils/Logger';
 import shim, { FetchOptions } from './shim';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- xml2js options and parsed result are both heterogeneous (caller decides tag normalisation; output mirrors XML structure)
 const parseXmlString: (xml: string, options: any, callback: (error: Error | null, result: any)=> void)=> void = require('xml2js').parseString;
 import JoplinError from './JoplinError';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- url-parse returns a Url object structurally; we use it as a constructor with property access
 const URL: any = require('url-parse');
 import { _ } from './locale';
 import { rtrimSlashes, ltrimSlashes } from './path-utils';
@@ -30,8 +30,7 @@ interface LoggedRequest {
 
 interface RequestInfo {
 	url: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	options: any;
+	options: FetchOptions & { headers?: Record<string, string>; method?: string; body?: string };
 }
 
 interface ExecOptions {
@@ -48,7 +47,7 @@ enum ExcludeIfNoneMatch {
 	Yes = 3,
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous WebDAV XML→JSON values returned by xml2js (objects, arrays of objects, strings); each accessor narrows from this base
 type JsonValue = any;
 
 class WebDavApi {
@@ -69,15 +68,15 @@ class WebDavApi {
 	private logRequest_(request: RequestInfo, responseText: string) {
 		if (this.lastRequests_.length > 10) this.lastRequests_.splice(0, 1);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const serializeRequest = (r: RequestInfo): string => {
-			const options = { ...r.options };
-			if (typeof options.body === 'string') options.body = options.body.substr(0, 4096);
+			const options: Record<string, unknown> = { ...r.options };
+			if (typeof options.body === 'string') options.body = (options.body as string).substr(0, 4096);
 			const output: string[] = [];
-			output.push(options.method ? options.method : 'GET');
+			output.push(typeof options.method === 'string' ? options.method : 'GET');
 			output.push(r.url);
-			options.headers = { ...options.headers };
-			if (options.headers['Authorization']) options.headers['Authorization'] = '********';
+			const headers: Record<string, string> = { ...(options.headers as Record<string, string> | undefined) };
+			if (headers['Authorization']) headers['Authorization'] = '********';
+			options.headers = headers;
 			delete options.method;
 			delete options.agent;
 			output.push(JSON.stringify(options));
@@ -230,8 +229,7 @@ class WebDavApi {
 		return this.valueFromJson(json, keys, 'array');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public resourcePropByName(resource: any, outputType: 'string' | 'array', propName: string): any {
+	public resourcePropByName(resource: JsonValue, outputType: 'string' | 'array', propName: string): JsonValue {
 		const propStats = resource['d:propstat'];
 		let output = null;
 		if (!Array.isArray(propStats)) throw new Error('Missing d:propstat property');
@@ -296,8 +294,7 @@ class WebDavApi {
 	}
 
 	// Used for debugging - can be uncommented in exec() to log curl commands
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private _requestToCurl(url: string, options: any): string {
+	private _requestToCurl(url: string, options: { method?: string; headers?: Record<string, string>; body?: string }): string {
 		const output: string[] = [];
 		output.push('curl');
 		output.push('-v');
@@ -460,7 +457,7 @@ class WebDavApi {
 		}
 		if (!headers['User-Agent']) headers['User-Agent'] = 'Joplin/1.0';
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mixed flow into shim.fetch/uploadBlob/fetchBlob (FetchOptions) and platform-specific fields (credentials/agent/path/ignoreTlsErrors); narrowing forces per-branch typing
 		const fetchOptions: any = {};
 		fetchOptions.headers = headers;
 		fetchOptions.method = method;
@@ -480,7 +477,7 @@ class WebDavApi {
 
 		if (shim.httpAgent(url)) fetchOptions.agent = shim.httpAgent(url);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- shim.fetch/uploadBlob/fetchBlob return slightly different response shapes (node-fetch vs blob); narrowing forces per-branch typing
 		let response: any = null;
 
 		// console.info('WebDAV Call', `${method} ${url}`, headers, options);

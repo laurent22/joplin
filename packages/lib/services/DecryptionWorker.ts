@@ -20,6 +20,11 @@ interface DecryptionResult {
 	error: Error | null;
 }
 
+interface DecryptionWorkerStartOptions {
+	masterKeyNotLoadedHandler?: 'throw' | 'dispatch';
+	errorHandler?: 'log' | 'throw';
+}
+
 // Key for use with the KvStore.
 const decryptionErrorKeyPrefix = 'decryptErrorLabel:';
 const decryptionErrorKey = (type: number, id: string) => {
@@ -36,8 +41,7 @@ export default class DecryptionWorker {
 
 	private state_ = 'idle';
 	private logger_: Logger;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public dispatch: Function = () => {};
+	public dispatch: (action: { type: string; [key: string]: unknown })=> void = () => {};
 	private scheduleId_: ReturnType<typeof setTimeout> | null = null;
 	private eventEmitter_: InstanceType<typeof EventEmitter>;
 	private kvStore_: KvStore = null;
@@ -59,13 +63,13 @@ export default class DecryptionWorker {
 		return this.logger_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- EventEmitter events carry heterogeneous payloads by name; per-event typing would require a string-literal map across all callers
+	public on(eventName: string, callback: (...args: any[])=> void) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: string, callback: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See on() above
+	public off(eventName: string, callback: (...args: any[])=> void) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
@@ -131,15 +135,12 @@ export default class DecryptionWorker {
 		await this.kvStore().deleteByPrefix(decryptionErrorKeyPrefix);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public dispatchReport(report: any) {
-		const action = { ...report };
-		action.type = 'DECRYPTION_WORKER_SET';
+	public dispatchReport(report: Record<string, unknown>) {
+		const action = { ...report, type: 'DECRYPTION_WORKER_SET' };
 		this.dispatch(action);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async start_(options: any = null): Promise<DecryptionResult> {
+	private async start_(options: DecryptionWorkerStartOptions = null): Promise<DecryptionResult> {
 		if (options === null) options = {};
 		if (!('masterKeyNotLoadedHandler' in options)) options.masterKeyNotLoadedHandler = 'throw';
 		if (!('errorHandler' in options)) options.errorHandler = 'log';
@@ -324,8 +325,7 @@ export default class DecryptionWorker {
 		return finalReport;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async start(options: any = {}): Promise<DecryptionResult> {
+	public async start(options: DecryptionWorkerStartOptions = {}): Promise<DecryptionResult> {
 		let output = null;
 		let lastError: Error;
 

@@ -91,6 +91,32 @@ export async function checkDecryptTestData(data: DecryptTestData, options: Check
 	}
 }
 
+const checkBufferToString = () => {
+	const crypto = shim.crypto;
+	const data = new Uint8Array([
+		0xaa, 0xbb, 0xcc, 0xdd,
+		0x00, 0x01, 0x02, 0x03, 0xfc, 0xfd, 0xfe, 0xff, 0x3d, 0xd8, 0x41, 0x00, 0x3e, 0xd8, 0x17, 0xdd, 0x00, 0xdc,
+		0x11, 0x22, 0x33, 0x44,
+	]);
+	const view = data.subarray(4, 22);
+
+	// cSpell:disable
+	const testCases = {
+		hex: '00010203fcfdfeff3dd841003ed817dd00dc',
+		base64: 'AAECA/z9/v892EEAPtgX3QDc',
+		utf16le: '\u0100\u0302\uFDFC\uFFFE\uD83DA\uD83E\uDD17\uDC00',
+	} as const;
+	// cSpell:enable
+
+	for (const encoding in testCases) {
+		const actual = crypto.bufferToString(view, encoding as keyof typeof testCases);
+		const expected = testCases[encoding as keyof typeof testCases];
+		if (actual !== expected) {
+			throw new Error(`bufferToString(${encoding}) failed. Expected: ${expected}. Got: ${actual}.`);
+		}
+	}
+};
+
 export async function testStringPerformance(method: EncryptionMethod, dataSize: number, count: number, options: CheckTestDataOptions = null) {
 	options = {
 		throwOnError: false,
@@ -110,7 +136,7 @@ export async function testStringPerformance(method: EncryptionMethod, dataSize: 
 
 		const crypto = shim.crypto;
 
-		const content = (await crypto.randomBytes(dataSize / 2)).toString('hex');
+		const content = crypto.bufferToString(await crypto.randomBytes(dataSize / 2), 'hex');
 		const folder = await Folder.save({ title: 'folder' });
 		const note = await Note.save({ title: 'encrypted note', body: content, parent_id: folder.id });
 
@@ -174,7 +200,7 @@ export async function testFilePerformance(method: EncryptionMethod, dataSize: nu
 		const encryptedPath = `${Setting.value('tempDir')}/testData.crypted`;
 		const decryptedPath = `${Setting.value('tempDir')}/testData.decrypted`;
 		await fsDriver.writeFile(sourcePath, '');
-		await fsDriver.appendFile(sourcePath, (await crypto.randomBytes(dataSize)).toString('base64'), 'base64');
+		await fsDriver.appendFile(sourcePath, crypto.bufferToString(await crypto.randomBytes(dataSize), 'base64'), 'base64');
 
 		let encryptTime = 0.0;
 		let decryptTime = 0.0;
@@ -248,6 +274,9 @@ export const runIntegrationTests = async (silent = false, testPerformance = fals
 	serviceInstance = EncryptionService.instance();
 	BaseItem.encryptionService_ = EncryptionService.instance();
 	setEncryptionEnabled(true);
+
+	log('Testing bufferToString...');
+	checkBufferToString();
 
 	log('Decrypting using known data...');
 	for (const testLabel in decryptTestData) {

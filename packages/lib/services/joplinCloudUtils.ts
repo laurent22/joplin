@@ -6,12 +6,14 @@ import { _ } from '../locale';
 import eventManager, { EventName } from '../eventManager';
 import { reg } from '../registry';
 import SyncTargetRegistry from '../SyncTargetRegistry';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('joplinCloudUtils');
 
 type ActionType = 'LINK_USED' | 'COMPLETED' | 'ERROR';
 type Action = {
 	type: ActionType;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	payload?: any;
+	payload?: string;
 };
 
 type DefaultState = {
@@ -90,6 +92,10 @@ export const generateApplicationConfirmUrl = async (confirmUrl: string) => {
 	return `${confirmUrl}?${searchParams.toString()}`;
 };
 
+export const saveApplicationAuthId = async (applicationAuthId: string) => {
+	Setting.setValue('sync.10.pendingAuthId', applicationAuthId);
+	await Setting.saveAll();
+};
 
 // We have isWaitingResponse inside the function to avoid any state from lingering
 // after an error occurs. E.g.: if the function would throw an error while isWaitingResponse
@@ -116,6 +122,7 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 		Setting.setValue('sync.10.username', jsonBody.id);
 		Setting.setValue('sync.10.password', jsonBody.password);
 		Setting.setValue('sync.target', SyncTargetRegistry.nameToId('joplinCloud'));
+		Setting.setValue('sync.10.pendingAuthId', '');
 
 		const fileApi = await reg.syncTarget().fileApi();
 		await fileApi.driver().api().loadSession();
@@ -125,4 +132,26 @@ export const checkIfLoginWasSuccessful = async (applicationsUrl: string) => {
 	};
 
 	return performLoginRequest();
+};
+
+// If the app was killed during the OAuth flow (common on Android), the
+// pending auth ID is still saved. On startup we check whether the server
+// has already confirmed the authorisation and, if so, save the credentials.
+export const completePendingAuthentication = async () => {
+	const pendingAuthId = Setting.value('sync.10.pendingAuthId');
+	if (!pendingAuthId) return;
+
+	const apiBaseUrl = Setting.value('sync.10.path');
+	const applicationsUrl = `${apiBaseUrl}/api/application_auth/${pendingAuthId}`;
+
+	try {
+		const result = await checkIfLoginWasSuccessful(applicationsUrl);
+		if (result && result.success) {
+			logger.info('Completed pending Joplin Cloud authentication');
+		}
+	} catch (error) {
+		logger.error('Could not complete pending authentication:', error);
+	} finally {
+		Setting.setValue('sync.10.pendingAuthId', '');
+	}
 };

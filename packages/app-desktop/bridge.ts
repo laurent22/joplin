@@ -325,8 +325,7 @@ export class Bridge {
 
 			electronApp: this.electronApp(),
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			shouldShowMenu: (_event: any, params: any) => {
+			shouldShowMenu: (_event: unknown, params: { isEditable: boolean }) => {
 				return params.isEditable;
 			},
 
@@ -411,16 +410,14 @@ export class Bridge {
 
 	public async showOpenDialog(options: OpenDialogOptions = null) {
 		if (!options) options = {};
-		let fileType = 'file';
+		let fileType: keyof LastSelectedPath = 'file';
 		if (options.properties && options.properties.includes('openDirectory')) fileType = 'directory';
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (!('defaultPath' in options) && (this.lastSelectedPaths_ as any)[fileType]) options.defaultPath = (this.lastSelectedPaths_ as any)[fileType];
+		if (!('defaultPath' in options) && this.lastSelectedPaths_[fileType]) options.defaultPath = this.lastSelectedPaths_[fileType];
 		if (!('createDirectory' in options)) options.createDirectory = true;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- App-internal OpenDialogOptions.properties is string[]; Electron's is a stricter union
 		const { filePaths } = await dialog.showOpenDialog(this.activeWindow(), options as any);
 		if (filePaths && filePaths.length) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			(this.lastSelectedPaths_ as any)[fileType] = dirname(filePaths[0]);
+			this.lastSelectedPaths_[fileType] = dirname(filePaths[0]);
 		}
 		return filePaths;
 	}

@@ -136,7 +136,7 @@ const renderer: ListRenderer = {
 		`,
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Matches OnRenderNoteHandler in noteListType.ts; props are heterogeneous (any subset of note fields per renderer's itemProps)
 	onRenderNote: async (props: any) => {
 		return {
 			...props,

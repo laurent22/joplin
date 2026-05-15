@@ -22,8 +22,7 @@ export interface LoadOptions {
 	caseInsensitive?: boolean;
 	fields?: string | string[];
 	where?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	whereParams?: any[];
+	whereParams?: (string | number | boolean)[];
 	order?: {
 		by: string;
 		dir: string;
@@ -41,8 +40,8 @@ export interface FolderLoadOptions extends LoadOptions {
 
 export interface SaveOptions {
 	isNew?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	oldItem?: any;
+	oldItem?: Record<string, unknown>;
+	fields?: string[];
 	userSideValidation?: boolean;
 	nextQueries?: SqlQuery[];
 	autoTimestamp?: boolean;

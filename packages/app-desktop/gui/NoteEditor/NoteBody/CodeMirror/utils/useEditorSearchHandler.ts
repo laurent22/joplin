@@ -4,14 +4,13 @@ import { RenderedBody } from './types';
 import { SearchMarkers } from '../../../utils/useSearchMarkers';
 import CodeMirror5Emulation from '@joplin/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation';
 import useEditorSearchExtension from './useEditorSearchExtension';
+import { NoteViewerControl } from '../../../../NoteTextViewer';
 const debounce = require('debounce');
 
 interface Props {
 	setLocalSearchResultCount(count: number): void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	searchMarkers: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	webviewRef: RefObject<any>;
+	searchMarkers: SearchMarkers;
+	webviewRef: RefObject<NoteViewerControl>;
 	editorRef: RefObject<CodeMirror5Emulation>;
 
 	noteContent: string;

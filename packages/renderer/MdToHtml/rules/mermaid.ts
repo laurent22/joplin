@@ -1,9 +1,12 @@
 import { RuleOptions } from '../../MdToHtml';
+import { RendererTheme } from '../../types';
+import type * as MarkdownIt from 'markdown-it';
+import type Token = require('markdown-it/lib/token');
+import type Renderer = require('markdown-it/lib/renderer');
 
 export default {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	assets: function(theme: any) {
+	assets: function(theme: RendererTheme) {
 		return [
 			{
 				name: 'mermaid.min.js',
@@ -55,16 +58,14 @@ export default {
 		});
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	plugin: function(markdownIt: any, ruleOptions: RuleOptions) {
-		// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-		const defaultRender: Function = markdownIt.renderer.rules.fence || function(tokens: any[], idx: number, options: any, env: any, self: any) {
-			return self.renderToken(tokens, idx, options, env, self);
+	plugin: function(markdownIt: MarkdownIt, ruleOptions: RuleOptions) {
+		const defaultRender: Renderer.RenderRule = markdownIt.renderer.rules.fence || function(tokens, idx, options, env, self): string {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- this fallback passes extra `env, self` args to renderToken which the type signature does not declare; preserved for parity with other rule fallbacks
+			return (self.renderToken as any)(tokens, idx, options, env, self);
 		};
 		const exportButtonMarkup = isDesktop(ruleOptions.platformName) ? exportGraphButton(ruleOptions) : '';
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: any, env: any, self: any) {
+		markdownIt.renderer.rules.fence = function(tokens: Token[], idx: number, options: MarkdownIt.Options, env: unknown, self: Renderer) {
 			const token = tokens[idx];
 			if (token.info !== 'mermaid') return defaultRender(tokens, idx, options, env, self);
 

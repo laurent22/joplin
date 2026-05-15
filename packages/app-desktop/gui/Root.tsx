@@ -76,7 +76,7 @@ async function initialize() {
 	InteropService.instance().xmlSerializer = new XMLSerializer();
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old class component with implicit state shape; tightening requires structural change to the screen
 class RootComponent extends React.Component<Props, any> {
 	public async componentDidMount() {
 		if (this.props.appState === 'starting') {

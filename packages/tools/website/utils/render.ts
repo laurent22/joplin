@@ -4,6 +4,7 @@ import * as fs from 'fs-extra';
 import { Partials, TemplateParams } from './types';
 import { headerAnchor } from '@joplin/renderer';
 import * as MarkdownIt from 'markdown-it';
+import StateCore = require('markdown-it/lib/rules_core/state_core');
 
 export async function loadMustachePartials(partialDir: string) {
 	const output: Partials = {};
@@ -30,8 +31,7 @@ export function getMarkdownIt() {
 		html: true,
 	});
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	markdownIt.core.ruler.push('tableClass', (state: any) => {
+	markdownIt.core.ruler.push('tableClass', (state: StateCore) => {
 		const tokens = state.tokens;
 		for (let i = 0; i < tokens.length; i++) {
 			const token = tokens[i];

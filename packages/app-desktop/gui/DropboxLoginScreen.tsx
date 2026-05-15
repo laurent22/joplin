@@ -11,10 +11,10 @@ interface Props {
 	themeId: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old class component without state/props refactor; tightening requires structural change to the screen
 class DropboxLoginScreenComponent extends React.Component<any, any> {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Shared helper from a JS module (dropbox-login-shared) with no exported type
 	private shared_: any;
 
 	public constructor(props: Props) {

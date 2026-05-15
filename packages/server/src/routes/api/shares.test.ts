@@ -23,8 +23,7 @@ describe('shares', () => {
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		const { user: user3 } = await createUserAndSession(3);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const tree: any = {
+		const tree: Record<string, Record<string, null>> = {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
 			},
@@ -50,8 +49,7 @@ describe('shares', () => {
 		});
 
 		{
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const shares = await getApi<PaginatedResults<any>>(session1.id, 'shares');
+			const shares = await getApi<PaginatedResults<Share>>(session1.id, 'shares');
 			expect(shares.items.length).toBe(2);
 
 			const share1: Share = shares.items.find(it => it.folder_id === '000000000000000000000000000000F1');
@@ -62,8 +60,7 @@ describe('shares', () => {
 			expect(share2).toBeTruthy();
 			expect(share2.type).toBe(ShareType.Note);
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const shareUsers = await getApi<PaginatedResults<any>>(session1.id, `shares/${share1.id}/users`);
+			const shareUsers = await getApi<PaginatedResults<{ user: { email: string }; status: ShareUserStatus }>>(session1.id, `shares/${share1.id}/users`);
 			expect(shareUsers.items.length).toBe(2);
 
 			const su2 = shareUsers.items.find(su => su.user.email === 'user2@localhost');

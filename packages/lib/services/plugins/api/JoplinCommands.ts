@@ -85,7 +85,7 @@ export default class JoplinCommands {
 	 * await joplin.commands.execute('newFolder', "SOME_FOLDER_ID");
 	 * ```
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: each command has its own args/return shape, matches CommandService.execute
 	public async execute(commandName: string, ...args: any[]): Promise<any | void> {
 		return CommandService.instance().execute(commandName, ...args);
 	}
@@ -115,7 +115,7 @@ export default class JoplinCommands {
 		if ('iconName' in command) declaration.iconName = command.iconName;
 
 		const runtime: CommandRuntime = {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See execute above
 			execute: (_context: CommandContext, ...args: any[]) => {
 				return command.execute(...args);
 			},

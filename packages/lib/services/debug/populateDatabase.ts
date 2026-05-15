@@ -1,6 +1,8 @@
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
+import JoplinDatabase from '../../JoplinDatabase';
+import { FolderEntity, NoteEntity } from '../database/types';
 
 export interface Options {
 	folderCount?: number;
@@ -13,8 +15,7 @@ export interface Options {
 	subFolderDepth?: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function randomIndex(array: any[]): number {
+function randomIndex<T>(array: T[]): number {
 	return Math.round(Math.random() * (array.length - 1));
 }
 
@@ -27,26 +28,23 @@ function randomIndexes(arrayLength: number, count: number): number[] {
 	return arr;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function randomElements(array: any[], count: number): any[] {
+function randomElements<T>(array: T[], count: number): T[] {
 	const indexes = randomIndexes(array.length, count);
-	const output = [];
+	const output: T[] = [];
 	for (const index of indexes) {
 		output.push(array[index]);
 	}
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function randomElement(array: any[]): any {
+function randomElement<T>(array: T[]): T {
 	const idx = randomIndex(array);
 	return array[idx];
 }
 
 // Use the constants below to define how many folders, notes and tags
 // should be created.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default async function populateDatabase(db: any, options: Options = null) {
+export default async function populateDatabase(db: JoplinDatabase & { clearForTesting(): Promise<void> }, options: Options = null) {
 	options = {
 		folderCount: 0,
 		noteCount: 0,
@@ -68,8 +66,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 	let rootFolderCount = 0;
 
 	for (let i = 0; i < options.folderCount; i++) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const folder: any = {
+		const folder: FolderEntity = {
 			title: `folder${i}`,
 		};
 
@@ -118,8 +115,7 @@ export default async function populateDatabase(db: any, options: Options = null)
 	}
 
 	for (let i = 0; i < options.noteCount; i++) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const note: any = { title: `note${i}`, body: `This is note num. ${i}` };
+		const note: NoteEntity = { title: `note${i}`, body: `This is note num. ${i}` };
 		const parentIndex = randomIndex(createdFolderIds);
 		note.parent_id = createdFolderIds[parentIndex];
 

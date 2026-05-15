@@ -1,13 +1,13 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
+import { WindowControl } from '../utils/useWindowControl';
 
 export const declaration: CommandDeclaration = {
 	name: 'showShareNoteDialog',
 	label: () => _('Publish note...'),
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const runtime = (comp: any): CommandRuntime => {
+export const runtime = (comp: WindowControl): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext, noteIds: string[] = null) => {
 			noteIds = noteIds || context.state.selectedNoteIds;

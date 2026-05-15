@@ -8,15 +8,14 @@ import DecryptionWorker from '../../services/DecryptionWorker';
 import eventManager, { EventName } from '../../eventManager';
 import BaseItem from '../../models/BaseItem';
 import shim from '../../shim';
-import { Dispatch } from 'redux';
+import { Dispatch, Store } from 'redux';
 import { State } from '../../reducer';
 import { onRevisionServiceSettingsChanged } from '../../services/synchronizer/syncInfoUtils';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let sortNoteListTimeout: any = null;
+let sortNoteListTimeout: ReturnType<typeof shim.setTimeout> = null;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default async (store: any, _next: any, action: any, dispatch: Dispatch) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux action shape varies per type; tightening would require an action-type union across the entire app
+export default async (store: Store<State>, _next: Dispatch, action: any, dispatch: Dispatch) => {
 	const newState: State = store.getState();
 
 	eventManager.appStateEmit(newState);

@@ -2,6 +2,7 @@ import CommandService, { CommandRuntime, CommandDeclaration } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 import { DesktopCommandContext } from '../services/commands/types';
+import { AppState } from '../app.reducer';
 
 export const declaration: CommandDeclaration = {
 	name: 'toggleExternalEditing',
@@ -23,8 +24,7 @@ export const runtime = (): CommandRuntime => {
 			}
 		},
 		enabledCondition: 'oneNoteSelected && !noteIsReadOnly && (!modalDialogVisible || gotoAnythingVisible)',
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		mapStateToTitle: (state: any) => {
+		mapStateToTitle: (state: AppState) => {
 			const noteId = stateUtils.selectedNoteId(state);
 			return state.watchedNoteFiles.includes(noteId) ? _('Stop') : '';
 		},

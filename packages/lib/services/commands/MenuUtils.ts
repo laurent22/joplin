@@ -95,8 +95,7 @@ export default class MenuUtils {
 		return item;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public commandToStatefulMenuItem(commandName: string, commandTarget?: any, options?: WhenClauseContextOptions): MenuItem {
+	public commandToStatefulMenuItem(commandName: string, commandTarget?: unknown, options?: WhenClauseContextOptions): MenuItem {
 		const whenClauseContext = this.service.currentWhenClauseContext(options);
 
 		const menuItem = this.commandToMenuItem(commandName, () => {

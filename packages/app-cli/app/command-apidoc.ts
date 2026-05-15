@@ -37,8 +37,7 @@ class Command extends BaseCommand {
 		return markdownUtils.createMarkdownTable(headers, tableFields);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { file: string }) {
 		const models = [
 			{
 				type: BaseModel.TYPE_NOTE,
@@ -251,7 +250,7 @@ async function fetchAllNotes() {
 
 			lines.push('### Properties');
 			lines.push('');
-			lines.push(this.createPropertiesTable(tableFields));
+			lines.push(this.createPropertiesTable(tableFields as unknown as MarkdownTableRow[]));
 			lines.push('');
 
 			lines.push(`### GET /${tableName}`);
@@ -427,7 +426,7 @@ async function fetchAllNotes() {
 			lines.push('');
 			lines.push('### Properties');
 			lines.push('');
-			lines.push(this.createPropertiesTable(tableFields));
+			lines.push(this.createPropertiesTable(tableFields as unknown as MarkdownTableRow[]));
 			lines.push('');
 			lines.push('### GET /events');
 			lines.push('');

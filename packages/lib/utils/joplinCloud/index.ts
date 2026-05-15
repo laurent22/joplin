@@ -22,9 +22,11 @@ interface PlanFeature {
 	basicInfo?: string;
 	proInfo?: string;
 	teamsInfo?: string;
+	joplinServerBusinessInfo?: string;
 	basicInfoShort?: string;
 	proInfoShort?: string;
 	teamsInfoShort?: string;
+	joplinServerBusinessInfoShort?: string;
 }
 
 enum PlanHostingType {
@@ -305,9 +307,9 @@ export const getFeaturesByPlan = (planName: PlanName, featureOn: boolean): PlanF
 
 export const getFeatureLabel = (planName: PlanName, featureId: FeatureId): string => {
 	const feature = features()[featureId];
-	const k = `${planName}Info`;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	if ((feature as any)[k]) return (feature as any)[k];
+	const k = `${planName}Info` as keyof PlanFeature;
+	const value = feature[k];
+	if (typeof value === 'string' && value) return value;
 	return feature.title;
 };
 
@@ -346,9 +348,9 @@ export const createFeatureTableMd = () => {
 
 	const getCellInfo = (planName: PlanName, feature: PlanFeature) => {
 		if (!feature[planName]) return '-';
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const infoShort: string = (feature as any)[`${planName}InfoShort`];
-		if (infoShort) return infoShort;
+		const key = `${planName}InfoShort` as keyof PlanFeature;
+		const infoShort = feature[key];
+		if (typeof infoShort === 'string' && infoShort) return infoShort;
 		return '✔️';
 	};
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, RefObject, useRef } from 'react';
-import { FormNote, defaultFormNote, ResourceInfos } from './types';
+import { FormNote, defaultFormNote, NoteBodyEditorRef, ResourceInfos } from './types';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { handleResourceDownloadMode } from './resourceHandling';
 import { splitHtml } from '@joplin/renderer/HtmlToHtml';
@@ -27,8 +27,7 @@ export interface HookDependencies {
 	editorId: string;
 	isProvisional: boolean;
 	titleInputRef: RefObject<HTMLInputElement>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	editorRef: any;
+	editorRef: RefObject<NoteBodyEditorRef>;
 	onBeforeLoad(event: OnLoadEvent): void;
 	onAfterLoad(event: OnLoadEvent): void;
 	builtInEditorVisible: boolean;
@@ -239,7 +238,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 				if (Setting.value(focusSettingName) === 'title') {
 					if (titleInputRef.current) focus('useFormNote::handleAutoFocus', titleInputRef.current);
 				} else {
-					if (editorRef.current) editorRef.current.execCommand({ name: 'editor.focus' });
+					if (editorRef.current) void editorRef.current.execCommand({ name: 'editor.focus' });
 				}
 			});
 		}
@@ -269,8 +268,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [noteId, isProvisional, formNote]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onResourceChange = useCallback(async (event: any = null) => {
+	const onResourceChange = useCallback(async (event: { id: string } = null) => {
 		const resourceIds = await Note.linkedResourceIds(formNote.body);
 		if (!event || resourceIds.indexOf(event.id) >= 0) {
 			clearResourceCache();

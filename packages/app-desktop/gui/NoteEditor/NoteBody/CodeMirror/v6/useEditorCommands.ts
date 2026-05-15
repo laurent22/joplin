@@ -1,6 +1,7 @@
 
 import { RefObject, useMemo } from 'react';
 import { CommandValue, DropCommandValue, ScrollToTextValue } from '../../../utils/types';
+import { NoteViewerControl } from '../../../../NoteTextViewer';
 import { commandAttachFileToBody } from '../../../utils/resourceHandling';
 import { _ } from '@joplin/lib/locale';
 import dialogs from '../../../../dialogs';
@@ -14,8 +15,7 @@ import { FocusElementOptions } from '../../../../../commands/focusElement';
 const logger = Logger.create('CodeMirror 6 commands');
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	webviewRef: RefObject<any>;
+	webviewRef: RefObject<NoteViewerControl>;
 	editorRef: RefObject<CodeMirrorControl>;
 	editorContent: string;
 
@@ -87,8 +87,7 @@ const useEditorCommands = (props: Props) => {
 					editorRef.current.wrapSelections('[', `](${url})`);
 				}
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			insertText: (value: any) => editorRef.current.insertText(value),
+			insertText: (value: string) => editorRef.current.insertText(value),
 			attachFile: async () => {
 				const newBody = await commandAttachFileToBody(
 					props.editorContent, null, { position: props.selectionRange.from, markupLanguage: props.contentMarkupLanguage },
@@ -101,10 +100,9 @@ const useEditorCommands = (props: Props) => {
 			'editor.execCommand': (value: CommandValue) => {
 				if (!('args' in value)) value.args = [];
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				if ((editorRef.current as any)[value.name]) {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					const result = (editorRef.current as any)[value.name](...value.args);
+				const editorAsRecord = editorRef.current as unknown as Record<string, (...args: unknown[])=> unknown>;
+				if (editorAsRecord[value.name]) {
+					const result = editorAsRecord[value.name](...value.args);
 					return result;
 				} else if (editorRef.current.supportsCommand(value.name)) {
 					const result = editorRef.current.execCommand(value.name, ...value.args);

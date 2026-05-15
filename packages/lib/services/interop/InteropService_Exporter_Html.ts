@@ -6,8 +6,10 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import { MarkupToHtml } from '@joplin/renderer';
+import { ExportOptions } from './types';
 import { NoteEntity, ResourceEntity, ResourceLocalStateEntity } from '../database/types';
 import { contentScriptsToRendererRules } from '../plugins/utils/loadContentScripts';
+import { ThemeStyle } from '../../theme';
 import { basename, friendlySafeFilename, rtrimSlashes, dirname } from '../../path-utils';
 import packToWriter from '@joplin/htmlpack/packToWriter';
 const { themeStyle } = require('../../theme');
@@ -33,13 +35,11 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 	private resourceDir_: string;
 	private markupToHtml_: MarkupToHtml;
 	private resources_: ResourceInfos = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private style_: any;
+	private style_: ThemeStyle;
 	private packIntoSingleFile_ = false;
 	private shouldEmbedOnlyImages_ = false;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async init(path: string, options: any = {}) {
+	public async init(path: string, options: ExportOptions = {}) {
 		this.customCss_ = options.customCss ? options.customCss : '';
 
 		if (this.metadata().target === 'file') {
@@ -99,8 +99,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		return newBody;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async processItem(_itemType: number, item: any) {
+	public async processItem(_itemType: number, item: NoteEntity) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 
 		let dirPath = '';

@@ -9,6 +9,7 @@ import { localFileFromUrl } from '../utils/joplinUtils';
 import { homeUrl, loginUrl } from '../utils/urlUtils';
 import * as mime from '@joplin/lib/mime-utils';
 import { hasOwnProperty } from '@joplin/utils/object';
+import { toForwardSlashes } from '@joplin/utils/path';
 
 const publicDir = `${dirname(dirname(__dirname))}/public`;
 
@@ -34,7 +35,7 @@ async function findLocalFile(path: string): Promise<string> {
 	const appFilePath = await localFileFromUrl(path);
 	if (appFilePath) return appFilePath;
 
-	let localPath = normalize(path);
+	let localPath = toForwardSlashes(normalize(path));
 	if (localPath.indexOf('..') >= 0) throw new ErrorNotFound(`Cannot resolve path: ${path}`);
 
 	if (hasOwnProperty(pathToFileMap, path)) return pathToFileMap[path];

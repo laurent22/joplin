@@ -24,10 +24,8 @@ export enum UuidType {
 export interface SaveOptions {
 	isNew?: boolean;
 	skipValidation?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	validationRules?: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	previousItem?: any;
+	validationRules?: Record<string, unknown>;
+	previousItem?: Record<string, unknown>;
 	queryContext?: QueryContext;
 }
 
@@ -40,16 +38,14 @@ export interface AllPaginatedOptions extends LoadOptions {
 }
 
 export interface DeleteOptions {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	validationRules?: any;
+	validationRules?: Record<string, unknown>;
 	allowNoOp?: boolean;
 	deletedItemUserIds?: Record<Uuid, Uuid[]>;
 }
 
 export interface ValidateOptions {
 	isNew?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	rules?: any;
+	rules?: Record<string, unknown>;
 }
 
 export enum AclAction {
@@ -252,8 +248,7 @@ export default abstract class BaseModel<T> {
 	}
 
 	public async all(options: LoadOptions = {}): Promise<T[]> {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const rows: any[] = await this.db(this.tableName).select(this.selectFields(options));
+		const rows = await this.db(this.tableName).select(this.selectFields(options));
 		return rows as T[];
 	}
 
@@ -295,15 +290,14 @@ export default abstract class BaseModel<T> {
 	public fromApiInput(object: T): T {
 		const blackList = ['updated_time', 'created_time', 'owner_id'];
 		const whiteList = Object.keys(databaseSchema[this.tableName]);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = { ...object };
+		const output: Record<string, unknown> = { ...(object as Record<string, unknown>) };
 
 		for (const f in object) {
 			if (blackList.includes(f)) delete output[f];
 			if (!whiteList.includes(f)) delete output[f];
 		}
 
-		return output;
+		return output as T;
 	}
 
 	protected async objectToApiOutput(object: T): Promise<T> {
@@ -330,8 +324,7 @@ export default abstract class BaseModel<T> {
 	protected async isNew(object: T, options: SaveOptions): Promise<boolean> {
 		if (options.isNew === false) return false;
 		if (options.isNew === true) return true;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if ('id' in (object as any) && !(object as WithUuid).id) throw new Error('ID cannot be undefined or null');
+		if (typeof object === 'object' && object && 'id' in object && !(object as WithUuid).id) throw new Error('ID cannot be undefined or null');
 		return !(object as WithUuid).id;
 	}
 

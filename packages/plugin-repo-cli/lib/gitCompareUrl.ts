@@ -1,4 +1,5 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
+import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 
 function removeBranch(commit: string): string {
 	if (!commit) return '';
@@ -17,8 +18,7 @@ const formatRepoUrl = (url: string): string => {
 	return url;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default function(manifest: any, previousManifest: any = null): string {
+export default function(manifest: Pick<PluginManifest, 'repository_url' | '_publish_commit'>, previousManifest: Pick<PluginManifest, '_publish_commit'> | null = null): string {
 	// "repository_url": "https://github.com/JackGruber/joplin-plugin-copytags",
 	// "_publish_commit": "master:b52b01f6d3b709a811ac214253636a7c207c87dd",
 

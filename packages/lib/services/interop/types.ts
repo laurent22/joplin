@@ -1,3 +1,4 @@
+import { FolderEntity } from '../database/types';
 import { PluginStates } from '../plugins/reducer';
 
 export interface CustomImportContext {
@@ -42,15 +43,13 @@ export interface ImportOptions {
 	format?: string;
 	// modulePath?: string;
 	destinationFolderId?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	destinationFolder?: any;
+	destinationFolder?: FolderEntity;
 	outputFormat?: ImportModuleOutputFormat;
 
 	// Only supported by some importers.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Importer/Exporter signatures share this options bag; the export side passes ExportProgressState here. Narrowing would force a discriminated union across both directions
 	onProgress?: (progressState: any, progress?: any)=> void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	onError?: (error: any)=> void;
+	onError?: (error: Error)=> void;
 	domParser?: DOMParser;
 	xmlSerializer?: XMLSerializer;
 

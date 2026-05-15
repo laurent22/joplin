@@ -1,6 +1,6 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree, expectNotThrow, createNote } from '../utils/testing/testUtils';
 import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
-import { ShareType } from '../services/database/types';
+import { Change2, ChangeType, ShareType } from '../services/database/types';
 import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept, updateItemShareId } from '../utils/testing/shareApiUtils';
 import { withWarningSilenced } from '@joplin/lib/testing/test-utils';
 
@@ -340,6 +340,34 @@ describe('ShareModel', () => {
 
 		const updatedNote = await models().item().load(note.id);
 		expect(updatedNote.owner_id).toBe(session2.user_id);
+	});
+
+	test('should add create/delete changes when an item is moved out of a share', async () => {
+		const { note, session2, session1 } = await createShareWithNoteOwnedByRecipient();
+		await models().share().updateSharedItems3();
+
+		const greatestCounterBefore = (await models().change().all())
+			.map(c => c.counter)
+			.reduce((a, b) => Math.max(a, b));
+		const isNewChange = (change: Change2) => change.counter > greatestCounterBefore;
+
+		// Move out of the share
+		await updateItemShareId(session2, note.id, '');
+		await models().share().updateSharedItems3();
+
+		const itemChanges = (await models().change().all())
+			.filter(change => change.item_id === note.id)
+			// Exclude all changes from before the item was moved out of the share
+			.filter(isNewChange)
+			.sort((a, b) => a.counter - b.counter);
+		const changesOfType = (type: ChangeType) => itemChanges.filter(c => c.type === type);
+
+		// Should delete the item for the other share participant
+		expect(changesOfType(ChangeType.Delete)).toMatchObject([
+			{ user_id: session1.user_id },
+		]);
+		// Should not need to create the item, since it wasn't moved into a new share:
+		expect(changesOfType(ChangeType.Create)).toHaveLength(0);
 	});
 
 	// linkedNoteShareUrl: R=0, I=0, P=ε → O=N

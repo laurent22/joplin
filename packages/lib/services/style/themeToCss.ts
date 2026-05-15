@@ -1,9 +1,8 @@
 import { Theme } from '../../themes/type';
 const { camelCaseToDash, formatCssSize } = require('../../string-utils');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const isColor = (v: any) => {
-	return v && typeof v === 'object' && ('color' in v) && ('model' in v) && ('valpha' in v);
+const isColor = (v: unknown): v is { color: unknown; model: unknown; valpha: unknown } => {
+	return !!v && typeof v === 'object' && ('color' in v) && ('model' in v) && ('valpha' in v);
 };
 
 export default function(theme: Theme) {
@@ -13,8 +12,7 @@ export default function(theme: Theme) {
 	const names = Object.keys(theme).sort();
 
 	for (const name of names) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const value = (theme as any)[name];
+		const value = (theme as unknown as Record<string, unknown>)[name];
 
 		if (typeof value === 'object' && !isColor(value)) continue;
 		if (value === undefined || value === null) continue;

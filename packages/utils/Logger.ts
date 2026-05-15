@@ -22,10 +22,9 @@ type FormatFunction = (level: LogLevel, targetPrefix?: string)=> string;
 
 interface TargetOptions {
 	level?: LogLevel;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- DB driver: typing it tightly leaks through lastEntries() to all callers reading row fields via `any`-driven access. Refactoring those callers is out of scope.
 	database?: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	console?: any;
+	console?: Console;
 	prefix?: string;
 	path?: string;
 	source?: string;
@@ -120,14 +119,12 @@ class Logger {
 			// statement comes from.
 
 			console.warn('Logger: Trying to access globalLogger, but it has not been initialized. Make sure that initializeGlobalLogger() has been called before logging. Will use the console as fallback.');
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const output: any = {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				log: (level: LogLevel, prefix: string, ...object: any[]) => {
+			const output = {
+				log: (level: LogLevel, prefix: string, ...object: unknown[]) => {
 					// eslint-disable-next-line no-console
 					console.info(`[UNINITIALIZED GLOBAL LOGGER] ${this.levelIdToString(level)}: ${prefix}:`, object);
 				},
-			};
+			} as Logger;
 			return output;
 
 			// throw new Error('Global logger has not been initialized!!');
@@ -137,14 +134,10 @@ class Logger {
 
 	public static create(prefix: string, logger: Logger|null = null): LoggerWrapper {
 		return {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			debug: (...object: any[]) => (logger ?? this.globalLogger).log(LogLevel.Debug, prefix, ...object),
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			info: (...object: any[]) => (logger ?? this.globalLogger).log(LogLevel.Info, prefix, ...object),
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			warn: (...object: any[]) => (logger ?? this.globalLogger).log(LogLevel.Warn, prefix, ...object),
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			error: (...object: any[]) => (logger ?? this.globalLogger).log(LogLevel.Error, prefix, ...object),
+			debug: (...object: unknown[]) => (logger ?? this.globalLogger).log(LogLevel.Debug, prefix, ...object),
+			info: (...object: unknown[]) => (logger ?? this.globalLogger).log(LogLevel.Info, prefix, ...object),
+			warn: (...object: unknown[]) => (logger ?? this.globalLogger).log(LogLevel.Warn, prefix, ...object),
+			error: (...object: unknown[]) => (logger ?? this.globalLogger).log(LogLevel.Error, prefix, ...object),
 		};
 	}
 
@@ -166,15 +159,13 @@ class Logger {
 		const target = { type: type };
 		for (const n in options) {
 			if (!options.hasOwnProperty(n)) continue;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			(target as any)[n] = (options as any)[n];
+			(target as Record<string, unknown>)[n] = (options as unknown as Record<string, unknown>)[n];
 		}
 
 		this.targets_.push(target);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public objectToString(object: any) {
+	public objectToString(object: unknown) {
 		let output = '';
 
 		if (Array.isArray(object)) {
@@ -195,25 +186,23 @@ class Logger {
 			output = '<false>';
 		} else if (typeof object === 'object') {
 			if (object instanceof Error) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				object = object as any;
-				output = object.toString();
-				if (object.code) output += `\nCode: ${object.code}`;
-				if (object.headers) output += `\nHeader: ${JSON.stringify(object.headers)}`;
-				if (object.request) output += `\nRequest: ${object.request.substr ? object.request.substr(0, 1024) : ''}`;
-				if (object.stack) output += `\n${object.stack}`;
+				const errorObj = object as Error & { code?: unknown; headers?: unknown; request?: { substr?: (start: number, length: number)=> string } };
+				output = errorObj.toString();
+				if (errorObj.code) output += `\nCode: ${errorObj.code}`;
+				if (errorObj.headers) output += `\nHeader: ${JSON.stringify(errorObj.headers)}`;
+				if (errorObj.request) output += `\nRequest: ${errorObj.request.substr ? errorObj.request.substr(0, 1024) : ''}`;
+				if (errorObj.stack) output += `\n${errorObj.stack}`;
 			} else {
 				output = JSON.stringify(object);
 			}
 		} else {
-			output = object.toString();
+			output = (object as { toString(): string }).toString();
 		}
 
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public objectsToString(...object: any[]) {
+	public objectsToString(...object: unknown[]) {
 		const output = [];
 		for (let i = 0; i < object.length; i++) {
 			output.push(this.objectToString(object[i]));
@@ -294,8 +283,7 @@ class Logger {
 				if (level === LogLevel.Warn) fn = 'warn';
 				if (level === LogLevel.Info) fn = 'info';
 				const consoleObj = target.console ? target.console : console;
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				let items: any[] = [];
+				let items: unknown[] = [];
 
 				if (target.format) {
 					const format = typeof target.format === 'string' ? target.format : target.format(level, targetPrefix);
@@ -314,7 +302,7 @@ class Logger {
 					items = [`${prefixItems.join(': ')}:` as unknown].concat(...object);
 				}
 
-				consoleObj[fn](...items);
+				(consoleObj as unknown as Record<string, (...args: unknown[])=> void>)[fn](...items);
 			} else if (target.type === 'file') {
 				logLine = this.logInfoToString(level, targetPrefix, ...object);
 
@@ -372,20 +360,16 @@ class Logger {
 		return;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public error(...object: any[]) {
+	public error(...object: unknown[]) {
 		return this.log(LogLevel.Error, null, ...object);
 	}
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public warn(...object: any[]) {
+	public warn(...object: unknown[]) {
 		return this.log(LogLevel.Warn, null, ...object);
 	}
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public info(...object: any[]) {
+	public info(...object: unknown[]) {
 		return this.log(LogLevel.Info, null, ...object);
 	}
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public debug(...object: any[]) {
+	public debug(...object: unknown[]) {
 		return this.log(LogLevel.Debug, null, ...object);
 	}
 

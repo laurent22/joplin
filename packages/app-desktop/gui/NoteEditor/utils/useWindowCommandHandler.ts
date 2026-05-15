@@ -1,4 +1,4 @@
-import { RefObject, Dispatch, SetStateAction, useEffect } from 'react';
+import { MutableRefObject, RefObject, Dispatch, SetStateAction, useEffect } from 'react';
 import { WindowCommandDependencies, NoteBodyEditorRef, OnChangeEvent, ScrollOptionTypes } from './types';
 import editorCommandDeclarations, { enabledCondition } from '../editorCommandDeclarations';
 import CommandService, { CommandDeclaration, CommandRuntime, CommandContext, RegisteredRuntime } from '@joplin/lib/services/CommandService';
@@ -22,8 +22,7 @@ interface HookDependencies {
 	setShowLocalSearch: Dispatch<SetStateAction<boolean>>;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	dispatch: Function;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	noteSearchBarRef: any;
+	noteSearchBarRef: MutableRefObject<HTMLInputElement | null>;
 	editorRef: RefObject<NoteBodyEditorRef>;
 	titleInputRef: RefObject<HTMLInputElement>;
 	onBodyChange: OnBodyChange;
@@ -36,8 +35,7 @@ function editorCommandRuntime(
 	onBodyChange: OnBodyChange,
 ): CommandRuntime {
 	return {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		execute: async (_context: CommandContext, ...args: any[]) => {
+		execute: async (_context: CommandContext, ...args: unknown[]) => {
 			if (!editorRef.current) {
 				reg.logger().warn('Received command, but editor is gone', declaration.name);
 				return;

@@ -20,6 +20,7 @@ import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import emptyTrash from '@joplin/lib/services/trash/emptyTrash';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { DialogContext } from './DialogManager';
+import { PromptButtonSpec } from './DialogManager/types';
 import { TextStyle, ViewStyle } from 'react-native';
 import { StateDecryptionWorker, StateResourceFetcher } from '@joplin/lib/reducer';
 import useOnLongPressProps from '../utils/hooks/useOnLongPressProps';
@@ -33,7 +34,7 @@ interface Props {
 	themeId: number;
 	dispatch: Dispatch;
 	collapsedFolderIds: string[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- syncReport is typed as `any` in @joplin/lib/reducer and in `Synchronizer.reportToLines`; tightening here would require updating the lib type first
 	syncReport: any;
 	decryptionWorker: StateDecryptionWorker;
 	resourceFetcher: StateResourceFetcher;
@@ -348,8 +349,7 @@ const SideMenuContentComponent = (props: Props) => {
 
 		const folder = folderOrAll as FolderEntity;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const menuItems: any[] = [];
+		const menuItems: PromptButtonSpec[] = [];
 
 		if (folder && folder.id === getConflictFolderId()) return;
 

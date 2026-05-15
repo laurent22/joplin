@@ -7,8 +7,10 @@ export type DatabaseCloseOptions = DatabaseOptions;
 
 export type SqlSelectParams = (string|number|boolean)[];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code from before rule was applied
-export type SelectResult = any;
+// SQLite driver results are heterogeneous: selectOne returns a single row object,
+// selectAll returns an array of row objects, and rows have arbitrary column shapes.
+// Callers narrow further via the underlying model entity types.
+export type SelectResult = unknown;
 
 interface DatabaseDriver {
 	open(options: DatabaseOpenOptions): Promise<void>;

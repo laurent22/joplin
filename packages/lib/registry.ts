@@ -1,4 +1,5 @@
 import Logger from '@joplin/utils/Logger';
+import JoplinDatabase from './JoplinDatabase';
 import Setting from './models/Setting';
 import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
@@ -7,21 +8,17 @@ import Synchronizer from './Synchronizer';
 
 class Registry {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous: each sync target subclass adds methods (e.g. OneDrive .api(), JoplinServer .driver()) accessed by callers
 	private syncTargets_: any = {};
 	private logger_: Logger = null;
 	private schedSyncCalls_: boolean[] = [];
 	private waitForReSyncCalls_: boolean[] = [];
 	private setupRecurrentCalls_: boolean[] = [];
 	private timerCallbackCalls_: boolean[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private showErrorMessageBoxHandler_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private scheduleSyncId_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private recurrentSyncId_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private db_: any;
+	private showErrorMessageBoxHandler_: (message: string)=> void;
+	private scheduleSyncId_: ReturnType<typeof shim.setTimeout> = null;
+	private recurrentSyncId_: ReturnType<typeof shim.setInterval> = null;
+	private db_: JoplinDatabase;
 	private isOnMobileData_ = false;
 	private dispatch_: Dispatch = (() => {}) as Dispatch;
 
@@ -38,8 +35,7 @@ class Registry {
 		this.logger_ = l;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setShowErrorMessageBoxHandler(v: any) {
+	public setShowErrorMessageBoxHandler(v: (message: string)=> void) {
 		this.showErrorMessageBoxHandler_ = v;
 	}
 
@@ -117,7 +113,7 @@ class Registry {
 		}
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- syncOptions passes through to Synchronizer.start(options: any); tightening would diverge from the underlying signature
 	public scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck = false) => {
 		this.schedSyncCalls_.push(true);
 
@@ -125,8 +121,7 @@ class Registry {
 			if (delay === null) delay = this.defaultScheduleInterval();
 			if (syncOptions === null) syncOptions = {};
 
-			// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-			let promiseResolve: Function = null;
+			let promiseResolve: ((value?: unknown)=> void) = null;
 			const promise = new Promise((resolve) => {
 				promiseResolve = resolve;
 			});
@@ -208,8 +203,7 @@ class Registry {
 							this.logger().info('Starting scheduled sync');
 							const options = { ...syncOptions, context: context };
 							if (!options.saveContextHandler) {
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-								options.saveContextHandler = (newContext: any) => {
+								options.saveContextHandler = (newContext: unknown) => {
 									Setting.setValue(contextKey, JSON.stringify(newContext));
 								};
 							}
@@ -282,8 +276,7 @@ class Registry {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setDb = (v: any) => {
+	public setDb = (v: JoplinDatabase) => {
 		this.db_ = v;
 	};
 

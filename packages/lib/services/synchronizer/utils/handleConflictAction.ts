@@ -4,12 +4,12 @@ import BaseItem from '../../../models/BaseItem';
 import ItemChange from '../../../models/ItemChange';
 import Note from '../../../models/Note';
 import Resource from '../../../models/Resource';
+import { BaseItemEntity } from '../../database/types';
 import { SyncAction, conflictActions } from './types';
 
 const logger = Logger.create('handleConflictAction');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExists: boolean, remoteContent: any, local: any, syncTargetId: number, itemIsReadOnly: boolean, dispatch: Dispatch) => {
+export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExists: boolean, remoteContent: BaseItemEntity, local: BaseItemEntity, syncTargetId: number, itemIsReadOnly: boolean, dispatch: Dispatch) => {
 	if (!conflictActions.includes(action)) return;
 
 	logger.debug(`Handling conflict: ${action}`);

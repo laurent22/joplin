@@ -152,6 +152,10 @@ export default class TaskService extends BaseService {
 	}
 
 	private taskDisplayString(id: TaskId): string {
+		// If a task is no longer registered, but was in the past, we might still attempt to
+		// create a display string for it:
+		if (!(id in this.tasks_)) return `#${id} (unknown)`;
+
 		const task = this.taskById(id);
 		return `#${task.id} (${task.description})`;
 	}

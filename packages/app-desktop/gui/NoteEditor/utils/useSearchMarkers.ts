@@ -8,8 +8,7 @@ interface SearchMarkersOptions {
 }
 
 export interface SearchMarkers {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	keywords: any[];
+	keywords: { value: string; type?: string; accuracy?: string }[];
 	options: SearchMarkersOptions;
 }
 
@@ -25,7 +24,7 @@ function defaultSearchMarkers(): SearchMarkers {
 }
 
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Function type matches the original signature; any[] matches the lib reducer's searches shape and the heterogeneous highlightedWords shape (string[] at the call site, keyword shapes inside)
 export default function useSearchMarkers(showLocalSearch: boolean, localSearchMarkerOptions: Function, searches: any[], selectedSearchId: string, highlightedWords: any[] = []) {
 	return useMemo((): SearchMarkers => {
 		if (showLocalSearch) return localSearchMarkerOptions();
