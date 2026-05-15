@@ -1301,7 +1301,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 					subType: SettingItemSubType.FontFamily,
 				},
 		'editor.mobile.defaultEditState': {
-			value: 'last',
+			value: 'view',
 			type: SettingItemType.String,
 			isEnum: true,
 			section: 'editor',
