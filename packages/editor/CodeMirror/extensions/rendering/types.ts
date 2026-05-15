@@ -23,6 +23,10 @@ export interface ReplacementExtension {
 
 	// Allows specifying custom logic to refresh all decorations associated with the extension
 	shouldFullReRender?: (transaction: Transaction)=> boolean;
+
+	// Treat the decorated ranges as atomic for cursor motion, so arrow keys
+	// jump over them rather than landing inside the replaced range.
+	atomic?: boolean;
 }
 
 export interface RenderedContentContext {

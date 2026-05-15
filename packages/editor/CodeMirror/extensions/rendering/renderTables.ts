@@ -873,6 +873,7 @@ const renderTables = [
 	}),
 	makeBlockReplaceExtension({
 		hideWhenContainsSelection: false,
+		atomic: true,
 		createDecoration: (node: SyntaxNodeRef, state: EditorState) => {
 			if (node.name !== 'TableHeader') return null;
 			const startLine = state.doc.lineAt(node.from);
