@@ -28,6 +28,56 @@ const CTX = 'cm-tw-ctx';
 // heights correctly for scroll position and coordinate mapping.
 const tableHeightCache = new Map<string, number>();
 
+// Render a small subset of inline markdown into DOM children appended to
+// `parent`. Supports: **bold**, *italic* / _italic_, `code`, ~~strike~~,
+// [label](url), and literal <br> as a line break. Escaped pipes (\|) are
+// shown as plain |. Anything not matched is emitted as plain text, so
+// untrusted input cannot inject HTML.
+export const renderInlineMarkdown = (parent: HTMLElement, text: string) => {
+	const doc = parent.ownerDocument;
+	// Normalise: escaped pipes → |, and split on literal <br> for soft breaks.
+	const normalised = text.replace(/\\\|/g, '|');
+	const segments = normalised.split(/<br\s*\/?>/i);
+	for (let s = 0; s < segments.length; s++) {
+		if (s > 0) parent.appendChild(doc.createElement('br'));
+		const segment = segments[s];
+		// Single regex with alternatives, scanned left-to-right. Each branch
+		// captures its inner content.
+		const re = /\*\*([^*]+)\*\*|__([^_]+)__|\*([^*]+)\*|_([^_]+)_|`([^`]+)`|~~([^~]+)~~|\[([^\]]+)\]\(([^)\s]+)\)/g;
+		let lastIdx = 0;
+		let m: RegExpExecArray | null;
+		while ((m = re.exec(segment)) !== null) {
+			if (m.index > lastIdx) {
+				parent.appendChild(doc.createTextNode(segment.slice(lastIdx, m.index)));
+			}
+			let node: HTMLElement;
+			if (m[1] !== undefined || m[2] !== undefined) {
+				node = doc.createElement('strong');
+				node.textContent = (m[1] ?? m[2])!;
+			} else if (m[3] !== undefined || m[4] !== undefined) {
+				node = doc.createElement('em');
+				node.textContent = (m[3] ?? m[4])!;
+			} else if (m[5] !== undefined) {
+				node = doc.createElement('code');
+				node.textContent = m[5];
+			} else if (m[6] !== undefined) {
+				node = doc.createElement('del');
+				node.textContent = m[6];
+			} else {
+				const a = doc.createElement('a');
+				a.textContent = m[7]!;
+				a.setAttribute('href', m[8]!);
+				node = a;
+			}
+			parent.appendChild(node);
+			lastIdx = m.index + m[0].length;
+		}
+		if (lastIdx < segment.length) {
+			parent.appendChild(doc.createTextNode(segment.slice(lastIdx)));
+		}
+	}
+};
+
 class TableWidget extends WidgetType {
 	public constructor(
 		private tableText: string,
@@ -123,23 +173,35 @@ class TableWidget extends WidgetType {
 		let scrollbarDragging = false;
 		let lastFocusedTextDiv: HTMLElement | null = null;
 
-		// Sync all dirty cells back to the table model (without dispatching).
-		// Must be called before any structural apply() so edits are not lost.
+		// Debounced dispatch so the document source stays in sync with cell
+		// edits — important so the preview pane reflects in-cell changes
+		// (e.g. deleting an image) without waiting for blur or a structural
+		// edit. Cleared whenever a structural apply() happens.
+		let liveSyncTimer: number | null = null;
+		const cancelLiveSync = () => {
+			if (liveSyncTimer !== null) {
+				win.clearTimeout(liveSyncTimer);
+				liveSyncTimer = null;
+			}
+		};
+
+		// Sync the focused cell's current text into the table model. Other
+		// cells are kept in sync continuously via their oninput handler, so
+		// this is just a final read of whichever cell is being edited right
+		// now. Reading textContent of an unfocused cell would be wrong —
+		// rendered cells have stripped markdown markers (** etc).
 		const syncDirtyCells = () => {
+			const active = doc.activeElement as HTMLElement | null;
+			if (!active || !active.classList.contains('cm-tw-text')) return;
+			if (!container.contains(active)) return;
 			for (let ri = 0; ri < allCells.length; ri++) {
 				for (let ci = 0; ci < allCells[ri].length; ci++) {
 					const td = allCells[ri][ci].querySelector('.cm-tw-text') as HTMLElement;
-					if (!td) continue;
-					// Sanitise: newlines → <br>, pipes → escaped
+					if (td !== active) continue;
 					const v = (td.textContent || '').trim().replace(/\n/g, '<br>').replace(/\|/g, '\\|');
 					const isH = ri === 0;
-					const orig = isH
-						? table.header.cells[ci]?.content
-						: table.body[ri - 1]?.cells[ci]?.content;
-					if (v !== orig) {
-						if (isH) table.header.cells[ci].content = v;
-						else if (ri - 1 < table.body.length) table.body[ri - 1].cells[ci].content = v;
-					}
+					if (isH) table.header.cells[ci].content = v;
+					else if (ri - 1 < table.body.length) table.body[ri - 1].cells[ci].content = v;
 				}
 			}
 		};
@@ -155,12 +217,113 @@ class TableWidget extends WidgetType {
 			textDiv.classList.add('cm-tw-text');
 			textDiv.contentEditable = 'true';
 			textDiv.spellcheck = false;
-			// Display unescaped text — escaped pipes (\|) are shown as plain |
-			textDiv.textContent = text.replace(/\\\|/g, '|');
+			// When not focused, show rendered inline markdown. On focus we
+			// swap to the raw source so the user edits the markdown text.
+			renderInlineMarkdown(textDiv, text);
 
-			// Sync CM cursor to this cell so toolbar commands work
+			// Push this cell's current edit-mode text into the table model.
+			// Called on every input so the model stays in sync even if a
+			// rebuild is triggered by an external event (image paste, toolbar
+			// command, etc.) before the deferred blur handler runs.
+			const pushToModel = () => {
+				const v = (textDiv.textContent || '').trim()
+					.replace(/\n/g, '<br>').replace(/\|/g, '\\|');
+				if (isHdr) table.header.cells[c].content = v;
+				else if (r - 1 < table.body.length) table.body[r - 1].cells[c].content = v;
+			};
+
+			// Caret position within the focused cell, as a plain offset into
+			// textContent — robust across the rebuild that follows a dispatch.
+			const caretOffset = (): number => {
+				const sel = win.getSelection();
+				if (!sel || sel.rangeCount === 0) return 0;
+				const range = sel.getRangeAt(0);
+				if (!textDiv.contains(range.endContainer)) return 0;
+				const pre = range.cloneRange();
+				pre.selectNodeContents(textDiv);
+				pre.setEnd(range.endContainer, range.endOffset);
+				return pre.toString().length;
+			};
+
+			const scheduleLiveSync = () => {
+				pushToModel();
+				cancelLiveSync();
+				const offset = caretOffset();
+				liveSyncTimer = win.setTimeout(() => {
+					liveSyncTimer = null;
+					if (!container.isConnected) return;
+					const newText = serializeTable(table);
+					if (newText === this.tableText) return;
+					this.apply(view, table);
+					// Rebuild discards this DOM — locate the same cell in the
+					// new widget and restore focus + caret.
+					requestAnimationFrame(() => {
+						const newC = this.findContainer(view);
+						const cells = newC?.querySelectorAll('.cm-tw-text');
+						const idx = r * numCols + c;
+						const target = cells && idx < cells.length ? cells[idx] as HTMLElement : null;
+						if (!target) return;
+						focus('TableWidget', target);
+						// Caret restoration: put it `offset` characters into
+						// the cell's text content.
+						const sel = win.getSelection();
+						if (!sel) return;
+						const range = doc.createRange();
+						let remaining = offset;
+						const walker = doc.createTreeWalker(target, 4 /* SHOW_TEXT */);
+						let placed = false;
+						let node = walker.nextNode();
+						while (node) {
+							const len = node.nodeValue?.length ?? 0;
+							if (remaining <= len) {
+								range.setStart(node, remaining);
+								range.collapse(true);
+								placed = true;
+								break;
+							}
+							remaining -= len;
+							node = walker.nextNode();
+						}
+						if (!placed) {
+							range.selectNodeContents(target);
+							range.collapse(false);
+						}
+						sel.removeAllRanges();
+						sel.addRange(range);
+					});
+				}, 500);
+			};
+
+			textDiv.oninput = scheduleLiveSync;
+			// Some browsers do not fire `input` reliably when non-text nodes
+			// (e.g. <img>) are removed via Backspace inside contentEditable.
+			// A MutationObserver catches DOM-level changes that `input` misses.
+			const mo = new win.MutationObserver(() => {
+				if (doc.activeElement === textDiv) scheduleLiveSync();
+			});
+			mo.observe(textDiv, { childList: true, characterData: true, subtree: true });
+
+			// Sync CM cursor to this cell so toolbar commands work, and
+			// swap the rendered DOM for the raw markdown source for editing.
 			textDiv.onfocus = () => {
 				lastFocusedTextDiv = textDiv;
+				// Replace formatted DOM with raw text. Use the current model
+				// entry rather than the stale `text` closure so that edits
+				// to other cells in this table are reflected.
+				const src = isHdr
+					? table.header.cells[c]?.content ?? ''
+					: table.body[r - 1]?.cells[c]?.content ?? '';
+				textDiv.textContent = src.replace(/\\\|/g, '|');
+				// Place caret at end so typing appends (matches prior behaviour
+				// where cells started empty of selection).
+				const sel = doc.defaultView!.getSelection();
+				if (sel) {
+					const range = doc.createRange();
+					range.selectNodeContents(textDiv);
+					range.collapse(false);
+					sel.removeAllRanges();
+					sel.addRange(range);
+				}
 				const tableRange = {
 					from: this.from,
 					to: this.to,
@@ -176,6 +339,7 @@ class TableWidget extends WidgetType {
 
 			textDiv.onblur = () => {
 				if (skipBlurSync) { skipBlurSync = false; return; }
+				cancelLiveSync();
 				// Defer sync so that a click on another cell in the same
 				// table can register before the widget rebuilds.
 				setTimeout(() => {
@@ -187,20 +351,29 @@ class TableWidget extends WidgetType {
 					const orig = isHdr
 						? table.header.cells[c]?.content
 						: table.body[r - 1]?.cells[c]?.content;
-					if (v === orig) return;
-					// If focus moved to another cell in this table, just
-					// update the in-memory model — no dispatch/rebuild.
-					// The markdown will sync on next structural edit or
-					// when focus leaves the table entirely.
-					if (scrollbarDragging || container.contains(doc.activeElement)) {
-						const sanitised = v.replace(/\n/g, '<br>').replace(/\|/g, '\\|');
-						if (isHdr) table.header.cells[c].content = sanitised;
-						else if (r - 1 < table.body.length) table.body[r - 1].cells[c].content = sanitised;
-					} else {
-						// Focus left the table — sync all dirty cells to markdown
-						syncDirtyCells();
-						this.apply(view, table);
+					const changed = v !== orig;
+					if (changed) {
+						// If focus moved to another cell in this table, just
+						// update the in-memory model — no dispatch/rebuild.
+						// The markdown will sync on next structural edit or
+						// when focus leaves the table entirely.
+						if (scrollbarDragging || container.contains(doc.activeElement)) {
+							const sanitised = v.replace(/\n/g, '<br>').replace(/\|/g, '\\|');
+							if (isHdr) table.header.cells[c].content = sanitised;
+							else if (r - 1 < table.body.length) table.body[r - 1].cells[c].content = sanitised;
+						} else {
+							// Focus left the table — sync to markdown and rebuild.
+							// The rebuild discards this DOM, so no swap-back needed.
+							this.apply(view, table);
+							return;
+						}
 					}
+					// Swap raw text back to rendered markdown view.
+					const src = isHdr
+						? table.header.cells[c]?.content ?? ''
+						: table.body[r - 1]?.cells[c]?.content ?? '';
+					textDiv.textContent = '';
+					renderInlineMarkdown(textDiv, src);
 				}, 80);
 			};
 
@@ -215,6 +388,7 @@ class TableWidget extends WidgetType {
 					e.stopPropagation();
 
 					skipBlurSync = true;
+					cancelLiveSync();
 
 					// Sync all dirty cells into the table model first
 					syncDirtyCells();
@@ -260,6 +434,7 @@ class TableWidget extends WidgetType {
 				} else if (e.key === 'Enter' && !e.shiftKey) {
 					e.preventDefault();
 					skipBlurSync = true;
+					cancelLiveSync();
 					syncDirtyCells();
 					if (r === totalRows - 1 && c === numCols - 1) {
 						this.apply(view, addRow(table, numBodyRows - 1));

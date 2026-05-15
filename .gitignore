@@ -1088,6 +1088,7 @@ packages/editor/CodeMirror/extensions/overwriteModeExtension.js
 packages/editor/CodeMirror/extensions/rendering/addFormattingClasses.js
 packages/editor/CodeMirror/extensions/rendering/renderBlockImages.test.js
 packages/editor/CodeMirror/extensions/rendering/renderBlockImages.js
+packages/editor/CodeMirror/extensions/rendering/renderTables.test.js
 packages/editor/CodeMirror/extensions/rendering/renderTables.js
 packages/editor/CodeMirror/extensions/rendering/renderingExtension.js
 packages/editor/CodeMirror/extensions/rendering/replaceBackslashEscapes.js
