@@ -89,8 +89,7 @@ describe('models/Revision', () => {
 
 		for (const t of testCases) {
 			const [expected, input] = t;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			expect(Revision.isEmptyRevision(input as any)).toBe(expected);
+			expect(Revision.isEmptyRevision(input as RevisionEntity)).toBe(expected);
 		}
 	});
 

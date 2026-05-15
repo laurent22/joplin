@@ -55,15 +55,13 @@ describe('Synchronizer.conflicts', () => {
 		for (const n in conflictedNote) {
 			if (!conflictedNote.hasOwnProperty(n)) continue;
 			if (n === 'id' || n === 'is_conflict' || n === 'conflict_original_id') continue;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			expect(conflictedNote[n]).toBe((note2conf as any)[n]);
+			expect((conflictedNote as Record<string, unknown>)[n]).toBe((note2conf as Record<string, unknown>)[n]);
 		}
 
 		const noteUpdatedFromRemote = await Note.load(note1.id);
 		for (const n in noteUpdatedFromRemote) {
 			if (!noteUpdatedFromRemote.hasOwnProperty(n)) continue;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			expect((noteUpdatedFromRemote as any)[n]).toBe((note2 as any)[n]);
+			expect((noteUpdatedFromRemote as Record<string, unknown>)[n]).toBe((note2 as Record<string, unknown>)[n]);
 		}
 	}));
 

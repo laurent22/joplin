@@ -1,10 +1,11 @@
 /* eslint-disable multiline-comment-style */
 
 import Plugin from '../Plugin';
+import { PluginStore } from '../ViewController';
 import { ModelType } from '../../../BaseModel';
 import eventManager, { EventName } from '../../../eventManager';
 import Setting from '../../../models/Setting';
-import { FolderEntity } from '../../database/types';
+import { FolderEntity, NoteEntity } from '../../database/types';
 import makeListener from '../utils/makeListener';
 import { Disposable, EditContextMenuFilterObject, FilterHandler } from './types';
 
@@ -67,12 +68,10 @@ type ResourceChangeHandler = WorkspaceEventHandler<ResourceChangeEvent>;
  * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins)
  */
 export default class JoplinWorkspace {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private store: any;
+	private store: PluginStore;
 	private plugin: Plugin;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(plugin: Plugin, store: any) {
+	public constructor(plugin: Plugin, store: PluginStore) {
 		this.store = store;
 		this.plugin = plugin;
 	}
@@ -113,8 +112,7 @@ export default class JoplinWorkspace {
 	 * Called when the content of the current note changes.
 	 */
 	public async onNoteChange(handler: ItemChangeHandler): Promise<Disposable> {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const wrapperHandler = (event: any) => {
+		const wrapperHandler = (event: { itemType: ModelType; itemId: string; eventType: number }) => {
 			if (event.itemType !== ModelType.Note) return;
 			if (!this.store.getState().selectedNoteIds.includes(event.itemId)) return;
 
@@ -174,8 +172,7 @@ export default class JoplinWorkspace {
 	 *
 	 * On desktop, this returns the selected note in the focused window.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async selectedNote(): Promise<any> {
+	public async selectedNote(): Promise<NoteEntity | null> {
 		const noteIds = this.store.getState().selectedNoteIds;
 		if (noteIds.length !== 1) { return null; }
 		return Note.load(noteIds[0]);

@@ -42,8 +42,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 
 				true;`);
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			postMessage(message: any) {
+			postMessage(message: unknown) {
 				webviewRef.current.postMessage(JSON.stringify(message));
 			},
 		};
@@ -116,14 +115,15 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	return (
 		<WebView
 			key={`webview-${reloadCounter}`}
-			style={{
-				// `backgroundColor: transparent` prevents a white fhash on iOS.
-				// It seems that `backgroundColor: theme.backgroundColor` does not
-				// prevent the flash.
-				backgroundColor: 'transparent',
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				...(props.style as any),
-			}}
+			style={[
+				{
+					// `backgroundColor: transparent` prevents a white fhash on iOS.
+					// It seems that `backgroundColor: theme.backgroundColor` does not
+					// prevent the flash.
+					backgroundColor: 'transparent',
+				},
+				props.style,
+			]}
 			ref={webviewRef}
 			scrollEnabled={props.scrollEnabled}
 			useWebKit={true}

@@ -1,10 +1,9 @@
 import { MenuItem, MenuItemLocation } from './api/types';
-import ViewController from './ViewController';
+import ViewController, { PluginStore } from './ViewController';
 
 export default class MenuController extends ViewController {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(id: string, pluginId: string, store: any, label: string, menuItems: MenuItem[], location: MenuItemLocation) {
+	public constructor(id: string, pluginId: string, store: PluginStore, label: string, menuItems: MenuItem[], location: MenuItemLocation) {
 		super(id, pluginId, store);
 
 		this.store.dispatch({

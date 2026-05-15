@@ -1,17 +1,16 @@
+import { type RefObject } from 'react';
 import shim from '../shim';
 const { useEffect, useRef } = shim.react();
 
+type EventHandler = (event: Event)=> void;
+
 function useEventListener(
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	eventName: any,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	handler: any,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	element?: any,
+	eventName: string,
+	handler: EventHandler,
+	element?: RefObject<EventTarget | null>,
 ) {
 	// Create a ref that stores handler
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const savedHandler = useRef<any>(undefined);
+	const savedHandler = useRef<EventHandler | undefined>(undefined);
 
 	useEffect(() => {
 		// Define the listening target

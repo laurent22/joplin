@@ -14,7 +14,7 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import * as jsdom from 'jsdom';
 import setupAppContext from '../setupAppContext';
-import { ApiError } from '../errors';
+import { ApiError, ErrorCode } from '../errors';
 import { getApi, putApi, deleteApi, ExecRequestOptions } from './apiUtils';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -180,7 +180,7 @@ export async function beforeEachDb() {
 export interface AppContextTestOptions {
 	// owner?: User;
 	sessionId?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- httpMocks.RequestOptions is too narrow: callers pass `files: { file: { path: string } }` and free-form `body` objects that the type rejects
 	request?: any;
 	ip?: string;
 	baseAppContext?: AppContext;
@@ -215,8 +215,7 @@ export function msleep(ms: number) {
 
 export const createBaseAppContext = () => {
 	const appLogger = Logger.create('AppTest');
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return setupAppContext({} as any, Env.Dev, db_, dbSlave_, () => appLogger);
+	return setupAppContext({} as unknown as AppContext, Env.Dev, db_, dbSlave_, () => appLogger);
 };
 
 export async function koaAppContext(options: AppContextTestOptions = null): Promise<AppContext> {
@@ -255,7 +254,7 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 
 	// Set type to "any" because the Koa context has many properties and we
 	// don't need to mock all of them.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- The Koa AppContext has many required properties; this test mock only provides a subset and casts to AppContext at return
 	const appContext: any = {
 		joplinBase: baseAppContext.joplinBase,
 		baseAppContext,
@@ -356,13 +355,11 @@ export const createUser = async function(index = 1, isAdmin = false): Promise<Us
 	return models().user().save({ email: `user${index}@localhost`, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function createItemTree(userId: Uuid, parentFolderId: string, tree: any): Promise<void> {
+export async function createItemTree(userId: Uuid, parentFolderId: string, tree: Record<string, unknown>): Promise<void> {
 	const itemModel = models().item();
 
 	for (const jopId in tree) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const children: any = tree[jopId];
+		const children = tree[jopId] as Record<string, unknown> | null;
 		const isFolder = children !== null;
 
 		const newItem: Item = await itemModel.saveForUser(userId, {
@@ -392,8 +389,13 @@ export async function createItemTree(userId: Uuid, parentFolderId: string, tree:
 // 	}
 // }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function createItemTree3(userId: Uuid, parentFolderId: string, shareId: Uuid, tree: any[]): Promise<void> {
+interface ItemTree3Node {
+	id: string;
+	children?: ItemTree3Node[];
+	[key: string]: unknown;
+}
+
+export async function createItemTree3(userId: Uuid, parentFolderId: string, shareId: Uuid, tree: ItemTree3Node[]): Promise<void> {
 	const itemModel = models().item();
 	const user = await models().user().load(userId);
 
@@ -496,8 +498,7 @@ export async function createResource(sessionId: string, resource: ResourceEntity
 
 export function checkContextError(context: AppContext) {
 	if (context.response.status >= 400) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const body: any = context.response?.body || {};
+		const body = (context.response?.body || {}) as { code?: ErrorCode };
 		throw new ApiError(`${context.method} ${context.path} ${JSON.stringify(context.response)}`, context.response.status, body.code);
 	}
 }

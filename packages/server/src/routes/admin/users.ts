@@ -41,29 +41,26 @@ export function checkRepeatPassword(fields: CheckRepeatPasswordInput, required: 
 	return '';
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function boolOrDefaultToValue(fields: any, fieldName: string): number | null {
+function boolOrDefaultToValue(fields: Record<string, unknown>, fieldName: string): number | null {
 	if (fields[fieldName] === '') return null;
 	const output = Number(fields[fieldName]);
 	if (isNaN(output) || (output !== 0 && output !== 1)) throw new Error(`Invalid value for ${fieldName}`);
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function intOrDefaultToValue(fields: any, fieldName: string): number | null {
+function intOrDefaultToValue(fields: Record<string, unknown>, fieldName: string): number | null {
 	if (fields[fieldName] === '') return null;
 	const output = Number(fields[fieldName]);
 	if (isNaN(output)) throw new Error(`Invalid value for ${fieldName}`);
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function makeUser(isNew: boolean, fields: any): User {
+function makeUser(isNew: boolean, fields: Record<string, unknown> & { id?: Uuid }): User {
 	const user: User = {};
 
-	if ('email' in fields) user.email = fields.email;
-	if ('full_name' in fields) user.full_name = fields.full_name;
-	if ('is_admin' in fields) user.is_admin = fields.is_admin;
+	if ('email' in fields) user.email = fields.email as string;
+	if ('full_name' in fields) user.full_name = fields.full_name as string;
+	if ('is_admin' in fields) user.is_admin = fields.is_admin as number;
 	if ('max_item_size' in fields) user.max_item_size = intOrDefaultToValue(fields, 'max_item_size');
 	if ('max_total_item_size' in fields) user.max_total_item_size = intOrDefaultToValue(fields, 'max_total_item_size');
 	if ('can_share_folder' in fields) user.can_share_folder = boolOrDefaultToValue(fields, 'can_share_folder');
@@ -71,7 +68,7 @@ function makeUser(isNew: boolean, fields: any): User {
 	if ('can_upload' in fields) user.can_upload = intOrDefaultToValue(fields, 'can_upload');
 	if ('account_type' in fields) user.account_type = Number(fields.account_type);
 
-	const password = checkRepeatPassword(fields, false);
+	const password = checkRepeatPassword(fields as unknown as CheckRepeatPasswordInput, false);
 	if (password) user.password = password;
 
 	if (!isNew) user.id = fields.id;
@@ -227,8 +224,7 @@ router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 	return view;
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User = null, error: any = null) => {
+router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User = null, error: Error | null = null) => {
 	const owner = ctx.joplin.owner;
 	const isMe = userIsMe(path);
 	const isNew = userIsNew(path);
@@ -304,8 +300,7 @@ router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User 
 
 	if (config().accountTypesEnabled) {
 		view.content.showAccountTypes = true;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		view.content.accountTypes = accountTypeOptions().map((o: any) => {
+		view.content.accountTypes = accountTypeOptions().map((o: { value: number; selected?: boolean }) => {
 			o.selected = user.account_type === o.value;
 			return o;
 		});
@@ -344,7 +339,7 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 		const fields = body.fields as FormFields;
 		const isNew = userIsNew(path);
 		if (userIsMe(path)) fields.id = userId;
-		user = makeUser(isNew, fields);
+		user = makeUser(isNew, fields as unknown as Record<string, unknown> & { id?: Uuid });
 
 		const models = ctx.joplin.models;
 

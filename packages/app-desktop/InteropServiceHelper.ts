@@ -71,8 +71,7 @@ export default class InteropServiceHelper {
 
 			win = bridge().newBrowserWindow(windowOptions);
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			return new Promise<any>((resolve, reject) => {
+			return new Promise<Buffer | null>((resolve, reject) => {
 				win.webContents.on('did-finish-load', () => {
 
 					// did-finish-load will trigger when most assets are done loading, probably
@@ -91,7 +90,7 @@ export default class InteropServiceHelper {
 								await win.webContents.executeJavaScript('document.querySelectorAll(\'details\').forEach(el=>el.setAttribute(\'open\',\'\'))');
 								const data = await win.webContents.printToPDF({
 									...options,
-									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code before rule was applied
+									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- options.pageSize is a string (user setting); Electron's PrintToPDFOptions.pageSize is a stricter union
 									pageSize: options.pageSize as any,
 									// Allows users to override the CSS page size.
 									// See https://github.com/laurent22/joplin/issues/13096
@@ -147,7 +146,7 @@ export default class InteropServiceHelper {
 									resolve(null);
 								}, 1000);
 							} else {
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ExportNoteOptions is broader than Electron's WebContentsPrintOptions; the runtime tolerates the extra fields
 								win.webContents.print(options as any, (success: boolean, reason: string) => {
 									cleanup();
 									if (!success && reason !== 'cancelled') reject(new Error(`Could not print: ${reason}`));

@@ -3,8 +3,13 @@ import { CustomError, CustomErrorCode } from '../../../utils/errors';
 import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import StorageDriverBase from './StorageDriverBase';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function stream2buffer(stream: any): Promise<Buffer> {
+interface ReadableLike {
+	on(event: 'data', listener: (chunk: Uint8Array)=> void): unknown;
+	on(event: 'end', listener: ()=> void): unknown;
+	on(event: 'error', listener: (error: Error)=> void): unknown;
+}
+
+function stream2buffer(stream: ReadableLike): Promise<Buffer> {
 	return new Promise((resolve, reject) => {
 		const buffer: Uint8Array[] = [];
 		let hasError = false;
@@ -19,8 +24,7 @@ function stream2buffer(stream: any): Promise<Buffer> {
 			resolve(Buffer.concat(buffer));
 		});
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		stream.on('error', (error: any) => {
+		stream.on('error', (error: Error) => {
 			if (hasError) return;
 			hasError = true;
 			reject(error);
@@ -61,7 +65,7 @@ export default class StorageDriverS3 extends StorageDriverBase {
 				Key: itemId,
 			}));
 
-			return stream2buffer(response.Body);
+			return stream2buffer(response.Body as ReadableLike);
 		} catch (error) {
 			if (error?.$metadata?.httpStatusCode === 404) throw new CustomError(`No such item: ${itemId}`, CustomErrorCode.NotFound);
 			error.message = `Could not get item "${itemId}": ${error.message}`;

@@ -29,8 +29,7 @@ export default (props: Props) => {
 		return ln && globalKeydownHandlersRef.current[ln - 1] === elementId;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const isInSubModal = (targetElement: any) => {
+	const isInSubModal = (targetElement: EventTarget | null) => {
 		// If we are inside a sub-modal within the dialog, we shouldn't handle
 		// global key events. It can be for example the emoji picker. In general
 		// it's difficult to know whether an element is a modal or not, so we'll

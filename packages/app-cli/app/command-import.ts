@@ -4,7 +4,7 @@ import { ModelType } from '@joplin/lib/BaseModel';
 const { cliUtils } = require('./cli-utils.js');
 import app from './app';
 import { _ } from '@joplin/lib/locale';
-import { ImportOptions } from '@joplin/lib/services/interop/types';
+import { ImportModuleOutputFormat, ImportOptions } from '@joplin/lib/services/interop/types';
 import { unique } from '@joplin/lib/array';
 import Folder from '@joplin/lib/models/Folder';
 
@@ -31,8 +31,7 @@ class Command extends BaseCommand {
 		];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { path: string; 'notebook'?: string; options: { format?: string; outputFormat?: string } }) {
 		let destinationFolder = await app().loadItem(ModelType.Folder, args.notebook);
 
 		if (args.notebook && !destinationFolder) throw new Error(_('Cannot find "%s".', args.notebook));
@@ -65,7 +64,7 @@ class Command extends BaseCommand {
 			this.stdout(s);
 		};
 
-		if (args.options.outputFormat) importOptions.outputFormat = args.options.outputFormat;
+		if (args.options.outputFormat) importOptions.outputFormat = args.options.outputFormat as ImportModuleOutputFormat;
 
 		app().gui().showConsole();
 		this.stdout(_('Importing notes...'));

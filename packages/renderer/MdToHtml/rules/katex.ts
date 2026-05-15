@@ -1,4 +1,8 @@
 import { RuleOptions } from '../../MdToHtml';
+import type * as MarkdownIt from 'markdown-it';
+import type StateInline = require('markdown-it/lib/rules_inline/state_inline');
+import type StateBlock = require('markdown-it/lib/rules_block/state_block');
+import type Token = require('markdown-it/lib/token');
 
 let katex = require('katex');
 const md5 = require('md5');
@@ -8,8 +12,22 @@ const mhchemModule = require('./katex_mhchem.js');
 // to serialize them with json-stringify-safe
 const stringifySafe = require('json-stringify-safe');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function stringifyKatexOptions(options: any) {
+interface KatexMacroToken {
+	text: string;
+}
+
+interface KatexMacro {
+	tokens: KatexMacroToken[];
+	numArgs: number;
+}
+
+interface KatexOptions {
+	macros?: Record<string, string | KatexMacro>;
+	displayMode?: boolean;
+	trust?: boolean;
+}
+
+function stringifyKatexOptions(options: KatexOptions) {
 	if (!options) return '';
 
 	const newOptions = { ...options };
@@ -51,15 +69,13 @@ function stringifyKatexOptions(options: any) {
 	// is created by \begin{align}...\end{align} environments, and doesn't have a "tokens" property.
 
 	if (options.macros) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const toSerialize: any = {};
+		const toSerialize: Record<string, string> = {};
 		for (const k of Object.keys(options.macros)) {
 			const macro = options.macros[k];
 			if (typeof macro === 'string') {
 				toSerialize[k] = `${macro}_string`;
 			} else {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const macroText: string[] = macro.tokens.map((t: any) => t.text);
+				const macroText: string[] = macro.tokens.map(t => t.text);
 				toSerialize[k] = `${macroText.join('')}_${macro.numArgs}`;
 			}
 		}
@@ -108,8 +124,7 @@ function katexStyle() {
 
 // Test if potential opening or closing delimiter
 // Assumes that there is a "$" at state.src[pos]
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function isValidDelim(state: any, pos: number) {
+function isValidDelim(state: StateInline, pos: number) {
 	const max = state.posMax;
 
 	let can_open = true,
@@ -133,8 +148,7 @@ function isValidDelim(state: any, pos: number) {
 	};
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function math_inline(state: any, silent: boolean) {
+function math_inline(state: StateInline, silent: boolean) {
 	let match, token, res, pos;
 
 	if (state.src[state.pos] !== '$') {
@@ -209,8 +223,7 @@ function math_inline(state: any, silent: boolean) {
 	return true;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function math_block(state: any, start: number, end: number, silent: boolean) {
+function math_block(state: StateBlock, start: number, end: number, silent: boolean) {
 	let firstLine,
 		lastLine,
 		next,
@@ -292,8 +305,7 @@ function math_block(state: any, start: number, end: number, silent: boolean) {
 
 const cache_: Record<string, string> = {};
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function renderToStringWithCache(latex: string, katexOptions: any) {
+function renderToStringWithCache(latex: string, katexOptions: KatexOptions) {
 	const cacheKey = md5(escape(latex) + escape(stringifyKatexOptions(katexOptions)));
 	if (cacheKey in cache_) {
 		return cache_[cacheKey];
@@ -310,16 +322,14 @@ function renderToStringWithCache(latex: string, katexOptions: any) {
 }
 
 export default {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	plugin: function(markdownIt: any, options: RuleOptions) {
+	plugin: function(markdownIt: MarkdownIt, options: RuleOptions) {
 		// Keep macros that persist across Katex blocks to allow defining a macro
 		// in one block and re-using it later in other blocks.
 		// https://github.com/laurent22/joplin/issues/1105
 		if (!options.context.userData.__katex) options.context.userData.__katex = { macros: {} };
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const katexOptions: any = {};
-		katexOptions.macros = options.context.userData.__katex.macros;
+		const katexOptions: KatexOptions = {};
+		katexOptions.macros = options.context.userData.__katex.macros as KatexOptions['macros'];
 		katexOptions.trust = true;
 
 		// When targeting inline math, the `containerTag` should be a `span` to prevent issues
@@ -340,8 +350,7 @@ export default {
 			return `<span class="joplin-editable"><span class="joplin-source" hidden data-joplin-language="katex" data-joplin-source-open="$" data-joplin-source-close="$">${markdownIt.utils.escapeHtml(latex)}</span>${outputHtml}</span>`;
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const inlineRenderer = function(tokens: any[], idx: number) {
+		const inlineRenderer = function(tokens: Token[], idx: number) {
 			options.context.pluginWasUsed.katex = true;
 			return katexInline(tokens[idx].content);
 		};
@@ -358,8 +367,7 @@ export default {
 			return `<div class="joplin-editable"><pre class="joplin-source" hidden data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">${markdownIt.utils.escapeHtml(latex)}</pre>${outputHtml}</div>`;
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const blockRenderer = function(tokens: any[], idx: number) {
+		const blockRenderer = function(tokens: Token[], idx: number) {
 			options.context.pluginWasUsed.katex = true;
 			return `${katexBlock(tokens[idx].content)}\n`;
 		};

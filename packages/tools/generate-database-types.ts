@@ -1,12 +1,12 @@
 import { execCommand } from '@joplin/utils';
 import { insertContentIntoFile, rootDir } from './tool-utils';
 import { remove } from 'fs-extra';
+import { Table, Column } from '@rmp135/sql-ts';
 
 const sqlts = require('@rmp135/sql-ts').default;
 const fs = require('fs-extra');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function createRuntimeObject(table: any) {
+function createRuntimeObject(table: Table) {
 	const colStrings = [];
 	for (const col of table.columns) {
 		const name = col.propertyName;
@@ -22,8 +22,7 @@ const stringToSingular = (word: string) => {
 	return word;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const generateListRenderDependencyType = (tables: any[]) => {
+const generateListRenderDependencyType = (tables: Table[]) => {
 	const output: string[] = [];
 
 	for (const table of tables) {
@@ -65,8 +64,8 @@ async function main() {
 
 		const definitions = await sqlts.toObject(sqlTsConfig);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		definitions.tables = definitions.tables.map((t: any) => {
+		definitions.tables = definitions.tables.map((t: Table) => {
+			// Adding the missing Column fields explicitly may change fromObject() output.
 			t.columns.push({
 				nullable: false,
 				name: 'type_',
@@ -75,15 +74,13 @@ async function main() {
 				isEnum: false,
 				propertyName: 'type_',
 				propertyType: 'number',
-			});
+			} as Column);
 
 			return t;
 		});
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		definitions.tables = definitions.tables.map((table: any) => {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			table.columns = table.columns.map((column: any) => {
+		definitions.tables = definitions.tables.map((table: Table) => {
+			table.columns = table.columns.map((column: Column) => {
 				return {
 					...column,
 					optional: true,

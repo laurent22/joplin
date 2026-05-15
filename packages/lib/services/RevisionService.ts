@@ -21,14 +21,10 @@ export default class RevisionService extends BaseService {
 
 	public static instance_: RevisionService;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private changedSinceCollectionCache_: Set<string> = new Set();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private maintenanceCalls_: any[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private maintenanceTimer1_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private maintenanceTimer2_: any = null;
+	private maintenanceCalls_: boolean[] = [];
+	private maintenanceTimer1_: ReturnType<typeof shim.setTimeout> = null;
+	private maintenanceTimer2_: ReturnType<typeof shim.setInterval> = null;
 	private isCollecting_ = false;
 	public isRunningInBackground_ = false;
 
@@ -66,12 +62,11 @@ export default class RevisionService extends BaseService {
 
 	private noteMetadata_(note: NoteEntity) {
 		const excludedFields = ['type_', 'title', 'body', 'created_time', 'updated_time', 'encryption_applied', 'encryption_cipher_text', 'is_conflict', 'user_data'];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const md: any = {};
+		const md: Record<string, unknown> = {};
+		const noteRecord = note as unknown as Record<string, unknown>;
 		for (const k in note) {
 			if (excludedFields.indexOf(k) >= 0) continue;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			md[k] = (note as any)[k];
+			md[k] = noteRecord[k];
 		}
 
 		if (note.user_updated_time === note.updated_time) delete md.user_updated_time;
@@ -259,8 +254,7 @@ export default class RevisionService extends BaseService {
 		};
 		output.updated_time = output.user_updated_time;
 		output.created_time = output.user_created_time;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		(output as any).type_ = BaseModel.TYPE_NOTE;
+		(output as NoteEntity & { type_?: number }).type_ = BaseModel.TYPE_NOTE;
 		if (!('markup_language' in output)) output.markup_language = MarkupLanguage.Markdown;
 
 		return output;

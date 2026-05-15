@@ -19,21 +19,18 @@ function isFontAwesomeIcon(iconName: string) {
 	return s.length === 2 && ['fa', 'fas'].includes(s[0]);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function getProp(props: Props, name: string, defaultValue: any = null) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	if (props.toolbarButtonInfo && (name in props.toolbarButtonInfo)) return (props.toolbarButtonInfo as any)[name];
+function getProp(props: Props, name: string, defaultValue: unknown = null) {
+	if (props.toolbarButtonInfo && (name in props.toolbarButtonInfo)) return (props.toolbarButtonInfo as unknown as Record<string, unknown>)[name];
 	if (!(name in props)) return defaultValue;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return (props as any)[name];
+	return (props as unknown as Record<string, unknown>)[name];
 }
 
 export default function ToolbarButton(props: Props) {
-	const title = getProp(props, 'title', '');
-	const tooltip = getProp(props, 'tooltip', title);
+	const title = getProp(props, 'title', '') as string;
+	const tooltip = getProp(props, 'tooltip', title) as string;
 
 	let icon = null;
-	const iconName = getProp(props, 'iconName');
+	const iconName = getProp(props, 'iconName') as string;
 	if (iconName) {
 		const iconProps: React.HTMLProps<HTMLDivElement> = {
 			'aria-hidden': true,
@@ -52,7 +49,7 @@ export default function ToolbarButton(props: Props) {
 	if (!isEnabled) classes.push('disabled');
 	if (title) classes.push('-has-title');
 
-	const onClick = getProp(props, 'onClick');
+	const onClick = getProp(props, 'onClick') as (()=> void) | undefined;
 	const style: React.CSSProperties = {
 		whiteSpace: 'nowrap',
 		overflow: 'hidden',

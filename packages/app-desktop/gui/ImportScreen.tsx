@@ -82,9 +82,17 @@ class ImportScreenComponent extends React.Component<Props, State> {
 
 		let lastProgress = '';
 
+		interface ProgressState {
+			loaded: number;
+			created: number;
+			updated: number;
+			skipped: number;
+			resourcesCreated: number;
+			notesTagged: number;
+		}
+
 		const options = {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			onProgress: (progressState: any) => {
+			onProgress: (progressState: ProgressState) => {
 				const line = [];
 				line.push(_('Found: %d.', progressState.loaded));
 				line.push(_('Created: %d.', progressState.created));
@@ -95,8 +103,7 @@ class ImportScreenComponent extends React.Component<Props, State> {
 				lastProgress = line.join(' ');
 				this.addMessage('progress', lastProgress);
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			onError: (error: any) => {
+			onError: (error: Error) => {
 				// Don't display the error directly because most of the time it doesn't matter
 				// (eg. for weird broken HTML, but the note is still imported)
 				console.warn('When importing ENEX file', error);

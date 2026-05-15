@@ -26,7 +26,7 @@ export interface View {
 	path: string;
 	layout?: string;
 	navbar?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- View content is highly heterogeneous (each view contributes different fields); tightening propagates through every view consumer
 	content?: any;
 	partials?: string[];
 	cssFiles?: string[];
@@ -292,8 +292,7 @@ export default class MustacheService {
 
 		const contentHtml = await this.renderFileContent(filePath, view, globalParams);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const layoutView: any = {
+		const layoutView: Record<string, unknown> = {
 			global: globalParams,
 			pageName: this.formatPageName(view.name),
 			pageTitle: view.titleOverride ? view.title : `${config().appName} - ${view.title}`,

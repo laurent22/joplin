@@ -52,7 +52,7 @@ describe('htmlUtils', () => {
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
-			const attrs = testCases[i][0];
+			const attrs = testCases[i][0] as Record<string, string>;
 			const expected = testCases[i][1];
 			expect(htmlUtils.attributesHtml(attrs)).toBe(expected);
 		}

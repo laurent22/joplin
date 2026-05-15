@@ -109,15 +109,13 @@ export const runtime = (control: WindowControl): CommandRuntime => {
 			const modalMessage = _('Importing from "%s" as "%s" format. Please wait...', sourcePath, options.importFormat);
 			void CommandService.instance().execute('showModalMessage', modalMessage);
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const errors: any[] = [];
+			const errors: (string|Error)[] = [];
 
 			const importOptions = {
 				path: sourcePath,
 				format: options.importFormat,
 				outputFormat: options.outputFormat,
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				onProgress: (status: any) => {
+				onProgress: (status: Record<string, unknown>) => {
 					const statusStrings: string[] = Object.keys(status).map((key: string) => {
 						return `${key}: ${status[key]}`;
 					});

@@ -1,5 +1,5 @@
 import { resourceBlobPath } from '../utils/joplinUtils';
-import { Change, ChangeType, Item, Share, ShareType, ShareUserStatus, User, Uuid } from '../services/database/types';
+import { Change2 as Change, ChangeType, Item, Share, ShareType, ShareUserStatus, User, Uuid } from '../services/database/types';
 import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
@@ -103,8 +103,7 @@ export default class ShareModel extends BaseModel<Share> {
 		return !!r;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public shareUrl(shareOwnerId: Uuid, id: Uuid, query: any = null): string {
+	public shareUrl(shareOwnerId: Uuid, id: Uuid, query: Record<string, string | number> = null): string {
 		return setQueryParameters(`${this.personalizedUserContentBaseUrl(shareOwnerId)}/shares/${id}`, query);
 	}
 
@@ -255,7 +254,7 @@ export default class ShareModel extends BaseModel<Share> {
 		};
 
 		const getPreviousShareId = (change: Change) => {
-			return this.models().change().unserializePreviousItem(change.previous_item)?.jop_share_id;
+			return change.previous_share_id;
 		};
 
 		const handleUpdated = async (change: Change, item: Item, share: Share, nextShareId: Uuid) => {
@@ -663,8 +662,7 @@ export default class ShareModel extends BaseModel<Share> {
 				this.db('items')
 					.select('id')
 					.where('jop_share_id', '=', shareId),
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			).groupBy('user_id') as any;
+			).groupBy('user_id') as unknown as { item_count: number; user_id: Uuid }[];
 	}
 
 

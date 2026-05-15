@@ -80,8 +80,7 @@ function preprocessHtml(html: string): string {
 
 
 let markupToHtml_ = new MarkupToHtml();
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function stripMarkup(markupLanguage: number, markup: string, options: any = null) {
+function stripMarkup(markupLanguage: number, markup: string, options: { collapseWhiteSpaces?: boolean } = null) {
 	if (!markupToHtml_) markupToHtml_ = new MarkupToHtml();
 	return	markupToHtml_.stripMarkup(markupLanguage, markup, options);
 }
@@ -92,8 +91,7 @@ interface LastOnChangeEventInfo {
 	contentKey: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let dispatchDidUpdateIID_: any = null;
+let dispatchDidUpdateIID_: ReturnType<typeof setTimeout> | null = null;
 let changeId_ = 1;
 
 const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
@@ -145,7 +143,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	useTabIndenter(editor, !props.tabMovesFocus);
 	useKeyboardRefocusHandler(editor);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 	const insertResourcesIntoContent = useCallback(async (filePaths: string[] = null, options: any = null) => {
 		const resourceMd = await commandAttachFileToBody('', filePaths, options);
 		if (!resourceMd) return;
@@ -156,7 +154,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	const insertResourcesIntoContentRef = useRef(null);
 	insertResourcesIntoContentRef.current = insertResourcesIntoContent;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 	const onEditorContentClick = useCallback((event: any) => {
 		const nodeName = event.target ? event.target.nodeName : '';
 
@@ -273,7 +271,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 				if (commandProcessed) return true;
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 				const additionalCommands: any = {
 					selectedText: () => {
 						return stripMarkup(MarkupToHtml.MARKUP_LANGUAGE_HTML, editor.selection.getContent());
@@ -281,7 +279,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					selectedHtml: () => {
 						return editor.selection.getContent();
 					},
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 					replaceSelection: (value: any) => {
 						editor.selection.setContent(value);
 						editor.fire(TinyMceEditorEvents.JoplinChange);
@@ -369,7 +367,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		let cancelled = false;
 
 		async function loadScripts() {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 			const scriptsToLoad: any[] = [
 				{
 					src: `${bridge().vendorDir()}/lib/tinymce/tinymce.min.js`,
@@ -703,7 +701,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				`joplinInsertDateTime${toolbarPluginButtons}`,
 			];
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 			const containerWindow = editorContainerDom.defaultView as any;
 			const isDefaultEnglishLocale = ['en_US', 'en_GB'].includes(language);
 
@@ -838,7 +836,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 						tooltip: _('Inline Code'),
 						icon: 'sourcecode',
 						onAction: function() {
-							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 							editor.execCommand('mceToggleFormat', false, 'code', { class: 'inline-code' } as any);
 						},
 						onSetup: function(api) {
@@ -896,30 +894,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					editor.addShortcut('Meta+Shift+8', '', () => editor.execCommand('InsertUnorderedList'));
 					editor.addShortcut('Meta+Shift+9', '', () => editor.execCommand('InsertJoplinChecklist'));
 
-					// Override ScrollIntoView to scroll to the cursor's character position
-					// instead of the start of the paragraph.
-					// See: https://github.com/laurent22/joplin/issues/14143
-					editor.on('ScrollIntoView', (event) => {
-						const sel = editor.getDoc().getSelection();
-						if (!sel || sel.rangeCount === 0) return;
-
-						const rect = sel.getRangeAt(0).getBoundingClientRect();
-						const win = editor.getWin();
-						const viewHeight = win.innerHeight;
-
-						if (rect.top < 0) {
-							win.scrollBy(0, rect.top);
-						} else if (rect.bottom > viewHeight) {
-							win.scrollBy(0, rect.bottom - viewHeight);
-						} else if (rect.top === 0 && rect.height === 0) {
-							// Handles edge case where rect is not rendered
-							// See: https://stackoverflow.com/a/14384220/5757550
-							return;
-						}
-						event.preventDefault();
-						return;
-					});
-
 					// TODO: remove event on unmount?
 					editor.on('drop', (event) => {
 						// Prevent the message "Dropped file type is not supported" from showing up.
@@ -974,7 +948,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	// Set the initial content and load the plugin CSS and JS files
 	// -----------------------------------------------------------------------------------------
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 	const loadDocumentAssets = (themeId: number, editor: any, pluginAssets: any[]) => {
 		const theme = themeStyle(themeId);
 
@@ -1001,14 +975,14 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 				.filter((a: any) => a.mime === 'text/css')
 				.map(assetToUrl),
 		);
 
 		const allJsFiles = [].concat(
 			pluginAssets
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 				.filter((a: any) => a.mime === 'application/javascript')
 				.map(assetToUrl),
 		);
@@ -1258,7 +1232,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	const prop_htmlToMarkdownRef = useRef<HtmlToMarkdownHandler>(null);
 	prop_htmlToMarkdownRef.current = props.htmlToMarkdown;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 	const nextOnChangeEventInfo = useRef<any>(null);
 
 	async function execOnChangeEvent() {
@@ -1291,7 +1265,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 	const onChangeHandlerTimeoutRef = useRef<any>(null);
 
 	useEffect(() => {
@@ -1320,7 +1294,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			}, 1000);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 		function onExecCommand(event: any) {
 			const c: string = event.command;
 			if (!c) return;
@@ -1357,7 +1331,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			}
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 		const onSetAttrib = (event: EditorEvent<any>) => {
 			// Dispatch onChange when a link or table-related formatting is edited
 			const target = Array.isArray(event.attrElm) ? event.attrElm[0] : event.attrElm;
@@ -1404,7 +1378,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		// onChange even though nothing is changed. The alternative would be to
 		// check the content before and after, but this is too slow, so let's
 		// keep it this way for now.
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 		function onKeyUp(event: any) {
 			const timeSinceNoteChange = Date.now() - noteChangeTimeRef.current;
 
@@ -1468,7 +1442,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			}
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 		async function onCopy(event: any) {
 			const copiedContent = editor.selection.getContent();
 			if (!copiedContent) return;
@@ -1476,7 +1450,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			event.preventDefault();
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 		async function onCut(event: any) {
 			event.preventDefault();
 			const selectedContent = editor.selection.getContent();
@@ -1510,7 +1484,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			onChangeHandler();
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
 		async function onKeyDown(event: any) {
 			// It seems "paste as text" is handled automatically on Windows and Linux,
 			// so we need to run the below code only on macOS. If we were to run this

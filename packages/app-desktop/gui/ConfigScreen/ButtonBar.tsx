@@ -3,8 +3,13 @@ import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 const styled = require('styled-components').default;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-type StyleProps = any;
+interface StyleProps {
+	theme: {
+		backgroundColor3: string;
+		configScreenPadding: number;
+		dividerColor: string;
+	};
+}
 
 interface Props {
 	backButtonTitle?: string;

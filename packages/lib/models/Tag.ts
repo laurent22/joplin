@@ -1,12 +1,12 @@
 import { TagEntity, TagsWithNoteCountEntity } from '../services/database/types';
 
-import BaseModel, { DeleteOptions } from '../BaseModel';
+import BaseModel, { DeleteOptions, SearchOptions } from '../BaseModel';
 import BaseItem from './BaseItem';
 import NoteTag from './NoteTag';
 import Note, { PreviewsOptions } from './Note';
 import { _ } from '../locale';
 import ActionLogger from '../utils/ActionLogger';
-import { LoadOptions } from './utils/types';
+import { LoadOptions, SaveOptions } from './utils/types';
 
 export default class Tag extends BaseItem {
 	public static tableName() {
@@ -138,8 +138,7 @@ export default class Tag extends BaseItem {
 		return await Tag.modelSelectAll('SELECT * FROM tags_with_note_count');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async searchAllWithNotes(options: any) {
+	public static async searchAllWithNotes(options: SearchOptions) {
 		if (!options) options = {};
 		if (!options.conditions) options.conditions = [];
 		options.conditions.push('id IN (SELECT distinct id FROM tags_with_note_count)');
@@ -248,8 +247,7 @@ export default class Tag extends BaseItem {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async save(o: TagEntity, options: any = null) {
+	public static async save(o: TagEntity, options: SaveOptions = null) {
 		options = {
 			dispatchUpdateAction: true,
 			userSideValidation: false, ...options,

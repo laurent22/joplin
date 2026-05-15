@@ -1,8 +1,7 @@
-import { NoteListColumns, defaultListColumns } from '@joplin/lib/services/plugins/api/noteListType';
+import { NoteListColumn, NoteListColumns, defaultListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import validateColumns from './validateColumns';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const makeColumns = (props: any) => {
+const makeColumns = (props: Partial<NoteListColumn>[]) => {
 	const columns: NoteListColumns = [];
 	for (const p of props) {
 		columns.push({

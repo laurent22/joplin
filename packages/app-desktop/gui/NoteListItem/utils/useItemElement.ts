@@ -16,8 +16,7 @@ const addItemEventListeners = (
 	const inputs = element.getElementsByTagName('input');
 	for (const input of inputs) {
 		if (input.type === 'checkbox' || input.type === 'text') {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
-			input.addEventListener('change', listeners.onInputChange as any);
+			input.addEventListener('change', listeners.onInputChange as unknown as EventListener);
 			processedInputs.push(input);
 		}
 	}
@@ -25,29 +24,24 @@ const addItemEventListeners = (
 	const buttons = element.getElementsByTagName('button');
 	if (listeners.onClick) {
 		for (const button of buttons) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
-			button.addEventListener('click', listeners.onClick as any);
+			button.addEventListener('click', listeners.onClick as unknown as EventListener);
 			processedButtons.push(button);
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
-	const clickHandler = (e: MouseEvent) => onClick(e as any);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
-	const dblclickHandler = (e: MouseEvent) => onDoubleClick(e as any);
+	const clickHandler = (e: MouseEvent) => onClick(e as unknown as React.MouseEvent<HTMLDivElement>);
+	const dblclickHandler = (e: MouseEvent) => onDoubleClick(e as unknown as React.MouseEvent<HTMLDivElement>);
 	element.addEventListener('click', clickHandler);
 	element.addEventListener('dblclick', dblclickHandler);
 
 	return {
 		cleanup: () => {
 			for (const input of processedInputs) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
-				input.removeEventListener('change', listeners.onInputChange as any);
+				input.removeEventListener('change', listeners.onInputChange as unknown as EventListener);
 			}
 			if (listeners.onClick) {
 				for (const button of processedButtons) {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we're mixing React synthetic events with DOM events which ideally should not be done but it is fine in this particular case
-					button.removeEventListener('click', listeners.onClick as any);
+					button.removeEventListener('click', listeners.onClick as unknown as EventListener);
 				}
 			}
 			element.removeEventListener('click', clickHandler);
@@ -68,8 +62,7 @@ const useItemElement = (
 		element.setAttribute('data-id', noteId);
 		element.className = 'note-list-item';
 		for (const [n, v] of Object.entries(style)) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			(element.style as any)[n] = v;
+			(element.style as unknown as Record<string, unknown>)[n] = v;
 		}
 		if (flow === ItemFlow.LeftToRight) element.style.width = `${itemSize.width}px`;
 		element.style.height = `${itemSize.height}px`;

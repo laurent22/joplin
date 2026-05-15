@@ -1,4 +1,5 @@
 import BaseModel from '../BaseModel';
+import { AlarmEntity, NoteEntity } from '../services/database/types';
 import Note from './Note';
 
 export interface Notification {
@@ -28,15 +29,13 @@ export default class Alarm extends BaseModel {
 
 	public static async alarmIdsWithoutNotes() {
 		// https://stackoverflow.com/a/4967229/561309
-		const alarms = await this.db().selectAll('SELECT alarms.id FROM alarms LEFT JOIN notes ON alarms.note_id = notes.id WHERE notes.id IS NULL');
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return alarms.map((a: any) => {
+		const alarms = await this.db().selectAll('SELECT alarms.id FROM alarms LEFT JOIN notes ON alarms.note_id = notes.id WHERE notes.id IS NULL') as { id: number }[];
+		return alarms.map(a => {
 			return a.id;
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async makeNotification(alarm: any, note: any = null): Promise<Notification> {
+	public static async makeNotification(alarm: AlarmEntity, note: NoteEntity = null): Promise<Notification> {
 		if (!note) {
 			note = await Note.load(alarm.note_id);
 		} else if (!note.todo_due) {

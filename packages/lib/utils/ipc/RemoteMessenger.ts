@@ -78,10 +78,8 @@ type OnAllMethodsRespondedToListener = ()=> void;
 // TODO: Remove after upgrading nodejs/browser types sufficiently
 //       (FinalizationRegistry is supported in modern browsers).
 declare class FinalizationRegistry {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(onDrop: any);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public register(v: any, id: string): void;
+	public constructor(onDrop: (id: string)=> void);
+	public register(v: object, id: string): void;
 }
 
 // A thin wrapper around postMessage. A script within `targetWindow` should
@@ -125,8 +123,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 			return new Proxy(baseObject, {
 				// Map all properties to functions that invoke remote
 				// methods.
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				get: (_target, property: string): any => {
+				get: (_target, property: string): unknown => {
 					if (property === '___is_joplin_wrapper___') {
 						return true;
 					} else {
@@ -215,8 +212,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private canRemoteAccessProperty(parentObject: any, methodName: string) {
+	private canRemoteAccessProperty(parentObject: unknown, methodName: string) {
 		// TODO: There may be a better way to do this -- this currently assumes that
 		//       **only** the following property names should be avoided.
 		// The goal here is primarily to prevent remote from accessing the Function
@@ -227,7 +223,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		}
 
 		// Function.constructor can be used to eval code. Avoid it.
-		if (parentObject[methodName] === Function.constructor) {
+		if ((parentObject as Record<string, unknown>)[methodName] === Function.constructor) {
 			return false;
 		}
 
@@ -238,8 +234,7 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 		return this.invokeRemoteMethod(['__callbacks', callbackId], callbackArgs);
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private trackCallbackFinalization = (callbackId: string, callback: any) => {
+	private trackCallbackFinalization = (callbackId: string, callback: object) => {
 		this.callbackTracker?.register(callback, callbackId);
 	};
 
@@ -247,23 +242,20 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 	private async invokeLocalMethod(message: InvokeMethodMessage) {
 		try {
 			const methodFromPath = (path: string[]) => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const parentObjectStack: any[] = [];
+				const parentObjectStack: unknown[] = [];
 
 				// We also use invokeLocalMethod to call callbacks that were previously
 				// passed as arguments. In this case, path should be [ '__callbacks', callbackIdHere ].
 				if (path.length === 2 && path[0] === '__callbacks' && this.argumentCallbacks.has(path[1])) {
 					return {
-						parentObject: undefined,
+						parentObject: undefined as unknown,
 						parentObjectStack,
-						method: this.argumentCallbacks.get(path[1]),
+						method: this.argumentCallbacks.get(path[1]) as unknown,
 					};
 				}
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				let parentObject: any;
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				let currentObject: any = this.localInterface;
+				let parentObject: unknown;
+				let currentObject: unknown = this.localInterface;
 				for (let i = 0; i < path.length; i++) {
 					const propertyName = path[i];
 
@@ -271,14 +263,14 @@ export default abstract class RemoteMessenger<LocalInterface, RemoteInterface> {
 						throw new Error(`Cannot access property ${propertyName}`);
 					}
 
-					if (!currentObject[propertyName]) {
+					if (!(currentObject as Record<string, unknown>)[propertyName]) {
 						const accessPath = path.map(part => `[${JSON.stringify(part)}]`).join('');
 						throw new Error(`No such property ${JSON.stringify(propertyName)} on ${this.localInterface}. Accessing properties remoteApi${accessPath}.`);
 					}
 
 					parentObject = currentObject;
 					parentObjectStack.push(parentObject);
-					currentObject = currentObject[propertyName];
+					currentObject = (currentObject as Record<string, unknown>)[propertyName];
 				}
 
 				return { parentObject, parentObjectStack, method: currentObject };

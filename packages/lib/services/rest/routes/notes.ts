@@ -34,8 +34,7 @@ import RevisionService from '../../RevisionService';
 
 const logger = Logger.create('routes/notes');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let htmlToMdParser_: any = null;
+let htmlToMdParser_: HtmlToMd = null;
 
 function htmlToMdParser() {
 	if (htmlToMdParser_) return htmlToMdParser_;
@@ -43,9 +42,22 @@ function htmlToMdParser() {
 	return htmlToMdParser_;
 }
 
+interface Stylesheet {
+	type: 'text' | 'url';
+	value: string;
+}
+
+interface ImageSize {
+	naturalWidth: number;
+	naturalHeight: number;
+	width: number;
+	height: number;
+}
+
+export type ImageSizes = Record<string, ImageSize[]>;
+
 type RequestNote = {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	id?: any;
+	id?: string;
 	parent_id?: string;
 	title: string;
 	body?: string;
@@ -64,11 +76,9 @@ type RequestNote = {
 	base_url?: string;
 	convert_to: string;
 	source?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	anchor_names?: any[];
-	image_sizes?: object;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	stylesheets: any;
+	anchor_names?: string[];
+	image_sizes?: ImageSizes;
+	stylesheets: Stylesheet[];
 };
 
 interface FetchOptions extends FetchBlobOptions {
@@ -89,8 +99,7 @@ export interface ResourceFromPath extends DownloadedMediaFile {
 
 
 async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = {
+	const output: NoteEntity = {
 		title: requestNote.title ? requestNote.title : '',
 		body: requestNote.body ? requestNote.body : '',
 	};
@@ -175,8 +184,7 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function buildNoteStyleSheet(stylesheets: any[]) {
+async function buildNoteStyleSheet(stylesheets: Stylesheet[]) {
 	if (!stylesheets) return [];
 
 	const output = [];
@@ -202,8 +210,7 @@ async function buildNoteStyleSheet(stylesheets: any[]) {
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
+async function tryToGuessExtFromMimeType(response: { headers: Record<string, string | string[]> }, mediaPath: string) {
 	const mimeType = mimeTypeFromHeaders(response.headers);
 	if (!mimeType) return mediaPath;
 
@@ -340,10 +347,8 @@ async function removeTempFiles(urls: ResourceFromPath[]) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function replaceUrlsByResources(markupLanguage: number, md: string, urls: ResourceFromPath[], imageSizes: any) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const imageSizesIndexes: any = {};
+function replaceUrlsByResources(markupLanguage: number, md: string, urls: ResourceFromPath[], imageSizes: ImageSizes) {
+	const imageSizesIndexes: Record<string, number> = {};
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
 		return htmlUtils.replaceMediaUrls(md, (url: string) => {
@@ -362,8 +367,8 @@ function replaceUrlsByResources(markupLanguage: number, md: string, urls: Resour
 		//
 		//     /(!?\[.*?\]\()([^\s\)]+)(.*?\))/g
 		//
-		// eslint-disable-next-line no-useless-escape, @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return md.replace(/(!?\[.*?\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
+		// eslint-disable-next-line no-useless-escape -- Old code before rule was applied
+		return md.replace(/(!?\[.*?\]\()([^\s\)]+)(.*?\))/g, (_match: string, before: string, url: string, after: string) => {
 			let type = 'link';
 			if (before.startsWith('[embedded_pdf]')) {
 				type = 'pdf';
@@ -410,15 +415,13 @@ export function extractMediaUrls(markupLanguage: number, text: string): string[]
 }
 
 // Note must have been saved first
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect: any) {
+async function attachImageFromDataUrl(note: NoteEntity, imageDataUrl: string, cropRect: { x: number; y: number; width: number; height: number } | null) {
 	const tempDir = Setting.value('tempDir');
 	const mime = mimeUtils.fromDataUrl(imageDataUrl);
 	let ext = mimeUtils.toFileExtension(mime) || '';
 	if (ext) ext = `.${ext}`;
 	const tempFilePath = `${tempDir}/${md5(`${Math.random()}_${Date.now()}`)}${ext}`;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const imageConvOptions: any = {};
+	const imageConvOptions: { cropRect?: { x: number; y: number; width: number; height: number } } = {};
 	if (cropRect) imageConvOptions.cropRect = cropRect;
 	await shim.imageFromDataUrl(imageDataUrl, tempFilePath, imageConvOptions);
 	return await shim.attachFileToNote(note, tempFilePath);
@@ -427,8 +430,7 @@ async function attachImageFromDataUrl(note: any, imageDataUrl: string, cropRect:
 export const extractNoteFromHTML = async (
 	requestNote: RequestNote,
 	requestId: string,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	imageSizes: any,
+	imageSizes: ImageSizes,
 	fetchOptions?: FetchOptions,
 	allowedProtocols?: string[],
 ) => {

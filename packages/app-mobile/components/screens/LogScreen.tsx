@@ -27,8 +27,7 @@ interface LogEntry {
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	navigation: any;
+	navigation: { state: { defaultFilter?: string } };
 }
 
 interface State {
@@ -42,8 +41,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 	private styles_: Record<number, ReturnType<typeof StyleSheet.create>>;
 	private readonly logListRef_ = React.createRef<FlatList>();
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static navigationOptions(): any {
+	public static navigationOptions(): { header: null } {
 		return { header: null };
 	}
 
@@ -124,8 +122,8 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 
 		const theme = themeStyle(this.props.themeId);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const styles: any = {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous style entries (row + rowText, then rowTextError/Warn spread off rowText); typed split would force restructuring
+		const styles: Record<string, any> = {
 			row: {
 				flexDirection: 'row',
 				paddingLeft: 1,

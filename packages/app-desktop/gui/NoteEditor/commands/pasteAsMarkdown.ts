@@ -2,6 +2,7 @@ import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/Command
 import { _ } from '@joplin/lib/locale';
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 import { processImagesInPastedHtml } from '../utils/resourceHandling';
+import { WindowCommandDependencies } from '../utils/types';
 
 const { clipboard } = require('electron');
 
@@ -19,8 +20,7 @@ const htmlToMd = () => {
 	return htmlToMd_;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Props passed from NoteEditor component
-export const runtime = (comp: any): CommandRuntime => {
+export const runtime = (comp: WindowCommandDependencies): CommandRuntime => {
 	return {
 		execute: async () => {
 			let html = clipboard.readHTML();
@@ -28,12 +28,12 @@ export const runtime = (comp: any): CommandRuntime => {
 				// Download images and convert them to Joplin resources
 				html = await processImagesInPastedHtml(html, { useInternalUrls: true });
 				const markdown = htmlToMd().parse(html, { tightLists: true, collapseMultipleBlankLines: true });
-				comp.editorRef.current.execCommand({ name: 'insertText', value: markdown });
+				void comp.editorRef.current.execCommand({ name: 'insertText', value: markdown });
 			} else {
 				// Fall back to plain text if no HTML is available
 				const text = clipboard.readText();
 				if (text) {
-					comp.editorRef.current.execCommand({ name: 'insertText', value: text });
+					void comp.editorRef.current.execCommand({ name: 'insertText', value: text });
 				}
 			}
 		},

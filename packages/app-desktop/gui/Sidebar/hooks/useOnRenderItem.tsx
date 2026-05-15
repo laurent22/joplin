@@ -418,8 +418,7 @@ const useOnRenderItem = (props: Props) => {
 		} else if (item.kind === ListItemType.Folder) {
 			const folder = item.folder;
 			const isExpanded = props.collapsedFolderIds.indexOf(folder.id) < 0;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			let noteCount = (folder as any).note_count;
+			let noteCount = (folder as FolderEntity & { note_count?: number }).note_count;
 
 			// For now hide the count for folders in the trash because it doesn't work and getting it to
 			// work would be tricky.
@@ -429,8 +428,7 @@ const useOnRenderItem = (props: Props) => {
 			if (isExpanded) {
 				for (let i = 0; i < props.folders.length; i++) {
 					if (props.folders[i].parent_id === folder.id) {
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						noteCount -= (props.folders[i] as any).note_count;
+						noteCount -= (props.folders[i] as FolderEntity & { note_count?: number }).note_count;
 					}
 				}
 			}

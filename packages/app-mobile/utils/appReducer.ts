@@ -6,11 +6,20 @@ import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('appReducer');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const navHistory: any[] = [];
+// Narrow shape for entries this file reads from the redux NAV action payload.
+// The full action type is a wider, heterogeneous union — see the disable
+// comments below — so the fields outside this interface are accessed via `any`
+// elsewhere.
+interface Route {
+	routeName?: string;
+	folderId?: string;
+	noteId?: string;
+	isDeleted?: boolean;
+}
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function historyCanGoBackTo(route: any) {
+const navHistory: Route[] = [];
+
+function historyCanGoBackTo(route: Route) {
 	if (route.routeName === 'Folder') return false;
 
 	// This is an intermediate screen that acts more like a modal -- it should be skipped in the
@@ -44,7 +53,7 @@ function removeLatestFolderIfSelected(items: any[], route: any) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Routes/actions are heterogeneous redux NAV payloads (NAV_GO/NAV_BACK with optional folderId/tagId/noteId/isDeleted/etc.); typing them requires defining a discriminated action union across the mobile codebase
 const appReducer = (state = appDefaultState, action: any) => {
 	let newState = state;
 	let historyGoingBack = false;

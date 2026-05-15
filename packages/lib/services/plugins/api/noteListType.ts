@@ -11,13 +11,12 @@ export enum ItemFlow {
 	LeftToRight = 'leftToRight',
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin-API output map; values are heterogeneous (HTML strings, formatted numbers, booleans) and indexed dynamically per-plugin
 export type RenderNoteView = Record<string, any>;
 
 export interface OnChangeEvent {
 	elementId: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	value: any;
+	value: unknown;
 	noteId: string;
 }
 
@@ -25,7 +24,7 @@ export interface OnClickEvent {
 	elementId: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin-API callback; props is a per-renderer subset of the note shape declared via itemProps, indexed dynamically
 export type OnRenderNoteHandler = (props: any)=> Promise<RenderNoteView>;
 export type OnChangeHandler = (event: OnChangeEvent)=> Promise<void>;
 export type OnClickHandler = (event: OnClickEvent)=> Promise<void>;

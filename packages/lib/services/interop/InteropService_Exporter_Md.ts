@@ -4,7 +4,7 @@ import shim from '../../shim';
 import markdownUtils from '../../markdownUtils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
-import { NoteEntity, ResourceEntity } from '../database/types';
+import { FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
 import { basename, dirname, friendlySafeFilename, safeFilename } from '../../path-utils';
 import { MarkupToHtml } from '@joplin/renderer';
 
@@ -25,25 +25,24 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		await shim.fsDriver().mkdir(this.resourceDir_);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	protected async makeDirPath_(item: any, pathPart: string = null) {
+	protected async makeDirPath_(item: NoteEntity | FolderEntity, pathPart: string = null) {
 		let output = '';
+		let current: NoteEntity | FolderEntity | null = item;
 		while (true) {
-			if (item.type_ === BaseModel.TYPE_FOLDER) {
+			if (current.type_ === BaseModel.TYPE_FOLDER) {
 				if (pathPart) {
 					output = `${pathPart}/${output}`;
 				} else {
-					const folderName = this.folderPaths_.get(item.id) || friendlySafeFilename(item.title, null);
+					const folderName = this.folderPaths_.get(current.id) || friendlySafeFilename(current.title, null);
 					output = `${folderName}/${output}`;
 				}
 			}
-			if (!item.parent_id) return output;
-			item = await Folder.load(item.parent_id);
+			if (!current.parent_id) return output;
+			current = await Folder.load(current.parent_id);
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async replaceLinkedItemIdsByRelativePaths_(item: any) {
+	private async replaceLinkedItemIdsByRelativePaths_(item: NoteEntity) {
 		const relativePathToRoot = await this.makeDirPath_(item, '..');
 
 		const newBody = await this.replaceResourceIdsByRelativePaths_(item.body, relativePathToRoot);
@@ -70,8 +69,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return await this.replaceItemIdsByRelativePaths_(noteBody, linkedNoteIds, notePaths, createRelativePath);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-	private async replaceItemIdsByRelativePaths_(noteBody: string, linkedItemIds: string[], paths: any, fn_createRelativePath: Function) {
+	private async replaceItemIdsByRelativePaths_(noteBody: string, linkedItemIds: string[], paths: Record<string, string>, fn_createRelativePath: (path: string)=> string) {
 		let newBody = noteBody;
 
 		for (let i = 0; i < linkedItemIds.length; i++) {
@@ -83,7 +81,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return newBody;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mirror of InteropService.itemsToExport — { type, itemOrId } with itemOrId being either an id or a partially-loaded entity
 	public async prepareForProcessingItemType(itemType: number, itemsToExport: any[]) {
 		if (itemType === BaseModel.TYPE_FOLDER) {
 			const namesByParent: Record<string, string[]> = {};
@@ -107,8 +105,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 
 		if (itemType === BaseModel.TYPE_NOTE) {
 			// Create unique file path for the note
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const context: any = {
+			const context: { notePaths: Record<string, string> } = {
 				notePaths: {},
 			};
 			for (let i = 0; i < itemsToExport.length; i++) {
@@ -141,8 +138,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return await Note.replaceResourceInternalToExternalLinks(await Note.serialize(modNote, ['body']));
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async processItem(_itemType: number, item: any) {
+	public async processItem(_itemType: number, item: NoteEntity | FolderEntity) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 
 		if (item.type_ === BaseModel.TYPE_FOLDER) {

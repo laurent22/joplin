@@ -8,7 +8,7 @@ const extractVideoId = (url: string) => {
 
 const plugin = (markdownIt: MarkdownIt) => {
 	const defaultLinkOpenRender = markdownIt.renderer.rules.link_open || function(tokens, idx, options, env, self) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- markdown-it's renderToken signature is (tokens, idx, options) but this fallback passes (tokens, idx, options, env, self); the extra args are unused but kept for parity with rules that override renderToken
 		return (self.renderToken as any)(tokens, idx, options, env, self);
 	};
 
@@ -17,7 +17,7 @@ const plugin = (markdownIt: MarkdownIt) => {
 	};
 
 	const defaultLinkCloseRender = markdownIt.renderer.rules.link_close || function(tokens, idx, options, env, self) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- markdown-it's renderToken signature is (tokens, idx, options) but this fallback passes (tokens, idx, options, env, self); the extra args are unused but kept for parity with rules that override renderToken
 		return (self.renderToken as any)(tokens, idx, options, env, self);
 	};
 

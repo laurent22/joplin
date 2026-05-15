@@ -6,7 +6,7 @@ const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { FileLocker } from '@joplin/utils/fs';
 import { IpcMessageHandler, IpcServer, Message, newHttpError, sendMessage, SendMessageOptions, startServer, stopServer } from '@joplin/utils/ipc';
-import { BrowserWindow, Tray, WebContents, screen, App, nativeTheme, Menu, session as electronSession, Session } from 'electron';
+import { BrowserWindow, BrowserWindowConstructorOptions, Tray, WebContents, screen, App, nativeTheme, Menu, session as electronSession, Session } from 'electron';
 import bridge from './bridge';
 import * as url from 'url';
 const path = require('path');
@@ -243,8 +243,7 @@ export default class ElectronAppWrapper {
 
 		const windowStateKeeper = require('electron-window-state');
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const stateOptions: any = {
+		const stateOptions: { defaultWidth: number; defaultHeight: number; file: string; path?: string } = {
 			defaultWidth: Math.round(0.8 * screen.getPrimaryDisplay().workArea.width),
 			defaultHeight: Math.round(0.8 * screen.getPrimaryDisplay().workArea.height),
 			file: `window-state-${this.env_}.json`,
@@ -255,8 +254,7 @@ export default class ElectronAppWrapper {
 		// Load the previous state with fallback to defaults
 		const windowState = windowStateKeeper(stateOptions);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const windowOptions: any = {
+		const windowOptions: BrowserWindowConstructorOptions = {
 			x: windowState.x,
 			y: windowState.y,
 			width: windowState.width,
@@ -272,8 +270,9 @@ export default class ElectronAppWrapper {
 				nodeIntegration: true,
 				contextIsolation: false,
 				spellcheck: true,
+				// enableRemoteModule was removed from Electron's published types but @electron/remote still relies on it at runtime
 				enableRemoteModule: true,
-			},
+			} as import('electron').WebPreferences,
 			// We start with a hidden window, which is then made visible depending on the showTrayIcon setting
 			// https://github.com/laurent22/joplin/issues/2031
 			//
@@ -336,8 +335,7 @@ export default class ElectronAppWrapper {
 		});
 
 		this.win_.webContents.on('did-fail-load', async event => {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			if ((event as any).isMainFrame) {
+			if ((event as import('electron').Event & { isMainFrame?: boolean }).isMainFrame) {
 				await this.handleAppFailure('Renderer process failed to load', false);
 			}
 		});
@@ -434,8 +432,7 @@ export default class ElectronAppWrapper {
 		};
 		addWindowEventHandlers(this.win_.webContents);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		this.win_.on('close', (event: any) => {
+		this.win_.on('close', (event: import('electron').Event) => {
 			// If it's on macOS, the app is completely closed only if the user chooses to close the app (willQuitApp_ will be true)
 			// otherwise the window is simply hidden, and will be re-open once the app is "activated" (which happens when the
 			// user clicks on the icon in the task bar).
@@ -550,20 +547,18 @@ export default class ElectronAppWrapper {
 			}
 		});
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		ipcMain.on('asynchronous-message', (_event: any, message: string, args: any) => {
+		ipcMain.on('asynchronous-message', (_event: import('electron').IpcMainEvent, message: string, args: unknown) => {
 			if (message === 'appCloseReply') {
 				// We got the response from the renderer process:
 				// save the response and try quit again.
-				this.rendererProcessQuitReply_ = args;
+				this.rendererProcessQuitReply_ = args as RendererProcessQuitReply;
 				this.quit();
 			}
 		});
 
 		// This handler receives IPC messages from a plugin or from the main window,
 		// and forwards it to the main window or the plugin window.
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		ipcMain.on('pluginMessage', (_event: any, message: PluginMessage) => {
+		ipcMain.on('pluginMessage', (_event: import('electron').IpcMainEvent, message: PluginMessage) => {
 			try {
 				if (message.target === 'mainWindow') {
 					this.win_.webContents.send('pluginMessage', message);
@@ -959,8 +954,7 @@ export default class ElectronAppWrapper {
 			this.win_.show();
 		});
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		this.electronApp_.on('open-url', (event: any, url: string) => {
+		this.electronApp_.on('open-url', (event: import('electron').Event, url: string) => {
 			event.preventDefault();
 			void this.openCallbackUrl(url);
 		});

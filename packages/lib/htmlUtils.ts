@@ -11,6 +11,14 @@ const embedRegex = /<embed([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 const objectRegex = /<object([\s\S]*?)data=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 const pdfUrlRegex = /[\s\S]*?\.pdf$/i;
 
+type ReplaceUrlCallback = (url: string)=> string | void;
+
+type ImageTagAction = { type: 'replaceSource'; src: string }
+	| { type: 'replaceElement'; html: string }
+	| { type: 'setAttributes'; attrs: Record<string, string> };
+
+type ProcessImageTagCallback = (data: { src: string })=> ImageTagAction | null | undefined;
+
 const selfClosingElements = [
 	'area',
 	'base',
@@ -35,8 +43,7 @@ const selfClosingElements = [
 
 class HtmlUtils {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public headAndBodyHtml(doc: any) {
+	public headAndBodyHtml(doc: Document) {
 		const output = [];
 		if (doc.head) output.push(doc.head.innerHTML);
 		if (doc.body) output.push(doc.body.innerHTML);
@@ -86,20 +93,17 @@ class HtmlUtils {
 		return html.replace(htmlReg, `:/${id}`);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public replaceImageUrls(html: string, callback: Function) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return this.processImageTags(html, (data: any) => {
+	public replaceImageUrls(html: string, callback: ReplaceUrlCallback) {
+		return this.processImageTags(html, (data: { src: string }) => {
 			const newSrc = callback(data.src);
 			return {
 				type: 'replaceSource',
-				src: newSrc,
+				src: (newSrc as string) ?? '',
 			};
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public replaceEmbedUrls(html: string, callback: Function) {
+	public replaceEmbedUrls(html: string, callback: ReplaceUrlCallback) {
 		if (!html) return '';
 		// We are adding the link as <a> since joplin disabled <embed>, <object> tags due to security reasons.
 		// See: CVE-2020-15930
@@ -114,8 +118,7 @@ class HtmlUtils {
 		return html;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public replaceMediaUrls(html: string, callback: Function) {
+	public replaceMediaUrls(html: string, callback: ReplaceUrlCallback) {
 		html = this.replaceImageUrls(html, callback);
 		html = this.replaceEmbedUrls(html, callback);
 		return html;
@@ -126,8 +129,7 @@ class HtmlUtils {
 	// file path is going to be used, it will need to be unescaped first. The
 	// transformed SRC, must also be escaped before being sent back to this
 	// function.
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public processImageTags(html: string, callback: Function) {
+	public processImageTags(html: string, callback: ProcessImageTagCallback) {
 		if (!html) return '';
 
 		return html.replace(imageRegex, (_v: string, before: string, src: string, after: string) => {
@@ -148,7 +150,7 @@ class HtmlUtils {
 				return `<img${before}${attrHtml}${after}>`;
 			}
 
-			throw new Error(`Invalid action: ${action.type}`);
+			throw new Error(`Invalid action: ${(action as { type: string }).type}`);
 		});
 	}
 
@@ -161,8 +163,7 @@ class HtmlUtils {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public attributesHtml(attr: any) {
+	public attributesHtml(attr: Record<string, string>) {
 		const output = [];
 
 		for (const n in attr) {

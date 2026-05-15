@@ -5,7 +5,7 @@ export interface EventHandlers {
 	[key: string]: Function;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Recursive walker over heterogeneous plugin-API arguments; tightening to `unknown` forces type-narrow casts at every branch and at every recursive call site
 export default function mapEventHandlersToIds(arg: any, eventHandlers: EventHandlers) {
 	if (Array.isArray(arg)) {
 		for (let i = 0; i < arg.length; i++) {

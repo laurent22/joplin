@@ -26,7 +26,7 @@ export interface Command {
 	/**
 	 * Code to be ran when the command is executed. It may return a result.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin commands accept arbitrary args and return arbitrary results; this is part of the public plugin API
 	execute(...args: any[]): Promise<any | void>;
 
 	/**
@@ -116,13 +116,13 @@ export interface ExportModule {
 	/**
 	 * Called when an item needs to be processed. An "item" can be any Joplin object, such as a note, a folder, a notebook, etc.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: item type depends on itemType (NoteEntity, FolderEntity, ResourceEntity, etc.); plugin authors discriminate at use site
 	onProcessItem(context: ExportContext, itemType: number, item: any): Promise<void>;
 
 	/**
 	 * Called when a resource file needs to be exported.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See onProcessItem; resource here is a ResourceEntity but the plugin API keeps it loosely typed
 	onProcessResource(context: ExportContext, resource: any, filePath: string): Promise<void>;
 
 	/**
@@ -186,14 +186,12 @@ export interface ExportContext {
 	/**
 	 * You can attach your own custom data using this property - it will then be passed to each event handler, allowing you to keep state from one event to the next.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	userData?: any;
+	userData?: unknown;
 }
 
 export interface ImportContext {
 	sourcePath: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	options: any;
+	options: Record<string, unknown>;
 	warnings: string[];
 }
 
@@ -202,8 +200,7 @@ export interface ImportContext {
 // =================================================================
 
 export interface Script {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	onStart?(event: any): Promise<void>;
+	onStart?(event: Record<string, unknown>): Promise<void>;
 }
 
 export interface Disposable {
@@ -308,8 +305,7 @@ export interface MenuItem {
 	 * Arguments that should be passed to the command. They will be as rest
 	 * parameters.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	commandArgs?: any[];
+	commandArgs?: unknown[];
 
 	/**
 	 * Set to "separator" to create a divider line
@@ -362,14 +358,12 @@ export type ViewHandle = string;
 
 export interface EditorCommand {
 	name: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	value?: any;
+	value?: unknown;
 }
 
 export interface DialogResult {
 	id: ButtonId;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	formData?: any;
+	formData?: Record<string, unknown>;
 }
 
 export enum ToastType {
@@ -519,7 +513,7 @@ export enum SettingStorage {
 // Redefine a simplified interface to mask internal details
 // and to remove function calls as they would have to be async.
 export interface SettingItem {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Setting values are heterogeneous per setting (string/number/bool/Record/Array); plugin authors narrow at use site
 	value: any;
 	type: SettingItemType;
 
@@ -556,8 +550,7 @@ export interface SettingItem {
 	 * This property is required when `isEnum` is `true`. In which case, it
 	 * should contain a map of value => label.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	options?: Record<any, any>;
+	options?: Record<string | number, string>;
 
 	/**
 	 * Reserved property. Not used at the moment.
@@ -638,7 +631,7 @@ export interface ClipboardContent {
 // Content Script types
 // =================================================================
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: messages between content scripts and plugins are arbitrary serialisable data
 export type PostMessageHandler = (message: any)=> Promise<any>;
 
 /**
@@ -662,38 +655,37 @@ export interface ContentScriptContext {
 }
 
 export interface ContentScriptModuleLoadedEvent {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	userData?: any;
+	userData?: unknown;
 }
 
 export interface ContentScriptModule {
 	onLoaded?: (event: ContentScriptModuleLoadedEvent)=> void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin entry point returns a plugin-specific module (markdown-it plugin, CodeMirror plugin, etc.); shape varies per content script type
 	plugin: ()=> any;
 	assets?: ()=> void;
 }
 
 export interface MarkdownItContentScriptModule extends Omit<ContentScriptModule, 'plugin'> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- markdown-it and options are external library types not imported here; plugin authors annotate concretely
 	plugin: (markdownIt: any, options: any)=> any;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror command callbacks accept and return arbitrary values; matches CM6 Command type
 type EditorCommandCallback = (...args: any[])=> any;
 
 export interface CodeMirrorControl {
 	/** Points to a CodeMirror 6 EditorView instance. */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CM6 EditorView is an external library type not imported here
 	editor: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CM6 module namespace; types come from the external library
 	cm6: any;
 
 	/** `extension` should be a [CodeMirror 6 extension](https://codemirror.net/docs/ref/#state.Extension). */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CM6 Extension type comes from the external library
 	addExtension(extension: any|any[]): void;
 
 	supportsCommand(name: string): boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See EditorCommandCallback
 	execCommand(name: string, ...args: any[]): any;
 	registerCommand(name: string, callback: EditorCommandCallback): void;
 
@@ -707,13 +699,13 @@ export interface CodeMirrorControl {
 		 *
 		 * Using `autocompletion({ override: [ ... ]})` causes errors when done by multiple plugins.
 		 */
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CM6 CompletionSource and Extension types come from the external library
 		completionSource(completionSource: any): any;
 
 		/**
 		 * Creates an extension that enables or disables [`languageData`-based autocompletion](https://codemirror.net/docs/ref/#autocomplete.autocompletion^config.override).
 		 */
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See completionSource above
 		enableLanguageDataAutocomplete: { of: (enabled: boolean)=> any };
 
 		/**

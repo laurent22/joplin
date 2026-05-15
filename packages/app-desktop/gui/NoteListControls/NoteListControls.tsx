@@ -35,11 +35,14 @@ interface Props {
 	buttonVerticalGap: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-type StyleProps = any;
+interface StyleProps {
+	theme: { backgroundColor3: string };
+	padding: number;
+	buttonVerticalGap: number;
+	size?: ButtonSize;
+}
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-const StyledRoot: any = styled.div`
+const StyledRoot = styled.div`
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
@@ -192,8 +195,7 @@ function NoteListControls(props: Props) {
 		const defaultIcon = 'fas fa-cog';
 
 		const field = props.sortOrderField;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const iconMap: any = {
+		const iconMap: Record<string, string> = {
 			user_updated_time: 'far fa-calendar-alt',
 			user_created_time: 'far fa-calendar-plus',
 			title: 'fas fa-font',

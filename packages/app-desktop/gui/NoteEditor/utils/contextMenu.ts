@@ -29,8 +29,7 @@ function handleCopyToClipboard(options: ContextMenuOptions) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function saveFileData(data: any, filename: string) {
+async function saveFileData(data: string | NodeJS.ArrayBufferView, filename: string) {
 	const newFilePath = await bridge().showSaveDialog({ defaultPath: filename });
 	if (!newFilePath) return;
 	await writeFile(newFilePath, data);

@@ -15,40 +15,54 @@ interface Options {
 	name: string;
 }
 
+type SqlParams = (string | number | boolean | null)[];
+
+interface PreparedStatement {
+	get(params: SqlParams): unknown;
+	all(params: SqlParams): unknown[];
+	run(params: SqlParams): unknown;
+}
+
+interface BetterSqliteDatabase {
+	prepare(sql: string): PreparedStatement;
+}
+
+interface SqliteError extends Error {
+	code?: string;
+}
+
+interface WrappedError extends Error {
+	code?: string;
+}
+
 export default class DatabaseDriverBetterSqlite {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private db_: any = null;
+	private db_: BetterSqliteDatabase = null;
 
 	public open(options: Options) {
 		this.db_ = new Database(options.name);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public sqliteErrorToJsError(error: any, sql: string = null, params: any[] = null) {
+	public sqliteErrorToJsError(error: SqliteError, sql: string = null, params: SqlParams = null) {
 		console.error(error.toString(), ' ---- ', sql, params);
 
 		const msg = [error.toString()];
 		if (sql) msg.push(sql);
-		if (params) msg.push(params);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = new Error(msg.join(': '));
+		if (params) msg.push(JSON.stringify(params));
+		const output: WrappedError = new Error(msg.join(': '));
 		if (error.code) output.code = error.code;
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async selectOne(sql: string, params: any[] = null) {
+	public async selectOne(sql: string, params: SqlParams = null) {
 		return this.db_.prepare(sql).get(params ? params : []);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async selectAll(sql: string, params: any[] = null) {
+	public async selectAll(sql: string, params: SqlParams = null) {
 		return this.db_.prepare(sql).all(params ? params : []);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async exec(sql: string, params: any[] = null) {
+	public async exec(sql: string, params: SqlParams = null) {
 		return this.db_.prepare(sql).run(params ? params : []);
 	}
 

@@ -1,31 +1,32 @@
+import { Store } from 'redux';
 import { ViewHandle } from './utils/createViewHandle';
 
 export interface EmitMessageEvent {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	message: any;
+	message: unknown;
 }
+
+// State shape varies between desktop (AppState with mainLayout) and mobile; subclasses access fields not present on the base lib State.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Store state is heterogeneous across desktop/mobile callers
+export type PluginStore = Store<any>;
 
 export default class ViewController {
 
 	private handle_: ViewHandle;
 	private pluginId_: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private store_: any;
+	private store_: PluginStore;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(handle: ViewHandle, pluginId: string, store: any) {
+	public constructor(handle: ViewHandle, pluginId: string, store: PluginStore) {
 		this.handle_ = handle;
 		this.pluginId_ = pluginId;
 		this.store_ = store;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- View shape varies by controller subtype (menu, panel, dialog, toolbar button); subclasses index into different fields
 	protected get storeView(): any {
 		return this.store_.getState().pluginService.plugins[this.pluginId_].views[this.handle];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	protected get store(): any {
+	protected get store(): PluginStore {
 		return this.store_;
 	}
 
@@ -45,13 +46,12 @@ export default class ViewController {
 		throw new Error('Must be overriden');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async emitMessage(event: EmitMessageEvent): Promise<any> {
+	public async emitMessage(event: EmitMessageEvent): Promise<unknown> {
 		console.warn('Calling ViewController.emitMessage - but not implemented', event);
+		return undefined;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public postMessage(message: any) {
+	public postMessage(message: unknown) {
 		console.warn('Calling ViewController.postMessage - but not implemented', message);
 	}
 

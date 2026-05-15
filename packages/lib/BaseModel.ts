@@ -28,6 +28,15 @@ export enum ModelType {
 	Command = 16,
 }
 
+export interface SearchOptions {
+	fields?: string | string[];
+	conditions?: string[];
+	conditionsParams?: (string | number | boolean)[];
+	titlePattern?: string;
+	limit?: number;
+	order?: { by: string; dir: string }[];
+}
+
 export interface DeleteOptions {
 	idFieldName?: string;
 	changeSource?: number;
@@ -60,8 +69,7 @@ class BaseModel {
 	// TODO: This ancient part of Joplin about model types is a bit of a
 	// mess and should be refactored properly.
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static typeEnum_: any[] = [
+	public static typeEnum_: [string, ModelType][] = [
 		['TYPE_NOTE', ModelType.Note],
 		['TYPE_FOLDER', ModelType.Folder],
 		['TYPE_SETTING', ModelType.Setting],
@@ -99,10 +107,9 @@ class BaseModel {
 	public static TYPE_SMART_FILTER = ModelType.SmartFilter;
 	public static TYPE_COMMAND = ModelType.Command;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Set by the app to redux dispatch; per-app action types diverge so the function is typed loosely here
 	public static dispatch: Function = function() {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static saveMutexes_: any = {};
+	private static saveMutexes_: Record<string, { acquire: ()=> Promise<()=> void> }> = {};
 
 	private static db_: JoplinDatabase;
 
@@ -114,12 +121,11 @@ class BaseModel {
 		throw new Error('Must be overriden');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static setDb(db: any) {
+	public static setDb(db: JoplinDatabase) {
 		this.db_ = db;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- model is any BaseItemEntity subclass or an array of them; adds `type_` and returns the augmented value
 	public static addModelMd(model: any): any {
 		if (!model) return model;
 
@@ -144,7 +150,7 @@ class BaseModel {
 		return false;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- byId is overridden by subclasses (Folder.byId returns FolderEntity) — narrowing the base forces subclass return-type incompatibility
 	public static byId(items: any[], id: string) {
 		for (let i = 0; i < items.length; i++) {
 			if (items[i].id === id) return items[i];
@@ -153,15 +159,14 @@ class BaseModel {
 	}
 
 	public static defaultValues(fieldNames: string[]) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {};
+		const output: Record<string, unknown> = {};
 		for (const n of fieldNames) {
 			output[n] = this.db().fieldDefaultValue(this.tableName(), n);
 		}
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See byId above
 	public static modelIndexById(items: any[], id: string) {
 		for (let i = 0; i < items.length; i++) {
 			if (items[i].id === id) return i;
@@ -227,8 +232,7 @@ class BaseModel {
 		return temp;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static fieldType(name: string, defaultValue: any = null) {
+	public static fieldType(name: string, defaultValue: number = null) {
 		const fields = this.fields();
 		for (let i = 0; i < fields.length; i++) {
 			if (fields[i].name === name) return fields[i].type;
@@ -241,9 +245,9 @@ class BaseModel {
 		return this.db().tableFields(this.tableName());
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- model is any per-table entity (ResourceEntity, NoteEntity, etc.); narrowing forces casts at callers like shim-init-node
 	public static removeUnknownFields(model: any) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See above
 		const newModel: any = {};
 		for (const n in model) {
 			if (!model.hasOwnProperty(n)) continue;
@@ -253,10 +257,10 @@ class BaseModel {
 		return newModel;
 	}
 
-	public static new() {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Returns a per-table entity object built from field defaults; subclass callers consume it as their specific entity
+	public static new(): any {
 		const fields = this.fields();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {};
+		const output: Record<string, unknown> = {};
 		for (let i = 0; i < fields.length; i++) {
 			const f = fields[i];
 			output[f.name] = f.default;
@@ -264,7 +268,7 @@ class BaseModel {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- options is a SaveOptions bag with per-model extras (isNew/oldItem/changeSource/etc.); reassigned and augmented by callers
 	public static modOptions(options: any) {
 		if (!options) {
 			options = {};
@@ -277,15 +281,14 @@ class BaseModel {
 		return options;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static count(options: any = null) {
+	public static count(options: { where?: string } = null) {
 		if (!options) options = {};
 		let sql = `SELECT count(*) as total FROM \`${this.tableName()}\``;
 		if (options.where) sql += ` WHERE ${options.where}`;
 		return this.db()
 			.selectOne(sql)
-		// eslint-disable-next-line promise/prefer-await-to-then, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-			.then((r: any) => {
+		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+			.then((r: { total?: number } | null) => {
 				return r ? r['total'] : 0;
 			});
 	}
@@ -302,14 +305,13 @@ class BaseModel {
 		return this.modelSelectAll(`SELECT * FROM \`${this.tableName()}\` WHERE \`id\` LIKE ?`, [`${partialId}%`]);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static applySqlOptions(options: LoadOptions, sql: string, params: any[] = null) {
+	public static applySqlOptions(options: LoadOptions, sql: string, params: (string | number | boolean)[] = null) {
 		if (!options) options = {};
 
 		if (options.order && options.order.length) {
 			sql += ` ORDER BY ${paginationToSql({
 				limit: options.limit,
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- LoadOptions.order has dir: string (matches ASC/DESC at runtime); PaginationOrder.dir is the literal union
 				order: options.order as any,
 				page: 1,
 				caseInsensitive: options.caseInsensitive,
@@ -321,12 +323,10 @@ class BaseModel {
 		return { sql: sql, params: params };
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async allIds(options: any = null) {
+	public static async allIds(options: LoadOptions = null) {
 		const q = this.applySqlOptions(options, `SELECT id FROM \`${this.tableName()}\``);
-		const rows = await this.db().selectAll(q.sql, q.params);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return rows.map((r: any) => r.id);
+		const rows: { id: string }[] = await this.db().selectAll(q.sql, q.params);
+		return rows.map(r => r.id);
 	}
 
 	public static async all(options: LoadOptions = null) {
@@ -334,8 +334,7 @@ class BaseModel {
 		if (!options.fields) options.fields = '*';
 
 		let sql = `SELECT ${this.db().escapeFields(options.fields)} FROM \`${this.tableName()}\``;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let params: any[] = [];
+		let params: (string | number | boolean)[] = [];
 		if (options.where) {
 			sql += ` WHERE ${options.where}`;
 			if (options.whereParams) params = params.concat(options.whereParams);
@@ -360,13 +359,12 @@ class BaseModel {
 		return this.modelSelectAll(q.sql);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async search(options: any = null) {
+	public static async search(options: SearchOptions = null) {
 		if (!options) options = {};
 		if (!options.fields) options.fields = '*';
 
 		const conditions = options.conditions ? options.conditions.slice(0) : [];
-		const params = options.conditionsParams ? options.conditionsParams.slice(0) : [];
+		const params: (string | number | boolean)[] = options.conditionsParams ? options.conditionsParams.slice(0) : [];
 
 		if (options.titlePattern) {
 			const pattern = options.titlePattern.replace(/\*/g, '%');
@@ -383,8 +381,7 @@ class BaseModel {
 		return this.modelSelectAll(query.sql, query.params);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async modelSelectOne(sqlOrSqlQuery: string | SqlQuery, params: any[] = null) {
+	public static async modelSelectOne(sqlOrSqlQuery: string | SqlQuery, params: (string | number | boolean)[] = null) {
 		if (params === null) params = [];
 		let sql = '';
 
@@ -404,8 +401,8 @@ class BaseModel {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async modelSelectAll<T = any>(sqlOrSqlQuery: string | SqlQuery, params: any[] = null): Promise<T[]> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- T defaults to any so untyped callers (which return per-entity rows narrowed at use site) still compile
+	public static async modelSelectAll<T = any>(sqlOrSqlQuery: string | SqlQuery, params: (string | number | boolean)[] = null): Promise<T[]> {
 		if (params === null) params = [];
 		let sql = '';
 
@@ -430,8 +427,7 @@ class BaseModel {
 		return this.db().escapeFieldsToString(options.fields);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static loadByField(fieldName: string, fieldValue: any, options: LoadOptions = null) {
+	public static loadByField(fieldName: string, fieldValue: string | number | boolean, options: LoadOptions = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
 		if (!options.fields) options.fields = '*';
@@ -440,13 +436,12 @@ class BaseModel {
 		return this.modelSelectOne(sql, [fieldValue]);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static loadByFields(fields: any, options: LoadOptions = null) {
+	public static loadByFields(fields: Record<string, string | number | boolean>, options: LoadOptions = null) {
 		if (!options) options = {};
 		if (!('caseInsensitive' in options)) options.caseInsensitive = false;
 		if (!options.fields) options.fields = '*';
 		const whereSql = [];
-		const params = [];
+		const params: (string | number | boolean)[] = [];
 		for (const fieldName in fields) {
 			whereSql.push(`\`${fieldName}\` = ?`);
 			params.push(fields[fieldName]);
@@ -456,15 +451,13 @@ class BaseModel {
 		return this.modelSelectOne(sql, params);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static loadByTitle(fieldValue: any) {
+	public static loadByTitle(fieldValue: string) {
 		return this.modelSelectOne(`SELECT * FROM \`${this.tableName()}\` WHERE \`title\` = ?`, [fieldValue]);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- old/new models are per-table entities (NoteEntity, FolderEntity, etc.); diff iterates dynamically over keys
 	public static diffObjects(oldModel: any, newModel: any) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {};
+		const output: Record<string, unknown> = {};
 		const fields = this.diffObjectsFields(oldModel, newModel);
 		for (let i = 0; i < fields.length; i++) {
 			output[fields[i]] = newModel[fields[i]];
@@ -473,7 +466,7 @@ class BaseModel {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See diffObjects above
 	public static diffObjectsFields(oldModel: any, newModel: any) {
 		const output = [];
 		for (const n in newModel) {
@@ -486,18 +479,16 @@ class BaseModel {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See diffObjects above
 	public static modelsAreSame(oldModel: any, newModel: any) {
 		const diff = this.diffObjects(oldModel, newModel);
 		delete diff.type_;
 		return !Object.getOwnPropertyNames(diff).length;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static saveMutex(modelOrId: any) {
+	public static saveMutex(modelOrId: string | { id?: string } | null) {
 		const noLockMutex = {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			acquire: function(): any {
+			acquire: function(): null {
 				return null;
 			},
 		};
@@ -516,8 +507,7 @@ class BaseModel {
 		return mutex;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-	public static releaseSaveMutex(modelOrId: any, release: Function) {
+	public static releaseSaveMutex(modelOrId: string | { id?: string } | null, release: ()=> void) {
 		if (!release) return;
 		if (!modelOrId) return release();
 
@@ -532,10 +522,9 @@ class BaseModel {
 		release();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- o is a per-table entity (NoteEntity/FolderEntity/...) being prepared for save; options is a SaveOptions bag with isNew/fields/autoTimestamp
 	public static saveQuery(o: any, options: any) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let temp: any = {};
+		let temp: Record<string, unknown> = {};
 		const fieldNames = this.fieldNames();
 		for (let i = 0; i < fieldNames.length; i++) {
 			const n = fieldNames[i];
@@ -547,8 +536,7 @@ class BaseModel {
 		// be part of the final list of fields if autoTimestamp is on.
 		// id also will stay.
 		if (!options.isNew && options.fields) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const filtered: any = {};
+			const filtered: Record<string, unknown> = {};
 			for (const k in temp) {
 				if (!temp.hasOwnProperty(k)) continue;
 				if (k !== 'id' && options.fields.indexOf(k) < 0) continue;
@@ -560,7 +548,7 @@ class BaseModel {
 		o = temp;
 
 		let modelId = temp.id;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- query is a Database.insertQuery/updateQuery result with sql/params plus extras (nextQueries, options); shape is heterogeneous
 		let query: any = {};
 
 		const timeNow = time.unixMs();
@@ -613,19 +601,18 @@ class BaseModel {
 		return query;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static userSideValidation(o: any) {
+	public static userSideValidation(o: { id?: string; user_updated_time?: number; user_created_time?: number }) {
 		if (o.id && !o.id.match(/^[a-f0-9]{32}$/)) {
 			throw new Error('Validation error: ID must a 32-characters lowercase hexadecimal string');
 		}
 
-		const timestamps = ['user_updated_time', 'user_created_time'];
+		const timestamps = ['user_updated_time', 'user_created_time'] as const;
 		for (const k of timestamps) {
 			if ((k in o) && (typeof o[k] !== 'number' || isNaN(o[k]) || o[k] < 0)) throw new Error('Validation error: user_updated_time and user_created_time must be numbers greater than 0');
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- o is any BaseItemEntity subclass being saved; subclasses override save() with stricter per-entity types
 	public static async save(o: any, options: SaveOptions = null) {
 		// When saving, there's a mutex per model ID. This is because the model returned from this function
 		// is basically its input `o` (instead of being read from the database, for performance reasons).
@@ -697,8 +684,7 @@ class BaseModel {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static isNew(object: any, options: any) {
+	public static isNew(object: { id?: string }, options: { isNew?: boolean | 'auto' }) {
 		if (options && 'isNew' in options) {
 			// options.isNew can be "auto" too
 			if (options.isNew === true) return true;
@@ -708,7 +694,7 @@ class BaseModel {
 		return !object.id;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- models is an array of per-table entities; filter() casts SQL values to JS types in-place
 	public static filterArray(models: any[]) {
 		const output = [];
 		for (let i = 0; i < models.length; i++) {
@@ -717,7 +703,7 @@ class BaseModel {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See filterArray; iterates dynamically over entity fields
 	public static filter(model: any) {
 		if (!model) return model;
 
@@ -779,8 +765,7 @@ class BaseModel {
 
 for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 	const e = BaseModel.typeEnum_[i];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	(BaseModel as any)[e[0]] = e[1];
+	(BaseModel as unknown as Record<string, ModelType>)[e[0]] = e[1];
 }
 
 export default BaseModel;

@@ -18,9 +18,14 @@ export const declaration: CommandDeclaration = {
 	label: () => _('Goto Anything...'),
 };
 
-function menuItemById(id: string) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return PluginManager.instance().menuItems().find((i: any) => i.id === id);
+interface PluginMenuItem {
+	id: string;
+	click: ()=> void;
+	userData?: GotoAnythingUserData;
+}
+
+function menuItemById(id: string): PluginMenuItem {
+	return PluginManager.instance().menuItems().find((i: PluginMenuItem) => i.id === id);
 }
 
 // The way this command is implemented is a bit hacky due to the PluginManager
@@ -42,8 +47,7 @@ export const runtime = (): CommandRuntime => {
 			} else if (uiType === UiType.ControlledApi) {
 				// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 				return new Promise((resolve: UserDataCallbackResolve, reject: UserDataCallbackReject) => {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					const menuItem = PluginManager.instance().menuItems().find((i: any) => i.id === 'controlledApi');
+					const menuItem: PluginMenuItem = PluginManager.instance().menuItems().find((i: PluginMenuItem) => i.id === 'controlledApi');
 					const userData: GotoAnythingUserData = {
 						callback: { resolve, reject },
 						mode: options.mode,

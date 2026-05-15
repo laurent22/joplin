@@ -12,29 +12,29 @@ import lightTheme from '@joplin/lib/themes/light';
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous: string for text/datetime inputs, TagOption[] for tags, string for datetime; consumers dispatch by inputType
 	defaultValue: any;
 	visible: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- DialogState.promptOptions.buttons is `unknown[]`; matching the looser upstream type avoids casts at every call site
 	buttons: any[];
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onClose: Function;
 	inputType: string;
 	description: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mirrors defaultValue — same heterogeneous shape
 	answer?: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- React-select autocomplete options array; per-prompt shape (TagOption[] / PromptSuggestion[])
 	autocomplete: any;
 	label: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- State holds the current answer which mirrors the heterogeneous defaultValue type
 export default class PromptDialog extends React.Component<Props, any> {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Holds either an HTMLInputElement ref or a react-select ref depending on inputType
 	private answerInput_: any;
 	private focusInput_: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous style blocks plus computed react-select theme/styles factories
 	private styles_: any;
 	private styleKey_: string;
 	private menuIsOpened_ = false;
@@ -128,7 +128,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 		};
 
 		this.styles_.select = {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- react-select style/theme factories take the library's own provided styles; tightening would require importing each StyleConfig generic
 			control: (provided: any) => {
 				return { ...provided,
 					minWidth: 'calc(var(--prompt-width) * 0.2)',
@@ -136,14 +136,14 @@ export default class PromptDialog extends React.Component<Props, any> {
 					fontFamily: theme.fontFamily,
 				};
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- react-select style/theme factories take the library's own provided styles; tightening would require importing each StyleConfig generic
 			input: (provided: any) => {
 				return { ...provided,
 					minWidth: '20px',
 					color: theme.color,
 				};
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- react-select style/theme factories take the library's own provided styles; tightening would require importing each StyleConfig generic
 			menu: (provided: any) => {
 				return { ...provided,
 					color: theme.color,
@@ -151,7 +151,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 					backgroundColor: theme.backgroundColor,
 				};
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- react-select style/theme factories take the library's own provided styles; tightening would require importing each StyleConfig generic
 			option: (provided: any, state: any) => {
 				return { ...provided,
 					color: theme.color,
@@ -159,13 +159,13 @@ export default class PromptDialog extends React.Component<Props, any> {
 					paddingLeft: `${10 + (state.data.indentDepth || 0) * 20}px`,
 				};
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- react-select style/theme factories take the library's own provided styles; tightening would require importing each StyleConfig generic
 			multiValueLabel: (provided: any) => {
 				return { ...provided,
 					fontFamily: theme.fontFamily,
 				};
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- react-select style/theme factories take the library's own provided styles; tightening would require importing each StyleConfig generic
 			multiValueRemove: (provided: any) => {
 				return { ...provided,
 					color: theme.color,
@@ -173,7 +173,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 			},
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- react-select style/theme factories take the library's own provided styles; tightening would require importing each StyleConfig generic
 		this.styles_.selectTheme = (tagTheme: any) => {
 			return { ...tagTheme,
 				borderRadius: 2,
@@ -234,14 +234,12 @@ export default class PromptDialog extends React.Component<Props, any> {
 		// 	return m.isValid() ? m.toDate() : null;
 		// }
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const onSelectChange = (newValue: any) => {
+		const onSelectChange = (newValue: unknown) => {
 			this.setState({ answer: newValue });
 			this.focusInput_ = true;
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const onKeyDown = (event: any) => {
+		const onKeyDown = (event: React.KeyboardEvent) => {
 			if (event.key === 'Enter') {
 				// If the dropdown is open, we don't close the dialog - instead
 				// the currently item will be selected. If it is closed however
@@ -288,7 +286,6 @@ export default class PromptDialog extends React.Component<Props, any> {
 				}
 			}
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			inputComp = <CreatableSelect
 				className="tag-selector"
 				onMenuOpen={this.select_menuOpen}
@@ -298,15 +295,14 @@ export default class PromptDialog extends React.Component<Props, any> {
 				ref={this.answerInput_}
 				value={this.state.answer}
 				placeholder=""
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- makeAnimated's generic doesn't unify with react-select's expected SelectComponents shape
 				components={makeAnimated() as any}
 				isMulti={true}
 				isClearable={false}
 				backspaceRemovesValue={true}
 				options={uniqueAutocomplete}
 				onChange={onSelectChange}
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				onKeyDown={(event: any) => onKeyDown(event)}
+				onKeyDown={onKeyDown}
 				filterOption={(option, rawInput) => {
 					const input = (rawInput || '').trim().normalize('NFC').toLowerCase();
 					const label = (option.label || '').trim().normalize('NFC').toLowerCase();
@@ -324,8 +320,8 @@ export default class PromptDialog extends React.Component<Props, any> {
 				}}
 			/>;
 		} else if (this.props.inputType === 'dropdown') {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			inputComp = <Select className="item-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated() as any} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={(event: any) => onKeyDown(event)} />;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- makeAnimated's generic doesn't unify with react-select's expected SelectComponents shape
+			inputComp = <Select className="item-selector" onMenuOpen={this.select_menuOpen} onMenuClose={this.select_menuClose} styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated() as any} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={onKeyDown} />;
 		} else {
 			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
 		}

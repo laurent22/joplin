@@ -3,23 +3,23 @@
 
 import { LinkRenderingType, RuleOptions } from '../../MdToHtml';
 import renderMedia, { Options as RenderMediaOptions } from '../renderMedia';
+import type * as MarkdownIt from 'markdown-it';
+import type Token = require('markdown-it/lib/token');
+import type Renderer = require('markdown-it/lib/renderer');
 
 
 export interface LinkIndexes {
 	[key: string]: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function plugin(markdownIt: any, ruleOptions: RuleOptions) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const defaultRender = markdownIt.renderer.rules.link_close || function(tokens: any, idx: any, options: any, _env: any, self: any) {
+function plugin(markdownIt: MarkdownIt, ruleOptions: RuleOptions) {
+	const defaultRender: Renderer.RenderRule = markdownIt.renderer.rules.link_close || function(tokens, idx, options, _env, self) {
 		return self.renderToken(tokens, idx, options);
 	};
 
 	const linkIndexes: LinkIndexes = {};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	markdownIt.renderer.rules.link_close = function(tokens: any[], idx: number, options: any, env: any, self: any) {
+	markdownIt.renderer.rules.link_close = function(tokens: Token[], idx: number, options: MarkdownIt.Options, env: unknown, self: Renderer) {
 		const defaultOutput = defaultRender(tokens, idx, options, env, self);
 		const link = ruleOptions.context.currentLinks.pop();
 

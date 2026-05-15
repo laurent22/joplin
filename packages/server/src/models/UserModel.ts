@@ -307,8 +307,7 @@ export default class UserModel extends BaseModel<User> {
 			];
 
 			for (const key of Object.keys(resource)) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				if (!user.is_admin && !canBeChangedByNonAdmin.includes(key) && (resource as any)[key] !== (previousResource as any)[key]) {
+				if (!user.is_admin && !canBeChangedByNonAdmin.includes(key) && (resource as Record<string, unknown>)[key] !== (previousResource as Record<string, unknown>)[key]) {
 					throw new ErrorForbidden(`non-admin user cannot change "${key}"`);
 				}
 			}
@@ -324,7 +323,7 @@ export default class UserModel extends BaseModel<User> {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- joplinItem is the heterogeneous result of itemToJoplinItem (Note/Folder/Resource/Tag)
 	public async checkMaxItemSizeLimit(user: User, buffer: Buffer, item: Item, joplinItem: any) {
 		// If the item is encrypted, we apply a multiplier because encrypted
 		// items can be much larger (seems to be up to twice the size but for
@@ -685,7 +684,6 @@ export default class UserModel extends BaseModel<User> {
 		await this.withTransaction(async () => {
 			for (const user of users) {
 				const maxTotalItemSize = getMaxTotalItemSize(user);
-				const account = accountByType(user.account_type);
 
 				if (user.total_item_size > maxTotalItemSize * alertLimitMax) {
 					await this.models().email().push({
@@ -699,7 +697,7 @@ export default class UserModel extends BaseModel<User> {
 					});
 
 					await this.models().userFlag().add(user.id, UserFlagType.AccountOverLimit);
-				} else if (maxTotalItemSize > account.max_total_item_size * alertLimit1) {
+				} else if (user.total_item_size > maxTotalItemSize * alertLimit1) {
 					await this.models().email().push({
 						...oversizedAccount1({
 							percentLimit: alertLimit1 * 100,
@@ -745,8 +743,7 @@ export default class UserModel extends BaseModel<User> {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async syncInfo(userId: Uuid): Promise<any> {
+	private async syncInfo(userId: Uuid): Promise<{ ppk?: { value: PublicPrivateKeyPair } }> {
 		const item = await this.models().item().loadByName(userId, 'info.json');
 
 		// We can get there if user 1 tries to share a notebook with user 2, but

@@ -57,10 +57,8 @@ export default class KeyValueModel extends BaseModel<KeyValue> {
 
 	public async value<T>(key: string, defaultValue: Value = null): Promise<T> {
 		const row: KeyValue = await this.db(this.tableName).where('key', '=', key).first();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (!row) return defaultValue as any;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return this.unserializeValue(row.type, row.value) as any;
+		if (!row) return defaultValue as T;
+		return this.unserializeValue(row.type, row.value) as T;
 	}
 
 	public async readThenWrite(key: string, handler: ReadThenWriteHandler) {
@@ -68,8 +66,7 @@ export default class KeyValueModel extends BaseModel<KeyValue> {
 			// While inside a transaction SQlite should lock the whole database
 			// file, which should allow atomic read then write.
 			await this.withTransaction(async () => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const value: any = await this.value(key);
+				const value = await this.value<Value>(key);
 				const newValue = await handler(value);
 				await this.setValue(key, newValue);
 			}, 'KeyValueModel::readThenWrite');

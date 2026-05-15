@@ -38,10 +38,8 @@ function calculateChildrenSizes(item: LayoutItem, parent: LayoutItem | null, siz
 		height: parentSize.height,
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const noWidthChildren: any[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const noHeightChildren: any[] = [];
+	const noWidthChildren: { item: LayoutItem; parent: LayoutItem }[] = [];
+	const noHeightChildren: { item: LayoutItem; parent: LayoutItem }[] = [];
 
 	// The minimum space required for items with no defined size
 	let noWidthChildrenMinWidth = 0;

@@ -99,31 +99,30 @@ let isTestingEnv_ = false;
 // https://stackoverflow.com/a/42816077/561309
 let react_: typeof React = null;
 let reactDom_: typeof ReactDom = null;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- node sqlite driver is set per-platform (better-sqlite3, react-native sqlite, etc.); accessed structurally
 let nodeSqlite_: any = null;
 
 const shim = {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Geolocation API differs across platforms (browser Geolocation, RN Geolocation module); accessed structurally
 	Geolocation: null as any,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- electron bridge is set in app-desktop; its shape is concrete there but lib references it structurally
 	electronBridge_: null as any,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- fsDriver set per-platform (node/RN/web); FsDriverBase subclasses expose additional methods accessed structurally
 	fsDriver_: null as any,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- http agent set per-platform (node https.Agent, RN noop); accessed structurally
 	httpAgent_: null as any,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- proxy agent set per-platform; accessed structurally
 	proxyAgent: null as any,
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See electronBridge_
 	electronBridge: (): any => {
 		throw new Error('Not implemented: electronBridge');
 	},
 
 	msleep_: (ms: number) => {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		return new Promise((resolve: Function) => {
+		return new Promise<void>((resolve) => {
 			shim.setTimeout(() => {
-				resolve(null);
+				resolve();
 			}, ms);
 		});
 	},
@@ -222,14 +221,12 @@ const shim = {
 	// https://github.com/cheton/is-electron
 	isElectron: () => {
 		// Renderer process
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (typeof window !== 'undefined' && typeof window.process === 'object' && (window.process as any).type === 'renderer') {
+		if (typeof window !== 'undefined' && typeof window.process === 'object' && (window.process as { type?: string }).type === 'renderer') {
 			return true;
 		}
 
 		// Main process
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (typeof process !== 'undefined' && typeof process.versions === 'object' && !!(process.versions as any).electron) {
+		if (typeof process !== 'undefined' && typeof process.versions === 'object' && !!(process.versions as NodeJS.ProcessVersions & { electron?: string }).electron) {
 			return true;
 		}
 
@@ -248,8 +245,7 @@ const shim = {
 	// Node requests can go wrong is so many different ways and with so
 	// many different error messages... This handler inspects the error
 	// and decides whether the request can safely be repeated or not.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	fetchRequestCanBeRetried: (error: any) => {
+	fetchRequestCanBeRetried: (error: { code?: string; message?: string } | null) => {
 		if (!error) return false;
 
 		// Unfortunately the error 'Network request failed' doesn't have a type
@@ -299,8 +295,8 @@ const shim = {
 		return previous;
 	},
 
-	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-	fetchWithRetry: async function(fetchFn: Function, options: any = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Used with various fetch-like functions (shim.fetch, shim.fetchBlob, custom wrappers); return shapes vary; options widened to FetchOptions because callers pass through their request options bag
+	fetchWithRetry: async function(fetchFn: ()=> Promise<any>, options: any = null) {
 		if (!options) options = {};
 		if (!options.timeout) options.timeout = 1000 * 120; // ms
 		if (!('maxRetry' in options)) options.maxRetry = shim.fetchMaxRetry_;
@@ -330,8 +326,7 @@ const shim = {
 		throw new Error('Not implemented: debugFetch');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	fetchText: async (url: string, options: any = null): Promise<string> => {
+	fetchText: async (url: string, options: FetchOptions | null = null): Promise<string> => {
 		const r = await shim.fetch(url, options || {});
 		if (!r.ok) throw new Error(`Could not fetch ${url}`);
 		return r.text();
@@ -353,39 +348,38 @@ const shim = {
 
 	FileApiDriverLocal: null as typeof FileApiDriverLocal,
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- node returns string (sync), RN returns Promise<string>; widening across both
 	readLocalFileBase64: (_path: string): any => {
 		throw new Error('Not implemented: readLocalFileBase64');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- options/return flow through node-fetch and platform-specific implementations
 	uploadBlob: (_url: string, _options: any): any => {
 		throw new Error('Not implemented: uploadBlob');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sjcl module set per-platform; accessed structurally
 	sjclModule: null as any,
 
 	crypto: null as Crypto,
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- node returns Buffer, browser/RN returns unknown[]; widening would cascade to EncryptionService and other callers
 	randomBytes: async (_count: number): Promise<any> => {
 		throw new Error('Not implemented: randomBytes');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	stringByteLength: (_s: string): any => {
+	stringByteLength: (_s: string): number => {
 		throw new Error('Not implemented: stringByteLength');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/ban-types -- node implementation accepts a Setting class argument; lib references it as a generic Function
 	detectAndSetLocale: null as Function,
 
 	attachFileToNote: async (_note: NoteEntity, _filePath: string, _options?: AttachFileToNoteOptions): Promise<NoteEntity> => {
 		throw new Error('Not implemented: attachFileToNote');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- options bag with markupLanguage/createFileURL/markdownLinkUrl and other route-specific keys
 	attachFileToNoteBody: async (_body: string, _filePath: string, _position: number, _options: any): Promise<string> => {
 		throw new Error('Not implemented: attachFileToNoteBody');
 	},
@@ -394,12 +388,12 @@ const shim = {
 		throw new Error('Not implemented: imageToDataUrl');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- options is { cropRect?, resize? } passed through to the native image module; varies per platform
 	imageFromDataUrl: async (_imageDataUrl: string, _filePath: string, _options: any = null): Promise<any> => {
 		throw new Error('Not implemented: imageFromDataUrl');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- options flow into FetchBlobOptions; return shape varies (node fetch Response vs RN blob)
 	fetchBlob: function(_url: string, _options: any = null): any {
 		throw new Error('Not implemented: fetchBlob');
 	},
@@ -426,30 +420,24 @@ const shim = {
 		throw new Error('Not implemented: createAccessiblePdf');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	Buffer: null as any,
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- node returns boolean (shell.openExternal), RN returns Promise<any> (Linking.openURL)
 	openUrl: (_url: string): any => {
 		throw new Error('Not implemented: openUrl');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See httpAgent_ above
 	httpAgent: (_url: string): any => {
 		throw new Error('Not implemented: httpAgent');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	openOrCreateFile: (_path: string, _defaultContents: any): any => {
+	openOrCreateFile: (_path: string, _defaultContents: string): string => {
 		throw new Error('Not implemented: openOrCreateFile');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	waitForFrame: (): any => {
+	waitForFrame: (): void => {
 		throw new Error('Not implemented: waitForFrame');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	appVersion: (): string => {
 		throw new Error('Not implemented: appVersion');
 	},
@@ -465,8 +453,7 @@ const shim = {
 		isTestingEnv_ = v;
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	pathRelativeToCwd: (_path: string): any => {
+	pathRelativeToCwd: (_path: string): string => {
 		throw new Error('Not implemented');
 	},
 
@@ -490,8 +477,8 @@ const shim = {
 		await shim.showMessageBox(message, { type: type === ToastType.Error ? MessageBoxType.Error : MessageBoxType.Info });
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	writeImageToFile: (_image: any, _format: any, _filePath: string): Promise<void> => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- image is a NativeImage (Electron) or an equivalent platform object; format is e.g. 'image/png' or 'image/jpeg'
+	writeImageToFile: (_image: any, _format: string, _filePath: string): Promise<void> => {
 		throw new Error('Not implemented');
 	},
 
@@ -518,27 +505,27 @@ const shim = {
 	//
 	// Having the timers wrapped in that way would also make it easier to debug timing issue and
 	// find out what timers have been fired or not.
-	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-	setTimeout: (_fn: Function, _interval: number): any=> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Return type varies by platform: node returns NodeJS.Timeout, browsers return number
+	setTimeout: (_fn: ()=> void, _interval: number): any=> {
 		throw new Error('Not implemented');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-	setInterval: (_fn: Function, _interval: number): any=> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See setTimeout above
+	setInterval: (_fn: ()=> void, _interval: number): any=> {
 		throw new Error('Not implemented');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	clearTimeout: (_id: any): any => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Id type matches setTimeout/setInterval return; varies by platform
+	clearTimeout: (_id: any): void => {
 		throw new Error('Not implemented');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	clearInterval: (_id: any): any => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See clearTimeout
+	clearInterval: (_id: any): void => {
 		throw new Error('Not implemented');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See nodeSqlite_
 	setNodeSqlite: (nodeSqlite: any) => {
 		nodeSqlite_ = nodeSqlite;
 	},
@@ -548,8 +535,7 @@ const shim = {
 		return nodeSqlite_;
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	setReact: (react: any) => {
+	setReact: (react: typeof React) => {
 		react_ = react;
 	},
 
@@ -558,8 +544,7 @@ const shim = {
 		return react_;
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Workaround for different react versions
-	setReactDom: (reactDom: any) => {
+	setReactDom: (reactDom: typeof ReactDom) => {
 		reactDom_ = reactDom;
 	},
 
@@ -568,7 +553,7 @@ const shim = {
 		return reactDom_;
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Returns node's `dgram` module on node platforms; the shape is dynamic and unused outside CLI bonjour discovery
 	dgram: (): any => {
 		throw new Error('Not implemented');
 	},
@@ -603,7 +588,7 @@ const shim = {
 	// React Native. In React Native that code path will throw an error, but at
 	// least it will build.
 	// https://stackoverflow.com/questions/55581073
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Returns whatever module is required at runtime; each call site narrows
 	requireDynamic: (_path: string): any => {
 		throw new Error('Not implemented');
 	},

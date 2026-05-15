@@ -26,8 +26,7 @@ import DialogTitle from '../DialogTitle';
 import PasswordInput from '../PasswordInput/PasswordInput';
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	themeId: any;
+	themeId: number;
 	dispatch: Dispatch;
 	masterKeys: MasterKeyEntity[];
 	passwords: Record<string, string>;
@@ -227,8 +226,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 		}
 
 		const headerComp = isEnabledMasterKeys ? <h2>{_('Encryption keys')}</h2> : <a onClick={() => toggleShowDisabledMasterKeys() } style={{ ...theme.urlStyle, display: 'inline-block', marginBottom: 10 }} href="#">{showTable ? _('Hide disabled keys') : _('Show disabled keys')}</a>;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const infoComp: any = null; // isEnabledMasterKeys ? <p>{'Note: Only one key is going to be used for encryption (the one marked as "active"). Any of the keys might be used for decryption, depending on how the notes or notebooks were originally encrypted.'}</p> : null;
+		const infoComp: React.ReactNode = null; // isEnabledMasterKeys ? <p>{'Note: Only one key is going to be used for encryption (the one marked as "active"). Any of the keys might be used for decryption, depending on how the notes or notebooks were originally encrypted.'}</p> : null;
 		const tableComp = !showTable ? null : (
 			<table>
 				<tbody>
@@ -352,7 +350,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 			}
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Required because PasswordInput's ChangeEventHandler type is incorrect
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- PasswordInput's ChangeEventHandler is typed as a custom {value} event but the runtime hands a React.ChangeEvent through
 		const onPasswordInputChange = (event: any) => {
 			setEnableEncryptionError('');
 			setEnableEncryptionPassword(event.target.value);

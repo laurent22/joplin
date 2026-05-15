@@ -40,22 +40,28 @@ export const testData = {
 	},
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function createTestData(data: any) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	async function recurseStruct(s: any, parentId = '') {
+interface TestDataNode {
+	resource?: boolean;
+	tags?: string[];
+	[childName: string]: TestDataNode | boolean | string[] | undefined;
+}
+type TestData = Record<string, TestDataNode>;
+
+export async function createTestData(data: TestData) {
+	async function recurseStruct(s: TestData | TestDataNode, parentId = '') {
 		for (const n in s) {
+			const child = s[n] as TestDataNode;
 			if (n.toLowerCase().includes('folder')) {
 				const folder = await Folder.save({ title: n, parent_id: parentId });
-				await recurseStruct(s[n], folder.id);
+				await recurseStruct(child, folder.id);
 			} else {
 				const note = await Note.save({ title: n, parent_id: parentId });
-				if (s[n].resource) {
+				if (child.resource) {
 					await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
 				}
 
-				if (s[n].tags) {
-					for (const tagTitle of s[n].tags) {
+				if (child.tags) {
+					for (const tagTitle of child.tags) {
 						await Tag.addNoteTagByTitle(note.id, tagTitle);
 					}
 				}
@@ -66,12 +72,10 @@ export async function createTestData(data: any) {
 	await recurseStruct(data);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function checkTestData(data: any) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	async function recurseCheck(s: any) {
+export async function checkTestData(data: TestData) {
+	async function recurseCheck(s: TestData | TestDataNode) {
 		for (const n in s) {
-			const obj = s[n];
+			const obj = s[n] as TestDataNode;
 
 			if (n.toLowerCase().includes('folder')) {
 				const folder = await Folder.loadByTitle(n);

@@ -22,8 +22,7 @@ class Command extends BaseCommand {
 		return _('Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s', s.join(', '));
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { note: string; name: string; value?: string }) {
 		const title = args['note'];
 		const propName = args['name'];
 		let propValue = args['value'];
@@ -37,8 +36,7 @@ class Command extends BaseCommand {
 
 			const timestamp = Date.now();
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const newNote: any = {
+			const newNote: Record<string, unknown> = {
 				id: notes[i].id,
 				type_: notes[i].type_,
 				updated_time: timestamp,
