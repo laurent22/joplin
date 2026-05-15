@@ -3,10 +3,11 @@ import Router from '../../utils/Router';
 import { redirect, SubPath } from '../../utils/routeUtils';
 import { generateRedirectHtml, getIdentityProvider, getServiceProvider } from '../../utils/saml';
 import { AppContext, RouteType, SamlPostResponse } from '../../utils/types';
-import { bodyFields } from '../../utils/requestUtils';
+import { bodyFields, userIp } from '../../utils/requestUtils';
 import { ErrorBadRequest, ErrorForbidden } from '../../utils/errors';
 import { cookieSet } from '../../utils/cookies';
 import defaultView from '../../utils/defaultView';
+import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
 
 export const router = new Router(RouteType.Api);
 
@@ -71,6 +72,8 @@ router.post('api/saml', async (_path: SubPath, ctx: AppContext) => {
 });
 
 router.get('api/login_with_code/:id', async (path: SubPath, ctx: AppContext) => {
+	await limiterLoginBruteForce(userIp(ctx));
+
 	const code = path.id;
 	if (!code) {
 		throw new ErrorBadRequest();
