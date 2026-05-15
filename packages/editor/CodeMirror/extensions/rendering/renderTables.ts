@@ -5,7 +5,7 @@
 // - Enter in last cell → adds new row
 // - Tab/Shift+Tab → navigate cells
 
-import { EditorView, WidgetType } from '@codemirror/view';
+import { EditorView, ViewPlugin, ViewUpdate, WidgetType } from '@codemirror/view';
 import { EditorState } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
 import makeBlockReplaceExtension from './utils/makeBlockReplaceExtension';
@@ -163,6 +163,8 @@ class TableWidget extends WidgetType {
 
 		const container = doc.createElement('div');
 		container.classList.add(W);
+		container.dataset.from = String(this.from);
+		container.dataset.to = String(this.to);
 
 		const tableEl = doc.createElement('table');
 
@@ -720,6 +722,11 @@ const tableTheme = EditorView.theme({
 		borderCollapse: 'collapse',
 		tableLayout: 'auto',
 	},
+	// Selection halo when the document selection covers the whole table.
+	[`& .${W}.cm-tw-selected`]: {
+		backgroundColor: 'var(--joplin-selected-color, rgba(0,120,255,0.18))',
+		borderRadius: '4px',
+	},
 
 	// Cells
 	[`& .${CELL}`]: {
@@ -831,9 +838,33 @@ const tableTheme = EditorView.theme({
 	},
 });
 
+// View plugin that tags table widget containers with a class when the
+// document selection fully covers their range, so they visually pick up
+// the selection halo (drag-select, Ctrl+A, etc.) like other text would.
+const selectionHighlight = ViewPlugin.fromClass(class {
+	public constructor(view: EditorView) { this.update_(view); }
+	public update(update: ViewUpdate) {
+		if (update.selectionSet || update.docChanged || update.viewportChanged) {
+			this.update_(update.view);
+		}
+	}
+	private update_(view: EditorView) {
+		const sel = view.state.selection.main;
+		const containers = view.dom.querySelectorAll<HTMLElement>(`.${W}`);
+		for (const c of containers) {
+			const from = Number(c.dataset.from);
+			const to = Number(c.dataset.to);
+			if (Number.isNaN(from) || Number.isNaN(to)) continue;
+			const covered = sel.from <= from && sel.to >= to && sel.from !== sel.to;
+			c.classList.toggle('cm-tw-selected', covered);
+		}
+	}
+});
+
 // ===================== EXTENSION =====================
 const renderTables = [
 	tableTheme,
+	selectionHighlight,
 	EditorView.domEventHandlers({
 		mousedown: (event) => {
 			if ((event.target as Element).closest(`.${W}`)) return true;
