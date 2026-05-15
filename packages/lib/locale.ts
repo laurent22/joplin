@@ -515,12 +515,12 @@ function defaultLocale() {
 }
 
 function localeStats() {
-	if (!localeStats_) localeStats_ = require('./locales/index.js').stats;
+	if (!localeStats_) localeStats_ = require('./locales/index').stats;
 	return localeStats_;
 }
 
 function supportedLocales(): string[] {
-	if (!supportedLocales_) supportedLocales_ = require('./locales/index.js').locales;
+	if (!supportedLocales_) supportedLocales_ = require('./locales/index').locales;
 
 	const output = [];
 	for (const n in supportedLocales_) {

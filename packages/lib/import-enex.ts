@@ -12,7 +12,7 @@ import { extractUrls as extractUrlsFromHtml } from '@joplin/utils/html';
 import { extractUrls as extractUrlsFromMarkdown } from '@joplin/utils/markdown';
 const moment = require('moment');
 const { wrapError } = require('./errorUtils');
-const { enexXmlToHtml } = require('./import-enex-html-gen.js');
+import { enexXmlToHtml } from './import-enex-html-gen';
 const md5 = require('md5');
 const { Base64Decode } = require('base64-stream');
 import * as mime from './mime-utils';

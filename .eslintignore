@@ -1284,6 +1284,7 @@ packages/lib/BaseApplication.js
 packages/lib/BaseModel.test.js
 packages/lib/BaseModel.js
 packages/lib/BaseSyncTarget.js
+packages/lib/Cache.js
 packages/lib/ClipperServer.js
 packages/lib/CssUtils.js
 packages/lib/EventDispatcher.test.js
@@ -1471,11 +1472,13 @@ packages/lib/net-utils.js
 packages/lib/ntp.js
 packages/lib/onedrive-api.test.js
 packages/lib/onedrive-api.js
+packages/lib/parameters.js
 packages/lib/path-utils.js
 packages/lib/reducer.test.js
 packages/lib/reducer.js
 packages/lib/registry.test.js
 packages/lib/registry.js
+packages/lib/resourceUtils.js
 packages/lib/services/AlarmService.js
 packages/lib/services/AlarmServiceDriverNode.js
 packages/lib/services/BaseService.js

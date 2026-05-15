@@ -1,0 +1,260 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import time from './time';
+import shim from './shim';
+import JoplinError from './JoplinError';
+import DropboxApi from './DropboxApi';
+
+export default class FileApiDriverDropbox {
+	private api_: DropboxApi;
+
+	public constructor(api: DropboxApi) {
+		this.api_ = api;
+	}
+
+	public api() {
+		return this.api_;
+	}
+
+	public requestRepeatCount() {
+		return 3;
+	}
+
+	private makePath_(path: string) {
+		if (!path) return '';
+		return `/${path}`;
+	}
+
+	private hasErrorCode_(error: any, errorCode: string) {
+		if (!error || typeof error.code !== 'string') return false;
+		return error.code.indexOf(errorCode) >= 0;
+	}
+
+	public async stat(path: string) {
+		try {
+			const metadata = await this.api().exec('POST', 'files/get_metadata', {
+				path: this.makePath_(path),
+			});
+
+			return this.metadataToStat_(metadata, path);
+		} catch (error) {
+			if (this.hasErrorCode_(error, 'not_found')) {
+				// ignore
+			} else {
+				throw error;
+			}
+		}
+		return null;
+	}
+
+	private metadataToStat_(md: any, path: string) {
+		const output: any = {
+			path: path,
+			updated_time: md.server_modified ? (new Date(md.server_modified)).getTime() : Date.now(),
+			isDir: md['.tag'] === 'folder',
+		};
+
+		if (md['.tag'] === 'deleted') output.isDeleted = true;
+
+		return output;
+	}
+
+	private metadataToStats_(mds: any[]) {
+		const output = [];
+		for (let i = 0; i < mds.length; i++) {
+			output.push(this.metadataToStat_(mds[i], mds[i].name));
+		}
+		return output;
+	}
+
+	public async setTimestamp() {
+		throw new Error('Not implemented'); // Not needed anymore
+	}
+
+	public async delta(path: string, options: any) {
+		const context = options ? options.context : null;
+		let cursor = context ? context.cursor : null;
+
+		while (true) {
+			const urlPath = cursor ? 'files/list_folder/continue' : 'files/list_folder';
+			const body = cursor ? { cursor: cursor } : { path: this.makePath_(path), include_deleted: true };
+
+			try {
+				const response = await this.api().exec('POST', urlPath, body);
+
+				const output = {
+					items: this.metadataToStats_(response.entries),
+					hasMore: response.has_more,
+					context: { cursor: response.cursor },
+				};
+
+				return output;
+			} catch (error) {
+				// If there's an error related to an invalid cursor, clear the cursor and retry.
+				if (cursor) {
+					if (((error as any) && (error as any).httpStatus === 400) || this.hasErrorCode_(error, 'reset')) {
+						// console.info('Clearing cursor and retrying', error);
+						cursor = null;
+						continue;
+					}
+				}
+				throw error;
+			}
+		}
+	}
+
+	public async list(path: string) {
+		let response = await this.api().exec('POST', 'files/list_folder', {
+			path: this.makePath_(path),
+		});
+
+		let output = this.metadataToStats_(response.entries);
+
+		while (response.has_more) {
+			response = await this.api().exec('POST', 'files/list_folder/continue', {
+				cursor: response.cursor,
+			});
+
+			output = output.concat(this.metadataToStats_(response.entries));
+		}
+
+		return {
+			items: output,
+			hasMore: false,
+			context: { cursor: response.cursor },
+		};
+	}
+
+	public async get(path: string, options: any) {
+		if (!options) options = {};
+		if (!options.responseFormat) options.responseFormat = 'text';
+
+		try {
+			// IMPORTANT:
+			//
+			// We cannot use POST here, because iOS (as of version 14?) doesn't
+			// support POST requests with an empty body:
+			//
+			// https://www.dropboxforum.com/t5/Dropbox-API-Support-Feedback/Error-1017-quot-cannot-parse-response-quot/td-p/589595
+			const needsFetchWorkaround = shim.mobilePlatform() === 'ios';
+
+			const fetchPath = (method: string, path: string, extraHeaders: any) => {
+				return this.api().exec(
+					method,
+					'files/download',
+					null,
+					{ 'Dropbox-API-Arg': JSON.stringify({ path: this.makePath_(path) }), ...extraHeaders },
+					options,
+				);
+			};
+
+			let response: any;
+			if (!needsFetchWorkaround) {
+				response = await fetchPath('POST', path, {});
+			} else {
+				// Use a random If-None-Match value to prevent React Native from using the cache.
+				// Passing "cache: no-store" doesn't seem to be sufficient, so If-None-Match is set to a value
+				// that will never match the ETag.
+				//
+				// Something similar is done for WebDAV.
+				//
+				// See https://github.com/laurent22/joplin/issues/10396
+				response = await fetchPath('GET', path, { 'If-None-Match': `JoplinIgnore-${Math.floor(Math.random() * 100000)}` });
+			}
+			return response;
+		} catch (error) {
+			if (this.hasErrorCode_(error, 'not_found')) {
+				return null;
+			} else if (this.hasErrorCode_(error, 'restricted_content')) {
+				throw new JoplinError('Cannot download because content is restricted by Dropbox', 'rejectedByTarget');
+			} else {
+				throw error;
+			}
+		}
+	}
+
+	public async mkdir(path: string) {
+		try {
+			await this.api().exec('POST', 'files/create_folder_v2', {
+				path: this.makePath_(path),
+			});
+		} catch (error) {
+			if (this.hasErrorCode_(error, 'path/conflict')) {
+				// Ignore
+			} else {
+				throw error;
+			}
+		}
+	}
+
+	public async put(path: string, content: any, options: any = null) {
+		try {
+			await this.api().exec(
+				'POST',
+				'files/upload',
+				content,
+				{
+					'Dropbox-API-Arg': JSON.stringify({
+						path: this.makePath_(path),
+						mode: 'overwrite',
+						mute: true, // Don't send a notification to user since there can be many of these updates
+					}),
+				},
+				options,
+			);
+		} catch (error) {
+			if (this.hasErrorCode_(error, 'restricted_content')) {
+				throw new JoplinError('Cannot upload because content is restricted by Dropbox (restricted_content)', 'rejectedByTarget');
+			} else if (this.hasErrorCode_(error, 'payload_too_large')) {
+				throw new JoplinError('Cannot upload because payload size is rejected by Dropbox (payload_too_large)', 'rejectedByTarget');
+			} else {
+				throw error;
+			}
+		}
+	}
+
+	public async delete(path: string) {
+		try {
+			await this.api().exec('POST', 'files/delete_v2', {
+				path: this.makePath_(path),
+			});
+		} catch (error) {
+			if (this.hasErrorCode_(error, 'not_found')) {
+				// ignore
+			} else {
+				throw error;
+			}
+		}
+	}
+
+	public async move() {
+		throw new Error('Not supported');
+	}
+
+	public format() {
+		throw new Error('Not supported');
+	}
+
+	public async clearRoot() {
+		const entries = await this.list('');
+		const batchDelete = [];
+		for (let i = 0; i < entries.items.length; i++) {
+			batchDelete.push({ path: this.makePath_(entries.items[i].path) });
+		}
+
+		if (!batchDelete.length) return;
+
+		const response = await this.api().exec('POST', 'files/delete_batch', { entries: batchDelete });
+		const jobId = response.async_job_id;
+
+		while (true) {
+			const check = await this.api().exec('POST', 'files/delete_batch/check', { async_job_id: jobId });
+			if (check['.tag'] === 'complete') break;
+
+			// It returns "failed" if it didn't work but anyway throw an error if it's anything other than complete or in_progress
+			if (check['.tag'] !== 'in_progress') {
+				throw new Error(`Batch delete failed? ${JSON.stringify(check)}`);
+			}
+			await time.sleep(2);
+		}
+	}
+}
