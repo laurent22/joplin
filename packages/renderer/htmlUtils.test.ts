@@ -96,4 +96,21 @@ describe('htmlUtils', () => {
 	])('should remove empty elements (case %#)', (before, expected) => {
 		expect(removeWrappingParagraphAndTrailingEmptyElements(before)).toBe(expected);
 	});
+
+	it.each([
+		[':/0123456789abcdef0123456789abcdef', true],
+		[':/0123456789abcdef0123456789abcdef/anchor', true],
+		['javascript:/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/;alert(1)', false],
+		['data:/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/;alert(1)', false],
+		['vbscript:/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', false],
+		[':/short', false],
+	])('should only allow resource-style URLs anchored to the start (input: %s)', (href, shouldKeep) => {
+		const output = htmlUtils.sanitizeHtml(`<a href="${href}">Click</a>`);
+		if (shouldKeep) {
+			expect(output).toContain(`href="${href}"`);
+		} else {
+			expect(output).not.toContain(`href="${href}"`);
+			expect(output).toContain('href="#"');
+		}
+	});
 });
