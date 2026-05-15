@@ -603,9 +603,10 @@ class TableWidget extends WidgetType {
 
 		// If this widget mounts at a position where a cell was focused just
 		// before a rebuild (e.g. undo triggered the rebuild from outside),
-		// restore focus to that cell. The map is in-memory only and only
-		// populated by an actual focus event, so there is no risk of
-		// stealing focus on a fresh document load.
+		// restore focus to that cell. The map is cleared when focus leaves
+		// the container (see focusout below), so a stale entry can only
+		// exist while the user is actively editing this table — there is no
+		// risk of stealing focus from unrelated work.
 		const remembered = lastFocusedCellByFrom.get(this.from);
 		if (remembered) {
 			const { r: rr, c: cc } = remembered;
@@ -613,13 +614,41 @@ class TableWidget extends WidgetType {
 			const targetCell = targetRow ? targetRow[cc] : undefined;
 			const targetText = targetCell?.querySelector('.cm-tw-text') as HTMLElement | null;
 			if (targetText) {
-				requestAnimationFrame(() => focus('TableWidget', targetText));
+				requestAnimationFrame(() => {
+					// Re-check the map and DOM before stealing focus — the
+					// user may have clicked elsewhere between mount and the
+					// next frame, in which case the entry is gone.
+					if (!lastFocusedCellByFrom.has(this.from)) return;
+					if (!targetText.isConnected) return;
+					focus('TableWidget', targetText);
+				});
 			} else {
 				// Coordinates no longer fit (row/column was removed) — drop the
 				// stale entry.
 				lastFocusedCellByFrom.delete(this.from);
 			}
 		}
+
+		// Clear the remembered cell when focus leaves the table container,
+		// so a later rebuild (e.g. from an unrelated document edit) does
+		// not steal focus back. The deletion is deferred so a widget
+		// rebuild — which detaches the old cell DOM and fires focusout for
+		// that reason alone — does not lose the entry before the new
+		// widget can consume it (this is what makes Cmd+Z restore focus).
+		container.addEventListener('focusout', (e: FocusEvent) => {
+			const next = e.relatedTarget as Node | null;
+			if (next && container.contains(next)) return;
+			const fromAtBlur = this.from;
+			// Defer two frames so any rebuild-driven refocus (which is
+			// itself scheduled via requestAnimationFrame from the new
+			// widget's toDOM) has a chance to land before we decide that
+			// focus genuinely left the table.
+			requestAnimationFrame(() => requestAnimationFrame(() => {
+				const newActive = doc.activeElement as HTMLElement | null;
+				if (newActive?.classList.contains('cm-tw-text')) return;
+				lastFocusedCellByFrom.delete(fromAtBlur);
+			}));
+		});
 
 		// ---- Highlight helpers ----
 		const highlightRow = (rowIdx: number) => {
