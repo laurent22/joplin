@@ -28,4 +28,19 @@ describe('BaseModel', () => {
 
 		expect(BaseModel.modelsByIds(items, ids)).toMatchObject(expectedMatchingItems);
 	});
+
+	test.each([
+		[0, false],
+		[12, false],
+		[4096, false],
+		[4097, true],
+		[100000, true],
+	])('userSideValidation should reject overly long titles (length: %d)', (length, shouldThrow) => {
+		const run = () => BaseModel.userSideValidation({ title: 'x'.repeat(length) });
+		if (shouldThrow) {
+			expect(run).toThrow(/title must be 4096 characters or less/);
+		} else {
+			expect(run).not.toThrow();
+		}
+	});
 });

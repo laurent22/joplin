@@ -601,7 +601,7 @@ class BaseModel {
 		return query;
 	}
 
-	public static userSideValidation(o: { id?: string; user_updated_time?: number; user_created_time?: number }) {
+	public static userSideValidation(o: { id?: string; title?: string; user_updated_time?: number; user_created_time?: number }) {
 		if (o.id && !o.id.match(/^[a-f0-9]{32}$/)) {
 			throw new Error('Validation error: ID must a 32-characters lowercase hexadecimal string');
 		}
@@ -609,6 +609,11 @@ class BaseModel {
 		const timestamps = ['user_updated_time', 'user_created_time'] as const;
 		for (const k of timestamps) {
 			if ((k in o) && (typeof o[k] !== 'number' || isNaN(o[k]) || o[k] < 0)) throw new Error('Validation error: user_updated_time and user_created_time must be numbers greater than 0');
+		}
+
+		const maxTitleLength = 4096;
+		if (typeof o.title === 'string' && o.title.length > maxTitleLength) {
+			throw new Error(`Validation error: title must be ${maxTitleLength} characters or less`);
 		}
 	}
 
