@@ -314,7 +314,15 @@ export function models() {
 }
 
 export function parseHtml(html: string): Document {
-	const dom = new jsdom.JSDOM(html);
+	const virtualConsole = new jsdom.VirtualConsole();
+	virtualConsole.sendTo(console, { omitJSDOMErrors: true });
+	virtualConsole.on('jsdomError', (error: Error & { detail?: unknown }) => {
+		// JSDOM's CSS parser doesn't support modern syntax (nested selectors, :has(), etc.) used in
+		// the rendered note stylesheets, so it spams the console. The HTML parse itself is unaffected.
+		if (error.message?.includes('Could not parse CSS stylesheet')) return;
+		console.error(error.stack, error.detail);
+	});
+	const dom = new jsdom.JSDOM(html, { virtualConsole });
 	return dom.window.document;
 }
 
