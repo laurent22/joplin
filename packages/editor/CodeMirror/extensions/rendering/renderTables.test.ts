@@ -40,6 +40,18 @@ describe('renderTables', () => {
 		if (inner) expect(div.innerHTML).toBe(inner);
 	});
 
+	test.each([
+		'foo_bar_baz',
+		'my_var_name',
+		'a*b*c',
+		'snake_case_identifier',
+	])('renderInlineMarkdown should not treat intra-word * or _ as emphasis: %s', (input) => {
+		const div = document.createElement('div');
+		renderInlineMarkdown(div, input);
+		expect(div.querySelector('em')).toBeNull();
+		expect(div.textContent).toBe(input);
+	});
+
 	test('renderInlineMarkdown should treat literal <br> as a line break', () => {
 		const div = document.createElement('div');
 		renderInlineMarkdown(div, 'line1<br>line2');

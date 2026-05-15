@@ -65,8 +65,10 @@ export const renderInlineMarkdown = (parent: HTMLElement, text: string) => {
 		if (s > 0) parts.push('<br>');
 		const segment = segments[s];
 		// Single regex with alternatives, scanned left-to-right. Each branch
-		// captures its inner content.
-		const re = /\*\*([^*]+)\*\*|__([^_]+)__|\*([^*]+)\*|_([^_]+)_|`([^`]+)`|~~([^~]+)~~|\[([^\]]+)\]\(([^)\s]+)\)/g;
+		// captures its inner content. Single * and _ emphasis use word-
+		// boundary guards so identifiers like `foo_bar_baz` or `a*b*c` are
+		// not rendered as emphasis.
+		const re = /\*\*([^*]+)\*\*|__([^_]+)__|(?<![A-Za-z0-9])\*([^*]+)\*(?![A-Za-z0-9])|(?<![A-Za-z0-9])_([^_]+)_(?![A-Za-z0-9])|`([^`]+)`|~~([^~]+)~~|\[([^\]]+)\]\(([^)\s]+)\)/g;
 		let lastIdx = 0;
 		let m: RegExpExecArray | null;
 		while ((m = re.exec(segment)) !== null) {
