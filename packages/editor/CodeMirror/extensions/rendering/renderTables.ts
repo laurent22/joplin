@@ -313,11 +313,28 @@ class TableWidget extends WidgetType {
 				}, 500);
 			};
 
-			textDiv.oninput = scheduleLiveSync;
+			// Track IME composition so we don't rebuild the cell DOM
+			// mid-composition — rebuilding would cancel the IME and drop
+			// any in-progress candidates.
+			let isComposing = false;
+			textDiv.addEventListener('compositionstart', () => {
+				isComposing = true;
+				cancelLiveSync();
+			});
+			textDiv.addEventListener('compositionend', () => {
+				isComposing = false;
+				scheduleLiveSync();
+			});
+
+			textDiv.oninput = () => {
+				if (isComposing) return;
+				scheduleLiveSync();
+			};
 			// Some browsers do not fire `input` reliably when non-text nodes
 			// (e.g. <img>) are removed via Backspace inside contentEditable.
 			// A MutationObserver catches DOM-level changes that `input` misses.
 			const mo = new win.MutationObserver(() => {
+				if (isComposing) return;
 				if (doc.activeElement === textDiv) scheduleLiveSync();
 			});
 			mo.observe(textDiv, { childList: true, characterData: true, subtree: true });
