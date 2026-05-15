@@ -8,6 +8,7 @@
 import { EditorView, WidgetType } from '@codemirror/view';
 import { EditorState } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
+import sanitizeHtml from '../../../ProseMirror/utils/sanitizeHtml';
 import makeBlockReplaceExtension from './utils/makeBlockReplaceExtension';
 import { focus, blur } from '@joplin/lib/utils/focusHandler';
 import {
@@ -28,18 +29,32 @@ const CTX = 'cm-tw-ctx';
 // heights correctly for scroll position and coordinate mapping.
 const tableHeightCache = new Map<string, number>();
 
+// HTML-escape a string so captured cell text can be safely embedded into the
+// HTML fragment we hand to DOMPurify. DOMPurify is the actual safety net for
+// tag/attribute/URL filtering; this just keeps angle brackets and quotes in
+// the input from being interpreted as markup at all.
+const escapeHtml = (s: string): string => {
+	return s
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#39;');
+};
+
 // Render a small subset of inline markdown into DOM children appended to
 // `parent`. Supports: **bold**, *italic* / _italic_, `code`, ~~strike~~,
 // [label](url), and literal <br> as a line break. Escaped pipes (\|) are
-// shown as plain |. Anything not matched is emitted as plain text, so
-// untrusted input cannot inject HTML.
+// shown as plain |. The assembled HTML is run through DOMPurify before
+// insertion, so unsafe URL schemes (javascript:, data:, ...) and any tags
+// or attributes that slipped through the regex are removed.
 export const renderInlineMarkdown = (parent: HTMLElement, text: string) => {
-	const doc = parent.ownerDocument;
 	// Normalise: escaped pipes → |, and split on literal <br> for soft breaks.
 	const normalised = text.replace(/\\\|/g, '|');
 	const segments = normalised.split(/<br\s*\/?>/i);
+	const parts: string[] = [];
 	for (let s = 0; s < segments.length; s++) {
-		if (s > 0) parent.appendChild(doc.createElement('br'));
+		if (s > 0) parts.push('<br>');
 		const segment = segments[s];
 		// Single regex with alternatives, scanned left-to-right. Each branch
 		// captures its inner content.
@@ -48,34 +63,26 @@ export const renderInlineMarkdown = (parent: HTMLElement, text: string) => {
 		let m: RegExpExecArray | null;
 		while ((m = re.exec(segment)) !== null) {
 			if (m.index > lastIdx) {
-				parent.appendChild(doc.createTextNode(segment.slice(lastIdx, m.index)));
+				parts.push(escapeHtml(segment.slice(lastIdx, m.index)));
 			}
-			let node: HTMLElement;
 			if (m[1] !== undefined || m[2] !== undefined) {
-				node = doc.createElement('strong');
-				node.textContent = (m[1] ?? m[2])!;
+				parts.push(`<strong>${escapeHtml((m[1] ?? m[2])!)}</strong>`);
 			} else if (m[3] !== undefined || m[4] !== undefined) {
-				node = doc.createElement('em');
-				node.textContent = (m[3] ?? m[4])!;
+				parts.push(`<em>${escapeHtml((m[3] ?? m[4])!)}</em>`);
 			} else if (m[5] !== undefined) {
-				node = doc.createElement('code');
-				node.textContent = m[5];
+				parts.push(`<code>${escapeHtml(m[5])}</code>`);
 			} else if (m[6] !== undefined) {
-				node = doc.createElement('del');
-				node.textContent = m[6];
+				parts.push(`<del>${escapeHtml(m[6])}</del>`);
 			} else {
-				const a = doc.createElement('a');
-				a.textContent = m[7]!;
-				a.setAttribute('href', m[8]!);
-				node = a;
+				parts.push(`<a href="${escapeHtml(m[8]!)}">${escapeHtml(m[7]!)}</a>`);
 			}
-			parent.appendChild(node);
 			lastIdx = m.index + m[0].length;
 		}
 		if (lastIdx < segment.length) {
-			parent.appendChild(doc.createTextNode(segment.slice(lastIdx)));
+			parts.push(escapeHtml(segment.slice(lastIdx)));
 		}
 	}
+	parent.innerHTML = sanitizeHtml(parts.join(''));
 };
 
 class TableWidget extends WidgetType {

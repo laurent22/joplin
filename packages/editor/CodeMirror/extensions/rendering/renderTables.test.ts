@@ -54,6 +54,36 @@ describe('renderTables', () => {
 		expect(div.textContent).toBe('<script>alert(1)</script>');
 	});
 
+	test.each([
+		'[click](javascript:alert(1))',
+		'[click](JavaScript:alert(1))',
+		'[click](data:text/html,<script>alert(1)</script>)',
+		'[click](vbscript:msgbox)',
+	])('renderInlineMarkdown should strip dangerous href schemes: %s', (input) => {
+		const div = document.createElement('div');
+		renderInlineMarkdown(div, input);
+		// DOMPurify may keep the anchor element but must remove the unsafe
+		// href so clicking it does nothing.
+		const anchor = div.querySelector('a');
+		expect(anchor?.getAttribute('href')).toBeFalsy();
+		// And nothing executable should have leaked in.
+		expect(div.querySelector('script')).toBeNull();
+	});
+
+	test.each([
+		{ url: 'https://example.com', expected: 'https://example.com' },
+		{ url: 'http://example.com', expected: 'http://example.com' },
+		{ url: 'mailto:test@example.com', expected: 'mailto:test@example.com' },
+		{ url: '/relative/path', expected: '/relative/path' },
+		{ url: ':/abc1234567890def', expected: ':/abc1234567890def' },
+	])('renderInlineMarkdown should produce anchors for safe URLs: $url', ({ url, expected }) => {
+		const div = document.createElement('div');
+		renderInlineMarkdown(div, `[label](${url})`);
+		const a = div.querySelector('a');
+		expect(a).not.toBeNull();
+		expect(a!.getAttribute('href')).toBe(expected);
+	});
+
 	test('cells should render inline markdown when not focused', async () => {
 		const editor = await createEditor('| **bold** | *italic* |\n|---|---|\n| `code` | plain |');
 		const cells = findCellTextDivs(editor);
