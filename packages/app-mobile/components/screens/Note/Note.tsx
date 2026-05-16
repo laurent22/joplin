@@ -1717,6 +1717,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					);
 				} else {
 					const editorStyle = this.styles().bodyTextInput;
+					const globalSearch = this.props.highlightedWords.length ? this.props.highlightedWords.join(' ') : this.props.searchQuery;
 
 					bodyComponent = <NoteEditor
 						ref={this.editorRef}
@@ -1726,7 +1727,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						initialText={note.body}
 						initialSelection={this.selection}
 						markupLanguage={this.state.note.markup_language}
-						globalSearch={this.props.searchQuery}
+						globalSearch={globalSearch}
 						onChange={this.onMarkdownEditorTextChange}
 						onSelectionChange={this.onEditorSelectionChange}
 						onUndoRedoDepthChange={this.onUndoRedoDepthChange}
