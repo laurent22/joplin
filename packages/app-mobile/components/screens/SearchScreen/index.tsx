@@ -71,6 +71,8 @@ const SearchScreenComponent: React.FC<Props> = props => {
 	const globalQueryRef = useRef(props.query);
 	globalQueryRef.current = props.query;
 	useEffect(() => {
+		let cancelled = false;
+
 		if (globalQueryRef.current !== query) {
 			const updateInlineQuery = async () => {
 				let terms = query;
@@ -85,6 +87,8 @@ const SearchScreenComponent: React.FC<Props> = props => {
 					logger.warn('Failed to parse search query', error);
 				}
 
+				if (cancelled) return;
+
 				props.dispatch({
 					type: 'SEARCH_INLINE_QUERY',
 					query: terms,
@@ -98,6 +102,10 @@ const SearchScreenComponent: React.FC<Props> = props => {
 
 			void updateInlineQuery();
 		}
+
+		return () => {
+			cancelled = true;
+		};
 	}, [props.dispatch, query]);
 
 	const clearButton_press = useCallback(() => {
