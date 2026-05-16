@@ -38,6 +38,7 @@ import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
 import { Second } from '@joplin/utils/time';
 import useDebounced from '../../utils/hooks/useDebounced';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 
 const logger = Logger.create('NoteEditor');
 
@@ -329,6 +330,7 @@ function NoteEditor(props: Props) {
 	const [selectionState, setSelectionState] = useState<SelectionFormatting>(defaultSelectionFormatting);
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
 	const [searchState, setSearchState] = useState(defaultSearchState);
+	const [globalSearch, setGlobalSearch] = useState('');
 
 	const editorControlRef = useRef<EditorControl|null>(null);
 	const lastSearchVisibleRef = useRef<boolean|undefined>(undefined);
@@ -424,6 +426,31 @@ function NoteEditor(props: Props) {
 		}
 	}, [props.noteResources, editorControl]);
 
+	useEffect(() => {
+		const timeoutId = setTimeout(() => {
+			const loadSearch = async () => {
+				try {
+					const parsedQuery = await SearchEngine.instance().parseQuery(props.globalSearch);
+
+					const terms = SearchEngine.instance()
+						.allParsedQueryTerms(parsedQuery)
+						.map(term => typeof term === 'string' ? term : term.value)
+						.join(' ');
+
+					setGlobalSearch(terms);
+				} catch (error) {
+					logger.warn('Failed to parse search query', error);
+				}
+			};
+
+			void loadSearch();
+		}, 100);
+
+		return () => {
+			clearTimeout(timeoutId);
+		};
+	}, [props.globalSearch]);
+
 	useEditorCommandHandler(editorControl);
 
 	useImperativeHandle(props.ref, () => {
@@ -485,7 +512,7 @@ function NoteEditor(props: Props) {
 					initialSelection={props.initialSelection}
 					initialScroll={props.initialScroll}
 					editorSettings={editorSettings}
-					globalSearch={props.globalSearch}
+					globalSearch={globalSearch}
 					onEditorEvent={onEditorEvent}
 					noteResources={props.noteResources}
 					plugins={props.plugins}
