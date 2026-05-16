@@ -189,6 +189,20 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				paddingTop: 15,
 				paddingBottom: 15,
 			},
+			viewToggleButton: {
+				flex: 1,
+				backgroundColor: theme.backgroundColor2,
+				paddingLeft: 22,
+				paddingRight: 10,
+				paddingTop: PADDING_V,
+				paddingBottom: PADDING_V,
+			},
+			viewToggleIcon: {
+				fontSize: 27,
+				color: theme.colorBright2,
+				flex: 1,
+				textAlignVertical: 'center',
+			},
 		};
 
 
@@ -384,12 +398,17 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			const mode = this.props.viewToggleButtonMode ?? ViewToggleButtonMode.Hidden;
 			if (mode === ViewToggleButtonMode.Hidden || !this.props.onViewTogglePress) return null;
 
-			return renderTopButton({
-				iconName: mode === ViewToggleButtonMode.ShowViewer ? 'ionicon book' : 'ionicon pencil',
-				description: mode === ViewToggleButtonMode.ShowViewer ? _('Stop editing') : _('Edit'),
-				onPress: this.props.onViewTogglePress,
-				visible: true,
-			});
+			return (
+				<IconButton
+					onPress={this.props.onViewTogglePress}
+					containerStyle={{ padding: 0 }}
+					contentWrapperStyle={this.styles().viewToggleButton}
+					themeId={themeId}
+					description={mode === ViewToggleButtonMode.ShowViewer ? _('Stop editing') : _('Edit')}
+					iconName={mode === ViewToggleButtonMode.ShowViewer ? 'ionicon book-outline' : 'ionicon create-outline'}
+					iconStyle={this.styles().viewToggleIcon}
+				/>
+			);
 		};
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
