@@ -11,6 +11,7 @@ import prepareViewProps from './prepareViewProps';
 import Tag from '@joplin/lib/models/Tag';
 import { unique } from '@joplin/lib/array';
 import Folder from '@joplin/lib/models/Folder';
+import { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
 
 interface RenderedNote {
 	id: string;
@@ -22,7 +23,7 @@ const hashContent = (content: unknown) => {
 	return createHash('sha1').update(JSON.stringify(content)).digest('hex');
 };
 
-export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listRenderer: ListRenderer, highlightedWords: string[], itemIndex: number, columns: NoteListColumns) => {
+export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listRenderer: ListRenderer, highlightedWords: (ComplexTerm | string)[], itemIndex: number, columns: NoteListColumns) => {
 	const [renderedNote, setRenderedNote] = useState<RenderedNote>(null);
 
 	let dependencies = columns && columns.length ? columns.map(c => c.name) as ListRendererDependency[] : [];
