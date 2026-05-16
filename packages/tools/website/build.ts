@@ -97,8 +97,7 @@ const jsBasePath = `${websiteAssetDir}/js`;
 const jsBaseUrl = `${baseUrl}/js`;
 
 async function getAssetUrls(): Promise<AssetUrls> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const scriptsToImport: any[] = [
+	const scriptsToImport: { id: string; sourcePath: string; md5: string; filename: string }[] = [
 		// {
 		// 	id: 'tippy',
 		// 	sourcePath: rootDir + '/packages/tools/node_modules/tippy.js/dist/tippy-bundle.umd.min.js',

@@ -37,7 +37,7 @@ interface ConfigScreenComponent {
 
 	state: Partial<ConfigScreenState>;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mirrors React.Component.setState signature (Pick<S, K> etc.); a narrower local type breaks subclass assignment of `this` to ConfigScreenComponent
 	setState(callbackOrNew: any, callback?: ()=> void): void;
 }
 
@@ -108,8 +108,7 @@ export const checkSyncConfigMessages = (comp: ConfigScreenComponent) => {
 	return output;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const updateSettingValue = (comp: ConfigScreenComponent, key: string, value: any, callback?: ()=> void) => {
+export const updateSettingValue = (comp: ConfigScreenComponent, key: string, value: unknown, callback?: ()=> void) => {
 	if (!callback) callback = () => {};
 
 	comp.setState((state: ConfigScreenState) => {

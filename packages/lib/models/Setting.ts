@@ -24,10 +24,12 @@ export type SettingValueType<T extends string> = (
 		: (T extends keyof Constants ? Constants[T] : any)
 );
 
-interface OptionsToValueLabelsOptions {
-	valueKey: string;
-	labelKey: string;
+interface OptionsToValueLabelsOptions<TValueKey extends string = 'value', TLabelKey extends string = 'label'> {
+	valueKey: TValueKey;
+	labelKey: TLabelKey;
 }
+
+type EnumValueLabel<TValueKey extends string, TLabelKey extends string> = { [K in TValueKey | TLabelKey]: string };
 
 interface KeysOptions {
 	secureOnly?: boolean;
@@ -37,7 +39,7 @@ interface KeysOptions {
 // They are saved to database at regular intervals.
 interface CacheItem {
 	key: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each setting has its own value type; tightening forces narrowing at every read/write site
 	value: any;
 }
 
@@ -289,8 +291,7 @@ class Setting extends BaseModel {
 		isDemo: false,
 		appName: 'joplin',
 		appId: 'SET_ME', // Each app should set this identifier
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		appType: 'SET_ME' as any, // 'cli' or 'mobile'
+		appType: 'SET_ME' as AppType, // 'cli' or 'mobile'
 		resourceDirName: '',
 		resourceDir: '',
 		pluginAssetDir: '',
@@ -315,14 +316,12 @@ class Setting extends BaseModel {
 	public static allowFileStorage = true;
 
 	private static metadata_: SettingItems = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- KeychainService concrete class lives in app-desktop/app-mobile; lib references it structurally to avoid cross-package imports
 	private static keychainService_: any = null;
 	private static keys_: string[] = null;
 	private static cache_: CacheItem[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static saveTimeoutId_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static changeEventTimeoutId_: any = null;
+	private static saveTimeoutId_: ReturnType<typeof shim.setTimeout> = null;
+	private static changeEventTimeoutId_: ReturnType<typeof shim.setTimeout> = null;
 	private static customMetadata_: SettingItems = {};
 	private static customSections_: SettingSections = {};
 	private static changedKeys_: string[] = [];
@@ -388,7 +387,7 @@ class Setting extends BaseModel {
 		return this.keychainService_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See keychainService_ above
 	public static setKeychainService(s: any) {
 		this.keychainService_ = s;
 	}
@@ -702,8 +701,7 @@ class Setting extends BaseModel {
 		// saving to database shouldn't). When the keychain works, the secure keys
 		// are deleted from the database and transferred to the keychain in saveAll().
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const rowKeys = rows.map((r: any) => r.key);
+		const rowKeys = (rows as { key: string }[]).map(r => r.key);
 		const secureKeys = this.keys(false, null, { secureOnly: true });
 		const secureItems: CacheItem[] = [];
 		for (const key of secureKeys) {
@@ -774,8 +772,7 @@ class Setting extends BaseModel {
 
 	public static toPlainObject() {
 		const keys = this.keys();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const keyToValues: any = {};
+		const keyToValues: Record<string, unknown> = {};
 		for (let i = 0; i < keys.length; i++) {
 			keyToValues[keys[i]] = this.value(keys[i]);
 		}
@@ -875,8 +872,7 @@ class Setting extends BaseModel {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static incValue(key: string, inc: any) {
+	public static incValue(key: string, inc: number) {
 		return this.setValue(key, this.value(key) + inc);
 	}
 
@@ -888,23 +884,20 @@ class Setting extends BaseModel {
 	// If yes, then it just returns 'true'. If its not present then, it will
 	// update it and return 'false'
 	public static setArrayValue(settingName: string, value: string): boolean {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const settingValue: any[] = this.value(settingName);
+		const settingValue: string[] = this.value(settingName);
 		if (settingValue.includes(value)) return true;
 		settingValue.push(value);
 		this.setValue(settingName, settingValue);
 		return false;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static objectValue(settingKey: string, objectKey: string, defaultValue: any = null) {
+	public static objectValue(settingKey: string, objectKey: string, defaultValue: unknown = null) {
 		const o = this.value(settingKey);
 		if (!o || !(objectKey in o)) return defaultValue;
 		return o[objectKey];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static setObjectValue(settingKey: string, objectKey: string, value: any) {
+	public static setObjectValue(settingKey: string, objectKey: string, value: unknown) {
 		let o = this.value(settingKey);
 		if (typeof o !== 'object') o = {};
 		o[objectKey] = value;
@@ -925,22 +918,22 @@ class Setting extends BaseModel {
 		}
 	}
 
-	public static enumOptionsToValueLabels(enumOptions: Record<string, string>, order: string[], options: OptionsToValueLabelsOptions = null) {
-		options = {
-			labelKey: 'label',
-			valueKey: 'value',
+	public static enumOptionsToValueLabels<TValueKey extends string = 'value', TLabelKey extends string = 'label'>(enumOptions: Record<string, string>, order: string[], options: OptionsToValueLabelsOptions<TValueKey, TLabelKey> = null): EnumValueLabel<TValueKey, TLabelKey>[] {
+		const resolvedOptions = {
+			labelKey: 'label' as TLabelKey,
+			valueKey: 'value' as TValueKey,
 			...options,
 		};
 
-		const output = [];
+		const output: EnumValueLabel<TValueKey, TLabelKey>[] = [];
 
 		for (const value of order) {
 			if (!Object.prototype.hasOwnProperty.call(enumOptions, value)) continue;
 
 			output.push({
-				[options.valueKey]: value,
-				[options.labelKey]: enumOptions[value],
-			});
+				[resolvedOptions.valueKey]: value,
+				[resolvedOptions.labelKey]: enumOptions[value],
+			} as EnumValueLabel<TValueKey, TLabelKey>);
 		}
 
 		for (const k in enumOptions) {
@@ -948,15 +941,15 @@ class Setting extends BaseModel {
 			if (order.includes(k)) continue;
 
 			output.push({
-				[options.valueKey]: k,
-				[options.labelKey]: enumOptions[k],
-			});
+				[resolvedOptions.valueKey]: k,
+				[resolvedOptions.labelKey]: enumOptions[k],
+			} as EnumValueLabel<TValueKey, TLabelKey>);
 		}
 
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- value is the per-setting raw value; formatValue branches by SettingItemType — narrowing forces casts in every branch
 	public static valueToString(key: string, value: any) {
 		const md = this.settingMetadata(key);
 		value = this.formatValue(key, value);
@@ -969,13 +962,12 @@ class Setting extends BaseModel {
 		throw new Error(`Unhandled value type: ${md.type}`);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static filterValue(key: string, value: any) {
+	public static filterValue(key: string, value: unknown) {
 		const md = this.settingMetadata(key);
 		return md.filter ? md.filter(value) : value;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See valueToString above
 	public static formatValue(key: string | SettingItemType, value: any) {
 		const type = typeof key === 'string' ? this.settingMetadata(key).type : key;
 
@@ -1018,16 +1010,15 @@ class Setting extends BaseModel {
 		// with strict equality and the value is updated only if changed. However if the caller acquire
 		// an object and change a key, the objects will be detected as equal. By returning a copy
 		// we avoid this problem.
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function copyIfNeeded(value: any) {
+		function copyIfNeeded<T>(value: T): T {
 			if (value === null || value === undefined) return value;
-			if (Array.isArray(value)) return value.slice();
-			if (typeof value === 'object') return { ...value };
+			if (Array.isArray(value)) return value.slice() as T;
+			if (typeof value === 'object') return { ...value } as T;
 			return value;
 		}
 
 		if (key in this.constants_) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Constants are heterogeneous (string, number, AppType, function); value() returns SettingValueType<T> which is parametric
 			const v = (this.constants_ as any)[key];
 			const output = typeof v === 'function' ? v() : v;
 			if (output === 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
@@ -1067,8 +1058,7 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static enumOptionLabel(key: string, value: any) {
+	public static enumOptionLabel(key: string, value: unknown) {
 		const options = this.enumOptions(key);
 		for (const n in options) {
 			if (n === value) return options[n];
@@ -1094,8 +1084,7 @@ class Setting extends BaseModel {
 		return output.join(', ');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static isAllowedEnumOption(key: string, value: any) {
+	public static isAllowedEnumOption(key: string, value: string) {
 		const options = this.enumOptions(key);
 		return !!options[value];
 	}
@@ -1104,7 +1093,6 @@ class Setting extends BaseModel {
 	// { sync.5.path: 'http://example', sync.5.username: 'testing' }
 	// and baseKey is 'sync.5', the function will return
 	// { path: 'http://example', username: 'testing' }
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	public static subValues(baseKey: string, settings: Partial<SettingsRecord>, options: SubValuesOptions|null = null) {
 		const includeBaseKeyInName = !!options && !!options.includeBaseKeyInName;
 
@@ -1112,8 +1100,7 @@ class Setting extends BaseModel {
 			return includeBaseKeyInName ? key : key.substring(baseKey.length + 1);
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {};
+		const output: Record<string, unknown> = {};
 		for (const [key, value] of Object.entries(settings)) {
 			if (key.startsWith(baseKey)) {
 				output[subKey(key)] = value;
@@ -1329,11 +1316,9 @@ class Setting extends BaseModel {
 	}
 
 	public static groupMetadatasBySections(metadatas: SettingItem[]): MetadataBySection {
-		const sections = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const generalSection: any = { name: 'general', metadatas: [] };
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const nameToSections: any = {};
+		const sections: SettingMetadataSection[] = [];
+		const generalSection: SettingMetadataSection = { name: 'general', metadatas: [] };
+		const nameToSections: Record<string, SettingMetadataSection> = {};
 		nameToSections['general'] = generalSection;
 		sections.push(generalSection);
 		for (let i = 0; i < metadatas.length; i++) {

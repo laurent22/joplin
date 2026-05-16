@@ -15,6 +15,7 @@ import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 import { Models } from '../../models/factory';
 import { confirmUrl } from '../../utils/urlUtils';
 import { msleep } from '../../utils/time';
+import { IncomingMessage } from 'http';
 
 const logger = Logger.create('index/stripe');
 
@@ -22,8 +23,7 @@ const router: Router = new Router(RouteType.Web);
 
 router.public = true;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function stripeEvent(stripe: Stripe, req: any): Promise<Stripe.Event> {
+async function stripeEvent(stripe: Stripe, req: IncomingMessage): Promise<Stripe.Event> {
 	if (!stripeConfig().webhookSecret) throw new Error('webhookSecret is required');
 
 	const body = await getRawBody(req);
@@ -43,8 +43,7 @@ interface CreateCheckoutSessionFields {
 	source: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<any>;
+type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<unknown>;
 
 interface PostHandlers {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
@@ -512,10 +511,9 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 };
 
 router.post('stripe/:id', async (path: SubPath, ctx: AppContext) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	if (!(postHandlers as any)[path.id]) throw new ErrorNotFound(`No such action: ${path.id}`);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return (postHandlers as any)[path.id](initStripe(), path, ctx);
+	const handler = (postHandlers as unknown as Record<string, (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<unknown>>)[path.id];
+	if (!handler) throw new ErrorNotFound(`No such action: ${path.id}`);
+	return handler(initStripe(), path, ctx);
 });
 
 router.get('stripe/:id', async (path: SubPath, ctx: AppContext) => {

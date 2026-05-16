@@ -168,16 +168,15 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 						return selections.length ? selections[0] : '';
 					};
 
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					const commands: any = {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous editor commands; each entry has a different signature, dispatched dynamically by name
+					const commands: Record<string, (...args: any[])=> unknown> = {
 						selectedText: () => {
 							return selectedText();
 						},
 						selectedHtml: () => {
 							return selectedText();
 						},
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						replaceSelection: (value: any) => {
+						replaceSelection: (value: string) => {
 							return editorRef.current.replaceSelection(value);
 						},
 						textCopy: () => {
@@ -216,8 +215,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 								}
 							}
 						},
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						insertText: (value: any) => editorRef.current.insertAtCursor(value),
+						insertText: (value: string) => editorRef.current.insertAtCursor(value),
 						attachFile: async () => {
 							const cursor = editorRef.current.getCursor();
 							const pos = cursorPositionToTextOffset(cursor, props.content);
@@ -286,8 +284,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.content, props.visiblePanes, props.contentMarkupLanguage, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onEditorPaste = useCallback(async (event: any = null) => {
+	const onEditorPaste = useCallback(async (event: { preventDefault: ()=> void } | null = null) => {
 		const resourceMds = await getResourcesFromPasteEvent(event);
 		if (!resourceMds.length) return;
 		if (editorRef.current) {
@@ -354,21 +351,19 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 	}, [editorPasteText, onEditorPaste]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const loadScript = async (script: any, document: Document) => {
+	const loadScript = async (script: { src: string; id?: string; attrs?: Record<string, string> }, document: Document) => {
 		return new Promise((resolve) => {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			let element: any = document.createElement('script');
+			let element = document.createElement('script') as HTMLScriptElement | HTMLLinkElement;
 			if (script.src.indexOf('.css') >= 0) {
 				element = document.createElement('link');
 				element.rel = 'stylesheet';
 				element.href = script.src;
 			} else {
-				element.src = script.src;
+				(element as HTMLScriptElement).src = script.src;
 
 				if (script.attrs) {
 					for (const attr in script.attrs) {
-						element[attr] = script.attrs[attr];
+						(element as unknown as Record<string, string>)[attr] = script.attrs[attr];
 					}
 				}
 			}
@@ -691,8 +686,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	useEffect(() => {
 		if (!webviewReady) return;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const options: any = {
+		const options: { pluginAssets: unknown[]; downloadResources: string; markupLineCount: number; percent?: number } = {
 			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),
 			markupLineCount: editorRef.current?.lineCount() || 0,

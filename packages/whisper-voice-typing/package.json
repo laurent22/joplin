@@ -1,6 +1,6 @@
 {
   "name": "@joplin/whisper-voice-typing",
-  "version": "3.6.0",
+  "version": "3.7.0",
   "private": true,
   "description": "Whisper.cpp bindings for React Native!",
   "author": "Joplin team",
@@ -49,7 +49,7 @@
     "nitrogen": "0.33.7",
     "react": "19.1.5",
     "react-native": "0.81.6",
-    "react-native-nitro-modules": "0.33.7",
+    "react-native-nitro-modules": "0.33.9",
     "typescript": "5.9.3"
   },
   "peerDependencies": {

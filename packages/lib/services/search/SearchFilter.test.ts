@@ -11,8 +11,7 @@ import ResourceService from '../ResourceService';
 import { NoteEntity } from '../database/types';
 
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let engine: any = null;
+let engine: SearchEngine = null;
 
 const ids = (array: NoteEntity[]) => array.map(a => a.id);
 

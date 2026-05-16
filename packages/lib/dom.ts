@@ -1,23 +1,22 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const isInsideContainer = (node: any, className: string): boolean => {
-	while (node) {
-		if (node.classList && node.classList.contains(className)) return true;
-		node = node.parentNode;
+export const isInsideContainer = (node: EventTarget | Node | null, className: string): boolean => {
+	let current: Node | null = node as Node | null;
+	while (current) {
+		if ((current as Element).classList && (current as Element).classList.contains(className)) return true;
+		current = current.parentNode;
 	}
 	return false;
 };
 
 interface CancelEvent { cancelled: boolean }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const waitForElement = async (parent: any, id: string, cancelEvent?: CancelEvent): Promise<any> => {
+export const waitForElement = async <T extends HTMLElement = HTMLElement>(parent: Document | HTMLElement, id: string, cancelEvent?: CancelEvent): Promise<T | null> => {
 	return new Promise((resolve, reject) => {
 		const iid = setInterval(() => {
 			try {
-				const element = parent.getElementById(id);
+				const element = (parent as Document).getElementById(id);
 				if (element || cancelEvent?.cancelled) {
 					clearInterval(iid);
-					resolve(element);
+					resolve(element as T | null);
 				}
 			} catch (error) {
 				clearInterval(iid);

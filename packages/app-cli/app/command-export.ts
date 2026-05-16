@@ -3,7 +3,7 @@ import InteropService from '@joplin/lib/services/interop/InteropService';
 import { ModelType } from '@joplin/lib/BaseModel';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
-import { ExportOptions } from '@joplin/lib/services/interop/types';
+import { ExportModuleOutputFormat, ExportOptions } from '@joplin/lib/services/interop/types';
 
 class Command extends BaseCommand {
 	public override usage() {
@@ -24,25 +24,22 @@ class Command extends BaseCommand {
 		return [['--format <format>', _('Destination format: %s', formats.join(', '))], ['--note <note>', _('Exports only the given note.')], ['--notebook <notebook>', _('Exports only the given notebook.')]];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { path: string; options: { format?: string; note?: string; 'notebook'?: string } }) {
 		const exportOptions: ExportOptions = {};
 		exportOptions.path = args.path;
 
-		exportOptions.format = args.options.format ? args.options.format : 'jex';
+		exportOptions.format = args.options.format ? args.options.format as ExportModuleOutputFormat : ExportModuleOutputFormat.Jex;
 
 		if (exportOptions.format === 'html') throw new Error('HTML export is not supported. Please use the desktop application.');
 
 		if (args.options.note) {
 			const notes = await app().loadItems(ModelType.Note, args.options.note, { parent: app().currentFolder() });
 			if (!notes.length) throw new Error(_('Cannot find "%s".', args.options.note));
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			exportOptions.sourceNoteIds = notes.map((n: any) => n.id);
+			exportOptions.sourceNoteIds = notes.map(n => n.id);
 		} else if (args.options.notebook) {
 			const folders = await app().loadItems(ModelType.Folder, args.options.notebook);
 			if (!folders.length) throw new Error(_('Cannot find "%s".', args.options.notebook));
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			exportOptions.sourceFolderIds = folders.map((n: any) => n.id);
+			exportOptions.sourceFolderIds = folders.map(n => n.id);
 		}
 
 		const service = InteropService.instance();

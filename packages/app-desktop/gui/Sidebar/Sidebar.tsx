@@ -18,7 +18,7 @@ interface Props {
 	dispatch: Dispatch;
 	decryptionWorker: StateDecryptionWorker;
 	resourceFetcher: StateResourceFetcher;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- syncReport: any matches the lib reducer shape; tightening requires defining the synchronizer's report type there first
 	syncReport: any;
 	syncStarted: boolean;
 	syncPending: boolean;

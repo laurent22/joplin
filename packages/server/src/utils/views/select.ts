@@ -27,7 +27,7 @@ export function selectOption(label: string, value: unknown, selected: boolean): 
 	return { label, value, selected };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Callers pass concrete entity types (e.g. `User`) which lack the `Record<string, unknown>` index signature; `Record<string, any>` would force narrowing at every call site
 export function yesNoDefaultOptions(object: any, key: string): Option[] {
 	return [
 		selectOption('Default', '', object[key] === null),
@@ -36,7 +36,7 @@ export function yesNoDefaultOptions(object: any, key: string): Option[] {
 	];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See yesNoDefaultOptions
 export function yesNoOptions(object: any, key: string): Option[] {
 	return [
 		selectOption('Yes', '1', object[key] === 1),

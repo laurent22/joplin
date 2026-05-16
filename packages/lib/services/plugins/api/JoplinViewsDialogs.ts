@@ -5,7 +5,8 @@ import createViewHandle from '../utils/createViewHandle';
 import WebviewController, { ContainerType } from '../WebviewController';
 import { ButtonSpec, ViewHandle, DialogResult, Toast } from './types';
 import { _ } from '../../../locale';
-import { JoplinViewsDialogs as JoplinViewsDialogsImplementation } from '../BasePlatformImplementation';
+import { JoplinViewsDialogs as JoplinViewsDialogsImplementation, ShowOpenDialogOptions } from '../BasePlatformImplementation';
+import { PluginStore } from '../ViewController';
 
 /**
  * Allows creating and managing dialogs. A dialog is modal window that
@@ -38,13 +39,11 @@ import { JoplinViewsDialogs as JoplinViewsDialogsImplementation } from '../BaseP
  */
 export default class JoplinViewsDialogs {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private store: any;
+	private store: PluginStore;
 	private plugin: Plugin;
 	private implementation_: JoplinViewsDialogsImplementation;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(implementation: any, plugin: Plugin, store: any) {
+	public constructor(implementation: JoplinViewsDialogsImplementation, plugin: Plugin, store: PluginStore) {
 		this.store = store;
 		this.plugin = plugin;
 		this.implementation_ = implementation;
@@ -93,8 +92,7 @@ export default class JoplinViewsDialogs {
 	 *
 	 * <span class="platform-desktop">desktop</span>
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async showOpenDialog(options: any): Promise<any> {
+	public async showOpenDialog(options: ShowOpenDialogOptions): Promise<string[] | null> {
 		return this.implementation_.showOpenDialog(options);
 	}
 

@@ -32,27 +32,26 @@ import KeychainServiceDriverDummy from '@joplin/lib/services/keychain/KeychainSe
 import BaseService from '@joplin/lib/services/BaseService';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 import FsDriverNode from '@joplin/lib/fs-driver-node';
+import { sanitizeUserUrl } from './urlUtils';
+import { BannerInfo } from './banners';
+import { getDefaultBannerInfo } from './banners';
 
 const logger = Logger.create('JoplinUtils');
 
 export interface FileViewerResponse {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	body: any;
+	body: Buffer | string;
 	mime: string;
 	size: number;
 	filename: string;
 }
 
 interface ResourceInfo {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	localState: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	item: any;
+	localState: { fetch_status: number };
+	item: NoteEntity;
 }
 
 interface LinkedItemInfo {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	item: any;
+	item: NoteEntity;
 	file: File;
 }
 
@@ -114,13 +113,11 @@ export function isJoplinItemName(name: string): boolean {
 	return !!name.match(/^[0-9a-zA-Z]{32}\.md$/);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function unserializeJoplinItem(body: string): Promise<any> {
+export async function unserializeJoplinItem(body: string): Promise<NoteEntity> {
 	return BaseItem.unserialize(body);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function serializeJoplinItem(item: any): Promise<string> {
+export async function serializeJoplinItem(item: NoteEntity): Promise<string> {
 	const ModelClass = BaseItem.itemClass(item);
 	return ModelClass.serialize(item);
 }
@@ -157,8 +154,7 @@ export async function localFileFromUrl(urlPath: string): Promise<string> {
 }
 
 async function getResourceInfos(linkedItemInfos: LinkedItemInfos): Promise<ResourceInfos> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: Record<string, any> = {};
+	const output: ResourceInfos = {};
 
 	for (const itemId of Object.keys(linkedItemInfos)) {
 		const info = linkedItemInfos[itemId];
@@ -198,8 +194,7 @@ async function renderResource(userId: string, resourceId: string, item: Item, co
 	// sufficient to download the resource. However, if we want a more user
 	// friendly download, we need to know the resource original name and mime
 	// type. So below, we try to get that information.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	let jopItem: any = null;
+	let jopItem: NoteEntity & { mime?: string } | null = null;
 
 	try {
 		const resourceItem = await models_.item().loadByJopId(userId, resourceId);
@@ -216,12 +211,12 @@ async function renderResource(userId: string, resourceId: string, item: Item, co
 	};
 }
 
-async function renderNote(share: Share, note: NoteEntity, resourceInfos: ResourceInfos, linkedItemInfos: LinkedItemInfos): Promise<FileViewerResponse> {
+async function renderNote(share: Share, note: NoteEntity, resourceInfos: ResourceInfos, linkedItemInfos: LinkedItemInfos, banner: BannerInfo): Promise<FileViewerResponse> {
 	const markupToHtml = new MarkupToHtml({
 		ResourceModel: Resource as OptionsResourceModel,
 	});
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- markupToHtml.render's RenderOptions is loosely typed in @joplin/renderer; tightening would require updating the renderer package
 	const renderOptions: any = {
 		resources: resourceInfos,
 
@@ -260,6 +255,18 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 	try {
 		const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
 
+		const cssStrings = result.cssStrings.slice();
+		cssStrings.push(`
+			.navbar {
+				.navbar-item {
+					.logo-text {
+						color: ${banner.text_color};
+					}
+				}			
+				background-color: ${banner.background_color};
+			}
+		`);
+
 		const bodyHtml = await mustache_.renderView({
 			cssFiles: ['items/note'],
 			jsFiles: ['items/note'],
@@ -273,7 +280,14 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 					bodyHtml: result.html,
 					updatedDateTime: formatDateTime(note.user_updated_time),
 				},
-				cssStrings: result.cssStrings.join('\n'),
+				logoSrc: banner.logoDataUrl ? banner.logoDataUrl : `${baseUrl_}/images/JoplinLogo.png`,
+				logoTitle: banner.logo_title,
+
+				// We sanitize the URL so that the user can't inject JavaScript with javascript: URLs.
+				// Although we *now* also validate this when the BannerModel is updated, some users may have
+				// old, invalid URLs.
+				logoUrl: sanitizeUserUrl(banner.logo_url),
+				cssStrings: cssStrings.join('\n'),
 				assetsJs: `
 					const joplinNoteViewer = {
 						pluginAssets: ${JSON.stringify(result.pluginAssets)},
@@ -343,8 +357,7 @@ interface RenderItemQuery {
 export async function renderItem(userId: Uuid, item: Item, share: Share, query: RenderItemQuery): Promise<FileViewerResponse> {
 	interface FileToRender {
 		item: Item;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		content: any;
+		content: Buffer | null;
 		jopItemId: string;
 	}
 
@@ -354,8 +367,7 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	let linkedItemInfos: LinkedItemInfos = {};
 	let resourceInfos: ResourceInfos = {};
 	let fileToRender: FileToRender;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	let itemToRender: any = null;
+	let itemToRender: NoteEntity & { type_?: ModelType } | null = null;
 
 	if (query.resource_id) {
 		// ------------------------------------------------------------------------------------------
@@ -401,8 +413,7 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 
 		fileToRender = {
 			item: item,
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			content: null as any,
+			content: null,
 			jopItemId: rootNote.id,
 		};
 
@@ -426,7 +437,8 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	if (itemType === ModelType.Resource) {
 		return renderResource(userId, fileToRender.jopItemId, fileToRender.item, fileToRender.content);
 	} else if (itemType === ModelType.Note) {
-		return renderNote(share, itemToRender, resourceInfos, linkedItemInfos);
+		const bannerInfo = getDefaultBannerInfo();
+		return renderNote(share, itemToRender, resourceInfos, linkedItemInfos, bannerInfo);
 	} else {
 		throw new Error(`Cannot render item with type "${itemType}"`);
 	}

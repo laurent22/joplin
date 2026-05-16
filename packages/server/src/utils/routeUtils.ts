@@ -30,7 +30,7 @@ export enum RouteResponseFormat {
 	Json = 'json',
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Concrete handlers (e.g. `login`, `mfa`, `users`) narrow `args` to per-route field types; using `unknown[]` would break that narrowing via function-parameter contravariance
 export type RouteHandler = (path: SubPath, ctx: AppContext, ...args: any[])=> Promise<any>;
 
 export interface Routers {
@@ -58,11 +58,9 @@ export enum ResponseType {
 
 export class Response {
 	public type: ResponseType;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public response: any;
+	public response: unknown;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(type: ResponseType, response: any) {
+	public constructor(type: ResponseType, response: unknown) {
 		this.type = type;
 		this.response = response;
 	}
@@ -85,8 +83,7 @@ export function redirect(ctx: AppContext, url: string): Response {
 	return new Response(ResponseType.KoaResponse, ctx.response);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function internalRedirect(path: SubPath, ctx: AppContext, router: Router, urlSchema: string, ...args: any[]) {
+export function internalRedirect(path: SubPath, ctx: AppContext, router: Router, urlSchema: string, ...args: unknown[]) {
 	const endPoint = router.findEndPoint(HttpMethod.GET, urlSchema);
 	return endPoint.handler(path, ctx, ...args);
 }
@@ -224,8 +221,7 @@ const convertPathId = (path: SubPath): SubPath => {
 };
 
 interface ExecRequestResult {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	response: any;
+	response: unknown;
 	path: SubPath;
 }
 
@@ -323,8 +319,12 @@ export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
 	throw new Error('Unreachable');
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function respondWithItemContent(koaResponse: any, item: Item, content: Buffer): Response {
+interface KoaResponseLike {
+	body: unknown;
+	set(name: string, value: unknown): void;
+}
+
+export function respondWithItemContent(koaResponse: KoaResponseLike, item: Item, content: Buffer): Response {
 	koaResponse.body = item.jop_type > 0 ? content.toString() : content;
 	koaResponse.set('Content-Type', item.mime_type);
 	koaResponse.set('Content-Length', content.byteLength);

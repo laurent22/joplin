@@ -97,7 +97,7 @@ function openEditDialog(
 			codeTextArea: source.content,
 			languageInput: source.language,
 		},
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE dialog API is not exposed as a public type
 		onSubmit: async (dialogApi: any) => {
 			const newSource = newBlockSource(dialogApi.getData().languageInput, dialogApi.getData().codeTextArea, source);
 			const md = `${newSource.openCharacters}${newSource.content}${newSource.closeCharacters}`;

@@ -6,7 +6,7 @@ import Setting from '../Setting';
 import { validateUrlProtocol as validateUrlProtocol_ } from '../../urlUtils';
 
 // Should return an error message if there's a problem, and an empty string if not.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Settings are heterogeneous (string/number/bool/Record); each validator narrows from this base type
 type ValidationHandler = (oldValue: any, newValue: any)=> Promise<string>;
 
 const validateUrlProtocol = async (_oldValue: string, newValue: string) => {
@@ -50,16 +50,14 @@ const validations: Record<string, ValidationHandler> = {
 
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const validateSetting = async (settingName: string, oldValue: any, newValue: any) => {
+const validateSetting = async (settingName: string, oldValue: unknown, newValue: unknown) => {
 	if (oldValue === newValue) return '';
 	if (!validations[settingName]) return '';
 
 	return await validations[settingName](oldValue, newValue);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default async (settingKeys: string[], newValues: Record<string, any>) => {
+export default async (settingKeys: string[], newValues: Record<string, unknown>) => {
 	for (const key of settingKeys) {
 		const oldValue = Setting.value(key);
 		const newValue = newValues[key];

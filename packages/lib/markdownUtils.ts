@@ -72,8 +72,8 @@ const markdownUtils = {
 	},
 
 	prependBaseUrl(md: string, baseUrl: string) {
-		// eslint-disable-next-line no-useless-escape, @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
+		// eslint-disable-next-line no-useless-escape -- Old code before rule was applied
+		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (_match: string, before: string, url: string, after: string) => {
 			return before + urlUtils.prependBaseUrl(url, baseUrl) + after;
 		});
 	},
@@ -90,8 +90,7 @@ const markdownUtils = {
 		let linkType = onlyType;
 		if (linkType === 'pdf') linkType = 'link_open';
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const searchUrls = (tokens: any[]) => {
+		const searchUrls = (tokens: MarkdownItType.Token[]) => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
 				if ((!onlyType && (token.type === 'link_open' || token.type === 'image')) || (!!onlyType && token.type === onlyType) || (onlyType === 'pdf' && token.type === 'link_open')) {

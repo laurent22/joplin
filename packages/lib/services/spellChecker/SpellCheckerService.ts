@@ -103,7 +103,7 @@ export default class SpellCheckerService {
 		this.driver_.addWordToSpellCheckerDictionary(language, word);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Returns Electron MenuItemConstructorOptions[]; lib doesn't import electron types
 	public contextMenuItems(misspelledWord: string, dictionarySuggestions: string[]): any[] {
 		if (!misspelledWord) return [];
 
@@ -159,8 +159,7 @@ export default class SpellCheckerService {
 			languageMenuItems.push(this.changeLanguageMenuItem(locale, enabled, selectedLanguages.includes(locale)));
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		languageMenuItems.sort((a: any, b: any) => {
+		languageMenuItems.sort((a, b) => {
 			return a.label < b.label ? -1 : +1;
 		});
 
@@ -172,11 +171,10 @@ export default class SpellCheckerService {
 			return this.changeLanguageMenuItem(language, true, selectedLanguages.includes(language));
 		});
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- separator items don't match the menu item shape; Electron MenuItemConstructorOptions union not imported here
 		if (latestLanguageItems.length) latestLanguageItems.splice(0, 0, { type: 'separator' } as any);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		latestLanguageItems.sort((a: any, b: any) => {
+		latestLanguageItems.sort((a, b) => {
 			return a.label < b.label ? -1 : +1;
 		});
 

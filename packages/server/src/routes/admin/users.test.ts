@@ -6,8 +6,7 @@ import { uuidgen } from '@joplin/lib/uuid';
 import { ErrorForbidden } from '../../utils/errors';
 import { AccountType } from '../../models/UserModel';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function postUser(sessionId: string, email: string, password: string = null, props: any = null): Promise<User> {
+async function postUser(sessionId: string, email: string, password: string = null, props: Record<string, unknown> = null): Promise<User> {
 	password = password === null ? uuidgen() : password;
 
 	const context = await koaAppContext({
@@ -30,8 +29,7 @@ async function postUser(sessionId: string, email: string, password: string = nul
 	return context.response.body;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function patchUser(sessionId: string, user: any, url = ''): Promise<User> {
+async function patchUser(sessionId: string, user: Record<string, unknown>, url = ''): Promise<User> {
 	const context = await koaAppContext({
 		sessionId: sessionId,
 		request: {

@@ -8,8 +8,7 @@ import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndS
 import { uuidgen } from '@joplin/lib/uuid';
 import config from '../../config';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function postUser(sessionId: string, email: string, password: string = null, props: any = null): Promise<User> {
+async function postUser(sessionId: string, email: string, password: string = null, props: Partial<User> = null): Promise<User> {
 	password = password === null ? uuidgen() : password;
 
 	const context = await koaAppContext({
@@ -32,8 +31,7 @@ async function postUser(sessionId: string, email: string, password: string = nul
 	return context.response.body;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function patchUser(sessionId: string, user: any, url = ''): Promise<User> {
+async function patchUser(sessionId: string, user: Partial<User> & Record<string, unknown>, url = ''): Promise<User> {
 	const context = await koaAppContext({
 		sessionId: sessionId,
 		request: {
@@ -118,8 +116,7 @@ describe('index/users', () => {
 		const doc = parseHtml(userHtml);
 
 		// <input class="input" type="email" name="email" value="user1@localhost"/>
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect((doc.querySelector('input[name=email]') as any).value).toBe('user1@localhost');
+		expect(doc.querySelector<HTMLInputElement>('input[name=email]').value).toBe('user1@localhost');
 	});
 
 	test('should allow user to set a password for new accounts', async () => {

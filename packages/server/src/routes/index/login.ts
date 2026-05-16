@@ -24,8 +24,7 @@ type LoginInputFields = {
 	applicationAuthId?: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function makeView(error: any = null, fields?: LoginInputFields, viewContentOptions?: LoginViewContentOptions): View {
+function makeView(error: Error | null = null, fields?: LoginInputFields, viewContentOptions?: LoginViewContentOptions): View {
 	const view = defaultView('login', 'Login');
 	view.content = {
 		error,

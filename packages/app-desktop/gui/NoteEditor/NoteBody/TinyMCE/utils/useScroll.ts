@@ -2,7 +2,7 @@ import { useEffect, useCallback, useRef } from 'react';
 import shim from '@joplin/lib/shim';
 
 interface HookDependencies {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance; the typed Editor surface is narrower than what we actually use (getDoc/getWin)
 	editor: any;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onScroll: Function;
@@ -44,8 +44,7 @@ export default function useScroll(dependencies: HookDependencies) {
 		editor.getWin().scrollTo(0, maxScrollTop() * percent);
 	}, [editor, maxScrollTop]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const scheduleOnScroll = useCallback((event: any) => {
+	const scheduleOnScroll = useCallback((event: { percent: number }) => {
 		if (scrollTimeoutId_.current) {
 			shim.clearTimeout(scrollTimeoutId_.current);
 			scrollTimeoutId_.current = null;

@@ -183,10 +183,8 @@ const getNoteHeader = (note: string) => {
 	return { header, body };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const toLowerCase = (obj: Record<string, any>): Record<string, any> => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const newObj: Record<string, any> = {};
+const toLowerCase = (obj: Record<string, unknown>): Record<string, unknown> => {
+	const newObj: Record<string, unknown> = {};
 	for (const key of Object.keys(obj)) {
 		newObj[key.toLowerCase()] = obj[key];
 	}
@@ -199,66 +197,68 @@ export const parse = (note: string): ParsedMeta => {
 
 	const { header, body } = getNoteHeader(note);
 
-	const md = toLowerCase(yaml.load(header, { schema: yaml.FAILSAFE_SCHEMA }) ?? {});
+	const md = toLowerCase((yaml.load(header, { schema: yaml.FAILSAFE_SCHEMA }) as Record<string, unknown>) ?? {});
+	const asString = (v: unknown): string => typeof v === 'string' ? v : v === null || v === undefined ? '' : String(v);
+	const asNumber = (v: unknown): number => typeof v === 'number' ? v : Number(v);
 	const metadata: NoteEntity = {
-		title: md['title'] || '',
-		source_url: md['source'] || '',
+		title: asString(md['title']),
+		source_url: asString(md['source']),
 		is_todo: ('completed?' in md) ? 1 : 0,
 	};
 
-	if ('id' in md && typeof md['id'] === 'string' && md.id.match(/^[0-9a-zA-Z]{32}$/)) {
-		metadata['id'] = md.id;
+	if ('id' in md && typeof md['id'] === 'string' && md['id'].match(/^[0-9a-zA-Z]{32}$/)) {
+		metadata['id'] = md['id'];
 	}
 
 	if ('author' in md) { metadata['author'] = extractAuthor(md['author']); }
 
 	// The date fallback gives support for MultiMarkdown format, r-markdown, and pandoc formats
 	if ('created' in md) {
-		metadata['user_created_time'] = dateStringToDate(md['created'], Date.now());
+		metadata['user_created_time'] = dateStringToDate(asString(md['created']), Date.now());
 	} else if ('date' in md) {
-		metadata['user_created_time'] = dateStringToDate(md['date'], Date.now());
+		metadata['user_created_time'] = dateStringToDate(asString(md['date']), Date.now());
 	} else if ('created_at' in md) {
 		// Add support for Notesnook
-		metadata['user_created_time'] = dateStringToDate(md['created_at'], Date.now());
+		metadata['user_created_time'] = dateStringToDate(asString(md['created_at']), Date.now());
 	}
 
 	if ('updated' in md) {
-		metadata['user_updated_time'] = dateStringToDate(md['updated'], Date.now());
+		metadata['user_updated_time'] = dateStringToDate(asString(md['updated']), Date.now());
 	} else if ('lastmod' in md) {
 		// Add support for hugo
-		metadata['user_updated_time'] = dateStringToDate(md['lastmod'], Date.now());
+		metadata['user_updated_time'] = dateStringToDate(asString(md['lastmod']), Date.now());
 	} else if ('date' in md) {
-		metadata['user_updated_time'] = dateStringToDate(md['date'], Date.now());
+		metadata['user_updated_time'] = dateStringToDate(asString(md['date']), Date.now());
 	} else if ('updated_at' in md) {
 		// Notesnook
-		metadata['user_updated_time'] = dateStringToDate(md['updated_at'], Date.now());
+		metadata['user_updated_time'] = dateStringToDate(asString(md['updated_at']), Date.now());
 	}
 
-	if ('latitude' in md) { metadata['latitude'] = md['latitude']; }
-	if ('longitude' in md) { metadata['longitude'] = md['longitude']; }
-	if ('altitude' in md) { metadata['altitude'] = md['altitude']; }
+	if ('latitude' in md) { metadata['latitude'] = asNumber(md['latitude']); }
+	if ('longitude' in md) { metadata['longitude'] = asNumber(md['longitude']); }
+	if ('altitude' in md) { metadata['altitude'] = asNumber(md['altitude']); }
 
 	if (metadata.is_todo) {
-		if (isTruthy(md['completed?'])) {
+		if (isTruthy(asString(md['completed?']))) {
 			// Completed time isn't preserved, so we use a sane choice here
 			metadata['todo_completed'] = metadata['user_updated_time'] ?? Date.now();
 		}
 		if ('due' in md) {
-			const due_date = dateStringToDate(md['due'], null);
+			const due_date = dateStringToDate(asString(md['due']), null);
 			if (due_date) { metadata['todo_due'] = due_date; }
 		}
 	}
 
 	// Tags are handled separately from typical metadata
 	let tags: string[] = [];
-	if ('tags' in md) {
+	if ('tags' in md && Array.isArray(md['tags'])) {
 		// Only create unique tags
-		tags = md['tags'];
-	} else if ('keywords' in md && Array.isArray(md.keywords)) {
+		tags = md['tags'] as string[];
+	} else if ('keywords' in md && Array.isArray(md['keywords'])) {
 		// Support for r-markdown/pandoc. Note that "keywords" may be an empty field in the input
 		// document, which would be parsed as just "null", so this is why we need to check that it
 		// is an array. Fixes: https://github.com/laurent22/joplin/issues/13008
-		tags = tags.concat(md['keywords']);
+		tags = tags.concat(md['keywords'] as string[]);
 	}
 
 	// Only create unique tags

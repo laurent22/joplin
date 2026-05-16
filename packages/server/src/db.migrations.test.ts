@@ -2,10 +2,8 @@ import { afterAllTests, beforeAllDb, beforeEachDb, db } from './utils/testing/te
 import sqlts from '@rmp135/sql-ts';
 import { DbConnection, migrateDown, migrateLatest, migrateUp, needsMigration, nextMigration } from './db';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function dbSchemaSnapshot(db: DbConnection): Promise<any> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return sqlts.toTypeScript({}, db as any);
+async function dbSchemaSnapshot(db: DbConnection): Promise<Awaited<ReturnType<typeof sqlts.toTypeScript>>> {
+	return sqlts.toTypeScript({}, db as unknown as Parameters<typeof sqlts.toTypeScript>[1]);
 }
 
 describe('db.migrations', () => {

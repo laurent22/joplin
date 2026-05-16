@@ -3,8 +3,25 @@ import Button from '../../Button/Button';
 import { css } from 'styled-components';
 const styled = require('styled-components').default;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type StyleProps = any;
+interface StyleProps {
+	theme: {
+		backgroundColor2: string;
+		backgroundColor: string;
+		backgroundColorHover2: string;
+		color2: string;
+		colorError2: string;
+		colorFaded2: string;
+		colorWarn2: string;
+		topRowHeight: number;
+		mainPadding: number;
+		fontSize: number;
+		toolbarIconSize: number;
+	};
+	isConflictFolder?: boolean;
+	isSpecialItem?: boolean;
+	shareId?: string;
+	selected?: boolean;
+}
 
 export const StyledRoot = styled.div`
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor2};

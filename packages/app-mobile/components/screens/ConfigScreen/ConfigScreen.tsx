@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, Linking, View, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo } from 'react-native';
+import { Platform, Linking, View, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo, LayoutChangeEvent } from 'react-native';
 import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
@@ -44,8 +44,8 @@ import { FolderEntity } from '@joplin/lib/services/database/types';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
 
 interface ConfigScreenState {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	settings: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Settings values are heterogeneous (string/number/boolean/object) and accessed by string key across many call sites; tightening to `unknown` forces casts everywhere
+	settings: Record<string, any>;
 	changedSettingKeys: string[];
 
 	searchQuery: string;
@@ -62,17 +62,15 @@ interface ConfigScreenState {
 }
 
 interface ConfigScreenProps {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	settings: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
+	settings: Record<string, any>;
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	navigation: any;
+	navigation: { state?: { sectionName?: string } };
 	dispatch: Dispatch;
 }
 
 class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, ConfigScreenState> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static navigationOptions(): any {
+	public static navigationOptions(): { header: null } {
 		return { header: null };
 	}
 
@@ -272,14 +270,12 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return this.styles_[themeId];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private onHeaderLayout(key: string, event: any) {
+	private onHeaderLayout(key: string, event: LayoutChangeEvent) {
 		const layout = event.nativeEvent.layout;
 		this.componentsY_[`header_${key}`] = layout.y;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private onSectionLayout(key: string, event: any) {
+	private onSectionLayout(key: string, event: LayoutChangeEvent) {
 		const layout = event.nativeEvent.layout;
 		this.componentsY_[`section_${key}`] = layout.y;
 	}
@@ -368,8 +364,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		NavService.removeHandler(this.handleNavigateToNewScreen);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private renderButton(key: string, title: string, clickHandler: ()=> void, options: any = null) {
+	private renderButton(key: string, title: string, clickHandler: ()=> void, options: { description?: string; statusComp?: ReactElement; disabled?: boolean } = null) {
 		return (
 			<SettingsButton
 				key={key}
@@ -383,8 +378,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public sectionToComponent(key: string, section: SettingMetadataSection, settings: any, isSelected: boolean) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
+	public sectionToComponent(key: string, section: SettingMetadataSection, settings: Record<string, any>, isSelected: boolean) {
 		const settingComps: ReactElement[] = [];
 		const advancedSettingComps: ReactElement[] = [];
 
@@ -418,8 +413,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			}
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const addSettingButton = (key: string, title: string, clickHandler: ()=> void, options: any = null) => {
+		const addSettingButton = (key: string, title: string, clickHandler: ()=> void, options: { description?: string; statusComp?: ReactElement; disabled?: boolean } = null) => {
 			const relatedText = [title];
 			if (typeof options === 'object' && options?.description) {
 				relatedText.push(options.description);
@@ -704,8 +698,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		};
 
 		return (
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			<View key={key} onLayout={(event: any) => this.onSectionLayout(key, event)}>
+			<View key={key} onLayout={(event: LayoutChangeEvent) => this.onSectionLayout(key, event)}>
 				<View>
 					{this.state.searching ? headerComponent : null}
 					{settingComps}
@@ -719,7 +712,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return <SettingsToggle
 			key={key}
 			settingId={key}
-			value={value}
+			value={!!value}
 			label={label}
 			updateSettingValue={updateSettingValue}
 			styles={this.styles()}
@@ -727,8 +720,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		/>;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private handleSetting = async (key: string, value: any): Promise<boolean> => {
+	private handleSetting = async (key: string, value: unknown): Promise<boolean> => {
 		// When the user tries to enable biometrics unlock, we ask for the
 		// fingerprint or Face ID, and if it's correct we save immediately. If
 		// it's not, we don't turn on the setting.
@@ -751,10 +743,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return false;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public settingToComponent(key: string, value: any) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const updateSettingValue = async (key: string, value: any) => {
+	public settingToComponent(key: string, value: unknown) {
+		const updateSettingValue = async (key: string, value: unknown) => {
 			const handled = await this.handleSetting(key, value);
 			if (!handled) shared.updateSettingValue(this, key, value);
 		};
@@ -771,15 +761,13 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private renderFeatureFlags(settings: any, featureFlagKeys: string[]): any[] {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const updateSettingValue = (key: string, value: any) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
+	private renderFeatureFlags(settings: Record<string, any>, featureFlagKeys: string[]): ReactElement[] {
+		const updateSettingValue = (key: string, value: unknown) => {
 			return shared.updateSettingValue(this, key, value);
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any[] = [];
+		const output: ReactElement[] = [];
 		for (const key of featureFlagKeys) {
 			output.push(this.renderToggle(key, key, settings[key], updateSettingValue));
 		}

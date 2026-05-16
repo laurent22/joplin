@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, ForwardedRef, useContext } from 'react';
 
+import { RenderResultPluginAsset } from '@joplin/renderer/types';
 import { EditorCommand, MarkupToHtmlOptions, NoteBodyEditorProps, NoteBodyEditorRef, OnChangeEvent } from '../../../utils/types';
 import { getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../../utils/types';
@@ -39,8 +40,7 @@ const logDebug = (message: string) => logger.debug(message);
 
 interface RenderedBody {
 	html: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	pluginAssets: any[];
+	pluginAssets: RenderResultPluginAsset[];
 }
 
 function defaultRenderedBody(): RenderedBody {
@@ -166,8 +166,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 				let commandOutput = null;
 				if (cmd.name in commands) {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					commandOutput = (commands as any)[cmd.name](cmd.value);
+					commandOutput = (commands as unknown as Record<string, (value: unknown)=> unknown>)[cmd.name](cmd.value);
 				} else if (editorRef.current.supportsCommand(cmd.name)) {
 					commandOutput = editorRef.current.execCommand(cmd.name);
 				} else if (editorRef.current.supportsJoplinCommand(cmd.name)) {
@@ -267,8 +266,12 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			lineCount = editorRef.current.editor.state.doc.lines;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const options: any = {
+		const options: {
+			pluginAssets: RenderResultPluginAsset[];
+			downloadResources: string;
+			markupLineCount: number;
+			percent?: number;
+		} = {
 			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),
 			markupLineCount: lineCount,

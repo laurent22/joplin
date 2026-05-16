@@ -25,14 +25,13 @@ import InteropService_Importer_EnexToMd from './InteropService_Importer_EnexToMd
 import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 const { sprintf } = require('sprintf-js');
 const { fileExtension } = require('../../path-utils');
-const EventEmitter = require('events');
+import { EventEmitter } from 'events';
 
 export default class InteropService {
 
 	private defaultModules_: Module[];
 	private userModules_: Module[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private eventEmitter_: any = null;
+	private eventEmitter_: EventEmitter = null;
 	private static instance_: InteropService;
 	private domParser_: DOMParser;
 	private xmlSerializer_: XMLSerializer;
@@ -46,13 +45,11 @@ export default class InteropService {
 		this.eventEmitter_ = new EventEmitter();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	public on(eventName: string, callback: (...args: unknown[])=> void) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: string, callback: Function) {
+	public off(eventName: string, callback: (...args: unknown[])=> void) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
@@ -338,10 +335,8 @@ export default class InteropService {
 		return result;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private normalizeItemForExport(_itemType: ModelType, item: any): any {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const override: any = {};
+	private normalizeItemForExport<T extends Record<string, unknown>>(_itemType: ModelType, item: T): T {
+		const override: Partial<{ is_shared: number; share_id: string }> = {};
 		if ('is_shared' in item) override.is_shared = 0;
 		if ('share_id' in item) override.share_id = '';
 
@@ -365,13 +360,13 @@ export default class InteropService {
 		let sourceFolderIds = options.sourceFolderIds ? options.sourceFolderIds : [];
 		const sourceNoteIds = options.sourceNoteIds ? options.sourceNoteIds : [];
 		const result: ImportExportResult = { warnings: [] };
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- itemsToExport is consumed by exporter.prepareForProcessingItemType (typed BaseItemEntity[]); the actual values are { type, itemOrId } structurally — narrowing here would force changing the exporter signature
 		const itemsToExport: any[] = [];
 
 		options.onProgress?.(ExportProgressState.QueuingItems, null);
 		let totalItemsToProcess = 0;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See itemsToExport above
 		const queueExportItem = (itemType: number, itemOrId: any) => {
 			totalItemsToProcess ++;
 			itemsToExport.push({
@@ -445,8 +440,7 @@ export default class InteropService {
 		await exporter.init(exportPath, options);
 
 		const typeOrder = [BaseModel.TYPE_FOLDER, BaseModel.TYPE_RESOURCE, BaseModel.TYPE_NOTE, BaseModel.TYPE_TAG, BaseModel.TYPE_NOTE_TAG];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const context: any = {
+		const context: { resourcePaths: Record<string, string>; destResourcePaths?: Record<string, string>; notePaths?: Record<string, string> } = {
 			resourcePaths: {},
 		};
 

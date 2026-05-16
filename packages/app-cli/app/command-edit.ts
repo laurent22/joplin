@@ -17,8 +17,7 @@ class Command extends BaseCommand {
 		return _('Edit note.');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { note: string }) {
 		let tempFilePath: string|null = null;
 
 		const onFinishedEditing = async () => {

@@ -7,7 +7,7 @@ import { NoteEntity } from './database/types';
 import Note from '../models/Note';
 import { openFileWithExternalEditor } from './ExternalEditWatcher/utils';
 import AsyncActionQueue from '../AsyncActionQueue';
-const EventEmitter = require('events');
+import { EventEmitter } from 'events';
 const chokidar = require('chokidar');
 const { ErrorNotFound } = require('./rest/utils/errors');
 
@@ -15,20 +15,22 @@ interface ChangeEventContext {
 	path: string;
 }
 
+type DispatchFn = (action: { type: string; [key: string]: unknown })=> void;
+// Bridge() returns the desktop bridge with methods openItem/openExternal/etc. used by the external-editor helper.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Concrete bridge type lives in app-desktop; lib references it structurally
+type BridgeFn = ()=> any;
+
 export default class ExternalEditWatcher {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private dispatch: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private bridge_: Function;
+	private dispatch: DispatchFn;
+	private bridge_: BridgeFn;
 	private logger_: Logger = new Logger();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- chokidar typings vary across platforms; we use a small subset (watch/on/unwatch/close) treated structurally
 	private watcher_: any = null;
 	private changeEventQueue_: AsyncActionQueue<ChangeEventContext>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private eventEmitter_: any = new EventEmitter();
+	private eventEmitter_: EventEmitter = new EventEmitter();
 	private skipNextChangeEvent_: Record<string, boolean> = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See watcher_ above
 	private chokidar_: any = chokidar;
 
 	private static instance_: ExternalEditWatcher;
@@ -39,8 +41,7 @@ export default class ExternalEditWatcher {
 		return this.instance_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public initialize(bridge: Function, dispatch: Function) {
+	public initialize(bridge: BridgeFn, dispatch: DispatchFn) {
 		this.bridge_ = bridge;
 		this.dispatch = dispatch;
 
@@ -95,13 +96,13 @@ export default class ExternalEditWatcher {
 		return Setting.value('profileDir');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- EventEmitter events carry heterogeneous payloads by name; per-event typing would need a string-literal map across all callers
+	public on(eventName: string, callback: (...args: any[])=> void) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: string, callback: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See on() above
+	public off(eventName: string, callback: (...args: any[])=> void) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 

@@ -1,5 +1,6 @@
 import { createPaginationLinks, PageLink, pageMaxSize, Pagination, PaginationOrder, PaginationOrderDir, PaginationQueryParams, requestPaginationOrder, validatePagination } from '../../models/utils/pagination';
 import { setQueryParameters } from '../urlUtils';
+import { ParsedUrlQuery } from 'querystring';
 
 const defaultSortOrder = PaginationOrderDir.ASC;
 
@@ -71,8 +72,7 @@ export interface Table {
 	headers: Header[];
 	rows: Row[];
 	baseUrl?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	requestQuery?: any;
+	requestQuery?: PaginationQueryParams;
 	pageCount?: number;
 	pagination?: Pagination;
 }
@@ -83,8 +83,7 @@ export interface TableView {
 	paginationLinks: PageLink[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function makeTablePagination(query: any, defaultOrderField: string, defaultOrderDir: PaginationOrderDir): Pagination {
+export function makeTablePagination(query: ParsedUrlQuery, defaultOrderField: string, defaultOrderDir: PaginationOrderDir): Pagination {
 	const limit = Number(query.limit) || pageMaxSize;
 	const order: PaginationOrder[] = requestPaginationOrder(query, defaultOrderField, defaultOrderDir);
 	const page: number = 'page' in query ? Number(query.page) : 1;

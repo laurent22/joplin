@@ -53,6 +53,7 @@ export interface ProcessResultsRow {
 	item_type?: ModelType;
 	fields?: string[];
 	weight?: number;
+	fuzziness?: number;
 	is_todo?: number;
 	todo_completed?: number;
 }
@@ -60,8 +61,7 @@ export interface ProcessResultsRow {
 export interface ComplexTerm {
 	type: 'regex' | 'text';
 	value: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	scriptType: any;
+	scriptType: string;
 	valueRegex?: string;
 }
 
@@ -91,15 +91,12 @@ export default class SearchEngine {
 	public static SEARCH_TYPE_NONLATIN_SCRIPT = SearchType.Nonlatin;
 	public static SEARCH_TYPE_FTS = SearchType.Fts;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-	public dispatch: Function = (_o: any) => {};
+	public dispatch: (action: { type: string; [key: string]: unknown })=> void = () => {};
 	private logger_ = new Logger();
 	private db_: JoplinDatabase = null;
 	private isIndexing_ = false;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private syncCalls_: any[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private scheduleSyncTablesIID_: any;
+	private syncCalls_: boolean[] = [];
+	private scheduleSyncTablesIID_: ReturnType<typeof shim.setTimeout>;
 
 	public static instance() {
 		if (SearchEngine.instance_) return SearchEngine.instance_;
@@ -115,8 +112,7 @@ export default class SearchEngine {
 		return this.logger_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setDb(db: any) {
+	public setDb(db: JoplinDatabase) {
 		this.db_ = db;
 	}
 
@@ -353,8 +349,7 @@ export default class SearchEngine {
 		return row && row['total'] ? row['total'] : 0;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private fieldNamesFromOffsets_(offsets: any[]) {
+	private fieldNamesFromOffsets_(offsets: number[]) {
 		const notesNormalizedFieldNames = this.db().tableFieldNames('notes_normalized');
 		const occurrenceCount = Math.floor(offsets.length / 4);
 		const output: string[] = [];
@@ -415,11 +410,9 @@ export default class SearchEngine {
 		// l 12
 		const X = matchInfo.map(m => m.slice(1 + 1 + 1 + numColumns + numColumns)); // x
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const hitsThisRow = (array: any, c: number, p: number) => array[3 * (c + p * numColumns) + 0];
+		const hitsThisRow = (array: Uint32Array, c: number, p: number) => array[3 * (c + p * numColumns) + 0];
 		// const hitsAllRows = (array, c, p) => array[3 * (c + p*NUM_COLS) + 1];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const docsWithHits = (array: any, c: number, p: number) => array[3 * (c + p * numColumns) + 2];
+		const docsWithHits = (array: Uint32Array, c: number, p: number) => array[3 * (c + p * numColumns) + 2];
 
 		const IDF = (n: number, N: number) => Math.max(Math.log(((N - n + 0.5) / (n + 0.5)) + 1), 0);
 
@@ -464,40 +457,33 @@ export default class SearchEngine {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private processBasicSearchResults_(rows: any[], parsedQuery: any) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const valueRegexs = parsedQuery.keys.includes('_') ? parsedQuery.terms['_'].map((term: any) => term.valueRegex || term.value) : [];
+	private processBasicSearchResults_(rows: ProcessResultsRow[], parsedQuery: ParsedQuery) {
+		const valueRegexs = parsedQuery.keys.includes('_') ? parsedQuery.terms['_'].map(term => (typeof term === 'string' ? term : term.valueRegex || term.value)) : [];
 		const isTitleSearch = parsedQuery.keys.includes('title');
 		const isOnlyTitle = parsedQuery.keys.length === 1 && isTitleSearch;
 
 		for (let i = 0; i < rows.length; i++) {
 			const row = rows[i];
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const testTitle = (regex: any) => new RegExp(regex, 'ig').test(row.title);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const matchedFields: any = {
+			const testTitle = (regex: string) => new RegExp(regex, 'ig').test(row.title);
+			const matchedFields: Record<string, boolean> = {
 				title: isTitleSearch || valueRegexs.some(testTitle),
 				body: !isOnlyTitle,
 			};
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			row.fields = Object.keys(matchedFields).filter((key: any) => matchedFields[key]);
+			row.fields = Object.keys(matchedFields).filter(key => matchedFields[key]);
 			row.weight = 0;
 			row.fuzziness = 0;
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private processResults_(rows: ProcessResultsRow[], parsedQuery: any, isBasicSearchResults = false) {
+	private processResults_(rows: ProcessResultsRow[], parsedQuery: ParsedQuery, isBasicSearchResults = false) {
 		if (isBasicSearchResults) {
 			this.processBasicSearchResults_(rows, parsedQuery);
 		} else {
 			this.calculateWeightBM25_(rows);
 			for (let i = 0; i < rows.length; i++) {
 				const row = rows[i];
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const offsets = row.offsets.split(' ').map((o: any) => Number(o));
+				const offsets = row.offsets.split(' ').map(o => Number(o));
 				row.fields = this.fieldNamesFromOffsets_(offsets);
 			}
 		}
@@ -523,8 +509,7 @@ export default class SearchEngine {
 	}
 
 	// https://stackoverflow.com/a/13818704/561309
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public queryTermToRegex(term: any) {
+	public queryTermToRegex(term: string) {
 		while (term.length && term.indexOf('*') === 0) {
 			term = term.substr(1);
 		}
@@ -677,15 +662,13 @@ export default class SearchEngine {
 	public async basicSearch(query: string) {
 		query = query.replace(/\*/, '');
 		const parsedQuery = await this.parseQuery(query);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const searchOptions: any = {};
+		const searchOptions: { anywherePattern?: string; titlePattern?: string; bodyPattern?: string } = {};
 
+		const termsRecord = parsedQuery.terms as unknown as Record<string, (string | ComplexTerm)[]>;
 		for (const key of parsedQuery.keys) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			if ((parsedQuery.terms as any)[key].length === 0) continue;
+			if (termsRecord[key].length === 0) continue;
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const term = (parsedQuery.terms as any)[key].map((x: Term) => x.value).join(' ');
+			const term = termsRecord[key].map(x => typeof x === 'string' ? x : x.value).join(' ');
 			if (key === '_') searchOptions.anywherePattern = `*${term}*`;
 			if (key === 'title') searchOptions.titlePattern = `*${term}*`;
 			if (key === 'body') searchOptions.bodyPattern = `*${term}*`;
@@ -694,16 +677,14 @@ export default class SearchEngine {
 		return Note.previews(null, searchOptions);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private determineSearchType_(query: string, preferredSearchType: any) {
+	private determineSearchType_(query: string, preferredSearchType: SearchType) {
 		if (preferredSearchType === SearchEngine.SEARCH_TYPE_BASIC) return SearchEngine.SEARCH_TYPE_BASIC;
 		if (preferredSearchType === SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT) return SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT;
 
 		// If preferredSearchType is "fts" we auto-detect anyway
 		// because it's not always supported.
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let allTerms: any[] = [];
+		let allTerms: Term[] = [];
 		try {
 			allTerms = filterParser(query);
 		} catch (error) {
@@ -781,8 +762,7 @@ export default class SearchEngine {
 
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			searchString = this.normalizeText_(searchString);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			rows = (await this.basicSearch(searchString)) as any[];
+			rows = (await this.basicSearch(searchString)) as unknown as ProcessResultsRow[];
 			this.processResults_(rows, parsedQuery, true);
 		} else {
 			// SEARCH_TYPE_FTS

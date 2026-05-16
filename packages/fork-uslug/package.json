@@ -1,6 +1,6 @@
 {
   "name": "@joplin/fork-uslug",
-  "version": "2.0.3",
+  "version": "2.0.6",
   "description": "A permissive slug generator that works with unicode.",
   "author": "Jeremy Selier <jerem.selier@gmail.com>",
   "publishConfig": {
@@ -46,5 +46,5 @@
       "url": "http://github.com/jeremys/uslug/raw/master/LICENSE"
     }
   ],
-  "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
+  "gitHead": "500e4c02809d3ebe463aa590e86f541d1ef0661c"
 }

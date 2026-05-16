@@ -302,6 +302,20 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useTabIndenter.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useTextPatternsLookup.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useWebViewApi.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/ActionPanel.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardContext.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardEditor.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/canvasFlow.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/injectStyle.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/loadReactFlowCss.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/LinkNode.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/sharedStyles.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/theme.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.test.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.js
 packages/app-desktop/gui/NoteEditor/NoteEditor.js
 packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js
 packages/app-desktop/gui/NoteEditor/StatusBar.js
@@ -479,6 +493,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/AppDialogs.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/ModalMessageOverlay.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/PluginDialogs.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/WindowCommandsAndDialogs.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addNoteToWhiteboard.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/commandPalette.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.js
@@ -498,6 +513,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newNote.test.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newNote.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newSubFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newTodo.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/newWhiteboard.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openFolderDialog.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.js
@@ -531,6 +547,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNotesSortOrderR
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/togglePerFolderSortOrder.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleSideBar.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleVisiblePanes.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleWhiteboardEditor.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/utils/canUseNativeUndo.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/types.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/utils/appDialogs.js
@@ -1094,6 +1111,7 @@ packages/editor/CodeMirror/extensions/overwriteModeExtension.js
 packages/editor/CodeMirror/extensions/rendering/addFormattingClasses.js
 packages/editor/CodeMirror/extensions/rendering/renderBlockImages.test.js
 packages/editor/CodeMirror/extensions/rendering/renderBlockImages.js
+packages/editor/CodeMirror/extensions/rendering/renderTables.test.js
 packages/editor/CodeMirror/extensions/rendering/renderTables.js
 packages/editor/CodeMirror/extensions/rendering/renderingExtension.js
 packages/editor/CodeMirror/extensions/rendering/replaceBackslashEscapes.js
@@ -1760,6 +1778,12 @@ packages/lib/services/trash/permanentlyDeleteOldItems.test.js
 packages/lib/services/trash/permanentlyDeleteOldItems.js
 packages/lib/services/trash/restoreItems.test.js
 packages/lib/services/trash/restoreItems.js
+packages/lib/services/whiteboard/generateId.js
+packages/lib/services/whiteboard/jsoncanvas.js
+packages/lib/services/whiteboard/parse.js
+packages/lib/services/whiteboard/resolveRef.js
+packages/lib/services/whiteboard/serialize.js
+packages/lib/services/whiteboard/whiteboard.test.js
 packages/lib/shim-init-node.test.js
 packages/lib/shim-init-node.js
 packages/lib/shim.js

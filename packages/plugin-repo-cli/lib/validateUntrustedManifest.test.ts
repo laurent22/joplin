@@ -1,5 +1,6 @@
 
 import validateUntrustedManifest from './validateUntrustedManifest';
+import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 
 const originalManifests = {
 	'joplin-plugin.this.is.a.test': {
@@ -7,7 +8,7 @@ const originalManifests = {
 		_npm_package_name: 'joplin-plugin-this-is-a-test',
 		version: '0.0.1',
 	},
-};
+} as unknown as Record<string, PluginManifest>;
 
 // Note: Most of the checks below have additional tests in other files.
 // This test suite is primarily to ensure that the checks are present.
@@ -21,7 +22,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(badManifest, originalManifests),
+			() => validateUntrustedManifest(badManifest as unknown as PluginManifest, originalManifests),
 		).toThrow('ID cannot be shorter than');
 
 
@@ -31,7 +32,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(goodManifest, originalManifests),
+			() => validateUntrustedManifest(goodManifest as unknown as PluginManifest, originalManifests),
 		).not.toThrow();
 	});
 
@@ -43,7 +44,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(badManifest, originalManifests),
+			() => validateUntrustedManifest(badManifest as unknown as PluginManifest, originalManifests),
 		).toThrow();
 
 
@@ -53,7 +54,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(goodManifest, originalManifests),
+			() => validateUntrustedManifest(goodManifest as unknown as PluginManifest, originalManifests),
 		).not.toThrow();
 	});
 
@@ -66,7 +67,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(badManifest, originalManifests),
+			() => validateUntrustedManifest(badManifest as unknown as PluginManifest, originalManifests),
 		).toThrow();
 
 		const goodManifest = {
@@ -75,7 +76,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(goodManifest, originalManifests),
+			() => validateUntrustedManifest(goodManifest as unknown as PluginManifest, originalManifests),
 		).not.toThrow();
 	});
 
@@ -88,7 +89,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(newManifest1, originalManifests),
+			() => validateUntrustedManifest(newManifest1 as unknown as PluginManifest, originalManifests),
 		).toThrow('mark itself as recommended');
 
 		// Should also throw for falsey values
@@ -100,7 +101,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(newManifest2, originalManifests),
+			() => validateUntrustedManifest(newManifest2 as unknown as PluginManifest, originalManifests),
 		).toThrow('mark itself as recommended');
 	});
 
@@ -112,7 +113,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(newManifest, originalManifests),
+			() => validateUntrustedManifest(newManifest as unknown as PluginManifest, originalManifests),
 		).toThrow();
 	});
 });

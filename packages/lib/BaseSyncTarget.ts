@@ -12,22 +12,19 @@ export interface CheckConfigResult {
 
 export default class BaseSyncTarget {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public static dispatch: Function = () => {};
+	public static dispatch: (action: { type: string; [key: string]: unknown })=> void = () => {};
 
 	private synchronizer_: Synchronizer = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private initState_: any = null;
+	private initState_: 'started' | 'ready' | 'error' | null = null;
 	private logger_: Logger = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private options_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private options_: Record<string, unknown>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Database is a sync-target-specific shape (JoplinDatabase in node/desktop; mock in tests); narrowing forces every subclass and test fixture to change
 	private db_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- FileApi has many subclasses (joplinServer, onedrive, etc.) with different implementations; tests pass partial mocks
 	protected fileApi_: any;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(db: any, options: any = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See db_ above
+	public constructor(db: any, options: Record<string, unknown> = null) {
 		this.db_ = db;
 		this.options_ = options;
 	}
@@ -58,8 +55,7 @@ export default class BaseSyncTarget {
 		return false;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public option(name: string, defaultValue: any = null) {
+	public option(name: string, defaultValue: unknown = null) {
 		return this.options_ && name in this.options_ ? this.options_[name] : defaultValue;
 	}
 
@@ -76,8 +72,7 @@ export default class BaseSyncTarget {
 	}
 
 	// If [] is returned it means all platforms are supported
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static unsupportedPlatforms(): any[] {
+	public static unsupportedPlatforms(): string[] {
 		return [];
 	}
 
@@ -107,7 +102,7 @@ export default class BaseSyncTarget {
 		throw new Error('initSynchronizer() not implemented');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See fileApi_ above
 	protected async initFileApi(): Promise<any> {
 		throw new Error('initFileApi() not implemented');
 	}
@@ -121,7 +116,7 @@ export default class BaseSyncTarget {
 	// Usually each sync target should create and setup its own file API via initFileApi()
 	// but for testing purposes it might be convenient to provide it here so that multiple
 	// clients can share and sync to the same file api (see test-utils.js)
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See fileApi_ above
 	public setFileApi(v: any) {
 		this.fileApi_ = v;
 	}
@@ -162,7 +157,7 @@ export default class BaseSyncTarget {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Subclasses override with their own FileApiOptions shape (path, password, username, etc.); typing base too narrowly forces all subclasses to match
 	public static async checkConfig(_options: any): Promise<CheckConfigResult> {
 		throw new Error('Not implemented');
 	}

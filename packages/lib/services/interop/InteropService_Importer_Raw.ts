@@ -10,15 +10,15 @@ import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 const { sprintf } = require('sprintf-js');
 import shim from '../../shim';
+import { Stat } from '../../fs-driver-base';
+import { ResourceEntity } from '../database/types';
 const { fileExtension } = require('../../path-utils');
 import uuid from '../../uuid';
 
 export default class InteropService_Importer_Raw extends InteropService_Importer_Base {
 	public async exec(result: ImportExportResult) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemIdMap: any = {};
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const createdResources: any = {};
+		const itemIdMap: Record<string, string> = {};
+		const createdResources: Record<string, ResourceEntity> = {};
 		const noteTagsToCreate = [];
 		const destinationFolderId = this.options_.destinationFolderId;
 
@@ -37,8 +37,7 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 
 		const stats = await shim.fsDriver().readDirStats(this.sourcePath_);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const folderExists = function(stats: any[], folderId: string) {
+		const folderExists = function(stats: Stat[], folderId: string) {
 			folderId = folderId.toLowerCase();
 			for (let i = 0; i < stats.length; i++) {
 				const stat = stats[i];
@@ -48,8 +47,7 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 			return false;
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let defaultFolder_: any = null;
+		let defaultFolder_: import('../database/types').FolderEntity | null = null;
 		const defaultFolder = async () => {
 			if (defaultFolder_) return defaultFolder_;
 			const folderTitle = await Folder.findUniqueItemTitle(this.options_.defaultFolderTitle ? this.options_.defaultFolderTitle : 'Imported', '');

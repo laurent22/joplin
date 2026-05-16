@@ -66,11 +66,9 @@ describe('api/sessions', () => {
 
 		const context = await postSession(user.email, password);
 		expect(context.response.status).toBe(200);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(!!(context.response.body as any).id).toBe(true);
+		expect(!!(context.response.body as { id: string }).id).toBe(true);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const session: Session = await models().session().load((context.response.body as any).id);
+		const session: Session = await models().session().load((context.response.body as { id: string }).id);
 		expect(session.user_id).toBe(user.id);
 	});
 
@@ -153,11 +151,9 @@ describe('api/sessions', () => {
 
 		expect(ldapLogin).toHaveBeenCalled();
 		expect(context.response.status).toBe(200);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(!!(context.response.body as any).id).toBe(true);
+		expect(!!(context.response.body as { id: string }).id).toBe(true);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const session: Session = await models().session().load((context.response.body as any).id);
+		const session: Session = await models().session().load((context.response.body as { id: string }).id);
 		expect(session.user_id).toBe(user.id);
 
 	});
@@ -184,11 +180,9 @@ describe('api/sessions', () => {
 
 		expect(ldapLogin).toHaveBeenCalled();
 		expect(context.response.status).toBe(200);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(!!(context.response.body as any).id).toBe(true);
+		expect(!!(context.response.body as { id: string }).id).toBe(true);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const session: Session = await models().session().load((context.response.body as any).id);
+		const session: Session = await models().session().load((context.response.body as { id: string }).id);
 		expect(session.user_id).toBe(user.id);
 
 	});
@@ -260,11 +254,9 @@ describe('api/sessions', () => {
 		await routeHandler(context);
 
 		expect(context.response.status).toBe(200);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(!!(context.response.body as any).id).toBe(true);
+		expect(!!(context.response.body as { id: string }).id).toBe(true);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const session: Session = await models().session().load((context.response.body as any).id);
+		const session: Session = await models().session().load((context.response.body as { id: string }).id);
 		expect(session.user_id).toBe(user.id);
 	});
 

@@ -22,10 +22,8 @@ export default class ResourceService extends BaseService {
 	private isIndexing_ = false;
 
 	private maintenanceCalls_: boolean[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private maintenanceTimer1_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private maintenanceTimer2_: any = null;
+	private maintenanceTimer1_: ReturnType<typeof shim.setTimeout> = null;
+	private maintenanceTimer2_: ReturnType<typeof shim.setInterval> = null;
 
 	public async indexNoteResources() {
 		this.logger().info('ResourceService::indexNoteResources: Start');

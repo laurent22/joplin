@@ -5,8 +5,7 @@ import shim from './shim';
 import { FolderLoadOptions } from './models/utils/types';
 
 const refreshCalls_: boolean[] = [];
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let scheduleRefreshFoldersIID_: any = null;
+let scheduleRefreshFoldersIID_: ReturnType<typeof shim.setTimeout> = null;
 
 export const allForDisplay = async (options: FolderLoadOptions = {}) => {
 	const orderDir = Setting.value('folders.sortOrder.reverse') ? 'DESC' : 'ASC';

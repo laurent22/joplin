@@ -8,7 +8,7 @@ import Note from './Note';
 import Tag from './Tag';
 import ItemChange from './ItemChange';
 import Resource from './Resource';
-import { ResourceEntity } from '../services/database/types';
+import { NoteEntity, ResourceEntity } from '../services/database/types';
 import { toForwardSlashes } from '../path-utils';
 import * as ArrayUtils from '../ArrayUtils';
 import { ErrorCode } from '../errors';
@@ -111,8 +111,7 @@ describe('models/Note', () => {
 		for (let i = 0; i < testCases.length; i++) {
 			const t = testCases[i];
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const input: any = t[0];
+			const input = t[0] as NoteEntity;
 
 			const note1 = await Note.save(input);
 			const serialized = await Note.serialize(note1);
@@ -273,7 +272,7 @@ describe('models/Note', () => {
 		const resourceDirE = markdownUtils.escapeLinkUrl(toForwardSlashes(resourceDir));
 		const fileProtocol = `file://${process.platform === 'win32' ? '/' : ''}`;
 
-		const testCases = [
+		const testCases: [boolean, string, string][] = [
 			[
 				false,
 				'',
@@ -313,7 +312,7 @@ describe('models/Note', () => {
 
 		for (const testCase of testCases) {
 			const [useAbsolutePaths, input, expected] = testCase;
-			const internalToExternal = await Note.replaceResourceInternalToExternalLinks(input as string, { useAbsolutePaths });
+			const internalToExternal = await Note.replaceResourceInternalToExternalLinks(input, { useAbsolutePaths });
 			expect(internalToExternal).toBe(expected);
 
 			const externalToInternal = await Note.replaceResourceExternalToInternalLinks(internalToExternal, { useAbsolutePaths });

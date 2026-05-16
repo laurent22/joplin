@@ -18,8 +18,7 @@ describe('index_items', () => {
 	test('should list the user items', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1, true);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const items: any = {};
+		const items: Record<string, Record<string, never>> = {};
 		for (let i = 1; i <= 150; i++) {
 			items[(`${i}`).padStart(32, '0')] = {};
 		}

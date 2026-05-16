@@ -38,8 +38,15 @@ export interface AppWindowState extends WindowState {
 	visibleDialogs: VisibleDialogs;
 	dialogs: AppStateDialog[];
 	devToolsVisible: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	watchedResources: any;
+	watchedResources: Record<string, unknown>;
+	// Note IDs for which the user has chosen to view the underlying Markdown
+	// instead of the Whiteboard editor. Per-window, in-memory only.
+	whiteboardForceMarkdown: Record<string, boolean>;
+	// Whether the currently-active note in this window contains a whiteboard
+	// fence. Set by the NoteEditor when it loads / saves the body, used by
+	// the toolbar to show the editor toggle button. (We can't compute this
+	// from the redux note list because `body` isn't in the preview fields.)
+	activeNoteIsWhiteboard: boolean;
 }
 
 interface BackgroundWindowStates {
@@ -50,8 +57,7 @@ export interface AppState extends State, AppWindowState {
 	backgroundWindows: BackgroundWindowStates;
 
 	route: AppStateRoute;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	navHistory: any[];
+	navHistory: AppStateRoute[];
 	watchedNoteFiles: string[];
 	focusedField: string;
 	layoutMoveMode: boolean;
@@ -72,14 +78,16 @@ export const createAppDefaultWindowState = (): AppWindowState => {
 		editorCodeView: true,
 		devToolsVisible: false,
 		watchedResources: {},
+		whiteboardForceMarkdown: {},
+		activeNoteIsWhiteboard: false,
 	};
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function createAppDefaultState(resourceEditWatcherDefaultState: any): AppState {
+export function createAppDefaultState(resourceEditWatcherDefaultState: Partial<AppState>): AppState {
 	return {
 		...defaultState,
 		...createAppDefaultWindowState(),
+		backgroundWindows: {},
 		route: {
 			type: 'NAV_GO',
 			routeName: 'Main',
@@ -107,7 +115,7 @@ const hideBackgroundDialogsWithId = produce((state: AppState, id: string) => {
 	}
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux actions are heterogeneous; typing this would require an action-type union and many narrowing casts inside the switch
 export default function(state: AppState, action: any) {
 	let newState = state;
 
@@ -162,8 +170,7 @@ export default function(state: AppState, action: any) {
 		case 'NOTE_VISIBLE_PANES_TOGGLE':
 
 			{
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const getNextLayout = (currentLayout: any) => {
+				const getNextLayout = (currentLayout: string | string[]) => {
 					currentLayout = panes.length === 2 ? 'both' : currentLayout[0];
 
 					let paneOptions;
@@ -205,6 +212,26 @@ export default function(state: AppState, action: any) {
 			};
 			break;
 
+		case 'WHITEBOARD_FORCE_MARKDOWN_TOGGLE': {
+			const id: unknown = action.noteId;
+			// Guard against dispatchers forgetting to pass a noteId — writing
+			// an `undefined` key into the map would persist a junk entry.
+			if (typeof id !== 'string' || !id) break;
+			const current = !!state.whiteboardForceMarkdown?.[id];
+			newState = {
+				...state,
+				whiteboardForceMarkdown: { ...(state.whiteboardForceMarkdown || {}), [id]: !current },
+			};
+			break;
+		}
+
+		case 'WHITEBOARD_ACTIVE_NOTE_SET':
+			newState = {
+				...state,
+				activeNoteIsWhiteboard: !!action.value,
+			};
+			break;
+
 		case 'MAIN_LAYOUT_SET':
 
 			newState = {
@@ -225,8 +252,7 @@ export default function(state: AppState, action: any) {
 								logger.warn('MAIN_LAYOUT_SET_ITEM_PROP: Found an empty item in layout: ', JSON.stringify(state.mainLayout));
 							} else {
 								if (item.key === action.itemKey) {
-									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-									(item as any)[action.propName] = action.propValue;
+									(item as unknown as Record<string, unknown>)[action.propName] = action.propValue;
 									return false;
 								}
 							}

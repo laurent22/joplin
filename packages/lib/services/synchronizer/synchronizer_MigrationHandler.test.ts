@@ -33,21 +33,16 @@ function migrationHandler(clientId = 'abcd'): MigrationHandler {
 }
 
 interface MigrationTests {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	[key: string]: Function;
+	[key: string]: ()=> Promise<void>;
 }
 
 const migrationTests: MigrationTests = {
 	2: async function() {
 		const items = (await fileApi().list('', { includeHidden: true })).items;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(items.filter((i: any) => i.path === '.resource' && i.isDir).length).toBe(1);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(items.filter((i: any) => i.path === 'locks' && i.isDir).length).toBe(1);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(items.filter((i: any) => i.path === 'temp' && i.isDir).length).toBe(1);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(items.filter((i: any) => i.path === 'info.json' && !i.isDir).length).toBe(1);
+		expect(items.filter(i => i.path === '.resource' && i.isDir).length).toBe(1);
+		expect(items.filter(i => i.path === 'locks' && i.isDir).length).toBe(1);
+		expect(items.filter(i => i.path === 'temp' && i.isDir).length).toBe(1);
+		expect(items.filter(i => i.path === 'info.json' && !i.isDir).length).toBe(1);
 
 		const versionForOldClients = await fileApi().get('.sync/version.txt');
 		expect(versionForOldClients).toBe('2');
@@ -55,14 +50,10 @@ const migrationTests: MigrationTests = {
 
 	3: async function() {
 		const items = (await fileApi().list('', { includeHidden: true })).items;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(items.filter((i: any) => i.path === '.resource' && i.isDir).length).toBe(1);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(items.filter((i: any) => i.path === 'locks' && i.isDir).length).toBe(1);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(items.filter((i: any) => i.path === 'temp' && i.isDir).length).toBe(1);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(items.filter((i: any) => i.path === 'info.json' && !i.isDir).length).toBe(1);
+		expect(items.filter(i => i.path === '.resource' && i.isDir).length).toBe(1);
+		expect(items.filter(i => i.path === 'locks' && i.isDir).length).toBe(1);
+		expect(items.filter(i => i.path === 'temp' && i.isDir).length).toBe(1);
+		expect(items.filter(i => i.path === 'info.json' && !i.isDir).length).toBe(1);
 
 		const versionForOldClients = await fileApi().get('.sync/version.txt');
 		expect(versionForOldClients).toBe('2');
@@ -182,10 +173,8 @@ describe('MigrationHandler', () => {
 		// Check that basic folders "locks" and "temp" are created for new sync targets.
 		await migrationHandler().upgrade(1);
 		const result = await fileApi().list();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(result.items.filter((i: any) => i.path === Dirnames.Locks).length).toBe(1);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		expect(result.items.filter((i: any) => i.path === Dirnames.Temp).length).toBe(1);
+		expect(result.items.filter(i => i.path === Dirnames.Locks).length).toBe(1);
+		expect(result.items.filter(i => i.path === Dirnames.Temp).length).toBe(1);
 	}), specTimeout);
 
 	it('should not allow syncing if the sync target is out-dated', (async () => {

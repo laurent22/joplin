@@ -1,4 +1,5 @@
 import InteropService_Importer_Md from '../../services/interop/InteropService_Importer_Md';
+import { ImportModuleOutputFormat } from './types';
 import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import * as fs from 'fs-extra';
@@ -15,7 +16,7 @@ describe('InteropService_Importer_Md', () => {
 		const importer = new InteropService_Importer_Md();
 		await importer.init(path, {
 			format: 'md',
-			outputFormat: 'md',
+			outputFormat: ImportModuleOutputFormat.Markdown,
 			path,
 			destinationFolder: newFolder,
 			destinationFolderId: newFolder.id,
@@ -30,7 +31,7 @@ describe('InteropService_Importer_Md', () => {
 		const importer = new InteropService_Importer_Md();
 		await importer.init(path, {
 			format: 'html',
-			outputFormat: 'html',
+			outputFormat: ImportModuleOutputFormat.Html,
 			path,
 			destinationFolder: newFolder,
 			destinationFolderId: newFolder.id,
@@ -44,7 +45,7 @@ describe('InteropService_Importer_Md', () => {
 		const importer = new InteropService_Importer_Md();
 		await importer.init(path, {
 			format: 'md',
-			outputFormat: 'md',
+			outputFormat: ImportModuleOutputFormat.Markdown,
 			path,
 		});
 		importer.setMetadata({ fileExtensions: ['md', 'html'] });

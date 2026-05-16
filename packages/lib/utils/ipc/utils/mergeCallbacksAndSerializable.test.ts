@@ -13,8 +13,7 @@ describe('mergeCallbacksAndSerializable', () => {
 				'test[2]',
 			],
 		};
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const data: any = {
+		const data: { foo: { fn1: undefined; fn2: undefined; value1: number }; test: (string | undefined)[] } = {
 			foo: {
 				fn1: undefined,
 				fn2: undefined,
@@ -28,7 +27,7 @@ describe('mergeCallbacksAndSerializable', () => {
 		};
 
 		const callMethodWithId = jest.fn();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- mergeCallbacksAndSerializable returns the input shape with strings replaced by functions; this test accesses both as runtime values
 		const merged: any = mergeCallbacksAndSerializable(data, callbacks, callMethodWithId, ()=>{});
 
 		// Should have created functions

@@ -1,6 +1,7 @@
 import { _ } from './locale.js';
 import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
+import Synchronizer from './Synchronizer';
 
 export default class SyncTargetNone extends BaseSyncTarget {
 
@@ -25,7 +26,6 @@ export default class SyncTargetNone extends BaseSyncTarget {
 	}
 
 	protected async initSynchronizer() {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return null as any;
+		return null as unknown as Synchronizer;
 	}
 }

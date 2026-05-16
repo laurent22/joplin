@@ -1,6 +1,6 @@
 # Joplin iOS Changelog
 
-## [ios-v13.6.5](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.5) - 2026-05-05T15:16:20Z
+## [ios-v13.6.6](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.6) - 2026-05-05T15:29:24Z
 
 - New: Add 'Go to start/end of note' toolbar buttons (#15015 by [@Vpatel1093](https://github.com/Vpatel1093))
 - Improved: Accessibility: View/edit toggle: Improve screen reader accessibility (#15167 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

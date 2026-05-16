@@ -3,10 +3,8 @@ import Setting from '../../models/Setting';
 
 const logger = Logger.create('mergeGlobalAndLocalSettings');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default (rootSettings: Record<string, any>, subProfileSettings: Record<string, any>) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: Record<string, any> = { ...subProfileSettings };
+export default (rootSettings: Record<string, unknown>, subProfileSettings: Record<string, unknown>) => {
+	const output: Record<string, unknown> = { ...subProfileSettings };
 
 	for (const k of Object.keys(output)) {
 		try {

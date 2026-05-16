@@ -9,17 +9,17 @@ const logger = Logger.create('loadContentScripts');
 
 export interface ExtraContentScript {
 	id: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- module is a ContentScriptModule extended at runtime with CodeMirror v5/v6/markdown-it specific fields (codeMirrorResources, codeMirrorOptions, plugin); narrowing forces casts at every consumer
 	module: any;
 	assetPath: string;
 	pluginId: string;
 }
 
 function postMessageHandler(pluginId: string, scriptType: ContentScriptType, contentScriptId: string): PostMessageHandler {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return (message: any) => {
+	return async (message: unknown) => {
 		if (scriptType === ContentScriptType.MarkdownItPlugin) {
 			logger.error('context.postMessage is not available to renderer content scripts');
+			return undefined;
 		} else {
 			const plugin = PluginService.instance().pluginById(pluginId);
 			return plugin.emitContentScriptMessage(contentScriptId, message);
@@ -56,10 +56,9 @@ function loadContentScripts(plugins: PluginStates, scriptType: ContentScriptType
 					postMessage: postMessageHandler(pluginId, scriptType, contentScript.id),
 				};
 
-				const loadedModule = module.default(context) as ContentScriptModule;
+				const loadedModule = module.default(context) as ContentScriptModule & { codeMirrorResources?: unknown; codeMirrorOptions?: unknown };
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				if (!loadedModule.plugin && !(loadedModule as any).codeMirrorResources && !(loadedModule as any).codeMirrorOptions) throw new Error(`Content script must export a "plugin" key or a list of CodeMirror assets or define a CodeMirror option: Plugin: ${pluginId}: Script: ${contentScript.id}`);
+				if (!loadedModule.plugin && !loadedModule.codeMirrorResources && !loadedModule.codeMirrorOptions) throw new Error(`Content script must export a "plugin" key or a list of CodeMirror assets or define a CodeMirror option: Plugin: ${pluginId}: Script: ${contentScript.id}`);
 
 				output.push({
 					id: contentScript.id,

@@ -153,8 +153,7 @@ describe('ChangeModel/index', () => {
 
 		const changeCount = 10;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemsToCreate: any[] = [];
+		const itemsToCreate: { id: string; children: never[] }[] = [];
 		for (let i = 0; i < changeCount / 2; i++) {
 			itemsToCreate.push({
 				id: (`${i}`).padStart(32, '0'),

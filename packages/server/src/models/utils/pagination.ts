@@ -1,6 +1,7 @@
 import { ErrorBadRequest } from '../../utils/errors';
 import { decodeBase64, encodeBase64 } from '../../utils/base64';
 import { Knex } from 'knex';
+import { ParsedUrlQuery } from 'querystring';
 
 export enum PaginationOrderDir {
 	ASC = 'asc',
@@ -55,13 +56,12 @@ function dbOffset(pagination: Pagination): number {
 	return pagination.limit * (pagination.page - 1);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function requestPaginationOrder(query: any, defaultOrderField: string = null, defaultOrderDir: PaginationOrderDir = null): PaginationOrder[] {
+export function requestPaginationOrder(query: ParsedUrlQuery | PaginationQueryParams, defaultOrderField: string = null, defaultOrderDir: PaginationOrderDir = null): PaginationOrder[] {
 	if (defaultOrderField === null) defaultOrderField = defaultOrderField_;
 	if (defaultOrderDir === null) defaultOrderDir = defaultOrderDir_;
 
-	const orderBy: string = 'order_by' in query ? query.order_by : defaultOrderField;
-	const orderDir: PaginationOrderDir = 'order_dir' in query ? query.order_dir : defaultOrderDir;
+	const orderBy: string = 'order_by' in query ? query.order_by as string : defaultOrderField;
+	const orderDir: PaginationOrderDir = 'order_dir' in query ? query.order_dir as PaginationOrderDir : defaultOrderDir;
 
 	if (![PaginationOrderDir.ASC, PaginationOrderDir.DESC].includes(orderDir)) throw new ErrorBadRequest(`Invalid order_dir parameter: ${orderDir}`);
 
@@ -93,8 +93,7 @@ function processCursor(pagination: Pagination): Pagination {
 	return pagination as Pagination;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function requestPagination(query: any): Pagination {
+export function requestPagination(query: (Pagination & PaginationQueryParams) | null): Pagination {
 	if (!query) return defaultPagination();
 
 	if ('cursor' in query) {
@@ -143,8 +142,7 @@ export interface PageLink {
 	url?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function filterPaginationQueryParams(query: any): PaginationQueryParams {
+export function filterPaginationQueryParams(query: PaginationQueryParams | null): PaginationQueryParams {
 	if (!query) return {};
 
 	const baseUrlQuery: PaginationQueryParams = {};
@@ -217,8 +215,7 @@ export function createPaginationLinks(page: number, pageCount: number, urlTempla
 // }
 
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function paginateDbQuery(query: Knex.QueryBuilder, pagination: Pagination, mainTable = ''): Promise<PaginatedResults<any>> {
+export async function paginateDbQuery<T = unknown>(query: Knex.QueryBuilder, pagination: Pagination, mainTable = ''): Promise<PaginatedResults<T>> {
 	pagination = {
 		...defaultPagination(),
 		...pagination,
@@ -226,8 +223,7 @@ export async function paginateDbQuery(query: Knex.QueryBuilder, pagination: Pagi
 
 	pagination = processCursor(pagination);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const orderSql: any[] = pagination.order.map(o => {
+	const orderSql = pagination.order.map(o => {
 		return {
 			column: (mainTable ? `${mainTable}.` : '') + o.by,
 			order: o.dir,

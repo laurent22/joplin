@@ -60,9 +60,8 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 
 	public state: State = { error: null, errorInfo: null, pluginInfos: [], plugins: {} };
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public componentDidCatch(error: any, errorInfo: ErrorInfo) {
-		if (typeof error === 'string') error = { message: error };
+	public componentDidCatch(error: Error | string, errorInfo: ErrorInfo) {
+		if (typeof error === 'string') error = { message: error } as Error;
 
 		const pluginInfos: PluginInfo[] = [];
 		let plugins: Plugins = {};

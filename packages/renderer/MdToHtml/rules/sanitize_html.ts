@@ -1,17 +1,17 @@
 import { RuleOptions } from '../../MdToHtml';
 import htmlUtils from '../../htmlUtils';
+import type * as MarkdownIt from 'markdown-it';
+import type Token = require('markdown-it/lib/token');
+import type StateCore = require('markdown-it/lib/rules_core/state_core');
 
 const md5 = require('md5');
 
 export default {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	plugin: function(markdownIt: any, ruleOptions: RuleOptions) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		markdownIt.core.ruler.push('sanitize_html', (state: any) => {
+	plugin: function(markdownIt: MarkdownIt, ruleOptions: RuleOptions) {
+		markdownIt.core.ruler.push('sanitize_html', (state: StateCore) => {
 			const tokens = state.tokens;
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const walkHtmlTokens = (tokens: any[]) => {
+			const walkHtmlTokens = (tokens: Token[]) => {
 				if (!tokens || !tokens.length) return;
 
 				for (const token of tokens) {

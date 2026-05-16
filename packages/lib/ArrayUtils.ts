@@ -56,12 +56,10 @@ export const contentEquals = function<T>(array1: T[], array2: T[]) {
 
 // Merges multiple overlapping intervals into a single interval
 // e.g. [0, 25], [20, 50], [75, 100] --> [0, 50], [75, 100]
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const mergeOverlappingIntervals = function(intervals: any[], limit: number) {
+export const mergeOverlappingIntervals = function(intervals: [number, number][], limit: number) {
 	intervals.sort((a, b) => a[0] - b[0]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const stack: any[] = [];
+	const stack: [number, number][] = [];
 	if (intervals.length) {
 		stack.push(intervals[0]);
 		for (let i = 1; i < intervals.length && stack.length < limit; i++) {

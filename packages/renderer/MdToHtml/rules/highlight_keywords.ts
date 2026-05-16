@@ -1,12 +1,13 @@
 // This plugin is used only on mobile, to highlight search results.
 
 import { RuleOptions } from '../../MdToHtml';
+import type * as MarkdownIt from 'markdown-it';
+import type StateCore = require('markdown-it/lib/rules_core/state_core');
 
 const stringUtils = require('../../stringUtils.js');
 const md5 = require('md5');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function createHighlightedTokens(Token: any, splitted: string[]) {
+function createHighlightedTokens(Token: typeof import('markdown-it/lib/token'), splitted: string[]) {
 	let token;
 	const output = [];
 
@@ -36,12 +37,10 @@ function createHighlightedTokens(Token: any, splitted: string[]) {
 }
 
 // function installRule(markdownIt, mdOptions, ruleOptions) {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function plugin(markdownIt: any, ruleOptions: RuleOptions) {
+function plugin(markdownIt: MarkdownIt, ruleOptions: RuleOptions) {
 	const divider = md5(Date.now().toString() + Math.random().toString());
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	markdownIt.core.ruler.push('highlight_keywords', (state: any) => {
+	markdownIt.core.ruler.push('highlight_keywords', (state: StateCore) => {
 		const keywords = ruleOptions.highlightedKeywords;
 		if (!keywords || !keywords.length) return;
 

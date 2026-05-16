@@ -20,8 +20,7 @@ export interface ParseOptions {
 export default class HtmlToMd {
 
 	public parse(html: string|HTMLElement, options: ParseOptions = {}) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const turndownOpts: any = {
+		const turndownOpts: Record<string, unknown> = {
 			headingStyle: 'atx',
 			anchorNames: options.anchorNames ? options.anchorNames.map(n => n.trim().toLowerCase()) : [],
 			codeBlockStyle: 'fenced',
@@ -46,8 +45,7 @@ export default class HtmlToMd {
 		if (options.convertEmbeddedPdfsToLinks) {
 			// Turndown ignores empty <object> tags, so we need to handle this case separately
 			// https://github.com/mixmark-io/turndown/issues/293#issuecomment-588984202
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			turndownOpts.blankReplacement = (content: string, node: any) => {
+			turndownOpts.blankReplacement = (content: string, node: HTMLElement & { isCode?: boolean }) => {
 				if (node.matches('object')) {
 					return pdfRule.replacement(content, node, {});
 				}
@@ -69,8 +67,7 @@ export default class HtmlToMd {
 		turndown.remove('style');
 		const pdfRule = {
 			filter: ['embed', 'object'],
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			replacement: function(_content: string, node: any, _options: any) {
+			replacement: function(_content: string, node: HTMLElement, _options: Record<string, unknown>) {
 				// We are setting embedded_pdf as name so that we can later distinguish them from normal links and create resources for them.
 				if (node.matches('embed') && node.getAttribute('src') && pdfUrlRegex.test(node.getAttribute('src'))) {
 					return `[embedded_pdf](${node.getAttribute('src')})`;

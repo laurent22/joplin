@@ -1,9 +1,12 @@
 import gitCompareUrl from './gitCompareUrl';
+import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
+
+type GitCompareManifest = Pick<PluginManifest, 'repository_url' | '_publish_commit'>;
 
 describe('gitCompareUrl', () => {
 
 	test('should create a compare URL', () => {
-		const testCases = [
+		const testCases: [GitCompareManifest, GitCompareManifest | null, string | null][] = [
 			[
 				{
 					repository_url: 'https://github.com/JackGruber/joplin-plugin-copytags',

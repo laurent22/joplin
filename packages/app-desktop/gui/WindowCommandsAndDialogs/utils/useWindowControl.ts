@@ -55,10 +55,9 @@ const useWindowControl = (setDialogState: OnSetDialogState, onPrint: PrintCallba
 							inputType: 'dropdown',
 							value: options.value,
 							autocomplete: options.suggestions,
-							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored code before rule was applied
-							onClose: async (answer: any) => {
+							onClose: async (answer: unknown) => {
 								if (answer) {
-									resolve(answer.value);
+									resolve((answer as PromptSuggestion<T>).value);
 								} else {
 									resolve(null);
 								}

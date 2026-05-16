@@ -1,3 +1,5 @@
+import { MutexInterface } from 'async-mutex';
+import JoplinDatabase from '../JoplinDatabase';
 import BaseService from './BaseService';
 const Mutex = require('async-mutex').Mutex;
 
@@ -15,10 +17,8 @@ interface KvStoreKeyValue {
 
 export default class KvStore extends BaseService {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private incMutex_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private db_: any = null;
+	private incMutex_: MutexInterface = null;
+	private db_: JoplinDatabase = null;
 
 	private static instance_: KvStore = null;
 
@@ -37,8 +37,7 @@ export default class KvStore extends BaseService {
 		this.incMutex_ = new Mutex();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setDb(v: any) {
+	public setDb(v: JoplinDatabase) {
 		this.db_ = v;
 	}
 
@@ -92,7 +91,7 @@ export default class KvStore extends BaseService {
 	}
 
 	public async all() {
-		return this.formatValues_(await this.db().selectAll('SELECT * FROM key_values'));
+		return this.formatValues_(await this.db().selectAll('SELECT * FROM key_values') as unknown as KvStoreKeyValue[]);
 	}
 
 	// Note: atomicity is done at application level so two difference instances
@@ -114,7 +113,7 @@ export default class KvStore extends BaseService {
 
 	public async searchByPrefix(prefix: string): Promise<KvStoreKeyValue[]> {
 		const results = await this.db().selectAll('SELECT `key`, `value`, `type` FROM key_values WHERE `key` LIKE ?', [`${prefix}%`]);
-		return this.formatValues_(results);
+		return this.formatValues_(results as unknown as KvStoreKeyValue[]);
 	}
 
 	public async countKeys() {

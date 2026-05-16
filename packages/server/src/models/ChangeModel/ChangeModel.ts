@@ -48,8 +48,7 @@ export function defaultDeltaPagination(): ChangePagination {
 	};
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function requestDeltaPagination(query: any): ChangePagination {
+export function requestDeltaPagination(query: ChangePagination | null): ChangePagination {
 	if (!query) return defaultDeltaPagination();
 
 	const output: ChangePagination = {};

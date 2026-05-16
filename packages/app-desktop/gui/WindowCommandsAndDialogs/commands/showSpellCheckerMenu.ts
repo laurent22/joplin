@@ -19,7 +19,7 @@ export const runtime = (): CommandRuntime => {
 			useSpellChecker = useSpellChecker === null ? context.state.settings['spellChecker.enabled'] : useSpellChecker;
 
 			const menuItems = SpellCheckerService.instance().spellCheckerConfigMenuItems(selectedLanguages, useSpellChecker);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- spellCheckerConfigMenuItems returns a heterogeneous menu shape (lib package) that doesn't satisfy Electron's MenuItemConstructorOptions structurally
 			const menu = Menu.buildFromTemplate(menuItems as any);
 			menu.popup({ window: bridge().activeWindow() });
 		},

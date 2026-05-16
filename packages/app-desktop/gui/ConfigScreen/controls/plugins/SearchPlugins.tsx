@@ -7,6 +7,7 @@ import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import PluginBox, { InstallState } from './PluginBox';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import { OnPluginSettingChangeEvent } from '@joplin/lib/components/shared/config/plugins/types';
 import { _ } from '@joplin/lib/locale';
 import useOnInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
 import { themeStyle } from '@joplin/lib/theme';
@@ -25,8 +26,7 @@ interface Props {
 	searchQuery: string;
 	onSearchQueryChange(event: OnChangeEvent): void;
 	pluginSettings: PluginSettings;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	onPluginSettingsChange(event: any): void;
+	onPluginSettingsChange(event: OnPluginSettingChangeEvent): void;
 	maxWidth: number;
 	repoApi(): RepositoryApi;
 	disabled: boolean;

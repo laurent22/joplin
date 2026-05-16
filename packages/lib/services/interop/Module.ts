@@ -99,8 +99,7 @@ export const makeExportModule = (
 ): ExportModule => {
 	const exporterDefaults: ExportMetadata = {
 		...defaultBaseMetadata,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		format: '' as any,
+		format: '' as ExportModuleOutputFormat,
 		type: ModuleType.Exporter,
 		target: FileSystemItem.File,
 

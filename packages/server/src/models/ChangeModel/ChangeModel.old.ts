@@ -153,8 +153,7 @@ export default class ChangeModel extends BaseChangeModel<Change> {
 
 		if (!doCountQuery) subParams2.push(limit);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let query: Knex.Raw<any> = null;
+		let query: Knex.Raw<unknown> = null;
 
 		const finalParams = subParams1.concat(subParams2);
 
