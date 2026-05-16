@@ -1,6 +1,6 @@
 import time from './time';
 import Setting from './models/Setting';
-import { basename, filename, fileExtension } from './path-utils';
+import { basename, filename, fileExtension, rtrimSlashes } from './path-utils';
 const md5 = require('md5');
 import resolvePathWithinDir from './utils/resolvePathWithinDir';
 import { Buffer } from 'buffer';
@@ -198,6 +198,7 @@ export default class FsDriverBase {
 			return reservedNames.includes(testName.toLowerCase());
 		};
 
+		name = rtrimSlashes(name);
 		const baseName = basename(name);
 		const pathPrefix = name.substring(0, name.length - baseName.length);
 		const nameNoExt = pathPrefix + filename(baseName);
