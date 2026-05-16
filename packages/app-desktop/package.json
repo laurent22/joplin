@@ -157,7 +157,7 @@
     "@testing-library/react": "16.3.2",
     "@types/jest": "29.5.14",
     "@types/mustache": "4.2.6",
-    "@types/node": "18.19.130",
+    "@types/node": "24.9.1",
     "@types/react": "19.1.10",
     "@types/react-dom": "19.1.7",
     "@types/react-redux": "7.1.34",
