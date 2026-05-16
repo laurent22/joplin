@@ -95,7 +95,6 @@ export interface WindowState {
 	notesParentType: string;
 	selectedNoteTags: NoteTagEntity[];
 	searchQuery: string;
-	searchInlineQuery: string;
 
 	selectedNoteIds: string[];
 	selectedNoteHash: string;
@@ -118,7 +117,6 @@ export const defaultWindowId = 'default';
 export const defaultWindowState: WindowState = {
 	windowId: defaultWindowId,
 	searchQuery: '',
-	searchInlineQuery: '',
 	notes: [],
 	notesSource: '',
 	notesParentType: null,
@@ -218,7 +216,6 @@ export const defaultState: State = {
 	showQuitSyncDialog: false,
 	syncReport: {},
 	searchQuery: '',
-	searchInlineQuery: '',
 	searchResults: [],
 	settings: {},
 	sharedData: null,
@@ -1449,10 +1446,6 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'SEARCH_QUERY':
 			draft.searchQuery = action.query.trim();
-			break;
-
-		case 'SEARCH_INLINE_QUERY':
-			draft.searchInlineQuery = action.query;
 			break;
 
 		case 'SEARCH_ADD':

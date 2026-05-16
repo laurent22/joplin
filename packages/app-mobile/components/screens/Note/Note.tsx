@@ -112,7 +112,7 @@ interface Props extends BaseProps {
 	editorFont: number; // e.g. Setting.FONT_MENLO
 	viewerFontSize: number;
 	showSideMenu: boolean;
-	searchInlineQuery: string;
+	searchQuery: string;
 	ftsEnabled: number;
 	highlightedWords: string[];
 	noteHash: string;
@@ -1643,7 +1643,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		};
 
 		// Currently keyword highlighting is supported only when FTS is available.
-		const keywords = this.props.searchInlineQuery && !!this.props.ftsEnabled ? this.props.highlightedWords : emptyArray;
+		const keywords = this.props.searchQuery && !!this.props.ftsEnabled ? this.props.highlightedWords : emptyArray;
 
 		const increaseSpaceForEditor = this.props.lowVerticalSpace
 			&& this.state.mode === 'edit'
@@ -1726,7 +1726,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						initialText={note.body}
 						initialSelection={this.selection}
 						markupLanguage={this.state.note.markup_language}
-						globalSearch={this.props.searchInlineQuery}
+						globalSearch={this.props.searchQuery}
 						onChange={this.onMarkdownEditorTextChange}
 						onSelectionChange={this.onEditorSelectionChange}
 						onUndoRedoDepthChange={this.onUndoRedoDepthChange}
@@ -1931,7 +1931,7 @@ const NoteScreen = connect((state: AppState) => {
 		noteHash: state.selectedNoteHash,
 		itemType: state.selectedItemType,
 		folders: state.folders,
-		searchInlineQuery: state.searchInlineQuery,
+		searchQuery: state.searchQuery,
 		themeId: state.settings.theme,
 		editorFont: state.settings['style.editor.fontFamily'] as number,
 		editorFontSize: state.settings['style.editor.fontSize'],

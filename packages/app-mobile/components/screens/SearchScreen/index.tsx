@@ -10,11 +10,8 @@ import { Dispatch } from 'redux';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import SearchResults from './SearchResults';
 import AccessibleView from '../../accessibility/AccessibleView';
-import SearchEngine, { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
+import { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
 import SearchBar from './SearchBar';
-import Logger from '@joplin/utils/Logger';
-
-const logger = Logger.create('screens/SearchScreen');
 
 interface Props {
 	themeId: number;
@@ -72,31 +69,10 @@ const SearchScreenComponent: React.FC<Props> = props => {
 	globalQueryRef.current = props.query;
 	useEffect(() => {
 		if (globalQueryRef.current !== query) {
-			const updateInlineQuery = async () => {
-				let terms = query;
-
-				try {
-					const parsedQuery = await SearchEngine.instance().parseQuery(query);
-					terms = SearchEngine.instance()
-						.allParsedQueryTerms(parsedQuery)
-						.map(term => typeof term === 'string' ? term : term.value)
-						.join(' ');
-				} catch (error) {
-					logger.warn('Failed to parse search query', error);
-				}
-
-				props.dispatch({
-					type: 'SEARCH_INLINE_QUERY',
-					query: terms,
-				});
-			};
-
 			props.dispatch({
 				type: 'SEARCH_QUERY',
 				query,
 			});
-
-			void updateInlineQuery();
 		}
 	}, [props.dispatch, query]);
 
