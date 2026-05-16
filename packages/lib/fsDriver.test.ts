@@ -42,4 +42,17 @@ describe('fsDriver', () => {
 			await shim.fsDriver().findUniqueFilename(join(supportDir, 'this-file-does-not-exist.txt'), [join(supportDir, 'some-other-file.txt')]),
 		).toBe(join(supportDir, 'this-file-does-not-exist.txt'));
 	});
+
+	it('should not insert the deduplication suffix into a parent directory that contains a dot in findUniqueFilename', async () => {
+		// Regression test: filename()/fileExtension() split on the last dot
+		// anywhere in the string, so a dot in a parent directory name must not
+		// push the "-1" deduplication suffix into the directory instead of the
+		// leaf filename. The leaf here has no extension, mirroring an exported
+		// folder name.
+		const dottedDir = join(supportDir, 'dir.with.dot');
+		const reserved = join(dottedDir, 'folder_');
+		expect(
+			await shim.fsDriver().findUniqueFilename(reserved, [reserved], true),
+		).toBe(join(dottedDir, 'folder_-1'));
+	});
 });

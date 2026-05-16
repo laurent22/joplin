@@ -1,6 +1,6 @@
 import time from './time';
 import Setting from './models/Setting';
-import { filename, fileExtension } from './path-utils';
+import { basename, filename, fileExtension } from './path-utils';
 const md5 = require('md5');
 import resolvePathWithinDir from './utils/resolvePathWithinDir';
 import { Buffer } from 'buffer';
@@ -203,22 +203,37 @@ export default class FsDriverBase {
 			return reservedNames.includes(testName.toLowerCase());
 		};
 
-		const nameNoExt = filename(name, true);
-		let extension = fileExtension(name);
+		// Derive the stem and extension from the leaf path segment only.
+		// Computing them from the full path is unsafe because
+		// filename()/fileExtension() split on the last dot anywhere in the
+		// string: a dot in a parent directory name (e.g. ".../joplin-3.6/...")
+		// would otherwise push the deduplication suffix into the directory
+		// rather than the leaf filename, producing a bogus path and breaking
+		// deduplication.
+		// A trailing separator (a directory path such as "folder/") is stripped
+		// first and restored on the result, so deduplication still operates on
+		// the final segment.
+		const trailingSepMatch = name.match(/[/\\]+$/);
+		const trailingSep = trailingSepMatch ? trailingSepMatch[0] : '';
+		const trimmedName = name.slice(0, name.length - trailingSep.length);
+		const baseName = trimmedName ? basename(trimmedName) : '';
+		const dirPart = name.slice(0, name.length - baseName.length - trailingSep.length);
+		const nameNoExt = baseName ? filename(baseName) : '';
+		let extension = baseName ? fileExtension(baseName) : '';
 		if (extension) extension = `.${extension}`;
-		let nameToTry = nameNoExt + extension;
+		let nameToTry = `${dirPart}${nameNoExt}${extension}${trailingSep}`;
 		while (true) {
 			// Check if the filename does not exist in the filesystem and is not reserved
 			const exists = await this.exists(nameToTry) || isReserved(nameToTry);
 			if (!exists) return nameToTry;
 			if (!markdownSafe) {
-				nameToTry = `${nameNoExt} (${counter})${extension}`;
+				nameToTry = `${dirPart}${nameNoExt} (${counter})${extension}${trailingSep}`;
 			} else {
-				nameToTry = `${nameNoExt}-${counter}${extension}`;
+				nameToTry = `${dirPart}${nameNoExt}-${counter}${extension}${trailingSep}`;
 			}
 			counter++;
 			if (counter >= 1000) {
-				nameToTry = `${nameNoExt} (${new Date().getTime()})${extension}`;
+				nameToTry = `${dirPart}${nameNoExt} (${new Date().getTime()})${extension}${trailingSep}`;
 				await time.msleep(10);
 			}
 			if (counter >= 1100) throw new Error('Cannot find unique filename');
