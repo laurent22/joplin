@@ -1093,6 +1093,7 @@ packages/editor/CodeMirror/extensions/rendering/replaceBackslashEscapes.js
 packages/editor/CodeMirror/extensions/rendering/replaceBulletLists.js
 packages/editor/CodeMirror/extensions/rendering/replaceCheckboxes.js
 packages/editor/CodeMirror/extensions/rendering/replaceDividers.js
+packages/editor/CodeMirror/extensions/rendering/replaceFormatCharacters.test.js
 packages/editor/CodeMirror/extensions/rendering/replaceFormatCharacters.js
 packages/editor/CodeMirror/extensions/rendering/replaceInlineHtml.test.js
 packages/editor/CodeMirror/extensions/rendering/replaceInlineHtml.js

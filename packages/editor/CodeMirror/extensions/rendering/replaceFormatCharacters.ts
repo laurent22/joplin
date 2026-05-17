@@ -15,13 +15,27 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	if ((node.name === 'URL' || node.name === 'LinkMark') && getParentName() === 'Link') {
 		const parent = node.node.parent!;
 		const parentContent = state.sliceDoc(parent.from, parent.to);
+
+		// If the link has no title (e.g. [](https://example.com) or [  ](...)),
+		// keep the URL visible so the link doesn't disappear entirely. The
+		// brackets/parens are still hidden.
+		// See https://github.com/laurent22/joplin/issues/15425
+		const linkMarks = parent.getChildren('LinkMark');
+		const openingBracket = linkMarks.find(mark => state.sliceDoc(mark.from, mark.to) === '[');
+		const firstClosingBracket = linkMarks.find(mark => state.sliceDoc(mark.from, mark.to) === ']');
+		const hasEmptyTitle = !!openingBracket && !!firstClosingBracket
+			&& state.sliceDoc(openingBracket.to, firstClosingBracket.from).trim() === '';
+		if (hasEmptyTitle && node.name === 'URL') {
+			return false;
+		}
+
 		if (node.name === 'LinkMark') {
 			if (isReferenceLink(parentContent)) {
 				return !!resolveReferenceFromLink(parentContent, state);
 			}
 		} else if (node.name === 'URL') {
 			// Find all closing link marks
-			const closingBracketNodes = parent.getChildren('LinkMark').filter(mark => {
+			const closingBracketNodes = linkMarks.filter(mark => {
 				const isClosingBracket = state.sliceDoc(mark.from, mark.to) === ']';
 				return isClosingBracket;
 			});
@@ -82,6 +96,18 @@ const replaceFormatCharacters = [
 				// Include the space in the hidden region, if it's available
 				if (state.doc.sliceString(node.to, node.to + 1) === ' ') {
 					return [node.from, node.to + 1];
+				}
+			}
+
+			// For empty/whitespace-only link titles, extend the opening [ to
+			// cover the whitespace through the closing ], so the whitespace
+			// isn't visible (and isn't underlined as part of the link).
+			// See https://github.com/laurent22/joplin/issues/15425
+			if (node.name === 'LinkMark' && node.node.parent?.name === 'Link' && state.sliceDoc(node.from, node.to) === '[') {
+				const parent = node.node.parent;
+				const closingBracket = parent.getChildren('LinkMark').find(mark => state.sliceDoc(mark.from, mark.to) === ']');
+				if (closingBracket && node.to < closingBracket.from && state.sliceDoc(node.to, closingBracket.from).trim() === '') {
+					return [node.from, closingBracket.from];
 				}
 			}
 
