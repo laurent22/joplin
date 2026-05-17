@@ -128,14 +128,6 @@ export default class ShareModel extends BaseModel<Share> {
 		return this.db(this.tableName).select(this.defaultFields).whereIn('item_id', itemIds);
 	}
 
-	public async byItemAndRecursive(itemId: Uuid, recursive: boolean): Promise<Share | null> {
-		return this.db(this.tableName)
-			.select(this.defaultFields)
-			.where('item_id', itemId)
-			.where('recursive', recursive ? 1 : 0)
-			.first();
-	}
-
 	public async byItemAndRecursiveWithEnabledOwner(itemId: Uuid, recursive: boolean): Promise<Share | null> {
 		return this.db(this.tableName)
 			.select(this.selectFields(null, this.defaultFields, this.tableName))
