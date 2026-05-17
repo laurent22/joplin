@@ -104,7 +104,9 @@ const buildPlugin = async (pluginId: string, repositoryData: RepositoryData, out
 		await options.beforeInstall(buildDir, pluginId);
 
 		logStatus('Installing dependencies.');
-		await execCommand('npm install');
+		// `npm install` occasionally crashes on Windows CI with STATUS_STACK_BUFFER_OVERRUN
+		// (exit code 3221226505), hence the retry.
+		await execCommand('npm install --no-audit --no-fund --prefer-offline', { retryCount: 3 });
 
 		const jplFiles = await glob('publish/*.jpl');
 		logStatus(`Found built .jpl files: ${JSON.stringify(jplFiles)}`);
