@@ -490,8 +490,12 @@ export default class SearchEngine {
 
 		const sortTerm = parsedQuery.allTerms.find(t => t.name === 'sort');
 		const sortAsc = sortTerm?.value?.endsWith('-asc');
-		const sortField = sortTerm?.value?.startsWith('updated') ? 'user_updated_time' :
-		                  sortTerm?.value?.startsWith('created') ? 'user_created_time' : null;
+		let sortField: string | null = null;
+		if (sortTerm?.value?.startsWith('updated')) {
+			sortField = 'user_updated_time';
+		} else if (sortTerm?.value?.startsWith('created')) {
+			sortField = 'user_created_time';
+		}
 
 		if (sortField) {
 			rows.sort((a, b) => {
@@ -868,7 +872,7 @@ export default class SearchEngine {
 
 				this.processResults_(rows as ProcessResultsRow[], parsedQuery, !useFts);
 			} catch (error) {
-				this.logger().error(`SearchEngine: Cannot execute MATCH query: ${searchString}: ${error.message}`);
+				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
 				rows = [];
 			}
 		}
