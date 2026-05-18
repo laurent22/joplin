@@ -9,6 +9,7 @@ interface StyleProps {
 		backgroundColor: string;
 		backgroundColorHover2: string;
 		color2: string;
+		color4: string;
 		colorError2: string;
 		colorFaded2: string;
 		colorWarn2: string;
@@ -19,6 +20,7 @@ interface StyleProps {
 	};
 	isConflictFolder?: boolean;
 	isSpecialItem?: boolean;
+	isPublished?: boolean;
 	shareId?: string;
 	selected?: boolean;
 }
