@@ -1,4 +1,3 @@
-
 export interface Term {
 	name: string;
 	value: string;
@@ -72,7 +71,7 @@ const parseQuery = (query: string): Term[] => {
 	const validFilters = new Set(['any', 'title', 'body', 'tag',
 		'notebook', 'created', 'updated', 'type',
 		'iscompleted', 'due', 'latitude', 'longitude',
-		'altitude', 'resource', 'sourceurl', 'id']);
+		'altitude', 'resource', 'sourceurl', 'id', 'sort']);
 
 	const terms = getTerms(query, validFilters);
 
@@ -134,6 +133,9 @@ const parseQuery = (query: string): Term[] => {
 		.find(x => (x.value !== '1' && x.value !== '0'));
 	if (incorrect) throw new Error('The value of filter "iscompleted" must be "1" or "0"');
 
+	incorrect = result.filter(term => term.name === 'sort')
+		.find(x => !['updated', 'updated-asc', 'created', 'created-asc'].includes(x.value));
+	if (incorrect) throw new Error('The value of filter "sort" must be "updated", "updated-asc", "created", or "created-asc"');
 
 	return result;
 };

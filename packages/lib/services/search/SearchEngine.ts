@@ -488,24 +488,35 @@ export default class SearchEngine {
 			}
 		}
 
-		rows.sort((a, b) => {
-			const aIsNote = a.item_type === ModelType.Note;
-			const bIsNote = b.item_type === ModelType.Note;
+		const sortTerm = parsedQuery.allTerms.find(t => t.name === 'sort');
+		const sortAsc = sortTerm?.value?.endsWith('-asc');
+		const sortField = sortTerm?.value?.startsWith('updated') ? 'user_updated_time' :
+		                  sortTerm?.value?.startsWith('created') ? 'user_created_time' : null;
 
-			if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
-			if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
-			if (a.weight < b.weight) return +1;
-			if (a.weight > b.weight) return -1;
+		if (sortField) {
+			rows.sort((a, b) => {
+				return sortAsc ? a[sortField] - b[sortField] : b[sortField] - a[sortField];
+			});
+		} else {
+			rows.sort((a, b) => {
+				const aIsNote = a.item_type === ModelType.Note;
+				const bIsNote = b.item_type === ModelType.Note;
 
-			if (aIsNote && bIsNote) {
-				if (a.is_todo && a.todo_completed) return +1;
-				if (b.is_todo && b.todo_completed) return -1;
-			}
+				if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
+				if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
+				if (a.weight < b.weight) return +1;
+				if (a.weight > b.weight) return -1;
 
-			if (a.user_updated_time < b.user_updated_time) return +1;
-			if (a.user_updated_time > b.user_updated_time) return -1;
-			return 0;
-		});
+				if (aIsNote && bIsNote) {
+					if (a.is_todo && a.todo_completed) return +1;
+					if (b.is_todo && b.todo_completed) return -1;
+				}
+
+				if (a.user_updated_time < b.user_updated_time) return +1;
+				if (a.user_updated_time > b.user_updated_time) return -1;
+				return 0;
+			});
+		}
 	}
 
 	// https://stackoverflow.com/a/13818704/561309
@@ -691,6 +702,7 @@ export default class SearchEngine {
 			console.warn(error);
 		}
 
+		// Exclude sort: terms when determining search type
 		const textQuery = allTerms.filter(x => x.name === 'text' || x.name === 'title' || x.name === 'body').map(x => x.value).join(' ');
 		const st = scriptType(textQuery);
 
@@ -787,10 +799,14 @@ export default class SearchEngine {
 
 			const useFts = searchType === SearchEngine.SEARCH_TYPE_FTS;
 			try {
-				const { query, params } = queryBuilder(parsedQuery.allTerms, useFts);
+				// Strip sort: terms before passing to queryBuilder - they are post-query
+				// sort modifiers and have no SQL representation.
+				const termsForQuery = parsedQuery.allTerms.filter(t => t.name !== 'sort');
+				const { query, params } = queryBuilder(termsForQuery, useFts);
 
 				rows = await this.db().selectAll<ProcessResultsRow>(query, params);
-				const queryHasFilters = !!parsedQuery.allTerms.find(t => t.name !== 'text');
+				// Exclude sort: from queryHasFilters so it doesn't suppress OCR search
+				const queryHasFilters = !!parsedQuery.allTerms.find(t => t.name !== 'text' && t.name !== 'sort');
 
 				rows = rows.map(r => {
 					return {
@@ -800,7 +816,8 @@ export default class SearchEngine {
 				});
 
 				if (!queryHasFilters && Setting.value('ocr.searchInExtractedContent')) {
-					const toSearch = parsedQuery.allTerms.map(t => t.value).join(' ');
+					// Exclude sort: term values from OCR search string
+					const toSearch = parsedQuery.allTerms.filter(t => t.name !== 'sort').map(t => t.value).join(' ');
 
 					let itemRows: ProcessResultsRow[] = [];
 
@@ -851,7 +868,7 @@ export default class SearchEngine {
 
 				this.processResults_(rows as ProcessResultsRow[], parsedQuery, !useFts);
 			} catch (error) {
-				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
+				this.logger().error(`SearchEngine: Cannot execute MATCH query: ${searchString}: ${error.message}`);
 				rows = [];
 			}
 		}
