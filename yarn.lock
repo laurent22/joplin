@@ -13013,7 +13013,7 @@ __metadata:
   dependencies:
     "@adobe/css-tools": "npm:4.4.4"
     "@mixmark-io/domino": "npm:2.2.0"
-    "@rollup/plugin-commonjs": "npm:28.0.9"
+    "@rollup/plugin-commonjs": "npm:29.0.0"
     "@rollup/plugin-node-resolve": "npm:16.0.3"
     "@rollup/plugin-replace": "npm:6.0.3"
     browserify: "npm:14.5.0"
@@ -16293,9 +16293,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:28.0.9":
-  version: 28.0.9
-  resolution: "@rollup/plugin-commonjs@npm:28.0.9"
+"@rollup/plugin-commonjs@npm:29.0.0":
+  version: 29.0.0
+  resolution: "@rollup/plugin-commonjs@npm:29.0.0"
   dependencies:
     "@rollup/pluginutils": "npm:^5.0.1"
     commondir: "npm:^1.0.1"
@@ -16309,7 +16309,7 @@ __metadata:
   peerDependenciesMeta:
     rollup:
       optional: true
-  checksum: 10/68b040339ac4476bc4e75444424e85f9d22726b23e54148b6e22b80c0a06d58b4cd8ccf8c1ccc8e768076b19c9c8474f53e58b11370ecaea2a4de748101bf87a
+  checksum: 10/9abffe07ebdd0aa5d412e7894c370b2c9d2f52e23d415c3e421ff2e05dc662d86f5b681b878463f468020360c477d74cc1476612facba0c5c987cc0b1ec6c06b
   languageName: node
   linkType: hard
 
