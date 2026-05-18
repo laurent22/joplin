@@ -15,7 +15,6 @@ import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
 import { initializeJoplinUtils } from './utils/joplinUtils';
 import startServices from './utils/startServices';
-import { credentialFile } from './utils/testing/testUtils';
 import apiVersionHandler from './middleware/apiVersionHandler';
 import clickJackingHandler from './middleware/clickJackingHandler';
 import newModelFactory from './models/factory';
@@ -29,6 +28,7 @@ import initLib from '@joplin/lib/initLib';
 import checkAdminHandler from './middleware/checkAdminHandler';
 import ActionLogger from '@joplin/lib/utils/ActionLogger';
 import { setupSamlAuthentication } from './utils/saml';
+import { credentialFile } from './utils/testing/credentialFile';
 
 interface Argv {
 	env?: Env;
