@@ -252,6 +252,26 @@ export default class ItemModel extends BaseModel<Item> {
 		return items.length ? items[0] : null;
 	}
 
+	public async loadByJopParentId(userId: Uuid | Uuid[], parentId: string, options: ItemLoadOptions = {}): Promise<Item[]> {
+		const userIds = Array.isArray(userId) ? userId : [userId];
+		if (!userIds.length) return [];
+
+		const rows: Item[] = await this
+			.db('user_items')
+			.leftJoin('items', 'items.id', 'user_items.item_id')
+			.distinct(this.selectFields(options, null, 'items', ['items.content_size']))
+			.whereIn('user_items.user_id', userIds)
+			.where('items.jop_parent_id', '=', parentId);
+
+		if (options.withContent) {
+			for (const row of rows) {
+				row.content = await this.storageDriverRead(row.id, row.content_size, { models: this.models() });
+			}
+		}
+
+		return rows;
+	}
+
 	public async loadByNames(userId: Uuid | Uuid[], names: string[], options: ItemLoadOptions = {}): Promise<Item[]> {
 		if (!names.length) return [];
 

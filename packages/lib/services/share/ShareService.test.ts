@@ -1,6 +1,7 @@
 import Note from '../../models/Note';
 import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
 import ShareService, { ApiShare } from './ShareService';
+import { ShareType } from './reducer';
 import { NoteEntity, ResourceEntity } from '../database/types';
 import Folder from '../../models/Folder';
 import { localSyncInfo, setEncryptionEnabled, setPpk } from '../synchronizer/syncInfoUtils';
@@ -406,6 +407,36 @@ describe('ShareService', () => {
 		expect(deletedItems[0].item_id).toBe(folder1.id);
 
 		cleanup();
+	});
+
+	it('should not return a published folder share when looking up a regular folder share', async () => {
+		const service = mockShareService({
+			getShares: async () => ({
+				items: [{
+					id: 'share1',
+					type: ShareType.PublishedFolder,
+					folder_id: 'folder1',
+					note_id: '',
+					master_key_id: '',
+				}],
+			}),
+			postShares: async () => null,
+			getShareInvitations: async () => ({ items: [] }),
+		});
+
+		await service.refreshShares();
+
+		expect(service.folderShare('folder1')).toBeUndefined();
+	});
+
+	it('should throw when publishing a folder that does not exist', async () => {
+		const service = mockShareService({
+			getShares: async () => ({ items: [] }),
+			postShares: async () => null,
+			getShareInvitations: async () => ({ items: [] }),
+		});
+
+		await expect(service.publishFolder('000000000000000000000000000000F9')).rejects.toThrow('No such folder: 000000000000000000000000000000F9');
 	});
 
 });

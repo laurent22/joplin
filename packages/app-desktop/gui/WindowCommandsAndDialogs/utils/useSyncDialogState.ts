@@ -35,6 +35,13 @@ const useSyncDialogState = (dialogState: DialogState, dispatch: Dispatch) => {
 				name: 'shareFolder',
 			});
 		}
+
+		if (state.publishFolderDialogOptions !== prevState.publishFolderDialogOptions) {
+			dispatch({
+				type: state.publishFolderDialogOptions && state.publishFolderDialogOptions.visible ? 'VISIBLE_DIALOGS_ADD' : 'VISIBLE_DIALOGS_REMOVE',
+				name: 'publishFolder',
+			});
+		}
 		lastDialogStateRef.current = dialogState;
 	}, [dialogState, dispatch]);
 };

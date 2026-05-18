@@ -9,11 +9,35 @@
 		<a class="navbar-item" href="{{logoUrl}}">
 			<img class="logo" src="{{logoSrc}}"/><span class="logo-text">{{logoTitle}}</span>
 		</a>
+		{{#showFolderTree}}
+		<button type="button" class="navbar-burger folder-tree-toggle" aria-label="Toggle notebook tree" aria-controls="folder-tree-sidebar" aria-expanded="false">
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+		</button>
+		{{/showFolderTree}}
 	</div>
 </nav>
 
-<div class="note-main">
-	<p class="last-updated">Last updated: {{note.updatedDateTime}}</p>
-	<h1 class="title">{{note.title}}</h1>
-	{{{note.bodyHtml}}}
+<div class="published-note-layout {{#showFolderTree}}with-tree{{/showFolderTree}}">
+	{{#showFolderTree}}
+	<aside id="folder-tree-sidebar" class="published-folder-sidebar" aria-label="Notebook navigation">
+		<p class="sidebar-title">{{folderTree.rootTitle}}</p>
+		<div id="folder-tree" class="folder-tree"></div>
+		<script id="folder-tree-data" type="application/json">{{{folderTree.treeDataJson}}}</script>
+	</aside>
+	{{/showFolderTree}}
+
+	<div class="note-main">
+		{{#note}}
+		<p class="last-updated">Last updated: {{updatedDateTime}}</p>
+		<h1 class="title">{{title}}</h1>
+		{{{bodyHtml}}}
+		{{/note}}
+
+		{{^note}}
+		{{{emptyStateHtml}}}
+		{{/note}}
+	</div>
 </div>

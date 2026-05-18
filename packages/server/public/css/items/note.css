@@ -9,7 +9,11 @@
 	box-shadow: 0px 2px 8px #cccccc;
 }
 
-.page-note .note-main {
+.published-note-layout {
+	display: block;
+}
+
+.page-note .published-note-layout:not(.with-tree) .note-main {
 	margin-top: 2em;
 	max-width: 840px;
 	margin-left: auto;
@@ -43,3 +47,155 @@ https://github.com/laurent22/joplin/issues/6370
 #rendered-md {
 	overflow-x: auto;
 }
+
+.page-note:has(.with-tree) {
+	height: 100vh;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
+.page-note:has(.with-tree) .main {
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow: hidden;
+	padding: 0;
+}
+
+.page-note:has(.with-tree) .main-container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	max-width: none !important;
+	padding: 0;
+	margin: 0;
+}
+
+.published-note-layout.with-tree {
+	display: flex;
+	align-items: stretch;
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow: hidden;
+}
+
+.published-folder-sidebar {
+	flex: 0 0 260px;
+	max-width: 260px;
+	padding: 16px 0 0;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	border-right: 1px solid #e3e5e8;
+}
+
+.sidebar-title {
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: #363636;
+	margin: 0 0 8px 0;
+	padding: 0 1rem;
+}
+
+div.wunderbaum.folder-tree {
+	flex: 1 1 auto;
+	border: none !important;
+	--wb-col-padding-x: 1rem;
+}
+
+div.wunderbaum.folder-tree .wb-col {
+	display: flex !important;
+	align-items: center !important;
+	column-gap: 0.5rem;
+}
+
+div.wunderbaum.folder-tree .wb-row {
+	display: flex;
+	padding: 0rem 2.75rem;
+	border-radius: 0.25rem;
+	border: none !important;
+}
+
+div.wunderbaum.folder-tree .wb-row.wb-active {
+	background-color: #0000000d !important;
+	color: #0557ba !important;
+	font-weight: 700 !important;
+}
+
+div.wunderbaum.folder-tree .wb-row:hover {
+	background-color: #0000000d !important;
+}
+
+div.wunderbaum.folder-tree .wb-row.wb-active .wb-title {
+	font-weight: 700 !important;
+}
+
+div.wunderbaum.folder-tree .wb-title {
+	font-weight: 400 !important;
+	line-height: 1.25;
+	color: #606770;
+}
+
+div.wunderbaum.folder-tree .wb-expander {
+	order: 2;
+}
+
+.page-note .published-note-layout.with-tree .note-main {
+	min-width: 0;
+	flex: 1 1 auto;
+	max-width: none;
+	margin: 0;
+	padding: 24px;
+	overflow-y: auto;
+}
+
+.folder-empty-state {
+	max-width: 640px;
+	margin: 3rem auto;
+	text-align: center;
+	color: #606770;
+}
+
+.folder-empty-state p {
+	font-size: 1.05rem;
+}
+
+.folder-tree-toggle {
+	display: none;
+}
+
+@media (max-width: 768px) {
+	.folder-tree-toggle {
+		display: flex;
+		margin-left: auto;
+	}
+
+	.published-note-layout.with-tree {
+		display: block;
+		position: relative;
+	}
+
+	.published-folder-sidebar {
+		position: fixed;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		z-index: 30;
+		max-width: 80vw;
+		width: 280px;
+		transform: translateX(-100%);
+		transition: transform 0.2s ease;
+		box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+	}
+
+	.published-folder-sidebar.is-open {
+		transform: translateX(0);
+	}
+
+	.page-note .published-note-layout.with-tree .note-main {
+		padding: 16px;
+		overflow: visible;
+	}
+}
+

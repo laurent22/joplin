@@ -51,6 +51,7 @@ export type ListRendererDependency =
 	'item.size.width' |
 	'note.checkboxes' |
 	'note.folder.title' |
+	'note.is_published' |
 	'note.isWatched' |
 	'note.tags' |
 	'note.todoStatusText' |

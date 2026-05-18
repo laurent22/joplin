@@ -7,7 +7,7 @@ import Note from './Note';
 import Database from '../database';
 import BaseItem from './BaseItem';
 import Resource from './Resource';
-import { isRootSharedFolder, StateShare } from '../services/share/reducer';
+import { isRootSharedFolder, ShareType, StateShare } from '../services/share/reducer';
 import Logger from '@joplin/utils/Logger';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
@@ -766,6 +766,46 @@ export default class Folder extends BaseItem {
 	public static async updateAllShareIds(resourceService: ResourceService, activeShares: StateShare[]) {
 		await this.updateFolderShareIds(activeShares);
 		await this.updateNoteShareIds();
+
+		const publishedFolderRootIds = activeShares
+			.filter(share => share.type === ShareType.PublishedFolder && !!share.folder_id)
+			.map(share => share.folder_id);
+		const directlyPublishedNoteIds = activeShares
+			.filter(share => share.type === ShareType.Note && !!share.note_id)
+			.map(share => share.note_id);
+		const publishedFolderIds = Array.from(new Set(publishedFolderRootIds.concat(
+			...(await Promise.all(publishedFolderRootIds.map(id => this.allChildrenFolders(id)))).map(folders => folders.map(f => f.id)),
+		)));
+
+		const publishedFolderIdSet = new Set(publishedFolderIds);
+		const directlyPublishedNoteIdSet = new Set(directlyPublishedNoteIds);
+
+		for (const folder of await this.all({ fields: ['id', 'is_shared'] })) {
+			await this.updateShareStatus({ ...folder, type_: BaseModel.TYPE_FOLDER }, publishedFolderIdSet.has(folder.id));
+		}
+
+		const noteIsSharedSql = [
+			directlyPublishedNoteIds.length ? `id IN (${this.escapeIdsForSql(directlyPublishedNoteIds)})` : '',
+			publishedFolderIds.length ? `parent_id IN (${this.escapeIdsForSql(publishedFolderIds)})` : '',
+		].filter(v => !!v).join(' OR ');
+
+		let notesToUpdate: NoteEntity[] = [];
+		if (noteIsSharedSql) {
+			notesToUpdate = await this.db().selectAll(`
+			SELECT id, parent_id, is_shared
+			FROM notes
+			WHERE (is_shared = 0 AND (${noteIsSharedSql}))
+				OR (is_shared = 1 AND NOT (${noteIsSharedSql}))
+		`);
+		}
+
+		for (const note of notesToUpdate) {
+			await this.updateShareStatus(
+				{ ...note, type_: BaseModel.TYPE_NOTE },
+				directlyPublishedNoteIdSet.has(note.id) || publishedFolderIdSet.has(note.parent_id),
+			);
+		}
+
 		await this.updateResourceShareIds(resourceService);
 	}
 

@@ -3,13 +3,15 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
-import { Item, Share } from '../../services/database/types';
+import { Item, Share, ShareType } from '../../services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { FileViewerResponse, renderItem as renderJoplinItem } from '../../utils/joplinUtils';
 import { friendlySafeFilename } from '@joplin/lib/path-utils';
 
 async function renderItem(context: AppContext, item: Item, share: Share): Promise<FileViewerResponse> {
-	if (item.jop_type === ModelType.Note) {
+	const isPublishedNote = item.jop_type === ModelType.Note && share.type === ShareType.Note;
+	const isPublishedFolder = item.jop_type === ModelType.Folder && share.type === ShareType.PublishedFolder;
+	if (isPublishedNote || isPublishedFolder) {
 		return renderJoplinItem(share.owner_id, item, share, context.query);
 	}
 
@@ -39,7 +41,10 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 	const user = await ctx.joplin.models.user().load(share.owner_id);
 	if (!user.enabled) throw new ErrorForbidden('This account has been disabled');
 
-	if (ctx.query.note_id && !share.recursive) {
+
+	if (share.type !== ShareType.Note && share.type !== ShareType.PublishedFolder) throw new ErrorNotFound();
+
+	if (ctx.query.note_id && share.type === ShareType.Note && !share.recursive) {
 		const redirectUrl = await shareModel.linkedNoteShareUrl(share, ctx.query.note_id as string);
 		if (redirectUrl) return redirect(ctx, redirectUrl);
 		throw new ErrorForbidden('This linked note has not been published');

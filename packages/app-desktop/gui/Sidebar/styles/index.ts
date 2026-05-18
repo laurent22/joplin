@@ -74,6 +74,7 @@ export const StyledHeaderLabel = styled.span`
 function listItemTextColor(props: StyleProps) {
 	if (props.isConflictFolder) return props.theme.colorError2;
 	if (props.isSpecialItem) return props.theme.colorFaded2;
+	if (props.isPublished) return props.theme.color4;
 	if (props.shareId) return props.theme.colorWarn2;
 	return props.theme.color2;
 }
@@ -87,7 +88,7 @@ export const StyledListItemAnchor = styled.a`
 		// So that the conflicts folder and shared folders have sufficient contrast,
 		// use an opacity of 1 even when unselected.
 		const needsHigherContrast = props.isConflictFolder || props.isSpecialItem;
-		return (props.selected || props.shareId || needsHigherContrast) ? 1 : 0.8;
+		return (props.selected || props.shareId || props.isPublished || needsHigherContrast) ? 1 : 0.8;
 	}};
 	white-space: nowrap;
 	display: flex;

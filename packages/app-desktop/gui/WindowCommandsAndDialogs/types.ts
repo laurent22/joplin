@@ -20,6 +20,10 @@ export interface DialogState {
 		visible: boolean;
 		folderId?: string;
 	};
+	publishFolderDialogOptions: {
+		visible: boolean;
+		folderId?: string;
+	};
 	promptOptions: {
 		inputType?: string;
 		buttons?: unknown[];

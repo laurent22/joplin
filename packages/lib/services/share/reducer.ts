@@ -6,6 +6,12 @@ import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('share/reducer');
 
+export enum ShareType {
+	Note = 1,
+	PublishedFolder = 2,
+	Folder = 3,
+}
+
 interface StateShareUserUser {
 	id: string;
 	email: string;
@@ -95,6 +101,23 @@ export function isRootSharedFolder(folder: FolderEntity): boolean {
 	}
 
 	return !!folder.share_id && !folder.parent_id;
+}
+
+// Returns true if folderId itself, or any of its ancestors, is directly published.
+export function isFolderPublished(state: RootState, folderId: string): boolean {
+	const publishedIds = new Set(
+		state[stateRootKey].shares
+			.filter(s => s.type === ShareType.PublishedFolder && !!s.folder_id)
+			.map(s => s.folder_id),
+	);
+	let currentId: string = folderId;
+	while (currentId) {
+		if (publishedIds.has(currentId)) return true;
+		const folder = state.folders.find(f => f.id === currentId);
+		if (!folder) break;
+		currentId = folder.parent_id;
+	}
+	return false;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous redux action shape across SHARE_* types; typed action union would require touching every dispatch site

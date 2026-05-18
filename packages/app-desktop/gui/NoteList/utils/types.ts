@@ -11,6 +11,8 @@ export interface Props {
 	notes: NoteEntity[];
 	dispatch: Dispatch;
 	watchedNoteFiles: string[];
+	publishedNoteIds: string[];
+	isFolderPublished: boolean;
 	plugins: PluginStates;
 	selectedFolderId: string;
 	customCss: string;

@@ -370,6 +370,7 @@ Withflags
 withs
 Wolof
 WONTFIX
+wunderbaum
 wordcount
 wraping
 writable

@@ -12911,6 +12911,7 @@ __metadata:
     stripe: "npm:13.9.0"
     typescript: "npm:5.9.3"
     uuid: "npm:11.1.0"
+    wunderbaum: "npm:0.14.1"
     yargs: "npm:17.7.2"
     zxcvbn: "npm:4.4.2"
   languageName: unknown
@@ -59969,6 +59970,13 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: 10/f759ea19e42f6d94727b3d8590693f2d92521a78ec2de5c6064c3356f50d4815d427b7ddb10bf39596cc67d3b18232a1b2dfbc3b6361d4772bdfec69d4c130f4
+  languageName: node
+  linkType: hard
+
+"wunderbaum@npm:0.14.1":
+  version: 0.14.1
+  resolution: "wunderbaum@npm:0.14.1"
+  checksum: 10/b0a652e105ca35a4b909de79cb699b25a1a41938f8569abd5a1db624caa22243474d6931e4875eadfea3038651bfbc8a9ef0722cdffe2513a07712f6fac1ec29
   languageName: node
   linkType: hard
 
