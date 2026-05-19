@@ -154,6 +154,8 @@ const startServerProcess = (config: ServerConfig, useDocker: boolean) => {
 			// with the same system clock.
 			'--env', 'MAX_TIME_DRIFT=0',
 			'--env', 'JOPLIN_IS_TESTING=1',
+			'-p', '22300:22300',
+			'--rm',
 			config.dockerImage,
 			'node', 'dist/app.js',
 			'--env', 'dev',
