@@ -298,3 +298,4 @@ keybinds
 unobserve
 querystring
 msgbox
+LASTEXITCODE
