@@ -185,7 +185,10 @@ void yargs
 				'use-running-server': {
 					type: 'boolean',
 					default: false,
-					description: 'When set, the fuzzer will connect to the server running on the default host/port (localhost:22300), rather than starting its own server instance.',
+					description: [
+						'When set to true, the fuzzer will connect to the server running on the default host/port (localhost:22300). ',
+						'When not set, the fuzzer starts an instance of Joplin Server.',
+					].join(''),
 				},
 				'setup': {
 					type: 'string',
