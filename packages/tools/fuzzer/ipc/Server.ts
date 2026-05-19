@@ -149,12 +149,12 @@ const startServerProcess = (config: ServerConfig, useDocker: boolean) => {
 		}
 
 		return execa('docker', [
-			'docker', 'run',
-			config.dockerImage,
+			'run',
 			// The MAX_TIME_DRIFT check isn't necessary: All clients will be running
 			// with the same system clock.
 			'--env', 'MAX_TIME_DRIFT=0',
 			'--env', 'JOPLIN_IS_TESTING=1',
+			config.dockerImage,
 			'node', 'dist/app.js',
 			'--env', 'dev',
 		], {
