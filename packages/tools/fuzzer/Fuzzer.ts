@@ -60,7 +60,8 @@ export interface FuzzerConfig {
 	keepAccountsOnClose: boolean;
 	setupActions: ActionSpec[];
 
-	serverPath: string;
+	serverPath: string|null;
+	serverDockerImage: string|null;
 	isJoplinCloud: boolean;
 }
 
@@ -204,6 +205,7 @@ export default class Fuzzer {
 		return {
 			baseUrl: 'http://localhost:22300/',
 			baseDirectory: config.serverPath,
+			dockerImage: config.serverDockerImage,
 			adminAuth: {
 				email: 'admin@localhost',
 				password: process.env['FUZZER_SERVER_ADMIN_PASSWORD'] ?? 'admin',

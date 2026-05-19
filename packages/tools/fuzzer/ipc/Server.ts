@@ -28,6 +28,7 @@ const createApi = async (serverUrl: string, adminAuth: UserData) => {
 interface ServerConfig {
 	baseUrl: string;
 	baseDirectory: string;
+	dockerImage: string|null;
 	adminAuth: UserData;
 }
 
@@ -39,6 +40,7 @@ export default class Server {
 	private api_: JoplinServerApi|null = null;
 	private serverUrl_: string;
 	private adminAuth_: UserData;
+	private usingDocker_: boolean;
 	private server_: execa.ExecaChildProcess<string>;
 	private baseDirectory_: string;
 
@@ -55,19 +57,8 @@ export default class Server {
 			this.serverUrl_ = `${this.serverUrl_}/`;
 		}
 
-		const mainEntrypoint = join(serverDir, 'dist', 'app.js');
-		this.server_ = execa.node(mainEntrypoint, [
-			'--env', 'dev',
-		], {
-			env: {
-				JOPLIN_IS_TESTING: '1',
-			},
-			cwd: serverDir,
-			stdin: 'ignore', // No stdin
-			// For debugging:
-			stderr: process.stderr,
-			// stdout: process.stdout,
-		});
+		this.usingDocker_ = !!config.dockerImage;
+		this.server_ = startServerProcess(config, this.usingDocker_);
 	}
 
 	private static assertCanUseSnapshots_() {
@@ -80,9 +71,11 @@ export default class Server {
 	}
 
 	public assertCanUseSnapshots() {
-		// For now, alias the static method. In the future, more checks that require
-		// a server instance may be added:
 		Server.assertCanUseSnapshots_();
+
+		if (this.usingDocker_) {
+			throw new Error('Not supported: Creating snapshots while using a server instance in Docker.');
+		}
 	}
 
 	public static async fromSnapshot({
@@ -148,4 +141,42 @@ export default class Server {
 	}
 }
 
+const startServerProcess = (config: ServerConfig, useDocker: boolean) => {
+	const baseDirectory = resolve(config.baseDirectory);
+	if (useDocker) {
+		if (!config.dockerImage) {
+			throw new Error('Attempting to run in Docker without a Docker image specified');
+		}
 
+		return execa('docker', [
+			'docker', 'run',
+			config.dockerImage,
+			// The MAX_TIME_DRIFT check isn't necessary: All clients will be running
+			// with the same system clock.
+			'--env', 'MAX_TIME_DRIFT=0',
+			'--env', 'JOPLIN_IS_TESTING=1',
+			'node', 'dist/app.js',
+			'--env', 'dev',
+		], {
+			cwd: baseDirectory,
+			stdin: 'ignore', // No stdin
+			// For debugging:
+			stderr: process.stderr,
+			// stdout: process.stdout,
+		});
+	} else {
+		const mainEntrypoint = join(baseDirectory, 'dist', 'app.js');
+		return execa.node(mainEntrypoint, [
+			'--env', 'dev',
+		], {
+			env: {
+				JOPLIN_IS_TESTING: '1',
+			},
+			cwd: baseDirectory,
+			stdin: 'ignore', // No stdin
+			// For debugging:
+			stderr: process.stderr,
+			// stdout: process.stdout,
+		});
+	}
+};

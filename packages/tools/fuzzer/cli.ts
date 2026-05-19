@@ -182,6 +182,13 @@ void yargs
 						'This also enables testing for some Joplin Cloud-specific features (e.g. read-only shares).',
 					].join(''),
 				},
+				'server-docker-image': {
+					type: 'string',
+					default: '',
+					description: [
+						'A Docker image name: If provided, the fuzzer will start Joplin Server using the provided Docker image.',
+					].join(''),
+				},
 				'setup': {
 					type: 'string',
 					default: '',
@@ -223,6 +230,7 @@ void yargs
 				},
 				clientCount,
 				serverPath: serverPath,
+				serverDockerImage: argv.serverDockerImage || null,
 				isJoplinCloud: !!argv.joplinCloud,
 				keepAccountsOnClose: argv.keepAccounts,
 				enableE2ee: argv.enableE2ee,

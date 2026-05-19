@@ -218,3 +218,7 @@ jobs:
             echo 'Failed while checking the body response after request to /api/ping'
             exit 1;
           fi
+      
+      - name: Check sync
+        run: |
+          yarn syncFuzzer start --server-docker-image "joplin/server:$(dpkg --print-architecture)-0.0.0" --max-steps 3
