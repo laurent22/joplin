@@ -616,9 +616,12 @@ describe('services/SearchEngine', () => {
 			expect(rows.length).toBe(resourcesFound);
 		});
 
-	test('makeSearchFromTerms returns the fallback when terms is undefined or empty', () => {
+	test('makeSearchFromTerms returns the fallback when terms is undefined', () => {
 		expect(engine.makeSearchFromTerms(undefined, 'fallback query')).toBe('fallback query');
-		expect(engine.makeSearchFromTerms([], 'fallback query')).toBe('fallback query');
+	});
+
+	test('makeSearchFromTerms returns the an empty string when terms is an empty array', () => {
+		expect(engine.makeSearchFromTerms([], 'fallback query')).toBe('');
 	});
 
 	test('makeSearchFromTerms joins string and ComplexTerm values into a single search string', () => {
