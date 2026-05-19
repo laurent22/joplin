@@ -386,17 +386,18 @@ class Client implements ActionableClient {
 
 		await this.account_.onClientDisconnected();
 
+		for (const listener of this.onCloseListeners_) {
+			listener();
+		}
+
+		this.childProcess_.close();
+
 		// Before removing the profile directory, verify that the profile directory is in the
 		// expected location:
 		const profileDirectory = resolvePathWithinDir(this.context_.baseDir, this.profileDirectory);
 		assert.ok(profileDirectory, 'profile directory for client should be contained within the main temporary profiles directory (should be safe to delete)');
 		await remove(profileDirectory);
 
-		for (const listener of this.onCloseListeners_) {
-			listener();
-		}
-
-		this.childProcess_.close();
 		this.closed_ = true;
 		logger.info('Closed client ', this.email);
 	}
