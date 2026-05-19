@@ -112,7 +112,29 @@ echo "Rust $( rustc --version )"
 # =============================================================================
 
 cd "$ROOT_DIR"
-yarn install
+
+# Retry a command up to a few times. Used to absorb random CI flakes, e.g.
+# `yarn install` failing when node-pre-gyp downloads prebuilt sqlite3 binaries
+# from GitHub Releases.
+retry() {
+	local attempts=3
+	local i=1
+	while true; do
+		"$@"
+		local result=$?
+		if [ $result -eq 0 ]; then
+			return 0
+		fi
+		if [ $i -ge $attempts ]; then
+			return $result
+		fi
+		echo "\`$*\` failed (attempt $i/$attempts) - retrying..."
+		i=$((i + 1))
+		sleep 10
+	done
+}
+
+retry yarn install
 testResult=$?
 if [ $testResult -ne 0 ]; then
 	echo "Yarn installation failed. Search for 'exit code 1' in the log for more information."

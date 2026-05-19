@@ -140,7 +140,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			const notebookFilePath = join(unzipTempDirectory, notebookFile.path);
 			// In some cases, the OneNote zip file can include folders and other files
 			// that shouldn't be imported directly. Skip these:
-			if (!['.one', '.onepkg', '.onetoc2'].includes(extname(notebookFilePath).toLowerCase())) {
+			if (!['.one', '.onepkg'].includes(extname(notebookFilePath).toLowerCase())) {
 				logger.info('Skipping non-OneNote file:', notebookFile.path);
 				skippedFiles.push(notebookFile.path);
 				continue;

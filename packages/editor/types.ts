@@ -188,6 +188,7 @@ export interface EditorTheme extends Theme {
 	marginLeft?: number;
 	marginRight?: number;
 	listTabSize?: string;
+	paddingBottom: number;
 }
 
 export interface EditorSettings {

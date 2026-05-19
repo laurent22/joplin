@@ -300,6 +300,11 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 	const panes = comp.props.noteVisiblePanes;
 	let mode = panes.includes('editor') ? 'edit' : 'view';
 
+	// Override the mode if the default state is not last
+	const defaultState = Setting.value('editor.mobile.defaultEditState');
+	if (defaultState === 'view') mode = 'view';
+	if (defaultState === 'edit') mode = 'edit';
+
 	// Prevent trashed notes from opening in edit mode.
 	if (note?.deleted_time) {
 		mode = 'view';

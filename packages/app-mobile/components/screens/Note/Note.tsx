@@ -1665,7 +1665,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					!note || !note.body.trim() ? null : (
 						<NoteBodyViewer
 							style={this.styles().noteBodyViewer}
-							paddingBottom={0}
+							paddingBottom={150}
 							noteBody={note.body}
 							noteMarkupLanguage={note.markup_language}
 							noteResources={this.state.noteResources}

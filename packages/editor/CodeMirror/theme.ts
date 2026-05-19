@@ -103,7 +103,7 @@ const createTheme = (theme: EditorTheme): Extension[] => {
 		'& .cm-content': {
 			fontFamily: theme.fontFamily,
 			...baseContentStyle,
-			paddingBottom: theme.isDesktop ? '400px' : undefined,
+			paddingBottom: `${theme.paddingBottom}px`,
 			marginLeft: `${theme.marginLeft}px`,
 			marginRight: `${theme.marginRight}px`,
 		},

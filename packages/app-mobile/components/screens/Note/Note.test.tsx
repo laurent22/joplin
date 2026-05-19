@@ -163,6 +163,7 @@ describe('screens/Note', () => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
+		Setting.setValue('editor.mobile.defaultEditState', 'view');
 
 		store = createMockReduxStore();
 		setupGlobalStore(store);
@@ -377,13 +378,15 @@ describe('screens/Note', () => {
 	it.each([
 		[['viewer']],
 		[['editor']],
-	])('should initialize in the correct mode when noteVisiblePanes is %j', async (panes) => {
+	])('should initialize in the correct mode when noteVisiblePanes is %j, when default edit state is set to last', async (panes) => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
 		const { unmount } = await setupNoteWithPanes(panes);
 		await expectToBeEditing(panes.includes('editor'));
 		unmount();
 	});
 
-	it('should show edit button', async () => {
+	it('should show edit button when in view mode', async () => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
 		const { unmount } = await setupNoteWithPanes(['viewer']);
 		const editButton = await screen.findByLabelText('Edit');
 		expect(editButton).toBeVisible();
@@ -393,7 +396,8 @@ describe('screens/Note', () => {
 	it.each([
 		[['viewer']],
 		[['editor']],
-	])('should switch modes when toggle button is pressed', async (panes) => {
+	])('should switch modes when toggle button is pressed, when default edit state is set to last', async (panes) => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
 		const initialEditing = panes.includes('editor');
 		const expectedEditing = !initialEditing;
 		const { unmount } = await setupNoteWithPanes(panes);
@@ -450,7 +454,9 @@ describe('screens/Note', () => {
 	it.each([
 		[['viewer']],
 		[['editor']],
-	])('should preserve noteVisiblePanes state when leaving and returning to the same note', async (panes) => {
+	])('should preserve noteVisiblePanes state when leaving and returning to the same note, when default edit state is set to last', async (panes) => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
+
 		const firstRender = await setupNoteWithPanes(panes);
 		await expectToBeEditing(panes.includes('editor'));
 		// Navigate away
@@ -480,7 +486,9 @@ describe('screens/Note', () => {
 	it.each([
 		[['viewer']],
 		[['editor']],
-	])('should preserve noteVisiblePanes state when navigating from note 1 to note 2', async (panes) => {
+	])('should preserve noteVisiblePanes state when navigating from note 1 to note 2, when default edit state is set to last', async (panes) => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
+
 		// Open note 1
 		await act(async () => {
 			store.dispatch({
