@@ -1,5 +1,5 @@
 import { setupDatabaseAndSynchronizer, db, sleep, switchClient, msleep, createNoteAndResource } from '../../testing/test-utils';
-import SearchEngine from './SearchEngine';
+import SearchEngine, { ComplexTerm } from './SearchEngine';
 import Note from '../../models/Note';
 import ItemChange from '../../models/ItemChange';
 import Setting from '../../models/Setting';
@@ -616,4 +616,16 @@ describe('services/SearchEngine', () => {
 			expect(rows.length).toBe(resourcesFound);
 		});
 
+	test('makeSearchFromTerms returns the fallback when terms is undefined or empty', () => {
+		expect(engine.makeSearchFromTerms(undefined, 'fallback query')).toBe('fallback query');
+		expect(engine.makeSearchFromTerms([], 'fallback query')).toBe('fallback query');
+	});
+
+	test('makeSearchFromTerms joins string and ComplexTerm values into a single search string', () => {
+		const terms = [
+			'hello', { type: 'text', value: 'world', scriptType: 'en' },
+			'test', { type: 'regex', value: 'query*', scriptType: 'en' },
+		] as (ComplexTerm | string)[];
+		expect(engine.makeSearchFromTerms(terms, 'fallback query')).toBe('hello world test query*');
+	});
 });

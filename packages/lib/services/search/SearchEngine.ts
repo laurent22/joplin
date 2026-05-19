@@ -880,4 +880,9 @@ export default class SearchEngine {
 			}, 100);
 		});
 	}
+
+	public makeSearchFromTerms(terms: (string | ComplexTerm)[], fallback: string) {
+		if (!terms?.length) return fallback;
+		return terms.map(term => typeof term === 'string' ? term : term.value).join(' ');
+	}
 }

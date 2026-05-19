@@ -81,7 +81,7 @@ import VoiceTyping from '../../../services/voiceTyping/VoiceTyping';
 import useDebounced from '../../../utils/hooks/useDebounced';
 import { Second } from '@joplin/utils/time';
 import TextWrapCalculator from '../Notes/TextWrapCalculator';
-import { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 const emptyArray: never[] = [];
@@ -1594,11 +1594,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		return !this.state.showCamera && !this.state.showImageEditor;
 	}
 
-	private makeSearchFromTerms(terms: (string | ComplexTerm)[], fallback: string) {
-		if (!terms?.length) return fallback;
-		return terms.map(term => typeof term === 'string' ? term : term.value).join(' ');
-	}
-
 	public render() {
 		// Commands must be registered before child components can render.
 		// Calling this in the constructor won't work in strict mode, where
@@ -1723,7 +1718,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					);
 				} else {
 					const editorStyle = this.styles().bodyTextInput;
-					const globalSearch = this.makeSearchFromTerms(this.props.highlightedWords, this.props.searchQuery);
+					const globalSearch = SearchEngine.instance().makeSearchFromTerms(this.props.highlightedWords, this.props.searchQuery);
 
 					bodyComponent = <NoteEditor
 						ref={this.editorRef}
