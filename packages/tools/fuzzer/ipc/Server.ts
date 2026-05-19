@@ -28,7 +28,7 @@ const createApi = async (serverUrl: string, adminAuth: UserData) => {
 interface ServerConfig {
 	baseUrl: string;
 	baseDirectory: string;
-	dockerImage: string|null;
+	useRunningServer: boolean;
 	adminAuth: UserData;
 }
 
@@ -40,8 +40,7 @@ export default class Server {
 	private api_: JoplinServerApi|null = null;
 	private serverUrl_: string;
 	private adminAuth_: UserData;
-	private usingDocker_: boolean;
-	private server_: execa.ExecaChildProcess<string>;
+	private server_: execa.ExecaChildProcess<string>|null;
 	private baseDirectory_: string;
 
 	public constructor(config: ServerConfig) {
@@ -57,8 +56,23 @@ export default class Server {
 			this.serverUrl_ = `${this.serverUrl_}/`;
 		}
 
-		this.usingDocker_ = !!config.dockerImage;
-		this.server_ = startServerProcess(config, this.usingDocker_);
+		const mainEntrypoint = join(serverDir, 'dist', 'app.js');
+		if (!config.useRunningServer) {
+			this.server_ = execa.node(mainEntrypoint, [
+				'--env', 'dev',
+			], {
+				env: {
+					JOPLIN_IS_TESTING: '1',
+				},
+				cwd: serverDir,
+				stdin: 'ignore', // No stdin
+				// For debugging:
+				stderr: process.stderr,
+				// stdout: process.stdout,
+			});
+		} else {
+			this.server_ = null;
+		}
 	}
 
 	private static assertCanUseSnapshots_() {
@@ -73,8 +87,8 @@ export default class Server {
 	public assertCanUseSnapshots() {
 		Server.assertCanUseSnapshots_();
 
-		if (this.usingDocker_) {
-			throw new Error('Not supported: Creating snapshots while using a server instance in Docker.');
+		if (!this.server_) {
+			throw new Error('Not supported: Creating snapshots using an external server instance.');
 		}
 	}
 
@@ -136,46 +150,13 @@ export default class Server {
 	}
 
 	public async close() {
-		this.server_.cancel();
-		logger.info('Closed the server.');
+		if (this.server_) {
+			this.server_.cancel();
+			logger.info('Closed the server.');
+		} else {
+			logger.info('Server not closed: Running using an external server.');
+		}
 	}
 }
 
-const startServerProcess = (config: ServerConfig, useDocker: boolean) => {
-	const baseDirectory = resolve(config.baseDirectory);
-	const options: execa.Options = {
-		env: {
-			JOPLIN_IS_TESTING: '1',
-		},
 
-		cwd: baseDirectory,
-		stdin: 'ignore', // No stdin
-		// For debugging:
-		stderr: process.stderr,
-		// stdout: process.stdout,
-	};
-
-	if (useDocker) {
-		if (!config.dockerImage) {
-			throw new Error('Attempting to run in Docker without a Docker image specified');
-		}
-
-		return execa('docker', [
-			'run',
-			// The MAX_TIME_DRIFT check isn't necessary: All clients will be running
-			// with the same system clock.
-			'--env', 'MAX_TIME_DRIFT=0',
-			'--env', 'JOPLIN_IS_TESTING=1',
-			'-p', '22300:22300',
-			'--rm',
-			config.dockerImage,
-			'node', 'dist/app.js',
-			'--env', 'dev',
-		], options);
-	} else {
-		const mainEntrypoint = join(baseDirectory, 'dist', 'app.js');
-		return execa.node(mainEntrypoint, [
-			'--env', 'dev',
-		], options);
-	}
-};

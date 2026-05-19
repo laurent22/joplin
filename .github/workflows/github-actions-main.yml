@@ -221,4 +221,4 @@ jobs:
       
       - name: Check sync
         run: |
-          yarn syncFuzzer start --server-docker-image "joplin/server:$(dpkg --print-architecture)-0.0.0" --steps 3
+          yarn syncFuzzer start --use-running-server --steps 3

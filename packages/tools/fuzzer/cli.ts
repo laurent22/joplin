@@ -182,12 +182,10 @@ void yargs
 						'This also enables testing for some Joplin Cloud-specific features (e.g. read-only shares).',
 					].join(''),
 				},
-				'server-docker-image': {
-					type: 'string',
-					default: '',
-					description: [
-						'A Docker image name: If provided, the fuzzer will start Joplin Server using the provided Docker image.',
-					].join(''),
+				'use-running-server': {
+					type: 'boolean',
+					default: false,
+					description: 'When set, the fuzzer will connect to the server running on the default host/port (localhost:22300), rather than starting its own server instance.',
 				},
 				'setup': {
 					type: 'string',
@@ -230,7 +228,7 @@ void yargs
 				},
 				clientCount,
 				serverPath: serverPath,
-				serverDockerImage: argv.serverDockerImage || null,
+				useRunningServer: argv.useRunningServer,
 				isJoplinCloud: !!argv.joplinCloud,
 				keepAccountsOnClose: argv.keepAccounts,
 				enableE2ee: argv.enableE2ee,
