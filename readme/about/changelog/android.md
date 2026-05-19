@@ -1,5 +1,13 @@
 # Joplin Android Changelog
 
+## [android-v3.6.19](https://github.com/laurent22/joplin/releases/tag/android-v3.6.19) - 2026-05-19T14:44:15Z
+
+- New: Add padding to the bottom of the viewer and editor  (#15418 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Add setting to choose the default view / edit state (#15423 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Improve view/edit toggle button appearance in note header (#15450)
+- Fixed: In-editor rendering: Do not render empty inline HTML (#15470) (#15467 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Voice typing: Fix speech-to-text accuracy regression for non-English languages (#15412) (#15363 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.6.18](https://github.com/laurent22/joplin/releases/tag/android-v3.6.18) - 2026-05-05T14:39:28Z
 
 - Fixed: Fix images fail to be resized (#15208) (#15205 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

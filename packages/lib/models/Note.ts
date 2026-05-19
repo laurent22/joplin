@@ -21,6 +21,8 @@ import ActionLogger from '../utils/ActionLogger';
 import { getDisplayParentId, getTrashFolderId } from '../services/trash';
 import { getCollator } from './utils/getCollator';
 const urlUtils = require('../urlUtils.js');
+import { hasWhiteboardFence, parseWhiteboard } from '../services/whiteboard/parse';
+import { resolveFileRef, RefKind } from '../services/whiteboard/resolveRef';
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ALL_NOTES_FILTER_ID } = require('../reserved-ids');
@@ -150,6 +152,22 @@ export default class Note extends BaseItem {
 
 		const links: { itemId: string }[] = urlUtils.extractResourceUrls(body);
 		const itemIds = links.map(l => l.itemId);
+
+		// Whiteboard cards reference notes/resources as bare `:/<id>` values
+		// inside a jsoncanvas fence — outside markdown link syntax, so
+		// extractResourceUrls doesn't find them. Walk the canvas separately
+		// so association / orphan-reaping / sync see those refs.
+		if (hasWhiteboardFence(body)) {
+			const parsed = parseWhiteboard(body);
+			if (parsed.hasCanvas) {
+				for (const node of parsed.canvas.nodes) {
+					if (node.type !== 'file') continue;
+					const ref = resolveFileRef(node.file);
+					if (ref.kind !== RefKind.External) itemIds.push(ref.id);
+				}
+			}
+		}
+
 		return unique(itemIds);
 	}
 

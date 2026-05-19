@@ -16,6 +16,7 @@ export const defaultEnvValues: EnvVariables = {
 	FILE_STORAGE_TTL: 7 * Day,
 	QUEUE_DATABASE_HOST: 'localhost',
 	IMAGE_MAX_DIMENSION: 400,
+	HTR_CLI_GPU_LAYERS: 0,
 };
 
 export interface EnvVariables {
@@ -34,6 +35,9 @@ export interface EnvVariables {
 	FILE_STORAGE_TTL: number;
 	QUEUE_DATABASE_HOST: string;
 	IMAGE_MAX_DIMENSION: number;
+	// Number of model layers to offload to the GPU. 0 = CPU only (default).
+	// Set to a high value (e.g. 9999) to offload all layers.
+	HTR_CLI_GPU_LAYERS: number;
 }
 
 export interface ComputedEnvVariables extends EnvVariables {

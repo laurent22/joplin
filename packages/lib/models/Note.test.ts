@@ -12,6 +12,10 @@ import { NoteEntity, ResourceEntity } from '../services/database/types';
 import { toForwardSlashes } from '../path-utils';
 import * as ArrayUtils from '../ArrayUtils';
 import { ErrorCode } from '../errors';
+import ResourceService from '../services/ResourceService';
+import NoteResource from './NoteResource';
+import { serializeWhiteboard } from '../services/whiteboard/serialize';
+import { Canvas } from '../services/whiteboard/jsoncanvas';
 import SearchEngine from '../services/search/SearchEngine';
 import { getTrashFolderId } from '../services/trash';
 import getConflictFolderId from './utils/getConflictFolderId';
@@ -74,6 +78,93 @@ describe('models/Note', () => {
 
 			expect(contentEquals).toBe(true);
 		}
+	}));
+
+	test.each<[string, string[]]>([
+		// Single file card pointing at a resource.
+		[
+			JSON.stringify({
+				nodes: [
+					{ id: 'a', type: 'file', x: 0, y: 0, width: 100, height: 100, file: ':/06894e83b8f84d3d8cbe0f1587f9e226' },
+				],
+				edges: [],
+			}),
+			['06894e83b8f84d3d8cbe0f1587f9e226'],
+		],
+		// Multiple file cards — duplicates collapse, external paths are skipped.
+		[
+			JSON.stringify({
+				nodes: [
+					{ id: 'a', type: 'file', x: 0, y: 0, width: 100, height: 100, file: ':/06894e83b8f84d3d8cbe0f1587f9e226' },
+					{ id: 'b', type: 'file', x: 0, y: 0, width: 100, height: 100, file: ':/06894e83b8f84d3d8cbe0f1587f9e227' },
+					{ id: 'c', type: 'file', x: 0, y: 0, width: 100, height: 100, file: ':/06894e83b8f84d3d8cbe0f1587f9e226' },
+					{ id: 'd', type: 'file', x: 0, y: 0, width: 100, height: 100, file: 'https://example.com/photo.png' },
+				],
+				edges: [],
+			}),
+			['06894e83b8f84d3d8cbe0f1587f9e226', '06894e83b8f84d3d8cbe0f1587f9e227'],
+		],
+		// Non-file node types (text/link/group) don't reference items.
+		[
+			JSON.stringify({
+				nodes: [
+					{ id: 'a', type: 'text', x: 0, y: 0, width: 100, height: 100, text: 'hello' },
+					{ id: 'b', type: 'link', x: 0, y: 0, width: 100, height: 100, url: 'https://example.com' },
+					{ id: 'c', type: 'group', x: 0, y: 0, width: 100, height: 100, label: 'Section' },
+				],
+				edges: [],
+			}),
+			[],
+		],
+	])('should find linked items inside jsoncanvas fences', (canvasJson, expected) => {
+		const body = `\`\`\`jsoncanvas\n${canvasJson}\n\`\`\``;
+		const actual = Note.linkedItemIds(body);
+		expect(ArrayUtils.contentEquals(actual, expected)).toBe(true);
+	});
+
+	it('should merge fence refs with surrounding markdown links', () => {
+		const canvas: Canvas = {
+			nodes: [
+				{ id: 'a', type: 'file', x: 0, y: 0, width: 100, height: 100, file: ':/06894e83b8f84d3d8cbe0f1587f9e226' },
+			],
+			edges: [],
+		};
+		const body = `Intro [foo](:/06894e83b8f84d3d8cbe0f1587f9e227)\n\n${serializeWhiteboard('', canvas)}`;
+		const actual = Note.linkedItemIds(body);
+		expect(ArrayUtils.contentEquals(
+			actual,
+			['06894e83b8f84d3d8cbe0f1587f9e226', '06894e83b8f84d3d8cbe0f1587f9e227'],
+		)).toBe(true);
+	});
+
+	it('should associate whiteboard-referenced resources so they are not orphaned', (async () => {
+		// End-to-end: a resource referenced only from a jsoncanvas card must
+		// still be picked up by ResourceService.indexNoteResources, registered
+		// in note_resources, and survive the orphan reaper.
+		const folder = await Folder.save({ title: 'folder' });
+		const resource = await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
+		const canvas: Canvas = {
+			nodes: [
+				{ id: 'card', type: 'file', x: 0, y: 0, width: 200, height: 160, file: `:/${resource.id}` },
+			],
+			edges: [],
+		};
+		const note = await Note.save({
+			title: 'whiteboard',
+			parent_id: folder.id,
+			body: serializeWhiteboard('', canvas),
+		});
+
+		const service = new ResourceService();
+		await service.indexNoteResources();
+
+		expect(await NoteResource.associatedNoteIds(resource.id)).toEqual([note.id]);
+
+		// Orphan reaper must NOT remove a resource that's still referenced by
+		// a whiteboard card — even though the ref lives outside markdown link
+		// syntax.
+		await service.deleteOrphanResources(0);
+		expect(!!(await Resource.load(resource.id))).toBe(true);
 	}));
 
 	it('should change the type of notes', (async () => {

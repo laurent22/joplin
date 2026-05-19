@@ -61,7 +61,7 @@ const useShouldShowOtherButton = () => {
 interface SyncProviderProps {
 	title: string;
 	icon: ()=> React.ReactNode;
-	description: string;
+	description: string|null;
 	onPress: ()=> void;
 	featuresList: string[];
 	disabled: boolean;
@@ -123,6 +123,7 @@ const SyncWizard: React.FC<Props> = ({ themeId, visible, dispatch }) => {
 
 	const showOther = useShouldShowOtherButton();
 
+	const isJoplinCloud = isAppJoplinCloud();
 	return <DismissibleDialog
 		themeId={themeId}
 		visible={visible}
@@ -132,12 +133,16 @@ const SyncWizard: React.FC<Props> = ({ themeId, visible, dispatch }) => {
 		heading={_('Synchronisation')}
 	>
 		<Text variant='bodyLarge' role='heading' style={styles.subheading}>{
-			_('Joplin can synchronise your notes using various providers. Select one from the list below.')
+			isJoplinCloud
+				? _('You can synchronise your notes using Joplin Cloud, which also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.')
+				: _('Joplin can synchronise your notes using various providers. Select one from the list below.')
 		}</Text>
 		<View style={styles.syncProviderList}>
 			<SyncProvider
-				title={_('Joplin Cloud')}
-				description={_('Joplin\'s own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.')}
+				title={isJoplinCloud ? _('Synchronise with Joplin Cloud') : _('Joplin Cloud')}
+				description={
+					isJoplinCloud ? null : _('Joplin\'s own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.')
+				}
 				featuresList={[
 					_('Sync your notes'),
 					_('Publish notes to the internet'),

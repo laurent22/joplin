@@ -25,6 +25,7 @@
     "buildWebsiteTranslations": "node packages/tools/website/buildTranslations.js",
     "checkIgnoredFiles": "node ./packages/tools/checkIgnoredFiles.js",
     "checkLibPaths": "node ./packages/tools/checkLibPaths.js",
+    "checkGeneratedFiles": "node ./packages/tools/checkGeneratedFiles.js",
     "circularDependencyCheck": "madge --warning --circular --extensions js ./",
     "clean": "npm run clean --workspaces --if-present && node packages/tools/clean && yarn cache clean",
     "crowdin": "crowdin",

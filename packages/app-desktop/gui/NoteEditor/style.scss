@@ -10,3 +10,4 @@
 @use "./styles/tag-bar.scss";
 @use "./styles/editor-status-bar.scss";
 @use "./styles/editor-status-indicator.scss";
+@use "./NoteBody/WhiteboardEditor/style.scss" as whiteboard-editor;

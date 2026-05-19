@@ -2,16 +2,25 @@ import { ImportExportResult, ImportModuleOutputFormat, ImportOptions } from './t
 
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { NoteEntity } from '../database/types';
-import { rtrimSlashes } from '../../path-utils';
+import { rtrimSlashes, toForwardSlashes } from '../../path-utils';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 import { join, resolve, normalize, sep, extname, basename, relative, dirname } from 'path';
 import Logger from '@joplin/utils/Logger';
 import { uuidgen } from '../../uuid';
 import shim from '../../shim';
 import { unique } from '../../ArrayUtils';
+import xpsToPngPowerShellScript from './xpsToPngPowerShellScript';
 import Note from '../../models/Note';
 
+// cspell:ignore oxps
+
 const logger = Logger.create('InteropService_Importer_OneNote');
+
+const xpsPrintoutImageExtensions = ['.xps', '.oxps'];
+const xpsPrintoutPageNumberAttributes = [
+	'data-onenote-page-number',
+	'data-joplin-onenote-page-number',
+];
 
 export type SvgXml = {
 	title: string;
@@ -21,6 +30,10 @@ export type SvgXml = {
 type PageResolutionResult = { path: string };
 type PageIdMap = {
 	get: (pageId: string|null)=> PageResolutionResult|null;
+};
+type XpsPrintoutPageConversion = {
+	pageNumber: number;
+	outputPath: string;
 };
 
 type NativeOneNoteConverter = (notebookPath: string, outputDirectory: string, baseDir: string)=> Promise<void>;
@@ -127,7 +140,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			const notebookFilePath = join(unzipTempDirectory, notebookFile.path);
 			// In some cases, the OneNote zip file can include folders and other files
 			// that shouldn't be imported directly. Skip these:
-			if (!['.one', '.onepkg', '.onetoc2'].includes(extname(notebookFilePath).toLowerCase())) {
+			if (!['.one', '.onepkg'].includes(extname(notebookFilePath).toLowerCase())) {
 				logger.info('Skipping non-OneNote file:', notebookFile.path);
 				skippedFiles.push(notebookFile.path);
 				continue;
@@ -237,6 +250,7 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 	public async postprocessGeneratedHtml_(html: string, baseFolder: string, idMap: PageIdMap) {
 		const pipeline = [
 			(dom: Document, currentFolder: string) => this.extractSvgsToFiles_(dom, currentFolder),
+			(dom: Document, currentFolder: string) => this.convertXpsPrintoutsToImages_(dom, currentFolder),
 			(dom: Document, currentFolder: string) => this.convertExternalLinksToInternalLinks_(dom, currentFolder, idMap),
 			(dom: Document, _currentFolder: string) => Promise.resolve(this.simplifyHtml_(dom)),
 		];
@@ -344,6 +358,184 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 			for (const element of dom.querySelectorAll(selector)) {
 				preprocess?.(element);
 				element.remove();
+				changed = true;
+			}
+		}
+
+		return changed;
+	}
+
+	private isXpsPrintoutImage_(image: HTMLImageElement) {
+		const src = image.getAttribute('src') ?? '';
+		return xpsPrintoutImageExtensions.includes(extname(src).toLowerCase());
+	}
+
+	private safeDecodeFileSrc_(src: string) {
+		try {
+			return decodeURIComponent(src);
+		} catch (error) {
+			logger.warn('Failed to decode OneNote image path:', src, error);
+			return src;
+		}
+	}
+
+	private xpsPrintoutOutputFilename_(sourcePath: string, pageNumber: number) {
+		const extension = extname(sourcePath);
+		return `${basename(sourcePath, extension)}.page-${pageNumber}.png`;
+	}
+
+	private xpsPrintoutDisplayedPageNumber_(image: HTMLImageElement) {
+		const pageNumberAttribute = xpsPrintoutPageNumberAttributes.find(attribute => image.hasAttribute(attribute));
+		const parsedPageNumber = Number.parseInt(pageNumberAttribute ? image.getAttribute(pageNumberAttribute) : '', 10);
+		return Number.isFinite(parsedPageNumber) && parsedPageNumber >= 0 ? parsedPageNumber : null;
+	}
+
+	private removeXpsPrintoutPageNumberAttributes_(image: HTMLImageElement) {
+		for (const attribute of xpsPrintoutPageNumberAttributes) {
+			image.removeAttribute(attribute);
+		}
+	}
+
+	private replaceXpsPrintoutImagesWithFallbackLinks_(dom: Document, images: HTMLImageElement[]) {
+		const sortedImages = [...images]
+			.sort((a, b) => (this.xpsPrintoutDisplayedPageNumber_(a) ?? 0) - (this.xpsPrintoutDisplayedPageNumber_(b) ?? 0));
+		const container = dom.createElement('div');
+		container.style.display = 'flex';
+		container.style.flexDirection = 'column';
+		container.style.gap = '1em';
+		if (sortedImages[0].style.top) container.style.paddingTop = sortedImages[0].style.top;
+		if (sortedImages[0].style.left) container.style.paddingLeft = sortedImages[0].style.left;
+
+		const links = sortedImages
+			.map(image => {
+				const displayedPageNumber = this.xpsPrintoutDisplayedPageNumber_(image);
+				const link = dom.createElement('a');
+
+				link.setAttribute('href', image.getAttribute('src') ?? '');
+				link.textContent = displayedPageNumber === null
+					? 'XPS printout: Open original XPS file'
+					: `XPS printout page ${displayedPageNumber + 1}: Open original XPS file`;
+				link.style.display = 'block';
+				return link;
+			});
+
+		container.append(...links);
+		images[0].replaceWith(container);
+		for (const image of images.slice(1)) image.remove();
+	}
+
+	private async convertXpsPrintoutPagesToImages_(sourcePath: string, conversions: XpsPrintoutPageConversion[]) {
+		const pendingConversions: XpsPrintoutPageConversion[] = [];
+		for (const conversion of conversions) {
+			if (!await shim.fsDriver().exists(conversion.outputPath)) pendingConversions.push(conversion);
+		}
+
+		if (!pendingConversions.length) return;
+
+		const { spawn } = shim.requireDynamic('child_process') as typeof import('child_process');
+		const pagesJsonPath = join(dirname(pendingConversions[0].outputPath), `${uuidgen(10)}.xps-pages.json`);
+		await shim.fsDriver().writeFile(pagesJsonPath, JSON.stringify(pendingConversions.map(conversion => ({
+			PageNumber: conversion.pageNumber,
+			OutputPath: conversion.outputPath,
+		}))), 'utf-8');
+
+		try {
+			await new Promise<void>((resolve, reject) => {
+				const processEnv = {
+					...process.env,
+					JOPLIN_XPS_INPUT: sourcePath,
+					JOPLIN_XPS_PAGES_FILE: pagesJsonPath,
+				};
+
+				const childProcess = spawn('PowerShell.exe', [
+					'-NoProfile',
+					'-NonInteractive',
+					'-ExecutionPolicy',
+					'Bypass',
+					'-Sta',
+					'-Command',
+					'-',
+				], {
+					env: processEnv,
+					windowsHide: true,
+				});
+
+				let stderr = '';
+				let stdout = '';
+
+				childProcess.stderr.on('data', data => {
+					stderr += data.toString();
+				});
+				childProcess.stdout.on('data', data => {
+					stdout += data.toString();
+				});
+				childProcess.on('error', error => {
+					reject(error);
+				});
+				childProcess.on('close', code => {
+					if (code === 0) {
+						resolve();
+					} else {
+						const output = (stderr || stdout).trim();
+						reject(new Error(`PowerShell.exe exited with code ${code}.${output ? ` Output: ${output}` : ''}`));
+					}
+				});
+
+				childProcess.stdin.on('error', () => {
+					// PowerShell may exit before reading the script. The process close/error events report the result.
+				});
+				childProcess.stdin.end(xpsToPngPowerShellScript);
+			});
+		} finally {
+			await shim.fsDriver().remove(pagesJsonPath);
+		}
+	}
+
+	private async convertXpsPrintoutsToImages_(dom: Document, baseFolder: string) {
+		const images = Array.from(dom.querySelectorAll<HTMLImageElement>('img[src]')).filter(image => this.isXpsPrintoutImage_(image));
+		if (!images.length) return false;
+
+		if (!shim.isWindows()) {
+			this.replaceXpsPrintoutImagesWithFallbackLinks_(dom, images);
+			return true;
+		}
+
+		const conversions = new Map<string, Map<number, string>>();
+		let changed = false;
+
+		for (const image of images) {
+			const src = image.getAttribute('src') ?? '';
+			const displayedPageNumber = this.xpsPrintoutDisplayedPageNumber_(image);
+			const pageNumber = displayedPageNumber === null ? 1 : displayedPageNumber + 1;
+			const sourcePath = resolve(baseFolder, this.safeDecodeFileSrc_(src));
+			const outputPath = join(dirname(sourcePath), this.xpsPrintoutOutputFilename_(sourcePath, pageNumber));
+			let sourceConversions = conversions.get(sourcePath);
+			if (!sourceConversions) {
+				sourceConversions = new Map();
+				conversions.set(sourcePath, sourceConversions);
+			}
+			sourceConversions.set(pageNumber, outputPath);
+		}
+
+		for (const [sourcePath, pageMap] of conversions) {
+			try {
+				const pageConversions = Array.from(pageMap.entries()).map(([pageNumber, outputPath]) => ({ pageNumber, outputPath }));
+				await this.convertXpsPrintoutPagesToImages_(sourcePath, pageConversions);
+			} catch (error) {
+				logger.warn('Failed to convert OneNote XPS printout pages:', sourcePath, error);
+			}
+		}
+
+		for (const image of images) {
+			const src = image.getAttribute('src') ?? '';
+			const displayedPageNumber = this.xpsPrintoutDisplayedPageNumber_(image);
+			const pageNumber = displayedPageNumber === null ? 1 : displayedPageNumber + 1;
+			const sourcePath = resolve(baseFolder, this.safeDecodeFileSrc_(src));
+			const convertedPath = conversions.get(sourcePath)?.get(pageNumber);
+
+			if (convertedPath && await shim.fsDriver().exists(convertedPath)) {
+				image.setAttribute('src', toForwardSlashes(relative(baseFolder, convertedPath)));
+				this.removeXpsPrintoutPageNumberAttributes_(image);
 				changed = true;
 			}
 		}

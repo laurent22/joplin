@@ -6,7 +6,7 @@ import Note from '@joplin/lib/models/Note';
 import { Canvas, CanvasNode, FileCanvasNode, TextCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 import { parseWhiteboard } from '@joplin/lib/services/whiteboard/parse';
 import { serializeWhiteboard } from '@joplin/lib/services/whiteboard/serialize';
-import { themeStyle } from '@joplin/lib/theme';
+import { _ } from '@joplin/lib/locale';
 import { WhiteboardContext } from './WhiteboardContext';
 import WhiteboardSurface from './WhiteboardSurface';
 
@@ -170,20 +170,21 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 	}), [props.markupToHtml, props.resourceInfos, props.resourceDirectory, props.themeId, onOpenRef, onUpdateNode, onPromoteTextNode]);
 
 	if (parseError) {
-		const theme = themeStyle(props.themeId);
 		return (
-			<div style={{ ...props.style, display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, padding: 24, overflow: 'auto' }}>
-				<div style={{ backgroundColor: theme.warningBackgroundColor, color: theme.color, padding: 16, borderRadius: 4, display: 'flex', flexDirection: 'column', gap: 12 }}>
-					<div style={{ fontWeight: 600 }}>This whiteboard could not be loaded</div>
-					<div style={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: 12 }}>{parseError}</div>
-					<div>Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.</div>
+			<div className="whiteboard-editor" style={props.style}>
+				<div className="error">
+					<div className="panel">
+						<div className="title">{_('This whiteboard could not be loaded')}</div>
+						<div className="detail">{parseError}</div>
+						<div>{_('Click the eye icon in the toolbar to switch to the Markdown editor and fix the JSON manually.')}</div>
+					</div>
 				</div>
 			</div>
 		);
 	}
 
 	return (
-		<div style={{ ...props.style, display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
+		<div className="whiteboard-editor" style={props.style}>
 			<WhiteboardContext.Provider value={contextValue}>
 				<WhiteboardSurface
 					canvas={canvas}

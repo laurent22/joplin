@@ -1,6 +1,4 @@
-// Translation between the JSONCanvas spec shape and React Flow's
-// node/edge shape. Pure functions, no React imports.
-
+import { CSSProperties } from 'react';
 import { Edge as FlowEdge, MarkerType, Node as FlowNode } from '@xyflow/react';
 import { Canvas, CanvasEdge, CanvasNode, CanvasNodeSide } from '@joplin/lib/services/whiteboard/jsoncanvas';
 
@@ -11,60 +9,58 @@ export type WhiteboardNodeData = {
 export type WhiteboardFlowNode = FlowNode<WhiteboardNodeData>;
 export type WhiteboardFlowEdge = FlowEdge<{ canvasEdge: CanvasEdge }>;
 
-// Maps JSONCanvas node types to our React Flow node types. Group nodes are
-// not rendered, so they're filtered out before this is called.
-const flowTypeForCanvasType = (type: 'text' | 'file' | 'link'): string => {
+const flowTypeForCanvasType = (type: CanvasNode['type']): string => {
 	switch (type) {
 	case 'text': return 'wbText';
 	case 'file': return 'wbFile';
 	case 'link': return 'wbLink';
+	case 'group': return 'wbGroup';
 	}
 };
 
-// Convert a single (non-group) JSONCanvas node into the React Flow shape.
-// Used both by the bulk converter at load time and by the surface when the
-// user creates a new node interactively.
-export const canvasNodeToFlowNode = (n: Exclude<CanvasNode, { type: 'group' }>): WhiteboardFlowNode => ({
-	id: n.id,
-	type: flowTypeForCanvasType(n.type),
-	position: { x: n.x, y: n.y },
-	data: { canvasNode: n },
-	style: { width: n.width, height: n.height },
-	width: n.width,
-	height: n.height,
-	selectable: true,
-	draggable: true,
-});
+export const canvasNodeToFlowNode = (n: CanvasNode): WhiteboardFlowNode => {
+	const isGroup = n.type === 'group';
+	// React Flow forces `pointerEvents: 'all'` as an inline style on the node
+	// wrapper, which beats any CSS class rule. For groups we override it back
+	// to 'none' via the node's own `style` (which React Flow spreads after its
+	// own pointerEvents). Children re-enable pointer-events selectively, so
+	// only the handle / label actually catches mouse events.
+	const style: CSSProperties = { width: n.width, height: n.height };
+	if (isGroup) style.pointerEvents = 'none';
+	return {
+		id: n.id,
+		type: flowTypeForCanvasType(n.type),
+		position: { x: n.x, y: n.y },
+		data: { canvasNode: n },
+		style,
+		width: n.width,
+		height: n.height,
+		selectable: true,
+		draggable: true,
+		// Restrict drag/select initiation to the explicit handle and label so
+		// clicks elsewhere bubble through to the pane (panning) or to a card
+		// on top (interacting with it).
+		...(isGroup ? { dragHandle: '.whiteboard-group-handle' } : {}),
+	};
+};
 
 const sideToHandle = (side: CanvasNodeSide | undefined): string | undefined => {
 	if (!side) return undefined;
-	return side; // React Flow handle ids match side names ('top', 'right', 'bottom', 'left').
+	return side;
 };
 
-// `markerUnits: 'userSpaceOnUse'` keeps the arrowhead at an absolute size,
-// independent of the edge's stroke width. Without it, selected edges (which
-// have a thicker stroke) would render a proportionally bigger arrow.
+// markerUnits userSpaceOnUse keeps arrowhead size fixed regardless of edge
+// stroke width — selected edges have a thicker stroke and would otherwise
+// render a proportionally bigger arrow.
 const arrowMarker = () => ({ type: MarkerType.ArrowClosed, width: 27, height: 27, markerUnits: 'userSpaceOnUse' });
 
 export interface CanvasToFlowResult {
 	nodes: WhiteboardFlowNode[];
 	edges: WhiteboardFlowEdge[];
-	// JSONCanvas group nodes are not rendered by this editor, but we keep them
-	// here so they can be merged back on save and round-trip cleanly.
-	preservedGroups: CanvasNode[];
 }
 
 export const canvasToFlow = (canvas: Canvas): CanvasToFlowResult => {
-	const preservedGroups: CanvasNode[] = [];
-	const nodes: WhiteboardFlowNode[] = [];
-
-	for (const n of canvas.nodes) {
-		if (n.type === 'group') {
-			preservedGroups.push(n);
-			continue;
-		}
-		nodes.push(canvasNodeToFlowNode(n));
-	}
+	const nodes: WhiteboardFlowNode[] = canvas.nodes.map(canvasNodeToFlowNode);
 
 	const edges: WhiteboardFlowEdge[] = canvas.edges.map(e => ({
 		id: e.id,
@@ -79,7 +75,7 @@ export const canvasToFlow = (canvas: Canvas): CanvasToFlowResult => {
 		markerEnd: e.toEnd === 'none' ? undefined : arrowMarker(),
 	}));
 
-	return { nodes, edges, preservedGroups };
+	return { nodes, edges };
 };
 
 const handleToSide = (handle?: string | null): CanvasNodeSide | undefined => {
@@ -87,14 +83,9 @@ const handleToSide = (handle?: string | null): CanvasNodeSide | undefined => {
 	return undefined;
 };
 
-// Apply React Flow positions back to canvas nodes. Preserves any field we
-// don't track (color, subpath, etc.) by spreading the original canvasNode
-// from `data`. Group nodes that were filtered out at load time are merged
-// back unchanged via `preservedGroups`.
 export const flowToCanvas = (
 	flowNodes: WhiteboardFlowNode[],
 	flowEdges: WhiteboardFlowEdge[],
-	preservedGroups: CanvasNode[] = [],
 ): Canvas => {
 	const nodes: CanvasNode[] = flowNodes.map(fn => {
 		const orig = fn.data?.canvasNode;
@@ -113,8 +104,14 @@ export const flowToCanvas = (
 		return { ...orig, ...base };
 	});
 
-	// Re-attach preserved group nodes so a round-trip doesn't drop them.
-	for (const g of preservedGroups) nodes.push(g);
+	// JSONCanvas z-order is array order: first = bottom, last = top. Groups
+	// are visual containers and must render behind regular nodes, so we sort
+	// them to the front of the array on serialize.
+	nodes.sort((a, b) => {
+		if (a.type === 'group' && b.type !== 'group') return -1;
+		if (a.type !== 'group' && b.type === 'group') return 1;
+		return 0;
+	});
 
 	const edges: CanvasEdge[] = flowEdges.map(fe => {
 		const orig = fe.data?.canvasEdge;

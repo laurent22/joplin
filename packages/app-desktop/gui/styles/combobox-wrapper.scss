@@ -13,4 +13,40 @@
 	&.-expanded > .suggestions {
 		display: block;
 	}
+
+	&.-form-control {
+		position: relative;
+		width: 100%;
+	}
+
+	&.-form-control > .input {
+		width: 100%;
+		box-sizing: border-box;
+		border: 1px solid var(--joplin-border-color4);
+		border-radius: 3px;
+		font-size: var(--joplin-font-size);
+		font-family: var(--joplin-font-family);
+		color: var(--joplin-color);
+		background-color: var(--joplin-background-color);
+		padding: 4px 8px;
+		height: var(--joplin-toolbar-height);
+		max-height: var(--joplin-toolbar-height);
+	}
+
+	&.-form-control > .suggestions {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		width: 100%;
+		box-sizing: border-box;
+		min-width: 0;
+		margin-top: 2px;
+		z-index: 1000;
+		border-radius: 3px;
+	}
+
+	&.-form-control > .suggestions.-empty {
+		display: none;
+	}
 }

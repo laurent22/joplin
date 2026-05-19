@@ -8,12 +8,12 @@ async function main() {
 
 	const imageName = 'joplin/server';
 
-	// docker manifest create joplin/server:latest joplin/server:arm64-3.3.13 joplin/server:amd64-3.3.13
-	// docker manifest annotate joplin/server:latest joplin/server:arm64-3.3.13 --arch arm64
-	// docker manifest annotate joplin/server:latest joplin/server:amd64-3.3.13 --arch amd64
-	// docker manifest push joplin/server:latest
-
-	await execCommand('docker manifest rm joplin/server:latest');
+	try {
+		await execCommand('docker manifest rm joplin/server:latest', { quiet: true });
+	} catch (_error) {
+		// The local manifest may not exist (e.g. first run, or after a previous push),
+		// in which case `docker manifest rm` fails. That's fine — we're about to recreate it.
+	}
 	await execCommand(`docker manifest create ${imageName}:latest ${imageName}:arm64-${version} ${imageName}:amd64-${version}`);
 	await execCommand(`docker manifest annotate ${imageName}:latest ${imageName}:arm64-${version} --arch arm64`);
 	await execCommand(`docker manifest annotate ${imageName}:latest ${imageName}:amd64-${version} --arch amd64`);

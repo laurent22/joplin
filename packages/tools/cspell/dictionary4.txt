@@ -255,6 +255,7 @@ mtmd
 gguf
 armor
 clearsign
+CUDA
 ligne
 payant
 llamacpp
@@ -297,3 +298,4 @@ keybinds
 unobserve
 querystring
 msgbox
+LASTEXITCODE

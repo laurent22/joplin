@@ -284,13 +284,11 @@ packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardContext.
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardEditor.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/WhiteboardSurface.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/canvasFlow.js
-packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/injectStyle.js
-packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/loadReactFlowCss.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/FileNode.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/LinkNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.js
-packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/sharedStyles.js
-packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/theme.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/handlePositions.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.test.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.js
 packages/app-desktop/gui/NoteEditor/NoteEditor.js
@@ -1098,6 +1096,8 @@ packages/editor/CodeMirror/extensions/rendering/replaceDividers.js
 packages/editor/CodeMirror/extensions/rendering/replaceFormatCharacters.js
 packages/editor/CodeMirror/extensions/rendering/replaceInlineHtml.test.js
 packages/editor/CodeMirror/extensions/rendering/replaceInlineHtml.js
+packages/editor/CodeMirror/extensions/rendering/replaceLinks.test.js
+packages/editor/CodeMirror/extensions/rendering/replaceLinks.js
 packages/editor/CodeMirror/extensions/rendering/types.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeBlockReplaceExtension.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.js
@@ -1559,6 +1559,7 @@ packages/lib/services/interop/Module.js
 packages/lib/services/interop/types.js
 packages/lib/services/interop/utils.test.js
 packages/lib/services/interop/utils.js
+packages/lib/services/interop/xpsToPngPowerShellScript.js
 packages/lib/services/joplinCloudUtils.js
 packages/lib/services/joplinServer/personalizedUserContentBaseUrl.js
 packages/lib/services/keychain/KeychainService.test.js
@@ -1909,6 +1910,8 @@ packages/tools/build-translation.js
 packages/tools/build-welcome.js
 packages/tools/buildServerDocker.test.js
 packages/tools/buildServerDocker.js
+packages/tools/checkGeneratedFiles.test.js
+packages/tools/checkGeneratedFiles.js
 packages/tools/checkIgnoredFiles.js
 packages/tools/checkLibPaths.test.js
 packages/tools/checkLibPaths.js

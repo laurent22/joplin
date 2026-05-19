@@ -25,6 +25,12 @@ export interface ApiShare {
 	folder_id: string;
 }
 
+export interface ApiTeamUsers {
+	items: { email: string }[];
+	has_more: boolean;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 function formatShareInvitations(invitations: (Omit<ShareInvitation, 'master_key'> & { master_key: string | MasterKeyEntity | null })[]): ShareInvitation[] {
 	return invitations.map(inv => {
 		return {
@@ -399,6 +405,13 @@ export default class ShareService {
 
 	private async loadShareUsers(shareId: string) {
 		return this.api().exec('GET', `api/shares/${shareId}/users`);
+	}
+
+	// Team member email autocomplete when sharing a notebook (Joplin Cloud / Teams).
+	public async loadTeamUsers(teamId: string, userEmailSearch: string): Promise<ApiTeamUsers> {
+		return this.api().exec('GET', `api/teams/${encodeURIComponent(teamId)}/users`, {
+			user_email_search: userEmailSearch,
+		});
 	}
 
 	private async loadShareInvitations() {

@@ -15,18 +15,29 @@ impl<'a> Renderer<'a> {
             // file type detection
             let image_start_bytes = read_file_start(&mut reader)?;
 
-            let filename = self.determine_image_filename(image, &image_start_bytes)?;
+            let (filename, should_write) =
+                self.determine_image_filename(image, &image_start_bytes)?;
             let path = fs_driver().join(&self.output, &filename);
-            log!("Rendering image: {:?}", path);
 
-            // Rebuild the reader so that the image start bytes are included in the file
-            let mut reader = Cursor::new(image_start_bytes).chain(reader);
-            fs_driver().stream_to_file(&path, &mut reader)?;
+            if should_write {
+                log!("Rendering image: {:?}", path);
+
+                let mut reader = Cursor::new(image_start_bytes).chain(reader);
+                fs_driver().stream_to_file(&path, &mut reader)?;
+            } else {
+                log!("Reusing image: {:?}", path);
+            }
 
             let mut attrs = AttributeSet::new();
             let mut styles = StyleSet::new();
 
             attrs.set("src", filename);
+
+            if is_xps_printout(image) {
+                if let Some(page_number) = image.displayed_page_number() {
+                    attrs.set("data-onenote-page-number", page_number.to_string());
+                }
+            }
 
             if let Some(text) = image.alt_text() {
                 attrs.set("alt", text.to_string());
@@ -62,8 +73,18 @@ impl<'a> Renderer<'a> {
         Ok(self.render_with_note_tags(image.note_tags(), content))
     }
 
-    fn determine_image_filename(&mut self, image: &Image, initial_bytes: &[u8]) -> Result<String> {
+    fn determine_image_filename(
+        &mut self,
+        image: &Image,
+        initial_bytes: &[u8],
+    ) -> Result<(String, bool)> {
         if let Some(name) = image.image_filename() {
+            if is_reusable_image_filename(name) {
+                let filename = fs_driver().sanitize_file_name(name);
+                let path = fs_driver().join(&self.output, &filename);
+                return Ok((filename, !fs_driver().exists(&path)?));
+            }
+
             // Workaround: PDF printout pages are PNG images, but have an image_filename with extension .PDF.
             // Add a PNG extension to these files so that they are imported properly:
             let name = {
@@ -78,7 +99,7 @@ impl<'a> Renderer<'a> {
             };
 
             let filename = self.section.to_unique_safe_filename(&self.output, &name)?;
-            return Ok(filename);
+            return Ok((filename, true));
         }
 
         let ext = image.extension().unwrap_or_else(|| {
@@ -88,8 +109,20 @@ impl<'a> Renderer<'a> {
         let filename = self
             .section
             .to_unique_safe_filename(&self.output, &format!("image{}", ext))?;
-        Ok(filename)
+        Ok((filename, true))
     }
+}
+
+fn is_reusable_image_filename(filename: &str) -> bool {
+    let extension = fs_driver().get_file_extension(filename);
+    extension.eq_ignore_ascii_case(".xps") || extension.eq_ignore_ascii_case(".oxps")
+}
+
+fn is_xps_printout(image: &Image) -> bool {
+    image
+        .image_filename()
+        .map(is_reusable_image_filename)
+        .unwrap_or(false)
 }
 
 fn read_file_start(reader: &mut Box<dyn Read>) -> Result<Vec<u8>> {

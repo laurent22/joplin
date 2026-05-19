@@ -9,8 +9,8 @@ import Folder from '@joplin/lib/models/Folder';
 import ShareService, { ApiShare } from '@joplin/lib/services/share/ShareService';
 import styled from 'styled-components';
 import StyledFormLabel from '../style/StyledFormLabel';
-import StyledInput from '../style/StyledInput';
 import Button, { ButtonSize } from '../Button/Button';
+import InlineCombobox from '../InlineCombobox';
 import Logger from '@joplin/utils/Logger';
 import StyledMessage from '../style/StyledMessage';
 import { SharePermissions, ShareUserStatus, StateShare, StateShareUser } from '@joplin/lib/services/share/reducer';
@@ -21,6 +21,7 @@ import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffe
 import { ChangeEvent, Dropdown, DropdownOptions, DropdownVariant } from '../Dropdown/Dropdown';
 import shim from '@joplin/lib/shim';
 import { SettingsRecord } from '@joplin/lib/models/Setting';
+const debounce = require('debounce');
 
 const logger = Logger.create('ShareFolderDialog');
 
@@ -39,11 +40,7 @@ const StyledFolder = styled.div`
 const StyledRecipientControls = styled.div`
 	display: flex;
 	flex-direction: row;
-`;
-
-const StyledRecipientInput = styled(StyledInput)`
-	width: 100%;
-	margin-right: 10px;
+	gap: 10px;
 `;
 
 const StyledAddRecipient = styled.div`
@@ -104,6 +101,7 @@ interface Props {
 	shares: StateShare[];
 	shareUsers: Record<string, StateShareUser[]>;
 	canUseSharePermissions: boolean;
+	canUseRecipientAutocomplete: boolean;
 }
 
 interface RecipientDeleteEvent {
@@ -130,6 +128,7 @@ function ShareFolderDialog(props: Props) {
 	const [shareUsers, setShareUsers] = useState<StateShareUser[]>([]);
 	const [shareState, setShareState] = useState<ShareState>(ShareState.Idle);
 	const [recipientsBeingUpdated, setRecipientsBeingUpdated] = useState<Record<string, boolean>>({});
+	const [recipientSuggestions, setRecipientSuggestions] = useState<string[]>([]);
 
 	async function synchronize(event: AsyncEffectEvent = null) {
 		setShareState(ShareState.Synchronizing);
@@ -168,6 +167,38 @@ function ShareFolderDialog(props: Props) {
 		if (!sus) return;
 		setShareUsers(sus);
 	}, [share, props.shareUsers]);
+
+	useEffect(() => {
+		setRecipientSuggestions([]);
+		setLatestError(null);
+
+		let cancelled = false;
+
+		const loadSuggestions = async () => {
+			if (!props.canUseRecipientAutocomplete || !recipientEmail) return;
+			try {
+				const result = await ShareService.instance().loadTeamUsers('me', recipientEmail);
+
+				if (!cancelled) {
+					setRecipientSuggestions(result.items.map(item => item.email));
+				}
+			} catch (error) {
+				logger.error('Could not load team users', error);
+				if (!cancelled) {
+					setLatestError(error);
+					setRecipientSuggestions([]);
+				}
+			}
+		};
+
+		const debouncedLoad = debounce(loadSuggestions, 250);
+		debouncedLoad();
+
+		return () => {
+			cancelled = true;
+			debouncedLoad.clear();
+		};
+	}, [props.canUseRecipientAutocomplete, recipientEmail]);
 
 	const permissionsFromString = (p: string): SharePermissions => {
 		return {
@@ -224,9 +255,13 @@ function ShareFolderDialog(props: Props) {
 		}
 	}, [recipientPermissions, props.folderId, recipientEmail]);
 
-	function recipientEmail_change(event: React.ChangeEvent<HTMLInputElement>) {
-		setRecipientEmail(event.target.value);
-	}
+	const recipientEmail_change = useCallback((value: string) => {
+		setRecipientEmail(value);
+	}, []);
+
+	const renderRecipientSuggestion = useCallback((suggestedValue: string) => {
+		return <div>{suggestedValue}</div>;
+	}, []);
 
 	async function recipient_delete(event: RecipientDeleteEvent) {
 		if (!await shim.showConfirmationDialog(_('Delete this invitation? The recipient will no longer have access to this shared notebook.'))) return;
@@ -256,13 +291,21 @@ function ShareFolderDialog(props: Props) {
 	function renderAddRecipient() {
 		const disabled = shareState !== ShareState.Idle && shareState !== ShareState.Synchronizing;
 
-		const dropdown = !props.canUseSharePermissions ? null : <Dropdown className="permission-dropdown" options={permissionOptions} value={recipientPermissions} onChange={recipientPermissions_change}/>;
+		const dropdown = !props.canUseSharePermissions ? null : <Dropdown options={permissionOptions} value={recipientPermissions} onChange={recipientPermissions_change}/>;
 
 		return (
 			<StyledAddRecipient>
 				<StyledFormLabel>{_('Add recipient:')}</StyledFormLabel>
 				<StyledRecipientControls>
-					<StyledRecipientInput disabled={disabled} type="email" placeholder="example@domain.com" value={recipientEmail} onChange={recipientEmail_change} />
+					<InlineCombobox
+						value={recipientEmail}
+						onChange={recipientEmail_change}
+						suggestedValues={disabled ? [] : recipientSuggestions}
+						renderOption={renderRecipientSuggestion}
+						inputStyle={{}}
+						inputId='share-folder-dialog-recipient-email'
+						className='-form-control'
+					/>
 					{dropdown}
 					<Button size={ButtonSize.Small} disabled={disabled} title={_('Share')} onClick={shareRecipient_click}></Button>
 				</StyledRecipientControls>
@@ -426,6 +469,13 @@ const mapStateToProps = (state: State) => {
 		shares: state.shareService.shares,
 		shareUsers: state.shareService.shareUsers,
 		canUseSharePermissions: getCanUseSharePermissions(state.settings),
+		// Autocomplete is in the same context as share permissions.
+		// We discussed to reuse sync.10.canUseSharePermissions because adding
+		// sync.10.canUseRecipientAutocomplete would need too many changes,
+		// I decided to have a different local prop with the same value, so it's
+		// separated to be easier to update when premium features handling change.
+
+		canUseRecipientAutocomplete: getCanUseSharePermissions(state.settings),
 	};
 };
 
