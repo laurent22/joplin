@@ -4,7 +4,6 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { Size } from '@joplin/utils/types';
 import { Dispatch } from 'redux';
 import { EventEmitter } from 'events';
-import { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
 
 export interface Props {
 	themeId: number;
@@ -26,7 +25,7 @@ export interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- searches: any[] is the shape in lib's reducer; tightening requires updating the reducer first
 	searches: any[];
 	selectedSearchId: string;
-	highlightedWords: (ComplexTerm | string)[];
+	highlightedWords: string[];
 	provisionalNoteIds: string[];
 	visible: boolean;
 	focusedField: string;

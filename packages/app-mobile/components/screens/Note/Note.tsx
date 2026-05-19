@@ -81,7 +81,6 @@ import VoiceTyping from '../../../services/voiceTyping/VoiceTyping';
 import useDebounced from '../../../utils/hooks/useDebounced';
 import { Second } from '@joplin/utils/time';
 import TextWrapCalculator from '../Notes/TextWrapCalculator';
-import { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 const emptyArray: never[] = [];
@@ -115,7 +114,7 @@ interface Props extends BaseProps {
 	showSideMenu: boolean;
 	searchQuery: string;
 	ftsEnabled: number;
-	highlightedWords: (ComplexTerm | string)[];
+	highlightedWords: string[];
 	noteHash: string;
 	toolbarEnabled: boolean;
 	pluginHtmlContents: PluginHtmlContents;
@@ -1718,10 +1717,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					);
 				} else {
 					const editorStyle = this.styles().bodyTextInput;
-					let globalSearch = this.props.searchQuery;
-					if (this.props.highlightedWords?.length) {
-						globalSearch = this.props.highlightedWords.map(term => typeof term === 'string' ? term : term.value).join(' ');
-					}
+					const globalSearch = this.props.highlightedWords.length ? this.props.highlightedWords.join(' ') : this.props.searchQuery;
 
 					bodyComponent = <NoteEditor
 						ref={this.editorRef}

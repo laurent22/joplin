@@ -19,7 +19,7 @@ interface SearchEntry {
 	parent_id?: string;
 }
 import { getListRendererIds } from './services/noteList/renderers';
-import { ComplexTerm, ProcessResultsRow } from './services/search/SearchEngine';
+import { ProcessResultsRow } from './services/search/SearchEngine';
 import { getDisplayParentId } from './services/trash';
 import Logger from '@joplin/utils/Logger';
 import { SettingsRecord } from './models/settings/types';
@@ -106,7 +106,7 @@ export interface WindowState {
 	selectedItemType: string;
 	selectedSmartFilterId: string;
 
-	highlightedWords: (ComplexTerm | string)[];
+	highlightedWords: string[];
 
 	backwardHistoryNotes: NoteEntity[];
 	forwardHistoryNotes: NoteEntity[];

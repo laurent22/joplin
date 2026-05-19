@@ -1,10 +1,9 @@
-import { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
 import { htmlentities } from '@joplin/utils/html';
 const Mark = require('mark.js/dist/mark.min.js');
 const markJsUtils = require('@joplin/lib/markJsUtils');
 const { replaceRegexDiacritics, pregQuote } = require('@joplin/lib/string-utils');
 
-const getNoteTitleHtml = (highlightedWords: (ComplexTerm | string)[], displayTitle: string) => {
+const getNoteTitleHtml = (highlightedWords: string[], displayTitle: string) => {
 	if (highlightedWords.length) {
 		const titleElement = document.createElement('span');
 		titleElement.textContent = displayTitle;

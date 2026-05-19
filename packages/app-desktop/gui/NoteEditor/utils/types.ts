@@ -5,7 +5,7 @@ import { PluginHtmlContents, PluginStates } from '@joplin/lib/services/plugins/r
 import { MarkupLanguage } from '@joplin/renderer';
 import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/types';
 import { Dispatch } from 'redux';
-import { ComplexTerm, ProcessResultsRow } from '@joplin/lib/services/search/SearchEngine';
+import { ProcessResultsRow } from '@joplin/lib/services/search/SearchEngine';
 import { DropHandler } from './useDropHandler';
 import { SearchMarkers } from './useSearchMarkers';
 import { ParseOptions } from '@joplin/lib/HtmlToMd';
@@ -53,7 +53,7 @@ export interface NoteEditorProps {
 	customCss: string;
 	noteVisiblePanes: string[];
 	watchedResources: Record<string, unknown>;
-	highlightedWords: (ComplexTerm | string)[];
+	highlightedWords: string[];
 	tabMovesFocus: boolean;
 	plugins: PluginStates;
 	toolbarButtonInfos: ToolbarItem[];

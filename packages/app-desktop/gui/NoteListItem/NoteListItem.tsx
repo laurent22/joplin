@@ -10,12 +10,11 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import useRenderedNote from './utils/useRenderedNote';
 import { Dispatch } from 'redux';
 import getNoteElementIdFromJoplinId from './utils/getNoteElementIdFromJoplinId';
-import { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
 
 interface NoteItemProps {
 	dragIndex: number;
 	flow: ItemFlow;
-	highlightedWords: (ComplexTerm | string)[];
+	highlightedWords: string[];
 	index: number;
 	isProvisional: boolean;
 	itemSize: Size;
