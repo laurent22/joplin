@@ -616,12 +616,9 @@ describe('services/SearchEngine', () => {
 			expect(rows.length).toBe(resourcesFound);
 		});
 
-	test('makeSearchFromTerms returns the fallback when terms is undefined', () => {
-		expect(engine.makeSearchFromTerms(undefined, 'fallback query')).toBe('fallback query');
-	});
-
-	test('makeSearchFromTerms returns the an empty string when terms is an empty array', () => {
-		expect(engine.makeSearchFromTerms([], 'fallback query')).toBe('');
+	test('makeSearchFromTerms returns the an empty string when terms is undefined or an empty array', () => {
+		expect(engine.makeSearchFromTerms(undefined)).toBe('');
+		expect(engine.makeSearchFromTerms([])).toBe('');
 	});
 
 	test('makeSearchFromTerms joins string and ComplexTerm values into a single search string', () => {
@@ -631,6 +628,6 @@ describe('services/SearchEngine', () => {
 			'test',
 			{ type: 'regex', value: 'query*', scriptType: 'en' },
 		] as (ComplexTerm | string)[];
-		expect(engine.makeSearchFromTerms(terms, 'fallback query')).toBe('hello world test query*');
+		expect(engine.makeSearchFromTerms(terms)).toBe('hello world test query*');
 	});
 });

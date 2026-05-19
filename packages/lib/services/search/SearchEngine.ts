@@ -881,8 +881,8 @@ export default class SearchEngine {
 		});
 	}
 
-	public makeSearchFromTerms(terms: (string | ComplexTerm)[], fallback: string) {
-		if (!terms) return fallback;
+	public makeSearchFromTerms(terms: (string | ComplexTerm)[]) {
+		if (!terms || !terms.length) return '';
 		return terms.map(term => typeof term === 'string' ? term : term.value).join(' ');
 	}
 }

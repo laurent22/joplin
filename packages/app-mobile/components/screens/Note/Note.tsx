@@ -1718,7 +1718,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					);
 				} else {
 					const editorStyle = this.styles().bodyTextInput;
-					const globalSearch = SearchEngine.instance().makeSearchFromTerms(this.props.highlightedWords, this.props.searchQuery);
+					const globalSearch = SearchEngine.instance().makeSearchFromTerms(this.props.highlightedWords);
 
 					bodyComponent = <NoteEditor
 						ref={this.editorRef}
