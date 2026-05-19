@@ -7,6 +7,7 @@ import { packagesDir } from './constants';
 import { ActionSpec } from './ActionRunner';
 import { readFile } from 'fs/promises';
 import Fuzzer, { FuzzerConfig } from './Fuzzer';
+import { isTTY } from '@joplin/utils/cli';
 const { shimInit } = require('@joplin/lib/shim-init-node');
 
 const globalLogger = new Logger();
@@ -59,7 +60,11 @@ const main = async (config: FuzzerConfig, restoreFromSnapshot: boolean) => {
 	} catch (error) {
 		logger.error('ERROR', error);
 		if (fuzzer) {
-			await fuzzer.openDebugSession();
+			if (isTTY()) {
+				await fuzzer.openDebugSession();
+			} else {
+				logger.info('(Not opening a debug session -- not running interactively)');
+			}
 		}
 		process.exitCode = 1;
 	} finally {
