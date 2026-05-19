@@ -42,6 +42,9 @@ type AccountData = Readonly<{
 	onClientDisconnected: ()=> Promise<void>;
 }>;
 
+// Don't generate passwords starting with '-'. Such passwords can
+// be interpreted as command arguments if sent to the CLI app via
+// the command line.
 const createPassword = () => createSecureRandom().replace(/^-/, '_');
 
 const emailPrefix = 'fuzzer-user-';
