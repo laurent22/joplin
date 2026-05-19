@@ -120,6 +120,7 @@ type ChildProcessWrapper = {
 	stderr: Stream.Readable;
 	writeStdin: (data: Buffer|string)=> void;
 	close: ()=> void;
+	onClosed: (eventHandler: OnCloseListener)=> void;
 };
 
 // Should match the prompt used by the CLI "batch" command.
@@ -320,6 +321,9 @@ class Client implements ActionableClient {
 				},
 				stderr: rawChildProcess.stderr,
 				stdout: rawChildProcess.stdout,
+				onClosed: (eventHandler) => {
+					rawChildProcess.once('close', eventHandler);
+				},
 				close: () => {
 					rawChildProcess.stdin.destroy();
 					rawChildProcess.kill();
@@ -390,13 +394,20 @@ class Client implements ActionableClient {
 			listener();
 		}
 
-		this.childProcess_.close();
-
 		// Before removing the profile directory, verify that the profile directory is in the
 		// expected location:
 		const profileDirectory = resolvePathWithinDir(this.context_.baseDir, this.profileDirectory);
 		assert.ok(profileDirectory, 'profile directory for client should be contained within the main temporary profiles directory (should be safe to delete)');
-		await remove(profileDirectory);
+		this.childProcess_.onClosed(async () => {
+			try {
+				await remove(profileDirectory);
+				logger.info('Removed profile directory', profileDirectory);
+			} catch (error) {
+				logger.error('Failed to remove profile directory', profileDirectory);
+			}
+		});
+
+		this.childProcess_.close();
 
 		this.closed_ = true;
 		logger.info('Closed client ', this.email);
