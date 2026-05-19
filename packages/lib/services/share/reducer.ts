@@ -8,8 +8,8 @@ const logger = Logger.create('share/reducer');
 
 export enum ShareType {
 	Note = 1,
-	PublishedFolder = 2,
 	Folder = 3,
+	PublishedFolder = 4,
 }
 
 interface StateShareUserUser {
