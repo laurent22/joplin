@@ -601,7 +601,7 @@ class BaseModel {
 		return query;
 	}
 
-	public static userSideValidation(o: { id?: string; title?: string; user_updated_time?: number; user_created_time?: number }) {
+	public static userSideValidation(o: { id?: string; title?: string; body?: string; user_updated_time?: number; user_created_time?: number }) {
 		if (o.id && !o.id.match(/^[a-f0-9]{32}$/)) {
 			throw new Error('Validation error: ID must a 32-characters lowercase hexadecimal string');
 		}
@@ -614,6 +614,13 @@ class BaseModel {
 		const maxTitleLength = 4096;
 		if (typeof o.title === 'string' && o.title.length > maxTitleLength) {
 			throw new Error(`Validation error: title must be ${maxTitleLength} characters or less`);
+		}
+
+		// Null bytes break Joplin's serialised note format and can cause silent
+		// truncation in some HTTP clients (notably React Native on iOS).
+		const nul = String.fromCharCode(0);
+		if ((typeof o.title === 'string' && o.title.includes(nul)) || (typeof o.body === 'string' && o.body.includes(nul))) {
+			throw new Error('Validation error: title and body cannot contain a null byte');
 		}
 	}
 
