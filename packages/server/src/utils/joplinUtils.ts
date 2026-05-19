@@ -242,13 +242,14 @@ async function renderNote(
 	note: NoteEntity,
 	resourceInfos: ResourceInfos,
 	linkedItemInfos: LinkedItemInfos,
+	bannerInfo: BannerInfo,
 	folderTree: RenderedFolderTree = null,
 ): Promise<FileViewerResponse> {
 	const markupToHtml = new MarkupToHtml({
 		ResourceModel: Resource as OptionsResourceModel,
 	});
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- markupToHtml.render's RenderOptions is loosely typed in @joplin/renderer; tightening would require updating the renderer package
 	const renderOptions: any = {
 		resources: resourceInfos,
 
@@ -288,7 +289,6 @@ async function renderNote(
 
 	try {
 		const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
-		const bannerInfo = getDefaultBannerInfo();
 
 		return renderNotePage(
 			note.title,
@@ -476,7 +476,8 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 		}
 
 		const resourceInfos = await getResourceInfos(linkedItemInfos);
-		return renderNote(share, models_.item().itemToJoplinItem(noteItem), resourceInfos, linkedItemInfos, folderTree);
+		const bannerInfo = getDefaultBannerInfo();
+		return renderNote(share, models_.item().itemToJoplinItem(noteItem), resourceInfos, linkedItemInfos, bannerInfo, folderTree);
 	}
 
 	interface FileToRender {
@@ -561,9 +562,9 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	if (itemType === ModelType.Resource) {
 		return renderResource(userId, fileToRender.jopItemId, fileToRender.item, fileToRender.content);
 	} else if (itemType === ModelType.Note) {
-		return renderNote(share, itemToRender, resourceInfos, linkedItemInfos);
+		const bannerInfo = getDefaultBannerInfo();
+		return renderNote(share, itemToRender, resourceInfos, linkedItemInfos, bannerInfo);
 	} else {
 		throw new Error(`Cannot render item with type "${itemType}"`);
 	}
 }
-
