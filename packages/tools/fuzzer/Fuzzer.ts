@@ -60,7 +60,7 @@ export interface FuzzerConfig {
 	keepAccountsOnClose: boolean;
 	setupActions: ActionSpec[];
 
-	serverPath: string|null;
+	serverPath: string;
 	serverDockerImage: string|null;
 	isJoplinCloud: boolean;
 }
