@@ -623,8 +623,10 @@ describe('services/SearchEngine', () => {
 
 	test('makeSearchFromTerms joins string and ComplexTerm values into a single search string', () => {
 		const terms = [
-			'hello', { type: 'text', value: 'world', scriptType: 'en' },
-			'test', { type: 'regex', value: 'query*', scriptType: 'en' },
+			'hello',
+			{ type: 'text', value: 'world', scriptType: 'en' },
+			'test',
+			{ type: 'regex', value: 'query*', scriptType: 'en' },
 		] as (ComplexTerm | string)[];
 		expect(engine.makeSearchFromTerms(terms, 'fallback query')).toBe('hello world test query*');
 	});
