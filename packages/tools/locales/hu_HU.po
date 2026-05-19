@@ -1,7 +1,7 @@
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin package.
 #
-# SPDX-FileCopyrightText: 2026 summoner <summoner@vivaldi.net>
+# SPDX-FileCopyrightText: 2026 summoner <summoner@disroot.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin 1.0.0\n"
@@ -5734,7 +5734,7 @@ msgstr "Rendezési sorrend gombjainak megjelenítése"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1133
 msgid "Show tray icon"
-msgstr "Tálcaikon megjelenítése"
+msgstr "Ikon megjelenítése az értesítési területen"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:282
 msgid "Show/hide the sidebar"
@@ -5909,7 +5909,7 @@ msgstr "Osztott nézet"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1148
 msgid "Start application minimised in the tray icon"
-msgstr "Alkalmazás kicsinyítése a tálcára indításkor"
+msgstr "Alkalmazás kicsinyítése az értesítési területre indításkor"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:206
 msgid "Start recording"
@@ -7283,8 +7283,8 @@ msgstr ""
 #: packages/app-desktop/gui/MainScreen.tsx:794
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
-"A nyilak segítségével mozgathatja az elemek elrendezését. A kilépéshez nyomja"
-" meg az „ESC” gombot."
+"Az elrendezéshez mozgassa az elemeket a nyilak segítségével. A kilépéshez"
+" nyomja meg az „ESC” gombot."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1563
 msgid "Use the legacy Markdown editor"
