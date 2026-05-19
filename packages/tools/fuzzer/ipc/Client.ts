@@ -42,6 +42,8 @@ type AccountData = Readonly<{
 	onClientDisconnected: ()=> Promise<void>;
 }>;
 
+const createPassword = () => createSecureRandom().replace(/^-/, '_');
+
 const emailPrefix = 'fuzzer-user-';
 
 const loadAccountAndResetPassword = async (
@@ -64,7 +66,7 @@ const loadAccountAndResetPassword = async (
 	const email = response.email;
 
 	// The password needs to be set *after* creating the user.
-	const password = createSecureRandom();
+	const password = createPassword();
 	await context.execApi('PATCH', userRoute, {
 		email,
 		password,
@@ -104,7 +106,7 @@ const createNewAccount = async (email: string, context: FuzzContext): Promise<Ac
 	});
 	const userId = getStringProperty(apiOutput, 'id');
 
-	const e2eePassword = context.enableE2ee ? createSecureRandom().replace(/^-/, '_') : null;
+	const e2eePassword = context.enableE2ee ? createPassword() : null;
 	return loadAccountAndResetPassword(userId, e2eePassword, context);
 };
 
