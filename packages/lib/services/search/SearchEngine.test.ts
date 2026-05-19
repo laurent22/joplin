@@ -616,18 +616,18 @@ describe('services/SearchEngine', () => {
 			expect(rows.length).toBe(resourcesFound);
 		});
 
-	test('makeSearchFromTerms returns the an empty string when terms is undefined or an empty array', () => {
-		expect(engine.makeSearchFromTerms(undefined)).toBe('');
-		expect(engine.makeSearchFromTerms([])).toBe('');
+	test('createQueryFromTerms returns the an empty string when terms is undefined or an empty array', () => {
+		expect(engine.createQueryFromTerms(undefined)).toBe('');
+		expect(engine.createQueryFromTerms([])).toBe('');
 	});
 
-	test('makeSearchFromTerms joins string and ComplexTerm values into a single search string', () => {
+	test('createQueryFromTerms joins string and ComplexTerm values into a single search string', () => {
 		const terms = [
 			'hello',
 			{ type: 'text', value: 'world', scriptType: 'en' },
 			'test',
 			{ type: 'regex', value: 'query*', scriptType: 'en' },
 		] as (ComplexTerm | string)[];
-		expect(engine.makeSearchFromTerms(terms)).toBe('hello world test query*');
+		expect(engine.createQueryFromTerms(terms)).toBe('hello world test query*');
 	});
 });
