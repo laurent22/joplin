@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, ForwardedRef, useContext } from 'react';
+import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, ForwardedRef, useContext, useLayoutEffect } from 'react';
 
 // eslint-disable-next-line no-unused-vars
 import { EditorCommand, NoteBodyEditorProps, NoteBodyEditorRef } from '../../../utils/types';
@@ -56,6 +56,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	const webviewRef = useRef(null);
 	const previousContentKeyRef = useRef(props.contentKey);
 	const wasViewerVisibleRef = useRef(props.visiblePanes.includes('viewer'));
+	const viewerVisible = props.visiblePanes.includes('viewer');
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	const props_onChangeRef = useRef<Function>(null);
 	props_onChangeRef.current = props.onChange;
@@ -640,8 +641,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		onMessage: props.onMessage,
 	});
 
-	useEffect(() => {
-		const viewerVisible = props.visiblePanes.includes('viewer');
+	useLayoutEffect(() => {
 		const viewerWasHidden = wasViewerVisibleRef.current && !viewerVisible;
 		const noteChanged = previousContentKeyRef.current !== props.contentKey;
 
@@ -651,7 +651,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 		previousContentKeyRef.current = props.contentKey;
 		wasViewerVisibleRef.current = viewerVisible;
-	}, [props.contentKey, props.visiblePanes]);
+	}, [props.contentKey, viewerVisible]);
 
 	useEffect(() => {
 		let cancelled = false;

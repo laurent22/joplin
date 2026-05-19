@@ -430,14 +430,29 @@
 			}
 		};
 
-		const pauseMediaElements = (root = document) => {
+		const pauseMediaElements = (root = document, reloadEmbeds = false) => {
 			for (const element of root.querySelectorAll('audio, video')) {
 				element.pause();
 			}
 
+			for (const element of root.querySelectorAll('iframe')) {
+				const src = element.getAttribute('src') ?? '';
+				if (/^https:\/\/(?:www\.)?youtube(?:-nocookie)?\.com\/embed\//.test(src)) {
+					element.contentWindow?.postMessage(JSON.stringify({
+						event: 'command',
+						func: 'pauseVideo',
+						args: [],
+					}), '*');
+
+					if (reloadEmbeds) {
+						element.src = src;
+					}
+				}
+			}
+
 			for (const element of root.querySelectorAll('*')) {
 				if (element.shadowRoot) {
-					pauseMediaElements(element.shadowRoot);
+					pauseMediaElements(element.shadowRoot, reloadEmbeds);
 				}
 			}
 		};
@@ -452,7 +467,7 @@
 
 		ipc.pauseMediaPlayback = () => {
 			clearPauseMediaPlaybackTimeouts();
-			pauseMediaElements();
+			pauseMediaElements(document, true);
 
 			for (const delay of [100, 500]) {
 				const timeoutId = setTimeout(() => {

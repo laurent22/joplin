@@ -63,7 +63,7 @@ const plugin = (markdownIt: MarkdownIt) => {
 			const originalUrl = activeEmbedVideo.originalUrl;
 			activeEmbedVideo = null; // Clear state
 
-			const embedUrl = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}`;
+			const embedUrl = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?enablejsapi=1`;
 			const escapedUrl = markdownIt.utils.escapeHtml(originalUrl);
 
 			return `
