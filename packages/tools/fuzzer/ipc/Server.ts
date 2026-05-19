@@ -143,6 +143,18 @@ export default class Server {
 
 const startServerProcess = (config: ServerConfig, useDocker: boolean) => {
 	const baseDirectory = resolve(config.baseDirectory);
+	const options: execa.Options = {
+		env: {
+			JOPLIN_IS_TESTING: '1',
+		},
+
+		cwd: baseDirectory,
+		stdin: 'ignore', // No stdin
+		// For debugging:
+		stderr: process.stderr,
+		// stdout: process.stdout,
+	};
+
 	if (useDocker) {
 		if (!config.dockerImage) {
 			throw new Error('Attempting to run in Docker without a Docker image specified');
@@ -159,26 +171,11 @@ const startServerProcess = (config: ServerConfig, useDocker: boolean) => {
 			config.dockerImage,
 			'node', 'dist/app.js',
 			'--env', 'dev',
-		], {
-			cwd: baseDirectory,
-			stdin: 'ignore', // No stdin
-			// For debugging:
-			stderr: process.stderr,
-			// stdout: process.stdout,
-		});
+		], options);
 	} else {
 		const mainEntrypoint = join(baseDirectory, 'dist', 'app.js');
 		return execa.node(mainEntrypoint, [
 			'--env', 'dev',
-		], {
-			env: {
-				JOPLIN_IS_TESTING: '1',
-			},
-			cwd: baseDirectory,
-			stdin: 'ignore', // No stdin
-			// For debugging:
-			stderr: process.stderr,
-			// stdout: process.stdout,
-		});
+		], options);
 	}
 };
