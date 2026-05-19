@@ -221,4 +221,4 @@ jobs:
       
       - name: Check sync
         run: |
-          yarn syncFuzzer start --use-running-server --steps 3
+          yarn syncFuzzer start --use-running-server --steps 5
