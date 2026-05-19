@@ -49,9 +49,10 @@ describe('BaseModel', () => {
 		[{ title: 'fine', body: 'fine' }, false],
 		[{ title: `bad${nul}title`, body: 'fine' }, true],
 		[{ title: 'fine', body: `bad${nul}body` }, true],
+		[{ source_url: `https://example.com/${nul}` }, true],
 		[{ title: 'fine' }, false],
 		[{ body: 'fine' }, false],
-	])('userSideValidation should reject titles or bodies containing a null byte (input: %j)', (input, shouldThrow) => {
+	])('userSideValidation should reject any string field containing a null byte (input: %j)', (input, shouldThrow) => {
 		const run = () => BaseModel.userSideValidation(input);
 		if (shouldThrow) {
 			expect(run).toThrow(/null byte/);
