@@ -787,14 +787,17 @@ export default class Folder extends BaseItem {
 		const noteIsSharedSql = [
 			directlyPublishedNoteIds.length ? `id IN (${this.escapeIdsForSql(directlyPublishedNoteIds)})` : '',
 			publishedFolderIds.length ? `parent_id IN (${this.escapeIdsForSql(publishedFolderIds)})` : '',
-		].filter(v => !!v).join(' OR ') || '0';
+		].filter(v => !!v).join(' OR ');
 
-		const notesToUpdate: NoteEntity[] = await this.db().selectAll(`
+		let notesToUpdate: NoteEntity[] = [];
+		if (noteIsSharedSql) {
+			notesToUpdate = await this.db().selectAll(`
 			SELECT id, parent_id, is_shared
 			FROM notes
 			WHERE (is_shared = 0 AND (${noteIsSharedSql}))
 				OR (is_shared = 1 AND NOT (${noteIsSharedSql}))
 		`);
+		}
 
 		for (const note of notesToUpdate) {
 			await this.updateShareStatus(
