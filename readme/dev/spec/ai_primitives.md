@@ -1,6 +1,6 @@
 # AI primitives
 
-This spec describes the core AI primitives that will be added to Joplin. The goal is not to ship a single AI feature, but to provide a platform on which features and plugins can be built. The primitives below are validated against four target use cases:
+This spec describes the core AI primitives that will be added to Joplin. The goal is not to ship a single AI feature, but to provide a platform on which features and plugins can be built. The primitives below are validated against five target use cases:
 
 - **Chat with your note** — a sidebar that can summarise, rewrite, or answer questions about the current note.
 - **Chat with your note collection** — ask a question across all notes and get a cited answer.
@@ -20,7 +20,7 @@ The primitives are:
 4. **Privacy & cost guardrails** — enforced at the provider layer so every feature inherits them.
 5. **MCP server** — exposes Joplin notes to external AI tools.
 
-Primitives 1–3 are required for any of the four target use cases to work. Primitive 4 must be in place from day one. Primitive 5 is independently valuable and can ship in parallel.
+Primitives 1–3 are required for any of the five target use cases to work. Primitive 4 must be in place from day one. Primitive 5 is independently valuable and can ship in parallel.
 
 ## 1. Provider abstraction
 
@@ -72,7 +72,7 @@ Notes are chunked, embedded, and stored locally so retrieval can run without a n
 
 ## 3. Retrieval helpers
 
-The shared query surface. All four target features differ mainly in *what* they retrieve — same machinery, different scope.
+The shared query surface. All five target features differ mainly in *what* they retrieve — same machinery, different scope.
 
 ### API
 
@@ -156,4 +156,4 @@ The server exposes a minimal tool surface:
 
 ### Why it belongs in this spec
 
-The MCP server is not required for the four target use cases, but it is the cheapest way to make Joplin a first-class participant in the broader AI tool ecosystem without building any chat UI. It also exercises the same note-access surface that internal AI features will need, so the two efforts share infrastructure.
+The MCP server is not required for the five target use cases, but it is the cheapest way to make Joplin a first-class participant in the broader AI tool ecosystem without building any chat UI. It also exercises the same note-access surface that internal AI features will need, so the two efforts share infrastructure.
