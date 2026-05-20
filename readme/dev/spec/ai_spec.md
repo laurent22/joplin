@@ -79,7 +79,7 @@ The shared query surface. All four target features differ mainly in *what* they 
 A single primary call:
 
 - **`search({ query, scope, relevance })`** — returns matching chunks with their source note ID, the chunk text, and a similarity score.
-  - `query`: plain text. Embedded internally using the active embedding provider.
+  - `query`: either plain text (embedded internally using the active embedding provider) or `{ noteId }` to find chunks similar to an existing note. When a note ID is given, Joplin reuses the note's already-indexed chunks as the query vector(s), so no re-embedding is needed. This is what the tag-suggestion and semantic-graph use cases rely on.
   - `scope`: where to search. One of `'note'` (with a note ID), `'notebook'` (with a folder ID), `'tag'` (with a tag ID), or `'all'`. Trashed and conflict notes are excluded by default.
   - `relevance`: `'strict' | 'normal' | 'loose'`. A preset that maps internally to model-appropriate values for the number of results returned (`k`) and the minimum similarity threshold.
 
@@ -102,6 +102,10 @@ These are internal values and are not part of the public API contract.
 ### Hybrid search
 
 Retrieval may be combined internally with the existing FTS-based keyword search. This is an implementation detail; plugins still call `search()` with the same shape.
+
+### Prior art
+
+The [Jarvis](https://github.com/alondmnt/joplin-plugin-jarvis) plugin already exposes a [semantic search API](https://github.com/alondmnt/joplin-plugin-jarvis/blob/master/docs/API.md) to other plugins, supporting both free-text and note-ID queries. It is a useful reference for anyone wanting to prototype against the shape proposed here.
 
 ### Mapping to features
 
