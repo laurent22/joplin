@@ -641,6 +641,17 @@ export default class ItemModel extends BaseModel<Item> {
 
 					if (isJoplinItem) {
 						joplinItem = await unserializeJoplinItem(rawItem.body.toString());
+
+						// Null bytes break Joplin's serialised item format and can cause
+						// silent truncation in some HTTP clients (notably React Native on
+						// iOS), making the item unreadable on those devices.
+						const nul = String.fromCharCode(0);
+						for (const k of Object.keys(joplinItem)) {
+							if (typeof joplinItem[k] === 'string' && joplinItem[k].includes(nul)) {
+								throw new ErrorUnprocessableEntity(`Item ${rawItem.name} cannot be saved because its ${k} contains a null byte`);
+							}
+						}
+
 						isNote = joplinItem.type_ === ModelType.Note;
 						resourceIds = isNote ? linkedResourceIds(joplinItem.body) : [];
 

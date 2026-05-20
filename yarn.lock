@@ -43142,13 +43142,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.8.4":
-  version: 2.29.1
-  resolution: "moment@npm:2.29.1"
-  checksum: 10/8518e781f2d80a1b050cdcbe42b82f2eb476d5f2e368f8aebd987874a0284cd7735ad2a7aeea717c0a0a03e042f975826c1b1cc286f9151b1d4ef6f0a8126d6a
-  languageName: node
-  linkType: hard
-
 "move-concurrently@npm:^1.0.1":
   version: 1.0.1
   resolution: "move-concurrently@npm:1.0.1"
@@ -43631,10 +43624,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-forge@npm:^1, node-forge@npm:^1.3.0":
-  version: 1.3.1
-  resolution: "node-forge@npm:1.3.1"
-  checksum: 10/05bab6868633bf9ad4c3b1dd50ec501c22ffd69f556cdf169a00998ca1d03e8107a6032ba013852f202035372021b845603aeccd7dfcb58cdb7430013b3daa8d
+"node-forge@npm:1.3.2":
+  version: 1.3.2
+  resolution: "node-forge@npm:1.3.2"
+  checksum: 10/dcc54aaffe0cf52367214a20c0032aa9b209d9095dd14526504f1972d1900a07e96046b3684cb0c8d0cc3d48744dd18e02b7b447ab28fac615ffb850beeabf18
   languageName: node
   linkType: hard
 

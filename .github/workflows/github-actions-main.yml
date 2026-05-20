@@ -218,3 +218,7 @@ jobs:
             echo 'Failed while checking the body response after request to /api/ping'
             exit 1;
           fi
+      
+      - name: Check sync
+        run: |
+          yarn syncFuzzer start --use-running-server --steps 5
