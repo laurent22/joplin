@@ -152,6 +152,7 @@ The server exposes a minimal tool surface:
 - Built as a thin protocol adapter on top of the existing Data API.
 - Auth uses the same token model as the Data API.
 - Disabled by default; enabled from the same settings page as the Web Clipper.
+- **Per-tool toggles.** Each MCP tool (search, read, create, update, list, etc.) can be individually enabled or disabled in settings, so users can grant external apps read-only access without exposing write operations.
 
 ### Why it belongs in this spec
 
