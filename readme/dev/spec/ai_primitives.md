@@ -1,4 +1,4 @@
-# AI features
+# AI primitives
 
 This spec describes the core AI primitives that will be added to Joplin. The goal is not to ship a single AI feature, but to provide a platform on which features and plugins can be built. The primitives below are validated against four target use cases:
 
