@@ -299,3 +299,6 @@ unobserve
 querystring
 msgbox
 LASTEXITCODE
+Ollama
+nomic
+mxbai
