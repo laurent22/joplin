@@ -3,6 +3,7 @@
 This spec describes the core AI primitives that will be added to Joplin. The goal is not to ship a single AI feature, but to provide a platform on which features and plugins can be built. The primitives below are validated against four target use cases:
 
 - **Chat with your note** — a sidebar that can summarise, rewrite, or answer questions about the current note.
+- **Chat with your note collection** — ask a question across all notes and get a cited answer.
 - **AI-based note categorisation and tagging** — background analysis that suggests tags and notebook structures based on note content.
 - **AI-generated note graphs** — surfacing semantically related but unlinked notes.
 - **Fuzzy semantic search** — finding notes by meaning rather than exact terms (e.g. "the note about pet sitters for my dog").
@@ -109,6 +110,7 @@ How each target use case composes the primitives:
 | Feature                  | Retrieval scope             | Then                                     |
 |--------------------------|-----------------------------|------------------------------------------|
 | Chat with note           | `note` or `notebook`        | Pass chunks as context to chat model     |
+| Chat with note collection | `all`                      | Pass top chunks (with note IDs) as context to chat model |
 | Fuzzy search             | `all`                       | Show chunks directly as results          |
 | Tag suggestions          | `all`, query = note content | Inspect tags of returned chunks          |
 | Semantic graph           | `all`, per note             | Use scores as edge weights               |
