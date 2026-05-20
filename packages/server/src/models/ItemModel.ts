@@ -648,7 +648,7 @@ export default class ItemModel extends BaseModel<Item> {
 						const nul = String.fromCharCode(0);
 						for (const k of Object.keys(joplinItem)) {
 							if (typeof joplinItem[k] === 'string' && joplinItem[k].includes(nul)) {
-								throw new ErrorBadRequest(`Item ${rawItem.name} cannot be saved because its ${k} contains a null byte`);
+								throw new ErrorUnprocessableEntity(`Item ${rawItem.name} cannot be saved because its ${k} contains a null byte`);
 							}
 						}
 

@@ -6,7 +6,7 @@ import { StorageDriverType } from '../utils/types';
 import config from '../config';
 import { msleep } from '../utils/time';
 import loadStorageDriver from './items/storage/loadStorageDriver';
-import { ErrorBadRequest, ErrorPayloadTooLarge } from '../utils/errors';
+import { ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
 import { makeNoteSerializedBody } from '../utils/testing/serializedItems';
 import { isSqlite } from '../db';
 
@@ -311,7 +311,7 @@ describe('ItemModel', () => {
 		});
 
 		expect(result[`${noteId}.md`].error).toBeTruthy();
-		expect(result[`${noteId}.md`].error.httpCode).toBe(ErrorBadRequest.httpCode);
+		expect(result[`${noteId}.md`].error.httpCode).toBe(ErrorUnprocessableEntity.httpCode);
 		expect(result[`${noteId}.md`].error.message).toMatch(/null byte/);
 	});
 
