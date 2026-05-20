@@ -212,6 +212,8 @@ async function main() {
 		origin: (ctx: AppContext) => {
 			const origin = ctx.request.header.origin;
 
+			if (!origin) return '';
+
 			if (acceptOrigin(origin)) {
 				return origin;
 			} else {
