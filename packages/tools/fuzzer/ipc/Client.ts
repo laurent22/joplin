@@ -42,6 +42,11 @@ type AccountData = Readonly<{
 	onClientDisconnected: ()=> Promise<void>;
 }>;
 
+// Don't generate passwords starting with '-'. Such passwords can
+// be interpreted as command arguments if sent to the CLI app via
+// the command line.
+const createPassword = () => createSecureRandom().replace(/^-/, '_');
+
 const emailPrefix = 'fuzzer-user-';
 
 const loadAccountAndResetPassword = async (
@@ -64,7 +69,7 @@ const loadAccountAndResetPassword = async (
 	const email = response.email;
 
 	// The password needs to be set *after* creating the user.
-	const password = createSecureRandom();
+	const password = createPassword();
 	await context.execApi('PATCH', userRoute, {
 		email,
 		password,
@@ -104,7 +109,7 @@ const createNewAccount = async (email: string, context: FuzzContext): Promise<Ac
 	});
 	const userId = getStringProperty(apiOutput, 'id');
 
-	const e2eePassword = context.enableE2ee ? createSecureRandom().replace(/^-/, '_') : null;
+	const e2eePassword = context.enableE2ee ? createPassword() : null;
 	return loadAccountAndResetPassword(userId, e2eePassword, context);
 };
 
@@ -120,6 +125,7 @@ type ChildProcessWrapper = {
 	stderr: Stream.Readable;
 	writeStdin: (data: Buffer|string)=> void;
 	close: ()=> void;
+	onClosed: (eventHandler: OnCloseListener)=> void;
 };
 
 // Should match the prompt used by the CLI "batch" command.
@@ -320,6 +326,9 @@ class Client implements ActionableClient {
 				},
 				stderr: rawChildProcess.stderr,
 				stdout: rawChildProcess.stdout,
+				onClosed: (eventHandler) => {
+					rawChildProcess.once('close', eventHandler);
+				},
 				close: () => {
 					rawChildProcess.stdin.destroy();
 					rawChildProcess.kill();
@@ -386,17 +395,25 @@ class Client implements ActionableClient {
 
 		await this.account_.onClientDisconnected();
 
-		// Before removing the profile directory, verify that the profile directory is in the
-		// expected location:
-		const profileDirectory = resolvePathWithinDir(this.context_.baseDir, this.profileDirectory);
-		assert.ok(profileDirectory, 'profile directory for client should be contained within the main temporary profiles directory (should be safe to delete)');
-		await remove(profileDirectory);
-
 		for (const listener of this.onCloseListeners_) {
 			listener();
 		}
 
+		// Before removing the profile directory, verify that the profile directory is in the
+		// expected location:
+		const profileDirectory = resolvePathWithinDir(this.context_.baseDir, this.profileDirectory);
+		assert.ok(profileDirectory, 'profile directory for client should be contained within the main temporary profiles directory (should be safe to delete)');
+		this.childProcess_.onClosed(async () => {
+			try {
+				await remove(profileDirectory);
+				logger.info('Removed profile directory', profileDirectory);
+			} catch (error) {
+				logger.error('Failed to remove profile directory', profileDirectory);
+			}
+		});
+
 		this.childProcess_.close();
+
 		this.closed_ = true;
 		logger.info('Closed client ', this.email);
 	}

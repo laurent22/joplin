@@ -16,25 +16,20 @@ jobs:
       (github.event_name == 'pull_request_review' &&
        (github.event.review.user.login == 'coderabbitai' || github.event.review.user.login == 'coderabbitai[bot]'))
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      pull-requests: write
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.CODERABBIT_CLEANUP_APP_ID }}
+          private-key: ${{ secrets.CODERABBIT_CLEANUP_APP_PRIVATE_KEY }}
+
       - name: Clean up CodeRabbit comments
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           REPO: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
         run: |
-          # When the PR is from a fork, GITHUB_TOKEN is downgraded to read-only
-          # regardless of the workflow's `permissions:` block, so the write
-          # calls below would 403. Skip the job in that case.
-          HEAD_REPO=$(gh api "repos/${REPO}/pulls/${PR_NUMBER}" --jq '.head.repo.full_name')
-          if [ "$HEAD_REPO" != "$REPO" ]; then
-            echo "PR is from a fork ($HEAD_REPO); skipping cleanup."
-            exit 0
-          fi
-
           # Clear the body of all CodeRabbit reviews on this PR
           # (We can't delete reviews, but clearing the body removes the spam
           # while keeping inline code comments visible)

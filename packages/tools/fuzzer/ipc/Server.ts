@@ -28,6 +28,7 @@ const createApi = async (serverUrl: string, adminAuth: UserData) => {
 interface ServerConfig {
 	baseUrl: string;
 	baseDirectory: string;
+	useRunningServer: boolean;
 	adminAuth: UserData;
 }
 
@@ -39,7 +40,7 @@ export default class Server {
 	private api_: JoplinServerApi|null = null;
 	private serverUrl_: string;
 	private adminAuth_: UserData;
-	private server_: execa.ExecaChildProcess<string>;
+	private server_: execa.ExecaChildProcess<string>|null;
 	private baseDirectory_: string;
 
 	public constructor(config: ServerConfig) {
@@ -56,18 +57,22 @@ export default class Server {
 		}
 
 		const mainEntrypoint = join(serverDir, 'dist', 'app.js');
-		this.server_ = execa.node(mainEntrypoint, [
-			'--env', 'dev',
-		], {
-			env: {
-				JOPLIN_IS_TESTING: '1',
-			},
-			cwd: serverDir,
-			stdin: 'ignore', // No stdin
-			// For debugging:
-			stderr: process.stderr,
-			// stdout: process.stdout,
-		});
+		if (!config.useRunningServer) {
+			this.server_ = execa.node(mainEntrypoint, [
+				'--env', 'dev',
+			], {
+				env: {
+					JOPLIN_IS_TESTING: '1',
+				},
+				cwd: serverDir,
+				stdin: 'ignore', // No stdin
+				// For debugging:
+				stderr: process.stderr,
+				// stdout: process.stdout,
+			});
+		} else {
+			this.server_ = null;
+		}
 	}
 
 	private static assertCanUseSnapshots_() {
@@ -80,9 +85,11 @@ export default class Server {
 	}
 
 	public assertCanUseSnapshots() {
-		// For now, alias the static method. In the future, more checks that require
-		// a server instance may be added:
 		Server.assertCanUseSnapshots_();
+
+		if (!this.server_) {
+			throw new Error('Not supported: Creating snapshots using an external server instance.');
+		}
 	}
 
 	public static async fromSnapshot({
@@ -143,8 +150,12 @@ export default class Server {
 	}
 
 	public async close() {
-		this.server_.cancel();
-		logger.info('Closed the server.');
+		if (this.server_) {
+			this.server_.cancel();
+			logger.info('Closed the server.');
+		} else {
+			logger.info('Server not closed: Running using an external server.');
+		}
 	}
 }
 
