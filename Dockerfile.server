@@ -51,7 +51,12 @@ RUN sed --in-place '/onenote-converter/d' ./packages/lib/package.json
 
 RUN --mount=type=cache,target=/build/.yarn/cache --mount=type=cache,target=/build/.yarn/berry/cache\
     BUILD_SEQUENCIAL=1 yarn config set cacheFolder /build/.yarn/cache \
-    && yarn install --inline-builds
+    && yarn install --inline-builds \
+    # Running "yarn workspaces focus" removes dev dependencies and allows building smaller images.
+    # For it to work, the "postinstall" step needs to be disabled, since dev dependencies are used
+    # during the postinstall-triggered build step.
+    && sed --in-place 's/"postinstall": ".*"/"postinstall": ""/' ./package.json ./packages/*/package.json \
+    && yarn workspaces focus --production --all
 
 # =============================================================================
 # Final stage - we copy only the relevant files from the build stage and start

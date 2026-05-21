@@ -96,10 +96,11 @@ jobs:
           SSL_ESIGNER_CREDENTIAL_ID: ${{ secrets.SSL_ESIGNER_CREDENTIAL_ID }}
           SSL_ESIGNER_USER_TOTP: ${{ secrets.SSL_ESIGNER_USER_TOTP }}
           SIGN_APPLICATION: 1
-        # To ensure that the operations stop on failure, all commands
-        # should be on one line with "&&" in between.
+        # `yarn install` can fail randomly on CI when node-pre-gyp downloads
+        # prebuilt sqlite3 binaries from GitHub Releases - retry a few times.
         run: |
-          yarn install && cd packages/app-desktop && yarn dist
+          . "${env:GITHUB_WORKSPACE}/.github/scripts/build_windows.ps1"
+          Build-WindowsApp
 
       # Build and package the Windows app, without publishing it, just to
       # verify that the build process hasn't been broken.
@@ -111,7 +112,8 @@ jobs:
           SERVER_REPOSITORY: joplin/server
           SERVER_TAG_PREFIX: server
         run: |
-          yarn install && cd packages/app-desktop && yarn dist --publish=never
+          . "${env:GITHUB_WORKSPACE}/.github/scripts/build_windows.ps1"
+          Build-WindowsApp -DistArgs "--publish=never"
 
       - name: Publish Docker manifest
         if: runner.os == 'Linux'
@@ -216,3 +218,7 @@ jobs:
             echo 'Failed while checking the body response after request to /api/ping'
             exit 1;
           fi
+      
+      - name: Check sync
+        run: |
+          yarn syncFuzzer start --use-running-server --steps 5

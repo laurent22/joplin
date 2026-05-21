@@ -1,5 +1,11 @@
 # Joplin Desktop Changelog
 
+## [v3.6.14](https://github.com/laurent22/joplin/releases/tag/v3.6.14) - 2026-05-19T22:12:04Z
+
+- Fixed: Fix Markdown export folder paths with dot in parent path ([#15455](https://github.com/laurent22/joplin/issues/15455)) ([#15374](https://github.com/laurent22/joplin/issues/15374) by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Importing from OneNote: Fix importing `.zip` files containing `.onetoc2` files ([#15476](https://github.com/laurent22/joplin/issues/15476)) ([#15430](https://github.com/laurent22/joplin/issues/15430) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: In-editor rendering: Do not render empty inline HTML ([#15470](https://github.com/laurent22/joplin/issues/15470)) ([#15467](https://github.com/laurent22/joplin/issues/15467) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.6.13](https://github.com/laurent22/joplin/releases/tag/v3.6.13) - 2026-05-12T11:16:40Z
 
 - Improved: Front matter: Wrap long lines in the viewer ([#15356](https://github.com/laurent22/joplin/issues/15356)) ([#15328](https://github.com/laurent22/joplin/issues/15328))

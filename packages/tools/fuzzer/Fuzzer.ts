@@ -61,6 +61,7 @@ export interface FuzzerConfig {
 	setupActions: ActionSpec[];
 
 	serverPath: string;
+	useRunningServer: boolean;
 	isJoplinCloud: boolean;
 }
 
@@ -204,6 +205,7 @@ export default class Fuzzer {
 		return {
 			baseUrl: 'http://localhost:22300/',
 			baseDirectory: config.serverPath,
+			useRunningServer: config.useRunningServer,
 			adminAuth: {
 				email: 'admin@localhost',
 				password: process.env['FUZZER_SERVER_ADMIN_PASSWORD'] ?? 'admin',

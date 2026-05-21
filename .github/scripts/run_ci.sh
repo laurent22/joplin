@@ -112,7 +112,10 @@ echo "Rust $( rustc --version )"
 # =============================================================================
 
 cd "$ROOT_DIR"
-yarn install
+
+source "$(dirname "$0")/retry.sh"
+
+retry yarn install
 testResult=$?
 if [ $testResult -ne 0 ]; then
 	echo "Yarn installation failed. Search for 'exit code 1' in the log for more information."

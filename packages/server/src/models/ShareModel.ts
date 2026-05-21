@@ -128,9 +128,22 @@ export default class ShareModel extends BaseModel<Share> {
 		return this.db(this.tableName).select(this.defaultFields).whereIn('item_id', itemIds);
 	}
 
-	public async byItemAndRecursive(itemId: Uuid, recursive: boolean): Promise<Share | null> {
+	public async byItemAndRecursiveWithEnabledOwner(itemId: Uuid, recursive: boolean): Promise<Share | null> {
+		return this.db(this.tableName)
+			.select(this.selectFields(null, this.defaultFields, this.tableName))
+			.innerJoin('users', 'users.id', `${this.tableName}.owner_id`)
+			.innerJoin('user_items', 'user_items.user_id', `${this.tableName}.owner_id`)
+			.where(`${this.tableName}.item_id`, itemId)
+			.where(`${this.tableName}.recursive`, recursive ? 1 : 0)
+			.where('users.enabled', 1)
+			.where('user_items.item_id', itemId)
+			.first();
+	}
+
+	public async byUserItemAndRecursive(userId: Uuid, itemId: Uuid, recursive: boolean): Promise<Share | null> {
 		return this.db(this.tableName)
 			.select(this.defaultFields)
+			.where('owner_id', userId)
 			.where('item_id', itemId)
 			.where('recursive', recursive ? 1 : 0)
 			.first();
@@ -607,7 +620,10 @@ export default class ShareModel extends BaseModel<Share> {
 		const noteItem = await this.models().item().loadByJopId(owner.id, noteId);
 		if (!noteItem) throw new ErrorNotFound(`No such note: ${noteId}`);
 
-		const existingShare = await this.byItemAndRecursive(noteItem.id, recursive);
+		const existingShareForOwner = await this.byUserItemAndRecursive(owner.id, noteItem.id, recursive);
+		if (existingShareForOwner) return existingShareForOwner;
+
+		const existingShare = await this.byItemAndRecursiveWithEnabledOwner(noteItem.id, recursive);
 		if (existingShare) return existingShare;
 
 		const shareToSave: Share = {

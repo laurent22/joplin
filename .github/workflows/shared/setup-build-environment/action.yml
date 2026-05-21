@@ -22,23 +22,24 @@ runs:
         sudo sysctl -w net.link.generic.system.hwcksum_tx=0
         sudo sysctl -w net.link.generic.system.hwcksum_rx=0
 
-    # Silence apt-get update errors (for example when a module doesn't
-    # exist) since otherwise it will make the whole build fails, even though
-    # it might work without update. libsecret-1-dev is required for keytar -
-    # https://github.com/atom/node-keytar
+    # libsecret-1-dev is required for keytar - https://github.com/atom/node-keytar
+    # xvfb provides a virtual display on Linux, used for Playwright tests.
+    # The apt-get update is allowed to fail (some sources may be temporarily
+    # unreachable, especially on arm64) but the install is retried to absorb
+    # transient mirror failures.
 
     - name: Install Linux dependencies
       if: runner.os == 'Linux'
       shell: bash
       run: |
+        source "${GITHUB_WORKSPACE}/.github/scripts/retry.sh"
         sudo apt-get update || true
-        sudo apt-get install -y gettext
-        sudo apt-get install -y libsecret-1-dev
-        sudo apt-get install -y translate-toolkit
-        sudo apt-get install -y rsync
-        # Provides a virtual display on Linux. Used for Playwright integration
-        # testing.
-        sudo apt-get install -y xvfb
+        retry 5 15 sudo apt-get install -y \
+          gettext \
+          libsecret-1-dev \
+          translate-toolkit \
+          rsync \
+          xvfb
 
     - name: Install macOs dependencies
       if: runner.os == 'macOS'

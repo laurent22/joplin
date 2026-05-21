@@ -81,6 +81,7 @@ import VoiceTyping from '../../../services/voiceTyping/VoiceTyping';
 import useDebounced from '../../../utils/hooks/useDebounced';
 import { Second } from '@joplin/utils/time';
 import TextWrapCalculator from '../Notes/TextWrapCalculator';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
 
 const emptyArray: never[] = [];
@@ -1665,7 +1666,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					!note || !note.body.trim() ? null : (
 						<NoteBodyViewer
 							style={this.styles().noteBodyViewer}
-							paddingBottom={0}
+							paddingBottom={150}
 							noteBody={note.body}
 							noteMarkupLanguage={note.markup_language}
 							noteResources={this.state.noteResources}
@@ -1717,6 +1718,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					);
 				} else {
 					const editorStyle = this.styles().bodyTextInput;
+					const globalSearch = SearchEngine.instance().createQueryFromTerms(this.props.highlightedWords);
 
 					bodyComponent = <NoteEditor
 						ref={this.editorRef}
@@ -1726,7 +1728,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						initialText={note.body}
 						initialSelection={this.selection}
 						markupLanguage={this.state.note.markup_language}
-						globalSearch={this.props.searchQuery}
+						globalSearch={globalSearch}
 						onChange={this.onMarkdownEditorTextChange}
 						onSelectionChange={this.onEditorSelectionChange}
 						onUndoRedoDepthChange={this.onUndoRedoDepthChange}

@@ -449,6 +449,36 @@ describe('interop/InteropService_Exporter_Md', () => {
 		expect(await shim.fsDriver().exists(`${exportDir()}/${expectedPaths[1]}`)).toBe(true);
 	});
 
+	it('should handle folders that collide after sanitization when the export path contains a dot', async () => {
+		const exporter = new InteropService_Exporter_Md();
+		await exporter.init(`${exportDir()}/parent.with.dot/export`);
+
+		const { items, queue } = createExportItems();
+
+		const folder1 = await Folder.save({ title: 'folder:' });
+		const folder2 = await Folder.save({ title: 'folder?' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
+		queue(BaseModel.TYPE_FOLDER, folder1.id);
+		queue(BaseModel.TYPE_FOLDER, folder2.id);
+		queue(BaseModel.TYPE_NOTE, note1);
+		queue(BaseModel.TYPE_NOTE, note2);
+
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_FOLDER, items);
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, items);
+
+		await exporter.processItem(Folder.modelType(), folder1);
+		await exporter.processItem(Folder.modelType(), folder2);
+		await exporter.processItem(Note.modelType(), note1);
+		await exporter.processItem(Note.modelType(), note2);
+
+		expect(exporter.context().notePaths[note1.id]).toBe('folder_/note1.md');
+		expect(exporter.context().notePaths[note2.id]).toBe('folder_-1/note2.md');
+
+		expect(await shim.fsDriver().exists(`${exportDir()}/parent.with.dot/export/folder_/note1.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/parent.with.dot/export/folder_-1/note2.md`)).toBe(true);
+	});
+
 	it('should handle filenames that contain slashes', (async () => {
 		const folder = await Folder.save({ title: 'testing' });
 		const note = await Note.save({ title: 'mynote', parent_id: folder.id });

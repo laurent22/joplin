@@ -1119,6 +1119,8 @@ packages/editor/CodeMirror/extensions/rendering/replaceDividers.js
 packages/editor/CodeMirror/extensions/rendering/replaceFormatCharacters.js
 packages/editor/CodeMirror/extensions/rendering/replaceInlineHtml.test.js
 packages/editor/CodeMirror/extensions/rendering/replaceInlineHtml.js
+packages/editor/CodeMirror/extensions/rendering/replaceLinks.test.js
+packages/editor/CodeMirror/extensions/rendering/replaceLinks.js
 packages/editor/CodeMirror/extensions/rendering/types.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeBlockReplaceExtension.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.js

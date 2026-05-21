@@ -1,5 +1,5 @@
 import { setupDatabaseAndSynchronizer, db, sleep, switchClient, msleep, createNoteAndResource } from '../../testing/test-utils';
-import SearchEngine from './SearchEngine';
+import SearchEngine, { ComplexTerm } from './SearchEngine';
 import Note from '../../models/Note';
 import ItemChange from '../../models/ItemChange';
 import Setting from '../../models/Setting';
@@ -616,4 +616,18 @@ describe('services/SearchEngine', () => {
 			expect(rows.length).toBe(resourcesFound);
 		});
 
+	test('createQueryFromTerms returns the an empty string when terms is undefined or an empty array', () => {
+		expect(engine.createQueryFromTerms(undefined)).toBe('');
+		expect(engine.createQueryFromTerms([])).toBe('');
+	});
+
+	test('createQueryFromTerms joins string and ComplexTerm values into a single search string', () => {
+		const terms = [
+			'hello',
+			{ type: 'text', value: 'world', scriptType: 'en' },
+			'test',
+			{ type: 'regex', value: 'query*', scriptType: 'en' },
+		] as (ComplexTerm | string)[];
+		expect(engine.createQueryFromTerms(terms)).toBe('hello world test query*');
+	});
 });
