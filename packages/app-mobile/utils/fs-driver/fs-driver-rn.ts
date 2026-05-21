@@ -128,9 +128,9 @@ export default class FsDriverRN extends FsDriverBase {
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let output: any[] = [];
-		for (let i = 0; i < stats.length; i++) {
-			const stat = stats[i];
+		type RawStat = any;
+
+		const toRelativePath = (stat: RawStat) => {
 			let relativePath = isScoped ? stat.uri : stat.path;
 
 			// Workaround: Paths returned by RNFS.readDir can include a leading /private/, when this isn't included
@@ -144,6 +144,14 @@ export default class FsDriverRN extends FsDriverBase {
 			}
 
 			relativePath = relativePath.substring(path.length + 1);
+			return relativePath;
+		};
+
+		let output: RawStat[] = [];
+		for (let i = 0; i < stats.length; i++) {
+			const stat = stats[i];
+
+			const relativePath = toRelativePath(stat);
 			const standardStat = this.rnfsStatToStd_(stat, relativePath);
 			output.push(standardStat);
 
