@@ -12870,7 +12870,7 @@ __metadata:
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.130"
-    "@types/nodemailer": "npm:6.4.22"
+    "@types/nodemailer": "npm:6.4.23"
     "@types/qrcode": "npm:1.5.6"
     "@types/uuid": "npm:11.0.0"
     "@types/yargs": "npm:17.0.35"
@@ -18921,12 +18921,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/nodemailer@npm:6.4.22":
-  version: 6.4.22
-  resolution: "@types/nodemailer@npm:6.4.22"
+"@types/nodemailer@npm:6.4.23":
+  version: 6.4.23
+  resolution: "@types/nodemailer@npm:6.4.23"
   dependencies:
     "@types/node": "npm:*"
-  checksum: 10/c4929dbdd3d0befc1943c50aea7778e9dd5deead81fa7400d513e2a66482864a4ea4467b78de14ab7f8ca91e68b6576cb9fcc66d467be9fd8a88ae64dca133c6
+  checksum: 10/2cd9713e8795d43ba95e489afc1146e3b1b84c3dd3364ba8f19e8414662c35d3dfbde6235fdfbc05108304c46b71dd8dc5e553fed91433be6ab5b0168c4e1f38
   languageName: node
   linkType: hard
 
