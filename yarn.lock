@@ -48422,21 +48422,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prosemirror-transform@npm:1.11.0":
+"prosemirror-transform@npm:1.11.0, prosemirror-transform@npm:^1.0.0, prosemirror-transform@npm:^1.1.0, prosemirror-transform@npm:^1.10.2, prosemirror-transform@npm:^1.10.3, prosemirror-transform@npm:^1.7.3":
   version: 1.11.0
   resolution: "prosemirror-transform@npm:1.11.0"
   dependencies:
     prosemirror-model: "npm:^1.21.0"
   checksum: 10/d6d8754e7d8b2c9059cc856e3fd04d3c4376533cfa74143c112e1dec76fcdcce8c5a260b2d241702e5d4ae0d87632df7d474ce47ff3c1825b9fdd76235a35920
-  languageName: node
-  linkType: hard
-
-"prosemirror-transform@npm:^1.0.0, prosemirror-transform@npm:^1.1.0, prosemirror-transform@npm:^1.10.2, prosemirror-transform@npm:^1.10.3, prosemirror-transform@npm:^1.7.3":
-  version: 1.10.5
-  resolution: "prosemirror-transform@npm:1.10.5"
-  dependencies:
-    prosemirror-model: "npm:^1.21.0"
-  checksum: 10/958b738082e55c99590d504e1d82cbb3139fb7d8c0d241a538ac8f16f8325fdfb761bf629b3991219a6c17521d8793c383d2c50cb7b2e52d24ce557712409212
   languageName: node
   linkType: hard
 
