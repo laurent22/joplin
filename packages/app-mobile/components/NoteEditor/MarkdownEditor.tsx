@@ -28,10 +28,6 @@ function useCss(themeId: number): string {
 
 			body {
 				margin: 0;
-				/* The body should be at least as tall as the screen:
-				   - This allows the editor to focus when tapping anywhere in the body in an empty note.
-				   - This must be **at least** and not **exactly** 100vh to avoid scroll issues (see PR #15499) */
-				min-height: 100vh;
 				/* Prefer 100% -- 100vw shows an unnecessary horizontal scrollbar in Google Chrome (desktop). */
 				width: 100%;
 				box-sizing: border-box;
@@ -102,7 +98,7 @@ function useHtml(): string {
 				</style>
 			</head>
 			<body>
-				<div class="CodeMirror" style="height:100%;" autocapitalize="on"></div>
+				<div class="CodeMirror" style="min-height:100vh;" autocapitalize="on"></div>
 			</body>
 		</html>
 	`, []);
