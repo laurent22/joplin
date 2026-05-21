@@ -12817,7 +12817,7 @@ __metadata:
     "@types/json5": "npm:2.2.0"
     "@types/markdown-it": "npm:13.0.9"
     "@types/node": "npm:18.19.130"
-    abcjs: "npm:6.6.1"
+    abcjs: "npm:6.6.2"
     font-awesome-filetypes: "npm:2.1.0"
     fs-extra: "npm:11.3.3"
     highlight.js: "npm:11.11.1"
@@ -20552,10 +20552,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"abcjs@npm:6.6.1":
-  version: 6.6.1
-  resolution: "abcjs@npm:6.6.1"
-  checksum: 10/42547d1b851433941b5491b36e09859ac49a3e8c99710c5669db037a9a7754475484c75c42620ccbd06cb30554780d4e4730662ae16438549a0e79c7e0411875
+"abcjs@npm:6.6.2":
+  version: 6.6.2
+  resolution: "abcjs@npm:6.6.2"
+  checksum: 10/f026bbbf38fb14bb8d711cb5222a2e6f2380dff9de3cc6a094135dd8a6612190a67fc1640e244309067d0379675ca48988c850c1fb0a0226ba20a2fbd5c549b8
   languageName: node
   linkType: hard
 
