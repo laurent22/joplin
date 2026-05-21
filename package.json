@@ -103,7 +103,7 @@
   },
   "packageManager": "yarn@4.12.0",
   "resolutions": {
-    "@codemirror/view": "6.39.9",
+    "@codemirror/view": "6.43.0",
     "@codemirror/state": "6.5.4",
     "react-native-camera@4.2.1": "patch:react-native-camera@npm%3A4.2.1#./.yarn/patches/react-native-camera-npm-4.2.1-24b2600a7e.patch",
     "eslint": "patch:eslint@8.57.1#./.yarn/patches/eslint-npm-8.39.0-d92bace04d.patch",
