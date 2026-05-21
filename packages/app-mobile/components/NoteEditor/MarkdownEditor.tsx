@@ -28,7 +28,6 @@ function useCss(themeId: number): string {
 
 			body {
 				margin: 0;
-				height: 100vh;
 				/* Prefer 100% -- 100vw shows an unnecessary horizontal scrollbar in Google Chrome (desktop). */
 				width: 100%;
 				box-sizing: border-box;
