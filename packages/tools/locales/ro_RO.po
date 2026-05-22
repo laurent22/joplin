@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && n%100<=19) ? 1 : "
 "2);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -1535,7 +1535,7 @@ msgstr "data creării"
 
 #: packages/lib/Synchronizer.ts:201
 msgid "Created local items: %d."
-msgstr "Elemente locale create: %d."
+msgstr "Elemente create local: %d."
 
 #: packages/lib/services/ReportService.ts:322
 msgid "Created locally"
@@ -1543,7 +1543,7 @@ msgstr "Creat local"
 
 #: packages/lib/Synchronizer.ts:203
 msgid "Created remote items: %d."
-msgstr "Elemente la distanță create: %d."
+msgstr "Elemente create la distanță: %d."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:140
 msgid "Created: "
@@ -1551,7 +1551,7 @@ msgstr "Creat: "
 
 #: packages/app-cli/app/command-import.ts:54 packages/app-desktop/gui/ImportScreen.tsx:90
 msgid "Created: %d."
-msgstr "Creat: %d."
+msgstr "Create: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:136
 #: packages/app-mobile/components/screens/Note/Note.tsx:1216
@@ -2691,7 +2691,7 @@ msgstr "Elemente preluate: %d/%d."
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:52
 #: packages/app-mobile/components/side-menu-content.tsx:648
 msgid "Fetching resources: %d/%d"
-msgstr "Încărcarea resurselor: %d/%d"
+msgstr "Se preiau resursele: %d/%d"
 
 #: packages/lib/services/interop/Module.ts:61
 msgid "File"
@@ -6973,11 +6973,11 @@ msgstr "data actualizării"
 
 #: packages/lib/Synchronizer.ts:202
 msgid "Updated local items: %d."
-msgstr "Elemente locale actualizate: %d."
+msgstr "Elemente actualizate local: %d."
 
 #: packages/lib/Synchronizer.ts:204
 msgid "Updated remote items: %d."
-msgstr "Elemente la distanță actualizate: %d."
+msgstr "Elemente actualizate la distanță: %d."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:140
 msgid "Updated: "
@@ -6985,7 +6985,7 @@ msgstr "Actualizat: "
 
 #: packages/app-cli/app/command-import.ts:55 packages/app-desktop/gui/ImportScreen.tsx:91
 msgid "Updated: %d."
-msgstr "Actualizat: %d."
+msgstr "Actualizate: %d."
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1217
 msgid "Updated: %s"
