@@ -46,7 +46,7 @@
     "mustache": "4.2.0",
     "node-cron": "4.2.1",
     "nodemailer": "6.10.1",
-    "nodemon": "3.1.13",
+    "nodemon": "3.1.14",
     "otplib": "12.0.1",
     "pg": "8.17.2",
     "pretty-bytes": "5.6.0",
