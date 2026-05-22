@@ -27,7 +27,6 @@ jobs:
           sudo rm -rf /opt/hostedtoolcache/CodeQL || true
           sudo rm -rf /usr/local/share/boost || true
           sudo rm -rf /usr/local/share/powershell || true
-          sudo rm -rf /usr/local/lib/node_modules || true
           docker system prune -af || true
           df -h /
 
