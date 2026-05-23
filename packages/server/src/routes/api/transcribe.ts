@@ -70,8 +70,13 @@ router.post('api/transcribe', async (_path: SubPath, ctx: AppContext) => {
 	const request = await formParse(ctx.req);
 	if (!request.files.file) throw new ErrorBadRequest('No file provided. Use a multipart/form request with a \'file\' property.');
 
+	const uploadedFile = request.files.file;
+	const maxFileSize = 25 * 1024 * 1024; // 25MB
+	if (uploadedFile.size > maxFileSize) throw new ErrorBadRequest('File size exceeds the maximum allowed size of 25MB.');
+	if (!uploadedFile.mimetype || !/^audio\//.test(uploadedFile.mimetype)) throw new ErrorBadRequest('Invalid file type. Only audio files are allowed.');
+
 	const form = new FormData();
-	const file = await readFile(request.files.file.filepath);
+	const file = await readFile(uploadedFile.filepath);
 	const blob = new Blob([file]);
 	form.append('file', blob, 'file');
 
@@ -102,7 +107,7 @@ router.post('api/transcribe', async (_path: SubPath, ctx: AppContext) => {
 		}
 		throw error;
 	} finally {
-		await safeRemove(request.files.file.filepath);
+		await safeRemove(uploadedFile.filepath);
 	}
 });
 
