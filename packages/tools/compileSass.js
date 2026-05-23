@@ -1,6 +1,6 @@
-const sass = require('sass');
-const fs = require('fs-extra');
-const { basename } = require('path');
+import sass from 'sass';
+import fs from 'fs-extra';
+import { basename } from 'path';
 
 
 // module.exports = async function compileSass(inputPaths, outputPath) {
@@ -28,7 +28,7 @@ const { basename } = require('path');
 // 	console.info(`Generated ${outputPath}`);
 // };
 
-module.exports = async function compileSass(inputPath, outputPath) {
+export default async function compileSass(inputPath, outputPath) {
 	// The SASS doc claims that compile is twice as fast as compileAsync, so if speed
 	// turns out to be an issue we could use that instead. The advantage of async is
 	// that we can run compilation of each file in parallel (and running other async
@@ -53,4 +53,4 @@ module.exports = async function compileSass(inputPath, outputPath) {
 	]);
 
 	console.info(`Generated ${outputPath}`);
-};
+}

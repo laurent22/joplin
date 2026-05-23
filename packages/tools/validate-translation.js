@@ -4,16 +4,19 @@
 //
 // sudo apt install gettext
 
+import fs from 'fs-extra';
+import { execCommand } from './tool-utils.js';
+
 const rootDir = `${__dirname}/../..`;
-const fs = require('fs-extra');
 const localesDir = `${rootDir}/packages/tools/locales`;
-const { execCommand } = require('./tool-utils.js');
 
 async function main() {
 	const files = fs.readdirSync(localesDir);
 	let hasErrors = false;
+
 	for (const file of files) {
 		if (!file.endsWith('.po')) continue;
+
 		const fullPath = `${localesDir}/${file}`;
 
 		try {

@@ -1,5 +1,5 @@
-const { execCommandVerbose, rootDir, gitPullTry, setPackagePrivateField } = require('./tool-utils.js');
-const { yarnVersionPatch } = require('@joplin/utils/version');
+import { execCommandVerbose, rootDir, gitPullTry, setPackagePrivateField } from './tool-utils.js';
+import { yarnVersionPatch } from '@joplin/utils/version';
 
 const genDir = `${rootDir}/packages/generator-joplin`;
 
