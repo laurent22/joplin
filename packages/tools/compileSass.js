@@ -28,7 +28,7 @@ import { basename } from 'path';
 // 	console.info(`Generated ${outputPath}`);
 // };
 
-export default async function compileSass(inputPath, outputPath) {
+module.exports = async function compileSass(inputPath, outputPath) {
 	// The SASS doc claims that compile is twice as fast as compileAsync, so if speed
 	// turns out to be an issue we could use that instead. The advantage of async is
 	// that we can run compilation of each file in parallel (and running other async
@@ -53,4 +53,4 @@ export default async function compileSass(inputPath, outputPath) {
 	]);
 
 	console.info(`Generated ${outputPath}`);
-}
+};
