@@ -118,6 +118,14 @@ export default class PluginService extends BaseService {
 		this.store_ = store;
 		this.runner_ = runner;
 		this.platformImplementation_ = platformImplementation;
+		// Reset transient state so re-initialization (e.g. between mobile tests that share
+		// the PluginService singleton) gives a clean slate. Without this, a late callback
+		// from an in-flight install in the previous test can re-populate `plugins_` and
+		// dispatch into the new test's components, triggering "already exists" errors and
+		// "not wrapped in act(...)" warnings.
+		this.pluginsChangeListeners_ = [];
+		this.plugins_ = {};
+		this.startedPlugins_ = {};
 	}
 
 	public get plugins(): Plugins {
