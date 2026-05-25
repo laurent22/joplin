@@ -407,12 +407,13 @@ export default class PluginService extends BaseService {
 			// On mobile, plugin scripts are loaded directly by the WebView
 			// from the filesystem, so we don't need to read them here.
 			const indexPath = `${distPath}/index.js`;
-			if (shim.mobilePlatform()) {
+			const loadMainScript = !shim.mobilePlatform() || shim.mobilePlatform() === 'web';
+			if (loadMainScript) {
 				if (!(await fsDriver.exists(indexPath))) {
 					throw new Error(`Plugin bundle not found at: ${indexPath}`);
 				}
 			}
-			const scriptText = (manifestOnly || shim.mobilePlatform()) ? '' : await fsDriver.readFile(indexPath);
+			const scriptText = (manifestOnly || !loadMainScript) ? '' : await fsDriver.readFile(indexPath);
 			const pluginId = makePluginId(filename(path));
 
 			return this.loadPlugin(distPath, manifestText, scriptText, pluginId);
