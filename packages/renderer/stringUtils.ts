@@ -1,14 +1,28 @@
-const Entities = require('html-entities').AllHtmlEntities;
-const htmlentities = new Entities().encode;
+import { AllHtmlEntities } from 'html-entities';
 
-function pregQuote(str, delimiter = '') {
+const htmlentities = new AllHtmlEntities().encode;
+
+interface RegexKeyword {
+	type: 'regex';
+	valueRegex: string;
+}
+
+interface StringKeyword {
+	type?: 'string';
+	value: string;
+}
+
+export type Keyword = string | RegexKeyword | StringKeyword;
+
+function pregQuote(str: string, delimiter = '') {
 	return (`${str}`).replace(new RegExp(`[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\${delimiter || ''}-]`, 'g'), '\\$&');
 }
 
-function replaceRegexDiacritics(regexString) {
+function replaceRegexDiacritics(regexString: string) {
 	if (!regexString) return '';
 
-	const diacriticReplacements = {
+	// cSpell:disable
+	const diacriticReplacements: Record<string, string> = {
 		a: '[aàáâãäåāą]',
 		A: '[AÀÁÂÃÄÅĀĄ]',
 		c: '[cçćč]',
@@ -38,6 +52,7 @@ function replaceRegexDiacritics(regexString) {
 		z: '[zžżź]',
 		Z: '[ZŽŻŹ]',
 	};
+	// cSpell:enable
 
 	let output = '';
 	for (let i = 0; i < regexString.length; i++) {
@@ -56,19 +71,19 @@ function replaceRegexDiacritics(regexString) {
 // keywords can either be a list of strings, or a list of objects with the format:
 // { value: 'actualkeyword', type: 'regex/string' }
 // The function surrounds the keywords wherever they are, even within other words.
-function surroundKeywords(keywords, text, prefix, suffix, options = null) {
+export function surroundKeywords(keywords: Keyword[], text: string, prefix: string, suffix: string, options: { escapeHtml?: boolean } | null = null) {
 	options = { escapeHtml: false, ...options };
 
 	if (!keywords.length) return text;
 
-	function escapeHtml(s) {
+	function escapeHtml(s: string) {
 		if (!options.escapeHtml) return s;
 		return htmlentities(s);
 	}
 
 	let regexString = keywords
 		.map(k => {
-			if (k.type === 'regex') {
+			if (typeof k !== 'string' && k.type === 'regex') {
 				return escapeHtml(replaceRegexDiacritics(k.valueRegex));
 			} else {
 				const value = typeof k === 'string' ? k : k.value;
@@ -80,5 +95,3 @@ function surroundKeywords(keywords, text, prefix, suffix, options = null) {
 	const re = new RegExp(regexString, 'gi');
 	return text.replace(re, `${prefix}$1${suffix}`);
 }
-
-module.exports = { surroundKeywords };
