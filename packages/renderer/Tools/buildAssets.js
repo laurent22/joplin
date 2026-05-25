@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 
-function dirname(path: string) {
+function dirname(path) {
 	if (!path) throw new Error('Path is empty');
 	const s = path.split(/\/|\\/);
 	s.pop();
@@ -10,7 +10,7 @@ function dirname(path: string) {
 const rootDir = dirname(__dirname);
 const assetsDir = `${rootDir}/assets`;
 
-async function copyFile(source: string, dest: string) {
+async function copyFile(source, dest) {
 	const fullDest = `${assetsDir}/${dest}`;
 	const dir = dirname(fullDest);
 	await fs.mkdirp(dir);
