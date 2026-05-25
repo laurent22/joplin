@@ -1,7 +1,7 @@
 import { afterAllTests, beforeAllDb, createdDbPath, models } from './testUtils';
 import populateDatabase from '../../tools/debug/populateDatabase';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
+import { shimInit } from '@joplin/lib/shim-init-node';
 import * as nodeSqlite from 'sqlite3';
 
 let logger_: Logger = null;

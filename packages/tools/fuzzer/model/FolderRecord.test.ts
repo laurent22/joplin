@@ -2,7 +2,7 @@ import FolderRecord from './FolderRecord';
 import Folder from '@joplin/lib/models/Folder';
 import { afterAllCleanUp, afterEachCleanUp, setupDatabase } from '@joplin/lib/testing/test-utils';
 import * as sqlite3 from 'sqlite3';
-const { shimInit } = require('@joplin/lib/shim-init-node');
+import { shimInit } from '@joplin/lib/shim-init-node';
 
 describe('FolderRecord', () => {
 	beforeAll(() => {

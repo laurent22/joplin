@@ -3,7 +3,7 @@ import { setNotesSortOrder } from './notesSortOrderUtils';
 import Setting from '../../models/Setting';
 import { defaultState, serializeNotesParent, State } from '../../reducer';
 import eventManager from '../../eventManager';
-const { shimInit } = require('../../shim-init-node.js');
+import { shimInit } from '../../shim-init-node';
 const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids');
 
 const folderId1 = 'aa012345678901234567890123456789';

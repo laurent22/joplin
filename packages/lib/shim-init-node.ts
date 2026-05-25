@@ -105,19 +105,20 @@ function setupProxySettings(options: ProxySettings) {
 	proxySettings.proxyUrl = options.proxyUrl;
 }
 
+// All fields are optional because shimInit fills in null defaults for each
 export interface ShimInitOptions {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sharp module type comes from the external library, not imported here
-	sharp: any;
+	sharp?: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- keytar module type comes from the external library
-	keytar: any;
+	keytar?: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- React module is assigned to shim.setReact which is `typeof React`; lib doesn't import React types
-	React: any;
-	appVersion: ()=> string;
+	React?: any;
+	appVersion?: ()=> string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron bridge concrete type lives in app-desktop; see shim.electronBridge_
-	electronBridge: any;
+	electronBridge?: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- node sqlite driver shape is per-platform; see shim.nodeSqlite_
-	nodeSqlite: any;
-	pdfJs: PdfJs;
+	nodeSqlite?: any;
+	pdfJs?: PdfJs;
 	isAppleSilicon?: ()=> boolean;
 }
 
@@ -947,4 +948,4 @@ function shimInit(options: ShimInitOptions = null) {
 	};
 }
 
-module.exports = { shimInit, setupProxySettings };
+export { shimInit, setupProxySettings };
