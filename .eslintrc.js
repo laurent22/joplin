@@ -262,6 +262,13 @@ module.exports = {
 					},
 				}],
 				'@typescript-eslint/no-floating-promises': ['error'],
+
+				// Nudge contributors toward typed `import` over `const X = require(...)`.
+				// Many existing usages remain for valid reasons (untyped libs, vendored
+				// modules, lazy loading, bundling constraints) — warn-only keeps CI green
+				// (`yarn linter-ci` runs with `--quiet`) while surfacing new violations
+				// in the editor.
+				'@typescript-eslint/no-require-imports': ['warn'],
 				'@typescript-eslint/naming-convention': ['error',
 					// Naming conventions over the codebase is very inconsistent
 					// unfortunately and fixing it would be way too much work.
