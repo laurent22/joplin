@@ -1,6 +1,6 @@
-const gulp = require('gulp');
-const execa = require('execa');
-const { stdout } = require('process');
+import { task } from 'gulp';
+import execa from 'execa';
+import { stdout } from 'process';
 
 const execCommand = async (executableName, args, options = null) => {
 	options = {
@@ -68,5 +68,5 @@ const tasks = {
 };
 
 for (const taskName in tasks) {
-	gulp.task(taskName, tasks[taskName].fn);
+	task(taskName, tasks[taskName].fn);
 }

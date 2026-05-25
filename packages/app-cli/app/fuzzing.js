@@ -1,13 +1,13 @@
 'use strict';
 
-const time = require('@joplin/lib/time').default;
-const Logger = require('@joplin/utils/Logger').default;
-const Resource = require('@joplin/lib/models/Resource').default;
-const { dirname } = require('@joplin/lib/path-utils');
-const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
-const lodash = require('lodash');
-const exec = require('child_process').exec;
-const fs = require('fs-extra');
+import time from '@joplin/lib/time';
+import Logger from '@joplin/utils/Logger';
+import Resource from '@joplin/lib/models/Resource';
+import { dirname } from '@joplin/lib/path-utils';
+import FsDriverNode from '@joplin/lib/fs-driver-node';
+import { mean } from 'lodash';
+import { exec } from 'child_process';
+import { remove } from 'fs-extra';
 
 const baseDir = `${dirname(__dirname)}/tests/fuzzing`;
 const syncDir = `${baseDir}/sync`;
@@ -34,7 +34,7 @@ async function createClients() {
 	const promises = [];
 	for (let clientId = 0; clientId < 2; clientId++) {
 		const client = createClient(clientId);
-		promises.push(fs.remove(client.profileDir));
+		promises.push(remove(client.profileDir));
 		promises.push(
 			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 			execCommand(client, 'config sync.target 2').then(() => {
@@ -2203,7 +2203,7 @@ async function execRandomCommand(client) {
 }
 
 function averageSyncDuration() {
-	return lodash.mean(syncDurations);
+	return mean(syncDurations);
 }
 
 function randomNextCheckTime() {
@@ -2310,7 +2310,7 @@ async function compareClientItems(clientItems) {
 }
 
 async function main() {
-	await fs.remove(syncDir);
+	await remove(syncDir);
 
 	const clients = await createClients();
 	let clientId = 0;

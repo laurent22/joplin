@@ -1,6 +1,6 @@
-const { wrap } = require('@joplin/lib/string-utils.js');
-const Setting = require('@joplin/lib/models/Setting').default;
-const { _ } = require('@joplin/lib/locale');
+import { wrap } from '@joplin/lib/string-utils.js';
+import Setting from '@joplin/lib/models/Setting';
+import { _ } from '@joplin/lib/locale';
 
 const MAX_WIDTH = 78;
 const INDENT = '    ';
@@ -101,4 +101,4 @@ function getOptionColWidth(options) {
 	return output;
 }
 
-module.exports = { renderCommandHelp };
+export default { renderCommandHelp };

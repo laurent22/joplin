@@ -1,8 +1,8 @@
-const BaseCommand = require('./base-command').default;
-const { _ } = require('@joplin/lib/locale');
-const Setting = require('@joplin/lib/models/Setting').default;
-const Logger = require('@joplin/utils/Logger').default;
-const shim = require('@joplin/lib/shim').default;
+import BaseCommand from './base-command';
+import { _ } from '@joplin/lib/locale';
+import Setting from '@joplin/lib/models/Setting';
+import Logger from '@joplin/utils/Logger';
+import shim from '@joplin/lib/shim';
 
 class Command extends BaseCommand {
 
@@ -67,4 +67,4 @@ class Command extends BaseCommand {
 
 }
 
-module.exports = Command;
+export default Command;

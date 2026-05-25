@@ -1,4 +1,4 @@
-const TextWidget = require('tkwidgets/TextWidget.js');
+import TextWidget from 'tkwidgets/TextWidget.js';
 
 class ConsoleWidget extends TextWidget {
 	constructor() {
@@ -53,4 +53,4 @@ class ConsoleWidget extends TextWidget {
 	}
 }
 
-module.exports = ConsoleWidget;
+export default ConsoleWidget;

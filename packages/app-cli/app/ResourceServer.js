@@ -1,9 +1,9 @@
-const Logger = require('@joplin/utils/Logger').default;
-const { findAvailablePort } = require('@joplin/lib/net-utils');
+import Logger from '@joplin/utils/Logger';
+import { findAvailablePort } from '@joplin/lib/net-utils';
 
-const http = require('http');
-const urlParser = require('url');
-const enableServerDestroy = require('server-destroy');
+import { createServer } from 'http';
+import { parse } from 'url';
+import enableServerDestroy from 'server-destroy';
 
 class ResourceServer {
 	constructor() {
@@ -42,7 +42,7 @@ class ResourceServer {
 			return;
 		}
 
-		this.server_ = http.createServer();
+		this.server_ = createServer();
 
 		this.server_.on('request', async (request, response) => {
 			const writeResponse = message => {
@@ -50,7 +50,7 @@ class ResourceServer {
 				response.end();
 			};
 
-			const url = urlParser.parse(request.url, true);
+			const url = parse(request.url, true);
 			let resourceId = url.pathname.split('/');
 			if (resourceId.length < 2) {
 				writeResponse(`Error: could not get resource ID from path name: ${url.pathname}`);
@@ -90,4 +90,4 @@ class ResourceServer {
 	}
 }
 
-module.exports = ResourceServer;
+export default ResourceServer;

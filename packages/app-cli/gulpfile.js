@@ -1,23 +1,23 @@
-const gulp = require('gulp');
-const fs = require('fs-extra');
-const utils = require('@joplin/tools/gulp/utils');
+import gulp, { task, series } from 'gulp';
+import { chmodSync, mkdirp } from 'fs-extra';
+import { copyDir, copyFile, setPackagePrivateField, registerGulpTasks } from '@joplin/tools/gulp/utils';
 
 const tasks = {};
 
 tasks.prepareBuild = {
 	fn: async () => {
 		const buildDir = `${__dirname}/build`;
-		await utils.copyDir(`${__dirname}/app`, buildDir, {
+		await copyDir(`${__dirname}/app`, buildDir, {
 			excluded: ['node_modules'],
 		});
 
-		await utils.copyFile(`${__dirname}/package.json`, `${buildDir}/package.json`);
-		await utils.setPackagePrivateField(`${buildDir}/package.json`, false);
+		await copyFile(`${__dirname}/package.json`, `${buildDir}/package.json`);
+		await setPackagePrivateField(`${buildDir}/package.json`, false);
 
 		// await utils.copyFile(`${__dirname}/package-lock.json`, `${buildDir}/package-lock.json`);
-		await utils.copyFile(`${__dirname}/gulpfile.js`, `${buildDir}/gulpfile.js`);
+		await copyFile(`${__dirname}/gulpfile.js`, `${buildDir}/gulpfile.js`);
 
-		fs.chmodSync(`${buildDir}/main.js`, 0o755);
+		chmodSync(`${buildDir}/main.js`, 0o755);
 	},
 };
 
@@ -25,7 +25,7 @@ tasks.prepareTestBuild = {
 	fn: async () => {
 		const testBuildDir = `${__dirname}/tests-build`;
 
-		await utils.copyDir(`${__dirname}/tests`, testBuildDir, {
+		await copyDir(`${__dirname}/tests`, testBuildDir, {
 			excluded: [
 				'lib/',
 				'locales/',
@@ -35,13 +35,13 @@ tasks.prepareTestBuild = {
 			],
 		});
 
-		await fs.mkdirp(`${testBuildDir}/data`);
+		await mkdirp(`${testBuildDir}/data`);
 	},
 };
 
-utils.registerGulpTasks(gulp, tasks);
+registerGulpTasks(gulp, tasks);
 
 
-gulp.task('build', gulp.series([
+task('build', series([
 	'prepareBuild',
 ]));

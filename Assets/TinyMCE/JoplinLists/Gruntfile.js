@@ -1,16 +1,16 @@
-const { CheckerPlugin } = require('awesome-typescript-loader');
-const LiveReloadPlugin = require('webpack-livereload-plugin');
-const path = require('path');
-const swag = require('@ephox/swag');
+import { CheckerPlugin } from 'awesome-typescript-loader';
+import LiveReloadPlugin from 'webpack-livereload-plugin';
+import { resolve as _resolve, basename, dirname } from 'path';
+import { onwarn as _onwarn, nodeResolve, remapImports } from '@ephox/swag';
 
-module.exports = function(grunt) {
+export default function(grunt) {
 	const packageData = grunt.file.readJSON('package.json');
 	const BUILD_VERSION = `${packageData.version}-${process.env.BUILD_NUMBER ? process.env.BUILD_NUMBER : '0'}`;
 	const libPluginPath = 'lib/Main.js';
 	const scratchPluginPath = 'scratch/compiled/joplinLists.js';
 	const scratchPluginMinPath = 'scratch/compiled/joplinLists.min.js';
-	const tsDemoSourceFile = path.resolve('src/demo/ts/Demo.ts');
-	const jsDemoDestFile = path.resolve('scratch/compiled/demo.js');
+	const tsDemoSourceFile = _resolve('src/demo/ts/Demo.ts');
+	const jsDemoDestFile = _resolve('scratch/compiled/demo.js');
 
 	grunt.initConfig({
 		pkg: packageData,
@@ -56,13 +56,13 @@ module.exports = function(grunt) {
 					'tinymce/core/api/dom/DomQuery': 'tinymce.dom.DomQuery',
 				},
 				format: 'iife',
-				onwarn: swag.onwarn,
+				onwarn: _onwarn,
 				plugins: [
-					swag.nodeResolve({
+					nodeResolve({
 						basedir: __dirname,
 						prefixes: {},
 					}),
-					swag.remapImports(),
+					remapImports(),
 				],
 			},
 			plugin: {
@@ -169,8 +169,8 @@ module.exports = function(grunt) {
 				plugins: [new LiveReloadPlugin(), new CheckerPlugin()],
 
 				output: {
-					filename: path.basename(jsDemoDestFile),
-					path: path.dirname(jsDemoDestFile),
+					filename: basename(jsDemoDestFile),
+					path: dirname(jsDemoDestFile),
 				},
 			},
 		},

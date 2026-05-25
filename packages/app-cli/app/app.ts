@@ -19,8 +19,8 @@ import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 
 type FolderOrNoteType = ModelType.Note | ModelType.Folder | 'folderOrNote';
 import initializeCommandService from './utils/initializeCommandService';
-const { cliUtils } = require('./cli-utils.js');
-const Cache = require('@joplin/lib/Cache');
+import { cliUtils } from './cli-utils.js';
+import Cache from '@joplin/lib/Cache';
 
 class Application extends BaseApplication {
 

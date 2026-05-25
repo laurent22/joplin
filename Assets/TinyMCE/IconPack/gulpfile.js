@@ -1,27 +1,27 @@
-const iconPackager = require('@ephox/oxide-icons-tools').iconPackager;
-const clean = require('gulp-clean');
-const gulp = require('gulp');
-const fs = require('fs');
+import { iconPackager } from '@ephox/oxide-icons-tools';
+import clean from 'gulp-clean';
+import { task, src, dest, series } from 'gulp';
+import { readFileSync, copyFileSync } from 'fs';
 
-gulp.task('icon-packager', function() {
-	const contents = fs.readFileSync('package.json');
+task('icon-packager', function() {
+	const contents = readFileSync('package.json');
 	const name = JSON.parse(contents).iconPackName;
 
-	return gulp.src('src/svg/**/*.svg')
+	return src('src/svg/**/*.svg')
 		.pipe(iconPackager({ name }))
-		.pipe(gulp.dest('dist'));
+		.pipe(dest('dist'));
 });
 
-gulp.task('deploy', function() {
-	fs.copyFileSync(`${__dirname}/dist/icons/Joplin/icons.js`, `${__dirname}/../../../packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/icons.js`);
+task('deploy', function() {
+	copyFileSync(`${__dirname}/dist/icons/Joplin/icons.js`, `${__dirname}/../../../packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/icons.js`);
 	return Promise.resolve();
 });
 
-gulp.task('clean', function() {
-	return gulp.src('./dist', {
+task('clean', function() {
+	return src('./dist', {
 		read: false,
 		allowEmpty: true,
 	}).pipe(clean());
 });
 
-gulp.task('default', gulp.series('clean', 'icon-packager', 'deploy'));
+task('default', series('clean', 'icon-packager', 'deploy'));

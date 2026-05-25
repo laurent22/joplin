@@ -1,8 +1,8 @@
-const BaseCommand = require('./base-command').default;
-const { _ } = require('@joplin/lib/locale');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const uuid = require('@joplin/lib/uuid').default;
+import BaseCommand from './base-command';
+import { _ } from '@joplin/lib/locale';
+import BaseModel from '@joplin/lib/BaseModel';
+import Folder from '@joplin/lib/models/Folder';
+import uuid from '@joplin/lib/uuid';
 
 class Command extends BaseCommand {
 	usage() {
@@ -47,4 +47,4 @@ class Command extends BaseCommand {
 	}
 }
 
-module.exports = Command;
+export default Command;

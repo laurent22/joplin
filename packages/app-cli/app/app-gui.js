@@ -1,41 +1,41 @@
-const Logger = require('@joplin/utils/Logger').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const BaseItem = require('@joplin/lib/models/BaseItem').default;
-const Tag = require('@joplin/lib/models/Tag').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Resource = require('@joplin/lib/models/Resource').default;
-const Setting = require('@joplin/lib/models/Setting').default;
-const reducer = require('@joplin/lib/reducer').default;
-const { defaultState } = require('@joplin/lib/reducer');
-const { splitCommandString } = require('@joplin/utils');
-const { reg } = require('@joplin/lib/registry.js');
-const { _ } = require('@joplin/lib/locale');
-const shim = require('@joplin/lib/shim').default;
-const Entities = require('html-entities').AllHtmlEntities;
+import Logger from '@joplin/utils/Logger';
+import Folder from '@joplin/lib/models/Folder';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import Tag from '@joplin/lib/models/Tag';
+import BaseModel from '@joplin/lib/BaseModel';
+import Note from '@joplin/lib/models/Note';
+import Resource from '@joplin/lib/models/Resource';
+import Setting from '@joplin/lib/models/Setting';
+import reducer from '@joplin/lib/reducer';
+import { defaultState } from '@joplin/lib/reducer';
+import { splitCommandString } from '@joplin/utils';
+import { reg } from '@joplin/lib/registry.js';
+import { _ } from '@joplin/lib/locale';
+import shim from '@joplin/lib/shim';
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 
-const chalk = require('chalk');
-const tk = require('terminal-kit');
-const TermWrapper = require('tkwidgets/framework/TermWrapper.js');
-const Renderer = require('tkwidgets/framework/Renderer.js');
-const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker').default;
+import { cyan, blue } from 'chalk';
+import { terminal } from 'terminal-kit';
+import TermWrapper from 'tkwidgets/framework/TermWrapper.js';
+import Renderer from 'tkwidgets/framework/Renderer.js';
+import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 
-const BaseWidget = require('tkwidgets/BaseWidget.js');
-const TextWidget = require('tkwidgets/TextWidget.js');
-const HLayoutWidget = require('tkwidgets/HLayoutWidget.js');
-const VLayoutWidget = require('tkwidgets/VLayoutWidget.js');
-const ReduxRootWidget = require('tkwidgets/ReduxRootWidget.js');
-const WindowWidget = require('tkwidgets/WindowWidget.js');
+import { setLogger as _setLogger } from 'tkwidgets/BaseWidget.js';
+import TextWidget from 'tkwidgets/TextWidget.js';
+import HLayoutWidget from 'tkwidgets/HLayoutWidget.js';
+import VLayoutWidget from 'tkwidgets/VLayoutWidget.js';
+import ReduxRootWidget from 'tkwidgets/ReduxRootWidget.js';
+import WindowWidget from 'tkwidgets/WindowWidget.js';
 
-const NoteWidget = require('./gui/NoteWidget.js');
-const ResourceServer = require('./ResourceServer.js');
-const NoteMetadataWidget = require('./gui/NoteMetadataWidget.js');
-const FolderListWidget = require('./gui/FolderListWidget').default;
-const NoteListWidget = require('./gui/NoteListWidget.js');
-const StatusBarWidget = require('./gui/StatusBarWidget').default;
-const ConsoleWidget = require('./gui/ConsoleWidget.js');
-const LinkSelector = require('./LinkSelector.js').default;
+import NoteWidget from './gui/NoteWidget.js';
+import ResourceServer from './ResourceServer.js';
+import NoteMetadataWidget from './gui/NoteMetadataWidget.js';
+import FolderListWidget from './gui/FolderListWidget';
+import NoteListWidget from './gui/NoteListWidget.js';
+import StatusBarWidget from './gui/StatusBarWidget';
+import ConsoleWidget from './gui/ConsoleWidget.js';
+import LinkSelector from './LinkSelector.js';
 
 
 class AppGui {
@@ -44,9 +44,9 @@ class AppGui {
 			this.app_ = app;
 			this.store_ = store;
 
-			BaseWidget.setLogger(app.logger());
+			_setLogger(app.logger());
 
-			this.term_ = new TermWrapper(tk.terminal);
+			this.term_ = new TermWrapper(terminal);
 
 			// Some keys are directly handled by the tkwidget framework
 			// so they need to be remapped in a different way.
@@ -295,7 +295,7 @@ class AppGui {
 		if (!cmd) return;
 		const isConfigPassword = cmd.indexOf('config ') >= 0 && cmd.indexOf('password') >= 0;
 		if (isConfigPassword) return;
-		this.stdout(chalk.cyan.bold(`> ${cmd}`));
+		this.stdout(cyan.bold(`> ${cmd}`));
 	}
 
 	setupKeymap(keymap) {
@@ -632,7 +632,7 @@ class AppGui {
 	}
 
 	async setupResourceServer() {
-		const linkStyle = chalk.blue.underline;
+		const linkStyle = blue.underline;
 		const noteTextWidget = this.widget('noteText');
 		const resourceIdRegex = /^:\/[a-f0-9]+$/i;
 		const noteLinks = {};
@@ -850,4 +850,4 @@ class AppGui {
 AppGui.INPUT_MODE_NORMAL = 1;
 AppGui.INPUT_MODE_META = 2;
 
-module.exports = AppGui;
+export default AppGui;

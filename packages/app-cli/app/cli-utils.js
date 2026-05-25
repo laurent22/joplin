@@ -1,8 +1,8 @@
-const yargParser = require('yargs-parser');
-const { _ } = require('@joplin/lib/locale');
-const time = require('@joplin/lib/time').default;
-const stringPadding = require('string-padding');
-const Logger = require('@joplin/utils/Logger').default;
+import yargParser from 'yargs-parser';
+import { _ } from '@joplin/lib/locale';
+import time from '@joplin/lib/time';
+import stringPadding, { RIGHT, LEFT } from 'string-padding';
+import Logger from '@joplin/utils/Logger';
 
 const cliUtils = {};
 
@@ -36,7 +36,7 @@ cliUtils.printArray = function(logFunction, rows) {
 				line.push(item ? item.toString() : '');
 			} else {
 				const width = colWidths[col];
-				const dir = colAligns[col] === ALIGN_LEFT ? stringPadding.RIGHT : stringPadding.LEFT;
+				const dir = colAligns[col] === ALIGN_LEFT ? RIGHT : LEFT;
 				line.push(stringPadding(item, width, ' ', dir));
 			}
 		}
@@ -280,4 +280,4 @@ cliUtils.stdoutLogger = function(stdout) {
 	return logger;
 };
 
-module.exports = { cliUtils };
+export default { cliUtils };

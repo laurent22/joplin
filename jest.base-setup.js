@@ -1,6 +1,6 @@
 /* eslint-disable jest/require-top-level-describe */
 
-module.exports = () => {
+export default () => {
 	// Disable the additional information that Jest adds to each console
 	// statement. It's rarely needed and if it is it can be commented out here.
 

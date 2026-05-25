@@ -1,8 +1,8 @@
-const BaseCommand = require('./base-command').default;
-const app = require('./app').default;
-const Setting = require('@joplin/lib/models/Setting').default;
-const { _ } = require('@joplin/lib/locale');
-const ReportService = require('@joplin/lib/services/ReportService').default;
+import BaseCommand from './base-command';
+import app from './app';
+import Setting from '@joplin/lib/models/Setting';
+import { _ } from '@joplin/lib/locale';
+import ReportService from '@joplin/lib/services/ReportService';
 
 class Command extends BaseCommand {
 	usage() {
@@ -50,4 +50,4 @@ class Command extends BaseCommand {
 	}
 }
 
-module.exports = Command;
+export default Command;

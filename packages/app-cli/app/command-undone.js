@@ -1,7 +1,7 @@
-const BaseCommand = require('./base-command').default;
-const { _ } = require('@joplin/lib/locale');
+import BaseCommand from './base-command';
+import { _ } from '@joplin/lib/locale';
 
-const CommandDone = require('./command-done.js');
+import { handleAction } from './command-done.js';
 
 class Command extends BaseCommand {
 	usage() {
@@ -13,8 +13,8 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		await CommandDone.handleAction(this, args, false);
+		await handleAction(this, args, false);
 	}
 }
 
-module.exports = Command;
+export default Command;

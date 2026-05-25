@@ -1,10 +1,10 @@
-const app = require('./app').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const Tag = require('@joplin/lib/models/Tag').default;
-const { cliUtils } = require('./cli-utils.js');
-const yargParser = require('yargs-parser');
-const fs = require('fs-extra');
+import app from './app';
+import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
+import Tag from '@joplin/lib/models/Tag';
+import { cliUtils } from './cli-utils.js';
+import yargParser from 'yargs-parser';
+import { readdir } from 'fs-extra';
 
 async function handleAutocompletionPromise(line) {
 	// Auto-complete the command name
@@ -100,7 +100,7 @@ async function handleAutocompletionPromise(line) {
 		}
 
 		if (argName === 'file') {
-			const files = await fs.readdir('.');
+			const files = await readdir('.');
 			l.push(...files);
 		}
 
@@ -201,4 +201,4 @@ function filterList(list, next) {
 	return output;
 }
 
-module.exports = { handleAutocompletion };
+export default { handleAutocompletion };

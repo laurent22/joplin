@@ -1,5 +1,5 @@
-const prompts = require('prompts');
-const fs = require('fs');
+import prompts from 'prompts';
+import { readFileSync, writeFileSync } from 'fs';
 
 (async function() {
 	const response = await prompts({
@@ -10,10 +10,10 @@ const fs = require('fs');
 	});
 
 	try {
-		const contents = fs.readFileSync('package.json');
+		const contents = readFileSync('package.json');
 		obj = JSON.parse(contents);
 		obj.iconPackName = response.iconPackName;
-		fs.writeFileSync('package.json', JSON.stringify(obj, undefined, 2));
+		writeFileSync('package.json', JSON.stringify(obj, undefined, 2));
 	} catch (err) {
 		console.error(err.message);
 	}

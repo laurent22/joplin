@@ -1,5 +1,5 @@
 import BaseCommand from './base-command';
-const { _ } = require('@joplin/lib/locale');
+import { _ } from '@joplin/lib/locale';
 const versionInfo = require('@joplin/lib/versionInfo').default;
 
 class Command extends BaseCommand {

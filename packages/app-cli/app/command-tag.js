@@ -1,9 +1,9 @@
-const BaseCommand = require('./base-command').default;
-const app = require('./app').default;
-const { _ } = require('@joplin/lib/locale');
-const Tag = require('@joplin/lib/models/Tag').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const time = require('@joplin/lib/time').default;
+import BaseCommand from './base-command';
+import app from './app';
+import { _ } from '@joplin/lib/locale';
+import Tag from '@joplin/lib/models/Tag';
+import BaseModel from '@joplin/lib/BaseModel';
+import time from '@joplin/lib/time';
 
 class Command extends BaseCommand {
 	usage() {
@@ -92,4 +92,4 @@ class Command extends BaseCommand {
 	}
 }
 
-module.exports = Command;
+export default Command;

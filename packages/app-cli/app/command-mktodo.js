@@ -1,7 +1,7 @@
-const BaseCommand = require('./base-command').default;
-const app = require('./app').default;
-const { _ } = require('@joplin/lib/locale');
-const Note = require('@joplin/lib/models/Note').default;
+import BaseCommand from './base-command';
+import app from './app';
+import { _ } from '@joplin/lib/locale';
+import Note from '@joplin/lib/models/Note';
 
 class Command extends BaseCommand {
 	usage() {
@@ -28,4 +28,4 @@ class Command extends BaseCommand {
 	}
 }
 
-module.exports = Command;
+export default Command;
