@@ -1,18 +1,18 @@
-const BaseCommand = require('./base-command').default;
-const { _ } = require('@joplin/lib/locale');
+import BaseCommand from './base-command';
+import { _ } from '@joplin/lib/locale';
 
 const CommandDone = require('./command-done.js');
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'undone <note>';
 	}
 
-	description() {
+	public override description() {
 		return _('Marks a to-do as non-completed.');
 	}
 
-	async action(args) {
+	public override async action(args: { note: string }) {
 		await CommandDone.handleAction(this, args, false);
 	}
 }

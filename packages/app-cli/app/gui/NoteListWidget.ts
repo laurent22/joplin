@@ -1,15 +1,20 @@
-const Note = require('@joplin/lib/models/Note').default;
+import Note from '@joplin/lib/models/Note';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 const ListWidget = require('tkwidgets/ListWidget.js');
 
 class NoteListWidget extends ListWidget {
-	constructor() {
+	private selectedNoteId_: string | 0;
+	public showIds: boolean;
+	private updateIndexFromSelectedNoteId_: boolean;
+
+	public constructor() {
 		super();
 		this.selectedNoteId_ = 0;
 		this.showIds = false;
 
 		this.updateIndexFromSelectedNoteId_ = false;
 
-		this.itemRenderer = note => {
+		this.itemRenderer = (note: NoteEntity) => {
 			let label = Note.displayTitle(note);
 			if (this.showIds) {
 				label = `${Note.shortId(note.id)} ${Note.displayTitle(note)}`;
@@ -21,17 +26,17 @@ class NoteListWidget extends ListWidget {
 		};
 	}
 
-	set selectedNoteId(v) {
+	public set selectedNoteId(v: string | 0) {
 		this.updateIndexFromSelectedNoteId_ = true;
 		this.selectedNoteId_ = v;
 	}
 
-	toggleShowIds() {
+	public toggleShowIds() {
 		this.showIds = !this.showIds;
 		this.invalidate();
 	}
 
-	render() {
+	public render() {
 		if (this.updateIndexFromSelectedNoteId_) {
 			const index = this.itemIndexByKey('id', this.selectedNoteId_);
 			this.currentIndex = index >= 0 ? index : 0;
@@ -42,4 +47,4 @@ class NoteListWidget extends ListWidget {
 	}
 }
 
-module.exports = NoteListWidget;
+export default NoteListWidget;

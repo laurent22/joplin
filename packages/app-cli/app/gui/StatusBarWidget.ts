@@ -4,6 +4,11 @@ const BaseWidget = require('tkwidgets/BaseWidget.js');
 const termutils = require('tkwidgets/framework/termutils.js');
 const { handleAutocompletion } = require('../autocompletion.js');
 
+export interface PromptOptions {
+	cursorPosition?: number;
+	secure?: boolean;
+}
+
 export default class StatusBarWidget extends BaseWidget {
 	public constructor() {
 		super();
@@ -27,7 +32,7 @@ export default class StatusBarWidget extends BaseWidget {
 		this.invalidate();
 	}
 
-	public async prompt(initialText = '', promptString: string = null, options: { cursorPosition?: number; secure?: boolean } = null) {
+	public async prompt(initialText = '', promptString: string = null, options: PromptOptions = null) {
 		if (this.promptState_) throw new Error('Another prompt already active');
 		if (promptString === null) promptString = ':';
 		if (options === null) options = {};

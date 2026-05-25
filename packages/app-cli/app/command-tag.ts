@@ -1,31 +1,35 @@
-const BaseCommand = require('./base-command').default;
-const app = require('./app').default;
-const { _ } = require('@joplin/lib/locale');
-const Tag = require('@joplin/lib/models/Tag').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const time = require('@joplin/lib/time').default;
+import BaseCommand from './base-command';
+import app from './app';
+import { _ } from '@joplin/lib/locale';
+import Tag from '@joplin/lib/models/Tag';
+import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
+import time from '@joplin/lib/time';
+import { NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'tag <tag-command> [tag] [note]';
 	}
 
-	description() {
+	public override description() {
 		return _('<tag-command> can be "add", "remove", "list", or "notetags" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).');
 	}
 
-	options() {
+	public override options() {
 		return [['-l, --long', _('Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE')]];
 	}
 
-	async action(args) {
-		let tag = null;
+	public override async action(args: { 'tag-command': string; tag?: string; note?: string; options: { long?: boolean } }) {
+		let tag: TagEntity | null = null;
 		const options = args.options;
 
-		if (args.tag) tag = await app().loadItem(BaseModel.TYPE_TAG, args.tag);
-		let notes = [];
+		// app.loadItem's parameter type is narrower (Note | Folder | 'folderOrNote') than the
+		// runtime support, which falls through to BaseItem.itemClass(type).loadByTitle for other
+		// types. ModelType.Tag is one of those — cast to satisfy the type checker.
+		if (args.tag) tag = await app().loadItem(ModelType.Tag as ModelType.Note, args.tag);
+		let notes: NoteEntity[] = [];
 		if (args.note) {
-			notes = await app().loadItems(BaseModel.TYPE_NOTE, args.note);
+			notes = await app().loadItems(ModelType.Note, args.note);
 		}
 
 		const command = args['tag-command'];
@@ -46,7 +50,7 @@ class Command extends BaseCommand {
 			}
 		} else if (command === 'list') {
 			if (tag) {
-				const notes = await Tag.notes(tag.id);
+				const notes: NoteEntity[] = await Tag.notes(tag.id);
 				notes.map(note => {
 					let line = '';
 					if (options.long) {
@@ -70,16 +74,16 @@ class Command extends BaseCommand {
 					this.stdout(line);
 				});
 			} else {
-				const tags = await Tag.all();
+				const tags: TagEntity[] = await Tag.all();
 				tags.map(tag => {
 					this.stdout(tag.title);
 				});
 			}
 		} else if (command === 'notetags') {
 			if (args.tag) {
-				const note = await app().loadItem(BaseModel.TYPE_NOTE, args.tag);
+				const note = await app().loadItem(ModelType.Note, args.tag);
 				if (!note) throw new Error(_('Cannot find "%s".', args.tag));
-				const tags = await Tag.tagsByNoteId(note.id);
+				const tags: TagEntity[] = await Tag.tagsByNoteId(note.id);
 				tags.map(tag => {
 					this.stdout(tag.title);
 				});

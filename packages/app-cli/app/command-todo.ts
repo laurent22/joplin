@@ -1,23 +1,24 @@
-const BaseCommand = require('./base-command').default;
-const app = require('./app').default;
-const { _ } = require('@joplin/lib/locale');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Note = require('@joplin/lib/models/Note').default;
-const time = require('@joplin/lib/time').default;
+import BaseCommand from './base-command';
+import app from './app';
+import { _ } from '@joplin/lib/locale';
+import { ModelType } from '@joplin/lib/BaseModel';
+import Note from '@joplin/lib/models/Note';
+import time from '@joplin/lib/time';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'todo <todo-command> <note-pattern>';
 	}
 
-	description() {
+	public override description() {
 		return _('<todo-command> can either be "toggle" or "clear". Use "toggle" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use "clear" to convert the to-do back to a regular note.');
 	}
 
-	async action(args) {
+	public override async action(args: { 'todo-command': string; 'note-pattern': string }) {
 		const action = args['todo-command'];
 		const pattern = args['note-pattern'];
-		const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
+		const notes: NoteEntity[] = await app().loadItems(ModelType.Note, pattern);
 		if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
 
 		for (let i = 0; i < notes.length; i++) {
@@ -25,7 +26,7 @@ class Command extends BaseCommand {
 
 			this.encryptionCheck(note);
 
-			let toSave = {
+			let toSave: NoteEntity = {
 				id: note.id,
 			};
 

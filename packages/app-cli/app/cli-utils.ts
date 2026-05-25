@@ -1,19 +1,54 @@
-const yargParser = require('yargs-parser');
-const { _ } = require('@joplin/lib/locale');
-const time = require('@joplin/lib/time').default;
+import { _ } from '@joplin/lib/locale';
+import time from '@joplin/lib/time';
+import Logger, { TargetType } from '@joplin/utils/Logger';
+import * as readline from 'readline';
+import { Writable } from 'stream';
+import BaseCommand from './base-command';
+import yargParser = require('yargs-parser');
 const stringPadding = require('string-padding');
-const Logger = require('@joplin/utils/Logger').default;
 
-const cliUtils = {};
+interface ParsedCommandArg {
+	required: boolean;
+	name: string;
+}
 
-cliUtils.printArray = function(logFunction, rows) {
-	if (!rows.length) return '';
+interface ParsedFlags {
+	long?: string;
+	short?: string;
+	arg?: ParsedCommandArg;
+}
 
+interface PromptOptions {
+	secure?: boolean;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- command args carry a mixed bag of values per the command-specific argv shapes
+type CommandArgs = Record<string, any>;
+
+interface CliUtils {
+	stdout_?: (s: string)=> void;
+	printArray(logFunction: (s: string)=> void, rows: unknown[][]): void;
+	parseFlags(flags: string): ParsedFlags;
+	parseCommandArg(arg: string): ParsedCommandArg;
+	makeCommandArgs(cmd: BaseCommand, argv: string[]): CommandArgs;
+	promptMcq(message: string, answers: Record<string, string>): Promise<string>;
+	promptConfirm(message: string, answers?: string[] | null): Promise<boolean>;
+	prompt(initialText?: string, promptString?: string, options?: PromptOptions | null): Promise<string>;
+	setStdout(v: (s: string)=> void): void;
+	redraw(s: string): void;
+	redrawDone(): void;
+	stdoutLogger(stdout: (s: string)=> void): Logger;
+}
+
+// eslint-disable-next-line import/prefer-default-export -- file is named after its functional area (cli-utils); the only export is the cliUtils namespace object
+export const cliUtils: CliUtils = {} as CliUtils;
+
+cliUtils.printArray = function(logFunction: (s: string)=> void, rows: unknown[][]) {
 	const ALIGN_LEFT = 0;
 	const ALIGN_RIGHT = 1;
 
-	const colWidths = [];
-	const colAligns = [];
+	const colWidths: number[] = [];
+	const colAligns: number[] = [];
 
 	for (let i = 0; i < rows.length; i++) {
 		const row = rows[i];
@@ -28,7 +63,7 @@ cliUtils.printArray = function(logFunction, rows) {
 	}
 
 	for (let row = 0; row < rows.length; row++) {
-		const line = [];
+		const line: string[] = [];
 		for (let col = 0; col < colWidths.length; col++) {
 			const item = rows[row][col];
 			const isLastCol = col === colWidths.length - 1;
@@ -44,17 +79,17 @@ cliUtils.printArray = function(logFunction, rows) {
 	}
 };
 
-cliUtils.parseFlags = function(flags) {
-	const output = {};
-	flags = flags.split(',');
-	for (let i = 0; i < flags.length; i++) {
-		let f = flags[i].trim();
+cliUtils.parseFlags = function(flags: string): ParsedFlags {
+	const output: ParsedFlags = {};
+	const parts = flags.split(',');
+	for (let i = 0; i < parts.length; i++) {
+		const f = parts[i].trim();
 
 		if (f.substr(0, 2) === '--') {
-			f = f.split(' ');
-			output.long = f[0].substr(2).trim();
-			if (f.length === 2) {
-				output.arg = cliUtils.parseCommandArg(f[1].trim());
+			const fParts = f.split(' ');
+			output.long = fParts[0].substr(2).trim();
+			if (fParts.length === 2) {
+				output.arg = cliUtils.parseCommandArg(fParts[1].trim());
 			}
 		} else if (f.substr(0, 1) === '-') {
 			output.short = f.substr(1);
@@ -63,7 +98,7 @@ cliUtils.parseFlags = function(flags) {
 	return output;
 };
 
-cliUtils.parseCommandArg = function(arg) {
+cliUtils.parseCommandArg = function(arg: string): ParsedCommandArg {
 	if (arg.length <= 2) throw new Error(`Invalid command arg: ${arg}`);
 
 	const c1 = arg[0];
@@ -79,20 +114,18 @@ cliUtils.parseCommandArg = function(arg) {
 	}
 };
 
-cliUtils.makeCommandArgs = function(cmd, argv) {
-	let cmdUsage = cmd.usage();
-	cmdUsage = yargParser(cmdUsage);
-	const output = {};
+cliUtils.makeCommandArgs = function(cmd: BaseCommand, argv: string[]): CommandArgs {
+	const cmdUsage = cmd.usage();
+	const parsedUsage = yargParser(cmdUsage);
+	const output: CommandArgs = {};
 
-	const options = cmd.options();
-	const booleanFlags = [];
-	const aliases = {};
-	const flagSpecs = [];
+	const options = cmd.options() as [string, string][];
+	const booleanFlags: string[] = [];
+	const aliases: Record<string, string[]> = {};
+	const flagSpecs: ParsedFlags[] = [];
 	for (let i = 0; i < options.length; i++) {
 		if (options[i].length !== 2) throw new Error(`Invalid options: ${options[i]}`);
-		let flags = options[i][0];
-
-		flags = cliUtils.parseFlags(flags);
+		const flags = cliUtils.parseFlags(options[i][0]);
 
 		if (!flags.arg) {
 			if (flags.short) booleanFlags.push(flags.short);
@@ -112,17 +145,13 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 		string: ['_'],
 	});
 
-	for (let i = 1; i < cmdUsage['_'].length; i++) {
-		const a = cliUtils.parseCommandArg(cmdUsage['_'][i]);
+	for (let i = 1; i < parsedUsage['_'].length; i++) {
+		const a = cliUtils.parseCommandArg(parsedUsage['_'][i] as string);
 		if (a.required && !args['_'][i]) throw new Error(_('Missing required argument: %s', a.name));
-		if (i >= a.length) {
-			output[a.name] = null;
-		} else {
-			output[a.name] = args['_'][i];
-		}
+		output[a.name] = args['_'][i];
 	}
 
-	const argOptions = {};
+	const argOptions: CommandArgs = {};
 	for (const key in args) {
 		if (!args.hasOwnProperty(key)) continue;
 		if (key === '_') continue;
@@ -147,9 +176,7 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 	return output;
 };
 
-cliUtils.promptMcq = function(message, answers) {
-	const readline = require('readline');
-
+cliUtils.promptMcq = function(message: string, answers: Record<string, string>): Promise<string> {
 	const rl = readline.createInterface({
 		input: process.stdin,
 		output: process.stdout,
@@ -178,9 +205,8 @@ cliUtils.promptMcq = function(message, answers) {
 	});
 };
 
-cliUtils.promptConfirm = function(message, answers = null) {
+cliUtils.promptConfirm = function(message: string, answers: string[] | null = null): Promise<boolean> {
 	if (!answers) answers = [_('Y'), _('n')];
-	const readline = require('readline');
 
 	const rl = readline.createInterface({
 		input: process.stdin,
@@ -198,22 +224,19 @@ cliUtils.promptConfirm = function(message, answers = null) {
 	});
 };
 
-// Note: initialText is there to have the same signature as statusBar.prompt() so that
-// it can be a drop-in replacement, however initialText is not used (and cannot be
-// with readline.question?).
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-cliUtils.prompt = function(initialText = '', promptString = ':', options = null) {
+// _initialText is there only to match statusBar.prompt's signature for drop-in
+// use; readline.question doesn't expose a way to pre-fill the prompt.
+cliUtils.prompt = function(_initialText = '', promptString = ':', options: PromptOptions | null = null): Promise<string> {
 	if (!options) options = {};
 
-	const readline = require('readline');
-	const Writable = require('stream').Writable;
+	type MutableStdout = Writable & { muted: boolean };
 
 	const mutableStdout = new Writable({
-		write: function(chunk, encoding, callback) {
+		write: function(this: MutableStdout, chunk, encoding, callback) {
 			if (!this.muted) process.stdout.write(chunk, encoding);
 			callback();
 		},
-	});
+	}) as MutableStdout;
 
 	const rl = readline.createInterface({
 		input: process.stdin,
@@ -226,7 +249,7 @@ cliUtils.prompt = function(initialText = '', promptString = ':', options = null)
 
 		rl.question(promptString, answer => {
 			rl.close();
-			if (options.secure) this.stdout_('');
+			if (options.secure) cliUtils.stdout_('');
 			resolve(answer);
 		});
 
@@ -235,14 +258,14 @@ cliUtils.prompt = function(initialText = '', promptString = ':', options = null)
 };
 
 let redrawStarted_ = false;
-let redrawLastLog_ = null;
+let redrawLastLog_: string | null = null;
 let redrawLastUpdateTime_ = 0;
 
-cliUtils.setStdout = function(v) {
+cliUtils.setStdout = function(v: (s: string)=> void) {
 	this.stdout_ = v;
 };
 
-cliUtils.redraw = function(s) {
+cliUtils.redraw = function(s: string) {
 	const now = time.unixMs();
 
 	if (now - redrawLastUpdateTime_ > 4000) {
@@ -267,17 +290,15 @@ cliUtils.redrawDone = function() {
 	redrawStarted_ = false;
 };
 
-cliUtils.stdoutLogger = function(stdout) {
-	const stdoutFn = (...s) => stdout(s.join(' '));
+cliUtils.stdoutLogger = function(stdout: (s: string)=> void): Logger {
+	const stdoutFn = (...s: string[]) => stdout(s.join(' '));
 
 	const logger = new Logger();
-	logger.addTarget('console', { console: {
+	logger.addTarget(TargetType.Console, { console: {
 		info: stdoutFn,
 		warn: stdoutFn,
 		error: stdoutFn,
-	} });
+	} as unknown as Console });
 
 	return logger;
 };
-
-module.exports = { cliUtils };

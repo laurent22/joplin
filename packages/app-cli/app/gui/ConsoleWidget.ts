@@ -1,7 +1,13 @@
 const TextWidget = require('tkwidgets/TextWidget.js');
 
 class ConsoleWidget extends TextWidget {
-	constructor() {
+	private lines_: string[];
+	private updateText_: boolean;
+	public markdownRendering: boolean;
+	public stickToBottom: boolean;
+	private maxLines_: number;
+
+	public constructor() {
 		super();
 		this.lines_ = [];
 		this.updateText_ = false;
@@ -10,37 +16,37 @@ class ConsoleWidget extends TextWidget {
 		this.maxLines_ = 1000;
 	}
 
-	get name() {
+	public get name() {
 		return 'console';
 	}
 
-	get lastLine() {
+	public get lastLine() {
 		return this.lines_.length ? this.lines_[this.lines_.length - 1] : '';
 	}
 
-	addLine(line) {
+	public addLine(line: string) {
 		this.lines_.push(line);
 		this.updateText_ = true;
 		this.invalidate();
 	}
 
-	onFocus() {
+	public onFocus() {
 		this.stickToBottom = false;
 		super.onFocus();
 	}
 
-	onBlur() {
+	public onBlur() {
 		this.stickToBottom = true;
 		super.onBlur();
 	}
 
-	clear() {
+	public clear() {
 		this.lines_ = [];
 		this.updateText_ = true;
 		this.invalidate();
 	}
 
-	render() {
+	public render() {
 		if (this.updateText_) {
 			if (this.lines_.length > this.maxLines_) {
 				this.lines_.splice(0, this.lines_.length - this.maxLines_);
@@ -53,4 +59,4 @@ class ConsoleWidget extends TextWidget {
 	}
 }
 
-module.exports = ConsoleWidget;
+export default ConsoleWidget;

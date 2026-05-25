@@ -1,12 +1,19 @@
-const Logger = require('@joplin/utils/Logger').default;
-const { findAvailablePort } = require('@joplin/lib/net-utils');
-
-const http = require('http');
-const urlParser = require('url');
+import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
+import { findAvailablePort } from '@joplin/lib/net-utils';
+import * as http from 'http';
+import * as urlParser from 'url';
 const enableServerDestroy = require('server-destroy');
 
+type LinkHandler = (resourceId: string, response: http.ServerResponse)=> Promise<boolean>;
+
 class ResourceServer {
-	constructor() {
+	private server_: http.Server | null;
+	private logger_: LoggerWrapper;
+	private port_: number | null;
+	private linkHandler_: LinkHandler | null;
+	private started_: boolean;
+
+	public constructor() {
 		this.server_ = null;
 		this.logger_ = new Logger();
 		this.port_ = null;
@@ -14,28 +21,28 @@ class ResourceServer {
 		this.started_ = false;
 	}
 
-	setLogger(logger) {
+	public setLogger(logger: LoggerWrapper) {
 		this.logger_ = logger;
 	}
 
-	logger() {
+	public logger() {
 		return this.logger_;
 	}
 
-	started() {
+	public started() {
 		return this.started_;
 	}
 
-	baseUrl() {
+	public baseUrl() {
 		if (!this.port_) return '';
 		return `http://127.0.0.1:${this.port_}`;
 	}
 
-	setLinkHandler(handler) {
+	public setLinkHandler(handler: LinkHandler) {
 		this.linkHandler_ = handler;
 	}
 
-	async start() {
+	public async start() {
 		this.port_ = await findAvailablePort(require('tcp-port-used'), [9167, 9267, 8167, 8267]);
 		if (!this.port_) {
 			this.logger().error('Could not find available port to start resource server. Please report the error at https://github.com/laurent22/joplin');
@@ -45,18 +52,18 @@ class ResourceServer {
 		this.server_ = http.createServer();
 
 		this.server_.on('request', async (request, response) => {
-			const writeResponse = message => {
+			const writeResponse = (message: string) => {
 				response.write(message);
 				response.end();
 			};
 
 			const url = urlParser.parse(request.url, true);
-			let resourceId = url.pathname.split('/');
-			if (resourceId.length < 2) {
+			const pathParts = url.pathname.split('/');
+			if (pathParts.length < 2) {
 				writeResponse(`Error: could not get resource ID from path name: ${url.pathname}`);
 				return;
 			}
-			resourceId = resourceId[1];
+			const resourceId = pathParts[1];
 
 			if (!this.linkHandler_) throw new Error('No link handler is defined');
 
@@ -84,10 +91,10 @@ class ResourceServer {
 		this.started_ = true;
 	}
 
-	stop() {
-		if (this.server_) this.server_.destroy();
+	public stop() {
+		if (this.server_) (this.server_ as http.Server & { destroy: ()=> void }).destroy();
 		this.server_ = null;
 	}
 }
 
-module.exports = ResourceServer;
+export default ResourceServer;

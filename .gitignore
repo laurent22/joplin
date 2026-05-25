@@ -73,9 +73,13 @@ docs/**/*.mustache
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.js
+packages/app-cli/app/ResourceServer.js
+packages/app-cli/app/app-gui.js
 packages/app-cli/app/app.js
+packages/app-cli/app/autocompletion.js
 packages/app-cli/app/base-command.js
 packages/app-cli/app/cli-integration-tests.test.js
+packages/app-cli/app/cli-utils.js
 packages/app-cli/app/command-apidoc.js
 packages/app-cli/app/command-attach.js
 packages/app-cli/app/command-batch.js
@@ -98,6 +102,8 @@ packages/app-cli/app/command-keymap.js
 packages/app-cli/app/command-ls.js
 packages/app-cli/app/command-mkbook.test.js
 packages/app-cli/app/command-mkbook.js
+packages/app-cli/app/command-mknote.js
+packages/app-cli/app/command-mktodo.js
 packages/app-cli/app/command-mv.js
 packages/app-cli/app/command-publish.test.js
 packages/app-cli/app/command-publish.js
@@ -107,18 +113,29 @@ packages/app-cli/app/command-rmbook.test.js
 packages/app-cli/app/command-rmbook.js
 packages/app-cli/app/command-rmnote.test.js
 packages/app-cli/app/command-rmnote.js
+packages/app-cli/app/command-search.js
+packages/app-cli/app/command-server.js
 packages/app-cli/app/command-set.js
 packages/app-cli/app/command-settingschema.js
 packages/app-cli/app/command-share.test.js
 packages/app-cli/app/command-share.js
+packages/app-cli/app/command-status.js
 packages/app-cli/app/command-sync.js
+packages/app-cli/app/command-tag.js
 packages/app-cli/app/command-testing.js
+packages/app-cli/app/command-todo.js
+packages/app-cli/app/command-undone.js
 packages/app-cli/app/command-unpublish.test.js
 packages/app-cli/app/command-unpublish.js
 packages/app-cli/app/command-use.js
 packages/app-cli/app/command-version.js
+packages/app-cli/app/gui/ConsoleWidget.js
 packages/app-cli/app/gui/FolderListWidget.js
+packages/app-cli/app/gui/NoteListWidget.js
+packages/app-cli/app/gui/NoteMetadataWidget.js
+packages/app-cli/app/gui/NoteWidget.js
 packages/app-cli/app/gui/StatusBarWidget.js
+packages/app-cli/app/help-utils.js
 packages/app-cli/app/services/plugins/PluginRunner.js
 packages/app-cli/app/setupCommand.js
 packages/app-cli/app/utils/initializeCommandService.js
