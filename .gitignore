@@ -1912,6 +1912,7 @@ packages/renderer/MdToHtml/rules/utils/defaultRule.js
 packages/renderer/MdToHtml/setupLinkify.js
 packages/renderer/MdToHtml/validateLinks.js
 packages/renderer/assetsToHeaders.js
+packages/renderer/defaultNoteStyle.js
 packages/renderer/defaultResourceModel.js
 packages/renderer/headerAnchor.js
 packages/renderer/highlight.js

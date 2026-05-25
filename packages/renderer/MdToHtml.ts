@@ -1,4 +1,5 @@
 import InMemoryCache from './InMemoryCache';
+import defaultNoteStyle from './defaultNoteStyle';
 import noteStyle from './noteStyle';
 import { fileExtension } from '@joplin/utils/path';
 import setupLinkify from './MdToHtml/setupLinkify';
@@ -73,7 +74,6 @@ const plugins: RendererPlugins = {
 	toc: { module: require('markdown-it-toc-done-right'), options: { listType: 'ul', slugify: slugify, uniqueSlugStartIndex: 2 } },
 	expand_tabs: { module: require('markdown-it-expand-tabs'), options: { tabWidth: 4 } },
 };
-const defaultNoteStyle = require('./defaultNoteStyle');
 
 function slugify(s: string): string {
 	return uslug(s);

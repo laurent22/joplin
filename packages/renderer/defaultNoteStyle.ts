@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	fontSize: 15,
 	color: '#222222',
 	lineHeight: '1.6em',
