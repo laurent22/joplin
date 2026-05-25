@@ -65,7 +65,7 @@ Counts captured 2026-05-25, before any work. `const X = require(...)` occurrence
 | 10 | tools | 49 | 29 | 20 | done (2026-05-25) |
 | 11 | app-cli | 49 | 18 | 31 | done (2026-05-25) |
 | 12 | app-mobile | 61 | 18 | 43 | done (2026-05-25) |
-| 13 | app-desktop | 131 | 73 | 58 | done (2026-05-25) |
+| 13 | app-desktop | 131 | 74 | 57 | done (2026-05-25) |
 | 14 | lib | 195 | 55 | 140 | done (2026-05-25) |
 | — | generator-joplin | 1 | — | — | excluded (template) |
 
@@ -356,8 +356,21 @@ Mechanical (no propagation):
 - gui/ExtensionBadge.tsx (`reselect.createSelector`; split the selector's return into four `React.CSSProperties` constants so the literal values for `boxSizing`/`flexDirection` etc. stay narrow).
 
 Still skipped:
-- gui/Button/Button.tsx — typed `styled` propagates `IntrinsicAttributes` errors through every call site of `<Button>`: `mr=...`/`ml=...` (from the `styled(Button)\`${space}\`` wrapper) and `type="..."` (currently dropped by the typed Button props) start failing across `EditFolderDialog`, `NoteListControls`, `PluginBox`, `SsoLoginScreen`, etc. Needs `Button`'s props to extend `SpaceProps` (from `styled-system`) and the omitted `type` to be restored; that's beyond a mechanical require→import.
 - gui/style/StyledInput.tsx — typing it surfaces a latent bug in `PasswordInput.tsx` (its custom `ChangeEvent { value: string }` shape doesn't match what the `<input>` actually fires) and a related `Function`-typed handler chain in `SearchInput.tsx`. Reverted to `require()` and flagged in `review-later.md` for a separate fix.
+
+Follow-up session (2026-05-25): typed `styled-components` in `Button.tsx` and adjacent fixes. With the underlying typing fixes below in place, every `styled-components` `require()` in app-desktop is now converted (9 / 9).
+
+What changed in `Button.tsx`:
+- Switched `ReactButtonProps` from `HTMLAttributes<HTMLButtonElement>` to `ButtonHTMLAttributes<HTMLButtonElement>`, which restores the `type` HTML attribute (`<Button type='submit' />` in `SsoLoginScreen`).
+- Declared a local `SpaceProps` interface (m/mt/mr/mb/ml/mx/my/p/pt/pr/pb/pl/px/py, all optional, `number | string`) and extended `Props` with it, so `<Button mr=… ml=… mb=… />` calls type-check. `styled-system` has no `@types/*` package and the migration explicitly avoids adding new types packages — the local interface documents the runtime-supported props.
+- Collapsed `StyledIcon` from `styled(styled.span(space))` to `styled.span<SpaceProps & StyleProps>\`${space}; … \`` so the inner `mr` prop is in scope on the resulting component (runtime behaviour unchanged).
+- Cast the `${(props: StyleProps) => props.disabled}` template interpolation in `StyledButtonPrimary` / `StyledButtonSecondary` with `as unknown as string` and flagged in `review-later.md`. The interpolation appears to produce malformed CSS in both branches (`false` → bare-`{ … }` block, `true` → `true { … }` rule); preserving the existing runtime output is intentional for a require→import pass.
+
+Knock-on fixes in callers (made necessary by the typed Button):
+- `gui/ConfigScreen/ButtonBar.tsx` — narrowed `onCancelClick: Function` / `onSaveClick?: Function` / `onApplyClick?: Function` to `()=> void` (dropped three `@typescript-eslint/ban-types` disables); typed Button's `onClick: ()=> void` no longer accepts the broad `Function`.
+- `gui/NoteListControls/NoteListControls.tsx` — made `StyleProps.padding` / `StyleProps.buttonVerticalGap` optional. They were declared required on the shared `StyleProps` but only used by `StyledRoot`; with typed `styled(Button)`, `<StyledPairButtonL>` calls started failing because they (correctly) don't pass either.
+
+`styled-system` `space` requires remain in `Button.tsx`, `UserWebviewDialogButtonBar.tsx`, and `PluginsStates.tsx` — the runtime `${space}` template still needs the function, and the package has no types.
 
 Files skipped entirely / important categories left untouched:
 - gui/Button/Button.tsx and downstream `styled-system` `space` requires (PluginsStates, the remaining styled wrapper inside Button) — see above; needs the Button typing follow-up.

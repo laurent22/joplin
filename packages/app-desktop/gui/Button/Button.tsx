@@ -1,6 +1,28 @@
 import * as React from 'react';
-const styled = require('styled-components').default;
+import styled from 'styled-components';
 const { space } = require('styled-system');
+
+// styled-system has no `@types/*` package and the migration explicitly
+// avoids installing new ones. These props are the `space` set actually
+// consumed by callers (mr, ml, mb); the wider set is declared here so
+// the runtime `${space}` template continues to accept any of them.
+type SpaceValue = number | string;
+interface SpaceProps {
+	m?: SpaceValue;
+	mt?: SpaceValue;
+	mr?: SpaceValue;
+	mb?: SpaceValue;
+	ml?: SpaceValue;
+	mx?: SpaceValue;
+	my?: SpaceValue;
+	p?: SpaceValue;
+	pt?: SpaceValue;
+	pr?: SpaceValue;
+	pb?: SpaceValue;
+	pl?: SpaceValue;
+	px?: SpaceValue;
+	py?: SpaceValue;
+}
 
 interface StyleProps {
 	theme: {
@@ -41,8 +63,8 @@ export enum ButtonSize {
 	Normal = 2,
 }
 
-type ReactButtonProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
-interface Props extends Omit<ReactButtonProps, 'onClick'> {
+type ReactButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+interface Props extends Omit<ReactButtonProps, 'onClick'>, SpaceProps {
 	title?: string;
 	iconName?: string;
 	level?: ButtonLevel;
@@ -95,16 +117,17 @@ const StyledButtonBase = styled.button`
 	${(props: Props) => props.fontSize ? `font-size: ${props.fontSize}px;` : ''}
 `;
 
-const StyledIcon = styled(styled.span(space))`
-	font-size: ${(props: StyleProps) => props.theme.toolbarIconSize}px;
-	${(props: StyleProps) => props.animation ? `animation: ${props.animation}` : ''};
+const StyledIcon = styled.span<SpaceProps & StyleProps>`
+	${space}
+	font-size: ${(props) => props.theme.toolbarIconSize}px;
+	${(props) => props.animation ? `animation: ${props.animation}` : ''};
 `;
 
 const StyledButtonPrimary = styled(StyledButtonBase)`
 	border: none;
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor5};
 
-	${(props: StyleProps) => props.disabled} {
+	${(props: StyleProps) => props.disabled as unknown as string} {
 		&:hover {
 			background-color: ${(props: StyleProps) => props.theme.backgroundColorHover5};
 		}
@@ -127,7 +150,7 @@ const StyledButtonSecondary = styled(StyledButtonBase)`
 	border: 1px solid ${(props: StyleProps) => props.theme.borderColor4};
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor4};
 
-	${(props: StyleProps) => props.disabled} {
+	${(props: StyleProps) => props.disabled as unknown as string} {
 		&:hover {
 			background-color: ${(props: StyleProps) => props.theme.backgroundColorHover4};
 		}
