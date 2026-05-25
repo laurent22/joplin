@@ -1911,6 +1911,7 @@ packages/renderer/MdToHtml/rules/tableHorizontallyScrollable.js
 packages/renderer/MdToHtml/rules/utils/defaultRule.js
 packages/renderer/MdToHtml/setupLinkify.js
 packages/renderer/MdToHtml/validateLinks.js
+packages/renderer/Tools/buildAssets.js
 packages/renderer/assetsToHeaders.js
 packages/renderer/defaultNoteStyle.js
 packages/renderer/defaultResourceModel.js
