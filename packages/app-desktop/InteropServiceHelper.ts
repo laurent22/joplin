@@ -13,7 +13,7 @@ import { friendlySafeFilename } from '@joplin/lib/path-utils';
 import time from '@joplin/lib/time';
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
 const md5 = require('md5');
-const url = require('url');
+import * as url from 'url';
 
 interface ExportNoteOptions {
 	customCss?: string;

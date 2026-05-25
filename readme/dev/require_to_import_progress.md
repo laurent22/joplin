@@ -65,7 +65,7 @@ Counts captured 2026-05-25, before any work. `const X = require(...)` occurrence
 | 10 | tools | 49 | 29 | 20 | done (2026-05-25) |
 | 11 | app-cli | 49 | 18 | 31 | done (2026-05-25) |
 | 12 | app-mobile | 61 | 18 | 43 | done (2026-05-25) |
-| 13 | app-desktop | 131 | 33 | 98 | done (2026-05-25) |
+| 13 | app-desktop | 131 | 39 | 92 | done (2026-05-25) |
 | 14 | lib | 195 | 55 | 140 | done (2026-05-25) |
 | — | generator-joplin | 1 | — | — | excluded (template) |
 
@@ -324,6 +324,12 @@ Files processed:
 - plugins/GotoAnything.tsx — 1 converted (`electron.clipboard`); `connect` left.
 - services/plugins/PlatformImplementation.ts — 1 converted (`electron.clipboard, nativeImage`).
 - services/plugins/PluginRunner.ts — 1 converted (`electron.ipcRenderer`).
+
+Follow-up session (2026-05-25): 5 more safe Node-built-in / typed-package conversions:
+- ElectronAppWrapper.ts — 2 more converted (`path`, `fs-extra`); consolidated with the existing `import { resolve } from 'path'` so `resolve(...)` is now `path.resolve(...)`.
+- InteropServiceHelper.ts — 1 more converted (`url`).
+- gui/NoteEditor/utils/resourceHandling.ts — 1 more converted (`path`).
+- gui/NoteEditor/utils/contextMenu.ts — 1 more converted (`fs-extra`); folded the existing `import { writeFile } from 'fs-extra'` into the namespace import.
 
 Files skipped entirely / important categories left untouched:
 - All `react-redux connect` requires (15) — typed `connect` rejects components whose Props haven't been declared and/or extend untyped base classes. Worth a follow-up that types each component's `Props` interface.

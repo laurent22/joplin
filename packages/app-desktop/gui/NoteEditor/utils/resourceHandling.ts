@@ -19,7 +19,7 @@ import * as mimeUtils from '@joplin/lib/mime-utils';
 import bridge from '../../../services/bridge';
 import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
 const md5 = require('md5');
-const path = require('path');
+import * as path from 'path';
 
 const logger = Logger.create('resourceHandling');
 
