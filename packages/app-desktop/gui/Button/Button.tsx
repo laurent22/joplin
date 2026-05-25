@@ -46,7 +46,6 @@ interface StyleProps {
 		colorHover2: string;
 		warningBackgroundColor: string;
 	};
-	disabled?: boolean;
 	animation?: string;
 }
 
@@ -127,7 +126,7 @@ const StyledButtonPrimary = styled(StyledButtonBase)`
 	border: none;
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor5};
 
-	${(props: StyleProps) => props.disabled as unknown as string} {
+	&:not(:disabled) {
 		&:hover {
 			background-color: ${(props: StyleProps) => props.theme.backgroundColorHover5};
 		}
@@ -150,7 +149,7 @@ const StyledButtonSecondary = styled(StyledButtonBase)`
 	border: 1px solid ${(props: StyleProps) => props.theme.borderColor4};
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor4};
 
-	${(props: StyleProps) => props.disabled as unknown as string} {
+	&:not(:disabled) {
 		&:hover {
 			background-color: ${(props: StyleProps) => props.theme.backgroundColorHover4};
 		}
