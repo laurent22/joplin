@@ -1921,6 +1921,7 @@ packages/renderer/index.js
 packages/renderer/noteStyle.js
 packages/renderer/stringUtils.js
 packages/renderer/types.js
+packages/renderer/urlUtils.js
 packages/renderer/utils.js
 packages/tools/build-release-stats.test.js
 packages/tools/build-release-stats.js
