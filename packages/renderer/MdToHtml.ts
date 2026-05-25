@@ -1,3 +1,39 @@
+// Use a require() to support bundling on mobile:
+
+import { default as default_285 } from './MdToHtml/rules/frontmatter';
+import { default as default_286 } from './MdToHtml/rules/fence';
+import { default as default_287 } from './MdToHtml/rules/sanitize_html';
+import { default as default_288 } from './MdToHtml/rules/image';
+import { default as default_289 } from './MdToHtml/rules/checkbox';
+import { default as default_290 } from './MdToHtml/rules/katex';
+import { default as default_291 } from './MdToHtml/rules/link_open';
+import { default as default_292 } from './MdToHtml/rules/link_close';
+import { default as default_293 } from './MdToHtml/rules/html_image';
+import { default as default_294 } from './MdToHtml/rules/highlight_keywords';
+import { default as default_295 } from './MdToHtml/rules/code_inline';
+import { default as default_296 } from './MdToHtml/rules/fountain';
+import { default as default_297 } from './MdToHtml/rules/abc';
+import { default as default_298 } from './MdToHtml/rules/mermaid';
+import { default as default_299 } from './MdToHtml/rules/externalEmbed';
+import { default as default_300 } from './MdToHtml/rules/source_map';
+import { default as default_301 } from './MdToHtml/rules/tableHorizontallyScrollable';
+import markdown_it_mark_302 from 'markdown-it-mark';
+import markdown_it_footnote_303 from 'markdown-it-footnote';
+import markdown_it_sub_304 from 'markdown-it-sub';
+import markdown_it_sup_305 from 'markdown-it-sup';
+import markdown_it_deflist_306 from 'markdown-it-deflist';
+import markdown_it_abbr_307 from 'markdown-it-abbr';
+import markdown_it_emoji_308 from 'markdown-it-emoji';
+import markdown_it_ins_309 from 'markdown-it-ins';
+import markdown_it_multimd_table_310 from 'markdown-it-multimd-table';
+import markdown_it_toc_done_right_311 from 'markdown-it-toc-done-right';
+import markdown_it_expand_tabs_312 from 'markdown-it-expand-tabs';
+import image_315 from './MdToHtml/rules/image';
+import { AllHtmlEntities as Entities } from 'html-entities';
+import md5 from 'md5';
+import uslug from '@joplin/fork-uslug';
+import markdownItAnchor from 'markdown-it-anchor';
+import defaultNoteStyle from './defaultNoteStyle';
 import InMemoryCache from './InMemoryCache';
 import noteStyle from './noteStyle';
 import { fileExtension } from '@joplin/utils/path';
@@ -6,12 +42,8 @@ import validateLinks from './MdToHtml/validateLinks';
 import { Options as NoteStyleOptions } from './noteStyle';
 import { FsDriver, ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RenderResultPluginAsset, RendererTheme, ResourceEntity, ResourceInfos } from './types';
 import hljs from './highlight';
-// Use a require() to support bundling on mobile:
-import MarkdownIt = require('markdown-it');
-
-const Entities = require('html-entities').AllHtmlEntities;
+import MarkdownIt from 'markdown-it';
 const htmlentities = new Entities().encode;
-const md5 = require('md5');
 
 interface RendererRule {
 	install?(context: PluginContext, ruleOptions: RuleOptions): unknown;
@@ -37,43 +69,40 @@ interface RendererPlugins {
 
 // /!\/!\ Note: the order of rules is important!! /!\/!\
 const rules: RendererRules = {
-	frontmatter: require('./MdToHtml/rules/frontmatter').default,
-	fence: require('./MdToHtml/rules/fence').default,
-	sanitize_html: require('./MdToHtml/rules/sanitize_html').default,
-	image: require('./MdToHtml/rules/image').default,
-	checkbox: require('./MdToHtml/rules/checkbox').default,
-	katex: require('./MdToHtml/rules/katex').default,
-	link_open: require('./MdToHtml/rules/link_open').default,
-	link_close: require('./MdToHtml/rules/link_close').default,
-	html_image: require('./MdToHtml/rules/html_image').default,
-	highlight_keywords: require('./MdToHtml/rules/highlight_keywords').default,
-	code_inline: require('./MdToHtml/rules/code_inline').default,
-	fountain: require('./MdToHtml/rules/fountain').default,
-	abc: require('./MdToHtml/rules/abc').default,
-	mermaid: require('./MdToHtml/rules/mermaid').default,
-	externalEmbed: require('./MdToHtml/rules/externalEmbed').default,
-	source_map: require('./MdToHtml/rules/source_map').default,
-	tableHorizontallyScrollable: require('./MdToHtml/rules/tableHorizontallyScrollable').default,
+	frontmatter: default_285,
+	fence: default_286,
+	sanitize_html: default_287,
+	image: default_288,
+	checkbox: default_289,
+	katex: default_290,
+	link_open: default_291,
+	link_close: default_292,
+	html_image: default_293,
+	highlight_keywords: default_294,
+	code_inline: default_295,
+	fountain: default_296,
+	abc: default_297,
+	mermaid: default_298,
+	externalEmbed: default_299,
+	source_map: default_300,
+	tableHorizontallyScrollable: default_301,
 };
 
-const uslug = require('@joplin/fork-uslug');
-const markdownItAnchor = require('markdown-it-anchor');
 
 // The keys must match the corresponding entry in Setting.js
 const plugins: RendererPlugins = {
-	mark: { module: require('markdown-it-mark') },
-	footnote: { module: require('markdown-it-footnote') },
-	sub: { module: require('markdown-it-sub') },
-	sup: { module: require('markdown-it-sup') },
-	deflist: { module: require('markdown-it-deflist') },
-	abbr: { module: require('markdown-it-abbr') },
-	emoji: { module: require('markdown-it-emoji') },
-	insert: { module: require('markdown-it-ins') },
-	multitable: { module: require('markdown-it-multimd-table'), options: { multiline: true, rowspan: true, headerless: true } },
-	toc: { module: require('markdown-it-toc-done-right'), options: { listType: 'ul', slugify: slugify, uniqueSlugStartIndex: 2 } },
-	expand_tabs: { module: require('markdown-it-expand-tabs'), options: { tabWidth: 4 } },
+	mark: { module: markdown_it_mark_302 },
+	footnote: { module: markdown_it_footnote_303 },
+	sub: { module: markdown_it_sub_304 },
+	sup: { module: markdown_it_sup_305 },
+	deflist: { module: markdown_it_deflist_306 },
+	abbr: { module: markdown_it_abbr_307 },
+	emoji: { module: markdown_it_emoji_308 },
+	insert: { module: markdown_it_ins_309 },
+	multitable: { module: markdown_it_multimd_table_310, options: { multiline: true, rowspan: true, headerless: true } },
+	toc: { module: markdown_it_toc_done_right_311, options: { listType: 'ul', slugify: slugify, uniqueSlugStartIndex: 2 } },
+	expand_tabs: { module: markdown_it_expand_tabs_312, options: { tabWidth: 4 } },
 };
-const defaultNoteStyle = require('./defaultNoteStyle');
 
 function slugify(s: string): string {
 	return uslug(s);
@@ -567,7 +596,7 @@ export default class MdToHtml implements MarkupRenderer {
 		//
 		// 1. If the plugin does not need any application specific data, use the standard way:
 		//
-		//    const someMarkdownPlugin = require('someMarkdownPlugin');
+		//    const someMarkdownPlugin = someMarkdownPlugin_313;
 		//    markdownIt.use(someMarkdownPlugin);
 		//
 		// 2. If the plugin does not need any application specific data, and you want the user
@@ -575,7 +604,7 @@ export default class MdToHtml implements MarkupRenderer {
 		//
 		//    Add the plugin to the plugins object
 		//    const plugins = {
-		//      plugin: require('someMarkdownPlugin'),
+		//      plugin: someMarkdownPlugin_314,
 		//    }
 		//
 		//    And add a corresponding entry into Setting.js
@@ -584,7 +613,7 @@ export default class MdToHtml implements MarkupRenderer {
 		// 3. If the plugin needs application data (in ruleOptions) or needs to pass data (CSS, files to load, etc.) back
 		//    to the application (using the context object), use the application-specific way:
 		//
-		//    const imagePlugin = require('./MdToHtml/rules/image');
+		//    const imagePlugin = image_315;
 		//    markdownIt.use(imagePlugin(context, ruleOptions));
 		//
 		// Using the `context` object, a plugin can define what additional assets they need (css, fonts, etc.) using context.pluginAssets.

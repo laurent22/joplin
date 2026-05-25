@@ -1,5 +1,5 @@
-import { CryptoBuffer } from './types';
 
+import { CryptoBuffer } from './types';
 const nonceCounterLength = 8;
 const nonceTimestampLength = 7;
 

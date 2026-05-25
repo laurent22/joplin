@@ -2,9 +2,6 @@
 
 // Hide warnings from js-draw.
 // jsdom doesn't support ResizeObserver and HTMLCanvasElement.getContext.
-HTMLCanvasElement.prototype.getContext = () => null;
-window.ResizeObserver = class { public observe() { } public unobserve() { } public disconnect() { } };
-
 import { describe, it, expect, jest } from '@jest/globals';
 import { Color4, EditorImage, EditorSettings, Path, pathToRenderable, StrokeComponent } from 'js-draw';
 import { RenderingMode } from 'js-draw';
@@ -13,6 +10,9 @@ import { BackgroundComponent } from 'js-draw';
 import { BackgroundComponentBackgroundType } from 'js-draw';
 import { MainProcessApi } from './types';
 import applyTemplateToEditor from './applyTemplateToEditor';
+HTMLCanvasElement.prototype.getContext = () => null;
+window.ResizeObserver = class { public observe() { } public unobserve() { } public disconnect() { } };
+
 
 
 const createEditorWithCallbacks = (callbacks: Partial<MainProcessApi>) => {

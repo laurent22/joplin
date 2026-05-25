@@ -1,13 +1,13 @@
+import { createRoot } from 'react-dom/client';
 import React from 'react';
 import shim from '@joplin/lib/shim';
-shim.setReact(React);
-const { createRoot } = require('react-dom/client');
 import * as pdfjsLib from 'pdfjs-dist';
 import MiniViewerApp from './miniViewer';
 import MessageService from './messageService';
 import FullViewer from './FullViewer';
+import './common.css';
+shim.setReact(React);
 
-require('./common.css');
 
 // Setting worker path to worker bundle.
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';

@@ -1,3 +1,6 @@
+
+import { sprintf } from 'sprintf-js';
+import { Dirnames } from './services/synchronizer/utils/types';
 import Logger from '@joplin/utils/Logger';
 import LockHandler, { appTypeToLockType, hasActiveLock, LockClientType, LockType } from './services/synchronizer/LockHandler';
 import Setting, { AppType } from './models/Setting';
@@ -35,9 +38,6 @@ import checkDisabledSyncItemsNotification from './services/synchronizer/utils/ch
 import { reg } from './registry';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { Day } from '@joplin/utils/time';
-const { sprintf } = require('sprintf-js');
-const { Dirnames } = require('./services/synchronizer/utils/types');
-
 const logger = Logger.create('Synchronizer');
 
 interface ProgressReport {

@@ -1,7 +1,7 @@
+
 import PluginService from '../../services/plugins/PluginService';
 import Logger from '@joplin/utils/Logger';
 import shim from '../../shim';
-
 const logger = Logger.create('usePlugin');
 
 const usePlugin = (pluginId: string) => {

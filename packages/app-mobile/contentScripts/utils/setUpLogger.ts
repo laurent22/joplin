@@ -1,5 +1,5 @@
-import Logger, { TargetType } from '@joplin/utils/Logger';
 
+import Logger, { TargetType } from '@joplin/utils/Logger';
 let loggerCreated = false;
 const setUpLogger = () => {
 	if (!loggerCreated) {

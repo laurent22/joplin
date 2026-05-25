@@ -1,3 +1,4 @@
+
 import Logger from '@joplin/utils/Logger';
 import { RefObject, useCallback } from 'react';
 import { FormNote, NoteBodyEditorRef } from './types';
@@ -7,7 +8,6 @@ import Note from '@joplin/lib/models/Note';
 import type { Dispatch } from 'redux';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
 import type { OnSetFormNote } from './useFormNote';
-
 const logger = Logger.create('useScheduleSaveCallbacks');
 
 interface Props {

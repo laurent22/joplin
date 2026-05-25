@@ -1,3 +1,6 @@
+
+import chokidar from 'chokidar';
+import { ErrorNotFound } from './rest/utils/errors';
 import Logger from '@joplin/utils/Logger';
 import Setting from '../models/Setting';
 import shim from '../shim';
@@ -8,9 +11,6 @@ import Note from '../models/Note';
 import { openFileWithExternalEditor } from './ExternalEditWatcher/utils';
 import AsyncActionQueue from '../AsyncActionQueue';
 import { EventEmitter } from 'events';
-const chokidar = require('chokidar');
-const { ErrorNotFound } = require('./rest/utils/errors');
-
 interface ChangeEventContext {
 	path: string;
 }

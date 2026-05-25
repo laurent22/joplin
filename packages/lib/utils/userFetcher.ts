@@ -1,9 +1,9 @@
+
 import eventManager, { EventName } from '../eventManager';
 import Setting from '../models/Setting';
 import isJoplinServerVariant from '../models/utils/isJoplinServerVariant';
 import { reg } from '../registry';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('userFetcher');
 
 interface UserApiResponse {

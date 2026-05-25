@@ -1,6 +1,6 @@
+
 import { useMemo } from 'react';
 import { useWindowDimensions } from 'react-native';
-
 const useButtonSize = () => {
 	const { fontScale } = useWindowDimensions();
 

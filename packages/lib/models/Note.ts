@@ -1,3 +1,11 @@
+
+import { sprintf } from 'sprintf-js';
+import { pregQuote, substrWithEllipsis } from '../string-utils.js';
+import { _, _n } from '../locale';
+import urlUtils from '../urlUtils.js';
+import { isImageMimeType } from '../resourceUtils';
+import { MarkupToHtml } from '@joplin/renderer';
+import { ALL_NOTES_FILTER_ID } from '../reserved-ids';
 import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import BaseItem from './BaseItem';
 import type FolderClass from './Folder';
@@ -10,23 +18,15 @@ import time from '../time';
 import markdownUtils from '../markdownUtils';
 import { FolderEntity, NoteEntity } from '../services/database/types';
 import Tag from './Tag';
-const { sprintf } = require('sprintf-js');
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import { toFileProtocolPath, toForwardSlashes } from '../path-utils';
-const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
-const { _, _n } = require('../locale');
 import { pull, removeElement, unique } from '../ArrayUtils';
 import { LoadOptions, SaveOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
 import { getDisplayParentId, getTrashFolderId } from '../services/trash';
 import { getCollator } from './utils/getCollator';
-const urlUtils = require('../urlUtils.js');
 import { hasWhiteboardFence, parseWhiteboard } from '../services/whiteboard/parse';
 import { resolveFileRef, RefKind } from '../services/whiteboard/resolveRef';
-const { isImageMimeType } = require('../resourceUtils');
-const { MarkupToHtml } = require('@joplin/renderer');
-const { ALL_NOTES_FILTER_ID } = require('../reserved-ids');
-
 export interface PreviewsOrder {
 	by: string;
 	dir: string;

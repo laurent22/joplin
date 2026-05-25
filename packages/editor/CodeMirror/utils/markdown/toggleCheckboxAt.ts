@@ -1,5 +1,5 @@
-import { Command, EditorView } from '@codemirror/view';
 
+import { Command, EditorView } from '@codemirror/view';
 const toggleCheckbox = (linePos: number): Command => (target: EditorView) => {
 	const state = target.state;
 	if (linePos >= state.doc.length) {

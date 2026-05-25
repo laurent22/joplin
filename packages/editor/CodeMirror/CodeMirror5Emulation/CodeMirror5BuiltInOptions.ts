@@ -1,6 +1,6 @@
+
 import { Compartment, Extension, RangeSetBuilder, StateEffect } from '@codemirror/state';
 import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view';
-
 const activeLineDecoration = Decoration.line({ class: 'CodeMirror-activeline CodeMirror-activeline-background' });
 
 const optionToExtension: Record<string, Extension> = {

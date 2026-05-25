@@ -1,10 +1,10 @@
+
 import * as React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import createMockReduxStore from '../utils/testing/createMockReduxStore';
 import TestProviderStack from './testing/TestProviderStack';
 import ComboBox, { OnItemSelected, Option } from './ComboBox';
 import { useMemo } from 'react';
-
 interface Item {
 	title: string;
 }

@@ -1,6 +1,6 @@
+
 import { ToastType } from '@joplin/lib/shim';
 import * as React from 'react';
-
 export type PopupHandle = {
 	remove(): void;
 	scheduleDismiss(delay?: number): void;

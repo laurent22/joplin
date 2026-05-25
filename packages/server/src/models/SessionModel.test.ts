@@ -1,6 +1,6 @@
+
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
 import { defaultSessionTtl } from './SessionModel';
-
 describe('SessionModel', () => {
 
 	beforeAll(async () => {

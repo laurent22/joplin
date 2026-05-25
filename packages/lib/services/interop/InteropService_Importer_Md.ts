@@ -1,6 +1,8 @@
+
+
+import { pregQuote } from '../../string-utils-common';
 import { ImportExportResult } from './types';
 import { _ } from '../../locale';
-
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
@@ -10,11 +12,9 @@ import shim from '../../shim';
 import markdownUtils from '../../markdownUtils';
 import htmlUtils from '../../htmlUtils';
 import { unique } from '../../ArrayUtils';
-const { pregQuote } = require('../../string-utils-common');
 import { MarkupToHtml } from '@joplin/renderer';
 import { isDataUrl } from '@joplin/utils/url';
 import { stripBom } from '../../string-utils';
-
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
 	protected importedNotes: Record<string, NoteEntity> = {};
 

@@ -1,7 +1,7 @@
+
 import { DbConnection } from '../../db';
 import { unique } from '../../utils/array';
 import { ChangeType, Item, Uuid } from '../database/types';
-
 export interface Options {
 	interval: number;
 	batchSize?: number;

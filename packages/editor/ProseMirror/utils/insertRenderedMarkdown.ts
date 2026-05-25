@@ -1,6 +1,6 @@
+
 import { EditorView } from 'prosemirror-view';
 import { getEditorApi } from '../plugins/joplinEditorApiPlugin';
-
 const insertRenderedMarkdown = async (
 	view: EditorView,
 	markdown: string,

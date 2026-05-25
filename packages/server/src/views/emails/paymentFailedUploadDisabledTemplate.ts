@@ -1,8 +1,8 @@
+
 import markdownUtils from '@joplin/lib/markdownUtils';
 import config from '../../config';
 import { EmailSubjectBody } from '../../models/EmailModel';
 import { stripePortalUrl } from '../../utils/urlUtils';
-
 interface Props {
 	disabledInDays: number;
 }

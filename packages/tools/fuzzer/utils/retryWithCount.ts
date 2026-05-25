@@ -1,6 +1,6 @@
+
 import Logger from '@joplin/utils/Logger';
 import { msleep } from '@joplin/utils/time';
-
 const logger = Logger.create('retryWithCount');
 
 interface FailureEvent {

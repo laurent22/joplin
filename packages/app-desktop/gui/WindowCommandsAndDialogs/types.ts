@@ -1,5 +1,5 @@
-import { MarkupLanguage } from '@joplin/renderer';
 
+import { MarkupLanguage } from '@joplin/renderer';
 export interface DialogState {
 	noteContentPropertiesDialogOptions: {
 		visible: boolean;

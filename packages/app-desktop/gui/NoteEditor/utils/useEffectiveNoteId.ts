@@ -1,6 +1,6 @@
+
 import { useEffect, useRef } from 'react';
 import { NoteEditorProps } from './types';
-
 export default function useEffectiveNoteId(props: NoteEditorProps) {
 	// When a notebook is changed without any selected note,
 	// no note is selected for a moment, and then a new note gets selected.

@@ -1,6 +1,6 @@
+
 import joplin from 'api';
 import { ToastType } from 'api/types';
-
 joplin.plugins.register({
 	onStart: async function() {
 		const dialogs = joplin.views.dialogs;

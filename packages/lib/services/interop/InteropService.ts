@@ -1,3 +1,6 @@
+
+import { sprintf } from 'sprintf-js';
+import { fileExtension } from '../../path-utils';
 import { ModuleType, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ExportOptions, ImportExportResult, ExportProgressState, ExportModuleOutputFormat } from './types';
 import shim from '../../shim';
 import { _ } from '../../locale';
@@ -23,10 +26,7 @@ import InteropService_Exporter_Html from './InteropService_Exporter_Html';
 import InteropService_Importer_EnexToHtml from './InteropService_Importer_EnexToHtml';
 import InteropService_Importer_EnexToMd from './InteropService_Importer_EnexToMd';
 import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
-const { sprintf } = require('sprintf-js');
-const { fileExtension } = require('../../path-utils');
 import { EventEmitter } from 'events';
-
 export default class InteropService {
 
 	private defaultModules_: Module[];

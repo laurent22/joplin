@@ -1,6 +1,6 @@
+
 import { tags, Tag } from '@lezer/highlight';
 import { MarkdownConfig, InlineContext, MarkdownExtension } from '@lezer/markdown';
-
 const equalsSignCharcode = 61;
 const plusSignCharcode = 43;
 

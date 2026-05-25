@@ -1,6 +1,7 @@
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
+import stringUtilsCommon from './string-utils-common.js';
+import wrap_ from 'word-wrap';
 const htmlentities = new Entities().encode;
-const stringUtilsCommon = require('./string-utils-common.js');
 
 export const pregQuote = stringUtilsCommon.pregQuote as (str: string, delimiter?: string)=> string;
 export const replaceRegexDiacritics = stringUtilsCommon.replaceRegexDiacritics;
@@ -105,7 +106,6 @@ export function escapeRegExp(keyword: string) {
 }
 
 export function wrap(text: string, indent: string, width: number) {
-	const wrap_ = require('word-wrap');
 
 	return wrap_(text, {
 		width: width - indent.length,

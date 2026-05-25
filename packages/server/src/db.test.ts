@@ -1,7 +1,7 @@
+
 import { DbConnection, versionCheck } from './db';
 import { } from './env';
 import { DatabaseConfigClient } from './utils/types';
-
 describe('db', () => {
 
 	const mockedDb = (version: string, client: DatabaseConfigClient = DatabaseConfigClient.PostgreSQL) => {

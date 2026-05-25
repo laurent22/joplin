@@ -1,7 +1,7 @@
+
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { RegionSpec } from './RegionSpec';
 import toggleRegionFormatGlobally from './toggleRegionFormatGlobally';
-
 describe('toggleRegionFormatGlobally', () => {
 	jest.retryTimes(2);
 

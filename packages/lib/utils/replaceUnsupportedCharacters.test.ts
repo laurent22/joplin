@@ -1,5 +1,5 @@
-import replaceUnsupportedCharacters from './replaceUnsupportedCharacters';
 
+import replaceUnsupportedCharacters from './replaceUnsupportedCharacters';
 describe('replaceUnsupportedCharacters', () => {
 	test('should replace NULL characters', () => {
 		expect(replaceUnsupportedCharacters('Test\x00...')).toBe('Test\uFFFD...');

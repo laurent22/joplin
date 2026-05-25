@@ -1,6 +1,6 @@
+
 import { Knex } from 'knex';
 import { DbConnection } from '../db';
-
 interface TransactionInfo {
 	name: string;
 	index: number;

@@ -1,8 +1,8 @@
+
+import Datauri from 'datauri/sync';
 import * as fs from 'fs-extra';
-const Datauri = require('datauri/sync');
 import { dirname } from 'path';
 import packToWriter, { type FileApiChunkCallback } from './packToWriter';
-
 const dataUriEncode = (filePath: string): string => {
 	const result = Datauri(filePath);
 	return result.content;

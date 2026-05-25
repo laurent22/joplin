@@ -1,7 +1,7 @@
+
 import { UserFlagType } from '../../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUser, models, db } from '../../utils/testing/testUtils';
 import { disabledUserIds, setUserAccountDisabledTimes } from '../20220131185922_account_disabled_timestamp';
-
 describe('20220131185922_account_disabled_timestamp', () => {
 
 	beforeAll(async () => {

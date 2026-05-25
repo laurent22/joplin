@@ -10,10 +10,11 @@
 //
 // https://github.com/facebook/metro/issues/1#issuecomment-511228599
 
-const path = require('path');
-const { mergeConfig, getDefaultConfig } = require('@react-native/metro-config');
-const { getDefaultConfig: getExpoDefaultConfig } = require('expo/metro-config');
 
+import path_browserify_139 from 'path-browserify';
+import path from 'path';
+import { mergeConfig, getDefaultConfig } from '@react-native/metro-config';
+import { getDefaultConfig as getExpoDefaultConfig } from 'expo/metro-config';
 const localPackages = {
 	'@joplin/lib': path.resolve(__dirname, '../lib/'),
 	'@joplin/renderer': path.resolve(__dirname, '../renderer/'),
@@ -34,7 +35,7 @@ const localPackages = {
 // cSpell:disable
 // Some packages aren't available in react-native and thus must be polyfilled
 // For example, this allows us to `import {resolve} from 'path'` rather than
-// `const { resolve } = require('path-browserify')` ('path-browerify' doesn't have its own type
+// `const { resolve } = path_browserify_139` ('path-browerify' doesn't have its own type
 // definitions).
 // cSpell:enable
 

@@ -1,6 +1,6 @@
+
 import { useState } from 'react';
 import KeymapService from '@joplin/lib/services/KeymapService';
-
 const keymapService = KeymapService.instance();
 
 interface CommandStatus {

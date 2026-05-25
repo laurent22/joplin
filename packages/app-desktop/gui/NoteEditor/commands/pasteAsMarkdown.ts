@@ -1,11 +1,11 @@
+
+
+import { clipboard } from 'electron';
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 import { processImagesInPastedHtml } from '../utils/resourceHandling';
 import { WindowCommandDependencies } from '../utils/types';
-
-const { clipboard } = require('electron');
-
 export const declaration: CommandDeclaration = {
 	name: 'pasteAsMarkdown',
 	label: () => _('Paste as Markdown'),

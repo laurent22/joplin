@@ -1,7 +1,9 @@
-import * as fs from 'fs-extra';
 
+import os_homedir from 'os';
+import os_homedir2 from 'os';
+import * as fs from 'fs-extra';
 export async function credentialFile(filename: string): Promise<string> {
-	const filePath = `${require('os').homedir()}/joplin-credentials/${filename}`;
+	const filePath = `${os_homedir.homedir()}/joplin-credentials/${filename}`;
 	if (await fs.pathExists(filePath)) return filePath;
 	return '';
 }
@@ -18,7 +20,7 @@ export async function readCredentialFile(filename: string, defaultValue: string 
 }
 
 export function credentialFileSync(filename: string): string {
-	const filePath = `${require('os').homedir()}/joplin-credentials/${filename}`;
+	const filePath = `${os_homedir2.homedir()}/joplin-credentials/${filename}`;
 	if (fs.pathExistsSync(filePath)) return filePath;
 	return '';
 }

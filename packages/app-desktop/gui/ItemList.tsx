@@ -1,6 +1,6 @@
+
 import * as React from 'react';
 import { DragEventHandler, KeyboardEventHandler, UIEventHandler } from 'react';
-
 interface Props<ItemType> {
 	style: React.CSSProperties & { height: number };
 	itemHeight: number;

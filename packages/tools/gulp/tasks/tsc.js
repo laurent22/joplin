@@ -1,5 +1,5 @@
-const execa = require('execa');
 
+import execa from 'execa';
 const rootDir = `${__dirname}/../../../`;
 process.chdir(rootDir);
 

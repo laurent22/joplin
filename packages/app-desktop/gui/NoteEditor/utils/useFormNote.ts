@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback, RefObject, useRef } from 'react';
 import { FormNote, defaultFormNote, NoteBodyEditorRef, ResourceInfos } from './types';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
@@ -15,7 +16,6 @@ import Logger from '@joplin/utils/Logger';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
-
 const logger = Logger.create('useFormNote');
 
 export interface OnLoadEvent {

@@ -1,7 +1,7 @@
+
 import { User, UserDeletion, Uuid } from '../services/database/types';
 import { errorToString } from '../utils/errors';
 import BaseModel from './BaseModel';
-
 export interface AddOptions {
 	processData?: boolean;
 	processAccount?: boolean;

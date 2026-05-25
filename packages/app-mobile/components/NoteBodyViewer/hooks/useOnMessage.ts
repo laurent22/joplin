@@ -1,7 +1,7 @@
+
 import { useCallback } from 'react';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 import Logger from '@joplin/utils/Logger';
-
 export type HandleMessageCallback = (message: string)=> void;
 export type OnMarkForDownloadCallback = (resource: { resourceId: string })=> void;
 

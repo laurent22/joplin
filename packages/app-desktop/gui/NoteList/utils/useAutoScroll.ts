@@ -1,7 +1,7 @@
-import { useRef, useEffect } from 'react';
 
 // Auto-scrolls the note list to the selected note when selection changes. Uses a pending flag
 // to handle cross-folder navigation where notes may not be loaded on the first render.
+import { useRef, useEffect } from 'react';
 const useAutoScroll = (
 	selectedNoteId: string,
 	selectedFolderId: string,

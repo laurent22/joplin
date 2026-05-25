@@ -1,9 +1,9 @@
+
 import { readFileSync, readdirSync, writeFileSync } from 'fs-extra';
 import { dirname } from 'path';
 import { fileExtension, basename } from '@joplin/lib/path-utils';
 import markdownUtils from '@joplin/lib/markdownUtils';
 import { AssetContent, ItemMetadata, WelcomeAssetNote, WelcomeAssetPlatform, WelcomeAssetResource, WelcomeAssets } from '@joplin/lib/WelcomeUtils';
-
 const rootDir = dirname(dirname(__dirname));
 const enWelcomeDir = `${rootDir}/readme/welcome`;
 

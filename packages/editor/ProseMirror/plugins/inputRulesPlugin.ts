@@ -1,3 +1,5 @@
+
+
 import { buildInputRules } from 'prosemirror-example-setup';
 import schema from '../schema';
 import { MarkType, ResolvedPos } from 'prosemirror-model';
@@ -5,8 +7,6 @@ import { EditorState, Plugin, Transaction } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { closeHistory } from 'prosemirror-history';
 import showCreateEditablePrompt from './joplinEditablePlugin/showCreateEditablePrompt';
-
-
 interface InputRuleData {
 	match: RegExp;
 	commitCharacter: string|null;

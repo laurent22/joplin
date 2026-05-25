@@ -1,7 +1,7 @@
+
 import SearchEngine from './SearchEngine';
 import Note, { PreviewsOptions } from '../../models/Note';
 import Setting from '../../models/Setting';
-
 export interface NotesForQueryOptions {
 	fields?: string[];
 	appendWildCards?: boolean;

@@ -1,6 +1,6 @@
-const { setupDatabaseAndSynchronizer, db, switchClient } = require('../testing/test-utils.js');
-const KvStore = require('../services/KvStore').default;
 
+import { setupDatabaseAndSynchronizer, db, switchClient } from '../testing/test-utils.js';
+import KvStore from '../services/KvStore';
 function setupStore() {
 	const store = KvStore.instance();
 	store.setDb(db());

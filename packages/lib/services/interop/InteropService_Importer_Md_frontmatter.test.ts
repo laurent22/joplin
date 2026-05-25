@@ -1,12 +1,3 @@
-import Note from '../../models/Note';
-import Tag from '../../models/Tag';
-import time from '../../time';
-import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
-import { ImportModuleOutputFormat, ImportOptions } from './types';
-import InteropService from './InteropService';
-import Folder from '../../models/Folder';
-import { NoteEntity } from '../database/types';
-const moment = require('moment');
 
 // Suppress warning:
 //
@@ -17,6 +8,15 @@ const moment = require('moment');
 //
 // But what moment.js does it correct when you don't know the format of the date, which is what we
 // simulate here with imported files.
+import moment from 'moment';
+import Note from '../../models/Note';
+import Tag from '../../models/Tag';
+import time from '../../time';
+import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
+import { ImportModuleOutputFormat, ImportOptions } from './types';
+import InteropService from './InteropService';
+import Folder from '../../models/Folder';
+import { NoteEntity } from '../database/types';
 moment.suppressDeprecationWarnings = true;
 
 async function importNote(path: string) {

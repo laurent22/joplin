@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 
+
+import { randomClipperPort } from './randomClipperPort';
 import getActiveTabs from '../../util/getActiveTabs.mjs';
 import joplinEnv from '../../util/joplinEnv.mjs';
-const { randomClipperPort } = require('./randomClipperPort');
-
 function msleep(ms) {
 	return new Promise((resolve) => {
 		setTimeout(() => {

@@ -1,10 +1,10 @@
+
+
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPrint, faDownload, faSquareArrowUpRight, faXmark, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { IconButtonProps } from '../types';
-
-
 const ButtonElement = styled.button<{ hoverColor?: string; size?: number; color?: string }>`
     padding: 0.2rem 0.7rem;
     cursor: pointer;

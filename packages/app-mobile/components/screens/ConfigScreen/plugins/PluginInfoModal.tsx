@@ -1,3 +1,4 @@
+
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
@@ -18,7 +19,6 @@ import InstallButton from './buttons/InstallButton';
 import { InstallState } from './PluginBox';
 import PluginChips from './PluginBox/PluginChips';
 import { PluginStatusRecord } from '../types';
-
 interface Props {
 	themeId: number;
 

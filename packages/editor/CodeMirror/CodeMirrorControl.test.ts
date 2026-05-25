@@ -1,9 +1,9 @@
+
 import { ViewPlugin } from '@codemirror/view';
 import createEditorControl from './testing/createEditorControl';
 import { EditorCommandType } from '../types';
 import pressReleaseKey from './testing/pressReleaseKey';
 import { EditorSelection, EditorState } from '@codemirror/state';
-
 describe('CodeMirrorControl', () => {
 	it('clearHistory should clear the undo/redo history', () => {
 		const controls = createEditorControl('');

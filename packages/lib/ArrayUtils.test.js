@@ -1,5 +1,5 @@
-const ArrayUtils = require('./ArrayUtils');
 
+import ArrayUtils from './ArrayUtils';
 describe('ArrayUtils', () => {
 
 

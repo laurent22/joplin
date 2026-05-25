@@ -1,5 +1,6 @@
 /** @jest-environment node */
 
+import handleCustomProtocols from './handleCustomProtocols';
 type ProtocolHandler = (request: Request)=> Promise<Response>;
 const customProtocols: Map<string, ProtocolHandler> = new Map();
 
@@ -16,7 +17,6 @@ jest.doMock('electron', () => {
 	};
 });
 
-import handleCustomProtocols from './handleCustomProtocols';
 
 const setUpProtocolHandler = () => {
 	const mockSession = {

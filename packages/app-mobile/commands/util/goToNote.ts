@@ -1,7 +1,7 @@
+
 import Note from '@joplin/lib/models/Note';
 import NavService from '@joplin/lib/services/NavService';
 import { AttachFileAction } from '../../components/screens/Note/commands/attachFile';
-
 export interface GotoNoteOptions {
 	attachFileAction?: AttachFileAction | null;
 }

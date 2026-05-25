@@ -1,8 +1,8 @@
+
+import execCommand from './execCommand';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import { notarize } from '@electron/notarize';
-const execCommand = require('./execCommand');
-
 function isDesktopAppTag(tagName: string) {
 	if (!tagName) return false;
 	return tagName[0] === 'v';

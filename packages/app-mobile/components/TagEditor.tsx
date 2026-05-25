@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { StyleSheet, View, Text, ScrollView, ViewStyle, Platform, AccessibilityInfo, ScrollViewProps, TextStyle } from 'react-native';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from './global-style';
@@ -11,7 +12,6 @@ import { Divider } from 'react-native-paper';
 import focusView from '../utils/focusView';
 import { msleep } from '@joplin/utils/time';
 import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
-
 export enum TagEditorMode {
 	Large,
 	Compact,

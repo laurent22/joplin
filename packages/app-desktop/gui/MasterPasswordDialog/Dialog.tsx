@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, useState, useEffect, useMemo } from 'react';
 import { _ } from '@joplin/lib/locale';
@@ -13,7 +14,6 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import LabelledPasswordInput from '../PasswordInput/LabelledPasswordInput';
 import shim from '@joplin/lib/shim';
 import time from '@joplin/lib/time';
-
 interface Props {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied

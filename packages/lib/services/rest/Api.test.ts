@@ -1,3 +1,5 @@
+
+import { MarkupToHtml } from '@joplin/renderer';
 import { PaginationOrderDir } from '../../models/utils/types';
 import Api, { RequestMethod } from '../../services/rest/Api';
 import { extractMediaUrls } from './routes/notes';
@@ -10,12 +12,10 @@ import Tag from '../../models/Tag';
 import NoteTag from '../../models/NoteTag';
 import ResourceService from '../../services/ResourceService';
 import SearchEngine from '../search/SearchEngine';
-const { MarkupToHtml } = require('@joplin/renderer');
 import { NoteEntity, ResourceEntity } from '../database/types';
 import { toFileProtocolPath } from '@joplin/utils/path';
 import { join } from 'path';
 import { htmlentities } from '@joplin/utils/html';
-
 const createFolderForPagination = async (num: number, time: number) => {
 	await Folder.save({
 		title: `folder${num}`,

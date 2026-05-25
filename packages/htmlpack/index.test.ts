@@ -1,7 +1,7 @@
+
 import { exists, mkdir, readFile, remove, writeFile } from 'fs-extra';
 import { join } from 'path';
 import htmlpack from '.';
-
 const outputDirectory = './test-output';
 
 describe('htmlpack/index', () => {

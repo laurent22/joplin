@@ -1,6 +1,6 @@
+
 import gitCompareUrl from './gitCompareUrl';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
-
 type GitCompareManifest = Pick<PluginManifest, 'repository_url' | '_publish_commit'>;
 
 describe('gitCompareUrl', () => {

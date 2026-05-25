@@ -1,5 +1,5 @@
-import Setting from '../../models/Setting';
 
+import Setting from '../../models/Setting';
 let fields: string[] = null;
 let perFieldReverse: { [field: string]: boolean } = null;
 

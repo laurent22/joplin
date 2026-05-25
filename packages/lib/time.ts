@@ -4,10 +4,10 @@
 // `@joplin/utils/time`.
 // -----------------------------------------------------------------------------------------------
 
+
+import moment from 'moment';
 import shim from './shim';
 import type * as MomentTypes from 'moment';
-const moment = require('moment');
-
 type ConditionHandler = ()=> boolean;
 
 class Time {

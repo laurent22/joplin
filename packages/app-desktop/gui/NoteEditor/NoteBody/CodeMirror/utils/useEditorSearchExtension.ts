@@ -1,8 +1,8 @@
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import CodeMirror5Emulation from '@joplin/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation';
-
 const logger = Logger.create('useEditorSearch');
 
 // Registers a helper CodeMirror extension to be used with

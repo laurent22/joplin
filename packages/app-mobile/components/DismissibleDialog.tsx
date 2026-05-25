@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useMemo } from 'react';
 import { StyleSheet, View, ViewStyle, useWindowDimensions } from 'react-native';
@@ -5,7 +6,6 @@ import { IconButton, Surface, Text } from 'react-native-paper';
 import { themeStyle } from './global-style';
 import Modal from './Modal';
 import { _ } from '@joplin/lib/locale';
-
 export enum DialogVariant {
 	// Small width, auto-determined height
 	SmallResize = 'small-resize',

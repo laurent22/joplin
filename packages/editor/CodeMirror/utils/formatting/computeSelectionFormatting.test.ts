@@ -1,8 +1,8 @@
+
+
 import { EditorSelection } from '@codemirror/state';
 import createTestEditor from '../../testing/createTestEditor';
 import computeSelectionFormatting from './computeSelectionFormatting';
-
-
 describe('computeSelectionFormatting', () => {
 	// The below tests rely on CodeMirror to correctly parse the document, which
 	// can be buggy (and fail very rarely).

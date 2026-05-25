@@ -1,8 +1,8 @@
+
 import markdownUtils from '@joplin/lib/markdownUtils';
 import config from '../../config';
 import { EmailSubjectBody } from '../../models/EmailModel';
 import { stripePortalUrl, helpUrl } from '../../utils/urlUtils';
-
 export default (): EmailSubjectBody => {
 	return {
 		subject: `Your ${config().appName} payment could not be processed`,

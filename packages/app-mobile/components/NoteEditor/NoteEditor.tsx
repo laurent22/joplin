@@ -1,15 +1,16 @@
+
+
+
 import Setting from '@joplin/lib/models/Setting';
 import { themeStyle } from '@joplin/lib/theme';
 import EditLinkDialog from './EditLinkDialog';
 import { defaultSearchState, SearchPanel } from './SearchPanel';
 import { WebViewControl } from '../ExtendedWebView/types';
-
 import * as React from 'react';
 import { Ref, RefObject, useEffect, useImperativeHandle } from 'react';
 import { useMemo, useState, useCallback, useRef } from 'react';
 import { LayoutChangeEvent, Platform, View, ViewStyle } from 'react-native';
 import { editorFont } from '../global-style';
-
 import { EditorControl as EditorBodyControl, ContentScriptData } from '@joplin/editor/types';
 import { EditorControl, EditorSettings, EditorType } from './types';
 import { _ } from '@joplin/lib/locale';
@@ -38,7 +39,6 @@ import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
 import { Second } from '@joplin/utils/time';
 import useDebounced from '../../utils/hooks/useDebounced';
-
 const logger = Logger.create('NoteEditor');
 
 type OnChange = (event: ChangeEvent)=> void;

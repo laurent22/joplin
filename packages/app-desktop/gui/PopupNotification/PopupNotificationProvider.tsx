@@ -1,9 +1,9 @@
+
 import * as React from 'react';
 import { createContext, useEffect, useMemo, useRef, useState } from 'react';
 import { NotificationType, PopupHandle, PopupControl as PopupManager } from './types';
 import { Hour, msleep } from '@joplin/utils/time';
 import shim from '@joplin/lib/shim';
-
 export const PopupNotificationContext = createContext<PopupManager|null>(null);
 export const VisibleNotificationsContext = createContext<PopupSpec[]>([]);
 

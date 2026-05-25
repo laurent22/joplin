@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import createMockReduxStore from '../utils/testing/createMockReduxStore';
@@ -6,7 +7,6 @@ import { TagEntity } from '@joplin/lib/services/database/types';
 import { useEffect, useState } from 'react';
 import TagEditor, { TagEditorMode } from './TagEditor';
 import Setting from '@joplin/lib/models/Setting';
-
 interface WrapperProps {
 	allTags: TagEntity[];
 	initialTags: string[];

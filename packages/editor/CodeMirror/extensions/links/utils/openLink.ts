@@ -1,6 +1,6 @@
+
 import { EditorView } from '@codemirror/view';
 import findLineMatchingLink from './findLineMatchingLink';
-
 export type OnOpenExternalLink = (url: string, view: EditorView)=> void;
 const openLink = (link: string, view: EditorView, onOpenExternalLink: OnOpenExternalLink) => {
 	const targetLine = findLineMatchingLink(link, view.state);

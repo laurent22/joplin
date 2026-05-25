@@ -1,11 +1,11 @@
 /* eslint-disable import/prefer-default-export */
 
+
 import { readFile } from 'fs-extra';
 import { normalize } from 'path';
-import yargs = require('yargs');
+import yargs from 'yargs';
 import { dirname } from './tool-utils';
 import { toForwardSlashes } from '@joplin/utils/path';
-
 export const findInvalidImportPaths = (baseDir: string, fileContent: string): string[] => {
 	const output: string[] = [];
 

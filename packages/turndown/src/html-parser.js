@@ -2,6 +2,7 @@
  * Set up window for Node.js
  */
 
+import domino from '@mixmark-io/domino';
 var root = (typeof window !== 'undefined' ? window : {})
 
 /*
@@ -47,7 +48,6 @@ function createHTMLParser () {
       }
     }
   } else {
-    var domino = require('@mixmark-io/domino')
     Parser.prototype.parseFromString = function (string) {
       return domino.createDocument(string)
     }

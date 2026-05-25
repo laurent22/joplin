@@ -1,3 +1,4 @@
+
 import { RouteHandler, SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -7,7 +8,6 @@ import defaultView from '../../utils/defaultView';
 import { forgotPasswordUrl, resetPasswordUrl } from '../../utils/urlUtils';
 import { bodyFields } from '../../utils/requestUtils';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('index/password');
 
 const router: Router = new Router(RouteType.Web);

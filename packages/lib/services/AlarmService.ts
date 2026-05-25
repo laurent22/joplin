@@ -1,10 +1,10 @@
+
+
 import Logger from '@joplin/utils/Logger';
 import Alarm from '../models/Alarm';
 import { Notification } from '../models/Alarm';
 import { NoteEntity } from './database/types';
-
 import Note from '../models/Note';
-
 export interface AlarmServiceDriver {
 	setService?(service: typeof AlarmService): void;
 	setInAppNotificationHandler?(handler: unknown): void;

@@ -1,3 +1,4 @@
+
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { linkedResourceIds, serializeJoplinItem } from '../joplinUtils';
 import { Item, Session, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../../services/database/types';
@@ -6,7 +7,6 @@ import { AppContext } from '../types';
 import { patchApi, postApi } from './apiUtils';
 import { checkContextError, createFolder, createItem, koaAppContext, models, updateFolder, createResource, updateItem } from './testUtils';
 import { makeFolderSerializedBody, makeNoteSerializedBody } from './serializedItems';
-
 interface ShareResult {
 	share: Share;
 	item: Item;

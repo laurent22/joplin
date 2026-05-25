@@ -1,6 +1,6 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { WindowControl } from '../utils/useWindowControl';
-
 export const declaration: CommandDeclaration = {
 	name: 'showPrompt',
 };

@@ -1,3 +1,4 @@
+
 import { _ } from '@joplin/lib/locale';
 import * as React from 'react';
 import { useCallback } from 'react';
@@ -9,7 +10,6 @@ import { LinkButton } from '../../buttons';
 import { ConfigScreenStyles } from './configScreenStyles';
 import { Divider } from 'react-native-paper';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('JoplinCloudConfig');
 
 type JoplinCloudConfigProps = {

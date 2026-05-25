@@ -1,7 +1,7 @@
+
 import * as fs from 'fs';
 import * as path from 'path';
 import * as crypto from 'crypto';
-
 export interface GenerateInfo {
 	version: string;
 	dmgPath: string;

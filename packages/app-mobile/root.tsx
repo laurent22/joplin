@@ -1,7 +1,13 @@
+import DropdownAlert from 'react-native-dropdownalert';
+import { connect, Provider } from 'react-redux';
+import { AppNav } from './components/app-nav.js';
+import { OneDriveLoginScreen } from './components/screens/onedrive-login.js';
+import SyncTargetNextcloud from '@joplin/lib/SyncTargetNextcloud.js';
+import SyncTargetWebDAV from '@joplin/lib/SyncTargetWebDAV.js';
+import SyncTargetDropbox from '@joplin/lib/SyncTargetDropbox.js';
+import SyncTargetAmazonS3 from '@joplin/lib/SyncTargetAmazonS3.js';
 import * as React from 'react';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
-PerformanceLogger.onAppStartBegin();
-
 import setupQuickActions from './setupQuickActions';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import Alarm from '@joplin/lib/models/Alarm';
@@ -22,24 +28,12 @@ import { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } from
 import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, ActivityIndicator } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
-const DropdownAlert = require('react-native-dropdownalert').default;
-
-// Mirrors the DropdownAlertData type from react-native-dropdownalert
-interface DropdownAlertData {
-	type?: string;
-	title?: string;
-	message?: string;
-	interval?: number;
-	resolve?: (_value: DropdownAlertData)=> void;
-}
 import SafeAreaView from './components/SafeAreaView';
-const { connect, Provider } = require('react-redux');
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import BackButtonService, { BackButtonHandler } from './services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
 import { createStore, applyMiddleware, Dispatch } from 'redux';
 import reduxSharedMiddleware from '@joplin/lib/components/shared/reduxSharedMiddleware';
-const { AppNav } = require('./components/app-nav.js');
 import Folder from '@joplin/lib/models/Folder';
 import NotesScreen from './components/screens/Notes/Notes';
 import TagsScreen from './components/screens/tags';
@@ -49,7 +43,6 @@ import LogScreen from './components/screens/LogScreen';
 import StatusScreen from './components/screens/status';
 import SearchScreen from './components/screens/SearchScreen';
 import ResourceScreen from './components/screens/ResourceScreen';
-const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
 import EncryptionConfigScreen from './components/screens/encryption-config';
 import DropboxLoginScreen from './components/screens/dropbox-login.js';
 import { MenuProvider } from 'react-native-popup-menu';
@@ -63,30 +56,11 @@ import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { themeStyle } from './components/global-style';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import SyncTargetFilesystem from '@joplin/lib/SyncTargetFilesystem';
-const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
-const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
-const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
-const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import BiometricPopup from './components/biometrics/BiometricPopup';
 import { isCallbackUrl, parseCallbackUrl, CallbackUrlCommand } from '@joplin/lib/callbackUrlUtils';
 import JoplinCloudLoginScreen from './components/screens/JoplinCloudLoginScreen';
-
 import SyncTargetNone from '@joplin/lib/SyncTargetNone';
-
-
-
-SyncTargetRegistry.addClass(SyncTargetNone);
-SyncTargetRegistry.addClass(SyncTargetOneDrive);
-SyncTargetRegistry.addClass(SyncTargetNextcloud);
-SyncTargetRegistry.addClass(SyncTargetWebDAV);
-SyncTargetRegistry.addClass(SyncTargetDropbox);
-SyncTargetRegistry.addClass(SyncTargetFilesystem);
-SyncTargetRegistry.addClass(SyncTargetAmazonS3);
-SyncTargetRegistry.addClass(SyncTargetJoplinServer);
-SyncTargetRegistry.addClass(SyncTargetJoplinServerSAML);
-SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
-
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import setupNotifications from './utils/setupNotifications';
@@ -116,6 +90,32 @@ import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-cont
 import appReducer from './utils/appReducer';
 import SyncWizard from './components/SyncWizard/SyncWizard';
 import Synchronizer from '@joplin/lib/Synchronizer';
+PerformanceLogger.onAppStartBegin();
+
+
+// Mirrors the DropdownAlertData type from react-native-dropdownalert
+interface DropdownAlertData {
+	type?: string;
+	title?: string;
+	message?: string;
+	interval?: number;
+	resolve?: (_value: DropdownAlertData)=> void;
+}
+
+
+
+
+SyncTargetRegistry.addClass(SyncTargetNone);
+SyncTargetRegistry.addClass(SyncTargetOneDrive);
+SyncTargetRegistry.addClass(SyncTargetNextcloud);
+SyncTargetRegistry.addClass(SyncTargetWebDAV);
+SyncTargetRegistry.addClass(SyncTargetDropbox);
+SyncTargetRegistry.addClass(SyncTargetFilesystem);
+SyncTargetRegistry.addClass(SyncTargetAmazonS3);
+SyncTargetRegistry.addClass(SyncTargetJoplinServer);
+SyncTargetRegistry.addClass(SyncTargetJoplinServerSAML);
+SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
+
 
 const logger = Logger.create('root');
 const perfLogger = PerformanceLogger.create();

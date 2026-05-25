@@ -1,12 +1,12 @@
+
+
+import { stringify } from 'query-string';
+import urlUtils from './urlUtils.js';
+import { Buffer } from 'buffer';
 import shim from './shim';
 import time from './time';
 import Logger from '@joplin/utils/Logger';
 import { _ } from './locale';
-
-const { stringify } = require('query-string');
-const urlUtils = require('./urlUtils.js');
-const Buffer = require('buffer').Buffer;
-
 const logger = Logger.create('OneDriveApi');
 
 interface OneDriveAuth {

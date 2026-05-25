@@ -1,9 +1,9 @@
+
 import { ModelType } from '../../../BaseModel';
 import { Request, RequestMethod } from '../Api';
 import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
 import ItemChange, { ChangeSinceIdOptions } from '../../../models/ItemChange';
 import requestFields from '../utils/requestFields';
-
 export default async function(request: Request, id: string = null, _link: string = null) {
 	if (request.method === RequestMethod.GET) {
 		const options: ChangeSinceIdOptions = {

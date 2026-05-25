@@ -1,3 +1,4 @@
+
 import { useMemo } from 'react';
 import { FolderListItem, HeaderId, HeaderListItem, ListItem, ListItemType, TagListItem } from '../types';
 import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
@@ -6,7 +7,6 @@ import { _ } from '@joplin/lib/locale';
 import toggleHeader from './utils/toggleHeader';
 import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
-
 interface Props {
 	tags: TagsWithNoteCountEntity[];
 	folders: FolderEntity[];

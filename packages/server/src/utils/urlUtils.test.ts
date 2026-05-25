@@ -1,5 +1,5 @@
-import { sanitizeUserUrl } from './urlUtils';
 
+import { sanitizeUserUrl } from './urlUtils';
 describe('urlUtils', () => {
 	test('sanitizeUserUrl should return # for dangerous URLs', () => {
 		expect(sanitizeUserUrl('randomProtocol://foo')).toBe('#');

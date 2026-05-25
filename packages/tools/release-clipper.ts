@@ -1,8 +1,9 @@
+
+import os_tmpdir from 'os';
+import md5File from 'md5-file';
 import * as fs from 'fs-extra';
 import { execCommand, rootDir } from './tool-utils';
-const md5File = require('md5-file');
 import * as glob from 'glob';
-
 const clipperDir = `${rootDir}/packages/app-clipper`;
 const tmpSourceDirName = 'Clipper-source';
 
@@ -106,7 +107,7 @@ async function compareDir(dir1: string, dir2: string) {
 }
 
 async function checkSourceZip(sourceZip: string, compiledZip: string) {
-	const tmpDir = `${require('os').tmpdir()}/${Date.now()}`;
+	const tmpDir = `${os_tmpdir.tmpdir()}/${Date.now()}`;
 
 	console.info(`Checking source ZIP in ${tmpDir}`);
 

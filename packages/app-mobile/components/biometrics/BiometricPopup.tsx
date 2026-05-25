@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import Setting from '@joplin/lib/models/Setting';
 import { useEffect, useState } from 'react';
@@ -7,7 +8,6 @@ import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
 import biometricAuthenticate from './biometricAuthenticate';
 import SafeAreaView from '../SafeAreaView';
-
 const logger = Logger.create('BiometricPopup');
 
 interface Props {

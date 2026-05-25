@@ -4,11 +4,11 @@
 // preserved even if the original pull request or comments are later deleted. It validates that each
 // CLA comment was made by the correct contributor.
 
+
 import { getRootDir } from '@joplin/utils';
 import { githubOauthToken } from './tool-utils';
 import { mkdirp, pathExists } from 'fs-extra';
 import { readdir, readFile, writeFile } from 'fs/promises';
-
 interface Issue {
 	user: {
 		id: number;

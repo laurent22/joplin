@@ -1,9 +1,9 @@
-import type { MarkupLanguage, FsDriver as RendererFsDriver, RenderResult, ResourceInfos } from '@joplin/renderer/types';
-import type Renderer from './contentScript/Renderer';
-import { PluginOptions } from '@joplin/renderer/MarkupToHtml';
 
 // Joplin settings (as from Setting.value(...)) that should
 // remain constant during editing.
+import type { MarkupLanguage, FsDriver as RendererFsDriver, RenderResult, ResourceInfos } from '@joplin/renderer/types';
+import type Renderer from './contentScript/Renderer';
+import { PluginOptions } from '@joplin/renderer/MarkupToHtml';
 export interface ForwardedJoplinSettings {
 	safeMode: boolean;
 	tempDir: string;

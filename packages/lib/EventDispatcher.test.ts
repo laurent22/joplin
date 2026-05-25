@@ -1,5 +1,6 @@
-import EventDispatcher from './EventDispatcher';
 
+import Dispatcher from './EventDispatcher';
+import EventDispatcher from './EventDispatcher';
 enum TestKey {
 	FooEvent,
 	BarEvent,
@@ -122,7 +123,6 @@ describe('EventDispatcher', () => {
 	});
 
 	it('should work if imported using require(...).default', () => {
-		const Dispatcher = require('./EventDispatcher').default;
 		const dispatcher = new Dispatcher();
 
 		let pass = false;

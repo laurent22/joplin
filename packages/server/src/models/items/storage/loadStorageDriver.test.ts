@@ -1,7 +1,7 @@
+
 import { afterAllTests, beforeAllDb, beforeEachDb, db, dbSlave, expectThrow, models } from '../../../utils/testing/testUtils';
 import { StorageDriverType } from '../../../utils/types';
 import loadStorageDriver from './loadStorageDriver';
-
 describe('loadStorageDriver', () => {
 
 	beforeAll(async () => {

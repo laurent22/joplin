@@ -1,7 +1,7 @@
+
+import { clipboard } from 'electron';
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 import HtmlUtils from '@joplin/lib/htmlUtils';
-const { clipboard } = require('electron');
-
 interface ClipboardData {
 	text: string;
 	html: string;

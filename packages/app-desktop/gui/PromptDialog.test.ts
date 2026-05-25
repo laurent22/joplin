@@ -1,5 +1,5 @@
-import PromptDialog from './PromptDialog';
 
+import PromptDialog from './PromptDialog';
 describe('PromptDialog Escape key handling', () => {
 
 	const setupKeyHandler = (inputType: string, menuIsOpened: boolean) => {

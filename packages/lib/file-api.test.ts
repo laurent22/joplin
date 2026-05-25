@@ -1,8 +1,8 @@
+
 import { PaginatedList, RemoteItem, getSupportsDeltaWithItems, enableEnhancedBasicDeltaAlgorithm, basicDelta, ItemStat, isLocalServer } from './file-api';
 import { RemoteItemMetadata } from './models/BaseItem';
 import Setting from './models/Setting';
 import SyncTargetRegistry from './SyncTargetRegistry';
-
 const defaultPaginatedList = (): PaginatedList => {
 	return {
 		items: [],

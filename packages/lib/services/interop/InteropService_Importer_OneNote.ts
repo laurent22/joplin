@@ -1,5 +1,8 @@
-import { ImportExportResult, ImportModuleOutputFormat, ImportOptions } from './types';
 
+
+// cspell:ignore oxps
+
+import { ImportExportResult, ImportModuleOutputFormat, ImportOptions } from './types';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { NoteEntity } from '../database/types';
 import { rtrimSlashes, toForwardSlashes } from '../../path-utils';
@@ -11,9 +14,6 @@ import shim from '../../shim';
 import { unique } from '../../ArrayUtils';
 import xpsToPngPowerShellScript from './xpsToPngPowerShellScript';
 import Note from '../../models/Note';
-
-// cspell:ignore oxps
-
 const logger = Logger.create('InteropService_Importer_OneNote');
 
 const xpsPrintoutImageExtensions = ['.xps', '.oxps'];

@@ -1,8 +1,8 @@
+
 import { LinkRenderingType } from '@joplin/renderer/MdToHtml';
 import { MarkupToHtmlOptions } from './types';
 import { getGlobalSettings, ResourceInfos } from '@joplin/renderer/types';
 import Setting from '@joplin/lib/models/Setting';
-
 interface OptionOverride {
 	bodyOnly: boolean;
 	resourceInfos?: ResourceInfos;

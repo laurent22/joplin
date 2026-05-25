@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { _ } from '@joplin/lib/locale';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
@@ -14,7 +15,6 @@ import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
 import { PluginCallback, PluginCallbacks } from './utils/usePluginCallbacks';
 import InstalledPluginBox from './InstalledPluginBox';
 import SectionLabel from './SectionLabel';
-
 interface Props {
 	themeId: number;
 	pluginSettings: PluginSettings;

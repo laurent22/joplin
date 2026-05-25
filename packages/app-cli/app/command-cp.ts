@@ -1,9 +1,9 @@
+
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
 import { ModelType } from '@joplin/lib/BaseModel';
 import Note from '@joplin/lib/models/Note';
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'cp <note> [notebook]';

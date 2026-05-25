@@ -1,8 +1,8 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { ConfigScreenStyleSheet } from './configScreenStyles';
 import { View, Text, LayoutChangeEvent } from 'react-native';
-
 interface Props {
 	styles: ConfigScreenStyleSheet;
 	title: string;

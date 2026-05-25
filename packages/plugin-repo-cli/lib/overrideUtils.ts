@@ -1,7 +1,7 @@
+
 import * as path from 'path';
 import { readJsonFile } from './utils';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
-
 export interface ManifestOverride {
 	_obsolete?: boolean;
 	_recommended?: boolean;

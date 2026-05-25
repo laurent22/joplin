@@ -1,12 +1,12 @@
 
-import { expect, type ElectronApplication } from '@playwright/test';
-import type { MenuItem } from 'electron';
 
 
 // Roughly based on
 // https://github.com/spaceagetv/electron-playwright-helpers/blob/main/src/menu_helpers.ts
 
 // If given, `parentMenuLabel` should be the label of the menu containing the target item.
+import { expect, type ElectronApplication } from '@playwright/test';
+import type { MenuItem } from 'electron';
 const activateMainMenuItem = async (
 	electronApp: ElectronApplication,
 	targetItemLabel: string|RegExp,

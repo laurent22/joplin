@@ -2,11 +2,11 @@
 // defined in the below config file. If the credentials are missing, all the
 // tests are skipped.
 
+
 import { readCredentialFileSync } from '../../../utils/testing/credentialFile';
 import { afterAllTests, beforeAllDb, beforeEachDb } from '../../../utils/testing/testUtils';
 import { StorageDriverConfig, StorageDriverMode, StorageDriverType } from '../../../utils/types';
 import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldSupportFallbackDriver, shouldSupportFallbackDriverInReadWriteMode, shouldThrowNotFoundIfNotExist, shouldUpdateContentStorageIdAfterSwitchingDriver, shouldWriteToContentAndReadItBack } from './testUtils';
-
 let s3config_: StorageDriverConfig;
 const s = readCredentialFileSync('server-s3-test-units.json', '');
 if (s) {

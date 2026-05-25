@@ -1,6 +1,6 @@
+
 import { beforeAllDb, afterAllTests, beforeEachDb, models, createUser, expectThrow } from '../utils/testing/testUtils';
 import { Day } from '../utils/time';
-
 describe('UserDeletionModel', () => {
 
 	beforeAll(async () => {

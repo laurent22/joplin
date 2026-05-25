@@ -1,4 +1,5 @@
 
+
 import { _ } from '@joplin/lib/locale';
 import PluginService, { PluginSettings, SerializedPluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
 import * as React from 'react';
@@ -12,7 +13,6 @@ import uuid from '@joplin/lib/uuid';
 import Setting from '@joplin/lib/models/Setting';
 import TextButton, { ButtonType } from '../../../buttons/TextButton';
 import { ConfigScreenStyles } from '../configScreenStyles';
-
 interface Props {
 	updatePluginStates: (settingValue: PluginSettings)=> void;
 	pluginSettings: SerializedPluginSettings;

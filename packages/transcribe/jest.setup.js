@@ -1,4 +1,5 @@
-require('../../jest.base-setup.js')();
+import jest_base_setup_560 from '../../jest.base-setup.js';
+jest_base_setup_560();
 
 // We don't want the tests to fail due to timeout, especially on CI, and certain
 // tests can take more time since we do integration testing too. The share tests

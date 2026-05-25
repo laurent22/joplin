@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import createRootStyle from '../../utils/createRootStyle';
@@ -21,7 +22,6 @@ import shim from '@joplin/lib/shim';
 import useToolbarEditorState, { ReorderableItem } from './utils/useToolbarEditorState';
 import useSaveToolbarButtons from './utils/useSaveToolbarButtons';
 import focusView from '../../utils/focusView';
-
 const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());
 
 interface EditorDialogProps {

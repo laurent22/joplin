@@ -1,6 +1,6 @@
-import { LicenseOverride } from './licenseOverrides/types';
-import licenseChecker = require('license-checker-rseidelsohn');
 
+import { LicenseOverride } from './licenseOverrides/types';
+import licenseChecker from 'license-checker-rseidelsohn';
 export interface LicenseInfo {
 	licenses: string;
 	repository: string|null;

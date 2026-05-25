@@ -1,5 +1,5 @@
-const execa = require('execa');
 
+import execa from 'execa';
 module.exports = async function() {
 	if (process.platform !== 'darwin') return Promise.resolve();
 

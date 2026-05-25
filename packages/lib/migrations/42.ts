@@ -1,6 +1,6 @@
+
 import Setting from '../models/Setting';
 import checkProviderIsSupported from '../utils/webDAVUtils';
-
 interface Script {
 	exec: ()=> Promise<void>;
 }

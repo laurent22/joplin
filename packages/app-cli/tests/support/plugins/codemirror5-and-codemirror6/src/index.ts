@@ -1,6 +1,6 @@
+
 import joplin from 'api';
 import { ContentScriptType, SettingItemType } from 'api/types';
-
 const highlightLineSettingId = 'highlight-active-line';
 
 const registerSettings = async () => {

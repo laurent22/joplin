@@ -1,7 +1,7 @@
 
+
 import MarkupToHtml from '@joplin/renderer/MarkupToHtml';
 import { RenderResult, MarkupLanguage } from '@joplin/renderer/types';
-
 describe('MarkupToHtml', () => {
 
 	it('should strip markup', (async () => {

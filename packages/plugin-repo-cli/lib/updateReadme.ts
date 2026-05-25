@@ -1,7 +1,7 @@
+
 import * as fs from 'fs-extra';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '@joplin/lib/markdownUtils';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
-
 export default async function(readmePath: string, manifests: Record<string, PluginManifest>) {
 	let rows: MarkdownTableRow[] = [];
 

@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Platform, Linking, View, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo, LayoutChangeEvent } from 'react-native';
 import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
@@ -42,7 +43,6 @@ import { UpdateSettingValueCallback } from './types';
 import Folder from '@joplin/lib/models/Folder';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
-
 interface ConfigScreenState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Settings values are heterogeneous (string/number/boolean/object) and accessed by string key across many call sites; tightening to `unknown` forces casts everywhere
 	settings: Record<string, any>;

@@ -1,6 +1,6 @@
+
 import { rtrimSlashes } from '@joplin/lib/path-utils';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
-
 function removeBranch(commit: string): string {
 	if (!commit) return '';
 

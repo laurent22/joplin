@@ -1,10 +1,10 @@
+
 import BaseModel from '../BaseModel';
 import { fileApi } from '../testing/../testing/test-utils';
 import Folder from '../models/Folder';
 import Note from '../models/Note';
 import BaseItem from '../models/BaseItem';
 import { FolderEntity, NoteEntity } from '../services/database/types';
-
 export async function allNotesFolders() {
 	const folders = await Folder.all();
 	const notes = await Note.all();

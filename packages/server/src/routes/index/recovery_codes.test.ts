@@ -1,9 +1,9 @@
+
 import { totp } from 'otplib';
 import routeHandler from '../../middleware/routeHandler';
 import { cookieGet, cookieSet } from '../../utils/cookies';
 import { execRequest } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, koaAppContext } from '../../utils/testing/testUtils';
-
 describe('index/recovery_codes', () => {
 
 	beforeAll(async () => {

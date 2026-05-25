@@ -1,3 +1,4 @@
+
 import { produce } from 'immer';
 import Logger from '@joplin/utils/Logger';
 import { ItemEvent, OnPluginSettingChangeHandler } from './types';
@@ -6,7 +7,6 @@ import shim from '../../../../shim';
 import RepositoryApi from '../../../../services/plugins/RepositoryApi';
 import PluginService, { PluginSettings, defaultPluginSetting } from '../../../../services/plugins/PluginService';
 import { _ } from '../../../../locale';
-
 const logger = Logger.create('useOnInstallHandler');
 
 type GetRepoApiCallback = ()=> RepositoryApi;

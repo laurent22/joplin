@@ -5,13 +5,13 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
+
 import { Node } from '@ephox/dom-globals';
 import { Arr, Option } from '@ephox/katamari';
 import { HTMLElement } from '@ephox/sand';
 import Editor from 'tinymce/core/api/Editor';
 import Tools from 'tinymce/core/api/util/Tools';
 import * as NodeType from './NodeType';
-
 const getParentList = function (editor) {
   const selectionStart = editor.selection.getStart(true);
 

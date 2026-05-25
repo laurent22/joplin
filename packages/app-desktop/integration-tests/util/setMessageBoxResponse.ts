@@ -1,6 +1,6 @@
+
 import { ElectronApplication } from '@playwright/test';
 import { BaseWindow, MessageBoxOptions } from 'electron';
-
 const setMessageBoxResponse = (electronApp: ElectronApplication, responseMatch: RegExp) => {
 	return electronApp.evaluate(async ({ dialog }, responseMatch) => {
 		type DialogArgsType = [ BaseWindow, MessageBoxOptions ]|[MessageBoxOptions];

@@ -3,7 +3,6 @@
 // This is a type-only import that gives access to ServiceWorker types.
 // For this to work with Webpack, an import alias for 'serviceworker' may
 // also be present in webpack.config.js.
-import 'serviceworker';
 
 // From https://github.com/gzuidhof/coi-serviceworker. This script enables the necessary
 // headers on GitHub pages to allow the use of SQLite. It has been modified and refactored
@@ -38,6 +37,7 @@ import 'serviceworker';
  * SOFTWARE.
  */
 
+import 'serviceworker';
 let coepCredentialless = false;
 if (typeof window === 'undefined') {
 	self.addEventListener('install', () => self.skipWaiting());

@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import SearchInput, { OnChangeEvent } from '../../../lib/SearchInput/SearchInput';
@@ -12,7 +13,6 @@ import { _ } from '@joplin/lib/locale';
 import useOnInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
 import { themeStyle } from '@joplin/lib/theme';
 import SettingDescription from '../SettingDescription';
-
 const Root = styled.div`
 `;
 

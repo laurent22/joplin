@@ -1,3 +1,7 @@
+
+// Note: Transitive dependencies used only by react-select. Remove if react-select is removed.
+
+import { StyleSheetManager } from 'styled-components';
 import * as React from 'react';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import NoteEditor from './NoteEditor';
@@ -7,13 +11,9 @@ import { AppState } from '../../app.reducer';
 import { Dispatch } from 'redux';
 import NewWindowOrIFrame, { WindowMode } from '../NewWindowOrIFrame';
 import WindowCommandsAndDialogs from '../WindowCommandsAndDialogs/WindowCommandsAndDialogs';
-
-const { StyleSheetManager } = require('styled-components');
-// Note: Transitive dependencies used only by react-select. Remove if react-select is removed.
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import { stateUtils } from '@joplin/lib/reducer';
-
 interface Props {
 	dispatch: Dispatch;
 	themeId: number;

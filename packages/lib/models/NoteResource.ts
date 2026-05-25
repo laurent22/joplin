@@ -1,8 +1,8 @@
+
 import BaseModel from '../BaseModel';
 import { NoteEntity, SqlQuery } from '../services/database/types';
 import BaseItem from './BaseItem';
 import { LoadOptions } from './utils/types';
-
 export type AssociatedResourceNote = Partial<NoteEntity> & {
 	resource_id: string;
 	note_id: string;

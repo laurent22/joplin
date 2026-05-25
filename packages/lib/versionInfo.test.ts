@@ -1,9 +1,9 @@
+
 import versionInfo from './versionInfo';
 import { reg } from './registry';
 import { Plugins } from './services/plugins/PluginService';
 import Plugin from './services/plugins/Plugin';
 import Setting from './models/Setting';
-
 jest.mock('./registry');
 
 const mockedVersion = jest.fn(() => 'test');

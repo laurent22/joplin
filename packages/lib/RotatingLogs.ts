@@ -1,6 +1,6 @@
+
 import shim from './shim';
 import { Stat } from './fs-driver-base';
-
 export default class RotatingLogs {
 
 	private logFilesDir: string;

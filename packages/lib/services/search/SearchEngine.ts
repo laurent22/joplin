@@ -1,3 +1,5 @@
+
+import { sprintf } from 'sprintf-js';
 import Logger from '@joplin/utils/Logger';
 import ItemChange from '../../models/ItemChange';
 import Setting from '../../models/Setting';
@@ -15,10 +17,8 @@ import BaseItem from '../../models/BaseItem';
 import { isCallbackUrl, parseCallbackUrl } from '../../callbackUrlUtils';
 import replaceUnsupportedCharacters from '../../utils/replaceUnsupportedCharacters';
 import { htmlentitiesDecode } from '@joplin/utils/html';
-const { sprintf } = require('sprintf-js');
 import { pregQuote, scriptType, removeDiacritics } from '../../string-utils';
 import PerformanceLogger from '../../PerformanceLogger';
-
 const perfLogger = PerformanceLogger.create();
 
 enum SearchType {

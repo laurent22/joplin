@@ -1,6 +1,6 @@
+
 import { FolderEntity } from '../../services/database/types';
 import getCanBeCollapsedFolderIds from './getCanBeCollapsedFolderIds';
-
 export default (folders: FolderEntity[], collapsedFolderIds: string[]) => {
 	const canBeCollapsedIds = getCanBeCollapsedFolderIds(folders);
 	if (collapsedFolderIds.length !== canBeCollapsedIds.length) return false;

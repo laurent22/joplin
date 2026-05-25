@@ -1,8 +1,8 @@
+
 import Folder, { FolderEntityWithChildren } from '@joplin/lib/models/Folder';
 import { WindowControl } from './useWindowControl';
 import { _ } from '@joplin/lib/locale';
 import { FolderEntity } from '@joplin/lib/services/database/types';
-
 interface FolderEntry {
 	key: string;
 	value: string;

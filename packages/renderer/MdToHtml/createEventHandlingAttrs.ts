@@ -1,8 +1,8 @@
 
 
+
+
 import * as utils from '../utils';
-
-
 export interface Options {
 	enableLongPress: boolean;
 	postMessageSyntax: string;

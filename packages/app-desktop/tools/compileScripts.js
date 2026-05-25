@@ -1,5 +1,5 @@
-const fs = require('fs-extra');
 
+import fs from 'fs-extra';
 const basePath = `${__dirname}/../../..`;
 
 module.exports = function() {

@@ -1,9 +1,9 @@
-const { basicDelta } = require('./file-api');
-const { rtrimSlashes, ltrimSlashes } = require('./path-utils');
-const JoplinError = require('./JoplinError').default;
-const Setting = require('./models/Setting').default;
-const checkProviderIsSupported = require('./utils/webDAVUtils').default;
 
+import { basicDelta } from './file-api';
+import { rtrimSlashes, ltrimSlashes } from './path-utils';
+import JoplinError from './JoplinError';
+import Setting from './models/Setting';
+import checkProviderIsSupported from './utils/webDAVUtils';
 class FileApiDriverWebDav {
 	constructor(api) {
 		this.api_ = api;

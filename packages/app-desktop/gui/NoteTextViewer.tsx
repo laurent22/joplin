@@ -1,3 +1,4 @@
+
 import PostMessageService, { MessageResponse, ResponderComponentType } from '@joplin/lib/services/PostMessageService';
 import * as React from 'react';
 import { reg } from '@joplin/lib/registry';
@@ -9,7 +10,6 @@ import useDocument from '@joplin/lib/hooks/dom/useDocument';
 import { _ } from '@joplin/lib/locale';
 import getAssetPath from '../utils/getAssetPath';
 import { toForwardSlashes } from '@joplin/utils/path';
-
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onDomReady: Function;

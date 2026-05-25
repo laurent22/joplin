@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { escapeRegExp } from '@joplin/lib/string-utils';
 
 // Returns a React node where every case-insensitive match of `query` in `text`
 // is wrapped in a `mark` element.
+import * as React from 'react';
+import { escapeRegExp } from '@joplin/lib/string-utils';
 const highlightSearchText = (
 	text: string,
 	query: string,

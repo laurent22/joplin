@@ -1,11 +1,12 @@
+// const { ALL_NOTES_FILTER_ID } = reserved_ids_241;
+
+import reserved_ids_241 from './reserved-ids';
 import { setupDatabaseAndSynchronizer, switchClient, createNTestNotes, createNTestFolders, createNTestTags } from './testing/test-utils';
 import reducer, { defaultState, defaultWindowId, MAX_HISTORY, State } from './reducer';
 import { BaseItemEntity, FolderEntity, NoteEntity, TagEntity } from './services/database/types';
 import Note from './models/Note';
 import BaseModel from './BaseModel';
 import Folder from './models/Folder';
-// const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
-
 function initTestState(folders: FolderEntity[], selectedFolderIndex: number, notes: NoteEntity[], selectedNoteIndexes: number[], tags: TagEntity[] = null, selectedTagIndex: number = null) {
 	let state = defaultState;
 

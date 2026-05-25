@@ -1,3 +1,4 @@
+
 import { RefObject, useCallback } from 'react';
 import { FormNote, HtmlToMarkdownHandler, MarkupToHtmlHandler, ScrollOptions, MessageEvent, NoteBodyEditorRef } from './types';
 import contextMenu from './contextMenu';
@@ -7,7 +8,6 @@ import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { reg } from '@joplin/lib/registry';
 import bridge from '../../../services/bridge';
 import { resolveContextMenuItemType } from './contextMenuUtils';
-
 export default function useMessageHandler(
 	scrollWhenReadyRef: RefObject<ScrollOptions|null>,
 	clearScrollWhenReady: ()=> void,

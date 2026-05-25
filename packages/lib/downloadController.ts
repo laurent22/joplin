@@ -1,8 +1,8 @@
+
 import Logger from '@joplin/utils/Logger';
 import JoplinError from './JoplinError';
 import { ErrorCode } from './errors';
 import { bytesToHuman } from '@joplin/utils/bytes';
-
 const logger = Logger.create('downloadController');
 
 interface DownloadRequest {

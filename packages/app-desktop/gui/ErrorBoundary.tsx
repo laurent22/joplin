@@ -1,3 +1,6 @@
+
+import packageInfo from '../packageInfo.js';
+import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import versionInfo, { PackageInfo } from '@joplin/lib/versionInfo';
 import PluginService, { Plugins } from '@joplin/lib/services/plugins/PluginService';
@@ -6,9 +9,6 @@ import restart from '../services/restart';
 import BannerContent from './NoteEditor/WarningBanner/BannerContent';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
-const packageInfo: PackageInfo = require('../packageInfo.js');
-const ipcRenderer = require('electron').ipcRenderer;
-
 const logger = Logger.create('ErrorBoundary');
 
 interface ErrorInfo {

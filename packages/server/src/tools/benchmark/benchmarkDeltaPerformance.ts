@@ -1,7 +1,7 @@
+
 import { Models } from '../../models/factory';
 import { ShareType, Uuid } from '../../services/database/types';
 import recordBenchmark from './recordBenchmark';
-
 const benchmarkDeltaPerformance = async (models: Models) => {
 	const iterateUsers = async function*() {
 		let page = 1;

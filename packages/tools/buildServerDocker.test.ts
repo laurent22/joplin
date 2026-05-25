@@ -1,5 +1,5 @@
-import { getIsPreRelease, getVersionFromTag } from './buildServerDocker';
 
+import { getIsPreRelease, getVersionFromTag } from './buildServerDocker';
 describe('buildServerDocker', () => {
 
 	test('should get the tag version', async () => {

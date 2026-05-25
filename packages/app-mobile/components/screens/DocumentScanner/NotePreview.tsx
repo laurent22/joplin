@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useMemo, useState, useCallback, useEffect } from 'react';
 import { themeStyle } from '../../global-style';
@@ -17,7 +18,6 @@ import { formatMsToLocal } from '@joplin/utils/time';
 import { PrimaryButton } from '../../buttons';
 import { Switch, Text } from 'react-native-paper';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-
 export interface CreateNoteEvent {
 	title: string;
 	tags: string[];

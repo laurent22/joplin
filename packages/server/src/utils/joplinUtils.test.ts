@@ -1,8 +1,8 @@
+
 import { basename } from '@joplin/utils/path';
 import { Item } from '../services/database/types';
 import { itemIsEncrypted, localFileFromUrl } from './joplinUtils';
 import { expectThrow } from './testing/testUtils';
-
 describe('joplinUtils', () => {
 
 	it('should check if an item is encrypted', async () => {

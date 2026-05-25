@@ -1,8 +1,8 @@
 
+
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import { Locator } from '@playwright/test';
-
 test.describe('goToAnything', () => {
 	test('clicking outside of go to anything should close it', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();

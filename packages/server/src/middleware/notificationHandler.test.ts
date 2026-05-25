@@ -1,9 +1,9 @@
+
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, koaNext } from '../utils/testing/testUtils';
 import { Notification, UserFlagType } from '../services/database/types';
 import { defaultAdminEmail, defaultAdminPassword } from '../db';
 import notificationHandler from './notificationHandler';
 import { AppContext } from '../utils/types';
-
 const runNotificationHandler = async (sessionId: string): Promise<AppContext> => {
 	const context = await koaAppContext({ sessionId: sessionId });
 	await notificationHandler(context, koaNext);

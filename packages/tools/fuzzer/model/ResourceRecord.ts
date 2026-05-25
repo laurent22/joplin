@@ -1,6 +1,6 @@
+
 import { ItemId, ResourceData } from './types';
 import Serializable, { BaseSchema } from './Serializable';
-
 interface InitializationOptions extends ResourceData {
 	referencedBy: ItemId[];
 }

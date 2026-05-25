@@ -1,9 +1,9 @@
+
+import { renderCommandHelp } from './help-utils.js';
+import { cliUtils } from './cli-utils.js';
 import BaseCommand from './base-command';
 import app from './app';
-const { renderCommandHelp } = require('./help-utils.js');
 import { _ } from '@joplin/lib/locale';
-const { cliUtils } = require('./cli-utils.js');
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'help [command]';

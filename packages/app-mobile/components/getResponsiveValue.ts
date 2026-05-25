@@ -13,8 +13,8 @@
 // [10] and [10, 15] are equivalent to { sm: 10 } and { sm: 10, md: 15 } respectively
 //
 // More Info: https://discourse.joplinapp.org/t/week-4-report/26117
-import { Dimensions } from 'react-native';
 
+import { Dimensions } from 'react-native';
 export interface ValueMap {
 	// Value to use on small-width displays
 	sm?: number;

@@ -1,7 +1,7 @@
+
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { useEffect } from 'react';
 import { Editor } from 'tinymce';
-
 interface WebViewApi {
 	postMessage: (contentScriptId: string, message: unknown)=> Promise<unknown>;
 }

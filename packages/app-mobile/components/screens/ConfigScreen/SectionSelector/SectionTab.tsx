@@ -1,10 +1,10 @@
+
 import * as React from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import Icon from '../../../Icon';
 import { TouchableRipple, Text } from 'react-native-paper';
 import { View } from 'react-native';
 import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
-
 interface Props {
 	selected: boolean;
 	section: SettingMetadataSection;

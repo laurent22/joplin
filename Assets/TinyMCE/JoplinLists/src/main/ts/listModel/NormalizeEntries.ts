@@ -5,9 +5,9 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
+
 import { Arr, Option } from '@ephox/katamari';
 import { Entry } from './Entry';
-
 const cloneListProperties = (target: Entry, source: Entry): void => {
   target.listType = source.listType;
   target.listAttributes = { ...source.listAttributes };

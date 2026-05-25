@@ -1,4 +1,5 @@
 
+
 import BaseModel, { AclAction, UuidType } from './BaseModel';
 import { Application, NotificationLevel, User, Uuid } from '../services/database/types';
 import { createSecureRandom } from '@joplin/lib/uuid';
@@ -9,7 +10,6 @@ import { validate } from 'uuid';
 import Logger from '@joplin/utils/Logger';
 import { NotificationKey } from './NotificationModel';
 import { getEmptyIp } from '../db';
-
 const logger = Logger.create('ApplicationModel');
 
 export type ActiveApplication = Pick<Application, 'id' | 'version' | 'platform' | 'ip' | 'created_time' | 'last_access_time'>;

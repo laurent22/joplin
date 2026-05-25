@@ -1,5 +1,6 @@
-import { Day, Hour, Minute, Second } from '@joplin/utils/time';
 
+import dotenv_config from 'dotenv';
+import { Day, Hour, Minute, Second } from '@joplin/utils/time';
 export const defaultEnvValues: EnvVariables = {
 	SERVER_PORT: 4567,
 	API_KEY: '',
@@ -88,7 +89,7 @@ export function parseEnv(rawEnv: Record<string, string | undefined>): ComputedEn
 	return computed;
 }
 
-// Should always be called after require('dotenv').config()
+// Should always be called after dotenv_config.config()
 const env = (): ComputedEnvVariables => {
 	const rawEnv = Object.keys(defaultEnvValues)
 		.reduce((env: Record<string, string | undefined>, key) => {

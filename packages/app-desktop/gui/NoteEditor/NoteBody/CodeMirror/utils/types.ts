@@ -1,5 +1,5 @@
-import { RenderResultPluginAsset } from '@joplin/renderer/types';
 
+import { RenderResultPluginAsset } from '@joplin/renderer/types';
 export interface RenderedBody {
 	html: string;
 	pluginAssets: RenderResultPluginAsset[];

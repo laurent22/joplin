@@ -1,6 +1,6 @@
+
 import { extractUrls } from './html';
 import { Link } from './types';
-
 describe('htmlUtils', () => {
 
 	test.each([

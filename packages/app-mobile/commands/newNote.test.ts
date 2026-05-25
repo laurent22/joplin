@@ -1,10 +1,10 @@
+
 import NavService from '@joplin/lib/services/NavService';
 import { runtime } from './newNote';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import Setting from '@joplin/lib/models/Setting';
-
 describe('newNote', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

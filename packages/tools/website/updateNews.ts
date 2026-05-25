@@ -2,6 +2,9 @@
 // them as Discourse forum posts. It then also update the news file with a link
 // to that forum post.
 
+
+import RSS from 'rss';
+import { argv } from 'yargs';
 import { readdir, readFile, writeFile } from 'fs-extra';
 import { basename } from 'path';
 import { rootDir } from '../tool-utils';
@@ -9,8 +12,6 @@ import { compileWithFrontMatter, MarkdownAndFrontMatter, stripOffFrontMatter } f
 import { markdownToHtml } from './utils/render';
 import { getNewsDate } from './utils/news';
 import { config, createTopic, getForumTopPostByExternalId, updatePost } from '../utils/discourse';
-const RSS = require('rss');
-
 interface Post {
 	id: string;
 	path: string;
@@ -119,7 +120,6 @@ const generateRssFeed = async (posts: Post[]) => {
 };
 
 const main = async () => {
-	const argv = require('yargs').argv;
 	config.key = argv._[0];
 	config.username = argv._[1];
 

@@ -1,7 +1,7 @@
+
 import * as React from 'react';
 import { ViewStyle } from 'react-native';
 import { Text } from 'react-native-paper';
-
 interface Props {
 	children: React.ReactNode;
 	visible: boolean;

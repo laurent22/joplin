@@ -1,9 +1,11 @@
+
+
+
+
 import * as React from 'react';
 import { useEffect, useImperativeHandle, useState, useRef, useCallback, forwardRef, RefObject } from 'react';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-
 import CodeMirror from 'codemirror';
-
 import 'codemirror/addon/comment/comment';
 import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/edit/closebrackets';
@@ -11,7 +13,6 @@ import 'codemirror/addon/edit/continuelist';
 import 'codemirror/addon/scroll/annotatescrollbar';
 import 'codemirror/addon/search/matchesonscrollbar';
 import 'codemirror/addon/search/searchcursor';
-
 import useListIdent from './utils/useListIdent';
 import useScrollUtils from './utils/useScrollUtils';
 import useCursorUtils from './utils/useCursorUtils';
@@ -21,20 +22,11 @@ import useJoplinMode from './utils/useJoplinMode';
 import useKeymap from './utils/useKeymap';
 import useExternalPlugins from './utils/useExternalPlugins';
 import useJoplinCommands from './utils/useJoplinCommands';
-
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
-import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
-
 import 'codemirror/mode/meta';
-
 import Setting from '@joplin/lib/models/Setting';
-
-// import eventManager from '@joplin/lib/eventManager';
-
 import { focus } from '@joplin/lib/utils/focusHandler';
-
-// Based on http://pypl.github.io/PYPL.html
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/javascript/javascript';
@@ -56,9 +48,6 @@ import 'codemirror/mode/julia/julia';
 import 'codemirror/mode/haskell/haskell';
 import 'codemirror/mode/pascal/pascal';
 import 'codemirror/mode/css/css';
-
-// Additional languages, not in the PYPL lis;
-import 'codemirror/mode/xml/xml'; // For HTML too
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/yaml/yaml';
 import 'codemirror/mode/shell/shell';
@@ -66,6 +55,17 @@ import 'codemirror/mode/dockerfile/dockerfile';
 import 'codemirror/mode/diff/diff';
 import 'codemirror/mode/erlang/erlang';
 import 'codemirror/mode/sql/sql';
+import 'codemirror/keymap/sublime'; // Used for swapLineUp and swapLineDown
+
+
+
+// import eventManager from '@joplin/lib/eventManager';
+
+
+// Based on http://pypl.github.io/PYPL.html
+
+// Additional languages, not in the PYPL lis;
+import 'codemirror/mode/xml/xml'; // For HTML too
 
 interface ExtendedWindow {
 	CodeMirror?: unknown;

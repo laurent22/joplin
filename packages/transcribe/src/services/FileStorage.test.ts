@@ -1,9 +1,9 @@
+
 import { readdir, copyFile, exists, remove, mkdirp } from 'fs-extra';
 import { dirname, join } from 'path';
 import FileStorage from './FileStorage';
 import initiateLogger from './initiateLogger';
 import Logger from '@joplin/utils/Logger';
-
 const transcribeDir = dirname(dirname(dirname(__dirname)));
 
 const imagesFolderPath = join(transcribeDir, 'images');

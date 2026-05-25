@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import configScreenStyles from '../../configScreenStyles';
@@ -7,7 +8,6 @@ import PluginStates from '../PluginStates';
 import { AppState } from '../../../../../utils/types';
 import { useCallback, useState } from 'react';
 import TestProviderStack from '../../../../testing/TestProviderStack';
-
 interface WrapperProps {
 	initialPluginSettings: PluginSettings;
 	store: Store<AppState>;

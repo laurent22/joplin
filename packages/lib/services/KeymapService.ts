@@ -1,11 +1,11 @@
+
+
 import eventManager, { EventListenerCallback, EventName } from '../eventManager';
 import shim from '../shim';
 import { _ } from '../locale';
 import keysRegExp from './KeymapService_keysRegExp';
 import keycodeToElectronMap from './KeymapService_keycodeToElectronMap';
-
 import BaseService from './BaseService';
-
 const modifiersRegExp = {
 	darwin: /^(Ctrl|Option|Shift|Cmd)$/,
 	default: /^(Ctrl|Alt|AltGr|Shift|Super)$/,

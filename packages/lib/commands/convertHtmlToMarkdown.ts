@@ -1,6 +1,6 @@
+
 import HtmlToMd from '../HtmlToMd';
 import { CommandContext, CommandRuntime, CommandDeclaration } from '../services/CommandService';
-
 export const declaration: CommandDeclaration = {
 	name: 'convertHtmlToMarkdown',
 };

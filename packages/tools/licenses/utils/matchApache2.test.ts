@@ -1,6 +1,6 @@
+
 import apache2License from '../licenseText/apache2';
 import matchApache2 from './matchApache2';
-
 describe('matchApache2', () => {
 	it('should return copyright line', () => {
 		expect(matchApache2(apache2License)).toMatchObject({

@@ -1,5 +1,5 @@
-import { SqlQuery } from '../../services/database/types';
 
+import { SqlQuery } from '../../services/database/types';
 export enum PaginationOrderDir {
 	ASC = 'ASC',
 	DESC = 'DESC',

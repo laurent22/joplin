@@ -1,5 +1,5 @@
-import type { BuiltInMetadataValues } from './builtInMetadata';
 
+import type { BuiltInMetadataValues } from './builtInMetadata';
 export enum SettingItemType {
 	Int = 1,
 	String = 2,

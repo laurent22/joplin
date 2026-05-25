@@ -1,8 +1,8 @@
+
 import * as helper from "../__fixtures__/test-helper";
 import { WritableStream } from "../WritableStream";
 import fs from "fs";
 import path from "path";
-
 helper.createSuite("Stream", (test, cb) => {
     const filePath = path.join(
         __dirname,

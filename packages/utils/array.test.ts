@@ -1,5 +1,5 @@
-import { randomWeightedElement } from './array';
 
+import { randomWeightedElement } from './array';
 describe('array', () => {
 	it('should select an item from the provided array based on the given weights', () => {
 		expect(randomWeightedElement([1, 2, 3], [1, 0, 0])).toBe(1);

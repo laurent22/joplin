@@ -1,7 +1,7 @@
+
 import { useMemo } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
 const useSafeAreaPadding = () => {
 	const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 	const safeAreaInsets = useSafeAreaInsets();

@@ -1,5 +1,5 @@
-import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 
+import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 function debounce<Args extends unknown[]>(func: (...args: Args)=> void, timeout: number) {
 	let timer: number;
 

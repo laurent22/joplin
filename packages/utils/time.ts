@@ -3,59 +3,100 @@
 // added here, and should be based on dayjs (not moment)
 // -----------------------------------------------------------------------------------------------
 
-import type * as dayjsImport from 'dayjs';
-import * as dayJsUtc from 'dayjs/plugin/utc';
 // A require() is needed here for this to work in React Native.
-const dayjs: typeof dayjsImport = require('dayjs');
 
 // Separating this into a type import and a require seems to be necessary to support mobile:
 // - import = require syntax doesn't work when bundling
 // - import * as dayJsRelativeTimeType causes a runtime error.
-import type * as dayJsRelativeTimeType from 'dayjs/plugin/relativeTime';
-const dayJsRelativeTime: typeof dayJsRelativeTimeType = require('dayjs/plugin/relativeTime');
 
+import ar_564 from 'dayjs/locale/ar';
+import bg_565 from 'dayjs/locale/bg';
+import bs_566 from 'dayjs/locale/bs';
+import ca_567 from 'dayjs/locale/ca';
+import cs_568 from 'dayjs/locale/cs';
+import da_569 from 'dayjs/locale/da';
+import de_570 from 'dayjs/locale/de';
+import el_571 from 'dayjs/locale/el';
+import en_gb_572 from 'dayjs/locale/en-gb';
+import en_573 from 'dayjs/locale/en';
+import eo_574 from 'dayjs/locale/eo';
+import es_575 from 'dayjs/locale/es';
+import et_576 from 'dayjs/locale/et';
+import eu_577 from 'dayjs/locale/eu';
+import fa_578 from 'dayjs/locale/fa';
+import fi_579 from 'dayjs/locale/fi';
+import fr_580 from 'dayjs/locale/fr';
+import gl_581 from 'dayjs/locale/gl';
+import hr_582 from 'dayjs/locale/hr';
+import hu_583 from 'dayjs/locale/hu';
+import id_584 from 'dayjs/locale/id';
+import it_585 from 'dayjs/locale/it';
+import ja_586 from 'dayjs/locale/ja';
+import ko_587 from 'dayjs/locale/ko';
+import nb_588 from 'dayjs/locale/nb';
+import nl_be_589 from 'dayjs/locale/nl-be';
+import nl_590 from 'dayjs/locale/nl';
+import pl_591 from 'dayjs/locale/pl';
+import pt_br_592 from 'dayjs/locale/pt-br';
+import pt_593 from 'dayjs/locale/pt';
+import ro_594 from 'dayjs/locale/ro';
+import ru_595 from 'dayjs/locale/ru';
+import sl_596 from 'dayjs/locale/sl';
+import sr_597 from 'dayjs/locale/sr';
+import sv_598 from 'dayjs/locale/sv';
+import th_599 from 'dayjs/locale/th';
+import tr_600 from 'dayjs/locale/tr';
+import uk_601 from 'dayjs/locale/uk';
+import vi_602 from 'dayjs/locale/vi';
+import zh_cn_603 from 'dayjs/locale/zh-cn';
+import zh_tw_604 from 'dayjs/locale/zh-tw';
+import dayjs from 'dayjs';
+import dayJsRelativeTime from 'dayjs/plugin/relativeTime';
+import type * as dayjsImport from 'dayjs';
+import * as dayJsUtc from 'dayjs/plugin/utc';
+import type * as dayJsRelativeTimeType from 'dayjs/plugin/relativeTime';
 const supportedLocales: Record<string, unknown> = {
-	'ar': require('dayjs/locale/ar'),
-	'bg': require('dayjs/locale/bg'),
-	'bs': require('dayjs/locale/bs'),
-	'ca': require('dayjs/locale/ca'),
-	'cs': require('dayjs/locale/cs'),
-	'da': require('dayjs/locale/da'),
-	'de': require('dayjs/locale/de'),
-	'el': require('dayjs/locale/el'),
-	'en-gb': require('dayjs/locale/en-gb'),
-	'en': require('dayjs/locale/en'),
-	'eo': require('dayjs/locale/eo'),
-	'es': require('dayjs/locale/es'),
-	'et': require('dayjs/locale/et'),
-	'eu': require('dayjs/locale/eu'),
-	'fa': require('dayjs/locale/fa'),
-	'fi': require('dayjs/locale/fi'),
-	'fr': require('dayjs/locale/fr'),
-	'gl': require('dayjs/locale/gl'),
-	'hr': require('dayjs/locale/hr'),
-	'hu': require('dayjs/locale/hu'),
-	'id': require('dayjs/locale/id'),
-	'it': require('dayjs/locale/it'),
-	'ja': require('dayjs/locale/ja'),
-	'ko': require('dayjs/locale/ko'),
-	'nb': require('dayjs/locale/nb'),
-	'nl-be': require('dayjs/locale/nl-be'),
-	'nl': require('dayjs/locale/nl'),
-	'pl': require('dayjs/locale/pl'),
-	'pt-br': require('dayjs/locale/pt-br'),
-	'pt': require('dayjs/locale/pt'),
-	'ro': require('dayjs/locale/ro'),
-	'ru': require('dayjs/locale/ru'),
-	'sl': require('dayjs/locale/sl'),
-	'sr': require('dayjs/locale/sr'),
-	'sv': require('dayjs/locale/sv'),
-	'th': require('dayjs/locale/th'),
-	'tr': require('dayjs/locale/tr'),
-	'uk': require('dayjs/locale/uk'),
-	'vi': require('dayjs/locale/vi'),
-	'zh-cn': require('dayjs/locale/zh-cn'),
-	'zh-tw': require('dayjs/locale/zh-tw'),
+	'ar': ar_564,
+	'bg': bg_565,
+	'bs': bs_566,
+	'ca': ca_567,
+	'cs': cs_568,
+	'da': da_569,
+	'de': de_570,
+	'el': el_571,
+	'en-gb': en_gb_572,
+	'en': en_573,
+	'eo': eo_574,
+	'es': es_575,
+	'et': et_576,
+	'eu': eu_577,
+	'fa': fa_578,
+	'fi': fi_579,
+	'fr': fr_580,
+	'gl': gl_581,
+	'hr': hr_582,
+	'hu': hu_583,
+	'id': id_584,
+	'it': it_585,
+	'ja': ja_586,
+	'ko': ko_587,
+	'nb': nb_588,
+	'nl-be': nl_be_589,
+	'nl': nl_590,
+	'pl': pl_591,
+	'pt-br': pt_br_592,
+	'pt': pt_593,
+	'ro': ro_594,
+	'ru': ru_595,
+	'sl': sl_596,
+	'sr': sr_597,
+	'sv': sv_598,
+	'th': th_599,
+	'tr': tr_600,
+	'uk': uk_601,
+	'vi': vi_602,
+	'zh-cn': zh_cn_603,
+	'zh-tw': zh_tw_604,
 };
 
 export const Second = 1000;

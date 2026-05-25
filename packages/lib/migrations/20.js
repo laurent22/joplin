@@ -1,9 +1,9 @@
-const Resource = require('../models/Resource').default;
-const Setting = require('../models/Setting').default;
-const shim = require('../shim').default;
-const { reg } = require('../registry');
-const { fileExtension } = require('../path-utils');
 
+import Resource from '../models/Resource';
+import Setting from '../models/Setting';
+import shim from '../shim';
+import { reg } from '../registry';
+import { fileExtension } from '../path-utils';
 const script = {};
 
 script.exec = async function() {

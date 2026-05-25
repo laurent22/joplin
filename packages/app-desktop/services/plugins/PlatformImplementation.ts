@@ -1,3 +1,6 @@
+
+import { clipboard, nativeImage } from 'electron';
+import packageInfo from '../../packageInfo';
 import bridge from '../bridge';
 import { VersionInfo } from '@joplin/lib/services/plugins/api/types';
 import Setting from '@joplin/lib/models/Setting';
@@ -9,9 +12,6 @@ import { join } from 'path';
 import uuid, { uuidgen } from '@joplin/lib/uuid';
 import { hasProtocol } from '@joplin/utils/url';
 import { fileExtension } from '@joplin/utils/path';
-const { clipboard, nativeImage } = require('electron');
-const packageInfo = require('../../packageInfo');
-
 interface Components {
 	[key: string]: unknown;
 }

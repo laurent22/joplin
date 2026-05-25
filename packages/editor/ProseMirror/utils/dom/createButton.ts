@@ -1,6 +1,6 @@
+
 import { LocalizationResult } from '../../../types';
 import createTextNode from './createTextNode';
-
 type OnClick = ()=> void;
 
 type Content = LocalizationResult|{

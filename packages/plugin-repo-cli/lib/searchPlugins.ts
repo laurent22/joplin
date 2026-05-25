@@ -1,5 +1,5 @@
-import { URLSearchParams } from 'node:url';
 
+import { URLSearchParams } from 'node:url';
 export interface PackageInfo {
 	name: string;
 	version: string;

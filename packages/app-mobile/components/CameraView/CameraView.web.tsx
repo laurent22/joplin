@@ -1,6 +1,7 @@
+
+
 import * as React from 'react';
 import { useCallback, useMemo } from 'react';
-
 import { connect } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
 import { _ } from '@joplin/lib/locale';
@@ -9,7 +10,6 @@ import { PrimaryButton } from '../buttons';
 import { themeStyle } from '../global-style';
 import { CameraViewProps } from './types';
 import pickDocument from '../../utils/pickDocument';
-
 const useStyles = (themeId: number) => {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);

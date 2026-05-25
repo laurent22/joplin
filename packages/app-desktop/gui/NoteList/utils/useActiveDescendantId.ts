@@ -1,6 +1,6 @@
+
 import { useEffect, useRef, useState } from 'react';
 import usePrevious from '@joplin/lib/hooks/usePrevious';
-
 const useActiveDescendantId = (selectedFolderId: string, selectedNoteIds: string[]) => {
 	const selectedNoteIdsRef = useRef(selectedNoteIds);
 	selectedNoteIdsRef.current = selectedNoteIds;

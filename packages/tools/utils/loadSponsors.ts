@@ -1,8 +1,8 @@
+
 import { readFile } from 'fs-extra';
 import { getRootDir } from '@joplin/utils';
 import { fetchWithRetry } from '@joplin/utils/net';
 import { githubOauthToken } from '../tool-utils';
-
 export interface GithubSponsor {
 	name: string;
 	id: string;

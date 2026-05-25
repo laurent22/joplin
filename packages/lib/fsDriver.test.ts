@@ -1,8 +1,8 @@
+
 import { join } from 'path';
 import FsDriverNode from './fs-driver-node';
 import shim from './shim';
 import { expectThrow, supportDir } from './testing/test-utils';
-
 const windowsPartitionLetter = __filename[0];
 
 // On Windows, path.resolve is going to convert a path such as

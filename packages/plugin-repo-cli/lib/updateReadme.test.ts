@@ -1,7 +1,7 @@
+
 import * as fs from 'fs-extra';
 import updateReadme from './updateReadme';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
-
 describe('updateReadme', () => {
 
 	test('should update the README file', async () => {

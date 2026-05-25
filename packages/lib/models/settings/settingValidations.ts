@@ -1,11 +1,11 @@
+
+// Should return an error message if there's a problem, and an empty string if not.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Settings are heterogeneous (string/number/bool/Record); each validator narrows from this base type
 import { _ } from '../../locale';
 import shim from '../../shim';
 import BaseItem from '../BaseItem';
 import Resource from '../Resource';
 import Setting from '../Setting';
-
-// Should return an error message if there's a problem, and an empty string if not.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Settings are heterogeneous (string/number/bool/Record); each validator narrows from this base type
 type ValidationHandler = (oldValue: any, newValue: any)=> Promise<string>;
 
 const validations: Record<string, ValidationHandler> = {

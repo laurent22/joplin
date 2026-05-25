@@ -1,6 +1,6 @@
+
 import { Knex } from 'knex';
 import { DbConnection, isPostgres } from '../db';
-
 export async function up(db: DbConnection): Promise<void> {
 	await db.schema.createTable('applications', (table: Knex.CreateTableBuilder) => {
 		table.uuid('id').unique().notNullable();

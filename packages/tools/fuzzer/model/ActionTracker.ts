@@ -1,3 +1,4 @@
+
 import { strict as assert } from 'assert';
 import { ActionableClient, FuzzContext, ShareOptions } from '../types';
 import { FolderData, ItemId, NoteData, TreeItem, assertIsFolder, isFolder, isNote, isResource } from './types';
@@ -6,7 +7,6 @@ import { extractResourceUrls } from '@joplin/lib/urlUtils';
 import ResourceRecord from './ResourceRecord';
 import Serializable, { BaseSchema, SchemaToType } from './Serializable';
 import NoteRecord from './NoteRecord';
-
 interface ClientData {
 	email: string;
 	childIds: ItemId[];

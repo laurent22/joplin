@@ -1,3 +1,4 @@
+
 import { splitCommandBatch } from '@joplin/lib/string-utils';
 import BaseCommand from './base-command';
 import { _ } from '@joplin/lib/locale';
@@ -5,7 +6,6 @@ import { splitCommandString } from '@joplin/utils';
 import iterateStdin from './utils/iterateStdin';
 import { readFile } from 'fs-extra';
 import app from './app';
-
 interface Options {
 	'file-path': string;
 	options: {

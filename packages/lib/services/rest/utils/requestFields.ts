@@ -1,6 +1,6 @@
+
 import { Request } from '../Api';
 import BaseItem from '../../../models/BaseItem';
-
 function defaultFieldsByModelType(modelType: number): string[] {
 	const ModelClass = BaseItem.getClassByItemType(modelType);
 	const possibleFields = ['id', 'parent_id', 'title', 'deleted_time'];

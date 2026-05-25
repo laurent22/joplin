@@ -1,6 +1,6 @@
+
 import { extractUrls } from './markdown';
 import { Link } from './types';
-
 describe('markdown', () => {
 
 	test.each([

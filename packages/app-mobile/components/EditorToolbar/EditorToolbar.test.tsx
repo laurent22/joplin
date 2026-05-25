@@ -1,6 +1,7 @@
+
+
 import * as React from 'react';
 import { act, fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
-
 import { Store } from 'redux';
 import { AppState } from '../../utils/types';
 import TestProviderStack from '../testing/TestProviderStack';
@@ -11,7 +12,6 @@ import setupGlobalStore from '../../utils/testing/setupGlobalStore';
 import Setting from '@joplin/lib/models/Setting';
 import { RegisteredRuntime } from '@joplin/lib/services/CommandService';
 import mockCommandRuntimes from './testing/mockCommandRuntimes';
-
 let store: Store<AppState>;
 
 interface WrapperProps { }

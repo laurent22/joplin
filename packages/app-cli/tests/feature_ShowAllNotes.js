@@ -7,13 +7,6 @@
 // remove them.
 // ====================== IMPORTANT ============================================
 
-const { setupDatabaseAndSynchronizer, switchClient, id, ids, sortedIds, at, createNTestFolders, createNTestNotes, createNTestTags, TestApp } = require('@joplin/lib/testing/test-utils.js');
-const Setting = require('@joplin/lib/models/Setting').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Tag = require('@joplin/lib/models/Tag').default;
-const time = require('@joplin/lib/time').default;
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
 
 // The integration tests are to test the integration of the core system,
 // comprising the base application with middleware, reducer and models in
@@ -27,6 +20,13 @@ const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
 // Important: TestApp.wait() must be used after TestApp dispatch to allow the
 // async processing to complete
 
+import { setupDatabaseAndSynchronizer, switchClient, id, ids, sortedIds, at, createNTestFolders, createNTestNotes, createNTestTags, TestApp } from '@joplin/lib/testing/test-utils.js';
+import Setting from '@joplin/lib/models/Setting';
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
+import Tag from '@joplin/lib/models/Tag';
+import time from '@joplin/lib/time';
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids.js';
 let testApp = null;
 
 describe('integration_ShowAllNotes', () => {

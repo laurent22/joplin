@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import ExpandLink from './ExpandLink';
 import { StyledListItemAnchor, StyledShareIcon, StyledSpanFix } from '../styles';
@@ -13,7 +14,6 @@ import NoteCount from './NoteCount';
 import ListItemWrapper, { ItemSelectionState, ListItemRef } from './ListItemWrapper';
 import { useId } from 'react';
 import { ItemClickEvent } from '../hooks/useOnItemClick';
-
 const renderFolderIcon = (folderIcon: FolderIcon) => {
 	if (!folderIcon) {
 		const defaultFolderIcon: FolderIcon = {

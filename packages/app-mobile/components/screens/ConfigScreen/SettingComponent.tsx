@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { UpdateSettingValueCallback } from './types';
 import { View, Text } from 'react-native';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
@@ -11,7 +12,6 @@ import ValidatedIntegerInput from './ValidatedIntegerInput';
 import SettingTextInput from './SettingTextInput';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '../../global-style';
-
 interface Props {
 	settingId: string;
 

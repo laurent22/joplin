@@ -1,7 +1,7 @@
+
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow } from '../utils/testing/testUtils';
 import { Notification, NotificationLevel } from '../services/database/types';
 import { NotificationKey } from './NotificationModel';
-
 describe('NotificationModel', () => {
 
 	beforeAll(async () => {

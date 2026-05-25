@@ -1,6 +1,7 @@
 
 /* eslint-disable no-console */
 
+
 import { copy, exists, remove, readdir, mkdtemp } from 'fs-extra';
 import { join, resolve, basename } from 'path';
 import { tmpdir } from 'os';
@@ -11,7 +12,6 @@ import readRepositoryJson, { BuiltInPluginType, RepositoryData } from './utils/r
 import getPathToPatchFileFor from './utils/getPathToPatchFileFor';
 import getCurrentCommitHash from './utils/getCurrentCommitHash';
 import { waitForCliInput } from '@joplin/utils/cli';
-
 interface Options {
 	outputParentDir: string|null;
 	beforeInstall: (buildDir: string, pluginName: string)=> Promise<void>;

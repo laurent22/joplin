@@ -1,8 +1,8 @@
+
+// Regex to match the FrontMatter delimiter (--- at start of line, optionally with trailing whitespace)
 import type * as MarkdownIt from 'markdown-it';
 import type * as StateBlock from 'markdown-it/lib/rules_block/state_block';
 import hljs from '../../highlight';
-
-// Regex to match the FrontMatter delimiter (--- at start of line, optionally with trailing whitespace)
 const frontMatterDelimiterRegex = /^---\s*$/;
 
 const plugin = (markdownIt: MarkdownIt, _ruleOptions: unknown) => {

@@ -1,5 +1,5 @@
-const utils = require('../utils');
 
+import utils from '../utils';
 const rootDir = utils.rootDir();
 
 module.exports = {

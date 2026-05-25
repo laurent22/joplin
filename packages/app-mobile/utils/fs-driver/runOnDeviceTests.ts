@@ -1,3 +1,4 @@
+
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import uuid from '@joplin/lib/uuid';
@@ -7,7 +8,6 @@ import Logger from '@joplin/utils/Logger';
 import { Buffer } from 'buffer';
 import createFilesFromPathRecord from './testUtil/createFilesFromPathRecord';
 import verifyDirectoryMatches from './testUtil/verifyDirectoryMatches';
-
 const logger = Logger.create('fs-driver-tests');
 
 const expectToBe = async <T> (actual: T, expected: T) => {

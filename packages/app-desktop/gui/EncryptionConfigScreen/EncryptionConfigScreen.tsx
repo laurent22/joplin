@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { themeStyle } from '@joplin/lib/theme';
@@ -24,7 +25,6 @@ import Dialog from '@joplin/lib/components/Dialog';
 import DialogButtonRow from '../DialogButtonRow';
 import DialogTitle from '../DialogTitle';
 import PasswordInput from '../PasswordInput/PasswordInput';
-
 interface Props {
 	themeId: number;
 	dispatch: Dispatch;

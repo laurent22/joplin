@@ -1,3 +1,5 @@
+
+
 import { useEffect, useRef, useState, MutableRefObject } from 'react';
 import * as React from 'react';
 import PdfDocument from './PdfDocument';
@@ -5,8 +7,6 @@ import Page from './Page';
 import styled from 'styled-components';
 import useScaledSize, { ScaledSizeParams } from './hooks/useScaledSize';
 import useScrollSaver, { ScrollSaver } from './hooks/useScrollSaver';
-
-
 const PagesHolder = styled.div<{ pageGap: number }>`
 	display: flex;
 	justify-content: center;

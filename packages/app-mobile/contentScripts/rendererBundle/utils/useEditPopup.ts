@@ -1,8 +1,8 @@
+
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
 import { useMemo } from 'react';
-
 export const editPopupClass = 'joplin-editPopup';
 
 const getEditIconSrc = (theme: Theme) => {

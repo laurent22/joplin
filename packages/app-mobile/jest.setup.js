@@ -1,20 +1,26 @@
 /* eslint-disable jest/require-top-level-describe */
 
-const { afterEachCleanUp, afterAllCleanUp } = require('@joplin/lib/testing/test-utils.js');
-const shim = require('@joplin/lib/shim').default;
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
-const injectedJs = require('./utils/shim-init-react/injectedJs.js').default;
-const { mkdir, rm } = require('fs-extra');
-const path = require('path');
-const sharp = require('sharp');
-const { tmpdir } = require('os');
-const uuid = require('@joplin/lib/uuid').default;
-const Setting = require('@joplin/lib/models/Setting').default;
-const sqlite3 = require('sqlite3');
-const React = require('react');
-require('../../jest.base-setup.js')();
-
+import jest_base_setup_96 from '../../jest.base-setup.js';
+import { version as version_97 } from './package.json';
+import { version as version_98 } from './package.json';
+import index_jest_99 from './components/ExtendedWebView/index.jest.js';
+import index_100 from './components/CameraView/Camera/index.jest';
+import { afterEachCleanUp, afterAllCleanUp } from '@joplin/lib/testing/test-utils.js';
+import shim from '@joplin/lib/shim';
+import { shimInit } from '@joplin/lib/shim-init-node.js';
+import injectedJs from './utils/shim-init-react/injectedJs.js';
+import { mkdir, rm } from 'fs-extra';
+import path from 'path';
+import sharp from 'sharp';
+import { tmpdir } from 'os';
+import uuid from '@joplin/lib/uuid';
+import Setting from '@joplin/lib/models/Setting';
+import sqlite3 from 'sqlite3';
+import React from 'react';
+import { View as MockIconComponent } from 'react-native';
 import { setImmediate } from 'timers';
+jest_base_setup_96();
+
 
 // Required by some libraries (setImmediate is not supported in most browsers,
 // so is removed by jsdom).
@@ -22,7 +28,7 @@ window.setImmediate = setImmediate;
 
 shimInit({
 	nodeSqlite: sqlite3,
-	appVersion: () => require('./package.json').version,
+	appVersion: () => version_97,
 	React,
 	sharp,
 });
@@ -58,18 +64,18 @@ jest.mock('react-native-device-info', () => {
 jest.doMock('react-native-version-info', () => {
 	return {
 		default: {
-			appVersion: require('./package.json').version,
+			appVersion: version_98,
 		},
 	};
 });
 
 // react-native-webview expects native iOS/Android code so needs to be mocked.
 jest.mock('./components/ExtendedWebView', () => {
-	return require('./components/ExtendedWebView/index.jest.js');
+	return index_jest_99;
 });
 
 jest.mock('./components/CameraView/Camera', () => {
-	return require('./components/CameraView/Camera/index.jest');
+	return index_100;
 });
 
 jest.mock('@react-native-clipboard/clipboard', () => {
@@ -142,7 +148,6 @@ jest.doMock('@expo/vector-icons/MaterialCommunityIcons', () => {
 
 const mockIconLibrary = (libraryName, exportName) => {
 	jest.doMock(libraryName, () => {
-		const MockIconComponent = require('react-native').View;
 		return {
 			default: MockIconComponent,
 			[exportName]: MockIconComponent,

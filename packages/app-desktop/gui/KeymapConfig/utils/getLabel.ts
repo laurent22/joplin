@@ -1,8 +1,8 @@
+
+
 import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
-
 import { _ } from '@joplin/lib/locale';
-
 const commandService = CommandService.instance();
 
 const getLabel = (commandName: string): string => {

@@ -1,9 +1,9 @@
+
 import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import { SyntaxNodeRef } from '@lezer/common';
 import { EditorState } from '@codemirror/state';
 import referenceLinkStateField, { isReferenceLink, resolveReferenceFromLink } from '../links/referenceLinksStateField';
 import { Decoration } from '@codemirror/view';
-
 const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	const isUrl = node.name === 'URL';
 	const isLinkMark = node.name === 'LinkMark';

@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
@@ -9,7 +10,6 @@ import { clearAutosave, writeAutosave } from './autosave';
 import { DialogContext } from '../../DialogManager';
 import BackButtonService from '../../../services/BackButtonService';
 import useWebViewSetup, { ImageEditorControl } from '../../../contentScripts/imageEditorBundle/useWebViewSetup';
-
 const logger = Logger.create('ImageEditor');
 
 type OnSaveCallback = (svgData: string)=> Promise<void>;

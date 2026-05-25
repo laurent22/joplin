@@ -1,12 +1,12 @@
+
+import shim from '@joplin/lib/shim';
 import { BrowserWindow } from 'electron';
 import { autoUpdater, UpdateInfo } from 'electron-updater';
-import path = require('path');
+import path from 'path';
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import type ShimType from '@joplin/lib/shim';
-const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { GitHubRelease, GitHubReleaseAsset, handleReleaseResponseError } from '../../utils/checkForUpdatesUtils';
 import * as semver from 'semver';
-
 export enum AutoUpdaterEvents {
 	CheckingForUpdate = 'checking-for-update',
 	UpdateAvailable = 'update-available',

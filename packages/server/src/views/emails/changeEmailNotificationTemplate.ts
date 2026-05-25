@@ -1,6 +1,6 @@
+
 import config from '../../config';
 import { EmailSubjectBody } from '../../models/EmailModel';
-
 export default (): EmailSubjectBody => {
 	return {
 		subject: `Somebody asked to change your email on ${config().appName}`,

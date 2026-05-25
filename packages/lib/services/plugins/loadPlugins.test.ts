@@ -1,3 +1,4 @@
+
 import Setting from '../../models/Setting';
 import PluginService, { defaultPluginSetting } from '../../services/plugins/PluginService';
 import { setupDatabaseAndSynchronizer, switchClient, withWarningSilenced } from '../../testing/test-utils';
@@ -12,7 +13,6 @@ import shim from '../../shim';
 import { PluginManifest } from './utils/types';
 import { writeFile, mkdirp } from 'fs-extra';
 import { join } from 'path';
-
 const createMockReduxStore = () => {
 	return createStore((state: State = defaultState, action: Action<string>) => {
 		return reducer(state, action);

@@ -1,5 +1,5 @@
-import * as callbackUrlUtils from './callbackUrlUtils';
 
+import * as callbackUrlUtils from './callbackUrlUtils';
 describe('callbackUrlUtils', () => {
 
 	it('should identify valid callback urls', () => {

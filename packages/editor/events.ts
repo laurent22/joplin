@@ -1,6 +1,6 @@
+
 import type SelectionFormatting from './SelectionFormatting';
 import type { SearchState } from './types';
-
 export enum EditorEventType {
 	Change,
 	UndoRedoDepthChange,

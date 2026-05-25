@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useContext, useEffect, useRef } from 'react';
 import { StateLastDeletion } from '@joplin/lib/reducer';
@@ -8,7 +9,6 @@ import { Dispatch } from 'redux';
 import { PopupNotificationContext } from '../PopupNotification/PopupNotificationProvider';
 import { NotificationType } from '../PopupNotification/types';
 import TrashNotificationMessage from './TrashNotificationMessage';
-
 interface Props {
 	lastDeletion: StateLastDeletion;
 	lastDeletionNotificationTime: number;

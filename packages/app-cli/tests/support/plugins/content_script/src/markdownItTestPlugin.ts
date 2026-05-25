@@ -1,5 +1,5 @@
-const leftPad = require('left-pad');
 
+import leftPad from 'left-pad';
 export default function(context) { 
 	return {
 		plugin: function(markdownIt, _options) {

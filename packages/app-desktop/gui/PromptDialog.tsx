@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
@@ -9,7 +10,6 @@ import Dialog from '@joplin/lib/components/Dialog';
 import { ChangeEvent } from 'react';
 import { formatDateTimeLocalToMs, isValidDate } from '@joplin/utils/time';
 import lightTheme from '@joplin/lib/themes/light';
-
 interface Props {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous: string for text/datetime inputs, TagOption[] for tags, string for datetime; consumers dispatch by inputType

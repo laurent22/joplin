@@ -1,6 +1,6 @@
+
 import { syntaxTree } from '@codemirror/language';
 import { EditorState } from '@codemirror/state';
-
 interface Range {
 	from: number;
 	to: number;

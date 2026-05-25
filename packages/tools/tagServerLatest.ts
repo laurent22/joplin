@@ -1,7 +1,7 @@
-import { execCommand } from '@joplin/utils';
 
+import { argv } from 'yargs';
+import { execCommand } from '@joplin/utils';
 async function main() {
-	const argv = require('yargs').argv;
 	if (!argv._.length) throw new Error('Version number is required');
 
 	const version = argv._[0];

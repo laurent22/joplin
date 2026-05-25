@@ -1,10 +1,10 @@
+
 import { MouseEvent } from 'react';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { RefObject, useCallback } from 'react';
 import { Dispatch } from 'redux';
 import { ListItem, ListItemType } from '../types';
 import shim from '@joplin/lib/shim';
-
 export interface ItemClickEvent {
 	id: string;
 	type: ModelType;

@@ -1,9 +1,9 @@
+
+// Metadata shared between importers and exporters.
 import { _ } from '../../locale';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { ExportModuleOutputFormat, ExportOptions, FileSystemItem, ImportModuleOutputFormat, ImportOptions, ModuleType } from './types';
-
-// Metadata shared between importers and exporters.
 interface BaseMetadata {
 	fileExtensions: string[];
 	description: string;

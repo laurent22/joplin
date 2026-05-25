@@ -1,5 +1,5 @@
-import { ShareInvitation, ShareUserStatus } from '../../services/share/reducer';
 
+import { ShareInvitation, ShareUserStatus } from '../../services/share/reducer';
 let idCounter = 0;
 const makeMockShareInvitation = (userName: string, userEmail: string, status: ShareUserStatus): ShareInvitation => {
 	const shareTypeFolder = 3;

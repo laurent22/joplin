@@ -1,8 +1,9 @@
 // Displays a find/replace dialog
 
+
+
 import * as React from 'react';
 import { useMemo, useState, useEffect } from 'react';
-
 import { EditorSettings } from './types';
 import { _ } from '@joplin/lib/locale';
 import { TextInput, View, Text, StyleSheet, ViewStyle } from 'react-native';
@@ -11,7 +12,6 @@ import IconButton from '../IconButton';
 import { SearchState } from '@joplin/editor/types';
 import { SearchControl } from './types';
 import BackButtonService from '../../services/BackButtonService';
-
 const buttonSize = 48;
 
 type OnChangeCallback = (text: string)=> void;

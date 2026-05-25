@@ -1,7 +1,7 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
 import { _ } from '../locale';
 import Note from '../models/Note';
-
 export const declaration: CommandDeclaration = {
 	name: 'deleteNote',
 	label: () => _('Delete note'),

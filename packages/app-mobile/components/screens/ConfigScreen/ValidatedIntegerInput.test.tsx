@@ -1,6 +1,6 @@
+
 import { validate } from './ValidatedIntegerInput';
 import Setting from '@joplin/lib/models/Setting';
-
 describe('ValidatedIntegerInput', () => {
 	test.each(
 		['aaa', '1a1', '1a', '1.1', '1-1', '1-', '', null],

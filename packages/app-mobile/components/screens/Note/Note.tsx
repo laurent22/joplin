@@ -1,3 +1,7 @@
+
+import Clipboard from '@react-native-clipboard/clipboard';
+import md5 from 'md5';
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import uuid from '@joplin/lib/uuid';
 import Setting from '@joplin/lib/models/Setting';
@@ -14,8 +18,6 @@ import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Resource from '@joplin/lib/models/Resource';
 import Folder from '@joplin/lib/models/Folder';
-const Clipboard = require('@react-native-clipboard/clipboard').default;
-const md5 = require('md5');
 import BackButtonService from '../../../services/BackButtonService';
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -82,8 +84,6 @@ import useDebounced from '../../../utils/hooks/useDebounced';
 import { Second } from '@joplin/utils/time';
 import TextWrapCalculator from '../Notes/TextWrapCalculator';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
-
 const emptyArray: never[] = [];
 
 const logger = Logger.create('screens/Note');

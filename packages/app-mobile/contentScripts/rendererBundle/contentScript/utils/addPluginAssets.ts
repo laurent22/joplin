@@ -1,6 +1,6 @@
+
 import { RenderResultPluginAsset } from '@joplin/renderer/types';
 import { join, dirname } from 'path';
-
 type PluginAssetRecord = {
 	element: HTMLElement;
 };

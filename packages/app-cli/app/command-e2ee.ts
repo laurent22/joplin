@@ -1,4 +1,7 @@
-const BaseCommand = require('./base-command').default;
+
+import os_tmpdir from 'os';
+import BaseCommand from './base-command';
+import fs from 'fs-extra';
 import { _ } from '@joplin/lib/locale';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
@@ -9,7 +12,6 @@ import * as pathUtils from '@joplin/lib/path-utils';
 import { getEncryptionEnabled, localSyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings, masterPasswordIsValid, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
 import { fromFile as fileTypeFromFile } from 'file-type';
-
 class Command extends BaseCommand {
 	public usage() {
 		return 'e2ee <command> [path]';
@@ -131,7 +133,7 @@ class Command extends BaseCommand {
 		if (args.command === 'decrypt-file') {
 			while (true) {
 				try {
-					const outputDir = options.output ? options.output : require('os').tmpdir();
+					const outputDir = options.output ? options.output : os_tmpdir.tmpdir();
 					let outFile = `${outputDir}/${pathUtils.filename(args.path)}.${Date.now()}.bin`;
 					await EncryptionService.instance().decryptFile(args.path, outFile);
 					const detectedType = await fileTypeFromFile(outFile);
@@ -171,7 +173,6 @@ class Command extends BaseCommand {
 		// }
 
 		if (args.command === 'target-status') {
-			const fs = require('fs-extra');
 
 			const targetPath = args.path;
 			if (!targetPath) throw new Error('Please specify the sync target path.');

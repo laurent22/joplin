@@ -1,9 +1,9 @@
-import { ListRenderer } from '../plugins/api/noteListType';
 // import defaultLeftToRightItemRenderer from '../noteList/defaultLeftToRightListRenderer';
+
+import { ListRenderer } from '../plugins/api/noteListType';
 import defaultListRenderer from '../noteList/defaultListRenderer';
 import defaultMultiColumnsRenderer from '../noteList/defaultMultiColumnsRenderer';
 import { Store } from 'redux';
-
 const renderers_: ListRenderer[] = [
 	defaultListRenderer,
 	defaultMultiColumnsRenderer,

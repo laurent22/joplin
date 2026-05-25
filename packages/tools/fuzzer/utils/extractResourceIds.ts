@@ -1,5 +1,5 @@
-import { extractResourceUrls } from '@joplin/lib/urlUtils';
 
+import { extractResourceUrls } from '@joplin/lib/urlUtils';
 const extractResourceIds = (text: string) => {
 	return extractResourceUrls(text).map(item => item.itemId);
 };

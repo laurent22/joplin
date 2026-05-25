@@ -1,14 +1,14 @@
+
+
+import { _ } from '../../../locale';
 import Setting, { AppType, SettingMetadataSection, SettingSectionSource, type SettingsRecord } from '../../../models/Setting';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
-const { _ } = require('../../../locale');
 import { createSelector } from 'reselect';
 import Logger from '@joplin/utils/Logger';
-
 import { type ReactNode } from 'react';
 import { type Registry } from '../../../registry';
 import settingValidations from '../../../models/settings/settingValidations';
 import { convertValuesToFunctions } from '../../../ObjectUtils';
-
 const logger = Logger.create('config-shared');
 
 type SettingsMap = Partial<SettingsRecord> & Record<string, unknown>;

@@ -1,3 +1,5 @@
+
+
 import './utils/polyfills';
 import './utils/initReact';
 import { AppRegistry } from 'react-native';
@@ -12,9 +14,7 @@ import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import Tag from '@joplin/lib/models/Tag';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
-
-require('./web/rnVectorIconsSetup.js');
-
+import './web/rnVectorIconsSetup.js';
 AppRegistry.registerComponent('Joplin', () => Root);
 
 // Fill properties not yet available in the TypeScript DOM types.

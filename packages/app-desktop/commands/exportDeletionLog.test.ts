@@ -1,8 +1,8 @@
+
 import shim from '@joplin/lib/shim';
 import * as exportDeletionLog from './exportDeletionLog';
 import Setting from '@joplin/lib/models/Setting';
 import { AppState, createAppDefaultState } from '../app.reducer';
-
 jest.mock('../services/bridge', () => ({
 	__esModule: true,
 	default: () => ({

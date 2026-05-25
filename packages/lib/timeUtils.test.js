@@ -1,5 +1,5 @@
-const time = require('./time').default;
 
+import time from './time';
 describe('timeUtils', () => {
 
 

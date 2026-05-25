@@ -1,5 +1,5 @@
-import { convertValuesToFunctions, sortByValue } from './ObjectUtils';
 
+import { convertValuesToFunctions, sortByValue } from './ObjectUtils';
 describe('ObjectUtils', () => {
 	test('should convert object values to functions', () => {
 		const v = convertValuesToFunctions({ a: 6, b: ()=>7, c: 'test' });

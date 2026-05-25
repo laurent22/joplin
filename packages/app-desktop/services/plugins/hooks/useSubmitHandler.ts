@@ -1,6 +1,6 @@
+
 import { RefObject } from 'react';
 import useMessageHandler from './useMessageHandler';
-
 type OnEvent = ()=> void;
 
 export default function(viewRef: RefObject<HTMLIFrameElement>, onSubmit: OnEvent, onDismiss: OnEvent) {

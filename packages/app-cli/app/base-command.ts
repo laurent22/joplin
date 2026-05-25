@@ -1,7 +1,7 @@
-import { _ } from '@joplin/lib/locale';
-import { reg } from '@joplin/lib/registry.js';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Stdout can be called with formatted strings or arbitrary values
+import { _ } from '@joplin/lib/locale';
+import { reg } from '@joplin/lib/registry.js';
 type StdoutFn = (text: any)=> void;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Prompt response varies by type and tests pass sync mocks
 type PromptFn = (message: string, options: any)=> any;

@@ -1,10 +1,10 @@
+
+
+import Note from '../../models/Note';
 import { setupDatabaseAndSynchronizer, db, switchClient } from '../../testing/test-utils.js';
 import SearchEngine from './SearchEngine.js';
 import SearchEngineUtils, { NotesForQueryOptions } from './SearchEngineUtils.js';
 import Setting from '../../models/Setting.js';
-const Note = require('../../models/Note').default;
-
-
 let searchEngine: SearchEngine = null;
 
 describe('SearchEngineUtils', () => {

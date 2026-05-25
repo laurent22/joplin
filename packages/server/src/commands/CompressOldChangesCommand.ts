@@ -1,7 +1,7 @@
+
 import { Options } from 'yargs';
 import { Day } from '../utils/time';
 import BaseCommand, { RunContext } from './BaseCommand';
-
 interface Argv {
 	ttl: number;
 }

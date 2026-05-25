@@ -1,6 +1,6 @@
+
 import Setting from '../../models/Setting';
 import { SettingValues } from '../../models/settings/FileHandler';
-
 export default (settings: SettingValues) => {
 	const globalSettings: SettingValues = {};
 	const localSettings: SettingValues = {};

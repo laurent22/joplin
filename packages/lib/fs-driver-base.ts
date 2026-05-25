@@ -1,10 +1,10 @@
+
+import md5 from 'md5';
 import time from './time';
 import Setting from './models/Setting';
 import { basename, filename, fileExtension, rtrimSlashes } from './path-utils';
-const md5 = require('md5');
 import resolvePathWithinDir from './utils/resolvePathWithinDir';
 import { Buffer } from 'buffer';
-
 export interface Stat {
 	birthtime: Date;
 	mtime: Date;

@@ -1,7 +1,7 @@
-const { setupDatabaseAndSynchronizer, switchClient, supportDir } = require('./testing/test-utils.js');
-const shim = require('./shim').default;
-const { enexXmlToHtml } = require('./import-enex-html-gen.js');
 
+import { setupDatabaseAndSynchronizer, switchClient, supportDir } from './testing/test-utils.js';
+import shim from './shim';
+import { enexXmlToHtml } from './import-enex-html-gen.js';
 const fileWithPath = (filename) =>
 	`${supportDir}/../enex_to_html/${filename}`;
 

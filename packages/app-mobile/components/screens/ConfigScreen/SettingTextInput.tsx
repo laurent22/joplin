@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { View, Text, TextInput } from 'react-native';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
@@ -5,7 +6,6 @@ import { ConfigScreenStyles } from './configScreenStyles';
 import { UpdateSettingValueCallback } from './types';
 import { themeStyle } from '../../global-style';
 import { FunctionComponent, ReactNode, useId, useState } from 'react';
-
 interface Props {
 	settingId: string;
 	value: string;

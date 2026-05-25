@@ -18,12 +18,12 @@
 // ! The above copyright notice and this permission notice shall be included in
 // ! all copies or substantial portions of the Software.
 
+
+
 import { markdownLanguage } from '@codemirror/lang-markdown';
 import { indentUnit, syntaxTree } from '@codemirror/language';
 import { ChangeSpec, countColumn, EditorSelection, EditorState, StateCommand, Text } from '@codemirror/state';
 import { SyntaxNode } from '@lezer/common';
-
-
 class Context {
 	public constructor(
 		public readonly node: SyntaxNode,

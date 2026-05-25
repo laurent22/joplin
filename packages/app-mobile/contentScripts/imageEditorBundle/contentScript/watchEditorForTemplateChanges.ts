@@ -1,5 +1,5 @@
-import { Editor, BackgroundComponent, EditorEventType, Vec2 } from 'js-draw';
 
+import { Editor, BackgroundComponent, EditorEventType, Vec2 } from 'js-draw';
 const watchEditorForTemplateChanges = (
 	editor: Editor, initialTemplate: string, updateTemplate: (templateData: string)=> void,
 ) => {

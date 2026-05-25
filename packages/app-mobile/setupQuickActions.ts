@@ -1,3 +1,4 @@
+
 import * as QuickActions from 'react-native-quick-actions';
 import { _ } from '@joplin/lib/locale';
 import { Dispatch } from 'redux';
@@ -6,7 +7,6 @@ import Logger from '@joplin/utils/Logger';
 import { DeviceEventEmitter } from 'react-native';
 import { GotoNoteOptions } from './commands/util/goToNote';
 import { AttachFileAction } from './components/screens/Note/commands/attachFile';
-
 const logger = Logger.create('setupQuickActions');
 
 type TData = {

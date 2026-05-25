@@ -1,6 +1,6 @@
+
 import { join, resolve } from 'path';
 import bridge from '../../services/bridge';
-
 const pathToBundled7Zip = () => {
 	// 7zip-bin is very large -- return the path to a version of 7zip
 	// copied from 7zip-bin.

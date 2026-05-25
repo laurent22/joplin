@@ -1,7 +1,7 @@
+
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import { Second } from '@joplin/utils/time';
-
 test.describe('sidebar', () => {
 	test('should be able to create new folders', async ({ mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();

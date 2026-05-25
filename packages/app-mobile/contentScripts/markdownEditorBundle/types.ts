@@ -1,7 +1,7 @@
+
+
 import { EditorEvent } from '@joplin/editor/events';
 import { ContentScriptData, EditorControl, EditorSettings, LocalizationResult } from '@joplin/editor/types';
-
-
 export interface EditorProps {
 	parentElementOrClassName: HTMLElement|string;
 	initialText: string;

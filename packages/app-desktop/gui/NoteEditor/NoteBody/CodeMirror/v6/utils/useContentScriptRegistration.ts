@@ -1,3 +1,4 @@
+
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import { ContentScriptData, ContentScriptLoadOptions } from '@joplin/editor/types';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
@@ -8,7 +9,6 @@ import { dirname } from 'path';
 import { useEffect, useId, useRef } from 'react';
 import bridge from '../../../../../../services/bridge';
 import type { ContentScriptRegistration } from '../../../../../../utils/customProtocols/handleCustomProtocols';
-
 interface Props {
 	editor: CodeMirrorControl;
 	pluginStates: PluginStates;

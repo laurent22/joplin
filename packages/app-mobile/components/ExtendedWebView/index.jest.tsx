@@ -1,15 +1,15 @@
+
 import * as React from 'react';
-
-import {
-	forwardRef, Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef,
-} from 'react';
-
 import { View } from 'react-native';
 import Logger from '@joplin/utils/Logger';
 import { Props, WebViewControl } from './types';
 import { JSDOM } from 'jsdom';
 import useCss from './utils/useCss';
 import polyfillScrollFunctions from './utils/polyfillScrollFunctions';
+import {
+	forwardRef, Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef,
+} from 'react';
+
 
 const logger = Logger.create('ExtendedWebView');
 

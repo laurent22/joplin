@@ -1,10 +1,10 @@
-import { Handler } from "./Parser";
 
 /**
  * Calls a specific handler function for all events that are encountered.
  *
  * @param func — The function to multiplex all events to.
  */
+import { Handler } from "./Parser";
 export default class MultiplexHandler implements Handler {
     _func: (event: keyof Handler, ...args: unknown[]) => void;
 

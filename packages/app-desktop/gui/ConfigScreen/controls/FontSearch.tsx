@@ -1,9 +1,9 @@
+
 import * as React from 'react';
 import { useState, useCallback, CSSProperties, useEffect } from 'react';
 import { _ } from '@joplin/lib/locale';
 import { SettingItemSubType } from '@joplin/lib/models/Setting';
 import InlineCombobox from '../../InlineCombobox';
-
 interface Props {
 	type: string;
 	style: CSSProperties;

@@ -1,7 +1,7 @@
+
+
 import { CallbackIds, SerializableData, SerializableDataAndCallbacks, TransferableCallback } from '../types';
 import separateCallbacksFromSerializable from './separateCallbacksFromSerializable';
-
-
 interface SeparatedCallbacksAndSerializableArrays {
 	serializableData: SerializableData[];
 	callbacks: CallbackIds[];

@@ -1,6 +1,6 @@
-const utils = require('../utils');
+import utils from '../utils';
+import fs from 'fs-extra';
 const rootDir = utils.rootDir();
-const fs = require('fs-extra');
 
 module.exports = {
 	src: '',

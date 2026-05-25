@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import ButtonBar from '../ConfigScreen/ButtonBar';
@@ -7,7 +8,6 @@ import SsoScreenShared from '@joplin/lib/components/shared/SsoScreenShared';
 import shim from '@joplin/lib/shim';
 import { Dispatch } from 'redux';
 import Button from '../Button/Button';
-
 type Props = {
 	themeId: number;
 	dispatch: Dispatch;

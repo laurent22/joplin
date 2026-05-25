@@ -1,10 +1,10 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import Note from '@joplin/lib/models/Note';
 import bridge from '../services/bridge';
-
 export const declaration: CommandDeclaration = {
 	name: 'startExternalEditing',
 	label: () => _('Open in external editor'),

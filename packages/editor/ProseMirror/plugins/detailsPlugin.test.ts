@@ -1,7 +1,7 @@
+
 import createTestEditor from '../testing/createTestEditor';
 import createTestEditorWithSerializer from '../testing/createTestEditorWithSerializer';
 import detailsPlugin from './detailsPlugin';
-
 describe('detailsPlugin', () => {
 	it('should add jop-noMdConv attributes to <details> and <summary>', () => {
 		const { toHtml, normalizeHtml } = createTestEditorWithSerializer({

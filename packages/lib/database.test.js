@@ -1,6 +1,6 @@
-const { setupDatabaseAndSynchronizer, switchClient } = require('./testing/test-utils.js');
-const BaseModel = require('./BaseModel').default;
 
+import { setupDatabaseAndSynchronizer, switchClient } from './testing/test-utils.js';
+import BaseModel from './BaseModel';
 describe('database', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

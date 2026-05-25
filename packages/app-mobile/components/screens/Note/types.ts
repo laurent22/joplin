@@ -1,7 +1,7 @@
+
 import { ResourceEntity } from '@joplin/lib/services/database/types';
 import { DialogControl } from '../../DialogManager';
 import { Dispatch } from 'redux';
-
 export interface PickerResponse {
 	uri?: string;
 	type?: string;

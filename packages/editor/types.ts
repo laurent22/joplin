@@ -1,8 +1,8 @@
-import type { Theme } from '@joplin/lib/themes/type';
-import type { EditorEvent } from './events';
 
 // Editor commands. Plugins can access these commands using editor.execCommand
 // or, in some cases, by prefixing the command name with `editor.`.
+import type { Theme } from '@joplin/lib/themes/type';
+import type { EditorEvent } from './events';
 export enum EditorCommandType {
 	Undo = 'undo',
 	Redo = 'redo',

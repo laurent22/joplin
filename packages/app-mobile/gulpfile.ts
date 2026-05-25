@@ -1,15 +1,18 @@
-const gulp = require('gulp');
-const utils = require('@joplin/tools/gulp/utils');
-const compilePackageInfo = require('@joplin/tools/compilePackageInfo');
 
+
+import encodeAssets_93 from './tools/encodeAssets';
+import { default as default_94 } from './tools/copyAssets';
+import podInstall_95 from './tools/podInstall';
+import gulp from 'gulp';
+import utils from '@joplin/tools/gulp/utils';
+import compilePackageInfo from '@joplin/tools/compilePackageInfo';
 import injectedJsGulpTasks from './tools/buildInjectedJs/gulpTasks';
-
 const tasks = {
 	encodeAssets: {
-		fn: require('./tools/encodeAssets'),
+		fn: encodeAssets_93,
 	},
 	copyWebAssets: {
-		fn: require('./tools/copyAssets').default,
+		fn: default_94,
 	},
 	compilePackageInfo: {
 		fn: async () => {
@@ -19,7 +22,7 @@ const tasks = {
 
 	...injectedJsGulpTasks,
 	podInstall: {
-		fn: require('./tools/podInstall'),
+		fn: podInstall_95,
 	},
 };
 

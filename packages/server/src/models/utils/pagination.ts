@@ -1,8 +1,8 @@
+
 import { ErrorBadRequest } from '../../utils/errors';
 import { decodeBase64, encodeBase64 } from '../../utils/base64';
 import { Knex } from 'knex';
 import { ParsedUrlQuery } from 'querystring';
-
 export enum PaginationOrderDir {
 	ASC = 'asc',
 	DESC = 'desc',

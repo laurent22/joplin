@@ -1,6 +1,6 @@
 // AUTO-GENERATED using `gulp buildScriptIndexes`
-import * as focusSearch from './focusSearch';
 
+import * as focusSearch from './focusSearch';
 const index: any[] = [
 	focusSearch,
 ];

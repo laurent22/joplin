@@ -1,8 +1,8 @@
+
 import '../testing/dom-test-environment';
 import type * as React from 'react';
 import { renderHook } from '@testing-library/react';
 import useNowEffect from './useNowEffect';
-
 describe('useNowEffect', () => {
 	test('should call the cleanup callback when the effect function is called and after unmount', async () => {
 		const cleanupFunction = jest.fn(() => {});

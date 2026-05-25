@@ -1,6 +1,6 @@
+
 import { readFile } from 'fs-extra';
 import { stripOffFrontMatter } from './frontMatter';
-
 interface ReadmeDoc {
 	title: string;
 	body: string;

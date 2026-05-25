@@ -1,3 +1,4 @@
+
 import { fileContentEqual, setupDatabaseAndSynchronizer, supportDir, switchClient, objectsEqual, checkThrowAsync, msleep } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
@@ -6,7 +7,6 @@ import BaseItem from '../../models/BaseItem';
 import MasterKey from '../../models/MasterKey';
 import EncryptionService, { EncryptionMethod } from './EncryptionService';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
-
 let service: EncryptionService = null;
 
 describe('services_EncryptionService', () => {

@@ -1,3 +1,5 @@
+
+import { sprintf } from 'sprintf-js';
 import NoteResource from '../models/NoteResource';
 import BaseModel from '../BaseModel';
 import BaseService from './BaseService';
@@ -12,8 +14,6 @@ import time from '../time';
 import eventManager, { EventName } from '../eventManager';
 import { ItemChangeEntity } from './database/types';
 import PerformanceLogger from '../PerformanceLogger';
-const { sprintf } = require('sprintf-js');
-
 const perfLogger = PerformanceLogger.create();
 
 export default class ResourceService extends BaseService {

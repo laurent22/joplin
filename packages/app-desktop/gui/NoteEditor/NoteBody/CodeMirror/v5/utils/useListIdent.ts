@@ -1,10 +1,10 @@
-import markdownUtils from '@joplin/lib/markdownUtils';
 
 // Markdown list indentation.
 // If the current line starts with `markup.list` token,
 // hitting `Tab` key indents the line instead of inserting tab at cursor.
 // hitting enter will insert a new list element, and unindent/delete an empty element
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration
+import markdownUtils from '@joplin/lib/markdownUtils';
 export default function useListIdent(CodeMirror: any) {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamically-loaded namespace; @types/codemirror's signatures are too narrow for plugin registration

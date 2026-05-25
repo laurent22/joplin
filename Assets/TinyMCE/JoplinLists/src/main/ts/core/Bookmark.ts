@@ -5,9 +5,9 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
+
 import DOMUtils from 'tinymce/core/api/dom/DOMUtils';
 import * as Range from './Range';
-
 const DOM = DOMUtils.DOM;
 
 /**

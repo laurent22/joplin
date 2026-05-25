@@ -22,9 +22,9 @@
 // another location, when the response is received, it resolves that promise.
 // See UserWebviewIndex.js to see how it's done.
 
+
 import Logger from '@joplin/utils/Logger';
 import PluginService from './plugins/PluginService';
-
 const logger = Logger.create('PostMessageService');
 
 export enum MessageParticipant {

@@ -1,6 +1,6 @@
-import { Theme, ThemeAppearance } from './type';
 
 // This is the default theme in Joplin
+import { Theme, ThemeAppearance } from './type';
 const theme: Theme = {
 	appearance: ThemeAppearance.Light,
 

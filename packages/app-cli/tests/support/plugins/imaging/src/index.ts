@@ -1,6 +1,6 @@
+
 import joplin from 'api';
 import { ToolbarButtonLocation } from 'api/types';
-
 const registerMakeThumbnailCommand = async () => {
 	await joplin.commands.register({
 		name: 'makeThumbnail',

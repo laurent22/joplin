@@ -1,3 +1,4 @@
+
 import Logger from '@joplin/utils/Logger';
 import ActionTracker from '../model/ActionTracker';
 import Client from './Client';
@@ -5,7 +6,6 @@ import { FuzzContext } from '../types';
 import { join } from 'path';
 import { mkdir } from 'fs-extra';
 import { readdir } from 'fs/promises';
-
 type ClientFilter = (client: Client)=> boolean;
 
 const logger = Logger.create('ClientPool');

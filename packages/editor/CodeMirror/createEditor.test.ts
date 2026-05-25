@@ -2,15 +2,15 @@
  * @jest-environment jsdom
  */
 
+
+
 import createEditor from './createEditor';
 import Setting from '@joplin/lib/models/Setting';
 import { forceParsing } from '@codemirror/language';
 import loadLanguages from './testing/loadLanguages';
-
 import { expect, describe, it } from '@jest/globals';
 import createEditorSettings from '../testing/createEditorSettings';
 import { ContentScriptLoadOptions } from '../types';
-
 const getMockContentScriptSource = (context: ContentScriptLoadOptions) => {
 	return {
 		sourceJs: `

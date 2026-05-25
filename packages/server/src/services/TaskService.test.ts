@@ -1,3 +1,4 @@
+
 import config from '../config';
 import { Models } from '../models/factory';
 import { ErrorCode } from '../utils/errors';
@@ -5,7 +6,6 @@ import { afterAllTests, beforeAllDb, beforeEachDb, expectThrow, models } from '.
 import { Env } from '../utils/types';
 import { TaskId } from './database/types';
 import TaskService, { RunType, Task } from './TaskService';
-
 const newService = () => {
 	return new TaskService(Env.Dev, models(), config(), {
 		email: null,

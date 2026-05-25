@@ -1,3 +1,4 @@
+
 import CommandService from '@joplin/lib/services/CommandService';
 import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
 import mainScreenCommands from '../gui/WindowCommandsAndDialogs/commands/index';
@@ -8,7 +9,6 @@ import sidebarCommands from '../gui/Sidebar/commands/index';
 import appCommands from '../commands/index';
 import libCommands from '@joplin/lib/commands/index';
 import editorCommandDeclarations from '../gui/NoteEditor/editorCommandDeclarations';
-
 const commands = mainScreenCommands
 	.concat(noteEditorCommands)
 	.concat(noteListCommands)

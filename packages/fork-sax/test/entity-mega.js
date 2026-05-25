@@ -1,4 +1,4 @@
-var sax = require('../')
+import sax from '../';
 var xml = '<r>'
 var text = ''
 for (var i in sax.ENTITIES) {

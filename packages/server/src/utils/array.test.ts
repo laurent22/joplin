@@ -1,5 +1,5 @@
-import { unique } from './array';
 
+import { unique } from './array';
 describe('array', () => {
 	it('should return unique items in a short array', () => {
 		expect(unique([1, 2, 2, 3, 1])).toEqual([1, 2, 3]);

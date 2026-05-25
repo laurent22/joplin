@@ -5,6 +5,7 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
+
 import { Arr } from '@ephox/katamari';
 import { Element} from '@ephox/sugar';
 import Editor from 'tinymce/core/api/Editor';
@@ -13,7 +14,6 @@ import { listIndentation } from '../listModel/ListsIndendation';
 import { dlIndentation } from '../core/DlIndentation';
 import * as Range from '../core/Range';
 import * as Selection from '../core/Selection';
-
 const selectionIndentation = (editor: Editor, indentation: Indentation): boolean => {
   const lists = Arr.map(Selection.getSelectedListRoots(editor), Element.fromDom);
   const dlItems = Arr.map(Selection.getSelectedDlItems(editor), Element.fromDom);

@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { AppState } from '../../utils/types';
@@ -8,7 +9,6 @@ import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncIn
 import Setting from '@joplin/lib/models/Setting';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
-
 interface Props {
 	themeId: number;
 	showMissingMasterKeyMessage: boolean;

@@ -1,3 +1,4 @@
+
 import BaseCommand from './base-command';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import BaseModel from '@joplin/lib/BaseModel';
@@ -6,7 +7,6 @@ import { reg } from '@joplin/lib/registry.js';
 import markdownUtils, { MarkdownTableRow } from '@joplin/lib/markdownUtils';
 import Database from '@joplin/lib/database';
 import shim from '@joplin/lib/shim';
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'apidoc <file>';

@@ -1,9 +1,9 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 import { FocusNote } from '../utils/useFocusNote';
 import bridge from '../../../services/bridge';
-
 export const declaration: CommandDeclaration = {
 	name: 'focusElementNoteList',
 	label: () => _('Note list'),

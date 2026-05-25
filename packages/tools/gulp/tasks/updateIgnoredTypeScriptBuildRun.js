@@ -1,7 +1,7 @@
 // Allow running that task "updateIgnoredTypeScriptBuild" without gulp
 
-const task = require('./updateIgnoredTypeScriptBuild.js');
 
+import task from './updateIgnoredTypeScriptBuild.js';
 const main = async () => {
 	await task.fn();
 };

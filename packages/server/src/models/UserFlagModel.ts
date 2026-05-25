@@ -1,9 +1,9 @@
+
 import Logger from '@joplin/utils/Logger';
 import { isUniqueConstraintError } from '../db';
 import { User, UserFlag, UserFlagType, userFlagTypeToLabel, Uuid } from '../services/database/types';
 import { formatDateTime } from '../utils/time';
 import BaseModel from './BaseModel';
-
 const logger = Logger.create('UserFlagModel');
 
 interface AddRemoveOptions {

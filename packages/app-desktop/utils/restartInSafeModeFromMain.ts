@@ -1,3 +1,6 @@
+
+
+import { shimInit } from '@joplin/lib/shim-init-node.js';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
 import bridge from '../bridge';
 import processStartFlags from '@joplin/lib/utils/processStartFlags';
@@ -6,8 +9,6 @@ import initProfile from '@joplin/lib/services/profileConfig/initProfile';
 import { writeFile } from 'fs-extra';
 import { join } from 'path';
 import determineBaseAppDirs from '@joplin/lib/determineBaseAppDirs';
-
-
 const restartInSafeModeFromMain = async () => {
 	// Only set constants here -- the main process doesn't have easy access (without loading
 	// a large amount of other code) to the database.
@@ -17,7 +18,6 @@ const restartInSafeModeFromMain = async () => {
 	Setting.setConstant('appName', appName);
 
 	// Load just enough for us to write a file in the profile directory
-	const { shimInit } = require('@joplin/lib/shim-init-node.js');
 	shimInit({});
 
 	const startFlags = await processStartFlags(bridge().processArgv());

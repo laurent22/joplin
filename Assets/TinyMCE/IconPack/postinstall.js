@@ -1,6 +1,6 @@
+
 import prompts from 'prompts';
 import { readFileSync, writeFileSync } from 'fs';
-
 (async function() {
 	const response = await prompts({
 		type: 'text',

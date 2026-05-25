@@ -1,3 +1,4 @@
+
 import { produce } from 'immer';
 import Setting from '@joplin/lib/models/Setting';
 import { defaultState, defaultWindowState, State, WindowState } from '@joplin/lib/reducer';
@@ -5,7 +6,6 @@ import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('app.reducer');
 
 export interface AppStateRoute {

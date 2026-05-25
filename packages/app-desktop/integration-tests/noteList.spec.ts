@@ -1,7 +1,7 @@
+
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import setMessageBoxResponse from './util/setMessageBoxResponse';
-
 test.describe('noteList', () => {
 	test('should be possible to edit notes in a different notebook when searching', async ({ mainWindow, electronApp }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();

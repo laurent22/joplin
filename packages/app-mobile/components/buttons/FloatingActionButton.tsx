@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useState, useCallback, useMemo, useRef } from 'react';
 import { FAB } from 'react-native-paper';
@@ -7,7 +8,6 @@ import { AccessibilityActionEvent, AccessibilityActionInfo, View } from 'react-n
 import { connect } from 'react-redux';
 import BottomDrawer from '../BottomDrawer';
 import { Ionicons as Icon } from '@react-native-vector-icons/ionicons';
-
 type OnButtonPress = ()=> void;
 interface ButtonSpec {
 	icon: string;

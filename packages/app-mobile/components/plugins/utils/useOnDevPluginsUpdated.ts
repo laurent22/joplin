@@ -1,9 +1,9 @@
+
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import shim from '@joplin/lib/shim';
 import time from '@joplin/lib/time';
 import { basename, join } from 'path';
 import { useRef } from 'react';
-
 type OnDevPluginChange = (id: string)=> void;
 
 const useOnDevPluginsUpdated = (onDevPluginChange: OnDevPluginChange, devPluginPath: string, pluginSupportEnabled: boolean) => {

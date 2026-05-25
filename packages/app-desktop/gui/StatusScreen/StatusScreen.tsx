@@ -1,8 +1,9 @@
+
+import { connect } from 'react-redux';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import ButtonBar from '../ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
-const { connect } = require('react-redux');
 import Setting from '@joplin/lib/models/Setting';
 import { themeStyle } from '@joplin/lib/theme';
 import ReportService, { ReportItem, ReportSection, RetryAllHandler } from '@joplin/lib/services/ReportService';
@@ -11,7 +12,6 @@ import bridge from '../../services/bridge';
 import styled from 'styled-components';
 import { AppState } from '../../app.reducer';
 import { writeFileSync } from 'fs';
-
 interface Props {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- style is also spread into theme.containerStyle which is loosely typed; tightening to React.CSSProperties forces narrowing changes

@@ -1,10 +1,10 @@
+
 import { produce } from 'immer';
 import Setting from '../../../models/Setting';
 import shim from '../../../shim';
 import PluginService, { defaultPluginSetting, DefaultPluginsInfo, Plugins, PluginSettings } from '../PluginService';
 import Logger from '@joplin/utils/Logger';
 import { join } from 'path';
-
 const logger = Logger.create('defaultPluginsUtils');
 
 

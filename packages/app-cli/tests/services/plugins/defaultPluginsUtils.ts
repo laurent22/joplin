@@ -1,9 +1,9 @@
+
 import { afterDefaultPluginsLoaded, getDefaultPluginPathsAndSettings } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import PluginRunner from '../../../app/services/plugins/PluginRunner';
 import { checkThrow, setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
 import PluginService, { defaultPluginSetting, DefaultPluginsInfo } from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
-
 const testDefaultPluginsDir = `${supportDir}/testDefaultPlugins`;
 
 function newPluginService(appVersion = '2.4') {

@@ -1,6 +1,6 @@
+
 import { rootDir, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
 import { versionPatch } from '@joplin/utils/version';
-
 const serverDir = `${rootDir}/packages/server`;
 
 async function main() {

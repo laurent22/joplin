@@ -1,5 +1,5 @@
-import { RemoteItem } from '../../../file-api';
 
+import { RemoteItem } from '../../../file-api';
 export enum Dirnames {
 	Locks = 'locks',
 	Resources = '.resource',

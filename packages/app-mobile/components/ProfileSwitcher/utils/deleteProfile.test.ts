@@ -1,3 +1,4 @@
+
 import { CurrentProfileVersion, DefaultProfileId, ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import deleteProfile from './deleteProfile';
 import { mkdir } from 'fs/promises';
@@ -5,7 +6,6 @@ import { getPluginDataDir, getResourceDir, setDispatch } from '../../../services
 import { setupDatabase } from '@joplin/lib/testing/test-utils';
 import DatabaseDriver, { DatabaseOpenOptions } from '@joplin/lib/database-driver';
 import { pathExists } from 'fs-extra';
-
 class MockDatabaseDriver implements DatabaseDriver {
 	public async open(_options: DatabaseOpenOptions) {
 		throw new Error('Method not implemented: open.');

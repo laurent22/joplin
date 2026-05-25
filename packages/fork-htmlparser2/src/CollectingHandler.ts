@@ -1,6 +1,6 @@
+
 import MultiplexHandler from "./MultiplexHandler";
 import { Handler } from "./Parser";
-
 export class CollectingHandler extends MultiplexHandler {
     _cbs: Partial<Handler>;
     events: [keyof Handler, ...unknown[]][];

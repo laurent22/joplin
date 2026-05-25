@@ -1,3 +1,5 @@
+
+
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
@@ -8,7 +10,6 @@ import { menuItems } from '../../../utils/contextMenu';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import type { ContextMenuParams, Event as ElectronEvent, MenuItemConstructorOptions } from 'electron';
-
 import Resource from '@joplin/lib/models/Resource';
 import { TinyMceEditorEvents } from './types';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from '../../../utils/types';
@@ -20,7 +21,6 @@ import type { MenuItem as MenuItemType } from 'electron';
 import isItemId from '@joplin/lib/models/utils/isItemId';
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('useContextMenu');
 
 const Menu = bridge().Menu;

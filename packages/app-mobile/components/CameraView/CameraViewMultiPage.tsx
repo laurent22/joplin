@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { CameraResult } from './types';
 import { View, StyleSheet } from 'react-native';
@@ -7,7 +8,6 @@ import { themeStyle } from '../global-style';
 import { Button } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import PhotoPreview from './PhotoPreview';
-
 export type OnPhotosChange = (photos: CameraResult[])=> void;
 export type OnComplete = ()=> void;
 

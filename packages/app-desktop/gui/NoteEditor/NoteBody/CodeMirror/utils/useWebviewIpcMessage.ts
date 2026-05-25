@@ -1,7 +1,7 @@
+
 import type CodeMirror5Emulation from '@joplin/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 import { useCallback, RefObject } from 'react';
-
 interface WebviewIpcEvent {
 	channel?: string;
 	args?: unknown[];

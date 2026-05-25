@@ -1,12 +1,20 @@
-const gulp = require('gulp');
-const utils = require('@joplin/tools/gulp/utils');
-const compileSass = require('@joplin/tools/compileSass');
-const compilePackageInfo = require('@joplin/tools/compilePackageInfo');
+
+import compileScripts_33 from './tools/compileScripts';
+import copyPluginAssets_34 from './tools/copyPluginAssets.js';
+import copyApplicationAssets_35 from './tools/copyApplicationAssets.js';
+import electronRebuild_36 from './tools/electronRebuild.js';
+import electronBuilder_37 from './tools/electronBuilder.js';
+import tsc_38 from '@joplin/tools/gulp/tasks/tsc';
+import updateIgnoredTypeScriptBuild_39 from '@joplin/tools/gulp/tasks/updateIgnoredTypeScriptBuild';
+import buildScriptIndexes_40 from '@joplin/tools/gulp/tasks/buildScriptIndexes';
+import gulp from 'gulp';
+import utils from '@joplin/tools/gulp/utils';
+import compileSass from '@joplin/tools/compileSass';
+import compilePackageInfo from '@joplin/tools/compilePackageInfo';
 import buildDefaultPlugins from '@joplin/default-plugins/commands/buildAll';
 import copy7Zip from './tools/copy7Zip';
 import bundleJs from './tools/bundleJs';
 import { remove } from 'fs-extra';
-
 const tasks = {
 	bundle: {
 		fn: () => bundleJs(false),
@@ -17,7 +25,7 @@ const tasks = {
 		fn: () => bundleJs(true),
 	},
 	compileScripts: {
-		fn: require('./tools/compileScripts'),
+		fn: compileScripts_33,
 	},
 	compilePackageInfo: {
 		fn: async () => {
@@ -25,16 +33,16 @@ const tasks = {
 		},
 	},
 	copyPluginAssets: {
-		fn: require('./tools/copyPluginAssets.js'),
+		fn: copyPluginAssets_34,
 	},
 	copyApplicationAssets: {
-		fn: require('./tools/copyApplicationAssets.js'),
+		fn: copyApplicationAssets_35,
 	},
 	electronRebuild: {
-		fn: require('./tools/electronRebuild.js'),
+		fn: electronRebuild_36,
 	},
 	electronBuilder: {
-		fn: require('./tools/electronBuilder.js'),
+		fn: electronBuilder_37,
 	},
 	copyDefaultPluginsAssets: {
 		fn: async () => {
@@ -48,9 +56,9 @@ const tasks = {
 			await buildDefaultPlugins(outputDir);
 		},
 	},
-	tsc: require('@joplin/tools/gulp/tasks/tsc'),
-	updateIgnoredTypeScriptBuild: require('@joplin/tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
-	buildScriptIndexes: require('@joplin/tools/gulp/tasks/buildScriptIndexes'),
+	tsc: tsc_38,
+	updateIgnoredTypeScriptBuild: updateIgnoredTypeScriptBuild_39,
+	buildScriptIndexes: buildScriptIndexes_40,
 	compileSass: {
 		fn: async () => {
 			await compileSass(

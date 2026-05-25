@@ -1,6 +1,6 @@
+
 import Setting, { AppType, SettingItem, SettingMetadataSection } from '@joplin/lib/models/Setting';
 import { includesNormalizedQuery, normalizeQuery } from '@joplin/lib/components/shared/config/config-search-text';
-
 const isMetadataMatched = (
 	normalizedQuery: string,
 	section: SettingMetadataSection,

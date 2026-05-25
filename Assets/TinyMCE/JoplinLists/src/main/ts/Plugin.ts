@@ -9,8 +9,8 @@ import PluginManager from 'tinymce/core/api/PluginManager';
 import * as Api from './api/Api';
 import * as Commands from './api/Commands';
 import * as Keyboard from './core/Keyboard';
-import * as Mouse from './core/Mouse'
 import * as Buttons from './ui/Buttons';
+import * as Mouse from './core/Mouse'
 
 export default function () {
   PluginManager.add('joplinLists', function (editor) {

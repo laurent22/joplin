@@ -1,9 +1,9 @@
-const shim = require('../../shim').default;
-const SyncTargetRegistry = require('../../SyncTargetRegistry').default;
-const { reg } = require('../../registry');
-const { _ } = require('../../locale');
-const Setting = require('../../models/Setting').default;
 
+import shim from '../../shim';
+import SyncTargetRegistry from '../../SyncTargetRegistry';
+import { reg } from '../../registry';
+import { _ } from '../../locale';
+import Setting from '../../models/Setting';
 class Shared {
 	constructor(comp, showInfoMessageBox, showErrorMessageBox) {
 		this.comp_ = comp;

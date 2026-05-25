@@ -1,6 +1,6 @@
 
-import dompurify = require('dompurify');
 
+import dompurify from 'dompurify';
 const sanitizeHtml = (html: string) => {
 	return dompurify.sanitize(html);
 };

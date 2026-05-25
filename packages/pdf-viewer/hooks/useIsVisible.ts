@@ -1,6 +1,6 @@
+
+
 import { useEffect, useState, MutableRefObject, useRef } from 'react';
-
-
 const useIsVisible = (elementRef: MutableRefObject<HTMLElement>, rootRef: MutableRefObject<HTMLElement>) => {
 	const [isVisible, setIsVisible] = useState(false);
 	const lastVisible = useRef(0);

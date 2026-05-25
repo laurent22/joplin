@@ -1,8 +1,8 @@
+
 import { EditorCommandType } from '@joplin/editor/types';
 import { AppState } from '../../../utils/types';
 import allToolbarCommandNamesFromState from './allToolbarCommandNamesFromState';
 import { Platform } from 'react-native';
-
 const omitFromDefault: string[] = [
 	'editor.textHeading1',
 	'editor.textHeading3',

@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
@@ -12,7 +13,6 @@ import ToolbarButton from './ToolbarButton';
 import isSelected from './utils/isSelected';
 import { _ } from '@joplin/lib/locale';
 import useButtonSize from './utils/useButtonSize';
-
 interface Props {
 	themeId: number;
 	toolbarButtonInfos: ToolbarItem[];

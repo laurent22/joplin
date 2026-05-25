@@ -1,3 +1,7 @@
+
+
+import { sprintf } from 'sprintf-js';
+import moment from 'moment';
 import { ModelType, DeleteOptions } from '../BaseModel';
 import { BaseItemEntity, DeletedItemEntity, NoteEntity, SyncItemEntity } from '../services/database/types';
 import Setting from './Setting';
@@ -15,10 +19,6 @@ import { LoadOptions, SaveOptions } from './utils/types';
 import { State as ShareState } from '../services/share/reducer';
 import { checkIfItemCanBeAddedToFolder, checkIfItemCanBeChanged, checkIfItemsCanBeChanged, needsShareReadOnlyChecks } from './utils/readOnly';
 import { checkObjectHasProperties } from '@joplin/utils/object';
-
-const { sprintf } = require('sprintf-js');
-const moment = require('moment');
-
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;
 	items: BaseItemEntity[];

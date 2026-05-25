@@ -1,7 +1,7 @@
+
 import { User } from '../services/database/types';
 import { getMaxItemSize, getMaxTotalItemSize, totalSizePercent } from '../models/utils/user';
 import { formatBytes } from './bytes';
-
 export function yesOrNo(value: unknown): string {
 	return value ? 'yes' : 'no';
 }

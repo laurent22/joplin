@@ -1,8 +1,8 @@
+
 import { reg } from '@joplin/lib/registry';
 import ReportService from '@joplin/lib/services/ReportService';
 import shim from '@joplin/lib/shim';
 import time from '@joplin/lib/time';
-
 const exportDebugReport = async () => {
 	const service = new ReportService();
 

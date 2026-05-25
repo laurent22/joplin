@@ -1,3 +1,9 @@
+
+
+import showRevisions_24 from './commands/showRevisions';
+import { themeStyle } from '@joplin/lib/theme';
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import debounce from 'debounce';
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, useMemo, useContext } from 'react';
 import { NoteEntity } from '@joplin/lib/services/database/types';
@@ -28,8 +34,6 @@ import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import { itemIsReadOnly } from '@joplin/lib/models/utils/readOnly';
-const { themeStyle } = require('@joplin/lib/theme');
-const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 import NoteSearchBar from '../NoteSearchBar';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
@@ -62,13 +66,10 @@ import useConnectToEditorPlugin from './utils/useConnectToEditorPlugin';
 import getResourceBaseUrl from './utils/getResourceBaseUrl';
 import useInitialCursorLocation from './utils/useInitialCursorLocation';
 import NotePositionService, { EditorCursorLocations } from '@joplin/lib/services/NotePositionService';
-
-const debounce = require('debounce');
-
 const logger = Logger.create('NoteEditor');
 
 const commands = [
-	require('./commands/showRevisions'),
+	showRevisions_24,
 ];
 
 const toolbarButtonUtils = new ToolbarButtonUtils(CommandService.instance());

@@ -1,3 +1,8 @@
+
+// For reference, see:
+// - https://prosemirror.net/docs/guide/#schema
+// - https://github.com/ProseMirror/prosemirror-schema-basic/blob/master/src/schema-basic.ts
+
 import { AttributeSpec, DOMOutputSpec, MarkSpec, NodeSpec, Schema } from 'prosemirror-model';
 import { nodeSpecs as joplinEditableNodes } from './plugins/joplinEditablePlugin/joplinEditablePlugin';
 import { tableNodes } from 'prosemirror-tables';
@@ -6,11 +11,6 @@ import { nodeSpecs as imageNodes } from './plugins/imagePlugin';
 import { hasProtocol } from '@joplin/utils/url';
 import { isResourceUrl } from '@joplin/lib/models/utils/resourceUtils';
 import { nodeSpecs as detailsNodes } from './plugins/detailsPlugin';
-
-// For reference, see:
-// - https://prosemirror.net/docs/guide/#schema
-// - https://github.com/ProseMirror/prosemirror-schema-basic/blob/master/src/schema-basic.ts
-
 const domOutputSpecs = {
 	paragraph: ['p', 0],
 	strong: ['strong', 0],

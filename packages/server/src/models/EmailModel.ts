@@ -1,6 +1,6 @@
+
 import { Uuid, Email, EmailSender } from '../services/database/types';
 import BaseModel from './BaseModel';
-
 export interface EmailToSend {
 	sender_id?: EmailSender;
 	recipient_email: string;

@@ -1,3 +1,4 @@
+
 import { ServiceProvider, IdentityProvider, setSchemaValidator } from 'samlify';
 import * as validator from '@authenio/samlify-xmllint-wasm';
 import { readFile } from 'fs-extra';
@@ -6,7 +7,6 @@ import { PostBindingContext } from 'samlify/types/src/entity';
 import { _ } from '@joplin/lib/locale';
 import { SamlRelayState } from './types';
 import { User } from '../services/database/types';
-
 const checkIfSamlIsEnabled = () => {
 	if (!config().saml.enabled) {
 		throw new Error('SAML support is disabled for this server.');

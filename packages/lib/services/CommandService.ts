@@ -1,10 +1,10 @@
+
 import { State } from '../reducer';
 import eventManager, { EventListenerCallback, EventName } from '../eventManager';
 import BaseService from './BaseService';
 import shim from '../shim';
 import WhenClause from './WhenClause';
 import type { WhenClauseContext, WhenClauseContextOptions } from './commands/stateToWhenClauseContext';
-
 type LabelFunction = ()=> string;
 type EnabledCondition = string;
 type VisibleCondition = string;

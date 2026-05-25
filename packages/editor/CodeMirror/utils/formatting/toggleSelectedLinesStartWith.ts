@@ -1,7 +1,7 @@
-import { EditorSelection, EditorState, Line, SelectionRange, TransactionSpec } from '@codemirror/state';
-import growSelectionToNode from '../growSelectionToNode';
 
 // Toggles whether all lines in the user's selection start with [regex].
+import { EditorSelection, EditorState, Line, SelectionRange, TransactionSpec } from '@codemirror/state';
+import growSelectionToNode from '../growSelectionToNode';
 const toggleSelectedLinesStartWith = (
 	state: EditorState,
 	regex: RegExp,

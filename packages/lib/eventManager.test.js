@@ -1,8 +1,8 @@
+import { checkThrow } from './testing/test-utils.js';
+import eventManager from './eventManager';
 'use strict';
 
 
-const { checkThrow } = require('./testing/test-utils.js');
-const eventManager = require('./eventManager').default;
 
 describe('eventManager', () => {
 

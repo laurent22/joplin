@@ -1,6 +1,6 @@
+
 import joplin from 'api';
 import { SettingItemSubType, SettingItemType, ToolbarButtonLocation } from 'api/types';
-
 joplin.plugins.register({
 	onStart: async function() {
 		await joplin.settings.registerSection('myCustomSection', {

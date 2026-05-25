@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { AppState } from '../../app.reducer';
 import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
@@ -18,7 +19,6 @@ import { ListItem } from './types';
 import useSidebarCommandHandler from './hooks/useSidebarCommandHandler';
 import { stateUtils } from '@joplin/lib/reducer';
 import useOnRenderListWrapper from './hooks/useOnRenderListWrapper';
-
 interface Props {
 	dispatch: Dispatch;
 	themeId: number;

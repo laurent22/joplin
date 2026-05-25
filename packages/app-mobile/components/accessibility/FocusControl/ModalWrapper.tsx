@@ -1,8 +1,8 @@
+
 import * as React from 'react';
 import { useContext, useEffect, useId } from 'react';
 import { FocusControlContext } from './FocusControlProvider';
 import { ModalState } from './types';
-
 interface Props {
 	children: React.ReactNode;
 	state: ModalState;

@@ -1,10 +1,10 @@
+
 import CommandService, { CommandContext, CommandDeclaration, CommandRuntime } from '../services/CommandService';
 import { _ } from '../locale';
 import Logger from '@joplin/utils/Logger';
 import getActivePluginEditorViews from '../services/plugins/utils/getActivePluginEditorViews';
 import getShownPluginEditorView from '../services/plugins/utils/getShownPluginEditorView';
 import { stateUtils } from '../reducer';
-
 const logger = Logger.create('toggleEditorPlugin');
 
 export const declaration: CommandDeclaration = {

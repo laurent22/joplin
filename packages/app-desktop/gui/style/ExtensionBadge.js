@@ -1,6 +1,6 @@
+import { createSelector } from 'reselect';
+import { themeStyle } from '@joplin/lib/theme';
 'use strict';
-const { createSelector } = require('reselect');
-const { themeStyle } = require('@joplin/lib/theme');
 const themeSelector = (state, props) => themeStyle(props.themeId);
 const style = createSelector(themeSelector, (theme) => {
 	const output = {

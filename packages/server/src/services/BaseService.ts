@@ -1,8 +1,8 @@
+
 import Logger from '@joplin/utils/Logger';
 import { Models } from '../models/factory';
 import { msleep } from '../utils/time';
 import { Config, Env } from '../utils/types';
-
 const logger = Logger.create('BaseService');
 
 export default class BaseService {

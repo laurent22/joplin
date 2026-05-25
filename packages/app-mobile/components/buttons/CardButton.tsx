@@ -1,8 +1,8 @@
+
 import * as React from 'react';
 import { Card, TouchableRipple } from 'react-native-paper';
 import { useMemo } from 'react';
 import { Platform, StyleSheet, View, ViewStyle } from 'react-native';
-
 export enum InstallState {
 	NotInstalled,
 	Installing,

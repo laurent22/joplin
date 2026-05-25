@@ -1,6 +1,6 @@
+
 import { LocalizationResult } from '../../../types';
 import createButton from './createButton';
-
 interface Options {
 	content: HTMLElement;
 	doneLabel: LocalizationResult;

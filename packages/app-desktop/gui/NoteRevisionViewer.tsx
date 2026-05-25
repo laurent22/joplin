@@ -1,3 +1,7 @@
+
+import urlUtils from '@joplin/lib/urlUtils';
+import ReactTooltip from 'react-tooltip';
+import { connect } from 'react-redux';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { themeStyle } from '@joplin/lib/theme';
@@ -12,9 +16,6 @@ import time from '@joplin/lib/time';
 import bridge from '../services/bridge';
 import { NoteEntity, RevisionEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../app.reducer';
-const urlUtils = require('@joplin/lib/urlUtils');
-const ReactTooltip = require('react-tooltip');
-const { connect } = require('react-redux');
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 import getHelpMessage from '@joplin/lib/components/shared/NoteRevisionViewer/getHelpMessage';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
@@ -27,7 +28,6 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 import useDeleteHistoryClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick';
 import { getGlobalSettings } from '@joplin/renderer/types';
 import Setting from '@joplin/lib/models/Setting';
-
 interface Props {
 	themeId: number;
 	noteId: string;

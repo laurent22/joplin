@@ -1,7 +1,7 @@
+
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import bridge from '../../../services/bridge';
-
 const canManuallySortNotes = (notesParentType: string, noteSortOrder: string, selectedFolderInTrash: boolean) => {
 	if (notesParentType !== 'Folder') return false;
 	if (selectedFolderInTrash) return false;

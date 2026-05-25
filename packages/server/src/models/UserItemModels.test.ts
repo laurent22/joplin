@@ -1,5 +1,5 @@
-import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
 
+import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
 describe('UserItemModel', () => {
 
 	beforeAll(async () => {

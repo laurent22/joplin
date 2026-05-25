@@ -1,12 +1,13 @@
-import type ShimType from '@joplin/lib/shim';
 
-const shim: typeof ShimType = require('@joplin/lib/shim').default;
+
+import { version as version_146 } from '../../package.json';
+import shim from '@joplin/lib/shim';
+import type ShimType from '@joplin/lib/shim';
 import shimInitShared from './shimInitShared';
 import FsDriverWeb from '../fs-driver/fs-driver-rn.web';
 import { FetchBlobOptions } from '@joplin/lib/types';
 import JoplinError from '@joplin/lib/JoplinError';
 import joplinCrypto from '@joplin/lib/services/e2ee/crypto';
-
 const shimInit = () => {
 	type GetLocationOptions = { timeout?: number };
 	shim.Geolocation = {
@@ -100,7 +101,7 @@ const shimInit = () => {
 	};
 
 	shim.appVersion = () => {
-		return require('../../package.json').version;
+		return version_146;
 	};
 
 	shim.restartApp = () => {

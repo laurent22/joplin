@@ -1,6 +1,6 @@
+
 import { ColumnName, NoteListColumns } from '../plugins/api/noteListType';
 import renderTemplate from './renderTemplate';
-
 describe('renderTemplate', () => {
 
 	it('should render a template', () => {

@@ -1,3 +1,4 @@
+
 import { afterAllTests, beforeAllDb, beforeEachDb, createFolder, createUserAndSession, db, dbSlave, expectThrow, getDatabaseClientType, models, packageRootDir, updateFolder } from './utils/testing/testUtils';
 import { connectDb, disconnectDb, reconnectDb, sqliteSyncSlave } from './db';
 import { ChangeType, Event } from './services/database/types';
@@ -5,7 +6,6 @@ import { DatabaseConfig, DatabaseConfigClient } from './utils/types';
 import { createDb } from './tools/dbTools';
 import { msleep } from './utils/time';
 import { FolderEntity } from '@joplin/lib/services/database/types';
-
 const eventId1 = '4f405391-bd72-4a4f-809f-344fc6cd4b31';
 const eventId2 = '4f405391-bd72-4a4f-809f-344fc6cd4b32';
 

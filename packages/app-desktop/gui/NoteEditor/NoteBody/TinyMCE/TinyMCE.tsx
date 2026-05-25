@@ -1,3 +1,7 @@
+
+import md5 from 'md5';
+import { clipboard } from 'electron';
+import supportedLocales from './supportedLocales';
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle, useMemo, Ref } from 'react';
 import { ScrollOptions, ScrollOptionTypes, EditorCommand, NoteBodyEditorProps, ResourceInfos, HtmlToMarkdownHandler, ScrollToTextValue, NoteBodyEditorRef } from '../../utils/types';
@@ -34,9 +38,6 @@ import Logger from '@joplin/utils/Logger';
 import useWebViewApi from './utils/useWebViewApi';
 import useLinkTooltips from './utils/useLinkTooltips';
 import { focus } from '@joplin/lib/utils/focusHandler';
-const md5 = require('md5');
-const { clipboard } = require('electron');
-const supportedLocales = require('./supportedLocales');
 import { hasProtocol } from '@joplin/utils/url';
 import useTabIndenter from './utils/useTabIndenter';
 import useKeyboardRefocusHandler from './utils/useKeyboardRefocusHandler';
@@ -48,7 +49,6 @@ import useTextPatternsLookup, { TextPatternContext } from './utils/useTextPatter
 import { toFileProtocolPath } from '@joplin/utils/path';
 import { RenderResultPluginAsset } from '@joplin/renderer/types';
 import useCursorPositioning from './utils/useCursorPositioning';
-
 const logger = Logger.create('TinyMCE');
 
 // In TinyMCE 5.2, when setting the body to '<div id="rendered-md"></div>',

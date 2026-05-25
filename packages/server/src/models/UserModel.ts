@@ -1,3 +1,5 @@
+
+import thirtyTwo from 'thirty-two';
 import BaseModel, { AclAction, LoadOptions, SaveOptions, ValidateOptions } from './BaseModel';
 import { EmailSender, Item, NotificationLevel, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import { isHashedPassword, hashPassword, checkPassword } from '../utils/auth';
@@ -19,25 +21,23 @@ import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk/ppk';
 import paymentFailedUploadDisabledTemplate from '../views/emails/paymentFailedUploadDisabledTemplate';
 import oversizedAccount1 from '../views/emails/oversizedAccount1';
 import oversizedAccount2 from '../views/emails/oversizedAccount2';
-import dayjs = require('dayjs');
+import dayjs from 'dayjs';
 import { failedPaymentFinalAccount } from './SubscriptionModel';
 import { Day } from '../utils/time';
 import paymentFailedAccountDisabledTemplate from '../views/emails/paymentFailedAccountDisabledTemplate';
 import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirmationTemplate';
 import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
 import { NotificationKey } from './NotificationModel';
-import prettyBytes = require('pretty-bytes');
+import prettyBytes from 'pretty-bytes';
 import { validateEmail } from '../utils/validation';
 import { Config, Env, LdapConfig } from '../utils/types';
 import { DbConnection } from '../db';
 import { NewModelFactoryHandler } from './factory';
 import { encryptMFASecret } from '../utils/crypto';
 import ldapLogin from '../utils/ldapLogin';
-const thirtyTwo = require('thirty-two');
 import config, { isUsingExternalAuth } from '../config';
 import { randomInt } from 'node:crypto';
 import { samlOwnedUserProperties } from '../utils/saml';
-
 const logger = Logger.create('UserModel');
 
 interface UserEmailDetails {

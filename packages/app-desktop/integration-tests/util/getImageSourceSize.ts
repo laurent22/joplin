@@ -1,5 +1,5 @@
-import { Locator } from '@playwright/test';
 
+import { Locator } from '@playwright/test';
 const getImageSourceSize = async (imageLocator: Locator) => {
 	// Use state: 'attached' -- we don't need the image to be on the screen (just present
 	// in the DOM).

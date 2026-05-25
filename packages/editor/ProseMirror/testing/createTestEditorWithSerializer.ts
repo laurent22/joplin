@@ -1,6 +1,6 @@
+
 import originalMarkupPlugin from '../plugins/originalMarkupPlugin';
 import createTestEditor, { PluginList } from './createTestEditor';
-
 interface Props {
 	html: string;
 	plugins: PluginList;

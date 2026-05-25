@@ -1,3 +1,4 @@
+
 import { FolderEntity, NoteEntity, ResourceEntity, ResourceLocalStateEntity } from '../../services/database/types';
 import { reg } from '../../registry';
 import Folder from '../../models/Folder';
@@ -11,7 +12,6 @@ import { Mutex } from 'async-mutex';
 import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import BaseItem from '../../models/BaseItem';
-
 interface SharedResource {
 	uri: string;
 	mimeType: string;

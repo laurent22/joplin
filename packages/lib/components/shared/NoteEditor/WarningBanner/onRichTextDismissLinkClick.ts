@@ -1,5 +1,5 @@
-import Setting from '../../../../models/Setting';
 
+import Setting from '../../../../models/Setting';
 const onRichTextDismissLinkClick = () => {
 	Setting.setValue('richTextBannerDismissed', true);
 };

@@ -1,8 +1,8 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
 import shim from '@joplin/lib/shim';
-
 export const declaration: CommandDeclaration = {
 	name: 'exportFolders',
 };

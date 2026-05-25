@@ -1,7 +1,7 @@
+
 import { EditorSelection, Text as DocumentText } from '@codemirror/state';
 import { RegionSpec } from './RegionSpec';
 import findInlineMatch, { MatchSide } from './findInlineMatch';
-
 describe('findInlineMatch', () => {
 	jest.retryTimes(2);
 

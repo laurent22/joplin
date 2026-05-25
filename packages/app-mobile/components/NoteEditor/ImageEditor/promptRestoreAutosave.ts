@@ -1,8 +1,8 @@
+
 import { _ } from '@joplin/lib/locale';
 import shim from '@joplin/lib/shim';
 import { Alert } from 'react-native';
 import { clearAutosave, getAutosaveFilepath, readAutosave } from './autosave';
-
 export type RestoreAutosaveCallback = (data: string)=> void;
 
 const promptRestoreAutosave = async (onRestoreAutosave: RestoreAutosaveCallback) => {

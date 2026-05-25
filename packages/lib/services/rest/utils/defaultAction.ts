@@ -1,3 +1,4 @@
+
 import { Request, RequestMethod } from '../Api';
 import defaultSaveOptions from './defaultSaveOptions';
 import { ErrorMethodNotAllowed, ErrorNotFound } from './errors';
@@ -7,7 +8,6 @@ import requestFields from './requestFields';
 import BaseItem from '../../../models/BaseItem';
 import { LoadOptions } from '../../../models/utils/types';
 import { WhereQuery } from '../../../models/utils/paginatedFeed';
-
 export default async function(modelType: number, request: Request, id: string = null, link: string = null, defaultFields: string[] = null, whereQuery: WhereQuery = null) {
 	if (link) throw new ErrorNotFound(); // Default action doesn't support links at all for now
 

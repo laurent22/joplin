@@ -1,8 +1,8 @@
+
 import * as React from 'react';
 import { AppStateDialog } from '../../app.reducer';
 import appDialogs from './utils/appDialogs';
 import { Dispatch } from 'redux';
-
 interface Props {
 	themeId: number;
 	dispatch: Dispatch;

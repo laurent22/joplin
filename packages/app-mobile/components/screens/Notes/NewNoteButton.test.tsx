@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import TestProviderStack from '../../testing/TestProviderStack';
 import NewNoteButton from './NewNoteButton';
@@ -12,7 +13,6 @@ import Folder from '@joplin/lib/models/Folder';
 import NavService from '@joplin/lib/services/NavService';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
-
 let testStore: Store<AppState>;
 
 interface WrappedNewNoteButtonProps {}

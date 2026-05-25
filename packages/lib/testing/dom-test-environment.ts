@@ -11,8 +11,8 @@
 // This is similar to (but somewhat simpler than) the approach taken by
 // "global-jsdom" package, which is recommended by the NodeJS native
 // test runner documentation (https://nodejs.org/en/learn/test-runner/using-test-runner#user-interface-tests).
-import { JSDOM } from 'jsdom';
 
+import { JSDOM } from 'jsdom';
 const dom = new JSDOM(
 	`
 	<!DOCTYPE html>

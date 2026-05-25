@@ -3,9 +3,9 @@
 // general, any desktop component should import this file, and not the lib
 // one.
 
+
 import libStateToWhenClauseContext, { WhenClauseContextOptions } from '@joplin/lib/services/commands/stateToWhenClauseContext';
 import { AppState } from '../../utils/types';
-
 const stateToWhenClauseContext = (state: AppState, options: WhenClauseContextOptions = null) => {
 	const markdownEditorVisible = state.noteEditorVisible && state.settings['editor.codeView'];
 	const richTextEditorVisible = state.noteEditorVisible && !state.settings['editor.codeView'];

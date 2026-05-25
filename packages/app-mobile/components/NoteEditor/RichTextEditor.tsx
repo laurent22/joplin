@@ -1,13 +1,14 @@
+
+
+
 import { themeStyle } from '@joplin/lib/theme';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
 import ExtendedWebView from '../ExtendedWebView';
 import Setting from '@joplin/lib/models/Setting';
 import { editorFont } from '../global-style';
-
 import * as React from 'react';
 import { useMemo, useCallback, useRef } from 'react';
 import { NativeSyntheticEvent } from 'react-native';
-
 import { EditorProps } from './types';
 import { _ } from '@joplin/lib/locale';
 import { WebViewErrorEvent } from 'react-native-webview/lib/RNCWebViewNativeComponent';
@@ -16,7 +17,6 @@ import { OnMessageEvent } from '../ExtendedWebView/types';
 import useWebViewSetup from '../../contentScripts/richTextEditorBundle/useWebViewSetup';
 import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
-
 const logger = Logger.create('RichTextEditor');
 
 function useCss(themeId: number, editorCss: string, fontFamilyId: number): string {

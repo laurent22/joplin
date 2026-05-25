@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { PaperProvider } from 'react-native-paper';
 import { MenuProvider } from 'react-native-popup-menu';
@@ -6,7 +7,6 @@ import { Store } from 'redux';
 import { AppState } from '../../utils/types';
 import FocusControl from '../accessibility/FocusControl/FocusControl';
 import { SafeAreaProvider, Metrics } from 'react-native-safe-area-context';
-
 interface Props {
 	store: Store<AppState>;
 	children: React.ReactNode;

@@ -1,3 +1,5 @@
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Many route handlers read fields without narrowing (e.g. `body.fields.email`); tightening to `unknown` propagates casts through every handler
 import { cookieGet } from './cookies';
 import { ErrorForbidden } from './errors';
 import { AppContext } from './types';
@@ -5,8 +7,6 @@ import * as formidable from 'formidable';
 import { Fields, Files } from 'formidable';
 import { IncomingMessage } from 'http';
 import { uuidgen } from './uuid';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Many route handlers read fields without narrowing (e.g. `body.fields.email`); tightening to `unknown` propagates casts through every handler
 export type BodyFields = Record<string, any>;
 
 interface FormParseResult {

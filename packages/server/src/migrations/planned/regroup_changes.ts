@@ -1,7 +1,7 @@
+
 import Logger from '@joplin/utils/Logger';
 import { DbConnection, isPostgres } from '../../db';
 import { Uuid } from '../../services/database/types';
-
 const logger = Logger.create('regroup_changes');
 
 // This migration creates a new `changes_3` table by combining `changes` and `changes_2`.

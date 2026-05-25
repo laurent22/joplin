@@ -5,8 +5,8 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
-import Plugin from './Plugin';
 
+import Plugin from './Plugin';
 Plugin();
 
 /*******

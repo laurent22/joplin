@@ -1,7 +1,7 @@
+
 import type FolderRecord from './FolderRecord';
 import type NoteRecord from './NoteRecord';
 import type ResourceRecord from './ResourceRecord';
-
 export type ItemId = string;
 export interface NoteData {
 	parentId: ItemId;

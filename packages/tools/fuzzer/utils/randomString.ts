@@ -1,5 +1,5 @@
-import removeInvalidUtf8 from './removeInvalidUtf8';
 
+import removeInvalidUtf8 from './removeInvalidUtf8';
 type OnRandomInt = (low: number, high: number)=> number;
 
 const randomString = (nextRandomInteger: OnRandomInt) => (length: number) => {

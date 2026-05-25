@@ -1,3 +1,5 @@
+
+
 import * as React from 'react';
 import TextInput from './TextInput';
 import { View, StyleSheet, TextInputProps, ViewStyle, TextInput as ReactNativeTextInput, Keyboard } from 'react-native';
@@ -5,8 +7,6 @@ import { _ } from '@joplin/lib/locale';
 import { Ref, useCallback, useMemo } from 'react';
 import { themeStyle } from './global-style';
 import IconButton from './IconButton';
-
-
 interface SearchInputProps extends TextInputProps {
 	inputRef?: Ref<ReactNativeTextInput>;
 	value: string;

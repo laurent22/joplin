@@ -1,8 +1,8 @@
+
 import { hasWhiteboardFence, parseWhiteboard } from './parse';
 import { newWhiteboardBody, serializeWhiteboard } from './serialize';
 import { isInternalRef, RefKind, resolveFileRef } from './resolveRef';
 import { Canvas } from './jsoncanvas';
-
 const sampleCanvas: Canvas = {
 	nodes: [
 		{ id: 'a', type: 'text', x: 0, y: 0, width: 200, height: 100, text: 'Hello' },

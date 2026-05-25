@@ -1,6 +1,6 @@
+
 import { Decoration, EditorView } from '@codemirror/view';
 import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
-
 const linkClassName = 'cm-ext-unfocused-link';
 const urlMarkDecoration = Decoration.mark({ class: linkClassName });
 const strikethroughClassName = 'cm-ext-strikethrough';

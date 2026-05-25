@@ -1,6 +1,6 @@
+
 import routeHandler from '../../middleware/routeHandler';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession } from '../../utils/testing/testUtils';
-
 describe('index/home', () => {
 
 	beforeAll(async () => {

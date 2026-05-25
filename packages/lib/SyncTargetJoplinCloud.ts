@@ -1,10 +1,10 @@
+
 import Setting from './models/Setting';
 import Synchronizer from './Synchronizer';
 import { _ } from './locale.js';
 import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
 import SyncTargetJoplinServer, { initFileApi } from './SyncTargetJoplinServer';
-
 interface FileApiOptions {
 	path(): string;
 	userContentPath(): string;

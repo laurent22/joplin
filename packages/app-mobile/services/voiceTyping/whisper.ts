@@ -1,3 +1,4 @@
+
 import Setting, { Env } from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
@@ -7,7 +8,6 @@ import { openSession, test as testWhisper, Session as WhisperSession } from '@jo
 import { SpeechToTextCallbacks, VoiceTypingProvider, VoiceTypingSession } from './VoiceTyping';
 import { languageCodeOnly, stringByLocale } from '@joplin/lib/locale';
 import { Platform } from 'react-native';
-
 const logger = Logger.create('voiceTyping/whisper');
 
 class WhisperConfig {

@@ -5,6 +5,7 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
+
 import { Arr, Fun, Option, Options } from '@ephox/katamari';
 import { Element, Fragment, InsertAll, Remove } from '@ephox/sugar';
 import Editor from 'tinymce/core/api/Editor';
@@ -18,7 +19,6 @@ import { Indentation, indentEntry } from './Indentation';
 import { normalizeEntries } from './NormalizeEntries';
 import { EntrySet, ItemSelection, parseLists } from './ParseLists';
 import { hasFirstChildList } from './Util';
-
 const outdentedComposer = (editor: Editor, entries: Entry[]): Element[] => {
   return Arr.map(entries, (entry) => {
     const content = Fragment.fromElements(entry.content);

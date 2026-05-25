@@ -1,3 +1,4 @@
+
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { ToolbarButtonInfo, ToolbarItem } from '@joplin/lib/services/commands/ToolbarButtonUtils';
@@ -16,7 +17,6 @@ import { RefObject, SetStateAction } from 'react';
 import * as React from 'react';
 import { ResourceEntity, ResourceLocalStateEntity } from '@joplin/lib/services/database/types';
 import { EditorCursorLocations } from '@joplin/lib/services/NotePositionService';
-
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
 	themeId?: number;

@@ -1,5 +1,5 @@
-import { stdout } from 'process';
 
+import { stdout } from 'process';
 export default class ProgressBar {
 	private isFirst_ = true;
 	private lastLength_ = 0;

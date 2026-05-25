@@ -1,3 +1,6 @@
+
+// cspell:ignore xpsdocument
+
 import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import { remove, readFile } from 'fs-extra';
@@ -12,9 +15,6 @@ import { ImportModuleOutputFormat, ImportOptions } from './types';
 import HtmlToMd from '../../HtmlToMd';
 import Resource from '../../models/Resource';
 import * as sharp from 'sharp';
-
-// cspell:ignore xpsdocument
-
 const instructionMessage = `
 --------------------------------------
 IF THIS IS FAILING IN THE CI

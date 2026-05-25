@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 
-import { githubOauthToken } from '@joplin/tools/tool-utils';
-import { pathExists, readdir, readFile, stat, writeFile } from 'fs-extra';
 
 // We need to require `.default` due to this issue:
 // https://github.com/node-fetch/node-fetch/issues/450#issuecomment-387045223
-const fetch = require('node-fetch').default;
 
-const ghReleaseAssets = require('gh-release-assets');
 
+import fetch from 'node-fetch';
+import ghReleaseAssets from 'gh-release-assets';
+import { githubOauthToken } from '@joplin/tools/tool-utils';
+import { pathExists, readdir, readFile, stat, writeFile } from 'fs-extra';
 const apiBaseUrl = 'https://api.github.com/repos/joplin/plugins';
 
 interface Args {

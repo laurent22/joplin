@@ -1,10 +1,10 @@
+
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
 import BaseModel from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'ren <item> <name>';

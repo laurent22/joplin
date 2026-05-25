@@ -1,7 +1,7 @@
+
+
 import { Event, EventType } from '../services/database/types';
 import BaseModel, { UuidType } from './BaseModel';
-
-
 export default class EventModel extends BaseModel<Event> {
 
 	public get tableName(): string {

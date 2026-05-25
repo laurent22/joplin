@@ -1,6 +1,7 @@
+
+
 import * as React from 'react';
 import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, ForwardedRef, useContext } from 'react';
-
 import { RenderResultPluginAsset } from '@joplin/renderer/types';
 import { EditorCommand, MarkupToHtmlOptions, NoteBodyEditorProps, NoteBodyEditorRef, OnChangeEvent } from '../../../utils/types';
 import { getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
@@ -34,7 +35,6 @@ import eventManager, { EventName, ResourceChangeEvent } from '@joplin/lib/eventM
 import useSyncEditorValue from './utils/useSyncEditorValue';
 import { getGlobalSettings } from '@joplin/renderer/types';
 import useEditorSettings from './utils/useEditorSettings';
-
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
 

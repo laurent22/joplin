@@ -1,7 +1,7 @@
+
 import routeHandler from '../../middleware/routeHandler';
 import { cookieGet } from '../../utils/cookies';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, models, createUserAndSession } from '../../utils/testing/testUtils';
-
 describe('index_logout', () => {
 
 	beforeAll(async () => {

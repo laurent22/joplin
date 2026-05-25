@@ -1,3 +1,6 @@
+
+// Creates and returns a minimal editor with markdown extensions. Waits to return the editor
+// until all syntax tree tags in `expectedSyntaxTreeTags` exist.
 import { markdown } from '@codemirror/lang-markdown';
 import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
 import { indentUnit, syntaxTree } from '@codemirror/language';
@@ -8,9 +11,6 @@ import loadLanguages from './loadLanguages';
 import markdownMathExtension from '../extensions/markdownMathExtension';
 import markdownHighlightExtension, { markdownInsertExtension } from '../extensions/markdownHighlightExtension';
 import markdownFrontMatterExtension from '../extensions/markdownFrontMatterExtension';
-
-// Creates and returns a minimal editor with markdown extensions. Waits to return the editor
-// until all syntax tree tags in `expectedSyntaxTreeTags` exist.
 const createTestEditor = async (
 	initialText: string,
 	initialSelection: SelectionRange|SelectionRange[],

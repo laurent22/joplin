@@ -1,4 +1,4 @@
-const open = require('open');
+import open from 'open';
 interface LinkStoreEntry {
 	link: string;
 	noteX: number;

@@ -1,9 +1,9 @@
+
 import { Dispatch } from 'redux';
 import Resource from '../../../models/Resource';
 import BaseItem from '../../../models/BaseItem';
 import Setting from '../../../models/Setting';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('checkDisabledSyncItemsNotification');
 
 export default async (dispatch: Dispatch) => {

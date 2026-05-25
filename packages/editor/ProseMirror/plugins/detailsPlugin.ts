@@ -1,7 +1,7 @@
+
 import { Plugin } from 'prosemirror-state';
 import { AttributeSpec, Node, NodeSpec } from 'prosemirror-model';
 import { EditorView, NodeView, ViewMutationRecord } from 'prosemirror-view';
-
 type NodeAttrs = Readonly<{
 	open: boolean;
 }>;

@@ -1,7 +1,7 @@
+
 import { LogMessageCallback, ContentScriptData } from '../../types';
 import CodeMirrorControl from '../CodeMirrorControl';
 import codeMirrorRequire from './codeMirrorRequire';
-
 let pluginScriptIdCounter = 0;
 let pluginLoaderCounter = 0;
 

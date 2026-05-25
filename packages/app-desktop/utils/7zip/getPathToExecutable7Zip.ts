@@ -1,8 +1,8 @@
+
 import Setting from '@joplin/lib/models/Setting';
 import pathToBundled7Zip from './pathToBundled7Zip';
 import { join } from 'path';
 import shim from '@joplin/lib/shim';
-
 const pathTo7Za_: undefined|string = undefined;
 
 const getPathToExecutable7Zip = async () => {

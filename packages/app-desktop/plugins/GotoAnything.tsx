@@ -1,8 +1,9 @@
+
+import { connect } from 'react-redux';
 import * as React from 'react';
 import { AppState } from '../app.reducer';
 import CommandService, { SearchResult as CommandSearchResult } from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
-const { connect } = require('react-redux');
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
 import SearchEngine, { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
@@ -23,7 +24,6 @@ import Resource from '@joplin/lib/models/Resource';
 import { FolderEntity, NoteEntity, ResourceEntity, TagEntity } from '@joplin/lib/services/database/types';
 import Dialog from '@joplin/lib/components/Dialog';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
-
 const logger = Logger.create('GotoAnything');
 
 const PLUGIN_NAME = 'gotoAnything';

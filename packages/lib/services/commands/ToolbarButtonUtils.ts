@@ -1,3 +1,4 @@
+
 import CommandService from '../CommandService';
 import { stateUtils } from '../../reducer';
 import focusEditorIfEditorCommand from './focusEditorIfEditorCommand';
@@ -5,7 +6,6 @@ import { WhenClauseContext } from './stateToWhenClauseContext';
 import Logger from '@joplin/utils/Logger';
 import KeymapService from '../KeymapService';
 import { _ } from '../../locale';
-
 const logger = Logger.create('ToolbarButtonUtils');
 
 export interface ToolbarButtonInfo {

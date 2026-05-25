@@ -1,9 +1,10 @@
+
+import something_89 from './something.node';
 import { filename, toForwardSlashes } from '@joplin/utils/path';
 import * as esbuild from 'esbuild';
 import { existsSync, readFileSync } from 'fs';
 import { writeFile } from 'fs/promises';
 import { dirname, join, relative } from 'path';
-
 const baseDir = dirname(__dirname);
 const baseNodeModules = join(baseDir, 'node_modules');
 
@@ -47,7 +48,7 @@ const makeBuildContext = (entryPoint: string, renderer: boolean, addDebugStats: 
 						}
 
 						// Some files have .node.* extensions but are not native modules. These files are often required using
-						// require('./something.node') rather than require('./something.node.js'). Skip path remapping for
+						// something_89 rather than require('./something.node.js'). Skip path remapping for
 						// these files:
 						if (args.path.endsWith('.node') && (path.endsWith('.ts') || path.endsWith('.js'))) {
 							// Normal .ts or .js file -- continue.

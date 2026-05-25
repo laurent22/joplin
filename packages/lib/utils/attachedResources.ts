@@ -1,9 +1,9 @@
+
 import BaseModel from '../BaseModel';
 import Note from '../models/Note';
 import Resource from '../models/Resource';
 import ResourceLocalState from '../models/ResourceLocalState';
 import { ResourceEntity } from '../services/database/types';
-
 let resourceCache_: AttachedResources = {};
 
 export function clearResourceCache() {

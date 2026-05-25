@@ -1,7 +1,7 @@
+
 import { EditorView } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import sortSelectedLines from './sortSelectedLines';
-
 describe('sortSelectedLines', () => {
 	it('should sort selected lines', () => {
 		const initialText = 'World\nHello\n';

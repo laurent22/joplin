@@ -1,9 +1,9 @@
+
 import * as React from 'react';
 import UserWebviewDialog from '../../services/plugins/UserWebviewDialog';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { VisibleDialogs } from '../../app.reducer';
-
 interface Props {
 	themeId: number;
 	visibleDialogs: VisibleDialogs;

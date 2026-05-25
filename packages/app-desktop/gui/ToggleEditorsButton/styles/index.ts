@@ -1,7 +1,7 @@
+
 import { Props, Value } from '../ToggleEditorsButton';
 import { buildStyle } from '@joplin/lib/theme';
 import { CSSProperties } from 'react';
-
 export default function styles(props: Props) {
 	return buildStyle(['ToggleEditorsButton', props.value], props.themeId, theme => {
 		const iconSize = 15;

@@ -1,5 +1,5 @@
-const { main } = require('@joplin/lib/testing/syncTargetUtils');
 
+import { main } from '@joplin/lib/testing/syncTargetUtils';
 const syncTargetType = process.argv.length <= 2 ? 'normal' : process.argv[2];
 
 main(syncTargetType).catch((error) => {

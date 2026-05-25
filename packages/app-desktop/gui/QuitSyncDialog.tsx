@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,7 +10,6 @@ import DialogButtonRow, { ClickEvent } from './DialogButtonRow';
 import styled from 'styled-components';
 import { reg } from '@joplin/lib/registry';
 import Synchronizer from '@joplin/lib/Synchronizer';
-
 interface Props {
 	themeId: number;
 }

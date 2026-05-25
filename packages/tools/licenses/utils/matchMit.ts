@@ -1,6 +1,6 @@
+
 import mit from '../licenseText/mit';
 import equalIgnoringSpacing from './equalIgnoringSpacing';
-
 const matchMit = (licenseText: string) => {
 	licenseText = licenseText.trim();
 

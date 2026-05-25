@@ -1,3 +1,4 @@
+
 import { RefObject, useEffect, useMemo, useRef } from 'react';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
@@ -19,7 +20,6 @@ import useContentScripts from './utils/useContentScripts';
 import uuid from '@joplin/lib/uuid';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
-
 const logger = Logger.create('renderer/useWebViewSetup');
 
 interface Props {

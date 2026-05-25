@@ -1,10 +1,10 @@
+
 import { renderHook, act, waitFor } from '../../../utils/testing/testingLibrary';
 import { setupDatabase, switchClient } from '@joplin/lib/testing/test-utils';
 import useSaveToolbarButtons from './useSaveToolbarButtons';
 import { ReorderableItem } from './useToolbarEditorState';
 import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import Setting from '@joplin/lib/models/Setting';
-
 const mockItem = (name: string): ReorderableItem => ({
 	commandName: name,
 	buttonInfo: {

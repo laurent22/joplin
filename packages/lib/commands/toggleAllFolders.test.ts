@@ -1,9 +1,9 @@
+
 import { setupDatabase, switchClient } from '../testing/test-utils';
 import { runtime } from './toggleAllFolders';
 import Setting from '../models/Setting';
 import { CommandContext } from '../services/CommandService';
 import { defaultState } from '../reducer';
-
 const command = runtime();
 
 const makeContext = (): CommandContext => {

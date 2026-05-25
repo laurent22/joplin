@@ -1,3 +1,4 @@
+
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '../../../global-style';
 import * as React from 'react';
@@ -5,7 +6,6 @@ import { useMemo } from 'react';
 import { Linking, View, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import { Card, Divider, Icon, List, Text } from 'react-native-paper';
 import { LinkButton, PrimaryButton } from '../../../buttons';
-
 interface Props {
 	themeId: number;
 	onEnablePluginSupport: ()=> void;

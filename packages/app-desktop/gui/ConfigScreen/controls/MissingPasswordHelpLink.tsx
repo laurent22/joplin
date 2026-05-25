@@ -1,10 +1,10 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import shim from '@joplin/lib/shim';
 import bridge from '../../../services/bridge';
 import StyledLink from '../../style/StyledLink';
 import { ThemeStyle } from '@joplin/lib/theme';
-
 interface Props {
 	theme: ThemeStyle;
 	text: string;

@@ -1,3 +1,5 @@
+
+import thirtyTwo from 'thirty-two';
 import { SubPath, internalRedirect, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -10,14 +12,12 @@ import defaultView from '../../utils/defaultView';
 import { mfaUrl, recoveryCodesUrl } from '../../utils/urlUtils';
 import { createCsrfTag } from '../../utils/csrf';
 import { totp } from 'otplib';
-const thirtyTwo = require('thirty-two');
 import { randomBytes } from 'crypto';
 import { checkConsecutiveMFACodes } from '../../utils/crypto';
 import { profileUrl } from '../../utils/urlUtils';
 import { getIsMFAEnabled } from '../../models/utils/user';
 import * as QRCode from 'qrcode';
 import { cookieSet } from '../../utils/cookies';
-
 const router = new Router(RouteType.Web);
 
 type MFAWebpageContent = {

@@ -1,5 +1,5 @@
-import { Tree } from '@lezer/common';
 
+import { Tree } from '@lezer/common';
 const getCheckboxAtPosition = (pos: number, tree: Tree) => {
 	let iterator = tree.resolveStack(pos);
 

@@ -1,6 +1,6 @@
+
 import { DependencyType } from '../../getLicenses';
 import { LicenseOverride } from '../types';
-
 const fontIsoOverride: LicenseOverride = {
 	packageName: 'fontiso icons',
 	replacePackagesMatching: /^fontiso@.*$/,

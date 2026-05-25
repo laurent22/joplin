@@ -1,10 +1,10 @@
+
 import { rtrimSlashes } from '@joplin/lib/path-utils';
 import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, LdapConfig, RouteType, StripeConfig, SamlConfig } from './utils/types';
 import * as pathUtils from 'path';
 import { loadStripeConfig, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import { EnvVariables } from './env';
 import parseStorageDriverConnectionString from './models/items/storage/parseStorageConnectionString';
-
 interface PackageJson {
 	version: string;
 	joplinServer: {

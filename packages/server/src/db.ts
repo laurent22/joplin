@@ -1,3 +1,11 @@
+
+// Make sure bigInteger values are numbers and not strings
+//
+// https://github.com/brianc/node-pg-types
+//
+// In our case, all bigInteger are timestamps, which JavaScript can handle
+// fine as numbers.
+import { types as types_510 } from 'pg';
 import { knex, Knex } from 'knex';
 import { DatabaseConfig, DatabaseConfigClient } from './utils/types';
 import * as pathUtils from 'path';
@@ -6,14 +14,7 @@ import Logger from '@joplin/utils/Logger';
 import { databaseSchema } from './services/database/types';
 import { compareVersions } from 'compare-versions';
 import { copyFile } from 'fs-extra';
-
-// Make sure bigInteger values are numbers and not strings
-//
-// https://github.com/brianc/node-pg-types
-//
-// In our case, all bigInteger are timestamps, which JavaScript can handle
-// fine as numbers.
-require('pg').types.setTypeParser(20, (val: string) => {
+types_510.setTypeParser(20, (val: string) => {
 	return parseInt(val, 10);
 });
 

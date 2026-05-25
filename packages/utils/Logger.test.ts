@@ -1,6 +1,6 @@
+
 import Logger, { LogLevel, TargetType } from './Logger';
 import { WriteFileOptions, appendFile, mkdirp, readFile, remove } from 'fs-extra';
-
 Logger.fsDriver_ = {
 	appendFile: async (path, content, encoding) => {
 		return await appendFile(path, content, encoding as WriteFileOptions);

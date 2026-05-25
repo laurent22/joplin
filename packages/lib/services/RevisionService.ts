@@ -1,3 +1,7 @@
+
+import { substrWithEllipsis } from '../string-utils';
+import { sprintf } from 'sprintf-js';
+import { wrapError } from '../errorUtils';
 import ItemChange from '../models/ItemChange';
 import Note from '../models/Note';
 import Folder from '../models/Folder';
@@ -11,10 +15,6 @@ import { _ } from '../locale';
 import { ItemChangeEntity, NoteEntity, RevisionEntity } from './database/types';
 import Logger from '@joplin/utils/Logger';
 import { MarkupLanguage } from '../../renderer';
-const { substrWithEllipsis } = require('../string-utils');
-const { sprintf } = require('sprintf-js');
-const { wrapError } = require('../errorUtils');
-
 const logger = Logger.create('RevisionService');
 
 export default class RevisionService extends BaseService {

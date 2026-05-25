@@ -1,7 +1,7 @@
+
 import { afterAllTests, beforeAllDb, beforeEachDb, createUserAndSession, expectThrow, koaAppContext, models } from '../../../../utils/testing/testUtils';
 import { cookieGet, cookieSet } from '../../../../utils/cookies';
 import { startImpersonating, stopImpersonating } from './impersonate';
-
 describe('users/impersonate', () => {
 
 	beforeAll(async () => {

@@ -1,3 +1,5 @@
+
+
 import { ModelType } from '../../BaseModel';
 import Folder from '../Folder';
 import ItemChange from '../ItemChange';
@@ -8,8 +10,6 @@ import Resource from '../Resource';
 import shim from '../../shim';
 import { setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, switchClient, tempFilePath } from '../../testing/test-utils';
 import BaseItem from '../BaseItem';
-
-
 const checkReadOnly = (itemType: ModelType, item: ItemSlice, shareData: ShareState = defaultShareState, syncUserId = '') => {
 	return itemIsReadOnlySync(itemType, ItemChange.SOURCE_UNSPECIFIED, item, syncUserId, shareData);
 };

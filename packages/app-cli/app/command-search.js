@@ -1,9 +1,9 @@
+
 import BaseCommand from './base-command';
 import { _ } from '@joplin/lib/locale';
 import BaseModel from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
 import uuid from '@joplin/lib/uuid';
-
 class Command extends BaseCommand {
 	usage() {
 		return 'search <pattern> [notebook]';

@@ -1,6 +1,6 @@
+
 import { isResourceUrl, isSupportedImageMimeType, resourceFilename, resourceFullPath, resourceUrlToId } from '@joplin/lib/models/utils/resourceUtils';
 import { OptionsResourceModel } from '@joplin/renderer/types';
-
 const makeResourceModel = (resourceDirPath: string): OptionsResourceModel => {
 	return {
 		isResourceUrl,

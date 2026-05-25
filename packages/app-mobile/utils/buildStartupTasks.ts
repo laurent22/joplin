@@ -1,3 +1,12 @@
+
+
+import joplin_lib_ntpDate_setLogger from '@joplin/lib/ntpDate';
+import VersionInfo from 'react-native-version-info';
+import AlarmServiceDriver from '../services/AlarmServiceDriver';
+import SyncTargetNextcloud from '@joplin/lib/SyncTargetNextcloud.js';
+import SyncTargetWebDAV from '@joplin/lib/SyncTargetWebDAV.js';
+import SyncTargetDropbox from '@joplin/lib/SyncTargetDropbox.js';
+import SyncTargetAmazonS3 from '@joplin/lib/SyncTargetAmazonS3.js';
 import PluginAssetsLoader from '../PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
@@ -16,8 +25,6 @@ import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import { completePendingAuthentication } from '@joplin/lib/services/joplinCloudUtils';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
-const VersionInfo = require('react-native-version-info').default;
-const AlarmServiceDriver = require('../services/AlarmServiceDriver').default;
 import NavService from '@joplin/lib/services/NavService';
 import { Dispatch, Store } from 'redux';
 import shimInit from '../utils/shim-init-react';
@@ -40,28 +47,9 @@ import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import SyncTargetFilesystem from '@joplin/lib/SyncTargetFilesystem';
-const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
-const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
-const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
-const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import initLib from '@joplin/lib/initLib';
-
 import SyncTargetNone from '@joplin/lib/SyncTargetNone';
-
-const logger = Logger.create('buildStartupTasks');
-
-SyncTargetRegistry.addClass(SyncTargetNone);
-SyncTargetRegistry.addClass(SyncTargetOneDrive);
-SyncTargetRegistry.addClass(SyncTargetNextcloud);
-SyncTargetRegistry.addClass(SyncTargetWebDAV);
-SyncTargetRegistry.addClass(SyncTargetDropbox);
-SyncTargetRegistry.addClass(SyncTargetFilesystem);
-SyncTargetRegistry.addClass(SyncTargetAmazonS3);
-SyncTargetRegistry.addClass(SyncTargetJoplinServer);
-SyncTargetRegistry.addClass(SyncTargetJoplinServerSAML);
-SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
-
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
@@ -94,6 +82,19 @@ import { Platform } from 'react-native';
 import VoiceTyping from '../services/voiceTyping/VoiceTyping';
 import whisper from '../services/voiceTyping/whisper';
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
+const logger = Logger.create('buildStartupTasks');
+
+SyncTargetRegistry.addClass(SyncTargetNone);
+SyncTargetRegistry.addClass(SyncTargetOneDrive);
+SyncTargetRegistry.addClass(SyncTargetNextcloud);
+SyncTargetRegistry.addClass(SyncTargetWebDAV);
+SyncTargetRegistry.addClass(SyncTargetDropbox);
+SyncTargetRegistry.addClass(SyncTargetFilesystem);
+SyncTargetRegistry.addClass(SyncTargetAmazonS3);
+SyncTargetRegistry.addClass(SyncTargetJoplinServer);
+SyncTargetRegistry.addClass(SyncTargetJoplinServerSAML);
+SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
+
 
 
 function resourceFetcher_downloadComplete(event: { id: string; encrypted: boolean }) {
@@ -214,7 +215,7 @@ const buildStartupTasks = (
 		reg.setShowErrorMessageBoxHandler((message: string) => { alert(message); });
 		reg.setDispatch(dispatch);
 
-		// require('@joplin/lib/ntpDate').setLogger(reg.logger());
+		// joplin_lib_ntpDate_setLogger.setLogger(reg.logger());
 
 		reg.logger().info('====================================');
 		reg.logger().info(`Starting application ${Setting.value('appId')} v${VersionInfo.appVersion} (${Setting.value('env')})`);

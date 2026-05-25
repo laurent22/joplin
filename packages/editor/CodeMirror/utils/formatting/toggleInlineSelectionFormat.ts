@@ -1,3 +1,6 @@
+
+// Returns updated selections: For all selections in the given `EditorState`, toggles
+// whether each is contained in an inline region of type [spec].
 import { EditorSelection, SelectionRange, EditorState } from '@codemirror/state';
 import { RegionSpec } from './RegionSpec';
 import { SelectionUpdate } from './types';
@@ -5,9 +8,6 @@ import findInlineMatch, { MatchSide } from './findInlineMatch';
 import growSelectionToNode from '../growSelectionToNode';
 import toggleInlineRegionSurrounded from './toggleInlineRegionSurrounded';
 import toggleInlineMultilineSelectionFormat, { shouldUseMultilineInlineSelectionFormatting } from './toggleInlineMultilineSelectionFormat';
-
-// Returns updated selections: For all selections in the given `EditorState`, toggles
-// whether each is contained in an inline region of type [spec].
 const toggleInlineSelectionFormat = (
 	state: EditorState, spec: RegionSpec, sel: SelectionRange,
 ): SelectionUpdate => {

@@ -1,6 +1,6 @@
+
 import useAutoScroll from './useAutoScroll';
 import { renderHook } from '@testing-library/react';
-
 type Props = {
 	selectedNoteId: string;
 	selectedFolderId: string;

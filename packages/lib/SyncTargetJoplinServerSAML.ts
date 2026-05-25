@@ -1,3 +1,4 @@
+
 import FileApiDriverJoplinServer from './file-api-driver-joplinServer';
 import Setting from './models/Setting';
 import { _ } from './locale.js';
@@ -5,7 +6,6 @@ import JoplinServerApi, { Session } from './JoplinServerApi';
 import { FileApi } from './file-api';
 import SyncTargetJoplinServer, { FileApiOptions } from './SyncTargetJoplinServer';
 import Logger from '@joplin/utils/Logger';
-
 export async function newFileApi(id: number, options: FileApiOptions) {
 	const apiOptions = {
 		baseUrl: () => options.path(),

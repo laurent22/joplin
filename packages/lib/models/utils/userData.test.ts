@@ -1,3 +1,4 @@
+
 import { ModelType } from '../../BaseModel';
 import { UserData } from '../../services/database/types';
 import { msleep, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
@@ -7,7 +8,6 @@ import Resource from '../Resource';
 import Tag from '../Tag';
 import { LoadOptions } from './types';
 import { deleteItemUserData, deleteNoteUserData, getItemUserData, getNoteUserData, mergeUserData, setItemUserData, setNoteUserData } from './userData';
-
 const loadOptions: LoadOptions = { fields: ['id', 'parent_id', 'user_data', 'updated_time'] };
 
 describe('utils/userData', () => {

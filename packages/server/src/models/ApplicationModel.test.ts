@@ -1,6 +1,6 @@
+
 import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
 import { AccountType } from './UserModel';
-
 describe('ApplicationModel', () => {
 
 	beforeAll(async () => {

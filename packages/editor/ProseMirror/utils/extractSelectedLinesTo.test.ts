@@ -1,8 +1,8 @@
+
 import { TextSelection } from 'prosemirror-state';
 import createTestEditor from '../testing/createTestEditor';
 import extractSelectedLinesTo from './extractSelectedLinesTo';
 import schema from '../schema';
-
 describe('extractSelectedLinesTo', () => {
 	test.each([
 		{

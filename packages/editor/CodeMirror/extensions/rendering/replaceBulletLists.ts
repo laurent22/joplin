@@ -1,6 +1,6 @@
+
 import { EditorView, WidgetType } from '@codemirror/view';
 import makeReplaceExtension from './utils/makeInlineReplaceExtension';
-
 const listMarkerClassName = 'cm-bullet-list-marker';
 
 class BulletListMarker extends WidgetType {

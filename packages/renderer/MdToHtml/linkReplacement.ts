@@ -1,11 +1,11 @@
+import { AllHtmlEntities as Entities } from 'html-entities';
+import urlUtils from '../urlUtils.js';
+import { getClassNameForMimeType } from 'font-awesome-filetypes';
 import { LinkRenderingType } from '../MdToHtml';
 import { ItemIdToUrlHandler, OptionsResourceModel, ResourceEntity, ResourceInfos } from '../types';
 import * as utils from '../utils';
 import createEventHandlingAttrs from './createEventHandlingAttrs';
-const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
-const urlUtils = require('../urlUtils.js');
-const { getClassNameForMimeType } = require('font-awesome-filetypes');
 
 export interface Options {
 	title?: string;

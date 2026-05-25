@@ -3,10 +3,12 @@
 // Text between single $s is marked as InlineMath and text between $$s is marked
 // as BlockMath.
 
-import { tags, Tag } from '@lezer/highlight';
-import { parseMixed, SyntaxNodeRef, Input, NestedParse, ParseWrapper } from '@lezer/common';
 
 // Extend the existing markdown parser
+import { tags, Tag } from '@lezer/highlight';
+import { parseMixed, SyntaxNodeRef, Input, NestedParse, ParseWrapper } from '@lezer/common';
+import { stexMath } from '@codemirror/legacy-modes/mode/stex';
+import { StreamLanguage } from '@codemirror/language';
 import {
 	MarkdownConfig, InlineContext,
 	BlockContext, Line, LeafBlock,
@@ -14,8 +16,6 @@ import {
 } from '@lezer/markdown';
 
 // The existing stexMath parser is used to parse the text between the $s
-import { stexMath } from '@codemirror/legacy-modes/mode/stex';
-import { StreamLanguage } from '@codemirror/language';
 
 const dollarSignCharcode = 36;
 const backslashCharcode = 92;

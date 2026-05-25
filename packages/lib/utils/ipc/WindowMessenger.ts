@@ -1,7 +1,7 @@
-import RemoteMessenger from './RemoteMessenger';
-import { SerializableData } from './types';
 
 // This allows using a WindowMessenger in a web worker, with window-like objects.
+import RemoteMessenger from './RemoteMessenger';
+import { SerializableData } from './types';
 const getLocalWindow = () => {
 	return typeof window !== 'undefined' ? window : self;
 };

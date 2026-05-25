@@ -1,8 +1,8 @@
+
 import { iconPackager } from '@ephox/oxide-icons-tools';
 import clean from 'gulp-clean';
 import { task, src, dest, series } from 'gulp';
 import { readFileSync, copyFileSync } from 'fs';
-
 task('icon-packager', function() {
 	const contents = readFileSync('package.json');
 	const name = JSON.parse(contents).iconPackName;

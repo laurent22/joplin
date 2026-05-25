@@ -1,10 +1,10 @@
+
 import { getRestoreFolder } from '.';
 import { ModelType } from '../../BaseModel';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { FolderEntity, NoteEntity } from '../database/types';
 import { checkObjectHasProperties } from '@joplin/utils/object';
-
 export interface RestoreItemsOptions {
 	targetFolderId?: string;
 

@@ -1,3 +1,4 @@
+
 import { _ } from '@joplin/lib/locale';
 import * as React from 'react';
 import { Portal, Snackbar } from 'react-native-paper';
@@ -7,7 +8,6 @@ import { Toast } from '@joplin/lib/services/plugins/api/types';
 import { useCallback } from 'react';
 import { Dispatch } from 'redux';
 import { ViewStyle } from 'react-native';
-
 interface Props {
 	dispatch: Dispatch;
 	toast: Toast;

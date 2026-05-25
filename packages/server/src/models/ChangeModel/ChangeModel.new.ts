@@ -1,3 +1,4 @@
+
 import Logger from '@joplin/utils/Logger';
 import { DbConnection } from '../../db';
 import { Change2, ChangeType, Uuid } from '../../services/database/types';
@@ -9,7 +10,6 @@ import type { RecordChangeOptions as RecordChangeOptionsBase } from './ChangeMod
 import { uuidgen } from '../../utils/uuid';
 import dbuuid from '../../utils/dbuuid';
 import BaseChangeModel from './BaseChangeModel';
-
 const logger = Logger.create('ChangeModel.new');
 
 

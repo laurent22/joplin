@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Dialog, Surface, Text } from 'react-native-paper';
 import { TextInputDialogData } from './types';
@@ -6,7 +7,6 @@ import { useId, useMemo, useState } from 'react';
 import PromptButton from './PromptButton';
 import { _ } from '@joplin/lib/locale';
 import TextInput from '../TextInput';
-
 interface Props {
 	dialog: TextInputDialogData;
 	containerStyle: ViewStyle;

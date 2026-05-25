@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 
+
 import { msleep } from './time';
 import fetch, { RequestInit } from 'node-fetch';
-
 interface FetchWithRetryOptions extends RequestInit {
 	retry?: number;
 	callback?: (retry: number)=> void;

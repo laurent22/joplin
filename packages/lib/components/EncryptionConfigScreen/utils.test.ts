@@ -1,3 +1,5 @@
+
+
 import '../../testing/dom-test-environment';
 import MasterKey from '../../models/MasterKey';
 import EncryptionService, { EncryptionMethod } from '../../services/e2ee/EncryptionService';
@@ -7,8 +9,6 @@ import { setupDatabaseAndSynchronizer, switchClient, decryptionWorker, kvStore }
 import { useInputMasterPassword, usePasswordChecker } from './utils';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import Setting from '../../models/Setting';
-
-
 interface WrappedPasswordCheckerProps {
 	masterKeys: MasterKeyEntity[];
 	activeMasterKeyId: string;

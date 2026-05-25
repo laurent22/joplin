@@ -1,7 +1,7 @@
-var sax = require('../lib/sax')
 
-var t = require('tap')
 
+import sax from '../lib/sax';
+import t from 'tap';
 exports.sax = sax
 
 // handy way to do simple unit tests

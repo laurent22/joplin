@@ -1,3 +1,5 @@
+
+import { toTitleCase } from '../string-utils.js';
 import time from '../time';
 import BaseItem from '../models/BaseItem';
 import Alarm from '../models/Alarm';
@@ -8,8 +10,6 @@ import DecryptionWorker from './DecryptionWorker';
 import ResourceFetcher from './ResourceFetcher';
 import Resource from '../models/Resource';
 import { _, _n } from '../locale';
-const { toTitleCase } = require('../string-utils.js');
-
 enum CanRetryType {
 	E2EE = 'e2ee',
 	ResourceDownload = 'resourceDownload',

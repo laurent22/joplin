@@ -1,9 +1,9 @@
+
 import { ModelType } from '../../BaseModel';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import restoreItems from './restoreItems';
-
 describe('restoreItems', () => {
 
 	beforeEach(async () => {

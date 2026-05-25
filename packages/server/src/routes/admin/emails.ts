@@ -1,3 +1,5 @@
+
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -12,8 +14,6 @@ import { senderInfo } from '../../models/utils/email';
 import { _ } from '@joplin/lib/locale';
 import { View } from '../../services/MustacheService';
 import { markdownBodyToHtml } from '../../services/email/utils';
-const { substrWithEllipsis } = require('@joplin/lib/string-utils');
-
 const router: Router = new Router(RouteType.Web);
 
 router.get('admin/emails', async (_path: SubPath, ctx: AppContext) => {

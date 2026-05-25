@@ -1,10 +1,10 @@
+
 import { writeFile, remove } from 'fs-extra';
 import { createTempDir } from '@joplin/lib/testing/test-utils';
 import config from '../config';
 import { getLoginRequest } from './saml';
 import { afterAllTests, beforeAllDb, beforeEachDb } from './testing/testUtils';
 import { SamlRelayState } from './types';
-
 describe('getLoginRequest', () => {
 	let dir: string;
 

@@ -1,5 +1,5 @@
-import type { HybridObject } from 'react-native-nitro-modules';
 
+import type { HybridObject } from 'react-native-nitro-modules';
 export interface AudioRecorder extends HybridObject<{ android: 'kotlin' }> {
 	start(): void;
 	stop(): void;

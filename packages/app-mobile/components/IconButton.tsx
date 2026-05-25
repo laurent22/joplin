@@ -2,6 +2,7 @@
 // A button with a long-press action. Long-pressing the button displays a tooltip
 //
 
+
 import * as React from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 import { useState, useMemo, useCallback, useRef, Ref } from 'react';
@@ -9,7 +10,6 @@ import { Text, Pressable, ViewStyle, StyleSheet, LayoutChangeEvent, LayoutRectan
 import { Menu, MenuOptions, MenuTrigger, renderers } from 'react-native-popup-menu';
 import Icon from './Icon';
 import AccessibleView from './accessibility/AccessibleView';
-
 type ButtonClickListener = ()=> void;
 interface ButtonProps {
 	onPress: ButtonClickListener;

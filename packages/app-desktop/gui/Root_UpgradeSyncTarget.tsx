@@ -1,13 +1,13 @@
+
+
+import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import { useEffect } from 'react';
 import useSyncTargetUpgrade, { SyncTargetUpgradeResult } from '@joplin/lib/services/synchronizer/gui/useSyncTargetUpgrade';
-
 import { createRoot } from 'react-dom/client';
-const ipcRenderer = require('electron').ipcRenderer;
 import Setting from '@joplin/lib/models/Setting';
 import restart from '../services/restart';
 import shim from '@joplin/lib/shim';
-
 function useAppCloseHandler(upgradeResult: SyncTargetUpgradeResult) {
 	useEffect(() => {
 		async function onAppClose() {

@@ -1,9 +1,9 @@
-import { ensureSyntaxTree, syntaxTreeAvailable } from '@codemirror/language';
-import { EditorState } from '@codemirror/state';
 
 // Forces a full parse of a CodeMirror editor. This is intended for unit testing.
 // If not in a unit-test consider using ensureSyntaxTree or forceParsing.
 // This will throw if no language is configured for the editor.
+import { ensureSyntaxTree, syntaxTreeAvailable } from '@codemirror/language';
+import { EditorState } from '@codemirror/state';
 const forceFullParse = (editorState: EditorState) => {
 	const timeout = 3000; // ms
 	ensureSyntaxTree(editorState, editorState.doc.length, timeout);

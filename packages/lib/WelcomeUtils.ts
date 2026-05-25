@@ -1,4 +1,6 @@
-const welcomeAssetsAny = require('./welcomeAssets');
+
+import welcomeAssetsAny from './welcomeAssets';
+import { pregQuote } from './string-utils';
 import Note from './models/Note';
 import Setting from './models/Setting';
 import Folder from './models/Folder';
@@ -6,9 +8,7 @@ import shim, { MobilePlatform } from './shim';
 import uuid from './uuid';
 import { fileExtension, basename } from './path-utils';
 import { _ } from './locale';
-const { pregQuote } = require('./string-utils');
 import { FolderIconType } from './services/database/types';
-
 export enum WelcomeAssetPlatform {
 	Desktop = 'desktop',
 	Cli = 'cli',

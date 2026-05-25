@@ -1,6 +1,6 @@
+
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import PluginRunner from '../app/services/plugins/PluginRunner';
-
 export interface PluginServiceOptions {
 	getState?(): Record<string, unknown>;
 }

@@ -1,7 +1,7 @@
+
 import Logger from '@joplin/utils/Logger';
 import { RenderNoteView } from '../plugins/api/noteListType';
 import renderViewProps from './renderViewProps';
-
 describe('renderViewProps', () => {
 
 	it('should render view props', async () => {

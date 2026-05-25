@@ -1,6 +1,6 @@
+
 import { TextStyle, ViewStyle, StyleSheet } from 'react-native';
 import { themeStyle } from '../../global-style';
-
 type SidebarButtonStyle = ViewStyle & { height: number };
 
 export interface ConfigScreenStyleSheet {

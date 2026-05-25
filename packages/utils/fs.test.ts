@@ -1,9 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 
+
 import { mkdirp } from 'fs-extra';
 import { FileLocker } from './fs';
 import { msleep, Second } from './time';
-
 const baseTempDir = `${__dirname}/../app-cli/tests/tmp`;
 
 export const createTempDir = async () => {

@@ -1,8 +1,8 @@
+
 import { produce } from 'immer';
 import iterateItems from './iterateItems';
 import { LayoutItem } from './types';
 import validateLayout from './validateLayout';
-
 interface ItemToRemove {
 	parent: LayoutItem;
 	index: number;

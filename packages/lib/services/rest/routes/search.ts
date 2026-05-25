@@ -1,3 +1,4 @@
+
 import BaseModel, { ModelType } from '../../../BaseModel';
 import { Request } from '../Api';
 import defaultLoadOptions from '../utils/defaultLoadOptions';
@@ -7,7 +8,6 @@ import collectionToPaginatedResults from '../utils/collectionToPaginatedResults'
 import BaseItem from '../../../models/BaseItem';
 import { NoteEntity } from '../../database/types';
 import SearchEngineUtils, { NotesForQueryOptions } from '../../search/SearchEngineUtils';
-
 export default async function(request: Request) {
 	if (request.method !== 'GET') throw new ErrorMethodNotAllowed();
 

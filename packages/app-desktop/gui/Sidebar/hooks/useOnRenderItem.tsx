@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { DragEventHandler, MouseEventHandler, useCallback, useMemo, useRef } from 'react';
 import { ItemClickListener, ItemDragListener, ListItem, ListItemType } from '../types';
@@ -31,7 +32,6 @@ import ListItemWrapper, { ItemSelectionState } from '../listItemComponents/ListI
 import { focus } from '@joplin/lib/utils/focusHandler';
 import shim from '@joplin/lib/shim';
 import useOnItemClick from './useOnItemClick';
-
 const Menu = bridge().Menu;
 const MenuItem: typeof MenuItemType = bridge().MenuItem;
 

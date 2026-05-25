@@ -1,3 +1,4 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import { _ } from '@joplin/lib/locale';
@@ -10,7 +11,6 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import showResource from './util/showResource';
 import { isCallbackUrl, parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import goToFolder from './util/goToFolder';
-
 const logger = Logger.create('openItemCommand');
 
 export const declaration: CommandDeclaration = {

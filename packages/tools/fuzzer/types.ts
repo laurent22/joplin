@@ -1,7 +1,7 @@
+
 import type Client from './ipc/Client';
 import type FolderRecord from './model/FolderRecord';
 import { NoteData, FolderData, ItemId, ResourceData, DetailedFolderData, TreeItem } from './model/types';
-
 export type Json = string|boolean|number|Json[]|{ [key: string]: Json };
 
 export type HttpMethod = 'GET'|'POST'|'DELETE'|'PUT'|'PATCH';

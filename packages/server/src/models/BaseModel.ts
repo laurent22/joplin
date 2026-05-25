@@ -1,3 +1,4 @@
+
 import { WithDates, WithUuid, databaseSchema, ItemType, Uuid, User } from '../services/database/types';
 import { DbConnection, QueryContext } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
@@ -11,7 +12,6 @@ import dbuuid from '../utils/dbuuid';
 import { defaultPagination, PaginatedResults, Pagination } from './utils/pagination';
 import { Knex } from 'knex';
 import { unique } from '../utils/array';
-
 const logger = Logger.create('BaseModel');
 
 type SavePoint = string;

@@ -1,20 +1,20 @@
+
+
+import { friendlySafeFilename } from '@joplin/lib/path-utils';
+import md5 from 'md5';
+import url from 'url';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
 import { ExportModule } from '@joplin/lib/services/interop/Module';
-
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import bridge from './services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
-const { friendlySafeFilename } = require('@joplin/lib/path-utils');
 import time from '@joplin/lib/time';
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
-const md5 = require('md5');
-const url = require('url');
-
 interface ExportNoteOptions {
 	customCss?: string;
 	sourceNoteIds?: string[];

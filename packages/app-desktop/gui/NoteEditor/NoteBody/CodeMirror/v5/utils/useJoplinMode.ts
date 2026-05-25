@@ -1,8 +1,8 @@
+
 import 'codemirror/addon/mode/multiplex';
 import 'codemirror/mode/stex/stex';
 import MarkdownUtils from '@joplin/lib/markdownUtils';
 import Setting from '@joplin/lib/models/Setting';
-
 interface JoplinModeState {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 mode/state/stream types; no @types/codemirror in this monorepo so the dynamic API stays untyped
 	outer: any;

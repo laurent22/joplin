@@ -1,11 +1,11 @@
+
+
 import { join } from 'path';
 import { PluginManifest } from '../../services/plugins/utils/types';
 import Setting from '../../models/Setting';
 import { mkdirp, writeFile } from 'fs-extra';
 import { defaultPluginSetting } from '../../services/plugins/PluginService';
 import shim from '../../shim';
-
-
 const setPluginEnabled = (id: string, enabled: boolean) => {
 	const newPluginStates = {
 		...Setting.value('plugins.states'),

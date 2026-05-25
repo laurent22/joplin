@@ -1,8 +1,8 @@
+
+import thirtyTwo from 'thirty-two';
 import { createHash, randomBytes, createCipheriv, createDecipheriv } from 'crypto';
-const thirtyTwo = require('thirty-two');
 import { totp } from 'otplib';
 import config from '../config';
-
 export function md5(string: string): string {
 	return createHash('md5').update(string).digest('hex');
 }

@@ -1,8 +1,8 @@
+
 import { Day } from '@joplin/utils/time';
 import { BackupItem, BackupItemType } from '../services/database/types';
 import BaseModel from './BaseModel';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('BackupItemModel');
 
 export default class BackupItemModel extends BaseModel<BackupItem> {

@@ -1,4 +1,4 @@
-// const prettycron = require('./prettycron');
+// const prettycron = prettycron_522;
 
 // describe('prettycron', function() {
 
@@ -56,3 +56,5 @@
 // 	});
 
 // });
+
+import prettycron_522 from './prettycron';

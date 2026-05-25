@@ -1,6 +1,6 @@
+
 import { DependencyType } from '../../getLicenses';
 import { LicenseOverride } from '../types';
-
 const fontAwesomeOverride: LicenseOverride = {
 	packageName: 'fontawesome v5 and 6',
 	replacePackagesMatching: /^@fontawesome\/.*@5.*$/,

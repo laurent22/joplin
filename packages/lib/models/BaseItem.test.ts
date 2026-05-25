@@ -1,9 +1,9 @@
+
 import { Second } from '@joplin/utils/time';
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, syncTargetId, synchronizerStart, msleep } from '../testing/test-utils';
 import BaseItem from './BaseItem';
 import Folder from './Folder';
 import Note from './Note';
-
 describe('BaseItem', () => {
 
 	beforeEach(async () => {

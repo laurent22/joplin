@@ -1,3 +1,4 @@
+
 import { net, Session } from 'electron';
 import { dirname, resolve, normalize } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
@@ -7,7 +8,6 @@ import * as fs from 'fs-extra';
 import { createReadStream } from 'fs';
 import { fromFilename } from '@joplin/lib/mime-utils';
 import { createSecureRandom } from '@joplin/lib/uuid';
-
 export interface AccessController {
 	remove(): void;
 }

@@ -1,9 +1,9 @@
+
+
 import { remove, writeFile } from 'fs-extra';
 import { createTempDir } from '@joplin/lib/testing/test-utils';
 import { join } from 'path';
 import isSafeToOpen from './isSafeToOpen';
-
-
 describe('isSafeToOpen', () => {
 	test.each([
 		{ fileName: 'a.txt', expected: true },

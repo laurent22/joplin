@@ -1,5 +1,5 @@
-import { plainTextToHtml } from './htmlUtils';
 
+import { plainTextToHtml } from './htmlUtils';
 describe('htmlUtils', () => {
 
 	test('should convert a plain text string to its HTML equivalent', () => {

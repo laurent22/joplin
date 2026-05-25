@@ -1,3 +1,5 @@
+
+import { padLeft } from '../../string-utils.js';
 import { CipherAlgorithm, CryptoBuffer, Digest, MasterKeyEntity } from './types';
 import Logger from '@joplin/utils/Logger';
 import shim from '../../shim';
@@ -7,8 +9,6 @@ import BaseItem from '../../models/BaseItem';
 import JoplinError from '../../JoplinError';
 import { getActiveMasterKeyId, setActiveMasterKeyId } from '../synchronizer/syncInfoUtils';
 import PerformanceLogger from '../../PerformanceLogger';
-const { padLeft } = require('../../string-utils.js');
-
 const logger = Logger.create('EncryptionService');
 const perfLogger = PerformanceLogger.create();
 

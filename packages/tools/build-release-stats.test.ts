@@ -1,5 +1,5 @@
-import { replaceGitHubInternalLinks } from './build-release-stats';
 
+import { replaceGitHubInternalLinks } from './build-release-stats';
 describe('build-release-stats', () => {
 
 	it('should replace GitHub internal link', async () => {

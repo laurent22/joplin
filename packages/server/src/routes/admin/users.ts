@@ -1,3 +1,4 @@
+
 import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -24,7 +25,6 @@ import { userFlagToString } from '../../models/UserFlagModel';
 import { _ } from '@joplin/lib/locale';
 import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
 import { PaginationOrderDir } from '../../models/utils/pagination';
-
 export interface CheckRepeatPasswordInput {
 	password: string;
 	password2: string;

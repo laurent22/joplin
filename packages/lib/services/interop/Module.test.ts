@@ -1,8 +1,8 @@
+
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { makeExportModule, makeImportModule } from './Module';
 import { ExportModuleOutputFormat, FileSystemItem } from './types';
-
 describe('Module', () => {
 	it('should return correct default fullLabel for an ImportModule', () => {
 		const baseMetadata = {

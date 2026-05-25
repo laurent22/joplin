@@ -1,3 +1,4 @@
+
 import { ApplicationPlatform, ApplicationType } from '@joplin/lib/types';
 import routeHandler from '../../middleware/routeHandler';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, models, parseHtml, createUserAndSession, expectHttpError } from '../../utils/testing/testUtils';
@@ -5,7 +6,6 @@ import * as crypto from '../../utils/crypto';
 import { AppContext } from '../../utils/types';
 import { execRequest } from '../../utils/testing/apiUtils';
 import { ErrorBadRequest, ErrorForbidden } from '../../utils/errors';
-
 async function getApplicationConfirm(applicationAuthId: string, sessionId?: string): Promise<AppContext> {
 	const context = await koaAppContext({
 		request: {

@@ -1,3 +1,4 @@
+
 import { LoggerWrapper } from '@joplin/utils/Logger';
 import config from '../config';
 import { DbConnection } from '../db';
@@ -9,7 +10,6 @@ import EmailService from '../services/EmailService';
 import MustacheService from '../services/MustacheService';
 import setupTaskService from './setupTaskService';
 import UserDeletionService from '../services/UserDeletionService';
-
 async function setupServices(env: Env, models: Models, config: Config): Promise<Services> {
 	const output: Services = {
 		email: new EmailService(env, models, config),

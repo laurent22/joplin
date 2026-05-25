@@ -1,6 +1,6 @@
-const { execCommand } = require('@joplin/utils');
-const yargs = require('yargs');
 
+import { execCommand } from '@joplin/utils';
+import yargs from 'yargs';
 async function main() {
 	const argv = yargs.argv;
 	if (!argv.profile) throw new Error('OneNote build: profile value is missing');

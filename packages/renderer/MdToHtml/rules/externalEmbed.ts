@@ -1,5 +1,5 @@
-import type * as MarkdownIt from 'markdown-it';
 
+import type * as MarkdownIt from 'markdown-it';
 const extractVideoId = (url: string) => {
 	const pattern = /^https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/;
 	const match = url.match(pattern);

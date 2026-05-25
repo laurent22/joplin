@@ -1,12 +1,12 @@
+
+// All input paths should be in the format: "path/to/file". This is converted to
+// "root:/path/to/file:" when doing the API call.
+
 import { MultiPutItem, RemoteItem } from './file-api';
 import JoplinError from './JoplinError';
 import JoplinServerApi, { ExecOptions } from './JoplinServerApi';
 import { trimSlashes } from './path-utils';
 import { Lock, LockClientType, LockType } from './services/synchronizer/LockHandler';
-
-// All input paths should be in the format: "path/to/file". This is converted to
-// "root:/path/to/file:" when doing the API call.
-
 export default class FileApiDriverJoplinServer {
 
 	private api_: JoplinServerApi;

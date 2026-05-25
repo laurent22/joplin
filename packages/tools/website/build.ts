@@ -1,3 +1,7 @@
+
+import glob from 'glob';
+import path from 'path';
+import md5File from 'md5-file';
 import { readFileSync, readFile, mkdirpSync, writeFileSync, remove, copy, pathExistsSync, pathExists } from 'fs-extra';
 import { rootDir } from '../tool-utils';
 import { pressCarouselItems } from './utils/pressCarousel';
@@ -17,7 +21,6 @@ import { loadSponsors } from '../utils/loadSponsors';
 import convertLinksToLocale from './utils/convertLinksToLocale';
 import { copyFile } from 'fs/promises';
 import { supportedLocales as supportedLocalesList } from './utils/supportedLocales';
-
 interface BuildConfig {
 	env: Env;
 }
@@ -38,9 +41,6 @@ const enGbLocale: Locale = {
 	hreflang: defaultEnglishLocale.hreflang,
 };
 
-const glob = require('glob');
-const path = require('path');
-const md5File = require('md5-file');
 const docDir = `${dirname(dirname(dirname(dirname(__dirname))))}/joplin-website/docs`;
 
 if (!pathExistsSync(docDir)) throw new Error(`"docs" directory does not exist - create it first. At: ${docDir}`);

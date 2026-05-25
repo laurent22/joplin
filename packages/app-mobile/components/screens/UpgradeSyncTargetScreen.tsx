@@ -1,13 +1,13 @@
+
+
+import { connect } from 'react-redux';
 import * as React from 'react';
 import useSyncTargetUpgrade from '@joplin/lib/services/synchronizer/gui/useSyncTargetUpgrade';
 import { _ } from '@joplin/lib/locale';
 import { View, Text, ScrollView, TextStyle } from 'react-native';
-
-const { connect } = require('react-redux');
 import { themeStyle } from '../global-style';
 import ScreenHeader from '../ScreenHeader';
 import { AppState } from '../../utils/types';
-
 interface Props {
 	themeId: number;
 }

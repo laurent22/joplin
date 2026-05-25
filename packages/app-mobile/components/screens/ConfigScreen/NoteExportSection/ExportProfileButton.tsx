@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { useCallback, useState } from 'react';
 import { View, Button } from 'react-native';
 import { TextInput } from 'react-native-paper';
@@ -8,7 +9,6 @@ import shim from '@joplin/lib/shim';
 import exportProfile from './utils/exportProfile';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import SettingsButton from '../SettingsButton';
-
 interface Props {
 	styles: ConfigScreenStyles;
 }

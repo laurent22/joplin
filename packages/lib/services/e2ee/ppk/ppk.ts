@@ -1,9 +1,9 @@
+
 import { VirtualOpaqueType } from '@joplin/utils/types';
 import uuid from '../../../uuid';
 import EncryptionService, { EncryptionCustomHandler, EncryptionMethod } from '../EncryptionService';
 import { MasterKeyEntity, PublicKeyAlgorithm, PublicKeyCrypto, PublicKeyCryptoProvider } from '../types';
 import PerformanceLogger from '../../../PerformanceLogger';
-
 const perfLogger = PerformanceLogger.create();
 
 interface PrivateKey {

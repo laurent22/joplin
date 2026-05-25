@@ -1,3 +1,4 @@
+
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 import { UserFlagType } from '../../services/database/types';
 import { AccountType } from '../../models/UserModel';
@@ -6,7 +7,6 @@ import { beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, expect
 import { AppContext } from '../../utils/types';
 import { uuidgen } from '@joplin/lib/uuid';
 import { postHandlers } from './stripe';
-
 interface StripeOptions {
 	userEmail?: string;
 }

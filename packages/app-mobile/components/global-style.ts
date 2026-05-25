@@ -1,10 +1,10 @@
+
+
+import Color from 'color';
 import Setting from '@joplin/lib/models/Setting';
 import { Platform, TextStyle, ViewStyle } from 'react-native';
 import { withDerivedColors, themeById } from '@joplin/lib/theme';
 import { Theme as BaseTheme } from '@joplin/lib/themes/type';
-
-const Color = require('color');
-
 const baseStyle = {
 	appearance: 'light',
 	fontSize: 16,

@@ -1,6 +1,6 @@
+
 import joplin from 'api';
 import { MenuItemLocation } from 'api/types';
-
 joplin.plugins.register({
 	onStart: async function() {
 		joplin.commands.register({

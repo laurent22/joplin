@@ -1,8 +1,8 @@
 
 
+
 import { exists, readFile, writeFile } from 'fs-extra';
 import { outputDir } from './constants';
-
 type InputFilePaths = {
 	js: string;
 	css?: string;

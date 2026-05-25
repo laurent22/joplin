@@ -1,9 +1,9 @@
 /** @jest-environment jsdom */
+
 import Setting from '@joplin/lib/models/Setting';
 import Renderer, { RenderSettings, RendererSetupOptions } from './Renderer';
 import shim from '@joplin/lib/shim';
 import { MarkupLanguage } from '@joplin/renderer';
-
 const defaultRendererSettings: RenderSettings = {
 	theme: JSON.stringify({ cacheKey: 'test' }),
 	highlightedKeywords: [],

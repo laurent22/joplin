@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { ForwardedRef, forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { NoteBodyEditorProps, NoteBodyEditorRef } from '../../utils/types';
@@ -9,7 +10,6 @@ import { serializeWhiteboard } from '@joplin/lib/services/whiteboard/serialize';
 import { _ } from '@joplin/lib/locale';
 import { WhiteboardContext } from './WhiteboardContext';
 import WhiteboardSurface from './WhiteboardSurface';
-
 const SAVE_DEBOUNCE_MS = 400;
 
 const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditorRef>) => {

@@ -1,7 +1,7 @@
+
 import DomHandler, { DomHandlerOptions, Element } from "domhandler";
 import * as DomUtils from "domutils";
 import { Parser, ParserOptions } from "./Parser";
-
 interface FeedItem {
     id?: string;
     title?: string;

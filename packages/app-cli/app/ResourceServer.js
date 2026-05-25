@@ -1,10 +1,11 @@
+
+
+import tcp_port_used_2 from 'tcp-port-used';
 import Logger from '@joplin/utils/Logger';
 import { findAvailablePort } from '@joplin/lib/net-utils';
-
 import { createServer } from 'http';
 import { parse } from 'url';
 import enableServerDestroy from 'server-destroy';
-
 class ResourceServer {
 	constructor() {
 		this.server_ = null;
@@ -36,7 +37,7 @@ class ResourceServer {
 	}
 
 	async start() {
-		this.port_ = await findAvailablePort(require('tcp-port-used'), [9167, 9267, 8167, 8267]);
+		this.port_ = await findAvailablePort(tcp_port_used_2, [9167, 9267, 8167, 8267]);
 		if (!this.port_) {
 			this.logger().error('Could not find available port to start resource server. Please report the error at https://github.com/laurent22/joplin');
 			return;

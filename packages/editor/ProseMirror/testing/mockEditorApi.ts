@@ -1,8 +1,8 @@
+
 import { EditorView } from 'prosemirror-view';
 import joplinEditorApiPlugin, { getEditorApi, setEditorApi } from '../plugins/joplinEditorApiPlugin';
 import { htmlentities } from '@joplin/utils/html';
 import { RenderResult } from '../../../renderer/types';
-
 const mockEditorApi = () => {
 	const setup = (editor: EditorView) => {
 		editor.dispatch(setEditorApi(editor.state.tr, {

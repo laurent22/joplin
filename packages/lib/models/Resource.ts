@@ -1,3 +1,5 @@
+
+import { FsDriverDummy } from '../fs-driver-dummy.js';
 import BaseModel, { DeleteOptions } from '../BaseModel';
 import FsDriverBase from '../fs-driver-base';
 import BaseItem from './BaseItem';
@@ -11,7 +13,6 @@ import ResourceLocalState from './ResourceLocalState';
 import * as pathUtils from '../path-utils';
 import { safeFilename } from '../path-utils';
 import * as mime from '../mime-utils';
-const { FsDriverDummy } = require('../fs-driver-dummy.js');
 import JoplinError from '../JoplinError';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
@@ -26,7 +27,6 @@ import { unique } from '../array';
 import ActionLogger from '../utils/ActionLogger';
 import isSqliteSyntaxError from '../services/database/isSqliteSyntaxError';
 import { internalUrl, isResourceUrl, isSupportedImageMimeType, resourceFilename, resourceFullPath, resourcePathToId, resourceRelativePath, resourceUrlToId } from './utils/resourceUtils';
-
 export const resourceOcrStatusToString = (status: ResourceOcrStatus) => {
 	const s: Record<ResourceOcrStatus, string> = {
 		[ResourceOcrStatus.Todo]: _('Idle'),

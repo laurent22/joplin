@@ -1,7 +1,7 @@
+
 import { createPaginationLinks, PageLink, pageMaxSize, Pagination, PaginationOrder, PaginationOrderDir, PaginationQueryParams, requestPaginationOrder, validatePagination } from '../../models/utils/pagination';
 import { setQueryParameters } from '../urlUtils';
 import { ParsedUrlQuery } from 'querystring';
-
 const defaultSortOrder = PaginationOrderDir.ASC;
 
 function headerIsSelectedClass(name: string, pagination: Pagination): string {

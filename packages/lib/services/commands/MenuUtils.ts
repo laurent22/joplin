@@ -1,12 +1,12 @@
+
+import { createSelectorCreator, defaultMemoize } from 'reselect';
+import { createCachedSelector } from 're-reselect';
 import { MenuItemLocation } from '../plugins/api/types';
 import CommandService, { MenuItemRole } from '../CommandService';
 import KeymapService from '../KeymapService';
 import { PluginStates, utils as pluginUtils } from '../plugins/reducer';
 import propsHaveChanged from './propsHaveChanged';
 import { WhenClauseContextOptions } from './stateToWhenClauseContext';
-const { createSelectorCreator, defaultMemoize } = require('reselect');
-const { createCachedSelector } = require('re-reselect');
-
 export interface MenuItem {
 	id?: string;
 	label?: string;

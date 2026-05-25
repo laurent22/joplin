@@ -1,4 +1,11 @@
 
+
+
+
+// Exposes CodeMirror libraries to plugins.
+//
+// Plugins can't bundle their own copies of the CodeMirror libraries, as multiple
+// copies of some libraries can cause issues.
 import * as codeMirrorView from '@codemirror/view';
 import * as codeMirrorState from '@codemirror/state';
 import * as codeMirrorSearch from '@codemirror/search';
@@ -9,16 +16,9 @@ import * as codeMirrorLint from '@codemirror/lint';
 import * as codeMirrorLangHtml from '@codemirror/lang-html';
 import * as codeMirrorLangMarkdown from '@codemirror/lang-markdown';
 import * as codeMirrorLanguageData from '@codemirror/language-data';
-
 import * as lezerHighlight from '@lezer/highlight';
 import * as lezerCommon from '@lezer/common';
 import * as lezerMarkdown from '@lezer/markdown';
-
-
-// Exposes CodeMirror libraries to plugins.
-//
-// Plugins can't bundle their own copies of the CodeMirror libraries, as multiple
-// copies of some libraries can cause issues.
 const libraryNameToPackage: Record<string, unknown> = {
 	'@codemirror/view': codeMirrorView,
 	'@codemirror/state': codeMirrorState,
@@ -38,7 +38,7 @@ const libraryNameToPackage: Record<string, unknown> = {
 
 const codeMirrorRequire = (library: string) => {
 	// Here, we use hasOwnProperty instead of "in" to prevent
-	// require("constructor") or require("__proto__") from returning
+	// constructor_157 or require("__proto__") from returning
 	// a constructor or prototype object.
 	if (libraryNameToPackage.hasOwnProperty(library)) {
 		return libraryNameToPackage[library];

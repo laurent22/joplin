@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import ScreenHeader from '../../ScreenHeader';
@@ -12,7 +13,6 @@ import SearchResults from './SearchResults';
 import AccessibleView from '../../accessibility/AccessibleView';
 import { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
 import SearchBar from './SearchBar';
-
 interface Props {
 	themeId: number;
 	query: string;

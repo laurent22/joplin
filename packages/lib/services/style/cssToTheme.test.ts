@@ -1,5 +1,5 @@
-import cssToTheme from './cssToTheme';
 
+import cssToTheme from './cssToTheme';
 describe('cssToTheme', () => {
 
 	it('should convert a CSS string to a theme', async () => {

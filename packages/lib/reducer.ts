@@ -1,3 +1,8 @@
+
+import fastDeepEqual from 'fast-deep-equal';
+import { ALL_NOTES_FILTER_ID } from './reserved-ids';
+import { createSelectorCreator, defaultMemoize } from 'reselect';
+import { createCachedSelector } from 're-reselect';
 import { produce, Draft, original } from 'immer';
 import pluginServiceReducer, { stateRootKey as pluginServiceStateRootKey, defaultState as pluginServiceDefaultState, State as PluginServiceState } from './services/plugins/reducer';
 import shareServiceReducer, { stateRootKey as shareServiceStateRootKey, defaultState as shareServiceDefaultState, State as ShareServiceState } from './services/share/reducer';
@@ -9,7 +14,13 @@ import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
 import { FolderEntity, NoteEntity, NoteTagEntity } from './services/database/types';
 import { MasterKeyEntity } from './services/e2ee/types';
-
+import { getListRendererIds } from './services/noteList/renderers';
+import { ProcessResultsRow } from './services/search/SearchEngine';
+import { getDisplayParentId } from './services/trash';
+import Logger from '@joplin/utils/Logger';
+import { SettingsRecord } from './models/settings/types';
+import { Toast, ToastType } from './services/plugins/api/types';
+import { unique } from './array';
 interface SearchEntry {
 	id: string;
 	type_: number;
@@ -18,17 +29,6 @@ interface SearchEntry {
 	query_type: number;
 	parent_id?: string;
 }
-import { getListRendererIds } from './services/noteList/renderers';
-import { ProcessResultsRow } from './services/search/SearchEngine';
-import { getDisplayParentId } from './services/trash';
-import Logger from '@joplin/utils/Logger';
-import { SettingsRecord } from './models/settings/types';
-import { Toast, ToastType } from './services/plugins/api/types';
-import { unique } from './array';
-const fastDeepEqual = require('fast-deep-equal');
-const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
-const { createSelectorCreator, defaultMemoize } = require('reselect');
-const { createCachedSelector } = require('re-reselect');
 
 const logger = Logger.create('lib/reducer');
 

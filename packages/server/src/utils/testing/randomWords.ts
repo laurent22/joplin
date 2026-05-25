@@ -1,5 +1,5 @@
-import { randomElement } from '../array';
 
+import { randomElement } from '../array';
 export const randomWords = (count: number) => {
 	const output: string[] = [];
 	for (let i = 0; i < count; i++) {

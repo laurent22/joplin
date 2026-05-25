@@ -1,12 +1,12 @@
+
+
+import { connect } from 'react-redux';
+import { themeStyle } from '@joplin/lib/theme';
 import * as React from 'react';
 import { useMemo } from 'react';
 import { AppState } from '../app.reducer';
 import TagItem from './TagItem';
 import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
-
-const { connect } = require('react-redux');
-const { themeStyle } = require('@joplin/lib/theme');
-
 interface TagData {
 	id: string;
 	title: string;

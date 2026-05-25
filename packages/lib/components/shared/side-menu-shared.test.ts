@@ -1,7 +1,7 @@
+
 import { FolderEntity } from '../../services/database/types';
 import { getTrashFolder, getTrashFolderId } from '../../services/trash';
 import { buildFolderTree, renderFolders } from './side-menu-shared';
-
 const renderItem = (folder: FolderEntity, hasChildren: boolean, depth: number) => {
 	return [folder.id, hasChildren, depth];
 };

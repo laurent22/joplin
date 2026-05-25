@@ -1,5 +1,6 @@
 /* eslint-disable jest/require-top-level-describe */
 
+import console_1 from 'console';
 export default () => {
 	// Disable the additional information that Jest adds to each console
 	// statement. It's rarely needed and if it is it can be commented out here.
@@ -7,7 +8,7 @@ export default () => {
 	const jestConsole = console;
 
 	beforeEach(() => {
-		global.console = require('console');
+		global.console = console_1;
 	});
 
 	afterEach(() => {

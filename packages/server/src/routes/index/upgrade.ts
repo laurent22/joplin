@@ -1,3 +1,4 @@
+
 import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -11,7 +12,6 @@ import { NotificationKey } from '../../models/NotificationModel';
 import { AccountType } from '../../models/UserModel';
 import { ErrorBadRequest } from '../../utils/errors';
 import { createCsrfTag } from '../../utils/csrf';
-
 interface FormFields {
 	upgrade_button: string;
 }

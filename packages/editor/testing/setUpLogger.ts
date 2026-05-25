@@ -1,5 +1,5 @@
-import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 
+import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 const setUpLogger = () => {
 	// To prevent warnings when testing focus-related logic (due to
 	// logging in focusHandler.ts):

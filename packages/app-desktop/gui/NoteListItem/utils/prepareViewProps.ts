@@ -1,10 +1,10 @@
+
 import { ListRendererDependency } from '@joplin/lib/services/plugins/api/noteListType';
 import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
-
 interface CheckboxStats {
 	total: number;
 	checked: number;

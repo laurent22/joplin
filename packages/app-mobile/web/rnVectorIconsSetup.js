@@ -1,11 +1,11 @@
+
+// See https://www.npmjs.com/package/react-native-vector-icons
 import fontAwesomeSolidFont from '@react-native-vector-icons/fontawesome5/fonts/FontAwesome5_Solid.ttf';
 import fontAwesomeRegularFont from '@react-native-vector-icons/fontawesome5/fonts/FontAwesome5_Regular.ttf';
 import fontAwesomeBrandsFont from '@react-native-vector-icons/fontawesome5/fonts/FontAwesome5_Brands.ttf';
 import ioniconFont from '@react-native-vector-icons/ionicons/fonts/Ionicons.ttf';
 import materialCommunityIconsFont from '@react-native-vector-icons/material-icons/fonts/MaterialIcons.ttf';
 import materialIconsFont from '@react-native-vector-icons/material-design-icons/fonts/MaterialDesignIcons.ttf';
-
-// See https://www.npmjs.com/package/react-native-vector-icons
 const setUpRnVectorIcons = () => {
 	const iconFontStyles = `
 		@font-face {

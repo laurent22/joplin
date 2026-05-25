@@ -1,3 +1,6 @@
+
+import packageInfo from '../packageInfo.js';
+import { clipboard } from 'electron';
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { AppState } from '../app.reducer';
 import InteropService from '@joplin/lib/services/interop/InteropService';
@@ -30,11 +33,8 @@ import NavService from '@joplin/lib/services/NavService';
 import Logger from '@joplin/utils/Logger';
 import { ImportCommandOptions } from './WindowCommandsAndDialogs/commands/importFrom';
 import { FileSystemItem } from '@joplin/lib/services/interop/types';
-
 const logger = Logger.create('MenuBar');
 
-const packageInfo: PackageInfo = require('../packageInfo.js');
-const { clipboard } = require('electron');
 const Menu = bridge().Menu;
 
 const menuUtils = new MenuUtils(CommandService.instance());

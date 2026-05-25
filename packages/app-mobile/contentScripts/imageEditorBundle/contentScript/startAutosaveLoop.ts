@@ -1,7 +1,7 @@
 
+
 import { Editor } from 'js-draw';
 import { SaveDrawingCallback } from './types';
-
 const startAutosaveLoop = async (
 	editor: Editor,
 	saveDrawing: SaveDrawingCallback,

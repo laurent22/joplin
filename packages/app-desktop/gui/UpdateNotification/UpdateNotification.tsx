@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, useContext, useEffect } from 'react';
 import { UpdateInfo } from 'electron-updater';
@@ -8,7 +9,6 @@ import shim from '@joplin/lib/shim';
 import { PopupNotificationContext } from '../PopupNotification/PopupNotificationProvider';
 import Button, { ButtonLevel } from '../Button/Button';
 import { NotificationType } from '../PopupNotification/types';
-
 interface Props {
 }
 

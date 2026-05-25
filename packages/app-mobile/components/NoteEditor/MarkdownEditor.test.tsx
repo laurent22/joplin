@@ -1,8 +1,10 @@
-import * as React from 'react';
 
+
+
+
+import * as React from 'react';
 import { describe, it, beforeEach } from '@jest/globals';
 import { render, waitFor } from '../../utils/testing/testingLibrary';
-
 import Setting from '@joplin/lib/models/Setting';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import TestProviderStack from '../testing/TestProviderStack';
@@ -12,8 +14,6 @@ import { EditorEvent, EditorEventType } from '@joplin/editor/events';
 import { RefObject, useCallback } from 'react';
 import { EditorCommandType, EditorControl } from '@joplin/editor/types';
 import MarkdownEditor from './MarkdownEditor';
-
-
 interface WrapperProps {
 	ref?: RefObject<EditorControl>;
 	onBodyChange: (newBody: string)=> void;

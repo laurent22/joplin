@@ -1,7 +1,7 @@
+
 import { afterAllTests, beforeAllDb, beforeEachDb, db } from './utils/testing/testUtils';
 import sqlts from '@rmp135/sql-ts';
 import { DbConnection, migrateDown, migrateLatest, migrateUp, needsMigration, nextMigration } from './db';
-
 async function dbSchemaSnapshot(db: DbConnection): Promise<Awaited<ReturnType<typeof sqlts.toTypeScript>>> {
 	return sqlts.toTypeScript({}, db as unknown as Parameters<typeof sqlts.toTypeScript>[1]);
 }

@@ -1,3 +1,4 @@
+
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import shim from '@joplin/lib/shim';
@@ -7,7 +8,6 @@ import { _ } from '@joplin/lib/locale';
 import { PluginCallback } from '../utils/usePluginCallbacks';
 import PluginChip from './PluginChip';
 import { themeStyle } from '../../../../global-style';
-
 interface Props {
 	themeId: number;
 	item: PluginItem;

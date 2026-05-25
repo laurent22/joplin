@@ -1,6 +1,6 @@
+
 import { utils, CommandRuntime, CommandDeclaration } from '../services/CommandService';
 import { _ } from '../locale';
-
 export const declaration: CommandDeclaration = {
 	name: 'historyBackward',
 	label: () => _('Back'),

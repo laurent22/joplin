@@ -1,3 +1,4 @@
+
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { ContentScriptData, EditorCommandType, EditorControl, EditorProps, EditorSettings, SearchState, UpdateBodyOptions, UserEventSource } from '../types';
 import { EditorState, TextSelection, Transaction } from 'prosemirror-state';
@@ -29,7 +30,6 @@ import postprocessEditorOutput from './utils/postprocessEditorOutput';
 import detailsPlugin from './plugins/detailsPlugin';
 import tablePlugin from './plugins/tablePlugin';
 import clampPointToDocument from './utils/clampPointToDocument';
-
 interface ProseMirrorControl extends EditorControl {
 	getSettings(): EditorSettings;
 }

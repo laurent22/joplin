@@ -1,11 +1,11 @@
+
+
 import { pack as tarStreamPack } from 'tar-stream';
 import { resolve } from 'path';
 import { Buffer } from 'buffer';
-
 import Logger from '@joplin/utils/Logger';
 import { chunkSize } from './constants';
 import shim from '@joplin/lib/shim';
-
 const logger = Logger.create('fs-driver-rn');
 
 export interface TarCreateOptions {

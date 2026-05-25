@@ -1,5 +1,5 @@
-import { readFile } from 'fs-extra';
 
+import { readFile } from 'fs-extra';
 export enum BuiltInPluginType {
 	// Plugins that need to be built when building Joplin (e.g. if the plugin
 	// needs to be patched)

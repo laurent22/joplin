@@ -1,3 +1,4 @@
+
 import { themeStyle } from '@joplin/lib/theme';
 import * as React from 'react';
 import { useMemo, useState, useEffect, useCallback, useContext } from 'react';
@@ -19,7 +20,6 @@ import depNameToNoteProp from '@joplin/lib/services/noteList/depNameToNoteProp';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
 import usePrevious from '../hooks/usePrevious';
 import { WindowIdContext } from '../NewWindowOrIFrame';
-
 const logger = Logger.create('NoteListWrapper');
 
 interface Props {

@@ -1,7 +1,7 @@
+
 import { useState } from 'react';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { waitForElement } from '@joplin/lib/dom';
-
 const useRootElement = (elementId: string) => {
 	const [rootElement, setRootElement] = useState<HTMLDivElement>(null);
 

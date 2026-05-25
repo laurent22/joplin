@@ -1,7 +1,7 @@
+
 import { _ } from '../../locale';
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import { ItemFlow, ListRenderer } from '../plugins/api/noteListType';
-
 interface Props {
 	note: {
 		id: string;

@@ -1,8 +1,8 @@
+
 import { EditorView } from 'prosemirror-view';
 import jumpToHash from './jumpToHash';
 import { getEditorApi } from '../plugins/joplinEditorApiPlugin';
 import { EditorEventType } from '../../events';
-
 const makeLinksClickableInElement = (element: HTMLElement, view: EditorView) => {
 	const followLink = (target: HTMLAnchorElement) => {
 		const href = target.getAttribute('href');

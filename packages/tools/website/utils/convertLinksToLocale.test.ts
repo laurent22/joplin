@@ -1,6 +1,6 @@
+
 import convertLinksToLocale from './convertLinksToLocale';
 import { Locale } from './types';
-
 describe('convertLinksToLocale', () => {
 
 	it('should convert links', async () => {

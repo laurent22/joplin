@@ -1,6 +1,6 @@
+
 import { isolateHistory } from '@codemirror/commands';
 import { Command } from '@codemirror/view';
-
 export enum ClipboardAction {
 	Cut = 'cut',
 	Copy = 'copy',

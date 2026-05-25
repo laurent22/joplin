@@ -1,8 +1,8 @@
+
 import { execCommand } from '@joplin/utils';
 import { chdir } from 'process';
 import { rootDir, gitRepoCleanTry } from './tool-utils';
 import updateDownloadPage from './website/updateDownloadPage';
-
 async function main() {
 	const doGitOperations = false;
 

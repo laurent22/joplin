@@ -1,5 +1,5 @@
-import { PluginManifest } from './types';
 
+import { PluginManifest } from './types';
 type ManifestSlice = Pick<PluginManifest, 'repository_url'|'homepage_url'>;
 const getPluginIssueReportUrl = (pluginManifest: ManifestSlice): string|null => {
 	const githubUrlExp = /^https?:\/\/(?:www\.)?github\.com\/([^/]+)\/([^/?]+)/;

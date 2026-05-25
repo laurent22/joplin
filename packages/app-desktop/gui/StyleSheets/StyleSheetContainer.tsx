@@ -8,8 +8,9 @@
 // unmount is handled properly. There should only be one such component on the
 // page.
 
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
@@ -18,7 +19,6 @@ import useDocument from '@joplin/lib/hooks/dom/useDocument';
 import { connect } from 'react-redux';
 import { AppState } from '../../app.reducer';
 import { ScrollbarSize } from '@joplin/lib/models/settings/builtInMetadata';
-
 interface Props {
 	themeId: number;
 	scrollbarSize: ScrollbarSize;

@@ -1,10 +1,10 @@
-import { ImportExportResult } from './types';
 
+
+import { filename } from '../../path-utils';
+import { ImportExportResult } from './types';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import InteropService_Importer_Raw from './InteropService_Importer_Raw';
-const { filename } = require('../../path-utils');
 import shim from '../../shim';
-
 export default class InteropService_Importer_Jex extends InteropService_Importer_Base {
 	public async exec(result: ImportExportResult) {
 		const tempDir = await this.temporaryDirectory_(true);

@@ -1,13 +1,14 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- xml2js options and parsed result are both heterogeneous (caller decides tag normalisation; output mirrors XML structure)
+import { parseString as parseString_182 } from 'xml2js';
+import URL from 'url-parse';
+import base64 from 'base-64';
 import Logger from '@joplin/utils/Logger';
 import shim, { FetchOptions } from './shim';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- xml2js options and parsed result are both heterogeneous (caller decides tag normalisation; output mirrors XML structure)
-const parseXmlString: (xml: string, options: any, callback: (error: Error | null, result: any)=> void)=> void = require('xml2js').parseString;
 import JoplinError from './JoplinError';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- url-parse returns a Url object structurally; we use it as a constructor with property access
-const URL: any = require('url-parse');
 import { _ } from './locale';
 import { rtrimSlashes, ltrimSlashes } from './path-utils';
-const base64 = require('base-64');
+const parseXmlString: (xml: string, options: any, callback: (error: Error | null, result: any)=> void)=> void = parseString_182;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- url-parse returns a Url object structurally; we use it as a constructor with property access
 
 // Note that the d: namespace (the DAV namespace) is specific to Nextcloud. The RFC for example uses "D:" however
 // we make all the tags and attributes lowercase so we handle both the Nextcloud style and RFC. Hopefully other

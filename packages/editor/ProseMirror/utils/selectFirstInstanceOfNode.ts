@@ -1,6 +1,6 @@
+
 import { NodeSelection } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
-
 const selectFirstInstanceOfNode = (view: EditorView, nodeName: string) => {
 	const state = view.state;
 

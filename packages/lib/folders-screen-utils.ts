@@ -1,9 +1,9 @@
+
 import { Dispatch } from 'redux';
 import Folder from './models/Folder';
 import Setting from './models/Setting';
 import shim from './shim';
 import { FolderLoadOptions } from './models/utils/types';
-
 const refreshCalls_: boolean[] = [];
 let scheduleRefreshFoldersIID_: ReturnType<typeof shim.setTimeout> = null;
 

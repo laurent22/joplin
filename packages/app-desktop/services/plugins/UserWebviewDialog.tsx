@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useRef, useCallback, useMemo } from 'react';
 import { ButtonSpec, DialogResult } from '@joplin/lib/services/plugins/api/types';
@@ -7,7 +8,6 @@ import UserWebview, { Props as UserWebviewProps } from './UserWebview';
 import UserWebviewDialogButtonBar from './UserWebviewDialogButtonBar';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import Dialog from '@joplin/lib/components/Dialog';
-
 interface Props extends UserWebviewProps {
 	buttons: ButtonSpec[];
 	fitToContent: boolean;

@@ -1,5 +1,5 @@
-import { closestSupportedLocale, setLocale, _n, toIso639Alpha3, languageName } from './locale';
 
+import { closestSupportedLocale, setLocale, _n, toIso639Alpha3, languageName } from './locale';
 describe('locale', () => {
 
 	it('should find the closest matching locale', () => {

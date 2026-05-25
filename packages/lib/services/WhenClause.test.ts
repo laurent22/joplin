@@ -1,5 +1,5 @@
-import WhenClause from './WhenClause';
 
+import WhenClause from './WhenClause';
 describe('WhenClause', () => {
 
 	test('should work with simple condition', async () => {

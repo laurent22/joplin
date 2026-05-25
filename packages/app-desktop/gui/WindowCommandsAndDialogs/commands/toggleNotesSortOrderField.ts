@@ -1,7 +1,7 @@
+
 import { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
 import { setNotesSortOrder } from '@joplin/lib/services/sortOrder/notesSortOrderUtils';
 import { _ } from '@joplin/lib/locale';
-
 export const declaration: CommandDeclaration = {
 	name: 'toggleNotesSortOrderField',
 	label: () => _('Toggle sort order field'),

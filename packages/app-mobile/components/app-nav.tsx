@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { ComponentType } from 'react';
 import { connect } from 'react-redux';
@@ -13,7 +14,6 @@ import usePrevious from '@joplin/lib/hooks/usePrevious';
 import { Theme } from '@joplin/lib/themes/type';
 import { useMemo } from 'react';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
-
 interface Props {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Route is a redux NAV action with heterogeneous payload (folderId, tagId, noteId, etc.); typing it would require restructuring action types across the mobile codebase
 	route: any;

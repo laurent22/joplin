@@ -1,3 +1,5 @@
+
+import EventEmitter from 'events';
 import BaseItem, { ItemsThatNeedDecryptionResult } from '../models/BaseItem';
 import BaseModel from '../BaseModel';
 import MasterKey from '../models/MasterKey';
@@ -9,8 +11,6 @@ import KvStore from './KvStore';
 import EncryptionService from './e2ee/EncryptionService';
 import PerformanceLogger from '../PerformanceLogger';
 import AsyncActionQueue from '../AsyncActionQueue';
-
-const EventEmitter = require('events');
 const perfLogger = PerformanceLogger.create();
 
 interface DecryptionResult {

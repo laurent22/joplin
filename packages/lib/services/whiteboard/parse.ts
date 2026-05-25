@@ -1,4 +1,3 @@
-import { Canvas, CanvasEdge, CanvasNode, emptyCanvas, fenceTag } from './jsoncanvas';
 
 // Matches the first ` ```jsoncanvas ` fence in a note body. Captures:
 //   1: the body before the fence (incl. trailing newline if any)
@@ -7,6 +6,7 @@ import { Canvas, CanvasEdge, CanvasNode, emptyCanvas, fenceTag } from './jsoncan
 //
 // Fence opener allows optional whitespace and an optional info-string newline.
 // Fence closer is a line consisting of just three or more backticks.
+import { Canvas, CanvasEdge, CanvasNode, emptyCanvas, fenceTag } from './jsoncanvas';
 const fenceRegex = new RegExp(
 	`^([\\s\\S]*?)\`\`\`${fenceTag}[ \\t]*\\r?\\n([\\s\\S]*?)\\r?\\n\`\`\`[ \\t]*(?:\\r?\\n|$)([\\s\\S]*)$`,
 );

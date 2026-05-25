@@ -1,10 +1,10 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 // To make their weird linter happy
+import lightCodeTheme from 'prism-react-renderer/themes/github';
+import darkCodeTheme from 'prism-react-renderer/themes/dracula';
 process.env.WEBSITE_BASE_URL = process.env.WEBSITE_BASE_URL || '';
 
 function rtrimSlashes(path) {

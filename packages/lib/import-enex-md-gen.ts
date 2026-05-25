@@ -1,11 +1,12 @@
+
+import joplin_fork_sax_createStream from '@joplin/fork-sax';
+import stringPadding from 'string-padding';
+import stringToStream from 'string-to-stream';
+import resourceUtils from './resourceUtils.js';
+import cssParser from '@adobe/css-tools';
 import markdownUtils from './markdownUtils';
 import { ResourceEntity } from './services/database/types';
 import { htmlentities } from '@joplin/utils/html';
-const stringPadding = require('string-padding');
-const stringToStream = require('string-to-stream');
-const resourceUtils = require('./resourceUtils.js');
-const cssParser = require('@adobe/css-tools');
-
 const BLOCK_OPEN = '[[BLOCK_OPEN]]';
 const BLOCK_CLOSE = '[[BLOCK_CLOSE]]';
 const NEWLINE = '[[NEWLINE]]';
@@ -620,7 +621,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 
 		const options = {};
 		const strict = false;
-		const saxStream = require('@joplin/fork-sax').createStream(strict, options);
+		const saxStream = joplin_fork_sax_createStream.createStream(strict, options);
 
 		let section: Section = {
 			type: SectionType.Text,

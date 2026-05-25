@@ -1,5 +1,5 @@
-import { htmlToClipboardData } from './clipboardUtils';
 
+import { htmlToClipboardData } from './clipboardUtils';
 describe('clipboardUtils', () => {
 
 	test('should convert HTML to the right format', () => {

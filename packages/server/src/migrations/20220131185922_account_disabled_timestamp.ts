@@ -1,8 +1,8 @@
-import { Knex } from 'knex';
-import { DbConnection } from '../db';
 
 // It's assumed that the input user IDs are disabled.
 // The disabled_time will be set to the first flag created_time
+import { Knex } from 'knex';
+import { DbConnection } from '../db';
 export const setUserAccountDisabledTimes = async (db: DbConnection, userIds: string[]) => {
 	// FailedPaymentFinal = 2,
 	// SubscriptionCancelled = 5,

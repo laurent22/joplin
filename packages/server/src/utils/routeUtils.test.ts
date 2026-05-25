@@ -1,8 +1,8 @@
+
 import { findMatchingRoute, isValidOrigin, parseSubPath, splitItemPath, urlMatchesSchema } from './routeUtils';
 import { ItemAddressingType } from '../services/database/types';
 import { RouteType } from './types';
 import { expectThrow } from './testing/testUtils';
-
 describe('routeUtils', () => {
 
 	it('should parse a route path', async () => {

@@ -1,9 +1,9 @@
+
 import Logger from '@joplin/utils/Logger';
 import time from '../../time';
 import { formatMsToRelative } from '@joplin/utils/time';
 import { TagEntity } from '../database/types';
 import { ListRendererDependency, RenderNoteView } from '../plugins/api/noteListType';
-
 const logger = Logger.create('renderViewProps');
 
 export interface RenderViewPropsOptions {

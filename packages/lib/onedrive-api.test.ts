@@ -1,5 +1,5 @@
-import OneDriveApi from './onedrive-api';
 
+import OneDriveApi from './onedrive-api';
 describe('onedrive-api', () => {
 	test.each([
 		[{ Authorization: 'testing' }, { Authorization: '[[DELETED]]' }],

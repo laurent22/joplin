@@ -1,3 +1,5 @@
+
+
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 import Note from '../../models/Note';
 import Folder from '../../models/Folder';
@@ -7,8 +9,6 @@ import { parse } from '../../utils/frontMatter';
 import { FolderIcon, FolderIconType } from '../database/types';
 import * as yaml from 'js-yaml';
 import Logger from '@joplin/utils/Logger';
-
-
 const logger = Logger.create('InteropService_Importer_Md_frontmatter');
 
 // Maps the string labels written by the exporter back to FolderIconType enum values.

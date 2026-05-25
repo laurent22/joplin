@@ -1,3 +1,4 @@
+
 import '../../utils/polyfills';
 import { createEditor } from '@joplin/editor/ProseMirror';
 import { EditorProcessApi, EditorProps, MainProcessApi } from '../types';
@@ -9,7 +10,6 @@ import { EditorLanguageType } from '@joplin/editor/types';
 import convertHtmlToMarkdown from './convertHtmlToMarkdown';
 import { ExportedWebViewGlobals as MarkdownEditorWebViewGlobals } from '../../markdownEditorBundle/types';
 import { EditorEventType } from '@joplin/editor/events';
-
 const wrapHtmlForMarkdownConversion = (html: HTMLElement) => {
 	// Add a container element -- when converting to HTML, Turndown
 	// sometimes doesn't process the toplevel element in the same way

@@ -1,5 +1,4 @@
 
-import * as path from 'path';
 
 // Returns `null` if `relativePath` is not within `baseDir` and `relativePath`
 // resolved to an absolute path otherwise.
@@ -8,6 +7,7 @@ import * as path from 'path';
 // If relative, it is assumed to be relative to `baseDir`.
 //
 // It is expected that baseDir is a safe path (not user-provided).
+import * as path from 'path';
 const resolvePathWithinDir = (
 	baseDir: string, relativePath: string,
 

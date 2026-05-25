@@ -1,6 +1,6 @@
+
 import { useEffect, useCallback, useRef } from 'react';
 import shim from '@joplin/lib/shim';
-
 interface HookDependencies {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance; the typed Editor surface is narrower than what we actually use (getDoc/getWin)
 	editor: any;

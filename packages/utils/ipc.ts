@@ -1,3 +1,5 @@
+
+import tcpPortUsed from 'tcp-port-used';
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import fetch from 'node-fetch';
 import { Server } from 'http';
@@ -5,8 +7,6 @@ import Logger, { LoggerWrapper } from './Logger';
 import { pathExists } from 'fs-extra';
 import { readFile, writeFile } from 'fs/promises';
 import { getSecureRandomString } from './crypto';
-
-const tcpPortUsed = require('tcp-port-used');
 const maxPorts = 10;
 
 const findAvailablePort = async (startPort: number) => {

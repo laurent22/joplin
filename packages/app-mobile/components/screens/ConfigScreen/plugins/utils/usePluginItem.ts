@@ -1,11 +1,11 @@
+
+// initialItem is used when the plugin is not installed. For example, if the plugin item is being
+// created from search results.
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import { useMemo, useRef } from 'react';
 import usePlugin from '@joplin/lib/hooks/plugins/usePlugin';
-
-// initialItem is used when the plugin is not installed. For example, if the plugin item is being
-// created from search results.
 const usePluginItem = (id: string, pluginSettings: PluginSettings, initialItem: PluginItem|null): PluginItem => {
 	const plugin = usePlugin(id);
 

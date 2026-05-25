@@ -1,3 +1,4 @@
+
 import BaseModel from '@joplin/lib/BaseModel';
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity } from '@joplin/lib/services/database/types';
@@ -5,7 +6,6 @@ import { useCallback } from 'react';
 import canManuallySortNotes from './canManuallySortNotes';
 import { FocusNote } from './useFocusNote';
 import { Dispatch } from 'redux';
-
 const useMoveNote = (notesParentType: string, noteSortOrder: string, selectedNoteIds: string[], selectedFolderId: string, uncompletedTodosOnTop: boolean, showCompletedTodos: boolean, notes: NoteEntity[], selectedFolderInTrash: boolean, makeItemIndexVisible: (itemIndex: number)=> void, focusNote: FocusNote, dispatch: Dispatch) => {
 	const moveNote = useCallback((direction: number, inc: number) => {
 		if (!canManuallySortNotes(notesParentType, noteSortOrder, selectedFolderInTrash)) return;

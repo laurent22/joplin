@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import IconButton from '../IconButton';
@@ -5,7 +6,6 @@ import { memo, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { themeStyle } from '../global-style';
 import useButtonSize from './utils/useButtonSize';
-
 interface Props {
 	themeId: number;
 	extraPadding: number;

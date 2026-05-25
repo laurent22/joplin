@@ -1,6 +1,6 @@
+
 import { DependencyType } from '../../getLicenses';
 import { LicenseOverride } from '../types';
-
 const materialCommunityIconsOverride: LicenseOverride = {
 	packageName: 'material community icons',
 	replacePackagesMatching: null,

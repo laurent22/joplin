@@ -1,9 +1,9 @@
+import { AllHtmlEntities as Entities } from 'html-entities';
+import htmlparser2 from '@joplin/fork-htmlparser2';
 import { unique } from '@joplin/lib/ArrayUtils';
 import { attributesHtml, isSelfClosingTag } from '@joplin/renderer/htmlUtils';
 import { Translations } from '../../utils/translation';
-const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
-const htmlparser2 = require('@joplin/fork-htmlparser2');
 
 const trimHtml = (content: string) => {
 	return content

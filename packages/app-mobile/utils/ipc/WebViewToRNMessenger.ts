@@ -1,7 +1,7 @@
 
+
 import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
 import { SerializableData } from '@joplin/lib/utils/ipc/types';
-
 interface ExtendedWindow extends Window {
 	ReactNativeWebView: {
 		postMessage(message: unknown): void;

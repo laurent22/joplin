@@ -1,7 +1,7 @@
+
 import Plugin from '@joplin/lib/services/plugins/Plugin';
 import { LoggerWrapper } from '@joplin/utils/Logger';
 import { LogLevel } from '../types';
-
 const createOnLogHander = (plugin: Plugin, pluginLogger: LoggerWrapper) => {
 	return async (level: LogLevel, message: string) => {
 		if (level === LogLevel.Info) {

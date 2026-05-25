@@ -1,5 +1,5 @@
-import validatePluginVersion from './validatePluginVersion';
 
+import validatePluginVersion from './validatePluginVersion';
 describe('validatePluginVersion', () => {
 
 	test('should validate a version number', () => {

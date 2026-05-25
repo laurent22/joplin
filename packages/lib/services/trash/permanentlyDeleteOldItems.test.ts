@@ -1,10 +1,10 @@
+
 import { Day, msleep } from '@joplin/utils/time';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, switchClient } from '../../testing/test-utils';
 import permanentlyDeleteOldItems from './permanentlyDeleteOldItems';
 import Setting from '../../models/Setting';
-
 describe('permanentlyDeleteOldItems', () => {
 
 	beforeEach(async () => {

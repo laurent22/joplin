@@ -1,9 +1,9 @@
+
 import { join, extname } from 'path';
 import { move, readdir, remove } from 'fs-extra';
 import { ContentStorage } from '../types';
 import Logger from '@joplin/utils/Logger';
 import createFilename from './createFilename';
-
 const logger = Logger.create('FileStorage');
 
 export default class FileStorage implements ContentStorage {

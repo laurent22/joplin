@@ -1,3 +1,5 @@
+
+
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import * as React from 'react';
 import NoteListUtils from './utils/NoteListUtils';
@@ -5,10 +7,8 @@ import { Dispatch } from 'redux';
 import { ThemeStyle } from '@joplin/lib/theme';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { MenuItem } from 'electron';
-
 import { buildStyle } from '@joplin/lib/theme';
 import bridge from '../services/bridge';
-
 interface MultiNoteActionsProps {
 	themeId: number;
 	selectedNoteIds: string[];

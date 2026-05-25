@@ -1,8 +1,8 @@
-const gulp = require('gulp');
-const utils = require('@joplin/tools/gulp/utils');
-const compilePackageInfo = require('@joplin/tools/compilePackageInfo');
-const fs = require('fs-extra');
 
+import gulp from 'gulp';
+import utils from '@joplin/tools/gulp/utils';
+import compilePackageInfo from '@joplin/tools/compilePackageInfo';
+import fs from 'fs-extra';
 const distDir = `${__dirname}/dist`;
 
 const tasks = {

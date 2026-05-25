@@ -1,13 +1,13 @@
+
+
+import { parameters } from './parameters.js';
+import { FileApi } from './file-api.js';
+import { FileApiDriverOneDrive } from './file-api-driver-onedrive.js';
 import OneDriveApi from './onedrive-api';
 import { _ } from './locale';
 import Setting from './models/Setting';
 import Synchronizer from './Synchronizer';
 import BaseSyncTarget from './BaseSyncTarget';
-
-const { parameters } = require('./parameters.js');
-const { FileApi } = require('./file-api.js');
-const { FileApiDriverOneDrive } = require('./file-api-driver-onedrive.js');
-
 export default class SyncTargetOneDrive extends BaseSyncTarget {
 
 	private api_: OneDriveApi;

@@ -1,10 +1,10 @@
+
 import { Text, EditorSelection, EditorState, SelectionRange, ChangeSet } from '@codemirror/state';
 import { RegionSpec } from './RegionSpec';
 import { SelectionUpdate } from './types';
 import toggleInlineRegionSurrounded from './toggleInlineRegionSurrounded';
 import intersectsSyntaxNode from '../isInSyntaxNode';
 import { blockquotePrefixRegex, listPrefixRegex } from './markdownFormatPatterns';
-
 const toggleWholeTextRegion = (content: string, spec: RegionSpec) => {
 	if (!content.trim()) return content;
 

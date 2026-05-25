@@ -1,5 +1,5 @@
-import { EditorState } from 'prosemirror-state';
 
+import { EditorState } from 'prosemirror-state';
 const documentMaximumIndex = (state: EditorState) => {
 	// nodeSize is documented to be the size of a node's content plus two (one for the
 	// start marker and one for the end marker). The main document doesn't have start or

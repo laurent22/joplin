@@ -1,10 +1,10 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
-
 export const declaration: CommandDeclaration = {
 	name: 'restoreNote',
 	label: () => _('Restore note'),

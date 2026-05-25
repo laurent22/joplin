@@ -1,11 +1,12 @@
-const path = require('path');
-const webpack = require('webpack');
 
+import source_map_support_install from 'source-map-support';
+import path from 'path';
+import webpack from 'webpack';
 const distDir = path.resolve(__dirname, 'dist');
 
 // To get source maps working:
 //
-// - Need to add `require('source-map-support').install()` on top of index.ts
+// - Need to add `source_map_support_install.install()` on top of index.ts
 // - Set `devtool: 'source-map'`
 // - It only works in development mode
 // - Need to add the "source-map-loader" rule so that it uses the maps generated

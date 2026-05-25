@@ -1,7 +1,7 @@
-import { Facet, StateEffect, StateField } from '@codemirror/state';
 
 // Allows updating the note ID stored in the state. Accessing the
 // note ID associated with the editor can be useful for plugins.
+import { Facet, StateEffect, StateField } from '@codemirror/state';
 export const setNoteIdEffect = StateEffect.define<string>();
 
 // Allows accessing the note ID

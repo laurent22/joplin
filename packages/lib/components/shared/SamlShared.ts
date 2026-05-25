@@ -1,10 +1,10 @@
+
 import { _ } from '../../locale';
 import Setting from '../../models/Setting';
 import shim from '../../shim';
 import { authenticateWithCode } from '../../SyncTargetJoplinServerSAML';
 import prefixWithHttps from '../../utils/prefixWithHttps';
 import SsoScreenShared from './SsoScreenShared';
-
 export default class SamlShared implements SsoScreenShared {
 	public openLoginPage() {
 		const samlUrl = Setting.value('sync.11.path');

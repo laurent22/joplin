@@ -1,7 +1,7 @@
 /* eslint-disable id-denylist */
 
-import time from '../../time';
 
+import time from '../../time';
 interface Term {
 	name: string;
 	value: string;

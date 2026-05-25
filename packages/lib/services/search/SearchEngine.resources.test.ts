@@ -1,3 +1,5 @@
+
+import console_244 from 'console';
 import { ModelType } from '../../BaseModel';
 import Note from '../../models/Note';
 import Resource from '../../models/Resource';
@@ -5,7 +7,6 @@ import shim from '../../shim';
 import { db, msleep, newOcrService, ocrSampleDir, resourceService, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import { ResourceOcrStatus } from '../database/types';
 import SearchEngine from './SearchEngine';
-
 const newSearchEngine = () => {
 	const engine = new SearchEngine();
 	engine.setDb(db());
@@ -31,7 +32,7 @@ describe('SearchEngine.resources', () => {
 	jest.retryTimes(2);
 
 	beforeEach(async () => {
-		global.console = require('console');
+		global.console = console_244;
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 	});

@@ -1,9 +1,9 @@
+
 import * as React from 'react';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { TouchableHighlight, StyleSheet, TextStyle, AccessibilityInfo } from 'react-native';
 import Icon from './Icon';
 import { _ } from '@joplin/lib/locale';
-
 interface Props {
 	checked: boolean;
 	accessibilityLabel?: string;

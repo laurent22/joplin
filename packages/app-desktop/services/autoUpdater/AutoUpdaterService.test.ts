@@ -1,8 +1,8 @@
+
 import { LoggerWrapper } from '@joplin/utils/Logger';
 import { releases3 } from '../../utils/checkForUpdatesUtilsTestData';
 import AutoUpdaterService from './AutoUpdaterService';
 import { BrowserWindow } from 'electron';
-
 jest.mock('electron', () => ({
 	BrowserWindow: jest.fn(),
 }));

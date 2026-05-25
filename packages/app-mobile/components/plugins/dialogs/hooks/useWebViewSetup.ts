@@ -1,9 +1,9 @@
+
 import { useEffect } from 'react';
 import { DialogWebViewApi } from '../../types';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '../../../../components/global-style';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
-
 interface Props {
 	themeId: number;
 	scriptPaths: string[];

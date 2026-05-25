@@ -1,10 +1,10 @@
 // Configuration file for rollup
 
-const { dirname } = require('path');
+
+
+import { dirname } from 'path';
 import typescript from '@rollup/plugin-typescript';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-
-
 const rootDir = dirname(dirname(dirname(__dirname)));
 const mobileDir = `${rootDir}/packages/app-mobile`;
 const codeMirrorDir = `${mobileDir}/components/NoteEditor/CodeMirror`;

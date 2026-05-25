@@ -1,5 +1,5 @@
-import commandToString from './commandToString';
 
+import commandToString from './commandToString';
 describe('commandToString', () => {
 
 	it('should convert a command array to a string', () => {

@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { AppState } from '../app.reducer';
@@ -6,7 +7,6 @@ import { clipboard } from 'electron';
 import Button from './Button/Button';
 import { accountTypeToString } from '@joplin/lib/utils/joplinCloud/types';
 import bridge from '../services/bridge';
-
 type JoplinCloudConfigScreenProps = {
 	inboxEmail: string;
 	joplinCloudAccountType: number;

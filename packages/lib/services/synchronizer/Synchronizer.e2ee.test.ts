@@ -1,3 +1,4 @@
+
 import time from '../../time';
 import shim from '../../shim';
 import Setting from '../../models/Setting';
@@ -13,7 +14,6 @@ import { fetchSyncInfo, getEncryptionEnabled, localSyncInfo, setEncryptionEnable
 import { loadMasterKeysFromSettings, setupAndDisableEncryption, setupAndEnableEncryption } from '../e2ee/utils';
 import { remoteNotesAndFolders } from '../../testing/test-utils-synchronizer';
 import { EncryptionMethod } from '../e2ee/EncryptionService';
-
 let insideBeforeEach = false;
 
 function newResourceFetcher(synchronizer: Synchronizer) {

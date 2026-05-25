@@ -1,3 +1,4 @@
+
 import { writeFile, remove, mkdirp } from 'fs-extra';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
@@ -7,7 +8,6 @@ import InteropService from './InteropService';
 import { ImportOptions } from './types';
 import { copyFile } from 'fs/promises';
 import Resource from '../../models/Resource';
-
 interface FolderEntityWithChildren extends FolderEntity {
 	notes?: NoteEntity[];
 	children?: FolderEntityWithChildren[];

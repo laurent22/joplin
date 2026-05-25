@@ -1,7 +1,7 @@
+
 import * as React from 'react';
 import { useCallback } from 'react';
 import { ShortcutRecorder } from '../../KeymapConfig/ShortcutRecorder';
-
 interface OnChangeEvent {
 	value: string;
 }

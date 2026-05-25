@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState, useCallback } from 'react';
 
+import { useMemo, useRef, useState, useCallback } from 'react';
 interface Props {
 	width: number;
 	height: number;

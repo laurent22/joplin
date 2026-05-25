@@ -1,5 +1,5 @@
-import htmlUtils, { extractHtmlBody, htmlDocIsImageOnly, removeWrappingParagraphAndTrailingEmptyElements } from './htmlUtils';
 
+import htmlUtils, { extractHtmlBody, htmlDocIsImageOnly, removeWrappingParagraphAndTrailingEmptyElements } from './htmlUtils';
 describe('htmlUtils', () => {
 
 	test('should strip off HTML', () => {

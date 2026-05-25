@@ -1,6 +1,7 @@
+
+
 import * as React from 'react';
 import { useCallback, useMemo, useRef, useState } from 'react';
-
 import { connect } from 'react-redux';
 import { Text, StyleSheet, Linking, View, Platform, useWindowDimensions } from 'react-native';
 import { _ } from '@joplin/lib/locale';
@@ -19,7 +20,6 @@ import Camera from './Camera/index';
 import { CameraViewProps } from './types';
 import Logger from '@joplin/utils/Logger';
 import useBackHandler from '../../utils/hooks/useBackHandler';
-
 const logger = Logger.create('CameraView');
 
 interface UseStyleProps {

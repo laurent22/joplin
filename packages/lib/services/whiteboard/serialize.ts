@@ -1,6 +1,6 @@
+
 import { Canvas, fenceTag } from './jsoncanvas';
 import { parseWhiteboard } from './parse';
-
 const stringifyCanvas = (canvas: Canvas): string => {
 	// Pretty-print so manual diffs are usable. The cost is bigger note bodies,
 	// but JSONCanvas files are small in practice and Joplin's note storage

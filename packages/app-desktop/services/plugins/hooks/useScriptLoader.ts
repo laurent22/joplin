@@ -1,7 +1,7 @@
-import { useEffect, useMemo } from 'react';
-import bridge from '../../bridge';
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+import { useEffect, useMemo } from 'react';
+import bridge from '../../bridge';
 export default function(postMessage: Function, isReady: boolean, scripts: string[], cssFilePath: string) {
 	const protocolHandler = useMemo(() => {
 		return bridge().electronApp().getContentProtocolHandler();

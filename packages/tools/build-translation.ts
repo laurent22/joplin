@@ -5,6 +5,9 @@
 // gettext v21+ is required as versions before that have bugs when parsing
 // JavaScript template strings which means we would lose translations.
 
+
+import $_locale__535 from './${locale}.json';
+import { argv } from 'yargs';
 import markdownUtils from '@joplin/lib/markdownUtils';
 import { translationExecutablePath, removePoHeaderDate, mergePotToPo, parsePoFile, parseTranslations, TranslationStatus } from './utils/translation';
 import { execCommand, isMac, insertContentIntoFile, filename, dirname, fileExtension } from './tool-utils.js';
@@ -14,7 +17,6 @@ import { readFile } from 'fs/promises';
 import { copy, mkdirpSync, remove } from 'fs-extra';
 import { GettextExtractor, JsExtractors } from 'gettext-extractor';
 import parsePluralLocalizationForm from './utils/parsePluralLocalizationForm';
-
 const rootDir = `${__dirname}/../..`;
 const localesDir = `${__dirname}/locales`;
 const libDir = `${rootDir}/packages/lib`;
@@ -198,7 +200,7 @@ function buildIndex(locales: string[], stats: TranslationStatus[]) {
 
 	for (let i = 0; i < locales.length; i++) {
 		const locale = locales[i];
-		output.push(`locales['${locale}'] = require('./${locale}.json');`);
+		output.push(`locales['${locale}'] = $_locale__535;`);
 	}
 
 	for (let i = 0; i < stats.length; i++) {
@@ -363,7 +365,6 @@ function deletedStrings(oldStrings: string[], newStrings: string[]) {
 }
 
 async function main() {
-	const argv = require('yargs').argv;
 
 	const missingStringsCheckOnly = !!argv['missing-strings-check-only'];
 

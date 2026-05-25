@@ -1,9 +1,9 @@
+
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import MarkdownIt = require('markdown-it');
-
+import MarkdownIt from 'markdown-it';
 const router: Router = new Router(RouteType.Web);
 router.public = true;
 

@@ -1,4 +1,5 @@
 
+
 import { RefObject, useMemo } from 'react';
 import { CommandValue, DropCommandValue, ScrollToTextValue } from '../../../utils/types';
 import { NoteViewerControl } from '../../../../NoteTextViewer';
@@ -11,7 +12,6 @@ import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import { MarkupLanguage } from '@joplin/renderer';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { FocusElementOptions } from '../../../../../commands/focusElement';
-
 const logger = Logger.create('CodeMirror 6 commands');
 
 interface Props {

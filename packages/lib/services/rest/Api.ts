@@ -1,6 +1,10 @@
+
+
+
+import { ltrimSlashes } from '../../path-utils';
+import md5 from 'md5';
 import { PaginationOrderDir } from '../../models/utils/types';
 import { ErrorMethodNotAllowed, ErrorForbidden, ErrorBadRequest, ErrorNotFound } from './utils/errors';
-
 import route_folders from './routes/folders';
 import route_notes from './routes/notes';
 import route_resources from './routes/resources';
@@ -11,10 +15,6 @@ import route_ping from './routes/ping';
 import route_auth from './routes/auth';
 import route_events from './routes/events';
 import route_revisions from './routes/revisions';
-
-const { ltrimSlashes } = require('../../path-utils');
-const md5 = require('md5');
-
 export enum RequestMethod {
 	GET = 'GET',
 	POST = 'POST',

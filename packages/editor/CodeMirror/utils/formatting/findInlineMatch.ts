@@ -1,6 +1,6 @@
+
 import { Text as DocumentText, SelectionRange } from '@codemirror/state';
 import { RegionSpec } from './RegionSpec';
-
 export enum MatchSide {
 	Start,
 	End,

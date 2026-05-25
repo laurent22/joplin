@@ -1,9 +1,9 @@
+
 import BaseCommand from './base-command';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'dump';

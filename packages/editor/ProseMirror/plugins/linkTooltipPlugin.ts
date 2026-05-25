@@ -1,4 +1,7 @@
 
+
+// This plugin is similar to https://prosemirror.net/examples/tooltip/
+
 import { EditorState, Plugin } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import schema from '../schema';
@@ -6,9 +9,6 @@ import { getEditorApi } from './joplinEditorApiPlugin';
 import { EditorEventType } from '../../events';
 import { OnEventCallback } from '../../types';
 import jumpToHash from '../utils/jumpToHash';
-
-// This plugin is similar to https://prosemirror.net/examples/tooltip/
-
 class LinkTooltip {
 	private tooltip_: HTMLElement;
 	private tooltipContent_: HTMLButtonElement;

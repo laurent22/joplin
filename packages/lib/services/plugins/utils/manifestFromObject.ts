@@ -1,7 +1,7 @@
+
 import { PluginManifest, PluginPermission, Image, Icons } from './types';
 import validatePluginId from './validatePluginId';
 import validatePluginPlatforms from './validatePluginPlatforms';
-
 export default function manifestFromObject(o: Record<string, unknown>): PluginManifest {
 
 	const getString = (name: string, required = true, defaultValue = ''): string => {

@@ -1,7 +1,7 @@
+
 import shim from '../shim';
 import { blur, focus } from '../utils/focusHandler';
 import useDocument from '../hooks/dom/useDocument';
-
 import type { FC, CSSProperties, ReactNode } from 'react';
 const React = shim.react();
 const { useEffect, useRef, useState } = shim.react();

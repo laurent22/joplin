@@ -1,10 +1,10 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import SyncWizardDialog from '../../SyncWizard/Dialog';
 import MasterPasswordDialog from '../../MasterPasswordDialog/Dialog';
 import EditFolderDialog from '../../EditFolderDialog/Dialog';
 import PdfViewer from '../../PdfViewer';
-
 interface RegisteredDialogProps {
 	themeId: number;
 	key: string;

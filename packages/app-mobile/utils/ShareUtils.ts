@@ -1,8 +1,8 @@
+
+// when refactoring this name, make sure to refactor the `SharePackage.java` (in android) as well
 import Resource from '@joplin/lib/models/Resource';
 import { ResourceEntity } from '@joplin/lib/services/database/types';
 import shim from '@joplin/lib/shim';
-
-// when refactoring this name, make sure to refactor the `SharePackage.java` (in android) as well
 const DIR_NAME = 'sharedFiles';
 
 const makeShareCacheDirectory = async () => {

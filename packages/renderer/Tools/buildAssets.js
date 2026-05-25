@@ -1,5 +1,5 @@
-const fs = require('fs-extra');
 
+import fs from 'fs-extra';
 function dirname(path) {
 	if (!path) throw new Error('Path is empty');
 	const s = path.split(/\/|\\/);

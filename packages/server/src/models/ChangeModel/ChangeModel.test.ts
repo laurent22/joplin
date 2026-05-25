@@ -1,3 +1,4 @@
+
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createFolder, createItemTree3, expectNotThrow, createNote, updateNote, db, dbSlave, createItemTree } from '../../utils/testing/testUtils';
 import { ChangeType, Item, Session, ShareType, User } from '../../services/database/types';
 import { Day, msleep } from '../../utils/time';
@@ -9,7 +10,6 @@ import config from '../../config';
 import { runWithFakeTimers } from '@joplin/lib/testing/test-utils';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { NoteEntity } from '@joplin/lib/services/database/types';
-
 const oldChangeModel = () => {
 	return new ChangeModelOld(
 		db(), dbSlave(), models, config(),

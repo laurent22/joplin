@@ -1,10 +1,10 @@
+
+
 import '../../../../testing/dom-test-environment';
 import useOnInstallHandler from './useOnInstallHandler';
 import { renderHook } from '@testing-library/react';
-
 import PluginService, { defaultPluginSetting } from '../../../../services/plugins/PluginService';
 import { ItemEvent } from './types';
-
 jest.mock('../../../../services/plugins/PluginService');
 
 const pluginServiceInstance = {

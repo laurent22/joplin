@@ -1,7 +1,7 @@
+
 import Logger from '@joplin/utils/Logger';
 import { PluginStates } from '../reducer';
 import getActivePluginEditorViews from './getActivePluginEditorViews';
-
 const logger = Logger.create('getActivePluginEditorView');
 
 export default (plugins: PluginStates, windowId: string) => {

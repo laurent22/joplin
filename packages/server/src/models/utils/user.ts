@@ -1,6 +1,6 @@
+
 import { User } from '../../services/database/types';
 import { accountByType } from '../UserModel';
-
 export function getCanShareFolder(user: User): number {
 	if (!('account_type' in user) || !('can_share_folder' in user)) throw new Error('Missing account_type or can_share_folder property');
 	const account = accountByType(user.account_type);

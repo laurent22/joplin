@@ -1,11 +1,11 @@
+
+import EventEmitter from 'events';
 import { PluginManifest } from './utils/types';
 import ViewController from './ViewController';
 import shim from '../../shim';
 import { ViewHandle } from './utils/createViewHandle';
 import { ContentScriptType } from './api/types';
 import Logger from '@joplin/utils/Logger';
-const EventEmitter = require('events');
-
 const logger = Logger.create('Plugin');
 
 interface ViewControllers {

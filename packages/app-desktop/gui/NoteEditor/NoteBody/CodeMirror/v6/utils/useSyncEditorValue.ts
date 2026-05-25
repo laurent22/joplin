@@ -1,7 +1,7 @@
+
 import { useEffect, useRef, RefObject } from 'react';
 import { OnMessage } from '../../../../utils/types';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
-
 interface Props {
 	content: string;
 

@@ -1,7 +1,7 @@
-const readline = require('readline/promises');
 
 /* eslint-disable no-console */
 
+import readline from 'readline/promises';
 export const isTTY = () => process.stdin.isTTY;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- readline/promises is not yet typed in this version of @types/node.

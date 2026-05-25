@@ -1,3 +1,5 @@
+
+import chokidar from 'chokidar';
 import AsyncActionQueue from '../../AsyncActionQueue';
 import shim from '../../shim';
 import { _ } from '../../locale';
@@ -7,8 +9,6 @@ import Setting from '../../models/Setting';
 import Resource from '../../models/Resource';
 import { ResourceEntity } from '../database/types';
 import { EventEmitter } from 'events';
-const chokidar = require('chokidar');
-
 type WindowId = string;
 
 interface WatchedItem {

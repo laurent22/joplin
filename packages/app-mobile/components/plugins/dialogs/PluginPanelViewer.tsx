@@ -1,4 +1,5 @@
 
+
 import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services/plugins/reducer';
 import * as React from 'react';
 import { Button, Portal, SegmentedButtons, Text } from 'react-native-paper';
@@ -14,7 +15,6 @@ import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import DismissibleDialog, { DialogVariant } from '../../../components/DismissibleDialog';
 import CommandService from '@joplin/lib/services/CommandService';
-
 interface Props {
 	themeId: number;
 

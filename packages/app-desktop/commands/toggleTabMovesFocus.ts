@@ -1,8 +1,8 @@
+
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { DesktopCommandContext } from '../services/commands/types';
 import Setting from '@joplin/lib/models/Setting';
-
 export const declaration: CommandDeclaration = {
 	name: 'toggleTabMovesFocus',
 	label: () => _('Toggle editor tab key navigation'),

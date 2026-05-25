@@ -1,10 +1,10 @@
+
+import { connect } from 'react-redux';
 import * as React from 'react';
 import time from '@joplin/lib/time';
 import { themeStyle } from '@joplin/lib/theme';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../app.reducer';
-const { connect } = require('react-redux');
-
 interface Props {
 	themeId: number;
 	note: NoteEntity;

@@ -1,6 +1,8 @@
+
+
+
 import * as React from 'react';
 import { useState } from 'react';
-
 import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
 import { ShortcutRecorder } from './ShortcutRecorder';
 import getLabel from './utils/getLabel';
@@ -8,10 +10,8 @@ import useKeymap from './utils/useKeymap';
 import useCommandStatus from './utils/useCommandStatus';
 import styles_ from './styles';
 import { _ } from '@joplin/lib/locale';
-
 import shim from '@joplin/lib/shim';
 import bridge from '../../services/bridge';
-
 const keymapService = KeymapService.instance();
 
 export interface KeymapConfigScreenProps {

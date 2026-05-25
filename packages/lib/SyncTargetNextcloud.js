@@ -1,12 +1,12 @@
 // The Nextcloud sync target is essentially a wrapper over the WebDAV sync target,
 // thus all the calls to SyncTargetWebDAV to avoid duplicate code.
 
-const BaseSyncTarget = require('./BaseSyncTarget').default;
-const { _ } = require('./locale');
-const Setting = require('./models/Setting').default;
-const Synchronizer = require('./Synchronizer').default;
-const SyncTargetWebDAV = require('./SyncTargetWebDAV');
 
+import BaseSyncTarget from './BaseSyncTarget';
+import { _ } from './locale';
+import Setting from './models/Setting';
+import Synchronizer from './Synchronizer';
+import SyncTargetWebDAV from './SyncTargetWebDAV';
 class SyncTargetNextcloud extends BaseSyncTarget {
 
 	static id() {

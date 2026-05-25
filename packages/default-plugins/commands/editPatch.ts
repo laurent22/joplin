@@ -1,10 +1,10 @@
+
 import { execCommand } from '@joplin/utils';
 import { copy } from 'fs-extra';
 import { join } from 'path';
 import { waitForCliInput } from '@joplin/utils/cli';
 import buildDefaultPlugins from '../buildDefaultPlugins';
 import getPathToPatchFileFor from '../utils/getPathToPatchFileFor';
-
 const editPatch = async (targetPluginId: string, outputParentDir: string|null) => {
 	let patchedPlugin = false;
 

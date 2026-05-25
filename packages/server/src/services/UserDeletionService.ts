@@ -1,9 +1,9 @@
+
 import Logger from '@joplin/utils/Logger';
 import { Pagination } from '../models/utils/pagination';
 import { Day, msleep } from '../utils/time';
 import BaseService from './BaseService';
 import { BackupItemType, UserDeletion, UserFlagType, Uuid } from './database/types';
-
 const logger = Logger.create('UserDeletionService');
 
 export interface DeletionJobOptions {

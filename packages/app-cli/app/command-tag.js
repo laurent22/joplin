@@ -1,10 +1,10 @@
+
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
 import Tag from '@joplin/lib/models/Tag';
 import BaseModel from '@joplin/lib/BaseModel';
 import time from '@joplin/lib/time';
-
 class Command extends BaseCommand {
 	usage() {
 		return 'tag <tag-command> [tag] [note]';

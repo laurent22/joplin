@@ -1,6 +1,6 @@
+
 import { EditorSelection } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
-
 const nodeIntersectsSelection = (selection: EditorSelection, node: SyntaxNodeRef) => {
 	const mainSelection = selection.main;
 

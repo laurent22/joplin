@@ -1,7 +1,7 @@
+
 import { ErrorMethodNotAllowed, ErrorNotFound } from './errors';
 import { HttpMethod, RouteType } from './types';
 import { RouteResponseFormat, RouteHandler } from './routeUtils';
-
 interface RouteInfo {
 	handler: RouteHandler;
 	type?: RouteType;

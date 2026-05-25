@@ -1,6 +1,6 @@
 
-const urlUtils = require('./urlUtils.js');
 
+import urlUtils from './urlUtils.js';
 describe('urlUtils', () => {
 
 	it('should prepend a base URL', (async () => {

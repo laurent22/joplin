@@ -1,8 +1,8 @@
+
+
 import { useState } from 'react';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import PdfDocument from '../PdfDocument';
-
-
 const usePdfDocument = (pdfPath: string) => {
 	const [pdfDocument, setPdfDocument] = useState<PdfDocument>(null);
 

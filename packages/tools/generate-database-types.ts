@@ -1,11 +1,11 @@
+
+
+import sqlts from '@rmp135/sql-ts';
+import fs from 'fs-extra';
 import { execCommand } from '@joplin/utils';
 import { insertContentIntoFile, rootDir } from './tool-utils';
 import { remove } from 'fs-extra';
 import { Table, Column } from '@rmp135/sql-ts';
-
-const sqlts = require('@rmp135/sql-ts').default;
-const fs = require('fs-extra');
-
 function createRuntimeObject(table: Table) {
 	const colStrings = [];
 	for (const col of table.columns) {

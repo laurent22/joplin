@@ -1,3 +1,4 @@
+
 import { resourceBlobPath } from '../utils/joplinUtils';
 import { Change2 as Change, ChangeType, Item, Share, ShareType, ShareUserStatus, User, Uuid } from '../services/database/types';
 import { unique } from '../utils/array';
@@ -9,7 +10,6 @@ import { getCanShareFolder } from './utils/user';
 import { isUniqueConstraintError } from '../db';
 import Logger from '@joplin/utils/Logger';
 import { PerformanceTimer } from '../utils/time';
-
 const logger = Logger.create('ShareModel');
 
 export default class ShareModel extends BaseModel<Share> {

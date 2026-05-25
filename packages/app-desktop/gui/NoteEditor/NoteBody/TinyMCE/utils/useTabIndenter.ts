@@ -1,6 +1,6 @@
+
 import { useEffect } from 'react';
 import type { Editor, EditorEvent } from 'tinymce';
-
 const useTabIndenter = (editor: Editor, enabled: boolean) => {
 	useEffect(() => {
 		if (!editor || !enabled) return () => {};

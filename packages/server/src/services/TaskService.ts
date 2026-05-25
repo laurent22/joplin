@@ -1,3 +1,6 @@
+
+
+import cron from 'node-cron';
 import Logger from '@joplin/utils/Logger';
 import newModelFactory, { Models } from '../models/factory';
 import { DbConnection, disconnectDb } from '../db';
@@ -8,9 +11,6 @@ import { Services } from './types';
 import { _ } from '@joplin/lib/locale';
 import { ErrorCode, ErrorNotFound } from '../utils/errors';
 import { durationToMilliseconds } from '../utils/time';
-
-const cron = require('node-cron');
-
 const logger = Logger.create('TaskService');
 
 export enum RunType {

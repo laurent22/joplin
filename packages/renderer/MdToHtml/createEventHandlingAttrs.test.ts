@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  */
 
+
 import { createEventHandlingListeners, Options } from './createEventHandlingAttrs';
 import { describe, beforeAll, it, jest, expect } from '@jest/globals';
-
 describe('createEventHandlingAttrs', () => {
 	let lastMessage: string|undefined = undefined;
 	const postMessageFn = (message: string) => {

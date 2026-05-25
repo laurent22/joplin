@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { WarningBannerComponent } from './WarningBanner';
 import Setting from '@joplin/lib/models/Setting';
@@ -5,7 +6,6 @@ import NavService from '@joplin/lib/services/NavService';
 import { render, screen, userEvent } from '../../utils/testing/testingLibrary';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
 import makeShareInvitation from '@joplin/lib/testing/share/makeMockShareInvitation';
-
 interface WrapperProps {
 	showMissingMasterKeyMessage?: boolean;
 	hasDisabledSyncItems?: boolean;

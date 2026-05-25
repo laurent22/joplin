@@ -1,9 +1,9 @@
+
 import { CallbackIds as CallbackIds, SerializableData, SerializableDataAndCallbacks, TransferableCallback } from './types';
 import isTransferableObject from './utils/isTransferableObject';
 import mergeCallbacksAndSerializable from './utils/mergeCallbacksAndSerializable';
 import separateCallbacksFromSerializable from './utils/separateCallbacksFromSerializable';
 import separateCallbacksFromSerializableArray from './utils/separateCallbacksFromSerializableArray';
-
 enum MessageType {
 	RemoteReady = 'RemoteReady',
 	InvokeMethod = 'InvokeMethod',

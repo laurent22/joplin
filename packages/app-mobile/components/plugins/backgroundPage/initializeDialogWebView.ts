@@ -1,9 +1,9 @@
+
 import { DialogWebViewApi, DialogMainProcessApi, WebViewPostMessageCallback, DialogSetOnMessageListenerCallback } from '../types';
 import reportUnhandledErrors from './utils/reportUnhandledErrors';
 import wrapConsoleLog from './utils/wrapConsoleLog';
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
 import getFormData from './utils/getFormData';
-
 interface ExtendedWindow extends Window {
 	webviewApi: {
 		postMessage: WebViewPostMessageCallback;

@@ -1,3 +1,4 @@
+
 import globalConfig from '../../../config';
 import { clientType, DbConnection } from '../../../db';
 import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
@@ -9,7 +10,6 @@ import StorageDriverDatabase from './StorageDriverDatabase';
 import StorageDriverFs from './StorageDriverFs';
 import StorageDriverMemory from './StorageDriverMemory';
 import StorageDriverS3 from './StorageDriverS3';
-
 export interface Options {
 	assignDriverId?: boolean;
 }

@@ -24,8 +24,8 @@
 // 4. Remove tests one by one to narrow it down to the one with the async
 //    call that's causing problem.
 
-import baseConfig from '../../jest.config.base.js';
 
+import baseConfig from '../../jest.config.base.js';
 export default {
 	...baseConfig,
 	testMatch: [

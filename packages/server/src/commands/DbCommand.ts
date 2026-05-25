@@ -1,9 +1,9 @@
+
 import { PositionalOptions } from 'yargs';
 import config from '../config';
 import { connectDb, disconnectDb, dropTables } from '../db';
 import BaseCommand from './BaseCommand';
 import { createDb } from '../tools/dbTools';
-
 enum ArgvCommand {
 	DropTables = 'dropTables',
 	Create = 'create',

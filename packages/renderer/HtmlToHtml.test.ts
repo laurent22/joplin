@@ -1,5 +1,5 @@
-import { splitHtml, SplittedHtml } from './HtmlToHtml';
 
+import { splitHtml, SplittedHtml } from './HtmlToHtml';
 describe('HtmlToHtml', () => {
 
 	test('should split an HTML string into HTML and CSS', () => {

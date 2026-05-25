@@ -5,6 +5,7 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
+
 import BookmarkManager from 'tinymce/core/api/dom/BookmarkManager';
 import Tools from 'tinymce/core/api/util/Tools';
 import * as Bookmark from '../core/Bookmark';
@@ -17,7 +18,6 @@ import { isCustomList } from '../core/Util';
 import Editor from 'tinymce/core/api/Editor';
 import { listToggleActionFromListName } from '../core/ListAction';
 import { findContainerListTypeFromElement } from '../listModel/JoplinListUtil';
-
 const updateListStyle = function (dom, el, detail) {
   const type = detail['list-style-type'] ? detail['list-style-type'] : null;
   dom.setStyle(el, 'list-style-type', type);

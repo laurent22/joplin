@@ -1,8 +1,8 @@
+
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { useRef, useState } from 'react';
 import { DialogContentSize, DialogWebViewApi } from '../../types';
 import { PixelRatio } from 'react-native';
-
 interface Props {
 	dialogControl: DialogWebViewApi;
 	webViewLoadCount: number;

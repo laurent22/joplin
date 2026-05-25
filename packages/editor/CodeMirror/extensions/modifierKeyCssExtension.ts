@@ -1,9 +1,9 @@
-import { StateEffect, StateField, Transaction } from '@codemirror/state';
-import { EditorView } from '@codemirror/view';
-import { editorSettingsFacet } from './editorSettingsExtension';
 
 // On MacOS: Tracks the meta key
 // On other platforms: Tracks the ctrl key.
+import { StateEffect, StateField, Transaction } from '@codemirror/state';
+import { EditorView } from '@codemirror/view';
+import { editorSettingsFacet } from './editorSettingsExtension';
 const ctrlOrMetaChangedEffect = StateEffect.define<boolean>();
 
 const ctrlOrMetaPressedField = StateField.define<boolean>({

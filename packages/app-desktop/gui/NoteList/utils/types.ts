@@ -1,10 +1,10 @@
+
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { ListRenderer, NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { Size } from '@joplin/utils/types';
 import { Dispatch } from 'redux';
 import { EventEmitter } from 'events';
-
 export interface Props {
 	themeId: number;
 	selectedNoteIds: string[];

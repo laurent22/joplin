@@ -1,5 +1,5 @@
-import { renderErrorBlock } from './makeDiscourseDebugUrl';
 
+import { renderErrorBlock } from './makeDiscourseDebugUrl';
 describe('makeDiscourseDebugUrl', () => {
 
 	it('should render errors', () => {

@@ -1,6 +1,6 @@
+
 import joplin from 'api';
 import { ToolbarButtonLocation } from 'api/types';
-
 joplin.plugins.register({
 	onStart: async function() {
 		const worker = new Worker(`${await joplin.plugins.installationDir()}/worker.js`);

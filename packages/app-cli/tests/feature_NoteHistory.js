@@ -5,14 +5,14 @@
 // remove them.
 // ====================== IMPORTANT ============================================
 
-const { id, ids, createNTestFolders, sortedIds, createNTestNotes, TestApp } = require('@joplin/lib/testing/test-utils.js');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const uuid = require('@joplin/lib/uuid').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Folder = require('@joplin/lib/models/Folder').default;
 
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids.js');
 
+import { id, ids, createNTestFolders, sortedIds, createNTestNotes, TestApp } from '@joplin/lib/testing/test-utils.js';
+import BaseModel from '@joplin/lib/BaseModel';
+import uuid from '@joplin/lib/uuid';
+import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids.js';
 let testApp = null;
 
 const goBackWard = (state) => {

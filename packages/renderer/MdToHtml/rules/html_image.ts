@@ -1,9 +1,9 @@
+
 import { RuleOptions } from '../../MdToHtml';
 import { attributesHtml } from '../../htmlUtils';
 import * as utils from '../../utils';
 import type * as MarkdownIt from 'markdown-it';
-import type Renderer = require('markdown-it/lib/renderer');
-
+import type Renderer from 'markdown-it/lib/renderer';
 function renderImageHtml(before: string, src: string, after: string, ruleOptions: RuleOptions) {
 	const r = utils.imageReplacement(ruleOptions.ResourceModel, { src, before, after }, ruleOptions.resources, ruleOptions.resourceBaseUrl, ruleOptions.itemIdToUrl);
 	if (typeof r === 'string') return r;

@@ -1,9 +1,9 @@
+
 import * as React from 'react';
 import { TouchableOpacity, TouchableWithoutFeedback, Text, Modal, View, LayoutRectangle, ViewStyle, TextStyle, FlatList, StyleSheet, useWindowDimensions } from 'react-native';
 import { ReactElement, useCallback, useMemo, useRef, useState } from 'react';
 import { _ } from '@joplin/lib/locale';
 import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
-
 type ValueType = string;
 export interface DropdownListItem {
 	label: string;

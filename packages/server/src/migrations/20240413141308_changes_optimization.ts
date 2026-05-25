@@ -1,6 +1,6 @@
-import { DbConnection, isPostgres } from '../db';
 
 // CREATE INDEX CONCURRENTLY cannot run within a transaction
+import { DbConnection, isPostgres } from '../db';
 export const config = { transaction: false };
 
 export const up = async (db: DbConnection) => {

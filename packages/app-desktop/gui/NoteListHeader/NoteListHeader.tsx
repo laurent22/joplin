@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useMemo } from 'react';
 import { NoteListColumns, OnClickHandler } from '@joplin/lib/services/plugins/api/noteListType';
@@ -6,7 +7,6 @@ import { OnItemClickHander } from './types';
 import useDragAndDrop, { DataType } from './useDragAndDrop';
 import useContextMenu from './utils/useContextMenu';
 import depNameToNoteProp from '@joplin/lib/services/noteList/depNameToNoteProp';
-
 interface Props {
 	template: string;
 	height: number;

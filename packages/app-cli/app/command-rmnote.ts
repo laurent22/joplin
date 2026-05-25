@@ -1,10 +1,10 @@
+
 import BaseCommand from './base-command';
 import app from './app';
 import { _, _n } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import { DeleteOptions, ModelType } from '@joplin/lib/BaseModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'rmnote <note-pattern>';

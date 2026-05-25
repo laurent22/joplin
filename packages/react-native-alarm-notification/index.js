@@ -1,5 +1,5 @@
-import { NativeModules } from 'react-native';
 
+import { NativeModules } from 'react-native';
 const { RNAlarmNotification } = NativeModules;
 const ReactNativeAN = {};
 

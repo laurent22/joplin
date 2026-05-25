@@ -1,3 +1,4 @@
+
 import { setupDatabaseAndSynchronizer, db, sleep, switchClient, msleep, createNoteAndResource } from '../../testing/test-utils';
 import SearchEngine, { ComplexTerm } from './SearchEngine';
 import Note from '../../models/Note';
@@ -5,7 +6,6 @@ import ItemChange from '../../models/ItemChange';
 import Setting from '../../models/Setting';
 import Resource from '../../models/Resource';
 import { ResourceOcrStatus } from '../database/types';
-
 let engine: SearchEngine = null;
 
 // const IDF = (N:number, n:number) => Math.max(Math.log((N - n + 0.5) / (n + 0.5)), 0);

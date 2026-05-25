@@ -1,5 +1,5 @@
-import postprocessEditorOutput from './postprocessEditorOutput';
 
+import postprocessEditorOutput from './postprocessEditorOutput';
 const normalizeHtmlString = (html: string) => {
 	return html.replace(/\s+/g, ' ').trim();
 };

@@ -1,8 +1,8 @@
-const fs = require('fs-extra');
-const { fileExtension, dirname } = require('@joplin/lib/path-utils');
-const wrap_ = require('word-wrap');
-const { languageCode } = require('@joplin/lib/locale');
 
+import fs from 'fs-extra';
+import { fileExtension, dirname } from '@joplin/lib/path-utils';
+import wrap_ from 'word-wrap';
+import { languageCode } from '@joplin/lib/locale';
 const rootDir = dirname(dirname(__dirname));
 const MAX_WIDTH = 78;
 const INDENT = '    ';

@@ -1,6 +1,6 @@
+
 import { EditorState, StateEffect } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-
 export const showLinkEditorEffect = StateEffect.define<void>();
 
 export const showLinkEditor = (view: EditorView) => {

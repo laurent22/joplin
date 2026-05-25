@@ -3,8 +3,8 @@
 // from another component. Potentially it could also be used to resolve conflict situations when
 // multiple components try to set the focus at the same time.
 
-import Logger from '@joplin/utils/Logger';
 
+import Logger from '@joplin/utils/Logger';
 const logger = Logger.create('focusHandler');
 
 enum ToggleFocusAction {

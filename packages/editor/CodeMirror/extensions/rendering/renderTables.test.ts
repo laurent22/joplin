@@ -1,8 +1,8 @@
+
 import { EditorSelection } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import createTestEditor from '../../testing/createTestEditor';
 import renderTables, { renderInlineMarkdown } from './renderTables';
-
 const createEditor = async (initialMarkdown: string) => {
 	return await createTestEditor(
 		initialMarkdown,

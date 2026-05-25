@@ -1,9 +1,9 @@
-import joplin from 'api';
-import { ToolbarButtonLocation } from 'api/types';
 
-const uslug = require('@joplin/fork-uslug');
 
 // From https://stackoverflow.com/a/6234804/561309
+import uslug from '@joplin/fork-uslug';
+import joplin from 'api';
+import { ToolbarButtonLocation } from 'api/types';
 function escapeHtml(unsafe:string) {
 	return unsafe
 		.replace(/&/g, "&amp;")

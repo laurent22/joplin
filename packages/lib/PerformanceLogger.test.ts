@@ -1,5 +1,5 @@
-import PerformanceLogger from './PerformanceLogger';
 
+import PerformanceLogger from './PerformanceLogger';
 describe('PerformanceLogger', () => {
 	beforeEach(() => {
 		PerformanceLogger.reset_();

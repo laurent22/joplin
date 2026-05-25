@@ -1,6 +1,6 @@
-const fs = require('fs-extra');
-const { execSync } = require('child_process');
 
+import fs from 'fs-extra';
+import { execSync } from 'child_process';
 module.exports = async function compilePackageInfo(packageInfoPath, outputPath) {
 	const packageInfo = require(packageInfoPath);
 

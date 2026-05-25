@@ -2,6 +2,7 @@
 // On Android and iOS, this wraps the default <Modal> component. On web,
 // it uses a <dialog>.
 
+
 import * as React from 'react';
 import { RefObject, useCallback, useMemo, useRef, useState } from 'react';
 import { GestureResponderEvent, Modal, Platform, Pressable, ScrollView, ScrollViewProps, StyleSheet, View, ViewStyle } from 'react-native';
@@ -14,7 +15,6 @@ import { _ } from '@joplin/lib/locale';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
 import Dialog from '@joplin/lib/components/Dialog';
 import useKeyboardState from '../utils/hooks/useKeyboardState';
-
 type OnClose = ()=> void;
 type OnShow = ()=> void;
 export interface ModalElementProps {

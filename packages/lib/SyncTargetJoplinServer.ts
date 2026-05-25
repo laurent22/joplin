@@ -1,3 +1,4 @@
+
 import FileApiDriverJoplinServer from './file-api-driver-joplinServer';
 import Setting from './models/Setting';
 import Synchronizer from './Synchronizer';
@@ -6,7 +7,6 @@ import JoplinServerApi, { Session } from './JoplinServerApi';
 import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
 import Logger from '@joplin/utils/Logger';
-
 const staticLogger = Logger.create('SyncTargetJoplinServer');
 
 export interface FileApiOptions {

@@ -1,3 +1,4 @@
+
 import { _ } from '@joplin/lib/locale';
 import BaseCommand from './base-command';
 import app from './app';
@@ -7,7 +8,6 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
-
 const logger = Logger.create('command-publish');
 
 type Args = {

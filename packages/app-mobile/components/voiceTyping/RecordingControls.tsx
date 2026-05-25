@@ -1,10 +1,10 @@
+
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ActivityIndicator, Icon, Surface, Text } from 'react-native-paper';
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
 import AccessibleView from '../accessibility/AccessibleView';
 import { RecorderState } from './types';
-
 interface Props {
 	recorderState: RecorderState;
 	heading: string;

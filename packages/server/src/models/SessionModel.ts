@@ -1,3 +1,4 @@
+
 import BaseModel from './BaseModel';
 import { User, Session, Uuid } from '../services/database/types';
 import { uuidgen } from '@joplin/lib/uuid';
@@ -5,7 +6,6 @@ import { ErrorForbidden } from '../utils/errors';
 import { Hour } from '../utils/time';
 import { isValidMFACode } from '../utils/crypto';
 import { getIsMFAEnabled } from './utils/user';
-
 export const defaultSessionTtl = 12 * Hour;
 
 export default class SessionModel extends BaseModel<Session> {

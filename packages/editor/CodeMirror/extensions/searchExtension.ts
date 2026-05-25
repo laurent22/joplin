@@ -1,3 +1,4 @@
+
 import { EditorSelection, EditorState, Extension, StateEffect, StateField } from '@codemirror/state';
 import { EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view';
 import { EditorSettings, OnEventCallback } from '../../types';
@@ -5,7 +6,6 @@ import getSearchState from '../utils/getSearchState';
 import { EditorEventType } from '../../events';
 import { search, searchPanelOpen, SearchQuery, setSearchQuery } from '@codemirror/search';
 import announceSearchMatch from '../vendor/announceSearchMatch';
-
 type CancelEvent = { cancelled: boolean };
 
 const scanForFirstMatch = async (

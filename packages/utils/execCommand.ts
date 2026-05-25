@@ -1,8 +1,8 @@
+
 import * as execa from 'execa';
 import commandToString from './commandToString';
 import splitCommandString from './splitCommandString';
 import { stdout } from 'process';
-
 interface ExecCommandOptions {
 	showInput?: boolean;
 	showStdout?: boolean;

@@ -1,8 +1,8 @@
+
 import config from '../config';
 import { ErrorPreconditionFailed } from '../utils/errors';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, koaNext, expectNotThrow, expectHttpError } from '../utils/testing/testUtils';
 import apiVersionHandler from './apiVersionHandler';
-
 describe('apiVersionHandler', () => {
 
 	beforeAll(async () => {

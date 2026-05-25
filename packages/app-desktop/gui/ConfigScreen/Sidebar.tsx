@@ -1,3 +1,4 @@
+
 import { AppType, MetadataBySection, SettingMetadataSection, SettingSectionSource } from '@joplin/lib/models/Setting';
 import * as React from 'react';
 import Setting from '@joplin/lib/models/Setting';
@@ -8,7 +9,6 @@ import SearchInput, { OnChangeEvent } from '../lib/SearchInput/SearchInput';
 import { normalizeQuery } from '@joplin/lib/components/shared/config/config-search-text';
 import { type SearchResultGroup } from './configSearch';
 import highlightSearchText from './searchHighlight';
-
 interface SectionChangeEvent {
 	section: SettingMetadataSection;
 }

@@ -1,7 +1,7 @@
+
 import { writeFile, readdir, remove } from 'fs-extra';
 import { createTempDir, msleep } from './testing/test-utils';
 import RotatingLogs from './RotatingLogs';
-
 const createTestLogFile = async (dir: string) => {
 	await writeFile(`${dir}/log.txt`, 'some content');
 };

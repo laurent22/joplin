@@ -1,3 +1,4 @@
+
 import InteropService from '../../services/interop/InteropService';
 import { CustomExportContext, CustomImportContext, ExportModuleOutputFormat, ModuleType } from '../../services/interop/types';
 import shim from '../../shim';
@@ -13,7 +14,6 @@ import * as ArrayUtils from '../../ArrayUtils';
 import InteropService_Importer_Custom from './InteropService_Importer_Custom';
 import InteropService_Exporter_Custom from './InteropService_Exporter_Custom';
 import Module, { makeExportModule, makeImportModule } from './Module';
-
 async function recreateExportDir() {
 	const dir = exportDir();
 	await fs.remove(dir);

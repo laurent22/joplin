@@ -1,10 +1,10 @@
+
+
+import fountain from '../../vendor/fountain.min.js';
 import { RendererTheme } from '../../types';
 import type * as MarkdownIt from 'markdown-it';
-import type Token = require('markdown-it/lib/token');
-import type Renderer = require('markdown-it/lib/renderer');
-
-const fountain = require('../../vendor/fountain.min.js');
-
+import type Token from 'markdown-it/lib/token';
+import type Renderer from 'markdown-it/lib/renderer';
 const pluginAssets = function(theme: RendererTheme) {
 	return [
 		{

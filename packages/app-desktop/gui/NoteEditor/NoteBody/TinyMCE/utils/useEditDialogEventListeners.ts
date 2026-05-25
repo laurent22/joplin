@@ -1,8 +1,8 @@
+
 import { Editor } from 'tinymce';
 import { EditDialogControl } from './useEditDialog';
 import { useEffect } from 'react';
 import { TinyMceEditorEvents } from './types';
-
 const useEditDialogEventListeners = (editor: Editor|null, editDialog: EditDialogControl) => {
 	useEffect(() => {
 		if (!editor) return () => {};

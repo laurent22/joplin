@@ -1,6 +1,6 @@
+
 import { useEffect, useRef } from 'react';
 import BackButtonService from '../../services/BackButtonService';
-
 type OnBackPress = ()=>(void|boolean);
 
 const useBackHandler = (onBackPress: OnBackPress|null) => {

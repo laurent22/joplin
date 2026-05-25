@@ -1,3 +1,5 @@
+
+import sandboxProxy from '@joplin/lib/services/plugins/sandboxProxy';
 import * as vm from 'vm';
 import Plugin from '@joplin/lib/services/plugins/Plugin';
 import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
@@ -7,8 +9,6 @@ import mapEventHandlersToIds, { EventHandlers } from '@joplin/lib/services/plugi
 import uuid from '@joplin/lib/uuid';
 import Joplin from '@joplin/lib/services/plugins/api/Joplin';
 import { Console } from 'console';
-const sandboxProxy = require('@joplin/lib/services/plugins/sandboxProxy');
-
 function createConsoleWrapper(pluginId: string) {
 	const wrapper: Record<string, (...args: unknown[])=> unknown> = {};
 

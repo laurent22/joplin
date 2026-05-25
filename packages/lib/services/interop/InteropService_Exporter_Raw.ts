@@ -1,9 +1,9 @@
+
+import { basename } from '../../path-utils';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 import BaseItem from '../../models/BaseItem';
-const { basename } = require('../../path-utils');
 import shim from '../../shim';
 import { BaseItemEntity, ResourceEntity } from '../database/types';
-
 export default class InteropService_Exporter_Raw extends InteropService_Exporter_Base {
 
 	private destDir_: string;

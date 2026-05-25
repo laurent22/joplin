@@ -1,8 +1,8 @@
+
 import { mkdirp, pathExists, readFile, remove, writeFile } from 'fs-extra';
 import { CustomError, CustomErrorCode } from '../../../utils/errors';
 import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import StorageDriverBase from './StorageDriverBase';
-
 export default class StorageDriverFs extends StorageDriverBase {
 
 	private pathCreated_: Record<string, boolean> = {};

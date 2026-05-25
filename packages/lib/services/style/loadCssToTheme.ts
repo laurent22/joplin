@@ -1,8 +1,8 @@
+
 import { Theme } from '../../themes/type';
 import { filename } from '../../path-utils';
 import shim from '../../shim';
 import cssToTheme from './cssToTheme';
-
 export default async function(cssBaseDir: string): Promise<Record<string, Theme>> {
 	const themeDirs = (await shim.fsDriver().readDirStats(cssBaseDir)).filter(f => f.isDirectory());
 

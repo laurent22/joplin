@@ -1,8 +1,8 @@
-const { writeFile, copy, mkdirp, remove } = require('fs-extra');
-const glob = require('glob');
-const { resolve, basename } = require('path');
-const { dirname } = require('@joplin/tools/gulp/utils');
 
+import { writeFile, copy, mkdirp, remove } from 'fs-extra';
+import glob from 'glob';
+import { resolve, basename } from 'path';
+import { dirname } from '@joplin/tools/gulp/utils';
 const rootDir = resolve(__dirname, '../../..');
 const nodeModulesDir = resolve(__dirname, '../node_modules');
 

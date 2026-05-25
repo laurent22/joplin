@@ -2,10 +2,10 @@
 // Handles adding decorations to the CodeMirror editor -- converts CodeMirror5-style calls
 // to input accepted by CodeMirror 6
 
+
 import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate, WidgetType } from '@codemirror/view';
 import { ChangeDesc, Extension, Range, RangeSetBuilder, StateEffect, StateField, Transaction } from '@codemirror/state';
 import { StreamParser, StringStream, indentUnit } from '@codemirror/language';
-
 interface DecorationRange {
 	from: number;
 	to: number;

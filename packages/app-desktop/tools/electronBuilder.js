@@ -2,8 +2,8 @@
 // variables which are not defined in this context. To make it work, we'll need
 // to somehow pass this to the execCommand call.
 
-const execCommand = require('./execCommand');
 
+import execCommand from './execCommand';
 async function main() {
 	process.chdir(`${__dirname}/..`);
 

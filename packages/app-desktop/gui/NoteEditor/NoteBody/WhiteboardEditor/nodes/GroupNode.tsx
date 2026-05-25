@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { NodeProps, NodeResizer } from '@xyflow/react';
@@ -6,7 +7,6 @@ import { _ } from '@joplin/lib/locale';
 import { GroupCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 import { useWhiteboardContext } from '../WhiteboardContext';
 import { WhiteboardNodeData } from '../canvasFlow';
-
 const GroupNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbGroup'; data: WhiteboardNodeData; position: { x: number; y: number } }>) => {
 	const ctx = useWhiteboardContext();
 	const node = data.canvasNode as GroupCanvasNode;

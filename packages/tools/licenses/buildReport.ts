@@ -1,4 +1,8 @@
 
+
+
+// Important: Review the output of this tool for correctness
+
 import getLicenses, { DependencyType, LicenseInfo } from './getLicenses';
 import { readFile, readdir } from 'fs/promises';
 import { dirname, join } from 'path';
@@ -7,10 +11,6 @@ import { LicenseOverride } from './licenseOverrides/types';
 import { exists } from 'fs-extra';
 import matchApache2 from './utils/matchApache2';
 import matchMit from './utils/matchMit';
-
-
-// Important: Review the output of this tool for correctness
-
 interface PackageInfo extends LicenseInfo {
 	packageName: string;
 }

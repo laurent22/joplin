@@ -1,8 +1,8 @@
+
 import { returningSupported } from '../db';
 import { KeyValue } from '../services/database/types';
 import { msleep } from '../utils/time';
 import BaseModel, { DeleteOptions } from './BaseModel';
-
 export enum ValueType {
 	Integer = 1,
 	String = 2,

@@ -1,6 +1,6 @@
+
 import { htmlDocIsImageOnly } from '@joplin/renderer/htmlUtils';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('shouldPasteResources');
 
 // We should only process the images if there is no plain text or HTML text in

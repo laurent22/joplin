@@ -1,5 +1,5 @@
-const { execSync } = require('child_process');
 
+import { execSync } from 'child_process';
 if (process.env.RUNNER_OS === 'macOS') {
 	console.info('Skipping app-mobile tests on macOS');
 	process.exit(0);

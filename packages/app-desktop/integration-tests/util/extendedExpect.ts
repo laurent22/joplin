@@ -1,5 +1,5 @@
-import { expect, Locator } from '@playwright/test';
 
+import { expect, Locator } from '@playwright/test';
 const extendedExpect = expect.extend({
 	async toBeSeekableMediaElement(videoLocator: Locator, seeksTo: number, playsUntil: number) {
 		let pass = true;

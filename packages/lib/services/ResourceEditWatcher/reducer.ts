@@ -1,6 +1,6 @@
+
 import { produce, Draft } from 'immer';
 import { defaultWindowId, stateUtils } from '../../reducer';
-
 export const defaultState = {
 	watchedResources: {},
 };

@@ -1,10 +1,10 @@
+
 import BaseSyncTarget from './BaseSyncTarget';
 import { _ } from './locale';
 import Setting from './models/Setting';
 import { FileApi } from './file-api';
 import FileApiDriverLocal from './file-api-driver-local';
 import Synchronizer from './Synchronizer';
-
 export default class SyncTargetFilesystem extends BaseSyncTarget {
 	public static id() {
 		return 2;

@@ -1,9 +1,9 @@
+
 import { createContext, useContext } from 'react';
 import { MarkupLanguage } from '@joplin/renderer';
 import { ResourceInfos } from '../../utils/types';
 import { MarkupToHtmlOptions } from '../../../hooks/useMarkupToHtml';
 import { RenderResult } from '@joplin/renderer/types';
-
 export interface WhiteboardContextValue {
 	markupToHtml: (markupLanguage: MarkupLanguage, md: string, options?: MarkupToHtmlOptions)=> Promise<RenderResult>;
 	resourceInfos: ResourceInfos;

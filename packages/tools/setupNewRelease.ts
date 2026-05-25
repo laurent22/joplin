@@ -1,7 +1,7 @@
+
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import yargs = require('yargs');
-
+import yargs from 'yargs';
 const rootDir = path.dirname(path.dirname(__dirname));
 
 interface Options {

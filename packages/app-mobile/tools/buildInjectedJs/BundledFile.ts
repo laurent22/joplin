@@ -3,12 +3,12 @@
 // files: First here we convert the JS file to a plain string, and that string
 // is then loaded by eg. the Mermaid plugin, and finally injected in the WebView.
 
-import { dirname, extname, basename, resolve } from 'path';
 
+
+import { dirname, extname, basename, resolve } from 'path';
 import * as esbuild from 'esbuild';
 import copyAssets from './copyAssets';
 import { writeFile, readFile } from 'fs-extra';
-
 export default class BundledFile {
 	private readonly bundleOutputPathBase_: string;
 	private readonly bundleBaseName_: string;

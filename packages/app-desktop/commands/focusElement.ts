@@ -1,5 +1,5 @@
-import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 
+import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 export const declaration: CommandDeclaration = {
 	name: 'focusElement',
 };

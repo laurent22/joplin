@@ -1,6 +1,6 @@
+
 import uslug from '@joplin/fork-uslug/lib/uslug';
 import { Node } from 'prosemirror-model';
-
 type OnHeading = (node: Node, hash: string, pos: number)=> boolean|void;
 
 const forEachHeading = (doc: Node, callback: OnHeading) => {

@@ -1,7 +1,7 @@
+
 import { useRef, useCallback, RefObject } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { NoteEntity } from '@joplin/lib/services/database/types';
-
 export type FocusNote = (noteId: string)=> void;
 type ContainerRef = RefObject<HTMLElement>;
 type OnMakeIndexVisible = (i: number)=> void;

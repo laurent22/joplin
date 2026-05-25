@@ -1,9 +1,9 @@
+
+
 import { Minute, Second } from '@joplin/utils/time';
 import { DbConnection } from '../../db';
 import newModelFactory from '../../models/factory';
 import { Config } from '../../utils/types';
-
-
 export default async function createUserDeletions(db: DbConnection, config: Config) {
 	const models = newModelFactory(db, db, config);
 

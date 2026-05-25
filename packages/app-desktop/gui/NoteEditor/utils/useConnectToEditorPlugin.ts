@@ -1,3 +1,4 @@
+
 import EditorPluginHandler, { OnSaveNoteCallback } from '@joplin/lib/services/plugins/EditorPluginHandler';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { useContext, useEffect, useMemo, useRef } from 'react';
@@ -8,7 +9,6 @@ import { PluginEditorViewState, PluginStates } from '@joplin/lib/services/plugin
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
 import { OnSetFormNote } from './useFormNote';
-
 const logger = Logger.create('useEditorPlugin');
 
 type OnScheduleSaveNote = (formNote: FormNote)=> Promise<void>;

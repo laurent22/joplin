@@ -1,8 +1,8 @@
+
 import * as React from 'react';
 import { MouseEventHandler } from 'react';
 import ExpandIcon from './ExpandIcon';
 import EmptyExpandLink from './EmptyExpandLink';
-
 interface ExpandLinkProps {
 	folderId: string;
 	hasChildren: boolean;

@@ -1,6 +1,6 @@
-const { readdir, stat, rm } = require('fs/promises');
-const { resolve } = require('path');
 
+import { readdir, stat, rm } from 'fs/promises';
+import { resolve } from 'path';
 const rootDir = resolve(__dirname, '../..');
 const packageDir = `${rootDir}/packages`;
 

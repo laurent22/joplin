@@ -1,9 +1,9 @@
+
 import Logger from '@joplin/utils/Logger';
-import PgBoss = require('pg-boss');
+import PgBoss from 'pg-boss';
 import { BaseQueue, JobData, JobWithData, JobWithResult, QueueConfiguration } from '../../types';
 import { ErrorBadRequest } from '../../errors';
 import { Day, Minute, Second } from '@joplin/utils/time';
-
 const logger = Logger.create('PGBossQueue');
 
 export default class PgBossQueue implements BaseQueue {

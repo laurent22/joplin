@@ -1,3 +1,5 @@
+
+import os_homedir from 'os';
 import { createNoteAndResource, newOcrService, ocrSampleDir, resourceFetcher, setupDatabaseAndSynchronizer, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
 import { supportedMimeTypes } from './OcrService';
 import Resource from '../../models/Resource';
@@ -8,7 +10,6 @@ import Setting from '../../models/Setting';
 import createAccessiblePdf from './utils/createAccessiblePdf';
 import { PdfOcrDetails } from './utils/types';
 import * as fs from 'fs-extra';
-
 describe('OcrService', () => {
 
 	jest.retryTimes(2);
@@ -241,7 +242,7 @@ describe('OcrService', () => {
 	// Use this to quickly test with specific images:
 
 	// it('should process resources 2', async () => {
-	// 	await createNoteAndResource({ path: `${require('os').homedir()}/Desktop/AllClients.png` });
+	// 	await createNoteAndResource({ path: `${os_homedir.homedir()}/Desktop/AllClients.png` });
 
 	// 	const service = newOcrService();
 	// 	await service.processResources();

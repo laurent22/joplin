@@ -30,13 +30,13 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // //////////////////////////////////////////////////////////////////////////////////
 
-const dayjs = require('dayjs');
-const advancedFormat = require('dayjs/plugin/advancedFormat');
-const calendar = require('dayjs/plugin/calendar');
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import calendar from 'dayjs/plugin/calendar';
+import later from 'later';
 dayjs.extend(advancedFormat);
 dayjs.extend(calendar);
 
-const later = require('later');
 
 (function() {
 

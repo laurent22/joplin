@@ -1,3 +1,4 @@
+
 import { useCallback, useRef } from 'react';
 import bridge from '../../../services/bridge';
 import InteropServiceHelper from '../../../InteropServiceHelper';
@@ -5,7 +6,6 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { msleep } from '@joplin/utils/time';
-
 let isPrinting = false;
 
 interface Props {

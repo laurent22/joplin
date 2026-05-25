@@ -1,5 +1,5 @@
-import { modifyListLines } from './useCursorUtils';
 
+import { modifyListLines } from './useCursorUtils';
 describe('useCursorUtils', () => {
 
 	const listWithDashes = [

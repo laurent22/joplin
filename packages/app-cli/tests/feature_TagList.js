@@ -7,13 +7,13 @@
 // remove them.
 // ====================== IMPORTANT ============================================
 
-const { setupDatabaseAndSynchronizer, switchClient, createNTestFolders, createNTestNotes, createNTestTags, TestApp } = require('@joplin/lib/testing/test-utils.js');
-const Setting = require('@joplin/lib/models/Setting').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Tag = require('@joplin/lib/models/Tag').default;
-const time = require('@joplin/lib/time').default;
 
+import { setupDatabaseAndSynchronizer, switchClient, createNTestFolders, createNTestNotes, createNTestTags, TestApp } from '@joplin/lib/testing/test-utils.js';
+import Setting from '@joplin/lib/models/Setting';
+import Folder from '@joplin/lib/models/Folder';
+import Note from '@joplin/lib/models/Note';
+import Tag from '@joplin/lib/models/Tag';
+import time from '@joplin/lib/time';
 let testApp = null;
 
 describe('integration_TagList', () => {

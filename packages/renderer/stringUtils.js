@@ -1,4 +1,4 @@
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 
 function pregQuote(str, delimiter = '') {

@@ -1,3 +1,7 @@
+
+import { shimInit } from '../shim-init-node';
+import sharp from 'sharp';
+import nodeSqlite from 'sqlite3';
 import { syncDir, synchronizer, supportDir, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient, synchronizerStart } from '../testing/test-utils';
 import Setting from '../models/Setting';
 import Folder from '../models/Folder';
@@ -8,10 +12,6 @@ import markdownUtils from '../markdownUtils';
 import shim from '../shim';
 import * as fs from 'fs-extra';
 import { setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
-const { shimInit } = require('../shim-init-node');
-const sharp = require('sharp');
-const nodeSqlite = require('sqlite3');
-
 const snapshotBaseDir = `${supportDir}/syncTargetSnapshots`;
 
 export const testData = {

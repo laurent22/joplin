@@ -1,9 +1,9 @@
-import { dirname, relative } from 'path';
-import * as yargs from 'yargs';
-const { wrapCallSite } = require('source-map-support');
 
 /* eslint-disable no-console */
 
+import { wrapCallSite } from 'source-map-support';
+import { dirname, relative } from 'path';
+import * as yargs from 'yargs';
 const resolveLine = (lineNumber: number, columnNumber: number, filePath: string) => {
 	// Note: This is an undocumented function provided by source-map-support. It
 	// may change in the future:

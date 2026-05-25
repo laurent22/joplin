@@ -1,6 +1,6 @@
+
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher';
 import { useEffect } from 'react';
-
 interface Props {
 	noteId: string;
 	windowId: string;

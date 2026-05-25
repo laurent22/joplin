@@ -1,3 +1,11 @@
+
+import showLocalSearch_25 from '../commands/showLocalSearch';
+import focusElementNoteTitle_26 from '../commands/focusElementNoteTitle';
+import focusElementNoteBody_27 from '../commands/focusElementNoteBody';
+import focusElementNoteViewer_28 from '../commands/focusElementNoteViewer';
+import focusElementToolbar_29 from '../commands/focusElementToolbar';
+import pasteAsText_30 from '../commands/pasteAsText';
+import pasteAsMarkdown_31 from '../commands/pasteAsMarkdown';
 import { MutableRefObject, RefObject, Dispatch, SetStateAction, useEffect } from 'react';
 import { WindowCommandDependencies, NoteBodyEditorRef, OnChangeEvent, ScrollOptionTypes } from './types';
 import editorCommandDeclarations, { enabledCondition } from '../editorCommandDeclarations';
@@ -5,15 +13,14 @@ import CommandService, { CommandDeclaration, CommandRuntime, CommandContext, Reg
 import { formatMsToLocal } from '@joplin/utils/time';
 import { reg } from '@joplin/lib/registry';
 import getWindowCommandPriority from './getWindowCommandPriority';
-
 const commandsWithDependencies = [
-	require('../commands/showLocalSearch'),
-	require('../commands/focusElementNoteTitle'),
-	require('../commands/focusElementNoteBody'),
-	require('../commands/focusElementNoteViewer'),
-	require('../commands/focusElementToolbar'),
-	require('../commands/pasteAsText'),
-	require('../commands/pasteAsMarkdown'),
+	showLocalSearch_25,
+	focusElementNoteTitle_26,
+	focusElementNoteBody_27,
+	focusElementNoteViewer_28,
+	focusElementToolbar_29,
+	pasteAsText_30,
+	pasteAsMarkdown_31,
 ];
 
 type OnBodyChange = (event: OnChangeEvent)=> void;

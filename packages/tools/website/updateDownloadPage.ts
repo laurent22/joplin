@@ -1,6 +1,6 @@
+
 import { readFile } from 'fs-extra';
 import { rootDir, insertContentIntoFile } from '../tool-utils';
-
 async function getInstallMd() {
 	return readFile(`${rootDir}/readme/install.md`, 'utf8');
 }

@@ -1,9 +1,9 @@
+
 import iterateItems from './iterateItems';
 import { LayoutItem, LayoutItemDirection, tempContainerPrefix } from './types';
 import { produce } from 'immer';
 import uuid from '@joplin/lib/uuid';
 import validateLayout from './validateLayout';
-
 export enum MoveDirection {
 	Up = 'up',
 	Down = 'down',

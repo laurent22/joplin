@@ -1,10 +1,10 @@
+
 import { ModelType } from '../../../BaseModel';
 import ItemChange from '../../../models/ItemChange';
 import Note from '../../../models/Note';
 import { expectThrow, setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
 import { ItemChangeEntity } from '../../database/types';
 import Api, { RequestMethod } from '../Api';
-
 let api: Api = null;
 
 describe('routes/events', () => {

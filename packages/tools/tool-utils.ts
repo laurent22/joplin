@@ -1,11 +1,19 @@
+
+
+import path_dirname from 'path';
+import fetch from 'node-fetch';
+import execa from 'execa';
+import moment from 'moment';
+import { exec } from 'child_process';
+import path from 'path';
+import { spawn } from 'child_process';
+import https from 'https';
+import crypto from 'crypto';
+import fs from 'fs';
+import readline from 'readline';
 import { pathExists, readFile, writeFile, unlink, stat, createWriteStream } from 'fs-extra';
 import { hasCredentialFile, readCredentialFile } from '@joplin/lib/utils/credentialFiles';
 import { execCommand as execCommand2, commandToString } from '@joplin/utils';
-
-const fetch = require('node-fetch');
-const execa = require('execa');
-const moment = require('moment');
-
 export interface GitHubReleaseAsset {
 	name: string;
 	browser_download_url: string;
@@ -110,12 +118,11 @@ async function saveGitHubUsernameCache(cache: Record<string, string>) {
 }
 
 // Returns the project root dir
-export const rootDir: string = require('path').dirname(require('path').dirname(__dirname));
+export const rootDir: string = path_dirname.dirname(require('path').dirname(__dirname));
 
 export function execCommand(command: string, options: { cwd?: string; env?: NodeJS.ProcessEnv; maxBuffer?: number } = null): Promise<string> {
 	options = options || {};
 
-	const exec = require('child_process').exec;
 
 	return new Promise((resolve, reject) => {
 		exec(command, options, (error: (Error & { signal?: string }) | null, stdout: string, stderr: string) => {
@@ -133,7 +140,6 @@ export function execCommand(command: string, options: { cwd?: string; env?: Node
 }
 
 export function resolveRelativePathWithinDir(baseDir: string, ...relativePath: string[]): string {
-	const path = require('path');
 	const resolvedBaseDir = path.resolve(baseDir);
 	const resolvedPath = path.resolve(baseDir, ...relativePath);
 	if (resolvedPath.indexOf(resolvedBaseDir) !== 0) throw new Error(`Resolved path for relative path "${JSON.stringify(relativePath)}" is not within base directory "${baseDir}" (Was resolved to ${resolvedPath})`);
@@ -148,7 +154,6 @@ export function execCommandVerbose(commandName: string, args: string[] = []) {
 }
 
 export function execCommandWithPipes(executable: string, args: string[]) {
-	const spawn = require('child_process').spawn;
 
 	return new Promise((resolve, reject) => {
 		const child = spawn(executable, args, { stdio: 'inherit' });
@@ -185,7 +190,6 @@ export async function setPackagePrivateField(filePath: string, value: boolean) {
 }
 
 export async function downloadFile(url: string, targetPath: string, headers: { [key: string]: string }) {
-	const https = require('https');
 
 	return new Promise((resolve, reject) => {
 		const makeDownloadRequest = (url: string) => {
@@ -230,8 +234,6 @@ export async function downloadFile(url: string, targetPath: string, headers: { [
 
 export function fileSha256(filePath: string) {
 	return new Promise((resolve, reject) => {
-		const crypto = require('crypto');
-		const fs = require('fs');
 		const algo = 'sha256';
 		const shasum = crypto.createHash(algo);
 
@@ -461,7 +463,6 @@ export const gitHubLinkify = (markdown: string) => {
 
 export function readline(question: string) {
 	return new Promise((resolve) => {
-		const readline = require('readline');
 
 		const rl = readline.createInterface({
 			input: process.stdin,

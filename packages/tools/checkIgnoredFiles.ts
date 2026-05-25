@@ -1,8 +1,8 @@
+
 import { execCommand, getRootDir } from '@joplin/utils';
 import { toSystemSlashes } from '@joplin/utils/path';
 import { readFile, writeFile } from 'fs-extra';
 import { chdir } from 'process';
-
 const main = async () => {
 	const rootDir = await getRootDir();
 	chdir(rootDir);

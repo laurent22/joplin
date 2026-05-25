@@ -1,5 +1,5 @@
-const { execCommand } = require('@joplin/utils');
 
+import { execCommand } from '@joplin/utils';
 if (!process.env.IS_CONTINUOUS_INTEGRATION || process.env.SKIP_ONENOTE_CONVERTER_BUILD) {
 	// eslint-disable-next-line no-console
 	console.info([

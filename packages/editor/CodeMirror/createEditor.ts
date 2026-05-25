@@ -1,27 +1,15 @@
+
+
 import { Compartment, EditorState, Prec } from '@codemirror/state';
 import { indentOnInput, syntaxHighlighting } from '@codemirror/language';
 import { openSearchPanel, closeSearchPanel, searchPanelOpen } from '@codemirror/search';
-
 import { classHighlighter } from '@lezer/highlight';
-
-import {
-	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command, rectangularSelection,
-	dropCursor,
-} from '@codemirror/view';
 import { history, undoDepth, redoDepth, standardKeymap, insertTab, simplifySelection } from '@codemirror/commands';
-
 import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
 import { historyKeymap } from '@codemirror/commands';
-
 import { EditorProps, EditorSettings } from '../types';
 import { EditorEventType, SelectionRangeChangeEvent } from '../events';
-import {
-	decreaseIndent, increaseIndent,
-	insertOrIncreaseIndent,
-	toggleBolded, toggleCode,
-	toggleItalicized, toggleMath,
-} from './editorCommands/markdownCommands';
 import { tableNextCell, tablePreviousCell } from './editorCommands/tableCommands';
 import decoratorExtension from './extensions/markdownDecorationExtension';
 import computeSelectionFormatting from './utils/formatting/computeSelectionFormatting';
@@ -42,6 +30,18 @@ import ctrlClickLinksExtension from './extensions/links/ctrlClickLinksExtension'
 import { RenderedContentContext } from './extensions/rendering/types';
 import ctrlClickCheckboxExtension from './extensions/ctrlClickCheckboxExtension';
 import editorSettingsExtension, { setEditorSettingsEffect } from './extensions/editorSettingsExtension';
+import {
+	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command, rectangularSelection,
+	dropCursor,
+} from '@codemirror/view';
+
+
+import {
+	decreaseIndent, increaseIndent,
+	insertOrIncreaseIndent,
+	toggleBolded, toggleCode,
+	toggleItalicized, toggleMath,
+} from './editorCommands/markdownCommands';
 
 // Newer versions of CodeMirror by default use Chrome's EditContext API.
 // While this might be stable enough for desktop use, it causes significant

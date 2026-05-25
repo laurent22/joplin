@@ -1,5 +1,5 @@
-const { copy, mkdirp, remove } = require('fs-extra');
 
+import { copy, mkdirp, remove } from 'fs-extra';
 const msleep = async (ms) => {
 	return new Promise((resolve) => {
 		setTimeout(() => {

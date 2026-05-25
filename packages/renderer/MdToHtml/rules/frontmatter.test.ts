@@ -1,7 +1,7 @@
-import { describe, test, expect } from '@jest/globals';
-import MarkdownIt = require('markdown-it');
-import frontmatter from './frontmatter';
 
+import { describe, test, expect } from '@jest/globals';
+import MarkdownIt from 'markdown-it';
+import frontmatter from './frontmatter';
 const createMarkdownIt = () => {
 	const markdownIt = new MarkdownIt();
 	markdownIt.use(frontmatter.plugin, {});

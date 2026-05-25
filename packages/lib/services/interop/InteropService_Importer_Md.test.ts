@@ -1,3 +1,5 @@
+
+
 import InteropService_Importer_Md from '../../services/interop/InteropService_Importer_Md';
 import { ImportModuleOutputFormat } from './types';
 import Note from '../../models/Note';
@@ -7,8 +9,6 @@ import { createTempDir, setupDatabaseAndSynchronizer, supportDir, switchClient }
 import { MarkupToHtml } from '@joplin/renderer';
 import { FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
 import Resource from '../../models/Resource';
-
-
 describe('InteropService_Importer_Md', () => {
 	let tempDir: string;
 	async function importNote(path: string) {

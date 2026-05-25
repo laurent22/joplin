@@ -1,7 +1,7 @@
+
 import { FolderEntity, TagEntity, TagsWithNoteCountEntity } from '../../services/database/types';
 import { getDisplayParentId } from '../../services/trash';
 import { getCollator } from '../../models/utils/getCollator';
-
 export type RenderFolderItem<T> = (folder: FolderEntity, hasChildren: boolean, depth: number)=> T;
 export type RenderTagItem<T> = (tag: TagsWithNoteCountEntity)=> T;
 

@@ -5,11 +5,11 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
+
+/*
 import { Element, Traverse, Replication, Attr, Node } from '@ephox/sugar';
 import { Arr, Option } from '@ephox/katamari';
 import { hasLastChildList, ListType } from './Util';
-
-/*
 General workflow: Parse lists to entries -> Manipulate entries -> Compose entries to lists
 
 0-------1---2--------->Depth

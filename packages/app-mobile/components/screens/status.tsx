@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { View, Text, Button, FlatList, TextStyle, StyleSheet, Role } from 'react-native';
 import Setting from '@joplin/lib/models/Setting';
 import { connect } from 'react-redux';
@@ -12,7 +13,6 @@ import { AppState } from '../../utils/types';
 import checkDisabledSyncItemsNotification from '@joplin/lib/services/synchronizer/utils/checkDisabledSyncItemsNotification';
 import { Dispatch } from 'redux';
 import Icon from '../Icon';
-
 interface Props {
 	themeId: number;
 	dispatch: Dispatch;

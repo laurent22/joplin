@@ -12,13 +12,13 @@ import { getSearchQuery, searchPanelOpen, SearchQuery } from '@codemirror/search
 import sanitizeHtml from '../../../ProseMirror/utils/sanitizeHtml';
 import makeBlockReplaceExtension from './utils/makeBlockReplaceExtension';
 import { focus, blur } from '@joplin/lib/utils/focusHandler';
+import { getCellContentPosition } from '../../editorCommands/tableCommands';
 import {
 	parseTable, serializeTable,
 	addRow, addColumn, deleteRow, deleteColumn,
 	swapRows, swapColumns,
 	Table,
 } from '../../utils/markdown/tableUtils';
-import { getCellContentPosition } from '../../editorCommands/tableCommands';
 
 // Short class name prefix
 const W = 'cm-tw';

@@ -1,6 +1,6 @@
-import shortUuid = require('short-uuid');
-import { customAlphabetSecure } from '@joplin/lib/uuid';
 
+import shortUuid from 'short-uuid';
+import { customAlphabetSecure } from '@joplin/lib/uuid';
 const charSet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 let shortUuidTranslator_: shortUuid.Translator = null;

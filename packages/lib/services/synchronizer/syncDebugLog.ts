@@ -2,8 +2,8 @@
 // related events. In particular, it logs notes and folders being saved, and the
 // relevant sync operations. Enable it in app.ts
 
-import Logger from '@joplin/utils/Logger';
 
+import Logger from '@joplin/utils/Logger';
 const syncDebugLog = new Logger();
 
 export default syncDebugLog;

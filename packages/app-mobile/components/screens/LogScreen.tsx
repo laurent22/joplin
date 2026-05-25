@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { FlatList, View, Text, Button, StyleSheet, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { reg } from '@joplin/lib/registry';
@@ -15,7 +16,6 @@ import { writeTextToCacheFile } from '../../utils/ShareUtils';
 import shim from '@joplin/lib/shim';
 import { TextInput } from 'react-native-paper';
 import shareFile from '../../utils/shareFile';
-
 const logger = Logger.create('LogScreen');
 
 interface LogEntry {

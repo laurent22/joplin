@@ -1,3 +1,4 @@
+
 import * as Mustache from 'mustache';
 import * as fs from 'fs-extra';
 import { extname } from 'path';
@@ -6,13 +7,12 @@ import { filename } from '@joplin/lib/path-utils';
 import { Config, NotificationView } from '../utils/types';
 import { User } from '../services/database/types';
 import { makeUrl, SubPath, UrlType } from '../utils/routeUtils';
-import MarkdownIt = require('markdown-it');
+import MarkdownIt from 'markdown-it';
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
 import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, homeUrl, itemsUrl, adminReportUrl, applicationsUrl } from '../utils/urlUtils';
 import { MenuItem, setSelectedMenu } from '../utils/views/menu';
 import { ReportType } from './reports/types';
-
 export interface RenderOptions {
 	partials?: Record<string, string>;
 	cssFiles?: string[];

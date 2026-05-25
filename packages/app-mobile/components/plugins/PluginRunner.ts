@@ -1,3 +1,4 @@
+
 import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
 import PluginApiGlobal from '@joplin/lib/services/plugins/api/Global';
 import Plugin from '@joplin/lib/services/plugins/Plugin';
@@ -9,7 +10,6 @@ import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import createOnLogHander from './utils/createOnLogHandler';
 import { OnMessageEvent } from '../ExtendedWebView/types';
-
 const logger = Logger.create('PluginRunner');
 
 type MessageEventListener = (event: OnMessageEvent)=> boolean;

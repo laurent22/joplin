@@ -1,12 +1,12 @@
-const { basicDelta } = require('./file-api');
-const { basename } = require('./path-utils');
-const shim = require('./shim').default;
-const JoplinError = require('./JoplinError').default;
-const { Buffer } = require('buffer');
-const { GetObjectCommand, ListObjectsV2Command, HeadObjectCommand, PutObjectCommand, DeleteObjectCommand, DeleteObjectsCommand, CopyObjectCommand } = require('@aws-sdk/client-s3');
-const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
-const parser = require('fast-xml-parser');
 
+import { basicDelta } from './file-api';
+import { basename } from './path-utils';
+import shim from './shim';
+import JoplinError from './JoplinError';
+import { Buffer } from 'buffer';
+import { GetObjectCommand, ListObjectsV2Command, HeadObjectCommand, PutObjectCommand, DeleteObjectCommand, DeleteObjectsCommand, CopyObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import parser from 'fast-xml-parser';
 const S3_MAX_DELETES = 1000;
 
 class FileApiDriverAmazonS3 {

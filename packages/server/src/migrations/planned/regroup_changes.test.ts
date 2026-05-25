@@ -1,3 +1,8 @@
+
+// Note: The tests in this file use SQL queries on db() directly.
+// This is needed because, when this test was first written, regroup_changes was a planned migration
+// and no ChangeModel existed for changes_3.
+
 import config from '../../config';
 import { truncateTables } from '../../db';
 import ChangeModelOld from '../../models/ChangeModel/ChangeModel.old';
@@ -8,11 +13,6 @@ import { afterAllTests, beforeAllDb, beforeEachDb, createUserAndSession, db, dbS
 import { down, up } from './regroup_changes';
 import { up as splitChangesMigrationUp, down as splitChangesMigrationDown } from '../20260310123600_split_changes';
 import { uuidgen } from '../../utils/uuid';
-
-// Note: The tests in this file use SQL queries on db() directly.
-// This is needed because, when this test was first written, regroup_changes was a planned migration
-// and no ChangeModel existed for changes_3.
-
 const oldChangeModel = () => new ChangeModelOld(db(), dbSlave(), models, config());
 const newChangeModel = () => new ChangeModelNew(db(), dbSlave(), models, config());
 

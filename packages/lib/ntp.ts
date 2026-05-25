@@ -1,7 +1,7 @@
+
+import ntpClient_ from './vendor/ntp-client';
 import shim from './shim';
 import time from './time';
-const ntpClient_ = require('./vendor/ntp-client');
-
 interface NtpServer {
 	domain: string;
 	port: number;

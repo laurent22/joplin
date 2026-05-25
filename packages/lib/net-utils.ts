@@ -1,5 +1,5 @@
-import shim from './shim';
 
+import shim from './shim';
 export async function ip() {
 	const response = await shim.fetch('https://api.ipify.org/?format=json');
 	if (!response.ok) {

@@ -1,9 +1,9 @@
+
 import reducer from '@joplin/lib/reducer';
 import { AppState } from './types';
 import appDefaultState, { DEFAULT_ROUTE } from './appDefaultState';
-import fastDeepEqual = require('fast-deep-equal');
+import fastDeepEqual from 'fast-deep-equal';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('appReducer');
 
 // Narrow shape for entries this file reads from the redux NAV action payload.

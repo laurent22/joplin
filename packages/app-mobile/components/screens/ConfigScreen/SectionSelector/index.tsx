@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { AppType, SettingMetadataSection, SettingSectionSource } from '@joplin/lib/models/Setting';
 import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
@@ -8,7 +9,6 @@ import { Text } from 'react-native-paper';
 import { settingsSections } from '@joplin/lib/components/shared/config/config-shared';
 import { _ } from '@joplin/lib/locale';
 import SectionTab from './SectionTab';
-
 interface Props {
 	styles: ConfigScreenStyles;
 

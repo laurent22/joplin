@@ -1,5 +1,5 @@
-import Logger from '@joplin/utils/Logger';
 
+import Logger from '@joplin/utils/Logger';
 const logger = Logger.create('loadScript');
 
 export interface Script {

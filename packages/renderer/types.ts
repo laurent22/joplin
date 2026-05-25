@@ -1,5 +1,5 @@
-import { Options as NoteStyleOptions } from './noteStyle';
 
+import { Options as NoteStyleOptions } from './noteStyle';
 export enum MarkupLanguage {
 	Markdown = 1,
 	Html = 2,

@@ -1,12 +1,12 @@
+
+import DiffMatchPatch from 'diff-match-patch';
+import { sprintf } from 'sprintf-js';
 import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import { RevisionEntity, StringOrSqlQuery } from '../services/database/types';
 import BaseItem from './BaseItem';
-const DiffMatchPatch = require('diff-match-patch');
 import * as ArrayUtils from '../ArrayUtils';
 import JoplinError from '../JoplinError';
 import time from '../time';
-const { sprintf } = require('sprintf-js');
-
 const dmp = new DiffMatchPatch();
 
 export interface ObjectPatch {

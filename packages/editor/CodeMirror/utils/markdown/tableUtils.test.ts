@@ -1,5 +1,5 @@
-import { parseTable, serializeTable, addRow, addColumn, deleteRow, deleteColumn, generateTable, ColumnAlignment } from './tableUtils';
 
+import { parseTable, serializeTable, addRow, addColumn, deleteRow, deleteColumn, generateTable, ColumnAlignment } from './tableUtils';
 describe('tableUtils', () => {
 
 	// parseTable

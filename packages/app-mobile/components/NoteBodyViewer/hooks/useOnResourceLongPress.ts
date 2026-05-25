@@ -1,6 +1,7 @@
-import { useCallback, useContext } from 'react';
 
-const { _ } = require('@joplin/lib/locale.js');
+
+import { _ } from '@joplin/lib/locale.js';
+import { useCallback, useContext } from 'react';
 import Resource from '@joplin/lib/models/Resource';
 import { copyToCache } from '../../../utils/ShareUtils';
 import isEditableResource from '../../NoteEditor/ImageEditor/isEditableResource';
@@ -8,7 +9,6 @@ import shim from '@joplin/lib/shim';
 import shareFile from '../../../utils/shareFile';
 import Logger from '@joplin/utils/Logger';
 import { DialogContext } from '../../DialogManager';
-
 const logger = Logger.create('useOnResourceLongPress');
 
 interface Callbacks {

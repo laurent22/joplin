@@ -1,7 +1,7 @@
+
+import gettextParser from 'gettext-parser';
 import { execCommand, isMac } from '../tool-utils';
 import { existsSync, readFile } from 'fs-extra';
-const gettextParser = require('gettext-parser');
-
 export interface TranslationStatus {
 	locale?: string;
 	languageName?: string;

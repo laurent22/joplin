@@ -1,8 +1,9 @@
-import * as React from 'react';
 
+
+
+import * as React from 'react';
 import { describe, it, expect, beforeEach } from '@jest/globals';
 import { act, fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
-
 import NoteEditor from './NoteEditor';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
@@ -17,7 +18,6 @@ import { Store } from 'redux';
 import { AppState } from '../../utils/types';
 import { MarkupLanguage } from '@joplin/renderer';
 import { EditorControl, EditorType } from './types';
-
 let store: Store<AppState>;
 let registeredRuntime: RegisteredRuntime;
 

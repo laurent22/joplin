@@ -1,3 +1,4 @@
+
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -11,7 +12,6 @@ import { getCanReceiveFolder, getCanShareFolder, totalSizeClass } from '../../mo
 import config from '../../config';
 import { escapeHtml } from '../../utils/htmlUtils';
 import { betaStartSubUrl, betaUserTrialPeriodDays, isBetaUser } from '../../utils/stripe';
-
 const router: Router = new Router(RouteType.Web);
 
 function setupMessageHtml() {

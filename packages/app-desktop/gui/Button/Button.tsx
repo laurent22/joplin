@@ -1,7 +1,7 @@
-import * as React from 'react';
-const styled = require('styled-components').default;
-const { space } = require('styled-system');
 
+import styled from 'styled-components';
+import { space } from 'styled-system';
+import * as React from 'react';
 interface StyleProps {
 	theme: {
 		toolbarIconSize: number;

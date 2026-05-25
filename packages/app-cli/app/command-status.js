@@ -1,9 +1,9 @@
+
 import BaseCommand from './base-command';
 import app from './app';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
 import ReportService from '@joplin/lib/services/ReportService';
-
 class Command extends BaseCommand {
 	usage() {
 		return 'status';

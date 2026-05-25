@@ -1,6 +1,6 @@
+
 import { RenderSettings, RendererSetupOptions } from '../Renderer';
 import { WebViewLib } from '../types';
-
 interface ExtendedWindow extends Window {
 	webviewLib: WebViewLib;
 }

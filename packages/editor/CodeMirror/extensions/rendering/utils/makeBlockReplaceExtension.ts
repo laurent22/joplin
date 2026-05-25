@@ -1,9 +1,9 @@
+
 import { EditorView, Decoration, DecorationSet, WidgetType } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
 import { EditorState, Extension, Range, StateField } from '@codemirror/state';
 import { ReplacementExtension } from '../types';
 import nodeIntersectsSelection from './nodeIntersectsSelection';
-
 const updateDecorations = (state: EditorState, extensionSpec: ReplacementExtension) => {
 	const doc = state.doc;
 	const cursorLine = doc.lineAt(state.selection.main.anchor);

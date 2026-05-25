@@ -5,11 +5,11 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
+
 import { Arr, Cell, Option } from '@ephox/katamari';
 import { Compare, Element, Traverse } from '@ephox/sugar';
 import { createEntry, Entry } from './Entry';
 import { isList } from './Util';
-
 type Parser = (depth: number, itemSelection: Option<ItemSelection>, selectionState: Cell<boolean>, element: Element) => Entry[];
 
 export interface ItemSelection {

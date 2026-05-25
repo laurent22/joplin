@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
@@ -10,7 +11,6 @@ import TagList from '../TagList';
 import { _ } from '@joplin/lib/locale';
 import { useCallback } from 'react';
 import KeymapService from '@joplin/lib/services/KeymapService';
-
 interface Props {
 	themeId: number;
 	tabMovesFocus: boolean;

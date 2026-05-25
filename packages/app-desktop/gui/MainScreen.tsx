@@ -1,3 +1,5 @@
+
+import { ipcRenderer } from 'electron';
 import * as React from 'react';
 import ResizableLayout from './ResizableLayout/ResizableLayout';
 import findItemByKey from './ResizableLayout/utils/findItemByKey';
@@ -47,10 +49,8 @@ import { Toast } from '@joplin/lib/services/plugins/api/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import QuitSyncDialog from './QuitSyncDialog';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('MainScreen');
 
-const ipcRenderer = require('electron').ipcRenderer;
 
 interface Props {
 	plugins: PluginStates;

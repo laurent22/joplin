@@ -1,9 +1,9 @@
+import Generator from 'yeoman-generator';
+import chalk from 'chalk';
+import yosay from 'yosay';
+import { mergePackageKey, mergeIgnoreFile, packageNameFromPluginName } from './utils';
 'use strict';
 
-const Generator = require('yeoman-generator');
-const chalk = require('chalk');
-const yosay = require('yosay');
-const { mergePackageKey, mergeIgnoreFile, packageNameFromPluginName } = require('./utils');
 
 module.exports = class extends Generator {
 

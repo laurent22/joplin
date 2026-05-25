@@ -1,8 +1,8 @@
-import { EditorView, highlightActiveLine } from '@codemirror/view';
 
 // Be careful when enabling this on mobile --- on some devices, this can
 // break certain accessibility features:
 // https://github.com/codemirror/dev/issues/1559
+import { EditorView, highlightActiveLine } from '@codemirror/view';
 const highlightActiveLineExtension = () => {
 	return [
 		EditorView.baseTheme({

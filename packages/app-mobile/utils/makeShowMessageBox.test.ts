@@ -1,8 +1,8 @@
+
 import { MessageBoxType } from '@joplin/lib/shim';
 import { DialogControl } from '../components/DialogManager';
 import { PromptButtonSpec } from '../components/DialogManager/types';
 import makeShowMessageBox from './makeShowMessageBox';
-
 type OnPrompt = (buttons: PromptButtonSpec[], onDismiss: ()=> void)=> void;
 const makeMockDialogControl = (onPrompt: OnPrompt): DialogControl => {
 	return {

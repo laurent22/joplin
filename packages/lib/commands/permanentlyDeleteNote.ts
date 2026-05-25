@@ -1,8 +1,8 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
 import { _ } from '../locale';
 import Note from '../models/Note';
 import shim, { MessageBoxType } from '../shim';
-
 export const declaration: CommandDeclaration = {
 	name: 'permanentlyDeleteNote',
 	label: () => _('Permanently delete note'),

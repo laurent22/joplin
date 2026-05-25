@@ -1,5 +1,5 @@
-import { DbConnection } from '../db';
 
+import { DbConnection } from '../db';
 export const up = async (db: DbConnection) => {
 	// This is another optimisation for the sub-query in ChangeModel::changesForUserQuery()
 	// which retrieves all the "update" (2) changes. We make it concurrent so that it doesn't

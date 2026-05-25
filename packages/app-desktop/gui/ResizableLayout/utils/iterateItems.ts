@@ -1,5 +1,5 @@
-import { LayoutItem } from './types';
 
+import { LayoutItem } from './types';
 type ItemItemCallback = (itemIndex: number, item: LayoutItem, parent: LayoutItem)=> boolean;
 
 // Callback should return `true` if iteration should continue, or `false` if it

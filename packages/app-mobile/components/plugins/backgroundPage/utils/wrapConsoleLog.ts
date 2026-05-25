@@ -1,7 +1,7 @@
-import { LogLevel } from '../../types';
 
 /* eslint-disable no-console */
 
+import { LogLevel } from '../../types';
 type OnLogCallback = (level: LogLevel, message: string)=> void;
 
 const wrapConsoleLog = (onLog: OnLogCallback) => {

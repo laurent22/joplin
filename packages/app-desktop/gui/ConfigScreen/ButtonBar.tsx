@@ -1,8 +1,8 @@
+
+import styled from 'styled-components';
 import * as React from 'react';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
-const styled = require('styled-components').default;
-
 interface StyleProps {
 	theme: {
 		backgroundColor3: string;

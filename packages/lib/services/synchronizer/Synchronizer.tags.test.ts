@@ -1,10 +1,10 @@
+
 import { synchronizerStart, setupDatabaseAndSynchronizer, switchClient, encryptionService, loadEncryptionMasterKey } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import MasterKey from '../../models/MasterKey';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
-
 describe('Synchronizer.tags', () => {
 
 	beforeEach(async () => {

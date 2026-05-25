@@ -1,7 +1,7 @@
 
+
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
-
 test.describe('resizableLayout', () => {
 	test('right/left buttons should retain keyboard focus after use', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();

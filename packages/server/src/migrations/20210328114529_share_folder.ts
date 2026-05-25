@@ -1,6 +1,6 @@
+
 import { Knex } from 'knex';
 import { DbConnection } from '../db';
-
 export const up = async (db: DbConnection) => {
 	await db.schema.alterTable('shares', (table: Knex.CreateTableBuilder) => {
 		table.string('folder_id', 32).defaultTo('').notNullable();

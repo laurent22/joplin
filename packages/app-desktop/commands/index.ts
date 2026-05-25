@@ -1,4 +1,5 @@
 // AUTO-GENERATED using `gulp buildScriptIndexes`
+
 import * as copyDevCommand from './copyDevCommand';
 import * as copyToClipboard from './copyToClipboard';
 import * as createAccessibleDocument from './createAccessibleDocument';
@@ -24,7 +25,6 @@ import * as switchProfile3 from './switchProfile3';
 import * as toggleExternalEditing from './toggleExternalEditing';
 import * as toggleSafeMode from './toggleSafeMode';
 import * as toggleTabMovesFocus from './toggleTabMovesFocus';
-
 const index: any[] = [
 	copyDevCommand,
 	copyToClipboard,

@@ -1,8 +1,8 @@
+
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { increaseIndent, toggleList } from '../editorCommands/markdownCommands';
 import { ListType } from '../../types';
 import createTestEditor from '../testing/createTestEditor';
-
 describe('markdownCommands.toggleList', () => {
 
 	jest.retryTimes(2);

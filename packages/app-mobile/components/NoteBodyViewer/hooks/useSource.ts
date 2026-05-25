@@ -1,8 +1,8 @@
+
 import { useMemo } from 'react';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '../../global-style';
 import { PageSetupSources } from '../../../contentScripts/types';
-
 const useSource = (rendererSource: PageSetupSources, themeId: number) => {
 	const [paddingLeft, paddingRight] = useMemo(() => {
 		const theme = themeStyle(themeId);

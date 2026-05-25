@@ -1,7 +1,7 @@
+
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, createFolder, updateFolder, dbSlave, deleteFolder } from '../../utils/testing/testUtils';
 import { Hour } from '../../utils/time';
 import userActivity from './userActivity';
-
 describe('reports/userActivity', () => {
 
 	beforeAll(async () => {

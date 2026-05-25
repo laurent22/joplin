@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, useId, useMemo } from 'react';
 import { _ } from '@joplin/lib/locale';
@@ -9,7 +10,6 @@ import bridge from '../../../../services/bridge';
 import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import getPluginHelpUrl from '@joplin/lib/services/plugins/utils/getPluginHelpUrl';
-
 export enum InstallState {
 	NotInstalled = 1,
 	Installing = 2,

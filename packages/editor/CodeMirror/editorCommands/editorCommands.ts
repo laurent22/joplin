@@ -1,13 +1,6 @@
 import { EditorView } from '@codemirror/view';
 import { EditorCommandType, ListType } from '../../types';
 import { undo, redo, selectAll, indentSelection, cursorDocStart, cursorDocEnd, cursorLineStart, cursorLineEnd, deleteToLineStart, deleteToLineEnd, undoSelection, redoSelection, cursorPageDown, cursorPageUp, cursorCharRight, cursorCharLeft, insertNewlineAndIndent, cursorLineDown, cursorLineUp, toggleComment, deleteLine, moveLineUp, moveLineDown } from '@codemirror/commands';
-import {
-	decreaseIndent, increaseIndent,
-	insertHorizontalRule,
-	toggleBolded, toggleCode,
-	toggleHeaderLevel, toggleItalicized,
-	toggleList, toggleMath,
-} from './markdownCommands';
 import duplicateLine from './duplicateLine';
 import sortSelectedLines from './sortSelectedLines';
 import { closeSearchPanel, findNext, findPrevious, openSearchPanel, replaceAll, replaceNext, searchPanelOpen } from '@codemirror/search';
@@ -16,6 +9,13 @@ import { showLinkEditor } from '../utils/handleLinkEditRequests';
 import jumpToHash from './jumpToHash';
 import { tableAddRow, tableAddColumn, tableDeleteRow, tableDeleteColumn } from './tableCommands';
 import { generateTable } from '../utils/markdown/tableUtils';
+import {
+	decreaseIndent, increaseIndent,
+	insertHorizontalRule,
+	toggleBolded, toggleCode,
+	toggleHeaderLevel, toggleItalicized,
+	toggleList, toggleMath,
+} from './markdownCommands';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Commands have varying argument types
 export type EditorCommandFunction = (editor: EditorView, ...args: any[])=> any;

@@ -1,3 +1,5 @@
+
+// Undefined = indeterminate progress
 import * as React from 'react';
 import { Text } from 'react-native';
 import { _ } from '@joplin/lib/locale';
@@ -7,8 +9,6 @@ import { ConfigScreenStyles } from '../configScreenStyles';
 import SettingsButton from '../SettingsButton';
 import Logger from '@joplin/utils/Logger';
 import shim from '@joplin/lib/shim';
-
-// Undefined = indeterminate progress
 export type OnProgressCallback = (progressFraction: number|undefined)=> void;
 export type AfterCompleteListener = (success: boolean)=> Promise<void>;
 export type SetAfterCompleteListenerCallback = (listener: AfterCompleteListener)=> void;

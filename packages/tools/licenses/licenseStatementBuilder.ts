@@ -1,4 +1,7 @@
 
+
+// Important: Review the output of this tool for correctness
+
 import { readFile } from 'fs/promises';
 import { basename, dirname, join } from 'path';
 import { writeFile } from 'fs-extra';
@@ -6,12 +9,9 @@ import apache2 from './licenseText/apache2';
 import agplv3 from './licenseText/agplv3';
 import mit from './licenseText/mit';
 import buildReport, { EntryLicenseType } from './buildReport';
-import yargs = require('yargs');
+import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { DependencyType } from './getLicenses';
-
-// Important: Review the output of this tool for correctness
-
 const toCodeBlock = (content: string) => {
 	const internalFences = [...content.matchAll(/(^|\n)[`]+/g)];
 	const longestFence = internalFences

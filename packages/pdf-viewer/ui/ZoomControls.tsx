@@ -1,8 +1,8 @@
+
 import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-
 const ZoomGroup = styled.div<{ size: number }>`
 display: flex;
 justify-content: center;

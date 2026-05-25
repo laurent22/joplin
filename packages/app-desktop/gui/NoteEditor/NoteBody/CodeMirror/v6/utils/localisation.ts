@@ -1,6 +1,6 @@
-import { _ } from '@joplin/lib/locale';
 
 // See https://codemirror.net/examples/translate/
+import { _ } from '@joplin/lib/locale';
 export default () => ({
 	// @codemirror/view
 	'Control character': _('Control character'),

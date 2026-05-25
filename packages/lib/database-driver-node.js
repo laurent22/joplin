@@ -1,5 +1,5 @@
-const shim = require('./shim').default;
 
+import shim from './shim';
 class DatabaseDriverNode {
 	open(options) {
 		return new Promise((resolve, reject) => {

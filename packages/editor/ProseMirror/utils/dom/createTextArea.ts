@@ -1,7 +1,7 @@
+
 import { LocalizationResult } from '../../../types';
 import createTextNode from './createTextNode';
 import createUniqueId from './createUniqueId';
-
 interface Options {
 	label: LocalizationResult;
 	initialContent: string;

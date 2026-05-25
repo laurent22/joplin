@@ -1,8 +1,8 @@
+
 import KeychainServiceDriverBase from './KeychainServiceDriverBase';
 import Setting from '../../models/Setting';
 import BaseService from '../BaseService';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('KeychainService');
 
 export default class KeychainService extends BaseService {

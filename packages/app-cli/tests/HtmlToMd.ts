@@ -1,9 +1,9 @@
-import shim from '@joplin/lib/shim';
-const os = require('os');
-import { readFile } from 'fs/promises';
-const { filename } = require('@joplin/lib/path-utils');
-import HtmlToMd, { ParseOptions } from '@joplin/lib/HtmlToMd';
 
+import os from 'os';
+import { filename } from '@joplin/lib/path-utils';
+import shim from '@joplin/lib/shim';
+import { readFile } from 'fs/promises';
+import HtmlToMd, { ParseOptions } from '@joplin/lib/HtmlToMd';
 describe('HtmlToMd', () => {
 
 	it('should convert from Html to Markdown', (async () => {

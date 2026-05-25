@@ -8,13 +8,13 @@
 //   In that case, it returns the complete Koa context, which can be used in
 //   particular to access the response object and test for errors.
 
+
 import { File } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { PaginatedResults, Pagination, paginationToQueryParams } from '../../models/utils/pagination';
 import { AppContext } from '../types';
 import { checkContextError, koaAppContext, testAssetDir } from './testUtils';
 import * as fs from 'fs-extra';
-
 export function testFilePath(ext = 'jpg') {
 	const basename = ext === 'jpg' ? 'photo' : 'poster';
 	return `${testAssetDir}/${basename}.${ext}`;

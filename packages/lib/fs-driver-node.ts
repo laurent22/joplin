@@ -1,9 +1,12 @@
-import AdmZip = require('adm-zip');
+
+import path_resolve from 'path';
+import tar_extract from 'tar';
+import tar_create from 'tar';
+import md5File from 'md5-file';
+import fs from 'fs-extra';
+import AdmZip from 'adm-zip';
 import FsDriverBase, { Stat, ZipEntry, ArchiveExtractOptions, TarOptions } from './fs-driver-base';
 import time from './time';
-const md5File = require('md5-file');
-const fs = require('fs-extra');
-
 interface FsError extends Error {
 	code?: string;
 }
@@ -195,7 +198,7 @@ export default class FsDriverNode extends FsDriverBase {
 	}
 
 	public resolve(...pathComponents: string[]) {
-		return require('path').resolve(...pathComponents);
+		return path_resolve.resolve(...pathComponents);
 	}
 
 	public async md5File(path: string): Promise<string> {
@@ -203,11 +206,11 @@ export default class FsDriverNode extends FsDriverBase {
 	}
 
 	public async tarExtract(options: TarOptions) {
-		await require('tar').extract(options);
+		await tar_extract.extract(options);
 	}
 
 	public async tarCreate(options: TarOptions, filePaths: string[]) {
-		await require('tar').create(options, filePaths);
+		await tar_create.create(options, filePaths);
 	}
 
 	public async zipExtract(options: ArchiveExtractOptions): Promise<ZipEntry[]> {

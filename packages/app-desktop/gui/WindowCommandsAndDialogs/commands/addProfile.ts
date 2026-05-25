@@ -1,10 +1,10 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { createNewProfile, saveProfileConfig } from '@joplin/lib/services/profileConfig';
 import Setting from '@joplin/lib/models/Setting';
 import restart from '../../../services/restart';
 import { WindowControl } from '../utils/useWindowControl';
-
 export const declaration: CommandDeclaration = {
 	name: 'addProfile',
 	label: () => _('Create new profile...'),

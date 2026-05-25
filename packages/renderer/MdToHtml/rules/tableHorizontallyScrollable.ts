@@ -1,7 +1,7 @@
+
 import type * as MarkdownIt from 'markdown-it';
 import type * as Renderer from 'markdown-it/lib/renderer';
 import defaultRule from './utils/defaultRule';
-
 export default {
 	// Make table horizontally scrollable by give table a div parent, so the width of the table is limited to the screen width.
 	// see https://github.com/laurent22/joplin/pull/10161

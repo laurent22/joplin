@@ -1,6 +1,6 @@
+
 import { LanguageDescription } from '@codemirror/language';
 import { languages } from '@codemirror/language-data';
-
 const additionalAliases: Record<string, string[]> = {
 	'python': ['py'],
 	'rust': ['rs'],

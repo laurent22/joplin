@@ -1,4 +1,9 @@
 
+import { mkdtemp, readFile, remove } from 'fs-extra';
+import restartInSafeModeFromMain from './restartInSafeModeFromMain';
+import { tmpdir } from 'os';
+import { join } from 'path';
+import { safeModeFlagFilename } from '@joplin/lib/BaseApplication';
 let currentProfileDirectory: string;
 
 jest.doMock('../bridge', () => ({
@@ -19,11 +24,6 @@ jest.doMock('../bridge', () => ({
 	}),
 }));
 
-import { mkdtemp, readFile, remove } from 'fs-extra';
-import restartInSafeModeFromMain from './restartInSafeModeFromMain';
-import { tmpdir } from 'os';
-import { join } from 'path';
-import { safeModeFlagFilename } from '@joplin/lib/BaseApplication';
 
 
 describe('restartInSafeModeFromMain', () => {

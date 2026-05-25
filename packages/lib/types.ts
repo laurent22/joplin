@@ -1,5 +1,5 @@
-import { DownloadController } from './downloadController';
 
+import { DownloadController } from './downloadController';
 export enum ApplicationPlatform {
 	Unknown = 0,
 	Windows = 1,

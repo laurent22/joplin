@@ -1,7 +1,7 @@
 
+
 import shim from '@joplin/lib/shim';
 import { join } from 'path';
-
 const verifyDirectoryMatches = async (baseDir: string, fileContents: Record<string, string>) => {
 	for (const path in fileContents) {
 		const fileContent = await shim.fsDriver().readFile(join(baseDir, path), 'utf8');

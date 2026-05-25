@@ -1,3 +1,4 @@
+
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItemTree, createResource, createNote, createItemTree3, db, tempDir, expectNotThrow, expectHttpError, dbSlave } from '../utils/testing/testUtils';
 import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../utils/joplinUtils';
@@ -9,7 +10,6 @@ import loadStorageDriver from './items/storage/loadStorageDriver';
 import { ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
 import { makeNoteSerializedBody } from '../utils/testing/serializedItems';
 import { isSqlite } from '../db';
-
 describe('ItemModel', () => {
 
 	beforeAll(async () => {

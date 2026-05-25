@@ -1,11 +1,11 @@
+
+import md5 from 'md5';
 import Logger from '@joplin/utils/Logger';
 import shim from '../../shim';
 import { PluginManifest } from './utils/types';
-const md5 = require('md5');
 import { compareVersions } from 'compare-versions';
 import isCompatible from './utils/isCompatible';
 import { AppType } from '../../models/Setting';
-
 const logger = Logger.create('RepositoryApi');
 
 interface ReleaseAsset {

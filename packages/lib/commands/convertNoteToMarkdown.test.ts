@@ -1,3 +1,4 @@
+
 import * as convertHtmlToMarkdown from './convertNoteToMarkdown';
 import { defaultState, State } from '../reducer';
 import Note from '../models/Note';
@@ -6,7 +7,6 @@ import { setupDatabaseAndSynchronizer, switchClient } from '../testing/test-util
 import Folder from '../models/Folder';
 import { NoteEntity } from '../services/database/types';
 import shim from '../shim';
-
 describe('convertNoteToMarkdown', () => {
 	let state: State = undefined;
 

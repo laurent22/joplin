@@ -1,7 +1,7 @@
+
 import { Command, TextSelection } from 'prosemirror-state';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import forEachHeading from './forEachHeading';
-
 const jumpToHash = (targetHash: string): Command => (state, dispatch, view) => {
 	if (targetHash.startsWith('#')) {
 		targetHash = targetHash.substring(1);

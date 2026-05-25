@@ -5,12 +5,12 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
+
 import { Document } from '@ephox/dom-globals';
 import { Arr, Option, Options } from '@ephox/katamari';
 import { Attr, Css, Element, Insert, InsertAll, Node, Replication } from '@ephox/sugar';
 import { Entry } from './Entry';
 import { ListType } from './Util';
-
 interface Segment {
   list: Element;
   item: Element;

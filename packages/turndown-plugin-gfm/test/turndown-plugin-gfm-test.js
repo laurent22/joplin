@@ -1,7 +1,7 @@
-const Attendant = require('turndown-attendant');
-const TurndownService = require('turndown');
-const gfm = require('../lib/turndown-plugin-gfm.cjs').gfm;
 
+import Attendant from 'turndown-attendant';
+import TurndownService from 'turndown';
+import { gfm } from '../lib/turndown-plugin-gfm.cjs';
 const attendant = new Attendant({
 	file: `${__dirname}/index.html`,
 	TurndownService: TurndownService,

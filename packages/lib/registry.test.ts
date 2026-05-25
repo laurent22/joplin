@@ -1,6 +1,6 @@
+
 import Setting, { Env } from './models/Setting';
 import { reg } from './registry';
-
 const sync = {
 	start: jest.fn().mockReturnValue({}),
 };

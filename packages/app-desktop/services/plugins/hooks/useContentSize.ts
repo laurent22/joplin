@@ -1,6 +1,6 @@
+
 import { RefObject, useState } from 'react';
 import useMessageHandler from './useMessageHandler';
-
 interface Size {
 	width: number;
 	height: number;

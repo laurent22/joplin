@@ -1,9 +1,10 @@
 // Dialog allowing the user to update/create links
 
+
+
 import * as React from 'react';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-
 import Modal from '../Modal';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
@@ -11,7 +12,6 @@ import { EditorControl } from './types';
 import { useCallback } from 'react';
 import SelectionFormatting from '@joplin/editor/SelectionFormatting';
 import { focus } from '@joplin/lib/utils/focusHandler';
-
 interface LinkDialogProps {
 	editorControl: EditorControl;
 	selectionState: SelectionFormatting;

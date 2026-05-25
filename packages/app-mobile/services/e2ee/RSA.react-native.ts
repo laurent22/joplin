@@ -1,9 +1,9 @@
+
+import { RSA as RnRSA } from 'react-native-rsa-native';
 import buildRsaCryptoProvider from '@joplin/lib/services/e2ee/ppk/webCrypto/buildRsaCryptoProvider';
 import { WebCryptoSlice } from '@joplin/lib/services/e2ee/ppk/webCrypto/WebCryptoRsa';
 import { CiphertextBuffer, PublicKeyAlgorithm, PublicKeyCrypto, PublicKeyCryptoProvider } from '@joplin/lib/services/e2ee/types';
 import QuickCrypto from 'react-native-quick-crypto';
-const RnRSA = require('react-native-rsa-native').RSA;
-
 interface LegacyRsaKeyPair {
 	public: string;
 	private: string;

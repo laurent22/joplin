@@ -1,6 +1,6 @@
+
 import joplin from 'api';
 import { ItemFlow, OnChangeEvent, OnChangeHandler } from 'api/noteListType';
-
 const thumbnailCache_:Record<string, string> = {};
 
 // This renderer displays the notes top to bottom. It's a minimal example that

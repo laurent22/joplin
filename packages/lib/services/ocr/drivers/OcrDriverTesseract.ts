@@ -1,3 +1,4 @@
+
 import { RecognizeResult, RecognizeResultBoundingBox, RecognizeResultLine, RecognizeResultWord } from '../utils/types';
 import { Worker, WorkerOptions, createWorker, RecognizeResult as TesseractRecognizeResult, OEM } from 'tesseract.js';
 import OcrDriverBase from '../OcrDriverBase';
@@ -7,7 +8,6 @@ import Logger from '@joplin/utils/Logger';
 import filterOcrText from '../utils/filterOcrText';
 import Resource from '../../../models/Resource';
 import { ResourceOcrDriverId, ResourceOcrStatus } from '../../database/types';
-
 const logger = Logger.create('OcrDriverTesseract');
 
 interface Tesseract {

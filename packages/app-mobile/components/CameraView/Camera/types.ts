@@ -1,8 +1,8 @@
+
 import { CameraDirection } from '@joplin/lib/models/settings/builtInMetadata';
 import { ViewStyle } from 'react-native';
 import { BarcodeScanner } from '../utils/useBarcodeScanner';
 import { CameraResult } from '../types';
-
 export interface Props {
 	style: ViewStyle;
 	cameraType: CameraDirection;

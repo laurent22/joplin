@@ -1,9 +1,9 @@
+
 import Setting from '../../../models/Setting';
 import { createNoteAndResource, setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
 import { ResourceOcrStatus } from '../../database/types';
 import OcrDriverTranscribe from './OcrDriverTranscribe';
 import { reg } from '../../../registry';
-
 type JobGenerated = { jobId: string };
 type GetResultPending = { state: string; jobId: string };
 type GetResultCompleted = { state: 'completed'; jobId: string; output: { result: string } };

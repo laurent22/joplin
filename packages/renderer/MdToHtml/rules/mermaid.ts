@@ -1,9 +1,9 @@
+
 import { RuleOptions } from '../../MdToHtml';
 import { RendererTheme } from '../../types';
 import type * as MarkdownIt from 'markdown-it';
-import type Token = require('markdown-it/lib/token');
-import type Renderer = require('markdown-it/lib/renderer');
-
+import type Token from 'markdown-it/lib/token';
+import type Renderer from 'markdown-it/lib/renderer';
 export default {
 
 	assets: function(theme: RendererTheme) {

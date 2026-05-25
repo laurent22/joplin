@@ -1,6 +1,6 @@
+
 import { execCommand, getRootDir } from '@joplin/utils';
 import { chdir } from 'process';
-
 const main = async () => {
 	// Having no output seems to cause lint-staged to fail on some systems.
 	// Add a console.log statement to work around this issue.

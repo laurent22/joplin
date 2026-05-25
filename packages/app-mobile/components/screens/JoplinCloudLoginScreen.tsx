@@ -1,9 +1,10 @@
-import * as React from 'react';
 
+
+import { connect } from 'react-redux';
+import { _ } from '@joplin/lib/locale';
+import { themeStyle } from '../global-style.js';
+import * as React from 'react';
 import { View, Text, StyleSheet, Linking, Animated, Easing } from 'react-native';
-const { connect } = require('react-redux');
-const { _ } = require('@joplin/lib/locale');
-const { themeStyle } = require('../global-style.js');
 import { AppState } from '../../utils/types';
 import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, saveApplicationAuthId, defaultState } from '@joplin/lib/services/joplinCloudUtils';
 import { uuidgen } from '@joplin/lib/uuid';
@@ -14,7 +15,6 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
 import Icon from '../Icon';
-
 const logger = Logger.create('JoplinCloudLoginScreen');
 
 interface Props {

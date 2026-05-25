@@ -5,11 +5,11 @@
 // For more about creating decorations, see https://codemirror.net/examples/zebra/
 //
 
+
 import { Decoration, EditorView } from '@codemirror/view';
 import { ViewPlugin, DecorationSet, ViewUpdate } from '@codemirror/view';
 import { ensureSyntaxTree } from '@codemirror/language';
 import { RangeSetBuilder } from '@codemirror/state';
-
 const regionStartDecoration = Decoration.line({
 	attributes: { class: 'cm-regionFirstLine' },
 });

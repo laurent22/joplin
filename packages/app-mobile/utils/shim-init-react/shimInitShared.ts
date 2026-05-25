@@ -1,3 +1,5 @@
+
+import sjcl_rn_153 from '@joplin/lib/vendor/sjcl-rn.js';
 import { Linking, Platform } from 'react-native';
 import injectedJs from './injectedJs';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
@@ -11,9 +13,8 @@ import { getLocales } from 'react-native-localize';
 import type Setting from '@joplin/lib/models/Setting';
 import shim, { MobilePlatform } from '@joplin/lib/shim';
 import { closestSupportedLocale, defaultLocale, setLocale } from '@joplin/lib/locale';
-
 const shimInitShared = () => {
-	shim.sjclModule = require('@joplin/lib/vendor/sjcl-rn.js');
+	shim.sjclModule = sjcl_rn_153;
 
 	shim.stringByteLength = function(string) {
 		return Buffer.byteLength(string, 'utf-8');

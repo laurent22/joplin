@@ -1,9 +1,9 @@
-const BaseSyncTarget = require('./BaseSyncTarget').default;
-const Setting = require('./models/Setting').default;
-const { FileApi } = require('./file-api.js');
-const FileApiDriverMemory = require('./file-api-driver-memory').default;
-const Synchronizer = require('./Synchronizer').default;
 
+import BaseSyncTarget from './BaseSyncTarget';
+import Setting from './models/Setting';
+import { FileApi } from './file-api.js';
+import FileApiDriverMemory from './file-api-driver-memory';
+import Synchronizer from './Synchronizer';
 class SyncTargetMemory extends BaseSyncTarget {
 	static id() {
 		return 1;

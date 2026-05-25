@@ -1,3 +1,5 @@
+
+import { connect } from 'react-redux';
 import * as React from 'react';
 import { useEffect, useMemo, useReducer, useState } from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
@@ -12,9 +14,7 @@ import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
 import JoplinCloudSignUpCallToAction from './JoplinCloudSignUpCallToAction';
 import bridge from '../services/bridge';
-
 const logger = Logger.create('JoplinCloudLoginScreen');
-const { connect } = require('react-redux');
 
 interface Props {
 	dispatch: Dispatch;

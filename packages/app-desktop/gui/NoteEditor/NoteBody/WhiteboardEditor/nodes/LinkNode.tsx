@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback } from 'react';
 import { Handle, NodeProps, NodeResizer } from '@xyflow/react';
@@ -6,7 +7,6 @@ import { LinkCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 import { useWhiteboardContext } from '../WhiteboardContext';
 import { WhiteboardNodeData } from '../canvasFlow';
 import handlePositions from './handlePositions';
-
 const LinkNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbLink'; data: WhiteboardNodeData; position: { x: number; y: number } }>) => {
 	const ctx = useWhiteboardContext();
 	const node = data.canvasNode as LinkCanvasNode;

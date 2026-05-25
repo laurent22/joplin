@@ -1,10 +1,10 @@
+
 import * as fs from 'fs';
 import { createWriteStream } from 'fs';
 import * as path from 'path';
 import { pipeline } from 'stream/promises';
 import axios from 'axios';
 import { GitHubRelease, GitHubReleaseAsset } from '../utils/checkForUpdatesUtils';
-
 export interface Context {
 	repo: string; // {owner}/{repo}
 	githubToken: string;

@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 
+import styled from 'styled-components';
 const StyledLink = styled.a`
 	font-size: ${props => props.theme.fontSize}px;
 	color: ${props => props.theme.urlColor};

@@ -1,6 +1,6 @@
+
 import * as React from 'react';
 import ExpandIcon from './ExpandIcon';
-
 interface Props {
 	className?: string;
 }

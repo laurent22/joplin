@@ -1,6 +1,6 @@
+
 import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import { dropHeaderAt, InsertAt } from './useDragAndDrop';
-
 const defaultColumns: NoteListColumns = [
 	{
 		name: 'note.todo_completed',

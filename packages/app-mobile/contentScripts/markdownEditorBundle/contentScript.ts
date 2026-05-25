@@ -1,3 +1,4 @@
+
 import { createEditor } from '@joplin/editor/CodeMirror';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import WebViewToRNMessenger from '../../utils/ipc/WebViewToRNMessenger';
@@ -6,7 +7,6 @@ import readFileToBase64 from '../utils/readFileToBase64';
 import { EditorControl } from '@joplin/editor/types';
 import { EditorEventType } from '@joplin/editor/events';
 import InMemoryCache from '@joplin/renderer/InMemoryCache';
-
 export { default as setUpLogger } from '../utils/setUpLogger';
 
 interface ExtendedWindow extends ExportedWebViewGlobals, Window { }

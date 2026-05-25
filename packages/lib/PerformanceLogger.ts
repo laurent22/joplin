@@ -1,5 +1,5 @@
-import { Second } from '@joplin/utils/time';
 
+import { Second } from '@joplin/utils/time';
 const formatDuration = (durationMs: number) => {
 	const round = (n: number) => Math.round(n * 100) / 100;
 	if (durationMs < Second / 4) {

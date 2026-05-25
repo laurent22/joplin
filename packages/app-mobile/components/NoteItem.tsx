@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { memo, useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
@@ -12,7 +13,6 @@ import { Dispatch } from 'redux';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import useOnLongPressProps from '../utils/hooks/useOnLongPressProps';
 import MultiTouchableOpacity from './buttons/MultiTouchableOpacity';
-
 interface Props {
 	dispatch: Dispatch;
 	themeId: number;

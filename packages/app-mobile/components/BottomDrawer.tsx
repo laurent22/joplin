@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { useCallback, useMemo } from 'react';
@@ -6,7 +7,6 @@ import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 import { themeStyle, ThemeStyle } from './global-style';
 import Modal from './Modal';
 import { AppState } from '../utils/types';
-
 interface Props {
 	themeId: number;
 	children: React.ReactNode;

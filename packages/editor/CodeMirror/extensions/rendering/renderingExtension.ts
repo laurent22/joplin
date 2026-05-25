@@ -1,3 +1,4 @@
+
 import addFormattingClasses from './addFormattingClasses';
 import replaceBackslashEscapes from './replaceBackslashEscapes';
 import replaceBulletLists from './replaceBulletLists';
@@ -7,7 +8,6 @@ import replaceFormatCharacters from './replaceFormatCharacters';
 import replaceInlineHtml from './replaceInlineHtml';
 import renderTables from './renderTables';
 import replaceLinks from './replaceLinks';
-
 export default (tableEditingEnabled = true) => {
 	return [
 		replaceCheckboxes,

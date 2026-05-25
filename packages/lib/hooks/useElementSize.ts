@@ -1,7 +1,7 @@
 import { type RefObject } from 'react';
 import shim from '../shim';
-const { useCallback, useEffect, useState } = shim.react();
 import useEventListener from './useEventListener';
+const { useCallback, useEffect, useState } = shim.react();
 
 interface Size {
 	width: number;

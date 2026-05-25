@@ -1,10 +1,10 @@
+
+import notifier from 'node-notifier';
 import eventManager, { EventName } from '../eventManager';
 import AlarmService from './AlarmService';
 import { Notification } from '../models/Alarm';
 import shim from '../shim';
 import Setting from '../models/Setting';
-const notifier = require('node-notifier');
-
 interface Options {
 	appName: string;
 }

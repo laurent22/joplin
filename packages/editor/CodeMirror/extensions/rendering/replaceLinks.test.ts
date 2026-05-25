@@ -1,7 +1,7 @@
+
 import createTestEditor from '../../testing/createTestEditor';
 import { EditorSelection } from '@codemirror/state';
 import replaceLinks from './replaceLinks';
-
 describe('replaceLinks', () => {
 	it.each([
 		{

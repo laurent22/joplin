@@ -1,9 +1,9 @@
+
+import md5 from 'md5';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { PermissionsAndroid, Platform } from 'react-native';
 import unzip from './utils/unzip';
-const md5 = require('md5');
-
 const logger = Logger.create('voiceTyping');
 
 export type OnTextCallback = (text: string)=> void;

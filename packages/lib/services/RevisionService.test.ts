@@ -1,3 +1,4 @@
+
 import { revisionService, setupDatabaseAndSynchronizer, switchClient, msleep, db } from '../testing/test-utils';
 import Setting from '../models/Setting';
 import Note from '../models/Note';
@@ -7,7 +8,6 @@ import BaseModel, { ModelType } from '../BaseModel';
 import RevisionService from '../services/RevisionService';
 import { MarkupLanguage } from '../../renderer';
 import { NoteEntity } from './database/types';
-
 interface CreateTestRevisionOptions {
 	// How long to pause (in milliseconds) between each note modification.
 	// For example, [10, 20] would modify the note twice, with pauses of 10ms and 20ms.

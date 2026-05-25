@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { useMemo } from 'react';
@@ -6,7 +7,6 @@ import useUpdateState from './utils/useUpdateState';
 import { PluginCallback, PluginCallbacks } from './utils/usePluginCallbacks';
 import usePluginItem from './utils/usePluginItem';
 import { PluginStatusRecord } from '../types';
-
 interface Props {
 	themeId: number;
 

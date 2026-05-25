@@ -1,3 +1,5 @@
+
+import Command from './command-share';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import mockShareService, { ApiMock } from '@joplin/lib/testing/share/mockShareService';
 import { setupCommandForTesting, setupApplication } from './utils/testUtils';
@@ -7,8 +9,6 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { ShareInvitation, ShareUserStatus, StateShare } from '@joplin/lib/services/share/reducer';
 import app from './app';
-const Command = require('./command-share');
-
 const setUpCommand = () => {
 	const output: string[] = [];
 	const stdout = (content: string) => {

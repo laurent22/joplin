@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 
+
 import config from '../../config';
 import { EmailSender } from '../../services/database/types';
-
 interface Participant {
 	name: string;
 	email: string;

@@ -1,8 +1,8 @@
+
 import { DOMParser as ProseMirrorDomParser } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import schema from '../schema';
 import { EditorState, Plugin } from 'prosemirror-state';
-
 export type PluginList = Plugin[]|(Plugin|Plugin[])[];
 
 interface Options {

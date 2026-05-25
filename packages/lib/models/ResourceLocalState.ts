@@ -1,8 +1,8 @@
+
 import BaseModel, { DeleteOptions } from '../BaseModel';
 import { ResourceLocalStateEntity } from '../services/database/types';
 import Database from '../database';
 import ActionLogger from '../utils/ActionLogger';
-
 export default class ResourceLocalState extends BaseModel {
 	public static tableName() {
 		return 'resource_local_states';

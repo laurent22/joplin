@@ -1,10 +1,10 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 import Note from '@joplin/lib/models/Note';
 import { createAppDefaultWindowState } from '../app.reducer';
 import Setting from '@joplin/lib/models/Setting';
-
 export const declaration: CommandDeclaration = {
 	name: 'openNoteInNewWindow',
 	label: () => _('Open in new window'),

@@ -1,5 +1,5 @@
-import { getResourceIdFromMarkup } from './useContextMenu';
 
+import { getResourceIdFromMarkup } from './useContextMenu';
 describe('useContextMenu', () => {
 	const resourceId = 'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4';
 	const resourceId2 = 'b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5';

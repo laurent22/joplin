@@ -1,8 +1,8 @@
-import SyncTargetRegistry from '../../../SyncTargetRegistry';
-import shouldShowMissingPasswordWarning from './shouldShowMissingPasswordWarning';
 
 // Maps targets to whether each target requires a password.
 // A subset of all sync targets.
+import SyncTargetRegistry from '../../../SyncTargetRegistry';
+import shouldShowMissingPasswordWarning from './shouldShowMissingPasswordWarning';
 const targetToRequiresPassword: Record<string, boolean> = {
 	'nextcloud': true,
 	'webdav': true,

@@ -1,3 +1,4 @@
+
 import Setting from '@joplin/lib/models/Setting';
 import * as React from 'react';
 import { useCallback } from 'react';
@@ -8,7 +9,6 @@ import NoteCount from './NoteCount';
 import EmptyExpandLink from './EmptyExpandLink';
 import ListItemWrapper, { ItemSelectionState, ListItemRef } from './ListItemWrapper';
 import { ItemClickEvent } from '../hooks/useOnItemClick';
-
 interface Props {
 	anchorRef: ListItemRef;
 	selectionState: ItemSelectionState;

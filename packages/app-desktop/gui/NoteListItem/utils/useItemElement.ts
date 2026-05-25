@@ -1,9 +1,9 @@
+
 import * as React from 'react';
 import { Size } from '@joplin/utils/types';
 import { useEffect, useRef } from 'react';
 import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
 import { ItemEventHandlers } from './types';
-
 const addItemEventListeners = (
 	element: HTMLElement,
 	listeners: ItemEventHandlers,

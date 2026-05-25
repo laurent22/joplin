@@ -1,6 +1,6 @@
+
 import BaseItem from './BaseItem';
 import BaseModel from '../BaseModel';
-
 export default class NoteTag extends BaseItem {
 	public static tableName() {
 		return 'note_tags';

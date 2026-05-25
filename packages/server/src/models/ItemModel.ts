@@ -1,3 +1,6 @@
+
+
+// Converts "root:/myfile.txt:" to "myfile.txt"
 import BaseModel, { SaveOptions, LoadOptions, DeleteOptions as BaseDeleteOptions, ValidateOptions, AclAction } from './BaseModel';
 import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, User, UserItem } from '../services/database/types';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
@@ -14,11 +17,8 @@ import { NewModelFactoryHandler } from './factory';
 import loadStorageDriver from './items/storage/loadStorageDriver';
 import { msleep } from '../utils/time';
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
-import prettyBytes = require('pretty-bytes');
-
+import prettyBytes from 'pretty-bytes';
 import * as mimeUtils from '@joplin/lib/mime-utils';
-
-// Converts "root:/myfile.txt:" to "myfile.txt"
 const extractNameRegex = /^root:\/(.*):$/;
 
 const modelLogger = Logger.create('ItemModel');

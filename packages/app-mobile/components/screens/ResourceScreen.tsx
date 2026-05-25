@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { View, Text, FlatList, StyleSheet, Button, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import ScreenHeader from '../ScreenHeader';
@@ -18,7 +19,6 @@ import showResource from '../../commands/util/showResource';
 import { bytesToHuman } from '@joplin/utils/bytes';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { buildResourceMarkdownLink, nextSortState } from './resourceScreenUtils';
-
 interface Props {
 	themeId: number;
 }

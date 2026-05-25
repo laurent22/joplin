@@ -1,10 +1,10 @@
+
 import SyncTargetRegistry from '../../SyncTargetRegistry';
 import { createNTestNotes, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import BaseItem from '../BaseItem';
 import Folder from '../Folder';
 import Setting from '../Setting';
 import settingValidations from './settingValidations';
-
 describe('settingValidations', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

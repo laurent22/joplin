@@ -1,11 +1,11 @@
+
+
+import md5 from 'md5';
 import { RuleOptions } from '../../MdToHtml';
 import htmlUtils from '../../htmlUtils';
 import type * as MarkdownIt from 'markdown-it';
-import type Token = require('markdown-it/lib/token');
-import type StateCore = require('markdown-it/lib/rules_core/state_core');
-
-const md5 = require('md5');
-
+import type Token from 'markdown-it/lib/token';
+import type StateCore from 'markdown-it/lib/rules_core/state_core';
 export default {
 	plugin: function(markdownIt: MarkdownIt, ruleOptions: RuleOptions) {
 		markdownIt.core.ruler.push('sanitize_html', (state: StateCore) => {

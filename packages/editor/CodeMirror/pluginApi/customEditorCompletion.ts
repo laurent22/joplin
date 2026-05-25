@@ -1,5 +1,3 @@
-import { EditorState, Facet, Compartment, Extension } from '@codemirror/state';
-import { CompletionSource, autocompletion } from '@codemirror/autocomplete';
 
 // CodeMirror 6's built-in autocomplete functionality is difficult to work with
 // unless you want to enable languageData-based autocompletion.
@@ -10,6 +8,8 @@ import { CompletionSource, autocompletion } from '@codemirror/autocomplete';
 //
 // See https://discuss.codemirror.net/t/autocompletion-merging-override-in-config/7853
 
+import { EditorState, Facet, Compartment, Extension } from '@codemirror/state';
+import { CompletionSource, autocompletion } from '@codemirror/autocomplete';
 export const editorCompletionSource = Facet.define<CompletionSource, CompletionSource[]>();
 export const enableLanguageDataAutocomplete = Facet.define<boolean, boolean[]>();
 

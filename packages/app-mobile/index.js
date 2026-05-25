@@ -6,19 +6,19 @@
 
 // So there's basically still a one way flux: React => SQLite => Redux => React
 
-import './utils/initReact';
-import './utils/polyfills';
 
-import Root from './root';
-import { LogBox } from 'react-native';
-import { registerRootComponent } from 'expo';
 // Allows loading image assets. See https://github.com/expo/expo/issues/31240
-import 'expo-asset';
 
 // Seems JavaScript developers love adding warnings everywhere, even when these warnings can't be fixed
 // or don't really matter. Because we want important warnings to actually be fixed, we disable
 // all the useless ones, that way we aren't flooded by them when the app starts, and when there's
 // one we know it should be fixed (or added here).
+import './utils/initReact';
+import './utils/polyfills';
+import Root from './root';
+import { LogBox } from 'react-native';
+import { registerRootComponent } from 'expo';
+import 'expo-asset';
 LogBox.ignoreLogs([
 	// Happens for example in react-native-side-menu, but the package is discontinued
 	// and we should just switch to a different one (or do it without a package).

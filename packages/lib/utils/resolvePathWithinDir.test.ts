@@ -1,6 +1,6 @@
+
 import { posix, win32 } from 'node:path';
 import resolvePathWithinDir from './resolvePathWithinDir';
-
 describe('resolvePathWithinDir', () => {
 	test('should return correct values for Unix-style paths', () => {
 		const testCases = [

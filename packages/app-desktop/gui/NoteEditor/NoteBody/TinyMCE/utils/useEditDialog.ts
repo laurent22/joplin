@@ -1,3 +1,4 @@
+
 import { RefObject, useMemo } from 'react';
 import type { Editor } from 'tinymce';
 import { DispatchDidUpdateCallback, TinyMceEditorEvents } from './types';
@@ -7,7 +8,6 @@ import enableTextAreaTab, { TextAreaTabHandler } from './enableTextAreaTab';
 import { MarkupToHtml } from '@joplin/renderer';
 import { getGlobalSettings } from '@joplin/renderer/types';
 import Setting from '@joplin/lib/models/Setting';
-
 interface Props {
 	editor: Editor;
 	markupToHtml: RefObject<MarkupToHtmlHandler>;

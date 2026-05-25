@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { AppState } from '../../../app.reducer';
@@ -11,7 +12,6 @@ import { useMemo } from 'react';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { NoteBodyEditorType } from '../utils/types';
-
 interface Props {
 	bodyEditor: NoteBodyEditorType;
 	editorMigrationVersion: number;

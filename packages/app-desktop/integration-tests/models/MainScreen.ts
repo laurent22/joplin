@@ -1,3 +1,4 @@
+
 import { Page, Locator, ElectronApplication } from '@playwright/test';
 import NoteEditorScreen from './NoteEditorScreen';
 import activateMainMenuItem from '../util/activateMainMenuItem';
@@ -8,7 +9,6 @@ import NoteList from './NoteList';
 import { expect } from '../util/test';
 import ChangeAppLayoutScreen from './ChangeAppLayoutScreen';
 import waitForNextWindowMatching from '../util/waitForNextWindowMatching';
-
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
 	public readonly noteList: NoteList;

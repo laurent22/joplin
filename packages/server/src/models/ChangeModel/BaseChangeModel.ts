@@ -1,3 +1,4 @@
+
 import Logger from '@joplin/utils/Logger';
 import { DbConnection, SqliteMaxVariableNum } from '../../db';
 import { Change, Change2, ChangeType, Uuid } from '../../services/database/types';
@@ -6,7 +7,6 @@ import BaseModel, { LoadOptions } from '../BaseModel';
 import { NewModelFactoryHandler } from '../factory';
 import { Config } from '../../utils/types';
 import type { RecordChangeOptions as RecordChangeOptionsBase } from './ChangeModel';
-
 const logger = Logger.create('BaseChangeModel');
 
 

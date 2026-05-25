@@ -1,3 +1,6 @@
+
+import { sprintf } from 'sprintf-js';
+import { cliUtils } from './cli-utils.js';
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
@@ -5,11 +8,8 @@ import BaseModel from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
-const { sprintf } = require('sprintf-js');
 import time from '@joplin/lib/time';
 import { NoteEntity } from '@joplin/lib/services/database/types';
-const { cliUtils } = require('./cli-utils.js');
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'ls [note-pattern]';

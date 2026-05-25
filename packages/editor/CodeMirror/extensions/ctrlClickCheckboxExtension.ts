@@ -1,11 +1,11 @@
+
+
 import { EditorView } from '@codemirror/view';
 import modifierKeyCssExtension from './modifierKeyCssExtension';
 import { syntaxTree } from '@codemirror/language';
 import getCheckboxAtPosition from '../utils/markdown/getCheckboxAtPosition';
 import toggleCheckboxAt from '../utils/markdown/toggleCheckboxAt';
 import ctrlClickActionExtension from './ctrlClickActionExtension';
-
-
 const ctrlClickCheckboxExtension = () => {
 	return [
 		modifierKeyCssExtension,

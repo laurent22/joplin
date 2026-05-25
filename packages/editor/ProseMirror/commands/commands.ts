@@ -1,3 +1,4 @@
+
 import { Command, EditorState, TextSelection, Transaction } from 'prosemirror-state';
 import { EditorCommandType } from '../../types';
 import { redo, undo } from 'prosemirror-history';
@@ -16,7 +17,6 @@ import focusEditor from './focusEditor';
 import canReplaceSelectionWith from '../utils/canReplaceSelectionWith';
 import showCreateEditablePrompt from '../plugins/joplinEditablePlugin/showCreateEditablePrompt';
 import getTextBetween from '../utils/getTextBetween';
-
 type Dispatch = (tr: Transaction)=> void;
 type ExtendedCommand = (state: EditorState, dispatch: Dispatch, view?: EditorView, options?: string[])=> boolean;
 

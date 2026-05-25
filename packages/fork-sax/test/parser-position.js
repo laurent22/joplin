@@ -1,6 +1,6 @@
-var sax = require('../lib/sax')
-var tap = require('tap')
 
+import sax from '../lib/sax';
+import tap from 'tap';
 function testPosition (chunks, expectedEvents) {
   var parser = sax.parser()
   expectedEvents.forEach(function (expectation) {

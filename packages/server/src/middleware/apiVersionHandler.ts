@@ -1,9 +1,9 @@
+
 import { AppContext, KoaNext } from '../utils/types';
 import { isApiRequest } from '../utils/requestUtils';
 import config from '../config';
 import { ErrorPreconditionFailed } from '../utils/errors';
 import { compareVersions } from 'compare-versions';
-
 export default async function(ctx: AppContext, next: KoaNext): Promise<void> {
 	if (!isApiRequest(ctx)) return next();
 

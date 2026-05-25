@@ -1,6 +1,6 @@
 // AUTO-GENERATED using `gulp buildScriptIndexes`
-import * as focusElementSideBar from './focusElementSideBar';
 
+import * as focusElementSideBar from './focusElementSideBar';
 const index: any[] = [
 	focusElementSideBar,
 ];

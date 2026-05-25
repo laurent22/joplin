@@ -1,3 +1,5 @@
+
+import packageInfo from '../../../packageInfo.js';
 import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import { FileSystemItem, ImportModuleOutputFormat, ModuleType } from '@joplin/lib/services/interop/types';
@@ -11,8 +13,6 @@ import { PackageInfo } from '@joplin/lib/versionInfo';
 import shim from '@joplin/lib/shim';
 import { ImportModule } from '@joplin/lib/services/interop/Module';
 import Logger from '@joplin/utils/Logger';
-const packageInfo: PackageInfo = require('../../../packageInfo.js');
-
 const logger = Logger.create('importFrom');
 
 export const declaration: CommandDeclaration = {

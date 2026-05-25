@@ -1,3 +1,5 @@
+
+import { clipboard } from 'electron';
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import { join } from 'path';
@@ -8,7 +10,6 @@ import setSettingValue from './util/setSettingValue';
 import { toForwardSlashes } from '@joplin/utils/path';
 import mockClipboard from './util/mockClipboard';
 import { ElectronApplication, Page } from '@playwright/test';
-
 const importAndOpenHtmlExport = async (mainWindow: Page, electronApp: ElectronApplication, noteTitle: string) => {
 	const mainScreen = await new MainScreen(mainWindow).setup();
 	await mainScreen.waitFor();
@@ -441,7 +442,6 @@ test.describe('markdownEditor', () => {
 		await mainWindow.keyboard.press(`${modifier}+c`);
 
 		const clipboardHtml = await mainWindow.evaluate(() => {
-			const { clipboard } = require('electron');
 			return clipboard.readHTML();
 		});
 

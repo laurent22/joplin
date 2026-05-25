@@ -1,5 +1,5 @@
-import { SqlQuery } from '../types';
 
+import { SqlQuery } from '../types';
 export default (): (SqlQuery|string)[] => {
 	return [
 		'ALTER TABLE `resources` ADD COLUMN blob_updated_time INT NOT NULL DEFAULT 0',

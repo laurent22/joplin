@@ -1,8 +1,8 @@
+
 import { RefObject, useRef, useEffect } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import { NoteViewerControl } from '../../../../../NoteTextViewer';
-
 interface Props {
 	editorRef: RefObject<CodeMirrorControl>;
 	webviewRef: RefObject<NoteViewerControl>;

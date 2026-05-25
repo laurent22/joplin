@@ -1,3 +1,5 @@
+
+
 import '../../utils/polyfills';
 import { Editor, AbstractToolbar, EditorEventType, EditorSettings, getLocalizationTable, adjustEditorThemeForContrast, BaseWidget } from 'js-draw';
 import { MaterialIconProvider } from '@js-draw/material-icons';
@@ -7,8 +9,6 @@ import watchEditorForTemplateChanges from './watchEditorForTemplateChanges';
 import { MainProcessApi, LocalizedStrings, EditorProcessApi } from './types';
 import startAutosaveLoop from './startAutosaveLoop';
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
-
-
 const restoreToolbarState = (toolbar: AbstractToolbar, state: string) => {
 	if (state) {
 		// deserializeState throws on invalid argument.

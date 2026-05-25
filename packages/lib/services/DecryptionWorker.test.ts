@@ -1,5 +1,5 @@
-import { setupDatabaseAndSynchronizer, switchClient, decryptionWorker } from '../testing/test-utils';
 
+import { setupDatabaseAndSynchronizer, switchClient, decryptionWorker } from '../testing/test-utils';
 describe('services/DecryptionWorker', () => {
 
 	beforeEach(async () => {

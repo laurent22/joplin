@@ -1,13 +1,13 @@
+
+
 import markdownUtils from './markdownUtils';
 import Setting from './models/Setting';
 import shim from './shim';
 import MarkupToHtml, { Options } from '@joplin/renderer/MarkupToHtml';
-
 import htmlUtils from './htmlUtils';
 import Resource from './models/Resource';
 import { PluginStates } from './services/plugins/reducer';
 import { MarkupLanguage } from '@joplin/renderer';
-
 export class MarkupLanguageUtils {
 
 	private lib_(language: MarkupLanguage) {

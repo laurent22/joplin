@@ -1,6 +1,6 @@
+
 import CodeMirror5Emulation from './CodeMirror5Emulation';
 import { EditorView } from '@codemirror/view';
-
 const makeCodeMirrorEmulation = (initialDocText: string) => {
 	const editorView = new EditorView({
 		doc: initialDocText,

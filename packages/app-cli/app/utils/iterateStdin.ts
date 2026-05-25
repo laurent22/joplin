@@ -1,5 +1,5 @@
-import { createInterface } from 'readline/promises';
 
+import { createInterface } from 'readline/promises';
 const iterateStdin = async function*(prompt: string) {
 	let nextLineListeners: (()=> void)[] = [];
 	const dispatchAllListeners = () => {

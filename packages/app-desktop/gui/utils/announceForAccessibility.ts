@@ -1,6 +1,6 @@
+
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('announceForAccessibility');
 
 const announceForAccessibility = (message: string) => {

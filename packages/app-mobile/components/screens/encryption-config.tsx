@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { TextInput, TouchableOpacity, Linking, View, StyleSheet, Text, Button, ScrollView, TextStyle } from 'react-native';
 import { connect } from 'react-redux';
@@ -14,7 +15,6 @@ import { getDefaultMasterKey, setupAndDisableEncryption, toggleAndSetupEncryptio
 import { useMemo, useState } from 'react';
 import { Divider, List } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
-
 interface Props {
 	themeId: number;
 	masterKeys: MasterKeyEntity[];

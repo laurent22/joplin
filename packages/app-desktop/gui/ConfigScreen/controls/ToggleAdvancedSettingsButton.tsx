@@ -1,8 +1,8 @@
 
+
 import * as React from 'react';
 import Button, { ButtonLevel } from '../../Button/Button';
 import { _ } from '@joplin/lib/locale';
-
 interface Props {
 	onClick: ()=> void;
 	advancedSettingsVisible: boolean;

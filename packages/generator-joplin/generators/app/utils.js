@@ -1,7 +1,7 @@
-const slugify = require('slugify');
 
 // "source" is the framework current version.
 // "dest" is the user existing version.
+import slugify from 'slugify';
 function mergePackageKey(parentKey, source, dest) {
 	const output = { ...dest };
 

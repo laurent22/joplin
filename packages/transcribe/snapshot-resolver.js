@@ -1,6 +1,6 @@
-const path = require('path');
 
 // This is required since we don't want to store snapshots inside the dist folder
+import path from 'path';
 module.exports = {
 	resolveSnapshotPath: (testPath, snapshotExtension) => {
 		const srcPath = testPath

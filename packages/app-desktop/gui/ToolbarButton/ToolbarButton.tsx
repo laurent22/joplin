@@ -1,6 +1,6 @@
+
 import * as React from 'react';
 import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
-
 interface Props {
 	readonly themeId: number;
 	readonly toolbarButtonInfo?: ToolbarButtonInfo;

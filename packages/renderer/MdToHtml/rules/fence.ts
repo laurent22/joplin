@@ -8,10 +8,10 @@
 // So we modify the code below to allow highlight() to return an object that tells how to render
 // the code.
 
-import type * as MarkdownIt from 'markdown-it';
-import type Token = require('markdown-it/lib/token');
-import type Renderer = require('markdown-it/lib/renderer');
 
+import type * as MarkdownIt from 'markdown-it';
+import type Token from 'markdown-it/lib/token';
+import type Renderer from 'markdown-it/lib/renderer';
 function plugin(markdownIt: MarkdownIt) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- options.highlight may return either a string or `{ wrapCode, html }` (non-standard return contract for fence rendering); see MdToHtml.render where highlight is defined
 	markdownIt.renderer.rules.fence = function(tokens: Token[], idx: number, options: any, _env: unknown, slf: Renderer) {

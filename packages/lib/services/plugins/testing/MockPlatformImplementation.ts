@@ -1,9 +1,9 @@
+
 import BasePlatformImplementation from '../BasePlatformImplementation';
 import shim from '../../../shim';
 import Setting from '../../../models/Setting';
 import { reg } from '../../../registry';
 import { Implementation as ImagingImplementation } from '../api/JoplinImaging';
-
 export default class MockPlatformImplementation extends BasePlatformImplementation {
 	public override get versionInfo() {
 		return {

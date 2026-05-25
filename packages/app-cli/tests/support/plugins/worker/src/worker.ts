@@ -1,5 +1,4 @@
 // @ts-ignore -- no types available for transformers.js
-import { pipeline, env } from '@xenova/transformers';
 
 // Use code similar to the following to use local models
 // See https://github.com/xenova/transformers.js?tab=readme-ov-file#settings
@@ -7,6 +6,7 @@ import { pipeline, env } from '@xenova/transformers';
 // env.allowRemoteModels = false;
 
 // Don't fetch ONNX WASM from the internet (see tools/copyModels.js).
+import { pipeline, env } from '@xenova/transformers';
 env.backends.onnx.wasm.wasmPaths = './onnx-dist/';
 
 let pipe: (text: string)=>Promise<unknown>;

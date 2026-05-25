@@ -1,3 +1,9 @@
+
+// See the fold example for more information about
+// writing similar ProseMirror plugins:
+// https://prosemirror.net/examples/fold/
+
+
 import { Plugin } from 'prosemirror-state';
 import { Node, NodeSpec, TagParseRule } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
@@ -10,12 +16,6 @@ import makeLinksClickableInElement from '../../utils/makeLinksClickableInElement
 import SelectableNodeView from '../../utils/SelectableNodeView';
 import createExternalEditorPlugin, { OnHide } from '../utils/createExternalEditorPlugin';
 import createFloatingButtonPlugin, { ToolbarType } from '../utils/createFloatingButtonPlugin';
-
-// See the fold example for more information about
-// writing similar ProseMirror plugins:
-// https://prosemirror.net/examples/fold/
-
-
 const createEditorDialogForNode = (nodePosition: number, view: EditorView, onHide: OnHide) => {
 	let saveCounter = 0;
 

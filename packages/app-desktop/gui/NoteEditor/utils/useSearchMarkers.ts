@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
 
+import { useMemo } from 'react';
 interface SearchMarkersOptions {
 	searchTimestamp: number;
 	selectedIndex: number;

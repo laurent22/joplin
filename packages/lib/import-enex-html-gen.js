@@ -1,9 +1,10 @@
-const stringToStream = require('string-to-stream');
-const resourceUtils = require('./resourceUtils.js');
-const { cssValue } = require('./import-enex-md-gen');
-const htmlUtils = require('./htmlUtils').default;
-const Entities = require('html-entities').AllHtmlEntities;
-const { fixAttributes } = require('@joplin/utils/html');
+import joplin_fork_sax_createStream from '@joplin/fork-sax';
+import stringToStream from 'string-to-stream';
+import resourceUtils from './resourceUtils.js';
+import { cssValue } from './import-enex-md-gen';
+import htmlUtils from './htmlUtils';
+import { AllHtmlEntities as Entities } from 'html-entities';
+import { fixAttributes } from '@joplin/utils/html';
 const htmlentities = new Entities().encode;
 
 function addResourceTag(lines, resource, attributes) {
@@ -63,7 +64,7 @@ function enexXmlToHtml_(stream, resources) {
 	return new Promise((resolve) => {
 		const options = {};
 		const strict = false;
-		const saxStream = require('@joplin/fork-sax').createStream(strict, options);
+		const saxStream = joplin_fork_sax_createStream.createStream(strict, options);
 
 		const section = {
 			type: 'text',

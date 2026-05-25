@@ -1,6 +1,6 @@
 
-import { Page, Locator } from '@playwright/test';
 
+import { Page, Locator } from '@playwright/test';
 export default class SettingsScreen {
 	private readonly container: Locator;
 	public readonly okayButton: Locator;

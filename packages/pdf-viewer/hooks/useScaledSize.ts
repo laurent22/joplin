@@ -1,8 +1,8 @@
+
 import { useRef, useState, MutableRefObject } from 'react';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import PdfDocument from '../PdfDocument';
 import { ScaledSize } from '../types';
-
 export interface ScaledSizeParams {
 	pdfDocument: PdfDocument;
 	pdfId: string;

@@ -1,7 +1,16 @@
+
+import ntp_client_177 from './vendor/ntp-client';
+import dgram_178 from 'dgram';
+import { setupProxySettings } from './shim-init-node';
+import { DatabaseDriverNode } from './database-driver-node.js';
+import syswidecas from './vendor/syswide-cas';
+import SyncTargetNextcloud from './SyncTargetNextcloud.js';
+import SyncTargetWebDAV from './SyncTargetWebDAV.js';
+import SyncTargetDropbox from './SyncTargetDropbox.js';
+import SyncTargetAmazonS3 from './SyncTargetAmazonS3.js';
 import Setting, { Env } from './models/Setting';
 import Logger, { TargetType, LoggerWrapper } from '@joplin/utils/Logger';
 import shim from './shim';
-const { setupProxySettings } = require('./shim-init-node');
 import BaseService from './services/BaseService';
 import reducer, { getNotesParent, serializeNotesParent, setStore, State } from './reducer';
 import KeychainServiceDriverNode from './services/keychain/KeychainServiceDriver.node';
@@ -15,7 +24,6 @@ import { createStore, applyMiddleware, Store } from 'redux';
 import { defaultState, stateUtils } from './reducer';
 import JoplinDatabase from './JoplinDatabase';
 import { cancelTimers as folderScreenUtilsCancelTimers, refreshFolders, scheduleRefreshFolders } from './folders-screen-utils';
-const { DatabaseDriverNode } = require('./database-driver-node.js');
 import BaseModel from './BaseModel';
 import Folder from './models/Folder';
 import BaseItem from './models/BaseItem';
@@ -27,16 +35,11 @@ import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
 import reduxSharedMiddleware from './components/shared/reduxSharedMiddleware';
-import dns = require('dns');
-import fs = require('fs-extra');
+import dns from 'dns';
+import fs from 'fs-extra';
 import { EventEmitter } from 'events';
-const syswidecas = require('./vendor/syswide-cas');
 import SyncTargetRegistry from './SyncTargetRegistry';
 import SyncTargetFilesystem from './SyncTargetFilesystem';
-const SyncTargetNextcloud = require('./SyncTargetNextcloud.js');
-const SyncTargetWebDAV = require('./SyncTargetWebDAV.js');
-const SyncTargetDropbox = require('./SyncTargetDropbox.js');
-const SyncTargetAmazonS3 = require('./SyncTargetAmazonS3.js');
 import EncryptionService from './services/e2ee/EncryptionService';
 import ResourceFetcher from './services/ResourceFetcher';
 import SearchEngineUtils from './services/search/SearchEngineUtils';
@@ -69,12 +72,11 @@ import NavService from './services/NavService';
 import getAppName from './getAppName';
 import PerformanceLogger from './PerformanceLogger';
 import Synchronizer from './Synchronizer';
-
 const appLogger: LoggerWrapper = Logger.create('App');
 const perfLogger = PerformanceLogger.create();
 
-// const ntpClient = require('./vendor/ntp-client');
-// ntpClient.dgram = require('dgram');
+// const ntpClient = ntp_client_177;
+// ntpClient.dgram = dgram_178;
 
 export interface StartOptions {
 	keychainEnabled?: boolean;

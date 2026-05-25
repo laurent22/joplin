@@ -1,4 +1,5 @@
 
+
 import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -13,7 +14,6 @@ import { formatDate } from '../../utils/time';
 import ApplicationModel, { ActiveApplication } from '../../models/ApplicationModel';
 import { AclAction } from '../../models/BaseModel';
 import { ErrorForbidden } from '../../utils/errors';
-
 const router: Router = new Router(RouteType.Web);
 
 router.publicSchemas.push('applications/:id/confirm');

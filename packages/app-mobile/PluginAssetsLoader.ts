@@ -1,11 +1,11 @@
+
+import { dirname } from '@joplin/lib/path-utils';
+import pluginAssets from './pluginAssets/index';
 import shim from '@joplin/lib/shim';
-const { dirname } = require('@joplin/lib/path-utils');
 import Setting from '@joplin/lib/models/Setting';
-const pluginAssets = require('./pluginAssets/index');
 import KvStore from '@joplin/lib/services/KvStore';
 import Logger from '@joplin/utils/Logger';
 import FsDriverWeb from './utils/fs-driver/fs-driver-rn.web';
-
 const logger = Logger.create('PluginAssetsLoader');
 
 export default class PluginAssetsLoader {

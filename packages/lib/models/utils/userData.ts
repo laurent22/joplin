@@ -1,3 +1,4 @@
+
 import { ModelType } from '../../BaseModel';
 import { FolderEntity, NoteEntity, ResourceEntity, TagEntity, UserData, UserDataValue } from '../../services/database/types';
 import Note from '../Note';
@@ -6,7 +7,6 @@ import Resource from '../Resource';
 import Tag from '../Tag';
 import BaseItem from '../BaseItem';
 import { LoadOptions } from './types';
-
 const maxKeyLength = 255;
 
 type SupportedEntity = NoteEntity | ResourceEntity | FolderEntity | TagEntity;

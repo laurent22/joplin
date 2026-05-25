@@ -1,3 +1,4 @@
+
 import { createStore } from 'redux';
 import CommandService from '../CommandService';
 import ToolbarButtonUtils from './ToolbarButtonUtils';
@@ -5,7 +6,6 @@ import reducer, { defaultState } from '../../reducer';
 import stateToWhenClauseContext from './stateToWhenClauseContext';
 import KeymapService from '../KeymapService';
 import shim from '../../shim';
-
 const createTestCommands = () => {
 	const simpleCommands = [
 		{ name: 'newNote', label: 'New Note' },

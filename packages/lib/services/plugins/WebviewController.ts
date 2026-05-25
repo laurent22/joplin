@@ -1,13 +1,13 @@
+
+import { toSystemSlashes } from '../../path-utils';
 import ViewController, { EmitMessageEvent, PluginStore } from './ViewController';
 import { MessageListenerCallback } from './Plugin';
 import shim from '../../shim';
 import { ButtonSpec, DialogResult, ViewHandle } from './api/types';
-const { toSystemSlashes } = require('../../path-utils');
 import PostMessageService, { MessageParticipant } from '../PostMessageService';
 import { PluginEditorViewState, PluginViewState } from './reducer';
 import { defaultWindowId } from '../../reducer';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('WebviewController');
 
 export enum ContainerType {

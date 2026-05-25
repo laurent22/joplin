@@ -1,9 +1,9 @@
+
 import BaseItem from '../../models/BaseItem';
 import Note from '../../models/Note';
 import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import handleConflictAction from './utils/handleConflictAction';
 import { SyncAction } from './utils/types';
-
 describe('handleConflictAction', () => {
 
 	beforeEach(async () => {

@@ -1,7 +1,7 @@
+
 import * as React from 'react';
 import { KeyboardAvoidingViewProps, KeyboardAvoidingView as NativeKeyboardAvoidingView } from 'react-native';
 import useKeyboardState from '../utils/hooks/useKeyboardState';
-
 interface Props extends KeyboardAvoidingViewProps {}
 
 const KeyboardAvoidingView: React.FC<Props> = ({ enabled, children, ...forwardedProps }) => {

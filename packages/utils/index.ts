@@ -1,9 +1,9 @@
+
 import execCommand from './execCommand';
 import commandToString from './commandToString';
 import splitCommandString from './splitCommandString';
 import { dirname } from 'path';
 import { pathExists } from 'fs-extra';
-
 let rootDir_ = '';
 
 

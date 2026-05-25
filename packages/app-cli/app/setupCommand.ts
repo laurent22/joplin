@@ -1,6 +1,6 @@
+
 import { _ } from '@joplin/lib/locale';
 import BaseCommand from './base-command';
-
 interface PromptOptions {
 	type?: string;
 	booleanAnswerDefault?: string;

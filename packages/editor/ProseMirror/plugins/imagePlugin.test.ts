@@ -1,5 +1,5 @@
-import createTestEditorWithSerializer from '../testing/createTestEditorWithSerializer';
 
+import createTestEditorWithSerializer from '../testing/createTestEditorWithSerializer';
 const testImageUrl = 'data:image/svg+xml;utf8,some-icon-here';
 
 describe('imagePlugin', () => {

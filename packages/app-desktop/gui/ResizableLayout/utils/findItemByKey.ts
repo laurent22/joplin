@@ -1,5 +1,5 @@
-import { LayoutItem } from './types';
 
+import { LayoutItem } from './types';
 export default function findItemByKey(layout: LayoutItem, key: string): LayoutItem {
 	if (!layout) throw new Error('Layout cannot be null');
 

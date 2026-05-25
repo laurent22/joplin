@@ -1,9 +1,9 @@
+
 import * as React from 'react';
 import { useContext, useEffect, useMemo } from 'react';
 import { Toast, ToastType } from '@joplin/lib/services/plugins/api/types';
 import { PopupNotificationContext } from '../PopupNotification/PopupNotificationProvider';
 import { NotificationType } from '../PopupNotification/types';
-
 const emptyToast = (): Toast => {
 	return {
 		duration: 0,

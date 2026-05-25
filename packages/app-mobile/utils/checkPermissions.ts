@@ -1,5 +1,5 @@
-import Logger from '@joplin/utils/Logger';
 
+import Logger from '@joplin/utils/Logger';
 import { Platform, PermissionsAndroid, Permission } from 'react-native';
 const logger = Logger.create('checkPermissions');
 

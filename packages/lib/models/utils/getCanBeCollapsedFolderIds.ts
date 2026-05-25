@@ -1,7 +1,7 @@
+
 import { FolderEntity } from '../../services/database/types';
 import { getTrashFolderId } from '../../services/trash';
 import Folder, { FolderEntityWithChildren } from '../Folder';
-
 export default (folders: FolderEntity[]) => {
 	const tree = Folder.buildTree(folders);
 

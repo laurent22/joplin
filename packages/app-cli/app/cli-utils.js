@@ -1,9 +1,11 @@
+
+import readline from 'readline';
+import { Writable } from 'stream';
 import yargParser from 'yargs-parser';
 import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
 import stringPadding, { RIGHT, LEFT } from 'string-padding';
 import Logger from '@joplin/utils/Logger';
-
 const cliUtils = {};
 
 cliUtils.printArray = function(logFunction, rows) {
@@ -148,7 +150,6 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 };
 
 cliUtils.promptMcq = function(message, answers) {
-	const readline = require('readline');
 
 	const rl = readline.createInterface({
 		input: process.stdin,
@@ -180,7 +181,6 @@ cliUtils.promptMcq = function(message, answers) {
 
 cliUtils.promptConfirm = function(message, answers = null) {
 	if (!answers) answers = [_('Y'), _('n')];
-	const readline = require('readline');
 
 	const rl = readline.createInterface({
 		input: process.stdin,
@@ -205,8 +205,6 @@ cliUtils.promptConfirm = function(message, answers = null) {
 cliUtils.prompt = function(initialText = '', promptString = ':', options = null) {
 	if (!options) options = {};
 
-	const readline = require('readline');
-	const Writable = require('stream').Writable;
 
 	const mutableStdout = new Writable({
 		write: function(chunk, encoding, callback) {

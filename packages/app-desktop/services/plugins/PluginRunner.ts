@@ -1,3 +1,8 @@
+// import BackOffHandler from './BackOffHandler';
+
+import electron_remote_main_enable from '@electron/remote/main';
+import url_format from 'url';
+import { ipcRenderer } from 'electron';
 import Plugin from '@joplin/lib/services/plugins/Plugin';
 import BasePluginRunner from '@joplin/lib/services/plugins/BasePluginRunner';
 import executeSandboxCall from '@joplin/lib/services/plugins/utils/executeSandboxCall';
@@ -9,9 +14,6 @@ import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import getPathToExecutable7Zip from '../../utils/7zip/getPathToExecutable7Zip';
 import getAssetPath from '../../utils/getAssetPath';
-// import BackOffHandler from './BackOffHandler';
-const ipcRenderer = require('electron').ipcRenderer;
-
 const logger = Logger.create('PluginRunner');
 
 // Electron error messages are useless so wrap the renderer call and print
@@ -124,7 +126,7 @@ export default class PluginRunner extends BasePluginRunner {
 			},
 		});
 
-		require('@electron/remote/main').enable(pluginWindow.webContents);
+		electron_remote_main_enable.enable(pluginWindow.webContents);
 
 		bridge().electronApp().registerPluginWindow(plugin.id, pluginWindow);
 
@@ -132,7 +134,7 @@ export default class PluginRunner extends BasePluginRunner {
 			pathTo7za: await getPathToExecutable7Zip(),
 		};
 
-		void pluginWindow.loadURL(`${require('url').format({
+		void pluginWindow.loadURL(`${url_format.format({
 			pathname: getAssetPath('services/plugins/plugin_index.html'),
 			protocol: 'file:',
 			slashes: true,

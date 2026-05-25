@@ -1,9 +1,9 @@
+
 import * as React from 'react';
 import { useMemo, useCallback } from 'react';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
 import useKeyboardHandler from './DialogButtonRow/useKeyboardHandler';
-
 export interface ButtonSpec {
 	name: string;
 	label: string;

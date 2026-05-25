@@ -1,7 +1,7 @@
+
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import { useCallback, useState } from 'react';
-
 interface Props {
 	message: string;
 	onCancel: ()=> void;

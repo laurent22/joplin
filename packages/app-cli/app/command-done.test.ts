@@ -1,9 +1,9 @@
+
+import Command from './command-done';
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import { setupCommandForTesting, setupApplication } from './utils/testUtils';
-const Command = require('./command-done');
-
 describe('command-done', () => {
 
 	beforeEach(async () => {

@@ -1,5 +1,5 @@
-import SyncTargetRegistry from '../../../SyncTargetRegistry';
 
+import SyncTargetRegistry from '../../../SyncTargetRegistry';
 const shouldShowMissingPasswordWarning = (syncTargetId: number, settings: Record<string, unknown>) => {
 	const syncTargetClass = SyncTargetRegistry.classById(syncTargetId);
 

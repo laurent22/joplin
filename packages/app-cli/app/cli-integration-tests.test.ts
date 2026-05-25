@@ -1,7 +1,12 @@
+
+import { version as version_3 } from '../package.json';
+import { DatabaseDriverNode } from '@joplin/lib/database-driver-node.js';
+import nodeSqlite from 'sqlite3';
+import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
+import { default as shimInitCli } from './utils/shimInitCli';
 import * as fs from 'fs-extra';
 import Logger, { TargetType } from '@joplin/utils/Logger';
 import { dirname } from '@joplin/lib/path-utils';
-const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import BaseModel from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
@@ -9,15 +14,11 @@ import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 import { node } from 'execa';
 import { splitCommandString } from '@joplin/utils';
-const nodeSqlite = require('sqlite3');
-const { loadKeychainServiceAndSettings } = require('@joplin/lib/services/SettingUtils');
-const { default: shimInitCli } = require('./utils/shimInitCli');
-
+import '@joplin/lib/testing/test-utils';
 const baseDir = `${dirname(__dirname)}/tests/cli-integration`;
 const joplinAppPath = `${__dirname}/main.js`;
 
-shimInitCli({ nodeSqlite, appVersion: () => require('../package.json').version, keytar: null });
-require('@joplin/lib/testing/test-utils');
+shimInitCli({ nodeSqlite, appVersion: () => version_3, keytar: null });
 
 
 interface Client {

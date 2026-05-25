@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { ForwardedRef, forwardRef, useCallback, useImperativeHandle } from 'react';
 import { CameraRef, Props } from './types';
@@ -5,7 +6,6 @@ import { PrimaryButton } from '../../buttons';
 import { Surface, Text } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
 import { TextInput } from 'react-native';
-
 const Camera = (props: Props, ref: ForwardedRef<CameraRef>) => {
 	useImperativeHandle(ref, () => ({
 		takePictureAsync: async () => {

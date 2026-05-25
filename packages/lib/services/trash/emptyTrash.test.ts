@@ -1,8 +1,8 @@
+
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import emptyTrash from './emptyTrash';
-
 describe('emptyTrash', () => {
 
 	beforeEach(async () => {

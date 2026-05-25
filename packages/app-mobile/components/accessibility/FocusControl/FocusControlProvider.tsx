@@ -1,7 +1,7 @@
+
 import * as React from 'react';
 import { createContext, useCallback, useMemo, useState } from 'react';
 import { ModalState } from './types';
-
 export interface FocusControl {
 	setModalState(dialogId: string, state: ModalState): void;
 

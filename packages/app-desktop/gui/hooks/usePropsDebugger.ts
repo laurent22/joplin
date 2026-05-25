@@ -2,8 +2,8 @@
 //
 // Usage: usePropsDebugger(props);
 
-import useEffectDebugger from './useEffectDebugger';
 
+import useEffectDebugger from './useEffectDebugger';
 export default function usePropsDebugger(props: Record<string, unknown>) {
 	const dependencies: unknown[] = [];
 	const dependencyNames: string[] = [];

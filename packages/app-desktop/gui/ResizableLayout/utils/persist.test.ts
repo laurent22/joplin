@@ -1,7 +1,7 @@
+
 import { loadLayout, saveLayout } from './persist';
 import { LayoutItem, LayoutItemDirection } from './types';
 import validateLayout from './validateLayout';
-
 describe('persist', () => {
 
 	test('should save layout and filter out non-user properties', () => {

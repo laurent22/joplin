@@ -1,10 +1,10 @@
 
-import path = require('path');
+
+import path from 'path';
 import { parseArgs } from 'util';
 import { Context, downloadFileFromGitHub, getTargetRelease, updateReleaseAsset, uploadReleaseAsset } from './githubReleasesUtils';
 import { GitHubRelease } from '../utils/checkForUpdatesUtils';
 import { GenerateInfo, generateLatestArm64Yml } from './generateLatestArm64Yml';
-
 const basePath = path.join(__dirname, '..');
 const downloadDir = path.join(basePath, 'downloads');
 

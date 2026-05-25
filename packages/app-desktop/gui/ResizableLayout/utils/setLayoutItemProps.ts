@@ -1,7 +1,7 @@
+
 import { produce } from 'immer';
 import { LayoutItem } from './types';
 import validateLayout from './validateLayout';
-
 export default function setLayoutItemProps(layout: LayoutItem, key: string, props: Partial<LayoutItem>) {
 	return validateLayout(produce(layout, (draftState: LayoutItem) => {
 		function recurseFind(item: LayoutItem) {

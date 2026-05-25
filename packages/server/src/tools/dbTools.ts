@@ -1,9 +1,9 @@
+
+
 import { connectDb, disconnectDb, migrateLatest } from '../db';
 import * as fs from 'fs-extra';
 import { DatabaseConfig } from '../utils/types';
 import { execCommand } from '@joplin/utils';
-
-
 export interface CreateDbOptions {
 	dropIfExists?: boolean;
 	autoMigrate?: boolean;

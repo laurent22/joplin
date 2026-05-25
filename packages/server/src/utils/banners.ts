@@ -1,5 +1,5 @@
-import config from '../config';
 
+import config from '../config';
 export interface BannerInfo {
 	background_color: string;
 	text_color: string;

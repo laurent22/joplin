@@ -1,5 +1,5 @@
-import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 
+import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 export const declaration: CommandDeclaration = {
 	name: 'search',
 	iconName: 'icon-search',

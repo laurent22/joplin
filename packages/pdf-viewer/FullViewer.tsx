@@ -1,3 +1,5 @@
+
+
 import { useRef, useState, useCallback } from 'react';
 import * as React from 'react';
 import usePdfDocument from './hooks/usePdfDocument';
@@ -7,9 +9,7 @@ import { DownloadButton, PrintButton, OpenLinkButton, CloseButton } from './ui/I
 import ZoomControls from './ui/ZoomControls';
 import styled from 'styled-components';
 import GotoInput from './ui/GotoPage';
-
-require('./fullScreen.css');
-
+import './fullScreen.css';
 const TitleWrapper = styled.div`
 	font-size: 0.7rem;
 	font-weight: 400;

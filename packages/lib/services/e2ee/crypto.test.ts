@@ -1,7 +1,7 @@
+
 import { afterAllCleanUp, expectNotThrow, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import { runIntegrationTests } from './cryptoTestUtils';
 import crypto from './crypto';
-
 describe('e2ee/crypto', () => {
 
 	beforeEach(async () => {

@@ -1,9 +1,9 @@
+
 import * as React from 'react';
 import { Alert, Platform } from 'react-native';
 import { DialogControl, DialogType, MenuChoice, PromptButtonSpec, DialogData, PromptOptions } from '../types';
 import { _ } from '@joplin/lib/locale';
 import { useMemo, useRef } from 'react';
-
 type SetPromptDialogs = React.Dispatch<React.SetStateAction<DialogData[]>>;
 
 const useDialogControl = (setPromptDialogs: SetPromptDialogs) => {

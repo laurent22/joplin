@@ -1,7 +1,7 @@
+
 import useVisibleRange from './useVisibleRange';
 import { renderHook } from '@testing-library/react';
 import { Size } from '@joplin/utils/types';
-
 describe('useVisibleRange', () => {
 
 	test('should calculate indexes', () => {

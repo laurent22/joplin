@@ -1,10 +1,10 @@
+
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
 import Folder from '@joplin/lib/models/Folder';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'rmbook <notebook>';

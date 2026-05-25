@@ -1,3 +1,4 @@
+
 import { ContentScriptData } from '@joplin/editor/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
@@ -6,7 +7,6 @@ import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { dirname } from '@joplin/utils/path';
 import { useMemo } from 'react';
-
 const logger = Logger.create('useCodeMirrorPlugins');
 
 const useCodeMirrorPlugins = (pluginStates: PluginStates) => {

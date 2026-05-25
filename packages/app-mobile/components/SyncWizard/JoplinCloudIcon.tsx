@@ -1,6 +1,6 @@
+
 import * as React from 'react';
 import Svg, { SvgProps, G, Path, Defs, LinearGradient, Stop, ClipPath, Rect } from 'react-native-svg';
-
 const JoplinCloudIcon: React.FC<SvgProps> = props => {
 	return <Svg
 		viewBox='0 0 84 84'

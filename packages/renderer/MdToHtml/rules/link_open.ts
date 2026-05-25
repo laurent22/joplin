@@ -1,11 +1,11 @@
+
+
+import urlUtils from '../../urlUtils.js';
 import { RuleOptions } from '../../MdToHtml';
 import linkReplacement from '../linkReplacement';
 import * as utils from '../../utils';
 import type * as MarkdownIt from 'markdown-it';
-import type Token = require('markdown-it/lib/token');
-
-const urlUtils = require('../../urlUtils.js');
-
+import type Token from 'markdown-it/lib/token';
 function plugin(markdownIt: MarkdownIt, ruleOptions: RuleOptions) {
 	markdownIt.renderer.rules.link_open = function(tokens: Token[], idx: number) {
 		const token = tokens[idx];

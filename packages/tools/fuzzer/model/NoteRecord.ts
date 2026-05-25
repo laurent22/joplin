@@ -1,6 +1,6 @@
+
 import type { ItemId, NoteData } from './types';
 import Serializable, { BaseSchema } from './Serializable';
-
 interface InitializationOptions extends NoteData {
 }
 

@@ -1,12 +1,12 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { useCallback, useState } from 'react';
 import { _ } from '@joplin/lib/locale';
 import exportDebugReport from './utils/exportDebugReport';
 import shim from '@joplin/lib/shim';
 import SettingsButton from '../SettingsButton';
 import { ConfigScreenStyles } from '../configScreenStyles';
-
 interface Props {
 	styles: ConfigScreenStyles;
 }

@@ -1,3 +1,5 @@
+
+import debounce from 'debounce';
 import { RefObject, useEffect, useMemo, useRef } from 'react';
 import usePrevious from '../../../../hooks/usePrevious';
 import { RenderedBody } from './types';
@@ -5,8 +7,6 @@ import { SearchMarkers } from '../../../utils/useSearchMarkers';
 import CodeMirror5Emulation from '@joplin/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation';
 import useEditorSearchExtension from './useEditorSearchExtension';
 import { NoteViewerControl } from '../../../../NoteTextViewer';
-const debounce = require('debounce');
-
 interface Props {
 	setLocalSearchResultCount(count: number): void;
 	searchMarkers: SearchMarkers;

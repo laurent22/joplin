@@ -1,3 +1,5 @@
+
+import { sprintf } from 'sprintf-js';
 import LockHandler, { LockClientType, LockType } from './LockHandler';
 import { Dirnames } from './utils/types';
 import BaseService from '../BaseService';
@@ -9,8 +11,6 @@ import JoplinError from '../../JoplinError';
 import { FileApi } from '../../file-api';
 import JoplinDatabase from '../../JoplinDatabase';
 import { fetchSyncInfo, SyncInfo } from './syncInfoUtils';
-const { sprintf } = require('sprintf-js');
-
 export type MigrationFunction = (api: FileApi, db: JoplinDatabase)=> Promise<void>;
 
 // To add a new migration:

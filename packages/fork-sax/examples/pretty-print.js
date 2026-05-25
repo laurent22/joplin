@@ -1,6 +1,9 @@
-var sax = require('../lib/sax'),
+import sax_165 from '../lib/sax';
+import fs_166 from 'fs';
+import path_join from 'path';
+var sax = sax_165,
   printer = sax.createStream(false, {lowercasetags: true, trim: true}),
-  fs = require('fs')
+  fs = fs_166;
 
 function entity (str) {
   return str.replace('"', '&quot;')
@@ -58,7 +61,7 @@ if (!process.argv[2]) {
   throw new Error('Please provide an xml file to prettify\n' +
     'TODO: read from stdin or take a file')
 }
-var xmlfile = require('path').join(process.cwd(), process.argv[2])
+var xmlfile = path_join.join(process.cwd(), process.argv[2])
 var fstr = fs.createReadStream(xmlfile, { encoding: 'utf8' })
 
 function print (c) {

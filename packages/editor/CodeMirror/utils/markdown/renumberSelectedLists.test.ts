@@ -1,7 +1,7 @@
+
 import { EditorSelection } from '@codemirror/state';
 import createTestEditor from '../../testing/createTestEditor';
 import renumberSelectedLists from './renumberSelectedLists';
-
 describe('renumberSelectedLists', () => {
 	jest.retryTimes(2);
 

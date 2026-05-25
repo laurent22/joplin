@@ -1,7 +1,7 @@
+
 import apache2License from '../../licenseText/apache2';
 import { DependencyType } from '../../getLicenses';
 import { LicenseOverride } from '../types';
-
 const materialCommunityIconsOverride: LicenseOverride = {
 	packageName: 'material icons and symbols',
 	replacePackagesMatching: null,

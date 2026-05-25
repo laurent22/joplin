@@ -1,5 +1,5 @@
-import { shouldCancelPendingEnableAfterMasterPasswordDialog, shouldOpenMasterPasswordDialogForEnable, shouldResumeEnableAfterMasterPasswordDialog } from './enableFlow';
 
+import { shouldCancelPendingEnableAfterMasterPasswordDialog, shouldOpenMasterPasswordDialogForEnable, shouldResumeEnableAfterMasterPasswordDialog } from './enableFlow';
 describe('enableFlow', () => {
 	test('opens the master password dialog when enabling encryption without a stored master password', () => {
 		expect(shouldOpenMasterPasswordDialogForEnable({

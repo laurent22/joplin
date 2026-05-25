@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { View, StyleSheet, Text, ScrollView, RefreshControl } from 'react-native';
@@ -11,7 +12,6 @@ import IncomingShareItem from './IncomingShareItem';
 import AcceptedShareItem from './AcceptedShareItem';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import { ThemeStyle } from '../../global-style';
-
 interface Props {
 	themeId: number;
 	shareInvitations: ShareInvitation[];

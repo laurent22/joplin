@@ -1,3 +1,5 @@
+
+import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
 import defaultAction from '../utils/defaultAction';
 import BaseModel, { ModelType } from '../../../BaseModel';
 import defaultLoadOptions from '../utils/defaultLoadOptions';
@@ -5,8 +7,6 @@ import { Request, RequestMethod } from '../Api';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 import Note from '../../../models/Note';
 import Tag from '../../../models/Tag';
-const { ErrorBadRequest, ErrorNotFound } = require('../utils/errors');
-
 export default async function(request: Request, id: string = null, link: string = null) {
 	if (link === 'notes') {
 		const tag = await Tag.load(id);

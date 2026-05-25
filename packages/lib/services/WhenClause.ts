@@ -1,9 +1,9 @@
-import { ContextKeyExpr, ContextKeyExpression, IContext } from './contextkey/contextkey';
 
 // We would like to support expressions with brackets but VSCode When Clauses
 // don't support this. To support this, we split the expressions with brackets
 // into sub-expressions, which can then be parsed and executed separately by the
 // When Clause library.
+import { ContextKeyExpr, ContextKeyExpression, IContext } from './contextkey/contextkey';
 interface AdvancedExpression {
 	// (test1 && test2) || test3
 	original: string;

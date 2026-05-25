@@ -1,5 +1,5 @@
-import Global from '../api/Global';
 
+import Global from '../api/Global';
 type EventHandler = (callbackId: string, args: unknown[])=> unknown;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Recursive walker over heterogeneous plugin sandbox arguments; tightening to `unknown` forces narrowing at every branch and recursive call

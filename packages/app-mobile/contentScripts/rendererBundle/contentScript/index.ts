@@ -1,7 +1,7 @@
+
 import Renderer from './Renderer';
 import WebViewToRNMessenger from '../../../utils/ipc/WebViewToRNMessenger';
 import { RendererProcessApi, MainProcessApi, RendererWebViewOptions } from '../types';
-
 interface WebViewLib {
 	initialize(config: unknown): void;
 }

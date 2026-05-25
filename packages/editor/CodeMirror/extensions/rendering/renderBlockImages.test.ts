@@ -1,8 +1,8 @@
+
 import { EditorSelection } from '@codemirror/state';
 import createTestEditor from '../../testing/createTestEditor';
 import renderBlockImages, { resetImageResourceEffect, testing__resetImageRefreshCounterCache } from './renderBlockImages';
 import { EditorView } from '@codemirror/view';
-
 const allowImageUrlsToBeFetched = async () => {
 	// Yield to the event loop. Since image URLs are fetched asynchronously, this is needed to
 	// allow the asynchronous promise code to run

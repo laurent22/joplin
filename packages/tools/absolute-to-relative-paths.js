@@ -1,8 +1,8 @@
-const glob = require('glob');
-const fs = require('fs-extra');
-const dirname = require('path').dirname;
-const relative = require('relative');
 
+import glob from 'glob';
+import fs from 'fs-extra';
+import { dirname } from 'path';
+import relative from 'relative';
 const libDir = `${dirname(__dirname)}/lib`;
 
 // function getBasename(p) {

@@ -1,8 +1,8 @@
+
 import { execFileSync } from 'child_process';
 import { writeFile, remove } from 'fs-extra';
 import { dirname, join } from 'path';
 import { createInterface, Interface as ReadlineInterface } from 'readline';
-
 const rootDir = dirname(dirname(__dirname));
 const canaryFile = join(rootDir, 'readme', 'canary.txt');
 

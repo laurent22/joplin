@@ -1,6 +1,6 @@
+
 import * as fs from 'fs-extra';
 import { dirname, join } from 'path';
-
 const copyAssets = async () => {
 	const appDir = dirname(__dirname);
 	const assetsDir = join(dirname(appDir), 'renderer', 'assets');

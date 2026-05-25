@@ -1,3 +1,5 @@
+import electron from 'electron';
+import electronRemote from '@electron/remote';
 'use strict';
 
 // This is a fork of electron-context-menu@0.15.0. We need to fork it because
@@ -9,8 +11,6 @@
 // just a wrapper over Electron's own native context menu but with more bugs, so
 // we should get rid of it, but for now this is good enough as a quick fix.
 
-const electron = require('electron');
-const electronRemote = require('@electron/remote');
 
 const webContents = win => win.webContents || (win.getWebContents && win.getWebContents());
 

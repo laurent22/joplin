@@ -1,7 +1,8 @@
+
+
+import request from 'request';
+import { insertContentIntoFile } from './tool-utils.js';
 import { rootDir } from './tool-utils';
-
-const request = require('request');
-
 interface Contributor {
 	avatar_url: string;
 	login: string;
@@ -9,7 +10,6 @@ interface Contributor {
 }
 
 const readmePath = `${rootDir}/README.md`;
-const { insertContentIntoFile } = require('./tool-utils.js');
 
 async function gitHubContributors(page: number): Promise<Contributor[]> {
 	return new Promise((resolve, reject) => {

@@ -1,7 +1,7 @@
+
 import JoplinDatabase from '../../JoplinDatabase';
 import paginationToSql from './paginationToSql';
 import { Pagination, PaginationOrder } from './types';
-
 export interface ModelFeedPage {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous: callers receive entity types (Note/Folder/Resource) which lack index signatures
 	items: any[];

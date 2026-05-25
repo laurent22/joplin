@@ -1,6 +1,6 @@
+
 import Logger from '@joplin/utils/Logger';
 import time from '@joplin/lib/time';
-
 const logger = Logger.create('BackOffHandler');
 
 // This handler performs two checks:

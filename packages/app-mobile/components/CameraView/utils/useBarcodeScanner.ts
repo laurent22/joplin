@@ -1,6 +1,6 @@
+
+
 import { useMemo, useState } from 'react';
-
-
 interface ScannedData {
 	text: string;
 	timestamp: number;

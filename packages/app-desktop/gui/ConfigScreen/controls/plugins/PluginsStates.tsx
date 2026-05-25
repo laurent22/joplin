@@ -1,3 +1,5 @@
+
+import { space } from 'styled-system';
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PluginService, { defaultPluginSetting, Plugins, PluginSetting, PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
@@ -19,8 +21,6 @@ import StyledMessage from '../../../style/StyledMessage';
 import StyledLink from '../../../style/StyledLink';
 import SettingHeader from '../SettingHeader';
 import SettingDescription from '../SettingDescription';
-const { space } = require('styled-system');
-
 const logger = Logger.create('PluginState');
 
 const maxWidth = 320;

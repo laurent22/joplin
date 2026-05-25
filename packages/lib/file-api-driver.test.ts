@@ -1,5 +1,5 @@
-import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, fileApi } from './testing/test-utils';
 
+import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, fileApi } from './testing/test-utils';
 describe('file-api-driver', () => {
 
 	beforeEach(async () => {

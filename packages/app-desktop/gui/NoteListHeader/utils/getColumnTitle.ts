@@ -1,6 +1,6 @@
+
 import { _ } from '@joplin/lib/locale';
 import { ColumnName } from '@joplin/lib/services/plugins/api/noteListType';
-
 const titles: Record<ColumnName, ()=> string> = {
 	'note.checkboxes': () => _('Checkbox completion'),
 	'note.folder.title': () => _('Notebook: %s', _('Title')),

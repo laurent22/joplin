@@ -1,6 +1,6 @@
+
 import { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
 import NavService from '@joplin/lib/services/NavService';
-
 export const declaration: CommandDeclaration = {
 	name: 'scrollToHash',
 };

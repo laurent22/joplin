@@ -1,9 +1,9 @@
+
+import { createSelector } from 'reselect';
 import * as React from 'react';
 import bridge from '../services/bridge';
 import { _ } from '@joplin/lib/locale';
 import { ThemeStyle, themeStyle } from '@joplin/lib/theme';
-const { createSelector } = require('reselect');
-
 interface Props {
 	themeId: number;
 	type: string;

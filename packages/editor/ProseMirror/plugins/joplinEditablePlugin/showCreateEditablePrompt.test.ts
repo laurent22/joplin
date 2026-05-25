@@ -1,9 +1,9 @@
+
 import createTestEditor from '../../testing/createTestEditor';
 import joplinEditablePlugin from './joplinEditablePlugin';
 import { Second } from '@joplin/utils/time';
 import showCreateEditablePrompt from './showCreateEditablePrompt';
 import mockEditorApi from '../../testing/mockEditorApi';
-
 const createEditor = (html: string) => {
 	const editorApi = mockEditorApi();
 	const editor = createTestEditor({

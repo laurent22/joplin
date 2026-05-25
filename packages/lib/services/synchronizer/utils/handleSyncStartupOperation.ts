@@ -1,8 +1,8 @@
+
 import Setting, { SyncStartupOperation } from '../../../models/Setting';
 import { clearLocalDataForRedownload, clearLocalSyncStateForReupload } from '../tools';
 import { reg } from '../../../registry';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('handleSyncStartupOperation');
 
 export default async function() {

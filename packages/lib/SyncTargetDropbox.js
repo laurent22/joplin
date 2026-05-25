@@ -1,12 +1,12 @@
-const BaseSyncTarget = require('./BaseSyncTarget').default;
-const { _ } = require('./locale');
-const DropboxApi = require('./DropboxApi');
-const Setting = require('./models/Setting').default;
-const { parameters } = require('./parameters.js');
-const { FileApi } = require('./file-api.js');
-const Synchronizer = require('./Synchronizer').default;
-const { FileApiDriverDropbox } = require('./file-api-driver-dropbox.js');
 
+import BaseSyncTarget from './BaseSyncTarget';
+import { _ } from './locale';
+import DropboxApi from './DropboxApi';
+import Setting from './models/Setting';
+import { parameters } from './parameters.js';
+import { FileApi } from './file-api.js';
+import Synchronizer from './Synchronizer';
+import { FileApiDriverDropbox } from './file-api-driver-dropbox.js';
 class SyncTargetDropbox extends BaseSyncTarget {
 	static id() {
 		return 7;

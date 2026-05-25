@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
@@ -10,7 +11,6 @@ import { ConfigScreenStyles } from '../configScreenStyles';
 import makeImportExportCacheDirectory from './utils/makeImportExportCacheDirectory';
 import TaskButton, { OnProgressCallback, SetAfterCompleteListenerCallback, TaskStatus } from './TaskButton';
 import shareFile from '../../../../utils/shareFile';
-
 const logger = Logger.create('NoteExportButton');
 
 interface Props {

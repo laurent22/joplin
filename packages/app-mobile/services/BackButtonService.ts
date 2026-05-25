@@ -1,5 +1,5 @@
-import { BackHandler, Platform } from 'react-native';
 
+import { BackHandler, Platform } from 'react-native';
 export type BackButtonHandler = ()=> boolean|Promise<boolean>;
 
 export default class BackButtonService {

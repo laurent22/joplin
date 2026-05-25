@@ -1,7 +1,7 @@
-import { Theme, ThemeAppearance } from './type';
-import lightTheme from './light';
 
 // This is the default dark theme in Joplin
+import { Theme, ThemeAppearance } from './type';
+import lightTheme from './light';
 const theme: Theme = {
 	...lightTheme,
 

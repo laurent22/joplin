@@ -1,3 +1,5 @@
+
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import * as React from 'react';
 import { themeStyle } from './global-style';
 import { _ } from '@joplin/lib/locale';
@@ -6,8 +8,6 @@ import time from '@joplin/lib/time';
 import { Platform } from 'react-native';
 import Modal from './Modal';
 import { formatMsToLocal } from '@joplin/utils/time';
-const DateTimePickerModal = require('react-native-modal-datetime-picker').default;
-
 const styles = StyleSheet.create({
 	centeredView: {
 		flex: 1,

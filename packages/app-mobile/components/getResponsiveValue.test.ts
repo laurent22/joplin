@@ -1,6 +1,6 @@
+
 import getResponsiveValue, { ValueMap } from './getResponsiveValue';
 import { Dimensions } from 'react-native';
-
 type testCase = [ ValueMap, number[] ];
 
 const testCases: testCase[] = [

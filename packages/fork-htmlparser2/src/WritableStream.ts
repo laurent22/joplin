@@ -1,8 +1,8 @@
+
+// Following the example in https://nodejs.org/api/stream.html#stream_decoding_buffers_in_a_writable_stream
 import { Parser, Handler, ParserOptions } from "./Parser";
 import { Writable } from "stream";
 import { StringDecoder } from "string_decoder";
-
-// Following the example in https://nodejs.org/api/stream.html#stream_decoding_buffers_in_a_writable_stream
 function isBuffer(_chunk: string | Buffer, encoding: string): _chunk is Buffer {
     return encoding === "buffer";
 }

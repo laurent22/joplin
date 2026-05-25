@@ -1,8 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 
+
 import { pathExists, readFile } from 'fs-extra';
 import { writeFile } from 'fs/promises';
-
 export const versionPatch = async () => {
 	if (!(await pathExists('package.json'))) throw new Error('Run this from the root of the package (./package.json not found)');
 	const content = JSON.parse(await readFile('package.json', 'utf-8'));

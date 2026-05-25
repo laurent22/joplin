@@ -1,7 +1,7 @@
+
 import { ModelType } from '@joplin/lib/BaseModel';
 import * as React from 'react';
 import { useMemo } from 'react';
-
 export type ListItemRef = React.Ref<HTMLDivElement>;
 
 export interface ItemSelectionState {

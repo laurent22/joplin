@@ -1,9 +1,9 @@
+
 import { _ } from '../../locale';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 import InteropService_Exporter_Raw from './InteropService_Exporter_Raw';
 import shim from '../../shim';
 import { BaseItemEntity, ResourceEntity } from '../database/types';
-
 export default class InteropService_Exporter_Jex extends InteropService_Exporter_Base {
 
 	private tempDir_: string;

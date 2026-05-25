@@ -1,6 +1,6 @@
+
 import joplin from 'api';
 import { ContentScriptType, MenuItemLocation } from 'api/types';
-
 async function setupContentScriptMarkdownIt() {
 	const contentScriptId = 'contentScriptMarkdownIt';
 

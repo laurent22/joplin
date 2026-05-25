@@ -1,6 +1,6 @@
+
 import RemoteMessenger from './RemoteMessenger';
 import { SerializableData } from './types';
-
 export default class WorkerMessenger<LocalInterface, RemoteInterface> extends RemoteMessenger<LocalInterface, RemoteInterface> {
 	public constructor(channelId: string, private worker: Worker, localApi: LocalInterface|null) {
 		super(channelId, localApi);

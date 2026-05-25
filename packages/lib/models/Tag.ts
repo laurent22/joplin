@@ -1,5 +1,6 @@
-import { TagEntity, TagsWithNoteCountEntity } from '../services/database/types';
 
+
+import { TagEntity, TagsWithNoteCountEntity } from '../services/database/types';
 import BaseModel, { DeleteOptions, SearchOptions } from '../BaseModel';
 import BaseItem from './BaseItem';
 import NoteTag from './NoteTag';
@@ -7,7 +8,6 @@ import Note, { PreviewsOptions } from './Note';
 import { _ } from '../locale';
 import ActionLogger from '../utils/ActionLogger';
 import { LoadOptions, SaveOptions } from './utils/types';
-
 export default class Tag extends BaseItem {
 	public static tableName() {
 		return 'tags';

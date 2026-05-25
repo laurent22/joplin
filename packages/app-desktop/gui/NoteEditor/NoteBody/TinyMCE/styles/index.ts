@@ -1,7 +1,7 @@
+
 import { ThemeAppearance } from '@joplin/lib/themes/type';
 import { NoteBodyEditorProps } from '../../../utils/types';
 import { buildStyle } from '@joplin/lib/theme';
-
 export default function styles(props: NoteBodyEditorProps) {
 	const leftExtraToolbarContainerWidth = props.watchedNoteFiles.length > 0 ? 120 : 80;
 	return buildStyle(['TinyMCE', props.style.width, props.style.height, leftExtraToolbarContainerWidth], props.themeId, theme => {

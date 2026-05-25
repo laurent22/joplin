@@ -1,7 +1,7 @@
+
 import { Draft } from 'immer';
 import { ContainerType } from './WebviewController';
 import { ButtonSpec } from './api/types';
-
 interface PluginViewStateBase {
 	id: string;
 	type: string;

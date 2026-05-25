@@ -1,6 +1,6 @@
+
 import { splitCommandBatch } from './string-utils';
 import * as StringUtils from './string-utils';
-
 describe('string-utils', () => {
 
 	// cSpell:disable

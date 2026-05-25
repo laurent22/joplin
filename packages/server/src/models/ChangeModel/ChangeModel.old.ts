@@ -1,3 +1,4 @@
+
 import { Knex } from 'knex';
 import { DbConnection, isPostgres } from '../../db';
 import { Change, ChangeType, Uuid } from '../../services/database/types';
@@ -6,7 +7,6 @@ import { NewModelFactoryHandler } from '../factory';
 import { Config } from '../../utils/types';
 import type { RecordChangeOptions } from './ChangeModel';
 import BaseChangeModel from './BaseChangeModel';
-
 export type PaginatedChanges = PaginatedResults<Change>;
 
 export interface ChangePreviousItem {

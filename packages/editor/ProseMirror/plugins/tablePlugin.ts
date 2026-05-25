@@ -1,3 +1,4 @@
+
 import { addColumnAfter, addRowAfter, deleteColumn, deleteRow, deleteTable, tableEditing } from 'prosemirror-tables';
 import createFloatingButtonPlugin, { ToolbarType } from './utils/createFloatingButtonPlugin';
 import addColumnRightIcon from '../vendor/icons/addColumnRight';
@@ -6,7 +7,6 @@ import removeRowIcon from '../vendor/icons/removeRow';
 import removeColumnIcon from '../vendor/icons/removeColumn';
 import focusEditor from '../commands/focusEditor';
 import { Command } from 'prosemirror-state';
-
 const tableCommand = (command: Command): Command => (state, dispatch, view) => {
 	return command(state, dispatch, view) && focusEditor(state, dispatch, view);
 };

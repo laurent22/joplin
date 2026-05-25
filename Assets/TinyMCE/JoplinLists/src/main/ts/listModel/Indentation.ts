@@ -5,8 +5,8 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
-import { Entry } from './Entry';
 
+import { Entry } from './Entry';
 export const enum Indentation {
   Indent = 'Indent',
   Outdent = 'Outdent',

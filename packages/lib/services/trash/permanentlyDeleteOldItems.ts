@@ -1,3 +1,4 @@
+
 import Logger from '@joplin/utils/Logger';
 import Folder from '../../models/Folder';
 import Setting from '../../models/Setting';
@@ -8,7 +9,6 @@ import { itemIsReadOnlySync } from '../../models/utils/readOnly';
 import BaseItem from '../../models/BaseItem';
 import { ModelType } from '../../BaseModel';
 import ItemChange from '../../models/ItemChange';
-
 const logger = Logger.create('permanentlyDeleteOldData');
 
 const readOnlyItemsRemoved = async (itemIds: string[], itemType: ModelType) => {

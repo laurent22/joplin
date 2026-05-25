@@ -1,5 +1,7 @@
 /* @typescript-eslint/prefer-const */
 
+
+
 import time from '../../time';
 import { setupDatabaseAndSynchronizer, supportDir, db, createNTestNotes, switchClient } from '../../testing/test-utils';
 import SearchEngine from './SearchEngine';
@@ -9,8 +11,6 @@ import Tag from '../../models/Tag';
 import shim from '../../shim';
 import ResourceService from '../ResourceService';
 import { NoteEntity } from '../database/types';
-
-
 let engine: SearchEngine = null;
 
 const ids = (array: NoteEntity[]) => array.map(a => a.id);

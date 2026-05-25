@@ -1,9 +1,9 @@
+
 import * as React from 'react';
 import { CSSProperties, useMemo, useCallback } from 'react';
 import { OnItemClickHander } from './types';
 import { NoteListColumn } from '@joplin/lib/services/plugins/api/noteListType';
 import getColumnTitle from './utils/getColumnTitle';
-
 interface Props {
 	isFirst: boolean;
 	column: NoteListColumn;

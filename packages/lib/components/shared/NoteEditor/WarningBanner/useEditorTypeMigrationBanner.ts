@@ -1,7 +1,7 @@
+
 import { _ } from '../../../../locale';
 import Setting from '../../../../models/Setting';
 import shim from '../../../../shim';
-
 interface Props {
 	editorMigrationVersion: number;
 	markdownEditorEnabled: boolean;

@@ -1,5 +1,5 @@
-import type { Context } from 'koa';
 
+import type { Context } from 'koa';
 declare module 'knex/types/tables' {
 	interface Job {
 		id: string;

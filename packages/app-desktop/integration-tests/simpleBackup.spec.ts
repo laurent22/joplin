@@ -1,8 +1,8 @@
+
 import { test } from './util/test';
 import MainScreen from './models/MainScreen';
 import SettingsScreen from './models/SettingsScreen';
 import activateMainMenuItem from './util/activateMainMenuItem';
-
 test.describe('simpleBackup', () => {
 	test('should have a section in settings', async ({ electronApp, startupPluginsLoaded, mainWindow }) => {
 		await startupPluginsLoaded;

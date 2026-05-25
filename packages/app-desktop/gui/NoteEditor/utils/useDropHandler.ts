@@ -1,3 +1,4 @@
+
 import { useCallback } from 'react';
 import Note from '@joplin/lib/models/Note';
 import { DragEvent as ReactDragEvent } from 'react';
@@ -5,7 +6,6 @@ import { DropCommandValue } from './types';
 import { webUtils } from 'electron';
 import { RefObject } from 'react';
 import { NoteBodyEditorRef } from './types';
-
 interface HookDependencies {
 	editorRef: RefObject<NoteBodyEditorRef>;
 }

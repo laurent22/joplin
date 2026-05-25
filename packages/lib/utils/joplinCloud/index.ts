@@ -1,8 +1,8 @@
+
 import * as fs from 'fs-extra';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '../../markdownUtils';
 import { _ } from '../../locale';
 import { htmlentities } from '@joplin/utils/html';
-
 type FeatureId = string;
 
 export enum PlanName {

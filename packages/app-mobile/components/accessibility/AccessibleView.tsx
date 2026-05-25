@@ -1,10 +1,10 @@
+
 import * as React from 'react';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Platform, View, ViewProps } from 'react-native';
 import { AutoFocusContext } from './FocusControl/AutoFocusProvider';
 import Logger from '@joplin/utils/Logger';
 import focusView from '../../utils/focusView';
-
 const logger = Logger.create('AccessibleView');
 
 interface Props extends ViewProps {

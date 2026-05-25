@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
-import markdownUtils from './markdownUtils';
 
+import markdownUtils from './markdownUtils';
 describe('markdownUtils', () => {
 
 

@@ -1,7 +1,7 @@
+
+
 import { PluginSettings } from '../../../../services/plugins/PluginService';
 import { PluginManifest } from '../../../../services/plugins/utils/types';
-
-
 export interface PluginItem {
 	manifest: PluginManifest;
 	installed: boolean;

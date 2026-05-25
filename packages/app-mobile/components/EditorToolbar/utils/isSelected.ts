@@ -1,7 +1,7 @@
+
 import SelectionFormatting from '@joplin/editor/SelectionFormatting';
 import { EditorCommandType } from '@joplin/editor/types';
 import { EditorState } from '../types';
-
 type StateSelector = (selectionState: SelectionFormatting, searchVisible: boolean)=> boolean;
 
 const commandNameToSelectionState: Record<string, StateSelector> = {

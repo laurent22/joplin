@@ -1,3 +1,8 @@
+
+import ObjectUtils from '../../ObjectUtils';
+import { toTitleCase } from '../../string-utils.js';
+import Note from '../Note';
+import Folder from '../Folder';
 import { rtrimSlashes } from '@joplin/utils/path';
 import SyncTargetRegistry from '../../SyncTargetRegistry';
 import { _, _n, defaultLocale, supportedLocalesToLanguages } from '../../locale';
@@ -9,9 +14,6 @@ import { defaultListColumns } from '../../services/plugins/api/noteListType';
 import type { PluginSettings } from '../../services/plugins/PluginService';
 import type { PublicPrivateKeyPair } from '../../services/e2ee/ppk/ppk';
 import { EmptyObject } from '@joplin/utils/types';
-const ObjectUtils = require('../../ObjectUtils');
-const { toTitleCase } = require('../../string-utils.js');
-
 const customCssFilePath = (Setting: typeof SettingType, filename: string): string => {
 	return `${Setting.value('rootProfileDir')}/${filename}`;
 };
@@ -720,7 +722,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Cli],
 			label: () => _('Sort notes by'),
 			options: () => {
-				const Note = require('../Note').default;
 				const noteSortFields = ['user_updated_time', 'user_created_time', 'title', 'order', 'todo_due', 'todo_completed'];
 				const options: Record<string, string> = {};
 				for (let i = 0; i < noteSortFields.length; i++) {
@@ -890,7 +891,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'appearance',
 			label: () => _('Sort notebooks by'),
 			options: () => {
-				const Folder = require('../Folder').default;
 				const folderSortFields = ['title', 'last_note_user_updated_time'];
 				const options: Record<string, string> = {};
 				for (let i = 0; i < folderSortFields.length; i++) {

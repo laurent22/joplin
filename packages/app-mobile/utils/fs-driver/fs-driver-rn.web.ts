@@ -1,3 +1,4 @@
+
 import { resolve } from 'path';
 import FsDriverBase, { ReadDirStatsOptions, RemoveOptions, Stat } from '@joplin/lib/fs-driver-base';
 import tarExtract, { TarExtractOptions } from './tarExtract';
@@ -8,7 +9,6 @@ import RemoteMessenger from '@joplin/lib/utils/ipc/RemoteMessenger';
 import type { AccessMode, TransferableStat, WorkerApi } from './fs-driver-rn.web.worker';
 import WorkerMessenger from '@joplin/lib/utils/ipc/WorkerMessenger';
 import JoplinError from '@joplin/lib/JoplinError';
-
 type FileHandle = {
 	reader: ReadableStreamDefaultReader<Uint8Array>;
 	buffered: Buffer;

@@ -1,3 +1,6 @@
+
+// New code should make use of this enum
+import { Mutex } from 'async-mutex';
 import paginationToSql from './models/utils/paginationToSql';
 import Database from './database';
 import time from './time';
@@ -6,9 +9,6 @@ import { LoadOptions, SaveOptions } from './models/utils/types';
 import ActionLogger, { ItemActionType as ItemActionType } from './utils/ActionLogger';
 import { BaseItemEntity, SqlQuery } from './services/database/types';
 import uuid from './uuid';
-const Mutex = require('async-mutex').Mutex;
-
-// New code should make use of this enum
 export enum ModelType {
 	Note = 1,
 	Folder = 2,

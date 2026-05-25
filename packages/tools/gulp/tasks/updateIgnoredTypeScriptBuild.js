@@ -1,4 +1,5 @@
-const utils = require('../utils');
+import fs_extra_543 from 'fs-extra';
+import utils from '../utils';
 const rootDir = utils.rootDir();
 
 module.exports = {
@@ -43,7 +44,7 @@ module.exports = {
 		// Use this to check what files are being scanned.
 		// Also change glob call to `glob.sync('**/*',`
 		//
-		// const fs = require('fs-extra');
+		// const fs = fs_extra_543;
 		// fs.writeFileSync('/Users/laurent/listfile.txt', JSON.stringify(tsFiles, null, '\t'));
 
 		const ignoredJsFiles = tsFiles.map(f => {

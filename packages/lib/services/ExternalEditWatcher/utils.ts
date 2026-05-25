@@ -1,12 +1,12 @@
 /* eslint-disable import/prefer-default-export */
 
+
 import { splitCommandString } from '@joplin/utils';
 import { spawn, SpawnOptions } from 'child_process';
 import Logger from '@joplin/utils/Logger';
 import Setting from '../../models/Setting';
 import { fileExtension } from '../../path-utils';
 import shim from '../../shim';
-
 const logger = Logger.create('ExternalEditWatcher/utils');
 
 const spawnCommand = async (path: string, args: string[], options: SpawnOptions) => {

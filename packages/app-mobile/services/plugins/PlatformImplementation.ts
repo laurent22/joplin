@@ -1,3 +1,6 @@
+
+
+
 import { VersionInfo } from '@joplin/lib/services/plugins/api/types';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
@@ -6,9 +9,6 @@ import { CreateFromPdfOptions, Implementation as ImagingImplementation } from '@
 import { _ } from '@joplin/lib/locale';
 import shim from '@joplin/lib/shim';
 import Clipboard from '@react-native-clipboard/clipboard';
-
-
-
 interface Components {
 	[key: string]: unknown;
 }

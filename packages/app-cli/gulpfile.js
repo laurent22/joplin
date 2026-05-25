@@ -1,7 +1,7 @@
+
 import gulp, { task, series } from 'gulp';
 import { chmodSync, mkdirp } from 'fs-extra';
 import { copyDir, copyFile, setPackagePrivateField, registerGulpTasks } from '@joplin/tools/gulp/utils';
-
 const tasks = {};
 
 tasks.prepareBuild = {

@@ -1,7 +1,7 @@
+
 import { wrap } from '@joplin/lib/string-utils.js';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
-
 const MAX_WIDTH = 78;
 const INDENT = '    ';
 

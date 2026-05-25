@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Button, Divider, Text } from 'react-native-paper';
 import { View, StyleSheet, ScrollView, Linking } from 'react-native';
@@ -19,7 +20,6 @@ import DismissibleDialog, { DialogVariant } from '../DismissibleDialog';
 import { _, _n } from '@joplin/lib/locale';
 import { LinkButton, PrimaryButton } from '../buttons';
 import { themeStyle } from '../global-style';
-
 interface Props {
 	themeId: number;
 	noteId: string;

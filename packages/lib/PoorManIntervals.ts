@@ -6,9 +6,9 @@
 // whenever the update() function is called, and in mobile it's called for
 // example on the Redux action middleware or when the app gets focus.
 
+
 import { Hour } from '@joplin/utils/time';
 import time from './time';
-
 type IntervalId = number;
 
 interface Interval {

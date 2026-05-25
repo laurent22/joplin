@@ -1,3 +1,4 @@
+
 import Setting from '../../models/Setting';
 import Tag from '../../models/Tag';
 import BaseModel from '../../BaseModel';
@@ -11,7 +12,6 @@ import shim from '../../shim';
 import { Dispatch, Store } from 'redux';
 import { State } from '../../reducer';
 import { onRevisionServiceSettingsChanged } from '../../services/synchronizer/syncInfoUtils';
-
 let sortNoteListTimeout: ReturnType<typeof shim.setTimeout> = null;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux action shape varies per type; tightening would require an action-type union across the entire app

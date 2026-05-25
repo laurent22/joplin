@@ -1,6 +1,6 @@
+
 import AsyncActionQueue from '../AsyncActionQueue';
 import { EventEmitter } from 'events';
-
 class UndoQueue {
 
 	private inner_: unknown[] = [];

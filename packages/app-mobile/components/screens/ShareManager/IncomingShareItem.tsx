@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import invitationRespond from '@joplin/lib/services/share/invitationRespond';
@@ -5,7 +6,6 @@ import { Button, Card, Icon, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { useCallback } from 'react';
 import { ViewStyle } from 'react-native';
-
 interface Props {
 	invitation: ShareInvitation;
 	processing: boolean;

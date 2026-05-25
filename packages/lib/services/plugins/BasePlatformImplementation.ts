@@ -1,9 +1,9 @@
 // PlatformImplementation provides access to platform specific dependencies,
 // such as the clipboard, message dialog, etc. It allows having the same plugin
 
+
 import { VersionInfo } from './api/types';
 import { Implementation as ImagingImplementation } from './api/JoplinImaging';
-
 export interface ShowOpenDialogOptions {
 	filters?: { name: string; extensions: string[] }[];
 	properties?: string[];

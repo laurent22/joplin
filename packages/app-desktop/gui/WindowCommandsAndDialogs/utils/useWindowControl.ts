@@ -1,10 +1,10 @@
+
 import * as React from 'react';
 import { RefObject, useMemo, useRef } from 'react';
 import { DialogState } from '../types';
 import { PrintCallback } from './usePrintToCallback';
 import { _ } from '@joplin/lib/locale';
 import announceForAccessibility from '../../utils/announceForAccessibility';
-
 interface PromptSuggestion<T> {
 	key: string;
 	value: T;

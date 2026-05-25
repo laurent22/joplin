@@ -1,3 +1,5 @@
+
+
 import { syntaxTree } from '@codemirror/language';
 import { EditorState, StateField } from '@codemirror/state';
 import { EditorView, showTooltip, Tooltip } from '@codemirror/view';
@@ -5,8 +7,6 @@ import referenceLinkStateField from './referenceLinksStateField';
 import getUrlAtPosition from './utils/getUrlAtPosition';
 import openLink from './utils/openLink';
 import ctrlClickLinksExtension from './ctrlClickLinksExtension';
-
-
 type OnOpenLink = (url: string, view: EditorView)=> void;
 
 // Returns tooltips for the links under the cursor(s).

@@ -1,5 +1,5 @@
-import { extractExecutablePath, isUncPath, quotePath, toFileProtocolPath, unquotePath } from './path';
 
+import { extractExecutablePath, isUncPath, quotePath, toFileProtocolPath, unquotePath } from './path';
 describe('path', () => {
 	it('should quote and unquote paths', (async () => {
 		const testCases = [

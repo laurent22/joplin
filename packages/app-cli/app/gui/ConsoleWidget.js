@@ -1,5 +1,5 @@
-import TextWidget from 'tkwidgets/TextWidget.js';
 
+import TextWidget from 'tkwidgets/TextWidget.js';
 class ConsoleWidget extends TextWidget {
 	constructor() {
 		super();

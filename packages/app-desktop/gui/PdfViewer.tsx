@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, useRef, useEffect } from 'react';
 import { ResourceEntity } from '@joplin/lib/services/database/types';
@@ -8,7 +9,6 @@ import { ContextMenuItemType, ContextMenuOptions } from './NoteEditor/utils/cont
 import CommandService from '@joplin/lib/services/CommandService';
 import styled from 'styled-components';
 import { themeStyle } from '@joplin/lib/theme';
-
 interface StyleProps {
 	theme: { backgroundColor: string; color: string };
 }

@@ -1,5 +1,5 @@
-import validatePluginPlatforms from './validatePluginPlatforms';
 
+import validatePluginPlatforms from './validatePluginPlatforms';
 describe('validatePluginPlatforms', () => {
 	test.each([
 		[['mobile', 'desktop'], true],

@@ -17,11 +17,11 @@
 //
 // That will create n users with email `user<n>@example.com`
 
+
 import * as fs from 'fs-extra';
 import { homedir } from 'os';
 import { execCommand } from '@joplin/utils';
 import { chdir } from 'process';
-
 const minUserNum = 1;
 const maxUserNum = 400;
 

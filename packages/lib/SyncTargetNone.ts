@@ -1,8 +1,8 @@
+
 import { _ } from './locale.js';
 import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
 import Synchronizer from './Synchronizer';
-
 export default class SyncTargetNone extends BaseSyncTarget {
 
 	public static id() {

@@ -1,11 +1,15 @@
-const gulp = require('gulp');
-const utils = require('./gulp/utils');
 
+import copyLib_544 from './Tools/gulp/tasks/copyLib';
+import tsc_545 from './Tools/gulp/tasks/tsc';
+import updateIgnoredTypeScriptBuild_546 from './gulp/tasks/updateIgnoredTypeScriptBuild';
+import deleteBuildDirs_547 from './Tools/gulp/tasks/deleteBuildDirs';
+import gulp from 'gulp';
+import utils from './gulp/utils';
 const tasks = {
-	// copyLib: require('./Tools/gulp/tasks/copyLib'),
-	// tsc: require('./Tools/gulp/tasks/tsc'),
-	updateIgnoredTypeScriptBuild: require('./gulp/tasks/updateIgnoredTypeScriptBuild'),
-	// deleteBuildDirs: require('./Tools/gulp/tasks/deleteBuildDirs'),
+	// copyLib: copyLib_544,
+	// tsc: tsc_545,
+	updateIgnoredTypeScriptBuild: updateIgnoredTypeScriptBuild_546,
+	// deleteBuildDirs: deleteBuildDirs_547,
 };
 
 utils.registerGulpTasks(gulp, tasks);

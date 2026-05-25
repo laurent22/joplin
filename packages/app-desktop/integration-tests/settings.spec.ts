@@ -1,7 +1,7 @@
+
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import SettingsScreen from './models/SettingsScreen';
-
 test.describe('settings', () => {
 	test('should be possible to remove sort order buttons in settings', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();

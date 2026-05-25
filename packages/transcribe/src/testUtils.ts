@@ -1,7 +1,7 @@
+
 import { remove } from 'fs-extra';
 import createQueue from './services/createQueue';
 import env, { ComputedEnvVariables } from './env';
-
 export const initDb = async (sqliteFile: string) => {
 	const envVariables = env();
 	const testEnv: ComputedEnvVariables = {

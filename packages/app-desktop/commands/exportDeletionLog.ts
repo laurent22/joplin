@@ -1,11 +1,11 @@
 
+
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import bridge from '../services/bridge';
 import { formatMsToLocal } from '@joplin/utils/time';
-
 export const declaration: CommandDeclaration = {
 	name: 'exportDeletionLog',
 	label: () => _('Export deletion log'),

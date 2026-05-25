@@ -1,3 +1,4 @@
+
 import config from '../../config';
 import { AccountType } from '../../models/UserModel';
 import { getCanShareFolder, getMaxItemSize } from '../../models/utils/user';
@@ -7,7 +8,6 @@ import { execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../../utils/testing/testUtils';
 import { uuidgen } from '@joplin/lib/uuid';
 import { FormUser } from './signup';
-
 describe('index_signup', () => {
 
 	beforeAll(async () => {

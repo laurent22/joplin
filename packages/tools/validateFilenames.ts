@@ -1,11 +1,11 @@
 // This is used to validate the Markdown filenames. The updateNews script uses the filename as the
 // Discourse external_id, however that ID does not support certain characters, such as ".".
 
+
 import { getRootDir } from '@joplin/utils';
 import { fileExtension } from '@joplin/utils/path';
 import { readdir } from 'fs/promises';
 import { filename } from '@joplin/lib/path-utils';
-
 const supportedExtensions = ['md', 'mdx'];
 const allowedRegex = '^[a-zA-Z0-9_-]+$';
 

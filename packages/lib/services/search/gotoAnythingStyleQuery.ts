@@ -1,6 +1,6 @@
+
 import { isCallbackUrl } from '../../callbackUrlUtils';
 import isItemId from '../../models/utils/isItemId';
-
 export default (query: string) => {
 	if (!query) return '';
 

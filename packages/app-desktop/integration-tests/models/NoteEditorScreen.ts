@@ -1,9 +1,9 @@
+
 import { ElectronApplication, Locator, Page } from '@playwright/test';
 import { expect } from '../util/test';
 import activateMainMenuItem from '../util/activateMainMenuItem';
 import EditorCodeDialog from './EditorCodeDialog';
 import setSettingValue from '../util/setSettingValue';
-
 export default class NoteEditorScreen {
 	public readonly codeMirrorEditor: Locator;
 	public readonly noteViewerContainer: Locator;

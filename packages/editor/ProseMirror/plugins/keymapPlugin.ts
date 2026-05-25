@@ -1,3 +1,4 @@
+
 import { buildKeymap as buildBaseKeymap } from 'prosemirror-example-setup';
 import schema from '../schema';
 import { keymap } from 'prosemirror-keymap';
@@ -8,7 +9,6 @@ import { EditorCommandType } from '../../types';
 import { Command, EditorState, TextSelection, Plugin } from 'prosemirror-state';
 import splitBlockAs from '../vendor/splitBlockAs';
 import canReplaceSelectionWith from '../utils/canReplaceSelectionWith';
-
 const splitBlockAsDefault = splitBlockAs();
 const splitBlockAsParagraph = splitBlockAs(() => ({ type: schema.nodes.paragraph }));
 

@@ -1,8 +1,3 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree, expectNotThrow, createNote } from '../utils/testing/testUtils';
-import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
-import { Change2, ChangeType, ShareType } from '../services/database/types';
-import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept, updateItemShareId } from '../utils/testing/shareApiUtils';
-import { withWarningSilenced } from '@joplin/lib/testing/test-utils';
 
 // Goes through the process of:
 // 1. Creating two users/sessions
@@ -11,6 +6,11 @@ import { withWarningSilenced } from '@joplin/lib/testing/test-utils';
 //
 // This creates a note owned by the share recipient, but within the
 // share.
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree, expectNotThrow, createNote } from '../utils/testing/testUtils';
+import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
+import { Change2, ChangeType, ShareType } from '../services/database/types';
+import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept, updateItemShareId } from '../utils/testing/shareApiUtils';
+import { withWarningSilenced } from '@joplin/lib/testing/test-utils';
 const createShareWithNoteOwnedByRecipient = async () => {
 	const { session: session1 } = await createUserAndSession(1);
 	const { session: session2, user: user2 } = await createUserAndSession(2);

@@ -1,3 +1,4 @@
+
 import time from '../../time';
 import shim from '../../shim';
 import Setting from '../../models/Setting';
@@ -12,7 +13,6 @@ import BaseItem from '../../models/BaseItem';
 import { ModelType } from '../../BaseModel';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { loadMasterKeysFromSettings } from '../e2ee/utils';
-
 let insideBeforeEach = false;
 
 describe('Synchronizer.resources', () => {

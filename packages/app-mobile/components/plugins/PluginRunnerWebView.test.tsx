@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import { AppState } from '../../utils/types';
@@ -12,7 +13,6 @@ import getWebViewDomById from '../../utils/testing/getWebViewDomById';
 import Setting from '@joplin/lib/models/Setting';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import CommandService from '@joplin/lib/services/CommandService';
-
 let store: Store<AppState>;
 
 interface WrapperProps { }

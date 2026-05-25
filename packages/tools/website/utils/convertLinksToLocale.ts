@@ -1,5 +1,5 @@
-import { Locale } from './types';
 
+import { Locale } from './types';
 export default (md: string, locale: Locale) => {
 	if (locale.lang === 'en-gb') return md;
 

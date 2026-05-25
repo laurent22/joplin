@@ -1,9 +1,9 @@
+
+import CommandService from '@joplin/lib/services/CommandService';
 import { useState, useCallback, MutableRefObject, useEffect } from 'react';
 import Logger from '@joplin/utils/Logger';
 import { SearchMarkers } from './useSearchMarkers';
 import { focus } from '@joplin/lib/utils/focusHandler';
-const CommandService = require('@joplin/lib/services/CommandService').default;
-
 const logger = Logger.create('useNoteSearchBar');
 
 const queryMaxLength = 1000;

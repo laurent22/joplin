@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { View, StyleSheet, TextInput, ScrollView, Text as TextNative } from 'react-native';
@@ -24,7 +25,6 @@ import { DialogContext } from '../DialogManager';
 import useDeleteHistoryClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick';
 import { OnScrollCallback } from '../NoteBodyViewer/types';
 import TextWrapCalculator from './Notes/TextWrapCalculator';
-
 interface Props {
 	themeId: number;
 	selectedNoteId: string;

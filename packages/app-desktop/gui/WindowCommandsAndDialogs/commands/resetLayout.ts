@@ -1,7 +1,7 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import shim from '@joplin/lib/shim';
-
 export const declaration: CommandDeclaration = {
 	name: 'resetLayout',
 	label: () => _('Reset application layout'),

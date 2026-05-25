@@ -1,3 +1,11 @@
+
+import md5 from 'md5';
+import urlUtils from '../../../urlUtils.js';
+import { mimeTypeFromHeaders } from '../../../net-utils';
+import { fileExtension, safeFileExtension, safeFilename, filename } from '../../../path-utils';
+import { MarkupToHtml } from '@joplin/renderer';
+import { ErrorNotFound } from '../utils/errors';
+import uglifycss from 'uglifycss';
 import Setting from '../../../models/Setting';
 import shim from '../../../shim';
 import uuid from '../../../uuid';
@@ -17,21 +25,14 @@ import Resource from '../../../models/Resource';
 import htmlUtils from '../../../htmlUtils';
 import markupLanguageUtils from '../../../markupLanguageUtils';
 import * as mimeUtils from '../../../mime-utils';
-const md5 = require('md5');
 import HtmlToMd from '../../../HtmlToMd';
-const urlUtils = require('../../../urlUtils.js');
 import * as ArrayUtils from '../../../ArrayUtils';
 import Logger from '@joplin/utils/Logger';
-const { mimeTypeFromHeaders } = require('../../../net-utils');
-const { fileExtension, safeFileExtension, safeFilename, filename } = require('../../../path-utils');
-const { MarkupToHtml } = require('@joplin/renderer');
-const { ErrorNotFound } = require('../utils/errors');
 import { fileUriToPath } from '@joplin/utils/url';
 import { NoteEntity, ResourceEntity } from '../../database/types';
 import { DownloadController } from '../../../downloadController';
 import { FetchBlobOptions } from '../../../types';
 import RevisionService from '../../RevisionService';
-
 const logger = Logger.create('routes/notes');
 
 let htmlToMdParser_: HtmlToMd = null;
@@ -123,7 +124,6 @@ async function requestNoteToNote(requestNote: RequestNote): Promise<NoteEntity> 
 				maxLineLength: 300,
 			};
 
-			const uglifycss = require('uglifycss');
 			const styleString = uglifycss.processString(style.join('\n'), {
 				// Need to set a max length because Ace Editor takes forever
 				// to display notes with long lines.

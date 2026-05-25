@@ -1,9 +1,9 @@
+
 import Setting from '../../models/Setting';
 import CommandService from '../CommandService';
 import SpellCheckerServiceDriverBase from './SpellCheckerServiceDriverBase';
 import { _, countryDisplayName } from '../../locale';
 import KvStore from '../KvStore';
-
 export default class SpellCheckerService {
 
 	private driver_: SpellCheckerServiceDriverBase;

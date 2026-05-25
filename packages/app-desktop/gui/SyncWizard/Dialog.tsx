@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useRef, useCallback, useId } from 'react';
 import { _ } from '@joplin/lib/locale';
@@ -11,7 +12,6 @@ import Button, { ButtonLevel } from '../Button/Button';
 import bridge from '../../services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 import JoplinCloudSignUpCallToAction from '../JoplinCloudSignUpCallToAction';
-
 interface Props {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied

@@ -1,6 +1,6 @@
+
 import { EditorState } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
-
 export interface HtmlNodeInfo {
 	node: SyntaxNodeRef;
 	opening: boolean;

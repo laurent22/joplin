@@ -1,5 +1,5 @@
-import { normalizeQuery, hasNormalizedQuery, toSearchText, shouldShowBySearch, equalsNormalizedQuery, includesNormalizedQuery } from './config-search-text';
 
+import { normalizeQuery, hasNormalizedQuery, toSearchText, shouldShowBySearch, equalsNormalizedQuery, includesNormalizedQuery } from './config-search-text';
 describe('config-search', () => {
 	it('should normalize query for case-insensitive matching', () => {
 		expect(normalizeQuery('  SyNc  ')).toBe('sync');

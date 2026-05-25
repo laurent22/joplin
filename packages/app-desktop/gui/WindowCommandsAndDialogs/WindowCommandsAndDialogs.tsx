@@ -1,3 +1,6 @@
+
+
+import PluginManager from '@joplin/lib/services/PluginManager';
 import * as React from 'react';
 import PromptDialog from '../PromptDialog';
 import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
@@ -19,9 +22,6 @@ import PluginDialogs from './PluginDialogs';
 import useSyncDialogState from './utils/useSyncDialogState';
 import AppDialogs from './AppDialogs';
 import PopupNotificationList from '../PopupNotification/PopupNotificationList';
-
-const PluginManager = require('@joplin/lib/services/PluginManager');
-
 interface Props {
 	dispatch: Dispatch;
 	themeId: number;

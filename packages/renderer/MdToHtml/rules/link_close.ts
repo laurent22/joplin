@@ -1,13 +1,13 @@
 // This rule is used to add a media player for certain resource types below
 // the link.
 
+
+
 import { LinkRenderingType, RuleOptions } from '../../MdToHtml';
 import renderMedia, { Options as RenderMediaOptions } from '../renderMedia';
 import type * as MarkdownIt from 'markdown-it';
-import type Token = require('markdown-it/lib/token');
-import type Renderer = require('markdown-it/lib/renderer');
-
-
+import type Token from 'markdown-it/lib/token';
+import type Renderer from 'markdown-it/lib/renderer';
 export interface LinkIndexes {
 	[key: string]: number;
 }

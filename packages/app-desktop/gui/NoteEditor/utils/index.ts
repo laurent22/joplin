@@ -1,10 +1,10 @@
-import { FormNote } from './types';
 
+
+import { MarkupToHtml } from '@joplin/renderer';
+import { FormNote } from './types';
 import HtmlToMd, { ParseOptions } from '@joplin/lib/HtmlToMd';
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity } from '@joplin/lib/services/database/types';
-const { MarkupToHtml } = require('@joplin/renderer');
-
 export async function htmlToMarkdown(markupLanguage: number, html: string, originalCss: string, parseOptions: ParseOptions = null): Promise<string> {
 	let newBody = '';
 

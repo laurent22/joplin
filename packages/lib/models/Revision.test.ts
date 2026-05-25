@@ -1,9 +1,9 @@
+
 import { expectNotThrow, naughtyStrings, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import Note from '../models/Note';
 import Revision, { ObjectPatch } from '../models/Revision';
 import { NoteEntity, RevisionEntity } from '../services/database/types';
 import BaseModel from '../BaseModel';
-
 const oneDayMs = 24 * 60 * 60 * 1000;
 const halfDayMs = 12 * 60 * 60 * 1000;
 // cSpell:disable

@@ -1,6 +1,6 @@
+
 import BaseService from './BaseService';
 import Migration from '../models/Migration';
-
 export default class MigrationService extends BaseService {
 
 	private static instance_: MigrationService;

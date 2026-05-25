@@ -1,6 +1,6 @@
+
 import KeychainServiceDriverBase from './KeychainServiceDriverBase';
 import shim from '../../shim';
-
 export default class KeychainServiceDriver extends KeychainServiceDriverBase {
 	public override readonly driverId: string = 'node-keytar';
 

@@ -1,10 +1,10 @@
+
 import config from '../config';
 import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
 import { afterAllTests, beforeAllDb, beforeEachDb, createApplicationCredentials, createNote, createUserAndSession, models } from '../utils/testing/testUtils';
 import { Env } from '../utils/types';
 import { BackupItemType, UserFlagType } from './database/types';
 import UserDeletionService from './UserDeletionService';
-
 const newService = () => {
 	return new UserDeletionService(Env.Dev, models(), config());
 };

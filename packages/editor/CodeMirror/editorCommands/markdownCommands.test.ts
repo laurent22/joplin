@@ -1,11 +1,11 @@
 import { EditorSelection } from '@codemirror/state';
+import createTestEditor from '../testing/createTestEditor';
+import { blockMathTagName } from '../extensions/markdownMathExtension';
 import {
 	insertHorizontalRule,
 	insertOrIncreaseIndent,
 	toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleMath, updateLink,
 } from '../editorCommands/markdownCommands';
-import createTestEditor from '../testing/createTestEditor';
-import { blockMathTagName } from '../extensions/markdownMathExtension';
 
 describe('markdownCommands', () => {
 

@@ -1,6 +1,6 @@
-const { setupDatabaseAndSynchronizer, sleep, switchClient } = require('./testing/test-utils.js');
-const TaskQueue = require('./TaskQueue').default;
 
+import { setupDatabaseAndSynchronizer, sleep, switchClient } from './testing/test-utils.js';
+import TaskQueue from './TaskQueue';
 describe('TaskQueue', () => {
 
 	beforeEach(async () => {

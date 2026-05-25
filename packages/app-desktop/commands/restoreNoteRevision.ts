@@ -1,7 +1,7 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import RevisionService from '@joplin/lib/services/RevisionService';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
-
 export const declaration: CommandDeclaration = {
 	name: 'restoreNoteRevision',
 	label: 'Restore a note from history',

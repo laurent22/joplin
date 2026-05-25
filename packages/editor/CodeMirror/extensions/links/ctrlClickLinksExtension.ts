@@ -1,3 +1,4 @@
+
 import { EditorView } from '@codemirror/view';
 import referenceLinkStateField from './referenceLinksStateField';
 import modifierKeyCssExtension from '../modifierKeyCssExtension';
@@ -5,7 +6,6 @@ import openLink from './utils/openLink';
 import getUrlAtPosition from './utils/getUrlAtPosition';
 import { syntaxTree } from '@codemirror/language';
 import ctrlClickActionExtension from '../ctrlClickActionExtension';
-
 type OnOpenLink = (url: string, view: EditorView)=> void;
 
 const ctrlClickLinksExtension = (onOpenExternalLink: OnOpenLink) => {

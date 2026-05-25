@@ -1,6 +1,6 @@
+
 import config from '../config';
 import { AppContext } from './types';
-
 export function cookieSet(ctx: AppContext, name: string, value: string) {
 	ctx.cookies.set(name, value, {
 		// Means that the cookies cannot be accessed from JavaScript

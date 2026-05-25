@@ -1,10 +1,10 @@
+
+import md5File from 'md5-file';
+import sharp from 'sharp';
 import { fileExtension } from '@joplin/lib/path-utils';
 import { copyFile, pathExists, readdir, readFile, writeFile } from 'fs-extra';
 import { dirname } from 'path';
 import { execCommand } from './tool-utils';
-const md5File = require('md5-file');
-const sharp = require('sharp');
-
 interface Source {
 	id: number;
 	name: string;

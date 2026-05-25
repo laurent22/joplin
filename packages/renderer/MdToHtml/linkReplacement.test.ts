@@ -1,7 +1,7 @@
+
 import defaultResourceModel from '../defaultResourceModel';
 import linkReplacement from './linkReplacement';
 import { describe, test, expect } from '@jest/globals';
-
 describe('linkReplacement', () => {
 
 	test('should handle non-resource links', () => {

@@ -1,6 +1,6 @@
+
 import errorsHaveChanged from './errorsHaveChanged';
 import { ImportErrors } from './types';
-
 describe('errorsHaveChanged', () => {
 
 	test('should tell if an errors object has changed', () => {

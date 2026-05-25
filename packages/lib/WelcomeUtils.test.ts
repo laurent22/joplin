@@ -1,9 +1,9 @@
+
 import { setupDatabaseAndSynchronizer, switchClient } from './testing/test-utils';
 import WelcomeUtils, { WelcomeAssetPlatform } from './WelcomeUtils';
 import Folder from './models/Folder';
 import { FolderIconType } from './services/database/types';
 import Note from './models/Note';
-
 describe('WelcomeUtils', () => {
 
 	beforeEach(async () => {

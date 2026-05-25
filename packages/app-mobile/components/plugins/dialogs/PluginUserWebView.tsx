@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PluginHtmlContents, ViewInfo } from '@joplin/lib/services/plugins/reducer';
@@ -9,7 +10,6 @@ import shim from '@joplin/lib/shim';
 import useDialogMessenger from './hooks/useDialogMessenger';
 import useWebViewSetup from './hooks/useWebViewSetup';
 import { DialogWebViewApi } from '../types';
-
 interface Props {
 	themeId: number;
 	pluginHtmlContents: PluginHtmlContents;

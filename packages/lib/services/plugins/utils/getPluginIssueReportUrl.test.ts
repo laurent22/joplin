@@ -1,5 +1,5 @@
-import getPluginIssueReportUrl from './getPluginIssueReportUrl';
 
+import getPluginIssueReportUrl from './getPluginIssueReportUrl';
 describe('getPluginIssueReportUrl', () => {
 	test.each([
 		[{ repository_url: 'http://github.com/laurent22/joplin' }, 'https://github.com/laurent22/joplin/issues'],

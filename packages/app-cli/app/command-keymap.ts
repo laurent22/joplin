@@ -1,8 +1,8 @@
+
+import { cliUtils } from './cli-utils.js';
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
-const { cliUtils } = require('./cli-utils.js');
-
 interface Args { }
 
 class Command extends BaseCommand {

@@ -1,3 +1,5 @@
+import { Stream as Stream_168 } from 'stream';
+import { StringDecoder as SD } from 'string_decoder';
 ;(function (sax) { // wrapper for non-node envs
   sax.parser = function (strict, opt) { return new SAXParser(strict, opt) }
   sax.SAXParser = SAXParser
@@ -160,7 +162,7 @@
 
   var Stream
   try {
-    Stream = require('stream').Stream
+    Stream = Stream_168;
   } catch (ex) {
     Stream = function () {}
   }
@@ -230,7 +232,6 @@
       typeof Buffer.isBuffer === 'function' &&
       Buffer.isBuffer(data)) {
       if (!this._decoder) {
-        var SD = require('string_decoder').StringDecoder
         this._decoder = new SD('utf8')
       }
       data = this._decoder.write(data)

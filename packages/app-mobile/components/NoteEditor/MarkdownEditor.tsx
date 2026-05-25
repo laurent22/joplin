@@ -1,18 +1,18 @@
+
+
+
 import { themeStyle } from '@joplin/lib/theme';
 import themeToCss from '@joplin/lib/services/style/themeToCss';
 import ExtendedWebView from '../ExtendedWebView';
-
 import * as React from 'react';
 import { useMemo, useCallback } from 'react';
 import { NativeSyntheticEvent } from 'react-native';
-
 import { EditorProps } from './types';
 import { _ } from '@joplin/lib/locale';
 import { WebViewErrorEvent } from 'react-native-webview/lib/RNCWebViewNativeComponent';
 import Logger from '@joplin/utils/Logger';
 import { OnMessageEvent } from '../ExtendedWebView/types';
 import useWebViewSetup from '../../contentScripts/markdownEditorBundle/useWebViewSetup';
-
 const logger = Logger.create('MarkdownEditor');
 
 function useCss(themeId: number): string {

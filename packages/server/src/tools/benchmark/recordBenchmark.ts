@@ -1,8 +1,8 @@
+
 import shim from '@joplin/lib/shim';
 import { getRootDir } from '@joplin/utils';
 import Logger from '@joplin/utils/Logger';
 import { writeFile } from 'fs/promises';
-
 const logger = Logger.create('benchmark');
 
 const computeAverage = (data: number[]) => {

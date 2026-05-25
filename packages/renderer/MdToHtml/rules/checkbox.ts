@@ -1,9 +1,9 @@
+
 import { RuleOptions } from '../../MdToHtml';
 import { RendererTheme } from '../../types';
 import type * as MarkdownIt from 'markdown-it';
-import type Token = require('markdown-it/lib/token');
-import type StateCore = require('markdown-it/lib/rules_core/state_core');
-
+import type Token from 'markdown-it/lib/token';
+import type StateCore from 'markdown-it/lib/rules_core/state_core';
 let checkboxIndex_ = -1;
 
 function pluginAssets(theme: RendererTheme) {

@@ -1,9 +1,9 @@
-import yargs = require('yargs');
+
+import yargs from 'yargs';
 import { chdir } from 'process';
 import { rootDir } from './tool-utils';
 import { execCommand } from '@joplin/utils';
 import { fileExtension } from '@joplin/utils/path';
-
 const supportedExtensions = ['ts', 'tsx', 'md', 'mdx'];
 
 const main = async () => {

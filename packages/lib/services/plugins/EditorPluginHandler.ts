@@ -3,13 +3,13 @@
 //
 // packages/lib/services/plugins/api/JoplinViewsEditor.ts
 
+
 import Logger from '@joplin/utils/Logger';
 import AsyncActionQueue, { IntervalType } from '../../AsyncActionQueue';
 import eventManager from '../../eventManager';
 import { EditorActivationCheckFilterObject } from './api/types';
 import type PluginService from './PluginService';
 import WebviewController from './WebviewController';
-
 const logger = Logger.create('EditorPluginHandler');
 
 export interface UpdateEvent {

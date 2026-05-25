@@ -1,5 +1,5 @@
-import { RenderResultPluginAsset } from './types';
 
+import { RenderResultPluginAsset } from './types';
 interface Options {
 	asHtml: boolean;
 }

@@ -1,3 +1,4 @@
+
 import { exists, mkdir, pathExists, readdir, remove, writeFile } from 'fs-extra';
 import ActionRunner, { ActionSpec } from './ActionRunner';
 import ClientPool from './ipc/ClientPool';
@@ -13,7 +14,6 @@ import { ItemId } from './model/types';
 import openDebugSession from './utils/openDebugSession';
 import { readFile } from 'fs/promises';
 import { randomWeightedElement } from '@joplin/utils/array';
-
 const logger = Logger.create('Fuzzer');
 
 interface FuzzerState {

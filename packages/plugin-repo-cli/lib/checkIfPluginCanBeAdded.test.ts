@@ -1,5 +1,5 @@
-import checkIfPluginCanBeAdded from './checkIfPluginCanBeAdded';
 
+import checkIfPluginCanBeAdded from './checkIfPluginCanBeAdded';
 describe('checkIfPluginCanBeAdded', () => {
 
 	test('should not add if already a plugin with this ID but different package name', () => {

@@ -1,11 +1,11 @@
+
+import Command from './command-rmnote';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import { setupCommandForTesting, setupApplication } from './utils/testUtils';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import app from './app';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
-const Command = require('./command-rmnote');
-
 const setUpCommand = () => {
 	const command = setupCommandForTesting(Command);
 	const promptMock = jest.fn(() => true);

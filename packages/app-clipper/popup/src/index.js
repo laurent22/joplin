@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
 
+
+
+import { Provider } from 'react-redux';
+import { bridge } from './bridge';
+import { createStore, applyMiddleware } from 'redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-
-const { Provider } = require('react-redux');
-const { bridge } = require('./bridge');
-const { createStore, applyMiddleware } = require('redux');
-
 const defaultState = {
 	warning: '',
 	clippedContent: null,

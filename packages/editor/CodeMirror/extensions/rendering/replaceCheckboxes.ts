@@ -1,8 +1,8 @@
+
 import { Decoration, EditorView, WidgetType } from '@codemirror/view';
 import { SyntaxNodeRef } from '@lezer/common';
 import makeReplaceExtension from './utils/makeInlineReplaceExtension';
 import toggleCheckboxAt from '../../utils/markdown/toggleCheckboxAt';
-
 const checkboxClassName = 'cm-ext-checkbox-toggle';
 
 

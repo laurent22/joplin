@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useRef } from 'react';
 
 // Joplin's renderer emits `<input type="checkbox">` elements for `- [ ]` /
 // `- [x]` markdown syntax, with an inline onclick that calls
@@ -12,6 +11,7 @@ import { useCallback, useEffect, useRef } from 'react';
 // installs a click listener that flips the corresponding `[ ]` / `[x]` in
 // the source markdown by index.
 
+import { useCallback, useEffect, useRef } from 'react';
 interface Options {
 	body: string;
 	onChange: (newBody: string)=> void;

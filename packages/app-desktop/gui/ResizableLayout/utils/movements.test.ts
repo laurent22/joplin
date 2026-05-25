@@ -1,8 +1,8 @@
+
 import { LayoutItem, LayoutItemDirection } from './types';
 import validateLayout from './validateLayout';
 import { canMove, MoveDirection, moveHorizontal, moveVertical } from './movements';
 import findItemByKey from './findItemByKey';
-
 describe('movements', () => {
 
 	test('should move items horizontally to the right', () => {

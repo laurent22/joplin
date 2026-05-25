@@ -1,3 +1,5 @@
+
+import { Dirnames } from './synchronizer/utils/types';
 import Resource from '../models/Resource';
 import Setting from '../models/Setting';
 import BaseService from './BaseService';
@@ -6,9 +8,7 @@ import Logger from '@joplin/utils/Logger';
 import shim from '../shim';
 import notifyDisabledSyncItems from './synchronizer/utils/checkDisabledSyncItemsNotification';
 import { GetOptionsTarget } from '../file-api';
-const { Dirnames } = require('./synchronizer/utils/types');
 import { EventEmitter } from 'events';
-
 export default class ResourceFetcher extends BaseService {
 
 	public static instance_: ResourceFetcher;

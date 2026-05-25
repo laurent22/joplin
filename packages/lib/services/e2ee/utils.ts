@@ -1,3 +1,4 @@
+
 import Logger from '@joplin/utils/Logger';
 import BaseItem from '../../models/BaseItem';
 import MasterKey from '../../models/MasterKey';
@@ -10,7 +11,6 @@ import { generateKeyPair, pkReencryptPrivateKey, ppkPasswordIsValid, shouldUpdat
 import KvStore from '../KvStore';
 import Folder from '../../models/Folder';
 import ShareService from '../share/ShareService';
-
 const logger = Logger.create('e2ee/utils');
 
 export async function setupAndEnableEncryption(service: EncryptionService, masterKey: MasterKeyEntity = null, masterPassword: string = null) {

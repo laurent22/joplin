@@ -1,16 +1,16 @@
+
+
+import os from 'os';
+import { filename } from './path-utils';
+import { enexXmlToMd } from './import-enex-md-gen.js';
 import { NoteEntity, ResourceEntity, TagEntity } from './services/database/types';
 import shim from './shim';
-
 import { readFile, stat } from 'fs/promises';
-const os = require('os');
-const { filename } = require('./path-utils');
 import { setupDatabaseAndSynchronizer, switchClient, expectNotThrow, supportDir, expectThrow } from './testing/test-utils';
-const { enexXmlToMd } = require('./import-enex-md-gen.js');
 import importEnex, { ImportOptions } from './import-enex';
 import Note from './models/Note';
 import Tag from './models/Tag';
 import Resource from './models/Resource';
-
 const enexSampleBaseDir = `${supportDir}/../enex_to_md`;
 
 const importEnexFile = async (filename: string, options: ImportOptions = null) => {

@@ -1,8 +1,8 @@
+
 import { _ } from '../../locale';
 import CommandService from '../CommandService';
 import { ItemFlow, ListRenderer, OnClickEvent } from '../plugins/api/noteListType';
 import checkboxPieCss from './checkboxPieCss';
-
 interface CheckboxStats {
 	total: number;
 	checked: number;

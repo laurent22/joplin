@@ -1,7 +1,7 @@
+
 import { TaskId, TaskState } from '../services/database/types';
 import { ErrorBadRequest, ErrorCode } from '../utils/errors';
 import BaseModel from './BaseModel';
-
 export default class TaskStateModel extends BaseModel<TaskState> {
 
 	public get tableName(): string {

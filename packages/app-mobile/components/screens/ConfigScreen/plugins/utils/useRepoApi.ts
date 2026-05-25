@@ -1,3 +1,4 @@
+
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import Logger from '@joplin/utils/Logger';
 import RepositoryApi, { InstallMode } from '@joplin/lib/services/plugins/RepositoryApi';
@@ -5,7 +6,6 @@ import Setting, { AppType } from '@joplin/lib/models/Setting';
 import { useMemo } from 'react';
 import shim from '@joplin/lib/shim';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
-
 const logger = Logger.create('useRepoApi');
 
 interface Props {

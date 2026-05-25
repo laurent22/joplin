@@ -1,6 +1,6 @@
+
 import { Second } from '@joplin/utils/time';
 import { ElectronApplication, Page } from '@playwright/test';
-
 const waitForNextWindowMatching = (titlePattern: RegExp, electronApp: ElectronApplication) => {
 	return new Promise<Page>((resolve, reject) => {
 		let timeout: NodeJS.Timeout|null = null;

@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import DismissibleDialog, { DialogVariant } from '../DismissibleDialog';
 import { AppState } from '../../utils/types';
@@ -12,7 +13,6 @@ import { Platform, StyleSheet, View } from 'react-native';
 import CardButton from '../buttons/CardButton';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
-
 interface Props {
 	dispatch: Dispatch;
 	visible: boolean;

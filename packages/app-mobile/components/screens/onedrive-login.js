@@ -1,16 +1,16 @@
-const React = require('react');
 
-const { View } = require('react-native');
-const { Button } = require('react-native');
-const { WebView } = require('react-native-webview');
-const { connect } = require('react-redux');
-const { ScreenHeader } = require('../ScreenHeader');
-const { reg } = require('@joplin/lib/registry');
-const { _ } = require('@joplin/lib/locale');
-const { BaseScreenComponent } = require('../base-screen');
-const { themeStyle } = require('../global-style');
-const shim = require('@joplin/lib/shim').default;
 
+import React from 'react';
+import { View } from 'react-native';
+import { Button } from 'react-native';
+import { WebView } from 'react-native-webview';
+import { connect } from 'react-redux';
+import { ScreenHeader } from '../ScreenHeader';
+import { reg } from '@joplin/lib/registry';
+import { _ } from '@joplin/lib/locale';
+import { BaseScreenComponent } from '../base-screen';
+import { themeStyle } from '../global-style';
+import shim from '@joplin/lib/shim';
 const authCodeFromUrl = (url) => {
 	if (!url) return null;
 	try {

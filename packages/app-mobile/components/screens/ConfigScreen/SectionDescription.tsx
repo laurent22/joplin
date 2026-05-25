@@ -1,7 +1,7 @@
+
 import * as React from 'react';
 import { ViewStyle } from 'react-native';
 import { Banner } from 'react-native-paper';
-
 interface Props {
 	content: string;
 }

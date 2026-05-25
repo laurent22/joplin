@@ -1,8 +1,9 @@
-import * as React from 'react';
 
+
+
+import * as React from 'react';
 import { describe, it, beforeEach } from '@jest/globals';
 import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../utils/testing/testingLibrary';
-
 import NoteScreen from './Note';
 import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers } from '@joplin/lib/testing/test-utils';
 import waitForWithRealTimers from '@joplin/lib/testing/waitFor';
@@ -27,7 +28,6 @@ import Resource from '@joplin/lib/models/Resource';
 import TestProviderStack from '../../testing/TestProviderStack';
 import setupGlobalStore from '../../../utils/testing/setupGlobalStore';
 import CommandService from '@joplin/lib/services/CommandService';
-
 jest.retryTimes(2);
 
 interface WrapperProps {

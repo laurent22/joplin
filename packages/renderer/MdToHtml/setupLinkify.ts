@@ -1,6 +1,6 @@
-import type * as MarkdownIt from 'markdown-it';
-import type LinkifyIt = require('linkify-it');
 
+import type * as MarkdownIt from 'markdown-it';
+import type LinkifyIt from 'linkify-it';
 export default function(markdownIt: MarkdownIt) {
 	// Add `file:` protocol in linkify to allow text in the format of "file://..." to translate into
 	// file-URL links in html view

@@ -1,7 +1,7 @@
+
 import { task } from 'gulp';
 import execa from 'execa';
 import { stdout } from 'process';
-
 const execCommand = async (executableName, args, options = null) => {
 	options = {
 		showInput: true,

@@ -1,3 +1,5 @@
+
+import md5 from 'md5';
 import Logger from '@joplin/utils/Logger';
 import shim from '../../../shim';
 import { downloadMediaFile, createResourcesFromPaths } from './notes';
@@ -9,8 +11,6 @@ import Note from '../../../models/Note';
 import { setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
 import Revision from '../../../models/Revision';
 import { ModelType } from '../../../BaseModel';
-const md5 = require('md5');
-
 const imagePath = `${__dirname}/../../../images/SideMenuHeader.png`;
 const jpgBase64Content = '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/wAALCAAFAAUBAREA/8QAFAABAAAAAAAAAAAAAAAAAAAACf/EAB8QAAEEAQUBAAAAAAAAAAAAAAQBAgUGAwAREiExM//aAAgBAQAAPwBJarVpGHm7KWbapCSwyZ6FDjkLyYE1W/LHyV2zfOk2TrzX/9k=';
 

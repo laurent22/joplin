@@ -1,8 +1,8 @@
+
+import { Mutex } from 'async-mutex';
 import { MutexInterface } from 'async-mutex';
 import JoplinDatabase from '../JoplinDatabase';
 import BaseService from './BaseService';
-const Mutex = require('async-mutex').Mutex;
-
 enum ValueType {
 	Int = 1,
 	Text = 2,

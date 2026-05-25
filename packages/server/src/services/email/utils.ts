@@ -1,5 +1,5 @@
-import MarkdownIt = require('markdown-it');
 
+import MarkdownIt from 'markdown-it';
 export function markdownBodyToPlainText(md: string): string {
 	// Just convert the links to plain URLs
 	return md.replace(/\[.*\]\((.*)\)/g, '$1');

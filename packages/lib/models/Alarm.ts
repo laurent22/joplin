@@ -1,7 +1,7 @@
+
 import BaseModel from '../BaseModel';
 import { AlarmEntity, NoteEntity } from '../services/database/types';
 import Note from './Note';
-
 export interface Notification {
 	id: number;
 	noteId: string;

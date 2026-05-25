@@ -1,8 +1,8 @@
+
+
 import BaseCommand from './base-command';
 import { _ } from '@joplin/lib/locale';
-
 import { handleAction } from './command-done.js';
-
 class Command extends BaseCommand {
 	usage() {
 		return 'undone <note>';

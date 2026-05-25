@@ -1,8 +1,8 @@
+
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import { useState } from 'react';
 import { loadProfileConfig } from '../../services/profiles';
-
 export default (timestamp = 0) => {
 	const [profileConfig, setProfileConfig] = useState<ProfileConfig>(null);
 

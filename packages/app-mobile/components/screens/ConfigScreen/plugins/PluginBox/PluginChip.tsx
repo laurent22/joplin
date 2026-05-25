@@ -1,10 +1,10 @@
+
 import * as React from 'react';
 import { Chip, ChipProps } from 'react-native-paper';
 import { useMemo } from 'react';
 import { connect } from 'react-redux';
 import { AppState } from '../../../../../utils/types';
 import { themeStyle } from '../../../../global-style';
-
 type Props = {
 	themeId: number;
 	color?: string;

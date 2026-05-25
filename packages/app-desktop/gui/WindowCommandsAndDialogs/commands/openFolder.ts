@@ -1,5 +1,5 @@
-import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 
+import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 export const declaration: CommandDeclaration = {
 	name: 'openFolder',
 };

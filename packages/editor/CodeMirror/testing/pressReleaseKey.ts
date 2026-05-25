@@ -1,6 +1,6 @@
+
 import { EditorView } from '@codemirror/view';
 import typeText from './typeText';
-
 interface KeyInfo {
 	key: string;
 	code: string;

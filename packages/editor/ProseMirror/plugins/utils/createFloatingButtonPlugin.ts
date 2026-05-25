@@ -1,3 +1,4 @@
+
 import { Command, EditorState, Plugin, PluginView } from 'prosemirror-state';
 import { LocalizationResult, OnLocalize } from '../../../types';
 import { EditorView } from 'prosemirror-view';
@@ -5,7 +6,6 @@ import createButton from '../../utils/dom/createButton';
 import { getEditorApi } from '../joplinEditorApiPlugin';
 import { Node } from 'prosemirror-model';
 import { Icon } from '../../vendor/icons/types';
-
 type LocalizeFunction = (_: OnLocalize)=> LocalizationResult;
 
 interface ButtonSpec {

@@ -1,3 +1,4 @@
+
 import Setting from '../../models/Setting';
 import { allNotesFolders, remoteNotesAndFolders, localNotesFoldersSameAsRemote } from '../../testing/test-utils-synchronizer';
 import { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi, expectThrow, createNoteAndResource } from '../../testing/test-utils';
@@ -10,7 +11,6 @@ import { fetchSyncInfo, setAppMinVersion, uploadSyncInfo } from './syncInfoUtils
 import { ErrorCode } from '../../errors';
 import Resource from '../../models/Resource';
 import { exists } from 'fs-extra';
-
 describe('Synchronizer.basics', () => {
 
 	beforeEach(async () => {

@@ -1,6 +1,6 @@
+
 import { Decoration, EditorView, WidgetType } from '@codemirror/view';
 import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
-
 const dividerClassName = 'cm-md-divider';
 const dividerLineClassName = 'cm-md-divider-line';
 

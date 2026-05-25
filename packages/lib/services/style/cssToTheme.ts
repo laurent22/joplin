@@ -1,9 +1,9 @@
-import { Theme } from '../../themes/type';
 
 // Need to include it that way due to a bug in the lib:
 // https://github.com/reworkcss/css/pull/146#issuecomment-740412799
-import { CssRuleAST, CssTypes, parse as cssParse } from '@adobe/css-tools';
 
+import { Theme } from '../../themes/type';
+import { CssRuleAST, CssTypes, parse as cssParse } from '@adobe/css-tools';
 function formatCssToThemeVariable(cssVariable: string): string {
 	const elements = cssVariable.substr(2).split('-');
 	if (elements[0] !== 'joplin') throw new Error(`CSS variable name must start with "--joplin": ${cssVariable}`);

@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Store } from 'redux';
 import { AppState } from '../../utils/types';
@@ -8,7 +9,6 @@ import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import setupGlobalStore from '../../utils/testing/setupGlobalStore';
 import { getActiveMasterKeyId, setEncryptionEnabled, setMasterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { act, render, screen } from '../../utils/testing/testingLibrary';
-
 interface WrapperProps { }
 
 let store: Store<AppState>;

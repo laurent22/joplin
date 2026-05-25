@@ -1,3 +1,4 @@
+
 import { SubPath, respondWithItemContent } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -10,7 +11,6 @@ import { View } from '../../services/MustacheService';
 import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
 import { PaginationOrderDir } from '../../models/utils/pagination';
 import { formatBytes } from '../../utils/bytes';
-
 const router = new Router(RouteType.Web);
 
 router.get('items', async (_path: SubPath, ctx: AppContext) => {

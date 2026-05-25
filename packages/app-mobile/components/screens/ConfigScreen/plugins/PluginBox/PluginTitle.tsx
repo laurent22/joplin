@@ -1,8 +1,8 @@
+
 import * as React from 'react';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import { Text } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-
 interface Props {
 	manifest: PluginManifest;
 }

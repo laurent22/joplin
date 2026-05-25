@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { connect } from 'react-redux';
 import Tag from '@joplin/lib/models/Tag';
 import ModalDialog from '../ModalDialog';
@@ -11,7 +12,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { ViewStyle } from 'react-native';
 import shim from '@joplin/lib/shim';
-
 interface Props {
 	themeId: number;
 	noteId: string|null;

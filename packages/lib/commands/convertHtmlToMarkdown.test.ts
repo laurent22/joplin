@@ -1,7 +1,7 @@
+
 import { runtime } from './convertHtmlToMarkdown';
 import { CommandContext } from '../services/CommandService';
 import { defaultState } from '../reducer';
-
 const command = runtime();
 
 const makeContext = (): CommandContext => {

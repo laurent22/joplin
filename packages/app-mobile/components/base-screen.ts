@@ -1,7 +1,7 @@
+
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { themeStyle } from './global-style';
-
 const rootStyles_: Record<number, ReturnType<typeof StyleSheet.create>> = {};
 
 class BaseScreenComponent<Props, State> extends React.Component<Props, State> {

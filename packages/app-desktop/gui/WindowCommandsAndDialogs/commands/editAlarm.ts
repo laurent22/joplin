@@ -1,3 +1,4 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
 import { _ } from '@joplin/lib/locale';
@@ -7,7 +8,6 @@ import time from '@joplin/lib/time';
 import { formatMsToDateTimeLocal } from '@joplin/utils/time';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { WindowControl } from '../utils/useWindowControl';
-
 export const declaration: CommandDeclaration = {
 	name: 'editAlarm',
 	label: () => _('Set alarm'),

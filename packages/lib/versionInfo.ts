@@ -1,3 +1,4 @@
+
 import Logger from '@joplin/utils/Logger';
 import { _ } from './locale';
 import Setting from './models/Setting';
@@ -6,7 +7,6 @@ import KeychainService from './services/keychain/KeychainService';
 import { Plugins } from './services/plugins/PluginService';
 import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
-
 const logger = Logger.create('versionInfo');
 
 export interface PackageInfo {

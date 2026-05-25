@@ -1,10 +1,10 @@
+
 import { RefObject, useMemo, useRef } from 'react';
 import Setting from '@joplin/lib/models/Setting';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { MainProcessApi, EditorProcessApi } from '../contentScript/types';
 import { WebViewControl } from '../../../components/ExtendedWebView/types';
 import RNToWebViewMessenger from '../../../utils/ipc/RNToWebViewMessenger';
-
 interface Props {
 	webViewRef: RefObject<WebViewControl>;
 	setImageChanged(changed: boolean): void;

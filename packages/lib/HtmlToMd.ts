@@ -1,7 +1,7 @@
-const TurndownService = require('@joplin/turndown');
-const turndownPluginGfm = require('@joplin/turndown-plugin-gfm').gfm;
-import markdownUtils from './markdownUtils';
 
+import TurndownService from '@joplin/turndown';
+import { gfm as turndownPluginGfm } from '@joplin/turndown-plugin-gfm';
+import markdownUtils from './markdownUtils';
 const pdfUrlRegex = /[\s\S]*?\.pdf$/i;
 
 export interface ParseOptions {

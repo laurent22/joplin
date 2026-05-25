@@ -1,5 +1,5 @@
-import TestMessenger from './TestMessenger';
 
+import TestMessenger from './TestMessenger';
 type NumberCallback = (n: number)=> void;
 type TwoNumberCallback = (arg1: number, arg2: string)=> void;
 type MultiplyAndCallCallback = (a: number, callback: NumberCallback)=> Promise<void>;

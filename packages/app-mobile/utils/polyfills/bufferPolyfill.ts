@@ -1,8 +1,8 @@
 
-import { Buffer } from 'buffer';
 
 // Fix the subarray method.
 // TODO: Remove this after https://github.com/feross/buffer/issues/329 is closed
+import { Buffer } from 'buffer';
 const originalSubarray = Buffer.prototype.subarray;
 Buffer.prototype.subarray = function(start: number, end: number) {
 	const subarray = originalSubarray.call(this, start, end);

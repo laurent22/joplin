@@ -1,7 +1,7 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import Logger from '@joplin/utils/Logger';
 import goToNote from './util/goToNote';
-
 const logger = Logger.create('openNoteCommand');
 
 export const declaration: CommandDeclaration = {

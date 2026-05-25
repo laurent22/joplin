@@ -1,5 +1,5 @@
-import { formatMsToDurationCompat, Hour, Minute, Second } from './time';
 
+import { formatMsToDurationCompat, Hour, Minute, Second } from './time';
 describe('time', () => {
 	test.each([
 		[0, '0:00'],

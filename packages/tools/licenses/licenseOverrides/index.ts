@@ -1,3 +1,4 @@
+
 import { DependencyType } from '../getLicenses';
 import mitLicense from '../licenseText/mit';
 import fontAwesomeOverride from './fontAwesomeOverride';
@@ -5,7 +6,6 @@ import fontIsoOverride from './fontIsoOverride';
 import materialCommunityIconsOverride from './materialCommunityIconsOverride';
 import materialIconsOverride from './materialIconsOverride';
 import { LicenseOverride, LicenseOverrides } from './types';
-
 const exclude = (packageRegex: RegExp, mode: DependencyType): LicenseOverride => {
 	return {
 		replacePackagesMatching: packageRegex,

@@ -1,8 +1,8 @@
+
 import themeToCss from '@joplin/lib/services/style/themeToCss';
 import * as fs from 'fs-extra';
 import { rootDir } from './tool-utils';
 import { filename } from '@joplin/lib/path-utils';
-
 function themeIdFromName(name: string) {
 	const nameToId: Record<string, number> = {
 		light: 1,

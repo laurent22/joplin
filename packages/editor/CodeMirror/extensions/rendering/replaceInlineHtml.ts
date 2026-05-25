@@ -1,9 +1,9 @@
+
 import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import { Decoration } from '@codemirror/view';
 import htmlNodeInfo, { HtmlNodeInfo } from '../../utils/htmlNodeInfo';
 import { SyntaxNodeRef } from '@lezer/common';
 import { EditorSelection, EditorState } from '@codemirror/state';
-
 const hideDecoration = Decoration.replace({});
 
 type OnRenderTagContent = (openingTag: HtmlNodeInfo)=> Decoration;

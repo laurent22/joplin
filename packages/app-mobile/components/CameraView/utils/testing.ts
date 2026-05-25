@@ -1,7 +1,7 @@
 // Utilities for use with the CameraView.jest.tsx mock
 
-import { fireEvent, screen } from '@testing-library/react-native';
 
+import { fireEvent, screen } from '@testing-library/react-native';
 export const rejectCameraPermission = () => {
 	const rejectPermissionButton = screen.getByRole('button', { name: 'Reject permission' });
 	fireEvent.press(rejectPermissionButton);

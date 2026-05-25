@@ -1,5 +1,5 @@
-import packToWriter, { FileApi } from './packToWriter';
 
+import packToWriter, { FileApi } from './packToWriter';
 describe('htmlpack/packToWriter', () => {
 
 	test('should write chunks as they arrive, not buffer them in memory', async () => {

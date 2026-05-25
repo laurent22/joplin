@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Handle, NodeProps, NodeResizer } from '@xyflow/react';
@@ -18,7 +19,6 @@ import { useWhiteboardContext } from '../WhiteboardContext';
 import { WhiteboardNodeData } from '../canvasFlow';
 import useCheckboxToggle from '../useCheckboxToggle';
 import handlePositions from './handlePositions';
-
 const logger = Logger.create('WhiteboardFileNode');
 
 const resourceUrlFor = (resource: ResourceEntity | null, resourceDirectory: string): string | null => {

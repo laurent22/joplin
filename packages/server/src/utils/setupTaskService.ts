@@ -1,3 +1,4 @@
+
 import { Models } from '../models/factory';
 import { connectDb } from '../db';
 import { TaskId } from '../services/database/types';
@@ -6,7 +7,6 @@ import { Services } from '../services/types';
 import { logHeartbeat as logHeartbeatMessage } from './metrics';
 import { Config, Env } from './types';
 import { Day } from './time';
-
 export default async function(env: Env, models: Models, config: Config, services: Services): Promise<TaskService> {
 	// In production, use a separate DB connection pool for task state
 	// management so that it is not affected by failed transactions in the

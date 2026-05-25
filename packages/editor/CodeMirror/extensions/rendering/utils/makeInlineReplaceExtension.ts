@@ -1,6 +1,8 @@
 // Ref: https://codemirror.net/examples/bundle/
 // and  https://codemirror.net/examples/decoration/
 
+
+
 import { EditorView, Decoration, DecorationSet, WidgetType } from '@codemirror/view';
 import { ViewPlugin, ViewUpdate } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
@@ -8,8 +10,6 @@ import { Range } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
 import { ReplacementExtension } from '../types';
 import nodeIntersectsSelection from './nodeIntersectsSelection';
-
-
 export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
 	public decorations: DecorationSet;
 

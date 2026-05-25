@@ -1,3 +1,6 @@
+
+
+
 import { useEffect, useRef, useState, MutableRefObject, useCallback, CSSProperties } from 'react';
 import * as React from 'react';
 import useIsVisible from './hooks/useIsVisible';
@@ -5,10 +8,7 @@ import useVisibleOnSelect, { VisibleOnSelect } from './hooks/useVisibleOnSelect'
 import PdfDocument from './PdfDocument';
 import { ScaledSize, RenderRequest } from './types';
 import styled from 'styled-components';
-
-
-require('./textLayer.css');
-
+import './textLayer.css';
 const PageWrapper = styled.div<{ isSelected?: boolean }>`
 	display: flex;
 	flex-direction: column;

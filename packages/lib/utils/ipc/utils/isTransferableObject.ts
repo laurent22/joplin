@@ -1,5 +1,5 @@
-import { TransferableObject } from '../types';
 
+import { TransferableObject } from '../types';
 const isTransferableObject = (o: unknown): o is TransferableObject => {
 	if (typeof o !== 'object') return false;
 	if (typeof FileSystemHandle !== 'undefined' && o instanceof FileSystemHandle) return true;

@@ -1,10 +1,10 @@
-import { ThemeAppearance } from '@joplin/lib/themes/type';
-import styled from 'styled-components';
 
 // Need to use `attrs` otherwise styled-components creates many instances of the
 // style when the component is resized.
 // https://github.com/styled-components/styled-components/issues/1212
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- styled-components.attrs typing collides with the dynamic style attrs we set here
+import { ThemeAppearance } from '@joplin/lib/themes/type';
+import styled from 'styled-components';
 export const StyledWrapperRoot: any = styled.div.attrs((props: { size: { width: number; height: number } }) => ({
 	style: {
 		width: props.size.width,

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 
+import { useEffect, useState } from 'react';
 const useIsFocused = () => {
 	const [isFocused, setIsFocused] = useState(false);
 

@@ -1,10 +1,10 @@
+
 import * as React from 'react';
 import { useCallback, useId } from 'react';
 import Button, { ButtonLevel } from '../Button/Button';
 import { MoveDirection } from './utils/movements';
 import styled from 'styled-components';
 import { _ } from '@joplin/lib/locale';
-
 const StyledRoot = styled.div`
 	display: flex;
 	flex-direction: column;

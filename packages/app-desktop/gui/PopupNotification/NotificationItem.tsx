@@ -1,7 +1,7 @@
+
 import * as React from 'react';
 import { NotificationType } from './types';
 import { _ } from '@joplin/lib/locale';
-
 interface Props {
 	children: React.ReactNode;
 	key: string;

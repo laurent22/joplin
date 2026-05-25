@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useRef, useImperativeHandle, forwardRef, useEffect, useMemo, useContext, useCallback } from 'react';
 import useViewIsReady from './hooks/useViewIsReady';
@@ -14,7 +15,6 @@ import useFormData from './hooks/useFormData';
 import Setting from '@joplin/lib/models/Setting';
 import getAssetPath from '../../utils/getAssetPath';
 import { toForwardSlashes } from '@joplin/utils/path';
-
 const logger = Logger.create('UserWebview');
 
 export interface Props {

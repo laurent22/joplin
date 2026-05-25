@@ -1,8 +1,8 @@
+
 import { readFile } from 'fs/promises';
 import { processMarkdownDoc, processUrls } from './processDocs';
 import { basename } from 'path';
 import { readdirSync } from 'fs';
-
 const sampleDir = `${__dirname}/processDocsTestSamples`;
 
 interface TestCase {

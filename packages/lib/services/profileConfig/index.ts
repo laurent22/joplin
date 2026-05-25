@@ -1,8 +1,8 @@
+
 import { rtrimSlashes } from '../../path-utils';
 import shim from '../../shim';
 import { CurrentProfileVersion, defaultProfile, defaultProfileConfig, DefaultProfileId, Profile, ProfileConfig } from './types';
 import { customAlphabet } from 'nanoid/non-secure';
-
 interface MigratingProfile {
 	id?: string;
 	path?: string;

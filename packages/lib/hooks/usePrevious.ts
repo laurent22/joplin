@@ -1,5 +1,5 @@
-import shim from '../shim';
 
+import shim from '../shim';
 const { useRef, useEffect } = shim.react();
 
 const usePrevious = <T> (value: T, initialValue: T = null) => {

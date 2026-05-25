@@ -1,3 +1,4 @@
+
 import BaseModel, { ModelType } from '../../../BaseModel';
 import shim from '../../../shim';
 import { Request, RequestMethod } from '../Api';
@@ -10,7 +11,6 @@ import collectionToPaginatedResults from '../utils/collectionToPaginatedResults'
 import defaultLoadOptions from '../utils/defaultLoadOptions';
 import Resource from '../../../models/Resource';
 import Note from '../../../models/Note';
-
 export default async function(request: Request, id: string = null, link: string = null) {
 	// fieldName: "data"
 	// headers: Object

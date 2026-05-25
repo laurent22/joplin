@@ -1,5 +1,5 @@
-import { DbConnection, truncateTables } from '../../db';
 
+import { DbConnection, truncateTables } from '../../db';
 const includedTables = [
 	'changes',
 	'emails',

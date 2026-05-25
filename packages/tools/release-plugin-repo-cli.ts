@@ -1,8 +1,8 @@
+
 import { execCommand } from '@joplin/utils';
 import { chdir } from 'process';
 import { rootDir, gitPullTry, releaseFinalGitCommands } from './tool-utils';
 import { versionPatch } from '@joplin/utils/version';
-
 const workDir = `${rootDir}/packages/plugin-repo-cli`;
 
 async function main() {

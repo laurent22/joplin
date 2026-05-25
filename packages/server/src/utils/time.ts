@@ -1,9 +1,9 @@
-import dayjs = require('dayjs');
-import dayJsUtc = require('dayjs/plugin/utc');
-import dayJsDuration = require('dayjs/plugin/duration');
-import dayJsTimezone = require('dayjs/plugin/timezone');
-import { LoggerWrapper } from '@joplin/utils/Logger';
 
+import dayjs from 'dayjs';
+import dayJsUtc from 'dayjs/plugin/utc';
+import dayJsDuration from 'dayjs/plugin/duration';
+import dayJsTimezone from 'dayjs/plugin/timezone';
+import { LoggerWrapper } from '@joplin/utils/Logger';
 function defaultTimezone() {
 	return dayjs.tz.guess();
 }

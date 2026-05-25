@@ -1,3 +1,4 @@
+
 import { User } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { execRequest } from '../../utils/testing/apiUtils';
@@ -5,7 +6,6 @@ import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndS
 import { uuidgen } from '@joplin/lib/uuid';
 import { ErrorForbidden } from '../../utils/errors';
 import { AccountType } from '../../models/UserModel';
-
 async function postUser(sessionId: string, email: string, password: string = null, props: Record<string, unknown> = null): Promise<User> {
 	password = password === null ? uuidgen() : password;
 

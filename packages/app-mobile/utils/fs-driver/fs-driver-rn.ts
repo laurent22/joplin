@@ -1,17 +1,17 @@
+
+import RNFetchBlob from 'rn-fetch-blob';
+import md5 from 'md5';
 import FsDriverBase, { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
-const RNFetchBlob = require('rn-fetch-blob').default;
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import RNSAF, { DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
 import type { StatResultT, ReadDirResItemT } from '@dr.pogodin/react-native-fs';
-
-type RnfsStatLike = StatResultT | ReadDirResItemT | DocumentFileDetail;
 import { Platform } from 'react-native';
 import tarCreate from './tarCreate';
 import tarExtract from './tarExtract';
 import JoplinError from '@joplin/lib/JoplinError';
-const md5 = require('md5');
 import { resolve } from 'path';
 import Logger from '@joplin/utils/Logger';
+type RnfsStatLike = StatResultT | ReadDirResItemT | DocumentFileDetail;
 const logger = Logger.create('fs-driver-rn');
 
 const ANDROID_URI_PREFIX = 'content://';

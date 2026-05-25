@@ -1,9 +1,9 @@
 
+
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import { msleep, Second } from '@joplin/utils/time';
 import setSettingValue from './util/setSettingValue';
-
 test.describe('pluginApi', () => {
 	test('the editor.setText command should update the current note (use RTE: false)', async ({ startAppWithPlugins }) => {
 		const { app, mainWindow } = await startAppWithPlugins(['resources/test-plugins/execCommand.js']);

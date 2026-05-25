@@ -1,3 +1,4 @@
+
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { dirname } from '@joplin/lib/path-utils';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
@@ -6,7 +7,6 @@ import shim from '@joplin/lib/shim';
 import { useRef, useState } from 'react';
 import Logger from '@joplin/utils/Logger';
 import { ExtraContentScriptSource } from '../types';
-
 const logger = Logger.create('NoteBodyViewer/hooks/useContentScripts');
 
 // Most of the time, we don't actually need to reload the content scripts from a file,

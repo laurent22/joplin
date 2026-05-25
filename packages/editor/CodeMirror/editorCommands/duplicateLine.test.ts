@@ -1,7 +1,7 @@
+
 import { EditorView } from '@codemirror/view';
 import { EditorSelection } from '@codemirror/state';
 import duplicateLine from './duplicateLine';
-
 describe('duplicateLine', () => {
 	it('should duplicate line', () => {
 		const initialText = 'Hello\nWorld\n';

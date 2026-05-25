@@ -1,3 +1,4 @@
+
 import PluginRunner from '../../../app/services/plugins/PluginRunner';
 import PluginService, { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
@@ -11,7 +12,6 @@ import { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow
 import { newPluginScript } from '../../testUtils';
 import { join } from 'path';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
-
 const testPluginDir = `${supportDir}/plugins`;
 
 function newPluginService(appVersion = '1.4') {

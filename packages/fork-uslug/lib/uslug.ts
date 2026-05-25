@@ -7,10 +7,10 @@
 // You may find a copy of this license in the LICENSE file that should have been provided
 // to you with a copy of this software.
 
-const nodeEmoji = require('node-emoji');
 
 // Very old browsers (e.g. Chrome < 64, which is from 2018) may not support
 // \p{} regexes.
+import nodeEmoji from 'node-emoji';
 let regexes_;
 try {
 	regexes_ = {

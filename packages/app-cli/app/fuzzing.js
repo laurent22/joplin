@@ -1,5 +1,3 @@
-'use strict';
-
 import time from '@joplin/lib/time';
 import Logger from '@joplin/utils/Logger';
 import Resource from '@joplin/lib/models/Resource';
@@ -8,6 +6,8 @@ import FsDriverNode from '@joplin/lib/fs-driver-node';
 import { mean } from 'lodash';
 import { exec } from 'child_process';
 import { remove } from 'fs-extra';
+'use strict';
+
 
 const baseDir = `${dirname(__dirname)}/tests/fuzzing`;
 const syncDir = `${baseDir}/sync`;

@@ -1,3 +1,4 @@
+
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
@@ -5,7 +6,6 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import Note from '@joplin/lib/models/Note';
 import time from '@joplin/lib/time';
 import { NoteEntity } from '@joplin/lib/services/database/types';
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'done <note>';

@@ -1,9 +1,9 @@
+
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import JoplinDatabase from '../../JoplinDatabase';
 import { FolderEntity, NoteEntity } from '../database/types';
-
 export interface Options {
 	folderCount?: number;
 	noteCount?: number;

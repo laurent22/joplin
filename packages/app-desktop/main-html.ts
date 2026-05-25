@@ -3,12 +3,11 @@
 // Disable React message in console "Download the React DevTools for a better development experience"
 // https://stackoverflow.com/questions/42196819/disable-hide-download-the-react-devtools#42196820
 // eslint-disable-next-line no-undef, @typescript-eslint/no-explicit-any
-(window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
-	supportsFiber: true,
-	inject: function() {},
-	onCommitFiberRoot: function() {},
-	onCommitFiberUnmount: function() {},
-};
+import keytar_82 from 'keytar';
+import { shimInit } from '@joplin/lib/shim-init-node.js';
+import pdfJs from 'pdfjs-dist';
+import { isAppleSilicon } from 'is-apple-silicon';
+import p from './packageInfo.js';
 import './utils/initReact';
 import './utils/sourceMapSetup';
 import app from './app';
@@ -25,16 +24,21 @@ import Logger from '@joplin/utils/Logger';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import bridge from './services/bridge';
 import shim from '@joplin/lib/shim';
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
 import * as React from 'react';
-import nodeSqlite = require('sqlite3');
+import nodeSqlite from 'sqlite3';
 import initLib from '@joplin/lib/initLib';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
-const pdfJs = require('pdfjs-dist');
-const { isAppleSilicon } = require('is-apple-silicon');
-require('@sentry/electron/renderer');
+import '@sentry/electron/renderer';
+import './gui/Root';
+import './gui/Root_UpgradeSyncTarget';
+(window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+	supportsFiber: true,
+	inject: function() {},
+	onCommitFiberRoot: function() {},
+	onCommitFiberUnmount: function() {},
+};
 
 // Allows components to use React as a global
 window.React = React;
@@ -73,14 +77,13 @@ const main = async () => {
 
 	let keytar;
 	try {
-		keytar = shim.platformSupportsKeyChain() ? require('keytar') : null;
+		keytar = shim.platformSupportsKeyChain() ? keytar_82 : null;
 	} catch (error) {
 		console.error('Cannot load keytar - keychain support will be disabled', error);
 		keytar = null;
 	}
 
 	function appVersion() {
-		const p = require('./packageInfo.js');
 		return p.version;
 	}
 
@@ -103,9 +106,7 @@ const main = async () => {
 	const startResult = await app().start(bridge().processArgv());
 
 	if (!startResult || !startResult.action) {
-		require('./gui/Root');
 	} else if (startResult.action === 'upgradeSyncTarget') {
-		require('./gui/Root_UpgradeSyncTarget');
 	}
 };
 

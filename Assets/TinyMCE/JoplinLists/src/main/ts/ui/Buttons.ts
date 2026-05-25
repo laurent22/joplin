@@ -5,13 +5,13 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
+
 import Tools from 'tinymce/core/api/util/Tools';
 import * as Settings from '../api/Settings';
 import * as NodeType from '../core/NodeType';
 import Editor from 'tinymce/core/api/Editor';
 import { isCustomList } from '../core/Util';
 import { findContainerListTypeFromEvent } from '../listModel/JoplinListUtil';
-
 const findIndex = function (list, predicate) {
   for (let index = 0; index < list.length; index++) {
     const element = list[index];

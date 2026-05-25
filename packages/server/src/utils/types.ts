@@ -1,3 +1,4 @@
+
 import { LoggerWrapper } from '@joplin/utils/Logger';
 import { StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import * as Koa from 'koa';
@@ -8,7 +9,6 @@ import { Services } from '../services/types';
 import { Routers } from './routeUtils';
 import { DbConnection } from '../db';
 import { EnvVariables, MailerSecurity } from '../env';
-
 export enum Env {
 	Dev = 'dev',
 	Prod = 'prod',

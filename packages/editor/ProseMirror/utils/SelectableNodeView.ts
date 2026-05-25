@@ -1,5 +1,5 @@
-import { NodeView } from 'prosemirror-view';
 
+import { NodeView } from 'prosemirror-view';
 export type GetPosition = ()=> number;
 
 export default class SelectableNodeView implements NodeView {

@@ -1,3 +1,4 @@
+
 import ShareService from './ShareService';
 import Logger from '@joplin/utils/Logger';
 import Folder from '../../models/Folder';
@@ -5,7 +6,6 @@ import { reg } from '../../registry';
 import { _ } from '../../locale';
 import { MasterKeyEntity } from '../e2ee/types';
 import shim from '../../shim';
-
 const logger = Logger.create('invitationRespond');
 
 export default async function(shareUserId: string, folderId: string, masterKey: MasterKeyEntity, accept: boolean) {

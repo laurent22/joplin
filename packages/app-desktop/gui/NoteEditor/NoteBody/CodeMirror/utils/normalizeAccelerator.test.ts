@@ -1,6 +1,6 @@
+
 import normalizeAccelerator from './normalizeAccelerator';
 import { CodeMirrorVersion } from './types';
-
 describe('normalizeAccelerator', () => {
 	test.each([
 		['Z', { v6: 'z', v5: 'Z' }],

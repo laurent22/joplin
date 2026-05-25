@@ -1,5 +1,5 @@
-import diffSortedStringArrays from './diffSortedStringArrays';
 
+import diffSortedStringArrays from './diffSortedStringArrays';
 describe('diffSortedStringArrays', () => {
 	test.each([
 		[

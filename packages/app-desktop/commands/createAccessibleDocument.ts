@@ -1,3 +1,4 @@
+
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import Resource from '@joplin/lib/models/Resource';
 import Setting from '@joplin/lib/models/Setting';
@@ -6,7 +7,6 @@ import { _ } from '@joplin/lib/locale';
 import { ResourceOcrStatus } from '@joplin/lib/services/database/types';
 import bridge from '../services/bridge';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('createAccessibleDocument');
 
 export const declaration: CommandDeclaration = {

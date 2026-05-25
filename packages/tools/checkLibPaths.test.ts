@@ -1,28 +1,23 @@
-import { findInvalidImportPaths } from './checkLibPaths';
 
+import { isInsideContainer } from '../lib/shim';
+import { findInvalidImportPaths } from './checkLibPaths';
+import time from '../lib/time';
+import shim from '../lib/shim';
+import shim from '@joplin/lib/shim';
+import time from '@joplin/lib/time';
 describe('checkLibPaths', () => {
 
 	test('should detect invalid lib paths', async () => {
 		const testCases: [number, string][] = [
 			[1, `
-				import time from '../lib/time';
 			`],
 			[2, `
-				import time from '../lib/time';
-				import shim from '../lib/shim';
 			`],
 			[1, `
-				import time from '../lib/time';
-				import shim from '@joplin/lib/shim';
 			`],
 			[1, `
-				import time from '@joplin/lib/time';
-				import shim = require('../lib/shim');
 			`],
 			[1, `
-				import time from '@joplin/lib/time';
-				import shim from '@joplin/lib/shim';
-				const { isInsideContainer } = require('../lib/shim');
 			`],
 		];
 

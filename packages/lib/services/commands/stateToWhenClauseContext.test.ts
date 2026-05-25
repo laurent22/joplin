@@ -1,9 +1,9 @@
+
 import { defaultState } from '../../reducer';
 import SyncTargetRegistry from '../../SyncTargetRegistry';
 import { FolderEntity, NoteEntity } from '../database/types';
 import { getTrashFolderId } from '../trash';
 import stateToWhenClauseContext from './stateToWhenClauseContext';
-
 interface StateOptions {
 	folders: FolderEntity[];
 	notes: NoteEntity[];

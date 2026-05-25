@@ -1,3 +1,6 @@
+
+import os_tmpdir from 'os';
+import BaseCommand from './base-command';
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
@@ -6,7 +9,6 @@ import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import Synchronizer from '@joplin/lib/Synchronizer';
 import { masterKeysWithoutPassword } from '@joplin/lib/services/e2ee/utils';
 import { appTypeToLockType } from '@joplin/lib/services/synchronizer/LockHandler';
-const BaseCommand = require('./base-command').default;
 import app from './app';
 import { OneDriveApiNodeUtils } from '@joplin/lib/onedrive-api-node-utils.js';
 import { reg } from '@joplin/lib/registry';
@@ -18,7 +20,6 @@ import { checkIfLoginWasSuccessful, generateApplicationConfirmUrl } from '@jopli
 import Logger from '@joplin/utils/Logger';
 import { uuidgen } from '@joplin/lib/uuid';
 import ShareService from '@joplin/lib/services/share/ShareService';
-
 const logger = Logger.create('command-sync');
 
 class Command extends BaseCommand {
@@ -139,7 +140,7 @@ class Command extends BaseCommand {
 		this.releaseLockFn_ = null;
 
 		// Lock is unique per profile/database
-		const lockFilePath = `${require('os').tmpdir()}/synclock_${md5(escape(Setting.value('profileDir')))}`; // https://github.com/pvorb/node-md5/issues/41
+		const lockFilePath = `${os_tmpdir.tmpdir()}/synclock_${md5(escape(Setting.value('profileDir')))}`; // https://github.com/pvorb/node-md5/issues/41
 		if (!(await pathExists(lockFilePath))) await writeFile(lockFilePath, 'synclock');
 
 		const useLock = args.options.useLock !== 0;

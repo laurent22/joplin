@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { ForwardedRef, RefObject } from 'react';
 import { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
@@ -15,7 +16,6 @@ import { parseResourceUrl } from '@joplin/lib/urlUtils';
 import { resourceFilename } from '@joplin/lib/models/utils/resourceUtils';
 import getResourceBaseUrl from '../../../utils/getResourceBaseUrl';
 import useContentScriptRegistration from './utils/useContentScriptRegistration';
-
 interface Props extends EditorProps {
 	style: React.CSSProperties;
 	pluginStates: PluginStates;

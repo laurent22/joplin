@@ -1,7 +1,8 @@
-const fs = require('fs-extra');
-const execa = require('execa');
-const glob = require('glob');
 
+import fs from 'fs-extra';
+import execa from 'execa';
+import glob from 'glob';
+import { exec } from 'child_process';
 const utils = {};
 
 utils.isLinux = () => {
@@ -25,7 +26,6 @@ utils.execCommandVerbose = function(commandName, args = []) {
 };
 
 utils.execCommand = function(command) {
-	const exec = require('child_process').exec;
 
 	return new Promise((resolve, reject) => {
 		exec(command, { maxBuffer: 1024 * 1024 }, (error, stdout) => {
@@ -186,7 +186,6 @@ utils.setPackagePrivateField = async function(filePath, value) {
 };
 
 utils.insertContentIntoFile = async (filePath, marker, contentToInsert, createIfNotExist = false) => {
-	const fs = require('fs-extra');
 	const fileExists = await fs.pathExists(filePath);
 
 	if (!fileExists) {

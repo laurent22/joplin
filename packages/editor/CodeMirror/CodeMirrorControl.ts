@@ -1,3 +1,4 @@
+
 import { EditorView, KeyBinding, keymap } from '@codemirror/view';
 import { EditorCommandType, EditorControl, EditorSettings, LogMessageCallback, ContentScriptData, SearchState, UserEventSource, UpdateBodyOptions } from '../types';
 import CodeMirror5Emulation from './CodeMirror5Emulation/CodeMirror5Emulation';
@@ -17,7 +18,6 @@ import { resetImageResourceEffect } from './extensions/rendering/renderBlockImag
 import Logger from '@joplin/utils/Logger';
 import { searchChangeSourceEffect } from './extensions/searchExtension';
 import cutOrCopyText, { ClipboardAction } from './editorCommands/cutOrCopyText';
-
 const logger = Logger.create('CodeMirrorControl');
 
 interface Callbacks {

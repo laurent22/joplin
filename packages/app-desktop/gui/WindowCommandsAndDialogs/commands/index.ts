@@ -1,4 +1,5 @@
 // AUTO-GENERATED using `gulp buildScriptIndexes`
+
 import * as addNoteToWhiteboard from './addNoteToWhiteboard';
 import * as addProfile from './addProfile';
 import * as commandPalette from './commandPalette';
@@ -51,7 +52,6 @@ import * as togglePerFolderSortOrder from './togglePerFolderSortOrder';
 import * as toggleSideBar from './toggleSideBar';
 import * as toggleVisiblePanes from './toggleVisiblePanes';
 import * as toggleWhiteboardEditor from './toggleWhiteboardEditor';
-
 const index: any[] = [
 	addNoteToWhiteboard,
 	addProfile,

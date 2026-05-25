@@ -1,5 +1,5 @@
-import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 
+import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 const initiateLogger = () => {
 	const globalLogger = new Logger();
 	globalLogger.addTarget(TargetType.Console, {

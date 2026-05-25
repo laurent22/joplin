@@ -1,7 +1,8 @@
+
+import package_6 from '../package.json';
+import versionInfo from '@joplin/lib/versionInfo';
 import BaseCommand from './base-command';
 import { _ } from '@joplin/lib/locale';
-const versionInfo = require('@joplin/lib/versionInfo').default;
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'version';
@@ -12,7 +13,7 @@ class Command extends BaseCommand {
 	}
 
 	public override async action() {
-		this.stdout(versionInfo(require('../package.json'), {}).message);
+		this.stdout(versionInfo(package_6, {}).message);
 	}
 }
 

@@ -1,3 +1,4 @@
+
 import Setting from '../../models/Setting';
 import shim from '../../shim';
 import { switchClient, setupDatabaseAndSynchronizer, withWarningSilenced } from '../../testing/test-utils';
@@ -5,7 +6,6 @@ import KeychainService from './KeychainService';
 import KeychainServiceDriverDummy from './KeychainServiceDriver.dummy';
 import KeychainServiceDriverElectron from './KeychainServiceDriver.electron';
 import KeychainServiceDriverNode from './KeychainServiceDriver.node';
-
 interface SafeStorageMockOptions {
 	isEncryptionAvailable?: ()=> boolean;
 	encryptString?: (str: string)=> Promise<string|null>;

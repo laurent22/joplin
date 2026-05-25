@@ -1,7 +1,7 @@
+
 import Logger from '@joplin/utils/Logger';
 import shim from '../../shim';
 import Setting from '../Setting';
-
 const logger = Logger.create('Settings');
 
 export type SettingValues = Record<string, unknown>;

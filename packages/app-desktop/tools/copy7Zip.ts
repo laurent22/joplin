@@ -1,7 +1,7 @@
 
+
 import { copy } from 'fs-extra';
 import { dirname, join } from 'path';
-
 const copy7Zip = async () => {
 	// We allow building for a different architecture/platform with
 	// the npm_config_target_arch and npm_config_target_platform environment variables.

@@ -1,12 +1,12 @@
+
+// Assumes that
+// 1. manifest._npm_package_name is correct,
+// 2. other fields were set by the plugin author and are thus untrusted.
 import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginId';
 import validatePluginVersion from '@joplin/lib/services/plugins/utils/validatePluginVersion';
 import validatePluginPlatforms from '@joplin/lib/services/plugins/utils/validatePluginPlatforms';
 import checkIfPluginCanBeAdded from './checkIfPluginCanBeAdded';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
-
-// Assumes that
-// 1. manifest._npm_package_name is correct,
-// 2. other fields were set by the plugin author and are thus untrusted.
 const validateUntrustedManifest = (manifest: PluginManifest, existingManifests: Record<string, PluginManifest>) => {
 	// At this point, we need to check the manifest ID as it's used in various
 	// places including as directory name and object key in manifests.json, so

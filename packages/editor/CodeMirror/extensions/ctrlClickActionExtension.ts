@@ -1,7 +1,7 @@
+
 import { EditorView } from '@codemirror/view';
 import { Prec } from '@codemirror/state';
 import { editorSettingsFacet } from './editorSettingsExtension';
-
 const hasMultipleCursors = (view: EditorView) => {
 	return view.state.selection.ranges.length > 1;
 };

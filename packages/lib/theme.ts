@@ -1,3 +1,6 @@
+
+
+import Color from 'color';
 import theme_light from './themes/light';
 import theme_dark from './themes/dark';
 import theme_dracula from './themes/dracula';
@@ -8,9 +11,6 @@ import theme_aritimDark from './themes/aritimDark';
 import theme_oledDark from './themes/oledDark';
 import Setting from './models/Setting';
 import { Theme, ThemeAppearance } from './themes/type';
-
-const Color = require('color');
-
 const themes: Record<number, Theme> = {
 	[Setting.THEME_LIGHT]: theme_light,
 	[Setting.THEME_DARK]: theme_dark,

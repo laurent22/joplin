@@ -1,10 +1,10 @@
+
 import { ModelType } from '../../../BaseModel';
 import { ModelFeedPage } from '../../../models/utils/paginatedFeed';
 import { PaginationOrderDir } from '../../../models/utils/types';
 import { Request } from '../Api';
 import requestPaginationOptions from '../utils/requestPaginationOptions';
 import requestFields from './requestFields';
-
 export interface Options {
 	sort?: boolean;
 }

@@ -1,5 +1,7 @@
-const { sprintf } = require('sprintf-js');
 
+import { stats as stats_191 } from './locales/index.js';
+import { locales as locales_192 } from './locales/index.js';
+import { sprintf } from 'sprintf-js';
 interface StringToStringMap {
 	[key: string]: string;
 }
@@ -513,12 +515,12 @@ function defaultLocale() {
 }
 
 function localeStats() {
-	if (!localeStats_) localeStats_ = require('./locales/index.js').stats;
+	if (!localeStats_) localeStats_ = stats_191;
 	return localeStats_;
 }
 
 function supportedLocales(): string[] {
-	if (!supportedLocales_) supportedLocales_ = require('./locales/index.js').locales;
+	if (!supportedLocales_) supportedLocales_ = locales_192;
 
 	const output = [];
 	for (const n in supportedLocales_) {

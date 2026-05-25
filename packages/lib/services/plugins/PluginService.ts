@@ -1,3 +1,5 @@
+
+import uslug from '@joplin/fork-uslug';
 import Plugin from './Plugin';
 import manifestFromObject from './utils/manifestFromObject';
 import Global from './api/Global';
@@ -15,8 +17,6 @@ import { AppType } from './api/types';
 import minVersionForPlatform from './utils/isCompatible/minVersionForPlatform';
 import { _ } from '../../locale';
 import ViewController from './ViewController';
-const uslug = require('@joplin/fork-uslug');
-
 const logger = Logger.create('PluginService');
 
 interface PluginExtractionState {

@@ -1,6 +1,6 @@
+
 import { PluginStates } from '../reducer';
 import { ContainerType } from '../WebviewController';
-
 interface Options {
 	mustBeVisible?: boolean;
 }

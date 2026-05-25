@@ -1,3 +1,5 @@
+
+import packageInfo from './packageInfo.js';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { _ } from '@joplin/lib/locale';
@@ -7,8 +9,6 @@ import * as ArrayUtils from '@joplin/lib/ArrayUtils';
 import { CheckForUpdateOptions, extractVersionInfo, GitHubRelease, handleReleaseResponseError } from './utils/checkForUpdatesUtils';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 import { compareVersions } from 'compare-versions';
-const packageInfo: PackageInfo = require('./packageInfo.js');
-
 const logger = Logger.create('checkForUpdates');
 
 let checkInBackground_ = false;

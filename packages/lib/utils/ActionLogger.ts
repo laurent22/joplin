@@ -1,5 +1,5 @@
-import Logger from '@joplin/utils/Logger';
 
+import Logger from '@joplin/utils/Logger';
 export enum ItemActionType {
 	Delete = 'DeleteAction',
 }

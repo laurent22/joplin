@@ -1,3 +1,4 @@
+
 import { emptyRecognizeResult, RecognizeResult } from '../utils/types';
 import OcrDriverBase from '../OcrDriverBase';
 import Logger from '@joplin/utils/Logger';
@@ -7,7 +8,6 @@ import shim from '../../../shim';
 import { msleep } from '@joplin/utils/time';
 import Resource from '../../../models/Resource';
 import { reg } from '../../../registry';
-
 const logger = Logger.create('OcrDriverTranscribe');
 
 type CreateJobResult = { jobId: string };

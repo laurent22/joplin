@@ -1,5 +1,5 @@
-import { ReactElement } from 'react';
 
+import { ReactElement } from 'react';
 export interface CustomSettingSection {
 	component: ReactElement;
 	icon: string;

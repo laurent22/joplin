@@ -1,10 +1,10 @@
+
 import MenuUtils from './commands/MenuUtils';
 import ToolbarButtonUtils from './commands/ToolbarButtonUtils';
 import CommandService, { CommandDeclaration, CommandRuntime } from './CommandService';
 import stateToWhenClauseContext from './commands/stateToWhenClauseContext';
 import KeymapService from './KeymapService';
 import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } from '../testing/test-utils';
-
 interface TestCommand {
 	declaration: CommandDeclaration;
 	runtime: CommandRuntime;

@@ -1,3 +1,4 @@
+
 import time from '../../time';
 import { allNotesFolders, localNotesFoldersSameAsRemote } from '../../testing/test-utils-synchronizer';
 import { synchronizerStart, setupDatabaseAndSynchronizer, sleep, switchClient, syncTargetId, loadEncryptionMasterKey, decryptionWorker } from '../../testing/test-utils';
@@ -6,7 +7,6 @@ import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { NoteEntity } from '../database/types';
-
 describe('Synchronizer.conflicts', () => {
 
 	beforeEach(async () => {

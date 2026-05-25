@@ -1,9 +1,9 @@
+
 import * as React from 'react';
 import { VisibleNotificationsContext } from './PopupNotificationProvider';
 import NotificationItem from './NotificationItem';
 import { useContext } from 'react';
 import { _ } from '@joplin/lib/locale';
-
 interface Props {}
 
 // This component displays the popups managed by PopupNotificationContext.

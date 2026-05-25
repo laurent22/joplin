@@ -1,14 +1,14 @@
+
 import * as React from 'react';
-
-import {
-	forwardRef, Ref, useCallback, useEffect, useImperativeHandle, useRef, useState,
-} from 'react';
 import { Props, WebViewControl } from './types';
-
 import { View, ViewStyle } from 'react-native';
 import makeSandboxedIframe from '@joplin/lib/utils/dom/makeSandboxedIframe';
 import Logger from '@joplin/utils/Logger';
 import useCss from './utils/useCss';
+import {
+	forwardRef, Ref, useCallback, useEffect, useImperativeHandle, useRef, useState,
+} from 'react';
+
 
 const logger = Logger.create('ExtendedWebView');
 

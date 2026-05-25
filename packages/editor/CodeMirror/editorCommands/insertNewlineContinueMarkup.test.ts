@@ -1,9 +1,9 @@
+
 import { EditorSelection } from '@codemirror/state';
 import createTestEditor from '../testing/createTestEditor';
 import pressReleaseKey from '../testing/pressReleaseKey';
 import { keymap } from '@codemirror/view';
 import insertNewlineContinueMarkup from './insertNewlineContinueMarkup';
-
 describe('insertNewlineContinueMarkup', () => {
 	jest.retryTimes(2);
 

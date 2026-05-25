@@ -1,6 +1,6 @@
+
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
-
 interface ExpandIconProps {
 	isExpanded: boolean;
 	isVisible: boolean;

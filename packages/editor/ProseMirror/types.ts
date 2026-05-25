@@ -1,6 +1,6 @@
+
 import { RenderResult } from '../../renderer/types';
 import { EditorLanguageType } from '../types';
-
 interface MarkupToHtmlOptions {
 	isFullPageRender: boolean;
 	forceMarkdown: boolean;

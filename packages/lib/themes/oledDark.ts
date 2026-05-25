@@ -1,6 +1,6 @@
+
 import { Theme } from './type';
 import theme_dark from './dark';
-
 const theme: Theme = {
 	...theme_dark,
 	backgroundColor: '#000000',

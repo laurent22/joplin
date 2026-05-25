@@ -1,3 +1,4 @@
+
 import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -20,7 +21,6 @@ import { userFlagToString } from '../../models/UserFlagModel';
 import { stopImpersonating } from '../admin/utils/users/impersonate';
 import { _ } from '@joplin/lib/locale';
 import { getIsMFAEnabled } from '../../models/utils/user';
-
 export interface CheckRepeatPasswordInput {
 	password: string;
 	password2: string;

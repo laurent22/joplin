@@ -1,9 +1,9 @@
+
 import { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
 import { CommandRuntimeProps } from '../types';
 import Setting from '@joplin/lib/models/Setting';
 import { AccessibilityInfo } from 'react-native';
 import { _ } from '@joplin/lib/locale';
-
 export const declaration: CommandDeclaration = {
 	// For compatibility with the desktop app, this command is called "toggleVisiblePanes".
 	name: 'toggleVisiblePanes',

@@ -1,3 +1,4 @@
+
 import { _ } from '@joplin/lib/locale';
 import BaseCommand from './base-command';
 import app from './app';
@@ -8,7 +9,6 @@ import Note from '@joplin/lib/models/Note';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import Setting from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry';
-
 const logger = Logger.create('command-unpublish');
 
 type Args = {

@@ -1,7 +1,7 @@
+
 import CommandService from '@joplin/lib/services/CommandService';
 import { useEffect } from 'react';
 import type { Editor, EditorEvent } from 'tinymce';
-
 const useKeyboardRefocusHandler = (editor: Editor) => {
 	useEffect(() => {
 		if (!editor) return () => {};

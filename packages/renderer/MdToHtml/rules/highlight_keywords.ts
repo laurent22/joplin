@@ -1,12 +1,12 @@
 // This plugin is used only on mobile, to highlight search results.
 
+
+
+import stringUtils from '../../stringUtils.js';
+import md5 from 'md5';
 import { RuleOptions } from '../../MdToHtml';
 import type * as MarkdownIt from 'markdown-it';
-import type StateCore = require('markdown-it/lib/rules_core/state_core');
-
-const stringUtils = require('../../stringUtils.js');
-const md5 = require('md5');
-
+import type StateCore from 'markdown-it/lib/rules_core/state_core';
 function createHighlightedTokens(Token: typeof import('markdown-it/lib/token'), splitted: string[]) {
 	let token;
 	const output = [];

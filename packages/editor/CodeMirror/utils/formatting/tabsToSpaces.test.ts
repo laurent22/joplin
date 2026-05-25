@@ -1,8 +1,8 @@
+
+
 import { indentUnit } from '@codemirror/language';
 import { EditorSelection, EditorState } from '@codemirror/state';
 import tabsToSpaces from './tabsToSpaces';
-
-
 describe('tabsToSpaces', () => {
 	it('should convert tabs to spaces based on indentUnit', () => {
 		const state: EditorState = EditorState.create({

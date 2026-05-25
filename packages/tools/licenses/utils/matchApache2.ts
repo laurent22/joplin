@@ -1,6 +1,6 @@
+
 import apache2 from '../licenseText/apache2';
 import wordsMatch from './equalIgnoringSpacing';
-
 const matchApache2 = (text: string) => {
 	const termsEndString = 'END OF TERMS AND CONDITIONS';
 	const termsEndStringIndex = text.indexOf(termsEndString);

@@ -1,3 +1,4 @@
+
 import Resource from '@joplin/lib/models/Resource';
 import Logger from '@joplin/utils/Logger';
 import bridge from '../../../services/bridge';
@@ -8,7 +9,6 @@ import CommandService from '@joplin/lib/services/CommandService';
 import { type MenuItem as MenuItemType } from 'electron';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import { ModelType } from '@joplin/lib/BaseModel';
-
 const MenuItem = bridge().MenuItem;
 const logger = Logger.create('contextMenuUtils');
 

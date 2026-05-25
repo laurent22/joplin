@@ -1,9 +1,9 @@
+
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
 import { ModelType } from '@joplin/lib/BaseModel';
 import shim from '@joplin/lib/shim';
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'attach <note> <file>';

@@ -1,3 +1,4 @@
+
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import { Share, ShareUserStatus, User } from '../../services/database/types';
@@ -8,7 +9,6 @@ import { randomElement } from '../../utils/array';
 import { CustomErrorCode } from '../../utils/errors';
 import uuid from '@joplin/lib/uuid';
 import { randomWeightedElement } from '@joplin/utils/array';
-
 let logger_: Logger = null;
 
 const logger = () => {

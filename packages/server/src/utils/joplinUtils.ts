@@ -1,3 +1,7 @@
+
+import path_resolve from 'path';
+import { DatabaseDriverNode } from '@joplin/lib/database-driver-node.js';
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
@@ -18,7 +22,6 @@ import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
 import { OptionsResourceModel } from '@joplin/renderer/types';
 import { isValidHeaderIdentifier } from '@joplin/lib/services/e2ee/EncryptionService';
-const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
 import { Models } from '../models/factory';
@@ -30,12 +33,10 @@ import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
 import KeychainServiceDriverDummy from '@joplin/lib/services/keychain/KeychainServiceDriver.dummy';
 import BaseService from '@joplin/lib/services/BaseService';
-const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import { sanitizeUserUrl } from './urlUtils';
 import { BannerInfo } from './banners';
 import { getDefaultBannerInfo } from './banners';
-
 const logger = Logger.create('JoplinUtils');
 
 export interface FileViewerResponse {
@@ -59,7 +60,7 @@ type LinkedItemInfos = Record<Uuid, LinkedItemInfo>;
 
 type ResourceInfos = Record<Uuid, ResourceInfo>;
 
-const pluginAssetRootDir_ = require('path').resolve(__dirname, '../..', 'node_modules/@joplin/renderer/assets');
+const pluginAssetRootDir_ = path_resolve.resolve(__dirname, '../..', 'node_modules/@joplin/renderer/assets');
 
 let db_: JoplinDatabase = null;
 let models_: Models = null;

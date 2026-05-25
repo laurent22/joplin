@@ -1,6 +1,6 @@
+
 import { runtime } from './showSpellCheckerMenu';
 import { AppState } from '../../../app.reducer';
-
 jest.mock('../../../services/bridge', () => ({
 	__esModule: true,
 	default: () => ({

@@ -1,3 +1,8 @@
+
+import { utils as joplinRendererUtils } from '@joplin/renderer';
+import { clipboard } from 'electron';
+import md5 from 'md5';
+import path from 'path';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
@@ -12,15 +17,10 @@ import { MarkupLanguage } from '@joplin/renderer';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
 import markupRenderOptions from './markupRenderOptions';
 import { fileExtension, filename, safeFileExtension, safeFilename } from '@joplin/utils/path';
-const joplinRendererUtils = require('@joplin/renderer').utils;
 import type { NativeImage } from 'electron';
-const { clipboard } = require('electron');
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import bridge from '../../../services/bridge';
 import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
-const md5 = require('md5');
-const path = require('path');
-
 const logger = Logger.create('resourceHandling');
 
 export async function handleResourceDownloadMode(noteBody: string) {

@@ -1,7 +1,7 @@
 // Allow running that task "buildScriptIndexes" without gulp
 
-const task = require('./buildScriptIndexes.js');
 
+import task from './buildScriptIndexes.js';
 const main = async () => {
 	await task.fn();
 };

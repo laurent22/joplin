@@ -1,8 +1,8 @@
+
 import { PublicKeyAlgorithm, PublicKeyCrypto, PublicKeyCryptoProvider } from '../types';
 import * as NodeRSA from 'node-rsa';
 import { webcrypto } from 'crypto';
 import buildRsaCryptoProvider from './webCrypto/buildRsaCryptoProvider';
-
 const legacyRSAOptions: NodeRSA.Options = {
 	// Must use pkcs1 otherwise any data encrypted with NodeRSA will crash the
 	// app when decrypted by RN-RSA.

@@ -1,6 +1,6 @@
+
 import appReducer from './appReducer';
 import appDefaultState, { DEFAULT_ROUTE } from './appDefaultState';
-
 const notesRoute = { type: 'NAV_GO', routeName: 'Notes', folderId: 'folder1' };
 const settingsRoute = { type: 'NAV_GO', routeName: 'Config' };
 const deletedFolderId = 'folder1';

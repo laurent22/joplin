@@ -1,11 +1,12 @@
+
+import path from 'path';
+import fetch from 'node-fetch';
+import uriTemplate from 'uri-template';
+import { argv } from 'yargs';
 import { execCommand } from '@joplin/utils';
 import { copy, mkdirp, move, readFile, readFileSync, remove, stat, writeFile, writeFileSync } from 'fs-extra';
 import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
 import { homedir } from 'os';
-const path = require('path');
-const fetch = require('node-fetch');
-const uriTemplate = require('uri-template');
-
 const rootDir = path.dirname(path.dirname(__dirname));
 const rnDir = `${rootDir}/packages/app-mobile`;
 const releaseDir = `${rnDir}/dist`;
@@ -305,7 +306,6 @@ const releaseConfigs: ReleaseConfig[] = [
 ];
 
 async function main() {
-	const argv = require('yargs').argv;
 
 	// await testPatch(releaseConfigs[1]);
 

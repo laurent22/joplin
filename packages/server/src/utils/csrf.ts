@@ -1,10 +1,10 @@
+
 import { User } from '../services/database/types';
 import { Models } from '../models/factory';
 import { ErrorForbidden } from './errors';
 import { escapeHtml } from './htmlUtils';
 import { bodyFields, isApiRequest } from './requestUtils';
 import { AppContext } from './types';
-
 interface BodyWithCsrfToken {
 	_csrf: string;
 }

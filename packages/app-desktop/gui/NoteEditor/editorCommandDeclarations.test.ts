@@ -1,6 +1,6 @@
+
 import WhenClause from '@joplin/lib/services/WhenClause';
 import { enabledCondition } from './editorCommandDeclarations';
-
 const baseContext: Record<string, boolean> = {
 	modalDialogVisible: false,
 	gotoAnythingVisible: false,

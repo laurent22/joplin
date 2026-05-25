@@ -1,5 +1,5 @@
-import CodeMirrorControl from '../CodeMirrorControl';
 
+import CodeMirrorControl from '../CodeMirrorControl';
 interface AppCommands {
 	sync(): void;
 }

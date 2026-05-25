@@ -1,3 +1,5 @@
+
+import prettyCron from 'prettycron';
 import { makeUrl, redirect, SubPath, UrlType } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -12,8 +14,6 @@ import { createCsrfTag } from '../../utils/csrf';
 import { RunType } from '../../services/TaskService';
 import { NotificationKey } from '../../models/NotificationModel';
 import { NotificationLevel, TaskId } from '../../services/database/types';
-const prettyCron = require('prettycron');
-
 const router: Router = new Router(RouteType.Web);
 
 router.post('admin/tasks', async (_path: SubPath, ctx: AppContext) => {

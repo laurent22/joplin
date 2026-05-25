@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -11,7 +12,6 @@ import { useCallback, useMemo, useRef } from 'react';
 import Logger from '@joplin/utils/Logger';
 import focusView from '../../../utils/focusView';
 import NavService from '@joplin/lib/services/NavService';
-
 const logger = Logger.create('NewNoteButton');
 
 interface Props {

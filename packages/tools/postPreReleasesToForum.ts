@@ -1,11 +1,12 @@
+
+import { argv } from 'yargs';
 import { pathExists } from 'fs-extra';
 import { readFile, writeFile } from 'fs/promises';
 import { GitHubRelease, gitHubLatestReleases, gitHubLinkify } from './tool-utils';
 import { config, createPost, createTopic, getForumTopPostByExternalId, getTopicByExternalId, trimPostToMaximumLength, updatePost } from './utils/discourse';
 import { compareVersions } from 'compare-versions';
-import dayjs = require('dayjs');
+import dayjs from 'dayjs';
 import { getRootDir } from '@joplin/utils';
-
 interface State {
 	processedReleases: Record<string, boolean>;
 }
@@ -159,7 +160,6 @@ const processReleases = async (releases: GitHubRelease[], platform: Platform, st
 const main = async () => {
 	const rootDir = await getRootDir();
 
-	const argv = require('yargs').argv;
 	config.key = argv._[0];
 	config.username = argv._[1];
 

@@ -1,8 +1,8 @@
+
 import { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
 import { setNotesSortOrder } from '@joplin/lib/services/sortOrder/notesSortOrderUtils';
-
 export const declaration: CommandDeclaration = {
 	name: 'toggleNotesSortOrderReverse',
 	label: () => _('Reverse sort order'),

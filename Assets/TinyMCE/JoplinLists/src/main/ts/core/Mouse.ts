@@ -1,6 +1,6 @@
+
+
 import { isJoplinChecklistItem } from '../listModel/JoplinListUtil';
-
-
 const setup = function (editor) {
     const editorClickHandler = (event) => {
         if (!isJoplinChecklistItem(event.target)) return;

@@ -1,9 +1,3 @@
-import { checkObjectHasProperties } from '@joplin/utils/object';
-import { ModelType } from '../../BaseModel';
-import { _ } from '../../locale';
-import { FolderEntity, FolderIcon, FolderIconType, NoteEntity } from '../database/types';
-import Folder from '../../models/Folder';
-import getTrashFolderId from './getTrashFolderId';
 
 // When an item is deleted, all its properties are kept, including the parent ID
 // so that it can potentially be restored to the right folder. However, when
@@ -17,6 +11,12 @@ import getTrashFolderId from './getTrashFolderId';
 //
 // `originalItemParent` is the parent before the item was deleted, which is the
 // folder with ID = item.parent_id
+import { checkObjectHasProperties } from '@joplin/utils/object';
+import { ModelType } from '../../BaseModel';
+import { _ } from '../../locale';
+import { FolderEntity, FolderIcon, FolderIconType, NoteEntity } from '../database/types';
+import Folder from '../../models/Folder';
+import getTrashFolderId from './getTrashFolderId';
 export const getDisplayParentId = (item: FolderEntity | NoteEntity, originalItemParent: FolderEntity) => {
 	if (!('parent_id' in item)) throw new Error(`Missing "parent_id" property: ${JSON.stringify(item)}`);
 

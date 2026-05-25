@@ -1,6 +1,6 @@
+
 import InMemoryCache from './InMemoryCache';
 import time from './time';
-
 describe('InMemoryCache', () => {
 
 	it('should get and set values', () => {

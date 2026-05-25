@@ -1,5 +1,5 @@
-import trimEmptyParagraphs from './trimEmptyParagraphs';
 
+import trimEmptyParagraphs from './trimEmptyParagraphs';
 const fixResourceUrls = (container: HTMLElement) => {
 	const resources = container.querySelectorAll<HTMLImageElement>('img[data-resource-id]');
 	for (const resource of resources) {

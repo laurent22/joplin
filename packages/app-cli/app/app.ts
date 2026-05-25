@@ -1,3 +1,5 @@
+
+import AppGui from './app-gui.js';
 import BaseApplication from '@joplin/lib/BaseApplication';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils.js';
 import ResourceService from '@joplin/lib/services/ResourceService';
@@ -16,11 +18,10 @@ import shim from '@joplin/lib/shim';
 import setupCommand from './setupCommand';
 import BaseCommand from './base-command';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
-
-type FolderOrNoteType = ModelType.Note | ModelType.Folder | 'folderOrNote';
 import initializeCommandService from './utils/initializeCommandService';
 import { cliUtils } from './cli-utils.js';
 import Cache from '@joplin/lib/Cache';
+type FolderOrNoteType = ModelType.Note | ModelType.Folder | 'folderOrNote';
 
 class Application extends BaseApplication {
 
@@ -439,7 +440,6 @@ class Application extends BaseApplication {
 			// Otherwise open the GUI
 			const keymap = await this.loadKeymaps();
 
-			const AppGui = require('./app-gui.js');
 			this.gui_ = new AppGui(this, this.store(), keymap);
 			this.gui_.setLogger(this.logger());
 			await this.gui_.start();

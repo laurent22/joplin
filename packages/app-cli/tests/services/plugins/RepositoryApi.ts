@@ -1,9 +1,9 @@
+
 import { AppType } from '@joplin/lib/models/Setting';
 import RepositoryApi, { AppInfo, InstallMode } from '@joplin/lib/services/plugins/RepositoryApi';
 import shim from '@joplin/lib/shim';
 import { setupDatabaseAndSynchronizer, switchClient, supportDir, createTempDir } from '@joplin/lib/testing/test-utils';
 import { remove } from 'fs-extra';
-
 let tempDirs: string[] = [];
 async function newRepoApi(appInfo: AppInfo = { type: AppType.Desktop, version: '3.0.0' }): Promise<RepositoryApi> {
 	const tempDir = await createTempDir();

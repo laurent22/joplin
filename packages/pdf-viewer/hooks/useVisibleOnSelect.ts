@@ -1,5 +1,5 @@
-import { useRef, useEffect, MutableRefObject } from 'react';
 
+import { useRef, useEffect, MutableRefObject } from 'react';
 export interface VisibleOnSelect {
 	container: MutableRefObject<HTMLElement>;
 	wrapperRef: MutableRefObject<HTMLElement>;

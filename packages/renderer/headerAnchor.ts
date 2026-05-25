@@ -1,6 +1,6 @@
-import type * as MarkdownIt from 'markdown-it';
-import type StateCore = require('markdown-it/lib/rules_core/state_core');
 
+import type * as MarkdownIt from 'markdown-it';
+import type StateCore from 'markdown-it/lib/rules_core/state_core';
 export default function(markdownIt: MarkdownIt) {
 	markdownIt.core.ruler.push('anchorHeader', (state: StateCore): boolean => {
 		const tokens = state.tokens;

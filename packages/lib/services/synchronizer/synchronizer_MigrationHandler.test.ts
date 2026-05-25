@@ -5,6 +5,7 @@
 //
 // These tests work by a taking a sync target snapshot at a version n and upgrading it to n+1.
 
+
 import LockHandler, { LockClientType } from './LockHandler';
 import MigrationHandler from './MigrationHandler';
 import { Dirnames } from './utils/types';
@@ -14,7 +15,6 @@ import Setting from '../../models/Setting';
 import MasterKey from '../../models/MasterKey';
 import { loadMasterKeysFromSettings } from '../e2ee/utils';
 import { fetchSyncInfo } from './syncInfoUtils';
-
 const specTimeout = 60000 * 10; // Nextcloud tests can be slow
 
 let lockHandler_: LockHandler = null;

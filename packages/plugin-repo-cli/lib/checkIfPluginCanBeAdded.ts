@@ -1,5 +1,5 @@
-import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 
+import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 type PluginManifests = Record<string, PluginManifest>;
 
 function caseInsensitiveFindManifest(manifests: PluginManifests, manifestId: string): PluginManifest | null {

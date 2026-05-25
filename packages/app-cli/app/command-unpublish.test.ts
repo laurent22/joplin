@@ -1,3 +1,6 @@
+
+
+import Command from './command-unpublish';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import mockShareService from '@joplin/lib/testing/share/mockShareService';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
@@ -5,9 +8,6 @@ import waitFor from '@joplin/lib/testing/waitFor';
 import { setupApplication, setupCommandForTesting } from './utils/testUtils';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-const Command = require('./command-unpublish');
-
-
 describe('command-unpublish', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

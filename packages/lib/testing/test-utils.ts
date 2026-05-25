@@ -1,4 +1,29 @@
 /* eslint-disable require-atomic-updates */
+
+// Each suite has its own separate data and temp directory so that multiple
+// suites can be run at the same time. suiteName is what is used to
+// differentiate between suite and it is currently set to a random string
+// (Ideally it would be something like the filename currently being executed by
+// Jest, to make debugging easier, but it's not clear how to get this info).
+import url_parse_253 from 'url-parse';
+import querystring_parse from 'querystring';
+import { DatabaseDriverNode } from '../database-driver-node.js';
+import FileApiDriverMemory from '../file-api-driver-memory';
+import { FileApiDriverWebDav } from '../file-api-driver-webdav.js';
+import { FileApiDriverDropbox } from '../file-api-driver-dropbox.js';
+import { FileApiDriverOneDrive } from '../file-api-driver-onedrive.js';
+import SyncTargetMemory from '../SyncTargetMemory.js';
+import SyncTargetNextcloud from '../SyncTargetNextcloud.js';
+import SyncTargetDropbox from '../SyncTargetDropbox.js';
+import SyncTargetAmazonS3 from '../SyncTargetAmazonS3.js';
+import SyncTargetWebDAV from '../SyncTargetWebDAV.js';
+import DropboxApi from '../DropboxApi';
+import md5 from 'md5';
+import { Dirnames } from '../services/synchronizer/utils/types';
+import { parameters, setEnvOverride } from '../parameters.js';
+import { FileApiDriverAmazonS3 } from '../file-api-driver-amazon-s3.js';
+import { S3Client } from '@aws-sdk/client-s3';
+import fs from 'fs-extra';
 import BaseApplication from '../BaseApplication';
 import BaseModel from '../BaseModel';
 import Logger, { TargetType, LoggerWrapper, LogLevel } from '@joplin/utils/Logger';
@@ -18,7 +43,6 @@ import OneDriveApi from '../onedrive-api';
 import SyncTargetOneDrive from '../SyncTargetOneDrive';
 import JoplinDatabase from '../JoplinDatabase';
 import * as fs from 'fs-extra';
-const { DatabaseDriverNode } = require('../database-driver-node.js');
 import Folder from '../models/Folder';
 import Note from '../models/Note';
 import ItemChange from '../models/ItemChange';
@@ -29,25 +53,15 @@ import Revision from '../models/Revision';
 import MasterKey from '../models/MasterKey';
 import BaseItem from '../models/BaseItem';
 import { FileApi } from '../file-api';
-const FileApiDriverMemory = require('../file-api-driver-memory').default;
 import FileApiDriverLocal from '../file-api-driver-local';
-const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
-const { FileApiDriverDropbox } = require('../file-api-driver-dropbox.js');
-const { FileApiDriverOneDrive } = require('../file-api-driver-onedrive.js');
 import SyncTargetRegistry from '../SyncTargetRegistry';
-const SyncTargetMemory = require('../SyncTargetMemory.js');
 import SyncTargetFilesystem from '../SyncTargetFilesystem';
-const SyncTargetNextcloud = require('../SyncTargetNextcloud.js');
-const SyncTargetDropbox = require('../SyncTargetDropbox.js');
-const SyncTargetAmazonS3 = require('../SyncTargetAmazonS3.js');
-const SyncTargetWebDAV = require('../SyncTargetWebDAV.js');
 import SyncTargetJoplinServer from '../SyncTargetJoplinServer';
 import EncryptionService from '../services/e2ee/EncryptionService';
 import DecryptionWorker from '../services/DecryptionWorker';
 import RevisionService from '../services/RevisionService';
 import ResourceFetcher from '../services/ResourceFetcher';
 import WebDavApi from '../WebDavApi';
-const DropboxApi = require('../DropboxApi');
 import JoplinServerApi, { Session } from '../JoplinServerApi';
 import { FolderEntity, ResourceEntity } from '../services/database/types';
 import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
@@ -58,8 +72,6 @@ import { setActiveMasterKeyId, setEncryptionEnabled } from '../services/synchron
 import Synchronizer from '../Synchronizer';
 import SyncTargetNone from '../SyncTargetNone';
 import { setRSA } from '../services/e2ee/ppk/ppk';
-const md5 = require('md5');
-const { Dirnames } = require('../services/synchronizer/utils/types');
 import RSA from '../services/e2ee/ppk/RSA.node';
 import { State as ShareState } from '../services/share/reducer';
 import initLib from '../initLib';
@@ -72,12 +84,6 @@ import { dirname } from '@joplin/utils/path';
 import SyncTargetJoplinServerSAML from '../SyncTargetJoplinServerSAML';
 import { MarkupLanguage } from '@joplin/renderer';
 import SearchEngine from '../services/search/SearchEngine';
-
-// Each suite has its own separate data and temp directory so that multiple
-// suites can be run at the same time. suiteName is what is used to
-// differentiate between suite and it is currently set to a random string
-// (Ideally it would be something like the filename currently being executed by
-// Jest, to make debugging easier, but it's not clear how to get this info).
 const suiteName_ = uuid.createNano();
 
 const databases_: JoplinDatabase[] = [];
@@ -658,14 +664,13 @@ async function initFileApi() {
 
 		mustRunInBand();
 
-		const { parameters, setEnvOverride } = require('../parameters.js');
 		Setting.setConstant('env', Env.Dev);
 		setEnvOverride('test');
 		const config = parameters().oneDriveTest;
 		const api = new OneDriveApi(config.id, config.secret, false);
 		const authData = fs.readFileSync(await credentialFile('onedrive-auth.txt'), 'utf8');
-		const urlInfo = require('url-parse')(authData, true);
-		const auth = require('querystring').parse(urlInfo.hash.substr(1));
+		const urlInfo = url_parse_253(authData, true);
+		const auth = querystring_parse.parse(urlInfo.hash.substr(1));
 		api.setAuth(auth);
 
 		const accountProperties = await api.execAccountPropertiesRequest();
@@ -679,8 +684,6 @@ async function initFileApi() {
 		//
 		// Require it dynamically so that this doesn't break test environments that
 		// aren't configured to do this conversion.
-		const { FileApiDriverAmazonS3 } = require('../file-api-driver-amazon-s3.js');
-		const { S3Client } = require('@aws-sdk/client-s3');
 
 		// We make sure for S3 tests run in band because tests
 		// share the same directory which will cause locking errors.
@@ -803,7 +806,6 @@ function checkThrow(fn: ()=> unknown) {
 }
 
 function fileContentEqual(path1: string, path2: string) {
-	const fs = require('fs-extra');
 	const content1 = fs.readFileSync(path1, 'base64');
 	const content2 = fs.readFileSync(path2, 'base64');
 	return content1 === content2;

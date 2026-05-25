@@ -3,8 +3,8 @@
 // way around. This is necessary after having enabled the "contextIsolation" option, which
 // prevents the webview from accessing low-level methods in the main process.
 
-const ipcRenderer = require('electron').ipcRenderer;
 
+import { ipcRenderer } from 'electron';
 ipcRenderer.on('setHtml', (event, html, options) => {
 	window.postMessage({ target: 'webview', name: 'setHtml', data: { html: html, options: options } }, '*');
 });

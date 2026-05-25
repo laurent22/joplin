@@ -1,10 +1,10 @@
+
+
 import * as React from 'react';
 import { useCallback } from 'react';
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import TextButton, { TextButtonProps, ButtonType } from '../../../../buttons/TextButton';
 import { PluginCallback } from '../utils/usePluginCallbacks';
-
-
 interface Props extends Omit<TextButtonProps, 'type'|'item'|'onPress'|'children'> {
 	item: PluginItem;
 	type?: ButtonType;

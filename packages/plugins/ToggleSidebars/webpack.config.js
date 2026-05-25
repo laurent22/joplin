@@ -8,16 +8,17 @@
 
 /* eslint-disable no-console */
 
-const path = require('path');
-const crypto = require('crypto');
-const fs = require('fs-extra');
-const chalk = require('chalk');
-const CopyPlugin = require('copy-webpack-plugin');
-const WebpackOnBuildPlugin = require('on-build-webpack');
-const tar = require('tar');
-const glob = require('glob');
-const execSync = require('child_process').execSync;
 
+import path from 'path';
+import crypto from 'crypto';
+import fs from 'fs-extra';
+import chalk from 'chalk';
+import CopyPlugin from 'copy-webpack-plugin';
+import WebpackOnBuildPlugin from 'on-build-webpack';
+import tar from 'tar';
+import glob from 'glob';
+import { execSync } from 'child_process';
+import yargs from 'yargs/yargs';
 const rootDir = path.resolve(__dirname);
 const userConfigFilename = './plugin.config.json';
 const userConfigPath = path.resolve(rootDir, userConfigFilename);
@@ -214,7 +215,6 @@ function buildExtraScriptConfigs(userConfig) {
 }
 
 function main(processArgv) {
-	const yargs = require('yargs/yargs');
 	const argv = yargs(processArgv).argv;
 
 	const configName = argv['joplin-plugin-config'];

@@ -3,13 +3,7 @@
 //
 
 
-import { defaultHighlightStyle, syntaxHighlighting, HighlightStyle } from '@codemirror/language';
-import { tags } from '@lezer/highlight';
-import { EditorView } from '@codemirror/view';
-import { Extension } from '@codemirror/state';
 
-import { inlineMathTag, mathTag } from './extensions/markdownMathExtension';
-import { EditorTheme } from '../types';
 
 // For an example on how to customize the theme, see:
 //
@@ -25,6 +19,12 @@ import { EditorTheme } from '../types';
 // use '&.cm-focused' in the theme.
 //
 // [theme] should be a joplin theme (see @joplin/lib/theme)
+import { defaultHighlightStyle, syntaxHighlighting, HighlightStyle } from '@codemirror/language';
+import { tags } from '@lezer/highlight';
+import { EditorView } from '@codemirror/view';
+import { Extension } from '@codemirror/state';
+import { inlineMathTag, mathTag } from './extensions/markdownMathExtension';
+import { EditorTheme } from '../types';
 const createTheme = (theme: EditorTheme): Extension[] => {
 	// If the theme hasn't loaded yet, return nothing.
 	// (createTheme should be called again after the theme has loaded).

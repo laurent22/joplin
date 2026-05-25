@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import shim from '@joplin/lib/shim';
 import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { ConfigScreenStyles } from './configScreenStyles';
@@ -11,7 +12,6 @@ import { reg } from '@joplin/lib/registry';
 import type FsDriverWeb from '../../../utils/fs-driver/fs-driver-rn.web';
 import { IconButton, TouchableRipple } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
-
 type Mode = 'read'|'readwrite';
 
 interface Props {

@@ -1,5 +1,10 @@
 /** @jest-environment node */
 
+import handleCustomProtocols from './handleCustomProtocols';
+import { supportDir } from '@joplin/lib/testing/test-utils';
+import { join } from 'path';
+import { stat } from 'fs-extra';
+import { toForwardSlashes } from '@joplin/utils/path';
 type ProtocolHandler = (request: Request)=> Promise<Response>;
 const customProtocols: Map<string, ProtocolHandler> = new Map();
 
@@ -20,11 +25,6 @@ jest.doMock('electron', () => {
 	};
 });
 
-import handleCustomProtocols from './handleCustomProtocols';
-import { supportDir } from '@joplin/lib/testing/test-utils';
-import { join } from 'path';
-import { stat } from 'fs-extra';
-import { toForwardSlashes } from '@joplin/utils/path';
 
 const setUpProtocolHandler = () => {
 	const mockSession = {

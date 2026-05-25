@@ -1,5 +1,5 @@
-import preprocessEditorInput from './preprocessEditorInput';
 
+import preprocessEditorInput from './preprocessEditorInput';
 describe('preprocessEditorInput', () => {
 	test.each([
 		{

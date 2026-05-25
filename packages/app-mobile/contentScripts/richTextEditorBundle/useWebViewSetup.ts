@@ -1,3 +1,4 @@
+
 import { RefObject, useEffect, useMemo, useRef } from 'react';
 import { WebViewControl } from '../../components/ExtendedWebView/types';
 import { SetUpResult } from '../types';
@@ -15,7 +16,6 @@ import { ResourceInfos } from '@joplin/renderer/types';
 import { _ } from '@joplin/lib/locale';
 import { defaultSearchState } from '../../components/NoteEditor/SearchPanel';
 import { SelectionRange } from '../markdownEditorBundle/types';
-
 const logger = Logger.create('useWebViewSetup');
 
 interface Props {

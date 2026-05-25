@@ -1,3 +1,8 @@
+
+// See the fold example for more information about
+// writing similar ProseMirror plugins:
+// https://prosemirror.net/examples/fold/
+
 import { Plugin } from 'prosemirror-state';
 import { AttributeSpec, Node, NodeSpec } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
@@ -7,11 +12,6 @@ import showModal from '../utils/dom/showModal';
 import createTextArea from '../utils/dom/createTextArea';
 import createExternalEditorPlugin, { OnHide } from './utils/createExternalEditorPlugin';
 import createFloatingButtonPlugin, { ToolbarType } from './utils/createFloatingButtonPlugin';
-
-// See the fold example for more information about
-// writing similar ProseMirror plugins:
-// https://prosemirror.net/examples/fold/
-
 type NodeAttrs = Readonly<{
 	// Placeholder attributes (e.g. if the src is not
 	// yet valid).

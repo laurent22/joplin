@@ -1,7 +1,7 @@
+
+
+import Setting from '@joplin/lib/models/Setting';
 import Geolocation from '@react-native-community/geolocation';
-
-const Setting = require('@joplin/lib/models/Setting').default;
-
 class GeolocationReact {
 	static currentPosition_testResponse() {
 		return {

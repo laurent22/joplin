@@ -1,7 +1,7 @@
-import { EditorState, Line } from '@codemirror/state';
-import uslug from '@joplin/fork-uslug/lib/uslug';
 
 // Searches the given `state` for a line that matches the target link.
+import { EditorState, Line } from '@codemirror/state';
+import uslug from '@joplin/fork-uslug/lib/uslug';
 const findLineMatchingLink = (link: string, state: EditorState): Line|null => {
 	const isAnchorLink = link.startsWith('#');
 	const isFootnote = link.startsWith('[^') && link.endsWith(']');

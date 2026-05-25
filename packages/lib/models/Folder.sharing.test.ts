@@ -1,3 +1,4 @@
+
 import { setupDatabaseAndSynchronizer, switchClient, createFolderTree, supportDir, msleep, resourceService, simulateReadOnlyShareEnv } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import { allNotesFolders } from '../testing/test-utils-synchronizer';
@@ -7,7 +8,6 @@ import Resource from '../models/Resource';
 import { FolderEntity, NoteEntity, ResourceEntity } from '../services/database/types';
 import ResourceService from '../services/ResourceService';
 import { StateShare } from '../services/share/reducer';
-
 const testImagePath = `${supportDir}/photo.jpg`;
 
 describe('models/Folder.sharing', () => {

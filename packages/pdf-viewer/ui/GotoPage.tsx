@@ -1,8 +1,8 @@
+
 import React, { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
-
 const Group = styled.div<{ size: number }>`
 	display: flex;
 	justify-content: center;

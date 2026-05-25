@@ -1,5 +1,5 @@
-const execCommand = require('./execCommand');
 
+import execCommand from './execCommand';
 const isArm64 = () => {
 	return process.platform === 'arm64';
 };

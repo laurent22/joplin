@@ -1,11 +1,11 @@
-const BaseCommand = require('./base-command').default;
+
+import BaseCommand from './base-command';
 import { reg } from '@joplin/lib/registry';
 import Note from '@joplin/lib/models/Note';
 import uuid from '@joplin/lib/uuid';
 import populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 import { readCredentialFile } from '@joplin/lib/utils/credentialFiles';
 import JoplinServerApi, { Session } from '@joplin/lib/JoplinServerApi';
-
 function randomElement<T>(array: T[]): T | null {
 	if (!array.length) return null;
 	return array[Math.floor(Math.random() * array.length)];

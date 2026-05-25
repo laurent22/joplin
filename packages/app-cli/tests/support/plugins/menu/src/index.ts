@@ -1,6 +1,6 @@
+
 import joplin from 'api';
 import { MenuItem } from 'api/types';
-
 joplin.plugins.register({
 	onStart: async function() {
 		await joplin.views.menus.create('myMenu', 'My Menu', [

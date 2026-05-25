@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import Folder from '@joplin/lib/models/Folder';
@@ -13,7 +14,6 @@ import TextInput from '../TextInput';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../../utils/types';
 import { Dispatch } from 'redux';
-
 interface Props {
 	folderId: string;
 	selectedFolderId: string;

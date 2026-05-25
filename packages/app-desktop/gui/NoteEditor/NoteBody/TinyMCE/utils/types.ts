@@ -1,6 +1,6 @@
-import type { Editor } from 'tinymce';
 
 // eslint-disable-next-line import/prefer-default-export
+import type { Editor } from 'tinymce';
 export enum TinyMceEditorEvents {
 	KeyUp = 'keyup',
 	KeyDown = 'keydown',

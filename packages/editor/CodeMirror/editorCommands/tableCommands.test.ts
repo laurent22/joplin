@@ -1,7 +1,7 @@
+
 import { EditorSelection } from '@codemirror/state';
 import createTestEditor from '../testing/createTestEditor';
 import { getTableRangeAtCursor, getCellAtCursor } from './tableCommands';
-
 describe('tableCommands', () => {
 
 	it('should resolve correct column in table with outer pipes', async () => {

@@ -6,12 +6,12 @@
 // date: 2024-01-01
 // ---
 
+
 import { Tag } from '@lezer/highlight';
 import { parseMixed, SyntaxNodeRef, Input, NestedParse, ParseWrapper } from '@lezer/common';
 import { MarkdownConfig, BlockContext, Line, LeafBlock, MarkdownExtension } from '@lezer/markdown';
 import { StreamLanguage } from '@codemirror/language';
 import { yaml } from '@codemirror/legacy-modes/mode/yaml';
-
 export const frontMatterTagName = 'FrontMatter';
 export const frontMatterContentTagName = 'FrontMatterContent';
 export const frontMatterMarkerTagName = 'FrontMatterMarker';

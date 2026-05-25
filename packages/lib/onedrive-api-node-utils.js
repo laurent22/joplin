@@ -1,11 +1,12 @@
-const { _ } = require('./locale');
-const { findAvailablePort } = require('./net-utils');
-const shim = require('./shim').default;
 
-const http = require('http');
-const urlParser = require('url');
-const enableServerDestroy = require('server-destroy');
 
+import tcp_port_used_240 from 'tcp-port-used';
+import { _ } from './locale';
+import { findAvailablePort } from './net-utils';
+import shim from './shim';
+import http from 'http';
+import urlParser from 'url';
+import enableServerDestroy from 'server-destroy';
 class OneDriveApiNodeUtils {
 	constructor(api) {
 		this.api_ = api;
@@ -42,7 +43,7 @@ class OneDriveApiNodeUtils {
 
 		this.api().setAuth(null);
 
-		const port = await findAvailablePort(require('tcp-port-used'), this.possibleOAuthDancePorts(), 0);
+		const port = await findAvailablePort(tcp_port_used_240, this.possibleOAuthDancePorts(), 0);
 		if (!port) throw new Error(_('All potential ports are in use - please report the issue at %s', 'https://github.com/laurent22/joplin'));
 
 		const authCodeUrl = this.api().authCodeUrl(`http://localhost:${port}`);

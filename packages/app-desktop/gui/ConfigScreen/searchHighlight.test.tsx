@@ -1,7 +1,7 @@
+
 import * as React from 'react';
 import { render } from '@testing-library/react';
 import highlightSearchText from './searchHighlight';
-
 describe('searchHighlight', () => {
 	const countMarks = (result: React.ReactNode[]): number => {
 		return result.filter((element) => React.isValidElement(element) && (element as React.ReactElement).type === 'mark').length;

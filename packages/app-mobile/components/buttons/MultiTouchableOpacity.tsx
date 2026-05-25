@@ -1,7 +1,7 @@
+
 import * as React from 'react';
 import { useCallback, useMemo, useRef } from 'react';
 import { Animated, StyleSheet, Pressable, ViewProps, PressableProps } from 'react-native';
-
 interface Props extends PressableProps {
 	// Nodes that need to change opacity but shouldn't be included in the main touchable
 	beforePressable: React.ReactNode;

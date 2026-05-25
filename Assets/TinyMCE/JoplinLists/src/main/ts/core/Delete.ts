@@ -5,20 +5,9 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
-interface DOMUtils {
-  isBlock: Function,
-  remove: Function,
-  $: Function,
-  getParent: Function,
-  getParents: Function,
-  getRoot: Function,
-  isEmpty: Function,
-}
-
 import { Element, HTMLLIElement, Node, Range as DomRange } from '@ephox/dom-globals';
 import { Arr } from '@ephox/katamari';
 import { Compare, Element as SugarElement } from '@ephox/sugar';
-// import DOMUtils from 'tinymce/core/api/dom/DOMUtils';
 import RangeUtils from 'tinymce/core/api/dom/RangeUtils';
 import TreeWalker from 'tinymce/core/api/dom/TreeWalker';
 import Editor from 'tinymce/core/api/Editor';
@@ -30,6 +19,17 @@ import * as NodeType from './NodeType';
 import * as NormalizeLists from './NormalizeLists';
 import * as Range from './Range';
 import * as Selection from './Selection';
+interface DOMUtils {
+  isBlock: Function,
+  remove: Function,
+  $: Function,
+  getParent: Function,
+  getParents: Function,
+  getRoot: Function,
+  isEmpty: Function,
+}
+
+// import DOMUtils from 'tinymce/core/api/dom/DOMUtils';
 
 const findNextCaretContainer = function (editor: Editor, rng: DomRange, isForward: Boolean, root: Node): Node {
   let node = rng.startContainer;

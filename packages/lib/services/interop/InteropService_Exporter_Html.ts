@@ -1,3 +1,7 @@
+
+import { themeStyle } from '../../theme';
+import { escapeHtml } from '../../string-utils.js';
+import { isImageMimeType } from '../../resourceUtils';
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 import BaseModel from '../../BaseModel';
 import shim from '../../shim';
@@ -12,8 +16,6 @@ import { contentScriptsToRendererRules } from '../plugins/utils/loadContentScrip
 import { ThemeStyle } from '../../theme';
 import { basename, friendlySafeFilename, rtrimSlashes, dirname } from '../../path-utils';
 import packToWriter from '@joplin/htmlpack/packToWriter';
-const { themeStyle } = require('../../theme');
-const { escapeHtml } = require('../../string-utils.js');
 import { assetsToHeaders } from '@joplin/renderer';
 import getPluginSettingValue from '../plugins/utils/getPluginSettingValue';
 import { LinkRenderingType } from '@joplin/renderer/MdToHtml';
@@ -22,8 +24,6 @@ import { parseRenderedNoteMetadata } from './utils';
 import ResourceLocalState from '../../models/ResourceLocalState';
 import { getGlobalSettings, ResourceInfos } from '@joplin/renderer/types';
 import { fromFilename } from '../../mime-utils';
-const { isImageMimeType } = require('../../resourceUtils');
-
 const logger = Logger.create('InteropService_Exporter_Html');
 
 export default class InteropService_Exporter_Html extends InteropService_Exporter_Base {

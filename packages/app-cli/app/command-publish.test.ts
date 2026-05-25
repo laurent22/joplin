@@ -1,3 +1,5 @@
+
+import Command from './command-publish';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import mockShareService from '@joplin/lib/testing/share/mockShareService';
 import { createFolderTree, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
@@ -6,8 +8,6 @@ import { setupApplication, setupCommandForTesting } from './utils/testUtils';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import Setting from '@joplin/lib/models/Setting';
-const Command = require('./command-publish');
-
 const setUpCommand = () => {
 	const onStdout = jest.fn();
 	const command = setupCommandForTesting(Command, onStdout);

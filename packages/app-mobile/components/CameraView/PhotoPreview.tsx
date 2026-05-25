@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { ViewStyle, TextStyle, Platform, ImageBackground, Text, StyleSheet } from 'react-native';
 import { useState } from 'react';
@@ -5,7 +6,6 @@ import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { CameraResult } from './types';
 import shim from '@joplin/lib/shim';
 import { _ } from '@joplin/lib/locale';
-
 interface PhotoProps {
 	source: CameraResult;
 	backgroundStyle: ViewStyle;

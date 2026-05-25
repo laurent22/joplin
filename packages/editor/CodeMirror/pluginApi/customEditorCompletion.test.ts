@@ -1,9 +1,9 @@
+
 import { EditorState, StateEffect } from '@codemirror/state';
 import createEditorControl from '../testing/createEditorControl';
 import { EditorView } from '@codemirror/view';
 import { completeFromList, completionStatus, currentCompletions } from '@codemirror/autocomplete';
 import typeText from '../testing/typeText';
-
 const waitForShownCompletionsToContain = (editor: EditorView, completionLabels: string[]) => {
 	return new Promise<string[]>(resolve => {
 		let resolved = false;

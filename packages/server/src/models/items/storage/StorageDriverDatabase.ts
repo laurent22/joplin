@@ -2,10 +2,10 @@
 // database (as a binary blob). For now the driver expects that the content is
 // stored in the same table as the items, as it originally was.
 
+
 import { CustomError, CustomErrorCode } from '../../../utils/errors';
 import { DatabaseConfigClient, StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import StorageDriverBase, { Context } from './StorageDriverBase';
-
 interface StorageDriverDatabaseConfig extends StorageDriverConfig {
 	dbClientType: DatabaseConfigClient;
 }

@@ -1,8 +1,8 @@
+
 import { RefObject, useCallback, useEffect, useMemo, useRef } from 'react';
 import { ListItem } from '../types';
 import ItemList from '../../ItemList';
 import { focus } from '@joplin/lib/utils/focusHandler';
-
 interface Props {
 	itemListRef: RefObject<ItemList<ListItem>>;
 	selectedIndex: number;

@@ -1,7 +1,10 @@
-import * as React from 'react';
-import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, ForwardedRef, useContext } from 'react';
 
 // eslint-disable-next-line no-unused-vars
+
+
+import { clipboard } from 'electron';
+import * as React from 'react';
+import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, ForwardedRef, useContext } from 'react';
 import { EditorCommand, NoteBodyEditorProps, NoteBodyEditorRef } from '../../../utils/types';
 import { commandAttachFileToBody, getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../../utils/types';
@@ -24,8 +27,6 @@ import { themeStyle } from '@joplin/lib/theme';
 import { ThemeAppearance } from '@joplin/lib/themes/type';
 import dialogs from '../../../../dialogs';
 import { MarkupToHtml } from '@joplin/renderer';
-const { clipboard } = require('electron');
-
 import { reg } from '@joplin/lib/registry';
 import ErrorBoundary from '../../../../ErrorBoundary';
 import useStyles from '../utils/useStyles';
@@ -35,7 +36,6 @@ import useEditorSearchHandler from '../utils/useEditorSearchHandler';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
 import { MarkupToHtmlOptions } from '../../../../hooks/useMarkupToHtml';
-
 function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtmlOptions {
 	return { ...override };
 }

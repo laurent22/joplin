@@ -1,3 +1,5 @@
+
+import debounce from 'debounce';
 import * as React from 'react';
 import Dialog from '@joplin/lib/components/Dialog';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
@@ -21,8 +23,6 @@ import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffe
 import { ChangeEvent, Dropdown, DropdownOptions, DropdownVariant } from '../Dropdown/Dropdown';
 import shim from '@joplin/lib/shim';
 import { SettingsRecord } from '@joplin/lib/models/Setting';
-const debounce = require('debounce');
-
 const logger = Logger.create('ShareFolderDialog');
 
 const StyledRoot = styled.div`

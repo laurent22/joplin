@@ -1,8 +1,8 @@
+
 import { compareVersions } from 'compare-versions';
 import minVersionForPlatform from './minVersionForPlatform';
 import { ManifestSlice } from './types';
 import { AppType } from '../../../../models/Setting';
-
 const isVersionCompatible = (appVersion: string, manifestMinVersion: string) => {
 	return compareVersions(appVersion, manifestMinVersion) >= 0;
 };

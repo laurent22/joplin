@@ -1,6 +1,6 @@
+
 import { useMemo } from 'react';
 import { LayoutItem, Size } from './types';
-
 const dragBarThickness = 5;
 
 export const itemMinWidth = 40;

@@ -1,3 +1,4 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import Folder from '@joplin/lib/models/Folder';
@@ -8,7 +9,6 @@ import Logger from '@joplin/utils/Logger';
 import shim from '@joplin/lib/shim';
 import showFolderPicker from '../utils/showFolderPicker';
 import { WindowControl } from '../utils/useWindowControl';
-
 const logger = Logger.create('commands/moveToFolder');
 
 export const declaration: CommandDeclaration = {

@@ -1,6 +1,6 @@
+
 import { Storage } from '../services/database/types';
 import BaseModel from './BaseModel';
-
 export default class StorageModel extends BaseModel<Storage> {
 
 	public get tableName(): string {

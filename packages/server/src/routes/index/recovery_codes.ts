@@ -1,3 +1,4 @@
+
 import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -9,7 +10,6 @@ import { createCsrfTag } from '../../utils/csrf';
 import { bodyFields, userIp } from '../../utils/requestUtils';
 import { cookieSet } from '../../utils/cookies';
 import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
-
 type RecoveryCodeAuthInputs = {
 	password?: string;
 	mfaCode?: string;

@@ -1,3 +1,5 @@
+
+
 import usePrevious from '@joplin/lib/hooks/usePrevious';
 import { MarkupLanguage } from '@joplin/renderer';
 import { useEffect, useRef, useState } from 'react';
@@ -6,8 +8,6 @@ import { ResourceEntity, ResourceLocalStateEntity } from '@joplin/lib/services/d
 import { RendererControl, RenderOptions } from '../../../contentScripts/rendererBundle/types';
 import Resource from '@joplin/lib/models/Resource';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
-
-
 export interface ResourceInfo {
 	localState: ResourceLocalStateEntity;
 	item: ResourceEntity;

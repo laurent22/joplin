@@ -1,3 +1,4 @@
+
 import { _ } from '@joplin/lib/locale';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import * as React from 'react';
@@ -6,7 +7,6 @@ import { Linking, StyleSheet } from 'react-native';
 import { themeStyle } from '../../../../global-style';
 import { useCallback, useContext, useMemo } from 'react';
 import { DialogContext } from '../../../../DialogManager';
-
 interface Props {
 	themeId: number;
 	manifest: PluginManifest;

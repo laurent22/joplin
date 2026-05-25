@@ -1,5 +1,5 @@
-import { dirname, resolve } from 'path';
 
+import { dirname, resolve } from 'path';
 const createStartupArgs = (profileDirectory: string) => {
 	// Input paths need to be absolute when running from VSCode
 	const baseDirectory = dirname(dirname(__dirname));

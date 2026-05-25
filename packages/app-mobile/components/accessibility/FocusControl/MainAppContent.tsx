@@ -1,10 +1,10 @@
+
 import * as React from 'react';
 import AccessibleView from '../AccessibleView';
 import { FocusControlContext } from './FocusControlProvider';
 import { useContext } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import AutoFocusProvider from './AutoFocusProvider';
-
 interface Props {
 	children: React.ReactNode;
 	style?: StyleProp<ViewStyle>;

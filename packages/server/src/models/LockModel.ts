@@ -1,10 +1,10 @@
+
 import BaseModel, { UuidType } from './BaseModel';
 import { Uuid } from '../services/database/types';
 import { LockType, Lock, LockClientType, defaultLockTtl, activeLock } from '@joplin/lib/services/synchronizer/LockHandler';
 import { Value } from './KeyValueModel';
 import { ErrorConflict, ErrorUnprocessableEntity, ErrorCode } from '../utils/errors';
 import { uuidgen } from '@joplin/lib/uuid';
-
 export default class LockModel extends BaseModel<Lock> {
 
 	private lockTtl_: number = defaultLockTtl;

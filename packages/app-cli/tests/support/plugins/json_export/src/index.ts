@@ -1,9 +1,9 @@
+
+
+import fs from 'fs-extra';
+import path from 'path';
 import joplin from 'api';
 import { FileSystemItem } from 'api/types';
-
-const fs = require('fs-extra');
-const path = require('path');
-
 function destDir(context:any) {
 	return context.destPath;
 }

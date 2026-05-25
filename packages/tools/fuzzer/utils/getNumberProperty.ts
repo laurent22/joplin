@@ -1,5 +1,5 @@
-import getProperty from './getProperty';
 
+import getProperty from './getProperty';
 const getNumberProperty = (object: unknown, propertyName: string) => {
 	const value = getProperty(object, propertyName);
 	if (typeof value !== 'number') {

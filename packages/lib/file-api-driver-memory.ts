@@ -1,7 +1,7 @@
-import time from './time';
-const fs = require('fs-extra');
-import { basicDelta, DeltaOptions, GetOptions, MultiPutItem, PutOptions } from './file-api';
 
+import fs from 'fs-extra';
+import time from './time';
+import { basicDelta, DeltaOptions, GetOptions, MultiPutItem, PutOptions } from './file-api';
 interface MemoryItem {
 	path: string;
 	isDir: boolean;

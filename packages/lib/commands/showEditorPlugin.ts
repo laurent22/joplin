@@ -1,3 +1,4 @@
+
 import { CommandContext, CommandDeclaration, CommandRuntime } from '../services/CommandService';
 import getActivePluginEditorView from '../services/plugins/utils/getActivePluginEditorView';
 import Logger from '@joplin/utils/Logger';
@@ -5,7 +6,6 @@ import getActivePluginEditorViews from '../services/plugins/utils/getActivePlugi
 import PluginService from '../services/plugins/PluginService';
 import WebviewController from '../services/plugins/WebviewController';
 import Setting from '../models/Setting';
-
 const logger = Logger.create('showEditorPlugin');
 
 export const declaration: CommandDeclaration = {

@@ -1,3 +1,5 @@
+
+import { sprintf } from 'sprintf-js';
 import shim from '../shim';
 import { _ } from '../locale';
 import eventManager, { EventName } from '../eventManager';
@@ -11,8 +13,6 @@ import JoplinError from '../JoplinError';
 import builtInMetadata, { BuiltInMetadataKeys, BuiltInMetadataValues } from './settings/builtInMetadata';
 import { toSystemSlashes } from '@joplin/utils/path';
 import { AppType, Env, SettingItem, SettingItemType, SettingItems, SettingSection, SettingSectionSource, SettingStorage, SettingsRecord } from './settings/types';
-const { sprintf } = require('sprintf-js');
-
 const logger = Logger.create('models/Setting');
 
 export * from './settings/types';

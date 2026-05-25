@@ -1,6 +1,6 @@
+
 import { Knex } from 'knex';
 import { DbConnection } from '../db';
-
 export const up = async (db: DbConnection) => {
 	await db.schema.createTable('shares', (table: Knex.CreateTableBuilder) => {
 		table.string('id', 32).unique().primary().notNullable();

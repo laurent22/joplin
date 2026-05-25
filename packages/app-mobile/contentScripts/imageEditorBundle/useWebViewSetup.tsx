@@ -1,3 +1,5 @@
+
+
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
@@ -10,8 +12,6 @@ import useEditorMessenger from './utils/useEditorMessenger';
 import { WebViewControl } from '../../components/ExtendedWebView/types';
 import { LocalizedStrings } from './contentScript/types';
 import { SetUpResult } from '../types';
-
-
 type OnSaveCallback = (svgData: string)=> Promise<void>;
 type OnCancelCallback = ()=> void;
 

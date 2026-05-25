@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import CommandService from '@joplin/lib/services/CommandService';
 import ToolbarBase from '../ToolbarBase';
@@ -10,7 +11,6 @@ import { _ } from '@joplin/lib/locale';
 import getActivePluginEditorView from '@joplin/lib/services/plugins/utils/getActivePluginEditorView';
 import { stateUtils } from '@joplin/lib/reducer';
 import { AppState, AppWindowState } from '../../app.reducer';
-
 interface NoteToolbarProps {
 	themeId: number;
 	style: React.CSSProperties;

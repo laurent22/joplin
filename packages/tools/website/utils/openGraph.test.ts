@@ -1,7 +1,7 @@
+
 import { extractOpenGraphTags, OpenGraphTags } from './openGraph';
 import { tempFilePath } from '@joplin/lib/testing/test-utils';
 import { writeFile } from 'fs-extra';
-
 describe('openGraph', () => {
 
 	it('should extract the Open Graph tags', async () => {

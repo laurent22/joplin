@@ -1,7 +1,7 @@
 
+
 import validateUntrustedManifest from './validateUntrustedManifest';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
-
 const originalManifests = {
 	'joplin-plugin.this.is.a.test': {
 		id: 'joplin-plugin.this.is.a.test',

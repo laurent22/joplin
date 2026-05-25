@@ -1,6 +1,6 @@
+
 import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import parseStorageConnectionString from './parseStorageConnectionString';
-
 describe('parseStorageConnectionString', () => {
 
 	test('should parse a connection string', async () => {

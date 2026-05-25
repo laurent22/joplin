@@ -1,8 +1,8 @@
+
+// Syncs the undo stack depth with the main Joplin application
 import { EditorView } from 'prosemirror-view';
 import { EditorEvent, EditorEventType } from '../../events';
 import { redoDepth, undoDepth } from 'prosemirror-history';
-
-// Syncs the undo stack depth with the main Joplin application
 export default class UndoStackSynchronizer {
 	private lastUndoDepth_ = 0;
 	private lastRedoDepth_ = 0;

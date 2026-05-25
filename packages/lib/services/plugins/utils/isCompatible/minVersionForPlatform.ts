@@ -1,8 +1,8 @@
+
+// Returns false if the platform isn't supported at all,
 import { AppType } from '../../../../models/Setting';
 import getDefaultPlatforms from './getDefaultPlatforms';
 import { ManifestSlice } from './types';
-
-// Returns false if the platform isn't supported at all,
 const minVersionForPlatform = (appPlatform: AppType, manifest: ManifestSlice): string|false => {
 	let platforms = manifest.platforms;
 

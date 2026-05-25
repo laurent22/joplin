@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { View, Text, TextInput } from 'react-native';
 import Setting, { AppType, SettingItem } from '@joplin/lib/models/Setting';
@@ -7,7 +8,6 @@ import { themeStyle } from '../../global-style';
 import { HelperText } from 'react-native-paper';
 import { FunctionComponent, ReactNode, useId, useState } from 'react';
 import { _ } from '@joplin/lib/locale';
-
 interface Props {
 	settingId: string;
 	value: number;

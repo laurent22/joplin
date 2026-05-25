@@ -1,7 +1,7 @@
+
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { useEffect, useState } from 'react';
 import { AccessibilityInfo } from 'react-native';
-
 const useReduceMotionEnabled = () => {
 	const [reduceMotionEnabled, setReduceMotionEnabled] = useState(false);
 	useEffect(() => {

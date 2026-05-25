@@ -1,9 +1,9 @@
+
 import * as React from 'react';
 import { useState, useCallback, CSSProperties, useEffect, useRef, useId } from 'react';
 import { _ } from '@joplin/lib/locale';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import ItemList from './ItemList';
-
 interface Props {
 	inputType?: string;
 	inputStyle: CSSProperties;

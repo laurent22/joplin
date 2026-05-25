@@ -1,8 +1,8 @@
+
+import styled from 'styled-components';
 import shim from '@joplin/lib/shim';
 import Button from '../../Button/Button';
 import { css } from 'styled-components';
-const styled = require('styled-components').default;
-
 interface StyleProps {
 	theme: {
 		backgroundColor2: string;

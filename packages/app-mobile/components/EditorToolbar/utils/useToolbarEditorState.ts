@@ -1,6 +1,6 @@
+
 import { useState, useCallback, useMemo } from 'react';
 import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
-
 export interface ReorderableItem {
 	commandName: string;
 	buttonInfo: ToolbarButtonInfo;

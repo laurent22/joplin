@@ -1,7 +1,7 @@
+
 import JoplinDatabase from '../JoplinDatabase';
 import Setting from '../models/Setting';
 import SyncTargetJoplinServer from '../SyncTargetJoplinServer';
-
 export default class DebugService {
 
 	private db_: JoplinDatabase;

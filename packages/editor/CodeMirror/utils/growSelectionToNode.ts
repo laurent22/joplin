@@ -1,7 +1,7 @@
-import { syntaxTree } from '@codemirror/language';
-import { EditorSelection, EditorState, SelectionRange } from '@codemirror/state';
 
 // Expands and returns a copy of [sel] to the smallest container node with name in [nodeNames].
+import { syntaxTree } from '@codemirror/language';
+import { EditorSelection, EditorState, SelectionRange } from '@codemirror/state';
 const growSelectionToNode = (
 	state: EditorState, sel: SelectionRange, nodeNames: string|string[]|null,
 ): SelectionRange => {

@@ -1,8 +1,8 @@
 
+
+import allCategories from '@joplin/lib/pluginCategories.json';
 import { dirname } from 'path';
 import { insertContentIntoFile } from '@joplin/tools/tool-utils';
-const allCategories = require('@joplin/lib/pluginCategories.json');
-
 const updateCategories = async () => {
 	const buildScriptPath = `${dirname(__dirname)}/generators/app/templates/webpack.config.js`;
 

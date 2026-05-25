@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { themeStyle } from './global-style';
@@ -5,7 +6,6 @@ import { useMemo } from 'react';
 import { _ } from '@joplin/lib/locale';
 import { connect } from 'react-redux';
 import { AppState } from '../utils/types';
-
 interface Props {
 	themeId: number;
 	size: number;

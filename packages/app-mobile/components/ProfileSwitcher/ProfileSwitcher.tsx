@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
@@ -18,7 +19,6 @@ import NavService from '@joplin/lib/services/NavService';
 import Logger from '@joplin/utils/Logger';
 import deleteProfile from './utils/deleteProfile';
 import DatabaseDriverReactNative from '../../utils/database-driver-react-native';
-
 const logger = Logger.create('ProfileSwitcher');
 
 interface Props {

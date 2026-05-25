@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Handle, NodeProps, NodeResizer } from '@xyflow/react';
@@ -9,7 +10,6 @@ import { useWhiteboardContext, WhiteboardContextValue } from '../WhiteboardConte
 import { WhiteboardNodeData } from '../canvasFlow';
 import useCheckboxToggle from '../useCheckboxToggle';
 import handlePositions from './handlePositions';
-
 const useRenderedMarkdown = (md: string, ctx: WhiteboardContextValue) => {
 	const [html, setHtml] = useState<string>('');
 

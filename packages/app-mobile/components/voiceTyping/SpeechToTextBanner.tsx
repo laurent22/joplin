@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Text, Button } from 'react-native-paper';
@@ -9,7 +10,6 @@ import RecordingControls from './RecordingControls';
 import { PrimaryButton } from '../buttons';
 import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
 import shim from '@joplin/lib/shim';
-
 interface Props {
 	locale: string;
 	onDismiss: ()=> void;

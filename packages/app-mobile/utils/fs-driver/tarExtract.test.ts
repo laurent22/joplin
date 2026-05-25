@@ -3,6 +3,8 @@
 // Just Jest tests aren't sufficient in this case because, in the past, differences
 // between polyfilled and node-built-in libraries have caused issues.
 
+
+
 import shim from '@joplin/lib/shim';
 import { createTempDir } from '@joplin/lib/testing/test-utils';
 import { join } from 'path';
@@ -10,8 +12,6 @@ import createFilesFromPathRecord from './testUtil/createFilesFromPathRecord';
 import verifyDirectoryMatches from './testUtil/verifyDirectoryMatches';
 import tarExtract from './tarExtract';
 import { remove } from 'fs-extra';
-
-
 const verifyTarWithContentExtractsTo = async (filePaths: Record<string, string>) => {
 	const tempDir = await createTempDir();
 

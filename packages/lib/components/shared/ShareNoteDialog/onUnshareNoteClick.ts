@@ -1,5 +1,5 @@
-import ShareService from '../../../services/share/ShareService';
 
+import ShareService from '../../../services/share/ShareService';
 interface UnshareNoteEvent {
 	noteId: string;
 }

@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { ReactElement } from 'react';
 import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services/plugins/reducer';
@@ -9,7 +10,6 @@ import useViewInfos from './hooks/useViewInfos';
 import PluginPanelViewer from './PluginPanelViewer';
 import FocusControl from '../../accessibility/FocusControl/FocusControl';
 import { ModalState } from '../../accessibility/FocusControl/types';
-
 interface Props {
 	themeId: number;
 

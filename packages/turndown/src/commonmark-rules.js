@@ -1,5 +1,5 @@
+import { AllHtmlEntities as Entities } from 'html-entities';
 import { repeat, isCodeBlockSpecialCase1, isCodeBlockSpecialCase2, isCodeBlock, getStyleProp } from './utilities'
-const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 
 function attributesHtml(attributes, options = null) {

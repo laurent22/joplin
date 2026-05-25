@@ -1,4 +1,5 @@
 
+
 import BaseModel, { UuidType } from './BaseModel';
 import { EmailSender, RecoveryCode, Uuid } from '../services/database/types';
 import { createSecureRandom, customAlphabetSecure } from '@joplin/lib/uuid';
@@ -10,7 +11,6 @@ import { formatDateOnServer } from '../utils/time';
 import { DbConnection } from '../db';
 import { NewModelFactoryHandler } from './factory';
 import { Config } from '../utils/types';
-
 type RecoveryCodeAccess = {
 	isValid: boolean;
 	isNewlyCreated: boolean;

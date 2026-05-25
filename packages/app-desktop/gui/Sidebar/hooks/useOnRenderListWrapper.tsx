@@ -1,8 +1,8 @@
+
 import * as React from 'react';
 import { useCallback } from 'react';
 import { _ } from '@joplin/lib/locale';
 import CommandService from '@joplin/lib/services/CommandService';
-
 interface Props {
 	selectedIndex: number;
 	onKeyDown: React.KeyboardEventHandler;

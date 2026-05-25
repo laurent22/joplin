@@ -1,9 +1,9 @@
+
 import { Decoration, EditorView, WidgetType } from '@codemirror/view';
 import { SyntaxNodeRef } from '@lezer/common';
 import { EditorState, StateEffect, Transaction } from '@codemirror/state';
 import { RenderedContentContext } from './types';
 import makeBlockReplaceExtension from './utils/makeBlockReplaceExtension';
-
 const imageClassName = 'cm-md-image';
 
 class ImageHeightCache {

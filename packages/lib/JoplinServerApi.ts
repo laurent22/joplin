@@ -1,3 +1,5 @@
+
+import { stringify } from 'query-string';
 import shim from './shim';
 import { _ } from './locale';
 import { rtrimSlashes } from './path-utils';
@@ -7,8 +9,6 @@ import Logger from '@joplin/utils/Logger';
 import personalizedUserContentBaseUrl from './services/joplinServer/personalizedUserContentBaseUrl';
 import { getHttpStatusMessage } from './net-utils';
 import { getApplicationInformation } from './services/joplinCloudUtils';
-const { stringify } = require('query-string');
-
 const logger = Logger.create('JoplinServerApi');
 
 interface Options {

@@ -1,3 +1,4 @@
+
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 import BaseModel from '../../BaseModel';
 import shim from '../../shim';
@@ -7,7 +8,6 @@ import Note from '../../models/Note';
 import { FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
 import { basename, dirname, friendlySafeFilename, safeFilename } from '../../path-utils';
 import { MarkupToHtml } from '@joplin/renderer';
-
 export default class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
 	protected destDir_: string;

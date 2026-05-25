@@ -1,6 +1,6 @@
+
 import { FileApi } from '../../../file-api';
 import { Dirnames } from '../utils/types';
-
 export default async function(api: FileApi) {
 	await Promise.all([
 		api.put('.sync/version.txt', '2'),

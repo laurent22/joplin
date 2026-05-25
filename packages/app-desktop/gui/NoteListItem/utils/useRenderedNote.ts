@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { ListRenderer, ListRendererDependency, NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import Note from '@joplin/lib/models/Note';
@@ -11,7 +12,6 @@ import prepareViewProps from './prepareViewProps';
 import Tag from '@joplin/lib/models/Tag';
 import { unique } from '@joplin/lib/array';
 import Folder from '@joplin/lib/models/Folder';
-
 interface RenderedNote {
 	id: string;
 	hash: string;

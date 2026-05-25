@@ -1,9 +1,9 @@
+
 import { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../../services/bridge';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
 import { AppState } from '../../../app.reducer';
-
 const Menu = bridge().Menu;
 
 export const declaration: CommandDeclaration = {

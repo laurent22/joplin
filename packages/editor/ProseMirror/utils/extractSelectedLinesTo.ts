@@ -1,8 +1,8 @@
+
 import { Attrs, NodeType, Node } from 'prosemirror-model';
 import { TextSelection, Transaction, Selection } from 'prosemirror-state';
 import schema from '../schema';
 import { canSplit } from 'prosemirror-transform';
-
 interface ExtractToOptions {
 	type: NodeType;
 	attrs: Attrs;

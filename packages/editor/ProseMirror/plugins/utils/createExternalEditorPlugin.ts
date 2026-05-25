@@ -1,11 +1,11 @@
-import { Command, EditorState, Plugin } from 'prosemirror-state';
-import { EditorView } from 'prosemirror-view';
-import { Node } from 'prosemirror-model';
 
 // See the fold example for more information about
 // writing similar ProseMirror plugins:
 // https://prosemirror.net/examples/fold/
 
+import { Command, EditorState, Plugin } from 'prosemirror-state';
+import { EditorView } from 'prosemirror-view';
+import { Node } from 'prosemirror-model';
 type EditRequest = {
 	nodeStart: number;
 	showEditor: true;

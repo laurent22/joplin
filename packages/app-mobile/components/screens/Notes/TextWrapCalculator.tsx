@@ -1,6 +1,6 @@
+
 import * as React from 'react';
 import { Platform, Text, ViewStyle } from 'react-native';
-
 interface Props {
 	textCompStyle: ViewStyle;
 	textCompContainerWidth: number; // Must be updated dynamically via onLayout of the container, in order for Text.onTextLayout to fire on every device rotation

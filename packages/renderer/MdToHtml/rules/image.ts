@@ -1,11 +1,11 @@
+
 import { RuleOptions } from '../../MdToHtml';
 import { attributesHtml } from '../../htmlUtils';
 import * as utils from '../../utils';
 import createEventHandlingAttrs from '../createEventHandlingAttrs';
 import type * as MarkdownIt from 'markdown-it';
-import type Token = require('markdown-it/lib/token');
-import type Renderer = require('markdown-it/lib/renderer');
-
+import type Token from 'markdown-it/lib/token';
+import type Renderer from 'markdown-it/lib/renderer';
 function plugin(markdownIt: MarkdownIt, ruleOptions: RuleOptions) {
 	const defaultRender = markdownIt.renderer.rules.image;
 

@@ -1,8 +1,8 @@
+
 import { EditorSelection } from '@codemirror/state';
 import createTestEditor from '../../testing/createTestEditor';
 import replaceInlineHtml from './replaceInlineHtml';
 import waitFor from '@joplin/lib/testing/waitFor';
-
 const createEditorWithCursor = async (initialMarkdown: string, cursorIndex: number, expectedTags: string[] = ['HTMLTag']) => {
 	const editor = await createTestEditor(
 		initialMarkdown,

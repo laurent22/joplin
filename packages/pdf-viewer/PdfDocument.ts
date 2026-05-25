@@ -1,9 +1,9 @@
+
+
 import * as pdfjsLib from 'pdfjs-dist';
 import { PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
 import { ScaledSize, RenderRequest, RenderResult } from './types';
 import { Mutex, MutexInterface, withTimeout } from 'async-mutex';
-
-
 export default class PdfDocument {
 	public url: string | Uint8Array;
 	private doc: PDFDocumentProxy = null;

@@ -1,10 +1,10 @@
+
+// The toolbar expects all toolbar command runtimes to be registered before it can be
+// rendered:
 import { Store } from 'redux';
 import { AppState } from '../../../utils/types';
 import CommandService, { CommandRuntime } from '@joplin/lib/services/CommandService';
 import allToolbarCommandNamesFromState from '../utils/allToolbarCommandNamesFromState';
-
-// The toolbar expects all toolbar command runtimes to be registered before it can be
-// rendered:
 const mockCommandRuntimes = (store: Store<AppState>) => {
 	const makeMockRuntime = (commandName: string) => ({
 		declaration: { name: commandName },

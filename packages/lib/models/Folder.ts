@@ -1,3 +1,6 @@
+
+
+import { substrWithEllipsis } from '../string-utils.js';
 import { BaseItemEntity, defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity, ResourceEntity } from '../services/database/types';
 import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
 import { FolderLoadOptions, SaveOptions } from './utils/types';
@@ -13,7 +16,6 @@ import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
 import { LoadOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
-
 import { getTrashFolder } from '../services/trash';
 import getConflictFolderId from './utils/getConflictFolderId';
 import getTrashFolderId from '../services/trash/getTrashFolderId';
@@ -21,8 +23,6 @@ import { getCollator } from './utils/getCollator';
 import Setting from './Setting';
 import { itemIsReadOnlySync, ItemSlice } from './utils/readOnly';
 import ItemChange from './ItemChange';
-const { substrWithEllipsis } = require('../string-utils.js');
-
 const logger = Logger.create('models/Folder');
 
 export interface FolderEntityWithChildren extends FolderEntity {

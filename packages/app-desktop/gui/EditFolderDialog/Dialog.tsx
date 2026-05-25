@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, useState, useRef, useEffect, useId } from 'react';
 import { _ } from '@joplin/lib/locale';
@@ -14,7 +15,6 @@ import bridge from '../../services/bridge';
 import shim from '@joplin/lib/shim';
 import FolderIconBox from '../FolderIconBox';
 import { focus } from '@joplin/lib/utils/focusHandler';
-
 interface Props {
 	themeId: number;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied

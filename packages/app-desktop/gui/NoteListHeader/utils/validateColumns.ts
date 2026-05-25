@@ -1,5 +1,5 @@
-import { NoteListColumns, defaultListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 
+import { NoteListColumns, defaultListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 export default (columns: NoteListColumns) => {
 	if (!columns || !columns.length) return defaultListColumns();
 

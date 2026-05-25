@@ -1,6 +1,6 @@
+
 import { StyleProp, ViewStyle } from 'react-native';
 import { WebViewErrorEvent } from 'react-native-webview/lib/WebViewTypes';
-
 export interface WebViewControl {
 	// Evaluate the given [script] in the context of the page.
 	// Unlike react-native-webview/WebView, this does not need to return true.

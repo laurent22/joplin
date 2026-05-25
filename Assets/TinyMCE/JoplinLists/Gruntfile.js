@@ -1,8 +1,9 @@
+
+import load_grunt_tasks_0 from 'load-grunt-tasks';
 import { CheckerPlugin } from 'awesome-typescript-loader';
 import LiveReloadPlugin from 'webpack-livereload-plugin';
 import { resolve as _resolve, basename, dirname } from 'path';
 import { onwarn as _onwarn, nodeResolve, remapImports } from '@ephox/swag';
-
 export default function(grunt) {
 	const packageData = grunt.file.readJSON('package.json');
 	const BUILD_VERSION = `${packageData.version}-${process.env.BUILD_NUMBER ? process.env.BUILD_NUMBER : '0'}`;
@@ -176,7 +177,7 @@ export default function(grunt) {
 		},
 	});
 
-	require('load-grunt-tasks')(grunt);
+	load_grunt_tasks_0(grunt);
 	grunt.loadNpmTasks('@ephox/swag');
 
 	// grunt.registerTask('version', 'Creates a version file', function() {

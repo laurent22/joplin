@@ -1,6 +1,6 @@
+
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { clipboard } from 'electron';
-
 export const declaration: CommandDeclaration = {
 	name: 'copyToClipboard',
 };

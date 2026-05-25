@@ -1,5 +1,17 @@
 import * as React from 'react';
 import { DragEvent as ReactDragEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import generateId from '@joplin/lib/services/whiteboard/generateId';
+import { _, _n } from '@joplin/lib/locale';
+import { Canvas, CanvasEdge, CanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
+import shim from '@joplin/lib/shim';
+import Logger from '@joplin/utils/Logger';
+import { webUtils } from 'electron';
+import { canvasNodeToFlowNode, canvasToFlow, flowToCanvas, WhiteboardFlowEdge, WhiteboardFlowNode } from './canvasFlow';
+import TextNode from './nodes/TextNode';
+import FileNode from './nodes/FileNode';
+import LinkNode from './nodes/LinkNode';
+import GroupNode from './nodes/GroupNode';
+import { ActionButton, ActionDivider, ActionInput, ActionPanel } from './ActionPanel';
 import {
 	Background,
 	Connection,
@@ -19,20 +31,8 @@ import {
 	applyNodeChanges,
 	useReactFlow,
 } from '@xyflow/react';
-import generateId from '@joplin/lib/services/whiteboard/generateId';
-import { _, _n } from '@joplin/lib/locale';
-import { Canvas, CanvasEdge, CanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
-import shim from '@joplin/lib/shim';
-import Logger from '@joplin/utils/Logger';
-import { webUtils } from 'electron';
-import { canvasNodeToFlowNode, canvasToFlow, flowToCanvas, WhiteboardFlowEdge, WhiteboardFlowNode } from './canvasFlow';
 
 const logger = Logger.create('WhiteboardSurface');
-import TextNode from './nodes/TextNode';
-import FileNode from './nodes/FileNode';
-import LinkNode from './nodes/LinkNode';
-import GroupNode from './nodes/GroupNode';
-import { ActionButton, ActionDivider, ActionInput, ActionPanel } from './ActionPanel';
 
 const makeArrowMarker = () => ({ type: MarkerType.ArrowClosed, width: 27, height: 27, markerUnits: 'userSpaceOnUse' });
 

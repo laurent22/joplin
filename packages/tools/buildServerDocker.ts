@@ -1,7 +1,8 @@
+
+import yargs_536 from 'yargs';
 import { rootDir } from './tool-utils';
 import * as moment from 'moment';
 import { execCommand } from '@joplin/utils';
-
 interface Argv {
 	dryRun?: boolean;
 	pushImages?: boolean;
@@ -14,7 +15,7 @@ interface Argv {
 }
 
 function parseArgv(): Argv {
-	return require('yargs')
+	return yargs_536
 		.scriptName('yarn buildServerDocker')
 		.usage('$0 --repository OWNER/IMAGE [args]')
 		.option('dockerFile', {

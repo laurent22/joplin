@@ -1,6 +1,6 @@
+
 import activateMainMenuItem from '../util/activateMainMenuItem';
 import { ElectronApplication, Locator, Page, expect } from '@playwright/test';
-
 export default class NoteList {
 	public readonly container: Locator;
 	public readonly sortOrderButton: Locator;

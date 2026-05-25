@@ -1,10 +1,10 @@
-import yargs = require('yargs');
+
+import yargs from 'yargs';
 import BaseCommand from '../commands/BaseCommand';
 import DbCommand from '../commands/DbCommand';
 import CompressOldChangesCommand from '../commands/CompressOldChangesCommand';
 import StorageCommand from '../commands/StorageCommand';
 import MigrateCommand from '../commands/MigrateCommand';
-
 export interface Commands {
 	commands: BaseCommand[];
 	argv: typeof yargs.argv;

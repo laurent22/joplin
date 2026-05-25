@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import Folder from '@joplin/lib/models/Folder';
 import { NoteEntity } from '@joplin/lib/services/database/types';
@@ -6,7 +7,6 @@ import { useCallback } from 'react';
 import { Dispatch } from 'redux';
 import bridge from '../../../services/bridge';
 import NoteListUtils from '../../utils/NoteListUtils';
-
 interface CustomContextMenuEvent {
 	itemId: string;
 	currentTarget?: undefined;

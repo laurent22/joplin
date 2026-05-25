@@ -1,3 +1,5 @@
+
+
 import * as React from 'react';
 import { StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton, StyledRoot } from './styles';
 import { ButtonLevel } from '../Button/Button';
@@ -11,8 +13,6 @@ import { connect } from 'react-redux';
 import { themeStyle } from '@joplin/lib/theme';
 import { Dispatch } from 'redux';
 import FolderAndTagList from './FolderAndTagList';
-
-
 interface Props {
 	themeId: number;
 	dispatch: Dispatch;

@@ -1,5 +1,5 @@
-const URL = require('url-parse');
 
+import URL from 'url-parse';
 export function isCallbackUrl(s: string) {
 	return s.startsWith('joplin://x-callback-url/openNote?') ||
 		s.startsWith('joplin://x-callback-url/openFolder?') ||

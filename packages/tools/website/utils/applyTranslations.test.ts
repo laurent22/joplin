@@ -1,5 +1,5 @@
-import applyTranslations from './applyTranslations';
 
+import applyTranslations from './applyTranslations';
 describe('applyTranslations', () => {
 
 	it('should apply translations', async () => {

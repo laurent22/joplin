@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
@@ -12,7 +13,6 @@ import TaskButton, { OnProgressCallback, SetAfterCompleteListenerCallback, TaskS
 import { Platform } from 'react-native';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import Folder from '@joplin/lib/models/Folder';
-
 const logger = Logger.create('NoteImportButton');
 
 interface Props {

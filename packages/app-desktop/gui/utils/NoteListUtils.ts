@@ -1,3 +1,5 @@
+
+import { clipboard } from 'electron';
 import { utils as pluginUtils, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import CommandService from '@joplin/lib/services/CommandService';
 import InteropService from '@joplin/lib/services/interop/InteropService';
@@ -10,11 +12,9 @@ import bridge from '../../services/bridge';
 import BaseModel from '@joplin/lib/BaseModel';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-const { clipboard } = require('electron');
 import { Dispatch } from 'redux';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { MarkupLanguage } from '@joplin/renderer';
-
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 

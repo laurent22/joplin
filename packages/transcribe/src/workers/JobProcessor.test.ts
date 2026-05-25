@@ -1,3 +1,5 @@
+
+// since the model is not deterministic, it can, sometimes, output slightly difference responses
 import Logger from '@joplin/utils/Logger';
 import initiateLogger from '../services/initiateLogger';
 import { cleanUpDb, initDb } from '../testUtils';
@@ -8,8 +10,6 @@ import { BaseQueue, OutputSuccess } from '../types';
 import FileStorage from '../services/FileStorage';
 import { join } from 'path';
 import { copy, exists } from 'fs-extra';
-
-// since the model is not deterministic, it can, sometimes, output slightly difference responses
 const cleanUpResult = (result: string) => {
 	if (!result) return '';
 	return result.replace('“', '"').replace('”', '"');

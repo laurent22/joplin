@@ -1,6 +1,6 @@
+
 import Tokenizer from "./Tokenizer";
 import { EventEmitter } from "events";
-
 const formTags = new Set([
     "input",
     "option",

@@ -1,3 +1,5 @@
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Receives dynamically-loaded CodeMirror 5 namespace; @types/codemirror's signature is too narrow for keymap registration
 import { useEffect } from 'react';
 import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
@@ -8,8 +10,6 @@ import setupVim from '@joplin/editor/CodeMirror/utils/setupVim';
 import { EventName } from '@joplin/lib/eventManager';
 import normalizeAccelerator from '../../utils/normalizeAccelerator';
 import { CodeMirrorVersion } from '../../utils/types';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Receives dynamically-loaded CodeMirror 5 namespace; @types/codemirror's signature is too narrow for keymap registration
 export default function useKeymap(CodeMirror: any) {
 
 	function save() {

@@ -1,10 +1,10 @@
+
 import versionInfo from '@joplin/lib/versionInfo';
 import { Platform, NativeModules } from 'react-native';
 import getPackageInfo from './getPackageInfo';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
-
 const getWebViewVersionText = () => {
 	if (Platform.OS === 'android') {
 		// SystemVersionInformationModule is unavailable on older versions of Android.

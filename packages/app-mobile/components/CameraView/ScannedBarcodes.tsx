@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
@@ -9,7 +10,6 @@ import { Chip, Text } from 'react-native-paper';
 import { isCallbackUrl, parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import { OnInsertBarcode } from './types';
-
 interface Props {
 	themeId: number;
 	codeScanner: BarcodeScanner;

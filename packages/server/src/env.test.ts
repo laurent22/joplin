@@ -1,6 +1,6 @@
+
 import { afterAllTests, beforeAllDb, beforeEachDb, expectThrow } from './utils/testing/testUtils';
 import { parseEnv } from './env';
-
 describe('env', () => {
 
 	beforeAll(async () => {

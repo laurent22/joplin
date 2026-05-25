@@ -1,10 +1,10 @@
+
 import createTestEditor from '../../testing/createTestEditor';
 import joplinEditablePlugin, { editSourceBlockAt, hideSourceBlockEditor } from './joplinEditablePlugin';
 import { Second } from '@joplin/utils/time';
 import { EditorView } from 'prosemirror-view';
 import selectFirstInstanceOfNode from '../../utils/selectFirstInstanceOfNode';
 import mockEditorApi from '../../testing/mockEditorApi';
-
 const createEditor = (html: string) => {
 	const editorApi = mockEditorApi();
 	const editor = createTestEditor({

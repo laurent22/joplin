@@ -1,10 +1,10 @@
+
+
 import * as React from 'react';
 import { useCallback } from 'react';
 import CommandService from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
-
 import StyledInput from '../../style/StyledInput';
-
 interface Props {
 	inputRef?: React.Ref<HTMLInputElement>;
 	value: string;

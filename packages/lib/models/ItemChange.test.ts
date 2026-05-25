@@ -1,10 +1,10 @@
+
 import { revisionService, setupDatabaseAndSynchronizer, db, switchClient, msleep } from '../testing/test-utils';
 import SearchEngine from '../services/search/SearchEngine';
 import ResourceService from '../services/ResourceService';
 import ItemChangeUtils from '../services/ItemChangeUtils';
 import Note from '../models/Note';
 import ItemChange from '../models/ItemChange';
-
 let searchEngine: SearchEngine = null;
 
 describe('models/ItemChange', () => {

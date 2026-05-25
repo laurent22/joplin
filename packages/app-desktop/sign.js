@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 
-const { execSync } = require('child_process');
-const { chdir, cwd } = require('process');
-const { mkdirpSync, moveSync, pathExists } = require('fs-extra');
-const { readdirSync, writeFileSync } = require('fs');
-const { dirname } = require('path');
 
+import { execSync } from 'child_process';
+import { chdir, cwd } from 'process';
+import { mkdirpSync, moveSync, pathExists } from 'fs-extra';
+import { readdirSync, writeFileSync } from 'fs';
+import { dirname } from 'path';
 const signToolName = 'CodeSignTool.bat';
 
 const getTempDir = () => {

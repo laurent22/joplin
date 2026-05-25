@@ -1,7 +1,7 @@
+
 import type * as MarkdownIt from 'markdown-it';
 import * as JSON5 from 'json5';
 import { RuleOptions } from '../../MdToHtml';
-
 interface AbcContent {
 	options: object;
 	markup: string;

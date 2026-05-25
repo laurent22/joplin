@@ -1,7 +1,9 @@
+import sqlite3_87 from 'sqlite3';
+import fs_extra_88 from 'fs-extra';
+import sandboxProxy from '../../vendor/lib/@joplin/lib/services/plugins/sandboxProxy.js';
+import { ipcRenderer } from 'electron';
 (function(globalObject) {
 	// TODO: Not sure if that will work once packaged in Electron
-	const sandboxProxy = require('../../vendor/lib/@joplin/lib/services/plugins/sandboxProxy.js');
-	const ipcRenderer = require('electron').ipcRenderer;
 
 	const ipcRendererSend = (message, args) => {
 		try {
@@ -52,11 +54,11 @@
 			if (!modulePath) throw new Error('No module path specified on `require` call');
 
 			if (modulePath === 'sqlite3') {
-				return require('sqlite3');
+				return sqlite3_87;
 			}
 
 			if (modulePath === 'fs-extra') {
-				return require('fs-extra');
+				return fs_extra_88;
 			}
 
 			// 7zip-bin is required by one of the default plugins (simple-backup)

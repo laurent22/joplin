@@ -1,5 +1,5 @@
-import filterParser from './filterParser';
 
+import filterParser from './filterParser';
 const makeTerm = (name: string, value: string, negated: boolean, quoted = false, wildcard = false) => {
 	if (name === 'text') { return { name, value, negated, quoted, wildcard }; }
 	if (name === 'title' || name === 'body') { return { name, value, negated, wildcard }; }

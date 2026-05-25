@@ -1,6 +1,6 @@
+
 import { FolderEntity } from '../database/types';
 import { PluginStates } from '../plugins/reducer';
-
 export interface CustomImportContext {
 	sourcePath: string;
 	options: ImportOptions;

@@ -1,5 +1,5 @@
-import { hashPassword } from './auth';
 
+import { hashPassword } from './auth';
 describe('auth', () => {
 
 	// cSpell:disable

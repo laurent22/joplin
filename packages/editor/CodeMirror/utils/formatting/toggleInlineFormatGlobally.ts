@@ -1,9 +1,9 @@
-import { EditorState, SelectionRange, TransactionSpec } from '@codemirror/state';
-import { RegionSpec } from './RegionSpec';
-import toggleInlineSelectionFormat from './toggleInlineSelectionFormat';
 
 
 // Like toggleInlineSelectionFormat, but for all selections in [state].
+import { EditorState, SelectionRange, TransactionSpec } from '@codemirror/state';
+import { RegionSpec } from './RegionSpec';
+import toggleInlineSelectionFormat from './toggleInlineSelectionFormat';
 const toggleInlineFormatGlobally = (
 	state: EditorState, spec: RegionSpec,
 ): TransactionSpec => {

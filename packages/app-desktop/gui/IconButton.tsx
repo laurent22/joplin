@@ -1,6 +1,6 @@
+
 import * as React from 'react';
 import { themeStyle } from '@joplin/lib/theme';
-
 interface Props {
 	themeId: number;
 	style?: React.CSSProperties;

@@ -1,7 +1,7 @@
+
 import uuid from '@joplin/lib/uuid';
 import { clearMetrics, heartbeatMessage, onRequestComplete, onRequestStart } from './metrics';
 import { Minute, Second } from './time';
-
 describe('metrics', () => {
 
 	beforeEach(() => {

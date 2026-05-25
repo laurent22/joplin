@@ -1,7 +1,7 @@
-import { parseDOM, createDomStream } from ".";
-import { Element } from "domhandler";
 
 // Add an `attributes` prop to the Element for now, to make it possible for Jest to render DOM nodes.
+import { parseDOM, createDomStream } from ".";
+import { Element } from "domhandler";
 Object.defineProperty(Element.prototype, "attributes", {
     get() {
         return Object.keys(this.attribs).map(name => ({

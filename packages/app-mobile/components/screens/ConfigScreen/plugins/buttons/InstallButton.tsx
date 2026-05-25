@@ -1,10 +1,10 @@
+
 import { PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import * as React from 'react';
 import ActionButton from './ActionButton';
 import { PluginCallback } from '../utils/usePluginCallbacks';
 import { InstallState } from '../PluginBox';
 import { _ } from '@joplin/lib/locale';
-
 interface Props {
 	item: PluginItem;
 	onInstall: PluginCallback;

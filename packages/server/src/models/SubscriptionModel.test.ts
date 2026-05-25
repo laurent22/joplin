@@ -1,8 +1,8 @@
+
 import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
 import { AccountType } from './UserModel';
 import { MB } from '../utils/bytes';
 import { getCanShareFolder, getMaxItemSize } from './utils/user';
-
 describe('SubscriptionModel', () => {
 
 	beforeAll(async () => {

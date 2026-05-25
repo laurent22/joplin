@@ -1,6 +1,6 @@
-const { pregQuote } = require('@joplin/lib/string-utils-common');
 
 // Specifies how a to find the start/stop of a type of formatting
+import { pregQuote } from '@joplin/lib/string-utils-common';
 interface RegionMatchSpec {
 	start: RegExp;
 	end: RegExp;

@@ -1,3 +1,4 @@
+
 import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -10,7 +11,6 @@ import { parseWhiteboard } from '@joplin/lib/services/whiteboard/parse';
 import { serializeWhiteboard } from '@joplin/lib/services/whiteboard/serialize';
 import { CanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 import generateId from '@joplin/lib/services/whiteboard/generateId';
-
 const logger = Logger.create('addNoteToWhiteboard');
 
 export const declaration: CommandDeclaration = {

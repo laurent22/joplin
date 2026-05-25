@@ -1,5 +1,5 @@
-import htmlUtils from './htmlUtils';
 
+import htmlUtils from './htmlUtils';
 describe('htmlUtils', () => {
 
 

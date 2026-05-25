@@ -1,7 +1,7 @@
+
 import { EventType } from '../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
 import { msleep, Week } from '../utils/time';
-
 describe('EventModel', () => {
 
 	beforeAll(async () => {

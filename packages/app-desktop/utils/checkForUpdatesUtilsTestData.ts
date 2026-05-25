@@ -1,5 +1,5 @@
-import { GitHubRelease } from './checkForUpdatesUtils';
 
+import { GitHubRelease } from './checkForUpdatesUtils';
 export const releases1 = ([
 	{
 		'url': 'https://api.github.com/repos/laurent22/joplin/releases/111428211',

@@ -1,3 +1,5 @@
+
+import { setTimeout as setTimeout_252 } from 'timers';
 import type * as React from 'react';
 import type * as ReactDom from 'react-dom';
 import type { NoteEntity, ResourceEntity } from './services/database/types';
@@ -5,7 +7,6 @@ import type FsDriverBase from './fs-driver-base';
 import type FileApiDriverLocal from './file-api-driver-local';
 import type { Crypto } from './services/e2ee/types';
 import type { MarkupLanguage } from '@joplin/renderer';
-
 export interface CreateResourceFromPathOptions {
 	resizeLargeImages?: 'always' | 'never' | 'ask';
 	userSideValidation?: boolean;
@@ -495,7 +496,7 @@ const shim = {
 	// - The timer would never get fired (although setTimeout was definitely called)
 	//
 	// It's not clear whether it is due to the code path originating in the plugin script or
-	// some other bugs. But in any case, the issue was fixed using require('timers').setTimeout
+	// some other bugs. But in any case, the issue was fixed using setTimeout_252
 	// instead of the default window.setTimeout. Might be related to this Electron bug:
 	// https://github.com/electron/electron/issues/25311
 	// (although changing allowRendererProcessReuse solved nothing)

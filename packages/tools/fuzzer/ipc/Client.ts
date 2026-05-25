@@ -1,3 +1,4 @@
+
 import uuid, { createSecureRandom } from '@joplin/lib/uuid';
 import { ActionableClient, FuzzContext, HttpMethod, Json, RandomFolderOptions, RandomNoteOptions, ShareOptions } from '../types';
 import { assertIsNote, assertIsNoteData, FolderData, ItemId, NoteData, ResourceData } from '../model/types';
@@ -18,7 +19,7 @@ import { formatMsToDateTimeLocal, msleep, Second } from '@joplin/utils/time';
 import { spawn } from 'child_process';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { createInterface } from 'readline/promises';
-import Stream = require('stream');
+import Stream from 'stream';
 import ProgressBar from '../utils/ProgressBar';
 import getDiffDebugMessage from '../utils/getBinaryDiffDebugMessage';
 import { NoteEntity } from '@joplin/lib/services/database/types';
@@ -29,7 +30,6 @@ import hangingIndent from '../utils/hangingIndent';
 import { readFile, writeFile } from 'fs/promises';
 import { hasOwnProperty } from '@joplin/utils/object';
 import removeInvalidUtf8 from '../utils/removeInvalidUtf8';
-
 const logger = Logger.create('Client');
 
 type AccountData = Readonly<{

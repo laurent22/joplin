@@ -1,3 +1,5 @@
+
+import { TextInput } from 'react-native-paper';
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
@@ -7,8 +9,6 @@ import { _ } from '@joplin/lib/locale';
 import { loadProfileConfig, saveProfileConfig } from '../../services/profiles';
 import { createNewProfile } from '@joplin/lib/services/profileConfig';
 import useProfileConfig from './useProfileConfig';
-const { TextInput } = require('react-native-paper');
-
 interface NavigationState {
 	profileId: string;
 }

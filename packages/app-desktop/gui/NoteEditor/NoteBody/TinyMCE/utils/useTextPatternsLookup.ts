@@ -1,5 +1,5 @@
-import { useRef } from 'react';
 
+import { useRef } from 'react';
 export interface TextPatternContext {
 	readonly text: string;
 	readonly block: Element;

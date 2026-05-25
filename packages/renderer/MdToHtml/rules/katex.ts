@@ -1,17 +1,17 @@
-import { RuleOptions } from '../../MdToHtml';
-import type * as MarkdownIt from 'markdown-it';
-import type StateInline = require('markdown-it/lib/rules_inline/state_inline');
-import type StateBlock = require('markdown-it/lib/rules_block/state_block');
-import type Token = require('markdown-it/lib/token');
 
-let katex = require('katex');
-const md5 = require('md5');
-const mhchemModule = require('./katex_mhchem.js');
 
 // Katex macros include circular references so we need
 // to serialize them with json-stringify-safe
-const stringifySafe = require('json-stringify-safe');
 
+import katex from 'katex';
+import md5 from 'md5';
+import mhchemModule from './katex_mhchem.js';
+import stringifySafe from 'json-stringify-safe';
+import { RuleOptions } from '../../MdToHtml';
+import type * as MarkdownIt from 'markdown-it';
+import type StateInline from 'markdown-it/lib/rules_inline/state_inline';
+import type StateBlock from 'markdown-it/lib/rules_block/state_block';
+import type Token from 'markdown-it/lib/token';
 interface KatexMacroToken {
 	text: string;
 }

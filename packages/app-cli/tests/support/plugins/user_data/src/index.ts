@@ -1,6 +1,6 @@
+
 import joplin from 'api';
 import { ModelType } from 'api/types';
-
 joplin.plugins.register({
 	onStart: async function() {
 		const folder = await joplin.data.post(['folders'], null, { title: "test" });

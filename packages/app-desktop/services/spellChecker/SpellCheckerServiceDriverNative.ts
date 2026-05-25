@@ -1,11 +1,11 @@
 // Provides spell checking feature via the native Electron built-in spell checker
 
+
 import SpellCheckerServiceDriverBase from '@joplin/lib/services/spellChecker/SpellCheckerServiceDriverBase';
 import bridge from '../bridge';
 import Logger from '@joplin/utils/Logger';
 import { languageCodeOnly, localesFromLanguageCode } from '@joplin/lib/locale';
 import { Session } from 'electron';
-
 const logger = Logger.create('SpellCheckerServiceDriverNative');
 
 export default class SpellCheckerServiceDriverNative extends SpellCheckerServiceDriverBase {

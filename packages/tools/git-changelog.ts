@@ -2,9 +2,10 @@
 
 // (Desktop|Mobile|Android|iOS[CLI): (New|Improved|Fixed): Some message..... (#ISSUE)
 
+
+import { argv } from 'yargs';
 import { execCommand, githubUsername } from './tool-utils';
 import { compareVersions } from 'compare-versions';
-
 interface LogEntry {
 	message: string;
 	commit: string;
@@ -505,7 +506,6 @@ async function findFirstRelevantTag(baseTag: string, platform: Platform, allTags
 }
 
 async function main() {
-	const argv = require('yargs').argv;
 	if (!argv._.length) throw new Error('Tag name must be specified. Provide the tag of the new version and git-changelog will walk backward to find the changes to the previous relevant tag.');
 
 	const allTags = await gitTags();

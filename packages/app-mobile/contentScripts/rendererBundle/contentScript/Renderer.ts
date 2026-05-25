@@ -1,3 +1,4 @@
+
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import type { MarkupToHtmlConverter, RenderOptions, RenderOptionsGlobalSettings, FsDriver as RendererFsDriver, ResourceInfos } from '@joplin/renderer/types';
 import makeResourceModel from './utils/makeResourceModel';
@@ -6,7 +7,6 @@ import { ExtraContentScriptSource, ForwardedJoplinSettings, MarkupRecord } from 
 import { ExtraContentScript } from '@joplin/lib/services/plugins/utils/loadContentScripts';
 import { PluginOptions } from '@joplin/renderer/MarkupToHtml';
 import afterFullPageRender from './utils/afterFullPageRender';
-
 export interface RendererSetupOptions {
 	settings: ForwardedJoplinSettings;
 	useTransferredFiles: boolean;

@@ -1,5 +1,5 @@
-import { State } from '@joplin/lib/reducer';
 
+import { State } from '@joplin/lib/reducer';
 export interface AppState extends State {
 	showPanelsDialog: boolean;
 	isOnMobileData: boolean;

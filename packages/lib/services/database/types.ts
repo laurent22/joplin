@@ -1,5 +1,5 @@
-import { ModelType } from "../../BaseModel";
 
+import { ModelType } from "../../BaseModel";
 export interface BaseItemEntity {
   id?: string;
   encryption_applied?: number;

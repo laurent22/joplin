@@ -2,13 +2,13 @@
 // These commands use the syntax tree to detect tables and manipulate them
 // using the pure utility functions from tableUtils.ts.
 
+
+// Check if a pipe at position `i` in `text` is unescaped.
+// A pipe is escaped if preceded by an odd number of backslashes.
 import { EditorView } from '@codemirror/view';
 import { EditorState } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
 import { parseTable, serializeTable, addRow, addColumn, deleteRow, deleteColumn } from '../utils/markdown/tableUtils';
-
-// Check if a pipe at position `i` in `text` is unescaped.
-// A pipe is escaped if preceded by an odd number of backslashes.
 const isUnescapedPipe = (text: string, i: number): boolean => {
 	if (text[i] !== '|') return false;
 	let backslashes = 0;

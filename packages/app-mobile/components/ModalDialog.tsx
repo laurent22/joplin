@@ -1,13 +1,13 @@
+
+
 import * as React from 'react';
 import { useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { themeStyle } from './global-style';
-
 import Modal, { ModalElementProps } from './Modal';
 import { PrimaryButton } from './buttons';
 import { _ } from '@joplin/lib/locale';
 import { Button } from 'react-native-paper';
-
 interface Props {
 	themeId: number;
 	children: React.ReactNode;

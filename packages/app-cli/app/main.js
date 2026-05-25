@@ -1,39 +1,44 @@
 #!/usr/bin/env node
 
 // Use njstrace to find out what Node.js might be spending time on
-// var njstrace = require('njstrace').inject();
+// var njstrace = njstrace_inject.inject();
 
-const compareVersion = require('compare-version');
+import njstrace_inject from 'njstrace';
+import sharp_8 from 'sharp';
+import keytar_9 from 'keytar';
+import readline_createInterface from 'readline';
+import compareVersion from 'compare-version';
+import app from './app';
+import Folder from '@joplin/lib/models/Folder';
+import Resource from '@joplin/lib/models/Resource';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import Note from '@joplin/lib/models/Note';
+import Tag from '@joplin/lib/models/Tag';
+import NoteTag from '@joplin/lib/models/NoteTag';
+import MasterKey from '@joplin/lib/models/MasterKey';
+import Setting from '@joplin/lib/models/Setting';
+import Revision from '@joplin/lib/models/Revision';
+import Logger from '@joplin/utils/Logger';
+import FsDriverNode from '@joplin/lib/fs-driver-node';
+import shimInitCli from './utils/shimInitCli';
+import shim from '@joplin/lib/shim';
+import { _ } from '@joplin/lib/locale';
+import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
+import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
+import envFromArgs from '@joplin/lib/envFromArgs';
+import nodeSqlite from 'sqlite3';
+import initLib from '@joplin/lib/initLib';
+import p from './package.json';
 const nodeVersion = process && process.versions && process.versions.node ? process.versions.node : '0.0.0';
 if (compareVersion(nodeVersion, '10.0.0') < 0) {
 	console.error(`Joplin requires Node 10+. Detected version ${nodeVersion}`);
 	process.exit(1);
 }
 
-const app = require('./app').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const Resource = require('@joplin/lib/models/Resource').default;
-const BaseItem = require('@joplin/lib/models/BaseItem').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Tag = require('@joplin/lib/models/Tag').default;
-const NoteTag = require('@joplin/lib/models/NoteTag').default;
-const MasterKey = require('@joplin/lib/models/MasterKey').default;
-const Setting = require('@joplin/lib/models/Setting').default;
-const Revision = require('@joplin/lib/models/Revision').default;
-const Logger = require('@joplin/utils/Logger').default;
-const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
-const shimInitCli = require('./utils/shimInitCli').default;
-const shim = require('@joplin/lib/shim').default;
-const { _ } = require('@joplin/lib/locale');
-const FileApiDriverLocal = require('@joplin/lib/file-api-driver-local').default;
-const EncryptionService = require('@joplin/lib/services/e2ee/EncryptionService').default;
-const envFromArgs = require('@joplin/lib/envFromArgs');
-const nodeSqlite = require('sqlite3');
-const initLib = require('@joplin/lib/initLib').default;
 
 let sharp = null;
 try {
-	sharp = require('sharp');
+	sharp = sharp_8;
 } catch (error) {
 	// Don't print an error or it will pollute stdout every time the app is started. A warning will
 	// be printed in app.ts
@@ -62,14 +67,13 @@ Setting.setConstant('appType', 'cli');
 
 let keytar;
 try {
-	keytar = shim.platformSupportsKeyChain() ? require('keytar') : null;
+	keytar = shim.platformSupportsKeyChain() ? keytar_9 : null;
 } catch (error) {
 	console.error('Cannot load keytar - keychain support will be disabled', error);
 	keytar = null;
 }
 
 function appVersion() {
-	const p = require('./package.json');
 	return p.version;
 }
 
@@ -82,7 +86,7 @@ initLib(logger);
 const application = app();
 
 if (process.platform === 'win32') {
-	const rl = require('readline').createInterface({
+	const rl = readline_createInterface.createInterface({
 		input: process.stdin,
 		output: process.stdout,
 	});

@@ -1,9 +1,10 @@
+
+import pdf_worker_256 from 'pdfjs-dist/legacy/build/pdf.worker.entry';
 import PdfDocument from './PdfDocument';
 import * as pdfjsLib from 'pdfjs-dist';
 import { readFile } from 'fs';
 import { resolve } from 'path';
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = require('pdfjs-dist/legacy/build/pdf.worker.entry');
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdf_worker_256;
 
 const pdfFilePath1 = resolve('config/welcome.pdf');
 

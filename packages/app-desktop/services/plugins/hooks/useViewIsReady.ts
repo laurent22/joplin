@@ -1,6 +1,6 @@
+
 import { RefObject, useEffect, useState } from 'react';
 import useMessageHandler from './useMessageHandler';
-
 export default function useViewIsReady(viewRef: RefObject<HTMLIFrameElement>) {
 	// Just checking if the iframe is ready is not sufficient because its content
 	// might not be ready (for example, IPC listeners might not be initialised).

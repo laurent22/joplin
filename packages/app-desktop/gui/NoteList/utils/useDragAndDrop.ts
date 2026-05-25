@@ -1,10 +1,10 @@
+
 import * as React from 'react';
 import { useCallback, DragEventHandler, MutableRefObject, useState, useEffect } from 'react';
 import Note from '@joplin/lib/models/Note';
 import canManuallySortNotes from './canManuallySortNotes';
 import { Size } from '@joplin/utils/types';
 import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
-
 const useDragAndDrop = (
 	parentFolderIsReadOnly: boolean,
 	selectedNoteIds: string[],

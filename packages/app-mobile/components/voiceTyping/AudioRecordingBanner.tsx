@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { PrimaryButton, SecondaryButton } from '../buttons';
 import { _ } from '@joplin/lib/locale';
@@ -14,7 +15,6 @@ import { Text } from 'react-native-paper';
 import time from '@joplin/lib/time';
 import { toFileExtension } from '@joplin/lib/mime-utils';
 import { formatMsToDurationCompat, msleep } from '@joplin/utils/time';
-
 const logger = Logger.create('AudioRecording');
 
 interface Props {

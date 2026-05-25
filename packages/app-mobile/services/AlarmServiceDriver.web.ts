@@ -1,5 +1,5 @@
-import Logger from '@joplin/utils/Logger';
 
+import Logger from '@joplin/utils/Logger';
 export default class AlarmServiceDriver {
 	public constructor(logger: Logger) {
 		logger.warn('WARNING: AlarmServiceDriver is not implemented on web');

@@ -1,6 +1,6 @@
-const Note = require('@joplin/lib/models/Note').default;
-const TextWidget = require('tkwidgets/TextWidget.js');
 
+import Note from '@joplin/lib/models/Note';
+import TextWidget from 'tkwidgets/TextWidget.js';
 class NoteMetadataWidget extends TextWidget {
 	constructor() {
 		super();

@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
-const sha512 = require('js-sha512');
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
+import sha512 from 'js-sha512';
 const distDirName = 'dist';
 const distPath = path.join(__dirname, distDirName);
 

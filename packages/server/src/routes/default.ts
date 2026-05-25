@@ -1,3 +1,4 @@
+
 import { SubPath, Response, ResponseType, redirect } from '../utils/routeUtils';
 import Router from '../utils/Router';
 import { ErrorNotFound, ErrorForbidden } from '../utils/errors';
@@ -10,7 +11,6 @@ import { homeUrl, loginUrl } from '../utils/urlUtils';
 import * as mime from '@joplin/lib/mime-utils';
 import { hasOwnProperty } from '@joplin/utils/object';
 import { toForwardSlashes } from '@joplin/utils/path';
-
 const publicDir = `${dirname(dirname(__dirname))}/public`;
 
 interface PathToFileMap {

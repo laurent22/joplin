@@ -1,7 +1,7 @@
+
 import { EditorCommandType } from '@joplin/editor/types';
 import { _ } from '@joplin/lib/locale';
 import { CommandDeclaration } from '@joplin/lib/services/CommandService';
-
 const markdownEditorOnlyCommands = [
 	EditorCommandType.DuplicateLine,
 	EditorCommandType.SortSelectedLines,

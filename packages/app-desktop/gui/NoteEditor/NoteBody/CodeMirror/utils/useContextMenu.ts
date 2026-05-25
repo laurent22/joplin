@@ -1,3 +1,4 @@
+
 import { ContextMenuParams, Event } from 'electron';
 import { useEffect, RefObject, useContext } from 'react';
 import { Dispatch } from 'redux';
@@ -17,7 +18,6 @@ import isItemId from '@joplin/lib/models/utils/isItemId';
 import { extractResourceUrls } from '@joplin/lib/urlUtils';
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('useContextMenu');
 
 export type ResourceMarkupType = 'image' | 'file';

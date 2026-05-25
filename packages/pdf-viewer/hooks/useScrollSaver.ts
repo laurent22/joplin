@@ -1,7 +1,7 @@
+
 import { useRef, useEffect, MutableRefObject, useState } from 'react';
 import PdfDocument from '../PdfDocument';
 import { ScaledSize } from '../types';
-
 export interface ScrollSaver {
 	container: MutableRefObject<HTMLElement>;
 	scaledSize: ScaledSize;

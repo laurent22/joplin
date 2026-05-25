@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services/plugins/reducer';
@@ -12,7 +13,6 @@ import WebviewController, { ContainerType } from '@joplin/lib/services/plugins/W
 import { Theme } from '@joplin/lib/themes/type';
 import useDialogSize from './hooks/useDialogSize';
 import PluginUserWebView from './PluginUserWebView';
-
 interface Props {
 	themeId: number;
 	pluginHtmlContents: PluginHtmlContents;

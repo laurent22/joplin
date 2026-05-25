@@ -1,9 +1,9 @@
-const TurndownService = require('@joplin/turndown');
-const turndownPluginGfm = require('@joplin/turndown-plugin-gfm').gfm;
 
 // Avoid using @joplin/lib/HtmlToMd here. HtmlToMd may cause several megabytes
 // of additional JavaScript and supporting data to be included.
 
+import TurndownService from '@joplin/turndown';
+import { gfm as turndownPluginGfm } from '@joplin/turndown-plugin-gfm';
 const convertHtmlToMarkdown = (html: string|HTMLElement) => {
 	const turndownOpts = {
 		headingStyle: 'atx',

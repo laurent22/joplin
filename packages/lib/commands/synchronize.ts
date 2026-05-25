@@ -1,9 +1,9 @@
+
 import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
 import { _ } from '../locale';
 import { reg } from '../registry';
 import Setting from '../models/Setting';
 import NavService from '../services/NavService';
-
 export const declaration: CommandDeclaration = {
 	name: 'synchronize',
 	label: () => _('Synchronise'),

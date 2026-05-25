@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { ReactNode, useMemo } from 'react';
 import { themeStyle } from '../global-style';
@@ -5,7 +6,6 @@ import { Button, ButtonProps } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { AppState } from '../../utils/types';
 import { TextStyle, StyleSheet, ViewStyle, StyleProp } from 'react-native';
-
 export enum ButtonType {
 	Primary,
 	Secondary,

@@ -1,6 +1,6 @@
+
+
 import { PublicKeyCrypto } from '../../types';
-
-
 const isLowercaseHexadecimalString = (text: string) => {
 	return text.match(/^[a-f0-9]+$/) && text.length % 2 === 0;
 };

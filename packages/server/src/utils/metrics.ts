@@ -3,10 +3,10 @@
 // Provides metrics about the operating system and server application, and format them in a message
 // that can be printed to log.
 
+
 import * as os from 'os';
 import { Minute } from './time';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('metrics');
 
 type TimestampToRequestCount = Map<number, number>;

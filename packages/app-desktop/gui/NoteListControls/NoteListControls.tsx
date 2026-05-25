@@ -1,3 +1,4 @@
+
 import { AppState } from '../../app.reducer';
 import * as React from 'react';
 import { useEffect, useRef, useMemo, useContext } from 'react';
@@ -15,7 +16,6 @@ import { getTrashFolderId } from '@joplin/lib/services/trash';
 import { Breakpoints } from '../NoteList/utils/types';
 import { stateUtils } from '@joplin/lib/reducer';
 import { WindowIdContext } from '../NewWindowOrIFrame';
-
 interface Props {
 	showNewNoteButtons: boolean;
 	sortOrderButtonsVisible: boolean;

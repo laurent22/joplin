@@ -1,12 +1,12 @@
 // pull out /GeneralSearchResponse/categories/category/items/product tags
 // the rest we don't care about.
 
-var sax = require('../lib/sax.js')
-var fs = require('fs')
-var path = require('path')
+import sax from '../lib/sax.js';
+import fs from 'fs';
+import path from 'path';
+import util from 'util';
+import http from 'http';
 var xmlFile = path.resolve(__dirname, 'shopping.xml')
-var util = require('util')
-var http = require('http')
 
 fs.readFile(xmlFile, function (er, d) {
   http.createServer(function (req, res) {

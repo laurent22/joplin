@@ -1,19 +1,19 @@
 // Fetch Patreon posts to Markdown so that we have them in a more versatile format
 // and to add them to the "News" notifications later on.
 
-const fetch = require('node-fetch');
-const fs = require('fs-extra');
-const { patreonOauthToken } = require('./tool-utils');
-const HtmlToMd = require('@joplin/lib/HtmlToMd').default;
-const { dirname, filename, basename } = require('@joplin/lib/path-utils');
-const markdownUtils = require('@joplin/lib/markdownUtils').default;
-const mimeUtils = require('@joplin/lib/mime-utils.js');
-const { mimeTypeFromHeaders } = require('@joplin/lib/net-utils');
-const shim = require('@joplin/lib/shim').default;
-const moment = require('moment');
-const { pregQuote } = require('@joplin/lib/string-utils');
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
 
+import fetch from 'node-fetch';
+import fs from 'fs-extra';
+import { patreonOauthToken } from './tool-utils';
+import HtmlToMd from '@joplin/lib/HtmlToMd';
+import { dirname, filename, basename } from '@joplin/lib/path-utils';
+import markdownUtils from '@joplin/lib/markdownUtils';
+import mimeUtils from '@joplin/lib/mime-utils.js';
+import { mimeTypeFromHeaders } from '@joplin/lib/net-utils';
+import shim from '@joplin/lib/shim';
+import moment from 'moment';
+import { pregQuote } from '@joplin/lib/string-utils';
+import { shimInit } from '@joplin/lib/shim-init-node.js';
 shimInit();
 
 const rootDir = dirname(dirname(__dirname));

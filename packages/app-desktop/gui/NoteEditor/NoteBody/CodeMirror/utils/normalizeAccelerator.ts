@@ -1,10 +1,10 @@
-import { CodeMirrorVersion } from './types';
 
 // CodeMirror and Electron register accelerators slightly different
 // CodeMirror requires a - between keys while Electron want's a +
 // CodeMirror doesn't recognize Option (it uses Alt instead)
 // CodeMirror requires Shift to be first
 // CodeMirror 6 requires Shift if the key name is uppercase.
+import { CodeMirrorVersion } from './types';
 const normalizeAccelerator = (accelerator: string, editorVersion: CodeMirrorVersion) => {
 	const command = accelerator.replace(/\+/g, '-').replace('Option', 'Alt');
 	// From here is taken out of codemirror/lib/codemirror.js, modified

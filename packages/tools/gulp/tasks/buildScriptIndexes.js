@@ -1,7 +1,7 @@
 // Takes a directory of TypeScript files and generate an index from it.
 
-const utils = require('../utils');
-const glob = require('glob');
+import utils from '../utils';
+import glob from 'glob';
 const rootDir = utils.rootDir();
 
 async function processDirectory(dir, indexFilePath = null, typeScriptType = null, imports = null, importNameTemplate = null, exportNameTemplate = null) {

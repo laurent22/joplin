@@ -1,5 +1,5 @@
-import { fileExtension } from '@joplin/lib/path-utils';
 
+import { fileExtension } from '@joplin/lib/path-utils';
 export interface CheckForUpdateOptions {
 	includePreReleases?: boolean;
 }

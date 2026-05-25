@@ -1,9 +1,9 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import Tag from '@joplin/lib/models/Tag';
 import { TagEntity } from '@joplin/lib/services/database/types';
 import { WindowControl } from '../utils/useWindowControl';
-
 export const declaration: CommandDeclaration = {
 	name: 'setTags',
 	label: () => _('Tags'),

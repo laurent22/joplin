@@ -1,7 +1,7 @@
+
 import { execCommand } from '@joplin/utils';
 import { rootDir, completeReleaseWithChangelog } from './tool-utils';
 import { versionPatch } from '@joplin/utils/version';
-
 const appDir = `${rootDir}/packages/app-cli`;
 const changelogPath = `${rootDir}/readme/about/changelog/cli.md`;
 

@@ -1,5 +1,5 @@
-import { ResourceOcrStatus } from '../../database/types';
 
+import { ResourceOcrStatus } from '../../database/types';
 export const emptyRecognizeResult = (): RecognizeResult => {
 	return {
 		ocr_status: ResourceOcrStatus.Todo,

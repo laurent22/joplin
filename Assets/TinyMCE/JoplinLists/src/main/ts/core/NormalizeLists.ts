@@ -5,10 +5,10 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
+
 import DOMUtils from 'tinymce/core/api/dom/DOMUtils';
 import Tools from 'tinymce/core/api/util/Tools';
 import * as NodeType from './NodeType';
-
 const DOM = DOMUtils.DOM;
 
 const normalizeList = function (dom, ul) {

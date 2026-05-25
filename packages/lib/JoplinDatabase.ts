@@ -1,3 +1,6 @@
+
+
+import { sprintf } from 'sprintf-js';
 import Resource from './models/Resource';
 import shim from './shim';
 import Database, { Row } from './database';
@@ -5,9 +8,6 @@ import { SqlQuery } from './services/database/types';
 import addMigrationFile from './services/database/addMigrationFile';
 import sqlStringToLines from './services/database/sqlStringToLines';
 import migrations from './services/database/migrations';
-
-const { sprintf } = require('sprintf-js');
-
 const structureSql = `
 CREATE TABLE folders (
 	id TEXT PRIMARY KEY,

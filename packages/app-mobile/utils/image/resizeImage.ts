@@ -1,10 +1,10 @@
+
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import fileToImage from './fileToImage.web';
 import FsDriverWeb from '../fs-driver/fs-driver-rn.web';
 import getImageDimensions from './getImageDimensions';
-
 const logger = Logger.create('resizeImage');
 
 type OutputFormat = 'PNG' | 'JPEG';

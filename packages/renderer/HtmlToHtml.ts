@@ -1,3 +1,8 @@
+
+// Renderered notes can potentially be quite large (for example
+// when they come from the clipper) so keep the cache size
+// relatively small.
+import md5 from 'md5';
 import htmlUtils from './htmlUtils';
 import linkReplacement from './MdToHtml/linkReplacement';
 import * as utils from './utils';
@@ -5,11 +10,6 @@ import InMemoryCache from './InMemoryCache';
 import noteStyle, { whiteBackgroundNoteStyle } from './noteStyle';
 import { Options as NoteStyleOptions } from './noteStyle';
 import { FsDriver, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RendererTheme } from './types';
-const md5 = require('md5');
-
-// Renderered notes can potentially be quite large (for example
-// when they come from the clipper) so keep the cache size
-// relatively small.
 const inMemoryCache = new InMemoryCache(10);
 
 export interface SplittedHtml {

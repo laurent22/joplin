@@ -1,7 +1,7 @@
+
 import { CustomError, CustomErrorCode } from '../../../utils/errors';
 import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import StorageDriverBase from './StorageDriverBase';
-
 export default class StorageDriverMemory extends StorageDriverBase {
 
 	private data_: Record<string, Buffer> = {};

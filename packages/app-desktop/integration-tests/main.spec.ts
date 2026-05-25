@@ -1,3 +1,5 @@
+
+
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import { _electron as electron } from '@playwright/test';
@@ -9,8 +11,6 @@ import setFilePickerResponse from './util/setFilePickerResponse';
 import setMessageBoxResponse from './util/setMessageBoxResponse';
 import getImageSourceSize from './util/getImageSourceSize';
 import setSettingValue from './util/setSettingValue';
-
-
 test.describe('main', () => {
 	test('app should launch', async ({ mainWindow }) => {
 		// A window should open with the correct title

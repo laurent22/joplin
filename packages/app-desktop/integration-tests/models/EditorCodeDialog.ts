@@ -1,5 +1,5 @@
-import { Locator, Page } from '@playwright/test';
 
+import { Locator, Page } from '@playwright/test';
 export default class EditorCodeDialog {
 	private readonly dialog: Locator;
 	public readonly textArea: Locator;

@@ -1,6 +1,6 @@
-const Attendant = require('turndown-attendant');
-const TurndownService = require('../lib/turndown.cjs');
 
+import Attendant from 'turndown-attendant';
+import TurndownService from '../lib/turndown.cjs';
 const attendant = new Attendant({
 	file: `${__dirname}/index.html`,
 	TurndownService: TurndownService,

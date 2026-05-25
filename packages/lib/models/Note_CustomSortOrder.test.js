@@ -1,8 +1,8 @@
-const time = require('../time').default;
-const { setupDatabaseAndSynchronizer, switchClient, msleep } = require('../testing/test-utils.js');
-const Folder = require('../models/Folder').default;
-const Note = require('../models/Note').default;
 
+import time from '../time';
+import { setupDatabaseAndSynchronizer, switchClient, msleep } from '../testing/test-utils.js';
+import Folder from '../models/Folder';
+import Note from '../models/Note';
 describe('models/Note_CustomSortOrder', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);

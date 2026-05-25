@@ -1,3 +1,4 @@
+
 import { ErrorCode } from '../errors';
 import { FolderEntity } from '../services/database/types';
 import getTrashFolderId from '../services/trash/getTrashFolderId';
@@ -5,7 +6,6 @@ import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, ch
 import Folder from './Folder';
 import Note from './Note';
 import Setting from './Setting';
-
 async function allItems() {
 	const folders = await Folder.all();
 	const notes = await Note.all();

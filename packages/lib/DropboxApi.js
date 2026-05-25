@@ -1,9 +1,9 @@
-const Logger = require('@joplin/utils/Logger').default;
-const shim = require('./shim').default;
-const JoplinError = require('./JoplinError').default;
-const time = require('./time').default;
-const EventDispatcher = require('./EventDispatcher').default;
 
+import Logger from '@joplin/utils/Logger';
+import shim from './shim';
+import JoplinError from './JoplinError';
+import time from './time';
+import EventDispatcher from './EventDispatcher';
 class DropboxApi {
 	constructor(options) {
 		this.logger_ = new Logger();

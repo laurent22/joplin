@@ -1,9 +1,9 @@
+
 import { execRequest } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, expectHttpError } from '../../utils/testing/testUtils';
 import { totp } from 'otplib';
 import * as crypto from '../../utils/crypto';
 import { ErrorBadRequest } from '../../utils/errors';
-
 describe('index/mfa', () => {
 
 	beforeAll(async () => {

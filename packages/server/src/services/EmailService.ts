@@ -1,14 +1,14 @@
+
 import Logger from '@joplin/utils/Logger';
 import BaseService from './BaseService';
-import Mail = require('nodemailer/lib/mailer');
-import SMTPTransport = require('nodemailer/lib/smtp-transport');
+import Mail from 'nodemailer/lib/mailer';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import { createTransport } from 'nodemailer';
 import { Email, EmailSender } from '../services/database/types';
 import { errorToString } from '../utils/errors';
 import { markdownBodyToHtml, markdownBodyToPlainText } from './email/utils';
 import { MailerSecurity } from '../env';
 import { senderInfo } from '../models/utils/email';
-
 const logger = Logger.create('EmailService');
 
 export default class EmailService extends BaseService {

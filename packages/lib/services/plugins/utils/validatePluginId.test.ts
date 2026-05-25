@@ -1,5 +1,5 @@
-import validatePluginId from './validatePluginId';
 
+import validatePluginId from './validatePluginId';
 describe('validatePluginId', () => {
 
 	test('should validate an ID', () => {

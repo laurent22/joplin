@@ -1,5 +1,5 @@
-import type BaseSyncTarget from './BaseSyncTarget';
 
+import type BaseSyncTarget from './BaseSyncTarget';
 export interface SyncTargetInfo {
 	id: number;
 	name: string;

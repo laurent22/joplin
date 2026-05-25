@@ -1,7 +1,7 @@
+
 import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import Folder from '../Folder';
 import getCanBeCollapsedFolderIds from './getCanBeCollapsedFolderIds';
-
 describe('getCanBeCollapsedFolderIds', () => {
 
 	beforeEach(async () => {

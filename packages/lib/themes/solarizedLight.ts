@@ -1,6 +1,6 @@
+
 import { Theme } from './type';
 import theme_light from './light';
-
 const theme: Theme = {
 	...theme_light,
 

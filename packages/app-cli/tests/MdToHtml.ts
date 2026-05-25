@@ -1,11 +1,11 @@
+
+import { filename } from '@joplin/lib/path-utils';
+import { themeStyle } from '@joplin/lib/theme';
 import MdToHtml, { LinkRenderingType, Options as MdToHtmlConstructorOptions } from '@joplin/renderer/MdToHtml';
-const { filename } = require('@joplin/lib/path-utils');
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import shim from '@joplin/lib/shim';
 import { RenderOptions } from '@joplin/renderer/types';
 import { isResourceUrl, resourceUrlToId } from '@joplin/lib/models/utils/resourceUtils';
-const { themeStyle } = require('@joplin/lib/theme');
-
 function newTestMdToHtml(options: Partial<MdToHtmlConstructorOptions> = null) {
 	const merged: MdToHtmlConstructorOptions = {
 		ResourceModel: {

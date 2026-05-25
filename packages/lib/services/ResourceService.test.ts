@@ -1,3 +1,4 @@
+
 import time from '../time';
 import NoteResource from '../models/NoteResource';
 import ResourceService from '../services/ResourceService';
@@ -8,7 +9,6 @@ import Note from '../models/Note';
 import Resource from '../models/Resource';
 import SearchEngine from './search/SearchEngine';
 import { loadMasterKeysFromSettings, setupAndEnableEncryption } from './e2ee/utils';
-
 describe('services/ResourceService', () => {
 
 	beforeEach(async () => {

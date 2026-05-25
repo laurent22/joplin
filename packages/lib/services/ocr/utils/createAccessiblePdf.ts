@@ -1,7 +1,7 @@
-import { PDFDocument, PDFFont, PDFPage, rgb, StandardFonts } from 'pdf-lib';
-import { PdfOcrDetails, RecognizeResultLine } from './types';
 
 // The PDF OCR images are created at 2x scale by pdfToImages()
+import { PDFDocument, PDFFont, PDFPage, rgb, StandardFonts } from 'pdf-lib';
+import { PdfOcrDetails, RecognizeResultLine } from './types';
 const OCR_SCALE_FACTOR = 2;
 
 export interface PageImageWithDimensions {

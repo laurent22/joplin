@@ -1,6 +1,6 @@
+
 import { hasOwnProperty } from '@joplin/utils/object';
 import { ItemId } from './types';
-
 type StringTypePrimitive = 'string'|'boolean'|'number'|'unknown'|'id';
 type StringType = StringTypePrimitive|`${StringTypePrimitive}[]`;
 export type BaseSchema =

@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useMemo, useRef, useEffect, useCallback } from 'react';
 import { AppState } from '../../app.reducer';
@@ -31,7 +32,6 @@ import { stateUtils } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 import useOnNoteDoubleClick from './utils/useOnNoteDoubleClick';
 import useAutoScroll from './utils/useAutoScroll';
-
 const commands = {
 	focusElementNoteList,
 };

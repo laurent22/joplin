@@ -1,6 +1,6 @@
-import { RendererTheme } from './types';
 
 // TODO: copied from string-utils
+import { RendererTheme } from './types';
 function formatCssSize(v: string | number): string {
 	if (typeof v === 'string') {
 		if (v.includes('px') || v.includes('em') || v.includes('%')) return v;

@@ -1,6 +1,6 @@
+
 import { EditorState } from '@codemirror/state';
 import { getIndentUnit } from '@codemirror/language';
-
 const tabsToSpaces = (state: EditorState, text: string): string => {
 	const chunks = text.split('\t');
 	const spaceLen = getIndentUnit(state);

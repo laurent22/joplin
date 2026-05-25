@@ -1,3 +1,4 @@
+
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -10,7 +11,6 @@ import { Hour } from '../../utils/time';
 import { ErrorNotFound } from '../../utils/errors';
 import { ReportType } from '../../services/reports/types';
 import { formatBytes } from '../../utils/bytes';
-
 const router: Router = new Router(RouteType.Web);
 
 interface Query {

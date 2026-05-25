@@ -1,8 +1,8 @@
+
 import { act, renderHook } from '@testing-library/react';
 import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
 import useItemElement from './useItemElement';
 import * as React from 'react';
-
 const defaultProps = {
 	noteId: 'note-1',
 	noteHtml: '<span>Test content</span>',

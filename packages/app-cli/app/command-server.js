@@ -1,9 +1,10 @@
+
+import ClipperServer from '@joplin/lib/ClipperServer';
 import BaseCommand from './base-command';
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import Logger from '@joplin/utils/Logger';
 import shim from '@joplin/lib/shim';
-
 class Command extends BaseCommand {
 
 	usage() {
@@ -24,7 +25,6 @@ class Command extends BaseCommand {
 	async action(args) {
 		const command = args.command;
 
-		const ClipperServer = require('@joplin/lib/ClipperServer').default;
 		ClipperServer.instance().initialize();
 		const stdoutFn = (...s) => this.stdout(s.join(' '));
 		const ignoreOutputFn = ()=>{};

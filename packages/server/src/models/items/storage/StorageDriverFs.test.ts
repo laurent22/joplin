@@ -1,9 +1,9 @@
+
 import { mkdirp, pathExists, remove } from 'fs-extra';
 import { afterAllTests, beforeAllDb, beforeEachDb, expectNotThrow, tempDirPath } from '../../../utils/testing/testUtils';
 import { StorageDriverConfig, StorageDriverMode, StorageDriverType } from '../../../utils/types';
 import StorageDriverFs from './StorageDriverFs';
 import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldSupportFallbackDriver, shouldSupportFallbackDriverInReadWriteMode, shouldThrowNotFoundIfNotExist, shouldUpdateContentStorageIdAfterSwitchingDriver, shouldWriteToContentAndReadItBack } from './testUtils';
-
 const basePath_: string = tempDirPath();
 
 const newDriver = (path: string = null) => {

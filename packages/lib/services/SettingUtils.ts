@@ -1,12 +1,12 @@
 /* eslint-disable import/prefer-default-export */
 
+
 import KeychainService from './keychain/KeychainService';
 import Setting from '../models/Setting';
 import uuid from '../uuid';
 import { migrateLocalSyncInfo } from './synchronizer/syncInfoUtils';
 import KeychainServiceDriverBase from './keychain/KeychainServiceDriverBase';
 import shim from '../shim';
-
 type KeychainServiceDriverConstructor = new (appId: string, clientId: string)=> KeychainServiceDriverBase;
 
 // This function takes care of initialising both the keychain service and settings.

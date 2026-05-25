@@ -1,5 +1,5 @@
-import { Pagination } from './types';
 
+import { Pagination } from './types';
 export default function(pagination: Pagination): string {
 	const sql: string[] = [];
 

@@ -1,9 +1,9 @@
+
 import { getTrashFolderId } from '../../services/trash';
 import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import Folder from '../Folder';
 import Note from '../Note';
 import onFolderDrop from './onFolderDrop';
-
 describe('onFolderDrop', () => {
 
 	beforeEach(async () => {

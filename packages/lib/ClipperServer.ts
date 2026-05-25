@@ -1,12 +1,14 @@
+
+import http_createServer from 'http';
+import urlParser from 'url';
+import { randomClipperPort, startPort } from './randomClipperPort';
+import enableServerDestroy from 'server-destroy';
+import multiparty from 'multiparty';
+import tcpPortUsed from 'tcp-port-used';
 import Setting from './models/Setting';
 import Logger from '@joplin/utils/Logger';
 import Api, { RequestFile } from './services/rest/Api';
 import ApiResponse from './services/rest/ApiResponse';
-const urlParser = require('url');
-const { randomClipperPort, startPort } = require('./randomClipperPort');
-const enableServerDestroy = require('server-destroy');
-const multiparty = require('multiparty');
-
 export enum StartState {
 	Idle = 'idle',
 	Starting = 'starting',
@@ -97,7 +99,6 @@ export default class ClipperServer {
 	}
 
 	public async findAvailablePort(): Promise<number> {
-		const tcpPortUsed = require('tcp-port-used');
 
 		let state = null;
 		for (let i = 0; i < 10000; i++) {
@@ -110,7 +111,6 @@ export default class ClipperServer {
 	}
 
 	public async isRunning() {
-		const tcpPortUsed = require('tcp-port-used');
 		const port = Setting.value('api.port') ? Setting.value('api.port') : startPort(Setting.value('env'));
 		const inUse = await tcpPortUsed.check(port);
 		return inUse ? port : 0;
@@ -134,7 +134,7 @@ export default class ClipperServer {
 			return null;
 		}
 
-		this.server_ = require('http').createServer();
+		this.server_ = http_createServer.createServer();
 
 		this.server_.on('request', async (request: import('http').IncomingMessage, response: import('http').ServerResponse) => {
 			const writeCorsHeaders = (code: number, contentType = 'application/json', additionalHeaders: Record<string, string | number> = null) => {

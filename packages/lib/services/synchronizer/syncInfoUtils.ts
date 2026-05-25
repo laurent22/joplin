@@ -1,3 +1,5 @@
+
+import fastDeepEqual from 'fast-deep-equal';
 import Logger from '@joplin/utils/Logger';
 import { FileApi } from '../../file-api';
 import JoplinDatabase from '../../JoplinDatabase';
@@ -10,8 +12,6 @@ import { compareVersions } from 'compare-versions';
 import { _ } from '../../locale';
 import JoplinError from '../../JoplinError';
 import { ErrorCode } from '../../errors';
-const fastDeepEqual = require('fast-deep-equal');
-
 const logger = Logger.create('syncInfoUtils');
 
 export interface SyncInfoValueBoolean {

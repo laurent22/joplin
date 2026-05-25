@@ -1,3 +1,4 @@
+import ListWidget from 'tkwidgets/ListWidget.js';
 import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import BaseModel from '@joplin/lib/BaseModel';
@@ -8,7 +9,6 @@ import {
 	getDisplayParentId,
 	getTrashFolderId,
 } from '@joplin/lib/services/trash';
-const ListWidget = require('tkwidgets/ListWidget.js');
 
 interface SearchItem {
 	id: string;

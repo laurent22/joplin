@@ -1,8 +1,8 @@
+
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import restart from '../services/restart';
-
 export const declaration: CommandDeclaration = {
 	name: 'toggleSafeMode',
 	label: () => _('Toggle safe mode'),

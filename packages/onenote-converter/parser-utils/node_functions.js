@@ -1,7 +1,7 @@
 
-const fs = require('node:fs');
-const path = require('node:path');
 
+import fs from 'node:fs';
+import path from 'node:path';
 function mkdirSyncRecursive(filepath) {
 	if (!fs.existsSync(filepath)) {
 		mkdirSyncRecursive(filepath.substring(0, filepath.lastIndexOf(path.sep)));

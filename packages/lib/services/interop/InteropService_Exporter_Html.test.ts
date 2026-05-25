@@ -1,3 +1,5 @@
+
+import path_dirname from 'path';
 import InteropService from '../../services/interop/InteropService';
 import { PluginStates } from '../../services/plugins/reducer';
 import { setupDatabaseAndSynchronizer, switchClient, exportDir } from '../../testing/test-utils';
@@ -9,7 +11,6 @@ import { ContentScriptType } from '../../services/plugins/api/types';
 import { ExportModuleOutputFormat, FileSystemItem } from './types';
 import { readFile } from 'fs/promises';
 import shim from '../../shim';
-
 async function recreateExportDir() {
 	const dir = exportDir();
 	await fs.remove(dir);
@@ -86,7 +87,7 @@ describe('interop/InteropService_Exporter_Html', () => {
 			},
 		}`);
 
-		const assetPath = `${require('path').dirname(contentScriptPath)}/fence.css`;
+		const assetPath = `${path_dirname.dirname(contentScriptPath)}/fence.css`;
 		const fenceContent = 'strong { color: red; }';
 		await fs.writeFile(assetPath, fenceContent);
 

@@ -1,5 +1,5 @@
-import mergeCallbacksAndSerializable from './mergeCallbacksAndSerializable';
 
+import mergeCallbacksAndSerializable from './mergeCallbacksAndSerializable';
 describe('mergeCallbacksAndSerializable', () => {
 	test('should create functions from given callback IDs while preserving values', () => {
 		const callbacks = {

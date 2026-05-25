@@ -1,10 +1,10 @@
+
 import * as React from 'react';
 import { useCallback, useState, useRef, useMemo } from 'react';
 import { registerGlobalDragEndEvent, unregisterGlobalDragEndEvent } from '../utils/dragAndDrop';
 import { NoteListColumn, NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import Setting from '@joplin/lib/models/Setting';
 import { findParentElementByClassName } from '@joplin/utils/dom';
-
 interface DraggedHeader {
 	name: string;
 }

@@ -1,6 +1,6 @@
-import { CiphertextBuffer, PublicKeyCrypto } from '../../types';
 
 // The web crypto API is available in both NodeJS and browsers
+import { CiphertextBuffer, PublicKeyCrypto } from '../../types';
 export type WebCryptoSlice = {
 	subtle: Pick<
 	SubtleCrypto,

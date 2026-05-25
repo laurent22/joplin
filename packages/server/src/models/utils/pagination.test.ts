@@ -1,6 +1,6 @@
+
 import { expectThrow } from '../../utils/testing/testUtils';
 import { defaultPagination, Pagination, createPaginationLinks, requestPagination, PaginationOrderDir } from './pagination';
-
 describe('pagination', () => {
 
 	test('should create options from request query parameters', async () => {

@@ -1,3 +1,4 @@
+
 import EncryptionService, { EncryptionMethod } from './EncryptionService';
 import BaseItem from '../../models/BaseItem';
 import Folder from '../../models/Folder';
@@ -7,7 +8,6 @@ import Setting from '../../models/Setting';
 import shim from '../..//shim';
 import { getEncryptionEnabled, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import Logger from '@joplin/utils/Logger';
-
 interface DecryptTestData {
 	method: EncryptionMethod;
 	password: string;

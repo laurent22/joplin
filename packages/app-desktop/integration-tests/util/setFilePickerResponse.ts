@@ -1,5 +1,5 @@
-import { ElectronApplication } from '@playwright/test';
 
+import { ElectronApplication } from '@playwright/test';
 const setFilePickerResponse = (electronApp: ElectronApplication, response: string[]) => {
 	return electronApp.evaluate(async ({ dialog }, response) => {
 		dialog.showOpenDialog = async () => ({

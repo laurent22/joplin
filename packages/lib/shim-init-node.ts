@@ -1,3 +1,26 @@
+
+
+import form_data_245 from 'form-data';
+import sjcl_246 from './vendor/sjcl.js';
+import crypto_randomBytes from 'crypto';
+import { default as default_248 } from './markdownUtils';
+import { http as http_249 } from 'follow-redirects';
+import { shell as shell_250 } from 'electron';
+import path_dirname from 'path';
+import { _ } from './locale';
+import http from 'http';
+import https from 'https';
+import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent';
+import toRelative from 'relative';
+import timers from 'timers';
+import zlib from 'zlib';
+import dgram from 'dgram';
+import { basename } from 'path';
+import { toFileProtocolPath } from './path-utils';
+import { nativeImage } from 'electron';
+import imageDataURI from 'image-data-uri';
+import nodeFetch from 'node-fetch';
+import { parse as urlParse } from 'url';
 import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, PdfInfo, PdfPageImage } from './shim';
 import createAccessiblePdf from './services/ocr/utils/createAccessiblePdf';
 import GeolocationNode from './geolocation-node';
@@ -13,7 +36,6 @@ import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
 import { FetchBlobOptions } from './types';
 import { fromFile as fileTypeFromFile } from 'file-type';
 import crypto from './services/e2ee/crypto';
-
 import FileApiDriverLocal from './file-api-driver-local';
 import * as mimeUtils from './mime-utils';
 import BaseItem from './models/BaseItem';
@@ -22,15 +44,6 @@ import { cpus } from 'os';
 import { pathToFileURL } from 'url';
 import * as tls from 'tls';
 import type PdfJs from './utils/types/pdfJs';
-const { _ } = require('./locale');
-const http = require('http');
-const https = require('https');
-const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent');
-const toRelative = require('relative');
-const timers = require('timers');
-const zlib = require('zlib');
-const dgram = require('dgram');
-
 interface ProxySettings {
 	maxConcurrentConnections?: number;
 	proxyTimeout?: number;
@@ -146,8 +159,8 @@ function shimInit(options: ShimInitOptions = null) {
 	};
 	shim.FileApiDriverLocal = FileApiDriverLocal;
 	shim.Geolocation = GeolocationNode;
-	shim.FormData = require('form-data');
-	shim.sjclModule = require('./vendor/sjcl.js');
+	shim.FormData = form_data_245;
+	shim.sjclModule = sjcl_246;
 	shim.crypto = crypto;
 	shim.electronBridge_ = options.electronBridge;
 
@@ -175,7 +188,7 @@ function shimInit(options: ShimInitOptions = null) {
 	};
 
 	shim.randomBytes = async count => {
-		const buffer = require('crypto').randomBytes(count);
+		const buffer = crypto_randomBytes.randomBytes(count);
 		return Array.from(buffer);
 	};
 
@@ -415,9 +428,7 @@ function shimInit(options: ShimInitOptions = null) {
 			...options,
 		};
 
-		const { basename } = require('path');
-		const { escapeTitleText } = require('./markdownUtils').default;
-		const { toFileProtocolPath } = require('./path-utils');
+		const { escapeTitleText } = default_248;
 
 		let resource = null;
 		if (!options.createFileURL) {
@@ -458,7 +469,6 @@ function shimInit(options: ShimInitOptions = null) {
 
 	shim.imageToDataUrl = async (filePath, maxSize) => {
 		if (shim.isElectron()) {
-			const nativeImage = require('electron').nativeImage;
 			let image = nativeImage.createFromPath(filePath);
 			if (!image) throw new Error(`Could not load image: ${filePath}`);
 
@@ -492,7 +502,6 @@ function shimInit(options: ShimInitOptions = null) {
 		if (options === null) options = {};
 
 		if (shim.isElectron()) {
-			const nativeImage = require('electron').nativeImage;
 			let image = nativeImage.createFromDataURL(imageDataUrl);
 			if (image.isEmpty()) throw new Error('Could not convert data URL to image - perhaps the format is not supported (eg. image/gif)'); // Would throw for example if the image format is no supported (eg. image/gif)
 			if (options.cropRect) {
@@ -509,13 +518,11 @@ function shimInit(options: ShimInitOptions = null) {
 		} else {
 			if (options.cropRect) throw new Error('Crop rect not supported in Node');
 
-			const imageDataURI = require('image-data-uri');
 			const result = imageDataURI.decode(imageDataUrl);
 			await shim.fsDriver().writeFile(filePath, result.dataBuffer, 'buffer');
 		}
 	};
 
-	const nodeFetch = require('node-fetch');
 
 	// Not used??
 	shim.readLocalFileBase64 = path => {
@@ -547,11 +554,10 @@ function shimInit(options: ShimInitOptions = null) {
 		if (!options.maxRedirects) options.maxRedirects = 21;
 		if (!options.timeout) options.timeout = undefined;
 
-		const urlParse = require('url').parse;
 
 		url = urlParse(url.trim());
 		const method = options.method ? options.method : 'GET';
-		const http = url.protocol.toLowerCase() === 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
+		const http = url.protocol.toLowerCase() === 'http:' ? http_249 : require('follow-redirects').https;
 		const headers = options.headers ? options.headers : {};
 		const filePath = options.path;
 		const downloadController = options.downloadController;
@@ -756,7 +762,7 @@ function shimInit(options: ShimInitOptions = null) {
 
 		// Open the file
 		// Don't use openUrl() there.
-		// The underneath require('electron').shell.openExternal() has a bug
+		// The underneath shell_250.openExternal() has a bug
 		// https://github.com/electron/electron/issues/31347
 
 		return shim.electronBridge().openItem(filepath);
@@ -802,7 +808,7 @@ function shimInit(options: ShimInitOptions = null) {
 			const filename = sites[1].getFileName();
 			if (!filename) throw new Error(`Cannot require file (2) ${path}`);
 
-			const fileDirName = require('path').dirname(filename);
+			const fileDirName = path_dirname.dirname(filename);
 			return require(`${fileDirName}/${path}`);
 		} else {
 			return require(path);

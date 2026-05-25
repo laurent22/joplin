@@ -1,5 +1,5 @@
-import joplin from 'api';
 
+import joplin from 'api';
 joplin.plugins.register({
 	onStart: async function() {
 		joplin.workspace.onNoteAlarmTrigger(async (event:any) => {

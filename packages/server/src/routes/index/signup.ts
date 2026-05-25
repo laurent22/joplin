@@ -1,3 +1,4 @@
+
 import { SubPath, redirect, makeUrl, UrlType } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -10,7 +11,6 @@ import { checkRepeatPassword } from './users';
 import { AccountType } from '../../models/UserModel';
 import { ErrorForbidden } from '../../utils/errors';
 import { cookieSet } from '../../utils/cookies';
-
 function makeView(error: Error = null): View {
 	const view = defaultView('signup', 'Sign Up');
 	view.content = {

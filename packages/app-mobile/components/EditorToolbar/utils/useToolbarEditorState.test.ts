@@ -1,8 +1,8 @@
+
 import { renderHook, act } from '../../../utils/testing/testingLibrary';
 import { setupDatabase, switchClient } from '@joplin/lib/testing/test-utils';
 import useToolbarEditorState, { ReorderableItem } from './useToolbarEditorState';
 import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
-
 const createMockButtonInfo = (name: string, title: string): ToolbarButtonInfo => ({
 	type: 'button',
 	name,

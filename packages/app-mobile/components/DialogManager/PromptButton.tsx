@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useMemo } from 'react';
 import { StyleSheet, TextStyle, View } from 'react-native';
@@ -5,7 +6,6 @@ import { TouchableRipple, Text } from 'react-native-paper';
 import { PromptButtonSpec } from './types';
 import { ThemeStyle, themeStyle } from '../global-style';
 import Icon from '../Icon';
-
 interface Props {
 	themeId: number;
 	buttonSpec: PromptButtonSpec;

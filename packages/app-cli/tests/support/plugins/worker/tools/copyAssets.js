@@ -1,8 +1,8 @@
-const fs = require('fs-extra');
-const path = require('path');
 
 // Copy WASM files
 // See https://github.com/xenova/transformers.js/issues/367#issuecomment-1777743129
+import fs from 'fs-extra';
+import path from 'path';
 const onnxDistFiles = path.dirname(require.resolve('onnxruntime-web'));
 const baseDir = path.dirname(__dirname);
 fs.copy(onnxDistFiles, path.join(baseDir, 'dist', 'onnx-dist'));

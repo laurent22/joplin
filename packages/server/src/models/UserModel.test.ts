@@ -1,3 +1,4 @@
+
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow, createUser, expectHttpError } from '../utils/testing/testUtils';
 import { EmailSender, UserFlagType } from '../services/database/types';
 import { ErrorBadRequest, ErrorUnprocessableEntity } from '../utils/errors';
@@ -7,7 +8,6 @@ import { failedPaymentFinalAccount, failedPaymentWarningInterval } from './Subsc
 import { stripePortalUrl } from '../utils/urlUtils';
 import { Day } from '../utils/time';
 import config from '../config';
-
 describe('UserModel', () => {
 
 	beforeAll(async () => {

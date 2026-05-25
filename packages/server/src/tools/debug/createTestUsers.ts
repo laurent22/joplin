@@ -1,3 +1,4 @@
+
 import time from '@joplin/lib/time';
 import { DbConnection } from '../../db';
 import newModelFactory from '../../models/factory';
@@ -5,7 +6,6 @@ import { AccountType } from '../../models/UserModel';
 import { User, UserFlagType } from '../../services/database/types';
 import { Config } from '../../utils/types';
 import truncateUserDataTables from './truncateUserDataTables';
-
 export interface CreateTestUsersOptions {
 	count?: number;
 	fromNum?: number;

@@ -1,5 +1,5 @@
-import getAppName from './getAppName';
 
+import getAppName from './getAppName';
 describe('getAppName', () => {
 
 	it('should get the app name', () => {

@@ -1,5 +1,5 @@
-import { WritableStream } from "./WritableStream";
 
+import { WritableStream } from "./WritableStream";
 describe("WritableStream", () => {
     test("should decode fragmented unicode characters", () => {
         const ontext = jest.fn();

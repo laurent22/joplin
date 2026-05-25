@@ -1,3 +1,5 @@
+
+import { spawnSync } from 'child_process';
 import * as fs from 'fs-extra';
 import BaseCommand from './base-command';
 import { splitCommandString } from '@joplin/utils';
@@ -7,7 +9,6 @@ import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 import { ModelType } from '@joplin/lib/BaseModel';
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'edit <note>';
@@ -76,7 +77,6 @@ class Command extends BaseCommand {
 			await app().gui().forceRender();
 			const termState = app().gui().termSaveState();
 
-			const spawnSync = require('child_process').spawnSync;
 			const result = spawnSync(editorPath, editorArgs, { stdio: 'inherit' });
 
 			if (result.error) this.stdout(_('Error opening note in editor: %s', result.error.message));

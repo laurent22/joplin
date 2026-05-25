@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, TextStyle, View, Text, ScrollView, useWindowDimensions, Platform } from 'react-native';
@@ -9,7 +10,6 @@ import FocusControl from '../accessibility/FocusControl/FocusControl';
 import { ModalState } from '../accessibility/FocusControl/types';
 import useKeyboardState from '../../utils/hooks/useKeyboardState';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
 interface MenuOptionDivider {
 	isDivider: true;
 }

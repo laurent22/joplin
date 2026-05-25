@@ -1,6 +1,6 @@
+
 import { Store } from 'redux';
 import { ViewHandle } from './utils/createViewHandle';
-
 export interface EmitMessageEvent {
 	message: unknown;
 }

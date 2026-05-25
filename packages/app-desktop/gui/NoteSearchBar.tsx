@@ -1,8 +1,8 @@
+
 import * as React from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
 import { focus } from '@joplin/lib/utils/focusHandler';
-
 interface Props {
 	themeId: number;
 	onNext: ()=> void;

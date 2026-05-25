@@ -1,6 +1,6 @@
+
 import { Knex } from 'knex';
 import { DbConnection } from '../db';
-
 export const up = async (db: DbConnection) => {
 	await db.schema.alterTable('users', (table: Knex.CreateTableBuilder) => {
 		table.specificType('enabled', 'smallint').defaultTo(1).nullable();

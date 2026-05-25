@@ -1,8 +1,8 @@
+
+
 import * as React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-
 import GlobalHotkeyInput from './GlobalHotkeyInput';
-
 describe('GlobalHotkeyInput', () => {
 	test('should render ShortcutRecorder with Save and Restore buttons', () => {
 		const onChange = jest.fn();

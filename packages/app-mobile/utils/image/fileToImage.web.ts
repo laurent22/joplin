@@ -1,6 +1,6 @@
+
 import shim from '@joplin/lib/shim';
 import { Platform } from 'react-native';
-
 const fileToImage = async (path: string) => {
 	if (Platform.OS !== 'web') throw new Error('fileToImageUrl: Not supported');
 

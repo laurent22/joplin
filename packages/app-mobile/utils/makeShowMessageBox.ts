@@ -1,11 +1,11 @@
+
+
 import { _ } from '@joplin/lib/locale';
 import { Alert } from 'react-native';
 import { DialogControl } from '../components/DialogManager';
 import { RefObject } from 'react';
 import { MessageBoxType, ShowMessageBoxOptions } from '@joplin/lib/shim';
 import { PromptButtonSpec } from '../components/DialogManager/types';
-
-
 const makeShowMessageBox = (dialogControl: null|RefObject<DialogControl>) => (message: string, options: ShowMessageBoxOptions = {}) => {
 	return new Promise<number>(resolve => {
 		const okButton: PromptButtonSpec = {

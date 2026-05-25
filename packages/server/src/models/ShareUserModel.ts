@@ -1,8 +1,8 @@
+
 import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../services/database/types';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import BaseModel, { AclAction, DeleteOptions } from './BaseModel';
 import { getCanReceiveFolder } from './utils/user';
-
 export default class ShareUserModel extends BaseModel<ShareUser> {
 
 	public get tableName(): string {

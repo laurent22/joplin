@@ -1,8 +1,8 @@
+
 import Logger from '@joplin/utils/Logger';
 import initiateLogger from '../initiateLogger';
 import SqliteQueue from './SqliteQueue';
 import { remove } from 'fs-extra';
-
 describe('SqliteQueue', () => {
 	const dbFilename = 'SqliteQueue.test.sqlite3';
 

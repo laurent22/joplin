@@ -1,6 +1,6 @@
+
 import { _ } from '@joplin/lib/locale';
 import { Platform } from 'react-native';
-
 const lockToSingleInstance = async () => {
 	if (Platform.OS !== 'web') return;
 	if (__DEV__) return;

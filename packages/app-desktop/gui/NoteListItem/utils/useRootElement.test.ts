@@ -1,6 +1,6 @@
+
 import { act, renderHook } from '@testing-library/react';
 import useRootElement from './useRootElement';
-
 describe('useRootElement', () => {
 	beforeEach(() => {
 		jest.useFakeTimers({ advanceTimers: true });

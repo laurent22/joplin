@@ -1,5 +1,7 @@
-var tap = require('tap')
-var saxStream = require('../lib/sax').createStream()
+import lib_sax_createStream from '../lib/sax';
+import lib_sax_createStream2 from '../lib/sax';
+import tap from 'tap';
+var saxStream = lib_sax_createStream.createStream()
 
 var b = new Buffer('误')
 
@@ -19,7 +21,7 @@ saxStream.write(new Buffer('</c>'))
 saxStream.write(Buffer.concat([new Buffer('<d>'), b.slice(0, 1)]))
 saxStream.end(Buffer.concat([b.slice(1), new Buffer('</d></test>')]))
 
-var saxStream2 = require('../lib/sax').createStream()
+var saxStream2 = lib_sax_createStream2.createStream()
 
 saxStream2.on('text', function (text) {
   tap.equal(text, '�')

@@ -1,10 +1,10 @@
+
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
 import BaseModel from '@joplin/lib/BaseModel';
 import Note from '@joplin/lib/models/Note';
 import time from '@joplin/lib/time';
-
 class Command extends BaseCommand {
 	usage() {
 		return 'todo <todo-command> <note-pattern>';

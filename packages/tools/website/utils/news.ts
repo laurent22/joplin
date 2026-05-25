@@ -1,9 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 
+
+import moment from 'moment';
 import { FrontMatter } from './frontMatter';
 import { basename } from 'path';
-const moment = require('moment');
-
 export const getNewsDateString = (info: FrontMatter, mdFilePath: string): string => {
 	return moment(getNewsDate(info, mdFilePath)).format('D MMM YYYY');
 };

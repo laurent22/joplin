@@ -1,6 +1,6 @@
+
 import { AppState, createAppDefaultWindowState } from './app.reducer';
 import appReducer, { createAppDefaultState } from './app.reducer';
-
 describe('app.reducer', () => {
 
 	it('should handle DIALOG_OPEN', async () => {

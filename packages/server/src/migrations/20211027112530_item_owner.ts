@@ -1,7 +1,7 @@
+
 import { Knex } from 'knex';
 import { DbConnection } from '../db';
 import { msleep } from '../utils/time';
-
 export const up = async (db: DbConnection) => {
 	if (!(await db.schema.hasColumn('items', 'owner_id'))) {
 		await db.schema.alterTable('items', (table: Knex.CreateTableBuilder) => {

@@ -1,14 +1,14 @@
-import { defaultWindowId } from '@joplin/lib/reducer';
-import * as React from 'react';
-import { useState, useEffect, useRef, createContext } from 'react';
-import { createPortal } from 'react-dom';
-import { SecondaryWindowApi } from '../utils/window/types';
 
 // This component uses react-dom's Portals to render its children in a different HTML
 // document. As children are rendered in a different Window/Document, they should avoid
 // referencing the `window` and `document` globals. Instead, HTMLElement.ownerDocument
 // and refs can be used to access the child component's DOM.
 
+import { defaultWindowId } from '@joplin/lib/reducer';
+import * as React from 'react';
+import { useState, useEffect, useRef, createContext } from 'react';
+import { createPortal } from 'react-dom';
+import { SecondaryWindowApi } from '../utils/window/types';
 export const WindowIdContext = createContext(defaultWindowId);
 
 type OnCloseCallback = ()=> void;

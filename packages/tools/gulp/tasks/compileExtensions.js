@@ -1,7 +1,7 @@
-const fs = require('fs-extra');
-const utils = require('../utils');
 
 
+import fs from 'fs-extra';
+import utils from '../utils';
 async function getSourceCode(dest) {
 	await utils.execCommand(`curl -o ${dest}/sqlite.tar.gz "https://www.sqlite.org/src/tarball/sqlite.tar.gz?r=release"`);
 	await utils.execCommand(`curl -o ${dest}/amalgamation.tar.gz "https://www.sqlite.org/2020/sqlite-autoconf-3330000.tar.gz"`);

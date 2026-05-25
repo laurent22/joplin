@@ -8,16 +8,17 @@
 
 /* eslint-disable no-console */
 
-const path = require('path');
-const crypto = require('crypto');
-const fs = require('fs-extra');
-const chalk = require('chalk');
-const CopyPlugin = require('copy-webpack-plugin');
-const tar = require('tar');
-const glob = require('glob');
-const execSync = require('child_process').execSync;
-const allPossibleCategories = require('@joplin/lib/pluginCategories.json');
 
+import path from 'path';
+import crypto from 'crypto';
+import fs from 'fs-extra';
+import chalk from 'chalk';
+import CopyPlugin from 'copy-webpack-plugin';
+import tar from 'tar';
+import glob from 'glob';
+import { execSync } from 'child_process';
+import allPossibleCategories from '@joplin/lib/pluginCategories.json';
+import { builtinModules } from 'node:module';
 const rootDir = path.resolve(__dirname);
 const userConfigFilename = './plugin.config.json';
 const userConfigPath = path.resolve(rootDir, userConfigFilename);
@@ -34,7 +35,6 @@ const manifest = readManifest(manifestPath);
 const pluginArchiveFilePath = path.resolve(publishDir, `${manifest.id}.jpl`);
 const pluginInfoFilePath = path.resolve(publishDir, `${manifest.id}.json`);
 
-const { builtinModules } = require('node:module');
 
 // Webpack5 doesn't polyfill by default and displays a warning when attempting to require() built-in
 // node modules. Set these to false to prevent Webpack from warning about not polyfilling these modules.

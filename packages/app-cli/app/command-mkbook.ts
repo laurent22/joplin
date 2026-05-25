@@ -1,10 +1,10 @@
-const BaseCommand = require('./base-command').default;
+
+import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
 import { ModelType } from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
 import { FolderEntity } from '@joplin/lib/services/database/types';
-
 class Command extends BaseCommand {
 	public usage() {
 		return 'mkbook <new-notebook>';

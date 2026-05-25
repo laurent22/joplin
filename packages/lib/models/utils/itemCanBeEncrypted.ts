@@ -1,6 +1,6 @@
+
 import { BaseItemEntity } from '../../services/database/types';
 import { StateShare } from '../../services/share/reducer';
-
 export default function(item: BaseItemEntity, share: StateShare): boolean {
 	// Note has been published - currently we don't encrypt
 	if (item.is_shared) return false;

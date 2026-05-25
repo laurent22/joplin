@@ -1,9 +1,9 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import Folder from '@joplin/lib/models/Folder';
 import bridge from '../../../services/bridge';
 import { WindowControl } from '../utils/useWindowControl';
-
 export const declaration: CommandDeclaration = {
 	name: 'renameFolder',
 	label: () => _('Rename'),

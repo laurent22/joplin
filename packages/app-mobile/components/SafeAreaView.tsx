@@ -1,9 +1,9 @@
+
 import * as React from 'react';
 import { View, Platform, StyleSheet } from 'react-native';
 import { SafeAreaViewProps } from 'react-native-safe-area-context';
 import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 import { useMemo } from 'react';
-
 interface Props extends SafeAreaViewProps {
 	titleBarUnderlayColor?: string;
 }

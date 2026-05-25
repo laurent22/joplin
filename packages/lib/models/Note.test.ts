@@ -1,3 +1,4 @@
+
 import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import shim from '../shim';
@@ -21,7 +22,6 @@ import { getTrashFolderId } from '../services/trash';
 import getConflictFolderId from './utils/getConflictFolderId';
 import Revision from './Revision';
 import RevisionService from '../services/RevisionService';
-
 async function allItems() {
 	const folders = await Folder.all();
 	const notes = await Note.all();

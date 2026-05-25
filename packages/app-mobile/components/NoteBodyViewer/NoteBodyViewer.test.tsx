@@ -1,9 +1,10 @@
-import * as React from 'react';
 
+
+
+
+import * as React from 'react';
 import { describe, it, beforeEach } from '@jest/globals';
 import { render, screen, waitFor } from '../../utils/testing/testingLibrary';
-
-
 import NoteBodyViewer from './NoteBodyViewer';
 import Setting from '@joplin/lib/models/Setting';
 import { resourceFetcher, setupDatabaseAndSynchronizer, supportDir, switchClient, synchronizerStart } from '@joplin/lib/testing/test-utils';
@@ -22,7 +23,6 @@ import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import { basename, dirname, join } from 'path';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import mockPluginServiceSetup from '../../utils/testing/mockPluginServiceSetup';
-
 interface WrapperProps {
 	noteBody: string;
 	highlightedKeywords?: string[];

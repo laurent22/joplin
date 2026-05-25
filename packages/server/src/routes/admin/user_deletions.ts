@@ -1,3 +1,4 @@
+
 import { redirect, SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -11,7 +12,6 @@ import { formatDateTime } from '../../utils/time';
 import { adminUserDeletionsUrl, userUrl } from '../../utils/urlUtils';
 import { createCsrfTag } from '../../utils/csrf';
 import { bodyFields } from '../../utils/requestUtils';
-
 const router: Router = new Router(RouteType.Web);
 
 router.get('admin/user_deletions', async (_path: SubPath, ctx: AppContext) => {

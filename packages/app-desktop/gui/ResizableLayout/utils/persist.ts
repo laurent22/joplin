@@ -1,8 +1,8 @@
+
 import { LayoutItem, Size } from './types';
 import { produce } from 'immer';
 import iterateItems from './iterateItems';
 import validateLayout from './validateLayout';
-
 export function saveLayout(layout: LayoutItem): Partial<LayoutItem> {
 	const propertyWhiteList = [
 		'visible',

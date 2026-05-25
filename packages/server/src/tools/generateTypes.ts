@@ -1,9 +1,11 @@
 /* eslint-disable no-console */
 
+
+import source_map_support_install from 'source-map-support';
+import fs from 'fs';
 import sqlts, { Config, Table } from '@rmp135/sql-ts';
 import { hasOwnProperty } from '@joplin/utils/object';
-
-require('source-map-support').install();
+source_map_support_install.install();
 
 const dbFilePath = `${__dirname}/../../src/services/database/types.ts`;
 
@@ -82,7 +84,6 @@ const interfaceNameOverrides: Record<string, string> = {
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {
-	const fs = require('fs');
 	if (!fs.existsSync(filePath)) throw new Error(`File not found: ${filePath}`);
 	let content: string = fs.readFileSync(filePath, 'utf-8');
 	// [^]* matches any character including new lines

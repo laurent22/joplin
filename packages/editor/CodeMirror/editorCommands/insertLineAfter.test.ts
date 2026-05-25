@@ -1,7 +1,7 @@
+
 import { EditorSelection } from '@codemirror/state';
 import createTestEditor from '../testing/createTestEditor';
 import insertLineAfter from './insertLineAfter';
-
 describe('insertLineAfter', () => {
 	test('should continue lists', async () => {
 		const editor = await createTestEditor(

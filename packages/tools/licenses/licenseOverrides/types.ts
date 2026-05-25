@@ -1,5 +1,5 @@
-import { DependencyType, LicenseInfo } from '../getLicenses';
 
+import { DependencyType, LicenseInfo } from '../getLicenses';
 export interface LicenseOverride {
 	packageName: string;
 

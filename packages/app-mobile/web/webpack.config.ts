@@ -2,13 +2,13 @@
 // Based on https://necolas.github.io/react-native-web/docs/multi-platform/
 // See also https://dev.to/mikehamilton00/adding-web-support-to-a-react-native-project-in-2023-4m4l
 
+
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import babelConfig from '../babel.config';
 import * as path from 'path';
 import * as webpack from 'webpack';
 import 'webpack-dev-server';
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-
 const appDirectory = path.resolve(__dirname, '../');
-const babelConfig = require('../babel.config');
 
 const buildSharedConfig = (hotReload: boolean): webpack.Configuration => {
 	const babelLoaderConfiguration = {

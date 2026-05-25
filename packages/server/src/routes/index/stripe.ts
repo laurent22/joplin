@@ -1,3 +1,4 @@
+
 import { redirect, SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { Env, RouteType } from '../../utils/types';
@@ -7,7 +8,7 @@ import globalConfig from '../../config';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { Stripe } from 'stripe';
 import Logger from '@joplin/utils/Logger';
-import getRawBody = require('raw-body');
+import getRawBody from 'raw-body';
 import { AccountType } from '../../models/UserModel';
 import { autoAssignCustomerPreferredLocales, betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
 import { Subscription, User, UserFlagType } from '../../services/database/types';
@@ -16,7 +17,6 @@ import { Models } from '../../models/factory';
 import { confirmUrl } from '../../utils/urlUtils';
 import { msleep } from '../../utils/time';
 import { IncomingMessage } from 'http';
-
 const logger = Logger.create('index/stripe');
 
 const router: Router = new Router(RouteType.Web);

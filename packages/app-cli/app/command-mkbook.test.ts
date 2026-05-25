@@ -1,9 +1,9 @@
+
+
+import Command from './command-mkbook';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import { setupCommandForTesting, setupApplication } from './utils/testUtils';
 import Folder from '@joplin/lib/models/Folder';
-const Command = require('./command-mkbook');
-
-
 describe('command-mkbook', () => {
 
 	beforeEach(async () => {

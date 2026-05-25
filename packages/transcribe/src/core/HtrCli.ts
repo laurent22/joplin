@@ -1,8 +1,8 @@
+
 import Logger from '@joplin/utils/Logger';
 import { commandToString, execCommand } from '@joplin/utils';
 import { WorkHandler } from '../types';
 import { basename } from 'path';
-
 const logger = Logger.create('HtrCli');
 
 const systemPrompt = 'SYSTEM: you are an agent of a OCR system. Your job is to be concise and correct. You should NEVER deviate from the content of the image. You should NEVER add any context or new information. Your only job should be to transcribe the text presented in the image as text without anything new information. The output for it should be inside triple backticks like: ```{{example}}```. If you find no text, output an empty code block: ``````. Your turn:';

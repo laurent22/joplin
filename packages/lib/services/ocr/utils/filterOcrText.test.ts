@@ -1,5 +1,5 @@
-import filterOcrText from './filterOcrText';
 
+import filterOcrText from './filterOcrText';
 const testData: string[][] = [
 	['— !',
 		'',

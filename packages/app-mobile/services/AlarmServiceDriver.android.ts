@@ -1,8 +1,8 @@
+
+
+import ReactNativeAN from '@joplin/react-native-alarm-notification';
 import Logger from '@joplin/utils/Logger';
 import { Notification } from '@joplin/lib/models/Alarm';
-
-const ReactNativeAN = require('@joplin/react-native-alarm-notification').default;
-
 interface ScheduledAlarm {
 	id: string;
 	data?: { joplinNotificationId?: number };

@@ -1,7 +1,7 @@
+
 import { Options, PositionalOptions } from 'yargs';
 import { DbConnection } from '../db';
 import { Models } from '../models/factory';
-
 export interface RunContext {
 	db: DbConnection;
 	models: Models;

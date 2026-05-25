@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 
+import styled from 'styled-components';
 const StyledFormLabel = styled.div`
 	font-size: ${props => props.theme.fontSize * 1.083333}px;
 	color: ${props => props.theme.color};

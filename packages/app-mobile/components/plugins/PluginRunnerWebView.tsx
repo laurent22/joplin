@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import ExtendedWebView from '../ExtendedWebView';
 import { WebViewControl } from '../ExtendedWebView/types';
@@ -17,7 +18,6 @@ import PlatformImplementation from '../../services/plugins/PlatformImplementatio
 import AccessibleView from '../accessibility/AccessibleView';
 import useOnDevPluginsUpdated from './utils/useOnDevPluginsUpdated';
 import { ViewStyle } from 'react-native';
-
 const logger = Logger.create('PluginRunnerWebView');
 
 const usePluginSettings = (serializedPluginSettings: SerializedPluginSettings) => {

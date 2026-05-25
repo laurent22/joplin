@@ -1,8 +1,8 @@
+
 import { escapeHtml } from '../../string-utils';
 import { ColumnName, ListRendererItemValueTemplates, NoteListColumns, RenderNoteView } from '../plugins/api/noteListType';
 import * as Mustache from 'mustache';
 import { objectValueFromPath } from '@joplin/utils/object';
-
 interface Cell {
 	name: ColumnName;
 	styleHtml: string;

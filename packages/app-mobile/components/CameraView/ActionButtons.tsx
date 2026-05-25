@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useMemo } from 'react';
 import { View, StyleSheet, ViewStyle, Platform } from 'react-native';
@@ -5,7 +6,6 @@ import IconButton from '../IconButton';
 import { _ } from '@joplin/lib/locale';
 import { CameraDirection } from '@joplin/lib/models/settings/builtInMetadata';
 import { ActivityIndicator } from 'react-native-paper';
-
 interface Props {
 	themeId: number;
 	onCameraReverse: ()=> void;

@@ -1,14 +1,14 @@
+
 import { join, resolve } from 'path';
 import { HttpMethod, Json, UserData } from '../types';
 import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 import { Env } from '@joplin/lib/models/Setting';
-import execa = require('execa');
+import execa from 'execa';
 import { msleep } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
 import { strict as assert } from 'assert';
 import { copy, exists } from 'fs-extra';
 import { copyFile } from 'fs/promises';
-
 const logger = Logger.create('Server');
 
 const createApi = async (serverUrl: string, adminAuth: UserData) => {

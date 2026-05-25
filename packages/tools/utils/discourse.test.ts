@@ -1,5 +1,5 @@
-import { trimPostToMaximumLength } from './discourse';
 
+import { trimPostToMaximumLength } from './discourse';
 describe('utils/discourse', () => {
 	it('trimPostToMaximumLength should allow trimming posts to a maximum length', () => {
 		const makeLongString = (length: number) => {

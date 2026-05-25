@@ -1,11 +1,12 @@
-import { pathExistsSync, readFileSync } from 'fs-extra';
 
 // All these calls used to be async but certain scripts need to load config
 // files early, so they've been converted to sync calls. Do not convert them
 // back to async.
 
+import os_userInfo from 'os';
+import { pathExistsSync, readFileSync } from 'fs-extra';
 export function credentialDir() {
-	const username = require('os').userInfo().username;
+	const username = os_userInfo.userInfo().username;
 
 	const toTry = [
 		`c:/Users/${username}/joplin-credentials`,

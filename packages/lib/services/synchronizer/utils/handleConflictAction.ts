@@ -1,3 +1,4 @@
+
 import { Dispatch } from 'redux';
 import Logger from '@joplin/utils/Logger';
 import BaseItem from '../../../models/BaseItem';
@@ -6,7 +7,6 @@ import Note from '../../../models/Note';
 import Resource from '../../../models/Resource';
 import { BaseItemEntity } from '../../database/types';
 import { SyncAction, conflictActions } from './types';
-
 const logger = Logger.create('handleConflictAction');
 
 export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExists: boolean, remoteContent: BaseItemEntity, local: BaseItemEntity, syncTargetId: number, itemIsReadOnly: boolean, dispatch: Dispatch) => {

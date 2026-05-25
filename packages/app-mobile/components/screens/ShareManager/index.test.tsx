@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { ShareManagerComponent } from './index';
 import Setting from '@joplin/lib/models/Setting';
@@ -11,7 +12,6 @@ import { Provider } from 'react-redux';
 import createMockReduxStore from '../../../utils/testing/createMockReduxStore';
 import { AppState } from '../../../utils/types';
 import { Store } from 'redux';
-
 interface WrapperProps {
 	shareInvitations: ShareInvitation[];
 	store: Store<AppState>;

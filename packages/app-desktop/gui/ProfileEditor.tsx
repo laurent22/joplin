@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useState, useEffect, CSSProperties } from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
@@ -13,7 +14,6 @@ import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { AppState } from '../app.reducer';
 import { Dispatch } from 'redux';
-
 const logger = Logger.create('ProfileEditor');
 
 interface Props {

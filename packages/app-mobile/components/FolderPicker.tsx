@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { FunctionComponent, ReactElement, useCallback, useContext } from 'react';
 import { _ } from '@joplin/lib/locale';
@@ -8,7 +9,6 @@ import { FolderEntity } from '@joplin/lib/services/database/types';
 import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { DialogContext } from './DialogManager';
-
 interface FolderPickerProps {
 	disabled?: boolean;
 	selectedFolderId?: string;

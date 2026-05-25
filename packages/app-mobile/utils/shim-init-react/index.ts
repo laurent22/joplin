@@ -1,14 +1,15 @@
-import shimInitShared from './shimInitShared';
 
+
+import { GeolocationReact } from '../geolocation-react.js';
+import p from 'react-native-version-info';
+import shimInitShared from './shimInitShared';
 import shim, { MobilePlatform } from '@joplin/lib/shim';
-const { GeolocationReact } = require('../geolocation-react.js');
 import RNFetchBlob from 'rn-fetch-blob';
 import { generateSecureRandom } from 'react-native-securerandom';
 import FsDriverRN from '../fs-driver/fs-driver-rn';
 import { Linking, Platform } from 'react-native';
 import crypto from '../../services/e2ee/crypto';
 import { reloadAppAsync } from 'expo';
-
 export default function shimInit() {
 	shim.Geolocation = GeolocationReact;
 
@@ -173,7 +174,6 @@ export default function shimInit() {
 	};
 
 	shim.appVersion = () => {
-		const p = require('react-native-version-info').default;
 		return p.appVersion;
 	};
 

@@ -1,9 +1,9 @@
+
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import setFilePickerResponse from './util/setFilePickerResponse';
 import waitForNextOpenPath from './util/waitForNextOpenPath';
 import { basename, join } from 'path';
-
 test.describe('richTextEditor', () => {
 	test('HTML links should be preserved when editing a note', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();

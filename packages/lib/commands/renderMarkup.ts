@@ -1,3 +1,4 @@
+
 import markupLanguageUtils from '../markupLanguageUtils';
 import Setting from '../models/Setting';
 import { CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
@@ -7,7 +8,6 @@ import attachedResources from '../utils/attachedResources';
 import { MarkupLanguage } from '@joplin/renderer';
 import { Options } from '@joplin/renderer/MdToHtml';
 import { RenderOptions } from '@joplin/renderer/types';
-
 export const declaration: CommandDeclaration = {
 	name: 'renderMarkup',
 };

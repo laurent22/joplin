@@ -1,3 +1,5 @@
+
+import { isImageMimeType } from '@joplin/lib/resourceUtils';
 import shim from '@joplin/lib/shim';
 import { EditorProcessApi, EditorProps as EditorOptions, SelectionRange, MainProcessApi } from './types';
 import { SetUpResult } from '../types';
@@ -12,8 +14,6 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import useCodeMirrorPlugins from './utils/useCodeMirrorPlugins';
 import Resource from '@joplin/lib/models/Resource';
 import { parseResourceUrl } from '@joplin/lib/urlUtils';
-const { isImageMimeType } = require('@joplin/lib/resourceUtils');
-
 const logger = Logger.create('markdownEditor');
 
 interface Props {

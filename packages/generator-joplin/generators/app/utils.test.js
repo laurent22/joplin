@@ -1,5 +1,5 @@
-const { packageNameFromPluginName, mergeIgnoreFile } = require('./utils');
 
+import { packageNameFromPluginName, mergeIgnoreFile } from './utils';
 describe('utils', () => {
 
 	test('packageNameFromPluginName', () => {

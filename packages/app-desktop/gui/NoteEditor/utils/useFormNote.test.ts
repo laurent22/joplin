@@ -1,3 +1,4 @@
+
 import Note from '@joplin/lib/models/Note';
 import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '@joplin/lib/testing/test-utils';
 import { act, renderHook, waitFor } from '@testing-library/react';
@@ -6,7 +7,6 @@ import shim from '@joplin/lib/shim';
 import Resource from '@joplin/lib/models/Resource';
 import { join } from 'path';
 import { formNoteToNote } from '.';
-
 const defaultFormNoteProps: HookDependencies = {
 	noteId: '',
 	isProvisional: false,

@@ -1,3 +1,5 @@
+
+
 import React, { useRef, useState, useCallback } from 'react';
 import useIsFocused from './hooks/useIsFocused';
 import usePdfDocument from './hooks/usePdfDocument';
@@ -5,9 +7,7 @@ import VerticalPages from './VerticalPages';
 import ZoomControls from './ui/ZoomControls';
 import MessageService from './messageService';
 import { DownloadButton, PrintButton } from './ui/IconButtons';
-
-require('./miniViewer.css');
-
+import './miniViewer.css';
 export interface MiniViewerAppProps {
 	pdfPath: string;
 	isDarkTheme: boolean;

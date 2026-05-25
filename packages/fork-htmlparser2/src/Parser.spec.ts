@@ -1,5 +1,5 @@
-import { Parser, Tokenizer } from ".";
 
+import { Parser, Tokenizer } from ".";
 describe("API", () => {
     test("should work without callbacks", () => {
         const p = new Parser(null, {

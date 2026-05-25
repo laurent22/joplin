@@ -1,5 +1,5 @@
-import gotoAnythingStyleQuery from './gotoAnythingStyleQuery';
 
+import gotoAnythingStyleQuery from './gotoAnythingStyleQuery';
 describe('search/gotoAnythingStyleQuery', () => {
 
 	it('should prepare queries', () => {

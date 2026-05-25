@@ -1,10 +1,10 @@
+
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { themeStyle } from '../../global-style';
 import IconButton from '../../IconButton';
 import { useMemo } from 'react';
-
 interface Props {
 	themeId: number;
 	value: string;

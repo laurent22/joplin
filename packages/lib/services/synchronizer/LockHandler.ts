@@ -1,11 +1,11 @@
+
+import { fileExtension, filename } from '../../path-utils';
 import { Dirnames } from './utils/types';
 import shim from '../../shim';
 import JoplinError from '../../JoplinError';
 import time from '../../time';
 import { FileApi } from '../../file-api';
 import { AppType } from '../../models/Setting';
-const { fileExtension, filename } = require('../../path-utils');
-
 export enum LockType {
 	None = 0,
 	Sync = 1,

@@ -1,4 +1,6 @@
 
+
+import { ErrorNotFound } from '../utils/errors';
 import { Request, RequestMethod } from '../Api';
 import defaultAction from '../utils/defaultAction';
 import paginatedResults from '../utils/paginatedResults';
@@ -6,8 +8,6 @@ import BaseModel from '../../../BaseModel';
 import requestFields from '../utils/requestFields';
 import Folder from '../../../models/Folder';
 import { allForDisplay } from '../../../folders-screen-utils';
-const { ErrorNotFound } = require('../utils/errors');
-
 export default async function(request: Request, id: string = null, link: string = null) {
 	const includeDeleted = request.query.include_deleted === '1';
 	if (request.method === RequestMethod.GET && !id) {

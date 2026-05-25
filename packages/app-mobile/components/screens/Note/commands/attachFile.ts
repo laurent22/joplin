@@ -1,3 +1,4 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { CommandRuntimeProps } from '../types';
@@ -6,7 +7,6 @@ import pickDocument from '../../../../utils/pickDocument';
 import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import Logger from '@joplin/utils/Logger';
 import { msleep } from '@joplin/utils/time';
-
 const logger = Logger.create('attachFile');
 
 export enum AttachFileAction {

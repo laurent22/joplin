@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { createContext, useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, useWindowDimensions } from 'react-native';
@@ -10,7 +11,6 @@ import useDialogControl from './hooks/useDialogControl';
 import PromptDialog from './PromptDialog';
 import { themeStyle } from '../global-style';
 import TextInputDialog from './TextInputDialog';
-
 export type { DialogControl } from './types';
 export const DialogContext = createContext<DialogControl>(null);
 

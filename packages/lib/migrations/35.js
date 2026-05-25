@@ -1,5 +1,5 @@
-const SearchEngine = require('../services/search/SearchEngine').default;
 
+import SearchEngine from '../services/search/SearchEngine';
 const script = {};
 
 script.exec = async function() {

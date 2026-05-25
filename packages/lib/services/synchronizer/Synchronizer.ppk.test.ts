@@ -1,9 +1,9 @@
+
 import { synchronizerStart, setupDatabaseAndSynchronizer, fileApi, switchClient, loadEncryptionMasterKey } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import { fetchSyncInfo, localSyncInfo, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { EncryptionMethod } from '../e2ee/EncryptionService';
 import { updateMasterPassword } from '../e2ee/utils';
-
 describe('Synchronizer.ppk', () => {
 
 	beforeEach(async () => {

@@ -1,7 +1,7 @@
+
 import { CSSProperties } from 'react';
 import { Edge as FlowEdge, MarkerType, Node as FlowNode } from '@xyflow/react';
 import { Canvas, CanvasEdge, CanvasNode, CanvasNodeSide } from '@joplin/lib/services/whiteboard/jsoncanvas';
-
 export type WhiteboardNodeData = {
 	canvasNode: CanvasNode;
 };

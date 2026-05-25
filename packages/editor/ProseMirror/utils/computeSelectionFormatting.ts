@@ -1,9 +1,9 @@
+
 import { MarkType } from 'prosemirror-model';
 import { EditorState } from 'prosemirror-state';
 import SelectionFormatting, { MutableSelectionFormatting, defaultSelectionFormatting } from '../../SelectionFormatting';
 import schema from '../schema';
 import { EditorSettings } from '../../types';
-
 const computeSelectionFormatting = (state: EditorState, settings: EditorSettings): SelectionFormatting => {
 	const doc = state.doc;
 	const selection = state.selection;

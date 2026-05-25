@@ -1,5 +1,5 @@
-import { markdownBodyToHtml, markdownBodyToPlainText } from './utils';
 
+import { markdownBodyToHtml, markdownBodyToPlainText } from './utils';
 describe('services/email/utils', () => {
 
 	test('markdownBodyToHtml should convert URLs to clickable links', async () => {

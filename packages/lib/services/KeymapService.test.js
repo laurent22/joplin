@@ -1,6 +1,6 @@
 
-const { tempFilePath } = require('../testing/test-utils.js');
-const KeymapService = require('../services/KeymapService').default;
+import { tempFilePath } from '../testing/test-utils.js';
+import KeymapService from '../services/KeymapService';
 const keymapService = KeymapService.instance();
 keymapService.initialize([]);
 

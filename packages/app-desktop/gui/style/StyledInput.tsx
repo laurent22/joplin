@@ -1,6 +1,6 @@
-const styled = require('styled-components').default;
-const Color = require('color');
 
+import styled from 'styled-components';
+import Color from 'color';
 interface StyleProps {
 	theme: {
 		color: string;

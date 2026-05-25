@@ -1,7 +1,7 @@
+
 import { focus } from '@joplin/lib/utils/focusHandler';
 import Logger from '@joplin/utils/Logger';
 import { AccessibilityInfo, findNodeHandle, Platform, UIManager, View } from 'react-native';
-
 const logger = Logger.create('focusView');
 
 const focusView = (source: string, view: View|HTMLElement) => {

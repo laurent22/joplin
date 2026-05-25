@@ -1,3 +1,4 @@
+
 import { countryCodeOnly, languageCodeOnly, toIso639Alpha3 } from '../../locale';
 import Resource from '../../models/Resource';
 import Setting from '../../models/Setting';
@@ -9,7 +10,6 @@ import { Minute } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
 import TaskQueue from '../../TaskQueue';
 import eventManager, { EventName } from '../../eventManager';
-
 const logger = Logger.create('OcrService');
 
 // From: https://github.com/naptha/tesseract.js/blob/master/docs/image-format.md

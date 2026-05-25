@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 
+import { useEffect } from 'react';
 type OnInjectJs = (js: string)=> void;
 
 const webViewCssClassName = 'extended-webview-css';

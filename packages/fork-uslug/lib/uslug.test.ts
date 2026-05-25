@@ -6,8 +6,8 @@
 //
 // You may find a copy of this license in the LICENSE file that should have been provided
 // to you with a copy of this software.
-import uslug from './uslug';
 
+import uslug from './uslug';
 const word0 = 'Ελληνικά';
 const word1 = [word0, word0].join('-');
 const word2 = [word0, word0].join(' - ');

@@ -1,5 +1,5 @@
-import * as fs from 'fs-extra';
 
+import * as fs from 'fs-extra';
 export async function readJsonFile<T = unknown>(manifestPath: string, defaultValue: T = null): Promise<T> {
 	if (!(await fs.pathExists(manifestPath))) {
 		if (defaultValue === null) throw new Error(`No such file: ${manifestPath}`);

@@ -1,3 +1,4 @@
+
 import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { Mode } from '../../../plugins/GotoAnything';
@@ -5,7 +6,6 @@ import { GotoAnythingOptions, UiType } from './gotoAnything';
 import { ModelType } from '@joplin/lib/BaseModel';
 import Logger from '@joplin/utils/Logger';
 import markdownUtils from '@joplin/lib/markdownUtils';
-
 const logger = Logger.create('linkToNote');
 
 export const declaration: CommandDeclaration = {

@@ -1,6 +1,6 @@
+
 import { rtrimSlashes, toFileProtocolPath } from './path-utils';
 import { urlDecode } from './string-utils';
-
 export const hash = (url: string) => {
 	const s = url.split('#');
 	if (s.length <= 1) return '';

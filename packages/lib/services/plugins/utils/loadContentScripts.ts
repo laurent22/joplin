@@ -1,10 +1,10 @@
+
 import { PluginStates } from '../reducer';
 import { ContentScriptType, ContentScriptContext, PostMessageHandler, ContentScriptModule } from '../api/types';
 import { dirname } from '@joplin/utils/path';
 import shim from '../../../shim';
 import Logger from '@joplin/utils/Logger';
 import PluginService from '../PluginService';
-
 const logger = Logger.create('loadContentScripts');
 
 export interface ExtraContentScript {

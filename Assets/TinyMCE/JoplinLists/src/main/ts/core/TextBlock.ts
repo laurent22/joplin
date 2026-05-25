@@ -5,11 +5,11 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
+
 import * as NodeType from './NodeType';
 import { DocumentFragment, Node } from '@ephox/dom-globals';
 import Editor from 'tinymce/core/api/Editor';
 import * as Settings from '../api/Settings';
-
 const createTextBlock = (editor: Editor, contentNode: Node): DocumentFragment => {
   const dom = editor.dom;
   const blockElements = editor.schema.getBlockElements();

@@ -1,7 +1,7 @@
+
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import NoteEditorScreen from './models/NoteEditorScreen';
-
 test.describe('multiWindow', () => {
 	// Disabled: Playwright's page.close() triggers a different code path than
 	// a user closing the window, causing the test to be unreliable.

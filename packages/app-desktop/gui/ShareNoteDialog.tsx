@@ -1,3 +1,5 @@
+
+import { clipboard } from 'electron';
 import * as React from 'react';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { _, _n } from '@joplin/lib/locale';
@@ -17,8 +19,6 @@ import onUnshareNoteClick from '@joplin/lib/components/shared/ShareNoteDialog/on
 import useShareStatusMessage from '@joplin/lib/components/shared/ShareNoteDialog/useShareStatusMessage';
 import useEncryptionWarningMessage from '@joplin/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage';
 import { SharingStatus } from '@joplin/lib/components/shared/ShareNoteDialog/types';
-const { clipboard } = require('electron');
-
 interface Props {
 	themeId: number;
 	noteIds: string[];

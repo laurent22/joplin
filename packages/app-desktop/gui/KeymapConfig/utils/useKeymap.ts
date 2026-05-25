@@ -1,7 +1,7 @@
+
 import { useState, useEffect } from 'react';
 import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
 import getLabel from './getLabel';
-
 const keymapService = KeymapService.instance();
 
 // This custom hook provides a synchronized snapshot of the keymap residing at KeymapService

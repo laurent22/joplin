@@ -1,6 +1,6 @@
+
 import { EditorSelection } from '@codemirror/state';
 import { Command, EditorView } from '@codemirror/view';
-
 const duplicateLine: Command = (editor: EditorView) => {
 	const state = editor.state;
 	const doc = state.doc;

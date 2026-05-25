@@ -1,6 +1,6 @@
+
 import { homedir } from 'os';
 import { toSystemSlashes } from './path-utils';
-
 export default (profileFromArgs: string, appName: string, altInstanceId: string) => {
 	let profileDir = '';
 	let homeDir = '';

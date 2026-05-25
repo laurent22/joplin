@@ -1,7 +1,7 @@
+
 import { EditorState } from '@codemirror/state';
 import { resolveReferenceFromLink } from '../referenceLinksStateField';
 import { SyntaxNodeRef, Tree } from '@lezer/common';
-
 enum MatchedUrlType {
 	Footnote,
 	Link,

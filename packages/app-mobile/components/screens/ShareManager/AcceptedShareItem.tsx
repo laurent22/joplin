@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import { Button, Card, Icon } from 'react-native-paper';
@@ -10,7 +11,6 @@ import Folder from '@joplin/lib/models/Folder';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/utils/Logger';
 import { ViewStyle } from 'react-native';
-
 interface Props {
 	invitation: ShareInvitation;
 	processing: boolean;

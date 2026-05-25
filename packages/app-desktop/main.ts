@@ -1,18 +1,19 @@
 // This is the basic initialization for the Electron MAIN process
 
+import electron_remote_main_initialize from '@electron/remote/main';
+import envFromArgs from '@joplin/lib/envFromArgs';
+import packageInfo from './packageInfo.js';
 import './utils/sourceMapSetup';
 import { app as electronApp } from 'electron';
-require('@electron/remote/main').initialize();
 import ElectronAppWrapper from './ElectronAppWrapper';
 import { pathExistsSync, readFileSync, mkdirpSync } from 'fs-extra';
 import { initBridge } from './bridge';
 import Logger from '@joplin/utils/Logger';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
-const envFromArgs = require('@joplin/lib/envFromArgs');
-const packageInfo = require('./packageInfo.js');
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import determineBaseAppDirs from '@joplin/lib/determineBaseAppDirs';
 import registerCustomProtocols from './utils/customProtocols/registerCustomProtocols';
+electron_remote_main_initialize.initialize();
 
 // Electron takes the application name from package.json `name` and
 // displays this in the tray icon toolip and message box titles, however in

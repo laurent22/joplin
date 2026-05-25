@@ -1,3 +1,4 @@
+
 import { EmojiButton } from '@joeattardi/emoji-button';
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
@@ -6,7 +7,6 @@ import Button from '../Button/Button';
 import { FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import bridge from '../../services/bridge';
 import { themeStyle } from '@joplin/lib/theme';
-
 export interface ChangeEvent {
 	value: FolderIcon;
 }

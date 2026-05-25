@@ -1,5 +1,5 @@
-const css = require('@adobe/css-tools');
 
+import css from '@adobe/css-tools';
 export function extend (destination) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i]

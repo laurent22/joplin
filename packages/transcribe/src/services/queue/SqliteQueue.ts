@@ -1,10 +1,10 @@
+
 import { BaseQueue, JobData, JobStates, jobStateToEnum, JobWithData, QueueConfiguration, Result } from '../../types';
 import KnexConstructor, { Knex } from 'knex';
 import Logger from '@joplin/utils/Logger';
 import { formatMsToUTC, goBackInTime, Minute, msleep, Second } from '@joplin/utils/time';
 import { ErrorBadRequest } from '../../errors';
 import { Job } from 'knex/types/tables';
-
 const logger = Logger.create('SqliteQueue');
 
 export default class SqliteQueue implements BaseQueue {

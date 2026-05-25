@@ -1,7 +1,8 @@
-require('../../jest.base-setup.js')();
-require('./polyfills.js');
+import jest_base_setup_159 from '../../jest.base-setup.js';
+import setUpLogger from './testing/setUpLogger';
+import './polyfills.js';
+jest_base_setup_159();
 
-const setUpLogger = require('./testing/setUpLogger').default;
 setUpLogger();
 
 // JSDOM overrides (don't include in polyfills.js):

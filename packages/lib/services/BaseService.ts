@@ -1,5 +1,5 @@
-import Logger from '@joplin/utils/Logger';
 
+import Logger from '@joplin/utils/Logger';
 export default class BaseService {
 
 	public static logger_: Logger = null;

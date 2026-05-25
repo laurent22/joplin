@@ -1,10 +1,10 @@
-import { EditorSelection, EditorState } from '@codemirror/state';
-import { frontMatterTagName, frontMatterContentTagName, frontMatterMarkerTagName } from './markdownFrontMatterExtension';
 
-import createTestEditor from '../testing/createTestEditor';
-import findNodesWithName from '../testing/findNodesWithName';
 
 // Creates an EditorState with FrontMatter and markdown extensions
+import { EditorSelection, EditorState } from '@codemirror/state';
+import { frontMatterTagName, frontMatterContentTagName, frontMatterMarkerTagName } from './markdownFrontMatterExtension';
+import createTestEditor from '../testing/createTestEditor';
+import findNodesWithName from '../testing/findNodesWithName';
 const createEditorState = async (initialText: string, expectedTags: string[]): Promise<EditorState> => {
 	return (await createTestEditor(initialText, EditorSelection.cursor(0), expectedTags)).state;
 };

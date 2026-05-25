@@ -1,3 +1,4 @@
+
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, expectNotThrow, expectThrow, kvStore, msleep } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
 import { activeMasterKeySanityCheck, migrateMasterPassword, migratePpk, resetMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
@@ -5,7 +6,6 @@ import { localSyncInfo, masterKeyById, masterKeyEnabled, saveLocalSyncInfo, setA
 import Setting from '../../models/Setting';
 import { generateKeyPair, generateKeyPairWithAlgorithm, getPpkAlgorithm, ppkPasswordIsValid, testing__setPpkMigrations_ } from './ppk/ppk';
 import { PublicKeyAlgorithm } from './types';
-
 describe('e2ee/utils', () => {
 
 	beforeEach(async () => {

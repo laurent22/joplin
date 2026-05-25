@@ -1,7 +1,7 @@
+
+
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import uuid from '@joplin/lib/uuid';
-
-
 export function makeNoteSerializedBody(note: NoteEntity = {}): string {
 	return `${'title' in note ? note.title : 'Title'}
 

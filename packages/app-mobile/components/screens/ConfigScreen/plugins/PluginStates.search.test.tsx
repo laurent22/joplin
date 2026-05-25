@@ -1,8 +1,9 @@
+
+
+
 import * as React from 'react';
 import { mockMobilePlatform, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
-
 import { render, screen, userEvent, waitFor } from '../../../../utils/testing/testingLibrary';
-
 import createMockReduxStore from '../../../../utils/testing/createMockReduxStore';
 import WrappedPluginStates from './testUtils/WrappedPluginStates';
 import { AppState } from '../../../../utils/types';
@@ -11,7 +12,6 @@ import mockRepositoryApiConstructor from './testUtils/mockRepositoryApiConstruct
 import { resetRepoApi } from './utils/useRepoApi';
 import mockPluginServiceSetup from '../../../../utils/testing/mockPluginServiceSetup';
 import { MobilePlatform } from '@joplin/lib/shim';
-
 const expectSearchResultCountToBe = async (count: number) => {
 	await waitFor(() => {
 		expect(screen.queryAllByTestId('plugin-card')).toHaveLength(count);

@@ -1,9 +1,9 @@
-import { EditorSelection, EditorState } from '@codemirror/state';
 
+
+import { EditorSelection, EditorState } from '@codemirror/state';
 import createTestEditor from '../testing/createTestEditor';
 import findNodesWithName from '../testing/findNodesWithName';
 import { highlightMarkerTagName, highlightTagName, insertMarkerTagName, insertTagName } from './markdownHighlightExtension';
-
 const createEditorState = async (initialText: string, expectedTags: string[]): Promise<EditorState> => {
 	return (await createTestEditor(initialText, EditorSelection.cursor(0), expectedTags)).state;
 };

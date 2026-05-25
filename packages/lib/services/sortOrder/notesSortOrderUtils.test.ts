@@ -1,7 +1,7 @@
+
+import { shimInit } from '../../shim-init-node.js';
 import { notesSortOrderNextField, setNotesSortOrder } from './notesSortOrderUtils';
 import Setting from '../../models/Setting';
-const { shimInit } = require('../../shim-init-node.js');
-
 describe('notesSortOrderUtils', () => {
 
 	beforeAll(() => {

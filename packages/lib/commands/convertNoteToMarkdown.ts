@@ -1,3 +1,4 @@
+
 import { _, _n } from '../locale';
 import Note from '../models/Note';
 import { CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
@@ -10,7 +11,6 @@ import { ModelType } from '../BaseModel';
 import ItemChange from '../models/ItemChange';
 import Setting from '../models/Setting';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('convertNoteToMarkdown');
 
 export const declaration: CommandDeclaration = {

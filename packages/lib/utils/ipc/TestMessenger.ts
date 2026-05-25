@@ -1,6 +1,6 @@
+
 import RemoteMessenger from './RemoteMessenger';
 import { SerializableData } from './types';
-
 export default class TestMessenger<LocalInterface, RemoteInterface> extends RemoteMessenger<LocalInterface, RemoteInterface> {
 	private remoteMessenger: TestMessenger<RemoteInterface, LocalInterface>|null = null;
 

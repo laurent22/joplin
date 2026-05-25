@@ -1,25 +1,25 @@
 /* eslint-disable import/prefer-default-export */
 
+
+
+import md5File from 'md5-file';
+import htmlparser2 from '@joplin/fork-htmlparser2';
+import styleToJs from 'style-to-js';
+import crypto from 'crypto';
 import { execCommand, getRootDir } from '@joplin/utils';
 import { readFile, readdir, stat, writeFile } from 'fs/promises';
 import * as MarkdownIt from 'markdown-it';
 import { htmlentities, isSelfClosingTag } from '@joplin/utils/html';
 import { compileWithFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
-import StateCore = require('markdown-it/lib/rules_core/state_core');
-import Token = require('markdown-it/lib/token');
+import StateCore from 'markdown-it/lib/rules_core/state_core';
+import Token from 'markdown-it/lib/token';
 import { copy, mkdirp, remove, pathExists } from 'fs-extra';
 import { basename, dirname } from 'path';
 import markdownUtils, { MarkdownTable } from '@joplin/lib/markdownUtils';
 import { readmeFileTitle } from './utils/parser';
 import { chdir } from 'process';
-import yargs = require('yargs');
+import yargs from 'yargs';
 import { extractOpenGraphTags } from './utils/openGraph';
-
-const md5File = require('md5-file');
-const htmlparser2 = require('@joplin/fork-htmlparser2');
-const styleToJs = require('style-to-js').default;
-const crypto = require('crypto');
-
 interface Config {
 	baseUrl: string;
 	docusaurusBuildEnabled: boolean;

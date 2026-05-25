@@ -1,5 +1,5 @@
-import { Line } from '@codemirror/state';
 
+import { Line } from '@codemirror/state';
 const blockQuoteRegex = /^>(\s|$)/;
 
 export const stripBlockquote = (line: Line): string => {

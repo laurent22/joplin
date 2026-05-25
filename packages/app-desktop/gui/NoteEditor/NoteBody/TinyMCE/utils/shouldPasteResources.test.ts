@@ -1,5 +1,5 @@
-import shouldPasteResources from './shouldPasteResources';
 
+import shouldPasteResources from './shouldPasteResources';
 describe('shouldPasteResources', () => {
 
 	test.each([

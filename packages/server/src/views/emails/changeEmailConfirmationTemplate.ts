@@ -1,7 +1,7 @@
+
 import markdownUtils from '@joplin/lib/markdownUtils';
 import config from '../../config';
 import { EmailSubjectBody } from '../../models/EmailModel';
-
 interface TemplateView {
 	url: string;
 }

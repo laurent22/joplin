@@ -1,3 +1,4 @@
+
 import { ChangeType, Item, UserItem, Uuid, ItemType } from '../services/database/types';
 import BaseModel, { DeleteOptions, LoadOptions, SaveOptions } from './BaseModel';
 import { unique } from '../utils/array';
@@ -6,7 +7,6 @@ import { Knex } from 'knex';
 import { PerformanceTimer } from '../utils/time';
 import Logger from '@joplin/utils/Logger';
 import { isUniqueConstraintError } from '../db';
-
 const logger = Logger.create('UserItemModel');
 
 interface DeleteByShare {

@@ -1,5 +1,5 @@
-import { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
 
+import { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
 export const declaration: CommandDeclaration = {
 	name: 'hideModalMessage',
 };

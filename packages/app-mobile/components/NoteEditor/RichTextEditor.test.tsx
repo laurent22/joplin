@@ -1,9 +1,11 @@
-import * as React from 'react';
 
+
+
+
+
+import * as React from 'react';
 import { describe, it, beforeEach } from '@jest/globals';
 import { render, waitFor } from '../../utils/testing/testingLibrary';
-
-
 import Setting from '@joplin/lib/models/Setting';
 import { createNoteAndResource, resourceFetcher, setupDatabaseAndSynchronizer, supportDir, switchClient, synchronizerStart } from '@joplin/lib/testing/test-utils';
 import getWebViewWindowById from '../../utils/testing/getWebViewWindowById';
@@ -24,8 +26,6 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import { EditorSettings } from './types';
 import { pregQuote } from '@joplin/lib/string-utils';
 import { join } from 'path';
-
-
 interface WrapperProps {
 	ref?: RefObject<EditorControl>;
 	noteResources?: ResourceInfos;

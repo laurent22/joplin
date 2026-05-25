@@ -1,3 +1,4 @@
+
 import InteropService from '../../services/interop/InteropService';
 import { setupDatabaseAndSynchronizer, switchClient, exportDir } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
@@ -7,7 +8,6 @@ import time from '../../time';
 import * as fs from 'fs-extra';
 import { ExportModuleOutputFormat } from './types';
 import { fieldOrder } from '../../utils/frontMatter';
-
 async function recreateExportDir() {
 	const dir = exportDir();
 	await fs.remove(dir);

@@ -1,7 +1,10 @@
+
+
+
+
+import { _ } from '@joplin/lib/locale';
 import * as React from 'react';
-
 import { Component } from 'react';
-
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { FlatList, Text, StyleSheet, Button, View } from 'react-native';
@@ -9,11 +12,8 @@ import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../utils/types';
 import getEmptyFolderMessage from '@joplin/lib/components/shared/NoteList/getEmptyFolderMessage';
 import Folder from '@joplin/lib/models/Folder';
-
-const { _ } = require('@joplin/lib/locale');
 import NoteItem from './NoteItem';
 import { themeStyle } from './global-style';
-
 interface NoteListProps {
 	themeId: number;
 	dispatch: Dispatch;

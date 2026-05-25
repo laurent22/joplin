@@ -1,9 +1,9 @@
+
 import { EditorState, Plugin, Transaction } from 'prosemirror-state';
 import { OnEventCallback, OnLocalize } from '../../types';
 import { OnCreateCodeEditor, RendererControl } from '../types';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import createTextArea from '../utils/dom/createTextArea';
-
 export interface EditorApi {
 	renderer: RendererControl;
 	onEvent: OnEventCallback;

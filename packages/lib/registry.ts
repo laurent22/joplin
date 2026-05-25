@@ -1,3 +1,4 @@
+
 import Logger from '@joplin/utils/Logger';
 import JoplinDatabase from './JoplinDatabase';
 import Setting from './models/Setting';
@@ -5,7 +6,6 @@ import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
 import Synchronizer from './Synchronizer';
-
 class Registry {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous: each sync target subclass adds methods (e.g. OneDrive .api(), JoplinServer .driver()) accessed by callers

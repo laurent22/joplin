@@ -1,3 +1,4 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import { _ } from '@joplin/lib/locale';
@@ -7,7 +8,6 @@ import { fileUrlToResourceUrl, parseResourceUrl, urlProtocol } from '@joplin/lib
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
 import Setting from '@joplin/lib/models/Setting';
-
 export const declaration: CommandDeclaration = {
 	name: 'openItem',
 };

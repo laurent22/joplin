@@ -1,4 +1,6 @@
 
+
+
 import 'prosemirror-view/style/prosemirror.css';
 import 'prosemirror-search/style/search.css';
 import './styles/joplin-editable.css';
@@ -12,4 +14,3 @@ import './styles/joplin-image-view.css';
 import './styles/alt-text-editor.css';
 import './styles/floating-button-bar.css';
 import './styles/action-button.css';
-

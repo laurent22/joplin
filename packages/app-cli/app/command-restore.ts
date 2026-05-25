@@ -1,8 +1,8 @@
+
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
 import restoreItems from '@joplin/lib/services/trash/restoreItems';
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'restore <pattern>';

@@ -1,6 +1,6 @@
+
 import { readFile } from 'fs-extra';
 import HtrCli from './HtrCli';
-
 describe('HtrCli', () => {
 	const dt = new HtrCli({ htrCliImagesFolder: '', binaryPath: '', modelsFolder: '', gpuLayers: 0 });
 	it('should parse multiline result', async () => {

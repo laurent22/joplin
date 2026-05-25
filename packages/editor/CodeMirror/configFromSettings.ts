@@ -1,3 +1,4 @@
+
 import { EditorView, keymap } from '@codemirror/view';
 import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete';
 import { EditorKeymap, EditorLanguageType, EditorSettings } from '../types';
@@ -19,7 +20,6 @@ import renderTables from './extensions/rendering/renderTables';
 import { RenderedContentContext } from './extensions/rendering/types';
 import highlightActiveLineExtension from './extensions/highlightActiveLineExtension';
 import renderBlockImages from './extensions/rendering/renderBlockImages';
-
 const closingFencedBlock = StateField.define<boolean>({
 	create: () => false,
 	update: (_, tr) => {

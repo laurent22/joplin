@@ -1,7 +1,7 @@
+
 import Logger from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
-
 export const autosaveFilename = 'autosaved-drawing.joplin.svg';
 
 const logger = Logger.create('ImageEditor/autosave');

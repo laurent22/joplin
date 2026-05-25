@@ -1,10 +1,10 @@
+
+
+
 import { Theme } from '@joplin/lib/themes/type';
 import { NoteBodyEditorProps } from '../../../utils/types';
 import { buildStyle } from '@joplin/lib/theme';
 import { useMemo } from 'react';
-
-
-
 const useStyles = (props: NoteBodyEditorProps) => {
 	return useMemo(() => {
 		return buildStyle([

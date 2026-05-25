@@ -1,10 +1,10 @@
+
+// Ensures that ordered lists within [sel] are numbered in ascending order.
 import { ChangeSpec, EditorSelection, EditorState, Line, SelectionRange, TransactionSpec } from '@codemirror/state';
 import stripBlockquote from './stripBlockquote';
 import tabsToSpaces from '../../utils/formatting/tabsToSpaces';
 import { syntaxTree } from '@codemirror/language';
 import { SyntaxNodeRef } from '@lezer/common';
-
-// Ensures that ordered lists within [sel] are numbered in ascending order.
 const renumberSelectedLists = (state: EditorState): TransactionSpec => {
 	const doc = state.doc;
 

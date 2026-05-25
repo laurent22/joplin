@@ -1,3 +1,7 @@
+
+
+import { connect } from 'react-redux';
+import { KeymapConfigScreen } from '../KeymapConfig/KeymapConfigScreen';
 import * as React from 'react';
 import Sidebar from './Sidebar';
 import ButtonBar from './ButtonBar';
@@ -8,7 +12,6 @@ import Setting, { AppType, SettingMetadataSection, SettingValueType, SyncStartup
 import { AppState } from '../../app.reducer';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 import { reg } from '@joplin/lib/registry';
-const { connect } = require('react-redux');
 import { themeStyle } from '@joplin/lib/theme';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import * as shared from '@joplin/lib/components/shared/config/config-shared.js';
@@ -20,13 +23,10 @@ import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/conf
 import { normalizeQuery } from '@joplin/lib/components/shared/config/config-search-text.js';
 import { searchResultGroups, matchedSearchSections } from './configSearch';
 import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
-const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { OnChangeEvent } from '../lib/SearchInput/SearchInput';
 import highlightSearchText from './searchHighlight';
-
-
 interface Font {
 	family: string;
 }

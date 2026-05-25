@@ -1,9 +1,9 @@
+
 import { getDefaultPpkAlgorithm, rsa } from './ppk';
 import { PublicKeyAlgorithm } from '../types';
 import shim from '../../../shim';
 import Logger from '@joplin/utils/Logger';
 import PerformanceLogger from '../../../PerformanceLogger';
-
 const logger = Logger.create('ppkTestUtils');
 const perfLogger = PerformanceLogger.create();
 

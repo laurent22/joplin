@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { AppState } from '../../../utils/types';
 import { Store } from 'redux';
@@ -10,7 +11,6 @@ import SearchResults from './SearchResults';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import Folder from '@joplin/lib/models/Folder';
 import TestProviderStack from '../../testing/TestProviderStack';
-
 const createNotes = async (count: number) => {
 	const folder = await Folder.save({ title: 'Test Note' });
 	for (let i = 0; i < count; i++) {

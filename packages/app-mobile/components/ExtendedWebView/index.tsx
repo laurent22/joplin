@@ -1,19 +1,19 @@
 // Wraps react-native-webview. Allows loading HTML directly.
 
-import * as React from 'react';
 
-import {
-	forwardRef, Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState,
-} from 'react';
+import * as React from 'react';
 import { WebView } from 'react-native-webview';
 import { WebViewErrorEvent, WebViewSource } from 'react-native-webview/lib/WebViewTypes';
-
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { Props, WebViewControl } from './types';
 import useCss from './utils/useCss';
 import { Platform } from 'react-native';
+import {
+	forwardRef, Ref, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState,
+} from 'react';
+
 
 const logger = Logger.create('ExtendedWebView');
 

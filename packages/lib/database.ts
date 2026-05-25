@@ -1,14 +1,14 @@
-import Logger from '@joplin/utils/Logger';
-import time from './time';
-import shim from './shim';
-import { SqlParams, SqlQuery, StringOrSqlQuery } from './services/database/types';
 
-const Mutex = require('async-mutex').Mutex;
 
 // Row values come back as SQLite primitives (string|number|null|Buffer for BLOBs)
 // but per-table column shapes vary, and callers across the codebase index without
 // runtime narrowing; widening here would require dozens of casts at call sites.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- See above
+import { Mutex } from 'async-mutex';
+import Logger from '@joplin/utils/Logger';
+import time from './time';
+import shim from './shim';
+import { SqlParams, SqlQuery, StringOrSqlQuery } from './services/database/types';
 export type Row = Record<string, any>;
 
 export default class Database {

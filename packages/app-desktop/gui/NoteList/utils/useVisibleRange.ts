@@ -1,6 +1,6 @@
+
 import { Size } from '@joplin/utils/types';
 import { useMemo } from 'react';
-
 const useVisibleRange = (itemsPerLine: number, scrollTop: number, listSize: Size, itemSize: Size, noteCount: number) => {
 	const startLineIndexFloat = useMemo(() => {
 		return scrollTop / itemSize.height;

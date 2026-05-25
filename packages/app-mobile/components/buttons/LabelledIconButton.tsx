@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Text, TouchableRipple } from 'react-native-paper';
 import Icon from '../Icon';
@@ -6,7 +7,6 @@ import { connect } from 'react-redux';
 import { AppState } from '../../utils/types';
 import { StyleSheet, View, ViewProps } from 'react-native';
 import { useMemo } from 'react';
-
 interface Props extends ViewProps {
 	themeId: number;
 	title: string;

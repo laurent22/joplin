@@ -1,8 +1,8 @@
+
 import config from '../config';
 import { ErrorForbidden } from '../utils/errors';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, koaNext, expectNotThrow, expectHttpError, createUserAndSession, models } from '../utils/testing/testUtils';
 import checkAdminHandler from './checkAdminHandler';
-
 describe('checkAdminHandler', () => {
 
 	beforeAll(async () => {

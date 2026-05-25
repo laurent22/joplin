@@ -1,5 +1,5 @@
-import AsyncActionQueue from './AsyncActionQueue';
 
+import AsyncActionQueue from './AsyncActionQueue';
 describe('AsyncActionQueue', () => {
 	beforeEach(() => {
 		jest.useRealTimers();

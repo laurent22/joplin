@@ -1,10 +1,10 @@
+
 import { RefObject, useCallback, useContext, useRef } from 'react';
 import { NoteBodyEditorRef, ScrollOptions, ScrollOptionTypes } from './types';
 import usePrevious from '@joplin/lib/hooks/usePrevious';
 import NotePositionService from '@joplin/lib/services/NotePositionService';
 import useNowEffect from '@joplin/lib/hooks/useNowEffect';
 import { WindowIdContext } from '../../NewWindowOrIFrame';
-
 interface Props {
 	noteId: string;
 	editorName: string;

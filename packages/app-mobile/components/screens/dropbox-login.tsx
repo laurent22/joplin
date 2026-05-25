@@ -1,15 +1,15 @@
-import * as React from 'react';
 
+
+import { connect } from 'react-redux';
+import { BaseScreenComponent } from '../base-screen';
+import Shared from '@joplin/lib/components/shared/dropbox-login-shared';
+import * as React from 'react';
 import { View, Button, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { AppState } from '../../utils/types';
-const { connect } = require('react-redux');
 import { ScreenHeader } from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
-const { BaseScreenComponent } = require('../base-screen');
-const Shared = require('@joplin/lib/components/shared/dropbox-login-shared');
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { themeStyle } from '../global-style';
-
 class DropboxLoginScreenComponent extends BaseScreenComponent {
 	public constructor() {
 		super();

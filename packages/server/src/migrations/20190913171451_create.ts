@@ -1,8 +1,8 @@
+
 import { Knex } from 'knex';
 import { DbConnection, defaultAdminEmail, defaultAdminPassword } from '../db';
 import { hashPassword } from '../utils/auth';
 import { uuidgen } from '@joplin/lib/uuid';
-
 export const up = async (db: DbConnection) => {
 	await db.schema.createTable('users', (table: Knex.CreateTableBuilder) => {
 		table.string('id', 32).unique().primary().notNullable();

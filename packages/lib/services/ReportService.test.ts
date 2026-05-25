@@ -1,3 +1,5 @@
+
+
 import { _ } from '../locale';
 import ReportService, { ReportSection } from './ReportService';
 import { createNTestNotes, decryptionWorker, encryptionService, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, supportDir, switchClient, syncTargetId, synchronizer, synchronizerStart } from '../testing/test-utils';
@@ -10,8 +12,6 @@ import { loadMasterKeysFromSettings, setupAndEnableEncryption } from './e2ee/uti
 import Setting from '../models/Setting';
 import DecryptionWorker from './DecryptionWorker';
 import { ModelType } from '../BaseModel';
-
-
 const firstSectionWithTitle = (report: ReportSection[], title: string) => {
 	const sections = report.filter(section => section.title === title);
 	if (sections.length === 0) return null;

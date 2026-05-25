@@ -1,9 +1,9 @@
-const BaseWidget = require('tkwidgets/BaseWidget.js');
-const chalk = require('chalk');
-const termutils = require('tkwidgets/framework/termutils.js');
-const stripAnsi = require('strip-ansi');
-const { handleAutocompletion } = require('../autocompletion.js');
 
+import BaseWidget from 'tkwidgets/BaseWidget.js';
+import chalk from 'chalk';
+import termutils from 'tkwidgets/framework/termutils.js';
+import stripAnsi from 'strip-ansi';
+import { handleAutocompletion } from '../autocompletion.js';
 export default class StatusBarWidget extends BaseWidget {
 	public constructor() {
 		super();

@@ -1,12 +1,12 @@
-import { Plugin } from 'prosemirror-state';
-import { Node, NodeSpec } from 'prosemirror-model';
-import { EditorView, NodeView } from 'prosemirror-view';
-import trimEmptyParagraphs from '../utils/trimEmptyParagraphs';
 
 // See the fold example for more information about
 // writing similar ProseMirror plugins:
 // https://prosemirror.net/examples/fold/
 
+import { Plugin } from 'prosemirror-state';
+import { Node, NodeSpec } from 'prosemirror-model';
+import { EditorView, NodeView } from 'prosemirror-view';
+import trimEmptyParagraphs from '../utils/trimEmptyParagraphs';
 const listGroup = 'block';
 
 // Note: Use snake_case for schema keys for compatibility with certain default ProseMirror code

@@ -1,10 +1,10 @@
-import { validateLinks } from '@joplin/renderer';
-const stringPadding = require('string-padding');
-const urlUtils = require('./urlUtils');
-import type * as MarkdownItType from 'markdown-it';
-const MarkdownIt = require('markdown-it');
 
 // Taken from codemirror/addon/edit/continuelist.js
+import stringPadding from 'string-padding';
+import urlUtils from './urlUtils';
+import MarkdownIt from 'markdown-it';
+import { validateLinks } from '@joplin/renderer';
+import type * as MarkdownItType from 'markdown-it';
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
 const emptyListRegex = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s+)$/;
 

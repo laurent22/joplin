@@ -1,5 +1,5 @@
-const Setting = require('../models/Setting').default;
 
+import Setting from '../models/Setting';
 const script = {};
 
 script.exec = async function() {

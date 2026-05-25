@@ -1,7 +1,7 @@
+
 import Logger from '@joplin/utils/Logger';
 import Setting from '@joplin/lib/models/Setting';
 import { Appearance, ColorSchemeName } from 'react-native';
-
 const logger = Logger.create('autodetectTheme');
 
 let systemColorScheme: ColorSchemeName|null = null;

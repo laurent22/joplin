@@ -1,5 +1,3 @@
-import { Knex } from 'knex';
-import { DbConnection } from '../db';
 
 // parent_id: ${'parent_id' in note ? note.parent_id : defaultFolderId}
 // created_time: 2020-10-15T10:34:16.044Z
@@ -25,6 +23,8 @@ import { DbConnection } from '../db';
 // is_shared: 1
 // type_: 1`;
 
+import { Knex } from 'knex';
+import { DbConnection } from '../db';
 export const up = async (db: DbConnection) => {
 	await db.schema.createTable('items', (table: Knex.CreateTableBuilder) => {
 		table.string('id', 32).unique().primary().notNullable();

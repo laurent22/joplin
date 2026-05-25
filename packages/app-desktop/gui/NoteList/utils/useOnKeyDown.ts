@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import BaseModel from '@joplin/lib/BaseModel';
 import Note from '@joplin/lib/models/Note';
@@ -10,7 +11,6 @@ import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
 import { KeyboardEventKey } from '@joplin/lib/dom';
 import announceForAccessibility from '../../utils/announceForAccessibility';
 import { _ } from '@joplin/lib/locale';
-
 const useOnKeyDown = (
 	activeNoteId: string,
 	selectedNoteIds: string[],

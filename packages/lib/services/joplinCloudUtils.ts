@@ -1,3 +1,4 @@
+
 import { Reducer } from 'react';
 import Setting from '../models/Setting';
 import { ApplicationPlatform, ApplicationType } from '../types';
@@ -7,7 +8,6 @@ import eventManager, { EventName } from '../eventManager';
 import { reg } from '../registry';
 import SyncTargetRegistry from '../SyncTargetRegistry';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('joplinCloudUtils');
 
 type ActionType = 'LINK_USED' | 'COMPLETED' | 'ERROR';

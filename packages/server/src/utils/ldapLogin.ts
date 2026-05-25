@@ -1,10 +1,10 @@
+
 import { Client } from 'ldapts';
 import { User } from '../services/database/types';
 import Logger from '@joplin/utils/Logger';
 import { LdapConfig } from './types';
 import { ErrorForbidden } from './errors';
 import { readFile } from 'fs/promises';
-
 const logger = Logger.create('LDAP');
 
 export default async function ldapLogin(email: string, password: string, user: User, config: LdapConfig): Promise<User> {

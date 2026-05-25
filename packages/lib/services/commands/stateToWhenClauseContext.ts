@@ -1,3 +1,4 @@
+
 import { State, stateUtils } from '../../reducer';
 import BaseModel, { ModelType } from '../../BaseModel';
 import Folder from '../../models/Folder';
@@ -9,7 +10,6 @@ import ItemChange from '../../models/ItemChange';
 import { getTrashFolderId } from '../trash';
 import getActivePluginEditorView from '../plugins/utils/getActivePluginEditorView';
 import { MarkupLanguage } from '@joplin/renderer';
-
 export interface WhenClauseContextOptions {
 	commandFolderId?: string;
 	commandFolderIds?: string[];

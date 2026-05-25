@@ -1,9 +1,9 @@
+
 import BaseModel, { ModelType } from '../BaseModel';
 import shim from '../shim';
 import eventManager, { EventName } from '../eventManager';
 import { ItemChangeEntity, SqlQuery } from '../services/database/types';
 import { Mutex } from 'async-mutex';
-
 export interface ChangeSinceIdOptions {
 	limit?: number;
 	fields?: string[];

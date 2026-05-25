@@ -1,7 +1,7 @@
+
 import time from './time';
 import Setting from './models/Setting';
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
-
 type TaskCallback = ()=> Promise<unknown>;
 
 interface Task {

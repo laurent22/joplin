@@ -1,8 +1,8 @@
+
 import { getSearchState, search, SearchQuery, setSearchState } from 'prosemirror-search';
 import { SearchState } from '../../types';
 import { Plugin, EditorState, Command, Transaction } from 'prosemirror-state';
 import { EditorEvent, EditorEventType } from '../../events';
-
 type VisibleMetaState = {
 	visible: boolean;
 	changeSource: string;

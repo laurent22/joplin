@@ -1,10 +1,10 @@
+
 import { DeleteOptions, ModelType } from '../../BaseModel';
 import { FolderEntity, NoteEntity } from '../../services/database/types';
 import { getTrashFolderId } from '../../services/trash';
 import restoreItems from '../../services/trash/restoreItems';
 import Folder from '../Folder';
 import Note from '../Note';
-
 const rootFolder = {
 	id: '',
 	deleted_time: 0,

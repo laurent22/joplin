@@ -1,5 +1,6 @@
-var parser = require('../').parser(true)
-var t = require('tap')
+import requiredModule_parser from '../';
+import t from 'tap';
+var parser = requiredModule_parser.parser(true)
 t.plan(1)
 parser.onopentag = function (node) {
   t.same(node, { name: 'x', attributes: {}, isSelfClosing: false })

@@ -1,9 +1,9 @@
+
 import { EditorState, Plugin } from 'prosemirror-state';
 import { Node as ProseMirrorNode, DOMSerializer } from 'prosemirror-model';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import schema from '../schema';
 import changedDescendants from '../vendor/changedDescendants';
-
 const nonbreakingSpace = '\u00A0';
 
 // Creates a custom serializer that can preserve empty paragraphs.

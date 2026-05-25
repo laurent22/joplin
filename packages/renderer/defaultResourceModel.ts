@@ -1,7 +1,7 @@
-import { OptionsResourceModel } from './types';
 
 // Used for tests and when no ResourceModel is provided.
 
+import { OptionsResourceModel } from './types';
 const defaultResourceModel: OptionsResourceModel = {
 	isResourceUrl: (_url: string) => false,
 	urlToId: _url => {

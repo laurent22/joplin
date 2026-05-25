@@ -1,8 +1,8 @@
+
 import * as React from 'react';
 import { useCallback } from 'react';
 import { Dispatch } from 'redux';
 import { FocusNote } from './useFocusNote';
-
 const useOnNoteClick = (dispatch: Dispatch, focusNote: FocusNote) => {
 	const onNoteClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
 		const noteId = event.currentTarget.getAttribute('data-id');

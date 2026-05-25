@@ -1,3 +1,4 @@
+
 import { supportDir, setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, expectThrow, createTempFile, msleep } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import Note from '../models/Note';
@@ -6,7 +7,6 @@ import shim from '../shim';
 import { ErrorCode } from '../errors';
 import { remove, pathExists } from 'fs-extra';
 import { ResourceEntity, ResourceOcrStatus } from '../services/database/types';
-
 const testImagePath = `${supportDir}/photo.jpg`;
 
 const setupFolderNoteResourceReadOnly = async (shareId: string) => {

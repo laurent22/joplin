@@ -1,9 +1,9 @@
+
 import KeychainServiceDriverBase from './KeychainServiceDriverBase';
 import shim from '../../shim';
 import Logger from '@joplin/utils/Logger';
 import KvStore from '../KvStore';
 import Setting from '../../models/Setting';
-
 const logger = Logger.create('KeychainServiceDriver.electron');
 
 const canUseSafeStorage = () => {

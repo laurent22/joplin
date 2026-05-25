@@ -1,3 +1,4 @@
+
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -5,7 +6,6 @@ import { AppContext } from '../../utils/types';
 import { bodyFields } from '../../utils/requestUtils';
 import { ErrorNotFound } from '../../utils/errors';
 import { Notification } from '../../services/database/types';
-
 const router = new Router(RouteType.Web);
 
 router.patch('notifications/:id', async (path: SubPath, ctx: AppContext) => {

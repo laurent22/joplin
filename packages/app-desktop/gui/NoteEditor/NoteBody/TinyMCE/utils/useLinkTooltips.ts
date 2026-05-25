@@ -1,8 +1,8 @@
+
 import type { Editor } from 'tinymce';
 import { useCallback, useEffect } from 'react';
 import { _ } from '@joplin/lib/locale';
 import shim from '@joplin/lib/shim';
-
 const useLinkTooltips = (editor: Editor|null) => {
 	const resetModifiedTitles = useCallback(() => {
 		if (!editor) return;

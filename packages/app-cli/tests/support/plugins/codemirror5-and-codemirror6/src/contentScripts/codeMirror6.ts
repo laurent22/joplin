@@ -1,5 +1,5 @@
-import { lineNumbers, highlightActiveLine } from '@codemirror/view';
 
+import { lineNumbers, highlightActiveLine } from '@codemirror/view';
 export default (context: { contentScriptId: string, postMessage: any }) => {
 	return {
 		plugin: async (codeMirrorWrapper: any) => {

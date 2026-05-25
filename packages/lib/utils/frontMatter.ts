@@ -1,10 +1,10 @@
+
+import moment from 'moment';
 import Note from '../models/Note';
 import { NoteEntity } from '../services/database/types';
 import { MdFrontMatterExport } from '../services/interop/types';
 import time from '../time';
 import * as yaml from 'js-yaml';
-const moment = require('moment');
-
 export interface ParsedMeta {
 	metadata: NoteEntity;
 	tags: string[];

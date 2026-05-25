@@ -1,5 +1,5 @@
-import packToWriter, { type FileApi as WriterFileApi } from './packToWriter';
 
+import packToWriter, { type FileApi as WriterFileApi } from './packToWriter';
 export type FileApi = Pick<WriterFileApi, 'exists' | 'readFileText' | 'readFileDataUri' | 'streamFileDataUri'>;
 
 // @deprecated Use `packToWriter` which provide better performance and avoid memory issues when dealing with large files.

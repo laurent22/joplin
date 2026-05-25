@@ -1,9 +1,9 @@
+
 import * as React from 'react';
 import PasswordInput from './PasswordInput';
 import { useId } from 'react';
 import { ChangeEventHandler } from './types';
 import { _ } from '@joplin/lib/locale';
-
 interface Props {
 	labelText: string;
 	value: string;

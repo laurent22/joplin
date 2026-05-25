@@ -1,3 +1,4 @@
+
 import Setting, { SettingItemType, SettingSectionSource, SettingStorage } from '../models/Setting';
 import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, msleep } from '../testing/test-utils';
 import { readFile, stat, mkdirp, writeFile, pathExists, readdir } from 'fs-extra';
@@ -6,7 +7,6 @@ import { defaultProfileConfig } from '../services/profileConfig/types';
 import { createNewProfile, saveProfileConfig } from '../services/profileConfig';
 import initProfile from '../services/profileConfig/initProfile';
 import { defaultPluginSetting } from '../services/plugins/PluginService';
-
 async function loadSettingsFromFile(): Promise<Record<string, unknown>> {
 	return JSON.parse(await readFile(Setting.settingFilePath, 'utf8'));
 }

@@ -1,3 +1,4 @@
+
 import { AppContext, KoaNext, NotificationView } from '../utils/types';
 import { isApiRequest } from '../utils/requestUtils';
 import { NotificationLevel } from '../services/database/types';
@@ -8,7 +9,6 @@ import { NotificationKey } from '../models/NotificationModel';
 import { helpUrl, profileUrl } from '../utils/urlUtils';
 import { userFlagToString } from '../models/UserFlagModel';
 import renderMarkdown from '../utils/renderMarkdown';
-
 const logger = Logger.create('notificationHandler');
 
 async function handleChangeAdminPasswordNotification(ctx: AppContext) {

@@ -1,7 +1,7 @@
+
 import SelectionFormatting, { MutableSelectionFormatting, defaultSelectionFormatting } from '../../../SelectionFormatting';
 import { syntaxTree } from '@codemirror/language';
 import { EditorState } from '@codemirror/state';
-
 const computeSelectionFormatting = (state: EditorState, globalSpellcheck: boolean): SelectionFormatting => {
 	const range = state.selection.main;
 	const formatting: MutableSelectionFormatting = {

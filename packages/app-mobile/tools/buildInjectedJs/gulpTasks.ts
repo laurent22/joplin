@@ -1,10 +1,10 @@
+
 import BundledFile from './BundledFile';
 import { mkdirp } from 'fs-extra';
 import { mobileDir, outputDir } from './constants';
 import copyAssets from './copyAssets';
 import { readdir, existsSync } from 'fs-extra';
 import { join } from 'path';
-
 const getBundles = async () => {
 	// All folders in the contentScripts/ directories are bundles
 	const contentScriptDir = `${mobileDir}/contentScripts/`;

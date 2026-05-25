@@ -1,5 +1,5 @@
-import { Command, TextSelection } from 'prosemirror-state';
 
+import { Command, TextSelection } from 'prosemirror-state';
 const selectDocumentEnd: Command = (state, dispatch) => {
 	// nodeSize is defined to be the length of the node content plus two (one for the start
 	// and one for the end token). However, the main document has no start/end tokens, so subtract two.

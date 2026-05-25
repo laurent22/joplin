@@ -1,5 +1,5 @@
-import { applyManifestOverrides, getObsoleteManifests, getSupersededPackages, ManifestOverrides } from './overrideUtils';
 
+import { applyManifestOverrides, getObsoleteManifests, getSupersededPackages, ManifestOverrides } from './overrideUtils';
 describe('overrideUtils', () => {
 
 	test('should get the obsolete manifests', () => {

@@ -1,5 +1,5 @@
-import { EditorView } from '@codemirror/view';
 
+import { EditorView } from '@codemirror/view';
 const typeText = (editor: EditorView, text: string) => {
 	const selection = editor.state.selection;
 	const inputHandlers = editor.state.facet(EditorView.inputHandler);

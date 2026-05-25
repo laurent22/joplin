@@ -1,5 +1,5 @@
-import { objectValueFromPath } from './object';
 
+import { objectValueFromPath } from './object';
 describe('object', () => {
 
 	test.each([

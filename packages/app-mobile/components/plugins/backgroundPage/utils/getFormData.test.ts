@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
-import getFormData from './getFormData';
 
+import getFormData from './getFormData';
 describe('getFormData', () => {
 	afterEach(() => {
 		// Remove all forms to prevent tests from conflicting -- getFormData

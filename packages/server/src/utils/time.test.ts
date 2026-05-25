@@ -1,6 +1,6 @@
+
 import { expectThrow } from './testing/testUtils';
 import { Day, durationToMilliseconds, Month, Second } from './time';
-
 describe('time', () => {
 
 	it('should have correct interval durations', () => {

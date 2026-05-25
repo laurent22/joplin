@@ -1,15 +1,15 @@
+
+import { shimInit } from '@joplin/lib/shim-init-node';
 import { join } from 'path';
 import Setting, { Env } from '@joplin/lib/models/Setting';
 import Logger, { TargetType } from '@joplin/utils/Logger';
 import { CleanupTask } from './types';
-import yargs = require('yargs');
+import yargs from 'yargs';
 import { packagesDir } from './constants';
 import { ActionSpec } from './ActionRunner';
 import { readFile } from 'fs/promises';
 import Fuzzer, { FuzzerConfig } from './Fuzzer';
 import { isTTY } from '@joplin/utils/cli';
-const { shimInit } = require('@joplin/lib/shim-init-node');
-
 const globalLogger = new Logger();
 globalLogger.addTarget(TargetType.Console);
 Logger.initializeGlobalLogger(globalLogger);

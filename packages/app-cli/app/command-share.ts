@@ -1,3 +1,4 @@
+
 import { _ } from '@joplin/lib/locale';
 import BaseCommand from './base-command';
 import app from './app';
@@ -11,7 +12,6 @@ import Folder from '@joplin/lib/models/Folder';
 import invitationRespond from '@joplin/lib/services/share/invitationRespond';
 import CommandService from '@joplin/lib/services/CommandService';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
-
 const logger = Logger.create('command-share');
 
 type Args = {

@@ -1,10 +1,10 @@
+
 import shim from '@joplin/lib/shim';
 import { DocumentPickerResponse, pick, isErrorWithCode } from '@react-native-documents/picker';
 import { openDocument } from '@joplin/react-native-saf-x';
 import Logger from '@joplin/utils/Logger';
 import type FsDriverWeb from './fs-driver/fs-driver-rn.web';
 import uuid from '@joplin/lib/uuid';
-
 interface SelectedDocument {
 	type: string;
 	mime: string;

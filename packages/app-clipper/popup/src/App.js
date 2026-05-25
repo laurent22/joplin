@@ -1,12 +1,12 @@
+
+
+import { connect } from 'react-redux';
+import { bridge } from './bridge';
 import React, { Component } from 'react';
 import './App.css';
 import led_red from './led_red.png';
 import led_green from './led_green.png';
 import led_orange from './led_orange.png';
-
-const { connect } = require('react-redux');
-const { bridge } = require('./bridge');
-
 function commandUserString(command) {
 	const s = [];
 

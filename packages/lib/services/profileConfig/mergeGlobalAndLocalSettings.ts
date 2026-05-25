@@ -1,6 +1,6 @@
+
 import Logger from '@joplin/utils/Logger';
 import Setting from '../../models/Setting';
-
 const logger = Logger.create('mergeGlobalAndLocalSettings');
 
 export default (rootSettings: Record<string, unknown>, subProfileSettings: Record<string, unknown>) => {

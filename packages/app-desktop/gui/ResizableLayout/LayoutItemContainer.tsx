@@ -1,8 +1,8 @@
+
 import * as React from 'react';
 import { Resizable, ResizeCallback, ResizeStartCallback, Size } from 're-resizable';
 import { LayoutItem } from './utils/types';
 import { itemMinHeight, itemMinWidth, itemSize, LayoutItemSizes } from './utils/useLayoutItemSizes';
-
 interface Props {
 	item: LayoutItem;
 	parent: LayoutItem|null;

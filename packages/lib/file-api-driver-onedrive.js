@@ -1,10 +1,10 @@
-const moment = require('moment');
-const { basicDelta } = require('./file-api');
-const { dirname, basename } = require('./path-utils');
-const shim = require('./shim').default;
-const Buffer = require('buffer').Buffer;
-const { ltrimSlashes } = require('./path-utils');
 
+import moment from 'moment';
+import { basicDelta } from './file-api';
+import { dirname, basename } from './path-utils';
+import shim from './shim';
+import { Buffer } from 'buffer';
+import { ltrimSlashes } from './path-utils';
 class FileApiDriverOneDrive {
 	constructor(api) {
 		this.api_ = api;

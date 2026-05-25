@@ -1,5 +1,5 @@
-import joplin from 'api';
 
+import joplin from 'api';
 function demoSqlite3() {
 	const sqlite3 = joplin.plugins.require('sqlite3');
 

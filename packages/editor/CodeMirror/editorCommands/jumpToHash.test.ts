@@ -1,7 +1,7 @@
+
 import { EditorSelection } from '@codemirror/state';
 import createTestEditor from '../testing/createTestEditor';
 import jumpToHash from './jumpToHash';
-
 describe('jumpToHash', () => {
 	test.each([
 		{

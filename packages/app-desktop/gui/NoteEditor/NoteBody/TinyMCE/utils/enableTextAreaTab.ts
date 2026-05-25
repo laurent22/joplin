@@ -1,7 +1,7 @@
+
+import taboverride from 'taboverride';
 import Setting from '@joplin/lib/models/Setting';
 import { focus } from '@joplin/lib/utils/focusHandler';
-const taboverride = require('taboverride');
-
 export interface TextAreaTabHandler {
 	remove(): void;
 }

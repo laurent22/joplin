@@ -1,10 +1,10 @@
+
 import { Command } from 'prosemirror-state';
 import { getEditorApi } from '../joplinEditorApiPlugin';
 import createEditorDialog from './utils/createEditorDialog';
 import postProcessRenderedHtml from './utils/postProcessRenderedHtml';
 import schema from '../../schema';
 import { JoplinEditableAttributes } from './joplinEditablePlugin';
-
 interface EditablePromptOptions {
 	source: string;
 	inline: boolean;

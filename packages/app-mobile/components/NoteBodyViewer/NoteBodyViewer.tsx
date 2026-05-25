@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import useOnMessage, { HandleMessageCallback, OnMarkForDownloadCallback } from './hooks/useOnMessage';
 import { useRef, useCallback } from 'react';
 import { View, ViewStyle } from 'react-native';
@@ -16,7 +17,6 @@ import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
 import useWebViewSetup from '../../contentScripts/rendererBundle/useWebViewSetup';
 import { OnScrollCallback } from '../../contentScripts/rendererBundle/types';
-
 interface Props {
 	themeId: number;
 	style: ViewStyle;

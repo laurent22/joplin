@@ -1,3 +1,4 @@
+
 import { Store } from 'redux';
 import JoplinServerApi from '../../JoplinServerApi';
 import { _ } from '../../locale';
@@ -15,7 +16,6 @@ import ResourceService from '../ResourceService';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
 import { ShareInvitation, SharePermissions, State, stateRootKey, StateShare } from './reducer';
 import PerformanceLogger from '../../PerformanceLogger';
-
 const logger = Logger.create('ShareService');
 const perfLogger = PerformanceLogger.create();
 

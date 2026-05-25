@@ -1,9 +1,9 @@
+
 import { TextSelection } from 'prosemirror-state';
 import createTestEditor from '../testing/createTestEditor';
 import joplinEditorApiPlugin from './joplinEditorApiPlugin';
 import linkTooltipPlugin from './linkTooltipPlugin';
 import { EditorView } from 'prosemirror-view';
-
 const getTooltip = () => {
 	return document.querySelector('.link-tooltip:not(.-hidden)');
 };

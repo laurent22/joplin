@@ -1,3 +1,4 @@
+
 import { SubPath, ResponseType, Response, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -7,7 +8,6 @@ import { Item, Share } from '../../services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { FileViewerResponse, renderItem as renderJoplinItem } from '../../utils/joplinUtils';
 import { friendlySafeFilename } from '@joplin/lib/path-utils';
-
 async function renderItem(context: AppContext, item: Item, share: Share): Promise<FileViewerResponse> {
 	if (item.jop_type === ModelType.Note) {
 		return renderJoplinItem(share.owner_id, item, share, context.query);

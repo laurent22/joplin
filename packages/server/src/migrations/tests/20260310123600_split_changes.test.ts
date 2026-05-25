@@ -1,8 +1,8 @@
+
 import { ChangeType, ItemType } from '../../services/database/types';
 import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, db, createUserAndSession } from '../../utils/testing/testUtils';
 import { down, up } from '../20260310123600_split_changes';
-
 describe('20260310123600_split_changes', () => {
 
 	beforeAll(async () => {

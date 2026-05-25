@@ -1,10 +1,10 @@
+
 import BaseCommand from './base-command';
 import { _, setLocale } from '@joplin/lib/locale';
 import app from './app';
 import * as fs from 'fs-extra';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
 import { ReadStream } from 'tty';
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'config [name] [value]';

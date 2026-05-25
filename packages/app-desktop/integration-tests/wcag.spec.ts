@@ -1,9 +1,9 @@
+
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import AxeBuilder from '@axe-core/playwright';
 import { Page } from '@playwright/test';
 import SettingsScreen from './models/SettingsScreen';
-
 const createScanner = (page: Page) => {
 	return new AxeBuilder({ page })
 		.disableRules(['page-has-heading-one'])

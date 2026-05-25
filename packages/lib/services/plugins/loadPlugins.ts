@@ -1,3 +1,4 @@
+
 import Setting from '../../models/Setting';
 import BasePluginRunner from '../plugins/BasePluginRunner';
 import PluginService, { PluginSettings } from '../../services/plugins/PluginService';
@@ -6,7 +7,6 @@ import Logger from '@joplin/utils/Logger';
 import shim from '../../shim';
 import { State as AppState } from '../../reducer';
 import BasePlatformImplementation from './BasePlatformImplementation';
-
 const logger = Logger.create('loadPlugins');
 
 type CancelEvent = { cancelled: boolean };

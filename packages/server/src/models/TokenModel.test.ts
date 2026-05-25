@@ -1,5 +1,5 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
 
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
 describe('TokenModel', () => {
 
 	beforeAll(async () => {

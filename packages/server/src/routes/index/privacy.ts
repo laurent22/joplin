@@ -1,11 +1,11 @@
+
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import MarkdownIt = require('markdown-it');
+import MarkdownIt from 'markdown-it';
 import config from '../../config';
 import markdownUtils from '@joplin/lib/markdownUtils';
-
 const router: Router = new Router(RouteType.Web);
 router.public = true;
 

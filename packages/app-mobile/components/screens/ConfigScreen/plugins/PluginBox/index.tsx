@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Card, Text } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
@@ -13,7 +14,6 @@ import InstallButton from '../buttons/InstallButton';
 import PluginTitle from './PluginTitle';
 import RecommendedBadge from './RecommendedBadge';
 import CardButton from '../../../../buttons/CardButton';
-
 export enum InstallState {
 	NotInstalled,
 	Installing,

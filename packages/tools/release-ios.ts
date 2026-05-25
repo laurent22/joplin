@@ -1,8 +1,8 @@
+
 import * as fs from 'fs-extra';
 import { rootDir, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
 import { unique } from '@joplin/lib/ArrayUtils';
 import * as readline from 'readline';
-
 const mobileDir = `${rootDir}/packages/app-mobile`;
 
 const warningMessage = async () => {

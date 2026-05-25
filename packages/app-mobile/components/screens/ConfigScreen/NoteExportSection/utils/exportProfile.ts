@@ -1,7 +1,7 @@
+
 import shim from '@joplin/lib/shim';
 import { reg } from '@joplin/lib/registry';
 import Setting from '@joplin/lib/models/Setting';
-
 const exportProfile = async (profileExportPath: string) => {
 	const dbPath = '/data/data/net.cozic.joplin/databases';
 	const exportPath = profileExportPath;

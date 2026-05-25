@@ -13,21 +13,17 @@ import { reg } from '@joplin/lib/registry.js';
 import { _ } from '@joplin/lib/locale';
 import shim from '@joplin/lib/shim';
 import { AllHtmlEntities as Entities } from 'html-entities';
-const htmlentities = new Entities().encode;
-
 import { cyan, blue } from 'chalk';
 import { terminal } from 'terminal-kit';
 import TermWrapper from 'tkwidgets/framework/TermWrapper.js';
 import Renderer from 'tkwidgets/framework/Renderer.js';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
-
 import { setLogger as _setLogger } from 'tkwidgets/BaseWidget.js';
 import TextWidget from 'tkwidgets/TextWidget.js';
 import HLayoutWidget from 'tkwidgets/HLayoutWidget.js';
 import VLayoutWidget from 'tkwidgets/VLayoutWidget.js';
 import ReduxRootWidget from 'tkwidgets/ReduxRootWidget.js';
 import WindowWidget from 'tkwidgets/WindowWidget.js';
-
 import NoteWidget from './gui/NoteWidget.js';
 import ResourceServer from './ResourceServer.js';
 import NoteMetadataWidget from './gui/NoteMetadataWidget.js';
@@ -36,6 +32,10 @@ import NoteListWidget from './gui/NoteListWidget.js';
 import StatusBarWidget from './gui/StatusBarWidget';
 import ConsoleWidget from './gui/ConsoleWidget.js';
 import LinkSelector from './LinkSelector.js';
+const htmlentities = new Entities().encode;
+
+
+
 
 
 class AppGui {

@@ -1,9 +1,9 @@
 // Based on https://github.com/grimen/node-env-file with various improvements to
 // remove global state and conversion to TypeScript.
 
+
 import { existsSync, readFileSync } from 'fs-extra';
 import { resolve } from 'path';
-
 export interface Options {
 	verbose?: boolean;
 	overwrite?: boolean;

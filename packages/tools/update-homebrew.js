@@ -1,9 +1,9 @@
+import { execCommand, downloadFile, fileSha256, unlinkForce } from './tool-utils.js';
 'use strict';
 
 // https://github.com/Homebrew/homebrew-core/blob/master/CONTRIBUTING.md
 
 const rootDir = `${__dirname}/..`;
-const { execCommand, downloadFile, fileSha256, unlinkForce } = require('./tool-utils.js');
 
 async function main() {
 	const url = await execCommand('yarn view joplin dist.tarball');

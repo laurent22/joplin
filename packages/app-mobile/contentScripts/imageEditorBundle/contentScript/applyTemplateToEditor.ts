@@ -1,5 +1,5 @@
-import { AbstractComponent, Editor, BackgroundComponentBackgroundType, Erase, Vec2, Rect2 } from 'js-draw';
 
+import { AbstractComponent, Editor, BackgroundComponentBackgroundType, Erase, Vec2, Rect2 } from 'js-draw';
 const applyTemplateToEditor = async (editor: Editor, templateData: string) => {
 	let backgroundComponent: AbstractComponent|null = null;
 	let imageSize = editor.getImportExportRect().size;

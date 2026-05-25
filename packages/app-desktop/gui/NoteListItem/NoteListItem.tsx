@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, forwardRef, LegacyRef, ChangeEvent, CSSProperties, MouseEventHandler, DragEventHandler, useMemo, memo } from 'react';
 import { ItemFlow, ListRenderer, NoteListColumns, OnChangeEvent, OnChangeHandler } from '@joplin/lib/services/plugins/api/noteListType';
@@ -10,7 +11,6 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import useRenderedNote from './utils/useRenderedNote';
 import { Dispatch } from 'redux';
 import getNoteElementIdFromJoplinId from './utils/getNoteElementIdFromJoplinId';
-
 interface NoteItemProps {
 	dragIndex: number;
 	flow: ItemFlow;

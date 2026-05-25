@@ -1,9 +1,9 @@
+
 import CommandService, { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { stateUtils } from '@joplin/lib/reducer';
 import { DesktopCommandContext } from '../services/commands/types';
 import { AppState } from '../app.reducer';
-
 export const declaration: CommandDeclaration = {
 	name: 'toggleExternalEditing',
 	label: () => _('Toggle external editing'),

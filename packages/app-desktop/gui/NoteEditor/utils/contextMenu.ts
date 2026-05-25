@@ -1,9 +1,12 @@
+import fs from 'fs-extra';
+import { writeFile } from 'fs-extra';
+import { clipboard } from 'electron';
+import { toSystemSlashes } from '@joplin/lib/path-utils';
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import { _ } from '@joplin/lib/locale';
 import { copyHtmlToClipboard } from './clipboardUtils';
 import bridge from '../../../services/bridge';
 import { ContextMenuItemType, ContextMenuOptions, ContextMenuItems, resourceInfo, textToDataUri, svgUriToPng, svgDimensions, buildMenuItems, ContextMenuItem } from './contextMenuUtils';
-const Menu = bridge().Menu;
 import Resource, { resourceOcrStatusToString } from '@joplin/lib/models/Resource';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
@@ -16,10 +19,7 @@ import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { openFileWithExternalEditor } from '@joplin/lib/services/ExternalEditWatcher/utils';
 import CommandService from '@joplin/lib/services/CommandService';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-const fs = require('fs-extra');
-const { writeFile } = require('fs-extra');
-const { clipboard } = require('electron');
-const { toSystemSlashes } = require('@joplin/lib/path-utils');
+const Menu = bridge().Menu;
 
 function handleCopyToClipboard(options: ContextMenuOptions) {
 	if (options.textToCopy) {

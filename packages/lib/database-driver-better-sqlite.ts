@@ -9,8 +9,8 @@
 //
 // https://github.com/JoshuaWise/better-sqlite3/blob/master/docs/compilation.md
 
-const Database = require('better-sqlite3');
 
+import Database from 'better-sqlite3';
 interface Options {
 	name: string;
 }

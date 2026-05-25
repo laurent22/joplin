@@ -1,9 +1,9 @@
+
 import JoplinDatabase from '../../JoplinDatabase';
 import BaseItem from '../../models/BaseItem';
 import Setting from '../../models/Setting';
 import SyncTargetRegistry from '../../SyncTargetRegistry';
 import { SqlQuery } from '../database/types';
-
 async function clearSyncContext() {
 	const syncTargetIds = SyncTargetRegistry.allIds();
 

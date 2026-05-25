@@ -1,6 +1,8 @@
 // Allows displaying error stack traces with TypeScript file paths
-require('source-map-support').install();
-
+import source_map_support_install from 'source-map-support';
+import nodeSqlite from 'sqlite3';
+import cors from '@koa/cors';
+import { shimInit } from '@joplin/lib/shim-init-node.js';
 import * as Koa from 'koa';
 import * as fs from 'fs-extra';
 import Logger, { LogLevel, LoggerWrapper, TargetType } from '@joplin/utils/Logger';
@@ -29,6 +31,8 @@ import checkAdminHandler from './middleware/checkAdminHandler';
 import ActionLogger from '@joplin/lib/utils/ActionLogger';
 import { setupSamlAuthentication } from './utils/saml';
 import { credentialFile } from './utils/testing/credentialFile';
+source_map_support_install.install();
+
 
 interface Argv {
 	env?: Env;
@@ -36,9 +40,6 @@ interface Argv {
 	envFile?: string;
 }
 
-const nodeSqlite = require('sqlite3');
-const cors = require('@koa/cors');
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit({ nodeSqlite });
 
 const defaultEnvVariables: Record<Env, Partial<EnvVariables>> = {

@@ -1,7 +1,7 @@
+
 import { AppState } from '../../../utils/types';
 import { utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { EditorCommandType } from '@joplin/editor/types';
-
 const builtInCommandNames = [
 	'attachFile',
 	'-',

@@ -1,6 +1,6 @@
+
 import usePrevious from './usePrevious';
 import { Ref, useImperativeHandle } from 'react';
-
 export default function useImperativeHandleDebugger<T>(ref: Ref<T>, effectHook: ()=> T, dependencies: unknown[], dependencyNames: string[] = []) {
 	const previousDeps = usePrevious(dependencies, []);
 

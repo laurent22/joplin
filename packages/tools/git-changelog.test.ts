@@ -1,6 +1,6 @@
+
 import { expectThrow } from '@joplin/lib/testing/test-utils';
 import { filesApplyToPlatform, parseRenovateMessage, RenovateMessage, summarizeRenovateMessages } from './git-changelog';
-
 describe('git-changelog', () => {
 
 	test('should find out if a file path is relevant to a platform', async () => {

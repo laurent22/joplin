@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { View, Text, FlatList, StyleSheet, AccessibilityRole } from 'react-native';
 import { connect } from 'react-redux';
 import Tag from '@joplin/lib/models/Tag';
@@ -19,7 +20,6 @@ import { PromptButtonSpec } from '../DialogManager/types';
 import MultiTouchableOpacity from '../buttons/MultiTouchableOpacity';
 import SearchBar from './SearchScreen/SearchBar';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('tags');
 
 interface Props {

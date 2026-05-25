@@ -1,7 +1,7 @@
+
 import Plugin from './Plugin';
 import BaseService from '../BaseService';
 import Global from './api/Global';
-
 export default abstract class BasePluginRunner extends BaseService {
 
 	// A dictionary with the plugin ID as key. Then each entry has a list

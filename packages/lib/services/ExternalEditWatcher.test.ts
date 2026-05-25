@@ -1,3 +1,4 @@
+
 import { setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import ExternalEditWatcher from './ExternalEditWatcher';
 import { appendFile } from 'fs/promises';
@@ -5,7 +6,6 @@ import Note from '../models/Note';
 import { msleep } from '@joplin/utils/time';
 import waitFor from '../testing/waitFor';
 import { NoteEntity } from './database/types';
-
 const createAndWatchNotes = async (notes: NoteEntity[]) => {
 	const watcher = new ExternalEditWatcher();
 	const openedPaths: string[] = [];

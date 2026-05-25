@@ -1,8 +1,8 @@
-import { useEffect, useState, useMemo, RefObject } from 'react';
-import useMessageHandler from './useMessageHandler';
-const md5 = require('md5');
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied, Old code before rule was applied
+import md5 from 'md5';
+import { useEffect, useState, useMemo, RefObject } from 'react';
+import useMessageHandler from './useMessageHandler';
 export default function(viewRef: RefObject<HTMLIFrameElement>, isReady: boolean, postMessage: Function, html: string) {
 	const [loadedHtmlHash, setLoadedHtmlHash] = useState('');
 

@@ -2,11 +2,11 @@
  * @jest-environment jsdom
  */
 
+
 import lightTheme from '@joplin/lib/themes/light';
 import { editPopupClass, getEditPopupSource } from './useEditPopup';
 import { describe, it, expect, beforeAll, jest } from '@jest/globals';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
-
 const createEditPopup = (target: HTMLElement) => {
 	const { createEditPopupSyntax } = getEditPopupSource(lightTheme);
 	eval(`(${createEditPopupSyntax})`)(target, 'someresourceid', '() => {}');

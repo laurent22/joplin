@@ -1,3 +1,5 @@
+
+
 import * as React from 'react';
 import { AccessibilityInfo, NativeSyntheticEvent, Platform, Role, ScrollViewProps, StyleSheet, TextInput, TextInputProps, useWindowDimensions, View, ViewProps, ViewStyle } from 'react-native';
 import { TouchableRipple, Text } from 'react-native-paper';
@@ -13,8 +15,6 @@ import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import NestableFlatList, { NestableFlatListControl } from './NestableFlatList';
 import useKeyboardState from '../utils/hooks/useKeyboardState';
 import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
-
-
 export interface Option {
 	title: string;
 	icon: string|undefined;

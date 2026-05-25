@@ -1,10 +1,10 @@
+
 import * as React from 'react';
 import { Dialog, Divider, Surface, Text } from 'react-native-paper';
 import { DialogType, ButtonDialogData } from './types';
 import { StyleSheet, ViewStyle } from 'react-native';
 import { useMemo } from 'react';
 import PromptButton from './PromptButton';
-
 interface Props {
 	dialog: ButtonDialogData;
 	containerStyle: ViewStyle;

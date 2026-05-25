@@ -1,3 +1,4 @@
+
 import SsoScreenShared from '@joplin/lib/components/shared/SsoScreenShared';
 import { connect } from 'react-redux';
 import { AppState } from '../../utils/types';
@@ -10,7 +11,6 @@ import { _ } from '@joplin/lib/locale';
 import { Button, TextInput } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
 import BackButtonService from '../../services/BackButtonService';
-
 interface Props {
 	themeId: number;
 	shared: SsoScreenShared;

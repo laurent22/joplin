@@ -1,3 +1,5 @@
+
+
 import { resolve, join, dirname } from 'path';
 import { remove, mkdirp, readFile, pathExists } from 'fs-extra';
 import { _electron as electron, Page, ElectronApplication, test as base, TestInfo } from '@playwright/test';
@@ -6,8 +8,6 @@ import createStartupArgs from './createStartupArgs';
 import getMainWindow from './getMainWindow';
 import setDarkMode from './setDarkMode';
 import evaluateWithRetry from './evaluateWithRetry';
-
-
 type StartWithPluginsResult = { app: ElectronApplication; mainWindow: Page };
 
 type JoplinFixtures = {

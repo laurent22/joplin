@@ -1,5 +1,5 @@
-import { RenderedNoteMetadata, parseRenderedNoteMetadata } from './utils';
 
+import { RenderedNoteMetadata, parseRenderedNoteMetadata } from './utils';
 describe('interop/utils', () => {
 
 	test.each<[string, RenderedNoteMetadata]>([

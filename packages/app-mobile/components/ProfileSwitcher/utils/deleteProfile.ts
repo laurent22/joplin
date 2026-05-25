@@ -1,3 +1,4 @@
+
 import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import { getDatabaseName, getPluginDataDir, getResourceDir, saveProfileConfig } from '../../../services/profiles';
 import { deleteProfileById, getCurrentProfile, isSubProfile } from '@joplin/lib/services/profileConfig';
@@ -7,7 +8,6 @@ import Logger from '@joplin/utils/Logger';
 import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 import DatabaseDriver from '@joplin/lib/database-driver';
 import { _ } from '@joplin/lib/locale';
-
 const logger = Logger.create('deleteProfile');
 
 interface DeleteProfileOptions {

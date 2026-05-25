@@ -1,9 +1,9 @@
+
 import BaseCommand from './base-command';
 import app from './app';
 import Setting from '@joplin/lib/models/Setting';
 import ReportService from '@joplin/lib/services/ReportService';
 import * as fs from 'fs-extra';
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'export-sync-status';

@@ -1,6 +1,6 @@
+
 import Logger from '@joplin/utils/Logger';
 import shim from './shim';
-
 export interface QueueItemAction<Context> {
 	(context: Context): void|Promise<void>;
 }

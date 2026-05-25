@@ -4,9 +4,6 @@
 // This is necessary. Having multiple copies of the CodeMirror libraries loaded can cause
 // the editor to not work properly.
 //
-import { lineNumbers, highlightActiveLineGutter, EditorView } from '@codemirror/view';
-import { completeFromList } from '@codemirror/autocomplete';
-import { MarkdownEditorContentScriptModule, ContentScriptContext } from 'api/types';
 //
 // For the above import to work, you may also need to add @codemirror/view as a dev dependency
 // to package.json. (For the type information only).
@@ -15,6 +12,9 @@ import { MarkdownEditorContentScriptModule, ContentScriptContext } from 'api/typ
 //  const { lineNumbers } = joplin.require('@codemirror/view');
 
 
+import { lineNumbers, highlightActiveLineGutter, EditorView } from '@codemirror/view';
+import { completeFromList } from '@codemirror/autocomplete';
+import { MarkdownEditorContentScriptModule, ContentScriptContext } from 'api/types';
 export default (_context: ContentScriptContext): MarkdownEditorContentScriptModule => {
 	return {
 		// - codeMirrorWrapper: A thin wrapper around CodeMirror 6, designed to be similar to the

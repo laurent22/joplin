@@ -1,12 +1,12 @@
+
+import { themeStyle } from '@joplin/lib/theme';
+import Countable from '@joplin/lib/countable/Countable';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow from './DialogButtonRow';
-const { themeStyle } = require('@joplin/lib/theme');
-const Countable = require('@joplin/lib/countable/Countable');
 import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
 import Dialog from '@joplin/lib/components/Dialog';
-
 interface NoteContentPropertiesDialogProps {
 	themeId: number;
 	text: string;

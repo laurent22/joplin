@@ -1,15 +1,19 @@
+
+import _20_236 from '../migrations/20.js';
+import _27_237 from '../migrations/27.js';
+import _33_238 from '../migrations/33.js';
+import _35_239 from '../migrations/35.js';
 import BaseModel from '../BaseModel';
 import migration42 from '../migrations/42';
-
 interface MigrationScript {
 	exec: ()=> Promise<void>;
 }
 
 const migrationScripts: Record<number, MigrationScript> = {
-	20: require('../migrations/20.js'),
-	27: require('../migrations/27.js'),
-	33: require('../migrations/33.js'),
-	35: require('../migrations/35.js'),
+	20: _20_236,
+	27: _27_237,
+	33: _33_238,
+	35: _35_239,
 	42: migration42,
 };
 

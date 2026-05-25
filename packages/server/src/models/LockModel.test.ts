@@ -2,10 +2,10 @@
 // synchronizer_LockHandler.test so to fully test that it works, Joplin Server
 // should be setup as a sync target for the test units.
 
+
 import { ErrorConflict, ErrorUnprocessableEntity } from '../utils/errors';
 import { beforeAllDb, afterAllTests, beforeEachDb, models, createUserAndSession, expectHttpError } from '../utils/testing/testUtils';
 import { LockType, LockClientType, defaultLockTtl } from '@joplin/lib/services/synchronizer/LockHandler';
-
 describe('LockModel', () => {
 
 	beforeAll(async () => {

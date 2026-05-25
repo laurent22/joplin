@@ -1,6 +1,6 @@
+
 import { randomBytes } from 'crypto';
 import { decryptMFASecret, encryptMFASecret } from './crypto';
-
 describe('crypto', () => {
 
 	it('should be able to encrypt and decrypt and return to same value', () => {

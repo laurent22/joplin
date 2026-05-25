@@ -1,3 +1,4 @@
+
 import * as fs from 'fs-extra';
 import { setupDatabaseAndSynchronizer, switchClient, exportDir, supportDir } from '../../testing/test-utils.js';
 import InteropService_Exporter_Md from '../../services/interop/InteropService_Exporter_Md';
@@ -12,7 +13,6 @@ import InteropService from './InteropService.js';
 import { fileExtension } from '../../path-utils.js';
 import { readdir } from 'fs/promises';
 import { ExportModuleOutputFormat } from './types.js';
-
 describe('interop/InteropService_Exporter_Md', () => {
 
 	beforeEach(async () => {

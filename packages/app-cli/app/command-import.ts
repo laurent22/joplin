@@ -1,13 +1,13 @@
+
+import { cliUtils } from './cli-utils.js';
 import BaseCommand from './base-command';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import { ModelType } from '@joplin/lib/BaseModel';
-const { cliUtils } = require('./cli-utils.js');
 import app from './app';
 import { _ } from '@joplin/lib/locale';
 import { ImportModuleOutputFormat, ImportOptions } from '@joplin/lib/services/interop/types';
 import { unique } from '@joplin/lib/array';
 import Folder from '@joplin/lib/models/Folder';
-
 class Command extends BaseCommand {
 	public override usage() {
 		return 'import <path> [notebook]';

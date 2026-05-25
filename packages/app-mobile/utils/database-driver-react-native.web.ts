@@ -1,7 +1,7 @@
-const { sqlite3Worker1Promiser } = require('@sqlite.org/sqlite-wasm');
+
+import { sqlite3Worker1Promiser } from '@sqlite.org/sqlite-wasm';
 import DatabaseDriver, { DatabaseCloseOptions, DatabaseOpenOptions } from '@joplin/lib/database-driver';
 import { safeFilename } from '@joplin/utils/path';
-
 type DbPromiser = (command: string, options: Record<string, unknown>)=> Promise<unknown>;
 type DbId = unknown;
 type RowResult = { rowNumber: number|null; row: unknown };

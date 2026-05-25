@@ -1,11 +1,11 @@
 
+
+
 import * as React from 'react';
 import { TextStyle, Text, StyleProp } from 'react-native';
-
 import { FontAwesome5 } from '@react-native-vector-icons/fontawesome5';
 import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { Ionicons } from '@react-native-vector-icons/ionicons';
-
 interface Props {
 	name: string;
 	style: StyleProp<TextStyle>;

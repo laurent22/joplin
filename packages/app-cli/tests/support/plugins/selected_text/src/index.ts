@@ -1,6 +1,6 @@
+
 import joplin from 'api';
 import { ToolbarButtonLocation } from 'api/types';
-
 function allEqual(input:string, char:string) {
 	return input.split('').every(c => c === char);
 }

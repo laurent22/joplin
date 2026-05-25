@@ -1,3 +1,4 @@
+
 import { EditorKeymap, EditorLanguageType, EditorSettings, EditorTheme } from '@joplin/editor/types';
 import shim from '@joplin/lib/shim';
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
@@ -6,7 +7,6 @@ import { useSelector } from 'react-redux';
 import { AppState } from '../../../../../../app.reducer';
 import { _ } from '@joplin/lib/locale';
 import { isDeepStrictEqual } from 'node:util';
-
 interface EditorSettingsProps {
 	contentMarkupLanguage: MarkupLanguage;
 	keyboardMode: string;

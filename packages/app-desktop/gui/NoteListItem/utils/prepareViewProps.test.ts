@@ -1,3 +1,5 @@
+
+// Same as `prepareViewProps` but with default arguments to make testing code simpler.
 import { ListRendererDependency } from '@joplin/lib/services/plugins/api/noteListType';
 import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
@@ -5,8 +7,6 @@ import prepareViewProps from './prepareViewProps';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
-
-// Same as `prepareViewProps` but with default arguments to make testing code simpler.
 const prepare = async (
 	dependencies: ListRendererDependency[],
 	note: NoteEntity,

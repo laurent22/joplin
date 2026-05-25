@@ -1,7 +1,7 @@
+
 import { _, _n } from '../../../locale';
 import shim from '../../../shim';
 import { SharingStatus } from './types';
-
 interface Props {
 	sharesState: SharingStatus;
 	noteCount: number;

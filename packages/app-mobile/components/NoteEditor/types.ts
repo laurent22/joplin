@@ -1,5 +1,6 @@
 // Types related to the NoteEditor
 
+
 import { EditorControl as EditorBodyControl, EditorSettings as EditorBodySettings, SearchState } from '@joplin/editor/types';
 import { RefObject } from 'react';
 import { WebViewControl } from '../ExtendedWebView/types';
@@ -7,7 +8,6 @@ import { SelectionRange } from '../../contentScripts/markdownEditorBundle/types'
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { EditorEvent } from '@joplin/editor/events';
 import { ResourceInfos } from '@joplin/renderer/types';
-
 export interface SearchControl {
 	findNext(): void;
 	findPrevious(): void;

@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ConfigScreenStyles } from '../configScreenStyles';
@@ -13,7 +14,6 @@ import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import PluginInfoModal from './PluginInfoModal';
 import usePluginCallbacks from './utils/usePluginCallbacks';
 import SectionLabel from './SectionLabel';
-
 interface Props {
 	themeId: number;
 	styles: ConfigScreenStyles;

@@ -1,5 +1,5 @@
-import { StorageDriverConfig, StorageDriverMode, StorageDriverType } from '../../../utils/types';
 
+import { StorageDriverConfig, StorageDriverMode, StorageDriverType } from '../../../utils/types';
 const serializeType = (type: StorageDriverType): string => {
 	if (type === StorageDriverType.Database) return 'Database';
 	if (type === StorageDriverType.Filesystem) return 'Filesystem';

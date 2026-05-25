@@ -1,10 +1,10 @@
+
 import { ensureSyntaxTree } from '@codemirror/language';
 import { EditorSelection } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import uslug from '@joplin/fork-uslug/lib/uslug';
 import { SyntaxNodeRef } from '@lezer/common';
 import htmlNodeInfo from '../utils/htmlNodeInfo';
-
 const jumpToHash = (view: EditorView, hash: string) => {
 	const state = view.state;
 	const timeout = 1_000; // Maximum time to spend parsing the syntax tree

@@ -1,3 +1,5 @@
+
+import { filename } from '../../path-utils';
 import { ImportExportResult, ImportOptions } from './types';
 import importEnex from '../../import-enex';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
@@ -5,8 +7,6 @@ import Folder from '../../models/Folder';
 import { FolderEntity } from '../database/types';
 import { fileExtension, rtrimSlashes } from '../../path-utils';
 import shim from '../../shim';
-const { filename } = require('../../path-utils');
-
 const doImportEnex = async (destFolder: FolderEntity, sourcePath: string, options: ImportOptions) => {
 	if (!destFolder) {
 		const folderTitle = await Folder.findUniqueItemTitle(filename(sourcePath));

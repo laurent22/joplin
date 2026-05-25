@@ -1,7 +1,7 @@
+
 import { strict as assert } from 'node:assert';
 import type { FolderData, ItemId } from './types';
 import Serializable, { BaseSchema } from './Serializable';
-
 export type ShareRecord = {
 	email: string;
 	readOnly: boolean;

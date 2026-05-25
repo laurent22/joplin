@@ -1,3 +1,6 @@
+
+import debounce from 'debounce';
+import styled from 'styled-components';
 import * as React from 'react';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import SearchInput from '../lib/SearchInput/SearchInput';
@@ -9,9 +12,6 @@ import { connect } from 'react-redux';
 import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../app.reducer';
 import { blur, focus } from '@joplin/lib/utils/focusHandler';
-const debounce = require('debounce');
-const styled = require('styled-components').default;
-
 export const Root = styled.div`
 	position: relative;
 	display: flex;

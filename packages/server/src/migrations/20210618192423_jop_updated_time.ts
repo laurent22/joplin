@@ -1,6 +1,6 @@
+
 import { Knex } from 'knex';
 import { DbConnection } from '../db';
-
 export const up = async (db: DbConnection) => {
 	await db.schema.alterTable('items', (table: Knex.CreateTableBuilder) => {
 		table.bigInteger('jop_updated_time').defaultTo(0).notNullable();

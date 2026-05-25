@@ -1,10 +1,10 @@
+
 import { Session } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { cookieDelete, cookieGet } from '../../utils/cookies';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, models, parseHtml, createUser } from '../../utils/testing/testUtils';
 import { AppContext } from '../../utils/types';
 import * as crypto from '../../utils/crypto';
-
 async function doLogin(email: string, password: string): Promise<AppContext> {
 	const context = await koaAppContext({
 		request: {

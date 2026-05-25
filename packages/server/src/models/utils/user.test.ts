@@ -1,5 +1,5 @@
-import { isHashedPassword } from '../../utils/auth';
 
+import { isHashedPassword } from '../../utils/auth';
 describe('isHashedPassword', () => {
 
 	// cSpell:disable

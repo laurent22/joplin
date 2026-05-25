@@ -1,7 +1,7 @@
+
 import Logger from '@joplin/utils/Logger';
 import { _ } from '@joplin/lib/locale';
 import { authenticateAsync } from 'expo-local-authentication';
-
 const logger = Logger.create('biometricAuthenticate');
 
 export default async () => {

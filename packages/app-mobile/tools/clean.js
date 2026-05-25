@@ -2,8 +2,8 @@
 // For now this script is specifically for Android, as it's the build that causes the most problems.
 // We also don't want to clear the iOS data whenever we build the Android app.
 
-const fs = require('fs');
 
+import fs from 'fs';
 function deleteMatchingDirs(rootDir, predicate) {
 	let entries;
 	try {

@@ -1,3 +1,10 @@
+
+import joplin_fork_sax_createStream from '@joplin/fork-sax';
+import moment from 'moment';
+import { wrapError } from './errorUtils';
+import { enexXmlToHtml } from './import-enex-html-gen.js';
+import md5 from 'md5';
+import { Base64Decode } from 'base64-stream';
 import uuid from './uuid';
 import Note from './models/Note';
 import Tag from './models/Tag';
@@ -10,14 +17,8 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { fileExtension, friendlySafeFilename, safeFileExtension } from './path-utils';
 import { extractUrls as extractUrlsFromHtml } from '@joplin/utils/html';
 import { extractUrls as extractUrlsFromMarkdown } from '@joplin/utils/markdown';
-const moment = require('moment');
-const { wrapError } = require('./errorUtils');
-const { enexXmlToHtml } = require('./import-enex-html-gen.js');
-const md5 = require('md5');
-const { Base64Decode } = require('base64-stream');
 import * as mime from './mime-utils';
 import type * as FsExtra from 'fs-extra';
-
 let fs_: typeof FsExtra = null;
 const fs = () => {
 	fs_ ??= shim.requireDynamic('fs-extra');
@@ -382,7 +383,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 
 		const options = {};
 		const strict = true;
-		const saxStream = require('@joplin/fork-sax').createStream(strict, options);
+		const saxStream = joplin_fork_sax_createStream.createStream(strict, options);
 
 		const nodes: Node[] = []; // LIFO list of nodes so that we know in which node we are in the onText event
 		let note: ExtractedNote = null;

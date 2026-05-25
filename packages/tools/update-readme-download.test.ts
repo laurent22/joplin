@@ -1,6 +1,6 @@
+
 import { GitHubRelease } from './tool-utils';
 import { downloadUrl, OS } from './update-readme-download';
-
 describe('update-readme-download', () => {
 
 	it('convert download URLs', async () => {

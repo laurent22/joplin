@@ -1,4 +1,3 @@
-import { CiphertextBuffer, PublicKeyCrypto } from '../../types';
 
 // This implementation is intended to roughly match what's used by NodeRSA
 // for long input data (https://github.com/rzcoder/node-rsa/blob/e7e7f7d2942a3bac1d2e132a881e5a3aceda10a1/src/libs/rsa.js#L252).
@@ -8,6 +7,7 @@ import { CiphertextBuffer, PublicKeyCrypto } from '../../types';
 // cases *shouldn't* affect Joplin master key encryption (pseudorandom data with
 // a length slightly bigger than the block size). However, it would be best to
 // avoid using "LongDataWrapper" if an alternative is available.
+import { CiphertextBuffer, PublicKeyCrypto } from '../../types';
 export default class LongDataWrapper<KeyPair> implements PublicKeyCrypto<KeyPair, Buffer<ArrayBuffer>> {
 	public constructor(
 		private publicKeyCrypto_: PublicKeyCrypto<KeyPair, Buffer<ArrayBuffer>>,

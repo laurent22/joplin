@@ -1,5 +1,5 @@
-import { ElectronApplication } from '@playwright/test';
 
+import { ElectronApplication } from '@playwright/test';
 const waitForNextOpenPath = (electronApp: ElectronApplication) => {
 	return electronApp.evaluate(async ({ shell }) => {
 		return new Promise<string>(resolve => {

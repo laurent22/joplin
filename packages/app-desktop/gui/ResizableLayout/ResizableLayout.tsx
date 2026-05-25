@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import useWindowResizeEvent from './utils/useWindowResizeEvent';
@@ -10,9 +11,8 @@ import MoveButtons, { MoveButtonClickEvent } from './MoveButtons';
 import { StyledWrapperRoot, StyledMoveOverlay, MoveModeRootMessage } from './utils/style';
 import type { ResizeCallback, ResizeStartCallback } from 're-resizable';
 import Dialog from '@joplin/lib/components/Dialog';
-import EventEmitter = require('events');
+import EventEmitter from 'events';
 import LayoutItemContainer from './LayoutItemContainer';
-
 interface OnResizeEvent {
 	layout: LayoutItem;
 }

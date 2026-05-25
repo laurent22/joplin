@@ -1,10 +1,10 @@
+
+import { testing__lastPrompt } from '@joplin/whisper-voice-typing';
 import { setupDatabase } from '@joplin/lib/testing/test-utils';
 import whisper from './whisper';
 import { dirname, join } from 'path';
 import { exists, mkdir, remove, writeFile } from 'fs-extra';
 import Setting from '@joplin/lib/models/Setting';
-const { testing__lastPrompt } = require('@joplin/whisper-voice-typing');
-
 jest.mock('@joplin/whisper-voice-typing', () => {
 	let lastPrompt: string|null = null;
 

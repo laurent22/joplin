@@ -1,7 +1,7 @@
+
 import { useCallback, useEffect, useRef } from 'react';
 import { Bookmark, Editor } from 'tinymce';
 import { OnCursorMotion } from '../../../utils/types';
-
 interface Props {
 	initialCursorLocation: Bookmark;
 	editor: Editor;

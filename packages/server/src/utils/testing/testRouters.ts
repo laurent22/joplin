@@ -1,13 +1,15 @@
 /* eslint-disable no-console */
 
+
+import source_map_support_install from 'source-map-support';
+import { stringify } from 'query-string';
+import { exec } from 'child_process';
+import { spawn } from 'child_process';
 import * as fs from 'fs-extra';
+source_map_support_install.install();
 
-require('source-map-support').install();
-
-const { stringify } = require('query-string');
 
 const execCommand = function(command: string, returnStdErr = false): Promise<string> {
-	const exec = require('child_process').exec;
 
 	return new Promise((resolve, reject) => {
 		exec(command, (error: (Error & { signal?: string }) | null, stdout: string, stderr: string) => {
@@ -91,7 +93,6 @@ function extractCurlResponse(rawResult: string) {
 	return splitted.filter((line: string) => line.indexOf('<') === 0).join('\n');
 }
 
-const spawn = require('child_process').spawn;
 
 let serverProcess: ReturnType<typeof spawn> | null = null;
 

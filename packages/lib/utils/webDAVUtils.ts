@@ -1,7 +1,7 @@
+
 import { _ } from '../locale';
 import Setting from '../models/Setting';
 import { URL } from 'url';
-
 const pathContainsUnsupportedProvider = (path: string, unsupportedProviders: string[]) => {
 	try {
 		const url = new URL(path.toLowerCase());

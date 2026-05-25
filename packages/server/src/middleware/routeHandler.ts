@@ -1,3 +1,4 @@
+
 import { routeResponseFormat, Response, RouteResponseFormat, execRequest } from '../utils/routeUtils';
 import { AppContext, Env } from '../utils/types';
 import { isView, View } from '../services/MustacheService';
@@ -9,7 +10,6 @@ import { onRequestComplete, onRequestStart } from '../utils/metrics';
 import { uuidgen } from '@joplin/lib/uuid';
 import { ApiError, ErrorTooManyRequests } from '../utils/errors';
 import { formatBytesSimple } from '../utils/bytes';
-
 const logRequestInfo = (ctx: AppContext, requestStartTime: number, error: Error | string | null) => {
 	try {
 		const owner = ctx.joplin.owner;

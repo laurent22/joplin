@@ -1,9 +1,9 @@
+
 import Logger, { LogLevel } from '@joplin/utils/Logger';
 import JoplinError from '../JoplinError';
 import { _ } from '../locale';
 import Setting from '../models/Setting';
 import Note from '../models/Note';
-
 export interface MatchedStartFlags {
 	profileDir?: string;
 	welcomeDisabled?: boolean;

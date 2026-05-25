@@ -1,6 +1,6 @@
+
 import Logger from '@joplin/utils/Logger';
 import { BaseQueue, ContentStorage, JobWithData, WorkHandler } from '../types';
-
 const logger = Logger.create('JobProcessor');
 
 export default class JobProcessor {

@@ -1,9 +1,10 @@
-const utils = require('@joplin/tools/gulp/utils');
-const { toForwardSlashes } = require('@joplin/utils/path');
-const fs = require('fs-extra');
-const path = require('path');
-const md5 = require('md5');
 
+import $_file_140 from './${file.encodedName}';
+import utils from '@joplin/tools/gulp/utils';
+import { toForwardSlashes } from '@joplin/utils/path';
+import fs from 'fs-extra';
+import path from 'path';
+import md5 from 'md5';
 const rootDir = `${__dirname}/..`;
 const outputDir = `${rootDir}/pluginAssets`;
 
@@ -78,7 +79,7 @@ async function main() {
 			const hashes = [];
 			const indexJs = [];
 			for (const file of encodedFiles) {
-				indexJs.push(`'${file.name}': { data: require('./${file.encodedName}'), mime: '${file.mime}', encoding: '${file.encoding}' },`);
+				indexJs.push(`'${file.name}': { data: $_file_140, mime: '${file.mime}', encoding: '${file.encoding}' },`);
 				hashes.push(file.hash);
 			}
 

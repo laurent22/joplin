@@ -1,10 +1,10 @@
+
 import { Store, createStore } from 'redux';
 import reducer, { State, defaultState } from '../../reducer';
 import ShareService from '../../services/share/ShareService';
 import { encryptionService } from '../test-utils';
 import JoplinServerApi, { ExecOptions } from '../../JoplinServerApi';
 import { ShareInvitation, StateShare, StateShareUser } from '../../services/share/reducer';
-
 const testReducer = (state = defaultState, action: unknown) => {
 	return reducer(state, action);
 };

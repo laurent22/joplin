@@ -1,6 +1,6 @@
+
 import { Facet, StateEffect, StateField } from '@codemirror/state';
 import { EditorSettings } from '../../types';
-
 export const setEditorSettingsEffect = StateEffect.define<EditorSettings>();
 
 export const editorSettingsFacet = Facet.define<EditorSettings|null, EditorSettings|null>({

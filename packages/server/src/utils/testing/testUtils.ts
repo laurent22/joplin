@@ -1,3 +1,7 @@
+
+// Takes into account the fact that this file will be inside the /dist directory
+// when it runs.
+import source_map_support_install from 'source-map-support';
 import { DbConnection, connectDb, disconnectDb, truncateTables } from '../../db';
 import { User, Session, Item, Uuid } from '../../services/database/types';
 import { createDb, CreateDbOptions } from '../../tools/dbTools';
@@ -29,15 +33,12 @@ import { AccountType } from '../../models/UserModel';
 import initLib from '@joplin/lib/initLib';
 import { makeFolderSerializedBody, makeNoteSerializedBody, makeResourceSerializedBody } from './serializedItems';
 import { AppAuthResponse } from '../../models/ApplicationModel';
-
-// Takes into account the fact that this file will be inside the /dist directory
-// when it runs.
 export const packageRootDir = path.dirname(path.dirname(path.dirname(__dirname)));
 
 let db_: DbConnection = null;
 let dbSlave_: DbConnection = null;
 
-// require('source-map-support').install();
+// source_map_support_install.install();
 
 export function randomHash(): string {
 	return crypto.createHash('md5').update(`${Date.now()}-${Math.random()}`).digest('hex');

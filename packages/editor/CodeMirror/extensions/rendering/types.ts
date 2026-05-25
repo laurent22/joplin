@@ -1,7 +1,7 @@
+
 import type { EditorState, Transaction } from '@codemirror/state';
 import type { Decoration, WidgetType } from '@codemirror/view';
 import type { SyntaxNodeRef } from '@lezer/common';
-
 export interface ReplacementExtension {
 	// Should return the widget that replaces `node`. Returning `null` preserves `node` without replacement.
 	createDecoration(node: SyntaxNodeRef, state: EditorState, parentTags: Readonly<Map<string, number>>): Decoration|WidgetType|null;

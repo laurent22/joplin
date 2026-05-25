@@ -1,6 +1,6 @@
+
 import { Knex } from 'knex';
 import { DbConnection } from '../db';
-
 export const up = async (db: DbConnection) => {
 	try {
 		await db.schema.alterTable('emails', (table: Knex.CreateTableBuilder) => {

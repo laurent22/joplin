@@ -1,5 +1,5 @@
-import { SubPath, urlMatchesSchema } from '../routeUtils';
 
+import { SubPath, urlMatchesSchema } from '../routeUtils';
 export type MenuItemSelectedCondition = (selectedUrl: SubPath)=> boolean;
 
 export interface MenuItem {

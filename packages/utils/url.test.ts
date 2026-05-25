@@ -1,5 +1,5 @@
-import { fileUriToPath, isHttpOrHttpsUrl, hasProtocol } from './url';
 
+import { fileUriToPath, isHttpOrHttpsUrl, hasProtocol } from './url';
 describe('utils/url', () => {
 
 	it('should convert a file URI to a file path', (async () => {

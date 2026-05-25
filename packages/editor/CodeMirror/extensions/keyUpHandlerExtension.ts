@@ -1,5 +1,5 @@
-import { EditorView, ViewPlugin } from '@codemirror/view';
 
+import { EditorView, ViewPlugin } from '@codemirror/view';
 interface OnKeyUpEvent {
 	domEvent: KeyboardEvent;
 	view: EditorView;

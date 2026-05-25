@@ -1,3 +1,4 @@
+
 import Setting from '../../models/Setting';
 import BaseModel from '../../BaseModel';
 import { synchronizerStart, revisionService, setupDatabaseAndSynchronizer, synchronizer, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker } from '../../testing/test-utils';
@@ -5,7 +6,6 @@ import Note from '../../models/Note';
 import Revision from '../../models/Revision';
 import { loadMasterKeysFromSettings, setupAndEnableEncryption } from '../e2ee/utils';
 import { onRevisionServiceSettingsChanged } from './syncInfoUtils';
-
 describe('Synchronizer.revisions', () => {
 
 	beforeEach(async () => {

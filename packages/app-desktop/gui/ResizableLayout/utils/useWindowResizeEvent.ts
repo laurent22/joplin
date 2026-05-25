@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-const debounce = require('debounce');
 
+import debounce from 'debounce';
+import { useEffect } from 'react';
 export default function useWindowResizeEvent(eventEmitter: { current: { emit: (name: string)=> void } }) {
 	useEffect(() => {
 		const window_resize = debounce(() => {

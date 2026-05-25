@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useCallback } from 'react';
 import { StyledHeader, StyledHeaderIcon, StyledHeaderLabel } from '../styles';
@@ -6,7 +7,6 @@ import bridge from '../../../services/bridge';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import CommandService from '@joplin/lib/services/CommandService';
 import ListItemWrapper, { ItemSelectionState, ListItemRef } from './ListItemWrapper';
-
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const menuUtils = new MenuUtils(CommandService.instance());

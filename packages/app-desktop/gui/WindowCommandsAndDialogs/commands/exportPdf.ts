@@ -1,3 +1,4 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import InteropServiceHelper from '../../../InteropServiceHelper';
@@ -5,7 +6,6 @@ import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import bridge from '../../../services/bridge';
 import { WindowControl } from '../utils/useWindowControl';
-
 export const declaration: CommandDeclaration = {
 	name: 'exportPdf',
 	label: () => `PDF - ${_('PDF File')}`,

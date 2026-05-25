@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { _ } from '@joplin/lib/locale';
@@ -9,7 +10,6 @@ import { Banner } from 'react-native-paper';
 import { useMemo } from 'react';
 import useEditorTypeMigrationBanner from '@joplin/lib/components/shared/NoteEditor/WarningBanner/useEditorTypeMigrationBanner';
 import { MarkupLanguage } from '@joplin/renderer/types';
-
 interface Props {
 	editorType: EditorType;
 	richTextBannerDismissed: boolean;

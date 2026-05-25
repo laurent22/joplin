@@ -1,8 +1,8 @@
+
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { RefObject } from 'react';
-
 export const declaration: CommandDeclaration = {
 	name: 'focusElementNoteTitle',
 	label: () => _('Note title'),

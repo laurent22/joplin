@@ -1,10 +1,10 @@
-import { flipNthCheckbox } from './useCheckboxToggle';
 
 // Joplin's renderer only converts `- [ ]` / `- [x]` items inside bullet lists
 // into clickable checkboxes — `*`, `+`, and numbered list markers are ignored.
 // `flipNthCheckbox` must count exactly the same subset so the Nth rendered
 // checkbox maps to the Nth source-text checkbox.
 
+import { flipNthCheckbox } from './useCheckboxToggle';
 describe('flipNthCheckbox', () => {
 	test('flips an unchecked box to checked', () => {
 		expect(flipNthCheckbox('- [ ] todo', 0)).toBe('- [x] todo');

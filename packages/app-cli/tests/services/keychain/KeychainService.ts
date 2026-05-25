@@ -1,10 +1,10 @@
 /* eslint-disable jest/require-top-level-describe */
 
+
 import KeychainService from '@joplin/lib/services/keychain/KeychainService';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import { db, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
-
 function describeIfCompatible(name: string, fn: ()=> void, elseFn: ()=> void) {
 	if (['win32', 'darwin'].includes(shim.platformName())) {
 		return describe(name, fn);

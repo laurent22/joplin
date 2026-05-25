@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import ToolbarButton from './ToolbarButton/ToolbarButton';
 import ToggleEditorsButton, { Value } from './ToggleEditorsButton/ToggleEditorsButton';
@@ -7,7 +8,6 @@ import { AppState } from '../app.reducer';
 import { connect } from 'react-redux';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { focus } from '@joplin/lib/utils/focusHandler';
-
 interface Props {
 	themeId: number;
 	scrollable: boolean;

@@ -1,7 +1,7 @@
 // This class doesn't appear to be used at all
 
-import BaseModel from '../BaseModel';
 
+import BaseModel from '../BaseModel';
 export default class Search extends BaseModel {
 	public static tableName(): string {
 		throw new Error('Not using database');

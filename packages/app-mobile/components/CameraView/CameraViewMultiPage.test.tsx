@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import Setting from '@joplin/lib/models/Setting';
 import CameraViewMultiPage from './CameraViewMultiPage';
@@ -9,7 +10,6 @@ import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { startCamera, takePhoto } from './utils/testing';
 import { useState } from 'react';
-
 interface WrapperProps {
 	onComplete?: (finalPhotos: CameraResult[])=> void;
 	onCancel?: ()=> void;

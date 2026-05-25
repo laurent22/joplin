@@ -1,6 +1,6 @@
-const SQLite = require('react-native-sqlite-storage');
-import DatabaseDriver, { DatabaseCloseOptions, DatabaseOpenOptions } from '@joplin/lib/database-driver';
 
+import SQLite from 'react-native-sqlite-storage';
+import DatabaseDriver, { DatabaseCloseOptions, DatabaseOpenOptions } from '@joplin/lib/database-driver';
 interface SqliteResultSet {
 	rows: { length: number; item: (i: number)=> unknown };
 	insertId?: string;

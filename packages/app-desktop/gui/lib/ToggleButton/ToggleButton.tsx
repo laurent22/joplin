@@ -1,9 +1,9 @@
+
+import ReactToggleButton from 'react-toggle-button';
+import Color from 'color';
 import { themeStyle } from '@joplin/lib/theme';
 import * as React from 'react';
 import { useMemo } from 'react';
-const ReactToggleButton = require('react-toggle-button');
-const Color = require('color');
-
 interface Props {
 	value: boolean;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied

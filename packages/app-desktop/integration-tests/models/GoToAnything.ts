@@ -1,10 +1,10 @@
 
+
 import { ElectronApplication, expect, Locator, Page } from '@playwright/test';
 import MainScreen from './MainScreen';
 import activateMainMenuItem from '../util/activateMainMenuItem';
 import { msleep } from '@joplin/utils/time';
 import retryOnFailure from '../util/retryOnFailure';
-
 export default class GoToAnything {
 	public readonly containerLocator: Locator;
 	public readonly inputLocator: Locator;

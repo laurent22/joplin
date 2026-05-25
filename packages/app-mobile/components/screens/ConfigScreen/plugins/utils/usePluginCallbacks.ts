@@ -1,3 +1,4 @@
+
 import { ItemEvent, OnPluginSettingChangeEvent } from '@joplin/lib/components/shared/config/plugins/types';
 import useOnDeleteHandler from '@joplin/lib/components/shared/config/plugins/useOnDeleteHandler';
 import useOnInstallHandler from '@joplin/lib/components/shared/config/plugins/useOnInstallHandler';
@@ -5,7 +6,6 @@ import NavService from '@joplin/lib/services/NavService';
 import { PluginSettings, defaultPluginSetting } from '@joplin/lib/services/plugins/PluginService';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import { useCallback, useMemo, useRef, useState } from 'react';
-
 interface Props {
 	updatePluginStates: (settingValue: PluginSettings)=> void;
 	pluginSettings: PluginSettings;

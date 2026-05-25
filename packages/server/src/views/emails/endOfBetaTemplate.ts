@@ -1,6 +1,6 @@
+
 import config from '../../config';
 import { EmailSubjectBody } from '../../models/EmailModel';
-
 interface TemplateView {
 	expireDays: number;
 	startSubUrl: string;

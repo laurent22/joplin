@@ -1,6 +1,6 @@
+
 import type { CameraDirection } from '@joplin/lib/models/settings/builtInMetadata';
 import type { ViewStyle } from 'react-native';
-
 export type OnInsertBarcode = (barcodeText: string)=> void;
 
 export interface CameraResult {

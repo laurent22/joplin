@@ -1,3 +1,5 @@
+
+import stripeLib from 'stripe';
 import globalConfig from '../config';
 import { StripeConfig } from './types';
 import { Stripe } from 'stripe';
@@ -6,8 +8,6 @@ import { Models } from '../models/factory';
 import { AccountType } from '../models/UserModel';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 import { ErrorWithCode, ErrorCode } from './errors';
-const stripeLib = require('stripe');
-
 export interface SubscriptionInfo {
 	sub: Subscription;
 	stripeSub: Stripe.Subscription;

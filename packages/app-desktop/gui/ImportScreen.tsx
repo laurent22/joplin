@@ -1,3 +1,5 @@
+
+import { connect } from 'react-redux';
 import * as React from 'react';
 import Folder from '@joplin/lib/models/Folder';
 import { themeStyle } from '@joplin/lib/theme';
@@ -5,8 +7,6 @@ import { _ } from '@joplin/lib/locale';
 import { filename, basename } from '@joplin/lib/path-utils';
 import importEnex from '@joplin/lib/import-enex';
 import { AppState } from '../app.reducer';
-const { connect } = require('react-redux');
-
 interface Props {
 	filePath: string;
 	themeId: number;

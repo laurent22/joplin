@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Store } from 'redux';
 import { AppState } from '../../utils/types';
@@ -12,7 +13,6 @@ import { useMemo } from 'react';
 import Revision from '@joplin/lib/models/Revision';
 import { ModelType } from '@joplin/lib/BaseModel';
 import getWebViewDomById from '../../utils/testing/getWebViewDomById';
-
 interface WrapperProps {
 	noteId: string;
 }

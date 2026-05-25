@@ -1,5 +1,5 @@
-import separateCallbacksFromSerializable from './separateCallbacksFromSerializable';
 
+import separateCallbacksFromSerializable from './separateCallbacksFromSerializable';
 describe('separateCallbacksFromSerializable', () => {
 	test('should separate callbacks from serializable data for a single callback', () => {
 		const testCallback = async () => {};

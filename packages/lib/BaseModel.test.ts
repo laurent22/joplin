@@ -1,5 +1,5 @@
-import BaseModel from './BaseModel';
 
+import BaseModel from './BaseModel';
 describe('BaseModel', () => {
 	test.each([
 		[0, 0],

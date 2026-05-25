@@ -1,8 +1,8 @@
+
 import Setting from '../../models/Setting';
 import eventManager from '../../eventManager';
 import { notesSortOrderFieldArray, setNotesSortOrder } from './notesSortOrderUtils';
 import { parseNotesParent } from '../../reducer';
-
 const SUFFIX_FIELD = '$field';
 const SUFFIX_REVERSE = '$reverse';
 

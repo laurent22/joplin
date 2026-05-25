@@ -1,10 +1,10 @@
+
 import { useEffect } from 'react';
 import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService, { KeymapItem } from '@joplin/lib/services/KeymapService';
 import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
 import normalizeAccelerator from '../../utils/normalizeAccelerator';
 import { CodeMirrorVersion } from '../../utils/types';
-
 const useKeymap = (editorControl: CodeMirrorControl) => {
 	useEffect(() => {
 		if (!editorControl) return () => {};

@@ -1,5 +1,5 @@
-import { beforeAllDb, afterAllTests, beforeEachDb, models, createUserAndSession, createNote, createResource } from '../utils/testing/testUtils';
 
+import { beforeAllDb, afterAllTests, beforeEachDb, models, createUserAndSession, createNote, createResource } from '../utils/testing/testUtils';
 describe('ItemResourceModel', () => {
 
 	beforeAll(async () => {

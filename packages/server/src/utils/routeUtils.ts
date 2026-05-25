@@ -1,3 +1,6 @@
+
+
+import { ltrimSlashes, rtrimSlashes } from '@joplin/lib/path-utils';
 import config, { baseUrl } from '../config';
 import { Item, ItemAddressingType, User, Uuid } from '../services/database/types';
 import { ErrorBadRequest, ErrorCode, ErrorForbidden, ErrorNotFound } from './errors';
@@ -9,9 +12,6 @@ import { contextSessionId } from './requestUtils';
 import { shortToLong } from './uuid';
 import { stripOffQueryParameters } from './urlUtils';
 import { hasOwnProperty } from '@joplin/utils/object';
-
-const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
-
 function dirname(path: string): string {
 	if (!path) throw new Error('Path is empty');
 	const s = path.split('/');

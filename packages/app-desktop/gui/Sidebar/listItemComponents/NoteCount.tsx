@@ -1,7 +1,7 @@
+
+
 import * as React from 'react';
 import { _n } from '@joplin/lib/locale';
-
-
 interface Props {
 	count: number;
 }

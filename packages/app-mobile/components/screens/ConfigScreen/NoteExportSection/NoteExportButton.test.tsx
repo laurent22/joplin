@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import { act, fireEvent, render, waitFor } from '../../../../utils/testing/testingLibrary';
 import { expect, describe, beforeEach, test, jest } from '@jest/globals';
@@ -9,7 +10,6 @@ import configScreenStyles from '../configScreenStyles';
 import { type ShareOptions } from 'react-native-share';
 import Setting from '@joplin/lib/models/Setting';
 import NoteExportButton from './NoteExportButton';
-
 jest.mock('react-native-share', () => {
 	const Share = {
 		open: (_options: ShareOptions) => jest.fn(),

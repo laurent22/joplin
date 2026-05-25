@@ -1,9 +1,9 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
 import { _ } from '../locale';
 import ShareService from '../services/share/ShareService';
 import Logger from '@joplin/utils/Logger';
 import shim from '../shim';
-
 const logger = Logger.create('leaveSharedFolder');
 
 export const declaration: CommandDeclaration = {

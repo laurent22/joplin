@@ -1,18 +1,21 @@
+
+
+import electron_remote_main_enable from '@electron/remote/main';
+import shim from '@joplin/lib/shim';
+import path from 'path';
+import { dirname } from '@joplin/lib/path-utils';
+import fs from 'fs-extra';
+import windowStateKeeper from 'electron-window-state';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/utils/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
 import AutoUpdaterService, { defaultUpdateInterval, initialUpdateStartup } from './services/autoUpdater/AutoUpdaterService';
 import type ShimType from '@joplin/lib/shim';
-const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { FileLocker } from '@joplin/utils/fs';
 import { IpcMessageHandler, IpcServer, Message, newHttpError, sendMessage, SendMessageOptions, startServer, stopServer } from '@joplin/utils/ipc';
 import { BrowserWindow, BrowserWindowConstructorOptions, Tray, WebContents, screen, App, nativeTheme, Menu, session as electronSession, Session } from 'electron';
 import bridge from './bridge';
 import * as url from 'url';
-const path = require('path');
-const { dirname } = require('@joplin/lib/path-utils');
-const fs = require('fs-extra');
-
 import { dialog, ipcMain } from 'electron';
 import { _ } from '@joplin/lib/locale';
 import restartInSafeModeFromMain from './utils/restartInSafeModeFromMain';
@@ -24,7 +27,6 @@ import { msleep, Second } from '@joplin/utils/time';
 import determineBaseAppDirs from '@joplin/lib/determineBaseAppDirs';
 import getAppName from '@joplin/lib/getAppName';
 import { execCommand } from '@joplin/utils';
-
 interface RendererProcessQuitReply {
 	canClose: boolean;
 }
@@ -241,7 +243,6 @@ export default class ElectronAppWrapper {
 		// Set to true to view errors if the application does not start
 		const debugEarlyBugs = this.env_ === 'dev' || this.isDebugMode_;
 
-		const windowStateKeeper = require('electron-window-state');
 
 		const stateOptions: { defaultWidth: number; defaultHeight: number; file: string; path?: string } = {
 			defaultWidth: Math.round(0.8 * screen.getPrimaryDisplay().workArea.width),
@@ -287,7 +288,7 @@ export default class ElectronAppWrapper {
 
 		this.win_ = new BrowserWindow(windowOptions);
 
-		require('@electron/remote/main').enable(this.win_.webContents);
+		electron_remote_main_enable.enable(this.win_.webContents);
 
 		// Add Referer header for YouTube embeds to fix Error 153
 		this.win_.webContents.session.webRequest.onBeforeSendHeaders(

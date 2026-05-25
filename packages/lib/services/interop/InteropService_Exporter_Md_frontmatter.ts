@@ -1,3 +1,4 @@
+
 import InteropService_Exporter_Md from './InteropService_Exporter_Md';
 import BaseModel, { ModelType } from '../../BaseModel';
 import NoteTag from '../../models/NoteTag';
@@ -7,7 +8,6 @@ import { FolderIcon, FolderIconType, NoteEntity } from '../database/types';
 import { serialize } from '../../utils/frontMatter';
 import Logger from '@joplin/utils/Logger';
 import * as yaml from 'js-yaml';
-
 const logger = Logger.create('InteropService_Exporter_Md_frontmatter');
 
 interface NoteTagContext {

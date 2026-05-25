@@ -1,5 +1,6 @@
-import * as React from 'react';
 
+
+import * as React from 'react';
 import { FlatList, View } from 'react-native';
 import NoteItem from '../../NoteItem';
 import { useEffect, useRef, useState } from 'react';
@@ -10,7 +11,6 @@ import Note from '@joplin/lib/models/Note';
 import SearchEngine, { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
 import { ProgressBar } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
-
 interface Props {
 	query: string;
 	paused: boolean;

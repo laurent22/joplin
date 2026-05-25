@@ -1,5 +1,5 @@
-import parsePluralLocalizationForm from './parsePluralLocalizationForm';
 
+import parsePluralLocalizationForm from './parsePluralLocalizationForm';
 describe('parsePluralLocalizationForm', () => {
 
 

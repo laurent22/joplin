@@ -1,5 +1,5 @@
-import { GB, KB, MB, formatBytes } from './bytes';
 
+import { GB, KB, MB, formatBytes } from './bytes';
 describe('bytes', () => {
 
 	it('should convert bytes', async () => {

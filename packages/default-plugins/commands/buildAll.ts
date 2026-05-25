@@ -1,5 +1,5 @@
-import buildDefaultPlugins from '../buildDefaultPlugins';
 
+import buildDefaultPlugins from '../buildDefaultPlugins';
 const buildAll = (outputDirectory: string) => {
 	return buildDefaultPlugins({
 		outputParentDir: outputDirectory,

@@ -1,3 +1,8 @@
+import { default as default_20 } from './plugins/GotoAnything';
+import shim from '@joplin/lib/shim';
+import packageInfo from './packageInfo.js';
+import PluginManager from '@joplin/lib/services/PluginManager';
+import electronContextMenu from './services/electron-context-menu';
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
@@ -6,7 +11,6 @@ import resourceEditWatcherReducer, { defaultState as resourceEditWatcherDefaultS
 import PluginRunner from './services/plugins/PluginRunner';
 import PlatformImplementation from './services/plugins/PlatformImplementation';
 import type ShimType from '@joplin/lib/shim';
-const shim: typeof ShimType = require('@joplin/lib/shim').default;
 import AlarmService from '@joplin/lib/services/AlarmService';
 import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode';
 import Logger, { TargetType } from '@joplin/utils/Logger';
@@ -25,24 +29,14 @@ import appReducer, { createAppDefaultState } from './app.reducer';
 import Folder from '@joplin/lib/models/Folder';
 import Tag from '@joplin/lib/models/Tag';
 import { reg } from '@joplin/lib/registry';
-const packageInfo: PackageInfo = require('./packageInfo.js');
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import ClipperServer from '@joplin/lib/ClipperServer';
 import { ipcRenderer } from 'electron';
-const Menu = bridge().Menu;
-const PluginManager = require('@joplin/lib/services/PluginManager');
 import RevisionService from '@joplin/lib/services/RevisionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
 import { loadCustomCss } from '@joplin/lib/CssUtils';
 import { homedir } from 'os';
 import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
-const electronContextMenu = require('./services/electron-context-menu');
-// import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
-
-
-// Commands that are not tied to any particular component.
-// The runtime for these commands can be loaded when the app starts.
-
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
@@ -50,7 +44,7 @@ import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 import { completePendingAuthentication } from '@joplin/lib/services/joplinCloudUtils';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
-import path = require('path');
+import path from 'path';
 import { afterDefaultPluginsLoaded, loadAndRunDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
 import userFetcher, { initializeUserFetcher } from '@joplin/lib/utils/userFetcher';
 import { parseNotesParent } from '@joplin/lib/reducer';
@@ -66,11 +60,18 @@ import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
+const Menu = bridge().Menu;
+// import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
+
+
+// Commands that are not tied to any particular component.
+// The runtime for these commands can be loaded when the app starts.
+
 
 const perfLogger = PerformanceLogger.create();
 
 const pluginClasses = [
-	require('./plugins/GotoAnything').default,
+	default_20,
 ];
 
 const appDefaultState = createAppDefaultState(resourceEditWatcherDefaultState);

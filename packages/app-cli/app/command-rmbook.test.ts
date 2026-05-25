@@ -1,9 +1,9 @@
+
+import Command from './command-rmbook';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import { setupCommandForTesting, setupApplication } from './utils/testUtils';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
-const Command = require('./command-rmbook');
-
 const setUpCommand = () => {
 	const command = setupCommandForTesting(Command);
 	const promptMock = jest.fn(() => true);

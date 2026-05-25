@@ -1,8 +1,8 @@
+
 import { EditorApi } from '../../joplinEditorApiPlugin';
 import { EditorLanguageType } from '../../../../types';
 import showModal from '../../../utils/dom/showModal';
 import { focus } from '@joplin/lib/utils/focusHandler';
-
 interface Options {
 	source: string;
 	cursor: number;

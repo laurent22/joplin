@@ -1,3 +1,4 @@
+
 import { FileApi } from '../../file-api';
 import BaseItem from '../../models/BaseItem';
 import Note from '../../models/Note';
@@ -5,7 +6,6 @@ import { expectNotThrow, expectThrow, setupDatabaseAndSynchronizer, switchClient
 import time from '../../time';
 import ItemUploader from './ItemUploader';
 import { ApiCallFunction } from './utils/types';
-
 interface ApiCall {
 	name: string;
 	args: unknown[];

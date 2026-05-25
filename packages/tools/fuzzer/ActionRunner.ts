@@ -1,3 +1,4 @@
+
 import Client from './ipc/Client';
 import ClientPool from './ipc/ClientPool';
 import { FuzzContext, RandomFolderOptions } from './types';
@@ -6,7 +7,6 @@ import { strict as assert } from 'assert';
 import Logger from '@joplin/utils/Logger';
 import retryWithCount from './utils/retryWithCount';
 import { Second } from '@joplin/utils/time';
-
 const logger = Logger.create('ActionRunner');
 
 export interface ActionSpec {

@@ -1,8 +1,8 @@
+
 import { resourceBlobPath } from '../utils/joplinUtils';
 import { Item, ItemResource, Uuid } from '../services/database/types';
 import BaseModel from './BaseModel';
 import { ItemLoadOptions } from './ItemModel';
-
 export interface TreeItem {
 	item_id: Uuid;
 	resource_id: string;

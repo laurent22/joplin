@@ -1,10 +1,10 @@
+
+import md5 from 'md5';
 import type { ReadDirStatsOptions, RemoveOptions } from '@joplin/lib/fs-driver-base';
 import WorkerToWindowMessenger from '@joplin/lib/utils/ipc/WorkerToWindowMessenger';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import { resolve, dirname, basename, normalize, join } from 'path';
 import { Buffer } from 'buffer';
-const md5 = require('md5');
-
 const removeReservedWords = (fileName: string) => {
 	return fileName.replace(/(tmp)$/g, '_$1');
 };

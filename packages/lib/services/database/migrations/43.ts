@@ -1,5 +1,5 @@
-import { SqlQuery } from '../types';
 
+import { SqlQuery } from '../types';
 export default (): (SqlQuery|string)[] => {
 	return [
 		'ALTER TABLE `notes` ADD COLUMN `user_data` TEXT NOT NULL DEFAULT ""',

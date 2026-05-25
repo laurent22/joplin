@@ -1,5 +1,5 @@
-const fs = require('fs-extra');
 
+import fs from 'fs-extra';
 const sourcePath = `${__dirname}/../../lib/randomClipperPort.js`;
 const clipperUtilsPath = `${__dirname}/../../lib/clipperUtils.js`;
 

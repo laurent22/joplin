@@ -1,7 +1,7 @@
+
 import { strict as assert } from 'assert';
 import { DbConnection, isPostgres } from '../db';
 import { uuidgen } from '../utils/uuid';
-
 export const up = async (db: DbConnection) => {
 	await db.schema.createTable('changes_2', (table) => {
 		// The counter is the internal change identifier and is used for ordering.

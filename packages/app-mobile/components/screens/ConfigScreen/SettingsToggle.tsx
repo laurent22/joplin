@@ -1,11 +1,11 @@
+
+
 import * as React from 'react';
 import { FunctionComponent, ReactNode } from 'react';
-
 import { View, Text, Switch } from 'react-native';
 import { UpdateSettingValueCallback } from './types';
 import { themeStyle } from '@joplin/lib/theme';
 import { ConfigScreenStyles } from './configScreenStyles';
-
 interface Props {
 	settingId: string;
 	value: boolean;

@@ -1,8 +1,8 @@
+
 import { writeFile } from 'fs-extra';
 import { createNewProfile, getProfileFullPath, loadProfileConfig, migrateProfileConfig, saveProfileConfig } from '.';
 import { tempFilePath } from '../../testing/test-utils';
 import { CurrentProfileVersion, defaultProfile, defaultProfileConfig, DefaultProfileId, Profile, ProfileConfig } from './types';
-
 describe('profileConfig/index', () => {
 
 	it('should load a default profile config', async () => {

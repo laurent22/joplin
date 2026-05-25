@@ -1,14 +1,15 @@
-const { afterEachCleanUp } = require('./testing/test-utils.js');
-const { shimInit } = require('./shim-init-node.js');
-const sharp = require('sharp');
-const nodeSqlite = require('sqlite3');
-const pdfJs = require('pdfjs-dist');
-const packageInfo = require('./package.json');
 
 // Used for testing some shared components
-const React = require('react');
 
-require('../../jest.base-setup.js')();
+import jest_base_setup_190 from '../../jest.base-setup.js';
+import { afterEachCleanUp } from './testing/test-utils.js';
+import { shimInit } from './shim-init-node.js';
+import sharp from 'sharp';
+import nodeSqlite from 'sqlite3';
+import pdfJs from 'pdfjs-dist';
+import packageInfo from './package.json';
+import React from 'react';
+jest_base_setup_190();
 
 shimInit({ pdfJs, sharp, nodeSqlite, React, appVersion: () => packageInfo.version });
 

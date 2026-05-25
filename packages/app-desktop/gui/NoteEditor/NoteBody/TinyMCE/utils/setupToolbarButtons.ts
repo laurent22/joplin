@@ -1,5 +1,5 @@
-import { _ } from '@joplin/lib/locale';
 
+import { _ } from '@joplin/lib/locale';
 interface ButtonDefinition {
 	name: string;
 	tooltip: string;

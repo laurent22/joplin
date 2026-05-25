@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { AppState } from '../../utils/types';
 import { Store } from 'redux';
@@ -11,7 +12,6 @@ import mockShareService from '@joplin/lib/testing/share/mockShareService';
 import { fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
 import Folder from '@joplin/lib/models/Folder';
 import ShareService from '@joplin/lib/services/share/ShareService';
-
 const mockServiceForNoteSharing = () => {
 	mockShareService({
 		getShares: async () => {

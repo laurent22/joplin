@@ -1,5 +1,9 @@
-import { Routers } from '../utils/routeUtils';
 
+
+
+
+
+import { Routers } from '../utils/routeUtils';
 import apiBatch from './api/batch';
 import apiBatchItems from './api/batch_items';
 import apiDebug from './api/debug';
@@ -14,14 +18,12 @@ import apiUsers from './api/users';
 import apiApplicationAuth from './api/application_auth';
 import apiLogin from './api/login';
 import apiTranscribe from './api/transcribe';
-
 import adminDashboard from './admin/dashboard';
 import adminEmails from './admin/emails';
 import adminTasks from './admin/tasks';
 import adminUserDeletions from './admin/user_deletions';
 import adminUsers from './admin/users';
 import adminReports from './admin/reports';
-
 import indexChanges from './index/changes';
 import indexHelp from './index/help';
 import indexHome from './index/home';
@@ -40,9 +42,7 @@ import indexUsers from './index/users';
 import indexMFA from './index/mfa';
 import indexApplications from './index/applications';
 import indexRecoveryCodes from './index/recovery_codes';
-
 import defaultRoute from './default';
-
 const routes: Routers = {
 	'api/batch_items': apiBatchItems,
 	'api/batch': apiBatch,

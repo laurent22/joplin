@@ -1,3 +1,5 @@
+import pathLibrary from 'path';
+import punycode from 'punycode/';
 export { runPlugin, stopPlugin } from './startStopPlugin';
 
 // Old plugins allowed to import legacy APIs
@@ -7,8 +9,6 @@ const legacyPluginIds = [
 	'com.github.joplin.kanban',
 ];
 
-const pathLibrary = require('path');
-const punycode = require('punycode/');
 
 export const requireModule = (moduleName: string, fromPluginId: string) => {
 	if (moduleName === 'path') {

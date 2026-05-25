@@ -1,6 +1,6 @@
+
 import { CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
 import { _ } from '../locale';
-
 export const declaration: CommandDeclaration = {
 	name: 'openMasterPasswordDialog',
 	label: () => _('Manage master password...'),

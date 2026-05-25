@@ -1,3 +1,8 @@
+
+import electron_context_menu_21 from './services/electron-context-menu';
+import { shell as shell_22 } from 'electron';
+import { screen as screen_23 } from 'electron';
+import { app } from 'electron';
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
@@ -15,7 +20,6 @@ import { closeSync, openSync, readSync, statSync } from 'fs';
 import { KB } from '@joplin/utils/bytes';
 import { defaultWindowId } from '@joplin/lib/reducer';
 import { execCommand } from '@joplin/utils';
-
 interface LastSelectedPath {
 	file: string;
 	directory: string;
@@ -320,7 +324,7 @@ export class Bridge {
 	// version of electron-context-menu.
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public setupContextMenu(_spellCheckerMenuItemsHandler: Function) {
-		require('./services/electron-context-menu')({
+		electron_context_menu_21({
 			allWindows: [this.mainWindow()],
 
 			electronApp: this.electronApp(),
@@ -378,7 +382,7 @@ export class Bridge {
 	}
 
 	public showItemInFolder(fullPath: string) {
-		return require('electron').shell.showItemInFolder(toSystemSlashes(fullPath));
+		return shell_22.showItemInFolder(toSystemSlashes(fullPath));
 	}
 
 	public newBrowserWindow(options: BrowserWindowConstructorOptions) {
@@ -550,7 +554,7 @@ export class Bridge {
 	}
 
 	public screen() {
-		return require('electron').screen;
+		return screen_23;
 	}
 
 	public shouldUseDarkColors() {
@@ -620,7 +624,6 @@ export class Bridge {
 		// Note that in this case we are not sending the "appClose" event
 		// to notify services and component that the app is about to close
 		// but for the current use-case it's not really needed.
-		const { app } = require('electron');
 
 		if (shim.isPortable()) {
 			const options = {

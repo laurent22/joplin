@@ -1,3 +1,5 @@
+
+
 import { useEffect, useState } from 'react';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import bridge from '../../../../../../services/bridge';
@@ -5,9 +7,7 @@ import { contentScriptsToCodeMirrorPlugin } from '@joplin/lib/services/plugins/u
 import { extname } from 'path';
 import shim from '@joplin/lib/shim';
 import uuid from '@joplin/lib/uuid';
-
 import { reg } from '@joplin/lib/registry';
-
 const addPluginDependency = (path: string) => {
 	const id = `content-script-${encodeURIComponent(path)}`;
 	if (document.getElementById(id)) {

@@ -1,3 +1,4 @@
+
 import Note from '../../models/Note';
 import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
 import ShareService, { ApiShare } from './ShareService';
@@ -18,7 +19,6 @@ import Setting from '../../models/Setting';
 import { ModelType } from '../../BaseModel';
 import { remoteNotesFoldersResources } from '../../testing/test-utils-synchronizer';
 import mockShareService from '../../testing/share/mockShareService';
-
 const testImagePath = `${supportDir}/photo.jpg`;
 
 

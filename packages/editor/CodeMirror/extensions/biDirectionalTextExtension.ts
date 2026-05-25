@@ -1,6 +1,6 @@
+
 import { Extension, RangeSetBuilder } from '@codemirror/state';
 import { Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate } from '@codemirror/view';
-
 const autoTextDirectionDecoration = Decoration.line({
 	attributes: { dir: 'auto' },
 });

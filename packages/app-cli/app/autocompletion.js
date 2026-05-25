@@ -1,3 +1,4 @@
+
 import app from './app';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
@@ -5,7 +6,6 @@ import Tag from '@joplin/lib/models/Tag';
 import { cliUtils } from './cli-utils.js';
 import yargParser from 'yargs-parser';
 import { readdir } from 'fs-extra';
-
 async function handleAutocompletionPromise(line) {
 	// Auto-complete the command name
 	const names = await app().commandNames();

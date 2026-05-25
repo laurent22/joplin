@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
@@ -18,7 +19,6 @@ import useBackHandler from '../../../utils/hooks/useBackHandler';
 import Logger from '@joplin/utils/Logger';
 import NavService from '@joplin/lib/services/NavService';
 import { ResourceOcrDriverId, ResourceOcrStatus } from '@joplin/lib/services/database/types';
-
 const logger = Logger.create('DocumentScanner');
 
 interface Props {

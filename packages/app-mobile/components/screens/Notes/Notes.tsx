@@ -1,3 +1,5 @@
+
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 import * as React from 'react';
 import { AppState as RNAppState, View, StyleSheet, NativeEventSubscription, ViewStyle, TextStyle } from 'react-native';
 import { stateUtils } from '@joplin/lib/reducer';
@@ -21,8 +23,6 @@ import { useContext } from 'react';
 import { MenuChoice } from '../../DialogManager/types';
 import NewNoteButton from './NewNoteButton';
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
-
 interface Props {
 	dispatch: Dispatch;
 

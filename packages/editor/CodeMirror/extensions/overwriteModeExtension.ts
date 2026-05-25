@@ -1,7 +1,7 @@
+
 import { EditorView, keymap } from '@codemirror/view';
 import { StateField, Facet, StateEffect } from '@codemirror/state';
 import keyUpHandlerExtension from './keyUpHandlerExtension';
-
 const overwriteModeFacet = Facet.define({
 	combine: values => values[0] ?? false,
 	enables: facet => [

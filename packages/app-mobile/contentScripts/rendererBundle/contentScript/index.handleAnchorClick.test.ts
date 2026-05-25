@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
-import { handleAnchorClick } from './index';
 
+import { handleAnchorClick } from './index';
 describe('index.handleAnchorClick', () => {
 	let document: Document;
 	let scrollIntoViewMock: jest.Mock;

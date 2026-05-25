@@ -1,9 +1,3 @@
-import { EditorSelection, EditorState, Line, SelectionRange, TransactionSpec } from '@codemirror/state';
-import { RegionSpec } from './RegionSpec';
-import findInlineMatch, { MatchSide } from './findInlineMatch';
-import growSelectionToNode from '../growSelectionToNode';
-import toggleInlineSelectionFormat from './toggleInlineSelectionFormat';
-import { blockquoteDetectRegex, singleBlockquoteMarkerLength } from './markdownFormatPatterns';
 
 // Toggle formatting for all selections. For example,
 // toggling a code RegionSpec repeatedly should create:
@@ -15,6 +9,12 @@ import { blockquoteDetectRegex, singleBlockquoteMarkerLength } from './markdownF
 //
 // This is intended primarily for mobile, where characters
 // like "`" can be difficult to type.
+import { EditorSelection, EditorState, Line, SelectionRange, TransactionSpec } from '@codemirror/state';
+import { RegionSpec } from './RegionSpec';
+import findInlineMatch, { MatchSide } from './findInlineMatch';
+import growSelectionToNode from '../growSelectionToNode';
+import toggleInlineSelectionFormat from './toggleInlineSelectionFormat';
+import { blockquoteDetectRegex, singleBlockquoteMarkerLength } from './markdownFormatPatterns';
 const toggleRegionFormatGlobally = (
 	state: EditorState,
 

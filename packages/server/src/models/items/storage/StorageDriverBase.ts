@@ -1,10 +1,10 @@
-import { StorageDriverConfig, StorageDriverMode } from '../../../utils/types';
-import { Models } from '../../factory';
 
 // ItemModel passes the models object when calling any of the driver handler.
 // This is so that if there's an active transaction, the driver can use that (as
 // required for example by StorageDriverDatabase).
 
+import { StorageDriverConfig, StorageDriverMode } from '../../../utils/types';
+import { Models } from '../../factory';
 export interface Context {
 	models: Models;
 }

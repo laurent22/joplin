@@ -1,7 +1,7 @@
+
 import { Pagination, PaginationOrder, PaginationOrderDir } from '../../../models/utils/types';
 import { Request } from '../Api';
 import { ErrorBadRequest } from './errors';
-
 function requestPaginationOrder(request: Request): PaginationOrder[] {
 	const orderBy: string = request.query.order_by ? request.query.order_by : 'updated_time';
 	const orderDir: PaginationOrderDir = request.query.order_dir ? request.query.order_dir : PaginationOrderDir.ASC;

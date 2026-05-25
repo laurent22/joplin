@@ -1,11 +1,8 @@
 // CodeMirror 6 commands that modify markdown formatting (e.g. toggleBold).
 
-import { EditorView, Command } from '@codemirror/view';
 
+import { EditorView, Command } from '@codemirror/view';
 import { ListType } from '../../types';
-import {
-	SelectionRange, EditorSelection, ChangeSpec, Line, TransactionSpec,
-} from '@codemirror/state';
 import { getIndentUnit, indentString, syntaxTree } from '@codemirror/language';
 import intersectsSyntaxNode from '../utils/isInSyntaxNode';
 import toggleRegionFormatGlobally from '../utils/formatting/toggleRegionFormatGlobally';
@@ -14,6 +11,9 @@ import toggleInlineFormatGlobally from '../utils/formatting/toggleInlineFormatGl
 import stripBlockquote from '../utils/markdown/stripBlockquote';
 import renumberSelectedLists from '../utils/markdown/renumberSelectedLists';
 import toggleSelectedLinesStartWith from '../utils/formatting/toggleSelectedLinesStartWith';
+import {
+	SelectionRange, EditorSelection, ChangeSpec, Line, TransactionSpec,
+} from '@codemirror/state';
 
 
 export const toggleBolded: Command = (view: EditorView): boolean => {

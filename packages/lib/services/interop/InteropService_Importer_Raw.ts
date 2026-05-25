@@ -1,5 +1,8 @@
-import { ImportExportResult } from './types';
 
+
+import { sprintf } from 'sprintf-js';
+import { fileExtension } from '../../path-utils';
+import { ImportExportResult } from './types';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import BaseItem from '../../models/BaseItem';
 import BaseModel from '../../BaseModel';
@@ -8,13 +11,10 @@ import Folder from '../../models/Folder';
 import NoteTag from '../../models/NoteTag';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
-const { sprintf } = require('sprintf-js');
 import shim from '../../shim';
 import { Stat } from '../../fs-driver-base';
 import { ResourceEntity } from '../database/types';
-const { fileExtension } = require('../../path-utils');
 import uuid from '../../uuid';
-
 export default class InteropService_Importer_Raw extends InteropService_Importer_Base {
 	public async exec(result: ImportExportResult) {
 		const itemIdMap: Record<string, string> = {};

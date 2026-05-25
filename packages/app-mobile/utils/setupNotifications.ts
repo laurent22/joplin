@@ -1,7 +1,7 @@
+
+
+import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 import { Dispatch } from 'redux';
-
-const { NativeEventEmitter, NativeModules, Platform } = require('react-native');
-
 interface NotificationData {
 	joplinNotificationId: string;
 	noteId: string;

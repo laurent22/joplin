@@ -1,6 +1,6 @@
+
 import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import { Decoration } from '@codemirror/view';
-
 const hideDecoration = Decoration.replace({});
 
 const replaceBackslashEscapes = makeInlineReplaceExtension({

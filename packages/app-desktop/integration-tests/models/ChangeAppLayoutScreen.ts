@@ -1,8 +1,8 @@
 
+
 import { ElectronApplication, Locator, Page } from '@playwright/test';
 import MainScreen from './MainScreen';
 import activateMainMenuItem from '../util/activateMainMenuItem';
-
 export default class ChangeAppLayoutScreen {
 	public readonly containerLocator: Locator;
 

@@ -1,3 +1,4 @@
+
 import { EditorNoteStatuses } from '@joplin/lib/reducer';
 import { RefObject } from 'react';
 import usePrintToCallback from './usePrintToCallback';
@@ -6,7 +7,6 @@ import commands from '../commands';
 import CommandService, { CommandRuntime, ComponentCommandSpec } from '@joplin/lib/services/CommandService';
 import useNowEffect from '@joplin/lib/hooks/useNowEffect';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-
 interface Props {
 	documentRef: RefObject<Document|null>;
 	customCss: string;

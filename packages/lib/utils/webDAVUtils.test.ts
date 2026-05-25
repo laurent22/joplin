@@ -1,6 +1,6 @@
+
 import checkProviderIsSupported from './webDAVUtils';
 import Setting from '../models/Setting';
-
 describe('checkProviderIsSupported', () => {
 	describe('when no unsupported provider is already configured', () => {
 		beforeAll(() => {

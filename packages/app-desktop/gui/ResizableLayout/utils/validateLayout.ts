@@ -1,7 +1,7 @@
+
 import { produce } from 'immer';
 import iterateItems from './iterateItems';
 import { LayoutItem, LayoutItemDirection } from './types';
-
 function isLastVisible(itemIndex: number, item: LayoutItem, parent: LayoutItem) {
 	if (item.visible === false) return false;
 

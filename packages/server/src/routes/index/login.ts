@@ -1,3 +1,4 @@
+
 import { SubPath, redirect, makeUrl, UrlType, internalRedirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -11,7 +12,6 @@ import { cookieSet } from '../../utils/cookies';
 import { adminDashboardUrl, applicationsConfirmUrl, homeUrl } from '../../utils/urlUtils';
 import { generateRedirectHtml } from '../../utils/saml';
 import { ErrorForbidden } from '../../utils/errors';
-
 type LoginViewContentOptions = {
 	showMfaCodeInput: boolean;
 	showRecoveryCodeInput?: boolean;

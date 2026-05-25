@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { CameraDirection } from '@joplin/lib/models/settings/builtInMetadata';
 import { BarcodeSettings, CameraMountError, CameraRatio, CameraView, useCameraPermissions } from 'expo-camera';
@@ -6,7 +7,6 @@ import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import { CameraRef, Props } from './types';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
-
 const logger = Logger.create('Camera/expo');
 
 const barcodeScannerSettings: BarcodeSettings = {

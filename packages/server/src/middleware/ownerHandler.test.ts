@@ -1,6 +1,6 @@
+
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, koaNext } from '../utils/testing/testUtils';
 import ownerHandler from './ownerHandler';
-
 describe('ownerHandler', () => {
 
 	beforeAll(async () => {

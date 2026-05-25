@@ -1,3 +1,4 @@
+
 import Logger from '@joplin/utils/Logger';
 import { ModelType } from '../../BaseModel';
 import { ErrorCode } from '../../errors';
@@ -8,7 +9,6 @@ import Setting from '../Setting';
 import { checkObjectHasProperties } from '@joplin/utils/object';
 import isTrashableItem from '../../services/trash/isTrashableItem';
 import isJoplinServerVariant from './isJoplinServerVariant';
-
 const logger = Logger.create('models/utils/readOnly');
 
 export interface ItemSlice {

@@ -1,7 +1,7 @@
+
 import { EditorSelection } from '@codemirror/state';
 import createTestEditor from '../../../testing/createTestEditor';
 import findLineMatchingLink from './findLineMatchingLink';
-
 describe('findLineMatchingLink', () => {
 	test.each([
 		// Should match headings

@@ -1,3 +1,4 @@
+
 import { EditorSelection } from '@codemirror/state';
 import createTestEditor from '../testing/createTestEditor';
 import { getSearchQuery, openSearchPanel, SearchQuery, setSearchQuery } from '@codemirror/search';
@@ -5,7 +6,6 @@ import { EditorView } from '@codemirror/view';
 import searchExtension from './searchExtension';
 import createEditorSettings from '../../testing/createEditorSettings';
 import { Second } from '@joplin/utils/time';
-
 const setSearchText = (text: string, view: EditorView) => {
 	const oldQuery = getSearchQuery(view.state);
 	const query = new SearchQuery({

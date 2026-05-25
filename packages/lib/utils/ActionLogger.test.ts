@@ -1,10 +1,10 @@
+
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import { setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import Note from '../models/Note';
 import ActionLogger from './ActionLogger';
 import Setting from '../models/Setting';
 import { pathExists, readFile, remove, writeFile } from 'fs-extra';
-
 const getLogPath = () => `${Setting.value('profileDir')}/log.txt`;
 
 const logContainsEntryWith = async (...terms: string[]) => {

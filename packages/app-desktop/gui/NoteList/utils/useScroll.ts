@@ -1,7 +1,7 @@
+
 import * as React from 'react';
 import { Size } from '@joplin/utils/types';
 import { useCallback, useState, useRef, useMemo } from 'react';
-
 const useScroll = (itemsPerLine: number, noteCount: number, itemSize: Size, listSize: Size, listRef: React.MutableRefObject<HTMLDivElement>) => {
 	const [scrollTop, setScrollTop] = useState(0);
 	const lastScrollSetTime = useRef(0);

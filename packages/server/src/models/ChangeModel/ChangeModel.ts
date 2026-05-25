@@ -1,3 +1,4 @@
+
 import { DbConnection, SqliteMaxVariableNum } from '../../db';
 import { ChangeType, Uuid, ItemType, Change2, Item, Change } from '../../services/database/types';
 import { PaginatedResults } from '../utils/pagination';
@@ -8,7 +9,6 @@ import ChangeModelNew from './ChangeModel.new';
 import BaseModel, { LoadOptions } from '../BaseModel';
 import { ErrorResyncRequired } from '../../utils/errors';
 import Logger from '@joplin/utils/Logger';
-
 export { defaultChangeTtl } from './BaseChangeModel';
 
 const logger = Logger.create('ChangeModel/index');

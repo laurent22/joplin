@@ -1,5 +1,5 @@
-import { RefObject } from 'react';
 
+import { RefObject } from 'react';
 const getWindowCommandPriority = <T extends HTMLElement> (contentContainer: RefObject<T>) => {
 	if (!contentContainer.current) return 0;
 	const containerDocument = contentContainer.current.getRootNode() as Document;

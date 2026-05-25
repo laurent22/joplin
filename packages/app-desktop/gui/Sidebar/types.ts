@@ -1,6 +1,6 @@
+
 import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import { DragEventHandler, MouseEventHandler, MouseEvent as ReactMouseEvent } from 'react';
-
 export enum HeaderId {
 	TagHeader = 'tagHeader',
 	FolderHeader = 'folderHeader',

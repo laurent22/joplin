@@ -1,9 +1,9 @@
-const fs = require('fs-extra');
-const execSync = require('child_process').execSync;
 
 // Electron Builder strip off certain important keys from package.json, which we need, in particular build.appId
 // so this script is used to preserve the keys that we need.
 
+import fs from 'fs-extra';
+import { execSync } from 'child_process';
 const packageInfo = require(`${__dirname}/../package.json`);
 
 module.exports = async function() {

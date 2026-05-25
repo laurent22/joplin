@@ -1,6 +1,6 @@
+
 import { NoteListColumn, NoteListColumns, defaultListColumns } from '@joplin/lib/services/plugins/api/noteListType';
 import validateColumns from './validateColumns';
-
 const makeColumns = (props: Partial<NoteListColumn>[]) => {
 	const columns: NoteListColumns = [];
 	for (const p of props) {

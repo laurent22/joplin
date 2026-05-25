@@ -1,10 +1,10 @@
+
 import { useCallback } from 'react';
 import bridge from '../../../services/bridge';
 import { ColumnName, NoteListColumn, NoteListColumns, columnNames, defaultWidth } from '@joplin/lib/services/plugins/api/noteListType';
 import Setting from '@joplin/lib/models/Setting';
 import { MenuItemConstructorOptions } from 'electron';
 import getColumnTitle from './getColumnTitle';
-
 const Menu = bridge().Menu;
 
 export default (columns: NoteListColumns) => {

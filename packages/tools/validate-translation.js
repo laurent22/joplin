@@ -1,3 +1,5 @@
+import fs from 'fs-extra';
+import { execCommand } from './tool-utils.js';
 'use strict';
 
 // Dependencies:
@@ -5,9 +7,7 @@
 // sudo apt install gettext
 
 const rootDir = `${__dirname}/../..`;
-const fs = require('fs-extra');
 const localesDir = `${rootDir}/packages/tools/locales`;
-const { execCommand } = require('./tool-utils.js');
 
 async function main() {
 	const files = fs.readdirSync(localesDir);

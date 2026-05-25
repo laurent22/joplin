@@ -1,7 +1,7 @@
+
 import { readFile } from 'fs/promises';
 import { createTempDir } from './fs.test';
 import { newHttpError, sendMessage, startServer, stopServer } from './ipc';
-
 const getRandomPort = () => {
 	return Math.floor(Math.random() * (65535 - 20000 + 1)) + 20000;
 };

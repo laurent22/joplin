@@ -1,9 +1,9 @@
+
 import { allNotesFolders, remoteNotesAndFolders } from '../../testing/test-utils-synchronizer';
 import { afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, switchClient, fileApi, db } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { clearLocalDataForRedownload, clearLocalSyncStateForReupload } from '../../services/synchronizer/tools';
-
 describe('Synchronizer.tools', () => {
 
 	beforeEach(async () => {

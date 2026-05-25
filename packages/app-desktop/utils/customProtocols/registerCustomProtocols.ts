@@ -1,9 +1,9 @@
 
-import { Privileges, protocol } from 'electron';
-import { contentProtocolName, pluginProtocolName } from './constants';
 
 // This must be called before Electron's onReady event.
 // handleCustomProtocols should be called separately, after onReady.
+import { Privileges, protocol } from 'electron';
+import { contentProtocolName, pluginProtocolName } from './constants';
 const registerCustomProtocols = async () => {
 	const contentProtocolPrivileges: Privileges = {
 		supportFetchAPI: true,

@@ -5,11 +5,11 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
+
 import VK from 'tinymce/core/api/util/VK';
 import * as Settings from '../api/Settings';
 import * as Delete from './Delete';
 import { outdentListSelection, indentListSelection } from '../actions/Indendation';
-
 const setupTabKey = function (editor) {
   editor.on('keydown', function (e) {
     // Check for tab but not ctrl/cmd+tab since it switches browser tabs

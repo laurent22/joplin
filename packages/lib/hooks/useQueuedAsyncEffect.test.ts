@@ -1,9 +1,9 @@
+
 import '../testing/dom-test-environment';
 import type * as React from 'react';
 import { renderHook } from '@testing-library/react';
 import useQueuedAsyncEffect from './useQueuedAsyncEffect';
 import { runWithFakeTimers } from '../testing/test-utils';
-
 describe('useQueuedAsyncEffect', () => {
 	test('should debounce effect updates', async () => {
 		const effectFunction = jest.fn(async () => { });

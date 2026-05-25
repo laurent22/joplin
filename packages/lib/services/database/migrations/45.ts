@@ -1,6 +1,6 @@
+
 import sqlStringToLines from '../sqlStringToLines';
 import { SqlQuery } from '../types';
-
 export default (): (SqlQuery|string)[] => {
 	const queries: (SqlQuery|string)[] = [];
 

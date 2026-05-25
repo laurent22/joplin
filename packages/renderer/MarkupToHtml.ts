@@ -1,3 +1,5 @@
+
+import MarkdownIt from 'markdown-it';
 import MdToHtml, { ExtraRendererRule } from './MdToHtml';
 import HtmlToHtml from './HtmlToHtml';
 import htmlUtils from './htmlUtils';
@@ -6,8 +8,6 @@ import { AllHtmlEntities } from 'html-entities';
 import { FsDriver, MarkupLanguage, MarkupRenderer, MarkupToHtmlConverter, OptionsResourceModel, RenderOptions, RenderResult, RendererTheme } from './types';
 import defaultResourceModel from './defaultResourceModel';
 import type * as MarkdownItType from 'markdown-it';
-const MarkdownIt = require('markdown-it');
-
 export interface PluginOptions {
 	[id: string]: { enabled: boolean };
 }

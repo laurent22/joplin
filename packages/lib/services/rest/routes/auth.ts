@@ -1,7 +1,7 @@
 
+
 import { AuthTokenStatus, Request, RequestContext } from '../Api';
 import uuid from '../../../uuid';
-
 let authToken: string = null;
 
 export default async function(request: Request, id: string = null, _link: string = null, context: RequestContext = null) {

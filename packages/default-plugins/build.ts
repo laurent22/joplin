@@ -1,9 +1,9 @@
+
+
+import yargs from 'yargs';
 import buildAll from './commands/buildAll';
 import editPatch from './commands/editPatch';
 import { Argv, ArgumentsCamelCase } from 'yargs';
-const yargs = require('yargs');
-
-
 const build = () => {
 	// eslint-disable-next-line no-unused-expressions -- Old code before rule was applied
 	yargs

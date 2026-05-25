@@ -1,8 +1,8 @@
+
 import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import { SyntaxNodeRef } from '@lezer/common';
 import { EditorState } from '@codemirror/state';
 import { Decoration } from '@codemirror/view';
-
 const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	const getNodeStartLine = () => state.doc.lineAt(node.from);
 

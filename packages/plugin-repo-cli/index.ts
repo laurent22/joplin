@@ -2,8 +2,7 @@
 
 /* eslint-disable no-console */
 
-require('source-map-support').install();
-
+import source_map_support_install from 'source-map-support';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';
@@ -18,6 +17,9 @@ import { execCommand } from '@joplin/utils';
 import validateUntrustedManifest from './lib/validateUntrustedManifest';
 import searchPlugins, { PackageInfo } from './lib/searchPlugins';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
+import 'yargs';
+source_map_support_install.install();
+
 
 type PluginManifests = Record<string, PluginManifest>;
 
@@ -294,7 +296,6 @@ async function main() {
 	}
 
 	// eslint-disable-next-line no-unused-expressions -- Old code before rule was applied
-	require('yargs')
 		.scriptName(scriptName)
 		.usage('$0 <cmd> [args]')
 

@@ -1,6 +1,6 @@
+
 import { CallbackIds, SerializableData, SerializableDataAndCallbacks } from '../types';
 import isTransferableObject from './isTransferableObject';
-
 type CallMethodWithIdCallback = (id: string, args: SerializableDataAndCallbacks[])=> Promise<SerializableDataAndCallbacks>;
 
 // Intended to be used to track callbacks for garbage collection

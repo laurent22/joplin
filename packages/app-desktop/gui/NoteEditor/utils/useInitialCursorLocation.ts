@@ -1,7 +1,7 @@
+
 import { useContext, useMemo } from 'react';
 import { WindowIdContext } from '../../NewWindowOrIFrame';
 import NotePositionService from '@joplin/lib/services/NotePositionService';
-
 interface Props {
 	noteId: string;
 }

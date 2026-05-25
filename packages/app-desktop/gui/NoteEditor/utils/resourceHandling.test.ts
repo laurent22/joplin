@@ -1,10 +1,10 @@
+
 import Setting from '@joplin/lib/models/Setting';
 import { processImagesInPastedHtml, processPastedHtml } from './resourceHandling';
 import markupLanguageUtils from '@joplin/lib/markupLanguageUtils';
 import HtmlToMd from '@joplin/lib/HtmlToMd';
 import { HtmlToMarkdownHandler, MarkupToHtmlHandler } from './types';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
-
 const createTestMarkupConverters = () => {
 	const markupToHtml: MarkupToHtmlHandler = async (markupLanguage, markup, options) => {
 		const conv = markupLanguageUtils.newMarkupToHtml({}, {

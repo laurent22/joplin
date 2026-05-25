@@ -1,3 +1,6 @@
+
+
+import { pregQuote } from '@joplin/lib/string-utils-common';
 import { EditorView, ViewPlugin, ViewUpdate, showPanel } from '@codemirror/view';
 import { Extension, Text, Transaction } from '@codemirror/state';
 import getScrollFraction from '../getScrollFraction';
@@ -9,9 +12,6 @@ import { StreamParser } from '@codemirror/language';
 import Decorator, { LineWidgetOptions, MarkTextOptions } from './Decorator';
 import insertLineAfter from '../editorCommands/insertLineAfter';
 import CodeMirror5BuiltInOptions from './CodeMirror5BuiltInOptions';
-const { pregQuote } = require('@joplin/lib/string-utils-common');
-
-
 type CodeMirror5Command = (codeMirror: CodeMirror5Emulation)=> void;
 
 interface ChangeRecord {

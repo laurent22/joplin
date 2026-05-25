@@ -1,5 +1,5 @@
-const { FileApiDriverWebDav } = require('./file-api-driver-webdav');
 
+import { FileApiDriverWebDav } from './file-api-driver-webdav';
 describe('file-api-driver-webdav', () => {
 
 	it.each([

@@ -1,10 +1,10 @@
+
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import { renderHook } from '@testing-library/react';
 import usePluginEditorView from './usePluginEditorView';
 import { PluginEditorViewState, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { defaultWindowId } from '@joplin/lib/reducer';
-
 const sampleView = (): PluginEditorViewState => {
 	return {
 		buttons: [],

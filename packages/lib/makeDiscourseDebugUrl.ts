@@ -1,7 +1,7 @@
+
 import { PluginSettings } from './services/plugins/PluginService';
 import type PluginService from './services/plugins/PluginService';
 import versionInfo, { PackageInfo } from './versionInfo';
-
 export const renderErrorBlock = (errors: (string | Error)[]): string => {
 	if (!errors.length) return '';
 	return `\`\`\`\n${errors.map(e => {

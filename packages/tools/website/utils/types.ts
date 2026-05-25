@@ -1,8 +1,8 @@
+
 import { Plan, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import { Sponsors } from '../../utils/loadSponsors';
 import { Translations } from '../../utils/translation';
 import { OpenGraphTags } from './openGraph';
-
 export enum Env {
 	Dev = 'dev',
 	Prod = 'prod',

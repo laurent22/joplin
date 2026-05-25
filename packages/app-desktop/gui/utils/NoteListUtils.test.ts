@@ -1,10 +1,10 @@
+
 import NoteListUtils from './NoteListUtils';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import menuCommandNames from '../menuCommandNames';
 import { MenuItem as MenuItemType } from '@joplin/lib/services/commands/MenuUtils';
 import initializeCommandService from '../../utils/initializeCommandService';
 import { createAppDefaultWindowState } from '../../app.reducer';
-
 type MenuItemWrapper = {
 	value: MenuItemType;
 };

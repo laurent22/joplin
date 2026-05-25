@@ -1,6 +1,6 @@
+
 import { Theme, ThemeAppearance } from '../../themes/type';
 import themeToCss from './themeToCss';
-
 const input: Theme = {
 	appearance: ThemeAppearance.Light,
 

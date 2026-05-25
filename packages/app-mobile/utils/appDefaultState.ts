@@ -1,6 +1,6 @@
+
 import { defaultState } from '@joplin/lib/reducer';
 import { AppState } from './types';
-
 export const DEFAULT_ROUTE = {
 	type: 'NAV_GO',
 	routeName: 'Notes',

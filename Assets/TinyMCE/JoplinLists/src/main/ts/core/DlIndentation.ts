@@ -5,12 +5,12 @@
  * For commercial licenses see https://www.tiny.cloud/
  */
 
+
 import Editor from 'tinymce/core/api/Editor';
 import { Compare, Replication, Element, Traverse } from '@ephox/sugar';
 import * as SplitList from './SplitList';
 import { Indentation } from '../listModel/Indentation';
 import { Arr } from '@ephox/katamari';
-
 const outdentDlItem = (editor: Editor, item: Element): void => {
   if (Compare.is(item, 'dd')) {
     Replication.mutate(item, 'dt');
