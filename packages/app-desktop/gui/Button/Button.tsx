@@ -2,11 +2,8 @@ import * as React from 'react';
 import styled from 'styled-components';
 const { space } = require('styled-system');
 
-// styled-system has no `@types/*` package and the migration explicitly
-// avoids installing new ones. These props are the `space` set actually
-// consumed by callers (mr, ml, mb); the wider set is declared here so
-// the runtime `${space}` template continues to accept any of them.
 type SpaceValue = number | string;
+// The props for styled-system's space
 interface SpaceProps {
 	m?: SpaceValue;
 	mt?: SpaceValue;
