@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import ButtonBar from '../ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import Setting from '@joplin/lib/models/Setting';
 import { themeStyle } from '@joplin/lib/theme';
 import ReportService, { ReportItem, ReportSection, RetryAllHandler } from '@joplin/lib/services/ReportService';

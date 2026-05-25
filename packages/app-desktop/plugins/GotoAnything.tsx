@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AppState } from '../app.reducer';
 import CommandService, { SearchResult as CommandSearchResult } from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
 import SearchEngine, { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';

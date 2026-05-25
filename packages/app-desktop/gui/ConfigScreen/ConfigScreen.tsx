@@ -8,7 +8,7 @@ import Setting, { AppType, SettingMetadataSection, SettingValueType, SyncStartup
 import { AppState } from '../../app.reducer';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 import { reg } from '@joplin/lib/registry';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import { themeStyle } from '@joplin/lib/theme';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import * as shared from '@joplin/lib/components/shared/config/config-shared.js';

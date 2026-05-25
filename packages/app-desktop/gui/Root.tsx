@@ -11,7 +11,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import MenuBar from './MenuBar';
 import { _ } from '@joplin/lib/locale';
 import { createRoot } from 'react-dom/client';
-const { connect, Provider } = require('react-redux');
+import { connect, Provider } from 'react-redux';
 import Setting from '@joplin/lib/models/Setting';
 import ClipperServer from '@joplin/lib/ClipperServer';
 import DialogTitle from './DialogTitle';

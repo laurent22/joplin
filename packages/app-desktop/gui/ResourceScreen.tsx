@@ -2,7 +2,7 @@ import * as React from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 const { themeStyle } = require('@joplin/lib/theme');
 import bridge from '../services/bridge';
 import prettyBytes = require('pretty-bytes');

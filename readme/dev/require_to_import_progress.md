@@ -65,7 +65,7 @@ Counts captured 2026-05-25, before any work. `const X = require(...)` occurrence
 | 10 | tools | 49 | 29 | 20 | done (2026-05-25) |
 | 11 | app-cli | 49 | 18 | 31 | done (2026-05-25) |
 | 12 | app-mobile | 61 | 18 | 43 | done (2026-05-25) |
-| 13 | app-desktop | 131 | 39 | 92 | done (2026-05-25) |
+| 13 | app-desktop | 131 | 56 | 75 | done (2026-05-25) |
 | 14 | lib | 195 | 55 | 140 | done (2026-05-25) |
 | — | generator-joplin | 1 | — | — | excluded (template) |
 
@@ -331,15 +331,23 @@ Follow-up session (2026-05-25): 5 more safe Node-built-in / typed-package conver
 - gui/NoteEditor/utils/resourceHandling.ts — 1 more converted (`path`).
 - gui/NoteEditor/utils/contextMenu.ts — 1 more converted (`fs-extra`); folded the existing `import { writeFile } from 'fs-extra'` into the namespace import.
 
+Follow-up session (2026-05-25): full `react-redux connect` cluster — all 15 `connect` requires + 2 `require('react')` requires converted to typed `import`s. Zero `react-redux`/`react` `require()`s remain in app-desktop.
+
+Files where the conversion was purely mechanical (`Props` already declared, or class was `<any, any>` with a matching `(props: any)` constructor):
+- gui/HelpButton.tsx, gui/NoteStatusBar.tsx, gui/StatusScreen/StatusScreen.tsx, gui/ImportScreen.tsx, gui/ResourceScreen.tsx, gui/TagList.tsx, gui/NoteRevisionViewer.tsx, gui/JoplinCloudLoginScreen.tsx, plugins/GotoAnything.tsx, gui/ConfigScreen/ConfigScreen.tsx, gui/Root.tsx (just the `connect, Provider` part — `styled-components` left).
+
+Files that needed a small typing fix:
+- gui/DropboxLoginScreen.tsx and gui/OneDriveLoginScreen.tsx — class was `<any, any>` but the constructor took a narrow `Props`, so TS inferred `Props` as the component's prop type. Typed `connect` then required `Props` to match the connected/external shape. Fix: changed the class generic to `<Props, any>`, added `dispatch: Dispatch` (imported from `redux`) to `Props` (already used by the cancel-button handler), and added a `style: any` field to Dropbox's `Props` (also already read in `render()`).
+- gui/TagItem.tsx — both `require('react')` and `require('react-redux')`; the class extended `React.Component` with no props. Converted to `import * as React from 'react'`, declared `Props { themeId, title, id }` (all already accessed on `this.props`), and typed the class as `React.Component<Props>`.
+- gui/ClipperConfigScreen.tsx — both `require('react')` and `require('react-redux')`; the class extended `React.Component` with no props and the constructor called `super()` with no args. Typed React needs `super(props)`. Declared `Props { themeId, apiToken, clipperServer, clipperServerAutoStart }` (all accessed in `render()`), typed the class as `React.Component<Props>`, and fixed the constructor.
+
 Files skipped entirely / important categories left untouched:
-- All `react-redux connect` requires (15) — typed `connect` rejects components whose Props haven't been declared and/or extend untyped base classes. Worth a follow-up that types each component's `Props` interface.
 - All `styled-components` requires (9) — typed `styled` surfaces broad `IntrinsicAttributes` mismatches on existing `<Button type=... mr=... />` usage and breaks downstream files (e.g. SearchInput, Button.tsx). Out of scope.
 - All `@joplin/lib/theme` `themeStyle` / `buildStyle` requires (9) — typed `themeStyle` returns a strict `ThemeStyle` whose CSS-property values are union types; spreading `theme.textStyle` into inline `style={{ ... }}` then fails on `WhiteSpace` / `TextAlign` / `OverflowX`. Need to either narrow each inline style with `as const` / `CSSProperties` casts, or change the lib's types. Out of scope.
 - `reselect.createSelector` (in ExtensionBadge.tsx) — typed selector return propagates `CSSProperties` cascade into inline `style`. Out of scope.
 - `@joplin/lib/services/PluginManager` (3), `@joplin/lib/onedrive-api-node-utils.js` (1), `@joplin/lib/markJsUtils` (1), `@joplin/lib/countable/Countable` (1), `@joplin/lib/envFromArgs` (1), `@joplin/lib/components/shared/dropbox-login-shared` (1), `@joplin/lib/reserved-ids` (2), `./packageInfo.js` (5), `./services/electron-context-menu` (1), `./execCommand` (1), `./supportedLocales` (1) — JS-only sources.
 - `@joplin/lib/shim-init-node.js` (2) — same `module.exports = { ... }` issue described under packages/server.
 - `md5` (4), `debounce` (5), `color` (2), `styled-system` (3), `taboverride` (1), `source-map-support` (1), `react-toggle-button` (1), `formatcoords` (1), `gulp` (1), `@joplin/tools/*` (3) — no types installed.
-- `react` (2) — `const React = require('react')` is used in class components; typing surfaces missing `Props` declarations on the affected `React.Component` subclasses (TagItem, ClipperConfigScreen). Same kind of follow-up as the `connect` cluster.
 - Inline `require()` calls inside functions / arrow callbacks (bridge.ts, mockClipboard.ts, markdownEditor.spec.ts, ElectronAppWrapper.ts `electron-window-state`) — would require moving to top level.
 
 ## packages/lib

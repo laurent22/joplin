@@ -14,7 +14,7 @@ import { NoteEntity, RevisionEntity } from '@joplin/lib/services/database/types'
 import { AppState } from '../app.reducer';
 import * as urlUtils from '@joplin/lib/urlUtils';
 const ReactTooltip = require('react-tooltip');
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 import getHelpMessage from '@joplin/lib/components/shared/NoteRevisionViewer/getHelpMessage';
 import shim, { MessageBoxType } from '@joplin/lib/shim';

@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import { reg } from '@joplin/lib/registry';
 import Setting from '@joplin/lib/models/Setting';
 import bridge from '../services/bridge';
@@ -11,10 +12,11 @@ const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js
 
 interface Props {
 	themeId: number;
+	dispatch: Dispatch;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old class component without state/props refactor; tightening requires structural change to the screen
-class OneDriveLoginScreenComponent extends React.Component<any, any> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old class component; state shape not refactored
+class OneDriveLoginScreenComponent extends React.Component<Props, any> {
 	public constructor(props: Props) {
 		super(props);
 
