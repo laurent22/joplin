@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
-const styled = require('styled-components').default;
+import styled from 'styled-components';
 
 interface StyleProps {
 	theme: {

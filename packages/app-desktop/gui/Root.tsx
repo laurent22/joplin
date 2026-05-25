@@ -31,7 +31,7 @@ import EditorWindow from './NoteEditor/EditorWindow';
 import SsoLoginScreen from './SsoLoginScreen/SsoLoginScreen';
 import SamlShared from '@joplin/lib/components/shared/SamlShared';
 import PopupNotificationProvider from './PopupNotification/PopupNotificationProvider';
-const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
+import { ThemeProvider, StyleSheetManager, createGlobalStyle } from 'styled-components';
 
 interface Props {
 	themeId: number;

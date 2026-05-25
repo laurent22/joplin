@@ -65,7 +65,7 @@ Counts captured 2026-05-25, before any work. `const X = require(...)` occurrence
 | 10 | tools | 49 | 29 | 20 | done (2026-05-25) |
 | 11 | app-cli | 49 | 18 | 31 | done (2026-05-25) |
 | 12 | app-mobile | 61 | 18 | 43 | done (2026-05-25) |
-| 13 | app-desktop | 131 | 65 | 66 | done (2026-05-25) |
+| 13 | app-desktop | 131 | 73 | 58 | done (2026-05-25) |
 | 14 | lib | 195 | 55 | 140 | done (2026-05-25) |
 | — | generator-joplin | 1 | — | — | excluded (template) |
 
@@ -343,8 +343,25 @@ Files that needed a small typing fix:
 
 Follow-up session (2026-05-25): full `@joplin/lib/theme` `themeStyle` / `buildStyle` cluster — all 9 converted. Five files were purely mechanical: `gui/hooks/useMarkupToHtml.ts`, `gui/KeymapConfig/styles/index.ts` (merged with the existing `import { ThemeStyle }`), `gui/NoteEditor/NoteBody/CodeMirror/Toolbar.tsx`, `gui/OneDriveLoginScreen.tsx`, `gui/TagList.tsx`, `gui/DropboxLoginScreen.tsx`, `gui/NoteEditor/NoteEditor.tsx`. Two needed inline-style annotations to keep literal types from widening: `gui/NoteContentPropertiesDialog.tsx` (3 styles annotated `React.CSSProperties` for `textAlign`) and `gui/ResourceScreen.tsx` (3 styles annotated for `whiteSpace`/`overflowX`).
 
+Follow-up session (2026-05-25): partial `styled-components` cluster (7 of 9 + `reselect.createSelector`).
+
+Mechanical (no propagation):
+- gui/Root.tsx (`ThemeProvider, StyleSheetManager, createGlobalStyle`).
+- gui/NoteEditor/EditorWindow.tsx (`StyleSheetManager`).
+- gui/Sidebar/styles/index.ts (`styled`, merged with the existing `import { css }`).
+- gui/style/StyledTextInput.tsx (`styled`).
+- gui/ConfigScreen/ButtonBar.tsx (`styled`).
+- gui/SearchBar/SearchBar.tsx (`styled`).
+- gui/services/plugins/UserWebviewDialogButtonBar.tsx (`styled`; the paired `styled-system` `space` kept as `require()` — no types installed).
+- gui/ExtensionBadge.tsx (`reselect.createSelector`; split the selector's return into four `React.CSSProperties` constants so the literal values for `boxSizing`/`flexDirection` etc. stay narrow).
+
+Still skipped:
+- gui/Button/Button.tsx — typed `styled` propagates `IntrinsicAttributes` errors through every call site of `<Button>`: `mr=...`/`ml=...` (from the `styled(Button)\`${space}\`` wrapper) and `type="..."` (currently dropped by the typed Button props) start failing across `EditFolderDialog`, `NoteListControls`, `PluginBox`, `SsoLoginScreen`, etc. Needs `Button`'s props to extend `SpaceProps` (from `styled-system`) and the omitted `type` to be restored; that's beyond a mechanical require→import.
+- gui/style/StyledInput.tsx — typing it surfaces a latent bug in `PasswordInput.tsx` (its custom `ChangeEvent { value: string }` shape doesn't match what the `<input>` actually fires) and a related `Function`-typed handler chain in `SearchInput.tsx`. Reverted to `require()` and flagged in `review-later.md` for a separate fix.
+
 Files skipped entirely / important categories left untouched:
-- All `styled-components` requires (9) — typed `styled` surfaces broad `IntrinsicAttributes` mismatches on existing `<Button type=... mr=... />` usage and breaks downstream files (e.g. SearchInput, Button.tsx). Out of scope.
+- gui/Button/Button.tsx and downstream `styled-system` `space` requires (PluginsStates, the remaining styled wrapper inside Button) — see above; needs the Button typing follow-up.
+- gui/style/StyledInput.tsx — see above; needs the PasswordInput fix first.
 - `reselect.createSelector` (in ExtensionBadge.tsx) — typed selector return propagates `CSSProperties` cascade into inline `style`. Out of scope.
 - `@joplin/lib/services/PluginManager` (3), `@joplin/lib/onedrive-api-node-utils.js` (1), `@joplin/lib/markJsUtils` (1), `@joplin/lib/countable/Countable` (1), `@joplin/lib/envFromArgs` (1), `@joplin/lib/components/shared/dropbox-login-shared` (1), `@joplin/lib/reserved-ids` (2), `./packageInfo.js` (5), `./services/electron-context-menu` (1), `./execCommand` (1), `./supportedLocales` (1) — JS-only sources.
 - `@joplin/lib/shim-init-node.js` (2) — same `module.exports = { ... }` issue described under packages/server.
