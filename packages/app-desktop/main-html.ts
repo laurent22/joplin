@@ -26,7 +26,6 @@ import FsDriverNode from '@joplin/lib/fs-driver-node';
 import bridge from './services/bridge';
 import shim from '@joplin/lib/shim';
 import { shimInit } from '@joplin/lib/shim-init-node';
-import type PdfJs from '@joplin/lib/utils/types/pdfJs';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
 import * as React from 'react';
@@ -93,8 +92,7 @@ const main = async () => {
 		appVersion,
 		electronBridge: bridge(),
 		nodeSqlite,
-		// lib's local PdfJs is a narrowed subset of pdfjs-dist's exports
-		pdfJs: pdfJs as unknown as PdfJs,
+		pdfJs: pdfJs,
 		isAppleSilicon,
 	});
 
