@@ -10,13 +10,17 @@ const Shared = require('@joplin/lib/components/shared/dropbox-login-shared');
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- style is plumbed in by parent without a typed contract
-	style: any;
+	style: { width: number; height: number };
 	dispatch: Dispatch;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old class component; state shape not refactored
-class DropboxLoginScreenComponent extends React.Component<Props, any> {
+interface State {
+	loginUrl: string;
+	authCode: string;
+	checkingAuthToken: boolean;
+}
+
+class DropboxLoginScreenComponent extends React.Component<Props, State> {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Shared helper from a JS module (dropbox-login-shared) with no exported type
 	private shared_: any;

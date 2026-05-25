@@ -15,8 +15,16 @@ interface Props {
 	dispatch: Dispatch;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old class component; state shape not refactored
-class OneDriveLoginScreenComponent extends React.Component<Props, any> {
+interface AuthLogEntry {
+	key: string;
+	text: string;
+}
+
+interface State {
+	authLog: AuthLogEntry[];
+}
+
+class OneDriveLoginScreenComponent extends React.Component<Props, State> {
 	public constructor(props: Props) {
 		super(props);
 
@@ -27,7 +35,7 @@ class OneDriveLoginScreenComponent extends React.Component<Props, any> {
 
 	public async componentDidMount() {
 		const log = (s: string) => {
-			this.setState((state: { authLog: { key: string; text: string }[] }) => {
+			this.setState((state) => {
 				const authLog = state.authLog.slice();
 				authLog.push({ key: (Date.now() + Math.random()).toString(), text: s });
 				return { authLog: authLog };
