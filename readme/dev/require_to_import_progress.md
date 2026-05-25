@@ -65,7 +65,7 @@ Counts captured 2026-05-25, before any work. `const X = require(...)` occurrence
 | 10 | tools | 49 | 29 | 20 | done (2026-05-25) |
 | 11 | app-cli | 49 | 18 | 31 | done (2026-05-25) |
 | 12 | app-mobile | 61 | 18 | 43 | done (2026-05-25) |
-| 13 | app-desktop | 131 | 56 | 75 | done (2026-05-25) |
+| 13 | app-desktop | 131 | 65 | 66 | done (2026-05-25) |
 | 14 | lib | 195 | 55 | 140 | done (2026-05-25) |
 | — | generator-joplin | 1 | — | — | excluded (template) |
 
@@ -341,9 +341,10 @@ Files that needed a small typing fix:
 - gui/TagItem.tsx — both `require('react')` and `require('react-redux')`; the class extended `React.Component` with no props. Converted to `import * as React from 'react'`, declared `Props { themeId, title, id }` (all already accessed on `this.props`), and typed the class as `React.Component<Props>`.
 - gui/ClipperConfigScreen.tsx — both `require('react')` and `require('react-redux')`; the class extended `React.Component` with no props and the constructor called `super()` with no args. Typed React needs `super(props)`. Declared `Props { themeId, apiToken, clipperServer, clipperServerAutoStart }` (all accessed in `render()`), typed the class as `React.Component<Props>`, and fixed the constructor.
 
+Follow-up session (2026-05-25): full `@joplin/lib/theme` `themeStyle` / `buildStyle` cluster — all 9 converted. Five files were purely mechanical: `gui/hooks/useMarkupToHtml.ts`, `gui/KeymapConfig/styles/index.ts` (merged with the existing `import { ThemeStyle }`), `gui/NoteEditor/NoteBody/CodeMirror/Toolbar.tsx`, `gui/OneDriveLoginScreen.tsx`, `gui/TagList.tsx`, `gui/DropboxLoginScreen.tsx`, `gui/NoteEditor/NoteEditor.tsx`. Two needed inline-style annotations to keep literal types from widening: `gui/NoteContentPropertiesDialog.tsx` (3 styles annotated `React.CSSProperties` for `textAlign`) and `gui/ResourceScreen.tsx` (3 styles annotated for `whiteSpace`/`overflowX`).
+
 Files skipped entirely / important categories left untouched:
 - All `styled-components` requires (9) — typed `styled` surfaces broad `IntrinsicAttributes` mismatches on existing `<Button type=... mr=... />` usage and breaks downstream files (e.g. SearchInput, Button.tsx). Out of scope.
-- All `@joplin/lib/theme` `themeStyle` / `buildStyle` requires (9) — typed `themeStyle` returns a strict `ThemeStyle` whose CSS-property values are union types; spreading `theme.textStyle` into inline `style={{ ... }}` then fails on `WhiteSpace` / `TextAlign` / `OverflowX`. Need to either narrow each inline style with `as const` / `CSSProperties` casts, or change the lib's types. Out of scope.
 - `reselect.createSelector` (in ExtensionBadge.tsx) — typed selector return propagates `CSSProperties` cascade into inline `style`. Out of scope.
 - `@joplin/lib/services/PluginManager` (3), `@joplin/lib/onedrive-api-node-utils.js` (1), `@joplin/lib/markJsUtils` (1), `@joplin/lib/countable/Countable` (1), `@joplin/lib/envFromArgs` (1), `@joplin/lib/components/shared/dropbox-login-shared` (1), `@joplin/lib/reserved-ids` (2), `./packageInfo.js` (5), `./services/electron-context-menu` (1), `./execCommand` (1), `./supportedLocales` (1) — JS-only sources.
 - `@joplin/lib/shim-init-node.js` (2) — same `module.exports = { ... }` issue described under packages/server.

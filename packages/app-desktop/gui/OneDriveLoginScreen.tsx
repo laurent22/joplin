@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { reg } from '@joplin/lib/registry';
 import Setting from '@joplin/lib/models/Setting';
 import bridge from '../services/bridge';
-const { themeStyle } = require('@joplin/lib/theme');
+import { themeStyle } from '@joplin/lib/theme';
 const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
 
 interface Props {

@@ -5,7 +5,7 @@ import TagItem from './TagItem';
 import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
 
 import { connect } from 'react-redux';
-const { themeStyle } = require('@joplin/lib/theme');
+import { themeStyle } from '@joplin/lib/theme';
 
 interface TagData {
 	id: string;

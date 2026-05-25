@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import bridge from '../services/bridge';
 
 import { connect } from 'react-redux';
-const { themeStyle } = require('@joplin/lib/theme');
+import { themeStyle } from '@joplin/lib/theme';
 const Shared = require('@joplin/lib/components/shared/dropbox-login-shared');
 
 interface Props {
