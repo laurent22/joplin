@@ -6,7 +6,7 @@ import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import Synchronizer from '@joplin/lib/Synchronizer';
 import { masterKeysWithoutPassword } from '@joplin/lib/services/e2ee/utils';
 import { appTypeToLockType } from '@joplin/lib/services/synchronizer/LockHandler';
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 import app from './app';
 const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
 import { reg } from '@joplin/lib/registry';
@@ -61,8 +61,8 @@ class Command extends BaseCommand {
 			// OneDrive
 			this.oneDriveApiUtils_ = new OneDriveApiNodeUtils(syncTarget.api());
 			const auth = await this.oneDriveApiUtils_.oauthDance({
-				log: (...s: string[]) => {
-					return this.stdout(...s);
+				log: (s: string) => {
+					return this.stdout(s);
 				},
 			});
 			this.oneDriveApiUtils_ = null;

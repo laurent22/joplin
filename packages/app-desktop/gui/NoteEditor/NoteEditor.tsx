@@ -29,7 +29,7 @@ import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseC
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import { itemIsReadOnly } from '@joplin/lib/models/utils/readOnly';
 const { themeStyle } = require('@joplin/lib/theme');
-const { substrWithEllipsis } = require('@joplin/lib/string-utils');
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import NoteSearchBar from '../NoteSearchBar';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';

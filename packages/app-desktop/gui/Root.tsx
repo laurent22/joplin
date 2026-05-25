@@ -10,7 +10,7 @@ import ErrorBoundary from './ErrorBoundary';
 import { themeStyle } from '@joplin/lib/theme';
 import MenuBar from './MenuBar';
 import { _ } from '@joplin/lib/locale';
-const { createRoot } = require('react-dom/client');
+import { createRoot } from 'react-dom/client';
 const { connect, Provider } = require('react-redux');
 import Setting from '@joplin/lib/models/Setting';
 import ClipperServer from '@joplin/lib/ClipperServer';

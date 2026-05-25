@@ -4,7 +4,7 @@ import HtmlToMd from '@joplin/lib/HtmlToMd';
 import { processImagesInPastedHtml } from '../utils/resourceHandling';
 import { WindowCommandDependencies } from '../utils/types';
 
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 
 export const declaration: CommandDeclaration = {
 	name: 'pasteAsMarkdown',

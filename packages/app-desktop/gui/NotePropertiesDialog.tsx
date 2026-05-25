@@ -9,7 +9,7 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import Dialog from '@joplin/lib/components/Dialog';
 import { formatDateTimeLocalToMs, formatMsToDateTimeLocal, formatMsToLocal } from '@joplin/utils/time';
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 const formatcoords = require('formatcoords');
 
 interface Props {

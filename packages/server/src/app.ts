@@ -36,7 +36,7 @@ interface Argv {
 	envFile?: string;
 }
 
-const nodeSqlite = require('sqlite3');
+import * as nodeSqlite from 'sqlite3';
 const cors = require('@koa/cors');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit({ nodeSqlite });

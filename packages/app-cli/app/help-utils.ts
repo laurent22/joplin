@@ -28,7 +28,7 @@ const renderTwoColumnData = (options: TwoColumnRow[], baseIndent: string, width:
 };
 
 // eslint-disable-next-line import/prefer-default-export -- file is named after its functional area (help-utils); default-export of renderCommandHelp would diverge from the file name
-export const renderCommandHelp = (cmd: BaseCommand, width: number = null) => {
+export const renderCommandHelp = (cmd: BaseCommand, width: number|null = null) => {
 	if (width === null) width = MAX_WIDTH;
 
 	const baseIndent = '';

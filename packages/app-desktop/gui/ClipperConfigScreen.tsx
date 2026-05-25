@@ -1,7 +1,7 @@
 const React = require('react');
 import { CSSProperties } from 'react';
 const { connect } = require('react-redux');
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 import ExtensionBadge from './ExtensionBadge';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';

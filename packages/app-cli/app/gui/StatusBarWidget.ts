@@ -1,7 +1,7 @@
+import chalk = require('chalk');
+import stripAnsi = require('strip-ansi');
 const BaseWidget = require('tkwidgets/BaseWidget.js');
-const chalk = require('chalk');
 const termutils = require('tkwidgets/framework/termutils.js');
-const stripAnsi = require('strip-ansi');
 const { handleAutocompletion } = require('../autocompletion.js');
 
 export interface PromptOptions {

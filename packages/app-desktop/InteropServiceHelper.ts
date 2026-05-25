@@ -9,7 +9,7 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import bridge from './services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
-const { friendlySafeFilename } = require('@joplin/lib/path-utils');
+import { friendlySafeFilename } from '@joplin/lib/path-utils';
 import time from '@joplin/lib/time';
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
 const md5 = require('md5');

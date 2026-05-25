@@ -10,7 +10,7 @@ import { BrowserWindow, BrowserWindowConstructorOptions, Tray, WebContents, scre
 import bridge from './bridge';
 import * as url from 'url';
 const path = require('path');
-const { dirname } = require('@joplin/lib/path-utils');
+import { dirname } from '@joplin/lib/path-utils';
 const fs = require('fs-extra');
 
 import { dialog, ipcMain } from 'electron';

@@ -9,14 +9,14 @@ import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 import { node } from 'execa';
 import { splitCommandString } from '@joplin/utils';
-const nodeSqlite = require('sqlite3');
-const { loadKeychainServiceAndSettings } = require('@joplin/lib/services/SettingUtils');
-const { default: shimInitCli } = require('./utils/shimInitCli');
+import * as nodeSqlite from 'sqlite3';
+import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
+import shimInitCli from './utils/shimInitCli';
 
 const baseDir = `${dirname(__dirname)}/tests/cli-integration`;
 const joplinAppPath = `${__dirname}/main.js`;
 
-shimInitCli({ nodeSqlite, appVersion: () => require('../package.json').version, keytar: null });
+shimInitCli({ nodeSqlite, appVersion: () => require('../package.json').version, keytar: null, sharp: null, React: null, electronBridge: null, pdfJs: null });
 require('@joplin/lib/testing/test-utils');
 
 

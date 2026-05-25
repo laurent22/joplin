@@ -50,7 +50,7 @@ import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('MainScreen');
 
-const ipcRenderer = require('electron').ipcRenderer;
+import { ipcRenderer } from 'electron';
 
 interface Props {
 	plugins: PluginStates;

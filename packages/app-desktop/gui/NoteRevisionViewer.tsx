@@ -12,7 +12,7 @@ import time from '@joplin/lib/time';
 import bridge from '../services/bridge';
 import { NoteEntity, RevisionEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../app.reducer';
-const urlUtils = require('@joplin/lib/urlUtils');
+import * as urlUtils from '@joplin/lib/urlUtils';
 const ReactTooltip = require('react-tooltip');
 const { connect } = require('react-redux');
 import shared from '@joplin/lib/components/shared/note-screen-shared';

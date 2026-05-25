@@ -91,7 +91,7 @@ Same as the [`any` cleanup guide](any_cleanup_progress.md#context-exhaustion-con
 
 Counts captured against the `dev` branch before any conversion work from this plan landed. Excludes the "Files to never touch" categories above. Numbers are approximate; re-verify at session start with:
 
-```
+```bash
 git ls-files packages/<name>/ | grep -E '\.js$' | grep -v -E '<the excludes>'
 ```
 

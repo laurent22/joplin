@@ -11,9 +11,9 @@ import { _ } from '../locale';
 import { ItemChangeEntity, NoteEntity, RevisionEntity } from './database/types';
 import Logger from '@joplin/utils/Logger';
 import { MarkupLanguage } from '../../renderer';
-const { substrWithEllipsis } = require('../string-utils');
+import { substrWithEllipsis } from '../string-utils';
 const { sprintf } = require('sprintf-js');
-const { wrapError } = require('../errorUtils');
+import { wrapError } from '../errorUtils';
 
 const logger = Logger.create('RevisionService');
 

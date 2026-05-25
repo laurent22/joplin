@@ -16,7 +16,7 @@ import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import { completePendingAuthentication } from '@joplin/lib/services/joplinCloudUtils';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
-const VersionInfo = require('react-native-version-info').default;
+import VersionInfo from 'react-native-version-info';
 const AlarmServiceDriver = require('../services/AlarmServiceDriver').default;
 import NavService from '@joplin/lib/services/NavService';
 import { Dispatch, Store } from 'redux';

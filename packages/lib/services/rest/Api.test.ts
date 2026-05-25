@@ -10,7 +10,7 @@ import Tag from '../../models/Tag';
 import NoteTag from '../../models/NoteTag';
 import ResourceService from '../../services/ResourceService';
 import SearchEngine from '../search/SearchEngine';
-const { MarkupToHtml } = require('@joplin/renderer');
+import { MarkupToHtml } from '@joplin/renderer';
 import { NoteEntity, ResourceEntity } from '../database/types';
 import { toFileProtocolPath } from '@joplin/utils/path';
 import { join } from 'path';

@@ -1,6 +1,6 @@
-const moment = require('moment');
+import * as moment from 'moment';
+import { Mutex } from 'async-mutex';
 const { sprintf } = require('sprintf-js');
-const Mutex = require('async-mutex').Mutex;
 
 const writeToFileMutex_ = new Mutex();
 

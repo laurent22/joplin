@@ -22,14 +22,14 @@ import { cpus } from 'os';
 import { pathToFileURL } from 'url';
 import * as tls from 'tls';
 import type PdfJs from './utils/types/pdfJs';
-const { _ } = require('./locale');
-const http = require('http');
-const https = require('https');
+import { _ } from './locale';
+import * as http from 'http';
+import * as https from 'https';
 const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent');
 const toRelative = require('relative');
-const timers = require('timers');
-const zlib = require('zlib');
-const dgram = require('dgram');
+import * as timers from 'timers';
+import * as zlib from 'zlib';
+import * as dgram from 'dgram';
 
 interface ProxySettings {
 	maxConcurrentConnections?: number;

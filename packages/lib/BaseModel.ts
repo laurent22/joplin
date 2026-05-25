@@ -6,7 +6,7 @@ import { LoadOptions, SaveOptions } from './models/utils/types';
 import ActionLogger, { ItemActionType as ItemActionType } from './utils/ActionLogger';
 import { BaseItemEntity, SqlQuery } from './services/database/types';
 import uuid from './uuid';
-const Mutex = require('async-mutex').Mutex;
+import { Mutex } from 'async-mutex';
 
 // New code should make use of this enum
 export enum ModelType {

@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 import bridge from '../services/bridge';
-const prettyBytes = require('pretty-bytes');
+import prettyBytes = require('pretty-bytes');
 import Resource from '@joplin/lib/models/Resource';
 import { LoadOptions } from '@joplin/lib/models/utils/types';
 import { AppState } from '../app.reducer';

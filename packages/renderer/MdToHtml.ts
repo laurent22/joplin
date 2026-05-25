@@ -10,7 +10,7 @@ import hljs from './highlight';
 // Use a require() to support bundling on mobile:
 import MarkdownIt = require('markdown-it');
 
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 const md5 = require('md5');
 

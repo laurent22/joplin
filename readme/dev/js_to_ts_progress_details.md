@@ -4,7 +4,7 @@ Per-package detail for the migration plan in [./js_to_ts_progress.md](./js_to_ts
 
 ## Format
 
-```
+```markdown
 ## packages/<name>
 Session date: YYYY-MM-DD
 Branch: <branch-name>

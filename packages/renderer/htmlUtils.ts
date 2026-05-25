@@ -1,7 +1,7 @@
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 import { fileUriToPath } from '@joplin/utils/url';
-const htmlparser2 = require('@joplin/fork-htmlparser2');
+import * as htmlparser2 from '@joplin/fork-htmlparser2';
 
 // [\s\S] instead of . for multiline matching
 // https://stackoverflow.com/a/16119722/561309

@@ -10,7 +10,7 @@ import * as fs from 'fs-extra';
 import { setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 const { shimInit } = require('../shim-init-node');
 const sharp = require('sharp');
-const nodeSqlite = require('sqlite3');
+import * as nodeSqlite from 'sqlite3';
 
 const snapshotBaseDir = `${supportDir}/syncTargetSnapshots`;
 

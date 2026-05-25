@@ -12,7 +12,7 @@ const { sprintf } = require('sprintf-js');
 import shim from '../../shim';
 import { Stat } from '../../fs-driver-base';
 import { ResourceEntity } from '../database/types';
-const { fileExtension } = require('../../path-utils');
+import { fileExtension } from '../../path-utils';
 import uuid from '../../uuid';
 
 export default class InteropService_Importer_Raw extends InteropService_Importer_Base {

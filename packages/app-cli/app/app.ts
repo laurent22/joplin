@@ -16,11 +16,12 @@ import shim from '@joplin/lib/shim';
 import setupCommand from './setupCommand';
 import BaseCommand from './base-command';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
+import initializeCommandService from './utils/initializeCommandService';
+import { cliUtils } from './cli-utils';
+const Cache = require('@joplin/lib/Cache');
 
 type FolderOrNoteType = ModelType.Note | ModelType.Folder | 'folderOrNote';
-import initializeCommandService from './utils/initializeCommandService';
-const { cliUtils } = require('./cli-utils.js');
-const Cache = require('@joplin/lib/Cache');
+
 
 export class Application extends BaseApplication {
 

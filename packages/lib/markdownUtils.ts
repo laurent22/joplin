@@ -2,7 +2,7 @@ import { validateLinks } from '@joplin/renderer';
 const stringPadding = require('string-padding');
 const urlUtils = require('./urlUtils');
 import type * as MarkdownItType from 'markdown-it';
-const MarkdownIt = require('markdown-it');
+import * as MarkdownIt from 'markdown-it';
 
 // Taken from codemirror/addon/edit/continuelist.js
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;

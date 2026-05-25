@@ -13,8 +13,8 @@ import Tag from './Tag';
 const { sprintf } = require('sprintf-js');
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import { toFileProtocolPath, toForwardSlashes } from '../path-utils';
-const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
-const { _, _n } = require('../locale');
+import { pregQuote, substrWithEllipsis } from '../string-utils';
+import { _, _n } from '../locale';
 import { pull, removeElement, unique } from '../ArrayUtils';
 import { LoadOptions, SaveOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
@@ -24,7 +24,7 @@ const urlUtils = require('../urlUtils.js');
 import { hasWhiteboardFence, parseWhiteboard } from '../services/whiteboard/parse';
 import { resolveFileRef, RefKind } from '../services/whiteboard/resolveRef';
 const { isImageMimeType } = require('../resourceUtils');
-const { MarkupToHtml } = require('@joplin/renderer');
+import { MarkupToHtml } from '@joplin/renderer';
 const { ALL_NOTES_FILTER_ID } = require('../reserved-ids');
 
 export interface PreviewsOrder {

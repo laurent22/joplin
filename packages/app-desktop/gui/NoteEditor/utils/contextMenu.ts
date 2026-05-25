@@ -17,9 +17,9 @@ import { openFileWithExternalEditor } from '@joplin/lib/services/ExternalEditWat
 import CommandService from '@joplin/lib/services/CommandService';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const fs = require('fs-extra');
-const { writeFile } = require('fs-extra');
-const { clipboard } = require('electron');
-const { toSystemSlashes } = require('@joplin/lib/path-utils');
+import { writeFile } from 'fs-extra';
+import { clipboard } from 'electron';
+import { toSystemSlashes } from '@joplin/lib/path-utils';
 
 function handleCopyToClipboard(options: ContextMenuOptions) {
 	if (options.textToCopy) {

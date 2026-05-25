@@ -33,7 +33,7 @@ interface DropdownAlertData {
 	resolve?: (_value: DropdownAlertData)=> void;
 }
 import SafeAreaView from './components/SafeAreaView';
-const { connect, Provider } = require('react-redux');
+import { connect, Provider } from 'react-redux';
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import BackButtonService, { BackButtonHandler } from './services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';

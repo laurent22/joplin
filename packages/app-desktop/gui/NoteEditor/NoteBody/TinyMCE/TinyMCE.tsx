@@ -35,7 +35,7 @@ import useWebViewApi from './utils/useWebViewApi';
 import useLinkTooltips from './utils/useLinkTooltips';
 import { focus } from '@joplin/lib/utils/focusHandler';
 const md5 = require('md5');
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 const supportedLocales = require('./supportedLocales');
 import { hasProtocol } from '@joplin/utils/url';
 import useTabIndenter from './utils/useTabIndenter';

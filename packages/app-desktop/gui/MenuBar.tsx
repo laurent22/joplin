@@ -34,7 +34,7 @@ import { FileSystemItem } from '@joplin/lib/services/interop/types';
 const logger = Logger.create('MenuBar');
 
 const packageInfo: PackageInfo = require('../packageInfo.js');
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 const Menu = bridge().Menu;
 
 const menuUtils = new MenuUtils(CommandService.instance());

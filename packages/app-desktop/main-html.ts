@@ -32,8 +32,8 @@ import * as React from 'react';
 import nodeSqlite = require('sqlite3');
 import initLib from '@joplin/lib/initLib';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
-const pdfJs = require('pdfjs-dist');
-const { isAppleSilicon } = require('is-apple-silicon');
+import * as pdfJs from 'pdfjs-dist';
+import { isAppleSilicon } from 'is-apple-silicon';
 require('@sentry/electron/renderer');
 
 // Allows components to use React as a global
