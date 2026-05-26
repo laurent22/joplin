@@ -63,9 +63,9 @@ const setEnvOverride = (env: Env) => {
 const parameters = (env: Env | null = null): ParametersForEnv => {
 	if (envOverride_) env = envOverride_;
 	if (env === null) env = Setting.value('env') as Env;
-	const output = parameters_[env];
+	let output = parameters_[env];
 	if (Setting.value('isDemo')) {
-		output.oneDrive = output.oneDriveDemo;
+		output = { ...output, oneDrive: output.oneDriveDemo };
 	}
 	return output;
 };
