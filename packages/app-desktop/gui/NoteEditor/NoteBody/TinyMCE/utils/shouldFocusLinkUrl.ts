@@ -22,6 +22,30 @@ type LinkDialogData = {
 	[key: string]: unknown;
 };
 
+// Decides whether the URL field of a TinyMCE link dialog should receive
+// keyboard focus when the dialog opens.
+//
+// The link dialog is identified by the presence of a `text` field — no other
+// TinyMCE plugin dialog uses that field, so its presence is sufficient as a
+// discriminator (the image dialog uses `src`/`alt`, etc.).
+//
+// Returns `true` only when:
+//    - `text` is a non-empty string (pre-populated from a prior selection), and
+//    - `href` is missing or an empty string (user has not yet typed a URL).
+//
+// Returns `false` for:
+//    - existing-link edits (both `text` and `href` populated — preserve the
+//      user's natural click target),
+//    - fresh inserts with no selection (both fields empty — default focus is
+//      fine),
+//    - non-link dialogs (`text` field absent),
+//    - undefined / null data,
+//    - defensive cases where `text` is not a string.
+//
+// @param data - The dialog data object as returned by `event.dialog.getData()`
+//    on TinyMCE's `OpenWindow` event. May be `undefined` / `null` when the
+//    dialog has no form fields.
+// @returns `true` iff the URL field should receive focus.
 export default function shouldFocusLinkUrl(data: LinkDialogData | undefined | null): boolean {
 	if (!data) return false;
 	// The `text` field is the unique discriminator for the link dialog. Image
