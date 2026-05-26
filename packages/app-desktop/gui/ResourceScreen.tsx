@@ -2,10 +2,10 @@ import * as React from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 
-const { connect } = require('react-redux');
-const { themeStyle } = require('@joplin/lib/theme');
+import { connect } from 'react-redux';
+import { themeStyle } from '@joplin/lib/theme';
 import bridge from '../services/bridge';
-const prettyBytes = require('pretty-bytes');
+import prettyBytes = require('pretty-bytes');
 import Resource from '@joplin/lib/models/Resource';
 import { LoadOptions } from '@joplin/lib/models/utils/types';
 import { AppState } from '../app.reducer';
@@ -58,7 +58,7 @@ interface ActiveSorting {
 const ResourceTableComp = (props: ResourceTable) => {
 	const theme = themeStyle(props.themeId);
 
-	const titleCellStyle = {
+	const titleCellStyle: React.CSSProperties = {
 		...theme.textStyle,
 		textOverflow: 'ellipsis',
 		overflowX: 'hidden',
@@ -67,14 +67,14 @@ const ResourceTableComp = (props: ResourceTable) => {
 		whiteSpace: 'nowrap',
 	};
 
-	const cellStyle = {
+	const cellStyle: React.CSSProperties = {
 		...theme.textStyle,
 		whiteSpace: 'nowrap',
 		color: theme.colorFaded,
 		width: 1,
 	};
 
-	const headerStyle = {
+	const headerStyle: React.CSSProperties = {
 		...theme.textStyle,
 		whiteSpace: 'nowrap',
 		width: 1,

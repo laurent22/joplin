@@ -24,7 +24,7 @@ import InteropService_Importer_EnexToHtml from './InteropService_Importer_EnexTo
 import InteropService_Importer_EnexToMd from './InteropService_Importer_EnexToMd';
 import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 const { sprintf } = require('sprintf-js');
-const { fileExtension } = require('../../path-utils');
+import { fileExtension } from '../../path-utils';
 import { EventEmitter } from 'events';
 
 export default class InteropService {

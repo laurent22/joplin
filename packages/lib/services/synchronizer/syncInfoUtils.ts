@@ -10,7 +10,7 @@ import { compareVersions } from 'compare-versions';
 import { _ } from '../../locale';
 import JoplinError from '../../JoplinError';
 import { ErrorCode } from '../../errors';
-const fastDeepEqual = require('fast-deep-equal');
+import * as fastDeepEqual from 'fast-deep-equal';
 
 const logger = Logger.create('syncInfoUtils');
 

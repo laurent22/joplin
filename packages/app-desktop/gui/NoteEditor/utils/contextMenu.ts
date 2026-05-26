@@ -16,10 +16,9 @@ import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { openFileWithExternalEditor } from '@joplin/lib/services/ExternalEditWatcher/utils';
 import CommandService from '@joplin/lib/services/CommandService';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-const fs = require('fs-extra');
-const { writeFile } = require('fs-extra');
-const { clipboard } = require('electron');
-const { toSystemSlashes } = require('@joplin/lib/path-utils');
+import * as fs from 'fs-extra';
+import { clipboard } from 'electron';
+import { toSystemSlashes } from '@joplin/lib/path-utils';
 
 function handleCopyToClipboard(options: ContextMenuOptions) {
 	if (options.textToCopy) {
@@ -32,7 +31,7 @@ function handleCopyToClipboard(options: ContextMenuOptions) {
 async function saveFileData(data: string | NodeJS.ArrayBufferView, filename: string) {
 	const newFilePath = await bridge().showSaveDialog({ defaultPath: filename });
 	if (!newFilePath) return;
-	await writeFile(newFilePath, data);
+	await fs.writeFile(newFilePath, data);
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied

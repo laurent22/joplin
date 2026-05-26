@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 
 export function escapeHtml(s: string) {

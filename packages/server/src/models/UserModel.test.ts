@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow, createUser, expectHttpError } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow, expectHttpError, createUser } from '../utils/testing/testUtils';
 import { EmailSender, UserFlagType } from '../services/database/types';
 import { ErrorBadRequest, ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
@@ -237,6 +237,7 @@ describe('UserModel', () => {
 	test('should send emails and flag accounts when it is over the size limit', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
+		const { user: user3 } = await createUserAndSession(3);
 
 		await models().user().save({
 			id: user1.id,
@@ -248,6 +249,12 @@ describe('UserModel', () => {
 			id: user2.id,
 			account_type: AccountType.Pro,
 			total_item_size: Math.round(accountByType(AccountType.Pro).max_total_item_size * 0.2),
+		});
+
+		await models().user().save({
+			id: user3.id,
+			account_type: AccountType.Pro100Gb,
+			total_item_size: Math.round(accountByType(AccountType.Pro100Gb).max_total_item_size * 0.2),
 		});
 
 		const emailBeforeCount = (await models().email().all()).length;
@@ -271,7 +278,7 @@ describe('UserModel', () => {
 		{
 			// Now check that the 100% email is sent too
 
-			for (const u of [user2]) {
+			for (const u of [user2, user3]) {
 				const user = await models().user().load(u.id);
 
 				await models().user().save({

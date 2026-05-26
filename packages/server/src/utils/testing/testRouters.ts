@@ -4,7 +4,7 @@ import * as fs from 'fs-extra';
 
 require('source-map-support').install();
 
-const { stringify } = require('query-string');
+import { stringify } from 'query-string';
 
 const execCommand = function(command: string, returnStdErr = false): Promise<string> {
 	const exec = require('child_process').exec;
@@ -91,7 +91,7 @@ function extractCurlResponse(rawResult: string) {
 	return splitted.filter((line: string) => line.indexOf('<') === 0).join('\n');
 }
 
-const spawn = require('child_process').spawn;
+import { spawn } from 'child_process';
 
 let serverProcess: ReturnType<typeof spawn> | null = null;
 

@@ -2,19 +2,32 @@ import * as React from 'react';
 
 import { View, Button, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { AppState } from '../../utils/types';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import { ScreenHeader } from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
-const { BaseScreenComponent } = require('../base-screen');
+import { BaseScreenComponent } from '../base-screen';
 const Shared = require('@joplin/lib/components/shared/dropbox-login-shared');
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { themeStyle } from '../global-style';
 
-class DropboxLoginScreenComponent extends BaseScreenComponent {
-	public constructor() {
-		super();
+interface Props {
+	themeId: number;
+}
 
-		this.styles_ = {};
+interface State {
+	loginUrl: string;
+	authCode: string;
+	checkingAuthToken: boolean;
+}
+
+class DropboxLoginScreenComponent extends BaseScreenComponent<Props, State> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Migrated from JS; per-theme StyleSheet cache
+	private styles_: Record<number, any> = {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Shared comes from an untyped JS module
+	private shared_: any;
+
+	public constructor(props: Props) {
+		super(props);
 
 		this.shared_ = new Shared(
 			this,

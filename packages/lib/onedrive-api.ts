@@ -3,7 +3,7 @@ import time from './time';
 import Logger from '@joplin/utils/Logger';
 import { _ } from './locale';
 
-const { stringify } = require('query-string');
+import { stringify } from 'query-string';
 const urlUtils = require('./urlUtils.js');
 const Buffer = require('buffer').Buffer;
 

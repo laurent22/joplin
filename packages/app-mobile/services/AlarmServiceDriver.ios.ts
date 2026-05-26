@@ -1,7 +1,6 @@
 import { Notification } from '@joplin/lib/models/Alarm';
 import Logger from '@joplin/utils/Logger';
-import type { PushNotification, PushNotificationPermissions, ScheduleLocalNotificationDetails } from '@react-native-community/push-notification-ios';
-const PushNotificationIOS = require('@react-native-community/push-notification-ios').default;
+import PushNotificationIOS, { PushNotification, PushNotificationPermissions, ScheduleLocalNotificationDetails } from '@react-native-community/push-notification-ios';
 
 export default class AlarmServiceDriver {
 

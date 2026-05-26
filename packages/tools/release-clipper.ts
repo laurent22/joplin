@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import { execCommand, rootDir } from './tool-utils';
-const md5File = require('md5-file');
+import md5File = require('md5-file');
 import * as glob from 'glob';
 
 const clipperDir = `${rootDir}/packages/app-clipper`;

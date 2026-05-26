@@ -15,10 +15,10 @@ import { chdir } from 'process';
 import yargs = require('yargs');
 import { extractOpenGraphTags } from './utils/openGraph';
 
-const md5File = require('md5-file');
-const htmlparser2 = require('@joplin/fork-htmlparser2');
-const styleToJs = require('style-to-js').default;
-const crypto = require('crypto');
+import md5File = require('md5-file');
+import * as htmlparser2 from '@joplin/fork-htmlparser2';
+import styleToJs = require('style-to-js');
+import * as crypto from 'crypto';
 
 interface Config {
 	baseUrl: string;

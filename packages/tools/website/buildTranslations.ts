@@ -1,7 +1,7 @@
 import { rootDir } from '../tool-utils';
 import { mergePotToPo } from '../utils/translation';
 import { supportedLocales } from './utils/supportedLocales';
-const { GettextExtractor, HtmlExtractors } = require('gettext-extractor');
+import { GettextExtractor, HtmlExtractors } from 'gettext-extractor';
 
 const websiteAssetsDir = `${rootDir}/Assets/WebsiteAssets`;
 const localesDir = `${websiteAssetsDir}/locales`;

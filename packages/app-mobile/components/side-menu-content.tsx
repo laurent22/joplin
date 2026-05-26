@@ -27,7 +27,7 @@ import useOnLongPressProps from '../utils/hooks/useOnLongPressProps';
 import { TouchableRipple } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
 import getConflictFolderId from '@joplin/lib/models/utils/getConflictFolderId';
-const { substrWithEllipsis } = require('@joplin/lib/string-utils');
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 
 interface Props {
 	syncStarted: boolean;

@@ -10,7 +10,7 @@ import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
 import { NotificationKey } from '../../models/NotificationModel';
-import { AccountType, accountTypeOptions } from '../../models/UserModel';
+import { accountTypeOptions, accountTypeToString, getNextSubscriptionPlan } from '../../models/UserModel';
 import { confirmUrl, stripePortalUrl } from '../../utils/urlUtils';
 import { initStripe, updateCustomerEmail } from '../../utils/stripe';
 import { createCsrfTag } from '../../utils/csrf';
@@ -108,8 +108,12 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, formUser: User = 
 		const lastPaymentAttempt = models.subscription().lastPaymentAttempt(subscription);
 
 		view.content.subscription = subscription;
-		view.content.showUpdateSubscriptionBasic = user.account_type !== AccountType.Basic;
-		view.content.showUpdateSubscriptionPro = user.account_type !== AccountType.Pro;
+
+		const { downgradeTo, upgradeTo } = getNextSubscriptionPlan(user.account_type);
+		view.content.showUpgradeSubscription = !!upgradeTo;
+		view.content.showDowngradeSubscription = !!downgradeTo;
+		view.content.upgradeSubscriptionPlan = upgradeTo && accountTypeToString(upgradeTo);
+
 		view.content.subLastPaymentStatus = lastPaymentAttempt.status;
 		view.content.subLastPaymentDate = formatDateTime(lastPaymentAttempt.time);
 	}

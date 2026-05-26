@@ -1,5 +1,5 @@
 import FsDriverBase, { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
-const RNFetchBlob = require('rn-fetch-blob').default;
+import RNFetchBlob from 'rn-fetch-blob';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import RNSAF, { DocumentFileDetail, openDocumentTree } from '@joplin/react-native-saf-x';
 import type { StatResultT, ReadDirResItemT } from '@dr.pogodin/react-native-fs';

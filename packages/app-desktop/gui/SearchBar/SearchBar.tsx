@@ -10,7 +10,7 @@ import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../app.reducer';
 import { blur, focus } from '@joplin/lib/utils/focusHandler';
 const debounce = require('debounce');
-const styled = require('styled-components').default;
+import styled from 'styled-components';
 
 export const Root = styled.div`
 	position: relative;

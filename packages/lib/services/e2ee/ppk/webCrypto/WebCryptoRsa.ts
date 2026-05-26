@@ -9,7 +9,7 @@ export type WebCryptoSlice = {
 	>;
 };
 
-interface KeyPair {
+export interface KeyPair {
 	publicKey: CryptoKey;
 	privateKey: CryptoKey|null;
 }
