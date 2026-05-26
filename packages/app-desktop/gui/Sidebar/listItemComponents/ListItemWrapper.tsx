@@ -47,6 +47,7 @@ const ListItemWrapper: React.FC<Props> = props => {
 	}, [props.depth]);
 
 	const { selected, primarySelected, multipleItemsSelected } = props.selectionState;
+	const showDropIndicator = props.dropLocation === 'before' || props.dropLocation === 'after';
 
 	return (
 		<div
@@ -83,6 +84,7 @@ const ListItemWrapper: React.FC<Props> = props => {
 			aria-labelledby={props['aria-labelledby']}
 		>
 			{props.children}
+			{showDropIndicator ? <div className={`drop-indicator -${props.dropLocation}`}></div> : null}
 		</div>
 	);
 };

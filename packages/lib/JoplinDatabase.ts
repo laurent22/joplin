@@ -936,7 +936,20 @@ export default class JoplinDatabase extends Database {
 				const migration = migrations[targetVersion - 42];
 				if (!migration) throw new Error(`No such migration: ${targetVersion}`);
 				const migrationQueries = migration();
-				queries = queries.concat(migrationQueries);
+
+				if (targetVersion === 50) {
+					const folderFields = await this.selectAll('PRAGMA table_info(`folders`)');
+					const hasOrderColumn = folderFields.some(field => field.name === 'order');
+
+					if (!hasOrderColumn) {
+						queries = queries.concat(migrationQueries);
+					} else {
+						queries.push('CREATE INDEX IF NOT EXISTS folders_order ON folders (`order`)');
+						queries.push('UPDATE folders SET `order` = created_time WHERE `order` = 0');
+					}
+				} else {
+					queries = queries.concat(migrationQueries);
+				}
 			}
 
 			const updateVersionQuery = { sql: 'UPDATE version SET version = ?', params: [targetVersion] };

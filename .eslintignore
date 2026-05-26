@@ -473,6 +473,7 @@ packages/app-desktop/gui/Sidebar/listItemComponents/NoteCount.js
 packages/app-desktop/gui/Sidebar/listItemComponents/TagItem.js
 packages/app-desktop/gui/Sidebar/styles/index.js
 packages/app-desktop/gui/Sidebar/types.js
+packages/app-desktop/gui/Sidebar/utils/canManuallySortNotebooks.js
 packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.js
 packages/app-desktop/gui/StatusScreen/StatusScreen.js
 packages/app-desktop/gui/StyleSheets/StyleSheetContainer.js
@@ -1382,6 +1383,7 @@ packages/lib/file-api-driver-webdav.test.js
 packages/lib/file-api-driver.test.js
 packages/lib/file-api.test.js
 packages/lib/file-api.js
+packages/lib/folders-screen-utils.test.js
 packages/lib/folders-screen-utils.js
 packages/lib/fs-driver-base.js
 packages/lib/fs-driver-node.js
@@ -1529,6 +1531,7 @@ packages/lib/services/database/migrations/46.js
 packages/lib/services/database/migrations/47.js
 packages/lib/services/database/migrations/48.js
 packages/lib/services/database/migrations/49.js
+packages/lib/services/database/migrations/50.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js

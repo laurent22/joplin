@@ -1,10 +1,10 @@
-
 .list-item-wrapper {
 	box-sizing: border-box;
 	height: 30px;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	position: relative;
 	// The top-level folder has depth 2, so we need to subtract for the item
 	// to have the correct padding
 	--absolute-depth: calc(var(--depth) - 2);
@@ -49,27 +49,21 @@
 		background-color: var(--joplin-background-color-hover2);
 	}
 
-	&.-drop-before,
-	&.-drop-after {
-		position: relative;
-	}
-
-	&.-drop-before::before,
-	&.-drop-after::after {
-		content: '';
+	> .drop-indicator {
 		position: absolute;
 		left: 0;
 		right: 0;
 		height: 2px;
-		background: var(--joplin-brand-color);
+		background: var(--joplin-color);
 		pointer-events: none;
+		z-index: 10;
 	}
 
-	&.-drop-before::before {
+	> .drop-indicator.-before {
 		top: 0;
 	}
 
-	&.-drop-after::after {
+	> .drop-indicator.-after {
 		bottom: 0;
 	}
 

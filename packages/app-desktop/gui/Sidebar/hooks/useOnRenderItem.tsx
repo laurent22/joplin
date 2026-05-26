@@ -31,6 +31,7 @@ import ListItemWrapper, { ItemSelectionState } from '../listItemComponents/ListI
 import { focus } from '@joplin/lib/utils/focusHandler';
 import shim from '@joplin/lib/shim';
 import useOnItemClick from './useOnItemClick';
+import canManuallySortNotebooks from '../utils/canManuallySortNotebooks';
 
 const Menu = bridge().Menu;
 const MenuItem: typeof MenuItemType = bridge().MenuItem;
@@ -42,7 +43,6 @@ interface Props {
 	themeId: number;
 	plugins: PluginStates;
 	folders: FolderEntity[];
-	foldersSortField: string;
 	collapsedFolderIds: string[];
 	containerRef: React.RefObject<HTMLDivElement>;
 
@@ -107,7 +107,6 @@ const useOnRenderItem = (props: Props) => {
 	pluginsRef.current = props.plugins;
 	const foldersRef = useRef<FolderEntity[]>(null);
 	foldersRef.current = props.folders;
-	const manualFolderOrderEnabled = props.foldersSortField === 'order';
 	const [folderDropTarget, setFolderDropTarget] = useState<{ folderId: string; location: 'before'|'after'|'nest' } | null>(null);
 
 	useEffect(() => {
@@ -371,12 +370,13 @@ const useOnRenderItem = (props: Props) => {
 
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
 		if (!folderId) return;
+		const dropLocation = isFolderDrag ? getFolderDropLocation(event) : 'nest';
 
 		setFolderDropTarget({
 			folderId,
-			location: isFolderDrag && manualFolderOrderEnabled ? getFolderDropLocation(event) : 'nest',
+			location: dropLocation,
 		});
-	}, [getFolderDropLocation, manualFolderOrderEnabled]);
+	}, [getFolderDropLocation]);
 
 	const onFolderDrop_: ItemDragListener = useCallback(async event => {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
@@ -396,7 +396,10 @@ const useOnRenderItem = (props: Props) => {
 			} else if (dt.types.indexOf('text/x-jop-folder-ids') >= 0) {
 				event.preventDefault();
 				const folderIds = JSON.parse(dt.getData('text/x-jop-folder-ids'));
-				const dropLocation = folderId && manualFolderOrderEnabled ? getFolderDropLocation(event) : 'nest';
+				const dropLocation = getFolderDropLocation(event);
+
+				if (!canManuallySortNotebooks(dropLocation)) return;
+
 				await onFolderDrop([], folderIds, folderId, {
 					location: dropLocation,
 				});
@@ -407,7 +410,7 @@ const useOnRenderItem = (props: Props) => {
 		} finally {
 			setFolderDropTarget(null);
 		}
-	}, [getFolderDropLocation, manualFolderOrderEnabled]);
+	}, [getFolderDropLocation]);
 
 	const onFolderToggleClick_: ItemClickListener = useCallback(event => {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
@@ -538,6 +541,7 @@ const useOnRenderItem = (props: Props) => {
 			return exhaustivenessCheck;
 		}
 	}, [
+		folderDropTarget,
 		onItemClick,
 		onFolderDragOver_,
 		onFolderDragStart_,
