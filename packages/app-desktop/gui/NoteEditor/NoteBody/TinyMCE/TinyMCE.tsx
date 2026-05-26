@@ -18,6 +18,7 @@ import shim from '@joplin/lib/shim';
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import setupToolbarButtons from './utils/setupToolbarButtons';
+import shouldFocusLinkUrl from './utils/shouldFocusLinkUrl';
 import { plainTextToHtml } from '@joplin/lib/htmlUtils';
 import { themeStyle } from '@joplin/lib/theme';
 import { loadScript } from '../../../utils/loadScript';
@@ -921,6 +922,26 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 
 					editor.on('init', () => {
 						setEditorReady(true);
+					});
+
+					// Fix #15521: when a user selects text and then opens the WYSIWYG
+					// "Insert hyperlink" dialog, TinyMCE's built-in `link` plugin
+					// pre-populates the "Text to display" field from the selection but
+					// leaves keyboard focus on it. We move focus to the URL field so
+					// the user can immediately type the URL. Existing-link edits
+					// (both fields populated) keep their default focus.
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- OpenWindow event payload is not in the published @types/tinymce
+					editor.on('OpenWindow', (event: any) => {
+						if (!event?.dialog) return;
+						try {
+							const data = event.dialog.getData?.();
+							if (shouldFocusLinkUrl(data)) {
+								event.dialog.focus('href');
+							}
+						} catch (_error) {
+							// getData / focus can throw on dialogs without form fields;
+							// safe to ignore — falling back to TinyMCE's default focus.
+						}
 					});
 
 					const preprocessContent = () => {
