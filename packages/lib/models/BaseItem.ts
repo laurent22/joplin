@@ -17,7 +17,7 @@ import { checkIfItemCanBeAddedToFolder, checkIfItemCanBeChanged, checkIfItemsCan
 import { checkObjectHasProperties } from '@joplin/utils/object';
 
 const { sprintf } = require('sprintf-js');
-import * as moment from 'moment';
+import moment from 'moment';
 
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;

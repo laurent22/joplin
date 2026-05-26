@@ -3,7 +3,7 @@ import { NoteEntity } from '../services/database/types';
 import { MdFrontMatterExport } from '../services/interop/types';
 import time from '../time';
 import * as yaml from 'js-yaml';
-import * as moment from 'moment';
+import moment from 'moment';
 
 export interface ParsedMeta {
 	metadata: NoteEntity;

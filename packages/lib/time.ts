@@ -5,7 +5,7 @@
 // -----------------------------------------------------------------------------------------------
 
 import shim from './shim';
-import * as moment from 'moment';
+import moment from 'moment';
 
 type ConditionHandler = ()=> boolean;
 
