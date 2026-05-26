@@ -680,18 +680,18 @@ export default class Synchronizer {
 							// a few seconds ahead of what it was set with setTimestamp()
 							try {
 								remoteContent = await this.apiCall('get', path);
+								if (!remoteContent) throw new Error(`Got metadata for path but could not fetch content: ${path}`);
+								remoteContent = await BaseItem.unserialize(remoteContent);
 							} catch (error) {
-								if (error.code === 'rejectedByTarget') {
+								if (error.code === 'rejectedByTarget' || error.code === 'malformedItem') {
 									this.progressReport_.errors.push(error);
-									logger.warn(`Rejected by target: ${path}: ${error.message}`);
+									logger.warn(`Skipping item from sync target: ${path}: ${error.message}`);
 									completeItemProcessing(path);
 									continue;
 								} else {
 									throw error;
 								}
 							}
-							if (!remoteContent) throw new Error(`Got metadata for path but could not fetch content: ${path}`);
-							remoteContent = await BaseItem.unserialize(remoteContent);
 
 							if (remoteContent.updated_time > local.sync_time) {
 								// Since, in this loop, we are only dealing with items that require sync, if the
@@ -1007,9 +1007,9 @@ export default class Synchronizer {
 								}
 							}
 						} catch (error) {
-							if (error.code === 'rejectedByTarget') {
+							if (error.code === 'rejectedByTarget' || error.code === 'malformedItem') {
 								this.progressReport_.errors.push(error);
-								logger.warn(`Rejected by target: ${path}: ${error.message}`);
+								logger.warn(`Skipping item from sync target: ${path}: ${error.message}`);
 								action = null;
 							} else {
 								error.message = `On file ${path}: ${error.message}`;
