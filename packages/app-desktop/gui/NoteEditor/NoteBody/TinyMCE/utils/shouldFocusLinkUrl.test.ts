@@ -10,9 +10,9 @@ describe('shouldFocusLinkUrl', () => {
 			true,
 		],
 		[
-			'pre-populated text + missing href → focus URL',
+			'pre-populated text + missing href key → focus URL (missing is treated as empty)',
 			{ text: 'hello world' } as { text: string; href?: string },
-			false, // missing 'href' key entirely means this is not the link dialog
+			true,
 		],
 		[
 			'pre-populated text + non-empty href (editing existing link) → leave focus',
@@ -40,8 +40,13 @@ describe('shouldFocusLinkUrl', () => {
 			false,
 		],
 		[
-			'empty object (not the link dialog) → no focus action',
+			'empty object (no text key, not the link dialog) → no focus action',
 			{},
+			false,
+		],
+		[
+			'object with only href, no text key → no focus action',
+			{ href: 'https://example.com' },
 			false,
 		],
 		[
