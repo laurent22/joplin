@@ -5,8 +5,7 @@
 // -----------------------------------------------------------------------------------------------
 
 import shim from './shim';
-import type * as MomentTypes from 'moment';
-const moment = require('moment');
+import * as moment from 'moment';
 
 type ConditionHandler = ()=> boolean;
 
@@ -128,9 +127,10 @@ class Time {
 	public anythingToDateTime(o: string | number | Date | { toDate(): Date } | null, defaultValue: Date = null) {
 		if (o && typeof o === 'object' && 'toDate' in o) return o.toDate();
 		if (!o) return defaultValue;
-		let m = moment(o, time.dateTimeFormat());
+		const input = o as string | number | Date;
+		let m = moment(input, time.dateTimeFormat());
 		if (m.isValid()) return m.toDate();
-		m = moment(o, time.dateFormat());
+		m = moment(input, time.dateFormat());
 		return m.isValid() ? m.toDate() : defaultValue;
 	}
 
@@ -141,9 +141,10 @@ class Time {
 		// moment without an explicit format specifier. The typical case is that a user
 		// has a preferred data format. This means we should try the currently assigned
 		// date first, and then attempt to load a generic date string.
-		const m = moment(o, this.dateTimeFormat());
+		const input = o as string | number | Date;
+		const m = moment(input, this.dateTimeFormat());
 		if (m.isValid()) return m.toDate().getTime();
-		const d = moment(o);
+		const d = moment(input);
 		return d.isValid() ? d.toDate().getTime() : defaultValue;
 	}
 
@@ -162,11 +163,11 @@ class Time {
 
 	public goBackInTime(startDate: string | number | Date, n: number, period: string) {
 		// period is a string (eg. "day", "week", "month", "year" ), n is an integer
-		return moment(startDate).startOf(period as MomentTypes.unitOfTime.StartOf).subtract(n, period as MomentTypes.unitOfTime.DurationConstructor).format('x');
+		return moment(startDate).startOf(period as moment.unitOfTime.StartOf).subtract(n, period as moment.unitOfTime.DurationConstructor).format('x');
 	}
 
 	public goForwardInTime(startDate: string | number | Date, n: number, period: string) {
-		return moment(startDate).startOf(period as MomentTypes.unitOfTime.StartOf).add(n, period as MomentTypes.unitOfTime.DurationConstructor).format('x');
+		return moment(startDate).startOf(period as moment.unitOfTime.StartOf).add(n, period as moment.unitOfTime.DurationConstructor).format('x');
 	}
 
 	public async waitTillCondition(condition: ConditionHandler) {

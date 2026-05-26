@@ -10,7 +10,7 @@ import type { PluginSettings } from '../../services/plugins/PluginService';
 import type { PublicPrivateKeyPair } from '../../services/e2ee/ppk/ppk';
 import { EmptyObject } from '@joplin/utils/types';
 const ObjectUtils = require('../../ObjectUtils');
-const { toTitleCase } = require('../../string-utils.js');
+import { toTitleCase } from '../../string-utils';
 
 const customCssFilePath = (Setting: typeof SettingType, filename: string): string => {
 	return `${Setting.value('rootProfileDir')}/${filename}`;

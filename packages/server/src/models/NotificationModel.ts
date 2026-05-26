@@ -11,6 +11,7 @@ export enum NotificationKey {
 	ChangeAdminPassword = 'change_admin_password',
 	// UsingSqliteInProd = 'using_sqlite_in_prod',
 	UpgradedToPro = 'upgraded_to_pro',
+	UpgradedToPro100Gb = 'upgraded_to_pro_100_gb',
 }
 
 interface NotificationType {
@@ -50,6 +51,10 @@ export default class NotificationModel extends BaseModel<Notification> {
 			[NotificationKey.UpgradedToPro]: {
 				level: NotificationLevel.Normal,
 				message: 'Thank you! Your account has been successfully upgraded to Pro.',
+			},
+			[NotificationKey.UpgradedToPro100Gb]: {
+				level: NotificationLevel.Normal,
+				message: 'Thank you! Your account has been successfully upgraded to Pro 100 GB.',
 			},
 			[NotificationKey.Any]: {
 				level: NotificationLevel.Normal,

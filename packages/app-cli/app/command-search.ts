@@ -1,23 +1,24 @@
-const BaseCommand = require('./base-command').default;
-const { _ } = require('@joplin/lib/locale');
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const uuid = require('@joplin/lib/uuid').default;
+import BaseCommand from './base-command';
+import { _ } from '@joplin/lib/locale';
+import BaseModel from '@joplin/lib/BaseModel';
+import Folder from '@joplin/lib/models/Folder';
+import uuid from '@joplin/lib/uuid';
 
 class Command extends BaseCommand {
-	usage() {
+	public override usage() {
 		return 'search <pattern> [notebook]';
 	}
 
-	description() {
+	public override description() {
 		return _('Searches for the given <pattern> in all the notes.');
 	}
 
-	compatibleUis() {
+	public override compatibleUis() {
 		return ['gui'];
 	}
 
-	async action(args) {
+	// eslint-disable-next-line id-denylist -- `notebook` is the CLI argument name declared in usage() and accessed via bracket notation; the identifier appears here only as a type property key
+	public override async action(args: { pattern: string; notebook?: string }) {
 		const pattern = args['pattern'];
 		const folderTitle = args['notebook'];
 

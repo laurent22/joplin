@@ -30,7 +30,7 @@ import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
 import KeychainServiceDriverDummy from '@joplin/lib/services/keychain/KeychainServiceDriver.dummy';
 import BaseService from '@joplin/lib/services/BaseService';
-const { substrWithEllipsis } = require('@joplin/lib/string-utils');
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import { sanitizeUserUrl } from './urlUtils';
 import { BannerInfo } from './banners';

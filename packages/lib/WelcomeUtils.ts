@@ -6,7 +6,7 @@ import shim, { MobilePlatform } from './shim';
 import uuid from './uuid';
 import { fileExtension, basename } from './path-utils';
 import { _ } from './locale';
-const { pregQuote } = require('./string-utils');
+import { pregQuote } from './string-utils';
 import { FolderIconType } from './services/database/types';
 
 export enum WelcomeAssetPlatform {

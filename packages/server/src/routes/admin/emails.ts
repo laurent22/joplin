@@ -12,7 +12,7 @@ import { senderInfo } from '../../models/utils/email';
 import { _ } from '@joplin/lib/locale';
 import { View } from '../../services/MustacheService';
 import { markdownBodyToHtml } from '../../services/email/utils';
-const { substrWithEllipsis } = require('@joplin/lib/string-utils');
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 
 const router: Router = new Router(RouteType.Web);
 

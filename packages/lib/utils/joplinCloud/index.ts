@@ -8,6 +8,7 @@ type FeatureId = string;
 export enum PlanName {
 	Basic = 'basic',
 	Pro = 'pro',
+	Pro100Gb = 'pro100Gb',
 	Teams = 'teams',
 	JoplinServerBusiness = 'joplinServerBusiness',
 }
@@ -17,14 +18,17 @@ interface PlanFeature {
 	description?: string;
 	basic: boolean;
 	pro: boolean;
+	pro100Gb: boolean;
 	teams: boolean;
 	joplinServerBusiness?: boolean;
 	basicInfo?: string;
 	proInfo?: string;
+	pro100GbInfo?: string;
 	teamsInfo?: string;
 	joplinServerBusinessInfo?: string;
 	basicInfoShort?: string;
 	proInfoShort?: string;
+	pro100GbInfoShort?: string;
 	teamsInfoShort?: string;
 	joplinServerBusinessInfoShort?: string;
 }
@@ -43,8 +47,8 @@ export interface Plan {
 	iconName: string;
 	featuresOn: FeatureId[];
 	featuresOff: FeatureId[];
-	featureLabelsOn: string[];
-	featureLabelsOff: string[];
+	featureLabelsOn: FeatureRow[];
+	featureLabelsOff: FeatureRow[];
 	cfaLabel: string;
 	cfaUrl: string;
 	footnote: string;
@@ -140,24 +144,30 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			title: _('Max note or attachment size'),
 			basic: true,
 			pro: true,
+			pro100Gb: true,
 			teams: true,
 			basicInfo: _('%d MB per note or attachment', 10),
 			proInfo: _('%d MB per note or attachment', 200),
+			pro100GbInfo: _('%d MB per note or attachment', 200),
 			teamsInfo: _('%d MB per note or attachment', 200),
 			basicInfoShort: _('%d MB', 10),
 			proInfoShort: _('%d MB', 200),
+			pro100GbInfoShort: _('%d MB', 200),
 			teamsInfoShort: _('%d MB', 200),
 		},
 		maxStorage: {
 			title: _('Storage space'),
 			basic: true,
 			pro: true,
+			pro100Gb: true,
 			teams: true,
 			basicInfo: _('%d GB storage space', 2),
 			proInfo: _('%d GB storage space', 30),
+			pro100GbInfo: _('%d GB storage space', 100),
 			teamsInfo: _('%d GB storage space', 50),
 			basicInfoShort: _('%d GB', 2),
 			proInfoShort: _('%d GB', 30),
+			pro100GbInfoShort: _('%d GB', 100),
 			teamsInfoShort: _('%d GB', 50),
 		},
 		publishNote: {
@@ -165,6 +175,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			description: 'You can [publish a note](https://joplinapp.org/help/apps/publish_note) from the Joplin app. You will get a link that you can share with other users, who can then view the note in their browser.',
 			basic: true,
 			pro: true,
+			pro100Gb: true,
 			teams: true,
 			joplinServerBusiness: true,
 		},
@@ -172,6 +183,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			title: _('Sync as many devices as you want'),
 			basic: true,
 			pro: true,
+			pro100Gb: true,
 			teams: true,
 			joplinServerBusiness: true,
 		},
@@ -187,6 +199,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			description: _('Access your notes from any web browser at %s.', 'https://app.joplincloud.com'),
 			basic: true,
 			pro: true,
+			pro100Gb: true,
 			teams: true,
 			joplinServerBusiness: false,
 		},
@@ -195,6 +208,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			description: _('This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature "%s".', shareNotebookTitle),
 			basic: true,
 			pro: true,
+			pro100Gb: true,
 			teams: true,
 			joplinServerBusiness: true,
 		},
@@ -203,6 +217,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			description: 'You can [share a notebook](https://joplinapp.org/help/apps/share_notebook/) with other Joplin Cloud users, who can then view the notes and edit them.',
 			basic: false,
 			pro: true,
+			pro100Gb: true,
 			teams: true,
 			joplinServerBusiness: true,
 		},
@@ -211,6 +226,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			description: '[Email to Note](https://joplinapp.org/help/apps/email_to_note/) allows you to save your emails in Joplin Cloud by forwarding your emails to a special email address. The subject of the email will become the note title, and the email body will become the note content.',
 			basic: false,
 			pro: true,
+			pro100Gb: true,
 			teams: true,
 			joplinServerBusiness: true,
 		},
@@ -219,6 +235,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			description: 'You can [customise the banner](https://joplinapp.org/help/apps/publish_note#customising-the-publishing-banner) that appears on top of your published notes, for example by adding a custom logo and text, and changing the banner colour.',
 			basic: false,
 			pro: true,
+			pro100Gb: true,
 			teams: true,
 			joplinServerBusiness: true,
 		},
@@ -227,6 +244,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			description: 'The [Teams functionality](https://joplinapp.org/help/apps/teams/) enables the efficient administration of multiple users within a team. Serving as a centralized hub, it provides an overview of all users within your organisations, facilitating easy addition or removal of members, as well as centralised billing.',
 			basic: false,
 			pro: false,
+			pro100Gb: false,
 			teams: true,
 			joplinServerBusiness: true,
 		},
@@ -235,6 +253,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			description: 'Billing is consolidated, ensuring a single monthly or yearly invoice, based on your chosen plan. The billing is automatically adjusted in accordance with the number of team members',
 			basic: false,
 			pro: false,
+			pro100Gb: false,
 			teams: true,
 		},
 		sharePermissions: {
@@ -242,6 +261,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			description: '[Share permissions](https://joplinapp.org/help/apps/share_permissions/) allow you to define whether a notebook you share with someone can be edited or is read-only. It can be useful for example to share documentation that you do not want to be modified.',
 			basic: false,
 			pro: false,
+			pro100Gb: false,
 			teams: true,
 			joplinServerBusiness: true,
 		},
@@ -249,6 +269,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			title: _('Priority support'),
 			basic: false,
 			pro: false,
+			pro100Gb: false,
 			teams: true,
 			joplinServerBusiness: true,
 		},
@@ -256,6 +277,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			title: _('Self-hosted'),
 			basic: false,
 			pro: false,
+			pro100Gb: false,
 			teams: false,
 			joplinServerBusiness: true,
 		},
@@ -263,6 +285,7 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			title: _('Source code available'),
 			basic: false,
 			pro: false,
+			pro100Gb: false,
 			teams: false,
 			joplinServerBusiness: true,
 		},
@@ -281,12 +304,48 @@ export const getFeatureIdsByPlan = (planName: PlanName, featureOn: boolean): Fea
 	return output;
 };
 
-export const getFeatureLabelsByPlan = (planName: PlanName, featureOn: boolean): string[] => {
-	const output: FeatureId[] = [];
+export interface FeatureAction {
+	label: string;
+	actionId: string;
+}
+
+export interface FeatureRow {
+	label: string;
+	actions: FeatureAction[];
+}
+
+const getFeatureActions = (planName: PlanName, featureId: FeatureId, featureEnabled: boolean) => {
+	const result: FeatureAction[] = [];
+
+	if (featureId === 'maxStorage' && featureEnabled) {
+		if (planName === PlanName.Pro) {
+			// TODO: Enable, when supported by the server
+			// result.push({
+			// 	label: _('Upgrade to 100 GB'),
+			// 	actionId: 'toggleIncreaseStorage',
+			// });
+		} else if (planName === PlanName.Pro100Gb) {
+			const defaultPlan = features().maxStorage.proInfoShort;
+			result.push({
+				label: _('Back to %s', defaultPlan),
+				actionId: 'toggleIncreaseStorage',
+			});
+		}
+	}
+
+	return result;
+};
+
+export const getFeatureLabelsByPlan = (planName: PlanName, featureOn: boolean): FeatureRow[] => {
+	const output: FeatureRow[] = [];
 
 	for (const [featureId, v] of Object.entries(features())) {
 		if (v[planName] === featureOn) {
-			output.push(getFeatureLabel(planName, featureId));
+			const actions = getFeatureActions(planName, featureId, featureOn);
+			output.push({
+				label: getFeatureLabel(planName, featureId),
+				actions,
+			});
 		}
 	}
 
@@ -341,6 +400,11 @@ export const createFeatureTableMd = () => {
 			name: 'pro',
 			label: 'Pro',
 		},
+		// TODO: Enable, when supported by Joplin Cloud
+		// {
+		// 	name: 'pro100Gb',
+		// 	label: 'Pro 100 GB',
+		// },
 		{
 			name: 'teams',
 			label: 'Teams',
@@ -382,6 +446,8 @@ export const createFeatureTableMd = () => {
 			featureLabel: makeFeatureLabel(id, feature),
 			basic: getCellInfo(PlanName.Basic, id, feature),
 			pro: getCellInfo(PlanName.Pro, id, feature),
+			// TODO: Enable when supported by Joplin Cloud
+			// pro100Gb: getCellInfo(PlanName.Pro100Gb, id, feature),
 			teams: getCellInfo(PlanName.Teams, id, feature),
 			joplinServerBusiness: getCellInfo(PlanName.JoplinServerBusiness, id, feature),
 		};
@@ -434,6 +500,29 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Pro, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Pro, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Pro, false),
+			cfaLabel: _('Try it now'),
+			cfaUrl: '',
+			footnote: '',
+			hostingType: PlanHostingType.Managed,
+		},
+
+		pro100Gb: {
+			name: 'pro100Gb',
+			title: _('Pro 100 GB'),
+			priceMonthly: findPrice(stripeConfig, {
+				accountType: 4,
+				period: PricePeriod.Monthly,
+			}),
+			priceYearly: findPrice(stripeConfig, {
+				accountType: 4,
+				period: PricePeriod.Yearly,
+			}),
+			featured: true,
+			iconName: 'pro-icon',
+			featuresOn: getFeatureIdsByPlan(PlanName.Pro100Gb, true),
+			featuresOff: getFeatureIdsByPlan(PlanName.Pro100Gb, false),
+			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Pro100Gb, true),
+			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Pro100Gb, false),
 			cfaLabel: _('Try it now'),
 			cfaUrl: '',
 			footnote: '',

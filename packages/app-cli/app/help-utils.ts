@@ -1,12 +1,16 @@
-const { wrap } = require('@joplin/lib/string-utils.js');
-const Setting = require('@joplin/lib/models/Setting').default;
-const { _ } = require('@joplin/lib/locale');
+import { wrap } from '@joplin/lib/string-utils';
+import Setting, { AppType } from '@joplin/lib/models/Setting';
+import { SettingItem } from '@joplin/lib/models/settings/types';
+import { _ } from '@joplin/lib/locale';
+import BaseCommand from './base-command';
 
 const MAX_WIDTH = 78;
 const INDENT = '    ';
 
-function renderTwoColumnData(options, baseIndent, width) {
-	const output = [];
+type TwoColumnRow = [string, string];
+
+const renderTwoColumnData = (options: TwoColumnRow[], baseIndent: string, width: number) => {
+	const output: string[] = [];
 	const optionColWidth = getOptionColWidth(options);
 
 	for (let i = 0; i < options.length; i++) {
@@ -21,19 +25,20 @@ function renderTwoColumnData(options, baseIndent, width) {
 	}
 
 	return output.join('\n');
-}
+};
 
-function renderCommandHelp(cmd, width = null) {
+// eslint-disable-next-line import/prefer-default-export -- file is named after its functional area (help-utils); default-export of renderCommandHelp would diverge from the file name
+export const renderCommandHelp = (cmd: BaseCommand, width: number|null = null) => {
 	if (width === null) width = MAX_WIDTH;
 
 	const baseIndent = '';
 
-	const output = [];
+	const output: string[] = [];
 	output.push(baseIndent + cmd.usage());
 	output.push('');
 	output.push(wrap(cmd.description(), baseIndent + INDENT, width));
 
-	const optionString = renderTwoColumnData(cmd.options(), baseIndent, width);
+	const optionString = renderTwoColumnData(cmd.options() as TwoColumnRow[], baseIndent, width);
 
 	if (optionString) {
 		output.push('');
@@ -41,8 +46,8 @@ function renderCommandHelp(cmd, width = null) {
 	}
 
 	if (cmd.name() === 'config') {
-		const renderMetadata = md => {
-			const desc = [];
+		const renderMetadata = (md: SettingItem): TwoColumnRow => {
+			const desc: string[] = [];
 
 			if (md.label) {
 				let label = md.label();
@@ -50,7 +55,7 @@ function renderCommandHelp(cmd, width = null) {
 				desc.push(label);
 			}
 
-			const description = Setting.keyDescription(md.key, 'cli');
+			const description = Setting.keyDescription(md.key, AppType.Cli);
 			if (description) desc.push(description);
 
 			desc.push(_('Type: %s.', md.isEnum ? _('Enum') : Setting.typeToString(md.type)));
@@ -77,8 +82,8 @@ function renderCommandHelp(cmd, width = null) {
 		output.push(_('Possible keys/values:'));
 		output.push('');
 
-		const keysValues = [];
-		const keys = Setting.keys(true, 'cli');
+		const keysValues: TwoColumnRow[] = [];
+		const keys = Setting.keys(true, AppType.Cli);
 		for (let i = 0; i < keys.length; i++) {
 			if (keysValues.length) keysValues.push(['', '']);
 			const md = Setting.settingMetadata(keys[i]);
@@ -90,15 +95,13 @@ function renderCommandHelp(cmd, width = null) {
 	}
 
 	return output.join('\n');
-}
+};
 
-function getOptionColWidth(options) {
+const getOptionColWidth = (options: TwoColumnRow[]) => {
 	let output = 0;
 	for (let j = 0; j < options.length; j++) {
 		const option = options[j];
 		if (option[0].length > output) output = option[0].length;
 	}
 	return output;
-}
-
-module.exports = { renderCommandHelp };
+};

@@ -1,4 +1,4 @@
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 const stringUtilsCommon = require('./string-utils-common.js');
 
@@ -278,7 +278,7 @@ export function camelCaseToDash(s: string) {
 	return output.join('');
 }
 
-export function formatCssSize(v: string) {
+export function formatCssSize(v: string | number) {
 	if (typeof v === 'string') {
 		if (v.includes('px') || v.includes('em') || v.includes('%')) return v;
 	}

@@ -4,7 +4,7 @@ import JoplinError from '../../JoplinError';
 import time from '../../time';
 import { FileApi } from '../../file-api';
 import { AppType } from '../../models/Setting';
-const { fileExtension, filename } = require('../../path-utils');
+import { fileExtension, filename } from '../../path-utils';
 
 export enum LockType {
 	None = 0,

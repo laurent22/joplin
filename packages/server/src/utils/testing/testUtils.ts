@@ -359,6 +359,15 @@ export const createUserAndSession = async function(index = 1, isAdmin = false, o
 	};
 };
 
+export const createSubscription = async (user: User, stripeUserId: string, stripeSubscriptionId: string) => {
+	return await models().subscription().save({
+		user_id: user.id,
+		stripe_user_id: stripeUserId,
+		stripe_subscription_id: stripeSubscriptionId,
+		last_payment_time: Date.now(),
+	});
+};
+
 export const createUser = async function(index = 1, isAdmin = false): Promise<User> {
 	return models().user().save({ email: `user${index}@localhost`, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
 };

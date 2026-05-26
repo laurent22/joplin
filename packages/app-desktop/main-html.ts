@@ -25,15 +25,16 @@ import Logger from '@joplin/utils/Logger';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import bridge from './services/bridge';
 import shim from '@joplin/lib/shim';
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
+import { shimInit } from '@joplin/lib/shim-init-node';
+import type PdfJs from '@joplin/lib/utils/types/pdfJs';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
 import * as React from 'react';
 import nodeSqlite = require('sqlite3');
 import initLib from '@joplin/lib/initLib';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
-const pdfJs = require('pdfjs-dist');
-const { isAppleSilicon } = require('is-apple-silicon');
+import * as pdfJs from 'pdfjs-dist';
+import { isAppleSilicon } from 'is-apple-silicon';
 require('@sentry/electron/renderer');
 
 // Allows components to use React as a global
@@ -92,7 +93,7 @@ const main = async () => {
 		appVersion,
 		electronBridge: bridge(),
 		nodeSqlite,
-		pdfJs,
+		pdfJs: pdfJs as PdfJs,
 		isAppleSilicon,
 	});
 

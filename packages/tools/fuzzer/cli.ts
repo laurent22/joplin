@@ -8,7 +8,7 @@ import { ActionSpec } from './ActionRunner';
 import { readFile } from 'fs/promises';
 import Fuzzer, { FuzzerConfig } from './Fuzzer';
 import { isTTY } from '@joplin/utils/cli';
-const { shimInit } = require('@joplin/lib/shim-init-node');
+import { shimInit } from '@joplin/lib/shim-init-node';
 
 const globalLogger = new Logger();
 globalLogger.addTarget(TargetType.Console);

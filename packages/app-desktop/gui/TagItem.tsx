@@ -1,10 +1,16 @@
-const React = require('react');
-const { connect } = require('react-redux');
+import * as React from 'react';
+import { connect } from 'react-redux';
 import { themeStyle } from '@joplin/lib/theme';
 import CommandService from '@joplin/lib/services/CommandService';
 import { AppState } from '../app.reducer';
 
-class TagItemComponent extends React.Component {
+interface Props {
+	themeId: number;
+	title: string;
+	id: string;
+}
+
+class TagItemComponent extends React.Component<Props> {
 	public render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = { ...theme.tagStyle };

@@ -300,3 +300,5 @@ querystring
 msgbox
 LASTEXITCODE
 segfaults
+SIGKILL
+dgram

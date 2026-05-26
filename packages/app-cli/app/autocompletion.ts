@@ -1,14 +1,18 @@
-const app = require('./app').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const Tag = require('@joplin/lib/models/Tag').default;
+import app from './app';
+import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
+import Tag from '@joplin/lib/models/Tag';
 const { cliUtils } = require('./cli-utils.js');
-const yargParser = require('yargs-parser');
-const fs = require('fs-extra');
+import yargParser = require('yargs-parser');
+import * as fs from 'fs-extra';
 
-async function handleAutocompletionPromise(line) {
+// Augmented-array shape consumed by StatusBarWidget's autoComplete callback.
+type CompletionList = string[] & { prefix?: string };
+type CompletionResult = string | CompletionList;
+
+const handleAutocompletionPromise = async (line: string): Promise<CompletionResult> => {
 	// Auto-complete the command name
-	const names = await app().commandNames();
+	const names: string[] = await app().commandNames();
 	const words = getArguments(line);
 	// If there is only one word and it is not already a command name then you
 	// should look for commands it could be
@@ -37,7 +41,7 @@ async function handleAutocompletionPromise(line) {
 
 	// complete an option
 	const next = words.length > 1 ? words[words.length - 1] : '';
-	const l = [];
+	const l: string[] = [];
 	if (next[0] === '-') {
 		for (let i = 0; i < metadata.options.length; i++) {
 			const options = metadata.options[i][0].split(' ');
@@ -60,7 +64,7 @@ async function handleAutocompletionPromise(line) {
 		if (l.length === 0) {
 			return line;
 		}
-		const ret = l.map(a => toCommandLine(a));
+		const ret: CompletionList = l.map(a => toCommandLine(a));
 		ret.prefix = `${toCommandLine(words.slice(0, -1))} `;
 		return ret;
 	}
@@ -91,7 +95,7 @@ async function handleAutocompletionPromise(line) {
 		if (argName === 'item') {
 			const notes = currentFolder ? await Note.previews(currentFolder.id, { titlePattern: `${next}*` }) : [];
 			const folders = await Folder.search({ titlePattern: `${next}*` });
-			l.push(...notes.map(n => n.title), folders.map(n => n.title));
+			l.push(...notes.map(n => n.title), ...folders.map(n => n.title));
 		}
 
 		if (argName === 'tag') {
@@ -117,19 +121,24 @@ async function handleAutocompletionPromise(line) {
 	if (l.length === 1) {
 		return toCommandLine([...words.slice(0, -1), l[0]]);
 	} else if (l.length > 1) {
-		const ret = l.map(a => toCommandLine(a));
+		const ret: CompletionList = l.map(a => toCommandLine(a));
 		ret.prefix = `${toCommandLine(words.slice(0, -1))} `;
 		return ret;
 	}
 	return line;
-}
-function handleAutocompletion(str, callback) {
-// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-	handleAutocompletionPromise(str).then((res) => {
+};
+
+type AutocompletionCallback = (error: undefined, result: CompletionResult)=> void;
+
+// eslint-disable-next-line import/prefer-default-export -- file is named after its functional area (autocompletion); default-export of handleAutocompletion would diverge from the file name
+export const handleAutocompletion = (str: string, callback: AutocompletionCallback) => {
+	// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+	void handleAutocompletionPromise(str).then((res) => {
 		callback(undefined, res);
 	});
-}
-function toCommandLine(args) {
+};
+
+const toCommandLine = (args: string | string[]) => {
 	if (Array.isArray(args)) {
 		return args
 			.map((a) => {
@@ -151,12 +160,13 @@ function toCommandLine(args) {
 			return `${args} `;
 		}
 	}
-}
-function getArguments(line) {
+};
+
+const getArguments = (line: string): string[] => {
 	let inSingleQuotes = false;
 	let inDoubleQuotes = false;
 	let currentWord = '';
-	const parsed = [];
+	const parsed: string[] = [];
 	for (let i = 0; i < line.length; i++) {
 		if (line[i] === '"') {
 			if (inDoubleQuotes) {
@@ -191,14 +201,13 @@ function getArguments(line) {
 		parsed.push(currentWord);
 	}
 	return parsed;
-}
-function filterList(list, next) {
-	const output = [];
+};
+
+const filterList = (list: string[], next: string): string[] => {
+	const output: string[] = [];
 	for (let i = 0; i < list.length; i++) {
 		if (list[i].indexOf(next) !== 0) continue;
 		output.push(list[i]);
 	}
 	return output;
-}
-
-module.exports = { handleAutocompletion };
+};

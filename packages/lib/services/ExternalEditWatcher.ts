@@ -8,7 +8,7 @@ import Note from '../models/Note';
 import { openFileWithExternalEditor } from './ExternalEditWatcher/utils';
 import AsyncActionQueue from '../AsyncActionQueue';
 import { EventEmitter } from 'events';
-const chokidar = require('chokidar');
+import * as chokidar from 'chokidar';
 const { ErrorNotFound } = require('./rest/utils/errors');
 
 interface ChangeEventContext {

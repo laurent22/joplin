@@ -1,25 +1,36 @@
-const Logger = require('@joplin/utils/Logger').default;
-const Folder = require('@joplin/lib/models/Folder').default;
-const BaseItem = require('@joplin/lib/models/BaseItem').default;
-const Tag = require('@joplin/lib/models/Tag').default;
-const BaseModel = require('@joplin/lib/BaseModel').default;
-const Note = require('@joplin/lib/models/Note').default;
-const Resource = require('@joplin/lib/models/Resource').default;
-const Setting = require('@joplin/lib/models/Setting').default;
-const reducer = require('@joplin/lib/reducer').default;
-const { defaultState } = require('@joplin/lib/reducer');
-const { splitCommandString } = require('@joplin/utils');
-const { reg } = require('@joplin/lib/registry.js');
-const { _ } = require('@joplin/lib/locale');
-const shim = require('@joplin/lib/shim').default;
-const Entities = require('html-entities').AllHtmlEntities;
-const htmlentities = new Entities().encode;
+import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
+import Folder from '@joplin/lib/models/Folder';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import Tag from '@joplin/lib/models/Tag';
+import BaseModel from '@joplin/lib/BaseModel';
+import Note from '@joplin/lib/models/Note';
+import Resource from '@joplin/lib/models/Resource';
+import Setting from '@joplin/lib/models/Setting';
+import reducer, { defaultState, State } from '@joplin/lib/reducer';
+import { Store } from 'redux';
+import { splitCommandString } from '@joplin/utils';
+import { reg } from '@joplin/lib/registry';
+import { _ } from '@joplin/lib/locale';
+import shim from '@joplin/lib/shim';
+import { AllHtmlEntities } from 'html-entities';
+import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
+import { NoteEntity } from '@joplin/lib/services/database/types';
+import NoteWidget from './gui/NoteWidget';
+import LinkSelector from './LinkSelector';
+import ResourceServer from './ResourceServer';
+import NoteMetadataWidget from './gui/NoteMetadataWidget';
+import FolderListWidget from './gui/FolderListWidget';
+import NoteListWidget from './gui/NoteListWidget';
+import StatusBarWidget, { PromptOptions } from './gui/StatusBarWidget';
+import ConsoleWidget from './gui/ConsoleWidget';
+import type { Application } from './app';
+
+const htmlentities = new AllHtmlEntities().encode;
 
 const chalk = require('chalk');
 const tk = require('terminal-kit');
 const TermWrapper = require('tkwidgets/framework/TermWrapper.js');
 const Renderer = require('tkwidgets/framework/Renderer.js');
-const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker').default;
 
 const BaseWidget = require('tkwidgets/BaseWidget.js');
 const TextWidget = require('tkwidgets/TextWidget.js');
@@ -28,18 +39,36 @@ const VLayoutWidget = require('tkwidgets/VLayoutWidget.js');
 const ReduxRootWidget = require('tkwidgets/ReduxRootWidget.js');
 const WindowWidget = require('tkwidgets/WindowWidget.js');
 
-const NoteWidget = require('./gui/NoteWidget.js');
-const ResourceServer = require('./ResourceServer.js');
-const NoteMetadataWidget = require('./gui/NoteMetadataWidget.js');
-const FolderListWidget = require('./gui/FolderListWidget').default;
-const NoteListWidget = require('./gui/NoteListWidget.js');
-const StatusBarWidget = require('./gui/StatusBarWidget').default;
-const ConsoleWidget = require('./gui/ConsoleWidget.js');
-const LinkSelector = require('./LinkSelector.js').default;
-
+// The keymap entries that the CLI dispatcher recognises. The shape is loose
+// because items can have command-type-specific extra fields (e.g. cursorPosition
+// on prompt-type entries) that the dispatcher reads opportunistically.
+interface KeymapItem {
+	command: string;
+	keys: string[];
+	type?: 'exec' | 'prompt' | 'function' | 'tkwidgets';
+	canRunAlongOtherCommands?: boolean;
+	cursorPosition?: number;
+}
 
 class AppGui {
-	constructor(app, store, keymap) {
+	private app_: Application;
+	private store_: Store<State>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TermWrapper from tkwidgets has no type definitions
+	private term_: any;
+	private tkWidgetKeys_: Record<string, string>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Renderer from tkwidgets has no type definitions
+	private renderer_: any;
+	private logger_: LoggerWrapper;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ReduxRootWidget from tkwidgets has no type definitions
+	private rootWidget_: any;
+	private keymap_: KeymapItem[];
+	private commandCancelCalled_: boolean;
+	private currentShortcutKeys_: string[];
+	private lastShortcutKeyTime_: number;
+	private linkSelector_: LinkSelector;
+	private resourceServer_: ResourceServer;
+
+	public constructor(app: Application, store: Store<State>, keymap: KeymapItem[]) {
 		try {
 			this.app_ = app;
 			this.store_ = store;
@@ -65,13 +94,12 @@ class AppGui {
 
 			this.renderer_ = new Renderer(this.term(), this.rootWidget_);
 
-			this.app_.on('modelAction', async event => {
+			this.app_.on('modelAction', async (...args: unknown[]) => {
+				const event = args[0] as { action: unknown };
 				await this.handleModelAction(event.action);
 			});
 
 			this.keymap_ = this.setupKeymap(keymap);
-
-			this.inputMode_ = AppGui.INPUT_MODE_NORMAL;
 
 			this.commandCancelCalled_ = false;
 
@@ -84,7 +112,7 @@ class AppGui {
 			// a regular command it's not necessary since the process
 			// exits right away.
 			reg.setupRecurrentSync();
-			DecryptionWorker.instance().scheduleStart();
+			void DecryptionWorker.instance().scheduleStart();
 		} catch (error) {
 			if (this.term_) { this.fullScreen(false); }
 			console.error(error);
@@ -92,40 +120,41 @@ class AppGui {
 		}
 	}
 
-	store() {
+	public store() {
 		return this.store_;
 	}
 
-	renderer() {
+	public renderer() {
 		return this.renderer_;
 	}
 
-	async forceRender() {
+	public async forceRender() {
 		this.widget('root').invalidate();
 		await this.renderer_.renderRoot();
 	}
 
-	termSaveState() {
+	public termSaveState() {
 		return this.term().saveState();
 	}
 
-	termRestoreState(state) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- terminal-kit state object is untyped
+	public termRestoreState(state: any) {
 		return this.term().restoreState(state);
 	}
 
-	prompt(initialText = '', promptString = ':', options = null) {
+	public prompt(initialText = '', promptString = ':', options: PromptOptions = null) {
 		return this.widget('statusBar').prompt(initialText, promptString, options);
 	}
 
-	stdoutMaxWidth() {
+	public stdoutMaxWidth() {
 		return this.widget('console').innerWidth - 1;
 	}
 
-	isDummy() {
+	public isDummy() {
 		return false;
 	}
 
-	buildUi() {
+	public buildUi() {
 		this.rootWidget_ = new ReduxRootWidget(this.store_);
 		this.rootWidget_.name = 'root';
 		this.rootWidget_.autoShortcutsEnabled = false;
@@ -137,7 +166,8 @@ class AppGui {
 		};
 		folderList.name = 'folderList';
 		folderList.vStretch = true;
-		folderList.on('currentItemChange', async event => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- tkwidgets event payload is untyped
+		folderList.on('currentItemChange', async (event: any) => {
 			const item = folderList.currentItem;
 
 			if (item === '-') {
@@ -172,7 +202,7 @@ class AppGui {
 				});
 			}
 		});
-		this.rootWidget_.connect(folderList, state => {
+		this.rootWidget_.connect(folderList, (state: State) => {
 			return {
 				selectedFolderId: state.selectedFolderId,
 				selectedTagId: state.selectedTagId,
@@ -199,7 +229,7 @@ class AppGui {
 				id: note ? note.id : null,
 			});
 		});
-		this.rootWidget_.connect(noteList, state => {
+		this.rootWidget_.connect(noteList, (state: State) => {
 			return {
 				selectedNoteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 				items: state.notes,
@@ -213,7 +243,7 @@ class AppGui {
 			borderBottomWidth: 1,
 			borderLeftWidth: 1,
 		};
-		this.rootWidget_.connect(noteText, state => {
+		this.rootWidget_.connect(noteText, (state: State) => {
 			return {
 				noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
 				notes: state.notes,
@@ -228,7 +258,7 @@ class AppGui {
 			borderLeftWidth: 1,
 			borderRightWidth: 1,
 		};
-		this.rootWidget_.connect(noteMetadata, state => {
+		this.rootWidget_.connect(noteMetadata, (state: State) => {
 			return { noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null };
 		});
 		noteMetadata.hide();
@@ -267,7 +297,7 @@ class AppGui {
 		this.rootWidget_.addChild(win1);
 	}
 
-	showModalOverlay(text) {
+	public showModalOverlay(text: string) {
 		if (!this.widget('overlayWindow')) {
 			const textWidget = new TextWidget();
 			textWidget.hStretch = true;
@@ -286,23 +316,23 @@ class AppGui {
 		this.widget('overlayText').text = text;
 	}
 
-	hideModalOverlay() {
+	public hideModalOverlay() {
 		if (this.widget('overlayWindow')) this.widget('overlayWindow').hide();
 		this.widget('mainWindow').activate();
 	}
 
-	addCommandToConsole(cmd) {
+	public addCommandToConsole(cmd: string) {
 		if (!cmd) return;
 		const isConfigPassword = cmd.indexOf('config ') >= 0 && cmd.indexOf('password') >= 0;
 		if (isConfigPassword) return;
 		this.stdout(chalk.cyan.bold(`> ${cmd}`));
 	}
 
-	setupKeymap(keymap) {
-		const output = [];
+	public setupKeymap(keymap: KeymapItem[]): KeymapItem[] {
+		const output: KeymapItem[] = [];
 
 		for (let i = 0; i < keymap.length; i++) {
-			const item = { ...keymap[i] };
+			const item: KeymapItem = { ...keymap[i] };
 
 			if (!item.command) throw new Error(`Missing command for keymap item: ${JSON.stringify(item)}`);
 
@@ -320,23 +350,23 @@ class AppGui {
 		return output;
 	}
 
-	toggleConsole() {
+	public toggleConsole() {
 		this.showConsole(!this.consoleIsShown());
 	}
 
-	showConsole(doShow = true) {
+	public showConsole(doShow = true) {
 		this.widget('console').show(doShow);
 	}
 
-	hideConsole() {
+	public hideConsole() {
 		this.showConsole(false);
 	}
 
-	consoleIsShown() {
+	public consoleIsShown() {
 		return this.widget('console').shown;
 	}
 
-	maximizeConsole(doMaximize = true) {
+	public maximizeConsole(doMaximize = true) {
 		const consoleWidget = this.widget('console');
 
 		if (consoleWidget.isMaximized__ === undefined) {
@@ -355,60 +385,61 @@ class AppGui {
 		this.widget('vLayout').setWidgetConstraints(consoleWidget, constraints);
 	}
 
-	minimizeConsole() {
+	public minimizeConsole() {
 		this.maximizeConsole(false);
 	}
 
-	consoleIsMaximized() {
+	public consoleIsMaximized() {
 		return this.widget('console').isMaximized__ === true;
 	}
 
-	showNoteMetadata(show = true) {
+	public showNoteMetadata(show = true) {
 		this.widget('noteMetadata').show(show);
 	}
 
-	hideNoteMetadata() {
+	public hideNoteMetadata() {
 		this.showNoteMetadata(false);
 	}
 
-	toggleNoteMetadata() {
+	public toggleNoteMetadata() {
 		this.showNoteMetadata(!this.widget('noteMetadata').shown);
 	}
 
-	toggleFolderIds() {
+	public toggleFolderIds() {
 		this.widget('folderList').toggleShowIds();
 		this.widget('noteList').toggleShowIds();
 	}
 
-	toggleFolderCollapse() {
+	public toggleFolderCollapse() {
 		const folderList = this.widget('folderList');
 		if (folderList && folderList.toggleFolderCollapse) {
 			folderList.toggleFolderCollapse();
 		}
 	}
 
-	widget(name) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- widget lookup returns whichever widget type matches the name; callers know the shape they expect
+	public widget(name: string): any {
 		if (name === 'root') return this.rootWidget_;
 		return this.rootWidget_.childByName(name);
 	}
 
-	app() {
+	public app(): Application {
 		return this.app_;
 	}
 
-	setLogger(l) {
+	public setLogger(l: LoggerWrapper) {
 		this.logger_ = l;
 	}
 
-	logger() {
+	public logger() {
 		return this.logger_;
 	}
 
-	keymap() {
+	public keymap() {
 		return this.keymap_;
 	}
 
-	keymapItemByKey(key) {
+	public keymapItemByKey(key: string): KeymapItem | null {
 		for (let i = 0; i < this.keymap_.length; i++) {
 			const item = this.keymap_[i];
 			if (item.keys.indexOf(key) >= 0) return item;
@@ -416,11 +447,11 @@ class AppGui {
 		return null;
 	}
 
-	term() {
+	public term() {
 		return this.term_;
 	}
 
-	activeListItem() {
+	public activeListItem() {
 		const widget = this.widget('mainWindow').focusedWidget;
 		if (!widget) return null;
 
@@ -431,7 +462,8 @@ class AppGui {
 		return null;
 	}
 
-	async handleModelAction(action) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux action shape varies across the app's action union
+	public async handleModelAction(action: any) {
 		this.logger().info('Action:', action);
 
 		const state = { ...defaultState };
@@ -444,14 +476,14 @@ class AppGui {
 		}
 	}
 
-	async processFunctionCommand(cmd) {
+	public async processFunctionCommand(cmd: string) {
 		if (cmd === 'activate') {
 			const w = this.widget('mainWindow').focusedWidget;
 			if (w.name === 'folderList') {
 				// eslint-disable-next-line no-restricted-properties
 				this.widget('noteList').focus();
 			} else if (w.name === 'noteList' || w.name === 'noteText') {
-				this.processPromptCommand('edit $n');
+				void this.processPromptCommand('edit $n');
 			}
 		} else if (cmd === 'delete') {
 			if (this.widget('folderList').hasFocus) {
@@ -516,16 +548,16 @@ class AppGui {
 		} else if (cmd === 'toggle_folder_collapse') {
 			this.toggleFolderCollapse();
 		} else if (cmd === 'enter_command_line_mode') {
-			const cmd = await this.widget('statusBar').prompt();
-			if (!cmd) return;
-			this.addCommandToConsole(cmd);
-			await this.processPromptCommand(cmd);
+			const inputCmd = await this.widget('statusBar').prompt();
+			if (!inputCmd) return;
+			this.addCommandToConsole(inputCmd);
+			await this.processPromptCommand(inputCmd);
 		} else {
 			throw new Error(`Unknown command: ${cmd}`);
 		}
 	}
 
-	async processPromptCommand(cmd) {
+	public async processPromptCommand(cmd: string) {
 		if (!cmd) return;
 		cmd = cmd.trim();
 		if (!cmd.length) return;
@@ -560,29 +592,29 @@ class AppGui {
 		this.widget('root').invalidate();
 	}
 
-	async updateFolderList() {
+	public async updateFolderList() {
 		const folders = await Folder.all();
 		this.widget('folderList').items = folders;
 	}
 
-	async updateNoteList(folderId) {
+	public async updateNoteList(folderId: string | null) {
 		const fields = Note.previewFields();
 		fields.splice(fields.indexOf('body'), 1);
 		const notes = folderId ? await Note.previews(folderId, { fields: fields }) : [];
 		this.widget('noteList').items = notes;
 	}
 
-	async updateNoteText(note) {
+	public async updateNoteText(note: NoteEntity | null) {
 		const text = note ? note.body : '';
 		this.widget('noteText').text = text;
 	}
 
 	// Any key after which a shortcut is not possible.
-	isSpecialKey(name) {
+	public isSpecialKey(name: string) {
 		return [':', 'ENTER', 'DOWN', 'UP', 'LEFT', 'RIGHT', 'DELETE', 'BACKSPACE', 'ESCAPE', 'TAB', 'SHIFT_TAB', 'PAGE_UP', 'PAGE_DOWN'].indexOf(name) >= 0;
 	}
 
-	fullScreen(enable = true) {
+	public fullScreen(enable = true) {
 		if (enable) {
 			this.term().fullscreen();
 			this.term().hideCursor();
@@ -593,7 +625,8 @@ class AppGui {
 		}
 	}
 
-	stdout(text) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- text comes from many places (chalk-coloured strings, error.messages, raw values); JSON.stringified for the object case
+	public stdout(text: any) {
 		if (text === null || text === undefined) return;
 
 		const lines = text.split('\n');
@@ -605,12 +638,12 @@ class AppGui {
 		this.updateStatusBarMessage();
 	}
 
-	exit() {
+	public exit() {
 		this.fullScreen(false);
 		this.resourceServer_.stop();
 	}
 
-	updateStatusBarMessage() {
+	public updateStatusBarMessage() {
 		const consoleWidget = this.widget('console');
 
 		let msg = '';
@@ -631,13 +664,14 @@ class AppGui {
 		if (msg !== '') this.widget('statusBar').setItemAt(0, msg);
 	}
 
-	async setupResourceServer() {
+	public async setupResourceServer() {
 		const linkStyle = chalk.blue.underline;
 		const noteTextWidget = this.widget('noteText');
 		const resourceIdRegex = /^:\/[a-f0-9]+$/i;
-		const noteLinks = {};
+		type NoteLink = { type: 'url'; url: string } | { type: 'item'; id: string };
+		const noteLinks: Record<string, NoteLink> = {};
 
-		const hasProtocol = function(s, protocols) {
+		const hasProtocol = (s: string, protocols: string[]) => {
 			if (!s) return false;
 			s = s.trim().toLowerCase();
 			for (let i = 0; i < protocols.length; i++) {
@@ -649,7 +683,7 @@ class AppGui {
 		// By default, before the server is started, only the regular
 		// URLs appear in blue.
 		noteTextWidget.markdownRendererOptions = {
-			linkUrlRenderer: (index, url) => {
+			linkUrlRenderer: (_index: number, url: string) => {
 				if (!url) return url;
 
 				if (resourceIdRegex.test(url)) {
@@ -705,7 +739,7 @@ class AppGui {
 		if (!this.resourceServer_.started()) return;
 
 		noteTextWidget.markdownRendererOptions = {
-			linkUrlRenderer: (index, url) => {
+			linkUrlRenderer: (index: number, url: string) => {
 				if (!url) return url;
 
 				if (resourceIdRegex.test(url)) {
@@ -729,13 +763,13 @@ class AppGui {
 		};
 	}
 
-	async start() {
+	public async start() {
 		const term = this.term();
 
 		this.fullScreen();
 
 		try {
-			this.setupResourceServer();
+			void this.setupResourceServer();
 
 			this.renderer_.start();
 
@@ -743,7 +777,7 @@ class AppGui {
 
 			term.grabInput();
 
-			term.on('key', async (name) => {
+			term.on('key', async (name: string) => {
 				// -------------------------------------------------------------------------
 				// Handle special shortcuts
 				// -------------------------------------------------------------------------
@@ -802,7 +836,7 @@ class AppGui {
 
 				// If this command is an alias to another command, resolve to the actual command
 
-				let processShortcutKeys = !this.app().currentCommand() && keymapItem;
+				let processShortcutKeys: boolean = !this.app().currentCommand() && !!keymapItem;
 				if (keymapItem && keymapItem.canRunAlongOtherCommands) processShortcutKeys = true;
 				if (statusBar.promptActive) processShortcutKeys = false;
 
@@ -812,9 +846,9 @@ class AppGui {
 					this.currentShortcutKeys_ = [];
 
 					if (keymapItem.type === 'function') {
-						this.processFunctionCommand(keymapItem.command);
+						void this.processFunctionCommand(keymapItem.command);
 					} else if (keymapItem.type === 'prompt') {
-						const promptOptions = {};
+						const promptOptions: PromptOptions = {};
 						if ('cursorPosition' in keymapItem) promptOptions.cursorPosition = keymapItem.cursorPosition;
 						const commandString = await statusBar.prompt(keymapItem.command ? keymapItem.command : '', null, promptOptions);
 						this.addCommandToConsole(commandString);
@@ -847,7 +881,4 @@ class AppGui {
 	}
 }
 
-AppGui.INPUT_MODE_NORMAL = 1;
-AppGui.INPUT_MODE_META = 2;
-
-module.exports = AppGui;
+export default AppGui;

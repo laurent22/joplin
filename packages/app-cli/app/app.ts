@@ -16,13 +16,14 @@ import shim from '@joplin/lib/shim';
 import setupCommand from './setupCommand';
 import BaseCommand from './base-command';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
-
-type FolderOrNoteType = ModelType.Note | ModelType.Folder | 'folderOrNote';
 import initializeCommandService from './utils/initializeCommandService';
-const { cliUtils } = require('./cli-utils.js');
+import { cliUtils } from './cli-utils';
 const Cache = require('@joplin/lib/Cache');
 
-class Application extends BaseApplication {
+type FolderOrNoteType = ModelType.Note | ModelType.Folder | 'folderOrNote';
+
+
+export class Application extends BaseApplication {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic command loading system
 	private commands_: Record<string, any> = {};
@@ -439,7 +440,7 @@ class Application extends BaseApplication {
 			// Otherwise open the GUI
 			const keymap = await this.loadKeymaps();
 
-			const AppGui = require('./app-gui.js');
+			const AppGui = require('./app-gui.js').default;
 			this.gui_ = new AppGui(this, this.store(), keymap);
 			this.gui_.setLogger(this.logger());
 			await this.gui_.start();

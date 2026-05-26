@@ -14,7 +14,7 @@ import JoplinCloudSignUpCallToAction from './JoplinCloudSignUpCallToAction';
 import bridge from '../services/bridge';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 
 interface Props {
 	dispatch: Dispatch;

@@ -10,7 +10,7 @@ import bridge from '../../services/bridge';
 import BaseModel from '@joplin/lib/BaseModel';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 import { Dispatch } from 'redux';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { MarkupLanguage } from '@joplin/renderer';

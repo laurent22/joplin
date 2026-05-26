@@ -1,6 +1,6 @@
 import Setting, { AppType, SettingMetadataSection, SettingSectionSource, type SettingsRecord } from '../../../models/Setting';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
-const { _ } = require('../../../locale');
+import { _ } from '../../../locale';
 import { createSelector } from 'reselect';
 import Logger from '@joplin/utils/Logger';
 

@@ -7,7 +7,7 @@ import BaseItem from '../../models/BaseItem';
 import JoplinError from '../../JoplinError';
 import { getActiveMasterKeyId, setActiveMasterKeyId } from '../synchronizer/syncInfoUtils';
 import PerformanceLogger from '../../PerformanceLogger';
-const { padLeft } = require('../../string-utils.js');
+import { padLeft } from '../../string-utils';
 
 const logger = Logger.create('EncryptionService');
 const perfLogger = PerformanceLogger.create();

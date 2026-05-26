@@ -36,9 +36,9 @@ interface Argv {
 	envFile?: string;
 }
 
-const nodeSqlite = require('sqlite3');
+import * as nodeSqlite from 'sqlite3';
+import { shimInit } from '@joplin/lib/shim-init-node';
 const cors = require('@koa/cors');
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit({ nodeSqlite });
 
 const defaultEnvVariables: Record<Env, Partial<EnvVariables>> = {

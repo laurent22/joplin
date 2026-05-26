@@ -4,7 +4,7 @@
 //
 // https://github.com/highlightjs/highlight.js/issues/1257#issuecomment-254502834
 
-const hljs = require('highlight.js/lib/core');
+import hljs from 'highlight.js/lib/core';
 
 // hljs.registerLanguage('1c', require('highlight.js/lib/languages/1c'));
 hljs.registerLanguage('abnf', require('highlight.js/lib/languages/abnf'));

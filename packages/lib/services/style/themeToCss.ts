@@ -1,5 +1,5 @@
 import { Theme } from '../../themes/type';
-const { camelCaseToDash, formatCssSize } = require('../../string-utils');
+import { camelCaseToDash, formatCssSize } from '../../string-utils';
 
 const isColor = (v: unknown): v is { color: unknown; model: unknown; valpha: unknown } => {
 	return !!v && typeof v === 'object' && ('color' in v) && ('model' in v) && ('valpha' in v);

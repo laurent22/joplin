@@ -1,10 +1,13 @@
+import { mock as stripeMock, reset as resetStripe } from '../../utils/testing/mockStripe';
 import { User } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { execRequest } from '../../utils/testing/apiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, checkContextError, expectHttpError, createSubscription } from '../../utils/testing/testUtils';
 import { uuidgen } from '@joplin/lib/uuid';
 import { ErrorForbidden } from '../../utils/errors';
 import { AccountType } from '../../models/UserModel';
+import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
+import { stripeConfig } from '../../utils/stripe';
 
 async function postUser(sessionId: string, email: string, password: string = null, props: Record<string, unknown> = null): Promise<User> {
 	password = password === null ? uuidgen() : password;
@@ -36,8 +39,8 @@ async function patchUser(sessionId: string, user: Record<string, unknown>, url =
 			method: 'POST',
 			url: url ? url : '/admin/users',
 			body: {
-				...user,
 				post_button: true,
+				...user,
 			},
 		},
 	});
@@ -59,6 +62,7 @@ describe('admin/users', () => {
 
 	beforeEach(async () => {
 		await beforeEachDb();
+		resetStripe();
 	});
 
 	test('should create a new user', async () => {
@@ -246,4 +250,45 @@ describe('admin/users', () => {
 		expect(await models().application().count()).toBe(0);
 	});
 
+	test.each([
+		{
+			fromType: AccountType.Pro,
+			toType: AccountType.Pro100Gb,
+			buttonId: 'update_subscription_pro_100gb_button' as const,
+		},
+		{
+			fromType: AccountType.Pro100Gb,
+			toType: AccountType.Pro,
+			buttonId: 'update_subscription_pro_button' as const,
+		},
+	])('should update a user account from type $fromType to $toType in Stripe', async ({ fromType, toType, buttonId }) => {
+		const { user } = await createUserAndSession(1, false, {
+			account_type: fromType,
+		});
+		const subscription = await createSubscription(user, 'stripe-user-id', 'stripe-subscription-id');
+		const admin = await createUserAndSession(2, true);
+
+		const originalPrice = findPrice(stripeConfig(), { accountType: fromType, period: PricePeriod.Monthly });
+		stripeMock.addMockSubscription(
+			'stripe-subscription-id',
+			[originalPrice],
+		);
+
+		await patchUser(admin.session.id, {
+			id: user.id,
+			[buttonId]: true,
+			post_button: false,
+		}, `/admin/users/${user.id}`);
+
+		const upgradePrice = findPrice(stripeConfig(), { accountType: toType, period: PricePeriod.Monthly });
+		expect(stripeMock.subscriptions.update).toHaveBeenCalledWith(
+			subscription.stripe_subscription_id,
+			{
+				items: [
+					{ deleted: true },
+					{ price: upgradePrice.id },
+				],
+			},
+		);
+	});
 });

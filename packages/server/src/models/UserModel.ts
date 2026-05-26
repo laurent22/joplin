@@ -37,6 +37,7 @@ const thirtyTwo = require('thirty-two');
 import config, { isUsingExternalAuth } from '../config';
 import { randomInt } from 'node:crypto';
 import { samlOwnedUserProperties } from '../utils/saml';
+import { PlanName } from '@joplin/lib/utils/joplinCloud';
 
 const logger = Logger.create('UserModel');
 
@@ -53,6 +54,7 @@ export enum AccountType {
 	Default = 0,
 	Basic = 1,
 	Pro = 2,
+	Pro100Gb = 4,
 }
 
 export interface Account {
@@ -90,6 +92,13 @@ const accountMetadata: Record<AccountType, Account> = {
 		max_item_size: 200 * MB,
 		max_total_item_size: 30 * GB,
 	},
+	[AccountType.Pro100Gb]: {
+		account_type: AccountType.Pro100Gb,
+		can_share_folder: 1,
+		can_receive_folder: 1,
+		max_item_size: 200 * MB,
+		max_total_item_size: 100 * GB,
+	},
 };
 
 interface AccountTypeSelectOptions {
@@ -117,6 +126,10 @@ export function accountTypeOptions(): AccountTypeSelectOptions[] {
 			value: AccountType.Pro,
 			label: accountTypeToString(AccountType.Pro),
 		},
+		{
+			value: AccountType.Pro100Gb,
+			label: accountTypeToString(AccountType.Pro100Gb),
+		},
 	];
 }
 
@@ -124,8 +137,36 @@ export function accountTypeToString(accountType: AccountType): string {
 	if (accountType === AccountType.Default) return 'Default';
 	if (accountType === AccountType.Basic) return 'Basic';
 	if (accountType === AccountType.Pro) return 'Pro';
-	throw new Error(`Invalid type: ${accountType}`);
+	if (accountType === AccountType.Pro100Gb) return 'Pro 100 GB';
+	const exhaustivenessCheck: never = accountType;
+	throw new Error(`Invalid type: ${exhaustivenessCheck}`);
 }
+
+export const accountTypeToPlan = (accountType: AccountType): PlanName => {
+	if (accountType === AccountType.Basic) return PlanName.Basic;
+	if (accountType === AccountType.Pro) return PlanName.Pro;
+	if (accountType === AccountType.Pro100Gb) return PlanName.Pro100Gb;
+	if (accountType === AccountType.Default) throw new Error('No plan exists for account type "Default"');
+	const exhaustivenessCheck: never = accountType;
+	throw new Error(`Invalid type: ${exhaustivenessCheck}`);
+};
+
+export const getNextSubscriptionPlan = (accountType: AccountType) => {
+	let upgradeTo = null;
+	let downgradeTo = null;
+	if (accountType === AccountType.Pro) {
+		upgradeTo = AccountType.Pro100Gb;
+		downgradeTo = AccountType.Basic;
+	} else if (accountType === AccountType.Basic) {
+		upgradeTo = AccountType.Pro;
+		downgradeTo = null;
+	} else if (accountType === AccountType.Pro100Gb) {
+		upgradeTo = null;
+		downgradeTo = AccountType.Pro;
+	}
+
+	return { upgradeTo, downgradeTo };
+};
 
 export default class UserModel extends BaseModel<User> {
 	private mfaEncryptionKey_: string = null;
@@ -649,10 +690,13 @@ export default class UserModel extends BaseModel<User> {
 
 		const basicAccount = accountByType(AccountType.Basic);
 		const proAccount = accountByType(AccountType.Pro);
+		const pro100GbAccount = accountByType(AccountType.Pro100Gb);
 		const basicDefaultLimit1 = Math.round(alertLimit1 * basicAccount.max_total_item_size);
 		const proDefaultLimit1 = Math.round(alertLimit1 * proAccount.max_total_item_size);
+		const pro100GbDefaultLimit1 = Math.round(alertLimit1 * pro100GbAccount.max_total_item_size);
 		const basicDefaultLimitMax = Math.round(alertLimitMax * basicAccount.max_total_item_size);
 		const proDefaultLimitMax = Math.round(alertLimitMax * proAccount.max_total_item_size);
+		const pro100GbDefaultLimitMax = Math.round(alertLimitMax * pro100GbAccount.max_total_item_size);
 
 		// ------------------------------------------------------------------------
 		// First, find all the accounts that are over the limit and send an
@@ -664,7 +708,8 @@ export default class UserModel extends BaseModel<User> {
 			.select(['id', 'total_item_size', 'max_total_item_size', 'account_type', 'email', 'full_name'])
 			.where(function() {
 				void this.whereRaw('total_item_size > ? AND account_type = ?', [basicDefaultLimit1, AccountType.Basic])
-					.orWhereRaw('total_item_size > ? AND account_type = ?', [proDefaultLimit1, AccountType.Pro]);
+					.orWhereRaw('total_item_size > ? AND account_type = ?', [proDefaultLimit1, AccountType.Pro])
+					.orWhereRaw('total_item_size > ? AND account_type = ?', [pro100GbDefaultLimit1, AccountType.Pro100Gb]);
 			})
 			// Users who are disabled or who cannot upload already received the
 			// notification.
@@ -724,7 +769,8 @@ export default class UserModel extends BaseModel<User> {
 			.where(function() {
 				void this
 					.whereRaw('u.total_item_size < ? AND u.account_type = ?', [basicDefaultLimitMax, AccountType.Basic])
-					.orWhereRaw('u.total_item_size < ? AND u.account_type = ?', [proDefaultLimitMax, AccountType.Pro]);
+					.orWhereRaw('u.total_item_size < ? AND u.account_type = ?', [proDefaultLimitMax, AccountType.Pro])
+					.orWhereRaw('u.total_item_size < ? AND u.account_type = ?', [pro100GbDefaultLimitMax, AccountType.Pro100Gb]);
 			});
 
 		await this.withTransaction(async () => {

@@ -205,6 +205,25 @@ h3 {
 	font-size: 1.3em;
 }
 
+.action-link {
+	/* Override default styles so that the class can apply to <button>s */
+	background: none;
+	border: none;
+	padding: 0;
+	color: inherit;
+	font-weight: bold;
+	font-size: 1em;
+	text-decoration: none;
+	display: block;
+	margin: 2px 0 0 1.7em;
+	text-align: left;
+	cursor: pointer;
+}
+
+.action-link:hover .action-label {
+	text-decoration: underline;
+}
+
 p,
 .button-link {
 	line-height: 30.8px;
@@ -759,6 +778,12 @@ footer .bottom-links-row p {
     font-weight: bold;
     font-size: 0.8em;
     opacity: 0.5;
+}
+
+/* Prevents parts of the feature comparison table from being offscreen
+   on mobile */
+.joplin-cloud-feature-list {
+	overflow-x: auto;
 }
 
 /*****************************************************************

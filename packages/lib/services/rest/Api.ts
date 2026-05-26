@@ -12,7 +12,7 @@ import route_auth from './routes/auth';
 import route_events from './routes/events';
 import route_revisions from './routes/revisions';
 
-const { ltrimSlashes } = require('../../path-utils');
+import { ltrimSlashes } from '../../path-utils';
 const md5 = require('md5');
 
 export enum RequestMethod {
