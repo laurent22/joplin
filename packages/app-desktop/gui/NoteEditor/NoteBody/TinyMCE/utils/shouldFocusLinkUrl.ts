@@ -24,13 +24,18 @@ type LinkDialogData = {
 
 export default function shouldFocusLinkUrl(data: LinkDialogData | undefined | null): boolean {
 	if (!data) return false;
-	if (!('href' in data) || !('text' in data)) return false;
+	// The `text` field is the unique discriminator for the link dialog. Image
+	// and other plugin dialogs do not include it, so its presence is enough to
+	// identify the link dialog without also requiring `href` to be present —
+	// `href` may legitimately be missing on the initial open before TinyMCE
+	// finishes populating the dialog state.
+	if (!('text' in data)) return false;
 
 	const text = data.text;
 	const href = data.href;
 
-	const textIsPrepopulated = typeof text === 'string' && text.length > 0;
-	const hrefIsEmpty = typeof href !== 'string' || href.length === 0;
+	const hasText = typeof text === 'string' && text.length > 0;
+	const hasHref = typeof href === 'string' && href.length > 0;
 
-	return textIsPrepopulated && hrefIsEmpty;
+	return hasText && !hasHref;
 }
