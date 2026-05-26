@@ -450,11 +450,18 @@ export default class BaseItem extends BaseModel {
 			: propValue;
 	}
 
+	// Columns that exist only for local conflict resolution and must never be uploaded to the sync target.
+	private static readonly localOnlyFields_ = ['conflict_base_body', 'conflict_base_title', 'conflict_remote_body', 'conflict_remote_title', 'conflict_remote_updated_time'];
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- item is a BaseItemEntity subclass plus type_; shownKeys is a heterogeneous list of property names
 	public static async serialize(item: any, shownKeys: any[] = null) {
 		if (shownKeys === null) {
 			shownKeys = this.itemClass(item).fieldNames();
 			shownKeys.push('type_');
+			for (const f of BaseItem.localOnlyFields_) {
+				const idx = shownKeys.indexOf(f);
+				if (idx >= 0) shownKeys.splice(idx, 1);
+			}
 		}
 
 		item = this.filter(item);

@@ -127,7 +127,10 @@ describe('BaseItem', () => {
 		const serialized = await Note.serialize(noteBefore);
 		const noteAfter = await Note.unserialize(serialized);
 
-		expect(noteAfter).toEqual(noteBefore);
+		const localOnlyFields = ['conflict_base_body', 'conflict_base_title', 'conflict_remote_body', 'conflict_remote_title', 'conflict_remote_updated_time'];
+		const noteBeforeComparable = { ...noteBefore } as Record<string, unknown>;
+		for (const f of localOnlyFields) delete noteBeforeComparable[f];
+		expect(noteAfter).toEqual(noteBeforeComparable);
 	});
 
 	it('should serialize and unserialize properties that contain new lines', async () => {
@@ -141,7 +144,10 @@ https://joplinapp.org/ \\n
 		const serialized = await Note.serialize(noteBefore);
 		const noteAfter = await Note.unserialize(serialized);
 
-		expect(noteAfter).toEqual(noteBefore);
+		const localOnlyFields = ['conflict_base_body', 'conflict_base_title', 'conflict_remote_body', 'conflict_remote_title', 'conflict_remote_updated_time'];
+		const noteBeforeComparable = { ...noteBefore } as Record<string, unknown>;
+		for (const f of localOnlyFields) delete noteBeforeComparable[f];
+		expect(noteAfter).toEqual(noteBeforeComparable);
 	});
 
 	it('should not serialize the note title and body', async () => {

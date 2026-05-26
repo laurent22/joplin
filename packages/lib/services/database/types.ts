@@ -226,6 +226,11 @@ export interface NoteEntity {
   'author'?: string;
   'body'?: string;
   'conflict_original_id'?: string;
+  'conflict_base_body'?: string;
+  'conflict_base_title'?: string;
+  'conflict_remote_body'?: string;
+  'conflict_remote_title'?: string;
+  'conflict_remote_updated_time'?: number;
   'created_time'?: number;
   'deleted_time'?: number;
   'encryption_applied'?: number;
@@ -341,6 +346,9 @@ export interface SyncItemEntity {
   'sync_time'?: number;
   'sync_warning_ignored'?: number;
   'remote_item_updated_time'?: number;
+  'base_body'?: string;
+  'base_title'?: string;
+  'base_conflict_note_id'?: string;
   'type_'?: number;
 }
 export interface TableFieldEntity {
@@ -447,6 +455,9 @@ export const databaseSchema: DatabaseTables = {
 		sync_time: { type: 'number' },
 		sync_warning_ignored: { type: 'number' },
 		remote_item_updated_time: { type: 'number' },
+		base_body: { type: 'string' },
+		base_title: { type: 'string' },
+		base_conflict_note_id: { type: 'string' },
 		type_: { type: 'number' },
 	},
 	version: {
@@ -567,6 +578,11 @@ export const databaseSchema: DatabaseTables = {
 		author: { type: 'string' },
 		body: { type: 'string' },
 		conflict_original_id: { type: 'string' },
+		conflict_base_body: { type: 'string' },
+		conflict_base_title: { type: 'string' },
+		conflict_remote_body: { type: 'string' },
+		conflict_remote_title: { type: 'string' },
+		conflict_remote_updated_time: { type: 'number' },
 		created_time: { type: 'number' },
 		deleted_time: { type: 'number' },
 		encryption_applied: { type: 'number' },
