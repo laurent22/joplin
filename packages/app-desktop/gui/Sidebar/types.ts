@@ -67,6 +67,8 @@ export type ItemDragListener = DragEventHandler<HTMLElement>;
 export type ItemContextMenuListener = MouseEventHandler<HTMLElement>;
 export type ItemClickListener = MouseEventHandler<HTMLElement>;
 
+export type FolderDropLocation = 'before' | 'after' | 'nest';
+
 export interface SidebarCommandRuntimeProps {
 	focusSidebar: ()=> void;
 }

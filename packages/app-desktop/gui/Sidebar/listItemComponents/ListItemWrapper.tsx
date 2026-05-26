@@ -1,6 +1,7 @@
 import { ModelType } from '@joplin/lib/BaseModel';
 import * as React from 'react';
 import { useMemo } from 'react';
+import { FolderDropLocation } from '../types';
 
 export type ListItemRef = React.Ref<HTMLDivElement>;
 
@@ -35,6 +36,7 @@ interface Props {
 	'data-tag-id'?: string;
 	'data-type'?: ModelType;
 	'aria-labelledby'?: string;
+	dropLocation?: FolderDropLocation|null;
 }
 
 const ListItemWrapper: React.FC<Props> = props => {
@@ -69,6 +71,7 @@ const ListItemWrapper: React.FC<Props> = props => {
 				props.highlightOnHover ? '-highlight-on-hover' : '',
 				selected ? '-selected' : '',
 				primarySelected && multipleItemsSelected ? '-selected-primary' : '',
+				props.dropLocation ? `-drop-${props.dropLocation}` : '',
 				props.className ?? '',
 			].join(' ')}
 			style={style}

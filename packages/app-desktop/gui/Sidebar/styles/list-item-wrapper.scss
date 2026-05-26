@@ -48,4 +48,42 @@
 	&.-highlight-on-hover:not(.-selected):hover {
 		background-color: var(--joplin-background-color-hover2);
 	}
+
+	&.-drop-before,
+	&.-drop-after {
+		position: relative;
+	}
+
+	&.-drop-before::before,
+	&.-drop-after::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		height: 2px;
+		background: var(--joplin-brand-color);
+		pointer-events: none;
+	}
+
+	&.-drop-before::before {
+		top: 0;
+	}
+
+	&.-drop-after::after {
+		bottom: 0;
+	}
+
+	&.-drop-nest {
+		background-color: color-mix(
+			in srgb,
+			var(--joplin-brand-color) 8%,
+			var(--joplin-background-color) 92%
+		);
+		outline: 1px solid color-mix(
+			in srgb,
+			var(--joplin-brand-color) 35%,
+			transparent
+		);
+		outline-offset: -1px;
+	}
 }

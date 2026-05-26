@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DragEventHandler, MouseEventHandler, useCallback, useMemo, useRef } from 'react';
+import { DragEventHandler, MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ItemClickListener, ItemDragListener, ListItem, ListItemType } from '../types';
 import TagItem from '../listItemComponents/TagItem';
 import { Dispatch } from 'redux';
@@ -42,6 +42,7 @@ interface Props {
 	themeId: number;
 	plugins: PluginStates;
 	folders: FolderEntity[];
+	foldersSortField: string;
 	collapsedFolderIds: string[];
 	containerRef: React.RefObject<HTMLDivElement>;
 
@@ -106,6 +107,16 @@ const useOnRenderItem = (props: Props) => {
 	pluginsRef.current = props.plugins;
 	const foldersRef = useRef<FolderEntity[]>(null);
 	foldersRef.current = props.folders;
+	const manualFolderOrderEnabled = props.foldersSortField === 'order';
+	const [folderDropTarget, setFolderDropTarget] = useState<{ folderId: string; location: 'before'|'after'|'nest' } | null>(null);
+
+	useEffect(() => {
+		const onDragEnd = () => setFolderDropTarget(null);
+		document.addEventListener('dragend', onDragEnd);
+		return () => {
+			document.removeEventListener('dragend', onDragEnd);
+		};
+	}, []);
 
 	const onTagDrop_: DragEventHandler<HTMLElement> = useCallback(async event => {
 		const tagId = event.currentTarget.getAttribute('data-tag-id');
@@ -335,10 +346,37 @@ const useOnRenderItem = (props: Props) => {
 		event.dataTransfer.setData('text/x-jop-folder-ids', JSON.stringify(itemIds));
 	}, [getSelectedIds]);
 
-	const onFolderDragOver_: ItemDragListener = useCallback(event => {
-		if (event.dataTransfer.types.indexOf('text/x-jop-note-ids') >= 0) event.preventDefault();
-		if (event.dataTransfer.types.indexOf('text/x-jop-folder-ids') >= 0) event.preventDefault();
+	const getFolderDropLocation = useCallback((event: React.DragEvent<HTMLElement>) => {
+		const rect = event.currentTarget.getBoundingClientRect();
+		if (!rect.height) return 'nest';
+
+		const y = event.clientY - rect.top;
+		const ratio = y / rect.height;
+
+		if (ratio < 0.25) return 'before';
+		if (ratio > 0.75) return 'after';
+
+		return 'nest';
 	}, []);
+
+	const onFolderDragOver_: ItemDragListener = useCallback(event => {
+		const dt = event.dataTransfer;
+		if (!dt) return;
+
+		const isNoteDrag = dt.types.indexOf('text/x-jop-note-ids') >= 0;
+		const isFolderDrag = dt.types.indexOf('text/x-jop-folder-ids') >= 0;
+		if (!isNoteDrag && !isFolderDrag) return;
+
+		event.preventDefault();
+
+		const folderId = event.currentTarget.getAttribute('data-folder-id');
+		if (!folderId) return;
+
+		setFolderDropTarget({
+			folderId,
+			location: isFolderDrag && manualFolderOrderEnabled ? getFolderDropLocation(event) : 'nest',
+		});
+	}, [getFolderDropLocation, manualFolderOrderEnabled]);
 
 	const onFolderDrop_: ItemDragListener = useCallback(async event => {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
@@ -358,13 +396,18 @@ const useOnRenderItem = (props: Props) => {
 			} else if (dt.types.indexOf('text/x-jop-folder-ids') >= 0) {
 				event.preventDefault();
 				const folderIds = JSON.parse(dt.getData('text/x-jop-folder-ids'));
-				await onFolderDrop([], folderIds, folderId);
+				const dropLocation = folderId && manualFolderOrderEnabled ? getFolderDropLocation(event) : 'nest';
+				await onFolderDrop([], folderIds, folderId, {
+					location: dropLocation,
+				});
 			}
 		} catch (error) {
 			logger.error(error);
 			await shim.showErrorDialog(error.message);
+		} finally {
+			setFolderDropTarget(null);
 		}
-	}, []);
+	}, [getFolderDropLocation, manualFolderOrderEnabled]);
 
 	const onFolderToggleClick_: ItemClickListener = useCallback(event => {
 		const folderId = event.currentTarget.getAttribute('data-folder-id');
@@ -436,6 +479,7 @@ const useOnRenderItem = (props: Props) => {
 				key={item.key}
 				anchorRef={anchorRef}
 				selectionState={selectionState}
+				dropLocation={folderDropTarget?.folderId === folder.id ? folderDropTarget.location : null}
 				folderId={folder.id}
 				folderTitle={item.label}
 				folderIcon={Folder.unserializeIcon(folder.icon)}

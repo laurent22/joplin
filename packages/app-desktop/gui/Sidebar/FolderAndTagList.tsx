@@ -26,6 +26,7 @@ interface Props {
 
 	tags: TagsWithNoteCountEntity[];
 	folders: FolderEntity[];
+	foldersSortField: string;
 	notesParentType: string;
 	selectedTagIds: string[];
 	selectedTagId: string;
@@ -116,6 +117,7 @@ const mapStateToProps = (state: AppState) => {
 		themeId: state.settings.theme,
 		tags: state.tags,
 		folders: state.folders,
+		foldersSortField: state.settings['folders.sortOrder.field'],
 		notesParentType: mainWindowState.notesParentType,
 		selectedFolderIds: mainWindowState.selectedFolderIds,
 		selectedTagIds: mainWindowState.selectedTagIds,

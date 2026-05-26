@@ -13,6 +13,7 @@ import NoteCount from './NoteCount';
 import ListItemWrapper, { ItemSelectionState, ListItemRef } from './ListItemWrapper';
 import { useId } from 'react';
 import { ItemClickEvent } from '../hooks/useOnItemClick';
+import { FolderDropLocation } from '../types';
 
 const renderFolderIcon = (folderIcon: FolderIcon) => {
 	if (!folderIcon) {
@@ -32,6 +33,7 @@ interface FolderItemProps {
 	anchorRef: ListItemRef;
 	hasChildren: boolean;
 	showFolderIcon: boolean;
+	dropLocation?: FolderDropLocation|null;
 	isExpanded: boolean;
 	parentId: string;
 	depth: number;
@@ -53,7 +55,7 @@ interface FolderItemProps {
 }
 
 function FolderItem(props: FolderItemProps) {
-	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selectionState, folderId, folderTitle, folderIcon, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
+	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selectionState, folderId, folderTitle, folderIcon, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId, dropLocation } = props;
 
 	const shareTitle = _('Shared');
 	const shareIcon = shareId && !parentId ? <StyledShareIcon aria-label={shareTitle} title={shareTitle} className="fas fa-share-alt"/> : null;
@@ -80,6 +82,7 @@ function FolderItem(props: FolderItemProps) {
 			expanded={hasChildren ? props.isExpanded : undefined}
 			className={`list-item-container list-item-depth-${depth} ${selectionState.selected ? 'selected' : ''}`}
 			highlightOnHover={true}
+			dropLocation={dropLocation}
 			onDragStart={onFolderDragStart_}
 			onDragOver={onFolderDragOver_}
 			onDrop={onFolderDrop_}
