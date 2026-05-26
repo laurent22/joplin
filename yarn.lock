@@ -12373,7 +12373,7 @@ __metadata:
     "@react-native-community/netinfo": "npm:11.4.1"
     "@react-native-community/push-notification-ios": "npm:1.12.0"
     "@react-native-documents/picker": "npm:10.1.7"
-    "@react-native-vector-icons/fontawesome5": "npm:12.3.0"
+    "@react-native-vector-icons/fontawesome5": "npm:12.3.1"
     "@react-native-vector-icons/get-image": "npm:12.3.0"
     "@react-native-vector-icons/ionicons": "npm:12.3.0"
     "@react-native-vector-icons/material-design-icons": "npm:12.4.0"
@@ -15780,27 +15780,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/fontawesome5@npm:12.3.0":
-  version: 12.3.0
-  resolution: "@react-native-vector-icons/fontawesome5@npm:12.3.0"
+"@react-native-vector-icons/fontawesome5@npm:12.3.1":
+  version: 12.3.1
+  resolution: "@react-native-vector-icons/fontawesome5@npm:12.3.1"
   dependencies:
     "@react-native-vector-icons/common": "npm:^12.4.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/d11626e7ccb4698c97c970796a3d8b6b6d23c768611ba1ef29b73883678592294c97de007b20dda085a02a25f06ab3c1e77dd7fe0f68b71824a9869cc68249b6
-  languageName: node
-  linkType: hard
-
-"@react-native-vector-icons/fontawesome5@patch:@react-native-vector-icons/fontawesome5@npm%3A12.3.0#~/.yarn/patches/@react-native-vector-icons-fontawesome5-npm-12.3.0-a1ca46610f.patch":
-  version: 12.3.0
-  resolution: "@react-native-vector-icons/fontawesome5@patch:@react-native-vector-icons/fontawesome5@npm%3A12.3.0#~/.yarn/patches/@react-native-vector-icons-fontawesome5-npm-12.3.0-a1ca46610f.patch::version=12.3.0&hash=8ed269"
-  dependencies:
-    "@react-native-vector-icons/common": "npm:^12.4.0"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 10/1bfe068fdf6b9edf4608d02acf2c329fe186bbee70e7949a781f56024f386d192ac00967463afc099bc43cca162e3711a884cf7dad01e40a50cea0b612f72f5e
+  checksum: 10/269e4fa994cb2e1b57474d7d4026b4a7754b4956cc927aa603507990a964f4443719a4e72e8da566a2a9ecf16033744fcfd6a3005fd0383da42b37b29c3c19b4
   languageName: node
   linkType: hard
 
