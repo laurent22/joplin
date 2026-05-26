@@ -886,12 +886,12 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.String,
 			isEnum: true,
 			public: true,
-			appTypes: [AppType.Cli, AppType.Mobile],
+			appTypes: [AppType.Cli, AppType.Desktop, AppType.Mobile],
 			section: 'appearance',
 			label: () => _('Sort notebooks by'),
 			options: () => {
 				const Folder = require('../Folder').default;
-				const folderSortFields = ['title', 'last_note_user_updated_time'];
+				const folderSortFields = ['order', 'title', 'last_note_user_updated_time'];
 				const options: Record<string, string> = {};
 				for (let i = 0; i < folderSortFields.length; i++) {
 					options[folderSortFields[i]] = toTitleCase(Folder.fieldToLabel(folderSortFields[i]));

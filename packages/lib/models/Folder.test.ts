@@ -293,6 +293,115 @@ describe('models/Folder', () => {
 		expect(sortedFolderTree.map(f => f.title)).toEqual(sortedFolderTitles);
 	}));
 
+	it('should sort folder trees by manual order within each parent', async () => {
+		Setting.setValue('folders.sortOrder.field', 'order');
+		Setting.setValue('folders.sortOrder.reverse', false);
+
+		const parent1 = await Folder.save({ title: 'parent1' });
+		const parent2 = await Folder.save({ title: 'parent2' });
+		const child1 = await Folder.save({ title: 'child1', parent_id: parent1.id, order: 300 });
+		const child2 = await Folder.save({ title: 'child2', parent_id: parent1.id, order: 100 });
+		const child3 = await Folder.save({ title: 'child3', parent_id: parent2.id, order: 200 });
+		const child4 = await Folder.save({ title: 'child4', parent_id: parent2.id, order: 50 });
+
+		const folders = await Folder.allAsTree();
+		const sortedFolderTree = await Folder.sortFolderTree(folders);
+
+		expect(sortedFolderTree.map(f => f.id)).toEqual([parent1.id, parent2.id]);
+		expect(sortedFolderTree[0].children.map(f => f.id)).toEqual([child2.id, child1.id]);
+		expect(sortedFolderTree[1].children.map(f => f.id)).toEqual([child4.id, child3.id]);
+	});
+
+	it('should assign a folder order that puts new notebooks at the top', async () => {
+		Setting.setValue('folders.sortOrder.reverse', false);
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
+
+		expect(folder2.order).toBeLessThan(folder1.order);
+
+		const folders = await Folder.all({
+			order: [
+				{ by: 'order', dir: 'ASC' },
+				{ by: 'user_created_time', dir: 'DESC' },
+			],
+		});
+
+		expect(folders.map(folder => folder.id)).toEqual([folder2.id, folder1.id]);
+	});
+
+	it('should move a folder before another folder in manual order', async () => {
+		Setting.setValue('folders.sortOrder.field', 'order');
+		Setting.setValue('folders.sortOrder.reverse', false);
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
+		const folder3 = await Folder.save({ title: 'folder3' });
+
+		await Folder.moveToFolder(folder1.id, folder3.id, { location: 'before' });
+
+		const folders = await Folder.all({
+			order: [
+				{ by: 'order', dir: 'ASC' },
+				{ by: 'user_created_time', dir: 'DESC' },
+			],
+		});
+
+		expect(folders.map(folder => folder.id)).toEqual([folder1.id, folder3.id, folder2.id]);
+	});
+
+	it('should move a folder after another folder in manual order', async () => {
+		Setting.setValue('folders.sortOrder.field', 'order');
+		Setting.setValue('folders.sortOrder.reverse', false);
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
+		const folder3 = await Folder.save({ title: 'folder3' });
+
+		await Folder.moveToFolder(folder3.id, folder1.id, { location: 'after' });
+
+		const folders = await Folder.all({
+			order: [
+				{ by: 'order', dir: 'ASC' },
+				{ by: 'user_created_time', dir: 'DESC' },
+			],
+		});
+
+		expect(folders.map(folder => folder.id)).toEqual([folder2.id, folder1.id, folder3.id]);
+	});
+
+	it('should place folders before another folder within the same parent', async () => {
+		Setting.setValue('folders.sortOrder.field', 'order');
+		Setting.setValue('folders.sortOrder.reverse', false);
+
+		const parent1 = await Folder.save({ title: 'parent1' });
+		const parent2 = await Folder.save({ title: 'parent2' });
+		const folder1 = await Folder.save({ title: 'folder1', parent_id: parent1.id, order: 10000000 });
+		const targetFolder = await Folder.save({ title: 'target', parent_id: parent2.id, order: 30000000 });
+		const nextFolder = await Folder.save({ title: 'next', parent_id: parent2.id, order: 50000000 });
+
+		await Folder.moveToFolder(folder1.id, targetFolder.id, { location: 'before' });
+
+		const sortedFolderTree = await Folder.sortFolderTree(await Folder.allAsTree());
+		const parent2Tree = sortedFolderTree.find(folder => folder.id === parent2.id);
+		expect(parent2Tree.children.map(folder => folder.id)).toEqual([folder1.id, targetFolder.id, nextFolder.id]);
+	});
+
+	it('should nest a folder within the target parent by default', async () => {
+		Setting.setValue('folders.sortOrder.field', 'order');
+		Setting.setValue('folders.sortOrder.reverse', false);
+
+		const targetFolder = await Folder.save({ title: 'target' });
+		const existingChild = await Folder.save({ title: 'existingChild', parent_id: targetFolder.id, order: 3000000 });
+		const folderToNest = await Folder.save({ title: 'folderToNest' });
+
+		await Folder.moveToFolder(folderToNest.id, targetFolder.id, { location: 'nest' });
+
+		const sortedFolderTree = await Folder.sortFolderTree(await Folder.allAsTree());
+		const targetTree = sortedFolderTree.find(folder => folder.id === targetFolder.id);
+		expect(targetTree.children.map(folder => folder.id)).toEqual([folderToNest.id, existingChild.id]);
+	});
+
 	it('should not allow setting a folder parent as itself', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const hasThrown = await checkThrowAsync(() => Folder.save({ id: f1.id, parent_id: f1.id }, { userSideValidation: true }));

@@ -359,6 +359,19 @@ class StateUtils {
 	}
 
 	public foldersOrder(stateSettings: Partial<SettingsRecord>) {
+		if (stateSettings['folders.sortOrder.field'] === 'order') {
+			return cacheEnabledOutput('foldersOrder', [
+				{
+					by: 'order',
+					dir: stateSettings['folders.sortOrder.reverse'] ? 'DESC' : 'ASC',
+				},
+				{
+					by: 'user_created_time',
+					dir: 'DESC',
+				},
+			]);
+		}
+
 		return cacheEnabledOutput('foldersOrder', [
 			{
 				by: stateSettings['folders.sortOrder.field'],

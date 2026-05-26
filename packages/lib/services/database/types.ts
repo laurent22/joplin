@@ -111,6 +111,7 @@ export interface FolderEntity {
   'id'?: string | null;
   'is_shared'?: number;
   'master_key_id'?: string;
+  'order'?: number;
   'parent_id'?: string;
   'share_id'?: string;
   'title'?: string;

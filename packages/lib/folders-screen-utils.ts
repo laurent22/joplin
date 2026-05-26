@@ -9,10 +9,20 @@ let scheduleRefreshFoldersIID_: ReturnType<typeof shim.setTimeout> = null;
 
 export const allForDisplay = async (options: FolderLoadOptions = {}) => {
 	const orderDir = Setting.value('folders.sortOrder.reverse') ? 'DESC' : 'ASC';
+	const folderSortField = Setting.value('folders.sortOrder.field');
 
 	const folderOptions: FolderLoadOptions = {
 		caseInsensitive: true,
-		order: [
+		order: folderSortField === 'order' ? [
+			{
+				by: 'order',
+				dir: orderDir,
+			},
+			{
+				by: 'user_created_time',
+				dir: 'DESC',
+			},
+		] : [
 			{
 				by: 'title',
 				dir: orderDir,
@@ -23,7 +33,7 @@ export const allForDisplay = async (options: FolderLoadOptions = {}) => {
 
 	let folders = await Folder.all(folderOptions);
 
-	if (Setting.value('folders.sortOrder.field') === 'last_note_user_updated_time') {
+	if (folderSortField === 'last_note_user_updated_time') {
 		folders = await Folder.orderByLastModified(folders, orderDir);
 	}
 

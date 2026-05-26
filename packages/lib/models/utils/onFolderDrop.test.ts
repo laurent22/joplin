@@ -2,6 +2,7 @@ import { getTrashFolderId } from '../../services/trash';
 import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import Folder from '../Folder';
 import Note from '../Note';
+import Setting from '../Setting';
 import onFolderDrop from './onFolderDrop';
 
 describe('onFolderDrop', () => {
@@ -90,5 +91,45 @@ describe('onFolderDrop', () => {
 		const folder1Reloaded = await Folder.load(folder1.id);
 		expect(folder1Reloaded.parent_id).toBe('');
 		expect(folder1Reloaded.deleted_time).toBe(0);
+	});
+
+	it('should reorder folders when dropping before another folder', async () => {
+		Setting.setValue('folders.sortOrder.field', 'order');
+		Setting.setValue('folders.sortOrder.reverse', false);
+
+		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({});
+		const folder3 = await Folder.save({});
+
+		await onFolderDrop([], [folder1.id], folder3.id, { location: 'before' });
+
+		const folders = await Folder.all({
+			order: [
+				{ by: 'order', dir: 'ASC' },
+				{ by: 'user_created_time', dir: 'DESC' },
+			],
+		});
+
+		expect(folders.map(folder => folder.id)).toEqual([folder1.id, folder3.id, folder2.id]);
+	});
+
+	it('should reorder folders when dropping after another folder', async () => {
+		Setting.setValue('folders.sortOrder.field', 'order');
+		Setting.setValue('folders.sortOrder.reverse', false);
+
+		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({});
+		const folder3 = await Folder.save({});
+
+		await onFolderDrop([], [folder3.id], folder1.id, { location: 'after' });
+
+		const folders = await Folder.all({
+			order: [
+				{ by: 'order', dir: 'ASC' },
+				{ by: 'user_created_time', dir: 'DESC' },
+			],
+		});
+
+		expect(folders.map(folder => folder.id)).toEqual([folder2.id, folder1.id, folder3.id]);
 	});
 });

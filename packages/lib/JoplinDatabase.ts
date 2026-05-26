@@ -13,11 +13,13 @@ CREATE TABLE folders (
 	id TEXT PRIMARY KEY,
 	title TEXT NOT NULL DEFAULT "",
 	created_time INT NOT NULL,
-	updated_time INT NOT NULL
+	updated_time INT NOT NULL,
+	\`order\` NUMERIC NOT NULL DEFAULT 0
 );
 
 CREATE INDEX folders_title ON folders (title);
 CREATE INDEX folders_updated_time ON folders (updated_time);
+CREATE INDEX folders_order ON folders (\`order\`);
 
 CREATE TABLE notes (
 	id TEXT PRIMARY KEY,

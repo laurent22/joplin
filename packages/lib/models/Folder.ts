@@ -33,7 +33,13 @@ export interface SortFolderOptions {
 	includeDeleted?: boolean;
 }
 
+export interface MoveToFolderOptions {
+	location?: 'nest' | 'before' | 'after';
+}
+
 export default class Folder extends BaseItem {
+	public static defaultOrderIntervalBetweenFolders = 60 * 60 * 1000;
+
 	public static tableName() {
 		return 'folders';
 	}
@@ -51,6 +57,7 @@ export default class Folder extends BaseItem {
 
 	public static fieldToLabel(field: string) {
 		const fieldsToLabels: Record<string, string> = {
+			order: _('manual order'),
 			title: _('title'),
 			last_note_user_updated_time: _('updated date'),
 		};
@@ -354,9 +361,30 @@ export default class Folder extends BaseItem {
 		}
 	}
 
+	public static handleManualOrderSorting(items: FolderEntity[], options: { order?: { by: string; dir: string }[] }) {
+		if (options.order?.length > 0 && options.order[0].by === 'order') {
+			const reverse = options.order[0].dir === 'DESC';
+			items.sort((a, b) => {
+				const aOrder = Number(a.order ?? 0);
+				const bOrder = Number(b.order ?? 0);
+
+				if (aOrder < bOrder) return reverse ? +1 : -1;
+				if (aOrder > bOrder) return reverse ? -1 : +1;
+
+				const aTime = Number(a.user_created_time ?? a.created_time ?? 0);
+				const bTime = Number(b.user_created_time ?? b.created_time ?? 0);
+				if (aTime < bTime) return +1;
+				if (aTime > bTime) return -1;
+
+				return 0;
+			});
+		}
+	}
+
 	public static async all(options: FolderLoadOptions = null) {
 		let output: FolderEntity[] = await super.all(options);
 		if (options) {
+			this.handleManualOrderSorting(output, options);
 			this.handleTitleNaturalSorting(output, options);
 		}
 
@@ -931,30 +959,41 @@ export default class Folder extends BaseItem {
 
 		const sortFoldersAlphabetically = (folders: FolderEntityWithChildren[]) => {
 			const collator = getCollator();
-			if (options && options.includeDeleted === false) folders = folders.filter(folder => !folder.deleted_time);
+			return folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => collator.compare(a.title, b.title));
+		};
 
-			folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => {
-				if (a.parent_id === b.parent_id) {
-					return collator.compare(a.title, b.title);
-				}
+		const sortFoldersByManualOrder = (folders: FolderEntityWithChildren[]) => {
+			const reverse = Setting.value('folders.sortOrder.reverse');
+			return folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => {
+				const aOrder = Number(a.order ?? 0);
+				const bOrder = Number(b.order ?? 0);
+				if (aOrder < bOrder) return reverse ? +1 : -1;
+				if (aOrder > bOrder) return reverse ? -1 : +1;
+
+				const aTime = Number(a.user_created_time ?? a.created_time ?? 0);
+				const bTime = Number(b.user_created_time ?? b.created_time ?? 0);
+				if (aTime < bTime) return +1;
+				if (aTime > bTime) return -1;
+
 				return 0;
 			});
-			return folders;
 		};
 
-		const sortFolders = (folders: FolderEntityWithChildren[]) => {
-			for (let i = 0; i < folders.length; i++) {
-				const folder = folders[i];
-				if (folder.children) {
-					folder.children = sortFoldersAlphabetically(folder.children);
-					sortFolders(folder.children);
+		const sortFoldersRecursive = (folders: FolderEntityWithChildren[]) => {
+			if (options && options.includeDeleted === false) folders = folders.filter(folder => !folder.deleted_time);
+
+			folders = Setting.value('folders.sortOrder.field') === 'order' ? sortFoldersByManualOrder(folders) : sortFoldersAlphabetically(folders);
+
+			for (const folder of folders) {
+				if (folder.children?.length) {
+					folder.children = sortFoldersRecursive(folder.children);
 				}
 			}
+
 			return folders;
 		};
 
-		output = sortFolders(sortFoldersAlphabetically(output));
-		return output;
+		return sortFoldersRecursive(output);
 	}
 
 	public static async loadByTitleAndParent(title: string, parentId: string, options: LoadOptions = null): Promise<FolderEntity> {
@@ -992,13 +1031,22 @@ export default class Folder extends BaseItem {
 		return true;
 	}
 
-	public static async moveToFolder(folderId: string, targetFolderId: string) {
-		if (!(await this.canNestUnder(folderId, targetFolderId))) throw new Error(_('Cannot move notebook to this location'));
+	public static async moveToFolder(folderId: string, targetFolderId: string, options: MoveToFolderOptions = null) {
+		const location = options?.location ?? 'nest';
+		const targetFolder = targetFolderId ? await this.load(targetFolderId) : null;
+		if (location !== 'nest' && !targetFolder) {
+			throw new Error(_('Cannot move notebook to this location'));
+		}
+		const destinationParentId = location === 'nest'
+			? targetFolderId
+			: (targetFolder ? targetFolder.parent_id || '' : '');
+
+		if (!(await this.canNestUnder(folderId, destinationParentId))) throw new Error(_('Cannot move notebook to this location'));
 
 		const original = await this.load(folderId);
 		const modifiedFolder: FolderEntity = {
 			id: folderId,
-			parent_id: targetFolderId,
+			parent_id: destinationParentId,
 
 			// When moving a note to a different folder, the user timestamp is not updated.
 			// However updated_time is updated so that the note can be synced later on.
@@ -1007,7 +1055,7 @@ export default class Folder extends BaseItem {
 		};
 
 		const wasShared = !!modifiedFolder.share_id;
-		const movedToTopLevel = original.parent_id !== '' && targetFolderId === '';
+		const movedToTopLevel = original.parent_id !== '' && destinationParentId === '';
 		if (wasShared && movedToTopLevel) {
 			// When a shared subfolder is converted to a toplevel folder, clear its share_id
 			// as soon as possible. Without this, modifiedFolder would be incorrectly treated
@@ -1017,7 +1065,59 @@ export default class Folder extends BaseItem {
 			modifiedFolder.share_id = '';
 		}
 
+		const reverse = Setting.value('folders.sortOrder.reverse');
+		const folderSortDir = reverse ? 'DESC' : 'ASC';
+		const siblings = await this.all({
+			includeDeleted: false,
+			order: [
+				{ by: 'order', dir: folderSortDir },
+				{ by: 'user_created_time', dir: 'DESC' },
+			],
+		});
+
+		const orderedSiblings = siblings.filter(folder => (folder.parent_id || '') === destinationParentId && folder.id !== folderId);
+		let targetIndex = 0;
+		if (location !== 'nest') {
+			const targetFolderIndex = orderedSiblings.findIndex(folder => folder.id === targetFolderId);
+			if (targetFolderIndex < 0) {
+				throw new Error(_('Cannot move notebook to this location'));
+			}
+			targetIndex = targetFolderIndex + (location === 'after' ? 1 : 0);
+		}
+
+		const interval = this.defaultOrderIntervalBetweenFolders;
+		const previousFolder = targetIndex > 0 ? orderedSiblings[targetIndex - 1] : null;
+		const nextFolder = targetIndex < orderedSiblings.length ? orderedSiblings[targetIndex] : null;
+		const previousOrder = previousFolder ? Number(previousFolder.order ?? 0) : null;
+		const nextOrder = nextFolder ? Number(nextFolder.order ?? 0) : null;
+
+		if (previousOrder !== null && nextOrder !== null) {
+			modifiedFolder.order = (previousOrder + nextOrder) / 2;
+		} else if (previousOrder !== null) {
+			modifiedFolder.order = reverse ? previousOrder - interval : previousOrder + interval;
+		} else if (nextOrder !== null) {
+			modifiedFolder.order = reverse ? nextOrder + interval : nextOrder - interval;
+		} else {
+			modifiedFolder.order = await this.getNextOrderValue(destinationParentId);
+		}
+
 		return Folder.save(modifiedFolder, { autoTimestamp: false });
+	}
+
+	public static async getNextOrderValue(parentId: string) {
+		const reverse = Setting.value('folders.sortOrder.reverse');
+		const sql = reverse
+			? 'SELECT MAX(`order`) as `order` FROM folders WHERE deleted_time = 0 AND parent_id = ?'
+			: 'SELECT MIN(`order`) as `order` FROM folders WHERE deleted_time = 0 AND parent_id = ?';
+		const folder = await this.modelSelectOne(sql, [parentId]);
+		if (!folder || folder.order === null || folder.order === undefined) return Date.now();
+
+		const currentOrder = Number(folder.order);
+		if (Number.isNaN(currentOrder)) return Date.now();
+
+		return reverse
+			? currentOrder + this.defaultOrderIntervalBetweenFolders
+			: currentOrder - this.defaultOrderIntervalBetweenFolders;
 	}
 
 	// These "duplicateCheck" and "reservedTitleCheck" should only be done when a user is
@@ -1041,6 +1141,10 @@ export default class Folder extends BaseItem {
 			while (o.title.length && (o.title[0] === '/' || o.title[0] === '\\')) {
 				o.title = o.title.substr(1);
 			}
+		}
+
+		if (this.isNew(o, options) && !('order' in o)) {
+			o.order = await this.getNextOrderValue(o.parent_id || '');
 		}
 
 		// We allow folders with duplicate titles so that folders with the same title can exist under different parent folder. For example:
