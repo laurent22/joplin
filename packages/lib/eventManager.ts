@@ -1,4 +1,4 @@
-import * as fastDeepEqual from 'fast-deep-equal';
+import fastDeepEqual = require('fast-deep-equal');
 import { EventEmitter } from 'events';
 import type { State as AppState } from './reducer';
 import { ModelType } from './BaseModel';
