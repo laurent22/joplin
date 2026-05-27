@@ -63,6 +63,17 @@ describe('models/Resource', () => {
 		return items.map(r => r.title ? r.title : '');
 	};
 
+	it('should add local encryption defaults for old sync resources', () => {
+		expect(Resource.filter({})).toMatchObject({
+			is_locally_encrypted: 0,
+		});
+		expect(Resource.filter({
+			is_locally_encrypted: null,
+		})).toMatchObject({
+			is_locally_encrypted: 0,
+		});
+	});
+
 	it('should have a "done" fetch_status when created locally', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });

@@ -723,6 +723,9 @@ class BaseModel {
 		if (!model) return model;
 
 		const output = { ...model };
+		if (this.hasField('is_locally_encrypted') && (output.is_locally_encrypted === null || output.is_locally_encrypted === undefined)) output.is_locally_encrypted = 0;
+		if (this.hasField('extracted_resource_ids') && (output.extracted_resource_ids === null || output.extracted_resource_ids === undefined)) output.extracted_resource_ids = '';
+
 		for (const n in output) {
 			if (!output.hasOwnProperty(n)) continue;
 

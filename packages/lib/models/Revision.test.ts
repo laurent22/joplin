@@ -49,6 +49,17 @@ describe('models/Revision', () => {
 		jest.useFakeTimers({ advanceTimers: true });
 	});
 
+	it('should add local encryption defaults for old sync revisions', () => {
+		expect(Revision.filter({})).toMatchObject({
+			is_locally_encrypted: 0,
+		});
+		expect(Revision.filter({
+			is_locally_encrypted: null,
+		})).toMatchObject({
+			is_locally_encrypted: 0,
+		});
+	});
+
 	it('should create patches of text and apply it', (async () => {
 		const note1 = await Note.save({ body: 'my note\nsecond line' });
 

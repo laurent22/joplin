@@ -213,6 +213,33 @@ describe('models/Note', () => {
 		}
 	}));
 
+	it('should add local encryption defaults for old sync notes', () => {
+		expect(Note.filter({})).toMatchObject({
+			is_locally_encrypted: 0,
+			extracted_resource_ids: '',
+		});
+		expect(Note.filter({
+			is_locally_encrypted: null,
+			extracted_resource_ids: null,
+		})).toMatchObject({
+			is_locally_encrypted: 0,
+			extracted_resource_ids: '',
+		});
+	});
+
+	it('should default local encryption fields for new notes', async () => {
+		const note = await Note.save({});
+		const loadedNote = await Note.load(note.id);
+
+		expect(loadedNote.is_locally_encrypted).toBe(0);
+		expect(loadedNote.extracted_resource_ids).toBe('');
+	});
+
+	it('should include local encryption state in preview fields', () => {
+		expect(Note.previewFields()).toContain('is_locally_encrypted');
+		expect(Note.previewFields()).not.toContain('extracted_resource_ids');
+	});
+
 	it('should reset fields for a duplicate', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'note', parent_id: folder1.id });
