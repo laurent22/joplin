@@ -50,7 +50,9 @@ describe('models/Revision', () => {
 	});
 
 	it('should add local encryption defaults for old sync revisions', () => {
-		expect(Revision.filter({})).toMatchObject({
+		expect(Revision.filter({
+			is_locally_encrypted: undefined,
+		})).toMatchObject({
 			is_locally_encrypted: 0,
 		});
 		expect(Revision.filter({

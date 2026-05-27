@@ -64,7 +64,9 @@ describe('models/Resource', () => {
 	};
 
 	it('should add local encryption defaults for old sync resources', () => {
-		expect(Resource.filter({})).toMatchObject({
+		expect(Resource.filter({
+			is_locally_encrypted: undefined,
+		})).toMatchObject({
 			is_locally_encrypted: 0,
 		});
 		expect(Resource.filter({

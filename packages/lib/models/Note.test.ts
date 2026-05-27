@@ -214,7 +214,10 @@ describe('models/Note', () => {
 	}));
 
 	it('should add local encryption defaults for old sync notes', () => {
-		expect(Note.filter({})).toMatchObject({
+		expect(Note.filter({
+			is_locally_encrypted: undefined,
+			extracted_resource_ids: undefined,
+		})).toMatchObject({
 			is_locally_encrypted: 0,
 			extracted_resource_ids: '',
 		});
