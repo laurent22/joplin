@@ -174,8 +174,10 @@ export default class InteropService_Importer_OneNote extends InteropService_Impo
 		logger.info('Importing HTML into Joplin');
 		const importer = new OneNoteHtmlImporter(fileToMetadata);
 		importer.setMetadata({ fileExtensions: ['html'] });
-		await importer.init(tempOutputDirectory, {
+		await importer.init(outputDirectory2, {
 			...this.options_,
+			destinationFolder: null,
+			destinationFolderId: null,
 			format: 'html',
 			outputFormat: ImportModuleOutputFormat.Html,
 		});
