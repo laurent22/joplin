@@ -470,6 +470,36 @@ describe('models/Note', () => {
 		expect(sortedNotes3[4].id).toBe(note2.id);
 	}));
 
+	it('should ignore leading and trailing whitespace when sorting', (async () => {
+		const folder1 = await Folder.save({});
+
+		// Create notes with leading and trailing whitespaces in titles
+		const note0 = await Note.save({ title: ' a', parent_id: folder1.id });
+		const note1 = await Note.save({ title: '\tb', parent_id: folder1.id });
+		const note2 = await Note.save({ title: '\nc', parent_id: folder1.id });
+		const note3 = await Note.save({ title: 'd ', parent_id: folder1.id });
+
+		// Test Note.previews() (natural sorting on load)
+		const sortedNotes = await Note.previews(folder1.id, {
+			fields: ['id', 'title'],
+			order: [{ by: 'title', dir: 'ASC' }],
+		});
+
+		expect(sortedNotes.length).toBe(4);
+		expect(sortedNotes[0].id).toBe(note0.id);
+		expect(sortedNotes[1].id).toBe(note1.id);
+		expect(sortedNotes[2].id).toBe(note2.id);
+		expect(sortedNotes[3].id).toBe(note3.id);
+
+		// Test Note.sortNotes() (in-memory sorting of loaded list)
+		const customSorted = Note.sortNotes([note3, note0, note2, note1], [{ by: 'title', dir: 'ASC' }], false);
+		expect(customSorted.length).toBe(4);
+		expect(customSorted[0].id).toBe(note0.id);
+		expect(customSorted[1].id).toBe(note1.id);
+		expect(customSorted[2].id).toBe(note2.id);
+		expect(customSorted[3].id).toBe(note3.id);
+	}));
+
 	it('should create a conflict note', async () => {
 		const folder = await Folder.save({ title: 'Source Folder' });
 		const origNote = await Note.save({ title: 'note', parent_id: folder.id, share_id: 'SHARE', is_shared: 1 });

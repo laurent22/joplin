@@ -519,4 +519,38 @@ describe('models/Folder', () => {
 		expect(validFolder).toBeNull();
 	});
 
+	it('should ignore leading and trailing whitespace when sorting folders', (async () => {
+		const f0 = await Folder.save({ title: ' a' });
+		const f1 = await Folder.save({ title: '\tb' });
+		const f2 = await Folder.save({ title: '\nc' });
+		const f3 = await Folder.save({ title: 'd ' });
+
+		// Test Folder.all() which uses handleTitleNaturalSorting
+		const sorted = await Folder.all({
+			order: [{ by: 'title', dir: 'ASC' }],
+		});
+
+		// Find the index of our test folders in the sorted output
+		const sortedFiltered = sorted.filter(f => [f0.id, f1.id, f2.id, f3.id].includes(f.id));
+		expect(sortedFiltered.length).toBe(4);
+		expect(sortedFiltered[0].id).toBe(f0.id);
+		expect(sortedFiltered[1].id).toBe(f1.id);
+		expect(sortedFiltered[2].id).toBe(f2.id);
+		expect(sortedFiltered[3].id).toBe(f3.id);
+
+		// Test Folder.sortFolderTree()
+		const tree = await Folder.sortFolderTree([
+			{ ...f3, children: [] },
+			{ ...f0, children: [] },
+			{ ...f2, children: [] },
+			{ ...f1, children: [] },
+		]);
+		expect(tree.length).toBe(4);
+		expect(tree[0].id).toBe(f0.id);
+		expect(tree[1].id).toBe(f1.id);
+		expect(tree[2].id).toBe(f2.id);
+		expect(tree[3].id).toBe(f3.id);
+	}));
+
 });
+

@@ -321,8 +321,8 @@ export default class Note extends BaseItem {
 			r = noteFieldComp(a.user_created_time, b.user_created_time);
 			if (r) return r;
 
-			const titleA = a.title ? a.title.toLowerCase() : '';
-			const titleB = b.title ? b.title.toLowerCase() : '';
+			const titleA = a.title ? a.title.toLowerCase().trim() : '';
+			const titleB = b.title ? b.title.toLowerCase().trim() : '';
 			r = noteFieldComp(titleA, titleB);
 			if (r) return r;
 
@@ -344,7 +344,7 @@ export default class Note extends BaseItem {
 				if (typeof bProp === 'string') bProp = bProp.toLowerCase();
 
 				if (order.by === 'title') {
-					r = -1 * collator.compare(aProp as string, bProp as string);
+					r = -1 * collator.compare((aProp as string || '').trim(), (bProp as string || '').trim());
 				} else {
 					if (aProp < bProp) r = +1;
 					if (aProp > bProp) r = -1;
@@ -1192,7 +1192,7 @@ export default class Note extends BaseItem {
 	public static handleTitleNaturalSorting(items: NoteEntity[], options: { order?: { by: string; dir: string }[] }) {
 		if (options.order.length > 0 && options.order[0].by === 'title') {
 			const collator = getCollator();
-			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
+			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare((a.title || '').trim(), (b.title || '').trim()));
 		}
 	}
 

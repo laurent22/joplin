@@ -350,7 +350,7 @@ export default class Folder extends BaseItem {
 	public static handleTitleNaturalSorting(items: FolderEntity[], options: { order?: { by: string; dir: string }[] }) {
 		if (options.order?.length > 0 && options.order[0].by === 'title') {
 			const collator = getCollator();
-			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
+			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare((a.title || '').trim(), (b.title || '').trim()));
 		}
 	}
 
@@ -935,7 +935,7 @@ export default class Folder extends BaseItem {
 
 			folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => {
 				if (a.parent_id === b.parent_id) {
-					return collator.compare(a.title, b.title);
+					return collator.compare((a.title || '').trim(), (b.title || '').trim());
 				}
 				return 0;
 			});

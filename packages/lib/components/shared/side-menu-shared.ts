@@ -99,7 +99,7 @@ const sortTags = (tags: TagEntity[]) => {
 		// Note: while newly created tags are normalized and lowercase
 		// imported tags might be any case, so we need to do case-insensitive
 		// sort.
-		return collator.compare(a.title, b.title);
+		return collator.compare((a.title || '').trim(), (b.title || '').trim());
 	});
 	return tags;
 };
