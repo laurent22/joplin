@@ -335,6 +335,15 @@ export interface SettingEntity {
   'value'?: string | null;
   'type_'?: number;
 }
+export interface ConflictNoteStateEntity {
+  'note_id'?: string;
+  'base_body'?: string;
+  'base_title'?: string;
+  'remote_body'?: string;
+  'remote_title'?: string;
+  'remote_updated_time'?: number;
+  'type_'?: number;
+}
 export interface SyncItemEntity {
   'force_sync'?: number;
   'id'?: number | null;
@@ -347,6 +356,9 @@ export interface SyncItemEntity {
   'sync_time'?: number;
   'sync_warning_ignored'?: number;
   'remote_item_updated_time'?: number;
+  'base_body'?: string;
+  'base_title'?: string;
+  'base_conflict_note_id'?: string;
   'type_'?: number;
 }
 export interface TableFieldEntity {
@@ -453,6 +465,18 @@ export const databaseSchema: DatabaseTables = {
 		sync_time: { type: 'number' },
 		sync_warning_ignored: { type: 'number' },
 		remote_item_updated_time: { type: 'number' },
+		base_body: { type: 'string' },
+		base_title: { type: 'string' },
+		base_conflict_note_id: { type: 'string' },
+		type_: { type: 'number' },
+	},
+	conflict_note_states: {
+		note_id: { type: 'string' },
+		base_body: { type: 'string' },
+		base_title: { type: 'string' },
+		remote_body: { type: 'string' },
+		remote_title: { type: 'string' },
+		remote_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
 	version: {
