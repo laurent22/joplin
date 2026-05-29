@@ -29229,14 +29229,14 @@ __metadata:
 
 "electron@patch:electron@npm%3A40.9.2#~/.yarn/patches/electron-npm-40.9.2-7b90992bd7.patch":
   version: 40.9.2
-  resolution: "electron@patch:electron@npm%3A40.9.2#~/.yarn/patches/electron-npm-40.9.2-7b90992bd7.patch::version=40.9.2&hash=c2f3d9"
+  resolution: "electron@patch:electron@npm%3A40.9.2#~/.yarn/patches/electron-npm-40.9.2-7b90992bd7.patch::version=40.9.2&hash=b45f79"
   dependencies:
     "@electron/get": "npm:^2.0.0"
     "@types/node": "npm:^24.9.0"
     extract-zip: "npm:^2.0.1"
   bin:
     electron: cli.js
-  checksum: 10/04e090d1e0ffae1e72be644d5301eff8a711e86955b42147e8590a0c12646cea9754d9b4621d403b9fd00634dfa5127e9fda3bdb79a05e20ef8801d71092de50
+  checksum: 10/b53939ed973e797ca4090ba5e94aba2ddbae81d985bf34b39ca11ff4df4fc20316bfa5477152c3cae665da6a08d726e46b3cf0d2e6ce777d2f7575483bfea99d
   languageName: node
   linkType: hard
 
