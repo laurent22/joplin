@@ -404,12 +404,19 @@ export default class OneDriveApi {
 					// Deleting a non-existing item is ok - noop
 					return;
 				} else {
+					let debugSafeOptions = { ...options };
+					// The .agent property can't be converted to JSON
+					if (debugSafeOptions.agent) {
+						debugSafeOptions.agent = '[[agent]]';
+					}
+					debugSafeOptions = this.authorizationTokenRemoved(debugSafeOptions);
+
 					error.request = [
 						method,
 						url,
 						JSON.stringify(query),
 						JSON.stringify(this.authorizationTokenRemoved(data)),
-						JSON.stringify(this.authorizationTokenRemoved(options)),
+						JSON.stringify(debugSafeOptions),
 					].join(' ');
 					error.headers = await response.headers;
 					throw error;
@@ -424,6 +431,10 @@ export default class OneDriveApi {
 
 	public setAccountProperties(accountProperties: Record<string, unknown>) {
 		this.accountProperties_ = accountProperties;
+	}
+
+	public get accountProperties() {
+		return { ...this.accountProperties_ };
 	}
 
 	public async execAccountPropertiesRequest() {

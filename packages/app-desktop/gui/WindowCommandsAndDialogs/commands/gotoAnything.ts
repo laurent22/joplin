@@ -1,7 +1,7 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import { GotoAnythingUserData, Mode, UserDataCallbackReject, UserDataCallbackResolve } from '../../../plugins/GotoAnything';
-const PluginManager = require('@joplin/lib/services/PluginManager');
+import PluginManager from '@joplin/lib/services/PluginManager';
 
 export enum UiType {
 	GotoAnything = 'gotoAnything',

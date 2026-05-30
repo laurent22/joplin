@@ -145,7 +145,7 @@ export default class InteropService {
 						'onepkg',
 					],
 					sources: [FileSystemItem.File],
-					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
+					isNoteArchive: true, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 					description: _('OneNote Notebook'),
 				}, () => new InteropService_Importer_OneNote()),
 			];

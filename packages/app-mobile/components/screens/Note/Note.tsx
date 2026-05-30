@@ -82,7 +82,7 @@ import useDebounced from '../../../utils/hooks/useDebounced';
 import { Second } from '@joplin/utils/time';
 import TextWrapCalculator from '../Notes/TextWrapCalculator';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 
 const emptyArray: never[] = [];
 

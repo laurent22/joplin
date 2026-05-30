@@ -18,7 +18,7 @@ import BaseCommand from './base-command';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
 import initializeCommandService from './utils/initializeCommandService';
 import { cliUtils } from './cli-utils';
-const Cache = require('@joplin/lib/Cache');
+import Cache from '@joplin/lib/Cache';
 
 type FolderOrNoteType = ModelType.Note | ModelType.Folder | 'folderOrNote';
 
@@ -200,7 +200,7 @@ export class Application extends BaseApplication {
 	public async commandMetadata() {
 		if (this.commandMetadata_) return this.commandMetadata_;
 
-		let output = await this.cache_.getItem('metadata');
+		let output = await this.cache_.getItem('metadata') as Record<string, unknown>;
 		if (output) {
 			this.commandMetadata_ = output;
 			return { ...this.commandMetadata_ };
