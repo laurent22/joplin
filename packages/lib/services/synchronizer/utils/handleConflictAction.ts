@@ -4,8 +4,9 @@ import BaseItem from '../../../models/BaseItem';
 import ItemChange from '../../../models/ItemChange';
 import Note from '../../../models/Note';
 import Resource from '../../../models/Resource';
-import { BaseItemEntity } from '../../database/types';
+import { BaseItemEntity, NoteEntity } from '../../database/types';
 import { SyncAction, conflictActions } from './types';
+import ConflictNoteState from '../../../models/ConflictNoteState';
 
 const logger = Logger.create('handleConflictAction');
 
@@ -57,7 +58,24 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		// ------------------------------------------------------------------------------
 
 		if (mustHandleConflict) {
-			await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
+			const conflictNote = await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
+
+			// Link the original note to its conflict note so the merge UI can find it later.
+			await BaseItem.setBaseConflictNoteId(syncTargetId, local.id, conflictNote.id);
+
+			// Snapshot the three versions needed for a future merge: base (the common
+			// ancestor recorded at the last clean upload) and remote (the server version
+			// that caused the conflict). The local version is held by the conflict note itself.
+			const base = await BaseItem.syncBaseContent(syncTargetId, local.id);
+			const remoteNote = remoteContent as NoteEntity;
+			await ConflictNoteState.save({
+				note_id: conflictNote.id,
+				base_body: base ? base.base_body : '',
+				base_title: base ? base.base_title : '',
+				remote_body: remoteNote ? remoteNote.body : '',
+				remote_title: remoteNote ? remoteNote.title : '',
+				remote_updated_time: remoteNote ? remoteNote.updated_time : 0,
+			});
 		}
 	} else if (action === SyncAction.ResourceConflict) {
 		if (!remoteContent || Resource.mustHandleConflict(local, remoteContent)) {

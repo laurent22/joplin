@@ -920,6 +920,24 @@ export default class BaseItem extends BaseModel {
 		await this.db().exec(sql, params);
 	}
 
+	// Records the note content that was just pushed to the server. This becomes the
+	// "base" version - the common ancestor used to detect what changed on each side
+	// when a conflict later occurs. A clean upload also means there's no active
+	// conflict, so we clear any previously recorded conflict note id.
+	public static async saveSyncBaseContent(syncTarget: number, noteId: string, body: string, title: string) {
+		const sql = 'UPDATE sync_items SET base_body = ?, base_title = ?, base_conflict_note_id = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
+		await this.db().exec(sql, [body, title, '', noteId, this.TYPE_NOTE, syncTarget]);
+	}
+
+	public static async setBaseConflictNoteId(syncTarget: number, noteId: string, conflictNoteId: string) {
+		const sql = 'UPDATE sync_items SET base_conflict_note_id = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
+		await this.db().exec(sql, [conflictNoteId, noteId, this.TYPE_NOTE, syncTarget]);
+	}
+
+	public static async syncBaseContent(syncTarget: number, noteId: string): Promise<SyncItemEntity> {
+		return this.syncItem(syncTarget, noteId, { fields: ['base_body', 'base_title'] });
+	}
+
 	// When an item is deleted, its associated sync_items data is not immediately deleted for
 	// performance reason. So this function is used to look for these remaining sync_items and
 	// delete them.
