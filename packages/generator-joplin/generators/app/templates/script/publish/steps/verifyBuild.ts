@@ -3,8 +3,8 @@ import * as fs from 'fs';
 import { execSync } from 'child_process';
 import * as semver from 'semver';
 const { Input } = require('enquirer');
-import { logger } from '../utils/logger';
 import { FatalError } from '../utils/errors';
+import logger from '../utils/logger';
 
 export interface PluginMetadata {
 	name: string;
