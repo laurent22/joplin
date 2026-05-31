@@ -13,6 +13,10 @@ const logger = Logger.create('handleConflictAction');
 export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExists: boolean, remoteContent: BaseItemEntity, local: BaseItemEntity, syncTargetId: number, itemIsReadOnly: boolean, dispatch: Dispatch) => {
 	if (!conflictActions.includes(action)) return;
 
+	// Linked to the original note only after the remote-overwrite step below, which
+	// rebuilds the sync_items row and would otherwise wipe the link.
+	let createdConflictNoteId = '';
+
 	logger.debug(`Handling conflict: ${action}`);
 	logger.debug('local:', local, 'remoteContent', remoteContent);
 	logger.debug('remoteExists:', remoteExists);
@@ -59,13 +63,10 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 
 		if (mustHandleConflict) {
 			const conflictNote = await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
+			createdConflictNoteId = conflictNote.id;
 
-			// Link the original note to its conflict note so the merge UI can find it later.
-			await BaseItem.setBaseConflictNoteId(syncTargetId, local.id, conflictNote.id);
-
-			// Snapshot the three versions needed for a future merge: base (the common
-			// ancestor recorded at the last clean upload) and remote (the server version
-			// that caused the conflict). The local version is held by the conflict note itself.
+			// Record base (read now, before the rebuild below) and remote. The local
+			// version is already preserved as the conflict note itself.
 			const base = await BaseItem.syncBaseContent(syncTargetId, local.id);
 			const remoteNote = remoteContent as NoteEntity;
 			await ConflictNoteState.save({
@@ -104,6 +105,11 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 			local = remoteContent;
 			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteContent.updated_time), remoteContent.updated_time);
 			await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
+
+			// Link after the save above, which rebuilds the sync_items row.
+			if (createdConflictNoteId) {
+				await BaseItem.setBaseConflictNoteId(syncTargetId, local.id, createdConflictNoteId);
+			}
 
 			if (local.encryption_applied) dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
 		} else {
