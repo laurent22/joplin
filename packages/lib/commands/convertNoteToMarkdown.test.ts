@@ -2,10 +2,12 @@ import * as convertHtmlToMarkdown from './convertNoteToMarkdown';
 import { defaultState, State } from '../reducer';
 import Note from '../models/Note';
 import { MarkupLanguage } from '@joplin/renderer';
-import { setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
+import { db, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import { NoteEntity } from '../services/database/types';
 import shim from '../shim';
+import SearchEngine from '../services/search/SearchEngine';
+import SearchEngineUtils from '../services/search/SearchEngineUtils';
 
 describe('convertNoteToMarkdown', () => {
 	let state: State = undefined;
@@ -104,6 +106,25 @@ describe('convertNoteToMarkdown', () => {
 		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
 
 		expect(shim.showToast).toHaveBeenCalled();
+	});
+
+	it('should cause note to not disappear from search results', async () => {
+		const searchEngine = new SearchEngine();
+		searchEngine.setDb(db());
+
+		const folder = await Folder.save({ title: 'test_folder' });
+		const htmlNote = await Note.save({ title: 'search note', body: '<p>Hello</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
+		await searchEngine.syncTables();
+
+		const searchResultsBeforeConversion = await SearchEngineUtils.notesForQuery('search note', true, null, searchEngine);
+		expect(searchResultsBeforeConversion.notes.map(note => note.id)).toEqual([htmlNote.id]);
+
+		state.selectedNoteIds = [htmlNote.id];
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
+		await searchEngine.syncTables();
+
+		const searchResultsAfterConversion = await SearchEngineUtils.notesForQuery('search note', true, null, searchEngine);
+		expect(searchResultsAfterConversion.notes.map(note => note.id)).toEqual([htmlNote.id]);
 	});
 
 });
