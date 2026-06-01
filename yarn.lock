@@ -12377,7 +12377,7 @@ __metadata:
     "@react-native-vector-icons/get-image": "npm:12.3.0"
     "@react-native-vector-icons/ionicons": "npm:12.3.0"
     "@react-native-vector-icons/material-design-icons": "npm:12.4.1"
-    "@react-native-vector-icons/material-icons": "npm:12.4.0"
+    "@react-native-vector-icons/material-icons": "npm:12.4.1"
     "@react-native/babel-preset": "npm:0.81.6"
     "@react-native/metro-config": "npm:0.81.6"
     "@react-native/typescript-config": "npm:0.83.1"
@@ -15838,27 +15838,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/material-icons@npm:12.4.0":
-  version: 12.4.0
-  resolution: "@react-native-vector-icons/material-icons@npm:12.4.0"
+"@react-native-vector-icons/material-icons@npm:12.4.1":
+  version: 12.4.1
+  resolution: "@react-native-vector-icons/material-icons@npm:12.4.1"
   dependencies:
     "@react-native-vector-icons/common": "npm:^12.4.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/472eb93fe551716558e4178707e08c854c05861acb2f7baff53222f13e0d0c0a02f790cfa20fcfb20eb8df1a5562f87380480b02419019c388db223d9a78779b
-  languageName: node
-  linkType: hard
-
-"@react-native-vector-icons/material-icons@patch:@react-native-vector-icons/material-icons@npm%3A12.4.0#~/.yarn/patches/@react-native-vector-icons-material-icons-npm-12.4.0-94138e627b.patch":
-  version: 12.4.0
-  resolution: "@react-native-vector-icons/material-icons@patch:@react-native-vector-icons/material-icons@npm%3A12.4.0#~/.yarn/patches/@react-native-vector-icons-material-icons-npm-12.4.0-94138e627b.patch::version=12.4.0&hash=81fbb4"
-  dependencies:
-    "@react-native-vector-icons/common": "npm:^12.4.0"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 10/64ff8df53e5a339635278b0fc6cce6a16620d404cad1d97dfb8a5e25542654bbd30fc20ece1cfdce7cd9382a1d999b938c1554122743ee0f2193d5bbcb08c151
+  checksum: 10/88517e20a7b1a31bbe713100a4ab9d07fbf7758ce81cd249bcaa41484e6a7e35006d27a77d20f5d1579febad157a72cee6b68f4e986af0b660da40f5fba5db42
   languageName: node
   linkType: hard
 
