@@ -1,9 +1,29 @@
 import type * as MarkdownIt from 'markdown-it';
 
-const extractVideoId = (url: string) => {
-	const pattern = /^https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/;
-	const match = url.match(pattern);
-	return match ? match[1] : null;
+const extractVideoId = (url: string): string | null => {
+	let parsed: URL;
+	try {
+		parsed = new URL(url);
+	} catch {
+		return null;
+	}
+
+	const host = parsed.hostname.toLowerCase();
+
+	if (host === 'youtu.be') {
+		const id = parsed.pathname.slice(1).split('/')[0];
+		return /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : null;
+	}
+
+	if (host === 'youtube.com' || host.endsWith('.youtube.com')) {
+		const pathMatch = parsed.pathname.match(/^\/(embed|v)\/([a-zA-Z0-9_-]{11})/);
+		if (pathMatch) return pathMatch[2];
+
+		const v = parsed.searchParams.get('v');
+		return v && /^[a-zA-Z0-9_-]{11}$/.test(v) ? v : null;
+	}
+
+	return null;
 };
 
 const plugin = (markdownIt: MarkdownIt) => {
