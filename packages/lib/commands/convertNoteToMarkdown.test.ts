@@ -8,6 +8,7 @@ import { NoteEntity } from '../services/database/types';
 import shim from '../shim';
 import SearchEngine from '../services/search/SearchEngine';
 import SearchEngineUtils from '../services/search/SearchEngineUtils';
+import { getTrashFolderId } from '../services/trash';
 
 describe('convertNoteToMarkdown', () => {
 	let state: State = undefined;
@@ -19,7 +20,7 @@ describe('convertNoteToMarkdown', () => {
 		shim.showToast = jest.fn();
 	});
 
-	it('should set the original note to be trashed', async () => {
+	it('should keep the original note active and trash an HTML backup', async () => {
 		const folder = await Folder.save({ title: 'test_folder' });
 		const htmlNote = await Note.save({ title: 'test', body: '<p>Hello</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
 		state.selectedNoteIds = [htmlNote.id];
@@ -27,12 +28,21 @@ describe('convertNoteToMarkdown', () => {
 		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: () => {} });
 
 		const refreshedNote = await Note.load(htmlNote.id);
+		const trashedNotes = await Note.previews(getTrashFolderId());
+		const backupNote = await Note.load(trashedNotes[0].id);
 
-		expect(htmlNote.deleted_time).toBe(0);
-		expect(refreshedNote.deleted_time).not.toBe(0);
+		expect(refreshedNote.id).toBe(htmlNote.id);
+		expect(refreshedNote.deleted_time).toBe(0);
+		expect(refreshedNote.markup_language).toBe(MarkupLanguage.Markdown);
+
+		expect(trashedNotes).toHaveLength(1);
+		expect(backupNote.id).not.toBe(htmlNote.id);
+		expect(backupNote.deleted_time).not.toBe(0);
+		expect(backupNote.body).toBe(htmlNote.body);
+		expect(backupNote.markup_language).toBe(MarkupLanguage.Html);
 	});
 
-	it('should recreate a new note that is a clone of the original', async () => {
+	it('should preserve note metadata when converting in place', async () => {
 		const folder = await Folder.save({ title: 'test_folder' });
 		const htmlNoteProperties = {
 			title: 'test',
