@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { Dispatch } from 'redux';
 import { AppState } from '../app.reducer';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import { defaultWindowId, stateUtils } from '@joplin/lib/reducer';
@@ -152,8 +153,7 @@ const useNoteListMenuItems = (noteListRendererIds: string[]) => {
 };
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 	menuItemProps: any;
 	mainScreenVisible: boolean;

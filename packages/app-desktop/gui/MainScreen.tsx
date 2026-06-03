@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import ResizableLayout from './ResizableLayout/ResizableLayout';
 import findItemByKey from './ResizableLayout/utils/findItemByKey';
 import { MoveButtonClickEvent } from './ResizableLayout/MoveButtons';
@@ -57,8 +58,7 @@ interface Props {
 	pluginHtmlContents: PluginHtmlContents;
 	pluginsLoaded: boolean;
 	hasNotesBeingSaved: boolean;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	mainLayout: LayoutItem;
 	style: React.CSSProperties & { width?: number; height?: number };
 	layoutMoveMode: boolean;

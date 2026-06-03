@@ -1,4 +1,5 @@
 import { RefObject, useCallback } from 'react';
+import { Dispatch } from 'redux';
 import { FormNote, HtmlToMarkdownHandler, MarkupToHtmlHandler, ScrollOptions, MessageEvent, NoteBodyEditorRef } from './types';
 import contextMenu from './contextMenu';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -15,8 +16,7 @@ export default function useMessageHandler(
 	editorRef: RefObject<NoteBodyEditorRef>,
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	setLocalSearchResultCount: Function,
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function,
+	dispatch: Dispatch,
 	formNote: FormNote,
 	htmlToMd: HtmlToMarkdownHandler,
 	mdToHtml: MarkupToHtmlHandler,

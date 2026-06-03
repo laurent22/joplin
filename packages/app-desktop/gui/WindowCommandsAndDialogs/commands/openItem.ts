@@ -3,6 +3,7 @@ import shim from '@joplin/lib/shim';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../../services/bridge';
 import { openItemById } from '../../NoteEditor/utils/contextMenu';
+import { Dispatch } from 'redux';
 import { fileUrlToResourceUrl, parseResourceUrl, urlProtocol } from '@joplin/lib/urlUtils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
@@ -26,7 +27,7 @@ export const runtime = (): CommandRuntime => {
 				const parsedUrl = parseResourceUrl(link);
 				if (parsedUrl) {
 					const { itemId, hash } = parsedUrl;
-					await openItemById(itemId, context.dispatch, hash);
+					await openItemById(itemId, context.dispatch as Dispatch, hash);
 				} else {
 					void bridge().openExternal(link);
 				}

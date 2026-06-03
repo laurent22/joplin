@@ -1,4 +1,5 @@
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
+import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
 import { copyHtmlToClipboard } from './clipboardUtils';
 import bridge from '../../../services/bridge';
@@ -34,8 +35,7 @@ async function saveFileData(data: string | NodeJS.ArrayBufferView, filename: str
 	await fs.writeFile(newFilePath, data);
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export async function openItemById(itemId: string, dispatch: Function, hash = '') {
+export async function openItemById(itemId: string, dispatch: Dispatch, hash = '') {
 
 	const item = await BaseItem.loadItemById(itemId);
 
@@ -77,8 +77,7 @@ export async function openItemById(itemId: string, dispatch: Function, hash = ''
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export function menuItems(dispatch: Function): ContextMenuItems {
+export function menuItems(dispatch: Dispatch): ContextMenuItems {
 	const makeSeparator = (): ContextMenuItem => {
 		return {
 			isActive: () => { return true; },
@@ -287,8 +286,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 	};
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export default async function contextMenu(options: ContextMenuOptions, dispatch: Function) {
+export default async function contextMenu(options: ContextMenuOptions, dispatch: Dispatch) {
 	const menu = new Menu();
 
 	if (!('readyOnly' in options)) options.isReadOnly = true;
