@@ -40,14 +40,22 @@ export default async function verifyGitState(): Promise<string> {
 	// check if the local project is linked to github
 	runGit('git remote get-url origin', 'No remote named \'origin\' found.');
 
-	// Extract the remote commit hash and checks if the user has pushed the changes that he is going to publish
+
 	const currentBranch = runGit('git rev-parse --abbrev-ref HEAD', 'Failed to get current branch name.');
+	if (currentBranch === 'HEAD') {
+		throw new FatalError(
+			'You are in a detached HEAD state.\n' +
+			'Checkout a branch (e.g. git checkout main) and push before publishing.',
+		);
+	}
+
+	// Extract the remote commit hash and checks if the user has pushed the changes that he is going to publish
 	const remoteHeadLine = runGit(`git ls-remote origin ${currentBranch}`, 'Could not retrieve remote HEAD. Make sure you have pushed your changes and have an internet connection.');
 	if (!remoteHeadLine) {
 		throw new FatalError('Remote HEAD is empty. Make sure you have pushed your changes.');
 	}
 
-	const remoteHash = remoteHeadLine.split(/\s+/)[0];
+	const remoteHash = remoteHeadLine.split('\n')[0].split(/\s+/)[0];
 	if (remoteHash !== commitHash) {
 		throw new FatalError('Your local commit has not been pushed to GitHub.\nRun: git push then try publishing again.');
 	}

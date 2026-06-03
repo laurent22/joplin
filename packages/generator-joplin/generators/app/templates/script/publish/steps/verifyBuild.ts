@@ -37,8 +37,15 @@ async function validateMetadata(): Promise<PluginMetadata> {
 	}
 
 	// Extract the meta-data : `Version`, `name` and `repository_url`
-	const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-	const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+	let manifest;
+	let packageJson;
+	try {
+		manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+		packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+	} catch {
+		throw new FatalError('manifest.json or package.json contains invalid JSON.');
+	}
+
 	const { version } = manifest;
 	const { name } = packageJson;
 	const repositoryUrl = manifest.repository_url;
@@ -96,7 +103,7 @@ async function validateMetadata(): Promise<PluginMetadata> {
 
 // Builds the .jpl file once to make sure there is no build errors.
 // Shows all the build log in terminal (stdio: 'inherit')
-async function build() {
+function build() {
 	try {
 		logger.info('Running "npm run dist"...');
 		execSync('npm run dist', { stdio: 'inherit', cwd: process.cwd() });
