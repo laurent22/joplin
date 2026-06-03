@@ -86,7 +86,7 @@ async function validateMetadata(): Promise<PluginMetadata> {
 
 		// Write the url back to manifest.json
 		manifest.repository_url = cleanUrl;
-		fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 4), 'utf8');
+		fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf8');
 		logger.success('Updated manifest.json with repository URL');
 	}
 

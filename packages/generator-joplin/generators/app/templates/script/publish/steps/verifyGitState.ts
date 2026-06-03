@@ -42,7 +42,7 @@ export default async function verifyGitState(): Promise<string> {
 
 	// Extract the remote commit hash and checks if the user has pushed the changes that he is going to publish
 	const currentBranch = runGit('git rev-parse --abbrev-ref HEAD', 'Failed to get current branch name.');
-	const remoteHeadLine = runGit(`git ls-remote origin ${currentBranch}}`, 'Could not retrieve remote HEAD. Make sure you have pushed your changes and have an internet connection.');
+	const remoteHeadLine = runGit(`git ls-remote origin ${currentBranch}`, 'Could not retrieve remote HEAD. Make sure you have pushed your changes and have an internet connection.');
 	if (!remoteHeadLine) {
 		throw new FatalError('Remote HEAD is empty. Make sure you have pushed your changes.');
 	}
