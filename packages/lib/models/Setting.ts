@@ -37,10 +37,9 @@ interface KeysOptions {
 
 // This is where the actual setting values are stored.
 // They are saved to database at regular intervals.
-interface CacheItem {
+interface CacheItem<T extends string|unknown> {
 	key: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each setting has its own value type; tightening forces narrowing at every read/write site
-	value: any;
+	value: T extends string ? SettingValueType<T> : unknown;
 }
 
 export interface Constants {
@@ -319,7 +318,7 @@ class Setting extends BaseModel {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- KeychainService concrete class lives in app-desktop/app-mobile; lib references it structurally to avoid cross-package imports
 	private static keychainService_: any = null;
 	private static keys_: string[] = null;
-	private static cache_: CacheItem[] = [];
+	private static cache_: CacheItem<unknown>[] = [];
 	private static saveTimeoutId_: ReturnType<typeof shim.setTimeout> = null;
 	private static changeEventTimeoutId_: ReturnType<typeof shim.setTimeout> = null;
 	private static customMetadata_: SettingItems = {};
@@ -643,14 +642,14 @@ class Setting extends BaseModel {
 	// This allows loading a setting without doing any check on anything - this can be useful to
 	// retrieve a value for a setting that was previously registered, but no longer is. Also to
 	// retrieve setting values for plugins before the plugin is actually loaded.
-	private static async loadOneFromDb(key: string): Promise<CacheItem | null> {
+	private static async loadOneFromDb<T extends string>(key: T): Promise<CacheItem<T> | null> {
 		const row = await this.modelSelectOne('SELECT key, value FROM settings WHERE key = ?', [key]);
 		return row ? row : null;
 	}
 
 	// Low-level method to load a setting directly from the database. Should not be used in most cases.
 	// Does not apply setting default values.
-	public static async loadOne(key: string): Promise<CacheItem | null> {
+	public static async loadOne<T extends string>(key: T): Promise<CacheItem<T> | null> {
 		if (this.keyStorage(key) === SettingStorage.File) {
 			let fileSettings = await this.fileHandler.load();
 
@@ -664,7 +663,7 @@ class Setting extends BaseModel {
 				return {
 					key,
 					value: fileSettings[key],
-				};
+				} as CacheItem<T>;
 			} else {
 				return null;
 			}
@@ -693,7 +692,7 @@ class Setting extends BaseModel {
 		this.cancelScheduleChangeEvent();
 
 		this.cache_ = [];
-		const rows: CacheItem[] = await this.modelSelectAll('SELECT * FROM settings');
+		const rows: CacheItem<unknown>[] = await this.modelSelectAll('SELECT * FROM settings');
 
 
 		// Keys in the database takes precedence over keys in the keychain because
@@ -703,7 +702,7 @@ class Setting extends BaseModel {
 
 		const rowKeys = (rows as { key: string }[]).map(r => r.key);
 		const secureKeys = this.keys(false, null, { secureOnly: true });
-		const secureItems: CacheItem[] = [];
+		const secureItems: CacheItem<unknown>[] = [];
 		for (const key of secureKeys) {
 			if (rowKeys.includes(key)) continue;
 
@@ -716,7 +715,7 @@ class Setting extends BaseModel {
 			}
 		}
 
-		const itemsFromFile: CacheItem[] = [];
+		const itemsFromFile: CacheItem<unknown>[] = [];
 
 		if (this.canUseFileStorage()) {
 			let fileSettings = await this.fileHandler.load();
@@ -737,7 +736,7 @@ class Setting extends BaseModel {
 
 		this.cache_ = [];
 		const cachedKeys = new Set();
-		const pushItemsToCache = (items: CacheItem[]) => {
+		const pushItemsToCache = (items: CacheItem<unknown>[]) => {
 			for (let i = 0; i < items.length; i++) {
 				const c = items[i];
 
@@ -1029,7 +1028,7 @@ class Setting extends BaseModel {
 
 		for (let i = 0; i < this.cache_.length; i++) {
 			if (this.cache_[i].key === key) {
-				return copyIfNeeded(this.cache_[i].value);
+				return copyIfNeeded(this.cache_[i].value) as SettingValueType<T>;
 			}
 		}
 
