@@ -1015,8 +1015,7 @@ class Setting extends BaseModel {
 		}
 
 		if (key in this.constants_) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Constants are heterogeneous (string, number, AppType, function); value() returns SettingValueType<T> which is parametric
-			const v = (this.constants_ as any)[key];
+			const v: unknown = this.constants_[key as keyof Constants];
 			const output = typeof v === 'function' ? v() : v;
 			if (output === 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
 			return output;
