@@ -9,6 +9,7 @@ import { ProfileConfig } from './services/profileConfig/types';
 import * as ArrayUtils from './ArrayUtils';
 import { FolderEntity, NoteEntity, NoteTagEntity } from './services/database/types';
 import { MasterKeyEntity } from './services/e2ee/types';
+import type { ProgressReport } from './Synchronizer';
 
 interface SearchEntry {
 	id: string;
@@ -160,7 +161,7 @@ export interface State extends WindowState {
 	syncStarted: boolean;
 	syncPending: boolean;
 	showQuitSyncDialog: boolean;
-	syncReport: Record<string, unknown>;
+	syncReport: ProgressReport;
 	searchResults: ProcessResultsRow[];
 	settings: Partial<SettingsRecord>;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sharedData is mostly used in CLI for cross-screen scratch state; tightening forces touching the affected commands
@@ -214,7 +215,7 @@ export const defaultState: State = {
 	syncStarted: false,
 	syncPending: false,
 	showQuitSyncDialog: false,
-	syncReport: {},
+	syncReport: { errors: [] },
 	searchQuery: '',
 	searchResults: [],
 	settings: {},
