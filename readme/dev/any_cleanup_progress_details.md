@@ -960,3 +960,6 @@ The remaining `any` annotations cluster into a handful of structural reasons tha
 
 All `yarn tsc --noEmit` and `yarn linter-ci packages/lib/` runs pass for every batch commit.
 
+## Multiple packages - June 2026
+
+Migrated several `any` types that weren't migrated before. Some of these required changes spanning multiple packages and were previously left aside for this reason. Others were missed during the previous migrations.
