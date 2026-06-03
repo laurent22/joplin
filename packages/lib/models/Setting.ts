@@ -681,7 +681,7 @@ class Setting extends BaseModel {
 			return {
 				key,
 				value: await this.keychainService().password(`setting.${key}`),
-			} as unknown as CacheItem<T>;
+			} as CacheItem<unknown> as CacheItem<T>;
 		}
 
 		return null;
