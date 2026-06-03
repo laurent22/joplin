@@ -503,7 +503,8 @@ function handleItemDelete(draft: Draft<State>, action: any) {
 		const selectedItemKeys = isSingular ? [windowDraft[selectedItemKey]] : windowDraft[selectedItemKey];
 		const isSelected = selectedItemKeys.includes(action.id);
 
-		const items = (listKey in windowDraft ? windowDraft[listKey as keyof WindowState] : draft[listKey]) as { id: string }[];
+		type ListItemSlice = { id: string };
+		const items = (listKey in windowDraft ? windowDraft[listKey as keyof WindowState] : draft[listKey]) as ListItemSlice[];
 		const newItems = [];
 		let newSelectedIndexes: number[] = [];
 
