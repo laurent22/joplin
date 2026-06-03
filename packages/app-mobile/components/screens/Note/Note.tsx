@@ -183,8 +183,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private noteTagDialog_closeRequested: ()=> void;
 	private refreshResource: (resource: ResourceEntity, noteBody?: string)=> Promise<void>;
 	private selection: SelectionRange;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Cached menu option entries are heterogeneous (different command types and option shapes)
-	private menuOptionsCache_: Record<string, any>;
+	private menuOptionsCache_: Record<string, MenuOptionType[]>;
 	private focusUpdateIID_: ReturnType<typeof setTimeout> | null;
 	private folderPickerOptions_: FolderPickerOptions;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- dialogbox is the react-native-dialogbox ref; the library ships no types
