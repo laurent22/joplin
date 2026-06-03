@@ -10,6 +10,7 @@ import * as ArrayUtils from './ArrayUtils';
 import { FolderEntity, NoteEntity, NoteTagEntity } from './services/database/types';
 import { MasterKeyEntity } from './services/e2ee/types';
 import type { ProgressReport } from './Synchronizer';
+import type { SharedData } from './components/shared/note-screen-shared';
 
 interface SearchEntry {
 	id: string;
@@ -164,8 +165,7 @@ export interface State extends WindowState {
 	syncReport: ProgressReport;
 	searchResults: ProcessResultsRow[];
 	settings: Partial<SettingsRecord>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sharedData is mostly used in CLI for cross-screen scratch state; tightening forces touching the affected commands
-	sharedData: any;
+	sharedData: SharedData;
 	appState: string;
 	biometricsDone: boolean;
 	hasDisabledSyncItems: boolean;
@@ -503,7 +503,7 @@ function handleItemDelete(draft: Draft<State>, action: any) {
 		const selectedItemKeys = isSingular ? [windowDraft[selectedItemKey]] : windowDraft[selectedItemKey];
 		const isSelected = selectedItemKeys.includes(action.id);
 
-		const items = listKey in windowDraft ? windowDraft[listKey as keyof WindowState] : draft[listKey];
+		const items = (listKey in windowDraft ? windowDraft[listKey as keyof WindowState] : draft[listKey]) as { id: string }[];
 		const newItems = [];
 		let newSelectedIndexes: number[] = [];
 
