@@ -9,13 +9,12 @@ interface Props {
 	inputRef?: React.Ref<HTMLInputElement>;
 	value: string;
 	onChange(event: OnChangeEvent): void;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	onFocus?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	onBlur?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	onKeyDown?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onSearchButtonClick: ()=> void;
 	searchStarted: boolean;
 	placeholder?: string;

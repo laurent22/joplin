@@ -37,10 +37,10 @@ export interface ContextMenuOptions {
 	linkToCopy: string;
 	textToCopy: string;
 	htmlToCopy: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	insertContent: Function;
 	isReadOnly?: boolean;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	fireEditorEvent: Function;
 	htmlToMd: HtmlToMarkdownHandler;
 	mdToHtml: MarkupToHtmlHandler;
@@ -48,9 +48,9 @@ export interface ContextMenuOptions {
 
 export interface ContextMenuItem {
 	label: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	onAction: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	isActive: Function;
 	isSeparator?: boolean;
 }

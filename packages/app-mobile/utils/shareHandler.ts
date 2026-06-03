@@ -8,7 +8,7 @@ import { ToastAndroid } from 'react-native';
 import { PermissionsAndroid } from 'react-native';
 import { Platform } from 'react-native';
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 export default async (sharedData: SharedData, folderId: string, dispatch: Function) => {
 
 	if (!!sharedData.resources && sharedData.resources.length > 0) {

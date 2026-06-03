@@ -34,7 +34,7 @@ async function saveFileData(data: string | NodeJS.ArrayBufferView, filename: str
 	await fs.writeFile(newFilePath, data);
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 export async function openItemById(itemId: string, dispatch: Function, hash = '') {
 
 	const item = await BaseItem.loadItemById(itemId);
@@ -77,7 +77,7 @@ export async function openItemById(itemId: string, dispatch: Function, hash = ''
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 export function menuItems(dispatch: Function): ContextMenuItems {
 	const makeSeparator = (): ContextMenuItem => {
 		return {
@@ -287,7 +287,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 	};
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 export default async function contextMenu(options: ContextMenuOptions, dispatch: Function) {
 	const menu = new Menu();
 

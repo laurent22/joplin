@@ -22,15 +22,14 @@ import Cache from '@joplin/lib/Cache';
 
 type FolderOrNoteType = ModelType.Note | ModelType.Folder | 'folderOrNote';
 
+type CommandMetadata = ReturnType<BaseCommand['metadata']>;
+
 
 export class Application extends BaseApplication {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic command loading system
-	private commands_: Record<string, any> = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic command metadata
-	private commandMetadata_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic command type
-	private activeCommand_: any = null;
+	private commands_: Record<string, BaseCommand> = {};
+	private commandMetadata_: Record<string, CommandMetadata> = null;
+	private activeCommand_: BaseCommand = null;
 	private allCommandsLoaded_ = false;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic GUI type with many optional methods
 	private gui_: any = null;
@@ -173,8 +172,7 @@ export class Application extends BaseApplication {
 		}
 
 		if (uiType !== null) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic command type
-			const temp: Record<string, any> = {};
+			const temp: Record<string, BaseCommand> = {};
 			for (const n in this.commands_) {
 				if (!this.commands_.hasOwnProperty(n)) continue;
 				const c = this.commands_[n];
@@ -200,7 +198,7 @@ export class Application extends BaseApplication {
 	public async commandMetadata() {
 		if (this.commandMetadata_) return this.commandMetadata_;
 
-		let output = await this.cache_.getItem('metadata') as Record<string, unknown>;
+		let output = await this.cache_.getItem('metadata') as Record<string, CommandMetadata>;
 		if (output) {
 			this.commandMetadata_ = output;
 			return { ...this.commandMetadata_ };
@@ -445,8 +443,7 @@ export class Application extends BaseApplication {
 			this.gui_.setLogger(this.logger());
 			await this.gui_.start();
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux dispatch type requires AnyAction
-			await refreshFolders((action: any) => this.store().dispatch(action), '');
+			await refreshFolders(action => this.store().dispatch(action), '');
 
 			const tags = await Tag.allWithNotes();
 

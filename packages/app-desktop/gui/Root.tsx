@@ -37,7 +37,7 @@ interface Props {
 	themeId: number;
 	appState: string;
 	profileConfigCurrentProfileId: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	dispatch: Function;
 	zoomFactor: number;
 	needApiAuth: boolean;

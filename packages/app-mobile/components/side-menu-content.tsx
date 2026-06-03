@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import Icon from './Icon';
 import Folder from '@joplin/lib/models/Folder';
-import Synchronizer from '@joplin/lib/Synchronizer';
+import Synchronizer, { type ProgressReport } from '@joplin/lib/Synchronizer';
 import NavService from '@joplin/lib/services/NavService';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from './global-style';
@@ -34,8 +34,7 @@ interface Props {
 	themeId: number;
 	dispatch: Dispatch;
 	collapsedFolderIds: string[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- syncReport is typed as `any` in @joplin/lib/reducer and in `Synchronizer.reportToLines`; tightening here would require updating the lib type first
-	syncReport: any;
+	syncReport: ProgressReport;
 	decryptionWorker: StateDecryptionWorker;
 	resourceFetcher: StateResourceFetcher;
 	syncOnlyOverWifi: boolean;

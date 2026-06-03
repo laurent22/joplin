@@ -30,7 +30,7 @@ interface Props {
 	onResize(event: OnResizeEvent): void;
 	width?: number;
 	height?: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	renderItem: Function;
 	onMoveButtonClick(event: MoveButtonClickEvent): void;
 	moveMode: boolean;

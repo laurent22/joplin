@@ -13,9 +13,9 @@ export default function useMessageHandler(
 	clearScrollWhenReady: ()=> void,
 	windowId: string,
 	editorRef: RefObject<NoteBodyEditorRef>,
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	setLocalSearchResultCount: Function,
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	dispatch: Function,
 	formNote: FormNote,
 	htmlToMd: HtmlToMarkdownHandler,

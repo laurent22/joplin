@@ -75,7 +75,7 @@ export interface GotoAnythingUserData {
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	dispatch: Function;
 	folders: FolderEntity[];
 	showCompletedTodos: boolean;
@@ -133,7 +133,7 @@ const itemListId = 'goto-anything-item-list';
 
 class GotoAnything {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	public dispatch: Function;
 	public static Dialog: React.ComponentType<Props>;
 	public static manifest: PluginManifest;

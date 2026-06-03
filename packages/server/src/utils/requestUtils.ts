@@ -72,7 +72,7 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 
 	// Note that for Formidable to work, the content-type must be set in the
 	// headers
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	return new Promise((resolve: Function, reject: Function) => {
 		let promiseCompleted = false;
 

@@ -22,7 +22,7 @@ export const Root = styled.div`
 interface Props {
 	inputRef?: React.MutableRefObject<HTMLInputElement | null>;
 	notesParentType: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	dispatch?: Function;
 	selectedNoteId: string;
 	isFocused?: boolean;
@@ -35,7 +35,7 @@ function SearchBar(props: Props) {
 	const searchId = useRef(uuid.create());
 
 	useEffect(() => {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 		function search(searchId: string, query: string, dispatch: Function) {
 			dispatch({
 				type: 'SEARCH_UPDATE',

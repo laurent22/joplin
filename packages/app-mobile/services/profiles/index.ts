@@ -6,9 +6,9 @@ import { loadProfileConfig as libLoadProfileConfig, saveProfileConfig as libSave
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 let dispatch_: Function = null;
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 export const setDispatch = (dispatch: Function) => {
 	dispatch_ = dispatch;
 };
