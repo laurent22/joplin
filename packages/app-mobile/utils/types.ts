@@ -5,7 +5,7 @@ import type { SideMenuContentOptions } from '../components/SideMenuContentNote';
 // and the navigation history. The dispatched NAV action carries more
 // (heterogeneous) fields; only these are read back from state.
 export interface Route {
-	routeName?: string;
+	routeName: string;
 	folderId?: string;
 	noteId?: string;
 	isDeleted?: boolean;
