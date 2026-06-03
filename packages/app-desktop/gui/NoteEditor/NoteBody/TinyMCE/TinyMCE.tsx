@@ -948,8 +948,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	// Set the initial content and load the plugin CSS and JS files
 	// -----------------------------------------------------------------------------------------
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
-	const loadDocumentAssets = (themeId: number, editor: any, pluginAssets: RenderResultPluginAsset[]) => {
+	const loadDocumentAssets = (themeId: number, editor: Editor, pluginAssets: RenderResultPluginAsset[]) => {
 		const theme = themeStyle(themeId);
 
 		let docHead_: HTMLHeadElement = null;
