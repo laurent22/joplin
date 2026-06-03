@@ -948,15 +948,14 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- value is the per-setting raw value; formatValue branches by SettingItemType — narrowing forces casts in every branch
-	public static valueToString(key: string, value: any) {
+	public static valueToString(key: string, value: unknown) {
 		const md = this.settingMetadata(key);
-		value = this.formatValue(key, value);
-		if (md.type === SettingItemType.Int) return value.toFixed(0);
-		if (md.type === SettingItemType.Bool) return value ? '1' : '0';
-		if (md.type === SettingItemType.Array) return value ? JSON.stringify(value) : '[]';
-		if (md.type === SettingItemType.Object) return value ? JSON.stringify(value) : '{}';
-		if (md.type === SettingItemType.String) return value ? `${value}` : '';
+		const formatted = this.formatValue(key, value);
+		if (md.type === SettingItemType.Int) return formatted.toFixed(0);
+		if (md.type === SettingItemType.Bool) return formatted ? '1' : '0';
+		if (md.type === SettingItemType.Array) return formatted ? JSON.stringify(formatted) : '[]';
+		if (md.type === SettingItemType.Object) return formatted ? JSON.stringify(formatted) : '{}';
+		if (md.type === SettingItemType.String) return formatted ? `${formatted}` : '';
 
 		throw new Error(`Unhandled value type: ${md.type}`);
 	}
@@ -966,8 +965,7 @@ class Setting extends BaseModel {
 		return md.filter ? md.filter(value) : value;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See valueToString above
-	public static formatValue(key: string | SettingItemType, value: any) {
+	public static formatValue(key: string | SettingItemType, value: unknown) {
 		const type = typeof key === 'string' ? this.settingMetadata(key).type : key;
 
 		if (type === SettingItemType.Int) return !value ? 0 : Math.floor(Number(value));
@@ -1033,7 +1031,7 @@ class Setting extends BaseModel {
 		}
 
 		const md = this.settingMetadata(key);
-		return copyIfNeeded(md.value);
+		return copyIfNeeded(md.value) as SettingValueType<T>;
 	}
 
 	// This function returns the default value if the setting key does not exist.
