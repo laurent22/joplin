@@ -163,8 +163,7 @@ const globalMigrations: GlobalMigration[] = [
 interface UserSettingMigration {
 	oldName: string;
 	newName: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	transformValue: Function;
+	transformValue: (value: string)=> string | string[];
 
 	// Currently the migration code only supports migrating a plugin setting to the regular settings
 	// (not a plugin setting to a different name). So "oldName" should be the plugin setting name
@@ -505,7 +504,7 @@ class Setting extends BaseModel {
 				}
 
 				if (applyMigration) {
-					this.setValue(migration.newName, migration.transformValue(newValue));
+					this.setValue(migration.newName, migration.transformValue(newValue as string));
 					logger.info(`applyUserSettingMigrations: Migrated ${migration.oldName} to ${migration.newName}`);
 				}
 			}
