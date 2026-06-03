@@ -1,21 +1,10 @@
 import reducer from '@joplin/lib/reducer';
-import { AppState } from './types';
+import { AppState, Route } from './types';
 import appDefaultState, { DEFAULT_ROUTE } from './appDefaultState';
 import fastDeepEqual = require('fast-deep-equal');
 import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('appReducer');
-
-// Narrow shape for entries this file reads from the redux NAV action payload.
-// The full action type is a wider, heterogeneous union — see the disable
-// comments below — so the fields outside this interface are accessed via `any`
-// elsewhere.
-interface Route {
-	routeName?: string;
-	folderId?: string;
-	noteId?: string;
-	isDeleted?: boolean;
-}
 
 const navHistory: Route[] = [];
 
