@@ -8,6 +8,7 @@ import Logger from '@joplin/utils/Logger';
 import mergeGlobalAndLocalSettings from '../services/profileConfig/mergeGlobalAndLocalSettings';
 import splitGlobalAndLocalSettings from '../services/profileConfig/splitGlobalAndLocalSettings';
 import JoplinError from '../JoplinError';
+import type KeychainService from '../services/keychain/KeychainService';
 import builtInMetadata, { BuiltInMetadataKeys, BuiltInMetadataValues } from './settings/builtInMetadata';
 import { toSystemSlashes } from '@joplin/utils/path';
 import { AppType, Env, SettingItem, SettingItemType, SettingItems, SettingSection, SettingSectionSource, SettingStorage, SettingsRecord } from './settings/types';
@@ -315,8 +316,8 @@ class Setting extends BaseModel {
 	public static allowFileStorage = true;
 
 	private static metadata_: SettingItems = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- KeychainService concrete class lives in app-desktop/app-mobile; lib references it structurally to avoid cross-package imports
-	private static keychainService_: any = null;
+	// Type-only import: KeychainService imports Setting, so a value import would create a runtime cycle.
+	private static keychainService_: KeychainService = null;
 	private static keys_: string[] = null;
 	private static cache_: CacheItem<unknown>[] = [];
 	private static saveTimeoutId_: ReturnType<typeof shim.setTimeout> = null;
@@ -386,8 +387,7 @@ class Setting extends BaseModel {
 		return this.keychainService_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See keychainService_ above
-	public static setKeychainService(s: any) {
+	public static setKeychainService(s: KeychainService) {
 		this.keychainService_ = s;
 	}
 
@@ -681,7 +681,7 @@ class Setting extends BaseModel {
 			return {
 				key,
 				value: await this.keychainService().password(`setting.${key}`),
-			};
+			} as unknown as CacheItem<T>;
 		}
 
 		return null;
