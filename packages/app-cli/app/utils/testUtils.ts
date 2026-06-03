@@ -9,7 +9,16 @@ type OnStdout = (text: string)=> void;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 export const setupCommandForTesting = (CommandClass: any, stdout: OnStdout|null = null): BaseCommand => {
 	const command = new CommandClass();
-	setupCommand(command, stdout, null, null);
+	setupCommand(
+		command,
+		stdout,
+		() => null,
+		() => ({
+			prompt: () => {
+				throw new Error('Not implemented: prompt');
+			},
+		}),
+	);
 	return command;
 };
 
