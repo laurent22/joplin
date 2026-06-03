@@ -191,7 +191,7 @@ export function menuItems(dispatch: Dispatch): ContextMenuItems {
 				});
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
-				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && !!options.resourceId);
 			},
 		},
 		copyOcrText: {
@@ -208,7 +208,7 @@ export function menuItems(dispatch: Dispatch): ContextMenuItems {
 				}
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
-				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && !!options.resourceId);
 			},
 		},
 		createAccessibleDocument: {
@@ -218,7 +218,7 @@ export function menuItems(dispatch: Dispatch): ContextMenuItems {
 				await CommandService.instance().execute('createAccessibleDocument', resource.id);
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
-				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && !!options.resourceId);
 			},
 		},
 		separator3: makeSeparator(),

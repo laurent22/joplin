@@ -17,8 +17,7 @@ interface Props {
 	visible: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- DialogState.promptOptions.buttons is `unknown[]`; matching the looser upstream type avoids casts at every call site
 	buttons: any[];
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onClose: Function;
+	onClose: (answer: unknown, buttonType: string)=> void;
 	inputType: string;
 	description: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mirrors defaultValue — same heterogeneous shape

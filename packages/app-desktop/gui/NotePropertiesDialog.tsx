@@ -15,8 +15,7 @@ const formatcoords = require('formatcoords');
 interface Props {
 	noteId: string;
 	onClose: ()=> void;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onRevisionLinkClick: Function;
+	onRevisionLinkClick: ()=> void;
 	themeId: number;
 }
 

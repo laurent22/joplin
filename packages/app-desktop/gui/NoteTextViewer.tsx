@@ -11,10 +11,8 @@ import getAssetPath from '../utils/getAssetPath';
 import { toForwardSlashes } from '@joplin/utils/path';
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onDomReady: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onIpcMessage: Function;
+	onDomReady: (event: Event)=> void;
+	onIpcMessage: (event: { channel?: string; args?: unknown[] })=> void;
 	viewerStyle: React.CSSProperties;
 	contentMaxWidth?: number;
 	themeId: number;
@@ -177,7 +175,8 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 
 	const webview_ipcMessageRef = useRef<EventListener>(null);
 	webview_ipcMessageRef.current = (event: Event) => {
-		if (props.onIpcMessage) props.onIpcMessage(event);
+		// The webview 'ipc-message' event carries channel/args, though it is statically typed as a bare Event here.
+		if (props.onIpcMessage) props.onIpcMessage(event as unknown as { channel?: string; args?: unknown[] });
 	};
 
 	const webview_loadRef = useRef<EventListener>(null);
