@@ -423,8 +423,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		return this.styles_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private renderNotificationMessage(message: string, callForAction: string = null, callForActionHandler: Function = null, callForAction2: string = null, callForActionHandler2: Function = null) {
+	private renderNotificationMessage(message: string, callForAction: string = null, callForActionHandler: ()=> void = null, callForAction2: string = null, callForActionHandler2: ()=> void = null) {
 		const theme = themeStyle(this.props.themeId);
 		const urlStyle: React.CSSProperties = { color: theme.colorWarnUrl, textDecoration: 'underline' };
 

@@ -66,8 +66,7 @@ function getPluginCommandNames(plugins: PluginStates): string[] {
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemClick: Function) {
+function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemClick: (commandName: string)=> void) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 	const output: any = {
 		label: label,
