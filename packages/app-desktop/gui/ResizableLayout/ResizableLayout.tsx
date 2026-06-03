@@ -24,13 +24,20 @@ interface ResizedItem {
 	maxSize: Size;
 }
 
+export interface RenderItemEvent {
+	eventEmitter: EventEmitter;
+	visible: boolean;
+	size: Size;
+	item: LayoutItem;
+}
+
 interface Props {
 	layout: LayoutItem;
 	layoutKeyToLabel: (key: string)=> string;
 	onResize(event: OnResizeEvent): void;
 	width?: number;
 	height?: number;
-	renderItem: (key: string, event: { eventEmitter: EventEmitter; visible: boolean; size: Size; item: LayoutItem })=> React.ReactNode;
+	renderItem: (key: string, event: RenderItemEvent)=> React.ReactNode;
 	onMoveButtonClick(event: MoveButtonClickEvent): void;
 	moveMode: boolean;
 	moveModeMessage: string;

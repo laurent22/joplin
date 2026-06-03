@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { Dispatch } from 'redux';
-import ResizableLayout from './ResizableLayout/ResizableLayout';
+import ResizableLayout, { RenderItemEvent } from './ResizableLayout/ResizableLayout';
 import findItemByKey from './ResizableLayout/utils/findItemByKey';
 import { MoveButtonClickEvent } from './ResizableLayout/MoveButtons';
 import { move } from './ResizableLayout/utils/movements';
-import { LayoutItem, Size } from './ResizableLayout/utils/types';
-import { EventEmitter } from 'events';
+import { LayoutItem } from './ResizableLayout/utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import Sidebar from './Sidebar/Sidebar';
@@ -633,7 +632,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.updateMainLayout(newLayout);
 	}
 
-	private resizableLayout_renderItem(key: string, event: { eventEmitter: EventEmitter; visible: boolean; size: Size; item: LayoutItem }): React.ReactNode {
+	private resizableLayout_renderItem(key: string, event: RenderItemEvent): React.ReactNode {
 		// Key should never be undefined but somehow it can happen, also not
 		// clear how. For now in this case render nothing so that the app
 		// doesn't crash.

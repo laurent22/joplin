@@ -4,6 +4,7 @@ import BaseService from './BaseService';
 import shim from '../shim';
 import WhenClause from './WhenClause';
 import type { WhenClauseContext, WhenClauseContextOptions } from './commands/stateToWhenClauseContext';
+import { Dispatch } from 'redux';
 
 type LabelFunction = ()=> string;
 type EnabledCondition = string;
@@ -14,8 +15,7 @@ export type MenuItemRole = 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAn
 export interface CommandContext {
 	// The state may also be of type "AppState" (used by the desktop app), which inherits from "State" (used by all apps)
 	state: State;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Used as a variance escape hatch: desktop runtimes type dispatch more strictly but lib's CommandRuntime is the supertype
-	dispatch: Function;
+	dispatch: Dispatch;
 }
 
 export interface CommandRuntime {
@@ -294,7 +294,7 @@ export default class CommandService extends BaseService {
 		return {
 			state: this.store_.getState(),
 			dispatch: (action: unknown) => {
-				this.store_.dispatch(action);
+				return this.store_.dispatch(action);
 			},
 		};
 	}
