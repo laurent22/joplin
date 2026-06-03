@@ -10,9 +10,14 @@ import { _ } from '@joplin/lib/locale';
 import getAssetPath from '../utils/getAssetPath';
 import { toForwardSlashes } from '@joplin/utils/path';
 
+interface IpcMessageEvent {
+	channel?: string;
+	args?: unknown[];
+}
+
 interface Props {
 	onDomReady: (event: Event)=> void;
-	onIpcMessage: (event: { channel?: string; args?: unknown[] })=> void;
+	onIpcMessage: (event: IpcMessageEvent)=> void;
 	viewerStyle: React.CSSProperties;
 	contentMaxWidth?: number;
 	themeId: number;
@@ -176,7 +181,7 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 	const webview_ipcMessageRef = useRef<EventListener>(null);
 	webview_ipcMessageRef.current = (event: Event) => {
 		// The webview 'ipc-message' event carries channel/args, though it is statically typed as a bare Event here.
-		if (props.onIpcMessage) props.onIpcMessage(event as unknown as { channel?: string; args?: unknown[] });
+		if (props.onIpcMessage) props.onIpcMessage(event as IpcMessageEvent);
 	};
 
 	const webview_loadRef = useRef<EventListener>(null);
