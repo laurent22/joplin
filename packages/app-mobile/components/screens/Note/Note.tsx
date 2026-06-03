@@ -6,6 +6,7 @@ import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../../utils/checkPermissions';
 import NoteEditor from '../../NoteEditor/NoteEditor';
+import { EditorControl } from '../../NoteEditor/types';
 import * as React from 'react';
 import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
@@ -174,8 +175,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private saveActionQueues_: Record<string, AsyncActionQueue>;
 	private doFocusUpdate_: boolean;
 	private styles_: Record<string, ReturnType<typeof StyleSheet.create>>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- editorRef can be a Markdown, RichText, or NoteBody viewer; each exposes a different command surface. Typing as the union would force narrowing at every call site.
-	private editorRef: any;
+	private editorRef: RefObject<EditorControl>;
 	private titleTextFieldRef: RefObject<TextInput>;
 	private navHandler: OnNavigateCallback;
 	private backHandler: ()=> Promise<boolean>;
