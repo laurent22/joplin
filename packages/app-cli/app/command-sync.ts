@@ -24,8 +24,7 @@ const logger = Logger.create('command-sync');
 class Command extends BaseCommand {
 
 	private syncTargetId_: number = null;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private releaseLockFn_: Function = null;
+	private releaseLockFn_: ()=> void = null;
 	private oneDriveApiUtils_: OneDriveApiNodeUtils | null = null;
 
 	public usage() {
