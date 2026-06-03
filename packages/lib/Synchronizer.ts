@@ -93,7 +93,7 @@ export default class Synchronizer {
 	private onProgress_: (report: ProgressReport)=> void;
 	private progressReport_: ProgressReport = { errors: [] };
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Lib boundary uses Function for compatibility with redux Dispatch<AnyAction> consumed by callers
+	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code from before rule was applied
 	public dispatch: Function;
 
 	public constructor(db: JoplinDatabase, api: FileApi, appType: AppType) {
