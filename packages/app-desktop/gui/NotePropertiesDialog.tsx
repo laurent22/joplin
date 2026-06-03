@@ -256,8 +256,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	public async saveProperty() {
 		if (!this.state.editedKey) return null;
 
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		return new Promise((resolve: Function) => {
+		return new Promise<void>((resolve) => {
 			const newFormNote = { ...this.state.formNote };
 
 			(newFormNote as unknown as Record<string, unknown>)[this.state.editedKey] = this.state.editedValue;
@@ -276,8 +275,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	}
 
 	public async cancelProperty() {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		return new Promise((resolve: Function) => {
+		return new Promise<void>((resolve) => {
 			if (this.okButton.current) focus('NotePropertiesDialog::focus', this.okButton.current);
 			this.setState({
 				editedKey: null,
