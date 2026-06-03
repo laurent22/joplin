@@ -2,7 +2,7 @@ export type OnNavigateCallback = ()=> Promise<boolean>;
 
 export default class NavService {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Set by each app to its redux dispatch; defaults to a no-op and per-app action types diverge, so it is typed loosely here (see BaseModel.dispatch)
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Set by each app to its redux dispatch; defaults to a no-op and per-app action types diverge, so it is typed loosely here (see BaseModel.dispatch)
 	public static dispatch: Function = () => {};
 	private static handlers_: OnNavigateCallback[] = [];
 

@@ -948,8 +948,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	// Set the initial content and load the plugin CSS and JS files
 	// -----------------------------------------------------------------------------------------
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
-	const loadDocumentAssets = (themeId: number, editor: any, pluginAssets: any[]) => {
+	const loadDocumentAssets = (themeId: number, editor: Editor, pluginAssets: RenderResultPluginAsset[]) => {
 		const theme = themeStyle(themeId);
 
 		let docHead_: HTMLHeadElement = null;
@@ -975,15 +974,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
-				.filter((a: any) => a.mime === 'text/css')
+				.filter(a => a.mime === 'text/css')
 				.map(assetToUrl),
 		);
 
 		const allJsFiles = [].concat(
 			pluginAssets
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
-				.filter((a: any) => a.mime === 'application/javascript')
+				.filter(a => a.mime === 'application/javascript')
 				.map(assetToUrl),
 		);
 

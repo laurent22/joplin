@@ -16,6 +16,8 @@ Modules/TinyMCE/JoplinLists/
 Modules/TinyMCE/langs/
 node_modules/
 packages/doc-builder/
+packages/react-native-saf-x/lib/
+packages/react-native-saf-x/.env
 packages/app-cli/build
 packages/app-cli/build/
 packages/app-cli/locales
@@ -57,6 +59,7 @@ packages/app-mobile/packageInfo.js
 packages/app-mobile/android
 packages/app-mobile/**/*.bundle.js
 packages/app-mobile/**/*.bundle.css
+packages/app-desktop/**/*.bundle.js
 packages/app-mobile/web/public/pluginAssets/**/*
 packages/app-mobile/ios
 packages/app-mobile/lib/rnInjectedJs/

@@ -235,11 +235,9 @@ export class Bridge {
 			if (registered) {
 				this.registeredGlobalHotkey_ = accelerator;
 			} else {
-				// eslint-disable-next-line no-console
 				console.warn(`Bridge: Failed to register global shortcut: ${accelerator}`);
 			}
 		} catch (error) {
-			// eslint-disable-next-line no-console
 			console.error(`Bridge: Error registering global shortcut "${accelerator}":`, error);
 		}
 	}
@@ -249,7 +247,7 @@ export class Bridge {
 			try {
 				globalShortcut.unregister(this.registeredGlobalHotkey_);
 			} catch (error) {
-				// eslint-disable-next-line no-console
+
 				console.warn('Bridge: Error removing global shortcut:', error);
 			}
 			this.registeredGlobalHotkey_ = '';

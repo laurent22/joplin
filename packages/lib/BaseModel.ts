@@ -107,7 +107,7 @@ class BaseModel {
 	public static TYPE_SMART_FILTER = ModelType.SmartFilter;
 	public static TYPE_COMMAND = ModelType.Command;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Set by the app to redux dispatch; per-app action types diverge so the function is typed loosely here
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Set by the app to redux dispatch; per-app action types diverge so the function is typed loosely here
 	public static dispatch: Function = function() {};
 	private static saveMutexes_: Record<string, { acquire: ()=> Promise<()=> void> }> = {};
 

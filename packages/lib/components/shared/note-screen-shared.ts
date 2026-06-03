@@ -12,13 +12,13 @@ import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import BaseItem from '../../models/BaseItem';
 
-interface SharedResource {
+export interface SharedResource {
 	uri: string;
 	mimeType: string;
 	name: string;
 }
 
-interface SharedData {
+export interface SharedData {
 	title: string;
 	text: string;
 	resources: SharedResource[];

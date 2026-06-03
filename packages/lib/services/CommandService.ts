@@ -120,10 +120,10 @@ export default class CommandService extends BaseService {
 	private commands_: Commands = {};
 	private store_: ReduxStore;
 	private devMode_: boolean;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Concrete state-to-context function is parametrised over per-app state (AppState in desktop/mobile, State in cli); typing too narrowly here breaks derived classes
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Concrete state-to-context function is parametrised over per-app state (AppState in desktop/mobile, State in cli); typing too narrowly here breaks derived classes
 	private stateToWhenClauseContext_: Function;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- See stateToWhenClauseContext_
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- See stateToWhenClauseContext_
 	public initialize(store: ReduxStore, devMode: boolean, stateToWhenClauseContext: Function) {
 		utils.store = store;
 		this.store_ = store;

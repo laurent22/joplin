@@ -62,7 +62,7 @@ export default class PluginManager {
 	private logger_: Logger = new Logger();
 	private static instance_: PluginManager | null = null;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- legacy callers assign arbitrary dispatch functions
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- legacy callers assign arbitrary dispatch functions
 	public dispatch_: Function;
 
 	public setLogger(l: Logger) {
