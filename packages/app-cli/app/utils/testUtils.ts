@@ -4,8 +4,10 @@ import BaseCommand from '../base-command';
 import setupCommand from '../setupCommand';
 import Setting from '@joplin/lib/models/Setting';
 
+type OnStdout = (text: string)=> void;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const setupCommandForTesting = (CommandClass: any, stdout: (text: string)=> void = null): BaseCommand => {
+export const setupCommandForTesting = (CommandClass: any, stdout: OnStdout|null = null): BaseCommand => {
 	const command = new CommandClass();
 	setupCommand(command, stdout, null, null);
 	return command;

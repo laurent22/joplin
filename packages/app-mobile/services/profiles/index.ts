@@ -7,7 +7,7 @@ import { loadProfileConfig as libLoadProfileConfig, saveProfileConfig as libSave
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 
-let dispatch_: Dispatch = null;
+let dispatch_: Dispatch|null = null;
 export const setDispatch = (dispatch: Dispatch) => {
 	dispatch_ = dispatch;
 };
