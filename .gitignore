@@ -1264,9 +1264,6 @@ packages/generator-joplin/generators/app/templates/api/index.js
 packages/generator-joplin/generators/app/templates/api/noteListType.js
 packages/generator-joplin/generators/app/templates/api/types.js
 packages/generator-joplin/generators/app/templates/api_index.js
-packages/generator-joplin/generators/app/templates/script/publish/index.js
-packages/generator-joplin/generators/app/templates/script/publish/steps/authenticate.js
-packages/generator-joplin/generators/app/templates/script/publish/steps/submitPayload.js
 packages/generator-joplin/generators/app/templates/script/publish/steps/verifyBuild.js
 packages/generator-joplin/generators/app/templates/script/publish/steps/verifyGitState.js
 packages/generator-joplin/generators/app/templates/script/publish/utils/errors.js
