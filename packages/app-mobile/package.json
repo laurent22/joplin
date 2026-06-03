@@ -133,7 +133,7 @@
     "jsdom": "26.1.0",
     "nodemon": "3.1.14",
     "punycode": "2.3.1",
-    "react-dom": "19.1.4",
+    "react-dom": "19.2.4",
     "react-native-web": "0.21.2",
     "react-refresh": "0.18.0",
     "react-test-renderer": "19.1.4",
