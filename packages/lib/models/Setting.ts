@@ -681,6 +681,8 @@ class Setting extends BaseModel {
 			return {
 				key,
 				value: await this.keychainService().password(`setting.${key}`),
+				// TODO: KeychainService currently only supports string-valued settings
+				// For now, cast to preserve existing behavior:
 			} as CacheItem<unknown> as CacheItem<T>;
 		}
 
