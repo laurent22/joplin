@@ -40,12 +40,26 @@ const { Dirnames } = require('./services/synchronizer/utils/types');
 
 const logger = Logger.create('Synchronizer');
 
-interface ProgressReport {
+export interface ProgressReport {
 	errors: (Error | string)[];
 	state?: string;
 	startTime?: number;
 	completedTime?: number;
 	[counterKey: string]: unknown;
+}
+
+// The delta-sync cursor. Its shape is sync-target-specific, so it is treated
+// opaquely here and round-tripped through JSON by callers.
+export interface SyncContext {
+	delta?: unknown;
+}
+
+export interface SyncStartOptions {
+	onProgress?: (report: ProgressReport)=> void;
+	context?: SyncContext;
+	syncSteps?: string[];
+	throwOnError?: boolean;
+	saveContextHandler?: (newContext: SyncContext)=> void;
 }
 
 function isCannotSyncError(error: { code?: string; type?: string; message?: string } | null): boolean {
@@ -386,8 +400,7 @@ export default class Synchronizer {
 	// 1. UPLOAD: Send to the sync target the items that have changed since the last sync.
 	// 2. DELETE_REMOTE: Delete on the sync target, the items that have been deleted locally.
 	// 3. DELTA: Find on the sync target the items that have been modified or deleted and apply the changes locally.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Caller-provided sync options bag (onProgress, context, syncSteps, throwOnError, saveContextHandler); widening would require touching every Synchronizer.start call site
-	public async start(options: any = null) {
+	public async start(options: SyncStartOptions = null) {
 		if (!options) options = {};
 
 		if (this.state() !== 'idle') {

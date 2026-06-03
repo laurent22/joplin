@@ -20,10 +20,25 @@ export enum LogLevel {
 
 type FormatFunction = (level: LogLevel, targetPrefix?: string)=> string;
 
+export interface LogEntry {
+	id: number;
+	source: string;
+	level: LogLevel;
+	message: string;
+	timestamp: number;
+}
+
+// Minimal structural view of the DB driver that Logger uses. The full Database
+// type lives in @joplin/lib, which depends on this package, so it cannot be
+// imported here.
+interface LoggerDatabase {
+	selectAll<T>(sql: string, params?: unknown[]): Promise<T[]>;
+	transactionExecBatch(queries: unknown[]): Promise<void>;
+}
+
 interface TargetOptions {
 	level?: LogLevel;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- DB driver: typing it tightly leaks through lastEntries() to all callers reading row fields via `any`-driven access. Refactoring those callers is out of scope.
-	database?: any;
+	database?: LoggerDatabase;
 	console?: Console;
 	prefix?: string;
 	path?: string;
@@ -224,14 +239,14 @@ class Logger {
 	}
 
 	// Only for database at the moment
-	public async lastEntries(limit = 100, options: LastEntriesOptions|null = null) {
+	public async lastEntries(limit = 100, options: LastEntriesOptions|null = null): Promise<LogEntry[]> {
 		if (options === null) options = {};
 		if (!options.levels) options.levels = [LogLevel.Debug, LogLevel.Info, LogLevel.Warn, LogLevel.Error];
 		if (!options.levels.length) return [];
 
 		for (let i = 0; i < this.targets_.length; i++) {
 			const target = this.targets_[i];
-			if (target.type === 'database') {
+			if (target.type === 'database' && target.database) {
 				const sql = [`SELECT * FROM logs WHERE level IN (${options.levels.join(',')})`];
 				const sqlParams = [];
 
@@ -246,7 +261,7 @@ class Logger {
 					sqlParams.push(limit);
 				}
 
-				return await target.database.selectAll(sql.join(' '), sqlParams);
+				return await target.database.selectAll<LogEntry>(sql.join(' '), sqlParams);
 			}
 		}
 		return [];
@@ -326,7 +341,7 @@ class Logger {
 				}).finally(() => {
 					if (release) release();
 				});
-			} else if (target.type === 'database') {
+			} else if (target.type === 'database' && target.database) {
 				const msg = [];
 				if (targetPrefix) msg.push(targetPrefix);
 				msg.push(this.objectsToString(...object));
@@ -348,7 +363,7 @@ class Logger {
 					});
 				}
 
-				target.database.transactionExecBatch(queries);
+				void target.database.transactionExecBatch(queries);
 			}
 		}
 	}

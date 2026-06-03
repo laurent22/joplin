@@ -3,7 +3,7 @@ import Setting from '@joplin/lib/models/Setting';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import MigrationHandler from '@joplin/lib/services/synchronizer/MigrationHandler';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-import Synchronizer from '@joplin/lib/Synchronizer';
+import Synchronizer, { SyncStartOptions } from '@joplin/lib/Synchronizer';
 import { masterKeysWithoutPassword } from '@joplin/lib/services/e2ee/utils';
 import { appTypeToLockType } from '@joplin/lib/services/synchronizer/LockHandler';
 import BaseCommand from './base-command';
@@ -182,16 +182,10 @@ class Command extends BaseCommand {
 
 			const sync = await syncTarget.synchronizer();
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Synchronizer.start accepts `any` options; tightening here would diverge from lib
-			const options: any = {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Synchronizer.reportToLines takes `any` (lib)
-				onProgress: (report: any) => {
+			const options: SyncStartOptions = {
+				onProgress: (report) => {
 					const lines = Synchronizer.reportToLines(report);
 					if (lines.length) cliUtils.redraw(lines.join(' '));
-				},
-				onMessage: (msg: string) => {
-					cliUtils.redrawDone();
-					this.stdout(msg);
 				},
 			};
 
