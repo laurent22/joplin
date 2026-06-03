@@ -34,20 +34,15 @@ function historyCanGoBackTo(route: Route) {
 	return true;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-function removeAdjacentNoteDuplicates(items: any[]) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-	return items.filter((item: any, idx: number) => (idx >= 1) ? !(item.routeName === 'Note' && items[idx - 1].routeName === 'Note' && items[idx - 1].noteId === item.noteId) : true);
+function removeAdjacentNoteDuplicates(items: Route[]) {
+	return items.filter((item, idx) => (idx >= 1) ? !(item.routeName === 'Note' && items[idx - 1].routeName === 'Note' && items[idx - 1].noteId === item.noteId) : true);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-function removeAdjacentFolderDuplicates(items: any[]) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-	return items.filter((item: any, idx: number) => (idx >= 1) ? !(item.routeName === 'Notes' && items[idx - 1].routeName === 'Notes' && items[idx - 1].folderId === item.folderId) : true);
+function removeAdjacentFolderDuplicates(items: Route[]) {
+	return items.filter((item, idx) => (idx >= 1) ? !(item.routeName === 'Notes' && items[idx - 1].routeName === 'Notes' && items[idx - 1].folderId === item.folderId) : true);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-function removeLatestFolderIfSelected(items: any[], route: any) {
+function removeLatestFolderIfSelected(items: Route[], route: Route) {
 	if (items.length && route.routeName === 'Notes' && items[items.length - 1].folderId === route.folderId) {
 		items.splice(items.length - 1, 1);
 	}
