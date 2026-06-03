@@ -28,6 +28,7 @@ import changeEmailNotificationTemplate from '../views/emails/changeEmailNotifica
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
 import { validateEmail } from '../utils/validation';
+import { EmailSubjectBody } from './EmailModel';
 import { Config, Env, LdapConfig } from '../utils/types';
 import { DbConnection } from '../db';
 import { NewModelFactoryHandler } from './factory';
@@ -472,13 +473,12 @@ export default class UserModel extends BaseModel<User> {
 		await this.save({ id: user.id, email_confirmed: 1 });
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public async processEmailConfirmation(userId: Uuid, token: string, beforeChangingEmailHandler: Function) {
+	public async processEmailConfirmation(userId: Uuid, token: string, beforeChangingEmailHandler: (newEmail: string)=> Promise<void>) {
 		await this.models().token().checkToken(userId, token);
 		const user = await this.models().user().load(userId);
 		if (!user) throw new ErrorNotFound('No such user');
 
-		const newEmail = await this.models().keyValue().value(`newEmail::${userId}`);
+		const newEmail = await this.models().keyValue().value<string>(`newEmail::${userId}`);
 		if (newEmail) {
 			await beforeChangingEmailHandler(newEmail);
 			await this.completeEmailChange(user);
@@ -633,8 +633,7 @@ export default class UserModel extends BaseModel<User> {
 	public async handleFailedPaymentSubscriptions() {
 		interface SubInfo {
 			subs: Subscription[];
-			// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-			templateFn: Function;
+			templateFn: ()=> EmailSubjectBody;
 			emailKeyPrefix: string;
 			flagType: UserFlagType;
 		}
