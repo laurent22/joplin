@@ -1789,6 +1789,7 @@ packages/lib/services/synchronizer/ItemUploader.test.js
 packages/lib/services/synchronizer/ItemUploader.js
 packages/lib/services/synchronizer/LockHandler.js
 packages/lib/services/synchronizer/MigrationHandler.js
+packages/lib/services/synchronizer/Synchronizer.baseFields.test.js
 packages/lib/services/synchronizer/Synchronizer.basics.test.js
 packages/lib/services/synchronizer/Synchronizer.conflicts.test.js
 packages/lib/services/synchronizer/Synchronizer.e2ee.test.js
