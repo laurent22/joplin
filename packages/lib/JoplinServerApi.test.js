@@ -6,7 +6,7 @@ describe('JoplinServerApi', () => {
     afterEach(() => {
         jest.restoreAllMocks();
     });
-    test('should pass ignoreTlsErrors to uploadBlob requests', async (_url, options) => {
+    test('should pass ignoreTlsErrors to uploadBlob requests', async () => {
         const uploadBlobSpy = jest.spyOn(shim_1.default, 'uploadBlob').mockImplementation(async (_url, options) => {
             return {
                 ok: true,
