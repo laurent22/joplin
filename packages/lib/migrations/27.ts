@@ -1,10 +1,14 @@
-const Setting = require('../models/Setting').default;
+import Setting from '../models/Setting';
 
-const script = {};
+interface Script {
+	exec: ()=> Promise<void>;
+}
 
-script.exec = async function() {
+const script: Script = <Script>{};
+
+script.exec = async () => {
 	Setting.setValue('markdown.plugin.softbreaks', Setting.value('markdown.softbreaks'));
 	Setting.setValue('markdown.plugin.typographer', Setting.value('markdown.typographer'));
 };
 
-module.exports = script;
+export default script;

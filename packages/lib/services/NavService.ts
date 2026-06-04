@@ -2,7 +2,7 @@ export type OnNavigateCallback = ()=> Promise<boolean>;
 
 export default class NavService {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	public static dispatch: Function = () => {};
 	private static handlers_: OnNavigateCallback[] = [];
 
@@ -20,7 +20,6 @@ export default class NavService {
 		return false;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public static addHandler(handler: OnNavigateCallback) {
 		for (let i = this.handlers_.length - 1; i >= 0; i--) {
 			const h = this.handlers_[i];
@@ -30,7 +29,6 @@ export default class NavService {
 		this.handlers_.push(handler);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public static removeHandler(handler: OnNavigateCallback) {
 		for (let i = this.handlers_.length - 1; i >= 0; i--) {
 			const h = this.handlers_[i];

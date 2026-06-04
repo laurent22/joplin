@@ -20,7 +20,7 @@ type OnBodyChange = (event: OnChangeEvent)=> void;
 
 interface HookDependencies {
 	setShowLocalSearch: Dispatch<SetStateAction<boolean>>;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	dispatch: Function;
 	noteSearchBarRef: MutableRefObject<HTMLInputElement | null>;
 	editorRef: RefObject<NoteBodyEditorRef>;

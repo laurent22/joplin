@@ -3,7 +3,7 @@ import { CiphertextBuffer, PublicKeyCrypto } from '../../types';
 // The web crypto API is available in both NodeJS and browsers
 export type WebCryptoSlice = {
 	subtle: Pick<
-	SubtleCrypto,
+		SubtleCrypto,
 		// Restrict to methods that are known to be supported on mobile:
 		'generateKey'|'importKey'|'encrypt'|'decrypt'|'exportKey'
 	>;

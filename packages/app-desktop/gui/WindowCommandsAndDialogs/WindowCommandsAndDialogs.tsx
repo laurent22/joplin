@@ -20,7 +20,7 @@ import useSyncDialogState from './utils/useSyncDialogState';
 import AppDialogs from './AppDialogs';
 import PopupNotificationList from '../PopupNotification/PopupNotificationList';
 
-const PluginManager = require('@joplin/lib/services/PluginManager');
+import PluginManager from '@joplin/lib/services/PluginManager';
 
 interface Props {
 	dispatch: Dispatch;
@@ -29,7 +29,7 @@ interface Props {
 	pluginHtmlContents: PluginHtmlContents;
 	visibleDialogs: VisibleDialogs;
 	appDialogStates: AppStateDialog[];
-	pluginsLegacy: unknown;
+	pluginsLegacy: Record<string, { dialogOpen?: boolean; userData?: unknown }>;
 	modalMessage: string|null;
 
 	customCss: string;
@@ -112,7 +112,8 @@ const WindowCommandsAndDialogs: React.FC<Props> = props => {
 	}, [dialogState.promptOptions]);
 
 	const dialogInfo = PluginManager.instance().pluginDialogToShow(props.pluginsLegacy);
-	const pluginDialog = !dialogInfo ? null : <dialogInfo.Dialog {...dialogInfo.props} />;
+	const Dialog = dialogInfo?.Dialog as React.ComponentType<Record<string, unknown>> | undefined;
+	const pluginDialog = !dialogInfo || !Dialog ? null : <Dialog {...dialogInfo.props} />;
 
 	const {
 		noteContentPropertiesDialogOptions, notePropertiesDialogOptions, shareNoteDialogOptions, shareFolderDialogOptions, promptOptions,

@@ -1,15 +1,20 @@
-const Resource = require('../models/Resource').default;
-const Setting = require('../models/Setting').default;
-const shim = require('../shim').default;
-const { reg } = require('../registry');
-const { fileExtension } = require('../path-utils');
+import Resource from '../models/Resource';
+import Setting from '../models/Setting';
+import shim from '../shim';
+import { reg } from '../registry';
+import { fileExtension } from '../path-utils';
+import { SqlQuery } from '../services/database/types';
 
-const script = {};
+interface Script {
+	exec: ()=> Promise<void>;
+}
 
-script.exec = async function() {
+const script: Script = <Script>{};
+
+script.exec = async () => {
 	const stats = await shim.fsDriver().readDirStats(Setting.value('resourceDir'));
 
-	let queries = [];
+	let queries: SqlQuery[] = [];
 	for (const stat of stats) {
 		if (fileExtension(stat.path) === 'crypted') continue;
 		const resourceId = Resource.pathToId(stat.path);
@@ -26,4 +31,4 @@ script.exec = async function() {
 	await reg.db().transactionExecBatch(queries);
 };
 
-module.exports = script;
+export default script;

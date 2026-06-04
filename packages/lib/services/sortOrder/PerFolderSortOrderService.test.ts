@@ -4,7 +4,7 @@ import Setting from '../../models/Setting';
 import { defaultState, serializeNotesParent, State } from '../../reducer';
 import eventManager from '../../eventManager';
 import { shimInit } from '../../shim-init-node';
-const { ALL_NOTES_FILTER_ID } = require('../../reserved-ids');
+import { ALL_NOTES_FILTER_ID } from '../../reserved-ids';
 
 const folderId1 = 'aa012345678901234567890123456789';
 const folderId2 = 'bb012345678901234567890123456789';

@@ -25,8 +25,7 @@ export enum SettingStorage {
 
 // This is the definition of a setting item
 export interface SettingItem {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Setting values are heterogeneous (string/number/bool/Record/Array); each consumer narrows from this base type
-	value: any;
+	value: unknown;
 	type: SettingItemType;
 	public: boolean;
 

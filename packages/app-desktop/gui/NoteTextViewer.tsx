@@ -11,9 +11,9 @@ import getAssetPath from '../utils/getAssetPath';
 import { toForwardSlashes } from '@joplin/utils/path';
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	onDomReady: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	onIpcMessage: Function;
 	viewerStyle: React.CSSProperties;
 	contentMaxWidth?: number;

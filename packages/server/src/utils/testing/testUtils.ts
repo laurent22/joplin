@@ -520,7 +520,7 @@ export function checkContextError(context: AppContext) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	try {
 		await asyncFn();
@@ -530,7 +530,7 @@ export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	return null;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
 export async function expectThrow(asyncFn: Function, errorCode: any = undefined): Promise<any> {
 	let hasThrown = false;
 	let thrownError = null;
@@ -553,7 +553,7 @@ export async function expectThrow(asyncFn: Function, errorCode: any = undefined)
 	return thrownError;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 export async function expectHttpError(asyncFn: Function, expectedHttpCode: number, expectedErrorCode: string = null): Promise<void> {
 	let thrownError = null;
 
@@ -574,7 +574,7 @@ export async function expectHttpError(asyncFn: Function, expectedHttpCode: numbe
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 export async function expectNoHttpError(asyncFn: Function): Promise<void> {
 	let thrownError = null;
 
@@ -591,7 +591,7 @@ export async function expectNoHttpError(asyncFn: Function): Promise<void> {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 export async function expectNotThrow(asyncFn: Function) {
 	let thrownError = null;
 	try {

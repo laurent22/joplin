@@ -226,9 +226,9 @@ async function saveNoteTags(note: ExtractedNote) {
 }
 
 export interface ImportOptions {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	onProgress?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	onError?: Function;
 	outputFormat?: string;
 	batchSize?: number;

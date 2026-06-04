@@ -35,7 +35,7 @@ export type SchemaToType<Schema extends BaseSchema|StringType> = (
 						? SchemaToType<Schema[key]>
 						: never
 		}
-	);
+);
 
 const deserializeFromSchema = <Schema extends BaseSchema|StringType> (schema: Schema, data: unknown): SchemaToType<Schema> => {
 	const errorContext = () => `(deserializing ${JSON.stringify(data)})`;

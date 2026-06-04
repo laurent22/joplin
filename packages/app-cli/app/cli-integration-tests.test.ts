@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 import Logger, { TargetType } from '@joplin/utils/Logger';
 import { dirname } from '@joplin/lib/path-utils';
-const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
+import { DatabaseDriverNode } from '@joplin/lib/database-driver-node';
 import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import BaseModel from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';

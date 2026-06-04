@@ -75,7 +75,6 @@ type ProcessImageCallback = (data: ProcessImageEvent)=> ProcessImageResult;
 
 class HtmlUtils {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public processImageTags(html: string, callback: ProcessImageCallback) {
 		if (!html) return '';
 
@@ -101,7 +100,7 @@ class HtmlUtils {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	public processAnchorTags(html: string, callback: Function) {
 		if (!html) return '';
 

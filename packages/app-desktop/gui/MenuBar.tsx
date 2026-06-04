@@ -65,7 +65,7 @@ function getPluginCommandNames(plugins: PluginStates): string[] {
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemClick: Function) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 	const output: any = {
@@ -152,7 +152,7 @@ const useNoteListMenuItems = (noteListRendererIds: string[]) => {
 };
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	dispatch: Function;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 	menuItemProps: any;

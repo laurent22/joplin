@@ -22,7 +22,7 @@ import { clipboard } from 'electron';
 interface Props {
 	themeId: number;
 	noteIds: string[];
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Old code before rule was applied
 	onClose: Function;
 	shares: StateShare[];
 	syncTargetId: number;
