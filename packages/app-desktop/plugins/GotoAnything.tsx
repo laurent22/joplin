@@ -23,6 +23,7 @@ import Resource from '@joplin/lib/models/Resource';
 import { FolderEntity, NoteEntity, ResourceEntity, TagEntity } from '@joplin/lib/services/database/types';
 import Dialog from '@joplin/lib/components/Dialog';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
+import { PluginManifest } from '@joplin/lib/services/PluginManager';
 
 const logger = Logger.create('GotoAnything');
 
@@ -135,7 +136,7 @@ class GotoAnything {
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public dispatch: Function;
 	public static Dialog: React.ComponentType<Props>;
-	public static manifest: { name: string; menuItems: { id: string; name?: string; parent?: string; label?: string; accelerator?: ()=> string; screens?: string[]; userData?: { startString?: string } }[] };
+	public static manifest: PluginManifest;
 
 	public onTrigger(event: { userData: GotoAnythingUserData }) {
 		this.dispatch({

@@ -1,7 +1,7 @@
 import InteropService from '../../services/interop/InteropService';
 import { CustomExportContext, CustomImportContext, ExportModuleOutputFormat, ModuleType } from '../../services/interop/types';
 import shim from '../../shim';
-import { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, exportDir, supportDir } from '../../testing/test-utils';
+import { fileContentEqual, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, exportDir, supportDir, withWarningSilenced } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
@@ -13,6 +13,7 @@ import * as ArrayUtils from '../../ArrayUtils';
 import InteropService_Importer_Custom from './InteropService_Importer_Custom';
 import InteropService_Exporter_Custom from './InteropService_Exporter_Custom';
 import Module, { makeExportModule, makeImportModule } from './Module';
+import { JSDOM } from 'jsdom';
 
 async function recreateExportDir() {
 	const dir = exportDir();
@@ -83,13 +84,57 @@ function memoryExportModule() {
 	return { result, module };
 }
 
+const oneNoteSimpleXpsPath = () => `${supportDir}/onenote/simple-xps.one`;
+
 describe('services_InteropService', () => {
+
+	const setupOneNoteDomParser = () => {
+		const jsdom = new JSDOM('<div></div>');
+		InteropService.instance().domParser = new jsdom.window.DOMParser();
+		InteropService.instance().xmlSerializer = new jsdom.window.XMLSerializer();
+	};
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		await recreateExportDir();
 	});
+
+	it('should import OneNote files as a top-level folder when no destination folder is passed', (async () => {
+		setupOneNoteDomParser();
+		const service = InteropService.instance();
+		const oneNoteModule = service.findModuleByFormat(ModuleType.Importer, 'one');
+		expect(oneNoteModule.isNoteArchive).toBe(true);
+
+		await withWarningSilenced(/OneNoteConverter:/, async () => {
+			await service.import({
+				path: oneNoteSimpleXpsPath(),
+				format: 'one',
+			});
+		});
+
+		expect(await Folder.loadByTitleAndParent('simple-xps', '')).toBeTruthy();
+		expect((await Note.all()).some(note => note.title === 'Printout')).toBe(true);
+	}));
+
+	// Covers the command-import.ts behavior by passing destinationFolderId directly
+	it('should import OneNote files as a top-level folder when a destination folder is passed', (async () => {
+		setupOneNoteDomParser();
+		const service = InteropService.instance();
+		const destinationFolder = await Folder.save({ title: 'destination' });
+
+		await withWarningSilenced(/OneNoteConverter:/, async () => {
+			await service.import({
+				path: oneNoteSimpleXpsPath(),
+				format: 'one',
+				destinationFolderId: destinationFolder.id,
+			});
+		});
+
+		expect(await Folder.loadByTitleAndParent('simple-xps', '')).toBeTruthy();
+		expect(await Folder.loadByTitleAndParent('simple-xps', destinationFolder.id)).toBeFalsy();
+		expect((await Note.all()).some(note => note.title === 'Printout')).toBe(true);
+	}));
 
 	it('should export and import folders', (async () => {
 		const service = InteropService.instance();

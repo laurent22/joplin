@@ -8,7 +8,7 @@ import { masterKeysWithoutPassword } from '@joplin/lib/services/e2ee/utils';
 import { appTypeToLockType } from '@joplin/lib/services/synchronizer/LockHandler';
 import BaseCommand from './base-command';
 import app from './app';
-const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
+import { OneDriveApiNodeUtils } from '@joplin/lib/onedrive-api-node-utils';
 import { reg } from '@joplin/lib/registry';
 const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
@@ -26,8 +26,7 @@ class Command extends BaseCommand {
 	private syncTargetId_: number = null;
 	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	private releaseLockFn_: Function = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- OneDriveApiNodeUtils is a plain JS module with no type declarations
-	private oneDriveApiUtils_: any = null;
+	private oneDriveApiUtils_: OneDriveApiNodeUtils | null = null;
 
 	public usage() {
 		return 'sync';

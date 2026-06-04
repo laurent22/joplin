@@ -6,7 +6,7 @@ import bridge from '../services/bridge';
 
 import { connect } from 'react-redux';
 import { themeStyle } from '@joplin/lib/theme';
-const Shared = require('@joplin/lib/components/shared/dropbox-login-shared');
+import Shared from '@joplin/lib/components/shared/dropbox-login-shared';
 
 interface Props {
 	themeId: number;
@@ -22,8 +22,7 @@ interface State {
 
 class DropboxLoginScreenComponent extends React.Component<Props, State> {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Shared helper from a JS module (dropbox-login-shared) with no exported type
-	private shared_: any;
+	private shared_: Shared<DropboxLoginScreenComponent>;
 
 	public constructor(props: Props) {
 		super(props);
@@ -32,7 +31,7 @@ class DropboxLoginScreenComponent extends React.Component<Props, State> {
 	}
 
 	public UNSAFE_componentWillMount() {
-		this.shared_.refreshUrl();
+		void this.shared_.refreshUrl();
 	}
 
 	public render() {
