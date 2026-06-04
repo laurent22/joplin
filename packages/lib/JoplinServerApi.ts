@@ -18,6 +18,7 @@ interface Options {
 	password(): string;
 	apiKey(): string;
 	session(): Session | null;
+	ignoreTlsErrors?(): boolean;
 	env?: Env;
 }
 
@@ -178,8 +179,9 @@ export default class JoplinServerApi {
 		headers['X-API-MIN-VERSION'] = '2.6.0'; // Need server 2.6 for new lock support
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See exec_.body above
-		const fetchOptions: { headers: Record<string, string>; method: string; path?: string; body?: any } = { headers, method };
+		const fetchOptions: { headers: Record<string, string>; method: string; path?: string; body?: any; ignoreTlsErrors?: boolean } = { headers, method };
 		if (options.path) fetchOptions.path = options.path;
+		fetchOptions.ignoreTlsErrors = this.options_.ignoreTlsErrors ? this.options_.ignoreTlsErrors() : false;
 
 		if (body) {
 			if (typeof body === 'object') {

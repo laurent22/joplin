@@ -14,6 +14,7 @@ export async function newFileApi(id: number, options: FileApiOptions) {
 		password: () => '',
 		apiKey: () => Setting.value('sync.11.apiKey'),
 		session: () => ({ id: Setting.value('sync.11.id'), user_id: Setting.value('sync.11.userId') }),
+		ignoreTlsErrors: () => options.ignoreTlsErrors(),
 		env: Setting.value('env'),
 	};
 
@@ -130,6 +131,7 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 			username: () => '',
 			password: () => '',
 			apiKey: () => Setting.value('sync.11.apiKey'),
+			ignoreTlsErrors: () => Setting.value('net.ignoreTlsErrors'),
 		};
 		return initFileApi(SyncTargetJoplinServerSAML.id(), this.logger(), this.lastFileApiOptions_);
 	}

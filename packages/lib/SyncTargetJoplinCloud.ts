@@ -11,6 +11,7 @@ interface FileApiOptions {
 	username(): string;
 	password(): string;
 	apiKey(): string;
+	ignoreTlsErrors(): boolean;
 }
 
 export default class SyncTargetJoplinCloud extends BaseSyncTarget {
@@ -91,6 +92,7 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 			username: () => Setting.value('sync.10.username'),
 			password: () => Setting.value('sync.10.password'),
 			apiKey: () => Setting.value('sync.10.apiKey'),
+			ignoreTlsErrors: () => Setting.value('net.ignoreTlsErrors'),
 		});
 	}
 

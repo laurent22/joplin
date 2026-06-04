@@ -15,6 +15,7 @@ export interface FileApiOptions {
 	username(): string;
 	password(): string;
 	apiKey(): string;
+	ignoreTlsErrors(): boolean;
 }
 
 export async function newFileApi(id: number, options: FileApiOptions) {
@@ -25,6 +26,7 @@ export async function newFileApi(id: number, options: FileApiOptions) {
 		password: () => options.password(),
 		apiKey: () => options.apiKey(),
 		session: (): Session => null,
+		ignoreTlsErrors: () => options.ignoreTlsErrors(),
 		env: Setting.value('env'),
 	};
 
@@ -151,6 +153,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 			username: () => Setting.value('sync.9.username'),
 			password: () => Setting.value('sync.9.password'),
 			apiKey: () => Setting.value('sync.9.apiKey'),
+			ignoreTlsErrors: () => Setting.value('net.ignoreTlsErrors'),
 		});
 	}
 
