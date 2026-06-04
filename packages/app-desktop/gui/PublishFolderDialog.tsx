@@ -11,7 +11,7 @@ import { ShareType, StateShare } from '@joplin/lib/services/share/reducer';
 import { connect } from 'react-redux';
 import { AppState } from '../app.reducer';
 import useEncryptionWarningMessage from '@joplin/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage';
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 
 interface Props {
 	themeId: number;

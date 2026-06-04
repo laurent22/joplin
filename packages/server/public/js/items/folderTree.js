@@ -19,7 +19,7 @@
 
 		let treeData;
 		try {
-			treeData = JSON.parse(dataEl.textContent || '{}');
+			treeData = JSON.parse(dataEl.content.textContent || '{}');
 		} catch (error) {
 			return;
 		}

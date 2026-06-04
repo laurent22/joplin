@@ -25,7 +25,7 @@
 	<aside id="folder-tree-sidebar" class="published-folder-sidebar" aria-label="Notebook navigation">
 		<p class="sidebar-title">{{folderTree.rootTitle}}</p>
 		<div id="folder-tree" class="folder-tree"></div>
-		<script id="folder-tree-data" type="application/json">{{{folderTree.treeDataJson}}}</script>
+		<template id="folder-tree-data">{{folderTree.treeDataJson}}</template>
 	</aside>
 	{{/showFolderTree}}
 

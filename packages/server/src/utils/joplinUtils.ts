@@ -350,7 +350,7 @@ async function buildFolderTree(share: Share, folderId: string, activeNoteId = ''
 
 	return {
 		rootTitle: rootFolder.title || '',
-		treeDataJson: JSON.stringify({ activeKey, source }).replace(/<\//g, '<\\/'),
+		treeDataJson: JSON.stringify({ activeKey, source }),
 		allowedNoteIds,
 	};
 }
