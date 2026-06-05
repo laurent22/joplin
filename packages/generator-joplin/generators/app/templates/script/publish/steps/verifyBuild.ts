@@ -2,9 +2,20 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { execSync } from 'child_process';
 import * as semver from 'semver';
-const { Input } = require('enquirer');
+const { input } = require('@inquirer/prompts');
 import { FatalError } from '../utils/errors';
 import logger from '../utils/logger';
+
+const DIST_COMMAND = 'npm run dist';
+
+interface Manifest {
+	version?: string;
+	repository_url?: string;
+}
+
+interface PackageJson {
+	name?: string;
+}
 
 export interface PluginMetadata {
 	name: string;
@@ -16,7 +27,7 @@ export interface PluginMetadata {
 // a local build to ensure the plugin compiles cleanly before proceeding.
 export async function verifyBuild(): Promise<PluginMetadata> {
 	const metadata = await validateMetadata();
-	await build();
+	build();
 
 	return metadata;
 }
@@ -37,11 +48,11 @@ async function validateMetadata(): Promise<PluginMetadata> {
 	}
 
 	// Extract the meta-data : `Version`, `name` and `repository_url`
-	let manifest;
-	let packageJson;
+	let manifest: Manifest;
+	let packageJson: PackageJson;
 	try {
-		manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-		packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+		manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8')) as Manifest;
+		packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')) as PackageJson;
 	} catch {
 		throw new FatalError('manifest.json or package.json contains invalid JSON.');
 	}
@@ -51,13 +62,12 @@ async function validateMetadata(): Promise<PluginMetadata> {
 	const repositoryUrl = manifest.repository_url;
 
 	if (!name || !name.startsWith('joplin-plugin-')) {
-		throw new FatalError('Plugin ID must start with "joplin-plugin-"');
+		throw new FatalError('Plugin name must start with "joplin-plugin-" in package.json');
 	}
 
 	if (!version || !semver.valid(version)) {
 		throw new FatalError(`Invalid plugin version: "${version}". Must follow semver format.`);
 	}
-
 
 	let cleanUrl = typeof repositoryUrl === 'string'
 		? repositoryUrl.trim().replace(/\.git$/, '').replace(/\/$/, '')
@@ -65,31 +75,17 @@ async function validateMetadata(): Promise<PluginMetadata> {
 	const githubPattern = /^https:\/\/github\.com\/[^/]+\/[^/]+$/;
 
 	// If the repository_url is malformed, prompt the user in the terminal for the url
-	// Max 3 fail tries
 	if (!cleanUrl || !githubPattern.test(cleanUrl)) {
 		logger.warn('Repository URL is missing or malformed in manifest.json.');
 
-		let validUrl = false;
-		for (let i = 0; i < 3; i++) {
-			const prompt = new Input({
-				message: 'Enter your GitHub repository URL (e.g. https://github.com/user/repo):',
-				initial: '',
-			});
+		const answer = await input({
+			message: 'Enter your GitHub repository URL:',
+			validate: (value: string) => githubPattern.test(value.trim().replace(/\.git$/, '').replace(/\/$/, ''))
+				? true
+				: 'Invalid GitHub URL format',
+		});
 
-			const answer = await prompt.run();
-			const cleanedAnswer = answer.trim().replace(/\.git$/, '').replace(/\/$/, '');
-
-			if (githubPattern.test(cleanedAnswer)) {
-				cleanUrl = cleanedAnswer;
-				validUrl = true;
-				break;
-			}
-			logger.error(`Invalid GitHub URL format (attempt ${i + 1}/3)`);
-		}
-
-		if (!validUrl) {
-			throw new FatalError('Failed to provide a valid GitHub repository URL.');
-		}
+		cleanUrl = answer.trim().replace(/\.git$/, '').replace(/\/$/, '');
 
 		// Write the url back to manifest.json
 		manifest.repository_url = cleanUrl;
@@ -105,8 +101,8 @@ async function validateMetadata(): Promise<PluginMetadata> {
 // Shows all the build log in terminal (stdio: 'inherit')
 function build() {
 	try {
-		logger.info('Running "npm run dist"...');
-		execSync('npm run dist', { stdio: 'inherit', cwd: process.cwd() });
+		logger.info(`Running "${DIST_COMMAND}"...`);
+		execSync(DIST_COMMAND, { stdio: 'inherit', cwd: process.cwd() });
 		logger.success('Build verified!');
 	} catch (error) {
 		throw new FatalError('Build failed. Fix the errors above before publishing.');

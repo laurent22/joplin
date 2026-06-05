@@ -1,6 +1,5 @@
 import logger from './logger';
 
-
 export class FatalError extends Error {
 	public constructor(message: string) {
 		super(message);
