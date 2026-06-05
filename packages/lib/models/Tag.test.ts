@@ -220,6 +220,25 @@ describe('models/Tag', () => {
 		expect(tag1).toStrictEqual(tag2);
 	});
 
+	it('should not create duplicate tags when tagging notes with existing Cyrillic titles', async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
+		const tag = await Tag.save({ title: 'Посмотреть' });
+
+		await Tag.setNoteTagsByTitles(note1.id, ['Посмотреть']);
+		await Tag.setNoteTagsByTitles(note2.id, ['Посмотреть']);
+
+		const allTags = await Tag.all();
+		const note1Tags = await Tag.tagsByNoteId(note1.id);
+		const note2Tags = await Tag.tagsByNoteId(note2.id);
+
+		expect(allTags.length).toBe(1);
+		expect(allTags[0].id).toBe(tag.id);
+		expect(note1Tags.map(tag => tag.id)).toEqual([tag.id]);
+		expect(note2Tags.map(tag => tag.id)).toEqual([tag.id]);
+	});
+
 	it('should not create duplicate tags when tagging with existing titles (issue #14540)', async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });

@@ -172,19 +172,35 @@ export default class Tag extends BaseItem {
 
 	public static async loadByTitle(title: string): Promise<TagEntity | null> {
 		const trimmedTitle = title.trim();
+		const normalizedTitle = trimmedTitle.normalize('NFC');
 		const lowercaseTitle = trimmedTitle.toLowerCase();
-		const normalizedLowercaseTitle = trimmedTitle.normalize('NFC').toLowerCase();
+		const normalizedLowercaseTitle = normalizedTitle.toLowerCase();
 		// We use a manual query here instead of loadByField to ensure deterministic ordering (ORDER BY created_time ASC)
-		// when visually similar tags exist in the database.
-		// We use created_time instead of id because IDs are UUIDs and cannot be meaningfully ordered.
-		const tag = await this.modelSelectOne(`SELECT * FROM ${this.tableName()} WHERE title = ? COLLATE NOCASE ORDER BY created_time ASC`, [lowercaseTitle]);
+        // when visually similar tags exist in the database.
+        // We use created_time instead of id because IDs are UUIDs and cannot be meaningfully ordered.
+		const titleLookupSql = `SELECT * FROM ${this.tableName()} WHERE title = ? ORDER BY created_time ASC`;
+		const nocaseTitleLookupSql = `SELECT * FROM ${this.tableName()} WHERE title = ? COLLATE NOCASE ORDER BY created_time ASC`;
+
+		let tag = await this.modelSelectOne(titleLookupSql, [trimmedTitle]);
+		if (tag) return tag;
+
+		if (normalizedTitle !== trimmedTitle) {
+			tag = await this.modelSelectOne(titleLookupSql, [normalizedTitle]);
+			if (tag) return tag;
+		}
+
+		tag = await this.modelSelectOne(nocaseTitleLookupSql, [lowercaseTitle]);
 		if (tag) return tag;
 
 		if (normalizedLowercaseTitle !== lowercaseTitle) {
-			return await this.modelSelectOne(`SELECT * FROM ${this.tableName()} WHERE title = ? COLLATE NOCASE ORDER BY created_time ASC`, [normalizedLowercaseTitle]);
+			tag = await this.modelSelectOne(nocaseTitleLookupSql, [normalizedLowercaseTitle]);
+			if (tag) return tag;
 		}
 
-		return null;
+		const tags = await this.modelSelectAll(`SELECT * FROM ${this.tableName()} ORDER BY created_time ASC`);
+		return tags.find((tag: TagEntity) => {
+			return (tag.title || '').trim().normalize('NFC').toLowerCase() === normalizedLowercaseTitle;
+		}) || null;
 	}
 
 	public static async addNoteTagByTitle(noteId: string, tagTitle: string) {
