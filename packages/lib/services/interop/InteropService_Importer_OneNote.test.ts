@@ -146,15 +146,19 @@ describe('InteropService_Importer_OneNote', () => {
 
 		const pageTwo = notes.find(n => n.title === 'Page 2');
 		expectWithInstructions(menuLines[3].trim()).toBe(`<li class="l1"><a href=":/${pageTwo.id}" target="content" title="Page 2">${pageTwo.title}</a>`);
+		expectWithInstructions(pageTwo.order).toBe(-3);
 
 		const pageTwoA = notes.find(n => n.title === 'Page 2-a');
 		expectWithInstructions(menuLines[4].trim()).toBe(`<li class="l2"><a href=":/${pageTwoA.id}" target="content" title="Page 2-a">${pageTwoA.title}</a>`);
+		expectWithInstructions(pageTwoA.order).toBe(-4);
 
 		const pageTwoAA = notes.find(n => n.title === 'Page 2-a-a');
 		expectWithInstructions(menuLines[5].trim()).toBe(`<li class="l3"><a href=":/${pageTwoAA.id}" target="content" title="Page 2-a-a">${pageTwoAA.title}</a>`);
+		expectWithInstructions(pageTwoAA.order).toBe(-5);
 
 		const pageTwoB = notes.find(n => n.title === 'Page 2-b');
 		expectWithInstructions(menuLines[7].trim()).toBe(`<li class="l2"><a href=":/${pageTwoB.id}" target="content" title="Page 2-b">${pageTwoB.title}</a>`);
+		expectWithInstructions(pageTwoB.order).toBe(-7);
 	});
 
 	it('should created subsections', async () => {

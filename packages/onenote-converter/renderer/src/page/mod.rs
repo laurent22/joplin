@@ -36,7 +36,7 @@ impl<'a> Renderer<'a> {
         }
     }
 
-    pub(crate) fn render_page(&mut self, page: &Page) -> Result<String> {
+    pub(crate) fn render_page(&mut self, page: &Page, page_order_index: u32) -> Result<String> {
         let title_text = page.title_text().unwrap_or("Untitled Page".to_string());
 
         let mut content = String::new();
@@ -69,6 +69,7 @@ impl<'a> Renderer<'a> {
 
         crate::templates::page::render(
             &page.link_target_id(),
+            page_order_index,
             &PageTimestamps {
                 created_time: page.created_time().unix_timestamp(),
                 updated_time: page.updated_time().unix_timestamp(),
