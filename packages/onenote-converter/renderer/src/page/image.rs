@@ -14,6 +14,8 @@ impl<'a> Renderer<'a> {
             // Read up to the first kilobyte so that determine_image_filename can do
             // file type detection
             let image_start_bytes = read_file_start(&mut reader)?;
+            let is_xps_printout_with_pdf_extension_detected =
+                is_xps_printout_with_pdf_extension(image, &image_start_bytes);
 
             let (filename, should_write) =
                 self.determine_image_filename(image, &image_start_bytes)?;
@@ -33,9 +35,7 @@ impl<'a> Renderer<'a> {
 
             attrs.set("src", filename);
 
-            if is_xps_printout(image)
-                || is_xps_printout_with_pdf_extension(image, &image_start_bytes)
-            {
+            if is_xps_printout(image) || is_xps_printout_with_pdf_extension_detected {
                 if let Some(page_number) = image.displayed_page_number() {
                     attrs.set("data-onenote-page-number", page_number.to_string());
                 }
