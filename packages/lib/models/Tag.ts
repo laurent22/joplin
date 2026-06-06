@@ -172,17 +172,18 @@ export default class Tag extends BaseItem {
 	}
 
 	public static async loadByTitle(title: string): Promise<TagEntity | null> {
+		// Case insensitive matching via NOCASE does not work for certain characters, such as Ö or Cyrillic characters, but this is an accepted limitation
+		// now that mixed case tags are supported
 		const trimmedTitle = title.trim();
-		const lowercaseTitle = trimmedTitle.toLowerCase();
-		const normalizedLowercaseTitle = trimmedTitle.normalize('NFC').toLowerCase();
+		const normalizedTitle = trimmedTitle.normalize('NFC');
 		// We use a manual query here instead of loadByField to ensure deterministic ordering (ORDER BY created_time ASC)
 		// when visually similar tags exist in the database.
 		// We use created_time instead of id because IDs are UUIDs and cannot be meaningfully ordered.
-		const tag = await this.modelSelectOne(`SELECT * FROM ${this.tableName()} WHERE title = ? COLLATE NOCASE ORDER BY created_time ASC`, [lowercaseTitle]);
+		const tag = await this.modelSelectOne(`SELECT * FROM ${this.tableName()} WHERE title = ? COLLATE NOCASE ORDER BY created_time ASC`, [trimmedTitle]);
 		if (tag) return tag;
 
-		if (normalizedLowercaseTitle !== lowercaseTitle) {
-			return await this.modelSelectOne(`SELECT * FROM ${this.tableName()} WHERE title = ? COLLATE NOCASE ORDER BY created_time ASC`, [normalizedLowercaseTitle]);
+		if (normalizedTitle !== trimmedTitle) {
+			return await this.modelSelectOne(`SELECT * FROM ${this.tableName()} WHERE title = ? COLLATE NOCASE ORDER BY created_time ASC`, [normalizedTitle]);
 		}
 
 		return null;
