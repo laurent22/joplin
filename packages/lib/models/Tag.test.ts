@@ -263,4 +263,15 @@ describe('models/Tag', () => {
 		expect(loadedTag.id).toBe(legacyTagId);
 		expect(loadedTag.id).not.toBe(normalizedTag.id);
 	});
+
+	it.each([
+		// cSpell:disable
+		'Посмотреть 1',
+		'Öp',
+		// cSpell:enable
+	])('should find match for tags which have been saved, when they contain special unicode characters', async (title) => {
+		await Tag.save({ title });
+		const loadedTag = await Tag.loadByTitle(title);
+		expect(loadedTag.id).not.toBeNull();
+	});
 });
