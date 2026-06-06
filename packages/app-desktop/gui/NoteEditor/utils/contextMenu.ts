@@ -17,8 +17,9 @@ import { openFileWithExternalEditor } from '@joplin/lib/services/ExternalEditWat
 import CommandService from '@joplin/lib/services/CommandService';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import * as fs from 'fs-extra';
-import { clipboard } from 'electron';
+import { clipboard, nativeImage } from 'electron';
 import { toSystemSlashes } from '@joplin/lib/path-utils';
+import webpToPng from './webpToPng';
 
 function handleCopyToClipboard(options: ContextMenuOptions) {
 	if (options.textToCopy) {
@@ -241,8 +242,14 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 		copyImage: {
 			label: _('Copy image'),
 			onAction: async (options: ContextMenuOptions) => {
-				const { resourcePath } = await resourceInfo(options);
-				const image = bridge().createImageFromPath(resourcePath);
+				const { resourcePath, resource } = await resourceInfo(options);
+				let image = bridge().createImageFromPath(resourcePath);
+
+				if (image.isEmpty() && resource.mime === 'image/webp') {
+					const png = await webpToPng(resourcePath);
+					image = nativeImage.createFromBuffer(Buffer.from(png));
+				}
+
 				clipboard.writeImage(image);
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && itemType === ContextMenuItemType.Image,

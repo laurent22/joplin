@@ -353,6 +353,8 @@ packages/app-desktop/gui/NoteEditor/utils/useScheduleSaveCallbacks.js
 packages/app-desktop/gui/NoteEditor/utils/useScrollWhenReadyOptions.js
 packages/app-desktop/gui/NoteEditor/utils/useSearchMarkers.js
 packages/app-desktop/gui/NoteEditor/utils/useWindowCommandHandler.js
+packages/app-desktop/gui/NoteEditor/utils/webpToPng.test.js
+packages/app-desktop/gui/NoteEditor/utils/webpToPng.js
 packages/app-desktop/gui/NoteList/NoteList2.js
 packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js
 packages/app-desktop/gui/NoteList/commands/index.js
