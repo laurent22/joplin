@@ -76,6 +76,7 @@ export interface BaseNoteScreenComponent<State extends BaseState = BaseState> {
 	scheduleFocusUpdate(): void;
 	attachFile(asset: AttachFileAsset, fileType: string | null): void;
 	lastLoadedNoteId_?: string;
+	updateRefreshKey(): void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Forwarded to EventEmitter.on/off which receive heterogeneous event payloads; callers like Note.tsx pass concrete signatures
@@ -310,7 +311,7 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 		mode = 'view';
 	}
 
-	if (isProvisionalNote && !comp.props.sharedData) {
+	if (isProvisionalNote) {
 		mode = 'edit';
 		comp.scheduleFocusUpdate();
 	}
@@ -371,6 +372,7 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 		if (fieldsToSave.title !== undefined || fieldsToSave.body !== undefined) {
 			await Note.save(fieldsToSave);
 			comp.setState({ note: updatedNote, lastSavedNote: updatedNote });
+			comp.updateRefreshKey();
 		}
 		if (comp.props.sharedData.resources) {
 			for (let i = 0; i < comp.props.sharedData.resources.length; i++) {

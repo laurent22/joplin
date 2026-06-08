@@ -763,6 +763,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		});
 	}
 
+	public updateRefreshKey() {
+		this.refreshKey = Date.now();
+	}
+
 	private async reloadNoteAndUpdateRefreshKey() {
 		await shared.reloadNote(this);
 		this.refreshKey = this.props.editorNoteReloadTimeRequest;
