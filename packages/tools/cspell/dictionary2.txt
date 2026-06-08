@@ -385,6 +385,7 @@ pfff
 pgdg
 PGPASSWORD
 pidfile
+pkgconf
 PLUGINLEGACY
 pocount
 Poedit
