@@ -15,32 +15,47 @@ const getSimulator = async () => {
 		.name;
 };
 
+
+// Based roughly on the approach taken by react-native-esbuild
+// (https://github.com/oblador/react-native-esbuild/blob/e5897955357e3fe6a48e1dd90ccb909426d24566/package.json#L9)
 const uiTests = async () => {
 	if (process.platform !== 'darwin') throw new Error('UI tests currently must run on MacOS');
 
 	const iosDir = join(dirname(__dirname), 'ios');
+	const workspaceFile = join(iosDir, 'Joplin.xcworkspace');
 
-	// Based on the approach taken by react-native-esbuild
-	// (https://github.com/oblador/react-native-esbuild/blob/e5897955357e3fe6a48e1dd90ccb909426d24566/package.json#L9)
-	await execCommand([
-		'xcrun',
-		'xcodebuild',
-		'test',
-		// Only log errors and warnings.
-		'-quiet',
+	const env = {
+		RUNNING_UI_TESTS: '1',
+		XCODE_XCCONFIG_FILE: join(iosDir, 'testing.xcconfig'),
+	};
+
+	const sharedOptions = [
 		'-workspace',
-		join(iosDir, 'Joplin.xcworkspace'),
+		workspaceFile,
 		'-scheme', 'Joplin',
 		// Create a release build: Without this, the React Native dev server needs to be running
 		// in the background:
 		'-configuration', 'Release',
 		'-destination', `platform=iOS Simulator,name=${await getSimulator()}`,
-	], {
-		env: {
-			RUNNING_UI_TESTS: '1',
-			XCODE_XCCONFIG_FILE: join(iosDir, 'testing.xcconfig'),
-		},
-	});
+	];
+
+	// Build first, in quiet mode, to avoid hundreds of thousands of lines of build output.
+	await execCommand([
+		'xcrun',
+		'xcodebuild',
+		'build-for-testing',
+		// Only log errors and warnings.
+		'-quiet',
+		...sharedOptions,
+	], { env });
+
+	// Run, with normal output. This makes it easier to debug test failures
+	await execCommand([
+		'xcrun',
+		'xcodebuild',
+		'test-without-building',
+		...sharedOptions,
+	], { env });
 };
 
 export default uiTests;
