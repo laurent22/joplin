@@ -20,8 +20,5 @@ ASSETCATALOG_COMPILER_OPTIMIZATION=time
 GCC_OPTIMIZATION_LEVEL=0
 GCC_PRECOMPILE_PREFIX_HEADER=YES
 
-// Don't generate dsym debug information
-DEBUG_INFORMATION_FORMAT=dwarf
-
 // Run neighboring build tasks in parallel, when supported
 FUSE_BUILD_SCRIPT_PHASES = YES
