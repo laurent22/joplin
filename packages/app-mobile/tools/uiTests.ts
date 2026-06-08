@@ -1,4 +1,5 @@
 import { execCommand } from '@joplin/utils';
+import { Second } from '@joplin/utils/time';
 import { dirname, join } from 'path';
 
 const getSimulator = async () => {
@@ -53,6 +54,7 @@ const uiTests = async () => {
 	];
 
 	// Build first, in quiet mode, to avoid hundreds of thousands of lines of build output.
+	const buildStart = performance.now();
 	await execCommand([
 		'xcrun',
 		'xcodebuild',
@@ -61,6 +63,9 @@ const uiTests = async () => {
 		'-quiet',
 		...sharedOptions,
 	], { env });
+	const buildEnd = performance.now();
+
+	console.log('Finished build in', (buildEnd - buildStart) / Second, 'seconds');
 
 	// Run, with normal output. This makes it easier to debug test failures
 	const runUiTests = () => {
