@@ -12486,7 +12486,7 @@ __metadata:
     "@react-native-vector-icons/fontawesome5": "npm:12.3.1"
     "@react-native-vector-icons/get-image": "npm:12.3.0"
     "@react-native-vector-icons/ionicons": "npm:12.3.0"
-    "@react-native-vector-icons/material-design-icons": "npm:12.4.1"
+    "@react-native-vector-icons/material-design-icons": "npm:12.4.2"
     "@react-native-vector-icons/material-icons": "npm:12.4.1"
     "@react-native/babel-preset": "npm:0.81.6"
     "@react-native/metro-config": "npm:0.81.6"
@@ -15890,6 +15890,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-vector-icons/common@npm:^12.4.1":
+  version: 12.4.2
+  resolution: "@react-native-vector-icons/common@npm:12.4.2"
+  dependencies:
+    find-up: "npm:^7.0.0"
+    picocolors: "npm:^1.1.1"
+    plist: "npm:^3.1.0"
+  peerDependencies:
+    "@react-native-vector-icons/get-image": ^12.3.0
+    react: "*"
+    react-native: "*"
+  peerDependenciesMeta:
+    "@react-native-vector-icons/get-image":
+      optional: true
+  bin:
+    rnvi-update-plist: lib/commonjs/scripts/updatePlist.js
+  checksum: 10/563d2126087c89c60192d2691c10c995c83b23eca05ba6ba960690abce5ed8de14448fc4dfd6842654751fad44c4f6b46cb9d5aca419d4e53971434ce0fdb13f
+  languageName: node
+  linkType: hard
+
 "@react-native-vector-icons/fontawesome5@npm:12.3.1":
   version: 12.3.1
   resolution: "@react-native-vector-icons/fontawesome5@npm:12.3.1"
@@ -15936,15 +15956,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/material-design-icons@npm:12.4.1":
-  version: 12.4.1
-  resolution: "@react-native-vector-icons/material-design-icons@npm:12.4.1"
+"@react-native-vector-icons/material-design-icons@npm:12.4.2":
+  version: 12.4.2
+  resolution: "@react-native-vector-icons/material-design-icons@npm:12.4.2"
   dependencies:
-    "@react-native-vector-icons/common": "npm:^12.4.0"
+    "@react-native-vector-icons/common": "npm:^12.4.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/f7fb8e01e2628d8c694867210a222c24be2bdbcdf5b1b2023f52e846b9404495cf8634e3ad19f66a71811eea44d399f925537bd53f8b874ba2b842520af6bfe9
+  checksum: 10/32073ca80bb4964d596b4f6cd1b7d4c8a2ebe593b8a663c68ffb88ae5543e24b5da891fc584b7953abe567b998721468f97bf411a703b8791aaffb9ef673efb2
   languageName: node
   linkType: hard
 
