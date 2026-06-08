@@ -18,6 +18,8 @@ const getSimulator = async () => {
 const uiTests = async () => {
 	if (process.platform !== 'darwin') throw new Error('UI tests currently must run on MacOS');
 
+	const iosDir = join(dirname(__dirname), 'ios');
+
 	// Based on the approach taken by react-native-esbuild
 	// (https://github.com/oblador/react-native-esbuild/blob/e5897955357e3fe6a48e1dd90ccb909426d24566/package.json#L9)
 	await execCommand([
@@ -27,7 +29,7 @@ const uiTests = async () => {
 		// Only log errors and warnings.
 		'-quiet',
 		'-workspace',
-		join(dirname(__dirname), 'ios', 'Joplin.xcworkspace'),
+		join(iosDir, 'Joplin.xcworkspace'),
 		'-scheme', 'Joplin',
 		// Create a release build: Without this, the React Native dev server needs to be running
 		// in the background:
@@ -36,6 +38,7 @@ const uiTests = async () => {
 	], {
 		env: {
 			RUNNING_UI_TESTS: '1',
+			XCODE_XCCONFIG_FILE: join(iosDir, 'testing.xcconfig'),
 		},
 	});
 };
