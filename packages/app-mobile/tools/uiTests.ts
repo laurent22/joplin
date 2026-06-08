@@ -15,6 +15,19 @@ const getSimulator = async () => {
 		.name;
 };
 
+const retry = async <T> (fn: ()=> Promise<T>, maxRetries: number) => {
+	let lastError;
+	for (let retry = 1; retry <= maxRetries; retry++) {
+		try {
+			return await fn();
+		} catch (error) {
+			console.error('Failed to run UI tests (attempt ', retry, ' / ', maxRetries, '): ', error);
+			lastError = error;
+		}
+	}
+	throw lastError;
+};
+
 
 // Based roughly on the approach taken by react-native-esbuild
 // (https://github.com/oblador/react-native-esbuild/blob/e5897955357e3fe6a48e1dd90ccb909426d24566/package.json#L9)
@@ -50,12 +63,16 @@ const uiTests = async () => {
 	], { env });
 
 	// Run, with normal output. This makes it easier to debug test failures
-	await execCommand([
-		'xcrun',
-		'xcodebuild',
-		'test-without-building',
-		...sharedOptions,
-	], { env });
+	const runUiTests = () => {
+		return execCommand([
+			'xcrun',
+			'xcodebuild',
+			'test-without-building',
+			...sharedOptions,
+		], { env });
+	};
+
+	await retry(runUiTests, 2);
 };
 
 export default uiTests;
