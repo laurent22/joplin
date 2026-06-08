@@ -12394,7 +12394,7 @@ __metadata:
     "@types/react": "npm:19.1.10"
     "@types/react-dom": "npm:19.1.7"
     "@types/react-redux": "npm:7.1.34"
-    "@types/semver": "npm:7.3.13"
+    "@types/semver": "npm:7.7.1"
     "@types/styled-components": "npm:5.1.36"
     "@xyflow/react": "npm:12.10.2"
     async-mutex: "npm:0.5.0"
@@ -19227,10 +19227,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:7.3.13":
-  version: 7.3.13
-  resolution: "@types/semver@npm:7.3.13"
-  checksum: 10/0064efd7a0515a539062b71630c72ca2b058501b957326c285cdff82f42c1716d9f9f831332ccf719d5ee8cc3ef24f9ff62122d7a7140c73959a240b49b0f62d
+"@types/semver@npm:7.7.1":
+  version: 7.7.1
+  resolution: "@types/semver@npm:7.7.1"
+  checksum: 10/8f09e7e6ca3ded67d78ba7a8f7535c8d9cf8ced83c52e7f3ac3c281fe8c689c3fe475d199d94390dc04fc681d51f2358b430bb7b2e21c62de24f2bee2c719068
   languageName: node
   linkType: hard
 
