@@ -13007,7 +13007,7 @@ __metadata:
     nodemailer: "npm:6.10.1"
     nodemon: "npm:3.1.14"
     otplib: "npm:12.0.1"
-    pg: "npm:8.17.2"
+    pg: "npm:8.18.0"
     pretty-bytes: "npm:5.6.0"
     prettycron: "npm:0.10.0"
     qrcode: "npm:1.5.4"
@@ -46167,10 +46167,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-connection-string@npm:^2.10.1":
-  version: 2.12.0
-  resolution: "pg-connection-string@npm:2.12.0"
-  checksum: 10/03e5462c1f4da57166344a9eae105f95af6887a501dfe4ca2feb85ca8d351162afe9fc581cb27d44ecdaecc59a8bd55a1ec35b66714b01a9db148f0a91c0b36c
+"pg-connection-string@npm:^2.11.0":
+  version: 2.13.0
+  resolution: "pg-connection-string@npm:2.13.0"
+  checksum: 10/b38bb5e27ff375b1c53e7fd805dba7c0380674db1325860d1b59a4ad668970ef0d9a97b15b8625ce393696a4b47083af9f345d998afa8abfe99a5180de52922a
   languageName: node
   linkType: hard
 
@@ -46233,12 +46233,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:8.17.2":
-  version: 8.17.2
-  resolution: "pg@npm:8.17.2"
+"pg@npm:8.18.0":
+  version: 8.18.0
+  resolution: "pg@npm:8.18.0"
   dependencies:
     pg-cloudflare: "npm:^1.3.0"
-    pg-connection-string: "npm:^2.10.1"
+    pg-connection-string: "npm:^2.11.0"
     pg-pool: "npm:^3.11.0"
     pg-protocol: "npm:^1.11.0"
     pg-types: "npm:2.2.0"
@@ -46251,7 +46251,7 @@ __metadata:
   peerDependenciesMeta:
     pg-native:
       optional: true
-  checksum: 10/0f0b70f1310791b263f970f8235ab054de26a94861e73727def8df1b976ab9dda7e9c34ecffb78260fe8569521798f8e811da6369b79601023a07ea0f5e7167a
+  checksum: 10/91c622f179f60df08ab7aa9b05a890567ea47f2d7984377b64e88e1eba1c42787324b7fc5ff00e109a757f3329dc4b57c73502603ae2765d1827b2082abbdcfa
   languageName: node
   linkType: hard
 
