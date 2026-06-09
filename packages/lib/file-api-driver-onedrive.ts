@@ -1,31 +1,74 @@
-const moment = require('moment');
-const { basicDelta } = require('./file-api');
-const { dirname, basename } = require('./path-utils');
-const shim = require('./shim').default;
-const Buffer = require('buffer').Buffer;
-const { ltrimSlashes } = require('./path-utils');
+import moment = require('moment');
+import { basicDelta, DeltaOptions, FileApi } from './file-api';
+import { dirname, basename } from './path-utils';
+import shim from './shim';
+import { Buffer } from 'buffer';
+import { ltrimSlashes } from './path-utils';
+import OneDriveApi from './onedrive-api';
 
-class FileApiDriverOneDrive {
-	constructor(api) {
+interface OneDriveItem {
+	name: string;
+	folder: unknown;
+	fileSystemInfo: {
+		lastModifiedDateTime: string;
+	};
+}
+
+interface ItemStat {
+	path: string;
+	isDir: boolean;
+	updated_time: number;
+	isDeleted?: boolean;
+}
+
+interface ListOptions {
+	context?: string;
+	includeDirs?: boolean;
+}
+
+interface GetOptions {
+	target?: 'file';
+}
+
+interface PutOptions {
+	source?: 'file';
+	path?: string;
+	headers?: Record<string, string>;
+}
+
+interface BrokenDeltaOptions extends DeltaOptions {
+	context?: { nextLink: string };
+}
+
+interface PathDetails {
+	id: string;
+}
+
+export default class FileApiDriverOneDrive {
+	private api_: OneDriveApi;
+	private fileApi_?: FileApi;
+	private pathCache_: Record<string, PathDetails>;
+
+	public constructor(api: OneDriveApi) {
 		this.api_ = api;
 		this.pathCache_ = {};
 	}
 
-	api() {
+	public api() {
 		return this.api_;
 	}
 
-	itemFilter_() {
+	private itemFilter_() {
 		return {
 			select: 'name,file,folder,fileSystemInfo,parentReference',
 		};
 	}
 
-	makePath_(path) {
+	private makePath_(path: string) {
 		return path;
 	}
 
-	makeItems_(odItems) {
+	private makeItems_(odItems: OneDriveItem[]) {
 		const output = [];
 		for (let i = 0; i < odItems.length; i++) {
 			output.push(this.makeItem_(odItems[i]));
@@ -33,11 +76,11 @@ class FileApiDriverOneDrive {
 		return output;
 	}
 
-	makeItem_(odItem) {
+	private makeItem_(odItem: OneDriveItem) {
 		const output = {
 			path: odItem.name,
 			isDir: 'folder' in odItem,
-		};
+		} as ItemStat;
 
 		if ('deleted' in odItem) {
 			output.isDeleted = true;
@@ -49,7 +92,7 @@ class FileApiDriverOneDrive {
 		return output;
 	}
 
-	async statRaw_(path) {
+	private async statRaw_(path: string) {
 		let item = null;
 		try {
 			item = await this.api_.execJson('GET', this.makePath_(path), this.itemFilter_());
@@ -60,13 +103,13 @@ class FileApiDriverOneDrive {
 		return item;
 	}
 
-	async stat(path) {
+	public async stat(path: string) {
 		const item = await this.statRaw_(path);
 		if (!item) return null;
 		return this.makeItem_(item);
 	}
 
-	async setTimestamp(path, timestamp) {
+	public async setTimestamp(path: string, timestamp: number) {
 		const body = {
 			fileSystemInfo: {
 				lastModifiedDateTime:
@@ -80,7 +123,7 @@ class FileApiDriverOneDrive {
 		return this.makeItem_(item);
 	}
 
-	async list(path, options = null) {
+	public async list(path: string, options: ListOptions = null) {
 		options = { context: null, ...options };
 
 		let query = { ...this.itemFilter_(), '$top': 1000 };
@@ -102,7 +145,7 @@ class FileApiDriverOneDrive {
 		};
 	}
 
-	async get(path, options = null) {
+	public async get(path: string, options: GetOptions = null) {
 		if (!options) options = {};
 
 		try {
@@ -119,12 +162,12 @@ class FileApiDriverOneDrive {
 		}
 	}
 
-	async mkdir(path) {
-		let item = await this.stat(path);
-		if (item) return item;
+	public async mkdir(path: string) {
+		const statItem = await this.stat(path);
+		if (statItem) return statItem;
 
 		const parentPath = dirname(path);
-		item = await this.api_.execJson('POST', `${this.makePath_(parentPath)}:/children`, this.itemFilter_(), {
+		const item = await this.api_.execJson('POST', `${this.makePath_(parentPath)}:/children`, this.itemFilter_(), {
 			name: basename(path),
 			folder: {},
 		});
@@ -132,7 +175,7 @@ class FileApiDriverOneDrive {
 		return this.makeItem_(item);
 	}
 
-	async put(path, content, options = null) {
+	public async put(path: string, content: string, options: PutOptions = null) {
 		if (!options) options = {};
 
 		let response = null;
@@ -152,11 +195,11 @@ class FileApiDriverOneDrive {
 		return response;
 	}
 
-	delete(path) {
+	public delete(path: string) {
 		return this.api_.exec('DELETE', this.makePath_(path));
 	}
 
-	async move() {
+	public async move() {
 		// Cannot work in an atomic way because if newPath already exist, the OneDrive API throw an error
 		// "An item with the same name already exists under the parent". Some posts suggest to use
 		// @name.conflictBehavior [0]but that doesn't seem to work. So until Microsoft fixes this
@@ -184,22 +227,21 @@ class FileApiDriverOneDrive {
 		// return this.makeItem_(item);
 	}
 
-	format() {
+	public format() {
 		throw new Error('Not implemented');
 	}
 
-	async pathDetails_(path) {
+	public async pathDetails_(path: string) {
 		if (this.pathCache_[path]) return this.pathCache_[path];
 		const output = await this.api_.execJson('GET', path);
 		this.pathCache_[path] = output;
 		return this.pathCache_[path];
 	}
 
-	async clearRoot() {
-		const recurseItems = async (path) => {
+	public async clearRoot() {
+		const recurseItems = async (path: string) => {
 			path = ltrimSlashes(path);
 			const result = await this.list(this.fileApi_.fullPath(path));
-			const output = [];
 
 			for (const item of result.items) {
 				const fullPath = ltrimSlashes(`${path}/${item.path}`);
@@ -208,16 +250,14 @@ class FileApiDriverOneDrive {
 				}
 				await this.delete(this.fileApi_.fullPath(fullPath));
 			}
-
-			return output;
 		};
 
 		await recurseItems('');
 	}
 
-	async delta(path, options = null) {
-		const getDirStats = async path => {
-			let items = [];
+	public async delta(path: string, options: DeltaOptions = null) {
+		const getDirStats = async (path: string) => {
+			let items: ItemStat[] = [];
 			let context = null;
 
 			while (true) {
@@ -233,15 +273,15 @@ class FileApiDriverOneDrive {
 		return await basicDelta(path, getDirStats, options);
 	}
 
-	async delta_BROKEN(path, options = null) {
+	public async delta_BROKEN(path: string, options: BrokenDeltaOptions = null) {
 		const output = {
 			hasMore: false,
 			context: {},
-			items: [],
+			items: [] as ItemStat[],
 		};
 
 		const freshStartDelta = () => {
-			const accountProperties = this.api_.accountProperties_;
+			const accountProperties = this.api_.accountProperties;
 			const url = `/drives/${accountProperties.driveId}/root/delta`;
 			const query = this.itemFilter_();
 			query.select += ',deleted';
@@ -322,7 +362,7 @@ class FileApiDriverOneDrive {
 		// https://dev.onedrive.com/items/view_delta.htm
 		// The same item may appear more than once in a delta feed, for various reasons. You should use the last occurrence you see.
 		// So remove any duplicate item from the array.
-		const temp = [];
+		const temp: ItemStat[] = [];
 		const seenPaths = [];
 		for (let i = output.items.length - 1; i >= 0; i--) {
 			const item = output.items[i];
@@ -336,5 +376,3 @@ class FileApiDriverOneDrive {
 		return output;
 	}
 }
-
-module.exports = { FileApiDriverOneDrive };

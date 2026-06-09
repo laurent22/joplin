@@ -18,7 +18,7 @@ import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
 import { OptionsResourceModel } from '@joplin/renderer/types';
 import { isValidHeaderIdentifier } from '@joplin/lib/services/e2ee/EncryptionService';
-const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
+import { DatabaseDriverNode } from '@joplin/lib/database-driver-node';
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
 import { Models } from '../models/factory';

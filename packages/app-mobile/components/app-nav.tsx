@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import NotesScreen from './screens/Notes/Notes';
 import SearchScreen from './screens/SearchScreen';
 import { Platform, View, StyleSheet } from 'react-native';
-import { AppState } from '../utils/types';
+import { AppState, Route } from '../utils/types';
 import { themeStyle } from './global-style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useKeyboardState from '../utils/hooks/useKeyboardState';
@@ -15,8 +15,7 @@ import { useMemo } from 'react';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Route is a redux NAV action with heterogeneous payload (folderId, tagId, noteId, etc.); typing it would require restructuring action types across the mobile codebase
-	route: any;
+	route: Route;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each screen has different props (themeId, dispatch, navigation, visible, ...); typing the union would force a refactor of every screen
 	screens: Record<string, { screen: ComponentType<any> }>;
 	dispatch: Dispatch;

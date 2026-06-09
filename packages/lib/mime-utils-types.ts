@@ -5,7 +5,13 @@
 // Any change should be appended at the end of this file using push/splice.
 // =============================================================================
 
-const mimeTypes = [
+export interface MimeType {
+	t: string;
+	e: string[];
+}
+
+// cSpell:disable
+const mimeTypes: MimeType[] = [
 	{ t: 'application/andrew-inset', e: ['ez'] },
 	{ t: 'application/applixware', e: ['aw'] },
 	{ t: 'application/atom+xml', e: ['atom'] },
@@ -781,5 +787,6 @@ const mimeTypes = [
 // original list.
 mimeTypes.push({ t: 'text/markdown', e: ['md', 'markdown'] });
 mimeTypes.push({ t: 'image/avif', e: ['avif'] });
+// cSpell:enable
 
-module.exports = mimeTypes;
+export default mimeTypes;

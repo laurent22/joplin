@@ -14,7 +14,7 @@
     "html-entities": "1.4.0"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "29.0.0",
+    "@rollup/plugin-commonjs": "29.0.2",
     "@rollup/plugin-node-resolve": "16.0.3",
     "@rollup/plugin-replace": "6.0.3",
     "browserify": "14.5.0",

@@ -25,7 +25,7 @@ import { hasWhiteboardFence, parseWhiteboard } from '../services/whiteboard/pars
 import { resolveFileRef, RefKind } from '../services/whiteboard/resolveRef';
 const { isImageMimeType } = require('../resourceUtils');
 import { MarkupToHtml } from '@joplin/renderer';
-const { ALL_NOTES_FILTER_ID } = require('../reserved-ids');
+import { ALL_NOTES_FILTER_ID } from '../reserved-ids';
 
 export interface PreviewsOrder {
 	by: string;

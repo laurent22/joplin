@@ -214,7 +214,7 @@ if [ "$RUN_TESTS" == "1" ]; then
 fi
 
 # =============================================================================
-# Check .gitignore and .eslintignore files - they should be updated when
+# Check .gitignore and .ignore.eslint files - they should be updated when
 # new TypeScript files are added by running `yarn updateIgnored`.
 # See coding_style.md
 # =============================================================================
@@ -222,9 +222,9 @@ fi
 if [ "$IS_LINUX" == "1" ]; then
 	echo "Step: Checking for files that should have been ignored..."
 
-	# .gitignore and .eslintignore can be modified during yarn install. Reset them
+	# .gitignore and .ignore.eslint can be modified during yarn install. Reset them
 	# so that checkIgnoredFiles works.
-	git restore .gitignore .eslintignore
+	git restore .gitignore .ignore.eslint
 
 	node packages/tools/checkIgnoredFiles.js 
 	testResult=$?

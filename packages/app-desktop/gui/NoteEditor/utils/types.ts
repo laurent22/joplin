@@ -137,7 +137,6 @@ export interface NoteBodyEditorProps {
 	resourceInfos: ResourceInfos;
 	resourceDirectory: string;
 	locale: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	onDrop: DropHandler;
 	noteToolbarButtonInfos: ToolbarItem[];
 	plugins: PluginStates;

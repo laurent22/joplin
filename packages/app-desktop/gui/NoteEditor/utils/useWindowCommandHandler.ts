@@ -1,4 +1,5 @@
 import { MutableRefObject, RefObject, Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch as ReduxDispatch } from 'redux';
 import { WindowCommandDependencies, NoteBodyEditorRef, OnChangeEvent, ScrollOptionTypes } from './types';
 import editorCommandDeclarations, { enabledCondition } from '../editorCommandDeclarations';
 import CommandService, { CommandDeclaration, CommandRuntime, CommandContext, RegisteredRuntime } from '@joplin/lib/services/CommandService';
@@ -20,8 +21,7 @@ type OnBodyChange = (event: OnChangeEvent)=> void;
 
 interface HookDependencies {
 	setShowLocalSearch: Dispatch<SetStateAction<boolean>>;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: ReduxDispatch;
 	noteSearchBarRef: MutableRefObject<HTMLInputElement | null>;
 	editorRef: RefObject<NoteBodyEditorRef>;
 	titleInputRef: RefObject<HTMLInputElement>;

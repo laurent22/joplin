@@ -8,7 +8,7 @@ import { reg } from '@joplin/lib/registry';
 import Setting from '@joplin/lib/models/Setting';
 import bridge from '../services/bridge';
 import { themeStyle } from '@joplin/lib/theme';
-const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
+import { OneDriveApiNodeUtils } from '@joplin/lib/onedrive-api-node-utils';
 
 interface Props {
 	themeId: number;

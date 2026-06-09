@@ -4,9 +4,9 @@ import Setting from './models/Setting';
 import Synchronizer from './Synchronizer';
 import BaseSyncTarget from './BaseSyncTarget';
 
-const { parameters } = require('./parameters.js');
-const { FileApi } = require('./file-api.js');
-const { FileApiDriverOneDrive } = require('./file-api-driver-onedrive.js');
+import { parameters } from './parameters';
+import { FileApi } from './file-api';
+import FileApiDriverOneDrive from './file-api-driver-onedrive';
 
 export default class SyncTargetOneDrive extends BaseSyncTarget {
 

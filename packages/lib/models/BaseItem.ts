@@ -8,6 +8,8 @@ import { _ } from '../locale';
 import Database from '../database';
 import ItemChange from './ItemChange';
 import ShareService from '../services/share/ShareService';
+import type EncryptionService from '../services/e2ee/EncryptionService';
+import type RevisionService from '../services/RevisionService';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import JoplinError from '../JoplinError';
@@ -52,10 +54,8 @@ export interface EncryptedItemsStats {
 
 export default class BaseItem extends BaseModel {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- EncryptionService is set at app startup; lib references it structurally to avoid a circular import (EncryptionService -> BaseItem)
-	public static encryptionService_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- RevisionService is set at app startup; see encryptionService_ above
-	public static revisionService_: any = null;
+	public static encryptionService_: EncryptionService = null;
+	public static revisionService_: RevisionService = null;
 	public static shareService_: ShareService = null;
 	private static syncShareCache_: ShareState | null = null;
 
