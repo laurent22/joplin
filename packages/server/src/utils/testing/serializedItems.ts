@@ -35,7 +35,7 @@ conflict_original_id:
 master_key_id: 
 user_data: 
 deleted_time: 0
-is_locally_encrypted: ${note.is_locally_encrypted || 0}
+is_locked: ${note.is_locked || 0}
 extracted_resource_ids: ${note.extracted_resource_ids || ''}
 type_: 1`;
 }
@@ -83,6 +83,6 @@ encryption_blob_encrypted: 0
 size: ${resource.size}
 share_id: ${resource.share_id || ''}
 is_shared: 0
-is_locally_encrypted: ${resource.is_locally_encrypted || 0}
+is_locked: ${resource.is_locked || 0}
 type_: 4`;
 }

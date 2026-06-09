@@ -49,16 +49,16 @@ describe('models/Revision', () => {
 		jest.useFakeTimers({ advanceTimers: true });
 	});
 
-	it('should add local encryption defaults for old sync revisions', () => {
+	it('should add lock defaults for old sync revisions', () => {
 		expect(Revision.filter({
-			is_locally_encrypted: undefined,
+			is_locked: undefined,
 		})).toMatchObject({
-			is_locally_encrypted: 0,
+			is_locked: 0,
 		});
 		expect(Revision.filter({
-			is_locally_encrypted: null,
+			is_locked: null,
 		})).toMatchObject({
-			is_locally_encrypted: 0,
+			is_locked: 0,
 		});
 	});
 

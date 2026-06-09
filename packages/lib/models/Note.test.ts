@@ -213,33 +213,33 @@ describe('models/Note', () => {
 		}
 	}));
 
-	it('should add local encryption defaults for old sync notes', () => {
+	it('should add lock defaults for old sync notes', () => {
 		expect(Note.filter({
-			is_locally_encrypted: undefined,
+			is_locked: undefined,
 			extracted_resource_ids: undefined,
 		})).toMatchObject({
-			is_locally_encrypted: 0,
+			is_locked: 0,
 			extracted_resource_ids: '',
 		});
 		expect(Note.filter({
-			is_locally_encrypted: null,
+			is_locked: null,
 			extracted_resource_ids: null,
 		})).toMatchObject({
-			is_locally_encrypted: 0,
+			is_locked: 0,
 			extracted_resource_ids: '',
 		});
 	});
 
-	it('should default local encryption fields for new notes', async () => {
+	it('should default lock fields for new notes', async () => {
 		const note = await Note.save({});
 		const loadedNote = await Note.load(note.id);
 
-		expect(loadedNote.is_locally_encrypted).toBe(0);
+		expect(loadedNote.is_locked).toBe(0);
 		expect(loadedNote.extracted_resource_ids).toBe('');
 	});
 
-	it('should include local encryption state in preview fields', () => {
-		expect(Note.previewFields()).toContain('is_locally_encrypted');
+	it('should include lock state in preview fields', () => {
+		expect(Note.previewFields()).toContain('is_locked');
 		expect(Note.previewFields()).not.toContain('extracted_resource_ids');
 	});
 

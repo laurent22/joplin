@@ -63,16 +63,16 @@ describe('models/Resource', () => {
 		return items.map(r => r.title ? r.title : '');
 	};
 
-	it('should add local encryption defaults for old sync resources', () => {
+	it('should add lock defaults for old sync resources', () => {
 		expect(Resource.filter({
-			is_locally_encrypted: undefined,
+			is_locked: undefined,
 		})).toMatchObject({
-			is_locally_encrypted: 0,
+			is_locked: 0,
 		});
 		expect(Resource.filter({
-			is_locally_encrypted: null,
+			is_locked: null,
 		})).toMatchObject({
-			is_locally_encrypted: 0,
+			is_locked: 0,
 		});
 	});
 

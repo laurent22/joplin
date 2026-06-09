@@ -102,7 +102,7 @@ export default class Note extends BaseItem {
 
 		const fieldNames = this.fieldNames();
 
-		if (!n.is_locally_encrypted) pull(fieldNames, 'is_locally_encrypted');
+		if (!n.is_locked) pull(fieldNames, 'is_locked');
 		if (!n.extracted_resource_ids) pull(fieldNames, 'extracted_resource_ids');
 		if (!n.is_conflict) pull(fieldNames, 'is_conflict');
 		if (!Number(n.latitude)) pull(fieldNames, 'latitude');
@@ -366,7 +366,7 @@ export default class Note extends BaseItem {
 	public static previewFields(options: { includeTimestamps?: boolean } = null) {
 		options = { includeTimestamps: true, ...options };
 
-		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'is_locally_encrypted', 'order', 'markup_language', 'is_conflict', 'is_shared', 'share_id', 'deleted_time'];
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'is_locked', 'order', 'markup_language', 'is_conflict', 'is_shared', 'share_id', 'deleted_time'];
 
 		if (options.includeTimestamps) {
 			output.push('updated_time');
