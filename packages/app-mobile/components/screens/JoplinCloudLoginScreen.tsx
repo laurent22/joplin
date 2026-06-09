@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { View, Text, StyleSheet, Linking, Animated, Easing } from 'react-native';
-const { connect } = require('react-redux');
-const { _ } = require('@joplin/lib/locale');
+import { connect } from 'react-redux';
+import { _ } from '@joplin/lib/locale';
 const { themeStyle } = require('../global-style.js');
 import { AppState } from '../../utils/types';
 import { generateApplicationConfirmUrl, reducer, checkIfLoginWasSuccessful, saveApplicationAuthId, defaultState } from '@joplin/lib/services/joplinCloudUtils';

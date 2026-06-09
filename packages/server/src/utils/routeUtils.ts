@@ -10,7 +10,7 @@ import { shortToLong } from './uuid';
 import { stripOffQueryParameters } from './urlUtils';
 import { hasOwnProperty } from '@joplin/utils/object';
 
-const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
+import { ltrimSlashes, rtrimSlashes } from '@joplin/lib/path-utils';
 
 function dirname(path: string): string {
 	if (!path) throw new Error('Path is empty');

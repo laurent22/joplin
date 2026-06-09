@@ -2,7 +2,7 @@ import Resource from '@joplin/lib/models/Resource';
 import { ResourceEntity } from '@joplin/lib/services/database/types';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
-const FileViewer = require('react-native-file-viewer').default;
+import FileViewer from 'react-native-file-viewer';
 
 
 const logger = Logger.create('showResource');

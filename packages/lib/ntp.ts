@@ -22,8 +22,7 @@ const parseNtpServer = (ntpServer: string): NtpServer => {
 };
 
 export async function getNetworkTime(ntpServer: string): Promise<Date> {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	return new Promise((resolve: Function, reject: Function) => {
+	return new Promise<Date>((resolve, reject) => {
 		const s = parseNtpServer(ntpServer);
 		ntpClient().getNetworkTime(s.domain, s.port, (error: Error | null, date: Date) => {
 			if (error) {

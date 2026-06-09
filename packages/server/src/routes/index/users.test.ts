@@ -4,9 +4,10 @@ import { NotificationKey } from '../../models/NotificationModel';
 import { cookieGet } from '../../utils/cookies';
 import { ErrorForbidden } from '../../utils/errors';
 import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError, expectThrow } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError, expectThrow, createSubscription } from '../../utils/testing/testUtils';
 import { uuidgen } from '@joplin/lib/uuid';
 import config from '../../config';
+import { AccountType } from '../../models/UserModel';
 
 async function postUser(sessionId: string, email: string, password: string = null, props: Partial<User> = null): Promise<User> {
 	password = password === null ? uuidgen() : password;
@@ -370,6 +371,28 @@ describe('index/users', () => {
 			).toBe(expectedDisabled);
 		} finally {
 			config().SAML_ENABLED = false;
+		}
+	});
+
+	test.each([
+		{ fromAccountType: AccountType.Basic, shouldAllowUpgrade: true, upgradeButtonText: /to Pro$/ },
+		{ fromAccountType: AccountType.Pro, shouldAllowUpgrade: true, upgradeButtonText: /to Pro 100 GB$/ },
+		{ fromAccountType: AccountType.Pro100Gb, shouldAllowUpgrade: false },
+	])('should prompt users to switch plans (case: %j)', async ({
+		fromAccountType, shouldAllowUpgrade, upgradeButtonText,
+	}) => {
+		const { user, session } = await createUserAndSession(0, false, {
+			account_type: fromAccountType,
+		});
+		await createSubscription(user, 'stripe-user-id-here', 'sub_1234567');
+
+		const userHtml = await getUserHtml(session.id, user.id);
+		const doc = parseHtml(userHtml);
+
+		const upgradeButton = doc.querySelector('a.button.upgrade-subscription');
+		expect(!!upgradeButton).toBe(shouldAllowUpgrade);
+		if (shouldAllowUpgrade) {
+			expect(upgradeButton.textContent).toMatch(upgradeButtonText);
 		}
 	});
 });

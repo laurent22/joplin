@@ -1,10 +1,10 @@
 import MdToHtml, { LinkRenderingType, Options as MdToHtmlConstructorOptions } from '@joplin/renderer/MdToHtml';
-const { filename } = require('@joplin/lib/path-utils');
+import { filename } from '@joplin/lib/path-utils';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import shim from '@joplin/lib/shim';
 import { RenderOptions } from '@joplin/renderer/types';
 import { isResourceUrl, resourceUrlToId } from '@joplin/lib/models/utils/resourceUtils';
-const { themeStyle } = require('@joplin/lib/theme');
+import { themeStyle } from '@joplin/lib/theme';
 
 function newTestMdToHtml(options: Partial<MdToHtmlConstructorOptions> = null) {
 	const merged: MdToHtmlConstructorOptions = {
@@ -376,5 +376,28 @@ describe('MdToHtml', () => {
 
 		// Should not contain the HTML in unsanitized form
 		expect(renderResult.html).not.toContain('<svg>');
+	});
+
+	// KaTeX's \href bypasses the Markdown URL allowlist because it renders HTML
+	// directly. With trust enabled unconditionally, a file:// or javascript: URL
+	// could leak NTLM credentials on Windows or trigger arbitrary URL handlers.
+	it.each([
+		['https://example.com/page', true],
+		['http://example.com/page', true],
+		['mailto:foo@example.com', true],
+		['joplin://x-callback-url/openNote?id=abc', true],
+		['file:///etc/passwd', false],
+		['file://attacker.example.com/share/x.txt', false],
+		['javascript:alert(1)', false],
+		['vscode://foo', false],
+		['ms-msdt:/id', false],
+	])('should only allow safe URL schemes in KaTeX \\href (%s -> allowed=%s)', async (url, allowed) => {
+		const { html } = await newTestMdToHtml().render(`$\\href{${url}}{click}$`, null, { bodyOnly: true });
+
+		if (allowed) {
+			expect(html).toContain(`href="${url}"`);
+		} else {
+			expect(html).not.toContain(`href="${url}"`);
+		}
 	});
 });

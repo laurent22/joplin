@@ -31,7 +31,8 @@ async function main() {
 
 	const buildCommand = `wasm-pack build --target nodejs --${argv.profile} ./renderer`;
 
-	await execCommand(buildCommand);
+	// Retry to work around intermittent clang linker segfaults on macOS CI runners.
+	await execCommand(buildCommand, { retryCount: 3 });
 
 	if (isDevBuild) return;
 

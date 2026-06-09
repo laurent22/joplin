@@ -1,7 +1,7 @@
-const React = require('react');
+import * as React from 'react';
 import { CSSProperties } from 'react';
-const { connect } = require('react-redux');
-const { clipboard } = require('electron');
+import { connect } from 'react-redux';
+import { clipboard } from 'electron';
 import ExtensionBadge from './ExtensionBadge';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
@@ -11,9 +11,16 @@ import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { AppState } from '../app.reducer';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 
-class ClipperConfigScreenComponent extends React.Component {
-	public constructor() {
-		super();
+interface Props {
+	themeId: number;
+	apiToken: string;
+	clipperServer: AppState['clipperServer'];
+	clipperServerAutoStart: boolean;
+}
+
+class ClipperConfigScreenComponent extends React.Component<Props> {
+	public constructor(props: Props) {
+		super(props);
 
 		this.copyToken_click = this.copyToken_click.bind(this);
 	}

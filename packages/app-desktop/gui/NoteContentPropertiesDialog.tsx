@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow from './DialogButtonRow';
-const { themeStyle } = require('@joplin/lib/theme');
+import { themeStyle } from '@joplin/lib/theme';
 const Countable = require('@joplin/lib/countable/Countable');
 import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
 import Dialog from '@joplin/lib/components/Dialog';
@@ -127,7 +127,7 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 		width: '10em',
 	};
 
-	const controlCompStyle = {
+	const controlCompStyle: React.CSSProperties = {
 		...theme.textStyle,
 		textAlign: 'center',
 	};
@@ -142,7 +142,7 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 		);
 	};
 
-	const tableHeaderStyle = {
+	const tableHeaderStyle: React.CSSProperties = {
 		...theme.textStyle,
 		textAlign: 'center',
 	};
@@ -161,7 +161,7 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 		tableBodyComps.push(comp);
 	}
 
-	const dialogBoxHeadingStyle = {
+	const dialogBoxHeadingStyle: React.CSSProperties = {
 		...theme.dialogTitle,
 		textAlign: 'center',
 	};

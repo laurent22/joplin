@@ -1,5 +1,9 @@
 # Joplin iOS Changelog
 
+## [ios-v13.6.9](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.9) - 2026-05-22T10:09:34Z
+
+- Fixed: Fix scroll jumps while editing long paragraphs (#15495) (#15490 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.6.8](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.8) - 2026-05-19T14:45:16Z
 
 - New: Add padding to the bottom of the viewer and editor  (#15418 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

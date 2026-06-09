@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, ForwardedRef, useContext } from 'react';
 
-// eslint-disable-next-line no-unused-vars
+
 import { EditorCommand, NoteBodyEditorProps, NoteBodyEditorRef } from '../../../utils/types';
 import { commandAttachFileToBody, getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../../utils/types';
@@ -24,7 +24,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import { ThemeAppearance } from '@joplin/lib/themes/type';
 import dialogs from '../../../../dialogs';
 import { MarkupToHtml } from '@joplin/renderer';
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 
 import { reg } from '@joplin/lib/registry';
 import ErrorBoundary from '../../../../ErrorBoundary';
@@ -54,8 +54,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	rootRef.current = editorRoot;
 
 	const webviewRef = useRef(null);
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	const props_onChangeRef = useRef<Function>(null);
+	const props_onChangeRef = useRef<NoteBodyEditorProps['onChange']>(null);
 	props_onChangeRef.current = props.onChange;
 
 	const rootSize = useElementSize(rootRef);

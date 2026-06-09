@@ -3,7 +3,7 @@ import time from './time';
 import shim from './shim';
 import { SqlParams, SqlQuery, StringOrSqlQuery } from './services/database/types';
 
-const Mutex = require('async-mutex').Mutex;
+import { Mutex } from 'async-mutex';
 
 // Row values come back as SQLite primitives (string|number|null|Buffer for BLOBs)
 // but per-table column shapes vary, and callers across the codebase index without

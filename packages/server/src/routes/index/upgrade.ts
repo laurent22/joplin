@@ -2,18 +2,22 @@ import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import { findPrice, PricePeriod, PlanName, getFeatureLabel, getFeatureEnabled, getAllFeatureIds } from '@joplin/lib/utils/joplinCloud';
+import { findPrice, PricePeriod, getFeatureLabel, getFeatureEnabled, getAllFeatureIds } from '@joplin/lib/utils/joplinCloud';
 import config from '../../config';
 import defaultView from '../../utils/defaultView';
 import { initStripe, stripeConfig, stripePriceIdByUserId, updateSubscriptionType } from '../../utils/stripe';
 import { bodyFields } from '../../utils/requestUtils';
 import { NotificationKey } from '../../models/NotificationModel';
-import { AccountType } from '../../models/UserModel';
-import { ErrorBadRequest } from '../../utils/errors';
+import { AccountType, accountTypeToPlan, accountTypeToString, getNextSubscriptionPlan } from '../../models/UserModel';
+import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
 import { createCsrfTag } from '../../utils/csrf';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('index/upgrade');
 
 interface FormFields {
 	upgrade_button: string;
+	to_plan: string;
 }
 
 const router: Router = new Router(RouteType.Web);
@@ -22,29 +26,42 @@ function upgradeUrl() {
 	return `${config().baseUrl}/upgrade`;
 }
 
+const getUpgradeToAccountType = (ctx: AppContext) => {
+	const { upgradeTo } = getNextSubscriptionPlan(ctx.joplin.owner.account_type);
+	if (!upgradeTo) {
+		throw new ErrorNotFound(`There are no upgrade options available for this account type (${accountTypeToString(ctx.joplin.owner.account_type)}).`);
+	}
+	return upgradeTo;
+};
+
 router.get('upgrade', async (_path: SubPath, ctx: AppContext) => {
+	const upgradeFrom = ctx.joplin.owner.account_type;
+	const upgradeTo = getUpgradeToAccountType(ctx);
+
 	interface PlanRow {
-		basicLabel: string;
-		proLabel: string;
+		currentLabel: string;
+		upgradeLabel: string;
 	}
 
 	const featureIds = getAllFeatureIds();
 
 	const planRows: PlanRow[] = [];
 
+	const fromPlanName = accountTypeToPlan(upgradeFrom);
+	const toPlanName = accountTypeToPlan(upgradeTo);
 	for (let i = 0; i < featureIds.length; i++) {
 		const featureId = featureIds[i];
 
-		const basicLabel = getFeatureLabel(PlanName.Basic, featureId);
-		const proLabel = getFeatureLabel(PlanName.Pro, featureId);
-		const basicEnabled = getFeatureEnabled(PlanName.Basic, featureId);
-		const proEnabled = getFeatureEnabled(PlanName.Pro, featureId);
+		const fromLabel = getFeatureLabel(fromPlanName, featureId);
+		const toLabel = getFeatureLabel(toPlanName, featureId);
+		const fromEnabled = getFeatureEnabled(fromPlanName, featureId);
+		const toEnabled = getFeatureEnabled(toPlanName, featureId);
 
-		if (basicLabel === proLabel && basicEnabled === proEnabled) continue;
+		if (fromLabel === toLabel && fromEnabled === toEnabled) continue;
 
 		planRows.push({
-			basicLabel: basicEnabled ? basicLabel : '-',
-			proLabel: proLabel,
+			currentLabel: fromEnabled ? fromLabel : '-',
+			upgradeLabel: toLabel,
 		});
 	}
 
@@ -53,15 +70,17 @@ router.get('upgrade', async (_path: SubPath, ctx: AppContext) => {
 
 	const currentPrice = findPrice(stripeConfig(), { priceId });
 	const upgradePrice = findPrice(stripeConfig(), {
-		accountType: AccountType.Pro,
+		accountType: upgradeTo,
 		period: currentPrice.period,
 	});
 
 	const view = defaultView('upgrade', 'Upgrade');
 	view.content = {
 		planRows,
-		basicPrice: currentPrice,
-		proPrice: upgradePrice,
+		currentPriceName: accountTypeToString(upgradeFrom),
+		upgradePriceName: accountTypeToString(upgradeTo),
+		currentPrice,
+		upgradePrice,
 		postUrl: upgradeUrl(),
 		csrfTag: await createCsrfTag(ctx),
 		showYearlyPrices: currentPrice.period === PricePeriod.Yearly,
@@ -71,16 +90,27 @@ router.get('upgrade', async (_path: SubPath, ctx: AppContext) => {
 });
 
 router.post('upgrade', async (_path: SubPath, ctx: AppContext) => {
+	const upgradeTo = getUpgradeToAccountType(ctx);
+
 	const fields = await bodyFields<FormFields>(ctx.req);
+	if (Number(fields.to_plan) !== upgradeTo) {
+		throw new ErrorBadRequest(`Unexpected next plan type: ${fields.to_plan}. Expected ${upgradeTo}. (Has the account already been upgraded?)`);
+	}
 
 	const joplin = ctx.joplin;
 	const models = joplin.models;
 
 	if (fields.upgrade_button) {
 		const stripe = initStripe();
-		await updateSubscriptionType(stripe, models, joplin.owner.id, AccountType.Pro);
-		await models.user().save({ id: joplin.owner.id, account_type: AccountType.Pro });
-		await models.notification().add(joplin.owner.id, NotificationKey.UpgradedToPro);
+		await updateSubscriptionType(stripe, models, joplin.owner.id, upgradeTo);
+		await models.user().save({ id: joplin.owner.id, account_type: upgradeTo });
+		const notificationKey = (() => {
+			if (upgradeTo === AccountType.Pro) return NotificationKey.UpgradedToPro;
+			if (upgradeTo === AccountType.Pro100Gb) return NotificationKey.UpgradedToPro100Gb;
+			logger.warn('No notification key for upgrade type', upgradeTo);
+			return NotificationKey.Any;
+		})();
+		await models.notification().add(joplin.owner.id, notificationKey);
 		return redirect(ctx, `${config().baseUrl}/home`);
 	}
 

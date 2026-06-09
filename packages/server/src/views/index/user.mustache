@@ -64,12 +64,12 @@
 		<h1 class="title">Your subscription</h1>
 
 		<div class="block">
-			{{#showUpdateSubscriptionPro}}
+			{{#showUpgradeSubscription}}
 				<div class="control block">
-					<p><a href="{{{global.baseUrl}}}/upgrade" class="button is-warning block">Upgrade to Pro</a></p>
-					<p class="help">Click for more info about the Pro plan and to upgrade your account.</p>
+					<p><a href="{{{global.baseUrl}}}/upgrade" class="button upgrade-subscription is-warning block">Upgrade to {{upgradeSubscriptionPlan}}</a></p>
+					<p class="help">Click for more info about the {{upgradeSubscriptionPlan}} plan and to upgrade your account.</p>
 				</div>
-			{{/showUpdateSubscriptionPro}}
+			{{/showUpgradeSubscription}}
 
 			<div class="control block">
 				<p><a class="button is-link" target="_blank" href="{{stripePortalUrl}}">Manage subscription</a></p>

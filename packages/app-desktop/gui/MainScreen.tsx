@@ -1,10 +1,10 @@
 import * as React from 'react';
-import ResizableLayout from './ResizableLayout/ResizableLayout';
+import { Dispatch } from 'redux';
+import ResizableLayout, { RenderItemEvent } from './ResizableLayout/ResizableLayout';
 import findItemByKey from './ResizableLayout/utils/findItemByKey';
 import { MoveButtonClickEvent } from './ResizableLayout/MoveButtons';
 import { move } from './ResizableLayout/utils/movements';
-import { LayoutItem, Size } from './ResizableLayout/utils/types';
-import { EventEmitter } from 'events';
+import { LayoutItem } from './ResizableLayout/utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import Sidebar from './Sidebar/Sidebar';
@@ -50,15 +50,14 @@ import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('MainScreen');
 
-const ipcRenderer = require('electron').ipcRenderer;
+import { ipcRenderer } from 'electron';
 
 interface Props {
 	plugins: PluginStates;
 	pluginHtmlContents: PluginHtmlContents;
 	pluginsLoaded: boolean;
 	hasNotesBeingSaved: boolean;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	mainLayout: LayoutItem;
 	style: React.CSSProperties & { width?: number; height?: number };
 	layoutMoveMode: boolean;
@@ -423,8 +422,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		return this.styles_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private renderNotificationMessage(message: string, callForAction: string = null, callForActionHandler: Function = null, callForAction2: string = null, callForActionHandler2: Function = null) {
+	private renderNotificationMessage(message: string, callForAction: string = null, callForActionHandler: ()=> void = null, callForAction2: string = null, callForActionHandler2: ()=> void = null) {
 		const theme = themeStyle(this.props.themeId);
 		const urlStyle: React.CSSProperties = { color: theme.colorWarnUrl, textDecoration: 'underline' };
 
@@ -634,7 +632,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.updateMainLayout(newLayout);
 	}
 
-	private resizableLayout_renderItem(key: string, event: { eventEmitter: EventEmitter; visible: boolean; size: Size; item: LayoutItem }): React.ReactNode {
+	private resizableLayout_renderItem(key: string, event: RenderItemEvent): React.ReactNode {
 		// Key should never be undefined but somehow it can happen, also not
 		// clear how. For now in this case render nothing so that the app
 		// doesn't crash.

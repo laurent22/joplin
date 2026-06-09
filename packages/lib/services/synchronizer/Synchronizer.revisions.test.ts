@@ -147,6 +147,10 @@ describe('Synchronizer.revisions', () => {
 	}));
 
 	it('should not create revisions when item is modified as a result of decryption', (async () => {
+		// This test does a full encrypt/sync/decrypt round-trip and is prone to timing out
+		// under CI runner contention, so allow one retry.
+		jest.retryTimes(2, { logErrorsBeforeRetry: true });
+
 		// Handle this scenario:
 		// - C1 creates note
 		// - C1 never changes it

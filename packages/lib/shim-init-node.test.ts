@@ -1,5 +1,4 @@
-
-const { shimInit } = require('./shim-init-node');
+import { shimInit } from './shim-init-node';
 import shim from './shim';
 import { createTempDir, setupDatabaseAndSynchronizer, supportDir } from './testing/test-utils';
 import { copyFile } from 'fs-extra';

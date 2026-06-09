@@ -15,7 +15,6 @@ import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
 import { initializeJoplinUtils } from './utils/joplinUtils';
 import startServices from './utils/startServices';
-import { credentialFile } from './utils/testing/testUtils';
 import apiVersionHandler from './middleware/apiVersionHandler';
 import clickJackingHandler from './middleware/clickJackingHandler';
 import newModelFactory from './models/factory';
@@ -29,6 +28,7 @@ import initLib from '@joplin/lib/initLib';
 import checkAdminHandler from './middleware/checkAdminHandler';
 import ActionLogger from '@joplin/lib/utils/ActionLogger';
 import { setupSamlAuthentication } from './utils/saml';
+import { credentialFile } from './utils/testing/credentialFile';
 
 interface Argv {
 	env?: Env;
@@ -36,9 +36,9 @@ interface Argv {
 	envFile?: string;
 }
 
-const nodeSqlite = require('sqlite3');
+import * as nodeSqlite from 'sqlite3';
+import { shimInit } from '@joplin/lib/shim-init-node';
 const cors = require('@koa/cors');
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit({ nodeSqlite });
 
 const defaultEnvVariables: Record<Env, Partial<EnvVariables>> = {
@@ -211,6 +211,8 @@ async function main() {
 		// https://github.com/koajs/cors/issues/52#issuecomment-413887382
 		origin: (ctx: AppContext) => {
 			const origin = ctx.request.header.origin;
+
+			if (!origin) return '';
 
 			if (acceptOrigin(origin)) {
 				return origin;

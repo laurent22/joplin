@@ -1,5 +1,5 @@
 import * as fs from 'fs-extra';
-const Datauri = require('datauri/sync');
+import Datauri = require('datauri/sync');
 import { dirname } from 'path';
 import packToWriter, { type FileApiChunkCallback } from './packToWriter';
 

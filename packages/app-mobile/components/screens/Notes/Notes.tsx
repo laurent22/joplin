@@ -21,7 +21,7 @@ import { useContext } from 'react';
 import { MenuChoice } from '../../DialogManager/types';
 import NewNoteButton from './NewNoteButton';
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 
 interface Props {
 	dispatch: Dispatch;

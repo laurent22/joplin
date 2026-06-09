@@ -7,7 +7,7 @@ import { AppState } from '../../../../app.reducer';
 import ToolbarButtonUtils, { ToolbarItem } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import stateToWhenClauseContext from '../../../../services/commands/stateToWhenClauseContext';
 import { _ } from '@joplin/lib/locale';
-const { buildStyle } = require('@joplin/lib/theme');
+import { buildStyle } from '@joplin/lib/theme';
 
 interface ToolbarProps {
 	themeId: number;

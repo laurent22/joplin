@@ -28,17 +28,24 @@ function useCss(themeId: number): string {
 
 			body {
 				margin: 0;
-				height: 100vh;
 				/* Prefer 100% -- 100vw shows an unnecessary horizontal scrollbar in Google Chrome (desktop). */
 				width: 100%;
-				box-sizing: border-box;
+				padding: 0;
 
+				font-size: 13pt;
+			}
+
+			body > .CodeMirror {
 				padding-left: 1px;
 				padding-right: 1px;
 				padding-bottom: 1px;
 				padding-top: 10px;
+				/* Padding contributes to the height */
+				box-sizing: border-box;
 
-				font-size: 13pt;
+				/* Tapping anywhere in an empty note should focus the editor. This style ensures that the
+				   editor wrapper is large enough for this to happen. */
+				min-height: 100vh;
 			}
 
 			* {
@@ -99,7 +106,7 @@ function useHtml(): string {
 				</style>
 			</head>
 			<body>
-				<div class="CodeMirror" style="height:100%;" autocapitalize="on"></div>
+				<div class="CodeMirror" autocapitalize="on"></div>
 			</body>
 		</html>
 	`, []);

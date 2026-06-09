@@ -302,3 +302,11 @@ LASTEXITCODE
 Ollama
 nomic
 mxbai
+segfaults
+GHSA
+msdt
+SIGKILL
+dgram
+simctl
+devicetypes
+xcodebuild

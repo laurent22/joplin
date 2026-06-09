@@ -4,7 +4,7 @@ import JoplinError from '../../JoplinError';
 import time from '../../time';
 import { FileApi } from '../../file-api';
 import { AppType } from '../../models/Setting';
-const { fileExtension, filename } = require('../../path-utils');
+import { fileExtension, filename } from '../../path-utils';
 
 export enum LockType {
 	None = 0,
@@ -377,8 +377,7 @@ export default class LockHandler {
 		return this.api_.remoteDate();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public startAutoLockRefresh(lock: Lock, errorHandler: Function): string {
+	public startAutoLockRefresh(lock: Lock, errorHandler: (error: Error)=> void): string {
 		if (!this.enabled) return '';
 
 		if (this.enabled) throw new Error('Lock handler is enabled');

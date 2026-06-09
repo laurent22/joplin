@@ -1,7 +1,7 @@
 import shim from '@joplin/lib/shim';
-const os = require('os');
+import * as os from 'os';
 import { readFile } from 'fs/promises';
-const { filename } = require('@joplin/lib/path-utils');
+import { filename } from '@joplin/lib/path-utils';
 import HtmlToMd, { ParseOptions } from '@joplin/lib/HtmlToMd';
 
 describe('HtmlToMd', () => {

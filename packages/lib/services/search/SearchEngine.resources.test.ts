@@ -25,6 +25,11 @@ const createNoteAndResource = async () => {
 
 describe('SearchEngine.resources', () => {
 
+	// The OCR tests below rely on tesseract.js, which downloads language data
+	// over the network on first run and occasionally fails with "fetch failed"
+	// on CI. Same retry strategy as OcrService.test.ts.
+	jest.retryTimes(2);
+
 	beforeEach(async () => {
 		global.console = require('console');
 		await setupDatabaseAndSynchronizer(1);

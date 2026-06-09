@@ -17,14 +17,31 @@ jobs:
        (github.event.review.user.login == 'coderabbitai' || github.event.review.user.login == 'coderabbitai[bot]'))
     runs-on: ubuntu-latest
     steps:
+      # Fork PRs trigger `pull_request_review` without exposing repo secrets,
+      # so the App token can't be minted. Skip the job cleanly in that case
+      # instead of letting it fail loudly.
+      - name: Check secrets availability
+        id: check-secrets
+        env:
+          APP_ID: ${{ secrets.CODERABBIT_CLEANUP_APP_ID }}
+        run: |
+          if [ -z "$APP_ID" ]; then
+            echo "App secrets not available (likely a fork PR event); skipping."
+            echo "available=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Generate GitHub App token
+        if: steps.check-secrets.outputs.available == 'true'
         id: app-token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ secrets.CODERABBIT_CLEANUP_APP_ID }}
           private-key: ${{ secrets.CODERABBIT_CLEANUP_APP_PRIVATE_KEY }}
 
       - name: Clean up CodeRabbit comments
+        if: steps.check-secrets.outputs.available == 'true'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           REPO: ${{ github.repository }}

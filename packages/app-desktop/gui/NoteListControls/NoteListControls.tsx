@@ -37,8 +37,8 @@ interface Props {
 
 interface StyleProps {
 	theme: { backgroundColor3: string };
-	padding: number;
-	buttonVerticalGap: number;
+	padding?: number;
+	buttonVerticalGap?: number;
 	size?: ButtonSize;
 }
 

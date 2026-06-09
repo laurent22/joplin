@@ -48,8 +48,7 @@ const RepoApiErrorMessage = styled(StyledMessage)<{ maxWidth: number }>`
 interface Props {
 	value: SerializedPluginSettings;
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onChange: Function;
+	onChange: (event: { value: unknown })=> void;
 }
 
 let repoApi_: RepositoryApi = null;

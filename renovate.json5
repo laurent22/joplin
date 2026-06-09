@@ -76,6 +76,7 @@
 		"prosemirror-state",
 		"prosemirror-view",
 		"prosemirror-tables",
+		"prosemirror-transform",
 		// Does not use semver
 		"@dr.pogodin/react-native-fs",
 		"@fortawesome/fontawesome-svg-core",

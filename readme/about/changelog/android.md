@@ -1,5 +1,9 @@
 # Joplin Android Changelog
 
+## [android-v3.6.20](https://github.com/laurent22/joplin/releases/tag/android-v3.6.20) - 2026-05-22T10:08:40Z
+
+- Fixed: Fix file system sync (#15500) (#15496 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.6.19](https://github.com/laurent22/joplin/releases/tag/android-v3.6.19) - 2026-05-19T14:44:15Z
 
 - New: Add padding to the bottom of the viewer and editor  (#15418 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
