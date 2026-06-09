@@ -12480,7 +12480,7 @@ __metadata:
     "@react-native-community/cli-platform-ios": "npm:20.0.0"
     "@react-native-community/datetimepicker": "npm:8.6.0"
     "@react-native-community/geolocation": "npm:3.4.0"
-    "@react-native-community/netinfo": "npm:11.4.1"
+    "@react-native-community/netinfo": "npm:11.5.2"
     "@react-native-community/push-notification-ios": "npm:1.12.0"
     "@react-native-documents/picker": "npm:10.1.7"
     "@react-native-vector-icons/fontawesome5": "npm:12.3.2"
@@ -15839,12 +15839,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/netinfo@npm:11.4.1":
-  version: 11.4.1
-  resolution: "@react-native-community/netinfo@npm:11.4.1"
+"@react-native-community/netinfo@npm:11.5.2":
+  version: 11.5.2
+  resolution: "@react-native-community/netinfo@npm:11.5.2"
   peerDependencies:
+    react: "*"
     react-native: ">=0.59"
-  checksum: 10/47f0d61072ca04a545784daaa44a5b1927eb788a3521dce5462184855733485c3b58c52d2a9b790b5c784e806fb342c83bc14e348cc7e55263b63d31e1862f9d
+  checksum: 10/0c388e1beb61d0135eb9303b18d7d953b0f777af15e34a8c0ab03f428669a987d658ead645a37b410afae7844374d07e7ab947897d5720b1e7fee5525fffd5b5
   languageName: node
   linkType: hard
 
