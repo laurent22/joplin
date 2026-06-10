@@ -132,8 +132,19 @@ if [ "$RUN_TESTS" == "1" ]; then
 	# On Linux, we run the Joplin Server tests using PostgreSQL
 	if [ "$IS_LINUX" == "1" ]; then
 		echo "Running Joplin Server tests using PostgreSQL..."
-		sudo docker compose --parallel 1 --file docker-compose.db-dev.yml up -d
-		cmdResult=$?
+		# Docker Hub auth/pulls occasionally time out on CI, so retry a few
+		# times before giving up.
+		cmdResult=1
+		for attempt in 1 2 3; do
+			sudo docker compose --parallel 1 --file docker-compose.db-dev.yml up -d
+			cmdResult=$?
+			if [ $cmdResult -eq 0 ]; then
+				break
+			fi
+			echo "docker compose up failed (attempt $attempt). Retrying in 15s..."
+			sudo docker compose --file docker-compose.db-dev.yml down --remove-orphans || true
+			sleep 15
+		done
 		if [ $cmdResult -ne 0 ]; then
 			exit $cmdResult
 		fi
