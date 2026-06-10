@@ -2,7 +2,7 @@
 
 import { execCommand, getRootDir } from '@joplin/utils';
 import { readFile, readdir, stat, writeFile } from 'fs/promises';
-import * as MarkdownIt from 'markdown-it';
+import MarkdownIt from 'markdown-it';
 import { htmlentities, isSelfClosingTag } from '@joplin/utils/html';
 import { compileWithFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
 import StateCore = require('markdown-it/lib/rules_core/state_core');

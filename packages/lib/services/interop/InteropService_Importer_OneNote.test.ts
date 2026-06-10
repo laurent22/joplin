@@ -11,7 +11,7 @@ import { JSDOM } from 'jsdom';
 import { ImportModuleOutputFormat, ImportOptions } from './types';
 import HtmlToMd from '../../HtmlToMd';
 import Resource from '../../models/Resource';
-import * as sharp from 'sharp';
+import sharp from 'sharp';
 
 // cspell:ignore xpsdocument
 

@@ -1,5 +1,5 @@
 import { compileWithFrontMatter, FrontMatter, stripOffFrontMatter } from './frontMatter';
-import * as moment from 'moment';
+import moment from 'moment';
 
 const testCases: [string, FrontMatter, string, string][] = [
 
