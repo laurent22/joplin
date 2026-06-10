@@ -76,6 +76,17 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 			throw new JoplinError(`AI provider returned ${response.status}${detail}`, response.status);
 		}
 
+		// A 2xx response with no `choices` array usually means the endpoint URL
+		// is wrong (e.g. user forgot the `/v1` suffix on a local server) — many
+		// such servers reply 200 with an empty body rather than 404. Surface
+		// this rather than returning an empty string the caller can't diagnose.
+		if (!Array.isArray(json.choices)) {
+			throw new JoplinError(
+				`AI provider returned an unexpected response shape. The base URL is likely wrong — for OpenAI, Ollama, and LM Studio the URL must end with "/v1" (got ${this.baseUrl_}).`,
+				'aiProviderBadResponse',
+			);
+		}
+
 		const content = json.choices?.[0]?.message?.content ?? '';
 		// Some "OpenAI-compatible" providers (notably older Ollama versions)
 		// omit `usage` entirely. Default to zeros rather than throw.

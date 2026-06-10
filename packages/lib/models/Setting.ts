@@ -1288,6 +1288,7 @@ class Setting extends BaseModel {
 			'application',
 			'appearance',
 			'sync',
+			'ai',
 			'encryption',
 			'joplinCloud',
 			'editor',

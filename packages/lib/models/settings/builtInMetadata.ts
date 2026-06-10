@@ -673,7 +673,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			},
 			options: () => ({
 				'joplin-cloud': _('Joplin Cloud AI'),
-				'openai-compatible': _('OpenAI-compatible (OpenAI, Ollama, LM Studio, OpenRouter, vLLM)'),
+				'openai-compatible': _('OpenAI-compatible'),
 				'anthropic': _('Anthropic'),
 			}),
 			storage: SettingStorage.File,

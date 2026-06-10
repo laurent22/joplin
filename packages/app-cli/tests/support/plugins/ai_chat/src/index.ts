@@ -27,23 +27,46 @@ joplin.plugins.register({
 					alert('No note selected.');
 					return;
 				}
-
-				const ai = (joplin as any).ai;
-				if (!ai || typeof ai.chat !== 'function') {
-					alert('This Joplin build does not expose joplin.ai.chat().');
+				const body = (note.body || '').trim();
+				if (!body) {
+					alert('The selected note is empty. Add some text and try again.');
 					return;
 				}
 
 				const messages: ChatMessage[] = [
-					{ role: 'system', content: 'You are a concise assistant. Summarise the user\'s note in 2–3 sentences.' },
-					{ role: 'user', content: note.body || '' },
+					{
+						role: 'system',
+						content: 'Summarise the following note in 2–3 sentences. Output only the summary itself — no preamble, no reasoning, no thinking tags, no headings.',
+					},
+					{ role: 'user', content: body },
 				];
 
+				let summary: string;
 				try {
-					const summary = await ai.chat(messages);
-					await joplin.commands.execute('editor.setText', `${note.body}\n\n---\n\n**AI summary:** ${summary}\n`);
+					// The plugin sandbox proxy mutates state per property access — we
+					// must reach .chat from `joplin` in a single chain and call it
+					// immediately. Storing `joplin.ai` or `joplin.ai.chat` first and
+					// then invoking it later corrupts the path tracking.
+					summary = await (joplin as any).ai.chat(messages);
 				} catch (error) {
 					alert(`AI call failed: ${error.message}`);
+					return;
+				}
+
+				if (!summary) {
+					alert('AI call succeeded but the response was empty. Check that your provider is returning content.');
+					return;
+				}
+
+				// Show the summary in a dialog first so we can confirm the round-trip
+				// works even if writing to the editor doesn't.
+				alert(`AI summary:\n\n${summary}`);
+
+				try {
+					const newBody = `${note.body || ''}\n\n---\n\n**AI summary:** ${summary}\n`;
+					await joplin.data.put(['notes', note.id], null, { body: newBody });
+				} catch (error) {
+					alert(`Got the AI summary but failed to write it to the note: ${error.message}`);
 				}
 			},
 		});
