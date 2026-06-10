@@ -2,7 +2,7 @@ import { ProviderClassification, ProviderType } from './types';
 
 // Hosts treated as on-device. LAN addresses are deliberately classified as
 // remote — the spec's local/remote split is "does my data leave my network",
-// so LAN traffic triggers the allowRemote prompt.
+// so LAN traffic still requires the user's ai.allowRemote opt-in.
 const localHosts = new Set(['localhost', '127.0.0.1', '::1', '0.0.0.0']);
 
 const hostFromBaseUrl = (baseUrl: string): string => {
