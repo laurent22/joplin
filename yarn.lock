@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 8
+  version: 10
   cacheKey: 10
 
 "7zip-bin@npm:5.2.0, 7zip-bin@npm:~5.2.0":
@@ -7676,18 +7676,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/autocomplete@npm:^6.0.0, @codemirror/autocomplete@npm:^6.3.2, @codemirror/autocomplete@npm:^6.7.1":
-  version: 6.20.0
-  resolution: "@codemirror/autocomplete@npm:6.20.0"
-  dependencies:
-    "@codemirror/language": "npm:^6.0.0"
-    "@codemirror/state": "npm:^6.0.0"
-    "@codemirror/view": "npm:^6.17.0"
-    "@lezer/common": "npm:^1.0.0"
-  checksum: 10/ba3603b860c30dd4f8b7c20085680d2f491022db95fe1f3aa6a58363c64678efb3ba795d715755c8a02121631317cf7fbe44cfa3b4cdb01ebca2b4ed36ea5d8a
-  languageName: node
-  linkType: hard
-
 "@codemirror/commands@npm:6.10.3":
   version: 6.10.3
   resolution: "@codemirror/commands@npm:6.10.3"
@@ -7995,17 +7983,6 @@ __metadata:
     "@codemirror/view": "npm:^6.35.0"
     crelt: "npm:^1.0.5"
   checksum: 10/f859b4c82ebc476d1986d2a674f8be0614c14fe65f456b4cd9267b7b103701633af7eba765c072ad60857a28752670c74eb53c434118c975bb45ce078fce058d
-  languageName: node
-  linkType: hard
-
-"@codemirror/lint@npm:^6.0.0":
-  version: 6.9.2
-  resolution: "@codemirror/lint@npm:6.9.2"
-  dependencies:
-    "@codemirror/state": "npm:^6.0.0"
-    "@codemirror/view": "npm:^6.35.0"
-    crelt: "npm:^1.0.5"
-  checksum: 10/22e04e25476f55dd8d3178009d03bd231c7933028df90c0ab0120afc5136ffb1e035a8b30c7c9d15e1b6bdd9158c3a9e83c8c1598fd140ede6e65d2bde77bda9
   languageName: node
   linkType: hard
 
