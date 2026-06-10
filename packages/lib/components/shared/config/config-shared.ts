@@ -162,8 +162,7 @@ export const saveSettings = async (comp: ConfigScreenComponent) => {
 		return false;
 	}
 
-	const aiOk = await aiSettingsTransition({ changedKeys: savedSettingKeys, settings: comp.state.settings });
-	if (!aiOk) return false;
+	aiSettingsTransition({ changedKeys: savedSettingKeys, settings: comp.state.settings });
 
 	for (const key in comp.state.settings) {
 		if (!comp.state.settings.hasOwnProperty(key)) continue;

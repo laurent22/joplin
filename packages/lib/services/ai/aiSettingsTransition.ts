@@ -1,26 +1,16 @@
 import Setting from '../../models/Setting';
-import shim from '../../shim';
-import { _ } from '../../locale';
-import deriveClassification from './classification';
 import { ProviderType } from './types';
 
 // Inspects a pending set of setting changes and applies the AI-specific
 // transition logic before settings are persisted:
 //
-// 1. Confirm "no silent enablement" (spec §4). When the user enables remote
-//    access, or when their changes cause the active provider to flip from
-//    local to remote, show a clear prompt naming the destination.
-//
-// 2. Mark `providerType.configured = true` when the user explicitly picked a
+// 1. Mark `providerType.configured = true` when the user explicitly picked a
 //    provider in the UI. This guards against the first-enable default
 //    overwriting their choice if they later toggle AI off and on again.
 //
-// 3. Reset the token-usage counters when the active provider endpoint changes
+// 2. Reset the token-usage counters when the active provider endpoint changes
 //    (provider type or base URL). Counters represent usage for whichever
 //    provider is currently active.
-//
-// Returns `true` to proceed, `false` to abort the save (the caller should not
-// persist the changes).
 
 interface PendingChanges {
 	changedKeys: string[];
@@ -28,16 +18,9 @@ interface PendingChanges {
 	settings: Record<string, any>;
 }
 
-const providerLabel = (providerType: ProviderType, baseUrl: string): string => {
-	if (providerType === 'joplin-cloud') return _('Joplin Cloud AI');
-	if (providerType === 'anthropic') return _('Anthropic');
-	if (providerType === 'openai-compatible') return baseUrl || _('the configured AI server');
-	return providerType;
-};
-
-const aiSettingsTransition = async (pending: PendingChanges): Promise<boolean> => {
+const aiSettingsTransition = (pending: PendingChanges): void => {
 	const aiKeys = pending.changedKeys.filter(k => k.startsWith('ai.'));
-	if (!aiKeys.length) return true;
+	if (!aiKeys.length) return;
 
 	// Mark provider as explicitly configured if the user touched any
 	// provider-shaping setting. After this point, sync target changes will
@@ -50,36 +33,11 @@ const aiSettingsTransition = async (pending: PendingChanges): Promise<boolean> =
 		}
 	}
 
-	// Confirmation: detect a local→remote flip OR ai.allowRemote turning on.
-	const newProviderType = (pending.settings['ai.chat.providerType'] ?? Setting.value('ai.chat.providerType')) as ProviderType;
-	const newBaseUrl = (pending.settings['ai.chat.baseUrl'] ?? Setting.value('ai.chat.baseUrl')) as string;
-	const newAllowRemote = !!(pending.settings['ai.allowRemote'] ?? Setting.value('ai.allowRemote'));
-	const newAiEnabled = !!(pending.settings['ai.enabled'] ?? Setting.value('ai.enabled'));
-
-	const previousClassification = deriveClassification(
-		Setting.value('ai.chat.providerType') as ProviderType,
-		Setting.value('ai.chat.baseUrl') as string,
-	);
-	const newClassification = deriveClassification(newProviderType, newBaseUrl);
-
-	const turnedOnAllowRemote = aiKeys.includes('ai.allowRemote') && !Setting.value('ai.allowRemote') && newAllowRemote;
-	const flippedToRemote = previousClassification === 'local' && newClassification === 'remote';
-
-	// Only prompt if AI is (or will be) enabled — no point asking permission
-	// for a feature that's off.
-	if (newAiEnabled && (turnedOnAllowRemote || flippedToRemote)) {
-		const label = providerLabel(newProviderType, newBaseUrl);
-		const message = newProviderType === 'joplin-cloud'
-			? _('AI features will use Joplin Cloud AI. Your note content will be sent to Joplin Cloud for processing. Continue?')
-			: _('AI features will send note content to %s. Continue?', label);
-
-		const ok = await shim.showConfirmationDialog(message);
-		if (!ok) return false;
-	}
-
 	// Reset usage counters whenever the user points at a different endpoint.
 	// Same provider type with a new baseUrl (e.g. switching from OpenAI to
 	// Mistral) also counts as a different endpoint.
+	const newProviderType = (pending.settings['ai.chat.providerType'] ?? Setting.value('ai.chat.providerType')) as ProviderType;
+	const newBaseUrl = (pending.settings['ai.chat.baseUrl'] ?? Setting.value('ai.chat.baseUrl')) as string;
 	const oldProviderType = Setting.value('ai.chat.providerType');
 	const oldBaseUrl = Setting.value('ai.chat.baseUrl');
 	if (newProviderType !== oldProviderType || newBaseUrl !== oldBaseUrl) {
@@ -88,8 +46,6 @@ const aiSettingsTransition = async (pending: PendingChanges): Promise<boolean> =
 		if (!pending.changedKeys.includes('ai.usage.inputTokens')) pending.changedKeys.push('ai.usage.inputTokens');
 		if (!pending.changedKeys.includes('ai.usage.outputTokens')) pending.changedKeys.push('ai.usage.outputTokens');
 	}
-
-	return true;
 };
 
 export default aiSettingsTransition;
