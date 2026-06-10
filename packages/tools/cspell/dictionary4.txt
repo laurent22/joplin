@@ -310,3 +310,4 @@ dgram
 simctl
 devicetypes
 xcodebuild
+openai

@@ -8,6 +8,7 @@ import KeychainServiceDriverNode from './services/keychain/KeychainServiceDriver
 import KeychainServiceDriverElectron from './services/keychain/KeychainServiceDriver.electron';
 import { setLocale } from './locale';
 import KvStore from './services/KvStore';
+import AiService from './services/ai/AiService';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
 import SyncTargetJoplinServerSAML from './SyncTargetJoplinServerSAML';
 import SyncTargetOneDrive from './SyncTargetOneDrive';
@@ -407,6 +408,15 @@ export default class BaseApplication {
 			'sync.interval': async () => {
 				if (this.hasGui()) reg.setupRecurrentSync();
 			},
+
+			'ai.enabled': async () => {
+				if (Setting.value('ai.enabled')) AiService.instance().applyFirstEnableDefault();
+				AiService.instance().invalidateProvider();
+			},
+
+			'ai.chat.providerType': async () => {
+				AiService.instance().invalidateProvider();
+			},
 		};
 
 		sideEffects['timeFormat'] = sideEffects['dateFormat'];
@@ -416,6 +426,9 @@ export default class BaseApplication {
 		sideEffects['sync.maxConcurrentConnections'] = sideEffects['net.proxyEnabled'];
 		sideEffects['sync.proxyTimeout'] = sideEffects['net.proxyEnabled'];
 		sideEffects['sync.proxyUrl'] = sideEffects['net.proxyEnabled'];
+		sideEffects['ai.chat.baseUrl'] = sideEffects['ai.chat.providerType'];
+		sideEffects['ai.chat.apiKey'] = sideEffects['ai.chat.providerType'];
+		sideEffects['ai.chat.model'] = sideEffects['ai.chat.providerType'];
 
 		if (action) {
 			const effect = sideEffects[action.key];

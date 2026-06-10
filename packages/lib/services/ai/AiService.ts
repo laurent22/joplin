@@ -1,0 +1,140 @@
+import Setting from '../../models/Setting';
+import JoplinError from '../../JoplinError';
+import Logger from '@joplin/utils/Logger';
+import { ChatMessage, ChatOptions, ChatProvider, ChatResult, ProviderClassification, ProviderType, TokenUsage } from './types';
+import deriveClassification from './classification';
+import ChatProviderBase from './providers/ChatProviderBase';
+import OpenAiCompatibleProvider from './providers/OpenAiCompatible';
+import AnthropicProvider from './providers/Anthropic';
+import JoplinCloudProvider from './providers/JoplinCloud';
+
+const logger = Logger.create('AiService');
+
+const JOPLIN_CLOUD_SYNC_TARGET = 10;
+
+const knownProviderTypes: ProviderType[] = ['joplin-cloud', 'openai-compatible', 'anthropic'];
+
+export default class AiService {
+
+	private static instance_: AiService;
+
+	public static instance(): AiService {
+		if (!this.instance_) this.instance_ = new AiService();
+		return this.instance_;
+	}
+
+	private cachedProvider_: ChatProvider | null = null;
+	private cachedProviderKey_: string | null = null;
+
+	private currentSettingsKey(): string {
+		// Re-builds the provider when any of these change.
+		return [
+			Setting.value('ai.chat.providerType'),
+			Setting.value('ai.chat.baseUrl'),
+			Setting.value('ai.chat.apiKey'),
+			Setting.value('ai.chat.model'),
+		].join('|');
+	}
+
+	private buildProvider(): ChatProvider {
+		const providerType = Setting.value('ai.chat.providerType') as ProviderType;
+
+		if (providerType === 'joplin-cloud') {
+			return this.attachRecorder(new JoplinCloudProvider(), 'joplin-cloud');
+		}
+
+		if (providerType === 'anthropic') {
+			return this.attachRecorder(new AnthropicProvider({
+				apiKey: Setting.value('ai.chat.apiKey'),
+				model: Setting.value('ai.chat.model'),
+			}), 'anthropic');
+		}
+
+		if (providerType === 'openai-compatible') {
+			const baseUrl = Setting.value('ai.chat.baseUrl');
+			return this.attachRecorder(new OpenAiCompatibleProvider({
+				baseUrl,
+				apiKey: Setting.value('ai.chat.apiKey'),
+				model: Setting.value('ai.chat.model'),
+				classification: deriveClassification('openai-compatible', baseUrl),
+			}), 'openai-compatible');
+		}
+
+		throw new JoplinError(`Unknown AI provider type: ${providerType}`, 'aiUnknownProvider');
+	}
+
+	private attachRecorder(provider: ChatProviderBase, providerId: ProviderType): ChatProvider {
+		provider.setUsageRecorder(async (inputTokens, outputTokens) => {
+			await this.recordTokens(providerId, inputTokens, outputTokens);
+		});
+		return provider;
+	}
+
+	private getProvider(): ChatProvider {
+		const key = this.currentSettingsKey();
+		if (this.cachedProvider_ && this.cachedProviderKey_ === key) return this.cachedProvider_;
+		this.cachedProvider_ = this.buildProvider();
+		this.cachedProviderKey_ = key;
+		return this.cachedProvider_;
+	}
+
+	public effectiveClassification(): ProviderClassification {
+		const providerType = Setting.value('ai.chat.providerType') as ProviderType;
+		const baseUrl = providerType === 'openai-compatible' ? Setting.value('ai.chat.baseUrl') : '';
+		return deriveClassification(providerType, baseUrl);
+	}
+
+	public async chat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult> {
+		if (!Setting.value('ai.enabled')) {
+			throw new JoplinError('AI features are disabled', 'aiDisabled');
+		}
+		if (!messages || !messages.length) {
+			throw new JoplinError('Messages array must not be empty', 'aiInvalidRequest');
+		}
+
+		const provider = this.getProvider();
+
+		if (provider.classification === 'remote' && !Setting.value('ai.allowRemote')) {
+			throw new JoplinError('Remote AI access is not allowed', 'aiRemoteNotAllowed');
+		}
+
+		return provider.chat(messages, options);
+	}
+
+	// Called when ai.enabled flips from false to true. If the user has never
+	// made an explicit provider choice and they're on Joplin Cloud sync, switch
+	// the default to joplin-cloud. This is a single one-shot write — after it
+	// runs, sync target changes never affect the AI provider.
+	public applyFirstEnableDefault() {
+		if (Setting.value('ai.chat.providerType.configured')) return;
+		if (Setting.value('sync.target') === JOPLIN_CLOUD_SYNC_TARGET) {
+			Setting.setValue('ai.chat.providerType', 'joplin-cloud');
+			logger.info('Applied first-enable default: joplin-cloud (user is on Joplin Cloud sync)');
+		}
+		Setting.setValue('ai.chat.providerType.configured', true);
+	}
+
+	public invalidateProvider() {
+		this.cachedProvider_ = null;
+		this.cachedProviderKey_ = null;
+	}
+
+	private async recordTokens(providerId: ProviderType, inputTokens: number, outputTokens: number) {
+		const inputKey = `ai.usage.${providerId}.inputTokens` as const;
+		const outputKey = `ai.usage.${providerId}.outputTokens` as const;
+		const prevIn = Setting.value(inputKey) as number;
+		const prevOut = Setting.value(outputKey) as number;
+		Setting.setValue(inputKey, prevIn + inputTokens);
+		Setting.setValue(outputKey, prevOut + outputTokens);
+	}
+
+	public tokenUsage(): TokenUsage[] {
+		const out: TokenUsage[] = [];
+		for (const providerId of knownProviderTypes) {
+			const inputTokens = Setting.value(`ai.usage.${providerId}.inputTokens`) as number;
+			const outputTokens = Setting.value(`ai.usage.${providerId}.outputTokens`) as number;
+			out.push({ providerId, inputTokens, outputTokens });
+		}
+		return out;
+	}
+}

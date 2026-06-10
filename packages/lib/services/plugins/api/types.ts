@@ -952,3 +952,44 @@ export enum ContentScriptType {
 	 */
 	CodeMirrorPlugin = 'codeMirrorPlugin',
 }
+
+// =================================================================
+// AI API types
+// =================================================================
+
+/**
+ * Role of a chat message. `system` messages set the assistant's behaviour,
+ * `user` messages come from the end user, and `assistant` messages are model
+ * responses fed back as conversation history.
+ */
+export type ChatMessageRole = 'system' | 'user' | 'assistant';
+
+/**
+ * A single message in a chat conversation.
+ */
+export interface ChatMessage {
+	role: ChatMessageRole;
+	content: string;
+}
+
+/**
+ * Optional parameters for a chat call. The active model and provider are
+ * controlled by the user in the Joplin settings — plugins cannot pick a model.
+ */
+export interface ChatOptions {
+	/** Sampling temperature, typically between 0 and 1. Provider default if omitted. */
+	temperature?: number;
+	/** Maximum number of tokens to generate. Provider default if omitted. */
+	maxTokens?: number;
+}
+
+/**
+ * Per-provider token usage counters. Cumulative since the counters were last
+ * reset. Some providers (notably local OpenAI-compatible servers) do not
+ * report usage; in that case the counters will remain at zero.
+ */
+export interface TokenUsage {
+	providerId: string;
+	inputTokens: number;
+	outputTokens: number;
+}

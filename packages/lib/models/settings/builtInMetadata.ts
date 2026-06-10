@@ -627,6 +627,157 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('OCR: Search in extracted content'),
 		},
 
+		'ai.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop, AppType.Cli],
+			label: () => _('Enable AI features'),
+			description: () => _('When enabled, plugins and built-in features can use AI models to generate or analyse text. AI is off by default.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'ai.allowRemote': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop, AppType.Cli],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Allow remote AI providers'),
+			description: () => _('Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'ai.chat.providerType': {
+			value: 'openai-compatible',
+			type: SettingItemType.String,
+			isEnum: true,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop, AppType.Cli],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Chat provider'),
+			description: () => {
+				// Inline warning when Joplin Cloud AI is selected but the user is
+				// no longer syncing with Joplin Cloud — the provider call will
+				// fail until they either restore Cloud sync or pick another
+				// provider.
+				if (Setting.value('ai.chat.providerType') === 'joplin-cloud' && Setting.value('sync.target') !== 10) {
+					return _('Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.');
+				}
+				return '';
+			},
+			options: () => ({
+				'joplin-cloud': _('Joplin Cloud AI'),
+				'openai-compatible': _('OpenAI-compatible (OpenAI, Ollama, LM Studio, OpenRouter, vLLM)'),
+				'anthropic': _('Anthropic'),
+			}),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		// Tracks whether the user has made an explicit chat-provider choice.
+		// On the first false→true transition of `ai.enabled`, AiService writes
+		// the sync-aware default for `ai.chat.providerType` and flips this to
+		// true. After that, sync target changes do not affect the provider.
+		'ai.chat.providerType.configured': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop, AppType.Cli],
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'ai.chat.baseUrl': {
+			value: '',
+			type: SettingItemType.String,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop, AppType.Cli],
+			show: (settings) => !!settings['ai.enabled'] && settings['ai.chat.providerType'] === 'openai-compatible',
+			label: () => _('Base URL'),
+			description: () => _('The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'ai.chat.apiKey': {
+			value: '',
+			type: SettingItemType.String,
+			secure: true,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop, AppType.Cli],
+			show: (settings) => !!settings['ai.enabled'] && (settings['ai.chat.providerType'] === 'openai-compatible' || settings['ai.chat.providerType'] === 'anthropic'),
+			label: () => _('API key'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'ai.chat.model': {
+			value: '',
+			type: SettingItemType.String,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop, AppType.Cli],
+			show: (settings) => !!settings['ai.enabled'] && (settings['ai.chat.providerType'] === 'openai-compatible' || settings['ai.chat.providerType'] === 'anthropic'),
+			label: () => _('Model'),
+			description: () => _('The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		// Per-provider token counters. Updated by AiService whenever a chat
+		// call completes. Hidden settings; surfaced to plugins via
+		// joplin.ai.tokenUsage().
+		'ai.usage.joplin-cloud.inputTokens': {
+			value: 0,
+			type: SettingItemType.Int,
+			public: false,
+			appTypes: [AppType.Desktop, AppType.Cli],
+			storage: SettingStorage.Database,
+		},
+		'ai.usage.joplin-cloud.outputTokens': {
+			value: 0,
+			type: SettingItemType.Int,
+			public: false,
+			appTypes: [AppType.Desktop, AppType.Cli],
+			storage: SettingStorage.Database,
+		},
+		'ai.usage.openai-compatible.inputTokens': {
+			value: 0,
+			type: SettingItemType.Int,
+			public: false,
+			appTypes: [AppType.Desktop, AppType.Cli],
+			storage: SettingStorage.Database,
+		},
+		'ai.usage.openai-compatible.outputTokens': {
+			value: 0,
+			type: SettingItemType.Int,
+			public: false,
+			appTypes: [AppType.Desktop, AppType.Cli],
+			storage: SettingStorage.Database,
+		},
+		'ai.usage.anthropic.inputTokens': {
+			value: 0,
+			type: SettingItemType.Int,
+			public: false,
+			appTypes: [AppType.Desktop, AppType.Cli],
+			storage: SettingStorage.Database,
+		},
+		'ai.usage.anthropic.outputTokens': {
+			value: 0,
+			type: SettingItemType.Int,
+			public: false,
+			appTypes: [AppType.Desktop, AppType.Cli],
+			storage: SettingStorage.Database,
+		},
+
 		theme: {
 			value: Setting.THEME_LIGHT,
 			type: SettingItemType.Int,

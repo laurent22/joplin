@@ -8,6 +8,7 @@ import { type ReactNode } from 'react';
 import { type Registry } from '../../../registry';
 import settingValidations from '../../../models/settings/settingValidations';
 import { convertValuesToFunctions } from '../../../ObjectUtils';
+import aiSettingsTransition from '../../../services/ai/aiSettingsTransition';
 
 const logger = Logger.create('config-shared');
 
@@ -161,9 +162,12 @@ export const saveSettings = async (comp: ConfigScreenComponent) => {
 		return false;
 	}
 
+	const aiOk = await aiSettingsTransition({ changedKeys: savedSettingKeys, settings: comp.state.settings });
+	if (!aiOk) return false;
+
 	for (const key in comp.state.settings) {
 		if (!comp.state.settings.hasOwnProperty(key)) continue;
-		if (comp.state.changedSettingKeys.indexOf(key) < 0) continue;
+		if (savedSettingKeys.indexOf(key) < 0) continue;
 		Setting.setValue(key, comp.state.settings[key]);
 	}
 

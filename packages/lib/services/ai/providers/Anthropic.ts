@@ -1,0 +1,94 @@
+import shim from '../../../shim';
+import JoplinError from '../../../JoplinError';
+import { ChatMessage, ChatOptions, ChatResult, ProviderClassification } from '../types';
+import ChatProviderBase from './ChatProviderBase';
+
+interface AnthropicUsage {
+	input_tokens?: number;
+	output_tokens?: number;
+}
+
+interface AnthropicContentBlock {
+	type?: string;
+	text?: string;
+}
+
+interface AnthropicResponse {
+	content?: AnthropicContentBlock[];
+	usage?: AnthropicUsage;
+	error?: { message?: string };
+}
+
+interface Options {
+	apiKey: string;
+	model: string;
+}
+
+// Anthropic requires max_tokens. We pick a sensible default if the caller
+// doesn't supply one, so plugins don't have to remember a provider-specific
+// requirement.
+const DEFAULT_MAX_TOKENS = 4096;
+
+export default class AnthropicProvider extends ChatProviderBase {
+
+	public id = 'anthropic';
+	public classification: ProviderClassification = 'remote';
+	private apiKey_: string;
+	private model_: string;
+
+	public constructor(options: Options) {
+		super();
+		this.apiKey_ = options.apiKey;
+		this.model_ = options.model;
+	}
+
+	protected async doChat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult> {
+		if (!this.apiKey_) throw new JoplinError('Anthropic provider has no API key configured', 'aiProviderNotConfigured');
+		if (!this.model_) throw new JoplinError('Anthropic provider has no model configured', 'aiProviderNotConfigured');
+
+		// Anthropic's API separates system prompts from the messages array.
+		const systemMessages = messages.filter(m => m.role === 'system').map(m => m.content);
+		const turnMessages = messages.filter(m => m.role !== 'system').map(m => ({ role: m.role, content: m.content }));
+
+		const body: Record<string, unknown> = {
+			model: this.model_,
+			messages: turnMessages,
+			max_tokens: options?.maxTokens ?? DEFAULT_MAX_TOKENS,
+		};
+		if (systemMessages.length) body.system = systemMessages.join('\n\n');
+		if (options?.temperature !== undefined) body.temperature = options.temperature;
+
+		const response = await shim.fetch('https://api.anthropic.com/v1/messages', {
+			method: 'POST',
+			headers: {
+				'x-api-key': this.apiKey_,
+				'anthropic-version': '2023-06-01',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(body),
+		});
+
+		const text = await response.text();
+		let json: AnthropicResponse;
+		try {
+			json = JSON.parse(text) as AnthropicResponse;
+		} catch {
+			throw new JoplinError(`Anthropic returned non-JSON response: ${text.slice(0, 200)}`, response.status);
+		}
+
+		if (response.status >= 400) {
+			const detail = json?.error?.message ? `: ${json.error.message}` : '';
+			throw new JoplinError(`Anthropic returned ${response.status}${detail}`, response.status);
+		}
+
+		const content = (json.content ?? [])
+			.filter(b => b.type === 'text' && typeof b.text === 'string')
+			.map(b => b.text)
+			.join('');
+
+		const inputTokens = json.usage?.input_tokens ?? 0;
+		const outputTokens = json.usage?.output_tokens ?? 0;
+
+		return { text: content, usage: { inputTokens, outputTokens } };
+	}
+}
