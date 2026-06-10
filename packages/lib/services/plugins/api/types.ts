@@ -982,14 +982,3 @@ export interface ChatOptions {
 	/** Maximum number of tokens to generate. Provider default if omitted. */
 	maxTokens?: number;
 }
-
-/**
- * Per-provider token usage counters. Cumulative since the counters were last
- * reset. Some providers (notably local OpenAI-compatible servers) do not
- * report usage; in that case the counters will remain at zero.
- */
-export interface TokenUsage {
-	providerId: string;
-	inputTokens: number;
-	outputTokens: number;
-}

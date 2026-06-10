@@ -1,7 +1,7 @@
 import Setting from '../../models/Setting';
 import JoplinError from '../../JoplinError';
 import Logger from '@joplin/utils/Logger';
-import { ChatMessage, ChatOptions, ChatProvider, ChatResult, ProviderClassification, ProviderType, TokenUsage } from './types';
+import { ChatMessage, ChatOptions, ChatProvider, ChatResult, ProviderClassification, ProviderType } from './types';
 import deriveClassification from './classification';
 import ChatProviderBase from './providers/ChatProviderBase';
 import OpenAiCompatibleProvider from './providers/OpenAiCompatible';
@@ -11,8 +11,6 @@ import JoplinCloudProvider from './providers/JoplinCloud';
 const logger = Logger.create('AiService');
 
 const JOPLIN_CLOUD_SYNC_TARGET = 10;
-
-const knownProviderTypes: ProviderType[] = ['joplin-cloud', 'openai-compatible', 'anthropic'];
 
 export default class AiService {
 
@@ -40,14 +38,14 @@ export default class AiService {
 		const providerType = Setting.value('ai.chat.providerType') as ProviderType;
 
 		if (providerType === 'joplin-cloud') {
-			return this.attachRecorder(new JoplinCloudProvider(), 'joplin-cloud');
+			return this.attachRecorder(new JoplinCloudProvider());
 		}
 
 		if (providerType === 'anthropic') {
 			return this.attachRecorder(new AnthropicProvider({
 				apiKey: Setting.value('ai.chat.apiKey'),
 				model: Setting.value('ai.chat.model'),
-			}), 'anthropic');
+			}));
 		}
 
 		if (providerType === 'openai-compatible') {
@@ -57,15 +55,15 @@ export default class AiService {
 				apiKey: Setting.value('ai.chat.apiKey'),
 				model: Setting.value('ai.chat.model'),
 				classification: deriveClassification('openai-compatible', baseUrl),
-			}), 'openai-compatible');
+			}));
 		}
 
 		throw new JoplinError(`Unknown AI provider type: ${providerType}`, 'aiUnknownProvider');
 	}
 
-	private attachRecorder(provider: ChatProviderBase, providerId: ProviderType): ChatProvider {
+	private attachRecorder(provider: ChatProviderBase): ChatProvider {
 		provider.setUsageRecorder(async (inputTokens, outputTokens) => {
-			await this.recordTokens(providerId, inputTokens, outputTokens);
+			await this.recordTokens(inputTokens, outputTokens);
 		});
 		return provider;
 	}
@@ -119,22 +117,10 @@ export default class AiService {
 		this.cachedProviderKey_ = null;
 	}
 
-	private async recordTokens(providerId: ProviderType, inputTokens: number, outputTokens: number) {
-		const inputKey = `ai.usage.${providerId}.inputTokens` as const;
-		const outputKey = `ai.usage.${providerId}.outputTokens` as const;
-		const prevIn = Setting.value(inputKey) as number;
-		const prevOut = Setting.value(outputKey) as number;
-		Setting.setValue(inputKey, prevIn + inputTokens);
-		Setting.setValue(outputKey, prevOut + outputTokens);
-	}
-
-	public tokenUsage(): TokenUsage[] {
-		const out: TokenUsage[] = [];
-		for (const providerId of knownProviderTypes) {
-			const inputTokens = Setting.value(`ai.usage.${providerId}.inputTokens`) as number;
-			const outputTokens = Setting.value(`ai.usage.${providerId}.outputTokens`) as number;
-			out.push({ providerId, inputTokens, outputTokens });
-		}
-		return out;
+	private async recordTokens(inputTokens: number, outputTokens: number) {
+		const prevIn = Setting.value('ai.usage.inputTokens') as number;
+		const prevOut = Setting.value('ai.usage.outputTokens') as number;
+		Setting.setValue('ai.usage.inputTokens', prevIn + inputTokens);
+		Setting.setValue('ai.usage.outputTokens', prevOut + outputTokens);
 	}
 }

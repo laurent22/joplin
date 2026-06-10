@@ -732,50 +732,38 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
-		// Per-provider token counters. Updated by AiService whenever a chat
-		// call completes. Hidden settings; surfaced to plugins via
-		// joplin.ai.tokenUsage().
-		'ai.usage.joplin-cloud.inputTokens': {
+		// Cumulative token counters for the currently configured provider.
+		// Reset whenever the user changes the active provider in settings —
+		// totals always reflect the provider in use.
+		'ai.usage.inputTokens': {
 			value: 0,
 			type: SettingItemType.Int,
 			public: false,
 			appTypes: [AppType.Desktop, AppType.Cli],
 			storage: SettingStorage.Database,
 		},
-		'ai.usage.joplin-cloud.outputTokens': {
+		'ai.usage.outputTokens': {
 			value: 0,
 			type: SettingItemType.Int,
 			public: false,
 			appTypes: [AppType.Desktop, AppType.Cli],
 			storage: SettingStorage.Database,
 		},
-		'ai.usage.openai-compatible.inputTokens': {
-			value: 0,
-			type: SettingItemType.Int,
-			public: false,
-			appTypes: [AppType.Desktop, AppType.Cli],
-			storage: SettingStorage.Database,
-		},
-		'ai.usage.openai-compatible.outputTokens': {
-			value: 0,
-			type: SettingItemType.Int,
-			public: false,
-			appTypes: [AppType.Desktop, AppType.Cli],
-			storage: SettingStorage.Database,
-		},
-		'ai.usage.anthropic.inputTokens': {
-			value: 0,
-			type: SettingItemType.Int,
-			public: false,
-			appTypes: [AppType.Desktop, AppType.Cli],
-			storage: SettingStorage.Database,
-		},
-		'ai.usage.anthropic.outputTokens': {
-			value: 0,
-			type: SettingItemType.Int,
-			public: false,
-			appTypes: [AppType.Desktop, AppType.Cli],
-			storage: SettingStorage.Database,
+
+		'ai.usage.resetButton': {
+			value: null as null,
+			type: SettingItemType.Button,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Reset token usage'),
+			description: () => {
+				const inTokens = Setting.value('ai.usage.inputTokens') as number;
+				const outTokens = Setting.value('ai.usage.outputTokens') as number;
+				if (inTokens === 0 && outTokens === 0) return _('No AI usage recorded yet.');
+				return _('%s input / %s output tokens used.', inTokens.toLocaleString(), outTokens.toLocaleString());
+			},
 		},
 
 		theme: {

@@ -132,6 +132,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			if (!await shim.showConfirmationDialog(this.restartMessage())) return;
 			Setting.setValue('ocr.clearLanguageDataCache', true);
 			await restart();
+		} else if (key === 'ai.usage.resetButton') {
+			if (!await shim.showConfirmationDialog(_('Reset AI token usage counters?'))) return;
+			Setting.setValue('ai.usage.inputTokens', 0);
+			Setting.setValue('ai.usage.outputTokens', 0);
+			await Setting.saveAll();
 		} else if (key === 'sync.openSyncWizard') {
 			this.props.dispatch({
 				type: 'DIALOG_OPEN',

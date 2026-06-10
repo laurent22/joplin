@@ -20,12 +20,6 @@ export interface ChatResult {
 	usage: ChatUsage;
 }
 
-export interface TokenUsage {
-	providerId: string;
-	inputTokens: number;
-	outputTokens: number;
-}
-
 export type ProviderClassification = 'local' | 'remote';
 
 export type ProviderType = 'joplin-cloud' | 'openai-compatible' | 'anthropic';

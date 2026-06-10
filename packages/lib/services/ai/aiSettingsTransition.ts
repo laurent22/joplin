@@ -15,6 +15,10 @@ import { ProviderType } from './types';
 //    provider in the UI. This guards against the first-enable default
 //    overwriting their choice if they later toggle AI off and on again.
 //
+// 3. Reset the token-usage counters when the active provider endpoint changes
+//    (provider type or base URL). Counters represent usage for whichever
+//    provider is currently active.
+//
 // Returns `true` to proceed, `false` to abort the save (the caller should not
 // persist the changes).
 
@@ -71,6 +75,18 @@ const aiSettingsTransition = async (pending: PendingChanges): Promise<boolean> =
 
 		const ok = await shim.showConfirmationDialog(message);
 		if (!ok) return false;
+	}
+
+	// Reset usage counters whenever the user points at a different endpoint.
+	// Same provider type with a new baseUrl (e.g. switching from OpenAI to
+	// Mistral) also counts as a different endpoint.
+	const oldProviderType = Setting.value('ai.chat.providerType');
+	const oldBaseUrl = Setting.value('ai.chat.baseUrl');
+	if (newProviderType !== oldProviderType || newBaseUrl !== oldBaseUrl) {
+		pending.settings['ai.usage.inputTokens'] = 0;
+		pending.settings['ai.usage.outputTokens'] = 0;
+		if (!pending.changedKeys.includes('ai.usage.inputTokens')) pending.changedKeys.push('ai.usage.inputTokens');
+		if (!pending.changedKeys.includes('ai.usage.outputTokens')) pending.changedKeys.push('ai.usage.outputTokens');
 	}
 
 	return true;

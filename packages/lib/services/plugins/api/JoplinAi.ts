@@ -1,7 +1,7 @@
 /* eslint-disable multiline-comment-style */
 
 import AiService from '../../ai/AiService';
-import { ChatMessage, ChatOptions, TokenUsage } from './types';
+import { ChatMessage, ChatOptions } from './types';
 
 /**
  * Provides access to AI models configured by the user. The active provider
@@ -51,19 +51,6 @@ export default class JoplinAi {
 	public async chat(messages: ChatMessage[], options?: ChatOptions): Promise<string> {
 		const result = await AiService.instance().chat(messages, options);
 		return result.text;
-	}
-
-	/**
-	 * Returns cumulative token-usage counters per provider. Useful for showing
-	 * the user (or the plugin's own UI) how many tokens have been consumed
-	 * since the counters were last reset.
-	 *
-	 * Some providers — typically local OpenAI-compatible servers like Ollama —
-	 * do not report token usage. Their counters will remain at zero even after
-	 * successful calls.
-	 */
-	public async tokenUsage(): Promise<TokenUsage[]> {
-		return AiService.instance().tokenUsage();
 	}
 
 }

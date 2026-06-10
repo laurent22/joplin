@@ -91,6 +91,47 @@ describe('aiSettingsTransition', () => {
 		expect(confirmCalls.length).toBe(0);
 	});
 
+	it('resets token usage counters when the active endpoint changes', async () => {
+		Setting.setValue('ai.enabled', true);
+		Setting.setValue('ai.allowRemote', true);
+		Setting.setValue('ai.chat.providerType', 'openai-compatible');
+		Setting.setValue('ai.chat.baseUrl', 'https://api.openai.com/v1');
+		Setting.setValue('ai.usage.inputTokens', 1234);
+		Setting.setValue('ai.usage.outputTokens', 5678);
+
+		const pending: { changedKeys: string[]; settings: Record<string, unknown> } = {
+			changedKeys: ['ai.chat.baseUrl'],
+			settings: {
+				'ai.chat.providerType': 'openai-compatible',
+				'ai.chat.baseUrl': 'https://api.mistral.ai/v1',
+			},
+		};
+		const ok = await aiSettingsTransition(pending);
+		expect(ok).toBe(true);
+		expect(pending.settings['ai.usage.inputTokens']).toBe(0);
+		expect(pending.settings['ai.usage.outputTokens']).toBe(0);
+	});
+
+	it('does not reset counters when only the API key changes', async () => {
+		Setting.setValue('ai.enabled', true);
+		Setting.setValue('ai.allowRemote', true);
+		Setting.setValue('ai.chat.providerType', 'anthropic');
+		Setting.setValue('ai.chat.baseUrl', '');
+		Setting.setValue('ai.usage.inputTokens', 1234);
+
+		const pending: { changedKeys: string[]; settings: Record<string, unknown> } = {
+			changedKeys: ['ai.chat.apiKey'],
+			settings: {
+				'ai.chat.providerType': 'anthropic',
+				'ai.chat.baseUrl': '',
+				'ai.chat.apiKey': 'new-key',
+			},
+		};
+		const ok = await aiSettingsTransition(pending);
+		expect(ok).toBe(true);
+		expect(pending.settings['ai.usage.inputTokens']).toBeUndefined();
+	});
+
 	it('uses Joplin-Cloud-specific copy when switching to joplin-cloud', async () => {
 		Setting.setValue('ai.enabled', true);
 		Setting.setValue('ai.allowRemote', true);
