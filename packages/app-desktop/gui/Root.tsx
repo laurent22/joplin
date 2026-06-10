@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import app from '../app';
 import { AppState, AppStateDialog } from '../app.reducer';
 import MainScreen from './MainScreen';
@@ -37,8 +38,7 @@ interface Props {
 	themeId: number;
 	appState: string;
 	profileConfigCurrentProfileId: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	zoomFactor: number;
 	needApiAuth: boolean;
 	dialogs: AppStateDialog[];

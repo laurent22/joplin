@@ -225,11 +225,18 @@ async function saveNoteTags(note: ExtractedNote) {
 	return notesTagged;
 }
 
+export interface ImportProgressState {
+	loaded: number;
+	created: number;
+	updated: number;
+	skipped: number;
+	resourcesCreated: number;
+	notesTagged: number;
+}
+
 export interface ImportOptions {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onProgress?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onError?: Function;
+	onProgress?: (progressState: ImportProgressState)=> void;
+	onError?: (error: Error)=> void;
 	outputFormat?: string;
 	batchSize?: number;
 }

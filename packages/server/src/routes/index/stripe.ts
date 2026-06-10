@@ -46,10 +46,8 @@ interface CreateCheckoutSessionFields {
 type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<unknown>;
 
 interface PostHandlers {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	createCheckoutSession: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	webhook: Function;
+	createCheckoutSession: StripeRouteHandler;
+	webhook: (stripe: Stripe, path: SubPath, ctx: AppContext, event?: Stripe.Event, logErrors?: boolean)=> Promise<unknown>;
 }
 
 interface SubscriptionInfo {

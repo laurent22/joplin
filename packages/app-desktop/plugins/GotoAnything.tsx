@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import { AppState } from '../app.reducer';
 import CommandService, { SearchResult as CommandSearchResult } from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
@@ -75,8 +76,7 @@ export interface GotoAnythingUserData {
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	folders: FolderEntity[];
 	showCompletedTodos: boolean;
 	userData: GotoAnythingUserData;
@@ -133,8 +133,7 @@ const itemListId = 'goto-anything-item-list';
 
 class GotoAnything {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public dispatch: Function;
+	public dispatch: Dispatch;
 	public static Dialog: React.ComponentType<Props>;
 	public static manifest: PluginManifest;
 

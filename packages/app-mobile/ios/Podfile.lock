@@ -1508,8 +1508,28 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-netinfo (11.4.1):
+  - react-native-netinfo (11.5.2):
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - react-native-quick-base64 (2.2.2):
     - React-Core
   - react-native-rsa-native (2.0.5):
@@ -1609,13 +1629,13 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-vector-icons-fontawesome5 (12.3.0)
+  - react-native-vector-icons-fontawesome5 (12.3.2)
   - react-native-vector-icons-ionicons (12.3.0)
-  - react-native-vector-icons-material-design-icons (12.4.0)
-  - react-native-vector-icons-material-icons (12.4.0)
+  - react-native-vector-icons-material-design-icons (12.4.2)
+  - react-native-vector-icons-material-icons (12.4.1)
   - react-native-version-info (1.1.1):
     - React-Core
-  - react-native-webview (13.16.0):
+  - react-native-webview (13.16.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2087,7 +2107,7 @@ PODS:
     - React
   - RNSecureRandom (1.0.1):
     - React
-  - RNShare (12.2.5):
+  - RNShare (12.2.6):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2599,19 +2619,19 @@ SPEC CHECKSUMS:
   react-native-geolocation: cfc39041210bd9f591ec2beb7d417291251da8e5
   react-native-get-random-values: a603782b2b222a34533c66371614790282dba3f1
   react-native-image-picker: 48d850454b4a389753053e1d7378b624d3b47d77
-  react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
+  react-native-netinfo: f852c868bf5175e46165c7e4db48a204a95c3800
   react-native-quick-base64: 6568199bb2ac8e72ecdfdc73a230fbc5c1d3aac4
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
   react-native-saf-x: 5f4d6aed7554454033c39c81d951962dadc8dc5a
   react-native-safe-area-context: 37e680fc4cace3c0030ee46e8987d24f5d3bdab2
   react-native-sqlite-storage: 0c84826214baaa498796c7e46a5ccc9a82e114ed
   react-native-vector-icons: 8215b0e62bf79d3be628cf658ec23777f9bec53c
-  react-native-vector-icons-fontawesome5: 271d813e27a86d30bb8cf1fc2f12dae74b74b69b
+  react-native-vector-icons-fontawesome5: 8187e7738d0db1b8373cf030f7140299a7216103
   react-native-vector-icons-ionicons: ad07e944a092a5cf71b8b569d8f5ce2bf674c415
-  react-native-vector-icons-material-design-icons: 76cd460b3540b80527b4a80fb7f867f7deedb498
-  react-native-vector-icons-material-icons: d67e485a05560416ff6b5977d5fa7e0eb6af6870
+  react-native-vector-icons-material-design-icons: 12bc222b4cd6781a3cbbf4b537767d3d528011dd
+  react-native-vector-icons-material-icons: 2fe75632937d07937bfe8ca953e1b5d06eef3a1d
   react-native-version-info: f0b04e16111c4016749235ff6d9a757039189141
-  react-native-webview: 3e303e80cadb5f17118c8c1502aa398e9287e415
+  react-native-webview: 0ed52ddb2eafc64a502871218440b8b4d37961c3
   React-NativeModulesApple: 2f4d69fb420f671980452a14efacd7a2273c4fbb
   React-oscompat: 0ceaff9ee45fc3801e266194ef8e60b384220b1c
   React-perflogger: f6bcfdde29ace9d7c3eb52643c8d3790bf6b5edf
@@ -2653,7 +2673,7 @@ SPEC CHECKSUMS:
   RNLocalize: 44b09911588826d01c5b949e8e3f9ed5fae16b32
   RNQuickAction: c2c8f379e614428be0babe4d53a575739667744d
   RNSecureRandom: b64d263529492a6897e236a22a2c4249aa1b53dc
-  RNShare: f40ea96fce38fd9fce6634c3f07c55b0292987d3
+  RNShare: aad7f2a80ae80be5e2bf57583be28b1a18f95de1
   RNSVG: 7612f5bc575eab5da3364d44abe9f0d5db2cde03
   SDWebImage: e9c98383c7572d713c1a0d7dd2783b10599b9838
   SDWebImageWebPCoder: 0e06e365080397465cc73a7a9b472d8a3bd0f377

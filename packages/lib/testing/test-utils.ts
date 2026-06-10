@@ -55,7 +55,7 @@ import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
 import KeychainService from '../services/keychain/KeychainService';
 import { loadKeychainServiceAndSettings } from '../services/SettingUtils';
 import { setActiveMasterKeyId, setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
-import Synchronizer from '../Synchronizer';
+import Synchronizer, { SyncStartOptions } from '../Synchronizer';
 import SyncTargetNone from '../SyncTargetNone';
 import { setRSA } from '../services/e2ee/ppk/ppk';
 const md5 = require('md5');
@@ -528,8 +528,7 @@ function synchronizer(id: number = null) {
 // This is like calling synchronizer.start() but it handles the
 // complexity of passing around the sync context depending on
 // the client.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Synchronizer.start takes any options; tightening here would diverge from lib
-async function synchronizerStart(id: number = null, extraOptions: any = null) {
+async function synchronizerStart(id: number = null, extraOptions: SyncStartOptions = null) {
 	if (id === null) id = currentClient_;
 
 	const contextKey = `sync.${syncTargetId()}.context`;

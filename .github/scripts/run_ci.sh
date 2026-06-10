@@ -132,8 +132,19 @@ if [ "$RUN_TESTS" == "1" ]; then
 	# On Linux, we run the Joplin Server tests using PostgreSQL
 	if [ "$IS_LINUX" == "1" ]; then
 		echo "Running Joplin Server tests using PostgreSQL..."
-		sudo docker compose --parallel 1 --file docker-compose.db-dev.yml up -d
-		cmdResult=$?
+		# Docker Hub auth/pulls occasionally time out on CI, so retry a few
+		# times before giving up.
+		cmdResult=1
+		for attempt in 1 2 3; do
+			sudo docker compose --parallel 1 --file docker-compose.db-dev.yml up -d
+			cmdResult=$?
+			if [ $cmdResult -eq 0 ]; then
+				break
+			fi
+			echo "docker compose up failed (attempt $attempt). Retrying in 15s..."
+			sudo docker compose --file docker-compose.db-dev.yml down --remove-orphans || true
+			sleep 15
+		done
 		if [ $cmdResult -ne 0 ]; then
 			exit $cmdResult
 		fi
@@ -214,7 +225,7 @@ if [ "$RUN_TESTS" == "1" ]; then
 fi
 
 # =============================================================================
-# Check .gitignore and .eslintignore files - they should be updated when
+# Check .gitignore and .ignore.eslint files - they should be updated when
 # new TypeScript files are added by running `yarn updateIgnored`.
 # See coding_style.md
 # =============================================================================
@@ -222,9 +233,9 @@ fi
 if [ "$IS_LINUX" == "1" ]; then
 	echo "Step: Checking for files that should have been ignored..."
 
-	# .gitignore and .eslintignore can be modified during yarn install. Reset them
+	# .gitignore and .ignore.eslint can be modified during yarn install. Reset them
 	# so that checkIgnoredFiles works.
-	git restore .gitignore .eslintignore
+	git restore .gitignore .ignore.eslint
 
 	node packages/tools/checkIgnoredFiles.js 
 	testResult=$?
