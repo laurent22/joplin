@@ -766,6 +766,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			},
 		},
 
+		'ai.chat.testButton': {
+			value: null as null,
+			type: SettingItemType.Button,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Test AI configuration'),
+			description: () => _('Sends a one-word prompt to your configured provider and reports whether it responds correctly.'),
+		},
+
 		theme: {
 			value: Setting.THEME_LIGHT,
 			type: SettingItemType.Int,

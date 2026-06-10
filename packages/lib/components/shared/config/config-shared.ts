@@ -16,6 +16,7 @@ type SettingsMap = Partial<SettingsRecord> & Record<string, unknown>;
 
 interface ConfigScreenState {
 	checkSyncConfigResult: { ok: boolean; errorMessage: string }|'checking'|null;
+	checkAiConfigResult: { ok: boolean; message: string }|'checking'|null;
 	settings: SettingsMap;
 	changedSettingKeys: string[];
 	showAdvancedSettings: boolean;
@@ -25,6 +26,7 @@ interface ConfigScreenState {
 
 export const defaultScreenState: ConfigScreenState = {
 	checkSyncConfigResult: null,
+	checkAiConfigResult: null,
 	settings: {},
 	changedSettingKeys: [],
 	showAdvancedSettings: false,
@@ -104,6 +106,45 @@ export const checkSyncConfigMessages = (comp: ConfigScreenComponent) => {
 	} else if (result && !result.ok) {
 		output.push(_('Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:'));
 		output.push(result.errorMessage);
+	}
+
+	return output;
+};
+
+export const checkAiConfig = async (comp: ConfigScreenComponent) => {
+	// Pending edits aren't persisted until Apply, so flush first — otherwise
+	// the test runs against the previously-saved provider config.
+	await saveSettings(comp);
+
+	comp.setState({ checkAiConfigResult: 'checking' });
+	try {
+		const { default: AiService } = await import('../../../services/ai/AiService');
+		const result = await AiService.instance().chat([
+			{ role: 'user', content: 'Reply with the single word OK.' },
+		], { maxTokens: 20 });
+		const text = (result.text || '').trim();
+		if (!text) {
+			comp.setState({ checkAiConfigResult: { ok: false, message: _('The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.') } });
+		} else {
+			comp.setState({ checkAiConfigResult: { ok: true, message: text } });
+		}
+	} catch (error) {
+		comp.setState({ checkAiConfigResult: { ok: false, message: error.message } });
+	}
+};
+
+export const checkAiConfigMessages = (comp: ConfigScreenComponent) => {
+	const result = comp.state.checkAiConfigResult;
+	const output: string[] = [];
+
+	if (result === 'checking') {
+		output.push(_('Checking... Please wait.'));
+	} else if (result && result.ok) {
+		output.push(_('Success! The AI provider responded:'));
+		output.push(result.message);
+	} else if (result && !result.ok) {
+		output.push(_('Error. The AI provider test failed:'));
+		output.push(result.message);
 	}
 
 	return output;
