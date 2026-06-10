@@ -1,4 +1,7 @@
+import Logger from '@joplin/utils/Logger';
 import { ChatMessage, ChatOptions, ChatProvider, ChatResult, ProviderClassification } from '../types';
+
+const logger = Logger.create('ChatProviderBase');
 
 export default abstract class ChatProviderBase implements ChatProvider {
 
@@ -11,7 +14,13 @@ export default abstract class ChatProviderBase implements ChatProvider {
 
 	public async chat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult> {
 		const result = await this.doChat(messages, options);
-		await this.recordUsage(result.usage.inputTokens, result.usage.outputTokens);
+		// Usage recording is best-effort — a failure here must not turn a
+		// successful chat into a failed one.
+		try {
+			await this.recordUsage(result.usage.inputTokens, result.usage.outputTokens);
+		} catch (error) {
+			logger.warn('Failed to record token usage:', error);
+		}
 		return result;
 	}
 
