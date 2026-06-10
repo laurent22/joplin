@@ -1,10 +1,11 @@
 import Setting from '../../../models/Setting';
 import JoplinError from '../../../JoplinError';
 import JoplinServerApi, { Session } from '../../../JoplinServerApi';
+import SyncTargetRegistry from '../../../SyncTargetRegistry';
 import { ChatMessage, ChatOptions, ChatResult, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 
-const JOPLIN_CLOUD_SYNC_TARGET = 10;
+const joplinCloudSyncTarget = () => SyncTargetRegistry.nameToId('joplinCloud');
 
 interface JoplinCloudUsage {
 	prompt_tokens?: number;
@@ -41,18 +42,19 @@ export default class JoplinCloudProvider extends ChatProviderBase {
 		// Build a fresh API object per call so re-auth survives without drift.
 		// JoplinServerApi caches its session internally on the instance, so
 		// we can't safely keep one across logout/login transitions.
+		const id = joplinCloudSyncTarget();
 		return new JoplinServerApi({
-			baseUrl: () => Setting.value(`sync.${JOPLIN_CLOUD_SYNC_TARGET}.path`),
-			userContentBaseUrl: () => Setting.value(`sync.${JOPLIN_CLOUD_SYNC_TARGET}.userContentPath`),
-			username: () => Setting.value(`sync.${JOPLIN_CLOUD_SYNC_TARGET}.username`),
-			password: () => Setting.value(`sync.${JOPLIN_CLOUD_SYNC_TARGET}.password`),
-			apiKey: () => Setting.value(`sync.${JOPLIN_CLOUD_SYNC_TARGET}.apiKey`),
+			baseUrl: () => Setting.value(`sync.${id}.path`),
+			userContentBaseUrl: () => Setting.value(`sync.${id}.userContentPath`),
+			username: () => Setting.value(`sync.${id}.username`),
+			password: () => Setting.value(`sync.${id}.password`),
+			apiKey: () => Setting.value(`sync.${id}.apiKey`),
 			session: (): Session | null => null,
 		});
 	}
 
 	protected async doChat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult> {
-		if (Setting.value('sync.target') !== JOPLIN_CLOUD_SYNC_TARGET) {
+		if (Setting.value('sync.target') !== joplinCloudSyncTarget()) {
 			throw new JoplinError('Joplin Cloud AI requires Joplin Cloud sync', 'aiJoplinCloudSyncRequired');
 		}
 

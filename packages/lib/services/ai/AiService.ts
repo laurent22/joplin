@@ -1,6 +1,7 @@
 import Setting from '../../models/Setting';
 import JoplinError from '../../JoplinError';
 import Logger from '@joplin/utils/Logger';
+import SyncTargetRegistry from '../../SyncTargetRegistry';
 import { ChatMessage, ChatOptions, ChatProvider, ChatResult, ProviderClassification, ProviderType } from './types';
 import deriveClassification from './classification';
 import ChatProviderBase from './providers/ChatProviderBase';
@@ -9,8 +10,6 @@ import AnthropicProvider from './providers/Anthropic';
 import JoplinCloudProvider from './providers/JoplinCloud';
 
 const logger = Logger.create('AiService');
-
-const JOPLIN_CLOUD_SYNC_TARGET = 10;
 
 export default class AiService {
 
@@ -105,7 +104,7 @@ export default class AiService {
 	// runs, sync target changes never affect the AI provider.
 	public applyFirstEnableDefault() {
 		if (Setting.value('ai.chat.providerType.configured')) return;
-		if (Setting.value('sync.target') === JOPLIN_CLOUD_SYNC_TARGET) {
+		if (Setting.value('sync.target') === SyncTargetRegistry.nameToId('joplinCloud')) {
 			Setting.setValue('ai.chat.providerType', 'joplin-cloud');
 			logger.info('Applied first-enable default: joplin-cloud (user is on Joplin Cloud sync)');
 		}
