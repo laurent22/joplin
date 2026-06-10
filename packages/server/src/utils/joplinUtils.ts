@@ -443,6 +443,8 @@ const isInTree = (itemTree: TreeItem, jopId: string) => {
 // be different from the item that will eventually get rendered - for example
 // for resources or linked notes.
 export async function renderItem(userId: Uuid, item: Item, share: Share, query: RenderItemQuery): Promise<FileViewerResponse> {
+	const bannerInfo = getDefaultBannerInfo();
+
 	if (item.jop_type === ModelType.Folder) {
 		const folderTree = await buildFolderTree(share, item.jop_id, query.note_id || '');
 
@@ -451,7 +453,6 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 				throw new ErrorNotFound(`Resource "${query.resource_id}" does not belong to this share`);
 			}
 
-			const bannerInfo = getDefaultBannerInfo();
 			return renderNotePage(folderTree.rootTitle, bannerInfo, null, folderTree);
 		}
 
@@ -476,7 +477,6 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 		}
 
 		const resourceInfos = await getResourceInfos(linkedItemInfos);
-		const bannerInfo = getDefaultBannerInfo();
 		return renderNote(share, models_.item().itemToJoplinItem(noteItem), resourceInfos, linkedItemInfos, bannerInfo, folderTree);
 	}
 
@@ -562,7 +562,6 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	if (itemType === ModelType.Resource) {
 		return renderResource(userId, fileToRender.jopItemId, fileToRender.item, fileToRender.content);
 	} else if (itemType === ModelType.Note) {
-		const bannerInfo = getDefaultBannerInfo();
 		return renderNote(share, itemToRender, resourceInfos, linkedItemInfos, bannerInfo);
 	} else {
 		throw new Error(`Cannot render item with type "${itemType}"`);

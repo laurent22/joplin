@@ -792,11 +792,11 @@ export default class Folder extends BaseItem {
 		let notesToUpdate: NoteEntity[] = [];
 		if (noteIsSharedSql) {
 			notesToUpdate = await this.db().selectAll(`
-			SELECT id, parent_id, is_shared
-			FROM notes
-			WHERE (is_shared = 0 AND (${noteIsSharedSql}))
-				OR (is_shared = 1 AND NOT (${noteIsSharedSql}))
-		`);
+				SELECT id, parent_id, is_shared
+				FROM notes
+				WHERE (is_shared = 0 AND (${noteIsSharedSql}))
+					OR (is_shared = 1 AND NOT (${noteIsSharedSql}))
+			`);
 		}
 
 		for (const note of notesToUpdate) {
