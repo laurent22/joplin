@@ -13097,7 +13097,7 @@ __metadata:
     knex: "npm:3.1.0"
     koa: "npm:2.16.4"
     koa-body: "npm:6.0.1"
-    pg-boss: "npm:10.4.2"
+    pg-boss: "npm:12.3.0"
     sharp: "npm:0.34.5"
     sqlite3: "npm:5.1.6"
     typescript: "npm:5.9.3"
@@ -26509,12 +26509,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cron-parser@npm:^4.9.0":
-  version: 4.9.0
-  resolution: "cron-parser@npm:4.9.0"
+"cron-parser@npm:^5.4.0":
+  version: 5.5.0
+  resolution: "cron-parser@npm:5.5.0"
   dependencies:
-    luxon: "npm:^3.2.1"
-  checksum: 10/ffca5e532a5ee0923412ee6e4c7f9bbceacc6ddf8810c16d3e9fb4fe5ec7e2de1b6896d7956f304bb6bc96b0ce37ad7e3935304179d52951c18d84107184faa7
+    luxon: "npm:^3.7.1"
+  checksum: 10/ee2c710ba9ad07a1e9fd2cc5615a5d998cef08558a66f4a33915f971c124966df8f4fb164484220e7b55c79b84f2d6447f863dacd32839e62361a984095e263d
   languageName: node
   linkType: hard
 
@@ -40487,10 +40487,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:^3.2.1":
-  version: 3.6.1
-  resolution: "luxon@npm:3.6.1"
-  checksum: 10/35aad425607708c87af110a52c949190bc35b987770079ec8007ef2365cd29639413db3360d2883777aa01cb3ca5bdb37f42ee3e8e5a0dd277fe22e90cc8a786
+"luxon@npm:^3.7.1":
+  version: 3.7.2
+  resolution: "luxon@npm:3.7.2"
+  checksum: 10/b24cd205ed306ce7415991687897dcc4027921ae413c9116590bc33a95f93b86ce52cf74ba72b4f5c5ab1c10090517f54ac8edfb127c049e0bf55b90dc2260be
   languageName: node
   linkType: hard
 
@@ -46220,14 +46220,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-boss@npm:10.4.2":
-  version: 10.4.2
-  resolution: "pg-boss@npm:10.4.2"
+"pg-boss@npm:12.3.0":
+  version: 12.3.0
+  resolution: "pg-boss@npm:12.3.0"
   dependencies:
-    cron-parser: "npm:^4.9.0"
+    cron-parser: "npm:^5.4.0"
     pg: "npm:^8.16.3"
-    serialize-error: "npm:^8.1.0"
-  checksum: 10/4f2952c6f2ab00834c8572577c9dec01b1d84a04e055aba4d439a6a0a5ecf5e899aec3930b57559ee5e547c563cf0b34f7943c537b20d443929dfb0f7a149908
+    serialize-error: "npm:^12.0.0"
+  checksum: 10/8ef8adf7dfbed9a1881881977cb1e26ccdcf7f0b7409a5e75c916003df29da4973a47d4847e0924ae32a7af6bc86d523f65f5c1d30fb3b04d392ccac1b3904d8
   languageName: node
   linkType: hard
 
@@ -52612,6 +52612,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"serialize-error@npm:^12.0.0":
+  version: 12.0.0
+  resolution: "serialize-error@npm:12.0.0"
+  dependencies:
+    type-fest: "npm:^4.31.0"
+  checksum: 10/733ddb9a2bd86515d18ef43f6bcb1f55a9d9b900944420e5606725668e64b752e5da971071d8fe1562961a926796257d2edb9fad828ec90a35cc6c32a75449bb
+  languageName: node
+  linkType: hard
+
 "serialize-error@npm:^2.1.0":
   version: 2.1.0
   resolution: "serialize-error@npm:2.1.0"
@@ -52625,15 +52634,6 @@ __metadata:
   dependencies:
     type-fest: "npm:^0.13.1"
   checksum: 10/e0aba4dca2fc9fe74ae1baf38dbd99190e1945445a241ba646290f2176cdb2032281a76443b02ccf0caf30da5657d510746506368889a593b9835a497fc0732e
-  languageName: node
-  linkType: hard
-
-"serialize-error@npm:^8.1.0":
-  version: 8.1.0
-  resolution: "serialize-error@npm:8.1.0"
-  dependencies:
-    type-fest: "npm:^0.20.2"
-  checksum: 10/2eef236d50edd2d7926e602c14fb500dc3a125ee52e9f08f67033181b8e0be5d1122498bdf7c23c80683cddcad083a27974e9e7111ce23165f4d3bcdd6d65102
   languageName: node
   linkType: hard
 
@@ -57024,7 +57024,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^4.41.0":
+"type-fest@npm:^4.31.0, type-fest@npm:^4.41.0":
   version: 4.41.0
   resolution: "type-fest@npm:4.41.0"
   checksum: 10/617ace794ac0893c2986912d28b3065ad1afb484cad59297835a0807dc63286c39e8675d65f7de08fafa339afcb8fe06a36e9a188b9857756ae1e92ee8bda212
