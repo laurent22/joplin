@@ -593,6 +593,22 @@ describe('UserModel', () => {
 		}
 	});
 
+	test('should not log in as a local account via SSO based on email match alone', async () => {
+		const localUser = await createUser(1);
+
+		config().SAML_ENABLED = true;
+
+		try {
+			const result = await models().user().ssoLogin(localUser.email, 'Attacker Controlled Name');
+			expect(result).toBeNull();
+
+			const reloaded = await models().user().load(localUser.id);
+			expect(reloaded.is_external).toBe(0);
+		} finally {
+			config().SAML_ENABLED = false;
+		}
+	});
+
 	test('should generate a unique SSO code', async () => {
 		const createExternalUser = async (index: number) => {
 			const user = await createUser(index);

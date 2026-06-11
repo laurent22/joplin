@@ -230,6 +230,11 @@ export default class UserModel extends BaseModel<User> {
 
 		let user = await this.loadByEmail(email);
 
+		// A local, password-based account already owns this email address. Do
+		// not allow a SAML assertion to log in as it - this would bypass the
+		// local account's password.
+		if (user && !user.is_external) return null;
+
 		if (!user) { // User does not exist
 			user = {
 				email: email,
