@@ -63,7 +63,7 @@
     "punycode": "2.3.1",
     "react": "19.1.4",
     "react-native": "0.81.6",
-    "react-native-device-info": "14.1.1",
+    "react-native-device-info": "15.0.1",
     "react-native-dropdownalert": "5.2.0",
     "react-native-file-viewer": "2.1.5",
     "react-native-get-random-values": "2.0.0",
