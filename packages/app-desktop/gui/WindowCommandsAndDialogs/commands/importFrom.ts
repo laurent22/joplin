@@ -106,6 +106,19 @@ export const runtime = (control: WindowControl): CommandRuntime => {
 				};
 			}
 
+			if (options.importFormat === 'one' && !shim.isWindows()) {
+				const response = bridge().showMessageBox(
+					_('This notebook contains Windows-specific files. For maximum compatibility, consider importing the notebook from Windows.'),
+					{
+						type: 'warning',
+						buttons: [_('Import anyway'), _('Cancel')],
+						defaultId: 0,
+						cancelId: 1,
+					},
+				);
+				if (response === 1) return null;
+			}
+
 			const modalMessage = _('Importing from "%s" as "%s" format. Please wait...', sourcePath, options.importFormat);
 			void CommandService.instance().execute('showModalMessage', modalMessage);
 
