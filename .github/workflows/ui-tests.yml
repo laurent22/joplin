@@ -12,7 +12,7 @@ jobs:
       matrix:
         os: [ubuntu-22.04, windows-2025]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup build environment
         uses: ./.github/workflows/shared/setup-build-environment
       - name: Build (Windows)
@@ -47,7 +47,7 @@ jobs:
     if: github.repository == 'laurent22/joplin'
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup build environment
         uses: ./.github/workflows/shared/setup-build-environment
       - name: Build

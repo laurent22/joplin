@@ -12,7 +12,7 @@ jobs:
         # https://github.com/actions/runner-images/issues/6709
         os: [macos-15-intel, ubuntu-22.04, windows-2025, ubuntu-22.04-arm]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup build environment
         uses: ./.github/workflows/shared/setup-build-environment
@@ -148,7 +148,7 @@ jobs:
           sudo apt-get update || true
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
