@@ -67,25 +67,20 @@ export default class JoplinCloudProvider extends ChatProviderBase {
 		if (options?.maxTokens !== undefined) body.max_tokens = options.maxTokens;
 		if (options?.temperature !== undefined) body.temperature = options.temperature;
 
-		let raw: string;
+		// JoplinServerApi.exec() returns the parsed JSON object directly when
+		// the response format is JSON (the default). No need to JSON.parse.
+		let json: JoplinCloudResponse;
 		try {
-			raw = await api.exec('POST', 'api/ai/chat/completions', null, body);
+			json = await api.exec('POST', 'api/ai/chat/completions', null, body) as JoplinCloudResponse;
 		} catch (error) {
 			const status = typeof error?.code === 'number' ? error.code : 0;
 			const detail = error?.message ?? '';
 			throw mapErrorByStatus(status, detail);
 		}
 
-		let json: JoplinCloudResponse;
-		try {
-			json = JSON.parse(raw) as JoplinCloudResponse;
-		} catch {
-			throw new JoplinError(`Joplin Cloud AI returned non-JSON response: ${raw.slice(0, 200)}`);
-		}
-
-		const content = json.choices?.[0]?.message?.content ?? '';
-		const inputTokens = json.usage?.prompt_tokens ?? 0;
-		const outputTokens = json.usage?.completion_tokens ?? 0;
+		const content = json?.choices?.[0]?.message?.content ?? '';
+		const inputTokens = json?.usage?.prompt_tokens ?? 0;
+		const outputTokens = json?.usage?.completion_tokens ?? 0;
 
 		return { text: content, usage: { inputTokens, outputTokens } };
 	}

@@ -636,7 +636,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Enable AI features'),
 			description: () => _('When enabled, plugins and built-in features can use AI models to generate or analyse text. AI is off by default.'),
 			storage: SettingStorage.File,
-			isGlobal: true,
 		},
 
 		'ai.allowRemote': {
@@ -649,7 +648,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Allow remote AI providers'),
 			description: () => _('Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.'),
 			storage: SettingStorage.File,
-			isGlobal: true,
 		},
 
 		'ai.chat.providerType': {
@@ -677,7 +675,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 				'anthropic': _('Anthropic'),
 			}),
 			storage: SettingStorage.File,
-			isGlobal: true,
 		},
 
 		// Tracks whether the user has made an explicit chat-provider choice.
@@ -689,8 +686,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Bool,
 			public: false,
 			appTypes: [AppType.Desktop],
-			storage: SettingStorage.File,
-			isGlobal: true,
+			storage: SettingStorage.Database,
 		},
 
 		'ai.chat.baseUrl': {
@@ -703,7 +699,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Base URL'),
 			description: () => _('The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.'),
 			storage: SettingStorage.File,
-			isGlobal: true,
 		},
 
 		'ai.chat.apiKey': {
@@ -715,8 +710,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 			show: (settings) => !!settings['ai.enabled'] && (settings['ai.chat.providerType'] === 'openai-compatible' || settings['ai.chat.providerType'] === 'anthropic'),
 			label: () => _('API key'),
-			storage: SettingStorage.File,
-			isGlobal: true,
+			storage: SettingStorage.Database,
 		},
 
 		'ai.chat.model': {
@@ -729,7 +723,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Model'),
 			description: () => _('The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.'),
 			storage: SettingStorage.File,
-			isGlobal: true,
 		},
 
 		// Cumulative token counters for the currently configured provider.
@@ -742,6 +735,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 			storage: SettingStorage.Database,
 		},
+
 		'ai.usage.outputTokens': {
 			value: 0,
 			type: SettingItemType.Int,

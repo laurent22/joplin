@@ -62,4 +62,50 @@ describe('aiSettingsTransition', () => {
 		aiSettingsTransition(pending);
 		expect(pending.settings['ai.usage.inputTokens']).toBeUndefined();
 	});
+
+	it('writes joplin-cloud default when enabling AI on Joplin Cloud sync for the first time', async () => {
+		Setting.setValue('sync.target', 10);
+		Setting.setValue('ai.enabled', false);
+		Setting.setValue('ai.chat.providerType', 'openai-compatible');
+		Setting.setValue('ai.chat.providerType.configured', false);
+
+		const pending: { changedKeys: string[]; settings: Record<string, unknown> } = {
+			changedKeys: ['ai.enabled'],
+			settings: { 'ai.enabled': true },
+		};
+		aiSettingsTransition(pending);
+		expect(pending.settings['ai.chat.providerType']).toBe('joplin-cloud');
+		expect(pending.settings['ai.chat.providerType.configured']).toBe(true);
+		expect(pending.changedKeys).toContain('ai.chat.providerType');
+		expect(pending.changedKeys).toContain('ai.chat.providerType.configured');
+	});
+
+	it('leaves providerType alone when enabling AI without Joplin Cloud sync', async () => {
+		Setting.setValue('sync.target', 7);
+		Setting.setValue('ai.enabled', false);
+		Setting.setValue('ai.chat.providerType', 'openai-compatible');
+		Setting.setValue('ai.chat.providerType.configured', false);
+
+		const pending: { changedKeys: string[]; settings: Record<string, unknown> } = {
+			changedKeys: ['ai.enabled'],
+			settings: { 'ai.enabled': true },
+		};
+		aiSettingsTransition(pending);
+		expect(pending.settings['ai.chat.providerType']).toBeUndefined();
+		expect(pending.settings['ai.chat.providerType.configured']).toBe(true);
+	});
+
+	it('does not overwrite an explicit provider choice on subsequent enable', async () => {
+		Setting.setValue('sync.target', 10);
+		Setting.setValue('ai.enabled', false);
+		Setting.setValue('ai.chat.providerType', 'anthropic');
+		Setting.setValue('ai.chat.providerType.configured', true);
+
+		const pending: { changedKeys: string[]; settings: Record<string, unknown> } = {
+			changedKeys: ['ai.enabled'],
+			settings: { 'ai.enabled': true },
+		};
+		aiSettingsTransition(pending);
+		expect(pending.settings['ai.chat.providerType']).toBeUndefined();
+	});
 });

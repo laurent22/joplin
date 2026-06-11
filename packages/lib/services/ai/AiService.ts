@@ -83,7 +83,7 @@ export default class AiService {
 
 	public async chat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult> {
 		if (!Setting.value('ai.enabled')) {
-			throw new JoplinError('AI features are disabled', 'aiDisabled');
+			throw new JoplinError('AI features are disabled. Enable them in Settings → AI.', 'aiDisabled');
 		}
 		if (!messages || !messages.length) {
 			throw new JoplinError('Messages array must not be empty', 'aiInvalidRequest');
@@ -92,7 +92,7 @@ export default class AiService {
 		const provider = this.getProvider();
 
 		if (provider.classification === 'remote' && !Setting.value('ai.allowRemote')) {
-			throw new JoplinError('Remote AI access is not allowed', 'aiRemoteNotAllowed');
+			throw new JoplinError('Remote AI access is not allowed. Enable "Allow remote AI providers" in Settings → AI to use cloud-hosted models.', 'aiRemoteNotAllowed');
 		}
 
 		return provider.chat(messages, options);

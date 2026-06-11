@@ -132,6 +132,9 @@ export const checkAiConfig = async (comp: ConfigScreenComponent) => {
 			comp.setState({ checkAiConfigResult: { ok: true, message: text } });
 		}
 	} catch (error) {
+		// Log the full error to the console — the user-facing status only shows
+		// the short message, but the dev tools console gets the stack trace too.
+		logger.warn('AI configuration test failed:', error);
 		comp.setState({ checkAiConfigResult: { ok: false, message: error.message } });
 	}
 };
@@ -174,6 +177,21 @@ export const updateSettingValue = (comp: ConfigScreenComponent, key: string, val
 		const changedSettingKeys = state.changedSettingKeys.slice();
 		settings[key] = Setting.formatValue(key, value);
 		if (changedSettingKeys.indexOf(key) < 0) changedSettingKeys.push(key);
+
+		// Live AI first-enable default: when the user ticks `ai.enabled` and
+		// they're on Joplin Cloud sync, pre-select Joplin Cloud AI in the
+		// form so the change is visible immediately (the same logic runs at
+		// save-time too, but applying it here makes the UI reflect it before
+		// the user clicks Apply).
+		if (
+			key === 'ai.enabled'
+			&& settings['ai.enabled'] === true
+			&& !Setting.value('ai.chat.providerType.configured')
+			&& Setting.value('sync.target') === SyncTargetRegistry.nameToId('joplinCloud')
+		) {
+			settings['ai.chat.providerType'] = 'joplin-cloud';
+			if (changedSettingKeys.indexOf('ai.chat.providerType') < 0) changedSettingKeys.push('ai.chat.providerType');
+		}
 
 		return {
 			settings: settings,
