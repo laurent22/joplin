@@ -184,9 +184,9 @@ export default class JoplinSettings {
 	 * https://github.com/laurent22/joplin/blob/dev/packages/lib/models/settings/builtInMetadata.ts
 	 */
 	public async globalValues(keys: string[]): Promise<unknown[]> {
-		const output: (string|number|boolean)[] = [];
+		const output: (string|number|boolean|undefined)[] = [];
 		for (const key of keys) {
-			output.push(Setting.value(key));
+			output.push(Setting.isSecureKey(key) ? undefined : Setting.value(key));
 		}
 		return output;
 	}
