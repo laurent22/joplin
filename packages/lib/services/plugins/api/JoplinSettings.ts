@@ -195,6 +195,7 @@ export default class JoplinSettings {
 	 * @deprecated Use joplin.settings.globalValues()
 	 */
 	public async globalValue(key: string): Promise<unknown> {
+		if (Setting.isSecureKey(key)) return undefined;
 		return Setting.value(key);
 	}
 
