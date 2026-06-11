@@ -113,8 +113,11 @@ export const checkSyncConfigMessages = (comp: ConfigScreenComponent) => {
 
 export const checkAiConfig = async (comp: ConfigScreenComponent) => {
 	// Pending edits aren't persisted until Apply, so flush first — otherwise
-	// the test runs against the previously-saved provider config.
-	await saveSettings(comp);
+	// the test runs against the previously-saved provider config. saveSettings
+	// returns false when validation fails; bail out in that case so the user
+	// sees the validation message instead of a misleading AI error.
+	const saved = await saveSettings(comp);
+	if (!saved) return;
 
 	comp.setState({ checkAiConfigResult: 'checking' });
 	try {
