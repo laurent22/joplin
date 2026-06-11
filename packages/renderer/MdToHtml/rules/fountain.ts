@@ -1,4 +1,5 @@
 const fountain = require('../../vendor/fountain.min.js');
+import htmlUtils from '../../htmlUtils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Theme is defined in @joplin/lib and we don't import it here
 const pluginAssets = function(theme: any) {
@@ -140,13 +141,14 @@ function renderFountainScript(markdownIt: any, content: string) {
 		`;
 	}
 
+	const contentHtml = result.html.script;
 	return `
 		<!-- joplin-metadata-print-title = false -->
 		<div class="fountain joplin-editable">
 			<pre class="joplin-source" hidden data-joplin-language="fountain" data-joplin-source-open="\`\`\`fountain&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${markdownIt.utils.escapeHtml(content)}</pre>
-			${titlePageHtml}
+			${htmlUtils.sanitizeHtml(titlePageHtml)}
 			<div class="page">
-				${result.html.script}
+				${htmlUtils.sanitizeHtml(contentHtml)}
 			</div>
 		</div>
 	`;
