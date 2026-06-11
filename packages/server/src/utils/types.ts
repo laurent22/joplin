@@ -174,6 +174,7 @@ export interface Config extends EnvVariables {
 	joplinAppBaseUrl: string;
 	signupEnabled: boolean;
 	termsEnabled: boolean;
+	defaultAdminPassword: string;
 	accountTypesEnabled: boolean;
 	showErrorStackTraces: boolean;
 	database: DatabaseConfig;

@@ -1,8 +1,9 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, koaNext } from '../utils/testing/testUtils';
 import { Notification, UserFlagType } from '../services/database/types';
-import { defaultAdminEmail, defaultAdminPassword } from '../db';
+import { defaultAdminEmail } from '../db';
 import notificationHandler from './notificationHandler';
 import { AppContext } from '../utils/types';
+import config from '../config';
 
 const runNotificationHandler = async (sessionId: string): Promise<AppContext> => {
 	const context = await koaAppContext({ sessionId: sessionId });
@@ -37,7 +38,7 @@ describe('notificationHandler', () => {
 		admin = await models().user().save({
 			id: admin.id,
 			email: defaultAdminEmail,
-			password: defaultAdminPassword,
+			password: config().defaultAdminPassword,
 			is_admin: 1,
 			email_confirmed: 1,
 		}, { skipValidation: true });
@@ -75,7 +76,7 @@ describe('notificationHandler', () => {
 
 		await createUserAndSession(2, true, {
 			email: defaultAdminEmail,
-			password: defaultAdminPassword,
+			password: config().defaultAdminPassword,
 		});
 
 		await runNotificationHandler(session.id);

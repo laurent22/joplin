@@ -36,7 +36,6 @@ const migrationDir = `${__dirname}/migrations`;
 export const sqliteDefaultDir = pathUtils.dirname(__dirname);
 
 export const defaultAdminEmail = 'admin@localhost';
-export const defaultAdminPassword = 'admin';
 
 export type DbConnection = Knex;
 
