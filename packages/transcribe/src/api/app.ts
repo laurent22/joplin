@@ -1,5 +1,5 @@
 require('dotenv').config();
-import * as Koa from 'koa';
+import Koa from 'koa';
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import koaBody from 'koa-body';
 import initiateLogger from '../services/initiateLogger';

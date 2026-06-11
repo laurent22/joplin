@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHand
 
 import { RenderResultPluginAsset } from '@joplin/renderer/types';
 import { EditorCommand, MarkupToHtmlOptions, NoteBodyEditorProps, NoteBodyEditorRef, OnChangeEvent } from '../../../utils/types';
-import { getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
+import { getResourceFromClipboardImage, getResourcesFromPasteEvent, plainTextLooksLikeAffinityImageData } from '../../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../../utils/types';
 import NoteTextViewer from '../../../../NoteTextViewer';
 import Editor from './Editor';
@@ -106,7 +106,9 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	const editorPasteText = useCallback(async () => {
 		if (editorRef.current) {
-			const modifiedMd = await Note.replaceResourceExternalToInternalLinks(clipboard.readText(), { useAbsolutePaths: true });
+			const pastedText = clipboard.readText();
+			const resourceMd = plainTextLooksLikeAffinityImageData(pastedText) ? await getResourceFromClipboardImage() : null;
+			const modifiedMd = resourceMd || await Note.replaceResourceExternalToInternalLinks(pastedText, { useAbsolutePaths: true });
 			editorRef.current.insertText(modifiedMd, UserEventSource.Paste);
 		}
 	}, []);

@@ -3,6 +3,8 @@ import { ModelType } from "../../BaseModel";
 export interface BaseItemEntity {
   id?: string;
   encryption_applied?: number;
+  extracted_resource_ids?: string;
+  is_locked?: number;
 
   // Means the item (note or resource) is published
   is_shared?: number;
@@ -230,8 +232,10 @@ export interface NoteEntity {
   'deleted_time'?: number;
   'encryption_applied'?: number;
   'encryption_cipher_text'?: string;
+  'extracted_resource_ids'?: string;
   'id'?: string | null;
   'is_conflict'?: number;
+  'is_locked'?: number;
   'is_shared'?: number;
   'is_todo'?: number;
   'latitude'?: number;
@@ -285,6 +289,7 @@ export interface ResourceEntity {
   'file_extension'?: string;
   'filename'?: string;
   'id'?: string | null;
+  'is_locked'?: number;
   'is_shared'?: number;
   'master_key_id'?: string;
   'mime'?: string;
@@ -315,6 +320,7 @@ export interface RevisionEntity {
   'encryption_applied'?: number;
   'encryption_cipher_text'?: string;
   'id'?: string | null;
+  'is_locked'?: number;
   'item_id'?: string;
   'item_type'?: number;
   'item_updated_time'?: number;
@@ -507,6 +513,7 @@ export const databaseSchema: DatabaseTables = {
 		file_extension: { type: 'string' },
 		filename: { type: 'string' },
 		id: { type: 'string' },
+		is_locked: { type: 'number' },
 		is_shared: { type: 'number' },
 		master_key_id: { type: 'string' },
 		mime: { type: 'string' },
@@ -530,6 +537,7 @@ export const databaseSchema: DatabaseTables = {
 		encryption_applied: { type: 'number' },
 		encryption_cipher_text: { type: 'string' },
 		id: { type: 'string' },
+		is_locked: { type: 'number' },
 		item_id: { type: 'string' },
 		item_type: { type: 'number' },
 		item_updated_time: { type: 'number' },
@@ -571,8 +579,10 @@ export const databaseSchema: DatabaseTables = {
 		deleted_time: { type: 'number' },
 		encryption_applied: { type: 'number' },
 		encryption_cipher_text: { type: 'string' },
+		extracted_resource_ids: { type: 'string' },
 		id: { type: 'string' },
 		is_conflict: { type: 'number' },
+		is_locked: { type: 'number' },
 		is_shared: { type: 'number' },
 		is_todo: { type: 'number' },
 		latitude: { type: 'number' },

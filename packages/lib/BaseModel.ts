@@ -723,6 +723,9 @@ class BaseModel {
 		if (!model) return model;
 
 		const output = { ...model };
+		if (this.hasField('is_locked') && output.hasOwnProperty('is_locked') && (output.is_locked === null || output.is_locked === undefined)) output.is_locked = 0;
+		if (this.hasField('extracted_resource_ids') && output.hasOwnProperty('extracted_resource_ids') && (output.extracted_resource_ids === null || output.extracted_resource_ids === undefined)) output.extracted_resource_ids = '';
+
 		for (const n in output) {
 			if (!output.hasOwnProperty(n)) continue;
 

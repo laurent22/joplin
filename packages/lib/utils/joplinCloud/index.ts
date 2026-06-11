@@ -319,11 +319,10 @@ const getFeatureActions = (planName: PlanName, featureId: FeatureId, featureEnab
 
 	if (featureId === 'maxStorage' && featureEnabled) {
 		if (planName === PlanName.Pro) {
-			// TODO: Enable, when supported by the server
-			// result.push({
-			// 	label: _('Upgrade to 100 GB'),
-			// 	actionId: 'toggleIncreaseStorage',
-			// });
+			result.push({
+				label: _('Upgrade to 100 GB'),
+				actionId: 'toggleIncreaseStorage',
+			});
 		} else if (planName === PlanName.Pro100Gb) {
 			const defaultPlan = features().maxStorage.proInfoShort;
 			result.push({
@@ -400,11 +399,10 @@ export const createFeatureTableMd = () => {
 			name: 'pro',
 			label: 'Pro',
 		},
-		// TODO: Enable, when supported by Joplin Cloud
-		// {
-		// 	name: 'pro100Gb',
-		// 	label: 'Pro 100 GB',
-		// },
+		{
+			name: 'pro100Gb',
+			label: 'Pro 100 GB',
+		},
 		{
 			name: 'teams',
 			label: 'Teams',
@@ -446,8 +444,7 @@ export const createFeatureTableMd = () => {
 			featureLabel: makeFeatureLabel(id, feature),
 			basic: getCellInfo(PlanName.Basic, id, feature),
 			pro: getCellInfo(PlanName.Pro, id, feature),
-			// TODO: Enable when supported by Joplin Cloud
-			// pro100Gb: getCellInfo(PlanName.Pro100Gb, id, feature),
+			pro100Gb: getCellInfo(PlanName.Pro100Gb, id, feature),
 			teams: getCellInfo(PlanName.Teams, id, feature),
 			joplinServerBusiness: getCellInfo(PlanName.JoplinServerBusiness, id, feature),
 		};

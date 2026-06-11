@@ -6,6 +6,12 @@ import { FontAwesome5 } from '@react-native-vector-icons/fontawesome5';
 import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 import { Ionicons } from '@react-native-vector-icons/ionicons';
 
+type IconNameProp<IconComponent> = IconComponent extends (props: { name: infer NameType })=> unknown ? NameType : never;
+
+type FontAwesome5Name = IconNameProp<typeof FontAwesome5>;
+type MaterialIconName = IconNameProp<typeof MaterialDesignIcons>;
+type IoniconsName = IconNameProp<typeof Ionicons>;
+
 interface Props {
 	name: string;
 	style: StyleProp<TextStyle>;
@@ -30,7 +36,7 @@ const Icon: React.FC<Props> = props => {
 	// to read the characters from the icon font (they don't make sense
 	// without the icon font applied).
 	const accessibilityHidden = props.accessibilityLabel === null;
-	const importantForAccessibility = accessibilityHidden ? 'no-hide-descendants' : 'yes';
+	const importantForAccessibility = accessibilityHidden ? 'no-hide-descendants' as const : 'yes' as const;
 
 	const sharedProps = {
 		importantForAccessibility, // Android
@@ -42,7 +48,7 @@ const Icon: React.FC<Props> = props => {
 	};
 
 	if (namePrefix.match(/^fa[bsr]?$/)) {
-		let iconStyle = 'solid';
+		let iconStyle: 'solid'|'brand' = 'solid';
 		if (namePrefix.startsWith('fab')) {
 			iconStyle = 'brand';
 		} else if (namePrefix.startsWith('fas')) {
@@ -51,15 +57,15 @@ const Icon: React.FC<Props> = props => {
 
 		return (
 			<FontAwesome5
-				name={nameSuffix}
+				name={nameSuffix as FontAwesome5Name}
 				iconStyle={iconStyle}
 				{...sharedProps}
 			/>
 		);
 	} else if (namePrefix === 'material') {
-		return <MaterialDesignIcons name={nameSuffix} {...sharedProps}/>;
+		return <MaterialDesignIcons name={nameSuffix as MaterialIconName} {...sharedProps}/>;
 	} else if (namePrefix === 'ionicon') {
-		return <Ionicons name={nameSuffix} {...sharedProps}/>;
+		return <Ionicons name={nameSuffix as IoniconsName} {...sharedProps}/>;
 	} else if (namePrefix === 'text') {
 		return (
 			<Text
@@ -72,7 +78,7 @@ const Icon: React.FC<Props> = props => {
 			</Text>
 		);
 	} else {
-		return <FontAwesome5 name='cog' {...sharedProps}/>;
+		return <FontAwesome5 name='cog' iconStyle='solid' {...sharedProps}/>;
 	}
 };
 

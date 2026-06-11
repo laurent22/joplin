@@ -7,7 +7,7 @@ import { _ } from '@joplin/lib/locale';
 import { formatBytes, GB, MB } from '../utils/bytes';
 import { itemIsEncrypted } from '../utils/joplinUtils';
 import { getIsMFAEnabled, getMaxItemSize, getMaxTotalItemSize } from './utils/user';
-import * as zxcvbn from 'zxcvbn';
+import zxcvbn from 'zxcvbn';
 import { confirmUrl, resetPasswordUrl } from '../utils/urlUtils';
 import { checkRepeatPassword, CheckRepeatPasswordInput } from '../routes/index/users';
 import accountConfirmationTemplate from '../views/emails/accountConfirmationTemplate';
@@ -229,6 +229,11 @@ export default class UserModel extends BaseModel<User> {
 		}
 
 		let user = await this.loadByEmail(email);
+
+		// A local, password-based account already owns this email address. Do
+		// not allow a SAML assertion to log in as it - this would bypass the
+		// local account's password.
+		if (user && !user.is_external) return null;
 
 		if (!user) { // User does not exist
 			user = {

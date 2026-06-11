@@ -1,6 +1,7 @@
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import { join } from 'path';
+import { readFile } from 'fs-extra';
 import getImageSourceSize from './util/getImageSourceSize';
 import setFilePickerResponse from './util/setFilePickerResponse';
 import activateMainMenuItem from './util/activateMainMenuItem';
@@ -8,6 +9,7 @@ import setSettingValue from './util/setSettingValue';
 import { toForwardSlashes } from '@joplin/utils/path';
 import mockClipboard from './util/mockClipboard';
 import { ElectronApplication, Page } from '@playwright/test';
+import { extractResourceUrls } from '@joplin/lib/urlUtils';
 
 const importAndOpenHtmlExport = async (mainWindow: Page, electronApp: ElectronApplication, noteTitle: string) => {
 	const mainScreen = await new MainScreen(mainWindow).setup();
@@ -399,6 +401,55 @@ test.describe('markdownEditor', () => {
 		await goToAnything.runCommand(electronApp, 'textPaste');
 		await noteEditor.expectToHaveText(/^Test \(new content!\)[\n]+/);
 	});
+
+	for (const testCase of [
+		{ name: 'CodeMirror 6', useLegacyMarkdownEditor: false },
+		{ name: 'CodeMirror 5', useLegacyMarkdownEditor: true },
+	]) {
+		test(`should paste Affinity Copy Merged clipboard data as an image resource (${testCase.name})`, async ({ electronApp, mainWindow }) => {
+			const mainScreen = new MainScreen(mainWindow);
+			await setSettingValue(electronApp, mainWindow, 'editor.legacyMarkdown', testCase.useLegacyMarkdownEditor);
+			await mainScreen.noteEditor.disableInlineRendering(electronApp);
+			await setSettingValue(electronApp, mainWindow, 'imageResizing', 'neverResize');
+			await mainScreen.setup();
+
+			const noteEditor = await mainScreen.createNewNote('Test Affinity image paste');
+			const editorContent = testCase.useLegacyMarkdownEditor ? mainWindow.locator('.rli-editor .CodeMirror5 .CodeMirror-code') : await noteEditor.contentLocator();
+			const editorToFocus = testCase.useLegacyMarkdownEditor ? mainWindow.locator('.rli-editor .CodeMirror5') : editorContent;
+			const noteBody = async () => editorContent.innerText();
+			await editorToFocus.click();
+
+			const affinityClipboardText = await readFile(join(__dirname, 'resources', 'affinity.txt'), 'utf8');
+
+			await mainWindow.evaluate((affinityClipboardText: string) => {
+				const { clipboard, nativeImage } = require('electron');
+				const affinityImageData = affinityClipboardText.match(/data:image\/png;base64,[^"]+/)?.[0];
+				if (!affinityImageData) throw new Error('Affinity clipboard text does not contain PNG image data');
+				const image = nativeImage.createFromDataURL(affinityImageData);
+				if (image.isEmpty()) throw new Error('Could not create image from Affinity clipboard data');
+
+				clipboard.write({
+					text: affinityClipboardText,
+					image,
+				});
+			}, affinityClipboardText);
+
+			await mainScreen.goToAnything.runCommand(electronApp, 'textPaste');
+
+			await expect.poll(async () => {
+				const currentNoteBody = (await noteBody()).trimEnd();
+				const resourceUrls = extractResourceUrls(currentNoteBody);
+				const isImageResource = currentNoteBody.startsWith('![') && resourceUrls.length === 1 && currentNoteBody.endsWith(`](:/${resourceUrls[0].itemId})`);
+				const doesNotContainSvg = !currentNoteBody.includes('<svg');
+				const doesNotContainBase64 = !currentNoteBody.includes('data:image/png;base64,');
+				return isImageResource && doesNotContainSvg && doesNotContainBase64;
+			}).toBe(true);
+
+			const renderedImage = noteEditor.getNoteViewerFrameLocator().locator('img');
+			await expect(renderedImage).toHaveCount(1);
+			await expect(await getImageSourceSize(renderedImage.first())).toMatchObject([64, 64]);
+		});
+	}
 
 	test('the undo and redo menu items should work', async ({ mainWindow, electronApp }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
