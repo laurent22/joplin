@@ -372,7 +372,7 @@ const shim = {
 		throw new Error('Not implemented: stringByteLength');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- node implementation accepts a Setting class argument; lib references it as a generic Function
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- node implementation accepts a Setting class argument; lib references it as a generic Function
 	detectAndSetLocale: null as Function,
 
 	attachFileToNote: async (_note: NoteEntity, _filePath: string, _options?: AttachFileToNoteOptions): Promise<NoteEntity> => {

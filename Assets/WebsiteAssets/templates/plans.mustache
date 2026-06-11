@@ -31,6 +31,14 @@
 			color: black;
 		}
 
+		/* Replace the Pro plan with the Pro+ plan when requesting increased storage */
+		body.-increased-storage .plan-group .account-type-2 {
+			display: none !important;
+		}
+		body:not(.-increased-storage) .plan-group .account-type-4 {
+			display: none !important;
+		}
+
 		@media (max-width: 480px) {
 			.toggle-container {
 				flex-direction: column;
@@ -101,7 +109,7 @@
 			</div>	
 		</div>
 		
-		<div class="row plan-group plan-prices-monthly">
+		<div class="row plan-group plan-prices-monthly default-storage">
 			{{#plans.basic}}
 				{{> plan}}
 			{{/plans.basic}}
@@ -109,6 +117,11 @@
 			{{#plans.pro}}
 				{{> plan}}
 			{{/plans.pro}}
+
+			{{! TODO: Enable, when supported by Joplin Cloud
+			\{\{#plans.pro100Gb\}\}
+				\{\{> plan\}\}
+			\{\{/plans.pro100Gb\}\} }}
 
 			{{#plans.teams}}
 				{{> plan}}

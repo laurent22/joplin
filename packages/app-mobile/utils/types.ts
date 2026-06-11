@@ -1,14 +1,23 @@
 import { State } from '@joplin/lib/reducer';
+import type { SideMenuContentOptions } from '../components/SideMenuContentNote';
+
+// Narrow shape of the redux NAV route that the mobile app stores in AppState
+// and the navigation history. The dispatched NAV action carries more
+// (heterogeneous) fields; only these are read back from state.
+export interface Route {
+	routeName: string;
+	folderId?: string;
+	noteId?: string;
+	isDeleted?: boolean;
+}
 
 export interface AppState extends State {
 	showPanelsDialog: boolean;
 	isOnMobileData: boolean;
 	keyboardVisible: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- `route` is the redux NAV action payload (heterogeneous fields like folderId/tagId/noteId/etc.); typing it requires a coordinated refactor across the mobile codebase
-	route: any;
+	route: Route;
 	smartFilterId: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- `noteSideMenuOptions` is set per-screen with heterogeneous shapes; typing it requires a coordinated refactor across the mobile codebase
-	noteSideMenuOptions: any;
+	noteSideMenuOptions: SideMenuContentOptions;
 	disableSideMenuGestures: boolean;
 	noteEditorVisible: boolean;
 	syncWizardVisible: boolean;

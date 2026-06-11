@@ -18,7 +18,7 @@ import OneDriveApi from '../onedrive-api';
 import SyncTargetOneDrive from '../SyncTargetOneDrive';
 import JoplinDatabase from '../JoplinDatabase';
 import * as fs from 'fs-extra';
-const { DatabaseDriverNode } = require('../database-driver-node.js');
+import { DatabaseDriverNode } from '../database-driver-node';
 import Folder from '../models/Folder';
 import Note from '../models/Note';
 import ItemChange from '../models/ItemChange';
@@ -33,14 +33,14 @@ const FileApiDriverMemory = require('../file-api-driver-memory').default;
 import FileApiDriverLocal from '../file-api-driver-local';
 const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('../file-api-driver-dropbox.js');
-const { FileApiDriverOneDrive } = require('../file-api-driver-onedrive.js');
+import FileApiDriverOneDrive from '../file-api-driver-onedrive';
 import SyncTargetRegistry from '../SyncTargetRegistry';
-const SyncTargetMemory = require('../SyncTargetMemory.js');
+import SyncTargetMemory from '../SyncTargetMemory';
 import SyncTargetFilesystem from '../SyncTargetFilesystem';
-const SyncTargetNextcloud = require('../SyncTargetNextcloud.js');
-const SyncTargetDropbox = require('../SyncTargetDropbox.js');
+import SyncTargetNextcloud from '../SyncTargetNextcloud';
+import SyncTargetDropbox from '../SyncTargetDropbox';
 const SyncTargetAmazonS3 = require('../SyncTargetAmazonS3.js');
-const SyncTargetWebDAV = require('../SyncTargetWebDAV.js');
+import SyncTargetWebDAV from '../SyncTargetWebDAV';
 import SyncTargetJoplinServer from '../SyncTargetJoplinServer';
 import EncryptionService from '../services/e2ee/EncryptionService';
 import DecryptionWorker from '../services/DecryptionWorker';
@@ -55,7 +55,7 @@ import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
 import KeychainService from '../services/keychain/KeychainService';
 import { loadKeychainServiceAndSettings } from '../services/SettingUtils';
 import { setActiveMasterKeyId, setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
-import Synchronizer from '../Synchronizer';
+import Synchronizer, { SyncStartOptions } from '../Synchronizer';
 import SyncTargetNone from '../SyncTargetNone';
 import { setRSA } from '../services/e2ee/ppk/ppk';
 const md5 = require('md5');
@@ -528,8 +528,7 @@ function synchronizer(id: number = null) {
 // This is like calling synchronizer.start() but it handles the
 // complexity of passing around the sync context depending on
 // the client.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Synchronizer.start takes any options; tightening here would diverge from lib
-async function synchronizerStart(id: number = null, extraOptions: any = null) {
+async function synchronizerStart(id: number = null, extraOptions: SyncStartOptions = null) {
 	if (id === null) id = currentClient_;
 
 	const contextKey = `sync.${syncTargetId()}.context`;

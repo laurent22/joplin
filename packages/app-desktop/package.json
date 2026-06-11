@@ -47,6 +47,9 @@
     "asar": true,
     "asarUnpack": "./node_modules/node-notifier/vendor/**",
     "win": {
+      "publisherName": [
+        "Joplin"
+      ],
       "sign": "./sign.js",
       "rfc3161TimeStampServer": "http://timestamp.digicert.com",
       "icon": "../../Assets/ImageSources/Joplin.ico",
@@ -151,7 +154,7 @@
     "@joplin/renderer": "~3.7",
     "@joplin/tools": "~3.7",
     "@joplin/utils": "~3.7",
-    "@playwright/test": "1.57.0",
+    "@playwright/test": "1.58.2",
     "@sentry/electron": "4.24.0",
     "@testing-library/dom": "10.4.1",
     "@testing-library/react": "16.3.2",
@@ -161,6 +164,7 @@
     "@types/react": "19.1.10",
     "@types/react-dom": "19.1.7",
     "@types/react-redux": "7.1.34",
+    "@types/semver": "7.7.1",
     "@types/styled-components": "5.1.36",
     "async-mutex": "0.5.0",
     "axios": "^1.7.7",
@@ -186,7 +190,7 @@
     "md5": "2.3.0",
     "moment": "2.30.1",
     "mustache": "4.2.0",
-    "nan": "2.24.0",
+    "nan": "2.25.0",
     "node-notifier": "10.0.1",
     "node-rsa": "1.1.1",
     "pdfjs-dist": "3.11.174",
@@ -216,7 +220,7 @@
     "@electron/remote": "2.1.3",
     "@joplin/onenote-converter": "~3.7",
     "@xyflow/react": "12.10.2",
-    "fs-extra": "11.3.3",
+    "fs-extra": "11.3.4",
     "keytar": "7.9.0",
     "node-fetch": "2.6.7",
     "sqlite3": "5.1.6"

@@ -4,7 +4,7 @@ import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 
-const { themeStyle } = require('@joplin/lib/theme');
+import { themeStyle } from '@joplin/lib/theme';
 import Note from '@joplin/lib/models/Note';
 import { ResourceInfos } from '../NoteEditor/utils/types';
 import { resourceFullPath } from '@joplin/lib/models/utils/resourceUtils';

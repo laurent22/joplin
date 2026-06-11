@@ -6,7 +6,7 @@ import { reg } from '@joplin/lib/registry';
 import { ScreenHeader } from '../ScreenHeader';
 import time from '@joplin/lib/time';
 import { themeStyle } from '../global-style';
-import Logger from '@joplin/utils/Logger';
+import Logger, { LogEntry } from '@joplin/utils/Logger';
 import { BaseScreenComponent } from '../base-screen';
 import { _ } from '@joplin/lib/locale';
 import { MenuOptionType } from '../ScreenHeader';
@@ -17,13 +17,6 @@ import { TextInput } from 'react-native-paper';
 import shareFile from '../../utils/shareFile';
 
 const logger = Logger.create('LogScreen');
-
-interface LogEntry {
-	id: number;
-	timestamp: number;
-	level: number;
-	message: string;
-}
 
 interface Props {
 	themeId: number;
@@ -91,7 +84,7 @@ class LogScreenComponent extends BaseScreenComponent<Props, State> {
 
 	private async getLogEntries(showErrorsOnly: boolean, limit: number|null = null): Promise<LogEntry[]> {
 		const levels = this.getLogLevels(showErrorsOnly);
-		return await reg.logger().lastEntries(limit, { levels, filter: this.state.filter }) as LogEntry[];
+		return await reg.logger().lastEntries(limit, { levels, filter: this.state.filter });
 	}
 
 	private async onSharePress() {

@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import { AppState } from '../app.reducer';
 import CommandService, { SearchResult as CommandSearchResult } from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
 import SearchEngine, { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
@@ -23,6 +24,7 @@ import Resource from '@joplin/lib/models/Resource';
 import { FolderEntity, NoteEntity, ResourceEntity, TagEntity } from '@joplin/lib/services/database/types';
 import Dialog from '@joplin/lib/components/Dialog';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
+import { PluginManifest } from '@joplin/lib/services/PluginManager';
 
 const logger = Logger.create('GotoAnything');
 
@@ -74,8 +76,7 @@ export interface GotoAnythingUserData {
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	folders: FolderEntity[];
 	showCompletedTodos: boolean;
 	userData: GotoAnythingUserData;
@@ -132,10 +133,9 @@ const itemListId = 'goto-anything-item-list';
 
 class GotoAnything {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public dispatch: Function;
+	public dispatch: Dispatch;
 	public static Dialog: React.ComponentType<Props>;
-	public static manifest: { name: string; menuItems: { id: string; name?: string; parent?: string; label?: string; accelerator?: ()=> string; screens?: string[]; userData?: { startString?: string } }[] };
+	public static manifest: PluginManifest;
 
 	public onTrigger(event: { userData: GotoAnythingUserData }) {
 		this.dispatch({

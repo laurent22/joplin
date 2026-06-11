@@ -3,12 +3,12 @@ import Setting from '@joplin/lib/models/Setting';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import MigrationHandler from '@joplin/lib/services/synchronizer/MigrationHandler';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-import Synchronizer from '@joplin/lib/Synchronizer';
+import Synchronizer, { SyncStartOptions } from '@joplin/lib/Synchronizer';
 import { masterKeysWithoutPassword } from '@joplin/lib/services/e2ee/utils';
 import { appTypeToLockType } from '@joplin/lib/services/synchronizer/LockHandler';
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 import app from './app';
-const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
+import { OneDriveApiNodeUtils } from '@joplin/lib/onedrive-api-node-utils';
 import { reg } from '@joplin/lib/registry';
 const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
@@ -24,10 +24,8 @@ const logger = Logger.create('command-sync');
 class Command extends BaseCommand {
 
 	private syncTargetId_: number = null;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private releaseLockFn_: Function = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- OneDriveApiNodeUtils is a plain JS module with no type declarations
-	private oneDriveApiUtils_: any = null;
+	private releaseLockFn_: ()=> void = null;
+	private oneDriveApiUtils_: OneDriveApiNodeUtils | null = null;
 
 	public usage() {
 		return 'sync';
@@ -61,8 +59,8 @@ class Command extends BaseCommand {
 			// OneDrive
 			this.oneDriveApiUtils_ = new OneDriveApiNodeUtils(syncTarget.api());
 			const auth = await this.oneDriveApiUtils_.oauthDance({
-				log: (...s: string[]) => {
-					return this.stdout(...s);
+				log: (s: string) => {
+					return this.stdout(s);
 				},
 			});
 			this.oneDriveApiUtils_ = null;
@@ -183,16 +181,10 @@ class Command extends BaseCommand {
 
 			const sync = await syncTarget.synchronizer();
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Synchronizer.start accepts `any` options; tightening here would diverge from lib
-			const options: any = {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Synchronizer.reportToLines takes `any` (lib)
-				onProgress: (report: any) => {
+			const options: SyncStartOptions = {
+				onProgress: (report) => {
 					const lines = Synchronizer.reportToLines(report);
 					if (lines.length) cliUtils.redraw(lines.join(' '));
-				},
-				onMessage: (msg: string) => {
-					cliUtils.redrawDone();
-					this.stdout(msg);
 				},
 			};
 

@@ -1,8 +1,7 @@
 import Setting, { AppType, SettingStorage } from '@joplin/lib/models/Setting';
 import { SettingItemType } from '@joplin/lib/services/plugins/api/types';
 import shim from '@joplin/lib/shim';
-
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 
 function settingTypeToSchemaType(type: SettingItemType): string {
 	const map: Record<SettingItemType, string> = {

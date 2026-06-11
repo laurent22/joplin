@@ -1,7 +1,7 @@
 import BaseCommand from './base-command';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import BaseModel from '@joplin/lib/BaseModel';
-const { toTitleCase } = require('@joplin/lib/string-utils.js');
+import { toTitleCase } from '@joplin/lib/string-utils';
 import { reg } from '@joplin/lib/registry.js';
 import markdownUtils, { MarkdownTableRow } from '@joplin/lib/markdownUtils';
 import Database from '@joplin/lib/database';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
-const styled = require('styled-components').default;
+import styled from 'styled-components';
 
 interface StyleProps {
 	theme: {
@@ -14,12 +14,9 @@ interface StyleProps {
 interface Props {
 	backButtonTitle?: string;
 	hasChanges?: boolean;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onCancelClick: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onSaveClick?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onApplyClick?: Function;
+	onCancelClick: ()=> void;
+	onSaveClick?: ()=> void;
+	onApplyClick?: ()=> void;
 }
 
 const StyledRoot = styled.nav`

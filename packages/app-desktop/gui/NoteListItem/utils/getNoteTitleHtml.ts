@@ -1,7 +1,7 @@
 import { htmlentities } from '@joplin/utils/html';
 const Mark = require('mark.js/dist/mark.min.js');
 const markJsUtils = require('@joplin/lib/markJsUtils');
-const { replaceRegexDiacritics, pregQuote } = require('@joplin/lib/string-utils');
+import { replaceRegexDiacritics, pregQuote } from '@joplin/lib/string-utils';
 
 const getNoteTitleHtml = (highlightedWords: string[], displayTitle: string) => {
 	if (highlightedWords.length) {

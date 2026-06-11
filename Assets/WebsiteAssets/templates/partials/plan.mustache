@@ -25,11 +25,16 @@
 			{{/priceYearly.formattedMonthlyAmount}}
 
 		{{#featureLabelsOn}}
-			<p><i class="fas fa-check feature feature-on"></i>{{.}}</p>
+			<p>
+				<i class="fas fa-check feature feature-on"></i>{{label}}
+				{{#actions}}
+					<button type="button" class="action-link action-{{actionId}}">→ <span class="action-label">{{label}}</span></button>
+				{{/actions}}
+			</p>
 		{{/featureLabelsOn}}
 
 		{{#featureLabelsOff}}
-			<p class="unchecked-text"><i class="fas fa-times feature feature-off"></i>{{.}}</p>
+			<p class="unchecked-text"><i class="fas fa-times feature feature-off"></i>{{label}}</p>
 		{{/featureLabelsOff}}
 		
 		<p class="text-center subscribe-wrapper">
@@ -75,6 +80,12 @@
 						.then(handleResult);
 					});
 				});
+			}
+
+			for (const button of document.querySelectorAll('button.action-toggleIncreaseStorage')) {
+				button.onclick = () => {
+					document.body.classList.toggle('-increased-storage');
+				};
 			}
 		})();
 	</script>

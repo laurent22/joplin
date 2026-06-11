@@ -33,7 +33,7 @@ interface DropdownAlertData {
 	resolve?: (_value: DropdownAlertData)=> void;
 }
 import SafeAreaView from './components/SafeAreaView';
-const { connect, Provider } = require('react-redux');
+import { connect, Provider } from 'react-redux';
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import BackButtonService, { BackButtonHandler } from './services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
@@ -63,9 +63,9 @@ import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { themeStyle } from './components/global-style';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import SyncTargetFilesystem from '@joplin/lib/SyncTargetFilesystem';
-const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
-const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
-const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
+import SyncTargetNextcloud from '@joplin/lib/SyncTargetNextcloud';
+import SyncTargetWebDAV from '@joplin/lib/SyncTargetWebDAV';
+import SyncTargetDropbox from '@joplin/lib/SyncTargetDropbox';
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import BiometricPopup from './components/biometrics/BiometricPopup';

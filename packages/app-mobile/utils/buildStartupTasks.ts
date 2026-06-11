@@ -16,7 +16,7 @@ import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import { completePendingAuthentication } from '@joplin/lib/services/joplinCloudUtils';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
-const VersionInfo = require('react-native-version-info').default;
+import VersionInfo from 'react-native-version-info';
 const AlarmServiceDriver = require('../services/AlarmServiceDriver').default;
 import NavService from '@joplin/lib/services/NavService';
 import { Dispatch, Store } from 'redux';
@@ -40,9 +40,9 @@ import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import SyncTargetFilesystem from '@joplin/lib/SyncTargetFilesystem';
-const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
-const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
-const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
+import SyncTargetNextcloud from '@joplin/lib/SyncTargetNextcloud';
+import SyncTargetWebDAV from '@joplin/lib/SyncTargetWebDAV';
+import SyncTargetDropbox from '@joplin/lib/SyncTargetDropbox';
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import initLib from '@joplin/lib/initLib';
@@ -94,6 +94,7 @@ import { Platform } from 'react-native';
 import VoiceTyping from '../services/voiceTyping/VoiceTyping';
 import whisper from '../services/voiceTyping/whisper';
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
+const { runStartupTests } = require('@joplin/mobile-config');
 
 
 function resourceFetcher_downloadComplete(event: { id: string; encrypted: boolean }) {
@@ -482,7 +483,7 @@ const buildStartupTasks = (
 		// call will throw an error, alerting us of the issue. Otherwise it will
 		// just print some messages in the console.
 		// ----------------------------------------------------------------------------
-		if (Setting.value('env') === 'dev') {
+		if (runStartupTests) {
 			await runRsaIntegrationTests();
 			await runCryptoIntegrationTests();
 			await runOnDeviceFsDriverTests();

@@ -1,48 +1,62 @@
 {
 	"dev": {
-		"publishableKey": "pk_test_51IvkOPLx4fybOTqJetV23Y5S9YHU9KoOtE6Ftur0waWoWahkHdENjDKSVcl7v3y8Y0Euv7Uwd7O7W4UFasRwd0wE00MPcprz9Q",
+		"publishableKey": "pk_test_51ScYvKL9ZkKzC9sXicNUSd3MAq6fIYAdGbRD1qlroJBpIXeO2VKIoCh8nLLRpTU9vf034VO1LmgfLgFMA7Gdavu4001GVysL65",
 		"webhookBaseUrl": "http://joplincloud.local:22300",
 		"prices": [
 			{
 				"accountType": 1,
-				"id": "price_1JAx31Lx4fybOTqJRcGdsSfg",
+				"id": "price_1TTPQHL9ZkKzC9sXEOq6yJhm",
 				"period": "monthly",
 				"amount": "1.99",
 				"currency": "EUR"
 			},
 			{
 				"accountType": 1,
-				"id": "price_1JIb4fLx4fybOTqJHnOUPVdf",
+				"id": "price_1TTPQpL9ZkKzC9sXROvbq8QN",
 				"period": "yearly",
 				"amount": "17.88",
 				"currency": "EUR"
 			},
 			{
 				"accountType": 2,
-				"id": "price_1JAx1eLx4fybOTqJ5VhkxaKC",
+				"id": "price_1TTPSFL9ZkKzC9sXndzVwgP6",
 				"period": "monthly",
 				"amount": "5.99",
 				"currency": "EUR"
 			},
 			{
 				"accountType": 2,
-				"id": "price_1JJFp7Lx4fybOTqJ0f4w2UvY",
+				"id": "price_1TTPSsL9ZkKzC9sXMbctbZar",
 				"period": "yearly",
 				"amount": "57.48",
 				"currency": "EUR"
 			},
 			{
 				"accountType": 3,
-				"id": "price_1Kl9uBLx4fybOTqJhx7q4zzj",
+				"id": "price_1TTPTnL9ZkKzC9sXKHF7ksrj",
 				"period": "monthly",
 				"amount": "7.99",
 				"currency": "EUR"
 			},
 			{
 				"accountType": 3,
-				"id": "price_1Kl9uNLx4fybOTqJpsB2l3Kg",
+				"id": "price_1TTPU7L9ZkKzC9sX1kpvGHt1",
 				"period": "yearly",
 				"amount": "80.28",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 4,
+				"id": "price_1TTPZyL9ZkKzC9sXy6j5bAJf",
+				"period": "monthly",
+				"amount": "9.99",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 4,
+				"id": "price_1TTPb1L9ZkKzC9sXtboasvjt",
+				"period": "yearly",
+				"amount": "95.88",
 				"currency": "EUR"
 			}
 		],
@@ -92,6 +106,20 @@
 				"id": "price_1Kl9nLLx4fybOTqJYTtts35z",
 				"period": "yearly",
 				"amount": "80.28",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 4,
+				"id": "price_1TZboILx4fybOTqJH1JDHDSI",
+				"period": "monthly",
+				"amount": "9.99",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 4,
+				"id": "price_1TZbplLx4fybOTqJ3VmzuqmZ",
+				"period": "yearly",
+				"amount": "95.88",
 				"currency": "EUR"
 			}
 		],

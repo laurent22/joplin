@@ -1,6 +1,6 @@
 import BaseCommand from './base-command';
-const { _ } = require('@joplin/lib/locale');
-const versionInfo = require('@joplin/lib/versionInfo').default;
+import { _ } from '@joplin/lib/locale';
+import versionInfo from '@joplin/lib/versionInfo';
 
 class Command extends BaseCommand {
 	public override usage() {

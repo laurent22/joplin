@@ -1,5 +1,5 @@
 import time from './time';
-const fs = require('fs-extra');
+import * as fs from 'fs-extra';
 import { basicDelta, DeltaOptions, GetOptions, MultiPutItem, PutOptions } from './file-api';
 
 interface MemoryItem {

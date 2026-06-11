@@ -14,12 +14,12 @@ import markupRenderOptions from './markupRenderOptions';
 import { fileExtension, filename, safeFileExtension, safeFilename } from '@joplin/utils/path';
 const joplinRendererUtils = require('@joplin/renderer').utils;
 import type { NativeImage } from 'electron';
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 import * as mimeUtils from '@joplin/lib/mime-utils';
 import bridge from '../../../services/bridge';
 import { getCollator, getCollatorLocale } from '@joplin/lib/models/utils/getCollator';
 const md5 = require('md5');
-const path = require('path');
+import * as path from 'path';
 
 const logger = Logger.create('resourceHandling');
 

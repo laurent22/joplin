@@ -35,7 +35,7 @@ import useWebViewApi from './utils/useWebViewApi';
 import useLinkTooltips from './utils/useLinkTooltips';
 import { focus } from '@joplin/lib/utils/focusHandler';
 const md5 = require('md5');
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 const supportedLocales = require('./supportedLocales');
 import { hasProtocol } from '@joplin/utils/url';
 import useTabIndenter from './utils/useTabIndenter';
@@ -948,8 +948,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	// Set the initial content and load the plugin CSS and JS files
 	// -----------------------------------------------------------------------------------------
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
-	const loadDocumentAssets = (themeId: number, editor: any, pluginAssets: any[]) => {
+	const loadDocumentAssets = (themeId: number, editor: Editor, pluginAssets: RenderResultPluginAsset[]) => {
 		const theme = themeStyle(themeId);
 
 		let docHead_: HTMLHeadElement = null;
@@ -975,15 +974,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
-				.filter((a: any) => a.mime === 'text/css')
+				.filter(a => a.mime === 'text/css')
 				.map(assetToUrl),
 		);
 
 		const allJsFiles = [].concat(
 			pluginAssets
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
-				.filter((a: any) => a.mime === 'application/javascript')
+				.filter(a => a.mime === 'application/javascript')
 				.map(assetToUrl),
 		);
 
@@ -1225,8 +1222,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 	// Need to save the onChange handler to a ref to make sure
 	// we call the current one from setTimeout.
 	// https://github.com/facebook/react/issues/14010#issuecomment-433788147
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	const props_onChangeRef = useRef<Function>(null);
+	const props_onChangeRef = useRef<NoteBodyEditorProps['onChange']>(null);
 	props_onChangeRef.current = props.onChange;
 
 	const prop_htmlToMarkdownRef = useRef<HtmlToMarkdownHandler>(null);

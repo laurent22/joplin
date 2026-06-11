@@ -359,6 +359,15 @@ export const createUserAndSession = async function(index = 1, isAdmin = false, o
 	};
 };
 
+export const createSubscription = async (user: User, stripeUserId: string, stripeSubscriptionId: string) => {
+	return await models().subscription().save({
+		user_id: user.id,
+		stripe_user_id: stripeUserId,
+		stripe_subscription_id: stripeSubscriptionId,
+		last_payment_time: Date.now(),
+	});
+};
+
 export const createUser = async function(index = 1, isAdmin = false): Promise<User> {
 	return models().user().save({ email: `user${index}@localhost`, password: '123456', is_admin: isAdmin ? 1 : 0 }, { skipValidation: true });
 };
@@ -511,8 +520,8 @@ export function checkContextError(context: AppContext) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-export async function checkThrowAsync(asyncFn: Function): Promise<any> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+export async function checkThrowAsync(asyncFn: ()=> unknown): Promise<any> {
 	try {
 		await asyncFn();
 	} catch (error) {
@@ -521,8 +530,8 @@ export async function checkThrowAsync(asyncFn: Function): Promise<any> {
 	return null;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-export async function expectThrow(asyncFn: Function, errorCode: any = undefined): Promise<any> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+export async function expectThrow(asyncFn: ()=> unknown, errorCode: any = undefined): Promise<any> {
 	let hasThrown = false;
 	let thrownError = null;
 	try {
@@ -544,8 +553,7 @@ export async function expectThrow(asyncFn: Function, errorCode: any = undefined)
 	return thrownError;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export async function expectHttpError(asyncFn: Function, expectedHttpCode: number, expectedErrorCode: string = null): Promise<void> {
+export async function expectHttpError(asyncFn: ()=> unknown, expectedHttpCode: number, expectedErrorCode: string = null): Promise<void> {
 	let thrownError = null;
 
 	try {
@@ -565,8 +573,7 @@ export async function expectHttpError(asyncFn: Function, expectedHttpCode: numbe
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export async function expectNoHttpError(asyncFn: Function): Promise<void> {
+export async function expectNoHttpError(asyncFn: ()=> unknown): Promise<void> {
 	let thrownError = null;
 
 	try {
@@ -582,8 +589,7 @@ export async function expectNoHttpError(asyncFn: Function): Promise<void> {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export async function expectNotThrow(asyncFn: Function) {
+export async function expectNotThrow(asyncFn: ()=> unknown) {
 	let thrownError = null;
 	try {
 		await asyncFn();

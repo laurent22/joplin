@@ -279,6 +279,7 @@ router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User 
 		view.content.subscription = subscription;
 		view.content.showManageSubscription = !isNew;
 		view.content.showUpdateSubscriptionBasic = !isNew && user.account_type !== AccountType.Basic;
+		view.content.showUpdateSubscriptionPro100Gb = !isNew && user.account_type !== AccountType.Pro100Gb;
 		view.content.showUpdateSubscriptionPro = !isNew && user.account_type !== AccountType.Pro;
 		view.content.subLastPaymentStatus = lastPaymentAttempt.status;
 		view.content.subLastPaymentDate = formatDateTime(lastPaymentAttempt.time);
@@ -320,6 +321,7 @@ interface FormFields {
 	send_account_confirmation_email: string;
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
+	update_subscription_pro_100gb_button: string;
 	impersonate_button: string;
 	// stop_impersonate_button: string;
 	delete_user_flags: string;
@@ -381,6 +383,8 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 			await updateSubscriptionType(stripe, models, userId, AccountType.Basic);
 		} else if (fields.update_subscription_pro_button) {
 			await updateSubscriptionType(stripe, models, userId, AccountType.Pro);
+		} else if (fields.update_subscription_pro_100gb_button) {
+			await updateSubscriptionType(stripe, models, userId, AccountType.Pro100Gb);
 		} else if (fields.recheck_invoice_button) {
 			await recheckPaymentStatus(stripe, models, userId);
 		} else if (fields.schedule_deletion_button) {

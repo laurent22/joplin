@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 import { writeFile, readFile, pathExists } from 'fs-extra';
 import { dirname } from '@joplin/lib/path-utils';
 import markdownUtils from '@joplin/lib/markdownUtils';
-const yargParser = require('yargs-parser');
+import yargParser = require('yargs-parser');
 import { stripOffFrontMatter } from './website/utils/frontMatter';
 import dayjs = require('dayjs');
 import utc = require('dayjs/plugin/utc');

@@ -21,7 +21,7 @@ import { getCollator } from './utils/getCollator';
 import Setting from './Setting';
 import { itemIsReadOnlySync, ItemSlice } from './utils/readOnly';
 import ItemChange from './ItemChange';
-const { substrWithEllipsis } = require('../string-utils.js');
+import { substrWithEllipsis } from '../string-utils';
 
 const logger = Logger.create('models/Folder');
 

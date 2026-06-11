@@ -6,6 +6,7 @@ import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../../utils/checkPermissions';
 import NoteEditor from '../../NoteEditor/NoteEditor';
+import { EditorControl } from '../../NoteEditor/types';
 import * as React from 'react';
 import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions } from 'react-native';
 import { Platform, PermissionsAndroid } from 'react-native';
@@ -14,7 +15,7 @@ import Note from '@joplin/lib/models/Note';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Resource from '@joplin/lib/models/Resource';
 import Folder from '@joplin/lib/models/Folder';
-const Clipboard = require('@react-native-clipboard/clipboard').default;
+import Clipboard from '@react-native-clipboard/clipboard';
 const md5 = require('md5');
 import BackButtonService from '../../../services/BackButtonService';
 import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
@@ -82,7 +83,7 @@ import useDebounced from '../../../utils/hooks/useDebounced';
 import { Second } from '@joplin/utils/time';
 import TextWrapCalculator from '../Notes/TextWrapCalculator';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 
 const emptyArray: never[] = [];
 
@@ -174,8 +175,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private saveActionQueues_: Record<string, AsyncActionQueue>;
 	private doFocusUpdate_: boolean;
 	private styles_: Record<string, ReturnType<typeof StyleSheet.create>>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- editorRef can be a Markdown, RichText, or NoteBody viewer; each exposes a different command surface. Typing as the union would force narrowing at every call site.
-	private editorRef: any;
+	private editorRef: RefObject<EditorControl>;
 	private titleTextFieldRef: RefObject<TextInput>;
 	private navHandler: OnNavigateCallback;
 	private backHandler: ()=> Promise<boolean>;
@@ -183,8 +183,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private noteTagDialog_closeRequested: ()=> void;
 	private refreshResource: (resource: ResourceEntity, noteBody?: string)=> Promise<void>;
 	private selection: SelectionRange;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Cached menu option entries are heterogeneous (different command types and option shapes)
-	private menuOptionsCache_: Record<string, any>;
+	private menuOptionsCache_: Record<string, MenuOptionType[]>;
 	private focusUpdateIID_: ReturnType<typeof setTimeout> | null;
 	private folderPickerOptions_: FolderPickerOptions;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- dialogbox is the react-native-dialogbox ref; the library ships no types
