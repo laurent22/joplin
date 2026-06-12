@@ -1,6 +1,6 @@
 import type { ResourceEntity } from '../../services/database/types';
 import * as mime from '../../mime-utils';
-import { filename } from '@joplin/utils/path';
+import { filename, safeFileExtension } from '@joplin/utils/path';
 
 // This file contains resource-related utilities that do not
 // depend on the database, settings, etc.
@@ -8,7 +8,7 @@ import { filename } from '@joplin/utils/path';
 export const resourceFilename = (resource: ResourceEntity, encryptedBlob = false) => {
 	let extension = encryptedBlob ? 'crypted' : resource.file_extension;
 	if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
-	extension = extension ? `.${extension}` : '';
+	extension = extension ? `.${safeFileExtension(extension)}` : '';
 	// Resource IDs should contain only alphanumeric characters
 	const idComponent = resource.id.replace(/[^a-zA-Z0-9]/g, '_');
 	return idComponent + extension;
