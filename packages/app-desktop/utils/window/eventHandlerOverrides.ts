@@ -17,7 +17,7 @@ document.addEventListener('click', (event) => {
 	// checkboxes. Such a global event handler is probably not a good idea
 	// anyway but keeping it for now, as it doesn't seem to break anything else.
 	// https://github.com/facebook/react/issues/13477#issuecomment-489274045
-	if (['LABEL', 'INPUT'].includes(event.target.nodeName)) return;
+	if (event.target && ['LABEL', 'INPUT'].includes((event.target as HTMLElement).nodeName)) return;
 
 	event.preventDefault();
 });

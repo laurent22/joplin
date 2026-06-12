@@ -36,7 +36,7 @@ import MigrationService from '@joplin/lib/services/MigrationService';
 import { loadCustomCss } from '@joplin/lib/CssUtils';
 import { homedir } from 'os';
 import getDefaultPluginsInfo from '@joplin/lib/services/plugins/defaultPlugins/desktopDefaultPluginsInfo';
-const electronContextMenu = require('./services/electron-context-menu');
+import electronContextMenu from './services/electron-context-menu';
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
 
