@@ -768,7 +768,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 			show: (settings) => !!settings['ai.enabled'],
 			label: () => _('Test AI configuration'),
-			description: () => _('Sends a one-word prompt to your configured provider and reports whether it responds correctly.'),
 		},
 
 		// User toggle for the background embedding indexer. On by default —
@@ -783,7 +782,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 			show: (settings) => !!settings['ai.enabled'],
 			label: () => _('Index notes for AI search'),
-			description: () => _('Builds a background index so plugins can search your notes by meaning. Turn off if you only want to use AI chat without indexing.'),
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},
