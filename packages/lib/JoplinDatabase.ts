@@ -179,7 +179,7 @@ export default class JoplinDatabase extends Database {
 			this.logger().info('sqlite-vec extension loaded');
 		} catch (error) {
 			this.sqliteVecAvailable_ = false;
-			this.logger().warn('sqlite-vec extension failed to load; vector search disabled:', error.message ?? error);
+			this.logger().warn('sqlite-vec extension failed to load; vector search disabled:', error);
 		}
 	}
 
