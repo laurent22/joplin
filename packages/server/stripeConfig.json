@@ -58,6 +58,27 @@
 				"period": "yearly",
 				"amount": "95.88",
 				"currency": "EUR"
+			},
+			{
+				"accountType": 5,
+				"id": "price_1ThCwVL9ZkKzC9sXU9AVyDB1",
+				"period": "yearly",
+				"quantityMinimum": 2,
+				"amounts": [
+					{
+						"amount": "40.00",
+						"users": [2, 10]
+					},
+					{
+						"amount": "30.00",
+						"users": [11, 50]
+					},
+					{
+						"amount": "20.00",
+						"users": [51, "infinity"]
+					}
+				],
+				"currency": "EUR"
 			}
 		],
 		"archivedPrices": []
@@ -120,6 +141,27 @@
 				"id": "price_1TZbplLx4fybOTqJ3VmzuqmZ",
 				"period": "yearly",
 				"amount": "95.88",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 5,
+				"id": "price_1TgZ0zLx4fybOTqJl0xF4kHr",
+				"period": "yearly",
+				"quantityMinimum": 2,
+				"amounts": [
+					{
+						"amount": "40.00",
+						"users": [2, 10]
+					},
+					{
+						"amount": "30.00",
+						"users": [11, 50]
+					},
+					{
+						"amount": "20.00",
+						"users": [51, "infinity"]
+					}
+				],
 				"currency": "EUR"
 			}
 		],
