@@ -638,7 +638,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 						period: PricePeriod.Yearly,
 					})),
 				},
-				cfaLabel: _('Try it out'),
+				cfaLabel: _('Try it now'),
 				cfaUrl: '',
 				priceYearly: findPrice(stripeConfig, {
 					accountType: 5,
