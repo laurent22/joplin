@@ -9,7 +9,9 @@ export const resourceFilename = (resource: ResourceEntity, encryptedBlob = false
 	let extension = encryptedBlob ? 'crypted' : resource.file_extension;
 	if (!extension) extension = resource.mime ? mime.toFileExtension(resource.mime) : '';
 	extension = extension ? `.${extension}` : '';
-	return resource.id + extension;
+	// Resource IDs should contain only alphanumeric characters
+	const idComponent = resource.id.replace(/[^a-zA-Z0-9]/g, '_');
+	return idComponent + extension;
 };
 
 export const resourceRelativePath = (resource: ResourceEntity, relativeResourceDirPath: string, encryptedBlob = false) => {

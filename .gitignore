@@ -1406,6 +1406,7 @@ packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginationToSql.js
 packages/lib/models/utils/readOnly.test.js
 packages/lib/models/utils/readOnly.js
+packages/lib/models/utils/resourceUtils.test.js
 packages/lib/models/utils/resourceUtils.js
 packages/lib/models/utils/types.js
 packages/lib/models/utils/userData.test.js
