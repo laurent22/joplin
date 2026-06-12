@@ -1,5 +1,4 @@
-'use strict';
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // This is a fork of electron-context-menu@0.15.0. We need to fork it because
 // the latest version only runs from the main process and we need it in the
 // renderer process. It also has a dependency to electron-is-dev which also only
@@ -9,13 +8,39 @@
 // just a wrapper over Electron's own native context menu but with more bugs, so
 // we should get rid of it, but for now this is good enough as a quick fix.
 
-const electron = require('electron');
-const electronRemote = require('@electron/remote');
+import * as electron from 'electron';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
-const webContents = win => win.webContents || (win.getWebContents && win.getWebContents());
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Require lazy loading because requiring it in the main process crashes
+let electronRemote: any = null;
+const getElectronRemote = () => {
+	if (electronRemote !== null) return electronRemote;
+	try {
+		if (process.type === 'renderer') {
+			electronRemote = require('@electron/remote');
+		} else {
+			electronRemote = false;
+		}
+	} catch (e) {
+		electronRemote = false;
+	}
+	return electronRemote;
+};
 
-const decorateMenuItem = menuItem => {
-	return (options = {}) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- win can be a BrowserWindow or WebviewTag, which share webContents
+const getWebContents = (win: any): electron.WebContents => win.webContents || (win.getWebContents && win.getWebContents());
+
+interface ContextMenuItem extends electron.MenuItemConstructorOptions {
+	transform?: (text: string)=> string;
+}
+
+interface DecoratorOptions {
+	transform?: (text: string)=> string;
+	click?: (menuItem: electron.MenuItem, browserWindow: electron.BrowserWindow | undefined, event: electron.KeyboardEvent)=> void;
+}
+
+const decorateMenuItem = (menuItem: ContextMenuItem) => {
+	return (options: DecoratorOptions = {}) => {
 		if (options.transform && !options.click) {
 			menuItem.transform = options.transform;
 		}
@@ -24,11 +49,11 @@ const decorateMenuItem = menuItem => {
 	};
 };
 
-const removeUnusedMenuItems = menuTemplate => {
-	let notDeletedPreviousElement;
+const removeUnusedMenuItems = (menuTemplate: (ContextMenuItem | undefined | false)[]) => {
+	let notDeletedPreviousElement: ContextMenuItem | undefined;
 
 	return menuTemplate
-		.filter(menuItem => menuItem !== undefined && menuItem !== false && menuItem.visible !== false)
+		.filter((menuItem): menuItem is ContextMenuItem => menuItem !== undefined && menuItem !== false && menuItem.visible !== false)
 		.filter((menuItem, index, array) => {
 			const toDelete = menuItem.type === 'separator' && (!notDeletedPreviousElement || index === array.length - 1 || array[index + 1].type === 'separator');
 			notDeletedPreviousElement = toDelete ? notDeletedPreviousElement : menuItem;
@@ -36,8 +61,25 @@ const removeUnusedMenuItems = menuTemplate => {
 		});
 };
 
-const create = (win, options) => {
-	webContents(win).on('context-menu', (event, props) => {
+interface ContextMenuOptions {
+	window?: any;
+	shouldShowMenu?: (event: any, props: any)=> boolean;
+	showInspectElement?: boolean;
+	showLookUpSelection?: boolean;
+	showSaveImageAs?: boolean;
+	showCopyImage?: boolean;
+	showCopyImageAddress?: boolean;
+	showServices?: boolean;
+	allWindows?: any;
+	electronApp?: any;
+	labels?: Record<string, string>;
+	menu?: (defaultActions: any, props: electron.ContextMenuParams, win: any)=> (ContextMenuItem | undefined | false)[];
+	prepend?: (defaultActions: any, props: electron.ContextMenuParams, win: any)=> (ContextMenuItem | undefined | false)[];
+	append?: (defaultActions: any, props: electron.ContextMenuParams, win: any)=> (ContextMenuItem | undefined | false)[];
+}
+
+const create = (win: any, options: ContextMenuOptions) => {
+	getWebContents(win).on('context-menu', (event: electron.Event, props: electron.ContextMenuParams) => {
 		if (typeof options.shouldShowMenu === 'function' && options.shouldShowMenu(event, props) === false) {
 			return;
 		}
@@ -50,17 +92,18 @@ const create = (win, options) => {
 		const { editFlags } = props;
 		const hasText = props.selectionText.trim().length > 0;
 		const isLink = Boolean(props.linkURL);
-		const can = type => editFlags[`can${type}`] && hasText;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- editFlags is indexed dynamically
+		const can = (type: string) => (editFlags as any)[`can${type}`] && hasText;
 
 		const defaultActions = {
-			separator: () => ({ type: 'separator' }),
+			separator: () => ({ type: 'separator' as const }),
 			lookUpSelection: decorateMenuItem({
 				id: 'lookUpSelection',
 				label: 'Look Up “{selection}”',
 				visible: process.platform === 'darwin' && hasText && !isLink,
 				click() {
 					if (process.platform === 'darwin') {
-						webContents(win).showDefinitionForSelection();
+						getWebContents(win).showDefinitionForSelection();
 					}
 				},
 			}),
@@ -69,10 +112,11 @@ const create = (win, options) => {
 				label: 'Cut',
 				enabled: can('Cut'),
 				visible: props.isEditable,
-				click(menuItem) {
-					props.selectionText = menuItem.transform ? menuItem.transform(props.selectionText) : props.selectionText;
+				click(menuItem: electron.MenuItem) {
+					const customItem = menuItem as unknown as ContextMenuItem;
+					props.selectionText = customItem.transform ? customItem.transform(props.selectionText) : props.selectionText;
 					electron.clipboard.writeText(props.selectionText);
-					webContents(win).delete();
+					getWebContents(win).delete();
 				},
 			}),
 			copy: decorateMenuItem({
@@ -80,8 +124,9 @@ const create = (win, options) => {
 				label: 'Copy',
 				enabled: can('Copy'),
 				visible: props.isEditable || hasText,
-				click(menuItem) {
-					props.selectionText = menuItem.transform ? menuItem.transform(props.selectionText) : props.selectionText;
+				click(menuItem: electron.MenuItem) {
+					const customItem = menuItem as unknown as ContextMenuItem;
+					props.selectionText = customItem.transform ? customItem.transform(props.selectionText) : props.selectionText;
 					electron.clipboard.writeText(props.selectionText);
 				},
 			}),
@@ -90,18 +135,20 @@ const create = (win, options) => {
 				label: 'Paste',
 				enabled: editFlags.canPaste,
 				visible: props.isEditable,
-				click(menuItem) {
-					let clipboardContent = electron.clipboard.readText(props.selectionText);
-					clipboardContent = menuItem.transform ? menuItem.transform(clipboardContent) : clipboardContent;
-					webContents(win).insertText(clipboardContent);
+				click(menuItem: electron.MenuItem) {
+					const customItem = menuItem as unknown as ContextMenuItem;
+					let clipboardContent = electron.clipboard.readText();
+					clipboardContent = customItem.transform ? customItem.transform(clipboardContent) : clipboardContent;
+					void getWebContents(win).insertText(clipboardContent);
 				},
 			}),
 			saveImage: decorateMenuItem({
 				id: 'saveImage',
 				label: 'Save Image',
 				visible: props.mediaType === 'image',
-				click(menuItem) {
-					props.srcURL = menuItem.transform ? menuItem.transform(props.srcURL) : props.srcURL;
+				click(menuItem: electron.MenuItem) {
+					const customItem = menuItem as unknown as ContextMenuItem;
+					props.srcURL = customItem.transform ? customItem.transform(props.srcURL) : props.srcURL;
 					// download(win, props.srcURL);
 				},
 			}),
@@ -109,8 +156,9 @@ const create = (win, options) => {
 				id: 'saveImageAs',
 				label: 'Save Image As…',
 				visible: props.mediaType === 'image',
-				click(menuItem) {
-					props.srcURL = menuItem.transform ? menuItem.transform(props.srcURL) : props.srcURL;
+				click(menuItem: electron.MenuItem) {
+					const customItem = menuItem as unknown as ContextMenuItem;
+					props.srcURL = customItem.transform ? customItem.transform(props.srcURL) : props.srcURL;
 					// download(win, props.srcURL, {saveAs: true});
 				},
 			}),
@@ -118,8 +166,9 @@ const create = (win, options) => {
 				id: 'copyLink',
 				label: 'Copy Link',
 				visible: props.linkURL.length !== 0 && props.mediaType === 'none',
-				click(menuItem) {
-					props.linkURL = menuItem.transform ? menuItem.transform(props.linkURL) : props.linkURL;
+				click(menuItem: electron.MenuItem) {
+					const customItem = menuItem as unknown as ContextMenuItem;
+					props.linkURL = customItem.transform ? customItem.transform(props.linkURL) : props.linkURL;
 
 					electron.clipboard.write({
 						bookmark: props.linkText,
@@ -132,15 +181,16 @@ const create = (win, options) => {
 				label: 'Copy Image',
 				visible: props.mediaType === 'image',
 				click() {
-					webContents(win).copyImageAt(props.x, props.y);
+					getWebContents(win).copyImageAt(props.x, props.y);
 				},
 			}),
 			copyImageAddress: decorateMenuItem({
 				id: 'copyImageAddress',
 				label: 'Copy Image Address',
 				visible: props.mediaType === 'image',
-				click(menuItem) {
-					props.srcURL = menuItem.transform ? menuItem.transform(props.srcURL) : props.srcURL;
+				click(menuItem: electron.MenuItem) {
+					const customItem = menuItem as unknown as ContextMenuItem;
+					props.srcURL = customItem.transform ? customItem.transform(props.srcURL) : props.srcURL;
 
 					electron.clipboard.write({
 						bookmark: props.srcURL,
@@ -154,22 +204,25 @@ const create = (win, options) => {
 				click() {
 					win.inspectElement(props.x, props.y);
 
-					if (webContents(win).isDevToolsOpened()) {
-						webContents(win).devToolsWebContents.focus();
+					if (getWebContents(win).isDevToolsOpened()) {
+						const devTools = getWebContents(win).devToolsWebContents;
+						if (devTools) {
+							focus('electron-context-menu', devTools);
+						}
 					}
 				},
 			}),
 			services: () => ({
 				id: 'services',
 				label: 'Services',
-				role: 'services',
+				role: 'services' as const,
 				visible: process.platform === 'darwin' && (props.isEditable || hasText),
 			}),
 		};
 
 		const shouldShowInspectElement = typeof options.showInspectElement === 'boolean' ? options.showInspectElement : false;
 
-		let menuTemplate = [
+		let menuTemplate: (ContextMenuItem | undefined | false)[] = [
 			defaultActions.separator(),
 			options.showLookUpSelection !== false && defaultActions.lookUpSelection(),
 			defaultActions.separator(),
@@ -214,8 +267,9 @@ const create = (win, options) => {
 		menuTemplate = removeUnusedMenuItems(menuTemplate);
 
 		for (const menuItem of menuTemplate) {
+			if (!menuItem) continue;
 			// Apply custom labels for default menu items
-			if (options.labels && options.labels[menuItem.id]) {
+			if (options.labels && menuItem.id && options.labels[menuItem.id]) {
 				menuItem.label = options.labels[menuItem.id];
 			}
 
@@ -227,7 +281,8 @@ const create = (win, options) => {
 		}
 
 		if (menuTemplate.length > 0) {
-			const menu = (electronRemote ? electronRemote.Menu : electron.Menu).buildFromTemplate(menuTemplate);
+			const remote = getElectronRemote();
+			const menu = (remote ? remote.Menu : electron.Menu).buildFromTemplate(menuTemplate);
 
 			//
 			// When `electronRemote` is not available, this runs in the browser process.
@@ -245,12 +300,12 @@ const create = (win, options) => {
 	});
 };
 
-module.exports = (options = {}) => {
+export default (options: ContextMenuOptions = {}) => {
 	if (options.window) {
 		const win = options.window;
 
 		// When window is a webview that has not yet finished loading webContents is not available
-		if (webContents(win) === undefined) {
+		if (getWebContents(win) === undefined) {
 			win.addEventListener('dom-ready', () => {
 				create(win, options);
 			}, { once: true });
@@ -260,11 +315,14 @@ module.exports = (options = {}) => {
 		return create(win, options);
 	}
 
-	for (const win of (electron.BrowserWindow || electronRemote.BrowserWindow).getAllWindows()) {
+	const remote = getElectronRemote();
+
+	for (const win of (electron.BrowserWindow || (remote && remote.BrowserWindow)).getAllWindows()) {
 		create(win, options);
 	}
 
-	(electron.app || electronRemote.app).on('browser-window-created', (event, win) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- event is unused but required by electron signature
+	(electron.app || (remote && remote.app)).on('browser-window-created', (_event: any, win: any) => {
 		create(win, options);
 	});
 };

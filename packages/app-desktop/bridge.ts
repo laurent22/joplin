@@ -1,5 +1,6 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
+import electronContextMenu from './services/electron-context-menu';
 import { _, setLocale } from '@joplin/lib/locale';
 import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage, Menu, MenuItemConstructorOptions, MenuItem, BrowserWindowConstructorOptions, FileFilter, SaveDialogOptions, globalShortcut } from 'electron';
 import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
@@ -317,7 +318,7 @@ export class Bridge {
 	// support the renderer process again. Or possibly revert to an old
 	// version of electron-context-menu.
 	public setupContextMenu(_spellCheckerMenuItemsHandler: (misspelledWord: string, dictionarySuggestions: string[])=> void) {
-		require('./services/electron-context-menu')({
+		electronContextMenu({
 			allWindows: [this.mainWindow()],
 
 			electronApp: this.electronApp(),
