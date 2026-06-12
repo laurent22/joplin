@@ -479,7 +479,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			.CodeMirror-lines {
 				/* This is used to enable the scroll-past end behaviour. The same height should */
 				/* be applied to the viewer. */
-				padding-bottom: 400px !important;
+				padding-bottom: 150px !important;
 			}
 
 			/* Left padding is applied at the editor component level, so we should remove it from the lines */
