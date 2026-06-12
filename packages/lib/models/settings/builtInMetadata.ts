@@ -771,6 +771,44 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			description: () => _('Sends a one-word prompt to your configured provider and reports whether it responds correctly.'),
 		},
 
+		// User toggle for the background embedding indexer. On by default —
+		// when AI is enabled, indexing is part of what AI does. The toggle
+		// exists as a kill switch for users who want chat without the
+		// background CPU cost of indexing.
+		'ai.embedding.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Index notes for AI search'),
+			description: () => _('Builds a background index so plugins can search your notes by meaning. Turn off if you only want to use AI chat without indexing.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		// Embedding indexer state. Hidden internal cursors — no UI surface.
+		// `lastProcessedChangeId` is the ItemChange cursor the indexer
+		// resumes from on each maintenance tick. `lastIndexedModelId` lets us
+		// detect when the active embedding model has changed (mismatch →
+		// full re-index, since vectors from different models aren't
+		// comparable).
+		'ai.embedding.lastProcessedChangeId': {
+			value: 0,
+			type: SettingItemType.Int,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+		'ai.embedding.lastIndexedModelId': {
+			value: '',
+			type: SettingItemType.String,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
 		theme: {
 			value: Setting.THEME_LIGHT,
 			type: SettingItemType.Int,

@@ -318,3 +318,5 @@ Katakana
 Hanzi
 Ideographs
 chunker
+idempotently
+unigrams

@@ -2,7 +2,7 @@ import Setting from '../../models/Setting';
 import JoplinError from '../../JoplinError';
 import Logger from '@joplin/utils/Logger';
 import SyncTargetRegistry from '../../SyncTargetRegistry';
-import { ChatMessage, ChatOptions, ChatProvider, ChatResult, ProviderClassification, ProviderType } from './types';
+import { ChatMessage, ChatOptions, ChatProvider, ChatResult, EmbeddingProvider, ProviderClassification, ProviderType } from './types';
 import deriveClassification from './classification';
 import ChatProviderBase from './providers/ChatProviderBase';
 import OpenAiCompatibleProvider from './providers/OpenAiCompatible';
@@ -114,6 +114,21 @@ export default class AiService {
 	public invalidateProvider() {
 		this.cachedProvider_ = null;
 		this.cachedProviderKey_ = null;
+	}
+
+	// Embedding provider — set externally by app startup (desktop will install
+	// the ONNX-backed local provider in a follow-up PR; tests install the
+	// deterministic test stub via setEmbeddingProvider() below). Returns null
+	// when no provider has been installed — callers (the indexer, future
+	// search APIs) should treat that as "embeddings unavailable" and degrade.
+	private embeddingProvider_: EmbeddingProvider | null = null;
+
+	public setEmbeddingProvider(provider: EmbeddingProvider | null) {
+		this.embeddingProvider_ = provider;
+	}
+
+	public getActiveEmbeddingProvider(): EmbeddingProvider | null {
+		return this.embeddingProvider_;
 	}
 
 	private async recordTokens(inputTokens: number, outputTokens: number) {
