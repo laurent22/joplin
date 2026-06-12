@@ -112,6 +112,18 @@ describe('NoteEmbedding', () => {
 		expect(scoped[0].noteId).toBe('note-2');
 	});
 
+	it('similaritySearch returns [] when noteIds is an explicit empty array', async () => {
+		if (skipIfNoVec()) return;
+
+		await NoteEmbedding.saveChunks('note-1', 'm', [
+			{ chunkIndex: 0, chunkText: 'something', vector: [1, 0, 0, 0] },
+		]);
+
+		// An empty noteIds means "search within zero notes" — not "no filter".
+		const results = await NoteEmbedding.similaritySearch([1, 0, 0, 0], { k: 10, noteIds: [] });
+		expect(results).toEqual([]);
+	});
+
 	it('deleteByNoteId removes only that note\'s chunks from both tables', async () => {
 		if (skipIfNoVec()) return;
 

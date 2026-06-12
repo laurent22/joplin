@@ -180,12 +180,20 @@ export default class NoteEmbedding extends BaseModel {
 		// rather than letting the query throw "no such table".
 		if (!await this.vecTableExists()) return [];
 
+		// An explicitly-empty noteIds means "search within zero notes" — return
+		// nothing rather than silently widening the search to all notes.
+		if (options.noteIds && options.noteIds.length === 0) return [];
+
 		const k = Math.max(1, options.k | 0);
 
 		// sqlite-vec's vec0 needs an inline `k = ?` constraint or a hardcoded
 		// LIMIT — a parameter-bound LIMIT after a JOIN isn't visible to its
-		// optimiser. We over-fetch (× 4) when noteIds filter is in play so the
-		// post-join filter doesn't starve the result set, then trim to k.
+		// optimiser. When a noteIds filter is in play we over-fetch by 4× so
+		// the post-join filter rarely starves the result set, then trim to k.
+		// This is a heuristic — pathological cases (large global indexes where
+		// most top matches fall outside the scope) can still under-fill. A
+		// follow-up can switch to pre-resolving noteIds → rowids and pushing
+		// the filter into the vec MATCH clause directly.
 		const fetchSize = options.noteIds?.length ? k * 4 : k;
 
 		const whereParts: string[] = [`v.embedding MATCH ? AND k = ${fetchSize}`];
