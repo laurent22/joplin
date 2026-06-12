@@ -122,6 +122,7 @@ export default class BaseApplication {
 		await folderScreenUtilsCancelTimers();
 		await BaseItem.revisionService_.cancelTimers();
 		await ResourceService.instance().cancelTimers();
+		await EmbeddingIndexer.instance().stopRunInBackground();
 		await reg.cancelTimers();
 
 		this.eventEmitter_.removeAllListeners();
