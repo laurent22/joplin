@@ -1677,6 +1677,11 @@ packages/lib/services/noteList/renderTemplate.js
 packages/lib/services/noteList/renderViewProps.test.js
 packages/lib/services/noteList/renderViewProps.js
 packages/lib/services/noteList/renderers.js
+packages/lib/services/noteLock/NoteLockKey.js
+packages/lib/services/noteLock/NoteLockNote.js
+packages/lib/services/noteLock/NoteLockService.test.js
+packages/lib/services/noteLock/NoteLockService.js
+packages/lib/services/noteLock/isNoteLockEnabled.js
 packages/lib/services/ocr/OcrDriverBase.js
 packages/lib/services/ocr/OcrService.test.js
 packages/lib/services/ocr/OcrService.js

@@ -26,6 +26,8 @@ import { resolveFileRef, RefKind } from '../services/whiteboard/resolveRef';
 const { isImageMimeType } = require('../resourceUtils');
 import { MarkupToHtml } from '@joplin/renderer';
 import { ALL_NOTES_FILTER_ID } from '../reserved-ids';
+import NoteLockNote from '../services/noteLock/NoteLockNote';
+import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
 
 export interface PreviewsOrder {
 	by: string;
@@ -779,8 +781,10 @@ export default class Note extends BaseItem {
 		return n.updated_time < date;
 	}
 
-	public static load(id: string, options: LoadOptions = null): Promise<NoteEntity> {
-		return super.load(id, options);
+	public static async load(id: string, options: LoadOptions = null): Promise<NoteEntity> {
+		const note = await super.load(id, options);
+		if (isNoteLockEnabled() && !!options?.useNoteLock) await NoteLockNote.decryptBody(note, options?.fields);
+		return note;
 	}
 
 	public static async save(o: NoteEntity, options: SaveOptions = null): Promise<NoteEntity> {
@@ -824,6 +828,9 @@ export default class Note extends BaseItem {
 		// we should set beforeNoteJson to the current contents in the database, or the last value which was stored
 		// in the item_changes table
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
+		if (isNoteLockEnabled() && !!options?.useNoteLock) {
+			await NoteLockNote.prepareForSave(o, this.linkedItemIds, isNew);
+		}
 
 		syncDebugLog.info('Save Note: P:', oldNote);
 
@@ -832,7 +839,9 @@ export default class Note extends BaseItem {
 		// has just been downloaded from the sync target and save is invoked when the note has not yet been decrypted
 		if (oldNote && !oldNote.encryption_applied) {
 			const changedSinceCollection = this.revisionService().changedSinceCollection(o.id);
-			if (changedSinceCollection) {
+			if (isNoteLockEnabled() && NoteLockNote.isLocked(o)) {
+				beforeNoteJson = null;
+			} else if (changedSinceCollection) {
 				beforeNoteJson = await ItemChange.oldNoteContent(o.id);
 			} else {
 				beforeNoteJson = JSON.stringify(oldNote);
@@ -853,6 +862,11 @@ export default class Note extends BaseItem {
 		syncDebugLog.info('Save Note: N:', o);
 
 		let savedNote = await super.save(o, options);
+
+		if (isNoteLockEnabled() && !!options?.useNoteLock && NoteLockNote.isLocking(o, oldNote)) {
+			await ItemChange.waitForAllSaved();
+			await this.revisionService().deleteUnencryptedHistoryForNote(savedNote.id, { sourceDescription: 'Note.save: note lock' });
+		}
 
 		void ItemChange.add(BaseModel.TYPE_NOTE, savedNote.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, {
 			changeSource, changeId: options?.changeId, beforeChangeItemJson: beforeNoteJson,

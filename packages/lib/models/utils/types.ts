@@ -31,6 +31,7 @@ export interface LoadOptions {
 	limit?: number;
 	includeConflicts?: boolean;
 	includeDeleted?: boolean;
+	useNoteLock?: boolean;
 }
 
 export interface FolderLoadOptions extends LoadOptions {
@@ -50,6 +51,7 @@ export interface SaveOptions {
 	dispatchUpdateAction?: boolean;
 	dispatchOptions?: { preserveSelection: boolean };
 	disableReadOnlyCheck?: boolean;
+	useNoteLock?: boolean;
 
 	changeSource?: number;
 
