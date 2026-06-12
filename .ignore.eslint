@@ -1569,6 +1569,7 @@ packages/lib/services/WhenClause.test.js
 packages/lib/services/WhenClause.js
 packages/lib/services/ai/AiService.test.js
 packages/lib/services/ai/AiService.js
+packages/lib/services/ai/SqliteVec.test.js
 packages/lib/services/ai/aiSettingsTransition.test.js
 packages/lib/services/ai/aiSettingsTransition.js
 packages/lib/services/ai/classification.js

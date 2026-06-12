@@ -178,16 +178,13 @@ export default class Database {
 		return this.tryCall('selectOne', sql, params);
 	}
 
-	public async loadExtension(/* path */) {
-		return; // Disabled for now as fuzzy search extension is not in use
-
-		// let result =  null;
-		// try {
-		// 	result = await this.driver().loadExtension(path);
-		// 	return result;
-		// } catch (e) {
-		// 	throw new Error(`Could not load extension ${path}`);
-		// }
+	public async loadExtension(path: string) {
+		try {
+			return await this.driver().loadExtension(path);
+		} catch (error) {
+			error.message = `Could not load extension ${path}: ${error.message}`;
+			throw error;
+		}
 	}
 
 	public async selectAll<T = Row>(sql: string, params: SqlParams = null): Promise<T[]> {

@@ -224,6 +224,7 @@
     "fs-extra": "11.3.4",
     "keytar": "7.9.0",
     "node-fetch": "2.6.7",
+    "sqlite-vec": "0.1.9",
     "sqlite3": "5.1.6"
   }
 }

@@ -311,3 +311,4 @@ simctl
 devicetypes
 xcodebuild
 openai
+vecs
