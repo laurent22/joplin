@@ -12534,7 +12534,7 @@ __metadata:
     react: "npm:19.1.4"
     react-dom: "npm:19.1.4"
     react-native: "npm:0.81.6"
-    react-native-device-info: "npm:15.0.1"
+    react-native-device-info: "npm:15.0.2"
     react-native-dropdownalert: "npm:5.2.0"
     react-native-file-viewer: "npm:2.1.5"
     react-native-get-random-values: "npm:2.0.0"
@@ -49387,12 +49387,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-device-info@npm:15.0.1":
-  version: 15.0.1
-  resolution: "react-native-device-info@npm:15.0.1"
+"react-native-device-info@npm:15.0.2":
+  version: 15.0.2
+  resolution: "react-native-device-info@npm:15.0.2"
   peerDependencies:
     react-native: "*"
-  checksum: 10/965cccc8b6453c2890a5ee72919189f4b29b076ff02a166ebe0743083db5e1c6b01a720f50e8d3c30af00f0ad204c8e6faaadd3ba57852763944f59fb711b789
+  checksum: 10/9f945a16bd1aebefc60868e22552375bc630eb98d5505d8cdc847d7841a226540408e7ea174cbb4eb5bfec17235eaca731d154082f64e4935e2a4d2e0244b39b
   languageName: node
   linkType: hard
 
