@@ -175,6 +175,11 @@ export default class NoteEmbedding extends BaseModel {
 		options: SimilaritySearchOptions,
 	): Promise<SimilarityResult[]> {
 		this.requireVec();
+		// On a fresh profile the vec table is created lazily by saveChunks(),
+		// so it may not exist yet. Treat that as "no embeddings to match"
+		// rather than letting the query throw "no such table".
+		if (!await this.vecTableExists()) return [];
+
 		const k = Math.max(1, options.k | 0);
 
 		// sqlite-vec's vec0 needs an inline `k = ?` constraint or a hardcoded
@@ -224,7 +229,9 @@ export default class NoteEmbedding extends BaseModel {
 	// changes — the existing vectors are no longer comparable to anything new.
 	public static async clearAll() {
 		const queries: string[] = ['DELETE FROM note_embeddings_meta'];
-		if (this.joplinDb().sqliteVecAvailable()) {
+		// Vec-table delete is guarded the same way as deleteByNoteId — the
+		// table is created lazily, so on a fresh profile it may not exist yet.
+		if (this.joplinDb().sqliteVecAvailable() && await this.vecTableExists()) {
 			queries.push('DELETE FROM note_embeddings_vec');
 		}
 		await this.db().transactionExecBatch(queries);

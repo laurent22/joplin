@@ -27,6 +27,19 @@ describe('NoteEmbedding', () => {
 		expect(await NoteEmbedding.byNoteId('note-1')).toEqual([]);
 	});
 
+	it('similaritySearch returns [] on a fresh profile (vec table not yet created)', async () => {
+		if (skipIfNoVec()) return;
+		// saveChunks creates the vec table lazily. Calling similaritySearch
+		// before any save must not crash with "no such table".
+		const results = await NoteEmbedding.similaritySearch([1, 0, 0, 0], { k: 5 });
+		expect(results).toEqual([]);
+	});
+
+	it('clearAll is a no-op on a fresh profile (vec table not yet created)', async () => {
+		if (skipIfNoVec()) return;
+		await expect(NoteEmbedding.clearAll()).resolves.toBeUndefined();
+	});
+
 	it('saves and reads back chunks for a note', async () => {
 		if (skipIfNoVec()) return;
 
