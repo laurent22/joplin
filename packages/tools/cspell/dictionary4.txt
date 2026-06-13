@@ -311,3 +311,12 @@ simctl
 devicetypes
 xcodebuild
 openai
+vecs
+Hangul
+Hiragana
+Katakana
+Hanzi
+Ideographs
+chunker
+idempotently
+unigrams

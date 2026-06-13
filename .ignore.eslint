@@ -1479,6 +1479,8 @@ packages/lib/models/Migration.js
 packages/lib/models/Note.customSortOrder.test.js
 packages/lib/models/Note.test.js
 packages/lib/models/Note.js
+packages/lib/models/NoteEmbedding.test.js
+packages/lib/models/NoteEmbedding.js
 packages/lib/models/NoteResource.js
 packages/lib/models/NoteTag.js
 packages/lib/models/Resource.test.js
@@ -1570,13 +1572,20 @@ packages/lib/services/WhenClause.test.js
 packages/lib/services/WhenClause.js
 packages/lib/services/ai/AiService.test.js
 packages/lib/services/ai/AiService.js
+packages/lib/services/ai/EmbeddingIndexer.test.js
+packages/lib/services/ai/EmbeddingIndexer.js
+packages/lib/services/ai/SqliteVec.test.js
 packages/lib/services/ai/aiSettingsTransition.test.js
 packages/lib/services/ai/aiSettingsTransition.js
+packages/lib/services/ai/chunker.test.js
+packages/lib/services/ai/chunker.js
 packages/lib/services/ai/classification.js
 packages/lib/services/ai/providers/Anthropic.js
 packages/lib/services/ai/providers/ChatProviderBase.js
 packages/lib/services/ai/providers/JoplinCloud.js
 packages/lib/services/ai/providers/OpenAiCompatible.js
+packages/lib/services/ai/testing/TestEmbeddingProvider.test.js
+packages/lib/services/ai/testing/TestEmbeddingProvider.js
 packages/lib/services/ai/types.js
 packages/lib/services/commands/MenuUtils.js
 packages/lib/services/commands/ToolbarButtonUtils.test.js
@@ -1600,6 +1609,7 @@ packages/lib/services/database/migrations/48.js
 packages/lib/services/database/migrations/49.js
 packages/lib/services/database/migrations/50.js
 packages/lib/services/database/migrations/51.js
+packages/lib/services/database/migrations/52.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js

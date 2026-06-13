@@ -9,6 +9,7 @@ import KeychainServiceDriverElectron from './services/keychain/KeychainServiceDr
 import { setLocale } from './locale';
 import KvStore from './services/KvStore';
 import AiService from './services/ai/AiService';
+import EmbeddingIndexer from './services/ai/EmbeddingIndexer';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
 import SyncTargetJoplinServerSAML from './SyncTargetJoplinServerSAML';
 import SyncTargetOneDrive from './SyncTargetOneDrive';
@@ -121,6 +122,7 @@ export default class BaseApplication {
 		await folderScreenUtilsCancelTimers();
 		await BaseItem.revisionService_.cancelTimers();
 		await ResourceService.instance().cancelTimers();
+		await EmbeddingIndexer.instance().stopRunInBackground();
 		await reg.cancelTimers();
 
 		this.eventEmitter_.removeAllListeners();
@@ -349,6 +351,24 @@ export default class BaseApplication {
 		return middleware;
 	}
 
+	// Starts or stops the embedding indexer to match current state. Called
+	// from the settings-side-effects path (on ai.enabled / ai.embedding.enabled
+	// toggles) and from app startup. The indexer runs when AI is enabled,
+	// embedding is enabled (the user-facing kill switch — defaults on), and
+	// an embedding provider has been installed by the host app (desktop ships
+	// the ONNX-backed local provider in a follow-up; tests inject a stub via
+	// AiService.setEmbeddingProvider()).
+	protected async applyEmbeddingIndexerState() {
+		const shouldRun = Setting.value('ai.enabled')
+			&& Setting.value('ai.embedding.enabled')
+			&& !!AiService.instance().getActiveEmbeddingProvider();
+		if (shouldRun) {
+			await EmbeddingIndexer.instance().runInBackground();
+		} else {
+			await EmbeddingIndexer.instance().stopRunInBackground();
+		}
+	}
+
 	protected async applySettingsSideEffects(action: { type?: string; key?: string; keys?: string[] } = null) {
 		const sideEffects: Record<string, ()=> Promise<void>> = {
 			'dateFormat': async () => {
@@ -412,10 +432,15 @@ export default class BaseApplication {
 			'ai.enabled': async () => {
 				if (Setting.value('ai.enabled')) AiService.instance().applyFirstEnableDefault();
 				AiService.instance().invalidateProvider();
+				await this.applyEmbeddingIndexerState();
 			},
 
 			'ai.chat.providerType': async () => {
 				AiService.instance().invalidateProvider();
+			},
+
+			'ai.embedding.enabled': async () => {
+				await this.applyEmbeddingIndexerState();
 			},
 		};
 

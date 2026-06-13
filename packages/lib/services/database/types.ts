@@ -96,6 +96,15 @@ export interface AlarmEntity {
   'trigger_time'?: number;
   'type_'?: number;
 }
+export interface ConflictNoteStateEntity {
+  'base_body'?: string;
+  'base_title'?: string;
+  'note_id'?: string | null;
+  'remote_body'?: string;
+  'remote_title'?: string;
+  'remote_updated_time'?: number;
+  'type_'?: number;
+}
 export interface DeletedItemEntity {
   'deleted_time'?: number;
   'id'?: number | null;
@@ -199,6 +208,15 @@ export interface MigrationEntity {
   'id'?: number | null;
   'number'?: number;
   'updated_time'?: number;
+  'type_'?: number;
+}
+export interface NoteEmbeddingsMetaEntity {
+  'chunk_index'?: number;
+  'chunk_text'?: string;
+  'created_time'?: number;
+  'id'?: number | null;
+  'model_id'?: string;
+  'note_id'?: string;
   'type_'?: number;
 }
 export interface NoteResourceEntity {
@@ -335,30 +353,21 @@ export interface SettingEntity {
   'value'?: string | null;
   'type_'?: number;
 }
-export interface ConflictNoteStateEntity {
-  'note_id'?: string;
-  'base_body'?: string;
-  'base_title'?: string;
-  'remote_body'?: string;
-  'remote_title'?: string;
-  'remote_updated_time'?: number;
-  'type_'?: number;
-}
 export interface SyncItemEntity {
+  'base_body'?: string;
+  'base_conflict_note_id'?: string;
+  'base_title'?: string;
   'force_sync'?: number;
   'id'?: number | null;
   'item_id'?: string;
   'item_location'?: number;
   'item_type'?: number;
+  'remote_item_updated_time'?: number;
   'sync_disabled'?: number;
   'sync_disabled_reason'?: string;
   'sync_target'?: number;
   'sync_time'?: number;
   'sync_warning_ignored'?: number;
-  'remote_item_updated_time'?: number;
-  'base_body'?: string;
-  'base_title'?: string;
-  'base_conflict_note_id'?: string;
   'type_'?: number;
 }
 export interface TableFieldEntity {
@@ -454,29 +463,20 @@ export const databaseSchema: DatabaseTables = {
 		type_: { type: 'number' },
 	},
 	sync_items: {
+		base_body: { type: 'string' },
+		base_conflict_note_id: { type: 'string' },
+		base_title: { type: 'string' },
 		force_sync: { type: 'number' },
 		id: { type: 'number' },
 		item_id: { type: 'string' },
 		item_location: { type: 'number' },
 		item_type: { type: 'number' },
+		remote_item_updated_time: { type: 'number' },
 		sync_disabled: { type: 'number' },
 		sync_disabled_reason: { type: 'string' },
 		sync_target: { type: 'number' },
 		sync_time: { type: 'number' },
 		sync_warning_ignored: { type: 'number' },
-		remote_item_updated_time: { type: 'number' },
-		base_body: { type: 'string' },
-		base_title: { type: 'string' },
-		base_conflict_note_id: { type: 'string' },
-		type_: { type: 'number' },
-	},
-	conflict_note_states: {
-		note_id: { type: 'string' },
-		base_body: { type: 'string' },
-		base_title: { type: 'string' },
-		remote_body: { type: 'string' },
-		remote_title: { type: 'string' },
-		remote_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
 	version: {
@@ -705,6 +705,24 @@ export const databaseSchema: DatabaseTables = {
 		title: { type: 'string' },
 		todo_completed_count: { type: 'any' },
 		updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	conflict_note_states: {
+		base_body: { type: 'string' },
+		base_title: { type: 'string' },
+		note_id: { type: 'string' },
+		remote_body: { type: 'string' },
+		remote_title: { type: 'string' },
+		remote_updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	note_embeddings_meta: {
+		chunk_index: { type: 'number' },
+		chunk_text: { type: 'string' },
+		created_time: { type: 'number' },
+		id: { type: 'number' },
+		model_id: { type: 'string' },
+		note_id: { type: 'string' },
 		type_: { type: 'number' },
 	},
 };

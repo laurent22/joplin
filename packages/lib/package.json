@@ -38,6 +38,7 @@
     "react": "19.1.5",
     "react-dom": "19.1.5",
     "sharp": "0.34.5",
+    "sqlite-vec": "0.1.9",
     "tesseract.js": "6.0.1",
     "typescript": "5.9.3"
   },

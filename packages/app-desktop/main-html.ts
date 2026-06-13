@@ -31,6 +31,7 @@ import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
 import * as React from 'react';
 import nodeSqlite = require('sqlite3');
+import sqliteVec = require('sqlite-vec');
 import initLib from '@joplin/lib/initLib';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import * as pdfJs from 'pdfjs-dist';
@@ -93,6 +94,7 @@ const main = async () => {
 		appVersion,
 		electronBridge: bridge(),
 		nodeSqlite,
+		sqliteVec,
 		pdfJs: pdfJs as PdfJs,
 		isAppleSilicon,
 	});

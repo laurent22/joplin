@@ -137,6 +137,62 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(note.body).not.toMatch(/\.xps/i);
 	});
 
+	it('should convert PDF-named XPS printouts to image resources on Windows', async () => {
+		if (process.platform !== 'win32') return;
+
+		const notes = await withWarningSilenced(/OneNoteConverter:/, async () => importNote(`${supportDir}/onenote/pdf-named-xps.one`));
+		const resources = await Resource.all();
+		const note = notes.find(note => note.title === 'The Importance of Being Earnest (1895)');
+
+		expectWithInstructions(note).toBeTruthy();
+		expectWithInstructions(note.body).not.toMatch(/<img[^>]+Importance of being earnest analysis jana\.pdf/i);
+		expectWithInstructions(note.body).not.toContain('XPS printout page 1: Open original XPS file');
+
+		const imageResourceIds = [
+			...note.body.matchAll(/!\[[^\]]*\]\(:\/([a-f0-9]{32})\)/g),
+			...note.body.matchAll(/<img[^>]+src=["']:\/([a-f0-9]{32})["']/g),
+		].map(match => match[1]);
+
+		expectWithInstructions(imageResourceIds.length).toBe(1);
+
+		const imageResource = await Resource.load(imageResourceIds[0]);
+		expectWithInstructions(imageResource.mime).toMatch(/^image\//);
+
+		const content = await Resource.content(imageResource);
+		const metadata = await sharp(content).metadata();
+		expectWithInstructions(metadata.width).toBeGreaterThan(0);
+		expectWithInstructions(metadata.height).toBeGreaterThan(0);
+
+		expectWithInstructions(resources.map(resource => resource.mime)).not.toContain('application/vnd.ms-xpsdocument');
+		expectWithInstructions(note.body).not.toMatch(/\.xps/i);
+	});
+
+	// Covers the anomaly reported in https://github.com/laurent22/joplin/issues/14211:
+	// In the reported file, a printout page has a .pdf filename, but its content
+	// is XPS. Non-Windows imports should link to the XPS resource.
+	it('should import PDF-named XPS printouts as resource links on non-Windows', async () => {
+		if (process.platform === 'win32') return;
+
+		const notes = await withWarningSilenced(/OneNoteConverter:/, async () => importNote(`${supportDir}/onenote/pdf-named-xps.one`));
+		const note = notes.find(note => note.title === 'The Importance of Being Earnest (1895)');
+
+		expectWithInstructions(note).toBeTruthy();
+		expectWithInstructions(note.body).toContain('XPS printout page 1: Open original XPS file');
+		expectWithInstructions(note.body).not.toMatch(/<img[^>]+Importance of being earnest analysis jana\.pdf/i);
+
+		const linkResourceIds = [
+			...note.body.matchAll(/\[[^\]]*\]\(:\/([a-f0-9]{32})\)/g),
+			...note.body.matchAll(/<a[^>]+href=["']:\/([a-f0-9]{32})["']/g),
+		].map(match => match[1]);
+
+		expectWithInstructions(linkResourceIds.length).toBe(1);
+
+		const linkedResource = await Resource.load(linkResourceIds[0]);
+		expectWithInstructions(linkedResource.mime).toBe('application/vnd.ms-xpsdocument');
+		expectWithInstructions(linkedResource.title).toMatch(/\.xps$/i);
+		expectWithInstructions(linkedResource.title).not.toMatch(/\.pdf$/i);
+	});
+
 	it('should preserve indentation of subpages in Section page', async () => {
 		const notes = await importNote(`${supportDir}/onenote/subpages.zip`);
 
