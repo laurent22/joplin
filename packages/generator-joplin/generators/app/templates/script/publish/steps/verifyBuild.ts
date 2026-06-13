@@ -17,8 +17,6 @@ interface PackageJson {
 	name?: string;
 }
 
-// Validates manifest requirements (name, version, repository URL) and does
-// a local build to ensure the plugin compiles cleanly before proceeding.
 const verifyBuild = async () => {
 	const metadata = await validateMetadata();
 	await build();
