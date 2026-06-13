@@ -5,7 +5,7 @@ import { promisify } from 'util';
 import { valid } from 'semver';
 import logger from '../utils/logger';
 
-const DIST_COMMAND = 'npm run dist';
+const distCommand = 'npm run dist';
 const execAsync = promisify(exec);
 
 interface Manifest {
@@ -47,11 +47,11 @@ const validateMetadata = async () => {
 	const repositoryUrl = manifest.repository_url;
 
 	if (!name || !name.startsWith('joplin-plugin-')) {
-		throw new Error('Plugin name must start with "joplin-plugin-" in package.json');
+		throw new Error('Plugin name must start with \'joplin-plugin-\' in package.json');
 	}
 
 	if (!version || !valid(version)) {
-		throw new Error(`Invalid plugin version: "${version}". Must follow semver format.`);
+		throw new Error(`Invalid plugin version: '${version}'. Must follow semver format.`);
 	}
 
 	const cleanUrl = typeof repositoryUrl === 'string'
@@ -69,8 +69,8 @@ const validateMetadata = async () => {
 
 const build = async () => {
 	try {
-		logger.info(`Running "${DIST_COMMAND}"...`);
-		await execAsync(DIST_COMMAND, { cwd: process.cwd() });
+		logger.info(`Running '${distCommand}'...`);
+		await execAsync(distCommand, { cwd: process.cwd() });
 		logger.success('Build verified!');
 	} catch (error: unknown) {
 		if (error instanceof Error) {
