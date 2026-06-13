@@ -22,9 +22,8 @@ export default class ConflictNoteState extends BaseModel {
 	}
 
 	public static async save(state: ConflictNoteStateEntity) {
-		await this.db().exec('DELETE FROM conflict_note_states WHERE note_id = ?', [state.note_id]);
 		await this.db().exec(
-			'INSERT INTO conflict_note_states (note_id, base_body, base_title, remote_body, remote_title, remote_updated_time) VALUES (?, ?, ?, ?, ?, ?)',
+			'INSERT OR REPLACE INTO conflict_note_states (note_id, base_body, base_title, remote_body, remote_title, remote_updated_time) VALUES (?, ?, ?, ?, ?, ?)',
 			[
 				state.note_id,
 				state.base_body ?? '',
