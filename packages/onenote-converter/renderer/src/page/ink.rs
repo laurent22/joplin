@@ -173,6 +173,11 @@ impl InkBuilder {
 
         if self.embedded {
             let mut span_styles = StyleSet::new();
+            span_styles.set("display", "inline-block".into());
+            span_styles.set("left", "0".into());
+            span_styles.set("position", "relative".into());
+            span_styles.set("top", "0".into());
+            span_styles.set("vertical-align", "bottom".into());
             // Use display_size instead of content_size to size the container. This ensures that
             // embedded ink that comes after this ink has the correct position.
             span_styles.set("width", format!("{}px", display_size.0));
