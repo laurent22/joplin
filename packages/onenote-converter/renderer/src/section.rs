@@ -53,11 +53,16 @@ impl Renderer {
             }
 
             for page in page_series.pages() {
-                let render_result =
-                    self.render_page_to_file(page, &section_dir, &output_dir, || {
+                let render_result = self.render_page_to_file(
+                    page,
+                    toc.len() as u32,
+                    &section_dir,
+                    &output_dir,
+                    || {
                         fallback_title_index += 1;
                         fallback_title_index
-                    });
+                    },
+                );
                 match render_result {
                     Ok(toc_entry) => {
                         toc.push(toc_entry);
@@ -100,6 +105,7 @@ impl Renderer {
     fn render_page_to_file<F>(
         &mut self,
         page: &Page,
+        page_order_index: u32,
         section_dir: &str,
         output_dir: &str,
         fallback_title_idx: F,
@@ -113,7 +119,7 @@ impl Renderer {
             .unwrap_or_else(|| format!("Untitled Page {}", fallback_title_idx()));
 
         let mut renderer = page::Renderer::new(section_dir.into(), self);
-        let page_html = renderer.render_page(page)?;
+        let page_html = renderer.render_page(page, page_order_index)?;
 
         let page_path = self.write_html_file(section_dir, &title, &page_html)?;
         log!("Created page file: {:?}", page_path);

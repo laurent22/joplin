@@ -132,6 +132,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			if (!await shim.showConfirmationDialog(this.restartMessage())) return;
 			Setting.setValue('ocr.clearLanguageDataCache', true);
 			await restart();
+		} else if (key === 'ai.usage.resetButton') {
+			if (!await shim.showConfirmationDialog(_('Reset AI token usage counters?'))) return;
+			Setting.setValue('ai.usage.inputTokens', 0);
+			Setting.setValue('ai.usage.outputTokens', 0);
+			await Setting.saveAll();
+		} else if (key === 'ai.chat.testButton') {
+			await shared.checkAiConfig(this);
 		} else if (key === 'sync.openSyncWizard') {
 			this.props.dispatch({
 				type: 'DIALOG_OPEN',
@@ -244,6 +251,21 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		if (section.name === 'general') {
 			sectionStyle.borderTopWidth = 0;
+		}
+
+		if (section.name === 'ai' && settings['ai.enabled']) {
+			const messages = shared.checkAiConfigMessages(this);
+			if (messages.length) {
+				const result = this.state.checkAiConfigResult;
+				const ok = result && result !== 'checking' && result.ok;
+				const statusStyle = { ...theme.textStyle, marginTop: 10, color: ok ? theme.color : theme.colorWarn };
+				settingComps.push(
+					<div key="ai_config_test_status" style={statusStyle} aria-live='polite'>
+						{messages[0]}
+						{messages.length > 1 ? <p>{messages[1]}</p> : null}
+					</div>,
+				);
+			}
 		}
 
 		if (section.name === 'sync') {

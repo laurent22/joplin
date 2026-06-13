@@ -73,7 +73,7 @@ jest.mock('./components/CameraView/Camera', () => {
 });
 
 jest.mock('@react-native-clipboard/clipboard', () => {
-	return { default: { getString: jest.fn(), setString: jest.fn() } };
+	return { getString: jest.fn(), setString: jest.fn() };
 });
 
 jest.doMock('expo-audio', () => {

@@ -11,7 +11,7 @@ import { JSDOM } from 'jsdom';
 import { ImportModuleOutputFormat, ImportOptions } from './types';
 import HtmlToMd from '../../HtmlToMd';
 import Resource from '../../models/Resource';
-import * as sharp from 'sharp';
+import sharp from 'sharp';
 
 // cspell:ignore xpsdocument
 
@@ -137,6 +137,62 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(note.body).not.toMatch(/\.xps/i);
 	});
 
+	it('should convert PDF-named XPS printouts to image resources on Windows', async () => {
+		if (process.platform !== 'win32') return;
+
+		const notes = await withWarningSilenced(/OneNoteConverter:/, async () => importNote(`${supportDir}/onenote/pdf-named-xps.one`));
+		const resources = await Resource.all();
+		const note = notes.find(note => note.title === 'The Importance of Being Earnest (1895)');
+
+		expectWithInstructions(note).toBeTruthy();
+		expectWithInstructions(note.body).not.toMatch(/<img[^>]+Importance of being earnest analysis jana\.pdf/i);
+		expectWithInstructions(note.body).not.toContain('XPS printout page 1: Open original XPS file');
+
+		const imageResourceIds = [
+			...note.body.matchAll(/!\[[^\]]*\]\(:\/([a-f0-9]{32})\)/g),
+			...note.body.matchAll(/<img[^>]+src=["']:\/([a-f0-9]{32})["']/g),
+		].map(match => match[1]);
+
+		expectWithInstructions(imageResourceIds.length).toBe(1);
+
+		const imageResource = await Resource.load(imageResourceIds[0]);
+		expectWithInstructions(imageResource.mime).toMatch(/^image\//);
+
+		const content = await Resource.content(imageResource);
+		const metadata = await sharp(content).metadata();
+		expectWithInstructions(metadata.width).toBeGreaterThan(0);
+		expectWithInstructions(metadata.height).toBeGreaterThan(0);
+
+		expectWithInstructions(resources.map(resource => resource.mime)).not.toContain('application/vnd.ms-xpsdocument');
+		expectWithInstructions(note.body).not.toMatch(/\.xps/i);
+	});
+
+	// Covers the anomaly reported in https://github.com/laurent22/joplin/issues/14211:
+	// In the reported file, a printout page has a .pdf filename, but its content
+	// is XPS. Non-Windows imports should link to the XPS resource.
+	it('should import PDF-named XPS printouts as resource links on non-Windows', async () => {
+		if (process.platform === 'win32') return;
+
+		const notes = await withWarningSilenced(/OneNoteConverter:/, async () => importNote(`${supportDir}/onenote/pdf-named-xps.one`));
+		const note = notes.find(note => note.title === 'The Importance of Being Earnest (1895)');
+
+		expectWithInstructions(note).toBeTruthy();
+		expectWithInstructions(note.body).toContain('XPS printout page 1: Open original XPS file');
+		expectWithInstructions(note.body).not.toMatch(/<img[^>]+Importance of being earnest analysis jana\.pdf/i);
+
+		const linkResourceIds = [
+			...note.body.matchAll(/\[[^\]]*\]\(:\/([a-f0-9]{32})\)/g),
+			...note.body.matchAll(/<a[^>]+href=["']:\/([a-f0-9]{32})["']/g),
+		].map(match => match[1]);
+
+		expectWithInstructions(linkResourceIds.length).toBe(1);
+
+		const linkedResource = await Resource.load(linkResourceIds[0]);
+		expectWithInstructions(linkedResource.mime).toBe('application/vnd.ms-xpsdocument');
+		expectWithInstructions(linkedResource.title).toMatch(/\.xps$/i);
+		expectWithInstructions(linkedResource.title).not.toMatch(/\.pdf$/i);
+	});
+
 	it('should preserve indentation of subpages in Section page', async () => {
 		const notes = await importNote(`${supportDir}/onenote/subpages.zip`);
 
@@ -146,15 +202,19 @@ describe('InteropService_Importer_OneNote', () => {
 
 		const pageTwo = notes.find(n => n.title === 'Page 2');
 		expectWithInstructions(menuLines[3].trim()).toBe(`<li class="l1"><a href=":/${pageTwo.id}" target="content" title="Page 2">${pageTwo.title}</a>`);
+		expectWithInstructions(pageTwo.order).toBe(-3);
 
 		const pageTwoA = notes.find(n => n.title === 'Page 2-a');
 		expectWithInstructions(menuLines[4].trim()).toBe(`<li class="l2"><a href=":/${pageTwoA.id}" target="content" title="Page 2-a">${pageTwoA.title}</a>`);
+		expectWithInstructions(pageTwoA.order).toBe(-4);
 
 		const pageTwoAA = notes.find(n => n.title === 'Page 2-a-a');
 		expectWithInstructions(menuLines[5].trim()).toBe(`<li class="l3"><a href=":/${pageTwoAA.id}" target="content" title="Page 2-a-a">${pageTwoAA.title}</a>`);
+		expectWithInstructions(pageTwoAA.order).toBe(-5);
 
 		const pageTwoB = notes.find(n => n.title === 'Page 2-b');
 		expectWithInstructions(menuLines[7].trim()).toBe(`<li class="l2"><a href=":/${pageTwoB.id}" target="content" title="Page 2-b">${pageTwoB.title}</a>`);
+		expectWithInstructions(pageTwoB.order).toBe(-7);
 	});
 
 	it('should created subsections', async () => {

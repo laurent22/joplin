@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useMemo, useRef } from 'react';
 import shim from '@joplin/lib/shim';
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { AppType } from '@joplin/lib/models/Setting';
 import { Platform } from 'react-native';
 import { SetUpResult } from '../types';
 import { themeStyle } from '../../components/global-style';
@@ -36,7 +36,9 @@ const useSource = (tempDirPath: string) => {
 		const subValues = Setting.subValues('markdown.plugin', Setting.toPlainObject());
 		const pluginOptions: PluginOptions = {};
 		for (const n in subValues) {
-			pluginOptions[n] = { enabled: !!subValues[n] };
+			const appTypes = Setting.settingMetadata(`markdown.plugin.${n}`).appTypes;
+			const enabled = !appTypes.includes(AppType.Mobile) ? false : !!subValues[n];
+			pluginOptions[n] = { enabled };
 		}
 
 		const rendererWebViewStaticOptions: RendererWebViewOptions = {

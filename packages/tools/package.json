@@ -25,7 +25,7 @@
     "@joplin/renderer": "~3.7",
     "@joplin/utils": "~3.7",
     "compare-versions": "6.1.1",
-    "dayjs": "1.11.19",
+    "dayjs": "1.11.20",
     "execa": "4.1.0",
     "fs-extra": "11.3.4",
     "gettext-parser": "7.0.1",

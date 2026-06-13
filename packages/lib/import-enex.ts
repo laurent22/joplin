@@ -10,7 +10,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { fileExtension, friendlySafeFilename, safeFileExtension } from './path-utils';
 import { extractUrls as extractUrlsFromHtml } from '@joplin/utils/html';
 import { extractUrls as extractUrlsFromMarkdown } from '@joplin/utils/markdown';
-import * as moment from 'moment';
+import moment from 'moment';
 import { wrapError } from './errorUtils';
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
 const md5 = require('md5');

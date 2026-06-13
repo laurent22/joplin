@@ -23,6 +23,21 @@ import * as path from 'path';
 
 const logger = Logger.create('resourceHandling');
 
+const textForPasteInspection = (text: string) => {
+	try {
+		return decodeURIComponent(text);
+	} catch {
+		return text;
+	}
+};
+
+export const plainTextLooksLikeAffinityImageData = (text: string) => {
+	if (!text) return false;
+
+	const decodedText = textForPasteInspection(text);
+	return /<svg(?:\s|>)/i.test(decodedText) && /data:image\/[^;]+;base64,/i.test(decodedText);
+};
+
 export async function handleResourceDownloadMode(noteBody: string) {
 	if (noteBody && Setting.value('sync.resourceDownloadMode') === 'auto') {
 		const resourceIds = await Note.linkedResourceIds(noteBody);
@@ -105,6 +120,18 @@ const clipboardImageToResource = async (image: NativeImage, mime: string) => {
 	} finally {
 		await shim.fsDriver().remove(filePath);
 	}
+};
+
+export const getResourceFromClipboardImage = async () => {
+	const image = clipboard.readImage();
+	if (image.isEmpty()) return null;
+
+	const supportedFormats = ['image/png', 'image/jpg', 'image/jpeg'];
+	const format = clipboard.availableFormats()
+		.map((format: string) => format.toLowerCase())
+		.find((format: string) => supportedFormats.includes(format)) || 'image/png';
+
+	return clipboardImageToResource(image, format);
 };
 
 export async function getResourcesFromPasteEvent(event: { preventDefault: ()=> void } | null) {

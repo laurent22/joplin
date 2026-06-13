@@ -26,6 +26,7 @@ export enum ModelType {
 	Migration = 14,
 	SmartFilter = 15,
 	Command = 16,
+	NoteEmbedding = 17,
 }
 
 export interface SearchOptions {
@@ -86,6 +87,7 @@ class BaseModel {
 		['TYPE_MIGRATION', ModelType.Migration],
 		['TYPE_SMART_FILTER', ModelType.SmartFilter],
 		['TYPE_COMMAND', ModelType.Command],
+		['TYPE_NOTE_EMBEDDING', ModelType.NoteEmbedding],
 	];
 
 	private static uuidGenerator: ()=> string = uuid.create;
@@ -106,6 +108,7 @@ class BaseModel {
 	public static TYPE_MIGRATION = ModelType.Migration;
 	public static TYPE_SMART_FILTER = ModelType.SmartFilter;
 	public static TYPE_COMMAND = ModelType.Command;
+	public static TYPE_NOTE_EMBEDDING = ModelType.NoteEmbedding;
 
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Set by the app to redux dispatch; per-app action types diverge so the function is typed loosely here
 	public static dispatch: Function = function() {};
@@ -723,6 +726,9 @@ class BaseModel {
 		if (!model) return model;
 
 		const output = { ...model };
+		if (this.hasField('is_locked') && output.hasOwnProperty('is_locked') && (output.is_locked === null || output.is_locked === undefined)) output.is_locked = 0;
+		if (this.hasField('extracted_resource_ids') && output.hasOwnProperty('extracted_resource_ids') && (output.extracted_resource_ids === null || output.extracted_resource_ids === undefined)) output.extracted_resource_ids = '';
+
 		for (const n in output) {
 			if (!output.hasOwnProperty(n)) continue;
 

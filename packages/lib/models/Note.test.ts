@@ -213,6 +213,36 @@ describe('models/Note', () => {
 		}
 	}));
 
+	it('should add lock defaults for old sync notes', () => {
+		expect(Note.filter({
+			is_locked: undefined,
+			extracted_resource_ids: undefined,
+		})).toMatchObject({
+			is_locked: 0,
+			extracted_resource_ids: '',
+		});
+		expect(Note.filter({
+			is_locked: null,
+			extracted_resource_ids: null,
+		})).toMatchObject({
+			is_locked: 0,
+			extracted_resource_ids: '',
+		});
+	});
+
+	it('should default lock fields for new notes', async () => {
+		const note = await Note.save({});
+		const loadedNote = await Note.load(note.id);
+
+		expect(loadedNote.is_locked).toBe(0);
+		expect(loadedNote.extracted_resource_ids).toBe('');
+	});
+
+	it('should include lock state in preview fields', () => {
+		expect(Note.previewFields()).toContain('is_locked');
+		expect(Note.previewFields()).not.toContain('extracted_resource_ids');
+	});
+
 	it('should reset fields for a duplicate', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'note', parent_id: folder1.id });

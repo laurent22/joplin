@@ -191,6 +191,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		joplinServerVersion: packageJson.version,
 		appName,
 		isJoplinCloud: apiBaseUrl.includes('.joplincloud.com') || apiBaseUrl.includes('.joplincloud.local'),
+		defaultAdminPassword: env.DEFAULT_ADMIN_PASSWORD || 'admin',
 		env: envType,
 		rootDir: rootDir,
 		viewDir: viewDir,

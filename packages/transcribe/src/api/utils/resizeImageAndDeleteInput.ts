@@ -1,5 +1,5 @@
 import { remove, copy } from 'fs-extra';
-import * as sharp from 'sharp';
+import sharp from 'sharp';
 
 // Strange function that deletes the input file so we give it a specific name, because it shouldn't
 // be used as a general function to resize an image. Should probably be refactored but for now it's

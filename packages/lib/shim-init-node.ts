@@ -6,7 +6,7 @@ import FsDriverNode from './fs-driver-node';
 import Note from './models/Note';
 import Resource from './models/Resource';
 import { basename, fileExtension, safeFileExtension } from './path-utils';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import { writeFile } from 'fs/promises';
 import { ResourceEntity } from './services/database/types';
 import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
@@ -20,16 +20,16 @@ import BaseItem from './models/BaseItem';
 import { Size } from '@joplin/utils/types';
 import { cpus } from 'os';
 import { pathToFileURL } from 'url';
-import * as tls from 'tls';
+import tls from 'tls';
 import type PdfJs from './utils/types/pdfJs';
 import { _ } from './locale';
-import * as http from 'http';
-import * as https from 'https';
+import http from 'http';
+import https from 'https';
 const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent');
 const toRelative = require('relative');
-import * as timers from 'timers';
-import * as zlib from 'zlib';
-import * as dgram from 'dgram';
+import timers from 'timers';
+import zlib from 'zlib';
+import dgram from 'dgram';
 
 interface ProxySettings {
 	maxConcurrentConnections?: number;
@@ -118,6 +118,8 @@ export interface ShimInitOptions {
 	electronBridge?: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- node sqlite driver shape is per-platform; see shim.nodeSqlite_
 	nodeSqlite?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sqlite-vec is only bundled with desktop; see shim.sqliteVec_
+	sqliteVec?: any;
 	pdfJs?: PdfJs;
 	isAppleSilicon?: ()=> boolean;
 }
@@ -130,6 +132,7 @@ function shimInit(options: ShimInitOptions = null) {
 		appVersion: null,
 		electronBridge: null,
 		nodeSqlite: null,
+		sqliteVec: null,
 		pdfJs: null,
 		isAppleSilicon: () => false,
 		...options,
@@ -141,6 +144,7 @@ function shimInit(options: ShimInitOptions = null) {
 	const pdfJs = options.pdfJs;
 
 	shim.setNodeSqlite(options.nodeSqlite);
+	shim.setSqliteVec(options.sqliteVec);
 
 	shim.fsDriver = () => {
 		throw new Error('Not implemented');

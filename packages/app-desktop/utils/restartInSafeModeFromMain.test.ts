@@ -1,22 +1,20 @@
 
 let currentProfileDirectory: string;
 
-jest.doMock('../bridge', () => ({
+jest.doMock('../bridge', () => () => ({
 	// Mock the bridge functions used by restartInSafeModeFromMain
 	// to remove the dependency on Electron.
-	default: () => ({
-		restart: jest.fn(),
-		processArgv: () => [
-			// The argument parser expects the first two arguments to
-			// be the path to NodeJS and the second to be the main filename.
-			process.argv[0], __filename,
+	restart: jest.fn(),
+	processArgv: () => [
+		// The argument parser expects the first two arguments to
+		// be the path to NodeJS and the second to be the main filename.
+		process.argv[0], __filename,
 
-			// Only the following arguments are used.
-			'--profile', currentProfileDirectory,
-		],
-		env: () => 'dev',
-		appName: () => 'joplin-desktop',
-	}),
+		// Only the following arguments are used.
+		'--profile', currentProfileDirectory,
+	],
+	env: () => 'dev',
+	appName: () => 'joplin-desktop',
 }));
 
 import { mkdtemp, readFile, remove } from 'fs-extra';

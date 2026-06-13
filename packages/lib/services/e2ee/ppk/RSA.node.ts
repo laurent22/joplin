@@ -1,5 +1,5 @@
 import { PublicKeyAlgorithm, PublicKeyCrypto, PublicKeyCryptoProvider } from '../types';
-import * as NodeRSA from 'node-rsa';
+import NodeRSA from 'node-rsa';
 import { webcrypto } from 'crypto';
 import buildRsaCryptoProvider from './webCrypto/buildRsaCryptoProvider';
 

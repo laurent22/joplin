@@ -1,5 +1,7 @@
-import { beforeAllDb, afterAllTests, beforeEachDb, createItemTree, createUserAndSession, parseHtml } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createItemTree, createUserAndSession, parseHtml, expectHttpError, expectNoHttpError, createItem } from '../../utils/testing/testUtils';
 import { execRequest } from '../../utils/testing/apiUtils';
+import { Uuid } from '../../services/database/types';
+import { makeNoteSerializedBody } from '../../utils/testing/serializedItems';
 
 describe('index_items', () => {
 
@@ -50,4 +52,28 @@ describe('index_items', () => {
 		}
 	});
 
+	test('should disallow accessing other users\' items from items/:id/content', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const itemJoplinId = '96765a68655f4446b3dbad7d41b6566e';
+		const item = await createItem(
+			session1.id,
+			`root:/${itemJoplinId}.md:`,
+			makeNoteSerializedBody({
+				id: itemJoplinId,
+			}),
+		);
+
+		const requestItem = (sessionId: Uuid) => {
+			return execRequest(sessionId, 'GET', `items/${item.id}/content`);
+		};
+
+		await expectNoHttpError(async () => {
+			await requestItem(session1.id);
+		});
+		await expectHttpError(async () => {
+			await requestItem(session2.id);
+		}, 404);
+	});
 });

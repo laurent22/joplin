@@ -627,6 +627,186 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('OCR: Search in extracted content'),
 		},
 
+		'ai.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			label: () => _('Enable AI features'),
+			description: () => _('When enabled, plugins and built-in features can use AI models to generate or analyse text. AI is off by default.'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.allowRemote': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Allow remote AI providers'),
+			description: () => _('Required to use cloud-hosted AI models, including Joplin Cloud AI. When disabled, only on-device providers can be used.'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.chat.providerType': {
+			value: 'openai-compatible',
+			type: SettingItemType.String,
+			isEnum: true,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Chat provider'),
+			description: () => {
+				// Inline warning when Joplin Cloud AI is selected but the user is
+				// no longer syncing with Joplin Cloud — the provider call will
+				// fail until they either restore Cloud sync or pick another
+				// provider.
+				if (Setting.value('ai.chat.providerType') === 'joplin-cloud' && Setting.value('sync.target') !== 10) {
+					return _('Joplin Cloud AI requires Joplin Cloud sync. Pick a different provider or restore Joplin Cloud sync.');
+				}
+				return '';
+			},
+			options: () => ({
+				'joplin-cloud': _('Joplin Cloud AI'),
+				'openai-compatible': _('OpenAI-compatible'),
+				'anthropic': _('Anthropic'),
+			}),
+			storage: SettingStorage.File,
+		},
+
+		// Tracks whether the user has made an explicit chat-provider choice.
+		// On the first false→true transition of `ai.enabled`, AiService writes
+		// the sync-aware default for `ai.chat.providerType` and flips this to
+		// true. After that, sync target changes do not affect the provider.
+		'ai.chat.providerType.configured': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		'ai.chat.baseUrl': {
+			value: '',
+			type: SettingItemType.String,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'] && settings['ai.chat.providerType'] === 'openai-compatible',
+			label: () => _('Base URL'),
+			description: () => _('The OpenAI-compatible API endpoint. For example, https://api.openai.com/v1 or http://localhost:11434/v1 for Ollama.'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.chat.apiKey': {
+			value: '',
+			type: SettingItemType.String,
+			secure: true,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'] && (settings['ai.chat.providerType'] === 'openai-compatible' || settings['ai.chat.providerType'] === 'anthropic'),
+			label: () => _('API key'),
+			storage: SettingStorage.Database,
+		},
+
+		'ai.chat.model': {
+			value: '',
+			type: SettingItemType.String,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'] && (settings['ai.chat.providerType'] === 'openai-compatible' || settings['ai.chat.providerType'] === 'anthropic'),
+			label: () => _('Model'),
+			description: () => _('The model identifier to use, for example gpt-4o-mini or claude-3-5-sonnet-latest.'),
+			storage: SettingStorage.File,
+		},
+
+		// Cumulative token counters for the currently configured provider.
+		// Reset whenever the user changes the active provider in settings —
+		// totals always reflect the provider in use.
+		'ai.usage.inputTokens': {
+			value: 0,
+			type: SettingItemType.Int,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		'ai.usage.outputTokens': {
+			value: 0,
+			type: SettingItemType.Int,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		'ai.usage.resetButton': {
+			value: null as null,
+			type: SettingItemType.Button,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Reset token usage'),
+			description: () => {
+				const inTokens = Setting.value('ai.usage.inputTokens') as number;
+				const outTokens = Setting.value('ai.usage.outputTokens') as number;
+				if (inTokens === 0 && outTokens === 0) return _('No AI usage recorded yet.');
+				return _('%s input / %s output tokens used.', inTokens.toLocaleString(), outTokens.toLocaleString());
+			},
+		},
+
+		'ai.chat.testButton': {
+			value: null as null,
+			type: SettingItemType.Button,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Test AI configuration'),
+		},
+
+		// User toggle for the background embedding indexer. On by default —
+		// when AI is enabled, indexing is part of what AI does. The toggle
+		// exists as a kill switch for users who want chat without the
+		// background CPU cost of indexing.
+		'ai.embedding.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['ai.enabled'],
+			label: () => _('Index notes for AI search'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		// Embedding indexer state. Hidden internal cursors — no UI surface.
+		// `lastProcessedChangeId` is the ItemChange cursor the indexer
+		// resumes from on each maintenance tick. `lastIndexedModelId` lets us
+		// detect when the active embedding model has changed (mismatch →
+		// full re-index, since vectors from different models aren't
+		// comparable).
+		'ai.embedding.lastProcessedChangeId': {
+			value: 0,
+			type: SettingItemType.Int,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+		'ai.embedding.lastIndexedModelId': {
+			value: '',
+			type: SettingItemType.String,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
 		theme: {
 			value: Setting.THEME_LIGHT,
 			type: SettingItemType.Int,
@@ -1130,7 +1310,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'markdown.plugin.emoji': { storage: SettingStorage.File, isGlobal: true, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable markdown emoji')}${wysiwygNo}` },
 		'markdown.plugin.insert': { storage: SettingStorage.File, isGlobal: true, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable ++insert++ syntax')}${wysiwygYes}` },
 		'markdown.plugin.multitable': { storage: SettingStorage.File, isGlobal: true, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable multimarkdown table extension')}${wysiwygNo}` },
-		'markdown.plugin.externalEmbed': { storage: SettingStorage.File, isGlobal: true, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable external embeds (e.g. YouTube Videos)')}${wysiwygYes}` },
+		'markdown.plugin.externalEmbed': { storage: SettingStorage.File, isGlobal: true, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Desktop], label: () => `${_('Enable external embeds (e.g. YouTube Videos)')}${wysiwygYes}` },
 
 		// For now, applies only to the Markdown viewer
 		'renderer.fileUrls': {

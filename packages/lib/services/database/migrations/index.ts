@@ -7,6 +7,9 @@ import migration46 from './46';
 import migration47 from './47';
 import migration48 from './48';
 import migration49 from './49';
+import migration50 from './50';
+import migration51 from './51';
+import migration52 from './52';
 
 import { Migration } from '../types';
 
@@ -19,6 +22,9 @@ const index: Migration[] = [
 	migration47,
 	migration48,
 	migration49,
+	migration50,
+	migration51,
+	migration52,
 ];
 
 export default index;

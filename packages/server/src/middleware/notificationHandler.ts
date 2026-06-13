@@ -1,28 +1,37 @@
 import { AppContext, KoaNext, NotificationView } from '../utils/types';
 import { isApiRequest } from '../utils/requestUtils';
 import { NotificationLevel } from '../services/database/types';
-import { defaultAdminEmail, defaultAdminPassword } from '../db';
+import { defaultAdminEmail } from '../db';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
 import { NotificationKey } from '../models/NotificationModel';
 import { helpUrl, profileUrl } from '../utils/urlUtils';
 import { userFlagToString } from '../models/UserFlagModel';
 import renderMarkdown from '../utils/renderMarkdown';
+import config from '../config';
 
 const logger = Logger.create('notificationHandler');
 
 async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 	if (!ctx.joplin.owner.is_admin) return;
 
-	const defaultAdmin = await ctx.joplin.models.user().login(defaultAdminEmail, defaultAdminPassword);
+	const defaultAdmin = await ctx.joplin.models.user().login(defaultAdminEmail, config().defaultAdminPassword);
 	const notificationModel = ctx.joplin.models.notification();
 
 	if (defaultAdmin) {
+		const knownInsecurePassword = config().defaultAdminPassword === 'admin';
+		let message;
+		if (knownInsecurePassword) {
+			message = _('The default admin password is insecure and has not been changed! [Change it now](%s)', profileUrl());
+		} else {
+			message = _('The default admin password has not been changed! [Change it now](%s)', profileUrl());
+		}
+
 		await notificationModel.add(
 			ctx.joplin.owner.id,
 			NotificationKey.ChangeAdminPassword,
 			NotificationLevel.Important,
-			_('The default admin password is insecure and has not been changed! [Change it now](%s)', profileUrl()),
+			message,
 		);
 	} else {
 		await notificationModel.setRead(ctx.joplin.owner.id, NotificationKey.ChangeAdminPassword);
