@@ -39,7 +39,7 @@
 				expanderExpanded: 'fas fa-chevron-down',
 				expanderCollapsed: 'fas fa-chevron-right',
 				expanderLazy: 'fas fa-chevron-right',
-				doc: 'fas fa-file-alt',
+				doc: 'fas fa-sticky-note',
 				folder: 'fas fa-folder',
 				folderOpen: 'fas fa-folder-open',
 				folderLazy: 'fas fa-folder',
