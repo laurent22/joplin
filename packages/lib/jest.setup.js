@@ -16,12 +16,22 @@ try {
 	console.warn('sqlite-vec unavailable in tests on this platform:', error.message);
 }
 
+// onnxruntime-node powers the local embedding model. Same loading story as
+// sqlite-vec: bundled with desktop only, optional everywhere else, wrapped
+// in try/catch so CI runners without a prebuilt skip the tests cleanly.
+let onnxRuntime = null;
+try {
+	onnxRuntime = require('onnxruntime-node');
+} catch (error) {
+	console.warn('onnxruntime-node unavailable in tests on this platform:', error.message);
+}
+
 // Used for testing some shared components
 const React = require('react');
 
 require('../../jest.base-setup.js')();
 
-shimInit({ pdfJs, sharp, nodeSqlite, sqliteVec, React, appVersion: () => packageInfo.version });
+shimInit({ pdfJs, sharp, nodeSqlite, sqliteVec, onnxRuntime, React, appVersion: () => packageInfo.version });
 
 global.afterEach(async () => {
 	await afterEachCleanUp();

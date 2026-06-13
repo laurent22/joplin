@@ -103,6 +103,8 @@ let reactDom_: typeof ReactDom = null;
 let nodeSqlite_: any = null;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- sqlite-vec is only bundled with desktop; null on platforms that don't ship it
 let sqliteVec_: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- onnxruntime-node is only bundled with desktop; null on platforms (mobile/CLI/web) that don't ship it
+let onnxRuntime_: any = null;
 
 const shim = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Geolocation API differs across platforms (browser Geolocation, RN Geolocation module); accessed structurally
@@ -547,6 +549,19 @@ const shim = {
 
 	sqliteVec: () => {
 		return sqliteVec_;
+	},
+
+	// onnxruntime-node powers the bundled local embedding model. Only the
+	// desktop app installs it; other platforms (CLI, mobile, web) leave it
+	// unset and the embedding indexer reports the local provider as
+	// unavailable rather than crashing.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See onnxRuntime_
+	setOnnxRuntime: (onnxRuntime: any) => {
+		onnxRuntime_ = onnxRuntime;
+	},
+
+	onnxRuntime: () => {
+		return onnxRuntime_;
 	},
 
 	setReact: (react: typeof React) => {

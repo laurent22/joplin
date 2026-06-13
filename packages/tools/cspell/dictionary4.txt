@@ -320,3 +320,5 @@ Ideographs
 chunker
 idempotently
 unigrams
+sentencepiece
+heterogenous
