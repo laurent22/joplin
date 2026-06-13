@@ -56,10 +56,9 @@ https://github.com/laurent22/joplin/issues/6370
 }
 
 .page-note:has(.with-tree) .main {
-	flex: 1 1 auto;
-	min-height: 0;
 	overflow: hidden;
 	padding: 0;
+	height: 100%;
 }
 
 .page-note:has(.with-tree) .main-container {
@@ -67,9 +66,22 @@ https://github.com/laurent22/joplin/issues/6370
 	flex-direction: column;
 	height: 100%;
 	max-width: none !important;
-	padding: 0;
+}
+
+.page-note:has(.with-tree) .navbar {
+	flex-shrink: 0;
+}
+
+.page-note:has(.with-tree) .footer {
+	height: fit-content;
+	padding: 0.25rem 1rem;
+	margin: .5rem 0;
+}
+
+.page-note:has(.with-tree) .footer .content {
 	margin: 0;
 }
+
 
 .published-note-layout.with-tree {
 	display: flex;
@@ -101,6 +113,8 @@ https://github.com/laurent22/joplin/issues/6370
 div.wunderbaum.folder-tree {
 	flex: 1 1 auto;
 	border: none !important;
+	overflow-x: hidden;
+	overflow-y: auto;
 	--wb-col-padding-x: 1rem;
 }
 
