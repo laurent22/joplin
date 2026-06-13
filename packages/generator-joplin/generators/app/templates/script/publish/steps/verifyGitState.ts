@@ -5,9 +5,9 @@ import logger from '../utils/logger';
 const execAsync = promisify(exec);
 
 // Verifies if the user has pushed the local code which he is going to publish on github or not
-const verifyGitState = async (): Promise<string> => {
+const verifyGitState = async () => {
 
-	const runGit = async (command: string, errorMessage: string): Promise<string> => {
+	const runGit = async (command: string, errorMessage: string) => {
 		try {
 			const { stdout } = await execAsync(command, { encoding: 'utf8', cwd: process.cwd() });
 			return stdout.trim();

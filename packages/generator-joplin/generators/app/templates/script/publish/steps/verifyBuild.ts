@@ -17,21 +17,15 @@ interface PackageJson {
 	name?: string;
 }
 
-export interface PluginMetadata {
-	name: string;
-	version: string;
-	repositoryUrl: string;
-}
-
 // Validates manifest requirements (name, version, repository URL) and does
 // a local build to ensure the plugin compiles cleanly before proceeding.
-export const verifyBuild = async (): Promise<PluginMetadata> => {
+const verifyBuild = async () => {
 	const metadata = await validateMetadata();
 	await build();
 	return metadata;
 };
 
-const validateMetadata = async (): Promise<PluginMetadata> => {
+const validateMetadata = async () => {
 	logger.info('Validating metadata...');
 
 	// process.cwd() is the plugin root dir when run via `npm run publish`
@@ -75,7 +69,7 @@ const validateMetadata = async (): Promise<PluginMetadata> => {
 	return { name, version, repositoryUrl: cleanUrl };
 };
 
-const build = async (): Promise<void> => {
+const build = async () => {
 	try {
 		logger.info(`Running "${DIST_COMMAND}"...`);
 		await execAsync(DIST_COMMAND, { cwd: process.cwd() });
@@ -87,3 +81,5 @@ const build = async (): Promise<void> => {
 		throw error;
 	}
 };
+
+export default verifyBuild;
