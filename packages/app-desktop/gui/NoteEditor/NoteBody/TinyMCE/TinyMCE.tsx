@@ -1115,6 +1115,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 					preprocessHtml(result.html),
 				].join('\n');
 				editor.setContent(htmlAndCss);
+				const noteCss = props.contentMarkupLanguage === MarkupLanguage.Html ? result.html.match(/<style[^>]*>([\s\S]*?)<\/style>/i)?.[1] : null;
+				if (noteCss) editor.dom.addStyle(noteCss);
 				lastNoteIdRef.current = props.noteId;
 
 				if (lastOnChangeEventInfo.current.contentKey !== props.contentKey) {
@@ -1660,4 +1662,3 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 };
 
 export default forwardRef(TinyMCE);
-
