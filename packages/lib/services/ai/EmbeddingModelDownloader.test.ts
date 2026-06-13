@@ -59,8 +59,7 @@ describe('EmbeddingModelDownloader', () => {
 		shim.fetchBlob = (async (_url: string, options: any) => {
 			await fs.copy(tarballPath, options.path);
 			return { ok: true, status: 200, path: options.path };
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- fetchBlob returns a discriminated union of node/blob response shapes
-		}) as any;
+		});
 	});
 
 	afterEach(async () => {
@@ -86,12 +85,10 @@ describe('EmbeddingModelDownloader', () => {
 
 		// Count fetchBlob calls in a second run.
 		let calls = 0;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- fetchBlob spy mirrors the loose typing of its callers
 		shim.fetchBlob = (async () => {
 			calls++;
 			return { ok: true, status: 200 };
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See above
-		}) as any;
+		});
 
 		const path = await ensureModelDownloaded(fakeModel);
 		expect(calls).toBe(0);
@@ -113,8 +110,7 @@ describe('EmbeddingModelDownloader', () => {
 	});
 
 	it('throws a clear error when the server returns a non-2xx response', async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See above
-		shim.fetchBlob = (async () => ({ ok: false, status: 404 })) as any;
+		shim.fetchBlob = (async () => ({ ok: false, status: 404 }));
 		await expect(ensureModelDownloaded(fakeModel)).rejects.toThrow(/HTTP 404/);
 	});
 
@@ -140,8 +136,7 @@ describe('EmbeddingModelDownloader', () => {
 			}
 			await fs.copy(tarballPath, options.path);
 			return { ok: true, status: 200 };
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See above
-		}) as any;
+		});
 
 		const samples: { bytesDownloaded: number }[] = [];
 		await ensureModelDownloaded(fakeModel, {

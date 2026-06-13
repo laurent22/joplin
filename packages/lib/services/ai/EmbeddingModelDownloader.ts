@@ -129,8 +129,7 @@ const downloadWithProgress = async (
 	// We pass a minimal downloadController so the underlying node http code
 	// hands us each chunk as it arrives — that's our progress signal.
 	const downloadController = onProgress ? makeProgressController(onProgress) : undefined;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- shim.fetchBlob accepts a heterogenous options bag; the downloadController shape comes from the node implementation
-	const response: any = await shim.fetchBlob(url, {
+	const response = await shim.fetchBlob(url, {
 		path: destPath,
 		method: 'GET',
 		downloadController,
