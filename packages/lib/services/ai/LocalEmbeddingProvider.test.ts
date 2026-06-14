@@ -132,9 +132,10 @@ describe('LocalEmbeddingProvider', () => {
 		expect(out[0]).toEqual([0, 0]);
 	});
 
-	// Stops short of running inference: ONNX's output Float32Array crosses
-	// Jest's VM realm and `new ort.Tensor(...)` rejects it as wrong-type. This
-	// does NOT happen in Electron; verify full inference there.
+	// Run via `yarn testEmbeddingProvider` (sets the env var + required
+	// NODE_OPTIONS=--experimental-vm-modules). Stops short of running inference:
+	// ONNX's output Float32Array crosses Jest's VM realm and `new ort.Tensor(...)`
+	// rejects it as wrong-type. This does NOT happen in Electron.
 	(process.env.JOPLIN_RUN_REAL_EMBEDDING_TEST === '1' ? it : it.skip)(
 		'downloads and loads the real model (gated)',
 		async () => {

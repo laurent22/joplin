@@ -12,8 +12,9 @@
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "generatePluginTypes": "rm -rf ./plugin_types && yarn tsc --declaration --declarationDir ./plugin_types --project tsconfig.json",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "test-ci": "yarn test"
+    "test": "jest",
+    "test-ci": "yarn test",
+    "testEmbeddingProvider": "JOPLIN_RUN_REAL_EMBEDDING_TEST=1 NODE_OPTIONS=--experimental-vm-modules jest LocalEmbeddingProvider"
   },
   "devDependencies": {
     "@testing-library/dom": "10.4.1",
