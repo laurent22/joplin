@@ -134,6 +134,12 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 			}
 		}
 
+		> .content.-published.-selected {
+			> .title {
+				color: var(--joplin-color);
+			}
+		}
+
 		> .content.-completed {
 			> .title {
 				opacity: 0.5;

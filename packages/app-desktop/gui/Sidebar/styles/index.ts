@@ -76,6 +76,7 @@ export const StyledHeaderLabel = styled.span`
 function listItemTextColor(props: StyleProps) {
 	if (props.isConflictFolder) return props.theme.colorError2;
 	if (props.isSpecialItem) return props.theme.colorFaded2;
+	if (props.selected && props.isPublished) return props.theme.color2;
 	if (props.isPublished) return props.theme.color4;
 	if (props.shareId) return props.theme.colorWarn2;
 	return props.theme.color2;

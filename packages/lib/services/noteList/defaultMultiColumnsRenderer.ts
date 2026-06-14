@@ -83,6 +83,10 @@ const renderer: ListRenderer = {
 			color: var(--joplin-color4);
 		}
 
+		> .row.-published.-selected {
+			color: var(--joplin-color);
+		}
+
 		> .row.-completed {
 			opacity: 0.5;
 		}
