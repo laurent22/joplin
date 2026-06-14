@@ -29,6 +29,30 @@
 			window.location.href = node.data.url;
 		};
 
+		const rowId = function(node) {
+			return `folder-tree-item-${node.key}`;
+		};
+
+		const setActiveDescendant = function(node) {
+			if (!node) return;
+			const row = document.getElementById(rowId(node));
+			if (row) container.setAttribute('aria-activedescendant', row.id);
+		};
+
+		container.setAttribute('role', 'tree');
+		container.setAttribute('aria-label', 'Notebook navigation');
+
+		const renderTreeItem = function(e) {
+			const row = e.nodeElem ? e.nodeElem.closest('.wb-row') : null;
+			if (!row) return;
+
+			row.id = rowId(e.node);
+			row.setAttribute('role', 'treeitem');
+			if (e.node.hasFocus() || e.node.isActive()) {
+				setActiveDescendant(e.node);
+			}
+		};
+
 		new window.mar10.Wunderbaum({
 			element: container,
 			header: false,
@@ -50,8 +74,15 @@
 					if (active) {
 						active.setActive(true, { noEvents: true, focusTree: false });
 						active.makeVisible({ noAnimation: true, noEvents: true });
+						setActiveDescendant(active);
 					}
 				}
+			},
+			activate: function(e) {
+				setActiveDescendant(e.node);
+			},
+			render: function(e) {
+				renderTreeItem(e);
 			},
 			click: function(e) {
 				if (e.node && !e.node.folder) {
