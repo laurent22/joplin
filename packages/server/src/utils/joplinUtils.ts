@@ -466,6 +466,8 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 
 		const noteItem = await models_.item().loadByName(userId, `${query.note_id}.md`, { fields: ['*'], withContent: true });
 		if (!noteItem) throw new ErrorNotFound(`No such note: ${query.note_id}`);
+		const note = models_.item().itemToJoplinItem(noteItem);
+		if (itemIsInTrash(note)) throw new ErrorNotFound(`No such note: ${query.note_id}`);
 
 		const linkedItemInfos = await noteLinkedItemInfos(userId, models_.item(), noteItem.content.toString());
 
@@ -481,7 +483,7 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 		}
 
 		const resourceInfos = await getResourceInfos(linkedItemInfos);
-		return renderNote(share, models_.item().itemToJoplinItem(noteItem), resourceInfos, linkedItemInfos, bannerInfo, folderTree);
+		return renderNote(share, note, resourceInfos, linkedItemInfos, bannerInfo, folderTree);
 	}
 
 	interface FileToRender {
@@ -491,6 +493,8 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	}
 
 	const rootNote: NoteEntity = models_.item().itemToJoplinItem(item);
+	if (itemIsInTrash(rootNote)) throw new ErrorNotFound(`No such note: ${rootNote.id}`);
+
 	const itemTree = await models_.itemResource().itemTree(item.id, rootNote.id);
 
 	let linkedItemInfos: LinkedItemInfos = {};
