@@ -1,14 +1,8 @@
 import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import LocalEmbeddingProvider, { meanPoolAndNormalise } from './LocalEmbeddingProvider';
 
-// The unit tests run against a fully stubbed ONNX runtime + tokenizer, so they
-// neither touch the network nor require the real 140 MB model. The point of
-// these tests is to verify the wiring (provider → tokenizer → ort.run → mean
-// pool → normalise), not the model's quality.
-//
-// A gated real-model integration test lives at the bottom (skipped unless
-// JOPLIN_RUN_REAL_EMBEDDING_TEST=1) — that one downloads the actual model and
-// embeds a few strings end-to-end.
+// Default tests use stubbed ONNX + tokenizer (no network, no 140 MB model).
+// The bottom test opts in to the real download via JOPLIN_RUN_REAL_EMBEDDING_TEST=1.
 
 interface FakeTokenized {
 	input_ids: { data: BigInt64Array; dims: number[] };
@@ -138,28 +132,10 @@ describe('LocalEmbeddingProvider', () => {
 		expect(out[0]).toEqual([0, 0]);
 	});
 
-	// Gated smoke test that downloads the real model and walks through enough
-	// of the pipeline to prove the artefact is well-formed (download URL,
-	// tarball layout, tokenizer load, ONNX session creation). Skipped by
-	// default because it pulls ~140 MB and takes a while; enable locally with:
-	//   yarn testEmbeddingProvider
-	// (which sets JOPLIN_RUN_REAL_EMBEDDING_TEST + NODE_OPTIONS=--experimental-vm-modules
-	// — the latter lets Jest's sandbox satisfy the dynamic ESM import of
-	// @xenova/transformers).
-	//
-	// We deliberately stop short of calling embed() under Jest. ONNX's
-	// InferenceSession returns Float32Array values from outside Jest's VM
-	// realm, and `new ort.Tensor(...)` rejects them as "wrong type" — a
-	// well-known Jest sandbox / cross-realm quirk that does NOT happen in
-	// Electron. For true end-to-end inference verification, run the app
-	// with AI enabled and watch the indexer produce vectors.
-	// Only run when BOTH the opt-in env var and the required NODE_OPTIONS are
-	// set. Anything less and we skip (with a clear comment elsewhere telling
-	// people to run `yarn testEmbeddingProvider`) — better than failing loudly
-	// when a developer is just running the suite normally.
-	const realModelOptIn = process.env.JOPLIN_RUN_REAL_EMBEDDING_TEST === '1'
-		&& (process.env.NODE_OPTIONS ?? '').includes('--experimental-vm-modules');
-	(realModelOptIn ? it : it.skip)(
+	// Stops short of running inference: ONNX's output Float32Array crosses
+	// Jest's VM realm and `new ort.Tensor(...)` rejects it as wrong-type. This
+	// does NOT happen in Electron; verify full inference there.
+	(process.env.JOPLIN_RUN_REAL_EMBEDDING_TEST === '1' ? it : it.skip)(
 		'downloads and loads the real model (gated)',
 		async () => {
 			const provider = new LocalEmbeddingProvider();

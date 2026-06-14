@@ -136,7 +136,14 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 
 	private async ensureInitialised(): Promise<void> {
 		if (this.session_ && this.tokenizer_) return;
-		this.initPromise_ ??= this.initialise();
+		// Clear initPromise_ on rejection so a transient failure (e.g. a
+		// dropped download) can be retried on the next call instead of every
+		// future call inheriting the same rejected promise.
+		// eslint-disable-next-line promise/prefer-await-to-then -- await would need a wrapper to keep the single-flight cache shape
+		this.initPromise_ ??= this.initialise().catch(error => {
+			this.initPromise_ = null;
+			throw error;
+		});
 		return this.initPromise_;
 	}
 
