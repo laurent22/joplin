@@ -95,6 +95,32 @@ describe('EmbeddingModelDownloader', () => {
 		expect(await fs.pathExists(`${path}/config.json`)).toBe(true);
 	});
 
+	it('serialises concurrent calls so only one download runs', async () => {
+		let calls = 0;
+		// Slow the "download" down to widen the race window — without
+		// concurrency control, both calls would race to wipe + write the
+		// same files at the same time.
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- fetchBlob spy mirrors the loose typing of its callers
+		shim.fetchBlob = (async (_url: string, options: any) => {
+			calls++;
+			await new Promise(resolve => setTimeout(resolve, 50));
+			await fs.copy(tarballPath, options.path);
+			return { ok: true, status: 200 };
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See above
+		}) as any;
+
+		const [p1, p2, p3] = await Promise.all([
+			ensureModelDownloaded(fakeModel),
+			ensureModelDownloaded(fakeModel),
+			ensureModelDownloaded(fakeModel),
+		]);
+
+		expect(calls).toBe(1);
+		expect(p1).toBe(p2);
+		expect(p2).toBe(p3);
+		expect(await fs.pathExists(`${p1}/config.json`)).toBe(true);
+	});
+
 	it('removes any stale partial state before re-downloading', async () => {
 		// Simulate a partial extract left over from a previous crash: directory
 		// exists but is missing the marker file.

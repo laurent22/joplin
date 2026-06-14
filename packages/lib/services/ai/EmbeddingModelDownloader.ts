@@ -74,8 +74,16 @@ export const localModelPath = async (model: ModelDescriptor): Promise<string | n
 	return exists ? dir : null;
 };
 
+// Tracks in-flight downloads per model so concurrent callers share a single
+// download instead of racing on the same tarball + extract directory. Cleared
+// once the work either resolves or rejects so a later call after a failure can
+// retry from scratch.
+const inFlight: Map<string, Promise<string>> = new Map();
+
 // Downloads, verifies, and extracts the model if it isn't already on disk.
-// Safe to call repeatedly: if the cache is hot, returns immediately.
+// Safe to call repeatedly and from concurrent callers: cache hot → returns
+// immediately; cache cold → first caller does the work and the rest await
+// the same promise.
 export const ensureModelDownloaded = async (
 	model: ModelDescriptor,
 	options: EnsureOptions = {},
@@ -83,6 +91,21 @@ export const ensureModelDownloaded = async (
 	const existing = await localModelPath(model);
 	if (existing) return existing;
 
+	const pending = inFlight.get(model.id);
+	if (pending) return pending;
+
+	// eslint-disable-next-line promise/prefer-await-to-then -- .finally is the natural fit here: we need cleanup to run on both resolve and reject, without inverting the caller-facing await chain
+	const work = runDownload(model, options).finally(() => {
+		inFlight.delete(model.id);
+	});
+	inFlight.set(model.id, work);
+	return work;
+};
+
+const runDownload = async (
+	model: ModelDescriptor,
+	options: EnsureOptions,
+): Promise<string> => {
 	const fsDriver = shim.fsDriver();
 	const cacheDir = baseCacheDir();
 	await fsDriver.mkdir(cacheDir);
