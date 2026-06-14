@@ -18,7 +18,7 @@
   "devDependencies": {
     "@testing-library/dom": "10.4.1",
     "@testing-library/react": "16.3.2",
-    "@types/adm-zip": "0.5.7",
+    "@types/adm-zip": "0.5.8",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.14",
     "@types/jest-expect-message": "1.1.0",

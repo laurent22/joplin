@@ -12749,7 +12749,7 @@ __metadata:
     "@joplin/utils": "npm:^3.7"
     "@testing-library/dom": "npm:10.4.1"
     "@testing-library/react": "npm:16.3.2"
-    "@types/adm-zip": "npm:0.5.7"
+    "@types/adm-zip": "npm:0.5.8"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     "@types/jest-expect-message": "npm:1.1.0"
@@ -17965,12 +17965,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/adm-zip@npm:0.5.7":
-  version: 0.5.7
-  resolution: "@types/adm-zip@npm:0.5.7"
+"@types/adm-zip@npm:0.5.8":
+  version: 0.5.8
+  resolution: "@types/adm-zip@npm:0.5.8"
   dependencies:
     "@types/node": "npm:*"
-  checksum: 10/24e9842bd6838879c60fe833af267489d8bc6b582d5feac6179543bf7a0b01a749931a9c6f21a20b8454e83925937a63bae0190493fa269d33a35c6daf4df209
+  checksum: 10/0739e5abda05f5c02b84048a02d308f77dd9e2d4e7d6ac7126830a0000b9e962a1f5795efd96d50df289333af9ae3b264adacfad9623dde66c10570ce65029d5
   languageName: node
   linkType: hard
 
