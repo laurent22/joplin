@@ -13,6 +13,7 @@ import * as fs from 'fs-extra';
 import { Item, Share, Uuid } from '../services/database/types';
 import ItemModel from '../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import { itemIsInTrash } from '@joplin/lib/services/trash';
 import { formatDateTime } from './time';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
@@ -315,6 +316,8 @@ async function buildFolderTree(share: Share, folderId: string, activeNoteId = ''
 	if (!rootFolderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
 
 	const rootFolder = models_.item().itemToJoplinItem(rootFolderItem);
+	if (itemIsInTrash(rootFolder)) throw new ErrorNotFound(`No such folder: ${folderId}`);
+
 	const allowedNoteIds = new Set<string>();
 
 	const buildNodes = async (parentId: string): Promise<TreeSourceNode[]> => {
@@ -323,6 +326,7 @@ async function buildFolderTree(share: Share, folderId: string, activeNoteId = ''
 
 		for (const child of children) {
 			const childJopItem = models_.item().itemToJoplinItem(child);
+			if (itemIsInTrash(childJopItem)) continue;
 
 			if (child.jop_type === ModelType.Folder) {
 				output.push({
