@@ -1,7 +1,6 @@
 import { NoteEntity } from '../database/types';
+import isItemId from '../../models/utils/isItemId';
 import NoteLockService from './NoteLockService';
-
-const linkedItemIdPattern = /^[a-f0-9]{32}$/;
 
 export default class NoteLockNote {
 
@@ -33,7 +32,7 @@ export default class NoteLockNote {
 
 		const plainTextBody = note.body ?? '';
 		if (isLocked) {
-			note.extracted_resource_ids = linkedItemIds(plainTextBody).filter(id => linkedItemIdPattern.test(id)).join(',');
+			note.extracted_resource_ids = linkedItemIds(plainTextBody).filter(id => !!isItemId(id)).join(',');
 			note.body = await NoteLockService.instance().encryptString(plainTextBody);
 		}
 	}
