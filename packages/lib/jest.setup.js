@@ -13,15 +13,21 @@ const packageInfo = require('./package.json');
 // Silent on failure: Jest re-runs this file per test, so warning here floods
 // CI logs with duplicates. Any test that actually needs these modules already
 // has its own skip-if-unavailable logic.
+// Only suppress MODULE_NOT_FOUND (the expected "no prebuilt for this platform"
+// case). Anything else — ABI mismatches, corrupt installs — should surface.
 let sqliteVec = null;
 try {
 	sqliteVec = require('sqlite-vec');
-} catch (_error) { /* expected on platforms without a prebuilt */ }
+} catch (error) {
+	if (error.code !== 'MODULE_NOT_FOUND') throw error;
+}
 
 let onnxRuntime = null;
 try {
 	onnxRuntime = require('onnxruntime-node');
-} catch (_error) { /* expected on platforms without a prebuilt */ }
+} catch (error) {
+	if (error.code !== 'MODULE_NOT_FOUND') throw error;
+}
 
 // Used for testing some shared components
 const React = require('react');
