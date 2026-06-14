@@ -151,11 +151,19 @@ const downloadWithProgress = async (
 	// (GitHub Releases redirects to S3, so following redirects is mandatory).
 	// We pass a minimal downloadController so the underlying node http code
 	// hands us each chunk as it arrives — that's our progress signal.
+	//
+	// The timeout is per-socket-idle (not total), so a 60s value means "fail
+	// after 60s of silence" — fine for a multi-minute download as long as
+	// data keeps flowing. Without it, shim.fetchBlob defaults to no timeout
+	// and a stalled connection (captive portal, dropped TCP traffic, hung
+	// proxy) would block forever and freeze every concurrent caller waiting
+	// on the shared in-flight promise.
 	const downloadController = onProgress ? makeProgressController(onProgress) : undefined;
 	const response = await shim.fetchBlob(url, {
 		path: destPath,
 		method: 'GET',
 		downloadController,
+		timeout: 60_000,
 	});
 
 	if (!response || response.ok === false) {
