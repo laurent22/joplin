@@ -12,6 +12,9 @@ import { connect } from 'react-redux';
 import { AppState } from '../app.reducer';
 import useEncryptionWarningMessage from '@joplin/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage';
 import { clipboard } from 'electron';
+import useOnPublishFolderLinkClick from '@joplin/lib/components/shared/PublishFolderDialog/useOnPublishFolderLinkClick';
+import useShareStatusMessage from '@joplin/lib/components/shared/ShareNoteDialog/useShareStatusMessage';
+import { SharingStatus } from '@joplin/lib/components/shared/ShareNoteDialog/types';
 
 interface Props {
 	themeId: number;
@@ -24,8 +27,7 @@ interface Props {
 export function PublishFolderDialog(props: Props) {
 	const [folder, setFolder] = useState<FolderEntity>(null);
 	const [noteCount, setNoteCount] = useState<number>(0);
-	const [statusMessage, setStatusMessage] = useState<string>('');
-	const [isBusy, setIsBusy] = useState<boolean>(false);
+	const [publishFolderStatus, setPublishFolderStatus] = useState<SharingStatus>(SharingStatus.Unknown);
 
 	const encryptionWarning = useEncryptionWarningMessage();
 	const publishedShare = useMemo(() => {
@@ -51,24 +53,22 @@ export function PublishFolderDialog(props: Props) {
 		void loadData();
 	}, [loadData]);
 
-	const onPublishClick = useCallback(async () => {
-		setIsBusy(true);
-		setStatusMessage('');
+	const onShareUrlReady = useCallback((url: string) => {
+		clipboard.writeText(url);
+	}, []);
 
-		try {
-			const share = publishedShare || await ShareService.instance().publishFolder(props.folderId);
-			clipboard.writeText(ShareService.instance().shareUrl(ShareService.instance().userId, share));
-			setStatusMessage(_('Notebook link copied to clipboard.'));
-		} catch (error) {
-			setStatusMessage(error instanceof Error ? error.message : `${error}`);
-		} finally {
-			setIsBusy(false);
-		}
-	}, [props.folderId, publishedShare]);
+	const publishFolderLinkButton_click = useOnPublishFolderLinkClick({
+		folderId: props.folderId,
+		publishedShare,
+		setPublishFolderStatus,
+		onShareUrlReady,
+	});
 
 	const onDialogButtonClick = useCallback((_event: ClickEvent) => {
 		props.onClose();
 	}, [props]);
+
+	const statusMessage = useShareStatusMessage({ sharesState: publishFolderStatus, noteCount: 1 });
 
 	return (
 		<Dialog>
@@ -79,7 +79,11 @@ export function PublishFolderDialog(props: Props) {
 					<p>{_('Status: %s', publishedShare ? _('Published') : _('Not published'))}</p>
 					<p>{_n('%d note in notebook', '%d notes in notebook', noteCount, noteCount)}</p>
 				</div>
-				<button disabled={!folder || isBusy} className="share" onClick={onPublishClick}>{publishedShare ? _('Copy Shareable Link') : _('Publish notebook')}</button>
+				<button
+					disabled={!folder || [SharingStatus.Creating, SharingStatus.Synchronizing].indexOf(publishFolderStatus) >= 0}
+					className="share"
+					onClick={publishFolderLinkButton_click}
+				>{publishedShare ? _('Copy Shareable Link') : _('Publish notebook')}</button>
 				<div className="message">{statusMessage}</div>
 				{encryptionWarning && <div className="message">{encryptionWarning}<hr/></div>}
 				<DialogButtonRow
