@@ -199,12 +199,14 @@ div.wunderbaum.folder-tree .wb-expander {
 		max-width: 80vw;
 		width: 280px;
 		transform: translateX(-100%);
+		visibility: hidden;
 		transition: transform 0.2s ease;
 		box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
 	}
 
 	.published-folder-sidebar.is-open {
 		transform: translateX(0);
+		visibility: visible;
 	}
 
 	.page-note .published-note-layout.with-tree .note-main {
@@ -212,4 +214,3 @@ div.wunderbaum.folder-tree .wb-expander {
 		overflow: visible;
 	}
 }
-
