@@ -321,3 +321,6 @@ chunker
 idempotently
 unigrams
 sentencepiece
+xenova
+pretrained
+huggingface

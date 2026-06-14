@@ -121,8 +121,13 @@ const runDownload = async (
 	logger.info(`Downloading embedding model from ${model.downloadUrl}`);
 	await downloadWithProgress(model.downloadUrl, tarPath, options.onProgress);
 
-	logger.info(`Extracting embedding model into ${cacheDir}`);
-	await fsDriver.tarExtract({ file: tarPath, cwd: cacheDir });
+	// The published tarball stores files at the archive root (no top-level
+	// directory) so we have to create the target dir ourselves and extract
+	// into it. If we extracted into cacheDir the model files would spill into
+	// the cache root and clobber any sibling model.
+	logger.info(`Extracting embedding model into ${targetDir}`);
+	await fsDriver.mkdir(targetDir);
+	await fsDriver.tarExtract({ file: tarPath, cwd: targetDir });
 
 	// Sanity check: after extraction the archive directory should exist with
 	// the marker file in place. If not, the tarball was malformed.

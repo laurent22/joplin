@@ -28,16 +28,16 @@ describe('EmbeddingModelDownloader', () => {
 	};
 
 	const buildFakeModelTarball = async (): Promise<string> => {
-		// Build a directory laid out like the real model archive: a top-level
-		// folder named after the model with a config.json marker file inside.
+		// Lay out the staging dir to match the real archive: files at the
+		// archive root, no top-level wrapper directory. The downloader
+		// extracts into modelDir(model) directly.
 		const stagingDir = `${tempDir}/staging`;
-		const modelDir = `${stagingDir}/${fakeModel.archiveName}`;
-		await fs.ensureDir(modelDir);
-		await fs.writeFile(`${modelDir}/config.json`, '{"_fake":true}');
-		await fs.writeFile(`${modelDir}/tokenizer.json`, '{}');
+		await fs.ensureDir(stagingDir);
+		await fs.writeFile(`${stagingDir}/config.json`, '{"_fake":true}');
+		await fs.writeFile(`${stagingDir}/tokenizer.json`, '{}');
 
 		const archive = `${tempDir}/${fakeModel.archiveName}.tar.gz`;
-		await tar.create({ gzip: true, cwd: stagingDir, file: archive }, [fakeModel.archiveName]);
+		await tar.create({ gzip: true, cwd: stagingDir, file: archive }, ['config.json', 'tokenizer.json']);
 		return archive;
 	};
 
