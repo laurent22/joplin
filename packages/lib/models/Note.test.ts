@@ -266,7 +266,7 @@ describe('models/Note', () => {
 		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(plainTextBody);
 
 		await expect(Note.load(note.id, { fields: ['id', 'is_locked'], useNoteLock: true })).rejects.toThrow();
-		await expect(Note.load(note.id, { fields: ['id', 'body'], useNoteLock: true })).rejects.toThrow('Gated note lock load with body is missing lock state');
+		await expect(Note.load(note.id, { fields: ['id', 'body'], useNoteLock: true })).rejects.toThrow('Gated note lock load is missing lock state');
 
 		await Note.save(await Note.load(note.id, { useNoteLock: true }), { useNoteLock: true });
 		expect((await Note.load(note.id)).body).not.toBe(plainTextBody);
