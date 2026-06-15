@@ -20,6 +20,7 @@ import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/conf
 import { normalizeQuery } from '@joplin/lib/components/shared/config/config-search-text.js';
 import { searchResultGroups, matchedSearchSections } from './configSearch';
 import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
+import AiIndexStatus from './controls/AiIndexStatus';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
@@ -266,6 +267,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					</div>,
 				);
 			}
+			settingComps.push(<AiIndexStatus key='ai_index_status' />);
 		}
 
 		if (section.name === 'sync') {

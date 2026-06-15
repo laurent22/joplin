@@ -42,6 +42,28 @@ export interface ChatProvider {
 // `dimension` is the size of the vectors returned by `embed()`. It controls
 // the FLOAT[] size of the sqlite-vec virtual table, which is fixed at the
 // table's first creation.
+
+// Provider-internal lifecycle state of the model artefact. The status
+// reporter widens this to include 'unavailable' (no provider active at
+// all), which providers themselves can't observe.
+export type ProviderModelDownloadStatus = 'not-started' | 'downloading' | 'downloaded';
+
+// Combined model + indexer state surfaced by EmbeddingIndexer.getStatus().
+// Used by the settings panel — kept internal to lib/ for now.
+export type ModelDownloadStatus = ProviderModelDownloadStatus | 'unavailable';
+// 'ai-disabled' = the top-level AI toggle is off.
+// 'index-disabled' = AI is on but the indexer toggle is off (chat-only mode).
+// 'idle' = settings are on and the background indexer is waiting for its
+//   next tick or there's nothing new to do.
+// 'running' = a maintenance tick is currently processing notes.
+export type IndexerState = 'idle' | 'running' | 'ai-disabled' | 'index-disabled';
+export interface IndexStatus {
+	modelDownloadStatus: ModelDownloadStatus;
+	indexerState: IndexerState;
+	notesIndexed: number;
+	totalNotes: number;
+}
+
 export interface EmbeddingProvider {
 	id: string;
 	modelId: string;
@@ -54,4 +76,8 @@ export interface EmbeddingProvider {
 	// Providers without an asymmetric setup can omit it — callers fall back
 	// to embed().
 	embedQuery?(texts: string[]): Promise<number[][]>;
+	// Optional status accessor for surfacing model lifecycle in the UI.
+	// Providers that don't have a downloadable artefact can omit this; the
+	// status reporter then treats them as always-ready.
+	modelDownloadStatus?(): Promise<ProviderModelDownloadStatus>;
 }

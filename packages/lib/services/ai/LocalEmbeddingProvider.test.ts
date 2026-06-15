@@ -132,6 +132,13 @@ describe('LocalEmbeddingProvider', () => {
 		expect(out[0]).toEqual([0, 0]);
 	});
 
+	it('modelDownloadStatus reports not-started when no cached model exists', async () => {
+		const provider = new LocalEmbeddingProvider();
+		// Without overrides and with a clean cache dir, the marker file is
+		// absent — the status should be 'not-started'.
+		expect(await provider.modelDownloadStatus()).toBe('not-started');
+	});
+
 	// Run via `yarn testEmbeddingProvider` (sets the env var + required
 	// NODE_OPTIONS=--experimental-vm-modules). Stops short of running inference:
 	// ONNX's output Float32Array crosses Jest's VM realm and `new ort.Tensor(...)`

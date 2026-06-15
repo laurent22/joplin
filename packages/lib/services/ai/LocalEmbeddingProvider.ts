@@ -1,11 +1,12 @@
 import Logger from '@joplin/utils/Logger';
 import shim from '../../shim';
-import { EmbeddingProvider, ProviderClassification } from './types';
+import { EmbeddingProvider, ProviderModelDownloadStatus, ProviderClassification } from './types';
 import {
 	MULTILINGUAL_E5_SMALL,
 	ModelDescriptor,
 	ProgressCallback,
 	ensureModelDownloaded,
+	localModelPath,
 } from './EmbeddingModelDownloader';
 
 const logger = Logger.create('LocalEmbeddingProvider');
@@ -82,6 +83,11 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 	private initPromise_: Promise<void> | null = null;
 	private session_: OnnxSession | null = null;
 	private tokenizer_: Tokenizer | null = null;
+	// `downloading` is set while we're inside ensureModelDownloaded(), so the
+	// UI can show progress without polling the file system mid-download.
+	// 'downloaded' once we've seen the marker on disk; reverts to whatever
+	// the on-disk check returns if the cache is later wiped.
+	private downloadStatus_: ProviderModelDownloadStatus | null = null;
 
 	public constructor(options: LocalEmbeddingProviderOptions = {}) {
 		this.model_ = options.model ?? MULTILINGUAL_E5_SMALL;
@@ -184,7 +190,32 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 	}
 
 	private async resolveModelDir(): Promise<string> {
-		return ensureModelDownloaded(this.model_, { onProgress: this.onDownloadProgress_ });
+		this.downloadStatus_ = 'downloading';
+		try {
+			const dir = await ensureModelDownloaded(this.model_, { onProgress: this.onDownloadProgress_ });
+			this.downloadStatus_ = 'downloaded';
+			return dir;
+		} catch (error) {
+			// On failure, drop the in-memory state so the next probe reflects
+			// the real on-disk situation (cache may be empty, or a stale
+			// partial may have been wiped by runDownload's cleanup).
+			this.downloadStatus_ = null;
+			throw error;
+		}
+	}
+
+	public async modelDownloadStatus(): Promise<ProviderModelDownloadStatus> {
+		// In-flight download wins: the file system check would say "not
+		// started" until the tarball lands and gets extracted.
+		if (this.downloadStatus_ === 'downloading') return 'downloading';
+		// On-disk marker is the source of truth for the steady state, so we
+		// notice an externally-wiped cache (manual rm or removeCachedModel).
+		const dir = await localModelPath(this.model_);
+		if (dir) {
+			this.downloadStatus_ = 'downloaded';
+			return 'downloaded';
+		}
+		return this.downloadStatus_ ?? 'not-started';
 	}
 
 	private getOnnxRuntime(): OnnxRuntime {

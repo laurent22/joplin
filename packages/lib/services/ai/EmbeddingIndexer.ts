@@ -9,7 +9,7 @@ import { NoteEntity, ItemChangeEntity } from '../database/types';
 import NoteEmbedding from '../../models/NoteEmbedding';
 import AiService from './AiService';
 import { chunkText } from './chunker';
-import { EmbeddingProvider } from './types';
+import { EmbeddingProvider, IndexStatus } from './types';
 
 const logger = Logger.create('EmbeddingIndexer');
 
@@ -58,7 +58,10 @@ export default class EmbeddingIndexer {
 		this.isRunningInBackground_ = true;
 
 		logger.info('Starting background indexer');
-		await this.maintenance();
+		// Kick the first maintenance off without awaiting — model load + first
+		// embed batch can take 5-15s and we don't want to block app startup on
+		// it. The timer below picks up subsequent runs.
+		void this.maintenance();
 
 		this.maintenanceTimer_ = shim.setInterval(async () => {
 			await this.maintenance();
@@ -71,6 +74,42 @@ export default class EmbeddingIndexer {
 		if (this.maintenanceTimer_) shim.clearInterval(this.maintenanceTimer_);
 		this.maintenanceTimer_ = null;
 		this.isRunningInBackground_ = false;
+	}
+
+	// Snapshot of model + indexer state for the settings UI and the
+	// joplin.ai.indexStatus() plugin API. Cheap to call (two COUNT(*) and one
+	// provider state probe) so callers can poll on a UI tick.
+	public async getStatus(): Promise<IndexStatus> {
+		const provider = AiService.instance().getActiveEmbeddingProvider();
+
+		let modelDownloadStatus: IndexStatus['modelDownloadStatus'] = 'unavailable';
+		if (provider) {
+			modelDownloadStatus = provider.modelDownloadStatus
+				? await provider.modelDownloadStatus()
+				// Remote / test providers without a downloadable artefact are
+				// always "ready" — surfacing 'downloaded' lets the UI treat
+				// them uniformly without a special "n/a" branch.
+				: 'downloaded';
+		}
+
+		let indexerState: IndexStatus['indexerState'];
+		if (!Setting.value('ai.enabled')) {
+			indexerState = 'ai-disabled';
+		} else if (!Setting.value('ai.embedding.enabled')) {
+			indexerState = 'index-disabled';
+		} else if (this.maintenanceRunning_) {
+			indexerState = 'running';
+		} else {
+			indexerState = 'idle';
+		}
+
+		// Both counts exclude trashed and conflict notes so the "indexed N/M"
+		// ratio is interpretable: M is the universe the indexer cares about,
+		// not the entire notes table.
+		const notesIndexed = await NoteEmbedding.distinctNoteIdCount();
+		const totalNotes = await Note.indexableCount();
+
+		return { modelDownloadStatus, indexerState, notesIndexed, totalNotes };
 	}
 
 	// Single maintenance tick. Public so tests can drive the indexer without
@@ -92,7 +131,14 @@ export default class EmbeddingIndexer {
 			}
 
 			await this.handleModelChange(provider);
-			await this.processChangeBatch(provider);
+			// Drain the change feed first so a recent edit isn't starved by a
+			// large backfill. Then top up the same batch slot with any
+			// not-yet-indexed notes from before the cursor (existing notes on
+			// first enable, or notes that pre-date the embeddings feature).
+			const processed = await this.processChangeBatch(provider);
+			if (processed < BATCH_SIZE) {
+				await this.processBackfillBatch(provider, BATCH_SIZE - processed);
+			}
 		} catch (error) {
 			logger.error('Maintenance run failed:', error);
 		} finally {
@@ -113,10 +159,12 @@ export default class EmbeddingIndexer {
 		Setting.setValue('ai.embedding.lastIndexedModelId', provider.modelId);
 	}
 
-	private async processChangeBatch(provider: EmbeddingProvider) {
+	// Returns the number of notes acted on so the caller can decide how much
+	// backfill room is left in this tick.
+	private async processChangeBatch(provider: EmbeddingProvider): Promise<number> {
 		const cursor = Setting.value('ai.embedding.lastProcessedChangeId') as number;
 		const changes = await ItemChange.changesSinceId(cursor, { limit: BATCH_SIZE });
-		if (!changes.length) return;
+		if (!changes.length) return 0;
 
 		// Collapse duplicates so we only embed each note once per batch even
 		// when there are multiple updates queued for it. Process deletes last
@@ -148,6 +196,28 @@ export default class EmbeddingIndexer {
 		// (idempotently — saveChunks deletes existing chunks first).
 		const highestId = changes[changes.length - 1].id;
 		Setting.setValue('ai.embedding.lastProcessedChangeId', highestId);
+
+		return latestPerNote.size;
+	}
+
+	// Picks up any indexable notes that haven't been embedded yet — typically
+	// the existing notes on a fresh AI enable, or notes that pre-date this
+	// feature. Bounded by the slot left over from the change-feed batch so
+	// each tick stays predictable in cost.
+	private async processBackfillBatch(provider: EmbeddingProvider, limit: number): Promise<void> {
+		if (limit <= 0) return;
+
+		const noteIds = await NoteEmbedding.notYetIndexedNoteIds(limit);
+		if (!noteIds.length) return;
+
+		logger.info(`Backfill: indexing ${noteIds.length} note(s) not yet in the embeddings index`);
+		for (const noteId of noteIds) {
+			try {
+				await this.indexNote(noteId, provider);
+			} catch (error) {
+				logger.warn(`Backfill failed for note ${noteId}:`, error);
+			}
+		}
 	}
 
 	private async indexNote(noteId: string, provider: EmbeddingProvider) {

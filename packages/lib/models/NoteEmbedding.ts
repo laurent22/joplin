@@ -93,6 +93,21 @@ export default class NoteEmbedding extends BaseModel {
 		return row?.c ?? 0;
 	}
 
+	// Picks indexable notes (not trashed, not in conflict) that haven't been
+	// embedded yet. Used by the indexer's backfill path so existing notes
+	// from before AI was enabled get picked up over successive ticks.
+	public static async notYetIndexedNoteIds(limit: number): Promise<string[]> {
+		const rows = await this.db().selectAll<{ id: string }>(
+			`SELECT id FROM notes
+			 WHERE (deleted_time IS NULL OR deleted_time = 0)
+			   AND (is_conflict IS NULL OR is_conflict = 0)
+			   AND id NOT IN (SELECT DISTINCT note_id FROM note_embeddings_meta)
+			 LIMIT ?`,
+			[limit],
+		);
+		return rows.map(r => r.id);
+	}
+
 	// Removes every chunk for a note from both the meta table and the vec
 	// table. Used before re-indexing a changed note and during note deletion.
 	//
