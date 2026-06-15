@@ -126,7 +126,7 @@ export default class SearchService {
 		switch (scope.type) {
 		case 'note':
 			return [scope.noteId];
-		case 'notebook': {
+		case 'folder': {
 			const notes = await Note.previews(scope.folderId, { fields: ['id'] });
 			return notes.map(n => n.id);
 		}

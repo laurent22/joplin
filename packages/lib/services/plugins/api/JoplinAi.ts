@@ -64,8 +64,8 @@ export default class JoplinAi {
 	 * graph use cases without spending another embedding pass.
 	 *
 	 * The `scope` restricts the search: `'all'` (default), `'note'`,
-	 * `'notebook'` (by folder id), or `'tag'` (by tag id). Trashed and
-	 * conflict notes are excluded from results.
+	 * `'folder'` (by folder id), or `'tag'` (by tag id).
+	 * Trashed and conflict notes are excluded from results.
 	 *
 	 * The `relevance` preset controls how strict the match is:
 	 * `'strict' | 'normal' | 'loose'`. Joplin owns the mapping from preset

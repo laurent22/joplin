@@ -92,7 +92,7 @@ describe('SearchService', () => {
 		expect(results).toEqual([]);
 	});
 
-	it('restricts to a notebook when scope is notebook', async () => {
+	it('restricts to a folder when scope is folder', async () => {
 		if (skipIfNoVec()) return;
 		const { folderB, carNote } = await seed();
 
@@ -101,7 +101,7 @@ describe('SearchService', () => {
 			// — the test provider is bigram-based, so we want a near-identical
 			// phrase to produce hits above the loose threshold.
 			query: { text: 'sedans and SUVs share roads' },
-			scope: { type: 'notebook', folderId: folderB.id },
+			scope: { type: 'folder', folderId: folderB.id },
 			relevance: 'loose',
 		});
 

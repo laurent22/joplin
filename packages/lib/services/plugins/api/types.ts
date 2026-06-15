@@ -996,7 +996,7 @@ export type SearchRelevance = 'strict' | 'normal' | 'loose';
  * - `all`: every indexed note (default).
  * - `note`: a single note (rarely useful directly — mainly an internal
  *   building block).
- * - `notebook`: all notes in the given folder.
+ * - `folder`: all notes in the given folder (a "notebook" in the UI).
  * - `tag`: all notes tagged with the given tag.
  *
  * Trashed and conflict notes are always excluded.
@@ -1004,7 +1004,7 @@ export type SearchRelevance = 'strict' | 'normal' | 'loose';
 export type SearchScope =
 	| { type: 'all' }
 	| { type: 'note'; noteId: string }
-	| { type: 'notebook'; folderId: string }
+	| { type: 'folder'; folderId: string }
 	| { type: 'tag'; tagId: string };
 
 /**
