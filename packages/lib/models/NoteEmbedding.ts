@@ -81,15 +81,20 @@ export default class NoteEmbedding extends BaseModel {
 		return row?.c ?? 0;
 	}
 
-	// Indexable notes not yet embedded — drives the indexer's backfill path.
-	public static async notYetIndexedNoteIds(limit: number): Promise<string[]> {
+	// Indexable notes not yet embedded — drives the indexer's initial scan.
+	// `excludeIds` lets the caller skip notes that already failed this session,
+	// so a permanently bad note doesn't keep coming back.
+	public static async notYetIndexedNoteIds(limit: number, excludeIds: string[] = []): Promise<string[]> {
+		const excludeSql = excludeIds.length
+			? ` AND n.id NOT IN (${excludeIds.map(() => '?').join(',')})`
+			: '';
 		const rows = await this.db().selectAll<{ id: string }>(
 			`SELECT n.id FROM notes n
 			 WHERE (n.deleted_time IS NULL OR n.deleted_time = 0)
 			   AND (n.is_conflict IS NULL OR n.is_conflict = 0)
-			   AND NOT EXISTS (SELECT 1 FROM note_embeddings_meta m WHERE m.note_id = n.id)
+			   AND NOT EXISTS (SELECT 1 FROM note_embeddings_meta m WHERE m.note_id = n.id)${excludeSql}
 			 LIMIT ?`,
-			[limit],
+			[...excludeIds, limit],
 		);
 		return rows.map(r => r.id);
 	}

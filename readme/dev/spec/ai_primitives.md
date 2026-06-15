@@ -1,6 +1,6 @@
 # AI primitives
 
-This spec describes the core AI primitives that will be added to Joplin. The goal is not to ship a single AI feature, but to provide a platform on which features and plugins can be built. The primitives below are validated against five target use cases:
+This spec describes the core AI primitives in Joplin. The goal is not to ship a single AI feature, but to provide a platform on which features and plugins can be built. The primitives below are validated against five target use cases:
 
 - **Chat with your note** — a sidebar that can summarise, rewrite, or answer questions about the current note.
 - **Chat with your note collection** — ask a question across all notes and get a cited answer.
@@ -22,6 +22,20 @@ The primitives are:
 
 Primitives 1–3 are required for any of the five target use cases to work. Primitive 4 must be in place from day one. Primitive 5 is independently valuable and can ship in parallel.
 
+## Implementation status
+
+| Primitive                           | Status                                                                 |
+|-------------------------------------|------------------------------------------------------------------------|
+| Provider abstraction (chat)         | Shipped (Joplin Cloud, OpenAI-compatible, Anthropic)                   |
+| Provider abstraction (embeddings)   | Shipped (local ONNX-backed)                                            |
+| Local embeddings index              | Shipped — multilingual-e5-small, downloaded on first enable            |
+| Retrieval helpers (`search`)        | Shipped as `joplin.ai.search()`                                        |
+| Chat helper (`chat`)                | Shipped as `joplin.ai.chat()`                                          |
+| Privacy & cost guardrails           | Shipped (off by default, remote-allow flag, classification, token tally)|
+| MCP server                          | Not started                                                            |
+
+Implementation detail for the embeddings stack lives in [ai_embeddings.md](ai_embeddings.md).
+
 ## 1. Provider abstraction
 
 A pluggable layer so users can pick their LLM and embedding model independently (cloud, self-hosted, or on-device). No provider is hardcoded.
@@ -39,36 +53,35 @@ Users configure a **list** of providers (each with its own settings — API key,
 
 ### Built-in providers
 
-- An **OpenAI-compatible** adapter (covers OpenAI, Ollama, LM Studio, vLLM, OpenRouter, and similar via base-URL override).
-- An **Anthropic** adapter.
-- A **bundled local embedding model** (see below)
+Chat:
+
+- **Joplin Cloud AI** — zero-config for users on Joplin Cloud sync.
+- **OpenAI-compatible** adapter (covers OpenAI, Ollama, LM Studio, vLLM, OpenRouter, and similar via base-URL override).
+- **Anthropic** adapter.
+
+Embeddings:
+
+- **Bundled local embedding provider** (see below).
+
+### Chat API
+
+Plugins call `joplin.ai.chat(messages, options?)`. The active provider and model are taken from user settings — plugins cannot pick a model. Throws if AI is disabled, if the active provider is remote and the user hasn't allowed remote providers, or if the provider is misconfigured.
 
 ## 2. Local embeddings index
 
-Notes are chunked, embedded, and stored locally so retrieval can run without a network call.
+Notes are chunked, embedded, and stored locally so retrieval can run without a network call. Embeddings are **not synced**: they are large, model-specific, and re-derivable. The model identifier is stored alongside each chunk so a model change triggers a clear-and-rebuild rather than silent corruption.
 
-### Storage
+Indexing runs as a background service: on first enable it walks the entire vault, after which it follows the note-change feed incrementally. New and edited notes become searchable within minutes.
 
-- A new local SQLite table holding `(note_id, chunk_index, model_id, vector)` and the source text of each chunk.
-- Implemented using the [sqlite-vec](https://github.com/asg017/sqlite-vec) extension for vector storage and similarity search.
-- **Not synced.** Embeddings are large, model-specific, and re-derivable.
-- Schema includes the model identifier so a model change triggers a re-index rather than silent corruption.
-
-### Indexing
-
-- Background task following the existing OCR Service pattern: timer-based, polls `ItemChange`, processes in chunks, persists progress in a settings key.
-- Chunking strategy: roughly 512–1024 tokens with overlap. Tunable internally.
-
-### Embedding model
-
-- Joplin ships a small embedding model (~100MB, e.g. from the nomic/mxbai/bge family) bundled with the desktop app, or downloaded after installation.
-- Runtime: **ONNX Runtime** (`onnxruntime-node`), loaded in-process. No external service, daemon, or Python required.
-- The bundled model is the default. Users may switch to a cloud embedding provider via the provider abstraction; doing so triggers a re-index.
+The bundled model is the default. Users may switch to a different embedding provider via the provider abstraction; doing so triggers a re-index because vectors from different models aren't comparable.
 
 ### Platform scope
 
-- **Desktop and CLI**: full support.
-- **Mobile**: deferred. sqlite-vec packaging for iOS/Android and on-device embedding cost on mobile are separate efforts. Mobile may eventually query an existing index produced on desktop, but that is out of scope for the initial work.
+- **Desktop on Apple Silicon macOS, Linux x64/arm64, Windows x64/arm64**: full support.
+- **macOS Intel**: chat works; embeddings do not (no ONNX prebuild for `darwin-x64`).
+- **CLI / mobile / server**: no on-device embeddings. Chat with remote providers still works.
+
+Implementation detail lives in [ai_embeddings.md](ai_embeddings.md).
 
 ## 3. Retrieval helpers
 
@@ -76,36 +89,23 @@ The shared query surface. All five target features differ mainly in *what* they 
 
 ### API
 
-A single primary call:
+Plugins call `joplin.ai.search({ query, scope?, relevance? })`. Returns matching chunks with the source note id, chunk text, and a similarity score.
 
-- **`search({ query, scope, relevance })`** — returns matching chunks with their source note ID, the chunk text, and a similarity score.
-  - `query`: either plain text (embedded internally using the active embedding provider) or `{ noteId }` to find chunks similar to an existing note. When a note ID is given, Joplin reuses the note's already-indexed chunks as the query vector(s), so no re-embedding is needed. This is what the tag-suggestion and semantic-graph use cases rely on.
-  - `scope`: where to search. One of `'note'` (with a note ID), `'notebook'` (with a folder ID), `'tag'` (with a tag ID), or `'all'`. Trashed and conflict notes are excluded by default.
-  - `relevance`: `'strict' | 'normal' | 'loose'`. A preset that maps internally to model-appropriate values for the number of results returned (`k`) and the minimum similarity threshold.
+- `query`: either plain text or `{ noteId }` to find chunks similar to an existing note. Note-id queries reuse the note's already-indexed chunks as the query — no re-embedding needed. This is what tag-suggestion and semantic-graph use cases rely on.
+- `scope`: `all` (default), `note`, `folder`, or `tag`. Trashed and conflict notes are always excluded.
+- `relevance`: `strict` / `normal` / `loose`. A preset that maps internally to model-appropriate values for the number of results returned and the minimum similarity threshold.
 
 Raw thresholds (`k`, `minScore`) are a leaky abstraction: the right values depend on the embedding model, and silently break when the model changes. Plugins calibrated against one model would produce poor results against another with no signal that anything had changed.
 
 The `relevance` preset is the contract plugins write against. Joplin owns the mapping from preset to numeric values per model. When the bundled model changes, the mapping is re-tuned and plugins continue working without modification.
 
-### Default mappings
-
-Reference defaults (subject to per-model calibration):
-
-| `relevance` preset   | k  | minScore (cosine) |
-|----------|----|-------------------|
-| strict   | 5  | ~0.55             |
-| normal   | 10 | ~0.40             |
-| loose    | 20 | ~0.25             |
-
-These are internal values and are not part of the public API contract.
-
 ### Hybrid search
 
-Retrieval may be combined internally with the existing FTS-based keyword search. This is an implementation detail; plugins still call `search()` with the same shape.
+Retrieval may eventually be combined internally with the existing FTS-based keyword search. Plugins will not see a contract change when hybrid ranking lands.
 
 ### Prior art
 
-The [Jarvis](https://github.com/alondmnt/joplin-plugin-jarvis) plugin already exposes a [semantic search API](https://github.com/alondmnt/joplin-plugin-jarvis/blob/master/docs/API.md) to other plugins, supporting both free-text and note-ID queries. It is a useful reference for anyone wanting to prototype against the shape proposed here.
+The [Jarvis](https://github.com/alondmnt/joplin-plugin-jarvis) plugin already exposes a [semantic search API](https://github.com/alondmnt/joplin-plugin-jarvis/blob/master/docs/API.md) to other plugins, supporting both free-text and note-ID queries. It is a useful reference.
 
 ### Mapping to features
 
@@ -113,7 +113,7 @@ How each target use case composes the primitives:
 
 | Feature                  | Retrieval scope             | Then                                     |
 |--------------------------|-----------------------------|------------------------------------------|
-| Chat with note           | `note` or `notebook`        | Pass chunks as context to chat model     |
+| Chat with note           | `note` or `folder`          | Pass chunks as context to chat model     |
 | Chat with note collection | `all`                      | Pass top chunks (with note IDs) as context to chat model |
 | Fuzzy search             | `all`                       | Show chunks directly as results          |
 | Tag suggestions          | `all`, query = note content | Inspect tags of returned chunks          |
@@ -123,17 +123,19 @@ Chat-based features additionally pass each chunk's source note ID into the promp
 
 ## 4. Privacy & cost guardrails
 
-Enforced at the provider layer so every feature (core or plugin) inherits these checks automatically.
+Enforced at the provider layer so every feature — core or plugin — inherits these checks automatically.
 
 ### Requirements
 
-- **AI features off by default.** A single top-level setting plus per-feature toggles.
-- **Offline by default**: User must explicitly grant permission to use online features.
-- **Per-provider classification** as `local` or `remote`. Surfaced in the provider picker and used by the indicator.
-- **Token accounting** per provider, queryable by plugins and shown to users.
-- **No silent enablement.** Switching from a local to a remote provider requires explicit user confirmation, with clear text about what data will be sent and where.
+- **AI features off by default.** A top-level toggle, plus a per-feature kill switch for the embeddings indexer (users who want chat-only).
+- **Offline by default**: remote providers require a separate explicit opt-in.
+- **Per-provider classification** as `local` or `remote`. OpenAI-compatible providers can be either depending on the configured base URL (loopback addresses count as local).
+- **Token accounting** per provider, queryable by plugins and shown in settings.
+- **No silent enablement.** Switching from a local to a remote provider requires an explicit user choice; auto-defaults (e.g. selecting Joplin Cloud AI for Joplin Cloud users on first enable) only apply once.
 
 ## 5. MCP server
+
+> Status: not started. Design recorded here for reference.
 
 Joplin runs an optional [Model Context Protocol](https://modelcontextprotocol.io/) server that exposes notes to external AI applications (Claude Desktop, ChatGPT desktop, Cursor, Zed, etc.).
 
