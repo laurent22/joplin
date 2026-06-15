@@ -113,6 +113,7 @@ https://github.com/laurent22/joplin/issues/6370
 div.wunderbaum.folder-tree {
 	flex: 1 1 auto;
 	border: none !important;
+	outline: none;
 	overflow-x: hidden;
 	overflow-y: auto;
 	--wb-col-padding-x: 1rem;
@@ -129,6 +130,13 @@ div.wunderbaum.folder-tree .wb-row {
 	padding: 0rem 2.75rem;
 	border-radius: 0.25rem;
 	border: none !important;
+}
+
+div.wunderbaum.folder-tree:focus .wb-row.wb-focus,
+div.wunderbaum.folder-tree:focus .wb-row.wb-active,
+div.wunderbaum.folder-tree:focus-within .wb-row.wb-focus,
+div.wunderbaum.folder-tree:focus-within .wb-row.wb-active {
+	box-shadow: inset 0 0 0 2px #275dc5;
 }
 
 div.wunderbaum.folder-tree .wb-row.wb-active {
