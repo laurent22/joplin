@@ -91,13 +91,22 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 	}
 
 	public async embed(texts: string[]): Promise<number[][]> {
+		return this.runEmbed(texts, 'passage: ');
+	}
+
+	public async embedQuery(texts: string[]): Promise<number[][]> {
+		return this.runEmbed(texts, 'query: ');
+	}
+
+	private async runEmbed(texts: string[], prefix: string): Promise<number[][]> {
 		if (!texts.length) return [];
 
 		await this.ensureInitialised();
 
-		// e5 indexing prefix. Without this, retrieval quality drops noticeably
-		// (it's part of the model's training contract).
-		const prefixed = texts.map(t => `passage: ${t}`);
+		// e5 is trained with asymmetric prefixes — "passage: " for indexed
+		// documents, "query: " for search inputs. Mixing them up doesn't
+		// crash but does measurably hurt retrieval quality.
+		const prefixed = texts.map(t => `${prefix}${t}`);
 
 		const tokenized = this.tokenizer_!(prefixed, {
 			padding: true,

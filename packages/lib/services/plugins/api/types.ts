@@ -982,3 +982,60 @@ export interface ChatOptions {
 	/** Maximum number of tokens to generate. Provider default if omitted. */
 	maxTokens?: number;
 }
+
+/**
+ * Relevance preset for semantic search. Maps internally to model-specific
+ * `(k, minScore)` tuning — the preset is the public contract so plugins keep
+ * working when the bundled embedding model changes.
+ */
+export type SearchRelevance = 'strict' | 'normal' | 'loose';
+
+/**
+ * Where to look for matches.
+ *
+ * - `all`: every indexed note (default).
+ * - `note`: a single note (rarely useful directly — mainly an internal
+ *   building block).
+ * - `notebook`: all notes in the given folder.
+ * - `tag`: all notes tagged with the given tag.
+ *
+ * Trashed and conflict notes are always excluded.
+ */
+export type SearchScope =
+	| { type: 'all' }
+	| { type: 'note'; noteId: string }
+	| { type: 'notebook'; folderId: string }
+	| { type: 'tag'; tagId: string };
+
+/**
+ * What to search for: free text (embedded internally), or an existing note
+ * whose stored chunks are reused as the query — useful for "related notes",
+ * tag suggestions, and graph-style use cases without a second embedding pass.
+ */
+export type SearchQuery =
+	| { text: string }
+	| { noteId: string };
+
+/**
+ * Parameters for {@link JoplinAi.search}.
+ */
+export interface SearchOptions {
+	query: SearchQuery;
+	scope?: SearchScope;
+	relevance?: SearchRelevance;
+}
+
+/**
+ * A single hit from {@link JoplinAi.search}.
+ */
+export interface SearchResult {
+	noteId: string;
+	chunkIndex: number;
+	chunkText: string;
+	/**
+	 * Cosine similarity in `[0, 1]`. Higher means more similar. Plugins should
+	 * use this for ranking but not as an absolute threshold — that's what the
+	 * `relevance` preset is for.
+	 */
+	score: number;
+}

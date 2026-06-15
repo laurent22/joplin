@@ -1578,6 +1578,8 @@ packages/lib/services/ai/EmbeddingModelDownloader.js
 packages/lib/services/ai/LocalEmbeddingProvider.test.js
 packages/lib/services/ai/LocalEmbeddingProvider.js
 packages/lib/services/ai/OnnxRuntime.test.js
+packages/lib/services/ai/SearchService.test.js
+packages/lib/services/ai/SearchService.js
 packages/lib/services/ai/SqliteVec.test.js
 packages/lib/services/ai/aiSettingsTransition.test.js
 packages/lib/services/ai/aiSettingsTransition.js

@@ -233,6 +233,24 @@ export default class NoteEmbedding extends BaseModel {
 		return results;
 	}
 
+	// Loads the stored vectors for a note's chunks, in chunk-index order.
+	// Used by the search service for noteId-based queries — re-using the
+	// already-indexed vectors avoids both re-embedding and the asymmetry
+	// you'd otherwise get from running them through embedQuery().
+	public static async vectorsByNoteId(noteId: string): Promise<number[][]> {
+		this.requireVec();
+		if (!await this.vecTableExists()) return [];
+		const rows = await this.db().selectAll<{ embedding: string }>(
+			`SELECT vec_to_json(v.embedding) AS embedding
+			 FROM note_embeddings_vec v
+			 JOIN note_embeddings_meta m ON m.id = v.rowid
+			 WHERE m.note_id = ?
+			 ORDER BY m.chunk_index ASC`,
+			[noteId],
+		);
+		return rows.map(r => JSON.parse(r.embedding) as number[]);
+	}
+
 	// Drops every embedding from both tables. Used when the embedding model
 	// changes — the existing vectors are no longer comparable to anything new.
 	public static async clearAll() {

@@ -48,4 +48,10 @@ export interface EmbeddingProvider {
 	dimension: number;
 	classification: ProviderClassification;
 	embed(texts: string[]): Promise<number[][]>;
+	// Optional query-side embedding. Some models (e5 family) get noticeably
+	// better retrieval when documents and queries are encoded with different
+	// prefixes; this method lets the provider apply the query-side one.
+	// Providers without an asymmetric setup can omit it — callers fall back
+	// to embed().
+	embedQuery?(texts: string[]): Promise<number[][]>;
 }
