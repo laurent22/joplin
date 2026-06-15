@@ -32,6 +32,12 @@ const AiIndexStatus = () => {
 
 	useEffect(() => {
 		let cancelled = false;
+		let timer: ReturnType<typeof setTimeout> | null = null;
+		// Chain polls instead of using setInterval — a fixed-interval timer
+		// would fire while a previous getStatus() was still in flight (e.g.
+		// during model load competing for the renderer thread), letting
+		// requests stack up. Recursive setTimeout pauses the cadence on slow
+		// ticks and resumes cleanly.
 		const tick = async () => {
 			try {
 				const s = await EmbeddingIndexer.instance().getStatus();
@@ -40,12 +46,12 @@ const AiIndexStatus = () => {
 				// Swallow — the status panel is decorative; we don't want a
 				// transient DB error to crash the settings screen.
 			}
+			if (!cancelled) timer = setTimeout(() => void tick(), POLL_INTERVAL_MS);
 		};
 		void tick();
-		const id = setInterval(() => void tick(), POLL_INTERVAL_MS);
 		return () => {
 			cancelled = true;
-			clearInterval(id);
+			if (timer) clearTimeout(timer);
 		};
 	}, []);
 
