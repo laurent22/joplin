@@ -37,6 +37,11 @@
 		{{/note}}
 
 		{{^note}}
+		{{#emptyStateErrorMessage}}
+		<div class="notification is-danger">
+			{{emptyStateErrorMessage}}
+		</div>
+		{{/emptyStateErrorMessage}}
 		{{{emptyStateHtml}}}
 		{{/note}}
 	</div>

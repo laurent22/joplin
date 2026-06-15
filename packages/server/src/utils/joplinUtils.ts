@@ -82,6 +82,10 @@ interface RenderItemQuery {
 	note_id?: string;
 }
 
+interface RenderNotePageOptions {
+	emptyStateErrorMessage?: string;
+}
+
 type LinkedItemInfos = Record<Uuid, LinkedItemInfo>;
 
 type ResourceInfos = Record<Uuid, ResourceInfo>;
@@ -367,6 +371,7 @@ async function renderNotePage(
 	folderTree: RenderedFolderTree = null,
 	cssStrings: string[] = [],
 	pluginAssets: unknown[] = [],
+	options: RenderNotePageOptions = {},
 ): Promise<FileViewerResponse> {
 
 	const outputCssStrings = cssStrings.slice();
@@ -382,6 +387,7 @@ async function renderNotePage(
 			folderTree,
 			note,
 			emptyStateHtml: '',
+			emptyStateErrorMessage: options.emptyStateErrorMessage || '',
 			logoSrc: banner.logoDataUrl ? banner.logoDataUrl : `${baseUrl_}/images/JoplinLogo.png`,
 			logoTitle: banner.logo_title,
 
@@ -461,7 +467,19 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 		}
 
 		if (!folderTree.allowedNoteIds.has(query.note_id)) {
-			throw new ErrorNotFound(`Item "${query.note_id}" does not belong to this share`);
+			if (query.resource_id) throw new ErrorNotFound(`Resource "${query.resource_id}" does not belong to this share`);
+
+			return renderNotePage(
+				folderTree.rootTitle,
+				bannerInfo,
+				null,
+				folderTree,
+				[],
+				[],
+				{
+					emptyStateErrorMessage: `Item "${query.note_id}" does not belong to this share`,
+				},
+			);
 		}
 
 		const noteItem = await models_.item().loadByName(userId, `${query.note_id}.md`, { fields: ['*'], withContent: true });
