@@ -39,6 +39,10 @@ export default class EmbeddingIndexer {
 	private maintenanceTimer_: ReturnType<typeof shim.setInterval> = null;
 	private isRunningInBackground_ = false;
 	private maintenanceRunning_ = false;
+	// Notes that threw during this session's initial scan. Skipped for the
+	// remainder of the session so the scan can complete; reset on process
+	// restart so a fix to the underlying issue gets a fresh chance.
+	private initialScanFailures_ = new Set<string>();
 
 	public async runInBackground() {
 		if (this.isRunningInBackground_) return;
@@ -105,11 +109,15 @@ export default class EmbeddingIndexer {
 			if (!provider) return;
 
 			await this.handleModelChange(provider);
-			// Change feed first so recent edits aren't starved by a large
-			// backfill of pre-existing notes.
-			const processed = await this.processChangeBatch(provider);
-			if (processed < BATCH_SIZE) {
-				await this.processBackfillBatch(provider, BATCH_SIZE - processed);
+			// Until the initial scan completes, walk the whole vault one batch
+			// per tick. Then switch to change-feed-only mode. The tick that
+			// finishes the scan still runs the change feed so edits made
+			// during the scan don't wait an extra interval.
+			if (!Setting.value('ai.embedding.initialScanDone')) {
+				await this.runInitialScanBatch(provider);
+			}
+			if (Setting.value('ai.embedding.initialScanDone')) {
+				await this.processChangeBatch(provider);
 			}
 		} catch (error) {
 			logger.error('Maintenance run failed:', error);
@@ -128,12 +136,14 @@ export default class EmbeddingIndexer {
 		await NoteEmbedding.clearAll();
 		Setting.setValue('ai.embedding.lastProcessedChangeId', 0);
 		Setting.setValue('ai.embedding.lastIndexedModelId', provider.modelId);
+		Setting.setValue('ai.embedding.initialScanDone', false);
+		this.initialScanFailures_.clear();
 	}
 
-	private async processChangeBatch(provider: EmbeddingProvider): Promise<number> {
+	private async processChangeBatch(provider: EmbeddingProvider): Promise<void> {
 		const cursor = Setting.value('ai.embedding.lastProcessedChangeId') as number;
 		const changes = await ItemChange.changesSinceId(cursor, { limit: BATCH_SIZE });
-		if (!changes.length) return 0;
+		if (!changes.length) return;
 
 		// Collapse duplicates so a note edited multiple times only gets
 		// embedded once per tick.
@@ -160,24 +170,37 @@ export default class EmbeddingIndexer {
 		// idempotent — it deletes existing chunks first).
 		const highestId = changes[changes.length - 1].id;
 		Setting.setValue('ai.embedding.lastProcessedChangeId', highestId);
-
-		return latestPerNote.size;
 	}
 
-	// Picks up notes that aren't yet in the index — existing notes on first
-	// AI enable, or notes that pre-date the feature.
-	private async processBackfillBatch(provider: EmbeddingProvider, limit: number): Promise<void> {
-		if (limit <= 0) return;
+	// Walks the full notes table on first enable (or after a model swap).
+	// One batch per tick so the indexer stays responsive on big vaults.
+	// Per-note failures are remembered in-memory only — they get a fresh
+	// attempt on the next session, which is when a fix to the underlying
+	// issue would have been deployed.
+	private async runInitialScanBatch(provider: EmbeddingProvider): Promise<void> {
+		// Snap the change-feed cursor at the start of the scan, not the end —
+		// edits and deletes that happen during the scan are then picked up
+		// normally by the change feed instead of being lost.
+		if ((Setting.value('ai.embedding.lastProcessedChangeId') as number) === 0) {
+			Setting.setValue('ai.embedding.lastProcessedChangeId', await ItemChange.lastChangeId());
+		}
 
-		const noteIds = await NoteEmbedding.notYetIndexedNoteIds(limit);
-		if (!noteIds.length) return;
+		const excluded = Array.from(this.initialScanFailures_);
+		const noteIds = await NoteEmbedding.notYetIndexedNoteIds(BATCH_SIZE, excluded);
 
-		logger.info(`Backfill: indexing ${noteIds.length} note(s) not yet in the embeddings index`);
+		if (!noteIds.length) {
+			Setting.setValue('ai.embedding.initialScanDone', true);
+			logger.info(`Initial scan complete (${this.initialScanFailures_.size} note(s) skipped after errors)`);
+			return;
+		}
+
+		logger.info(`Initial scan: indexing ${noteIds.length} note(s)`);
 		for (const noteId of noteIds) {
 			try {
 				await this.indexNote(noteId, provider);
 			} catch (error) {
-				logger.warn(`Backfill failed for note ${noteId}:`, error);
+				this.initialScanFailures_.add(noteId);
+				logger.warn(`Initial scan failed for note ${noteId} (will retry next session):`, error);
 			}
 		}
 	}

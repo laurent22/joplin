@@ -298,6 +298,38 @@ describe('EmbeddingIndexer', () => {
 		expect(await NoteEmbedding.distinctNoteIdCount()).toBe(2);
 	});
 
+	it('skips a note that fails during the initial scan instead of looping on it', async () => {
+		if (skipIfNoVec()) return;
+		const folder = await Folder.save({ title: 'f' });
+		const good = await Note.save({ title: 'good', body: 'this one works', parent_id: folder.id });
+		const bad = await Note.save({ title: 'bad', body: 'this one will fail', parent_id: folder.id });
+		await waitForChangesSince(0, 2);
+
+		// Provider that throws for the bad note's body, succeeds for everything else.
+		let failureCalls = 0;
+		const failingProvider = new (class extends TestEmbeddingProvider {
+			public async embed(texts: string[]) {
+				if (texts.some(t => t.includes('this one will fail'))) {
+					failureCalls++;
+					throw new Error('synthetic failure');
+				}
+				return super.embed(texts);
+			}
+		})();
+		AiService.instance().setEmbeddingProvider(failingProvider);
+
+		// First tick processes both — bad fails, good succeeds.
+		await EmbeddingIndexer.instance().maintenance();
+		// Second tick must NOT retry the bad note (would re-incur failureCalls).
+		await EmbeddingIndexer.instance().maintenance();
+		await EmbeddingIndexer.instance().maintenance();
+
+		expect(failureCalls).toBe(1);
+		expect(await NoteEmbedding.countByNoteId(good.id)).toBeGreaterThan(0);
+		expect(await NoteEmbedding.countByNoteId(bad.id)).toBe(0);
+		expect(Setting.value('ai.embedding.initialScanDone')).toBe(true);
+	});
+
 	it('getStatus counts indexed vs total notes and excludes trashed ones', async () => {
 		if (skipIfNoVec()) return;
 		const folder = await Folder.save({ title: 'f' });

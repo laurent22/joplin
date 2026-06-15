@@ -807,6 +807,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.Database,
 		},
 
+		// Indexer lifecycle: false until the initial full-vault scan finishes;
+		// after that the indexer only follows the ItemChange feed. Reset to
+		// false when the model id changes (triggering a re-scan).
+		'ai.embedding.initialScanDone': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
 		theme: {
 			value: Setting.THEME_LIGHT,
 			type: SettingItemType.Int,

@@ -16,6 +16,7 @@
 - To compile TypeScript, use `yarn tsc`. To type-check without emitting files, use `yarn tsc --noEmit`.
 - Default to no comments. Only add one when the why is non-obvious (workaround, hidden constraint, subtle invariant). Never explain what the code does — names handle that. Keep necessary comments to one or two line where possible.
 - SQL queries should only be done from within models (in packages/lib/models).
+- In markdown files, do not hard-wrap paragraphs. Let the renderer wrap lines; only insert newlines for actual paragraph or list breaks.
 
 ## Styling (desktop app)
 
