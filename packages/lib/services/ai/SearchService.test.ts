@@ -96,16 +96,16 @@ describe('SearchService', () => {
 		if (skipIfNoVec()) return;
 		const { folderB, carNote } = await seed();
 
+		// Query by the note's own id — guarantees a hit (self-match) so the
+		// "scope restricts results" check below is non-vacuous. Bigram-only
+		// text queries can return zero results past the threshold.
 		const results = await SearchService.instance().search({
-			// Query phrased to maximise bigram overlap with the carNote body
-			// — the test provider is bigram-based, so we want a near-identical
-			// phrase to produce hits above the loose threshold.
-			query: { text: 'sedans and SUVs share roads' },
+			query: { noteId: carNote.id },
 			scope: { type: 'folder', folderId: folderB.id },
 			relevance: 'loose',
 		});
 
-		// Whatever comes back, it must be from folder B only.
+		expect(results.length).toBeGreaterThan(0);
 		for (const r of results) {
 			expect(r.noteId).toBe(carNote.id);
 		}

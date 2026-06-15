@@ -32,11 +32,13 @@ const RELEVANCE_DEFAULTS: Record<SearchRelevance, RelevanceTuning> = {
 };
 
 const cosineFromDistance = (distance: number): number => {
-	// sqlite-vec returns cosine distance (1 - cosine similarity) for the
-	// default cosine metric. Clamp to [0, 1] so a tiny floating-point
-	// negative distance from a perfect-match self-query doesn't surface as
-	// a >1 score.
-	const score = 1 - distance;
+	// vec0 stores its distance as L2 (Euclidean) by default. The vectors we
+	// index are L2-normalised, so the exact relation L2² = 2·(1 − cosine)
+	// holds and we recover cosine similarity as 1 − d²/2. Clamp to [0, 1]
+	// so floating-point slop on perfect-match self-queries doesn't surface
+	// negatives or values above 1 — and so an opposing-vector edge case
+	// (cosine = −1) maps to 0 rather than a negative score.
+	const score = 1 - (distance * distance) / 2;
 	if (score < 0) return 0;
 	if (score > 1) return 1;
 	return score;
