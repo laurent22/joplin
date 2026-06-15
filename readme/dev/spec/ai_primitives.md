@@ -69,7 +69,7 @@ Plugins call `joplin.ai.chat(messages, options?)`. The active provider and model
 
 ## 2. Local embeddings index
 
-Notes are chunked, embedded, and stored locally so retrieval can run without a network call. Embeddings are **not synced**: they are large, model-specific, and re-derivable. The model identifier is stored alongside each chunk so a model change triggers a clear-and-rebuild rather than silent corruption.
+Notes are chunked, embedded, and stored locally, so retrieval can run without a network call. Embeddings are **not synced**: they are large, model-specific, and re-derivable. The model identifier is stored alongside each chunk, so a model change triggers a clear-and-rebuild rather than silent corruption.
 
 Indexing runs as a background service: on first enable it walks the entire vault, after which it follows the note-change feed incrementally. New and edited notes become searchable within minutes.
 

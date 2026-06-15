@@ -30,15 +30,15 @@ The indexer runs on a 5-minute timer (matching `OcrService`) and has two modes:
 
 **Order of processing during the scan**: unspecified. The "not yet indexed" query has no `ORDER BY`, so SQLite returns rows in storage order (roughly insertion order). Determinism doesn't matter for the final state — every indexable note ends up embedded.
 
-**Resume across restarts**: free, because progress is the disk state, not a counter. After a restart the indexer re-enters scan mode (flag still false) and the `NOT EXISTS` query naturally skips notes that already have rows. Already-indexed notes from the previous session don't get re-processed.
+**Resume across restarts**: free because progress is the disk state, not a counter. After a restart the indexer re-enters scan mode (flag still false) and the `NOT EXISTS` query naturally skips notes that already have rows. Already-indexed notes from the previous session don't get re-processed.
 
-**Failure handling during the scan**: per-note failures are logged and the note is added to an in-memory skip set for the rest of the session — no retry loop, no log flood. The skip set is **not** persisted, so the next process restart retries the previously-failed notes.
+**Failure handling during the scan**: per-note failures are logged, and the note is added to an in-memory skip set for the rest of the session — no retry loop, no log flood. The skip set is **not** persisted, so the next process restart retries the previously failed notes.
 
 Once the scan completes, the indexer never sweeps the notes table again. A note that failed during the scan only gets re-tried if (a) the user edits it (the change feed picks it up), or (b) the model id changes (full re-scan). It will not be retried just because time passed.
 
 Per note, the title is injected (doubled) into chunk 0. Without this, notes whose body is just an attachment link would never match title-anchored queries.
 
-The first tick fires fire-and-forget at startup so the model load doesn't block the splash screen. A model id change (e.g. switching providers) wipes the index, clears the scan flag, and rebuilds.
+The first tick fires fire-and-forget at startup, so the model load doesn't block the splash screen. A model id change (e.g. switching providers) wipes the index, clears the scan flag, and rebuilds.
 
 ## Chunking
 
