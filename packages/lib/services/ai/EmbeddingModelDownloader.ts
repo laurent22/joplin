@@ -4,34 +4,15 @@ import shim from '../../shim';
 
 const logger = Logger.create('EmbeddingModelDownloader');
 
-// Handles downloading the local embedding model on first use and caching it
-// under the user's profile. The model itself is too large to ship with the
-// desktop installer (~140 MB), so we download it lazily the first time the
-// user enables AI.
-//
-// Cache layout (under `${cacheDir}/ai/embedding-models/`):
-//
-//   multilingual-e5-small/
-//     config.json
-//     model_quantized.onnx
-//     sentencepiece.bpe.model
-//     special_tokens_map.json
-//     tokenizer.json
-//     tokenizer_config.json
-//
-// The model directory is created by extracting the tarball published as a
-// release asset in https://github.com/joplinapp/embedding-models. Each release
-// uses the model name as both the tag and the archive filename, so the
-// download URL is fully determined by the model id.
+// Downloads the local embedding model on first use and caches it under
+// ${cacheDir}/ai/embedding-models/<archiveName>/. The model is too large
+// (~140 MB) to ship with the installer.
 
 export interface ModelDescriptor {
-	// Stable identifier the indexer stores in note_embeddings_meta.model_id.
-	// When this changes, EmbeddingIndexer.handleModelChange() wipes the index.
+	// Stored alongside each chunk; changing it triggers a full re-index.
 	id: string;
-	// File name (without `.tar.gz`) that matches the GitHub release tag AND
-	// the top-level directory inside the archive.
+	// Base name of the tarball and the cache subdir.
 	archiveName: string;
-	// Public URL the tarball is downloaded from.
 	downloadUrl: string;
 }
 
@@ -42,10 +23,8 @@ export const MULTILINGUAL_E5_SMALL: ModelDescriptor = {
 };
 
 export interface DownloadProgress {
-	// Bytes received so far. May be partial if the server doesn't advertise
-	// Content-Length (rare with GitHub Releases, but defensive).
 	bytesDownloaded: number;
-	// Total bytes if known, else null. Use to compute a percentage when set.
+	// Currently always null — shim.fetchBlob doesn't surface Content-Length.
 	totalBytes: number | null;
 }
 
@@ -63,27 +42,17 @@ const archivePath = (model: ModelDescriptor) =>
 const modelDir = (model: ModelDescriptor) =>
 	`${baseCacheDir()}/${model.archiveName}`;
 
-// Returns the path to the local model directory if it's present and looks
-// usable (the marker file we extract is there). Returns null otherwise.
+// Returns the model dir if config.json (our extraction marker) is present.
 export const localModelPath = async (model: ModelDescriptor): Promise<string | null> => {
 	const dir = modelDir(model);
-	// A successful extract always leaves config.json behind. That's our cheap
-	// "is the model cached?" check — no need to validate every file.
 	const marker = `${dir}/config.json`;
 	const exists = await shim.fsDriver().exists(marker);
 	return exists ? dir : null;
 };
 
-// Tracks in-flight downloads per model so concurrent callers share a single
-// download instead of racing on the same tarball + extract directory. Cleared
-// once the work either resolves or rejects so a later call after a failure can
-// retry from scratch.
+// Single-flight per model id so concurrent callers share one download.
 const inFlight: Map<string, Promise<string>> = new Map();
 
-// Downloads, verifies, and extracts the model if it isn't already on disk.
-// Safe to call repeatedly and from concurrent callers: cache hot → returns
-// immediately; cache cold → first caller does the work and the rest await
-// the same promise.
 export const ensureModelDownloaded = async (
 	model: ModelDescriptor,
 	options: EnsureOptions = {},
@@ -94,7 +63,7 @@ export const ensureModelDownloaded = async (
 	const pending = inFlight.get(model.id);
 	if (pending) return pending;
 
-	// eslint-disable-next-line promise/prefer-await-to-then -- .finally is the natural fit here: we need cleanup to run on both resolve and reject, without inverting the caller-facing await chain
+	// eslint-disable-next-line promise/prefer-await-to-then -- .finally cleans up on both resolve and reject without inverting the caller's await chain
 	const work = runDownload(model, options).finally(() => {
 		inFlight.delete(model.id);
 	});
@@ -113,34 +82,28 @@ const runDownload = async (
 	const tarPath = archivePath(model);
 	const targetDir = modelDir(model);
 
-	// Wipe any stale half-downloaded tarball or partially-extracted directory
-	// left over from a previous failed attempt.
+	// Wipe any stale partial state from a previous failed attempt.
 	if (await fsDriver.exists(tarPath)) await fsDriver.remove(tarPath);
 	if (await fsDriver.exists(targetDir)) await fsDriver.remove(targetDir);
 
 	logger.info(`Downloading embedding model from ${model.downloadUrl}`);
 	await downloadWithProgress(model.downloadUrl, tarPath, options.onProgress);
 
-	// The published tarball stores files at the archive root (no top-level
-	// directory) so we have to create the target dir ourselves and extract
-	// into it. If we extracted into cacheDir the model files would spill into
-	// the cache root and clobber any sibling model.
+	// Files in the tarball sit at the archive root (no wrapping dir), so we
+	// create the target ourselves to avoid spilling into the cache root.
 	logger.info(`Extracting embedding model into ${targetDir}`);
 	await fsDriver.mkdir(targetDir);
 	await fsDriver.tarExtract({ file: tarPath, cwd: targetDir });
 
-	// Sanity check: after extraction the archive directory should exist with
-	// the marker file in place. If not, the tarball was malformed.
 	const verified = await localModelPath(model);
 	if (!verified) {
 		throw new Error(`Embedding model archive did not extract as expected (missing ${targetDir}/config.json)`);
 	}
 
-	// Tarball is no longer needed once extracted.
 	try {
 		await fsDriver.remove(tarPath);
 	} catch (error) {
-		// Non-fatal — the next download attempt will clean it up.
+		// Non-fatal — next download attempt will clean it up.
 		logger.warn(`Failed to delete model archive at ${tarPath}: ${error.message ?? error}`);
 	}
 
@@ -152,17 +115,9 @@ const downloadWithProgress = async (
 	destPath: string,
 	onProgress?: ProgressCallback,
 ): Promise<void> => {
-	// shim.fetchBlob streams the body straight to disk and handles redirects
-	// (GitHub Releases redirects to S3, so following redirects is mandatory).
-	// We pass a minimal downloadController so the underlying node http code
-	// hands us each chunk as it arrives — that's our progress signal.
-	//
-	// The timeout is per-socket-idle (not total), so a 60s value means "fail
-	// after 60s of silence" — fine for a multi-minute download as long as
-	// data keeps flowing. Without it, shim.fetchBlob defaults to no timeout
-	// and a stalled connection (captive portal, dropped TCP traffic, hung
-	// proxy) would block forever and freeze every concurrent caller waiting
-	// on the shared in-flight promise.
+	// 60s is per-socket-idle, not total — fail after silence, fine while
+	// data keeps flowing. Without it a stalled connection would block every
+	// concurrent caller forever via the shared in-flight promise.
 	const downloadController = onProgress ? makeProgressController(onProgress) : undefined;
 	const response = await shim.fetchBlob(url, {
 		path: destPath,
@@ -177,13 +132,10 @@ const downloadWithProgress = async (
 	}
 };
 
-// Minimal downloadController shape that conforms to the contract exercised by
-// shim-init-node's fetchBlob (only `handleChunk(request)` is called). We don't
-// care about the size-limit fields the real LimitedDownloadController uses —
-// they're set internally by callers that need them.
+// Minimal shape that matches what shim-init-node's fetchBlob actually calls
+// on a downloadController — only handleChunk is exercised here.
 const makeProgressController = (onProgress: ProgressCallback) => {
 	let bytesDownloaded = 0;
-	const totalBytes: number | null = null;
 	return {
 		totalBytes: 0,
 		imagesCount: 0,
@@ -191,16 +143,16 @@ const makeProgressController = (onProgress: ProgressCallback) => {
 		maxImagesCount: 0,
 		printStats: () => { /* no-op */ },
 		limitMessage: () => '',
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- DownloadChunk type isn't re-exported; we read only .length
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- DownloadChunk type isn't re-exported; we only read .length
 		handleChunk: (_request: unknown) => (chunk: any) => {
 			bytesDownloaded += chunk.length ?? 0;
-			onProgress({ bytesDownloaded, totalBytes });
+			onProgress({ bytesDownloaded, totalBytes: null });
 		},
 	};
 };
 
-// Clears the cached model. Used for the future "re-download" path and to
-// reclaim disk space when AI is disabled and the user wants a clean slate.
+// Wipes the cached model. Public for use by a future "re-download" action;
+// also covered by tests as the cleanup primitive.
 export const removeCachedModel = async (model: ModelDescriptor): Promise<void> => {
 	const fsDriver = shim.fsDriver();
 	const dir = modelDir(model);

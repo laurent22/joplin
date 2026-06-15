@@ -12,25 +12,15 @@ import {
 const logger = Logger.create('LocalEmbeddingProvider');
 
 // Runs the bundled multilingual-e5-small model locally via onnxruntime-node.
-// Tokenization is delegated to @xenova/transformers (AutoTokenizer); inference
-// runs through shim.onnxRuntime() so non-desktop builds (mobile, cli) that
-// haven't wired ONNX in degrade cleanly instead of crashing on require().
-//
-// e5 models expect inputs prefixed with "passage: " (for documents being
-// indexed) or "query: " (for search queries). For v1 we always use "passage:"
-// because this provider only feeds the indexer. When PR D adds search,
-// callers will provide pre-prefixed text or we'll add an `embedQuery()`
-// method — whichever fits the API best.
+// Tokenization is delegated to @xenova/transformers; inference runs through
+// shim.onnxRuntime() so non-desktop builds without ONNX wired in degrade
+// cleanly instead of crashing on require().
 
-// Cap ONNX thread count so background indexing doesn't peg every core on the
-// user's machine. 2 threads is a good compromise: noticeably faster than 1
-// without making the laptop fans spin during a re-index.
+// Capped to keep background indexing from pegging every core.
 const INTRA_OP_NUM_THREADS = 2;
 
-// e5-small returns 384-dim vectors. Hard-coded because the sqlite-vec table
-// dimension is fixed at first creation and we need to match it. If we ever
-// switch model, modelId changes too and the indexer rebuilds from scratch
-// against the new dimension.
+// Fixed at the model's known output size — the sqlite-vec table dimension
+// is set on first create() and must match.
 const E5_SMALL_DIMENSION = 384;
 
 interface OnnxSession {
@@ -83,10 +73,8 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 	private initPromise_: Promise<void> | null = null;
 	private session_: OnnxSession | null = null;
 	private tokenizer_: Tokenizer | null = null;
-	// `downloading` is set while we're inside ensureModelDownloaded(), so the
-	// UI can show progress without polling the file system mid-download.
-	// 'downloaded' once we've seen the marker on disk; reverts to whatever
-	// the on-disk check returns if the cache is later wiped.
+	// Set while we're inside ensureModelDownloaded() so the status panel can
+	// distinguish "downloading" from "not started" without polling disk.
 	private downloadStatus_: ProviderModelDownloadStatus | null = null;
 
 	public constructor(options: LocalEmbeddingProviderOptions = {}) {
@@ -109,9 +97,8 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 
 		await this.ensureInitialised();
 
-		// e5 is trained with asymmetric prefixes — "passage: " for indexed
-		// documents, "query: " for search inputs. Mixing them up doesn't
-		// crash but does measurably hurt retrieval quality.
+		// e5 is trained with asymmetric prefixes — "passage: " for documents,
+		// "query: " for searches. Mixing them up measurably hurts retrieval.
 		const prefixed = texts.map(t => `${prefix}${t}`);
 
 		const tokenized = this.tokenizer_!(prefixed, {
@@ -128,11 +115,9 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 			input_ids: inputIds,
 			attention_mask: attentionMask,
 		};
-		// e5 was exported expecting token_type_ids as an input even though
-		// XLM-RoBERTa only ever uses a single segment. transformers.js
-		// doesn't emit it for XLM-R, so we synthesise a zero tensor with the
-		// same shape — that's what the model would see for any single-segment
-		// input anyway.
+		// e5's ONNX export declares token_type_ids as a required input even
+		// though XLM-RoBERTa is single-segment. transformers.js doesn't emit
+		// it, so we synthesise a zero tensor when the session asks for one.
 		if (this.session_!.inputNames?.includes('token_type_ids')) {
 			const ttiData = tokenized.token_type_ids?.data
 				?? new BigInt64Array(tokenized.input_ids.data.length);
@@ -151,9 +136,8 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 
 	private async ensureInitialised(): Promise<void> {
 		if (this.session_ && this.tokenizer_) return;
-		// Clear initPromise_ on rejection so a transient failure (e.g. a
-		// dropped download) can be retried on the next call instead of every
-		// future call inheriting the same rejected promise.
+		// Drop the cached promise on rejection so a transient failure can be
+		// retried — otherwise every future caller inherits the failed promise.
 		// eslint-disable-next-line promise/prefer-await-to-then -- await would need a wrapper to keep the single-flight cache shape
 		this.initPromise_ ??= this.initialise().catch(error => {
 			this.initPromise_ = null;
@@ -168,8 +152,8 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 			throw new Error('ONNX runtime is not available. Local embeddings require the desktop build.');
 		}
 
-		// Full-override path used by unit tests: skip disk + transformers.js
-		// entirely so the test runner doesn't need a real model directory.
+		// Test seam: with both overrides supplied, skip the disk + ESM-import
+		// paths entirely.
 		if (this.overrides_?.onnxRuntime && this.overrides_?.tokenizer) {
 			this.session_ = await ort.InferenceSession.create('', {});
 			this.tokenizer_ = this.overrides_.tokenizer;
@@ -196,20 +180,15 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 			this.downloadStatus_ = 'downloaded';
 			return dir;
 		} catch (error) {
-			// On failure, drop the in-memory state so the next probe reflects
-			// the real on-disk situation (cache may be empty, or a stale
-			// partial may have been wiped by runDownload's cleanup).
 			this.downloadStatus_ = null;
 			throw error;
 		}
 	}
 
 	public async modelDownloadStatus(): Promise<ProviderModelDownloadStatus> {
-		// In-flight download wins: the file system check would say "not
-		// started" until the tarball lands and gets extracted.
+		// In-flight download wins — the on-disk check still says "not started"
+		// while the tarball is being fetched.
 		if (this.downloadStatus_ === 'downloading') return 'downloading';
-		// On-disk marker is the source of truth for the steady state, so we
-		// notice an externally-wiped cache (manual rm or removeCachedModel).
 		const dir = await localModelPath(this.model_);
 		if (dir) {
 			this.downloadStatus_ = 'downloaded';
@@ -224,21 +203,16 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 
 	private async loadTokenizer(modelDir: string): Promise<Tokenizer> {
 		if (this.overrides_?.tokenizer) return this.overrides_.tokenizer;
-		// transformers.js is an ESM-only package, so we can't `require()` it
-		// from this CommonJS module. A plain `await import()` is what we want
-		// but TypeScript rewrites it to `require()` under `module: commonjs`.
-		// `new Function('import(...)')` would also work but the renderer's CSP
-		// forbids unsafe-eval. So we hide the dynamic import in a sibling .js
-		// file that TypeScript can't see (and so can't rewrite).
-		// eslint-disable-next-line @typescript-eslint/no-require-imports -- the .js helper preserves a native ESM import past TS lowering
+		// See dynamicEsmImport.js for why this isn't a plain `await import()`.
+		// eslint-disable-next-line @typescript-eslint/no-require-imports -- see dynamicEsmImport.js
 		const dynamicImport = require('./dynamicEsmImport') as (s: string)=> Promise<{
 			env: { localModelPath: string; allowRemoteModels: boolean };
 			AutoTokenizer: { from_pretrained: (name: string)=> Promise<Tokenizer> };
 		}>;
 		const transformers = await dynamicImport('@xenova/transformers');
-		// Point transformers.js at the parent dir of the extracted model
-		// (so model_id `multilingual-e5-small` resolves to `${modelDir}`),
-		// and disable network fetches so we never silently hit huggingface.co.
+		// transformers.js resolves model_id against env.localModelPath, so we
+		// point it at the parent and pass the model dir name as the id.
+		// allowRemoteModels=false stops it falling back to huggingface.co.
 		transformers.env.localModelPath = `${modelDir}/..`;
 		transformers.env.allowRemoteModels = false;
 		const tokenizer = await transformers.AutoTokenizer.from_pretrained(this.model_.archiveName);

@@ -1,19 +1,12 @@
-// Loads an ESM-only package from a CommonJS context.
-//
-// Tried approaches:
-// 1. `new Function('import(...)')` — blocked by the renderer's CSP
-//    (unsafe-eval forbidden).
-// 2. `await import(specifier)` — TypeScript lowers this to `require()` under
-//    `module: commonjs`, which can't load ESM.
-// 3. `import(specifier)` from a .js file — works in Node, but in Electron's
-//    renderer the import() goes through the browser's module loader, which
-//    can't resolve bare specifiers or transitive node_modules imports
-//    (e.g. transformers.js pulling @huggingface/jinja).
-//
-// The reliable path is Node's own `require()`, which since 22.12 supports
-// loading ESM modules (`require(esm)`) and always uses Node's resolver. This
-// works in both the main and renderer processes when nodeIntegration is on.
-// The repo's engines.node enforces the 22.12+ requirement at install time.
+// Loads ESM-only packages (e.g. @xenova/transformers) from this CJS module.
+// Why this exists:
+// - `await import()` gets lowered to require() by tsc under module:commonjs,
+//   which can't load ESM.
+// - `new Function('import(...)')` is blocked by the renderer's CSP.
+// - `import()` from a .js file uses the browser loader in the renderer,
+//   which can't resolve bare specifiers (e.g. transitive @huggingface/jinja).
+// Node's require() since 22.12 loads ESM transparently using Node's resolver
+// and works in both processes. engines.node enforces the 22.12+ floor.
 module.exports = function dynamicEsmImport(specifier) {
 	return Promise.resolve(require(specifier));
 };

@@ -10,34 +10,26 @@ export type { SearchOptions, SearchQuery, SearchRelevance, SearchResult, SearchS
 
 const logger = Logger.create('SearchService');
 
-// Semantic search over the local embedding index. Used by the plugin API
-// (joplin.ai.search) and, eventually, by core features that want to query
-// the vector index without going through the chat layer.
-//
-// The "relevance" preset is the public contract: it maps to model-specific
-// (k, minScore) values. Plugins target the preset; we own the mapping. When
-// the bundled model changes, we re-tune the table and plugins keep working.
+// Semantic search over the local embedding index.
+// The "relevance" preset is the plugin-facing contract; we own the mapping
+// to model-specific (k, minScore) so plugins survive model changes.
 
 interface RelevanceTuning {
 	k: number;
 	minScore: number;
 }
 
-// Defaults from the spec, calibrated for multilingual-e5-small. When more
-// models are supported, this becomes a per-model map keyed by modelId.
+// Tuned for multilingual-e5-small. Becomes a per-model map when we add more.
 const RELEVANCE_DEFAULTS: Record<SearchRelevance, RelevanceTuning> = {
 	strict: { k: 5, minScore: 0.55 },
 	normal: { k: 10, minScore: 0.40 },
 	loose: { k: 20, minScore: 0.25 },
 };
 
+// vec0 returns L2 distance. Our vectors are L2-normalised, so cosine
+// similarity = 1 − d²/2 exactly. Clamp to handle float drift on self-matches
+// and opposite-vector edges.
 const cosineFromDistance = (distance: number): number => {
-	// vec0 stores its distance as L2 (Euclidean) by default. The vectors we
-	// index are L2-normalised, so the exact relation L2² = 2·(1 − cosine)
-	// holds and we recover cosine similarity as 1 − d²/2. Clamp to [0, 1]
-	// so floating-point slop on perfect-match self-queries doesn't surface
-	// negatives or values above 1 — and so an opposing-vector edge case
-	// (cosine = −1) maps to 0 rather than a negative score.
 	const score = 1 - (distance * distance) / 2;
 	if (score < 0) return 0;
 	if (score > 1) return 1;
@@ -66,14 +58,11 @@ export default class SearchService {
 		if (!queryVectors.length) return [];
 
 		const noteIds = await this.resolveScope(options.scope);
-		// Scope resolved to an explicit empty list (e.g. tag with no notes).
-		// similaritySearch treats an empty noteIds as "search within nothing"
-		// — return early without hitting the vec table.
+		// Empty scope = search nothing (e.g. tag with no notes).
 		if (noteIds && noteIds.length === 0) return [];
 
-		// Merge results across multiple query vectors (the `{ noteId }` query
-		// produces one vector per chunk). Per (noteId, chunkIndex) we keep the
-		// best score seen, then sort and trim to k.
+		// noteId queries produce one vector per chunk; merge by (note, chunk),
+		// keeping the highest score seen.
 		const best = new Map<string, SearchResult>();
 		for (const queryVector of queryVectors) {
 			const hits = await NoteEmbedding.similaritySearch(queryVector, {
@@ -107,15 +96,14 @@ export default class SearchService {
 	): Promise<number[][]> {
 		if ('text' in query) {
 			if (!query.text.trim()) return [];
-			// Use the query-side encoding when the provider exposes one (e5
-			// and friends). Otherwise fall back to the symmetric path.
+			// Asymmetric providers (e5) get better retrieval with embedQuery;
+			// symmetric ones fall back to embed.
 			const embedQuery = provider.embedQuery?.bind(provider) ?? provider.embed.bind(provider);
 			return embedQuery([query.text]);
 		}
 
-		// noteId query: reuse the note's already-indexed chunks as the query
-		// vector(s). Avoids re-embedding (cheap, and matches what the indexer
-		// stored — so the math is symmetric).
+		// Reuse stored vectors so the math stays symmetric and we avoid a
+		// re-embed pass.
 		const vectors = await NoteEmbedding.vectorsByNoteId(query.noteId);
 		if (!vectors.length) {
 			logger.info(`No embeddings indexed for note ${query.noteId} — returning empty result`);

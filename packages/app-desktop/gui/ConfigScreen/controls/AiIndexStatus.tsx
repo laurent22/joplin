@@ -4,9 +4,8 @@ import { _ } from '@joplin/lib/locale';
 import EmbeddingIndexer from '@joplin/lib/services/ai/EmbeddingIndexer';
 import { IndexStatus } from '@joplin/lib/services/ai/types';
 
-// Live status panel rendered under the "Enable AI features" toggle. Polls
-// EmbeddingIndexer.getStatus() while the AI settings page is visible.
-
+// Live status panel under the "Enable AI features" toggle. Polls
+// EmbeddingIndexer.getStatus() while the AI section is visible.
 const POLL_INTERVAL_MS = 2000;
 
 const modelStatusLabel = (s: IndexStatus['modelDownloadStatus']) => {
@@ -33,18 +32,14 @@ const AiIndexStatus = () => {
 	useEffect(() => {
 		let cancelled = false;
 		let timer: ReturnType<typeof setTimeout> | null = null;
-		// Chain polls instead of using setInterval — a fixed-interval timer
-		// would fire while a previous getStatus() was still in flight (e.g.
-		// during model load competing for the renderer thread), letting
-		// requests stack up. Recursive setTimeout pauses the cadence on slow
-		// ticks and resumes cleanly.
+		// Chained setTimeout, not setInterval — keeps polls from stacking up
+		// when getStatus() is slow (e.g. competing with the model load).
 		const tick = async () => {
 			try {
 				const s = await EmbeddingIndexer.instance().getStatus();
 				if (!cancelled) setStatus(s);
 			} catch {
-				// Swallow — the status panel is decorative; we don't want a
-				// transient DB error to crash the settings screen.
+				// Swallow: this panel is decorative.
 			}
 			if (!cancelled) timer = setTimeout(() => void tick(), POLL_INTERVAL_MS);
 		};
