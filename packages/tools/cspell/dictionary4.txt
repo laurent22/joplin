@@ -324,3 +324,5 @@ sentencepiece
 xenova
 pretrained
 huggingface
+stdio
+doesnotexist

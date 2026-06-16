@@ -818,6 +818,83 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.Database,
 		},
 
+		'mcp.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			label: () => _('Enable MCP server'),
+			description: () => _('Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running.'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.search_notes.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow searching notes'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.read_note.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow reading notes'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.list_notebooks.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow listing notebooks'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.list_tags.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow listing tags'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.create_note.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow creating notes'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.update_note.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow updating notes'),
+			storage: SettingStorage.File,
+		},
+
 		theme: {
 			value: Setting.THEME_LIGHT,
 			type: SettingItemType.Int,

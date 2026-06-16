@@ -32,7 +32,7 @@ Primitives 1–3 are required for any of the five target use cases to work. Prim
 | Retrieval helpers (`search`)        | Shipped as `joplin.ai.search()`                                        |
 | Chat helper (`chat`)                | Shipped as `joplin.ai.chat()`                                          |
 | Privacy & cost guardrails           | Shipped (off by default, remote-allow flag, classification, token tally)|
-| MCP server                          | Not started                                                            |
+| MCP server                          | Shipped — HTTP transport on the Web Clipper, six purpose-built tools   |
 
 Implementation detail for the embeddings stack lives in [ai_embeddings.md](ai_embeddings.md).
 
@@ -135,27 +135,28 @@ Enforced at the provider layer so every feature — core or plugin — inherits 
 
 ## 5. MCP server
 
-> Status: not started. Design recorded here for reference.
-
 Joplin runs an optional [Model Context Protocol](https://modelcontextprotocol.io/) server that exposes notes to external AI applications (Claude Desktop, ChatGPT desktop, Cursor, Zed, etc.).
 
 ### Scope
 
-The server exposes a minimal tool surface:
+The server exposes a minimal, purpose-built tool surface — not a 1:1 wrapper around the Data API:
 
-- Search notes
-- Read note by ID
-- Create note
-- Update note
-- List notebooks and tags
+- `search_notes` — keyword search
+- `read_note` — fetch a note with its notebook title and tags
+- `list_notebooks` — flat list of folders with parents
+- `list_tags` — tags with at least one attached note
+- `create_note` — new note in a chosen notebook
+- `update_note` — patch title / body / notebook / todo state
 
 ### Implementation
 
-- Built as a thin protocol adapter on top of the existing Data API.
+- HTTP transport mounted at `/mcp` on the existing Web Clipper service. No second port, no second token.
 - Auth uses the same token model as the Data API.
 - Disabled by default; enabled from the same settings page as the Web Clipper.
-- **Per-tool toggles.** Each MCP tool (search, read, create, update, list, etc.) can be individually enabled or disabled in settings, so users can grant external apps read-only access without exposing write operations.
+- **Per-tool toggles.** Read tools (`search_notes`, `read_note`, `list_notebooks`, `list_tags`) default to on; write tools (`create_note`, `update_note`) default to off, so users grant write access deliberately.
+
+Implementation detail lives in [ai_mcp.md](ai_mcp.md).
 
 ### Why it belongs in this spec
 
-The MCP server is not required for the five target use cases, but it is the cheapest way to make Joplin a first-class participant in the broader AI tool ecosystem without building any chat UI. It also exercises the same note-access surface that internal AI features will need, so the two efforts share infrastructure.
+The MCP server is not required for the five target use cases, but it is the cheapest way to make Joplin a first-class participant in the broader AI tool ecosystem without building any chat UI. Chat handling stays in the host AI app — Joplin is a tool surface, not an LLM consumer in this flow.

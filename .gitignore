@@ -1653,6 +1653,16 @@ packages/lib/services/keychain/KeychainServiceDriver.dummy.js
 packages/lib/services/keychain/KeychainServiceDriver.electron.js
 packages/lib/services/keychain/KeychainServiceDriver.node.js
 packages/lib/services/keychain/KeychainServiceDriverBase.js
+packages/lib/services/mcp/McpServer.test.js
+packages/lib/services/mcp/McpServer.js
+packages/lib/services/mcp/registry.js
+packages/lib/services/mcp/tools/createNote.js
+packages/lib/services/mcp/tools/listNotebooks.js
+packages/lib/services/mcp/tools/listTags.js
+packages/lib/services/mcp/tools/readNote.js
+packages/lib/services/mcp/tools/searchNotes.js
+packages/lib/services/mcp/tools/updateNote.js
+packages/lib/services/mcp/types.js
 packages/lib/services/noteList/checkboxPieCss.js
 packages/lib/services/noteList/defaultLeftToRightListRenderer.js
 packages/lib/services/noteList/defaultListRenderer.js
@@ -1760,6 +1770,7 @@ packages/lib/services/rest/routes/events.js
 packages/lib/services/rest/routes/folders.test.js
 packages/lib/services/rest/routes/folders.js
 packages/lib/services/rest/routes/master_keys.js
+packages/lib/services/rest/routes/mcp.js
 packages/lib/services/rest/routes/notes.test.js
 packages/lib/services/rest/routes/notes.js
 packages/lib/services/rest/routes/ping.js
