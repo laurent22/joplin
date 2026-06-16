@@ -1110,8 +1110,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				// when the note content is updated externally.
 				const offsetBookmarkId = 2;
 				const bookmark = editor.selection.getBookmark(offsetBookmarkId);
-				if (result.html.includes('ink-text') || result.html.includes('ink-space') || result.html.includes('container-outline')) {
+				if (new DOMParser().parseFromString(result.html, 'text/html').querySelector('.ink-text, .ink-space, .container-outline') && !editor.getDoc().head.querySelector('style[data-joplin-onenote-content-style="true"]')) {
 					const styleElement = editor.getDoc().createElement('style');
+					styleElement.setAttribute('data-joplin-onenote-content-style', 'true');
 					styleElement.textContent = '.ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; } .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; font-weight: normal; }';
 					editor.getDoc().head.appendChild(styleElement);
 				}
@@ -1665,4 +1666,3 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 };
 
 export default forwardRef(TinyMCE);
-
