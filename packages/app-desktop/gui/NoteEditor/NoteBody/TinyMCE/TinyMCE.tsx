@@ -1112,8 +1112,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 				const bookmark = editor.selection.getBookmark(offsetBookmarkId);
 
 				// This is a workaround to inject missing ink style for OneNote imported notes.
-				// See https://github.com/laurent22/joplin/pull/15681 for more details.
-				if (new DOMParser().parseFromString(result.html, 'text/html').querySelector('.ink-text, .ink-space, .container-outline') && !editor.getDoc().head.querySelector('style[data-joplin-onenote-content-style="true"]')) {
+				// See https://github.com/laurent22/joplin/issues/15578 for more details.
+				const hasOneNoteInkContentStyle = !!editor.getDoc().head.querySelector('style[data-joplin-onenote-content-style="true"]');
+				if (!hasOneNoteInkContentStyle && new DOMParser().parseFromString(result.html, 'text/html').querySelector('.ink-text, .ink-space, .container-outline')) {
 					const styleElement = editor.getDoc().createElement('style');
 					styleElement.setAttribute('data-joplin-onenote-content-style', 'true');
 					styleElement.textContent = '.ink-text, .ink-space { display: inline-block; position: relative; vertical-align: bottom; } .container-outline { font-family: Calibri, sans-serif; font-size: 6pt; font-weight: normal; }';
