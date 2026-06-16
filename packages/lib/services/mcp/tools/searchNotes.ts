@@ -7,14 +7,15 @@ interface Input {
 	limit?: number;
 }
 
-const FIELDS = ['id', 'title', 'parent_id', 'updated_time'];
-const DEFAULT_LIMIT = 20;
-const MAX_LIMIT = 100;
+const fields = ['id', 'title', 'parent_id', 'updated_time', 'body'];
+const defaultLimit = 20;
+const maxLimit = 100;
+const snippetChars = 240;
 
 const tool: McpTool = {
 	id: 'search_notes',
 	description: [
-		'Search notes. Returns a ranked list of matches with id, title, notebook id, and updated_time. Use this to find notes before reading them.',
+		'Search notes. Returns a ranked list of matches with id, title, notebook id, updated_time, and a short snippet anchored on the keyword match. The snippet often answers the question without a follow-up read_note call.',
 		'',
 		'The query supports plain keywords and Joplin search filters. Combine filters with spaces (AND); prefix with - to negate.',
 		'',
@@ -43,7 +44,7 @@ const tool: McpTool = {
 		type: 'object',
 		properties: {
 			query: { type: 'string', description: 'Search query. See the tool description for the full filter syntax.' },
-			limit: { type: 'integer', description: 'Maximum number of results to return.', minimum: 1, maximum: MAX_LIMIT, default: DEFAULT_LIMIT },
+			limit: { type: 'integer', description: 'Maximum number of results to return.', minimum: 1, maximum: maxLimit, default: defaultLimit },
 		},
 		required: ['query'],
 	},
@@ -52,18 +53,49 @@ const tool: McpTool = {
 			return { content: [{ type: 'text', text: 'Missing "query" parameter' }], isError: true };
 		}
 
-		const limit = Math.min(Math.max(input.limit ?? DEFAULT_LIMIT, 1), MAX_LIMIT);
-		const { notes } = await SearchEngineUtils.notesForQuery(input.query, false, { fields: FIELDS });
+		const limit = Math.min(Math.max(input.limit ?? defaultLimit, 1), maxLimit);
+		const { notes } = await SearchEngineUtils.notesForQuery(input.query, false, { fields });
+
+		// Pull keywords out of the query so we can anchor the snippet near a
+		// match. Filters like `notebook:"X"` aren't useful for that.
+		const keywords = input.query
+			.split(/\s+/)
+			.filter(t => t && !t.includes(':') && !t.startsWith('-'))
+			.map(t => t.replace(/^["*]+|["*]+$/g, '').toLowerCase())
+			.filter(Boolean);
+
 		const results = notes.slice(0, limit).map((n: NoteEntity) => ({
 			id: n.id,
 			title: n.title,
 			notebook_id: n.parent_id,
 			updated_time: n.updated_time,
+			snippet: makeSnippet(n.body ?? '', keywords),
 		}));
 
 		const payload = { results, total: results.length };
 		return { content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }] };
 	},
+};
+
+const makeSnippet = (body: string, keywords: string[]) => {
+	const normalised = body.replace(/\s+/g, ' ').trim();
+	if (!normalised) return '';
+	if (normalised.length <= snippetChars) return normalised;
+
+	let anchor = -1;
+	const lower = normalised.toLowerCase();
+	for (const kw of keywords) {
+		const i = lower.indexOf(kw);
+		if (i >= 0) { anchor = i; break; }
+	}
+
+	if (anchor < 0) return `${normalised.slice(0, snippetChars).trimEnd()}…`;
+
+	const start = Math.max(0, anchor - Math.floor(snippetChars / 3));
+	const end = Math.min(normalised.length, start + snippetChars);
+	const prefix = start > 0 ? '…' : '';
+	const suffix = end < normalised.length ? '…' : '';
+	return `${prefix}${normalised.slice(start, end).trim()}${suffix}`;
 };
 
 export default tool;

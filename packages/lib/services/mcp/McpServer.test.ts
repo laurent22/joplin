@@ -2,21 +2,26 @@ import Setting from '../../models/Setting';
 import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import Tag from '../../models/Tag';
-import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import SearchEngine from '../search/SearchEngine';
+import { db, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import McpServer from './McpServer';
 import { McpProtocolVersion } from './types';
 
-const ALL_TOOL_SETTINGS = [
+const allToolSettings = [
 	'mcp.tool.search_notes.enabled',
+	'mcp.tool.semantic_search_notes.enabled',
 	'mcp.tool.read_note.enabled',
 	'mcp.tool.list_notebooks.enabled',
 	'mcp.tool.list_tags.enabled',
 	'mcp.tool.create_note.enabled',
 	'mcp.tool.update_note.enabled',
+	'mcp.tool.delete_note.enabled',
+	'mcp.tool.manage_tags.enabled',
+	'mcp.tool.create_notebook.enabled',
 ];
 
 const enableAllTools = () => {
-	for (const s of ALL_TOOL_SETTINGS) Setting.setValue(s, true);
+	for (const s of allToolSettings) Setting.setValue(s, true);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- test helper unwraps MCP text payloads
@@ -114,18 +119,160 @@ describe('McpServer', () => {
 		expect(response.result.isError).toBe(true);
 	});
 
-	test('list_notebooks returns id title and parent_id', async () => {
+	test('list_notebooks returns id title parent_id and note_count', async () => {
 		const parent = await Folder.save({ title: 'Parent' });
 		const child = await Folder.save({ title: 'Child', parent_id: parent.id });
+		await Note.save({ title: 'n1', parent_id: child.id });
+		await Note.save({ title: 'n2', parent_id: child.id });
 
 		const response = await McpServer.instance().handleRequest({
 			jsonrpc: '2.0', id: 1, method: 'tools/call',
 			params: { name: 'list_notebooks', arguments: {} },
 		});
 		const payload = parseToolResult(response.result);
+		const parentEntry = payload.notebooks.find((n: { id: string }) => n.id === parent.id);
 		const childEntry = payload.notebooks.find((n: { id: string }) => n.id === child.id);
 		expect(childEntry.parent_id).toBe(parent.id);
-		expect(payload.notebooks.length).toBe(2);
+		expect(childEntry.note_count).toBe(2);
+		expect(parentEntry.note_count).toBe(0);
+	});
+
+	test('search_notes returns a snippet anchored on the keyword', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const body = `${'lorem '.repeat(60)}pet sitters ${'ipsum '.repeat(60)}`;
+		await Note.save({ title: 'Recommendations', body, parent_id: folder.id });
+
+		SearchEngine.instance().setDb(db());
+		await SearchEngine.instance().syncTables();
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'search_notes', arguments: { query: 'sitters' } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.results.length).toBe(1);
+		expect(payload.results[0].snippet).toMatch(/pet sitters/);
+		expect(payload.results[0].snippet.length).toBeLessThan(body.length);
+	});
+
+	test('read_note pages the body when max_chars is set', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const body = '0123456789';
+		const note = await Note.save({ title: 'Slice', body, parent_id: folder.id });
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_note', arguments: { id: note.id, offset: 2, max_chars: 4 } },
+		});
+		const payload = parseToolResult(response.result);
+		expect(payload.body).toBe('2345');
+		expect(payload.body_offset).toBe(2);
+		expect(payload.body_length).toBe(10);
+		expect(payload.has_more).toBe(true);
+	});
+
+	test('delete_note moves a note to trash', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const note = await Note.save({ title: 'Doomed', parent_id: folder.id });
+
+		await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'delete_note', arguments: { id: note.id } },
+		});
+
+		const reloaded = await Note.load(note.id);
+		expect(reloaded.deleted_time).toBeGreaterThan(0);
+	});
+
+	test('manage_tags adds and removes tags by title', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const note = await Note.save({ title: 'Tagged', parent_id: folder.id });
+
+		await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'manage_tags', arguments: { note_id: note.id, add: ['alpha', 'beta'] } },
+		});
+		let tags = await Tag.tagsByNoteId(note.id);
+		expect(tags.map(t => t.title).sort()).toEqual(['alpha', 'beta']);
+
+		await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'manage_tags', arguments: { note_id: note.id, remove: ['alpha'] } },
+		});
+		tags = await Tag.tagsByNoteId(note.id);
+		expect(tags.map(t => t.title)).toEqual(['beta']);
+	});
+
+	test('create_notebook creates a notebook under a parent', async () => {
+		const parent = await Folder.save({ title: 'Parent' });
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'create_notebook', arguments: { title: 'Child', parent_id: parent.id } },
+		});
+		const payload = parseToolResult(response.result);
+		const reloaded = await Folder.load(payload.id);
+		expect(reloaded.title).toBe('Child');
+		expect(reloaded.parent_id).toBe(parent.id);
+	});
+
+	test('update_note append adds text to the existing body', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const note = await Note.save({ title: 't', body: 'start', parent_id: folder.id });
+
+		await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'update_note', arguments: { id: note.id, append: '-end' } },
+		});
+
+		const reloaded = await Note.load(note.id);
+		expect(reloaded.body).toBe('start-end');
+	});
+
+	test('update_note replace_text fails on ambiguous match', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const note = await Note.save({ title: 't', body: 'foo bar foo', parent_id: folder.id });
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'update_note', arguments: { id: note.id, replace_text: { find: 'foo', replace: 'baz' } } },
+		});
+		expect(response.result.isError).toBe(true);
+		const reloaded = await Note.load(note.id);
+		expect(reloaded.body).toBe('foo bar foo');
+	});
+
+	test('update_note replace_text fails when find is missing', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const note = await Note.save({ title: 't', body: 'hello', parent_id: folder.id });
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'update_note', arguments: { id: note.id, replace_text: { find: 'world', replace: 'x' } } },
+		});
+		expect(response.result.isError).toBe(true);
+	});
+
+	test('update_note replace_text replaces a unique match', async () => {
+		const folder = await Folder.save({ title: 'F' });
+		const note = await Note.save({ title: 't', body: 'hello world', parent_id: folder.id });
+
+		await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'update_note', arguments: { id: note.id, replace_text: { find: 'world', replace: 'there' } } },
+		});
+
+		const reloaded = await Note.load(note.id);
+		expect(reloaded.body).toBe('hello there');
+	});
+
+	test('semantic_search_notes returns a clear error when AI is off', async () => {
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'semantic_search_notes', arguments: { query: 'anything' } },
+		});
+		expect(response.result.isError).toBe(true);
+		expect(response.result.content[0].text).toMatch(/embedding|AI/);
 	});
 
 	test('create_note creates a note in the chosen notebook', async () => {

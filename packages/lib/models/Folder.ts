@@ -94,6 +94,20 @@ export default class Folder extends BaseItem {
 		return r ? r.total : 0;
 	}
 
+	// Returns a map of folder id → number of indexable notes (excluding trash
+	// and conflicts). Folders with zero notes are omitted from the map.
+	public static async noteCountsByFolderId() {
+		const rows = await this.db().selectAll<{ parent_id: string; total: number }>(
+			`SELECT parent_id, count(*) as total
+			 FROM notes
+			 WHERE is_conflict = 0 AND (deleted_time IS NULL OR deleted_time = 0)
+			 GROUP BY parent_id`,
+		);
+		const counts: Record<string, number> = {};
+		for (const r of rows) counts[r.parent_id] = r.total;
+		return counts;
+	}
+
 	public static markNotesAsConflict(parentId: string) {
 		const query = Database.updateQuery('notes', { is_conflict: 1 }, { parent_id: parentId });
 		return this.db().exec(query);

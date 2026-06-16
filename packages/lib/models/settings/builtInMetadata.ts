@@ -825,7 +825,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'mcp',
 			appTypes: [AppType.Desktop],
 			label: () => _('Enable MCP server'),
-			description: () => _('Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running.'),
+			description: () => _('Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.'),
 			storage: SettingStorage.File,
 		},
 
@@ -892,6 +892,50 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 			show: (settings) => !!settings['mcp.enabled'],
 			label: () => _('MCP: Allow updating notes'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.delete_note.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow trashing notes'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.manage_tags.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow editing tags on notes'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.create_notebook.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow creating notebooks'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.semantic_search_notes.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow semantic search of notes'),
 			storage: SettingStorage.File,
 		},
 

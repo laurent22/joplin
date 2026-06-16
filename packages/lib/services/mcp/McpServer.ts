@@ -5,8 +5,8 @@ import { JsonRpcRequest, JsonRpcResponse, JsonRpcErrorCodes, McpProtocolVersion 
 
 const logger = Logger.create('McpServer');
 
-const SERVER_NAME = 'joplin-mcp';
-const SERVER_VERSION = '1.0.0';
+const serverName = 'joplin-mcp';
+const serverVersion = '1.0.0';
 
 // Routes a JSON-RPC request to the matching MCP method. The transport layer
 // (HTTP today, possibly stdio later) calls this with a parsed envelope and
@@ -61,8 +61,8 @@ export default class McpServer {
 				tools: {},
 			},
 			serverInfo: {
-				name: SERVER_NAME,
-				version: SERVER_VERSION,
+				name: serverName,
+				version: serverVersion,
 			},
 		};
 	}
@@ -103,7 +103,7 @@ export default class McpServer {
 		return { jsonrpc: '2.0', id, error: { code, message } };
 	}
 
-	public isEnabled(): boolean {
+	public isEnabled() {
 		return Setting.value('mcp.enabled') as boolean;
 	}
 }
