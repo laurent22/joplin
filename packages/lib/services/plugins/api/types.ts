@@ -186,12 +186,14 @@ export interface ExportContext {
 	/**
 	 * You can attach your own custom data using this property - it will then be passed to each event handler, allowing you to keep state from one event to the next.
 	 */
-	userData?: unknown;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: userData is arbitrary per-plugin state
+	userData?: any;
 }
 
 export interface ImportContext {
 	sourcePath: string;
-	options: Record<string, unknown>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: import options are arbitrary per-importer
+	options: any;
 	warnings: string[];
 }
 
@@ -200,7 +202,8 @@ export interface ImportContext {
 // =================================================================
 
 export interface Script {
-	onStart?(event: Record<string, unknown>): Promise<void>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: event payload shape depends on the host context
+	onStart?(event: any): Promise<void>;
 }
 
 export interface Disposable {
@@ -305,7 +308,8 @@ export interface MenuItem {
 	 * Arguments that should be passed to the command. They will be as rest
 	 * parameters.
 	 */
-	commandArgs?: unknown[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: command args depend on the command
+	commandArgs?: any[];
 
 	/**
 	 * Set to "separator" to create a divider line
@@ -358,12 +362,14 @@ export type ViewHandle = string;
 
 export interface EditorCommand {
 	name: string;
-	value?: unknown;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: command value depends on the command
+	value?: any;
 }
 
 export interface DialogResult {
 	id: ButtonId;
-	formData?: Record<string, unknown>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: form data shape depends on the dialog
+	formData?: any;
 }
 
 export enum ToastType {
@@ -655,7 +661,8 @@ export interface ContentScriptContext {
 }
 
 export interface ContentScriptModuleLoadedEvent {
-	userData?: unknown;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: userData is arbitrary per-plugin state
+	userData?: any;
 }
 
 export interface ContentScriptModule {

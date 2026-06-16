@@ -54,7 +54,8 @@ export default class JoplinData {
 		this.plugin = plugin;
 	}
 
-	private serializeApiBody(body: unknown) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: body can be any serialisable value
+	private serializeApiBody(body: any) {
 		if (typeof body !== 'string') { return JSON.stringify(body); }
 		return body;
 	}
@@ -75,19 +76,23 @@ export default class JoplinData {
 		return path.join('/');
 	}
 
-	public async get(path: Path, query: Record<string, unknown> = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: query/body are arbitrary user-provided values
+	public async get(path: Path, query: any = null) {
 		return this.api_.route(RequestMethod.GET, this.pathToString(path), query);
 	}
 
-	public async post(path: Path, query: Record<string, unknown> = null, body: unknown = null, files: RequestFile[] = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: query/body are arbitrary user-provided values
+	public async post(path: Path, query: any = null, body: any = null, files: RequestFile[] = null) {
 		return this.api_.route(RequestMethod.POST, this.pathToString(path), query, this.serializeApiBody(body), files);
 	}
 
-	public async put(path: Path, query: Record<string, unknown> = null, body: unknown = null, files: RequestFile[] = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: query/body are arbitrary user-provided values
+	public async put(path: Path, query: any = null, body: any = null, files: RequestFile[] = null) {
 		return this.api_.route(RequestMethod.PUT, this.pathToString(path), query, this.serializeApiBody(body), files);
 	}
 
-	public async delete(path: Path, query: Record<string, unknown> = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: query/body are arbitrary user-provided values
+	public async delete(path: Path, query: any = null) {
 		return this.api_.route(RequestMethod.DELETE, this.pathToString(path), query);
 	}
 

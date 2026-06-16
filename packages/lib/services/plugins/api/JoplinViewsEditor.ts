@@ -260,7 +260,8 @@ export default class JoplinViewsEditors {
 	/**
 	 * See [[JoplinViewPanels]]
 	 */
-	public postMessage(handle: ViewHandle, message: unknown): void {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: messages exchanged with webview can be of any serialisable type
+	public postMessage(handle: ViewHandle, message: any): void {
 		return this.controller(handle).postMessage(message);
 	}
 
