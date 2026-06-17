@@ -1,4 +1,4 @@
-import { Client } from 'ldapts';
+import { Client, EqualityFilter } from 'ldapts';
 import { User } from '../services/database/types';
 import Logger from '@joplin/utils/Logger';
 import { LdapConfig } from './types';
@@ -53,7 +53,7 @@ export default async function ldapLogin(email: string, password: string, user: U
 
 		try {
 			searchResults = await client.search(baseDN, {
-				filter: `(${mailAttribute}=${email})`,
+				filter: new EqualityFilter({ attribute: mailAttribute, value: email }),
 				attributes: ['dn', fullNameAttribute],
 			});
 
