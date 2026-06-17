@@ -22,7 +22,9 @@ const tool: McpTool = {
 	},
 	handler: async (input: Input) => {
 		if (!input.note_id) throw new ToolError('Missing "note_id" parameter');
-		if (!input.add?.length && !input.remove?.length) {
+		const addList = checkStringArray(input.add, 'add');
+		const removeList = checkStringArray(input.remove, 'remove');
+		if (!addList.length && !removeList.length) {
 			throw new ToolError('Pass at least one of "add" or "remove"');
 		}
 
@@ -32,16 +34,16 @@ const tool: McpTool = {
 		}
 
 		const added: string[] = [];
-		for (const title of input.add ?? []) {
-			const trimmed = (title || '').trim();
+		for (const title of addList) {
+			const trimmed = title.trim();
 			if (!trimmed) continue;
 			await Tag.addNoteTagByTitle(input.note_id, trimmed);
 			added.push(trimmed);
 		}
 
 		const removed: string[] = [];
-		for (const title of input.remove ?? []) {
-			const trimmed = (title || '').trim();
+		for (const title of removeList) {
+			const trimmed = title.trim();
 			if (!trimmed) continue;
 			const tag = await Tag.loadByTitle(trimmed);
 			if (tag) {
@@ -58,6 +60,15 @@ const tool: McpTool = {
 			tags: currentTags.map(t => t.title),
 		};
 	},
+};
+
+const checkStringArray = (value: unknown, paramName: string) => {
+	if (value === undefined || value === null) return [];
+	if (!Array.isArray(value)) throw new ToolError(`"${paramName}" must be an array of strings`);
+	for (const item of value) {
+		if (typeof item !== 'string') throw new ToolError(`"${paramName}" must be an array of strings`);
+	}
+	return value as string[];
 };
 
 export default tool;

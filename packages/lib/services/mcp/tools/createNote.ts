@@ -23,7 +23,13 @@ const tool: McpTool = {
 		required: ['title'],
 	},
 	handler: async (input: Input) => {
-		if (!input.title || !input.title.trim()) throw new ToolError('Missing "title" parameter');
+		if (typeof input.title !== 'string' || !input.title.trim()) {
+			throw new ToolError('Missing or invalid "title" parameter');
+		}
+		// `is_todo: 'false'` is otherwise truthy and would silently flip the flag.
+		if (input.is_todo !== undefined && typeof input.is_todo !== 'boolean') {
+			throw new ToolError('"is_todo" must be a boolean');
+		}
 
 		let parentId = input.notebook_id;
 		if (parentId) {
