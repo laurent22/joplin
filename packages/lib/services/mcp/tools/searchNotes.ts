@@ -1,6 +1,6 @@
 import SearchEngineUtils from '../../search/SearchEngineUtils';
 import { NoteEntity } from '../../database/types';
-import { McpTool } from '../types';
+import { McpTool, ToolError } from '../types';
 
 interface Input {
 	query?: string;
@@ -49,9 +49,7 @@ const tool: McpTool = {
 		required: ['query'],
 	},
 	handler: async (input: Input) => {
-		if (!input.query || !input.query.trim()) {
-			return { content: [{ type: 'text', text: 'Missing "query" parameter' }], isError: true };
-		}
+		if (!input.query || !input.query.trim()) throw new ToolError('Missing "query" parameter');
 
 		const limit = Math.min(Math.max(input.limit ?? defaultLimit, 1), maxLimit);
 		const { notes } = await SearchEngineUtils.notesForQuery(input.query, false, { fields });
@@ -72,8 +70,7 @@ const tool: McpTool = {
 			snippet: makeSnippet(n.body ?? '', keywords),
 		}));
 
-		const payload = { results, total: notes.length };
-		return { content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }] };
+		return { results, total: notes.length };
 	},
 };
 

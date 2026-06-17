@@ -10,10 +10,9 @@ const tool: McpTool = {
 	},
 	handler: async () => {
 		const tags = await Tag.allWithNotes();
-		const payload = {
+		return {
 			tags: tags.map(t => ({ id: t.id, title: t.title })),
 		};
-		return { content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }] };
 	},
 };
 

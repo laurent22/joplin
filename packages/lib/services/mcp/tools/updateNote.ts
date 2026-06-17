@@ -1,7 +1,7 @@
 import Note from '../../../models/Note';
 import Folder from '../../../models/Folder';
 import { NoteEntity } from '../../database/types';
-import { McpTool } from '../types';
+import { McpTool, ToolError } from '../types';
 
 interface ReplaceTextOp {
 	find: string;
@@ -54,20 +54,16 @@ const tool: McpTool = {
 		required: ['id'],
 	},
 	handler: async (input: Input) => {
-		if (!input.id) {
-			return { content: [{ type: 'text', text: 'Missing "id" parameter' }], isError: true };
-		}
+		if (!input.id) throw new ToolError('Missing "id" parameter');
 
 		const existing = await Note.load(input.id);
 		if (!existing || existing.is_conflict || (existing.deleted_time && existing.deleted_time > 0)) {
-			return { content: [{ type: 'text', text: `Note not found: ${input.id}` }], isError: true };
+			throw new ToolError(`Note not found: ${input.id}`);
 		}
 
 		if (input.notebook_id) {
 			const folder = await Folder.load(input.notebook_id);
-			if (!folder) {
-				return { content: [{ type: 'text', text: `Notebook not found: ${input.notebook_id}` }], isError: true };
-			}
+			if (!folder) throw new ToolError(`Notebook not found: ${input.notebook_id}`);
 		}
 
 		const patch: NoteEntity = { id: input.id };
@@ -91,15 +87,11 @@ const tool: McpTool = {
 			}
 			if (input.replace_text) {
 				const { find, replace } = input.replace_text;
-				if (!find) {
-					return { content: [{ type: 'text', text: '"replace_text.find" must not be empty' }], isError: true };
-				}
+				if (!find) throw new ToolError('"replace_text.find" must not be empty');
 				const firstIdx = nextBody.indexOf(find);
-				if (firstIdx < 0) {
-					return { content: [{ type: 'text', text: 'replace_text: "find" string not found in body' }], isError: true };
-				}
+				if (firstIdx < 0) throw new ToolError('replace_text: "find" string not found in body');
 				if (nextBody.indexOf(find, firstIdx + 1) >= 0) {
-					return { content: [{ type: 'text', text: 'replace_text: "find" string appears more than once; pass more context to make it unique' }], isError: true };
+					throw new ToolError('replace_text: "find" string appears more than once; pass more context to make it unique');
 				}
 				nextBody = `${nextBody.slice(0, firstIdx)}${replace ?? ''}${nextBody.slice(firstIdx + find.length)}`;
 				bodyChanged = true;
@@ -109,8 +101,7 @@ const tool: McpTool = {
 
 		const saved = await Note.save(patch);
 
-		const payload = { id: saved.id, updated_time: saved.updated_time };
-		return { content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }] };
+		return { id: saved.id, updated_time: saved.updated_time };
 	},
 };
 

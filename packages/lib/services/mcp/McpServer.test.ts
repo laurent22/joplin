@@ -282,6 +282,22 @@ describe('McpServer', () => {
 		expect(reloaded.body).toBe('hello there');
 	});
 
+	test('handler throwing a plain Error surfaces as JSON-RPC InternalError, not a tool error', async () => {
+		// Forge an internal-bug scenario by passing a clearly invalid id format
+		// straight through; the Note model will throw an internal Error rather
+		// than ToolError when SQL fails on it. (We rely on the dispatcher's
+		// distinction here: ToolError → isError:true, anything else → JSON-RPC error.)
+		jest.spyOn(Note, 'load').mockRejectedValueOnce(new Error('forged internal failure'));
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_note', arguments: { id: 'a'.repeat(32) } },
+		});
+		expect(response.result).toBeUndefined();
+		expect(response.error.code).toBe(-32603);
+		expect(response.error.message).toMatch(/forged internal failure/);
+	});
+
 	test('semantic_search_notes returns a clear error when AI is off', async () => {
 		const response = await McpServer.instance().handleRequest({
 			jsonrpc: '2.0', id: 1, method: 'tools/call',

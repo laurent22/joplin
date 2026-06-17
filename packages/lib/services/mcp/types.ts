@@ -17,11 +17,25 @@ export interface ToolCallResult {
 	isError?: boolean;
 }
 
+// Handlers return their raw payload (any JSON-serialisable value) or throw.
+// The dispatcher serialises the payload into MCP content. ToolErrors come back
+// as { isError: true, content: [text] }; any other Error bubbles up to the
+// JSON-RPC layer as an InternalError so the MCP client sees it.
 export interface McpTool {
 	id: string;
 	description: string;
 	inputSchema: JsonSchema;
-	handler: (input: ToolInput)=> Promise<ToolCallResult>;
+	handler: (input: ToolInput)=> Promise<unknown>;
+}
+
+// Throw this from a tool handler for failure modes the LLM should see and
+// recover from (note not found, ambiguous match, missing parameter, etc.).
+// Plain Errors are treated as internal bugs and surface as JSON-RPC errors.
+export class ToolError extends Error {
+	public constructor(message: string) {
+		super(message);
+		this.name = 'ToolError';
+	}
 }
 
 export interface JsonRpcRequest {

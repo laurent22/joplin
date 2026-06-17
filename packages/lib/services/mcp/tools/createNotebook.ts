@@ -1,5 +1,5 @@
 import Folder from '../../../models/Folder';
-import { McpTool } from '../types';
+import { McpTool, ToolError } from '../types';
 
 interface Input {
 	title?: string;
@@ -18,15 +18,11 @@ const tool: McpTool = {
 		required: ['title'],
 	},
 	handler: async (input: Input) => {
-		if (!input.title || !input.title.trim()) {
-			return { content: [{ type: 'text', text: 'Missing "title" parameter' }], isError: true };
-		}
+		if (!input.title || !input.title.trim()) throw new ToolError('Missing "title" parameter');
 
 		if (input.parent_id) {
 			const parent = await Folder.load(input.parent_id);
-			if (!parent) {
-				return { content: [{ type: 'text', text: `Parent notebook not found: ${input.parent_id}` }], isError: true };
-			}
+			if (!parent) throw new ToolError(`Parent notebook not found: ${input.parent_id}`);
 		}
 
 		const saved = await Folder.save({
@@ -34,8 +30,7 @@ const tool: McpTool = {
 			parent_id: input.parent_id ?? '',
 		}, { userSideValidation: true });
 
-		const payload = { id: saved.id, title: saved.title, parent_id: saved.parent_id || null };
-		return { content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }] };
+		return { id: saved.id, title: saved.title, parent_id: saved.parent_id || null };
 	},
 };
 

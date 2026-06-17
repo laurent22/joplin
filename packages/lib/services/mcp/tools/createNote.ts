@@ -1,6 +1,6 @@
 import Note from '../../../models/Note';
 import Folder from '../../../models/Folder';
-import { McpTool } from '../types';
+import { McpTool, ToolError } from '../types';
 
 interface Input {
 	title?: string;
@@ -23,21 +23,15 @@ const tool: McpTool = {
 		required: ['title'],
 	},
 	handler: async (input: Input) => {
-		if (!input.title || !input.title.trim()) {
-			return { content: [{ type: 'text', text: 'Missing "title" parameter' }], isError: true };
-		}
+		if (!input.title || !input.title.trim()) throw new ToolError('Missing "title" parameter');
 
 		let parentId = input.notebook_id;
 		if (parentId) {
 			const folder = await Folder.load(parentId);
-			if (!folder) {
-				return { content: [{ type: 'text', text: `Notebook not found: ${parentId}` }], isError: true };
-			}
+			if (!folder) throw new ToolError(`Notebook not found: ${parentId}`);
 		} else {
 			const defaultFolder = await Folder.defaultFolder();
-			if (!defaultFolder) {
-				return { content: [{ type: 'text', text: 'No notebook available. Create one first or pass notebook_id.' }], isError: true };
-			}
+			if (!defaultFolder) throw new ToolError('No notebook available. Create one first or pass notebook_id.');
 			parentId = defaultFolder.id;
 		}
 
@@ -48,8 +42,7 @@ const tool: McpTool = {
 			is_todo: input.is_todo ? 1 : 0,
 		});
 
-		const payload = { id: saved.id, title: saved.title, notebook_id: saved.parent_id };
-		return { content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }] };
+		return { id: saved.id, title: saved.title, notebook_id: saved.parent_id };
 	},
 };
 

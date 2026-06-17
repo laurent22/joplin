@@ -1,7 +1,7 @@
 import Logger from '@joplin/utils/Logger';
 import Setting from '../../models/Setting';
 import { allTools, enabledTools, findTool } from './registry';
-import { JsonRpcRequest, JsonRpcResponse, JsonRpcErrorCodes, McpProtocolVersion } from './types';
+import { JsonRpcRequest, JsonRpcResponse, JsonRpcErrorCodes, McpProtocolVersion, ToolCallResult, ToolError } from './types';
 
 const logger = Logger.create('McpServer');
 
@@ -84,7 +84,7 @@ export default class McpServer {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- params are JSON-RPC-shaped
-	private async handleToolsCall(params: any) {
+	private async handleToolsCall(params: any): Promise<ToolCallResult> {
 		if (!params || typeof params.name !== 'string') {
 			throw new InvalidParamsError('Missing or invalid "name" parameter');
 		}
@@ -92,13 +92,21 @@ export default class McpServer {
 		if (!tool) {
 			// "Disabled" vs "unknown" surface differently so the LLM gets actionable feedback.
 			const exists = allTools().some(t => t.id === params.name);
-			return {
-				content: [{ type: 'text', text: exists ? `Tool '${params.name}' is disabled in Joplin settings` : `Unknown tool '${params.name}'` }],
-				isError: true,
-			};
+			return toolErrorResult(exists ? `Tool '${params.name}' is disabled in Joplin settings` : `Unknown tool '${params.name}'`);
 		}
 		const input = params.arguments ?? {};
-		return await tool.handler(input);
+		try {
+			const payload = await tool.handler(input);
+			return {
+				content: [{ type: 'text', text: serialisePayload(payload) }],
+			};
+		} catch (error) {
+			if (error instanceof ToolError) {
+				return toolErrorResult(error.message);
+			}
+			// Internal bug — let it bubble to the JSON-RPC layer as InternalError.
+			throw error;
+		}
 	}
 
 	private successResponse(id: string | number | null, result: unknown): JsonRpcResponse {
@@ -113,3 +121,16 @@ export default class McpServer {
 		return Setting.value('mcp.enabled') as boolean;
 	}
 }
+
+const toolErrorResult = (message: string): ToolCallResult => ({
+	content: [{ type: 'text', text: message }],
+	isError: true,
+});
+
+// MCP content is always text, so we JSON-serialise objects/arrays and pass
+// strings through unchanged. null/undefined collapse to an empty string.
+const serialisePayload = (payload: unknown) => {
+	if (payload === null || payload === undefined) return '';
+	if (typeof payload === 'string') return payload;
+	return JSON.stringify(payload, null, 2);
+};

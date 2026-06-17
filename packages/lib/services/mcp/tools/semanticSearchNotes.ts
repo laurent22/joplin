@@ -1,6 +1,6 @@
 import Note from '../../../models/Note';
 import SearchService from '../../ai/SearchService';
-import { McpTool } from '../types';
+import { McpTool, ToolError } from '../types';
 
 interface Input {
 	query?: string;
@@ -34,54 +34,49 @@ const tool: McpTool = {
 		required: ['query'],
 	},
 	handler: async (input: Input) => {
-		if (!input.query || !input.query.trim()) {
-			return { content: [{ type: 'text', text: 'Missing "query" parameter' }], isError: true };
-		}
-		if (input.notebook_id && input.tag_id) {
-			return { content: [{ type: 'text', text: 'Pass either "notebook_id" or "tag_id", not both' }], isError: true };
-		}
+		if (!input.query || !input.query.trim()) throw new ToolError('Missing "query" parameter');
+		if (input.notebook_id && input.tag_id) throw new ToolError('Pass either "notebook_id" or "tag_id", not both');
 
+		const scope = input.notebook_id
+			? { type: 'folder' as const, folderId: input.notebook_id }
+			: input.tag_id
+				? { type: 'tag' as const, tagId: input.tag_id }
+				: undefined;
+
+		let hits;
 		try {
-			const scope = input.notebook_id
-				? { type: 'folder' as const, folderId: input.notebook_id }
-				: input.tag_id
-					? { type: 'tag' as const, tagId: input.tag_id }
-					: undefined;
-
-			const hits = await SearchService.instance().search({
+			hits = await SearchService.instance().search({
 				query: { text: input.query },
 				scope,
 				relevance: input.relevance ?? 'normal',
 			});
-
-			const noteIds = Array.from(new Set(hits.map(h => h.noteId)));
-			const notes = noteIds.length
-				? await Note.byIds(noteIds, { fields: ['id', 'title', 'parent_id'] })
-				: [];
-			const noteById = new Map(notes.map(n => [n.id, n]));
-
-			const results = hits.map(h => {
-				const note = noteById.get(h.noteId);
-				return {
-					note_id: h.noteId,
-					title: note?.title ?? null,
-					notebook_id: note?.parent_id ?? null,
-					chunk_index: h.chunkIndex,
-					chunk_text: h.chunkText,
-					score: Math.round(h.score * 1000) / 1000,
-				};
-			});
-
-			const payload = { results, total: results.length };
-			return { content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }] };
 		} catch (error) {
-			const message = error instanceof Error
-				? error.message
-				: typeof error === 'string'
-					? error
-					: '';
-			return { content: [{ type: 'text', text: message || 'Semantic search failed' }], isError: true };
+			// SearchService throws when no embedding provider is active — that's
+			// a configuration mistake the LLM should report to the user, not an
+			// internal bug.
+			const message = error instanceof Error ? error.message : 'Semantic search failed';
+			throw new ToolError(message);
 		}
+
+		const noteIds = Array.from(new Set(hits.map(h => h.noteId)));
+		const notes = noteIds.length
+			? await Note.byIds(noteIds, { fields: ['id', 'title', 'parent_id'] })
+			: [];
+		const noteById = new Map(notes.map(n => [n.id, n]));
+
+		const results = hits.map(h => {
+			const note = noteById.get(h.noteId);
+			return {
+				note_id: h.noteId,
+				title: note?.title ?? null,
+				notebook_id: note?.parent_id ?? null,
+				chunk_index: h.chunkIndex,
+				chunk_text: h.chunkText,
+				score: Math.round(h.score * 1000) / 1000,
+			};
+		});
+
+		return { results, total: results.length };
 	},
 };
 

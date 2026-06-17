@@ -1,5 +1,5 @@
 import Note from '../../../models/Note';
-import { McpTool } from '../types';
+import { McpTool, ToolError } from '../types';
 
 interface Input {
 	id?: string;
@@ -16,18 +16,16 @@ const tool: McpTool = {
 		required: ['id'],
 	},
 	handler: async (input: Input) => {
-		if (!input.id) {
-			return { content: [{ type: 'text', text: 'Missing "id" parameter' }], isError: true };
-		}
+		if (!input.id) throw new ToolError('Missing "id" parameter');
 
 		const existing = await Note.load(input.id);
 		if (!existing || existing.is_conflict || (existing.deleted_time && existing.deleted_time > 0)) {
-			return { content: [{ type: 'text', text: `Note not found: ${input.id}` }], isError: true };
+			throw new ToolError(`Note not found: ${input.id}`);
 		}
 
 		await Note.batchDelete([input.id], { toTrash: true });
 
-		return { content: [{ type: 'text', text: JSON.stringify({ id: input.id, trashed: true }, null, 2) }] };
+		return { id: input.id, trashed: true };
 	},
 };
 

@@ -1,6 +1,6 @@
 import Note from '../../../models/Note';
 import Tag from '../../../models/Tag';
-import { McpTool } from '../types';
+import { McpTool, ToolError } from '../types';
 
 interface Input {
 	note_id?: string;
@@ -21,16 +21,14 @@ const tool: McpTool = {
 		required: ['note_id'],
 	},
 	handler: async (input: Input) => {
-		if (!input.note_id) {
-			return { content: [{ type: 'text', text: 'Missing "note_id" parameter' }], isError: true };
-		}
+		if (!input.note_id) throw new ToolError('Missing "note_id" parameter');
 		if (!input.add?.length && !input.remove?.length) {
-			return { content: [{ type: 'text', text: 'Pass at least one of "add" or "remove"' }], isError: true };
+			throw new ToolError('Pass at least one of "add" or "remove"');
 		}
 
 		const note = await Note.load(input.note_id);
 		if (!note || note.is_conflict || (note.deleted_time && note.deleted_time > 0)) {
-			return { content: [{ type: 'text', text: `Note not found: ${input.note_id}` }], isError: true };
+			throw new ToolError(`Note not found: ${input.note_id}`);
 		}
 
 		const added: string[] = [];
@@ -53,13 +51,12 @@ const tool: McpTool = {
 		}
 
 		const currentTags = await Tag.tagsByNoteId(input.note_id);
-		const payload = {
+		return {
 			note_id: input.note_id,
 			added,
 			removed,
 			tags: currentTags.map(t => t.title),
 		};
-		return { content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }] };
 	},
 };
 
