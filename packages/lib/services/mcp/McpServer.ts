@@ -8,6 +8,8 @@ const logger = Logger.create('McpServer');
 const serverName = 'joplin-mcp';
 const serverVersion = '1.0.0';
 
+class InvalidParamsError extends Error {}
+
 // Routes a JSON-RPC request to the matching MCP method. The transport layer
 // (HTTP today, possibly stdio later) calls this with a parsed envelope and
 // gets back a response envelope to write.
@@ -21,15 +23,16 @@ export default class McpServer {
 	}
 
 	public async handleRequest(request: JsonRpcRequest): Promise<JsonRpcResponse | null> {
+		// Per JSON-RPC 2.0: a request without an id field is a notification
+		// (no response). id: null is a real request and must get a response
+		// with id: null, so it isn't a notification.
+		const isNotification = request.id === undefined;
 		const id = request.id ?? null;
 
 		if (request.jsonrpc !== '2.0' || !request.method) {
+			if (isNotification) return null;
 			return this.errorResponse(id, JsonRpcErrorCodes.InvalidRequest, 'Invalid JSON-RPC request');
 		}
-
-		// JSON-RPC notifications (no id) get no response — return null and the
-		// transport drops it.
-		const isNotification = request.id === undefined || request.id === null;
 
 		try {
 			switch (request.method) {
@@ -50,6 +53,9 @@ export default class McpServer {
 		} catch (error) {
 			logger.error(`Error handling method ${request.method}:`, error);
 			if (isNotification) return null;
+			if (error instanceof InvalidParamsError) {
+				return this.errorResponse(id, JsonRpcErrorCodes.InvalidParams, error.message);
+			}
 			return this.errorResponse(id, JsonRpcErrorCodes.InternalError, error.message || 'Internal error');
 		}
 	}
@@ -80,7 +86,7 @@ export default class McpServer {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- params are JSON-RPC-shaped
 	private async handleToolsCall(params: any) {
 		if (!params || typeof params.name !== 'string') {
-			throw new Error('Missing or invalid "name" parameter');
+			throw new InvalidParamsError('Missing or invalid "name" parameter');
 		}
 		const tool = findTool(params.name);
 		if (!tool) {

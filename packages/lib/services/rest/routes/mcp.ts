@@ -24,13 +24,16 @@ export default async function(request: Request) {
 
 	const server = McpServer.instance();
 
-	// JSON-RPC batch: spec allows an array of requests.
+	// JSON-RPC batch: spec allows an array of requests. If every item is a
+	// notification, the server must return nothing (empty body), same as the
+	// single-notification case.
 	if (Array.isArray(payload)) {
 		const responses: JsonRpcResponse[] = [];
 		for (const item of payload) {
 			const r = await server.handleRequest(item as JsonRpcRequest);
 			if (r) responses.push(r);
 		}
+		if (!responses.length) return '';
 		return responses;
 	}
 

@@ -75,7 +75,12 @@ const tool: McpTool = {
 			const payload = { results, total: results.length };
 			return { content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }] };
 		} catch (error) {
-			return { content: [{ type: 'text', text: error.message || 'Semantic search failed' }], isError: true };
+			const message = error instanceof Error
+				? error.message
+				: typeof error === 'string'
+					? error
+					: '';
+			return { content: [{ type: 'text', text: message || 'Semantic search failed' }], isError: true };
 		}
 	},
 };

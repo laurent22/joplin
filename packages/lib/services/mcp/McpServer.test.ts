@@ -75,6 +75,22 @@ describe('McpServer', () => {
 		expect(response.result.content[0].text).toMatch(/disabled/);
 	});
 
+	test('returns InvalidParams for malformed tools/call params', async () => {
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call', params: {},
+		});
+		expect(response.error.code).toBe(-32602);
+	});
+
+	test('responds to id: null requests instead of treating them as notifications', async () => {
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: null, method: 'tools/list',
+		});
+		expect(response).not.toBeNull();
+		expect(response.id).toBeNull();
+		expect(response.result.tools.length).toBeGreaterThan(0);
+	});
+
 	test('returns isError for unknown tools', async () => {
 		const response = await McpServer.instance().handleRequest({
 			jsonrpc: '2.0', id: 1, method: 'tools/call',
@@ -108,7 +124,7 @@ describe('McpServer', () => {
 		expect(payload.tags).toEqual(['important']);
 	});
 
-	test('read_note refuses trashed and conflict notes', async () => {
+	test('read_note refuses trashed notes', async () => {
 		const folder = await Folder.save({ title: 'F' });
 		const trashed = await Note.save({ title: 'Gone', parent_id: folder.id, deleted_time: Date.now() });
 

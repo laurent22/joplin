@@ -72,7 +72,7 @@ const tool: McpTool = {
 			snippet: makeSnippet(n.body ?? '', keywords),
 		}));
 
-		const payload = { results, total: results.length };
+		const payload = { results, total: notes.length };
 		return { content: [{ type: 'text', text: JSON.stringify(payload, null, 2) }] };
 	},
 };
