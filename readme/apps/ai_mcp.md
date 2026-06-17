@@ -11,7 +11,7 @@ Joplin exposes a small, fixed set of tools. Each can be turned on or off individ
 | Tool | What it does | Default |
 |---|---|---|
 | Search notes | Keyword search using Joplin's regular search syntax. | On |
-| Semantic search | Search by meaning, using the [local embeddings index](ai_semantic_search.md). | On |
+| Semantic search | Search by meaning, using the [local embeddings index](https://github.com/laurent22/joplin/blob/dev/readme/apps/ai_semantic_search.md). | On |
 | Read note | Return one note (title, markdown body, notebook, tags). | On |
 | List notebooks | List notebooks with their hierarchy. | On |
 | List tags | List tags. | On |
@@ -25,7 +25,7 @@ The "write" tools default to off so you have to deliberately let an AI app modif
 
 ## Turning it on
 
-The MCP server runs on top of the [Web Clipper service](clipper.md), so the Web Clipper must be running.
+The MCP server runs on top of the [Web Clipper service](https://github.com/laurent22/joplin/blob/dev/readme/apps/clipper.md), so the Web Clipper must be running.
 
 1. Open the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md) and go to **Web Clipper**. Make sure the service is started, and note the port number and authorisation token.
 2. Go to the **MCP** section. Tick **Enable MCP server**.
@@ -67,7 +67,7 @@ Cursor, Zed, and a growing number of editors support MCP. The setup follows the 
 Important to understand:
 
 - An AI app connected via MCP can **read your notes**. Whichever model that app uses (Claude, GPT-4, etc.) may include note content in the prompts it sends to its own cloud provider — that's how it answers your question.
-- This is independent of Joplin's own [AI chat](ai_chat.md) provider. Joplin's chat settings have no effect on what an external AI app does.
+- This is independent of Joplin's own [AI chat](https://github.com/laurent22/joplin/blob/dev/readme/apps/ai_chat.md) provider. Joplin's chat settings have no effect on what an external AI app does.
 - The MCP server only listens on `127.0.0.1`, so other machines on your network can't reach it. The authorisation token guards against other applications on your own machine connecting without your knowledge.
 - Turning on the **write** tools allows the AI app to create, modify, or trash notes. Joplin will not ask you to confirm each write — the AI app may or may not. Leave write tools off unless you trust both the app and the model behind it.
 

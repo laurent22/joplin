@@ -29,7 +29,7 @@ After the initial scan, new and edited notes are picked up within a few minutes.
 There is no dedicated "semantic search" box in Joplin's UI today. Semantic search is exposed in two ways:
 
 - **Plugins** can call `joplin.ai.search()` to look up notes by meaning. The plugin's description tells you whether it uses this.
-- **External AI apps** (Claude Desktop, Cursor, etc.) can use it through the [MCP server](ai_mcp.md), via the `semantic_search_notes` tool.
+- **External AI apps** (Claude Desktop, Cursor, etc.) can use it through the [MCP server](https://github.com/laurent22/joplin/blob/dev/readme/apps/ai_mcp.md), via the `semantic_search_notes` tool.
 
 If you want to try it directly, the MCP server is the easiest path.
 
