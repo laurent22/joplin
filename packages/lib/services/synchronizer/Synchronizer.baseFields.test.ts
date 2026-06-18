@@ -41,7 +41,7 @@ describe('Synchronizer.baseFields', () => {
 		await synchronizerStart();
 
 		// Simulate a previously recorded conflict link
-		await BaseItem.setBaseConflictNoteId(syncTargetId(), note.id, 'some-old-conflict-id');
+		await Note.setBaseConflictNoteId(syncTargetId(), note.id, 'some-old-conflict-id');
 
 		await Note.save({ id: note.id, body: 'body changed' });
 		await synchronizerStart();

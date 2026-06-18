@@ -67,7 +67,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 
 			// Record base (read now, before the rebuild below) and remote. The local
 			// version is already preserved as the conflict note itself.
-			const base = await BaseItem.syncBaseContent(syncTargetId, local.id);
+			const base = await Note.syncBaseContent(syncTargetId, local.id);
 			const remoteNote = remoteContent as NoteEntity;
 			await ConflictNoteState.save({
 				note_id: conflictNote.id,
@@ -108,7 +108,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 
 			// Link after the save above, which rebuilds the sync_items row.
 			if (createdConflictNoteId) {
-				await BaseItem.setBaseConflictNoteId(syncTargetId, local.id, createdConflictNoteId);
+				await Note.setBaseConflictNoteId(syncTargetId, local.id, createdConflictNoteId);
 			}
 
 			if (local.encryption_applied) dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });

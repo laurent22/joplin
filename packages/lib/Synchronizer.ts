@@ -853,7 +853,7 @@ export default class Synchronizer {
 
 								if (local.type_ === BaseModel.TYPE_NOTE) {
 									const note = local as NoteEntity;
-									await BaseItem.saveSyncBaseContent(syncTargetId, note.id, note.body, note.title);
+									await Note.saveSyncBaseContent(syncTargetId, note.id, note.body, note.title);
 								}
 							}
 						}

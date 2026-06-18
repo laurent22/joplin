@@ -14,7 +14,7 @@ export default class ConflictNoteState extends BaseModel {
 	}
 
 	public static modelType() {
-		return BaseModel.TYPE_NOTE;
+		return BaseModel.TYPE_CONFLICT_NOTE_STATE;
 	}
 
 	public static async byNoteId(noteId: string): Promise<ConflictNoteStateEntity> {
