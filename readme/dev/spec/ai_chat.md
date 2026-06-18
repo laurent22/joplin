@@ -1,6 +1,6 @@
 # AI chat
 
-This spec describes how Joplin exposes a generic chat-with-an-LLM capability to plugins and built-in features. It is the first concrete implementation of the **provider abstraction** and **privacy & cost guardrails** primitives from [AI primitives](ai_primitives.md).
+How Joplin exposes a generic chat-with-an-LLM capability to plugins and built-in features. This is the concrete implementation of the **provider abstraction** and **privacy & cost guardrails** primitives — see [ai_primitives.md](ai_primitives.md) for how it fits with the rest.
 
 The goal is not to ship a built-in chat UI — that is left to plugins. The goal is to provide one stable API (`joplin.ai.chat()`) that lets any plugin call a chat model without bundling provider code or asking the user for a second set of API keys.
 

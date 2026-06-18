@@ -1,8 +1,8 @@
-import Setting from './Setting';
+import Setting, { Env } from './Setting';
 import BaseModel from '../BaseModel';
 import shim from '../shim';
 import markdownUtils from '../markdownUtils';
-import { sortedIds, createNTestNotes, expectThrow, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, supportDir, expectNotThrow, simulateReadOnlyShareEnv, msleep, db } from '../testing/test-utils';
+import { sortedIds, createNTestNotes, expectThrow, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, supportDir, expectNotThrow, simulateReadOnlyShareEnv, msleep, db, encryptionService, revisionService } from '../testing/test-utils';
 import Folder from './Folder';
 import Note from './Note';
 import Tag from './Tag';
@@ -21,6 +21,9 @@ import { getTrashFolderId } from '../services/trash';
 import getConflictFolderId from './utils/getConflictFolderId';
 import Revision from './Revision';
 import RevisionService from '../services/RevisionService';
+import NoteLockKey from '../services/noteLock/NoteLockKey';
+import NoteLockService from '../services/noteLock/NoteLockService';
+import EncryptionService from '../services/e2ee/EncryptionService';
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -32,6 +35,9 @@ describe('models/Note', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		NoteLockKey.destroyInstance();
+		NoteLockService.destroyInstance();
+		EncryptionService.instance_ = encryptionService();
 	});
 
 	it('should find resource and note IDs', (async () => {
@@ -241,6 +247,117 @@ describe('models/Note', () => {
 	it('should include lock state in preview fields', () => {
 		expect(Note.previewFields()).toContain('is_locked');
 		expect(Note.previewFields()).not.toContain('extracted_resource_ids');
+	});
+
+	it('should store note lock ciphertext while decrypting only gated loads', async () => {
+		await NoteLockKey.instance().create('123456');
+		const resourceId1 = '06894e83b8f84d3d8cbe0f1587f9e226';
+		const resourceId2 = '06894e83b8f84d3d8cbe0f1587f9e227';
+		const plainTextBody = `secret [](:/${resourceId1}) [](:/${resourceId2})`;
+
+		const note = await Note.save({
+			body: plainTextBody,
+			is_locked: 1,
+		}, { useNoteLock: true });
+		const storedNote = await Note.load(note.id);
+
+		expect(storedNote.body).not.toBe(plainTextBody);
+		expect(storedNote.extracted_resource_ids).toBe(`${resourceId1},${resourceId2}`);
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(plainTextBody);
+
+		await expect(Note.load(note.id, { fields: ['id', 'is_locked'], useNoteLock: true })).rejects.toThrow();
+		await expect(Note.load(note.id, { fields: ['id', 'body'], useNoteLock: true })).rejects.toThrow('Gated note lock load is missing lock state');
+
+		await Note.save(await Note.load(note.id, { useNoteLock: true }), { useNoteLock: true });
+		expect((await Note.load(note.id)).body).not.toBe(plainTextBody);
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(plainTextBody);
+
+		await expect(Note.save({
+			id: note.id,
+			body: 'must not be stored',
+		}, { useNoteLock: true })).rejects.toThrow('Gated note lock save is missing lock state');
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(plainTextBody);
+
+		await Note.save({
+			...await Note.load(note.id, { useNoteLock: true }),
+			body: `${plainTextBody} edited`,
+		}, { useNoteLock: true });
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(`${plainTextBody} edited`);
+
+		await Note.save({
+			...await Note.load(note.id, { useNoteLock: true }),
+			body: 'unlocked',
+			is_locked: 0,
+		}, { useNoteLock: true });
+		const unlockedNote = await Note.load(note.id);
+		expect(unlockedNote.body).toBe('unlocked');
+		expect(unlockedNote.extracted_resource_ids).toBe('');
+	});
+
+	it('should not decrypt locked notes while the feature is disabled', async () => {
+		await NoteLockKey.instance().create('123456');
+		const note = await Note.save({
+			body: 'secret',
+			is_locked: 1,
+		}, { useNoteLock: true });
+
+		Setting.setConstant('env', Env.Prod);
+		try {
+			expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(note.body);
+		} finally {
+			Setting.setConstant('env', Env.Dev);
+		}
+	});
+
+	it('should fail closed when note lock encryption cannot decrypt or encrypt', async () => {
+		const noteLockKey = NoteLockKey.instance();
+		await noteLockKey.create('123456');
+		const note = await Note.save({
+			body: 'secret',
+			is_locked: 1,
+		}, { useNoteLock: true });
+
+		noteLockKey.lock();
+		await expect(Note.save({
+			body: 'must not be stored',
+			is_locked: 1,
+		}, { useNoteLock: true })).rejects.toThrow('Note lock key is not unlocked');
+		expect(await Note.all()).toHaveLength(1);
+
+		await noteLockKey.unlock('123456');
+		const corruptedBody = `${note.body}invalid`;
+		await db().exec('UPDATE notes SET body = ? WHERE id = ?', [corruptedBody, note.id]);
+		await expect(Note.load(note.id, { useNoteLock: true })).rejects.toThrow();
+		expect((await Note.load(note.id)).body).toBe(corruptedBody);
+
+		const incompleteBody = note.body.slice(0, -1);
+		await db().exec('UPDATE notes SET body = ? WHERE id = ?', [incompleteBody, note.id]);
+		await expect(Note.load(note.id, { useNoteLock: true })).rejects.toThrow();
+		expect((await Note.load(note.id)).body).toBe(incompleteBody);
+	});
+
+	it('should clear plaintext revision data when locking a note', async () => {
+		const note = await Note.save({ body: 'plain text' });
+		await Note.save({ id: note.id, body: 'updated plain text' });
+		await revisionService().collectRevisions();
+		expect(await Revision.countRevisions(Note.modelType(), note.id)).toBe(1);
+		const encryptedRevision = await Revision.save({
+			item_type: Note.modelType(),
+			item_id: note.id,
+			item_updated_time: Date.now(),
+			is_locked: 1,
+		});
+
+		await NoteLockKey.instance().create('123456');
+		await Note.save({
+			...await Note.load(note.id),
+			is_locked: 1,
+		}, { useNoteLock: true });
+
+		expect(await Revision.countRevisions(Note.modelType(), note.id)).toBe(1);
+		expect(await Revision.load(encryptedRevision.id)).toBeTruthy();
+		await ItemChange.waitForAllSaved();
+		expect(await ItemChange.oldNoteContent(note.id)).toBe(null);
 	});
 
 	it('should reset fields for a duplicate', (async () => {

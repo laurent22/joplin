@@ -807,6 +807,138 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.Database,
 		},
 
+		// Indexer lifecycle: false until the initial full-vault scan finishes;
+		// after that the indexer only follows the ItemChange feed. Reset to
+		// false when the model id changes (triggering a re-scan).
+		'ai.embedding.initialScanDone': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		'mcp.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			label: () => _('Enable MCP server'),
+			description: () => _('Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.search_notes.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow searching notes'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.read_note.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow reading notes'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.list_notebooks.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow listing notebooks'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.list_tags.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow listing tags'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.create_note.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow creating notes'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.update_note.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow updating notes'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.delete_note.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow trashing notes'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.manage_tags.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow editing tags on notes'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.create_notebook.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow creating notebooks'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.tool.semantic_search_notes.enabled': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'mcp',
+			appTypes: [AppType.Desktop],
+			show: (settings) => !!settings['mcp.enabled'],
+			label: () => _('MCP: Allow semantic search of notes'),
+			storage: SettingStorage.File,
+		},
+
 		theme: {
 			value: Setting.THEME_LIGHT,
 			type: SettingItemType.Int,

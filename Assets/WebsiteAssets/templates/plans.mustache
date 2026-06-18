@@ -250,6 +250,8 @@
 
 		$('.toggle-button-self').click((event) => {
 			event.preventDefault();
+			// Self-hosting is currently yearly-only
+			applyPeriod('yearly');
 			setHostingType('self');
 		});
 

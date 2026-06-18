@@ -30,22 +30,30 @@ export interface ChatProvider {
 	chat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult>;
 }
 
-// Produces embedding vectors for arbitrary text. Implemented by the bundled
-// local provider (ONNX-backed, lands in a follow-up PR) and by a test stub
-// used in CI to exercise the indexer without a real model.
-//
-// `modelId` is stored alongside each chunk in note_embeddings_meta. When the
-// active provider's `modelId` differs from the value last seen by the indexer,
-// the index is cleared and rebuilt — vectors from different models aren't
-// comparable.
-//
-// `dimension` is the size of the vectors returned by `embed()`. It controls
-// the FLOAT[] size of the sqlite-vec virtual table, which is fixed at the
-// table's first creation.
+// Produces embedding vectors for text.
+// - modelId is stored per chunk; a change triggers a full re-index.
+// - dimension is fixed at first vec-table creation.
+export type ProviderModelDownloadStatus = 'not-started' | 'downloading' | 'downloaded';
+
+export type ModelDownloadStatus = ProviderModelDownloadStatus | 'unavailable';
+export type IndexerState = 'idle' | 'running' | 'ai-disabled' | 'index-disabled';
+export interface IndexStatus {
+	modelDownloadStatus: ModelDownloadStatus;
+	indexerState: IndexerState;
+	notesIndexed: number;
+	totalNotes: number;
+}
+
 export interface EmbeddingProvider {
 	id: string;
 	modelId: string;
 	dimension: number;
 	classification: ProviderClassification;
 	embed(texts: string[]): Promise<number[][]>;
+	// Asymmetric providers (e5) get better retrieval with a query-side
+	// encoding. Symmetric providers omit it and callers fall back to embed().
+	embedQuery?(texts: string[]): Promise<number[][]>;
+	// Providers without a downloadable artefact omit this; the reporter
+	// treats them as always-ready.
+	modelDownloadStatus?(): Promise<ProviderModelDownloadStatus>;
 }

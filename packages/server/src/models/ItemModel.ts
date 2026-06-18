@@ -1039,11 +1039,21 @@ export default class ItemModel extends BaseModel<Item> {
 	// items, so a simple processing task like this one is sufficient for now
 	// but it would be nice to get to the bottom of this bug.
 	public processOrphanedItems = async (options: ProcessOrphanedItemsOptions = {}) => {
-		// Process in batches to avoid long-running transactions that can timeout
-		// and poison the connection pool.
-		const batchSize = options.batchSize ?? 100;
+		// The obvious query here is `items LEFT JOIN user_items WHERE
+		// user_items.id IS NULL LIMIT N` (or the equivalent NOT EXISTS).
+		// That times out on busy instances: orphans are ~0.0008% of items, so
+		// Postgres has to scan most of the table to find a single batch, and
+		// the statement timeout fires before it returns anything.
+		//
+		// Instead we walk `items` by primary key in fixed-size windows. Each
+		// window is two cheap indexed queries: fetch the next N items by id,
+		// then look up which of those ids exist in user_items. The orphan
+		// filter happens in TS. Per-query cost is bounded by the window size,
+		// not by the table size, so no statement can blow past the timeout.
+		const batchSize = options.batchSize ?? 10000;
 		let batchNum = 0;
 		let totalProcessed = 0;
+		let lastId = '';
 
 		modelLogger.info(`processOrphanedItems: Starting with batchSize=${batchSize}`);
 
@@ -1051,21 +1061,32 @@ export default class ItemModel extends BaseModel<Item> {
 			batchNum++;
 			const batchStartTime = Date.now();
 
-			// Find items that have no corresponding entry in user_items.
-			// NOT EXISTS is used instead of LEFT JOIN for performance as it
-			// allows Postgres to short-circuit on the first match per item.
-			const orphanedItems: Item[] = await this.db(this.tableName)
+			const windowItems: Item[] = await this.db(this.tableName)
 				.select(['items.id', 'items.name', 'items.owner_id'])
-				.whereNotExists(
-					this.db('user_items')
-						.select(this.db.raw('1'))
-						.whereRaw('user_items.item_id = items.id'),
-				)
+				.where('items.id', '>', lastId)
+				.orderBy('items.id')
 				.limit(batchSize);
 
-			if (!orphanedItems.length) {
+			if (!windowItems.length) {
 				modelLogger.info(`processOrphanedItems: Completed. Total items processed: ${totalProcessed}`);
 				break;
+			}
+
+			// Advance the cursor by the window boundary, not by orphans found,
+			// so that windows with zero orphans still make progress.
+			lastId = windowItems[windowItems.length - 1].id;
+
+			const windowItemIds = windowItems.map(i => i.id);
+			const existingUserItems = await this.db('user_items')
+				.select('item_id')
+				.whereIn('item_id', windowItemIds);
+			const userItemIds = new Set(existingUserItems.map(u => u.item_id));
+			const orphanedItems = windowItems.filter(i => !userItemIds.has(i.id));
+
+			if (!orphanedItems.length) {
+				const batchDuration = Date.now() - batchStartTime;
+				modelLogger.info(`processOrphanedItems: Batch ${batchNum} - No orphans in window of ${windowItems.length} items (${batchDuration}ms)`);
+				continue;
 			}
 
 			modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Found ${orphanedItems.length} orphaned items`);

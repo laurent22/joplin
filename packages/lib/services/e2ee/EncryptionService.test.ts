@@ -162,6 +162,27 @@ describe('services_EncryptionService', () => {
 		expect(plainText2 === veryLongSecret).toBe(true);
 	}));
 
+	it('should encrypt and decrypt with a supplied decrypted master key', (async () => {
+		let masterKey = await service.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+		const decryptedMasterKey = await service.decryptMasterKeyContent(masterKey, '123456');
+		const options = {
+			masterKeyId: masterKey.id,
+			decryptedMasterKey,
+		};
+
+		expect(service.loadedMasterKeysCount()).toBe(0);
+
+		const cipherText = await service.encryptString('some secret', options);
+		expect(await service.decryptString(cipherText, options)).toBe('some secret');
+		expect(service.loadedMasterKeysCount()).toBe(0);
+
+		await expect(service.decryptString(cipherText, {
+			...options,
+			masterKeyId: '01234568abcdefgh01234568abcdefgh',
+		})).rejects.toThrow('Supplied master key ID does not match encrypted content');
+	}));
+
 	it('should decrypt various encryption methods', (async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);

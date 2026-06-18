@@ -9,36 +9,23 @@ import { NoteEntity, ItemChangeEntity } from '../database/types';
 import NoteEmbedding from '../../models/NoteEmbedding';
 import AiService from './AiService';
 import { chunkText } from './chunker';
-import { EmbeddingProvider } from './types';
+import { EmbeddingProvider, IndexStatus } from './types';
 
 const logger = Logger.create('EmbeddingIndexer');
 
-// 5-minute interval matches OcrService — slow enough to avoid burning CPU on
-// every edit, fast enough that newly-saved notes are searchable within minutes.
+// Matches OcrService — slow enough to avoid burning CPU on every edit,
+// fast enough that newly-saved notes are searchable within minutes.
 const MAINTENANCE_INTERVAL = 5 * Minute;
 
-// How many item_changes we process per maintenance tick. Keeps the indexer
-// responsive on huge backlogs (e.g. first run on an existing vault) by
-// committing progress after each batch rather than holding everything in
-// memory until done.
+// Caps both the per-tick change-feed drain and the backfill top-up.
 const BATCH_SIZE = 100;
 
-// Background service that watches `item_changes` for note edits, chunks the
-// note body, asks the active EmbeddingProvider to embed each chunk, and stores
-// the result via the NoteEmbedding model.
-//
-// Lifecycle is identical to OcrService: `runInBackground()` starts a timer,
-// `stopRunInBackground()` stops it. Both are idempotent.
-//
-// Progress is durable via two settings:
-// - `ai.embedding.lastProcessedChangeId` is the cursor into item_changes. We
-//   resume from this on every restart, so a crashed indexer doesn't reprocess
-//   notes it already handled.
-// - `ai.embedding.lastIndexedModelId` is the model that produced the current
-//   vectors. If the active provider's modelId differs (e.g. the user upgraded
-//   the local model, or switched to a cloud embedding provider), we wipe
-//   note_embeddings and start over — vectors from different models aren't
-//   comparable.
+// Background service that watches `item_changes`, chunks each modified note,
+// embeds the chunks via the active EmbeddingProvider, and stores them in
+// NoteEmbedding. Progress is durable via two settings: a cursor into
+// item_changes, and the modelId that produced the current vectors (a mismatch
+// triggers a clear-and-rebuild — vectors from different models aren't
+// comparable).
 
 export default class EmbeddingIndexer {
 
@@ -52,13 +39,19 @@ export default class EmbeddingIndexer {
 	private maintenanceTimer_: ReturnType<typeof shim.setInterval> = null;
 	private isRunningInBackground_ = false;
 	private maintenanceRunning_ = false;
+	// Notes that threw during this session's initial scan. Skipped for the
+	// remainder of the session so the scan can complete; reset on process
+	// restart so a fix to the underlying issue gets a fresh chance.
+	private initialScanFailures_ = new Set<string>();
 
 	public async runInBackground() {
 		if (this.isRunningInBackground_) return;
 		this.isRunningInBackground_ = true;
 
 		logger.info('Starting background indexer');
-		await this.maintenance();
+		// Fire-and-forget the first tick: model load + first embed batch can
+		// be 5-15s and would otherwise block app startup.
+		void this.maintenance();
 
 		this.maintenanceTimer_ = shim.setInterval(async () => {
 			await this.maintenance();
@@ -73,26 +66,59 @@ export default class EmbeddingIndexer {
 		this.isRunningInBackground_ = false;
 	}
 
-	// Single maintenance tick. Public so tests can drive the indexer without
-	// waiting for a real timer fire.
-	public async maintenance() {
-		if (this.maintenanceRunning_) {
-			// Don't queue concurrent maintenance runs; if the previous one is
-			// still going (e.g. a huge initial backlog), the next tick will
-			// pick up where it left off.
-			logger.info('Skipping maintenance — previous run still in flight');
-			return;
+	// Snapshot of indexer + model state for the settings UI. Cheap enough to
+	// poll on a UI tick (two COUNTs + a provider probe).
+	public async getStatus(): Promise<IndexStatus> {
+		const provider = AiService.instance().getActiveEmbeddingProvider();
+
+		let modelDownloadStatus: IndexStatus['modelDownloadStatus'] = 'unavailable';
+		if (provider) {
+			// Providers without a downloadable artefact (remote, test stub)
+			// surface as 'downloaded' so the UI doesn't need a special case.
+			modelDownloadStatus = provider.modelDownloadStatus
+				? await provider.modelDownloadStatus()
+				: 'downloaded';
 		}
+
+		let indexerState: IndexStatus['indexerState'];
+		if (!Setting.value('ai.enabled')) {
+			indexerState = 'ai-disabled';
+		} else if (!Setting.value('ai.embedding.enabled')) {
+			indexerState = 'index-disabled';
+		} else if (this.maintenanceRunning_) {
+			indexerState = 'running';
+		} else {
+			indexerState = 'idle';
+		}
+
+		// Both counts exclude trashed/conflict notes so the displayed ratio
+		// matches the indexer's universe.
+		const notesIndexed = await NoteEmbedding.distinctNoteIdCount();
+		const totalNotes = await Note.indexableCount();
+
+		return { modelDownloadStatus, indexerState, notesIndexed, totalNotes };
+	}
+
+	// Single maintenance tick. Public so tests can drive it without waiting
+	// for the timer.
+	public async maintenance() {
+		if (this.maintenanceRunning_) return;
 		this.maintenanceRunning_ = true;
 		try {
 			const provider = AiService.instance().getActiveEmbeddingProvider();
-			if (!provider) {
-				logger.info('No embedding provider configured — skipping');
-				return;
-			}
+			if (!provider) return;
 
 			await this.handleModelChange(provider);
-			await this.processChangeBatch(provider);
+			// Until the initial scan completes, walk the whole vault one batch
+			// per tick. Then switch to change-feed-only mode. The tick that
+			// finishes the scan still runs the change feed so edits made
+			// during the scan don't wait an extra interval.
+			if (!Setting.value('ai.embedding.initialScanDone')) {
+				await this.runInitialScanBatch(provider);
+			}
+			if (Setting.value('ai.embedding.initialScanDone')) {
+				await this.processChangeBatch(provider);
+			}
 		} catch (error) {
 			logger.error('Maintenance run failed:', error);
 		} finally {
@@ -100,9 +126,8 @@ export default class EmbeddingIndexer {
 		}
 	}
 
-	// If the active provider's modelId doesn't match what's stored for the
-	// existing vectors, clear everything and reset the cursor. The next
-	// maintenance tick will rebuild from scratch.
+	// Wipe-and-rebuild when the active provider's modelId changes — vectors
+	// from different models aren't comparable.
 	private async handleModelChange(provider: EmbeddingProvider) {
 		const lastModelId = Setting.value('ai.embedding.lastIndexedModelId') as string;
 		if (lastModelId === provider.modelId) return;
@@ -111,16 +136,17 @@ export default class EmbeddingIndexer {
 		await NoteEmbedding.clearAll();
 		Setting.setValue('ai.embedding.lastProcessedChangeId', 0);
 		Setting.setValue('ai.embedding.lastIndexedModelId', provider.modelId);
+		Setting.setValue('ai.embedding.initialScanDone', false);
+		this.initialScanFailures_.clear();
 	}
 
-	private async processChangeBatch(provider: EmbeddingProvider) {
+	private async processChangeBatch(provider: EmbeddingProvider): Promise<void> {
 		const cursor = Setting.value('ai.embedding.lastProcessedChangeId') as number;
 		const changes = await ItemChange.changesSinceId(cursor, { limit: BATCH_SIZE });
 		if (!changes.length) return;
 
-		// Collapse duplicates so we only embed each note once per batch even
-		// when there are multiple updates queued for it. Process deletes last
-		// so a delete-then-create within the batch lands in the right order.
+		// Collapse duplicates so a note edited multiple times only gets
+		// embedded once per tick.
 		const latestPerNote = new Map<string, ItemChangeEntity>();
 		for (const change of changes) {
 			if (change.item_type !== ModelType.Note) continue;
@@ -135,33 +161,53 @@ export default class EmbeddingIndexer {
 					await this.indexNote(noteId, provider);
 				}
 			} catch (error) {
-				// Don't let one bad note stop the whole batch. The cursor will
-				// advance past it; if the user fixes the underlying issue
-				// they can trigger a full re-index later.
 				logger.warn(`Failed to index note ${noteId}:`, error);
 			}
 		}
 
-		// Advance the cursor to the highest change ID we just looked at. If
-		// the indexer crashes mid-batch the cursor stays at its previous
-		// value, so the next run reprocesses the partially-applied notes
-		// (idempotently — saveChunks deletes existing chunks first).
+		// Advance the cursor only after the batch finishes. A mid-batch crash
+		// reprocesses everything from the previous cursor (saveChunks is
+		// idempotent — it deletes existing chunks first).
 		const highestId = changes[changes.length - 1].id;
 		Setting.setValue('ai.embedding.lastProcessedChangeId', highestId);
 	}
 
-	private async indexNote(noteId: string, provider: EmbeddingProvider) {
-		const note = await Note.load(noteId) as NoteEntity | null;
-		if (!note) {
-			// Note may have been deleted between the change being recorded
-			// and us getting around to it.
-			await NoteEmbedding.deleteByNoteId(noteId);
+	// Walks the full notes table on first enable (or after a model swap).
+	// One batch per tick so the indexer stays responsive on big vaults.
+	// Per-note failures are remembered in-memory only — they get a fresh
+	// attempt on the next session, which is when a fix to the underlying
+	// issue would have been deployed.
+	private async runInitialScanBatch(provider: EmbeddingProvider): Promise<void> {
+		// Snap the change-feed cursor at the start of the scan, not the end —
+		// edits and deletes that happen during the scan are then picked up
+		// normally by the change feed instead of being lost.
+		if ((Setting.value('ai.embedding.lastProcessedChangeId') as number) === 0) {
+			Setting.setValue('ai.embedding.lastProcessedChangeId', await ItemChange.lastChangeId());
+		}
+
+		const excluded = Array.from(this.initialScanFailures_);
+		const noteIds = await NoteEmbedding.notYetIndexedNoteIds(BATCH_SIZE, excluded);
+
+		if (!noteIds.length) {
+			Setting.setValue('ai.embedding.initialScanDone', true);
+			logger.info(`Initial scan complete (${this.initialScanFailures_.size} note(s) skipped after errors)`);
 			return;
 		}
 
-		// Skip notes that retrieval should never return — keeps the index
-		// smaller and avoids surprising search results.
-		if (note.is_conflict || (note.deleted_time && note.deleted_time > 0)) {
+		logger.info(`Initial scan: indexing ${noteIds.length} note(s)`);
+		for (const noteId of noteIds) {
+			try {
+				await this.indexNote(noteId, provider);
+			} catch (error) {
+				this.initialScanFailures_.add(noteId);
+				logger.warn(`Initial scan failed for note ${noteId} (will retry next session):`, error);
+			}
+		}
+	}
+
+	private async indexNote(noteId: string, provider: EmbeddingProvider) {
+		const note = await Note.load(noteId) as NoteEntity | null;
+		if (!note || note.is_conflict || (note.deleted_time && note.deleted_time > 0)) {
 			await NoteEmbedding.deleteByNoteId(noteId);
 			return;
 		}
@@ -169,26 +215,15 @@ export default class EmbeddingIndexer {
 		const body = (note.body ?? '').trim();
 		const title = (note.title ?? '').trim();
 		if (!body && !title) {
-			// Notes with neither a title nor a body have no meaningful signal
-			// to embed. Make sure any stale rows from a previous edit are
-			// cleaned up.
 			await NoteEmbedding.deleteByNoteId(noteId);
 			return;
 		}
 
 		const chunks = chunkText(body);
 
-		// Inject the title into the first chunk twice. The title is often the
-		// densest semantic signal a note carries — e.g. "Pet sitters for my
-		// dog" with a body that's just an attachment reference. Without this,
-		// searching for "dog walker" would never find that note because the
-		// body has no relevant content.
-		//
-		// Why double, and why only chunk 0?
-		// - Doubling boosts the title's weight in the chunk's embedding so
-		//   title-anchored queries pull harder on this note.
-		// - Chunk 0 is the natural place to put it because it's also where
-		//   the body opening lives, which usually flows from the title.
+		// Title is often the densest semantic signal (e.g. "Pet sitters for
+		// my dog" with a body that's just an attachment link). Doubling it
+		// into chunk 0 boosts its weight so title-anchored queries hit.
 		if (title) {
 			if (chunks.length === 0) {
 				chunks.push(title);
@@ -214,12 +249,5 @@ export default class EmbeddingIndexer {
 		}));
 
 		await NoteEmbedding.saveChunks(noteId, provider.modelId, payload);
-	}
-
-	// Reset state — exposed for tests and for a future "re-index all" button.
-	public async clearProgress() {
-		await NoteEmbedding.clearAll();
-		Setting.setValue('ai.embedding.lastProcessedChangeId', 0);
-		Setting.setValue('ai.embedding.lastIndexedModelId', '');
 	}
 }

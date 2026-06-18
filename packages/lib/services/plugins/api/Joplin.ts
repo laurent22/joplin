@@ -129,7 +129,8 @@ export default class Joplin {
 	}
 
 	/**
-	 * Access to AI features (chat completions and token usage). See {@link JoplinAi}.
+	 * Access to AI features: chat completions and semantic search over the
+	 * local embeddings index. See {@link JoplinAi}.
 	 *
 	 * <span class="platform-desktop">desktop</span>
 	 */

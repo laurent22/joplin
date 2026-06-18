@@ -320,3 +320,9 @@ Ideographs
 chunker
 idempotently
 unigrams
+sentencepiece
+xenova
+pretrained
+huggingface
+stdio
+doesnotexist

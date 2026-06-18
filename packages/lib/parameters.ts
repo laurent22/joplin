@@ -2,7 +2,7 @@ import Setting from './models/Setting';
 
 type Env = 'dev' | 'prod' | 'test';
 
-interface AppCredentials {
+export interface AppCredentials {
 	id: string;
 	secret: string;
 }

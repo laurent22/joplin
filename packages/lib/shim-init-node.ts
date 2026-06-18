@@ -120,6 +120,8 @@ export interface ShimInitOptions {
 	nodeSqlite?: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sqlite-vec is only bundled with desktop; see shim.sqliteVec_
 	sqliteVec?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- onnxruntime-node is only bundled with desktop; see shim.onnxRuntime_
+	onnxRuntime?: any;
 	pdfJs?: PdfJs;
 	isAppleSilicon?: ()=> boolean;
 }
@@ -133,6 +135,7 @@ function shimInit(options: ShimInitOptions = null) {
 		electronBridge: null,
 		nodeSqlite: null,
 		sqliteVec: null,
+		onnxRuntime: null,
 		pdfJs: null,
 		isAppleSilicon: () => false,
 		...options,
@@ -145,6 +148,7 @@ function shimInit(options: ShimInitOptions = null) {
 
 	shim.setNodeSqlite(options.nodeSqlite);
 	shim.setSqliteVec(options.sqliteVec);
+	shim.setOnnxRuntime(options.onnxRuntime);
 
 	shim.fsDriver = () => {
 		throw new Error('Not implemented');

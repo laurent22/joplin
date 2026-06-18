@@ -246,4 +246,104 @@ describe('EmbeddingIndexer', () => {
 
 		expect(await NoteEmbedding.distinctNoteIdCount()).toBe(1);
 	});
+
+	it('getStatus reports unavailable when no provider is active', async () => {
+		AiService.instance().setEmbeddingProvider(null);
+		const status = await EmbeddingIndexer.instance().getStatus();
+		expect(status.modelDownloadStatus).toBe('unavailable');
+	});
+
+	it('getStatus distinguishes between AI-off and indexing-off', async () => {
+		Setting.setValue('ai.enabled', false);
+		try {
+			const status = await EmbeddingIndexer.instance().getStatus();
+			expect(status.indexerState).toBe('ai-disabled');
+		} finally {
+			Setting.setValue('ai.enabled', true);
+		}
+
+		Setting.setValue('ai.embedding.enabled', false);
+		try {
+			const status = await EmbeddingIndexer.instance().getStatus();
+			expect(status.indexerState).toBe('index-disabled');
+		} finally {
+			Setting.setValue('ai.embedding.enabled', true);
+		}
+	});
+
+	it('getStatus reports downloaded for providers without a download stage', async () => {
+		// The bigram test provider doesn't expose modelDownloadStatus, so the
+		// reporter should treat it as "always ready" — i.e. 'downloaded' from
+		// the UI's point of view.
+		const status = await EmbeddingIndexer.instance().getStatus();
+		expect(status.modelDownloadStatus).toBe('downloaded');
+	});
+
+	it('backfills notes whose item_changes are already past the cursor', async () => {
+		if (skipIfNoVec()) return;
+		// Simulate "existing notes on first AI enable": the notes have
+		// already produced item_changes, but the cursor is set past them as
+		// if the indexer had nothing to chew on from the change feed.
+		const folder = await Folder.save({ title: 'f' });
+		await Note.save({ title: 'A', body: 'apples', parent_id: folder.id });
+		await Note.save({ title: 'B', body: 'bananas', parent_id: folder.id });
+		await waitForChangesSince(0, 2);
+		const lastChange = await ItemChange.lastChangeId();
+		Setting.setValue('ai.embedding.lastProcessedChangeId', lastChange);
+
+		await EmbeddingIndexer.instance().maintenance();
+
+		// Both notes should be indexed via the backfill path even though no
+		// new item_changes were available.
+		expect(await NoteEmbedding.distinctNoteIdCount()).toBe(2);
+	});
+
+	it('skips a note that fails during the initial scan instead of looping on it', async () => {
+		if (skipIfNoVec()) return;
+		const folder = await Folder.save({ title: 'f' });
+		const good = await Note.save({ title: 'good', body: 'this one works', parent_id: folder.id });
+		const bad = await Note.save({ title: 'bad', body: 'this one will fail', parent_id: folder.id });
+		await waitForChangesSince(0, 2);
+
+		// Provider that throws for the bad note's body, succeeds for everything else.
+		let failureCalls = 0;
+		const failingProvider = new (class extends TestEmbeddingProvider {
+			public async embed(texts: string[]) {
+				if (texts.some(t => t.includes('this one will fail'))) {
+					failureCalls++;
+					throw new Error('synthetic failure');
+				}
+				return super.embed(texts);
+			}
+		})();
+		AiService.instance().setEmbeddingProvider(failingProvider);
+
+		// First tick processes both — bad fails, good succeeds.
+		await EmbeddingIndexer.instance().maintenance();
+		// Second tick must NOT retry the bad note (would re-incur failureCalls).
+		await EmbeddingIndexer.instance().maintenance();
+		await EmbeddingIndexer.instance().maintenance();
+
+		expect(failureCalls).toBe(1);
+		expect(await NoteEmbedding.countByNoteId(good.id)).toBeGreaterThan(0);
+		expect(await NoteEmbedding.countByNoteId(bad.id)).toBe(0);
+		expect(Setting.value('ai.embedding.initialScanDone')).toBe(true);
+	});
+
+	it('getStatus counts indexed vs total notes and excludes trashed ones', async () => {
+		if (skipIfNoVec()) return;
+		const folder = await Folder.save({ title: 'f' });
+		await Note.save({ title: 'A', body: 'apples are red', parent_id: folder.id });
+		await Note.save({ title: 'B', body: 'bananas are yellow', parent_id: folder.id });
+		const trashed = await Note.save({ title: 'C', body: 'cherries', parent_id: folder.id });
+		// Move the third note to trash so it should be excluded from totalNotes.
+		await Note.batchDelete([trashed.id], { toTrash: true });
+		await waitForChangesSince(0, 3);
+		await EmbeddingIndexer.instance().maintenance();
+
+		const status = await EmbeddingIndexer.instance().getStatus();
+		expect(status.totalNotes).toBe(2);
+		expect(status.notesIndexed).toBeGreaterThanOrEqual(1);
+		expect(status.notesIndexed).toBeLessThanOrEqual(2);
+	});
 });

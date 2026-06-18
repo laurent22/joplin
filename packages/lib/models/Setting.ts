@@ -1291,6 +1291,7 @@ class Setting extends BaseModel {
 			'encryption',
 			'joplinCloud',
 			'ai',
+			'mcp',
 			'editor',
 			'plugins',
 			'markdownPlugins',
@@ -1366,6 +1367,7 @@ class Setting extends BaseModel {
 		if (name === 'importOrExport') return _('Import and Export');
 		if (name === 'moreInfo') return _('More information');
 		if (name === 'ai') return _('AI');
+		if (name === 'mcp') return _('MCP Server');
 
 		if (this.customSections_[name] && this.customSections_[name].label) return this.customSections_[name].label;
 
@@ -1443,6 +1445,7 @@ class Setting extends BaseModel {
 			'importOrExport': 'fa fa-file-export',
 			'moreInfo': 'fa fa-info-circle',
 			'ai': 'fa fa-robot',
+			'mcp': 'fa fa-plug',
 		};
 
 		// Icomoon icons are currently not present in the mobile app -- we override these

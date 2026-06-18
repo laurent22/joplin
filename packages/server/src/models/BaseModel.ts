@@ -409,12 +409,10 @@ export default abstract class BaseModel<T> {
 		if (!ids.length) throw new Error('no id provided');
 
 		await this.withTransaction(async () => {
-			const query = this.db(this.tableName).where({ id: ids[0] });
-			for (let i = 1; i < ids.length; i++) {
-				await query.orWhere({ id: ids[i] });
-			}
-
-			const deletedCount = await query.del();
+			// Use whereIn rather than chaining orWhere in a loop: the latter
+			// builds a giant OR clause that's expensive for both Knex to
+			// assemble and Postgres to parse.
+			const deletedCount = await this.db(this.tableName).whereIn('id', ids as (string|number)[]).del();
 			if (!options.allowNoOp && deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted but ${deletedCount} row(s) were deleted. ID: ${id}`);
 		}, 'BaseModel::delete');
 	}

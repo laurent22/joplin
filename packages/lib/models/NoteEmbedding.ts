@@ -2,19 +2,13 @@ import BaseModel from '../BaseModel';
 import JoplinDatabase from '../JoplinDatabase';
 import { NoteEmbeddingsMetaEntity } from '../services/database/types';
 
-// Storage for per-note chunk embeddings produced by the AI embeddings index.
+// Storage for per-note chunk embeddings.
 //
-// Metadata (chunk text, source note ID, model identifier) lives in the regular
-// `note_embeddings_meta` table created by migration 52.
-//
-// The associated vectors are stored in a sqlite-vec `vec0` virtual table
-// (`note_embeddings_vec`) created lazily by `ensureVecTable()` when sqlite-vec
-// is available. Joining is done by rowid — the meta row's id is the same as
-// the vec row's rowid.
-//
-// All vector-touching methods check `JoplinDatabase.sqliteVecAvailable()` and
-// throw a clear error if vector search isn't supported on this platform. The
-// metadata-only methods work regardless.
+// Metadata lives in `note_embeddings_meta` (regular SQLite table, migration
+// 52). Vectors live in `note_embeddings_vec`, a sqlite-vec `vec0` virtual
+// table created lazily when sqlite-vec is available. Joined by rowid.
+// Vector methods throw if sqlite-vec is missing; metadata methods work
+// regardless.
 
 interface SaveChunk {
 	chunkIndex: number;
@@ -31,13 +25,9 @@ interface SimilarityResult {
 
 interface SimilaritySearchOptions {
 	k: number;
-	// Maximum cosine distance to include. sqlite-vec returns L2 distance for
-	// vec0 by default; for normalised vectors L2² ≈ 2·(1 − cosine). The caller
-	// converts as needed; this layer just exposes the distance as returned by
-	// the extension.
+	// Raw L2 distance from vec0 (caller converts to cosine if needed).
 	maxDistance?: number;
-	// Restrict results to this set of note IDs. Used for scoped searches
-	// (notebook, tag, note) — the caller resolves scope → note IDs first.
+	// Pre-resolved scope filter. Empty array = search nothing.
 	noteIds?: string[];
 }
 
@@ -61,9 +51,7 @@ export default class NoteEmbedding extends BaseModel {
 		}
 	}
 
-	// Creates the sqlite-vec virtual table if it doesn't already exist. Called
-	// lazily because the CREATE VIRTUAL TABLE statement fails on platforms
-	// without the extension.
+	// Called lazily — CREATE VIRTUAL TABLE fails without sqlite-vec loaded.
 	public static async ensureVecTable(dimension: number) {
 		this.requireVec();
 		await this.db().exec(
@@ -93,12 +81,26 @@ export default class NoteEmbedding extends BaseModel {
 		return row?.c ?? 0;
 	}
 
-	// Removes every chunk for a note from both the meta table and the vec
-	// table. Used before re-indexing a changed note and during note deletion.
-	//
-	// The vec-table delete is guarded by both `sqliteVecAvailable()` AND the
-	// table's existence — saveChunks creates the vec table lazily, so on a
-	// fresh profile it may not exist yet.
+	// Indexable notes not yet embedded — drives the indexer's initial scan.
+	// `excludeIds` lets the caller skip notes that already failed this session,
+	// so a permanently bad note doesn't keep coming back.
+	public static async notYetIndexedNoteIds(limit: number, excludeIds: string[] = []): Promise<string[]> {
+		const excludeSql = excludeIds.length
+			? ` AND n.id NOT IN (${excludeIds.map(() => '?').join(',')})`
+			: '';
+		const rows = await this.db().selectAll<{ id: string }>(
+			`SELECT n.id FROM notes n
+			 WHERE (n.deleted_time IS NULL OR n.deleted_time = 0)
+			   AND (n.is_conflict IS NULL OR n.is_conflict = 0)
+			   AND NOT EXISTS (SELECT 1 FROM note_embeddings_meta m WHERE m.note_id = n.id)${excludeSql}
+			 LIMIT ?`,
+			[...excludeIds, limit],
+		);
+		return rows.map(r => r.id);
+	}
+
+	// Vec-table delete is guarded by sqliteVecAvailable() AND vecTableExists()
+	// because saveChunks creates the vec table lazily.
 	public static async deleteByNoteId(noteId: string) {
 		const rows = await this.db().selectAll<{ id: number }>(
 			'SELECT id FROM note_embeddings_meta WHERE note_id = ?',
@@ -123,15 +125,10 @@ export default class NoteEmbedding extends BaseModel {
 		return !!row;
 	}
 
-	// Replaces every chunk for a note with a new set. The `modelId` is recorded
-	// alongside each chunk so a future model change can trigger a re-index.
-	//
-	// Not transactional: if the process crashes mid-save the indexer will
-	// later see the half-written set, treat the note as out-of-date via the
-	// ItemChange cursor, and re-run saveChunks (which begins with a
-	// deleteByNoteId so the partial set is cleared). A future PR can add a
-	// proper transactional helper to `Database` once there are other callers
-	// that need it.
+	// Replaces every chunk for a note. modelId is stored per row so a future
+	// model change can trigger a re-index. Not wrapped in a transaction: a
+	// mid-save crash leaves a partial set, but the indexer reprocesses via
+	// the ItemChange cursor and saveChunks begins by clearing the note.
 	public static async saveChunks(noteId: string, modelId: string, chunks: SaveChunk[]) {
 		this.requireVec();
 		if (chunks.length === 0) {
@@ -151,10 +148,9 @@ export default class NoteEmbedding extends BaseModel {
 
 		const now = Date.now();
 		for (const chunk of chunks) {
-			// Insert into meta, then read back the auto-assigned id via
-			// last_insert_rowid() — node-sqlite3's exec() doesn't return it
-			// directly. The driver serialises queries through a mutex so the
-			// reading query runs on the same connection without races.
+			// node-sqlite3's exec() doesn't return the insert id, so read it
+			// back with last_insert_rowid(). The driver serialises queries on
+			// the same connection so there's no race.
 			await this.db().exec({
 				sql: 'INSERT INTO note_embeddings_meta(note_id, chunk_index, model_id, chunk_text, created_time) VALUES (?, ?, ?, ?, ?)',
 				params: [noteId, chunk.chunkIndex, modelId, chunk.chunkText, now],
@@ -175,25 +171,17 @@ export default class NoteEmbedding extends BaseModel {
 		options: SimilaritySearchOptions,
 	): Promise<SimilarityResult[]> {
 		this.requireVec();
-		// On a fresh profile the vec table is created lazily by saveChunks(),
-		// so it may not exist yet. Treat that as "no embeddings to match"
-		// rather than letting the query throw "no such table".
 		if (!await this.vecTableExists()) return [];
 
-		// An explicitly-empty noteIds means "search within zero notes" — return
-		// nothing rather than silently widening the search to all notes.
+		// Explicit empty noteIds = search nothing (vs undefined = search all).
 		if (options.noteIds && options.noteIds.length === 0) return [];
 
 		const k = Math.max(1, options.k | 0);
 
-		// sqlite-vec's vec0 needs an inline `k = ?` constraint or a hardcoded
-		// LIMIT — a parameter-bound LIMIT after a JOIN isn't visible to its
-		// optimiser. When a noteIds filter is in play we over-fetch by 4× so
-		// the post-join filter rarely starves the result set, then trim to k.
-		// This is a heuristic — pathological cases (large global indexes where
-		// most top matches fall outside the scope) can still under-fill. A
-		// follow-up can switch to pre-resolving noteIds → rowids and pushing
-		// the filter into the vec MATCH clause directly.
+		// vec0 needs k inlined into the MATCH clause; a parameter-bound LIMIT
+		// after a JOIN isn't visible to its planner. With a noteIds filter we
+		// over-fetch 4× and trim after, so the post-join filter has room to
+		// drop non-matches. Pathological vaults can still under-fill.
 		const fetchSize = options.noteIds?.length ? k * 4 : k;
 
 		const whereParts: string[] = [`v.embedding MATCH ? AND k = ${fetchSize}`];
@@ -233,12 +221,25 @@ export default class NoteEmbedding extends BaseModel {
 		return results;
 	}
 
-	// Drops every embedding from both tables. Used when the embedding model
-	// changes — the existing vectors are no longer comparable to anything new.
+	// Loads the stored vectors for a note's chunks in chunk-index order.
+	// Lets noteId-based searches reuse indexed vectors instead of re-embedding.
+	public static async vectorsByNoteId(noteId: string): Promise<number[][]> {
+		this.requireVec();
+		if (!await this.vecTableExists()) return [];
+		const rows = await this.db().selectAll<{ embedding: string }>(
+			`SELECT vec_to_json(v.embedding) AS embedding
+			 FROM note_embeddings_vec v
+			 JOIN note_embeddings_meta m ON m.id = v.rowid
+			 WHERE m.note_id = ?
+			 ORDER BY m.chunk_index ASC`,
+			[noteId],
+		);
+		return rows.map(r => JSON.parse(r.embedding) as number[]);
+	}
+
+	// Drops every embedding. Used when the active model's id changes.
 	public static async clearAll() {
 		const queries: string[] = ['DELETE FROM note_embeddings_meta'];
-		// Vec-table delete is guarded the same way as deleteByNoteId — the
-		// table is created lazily, so on a fresh profile it may not exist yet.
 		if (this.joplinDb().sqliteVecAvailable() && await this.vecTableExists()) {
 			queries.push('DELETE FROM note_embeddings_vec');
 		}

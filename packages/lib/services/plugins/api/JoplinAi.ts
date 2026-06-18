@@ -1,7 +1,8 @@
 /* eslint-disable multiline-comment-style */
 
 import AiService from '../../ai/AiService';
-import { ChatMessage, ChatOptions } from './types';
+import SearchService from '../../ai/SearchService';
+import { ChatMessage, ChatOptions, SearchOptions, SearchResult } from './types';
 
 /**
  * Provides access to AI models configured by the user. The active provider
@@ -51,6 +52,42 @@ export default class JoplinAi {
 	public async chat(messages: ChatMessage[], options?: ChatOptions): Promise<string> {
 		const result = await AiService.instance().chat(messages, options);
 		return result.text;
+	}
+
+	/**
+	 * Runs a semantic search against the locally-indexed embeddings and
+	 * returns matching chunks ranked by similarity.
+	 *
+	 * The `query` is either plain text (which gets embedded internally) or
+	 * `{ noteId }`, which reuses the note's already-indexed chunks as the
+	 * query — useful for "find related notes" / tag suggestion / semantic
+	 * graph use cases without spending another embedding pass.
+	 *
+	 * The `scope` restricts the search: `'all'` (default), `'note'`,
+	 * `'folder'` (by folder id), or `'tag'` (by tag id).
+	 * Trashed and conflict notes are excluded from results.
+	 *
+	 * The `relevance` preset controls how strict the match is:
+	 * `'strict' | 'normal' | 'loose'`. Joplin owns the mapping from preset
+	 * to model-specific (k, minScore) — plugins write against the preset
+	 * and stay compatible when the bundled model changes.
+	 *
+	 * Throws when AI features are disabled or no embedding provider is
+	 * active (e.g. ONNX failed to load on this platform).
+	 *
+	 * @example
+	 * ```typescript
+	 * const results = await joplin.ai.search({
+	 *     query: { text: 'pizza dough hydration' },
+	 *     relevance: 'normal',
+	 * });
+	 * for (const r of results) {
+	 *     console.log(r.score, r.noteId, r.chunkText.slice(0, 80));
+	 * }
+	 * ```
+	 */
+	public async search(options: SearchOptions): Promise<SearchResult[]> {
+		return SearchService.instance().search(options);
 	}
 
 }

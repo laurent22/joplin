@@ -36,7 +36,18 @@
 		{{#featureLabelsOff}}
 			<p class="unchecked-text"><i class="fas fa-times feature feature-off"></i>{{label}}</p>
 		{{/featureLabelsOff}}
-		
+
+		{{#pricingTable}}
+			<strong translate>Pricing</strong>
+			<table class="table">
+				<tbody>
+					{{#rows}}
+						<tr><td>{{condition}}</td><td>{{priceYearly}}</td></tr>
+					{{/rows}}
+				</tbody>
+			</table>
+		{{/pricingTable}}
+
 		<p class="text-center subscribe-wrapper">
 			<a id="subscribeButton-{{name}}" href="{{cfaUrl}}" class="button-link btn-white subscribeButton cfa-button">{{cfaLabel}}</a>
 
@@ -58,29 +69,27 @@
 			const buttonId = 'subscribeButton-' + planName;
 			const buttonElement = document.getElementById(buttonId);
 
-			if (stripePricesIds.monthly) {
-				function handleResult() {
-					console.info('Redirected to checkout');
+			function handleResult() {
+				console.info('Redirected to checkout');
+			}
+
+			buttonElement.addEventListener("click", function(evt) {
+				const priceId = stripePricesIds[subscriptionPeriod];
+
+				if (!priceId) {
+					console.error('Invalid period: ' + subscriptionPeriod);
+					return;
 				}
 
-				buttonElement.addEventListener("click", function(evt) {
-					evt.preventDefault();
+				evt.preventDefault();
 
-					const priceId = stripePricesIds[subscriptionPeriod];
-
-					if (!priceId) {
-						console.error('Invalid period: ' + subscriptionPeriod);
-						return;
-					}
-
-					createCheckoutSession(priceId).then(function(data) {
-						stripe.redirectToCheckout({
-							sessionId: data.sessionId
-						})
-						.then(handleResult);
-					});
+				createCheckoutSession(priceId).then(function(data) {
+					stripe.redirectToCheckout({
+						sessionId: data.sessionId
+					})
+					.then(handleResult);
 				});
-			}
+			});
 
 			for (const button of document.querySelectorAll('button.action-toggleIncreaseStorage')) {
 				button.onclick = () => {
