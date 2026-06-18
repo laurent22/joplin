@@ -216,7 +216,10 @@ export default class ShareModel extends BaseModel<Share> {
 			try {
 				await this.models().userItem().add(shareUserId, itemId, { queryContext: { uniqueConstraintErrorLoggingDisabled: true } });
 			} catch (error) {
-				if (!isUniqueConstraintError(error)) throw error;
+				if (!isUniqueConstraintError(error)) {
+					logger.error(`OrphanTrace: addUserItem failed user=${shareUserId} item=${itemId}`, error);
+					throw error;
+				}
 			}
 		};
 
@@ -227,6 +230,7 @@ export default class ShareModel extends BaseModel<Share> {
 				if (error.httpCode === ErrorNotFound.httpCode) {
 					logger.warn('Could not remove a user item because it has already been removed:', error);
 				} else {
+					logger.error(`OrphanTrace: removeUserItem failed user=${shareUserId} item=${itemId}`, error);
 					throw error;
 				}
 			}
@@ -298,6 +302,13 @@ export default class ShareModel extends BaseModel<Share> {
 						if (shareUserId === change.user_id) continue;
 						await addUserItem(shareUserId, item.id);
 					}
+				}
+
+				// Cross-check: is the item owner still in user_items? If not,
+				// this transition just produced an orphan.
+				const ownerUserItem = await this.models().userItem().byUserAndItemId(item.owner_id, item.id);
+				if (!ownerUserItem) {
+					logger.error(`OrphanTrace: handleUpdated produced orphan item=${item.id} owner=${item.owner_id} previousShare=${previousShareId} nextShare=${nextShareId} changeUser=${change.user_id}`);
 				}
 			} finally {
 				perfTimer.pop();
