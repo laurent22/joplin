@@ -2,7 +2,6 @@ import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { exec } from 'child_process';
 import { promisify } from 'util';
-import { valid } from 'semver';
 import logger from '../utils/logger';
 
 const distCommand = 'npm run dist';
@@ -50,7 +49,8 @@ const validateMetadata = async () => {
 		throw new Error('Plugin name must start with \'joplin-plugin-\' in package.json');
 	}
 
-	if (!version || !valid(version)) {
+	const semverRegex = /^\d+\.\d+\.\d+(-[\w.]+)?(\+[\w.]+)?$/;
+	if (!version || !semverRegex.test(version)) {
 		throw new Error(`Invalid plugin version: '${version}'. Must follow semver format.`);
 	}
 
