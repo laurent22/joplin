@@ -22,11 +22,11 @@
 
 <div class="published-note-layout {{#showFolderTree}}with-tree{{/showFolderTree}}">
 	{{#showFolderTree}}
-	<aside id="folder-tree-sidebar" class="published-folder-sidebar" aria-label="Notebook navigation">
+	<nav id="folder-tree-sidebar" class="published-folder-sidebar" aria-label="Notebook navigation">
 		<p class="sidebar-title">{{folderTree.rootTitle}}</p>
 		<div id="folder-tree" class="folder-tree"></div>
 		<template id="folder-tree-data">{{folderTree.treeDataJson}}</template>
-	</aside>
+	</nav>
 	{{/showFolderTree}}
 
 	<div class="note-main">

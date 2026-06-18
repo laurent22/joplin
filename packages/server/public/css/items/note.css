@@ -82,7 +82,6 @@ https://github.com/laurent22/joplin/issues/6370
 	margin: 0;
 }
 
-
 .published-note-layout.with-tree {
 	display: flex;
 	align-items: stretch;
@@ -103,11 +102,13 @@ https://github.com/laurent22/joplin/issues/6370
 }
 
 .sidebar-title {
-	font-size: 0.85rem;
-	font-weight: 600;
+	font-size: 14px !important;
+	font-weight: 700;
+	text-transform: uppercase;
 	color: #363636;
 	margin: 0 0 8px 0;
-	padding: 0 1rem;
+	padding: 0 1rem 12px;
+	border-bottom: 1px solid #e3e5e8;
 }
 
 div.wunderbaum.folder-tree {
@@ -117,36 +118,74 @@ div.wunderbaum.folder-tree {
 	overflow-x: hidden;
 	overflow-y: auto;
 	--wb-col-padding-x: 1rem;
+	--folder-tree-blue: #0557ba;
+	--folder-tree-blue-dark: #03468f;
+	--folder-tree-line: lightblue;
+	--folder-tree-hover-text: #1f2328;
+	--folder-tree-muted-text: #606770;
+	--folder-tree-background-blue-hover: rgb(229, 248, 255);
 }
 
 div.wunderbaum.folder-tree .wb-col {
 	display: flex !important;
 	align-items: center !important;
-	column-gap: 0.5rem;
+	height: 100%;
+	width: 100%;
 }
 
 div.wunderbaum.folder-tree .wb-row {
 	display: flex;
-	padding: 0rem 2.75rem;
 	border-radius: 0.25rem;
 	border: none !important;
+	background-color: transparent !important;
 }
 
-div.wunderbaum.folder-tree:focus .wb-row.wb-focus,
-div.wunderbaum.folder-tree:focus .wb-row.wb-active,
-div.wunderbaum.folder-tree:focus-within .wb-row.wb-focus,
-div.wunderbaum.folder-tree:focus-within .wb-row.wb-active {
-	box-shadow: inset 0 0 0 2px #275dc5;
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"]:hover {
+	background-color: var(--folder-tree-background-blue-hover) !important;
 }
 
-div.wunderbaum.folder-tree .wb-row.wb-active {
-	background-color: #0000000d !important;
-	color: #0557ba !important;
-	font-weight: 700 !important;
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"]:hover .wb-title,
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"]:hover .wb-expander {
+	color: #000;
 }
 
-div.wunderbaum.folder-tree .wb-row:hover {
-	background-color: #0000000d !important;
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"].wb-active .wb-title,
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"].wb-active .wb-expander {
+	color: var(--folder-tree-blue) !important;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"].wb-active:hover .wb-title,
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"].wb-active:hover .wb-expander {
+	color: var(--folder-tree-blue-dark) !important;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"]:hover {
+	background-color: transparent !important;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"]:hover .wb-title {
+	color: #000;
+	background-color: var(--folder-tree-background-blue-hover) !important;
+	border-top-right-radius: 999px !important;
+	border-bottom-right-radius: 999px !important;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"].wb-active:hover .wb-title {
+	color: var(--folder-tree-blue-dark) !important;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"].wb-active .wb-title {
+	color: var(--folder-tree-blue);
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"].wb-active .wb-title::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0px;
+	width: 2px;
+	background-color: var(--folder-tree-blue-dark);
 }
 
 div.wunderbaum.folder-tree .wb-row.wb-active .wb-title {
@@ -156,11 +195,28 @@ div.wunderbaum.folder-tree .wb-row.wb-active .wb-title {
 div.wunderbaum.folder-tree .wb-title {
 	font-weight: 400 !important;
 	line-height: 1.25;
-	color: #606770;
+	color: var(--folder-tree-muted-text);
+	display: flex;
+	align-content: center;
+	height: 100%;
+	position: relative;
+	border-left: 1px solid transparent;
+	box-sizing: border-box;
+	padding: .25rem 0rem;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"] .wb-title {
+	padding-left: var(--wb-col-padding-x);
+	border-left-color: var(--folder-tree-line);
 }
 
 div.wunderbaum.folder-tree .wb-expander {
+	color: var(--folder-tree-muted-text);
 	order: 2;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"] .wb-expander.wb-indent {
+	display: none;
 }
 
 .page-note .published-note-layout.with-tree .note-main {
