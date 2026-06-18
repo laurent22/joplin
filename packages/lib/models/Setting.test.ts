@@ -580,4 +580,16 @@ describe('models/Setting', () => {
 		expect(Setting.value('editor.imageRendering')).toBe(true);
 		expect(Setting.value(testSettingId)).toBe(false);
 	});
+
+	test('should limit listed sync targets on app.joplincloud.com', async () => {
+		Setting.setConstant('isJoplinCloudWebApp', true);
+		expect(Setting.enumOptionValues('sync.target')).toEqual(['0', '9', '10', '11']);
+
+		// Should list other sync targets on other apps
+		Setting.setConstant('isJoplinCloudWebApp', false);
+		const fullSyncOptions = Setting.enumOptionValues('sync.target');
+		expect(fullSyncOptions).toContain('0');
+		expect(fullSyncOptions).toContain('5');
+		expect(fullSyncOptions).toContain('10');
+	});
 });
