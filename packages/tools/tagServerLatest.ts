@@ -13,14 +13,6 @@ async function main(version: string, imageName: string) {
 	};
 
 	try {
-		await doManifestQuiet('inspect', `${imageName}:amd64-${version}`);
-		await doManifestQuiet('inspect', `${imageName}:arm64-${version}`);
-	} catch (error) {
-		console.error('Failed to inspect existing tags. Does the version', version, 'exist?');
-		throw error;
-	}
-
-	try {
 		await doManifestQuiet('rm', `${imageName}:latest`);
 	} catch (_error) {
 		// The local manifest may not exist (e.g. first run, or after a previous push),
