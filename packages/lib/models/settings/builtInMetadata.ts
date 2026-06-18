@@ -138,7 +138,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 					return SyncTargetRegistry.idAndLabelPlainObject(platform);
 				} else {
 					// Only the Joplin-related sync targets are shown on app.joplincloud.com:
-					return SyncTargetRegistry.idAndLabelPlainObject(platform, ['0', '9', '10', '11']);
+					return SyncTargetRegistry.idAndLabelPlainObject(platform, ['0', '10']);
 				}
 			},
 			optionsOrder: () => {

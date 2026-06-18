@@ -583,7 +583,7 @@ describe('models/Setting', () => {
 
 	test('should limit listed sync targets on app.joplincloud.com', async () => {
 		Setting.setConstant('isJoplinCloudWebApp', true);
-		expect(Setting.enumOptionValues('sync.target')).toEqual(['0', '9', '10', '11']);
+		expect(Setting.enumOptionValues('sync.target')).toEqual(['0', '10']);
 
 		// Should list other sync targets on other apps
 		Setting.setConstant('isJoplinCloudWebApp', false);
