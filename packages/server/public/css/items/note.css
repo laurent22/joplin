@@ -184,7 +184,7 @@ div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"].wb-active .wb-tit
 	top: 0;
 	bottom: 0;
 	left: 0px;
-	width: 2px;
+	width: 1px;
 	background-color: var(--folder-tree-blue-dark);
 }
 
