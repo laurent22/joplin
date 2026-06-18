@@ -582,14 +582,18 @@ describe('models/Setting', () => {
 	});
 
 	test('should limit listed sync targets on app.joplincloud.com', async () => {
-		Setting.setConstant('isJoplinCloudWebApp', true);
-		expect(Setting.enumOptionValues('sync.target')).toEqual(['0', '10']);
+		try {
+			Setting.setConstant('isJoplinCloudWebApp', true);
+			expect(Setting.enumOptionValues('sync.target')).toEqual(['0', '10']);
 
-		// Should list other sync targets on other apps
-		Setting.setConstant('isJoplinCloudWebApp', false);
-		const fullSyncOptions = Setting.enumOptionValues('sync.target');
-		expect(fullSyncOptions).toContain('0');
-		expect(fullSyncOptions).toContain('5');
-		expect(fullSyncOptions).toContain('10');
+			// Should list other sync targets on other apps
+			Setting.setConstant('isJoplinCloudWebApp', false);
+			const fullSyncOptions = Setting.enumOptionValues('sync.target');
+			expect(fullSyncOptions).toContain('0');
+			expect(fullSyncOptions).toContain('5');
+			expect(fullSyncOptions).toContain('10');
+		} finally {
+			Setting.setConstant('isJoplinCloudWebApp', false);
+		}
 	});
 });
