@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 });
 
 const isAppJoplinCloud = () => {
-	return Platform.OS === 'web' && location.origin === 'https://app.joplincloud.com';
+	return Setting.value('isJoplinCloudWebApp');
 };
 
 const useShouldShowOtherButton = () => {
