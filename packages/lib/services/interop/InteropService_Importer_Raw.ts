@@ -140,6 +140,10 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 
 				await ItemClass.save(item, { isNew: true, autoTimestamp: false });
 			} catch (error) {
+				if (error.code === 'malformedItem') {
+					result.warnings.push(sprintf('Skipped malformed item: %s: %s', stat.path, error.message));
+					continue;
+				}
 				error.message = `Could not import: ${stat.path}: ${error.message}`;
 				throw error;
 			}

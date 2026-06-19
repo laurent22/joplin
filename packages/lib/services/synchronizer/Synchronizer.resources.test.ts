@@ -3,7 +3,7 @@ import shim from '../../shim';
 import Setting from '../../models/Setting';
 import { NoteEntity, ResourceEntity } from '../../services/database/types';
 import { remoteNotesFoldersResources, remoteResources } from '../../testing/test-utils-synchronizer';
-import { synchronizerStart, tempFilePath, resourceFetcher, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync, msleep } from '../../testing/test-utils';
+import { synchronizerStart, tempFilePath, resourceFetcher, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync, msleep, withWarningSilenced } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Resource from '../../models/Resource';
@@ -441,7 +441,9 @@ describe('Synchronizer.resources', () => {
 		await fileApi().put('11111111111111111111111111111111.md', malicious);
 
 		await switchClient(2);
-		await synchronizerStart();
+		await withWarningSilenced(/Skipping item from sync target|There was some errors|Invalid item ID format/, async () => {
+			await synchronizerStart();
+		});
 
 		const localNote = await Note.load(note.id);
 		expect(localNote).toBeTruthy();

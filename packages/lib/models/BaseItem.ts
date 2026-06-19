@@ -627,7 +627,7 @@ export default class BaseItem extends BaseModel {
 		// char hex string; the extension must not contain path separators.
 		// Throws a malformedItem JoplinError so the sync loop can log+skip the
 		// item rather than abort the whole batch.
-		if ('id' in output && output.id !== '' && !/^[a-f0-9]{32}$/.test(output.id)) {
+		if ('id' in output && output.id !== '' && !/^[a-fA-F0-9]{32}$/.test(output.id)) {
 			throw new JoplinError(`Invalid item ID format: ${JSON.stringify(output.id)}`, 'malformedItem');
 		}
 		if ('file_extension' in output && /[/\\]|\.\./.test(output.file_extension)) {
