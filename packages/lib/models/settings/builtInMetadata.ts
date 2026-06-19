@@ -22,6 +22,10 @@ const showVoiceTypingSettings = (settings: VoiceTypingSettingSlice) => (
 	shim.mobilePlatform() === 'android' && !!settings['buildFlag.voiceTypingEnabled']
 );
 
+const show3rdPartySyncSettings = (Setting: typeof SettingType) => {
+	return !Setting.value('isJoplinCloudWebApp');
+};
+
 export enum CameraDirection {
 	Back,
 	Front,
@@ -130,7 +134,12 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 				return appType !== 'cli' ? null : _('The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).');
 			},
 			options: () => {
-				return SyncTargetRegistry.idAndLabelPlainObject(platform);
+				if (show3rdPartySyncSettings(Setting)) {
+					return SyncTargetRegistry.idAndLabelPlainObject(platform);
+				} else {
+					// Only the Joplin-related sync targets are shown on app.joplincloud.com:
+					return SyncTargetRegistry.idAndLabelPlainObject(platform, ['0', '10']);
+				}
 			},
 			optionsOrder: () => {
 				return SyncTargetRegistry.optionsOrder();

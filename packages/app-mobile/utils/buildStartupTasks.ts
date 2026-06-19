@@ -185,6 +185,7 @@ const buildStartupTasks = (
 		Setting.setConstant('sync.9.apiKey', '');
 		Setting.setConstant('sync.10.apiKey', '');
 		Setting.setConstant('sync.11.apiKey', '');
+		Setting.setConstant('isJoplinCloudWebApp', Platform.OS === 'web' && location.origin === 'https://app.joplincloud.com');
 	});
 	addTask('buildStartupTasks/make resource directory', async () => {
 		await shim.fsDriver().mkdir(Setting.value('resourceDir'));

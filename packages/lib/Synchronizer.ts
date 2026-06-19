@@ -32,6 +32,7 @@ import syncDeleteStep from './services/synchronizer/utils/syncDeleteStep';
 import { ErrorCode } from './errors';
 import { SyncAction } from './services/synchronizer/utils/types';
 import checkDisabledSyncItemsNotification from './services/synchronizer/utils/checkDisabledSyncItemsNotification';
+import { NoteEntity } from './services/database/types';
 import { reg } from './registry';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { Day } from '@joplin/utils/time';
@@ -849,6 +850,11 @@ export default class Synchronizer {
 								// get set there
 
 								await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time);
+
+								if (local.type_ === BaseModel.TYPE_NOTE) {
+									const note = local as NoteEntity;
+									await Note.saveSyncBaseContent(syncTargetId, note.id, note.body, note.title);
+								}
 							}
 						}
 

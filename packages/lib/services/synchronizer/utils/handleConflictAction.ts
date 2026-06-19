@@ -4,13 +4,18 @@ import BaseItem from '../../../models/BaseItem';
 import ItemChange from '../../../models/ItemChange';
 import Note from '../../../models/Note';
 import Resource from '../../../models/Resource';
-import { BaseItemEntity } from '../../database/types';
+import { BaseItemEntity, NoteEntity } from '../../database/types';
 import { SyncAction, conflictActions } from './types';
+import ConflictNoteState from '../../../models/ConflictNoteState';
 
 const logger = Logger.create('handleConflictAction');
 
 export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExists: boolean, remoteContent: BaseItemEntity, local: BaseItemEntity, syncTargetId: number, itemIsReadOnly: boolean, dispatch: Dispatch) => {
 	if (!conflictActions.includes(action)) return;
+
+	// Linked to the original note only after the remote-overwrite step below, which
+	// rebuilds the sync_items row and would otherwise wipe the link.
+	let createdConflictNoteId = '';
 
 	logger.debug(`Handling conflict: ${action}`);
 	logger.debug('local:', local, 'remoteContent', remoteContent);
@@ -57,7 +62,21 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		// ------------------------------------------------------------------------------
 
 		if (mustHandleConflict) {
-			await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
+			const conflictNote = await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
+			createdConflictNoteId = conflictNote.id;
+
+			// Record base (read now, before the rebuild below) and remote. The local
+			// version is already preserved as the conflict note itself.
+			const base = await Note.syncBaseContent(syncTargetId, local.id);
+			const remoteNote = remoteContent as NoteEntity;
+			await ConflictNoteState.save({
+				note_id: conflictNote.id,
+				base_body: base ? base.base_body : '',
+				base_title: base ? base.base_title : '',
+				remote_body: remoteNote ? remoteNote.body : '',
+				remote_title: remoteNote ? remoteNote.title : '',
+				remote_updated_time: remoteNote ? remoteNote.updated_time : 0,
+			});
 		}
 	} else if (action === SyncAction.ResourceConflict) {
 		if (!remoteContent || Resource.mustHandleConflict(local, remoteContent)) {
@@ -86,6 +105,11 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 			local = remoteContent;
 			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteContent.updated_time), remoteContent.updated_time);
 			await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
+
+			// Link after the save above, which rebuilds the sync_items row.
+			if (createdConflictNoteId) {
+				await Note.setBaseConflictNoteId(syncTargetId, local.id, createdConflictNoteId);
+			}
 
 			if (local.encryption_applied) dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
 		} else {

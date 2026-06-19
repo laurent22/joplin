@@ -54,6 +54,8 @@
 	overflow: auto;
 	padding: var(--joplin-config-screen-padding);
 	padding-top: 0;
+	padding-bottom: 0;
+	align-items: flex-start;
 	display: flex;
 	flex: 1;
 
