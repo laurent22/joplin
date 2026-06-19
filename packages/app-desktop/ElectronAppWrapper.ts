@@ -950,11 +950,11 @@ export default class ElectronAppWrapper {
 		});
 
 		this.electronApp_.on('activate', () => {
-			if (this.win_) this.win_.show();
+			if (this.win_ && !this.win_.isDestroyed()) this.win_.show();
 		});
 
 		this.electronApp_.on('did-become-active', () => {
-			if (this.win_) this.win_.show();
+			if (this.win_ && !this.win_.isDestroyed()) this.win_.show();
 		});
 
 		this.electronApp_.on('open-url', (event: import('electron').Event, url: string) => {
