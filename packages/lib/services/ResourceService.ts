@@ -56,7 +56,7 @@ export default class ResourceService extends BaseService {
 				if (!changes.length) break;
 
 				const noteIds = changes.map(a => a.item_id);
-				const notes = await Note.modelSelectAll(`SELECT id, title, body, encryption_applied FROM notes WHERE id IN (${Note.escapeIdsForSql(noteIds)})`);
+				const notes = await Note.modelSelectAll(`SELECT id, title, body, encryption_applied, is_locked, extracted_resource_ids FROM notes WHERE id IN (${Note.escapeIdsForSql(noteIds)})`);
 
 				const noteById = (noteId: string) => {
 					for (let i = 0; i < notes.length; i++) {
@@ -77,16 +77,19 @@ export default class ResourceService extends BaseService {
 						const note = noteById(change.item_id);
 
 						if (note) {
-							if (note.encryption_applied) {
+							if (note.is_locked) {
+								const noteBody = note.extracted_resource_ids.split(',').map((id: string) => `[](:/${id})`).join(' ');
+								await this.setAssociatedResources(note.id, noteBody);
+							} else if (note.encryption_applied) {
 								// If we hit an encrypted note, abort processing for now.
 								// Note will eventually get decrypted and processing can resume then.
 								// This is a limitation of the change tracking system - we cannot skip a change
 								// and keep processing the rest since we only keep track of "lastProcessedChangeId".
 								foundNoteWithEncryption = true;
 								break;
+							} else {
+								await this.setAssociatedResources(note.id, note.body);
 							}
-
-							await this.setAssociatedResources(note.id, note.body);
 						} else {
 							this.logger().warn(`ResourceService::indexNoteResources: A change was recorded for a note that has been deleted: ${change.item_id}`);
 						}
