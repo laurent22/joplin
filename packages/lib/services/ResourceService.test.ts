@@ -8,7 +8,7 @@ import Note from '../models/Note';
 import Resource from '../models/Resource';
 import SearchEngine from './search/SearchEngine';
 import { loadMasterKeysFromSettings, setupAndEnableEncryption } from './e2ee/utils';
-import Setting, { Env } from '../models/Setting';
+import Setting from '../models/Setting';
 
 describe('services/ResourceService', () => {
 
@@ -148,38 +148,34 @@ describe('services/ResourceService', () => {
 			parent_id: folder1.id,
 			body: `encrypted body [](:/${resource2.id})`,
 			is_locked: 1,
-			extracted_resource_ids: `${resource1.id},not-a-resource-id,${folder1.id}`,
+			extracted_resource_ids: ` ${resource1.id},not-a-resource-id,${folder1.id},${resource1.id} `,
 		});
 
-		Setting.setConstant('env', Env.Prod);
-		try {
-			await service.indexNoteResources();
+		Setting.setValue('featureFlag.noteLock', false);
+		await service.indexNoteResources();
 
-			expect(await NoteResource.associatedNoteIds(resource1.id)).toEqual([note1.id]);
-			expect(await NoteResource.associatedNoteIds(resource2.id)).toEqual([]);
-			expect(await NoteResource.associatedNoteIds('not-a-resource-id')).toEqual([]);
-			expect(await NoteResource.associatedNoteIds(folder1.id)).toEqual([]);
+		expect(await NoteResource.associatedNoteIds(resource1.id)).toEqual([note1.id]);
+		expect(await NoteResource.associatedNoteIds(resource2.id)).toEqual([]);
+		expect(await NoteResource.associatedNoteIds('not-a-resource-id')).toEqual([]);
+		expect(await NoteResource.associatedNoteIds(folder1.id)).toEqual([]);
 
-			await Note.save({
-				id: note1.id,
-				body: 'modified encrypted body',
-			});
-			await service.indexNoteResources();
+		await Note.save({
+			id: note1.id,
+			body: 'modified encrypted body',
+		});
+		await service.indexNoteResources();
 
-			expect(await NoteResource.associatedNoteIds(resource1.id)).toEqual([note1.id]);
+		expect(await NoteResource.associatedNoteIds(resource1.id)).toEqual([note1.id]);
 
-			await Note.save({
-				id: note1.id,
-				body: 'encrypted body',
-				is_locked: 1,
-				extracted_resource_ids: '',
-			});
-			await service.indexNoteResources();
+		await Note.save({
+			id: note1.id,
+			body: 'encrypted body',
+			is_locked: 1,
+			extracted_resource_ids: '',
+		});
+		await service.indexNoteResources();
 
-			expect(await NoteResource.associatedNoteIds(resource1.id)).toEqual([]);
-		} finally {
-			Setting.setConstant('env', Env.Dev);
-		}
+		expect(await NoteResource.associatedNoteIds(resource1.id)).toEqual([]);
 	}));
 
 	it('should continue indexing after a locked encrypted note', (async () => {

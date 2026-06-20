@@ -1,4 +1,4 @@
-import Setting, { Env } from './Setting';
+import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import shim from '../shim';
 import markdownUtils from '../markdownUtils';
@@ -38,6 +38,7 @@ describe('models/Note', () => {
 		NoteLockKey.destroyInstance();
 		NoteLockService.destroyInstance();
 		EncryptionService.instance_ = encryptionService();
+		Setting.setValue('featureFlag.noteLock', true);
 	});
 
 	it('should find resource and note IDs', (async () => {
@@ -249,6 +250,15 @@ describe('models/Note', () => {
 		expect(Note.previewFields()).not.toContain('extracted_resource_ids');
 	});
 
+	it('should serialize and unserialize extracted resource IDs', () => {
+		const resourceId1 = '06894e83b8f84d3d8cbe0f1587f9e226';
+		const resourceId2 = '06894e83b8f84d3d8cbe0f1587f9e227';
+
+		expect(Note.serializeExtractedResourceIds([resourceId1, ` ${resourceId2} `, resourceId1, 'invalid'])).toBe(`${resourceId1},${resourceId2}`);
+		expect(Note.unserializeExtractedResourceIds(` ${resourceId1}, ${resourceId2},${resourceId1},invalid`)).toEqual([resourceId1, resourceId2]);
+		expect(Note.unserializeExtractedResourceIds('')).toEqual([]);
+	});
+
 	it('should store note lock ciphertext while decrypting only gated loads', async () => {
 		await NoteLockKey.instance().create('123456');
 		const resourceId1 = '06894e83b8f84d3d8cbe0f1587f9e226';
@@ -301,12 +311,8 @@ describe('models/Note', () => {
 			is_locked: 1,
 		}, { useNoteLock: true });
 
-		Setting.setConstant('env', Env.Prod);
-		try {
-			expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(note.body);
-		} finally {
-			Setting.setConstant('env', Env.Dev);
-		}
+		Setting.setValue('featureFlag.noteLock', false);
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(note.body);
 	});
 
 	it('should fail closed when note lock encryption cannot decrypt or encrypt', async () => {

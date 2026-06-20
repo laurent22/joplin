@@ -78,7 +78,8 @@ export default class ResourceService extends BaseService {
 
 						if (note) {
 							if (note.is_locked) {
-								const noteBody = note.extracted_resource_ids.split(',').map((id: string) => `[](:/${id})`).join(' ');
+								// Recreate note links so setAssociatedResources can validate that each ID belongs to a resource.
+								const noteBody = Note.unserializeExtractedResourceIds(note.extracted_resource_ids).map(id => `[](:/${id})`).join(' ');
 								await this.setAssociatedResources(note.id, noteBody);
 							} else if (note.encryption_applied) {
 								// If we hit an encrypted note, abort processing for now.
