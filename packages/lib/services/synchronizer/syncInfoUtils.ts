@@ -96,10 +96,16 @@ export async function migrateLocalSyncInfo(db: JoplinDatabase) {
 	//   most likely not what the user wants.
 	syncInfo.setKeyTimestamp('e2ee', 0);
 	syncInfo.setKeyTimestamp('activeMasterKeyId', 0);
-	syncInfo.revisionServiceEnabled = Setting.value('revisionService.enabled');
-	syncInfo.revisionServiceTtlDays = Setting.value('revisionService.ttlDays');
-	syncInfo.setKeyTimestamp('revisionServiceEnabled', 0);
-	syncInfo.setKeyTimestamp('revisionServiceTtlDays', 0);
+
+	// For revisionService.*: stamp the timestamp only when the local value
+	// has been customised. A default value uploaded with a real timestamp
+	// would overwrite another client's customised value on first sync.
+	const localRevisionEnabled = Setting.value('revisionService.enabled');
+	const localRevisionTtlDays = Setting.value('revisionService.ttlDays');
+	syncInfo.revisionServiceEnabled = localRevisionEnabled;
+	syncInfo.revisionServiceTtlDays = localRevisionTtlDays;
+	syncInfo.setKeyTimestamp('revisionServiceEnabled', localRevisionEnabled === Setting.settingMetadata('revisionService.enabled').value ? 0 : Date.now());
+	syncInfo.setKeyTimestamp('revisionServiceTtlDays', localRevisionTtlDays === Setting.settingMetadata('revisionService.ttlDays').value ? 0 : Date.now());
 
 	await saveLocalSyncInfo(syncInfo);
 }

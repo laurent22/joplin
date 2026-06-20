@@ -541,10 +541,14 @@ export default class Synchronizer {
 
 					// console.info('NEW', newInfo);
 
-					if (newInfo.revisionServiceEnabled !== localInfo.revisionServiceEnabled) {
+					// Only copy a synced revisionService.* value back to the local
+					// Setting when it carries a real timestamp; a timestamp of 0
+					// means no client has explicitly set it, so we must not
+					// overwrite a customised local value with a migration default.
+					if (newInfo.revisionServiceEnabled !== localInfo.revisionServiceEnabled && newInfo.keyTimestamp('revisionServiceEnabled') > 0) {
 						Setting.setValue('revisionService.enabled', newInfo.revisionServiceEnabled);
 					}
-					if (newInfo.revisionServiceTtlDays !== localInfo.revisionServiceTtlDays) {
+					if (newInfo.revisionServiceTtlDays !== localInfo.revisionServiceTtlDays && newInfo.keyTimestamp('revisionServiceTtlDays') > 0) {
 						Setting.setValue('revisionService.ttlDays', newInfo.revisionServiceTtlDays);
 					}
 
