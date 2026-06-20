@@ -1622,6 +1622,7 @@ packages/lib/services/database/migrations/49.js
 packages/lib/services/database/migrations/50.js
 packages/lib/services/database/migrations/51.js
 packages/lib/services/database/migrations/52.js
+packages/lib/services/database/migrations/53.js
 packages/lib/services/database/migrations/index.js
 packages/lib/services/database/sqlStringToLines.js
 packages/lib/services/database/types.js
