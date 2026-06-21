@@ -3,6 +3,7 @@ import { Size } from '@joplin/utils/types';
 import { useEffect, useRef } from 'react';
 import { ItemFlow } from '@joplin/lib/services/plugins/api/noteListType';
 import { ItemEventHandlers } from './types';
+import attachNoteTitleTooltip from './noteTitleTooltip';
 
 const addItemEventListeners = (
 	element: HTMLElement,
@@ -51,7 +52,7 @@ const addItemEventListeners = (
 };
 
 const useItemElement = (
-	rootElement: HTMLDivElement | null, noteId: string, noteHtml: string, focusVisible: boolean, style: React.CSSProperties, itemSize: Size, onClick: React.MouseEventHandler<HTMLDivElement>, onDoubleClick: React.MouseEventHandler<HTMLDivElement>, flow: ItemFlow, itemEventHandlers: ItemEventHandlers,
+	rootElement: HTMLDivElement | null, noteId: string, noteHtml: string, focusVisible: boolean, style: React.CSSProperties, itemSize: Size, onClick: React.MouseEventHandler<HTMLDivElement>, onDoubleClick: React.MouseEventHandler<HTMLDivElement>, flow: ItemFlow, itemEventHandlers: ItemEventHandlers, displayTitle = '',
 ) => {
 	const itemElement = useRef<HTMLDivElement>(null);
 
@@ -69,16 +70,18 @@ const useItemElement = (
 		element.innerHTML = noteHtml;
 
 		const { cleanup } = addItemEventListeners(element, itemEventHandlers, onClick, onDoubleClick);
+		const detachTooltip = displayTitle ? attachNoteTitleTooltip(element, displayTitle) : null;
 
 		rootElement.appendChild(element);
 		itemElement.current = element;
 
 		return () => {
 			cleanup();
+			if (detachTooltip) detachTooltip();
 			itemElement.current = null;
 			element.remove();
 		};
-	}, [rootElement, itemSize, noteHtml, noteId, flow, style, onClick, onDoubleClick, itemEventHandlers]);
+	}, [rootElement, itemSize, noteHtml, noteId, flow, style, onClick, onDoubleClick, itemEventHandlers, displayTitle]);
 
 	useEffect(() => {
 		const element = itemElement.current;
