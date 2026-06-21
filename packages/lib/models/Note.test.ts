@@ -250,13 +250,29 @@ describe('models/Note', () => {
 		expect(Note.previewFields()).not.toContain('extracted_resource_ids');
 	});
 
-	it('should serialize and unserialize extracted resource IDs', () => {
-		const resourceId1 = '06894e83b8f84d3d8cbe0f1587f9e226';
-		const resourceId2 = '06894e83b8f84d3d8cbe0f1587f9e227';
+	const resourceId1 = '06894e83b8f84d3d8cbe0f1587f9e226';
+	const resourceId2 = '06894e83b8f84d3d8cbe0f1587f9e227';
 
-		expect(Note.serializeExtractedResourceIds([resourceId1, ` ${resourceId2} `, resourceId1, 'invalid'])).toBe(`${resourceId1},${resourceId2}`);
-		expect(Note.unserializeExtractedResourceIds(` ${resourceId1}, ${resourceId2},${resourceId1},invalid`)).toEqual([resourceId1, resourceId2]);
-		expect(Note.unserializeExtractedResourceIds('')).toEqual([]);
+	test.each<[string[], string]>([
+		[[], ''],
+		[[' '], ''],
+		[[resourceId1], resourceId1],
+		[[` ${resourceId1} `, resourceId2], `${resourceId1},${resourceId2}`],
+		[[resourceId1, resourceId1, 'invalid'], resourceId1],
+	])('should serialize extracted resource IDs: %j', (resourceIds, expected) => {
+		expect(Note.serializeExtractedResourceIds(resourceIds)).toBe(expected);
+	});
+
+	test.each<[string, string[]]>([
+		['', []],
+		[' ', []],
+		[',,', []],
+		[resourceId1, [resourceId1]],
+		[`${resourceId1},,${resourceId2}`, [resourceId1, resourceId2]],
+		[` ${resourceId1}, ${resourceId2} `, [resourceId1, resourceId2]],
+		[`${resourceId1},${resourceId1},invalid`, [resourceId1]],
+	])('should unserialize extracted resource IDs: %j', (serializedIds, expected) => {
+		expect(Note.unserializeExtractedResourceIds(serializedIds)).toEqual(expected);
 	});
 
 	it('should store note lock ciphertext while decrypting only gated loads', async () => {
