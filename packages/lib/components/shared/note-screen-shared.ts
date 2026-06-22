@@ -310,7 +310,7 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 		mode = 'view';
 	}
 
-	if (isProvisionalNote) {
+	if (isProvisionalNote && !comp.props.sharedData) {
 		mode = 'edit';
 		comp.scheduleFocusUpdate();
 	}
