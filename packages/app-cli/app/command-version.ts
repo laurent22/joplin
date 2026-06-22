@@ -12,6 +12,8 @@ class Command extends BaseCommand {
 	}
 
 	public override async action() {
+		// The relative path to package.json is from the built version of this command
+		// in app-cli/build/command-version.js (see https://github.com/laurent22/joplin/issues/15738):
 		this.stdout(versionInfo(require('./package.json'), {}).message);
 	}
 }
