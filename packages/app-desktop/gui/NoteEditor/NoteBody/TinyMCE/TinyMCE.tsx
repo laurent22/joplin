@@ -1372,8 +1372,14 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 		};
 
 		// Keypress means that a printable key (letter, digit, etc.) has been
-		// pressed so we want to always trigger onChange in this case
-		function onKeypress() {
+		// pressed so we want to always trigger onChange in this case. Except on
+		// Windows/Linux, Ctrl+Alt also produces AltGr characters, so our own
+		// Ctrl+Alt shortcuts (e.g. "Toggle editors") fire this event too even
+		// though they don't insert any text.
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- TinyMCE editor instance / event types are looser than the published @types/tinymce (we use APIs not in the published types: getDoc, getWin, formatter, ui.registry, undoManager extensions)
+		function onKeypress(event: any) {
+			if (event.ctrlKey && event.altKey && !event.getModifierState('AltGraph')) return;
+
 			onChangeHandler();
 		}
 
