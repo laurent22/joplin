@@ -13,12 +13,17 @@ const baseStyle = {
 	margin: 15, // No text and no interactive component should be within this margin
 	itemMarginTop: 10,
 	itemMarginBottom: 10,
+	spacingSmall: 8,
+	spacingMedium: 12,
+	spacingLarge: 16,
+	borderRadiusSmall: 8,
 	fontSizeSmaller: 14,
 	disabledOpacity: 0.2,
 	lineHeight: '1.6em',
 	listTabSize: '1.7em',
 	// The default, may be overridden in settings:
 	noteViewerFontSize: 16,
+	newIconColor: '#262626',
 };
 
 export type ThemeStyle = BaseTheme & typeof baseStyle & {

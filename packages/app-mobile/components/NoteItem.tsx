@@ -12,6 +12,8 @@ import { Dispatch } from 'redux';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import useOnLongPressProps from '../utils/hooks/useOnLongPressProps';
 import MultiTouchableOpacity from './buttons/MultiTouchableOpacity';
+import Icon from './Icon';
+import { escapeRegExp } from '@joplin/lib/string-utils';
 
 interface Props {
 	dispatch: Dispatch;
@@ -19,19 +21,18 @@ interface Props {
 	note: NoteEntity;
 	noteSelectionEnabled: boolean;
 	selectedNoteIds: string[];
+	highlightedWord?: string;
 }
-
 
 const useStyles = (themeId: number) => {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 
 		const listItem: ViewStyle = {
-			flexDirection: 'row',
-			// height: 40,
-			borderBottomWidth: 1,
-			borderBottomColor: theme.dividerColor,
-			alignItems: 'flex-start',
+			borderTopWidth: 1,
+			borderTopColor: theme.dividerColor,
+			paddingTop: theme.itemMarginTop,
+			paddingBottom: theme.itemMarginBottom,
 			// backgroundColor: theme.backgroundColor,
 		};
 
@@ -39,6 +40,9 @@ const useStyles = (themeId: number) => {
 			flexGrow: 1,
 			flexShrink: 1,
 			alignSelf: 'stretch',
+			flexDirection: 'row',
+			alignItems: 'center',
+			gap: theme.itemMarginTop,
 		};
 		const listItemPressableWithCheckbox: ViewStyle = {
 			...listItemPressable,
@@ -53,7 +57,7 @@ const useStyles = (themeId: number) => {
 		};
 
 		const listItemText: TextStyle = {
-			flex: 1,
+			flexShrink: 1,
 			color: theme.color,
 			fontSize: theme.fontSize,
 		};
@@ -74,6 +78,14 @@ const useStyles = (themeId: number) => {
 			listItemPressableWithoutCheckbox,
 			listItemPressableWithCheckbox,
 			listItemTextWithCheckbox,
+			noteIcon: {
+				color: theme.newIconColor,
+				fontSize: theme.fontSize,
+			},
+			highlightedText: {
+				backgroundColor: theme.searchMarkerBackgroundColor,
+				color: theme.searchMarkerColor,
+			},
 			selectionWrapperSelected,
 			checkboxStyle: {
 				color: theme.color,
@@ -149,6 +161,10 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 	const selectionWrapperStyle = isSelected ? styles.selectionWrapperSelected : styles.selectionWrapper;
 
 	const noteTitle = Note.displayTitle(note);
+	const highlightedWord = props.highlightedWord;
+	const displayedNoteTitle = highlightedWord ? noteTitle.split(new RegExp(`(${escapeRegExp(highlightedWord)})`, 'i')).map((part, index) => {
+		return part.toLowerCase() === highlightedWord.toLowerCase() ? <Text key={index} style={styles.highlightedText}>{part}</Text> : part;
+	}) : noteTitle;
 	const selectDeselectLabel = isSelected ? _('Deselect') : _('Select');
 	const onLongPressProps = useOnLongPressProps({ onLongPress, actionDescription: selectDeselectLabel });
 
@@ -175,7 +191,8 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 			onPress={onPress}
 			beforePressable={todoCheckbox}
 		>
-			<Text style={listItemTextStyle}>{noteTitle}</Text>
+			<Icon name='ionicon document-text-outline' style={styles.noteIcon} accessibilityLabel={null}/>
+			<Text style={listItemTextStyle}>{displayedNoteTitle}</Text>
 		</MultiTouchableOpacity>
 	);
 });
@@ -187,4 +204,3 @@ export default connect((state: AppState) => {
 		selectedNoteIds: state.selectedNoteIds,
 	};
 })(NoteItemComponent);
-
