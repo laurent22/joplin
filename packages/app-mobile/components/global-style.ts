@@ -24,6 +24,7 @@ const baseStyle = {
 	// The default, may be overridden in settings:
 	noteViewerFontSize: 16,
 	newIconColor: '#262626',
+	inputFocusBorderColor: '#2D5BE5',
 };
 
 export type ThemeStyle = BaseTheme & typeof baseStyle & {

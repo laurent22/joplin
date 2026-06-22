@@ -57,7 +57,7 @@ const useResults = (props: Props) => {
 			if (event.cancelled) return;
 
 			props.onHighlightedWordsChange(searchTerms);
-			setHighlightedWord(query);
+			setHighlightedWord(SearchEngine.instance().createQueryFromTerms(searchTerms));
 			setNotes(notes);
 		} finally {
 			setIsProcessing(false);

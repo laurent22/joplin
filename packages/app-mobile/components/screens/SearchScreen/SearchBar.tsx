@@ -43,7 +43,7 @@ const SearchBar: React.FC<Props> = ({ themeId, value, autoFocus, placeholder, on
 
 	return (
 		<Searchbar
-			style={[styles.searchContainer, isFocused && { borderColor: '#2D5BE5' }]}
+			style={[styles.searchContainer, isFocused && { borderColor: theme.inputFocusBorderColor }]}
 			inputStyle={styles.searchTextInput}
 			autoFocus={autoFocus}
 			autoCapitalize='none'
