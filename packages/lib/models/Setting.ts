@@ -517,7 +517,7 @@ class Setting extends BaseModel {
 	}
 
 	public static featureFlagKeys(appType: AppType): string[] {
-		const keys = this.keys(true, appType);
+		const keys = this.keys(false, appType);
 		return keys.filter(k => k.indexOf('featureFlag.') === 0);
 	}
 
