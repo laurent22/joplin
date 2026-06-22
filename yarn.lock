@@ -13192,7 +13192,7 @@ __metadata:
   resolution: "@joplin/whisper-voice-typing@workspace:packages/whisper-voice-typing"
   dependencies:
     "@types/react": "npm:19.1.10"
-    nitrogen: "npm:0.33.7"
+    nitrogen: "npm:0.33.9"
     react: "npm:19.1.5"
     react-native: "npm:0.81.6"
     react-native-nitro-modules: "npm:0.33.9"
@@ -43801,18 +43801,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nitrogen@npm:0.33.7":
-  version: 0.33.7
-  resolution: "nitrogen@npm:0.33.7"
+"nitrogen@npm:0.33.9":
+  version: 0.33.9
+  resolution: "nitrogen@npm:0.33.9"
   dependencies:
     chalk: "npm:^5.3.0"
-    react-native-nitro-modules: "npm:^0.33.7"
+    react-native-nitro-modules: "npm:^0.33.9"
     ts-morph: "npm:^27.0.0"
     yargs: "npm:^18.0.0"
     zod: "npm:^4.0.5"
   bin:
     nitrogen: lib/index.js
-  checksum: 10/d08e55575fa5bef5161e221b5f46f5b9337dbc706a04037c41e782f94bd2b12a4163196491e1b82427e64caf4124ec126467047f84bc1946cd710fa65de17572
+  checksum: 10/dba4241f23bb106043899b1ec877672df9fc1f76d15019785bf74ff6a957439f474a8438bdcabd96cda1f23e4b1147c94956bc1ed07504671a8a3e16d17f337f
   languageName: node
   linkType: hard
 
@@ -49723,7 +49723,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-nitro-modules@npm:0.33.9, react-native-nitro-modules@npm:^0.33.7":
+"react-native-nitro-modules@npm:0.33.9, react-native-nitro-modules@npm:^0.33.9":
   version: 0.33.9
   resolution: "react-native-nitro-modules@npm:0.33.9"
   peerDependencies:
