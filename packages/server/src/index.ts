@@ -2,14 +2,14 @@ import Logger, { TargetType } from '@joplin/utils/Logger';
 import { fork } from 'node:child_process';
 import { join } from 'node:path';
 
+// This script starts the server with a customized environment. This is useful
+// for enabling global NodeJS hardening options.
+
 const globalLogger = new Logger();
 globalLogger.addTarget(TargetType.Console);
 Logger.initializeGlobalLogger(globalLogger);
 
 const logger = Logger.create('index');
-
-// Manages the server environment.
-// This allows enabling global NODE_OPTIONS for the main server process.
 
 const getHardeningLevel = () => {
 	const hardeningLevel = Number(process.env.JOPLIN_HARDENING_LEVEL || '0');
