@@ -1,6 +1,6 @@
 # Joplin Server hardening
 
-NodeJS provides several harding options, which can reduce attack surface and make it more difficult to exploit certain types of vulnerabilities.
+NodeJS provides several hardening options, which can reduce attack surface and make it more difficult to exploit certain types of vulnerabilities.
 
 If Joplin Server hardening is enabled, certain supported NodeJS hardening options are enabled on startup. This feature is currently opt-in by setting `JOPLIN_HARDENING_LEVEL=1`.
 
