@@ -5,11 +5,13 @@ import { join } from 'node:path';
 // This script starts the server with a customized environment. This is useful
 // for enabling global NodeJS hardening options.
 
-const globalLogger = new Logger();
-globalLogger.addTarget(TargetType.Console);
-Logger.initializeGlobalLogger(globalLogger);
-
 const logger = Logger.create('index');
+
+const setUpLogger = () => {
+	const globalLogger = new Logger();
+	globalLogger.addTarget(TargetType.Console);
+	Logger.initializeGlobalLogger(globalLogger);
+};
 
 const getHardeningLevel = () => {
 	const hardeningLevel = Number(process.env.JOPLIN_HARDENING_LEVEL || '0');
@@ -40,16 +42,22 @@ const getServerEnv = () => {
 	};
 };
 
-// Omit the NodeJS process name and file path arguments:
-const argv = process.argv.slice(2);
-const child = fork(join(__dirname, 'app.js'), argv, {
-	env: getServerEnv(),
-	detached: false,
-});
+const main = () => {
+	setUpLogger();
 
-child.on('exit', (code) => {
-	process.exit(code ?? child.exitCode ?? 0);
-});
+	// Omit the NodeJS process name and file path arguments:
+	const argv = process.argv.slice(2);
+	const child = fork(join(__dirname, 'app.js'), argv, {
+		env: getServerEnv(),
+		detached: false,
+	});
 
-process.on('SIGTERM', () => child.kill('SIGTERM'));
-process.on('SIGINT', () => child.kill('SIGINT'));
+	child.on('exit', (code) => {
+		process.exit(code ?? child.exitCode ?? 0);
+	});
+
+	process.on('SIGTERM', () => child.kill('SIGTERM'));
+	process.on('SIGINT', () => child.kill('SIGINT'));
+};
+
+main();
