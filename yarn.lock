@@ -13028,7 +13028,7 @@ __metadata:
     rate-limiter-flexible: "npm:9.1.1"
     raw-body: "npm:3.0.2"
     samlify: "npm:2.13.1"
-    short-uuid: "npm:6.0.2"
+    short-uuid: "npm:6.0.3"
     source-map-support: "npm:0.5.21"
     sqlite3: "npm:5.1.6"
     stripe: "npm:13.9.0"
@@ -53368,12 +53368,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"short-uuid@npm:6.0.2":
-  version: 6.0.2
-  resolution: "short-uuid@npm:6.0.2"
+"short-uuid@npm:6.0.3":
+  version: 6.0.3
+  resolution: "short-uuid@npm:6.0.3"
   dependencies:
     any-base: "npm:^1.1.0"
-  checksum: 10/4dd8888563cf305d8ae51924b8c67618f51a47526e291566112eaba2cc78eef9c221981e5923fe032dd18193e51225ef80f9ab1edf48d62ae1ef78edc520d0b7
+  checksum: 10/4f23a565db99fd8033fc5b32e4ec558b2c4ac713f5a32665b6c7553d10956825b174c0f90db58c5dd65384e2b568e15379321e2b36f20d23897f2ce2cbde6a39
   languageName: node
   linkType: hard
 
