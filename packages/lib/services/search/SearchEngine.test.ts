@@ -71,10 +71,12 @@ describe('services/SearchEngine', () => {
 
 		const n1 = await Note.save({ title: 'a' });
 		const n2 = await Note.save({ title: 'b' });
+		await Note.save({ title: 'locked', is_locked: 1 });
 		await engine.syncTables();
 		rows = await engine.search('a');
 		expect(rows.length).toBe(1);
 		expect(rows[0].title).toBe('a');
+		expect(await engine.search('locked')).toEqual([]);
 
 		await Note.delete(n1.id);
 		await engine.syncTables();
@@ -99,6 +101,14 @@ describe('services/SearchEngine', () => {
 		await engine.syncTables();
 		rows = await engine.search('c');
 		expect(rows.length).toBe(1);
+
+		await Note.save({ id: n2.id, is_locked: 1 });
+		await engine.syncTables();
+		expect(await engine.search('c')).toEqual([]);
+
+		await Note.save({ id: n2.id, is_locked: 0 });
+		await engine.syncTables();
+		expect((await engine.search('c')).length).toBe(1);
 	}));
 
 	it('should, after initial indexing, save the last change ID', (async () => {

@@ -92,6 +92,7 @@ export default class NoteEmbedding extends BaseModel {
 			`SELECT n.id FROM notes n
 			 WHERE (n.deleted_time IS NULL OR n.deleted_time = 0)
 			   AND (n.is_conflict IS NULL OR n.is_conflict = 0)
+			   AND n.is_locked = 0
 			   AND NOT EXISTS (SELECT 1 FROM note_embeddings_meta m WHERE m.note_id = n.id)${excludeSql}
 			 LIMIT ?`,
 			[...excludeIds, limit],
