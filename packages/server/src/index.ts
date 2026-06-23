@@ -52,8 +52,14 @@ const main = () => {
 		detached: false,
 	});
 
-	child.on('exit', (code) => {
-		process.exit(code ?? child.exitCode ?? 0);
+	child.on('exit', (code, signal) => {
+		// The child process either exits with a signal or an exit code.
+		// See https://nodejs.org/api/child_process.html#event-exit
+		if (signal) {
+			process.kill(process.pid, signal);
+		} else {
+			process.exit(code ?? 1);
+		}
 	});
 
 	process.on('SIGTERM', () => child.kill('SIGTERM'));
