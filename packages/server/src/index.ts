@@ -1,5 +1,12 @@
+import Logger, { TargetType } from '@joplin/utils/Logger';
 import { fork } from 'node:child_process';
 import { join } from 'node:path';
+
+const globalLogger = new Logger();
+globalLogger.addTarget(TargetType.Console);
+Logger.initializeGlobalLogger(globalLogger);
+
+const logger = Logger.create('index');
 
 // Manages the server environment.
 // This allows enabling global NODE_OPTIONS for the main server process.
@@ -11,7 +18,10 @@ const getHardeningLevel = () => {
 };
 
 const getServerEnv = () => {
-	if (getHardeningLevel() === 0) return process.env;
+	const hardeningLevel = getHardeningLevel();
+	if (hardeningLevel === 0) return process.env;
+
+	logger.info('Starting with certain NodeJS hardening options enabled.');
 
 	const nodeOptions = [
 		// Hardening: Disallow code execution through 'eval' and 'new Function'
