@@ -5,7 +5,7 @@ import { join } from 'node:path';
 // This allows enabling global NODE_OPTIONS for the main server process.
 
 const getHardeningLevel = () => {
-	const hardeningLevel = Number(process.env.JOPLIN_HARDENING_LEVEL || '1');
+	const hardeningLevel = Number(process.env.JOPLIN_HARDENING_LEVEL || '0');
 	if (!isFinite(hardeningLevel)) throw new Error('Invalid environment: JOPLIN_HARDENING_LEVEL must be an integer or undefined');
 	return hardeningLevel;
 };
