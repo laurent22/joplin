@@ -330,6 +330,25 @@ describe('EmbeddingIndexer', () => {
 		expect(Setting.value('ai.embedding.initialScanDone')).toBe(true);
 	});
 
+	it('does not start in background when vector search is unavailable', async () => {
+		// On platforms where the sqlite-vec extension fails to load (see
+		// #15761) the indexer would otherwise pull every note into the
+		// expensive embedding provider and then throw at saveChunks — burning
+		// CPU/memory on every tick for no result. Confirm we bail at startup
+		// and surface the state to the UI instead.
+		Setting.setValue('ai.enabled', true);
+		const spy = jest.spyOn(NoteEmbedding, 'vectorSearchAvailable').mockReturnValue(false);
+		try {
+			await EmbeddingIndexer.instance().runInBackground();
+			const status = await EmbeddingIndexer.instance().getStatus();
+			expect(status.indexerState).toBe('vector-search-unavailable');
+		} finally {
+			spy.mockRestore();
+			Setting.setValue('ai.enabled', false);
+			await EmbeddingIndexer.instance().stopRunInBackground();
+		}
+	});
+
 	it('getStatus counts indexed vs total notes and excludes trashed ones', async () => {
 		if (skipIfNoVec()) return;
 		const folder = await Folder.save({ title: 'f' });

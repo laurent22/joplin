@@ -46,6 +46,17 @@ export default class EmbeddingIndexer {
 
 	public async runInBackground() {
 		if (this.isRunningInBackground_) return;
+
+		// Without sqlite-vec we can run the embedding provider (potentially
+		// expensive ONNX inference) but have nowhere to store the vectors, so
+		// every note would fail at saveChunks. Bail before starting the timer
+		// so we don't burn CPU/memory for nothing on platforms where the
+		// extension didn't load (see #15761).
+		if (!NoteEmbedding.vectorSearchAvailable()) {
+			logger.warn('Not starting background indexer: sqlite-vec extension is not loaded on this platform');
+			return;
+		}
+
 		this.isRunningInBackground_ = true;
 
 		logger.info('Starting background indexer');
@@ -85,6 +96,8 @@ export default class EmbeddingIndexer {
 			indexerState = 'ai-disabled';
 		} else if (!Setting.value('ai.embedding.enabled')) {
 			indexerState = 'index-disabled';
+		} else if (!NoteEmbedding.vectorSearchAvailable()) {
+			indexerState = 'vector-search-unavailable';
 		} else if (this.maintenanceRunning_) {
 			indexerState = 'running';
 		} else {
