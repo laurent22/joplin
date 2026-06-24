@@ -1,0 +1,188 @@
+# =============================================================================
+# issues.yml
+# Data source for create-issues.sh.
+# Edit this file to change repo, project, labels, or issue content.
+# The script contains no magic strings — everything lives here.
+# =============================================================================
+
+config:
+  repo: "Ach57/joplin-comp-354-dev"
+  project: "joplin-comp-354-dev-project"
+
+# Labels that must exist before issues are created.
+labels:
+  - name: epic
+    description: "High-level epic grouping"
+    color: "0075ca"
+  - name: feature
+    description: "Feature-level work item"
+    color: "e4e669"
+
+# Issues to create, in order. Each entry needs: title, label, body.
+issues:
+  - title: "Epic: Offline Thesaurus Plugin"
+    label: epic
+    body: |
+      ## Overview
+
+      Add an **offline synonym suggestion** feature to Joplin using WordNet as the lexical database and the MiniLM sentence-transformer model for semantic re-ranking.
+
+      ## Goals
+
+      - Provide synonym suggestions entirely offline — no network call after initial setup.
+      - Integrate naturally into the Joplin editor (right-click or keyboard shortcut).
+      - Keep latency low enough to feel instant on typical developer hardware.
+
+      ## Features
+
+      This epic is broken down into the following feature issues:
+
+      1. User Interaction & UX
+      2. WordNet Synonym Retrieval
+      3. Semantic Ranking Engine
+      4. Offline Experience
+      5. Performance & Optimization
+      6. Quality Assurance
+      7. Documentation & Release Readiness
+
+      ## Out of Scope
+
+      - Online thesaurus APIs
+      - Languages other than English (v1)
+      - Mobile (Joplin mobile) support in v1
+
+  - title: "Feature: User Interaction & UX"
+    label: feature
+    body: |
+      ## Description
+
+      Design and implement the editor-side surface that lets a user trigger synonym suggestions and apply a chosen synonym.
+
+      ## Acceptance Criteria
+
+      - [ ] User can invoke the thesaurus via right-click context menu on a selected word.
+      - [ ] User can invoke the thesaurus via a configurable keyboard shortcut.
+      - [ ] A dropdown/popup lists up to 10 ranked synonym suggestions.
+      - [ ] Selecting a suggestion replaces the selected word in-place without losing surrounding formatting.
+      - [ ] If no synonyms are found, a user-friendly 'No synonyms found' message is shown.
+      - [ ] The UI is accessible (keyboard-navigable, screen-reader friendly).
+
+      ## Related Epic
+
+      Epic: Offline Thesaurus Plugin
+
+  - title: "Feature: WordNet Synonym Retrieval"
+    label: feature
+    body: |
+      ## Description
+
+      Implement the module responsible for querying the bundled WordNet database to retrieve candidate synonyms for a given input word.
+
+      ## Acceptance Criteria
+
+      - [ ] WordNet data files are bundled with the plugin (no network fetch at runtime).
+      - [ ] Given a word, the module returns all synset members across relevant POS tags (noun, verb, adjective, adverb).
+      - [ ] Lookup completes in < 50 ms on a modern laptop.
+      - [ ] Unknown words return an empty list without throwing.
+      - [ ] Case-insensitive lookup is supported.
+
+      ## Related Epic
+
+      Epic: Offline Thesaurus Plugin
+
+  - title: "Feature: Semantic Ranking Engine"
+    label: feature
+    body: |
+      ## Description
+
+      Integrate the MiniLM sentence-transformer model to semantically re-rank raw WordNet synonyms by contextual relevance to the sentence in which the target word appears.
+
+      ## Acceptance Criteria
+
+      - [ ] The MiniLM model weights are bundled or fetched once and cached locally.
+      - [ ] Candidates are ranked by cosine similarity between the candidate embedding and the surrounding-sentence embedding.
+      - [ ] Re-ranking completes in < 200 ms for a candidate list of ≤ 50 words.
+      - [ ] Ranking is deterministic for identical inputs.
+      - [ ] The engine exposes a clean interface: `rank(word, context, candidates[]) → RankedSynonym[]`.
+
+      ## Related Epic
+
+      Epic: Offline Thesaurus Plugin
+
+  - title: "Feature: Offline Experience"
+    label: feature
+    body: |
+      ## Description
+
+      Ensure the plugin works fully offline after initial setup, with clear guidance for first-time model download.
+
+      ## Acceptance Criteria
+
+      - [ ] Plugin works with no internet connection after the first-run model download.
+      - [ ] On first use, the plugin prompts the user to download model weights and shows progress.
+      - [ ] If the download fails, an actionable error message is displayed.
+      - [ ] WordNet data is included in the plugin bundle — no separate download needed.
+      - [ ] Plugin does not make any network requests once assets are cached.
+
+      ## Related Epic
+
+      Epic: Offline Thesaurus Plugin
+
+  - title: "Feature: Performance & Optimization"
+    label: feature
+    body: |
+      ## Description
+
+      Profile and optimise the critical path (WordNet lookup → MiniLM inference → UI render) so that the end-to-end response feels instant.
+
+      ## Acceptance Criteria
+
+      - [ ] End-to-end synonym suggestion (lookup + ranking + display) completes in < 300 ms on reference hardware (2020 MacBook Pro M1).
+      - [ ] WordNet index is pre-parsed into a fast lookup structure (e.g. SQLite or binary trie) at build time.
+      - [ ] MiniLM inference runs on a background thread / worker so the editor UI is never blocked.
+      - [ ] Memory footprint of the plugin does not exceed 150 MB at rest.
+      - [ ] Performance benchmarks are tracked in CI with a regression threshold.
+
+      ## Related Epic
+
+      Epic: Offline Thesaurus Plugin
+
+  - title: "Feature: Quality Assurance"
+    label: feature
+    body: |
+      ## Description
+
+      Establish the testing strategy and implement the test suite covering unit, integration, and end-to-end scenarios.
+
+      ## Acceptance Criteria
+
+      - [ ] Unit tests cover WordNet retrieval module with ≥ 90 % line coverage.
+      - [ ] Unit tests cover the semantic ranking engine with known fixture inputs.
+      - [ ] Integration tests verify the full lookup → rank → display pipeline.
+      - [ ] Tests run offline (no network dependency in CI).
+      - [ ] All tests pass on macOS, Windows, and Linux CI runners.
+      - [ ] Linting and type-checking are enforced in CI.
+
+      ## Related Epic
+
+      Epic: Offline Thesaurus Plugin
+
+  - title: "Feature: Documentation & Release Readiness"
+    label: feature
+    body: |
+      ## Description
+
+      Write end-user and developer documentation, configure packaging, and prepare the plugin for submission to the Joplin plugin repository.
+
+      ## Acceptance Criteria
+
+      - [ ] README documents installation, first-run model download, and keyboard shortcuts.
+      - [ ] CHANGELOG follows Keep a Changelog format; v1.0.0 entry is complete.
+      - [ ] Plugin manifest (`manifest.json`) is valid and all required fields are populated.
+      - [ ] Plugin is packaged with `jpm pack` and the resulting `.jpl` installs cleanly.
+      - [ ] Developer docs explain the architecture, how to run tests, and how to contribute.
+      - [ ] Plugin passes Joplin's official plugin submission checklist.
+
+      ## Related Epic
+
+      Epic: Offline Thesaurus Plugin
