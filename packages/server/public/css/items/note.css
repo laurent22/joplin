@@ -91,8 +91,8 @@ https://github.com/laurent22/joplin/issues/6370
 }
 
 .published-folder-sidebar {
-	flex: 0 0 260px;
-	max-width: 260px;
+	flex: 0 0 320px;
+	max-width: 320px;
 	padding: 16px 0 0;
 	overflow: hidden;
 	display: flex;
@@ -103,7 +103,7 @@ https://github.com/laurent22/joplin/issues/6370
 
 .sidebar-title {
 	font-size: 14px !important;
-	font-weight: 700;
+	font-weight: 600;
 	text-transform: uppercase;
 	color: #363636;
 	margin: 0 0 8px 0;
@@ -111,19 +111,35 @@ https://github.com/laurent22/joplin/issues/6370
 	border-bottom: 1px solid #e3e5e8;
 }
 
+div.folder-tree {
+	flex: 1 1 0;
+	height: 0;
+	min-height: 0;
+	overflow: hidden;
+	contain: strict;
+}
+
 div.wunderbaum.folder-tree {
-	flex: 1 1 auto;
+	flex: 1 1 0;
+	height: 0;
+	min-height: 0;
 	border: none !important;
 	outline: none;
 	overflow-x: hidden;
-	overflow-y: auto;
+	overflow-y: hidden;
+	scrollbar-gutter: stable;
 	--wb-col-padding-x: 1rem;
 	--folder-tree-blue: #0557ba;
 	--folder-tree-blue-dark: #03468f;
 	--folder-tree-line: lightblue;
-	--folder-tree-hover-text: #1f2328;
-	--folder-tree-muted-text: #606770;
-	--folder-tree-background-blue-hover: rgb(229, 248, 255);
+	--folder-tree-hover-text: #616161;
+	--folder-tree-muted-text: #282828;
+	--folder-tree-background-blue-hover: #e5f8ff;
+	--folder-tree-background-gray-hover: #f6f6f6;
+}
+
+div.wunderbaum.folder-tree:not(.wb-initializing) {
+	overflow-y: auto;
 }
 
 div.wunderbaum.folder-tree .wb-col {
@@ -138,15 +154,21 @@ div.wunderbaum.folder-tree .wb-row {
 	border-radius: 0.25rem;
 	border: none !important;
 	background-color: transparent !important;
+	transition: background-color 220ms ease;
 }
+
+/* div.wunderbaum.folder-tree .wb-row:hover {
+	color: var(--folder-tree-hover-text) !important;
+} */
 
 div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"]:hover {
-	background-color: var(--folder-tree-background-blue-hover) !important;
+	background-color: var(--folder-tree-background-gray-hover) !important;
 }
 
-div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"]:hover .wb-title,
-div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"]:hover .wb-expander {
-	color: #000;
+div.wunderbaum.folder-tree .wb-row:hover .wb-title,
+div.wunderbaum.folder-tree .wb-row:hover .wb-expander {
+	color: var(--folder-tree-hover-text) !important;
+
 }
 
 div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"].wb-active .wb-title,
@@ -165,6 +187,12 @@ div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"]:hover {
 
 div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"]:hover .wb-title {
 	color: #000;
+	background-color: var(--folder-tree-background-gray-hover) !important;
+	border-top-right-radius: 999px !important;
+	border-bottom-right-radius: 999px !important;
+}
+
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"].wb-active .wb-title {
 	background-color: var(--folder-tree-background-blue-hover) !important;
 	border-top-right-radius: 999px !important;
 	border-bottom-right-radius: 999px !important;
@@ -189,13 +217,14 @@ div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"].wb-active .wb-tit
 }
 
 div.wunderbaum.folder-tree .wb-row.wb-active .wb-title {
-	font-weight: 700 !important;
+	font-weight: 600 !important;
 }
 
 div.wunderbaum.folder-tree .wb-title {
 	font-weight: 400 !important;
 	line-height: 1.25;
 	color: var(--folder-tree-muted-text);
+	transition: color 220ms ease, background-color 220ms ease;
 	display: flex;
 	align-content: center;
 	height: 100%;
@@ -203,6 +232,7 @@ div.wunderbaum.folder-tree .wb-title {
 	border-left: 1px solid transparent;
 	box-sizing: border-box;
 	padding: .25rem 0rem;
+	padding-right: var(--wb-col-padding-x);
 }
 
 div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"] .wb-title {
@@ -212,7 +242,14 @@ div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"] .wb-title {
 
 div.wunderbaum.folder-tree .wb-expander {
 	color: var(--folder-tree-muted-text);
+	transition: color 220ms ease;
 	order: 2;
+}
+
+div.wunderbaum.folder-tree.is-initializing .wb-row,
+div.wunderbaum.folder-tree.is-initializing .wb-title,
+div.wunderbaum.folder-tree.is-initializing .wb-expander {
+	transition: none;
 }
 
 div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"] .wb-expander.wb-indent {

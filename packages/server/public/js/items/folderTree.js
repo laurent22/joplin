@@ -1,14 +1,6 @@
 (function() {
 	'use strict';
 
-	function onReady(fn) {
-		if (document.readyState === 'complete' || document.readyState === 'interactive') {
-			setTimeout(fn, 1);
-		} else {
-			document.addEventListener('DOMContentLoaded', fn);
-		}
-	}
-
 	function initTree() {
 		const container = document.getElementById('folder-tree');
 		if (!container) return;
@@ -23,6 +15,35 @@
 		} catch (error) {
 			return;
 		}
+
+		const collapsedNotebooksStorageKey = `folder-tree-collapsed:${window.location.pathname}`;
+		const loadCollapsedNotebookKeys = function() {
+			try {
+				const keys = JSON.parse(window.sessionStorage.getItem(collapsedNotebooksStorageKey) || '[]');
+				return new Set(Array.isArray(keys) ? keys.filter(key => typeof key === 'string') : []);
+			} catch (error) {
+				return new Set();
+			}
+		};
+		const collapsedNotebookKeys = loadCollapsedNotebookKeys();
+		const saveCollapsedNotebookKeys = function() {
+			try {
+				if (collapsedNotebookKeys.size) {
+					window.sessionStorage.setItem(collapsedNotebooksStorageKey, JSON.stringify([...collapsedNotebookKeys]));
+				} else {
+					window.sessionStorage.removeItem(collapsedNotebooksStorageKey);
+				}
+			} catch (error) {
+				// Ignore unavailable browser storage.
+			}
+		};
+		const restoreCollapsedNotebooks = function(nodes) {
+			for (const node of nodes) {
+				if (node.folder && collapsedNotebookKeys.has(node.key)) node.expanded = false;
+				if (node.children) restoreCollapsedNotebooks(node.children);
+			}
+		};
+		restoreCollapsedNotebooks(treeData.source || []);
 
 		const navigate = function(node) {
 			if (!node || !node.data || !node.data.url) return;
@@ -78,6 +99,12 @@
 			const position = siblings.indexOf(e.node) + 1;
 			row.setAttribute('role', 'presentation');
 			row.dataset.treeItemType = e.node.data.url ? 'note' : 'folder';
+			const title = e.nodeElem.querySelector('.wb-title');
+			if (title && title.scrollWidth > title.clientWidth) {
+				title.setAttribute('title', e.node.title);
+			} else if (title) {
+				title.removeAttribute('title');
+			}
 			e.nodeElem.id = rowId(e.node);
 			e.nodeElem.setAttribute('role', 'treeitem');
 			// Added to fix screen reader on Safari
@@ -94,6 +121,7 @@
 
 		new window.mar10.Wunderbaum({
 			element: container,
+			adjustHeight: false,
 			header: false,
 			rowHeightPx: 40,
 			source: treeData.source || [],
@@ -114,10 +142,13 @@
 					const active = e.tree.findKey(treeData.activeKey);
 					if (active) {
 						active.setActive(true, { noEvents: true, focusTree: false });
-						active.makeVisible({ noAnimation: true, noEvents: true });
 						setActiveTreeItem(active, false);
 					}
 				}
+
+				requestAnimationFrame(() => {
+					requestAnimationFrame(() => container.classList.remove('is-initializing'));
+				});
 			},
 			activate: function(e) {
 				setActiveTreeItem(e.node, true);
@@ -126,18 +157,26 @@
 				renderTreeItem(e);
 			},
 			expand: function(e) {
-				updateExpandedState(e.node);
-				announceExpandedState(e.node);
-			},
-			collapse: function(e) {
+				if (e.flag) {
+					collapsedNotebookKeys.delete(e.node.key);
+				} else {
+					collapsedNotebookKeys.add(e.node.key);
+				}
+				saveCollapsedNotebookKeys();
 				updateExpandedState(e.node);
 				announceExpandedState(e.node);
 			},
 			click: function(e) {
-				if (e.node && !e.node.folder) {
+				if (e.node && e.node.data.folder) {
+					e.node.setExpanded(!e.node.isExpanded());
+					return false;
+				} else if (e.node) {
 					if (e.event && e.event.preventDefault) e.event.preventDefault();
 					navigate(e.node);
 				}
+			},
+			dblclick: function() {
+				return false;
 			},
 			keydown: function(e) {
 				if (e.event && e.event.key === 'Enter' && e.node && !e.node.folder) {
@@ -165,8 +204,28 @@
 		});
 	}
 
-	onReady(() => {
+	const initFolderTree = function() {
 		initTree();
 		initSidebarToggle();
-	});
+	};
+
+	const initWhenLayoutReady = function() {
+		const footer = document.querySelector('body > .footer');
+		// The next node is added after the footer is fully parsed.
+		if (!footer || !footer.nextSibling) return false;
+
+		initFolderTree();
+		return true;
+	};
+
+	if (!initWhenLayoutReady()) {
+		const layoutObserver = new MutationObserver(() => {
+			if (initWhenLayoutReady()) layoutObserver.disconnect();
+		});
+
+		layoutObserver.observe(document.documentElement, {
+			childList: true,
+			subtree: true,
+		});
+	}
 })();
