@@ -79,7 +79,7 @@ const useStyles = (themeId: number) => {
 			listItemPressableWithCheckbox,
 			listItemTextWithCheckbox,
 			noteIcon: {
-				color: theme.raisedColor,
+				color: theme.color,
 				fontSize: theme.fontSize,
 			},
 			highlightedText: {
