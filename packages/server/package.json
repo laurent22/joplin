@@ -12,7 +12,7 @@
     "devDropDb": "node dist/index.js --env dev --drop-db",
     "start": "node dist/index.js",
     "generateTypes": "rm -f db-buildTypes.sqlite && yarn start --env buildTypes migrate latest && node dist/tools/generateTypes.js && mv db-buildTypes.sqlite schema.sqlite",
-    "tsc": "tsc --project tsconfig.json",
+    "tsc": "NODE_OPTIONS=--disable-proto=delete tsc --project tsconfig.json",
     "test": "jest --verbose=false",
     "test-ci": "yarn test",
     "test-debug": "node --inspect node_modules/.bin/jest -- --verbose=false",
