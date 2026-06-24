@@ -146,18 +146,18 @@
 				folderOpen: 'fas fa-folder-open',
 				folderLazy: 'fas fa-folder',
 			},
-			init: async function(e) {
-				const scrollTop = Number(accessSessionStorage(storage => storage.getItem(scrollStorageKey))) || 0;
+			init: function(e) {
 				if (treeData.activeKey) {
 					const active = e.tree.findKey(treeData.activeKey);
 					if (active) {
-						await active.setActive(true, { noEvents: true, focusTree: false });
-						container.scrollTop = scrollTop;
+						e.tree._setActiveNode(active);
+						active.update();
 						setActiveTreeItem(active, false);
 					}
 				}
 
 				requestAnimationFrame(() => {
+					container.scrollTop = Number(accessSessionStorage(storage => storage.getItem(scrollStorageKey))) || 0;
 					requestAnimationFrame(() => container.classList.remove('is-initializing'));
 				});
 			},
