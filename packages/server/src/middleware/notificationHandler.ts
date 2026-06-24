@@ -9,17 +9,32 @@ import { helpUrl, profileUrl } from '../utils/urlUtils';
 import { userFlagToString } from '../models/UserFlagModel';
 import renderMarkdown from '../utils/renderMarkdown';
 import config from '../config';
+import { unique } from '../utils/array';
 
 const logger = Logger.create('notificationHandler');
 
 async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 	if (!ctx.joplin.owner.is_admin) return;
 
-	const defaultAdmin = await ctx.joplin.models.user().login(defaultAdminEmail, config().defaultAdminPassword);
+	const findInsecureAdminPassword = async () => {
+		// Check both the user-set default admin password and 'admin' -- the config's defaultAdminPassword
+		// is only applied on first startup:
+		const dangerousPasswords = unique([config().defaultAdminPassword, 'admin']);
+		for (const password of dangerousPasswords) {
+			const admin = await ctx.joplin.models.user().login(defaultAdminEmail, password);
+			if (admin) {
+				return password;
+			}
+		}
+
+		return null;
+	};
+
 	const notificationModel = ctx.joplin.models.notification();
 
-	if (defaultAdmin) {
-		const knownInsecurePassword = config().defaultAdminPassword === 'admin';
+	const foundAdminPassword = await findInsecureAdminPassword();
+	if (foundAdminPassword) {
+		const knownInsecurePassword = foundAdminPassword === 'admin';
 		let message;
 		if (knownInsecurePassword) {
 			message = _('The default admin password is insecure and has not been changed! [Change it now](%s)', profileUrl());

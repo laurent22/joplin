@@ -3,7 +3,7 @@ import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import Tag from '../../models/Tag';
 import SearchEngine from '../search/SearchEngine';
-import { db, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { db, setupDatabaseAndSynchronizer, switchClient, withWarningSilenced } from '../../testing/test-utils';
 import McpServer from './McpServer';
 import { McpProtocolVersion } from './types';
 
@@ -76,10 +76,12 @@ describe('McpServer', () => {
 	});
 
 	test('returns InvalidParams for malformed tools/call params', async () => {
-		const response = await McpServer.instance().handleRequest({
-			jsonrpc: '2.0', id: 1, method: 'tools/call', params: {},
+		await withWarningSilenced(/Missing or invalid "name" parameter/, async () => {
+			const response = await McpServer.instance().handleRequest({
+				jsonrpc: '2.0', id: 1, method: 'tools/call', params: {},
+			});
+			expect(response.error.code).toBe(-32602);
 		});
-		expect(response.error.code).toBe(-32602);
 	});
 
 	test('responds to id: null requests instead of treating them as notifications', async () => {
@@ -289,13 +291,15 @@ describe('McpServer', () => {
 		// distinction here: ToolError → isError:true, anything else → JSON-RPC error.)
 		jest.spyOn(Note, 'load').mockRejectedValueOnce(new Error('forged internal failure'));
 
-		const response = await McpServer.instance().handleRequest({
-			jsonrpc: '2.0', id: 1, method: 'tools/call',
-			params: { name: 'read_note', arguments: { id: 'a'.repeat(32) } },
+		await withWarningSilenced(/forged internal failure/, async () => {
+			const response = await McpServer.instance().handleRequest({
+				jsonrpc: '2.0', id: 1, method: 'tools/call',
+				params: { name: 'read_note', arguments: { id: 'a'.repeat(32) } },
+			});
+			expect(response.result).toBeUndefined();
+			expect(response.error.code).toBe(-32603);
+			expect(response.error.message).toMatch(/forged internal failure/);
 		});
-		expect(response.result).toBeUndefined();
-		expect(response.error.code).toBe(-32603);
-		expect(response.error.message).toMatch(/forged internal failure/);
 	});
 
 	test('semantic_search_notes returns a clear error when AI is off', async () => {

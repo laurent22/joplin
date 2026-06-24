@@ -354,6 +354,7 @@ export default class JoplinDatabase extends Database {
 				if (tableName.indexOf('items_fts') === 0) continue;
 				if (tableName === 'notes_spellfix') continue;
 				if (tableName === 'search_aux') continue;
+				if (tableName.startsWith('note_embeddings_vec')) continue;
 
 				pragmas = await this.selectAll(`PRAGMA table_info("${tableName}")`);
 

@@ -594,11 +594,11 @@ describe('shares.folder', () => {
 		const { user: owner, session: session1 } = await createUserAndSession(1);
 		const { user: recipient, session: session2 } = await createUserAndSession(2);
 
-		await shareFolderWithUser(session1.id, session2.id, '0000000TEST0FOLDER01000000000000', {
-			'0000000TEST0FOLDER01000000000000': { },
+		await shareFolderWithUser(session1.id, session2.id, '00000000000000000001000000000000', {
+			'00000000000000000001000000000000': { },
 		});
 
-		const folderItem = await models().item().loadByJopId(owner.id, '0000000TEST0FOLDER01000000000000');
+		const folderItem = await models().item().loadByJopId(owner.id, '00000000000000000001000000000000');
 
 		const itemIdsForUser = async (userId: string) => {
 			return (await models().item().children(userId)).items.map(item => item.id);

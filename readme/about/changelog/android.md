@@ -1,5 +1,50 @@
 # Joplin Android Changelog
 
+## [android-v3.7.2](https://github.com/laurent22/joplin/releases/tag/android-v3.7.2) - 2026-06-22T20:27:04Z
+
+- Improved: Preserve customised note history settings when syncing across clients (#15728)
+- Fixed: Fixed crash when the profile database is updated (d85f430)
+
+## [android-v3.7.1](https://github.com/laurent22/joplin/releases/tag/android-v3.7.1) - 2026-06-20T12:22:13Z
+
+- New: Add notebook sort options in config screen (#15203 by Self Not Found)
+- Improved: Add local note encryption schema metadata (#15557) (#15556 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Add migration 51 for conflict resolution columns (#15565) (#15549 by Sriram Varun Kumar)
+- Improved: Exclude user_data from note revisions (#15245 by [@alondmnt](https://github.com/alondmnt))
+- Improved: Give conflict_note_states table a numeric primary key and set note_id as unique (#15724) (#15722 by Sriram Varun Kumar)
+- Improved: Joplin Server/Cloud sync: Improve item deletion performance (#15392 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Load plugin scripts directly from filesystem instead of passing through bridge (#15095)
+- Improved: Prevent notes with null bytes in title or body from being saved (#15485)
+- Improved: Refactor (native) Crypto module to improve encryption performance on mobile (#15288) (#15287 by Self Not Found)
+- Improved: Reject malformed item IDs during sync (#15540)
+- Improved: Remove old workaround for S3 and Dropbox sync to improve performance (#15314) (#15313 by Self Not Found)
+- Improved: Speed up app startup by skipping unnecessary plugin file processing (#15085) (#15081)
+- Fixed: Add the ability to delete the default profile (#15153) (#14506 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Disable external embeds on mobile and hide the setting (#15602) (#15483 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix Android IME text corruption by upgrading @codemirror/view to 6.39.9 (#15283) (#13134 by Sriram Varun Kumar)
+- Fixed: Fix Joplin Cloud login failing when Android kills the app during OAuth (#15111)
+- Fixed: Fix XSS vulnerability in HTML notes (#15435)
+- Fixed: Fix gap when side menus are opened in landscape on some devices (#15302) (#15292 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix inability to cancel the sync during the deletion step (#15243 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix inconsistent note order upon note creation, when custom order is set (#14656) (#14647 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix log screen auto-scroll loop when toggling errors (#15219 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix long note titles hide "unpublish" in the publish notes dialog (#15475) (#15473 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix possible crash when creating a note or notebook with an excessively long title (#15434)
+- Fixed: Fix silent sync failure which prevents new changes being synced, when a single server object has an updated_time in the future (#15262 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix startup failure (#15554 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed mobile "new notebook" instructions (#15590) (#15479 by [@aguasa4](https://github.com/aguasa4))
+- Fixed: In-editor rendering: Render URLs when the link text is empty (#15444) (#15425 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Match desktop behaviour for sanitising inline search queries copied from the global search (#15452) (#15442 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: RTE heading links scroll to bottom instead of top in Editing mode (#15128) (#15120 by Sriram Varun Kumar)
+- Fixed: Truncate verbose decryption error payloads in Status screen (#15112) (#15104 by [@Ehtesham-Zahid](https://github.com/Ehtesham-Zahid))
+- Fixed: Upgrade CodeMirror view to 6.42.1 (#15639) (#15498 by [@mrjo118](https://github.com/mrjo118))
+
+## [android-v3.6.21](https://github.com/laurent22/joplin/releases/tag/android-v3.6.21) - 2026-06-20T10:38:19Z
+
+- Improved: Improve how resource filenames are determined (#15672 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Fountain rendering issue (#15659 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix duplicate tag creation for special unicode characters (#15613) (#15608 by [@mrjo118](https://github.com/mrjo118))
+
 ## [android-v3.6.20](https://github.com/laurent22/joplin/releases/tag/android-v3.6.20) - 2026-05-22T10:08:40Z
 
 - Fixed: Fix file system sync (#15500) (#15496 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

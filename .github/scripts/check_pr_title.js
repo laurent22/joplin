@@ -20,7 +20,12 @@ module.exports = async ({ github, context, core }) => {
 	const softCheckUsers = ['laurent22', 'personalizedrefrigerator', 'mrjo118', 'tessus', 'CalebJohn', 'Rygaa'];
 	const autoClosedLabel = 'auto-closed: invalid-title';
 
-	const prefix = '(Desktop|Mobile|All|Cli|Tools|Chore|Clipper|Server|Android|iOS|Web|Transcribe|Plugins|CI|Plugin Repo|Doc)';
+	// Product-area prefixes are kept in sync with the list recognised by
+	// packages/tools/git-changelog.ts so that valid titles are picked up by
+	// the changelog generator. Non-product prefixes (Tools, Chore, CI, Doc,
+	// Plugin Repo) are administrative categories for changes that do not
+	// ship to users and so do not appear in the changelog.
+	const prefix = '(Desktop|Mobile|Android|iOS|Windows|Linux|macOS|Cli|Clipper|Server|Transcribe|Plugins|Api|Cloud|Tools|Chore|CI|Doc)';
 	const prefixList = `${prefix}(,\\s*${prefix})*`;
 	const strictRegex = new RegExp(`^${prefixList}: (Fixes|Resolves) #[0-9]+: .+`);
 	const softRegex = new RegExp(`^${prefixList}: ((Fixes|Resolves) #[0-9]+: )?.+`);
@@ -107,11 +112,11 @@ module.exports = async ({ github, context, core }) => {
 		commentMarker,
 		`@${author} the pull request title does not match the required format.`,
 		'',
-		'Please prefix the title with the area you are targeting, then add the issue you are addressing. For example:',
+		'Please prefix the title with the area you are targeting, then add the issue you are addressing. If the change targets several areas, separate them with commas. For example:',
 		'',
 		'- `Desktop: Resolves #123: Added new setting to change font`',
 		'- `Mobile, Desktop: Fixes #456: Fixed config screen error`',
-		'- `All: Resolves #777: Made synchronisation faster`',
+		'- `Mobile, Desktop, Cli: Resolves #777: Improved note search performance`',
 		'',
 		'See the [pull request template](https://github.com/laurent22/joplin/blob/dev/.github/PULL_REQUEST_TEMPLATE) for the list of valid prefixes and the full specification.',
 		'',

@@ -73,6 +73,8 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 
 	const itemEventHandlers = useMemo((): ItemEventHandlers => ({ onInputChange, onClick: null }), [onInputChange]);
 
+	const displayTitle = useMemo(() => Note.displayTitle(props.note), [props.note]);
+
 	useItemElement(
 		rootElement,
 		noteId,
@@ -84,6 +86,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		props.onDoubleClick,
 		props.flow,
 		itemEventHandlers,
+		displayTitle,
 	);
 
 

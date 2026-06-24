@@ -8,7 +8,7 @@ import Setting from './Setting';
 import shim from '../shim';
 import time from '../time';
 import markdownUtils from '../markdownUtils';
-import { FolderEntity, NoteEntity } from '../services/database/types';
+import { FolderEntity, NoteEntity, SyncItemEntity } from '../services/database/types';
 import Tag from './Tag';
 const { sprintf } = require('sprintf-js');
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
@@ -28,6 +28,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { ALL_NOTES_FILTER_ID } from '../reserved-ids';
 import NoteLockNote from '../services/noteLock/NoteLockNote';
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
+import isItemId from './utils/isItemId';
 
 export interface PreviewsOrder {
 	by: string;
@@ -173,6 +174,15 @@ export default class Note extends BaseItem {
 		}
 
 		return unique(itemIds);
+	}
+
+	public static serializeExtractedResourceIds(resourceIds: string[]) {
+		return unique(resourceIds.map(id => id.trim()).filter(id => !!isItemId(id))).join(',');
+	}
+
+	public static unserializeExtractedResourceIds(serializedIds: string) {
+		if (!serializedIds) return [];
+		return unique(serializedIds.split(',').map(id => id.trim()).filter(id => !!isItemId(id)));
 	}
 
 	public static async linkedItems(body: string) {
@@ -839,7 +849,7 @@ export default class Note extends BaseItem {
 		// in the item_changes table
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
 		if (isNoteLockEnabled() && !!options?.useNoteLock) {
-			await NoteLockNote.prepareForSave(o, this.linkedItemIds, isNew);
+			await NoteLockNote.prepareForSave(o, this.linkedItemIds, this.serializeExtractedResourceIds, isNew);
 		}
 
 		syncDebugLog.info('Save Note: P:', oldNote);
@@ -1230,6 +1240,24 @@ export default class Note extends BaseItem {
 		conflictNote.is_conflict = 1;
 		conflictNote.conflict_original_id = sourceNote.id;
 		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });
+	}
+
+	// Records the note content that was just pushed to the server. This becomes the
+	// "base" version - the common ancestor used to detect what changed on each side
+	// when a conflict later occurs. A clean upload also means there's no active
+	// conflict, so we clear any previously recorded conflict note id.
+	public static async saveSyncBaseContent(syncTarget: number, noteId: string, body: string, title: string) {
+		const sql = 'UPDATE sync_items SET base_body = ?, base_title = ?, base_conflict_note_id = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
+		await this.db().exec(sql, [body, title, '', noteId, this.TYPE_NOTE, syncTarget]);
+	}
+
+	public static async setBaseConflictNoteId(syncTarget: number, noteId: string, conflictNoteId: string) {
+		const sql = 'UPDATE sync_items SET base_conflict_note_id = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
+		await this.db().exec(sql, [conflictNoteId, noteId, this.TYPE_NOTE, syncTarget]);
+	}
+
+	public static async syncBaseContent(syncTarget: number, noteId: string): Promise<SyncItemEntity> {
+		return BaseItem.syncItem(syncTarget, noteId, { fields: ['base_body', 'base_title'] });
 	}
 
 	public static async getNextOrderValue(folderId: string) {

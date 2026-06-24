@@ -63,6 +63,7 @@ export interface Constants {
 	syncVersion: number;
 	startupDevPlugins: string[];
 	isSubProfile: boolean;
+	isJoplinCloudWebApp: boolean;
 
 	'sync.9.apiKey': string;
 	'sync.10.apiKey': string;
@@ -305,6 +306,7 @@ class Setting extends BaseModel {
 		syncVersion: 3,
 		startupDevPlugins: [],
 		isSubProfile: false,
+		isJoplinCloudWebApp: false,
 
 		'sync.9.apiKey': '',
 		'sync.10.apiKey': '',

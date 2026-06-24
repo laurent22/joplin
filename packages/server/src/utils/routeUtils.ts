@@ -6,7 +6,6 @@ import { AppContext, HttpMethod, RouteType } from './types';
 import { URL } from 'url';
 import { csrfCheck } from './csrf';
 import { contextSessionId } from './requestUtils';
-import { shortToLong } from './uuid';
 import { stripOffQueryParameters } from './urlUtils';
 import { hasOwnProperty } from '@joplin/utils/object';
 
@@ -204,22 +203,6 @@ function disabledAccountCheck(route: MatchedRoute, user: User) {
 	if (route.subPath.schema.startsWith('api/')) throw new ErrorForbidden(`This account is disabled. Please login to ${config().baseUrl} for more information.`);
 }
 
-const needsConvertedId = (_path: SubPath): boolean => {
-	// Return true if the particular schema should use a converted ID
-	return false;
-};
-
-const convertPathId = (path: SubPath): SubPath => {
-	if (needsConvertedId(path)) {
-		return {
-			...path,
-			id: shortToLong(path.id),
-		};
-	}
-
-	return path;
-};
-
 interface ExecRequestResult {
 	response: unknown;
 	path: SubPath;
@@ -253,7 +236,7 @@ export async function execRequest(routes: Routers, ctx: AppContext): Promise<Exe
 
 	return {
 		response: await endPoint.handler(match.subPath, ctx),
-		path: convertPathId(match.subPath),
+		path: match.subPath,
 	};
 }
 

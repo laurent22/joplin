@@ -3,8 +3,8 @@ Hash: SHA512
 
 Joplin Warrant Canary
 
-Statement date: 20 April 2026
-Valid until: 19 June 2026
+Statement date: 19 June 2026
+Valid until: 18 August 2026
 
 This warrant canary is updated every 60 days.
 If this document has not been updated within 75 days of the
@@ -31,17 +31,17 @@ To prevent backdating, this statement includes current public events:
 
 Current international events:
 
-1. Iran sends mixed signals on talks after US seizes ship
-2. Carney says Canada’s strong economic ties to US are ‘weakness’ to be corrected
+1. Israel strikes targets in Lebanon as US-Iran talks in Switzerland called off
+2. Andy Burnham wins huge majority in Makerfield byelection, paving way for Starmer leadership challenge
 
 Canary signing key fingerprint:
 
 F820 F830 6DD0 05A1 02D1  8CD5 946A E9FA 5915 EF53
 -----BEGIN PGP SIGNATURE-----
 
-iKcEARYKAE8WIQT4IPgwbdAFoQLRjNWUaun6WRXvUwUCaeY82xsUgAAAAAAEAA5t
+iKcEARYKAE8WIQT4IPgwbdAFoQLRjNWUaun6WRXvUwUCajUnuBsUgAAAAAAEAA5t
 YW51MiwyLjUrMS4xMiwwLDMVHGNhbmFyeUBqb3BsaW5hcHAub3JnAAoJEJRq6fpZ
-Fe9TaH0BAM24c/9HjyqS+i9cgqIBpsttXlD6lan4x7rcjiohqsvTAPwNju/nww9q
-M6ILELmcKdzgarmL9hTn+YQGki/2xBoFAA==
-=H46T
+Fe9TYy0A/1Emr/pD768V1triC06rfB9IfWZKQ3IxH0PCfb/9GZZPAQCFWvI4t7j0
+NrDJJm9mLvNKtznSqLHFv63csQ8a4k3PCw==
+=uKI1
 -----END PGP SIGNATURE-----

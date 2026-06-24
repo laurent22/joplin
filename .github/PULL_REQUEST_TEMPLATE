@@ -18,26 +18,29 @@ Examples of good titles:
 
 - Desktop: Resolves #123: Added new setting to change font
 - Mobile, Desktop: Fixes #456: Fixed config screen error
-- All: Resolves #777: Made synchronisation faster
+- Mobile, Desktop, Cli: Resolves #777: Improved note search performance
 
 Valid prefixes:
 
-- `All` — change applies to all client apps (Desktop, Mobile and CLI)
 - `Desktop` — the Windows/macOS/Linux app (Electron app)
 - `Mobile` — the mobile app (both Android and iOS)
 - `Android` — only the Android app
 - `iOS` — only the iOS app
+- `Windows` — Windows-specific changes
+- `Linux` — Linux-specific changes
+- `macOS` — macOS-specific changes
 - `Cli` — the command line app
 - `Server` — the Joplin Server
 - `Clipper` — the web clipper browser extension
 - `Transcribe` — the Transcribe server
 - `Plugins` — the plugin API or built-in plugins
-- `Plugin Repo` — the plugin repository
+- `Api` — the data API
+- `Cloud` — Joplin Cloud
 - `Tools` — internal scripts and build tools
 - `CI` — continuous integration and GitHub workflows
 - `Doc` — documentation, README, website content
 - `Chore` — maintenance work that does not fit any of the above (dependency bumps, refactoring, cleanup)
 
-If the change targets two areas, separate them with commas — for example "Desktop, Mobile". If it applies to all client apps, use "All".
+If the change targets several areas, separate them with commas — for example "Mobile, Desktop, Cli: Resolves #777: Improved note search performance".
 
 -->

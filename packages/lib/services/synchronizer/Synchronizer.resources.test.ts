@@ -3,7 +3,7 @@ import shim from '../../shim';
 import Setting from '../../models/Setting';
 import { NoteEntity, ResourceEntity } from '../../services/database/types';
 import { remoteNotesFoldersResources, remoteResources } from '../../testing/test-utils-synchronizer';
-import { synchronizerStart, tempFilePath, resourceFetcher, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync, msleep } from '../../testing/test-utils';
+import { synchronizerStart, tempFilePath, resourceFetcher, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync, msleep, withWarningSilenced } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Resource from '../../models/Resource';
@@ -414,6 +414,41 @@ describe('Synchronizer.resources', () => {
 		await synchronizerStart();
 		expect(await synchronizer().api().get(resourcePath)).toBe('just testing 2');
 		expect(await synchronizer().api().get(`${resource.id}.md`)).toContain('my new title 2');
+	});
+
+	// A crafted resource metadata file with `..` in its id must be rejected at sync ingestion. Sync
+	// must continue past it (not abort the whole batch) so one malformed item can't permanently
+	// break sync.
+	it('should skip resources with malformed IDs during sync without aborting', async () => {
+		const folder = await Folder.save({ title: 'folder1' });
+		const note = await Note.save({ title: 'good note', parent_id: folder.id });
+		await synchronizerStart();
+
+		const malicious = [
+			'poc-resource',
+			'',
+			'id: ../../joplin-poc-escaped',
+			'mime: application/octet-stream',
+			'filename: poc',
+			'file_extension: txt',
+			'size: 0',
+			'created_time: 2026-01-01T00:00:00.000Z',
+			'updated_time: 2026-01-01T00:00:00.000Z',
+			'user_created_time: 2026-01-01T00:00:00.000Z',
+			'user_updated_time: 2026-01-01T00:00:00.000Z',
+			'type_: 4',
+		].join('\n');
+		await fileApi().put('11111111111111111111111111111111.md', malicious);
+
+		await switchClient(2);
+		await withWarningSilenced(/Skipping item from sync target|There was some errors|Invalid item ID format/, async () => {
+			await synchronizerStart();
+		});
+
+		const localNote = await Note.load(note.id);
+		expect(localNote).toBeTruthy();
+		expect(localNote.title).toBe('good note');
+		expect(await Resource.load('11111111111111111111111111111111')).toBeFalsy();
 	});
 
 });

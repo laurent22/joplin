@@ -23,10 +23,8 @@ const useStyles = (themeId: number) => {
 				borderWidth: 2,
 				borderColor: theme.dividerColor,
 				backgroundColor: theme.backgroundColor,
-				margin: theme.spacingLarge,
-				marginTop: theme.spacingMedium,
-				marginBottom: theme.spacingSmall,
-				borderRadius: theme.borderRadiusSmall,
+				margin: theme.margin,
+				borderRadius: theme.borderRadius,
 			},
 			searchTextInput: {
 				color: theme.color,

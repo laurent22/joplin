@@ -1,5 +1,11 @@
 # Joplin iOS Changelog
 
+## [ios-v13.6.10](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.10) - 2026-06-20T11:04:51Z
+
+- Improved: Improve how resource filenames are determined (#15672 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Fountain rendering issue (#15659 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix duplicate tag creation for special unicode characters (#15613) (#15608 by [@mrjo118](https://github.com/mrjo118))
+
 ## [ios-v13.6.9](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.9) - 2026-05-22T10:09:34Z
 
 - Fixed: Fix scroll jumps while editing long paragraphs (#15495) (#15490 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

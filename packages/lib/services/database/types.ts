@@ -99,7 +99,8 @@ export interface AlarmEntity {
 export interface ConflictNoteStateEntity {
   'base_body'?: string;
   'base_title'?: string;
-  'note_id'?: string | null;
+  'id'?: number | null;
+  'note_id'?: string;
   'remote_body'?: string;
   'remote_title'?: string;
   'remote_updated_time'?: number;
@@ -707,15 +708,6 @@ export const databaseSchema: DatabaseTables = {
 		updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
-	conflict_note_states: {
-		base_body: { type: 'string' },
-		base_title: { type: 'string' },
-		note_id: { type: 'string' },
-		remote_body: { type: 'string' },
-		remote_title: { type: 'string' },
-		remote_updated_time: { type: 'number' },
-		type_: { type: 'number' },
-	},
 	note_embeddings_meta: {
 		chunk_index: { type: 'number' },
 		chunk_text: { type: 'string' },
@@ -723,6 +715,16 @@ export const databaseSchema: DatabaseTables = {
 		id: { type: 'number' },
 		model_id: { type: 'string' },
 		note_id: { type: 'string' },
+		type_: { type: 'number' },
+	},
+	conflict_note_states: {
+		base_body: { type: 'string' },
+		base_title: { type: 'string' },
+		id: { type: 'number' },
+		note_id: { type: 'string' },
+		remote_body: { type: 'string' },
+		remote_title: { type: 'string' },
+		remote_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
 };

@@ -1090,6 +1090,9 @@ export default class ItemModel extends BaseModel<Item> {
 			}
 
 			modelLogger.info(`processOrphanedItems: Batch ${batchNum} - Found ${orphanedItems.length} orphaned items`);
+			for (const o of orphanedItems) {
+				modelLogger.info(`OrphanTrace: found orphan item=${o.id} owner=${o.owner_id} name=${o.name}`);
+			}
 
 			const userIds: string[] = unique(orphanedItems.map(i => i.owner_id));
 			const users = await this.models().user().loadByIds(userIds, { fields: ['id'] });
