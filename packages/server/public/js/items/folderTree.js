@@ -44,9 +44,18 @@
 			}
 		};
 		restoreCollapsedNotebooks(treeData.source || []);
+		const scrollStorageKey = `folder-tree-scroll:${window.location.pathname}`;
+		const accessSessionStorage = function(callback) {
+			try {
+				return callback(window.sessionStorage);
+			} catch (error) {
+				return null;
+			}
+		};
 
 		const navigate = function(node) {
 			if (!node || !node.data || !node.data.url) return;
+			accessSessionStorage(storage => storage.setItem(scrollStorageKey, String(container.scrollTop)));
 			window.location.href = node.data.url;
 		};
 
@@ -137,11 +146,13 @@
 				folderOpen: 'fas fa-folder-open',
 				folderLazy: 'fas fa-folder',
 			},
-			init: function(e) {
+			init: async function(e) {
+				const scrollTop = Number(accessSessionStorage(storage => storage.getItem(scrollStorageKey))) || 0;
 				if (treeData.activeKey) {
 					const active = e.tree.findKey(treeData.activeKey);
 					if (active) {
-						active.setActive(true, { noEvents: true, focusTree: false });
+						await active.setActive(true, { noEvents: true, focusTree: false });
+						container.scrollTop = scrollTop;
 						setActiveTreeItem(active, false);
 					}
 				}
@@ -173,6 +184,7 @@
 				} else if (e.node) {
 					if (e.event && e.event.preventDefault) e.event.preventDefault();
 					navigate(e.node);
+					return false;
 				}
 			},
 			dblclick: function() {
@@ -182,6 +194,7 @@
 				if (e.event && e.event.key === 'Enter' && e.node && !e.node.folder) {
 					e.event.preventDefault();
 					navigate(e.node);
+					return false;
 				}
 			},
 		});
