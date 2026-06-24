@@ -7,7 +7,7 @@ import { join } from 'node:path';
 const getServerEnv = () => {
 	const nodeOptions = [
 		// Hardening: Disallow code execution through 'eval' and 'new Function'
-		// Disabled for now: Some libraries still use eval():
+		// Disabled, pending further verification that this doesn't break anything:
 		// '--disallow-code-generation-from-strings',
 
 		// Disable the __proto__ property:
