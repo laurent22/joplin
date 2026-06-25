@@ -39,7 +39,7 @@ const theme: Theme = {
 	// Color scheme "4" is used for secondary-style buttons. It makes a white
 	// button with blue text.
 	backgroundColor4: '#ffffff',
-	color4: '#2D6BDC',
+	color4: '#2D5BE5',
 	backgroundColor4Dimmed: '#e3eaff',
 
 	raisedBackgroundColor: '#e5e5e5',
