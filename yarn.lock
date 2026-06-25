@@ -13020,7 +13020,7 @@ __metadata:
     nodemailer: "npm:6.10.1"
     nodemon: "npm:3.1.14"
     otplib: "npm:12.0.1"
-    pg: "npm:8.18.0"
+    pg: "npm:8.19.0"
     pretty-bytes: "npm:5.6.0"
     prettycron: "npm:0.10.0"
     qrcode: "npm:1.5.4"
@@ -46480,12 +46480,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-pool@npm:^3.11.0":
-  version: 3.13.0
-  resolution: "pg-pool@npm:3.13.0"
+"pg-pool@npm:^3.12.0":
+  version: 3.14.0
+  resolution: "pg-pool@npm:3.14.0"
   peerDependencies:
     pg: ">=8.0"
-  checksum: 10/0addd11b3f3f49fb1d16bf181583411e8a9809730dbfc5edb9bbf5110bc02beb4ac346c52a121f446ff76bcd420a76a3409952ea743aa5f6a04705ea953bd8aa
+  checksum: 10/0d90984fa8304fc07c4d06f8324ac5f5f6dcf4fe387b02263fa3f4e1f7bb6e7d8f3a97471836c3d38ca1ee129dae2f1fc28cb53e72bf48cb6515a848729c863a
   languageName: node
   linkType: hard
 
@@ -46496,10 +46496,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-protocol@npm:^1.11.0":
-  version: 1.13.0
-  resolution: "pg-protocol@npm:1.13.0"
-  checksum: 10/302cd3920df00f178519693557c34949d64c8b3af7e2c12772b14f61547b947e4c761b4ca2319dbba5b0906207bb1b535cbfc7006d40d47fd823e277c2690a71
+"pg-protocol@npm:^1.12.0":
+  version: 1.14.0
+  resolution: "pg-protocol@npm:1.14.0"
+  checksum: 10/81c69dba142f3cecf3926afbef97c18c53ba54717d2073d759e2cde98dff61ac7b178c4676950e0e3e6bd43fcf4ba21ef96a217b2765020aadeef6bf6bf82a7e
   languageName: node
   linkType: hard
 
@@ -46516,14 +46516,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:8.18.0":
-  version: 8.18.0
-  resolution: "pg@npm:8.18.0"
+"pg@npm:8.19.0":
+  version: 8.19.0
+  resolution: "pg@npm:8.19.0"
   dependencies:
     pg-cloudflare: "npm:^1.3.0"
     pg-connection-string: "npm:^2.11.0"
-    pg-pool: "npm:^3.11.0"
-    pg-protocol: "npm:^1.11.0"
+    pg-pool: "npm:^3.12.0"
+    pg-protocol: "npm:^1.12.0"
     pg-types: "npm:2.2.0"
     pgpass: "npm:1.0.5"
   peerDependencies:
@@ -46534,7 +46534,7 @@ __metadata:
   peerDependenciesMeta:
     pg-native:
       optional: true
-  checksum: 10/91c622f179f60df08ab7aa9b05a890567ea47f2d7984377b64e88e1eba1c42787324b7fc5ff00e109a757f3329dc4b57c73502603ae2765d1827b2082abbdcfa
+  checksum: 10/0d552512b6c65c20b4054a203632f8ad51f6c5e60b8aaf65f5dc9f07a698da1e8974ca3918964999ea783c370bda9d230e662d2bab333b3968a28086923934e0
   languageName: node
   linkType: hard
 
