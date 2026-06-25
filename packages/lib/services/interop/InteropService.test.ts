@@ -85,6 +85,7 @@ function memoryExportModule() {
 }
 
 const oneNoteSimpleXpsPath = () => `${supportDir}/onenote/simple-xps.one`;
+const skipByDefault = process.env.IS_CONTINUOUS_INTEGRATION ? it : it.skip;
 
 describe('services_InteropService', () => {
 
@@ -100,7 +101,7 @@ describe('services_InteropService', () => {
 		await recreateExportDir();
 	});
 
-	it('should import OneNote files as a top-level folder when no destination folder is passed', (async () => {
+	skipByDefault('should import OneNote files as a top-level folder when no destination folder is passed', (async () => {
 		setupOneNoteDomParser();
 		const service = InteropService.instance();
 		const oneNoteModule = service.findModuleByFormat(ModuleType.Importer, 'one');
@@ -118,7 +119,7 @@ describe('services_InteropService', () => {
 	}));
 
 	// Covers the command-import.ts behavior by passing destinationFolderId directly
-	it('should import OneNote files as a top-level folder when a destination folder is passed', (async () => {
+	skipByDefault('should import OneNote files as a top-level folder when a destination folder is passed', (async () => {
 		setupOneNoteDomParser();
 		const service = InteropService.instance();
 		const destinationFolder = await Folder.save({ title: 'destination' });
