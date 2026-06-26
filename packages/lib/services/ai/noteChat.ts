@@ -21,10 +21,11 @@ export type EditOp =
 	| { op: 'insertBefore'; anchor: string; text: string }
 	| { op: 'insertAfter'; anchor: string; text: string }
 	| { op: 'appendToNote'; text: string }
-	| { op: 'replaceRange'; anchor: string; text: string };
+	| { op: 'replaceRange'; anchor: string; text: string }
+	| { op: 'replaceFencedBlock'; tag: string; text: string };
 
 const KNOWN_OPS = new Set<EditOp['op']>([
-	'replaceSelection', 'insertBefore', 'insertAfter', 'appendToNote', 'replaceRange',
+	'replaceSelection', 'insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock',
 ]);
 
 export interface ChatTurn {
@@ -107,8 +108,11 @@ const systemPrompt = (note: NoteContext) => {
 		lines.push('  { "op": "insertAfter", "anchor": "...", "text": "..." } — inserts text immediately after the first occurrence of "anchor".');
 		lines.push('  { "op": "appendToNote", "text": "..." } — appends text at the end of the note.');
 		lines.push('  { "op": "replaceRange", "anchor": "...", "text": "..." } — replaces the first occurrence of "anchor" with "text".');
+		lines.push('  { "op": "replaceFencedBlock", "tag": "...", "text": "..." } — replaces the inner content of the first ```<tag>``` fenced block. "text" is the new content inside the fence (no fence markers). Supported tags: jsoncanvas, mermaid, abc, fountain.');
 		lines.push('');
 		lines.push('Anchors must be exact substrings of the current note body. Keep them short but unique.');
+		lines.push('');
+		lines.push('To edit a structured block already in the note (whiteboard / mermaid / abc / fountain), use replaceFencedBlock with the full new content — do not try to anchor inside the block\'s contents. To create one that doesn\'t exist yet, use appendToNote with the complete fenced block including the ```<tag> markers.');
 	}
 
 	lines.push('Preserve the user\'s existing formatting conventions, including any Joplin-specific blocks already in the note.');

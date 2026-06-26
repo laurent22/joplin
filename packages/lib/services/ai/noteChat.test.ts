@@ -26,6 +26,7 @@ describe('noteChat', () => {
 		expect(prompt).not.toContain('insertAfter');
 		expect(prompt).not.toContain('appendToNote');
 		expect(prompt).not.toContain('replaceRange');
+		expect(prompt).not.toContain('replaceFencedBlock');
 	});
 
 	test('systemPrompt offers anchor ops when no selection', () => {
@@ -152,6 +153,47 @@ describe('noteChat', () => {
 		const result = applyAnchorEdits(body, cases as any, 0);
 		expect(result.newBody).toBe(body);
 		expect(result.appliedEdits.every(e => e.status === 'invalid')).toBe(true);
+	});
+
+	test('applyAnchorEdits replaces the inner content of a fenced block', () => {
+		const body = 'Intro paragraph.\n\n```jsoncanvas\n{"nodes":[],"edges":[]}\n```\n\nOutro.';
+		const { newBody, appliedEdits } = applyAnchorEdits(body, [
+			{ op: 'replaceFencedBlock', tag: 'jsoncanvas', text: '{"nodes":[{"id":"a"}],"edges":[]}' },
+		], 0);
+		expect(appliedEdits[0].status).toBe('applied');
+		expect(newBody).toContain('```jsoncanvas\n{"nodes":[{"id":"a"}],"edges":[]}\n```');
+		// Surrounding prose is preserved.
+		expect(newBody).toContain('Intro paragraph.');
+		expect(newBody).toContain('Outro.');
+	});
+
+	test('applyAnchorEdits reports anchor-not-found when fenced block missing', () => {
+		const body = 'No whiteboard in this note.';
+		const { newBody, appliedEdits } = applyAnchorEdits(body, [
+			{ op: 'replaceFencedBlock', tag: 'jsoncanvas', text: '{}' },
+		], 0);
+		expect(newBody).toBe(body);
+		expect(appliedEdits[0].status).toBe('anchor-not-found');
+	});
+
+	test('applyAnchorEdits rejects replaceFencedBlock with unsupported tag', () => {
+		// Plain code fences (```js, ```python, ...) are not structured-document
+		// formats — the model should use anchor-based ops instead.
+		const body = '```js\nconsole.log("x");\n```';
+		const { newBody, appliedEdits } = applyAnchorEdits(body, [
+			{ op: 'replaceFencedBlock', tag: 'js', text: 'console.log("y");' },
+		], 0);
+		expect(newBody).toBe(body);
+		expect(appliedEdits[0].status).toBe('invalid');
+	});
+
+	test('systemPrompt advertises replaceFencedBlock with structured-block guidance', () => {
+		const prompt = _internal.systemPrompt({ title: 'n', body: 'b', selection: null });
+		expect(prompt).toContain('replaceFencedBlock');
+		expect(prompt).toContain('jsoncanvas');
+		// Guidance to use the op for structured blocks, appendToNote for creation.
+		expect(prompt).toContain('replaceFencedBlock with the full new content');
+		expect(prompt).toContain('use appendToNote');
 	});
 
 	test('applyAnchorEdits refuses replaceRange anchor covering most of the body', () => {

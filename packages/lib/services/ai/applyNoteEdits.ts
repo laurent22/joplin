@@ -2,6 +2,22 @@ import { EditOp } from './noteChat';
 
 export type ApplyEditStatus = 'applied' | 'anchor-not-found' | 'invalid';
 
+// Fenced blocks the model is allowed to replace wholesale. These are
+// structured-document formats (canvas JSON, diagrams, sheet music, screenplays)
+// where surgical anchor-based edits don't make sense — the model regenerates
+// the entire block instead. Plain code fences (```js, ```python, ...) are
+// deliberately excluded; the model should edit them via insertBefore /
+// replaceRange / replaceSelection like any other text.
+export const STRUCTURED_BLOCK_TAGS = new Set<string>([
+	'jsoncanvas', 'mermaid', 'abc', 'fountain',
+]);
+
+// Matches the first ```<tag>\n<inner>\n``` (or ```<tag>\n<inner>```) block.
+// Captures the inner content (group 1) and gives us the full match length via
+// the match index so callers can splice.
+const fencedBlockRegex = (tag: string) =>
+	new RegExp(`\`\`\`${tag}\\s*\\n([\\s\\S]*?)\\n?\`\`\``, 'i');
+
 export interface AppliedEdit {
 	op: EditOp;
 	status: ApplyEditStatus;
@@ -59,6 +75,10 @@ const isValidEdit = (edit: EditOp, bodyLength: number): boolean => {
 		// the model intended replaceSelection or appendToNote.
 		if (edit.anchor.length > bodyLength * 0.5) return false;
 		return true;
+	case 'replaceFencedBlock':
+		if (typeof edit.tag !== 'string' || !STRUCTURED_BLOCK_TAGS.has(edit.tag)) return false;
+		if (typeof edit.text !== 'string') return false;
+		return true;
 	default:
 		return false;
 	}
@@ -103,6 +123,24 @@ export const applyAnchorEdits = (
 				else sep = '\n\n';
 			}
 			newBody = `${newBody}${sep}${edit.text}`;
+			appliedEdits.push({ op: edit, status: 'applied' });
+			continue;
+		}
+
+		if (edit.op === 'replaceFencedBlock') {
+			// Replace-only: if the block doesn't exist, report missing and
+			// let the model retry with appendToNote. We don't try to create
+			// the block here — that's appendToNote's job, and conflating the
+			// two would let one op silently grow the note in surprising ways.
+			const match = newBody.match(fencedBlockRegex(edit.tag));
+			if (!match) {
+				appliedEdits.push({ op: edit, status: 'anchor-not-found' });
+				continue;
+			}
+			const start = match.index!;
+			const end = start + match[0].length;
+			const inner = edit.text.endsWith('\n') ? edit.text : `${edit.text}\n`;
+			newBody = `${newBody.slice(0, start)}\`\`\`${edit.tag}\n${inner}\`\`\`${newBody.slice(end)}`;
 			appliedEdits.push({ op: edit, status: 'applied' });
 			continue;
 		}
