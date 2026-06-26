@@ -61,6 +61,8 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		'showNoteProperties',
 	];
 
+	if (state.settings['ai.enabled']) commands.push('toggleAiChat');
+
 	// `toggleEditorPlugin` shows for plugin editors; we extend it to also
 	// toggle the core whiteboard editor on whiteboard notes (see the command's
 	// runtime). The button is the same eye icon either way.

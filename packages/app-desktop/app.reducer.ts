@@ -8,6 +8,14 @@ import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('app.reducer');
 
+export interface AiChatMessage {
+	id: string;
+	role: 'user' | 'assistant' | 'error' | 'separator';
+	text: string;
+	editsApplied?: number;
+	editsMissed?: number;
+}
+
 export interface AppStateRoute {
 	type: string;
 	routeName: string;
@@ -47,6 +55,10 @@ export interface AppWindowState extends WindowState {
 	// the toolbar to show the editor toggle button. (We can't compute this
 	// from the redux note list because `body` isn't in the preview fields.)
 	activeNoteIsWhiteboard: boolean;
+	// AI chat conversation lives in window state so it survives panel
+	// hide/show (the layout container can swap component types when an item
+	// becomes the last child, which would lose component-local state).
+	aiChatMessages: AiChatMessage[];
 }
 
 interface BackgroundWindowStates {
@@ -80,6 +92,7 @@ export const createAppDefaultWindowState = (): AppWindowState => {
 		watchedResources: {},
 		whiteboardForceMarkdown: {},
 		activeNoteIsWhiteboard: false,
+		aiChatMessages: [],
 	};
 };
 
@@ -229,6 +242,20 @@ export default function(state: AppState, action: any) {
 			newState = {
 				...state,
 				activeNoteIsWhiteboard: !!action.value,
+			};
+			break;
+
+		case 'AI_CHAT_APPEND':
+			newState = {
+				...state,
+				aiChatMessages: [...state.aiChatMessages, action.message as AiChatMessage],
+			};
+			break;
+
+		case 'AI_CHAT_RESET':
+			newState = {
+				...state,
+				aiChatMessages: [],
 			};
 			break;
 
