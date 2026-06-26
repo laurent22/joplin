@@ -172,6 +172,25 @@ describe('noteChat', () => {
 		expect(_internal.tryParseReply('[1,2,3]').reply).toBe('[1,2,3]');
 	});
 
+	test('enforceSelectionScope strips anchor ops when selection present, passes through otherwise', () => {
+		const reply = {
+			reply: 'ok',
+			edits: [
+				{ op: 'replaceSelection' as const, text: 'A' },
+				{ op: 'appendToNote' as const, text: 'B' },
+				{ op: 'insertBefore' as const, anchor: 'x', text: 'C' },
+				{ op: 'replaceRange' as const, anchor: 'y', text: 'D' },
+			],
+		};
+		// With selection: only replaceSelection survives.
+		const scoped = _internal.enforceSelectionScope(reply, 'some selection');
+		expect(scoped.edits.length).toBe(1);
+		expect(scoped.edits[0].op).toBe('replaceSelection');
+		// Without selection: everything passes through unchanged.
+		const unscoped = _internal.enforceSelectionScope(reply, null);
+		expect(unscoped.edits.length).toBe(4);
+	});
+
 	test('tryParseReply drops malformed edits but keeps valid ones', () => {
 		// Mixed array: missing op, unknown op, primitive, and one valid entry.
 		const text = '{"reply":"ok","edits":["lol",{"op":"bogus"},{"op":"appendToNote","text":"good"},{}]}';

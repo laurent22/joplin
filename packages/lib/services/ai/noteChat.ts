@@ -189,8 +189,18 @@ export const runNoteChat = async (
 	}
 
 	const result = await AiService.instance().chat(messages);
-	return tryParseReply(result.text);
+	return enforceSelectionScope(tryParseReply(result.text), note.selection);
+};
+
+// Defence-in-depth for selection mode. The system prompt tells the model to
+// use only replaceSelection when a selection is present, but a non-compliant
+// reply could still emit anchor-based ops that would mutate text outside the
+// user's selection. Drop those at the boundary so the ChatPanel /
+// applyAnchorEdits path never sees them.
+const enforceSelectionScope = (reply: ChatReply, selection: string | null): ChatReply => {
+	if (!selection) return reply;
+	return { reply: reply.reply, edits: reply.edits.filter(e => e.op === 'replaceSelection') };
 };
 
 // Exported for tests.
-export const _internal = { systemPrompt, tryParseReply, estimateTokens, sanitizeEdits, NOTE_BODY_TOKEN_BUDGET };
+export const _internal = { systemPrompt, tryParseReply, estimateTokens, sanitizeEdits, enforceSelectionScope, NOTE_BODY_TOKEN_BUDGET };
