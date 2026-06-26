@@ -4,18 +4,42 @@
 import { EditorView, Decoration, DecorationSet, WidgetType } from '@codemirror/view';
 import { ViewPlugin, ViewUpdate } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { Range } from '@codemirror/state';
+import { Range, StateEffect } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
 import { ReplacementExtension } from '../types';
 import nodeIntersectsSelection from './nodeIntersectsSelection';
 
+const updateInlineDecorationsEffect = StateEffect.define();
 
 export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
 	public decorations: DecorationSet;
+	private mouseSelectionInProgress = false;
 
-	public constructor(view: EditorView) {
+	public constructor(private view: EditorView) {
+		view.contentDOM.addEventListener('mousedown', this.onMouseDown, true);
+		view.dom.ownerDocument.addEventListener('mouseup', this.onMouseUp);
 		this.updateDecorations(view);
 	}
+
+	public destroy() {
+		this.view.contentDOM.removeEventListener('mousedown', this.onMouseDown, true);
+		this.view.dom.ownerDocument.removeEventListener('mouseup', this.onMouseUp);
+	}
+
+	private onMouseDown = (event: MouseEvent) => {
+		if (event.button === 0) {
+			this.mouseSelectionInProgress = true;
+		}
+	};
+
+	private onMouseUp = () => {
+		if (this.mouseSelectionInProgress) {
+			this.mouseSelectionInProgress = false;
+			this.view.dispatch({
+				effects: updateInlineDecorationsEffect.of(null),
+			});
+		}
+	};
 
 	private updateDecorations(view: EditorView) {
 		const doc = view.state.doc;
@@ -91,7 +115,14 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 	}
 
 	public update(update: ViewUpdate) {
-		if (update.docChanged || update.viewportChanged || update.selectionSet) {
+		if (this.mouseSelectionInProgress && update.selectionSet && !update.docChanged) {
+			return;
+		}
+
+		const forceUpdate = update.transactions.some(transaction => (
+			transaction.effects.some(effect => effect.is(updateInlineDecorationsEffect))
+		));
+		if (update.docChanged || update.viewportChanged || update.selectionSet || forceUpdate) {
 			this.updateDecorations(update.view);
 		}
 	}
