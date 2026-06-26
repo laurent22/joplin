@@ -40,6 +40,21 @@ describe('noteChat', () => {
 		expect(prompt).toContain('replaceRange');
 	});
 
+	test('systemPrompt advertises Joplin-specific Markdown features', () => {
+		const prompt = _internal.systemPrompt({ title: 'n', body: 'b', selection: null });
+		// The fence tags are the load-bearing strings — the model knows the
+		// syntax inside (JSONCanvas, Mermaid, KaTeX) but needs the Joplin
+		// fence tag to wrap it correctly.
+		expect(prompt).toContain('jsoncanvas');
+		expect(prompt).toContain('mermaid');
+		expect(prompt).toContain('KaTeX');
+		// Don't-invent-IDs guidance for note + resource links.
+		expect(prompt).toContain('Never invent NOTE_IDs');
+		expect(prompt).toContain('Never invent RESOURCE_IDs');
+		// Checkboxes (todos).
+		expect(prompt).toContain('- [ ]');
+	});
+
 	test('systemPrompt includes full body when no selection', () => {
 		const prompt = _internal.systemPrompt({
 			title: 'My note',

@@ -44,11 +44,30 @@ export interface ChatReply {
 	edits: EditOp[];
 }
 
+// Joplin-specific Markdown features the model needs to know about. Without
+// this, the model defaults to plain CommonMark and guesses at things like
+// whiteboards or note links, often producing constructs that don't render.
+// Always-on: ~250 tokens, worth it to avoid hallucinated syntax.
+const JOPLIN_MARKDOWN_NOTES = [
+	'This note uses Joplin Markdown — CommonMark plus the following extras:',
+	'- Checkboxes: `- [ ] todo` and `- [x] done`. Render as interactive checkboxes.',
+	'- Internal note links: `[Title](:/NOTE_ID)`. Never invent NOTE_IDs — only reuse ones already in the note.',
+	'- Resource references (images, attachments): `![alt](:/RESOURCE_ID)` or `[name](:/RESOURCE_ID)`. Never invent RESOURCE_IDs. If the user wants a new image, describe it in plain text instead.',
+	'- Math: `$inline$` and `$$block$$` (KaTeX). Chemistry via mhchem inside the same delimiters.',
+	'- Mermaid diagrams: ```` ```mermaid ```` fenced blocks.',
+	'- ABC musical notation: ```` ```abc ```` fenced blocks.',
+	'- Fountain screenplays: ```` ```fountain ```` fenced blocks.',
+	'- Whiteboards (canvas): ```` ```jsoncanvas ```` fenced blocks containing JSONCanvas 1.0 — the open spec at jsoncanvas.org. Use this when the user asks for a whiteboard, canvas, mind map, sticky notes, or similar spatial layout. A note that already contains a `jsoncanvas` block is a whiteboard; modifying its prose without preserving the block will break the whiteboard.',
+	'- HTML is allowed for features without a Markdown equivalent (e.g. `<s>strikethrough</s>`).',
+].join('\n');
+
 const systemPrompt = (note: NoteContext) => {
 	const lines: string[] = [
 		'You are an assistant helping the user work on a note in Joplin, a note-taking application.',
 		'',
 		`Note title: ${note.title || '(untitled)'}`,
+		'',
+		JOPLIN_MARKDOWN_NOTES,
 		'',
 	];
 
@@ -92,7 +111,7 @@ const systemPrompt = (note: NoteContext) => {
 		lines.push('Anchors must be exact substrings of the current note body. Keep them short but unique.');
 	}
 
-	lines.push('The note is Markdown. Preserve the user\'s formatting conventions.');
+	lines.push('Preserve the user\'s existing formatting conventions, including any Joplin-specific blocks already in the note.');
 
 	return lines.join('\n');
 };
