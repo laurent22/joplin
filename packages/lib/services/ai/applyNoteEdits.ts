@@ -8,15 +8,36 @@ export type ApplyEditStatus = 'applied' | 'anchor-not-found' | 'invalid';
 // the entire block instead. Plain code fences (```js, ```python, ...) are
 // deliberately excluded; the model should edit them via insertBefore /
 // replaceRange / replaceSelection like any other text.
-export const STRUCTURED_BLOCK_TAGS = new Set<string>([
+export const structuredBlockTags = new Set<string>([
 	'jsoncanvas', 'mermaid', 'abc', 'fountain',
 ]);
 
-// Matches the first ```<tag>\n<inner>\n``` (or ```<tag>\n<inner>```) block.
-// Captures the inner content (group 1) and gives us the full match length via
-// the match index so callers can splice.
+// Matches a ```<tag>\n<inner>\n``` (or ```<tag>\n<inner>```) block. Global so
+// callers can iterate all occurrences and pick by position.
 const fencedBlockRegex = (tag: string) =>
-	new RegExp(`\`\`\`${tag}\\s*\\n([\\s\\S]*?)\\n?\`\`\``, 'i');
+	new RegExp(`\`\`\`${tag}\\s*\\n([\\s\\S]*?)\\n?\`\`\``, 'gi');
+
+// Returns the match of the ```<tag>``` block closest to cursorPos, or null.
+// When the cursor is at 0 (no selection / no disambiguation available) the
+// first match wins by virtue of being the closest. Mirrors findAnchor's
+// tiebreak logic so behaviour stays consistent across ops.
+const findFencedBlock = (body: string, tag: string, cursorPos: number) => {
+	const re = fencedBlockRegex(tag);
+	let best: RegExpExecArray | null = null;
+	let bestDistance = Infinity;
+	let match: RegExpExecArray | null;
+	while ((match = re.exec(body)) !== null) {
+		const distance = Math.abs(match.index - cursorPos);
+		if (distance < bestDistance) {
+			bestDistance = distance;
+			best = match;
+		}
+		// Guard against zero-width matches looping forever (the regex requires
+		// a backtick fence so this shouldn't happen, but cheap to be safe).
+		if (match.index === re.lastIndex) re.lastIndex++;
+	}
+	return best;
+};
 
 export interface AppliedEdit {
 	op: EditOp;
@@ -76,7 +97,7 @@ const isValidEdit = (edit: EditOp, bodyLength: number): boolean => {
 		if (edit.anchor.length > bodyLength * 0.5) return false;
 		return true;
 	case 'replaceFencedBlock':
-		if (typeof edit.tag !== 'string' || !STRUCTURED_BLOCK_TAGS.has(edit.tag)) return false;
+		if (typeof edit.tag !== 'string' || !structuredBlockTags.has(edit.tag)) return false;
 		if (typeof edit.text !== 'string') return false;
 		return true;
 	default:
@@ -132,12 +153,17 @@ export const applyAnchorEdits = (
 			// let the model retry with appendToNote. We don't try to create
 			// the block here — that's appendToNote's job, and conflating the
 			// two would let one op silently grow the note in surprising ways.
-			const match = newBody.match(fencedBlockRegex(edit.tag));
+			//
+			// When the note contains multiple blocks of the same tag, pick the
+			// one closest to the cursor — matches what findAnchor does for
+			// duplicate anchors. With no selection the cursor is at 0, so the
+			// first occurrence wins (the previous fallback behaviour).
+			const match = findFencedBlock(newBody, edit.tag, cursorPos);
 			if (!match) {
 				appliedEdits.push({ op: edit, status: 'anchor-not-found' });
 				continue;
 			}
-			const start = match.index!;
+			const start = match.index;
 			const end = start + match[0].length;
 			const inner = edit.text.endsWith('\n') ? edit.text : `${edit.text}\n`;
 			newBody = `${newBody.slice(0, start)}\`\`\`${edit.tag}\n${inner}\`\`\`${newBody.slice(end)}`;

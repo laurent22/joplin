@@ -10,11 +10,11 @@ const logger = Logger.create('noteChat');
 // (system message + history + user turn). Keeps headroom for the model reply.
 // Payloads that exceed this are refused — v1 expects the user to select the
 // relevant region or trim the conversation instead.
-const NOTE_BODY_TOKEN_BUDGET = 80000;
+const noteBodyTokenBudget = 80000;
 
 // Rough char→token ratio. Good enough for a budget check; we don't need
 // per-provider tokenisers here.
-const CHARS_PER_TOKEN = 4;
+const charsPerToken = 4;
 
 export type EditOp =
 	| { op: 'replaceSelection'; text: string }
@@ -24,7 +24,7 @@ export type EditOp =
 	| { op: 'replaceRange'; anchor: string; text: string }
 	| { op: 'replaceFencedBlock'; tag: string; text: string };
 
-const KNOWN_OPS = new Set<EditOp['op']>([
+const knownOps = new Set<EditOp['op']>([
 	'replaceSelection', 'insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock',
 ]);
 
@@ -49,7 +49,7 @@ export interface ChatReply {
 // this, the model defaults to plain CommonMark and guesses at things like
 // whiteboards or note links, often producing constructs that don't render.
 // Always-on: ~250 tokens, worth it to avoid hallucinated syntax.
-const JOPLIN_MARKDOWN_NOTES = [
+const joplinMarkdownNotes = [
 	'This note uses Joplin Markdown — CommonMark plus the following extras:',
 	'- Checkboxes: `- [ ] todo` and `- [x] done`. Render as interactive checkboxes.',
 	'- Internal note links: `[Title](:/NOTE_ID)`. Never invent NOTE_IDs — only reuse ones already in the note.',
@@ -68,7 +68,7 @@ const systemPrompt = (note: NoteContext) => {
 		'',
 		`Note title: ${note.title || '(untitled)'}`,
 		'',
-		JOPLIN_MARKDOWN_NOTES,
+		joplinMarkdownNotes,
 		'',
 	];
 
@@ -120,7 +120,7 @@ const systemPrompt = (note: NoteContext) => {
 	return lines.join('\n');
 };
 
-const estimateTokens = (text: string) => Math.ceil(text.length / CHARS_PER_TOKEN);
+const estimateTokens = (text: string) => Math.ceil(text.length / charsPerToken);
 
 // Drops anything that doesn't at least have a known `op` string. Per-op
 // field validation (anchor/text presence, anchor size) lives in
@@ -132,7 +132,7 @@ const sanitizeEdits = (raw: unknown): EditOp[] => {
 	for (const item of raw) {
 		if (!item || typeof item !== 'object') continue;
 		const op = (item as { op?: unknown }).op;
-		if (typeof op !== 'string' || !KNOWN_OPS.has(op as EditOp['op'])) continue;
+		if (typeof op !== 'string' || !knownOps.has(op as EditOp['op'])) continue;
 		out.push(item as EditOp);
 	}
 	return out;
@@ -185,7 +185,7 @@ export const runNoteChat = async (
 	// conversations grow turn-by-turn — eventually history (not the note)
 	// would blow the context window, and a note-only check wouldn't catch it.
 	const totalTokens = messages.reduce((sum, m) => sum + estimateTokens(m.content), 0);
-	if (totalTokens > NOTE_BODY_TOKEN_BUDGET) {
+	if (totalTokens > noteBodyTokenBudget) {
 		throw new JoplinError(
 			'This conversation has grown too large to send. Reset the chat, or select the part of the note you want to ask about.',
 			'aiNoteTooLarge',
@@ -207,4 +207,4 @@ const enforceSelectionScope = (reply: ChatReply, selection: string | null): Chat
 };
 
 // Exported for tests.
-export const _internal = { systemPrompt, tryParseReply, estimateTokens, sanitizeEdits, enforceSelectionScope, NOTE_BODY_TOKEN_BUDGET };
+export const _internal = { systemPrompt, tryParseReply, estimateTokens, sanitizeEdits, enforceSelectionScope, noteBodyTokenBudget };

@@ -167,6 +167,28 @@ describe('noteChat', () => {
 		expect(newBody).toContain('Outro.');
 	});
 
+	test('applyAnchorEdits picks the fenced block closest to the cursor', () => {
+		const first = '```jsoncanvas\n{"v":1}\n```';
+		const second = '```jsoncanvas\n{"v":2}\n```';
+		const body = `${first}\n\nSome prose between.\n\n${second}`;
+		// Cursor near the second block — should edit that one, leaving the first untouched.
+		const cursorNearSecond = body.indexOf(second) + 5;
+		const { newBody } = applyAnchorEdits(body, [
+			{ op: 'replaceFencedBlock', tag: 'jsoncanvas', text: '{"v":99}' },
+		], cursorNearSecond);
+		expect(newBody).toContain('{"v":1}'); // first untouched
+		expect(newBody).toContain('{"v":99}'); // second replaced
+		expect(newBody).not.toContain('{"v":2}');
+
+		// Cursor at 0 — first block wins (fallback behaviour preserved).
+		const { newBody: firstWins } = applyAnchorEdits(body, [
+			{ op: 'replaceFencedBlock', tag: 'jsoncanvas', text: '{"v":0}' },
+		], 0);
+		expect(firstWins).toContain('{"v":0}');
+		expect(firstWins).toContain('{"v":2}'); // second untouched
+		expect(firstWins).not.toContain('{"v":1}');
+	});
+
 	test('applyAnchorEdits reports anchor-not-found when fenced block missing', () => {
 		const body = 'No whiteboard in this note.';
 		const { newBody, appliedEdits } = applyAnchorEdits(body, [

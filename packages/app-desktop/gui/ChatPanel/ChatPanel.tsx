@@ -25,7 +25,7 @@ interface Props {
 	dispatch: Dispatch;
 }
 
-const DISCLOSURE_SETTING = 'ai.chat.disclosureAcknowledged';
+const disclosureSetting = 'ai.chat.disclosureAcknowledged';
 
 let nextMessageId = 0;
 const makeId = () => `m-${Date.now()}-${++nextMessageId}`;
@@ -47,7 +47,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 	const [sending, setSending] = useState(false);
 	const [disclosureShown, setDisclosureShown] = useState<boolean>(() => {
 		try {
-			return !!Setting.value(DISCLOSURE_SETTING);
+			return !!Setting.value(disclosureSetting);
 		} catch {
 			return false;
 		}
@@ -228,7 +228,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 	}, [input, sending, props.noteId, conversationTurns, appendMessage, dispatch]);
 
 	const handleAcknowledgeDisclosure = useCallback(() => {
-		Setting.setValue(DISCLOSURE_SETTING, true);
+		Setting.setValue(disclosureSetting, true);
 		setDisclosureShown(true);
 	}, []);
 

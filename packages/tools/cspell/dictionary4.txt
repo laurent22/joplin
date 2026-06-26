@@ -328,3 +328,4 @@ stdio
 doesnotexist
 asar
 agentic
+tiebreak
