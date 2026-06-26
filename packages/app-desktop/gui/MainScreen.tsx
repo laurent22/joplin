@@ -118,7 +118,7 @@ const defaultLayout: LayoutItem = {
 	children: [
 		{ key: 'sideBar', width: 250 },
 		{ key: 'noteList', width: 250 },
-		{ key: 'editor' },
+		{ key: 'editor', flexible: true },
 	],
 };
 
@@ -233,10 +233,22 @@ class MainScreenComponent extends React.Component<Props, State> {
 	private buildLayout(plugins: PluginStates): LayoutItem {
 		const rootLayoutSize = this.rootLayoutSize();
 
-		const userLayout = Setting.value('ui.layout');
+		let userLayout = Setting.value('ui.layout');
 		let output = null;
 
 		try {
+			// Migration: stamp the flexible flag on the editor and clear any
+			// stale width before validateLayout's first pass.
+			if (userLayout && Object.keys(userLayout).length) {
+				userLayout = produce(userLayout as LayoutItem, (draft: LayoutItem) => {
+					const editor = findItemByKey(draft, 'editor');
+					if (editor && !editor.flexible) {
+						editor.flexible = true;
+						delete editor.width;
+					}
+				});
+			}
+
 			output = loadLayout(Object.keys(userLayout).length ? userLayout : null, defaultLayout, rootLayoutSize);
 
 			// For unclear reasons, layout items sometimes end up without a key.
