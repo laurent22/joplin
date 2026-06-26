@@ -8,8 +8,8 @@ const logger = Logger.create('noteChat');
 
 // Conservative token budget for the user-controlled portion of the prompt
 // (system message + history + user turn). Keeps headroom for the model reply.
-// Notes whose body alone would exceed this are refused — v1 expects the user
-// to select the relevant region instead.
+// Payloads that exceed this are refused — v1 expects the user to select the
+// relevant region or trim the conversation instead.
 const NOTE_BODY_TOKEN_BUDGET = 80000;
 
 // Rough char→token ratio. Good enough for a budget check; we don't need
@@ -22,6 +22,10 @@ export type EditOp =
 	| { op: 'insertAfter'; anchor: string; text: string }
 	| { op: 'appendToNote'; text: string }
 	| { op: 'replaceRange'; anchor: string; text: string };
+
+const KNOWN_OPS = new Set<EditOp['op']>([
+	'replaceSelection', 'insertBefore', 'insertAfter', 'appendToNote', 'replaceRange',
+]);
 
 export interface ChatTurn {
 	role: 'user' | 'assistant';
@@ -49,7 +53,7 @@ const systemPrompt = (note: NoteContext) => {
 	];
 
 	if (note.selection) {
-		lines.push('The user has selected the following text within the note. Unless they ask otherwise, scope your work to this selection.');
+		lines.push('The user has selected the following text within the note. Scope your work to this selection.');
 		lines.push('--- BEGIN SELECTION ---');
 		lines.push(note.selection);
 		lines.push('--- END SELECTION ---');
@@ -68,20 +72,48 @@ const systemPrompt = (note: NoteContext) => {
 	lines.push('}');
 	lines.push('');
 	lines.push('"edits" is an array of operations to apply to the note. Leave it empty for chat-only answers (e.g. questions about the note).');
-	lines.push('Each edit must be one of:');
-	lines.push('  { "op": "replaceSelection", "text": "..." } — replaces the currently selected text. Only valid when the user has a selection.');
-	lines.push('  { "op": "insertBefore", "anchor": "...", "text": "..." } — inserts text immediately before the first occurrence of "anchor".');
-	lines.push('  { "op": "insertAfter", "anchor": "...", "text": "..." } — inserts text immediately after the first occurrence of "anchor".');
-	lines.push('  { "op": "appendToNote", "text": "..." } — appends text at the end of the note.');
-	lines.push('  { "op": "replaceRange", "anchor": "...", "text": "..." } — replaces the first occurrence of "anchor" with "text".');
-	lines.push('');
-	lines.push('Anchors must be exact substrings of the current note body (or selection, for replaceSelection). Keep them short but unique.');
+
+	if (note.selection) {
+		// With a selection, only replaceSelection is offered. Anchor-based ops
+		// target the full note body, which the model can't see in this mode —
+		// advertising them would invite hallucinated anchors that mutate text
+		// outside the user's selection.
+		lines.push('Each edit must be:');
+		lines.push('  { "op": "replaceSelection", "text": "..." } — replaces the selected text with "text".');
+		lines.push('');
+		lines.push('Do not use any other operation. The selection is the only part of the note you can modify in this turn.');
+	} else {
+		lines.push('Each edit must be one of:');
+		lines.push('  { "op": "insertBefore", "anchor": "...", "text": "..." } — inserts text immediately before the first occurrence of "anchor".');
+		lines.push('  { "op": "insertAfter", "anchor": "...", "text": "..." } — inserts text immediately after the first occurrence of "anchor".');
+		lines.push('  { "op": "appendToNote", "text": "..." } — appends text at the end of the note.');
+		lines.push('  { "op": "replaceRange", "anchor": "...", "text": "..." } — replaces the first occurrence of "anchor" with "text".');
+		lines.push('');
+		lines.push('Anchors must be exact substrings of the current note body. Keep them short but unique.');
+	}
+
 	lines.push('The note is Markdown. Preserve the user\'s formatting conventions.');
 
 	return lines.join('\n');
 };
 
 const estimateTokens = (text: string) => Math.ceil(text.length / CHARS_PER_TOKEN);
+
+// Drops anything that doesn't at least have a known `op` string. Per-op
+// field validation (anchor/text presence, anchor size) lives in
+// applyNoteEdits — this is just the first filter so obvious junk doesn't
+// reach the panel or the applier.
+const sanitizeEdits = (raw: unknown): EditOp[] => {
+	if (!Array.isArray(raw)) return [];
+	const out: EditOp[] = [];
+	for (const item of raw) {
+		if (!item || typeof item !== 'object') continue;
+		const op = (item as { op?: unknown }).op;
+		if (typeof op !== 'string' || !KNOWN_OPS.has(op as EditOp['op'])) continue;
+		out.push(item as EditOp);
+	}
+	return out;
+};
 
 const tryParseReply = (text: string): ChatReply => {
 	const trimmed = text.trim();
@@ -105,7 +137,7 @@ const tryParseReply = (text: string): ChatReply => {
 			return { reply: text, edits: [] };
 		}
 		const reply = typeof parsed.reply === 'string' ? parsed.reply : '';
-		const edits = Array.isArray(parsed.edits) ? parsed.edits as EditOp[] : [];
+		const edits = sanitizeEdits(parsed.edits);
 		return { reply, edits };
 	} catch {
 		logger.warn('Failed to parse structured reply; falling back to raw text. Raw:', text);
@@ -120,23 +152,26 @@ export const runNoteChat = async (
 	history: ChatTurn[],
 	userMessage: string,
 ): Promise<ChatReply> => {
-	const contextText = note.selection ?? note.body;
-	if (estimateTokens(contextText) > NOTE_BODY_TOKEN_BUDGET) {
-		throw new JoplinError(
-			'This note is too large to send. Select the part you want to ask about, then try again.',
-			'aiNoteTooLarge',
-		);
-	}
-
 	const messages: ChatMessage[] = [
 		{ role: 'system', content: systemPrompt(note) },
 		...history.map<ChatMessage>(t => ({ role: t.role, content: t.content })),
 		{ role: 'user', content: userMessage },
 	];
 
+	// Budget the full assembled payload, not just the note text. Sticky
+	// conversations grow turn-by-turn — eventually history (not the note)
+	// would blow the context window, and a note-only check wouldn't catch it.
+	const totalTokens = messages.reduce((sum, m) => sum + estimateTokens(m.content), 0);
+	if (totalTokens > NOTE_BODY_TOKEN_BUDGET) {
+		throw new JoplinError(
+			'This conversation has grown too large to send. Reset the chat, or select the part of the note you want to ask about.',
+			'aiNoteTooLarge',
+		);
+	}
+
 	const result = await AiService.instance().chat(messages);
 	return tryParseReply(result.text);
 };
 
 // Exported for tests.
-export const _internal = { systemPrompt, tryParseReply, estimateTokens, NOTE_BODY_TOKEN_BUDGET };
+export const _internal = { systemPrompt, tryParseReply, estimateTokens, sanitizeEdits, NOTE_BODY_TOKEN_BUDGET };

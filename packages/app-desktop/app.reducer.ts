@@ -252,6 +252,13 @@ export default function(state: AppState, action: any) {
 			};
 			break;
 
+		case 'AI_CHAT_REMOVE':
+			newState = {
+				...state,
+				aiChatMessages: state.aiChatMessages.filter(m => m.id !== action.id),
+			};
+			break;
+
 		case 'AI_CHAT_RESET':
 			newState = {
 				...state,

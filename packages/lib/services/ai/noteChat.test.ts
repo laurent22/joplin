@@ -15,6 +15,31 @@ describe('noteChat', () => {
 		expect(prompt).not.toContain('long body text');
 	});
 
+	test('systemPrompt restricts ops to replaceSelection when selection present', () => {
+		const prompt = _internal.systemPrompt({
+			title: 'n',
+			body: 'b',
+			selection: 'sel',
+		});
+		expect(prompt).toContain('replaceSelection');
+		expect(prompt).not.toContain('insertBefore');
+		expect(prompt).not.toContain('insertAfter');
+		expect(prompt).not.toContain('appendToNote');
+		expect(prompt).not.toContain('replaceRange');
+	});
+
+	test('systemPrompt offers anchor ops when no selection', () => {
+		const prompt = _internal.systemPrompt({
+			title: 'n',
+			body: 'b',
+			selection: null,
+		});
+		expect(prompt).toContain('insertBefore');
+		expect(prompt).toContain('insertAfter');
+		expect(prompt).toContain('appendToNote');
+		expect(prompt).toContain('replaceRange');
+	});
+
 	test('systemPrompt includes full body when no selection', () => {
 		const prompt = _internal.systemPrompt({
 			title: 'My note',
@@ -130,6 +155,15 @@ describe('noteChat', () => {
 		expect(_internal.tryParseReply('"hello"').edits.length).toBe(0);
 		expect(_internal.tryParseReply('null').reply).toBe('null');
 		expect(_internal.tryParseReply('[1,2,3]').reply).toBe('[1,2,3]');
+	});
+
+	test('tryParseReply drops malformed edits but keeps valid ones', () => {
+		// Mixed array: missing op, unknown op, primitive, and one valid entry.
+		const text = '{"reply":"ok","edits":["lol",{"op":"bogus"},{"op":"appendToNote","text":"good"},{}]}';
+		const parsed = _internal.tryParseReply(text);
+		expect(parsed.reply).toBe('ok');
+		expect(parsed.edits.length).toBe(1);
+		expect(parsed.edits[0].op).toBe('appendToNote');
 	});
 
 });

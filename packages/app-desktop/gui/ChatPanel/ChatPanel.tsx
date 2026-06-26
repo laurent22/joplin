@@ -56,6 +56,10 @@ const ChatPanel: React.FC<Props> = (props) => {
 	const lastNoteIdRef = useRef<string | null>(props.noteId);
 	const messagesLengthRef = useRef(messages.length);
 	messagesLengthRef.current = messages.length;
+	// noteIdRef mirrors props.noteId so async work can detect note switches
+	// without re-running its closure each time the prop changes.
+	const noteIdRef = useRef(props.noteId);
+	noteIdRef.current = props.noteId;
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
 	// Bumped whenever the user resets the conversation or the panel
@@ -117,7 +121,13 @@ const ChatPanel: React.FC<Props> = (props) => {
 		setSending(true);
 		setInput('');
 
-		appendMessage({ id: makeId(), role: 'user', text });
+		// Capture the user-turn id so we can roll it back on failure. If we
+		// left a failed user turn in history, the next attempt (a retry with
+		// the same prompt) would re-send it: the prior user message in
+		// `conversationTurns` plus the fresh `text` argument = same prompt
+		// twice.
+		const userTurnId = makeId();
+		appendMessage({ id: userTurnId, role: 'user', text });
 
 		try {
 			const note = await Note.load(props.noteId);
@@ -141,41 +151,53 @@ const ChatPanel: React.FC<Props> = (props) => {
 			let editsApplied = 0;
 			let editsMissed = 0;
 			if (reply.edits.length > 0) {
-				// Re-read the live body just before applying. If the user
-				// typed in the editor while the request was in flight, the
-				// body we read at send time is stale and writing newBody
-				// would silently overwrite those keystrokes.
-				const fresh = await Note.load(noteIdAtStart);
-				const liveBody = fresh?.body ?? '';
-
-				if (liveBody !== (note.body || '')) {
+				// If the user switched notes while the request was in flight,
+				// the editor commands below (replaceSelection / editor.setText)
+				// would run against the new note's editor, silently mutating
+				// it. Refuse to apply and tell the user.
+				if (noteIdRef.current !== noteIdAtStart) {
 					appendMessage({
 						id: makeId(),
 						role: 'error',
-						text: _('The note changed while the request was running; edits were not applied. Try again.'),
+						text: _('You switched notes while the request was running; edits were not applied. Try again.'),
 					});
 				} else {
-					const selectionEdits = reply.edits.filter(e => e.op === 'replaceSelection');
-					const anchorEdits = reply.edits.filter(e => e.op !== 'replaceSelection');
+					// Re-read the live body just before applying. If the user
+					// typed in the editor while the request was in flight, the
+					// body we read at send time is stale and writing newBody
+					// would silently overwrite those keystrokes.
+					const fresh = await Note.load(noteIdAtStart);
+					const liveBody = fresh?.body ?? '';
 
-					for (const edit of selectionEdits) {
-						if (edit.op !== 'replaceSelection') continue;
-						if (!selection) {
-							editsMissed++;
-							continue;
+					if (liveBody !== (note.body || '')) {
+						appendMessage({
+							id: makeId(),
+							role: 'error',
+							text: _('The note changed while the request was running; edits were not applied. Try again.'),
+						});
+					} else {
+						const selectionEdits = reply.edits.filter(e => e.op === 'replaceSelection');
+						const anchorEdits = reply.edits.filter(e => e.op !== 'replaceSelection');
+
+						for (const edit of selectionEdits) {
+							if (edit.op !== 'replaceSelection') continue;
+							if (!selection) {
+								editsMissed++;
+								continue;
+							}
+							await CommandService.instance().execute('replaceSelection', edit.text);
+							editsApplied++;
 						}
-						await CommandService.instance().execute('replaceSelection', edit.text);
-						editsApplied++;
-					}
 
-					if (anchorEdits.length > 0) {
-						const cursorPos = selection ? Math.max(0, liveBody.indexOf(selection)) : 0;
-						const { newBody, appliedEdits } = applyAnchorEdits(liveBody, anchorEdits, cursorPos);
-						const missed = appliedEdits.filter(e => e.status !== 'applied').length;
-						editsMissed += missed;
-						editsApplied += appliedEdits.length - missed;
-						if (newBody !== liveBody) {
-							await CommandService.instance().execute('editor.setText', newBody);
+						if (anchorEdits.length > 0) {
+							const cursorPos = selection ? Math.max(0, liveBody.indexOf(selection)) : 0;
+							const { newBody, appliedEdits } = applyAnchorEdits(liveBody, anchorEdits, cursorPos);
+							const missed = appliedEdits.filter(e => e.status !== 'applied').length;
+							editsMissed += missed;
+							editsApplied += appliedEdits.length - missed;
+							if (newBody !== liveBody) {
+								await CommandService.instance().execute('editor.setText', newBody);
+							}
 						}
 					}
 				}
@@ -193,6 +215,9 @@ const ChatPanel: React.FC<Props> = (props) => {
 		} catch (error) {
 			logger.warn('Chat failed:', error);
 			if (generationRef.current !== startGeneration) return;
+			// Drop the optimistic user turn so a retry doesn't re-send it as
+			// history alongside the new prompt.
+			dispatch({ type: 'AI_CHAT_REMOVE', id: userTurnId });
 			// Restore the user's prompt so they can edit and retry instead
 			// of re-typing it.
 			setInput(text);
@@ -200,7 +225,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 		} finally {
 			setSending(false);
 		}
-	}, [input, sending, props.noteId, conversationTurns, appendMessage]);
+	}, [input, sending, props.noteId, conversationTurns, appendMessage, dispatch]);
 
 	const handleAcknowledgeDisclosure = useCallback(() => {
 		Setting.setValue(DISCLOSURE_SETTING, true);
