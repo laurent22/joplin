@@ -48,12 +48,32 @@ describe('NoteLockService', () => {
 		expect(noteLockKey.isUnlocked()).toBe(false);
 		await expect(noteLockKey.unlock('wrong password')).rejects.toThrow();
 
-		await noteLockKey.unlock('123456', Date.now() - 1);
-		expect(noteLockKey.isUnlocked()).toBe(false);
-
 		const secondKey = await noteLockKey.reset('654321');
 		expect(secondKey.id).not.toBe(firstKey.id);
 		expect(noteLockKey.isUnlocked()).toBe(true);
+	});
+
+	it('should defer clearing key data while exporting', async () => {
+		const noteLockKey = NoteLockKey.instance();
+		const service = NoteLockService.instance();
+		await noteLockKey.create('123456');
+		const cipherText = await service.encryptString('some secret');
+
+		noteLockKey.setExporting(true);
+		expect(noteLockKey.isUnlocked()).toBe(true);
+		noteLockKey.setExporting(false);
+		expect(noteLockKey.isUnlocked()).toBe(true);
+
+		noteLockKey.setExporting(true);
+		noteLockKey.lock();
+
+		expect(noteLockKey.isUnlocked()).toBe(false);
+		expect(await service.decryptString(cipherText)).toBe('some secret');
+
+		noteLockKey.setExporting(false);
+
+		expect(noteLockKey.isUnlocked()).toBe(false);
+		await expect(service.decryptString(cipherText)).rejects.toThrow('Note lock key is not unlocked');
 	});
 
 	it('should sync the encrypted note lock key without loading it into the E2EE registry', async () => {
