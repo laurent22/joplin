@@ -34,12 +34,12 @@ export interface SafeContentResponse {
 	xContentTypeOptions: string;
 }
 
-function normalizeMime(mime: string): string {
+function normalizeMime(mime: string) {
 	if (!mime) return '';
 	return mime.split(';')[0].trim().toLowerCase();
 }
 
-function safeFilename(filename: string): string {
+function safeFilename(filename: string) {
 	const encoded = encodeURIComponent(friendlySafeFilename(filename || '', null, true));
 	return `filename*=UTF-8''${encoded}; filename="${encoded}"`;
 }

@@ -306,6 +306,9 @@ describe('shares.link', () => {
 		expect(context.response.get('Content-Type')).toBe('image/png');
 		expect(context.response.get('Content-Disposition').startsWith('inline;')).toBe(true);
 		expect(context.response.get('X-Content-Type-Options')).toBe('nosniff');
+		const csp = context.response.get('Content-Security-Policy');
+		expect(csp).toContain('default-src \'none\'');
+		expect(csp).toContain('sandbox');
 	});
 
 	test('should throw an error if owner of share is disabled', async () => {
