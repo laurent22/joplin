@@ -100,5 +100,8 @@ describe('index_items', () => {
 		expect(safe.response.get('Content-Type')).toBe('image/png');
 		expect(safe.response.get('Content-Disposition').startsWith('inline;')).toBe(true);
 		expect(safe.response.get('X-Content-Type-Options')).toBe('nosniff');
+		const safeCsp = safe.response.get('Content-Security-Policy');
+		expect(safeCsp).toContain('default-src \'none\'');
+		expect(safeCsp).toContain('sandbox');
 	});
 });
