@@ -329,3 +329,5 @@ doesnotexist
 asar
 agentic
 tiebreak
+heic
+heif
