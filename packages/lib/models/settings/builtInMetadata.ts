@@ -2249,7 +2249,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 		},
 
-		'noteLock.autoLockOnSwitch': {
+		'noteLock.lockOnNoteSwitch': {
 			value: false,
 			type: SettingItemType.Bool,
 			public: false,

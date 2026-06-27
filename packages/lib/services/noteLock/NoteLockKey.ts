@@ -14,7 +14,7 @@ export default class NoteLockKey {
 
 	private decryptedKey_: string = null;
 	private keyId_: string = null;
-	private exporting_ = false;
+	private exportingCount_ = 0;
 	private locked_ = true;
 
 	private constructor(private encryptionService_: EncryptionService = EncryptionService.instance()) {}
@@ -27,8 +27,7 @@ export default class NoteLockKey {
 	}
 
 	public static destroyInstance() {
-		this.instance_?.setExporting(false);
-		this.instance_?.lock();
+		this.instance_?.clearKey_();
 		this.instance_ = null;
 	}
 
@@ -75,13 +74,17 @@ export default class NoteLockKey {
 
 	public lock() {
 		this.locked_ = true;
-		if (this.exporting_) return;
+		if (this.exportingCount_) return;
 		this.clearKey_();
 	}
 
-	public setExporting(exporting: boolean) {
-		this.exporting_ = exporting;
-		if (!this.exporting_ && this.locked_) this.clearKey_();
+	public startExport() {
+		this.exportingCount_++;
+	}
+
+	public endExport() {
+		this.exportingCount_ = Math.max(0, this.exportingCount_ - 1);
+		if (!this.exportingCount_ && this.locked_) this.clearKey_();
 	}
 
 	private clearKey_() {
@@ -90,20 +93,18 @@ export default class NoteLockKey {
 		this.locked_ = true;
 	}
 
-	private clearKeyIfChanged_() {
-		if (this.keyId_ && this.keyId_ !== this.load()?.id) this.clearKey_();
+	private lockIfKeyChanged_() {
+		if (this.keyId_ && this.keyId_ !== this.load()?.id) this.lock();
 	}
 
 	public isUnlocked() {
-		this.clearKeyIfChanged_();
-		if (!this.exporting_ && this.locked_ && this.decryptedKey_) this.clearKey_();
+		this.lockIfKeyChanged_();
 		return !this.locked_ && !!this.decryptedKey_;
 	}
 
 	public decryptedKey(): DecryptedNoteLockKey {
-		this.clearKeyIfChanged_();
-		if (!this.exporting_ && !this.isUnlocked()) throw new Error('Note lock key is not unlocked');
-		if (!this.decryptedKey_) throw new Error('Note lock key is not unlocked');
+		this.lockIfKeyChanged_();
+		if (!this.decryptedKey_ || (!this.exportingCount_ && this.locked_)) throw new Error('Note lock key is not unlocked');
 		return {
 			id: this.keyId_,
 			plainText: this.decryptedKey_,

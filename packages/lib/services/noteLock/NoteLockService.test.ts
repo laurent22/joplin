@@ -1,6 +1,7 @@
 import Setting from '../../models/Setting';
 import { afterAllCleanUp, encryptionService, fileContentEqual, setupDatabaseAndSynchronizer, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
 import EncryptionService from '../e2ee/EncryptionService';
+import { localSyncInfo, saveLocalSyncInfo } from '../synchronizer/syncInfoUtils';
 import NoteLockKey from './NoteLockKey';
 import NoteLockService from './NoteLockService';
 
@@ -59,20 +60,46 @@ describe('NoteLockService', () => {
 		await noteLockKey.create('123456');
 		const cipherText = await service.encryptString('some secret');
 
-		noteLockKey.setExporting(true);
+		noteLockKey.startExport();
 		expect(noteLockKey.isUnlocked()).toBe(true);
-		noteLockKey.setExporting(false);
+		noteLockKey.endExport();
 		expect(noteLockKey.isUnlocked()).toBe(true);
 
-		noteLockKey.setExporting(true);
+		noteLockKey.startExport();
 		noteLockKey.lock();
 
 		expect(noteLockKey.isUnlocked()).toBe(false);
 		expect(await service.decryptString(cipherText)).toBe('some secret');
 
-		noteLockKey.setExporting(false);
+		noteLockKey.endExport();
 
 		expect(noteLockKey.isUnlocked()).toBe(false);
+		await expect(service.decryptString(cipherText)).rejects.toThrow('Note lock key is not unlocked');
+	});
+
+	it('should defer a synced key change until all exports finish', async () => {
+		const noteLockKey = NoteLockKey.instance();
+		const service = NoteLockService.instance();
+		await noteLockKey.create('123456');
+		const cipherText = await service.encryptString('some secret');
+
+		noteLockKey.startExport();
+		noteLockKey.startExport();
+
+		const syncInfo = localSyncInfo();
+		syncInfo.noteLockKey = {
+			...syncInfo.noteLockKey,
+			id: '0123456789abcdef0123456789abcdef',
+		};
+		saveLocalSyncInfo(syncInfo);
+
+		expect(noteLockKey.isUnlocked()).toBe(false);
+		expect(await service.decryptString(cipherText)).toBe('some secret');
+
+		noteLockKey.endExport();
+		expect(await service.decryptString(cipherText)).toBe('some secret');
+
+		noteLockKey.endExport();
 		await expect(service.decryptString(cipherText)).rejects.toThrow('Note lock key is not unlocked');
 	});
 
