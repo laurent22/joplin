@@ -59,9 +59,9 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		'editAlarm',
 		'toggleVisiblePanes',
 		'showNoteProperties',
+		// Always shown — the panel itself surfaces any configuration issue.
+		'toggleAiChat',
 	];
-
-	if (state.settings['ai.enabled']) commands.push('toggleAiChat');
 
 	// `toggleEditorPlugin` shows for plugin editors; we extend it to also
 	// toggle the core whiteboard editor on whiteboard notes (see the command's

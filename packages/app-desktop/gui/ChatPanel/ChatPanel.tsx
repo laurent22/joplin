@@ -11,12 +11,14 @@ import { defaultWindowId, stateUtils } from '@joplin/lib/reducer';
 import { AiChatMessage, AppState } from '../../app.reducer';
 import { runNoteChat, ChatTurn } from '@joplin/lib/services/ai/noteChat';
 import { applyAnchorEdits } from '@joplin/lib/services/ai/applyNoteEdits';
+import { chatAvailability } from '@joplin/lib/services/ai/availability';
 
 const logger = Logger.create('ChatPanel');
 
 interface Props {
 	themeId: number;
-	aiEnabled: boolean;
+	available: boolean;
+	unavailableHint: string;
 	providerType: string;
 	noteId: string | null;
 	noteTitle: string;
@@ -36,11 +38,8 @@ const editsSummary = (applied: number, missed: number) => {
 	return _('%d edit(s) applied, %d could not be placed automatically.', applied, missed);
 };
 
-// v1 scope: the panel is single-window. mapStateToProps reads `defaultWindowId`
-// and the toggle command writes to the app-wide layout. `aiChatMessages`
-// lives in window state for future multi-window support, but a second window
-// would currently mirror the main window's conversation.
-
+// Single-window for v1: mapStateToProps hard-codes defaultWindowId and the
+// toggle writes to the app-wide layout. A second window would mirror the main.
 const ChatPanel: React.FC<Props> = (props) => {
 	const { dispatch, messages } = props;
 	const [input, setInput] = useState('');
@@ -56,16 +55,13 @@ const ChatPanel: React.FC<Props> = (props) => {
 	const lastNoteIdRef = useRef<string | null>(props.noteId);
 	const messagesLengthRef = useRef(messages.length);
 	messagesLengthRef.current = messages.length;
-	// noteIdRef mirrors props.noteId so async work can detect note switches
-	// without re-running its closure each time the prop changes.
+	// Lets async work detect note switches without re-running its closure.
 	const noteIdRef = useRef(props.noteId);
 	noteIdRef.current = props.noteId;
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
-	// Bumped whenever the user resets the conversation or the panel
-	// unmounts. handleSend captures the generation at start and bails before
-	// appending if it no longer matches — prevents an in-flight reply from
-	// landing in a cleared conversation.
+	// Bumped on Reset / unmount so an in-flight reply can detect it should
+	// abort instead of landing in a cleared or destroyed conversation.
 	const generationRef = useRef(0);
 	useEffect(() => () => { generationRef.current++; }, []);
 
@@ -73,12 +69,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 		dispatch({ type: 'AI_CHAT_APPEND', message });
 	}, [dispatch]);
 
-	// When the active note changes mid-conversation, drop a separator so the
-	// user can see the context shifted. Don't reset history — that's the
-	// sticky-conversation model.
-	//
-	// Guard: skip when the previous noteId was null (first-ever opened note
-	// after the panel mounted — no prior context to separate from).
+	// Drop a separator when the active note changes mid-conversation. Skip
+	// the first ever opened note (no prior context to separate from).
 	useEffect(() => {
 		const prev = lastNoteIdRef.current;
 		lastNoteIdRef.current = props.noteId;
@@ -102,9 +94,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 			.map(m => ({ role: m.role as 'user' | 'assistant', content: m.text }));
 	}, [messages]);
 
-	// "Remote" from the user's perspective: a destination they may not have
-	// already consented to. Joplin Cloud is technically remote but the user
-	// opted into it as part of sync setup, so we don't repeat the disclosure.
+	// Joplin Cloud is remote but the user already consented via sync setup.
 	const requiresDisclosure = props.providerType !== 'joplin-cloud';
 	const showDisclosure = requiresDisclosure && !disclosureShown && messages.length === 0;
 
@@ -121,11 +111,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 		setSending(true);
 		setInput('');
 
-		// Capture the user-turn id so we can roll it back on failure. If we
-		// left a failed user turn in history, the next attempt (a retry with
-		// the same prompt) would re-send it: the prior user message in
-		// `conversationTurns` plus the fresh `text` argument = same prompt
-		// twice.
+		// Captured so we can roll it back on failure — otherwise a retry would
+		// send the prior user turn as history alongside the new prompt.
 		const userTurnId = makeId();
 		appendMessage({ id: userTurnId, role: 'user', text });
 
@@ -151,10 +138,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 			let editsApplied = 0;
 			let editsMissed = 0;
 			if (reply.edits.length > 0) {
-				// If the user switched notes while the request was in flight,
-				// the editor commands below (replaceSelection / editor.setText)
-				// would run against the new note's editor, silently mutating
-				// it. Refuse to apply and tell the user.
+				// Editor commands run against the focused editor, which may now
+				// be a different note. Refuse rather than mutate the wrong one.
 				if (noteIdRef.current !== noteIdAtStart) {
 					appendMessage({
 						id: makeId(),
@@ -162,10 +147,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 						text: _('You switched notes while the request was running; edits were not applied. Try again.'),
 					});
 				} else {
-					// Re-read the live body just before applying. If the user
-					// typed in the editor while the request was in flight, the
-					// body we read at send time is stale and writing newBody
-					// would silently overwrite those keystrokes.
+					// Re-read live body: the user may have typed while the
+					// request was in flight, and we don't want to overwrite that.
 					const fresh = await Note.load(noteIdAtStart);
 					const liveBody = fresh?.body ?? '';
 
@@ -215,11 +198,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 		} catch (error) {
 			logger.warn('Chat failed:', error);
 			if (generationRef.current !== startGeneration) return;
-			// Drop the optimistic user turn so a retry doesn't re-send it as
-			// history alongside the new prompt.
 			dispatch({ type: 'AI_CHAT_REMOVE', id: userTurnId });
-			// Restore the user's prompt so they can edit and retry instead
-			// of re-typing it.
 			setInput(text);
 			appendMessage({ id: makeId(), role: 'error', text: error.message || _('Something went wrong.') });
 		} finally {
@@ -238,22 +217,20 @@ const ChatPanel: React.FC<Props> = (props) => {
 	}, [dispatch]);
 
 	const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-		// Allow Shift+Enter for newlines; ignore plain Enter while sending so
-		// the user can keep typing without their next keystroke firing.
 		if (e.key === 'Enter' && !e.shiftKey) {
 			e.preventDefault();
 			if (!sending) void handleSend();
 		}
 	}, [handleSend, sending]);
 
-	if (!props.aiEnabled) {
+	if (!props.available) {
 		return (
 			<div className='chat-panel'>
 				<div className='header'>
 					<span className='title'>{_('AI Chat')}</span>
 				</div>
 				<div className='disabled-message'>
-					{_('AI features are disabled. Enable them in Settings → AI.')}
+					{props.unavailableHint}
 				</div>
 			</div>
 		);
@@ -346,9 +323,11 @@ const mapStateToProps = (state: AppState) => {
 	const windowState = stateUtils.windowStateById(state, defaultWindowId);
 	const noteId = stateUtils.selectedNoteId(windowState);
 	const note = noteId ? windowState.notes.find(n => n.id === noteId) : null;
+	const availability = chatAvailability();
 	return {
 		themeId: state.settings.theme,
-		aiEnabled: !!state.settings['ai.enabled'],
+		available: availability.available,
+		unavailableHint: availability.hint ?? '',
 		providerType: state.settings['ai.chat.providerType'] || 'openai-compatible',
 		noteId,
 		noteTitle: note?.title || '',

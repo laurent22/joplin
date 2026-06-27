@@ -55,9 +55,8 @@ export interface AppWindowState extends WindowState {
 	// the toolbar to show the editor toggle button. (We can't compute this
 	// from the redux note list because `body` isn't in the preview fields.)
 	activeNoteIsWhiteboard: boolean;
-	// AI chat conversation lives in window state so it survives panel
-	// hide/show (the layout container can swap component types when an item
-	// becomes the last child, which would lose component-local state).
+	// In window state so the conversation survives panel hide/show (the
+	// layout container can swap component types and unmount the panel).
 	aiChatMessages: AiChatMessage[];
 }
 

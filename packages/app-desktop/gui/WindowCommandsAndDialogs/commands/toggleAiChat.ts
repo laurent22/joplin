@@ -21,10 +21,6 @@ export const runtime = (control: WindowControl): CommandRuntime => {
 
 			window.dispatchEvent(new Event('resize'));
 
-			// Use MAIN_LAYOUT_SET_ITEM_PROP rather than mutating + dispatching
-			// MAIN_LAYOUT_SET: the reducer already guards a null layout and
-			// re-validates after mutation. Matches how other layout toggles
-			// (toggleSideBar predates this) ought to be wired.
 			context.dispatch({
 				type: 'MAIN_LAYOUT_SET_ITEM_PROP',
 				itemKey: 'chatPanel',

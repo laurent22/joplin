@@ -6,14 +6,10 @@ import JSON5 from 'json5';
 
 const logger = Logger.create('noteChat');
 
-// Conservative token budget for the user-controlled portion of the prompt
-// (system message + history + user turn). Keeps headroom for the model reply.
-// Payloads that exceed this are refused — v1 expects the user to select the
-// relevant region or trim the conversation instead.
+// Budget for system + history + user turn. Leaves headroom for the reply.
+// Oversize payloads are refused rather than truncated — see runNoteChat.
 const noteBodyTokenBudget = 80000;
 
-// Rough char→token ratio. Good enough for a budget check; we don't need
-// per-provider tokenisers here.
 const charsPerToken = 4;
 
 export type EditOp =
@@ -45,10 +41,9 @@ export interface ChatReply {
 	edits: EditOp[];
 }
 
-// Joplin-specific Markdown features the model needs to know about. Without
-// this, the model defaults to plain CommonMark and guesses at things like
-// whiteboards or note links, often producing constructs that don't render.
-// Always-on: ~250 tokens, worth it to avoid hallucinated syntax.
+// ~250 tokens, always on. Without this the model defaults to plain CommonMark
+// and invents syntax for Joplin extras (whiteboards, note links) that don't
+// render.
 const joplinMarkdownNotes = [
 	'This note uses Joplin Markdown — CommonMark plus the following extras:',
 	'- Checkboxes: `- [ ] todo` and `- [x] done`. Render as interactive checkboxes.',
@@ -94,10 +89,8 @@ const systemPrompt = (note: NoteContext) => {
 	lines.push('"edits" is an array of operations to apply to the note. Leave it empty for chat-only answers (e.g. questions about the note).');
 
 	if (note.selection) {
-		// With a selection, only replaceSelection is offered. Anchor-based ops
-		// target the full note body, which the model can't see in this mode —
-		// advertising them would invite hallucinated anchors that mutate text
-		// outside the user's selection.
+		// Anchor ops would target text the model can't see in this mode,
+		// inviting hallucinated anchors that mutate outside the selection.
 		lines.push('Each edit must be:');
 		lines.push('  { "op": "replaceSelection", "text": "..." } — replaces the selected text with "text".');
 		lines.push('');
@@ -122,10 +115,7 @@ const systemPrompt = (note: NoteContext) => {
 
 const estimateTokens = (text: string) => Math.ceil(text.length / charsPerToken);
 
-// Drops anything that doesn't at least have a known `op` string. Per-op
-// field validation (anchor/text presence, anchor size) lives in
-// applyNoteEdits — this is just the first filter so obvious junk doesn't
-// reach the panel or the applier.
+// First-pass filter. Per-op field validation lives in applyNoteEdits.
 const sanitizeEdits = (raw: unknown): EditOp[] => {
 	if (!Array.isArray(raw)) return [];
 	const out: EditOp[] = [];
@@ -147,15 +137,11 @@ const tryParseReply = (text: string): ChatReply => {
 		.replace(/\s*```$/, '')
 		.trim();
 
-	// JSON5 accepts every strict-JSON document and additionally tolerates
-	// the things models commonly emit despite instructions: trailing commas,
-	// unquoted keys, single-quoted strings, comments. Models are inconsistent
-	// about strict JSON output; this is the cheapest way to absorb the drift.
+	// JSON5 absorbs the trailing commas / unquoted keys / single quotes /
+	// comments that models emit despite strict-JSON instructions.
 	try {
 		const parsed = JSON5.parse(stripped);
-		// Guard against non-object payloads (string, number, null). A model
-		// that just returns "hello" parses successfully but isn't a reply
-		// envelope — fall back to raw text in that case.
+		// Primitives parse but aren't reply envelopes.
 		if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
 			return { reply: text, edits: [] };
 		}
@@ -168,8 +154,6 @@ const tryParseReply = (text: string): ChatReply => {
 	}
 };
 
-// Builds the message array and dispatches to AiService. Kept thin so a future
-// streaming or agentic variant can sit alongside it without reshaping callers.
 export const runNoteChat = async (
 	note: NoteContext,
 	history: ChatTurn[],
@@ -181,9 +165,8 @@ export const runNoteChat = async (
 		{ role: 'user', content: userMessage },
 	];
 
-	// Budget the full assembled payload, not just the note text. Sticky
-	// conversations grow turn-by-turn — eventually history (not the note)
-	// would blow the context window, and a note-only check wouldn't catch it.
+	// Budget the full payload — sticky history grows turn-by-turn and would
+	// eventually blow the context window even if no single note is too big.
 	const totalTokens = messages.reduce((sum, m) => sum + estimateTokens(m.content), 0);
 	if (totalTokens > noteBodyTokenBudget) {
 		throw new JoplinError(
@@ -196,11 +179,9 @@ export const runNoteChat = async (
 	return enforceSelectionScope(tryParseReply(result.text), note.selection);
 };
 
-// Defence-in-depth for selection mode. The system prompt tells the model to
-// use only replaceSelection when a selection is present, but a non-compliant
-// reply could still emit anchor-based ops that would mutate text outside the
-// user's selection. Drop those at the boundary so the ChatPanel /
-// applyAnchorEdits path never sees them.
+// Defence-in-depth: the prompt already tells the model to only use
+// replaceSelection in this mode, but a non-compliant reply could still slip
+// anchor ops through and mutate text outside the selection.
 const enforceSelectionScope = (reply: ChatReply, selection: string | null): ChatReply => {
 	if (!selection) return reply;
 	return { reply: reply.reply, edits: reply.edits.filter(e => e.op === 'replaceSelection') };

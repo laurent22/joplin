@@ -1593,6 +1593,8 @@ packages/lib/services/ai/SqliteVec.test.js
 packages/lib/services/ai/aiSettingsTransition.test.js
 packages/lib/services/ai/aiSettingsTransition.js
 packages/lib/services/ai/applyNoteEdits.js
+packages/lib/services/ai/availability.test.js
+packages/lib/services/ai/availability.js
 packages/lib/services/ai/chunker.test.js
 packages/lib/services/ai/chunker.js
 packages/lib/services/ai/classification.js
