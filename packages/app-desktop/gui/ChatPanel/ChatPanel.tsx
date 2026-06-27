@@ -217,7 +217,9 @@ const ChatPanel: React.FC<Props> = (props) => {
 	}, [dispatch]);
 
 	const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-		if (e.key === 'Enter' && !e.shiftKey) {
+		// Don't send while an IME composition is in flight — Enter commits
+		// the composition for CJK / accented input.
+		if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
 			e.preventDefault();
 			if (!sending) void handleSend();
 		}
