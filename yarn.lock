@@ -12495,7 +12495,7 @@ __metadata:
     "@react-native-documents/picker": "npm:11.0.4"
     "@react-native-vector-icons/fontawesome5": "npm:12.3.3"
     "@react-native-vector-icons/get-image": "npm:12.3.0"
-    "@react-native-vector-icons/ionicons": "npm:12.3.0"
+    "@react-native-vector-icons/ionicons": "npm:12.4.1"
     "@react-native-vector-icons/material-design-icons": "npm:12.4.3"
     "@react-native-vector-icons/material-icons": "npm:12.4.3"
     "@react-native/babel-preset": "npm:0.81.6"
@@ -15955,27 +15955,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/common@npm:^12.3.0":
-  version: 12.4.0
-  resolution: "@react-native-vector-icons/common@npm:12.4.0"
-  dependencies:
-    find-up: "npm:^7.0.0"
-    picocolors: "npm:^1.1.1"
-    plist: "npm:^3.1.0"
-  peerDependencies:
-    "@react-native-vector-icons/get-image": ^12.3.0
-    react: "*"
-    react-native: "*"
-  peerDependenciesMeta:
-    "@react-native-vector-icons/get-image":
-      optional: true
-  bin:
-    rnvi-update-plist: lib/commonjs/scripts/updatePlist.js
-  checksum: 10/9c59a8c21f98106621320f77b89e9ea11a2d59d70d61576742ffb65e7426537d3b218de46dd997c63422ff37347d44513e64d3305625423a21ec9a21581c8d94
-  languageName: node
-  linkType: hard
-
-"@react-native-vector-icons/common@npm:^12.4.2":
+"@react-native-vector-icons/common@npm:^12.4.0, @react-native-vector-icons/common@npm:^12.4.2":
   version: 12.4.2
   resolution: "@react-native-vector-icons/common@npm:12.4.2"
   dependencies:
@@ -16017,27 +15997,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/ionicons@npm:12.3.0":
-  version: 12.3.0
-  resolution: "@react-native-vector-icons/ionicons@npm:12.3.0"
+"@react-native-vector-icons/ionicons@npm:12.4.1":
+  version: 12.4.1
+  resolution: "@react-native-vector-icons/ionicons@npm:12.4.1"
   dependencies:
-    "@react-native-vector-icons/common": "npm:^12.3.0"
+    "@react-native-vector-icons/common": "npm:^12.4.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/da342a72ef599de1d897e8fe1acee50d58b95c7c253fd26f4a831fd5488d2826a636fb259e8b5970ab45e9e85790cffd3552837a025b0f2310f571f71effcbeb
-  languageName: node
-  linkType: hard
-
-"@react-native-vector-icons/ionicons@patch:@react-native-vector-icons/ionicons@npm%3A12.3.0#~/.yarn/patches/@react-native-vector-icons-ionicons-npm-12.3.0-9bd4746f3f.patch":
-  version: 12.3.0
-  resolution: "@react-native-vector-icons/ionicons@patch:@react-native-vector-icons/ionicons@npm%3A12.3.0#~/.yarn/patches/@react-native-vector-icons-ionicons-npm-12.3.0-9bd4746f3f.patch::version=12.3.0&hash=e0b183"
-  dependencies:
-    "@react-native-vector-icons/common": "npm:^12.3.0"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 10/f94852e0f4973e2e695e0413d69349ae1145b46253f73963f253fc83a6fdf43e39329dee1f6535b9675170e7e4e1def679ea9c2550e70d67a669434fe9a0f08f
+  checksum: 10/062dc844516db465459b34dbc3101f1e257f61a46b028055ca1c037e61a660617ac860addfeb3ed214752577157cc0a4c82ebcf07392b9de41e6cbb3a9d69356
   languageName: node
   linkType: hard
 
