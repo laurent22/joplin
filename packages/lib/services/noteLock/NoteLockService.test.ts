@@ -103,6 +103,26 @@ describe('NoteLockService', () => {
 		await expect(service.decryptString(cipherText)).rejects.toThrow('Note lock key is not unlocked');
 	});
 
+	it('should clear a synced key change when the final export ends', async () => {
+		const noteLockKey = NoteLockKey.instance();
+		const service = NoteLockService.instance();
+		const originalKey = await noteLockKey.create('123456');
+		const cipherText = await service.encryptString('some secret');
+
+		noteLockKey.startExport();
+		const syncInfo = localSyncInfo();
+		syncInfo.noteLockKey = {
+			...originalKey,
+			id: '0123456789abcdef0123456789abcdef',
+		};
+		saveLocalSyncInfo(syncInfo);
+		noteLockKey.endExport();
+
+		syncInfo.noteLockKey = originalKey;
+		saveLocalSyncInfo(syncInfo);
+		await expect(service.decryptString(cipherText)).rejects.toThrow('Note lock key is not unlocked');
+	});
+
 	it('should sync the encrypted note lock key without loading it into the E2EE registry', async () => {
 		const createdKey = await NoteLockKey.instance().create('123456');
 		NoteLockKey.destroyInstance();

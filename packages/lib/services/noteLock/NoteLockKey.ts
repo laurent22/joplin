@@ -85,6 +85,7 @@ export default class NoteLockKey {
 	public endExport() {
 		this.exportingCount_ = Math.max(0, this.exportingCount_ - 1);
 		if (!this.exportingCount_ && this.locked_) this.clearKey_();
+		this.lockIfKeyChanged_();
 	}
 
 	private clearKey_() {
