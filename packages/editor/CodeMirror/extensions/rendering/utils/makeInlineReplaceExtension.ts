@@ -142,8 +142,9 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 	public update(update: ViewUpdate) {
 		const forceUpdate = update.transactions.some(transaction => (
 			transaction.effects.some(effect => effect.is(updateInlineDecorationsEffect))
+			|| extensionSpec.shouldFullReRender?.(transaction)
 		));
-		if (this.mouseSelectionInProgress && update.selectionSet && update.state.selection.main.empty && !update.docChanged) {
+		if (this.mouseSelectionInProgress && update.selectionSet && update.state.selection.main.empty && !update.docChanged && !forceUpdate) {
 			return;
 		}
 
