@@ -36,7 +36,7 @@ export interface ChatProvider {
 export type ProviderModelDownloadStatus = 'not-started' | 'downloading' | 'downloaded';
 
 export type ModelDownloadStatus = ProviderModelDownloadStatus | 'unavailable';
-export type IndexerState = 'idle' | 'running' | 'ai-disabled' | 'index-disabled';
+export type IndexerState = 'idle' | 'running' | 'ai-disabled' | 'index-disabled' | 'vector-search-unavailable';
 export interface IndexStatus {
 	modelDownloadStatus: ModelDownloadStatus;
 	indexerState: IndexerState;

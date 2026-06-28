@@ -33,6 +33,12 @@ export enum EventType {
 	TaskCompleted = 2,
 }
 
+export enum StripeEventStatus {
+	InProgress = 1,
+	Success = 2,
+	Errored = 3,
+}
+
 export enum BackupItemType {
 	UserAccount = 1,
 }
@@ -375,6 +381,11 @@ export interface Change2 extends WithDates, WithUuid {
 	type?: ChangeType;
 }
 
+export interface StripeEvent extends WithDates, WithUuid {
+	stripe_id?: Uuid;
+	status?: StripeEventStatus;
+}
+
 export const databaseSchema: DatabaseTables = {
 	sessions: {
 		id: { type: 'string', defaultValue: null },
@@ -624,6 +635,13 @@ export const databaseSchema: DatabaseTables = {
 		type: { type: 'number', defaultValue: null },
 		updated_time: { type: 'string', defaultValue: null },
 		created_time: { type: 'string', defaultValue: null },
+	},
+	stripe_events: {
+		id: { type: 'string', defaultValue: null },
+		stripe_id: { type: 'string', defaultValue: null },
+		created_time: { type: 'string', defaultValue: null },
+		updated_time: { type: 'string', defaultValue: null },
+		status: { type: 'number', defaultValue: null },
 	},
 };
 // AUTO-GENERATED-TYPES

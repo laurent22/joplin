@@ -863,6 +863,7 @@ function useMenu(props: Props) {
 						menuItemDic.openNoteInNewWindow,
 						menuItemDic.toggleExternalEditing,
 						separator(),
+						menuItemDic.linkToNote,
 						menuItemDic.setTags,
 						menuItemDic.showShareNoteDialog,
 						menuItemDic.convertNoteToMarkdown,
@@ -973,7 +974,6 @@ function useMenu(props: Props) {
 
 			rootMenus.go.submenu.push(menuItemDic.gotoAnything);
 			rootMenus.tools.submenu.push(menuItemDic.commandPalette);
-			rootMenus.tools.submenu.push(menuItemDic.linkToNote);
 			rootMenus.tools.submenu.push(menuItemDic.openMasterPasswordDialog);
 
 			for (const view of props.pluginMenuItems) {

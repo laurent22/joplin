@@ -779,6 +779,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('Test AI configuration'),
 		},
 
+		// First-send disclosure for non-cloud providers. The chat panel shows
+		// an inline banner the first time the user sends a message; clicking
+		// "Don't show again" flips this so the banner stays away.
+		'ai.chat.disclosureAcknowledged': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
 		// User toggle for the background embedding indexer. On by default —
 		// when AI is enabled, indexing is part of what AI does. The toggle
 		// exists as a kill switch for users who want chat without the

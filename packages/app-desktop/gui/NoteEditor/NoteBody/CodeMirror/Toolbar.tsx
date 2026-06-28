@@ -58,6 +58,7 @@ const mapStateToProps = (state: AppState, connectProps: ConnectProps) => {
 		'textItalic',
 		'-',
 		'textLink',
+		'linkToNote',
 		'textCode',
 		'attachFile',
 		'-',

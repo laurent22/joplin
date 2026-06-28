@@ -40,8 +40,9 @@ export interface Theme {
 
 	// Color scheme "4" is used for secondary-style buttons. It makes a white
 	// button with blue text.
-	backgroundColor4: string;
 	color4: string;
+	backgroundColor4: string;
+	backgroundColor4Dimmed: string;
 
 	backgroundColor5?: string;
 	color5?: string;

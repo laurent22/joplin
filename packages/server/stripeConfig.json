@@ -79,6 +79,13 @@
 					}
 				],
 				"currency": "EUR"
+			},
+			{
+				"productType": "ai-credits",
+				"id": "price_1Tf4FvL9ZkKzC9sXpjjunUDE",
+				"amount": "2.00",
+				"aiCredits": 500000,
+				"currency": "EUR"
 			}
 		],
 		"archivedPrices": []
@@ -141,6 +148,13 @@
 				"id": "price_1TZbplLx4fybOTqJ3VmzuqmZ",
 				"period": "yearly",
 				"amount": "95.88",
+				"currency": "EUR"
+			},
+			{
+				"productType": "ai-credits",
+				"id": "price_1TkN0uLx4fybOTqJxyMwGoh7",
+				"amount": "1.99",
+				"aiCredits": 500000,
 				"currency": "EUR"
 			},
 			{

@@ -126,6 +126,23 @@ describe('EmbeddingIndexer', () => {
 		expect(await NoteEmbedding.countByNoteId(note.id)).toBe(0);
 	});
 
+	it('removes embeddings for a locked note on the next maintenance', async () => {
+		if (skipIfNoVec()) return;
+		const folder = await Folder.save({ title: 'f' });
+		const note = await Note.save({ title: 't', body: 'some body text', parent_id: folder.id });
+		await waitForChangesSince(0, 1);
+
+		await EmbeddingIndexer.instance().maintenance();
+		expect(await NoteEmbedding.countByNoteId(note.id)).toBeGreaterThan(0);
+
+		const cursorAfterFirst = Setting.value('ai.embedding.lastProcessedChangeId') as number;
+		await Note.save({ id: note.id, is_locked: 1 });
+		await waitForChangesSince(cursorAfterFirst, 1);
+
+		await EmbeddingIndexer.instance().maintenance();
+		expect(await NoteEmbedding.countByNoteId(note.id)).toBe(0);
+	});
+
 	it('skips trashed and conflict notes', async () => {
 		if (skipIfNoVec()) return;
 		const folder = await Folder.save({ title: 'f' });
@@ -287,15 +304,20 @@ describe('EmbeddingIndexer', () => {
 		const folder = await Folder.save({ title: 'f' });
 		await Note.save({ title: 'A', body: 'apples', parent_id: folder.id });
 		await Note.save({ title: 'B', body: 'bananas', parent_id: folder.id });
-		await waitForChangesSince(0, 2);
+		const locked = await Note.save({ title: 'C', body: 'cherries', parent_id: folder.id, is_locked: 1 });
+		await waitForChangesSince(0, 3);
 		const lastChange = await ItemChange.lastChangeId();
 		Setting.setValue('ai.embedding.lastProcessedChangeId', lastChange);
 
 		await EmbeddingIndexer.instance().maintenance();
+		await EmbeddingIndexer.instance().maintenance();
 
-		// Both notes should be indexed via the backfill path even though no
+		// The unlocked notes should be indexed via the backfill path even though no
 		// new item_changes were available.
 		expect(await NoteEmbedding.distinctNoteIdCount()).toBe(2);
+		expect(await NoteEmbedding.countByNoteId(locked.id)).toBe(0);
+		expect(Setting.value('ai.embedding.initialScanDone')).toBe(true);
+		expect((await EmbeddingIndexer.instance().getStatus()).totalNotes).toBe(2);
 	});
 
 	it('skips a note that fails during the initial scan instead of looping on it', async () => {
@@ -328,6 +350,25 @@ describe('EmbeddingIndexer', () => {
 		expect(await NoteEmbedding.countByNoteId(good.id)).toBeGreaterThan(0);
 		expect(await NoteEmbedding.countByNoteId(bad.id)).toBe(0);
 		expect(Setting.value('ai.embedding.initialScanDone')).toBe(true);
+	});
+
+	it('does not start in background when vector search is unavailable', async () => {
+		// On platforms where the sqlite-vec extension fails to load (see
+		// #15761) the indexer would otherwise pull every note into the
+		// expensive embedding provider and then throw at saveChunks — burning
+		// CPU/memory on every tick for no result. Confirm we bail at startup
+		// and surface the state to the UI instead.
+		Setting.setValue('ai.enabled', true);
+		const spy = jest.spyOn(NoteEmbedding, 'vectorSearchAvailable').mockReturnValue(false);
+		try {
+			await EmbeddingIndexer.instance().runInBackground();
+			const status = await EmbeddingIndexer.instance().getStatus();
+			expect(status.indexerState).toBe('vector-search-unavailable');
+		} finally {
+			spy.mockRestore();
+			Setting.setValue('ai.enabled', false);
+			await EmbeddingIndexer.instance().stopRunInBackground();
+		}
 	});
 
 	it('getStatus counts indexed vs total notes and excludes trashed ones', async () => {

@@ -45,8 +45,16 @@ export default class NoteEmbedding extends BaseModel {
 		return this.db() as JoplinDatabase;
 	}
 
+	// Single source of truth for "can we use vector search?". Callers that
+	// would otherwise throw (the indexer, search APIs) should gate on this and
+	// no-op when it's false, so users on platforms without sqlite-vec don't
+	// get a flood of failed-to-index errors.
+	public static vectorSearchAvailable(): boolean {
+		return this.joplinDb().sqliteVecAvailable();
+	}
+
 	private static requireVec() {
-		if (!this.joplinDb().sqliteVecAvailable()) {
+		if (!this.vectorSearchAvailable()) {
 			throw new Error('Vector search is unavailable: sqlite-vec extension is not loaded on this platform');
 		}
 	}
@@ -92,6 +100,7 @@ export default class NoteEmbedding extends BaseModel {
 			`SELECT n.id FROM notes n
 			 WHERE (n.deleted_time IS NULL OR n.deleted_time = 0)
 			   AND (n.is_conflict IS NULL OR n.is_conflict = 0)
+			   AND n.is_locked = 0
 			   AND NOT EXISTS (SELECT 1 FROM note_embeddings_meta m WHERE m.note_id = n.id)${excludeSql}
 			 LIMIT ?`,
 			[...excludeIds, limit],
@@ -159,6 +168,15 @@ export default class NoteEmbedding extends BaseModel {
 			const lastID = row?.id;
 			if (!lastID) throw new Error('Failed to obtain rowid after embedding insert');
 
+			// Wipe any orphan vec-row at this rowid before inserting. Orphans
+			// show up when a prior saveChunks crashed between the meta insert
+			// and the vec insert: meta was wiped on the next pass but the vec
+			// row stayed, and sqlite later hands us the same rowid (#15761).
+			// vec0 doesn't support INSERT OR REPLACE — explicit DELETE then INSERT.
+			await this.db().exec({
+				sql: 'DELETE FROM note_embeddings_vec WHERE rowid = ?',
+				params: [lastID],
+			});
 			await this.db().exec({
 				sql: 'INSERT INTO note_embeddings_vec(rowid, embedding) VALUES (?, ?)',
 				params: [lastID, JSON.stringify(chunk.vector)],

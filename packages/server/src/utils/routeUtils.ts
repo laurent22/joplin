@@ -10,6 +10,7 @@ import { stripOffQueryParameters } from './urlUtils';
 import { hasOwnProperty } from '@joplin/utils/object';
 
 import { ltrimSlashes, rtrimSlashes } from '@joplin/lib/path-utils';
+import safeUserContentResponse from './safeUserContentResponse';
 
 function dirname(path: string): string {
 	if (!path) throw new Error('Path is empty');
@@ -309,8 +310,15 @@ interface KoaResponseLike {
 
 export function respondWithItemContent(koaResponse: KoaResponseLike, item: Item, content: Buffer): Response {
 	koaResponse.body = item.jop_type > 0 ? content.toString() : content;
-	koaResponse.set('Content-Type', item.mime_type);
 	koaResponse.set('Content-Length', content.byteLength);
+
+	// mime_type is user-controlled, so sanitize to prevent inline script execution.
+	const safe = safeUserContentResponse(item.mime_type, item.name || '');
+	koaResponse.set('Content-Type', safe.mime);
+	koaResponse.set('Content-Disposition', safe.contentDisposition);
+	koaResponse.set('Content-Security-Policy', safe.contentSecurityPolicy);
+	koaResponse.set('X-Content-Type-Options', safe.xContentTypeOptions);
+
 	return new Response(ResponseType.KoaResponse, koaResponse);
 }
 

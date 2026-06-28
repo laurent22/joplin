@@ -32,6 +32,8 @@ const theme: Theme = {
 
 	codeMirrorTheme: 'solarized light',
 	codeThemeCss: 'atom-one-light.css',
+
+	backgroundColor4Dimmed: '#eee8d5',
 };
 
 export default theme;

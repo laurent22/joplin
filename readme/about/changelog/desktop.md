@@ -1,5 +1,18 @@
 # Joplin Desktop Changelog
 
+## [v3.7.6](https://github.com/laurent22/joplin/releases/tag/v3.7.6) (Pre-release) - 2026-06-24T22:10:00Z
+
+- Improved: Cap ONNX embedding batch size to prevent renderer OOM ([109d1b1](https://github.com/laurent22/joplin/commit/109d1b1))
+- Improved: Speed up embedding indexer during initial scan ([6668375](https://github.com/laurent22/joplin/commit/6668375))
+- Improved: Wipe orphan vec rows before insert in NoteEmbedding.saveChunks ([4a6da2c](https://github.com/laurent22/joplin/commit/4a6da2c))
+- Fixed: Fix sqlite-vec extension path inside packaged Electron app ([9de4a11](https://github.com/laurent22/joplin/commit/9de4a11))
+- Fixed: Fixed loading of note embeddings ([7f1d39b](https://github.com/laurent22/joplin/commit/7f1d39b))
+
+## [v3.7.4](https://github.com/laurent22/joplin/releases/tag/v3.7.4) (Pre-release) - 2026-06-24T12:55:38Z
+
+- Improved: Index locked note resources ([#15717](https://github.com/laurent22/joplin/issues/15717)) ([#15714](https://github.com/laurent22/joplin/issues/15714) by [@keshav0479](https://github.com/keshav0479))
+- Fixed: Fix renderer crash loop when sqlite-vec is unavailable  ([#15762](https://github.com/laurent22/joplin/issues/15762)) ([#15761](https://github.com/laurent22/joplin/issues/15761))
+
 ## [v3.7.3](https://github.com/laurent22/joplin/releases/tag/v3.7.3) (Pre-release) - 2026-06-23T04:54:15Z
 
 - New: Add AI chat backend and plugin API ([#15643](https://github.com/laurent22/joplin/issues/15643))

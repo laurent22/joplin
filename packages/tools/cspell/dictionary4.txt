@@ -326,3 +326,8 @@ pretrained
 huggingface
 stdio
 doesnotexist
+asar
+agentic
+tiebreak
+heic
+heif

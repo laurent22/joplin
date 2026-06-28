@@ -73,30 +73,49 @@ export enum PriceCurrency {
 	USD = 'USD',
 }
 
-export interface StripePublicConfigTieredAmount {
+
+export enum ProductType {
+	Subscription = 'subscription',
+	AiCredits = 'ai-credits',
+}
+
+export enum AccountType {
+	Default = 0,
+	Basic = 1,
+	Pro = 2,
+	Team = 3,
+	Pro100Gb = 4,
+	SelfHosted = 5,
+}
+
+interface StripeBasePrice {
+	id: string;
+	currency: PriceCurrency;
+}
+
+interface StripeBaseSubscriptionPrice extends StripeBasePrice {
+	accountType: AccountType;
+	period: PricePeriod;
+	productType: ProductType.Subscription|undefined;
+	aiCredits?: undefined;
+}
+
+export interface StripeFixedSubscriptionPrice extends StripeBaseSubscriptionPrice {
+	amount: string;
+	formattedAmount: string;
+	formattedMonthlyAmount: string;
+	amounts: undefined;
+}
+
+export interface StripeTieredAmount {
 	amount: string;
 	formattedAmount: string;
 	users: [number, number|'infinity'];
 	userRange: { min: number; max: number };
 }
 
-export interface StripePublicConfigBasePrice {
-	accountType: number; // AccountType
-	id: string;
-	period: PricePeriod;
-	currency: PriceCurrency;
-}
-
-export interface StripePublicConfigFixedPrice extends StripePublicConfigBasePrice {
-	amount: string;
-	formattedAmount: string;
-	formattedMonthlyAmount: string;
-
-	amounts: undefined;
-}
-
-export interface StripePublicConfigTieredPrice extends StripePublicConfigBasePrice {
-	amounts: StripePublicConfigTieredAmount[];
+export interface StripeTieredSubscriptionPrice extends StripeBaseSubscriptionPrice {
+	amounts: StripeTieredAmount[];
 
 	quantityMinimum: number;
 	amount: undefined;
@@ -104,7 +123,19 @@ export interface StripePublicConfigTieredPrice extends StripePublicConfigBasePri
 	formattedMonthlyAmount: undefined;
 }
 
-export type StripePublicConfigPrice = StripePublicConfigFixedPrice | StripePublicConfigTieredPrice;
+type StripeSubscriptionPrice = StripeTieredSubscriptionPrice | StripeFixedSubscriptionPrice;
+
+export interface StripePublicConfigAiProductPrice extends StripeBasePrice {
+	productType: ProductType.AiCredits;
+	amount: string;
+	formattedAmount: string;
+	aiCredits: number;
+
+	accountType?: undefined;
+	period?: undefined;
+}
+
+export type StripePublicConfigPrice = StripeSubscriptionPrice | StripePublicConfigAiProductPrice;
 
 export interface StripePublicConfig {
 	publishableKey: string;
@@ -121,7 +152,7 @@ function formatPrice(amount: string | number, currency: PriceCurrency): string {
 	throw new Error(`Unsupported currency: ${currency}`);
 }
 
-export const isTieredPrice = (p: StripePublicConfigPrice): p is StripePublicConfigTieredPrice => {
+export const isTieredPrice = (p: StripePublicConfigPrice): p is StripeTieredSubscriptionPrice => {
 	return 'amounts' in p;
 };
 
@@ -129,7 +160,12 @@ export function loadStripeConfig(env: string, filePath: string): StripePublicCon
 	const config: StripePublicConfig = JSON.parse(fs.readFileSync(filePath, 'utf8'))[env];
 	if (!config) throw new Error(`Invalid env: ${env}`);
 
-	const decoratePrices = (p: StripePublicConfigPrice): StripePublicConfigPrice => {
+	const isSubscriptionPrice = (p: StripePublicConfigPrice): p is StripeSubscriptionPrice => {
+		return p.productType === undefined || p.productType === ProductType.Subscription;
+	};
+
+	const decoratePrices = (p: StripePublicConfigPrice) => {
+		const price = p;
 		if (isTieredPrice(p)) {
 			return {
 				...p,
@@ -143,11 +179,24 @@ export function loadStripeConfig(env: string, filePath: string): StripePublicCon
 				})),
 			};
 		}
-		return {
-			...p,
-			formattedAmount: formatPrice(p.amount, p.currency),
-			formattedMonthlyAmount: p.period === PricePeriod.Monthly ? formatPrice(p.amount, p.currency) : formatPrice(Number(p.amount) / 12, p.currency),
-		};
+		if (isSubscriptionPrice(p)) {
+			return {
+				...p,
+				productType: ProductType.Subscription,
+				formattedAmount: formatPrice(p.amount, p.currency),
+				formattedMonthlyAmount: p.period === PricePeriod.Monthly ? formatPrice(p.amount, p.currency) : formatPrice(Number(p.amount) / 12, p.currency),
+			} satisfies StripeSubscriptionPrice;
+		}
+		if (p.productType === ProductType.AiCredits) {
+			return {
+				...p,
+				formattedAmount: formatPrice(p.amount, p.currency),
+			} satisfies StripePublicConfigAiProductPrice;
+		}
+
+		const exhaustivenessCheck: never = p;
+		// Use the exhaustivenessCheck to prevent unused variable warnings
+		throw new Error(`Unexpected product type: ${exhaustivenessCheck && price.productType}`);
 	};
 
 	config.prices = config.prices.map(decoratePrices);
@@ -156,11 +205,24 @@ export function loadStripeConfig(env: string, filePath: string): StripePublicCon
 	return config;
 }
 
-interface FindPriceQuery {
+
+type FindPriceQuery = {
 	accountType?: number;
 	period?: PricePeriod;
+
+	priceId?: undefined;
+}|{
+	accountType?: undefined;
+	period?: undefined;
+
 	priceId?: string;
-}
+}|{
+	accountType?: undefined;
+	period?: undefined;
+	priceId?: undefined;
+
+	productType: ProductType;
+};
 
 export function findPrice(config: StripePublicConfig, query: FindPriceQuery): StripePublicConfigPrice {
 	let output: StripePublicConfigPrice = null;
@@ -170,6 +232,8 @@ export function findPrice(config: StripePublicConfig, query: FindPriceQuery): St
 			output = prices.filter(p => p.accountType === query.accountType).find(p => p.period === query.period);
 		} else if (query.priceId) {
 			output = prices.find(p => p.id === query.priceId);
+		} else if ('productType' in query) {
+			output = prices.find(p => p.productType === query.productType);
 		} else {
 			throw new Error(`Invalid query: ${JSON.stringify(query)}`);
 		}

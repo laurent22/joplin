@@ -57,18 +57,32 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 		const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 		if (this.apiKey_) headers['Authorization'] = `Bearer ${this.apiKey_}`;
 
-		const response = await shim.fetch(`${this.baseUrl_}/chat/completions`, {
-			method: 'POST',
-			headers,
-			body: JSON.stringify(body),
-		});
+		const doFetch = async () => {
+			const response = await shim.fetch(`${this.baseUrl_}/chat/completions`, {
+				method: 'POST',
+				headers,
+				body: JSON.stringify(body),
+			});
+			const text = await response.text();
+			let json: OpenAiResponse;
+			try {
+				json = JSON.parse(text) as OpenAiResponse;
+			} catch {
+				throw new JoplinError(`AI provider returned non-JSON response: ${text.slice(0, 200)}`, response.status);
+			}
+			return { response, json };
+		};
 
-		const text = await response.text();
-		let json: OpenAiResponse;
-		try {
-			json = JSON.parse(text) as OpenAiResponse;
-		} catch {
-			throw new JoplinError(`AI provider returned non-JSON response: ${text.slice(0, 200)}`, response.status);
+		let { response, json } = await doFetch();
+
+		// Newer OpenAI models (o1/o3/gpt-5/...) reject `max_tokens` and require
+		// `max_completion_tokens`. Older models and many OpenAI-compatible
+		// servers only know `max_tokens`. Retry once with the new name when the
+		// server tells us so.
+		if (response.status === 400 && 'max_tokens' in body && /max_completion_tokens/i.test(json?.error?.message ?? '')) {
+			body.max_completion_tokens = body.max_tokens;
+			delete body.max_tokens;
+			({ response, json } = await doFetch());
 		}
 
 		if (response.status >= 400) {

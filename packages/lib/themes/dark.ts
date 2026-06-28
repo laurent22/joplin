@@ -42,6 +42,7 @@ const theme: Theme = {
 	// button with blue text.
 	backgroundColor4: '#1D2024',
 	color4: '#789FE9',
+	backgroundColor4Dimmed: '#303543',
 
 	raisedBackgroundColor: '#474747',
 	raisedColor: '#ffffff',
