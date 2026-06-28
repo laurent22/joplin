@@ -10,7 +10,7 @@ import { stripOffQueryParameters } from './urlUtils';
 import { hasOwnProperty } from '@joplin/utils/object';
 
 import { ltrimSlashes, rtrimSlashes } from '@joplin/lib/path-utils';
-import { safeUserContentResponse } from './userContentResponse';
+import safeUserContentResponse from './safeUserContentResponse';
 
 function dirname(path: string): string {
 	if (!path) throw new Error('Path is empty');

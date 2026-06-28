@@ -27,26 +27,19 @@ const safeInlineMimeTypes = new Set<string>([
 	'application/pdf',
 ]);
 
-export interface SafeContentResponse {
-	mime: string;
-	contentDisposition: string;
-	contentSecurityPolicy: string;
-	xContentTypeOptions: string;
-}
-
-function normalizeMime(mime: string) {
+const normalizeMime = (mime: string) => {
 	if (!mime) return '';
 	return mime.split(';')[0].trim().toLowerCase();
-}
+};
 
-function safeFilename(filename: string) {
+const safeFilename = (filename: string) => {
 	const encoded = encodeURIComponent(friendlySafeFilename(filename || '', null, true));
 	return `filename*=UTF-8''${encoded}; filename="${encoded}"`;
-}
+};
 
 // Returns safe response headers for serving user-uploaded content. All four
 // fields must be applied together.
-export function safeUserContentResponse(rawMime: string, filename: string): SafeContentResponse {
+export default (rawMime: string, filename: string) => {
 	const mime = normalizeMime(rawMime);
 	const isSafeInline = safeInlineMimeTypes.has(mime);
 
@@ -59,4 +52,4 @@ export function safeUserContentResponse(rawMime: string, filename: string): Safe
 		contentSecurityPolicy: 'default-src \'none\'; img-src \'self\' data:; media-src \'self\' data:; style-src \'unsafe-inline\'; sandbox',
 		xContentTypeOptions: 'nosniff',
 	};
-}
+};

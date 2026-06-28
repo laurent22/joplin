@@ -6,7 +6,7 @@ import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { Item, Share } from '../../services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { FileViewerResponse, renderItem as renderJoplinItem } from '../../utils/joplinUtils';
-import { safeUserContentResponse } from '../../utils/userContentResponse';
+import safeUserContentResponse from '../../utils/safeUserContentResponse';
 
 async function renderItem(context: AppContext, item: Item, share: Share): Promise<FileViewerResponse> {
 	if (item.jop_type === ModelType.Note) {
