@@ -16,13 +16,13 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 	private mouseSelectionInProgress = false;
 
 	public constructor(private view: EditorView) {
-		view.contentDOM.addEventListener('mousedown', this.onMouseDown, true);
+		view.dom.addEventListener('mousedown', this.onMouseDown, true);
 		view.dom.ownerDocument.addEventListener('mouseup', this.onMouseUp);
 		this.updateDecorations(view);
 	}
 
 	public destroy() {
-		this.view.contentDOM.removeEventListener('mousedown', this.onMouseDown, true);
+		this.view.dom.removeEventListener('mousedown', this.onMouseDown, true);
 		this.view.dom.ownerDocument.removeEventListener('mouseup', this.onMouseUp);
 	}
 
@@ -140,13 +140,13 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 	}
 
 	public update(update: ViewUpdate) {
-		if (this.mouseSelectionInProgress && update.selectionSet && !update.docChanged) {
-			return;
-		}
-
 		const forceUpdate = update.transactions.some(transaction => (
 			transaction.effects.some(effect => effect.is(updateInlineDecorationsEffect))
 		));
+		if (this.mouseSelectionInProgress && update.selectionSet && update.state.selection.main.empty && !update.docChanged) {
+			return;
+		}
+
 		if (update.docChanged || update.viewportChanged || update.selectionSet || forceUpdate) {
 			this.updateDecorations(update.view);
 		}
