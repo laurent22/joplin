@@ -8,6 +8,7 @@ export default class NoteLockSession {
 	private keyId_: string = null;
 	private leaseCount_ = 0;
 	private locked_ = true;
+	private lockGeneration_ = 0;
 
 	private constructor(private noteLockKey_: NoteLockKey = NoteLockKey.instance()) {}
 
@@ -25,7 +26,11 @@ export default class NoteLockSession {
 
 	public async unlock(password: string) {
 		if (this.leaseCount_) throw new Error('Cannot unlock the note lock session while an operation is holding the key');
+		// Decryption yields, so a lock can land mid-await. Without this check a late unlock would
+		// silently reopen a session the caller already locked.
+		const generation = this.lockGeneration_;
 		const decrypted = await this.noteLockKey_.decrypt(password);
+		if (this.lockGeneration_ !== generation || this.leaseCount_) return;
 		this.keyId_ = decrypted.id;
 		this.decryptedKey_ = decrypted.plainText;
 		this.locked_ = false;
@@ -33,6 +38,7 @@ export default class NoteLockSession {
 
 	public lock() {
 		this.locked_ = true;
+		this.lockGeneration_++;
 		if (this.leaseCount_) return;
 		this.clearKey_();
 	}

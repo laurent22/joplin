@@ -143,6 +143,27 @@ describe('NoteLockService', () => {
 		});
 	});
 
+	it('should stay locked when locked while an unlock is in flight', async () => {
+		const noteLockKey = NoteLockKey.instance();
+		const session = NoteLockSession.instance();
+		await noteLockKey.create('123456');
+
+		let releaseDecrypt: ()=> void = () => {};
+		const decryptGate = new Promise<void>(resolve => { releaseDecrypt = resolve; });
+		const realDecrypt = noteLockKey.decrypt.bind(noteLockKey);
+		jest.spyOn(noteLockKey, 'decrypt').mockImplementation(async password => {
+			await decryptGate;
+			return realDecrypt(password);
+		});
+
+		const unlocking = session.unlock('123456');
+		session.lock();
+		releaseDecrypt();
+		await unlocking;
+
+		expect(session.isUnlocked()).toBe(false);
+	});
+
 	it('should hold the key until the last overlapping lease finishes out of order', async () => {
 		const noteLockKey = NoteLockKey.instance();
 		const session = NoteLockSession.instance();
