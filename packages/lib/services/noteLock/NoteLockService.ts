@@ -1,5 +1,5 @@
 import EncryptionService, { EncryptOptions } from '../e2ee/EncryptionService';
-import NoteLockKey from './NoteLockKey';
+import NoteLockSession from './NoteLockSession';
 
 export default class NoteLockService {
 
@@ -7,14 +7,14 @@ export default class NoteLockService {
 
 	private constructor(
 		private encryptionService_: EncryptionService,
-		private noteLockKey_: NoteLockKey,
+		private noteLockSession_: NoteLockSession,
 	) {}
 
 	public static instance() {
 		if (!this.instance_) {
 			const encryptionService = EncryptionService.instance();
-			const noteLockKey = NoteLockKey.instance();
-			this.instance_ = new NoteLockService(encryptionService, noteLockKey);
+			const noteLockSession = NoteLockSession.instance();
+			this.instance_ = new NoteLockService(encryptionService, noteLockSession);
 		}
 		return this.instance_;
 	}
@@ -40,7 +40,7 @@ export default class NoteLockService {
 	}
 
 	private encryptionOptions_(): EncryptOptions {
-		const key = this.noteLockKey_.decryptedKey();
+		const key = this.noteLockSession_.decryptedKey();
 		return {
 			masterKeyId: key.id,
 			decryptedMasterKey: key.plainText,

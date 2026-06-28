@@ -72,6 +72,7 @@ import getAppName from './getAppName';
 import PerformanceLogger from './PerformanceLogger';
 import Synchronizer from './Synchronizer';
 import NoteLockKey from './services/noteLock/NoteLockKey';
+import NoteLockSession from './services/noteLock/NoteLockSession';
 import NoteLockService from './services/noteLock/NoteLockService';
 
 const appLogger: LoggerWrapper = Logger.create('App');
@@ -139,6 +140,7 @@ export default class BaseApplication {
 		// ResourceService.isRunningInBackground_ = false;
 		ResourceFetcher.instance_ = null;
 		NoteLockKey.destroyInstance();
+		NoteLockSession.destroyInstance();
 		NoteLockService.destroyInstance();
 		EncryptionService.instance_ = null;
 		DecryptionWorker.instance_ = null;

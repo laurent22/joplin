@@ -3,6 +3,7 @@ import { afterAllCleanUp, encryptionService, fileContentEqual, setupDatabaseAndS
 import EncryptionService from '../e2ee/EncryptionService';
 import { localSyncInfo, saveLocalSyncInfo } from '../synchronizer/syncInfoUtils';
 import NoteLockKey from './NoteLockKey';
+import NoteLockSession from './NoteLockSession';
 import NoteLockService from './NoteLockService';
 
 describe('NoteLockService', () => {
@@ -12,6 +13,7 @@ describe('NoteLockService', () => {
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
 		NoteLockKey.destroyInstance();
+		NoteLockSession.destroyInstance();
 		NoteLockService.destroyInstance();
 		EncryptionService.instance_ = encryptionService();
 	});
@@ -23,8 +25,10 @@ describe('NoteLockService', () => {
 	it('should encrypt and decrypt strings and files without loading an E2EE master key', async () => {
 		const encryptionServiceInstance = EncryptionService.instance();
 		const noteLockKey = NoteLockKey.instance();
+		const session = NoteLockSession.instance();
 		const service = NoteLockService.instance();
 		await noteLockKey.create('123456');
+		await session.unlock('123456');
 
 		const cipherText = await service.encryptString('some secret');
 		expect(await service.decryptString(cipherText)).toBe('some secret');
@@ -42,49 +46,79 @@ describe('NoteLockService', () => {
 
 	it('should clear cached key data and only rotate on reset', async () => {
 		const noteLockKey = NoteLockKey.instance();
+		const session = NoteLockSession.instance();
 		const firstKey = await noteLockKey.create('123456');
 		await expect(noteLockKey.create('123456')).rejects.toThrow('Note lock key already exists');
 
-		noteLockKey.lock();
-		expect(noteLockKey.isUnlocked()).toBe(false);
-		await expect(noteLockKey.unlock('wrong password')).rejects.toThrow();
+		await session.unlock('123456');
+		session.lock();
+		expect(session.isUnlocked()).toBe(false);
+		await expect(session.unlock('wrong password')).rejects.toThrow();
 
 		const secondKey = await noteLockKey.reset('654321');
 		expect(secondKey.id).not.toBe(firstKey.id);
-		expect(noteLockKey.isUnlocked()).toBe(true);
+		await session.unlock('654321');
+		expect(session.isUnlocked()).toBe(true);
 	});
 
-	it('should defer clearing key data while exporting', async () => {
+	it('should keep the key available to a lease after locking', async () => {
 		const noteLockKey = NoteLockKey.instance();
+		const session = NoteLockSession.instance();
 		const service = NoteLockService.instance();
 		await noteLockKey.create('123456');
+		await session.unlock('123456');
 		const cipherText = await service.encryptString('some secret');
 
-		noteLockKey.startExport();
-		expect(noteLockKey.isUnlocked()).toBe(true);
-		noteLockKey.endExport();
-		expect(noteLockKey.isUnlocked()).toBe(true);
+		await session.withKeyHeld(async () => {
+			expect(session.isUnlocked()).toBe(true);
+		});
+		expect(session.isUnlocked()).toBe(true);
 
-		noteLockKey.startExport();
-		noteLockKey.lock();
+		await session.withKeyHeld(async () => {
+			session.lock();
+			expect(session.isUnlocked()).toBe(false);
+			expect(await service.decryptString(cipherText)).toBe('some secret');
+		});
 
-		expect(noteLockKey.isUnlocked()).toBe(false);
-		expect(await service.decryptString(cipherText)).toBe('some secret');
-
-		noteLockKey.endExport();
-
-		expect(noteLockKey.isUnlocked()).toBe(false);
-		await expect(service.decryptString(cipherText)).rejects.toThrow('Note lock key is not unlocked');
+		expect(session.isUnlocked()).toBe(false);
+		await expect(service.decryptString(cipherText)).rejects.toThrow('Note lock session is locked');
 	});
 
-	it('should defer a synced key change until all exports finish', async () => {
+	it('should release the lease when a held callback throws', async () => {
 		const noteLockKey = NoteLockKey.instance();
+		const session = NoteLockSession.instance();
+		await noteLockKey.create('123456');
+		await session.unlock('123456');
+
+		await expect(session.withKeyHeld(async () => {
+			throw new Error('boom');
+		})).rejects.toThrow('boom');
+
+		session.lock();
+		expect(() => session.decryptedKey()).toThrow('Note lock session is locked');
+	});
+
+	it('should leave the session locked after create and reset until explicitly unlocked', async () => {
+		const noteLockKey = NoteLockKey.instance();
+		const session = NoteLockSession.instance();
+
+		await noteLockKey.create('123456');
+		expect(session.isUnlocked()).toBe(false);
+
+		await session.unlock('123456');
+		expect(session.isUnlocked()).toBe(true);
+
+		await noteLockKey.reset('654321');
+		expect(session.isUnlocked()).toBe(false);
+	});
+
+	it('should not serve a key that changed before the lease started', async () => {
+		const noteLockKey = NoteLockKey.instance();
+		const session = NoteLockSession.instance();
 		const service = NoteLockService.instance();
 		await noteLockKey.create('123456');
+		await session.unlock('123456');
 		const cipherText = await service.encryptString('some secret');
-
-		noteLockKey.startExport();
-		noteLockKey.startExport();
 
 		const syncInfo = localSyncInfo();
 		syncInfo.noteLockKey = {
@@ -93,39 +127,89 @@ describe('NoteLockService', () => {
 		};
 		saveLocalSyncInfo(syncInfo);
 
-		expect(noteLockKey.isUnlocked()).toBe(false);
-		expect(await service.decryptString(cipherText)).toBe('some secret');
-
-		noteLockKey.endExport();
-		expect(await service.decryptString(cipherText)).toBe('some secret');
-
-		noteLockKey.endExport();
-		await expect(service.decryptString(cipherText)).rejects.toThrow('Note lock key is not unlocked');
+		await session.withKeyHeld(async () => {
+			await expect(service.decryptString(cipherText)).rejects.toThrow('Note lock session is locked');
+		});
 	});
 
-	it('should clear a synced key change when the final export ends', async () => {
+	it('should reject unlocking while a lease holds the key', async () => {
 		const noteLockKey = NoteLockKey.instance();
+		const session = NoteLockSession.instance();
+		await noteLockKey.create('123456');
+		await session.unlock('123456');
+
+		await session.withKeyHeld(async () => {
+			await expect(session.unlock('123456')).rejects.toThrow('Cannot unlock the note lock session while an operation is holding the key');
+		});
+	});
+
+	it('should hold the key until the last overlapping lease finishes out of order', async () => {
+		const noteLockKey = NoteLockKey.instance();
+		const session = NoteLockSession.instance();
 		const service = NoteLockService.instance();
-		const originalKey = await noteLockKey.create('123456');
+		await noteLockKey.create('123456');
+		await session.unlock('123456');
 		const cipherText = await service.encryptString('some secret');
 
-		noteLockKey.startExport();
-		const syncInfo = localSyncInfo();
-		syncInfo.noteLockKey = {
-			...originalKey,
-			id: '0123456789abcdef0123456789abcdef',
-		};
-		saveLocalSyncInfo(syncInfo);
-		noteLockKey.endExport();
+		let releaseFirst: ()=> void = () => {};
+		let releaseSecond: ()=> void = () => {};
+		const firstGate = new Promise<void>(resolve => { releaseFirst = resolve; });
+		const secondGate = new Promise<void>(resolve => { releaseSecond = resolve; });
 
+		const firstLease = session.withKeyHeld(async () => { await firstGate; });
+		const secondLease = session.withKeyHeld(async () => { await secondGate; });
+
+		session.lock();
+		expect(session.isUnlocked()).toBe(false);
+
+		releaseFirst();
+		await firstLease;
+		// While any lease is in flight the held key is process-wide: even this caller, which is
+		// outside the lease, can still decrypt. Intentional for now; to be scoped to the leased
+		// operation when export integration lands.
+		expect(await service.decryptString(cipherText)).toBe('some secret');
+
+		releaseSecond();
+		await secondLease;
+		await expect(service.decryptString(cipherText)).rejects.toThrow('Note lock session is locked');
+	});
+
+	it('should defer a synced key change until the final lease ends, then clear it', async () => {
+		const noteLockKey = NoteLockKey.instance();
+		const session = NoteLockSession.instance();
+		const service = NoteLockService.instance();
+		const originalKey = await noteLockKey.create('123456');
+		await session.unlock('123456');
+		const cipherText = await service.encryptString('some secret');
+
+		await session.withKeyHeld(async () => {
+			await session.withKeyHeld(async () => {
+				const syncInfo = localSyncInfo();
+				syncInfo.noteLockKey = {
+					...syncInfo.noteLockKey,
+					id: '0123456789abcdef0123456789abcdef',
+				};
+				saveLocalSyncInfo(syncInfo);
+
+				// Visible session reads as locked, but the in-flight lease still gets the key.
+				expect(session.isUnlocked()).toBe(false);
+				expect(await service.decryptString(cipherText)).toBe('some secret');
+			});
+
+			expect(await service.decryptString(cipherText)).toBe('some secret');
+		});
+
+		// Once every lease is done the key is cleared and stays cleared even if the original returns.
+		const syncInfo = localSyncInfo();
 		syncInfo.noteLockKey = originalKey;
 		saveLocalSyncInfo(syncInfo);
-		await expect(service.decryptString(cipherText)).rejects.toThrow('Note lock key is not unlocked');
+		await expect(service.decryptString(cipherText)).rejects.toThrow('Note lock session is locked');
 	});
 
 	it('should sync the encrypted note lock key without loading it into the E2EE registry', async () => {
 		const createdKey = await NoteLockKey.instance().create('123456');
 		NoteLockKey.destroyInstance();
+		NoteLockSession.destroyInstance();
 		NoteLockService.destroyInstance();
 		await synchronizerStart();
 
@@ -135,7 +219,7 @@ describe('NoteLockService', () => {
 
 		const syncedKey = NoteLockKey.instance();
 		expect(syncedKey.load()).toEqual(createdKey);
-		expect(syncedKey.isUnlocked()).toBe(false);
+		expect(NoteLockSession.instance().isUnlocked()).toBe(false);
 		expect(EncryptionService.instance().loadedMasterKeysCount()).toBe(0);
 	});
 });
