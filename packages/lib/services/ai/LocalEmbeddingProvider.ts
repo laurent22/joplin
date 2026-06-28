@@ -267,6 +267,9 @@ export const meanPoolAndNormalise = (
 		let norm = 0;
 		for (let h = 0; h < hidden; h++) norm += vec[h] * vec[h];
 		norm = Math.sqrt(norm);
+		if (!Number.isFinite(norm)) {
+			throw new Error(`meanPoolAndNormalise: non-finite norm at batch index ${b}`);
+		}
 		if (norm > 0) {
 			for (let h = 0; h < hidden; h++) vec[h] /= norm;
 		}

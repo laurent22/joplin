@@ -331,3 +331,4 @@ agentic
 tiebreak
 heic
 heif
+logits
