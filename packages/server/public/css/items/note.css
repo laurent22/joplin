@@ -161,12 +161,12 @@ div.wunderbaum.folder-tree .wb-row {
 	color: var(--folder-tree-hover-text) !important;
 } */
 
-div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"]:hover {
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"]:is(:hover, .is-pointer-hover) {
 	background-color: var(--folder-tree-background-gray-hover) !important;
 }
 
-div.wunderbaum.folder-tree .wb-row:hover .wb-title,
-div.wunderbaum.folder-tree .wb-row:hover .wb-expander {
+div.wunderbaum.folder-tree .wb-row:is(:hover, .is-pointer-hover) .wb-title,
+div.wunderbaum.folder-tree .wb-row:is(:hover, .is-pointer-hover) .wb-expander {
 	color: var(--folder-tree-hover-text) !important;
 
 }
@@ -176,8 +176,8 @@ div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"].wb-active .wb-e
 	color: var(--folder-tree-blue) !important;
 }
 
-div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"].wb-active:hover .wb-title,
-div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"].wb-active:hover .wb-expander {
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"].wb-active:is(:hover, .is-pointer-hover) .wb-title,
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="folder"].wb-active:is(:hover, .is-pointer-hover) .wb-expander {
 	color: var(--folder-tree-blue-dark) !important;
 }
 
@@ -185,7 +185,7 @@ div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"]:hover {
 	background-color: transparent !important;
 }
 
-div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"]:hover .wb-title {
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"]:is(:hover, .is-pointer-hover) .wb-title {
 	color: #000;
 	background-color: var(--folder-tree-background-gray-hover) !important;
 	border-top-right-radius: 999px !important;
@@ -198,7 +198,7 @@ div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"].wb-active .wb-tit
 	border-bottom-right-radius: 999px !important;
 }
 
-div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"].wb-active:hover .wb-title {
+div.wunderbaum.folder-tree .wb-row[data-tree-item-type="note"].wb-active:is(:hover, .is-pointer-hover) .wb-title {
 	color: var(--folder-tree-blue-dark) !important;
 }
 

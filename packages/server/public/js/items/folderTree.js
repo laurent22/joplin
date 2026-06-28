@@ -45,6 +45,9 @@
 		};
 		restoreCollapsedNotebooks(treeData.source || []);
 		const scrollStorageKey = `folder-tree-scroll:${window.location.pathname}`;
+		const pointerPositionStorageKey = 'folder-tree-pointer-position';
+		const syntheticHoverClassName = 'is-pointer-hover';
+		const treeRowSelector = '.wb-row[data-tree-item-type]';
 		const accessSessionStorage = function(callback) {
 			try {
 				return callback(window.sessionStorage);
@@ -52,9 +55,32 @@
 				return null;
 			}
 		};
+		let hoverPosition = accessSessionStorage(storage => JSON.parse(storage.getItem(pointerPositionStorageKey) || 'null'));
 
-		const navigate = function(node) {
+		const applySyntheticHoverAt = function(x, y) {
+			if (typeof x !== 'number' || typeof y !== 'number') return;
+			const target = document.elementFromPoint(x, y);
+			const row = target ? target.closest(treeRowSelector) : null;
+			const previousRow = container.querySelector(`.${syntheticHoverClassName}`);
+			if (previousRow && previousRow !== row) previousRow.classList.remove(syntheticHoverClassName);
+			if (row && container.contains(row)) row.classList.add(syntheticHoverClassName);
+		};
+
+		const savePointerPosition = function(event, nodeId) {
+			if (!event || typeof event.clientX !== 'number' || typeof event.clientY !== 'number') return;
+			const row = nodeId || !event.target.closest ? null : event.target.closest(treeRowSelector);
+			const treeItem = row ? row.querySelector('[role="treeitem"]') : null;
+			hoverPosition = {
+				x: event.clientX,
+				y: event.clientY,
+				id: nodeId || (treeItem ? treeItem.id : null),
+			};
+			accessSessionStorage(storage => storage.setItem(pointerPositionStorageKey, JSON.stringify(hoverPosition)));
+		};
+
+		const navigate = function(node, event) {
 			if (!node || !node.data || !node.data.url) return;
+			savePointerPosition(event, rowId(node));
 			accessSessionStorage(storage => storage.setItem(scrollStorageKey, String(container.scrollTop)));
 			window.location.href = node.data.url;
 		};
@@ -108,13 +134,15 @@
 			const position = siblings.indexOf(e.node) + 1;
 			row.setAttribute('role', 'presentation');
 			row.dataset.treeItemType = e.node.data.url ? 'note' : 'folder';
+			e.nodeElem.id = rowId(e.node);
+			const wasRowHovered = Boolean(hoverPosition && hoverPosition.id === e.nodeElem.id);
+			row.classList.toggle(syntheticHoverClassName, wasRowHovered);
 			const title = e.nodeElem.querySelector('.wb-title');
 			if (title && title.scrollWidth > title.clientWidth) {
 				title.setAttribute('title', e.node.title);
 			} else if (title) {
 				title.removeAttribute('title');
 			}
-			e.nodeElem.id = rowId(e.node);
 			e.nodeElem.setAttribute('role', 'treeitem');
 			// Added to fix screen reader on Safari
 			e.nodeElem.setAttribute('aria-roledescription', 'outline row');
@@ -158,7 +186,10 @@
 
 				requestAnimationFrame(() => {
 					container.scrollTop = Number(accessSessionStorage(storage => storage.getItem(scrollStorageKey))) || 0;
-					requestAnimationFrame(() => container.classList.remove('is-initializing'));
+					requestAnimationFrame(() => {
+						if (hoverPosition) applySyntheticHoverAt(hoverPosition.x, hoverPosition.y);
+						container.classList.remove('is-initializing');
+					});
 				});
 			},
 			activate: function(e) {
@@ -183,7 +214,7 @@
 					return false;
 				} else if (e.node) {
 					if (e.event && e.event.preventDefault) e.event.preventDefault();
-					navigate(e.node);
+					navigate(e.node, e.event);
 					return false;
 				}
 			},
@@ -198,6 +229,16 @@
 				}
 			},
 		});
+
+		const updateSyntheticHover = function(event) {
+			savePointerPosition(event);
+			const pointerLeftTree = event.type === 'pointerleave';
+			const pointerX = pointerLeftTree ? -1 : event.clientX;
+			const pointerY = pointerLeftTree ? -1 : event.clientY;
+			applySyntheticHoverAt(pointerX, pointerY);
+		};
+		container.addEventListener('pointermove', updateSyntheticHover);
+		container.addEventListener('pointerleave', updateSyntheticHover);
 
 		const listContainer = container.querySelector('.wb-list-container');
 		const nodeList = container.querySelector('.wb-node-list');
