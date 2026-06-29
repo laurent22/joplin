@@ -251,7 +251,7 @@ export default class NoteEmbedding extends BaseModel {
 		noteIds?: string[];
 		afterRowid?: number;
 		limit: number;
-	}): Promise<{ rowid: number; noteId: string; chunkIndex: number; chunkText: string; vector: number[] }[]> {
+	}): Promise<{ rowid: number; noteId: string; modelId: string; chunkIndex: number; chunkText: string; vector: number[] }[]> {
 		this.requireVec();
 		if (!await this.vecTableExists()) return [];
 		if (options.noteIds && options.noteIds.length === 0) return [];
@@ -271,11 +271,12 @@ export default class NoteEmbedding extends BaseModel {
 		const rows = await this.db().selectAll<{
 			id: number;
 			note_id: string;
+			model_id: string;
 			chunk_index: number;
 			chunk_text: string;
 			embedding: string;
 		}>(
-			`SELECT m.id, m.note_id, m.chunk_index, m.chunk_text, vec_to_json(v.embedding) AS embedding
+			`SELECT m.id, m.note_id, m.model_id, m.chunk_index, m.chunk_text, vec_to_json(v.embedding) AS embedding
 			 FROM note_embeddings_meta m
 			 JOIN note_embeddings_vec v ON v.rowid = m.id
 			 ${where}
@@ -287,6 +288,7 @@ export default class NoteEmbedding extends BaseModel {
 		return rows.map(r => ({
 			rowid: r.id,
 			noteId: r.note_id,
+			modelId: r.model_id,
 			chunkIndex: r.chunk_index,
 			chunkText: r.chunk_text,
 			vector: JSON.parse(r.embedding) as number[],

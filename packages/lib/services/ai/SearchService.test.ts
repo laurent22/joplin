@@ -261,6 +261,24 @@ describe('SearchService', () => {
 			.rejects.toThrow(/Invalid embeddings cursor/);
 	});
 
+	it.each([NaN, Infinity, -1, 0, 1.5])('getEmbeddings: rejects invalid limit %p', async (limit) => {
+		await expect(SearchService.instance().getEmbeddings({ limit }))
+			.rejects.toThrow(/Invalid embeddings limit/);
+	});
+
+	it('getEmbeddings: reads modelId from rows so a mid-flight provider swap cannot mislabel them', async () => {
+		if (skipIfNoVec()) return;
+		const { catNote } = await seed();
+		// Swap the active provider *after* indexing. Rows in the table still
+		// carry the original modelId; the page envelope must reflect that, not
+		// the live provider.
+		AiService.instance().setEmbeddingProvider(new TestEmbeddingProvider({ dimension: 64, modelId: 'different-model' }));
+
+		const page = await SearchService.instance().getEmbeddings({ noteIds: [catNote.id] });
+		expect(page.chunks.length).toBeGreaterThan(0);
+		expect(page.modelId).toBe('test-model-v1');
+	});
+
 	it('uses embedQuery when the provider exposes it', async () => {
 		if (skipIfNoVec()) return;
 		const { catNote } = await seed();

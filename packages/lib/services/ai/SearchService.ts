@@ -31,19 +31,27 @@ const MAX_EMBEDDINGS_PAGE_SIZE = 5000;
 
 // Opaque to plugins: the cursor format is an implementation detail and may
 // change. The `v1:` prefix lets a future format coexist via a version bump.
-const encodeEmbeddingsCursor = (rowid: number): string => `v1:${rowid}`;
+const encodeEmbeddingsCursor = (rowid: number) => `v1:${rowid}`;
 
-const decodeEmbeddingsCursor = (cursor: string | undefined): number | undefined => {
+const decodeEmbeddingsCursor = (cursor: string | undefined) => {
 	if (!cursor) return undefined;
 	const match = /^v1:(\d+)$/.exec(cursor);
-	if (!match) throw new Error(`Invalid embeddings cursor: ${cursor}`);
+	if (!match) throw new Error(`Invalid embeddings cursor: ${JSON.stringify(cursor)}`);
 	return Number(match[1]);
+};
+
+const resolveEmbeddingsLimit = (raw: number | undefined) => {
+	if (raw === undefined) return DEFAULT_EMBEDDINGS_PAGE_SIZE;
+	if (!Number.isInteger(raw) || raw < 1) {
+		throw new Error(`Invalid embeddings limit: ${raw}`);
+	}
+	return Math.min(raw, MAX_EMBEDDINGS_PAGE_SIZE);
 };
 
 // vec0 returns L2 distance. Our vectors are L2-normalised, so cosine
 // similarity = 1 − d²/2 exactly. Clamp to handle float drift on self-matches
 // and opposite-vector edges.
-const cosineFromDistance = (distance: number): number => {
+const cosineFromDistance = (distance: number) => {
 	const score = 1 - (distance * distance) / 2;
 	if (score < 0) return 0;
 	if (score > 1) return 1;
@@ -65,7 +73,7 @@ export default class SearchService {
 			throw new Error('No embedding provider is active. Enable AI features in Settings → AI.');
 		}
 
-		const limit = Math.min(Math.max(1, options.limit ?? DEFAULT_EMBEDDINGS_PAGE_SIZE), MAX_EMBEDDINGS_PAGE_SIZE);
+		const limit = resolveEmbeddingsLimit(options.limit);
 		const afterRowid = decodeEmbeddingsCursor(options.cursor);
 
 		const rows = await NoteEmbedding.chunksPage({
@@ -74,6 +82,26 @@ export default class SearchService {
 			limit,
 		});
 
+		// Take the page's modelId from the rows themselves rather than the
+		// live provider: a model swap during the await could leave rows from
+		// the old model in flight while provider.modelId already reports the
+		// new one. Empty pages have no rows to read from, so fall back to the
+		// provider (no rows = no mismatch to expose).
+		let modelId: string;
+		let dimension: number;
+		if (rows.length === 0) {
+			modelId = provider.modelId;
+			dimension = provider.dimension;
+		} else {
+			modelId = rows[0].modelId;
+			dimension = rows[0].vector.length;
+			for (const r of rows) {
+				if (r.modelId !== modelId) {
+					throw new Error(`Embeddings page spans multiple models (${modelId} and ${r.modelId}). The index is being rebuilt — retry shortly.`);
+				}
+			}
+		}
+
 		const chunks = rows.map(r => ({
 			noteId: r.noteId,
 			chunkIndex: r.chunkIndex,
@@ -81,15 +109,14 @@ export default class SearchService {
 			vector: r.vector,
 		}));
 
-		// Only emit a cursor when we filled the page. A short page is the
-		// natural end-of-stream signal — saves the plugin one empty round-trip.
+		// Short page = end-of-stream. Saves the plugin one empty round-trip.
 		const nextCursor = rows.length === limit
 			? encodeEmbeddingsCursor(rows[rows.length - 1].rowid)
 			: undefined;
 
 		return {
-			modelId: provider.modelId,
-			dimension: provider.dimension,
+			modelId,
+			dimension,
 			chunks,
 			nextCursor,
 		};
