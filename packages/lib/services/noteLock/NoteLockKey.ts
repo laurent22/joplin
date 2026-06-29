@@ -49,6 +49,8 @@ export default class NoteLockKey {
 		return this.save(await this.encryptionService_.generateMasterKey(password));
 	}
 
+	// Rotate through NoteLockSession.reset() rather than calling this directly, so the session locks
+	// and drops the old key as part of the rotation.
 	public async reset(password: string) {
 		return this.save(await this.encryptionService_.generateMasterKey(password));
 	}

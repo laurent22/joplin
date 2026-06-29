@@ -4,11 +4,9 @@ export default class NoteLockSession {
 
 	public static instance_: NoteLockSession = null;
 
-	private decryptedKey_: string = null;
-	private keyId_: string = null;
-	private leaseCount_ = 0;
-	private locked_ = true;
+	private key_: DecryptedNoteLockKey = null;
 	private lockGeneration_ = 0;
+	private rotating_ = false;
 
 	private constructor(private noteLockKey_: NoteLockKey = NoteLockKey.instance()) {}
 
@@ -20,66 +18,54 @@ export default class NoteLockSession {
 	}
 
 	public static destroyInstance() {
-		this.instance_?.clearKey_();
+		// lock() bumps the generation so a mid-decrypt unlock() cannot repopulate a torn-down session.
+		this.instance_?.lock();
 		this.instance_ = null;
 	}
 
+	// Re-checks state after the await so a lock, reset, synced change or teardown that raced in can't install a stale key.
 	public async unlock(password: string) {
-		if (this.leaseCount_) throw new Error('Cannot unlock the note lock session while an operation is holding the key');
-		// Decryption yields, so a lock can land mid-await. Without this check a late unlock would
-		// silently reopen a session the caller already locked.
+		if (this.rotating_) return false;
 		const generation = this.lockGeneration_;
 		const decrypted = await this.noteLockKey_.decrypt(password);
-		if (this.lockGeneration_ !== generation || this.leaseCount_) return;
-		this.keyId_ = decrypted.id;
-		this.decryptedKey_ = decrypted.plainText;
-		this.locked_ = false;
+		if (this.rotating_ || this.lockGeneration_ !== generation || this.noteLockKey_.load()?.id !== decrypted.id) return false;
+		this.key_ = decrypted;
+		return true;
 	}
 
 	public lock() {
-		this.locked_ = true;
 		this.lockGeneration_++;
-		if (this.leaseCount_) return;
-		this.clearKey_();
+		this.key_ = null;
 	}
 
-	// Holds the decrypted key for the duration of the callback if the session locks or the synced
-	// key changes meanwhile. A key change that happened before the lease starts is not deferred, so
-	// it is applied first and the lease then runs on a locked session. The key is only cleared once
-	// the final lease ends.
-	public async withKeyHeld<T>(callback: ()=> Promise<T>): Promise<T> {
-		this.lockIfKeyChanged_();
-		this.leaseCount_++;
+	// Blocks unlock during rotation so the still-persisted old key can't be unlocked before the new one is saved.
+	public async reset(password: string) {
+		if (this.rotating_) throw new Error('A note lock key reset is already in progress');
+		this.rotating_ = true;
+		this.lock();
 		try {
-			return await callback();
+			return await this.noteLockKey_.reset(password);
 		} finally {
-			this.leaseCount_ = Math.max(0, this.leaseCount_ - 1);
-			if (!this.leaseCount_ && this.locked_) this.clearKey_();
-			this.lockIfKeyChanged_();
+			this.lock();
+			this.rotating_ = false;
 		}
 	}
 
-	private clearKey_() {
-		this.keyId_ = null;
-		this.decryptedKey_ = null;
-		this.locked_ = true;
-	}
-
 	private lockIfKeyChanged_() {
-		if (this.keyId_ && this.keyId_ !== this.noteLockKey_.load()?.id) this.lock();
+		if (this.key_ && this.key_.id !== this.noteLockKey_.load()?.id) this.lock();
 	}
 
 	public isUnlocked() {
 		this.lockIfKeyChanged_();
-		return !this.locked_ && !!this.decryptedKey_;
+		return !!this.key_;
 	}
 
 	public decryptedKey(): DecryptedNoteLockKey {
 		this.lockIfKeyChanged_();
-		if (!this.decryptedKey_ || (!this.leaseCount_ && this.locked_)) throw new Error('Note lock session is locked');
+		if (!this.key_) throw new Error('Note lock session is locked');
 		return {
-			id: this.keyId_,
-			plainText: this.decryptedKey_,
+			id: this.key_.id,
+			plainText: this.key_.plainText,
 		};
 	}
 }

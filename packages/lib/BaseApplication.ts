@@ -139,9 +139,9 @@ export default class BaseApplication {
 		ResourceService.isRunningInBackground_ = false;
 		// ResourceService.isRunningInBackground_ = false;
 		ResourceFetcher.instance_ = null;
-		NoteLockKey.destroyInstance();
-		NoteLockSession.destroyInstance();
 		NoteLockService.destroyInstance();
+		NoteLockSession.destroyInstance();
+		NoteLockKey.destroyInstance();
 		EncryptionService.instance_ = null;
 		DecryptionWorker.instance_ = null;
 
