@@ -16,6 +16,9 @@ import { AppState } from '../../utils/types';
 import { connect } from 'react-redux';
 import useWebViewSetup from '../../contentScripts/rendererBundle/useWebViewSetup';
 import { OnScrollCallback } from '../../contentScripts/rendererBundle/types';
+import Logger from '@joplin/utils/Logger';
+
+const perfLogger = Logger.create('NoteBodyViewer-perf');
 
 interface Props {
 	themeId: number;
@@ -88,7 +91,9 @@ function NoteBodyViewer(props: Props) {
 		showNoteLinkIcon: props.showNoteLinkIcon,
 	});
 
+	const mountTimeRef = useRef(Date.now());
 	const onLoadEnd = useCallback(() => {
+		perfLogger.info(`[perf] WebView onLoadEnd fired ${Date.now() - mountTimeRef.current} ms after mount`);
 		webViewEventHandlers.onLoadEnd();
 		if (props.onLoadEnd) props.onLoadEnd();
 	}, [props.onLoadEnd, webViewEventHandlers]);

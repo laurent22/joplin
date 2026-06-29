@@ -81,6 +81,7 @@ export default class Renderer {
 	public async setExtraContentScriptsAndRerender(
 		extraContentScripts: ExtraContentScriptSource[],
 	) {
+		const evalStart = Date.now();
 		this.extraContentScripts_ = extraContentScripts.map(script => {
 			const scriptModule = ((0, eval)(script.js))({
 				pluginId: script.pluginId,
@@ -99,14 +100,20 @@ export default class Renderer {
 				module: scriptModule,
 			};
 		});
+		const evalMs = Date.now() - evalStart;
 		this.recreateMarkupToHtml_();
 
 		// If possible, rerenders with the last rendering settings. The goal
 		// of this is to reduce the number of IPC calls between the viewer and
 		// React Native. We want the first render to be as fast as possible.
+		let renderMs = 0;
 		if (this.lastBodyMarkup_) {
+			const renderStart = Date.now();
 			await this.rerenderToBody(this.lastBodyMarkup_, this.lastBodyRenderSettings_);
+			renderMs = Date.now() - renderStart;
 		}
+
+		return { evalMs, renderMs };
 	}
 
 	public async render(markup: MarkupRecord, settings: RenderSettings) {
