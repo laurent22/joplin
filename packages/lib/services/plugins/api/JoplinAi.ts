@@ -1,8 +1,9 @@
 /* eslint-disable multiline-comment-style */
 
 import AiService from '../../ai/AiService';
+import EmbeddingIndexer from '../../ai/EmbeddingIndexer';
 import SearchService from '../../ai/SearchService';
-import { ChatMessage, ChatOptions, SearchOptions, SearchResult } from './types';
+import { AiIndexStatus, ChatMessage, ChatOptions, SearchOptions, SearchResult } from './types';
 
 /**
  * Provides access to AI models configured by the user. The active provider
@@ -88,6 +89,25 @@ export default class JoplinAi {
 	 */
 	public async search(options: SearchOptions): Promise<SearchResult[]> {
 		return SearchService.instance().search(options);
+	}
+
+	/**
+	 * Returns the current state of the on-device embedding index. Useful for
+	 * hybrid pipelines that prefer {@link search} when ready and fall back
+	 * otherwise. Cheap enough to call on a UI tick.
+	 *
+	 * @example
+	 * ```typescript
+	 * const status = await joplin.ai.getIndexStatus();
+	 * if (status.ready) {
+	 *     await runOnJoplinAi();
+	 * } else {
+	 *     await runOnLocalFallback();
+	 * }
+	 * ```
+	 */
+	public async getIndexStatus(): Promise<AiIndexStatus> {
+		return EmbeddingIndexer.instance().getPluginStatus();
 	}
 
 }

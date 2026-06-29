@@ -10,6 +10,7 @@ import NoteEmbedding from '../../models/NoteEmbedding';
 import AiService from './AiService';
 import { chunkText } from './chunker';
 import { EmbeddingProvider, IndexStatus } from './types';
+import { AiIndexState, AiIndexStatus } from '../plugins/api/types';
 
 const logger = Logger.create('EmbeddingIndexer');
 
@@ -128,6 +129,24 @@ export default class EmbeddingIndexer {
 		const totalNotes = await Note.indexableCount();
 
 		return { modelDownloadStatus, indexerState, notesIndexed, totalNotes };
+	}
+
+	// Plugin-facing snapshot. Coarsens the internal state so the public API
+	// isn't pinned to current internals.
+	public async getPluginStatus(): Promise<AiIndexStatus> {
+		const internal = await this.getStatus();
+		const provider = AiService.instance().getActiveEmbeddingProvider();
+
+		const state = coarseStateFrom(internal);
+		const ready = state === 'ready' && internal.notesIndexed > 0;
+
+		return {
+			ready,
+			state,
+			modelId: provider?.modelId ?? null,
+			notesIndexed: internal.notesIndexed,
+			totalNotes: internal.totalNotes,
+		};
 	}
 
 	// Single maintenance tick. Public so tests can drive it without waiting
@@ -282,3 +301,13 @@ export default class EmbeddingIndexer {
 		await NoteEmbedding.saveChunks(noteId, provider.modelId, payload);
 	}
 }
+
+// Exported so the mapping is unit-testable without spinning up the indexer.
+export const coarseStateFrom = (status: IndexStatus): AiIndexState => {
+	if (status.indexerState === 'vector-search-unavailable') return 'unavailable';
+	if (status.indexerState === 'ai-disabled' || status.indexerState === 'index-disabled') return 'disabled';
+	if (status.modelDownloadStatus === 'unavailable' || status.modelDownloadStatus === 'not-started') return 'preparing';
+	if (status.modelDownloadStatus === 'downloading') return 'preparing';
+	if (status.indexerState === 'running') return 'indexing';
+	return 'ready';
+};
