@@ -1054,7 +1054,8 @@ export interface SearchResult {
  * - `disabled`: AI or the embedding index is turned off in settings.
  * - `preparing`: the embedding model is downloading or loading.
  * - `indexing`: the background scan is embedding notes; search works but results are incomplete.
- * - `ready`: the index is idle and at least one note is embedded.
+ * - `ready`: the index is idle and the model is loaded. Indexed-note count
+ *   may still be 0 (e.g. empty vault) — see the separate `ready` boolean.
  */
 export type AiIndexState = 'unavailable' | 'disabled' | 'preparing' | 'indexing' | 'ready';
 

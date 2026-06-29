@@ -427,10 +427,15 @@ describe('EmbeddingIndexer', () => {
 	});
 
 	it('getPluginStatus: modelId is null when no provider is active', async () => {
+		const original = AiService.instance().getActiveEmbeddingProvider();
 		AiService.instance().setEmbeddingProvider(null);
-		const status = await EmbeddingIndexer.instance().getPluginStatus();
-		expect(status.modelId).toBeNull();
-		expect(status.ready).toBe(false);
+		try {
+			const status = await EmbeddingIndexer.instance().getPluginStatus();
+			expect(status.modelId).toBeNull();
+			expect(status.ready).toBe(false);
+		} finally {
+			AiService.instance().setEmbeddingProvider(original);
+		}
 	});
 
 	it('getStatus counts indexed vs total notes and excludes trashed ones', async () => {

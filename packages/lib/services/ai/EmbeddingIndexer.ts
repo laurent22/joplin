@@ -99,8 +99,30 @@ export default class EmbeddingIndexer {
 	// Snapshot of indexer + model state for the settings UI. Cheap enough to
 	// poll on a UI tick (two COUNTs + a provider probe).
 	public async getStatus(): Promise<IndexStatus> {
-		const provider = AiService.instance().getActiveEmbeddingProvider();
+		return this.statusFor(AiService.instance().getActiveEmbeddingProvider());
+	}
 
+	// Plugin-facing snapshot. Coarsens the internal state so the public API
+	// isn't pinned to current internals.
+	public async getPluginStatus(): Promise<AiIndexStatus> {
+		// Capture once so modelId in the response matches the provider the
+		// rest of the snapshot was computed from.
+		const provider = AiService.instance().getActiveEmbeddingProvider();
+		const internal = await this.statusFor(provider);
+
+		const state = coarseStateFrom(internal);
+		const ready = state === 'ready' && internal.notesIndexed > 0;
+
+		return {
+			ready,
+			state,
+			modelId: provider?.modelId ?? null,
+			notesIndexed: internal.notesIndexed,
+			totalNotes: internal.totalNotes,
+		};
+	}
+
+	private async statusFor(provider: EmbeddingProvider | null): Promise<IndexStatus> {
 		let modelDownloadStatus: IndexStatus['modelDownloadStatus'] = 'unavailable';
 		if (provider) {
 			// Providers without a downloadable artefact (remote, test stub)
@@ -129,24 +151,6 @@ export default class EmbeddingIndexer {
 		const totalNotes = await Note.indexableCount();
 
 		return { modelDownloadStatus, indexerState, notesIndexed, totalNotes };
-	}
-
-	// Plugin-facing snapshot. Coarsens the internal state so the public API
-	// isn't pinned to current internals.
-	public async getPluginStatus(): Promise<AiIndexStatus> {
-		const internal = await this.getStatus();
-		const provider = AiService.instance().getActiveEmbeddingProvider();
-
-		const state = coarseStateFrom(internal);
-		const ready = state === 'ready' && internal.notesIndexed > 0;
-
-		return {
-			ready,
-			state,
-			modelId: provider?.modelId ?? null,
-			notesIndexed: internal.notesIndexed,
-			totalNotes: internal.totalNotes,
-		};
 	}
 
 	// Single maintenance tick. Public so tests can drive it without waiting
