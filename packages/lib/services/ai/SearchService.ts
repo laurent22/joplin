@@ -76,11 +76,16 @@ export default class SearchService {
 		const limit = resolveEmbeddingsLimit(options.limit);
 		const afterRowid = decodeEmbeddingsCursor(options.cursor);
 
-		const rows = await NoteEmbedding.chunksPage({
+		// Fetch one extra row to detect end-of-stream without an extra round-
+		// trip: if the DB returns limit+1, there's at least one more page; if
+		// it returns ≤limit, we know this is the last page.
+		const fetched = await NoteEmbedding.chunksPage({
 			noteIds: options.noteIds,
 			afterRowid,
-			limit,
+			limit: limit + 1,
 		});
+		const hasMore = fetched.length > limit;
+		const rows = hasMore ? fetched.slice(0, limit) : fetched;
 
 		// Take the page's modelId from the rows themselves rather than the
 		// live provider: a model swap during the await could leave rows from
@@ -109,8 +114,7 @@ export default class SearchService {
 			vector: r.vector,
 		}));
 
-		// Short page = end-of-stream. Saves the plugin one empty round-trip.
-		const nextCursor = rows.length === limit
+		const nextCursor = hasMore
 			? encodeEmbeddingsCursor(rows[rows.length - 1].rowid)
 			: undefined;
 

@@ -249,10 +249,23 @@ describe('SearchService', () => {
 		} while (cursor);
 
 		// Three seeded notes, one chunk each (titles + short bodies fit in a
-		// single chunk). One row per page → at least 3 pages, then a short
-		// final page closes the stream.
+		// single chunk). With look-ahead, the final page that contains the
+		// third chunk must omit nextCursor — so we expect exactly 3 pages,
+		// not 4 (which would mean a wasted empty-page round-trip).
 		expect(collected).toHaveLength(3);
 		expect(new Set(collected).size).toBe(3);
+		expect(pageCount).toBe(3);
+	});
+
+	it('getEmbeddings: does not emit nextCursor when the page fills exactly to limit', async () => {
+		if (skipIfNoVec()) return;
+		// Three indexed chunks total; requesting a limit that exactly matches
+		// the row count would, without look-ahead, return a cursor pointing at
+		// an empty next page.
+		await seed();
+		const page = await SearchService.instance().getEmbeddings({ limit: 3 });
+		expect(page.chunks).toHaveLength(3);
+		expect(page.nextCursor).toBeUndefined();
 	});
 
 	it('getEmbeddings: rejects a malformed cursor', async () => {
