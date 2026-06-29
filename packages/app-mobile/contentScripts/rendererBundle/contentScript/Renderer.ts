@@ -100,8 +100,8 @@ export default class Renderer {
 				module: scriptModule,
 			};
 		});
-		const evalMs = Date.now() - evalStart;
 		this.recreateMarkupToHtml_();
+		const evalMs = Date.now() - evalStart;
 
 		// If possible, rerenders with the last rendering settings. The goal
 		// of this is to reduce the number of IPC calls between the viewer and

@@ -91,9 +91,12 @@ function NoteBodyViewer(props: Props) {
 		showNoteLinkIcon: props.showNoteLinkIcon,
 	});
 
-	const mountTimeRef = useRef(Date.now());
+	const loadStartRef = useRef(Date.now());
+	const onLoadStart = useCallback(() => {
+		loadStartRef.current = Date.now();
+	}, []);
 	const onLoadEnd = useCallback(() => {
-		perfLogger.info(`[perf] WebView onLoadEnd fired ${Date.now() - mountTimeRef.current} ms after mount`);
+		perfLogger.info(`[perf] WebView onLoadEnd fired ${Date.now() - loadStartRef.current} ms after load start`);
 		webViewEventHandlers.onLoadEnd();
 		if (props.onLoadEnd) props.onLoadEnd();
 	}, [props.onLoadEnd, webViewEventHandlers]);
@@ -110,6 +113,7 @@ function NoteBodyViewer(props: Props) {
 				allowFileAccessFromJs={true}
 				injectedJavaScript={js}
 				mixedContentMode="always"
+				onLoadStart={onLoadStart}
 				onLoadEnd={onLoadEnd}
 				onMessage={webViewEventHandlers.onMessage}
 				hasPluginScripts={hasPluginScripts}
