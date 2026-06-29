@@ -21,7 +21,8 @@ interface PathToFileMap {
 // example if they are in node_modules, use the map below.
 const pathToFileMap: PathToFileMap = {
 	'css/bulma.min.css': 'node_modules/bulma/css/bulma.min.css',
-	'css/fontawesome/css/all.min.css': 'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
+	'css/fontawesome/css/all.min.css':
+    'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
 	'js/zxcvbn.js': 'node_modules/zxcvbn/dist/zxcvbn.js',
 	'js/zxcvbn.js.map': 'node_modules/zxcvbn/dist/zxcvbn.js.map',
 	'js/jquery.min.js': 'node_modules/jquery/dist/jquery.min.js',
@@ -36,34 +37,44 @@ async function findLocalFile(path: string): Promise<string> {
 	if (appFilePath) return appFilePath;
 
 	let localPath = toForwardSlashes(normalize(path));
-	if (localPath.indexOf('..') >= 0) throw new ErrorNotFound(`Cannot resolve path: ${path}`);
+	if (localPath.indexOf('..') >= 0) { throw new ErrorNotFound(`Cannot resolve path: ${path}`); }
 
 	if (hasOwnProperty(pathToFileMap, path)) return pathToFileMap[path];
 
 	// For now a bit of a hack to load FontAwesome fonts.
 	if (localPath.indexOf('css/fontawesome/webfonts/fa-') === 0) {
-		localPath = `node_modules/@fortawesome/fontawesome-free/${localPath.substring(16)}`;
+		localPath = `node_modules/@fortawesome/fontawesome-free/${localPath.substring(
+			16,
+		)}`;
 	} else {
 		localPath = `${publicDir}/${localPath}`;
 	}
 
-	if (!(await pathExists(localPath))) throw new ErrorNotFound(`Path not found: ${path}`);
+	if (!(await pathExists(localPath))) { throw new ErrorNotFound(`Path not found: ${path}`); }
 
 	const stat = await fs.stat(localPath);
-	if (stat.isDirectory()) throw new ErrorForbidden(`Directory listing not allowed: ${path}`);
+	if (stat.isDirectory()) { throw new ErrorForbidden(`Directory listing not allowed: ${path}`); }
 
 	return localPath;
 }
 
 const patchFile = (path: string, fileContent: Buffer): Buffer => {
 	const patches: Record<string, (fileContent: Buffer)=> Buffer> = {
-		'css/bulma.min.css': fileContent => {
+		'css/bulma.min.css': (fileContent) => {
 			// We apply the patch here rather than with `yarn patch` because that would mean
 			// modifying a minified file, which is likely to break on each new update of Bulma. Dark
 			// theme is disabled mostly because we don't want it in published notes, which may have
 			// their own style inherited from clipped web pages. Having dark theme in the web UI is
 			// not that useful because it's not frequently accessed by users.
-			return Buffer.from(fileContent.toString().replace('prefers-color-scheme:dark', 'prefers-color-scheme:dark-disabled-by-patch'), 'utf-8');
+			return Buffer.from(
+				fileContent
+					.toString()
+					.replace(
+						'prefers-color-scheme:dark',
+						'prefers-color-scheme:dark-disabled-by-patch',
+					),
+				'utf-8',
+			);
 		},
 	};
 

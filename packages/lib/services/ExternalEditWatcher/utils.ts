@@ -9,7 +9,11 @@ import shim from '../../shim';
 
 const logger = Logger.create('ExternalEditWatcher/utils');
 
-const spawnCommand = async (path: string, args: string[], options: SpawnOptions) => {
+const spawnCommand = async (
+	path: string,
+	args: string[],
+	options: SpawnOptions,
+) => {
 	return new Promise((resolve, reject) => {
 		// App bundles need to be opened using the `open` command.
 		// Additional args can be specified after --args, and the
@@ -75,7 +79,10 @@ interface ExternalBridge {
 	openItem(filePath: string): void;
 }
 
-export const openFileWithExternalEditor = async (filePath: string, bridge: ExternalBridge) => {
+export const openFileWithExternalEditor = async (
+	filePath: string,
+	bridge: ExternalBridge,
+) => {
 	const cmd = textEditorCommand();
 	if (!cmd) {
 		bridge.openItem(filePath);

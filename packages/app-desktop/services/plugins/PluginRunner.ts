@@ -90,7 +90,6 @@ function mapEventIdsToHandlers(pluginId: string, arg: unknown): unknown {
 }
 
 export default class PluginRunner extends BasePluginRunner {
-
 	protected eventHandlers_: EventHandlers = {};
 	// private backOffHandlers_: Record<string, BackOffHandler> = {};
 
@@ -132,11 +131,17 @@ export default class PluginRunner extends BasePluginRunner {
 			pathTo7za: await getPathToExecutable7Zip(),
 		};
 
-		void pluginWindow.loadURL(`${require('url').format({
-			pathname: getAssetPath('services/plugins/plugin_index.html'),
-			protocol: 'file:',
-			slashes: true,
-		})}?pluginId=${encodeURIComponent(plugin.id)}&pluginScript=${encodeURIComponent(`file://${scriptPath}`)}&libraryData=${encodeURIComponent(JSON.stringify(libraryData))}`);
+		void pluginWindow.loadURL(
+			`${require('url').format({
+				pathname: getAssetPath('services/plugins/plugin_index.html'),
+				protocol: 'file:',
+				slashes: true,
+			})}?pluginId=${encodeURIComponent(
+				plugin.id,
+			)}&pluginScript=${encodeURIComponent(
+				`file://${scriptPath}`,
+			)}&libraryData=${encodeURIComponent(JSON.stringify(libraryData))}`,
+		);
 
 		if (plugin.devMode) {
 			pluginWindow.webContents.once('dom-ready', () => {
@@ -147,70 +152,87 @@ export default class PluginRunner extends BasePluginRunner {
 			});
 		}
 
-		ipcRenderer.on('pluginMessage', async (_event: import('electron').IpcRendererEvent, message: PluginMessage) => {
-			if (message.target !== PluginMessageTarget.MainWindow) return;
-			if (message.pluginId !== plugin.id) return;
+		ipcRenderer.on(
+			'pluginMessage',
+			async (
+				_event: import('electron').IpcRendererEvent,
+				message: PluginMessage,
+			) => {
+				if (message.target !== PluginMessageTarget.MainWindow) return;
+				if (message.pluginId !== plugin.id) return;
 
-			if (message.mainWindowCallbackId) {
-				const callbackId = message.mainWindowCallbackId;
-				const promise = callbackPromises[callbackId];
+				if (message.mainWindowCallbackId) {
+					const callbackId = message.mainWindowCallbackId;
+					const promise = callbackPromises[callbackId];
 
-				if (!promise) {
-					console.error('Got a callback without matching promise: ', message);
-					return;
-				}
+					if (!promise) {
+						console.error('Got a callback without matching promise: ', message);
+						return;
+					}
 
-				delete callbackPromises[callbackId];
+					delete callbackPromises[callbackId];
 
-				if (message.error) {
-					promise.reject(message.error);
+					if (message.error) {
+						promise.reject(message.error);
+					} else {
+						promise.resolve(message.result);
+					}
 				} else {
-					promise.resolve(message.result);
+					// Handle notification that a plugin failed to start before
+					// calling register(). Emit 'started' so allPluginsStarted
+					// is not blocked. See: https://github.com/laurent22/joplin/issues/12793
+					if (message.path === '__pluginFailedToStart__') {
+						logger.error(
+							`Plugin "${plugin.id}" failed to start:`,
+							message.args?.[0],
+						);
+						plugin.running = false;
+						plugin.emit('started');
+						return;
+					}
+
+					const mappedArgs = mapEventIdsToHandlers(plugin.id, message.args);
+					const fullPath = `joplin.${message.path}`;
+
+					// Don't log complete HTML code, which can be long, for setHtml calls
+					const debugMappedArgs =
+						fullPath.includes('setHtml') || fullPath.includes('imaging')
+							? '<hidden>'
+							: mappedArgs;
+					logger.debug(`Got message (3): ${fullPath}`, debugMappedArgs);
+
+					this.recordCallStat(plugin.id);
+
+					// try {
+					// 	await this.backOffHandler(plugin.id).wait(fullPath, debugMappedArgs);
+					// } catch (error) {
+					// 	logger.error(error);
+					// 	return;
+					// }
+
+					let result: unknown = null;
+					let error: Error | null = null;
+					try {
+						result = await executeSandboxCall(
+							plugin.id,
+							pluginApi,
+							fullPath,
+							mappedArgs as unknown[],
+							this.eventHandler,
+						);
+					} catch (e) {
+						error = e ? (e as Error) : new Error('Unknown error');
+					}
+
+					ipcRendererSend('pluginMessage', {
+						target: PluginMessageTarget.Plugin,
+						pluginId: plugin.id,
+						pluginCallbackId: message.callbackId,
+						result: result,
+						error: error,
+					});
 				}
-			} else {
-				// Handle notification that a plugin failed to start before
-				// calling register(). Emit 'started' so allPluginsStarted
-				// is not blocked. See: https://github.com/laurent22/joplin/issues/12793
-				if (message.path === '__pluginFailedToStart__') {
-					logger.error(`Plugin "${plugin.id}" failed to start:`, message.args?.[0]);
-					plugin.running = false;
-					plugin.emit('started');
-					return;
-				}
-
-				const mappedArgs = mapEventIdsToHandlers(plugin.id, message.args);
-				const fullPath = `joplin.${message.path}`;
-
-				// Don't log complete HTML code, which can be long, for setHtml calls
-				const debugMappedArgs = fullPath.includes('setHtml') || fullPath.includes('imaging') ? '<hidden>' : mappedArgs;
-				logger.debug(`Got message (3): ${fullPath}`, debugMappedArgs);
-
-				this.recordCallStat(plugin.id);
-
-				// try {
-				// 	await this.backOffHandler(plugin.id).wait(fullPath, debugMappedArgs);
-				// } catch (error) {
-				// 	logger.error(error);
-				// 	return;
-				// }
-
-				let result: unknown = null;
-				let error: Error | null = null;
-				try {
-					result = await executeSandboxCall(plugin.id, pluginApi, fullPath, mappedArgs as unknown[], this.eventHandler);
-				} catch (e) {
-					error = e ? (e as Error) : new Error('Unknown error');
-				}
-
-				ipcRendererSend('pluginMessage', {
-					target: PluginMessageTarget.Plugin,
-					pluginId: plugin.id,
-					pluginCallbackId: message.callbackId,
-					result: result,
-					error: error,
-				});
-			}
-		});
+			},
+		);
 	}
-
 }

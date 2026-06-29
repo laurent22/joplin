@@ -1,0 +1,12 @@
+{
+	"manifest_version": 1,
+	"id": "org.joplinapp.plugins.thesaurus",
+	"app_min_version": "1.6",
+	"version": "1.0.0",
+	"name": "Offline Thesaurus",
+	"description": "Suggests ranked synonyms for the selected word using a local NLP pipeline",
+	"author": "",
+	"platforms": ["desktop"],
+	"homepage_url": "https://github.com/laurent22/joplin/tree/dev/packages/plugins/thesaurus",
+	"repository_url": "https://github.com/laurent22/joplin/tree/dev/packages/plugins/thesaurus"
+}

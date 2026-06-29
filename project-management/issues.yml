@@ -17,6 +17,9 @@ labels:
   - name: feature
     description: "Feature-level work item"
     color: "e4e669"
+  - name: backlog
+    description: "Backlog work item"
+    color: "add8e6"
 
 # Issues to create, in order. Each entry needs: title, label, body.
 issues:
@@ -186,3 +189,618 @@ issues:
       ## Related Epic
 
       Epic: Offline Thesaurus Plugin
+
+  - title: "Backlog: Define TS-Python API Contract"
+    label: backlog
+    body: |
+      ## Description
+
+      Define the communication contract between the TypeScript plugin and the Python NLP pipeline. This contract specifies the request payload, response payload, and error formats exchanged between both components.
+
+      ## Why Is It Needed?
+
+      Without a clear contract, frontend, integration, and NLP development become tightly coupled and error-prone. A stable API allows both sides to develop independently.
+
+
+      ## Example
+
+      Request:
+
+      ```json
+      {
+        "word": "large",
+        "sentence": "The large building overlooks the river."
+      }
+      ```
+
+      Response:
+      ```json
+      {
+      "synonyms": [
+        {
+          "word": "huge",
+          "score": 0.94
+        },
+        {
+          "word": "big",
+          "score": 0.91
+        }
+      ]
+      }
+      ```
+
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
+
+  - title: "Define Ranking Request and Response Schemas"
+    label: backlog
+    body: |
+      ## Description
+
+      Create the TypeScript types and interfaces that represent requests and responses exchanged with the Python ranking service.
+
+      ## Why Is It Needed?
+
+      Provides type safety and prevents malformed requests or responses throughout the application.
+
+      ## Example
+
+      ```TypeScript
+      interface RankingRequest {
+        word: string;
+        sentence: string;
+      }
+
+      interface RankedSynonym {
+        word: string;
+        score: number;
+      }
+
+      interface RankingResponse {
+        synonyms: RankedSynonym[];
+      }
+      ```
+
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
+
+  - title: "Implement Python Process Manager"
+    label: backlog
+    body: |
+      ## Description
+
+      Create a service responsible for launching, monitoring, and terminating the Python NLP process from the Joplin plugin.
+
+      ## Why Is It Needed?
+
+      The TypeScript application must be able to communicate with the Python ranking engine in a reliable and controlled manner.
+
+      ## Example
+
+      ```TypeScript
+      const process = spawn("python", ["rank.py"]);
+      ```
+
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
+
+  - title: "Create Ranking Service Wrapper"
+    label: backlog
+    body: |
+      ## Description
+
+      Provide a clean TypeScript abstraction that hides the details of Python communication from the rest of the application.
+
+      ## Why Is It Needed?
+
+      Frontend code should not need to know how NLP processing is performed.
+
+      ## Example
+
+      ```TypeScript
+      const results = await rankingService.getSuggestions(
+        "large",
+        "The large building overlooks the river."
+      );
+      ```
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
+
+  - title: "Implement Python Error and Timeout Handling"
+    label: backlog
+    body: |
+      ## Description
+
+      Handle failures occurring during communication with the Python NLP process.
+
+      ## Why Is It Needed?
+
+      Prevents the plugin from freezing or crashing when the NLP service fails.
+
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
+
+  - title: "Create Context Menu Integration"
+    label: backlog
+    body: |
+      ## Description
+
+      Add a "Find Synonyms" option to the editor's right-click context menu. The option should only be available when a word is selected and should trigger the synonym lookup workflow.
+
+      ## Example
+
+      User selects the word "large".
+
+      Right-click menu:
+      - Copy
+      - Paste
+      - Find Synonyms
+
+      Selecting "Find Synonyms" starts the synonym lookup process.
+
+      ## Related Feature
+
+      Parent Ticket: User Interaction & UX
+
+  - title: "Implement Keyboard Shortcut Support"
+    label: backlog
+    body: |
+      ## Description
+
+      Implement a keyboard shortcut that allows users to trigger synonym lookup without using the mouse. The shortcut should be configurable through plugin settings.
+
+      ## Example
+
+      User selects the word "large".
+
+      Presses:
+      Ctrl + Shift + S
+
+      The synonym lookup process is triggered.
+
+      ## Related Feature
+
+      Parent Ticket: User Interaction & UX
+
+  - title: "Create Synonym Suggestion Dropdown"
+    label: backlog
+    body: |
+      ## Description
+
+      Create a dropdown or popup component that displays returned synonym suggestions. The component should show up to three ranked synonyms returned by the backend.
+
+      ## Example
+
+      Synonym Suggestions
+
+      - huge
+      - big
+      - massive
+
+      Selecting a synonym applies it to the editor.
+
+      ## Related Feature
+
+      Parent Ticket: User Interaction & UX
+
+  - title: "Implement Word Replacement Logic"
+    label: backlog
+    body: |
+      ## Description
+
+      Replace the currently selected word with the synonym chosen by the user while preserving the surrounding note content and formatting.
+
+      ## Example
+
+      Before:
+      The large building overlooks the river.
+
+      User selects:
+      huge
+
+      After:
+      The huge building overlooks the river.
+
+      ## Related Feature
+
+      Parent Ticket: User Interaction & UX
+
+  - title: "Implement No Results State"
+    label: backlog
+    body: |
+      ## Description
+
+      Display a clear and user-friendly message when the backend returns no valid synonym suggestions.
+
+      ## Example
+
+      Lookup Result:
+
+      "No synonyms found for the selected word."
+
+      ## Related Feature
+
+      Parent Ticket: User Interaction & UX
+
+  - title: "Implement Error Display"
+    label: backlog
+    body: |
+      ## Description
+
+      Display meaningful error messages when synonym lookup fails due to backend, Python, or processing errors.
+
+      ## Example
+
+      Error:
+      "Unable to retrieve synonym suggestions. Please try again."
+
+      Possible causes:
+      - Python service unavailable
+      - Request timeout
+      - Unexpected processing error
+
+      ## Related Feature
+
+      Parent Ticket: User Interaction & UX
+
+  - title: "Accessibility & Keyboard Navigation"
+    label: backlog
+    body: |
+      ## Description
+
+      Ensure all synonym-related UI components are accessible and can be fully used via keyboard navigation.
+
+      ## Example
+
+      - User opens synonym dropdown using a keyboard shortcut.
+      - Arrow keys navigate suggestions.
+      - Enter selects a synonym.
+      - Escape closes the dropdown.
+
+      ## Related Feature
+
+      Parent Ticket: User Interaction & UX
+
+  - title: "Evaluate WordNet Library Options"
+    label: backlog
+    body: |
+      ## Description
+
+      Research and select the most appropriate WordNet library for the NLP pipeline based on functionality, performance, and ease of integration.
+
+      ## Example
+
+      Compare:
+      - NLTK WordNet
+      - WordNet package
+      - Custom database implementation
+
+      Document the selected option and rationale.
+
+      ## Related Feature
+
+      Parent Ticket: WordNet Synonym Retrieval
+
+  - title: "Implement WordNet Data Access Layer"
+    label: backlog
+    body: |
+      ## Description  
+
+      Create a reusable module responsible for loading and querying WordNet data.
+
+      ## Example
+
+      Input:
+      "large"
+
+      Output:
+      ["big", "huge", "massive", ...]
+
+      ## Related Feature
+
+      Parent Ticket: WordNet Synonym Retrieval
+
+  - title: "Implement Synonym Candidate Retrieval"
+    label: backlog
+    body: |
+      ## Description
+
+      Retrieve all available synonym candidates for a given word across supported parts of speech.
+
+      ## Example
+
+      Input:
+      "large"
+
+      Output:
+      ["big", "huge", "great", "massive"]
+
+      ## Related Feature
+
+      Parent Ticket: WordNet Synonym Retrieval
+
+  - title: "Implement Case-Insensitive Lookup"
+    label: backlog
+    body: |
+      ## Description
+
+      Ensure synonym lookup returns the same results regardless of the word's capitalization.
+
+      ## Example
+
+      The following inputs should return identical results:
+
+      - "large"
+      - "Large"
+      - "LARGE"
+
+      ## Related Feature
+
+      Parent Ticket: WordNet Synonym Retrieval
+
+  - title: "Handle Unknown Word Scenarios"
+    label: backlog
+    body: |
+      ## Description
+
+      Handle words that do not exist in WordNet without causing errors or exceptions.
+
+      ## Example
+
+      Input:
+      "asdfghjkl"
+
+      Output:
+      []
+
+      ## Related Feature
+
+      Parent Ticket: WordNet Synonym Retrieval
+
+  - title: "Benchmark WordNet Lookup Performance"
+    label: backlog
+    body: |
+      ## Description
+
+      Measure the average execution time of synonym lookups and verify performance targets are met.
+
+      ## Example
+
+      Measure lookup times for common words and ensure responses remain below the defined threshold.
+
+      ## Related Feature
+
+      Parent Ticket: WordNet Synonym Retrieval
+
+  - title: "Evaluate MiniLM Model Variant"
+    label: backlog
+    body: |
+      ## Description
+
+      Evaluate available MiniLM models and select the best balance between accuracy, memory usage, and inference speed.
+
+      ## Example
+
+      Compare multiple MiniLM variants and document the selected model for the project.
+
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
+
+  - title: "Evaluate MiniLM Model Variant"
+    label: backlog
+    body: |
+      ## Description
+
+      Load the selected MiniLM model into memory and make it available for inference requests.
+
+      ## Example
+
+      On application startup:
+
+      Model Loaded Successfully
+
+      The model is ready to generate embeddings.
+
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
+
+  - title: "Implement Model Loading"
+    label: backlog
+    body: |
+      ## Description
+
+      Load the selected MiniLM model into memory and make it available for inference requests.
+
+      ## Example
+
+      On application startup:
+
+      Model Loaded Successfully
+
+      The model is ready to generate embeddings.
+
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
+
+  - title: "Generate Original Sentence Embeddings"
+    label: backlog
+    body: |
+      ## Description
+
+      Generate an embedding vector representing the original sentence selected by the user.
+
+      ## Example
+
+      Input:
+
+      "The large building overlooks the river."
+
+      Output:
+
+      [0.12, -0.45, 0.88, ...]
+
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
+
+  - title: "Generate Candidate Sentence Embeddings"
+    label: backlog
+    body: |
+      ## Description
+
+      Generate embeddings for sentences created by replacing the target word with each candidate synonym.
+
+      ## Example
+
+      Original:
+
+      "The large building overlooks the river."
+
+      Candidate:
+
+      "The huge building overlooks the river."
+
+      Generate an embedding for each candidate sentence.
+
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
+
+  - title: "Implement Cosine Similarity Calculation"
+    label: backlog
+    body: |
+      ## Description
+
+      Calculate the cosine similarity between the original sentence embedding and each candidate sentence embedding.
+
+      ## Example
+
+      Original Sentence
+          ↓
+      Candidate Sentence
+          ↓
+      Similarity Score = 0.92
+
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
+
+  - title: "Implement Synonym Ranking Logic"
+    label: backlog
+    body: |
+      ## Description
+
+      Rank candidate synonyms based on their cosine similarity scores from highest to lowest.
+
+      ## Example
+
+      Before Ranking:
+
+      - huge (0.92)
+      - massive (0.89)
+      - great (0.55)
+
+      After Ranking:
+
+      1. huge
+      2. massive
+      3. great
+
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
+
+  - title: "Implement Confidence Threshold Filtering"
+    label: backlog
+    body: |
+      ## Description
+
+      Remove synonym candidates whose similarity score falls below the required confidence threshold.
+
+      ## Example
+
+      Threshold = 0.85
+
+      Results:
+
+      - huge (0.92) keep
+      - massive (0.89) keep
+      - great (0.55) remove
+
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
+
+  - title: "Implement Top-3 Recommendation Selection"
+    label: backlog
+    body: |
+      ## Description
+
+      Select and return the three highest-ranked synonyms that satisfy the confidence threshold.
+
+      ## Example
+
+      Ranked Results:
+
+      1. huge (0.92)
+      2. massive (0.89)
+      3. big (0.87)
+      4. great (0.83)
+
+      Returned Results:
+
+      - huge
+      - massive
+      - big
+
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
+
+  - title: "Format Ranking Response Payload"
+    label: backlog
+    body: |
+      ## Description
+
+      Format the final ranking results into the agreed JSON response schema before returning them to the TypeScript integration layer.
+
+      ## Why Is It Needed?
+
+      The TypeScript service layer relies on a predictable response format. Standardizing the response ensures reliable communication between the Python NLP pipeline and the plugin.
+
+      ## Example
+
+      Python Output:
+
+      ```json
+      {
+        "synonyms": [
+          {
+            "word": "huge",
+            "score": 0.92
+          },
+          {
+            "word": "massive",
+            "score": 0.89
+          },
+          {
+            "word": "big",
+            "score": 0.87
+          }
+        ]
+      }
+      ```
+
+      The response should only contain the top-ranked synonyms that satisfy the confidence threshold and must follow the agreed API contract.
+
+      ## Related Feature
+
+      Parent Ticket: Semantic Ranking Engine
