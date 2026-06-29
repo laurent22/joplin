@@ -1110,3 +1110,34 @@ export interface EmbeddingsPage {
 	nextCursor?: string;
 }
 
+/**
+ * State of the on-device embedding indexer.
+ *
+ * - `unavailable`: vector search isn't supported on this platform (won't change this session).
+ * - `disabled`: AI or the embedding index is turned off in settings.
+ * - `preparing`: the embedding model is downloading or loading.
+ * - `indexing`: the background scan is embedding notes; search works but results are incomplete.
+ * - `ready`: the index is idle and the model is loaded. Indexed-note count
+ *   may still be 0 (e.g. empty vault) — see the separate `ready` boolean.
+ */
+export type AiIndexState = 'unavailable' | 'disabled' | 'preparing' | 'indexing' | 'ready';
+
+/**
+ * Returned by {@link JoplinAi.getIndexStatus}. Lets plugins decide whether to
+ * use Joplin's native AI or fall back to their own implementation.
+ */
+export interface AiIndexStatus {
+	/** `true` when `state === 'ready'` and at least one note is indexed. */
+	ready: boolean;
+	state: AiIndexState;
+	/**
+	 * Identifier of the model producing the current vectors, e.g.
+	 * `'multilingual-e5-small'`. `null` when no provider is active. Plugins
+	 * that cache derived data should key it by `modelId`.
+	 */
+	modelId: string | null;
+	notesIndexed: number;
+	/** Indexable notes in the vault (excludes trashed, conflict, locked). */
+	totalNotes: number;
+}
+
