@@ -198,6 +198,69 @@ describe('SearchService', () => {
 		expect(strict.length).toBeLessThanOrEqual(loose.length);
 	});
 
+	it('getEmbeddings: throws when no embedding provider is active', async () => {
+		AiService.instance().setEmbeddingProvider(null);
+		await expect(SearchService.instance().getEmbeddings())
+			.rejects.toThrow(/No embedding provider/);
+	});
+
+	it('getEmbeddings: returns chunks with raw vectors and model metadata', async () => {
+		if (skipIfNoVec()) return;
+		const { catNote, dogNote, carNote } = await seed();
+
+		const page = await SearchService.instance().getEmbeddings();
+
+		expect(page.modelId).toBe(provider.modelId);
+		expect(page.dimension).toBe(64);
+		expect(page.chunks.length).toBeGreaterThanOrEqual(3);
+		for (const chunk of page.chunks) {
+			expect(chunk.vector).toHaveLength(64);
+			expect(typeof chunk.chunkText).toBe('string');
+		}
+		const seenNotes = new Set(page.chunks.map(c => c.noteId));
+		expect(seenNotes).toEqual(new Set([catNote.id, dogNote.id, carNote.id]));
+	});
+
+	it('getEmbeddings: filters by noteIds and silently skips unindexed ids', async () => {
+		if (skipIfNoVec()) return;
+		const { catNote } = await seed();
+
+		const page = await SearchService.instance().getEmbeddings({
+			noteIds: [catNote.id, 'doesnotexist'],
+		});
+
+		const noteIds = new Set(page.chunks.map(c => c.noteId));
+		expect(noteIds).toEqual(new Set([catNote.id]));
+	});
+
+	it('getEmbeddings: paginates with a cursor and signals end-of-stream by omitting nextCursor', async () => {
+		if (skipIfNoVec()) return;
+		await seed();
+
+		const collected: string[] = [];
+		let cursor: string | undefined;
+		let pageCount = 0;
+		do {
+			const page = await SearchService.instance().getEmbeddings({ cursor, limit: 1 });
+			pageCount++;
+			for (const c of page.chunks) collected.push(`${c.noteId}:${c.chunkIndex}`);
+			cursor = page.nextCursor;
+			if (pageCount > 50) throw new Error('Pagination did not terminate');
+		} while (cursor);
+
+		// Three seeded notes, one chunk each (titles + short bodies fit in a
+		// single chunk). One row per page → at least 3 pages, then a short
+		// final page closes the stream.
+		expect(collected).toHaveLength(3);
+		expect(new Set(collected).size).toBe(3);
+	});
+
+	it('getEmbeddings: rejects a malformed cursor', async () => {
+		if (skipIfNoVec()) return;
+		await expect(SearchService.instance().getEmbeddings({ cursor: 'garbage' }))
+			.rejects.toThrow(/Invalid embeddings cursor/);
+	});
+
 	it('uses embedQuery when the provider exposes it', async () => {
 		if (skipIfNoVec()) return;
 		const { catNote } = await seed();

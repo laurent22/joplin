@@ -4,9 +4,9 @@ import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import AiService from './AiService';
 import { EmbeddingProvider } from './types';
-import { SearchOptions, SearchQuery, SearchRelevance, SearchResult, SearchScope } from '../plugins/api/types';
+import { EmbeddingsPage, GetEmbeddingsOptions, SearchOptions, SearchQuery, SearchRelevance, SearchResult, SearchScope } from '../plugins/api/types';
 
-export type { SearchOptions, SearchQuery, SearchRelevance, SearchResult, SearchScope };
+export type { EmbeddingsPage, GetEmbeddingsOptions, SearchOptions, SearchQuery, SearchRelevance, SearchResult, SearchScope };
 
 const logger = Logger.create('SearchService');
 
@@ -26,6 +26,20 @@ const RELEVANCE_DEFAULTS: Record<SearchRelevance, RelevanceTuning> = {
 	loose: { k: 20, minScore: 0.25 },
 };
 
+const DEFAULT_EMBEDDINGS_PAGE_SIZE = 500;
+const MAX_EMBEDDINGS_PAGE_SIZE = 5000;
+
+// Opaque to plugins: the cursor format is an implementation detail and may
+// change. The `v1:` prefix lets a future format coexist via a version bump.
+const encodeEmbeddingsCursor = (rowid: number): string => `v1:${rowid}`;
+
+const decodeEmbeddingsCursor = (cursor: string | undefined): number | undefined => {
+	if (!cursor) return undefined;
+	const match = /^v1:(\d+)$/.exec(cursor);
+	if (!match) throw new Error(`Invalid embeddings cursor: ${cursor}`);
+	return Number(match[1]);
+};
+
 // vec0 returns L2 distance. Our vectors are L2-normalised, so cosine
 // similarity = 1 − d²/2 exactly. Clamp to handle float drift on self-matches
 // and opposite-vector edges.
@@ -43,6 +57,42 @@ export default class SearchService {
 	public static instance(): SearchService {
 		if (!this.instance_) this.instance_ = new SearchService();
 		return this.instance_;
+	}
+
+	public async getEmbeddings(options: GetEmbeddingsOptions = {}): Promise<EmbeddingsPage> {
+		const provider = AiService.instance().getActiveEmbeddingProvider();
+		if (!provider) {
+			throw new Error('No embedding provider is active. Enable AI features in Settings → AI.');
+		}
+
+		const limit = Math.min(Math.max(1, options.limit ?? DEFAULT_EMBEDDINGS_PAGE_SIZE), MAX_EMBEDDINGS_PAGE_SIZE);
+		const afterRowid = decodeEmbeddingsCursor(options.cursor);
+
+		const rows = await NoteEmbedding.chunksPage({
+			noteIds: options.noteIds,
+			afterRowid,
+			limit,
+		});
+
+		const chunks = rows.map(r => ({
+			noteId: r.noteId,
+			chunkIndex: r.chunkIndex,
+			chunkText: r.chunkText,
+			vector: r.vector,
+		}));
+
+		// Only emit a cursor when we filled the page. A short page is the
+		// natural end-of-stream signal — saves the plugin one empty round-trip.
+		const nextCursor = rows.length === limit
+			? encodeEmbeddingsCursor(rows[rows.length - 1].rowid)
+			: undefined;
+
+		return {
+			modelId: provider.modelId,
+			dimension: provider.dimension,
+			chunks,
+			nextCursor,
+		};
 	}
 
 	public async search(options: SearchOptions): Promise<SearchResult[]> {
