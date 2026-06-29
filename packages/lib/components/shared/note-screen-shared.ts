@@ -353,7 +353,9 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 shared.initState = async function(comp: BaseNoteScreenComponent) {
 	const note = await shared.reloadNote(comp);
 
-	if (comp.props.sharedData && note) {
+	// Ensure that only empty notes created for shared content are populated with sharedData, because in some cases
+	// existing notes can be overwritten by the shared data. See https://github.com/laurent22/joplin/issues/11479
+	if (comp.props.sharedData && note && note.title.length === 0 && note.body.length === 0) {
 		// Use the note returned by reloadNote directly to avoid a race condition where
 		// comp.state.note is still the initial empty note (Note.new() with parent_id='')
 		// because React hasn't flushed reloadNote's setState yet. Without this, the
@@ -370,7 +372,7 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 		}
 		if (fieldsToSave.title !== undefined || fieldsToSave.body !== undefined) {
 			await Note.save(fieldsToSave);
-			comp.setState({ note: updatedNote, lastSavedNote: updatedNote });
+			comp.setState({ note: updatedNote, lastSavedNote: { ...updatedNote } });
 		}
 		if (comp.props.sharedData.resources) {
 			for (let i = 0; i < comp.props.sharedData.resources.length; i++) {
