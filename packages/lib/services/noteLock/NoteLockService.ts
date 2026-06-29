@@ -25,12 +25,12 @@ export default class NoteLockService {
 	public static async withDecryptedKey<T>(callback: (service: ScopedNoteLockService)=> Promise<T>) {
 		const key = NoteLockSession.instance().decryptedKey();
 		const scoped = new NoteLockService(EncryptionService.instance(), () => key);
-		const decryptor: ScopedNoteLockService = {
+		const decryptView: ScopedNoteLockService = {
 			decryptString: cipherText => scoped.decryptString(cipherText),
 			decryptFile: (srcPath, destPath) => scoped.decryptFile(srcPath, destPath),
 		};
 		try {
-			return await callback(decryptor);
+			return await callback(decryptView);
 		} finally {
 			scoped.revoke_();
 		}

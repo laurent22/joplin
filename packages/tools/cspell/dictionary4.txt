@@ -327,4 +327,3 @@ huggingface
 stdio
 doesnotexist
 asar
-decryptor
