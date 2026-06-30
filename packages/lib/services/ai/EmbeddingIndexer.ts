@@ -10,6 +10,7 @@ import NoteEmbedding from '../../models/NoteEmbedding';
 import AiService from './AiService';
 import { chunkText } from './chunker';
 import { EmbeddingProvider, IndexStatus } from './types';
+import { AiIndexState, AiIndexStatus } from '../plugins/api/types';
 
 const logger = Logger.create('EmbeddingIndexer');
 
@@ -98,8 +99,30 @@ export default class EmbeddingIndexer {
 	// Snapshot of indexer + model state for the settings UI. Cheap enough to
 	// poll on a UI tick (two COUNTs + a provider probe).
 	public async getStatus(): Promise<IndexStatus> {
-		const provider = AiService.instance().getActiveEmbeddingProvider();
+		return this.statusFor(AiService.instance().getActiveEmbeddingProvider());
+	}
 
+	// Plugin-facing snapshot. Coarsens the internal state so the public API
+	// isn't pinned to current internals.
+	public async getPluginStatus(): Promise<AiIndexStatus> {
+		// Capture once so modelId in the response matches the provider the
+		// rest of the snapshot was computed from.
+		const provider = AiService.instance().getActiveEmbeddingProvider();
+		const internal = await this.statusFor(provider);
+
+		const state = coarseStateFrom(internal);
+		const ready = state === 'ready' && internal.notesIndexed > 0;
+
+		return {
+			ready,
+			state,
+			modelId: provider?.modelId ?? null,
+			notesIndexed: internal.notesIndexed,
+			totalNotes: internal.totalNotes,
+		};
+	}
+
+	private async statusFor(provider: EmbeddingProvider | null): Promise<IndexStatus> {
 		let modelDownloadStatus: IndexStatus['modelDownloadStatus'] = 'unavailable';
 		if (provider) {
 			// Providers without a downloadable artefact (remote, test stub)
@@ -282,3 +305,13 @@ export default class EmbeddingIndexer {
 		await NoteEmbedding.saveChunks(noteId, provider.modelId, payload);
 	}
 }
+
+// Exported so the mapping is unit-testable without spinning up the indexer.
+export const coarseStateFrom = (status: IndexStatus): AiIndexState => {
+	if (status.indexerState === 'vector-search-unavailable') return 'unavailable';
+	if (status.indexerState === 'ai-disabled' || status.indexerState === 'index-disabled') return 'disabled';
+	if (status.modelDownloadStatus === 'unavailable' || status.modelDownloadStatus === 'not-started') return 'preparing';
+	if (status.modelDownloadStatus === 'downloading') return 'preparing';
+	if (status.indexerState === 'running') return 'indexing';
+	return 'ready';
+};

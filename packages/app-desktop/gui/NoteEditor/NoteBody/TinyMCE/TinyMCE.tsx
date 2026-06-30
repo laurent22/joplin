@@ -692,7 +692,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			const toolbar = [
 				'bold', 'italic', 'joplinHighlight', 'joplinStrikethrough', '|',
 				'joplinInsert', 'joplinSup', 'joplinSub', 'forecolor', '|',
-				'link', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
+				'link', 'joplinLinkToNote', 'joplinInlineCode', 'joplinCodeBlock', 'joplinAttach', '|',
 				'bullist', 'numlist', 'joplinChecklist', '|',
 				'h1', 'h2', 'h3', '|',
 				'hr', '|',
@@ -819,6 +819,14 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 						icon: 'paperclip',
 						onAction: async function() {
 							editor.execCommand('joplinAttach');
+						},
+					});
+
+					editor.ui.registry.addButton('joplinLinkToNote', {
+						tooltip: _('Link to note'),
+						icon: 'export',
+						onAction: async function() {
+							void CommandService.instance().execute('linkToNote');
 						},
 					});
 

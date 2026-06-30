@@ -11,6 +11,7 @@ export enum UiType {
 
 export interface GotoAnythingOptions {
 	mode?: Mode;
+	alwaysShowHelp?: boolean;
 }
 
 export const declaration: CommandDeclaration = {
@@ -50,6 +51,7 @@ export const runtime = (): CommandRuntime => {
 					const userData: GotoAnythingUserData = {
 						callback: { resolve, reject },
 						mode: options.mode,
+						alwaysShowHelp: options.alwaysShowHelp,
 					};
 					menuItem.userData = userData;
 					menuItem.click();

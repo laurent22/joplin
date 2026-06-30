@@ -167,6 +167,12 @@ describe('LocalEmbeddingProvider', () => {
 		expect(out[0]).toEqual([0, 0]);
 	});
 
+	it('throws when the model produces non-finite values, instead of writing NaN to the index', () => {
+		const hidden = new Float32Array([1, NaN, 3, 4]);
+		const mask = new BigInt64Array([BigInt(1), BigInt(1)]);
+		expect(() => meanPoolAndNormalise(hidden, [1, 2, 2], mask)).toThrow(/non-finite/);
+	});
+
 	it('modelDownloadStatus reports not-started when no cached model exists', async () => {
 		const provider = new LocalEmbeddingProvider();
 		// Without overrides and with a clean cache dir, the marker file is

@@ -239,6 +239,62 @@ export default class NoteEmbedding extends BaseModel {
 		return results;
 	}
 
+	// Page through stored chunks (with raw vectors) ordered by rowid. rowid is
+	// monotonic on insert so a cursor positioned at rowid=N is guaranteed to
+	// never miss a chunk with rowid<N inserted later — the only chunks the
+	// caller can miss are those added ahead of an in-flight cursor, which is
+	// the documented snapshot tradeoff for the plugin API.
+	//
+	// noteIds is an optional filter; afterRowid is the cursor (exclusive).
+	// Returns rows in rowid order so the last row's id is the next cursor.
+	public static async chunksPage(options: {
+		noteIds?: string[];
+		afterRowid?: number;
+		limit: number;
+	}): Promise<{ rowid: number; noteId: string; modelId: string; chunkIndex: number; chunkText: string; vector: number[] }[]> {
+		this.requireVec();
+		if (!await this.vecTableExists()) return [];
+		if (options.noteIds && options.noteIds.length === 0) return [];
+
+		const whereParts: string[] = [];
+		const params: (string | number)[] = [];
+		if (options.afterRowid !== undefined) {
+			whereParts.push('m.id > ?');
+			params.push(options.afterRowid);
+		}
+		if (options.noteIds && options.noteIds.length) {
+			whereParts.push(`m.note_id IN (${options.noteIds.map(() => '?').join(',')})`);
+			params.push(...options.noteIds);
+		}
+		const where = whereParts.length ? `WHERE ${whereParts.join(' AND ')}` : '';
+
+		const rows = await this.db().selectAll<{
+			id: number;
+			note_id: string;
+			model_id: string;
+			chunk_index: number;
+			chunk_text: string;
+			embedding: string;
+		}>(
+			`SELECT m.id, m.note_id, m.model_id, m.chunk_index, m.chunk_text, vec_to_json(v.embedding) AS embedding
+			 FROM note_embeddings_meta m
+			 JOIN note_embeddings_vec v ON v.rowid = m.id
+			 ${where}
+			 ORDER BY m.id ASC
+			 LIMIT ?`,
+			[...params, options.limit],
+		);
+
+		return rows.map(r => ({
+			rowid: r.id,
+			noteId: r.note_id,
+			modelId: r.model_id,
+			chunkIndex: r.chunk_index,
+			chunkText: r.chunk_text,
+			vector: JSON.parse(r.embedding) as number[],
+		}));
+	}
+
 	// Loads the stored vectors for a note's chunks in chunk-index order.
 	// Lets noteId-based searches reuse indexed vectors instead of re-embedding.
 	public static async vectorsByNoteId(noteId: string): Promise<number[][]> {

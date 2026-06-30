@@ -327,3 +327,9 @@ huggingface
 stdio
 doesnotexist
 asar
+agentic
+tiebreak
+heic
+heif
+logits
+tradeoff

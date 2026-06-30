@@ -1420,7 +1420,7 @@ PODS:
     - ReactNativeDependencies
   - react-native-alarm-notification (3.7.0):
     - React
-  - react-native-document-picker (10.1.7):
+  - react-native-document-picker (11.0.4):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -1536,7 +1536,7 @@ PODS:
     - React
   - react-native-saf-x (3.7.0):
     - React-Core
-  - react-native-safe-area-context (5.6.2):
+  - react-native-safe-area-context (5.7.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -1548,8 +1548,8 @@ PODS:
     - React-graphics
     - React-ImageManager
     - React-jsi
-    - react-native-safe-area-context/common (= 5.6.2)
-    - react-native-safe-area-context/fabric (= 5.6.2)
+    - react-native-safe-area-context/common (= 5.7.0)
+    - react-native-safe-area-context/fabric (= 5.7.0)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-renderercss
@@ -1560,7 +1560,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-safe-area-context/common (5.6.2):
+  - react-native-safe-area-context/common (5.7.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -1582,7 +1582,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-safe-area-context/fabric (5.6.2):
+  - react-native-safe-area-context/fabric (5.7.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -1630,7 +1630,7 @@ PODS:
     - ReactNativeDependencies
     - Yoga
   - react-native-vector-icons-fontawesome5 (12.3.3)
-  - react-native-vector-icons-ionicons (12.3.0)
+  - react-native-vector-icons-ionicons (12.4.3)
   - react-native-vector-icons-material-design-icons (12.4.3)
   - react-native-vector-icons-material-icons (12.4.3)
   - react-native-version-info (1.1.1):
@@ -2081,7 +2081,7 @@ PODS:
     - React-Core
   - RNFileViewer (2.1.5):
     - React-Core
-  - RNLocalize (3.6.1):
+  - RNLocalize (3.7.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2615,7 +2615,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 90837747b018e7061eca67d45bc7e5dab93c4a06
   React-microtasksnativemodule: f86ccf2ec5f619f6df1dd06ae770c326e3eca0b8
   react-native-alarm-notification: 5236274a333fd40a14c3faafd8984edfc1b6ec62
-  react-native-document-picker: 4aa06b45d0f6dfc7fac5bcb5d1cee4f45af5d68a
+  react-native-document-picker: 8b6d1b52aee2c055f647ecf0db83867de5b5a432
   react-native-geolocation: cfc39041210bd9f591ec2beb7d417291251da8e5
   react-native-get-random-values: a603782b2b222a34533c66371614790282dba3f1
   react-native-image-picker: 48d850454b4a389753053e1d7378b624d3b47d77
@@ -2623,11 +2623,11 @@ SPEC CHECKSUMS:
   react-native-quick-base64: 6568199bb2ac8e72ecdfdc73a230fbc5c1d3aac4
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
   react-native-saf-x: 5f4d6aed7554454033c39c81d951962dadc8dc5a
-  react-native-safe-area-context: 37e680fc4cace3c0030ee46e8987d24f5d3bdab2
+  react-native-safe-area-context: ae7587b95fb580d1800c5b0b2a7bd48c2868e67a
   react-native-sqlite-storage: 0c84826214baaa498796c7e46a5ccc9a82e114ed
   react-native-vector-icons: 8215b0e62bf79d3be628cf658ec23777f9bec53c
   react-native-vector-icons-fontawesome5: 61456ec9a12f6a1b7783fcc41102cdac24c9299b
-  react-native-vector-icons-ionicons: ad07e944a092a5cf71b8b569d8f5ce2bf674c415
+  react-native-vector-icons-ionicons: 5edcb84ec72c42601fef1c2251e3fd14a79823c4
   react-native-vector-icons-material-design-icons: fa15a032cbf6699a246edb98bff482c1dc69816a
   react-native-vector-icons-material-icons: dc9f5fd0eabeb46fcf177886e55488c8033b19fe
   react-native-version-info: f0b04e16111c4016749235ff6d9a757039189141
@@ -2670,7 +2670,7 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 9c0a849bbe1c256f0854fea255734b715f5ea876
   RNDeviceInfo: 4c852998208b60dc192ae3529e5867817719ad1e
   RNFileViewer: 4b5d83358214347e4ab2d4ca8d5c1c90d869e251
-  RNLocalize: 44b09911588826d01c5b949e8e3f9ed5fae16b32
+  RNLocalize: 1e6eb4290e89502c3d2193d82dfb7de14a9e672b
   RNQuickAction: c2c8f379e614428be0babe4d53a575739667744d
   RNSecureRandom: b64d263529492a6897e236a22a2c4249aa1b53dc
   RNShare: aad7f2a80ae80be5e2bf57583be28b1a18f95de1

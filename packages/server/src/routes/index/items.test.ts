@@ -1,5 +1,5 @@
-import { beforeAllDb, afterAllTests, beforeEachDb, createItemTree, createUserAndSession, parseHtml, expectHttpError, expectNoHttpError, createItem } from '../../utils/testing/testUtils';
-import { execRequest } from '../../utils/testing/apiUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createItemTree, createUserAndSession, parseHtml, expectHttpError, expectNoHttpError, createItem, createResource, models } from '../../utils/testing/testUtils';
+import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { Uuid } from '../../services/database/types';
 import { makeNoteSerializedBody } from '../../utils/testing/serializedItems';
 
@@ -75,5 +75,33 @@ describe('index_items', () => {
 		await expectHttpError(async () => {
 			await requestItem(session2.id);
 		}, 404);
+	});
+
+	test('should sanitise response headers when serving user-controlled MIME types', async () => {
+		const { user, session } = await createUserAndSession(1);
+
+		const resource = await createResource(session.id, {
+			id: '000000000000000000000000000000E1',
+		}, '<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>');
+
+		await models().item().saveForUser(user.id, { id: resource.id, mime_type: 'image/svg+xml' });
+
+		const dangerous = await execRequestC(session.id, 'GET', `items/${resource.id}/content`);
+		expect(dangerous.response.get('Content-Type')).toBe('application/octet-stream');
+		expect(dangerous.response.get('Content-Disposition').startsWith('attachment;')).toBe(true);
+		expect(dangerous.response.get('X-Content-Type-Options')).toBe('nosniff');
+		const csp = dangerous.response.get('Content-Security-Policy');
+		expect(csp).toContain('default-src \'none\'');
+		expect(csp).toContain('sandbox');
+
+		await models().item().saveForUser(user.id, { id: resource.id, mime_type: 'image/png' });
+
+		const safe = await execRequestC(session.id, 'GET', `items/${resource.id}/content`);
+		expect(safe.response.get('Content-Type')).toBe('image/png');
+		expect(safe.response.get('Content-Disposition').startsWith('inline;')).toBe(true);
+		expect(safe.response.get('X-Content-Type-Options')).toBe('nosniff');
+		const safeCsp = safe.response.get('Content-Security-Policy');
+		expect(safeCsp).toContain('default-src \'none\'');
+		expect(safeCsp).toContain('sandbox');
 	});
 });

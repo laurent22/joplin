@@ -12495,7 +12495,7 @@ __metadata:
     "@react-native-documents/picker": "npm:11.0.4"
     "@react-native-vector-icons/fontawesome5": "npm:12.3.3"
     "@react-native-vector-icons/get-image": "npm:12.3.0"
-    "@react-native-vector-icons/ionicons": "npm:12.3.0"
+    "@react-native-vector-icons/ionicons": "npm:12.4.3"
     "@react-native-vector-icons/material-design-icons": "npm:12.4.3"
     "@react-native-vector-icons/material-icons": "npm:12.4.3"
     "@react-native/babel-preset": "npm:0.81.6"
@@ -12795,6 +12795,7 @@ __metadata:
     jest-expect-message: "npm:1.1.3"
     js-yaml: "npm:4.1.1"
     jsdom: "npm:26.1.0"
+    json5: "npm:2.2.3"
     markdown-it: "npm:13.0.2"
     md5: "npm:2.3.0"
     md5-file: "npm:5.0.0"
@@ -15955,26 +15956,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/common@npm:^12.3.0":
-  version: 12.4.0
-  resolution: "@react-native-vector-icons/common@npm:12.4.0"
-  dependencies:
-    find-up: "npm:^7.0.0"
-    picocolors: "npm:^1.1.1"
-    plist: "npm:^3.1.0"
-  peerDependencies:
-    "@react-native-vector-icons/get-image": ^12.3.0
-    react: "*"
-    react-native: "*"
-  peerDependenciesMeta:
-    "@react-native-vector-icons/get-image":
-      optional: true
-  bin:
-    rnvi-update-plist: lib/commonjs/scripts/updatePlist.js
-  checksum: 10/9c59a8c21f98106621320f77b89e9ea11a2d59d70d61576742ffb65e7426537d3b218de46dd997c63422ff37347d44513e64d3305625423a21ec9a21581c8d94
-  languageName: node
-  linkType: hard
-
 "@react-native-vector-icons/common@npm:^12.4.2":
   version: 12.4.2
   resolution: "@react-native-vector-icons/common@npm:12.4.2"
@@ -16017,27 +15998,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/ionicons@npm:12.3.0":
-  version: 12.3.0
-  resolution: "@react-native-vector-icons/ionicons@npm:12.3.0"
+"@react-native-vector-icons/ionicons@npm:12.4.3":
+  version: 12.4.3
+  resolution: "@react-native-vector-icons/ionicons@npm:12.4.3"
   dependencies:
-    "@react-native-vector-icons/common": "npm:^12.3.0"
+    "@react-native-vector-icons/common": "npm:^12.4.2"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/da342a72ef599de1d897e8fe1acee50d58b95c7c253fd26f4a831fd5488d2826a636fb259e8b5970ab45e9e85790cffd3552837a025b0f2310f571f71effcbeb
-  languageName: node
-  linkType: hard
-
-"@react-native-vector-icons/ionicons@patch:@react-native-vector-icons/ionicons@npm%3A12.3.0#~/.yarn/patches/@react-native-vector-icons-ionicons-npm-12.3.0-9bd4746f3f.patch":
-  version: 12.3.0
-  resolution: "@react-native-vector-icons/ionicons@patch:@react-native-vector-icons/ionicons@npm%3A12.3.0#~/.yarn/patches/@react-native-vector-icons-ionicons-npm-12.3.0-9bd4746f3f.patch::version=12.3.0&hash=e0b183"
-  dependencies:
-    "@react-native-vector-icons/common": "npm:^12.3.0"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 10/f94852e0f4973e2e695e0413d69349ae1145b46253f73963f253fc83a6fdf43e39329dee1f6535b9675170e7e4e1def679ea9c2550e70d67a669434fe9a0f08f
+  checksum: 10/f06a1a892e6c7ff3b9d34de31c17244afe4df5a51c9cc923a0e98b606599bfcfe87d07aea12614e5b662ebd3fca6b96bdf28678838ee47c862ae1d6cbd6ad069
   languageName: node
   linkType: hard
 
@@ -25722,7 +25691,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^14.0.2":
+"commander@npm:^14.0.3":
   version: 14.0.3
   resolution: "commander@npm:14.0.3"
   checksum: 10/dfa9ebe2a433d277de5cb0252d23b10a543d245d892db858d23b516336a835c50fd4f52bee4cd13c705cc8acb6f03dc632c73dd806f7d06d3353eb09953dd17a
@@ -40015,20 +39984,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:16.2.7":
-  version: 16.2.7
-  resolution: "lint-staged@npm:16.2.7"
+"lint-staged@npm:16.3.4":
+  version: 16.3.4
+  resolution: "lint-staged@npm:16.3.4"
   dependencies:
-    commander: "npm:^14.0.2"
+    commander: "npm:^14.0.3"
     listr2: "npm:^9.0.5"
     micromatch: "npm:^4.0.8"
-    nano-spawn: "npm:^2.0.0"
-    pidtree: "npm:^0.6.0"
     string-argv: "npm:^0.3.2"
-    yaml: "npm:^2.8.1"
+    tinyexec: "npm:^1.0.4"
+    yaml: "npm:^2.8.2"
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 10/c1fd7685300800ea6d3f073cb450f9e3d2a83966e7c6785ea9608a08e77e1e8e5f1958f77b98ccd7d423daa53bb36016d6fd96a98d22234d0f7f56d7b3f360f2
+  checksum: 10/15d2baf9413cae283cd240a0bfae1b7747419f9a6382f5498ea0757686965ca5389472dc87b1ed9dafd442a28c90f738f5a2bf675283b7da8c2a31202c8e570c
   languageName: node
   linkType: hard
 
@@ -43645,13 +43613,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nano-spawn@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "nano-spawn@npm:2.0.0"
-  checksum: 10/117d35d7bd85b146908de5d3d1177d2b2ee3174e5d884d6bc9555583bf6e50a265f4038b5c134b7cdd768a10d53598ccde5c00d6f55e25e7eed31b86b8d29646
-  languageName: node
-  linkType: hard
-
 "nanoid@npm:3.3.7":
   version: 3.3.7
   resolution: "nanoid@npm:3.3.7"
@@ -46636,15 +46597,6 @@ __metadata:
   version: 4.0.4
   resolution: "picomatch@npm:4.0.4"
   checksum: 10/f6ef80a3590827ce20378ae110ac78209cc4f74d39236370f1780f957b7ee41c12acde0e4651b90f39983506fd2f5e449994716f516db2e9752924aff8de93ce
-  languageName: node
-  linkType: hard
-
-"pidtree@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "pidtree@npm:0.6.0"
-  bin:
-    pidtree: bin/pidtree.js
-  checksum: 10/ea67fb3159e170fd069020e0108ba7712df9f0fd13c8db9b2286762856ddce414fb33932e08df4bfe36e91fe860b51852aee49a6f56eb4714b69634343add5df
   languageName: node
   linkType: hard
 
@@ -52027,7 +51979,7 @@ __metadata:
     http-server: "npm:14.1.1"
     husky: "npm:9.1.7"
     lerna: "npm:3.22.1"
-    lint-staged: "npm:16.2.7"
+    lint-staged: "npm:16.3.4"
     madge: "npm:8.0.0"
     node-gyp: "npm:11.5.0"
     nodemon: "npm:3.1.14"
@@ -56377,6 +56329,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tinyexec@npm:^1.0.4":
+  version: 1.2.4
+  resolution: "tinyexec@npm:1.2.4"
+  checksum: 10/f20b3e6f56f24c3ebe0129d0b6e657e561d225df2cf93c1a10362996232dd6ad4b8af8c9e81d258a64d09020e723772baf6fe0be26512dba7c61bb366d67b1f9
+  languageName: node
+  linkType: hard
+
 "tinyglobby@npm:^0.2.11, tinyglobby@npm:^0.2.14":
   version: 0.2.15
   resolution: "tinyglobby@npm:0.2.15"
@@ -60646,12 +60605,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml@npm:^2.6.1, yaml@npm:^2.8.1":
+"yaml@npm:^2.6.1":
   version: 2.8.2
   resolution: "yaml@npm:2.8.2"
   bin:
     yaml: bin.mjs
   checksum: 10/4eab0074da6bc5a5bffd25b9b359cf7061b771b95d1b3b571852098380db3b1b8f96e0f1f354b56cc7216aa97cea25163377ccbc33a2e9ce00316fe8d02f4539
+  languageName: node
+  linkType: hard
+
+"yaml@npm:^2.8.2":
+  version: 2.9.0
+  resolution: "yaml@npm:2.9.0"
+  bin:
+    yaml: bin.mjs
+  checksum: 10/9a95e8e08651c3d292ab6a5befeb5f57b76801caa097c75bb45c9a70ce19c1b11f57e87a6ef84a579ea070ed2c2c8ac541c88c0ae684d544d5f42c7e77d11b7b
   languageName: node
   linkType: hard
 

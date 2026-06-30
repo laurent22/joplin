@@ -1,8 +1,9 @@
 /* eslint-disable multiline-comment-style */
 
 import AiService from '../../ai/AiService';
+import EmbeddingIndexer from '../../ai/EmbeddingIndexer';
 import SearchService from '../../ai/SearchService';
-import { ChatMessage, ChatOptions, SearchOptions, SearchResult } from './types';
+import { AiIndexStatus, ChatMessage, ChatOptions, EmbeddingsPage, GetEmbeddingsOptions, SearchOptions, SearchResult } from './types';
 
 /**
  * Provides access to AI models configured by the user. The active provider
@@ -88,6 +89,66 @@ export default class JoplinAi {
 	 */
 	public async search(options: SearchOptions): Promise<SearchResult[]> {
 		return SearchService.instance().search(options);
+	}
+
+	/**
+	 * Returns raw embedding vectors for indexed note chunks, paginated.
+	 *
+	 * Unlike {@link search}, this exposes the underlying vectors rather than
+	 * similarity scores — intended for plugins that need to run their own
+	 * clustering, dimensionality reduction, or distance computations over the
+	 * full set.
+	 *
+	 * Vectors are model-specific: the response includes the `modelId` that
+	 * produced them. Plugins that cache vectors must invalidate on `modelId`
+	 * change. If the model swaps mid-pagination, the cursor stops returning
+	 * rows; the plugin should restart with no cursor and the new `modelId`.
+	 *
+	 * Pagination uses an opaque cursor. Pass `nextCursor` from one call back
+	 * as `cursor` on the next. A missing `nextCursor` signals end-of-stream.
+	 *
+	 * The cursor is stable under concurrent writes: chunks inserted behind
+	 * the cursor are guaranteed to have been returned; chunks inserted ahead
+	 * of the cursor will be returned in a later page.
+	 *
+	 * Throws when AI features are disabled or no embedding provider is
+	 * active.
+	 *
+	 * @example
+	 * ```typescript
+	 * let cursor: string | undefined;
+	 * const all: EmbeddingChunk[] = [];
+	 * let modelId: string | null = null;
+	 * do {
+	 *     const page = await joplin.ai.getEmbeddings({ cursor, limit: 1000 });
+	 *     if (modelId && page.modelId !== modelId) throw new Error('model changed mid-fetch');
+	 *     modelId = page.modelId;
+	 *     all.push(...page.chunks);
+	 *     cursor = page.nextCursor;
+	 * } while (cursor);
+	 * ```
+	 */
+	public async getEmbeddings(options?: GetEmbeddingsOptions): Promise<EmbeddingsPage> {
+		return SearchService.instance().getEmbeddings(options);
+	}
+
+	/**
+	 * Returns the current state of the on-device embedding index. Useful for
+	 * hybrid pipelines that prefer {@link search} when ready and fall back
+	 * otherwise. Cheap enough to call on a UI tick.
+	 *
+	 * @example
+	 * ```typescript
+	 * const status = await joplin.ai.getIndexStatus();
+	 * if (status.ready) {
+	 *     await runOnJoplinAi();
+	 * } else {
+	 *     await runOnLocalFallback();
+	 * }
+	 * ```
+	 */
+	public async getIndexStatus(): Promise<AiIndexStatus> {
+		return EmbeddingIndexer.instance().getPluginStatus();
 	}
 
 }

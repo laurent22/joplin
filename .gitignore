@@ -190,6 +190,7 @@ packages/app-desktop/commands/toggleExternalEditing.js
 packages/app-desktop/commands/toggleSafeMode.js
 packages/app-desktop/commands/toggleTabMovesFocus.js
 packages/app-desktop/gui/Button/Button.js
+packages/app-desktop/gui/ChatPanel/ChatPanel.js
 packages/app-desktop/gui/ClipperConfigScreen.js
 packages/app-desktop/gui/ConfigScreen/ButtonBar.js
 packages/app-desktop/gui/ConfigScreen/ConfigScreen.js
@@ -531,6 +532,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareFolderDialog
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showSpellCheckerMenu.test.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showSpellCheckerMenu.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleAiChat.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleEditors.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleLayoutMoveMode.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleMenuBar.js
@@ -1564,9 +1566,14 @@ packages/lib/services/ai/SearchService.js
 packages/lib/services/ai/SqliteVec.test.js
 packages/lib/services/ai/aiSettingsTransition.test.js
 packages/lib/services/ai/aiSettingsTransition.js
+packages/lib/services/ai/applyNoteEdits.js
+packages/lib/services/ai/availability.test.js
+packages/lib/services/ai/availability.js
 packages/lib/services/ai/chunker.test.js
 packages/lib/services/ai/chunker.js
 packages/lib/services/ai/classification.js
+packages/lib/services/ai/noteChat.test.js
+packages/lib/services/ai/noteChat.js
 packages/lib/services/ai/providers/Anthropic.js
 packages/lib/services/ai/providers/ChatProviderBase.js
 packages/lib/services/ai/providers/JoplinCloud.js
