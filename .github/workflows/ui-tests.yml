@@ -37,7 +37,7 @@ jobs:
           cd ${GITHUB_WORKSPACE}/packages/app-desktop/
           bash ./integration-tests/run-ci.sh
       # See https://playwright.dev/docs/ci-intro#setting-up-github-actions
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         if: ${{ !cancelled() }}
         with:
           name: playwright-report-${{ matrix.os }}
