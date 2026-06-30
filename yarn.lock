@@ -12771,7 +12771,7 @@ __metadata:
     "@types/react-dom": "npm:19.1.7"
     "@types/uuid": "npm:11.0.0"
     "@xenova/transformers": "npm:2.17.2"
-    adm-zip: "npm:0.5.16"
+    adm-zip: "npm:0.5.17"
     async-mutex: "npm:0.5.0"
     base-64: "npm:1.0.0"
     base64-stream: "npm:1.0.0"
@@ -21031,14 +21031,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"adm-zip@npm:0.5.16":
-  version: 0.5.16
-  resolution: "adm-zip@npm:0.5.16"
-  checksum: 10/e167d1b9e60cde37334efda828fa514680af9facbd4183952f36526390e5c7da9a90ca1e6880dfd3aba7b3517f1506c6178e0dc29cd630b26b98c795f97fc599
-  languageName: node
-  linkType: hard
-
-"adm-zip@npm:^0.5.16":
+"adm-zip@npm:0.5.17, adm-zip@npm:^0.5.16":
   version: 0.5.17
   resolution: "adm-zip@npm:0.5.17"
   checksum: 10/035ea96d04376c290bed3401b67d1a2a2654996450ec9056dccc0fb194cb6a956bf7ad388d2648b0e1775338a377805601deca4bcd689658dc1d39247a1e9bdd
