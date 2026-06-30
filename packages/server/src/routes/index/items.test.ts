@@ -82,9 +82,9 @@ describe('index_items', () => {
 
 		const resource = await createResource(session.id, {
 			id: '000000000000000000000000000000E1',
-		}, '<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>');
+		}, '<script>alert(1)</script>');
 
-		await models().item().saveForUser(user.id, { id: resource.id, mime_type: 'image/svg+xml' });
+		await models().item().saveForUser(user.id, { id: resource.id, mime_type: 'text/html' });
 
 		const dangerous = await execRequestC(session.id, 'GET', `items/${resource.id}/content`);
 		expect(dangerous.response.get('Content-Type')).toBe('application/octet-stream');
