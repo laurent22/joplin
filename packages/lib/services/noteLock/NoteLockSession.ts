@@ -68,4 +68,9 @@ export default class NoteLockSession {
 			plainText: this.key_.plainText,
 		};
 	}
+
+	// A lock clears key_ but not the persisted key, so this only fails on a real rotation, or one in progress.
+	public assertCanEncryptWith(keyId: string) {
+		if (this.rotating_ || this.noteLockKey_.load()?.id !== keyId) throw new Error('Note lock key changed during operation');
+	}
 }

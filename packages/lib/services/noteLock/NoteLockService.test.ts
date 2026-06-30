@@ -6,6 +6,19 @@ import NoteLockKey from './NoteLockKey';
 import NoteLockSession from './NoteLockSession';
 import NoteLockService, { ScopedNoteLockService } from './NoteLockService';
 
+const unlockedSession = async (password = '123456') => {
+	const session = NoteLockSession.instance();
+	await NoteLockKey.instance().create(password);
+	expect(await session.unlock(password)).toBe(true);
+	return session;
+};
+
+const changeSyncedKeyId = (id: string) => {
+	const syncInfo = localSyncInfo();
+	syncInfo.noteLockKey = { ...syncInfo.noteLockKey, id };
+	saveLocalSyncInfo(syncInfo);
+};
+
 describe('NoteLockService', () => {
 
 	beforeEach(async () => {
@@ -49,10 +62,8 @@ describe('NoteLockService', () => {
 	});
 
 	it('should keep a held operation working after the session locks, refuse the session-backed service, and revoke the scoped service afterwards', async () => {
-		const session = NoteLockSession.instance();
 		const service = NoteLockService.instance();
-		await NoteLockKey.instance().create('123456');
-		await session.unlock('123456');
+		const session = await unlockedSession();
 		const cipherText = await service.encryptString('some secret');
 
 		let escaped: ScopedNoteLockService = null;
@@ -61,6 +72,8 @@ describe('NoteLockService', () => {
 			session.lock();
 			await expect(service.decryptString(cipherText)).rejects.toThrow('Note lock session is locked');
 			expect(await scoped.decryptString(cipherText)).toBe('some secret');
+			const lockedEncryptedText = await scoped.encryptString('encrypted while locked');
+			expect(await scoped.decryptString(lockedEncryptedText)).toBe('encrypted while locked');
 		});
 
 		await expect(service.decryptString(cipherText)).rejects.toThrow('Note lock session is locked');
@@ -68,20 +81,47 @@ describe('NoteLockService', () => {
 	});
 
 	it('should keep a held operation on its captured key when the synced key changes, and fail the session-backed service closed', async () => {
-		const session = NoteLockSession.instance();
 		const service = NoteLockService.instance();
-		await NoteLockKey.instance().create('123456');
-		await session.unlock('123456');
+		await unlockedSession();
 		const cipherText = await service.encryptString('some secret');
 
 		await NoteLockService.withDecryptedKey(async scoped => {
-			const syncInfo = localSyncInfo();
-			syncInfo.noteLockKey = { ...syncInfo.noteLockKey, id: '0123456789abcdef0123456789abcdef' };
-			saveLocalSyncInfo(syncInfo);
+			changeSyncedKeyId('0123456789abcdef0123456789abcdef');
 
 			expect(await scoped.decryptString(cipherText)).toBe('some secret');
 			await expect(service.encryptString('unrelated')).rejects.toThrow('Note lock session is locked');
+			await expect(scoped.encryptString('unrelated')).rejects.toThrow('Note lock key changed during operation');
 		});
+	});
+
+	it('should fail a held encrypt closed while a reset is in progress', async () => {
+		const session = await unlockedSession();
+
+		await NoteLockService.withDecryptedKey(async scoped => {
+			// Don't await yet: reset() sets the rotating flag synchronously before its first await, which is
+			// what the held encrypt below needs to observe.
+			const resetting = session.reset('654321');
+			await expect(scoped.encryptString('some secret')).rejects.toThrow('Note lock key changed during operation');
+			await resetting;
+		});
+	});
+
+	it('should fail a held encryptFile closed and remove its output if the key rotates mid-encrypt', async () => {
+		await unlockedSession();
+
+		const sourcePath = `${supportDir}/photo.jpg`;
+		const destPath = `${Setting.value('tempDir')}/note-lock-rotate-mid-encrypt.crypted`;
+		const fsDriver = EncryptionService.instance().fsDriver();
+
+		await NoteLockService.withDecryptedKey(async scoped => {
+			// Don't await yet: encryptFile() doesn't reach its own first await until after the pre-check, so
+			// this mutation is guaranteed to land before the post-check below runs.
+			const encrypting = scoped.encryptFile(sourcePath, destPath);
+			changeSyncedKeyId('0123456789abcdef0123456789abcdef');
+			await expect(encrypting).rejects.toThrow('Note lock key changed during operation');
+		});
+
+		expect(await fsDriver.exists(destPath)).toBe(false);
 	});
 
 	it('should propagate errors from a held operation and still revoke the scoped service', async () => {
