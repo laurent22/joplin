@@ -376,6 +376,7 @@ describe('models/Revision', () => {
 		expect(remainingRevs.length).toBe(3);
 	}));
 
+	// cSpell:disable
 	test('mergeDiffs should stop traversal when parent_id is not set', (async () => {
 		const note = await Note.save({ title: 'test', body: testBody });
 
@@ -407,5 +408,6 @@ describe('models/Revision', () => {
 		expect(newRev2.body_diff).toBe(rev2.body_diff);
 		expect(newRev2.parent_id).toBe('');
 	}));
+	// cSpell:enable
 
 });
