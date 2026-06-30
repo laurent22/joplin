@@ -921,7 +921,7 @@ msgstr "Det går inte att ändra krypterat objekt"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:42
 msgid "Cannot convert read-only item: \"%s\""
-msgstr "Kan inte konvertera skrivskyddat objekt: \"%s\""
+msgstr "Det går inte att konvertera skrivskyddat objekt: \"%s\""
 
 #: packages/lib/models/Note.ts:622
 msgid "Cannot copy note to \"%s\" notebook"
@@ -2358,7 +2358,7 @@ msgstr "Aktivera förkortningssyntax"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1093
 msgid "Enable ABC musical notation support"
-msgstr "Aktivera stöd för ABC musiknotation"
+msgstr "Aktivera stöd för ABC-notation"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1095
 msgid "Enable audio player"
@@ -3203,7 +3203,6 @@ msgstr ""
 "2. Klicka på \"%s\".\n"
 "3. Låt den köras tills den är klar. Undvik att ändra några anteckningar på "
 "dina andra enheter medan den körs, för att undvika konflikter.\n"
-"\n"
 "4. När synkroniseringen är klar på den här enheten, synkronisera alla dina "
 "andra enheter och låt den köras tills den är klar.\n"
 "\n"
@@ -3377,7 +3376,7 @@ msgstr "Objekt med fel: %s"
 
 #: packages/app-desktop/gui/MenuBar.tsx:885
 msgid "Join us on %s"
-msgstr "Följ oss ​​på %s"
+msgstr "Följ oss på %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:310
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:114
@@ -3930,8 +3929,8 @@ msgid ""
 msgstr ""
 "Flytta %d anteckningsböcker till papperskorgen?\n"
 "\n"
-"Alla anteckningar och underanteckningsböcker i dessa anteckningsböcker "
-"flyttas också till papperskorgen."
+"Alla anteckningar och underliggande anteckningsböcker i dessa "
+"anteckningsböcker flyttas också till papperskorgen."
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
 msgid "Move down"
@@ -6411,8 +6410,8 @@ msgstr[0] ""
 "Anteckningen har konverterats till Markdown och den ursprungliga "
 "anteckningen har flyttats till papperskorgen"
 msgstr[1] ""
-"Anteckningarna har konverterats till Markdown och originalanteckningarna har "
-"flyttats till papperskorgen"
+"Anteckningarna har konverterats till Markdown och de ursprungliga "
+"anteckningarna har flyttats till papperskorgen"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
