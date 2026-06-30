@@ -9,13 +9,13 @@ export default class NoteLockService {
 	private constructor(
 		private encryptionService_: EncryptionService,
 		private keySource_: ()=> DecryptedNoteLockKey,
-		private assertCanEncrypt_: (keyId: string)=> void = () => {},
+		private assertCanEncrypt_: (keyId: string)=> void,
 	) {}
 
 	public static instance() {
 		if (!this.instance_) {
 			const session = NoteLockSession.instance();
-			this.instance_ = new NoteLockService(EncryptionService.instance(), () => session.decryptedKey());
+			this.instance_ = new NoteLockService(EncryptionService.instance(), () => session.decryptedKey(), keyId => session.assertCanEncryptWith(keyId));
 		}
 		return this.instance_;
 	}

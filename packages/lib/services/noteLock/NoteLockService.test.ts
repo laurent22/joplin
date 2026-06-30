@@ -124,6 +124,23 @@ describe('NoteLockService', () => {
 		expect(await fsDriver.exists(destPath)).toBe(false);
 	});
 
+	it('should fail the live service closed and remove its output if the key rotates mid-encrypt', async () => {
+		await unlockedSession();
+		const service = NoteLockService.instance();
+
+		const sourcePath = `${supportDir}/photo.jpg`;
+		const destPath = `${Setting.value('tempDir')}/note-lock-rotate-mid-encrypt-live.crypted`;
+		const fsDriver = EncryptionService.instance().fsDriver();
+
+		// Don't await yet: encryptFile() doesn't reach its own first await until after the pre-check, so this
+		// mutation is guaranteed to land before the post-check below runs.
+		const encrypting = service.encryptFile(sourcePath, destPath);
+		changeSyncedKeyId('0123456789abcdef0123456789abcdef');
+		await expect(encrypting).rejects.toThrow('Note lock key changed during operation');
+
+		expect(await fsDriver.exists(destPath)).toBe(false);
+	});
+
 	it('should propagate errors from a held operation and still revoke the scoped service', async () => {
 		const session = NoteLockSession.instance();
 		await NoteLockKey.instance().create('123456');
