@@ -2377,6 +2377,19 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'featureFlag.enableSemanticSearch': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			appTypes: [AppType.Desktop],
+			label: () => 'Use semantic search when the default search finds no results',
+			description: () => 'Allows using semantic search from the search panel',
+			section: 'general',
+			isGlobal: true,
+			advanced: true,
+		},
+
 		// As of December 2025, the voice typing feature doesn't work well on low-resource devices.
 		// There have been requests to allow disabling the voice typing feature at build time. This
 		// feature flag allows doing so, by changing the default `value` from `true` to `false`:

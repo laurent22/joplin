@@ -765,7 +765,9 @@ export default class SearchEngine {
 			return false;
 		}
 
-		return Setting.value('ai.embedding.enabled') && !!AiService.instance().getActiveEmbeddingProvider();
+		return Setting.value('featureFlag.enableSemanticSearch')
+			&& Setting.value('ai.embedding.enabled')
+			&& !!AiService.instance().getActiveEmbeddingProvider();
 	}
 
 	private async searchFromItemIds(searchString: string): Promise<ProcessResultsRow[]> {
