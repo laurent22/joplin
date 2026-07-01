@@ -682,7 +682,7 @@ export default class SearchEngine {
 
 	public async semanticSearch(query: string, parsedQuery: ParsedQuery) {
 		const rows: ProcessResultsRow[] = [];
-		const results = await SearchService.instance().search({ query: { text: query }, relevance: 'strict' });
+		const results = await SearchService.instance().search({ query: { text: query } });
 
 		const seenNotes = new Map<string, ProcessResultsRow>();
 		for (const result of results) {
