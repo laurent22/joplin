@@ -19,10 +19,8 @@ export default class SearchEngineUtils {
 		}
 
 		let searchType = SearchType.Auto;
-		if (query.length) {
-			if (query[0] === '/') {
-				searchType = SearchType.Basic;
-			}
+		if (query.length && query[0] === '/') {
+			searchType = SearchType.Basic;
 		}
 
 		const results = await searchEngine.search(query, {
