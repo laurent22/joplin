@@ -23,11 +23,6 @@ export default class SearchEngineUtils {
 			if (query[0] === '/') {
 				searchType = SearchType.Basic;
 			}
-
-			if (query[0] === '%') {
-				searchType = SearchType.Semantic;
-				query = query.substring(1);
-			}
 		}
 
 		const results = await searchEngine.search(query, {
