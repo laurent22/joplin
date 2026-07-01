@@ -459,7 +459,7 @@ export default class SearchEngine {
 		}
 	}
 
-	private processBasicSearchResults_(rows: ProcessResultsRow[], parsedQuery: ParsedQuery) {
+	private processNonFtsSearchResults_(rows: ProcessResultsRow[], parsedQuery: ParsedQuery) {
 		const valueRegexs = parsedQuery.keys.includes('_') ? parsedQuery.terms['_'].map(term => (typeof term === 'string' ? term : term.valueRegex || term.value)) : [];
 		const isTitleSearch = parsedQuery.keys.includes('title');
 		const isOnlyTitle = parsedQuery.keys.length === 1 && isTitleSearch;
@@ -468,8 +468,8 @@ export default class SearchEngine {
 			const row = rows[i];
 			const testTitle = (regex: string) => new RegExp(regex, 'ig').test(row.title);
 			const matchedFields: Record<string, boolean> = {
-				title: isTitleSearch || valueRegexs.some(testTitle),
-				body: !isOnlyTitle,
+				title: isTitleSearch || valueRegexs.some(testTitle) || row.fields?.includes('title'),
+				body: !isOnlyTitle || row.fields?.includes('body'),
 			};
 
 			row.fields = Object.keys(matchedFields).filter(key => matchedFields[key]);
@@ -478,16 +478,16 @@ export default class SearchEngine {
 		}
 	}
 
-	private processResults_(rows: ProcessResultsRow[], parsedQuery: ParsedQuery, isBasicSearchResults = false) {
-		if (isBasicSearchResults) {
-			this.processBasicSearchResults_(rows, parsedQuery);
-		} else {
+	private processResults_(rows: ProcessResultsRow[], parsedQuery: ParsedQuery, isFtsSearchResults = false) {
+		if (isFtsSearchResults) {
 			this.calculateWeightBM25_(rows);
 			for (let i = 0; i < rows.length; i++) {
 				const row = rows[i];
 				const offsets = row.offsets.split(' ').map(o => Number(o));
 				row.fields = this.fieldNamesFromOffsets_(offsets);
 			}
+		} else {
+			this.processNonFtsSearchResults_(rows, parsedQuery);
 		}
 
 		rows.sort((a, b) => {
@@ -679,9 +679,49 @@ export default class SearchEngine {
 		return Note.previews(null, searchOptions);
 	}
 
-	private determineSearchType_(query: string, preferredSearchType: SearchType) {
+	public async semanticSearch(query: string, parsedQuery: ParsedQuery) {
+		const rows: ProcessResultsRow[] = [];
+		const results = await SearchService.instance().search({ query: { text: query } });
+
+		const seenNotes = new Set<string>();
+		for (const result of results) {
+			if (seenNotes.has(result.noteId)) {
+				continue;
+			}
+			seenNotes.add(result.noteId);
+
+			const item = await Note.load(
+				result.noteId,
+				{ fields: ['id', 'parent_id', 'title', 'user_updated_time', 'user_created_time', 'is_todo', 'todo_completed'] },
+			);
+			rows.push({
+				id: item.id,
+				item_id: item.id,
+				parent_id: item.parent_id,
+				title: item.title,
+				user_updated_time: item.user_updated_time,
+				user_created_time: item.user_created_time,
+				matchinfo: null,
+				item_type: ModelType.Note,
+				weight: result.score,
+				is_todo: item.is_todo,
+				todo_completed: item.todo_completed,
+
+				fields: item.title.includes(result.chunkText) ? ['title'] : ['body'],
+				offsets: '',
+			});
+		}
+		this.processResults_(rows, parsedQuery, false);
+
+		return rows;
+	}
+
+	private determineSearchType_(query: string, parsedQuery: ParsedQuery, preferredSearchType: SearchType) {
 		if (preferredSearchType === SearchType.Basic) return SearchType.Basic;
 		if (preferredSearchType === SearchType.Nonlatin) return SearchType.Nonlatin;
+		if (preferredSearchType === SearchType.Semantic && this.canSemanticSearch_(parsedQuery)) {
+			return SearchType.Semantic;
+		}
 
 		// If preferredSearchType is "fts" we auto-detect anyway
 		// because it's not always supported.
@@ -696,10 +736,6 @@ export default class SearchEngine {
 		const textQuery = allTerms.filter(x => x.name === 'text' || x.name === 'title' || x.name === 'body').map(x => x.value).join(' ');
 		const st = scriptType(textQuery);
 
-		if (preferredSearchType === SearchType.Semantic && shim.isElectron() && Setting.value('ai.embedding.enabled')) {
-			return SearchType.Semantic;
-		}
-
 		if (!Setting.value('db.ftsEnabled')) {
 			return SearchEngine.SEARCH_TYPE_BASIC;
 		}
@@ -710,6 +746,10 @@ export default class SearchEngine {
 		}
 
 		return SearchEngine.SEARCH_TYPE_FTS;
+	}
+
+	private canSemanticSearch_(_parsedQuery: ParsedQuery) {
+		return shim.isElectron() && Setting.value('ai.embedding.enabled');
 	}
 
 	private async searchFromItemIds(searchString: string): Promise<ProcessResultsRow[]> {
@@ -761,46 +801,17 @@ export default class SearchEngine {
 			...options,
 		};
 
-		const searchType = this.determineSearchType_(searchString, options.searchType);
 		const parsedQuery = await this.parseQuery(searchString);
+		const searchType = this.determineSearchType_(searchString, parsedQuery, options.searchType);
 
 		let rows: ProcessResultsRow[] = [];
 
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			searchString = this.normalizeText_(searchString);
 			rows = (await this.basicSearch(searchString)) as unknown as ProcessResultsRow[];
-			this.processResults_(rows, parsedQuery, true);
+			this.processResults_(rows, parsedQuery, false);
 		} else if (searchType === SearchType.Semantic) {
-			const results = await SearchService.instance().search({ query: { text: searchString } });
-
-			const seenNotes = new Map<string, number>();
-			for (const result of results) {
-				if (seenNotes.has(result.noteId)) {
-					rows[seenNotes.get(result.noteId)].offsets += ` ${result.chunkIndex}`;
-					continue;
-				}
-				seenNotes.set(result.noteId, rows.length);
-
-				const item = await Note.load(
-					result.noteId,
-					{ fields: ['id', 'parent_id', 'title', 'user_updated_time', 'user_created_time', 'is_todo', 'todo_completed'] },
-				);
-				rows.push({
-					id: item.id,
-					item_id: item.id,
-					parent_id: item.parent_id,
-					title: item.title,
-					user_updated_time: item.user_updated_time,
-					user_created_time: item.user_created_time,
-					offsets: String(result.chunkIndex),
-					matchinfo: null,
-					item_type: ModelType.Note,
-					weight: result.score,
-					is_todo: item.is_todo,
-					todo_completed: item.todo_completed,
-				});
-			}
-			this.processResults_(rows, parsedQuery, true);
+			rows = await this.semanticSearch(searchString, parsedQuery);
 		} else {
 			// SEARCH_TYPE_FTS
 			// FTS will ignore all special characters, like "-" in the index. So if
@@ -886,7 +897,7 @@ export default class SearchEngine {
 					rows = rows.concat(itemRows);
 				}
 
-				this.processResults_(rows as ProcessResultsRow[], parsedQuery, !useFts);
+				this.processResults_(rows as ProcessResultsRow[], parsedQuery, useFts);
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
 				rows = [];
@@ -895,6 +906,13 @@ export default class SearchEngine {
 
 		if (!rows.length) {
 			rows = await this.searchFromItemIds(searchString);
+		}
+
+		if (rows.length < 4
+			&& this.canSemanticSearch_(parsedQuery)
+			&& searchType !== SearchType.Semantic && options.searchType === SearchType.Auto
+		) {
+			rows = rows.concat(await this.semanticSearch(searchString, parsedQuery));
 		}
 
 		return rows;

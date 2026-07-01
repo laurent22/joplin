@@ -18,7 +18,7 @@ export default class SearchEngineUtils {
 			searchEngine = SearchEngine.instance();
 		}
 
-		let searchType = SearchType.Fts;
+		let searchType = SearchType.Auto;
 		if (query.length) {
 			if (query[0] === '/') {
 				searchType = SearchType.Basic;
