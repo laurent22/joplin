@@ -681,20 +681,28 @@ export default class SearchEngine {
 
 	public async semanticSearch(query: string, parsedQuery: ParsedQuery) {
 		const rows: ProcessResultsRow[] = [];
-		const results = await SearchService.instance().search({ query: { text: query } });
+		const results = await SearchService.instance().search({
+			query: { text: query }, relevance: 'strict',
+		});
 
-		const seenNotes = new Set<string>();
+		const seenNotes = new Map<string, ProcessResultsRow>();
 		for (const result of results) {
-			if (seenNotes.has(result.noteId)) {
+			let row = seenNotes.get(result.noteId);
+			if (row) {
+				// Move the row's weight slightly closer to 1. Notes with more matches
+				// should be rated higher:
+				row.weight = row.weight * 0.9 + 0.1;
 				continue;
 			}
-			seenNotes.add(result.noteId);
 
 			const item = await Note.load(
 				result.noteId,
 				{ fields: ['id', 'parent_id', 'title', 'user_updated_time', 'user_created_time', 'is_todo', 'todo_completed'] },
 			);
-			rows.push({
+			// Handle the case where the item was deleted after search started
+			if (!item) continue;
+
+			row = {
 				id: item.id,
 				item_id: item.id,
 				parent_id: item.parent_id,
@@ -707,9 +715,13 @@ export default class SearchEngine {
 				is_todo: item.is_todo,
 				todo_completed: item.todo_completed,
 
+				// For now, estimate whether the match is in the title or the body.
+				// For performance, we avoid loading 'body'.
 				fields: item.title.includes(result.chunkText) ? ['title'] : ['body'],
 				offsets: '',
-			});
+			};
+			seenNotes.set(result.noteId, row);
+			rows.push(row);
 		}
 		this.processResults_(rows, parsedQuery, false);
 
@@ -908,9 +920,12 @@ export default class SearchEngine {
 			rows = await this.searchFromItemIds(searchString);
 		}
 
-		if (rows.length < 4
+		if (rows.length === 0
 			&& this.canSemanticSearch_(parsedQuery)
-			&& searchType !== SearchType.Semantic && options.searchType === SearchType.Auto
+			// Don't use semantic search if another search type was explicitly requested
+			&& options.searchType === SearchType.Auto
+			// Avoid doing semantic search twice
+			&& searchType !== SearchType.Semantic
 		) {
 			rows = rows.concat(await this.semanticSearch(searchString, parsedQuery));
 		}
