@@ -171,7 +171,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 	note = { ...note, ...savedNote };
 
 	if (stateNote.id === note.id) {
-		// But we preserve the current title and body because
+		// But we preserve the current title, body and todo_completed because
 		// the user might have changed them between the time
 		// saveNoteButton_press was called and the note was
 		// saved (it's done asynchronously).
@@ -180,6 +180,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 		// it from the state because it will be empty there.
 		if (!hasAutoTitle) note.title = stateNote.title;
 		note.body = stateNote.body;
+		note.todo_completed = stateNote.todo_completed;
 	}
 
 	const newState: Partial<BaseState> = {
@@ -235,7 +236,7 @@ shared.saveOneProperty = async function(comp: BaseNoteScreenComponent, name: str
 	(note as Record<string, unknown>)[name] = saved[name];
 
 	comp.setState({
-		lastSavedNote: { ...note },
+		lastSavedNote: { ...note, ...saved },
 		note: note,
 	});
 };
