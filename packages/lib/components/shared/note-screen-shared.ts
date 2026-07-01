@@ -127,7 +127,10 @@ shared.handleNoteDeletedWhileEditing_ = async (note: NoteEntity) => {
 
 shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, state: BaseState, folderId: string = null, options: SaveNoteOptions = null) {
 	options = { autoTitle: true, ...options };
-	state = { ...comp.state, ...state };
+	// comp.state always reflects every change made up to and including the
+	// change that triggered this save (setState is called synchronously
+	// before scheduleSave), so it must win over a possibly-stale snapshot.
+	state = { ...state, ...comp.state };
 
 	const releaseMutex = await saveNoteMutex_.acquire();
 
@@ -248,7 +251,9 @@ shared.noteComponent_change = function(comp: BaseNoteScreenComponent, propName: 
 	newState.note = note;
 
 	comp.setState(newState);
-	comp.scheduleSave(newState as BaseState);
+	// scheduleSave requires a complete state snapshot, so merge the change
+	// into the full current state rather than passing the partial newState.
+	comp.scheduleSave({ ...comp.state, ...newState });
 };
 
 let resourceCache_: AttachedResources = {};
