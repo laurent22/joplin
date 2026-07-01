@@ -33433,7 +33433,7 @@ __metadata:
     "@joplin/tools": "npm:~3.7"
     chalk: "npm:2.4.2"
     jest: "npm:29.7.0"
-    slugify: "npm:1.6.8"
+    slugify: "npm:1.6.9"
     ts-node: "npm:10.9.2"
     yeoman-generator: "npm:5.10.0"
     yosay: "npm:2.0.2"
@@ -53575,10 +53575,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"slugify@npm:1.6.8":
-  version: 1.6.8
-  resolution: "slugify@npm:1.6.8"
-  checksum: 10/d80c3ce9e57d67ba60f4fc37ac4e2852174eab6402d16daeb6896ced1da838ef650a563a0069266198a866407744334fcd8c02b3470e0a9be348b885cf5db8a7
+"slugify@npm:1.6.9":
+  version: 1.6.9
+  resolution: "slugify@npm:1.6.9"
+  checksum: 10/101599a77585ac3b3fe49662db8666260c8ee1c5090d28a13c6ecabf16b42057e69ea209654797f46b13faee4c53224f48784044bd734a9443b7b88e0357110e
   languageName: node
   linkType: hard
 
