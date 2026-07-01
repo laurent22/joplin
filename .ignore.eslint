@@ -2004,6 +2004,10 @@ packages/plugin-repo-cli/lib/validateUntrustedManifest.js
 packages/plugins/ToggleSidebars/api/index.js
 packages/plugins/ToggleSidebars/api/types.js
 packages/plugins/ToggleSidebars/src/index.js
+packages/plugins/thesaurus/src/PythonProcessManager.js
+packages/plugins/thesaurus/src/RankingService.js
+packages/plugins/thesaurus/src/index.js
+packages/plugins/thesaurus/src/types.js
 packages/react-native-saf-x/src/index.js
 packages/renderer/HtmlToHtml.test.js
 packages/renderer/HtmlToHtml.js
