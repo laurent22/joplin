@@ -1,4 +1,4 @@
-import SearchEngine from './SearchEngine';
+import SearchEngine, { SearchType } from './SearchEngine';
 import Note, { PreviewsOptions } from '../../models/Note';
 import Setting from '../../models/Setting';
 
@@ -18,9 +18,16 @@ export default class SearchEngineUtils {
 			searchEngine = SearchEngine.instance();
 		}
 
-		let searchType = SearchEngine.SEARCH_TYPE_FTS;
-		if (query.length && query[0] === '/') {
-			searchType = SearchEngine.SEARCH_TYPE_BASIC;
+		let searchType = SearchType.Fts;
+		if (query.length) {
+			if (query[0] === '/') {
+				searchType = SearchType.Basic;
+			}
+
+			if (query[0] === '%') {
+				searchType = SearchType.Semantic;
+				query = query.substring(1);
+			}
 		}
 
 		const results = await searchEngine.search(query, {

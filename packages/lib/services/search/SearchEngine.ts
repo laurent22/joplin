@@ -18,14 +18,16 @@ import { htmlentitiesDecode } from '@joplin/utils/html';
 const { sprintf } = require('sprintf-js');
 import { pregQuote, scriptType, removeDiacritics } from '../../string-utils';
 import PerformanceLogger from '../../PerformanceLogger';
+import SearchService from '../ai/SearchService';
 
 const perfLogger = PerformanceLogger.create();
 
-enum SearchType {
+export enum SearchType {
 	Auto = 'auto',
 	Basic = 'basic',
 	Nonlatin = 'nonlatin',
 	Fts = 'fts',
+	Semantic = 'semantic',
 }
 
 interface SearchOptions {
@@ -471,8 +473,8 @@ export default class SearchEngine {
 			};
 
 			row.fields = Object.keys(matchedFields).filter(key => matchedFields[key]);
-			row.weight = 0;
-			row.fuzziness = 0;
+			row.weight ??= 0;
+			row.fuzziness ??= 0;
 		}
 	}
 
@@ -678,8 +680,8 @@ export default class SearchEngine {
 	}
 
 	private determineSearchType_(query: string, preferredSearchType: SearchType) {
-		if (preferredSearchType === SearchEngine.SEARCH_TYPE_BASIC) return SearchEngine.SEARCH_TYPE_BASIC;
-		if (preferredSearchType === SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT) return SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT;
+		if (preferredSearchType === SearchType.Basic) return SearchType.Basic;
+		if (preferredSearchType === SearchType.Nonlatin) return SearchType.Nonlatin;
 
 		// If preferredSearchType is "fts" we auto-detect anyway
 		// because it's not always supported.
@@ -693,6 +695,10 @@ export default class SearchEngine {
 
 		const textQuery = allTerms.filter(x => x.name === 'text' || x.name === 'title' || x.name === 'body').map(x => x.value).join(' ');
 		const st = scriptType(textQuery);
+
+		if (preferredSearchType === SearchType.Semantic && shim.isElectron() && Setting.value('ai.embedding.enabled')) {
+			return SearchType.Semantic;
+		}
 
 		if (!Setting.value('db.ftsEnabled')) {
 			return SearchEngine.SEARCH_TYPE_BASIC;
@@ -763,6 +769,37 @@ export default class SearchEngine {
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
 			searchString = this.normalizeText_(searchString);
 			rows = (await this.basicSearch(searchString)) as unknown as ProcessResultsRow[];
+			this.processResults_(rows, parsedQuery, true);
+		} else if (searchType === SearchType.Semantic) {
+			const results = await SearchService.instance().search({ query: { text: searchString } });
+
+			const seenNotes = new Map<string, number>();
+			for (const result of results) {
+				if (seenNotes.has(result.noteId)) {
+					rows[seenNotes.get(result.noteId)].offsets += ` ${result.chunkIndex}`;
+					continue;
+				}
+				seenNotes.set(result.noteId, rows.length);
+
+				const item = await Note.load(
+					result.noteId,
+					{ fields: ['id', 'parent_id', 'title', 'user_updated_time', 'user_created_time', 'is_todo', 'todo_completed'] },
+				);
+				rows.push({
+					id: item.id,
+					item_id: item.id,
+					parent_id: item.parent_id,
+					title: item.title,
+					user_updated_time: item.user_updated_time,
+					user_created_time: item.user_created_time,
+					offsets: String(result.chunkIndex),
+					matchinfo: null,
+					item_type: ModelType.Note,
+					weight: result.score,
+					is_todo: item.is_todo,
+					todo_completed: item.todo_completed,
+				});
+			}
 			this.processResults_(rows, parsedQuery, true);
 		} else {
 			// SEARCH_TYPE_FTS
