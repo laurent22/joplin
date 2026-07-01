@@ -19,6 +19,7 @@ const { sprintf } = require('sprintf-js');
 import { pregQuote, scriptType, removeDiacritics } from '../../string-utils';
 import PerformanceLogger from '../../PerformanceLogger';
 import SearchService from '../ai/SearchService';
+import AiService from '../ai/AiService';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -681,9 +682,7 @@ export default class SearchEngine {
 
 	public async semanticSearch(query: string, parsedQuery: ParsedQuery) {
 		const rows: ProcessResultsRow[] = [];
-		const results = await SearchService.instance().search({
-			query: { text: query }, relevance: 'strict',
-		});
+		const results = await SearchService.instance().search({ query: { text: query }, relevance: 'strict' });
 
 		const seenNotes = new Map<string, ProcessResultsRow>();
 		for (const result of results) {
@@ -760,8 +759,13 @@ export default class SearchEngine {
 		return SearchEngine.SEARCH_TYPE_FTS;
 	}
 
-	private canSemanticSearch_(_parsedQuery: ParsedQuery) {
-		return shim.isElectron() && Setting.value('ai.embedding.enabled');
+	private canSemanticSearch_(parsedQuery: ParsedQuery) {
+		// Disable semantic search if the user has explicitly specified a field to search in
+		if (parsedQuery.allTerms.some(term => term.name !== 'text')) {
+			return false;
+		}
+
+		return Setting.value('ai.embedding.enabled') && !!AiService.instance().getActiveEmbeddingProvider();
 	}
 
 	private async searchFromItemIds(searchString: string): Promise<ProcessResultsRow[]> {
