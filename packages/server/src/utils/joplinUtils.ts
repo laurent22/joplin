@@ -32,6 +32,7 @@ import KeychainServiceDriverDummy from '@joplin/lib/services/keychain/KeychainSe
 import BaseService from '@joplin/lib/services/BaseService';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
+import { parseRenderedNoteMetadata } from '@joplin/lib/services/interop/utils';
 import { sanitizeUserUrl } from './urlUtils';
 import { BannerInfo } from './banners';
 import { getDefaultBannerInfo } from './banners';
@@ -254,6 +255,7 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 
 	try {
 		const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
+		const renderedNoteMetadata = parseRenderedNoteMetadata(result.html ? result.html : '');
 
 		const cssStrings = result.cssStrings.slice();
 		cssStrings.push(`
@@ -278,6 +280,7 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 				note: {
 					...note,
 					bodyHtml: result.html,
+					printTitle: renderedNoteMetadata.printTitle,
 					updatedDateTime: formatDateTime(note.user_updated_time),
 				},
 				logoSrc: banner.logoDataUrl ? banner.logoDataUrl : `${baseUrl_}/images/JoplinLogo.png`,

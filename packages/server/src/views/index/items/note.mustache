@@ -13,7 +13,9 @@
 </nav>
 
 <div class="note-main">
+	{{#note.printTitle}}
 	<p class="last-updated">Last updated: {{note.updatedDateTime}}</p>
 	<h1 class="title">{{note.title}}</h1>
+	{{/note.printTitle}}
 	{{{note.bodyHtml}}}
 </div>
