@@ -687,12 +687,7 @@ export default class SearchEngine {
 		const seenNotes = new Map<string, ProcessResultsRow>();
 		for (const result of results) {
 			let row = seenNotes.get(result.noteId);
-			if (row) {
-				// Move the row's weight slightly closer to 1. Notes with more matches
-				// should be rated higher:
-				row.weight = row.weight * 0.9 + 0.1;
-				continue;
-			}
+			if (row) continue;
 
 			const item = await Note.load(
 				result.noteId,
