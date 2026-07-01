@@ -249,7 +249,6 @@ describe('shares.link', () => {
 		}
 	});
 
-	// A shared SVG resource with an empty title must not be served inline with image/svg+xml,
 	// SVG is served inline but the strict CSP + sandbox blocks the embedded script.
 	test('should serve SVG inline under a strict CSP that blocks scripts', async () => {
 		const { session } = await createUserAndSession();
