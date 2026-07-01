@@ -12582,7 +12582,7 @@ __metadata:
     timers: "npm:0.1.1"
     timers-browserify: "npm:2.0.12"
     ts-jest: "npm:29.4.6"
-    ts-loader: "npm:9.5.4"
+    ts-loader: "npm:9.5.7"
     ts-node: "npm:10.9.2"
     typescript: "npm:5.9.3"
     url: "npm:0.11.4"
@@ -12869,7 +12869,7 @@ __metadata:
     style-loader: "npm:3.3.4"
     styled-components: "npm:5.3.11"
     ts-jest: "npm:29.4.6"
-    ts-loader: "npm:9.5.4"
+    ts-loader: "npm:9.5.7"
     typescript: "npm:5.9.3"
     webpack: "npm:5.74.0"
     webpack-cli: "npm:4.10.0"
@@ -56895,9 +56895,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-loader@npm:9.5.4":
-  version: 9.5.4
-  resolution: "ts-loader@npm:9.5.4"
+"ts-loader@npm:9.5.7":
+  version: 9.5.7
+  resolution: "ts-loader@npm:9.5.7"
   dependencies:
     chalk: "npm:^4.1.0"
     enhanced-resolve: "npm:^5.0.0"
@@ -56907,7 +56907,7 @@ __metadata:
   peerDependencies:
     typescript: "*"
     webpack: ^5.0.0
-  checksum: 10/a9977dce1cda5af08010ae92d96fb57981ce52cb6123054b232fc7f71e151969f45e36ca055c0babe01b3b97dcba54b631ad7a50e3e96e839dfd7033c385de05
+  checksum: 10/c70c53679a877f94ae75c03eb0c7690e5c00891af9d2eef9a95271e84ac1b7144e25451dc41385ac3eb05950465c5b231cc5ce2fbd1c711a68c4012323ab03b7
   languageName: node
   linkType: hard
 
