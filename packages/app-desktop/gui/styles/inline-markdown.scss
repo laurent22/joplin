@@ -9,7 +9,11 @@
 
 	// Decrease space between paragraphs to better fit
 	p {
-		margin-bottom: 8px;
+		margin-bottom: var(--joplin-margin-small);
+	}
+
+	ul, ol {
+		padding-left: var(--joplin-margin);
 	}
 
 	pre {
