@@ -57,6 +57,16 @@ export default class AnthropicProvider extends ChatProviderBase {
 		};
 		if (systemMessages.length) body.system = systemMessages.join('\n\n');
 		if (options?.temperature !== undefined) body.temperature = options.temperature;
+		if (options?.responseFormat?.type === 'json_schema') {
+			// Anthropic's API accepts the schema property directly:
+			const schema = options.responseFormat.json_schema.schema;
+			body.output_config = {
+				format: {
+					type: options.responseFormat.type,
+					schema,
+				},
+			};
+		}
 
 		const response = await shim.fetch('https://api.anthropic.com/v1/messages', {
 			method: 'POST',

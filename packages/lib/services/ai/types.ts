@@ -7,7 +7,11 @@ export interface ChatMessage {
 
 export interface ResponseFormat {
 	type: 'json_schema';
-	json_schema: unknown;
+	json_schema: {
+		name: string;
+		strict: boolean;
+		schema: unknown;
+	};
 }
 
 export interface ChatOptions {
