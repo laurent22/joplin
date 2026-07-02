@@ -89,19 +89,23 @@
 			return `folder-tree-item-${node.key}`;
 		};
 
+		let selectedTreeItem = null;
+		const setSelectedTreeItem = function(treeItem) {
+			if (selectedTreeItem && selectedTreeItem !== treeItem) {
+				selectedTreeItem.setAttribute('aria-selected', 'false');
+			}
+
+			selectedTreeItem = treeItem;
+			if (selectedTreeItem) selectedTreeItem.setAttribute('aria-selected', 'true');
+		};
+
 		const setActiveTreeItem = function(node, moveFocus) {
 			if (!node) return;
 			const nodeElement = document.getElementById(rowId(node));
 			if (!nodeElement) return;
 
-			const previousActiveId = container.getAttribute('aria-activedescendant');
-			const previousActiveElement = previousActiveId ? document.getElementById(previousActiveId) : null;
-			if (previousActiveElement && previousActiveElement !== nodeElement) {
-				previousActiveElement.setAttribute('aria-selected', 'false');
-			}
-
 			container.setAttribute('aria-activedescendant', nodeElement.id);
-			nodeElement.setAttribute('aria-selected', 'true');
+			setSelectedTreeItem(nodeElement);
 			if (moveFocus) node.tree.setFocus();
 		};
 
@@ -151,7 +155,11 @@
 				title.removeAttribute('title');
 			}
 			e.nodeElem.setAttribute('role', 'treeitem');
-			e.nodeElem.setAttribute('aria-selected', e.node.isActive() ? 'true' : 'false');
+			if (e.node.hasFocus() || e.node.isActive() || container.getAttribute('aria-activedescendant') === e.nodeElem.id) {
+				setSelectedTreeItem(e.nodeElem);
+			} else {
+				e.nodeElem.setAttribute('aria-selected', 'false');
+			}
 			// Added to fix screen reader on Safari
 			e.nodeElem.setAttribute('aria-roledescription', 'outline row');
 			e.nodeElem.setAttribute('aria-level', e.node.getLevel());
@@ -214,10 +222,12 @@
 				}
 				saveCollapsedNotebookKeys();
 				updateExpandedState(e.node);
+				setActiveTreeItem(e.node, container.contains(document.activeElement));
 				announceExpandedState(e.node);
 			},
 			click: function(e) {
 				if (e.node && e.node.data.folder) {
+					setActiveTreeItem(e.node, true);
 					e.node.setExpanded(!e.node.isExpanded());
 					return false;
 				} else if (e.node) {
