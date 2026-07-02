@@ -40,6 +40,7 @@ import PluginNotification from './PluginNotification/PluginNotification';
 import { Toast } from '@joplin/lib/services/plugins/api/types';
 import QuitSyncDialog from './QuitSyncDialog';
 import Logger from '@joplin/utils/Logger';
+import checkForUpdates from '../checkForUpdates';
 
 const logger = Logger.create('MainScreen');
 
@@ -72,6 +73,7 @@ interface Props {
 	lastDeletion: StateLastDeletion;
 	lastDeletionNotificationTime: number;
 	mustUpgradeAppMessage: string;
+	syncTargetAppMinVersion: string;
 	showInvalidJoplinCloudCredential: boolean;
 	toast: Toast;
 	shouldSwitchToAppleSiliconVersion: boolean;
@@ -491,6 +493,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 			shim.openUrl('https://joplinapp.org/download/');
 		};
 
+		const onCheckForUpdates = () => {
+			if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
+				ipcRenderer.send('check-for-updates');
+			} else {
+				void checkForUpdates(false, bridge().mainWindow(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+			}
+		};
+
 		const onRestartAndUpgrade = async () => {
 			Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_MUST_DO);
 			await Setting.saveAll();
@@ -572,7 +582,15 @@ class MainScreenComponent extends React.Component<Props, State> {
 				onViewEncryptionConfigScreen,
 			);
 		} else if (this.props.mustUpgradeAppMessage) {
-			msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
+			if (this.props.syncTargetAppMinVersion && !shim.isLinux()) {
+				msg = this.renderNotificationMessage(
+					_('Please upgrade your application to version %s:', this.props.syncTargetAppMinVersion),
+					Setting.value('autoUpdate.includePreReleases') ? _('Download it from GitHub Releases') : _('Check for updates'),
+					Setting.value('autoUpdate.includePreReleases') ? () => shim.openUrl('https://github.com/laurent22/joplin/releases') : onCheckForUpdates,
+				);
+			} else {
+				msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
+			}
 		} else if (this.props.shouldSwitchToAppleSiliconVersion) {
 			msg = this.renderNotificationMessage(
 				_('You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.'),
@@ -747,6 +765,7 @@ const mapStateToProps = (state: AppState) => {
 		lastDeletion: state.lastDeletion,
 		lastDeletionNotificationTime: state.lastDeletionNotificationTime,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
+		syncTargetAppMinVersion: syncInfo.appMinVersion,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 		toast: state.toast,
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && shim.isMac() && process.arch !== 'arm64',
