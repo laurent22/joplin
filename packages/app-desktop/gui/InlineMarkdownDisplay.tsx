@@ -7,6 +7,7 @@ import dompurify = require('dompurify');
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import CommandService from '@joplin/lib/services/CommandService';
 import isItemId from '@joplin/lib/models/utils/isItemId';
+import { RenderResult } from '@joplin/renderer/types';
 
 interface Props {
 	className: string;
@@ -29,34 +30,9 @@ const InlineMarkdownDisplay: React.FC<Props> = props => {
 		const result = await markupToHtml(MarkupLanguage.Markdown, props.markdown, { bodyOnly: true });
 		if (event.cancelled) return;
 
-		const renderedContent = document.createElement('div');
-		// Since we're including the output in the main document, do an additional sanitization step.
-		// Disallow inline styles to avoid absolutely positioned content that can render outside the
-		// Markdown region.
-		renderedContent.innerHTML = dompurify.sanitize(
-			result.html, { FORBID_ATTR: ['style'] },
+		outputElementRef.current.replaceChildren(
+			sanitizeAndPostprocessRenderedOutput(result),
 		);
-
-		// Make links clickable
-		for (const link of renderedContent.querySelectorAll<HTMLAnchorElement>('a[href]')) {
-			const resourceId = link.getAttribute('data-resource-id');
-			const url = resourceId && isItemId(resourceId) ? `:/${resourceId}` : link.getAttribute('href');
-			link.href = '#';
-			link.title = url;
-
-			link.onclick = (event) => {
-				event.preventDefault();
-
-				void CommandService.instance().execute('openItem', url);
-			};
-		}
-
-		// Avoid duplicate math caused by missing styles (show only the MathML)
-		for (const katexDisplay of renderedContent.querySelectorAll('.katex-html')) {
-			katexDisplay.remove();
-		}
-
-		outputElementRef.current.replaceChildren(renderedContent);
 	}, [props.markdown]);
 
 	return <div className={`inline-markdown ${props.className}`} ref={outputElementRef} />;
@@ -64,3 +40,34 @@ const InlineMarkdownDisplay: React.FC<Props> = props => {
 
 export default InlineMarkdownDisplay;
 
+
+const sanitizeAndPostprocessRenderedOutput = (renderResult: RenderResult) => {
+	const renderedContent = document.createElement('div');
+	// Since we're including the output in the main document, do an additional sanitization step.
+	// Disallow inline styles to avoid absolutely positioned content that can render outside the
+	// Markdown region.
+	renderedContent.innerHTML = dompurify.sanitize(
+		renderResult.html, { FORBID_ATTR: ['style'] },
+	);
+
+	// Make links clickable
+	for (const link of renderedContent.querySelectorAll<HTMLAnchorElement>('a[href]')) {
+		const resourceId = link.getAttribute('data-resource-id');
+		const url = resourceId && isItemId(resourceId) ? `:/${resourceId}` : link.getAttribute('href');
+		link.href = '#';
+		link.title = url;
+
+		link.onclick = (event) => {
+			event.preventDefault();
+
+			void CommandService.instance().execute('openItem', url);
+		};
+	}
+
+	// Avoid duplicate math caused by missing styles (show only the MathML)
+	for (const katexDisplay of renderedContent.querySelectorAll('.katex-html')) {
+		katexDisplay.remove();
+	}
+
+	return renderedContent;
+};
