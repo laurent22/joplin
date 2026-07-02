@@ -7,7 +7,7 @@ import Setting from '../../models/Setting';
 import Resource from '../../models/Resource';
 import { ResourceEntity } from '../database/types';
 import { EventEmitter } from 'events';
-const chokidar = require('chokidar');
+import * as chokidar from 'chokidar';
 
 type WindowId = string;
 

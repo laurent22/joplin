@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CSSProperties, DragEvent as ReactDragEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { DragEvent as ReactDragEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
 	Background,
 	Connection,
@@ -19,23 +19,21 @@ import {
 	applyNodeChanges,
 	useReactFlow,
 } from '@xyflow/react';
-import ensureReactFlowCss, { applyReactFlowTheme } from './loadReactFlowCss';
 import generateId from '@joplin/lib/services/whiteboard/generateId';
 import { _, _n } from '@joplin/lib/locale';
 import { Canvas, CanvasEdge, CanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
-
-ensureReactFlowCss();
+import shim from '@joplin/lib/shim';
+import Logger from '@joplin/utils/Logger';
+import { webUtils } from 'electron';
 import { canvasNodeToFlowNode, canvasToFlow, flowToCanvas, WhiteboardFlowEdge, WhiteboardFlowNode } from './canvasFlow';
+
+const logger = Logger.create('WhiteboardSurface');
 import TextNode from './nodes/TextNode';
 import FileNode from './nodes/FileNode';
 import LinkNode from './nodes/LinkNode';
+import GroupNode from './nodes/GroupNode';
 import { ActionButton, ActionDivider, ActionInput, ActionPanel } from './ActionPanel';
-import { useWhiteboardContext } from './WhiteboardContext';
-import { whiteboardColors } from './theme';
 
-// `markerUnits: 'userSpaceOnUse'` keeps the arrowhead at an absolute size,
-// independent of the edge's stroke width. Without it, selected edges (which
-// have a thicker stroke) would render a proportionally bigger arrow.
 const makeArrowMarker = () => ({ type: MarkerType.ArrowClosed, width: 27, height: 27, markerUnits: 'userSpaceOnUse' });
 
 type ArrowMode = 'none' | 'forward' | 'backward' | 'both' | 'mixed';
@@ -57,58 +55,28 @@ const nodeTypes: NodeTypes = {
 	wbText: TextNode as unknown as NodeTypes[string],
 	wbFile: FileNode as unknown as NodeTypes[string],
 	wbLink: LinkNode as unknown as NodeTypes[string],
+	wbGroup: GroupNode as unknown as NodeTypes[string],
 };
 
 const InnerSurface = ({ canvas, onChange }: Props) => {
-	const ctx = useWhiteboardContext();
-	const colors = useMemo(() => whiteboardColors(ctx.themeId), [ctx.themeId]);
-
-	// Re-apply React Flow's CSS custom properties whenever the theme changes
-	// so edges, minimap, controls and dot grid follow the active Joplin theme.
-	useEffect(() => {
-		applyReactFlowTheme(colors);
-	}, [colors]);
-
-	const containerStyle: CSSProperties = useMemo(() => ({
-		position: 'relative',
-		flex: 1,
-		width: '100%',
-		height: '100%',
-		background: colors.surfaceBackground,
-		outline: 'none',
-	}), [colors]);
-
 	const initial = useMemo(() => canvasToFlow(canvas), [canvas]);
 	const [flowNodes, setFlowNodes] = useState<WhiteboardFlowNode[]>(initial.nodes);
 	const [flowEdges, setFlowEdges] = useState<WhiteboardFlowEdge[]>(initial.edges);
-	// JSONCanvas group nodes are not rendered, but we preserve them through
-	// round-trip so importing a canvas from another tool and
-	// re-saving doesn't silently drop them.
-	const preservedGroupsRef = useRef<CanvasNode[]>(initial.preservedGroups);
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const rf = useReactFlow();
 
-	// When the incoming canvas changes (note loaded externally), reload state
-	// — but skip if it's the same canvas we just emitted (avoid feedback loops).
-	// Seed with the *round-tripped* serialization so optional edge fields
-	// (fromEnd/toEnd) added by flowToCanvas don't make the very first push-back
-	// effect see the canvas as "different" and emit a spurious onChange.
-	const lastEmittedRef = useRef<string>(JSON.stringify(flowToCanvas(initial.nodes, initial.edges, initial.preservedGroups)));
+	const lastEmittedRef = useRef<string>(JSON.stringify(flowToCanvas(initial.nodes, initial.edges)));
 	useEffect(() => {
 		const incoming = JSON.stringify(canvas);
 		if (incoming === lastEmittedRef.current) return;
 		const next = canvasToFlow(canvas);
 		setFlowNodes(next.nodes);
 		setFlowEdges(next.edges);
-		preservedGroupsRef.current = next.preservedGroups;
-		// Stamp with the round-tripped form too, for the same reason as the
-		// initial seed above.
-		lastEmittedRef.current = JSON.stringify(flowToCanvas(next.nodes, next.edges, next.preservedGroups));
+		lastEmittedRef.current = JSON.stringify(flowToCanvas(next.nodes, next.edges));
 	}, [canvas]);
 
-	// Push changes back to the parent whenever the local flow state changes.
 	useEffect(() => {
-		const out = flowToCanvas(flowNodes, flowEdges, preservedGroupsRef.current);
+		const out = flowToCanvas(flowNodes, flowEdges);
 		const serialized = JSON.stringify(out);
 		if (serialized === lastEmittedRef.current) return;
 		lastEmittedRef.current = serialized;
@@ -121,6 +89,59 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 
 	const onEdgesChange: OnEdgesChange = useCallback((changes) => {
 		setFlowEdges(prev => applyEdgeChanges(changes, prev) as WhiteboardFlowEdge[]);
+	}, []);
+
+	// Drag-along for groups: when the user drags a group, all non-selected
+	// nodes whose centre lies inside the group's starting bounds move with it.
+	// The set is captured once at drag-start so adding/removing overlap
+	// mid-drag doesn't change membership. Other groups can be captives too;
+	// their own captives are NOT re-evaluated because we only translate them.
+	type Captive = { id: string; originX: number; originY: number };
+	const dragRef = useRef<{ groupId: string; originX: number; originY: number; captives: Captive[] } | null>(null);
+
+	const onNodeDragStart = useCallback((_e: React.MouseEvent, node: Node) => {
+		const dragged = flowNodes.find(n => n.id === node.id);
+		if (!dragged || dragged.data?.canvasNode?.type !== 'group') return;
+		const gx = dragged.position.x;
+		const gy = dragged.position.y;
+		const gw = (typeof dragged.width === 'number' ? dragged.width : (typeof dragged.style?.width === 'number' ? dragged.style.width : 0)) ?? 0;
+		const gh = (typeof dragged.height === 'number' ? dragged.height : (typeof dragged.style?.height === 'number' ? dragged.style.height : 0)) ?? 0;
+		// If the group itself is part of a multi-selection, React Flow drags
+		// every selected node together — in that case we must skip selected
+		// captives or they'd be double-moved by our delta. If the group isn't
+		// in the multi-selection, only the group moves, so all nodes inside
+		// (selected or not) need to come along.
+		const groupInMultiSelect = !!dragged.selected;
+		const captives: Captive[] = [];
+		for (const n of flowNodes) {
+			if (n.id === dragged.id) continue;
+			if (groupInMultiSelect && n.selected) continue;
+			const nw = (typeof n.width === 'number' ? n.width : (typeof n.style?.width === 'number' ? n.style.width : 0)) ?? 0;
+			const nh = (typeof n.height === 'number' ? n.height : (typeof n.style?.height === 'number' ? n.style.height : 0)) ?? 0;
+			const cx = n.position.x + nw / 2;
+			const cy = n.position.y + nh / 2;
+			if (cx >= gx && cx <= gx + gw && cy >= gy && cy <= gy + gh) {
+				captives.push({ id: n.id, originX: n.position.x, originY: n.position.y });
+			}
+		}
+		dragRef.current = { groupId: dragged.id, originX: gx, originY: gy, captives };
+	}, [flowNodes]);
+
+	const onNodeDrag = useCallback((_e: React.MouseEvent, node: Node) => {
+		const ctx = dragRef.current;
+		if (!ctx || node.id !== ctx.groupId || !ctx.captives.length) return;
+		const dx = node.position.x - ctx.originX;
+		const dy = node.position.y - ctx.originY;
+		const originById = new Map(ctx.captives.map(c => [c.id, c]));
+		setFlowNodes(prev => prev.map(n => {
+			const origin = originById.get(n.id);
+			if (!origin) return n;
+			return { ...n, position: { x: origin.originX + dx, y: origin.originY + dy } };
+		}));
+	}, []);
+
+	const onNodeDragStop = useCallback(() => {
+		dragRef.current = null;
 	}, []);
 
 	const onConnect: OnConnect = useCallback((connection: Connection) => {
@@ -146,18 +167,21 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 		markerEnd: makeArrowMarker(),
 	}), []);
 
-	// Append a freshly-created canvas node to the surface's local flow state.
-	// The render-cycle effect at flowToCanvas → onChange propagates the new
-	// node up to the parent, so we don't need an explicit onAddNode prop.
-	const addCanvasNode = useCallback((n: Exclude<CanvasNode, { type: 'group' }>) => {
-		setFlowNodes(prev => [...prev, canvasNodeToFlowNode(n)]);
+	const addCanvasNode = useCallback((n: CanvasNode) => {
+		const flow = canvasNodeToFlowNode(n);
+		setFlowNodes(prev => n.type === 'group' ? [flow, ...prev] : [...prev, flow]);
 	}, []);
 
-	const onAddText = useCallback(() => {
+	const viewportCentre = useCallback((): { x: number; y: number } => {
 		const view = rf.getViewport();
 		const rect = containerRef.current?.getBoundingClientRect();
 		const cx = rect ? (rect.width / 2 - view.x) / view.zoom : 0;
 		const cy = rect ? (rect.height / 2 - view.y) / view.zoom : 0;
+		return { x: cx, y: cy };
+	}, [rf]);
+
+	const onAddText = useCallback(() => {
+		const { x: cx, y: cy } = viewportCentre();
 		addCanvasNode({
 			id: generateId(),
 			type: 'text',
@@ -167,15 +191,24 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 			height: 100,
 			text: _('New text card'),
 		});
-	}, [rf, addCanvasNode]);
+	}, [viewportCentre, addCanvasNode]);
 
-	// Selection summaries for the action panels.
+	const onAddGroup = useCallback(() => {
+		const { x: cx, y: cy } = viewportCentre();
+		addCanvasNode({
+			id: generateId(),
+			type: 'group',
+			x: cx - 200,
+			y: cy - 140,
+			width: 400,
+			height: 280,
+			label: _('New group'),
+		});
+	}, [viewportCentre, addCanvasNode]);
+
 	const selectedEdges = useMemo(() => flowEdges.filter(e => e.selected), [flowEdges]);
 	const selectedNodes = useMemo(() => flowNodes.filter(n => n.selected), [flowNodes]);
 
-	// Edges fed to React Flow. For selected edges we override marker colour
-	// to match the selection blue — markers are SVG <marker> defs that don't
-	// inherit stroke colour from the edge path automatically.
 	const SELECTED_EDGE_COLOR = '#4a90e2';
 	const renderedEdges = useMemo<WhiteboardFlowEdge[]>(() => {
 		return flowEdges.map(e => {
@@ -226,13 +259,20 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 		if (types.includes('text/x-jop-note-ids') || types.includes('text/x-jop-resource-ids')) {
 			e.preventDefault();
 			e.dataTransfer.dropEffect = 'link';
+		} else if (types.includes('Files')) {
+			e.preventDefault();
+			e.dataTransfer.dropEffect = 'copy';
 		}
 	}, []);
 
-	const onDrop = useCallback((e: ReactDragEvent<HTMLDivElement>) => {
+	const onDrop = useCallback(async (e: ReactDragEvent<HTMLDivElement>) => {
 		const noteIdsRaw = e.dataTransfer.getData('text/x-jop-note-ids');
 		const resourceIdsRaw = e.dataTransfer.getData('text/x-jop-resource-ids');
-		if (!noteIdsRaw && !resourceIdsRaw) return;
+		// Electron's recommended way to get the on-disk path of a dropped File
+		// (the deprecated `File.path` was removed in recent Electron versions).
+		const droppedFiles = Array.from(e.dataTransfer.files);
+		const filePaths = droppedFiles.map(f => webUtils.getPathForFile(f)).filter((p): p is string => !!p);
+		if (!noteIdsRaw && !resourceIdsRaw && !filePaths.length) return;
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -241,12 +281,9 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 			if (!raw) return [];
 			try { const v = JSON.parse(raw); return Array.isArray(v) ? v : []; } catch { return []; }
 		};
-		const ids = [
-			...tryParse(noteIdsRaw),
-			...tryParse(resourceIdsRaw),
-		];
-		let offset = 0;
-		for (const id of ids) {
+
+		const placeCardForResource = (resourceId: string, index: number) => {
+			const offset = index * 24;
 			addCanvasNode({
 				id: generateId(),
 				type: 'file',
@@ -254,16 +291,36 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 				y: drop.y - 60 + offset,
 				width: 240,
 				height: 160,
-				file: `:/${id}`,
+				file: `:/${resourceId}`,
 			});
-			offset += 24;
+		};
+
+		const internalIds = [
+			...tryParse(noteIdsRaw),
+			...tryParse(resourceIdsRaw),
+		];
+		for (let i = 0; i < internalIds.length; i++) placeCardForResource(internalIds[i], i);
+
+		if (filePaths.length) {
+			// Import each file into the resource store, then add a card. Done
+			// in parallel for throughput; the card index (and thus the offset)
+			// follows the original drop order so cards stagger predictably
+			// even if larger files finish importing later.
+			await Promise.all(filePaths.map(async (filePath, i) => {
+				try {
+					const resource = await shim.createResourceFromPath(filePath);
+					placeCardForResource(resource.id, internalIds.length + i);
+				} catch (error) {
+					logger.warn(`Could not import dropped file ${filePath}:`, error);
+				}
+			}));
 		}
 	}, [rf, addCanvasNode]);
 
 	return (
 		<div
 			ref={containerRef}
-			style={containerStyle}
+			className="whiteboard-surface"
 			onDragOver={onDragOver}
 			onDrop={onDrop}
 		>
@@ -276,6 +333,9 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 				onNodesChange={onNodesChange}
 				onEdgesChange={onEdgesChange}
 				onConnect={onConnect}
+				onNodeDragStart={onNodeDragStart}
+				onNodeDrag={onNodeDrag}
+				onNodeDragStop={onNodeDragStop}
 				deleteKeyCode={['Backspace', 'Delete']}
 				multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
 				selectionKeyCode={['Shift']}
@@ -284,14 +344,16 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 				zoomOnPinch
 				zoomOnScroll={false}
 				fitView={flowNodes.length > 0}
+				elevateNodesOnSelect={false}
 				proOptions={{ hideAttribution: true }}
 			>
 				<Background gap={16} size={1} />
 				<Controls showInteractive={false} />
-				<MiniMap pannable zoomable style={{ width: 160, height: 100 }} />
+				<MiniMap pannable zoomable />
 
 				<ActionPanel position="top-right">
 					<ActionButton onClick={onAddText} title={_('Add a text card')}>{_('+ Text')}</ActionButton>
+					<ActionButton onClick={onAddGroup} title={_('Add a group')}>{_('+ Group')}</ActionButton>
 				</ActionPanel>
 
 				{selectedEdges.length > 0 ? (
@@ -322,9 +384,7 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 					<ActionPanel
 						position="bottom-center"
 						caption={_n('%d card', '%d cards', selectedNodes.length, selectedNodes.length)}
-					>
-						{/* Per-card actions can be added here later (colour, alignment, etc.). */}
-					</ActionPanel>
+					/>
 				) : null}
 			</ReactFlow>
 		</div>

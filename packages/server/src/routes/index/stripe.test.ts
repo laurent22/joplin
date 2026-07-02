@@ -6,6 +6,8 @@ import { beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, expect
 import { AppContext } from '../../utils/types';
 import { uuidgen } from '@joplin/lib/uuid';
 import { postHandlers } from './stripe';
+import Stripe from 'stripe';
+import { SubPath } from '../../utils/routeUtils';
 
 interface StripeOptions {
 	userEmail?: string;
@@ -65,13 +67,14 @@ async function simulateWebhook(ctx: AppContext, type: string, object: Record<str
 		...options,
 	};
 
-	await postHandlers.webhook(options.stripe, {}, ctx, {
+	// The stripe client, sub-path and event are stubbed for this test, so cast past their full production types.
+	await postHandlers.webhook(options.stripe as unknown as Stripe, {} as unknown as SubPath, ctx, {
 		id: options.eventId,
 		type,
 		data: {
 			object,
 		},
-	}, false);
+	} as unknown as Stripe.Event, false);
 }
 
 async function createUserViaSubscription(ctx: AppContext, options: WebhookOptions = {}) {
@@ -136,10 +139,19 @@ describe('index/stripe', () => {
 	test('should not process the same event twice', async () => {
 		const ctx = await koaAppContext();
 		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com', eventId: 'evt_1' });
-		const v = await models().keyValue().value('stripeEventDone::evt_1');
-		expect(v).toBe(1);
+		const loadUser = () => models().user().loadByEmail('toto@example.com');
+
+		let user = await loadUser();
+		expect(user).toMatchObject({
+			account_type: AccountType.Pro,
+		});
+		await models().user().delete(user.id);
+
 		// This event should simply be skipped
 		await expectNotThrow(async () => createUserViaSubscription(ctx, { userEmail: 'toto@example.com', eventId: 'evt_1' }));
+
+		user = await loadUser();
+		expect(user).toBeUndefined();
 	});
 
 	test('should check if it is a beta user', async () => {

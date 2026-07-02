@@ -1,5 +1,5 @@
 import { setupDatabaseAndSynchronizer, db, sleep, switchClient, msleep, createNoteAndResource } from '../../testing/test-utils';
-import SearchEngine from './SearchEngine';
+import SearchEngine, { ComplexTerm } from './SearchEngine';
 import Note from '../../models/Note';
 import ItemChange from '../../models/ItemChange';
 import Setting from '../../models/Setting';
@@ -71,10 +71,12 @@ describe('services/SearchEngine', () => {
 
 		const n1 = await Note.save({ title: 'a' });
 		const n2 = await Note.save({ title: 'b' });
+		await Note.save({ title: 'locked', is_locked: 1 });
 		await engine.syncTables();
 		rows = await engine.search('a');
 		expect(rows.length).toBe(1);
 		expect(rows[0].title).toBe('a');
+		expect(await engine.search('locked')).toEqual([]);
 
 		await Note.delete(n1.id);
 		await engine.syncTables();
@@ -99,6 +101,14 @@ describe('services/SearchEngine', () => {
 		await engine.syncTables();
 		rows = await engine.search('c');
 		expect(rows.length).toBe(1);
+
+		await Note.save({ id: n2.id, is_locked: 1 });
+		await engine.syncTables();
+		expect(await engine.search('c')).toEqual([]);
+
+		await Note.save({ id: n2.id, is_locked: 0 });
+		await engine.syncTables();
+		expect((await engine.search('c')).length).toBe(1);
 	}));
 
 	it('should, after initial indexing, save the last change ID', (async () => {
@@ -616,4 +626,18 @@ describe('services/SearchEngine', () => {
 			expect(rows.length).toBe(resourcesFound);
 		});
 
+	test('createQueryFromTerms returns the an empty string when terms is undefined or an empty array', () => {
+		expect(engine.createQueryFromTerms(undefined)).toBe('');
+		expect(engine.createQueryFromTerms([])).toBe('');
+	});
+
+	test('createQueryFromTerms joins string and ComplexTerm values into a single search string', () => {
+		const terms = [
+			'hello',
+			{ type: 'text', value: 'world', scriptType: 'en' },
+			'test',
+			{ type: 'regex', value: 'query*', scriptType: 'en' },
+		] as (ComplexTerm | string)[];
+		expect(engine.createQueryFromTerms(terms)).toBe('hello world test query*');
+	});
 });

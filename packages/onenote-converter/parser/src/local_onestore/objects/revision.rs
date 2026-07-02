@@ -147,6 +147,8 @@ impl Revision {
                     || onestore_parse_error!("Unable to resolve RootObjectReference2FNDX ID -- no global ID table found")
                 )?.resolve_id(&object_reference.oid_root)?;
                 root_objects.insert(object_reference.root_role.try_into()?, oid_root);
+            } else if let FileNodeData::ObjectInfoDependencyOverridesFND(_) = current {
+                iterator.next();
             } else if let FileNodeData::DataSignatureGroupDefinitionFND(_) = current {
                 // .onetoc2
                 log!("Ignoring DataSignatureGroupDefinitionFND");

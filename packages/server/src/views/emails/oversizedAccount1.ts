@@ -13,11 +13,11 @@ export default function(view: TemplateView): EmailSubjectBody {
 
 Your ${config().appName} account is over ${view.percentLimit}% full.
 
-Please consider deleting notes or attachments before it reaches its limit.
+To free up space, you can delete notes or attachments before the limit is reached.
 
-Once the account is full it will no longer be possible to upload new notes to it.
+To unlock more storage, you can upgrade to a plan with a higher storage limit: ${config().joplinAppBaseUrl}/plans
 
-If you have Pro account and would like to request more space, please contact us by replying to this email.
+Once the account is full, you will no longer be able to upload new notes to it.
 
 You may access your account by following this URL:
 

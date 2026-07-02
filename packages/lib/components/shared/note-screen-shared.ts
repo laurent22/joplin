@@ -12,13 +12,13 @@ import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import BaseItem from '../../models/BaseItem';
 
-interface SharedResource {
+export interface SharedResource {
 	uri: string;
 	mimeType: string;
 	name: string;
 }
 
-interface SharedData {
+export interface SharedData {
 	title: string;
 	text: string;
 	resources: SharedResource[];
@@ -300,8 +300,13 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 	const panes = comp.props.noteVisiblePanes;
 	let mode = panes.includes('editor') ? 'edit' : 'view';
 
-	// Prevent trashed notes from opening in edit mode.
-	if (note?.deleted_time) {
+	// Override the mode if the default state is not last
+	const defaultState = Setting.value('editor.mobile.defaultEditState');
+	if (defaultState === 'view') mode = 'view';
+	if (defaultState === 'edit') mode = 'edit';
+
+	// Prevent trashed notes and notes created via sharing from opening in edit mode.
+	if (note?.deleted_time || comp.props.sharedData) {
 		mode = 'view';
 	}
 

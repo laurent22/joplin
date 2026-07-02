@@ -14,12 +14,28 @@ jobs:
           sudo apt-get update || true
           sudo apt-get install -y libsecret-1-dev
 
+      # Free disk space before anything else so the Gradle/NDK transforms
+      # (which can write 20GB+ during react-native-quick-crypto's OpenSSL
+      # build) don't exhaust the runner's ~14GB free space. Keep the Android
+      # SDK and Java toolchains; remove the large preinstalled packages this
+      # workflow doesn't use.
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet || true
+          sudo rm -rf /usr/share/swift || true
+          sudo rm -rf /opt/ghc || true
+          sudo rm -rf /opt/hostedtoolcache/CodeQL || true
+          sudo rm -rf /usr/local/share/boost || true
+          sudo rm -rf /usr/local/share/powershell || true
+          docker system prune -af || true
+          df -h /
+
       - uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '20'
-          
-      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
@@ -34,11 +50,6 @@ jobs:
         run:  yarn install
         env:
           SKIP_ONENOTE_CONVERTER_BUILD: 1
-      
-      - name: Free disk space
-        run: |
-          sudo rm -rf /usr/share/dotnet || true
-          sudo rm -rf /opt/ghc || true
 
       - name: Assemble Android Release
         run: |

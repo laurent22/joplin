@@ -2,7 +2,7 @@ import AdmZip = require('adm-zip');
 import FsDriverBase, { Stat, ZipEntry, ArchiveExtractOptions, TarOptions } from './fs-driver-base';
 import time from './time';
 const md5File = require('md5-file');
-const fs = require('fs-extra');
+import * as fs from 'fs-extra';
 
 interface FsError extends Error {
 	code?: string;
@@ -28,7 +28,7 @@ export default class FsDriverNode extends FsDriverBase {
 
 	public async appendFile(path: string, string: string, encoding = 'base64') {
 		try {
-			return await fs.appendFile(path, string, { encoding: encoding });
+			return await fs.appendFile(path, string, { encoding: encoding as BufferEncoding });
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
 		}
@@ -39,7 +39,7 @@ export default class FsDriverNode extends FsDriverBase {
 			if (encoding === 'buffer') {
 				return await fs.writeFile(path, string);
 			} else {
-				return await fs.writeFile(path, string, { encoding: encoding });
+				return await fs.writeFile(path, string, { encoding: encoding as BufferEncoding });
 			}
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
@@ -155,7 +155,7 @@ export default class FsDriverNode extends FsDriverBase {
 	public async readFile(path: string, encoding = 'utf8') {
 		try {
 			if (encoding === 'Buffer') return await fs.readFile(path); // Returns the raw buffer
-			return await fs.readFile(path, encoding);
+			return await fs.readFile(path, encoding as BufferEncoding);
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
 		}

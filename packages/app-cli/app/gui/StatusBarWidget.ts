@@ -1,8 +1,13 @@
+import chalk = require('chalk');
+import stripAnsi = require('strip-ansi');
 const BaseWidget = require('tkwidgets/BaseWidget.js');
-const chalk = require('chalk');
 const termutils = require('tkwidgets/framework/termutils.js');
-const stripAnsi = require('strip-ansi');
 const { handleAutocompletion } = require('../autocompletion.js');
+
+export interface PromptOptions {
+	cursorPosition?: number;
+	secure?: boolean;
+}
 
 export default class StatusBarWidget extends BaseWidget {
 	public constructor() {
@@ -27,7 +32,7 @@ export default class StatusBarWidget extends BaseWidget {
 		this.invalidate();
 	}
 
-	public async prompt(initialText = '', promptString: string = null, options: { cursorPosition?: number; secure?: boolean } = null) {
+	public async prompt(initialText = '', promptString: string = null, options: PromptOptions = null) {
 		if (this.promptState_) throw new Error('Another prompt already active');
 		if (promptString === null) promptString = ':';
 		if (options === null) options = {};

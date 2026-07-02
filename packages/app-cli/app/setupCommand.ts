@@ -1,5 +1,6 @@
 import { _ } from '@joplin/lib/locale';
 import BaseCommand from './base-command';
+import { Store } from 'redux';
 
 interface PromptOptions {
 	type?: string;
@@ -8,8 +9,8 @@ interface PromptOptions {
 	secure?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export default (cmd: BaseCommand, stdout: Function, store: Function, gui: Function) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- gui() returns AppGui, which is an untyped JS module (app-gui.js)
+export default (cmd: BaseCommand, stdout: (text: string)=> void, store: ()=> Store, gui: ()=> any) => {
 	cmd.setStdout((text: string) => {
 		return stdout(text);
 	});

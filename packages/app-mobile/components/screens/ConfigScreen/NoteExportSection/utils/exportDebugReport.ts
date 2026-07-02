@@ -10,7 +10,7 @@ const exportDebugReport = async () => {
 	const logItemRows = [['Date', 'Level', 'Message']];
 	for (let i = 0; i < logItems.length; i++) {
 		const item = logItems[i];
-		logItemRows.push([time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss'), item.level, item.message]);
+		logItemRows.push([time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss'), item.level.toString(), item.message]);
 	}
 	const logItemCsv = service.csvCreate(logItemRows);
 

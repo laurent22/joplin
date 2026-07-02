@@ -22,6 +22,20 @@ interface ResizedItem {
 	initialWidth: number;
 	initialHeight: number;
 	maxSize: Size;
+	// A divider drag updates the dragged item and its next visible sibling,
+	// so the delta stays between the two panels on either side of it.
+	nextSiblingKey: string | null;
+	nextSiblingInitialWidth: number;
+	nextSiblingInitialHeight: number;
+	itemAbsorbsAlongAxis: { width: boolean; height: boolean };
+	nextAbsorbsAlongAxis: { width: boolean; height: boolean };
+}
+
+export interface RenderItemEvent {
+	eventEmitter: EventEmitter;
+	visible: boolean;
+	size: Size;
+	item: LayoutItem;
 }
 
 interface Props {
@@ -30,8 +44,7 @@ interface Props {
 	onResize(event: OnResizeEvent): void;
 	width?: number;
 	height?: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	renderItem: Function;
+	renderItem: (key: string, event: RenderItemEvent)=> React.ReactNode;
 	onMoveButtonClick(event: MoveButtonClickEvent): void;
 	moveMode: boolean;
 	moveModeMessage: string;
@@ -85,30 +98,60 @@ function ResizableLayout(props: Props) {
 		item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isVisible: boolean, isLastChild: boolean, onlyMoveControls: boolean,
 	): React.ReactNode {
 		const onResizeStart: ResizeStartCallback = () => {
+			let nextSiblingKey: string | null = null;
+			const nextAbsorbsAlongAxis = { width: false, height: false };
+			if (parent) {
+				const siblings = parent.children;
+				const idx = siblings.findIndex(c => c.key === item.key);
+				for (let i = idx + 1; i < siblings.length; i++) {
+					if (siblings[i].visible !== false) {
+						nextSiblingKey = siblings[i].key;
+						nextAbsorbsAlongAxis.width = !('width' in siblings[i]);
+						nextAbsorbsAlongAxis.height = !('height' in siblings[i]);
+						break;
+					}
+				}
+			}
+
 			setResizedItem({
 				key: item.key,
 				initialWidth: sizes[item.key].width,
 				initialHeight: sizes[item.key].height,
 				maxSize: calculateMaxSizeAvailableForItem(item, parent, sizes),
+				nextSiblingKey,
+				nextSiblingInitialWidth: nextSiblingKey ? sizes[nextSiblingKey].width : 0,
+				nextSiblingInitialHeight: nextSiblingKey ? sizes[nextSiblingKey].height : 0,
+				itemAbsorbsAlongAxis: {
+					width: !('width' in item),
+					height: !('height' in item),
+				},
+				nextAbsorbsAlongAxis,
 			});
 		};
 
 		const onResize: ResizeCallback = (_event, direction, _refToElement, delta) => {
-			const newWidth = Math.max(itemMinWidth, resizedItem.initialWidth + delta.width);
-			const newHeight = Math.max(itemMinHeight, resizedItem.initialHeight + delta.height);
+			// The absorber (width/height-less side) is skipped so the layout
+			// system keeps it flexible.
+			const isHorizontal = direction !== 'bottom';
+			const minSize = isHorizontal ? itemMinWidth : itemMinHeight;
+			const rawDelta = isHorizontal ? delta.width : delta.height;
 
-			const newSize: { width?: number; height?: number } = {};
+			const itemIsAbsorber = isHorizontal ? resizedItem.itemAbsorbsAlongAxis.width : resizedItem.itemAbsorbsAlongAxis.height;
+			const nextIsAbsorber = isHorizontal ? resizedItem.nextAbsorbsAlongAxis.width : resizedItem.nextAbsorbsAlongAxis.height;
 
-			if (item.width) newSize.width = item.width;
-			if (item.height) newSize.height = item.height;
+			let newLayout = props.layout;
 
-			if (direction === 'bottom') {
-				newSize.height = newHeight;
-			} else {
-				newSize.width = newWidth;
+			if (!itemIsAbsorber) {
+				const initial = isHorizontal ? resizedItem.initialWidth : resizedItem.initialHeight;
+				const newSize = Math.max(minSize, initial + rawDelta);
+				newLayout = setLayoutItemProps(newLayout, resizedItem.key, isHorizontal ? { width: newSize } : { height: newSize });
 			}
 
-			const newLayout = setLayoutItemProps(props.layout, item.key, newSize);
+			if (!nextIsAbsorber && resizedItem.nextSiblingKey) {
+				const initial = isHorizontal ? resizedItem.nextSiblingInitialWidth : resizedItem.nextSiblingInitialHeight;
+				const newSize = Math.max(minSize, initial - rawDelta);
+				newLayout = setLayoutItemProps(newLayout, resizedItem.nextSiblingKey, isHorizontal ? { width: newSize } : { height: newSize });
+			}
 
 			props.onResize({ layout: newLayout });
 			eventEmitter.current.emit('resize');

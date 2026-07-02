@@ -17,8 +17,7 @@ interface Props {
 	visible: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- DialogState.promptOptions.buttons is `unknown[]`; matching the looser upstream type avoids casts at every call site
 	buttons: any[];
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onClose: Function;
+	onClose: (answer: unknown, buttonType: string|null)=> void;
 	inputType: string;
 	description: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mirrors defaultValue — same heterogeneous shape
@@ -210,7 +209,7 @@ export default class PromptDialog extends React.Component<Props, any> {
 
 		const styles = this.styles(this.props.themeId, this.state.visible);
 
-		const onClose = (accept: boolean, buttonType: string = null) => {
+		const onClose = (accept: boolean, buttonType: string|null = null) => {
 			if (this.props.onClose) {
 				let outputAnswer = this.state.answer;
 				if (this.props.inputType === 'datetime') {

@@ -79,7 +79,6 @@ export default class JoplinWorkspace {
 	/**
 	 * Called when a new note or notes are selected.
 	 */
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public async onNoteSelectionChange(callback: WorkspaceEventHandler<NoteSelectionChangeEvent>): Promise<Disposable> {
 		eventManager.appStateOn('selectedNoteIds', callback);
 		const dispose = () => {

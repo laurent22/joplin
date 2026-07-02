@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import useSyncTargetUpgrade, { SyncTargetUpgradeResult } from '@joplin/lib/services/synchronizer/gui/useSyncTargetUpgrade';
 
 import { createRoot } from 'react-dom/client';
-const ipcRenderer = require('electron').ipcRenderer;
+import { ipcRenderer } from 'electron';
 import Setting from '@joplin/lib/models/Setting';
 import restart from '../services/restart';
 import shim from '@joplin/lib/shim';

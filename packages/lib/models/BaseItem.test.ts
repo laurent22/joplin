@@ -191,4 +191,42 @@ three line \\n no escape`)).toBe(0);
 		const note = await Note.save({ id }, { isNew: true });
 		expect(await BaseItem.loadItemById(note.id)).toMatchObject({ id });
 	});
+
+	// Sync ingestion concatenates resource.id and resource.file_extension into
+	// a local file path; a malformed id like `../../foo` would escape the
+	// resource directory. unserialize() must reject these.
+	it.each([
+		'../../escape',
+		'../foo',
+		'foo/bar',
+		'foo\\bar',
+		'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ',
+		'short',
+	])('should reject items with malformed IDs during unserialize (id: %j)', async (id) => {
+		const serialized = `poc-resource\n\nid: ${id}\ntype_: 4`;
+		await expect(BaseItem.unserialize(serialized)).rejects.toMatchObject({
+			code: 'malformedItem',
+			message: expect.stringMatching(/Invalid item ID/),
+		});
+	});
+
+	it.each([
+		'../foo',
+		'foo/bar',
+		'foo\\bar',
+		'..',
+	])('should reject items with malformed file_extension during unserialize (ext: %j)', async (ext) => {
+		const serialized = `poc-resource\n\nid: 00000000000000000000000000000001\nfile_extension: ${ext}\ntype_: 4`;
+		await expect(BaseItem.unserialize(serialized)).rejects.toMatchObject({
+			code: 'malformedItem',
+			message: expect.stringMatching(/Invalid file extension/),
+		});
+	});
+
+	it('should accept well-formed resource items', async () => {
+		const serialized = 'poc-resource\n\nid: 00000000000000000000000000000001\nfile_extension: txt\ntype_: 4';
+		const out = await BaseItem.unserialize(serialized);
+		expect(out.id).toBe('00000000000000000000000000000001');
+		expect(out.file_extension).toBe('txt');
+	});
 });

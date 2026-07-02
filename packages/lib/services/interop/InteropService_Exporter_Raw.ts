@@ -1,6 +1,6 @@
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 import BaseItem from '../../models/BaseItem';
-const { basename } = require('../../path-utils');
+import { basename } from '../../path-utils';
 import shim from '../../shim';
 import { BaseItemEntity, ResourceEntity } from '../database/types';
 

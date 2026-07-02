@@ -3,6 +3,8 @@ import { ModelType } from "../../BaseModel";
 export interface BaseItemEntity {
   id?: string;
   encryption_applied?: number;
+  extracted_resource_ids?: string;
+  is_locked?: number;
 
   // Means the item (note or resource) is published
   is_shared?: number;
@@ -92,6 +94,16 @@ export interface AlarmEntity {
   'id'?: number | null;
   'note_id'?: string;
   'trigger_time'?: number;
+  'type_'?: number;
+}
+export interface ConflictNoteStateEntity {
+  'base_body'?: string;
+  'base_title'?: string;
+  'id'?: number | null;
+  'note_id'?: string;
+  'remote_body'?: string;
+  'remote_title'?: string;
+  'remote_updated_time'?: number;
   'type_'?: number;
 }
 export interface DeletedItemEntity {
@@ -199,6 +211,15 @@ export interface MigrationEntity {
   'updated_time'?: number;
   'type_'?: number;
 }
+export interface NoteEmbeddingsMetaEntity {
+  'chunk_index'?: number;
+  'chunk_text'?: string;
+  'created_time'?: number;
+  'id'?: number | null;
+  'model_id'?: string;
+  'note_id'?: string;
+  'type_'?: number;
+}
 export interface NoteResourceEntity {
   'id'?: number | null;
   'is_associated'?: number;
@@ -230,8 +251,10 @@ export interface NoteEntity {
   'deleted_time'?: number;
   'encryption_applied'?: number;
   'encryption_cipher_text'?: string;
+  'extracted_resource_ids'?: string;
   'id'?: string | null;
   'is_conflict'?: number;
+  'is_locked'?: number;
   'is_shared'?: number;
   'is_todo'?: number;
   'latitude'?: number;
@@ -285,6 +308,7 @@ export interface ResourceEntity {
   'file_extension'?: string;
   'filename'?: string;
   'id'?: string | null;
+  'is_locked'?: number;
   'is_shared'?: number;
   'master_key_id'?: string;
   'mime'?: string;
@@ -315,6 +339,7 @@ export interface RevisionEntity {
   'encryption_applied'?: number;
   'encryption_cipher_text'?: string;
   'id'?: string | null;
+  'is_locked'?: number;
   'item_id'?: string;
   'item_type'?: number;
   'item_updated_time'?: number;
@@ -330,17 +355,20 @@ export interface SettingEntity {
   'type_'?: number;
 }
 export interface SyncItemEntity {
+  'base_body'?: string;
+  'base_conflict_note_id'?: string;
+  'base_title'?: string;
   'force_sync'?: number;
   'id'?: number | null;
   'item_id'?: string;
   'item_location'?: number;
   'item_type'?: number;
+  'remote_item_updated_time'?: number;
   'sync_disabled'?: number;
   'sync_disabled_reason'?: string;
   'sync_target'?: number;
   'sync_time'?: number;
   'sync_warning_ignored'?: number;
-  'remote_item_updated_time'?: number;
   'type_'?: number;
 }
 export interface TableFieldEntity {
@@ -436,17 +464,20 @@ export const databaseSchema: DatabaseTables = {
 		type_: { type: 'number' },
 	},
 	sync_items: {
+		base_body: { type: 'string' },
+		base_conflict_note_id: { type: 'string' },
+		base_title: { type: 'string' },
 		force_sync: { type: 'number' },
 		id: { type: 'number' },
 		item_id: { type: 'string' },
 		item_location: { type: 'number' },
 		item_type: { type: 'number' },
+		remote_item_updated_time: { type: 'number' },
 		sync_disabled: { type: 'number' },
 		sync_disabled_reason: { type: 'string' },
 		sync_target: { type: 'number' },
 		sync_time: { type: 'number' },
 		sync_warning_ignored: { type: 'number' },
-		remote_item_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
 	version: {
@@ -507,6 +538,7 @@ export const databaseSchema: DatabaseTables = {
 		file_extension: { type: 'string' },
 		filename: { type: 'string' },
 		id: { type: 'string' },
+		is_locked: { type: 'number' },
 		is_shared: { type: 'number' },
 		master_key_id: { type: 'string' },
 		mime: { type: 'string' },
@@ -530,6 +562,7 @@ export const databaseSchema: DatabaseTables = {
 		encryption_applied: { type: 'number' },
 		encryption_cipher_text: { type: 'string' },
 		id: { type: 'string' },
+		is_locked: { type: 'number' },
 		item_id: { type: 'string' },
 		item_type: { type: 'number' },
 		item_updated_time: { type: 'number' },
@@ -571,8 +604,10 @@ export const databaseSchema: DatabaseTables = {
 		deleted_time: { type: 'number' },
 		encryption_applied: { type: 'number' },
 		encryption_cipher_text: { type: 'string' },
+		extracted_resource_ids: { type: 'string' },
 		id: { type: 'string' },
 		is_conflict: { type: 'number' },
+		is_locked: { type: 'number' },
 		is_shared: { type: 'number' },
 		is_todo: { type: 'number' },
 		latitude: { type: 'number' },
@@ -671,6 +706,25 @@ export const databaseSchema: DatabaseTables = {
 		title: { type: 'string' },
 		todo_completed_count: { type: 'any' },
 		updated_time: { type: 'number' },
+		type_: { type: 'number' },
+	},
+	note_embeddings_meta: {
+		chunk_index: { type: 'number' },
+		chunk_text: { type: 'string' },
+		created_time: { type: 'number' },
+		id: { type: 'number' },
+		model_id: { type: 'string' },
+		note_id: { type: 'string' },
+		type_: { type: 'number' },
+	},
+	conflict_note_states: {
+		base_body: { type: 'string' },
+		base_title: { type: 'string' },
+		id: { type: 'number' },
+		note_id: { type: 'string' },
+		remote_body: { type: 'string' },
+		remote_title: { type: 'string' },
+		remote_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},
 };

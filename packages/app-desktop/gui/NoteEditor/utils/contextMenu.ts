@@ -1,4 +1,5 @@
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
+import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
 import { copyHtmlToClipboard } from './clipboardUtils';
 import bridge from '../../../services/bridge';
@@ -16,10 +17,9 @@ import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { openFileWithExternalEditor } from '@joplin/lib/services/ExternalEditWatcher/utils';
 import CommandService from '@joplin/lib/services/CommandService';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-const fs = require('fs-extra');
-const { writeFile } = require('fs-extra');
-const { clipboard } = require('electron');
-const { toSystemSlashes } = require('@joplin/lib/path-utils');
+import * as fs from 'fs-extra';
+import { clipboard } from 'electron';
+import { toSystemSlashes } from '@joplin/lib/path-utils';
 
 function handleCopyToClipboard(options: ContextMenuOptions) {
 	if (options.textToCopy) {
@@ -32,11 +32,10 @@ function handleCopyToClipboard(options: ContextMenuOptions) {
 async function saveFileData(data: string | NodeJS.ArrayBufferView, filename: string) {
 	const newFilePath = await bridge().showSaveDialog({ defaultPath: filename });
 	if (!newFilePath) return;
-	await writeFile(newFilePath, data);
+	await fs.writeFile(newFilePath, data);
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export async function openItemById(itemId: string, dispatch: Function, hash = '') {
+export async function openItemById(itemId: string, dispatch: Dispatch, hash = '') {
 
 	const item = await BaseItem.loadItemById(itemId);
 
@@ -78,8 +77,7 @@ export async function openItemById(itemId: string, dispatch: Function, hash = ''
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export function menuItems(dispatch: Function): ContextMenuItems {
+export function menuItems(dispatch: Dispatch): ContextMenuItems {
 	const makeSeparator = (): ContextMenuItem => {
 		return {
 			isActive: () => { return true; },
@@ -193,7 +191,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				});
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
-				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && !!options.resourceId);
 			},
 		},
 		copyOcrText: {
@@ -210,7 +208,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				}
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
-				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && !!options.resourceId);
 			},
 		},
 		createAccessibleDocument: {
@@ -220,7 +218,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				await CommandService.instance().execute('createAccessibleDocument', resource.id);
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => {
-				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && options.resourceId);
+				return itemType === ContextMenuItemType.Resource || (itemType === ContextMenuItemType.Image && !!options.resourceId);
 			},
 		},
 		separator3: makeSeparator(),
@@ -288,8 +286,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 	};
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-export default async function contextMenu(options: ContextMenuOptions, dispatch: Function) {
+export default async function contextMenu(options: ContextMenuOptions, dispatch: Dispatch) {
 	const menu = new Menu();
 
 	if (!('readyOnly' in options)) options.isReadOnly = true;

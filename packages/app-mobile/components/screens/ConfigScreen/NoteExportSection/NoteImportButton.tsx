@@ -2,7 +2,7 @@ import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
 import { FunctionComponent } from 'react';
-import { join } from 'path';
+import { join, basename } from 'path';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import pickDocument from '../../../../utils/pickDocument';
@@ -64,8 +64,10 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 			default: sourceFileUri,
 			ios: decodeURIComponent(sourceFileUri),
 		});
+		// importFiles[0].fileName can be null on iOS
+		const sourceFileName = importFiles[0].fileName ?? basename(sourceFilePath);
 
-		const importTargetPath = join(await makeImportExportCacheDirectory(), importFiles[0].fileName);
+		const importTargetPath = join(await makeImportExportCacheDirectory(), sourceFileName);
 		setAfterCompleteListener(async (_success: boolean) => {
 			await shim.fsDriver().remove(importTargetPath);
 		});

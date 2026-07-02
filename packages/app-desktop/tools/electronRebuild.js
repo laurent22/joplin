@@ -25,7 +25,7 @@ async function main() {
 	// wrong one. However it means it will have to be manually upgraded for each
 	// new Electron release. Some ABI map there:
 	// https://github.com/electron/node-abi/blob/main/abi_registry.json
-	const forceAbiArgs = '--force-abi 143';
+	const forceAbiArgs = '--force-abi 146';
 
 	if (isWindows()) {
 		// Cannot run this in parallel, or the 64-bit version might end up

@@ -1,7 +1,6 @@
 import shim from '@joplin/lib/shim';
 import Button from '../../Button/Button';
-import { css } from 'styled-components';
-const styled = require('styled-components').default;
+import styled, { css } from 'styled-components';
 
 interface StyleProps {
 	theme: {

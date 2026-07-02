@@ -1,0 +1,33 @@
+.ai-index-status {
+	margin-top: 16px;
+	padding: 12px 16px;
+	border: 1px solid var(--joplin-divider-color);
+	border-radius: 4px;
+	background: var(--joplin-background-color);
+	color: var(--joplin-color);
+
+	> .title {
+		margin: 0 0 10px 0;
+		font-size: 1em;
+		font-weight: 600;
+	}
+
+	> .rows {
+		display: grid;
+		grid-template-columns: max-content 1fr;
+		gap: 6px 16px;
+		margin: 0;
+
+		> dt {
+			margin: 0;
+			font-weight: normal;
+			color: var(--joplin-color);
+			opacity: 0.7;
+		}
+
+		> dd {
+			margin: 0;
+			color: var(--joplin-color);
+		}
+	}
+}

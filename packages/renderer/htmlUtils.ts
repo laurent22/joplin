@@ -1,7 +1,7 @@
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 import { fileUriToPath } from '@joplin/utils/url';
-const htmlparser2 = require('@joplin/fork-htmlparser2');
+import * as htmlparser2 from '@joplin/fork-htmlparser2';
 
 // [\s\S] instead of . for multiline matching
 // https://stackoverflow.com/a/16119722/561309
@@ -73,9 +73,19 @@ interface ProcessImageEvent {
 }
 type ProcessImageCallback = (data: ProcessImageEvent)=> ProcessImageResult;
 
+interface ProcessAnchorTagsEvent {
+	href: string;
+}
+
+type ProcessAnchorTagsAction =
+	| { type: 'replaceElement'; html: string }
+	| { type: 'replaceSource'; href: string }
+	| { type: 'setAttributes'; attrs: Record<string, string> };
+
+type ProcessAnchorTagsCallback = (event: ProcessAnchorTagsEvent)=> ProcessAnchorTagsAction | null;
+
 class HtmlUtils {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public processImageTags(html: string, callback: ProcessImageCallback) {
 		if (!html) return '';
 
@@ -101,19 +111,11 @@ class HtmlUtils {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public processAnchorTags(html: string, callback: Function) {
+	public processAnchorTags(html: string, callback: ProcessAnchorTagsCallback) {
 		if (!html) return '';
 
-		interface Action {
-			type: 'replaceElement' | 'replaceSource' | 'setAttributes';
-			href: string;
-			html: string;
-			attrs: Record<string, string>;
-		}
-
 		return html.replace(anchorRegex, (_v, before, href, after) => {
-			const action: Action = callback({ href: href });
+			const action = callback({ href: href });
 
 			if (!action) return `<a${before}href="${href}"${after}>`;
 
@@ -130,7 +132,7 @@ class HtmlUtils {
 				return `<img${before}${attrHtml}${after}>`;
 			}
 
-			throw new Error(`Invalid action: ${action.type}`);
+			throw new Error(`Invalid action: ${(action as ProcessAnchorTagsAction).type}`);
 		});
 	}
 

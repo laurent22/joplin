@@ -1,0 +1,427 @@
+$selection-color: #4a90e2;
+$selection-shadow: rgba(74, 144, 226, 0.25);
+$card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+$card-shadow-selected: 0 4px 12px $selection-shadow;
+$active-bg: rgba(74, 144, 226, 0.18);
+$active-fg: #2766b8;
+$hover-bg: rgba(127, 127, 127, 0.12);
+
+.whiteboard-editor {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-height: 0;
+
+	> .error {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		min-height: 0;
+		padding: 24px;
+		overflow: auto;
+
+		> .panel {
+			background-color: var(--joplin-warning-background-color);
+			color: var(--joplin-color);
+			padding: 16px;
+			border-radius: 4px;
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+
+			> .title { font-weight: 600; }
+			> .detail { white-space: pre-wrap; font-family: monospace; font-size: 12px; }
+		}
+	}
+}
+
+.whiteboard-surface {
+	position: relative;
+	flex: 1;
+	width: 100%;
+	height: 100%;
+	background: var(--joplin-background-color3);
+	outline: none;
+
+	.react-flow {
+		--xy-background-color-default: var(--joplin-background-color3);
+		--xy-background-pattern-dots-color-default: var(--joplin-divider-color);
+		--xy-edge-stroke-default: var(--joplin-divider-color);
+		--xy-edge-stroke-selected-default: #{$selection-color};
+		--xy-connectionline-stroke-default: var(--joplin-color-faded);
+		--xy-attribution-background-color-default: var(--joplin-background-color);
+		--xy-minimap-background-color-default: var(--joplin-background-color);
+		--xy-minimap-mask-background-color-default: var(--joplin-background-color3);
+		--xy-minimap-node-background-color-default: var(--joplin-color-faded);
+		--xy-node-color-default: var(--joplin-color);
+		--xy-node-background-color-default: var(--joplin-background-color);
+		--xy-controls-button-background-color-default: var(--joplin-background-color);
+		--xy-controls-button-color-default: var(--joplin-color);
+		--xy-controls-button-border-color-default: var(--joplin-divider-color);
+	}
+
+	.react-flow__edge.selected .react-flow__edge-path,
+	.react-flow__edge:focus .react-flow__edge-path,
+	.react-flow__edge:focus-visible .react-flow__edge-path {
+		stroke: $selection-color !important;
+		stroke-width: 2 !important;
+	}
+	.react-flow__edge.selected .react-flow__edge-textbg { fill: $selection-color; }
+	.react-flow__edge.selected .react-flow__edge-text { fill: #ffffff; }
+
+	.react-flow__node .react-flow__handle {
+		opacity: 0;
+		transition: opacity 120ms ease;
+		background: var(--joplin-color-faded);
+	}
+	.react-flow__node:hover .react-flow__handle,
+	.react-flow__node.selected .react-flow__handle,
+	.react-flow__handle.connectingfrom,
+	.react-flow__handle.connectingto { opacity: 1; }
+
+	.react-flow__minimap { width: 160px; height: 100px; }
+}
+
+.whiteboard-action-panel {
+	position: absolute;
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	gap: 0;
+	padding: 4px;
+	background: var(--joplin-background-color);
+	border: 1px solid var(--joplin-divider-color);
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+	font-size: 12px;
+	height: 36px;
+	color: var(--joplin-color);
+
+	&.-bottom-center { bottom: 16px; left: 50%; transform: translateX(-50%); }
+	&.-top-center { top: 16px; left: 50%; transform: translateX(-50%); }
+	&.-top-right { top: 8px; right: 8px; }
+
+	> .caption {
+		color: var(--joplin-color-faded);
+		padding: 0 10px;
+		white-space: nowrap;
+	}
+
+	> .divider {
+		width: 1px;
+		height: 20px;
+		background: var(--joplin-divider-color);
+		margin: 0 4px;
+	}
+
+	> .button {
+		height: 28px;
+		padding: 0 10px;
+		font-size: 12px;
+		border: none;
+		background: transparent;
+		color: var(--joplin-color);
+		cursor: pointer;
+		border-radius: 6px;
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		white-space: nowrap;
+		user-select: none;
+
+		&:hover:not(:disabled):not(.-active) { background: $hover-bg; }
+		&.-active { background: $active-bg; color: $active-fg; }
+		&:disabled { opacity: 0.45; cursor: default; }
+	}
+
+	> .input {
+		height: 24px;
+		padding: 0 8px;
+		font-size: 12px;
+		border: 1px solid var(--joplin-divider-color);
+		border-radius: 4px;
+		margin: 0 4px;
+		background: var(--joplin-background-color);
+		color: var(--joplin-color);
+	}
+}
+
+.whiteboard-node {
+	width: 100%;
+	height: 100%;
+	border: 1px solid var(--joplin-divider-color);
+	border-radius: 6px;
+	background: var(--joplin-background-color);
+	overflow: hidden;
+	box-shadow: $card-shadow;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	color: var(--joplin-color);
+
+	&.-selected {
+		border: 2px solid $selection-color;
+		box-shadow: $card-shadow-selected;
+	}
+
+	&.-text { overflow: auto; padding: 8px; font-size: 13px; line-height: 1.4; }
+
+	> .header {
+		font-size: 11px;
+		color: var(--joplin-color-faded);
+		padding: 4px 8px;
+		border-bottom: 1px solid var(--joplin-divider-color);
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		flex-shrink: 0;
+
+		&.-note-title {
+			font-size: 12px;
+			font-weight: 600;
+			color: var(--joplin-color);
+			padding: 5px 8px;
+			text-transform: none;
+			letter-spacing: 0;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+
+	> .body {
+		flex: 1;
+		padding: 8px;
+		overflow: auto;
+		word-break: break-word;
+		font-size: 13px;
+		line-height: 1.4;
+		color: var(--joplin-color);
+
+		&.-deleted { color: var(--joplin-color-faded); font-style: italic; }
+		&.-url { word-break: break-all; }
+	}
+
+	> .image {
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+		align-self: center;
+		flex: 1;
+	}
+
+	> .editor {
+		width: 100%;
+		height: 100%;
+		border: none;
+		outline: none;
+		resize: none;
+		font-family: inherit;
+		font-size: 13px;
+		line-height: 1.4;
+		color: var(--joplin-color);
+		background: transparent;
+	}
+
+	> .empty { color: var(--joplin-color-faded); }
+}
+
+// Groups are visual containers. pointer-events:none is set inline on the
+// React Flow wrapper via canvasNodeToFlowNode (CSS classes can't override
+// React Flow's own inline style on the wrapper). The label and handle below
+// re-enable pointer events so they catch select / drag / rename.
+.whiteboard-group {
+	position: relative;
+	width: 100%;
+	height: 100%;
+
+	// Two-layer construction: .background is the rounded fill (no pointer
+	// events). .ring is the dashed border with no background — because
+	// pointer-events:auto on an unpainted element only catches the painted
+	// pixels, the interior of .ring doesn't catch clicks. Only the border
+	// line does, which is exactly what we want: drag the line to move the
+	// group, click anywhere else to pan.
+	> .background {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		border-radius: 8px;
+		background: rgba(127, 127, 127, 0.06);
+		pointer-events: none;
+	}
+
+	// Four edge strips form the dashed border. Each strip is a separate
+	// painted element with pointer-events:auto, so clicks on the border line
+	// catch drags. The interior has no overlay at all, so clicks there fall
+	// through to the pane (pan / deselect) or to a card on top.
+	$edge-thickness: 8px;
+	> .edge {
+		position: absolute;
+		pointer-events: auto;
+		cursor: grab;
+
+		&:active { cursor: grabbing; }
+
+		&.-top {
+			top: -2px;
+			left: 0;
+			right: 0;
+			height: $edge-thickness;
+			border-top: 2px dashed var(--joplin-divider-color);
+		}
+		&.-bottom {
+			bottom: -2px;
+			left: 0;
+			right: 0;
+			height: $edge-thickness;
+			border-bottom: 2px dashed var(--joplin-divider-color);
+		}
+		&.-left {
+			top: 0;
+			bottom: 0;
+			left: -2px;
+			width: $edge-thickness;
+			border-left: 2px dashed var(--joplin-divider-color);
+		}
+		&.-right {
+			top: 0;
+			bottom: 0;
+			right: -2px;
+			width: $edge-thickness;
+			border-right: 2px dashed var(--joplin-divider-color);
+		}
+	}
+
+	&.-selected > .edge.-top { border-top-color: $selection-color; }
+	&.-selected > .edge.-bottom { border-bottom-color: $selection-color; }
+	&.-selected > .edge.-left { border-left-color: $selection-color; }
+	&.-selected > .edge.-right { border-right-color: $selection-color; }
+
+	> .anchor {
+		position: absolute;
+		top: -30px;
+		left: -30px;
+		width: 24px;
+		height: 24px;
+		border-radius: 4px;
+		background: var(--joplin-background-color);
+		border: 1px solid var(--joplin-divider-color);
+		color: var(--joplin-color-faded);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 12px;
+		pointer-events: auto;
+		cursor: grab;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10);
+
+		&:hover { background: $selection-color; color: #fff; border-color: $selection-color; }
+		&:active { cursor: grabbing; }
+	}
+
+	&.-selected > .anchor { border-color: $selection-color; color: $selection-color; }
+	&.-selected > .anchor:hover { color: #fff; }
+
+	> .label {
+		position: absolute;
+		top: 6px;
+		left: 10px;
+		max-width: calc(100% - 20px);
+		font-size: 12px;
+		font-weight: 600;
+		color: var(--joplin-color-faded);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		pointer-events: auto;
+		cursor: grab;
+		padding: 1px 4px;
+		border-radius: 3px;
+
+		&:hover { background: rgba(127, 127, 127, 0.10); }
+		&:active { cursor: grabbing; }
+
+		> .placeholder { font-weight: 400; font-style: italic; }
+	}
+
+	> input.label {
+		border: 1px solid var(--joplin-divider-color);
+		border-radius: 4px;
+		padding: 1px 6px;
+		background: var(--joplin-background-color);
+		color: var(--joplin-color);
+		font-weight: 600;
+		outline: none;
+		pointer-events: auto;
+		cursor: text;
+	}
+}
+
+// Re-enable pointer events on the resize handles when a group is selected,
+// since the wrapper itself is pointer-transparent.
+.react-flow__node-wbGroup.selected .react-flow__resize-control {
+	pointer-events: auto;
+}
+
+.whiteboard-node-promote {
+	position: absolute;
+	top: -10px;
+	right: -10px;
+	padding: 2px 8px;
+	font-size: 11px;
+	border: 1px solid $selection-color;
+	border-radius: 10px;
+	background: var(--joplin-background-color);
+	color: $selection-color;
+	cursor: pointer;
+	z-index: 5;
+}
+
+.wb-card-md {
+	flex: 1;
+	overflow: auto;
+	word-break: break-word;
+	font-size: 13px;
+	line-height: 1.4;
+
+	h1 { font-size: 16px; margin: 4px 0; }
+	h2 { font-size: 15px; margin: 4px 0; }
+	h3 { font-size: 14px; margin: 3px 0; }
+	h4, h5, h6 { font-size: 13px; margin: 3px 0; }
+	p { margin: 4px 0; }
+	ul, ol { margin: 4px 0; padding-left: 20px; }
+	li { margin: 2px 0; }
+	li.md-checkbox, li.joplin-checkbox { list-style: none; margin-left: -20px; }
+	li.md-checkbox input[type=checkbox] { margin-right: 6px; vertical-align: middle; }
+	.checkbox-wrapper { display: inline; }
+	pre {
+		margin: 4px 0;
+		padding: 6px;
+		font-size: 12px;
+		background: var(--joplin-code-background-color);
+		border: 1px solid var(--joplin-code-border-color);
+		border-radius: 4px;
+		overflow: auto;
+		color: var(--joplin-code-color);
+	}
+	code {
+		font-size: 12px;
+		background: var(--joplin-code-background-color);
+		color: var(--joplin-code-color);
+		padding: 1px 4px;
+		border-radius: 3px;
+	}
+	pre code { background: transparent; padding: 0; border: none; }
+	blockquote {
+		margin: 4px 0;
+		padding-left: 8px;
+		border-left: 3px solid var(--joplin-divider-color);
+		color: var(--joplin-color-faded);
+	}
+	img { max-width: 100%; height: auto; }
+	table { font-size: 12px; border-collapse: collapse; }
+	th, td { padding: 2px 6px; border: 1px solid var(--joplin-divider-color); }
+	hr { margin: 6px 0; border: none; border-top: 1px solid var(--joplin-divider-color); }
+	a { color: var(--joplin-url-color, #{$selection-color}); }
+}

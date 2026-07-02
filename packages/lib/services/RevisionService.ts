@@ -11,9 +11,9 @@ import { _ } from '../locale';
 import { ItemChangeEntity, NoteEntity, RevisionEntity } from './database/types';
 import Logger from '@joplin/utils/Logger';
 import { MarkupLanguage } from '../../renderer';
-const { substrWithEllipsis } = require('../string-utils');
+import { substrWithEllipsis } from '../string-utils';
 const { sprintf } = require('sprintf-js');
-const { wrapError } = require('../errorUtils');
+import { wrapError } from '../errorUtils';
 
 const logger = Logger.create('RevisionService');
 
@@ -372,10 +372,19 @@ export default class RevisionService extends BaseService {
 	public async deleteHistoryForNote(noteIds: string | string[], options: DeleteOptions) {
 		const ids = Array.isArray(noteIds) ? noteIds : [noteIds];
 		await Revision.deleteHistoryForNote(ids, options);
+		await this.resetHistoryState_(ids);
+	}
 
+	public async deleteUnencryptedHistoryForNote(noteIds: string | string[], options: DeleteOptions) {
+		const ids = Array.isArray(noteIds) ? noteIds : [noteIds];
+		await Revision.deleteUnencryptedHistoryForNote(ids, options);
+		await this.resetHistoryState_(ids);
+	}
+
+	private async resetHistoryState_(noteIds: string[]) {
 		// Clear any cached content in the item_changes table and reset the state of the note in the revision service, to ensure that any new revisions created
 		// upon revision collection do not include contents which were present prior to triggering the deletion
-		for (const noteId of ids) {
+		for (const noteId of noteIds) {
 			await ItemChange.resetOldNoteContent(noteId);
 			RevisionService.instance().removeChangedSinceCollection(noteId);
 		}

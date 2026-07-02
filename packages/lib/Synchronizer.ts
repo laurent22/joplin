@@ -32,6 +32,7 @@ import syncDeleteStep from './services/synchronizer/utils/syncDeleteStep';
 import { ErrorCode } from './errors';
 import { SyncAction } from './services/synchronizer/utils/types';
 import checkDisabledSyncItemsNotification from './services/synchronizer/utils/checkDisabledSyncItemsNotification';
+import { NoteEntity } from './services/database/types';
 import { reg } from './registry';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { Day } from '@joplin/utils/time';
@@ -40,12 +41,26 @@ const { Dirnames } = require('./services/synchronizer/utils/types');
 
 const logger = Logger.create('Synchronizer');
 
-interface ProgressReport {
+export interface ProgressReport {
 	errors: (Error | string)[];
 	state?: string;
 	startTime?: number;
 	completedTime?: number;
 	[counterKey: string]: unknown;
+}
+
+// The delta-sync cursor. Its shape is sync-target-specific, so it is treated
+// opaquely here and round-tripped through JSON by callers.
+export interface SyncContext {
+	delta?: unknown;
+}
+
+export interface SyncStartOptions {
+	onProgress?: (report: ProgressReport)=> void;
+	context?: SyncContext;
+	syncSteps?: string[];
+	throwOnError?: boolean;
+	saveContextHandler?: (newContext: SyncContext)=> void;
 }
 
 function isCannotSyncError(error: { code?: string; type?: string; message?: string } | null): boolean {
@@ -93,7 +108,7 @@ export default class Synchronizer {
 	private onProgress_: (report: ProgressReport)=> void;
 	private progressReport_: ProgressReport = { errors: [] };
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Lib boundary uses Function for compatibility with redux Dispatch<AnyAction> consumed by callers
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Lib boundary uses Function for compatibility with redux Dispatch<AnyAction> consumed by callers
 	public dispatch: Function;
 
 	public constructor(db: JoplinDatabase, api: FileApi, appType: AppType) {
@@ -386,8 +401,7 @@ export default class Synchronizer {
 	// 1. UPLOAD: Send to the sync target the items that have changed since the last sync.
 	// 2. DELETE_REMOTE: Delete on the sync target, the items that have been deleted locally.
 	// 3. DELTA: Find on the sync target the items that have been modified or deleted and apply the changes locally.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Caller-provided sync options bag (onProgress, context, syncSteps, throwOnError, saveContextHandler); widening would require touching every Synchronizer.start call site
-	public async start(options: any = null) {
+	public async start(options: SyncStartOptions = null) {
 		if (!options) options = {};
 
 		if (this.state() !== 'idle') {
@@ -527,10 +541,14 @@ export default class Synchronizer {
 
 					// console.info('NEW', newInfo);
 
-					if (newInfo.revisionServiceEnabled !== localInfo.revisionServiceEnabled) {
+					// Only copy a synced revisionService.* value back to the local
+					// Setting when it carries a real timestamp; a timestamp of 0
+					// means no client has explicitly set it, so we must not
+					// overwrite a customised local value with a migration default.
+					if (newInfo.revisionServiceEnabled !== localInfo.revisionServiceEnabled && newInfo.keyTimestamp('revisionServiceEnabled') > 0) {
 						Setting.setValue('revisionService.enabled', newInfo.revisionServiceEnabled);
 					}
-					if (newInfo.revisionServiceTtlDays !== localInfo.revisionServiceTtlDays) {
+					if (newInfo.revisionServiceTtlDays !== localInfo.revisionServiceTtlDays && newInfo.keyTimestamp('revisionServiceTtlDays') > 0) {
 						Setting.setValue('revisionService.ttlDays', newInfo.revisionServiceTtlDays);
 					}
 
@@ -680,18 +698,18 @@ export default class Synchronizer {
 							// a few seconds ahead of what it was set with setTimestamp()
 							try {
 								remoteContent = await this.apiCall('get', path);
+								if (!remoteContent) throw new Error(`Got metadata for path but could not fetch content: ${path}`);
+								remoteContent = await BaseItem.unserialize(remoteContent);
 							} catch (error) {
-								if (error.code === 'rejectedByTarget') {
+								if (error.code === 'rejectedByTarget' || error.code === 'malformedItem') {
 									this.progressReport_.errors.push(error);
-									logger.warn(`Rejected by target: ${path}: ${error.message}`);
+									logger.warn(`Skipping item from sync target: ${path}: ${error.message}`);
 									completeItemProcessing(path);
 									continue;
 								} else {
 									throw error;
 								}
 							}
-							if (!remoteContent) throw new Error(`Got metadata for path but could not fetch content: ${path}`);
-							remoteContent = await BaseItem.unserialize(remoteContent);
 
 							if (remoteContent.updated_time > local.sync_time) {
 								// Since, in this loop, we are only dealing with items that require sync, if the
@@ -836,6 +854,11 @@ export default class Synchronizer {
 								// get set there
 
 								await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time);
+
+								if (local.type_ === BaseModel.TYPE_NOTE) {
+									const note = local as NoteEntity;
+									await Note.saveSyncBaseContent(syncTargetId, note.id, note.body, note.title);
+								}
 							}
 						}
 
@@ -1007,9 +1030,9 @@ export default class Synchronizer {
 								}
 							}
 						} catch (error) {
-							if (error.code === 'rejectedByTarget') {
+							if (error.code === 'rejectedByTarget' || error.code === 'malformedItem') {
 								this.progressReport_.errors.push(error);
-								logger.warn(`Rejected by target: ${path}: ${error.message}`);
+								logger.warn(`Skipping item from sync target: ${path}: ${error.message}`);
 								action = null;
 							} else {
 								error.message = `On file ${path}: ${error.message}`;

@@ -144,6 +144,29 @@ describe('ShareModel', () => {
 		expect(share1.id).toBe(share2.id);
 	});
 
+	test('should not reuse a disabled user share when publishing a shared note', async () => {
+		const { shareUser, note, session1, session2 } = await createShareWithNoteOwnedByRecipient();
+		const user1 = await models().user().load(session1.user_id);
+		const user2 = await models().user().load(session2.user_id);
+
+		const user2Share = await models().share().shareNote(user2, note.jop_id, '', false);
+		expect(user2Share.owner_id).toBe(user2.id);
+
+		await models().shareUser().delete(shareUser.id);
+		await models().user().save({
+			id: user2.id,
+			enabled: 0,
+		});
+		await models().share().updateSharedItems3();
+
+		const updatedNote = await models().item().load(note.id);
+		expect(updatedNote.owner_id).toBe(user1.id);
+
+		const user1Share = await models().share().shareNote(user1, note.jop_id, '', false);
+		expect(user1Share.id).not.toBe(user2Share.id);
+		expect(user1Share.owner_id).toBe(user1.id);
+	});
+
 	test('should delete a note that has been shared', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 

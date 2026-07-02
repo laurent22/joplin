@@ -284,9 +284,10 @@ msgid ""
 "list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> kan vara \"add\", \"remove\", \"list\" eller \"notetags\" för "
-"att tilldela eller ta bort [tag] från [note], eller för att lista "
-"anteckningarna som är associerade med [tag]. Kommandot `tag list` kan "
-"användas för att lista alla taggar (använd -l för långt alternativ)."
+"att tilldela eller ta bort [tag] från [note], för att lista anteckningar "
+"associerade med [tag] eller för att lista taggar associerade med [note]. "
+"Kommandot `tag list` kan användas för att lista alla taggar (använd -l för "
+"långt alternativ)."
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -296,10 +297,10 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 "<todo-command> kan antingen vara \"toggle\" eller \"clear\". Använd "
-"\"toggle\" för att växla mellan givna uppgifter mellan slutförda och inte "
-"slutförda tillstånd (Om målet är en vanlig anteckning kommer den att "
-"konverteras till en att-göra). Använd \"clear\" för att konvertera uppgiften "
-"att-göra tillbaka till en vanlig anteckning."
+"\"toggle\" för att växla status på den givna att-göra-posten mellan "
+"slutförd och ej slutförd (om målet är en vanlig anteckning kommer den att "
+"konverteras till en att-göra-post). Använd \"clear\" för att konvertera "
+"att-göra-posten tillbaka till en vanlig anteckning."
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
@@ -1655,7 +1656,7 @@ msgstr "Ctrl-klicka för att öppna: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:24
 msgid "current match"
-msgstr "aktuell matchning"
+msgstr "aktuell sökträff"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:153
 msgid "Current password"
@@ -2953,7 +2954,7 @@ msgstr "Gå till källans URL"
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/gotoAnything.ts:18
 #: packages/app-desktop/plugins/GotoAnything.tsx:775
 msgid "Goto Anything..."
-msgstr "Gå till varsomhelst…"
+msgstr "Gå till varsomhelst..."
 
 #: packages/app-desktop/gui/Root.tsx:130
 msgid "Grant authorisation"
@@ -3527,7 +3528,7 @@ msgstr "Tangentbordsgenvägar"
 
 #: packages/lib/versionInfo.ts:92
 msgid "Keychain Supported: %s"
-msgstr "Nyckelring som stöds: %s"
+msgstr "Nyckelring stöds: %s"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "KEYS"
@@ -4783,7 +4784,7 @@ msgstr "Insticksmodulsverktyg"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1032
 msgid "Plugin WebView debugging"
-msgstr "Plugin WebView-felsökning"
+msgstr "WebView-felsökning för insticksmoduler"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:148
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:550
@@ -5189,7 +5190,7 @@ msgstr "Ersätt alla"
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:250
 msgid "Replace with..."
-msgstr "Ersätt med…"
+msgstr "Ersätt med..."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:271
 msgid "Replace: "

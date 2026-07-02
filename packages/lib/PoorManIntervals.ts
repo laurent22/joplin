@@ -13,8 +13,7 @@ type IntervalId = number;
 
 interface Interval {
 	id: IntervalId;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	callback: Function;
+	callback: ()=> void;
 	interval: number;
 	lastIntervalTime: number;
 	isTimeout: boolean;
@@ -36,9 +35,9 @@ export default class PoorManIntervals {
 	private static intervalId_: IntervalId = 0;
 	private static intervals_: Intervals = {};
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public static setInterval(callback: Function, interval: number): IntervalId {
-		if (interval <= this.maxNativeTimerDuration_) return setInterval(callback, interval);
+	public static setInterval(callback: ()=> void, interval: number): IntervalId {
+		// Node's setInterval returns a Timeout object; IntervalId normalises it to a numeric handle (as shim.setInterval does).
+		if (interval <= this.maxNativeTimerDuration_) return setInterval(callback, interval) as unknown as IntervalId;
 
 		this.intervalId_++;
 		const id = this.intervalId_;
@@ -54,9 +53,9 @@ export default class PoorManIntervals {
 		return id;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public static setTimeout(callback: Function, interval: number): IntervalId {
-		if (interval <= this.maxNativeTimerDuration_) return setTimeout(callback, interval);
+	public static setTimeout(callback: ()=> void, interval: number): IntervalId {
+		// See setInterval: the native Timeout handle is normalised to a numeric IntervalId.
+		if (interval <= this.maxNativeTimerDuration_) return setTimeout(callback, interval) as unknown as IntervalId;
 
 		this.intervalId_++;
 		const id = this.intervalId_;

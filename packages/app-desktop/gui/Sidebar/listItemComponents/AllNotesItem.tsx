@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import EmptyExpandLink from './EmptyExpandLink';
 import ListItemWrapper, { ItemSelectionState, ListItemRef } from './ListItemWrapper';
 import { ListItem } from '../types';
-const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;

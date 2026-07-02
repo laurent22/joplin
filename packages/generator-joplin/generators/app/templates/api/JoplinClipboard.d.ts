@@ -1,8 +1,23 @@
 import { ClipboardContent } from './types';
+interface ElectronClipboardLike {
+    readText(): string;
+    writeText(text: string): void;
+    readHTML(): string;
+    writeHTML(html: string): void;
+    readImage(): {
+        toDataURL(): string;
+    } | null;
+    writeImage(image: unknown): void;
+    availableFormats(): string[];
+    write(data: Record<string, unknown>): void;
+}
+interface ElectronNativeImageLike {
+    createFromDataURL(dataUrl: string): unknown;
+}
 export default class JoplinClipboard {
     private electronClipboard_;
     private electronNativeImage_;
-    constructor(electronClipboard: any, electronNativeImage: any);
+    constructor(electronClipboard: ElectronClipboardLike, electronNativeImage: ElectronNativeImageLike);
     readText(): Promise<string>;
     writeText(text: string): Promise<void>;
     /** <span class="platform-desktop">desktop</span> */
@@ -43,3 +58,4 @@ export default class JoplinClipboard {
      */
     write(content: ClipboardContent): Promise<void>;
 }
+export {};

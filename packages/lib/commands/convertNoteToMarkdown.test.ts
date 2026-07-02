@@ -22,7 +22,7 @@ describe('convertNoteToMarkdown', () => {
 		const htmlNote = await Note.save({ title: 'test', body: '<p>Hello</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
 		state.selectedNoteIds = [htmlNote.id];
 
-		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: () => {} });
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
 
 		const refreshedNote = await Note.load(htmlNote.id);
 

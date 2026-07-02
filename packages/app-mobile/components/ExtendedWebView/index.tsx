@@ -139,6 +139,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			injectedJavaScript={injectedJavaScript}
 			onMessage={props.onMessage}
 			onError={props.onError ?? onError}
+			onLoadStart={props.onLoadStart}
 			onLoadEnd={props.onLoadEnd}
 			onContentProcessDidTerminate={refreshWebViewAfterCrash}
 			onRenderProcessGone={refreshWebViewAfterCrash}

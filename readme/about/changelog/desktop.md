@@ -1,5 +1,91 @@
 # Joplin Desktop Changelog
 
+## [v3.7.6](https://github.com/laurent22/joplin/releases/tag/v3.7.6) (Pre-release) - 2026-06-24T22:10:00Z
+
+- Improved: Cap ONNX embedding batch size to prevent renderer OOM ([109d1b1](https://github.com/laurent22/joplin/commit/109d1b1))
+- Improved: Speed up embedding indexer during initial scan ([6668375](https://github.com/laurent22/joplin/commit/6668375))
+- Improved: Wipe orphan vec rows before insert in NoteEmbedding.saveChunks ([4a6da2c](https://github.com/laurent22/joplin/commit/4a6da2c))
+- Fixed: Fix sqlite-vec extension path inside packaged Electron app ([9de4a11](https://github.com/laurent22/joplin/commit/9de4a11))
+- Fixed: Fixed loading of note embeddings ([7f1d39b](https://github.com/laurent22/joplin/commit/7f1d39b))
+
+## [v3.7.4](https://github.com/laurent22/joplin/releases/tag/v3.7.4) (Pre-release) - 2026-06-24T12:55:38Z
+
+- Improved: Index locked note resources ([#15717](https://github.com/laurent22/joplin/issues/15717)) ([#15714](https://github.com/laurent22/joplin/issues/15714) by [@keshav0479](https://github.com/keshav0479))
+- Fixed: Fix renderer crash loop when sqlite-vec is unavailable  ([#15762](https://github.com/laurent22/joplin/issues/15762)) ([#15761](https://github.com/laurent22/joplin/issues/15761))
+
+## [v3.7.3](https://github.com/laurent22/joplin/releases/tag/v3.7.3) (Pre-release) - 2026-06-23T04:54:15Z
+
+- New: Add AI chat backend and plugin API ([#15643](https://github.com/laurent22/joplin/issues/15643))
+- New: Add MCP server ([#15699](https://github.com/laurent22/joplin/issues/15699))
+- New: Add note embeddings indexer ([#15674](https://github.com/laurent22/joplin/issues/15674))
+- New: Add tooltip on note title in note list ([#15732](https://github.com/laurent22/joplin/issues/15732))
+- New: Added email autocomplete when sharing a notebook ([#15241](https://github.com/laurent22/joplin/issues/15241) by [@Rygaa](https://github.com/Rygaa))
+- New: Plugins: Add semantic search plugin API (joplin.ai.search) ([#15686](https://github.com/laurent22/joplin/issues/15686))
+- New: Whiteboard: Add support for drag and dropping files on whiteboard ([e856627](https://github.com/laurent22/joplin/commit/e856627))
+- New: Whiteboard: Add support for groups ([345b7b6](https://github.com/laurent22/joplin/commit/345b7b6))
+- Improved: Add local note encryption schema metadata ([#15557](https://github.com/laurent22/joplin/issues/15557)) ([#15556](https://github.com/laurent22/joplin/issues/15556) by [@keshav0479](https://github.com/keshav0479))
+- Improved: Add migration 51 for conflict resolution columns ([#15565](https://github.com/laurent22/joplin/issues/15565)) ([#15549](https://github.com/laurent22/joplin/issues/15549) by Sriram Varun Kumar)
+- Improved: Allow arrow keys to move past tables in the CodeMirror editor ([#15439](https://github.com/laurent22/joplin/issues/15439))
+- Improved: Embeddings indexer: Also index note titles ([1eea1f8](https://github.com/laurent22/joplin/commit/1eea1f8))
+- Improved: Error importing from format: one ([#15615](https://github.com/laurent22/joplin/issues/15615)) ([#14211](https://github.com/laurent22/joplin/issues/14211) by [@Rygaa](https://github.com/Rygaa))
+- Improved: Front matter: Wrap long lines in the viewer ([#15356](https://github.com/laurent22/joplin/issues/15356)) ([#15328](https://github.com/laurent22/joplin/issues/15328))
+- Improved: Give conflict_note_states table a numeric primary key and set note_id as unique ([#15724](https://github.com/laurent22/joplin/issues/15724)) ([#15722](https://github.com/laurent22/joplin/issues/15722) by Sriram Varun Kumar)
+- Improved: Highlight matching cells when searching tables in the CodeMirror editor ([#15440](https://github.com/laurent22/joplin/issues/15440))
+- Improved: Importing from OneNote: Issues with XPS-Printouts ([#15290](https://github.com/laurent22/joplin/issues/15290)) ([#15202](https://github.com/laurent22/joplin/issues/15202) by [@Rygaa](https://github.com/Rygaa))
+- Improved: Importing from OneNote: Note order should be preserved   ([#15609](https://github.com/laurent22/joplin/issues/15609)) ([#15334](https://github.com/laurent22/joplin/issues/15334) by [@Rygaa](https://github.com/Rygaa))
+- Improved: Improve how resource filenames are determined ([#15672](https://github.com/laurent22/joplin/issues/15672) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Joplin Server/Cloud sync: Improve item deletion performance ([#15392](https://github.com/laurent22/joplin/issues/15392) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: OneNote Import: Handwriting/pen strokes imported incorrectly ([#15681](https://github.com/laurent22/joplin/issues/15681)) ([#15578](https://github.com/laurent22/joplin/issues/15578) by [@Rygaa](https://github.com/Rygaa))
+- Improved: Padding between bottom of setting screen and button bar doesn't appear ([#15698](https://github.com/laurent22/joplin/issues/15698)) ([#15690](https://github.com/laurent22/joplin/issues/15690) by [@Rygaa](https://github.com/Rygaa))
+- Improved: Plugins: Filter what values joplin.settings.globalValues can return ([#15651](https://github.com/laurent22/joplin/issues/15651) by [@Rygaa](https://github.com/Rygaa))
+- Improved: Preserve customised note history settings when syncing across clients ([#15728](https://github.com/laurent22/joplin/issues/15728))
+- Improved: Prevent notes with null bytes in title or body from being saved ([#15485](https://github.com/laurent22/joplin/issues/15485))
+- Improved: Reject malformed item IDs during sync ([#15540](https://github.com/laurent22/joplin/issues/15540))
+- Improved: Render inline markdown formatting inside table cells ([#15437](https://github.com/laurent22/joplin/issues/15437))
+- Improved: Restrict KaTeX \href to safe URL schemes ([#15538](https://github.com/laurent22/joplin/issues/15538))
+- Improved: Set Windows publisher name for installer verification ([#15539](https://github.com/laurent22/joplin/issues/15539))
+- Improved: Show selection highlight on tables in the CodeMirror editor ([#15438](https://github.com/laurent22/joplin/issues/15438))
+- Improved: Upgrade to Electron 42.3.0 ([#15571](https://github.com/laurent22/joplin/issues/15571) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Whiteboard: Use clearer "Linked item" label on file cards ([554ee18](https://github.com/laurent22/joplin/commit/554ee18))
+- Fixed: Copying and pasting image from Affinity adds the image as Base64 ([#15566](https://github.com/laurent22/joplin/issues/15566)) ([#15277](https://github.com/laurent22/joplin/issues/15277) by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Crash on deleting ca. 4000 notes ([#15640](https://github.com/laurent22/joplin/issues/15640)) ([#15575](https://github.com/laurent22/joplin/issues/15575) by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Desktop: Whiteboard unusable in Secondary Window ([#15375](https://github.com/laurent22/joplin/issues/15375))
+- Fixed: Fix Electron build/download failure ([#15579](https://github.com/laurent22/joplin/issues/15579) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Fountain rendering issue ([#15659](https://github.com/laurent22/joplin/issues/15659) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Markdown export folder paths with dot in parent path ([#15455](https://github.com/laurent22/joplin/issues/15455)) ([#15374](https://github.com/laurent22/joplin/issues/15374) by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Fix XSS vulnerability in HTML notes ([#15435](https://github.com/laurent22/joplin/issues/15435))
+- Fixed: Fix duplicate tag creation for special unicode characters ([#15613](https://github.com/laurent22/joplin/issues/15613)) ([#15608](https://github.com/laurent22/joplin/issues/15608) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix external embeds originating from Youtube on mobile not working ([#15605](https://github.com/laurent22/joplin/issues/15605)) ([#15482](https://github.com/laurent22/joplin/issues/15482) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix fatal startup crash when sync target upgrade is required ([#15348](https://github.com/laurent22/joplin/issues/15348)) ([#15346](https://github.com/laurent22/joplin/issues/15346))
+- Fixed: Fix importing legacy keyboard shortcuts ([#15308](https://github.com/laurent22/joplin/issues/15308))
+- Fixed: Fix possible crash when creating a note or notebook with an excessively long title ([#15434](https://github.com/laurent22/joplin/issues/15434))
+- Fixed: Fixed crash when the profile database is updated ([d85f430](https://github.com/laurent22/joplin/commit/d85f430))
+- Fixed: Importing from OneNote: Fix importing `.zip` files containing `.onetoc2` files ([#15476](https://github.com/laurent22/joplin/issues/15476)) ([#15430](https://github.com/laurent22/joplin/issues/15430) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Importing from OneNote: Notebooks can be imported as subfolders of the trash ([#15555](https://github.com/laurent22/joplin/issues/15555)) ([#15217](https://github.com/laurent22/joplin/issues/15217) by [@Rygaa](https://github.com/Rygaa))
+- Fixed: In-editor rendering: Do not render empty inline HTML ([#15470](https://github.com/laurent22/joplin/issues/15470)) ([#15467](https://github.com/laurent22/joplin/issues/15467) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: In-editor rendering: Render URLs when the link text is empty ([#15444](https://github.com/laurent22/joplin/issues/15444)) ([#15425](https://github.com/laurent22/joplin/issues/15425) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Note list: Don't detect checkbox-like markup in tables and paragraphs as checkboxes ([#15357](https://github.com/laurent22/joplin/issues/15357)) ([#15307](https://github.com/laurent22/joplin/issues/15307) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugins: Removed semver and used regex for version check ([#15711](https://github.com/laurent22/joplin/issues/15711)) ([#15710](https://github.com/laurent22/joplin/issues/15710) by [@akshajrawat](https://github.com/akshajrawat))
+- Fixed: Prevent links with empty title from disappearing in the Markdown editor ([#15462](https://github.com/laurent22/joplin/issues/15462)) ([#15425](https://github.com/laurent22/joplin/issues/15425))
+- Fixed: Prevent text selection inside whiteboard action buttons ([#15386](https://github.com/laurent22/joplin/issues/15386))
+- Fixed: Prevent trashed notes from opening in edit mode ([#15248](https://github.com/laurent22/joplin/issues/15248))
+- Fixed: Revert PR [#14612](https://github.com/laurent22/joplin/issues/14612) ([#15384](https://github.com/laurent22/joplin/issues/15384)) ([#15382](https://github.com/laurent22/joplin/issues/15382))
+- Fixed: Rich Text Editor: Fix find/replace dialog fails to scroll to the next match ([#15298](https://github.com/laurent22/joplin/issues/15298)) ([#15297](https://github.com/laurent22/joplin/issues/15297) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Show clearer message on whiteboard cards when the linked note or resource has been deleted or moved to the trash ([#15385](https://github.com/laurent22/joplin/issues/15385))
+- Fixed: Upgrade CodeMirror view to 6.42.1 ([#15639](https://github.com/laurent22/joplin/issues/15639)) ([#15498](https://github.com/laurent22/joplin/issues/15498) by [@mrjo118](https://github.com/mrjo118))
+
+## [v3.6.15](https://github.com/laurent22/joplin/releases/tag/v3.6.15) - 2026-06-20T11:04:11Z
+
+- Improved: Improve how resource filenames are determined ([#15672](https://github.com/laurent22/joplin/issues/15672) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Fountain rendering issue ([#15659](https://github.com/laurent22/joplin/issues/15659) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix duplicate tag creation for special unicode characters ([#15613](https://github.com/laurent22/joplin/issues/15613)) ([#15608](https://github.com/laurent22/joplin/issues/15608) by [@mrjo118](https://github.com/mrjo118))
+
+## [v3.6.14](https://github.com/laurent22/joplin/releases/tag/v3.6.14) - 2026-05-19T22:12:04Z
+
+- Fixed: Fix Markdown export folder paths with dot in parent path ([#15455](https://github.com/laurent22/joplin/issues/15455)) ([#15374](https://github.com/laurent22/joplin/issues/15374) by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Importing from OneNote: Fix importing `.zip` files containing `.onetoc2` files ([#15476](https://github.com/laurent22/joplin/issues/15476)) ([#15430](https://github.com/laurent22/joplin/issues/15430) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: In-editor rendering: Do not render empty inline HTML ([#15470](https://github.com/laurent22/joplin/issues/15470)) ([#15467](https://github.com/laurent22/joplin/issues/15467) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.6.13](https://github.com/laurent22/joplin/releases/tag/v3.6.13) - 2026-05-12T11:16:40Z
 
 - Improved: Front matter: Wrap long lines in the viewer ([#15356](https://github.com/laurent22/joplin/issues/15356)) ([#15328](https://github.com/laurent22/joplin/issues/15328))

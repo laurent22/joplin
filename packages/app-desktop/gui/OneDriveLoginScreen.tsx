@@ -1,20 +1,30 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import { reg } from '@joplin/lib/registry';
 import Setting from '@joplin/lib/models/Setting';
 import bridge from '../services/bridge';
-const { themeStyle } = require('@joplin/lib/theme');
-const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
+import { themeStyle } from '@joplin/lib/theme';
+import { OneDriveApiNodeUtils } from '@joplin/lib/onedrive-api-node-utils';
 
 interface Props {
 	themeId: number;
+	dispatch: Dispatch;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old class component without state/props refactor; tightening requires structural change to the screen
-class OneDriveLoginScreenComponent extends React.Component<any, any> {
+interface AuthLogEntry {
+	key: string;
+	text: string;
+}
+
+interface State {
+	authLog: AuthLogEntry[];
+}
+
+class OneDriveLoginScreenComponent extends React.Component<Props, State> {
 	public constructor(props: Props) {
 		super(props);
 
@@ -25,7 +35,7 @@ class OneDriveLoginScreenComponent extends React.Component<any, any> {
 
 	public async componentDidMount() {
 		const log = (s: string) => {
-			this.setState((state: { authLog: { key: string; text: string }[] }) => {
+			this.setState((state) => {
 				const authLog = state.authLog.slice();
 				authLog.push({ key: (Date.now() + Math.random()).toString(), text: s });
 				return { authLog: authLog };

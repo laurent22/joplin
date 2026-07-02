@@ -24,7 +24,7 @@ import InteropService_Importer_EnexToHtml from './InteropService_Importer_EnexTo
 import InteropService_Importer_EnexToMd from './InteropService_Importer_EnexToMd';
 import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 const { sprintf } = require('sprintf-js');
-const { fileExtension } = require('../../path-utils');
+import { fileExtension } from '../../path-utils';
 import { EventEmitter } from 'events';
 
 export default class InteropService {
@@ -145,7 +145,7 @@ export default class InteropService {
 						'onepkg',
 					],
 					sources: [FileSystemItem.File],
-					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
+					isNoteArchive: true, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 					description: _('OneNote Notebook'),
 				}, () => new InteropService_Importer_OneNote()),
 			];

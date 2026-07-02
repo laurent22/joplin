@@ -7,7 +7,8 @@ import { packagesDir } from './constants';
 import { ActionSpec } from './ActionRunner';
 import { readFile } from 'fs/promises';
 import Fuzzer, { FuzzerConfig } from './Fuzzer';
-const { shimInit } = require('@joplin/lib/shim-init-node');
+import { isTTY } from '@joplin/utils/cli';
+import { shimInit } from '@joplin/lib/shim-init-node';
 
 const globalLogger = new Logger();
 globalLogger.addTarget(TargetType.Console);
@@ -59,7 +60,11 @@ const main = async (config: FuzzerConfig, restoreFromSnapshot: boolean) => {
 	} catch (error) {
 		logger.error('ERROR', error);
 		if (fuzzer) {
-			await fuzzer.openDebugSession();
+			if (isTTY()) {
+				await fuzzer.openDebugSession();
+			} else {
+				logger.info('(Not opening a debug session -- not running interactively)');
+			}
 		}
 		process.exitCode = 1;
 	} finally {
@@ -182,6 +187,14 @@ void yargs
 						'This also enables testing for some Joplin Cloud-specific features (e.g. read-only shares).',
 					].join(''),
 				},
+				'use-running-server': {
+					type: 'boolean',
+					default: false,
+					description: [
+						'When set to true, the fuzzer will connect to the server running on the default host/port (localhost:22300). ',
+						'When not set, the fuzzer starts an instance of Joplin Server.',
+					].join(''),
+				},
 				'setup': {
 					type: 'string',
 					default: '',
@@ -223,6 +236,7 @@ void yargs
 				},
 				clientCount,
 				serverPath: serverPath,
+				useRunningServer: argv.useRunningServer,
 				isJoplinCloud: !!argv.joplinCloud,
 				keepAccountsOnClose: argv.keepAccounts,
 				enableE2ee: argv.enableE2ee,

@@ -8,7 +8,7 @@ import { pathExistsSync, readFileSync, mkdirpSync } from 'fs-extra';
 import { initBridge } from './bridge';
 import Logger from '@joplin/utils/Logger';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
-const envFromArgs = require('@joplin/lib/envFromArgs');
+import envFromArgs from '@joplin/lib/envFromArgs';
 const packageInfo = require('./packageInfo.js');
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import determineBaseAppDirs from '@joplin/lib/determineBaseAppDirs';

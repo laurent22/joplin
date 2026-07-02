@@ -42,4 +42,12 @@ describe('fsDriver', () => {
 			await shim.fsDriver().findUniqueFilename(join(supportDir, 'this-file-does-not-exist.txt'), [join(supportDir, 'some-other-file.txt')]),
 		).toBe(join(supportDir, 'this-file-does-not-exist.txt'));
 	});
+
+	it('should append markdown-safe suffixes to the leaf name when parent directories contain dots', async () => {
+		const folderPath = join(supportDir, 'parent.with.dot', 'folder_');
+
+		expect(
+			await shim.fsDriver().findUniqueFilename(folderPath, [folderPath], true),
+		).toBe(join(supportDir, 'parent.with.dot', 'folder_-1'));
+	});
 });

@@ -10,7 +10,9 @@ Most of your account details can be found in your [Profile](/users/me) page. To 
 
 If you are on a Basic account, you may upgrade to a Pro account to get more space. Open your [profile](/users/me), then scroll down and select "Upgrade to Pro".
 
-If you are already on a Pro account, and you need more space for specific reasons, please contact us as we may increase the cap in some cases.
+If you are already on a Pro 100 GB account, open your [profile](/users/me) and select "Upgrade to Pro 100 GB".
+
+If 100 GB is not enough, and you need more space for specific reasons, please contact us as we may increase the cap in some cases.
 
 ### How can I switch to a different billing cycle or plan?
 

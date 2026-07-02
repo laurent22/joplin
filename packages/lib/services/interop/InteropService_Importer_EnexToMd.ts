@@ -5,7 +5,7 @@ import Folder from '../../models/Folder';
 import { FolderEntity } from '../database/types';
 import { fileExtension, rtrimSlashes } from '../../path-utils';
 import shim from '../../shim';
-const { filename } = require('../../path-utils');
+import { filename } from '../../path-utils';
 
 const doImportEnex = async (destFolder: FolderEntity, sourcePath: string, options: ImportOptions) => {
 	if (!destFolder) {

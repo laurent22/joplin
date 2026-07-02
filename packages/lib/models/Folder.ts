@@ -21,7 +21,7 @@ import { getCollator } from './utils/getCollator';
 import Setting from './Setting';
 import { itemIsReadOnlySync, ItemSlice } from './utils/readOnly';
 import ItemChange from './ItemChange';
-const { substrWithEllipsis } = require('../string-utils.js');
+import { substrWithEllipsis } from '../string-utils';
 
 const logger = Logger.create('models/Folder');
 
@@ -92,6 +92,20 @@ export default class Folder extends BaseItem {
 	public static async noteCount(parentId: string) {
 		const r = await this.db().selectOne('SELECT count(*) as total FROM notes WHERE is_conflict = 0 AND parent_id = ?', [parentId]);
 		return r ? r.total : 0;
+	}
+
+	// Returns a map of folder id → number of indexable notes (excluding trash
+	// and conflicts). Folders with zero notes are omitted from the map.
+	public static async noteCountsByFolderId() {
+		const rows = await this.db().selectAll<{ parent_id: string; total: number }>(
+			`SELECT parent_id, count(*) as total
+			 FROM notes
+			 WHERE is_conflict = 0 AND (deleted_time IS NULL OR deleted_time = 0)
+			 GROUP BY parent_id`,
+		);
+		const counts: Record<string, number> = {};
+		for (const r of rows) counts[r.parent_id] = r.total;
+		return counts;
 	}
 
 	public static markNotesAsConflict(parentId: string) {

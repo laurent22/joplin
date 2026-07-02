@@ -1,7 +1,7 @@
 import { useCallback, useRef } from 'react';
 import shim from '@joplin/lib/shim';
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / webview ref; Function matches the original onScroll signature
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type, @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / webview ref; Function matches the original onScroll signature
 export default function useScrollHandler(editorRef: any, webviewRef: any, onScroll: Function) {
 	const scrollTimeoutId_ = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const scrollPercent_ = useRef(0);

@@ -12,7 +12,7 @@ jobs:
         # https://github.com/actions/runner-images/issues/6709
         os: [macos-15-intel, ubuntu-22.04, windows-2025, ubuntu-22.04-arm]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup build environment
         uses: ./.github/workflows/shared/setup-build-environment
@@ -96,10 +96,11 @@ jobs:
           SSL_ESIGNER_CREDENTIAL_ID: ${{ secrets.SSL_ESIGNER_CREDENTIAL_ID }}
           SSL_ESIGNER_USER_TOTP: ${{ secrets.SSL_ESIGNER_USER_TOTP }}
           SIGN_APPLICATION: 1
-        # To ensure that the operations stop on failure, all commands
-        # should be on one line with "&&" in between.
+        # `yarn install` can fail randomly on CI when node-pre-gyp downloads
+        # prebuilt sqlite3 binaries from GitHub Releases - retry a few times.
         run: |
-          yarn install && cd packages/app-desktop && yarn dist
+          . "${env:GITHUB_WORKSPACE}/.github/scripts/build_windows.ps1"
+          Build-WindowsApp
 
       # Build and package the Windows app, without publishing it, just to
       # verify that the build process hasn't been broken.
@@ -111,7 +112,8 @@ jobs:
           SERVER_REPOSITORY: joplin/server
           SERVER_TAG_PREFIX: server
         run: |
-          yarn install && cd packages/app-desktop && yarn dist --publish=never
+          . "${env:GITHUB_WORKSPACE}/.github/scripts/build_windows.ps1"
+          Build-WindowsApp -DistArgs "--publish=never"
 
       - name: Publish Docker manifest
         if: runner.os == 'Linux'
@@ -146,7 +148,7 @@ jobs:
           sudo apt-get update || true
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
@@ -184,12 +186,12 @@ jobs:
 
           # Basic test to ensure that the created build is valid. It should exit with
           # code 0 if it works.
-          docker run joplin/server:$(dpkg --print-architecture)-0.0.0 node dist/app.js migrate list
+          docker run joplin/server:$(dpkg --print-architecture)-0.0.0 node dist/index.js migrate list
  
       - name: Check HTTP request
         run: |
           # Need to pass environment variables:
-          docker run --env MAX_TIME_DRIFT=0 --publish 22300:22300 joplin/server:$(dpkg --print-architecture)-0.0.0 node dist/app.js --env dev &
+          docker run --env MAX_TIME_DRIFT=0 --publish 22300:22300 joplin/server:$(dpkg --print-architecture)-0.0.0 node dist/index.js --env dev &
 
           # Wait for server to start
           sleep 120
@@ -216,3 +218,7 @@ jobs:
             echo 'Failed while checking the body response after request to /api/ping'
             exit 1;
           fi
+      
+      - name: Check sync
+        run: |
+          yarn syncFuzzer start --use-running-server --steps 5

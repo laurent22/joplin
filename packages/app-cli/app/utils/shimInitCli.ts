@@ -1,8 +1,7 @@
 import shim, { ShowMessageBoxOptions } from '@joplin/lib/shim';
-import type { ShimInitOptions } from '@joplin/lib/shim-init-node';
+import { shimInit, ShimInitOptions } from '@joplin/lib/shim-init-node';
 import app from '../app';
 import { _ } from '@joplin/lib/locale';
-const { shimInit } = require('@joplin/lib/shim-init-node.js');
 
 const shimInitCli = (options: ShimInitOptions) => {
 	shimInit(options);

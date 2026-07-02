@@ -1,5 +1,7 @@
 import Plugin from '../Plugin';
 import Joplin from './Joplin';
+import BasePlatformImplementation from '../BasePlatformImplementation';
+import type { Store } from 'redux';
 /**
  * @ignore
  */
@@ -8,7 +10,7 @@ import Joplin from './Joplin';
  */
 export default class Global {
     private joplin_;
-    constructor(implementation: any, plugin: Plugin, store: any);
+    constructor(implementation: BasePlatformImplementation, plugin: Plugin, store: Store<any>);
     get joplin(): Joplin;
-    get process(): any;
+    get process(): NodeJS.Process;
 }

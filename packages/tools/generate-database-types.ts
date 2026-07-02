@@ -1,10 +1,8 @@
 import { execCommand } from '@joplin/utils';
 import { insertContentIntoFile, rootDir } from './tool-utils';
 import { remove } from 'fs-extra';
-import { Table, Column } from '@rmp135/sql-ts';
-
-const sqlts = require('@rmp135/sql-ts').default;
-const fs = require('fs-extra');
+import sqlts, { Table, Column } from '@rmp135/sql-ts';
+import * as fs from 'fs-extra';
 
 function createRuntimeObject(table: Table) {
 	const colStrings = [];

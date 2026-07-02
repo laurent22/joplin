@@ -1,5 +1,5 @@
 import * as React from 'react';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import { themeStyle } from '@joplin/lib/theme';
 import { AppState } from '../app.reducer';
 import { _ } from '@joplin/lib/locale';

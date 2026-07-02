@@ -1,0 +1,23 @@
+# Allows the `multiline-comment-style` rule to coexist with Jest's
+# `/** @jest-environment ... */` docblock. Jest requires that pragma to be a
+# block comment at the top of the file, but `multiline-comment-style:
+# separate-lines` would otherwise force it to be rewritten as line comments,
+# which Jest then ignores. This early-return exempts that single pragma.
+#
+# Re-rolled from the previous eslint@8.57.1 patch for the v9 upgrade; the rule
+# body was only reformatted between versions, the patched logic is unchanged.
+diff --git a/lib/rules/multiline-comment-style.js b/lib/rules/multiline-comment-style.js
+index 463e7a7343253ff25f29a45b7605c1e947847d45..0d8813a9a8f098e06ea454e81f807aa3bfbe1fb1 100644
+--- a/lib/rules/multiline-comment-style.js
++++ b/lib/rules/multiline-comment-style.js
+@@ -509,6 +509,10 @@ module.exports = {
+ 					);
+ 				}
+ 
++				// We have to allow this because it's always a top comment and
++				// it has to be in a jsdoc block
++				if (commentLines.join('').trim().startsWith('@jest-environment')) return;
++
+ 				const tokenAfter = sourceCode.getTokenAfter(firstComment, {
+ 					includeComments: true,
+ 				});

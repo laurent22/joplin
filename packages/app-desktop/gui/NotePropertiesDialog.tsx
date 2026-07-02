@@ -9,14 +9,13 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import Dialog from '@joplin/lib/components/Dialog';
 import { formatDateTimeLocalToMs, formatMsToDateTimeLocal, formatMsToLocal } from '@joplin/utils/time';
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 const formatcoords = require('formatcoords');
 
 interface Props {
 	noteId: string;
 	onClose: ()=> void;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onRevisionLinkClick: Function;
+	onRevisionLinkClick: ()=> void;
 	themeId: number;
 }
 
@@ -256,8 +255,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	public async saveProperty() {
 		if (!this.state.editedKey) return null;
 
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		return new Promise((resolve: Function) => {
+		return new Promise<void>((resolve) => {
 			const newFormNote = { ...this.state.formNote };
 
 			(newFormNote as unknown as Record<string, unknown>)[this.state.editedKey] = this.state.editedValue;
@@ -276,8 +274,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	}
 
 	public async cancelProperty() {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		return new Promise((resolve: Function) => {
+		return new Promise<void>((resolve) => {
 			if (this.okButton.current) focus('NotePropertiesDialog::focus', this.okButton.current);
 			this.setState({
 				editedKey: null,

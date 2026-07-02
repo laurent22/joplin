@@ -1,4 +1,4 @@
-import Plugin from '../Plugin';
+import Plugin, { MessageListenerCallback } from '../Plugin';
 import { ContentScriptType } from './types';
 export default class JoplinContentScripts {
     private plugin;
@@ -37,5 +37,5 @@ export default class JoplinContentScripts {
      * [postMessage
      * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages)
      */
-    onMessage(contentScriptId: string, callback: any): Promise<void>;
+    onMessage(contentScriptId: string, callback: MessageListenerCallback): Promise<void>;
 }

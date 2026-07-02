@@ -33,7 +33,7 @@
   },
   "scripts": {
     "coverage": "cat coverage/lcov.info | coveralls",
-    "lint": "eslint --ext=js,ts src",
+    "lint": "eslint src",
     "format": "prettier --write '**/*.{ts,md,json}'",
     "build": "tsc",
     "prepare": "npm run build"
@@ -50,7 +50,7 @@
     "@typescript-eslint/eslint-plugin": "6.21.0",
     "@typescript-eslint/parser": "6.21.0",
     "coveralls": "3.1.1",
-    "eslint": "8.57.1",
+    "eslint": "9.39.4",
     "jest": "29.7.0",
     "prettier": "3.7.4",
     "ts-jest": "29.4.6",

@@ -27,7 +27,7 @@ const shim = require('@joplin/lib/shim').default;
 const { _ } = require('@joplin/lib/locale');
 const FileApiDriverLocal = require('@joplin/lib/file-api-driver-local').default;
 const EncryptionService = require('@joplin/lib/services/e2ee/EncryptionService').default;
-const envFromArgs = require('@joplin/lib/envFromArgs');
+const envFromArgs = require('@joplin/lib/envFromArgs').default;
 const nodeSqlite = require('sqlite3');
 const initLib = require('@joplin/lib/initLib').default;
 

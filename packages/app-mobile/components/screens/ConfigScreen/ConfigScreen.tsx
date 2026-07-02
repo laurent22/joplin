@@ -647,7 +647,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				Clipboard.setString(versionInfoText);
 			});
 
-			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
+			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile).filter(key => Setting.isPublic(key));
 			if (featureFlagKeys.length) {
 				const headerKey = 'featureFlags';
 				const featureFlagsTitle = _('Feature flags');

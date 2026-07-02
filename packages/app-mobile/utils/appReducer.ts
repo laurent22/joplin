@@ -1,21 +1,10 @@
 import reducer from '@joplin/lib/reducer';
-import { AppState } from './types';
+import { AppState, Route } from './types';
 import appDefaultState, { DEFAULT_ROUTE } from './appDefaultState';
 import fastDeepEqual = require('fast-deep-equal');
 import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('appReducer');
-
-// Narrow shape for entries this file reads from the redux NAV action payload.
-// The full action type is a wider, heterogeneous union — see the disable
-// comments below — so the fields outside this interface are accessed via `any`
-// elsewhere.
-interface Route {
-	routeName?: string;
-	folderId?: string;
-	noteId?: string;
-	isDeleted?: boolean;
-}
 
 const navHistory: Route[] = [];
 
@@ -34,20 +23,15 @@ function historyCanGoBackTo(route: Route) {
 	return true;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-function removeAdjacentNoteDuplicates(items: any[]) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-	return items.filter((item: any, idx: number) => (idx >= 1) ? !(item.routeName === 'Note' && items[idx - 1].routeName === 'Note' && items[idx - 1].noteId === item.noteId) : true);
+function removeAdjacentNoteDuplicates(items: Route[]) {
+	return items.filter((item, idx) => (idx >= 1) ? !(item.routeName === 'Note' && items[idx - 1].routeName === 'Note' && items[idx - 1].noteId === item.noteId) : true);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-function removeAdjacentFolderDuplicates(items: any[]) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-	return items.filter((item: any, idx: number) => (idx >= 1) ? !(item.routeName === 'Notes' && items[idx - 1].routeName === 'Notes' && items[idx - 1].folderId === item.folderId) : true);
+function removeAdjacentFolderDuplicates(items: Route[]) {
+	return items.filter((item, idx) => (idx >= 1) ? !(item.routeName === 'Notes' && items[idx - 1].routeName === 'Notes' && items[idx - 1].folderId === item.folderId) : true);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning types to these variables would be too big of a refactoring
-function removeLatestFolderIfSelected(items: any[], route: any) {
+function removeLatestFolderIfSelected(items: Route[], route: Route) {
 	if (items.length && route.routeName === 'Notes' && items[items.length - 1].folderId === route.folderId) {
 		items.splice(items.length - 1, 1);
 	}

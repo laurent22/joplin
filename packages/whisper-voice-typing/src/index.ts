@@ -27,7 +27,12 @@ export class Session {
 		}
 
 		this.recorder_ = NitroModules.createHybridObject<AudioRecorder>('AudioRecorder');
-		this.nativeSession_ = getVoiceTyping().openSession(this.options_);
+		this.nativeSession_ = getVoiceTyping().openSession({
+			...this.options_,
+
+			// Whisper.cpp doesn't support region specifiers (e.g. US in en_US). Remove them:
+			locale: this.options_.locale.replace(/_[a-z]+$/i, ''),
+		});
 		this.recorder_.start();
 	}
 

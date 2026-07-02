@@ -117,6 +117,7 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 			betaExpiredDays: betaUserTrialPeriodDays(user.created_time, 0, 0),
 			betaStartSubUrl: betaStartSubUrl(user.email, user.account_type),
 			setupMessageHtml: setupMessageHtml(),
+			isJoplinCloud: config().isJoplinCloud,
 			socialFeeds: socialFeeds(),
 		};
 

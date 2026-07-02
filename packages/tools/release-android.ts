@@ -2,9 +2,9 @@ import { execCommand } from '@joplin/utils';
 import { copy, mkdirp, move, readFile, readFileSync, remove, stat, writeFile, writeFileSync } from 'fs-extra';
 import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
 import { homedir } from 'os';
-const path = require('path');
-const fetch = require('node-fetch');
-const uriTemplate = require('uri-template');
+import * as path from 'path';
+import fetch from 'node-fetch';
+import * as uriTemplate from 'uri-template';
 
 const rootDir = path.dirname(path.dirname(__dirname));
 const rnDir = `${rootDir}/packages/app-mobile`;
@@ -227,7 +227,7 @@ const uploadToGitHubRelease = async (projectName: string, tagName: string, isPre
 			headers: {
 				'Content-Type': 'application/vnd.android.package-archive',
 				'Authorization': `token ${oauthToken}`,
-				'Content-Length': binaryBody.length,
+				'Content-Length': String(binaryBody.length),
 			},
 		});
 

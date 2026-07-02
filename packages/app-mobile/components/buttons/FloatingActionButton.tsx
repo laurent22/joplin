@@ -32,7 +32,8 @@ interface ActionButtonProps {
 
 // Returns a render function compatible with React Native Paper.
 const getIconRenderFunction = (iconName: string) => {
-	return (props: Omit<React.ComponentProps<typeof Icon>, 'name'>) => <Icon name={iconName} {...props} />;
+	type NameProp = React.ComponentProps<typeof Icon>['name'];
+	return (props: Omit<React.ComponentProps<typeof Icon>, 'name'>) => <Icon name={iconName as NameProp} {...props} />;
 };
 
 const useIcon = (iconName: string) => {

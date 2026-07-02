@@ -22,7 +22,7 @@ export default class BaseCommand {
 		if (item && item.encryption_applied) throw new Error(_('Cannot change encrypted item'));
 	}
 
-	public description() {
+	public description(): string {
 		throw new Error('Description not defined');
 	}
 

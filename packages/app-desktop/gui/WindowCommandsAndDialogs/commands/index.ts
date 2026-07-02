@@ -41,6 +41,7 @@ import * as showPublishFolderDialog from './showPublishFolderDialog';
 import * as showShareFolderDialog from './showShareFolderDialog';
 import * as showShareNoteDialog from './showShareNoteDialog';
 import * as showSpellCheckerMenu from './showSpellCheckerMenu';
+import * as toggleAiChat from './toggleAiChat';
 import * as toggleEditors from './toggleEditors';
 import * as toggleLayoutMoveMode from './toggleLayoutMoveMode';
 import * as toggleMenuBar from './toggleMenuBar';
@@ -96,6 +97,7 @@ const index: any[] = [
 	showShareFolderDialog,
 	showShareNoteDialog,
 	showSpellCheckerMenu,
+	toggleAiChat,
 	toggleEditors,
 	toggleLayoutMoveMode,
 	toggleMenuBar,

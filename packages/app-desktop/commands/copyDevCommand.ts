@@ -1,8 +1,8 @@
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
-const app = require('@electron/remote').app;
-const { clipboard } = require('electron');
+import { app } from '@electron/remote';
+import { clipboard } from 'electron';
 
 export const declaration: CommandDeclaration = {
 	name: 'copyDevCommand',

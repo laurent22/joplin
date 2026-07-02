@@ -36,7 +36,6 @@ const migrationDir = `${__dirname}/migrations`;
 export const sqliteDefaultDir = pathUtils.dirname(__dirname);
 
 export const defaultAdminEmail = 'admin@localhost';
-export const defaultAdminPassword = 'admin';
 
 export type DbConnection = Knex;
 
@@ -316,8 +315,27 @@ const fixMigrationNames = async (db: DbConnection) => {
 	}
 };
 
-export async function migrateLatest(db: DbConnection, disableTransactions = false) {
+// Knex acquires a row in `knex_migrations_lock` before running migrations and releases it
+// after. Because the lock is committed outside the migration transaction, a server crash
+// mid-migration leaves the lock held, which then blocks every subsequent restart. Joplin
+// Server is single-instance per database, so it is always safe to clear the lock before
+// running migrations.
+const forceUnlockMigrations = async (db: DbConnection) => {
+	try {
+		await db.migrate.forceFreeMigrationsLock();
+	} catch (error) {
+		if (isNoSuchTableError(error)) return;
+		throw error;
+	}
+};
+
+const beforeMigrate = async (db: DbConnection) => {
 	await fixMigrationNames(db);
+	await forceUnlockMigrations(db);
+};
+
+export async function migrateLatest(db: DbConnection, disableTransactions = false) {
+	await beforeMigrate(db);
 
 	await db.migrate.latest({
 		directory: migrationDir,
@@ -326,7 +344,7 @@ export async function migrateLatest(db: DbConnection, disableTransactions = fals
 }
 
 export async function migrateUp(db: DbConnection, disableTransactions = false) {
-	await fixMigrationNames(db);
+	await beforeMigrate(db);
 
 	await db.migrate.up({
 		directory: migrationDir,
@@ -335,7 +353,7 @@ export async function migrateUp(db: DbConnection, disableTransactions = false) {
 }
 
 export async function migrateDown(db: DbConnection, disableTransactions = false) {
-	await fixMigrationNames(db);
+	await beforeMigrate(db);
 
 	await db.migrate.down({
 		directory: migrationDir,

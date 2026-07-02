@@ -90,12 +90,16 @@ const createHtmlReplacementExtension = (tagName: string, onRenderContent: OnRend
 		if (info.opening) {
 			const closingTag = findClosingTag(node, state);
 			if (!closingTag) return null;
+			const content = state.sliceDoc(node.to, closingTag.from);
+			if (!content.trim()) return null;
 			return [node.from, closingTag.to];
 		}
 
 		if (info.closing) {
 			const openingTag = findOpeningTag(node, state);
 			if (!openingTag) return null;
+			const content = state.sliceDoc(openingTag.to, node.from);
+			if (!content.trim()) return null;
 			return [openingTag.from, node.to];
 		}
 

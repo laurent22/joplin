@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useMemo, useRef } from 'react';
 import shim from '@joplin/lib/shim';
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { AppType } from '@joplin/lib/models/Setting';
 import { Platform } from 'react-native';
 import { SetUpResult } from '../types';
 import { themeStyle } from '../../components/global-style';
@@ -36,7 +36,9 @@ const useSource = (tempDirPath: string) => {
 		const subValues = Setting.subValues('markdown.plugin', Setting.toPlainObject());
 		const pluginOptions: PluginOptions = {};
 		for (const n in subValues) {
-			pluginOptions[n] = { enabled: !!subValues[n] };
+			const appTypes = Setting.settingMetadata(`markdown.plugin.${n}`).appTypes;
+			const enabled = !appTypes.includes(AppType.Mobile) ? false : !!subValues[n];
+			pluginOptions[n] = { enabled };
 		}
 
 		const rendererWebViewStaticOptions: RendererWebViewOptions = {
@@ -151,7 +153,21 @@ const useWebViewSetup = (props: Props): Result => {
 
 	const contentScripts = useContentScripts(props.pluginStates);
 	useEffect(() => {
-		void messenger.remoteApi.renderer.setExtraContentScriptsAndRerender(contentScripts);
+		const startTime = Date.now();
+		const totalBytes = contentScripts.reduce((sum, s) => sum + s.js.length, 0);
+		logger.info(`[perf] setExtraContentScriptsAndRerender: sending ${contentScripts.length} script(s), ${Math.round(totalBytes / 1024)} KiB`);
+		void (async () => {
+			try {
+				const result = await messenger.remoteApi.renderer.setExtraContentScriptsAndRerender(contentScripts);
+				const totalMs = Date.now() - startTime;
+				const evalMs = result?.evalMs ?? -1;
+				const renderMs = result?.renderMs ?? -1;
+				const bridge = totalMs - evalMs - renderMs;
+				logger.info(`[perf] setExtraContentScriptsAndRerender: round-trip ${totalMs} ms (eval ${evalMs} ms, rerender ${renderMs} ms, bridge ~${bridge} ms)`);
+			} catch (error) {
+				logger.error(`[perf] setExtraContentScriptsAndRerender FAILED after ${Date.now() - startTime} ms:`, error);
+			}
+		})();
 	}, [messenger, contentScripts]);
 
 	const onRerenderRequestRef = useRef(()=>{});

@@ -8,7 +8,7 @@ import Setting, { AppType, SettingMetadataSection, SettingValueType, SyncStartup
 import { AppState } from '../../app.reducer';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 import { reg } from '@joplin/lib/registry';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import { themeStyle } from '@joplin/lib/theme';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import * as shared from '@joplin/lib/components/shared/config/config-shared.js';
@@ -20,6 +20,7 @@ import shouldShowMissingPasswordWarning from '@joplin/lib/components/shared/conf
 import { normalizeQuery } from '@joplin/lib/components/shared/config/config-search-text.js';
 import { searchResultGroups, matchedSearchSections } from './configSearch';
 import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
+import AiIndexStatus from './controls/AiIndexStatus';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
@@ -132,6 +133,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			if (!await shim.showConfirmationDialog(this.restartMessage())) return;
 			Setting.setValue('ocr.clearLanguageDataCache', true);
 			await restart();
+		} else if (key === 'ai.usage.resetButton') {
+			if (!await shim.showConfirmationDialog(_('Reset AI token usage counters?'))) return;
+			Setting.setValue('ai.usage.inputTokens', 0);
+			Setting.setValue('ai.usage.outputTokens', 0);
+			await Setting.saveAll();
+		} else if (key === 'ai.chat.testButton') {
+			await shared.checkAiConfig(this);
 		} else if (key === 'sync.openSyncWizard') {
 			this.props.dispatch({
 				type: 'DIALOG_OPEN',
@@ -244,6 +252,22 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		if (section.name === 'general') {
 			sectionStyle.borderTopWidth = 0;
+		}
+
+		if (section.name === 'ai' && settings['ai.enabled']) {
+			const messages = shared.checkAiConfigMessages(this);
+			if (messages.length) {
+				const result = this.state.checkAiConfigResult;
+				const ok = result && result !== 'checking' && result.ok;
+				const statusStyle = { ...theme.textStyle, marginTop: 10, color: ok ? theme.color : theme.colorWarn };
+				settingComps.push(
+					<div key="ai_config_test_status" style={statusStyle} aria-live='polite'>
+						{messages[0]}
+						{messages.length > 1 ? <p>{messages[1]}</p> : null}
+					</div>,
+				);
+			}
+			settingComps.push(<AiIndexStatus key='ai_index_status' />);
 		}
 
 		if (section.name === 'sync') {

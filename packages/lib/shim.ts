@@ -101,6 +101,10 @@ let react_: typeof React = null;
 let reactDom_: typeof ReactDom = null;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- node sqlite driver is set per-platform (better-sqlite3, react-native sqlite, etc.); accessed structurally
 let nodeSqlite_: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sqlite-vec is only bundled with desktop; null on platforms that don't ship it
+let sqliteVec_: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- onnxruntime-node is only bundled with desktop; null on platforms (mobile/CLI/web) that don't ship it
+let onnxRuntime_: any = null;
 
 const shim = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Geolocation API differs across platforms (browser Geolocation, RN Geolocation module); accessed structurally
@@ -372,7 +376,7 @@ const shim = {
 		throw new Error('Not implemented: stringByteLength');
 	},
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- node implementation accepts a Setting class argument; lib references it as a generic Function
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- node implementation accepts a Setting class argument; lib references it as a generic Function
 	detectAndSetLocale: null as Function,
 
 	attachFileToNote: async (_note: NoteEntity, _filePath: string, _options?: AttachFileToNoteOptions): Promise<NoteEntity> => {
@@ -533,6 +537,31 @@ const shim = {
 	nodeSqlite: () => {
 		if (!nodeSqlite_) throw new Error('Trying to access nodeSqlite before it has been set!!!');
 		return nodeSqlite_;
+	},
+
+	// sqlite-vec is only bundled with the desktop app. Other platforms (CLI,
+	// mobile, web) leave it unset and the embeddings index gracefully reports
+	// itself as unavailable rather than crashing.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See sqliteVec_
+	setSqliteVec: (sqliteVec: any) => {
+		sqliteVec_ = sqliteVec;
+	},
+
+	sqliteVec: () => {
+		return sqliteVec_;
+	},
+
+	// onnxruntime-node powers the bundled local embedding model. Only the
+	// desktop app installs it; other platforms (CLI, mobile, web) leave it
+	// unset and the embedding indexer reports the local provider as
+	// unavailable rather than crashing.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See onnxRuntime_
+	setOnnxRuntime: (onnxRuntime: any) => {
+		onnxRuntime_ = onnxRuntime;
+	},
+
+	onnxRuntime: () => {
+		return onnxRuntime_;
 	},
 
 	setReact: (react: typeof React) => {

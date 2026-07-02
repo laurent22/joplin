@@ -112,7 +112,10 @@ echo "Rust $( rustc --version )"
 # =============================================================================
 
 cd "$ROOT_DIR"
-yarn install
+
+source "$(dirname "$0")/retry.sh"
+
+retry yarn install
 testResult=$?
 if [ $testResult -ne 0 ]; then
 	echo "Yarn installation failed. Search for 'exit code 1' in the log for more information."
@@ -129,8 +132,19 @@ if [ "$RUN_TESTS" == "1" ]; then
 	# On Linux, we run the Joplin Server tests using PostgreSQL
 	if [ "$IS_LINUX" == "1" ]; then
 		echo "Running Joplin Server tests using PostgreSQL..."
-		sudo docker compose --parallel 1 --file docker-compose.db-dev.yml up -d
-		cmdResult=$?
+		# Docker Hub auth/pulls occasionally time out on CI, so retry a few
+		# times before giving up.
+		cmdResult=1
+		for attempt in 1 2 3; do
+			sudo docker compose --parallel 1 --file docker-compose.db-dev.yml up -d
+			cmdResult=$?
+			if [ $cmdResult -eq 0 ]; then
+				break
+			fi
+			echo "docker compose up failed (attempt $attempt). Retrying in 15s..."
+			sudo docker compose --file docker-compose.db-dev.yml down --remove-orphans || true
+			sleep 15
+		done
 		if [ $cmdResult -ne 0 ]; then
 			exit $cmdResult
 		fi
@@ -211,7 +225,7 @@ if [ "$RUN_TESTS" == "1" ]; then
 fi
 
 # =============================================================================
-# Check .gitignore and .eslintignore files - they should be updated when
+# Check .gitignore and .ignore.eslint files - they should be updated when
 # new TypeScript files are added by running `yarn updateIgnored`.
 # See coding_style.md
 # =============================================================================
@@ -219,9 +233,9 @@ fi
 if [ "$IS_LINUX" == "1" ]; then
 	echo "Step: Checking for files that should have been ignored..."
 
-	# .gitignore and .eslintignore can be modified during yarn install. Reset them
+	# .gitignore and .ignore.eslint can be modified during yarn install. Reset them
 	# so that checkIgnoredFiles works.
-	git restore .gitignore .eslintignore
+	git restore .gitignore .ignore.eslint
 
 	node packages/tools/checkIgnoredFiles.js 
 	testResult=$?
@@ -287,6 +301,28 @@ fi
 
 cd "$ROOT_DIR/packages/app-desktop"
 
+# On macOS, `yarn dist` can fail randomly with `hdiutil detach ... Resource
+# busy` when packaging the DMG, because another process (Spotlight mds,
+# diskimages-helper, etc.) still holds the mounted image. Retry the whole
+# build a couple of times to absorb the flake.
+run_yarn_dist() {
+	local attempts=3
+	local i=1
+	while true; do
+		USE_HARD_LINKS=false yarn dist "$@"
+		local result=$?
+		if [ $result -eq 0 ]; then
+			return 0
+		fi
+		if [ "$IS_MACOS" != "1" ] || [ $i -ge $attempts ]; then
+			return $result
+		fi
+		echo "yarn dist failed (attempt $i/$attempts) - retrying..."
+		i=$((i + 1))
+		sleep 10
+	done
+}
+
 if [ "$IS_DESKTOP_RELEASE" == "1" ]; then
 	echo "Step: Building and publishing desktop application..."
 	# cd "$ROOT_DIR/packages/tools"
@@ -295,7 +331,7 @@ if [ "$IS_DESKTOP_RELEASE" == "1" ]; then
 
 	if [ "$IS_MACOS" == "1" ]; then
 		# This is to fix this error:
-		# 
+		#
 		# Exit code: ENOENT. spawn /usr/bin/python ENOENT
 		#
 		# Ref: https://github.com/electron-userland/electron-builder/issues/6767#issuecomment-1096589528
@@ -308,10 +344,8 @@ if [ "$IS_DESKTOP_RELEASE" == "1" ]; then
 		# "python" and seems to no longer respect the PYTHON_PATH environment variable.
 		# We work around this by aliasing python.
 		alias python=$(which python3)
-		USE_HARD_LINKS=false yarn dist
-	else
-		USE_HARD_LINKS=false yarn dist
-	fi	
+	fi
+	run_yarn_dist
 elif [[ $IS_LINUX = 1 ]] && [ "$IS_SERVER_RELEASE" == "1" ]; then
 	echo "Step: Building Joplin Server Docker Image..."
 	cd "$ROOT_DIR"
@@ -322,7 +356,7 @@ elif [[ $IS_LINUX = 1 ]] && [ "$IS_TRANSCRIBE_RELEASE" == "1" ]; then
 	yarn buildServerDocker --docker-file Dockerfile.transcribe --platform $DOCKER_IMAGE_PLATFORM --tag-name $GIT_TAG_NAME --push-images --repository $TRANSCRIBE_REPOSITORY
 else
 	echo "Step: Building but *not* publishing desktop application..."
-	
+
 	if [ "$IS_MACOS" == "1" ]; then
 		# See above why we need to specify Python
 		alias python=$(which python3)
@@ -332,9 +366,6 @@ else
 		# https://www.electron.build/code-signing#how-to-disable-code-signing-during-the-build-process-on-macos
 		export CSC_IDENTITY_AUTO_DISCOVERY=false
 		npm pkg set 'build.mac.identity'=null --json
-		
-		USE_HARD_LINKS=false yarn dist --publish=never
-	else
-		USE_HARD_LINKS=false yarn dist --publish=never
 	fi
+	run_yarn_dist --publish=never
 fi

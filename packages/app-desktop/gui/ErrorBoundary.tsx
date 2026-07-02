@@ -7,7 +7,7 @@ import BannerContent from './NoteEditor/WarningBanner/BannerContent';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
 const packageInfo: PackageInfo = require('../packageInfo.js');
-const ipcRenderer = require('electron').ipcRenderer;
+import { ipcRenderer } from 'electron';
 
 const logger = Logger.create('ErrorBoundary');
 

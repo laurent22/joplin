@@ -9,7 +9,7 @@ const command = runtime();
 const makeContext = (): CommandContext => {
 	return {
 		state: defaultState,
-		dispatch: ()=>{},
+		dispatch: jest.fn(),
 	};
 };
 

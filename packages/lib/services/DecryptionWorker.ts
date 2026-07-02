@@ -10,7 +10,7 @@ import EncryptionService from './e2ee/EncryptionService';
 import PerformanceLogger from '../PerformanceLogger';
 import AsyncActionQueue from '../AsyncActionQueue';
 
-const EventEmitter = require('events');
+import { EventEmitter } from 'events';
 const perfLogger = PerformanceLogger.create();
 
 interface DecryptionResult {

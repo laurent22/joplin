@@ -49,6 +49,19 @@ describe('models/Revision', () => {
 		jest.useFakeTimers({ advanceTimers: true });
 	});
 
+	it('should add lock defaults for old sync revisions', () => {
+		expect(Revision.filter({
+			is_locked: undefined,
+		})).toMatchObject({
+			is_locked: 0,
+		});
+		expect(Revision.filter({
+			is_locked: null,
+		})).toMatchObject({
+			is_locked: 0,
+		});
+	});
+
 	it('should create patches of text and apply it', (async () => {
 		const note1 = await Note.save({ body: 'my note\nsecond line' });
 

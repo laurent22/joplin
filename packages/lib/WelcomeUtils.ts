@@ -1,12 +1,13 @@
 const welcomeAssetsAny = require('./welcomeAssets');
 import Note from './models/Note';
+import { Dispatch } from 'redux';
 import Setting from './models/Setting';
 import Folder from './models/Folder';
 import shim, { MobilePlatform } from './shim';
 import uuid from './uuid';
 import { fileExtension, basename } from './path-utils';
 import { _ } from './locale';
-const { pregQuote } = require('./string-utils');
+import { pregQuote } from './string-utils';
 import { FolderIconType } from './services/database/types';
 
 export enum WelcomeAssetPlatform {
@@ -134,8 +135,7 @@ class WelcomeUtils {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public static async install(locale: string, dispatch: Function) {
+	public static async install(locale: string, dispatch: Dispatch) {
 		if (!Setting.value('welcome.enabled')) {
 			Setting.setValue('welcome.wasBuilt', true);
 			return;

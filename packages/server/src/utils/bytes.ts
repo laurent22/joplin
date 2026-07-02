@@ -1,4 +1,4 @@
-const prettyBytes = require('pretty-bytes');
+import prettyBytes = require('pretty-bytes');
 
 export const KB = 1024;
 export const MB = KB * KB;

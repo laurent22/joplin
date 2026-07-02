@@ -3,14 +3,14 @@ import shim from './shim';
 import BaseItem, { RemoteItemMetadata } from './models/BaseItem';
 import time from './time';
 
-const { isHidden } = require('./path-utils');
+import { isHidden } from './path-utils';
 import JoplinError from './JoplinError';
 import { Lock, LockClientType, LockType } from './services/synchronizer/LockHandler';
 import * as ArrayUtils from './ArrayUtils';
 import Setting from './models/Setting';
 import SyncTargetRegistry from './SyncTargetRegistry';
 const { sprintf } = require('sprintf-js');
-const Mutex = require('async-mutex').Mutex;
+import { Mutex } from 'async-mutex';
 
 const logger = Logger.create('FileApi');
 

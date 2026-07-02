@@ -6,7 +6,7 @@ import FsDriverNode from './fs-driver-node';
 import Note from './models/Note';
 import Resource from './models/Resource';
 import { basename, fileExtension, safeFileExtension } from './path-utils';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import { writeFile } from 'fs/promises';
 import { ResourceEntity } from './services/database/types';
 import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
@@ -20,16 +20,16 @@ import BaseItem from './models/BaseItem';
 import { Size } from '@joplin/utils/types';
 import { cpus } from 'os';
 import { pathToFileURL } from 'url';
-import * as tls from 'tls';
+import tls from 'tls';
 import type PdfJs from './utils/types/pdfJs';
-const { _ } = require('./locale');
-const http = require('http');
-const https = require('https');
+import { _ } from './locale';
+import http from 'http';
+import https from 'https';
 const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent');
 const toRelative = require('relative');
-const timers = require('timers');
-const zlib = require('zlib');
-const dgram = require('dgram');
+import timers from 'timers';
+import zlib from 'zlib';
+import dgram from 'dgram';
 
 interface ProxySettings {
 	maxConcurrentConnections?: number;
@@ -105,19 +105,24 @@ function setupProxySettings(options: ProxySettings) {
 	proxySettings.proxyUrl = options.proxyUrl;
 }
 
+// All fields are optional because shimInit fills in null defaults for each
 export interface ShimInitOptions {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sharp module type comes from the external library, not imported here
-	sharp: any;
+	sharp?: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- keytar module type comes from the external library
-	keytar: any;
+	keytar?: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- React module is assigned to shim.setReact which is `typeof React`; lib doesn't import React types
-	React: any;
-	appVersion: ()=> string;
+	React?: any;
+	appVersion?: ()=> string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron bridge concrete type lives in app-desktop; see shim.electronBridge_
-	electronBridge: any;
+	electronBridge?: any;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- node sqlite driver shape is per-platform; see shim.nodeSqlite_
-	nodeSqlite: any;
-	pdfJs: PdfJs;
+	nodeSqlite?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sqlite-vec is only bundled with desktop; see shim.sqliteVec_
+	sqliteVec?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- onnxruntime-node is only bundled with desktop; see shim.onnxRuntime_
+	onnxRuntime?: any;
+	pdfJs?: PdfJs;
 	isAppleSilicon?: ()=> boolean;
 }
 
@@ -129,6 +134,8 @@ function shimInit(options: ShimInitOptions = null) {
 		appVersion: null,
 		electronBridge: null,
 		nodeSqlite: null,
+		sqliteVec: null,
+		onnxRuntime: null,
 		pdfJs: null,
 		isAppleSilicon: () => false,
 		...options,
@@ -140,6 +147,8 @@ function shimInit(options: ShimInitOptions = null) {
 	const pdfJs = options.pdfJs;
 
 	shim.setNodeSqlite(options.nodeSqlite);
+	shim.setSqliteVec(options.sqliteVec);
+	shim.setOnnxRuntime(options.onnxRuntime);
 
 	shim.fsDriver = () => {
 		throw new Error('Not implemented');
@@ -947,4 +956,4 @@ function shimInit(options: ShimInitOptions = null) {
 	};
 }
 
-module.exports = { shimInit, setupProxySettings };
+export { shimInit, setupProxySettings };

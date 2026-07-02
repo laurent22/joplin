@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Handle, NodeProps, NodeResizer } from '@xyflow/react';
 import { pathToFileURL } from 'url';
 import { MarkupLanguage } from '@joplin/renderer';
@@ -8,6 +8,7 @@ import Note from '@joplin/lib/models/Note';
 import ItemChange from '@joplin/lib/models/ItemChange';
 import { ModelType } from '@joplin/lib/BaseModel';
 import attachedResources from '@joplin/lib/utils/attachedResources';
+import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
 import { resourceFullPath } from '@joplin/lib/models/utils/resourceUtils';
 import { ResourceEntity } from '@joplin/lib/services/database/types';
@@ -16,30 +17,10 @@ import { isInternalRef, RefKind, resolveFileRef } from '@joplin/lib/services/whi
 import { useWhiteboardContext } from '../WhiteboardContext';
 import { WhiteboardNodeData } from '../canvasFlow';
 import useCheckboxToggle from '../useCheckboxToggle';
-import { whiteboardColors } from '../theme';
-import { bodyStyle, cardStyle, handlePositions, headerStyle } from './sharedStyles';
+import handlePositions from './handlePositions';
 
 const logger = Logger.create('WhiteboardFileNode');
 
-// Header showing the linked note's title — replaces the generic "NOTE" badge
-// when we know the title. Truncated with ellipsis on overflow.
-const noteHeaderStyle = (textColor: string, dividerColor: string): CSSProperties => ({
-	fontSize: 12,
-	fontWeight: 600,
-	color: textColor,
-	padding: '5px 8px',
-	borderBottom: `1px solid ${dividerColor}`,
-	flexShrink: 0,
-	whiteSpace: 'nowrap',
-	overflow: 'hidden',
-	textOverflow: 'ellipsis',
-});
-
-// Build a file:// URL pointing at the resource's blob on disk. Delegates
-// the path-on-disk computation to resourceFullPath so we get the same
-// extension logic as the rest of Joplin (file_extension first, then a
-// mime → extension fallback for resources missing an explicit extension).
-// pathToFileURL handles Windows separators and special-character encoding.
 const resourceUrlFor = (resource: ResourceEntity | null, resourceDirectory: string): string | null => {
 	if (!resource || !resourceDirectory) return null;
 	return pathToFileURL(resourceFullPath(resource, resourceDirectory)).href;
@@ -49,13 +30,8 @@ interface ResolvedItem {
 	kind: 'note' | 'resource' | 'unknown';
 	title: string;
 	body?: string;
-	// Note metadata used to gate writes from this card (e.g. checkbox
-	// toggling) and to enable conflict detection on save.
 	userUpdatedTime?: number;
 	deletedTime?: number;
-	// The full resource entity for `kind: 'resource'` items, so we can pass
-	// it straight to resourceFullPath / resourceFilename (which know how to
-	// fall back from missing file_extension to a mime-derived one).
 	resource?: ResourceEntity;
 }
 
@@ -72,11 +48,6 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 			lastLoadedFileRef.current = null;
 			return undefined;
 		}
-		// Clear any previously-resolved item before loading when the ref has
-		// changed, so switching from one internal ref to another doesn't show
-		// stale content during the async load. Skip the clear on a refetch
-		// of the same ref (e.g. after a checkbox toggle saves the note) —
-		// otherwise the preview would flicker on every refetch.
 		if (lastLoadedFileRef.current !== file) {
 			setResolved(null);
 			lastLoadedFileRef.current = file;
@@ -102,6 +73,7 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 						kind: 'resource',
 						title: item.title || file,
 						resource: item as ResourceEntity,
+						deletedTime: item.deleted_time,
 					});
 				} else {
 					setResolved({ kind: 'unknown', title: file });
@@ -119,7 +91,6 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; data: WhiteboardNodeData; position: { x: number; y: number } }>) => {
 	const ctx = useWhiteboardContext();
 	const node = data.canvasNode as FileCanvasNode;
-	const colors = useMemo(() => whiteboardColors(ctx.themeId), [ctx.themeId]);
 
 	const onDoubleClick = useCallback((e: React.MouseEvent) => {
 		e.stopPropagation();
@@ -127,26 +98,15 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 	}, [ctx, node.file]);
 
 	const { resolved, refetch } = useResolvedRef(node.file);
-	// Internal refs go through the resolved resource (which carries mime +
-	// file_extension from the database). External refs may already be URLs
-	// (http/https/file), in which case we use them as-is for rendering;
-	// bare paths from other tools can't be resolved here so we leave url null and fall
-	// back to the text branch.
 	const isInternal = isInternalRef(node.file);
 	const url = isInternal
 		? resourceUrlFor(resolved?.resource ?? null, ctx.resourceDirectory)
 		: (/^(https?:|file:)\/\//i.test(node.file) ? node.file : null);
 	const mime = resolved?.resource?.mime;
-	const isPdf = isInternal
-		? mime === 'application/pdf'
-		: /\.pdf(\?|$|#)/i.test(node.file);
 	const isImage = isInternal
 		? !!mime?.startsWith('image/')
 		: /\.(png|jpe?g|gif|webp|svg|bmp)(\?|$|#)/i.test(node.file);
 
-	// Render note bodies as compiled HTML, like the TextNode does. Resources
-	// linked from the note body need to be resolved separately — the editor's
-	// own resourceInfos only covers resources of the *whiteboard* note.
 	const [noteHtml, setNoteHtml] = useState<string>('');
 	useEffect(() => {
 		let cancelled = false;
@@ -169,23 +129,12 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 		return () => { cancelled = true; };
 	}, [resolved, ctx]);
 
-	// Save the linked note's body when the user toggles a checkbox in its
-	// preview. We rely on the same reload-on-external-change path that lets
-	// other commands (e.g. addNoteToWhiteboard) update notes outside the
-	// editor's own state — once the body is saved, refetching `resolved`
-	// happens via `useResolvedRef` which is keyed on `node.file`.
 	const linkedNoteId = resolved?.kind === 'note' ? resolveFileRef(node.file).id : null;
 	const linkedNoteUserUpdatedTime = resolved?.kind === 'note' ? resolved.userUpdatedTime : undefined;
 	const linkedNoteDeletedTime = resolved?.kind === 'note' ? resolved.deletedTime : undefined;
-	// Per-card in-flight flag. Rapid checkbox toggles can otherwise overwrite
-	// each other because all clicks read from the same stale `resolved.body`
-	// until refetch completes. While a save is pending we drop further
-	// toggles; the user retries once the preview catches up.
 	const savingRef = useRef(false);
 	const onLinkedNoteBodyChange = useCallback(async (newBody: string) => {
 		if (!linkedNoteId) return;
-		// Don't write to deleted (in-trash) notes — Note.save would either
-		// fail or, worse, silently resurrect the note via the timestamp bump.
 		if (linkedNoteDeletedTime) {
 			logger.info(`Ignoring checkbox toggle on deleted note: ${linkedNoteId}`);
 			return;
@@ -196,9 +145,6 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 		}
 		savingRef.current = true;
 		try {
-			// Pass user_updated_time so the save layer can detect concurrent
-			// edits (e.g. the same note open in another window). changeSource
-			// is set explicitly so sync/telemetry can attribute the write.
 			await Note.save(
 				{
 					id: linkedNoteId,
@@ -209,9 +155,6 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 			);
 			refetch();
 		} catch (error) {
-			// Read-only / shared-without-write-permission notes throw here.
-			// Log and leave the preview as-is — the next refetch will revert
-			// the visible checkbox state to match the on-disk body.
 			logger.warn(`Could not save linked note ${linkedNoteId}:`, error);
 			refetch();
 		} finally {
@@ -223,41 +166,44 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 		onChange: onLinkedNoteBodyChange,
 	});
 
+	const isInTrash = !!resolved?.deletedTime;
+
 	const renderContent = () => {
-		// Image / PDF resource — render directly.
-		if (url && isImage) {
-			return <img src={url} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', alignSelf: 'center', flex: 1 }} alt={resolved?.title ?? ''} />;
-		}
-		if (url && isPdf) {
-			return <embed src={url} type="application/pdf" style={{ width: '100%', height: '100%' }} />;
+		if (url && isImage && !isInTrash) {
+			return <img className="image" src={url} alt={resolved?.title ?? ''} />;
 		}
 
-		// Internal note ref — show the note's title in the header and the body
-		// preview below.
-		if (resolved?.kind === 'note') {
+		if (resolved?.kind === 'note' && !isInTrash) {
 			return (
 				<>
-					<div style={noteHeaderStyle(colors.textColor, colors.dividerColor)} title={resolved.title}>{resolved.title}</div>
-					<div ref={checkboxRef} className="wb-card-md" style={bodyStyle(colors)} dangerouslySetInnerHTML={{ __html: noteHtml }} />
+					<div className="header -note-title" title={resolved.title}>{resolved.title}</div>
+					<div ref={checkboxRef} className="wb-card-md body" dangerouslySetInnerHTML={{ __html: noteHtml }} />
 				</>
 			);
 		}
 
-		// Internal resource (non-image / non-pdf) — show its title.
-		if (resolved?.kind === 'resource') {
+		if (resolved?.kind === 'resource' && !isInTrash) {
 			return (
 				<>
-					<div style={headerStyle(colors)}>Resource</div>
-					<div style={bodyStyle(colors)}>{resolved.title}</div>
+					<div className="header">{_('File')}</div>
+					<div className="body">{resolved.title}</div>
 				</>
 			);
 		}
 
-		// Loading or external file path.
+		if (isInternal && (resolved?.kind === 'unknown' || isInTrash)) {
+			return (
+				<>
+					<div className="header">{_('Linked item')}</div>
+					<div className="body -deleted">{_('This linked item has been deleted.')}</div>
+				</>
+			);
+		}
+
 		return (
 			<>
-				<div style={headerStyle(colors)}>{node.file.startsWith(':/') ? 'Note / Resource' : 'File'}</div>
-				<div style={bodyStyle(colors)}>{resolved === null && node.file.startsWith(':/') ? 'Loading…' : node.file}</div>
+				<div className="header">{isInternal ? _('Linked item') : _('File')}</div>
+				<div className="body">{resolved === null && isInternal ? _('Loading…') : node.file}</div>
 			</>
 		);
 	};
@@ -266,9 +212,9 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 		<>
 			<NodeResizer minWidth={80} minHeight={40} isVisible={!!selected} />
 			{handlePositions.map(({ id: hid, position }) => (
-				<Handle key={hid} type="source" position={position} id={hid} style={{ background: colors.handleColor }} />
+				<Handle key={hid} type="source" position={position} id={hid} />
 			))}
-			<div style={cardStyle(colors, !!selected)} onDoubleClick={onDoubleClick}>
+			<div className={`whiteboard-node ${selected ? '-selected' : ''}`} onDoubleClick={onDoubleClick}>
 				{renderContent()}
 			</div>
 		</>

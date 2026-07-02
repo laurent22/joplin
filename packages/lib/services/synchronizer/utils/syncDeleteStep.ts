@@ -47,7 +47,16 @@ export default async (
 				let remoteContent = await apiCall('get', path);
 
 				if (remoteContent) {
-					remoteContent = await BaseItem.unserialize(remoteContent);
+					try {
+						remoteContent = await BaseItem.unserialize(remoteContent);
+					} catch (unserializeError) {
+						if (unserializeError.code === 'malformedItem') {
+							logger.warn(`Skipping item from sync target: ${path}: ${unserializeError.message}`);
+							await BaseItem.remoteDeletedItems(syncTargetId, [item.item_id]);
+							continue;
+						}
+						throw unserializeError;
+					}
 					const ItemClass = BaseItem.itemClass(item.item_type);
 					// For remote deletion, remoteItemUpdatedTime can be reset to 0
 					let nextQueries = BaseItem.updateSyncTimeQueries(syncTargetId, remoteContent, time.unixMs());

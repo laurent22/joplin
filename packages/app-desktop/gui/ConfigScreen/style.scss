@@ -1,5 +1,6 @@
 @use "./styles/index.scss";
 @use "./Sidebar/style.scss" as sidebar-styles;
+@use "./controls/AiIndexStatus.scss" as ai-index-status;
 
 .config-screen-content-wrapper {
 	padding: 24px;
@@ -53,6 +54,8 @@
 	overflow: auto;
 	padding: var(--joplin-config-screen-padding);
 	padding-top: 0;
+	padding-bottom: 0;
+	align-items: flex-start;
 	display: flex;
 	flex: 1;
 

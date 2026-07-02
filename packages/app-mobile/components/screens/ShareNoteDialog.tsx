@@ -48,6 +48,8 @@ const useStyles = (themeId: number) => {
 			},
 			noteTitle: {
 				fontSize: theme.fontSize,
+				flexShrink: 1,
+				flexGrow: 1,
 			},
 		});
 	}, [themeId]);

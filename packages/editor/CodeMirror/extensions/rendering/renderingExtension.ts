@@ -6,12 +6,14 @@ import replaceDividers from './replaceDividers';
 import replaceFormatCharacters from './replaceFormatCharacters';
 import replaceInlineHtml from './replaceInlineHtml';
 import renderTables from './renderTables';
+import replaceLinks from './replaceLinks';
 
 export default (tableEditingEnabled = true) => {
 	return [
 		replaceCheckboxes,
 		replaceBulletLists,
 		replaceFormatCharacters,
+		replaceLinks,
 		replaceBackslashEscapes,
 		replaceDividers,
 		addFormattingClasses,

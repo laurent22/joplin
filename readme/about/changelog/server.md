@@ -1,5 +1,18 @@
 # Joplin Server Changelog
 
+## [server-v3.7.1](https://github.com/laurent22/joplin/releases/tag/server-v3.7.1) - 2026-05-18T10:41:28Z
+
+- New: Add rate limiter on SAML auth code endpoint (#15433)
+- Improved: Joplin Server/Cloud sync: Improve item deletion performance (#15392 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Performance: Store update changes per-user, rather than per-item (#14712 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix XSS vulnerability in HTML notes (#15435)
+- Fixed: Fix banner handling (51637d6)
+- Fixed: Fix conditions for sending oversized account emails (#15271 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix database connection pool corruption after transaction failures (e7631bc)
+- Fixed: Fix database connection pool corruption when processing orphaned items (2f4f0a5)
+- Fixed: Fix startup can fail after downgrading if an interrupted task no longer exists (#15301 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Static asset resolution fails on Windows due to backslash path separators (#15396) (#15395 by [@Rygaa](https://github.com/Rygaa))
+
 ## [server-v3.6.1](https://github.com/laurent22/joplin/releases/tag/server-v3.6.1) - 2026-04-20T16:54:33Z
 
 - New: Add support for MFA (#14081)

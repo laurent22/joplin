@@ -51,3 +51,21 @@
 .note-list-item-wrapper.-provisional {
 	opacity: 0.5;
 }
+
+.note-title-tooltip {
+	position: fixed;
+	display: none;
+	z-index: 10000;
+	max-width: 480px;
+	padding: 4px 8px;
+	background-color: var(--joplin-background-color2);
+	color: var(--joplin-color2);
+	border: 1px solid var(--joplin-divider-color);
+	border-radius: 4px;
+	font-family: var(--joplin-font-family);
+	font-size: var(--joplin-font-size);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+	pointer-events: none;
+	white-space: normal;
+	overflow-wrap: break-word;
+}

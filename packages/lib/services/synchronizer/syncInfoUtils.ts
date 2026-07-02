@@ -10,7 +10,7 @@ import { compareVersions } from 'compare-versions';
 import { _ } from '../../locale';
 import JoplinError from '../../JoplinError';
 import { ErrorCode } from '../../errors';
-const fastDeepEqual = require('fast-deep-equal');
+import fastDeepEqual = require('fast-deep-equal');
 
 const logger = Logger.create('syncInfoUtils');
 
@@ -43,7 +43,7 @@ export interface SyncInfoValuePublicPrivateKeyPair {
 //
 // `appMinVersion_` should really just be a constant but for testing purposes it can be changed
 // using `setAppMinVersion()`
-let appMinVersion_ = '3.0.0';
+let appMinVersion_ = '3.7.0';
 
 export const setAppMinVersion = (v: string) => {
 	appMinVersion_ = v;
@@ -96,10 +96,16 @@ export async function migrateLocalSyncInfo(db: JoplinDatabase) {
 	//   most likely not what the user wants.
 	syncInfo.setKeyTimestamp('e2ee', 0);
 	syncInfo.setKeyTimestamp('activeMasterKeyId', 0);
-	syncInfo.revisionServiceEnabled = Setting.value('revisionService.enabled');
-	syncInfo.revisionServiceTtlDays = Setting.value('revisionService.ttlDays');
-	syncInfo.setKeyTimestamp('revisionServiceEnabled', 0);
-	syncInfo.setKeyTimestamp('revisionServiceTtlDays', 0);
+
+	// For revisionService.*: stamp the timestamp only when the local value
+	// has been customised. A default value uploaded with a real timestamp
+	// would overwrite another client's customised value on first sync.
+	const localRevisionEnabled = Setting.value('revisionService.enabled');
+	const localRevisionTtlDays = Setting.value('revisionService.ttlDays');
+	syncInfo.revisionServiceEnabled = localRevisionEnabled;
+	syncInfo.revisionServiceTtlDays = localRevisionTtlDays;
+	syncInfo.setKeyTimestamp('revisionServiceEnabled', localRevisionEnabled === Setting.settingMetadata('revisionService.enabled').value ? 0 : Date.now());
+	syncInfo.setKeyTimestamp('revisionServiceTtlDays', localRevisionTtlDays === Setting.settingMetadata('revisionService.ttlDays').value ? 0 : Date.now());
 
 	await saveLocalSyncInfo(syncInfo);
 }
@@ -261,6 +267,16 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 		}
 	}
 
+	const noteLockKey1 = s1.noteLockKey;
+	const noteLockKey2 = s2.noteLockKey;
+	if (!noteLockKey1) {
+		output.noteLockKey = noteLockKey2;
+	} else if (!noteLockKey2) {
+		output.noteLockKey = noteLockKey1;
+	} else {
+		output.noteLockKey = (noteLockKey1.updated_time || 0) >= (noteLockKey2.updated_time || 0) ? noteLockKey1 : noteLockKey2;
+	}
+
 	// We use >= so that the version from s1 (local) is preferred to the version in s2 (remote).
 	// For example, if s2 has appMinVersion 0.00 and s1 has appMinVersion 0.0.0, we choose the
 	// local version, 0.0.0.
@@ -279,6 +295,7 @@ export class SyncInfo {
 	private e2ee_: SyncInfoValueBoolean;
 	private activeMasterKeyId_: SyncInfoValueString;
 	private masterKeys_: MasterKeyEntity[] = [];
+	private noteLockKey_: MasterKeyEntity = null;
 	private ppk_: SyncInfoValuePublicPrivateKeyPair;
 	private appMinVersion_: string = appMinVersion_;
 	private revisionServiceEnabled_: SyncInfoValueBoolean;
@@ -300,6 +317,7 @@ export class SyncInfo {
 			e2ee: this.e2ee_,
 			activeMasterKeyId: this.activeMasterKeyId_,
 			masterKeys: this.masterKeys,
+			noteLockKey: this.noteLockKey,
 			ppk: this.ppk_,
 			appMinVersion: this.appMinVersion,
 			revisionServiceEnabled: this.revisionServiceEnabled_,
@@ -317,6 +335,11 @@ export class SyncInfo {
 				delete mk.checksum;
 				return mk;
 			});
+		}
+
+		if (filtered.noteLockKey) {
+			delete filtered.noteLockKey.content;
+			delete filtered.noteLockKey.checksum;
 		}
 
 		// Truncate the private key and public key
@@ -344,6 +367,7 @@ export class SyncInfo {
 		this.e2ee_ = 'e2ee' in s ? s.e2ee : { value: false, updatedTime: 0 };
 		this.activeMasterKeyId_ = 'activeMasterKeyId' in s ? s.activeMasterKeyId : { value: '', updatedTime: 0 };
 		this.masterKeys_ = 'masterKeys' in s ? s.masterKeys : [];
+		this.noteLockKey_ = 'noteLockKey' in s ? s.noteLockKey : null;
 		this.ppk_ = 'ppk' in s ? s.ppk : { value: null, updatedTime: 0 };
 		this.appMinVersion_ = s.appMinVersion ? s.appMinVersion : '0.0.0';
 		this.revisionServiceEnabled_ = 'revisionServiceEnabled' in s ? s.revisionServiceEnabled : { value: true, updatedTime: 0 };
@@ -441,6 +465,16 @@ export class SyncInfo {
 		if (JSON.stringify(v) === JSON.stringify(this.masterKeys_)) return;
 
 		this.masterKeys_ = v;
+	}
+
+	public get noteLockKey(): MasterKeyEntity {
+		return this.noteLockKey_;
+	}
+
+	public set noteLockKey(v: MasterKeyEntity) {
+		if (JSON.stringify(v) === JSON.stringify(this.noteLockKey_)) return;
+
+		this.noteLockKey_ = v;
 	}
 
 	public keyTimestamp(name: string): number {

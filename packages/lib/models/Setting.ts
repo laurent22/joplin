@@ -8,6 +8,7 @@ import Logger from '@joplin/utils/Logger';
 import mergeGlobalAndLocalSettings from '../services/profileConfig/mergeGlobalAndLocalSettings';
 import splitGlobalAndLocalSettings from '../services/profileConfig/splitGlobalAndLocalSettings';
 import JoplinError from '../JoplinError';
+import type KeychainService from '../services/keychain/KeychainService';
 import builtInMetadata, { BuiltInMetadataKeys, BuiltInMetadataValues } from './settings/builtInMetadata';
 import { toSystemSlashes } from '@joplin/utils/path';
 import { AppType, Env, SettingItem, SettingItemType, SettingItems, SettingSection, SettingSectionSource, SettingStorage, SettingsRecord } from './settings/types';
@@ -37,10 +38,9 @@ interface KeysOptions {
 
 // This is where the actual setting values are stored.
 // They are saved to database at regular intervals.
-interface CacheItem {
+interface CacheItem<T extends string|unknown> {
 	key: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each setting has its own value type; tightening forces narrowing at every read/write site
-	value: any;
+	value: T extends string ? SettingValueType<T> : unknown;
 }
 
 export interface Constants {
@@ -63,6 +63,7 @@ export interface Constants {
 	syncVersion: number;
 	startupDevPlugins: string[];
 	isSubProfile: boolean;
+	isJoplinCloudWebApp: boolean;
 
 	'sync.9.apiKey': string;
 	'sync.10.apiKey': string;
@@ -163,8 +164,7 @@ const globalMigrations: GlobalMigration[] = [
 interface UserSettingMigration {
 	oldName: string;
 	newName: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	transformValue: Function;
+	transformValue: (value: string)=> string | string[];
 
 	// Currently the migration code only supports migrating a plugin setting to the regular settings
 	// (not a plugin setting to a different name). So "oldName" should be the plugin setting name
@@ -306,6 +306,7 @@ class Setting extends BaseModel {
 		syncVersion: 3,
 		startupDevPlugins: [],
 		isSubProfile: false,
+		isJoplinCloudWebApp: false,
 
 		'sync.9.apiKey': '',
 		'sync.10.apiKey': '',
@@ -316,10 +317,10 @@ class Setting extends BaseModel {
 	public static allowFileStorage = true;
 
 	private static metadata_: SettingItems = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- KeychainService concrete class lives in app-desktop/app-mobile; lib references it structurally to avoid cross-package imports
-	private static keychainService_: any = null;
+	// Type-only import: KeychainService imports Setting, so a value import would create a runtime cycle.
+	private static keychainService_: KeychainService = null;
 	private static keys_: string[] = null;
-	private static cache_: CacheItem[] = [];
+	private static cache_: CacheItem<unknown>[] = [];
 	private static saveTimeoutId_: ReturnType<typeof shim.setTimeout> = null;
 	private static changeEventTimeoutId_: ReturnType<typeof shim.setTimeout> = null;
 	private static customMetadata_: SettingItems = {};
@@ -387,8 +388,7 @@ class Setting extends BaseModel {
 		return this.keychainService_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See keychainService_ above
-	public static setKeychainService(s: any) {
+	public static setKeychainService(s: KeychainService) {
 		this.keychainService_ = s;
 	}
 
@@ -505,7 +505,7 @@ class Setting extends BaseModel {
 				}
 
 				if (applyMigration) {
-					this.setValue(migration.newName, migration.transformValue(newValue));
+					this.setValue(migration.newName, migration.transformValue(newValue as string));
 					logger.info(`applyUserSettingMigrations: Migrated ${migration.oldName} to ${migration.newName}`);
 				}
 			}
@@ -643,14 +643,14 @@ class Setting extends BaseModel {
 	// This allows loading a setting without doing any check on anything - this can be useful to
 	// retrieve a value for a setting that was previously registered, but no longer is. Also to
 	// retrieve setting values for plugins before the plugin is actually loaded.
-	private static async loadOneFromDb(key: string): Promise<CacheItem | null> {
+	private static async loadOneFromDb<T extends string>(key: T): Promise<CacheItem<T> | null> {
 		const row = await this.modelSelectOne('SELECT key, value FROM settings WHERE key = ?', [key]);
 		return row ? row : null;
 	}
 
 	// Low-level method to load a setting directly from the database. Should not be used in most cases.
 	// Does not apply setting default values.
-	public static async loadOne(key: string): Promise<CacheItem | null> {
+	public static async loadOne<T extends string>(key: T): Promise<CacheItem<T> | null> {
 		if (this.keyStorage(key) === SettingStorage.File) {
 			let fileSettings = await this.fileHandler.load();
 
@@ -664,7 +664,7 @@ class Setting extends BaseModel {
 				return {
 					key,
 					value: fileSettings[key],
-				};
+				} as CacheItem<T>;
 			} else {
 				return null;
 			}
@@ -682,7 +682,9 @@ class Setting extends BaseModel {
 			return {
 				key,
 				value: await this.keychainService().password(`setting.${key}`),
-			};
+				// TODO: KeychainService currently only supports string-valued settings
+				// For now, cast to preserve existing behavior:
+			} as CacheItem<unknown> as CacheItem<T>;
 		}
 
 		return null;
@@ -693,7 +695,7 @@ class Setting extends BaseModel {
 		this.cancelScheduleChangeEvent();
 
 		this.cache_ = [];
-		const rows: CacheItem[] = await this.modelSelectAll('SELECT * FROM settings');
+		const rows: CacheItem<unknown>[] = await this.modelSelectAll('SELECT * FROM settings');
 
 
 		// Keys in the database takes precedence over keys in the keychain because
@@ -703,7 +705,7 @@ class Setting extends BaseModel {
 
 		const rowKeys = (rows as { key: string }[]).map(r => r.key);
 		const secureKeys = this.keys(false, null, { secureOnly: true });
-		const secureItems: CacheItem[] = [];
+		const secureItems: CacheItem<unknown>[] = [];
 		for (const key of secureKeys) {
 			if (rowKeys.includes(key)) continue;
 
@@ -716,7 +718,7 @@ class Setting extends BaseModel {
 			}
 		}
 
-		const itemsFromFile: CacheItem[] = [];
+		const itemsFromFile: CacheItem<unknown>[] = [];
 
 		if (this.canUseFileStorage()) {
 			let fileSettings = await this.fileHandler.load();
@@ -737,7 +739,7 @@ class Setting extends BaseModel {
 
 		this.cache_ = [];
 		const cachedKeys = new Set();
-		const pushItemsToCache = (items: CacheItem[]) => {
+		const pushItemsToCache = (items: CacheItem<unknown>[]) => {
 			for (let i = 0; i < items.length; i++) {
 				const c = items[i];
 
@@ -949,15 +951,14 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- value is the per-setting raw value; formatValue branches by SettingItemType — narrowing forces casts in every branch
-	public static valueToString(key: string, value: any) {
+	public static valueToString(key: string, value: unknown) {
 		const md = this.settingMetadata(key);
-		value = this.formatValue(key, value);
-		if (md.type === SettingItemType.Int) return value.toFixed(0);
-		if (md.type === SettingItemType.Bool) return value ? '1' : '0';
-		if (md.type === SettingItemType.Array) return value ? JSON.stringify(value) : '[]';
-		if (md.type === SettingItemType.Object) return value ? JSON.stringify(value) : '{}';
-		if (md.type === SettingItemType.String) return value ? `${value}` : '';
+		const formatted = this.formatValue(key, value);
+		if (md.type === SettingItemType.Int) return formatted.toFixed(0);
+		if (md.type === SettingItemType.Bool) return formatted ? '1' : '0';
+		if (md.type === SettingItemType.Array) return formatted ? JSON.stringify(formatted) : '[]';
+		if (md.type === SettingItemType.Object) return formatted ? JSON.stringify(formatted) : '{}';
+		if (md.type === SettingItemType.String) return formatted ? `${formatted}` : '';
 
 		throw new Error(`Unhandled value type: ${md.type}`);
 	}
@@ -967,8 +968,7 @@ class Setting extends BaseModel {
 		return md.filter ? md.filter(value) : value;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See valueToString above
-	public static formatValue(key: string | SettingItemType, value: any) {
+	public static formatValue(key: string | SettingItemType, value: unknown) {
 		const type = typeof key === 'string' ? this.settingMetadata(key).type : key;
 
 		if (type === SettingItemType.Int) return !value ? 0 : Math.floor(Number(value));
@@ -1018,8 +1018,7 @@ class Setting extends BaseModel {
 		}
 
 		if (key in this.constants_) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Constants are heterogeneous (string, number, AppType, function); value() returns SettingValueType<T> which is parametric
-			const v = (this.constants_ as any)[key];
+			const v: unknown = this.constants_[key as keyof Constants];
 			const output = typeof v === 'function' ? v() : v;
 			if (output === 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
 			return output;
@@ -1029,12 +1028,12 @@ class Setting extends BaseModel {
 
 		for (let i = 0; i < this.cache_.length; i++) {
 			if (this.cache_[i].key === key) {
-				return copyIfNeeded(this.cache_[i].value);
+				return copyIfNeeded(this.cache_[i].value) as SettingValueType<T>;
 			}
 		}
 
 		const md = this.settingMetadata(key);
-		return copyIfNeeded(md.value);
+		return copyIfNeeded(md.value) as SettingValueType<T>;
 	}
 
 	// This function returns the default value if the setting key does not exist.
@@ -1293,6 +1292,8 @@ class Setting extends BaseModel {
 			'sync',
 			'encryption',
 			'joplinCloud',
+			'ai',
+			'mcp',
 			'editor',
 			'plugins',
 			'markdownPlugins',
@@ -1367,6 +1368,8 @@ class Setting extends BaseModel {
 		if (name === 'tools') return _('Tools');
 		if (name === 'importOrExport') return _('Import and Export');
 		if (name === 'moreInfo') return _('More information');
+		if (name === 'ai') return _('AI');
+		if (name === 'mcp') return _('MCP Server');
 
 		if (this.customSections_[name] && this.customSections_[name].label) return this.customSections_[name].label;
 
@@ -1443,6 +1446,8 @@ class Setting extends BaseModel {
 			'tools': 'fa fa-toolbox',
 			'importOrExport': 'fa fa-file-export',
 			'moreInfo': 'fa fa-info-circle',
+			'ai': 'fa fa-robot',
+			'mcp': 'fa fa-plug',
 		};
 
 		// Icomoon icons are currently not present in the mobile app -- we override these

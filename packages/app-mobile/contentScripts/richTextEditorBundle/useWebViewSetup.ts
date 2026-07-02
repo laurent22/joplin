@@ -136,6 +136,7 @@ const useSource = (props: UseSourceProps) => {
 				/* Increase the size of the editor to make it easier to focus the editor. */
 				.prosemirror-editor {
 					min-height: 75vh;
+					padding-bottom: ${Number(propsRef.current.settings.themeData.paddingBottom)}px;
 				}
 			`,
 			js: `

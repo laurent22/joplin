@@ -40,7 +40,7 @@ export default class JoplinSettings {
     /**
      * Gets setting values (only applies to setting you registered from your plugin)
      */
-    values(keys: string[] | string): Promise<Record<string, unknown>>;
+    values(keys: string[] | string): Promise<Record<string, any>>;
     /**
      * Gets a setting value (only applies to setting you registered from your plugin).
      *

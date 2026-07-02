@@ -2,7 +2,7 @@ import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import shim from '../shim';
 import markdownUtils from '../markdownUtils';
-import { sortedIds, createNTestNotes, expectThrow, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, supportDir, expectNotThrow, simulateReadOnlyShareEnv, msleep, db } from '../testing/test-utils';
+import { sortedIds, createNTestNotes, expectThrow, setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, supportDir, expectNotThrow, simulateReadOnlyShareEnv, msleep, db, encryptionService, revisionService } from '../testing/test-utils';
 import Folder from './Folder';
 import Note from './Note';
 import Tag from './Tag';
@@ -12,11 +12,18 @@ import { NoteEntity, ResourceEntity } from '../services/database/types';
 import { toForwardSlashes } from '../path-utils';
 import * as ArrayUtils from '../ArrayUtils';
 import { ErrorCode } from '../errors';
+import ResourceService from '../services/ResourceService';
+import NoteResource from './NoteResource';
+import { serializeWhiteboard } from '../services/whiteboard/serialize';
+import { Canvas } from '../services/whiteboard/jsoncanvas';
 import SearchEngine from '../services/search/SearchEngine';
 import { getTrashFolderId } from '../services/trash';
 import getConflictFolderId from './utils/getConflictFolderId';
 import Revision from './Revision';
 import RevisionService from '../services/RevisionService';
+import NoteLockKey from '../services/noteLock/NoteLockKey';
+import NoteLockService from '../services/noteLock/NoteLockService';
+import EncryptionService from '../services/e2ee/EncryptionService';
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -28,6 +35,10 @@ describe('models/Note', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		NoteLockKey.destroyInstance();
+		NoteLockService.destroyInstance();
+		EncryptionService.instance_ = encryptionService();
+		Setting.setValue('featureFlag.noteLock', true);
 	});
 
 	it('should find resource and note IDs', (async () => {
@@ -76,6 +87,93 @@ describe('models/Note', () => {
 		}
 	}));
 
+	test.each<[string, string[]]>([
+		// Single file card pointing at a resource.
+		[
+			JSON.stringify({
+				nodes: [
+					{ id: 'a', type: 'file', x: 0, y: 0, width: 100, height: 100, file: ':/06894e83b8f84d3d8cbe0f1587f9e226' },
+				],
+				edges: [],
+			}),
+			['06894e83b8f84d3d8cbe0f1587f9e226'],
+		],
+		// Multiple file cards — duplicates collapse, external paths are skipped.
+		[
+			JSON.stringify({
+				nodes: [
+					{ id: 'a', type: 'file', x: 0, y: 0, width: 100, height: 100, file: ':/06894e83b8f84d3d8cbe0f1587f9e226' },
+					{ id: 'b', type: 'file', x: 0, y: 0, width: 100, height: 100, file: ':/06894e83b8f84d3d8cbe0f1587f9e227' },
+					{ id: 'c', type: 'file', x: 0, y: 0, width: 100, height: 100, file: ':/06894e83b8f84d3d8cbe0f1587f9e226' },
+					{ id: 'd', type: 'file', x: 0, y: 0, width: 100, height: 100, file: 'https://example.com/photo.png' },
+				],
+				edges: [],
+			}),
+			['06894e83b8f84d3d8cbe0f1587f9e226', '06894e83b8f84d3d8cbe0f1587f9e227'],
+		],
+		// Non-file node types (text/link/group) don't reference items.
+		[
+			JSON.stringify({
+				nodes: [
+					{ id: 'a', type: 'text', x: 0, y: 0, width: 100, height: 100, text: 'hello' },
+					{ id: 'b', type: 'link', x: 0, y: 0, width: 100, height: 100, url: 'https://example.com' },
+					{ id: 'c', type: 'group', x: 0, y: 0, width: 100, height: 100, label: 'Section' },
+				],
+				edges: [],
+			}),
+			[],
+		],
+	])('should find linked items inside jsoncanvas fences', (canvasJson, expected) => {
+		const body = `\`\`\`jsoncanvas\n${canvasJson}\n\`\`\``;
+		const actual = Note.linkedItemIds(body);
+		expect(ArrayUtils.contentEquals(actual, expected)).toBe(true);
+	});
+
+	it('should merge fence refs with surrounding markdown links', () => {
+		const canvas: Canvas = {
+			nodes: [
+				{ id: 'a', type: 'file', x: 0, y: 0, width: 100, height: 100, file: ':/06894e83b8f84d3d8cbe0f1587f9e226' },
+			],
+			edges: [],
+		};
+		const body = `Intro [foo](:/06894e83b8f84d3d8cbe0f1587f9e227)\n\n${serializeWhiteboard('', canvas)}`;
+		const actual = Note.linkedItemIds(body);
+		expect(ArrayUtils.contentEquals(
+			actual,
+			['06894e83b8f84d3d8cbe0f1587f9e226', '06894e83b8f84d3d8cbe0f1587f9e227'],
+		)).toBe(true);
+	});
+
+	it('should associate whiteboard-referenced resources so they are not orphaned', (async () => {
+		// End-to-end: a resource referenced only from a jsoncanvas card must
+		// still be picked up by ResourceService.indexNoteResources, registered
+		// in note_resources, and survive the orphan reaper.
+		const folder = await Folder.save({ title: 'folder' });
+		const resource = await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
+		const canvas: Canvas = {
+			nodes: [
+				{ id: 'card', type: 'file', x: 0, y: 0, width: 200, height: 160, file: `:/${resource.id}` },
+			],
+			edges: [],
+		};
+		const note = await Note.save({
+			title: 'whiteboard',
+			parent_id: folder.id,
+			body: serializeWhiteboard('', canvas),
+		});
+
+		const service = new ResourceService();
+		await service.indexNoteResources();
+
+		expect(await NoteResource.associatedNoteIds(resource.id)).toEqual([note.id]);
+
+		// Orphan reaper must NOT remove a resource that's still referenced by
+		// a whiteboard card — even though the ref lives outside markdown link
+		// syntax.
+		await service.deleteOrphanResources(0);
+		expect(!!(await Resource.load(resource.id))).toBe(true);
+	}));
+
 	it('should change the type of notes', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
@@ -121,6 +219,168 @@ describe('models/Note', () => {
 			expect(unserialized.body).toBe(input.body);
 		}
 	}));
+
+	it('should add lock defaults for old sync notes', () => {
+		expect(Note.filter({
+			is_locked: undefined,
+			extracted_resource_ids: undefined,
+		})).toMatchObject({
+			is_locked: 0,
+			extracted_resource_ids: '',
+		});
+		expect(Note.filter({
+			is_locked: null,
+			extracted_resource_ids: null,
+		})).toMatchObject({
+			is_locked: 0,
+			extracted_resource_ids: '',
+		});
+	});
+
+	it('should default lock fields for new notes', async () => {
+		const note = await Note.save({});
+		const loadedNote = await Note.load(note.id);
+
+		expect(loadedNote.is_locked).toBe(0);
+		expect(loadedNote.extracted_resource_ids).toBe('');
+	});
+
+	it('should include lock state in preview fields', () => {
+		expect(Note.previewFields()).toContain('is_locked');
+		expect(Note.previewFields()).not.toContain('extracted_resource_ids');
+	});
+
+	const resourceId1 = '06894e83b8f84d3d8cbe0f1587f9e226';
+	const resourceId2 = '06894e83b8f84d3d8cbe0f1587f9e227';
+
+	test.each<[string[], string]>([
+		[[], ''],
+		[[' '], ''],
+		[[resourceId1], resourceId1],
+		[[` ${resourceId1} `, resourceId2], `${resourceId1},${resourceId2}`],
+		[[resourceId1, resourceId1, 'invalid'], resourceId1],
+	])('should serialize extracted resource IDs: %j', (resourceIds, expected) => {
+		expect(Note.serializeExtractedResourceIds(resourceIds)).toBe(expected);
+	});
+
+	test.each<[string, string[]]>([
+		['', []],
+		[' ', []],
+		[',,', []],
+		[resourceId1, [resourceId1]],
+		[`${resourceId1},,${resourceId2}`, [resourceId1, resourceId2]],
+		[` ${resourceId1}, ${resourceId2} `, [resourceId1, resourceId2]],
+		[`${resourceId1},${resourceId1},invalid`, [resourceId1]],
+	])('should unserialize extracted resource IDs: %j', (serializedIds, expected) => {
+		expect(Note.unserializeExtractedResourceIds(serializedIds)).toEqual(expected);
+	});
+
+	it('should store note lock ciphertext while decrypting only gated loads', async () => {
+		await NoteLockKey.instance().create('123456');
+		const resourceId1 = '06894e83b8f84d3d8cbe0f1587f9e226';
+		const resourceId2 = '06894e83b8f84d3d8cbe0f1587f9e227';
+		const plainTextBody = `secret [](:/${resourceId1}) [](:/${resourceId2})`;
+
+		const note = await Note.save({
+			body: plainTextBody,
+			is_locked: 1,
+		}, { useNoteLock: true });
+		const storedNote = await Note.load(note.id);
+
+		expect(storedNote.body).not.toBe(plainTextBody);
+		expect(storedNote.extracted_resource_ids).toBe(`${resourceId1},${resourceId2}`);
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(plainTextBody);
+
+		await expect(Note.load(note.id, { fields: ['id', 'is_locked'], useNoteLock: true })).rejects.toThrow();
+		await expect(Note.load(note.id, { fields: ['id', 'body'], useNoteLock: true })).rejects.toThrow('Gated note lock load is missing lock state');
+
+		await Note.save(await Note.load(note.id, { useNoteLock: true }), { useNoteLock: true });
+		expect((await Note.load(note.id)).body).not.toBe(plainTextBody);
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(plainTextBody);
+
+		await expect(Note.save({
+			id: note.id,
+			body: 'must not be stored',
+		}, { useNoteLock: true })).rejects.toThrow('Gated note lock save is missing lock state');
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(plainTextBody);
+
+		await Note.save({
+			...await Note.load(note.id, { useNoteLock: true }),
+			body: `${plainTextBody} edited`,
+		}, { useNoteLock: true });
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(`${plainTextBody} edited`);
+
+		await Note.save({
+			...await Note.load(note.id, { useNoteLock: true }),
+			body: 'unlocked',
+			is_locked: 0,
+		}, { useNoteLock: true });
+		const unlockedNote = await Note.load(note.id);
+		expect(unlockedNote.body).toBe('unlocked');
+		expect(unlockedNote.extracted_resource_ids).toBe('');
+	});
+
+	it('should not decrypt locked notes while the feature is disabled', async () => {
+		await NoteLockKey.instance().create('123456');
+		const note = await Note.save({
+			body: 'secret',
+			is_locked: 1,
+		}, { useNoteLock: true });
+
+		Setting.setValue('featureFlag.noteLock', false);
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(note.body);
+	});
+
+	it('should fail closed when note lock encryption cannot decrypt or encrypt', async () => {
+		const noteLockKey = NoteLockKey.instance();
+		await noteLockKey.create('123456');
+		const note = await Note.save({
+			body: 'secret',
+			is_locked: 1,
+		}, { useNoteLock: true });
+
+		noteLockKey.lock();
+		await expect(Note.save({
+			body: 'must not be stored',
+			is_locked: 1,
+		}, { useNoteLock: true })).rejects.toThrow('Note lock key is not unlocked');
+		expect(await Note.all()).toHaveLength(1);
+
+		await noteLockKey.unlock('123456');
+		const corruptedBody = `${note.body}invalid`;
+		await db().exec('UPDATE notes SET body = ? WHERE id = ?', [corruptedBody, note.id]);
+		await expect(Note.load(note.id, { useNoteLock: true })).rejects.toThrow();
+		expect((await Note.load(note.id)).body).toBe(corruptedBody);
+
+		const incompleteBody = note.body.slice(0, -1);
+		await db().exec('UPDATE notes SET body = ? WHERE id = ?', [incompleteBody, note.id]);
+		await expect(Note.load(note.id, { useNoteLock: true })).rejects.toThrow();
+		expect((await Note.load(note.id)).body).toBe(incompleteBody);
+	});
+
+	it('should clear plaintext revision data when locking a note', async () => {
+		const note = await Note.save({ body: 'plain text' });
+		await Note.save({ id: note.id, body: 'updated plain text' });
+		await revisionService().collectRevisions();
+		expect(await Revision.countRevisions(Note.modelType(), note.id)).toBe(1);
+		const encryptedRevision = await Revision.save({
+			item_type: Note.modelType(),
+			item_id: note.id,
+			item_updated_time: Date.now(),
+			is_locked: 1,
+		});
+
+		await NoteLockKey.instance().create('123456');
+		await Note.save({
+			...await Note.load(note.id),
+			is_locked: 1,
+		}, { useNoteLock: true });
+
+		expect(await Revision.countRevisions(Note.modelType(), note.id)).toBe(1);
+		expect(await Revision.load(encryptedRevision.id)).toBeTruthy();
+		await ItemChange.waitForAllSaved();
+		expect(await ItemChange.oldNoteContent(note.id)).toBe(null);
+	});
 
 	it('should reset fields for a duplicate', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });

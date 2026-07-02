@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import app from '../app';
 import { AppState, AppStateDialog } from '../app.reducer';
 import MainScreen from './MainScreen';
@@ -10,8 +11,8 @@ import ErrorBoundary from './ErrorBoundary';
 import { themeStyle } from '@joplin/lib/theme';
 import MenuBar from './MenuBar';
 import { _ } from '@joplin/lib/locale';
-const { createRoot } = require('react-dom/client');
-const { connect, Provider } = require('react-redux');
+import { createRoot } from 'react-dom/client';
+import { connect, Provider } from 'react-redux';
 import Setting from '@joplin/lib/models/Setting';
 import ClipperServer from '@joplin/lib/ClipperServer';
 import DialogTitle from './DialogTitle';
@@ -31,14 +32,13 @@ import EditorWindow from './NoteEditor/EditorWindow';
 import SsoLoginScreen from './SsoLoginScreen/SsoLoginScreen';
 import SamlShared from '@joplin/lib/components/shared/SamlShared';
 import PopupNotificationProvider from './PopupNotification/PopupNotificationProvider';
-const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
+import { ThemeProvider, StyleSheetManager, createGlobalStyle } from 'styled-components';
 
 interface Props {
 	themeId: number;
 	appState: string;
 	profileConfigCurrentProfileId: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	zoomFactor: number;
 	needApiAuth: boolean;
 	dialogs: AppStateDialog[];

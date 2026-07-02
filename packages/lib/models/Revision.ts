@@ -407,6 +407,18 @@ export default class Revision extends BaseItem {
 		await this.batchDelete(revisions.map(item => item.id), options);
 	}
 
+	// Same as deleteHistoryForNote, but keeps locked revisions when clearing plaintext history during note locking.
+	public static async deleteUnencryptedHistoryForNote(noteIds: string | string[], options: DeleteOptions) {
+		const ids = Array.isArray(noteIds) ? noteIds : [noteIds];
+
+		const revisions: RevisionEntity[] = await this.modelSelectAll(
+			`SELECT id FROM revisions WHERE item_type = ? AND item_id in (${this.escapeIdsForSql(ids)}) AND is_locked = 0 ORDER BY item_updated_time DESC`,
+			[ModelType.Note],
+		);
+
+		await this.batchDelete(revisions.map(item => item.id), options);
+	}
+
 	public static async revisionExists(itemType: ModelType, itemId: string, updatedTime: number) {
 		const existingRev = await Revision.latestRevision(itemType, itemId);
 		return existingRev && existingRev.item_updated_time === updatedTime;

@@ -224,6 +224,21 @@
 		"ios-v13.6.5": true,
 		"v3.7.1": true,
 		"ios-v13.6.6": true,
-		"v3.6.13": true
+		"v3.6.13": true,
+		"android-v3.6.19": true,
+		"ios-v13.6.7": true,
+		"ios-v13.6.8": true,
+		"v3.6.14": true,
+		"android-v3.6.20": true,
+		"ios-v13.6.9": true,
+		"v3.6.15": true,
+		"v3.7.2": true,
+		"android-v3.6.21": true,
+		"android-v3.7.1": true,
+		"ios-v13.6.10": true,
+		"android-v3.7.2": true,
+		"v3.7.3": true,
+		"v3.7.4": true,
+		"v3.7.6": true
 	}
 }

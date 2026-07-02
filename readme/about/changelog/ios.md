@@ -1,5 +1,27 @@
 # Joplin iOS Changelog
 
+## [ios-v13.6.10](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.10) - 2026-06-20T11:04:51Z
+
+- Improved: Improve how resource filenames are determined (#15672 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Fountain rendering issue (#15659 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix duplicate tag creation for special unicode characters (#15613) (#15608 by [@mrjo118](https://github.com/mrjo118))
+
+## [ios-v13.6.9](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.9) - 2026-05-22T10:09:34Z
+
+- Fixed: Fix scroll jumps while editing long paragraphs (#15495) (#15490 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [ios-v13.6.8](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.8) - 2026-05-19T14:45:16Z
+
+- New: Add padding to the bottom of the viewer and editor  (#15418 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- New: Add setting to choose the default view / edit state (#15423 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Improve view/edit toggle button appearance in note header (#15450)
+- Fixed: Fix JEX import on iOS (#15408) (#15407 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: In-editor rendering: Do not render empty inline HTML (#15470) (#15467 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [ios-v13.6.7](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.7) - 2026-05-12T10:04:26Z
+
+- Fixed: Fix plugins fail to start (#15362) (#15311 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.6.6](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.6) - 2026-05-05T15:29:24Z
 
 - New: Add 'Go to start/end of note' toolbar buttons (#15015 by [@Vpatel1093](https://github.com/Vpatel1093))

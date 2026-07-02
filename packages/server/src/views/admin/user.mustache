@@ -117,8 +117,11 @@
 					<input type="submit" name="update_subscription_basic_button" class="button is-warning" value="Downgrade to Basic" />
 				{{/showUpdateSubscriptionBasic}}
 				{{#showUpdateSubscriptionPro}}
-					<input type="submit" name="update_subscription_pro_button" class="button is-warning" value="Upgrade to Pro" />
+					<input type="submit" name="update_subscription_pro_button" class="button is-warning" value="Switch to Pro" />
 				{{/showUpdateSubscriptionPro}}
+				{{#showUpdateSubscriptionPro100Gb}}
+					<input type="submit" name="update_subscription_pro_100gb_button" class="button is-warning" value="Switch to Pro 100 GB" />
+				{{/showUpdateSubscriptionPro100Gb}}
 				<input type="submit" name="recheck_invoice_button" class="button is-link" value="Recheck invoice" />
 			</div>
 		</div>
@@ -161,7 +164,12 @@
 			}
 
 			if (event.submitter.getAttribute('name') === 'update_subscription_pro_button') {
-				const ok = confirm('Upgrade to Pro subscription?');
+				const ok = confirm('Switch to Pro subscription?');
+				if (!ok) event.preventDefault();
+			}
+
+			if (event.submitter.getAttribute('name') === 'update_subscription_pro_100gb_button') {
+				const ok = confirm('Switch to Pro 100 GB subscription?');
 				if (!ok) event.preventDefault();
 			}
 		});

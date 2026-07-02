@@ -1,7 +1,7 @@
 import { attributesHtml } from './htmlUtils';
 import { ItemIdToUrlHandler, OptionsResourceModel, ResourceInfo, ResourceInfos } from './types';
 
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 
 // Imported from models/Resource.js

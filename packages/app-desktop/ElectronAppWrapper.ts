@@ -9,16 +9,15 @@ import { IpcMessageHandler, IpcServer, Message, newHttpError, sendMessage, SendM
 import { BrowserWindow, BrowserWindowConstructorOptions, Tray, WebContents, screen, App, nativeTheme, Menu, session as electronSession, Session } from 'electron';
 import bridge from './bridge';
 import * as url from 'url';
-const path = require('path');
-const { dirname } = require('@joplin/lib/path-utils');
-const fs = require('fs-extra');
+import * as path from 'path';
+import { dirname } from '@joplin/lib/path-utils';
+import * as fs from 'fs-extra';
 
 import { dialog, ipcMain } from 'electron';
 import { _ } from '@joplin/lib/locale';
 import restartInSafeModeFromMain from './utils/restartInSafeModeFromMain';
 import handleCustomProtocols, { CustomProtocolHandlers } from './utils/customProtocols/handleCustomProtocols';
 import { clearTimeout, setTimeout } from 'timers';
-import { resolve } from 'path';
 import { defaultWindowId } from '@joplin/lib/reducer';
 import { msleep, Second } from '@joplin/utils/time';
 import determineBaseAppDirs from '@joplin/lib/determineBaseAppDirs';
@@ -411,7 +410,7 @@ export default class ElectronAppWrapper {
 						overrideBrowserWindowOptions: {
 							webPreferences: {
 								nodeIntegration: false,
-								preload: resolve(__dirname, './utils/window/secondaryWindowPreload.js'),
+								preload: path.resolve(__dirname, './utils/window/secondaryWindowPreload.js'),
 							},
 						},
 					};

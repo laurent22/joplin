@@ -2,7 +2,7 @@ import Setting from './models/Setting';
 import Logger from '@joplin/utils/Logger';
 import Api, { RequestFile } from './services/rest/Api';
 import ApiResponse from './services/rest/ApiResponse';
-const urlParser = require('url');
+import * as urlParser from 'url';
 const { randomClipperPort, startPort } = require('./randomClipperPort');
 const enableServerDestroy = require('server-destroy');
 const multiparty = require('multiparty');

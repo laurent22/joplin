@@ -11,6 +11,8 @@ export interface HtrCliOptions {
 	htrCliImagesFolder: string;
 	binaryPath: string;
 	modelsFolder: string;
+	// Number of model layers to offload to the GPU. 0 = CPU only.
+	gpuLayers: number;
 }
 
 export default class HtrCli implements WorkHandler {
@@ -43,9 +45,9 @@ export default class HtrCli implements WorkHandler {
 		return this.cleanUpResult(result);
 	}
 
-	private buildCommand(imageName: string): string[] {
-		const { binaryPath, modelsFolder, htrCliImagesFolder } = this.options;
-		return [
+	public buildCommand(imageName: string): string[] {
+		const { binaryPath, modelsFolder, htrCliImagesFolder, gpuLayers } = this.options;
+		const args = [
 			binaryPath,
 			'-m', `${modelsFolder}/Model-7.6B-Q4_K_M.gguf`,
 			'--mmproj', `${modelsFolder}/mmproj-model-f16.gguf`,
@@ -57,6 +59,8 @@ export default class HtrCli implements WorkHandler {
 			'--image', `${htrCliImagesFolder}/${imageName}`,
 			'-p', systemPrompt,
 		];
+		if (gpuLayers > 0) args.push('-ngl', String(gpuLayers));
+		return args;
 	}
 
 	public cleanUpResult(transcriptionAndLogs: string) {

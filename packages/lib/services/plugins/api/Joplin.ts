@@ -15,6 +15,7 @@ import JoplinWindow from './JoplinWindow';
 import BasePlatformImplementation from '../BasePlatformImplementation';
 import JoplinImaging from './JoplinImaging';
 import JoplinFs from './JoplinFs';
+import JoplinAi from './JoplinAi';
 import { themeStyle } from '../../../theme';
 import Setting from '../../../models/Setting';
 import { ThemeAppearance } from '../../../themes/type';
@@ -47,6 +48,7 @@ export default class Joplin {
 	private contentScripts_: JoplinContentScripts = null;
 	private clipboard_: JoplinClipboard = null;
 	private window_: JoplinWindow = null;
+	private ai_: JoplinAi = null;
 	private implementation_: BasePlatformImplementation = null;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux store is parametrised per-app (AppState differs across cli/desktop/mobile); see PluginStore
@@ -65,6 +67,7 @@ export default class Joplin {
 		this.contentScripts_ = new JoplinContentScripts(plugin);
 		this.clipboard_ = new JoplinClipboard(implementation.clipboard as ConstructorParameters<typeof JoplinClipboard>[0], implementation.nativeImage as ConstructorParameters<typeof JoplinClipboard>[1]);
 		this.window_ = new JoplinWindow(plugin, store);
+		this.ai_ = new JoplinAi();
 	}
 
 	public get data(): JoplinData {
@@ -123,6 +126,16 @@ export default class Joplin {
 
 	public get settings(): JoplinSettings {
 		return this.settings_;
+	}
+
+	/**
+	 * Access to AI features: chat completions and semantic search over the
+	 * local embeddings index. See {@link JoplinAi}.
+	 *
+	 * <span class="platform-desktop">desktop</span>
+	 */
+	public get ai(): JoplinAi {
+		return this.ai_;
 	}
 
 	/**

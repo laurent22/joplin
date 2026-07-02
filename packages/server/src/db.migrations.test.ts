@@ -82,4 +82,20 @@ describe('db.migrations', () => {
 		expect(await needsMigration(db())).toBe(false);
 	});
 
+	it('should recover from a stuck migration lock', async () => {
+		// Run one migration so that knex_migrations_lock exists.
+		await migrateUp(db());
+
+		// Simulate a server that crashed mid-migration: the lock row was set to
+		// is_locked=1 and never released. Without auto-unlock, the next migration
+		// call would hang forever waiting on the lock.
+		await db()('knex_migrations_lock').update({ is_locked: 1 });
+		expect((await db()('knex_migrations_lock').first()).is_locked).toBe(1);
+
+		await migrateLatest(db());
+
+		expect(await needsMigration(db())).toBe(false);
+		expect((await db()('knex_migrations_lock').first()).is_locked).toBe(0);
+	});
+
 });

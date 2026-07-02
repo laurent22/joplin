@@ -42,4 +42,4 @@ No, but you should use disk encryption. See also [Physically-local attacks](http
 
 ## Bounty
 
-We **do not** offer a bounty for discovering vulnerabilities, please do not ask. We can however credit you and link to your website in the changelog and release announcement.
+We **do not** offer a bounty for discovering vulnerabilities, please do not ask.

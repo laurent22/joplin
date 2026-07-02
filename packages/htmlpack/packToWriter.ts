@@ -1,4 +1,4 @@
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 import { CssTypes, parse as cssParse, stringify as cssStringify } from '@adobe/css-tools';
 import { dirname, basename } from 'path';
 import parseHtmlAsync, { HtmlAttrs } from './utils/parseHtmlAsync';

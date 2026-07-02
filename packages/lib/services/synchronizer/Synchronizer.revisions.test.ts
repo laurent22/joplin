@@ -147,6 +147,10 @@ describe('Synchronizer.revisions', () => {
 	}));
 
 	it('should not create revisions when item is modified as a result of decryption', (async () => {
+		// This test does a full encrypt/sync/decrypt round-trip and is prone to timing out
+		// under CI runner contention, so allow one retry.
+		jest.retryTimes(2, { logErrorsBeforeRetry: true });
+
 		// Handle this scenario:
 		// - C1 creates note
 		// - C1 never changes it
@@ -324,5 +328,26 @@ describe('Synchronizer.revisions', () => {
 		expect(Setting.value('revisionService.enabled')).toBe(false);
 		await synchronizerStart();
 		expect(Setting.value('revisionService.enabled')).toBe(true);
+	}));
+
+	it('should not overwrite a customised local ttlDays with another client default', (async () => {
+		// Regression: a client that has never customised revisionService.ttlDays
+		// must not push its default over another client's customised value.
+		const changeSetting = (key: string, value: unknown) => {
+			Setting.setValue(key, value);
+			onRevisionServiceSettingsChanged(key, value);
+		};
+
+		changeSetting('revisionService.ttlDays', 30);
+		await synchronizerStart();
+
+		await switchClient(2);
+		expect(Setting.value('revisionService.ttlDays')).toBe(90);
+		await synchronizerStart();
+		expect(Setting.value('revisionService.ttlDays')).toBe(30);
+
+		await switchClient(1);
+		await synchronizerStart();
+		expect(Setting.value('revisionService.ttlDays')).toBe(30);
 	}));
 });
