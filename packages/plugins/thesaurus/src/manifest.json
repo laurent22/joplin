@@ -7,6 +7,6 @@
 	"description": "Suggests ranked synonyms for the selected word using a local NLP pipeline",
 	"author": "",
 	"platforms": ["desktop"],
-	"homepage_url": "https://github.com/laurent22/joplin/tree/dev/packages/plugins/thesaurus",
-	"repository_url": "https://github.com/laurent22/joplin/tree/dev/packages/plugins/thesaurus"
+	"homepage_url": "https://github.com/Ach57/joplin-comp-354-dev/tree/dev/packages/plugins/thesaurus",
+	"repository_url": "https://github.com/Ach57/joplin-comp-354-dev/tree/dev/packages/plugins/thesaurus"
 }

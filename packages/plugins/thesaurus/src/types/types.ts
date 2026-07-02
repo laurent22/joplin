@@ -18,3 +18,8 @@ export interface RankResponse {
 	results: SynonymEntry[];
 	error?: string;
 }
+
+export interface PendingRequest {
+	resolve: (value: RankResponse)=> void;
+	reject: (reason: Error)=> void;
+}
