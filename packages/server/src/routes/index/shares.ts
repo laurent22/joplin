@@ -59,8 +59,11 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 
 	// Note HTML is server-rendered, so it can be served as-is. Resource
 	// attachments use user-controlled MIME/filename and must be sanitized.
-	const isRenderedNoteHtml = item.jop_type === ModelType.Note && !ctx.query.resource_id;
-	if (isRenderedNoteHtml) {
+	const isRenderedShareHtml = !ctx.query.resource_id && (
+		item.jop_type === ModelType.Note ||
+		item.jop_type === ModelType.Folder
+	);
+	if (isRenderedShareHtml) {
 		ctx.response.set('Content-Type', result.mime);
 	} else {
 		const safe = safeUserContentResponse(result.mime, result.filename);
