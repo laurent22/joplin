@@ -94,7 +94,14 @@
 			const nodeElement = document.getElementById(rowId(node));
 			if (!nodeElement) return;
 
+			const previousActiveId = container.getAttribute('aria-activedescendant');
+			const previousActiveElement = previousActiveId ? document.getElementById(previousActiveId) : null;
+			if (previousActiveElement && previousActiveElement !== nodeElement) {
+				previousActiveElement.setAttribute('aria-selected', 'false');
+			}
+
 			container.setAttribute('aria-activedescendant', nodeElement.id);
+			nodeElement.setAttribute('aria-selected', 'true');
 			if (moveFocus) node.tree.setFocus();
 		};
 
@@ -144,6 +151,7 @@
 				title.removeAttribute('title');
 			}
 			e.nodeElem.setAttribute('role', 'treeitem');
+			e.nodeElem.setAttribute('aria-selected', e.node.isActive() ? 'true' : 'false');
 			// Added to fix screen reader on Safari
 			e.nodeElem.setAttribute('aria-roledescription', 'outline row');
 			e.nodeElem.setAttribute('aria-level', e.node.getLevel());
