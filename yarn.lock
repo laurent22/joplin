@@ -12410,6 +12410,7 @@ __metadata:
     color: "npm:3.2.1"
     compare-versions: "npm:6.1.1"
     debounce: "npm:1.2.1"
+    dompurify: "npm:3.3.3"
     electron: "npm:42.3.0"
     electron-builder: "npm:24.13.3"
     electron-updater: "npm:6.6.8"

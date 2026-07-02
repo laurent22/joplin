@@ -13,6 +13,7 @@ import { runNoteChat, ChatTurn } from '@joplin/lib/services/ai/noteChat';
 import { applyAnchorEdits } from '@joplin/lib/services/ai/applyNoteEdits';
 import { chatAvailability } from '@joplin/lib/services/ai/availability';
 import { WindowIdContext } from '../NewWindowOrIFrame';
+import InlineMarkdownDisplay from '../InlineMarkdownDisplay';
 
 const logger = Logger.create('ChatPanel');
 
@@ -284,7 +285,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 					const summary = m.role === 'assistant' ? editsSummary(m.editsApplied ?? 0, m.editsMissed ?? 0) : '';
 					return (
 						<div key={m.id} className={`turn -${m.role}`}>
-							<div className='content'>{m.text}</div>
+							<InlineMarkdownDisplay className='content' markdown={m.text} themeId={props.themeId} />
 							{summary && (
 								<div className='meta'>
 									{(m.editsMissed ?? 0) > 0

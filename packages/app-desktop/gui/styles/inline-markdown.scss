@@ -1,0 +1,20 @@
+
+.inline-markdown {
+	position: relative;
+
+	// Ensure images don't overflow the container
+	img {
+		max-width: 100%;
+	}
+
+	// Decrease space between paragraphs to better fit
+	p {
+		margin-bottom: 8px;
+	}
+
+	pre {
+		white-space: pre;
+		white-space: pre-wrap;
+		word-wrap: break-word;
+	}
+}
