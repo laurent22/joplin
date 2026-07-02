@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { useCallback, useMemo, useRef, useState } from 'react';
-import NoteEditor from './NoteEditor';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import StyleSheetContainer from '../StyleSheets/StyleSheetContainer';
 import { connect } from 'react-redux';
 import { AppState } from '../../app.reducer';
@@ -13,14 +12,20 @@ import { StyleSheetManager } from 'styled-components';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import { stateUtils } from '@joplin/lib/reducer';
+import ResizableLayout, { RenderItemEvent } from '../ResizableLayout/ResizableLayout';
+import { LayoutItem } from '../ResizableLayout/utils/types';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import layoutKeyToLabel from '../../utils/layout/layoutKeyToLabel';
+import MainLayoutPane from '../MainLayoutPane';
 
 interface Props {
 	dispatch: Dispatch;
 	themeId: number;
 
+	layout: LayoutItem;
+	plugins: PluginStates;
 	newWindow: boolean;
 	windowId: string;
-	startupPluginsLoaded: boolean;
 }
 
 const emptyCallback = () => {};
@@ -37,17 +42,75 @@ const useWindowTitle = (isNewWindow: boolean) => {
 	return { windowTitle: `Joplin - ${title}`, onNoteTitleChange: setTitle };
 };
 
-const SecondaryWindow: React.FC<Props> = props => {
-	const containerRef = useRef<HTMLDivElement>(null);
+const defaultLayout = {
+	key: 'root',
+	isRoot: true,
+	width: 500,
+	height: 500,
+	children: [
+		{ key: 'editor' },
+		{ key: 'chatPanel', width: 340, visible: false },
+	],
+};
 
+const useLayout = ({ windowId, layout, plugins, dispatch }: Props) => {
+	const [window, setWindow] = useState<Window|null>(null);
+	layout ??= defaultLayout;
+
+	const onUpdateLayout = useCallback((newLayout: LayoutItem) => {
+		dispatch({
+			type: 'WINDOW_LAYOUT_SET',
+			windowId,
+			value: newLayout,
+		});
+	}, [dispatch, windowId]);
+
+	const onResize = useCallback((event: { layout: LayoutItem }) => {
+		onUpdateLayout(event.layout);
+	}, [onUpdateLayout]);
+
+	const onKeyToLabel = useCallback((key: string) => {
+		return layoutKeyToLabel(key, plugins);
+	}, [plugins]);
+
+	const currentLayoutRef = useRef(layout);
+	currentLayoutRef.current = layout;
+
+	const onRefreshLayoutSize = useCallback((window: Window) => {
+		const layout = currentLayoutRef.current;
+		if (layout.width !== window.innerWidth || layout.height !== window.innerHeight) {
+			const newLayout = {
+				...currentLayoutRef.current,
+				width: window.innerWidth,
+				height: window.innerHeight,
+			};
+			onUpdateLayout(newLayout);
+		}
+	}, [onUpdateLayout]);
+
+	useEffect(() => {
+		if (!window) return ()=>{};
+
+		const onWindowResize = () => onRefreshLayoutSize(window);
+		window.addEventListener('resize', onWindowResize);
+		onWindowResize();
+
+		return () => {
+			window.removeEventListener('resize', onWindowResize);
+		};
+	}, [window, onRefreshLayoutSize]);
+
+	return {
+		layout,
+		onWindow: setWindow,
+		onResize,
+		onUpdate: onUpdateLayout,
+		onKeyToLabel,
+	};
+};
+
+const SecondaryWindow: React.FC<Props> = props => {
 	const { windowTitle, onNoteTitleChange } = useWindowTitle(props.newWindow);
-	const editor = <div className='note-editor-wrapper' ref={containerRef}>
-		<NoteEditor
-			windowId={props.windowId}
-			onTitleChange={onNoteTitleChange}
-			startupPluginsLoaded={props.startupPluginsLoaded}
-		/>
-	</div>;
 
 	const newWindow = props.newWindow;
 	const onWindowClose = useCallback(() => {
@@ -56,7 +119,22 @@ const SecondaryWindow: React.FC<Props> = props => {
 		}
 	}, [props.dispatch, props.windowId, newWindow]);
 
+	const layout = useLayout(props);
+
+	const onRenderItem = useCallback((key: string, event: RenderItemEvent) => {
+		return <MainLayoutPane
+			key={key}
+			contentKey={key}
+			windowId={props.windowId}
+			onNoteTitleChange={onNoteTitleChange}
+			event={event}
+			onUpdateLayout={layout.onUpdate}
+			layout={layout.layout}
+		/>;
+	}, [props.windowId, onNoteTitleChange, layout.layout, layout.onUpdate]);
+
 	return <NewWindowOrIFrame
+		onWindow={layout.onWindow}
 		mode={newWindow ? WindowMode.NewWindow : WindowMode.Iframe}
 		windowId={props.windowId}
 		onClose={onWindowClose}
@@ -64,7 +142,15 @@ const SecondaryWindow: React.FC<Props> = props => {
 	>
 		<LibraryStyleRoot>
 			<WindowCommandsAndDialogs windowId={props.windowId} />
-			{editor}
+			<ResizableLayout
+				layout={layout.layout}
+				onResize={layout.onResize}
+				onMoveButtonClick={() => {}}
+				renderItem={onRenderItem}
+				layoutKeyToLabel={layout.onKeyToLabel}
+				moveMode={false}
+				moveModeMessage={''}
+			/>
 		</LibraryStyleRoot>
 		<StyleSheetContainer />
 	</NewWindowOrIFrame>;
@@ -107,8 +193,9 @@ export default connect((state: AppState, ownProps: ConnectProps) => {
 	return {
 		themeId: state.settings.theme,
 		isSafeMode: state.settings.isSafeMode,
+		layout: windowState.secondaryWindowLayout,
 		codeView: windowState?.editorCodeView ?? state.settings['editor.codeView'],
 		legacyMarkdown: state.settings['editor.legacyMarkdown'],
-		startupPluginsLoaded: state.startupPluginsLoaded,
+		plugins: state.pluginService.plugins,
 	};
 })(SecondaryWindow);

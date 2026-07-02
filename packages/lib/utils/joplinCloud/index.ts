@@ -340,6 +340,15 @@ const features = (): Record<FeatureId, PlanFeature> => {
 			teams: true,
 			joplinServerBusiness: true,
 		},
+		joplinCloudAi: {
+			title: _('Joplin Cloud AI (beta)'),
+			description: '[Joplin Cloud AI](https://joplinapp.org/help/apps/ai_chat) is a chat model hosted by Joplin Cloud that can summarise, rewrite, or answer questions about your notes from the desktop app. This is a beta feature and may change or contain bugs.',
+			basic: true,
+			pro: true,
+			pro100Gb: true,
+			teams: true,
+			joplinServerBusiness: false,
+		},
 		customBanner: {
 			title: _('Customise the note publishing banner'),
 			description: 'You can [customise the banner](https://joplinapp.org/help/apps/publish_note#customising-the-publishing-banner) that appears on top of your published notes, for example by adding a custom logo and text, and changing the banner colour.',

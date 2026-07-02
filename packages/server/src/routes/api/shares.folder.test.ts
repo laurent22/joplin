@@ -4,7 +4,7 @@ import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUti
 import { PaginatedDeltaChanges } from '../../models/ChangeModel/ChangeModel';
 import { inviteUserToShare, shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
-import { ErrorForbidden } from '../../utils/errors';
+import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { resourceBlobPath, serializeJoplinItem, unserializeJoplinItem } from '../../utils/joplinUtils';
 import { PaginatedItems } from '../../models/ItemModel';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
@@ -222,6 +222,31 @@ describe('shares.folder', () => {
 			const children2 = await getApi<PaginatedItems>(session2.id, 'items/root/children');
 			expect(children2.items.length).toBe(2);
 		}
+	});
+
+	test('should not allow a pending recipient to write items into the share', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		const { shareUser, share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [],
+			},
+		], false);
+		expect(shareUser.status).toBe(ShareUserStatus.Waiting);
+
+		await expectHttpError(async () => createNote(session2.id, {
+			id: '00000000000000000000000000000009',
+			parent_id: '000000000000000000000000000000F1',
+			share_id: share.id,
+			title: 'pending recipient injected note',
+			body: 'pending recipient write was propagated',
+		}), ErrorForbidden.httpCode);
+
+		await models().share().updateSharedItems3();
+
+		await expectHttpError(async () => getApi<Buffer>(session1.id, 'items/root:/00000000000000000000000000000009.md:/content'), ErrorNotFound.httpCode);
 	});
 
 	test('should share when a note is added to a shared folder', async () => {

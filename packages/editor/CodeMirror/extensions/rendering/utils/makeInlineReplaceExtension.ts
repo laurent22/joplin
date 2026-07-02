@@ -4,18 +4,67 @@
 import { EditorView, Decoration, DecorationSet, WidgetType } from '@codemirror/view';
 import { ViewPlugin, ViewUpdate } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { Range } from '@codemirror/state';
+import { Range, StateEffect } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
 import { ReplacementExtension } from '../types';
 import nodeIntersectsSelection from './nodeIntersectsSelection';
 
+const updateInlineDecorationsEffect = StateEffect.define();
 
 export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
 	public decorations: DecorationSet;
+	private mouseSelectionInProgress = false;
 
-	public constructor(view: EditorView) {
+	public constructor(private view: EditorView) {
+		view.dom.addEventListener('mousedown', this.onMouseDown, true);
+		view.dom.ownerDocument.addEventListener('mouseup', this.onMouseUp);
 		this.updateDecorations(view);
 	}
+
+	public destroy() {
+		this.view.dom.removeEventListener('mousedown', this.onMouseDown, true);
+		this.view.dom.ownerDocument.removeEventListener('mouseup', this.onMouseUp);
+	}
+
+	private onMouseDown = (event: MouseEvent) => {
+		if (event.button === 0) {
+			this.mouseSelectionInProgress = true;
+		}
+	};
+
+	private onMouseUp = () => {
+		if (this.mouseSelectionInProgress) {
+			const selection = this.view.state.selection.main;
+			let coveredTo = selection.from;
+			this.decorations.between(selection.from, selection.to, (from, to, decoration) => {
+				if (!Object.keys(decoration.spec).length && from <= coveredTo) {
+					coveredTo = Math.max(coveredTo, to);
+				}
+			});
+
+			let selectionUpdate = !selection.empty && coveredTo >= selection.to ? { anchor: selection.head } : undefined;
+			const line = this.view.state.doc.lineAt(selection.from);
+			syntaxTree(this.view.state).iterate({
+				from: line.from,
+				to: line.to,
+				enter: node => {
+					if (selectionUpdate || node.name !== 'Link') return;
+					const closingBracket = node.node.getChildren('LinkMark').find(mark => (
+						this.view.state.sliceDoc(mark.from, mark.to) === ']'
+					));
+					if (closingBracket && selection.from >= closingBracket.from && selection.to <= node.to) {
+						selectionUpdate = { anchor: node.to };
+					}
+				},
+			});
+
+			this.mouseSelectionInProgress = false;
+			this.view.dispatch({
+				selection: selectionUpdate,
+				effects: updateInlineDecorationsEffect.of(null),
+			});
+		}
+	};
 
 	private updateDecorations(view: EditorView) {
 		const doc = view.state.doc;
@@ -91,7 +140,15 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 	}
 
 	public update(update: ViewUpdate) {
-		if (update.docChanged || update.viewportChanged || update.selectionSet) {
+		const forceUpdate = update.transactions.some(transaction => (
+			transaction.effects.some(effect => effect.is(updateInlineDecorationsEffect))
+			|| extensionSpec.shouldFullReRender?.(transaction)
+		));
+		if (this.mouseSelectionInProgress && update.selectionSet && update.state.selection.main.empty && !update.docChanged && !forceUpdate) {
+			return;
+		}
+
+		if (update.docChanged || update.viewportChanged || update.selectionSet || forceUpdate) {
 			this.updateDecorations(update.view);
 		}
 	}

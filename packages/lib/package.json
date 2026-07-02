@@ -58,7 +58,7 @@
     "@joplin/turndown": "^4.0.85",
     "@joplin/turndown-plugin-gfm": "^1.0.67",
     "@joplin/utils": "^3.7",
-    "adm-zip": "0.5.16",
+    "adm-zip": "0.5.17",
     "async-mutex": "0.5.0",
     "base-64": "1.0.0",
     "base64-stream": "1.0.0",

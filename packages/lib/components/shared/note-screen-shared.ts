@@ -171,7 +171,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 	note = { ...note, ...savedNote };
 
 	if (stateNote.id === note.id) {
-		// But we preserve the current title and body because
+		// But we preserve the current title, body and todo_completed because
 		// the user might have changed them between the time
 		// saveNoteButton_press was called and the note was
 		// saved (it's done asynchronously).
@@ -180,6 +180,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 		// it from the state because it will be empty there.
 		if (!hasAutoTitle) note.title = stateNote.title;
 		note.body = stateNote.body;
+		note.todo_completed = stateNote.todo_completed;
 	}
 
 	const newState: Partial<BaseState> = {
@@ -235,7 +236,7 @@ shared.saveOneProperty = async function(comp: BaseNoteScreenComponent, name: str
 	(note as Record<string, unknown>)[name] = saved[name];
 
 	comp.setState({
-		lastSavedNote: { ...note },
+		lastSavedNote: { ...note, ...saved },
 		note: note,
 	});
 };
@@ -353,7 +354,9 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 shared.initState = async function(comp: BaseNoteScreenComponent) {
 	const note = await shared.reloadNote(comp);
 
-	if (comp.props.sharedData && note) {
+	// Ensure that only empty notes created for shared content are populated with sharedData, because in some cases
+	// existing notes can be overwritten by the shared data. See https://github.com/laurent22/joplin/issues/11479
+	if (comp.props.sharedData && note && note.title.length === 0 && note.body.length === 0) {
 		// Use the note returned by reloadNote directly to avoid a race condition where
 		// comp.state.note is still the initial empty note (Note.new() with parent_id='')
 		// because React hasn't flushed reloadNote's setState yet. Without this, the
@@ -370,7 +373,7 @@ shared.initState = async function(comp: BaseNoteScreenComponent) {
 		}
 		if (fieldsToSave.title !== undefined || fieldsToSave.body !== undefined) {
 			await Note.save(fieldsToSave);
-			comp.setState({ note: updatedNote, lastSavedNote: updatedNote });
+			comp.setState({ note: updatedNote, lastSavedNote: { ...updatedNote } });
 		}
 		if (comp.props.sharedData.resources) {
 			for (let i = 0; i < comp.props.sharedData.resources.length; i++) {

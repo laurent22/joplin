@@ -19,25 +19,26 @@ const useStyles = (themeId: number, isMenu: boolean) => {
 		return StyleSheet.create({
 
 			dialogContent: {
-				paddingBottom: theme.marginBottom,
-				paddingTop: 0, // Applied by the parent
+				paddingBottom: theme.margin,
+				paddingHorizontal: theme.margin,
 			},
 			dialogActions: {
-				paddingBottom: theme.marginBottom,
-				paddingTop: 4,
-				paddingLeft: theme.marginLeft,
-				paddingRight: theme.marginRight,
+				paddingBottom: theme.margin,
+				paddingHorizontal: theme.margin,
+				paddingTop: isMenu ? 4 : theme.marginSmall,
 
 				...(isMenu ? {
 					flexDirection: 'column',
 					alignItems: 'stretch',
+					gap: 1,
 				} : {
-					gap: theme.marginSmall,
+					gap: theme.marginMedium,
+					flexWrap: 'wrap',
 				}),
 			},
-			dialogLabel: {
-				textAlign: isMenu ? 'center' : undefined,
-			},
+			dialogLabel: isMenu ? {
+				textAlign: 'center',
+			} : {},
 		});
 	}, [isMenu, themeId]);
 };
@@ -50,6 +51,7 @@ const PromptDialog: React.FC<Props> = ({ dialog, containerStyle, themeId }) => {
 		return <PromptButton
 			key={`${index}-${button.text}`}
 			buttonSpec={button}
+			isMenu={isMenu}
 			themeId={themeId}
 		/>;
 	});
@@ -69,7 +71,7 @@ const PromptDialog: React.FC<Props> = ({ dialog, containerStyle, themeId }) => {
 			<Dialog.Content style={styles.dialogContent}>
 				{dialog.title ? titleComponent : null}
 				<Text
-					variant='bodyMedium'
+					variant='titleMedium'
 					style={styles.dialogLabel}
 				>{dialog.message}</Text>
 			</Dialog.Content>

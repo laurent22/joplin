@@ -239,6 +239,7 @@ packages/app-desktop/gui/KeymapConfig/styles/index.js
 packages/app-desktop/gui/KeymapConfig/utils/getLabel.js
 packages/app-desktop/gui/KeymapConfig/utils/useCommandStatus.js
 packages/app-desktop/gui/KeymapConfig/utils/useKeymap.js
+packages/app-desktop/gui/MainLayoutPane.js
 packages/app-desktop/gui/MainScreen.js
 packages/app-desktop/gui/MasterPasswordDialog/Dialog.js
 packages/app-desktop/gui/MenuBar.js
@@ -660,6 +661,7 @@ packages/app-desktop/utils/initReact.js
 packages/app-desktop/utils/initializeCommandService.js
 packages/app-desktop/utils/isSafeToOpen.test.js
 packages/app-desktop/utils/isSafeToOpen.js
+packages/app-desktop/utils/layout/layoutKeyToLabel.js
 packages/app-desktop/utils/restartInSafeModeFromMain.test.js
 packages/app-desktop/utils/restartInSafeModeFromMain.js
 packages/app-desktop/utils/sourceMapSetup.js
