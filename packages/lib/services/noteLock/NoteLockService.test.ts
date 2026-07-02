@@ -9,7 +9,7 @@ import NoteLockService, { ScopedNoteLockService } from './NoteLockService';
 const unlockedSession = async (password = '123456') => {
 	const session = NoteLockSession.instance();
 	await NoteLockKey.instance().create(password);
-	expect(await session.unlock(password)).toBe(true);
+	await session.unlock(password);
 	return session;
 };
 

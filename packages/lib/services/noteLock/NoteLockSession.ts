@@ -23,14 +23,16 @@ export default class NoteLockSession {
 		this.instance_ = null;
 	}
 
-	// Re-checks state after the await so a lock, reset, synced change or teardown that raced in can't install a stale key.
+	// Re-checks state after the await so a lock, reset, synced change or teardown that raced in
+	// can't install a stale key. A reset that starts mid-decrypt also locks, so the generation
+	// check covers it.
 	public async unlock(password: string) {
-		if (this.rotating_) return false;
+		if (this.rotating_) throw new Error('Cannot unlock: a note lock key reset is in progress');
 		const generation = this.lockGeneration_;
 		const decrypted = await this.noteLockKey_.decrypt(password);
-		if (this.rotating_ || this.lockGeneration_ !== generation || this.noteLockKey_.load()?.id !== decrypted.id) return false;
+		if (this.lockGeneration_ !== generation) throw new Error('Cannot unlock: the session was locked while unlocking');
+		if (this.noteLockKey_.load()?.id !== decrypted.id) throw new Error('Cannot unlock: the note lock key changed while unlocking');
 		this.key_ = decrypted;
-		return true;
 	}
 
 	public lock() {

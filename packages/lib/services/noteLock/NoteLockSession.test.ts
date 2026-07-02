@@ -8,7 +8,7 @@ import NoteLockService from './NoteLockService';
 const unlockedSession = async (password = '123456') => {
 	const session = NoteLockSession.instance();
 	await NoteLockKey.instance().create(password);
-	expect(await session.unlock(password)).toBe(true);
+	await session.unlock(password);
 	return session;
 };
 
@@ -67,14 +67,14 @@ describe('NoteLockSession', () => {
 		const firstKey = await NoteLockKey.instance().create('123456');
 		expect(session.isUnlocked()).toBe(false);
 
-		expect(await session.unlock('123456')).toBe(true);
+		await session.unlock('123456');
 		expect(session.isUnlocked()).toBe(true);
 
 		const secondKey = await session.reset('654321');
 		expect(secondKey.id).not.toBe(firstKey.id);
 		expect(session.isUnlocked()).toBe(false);
 
-		expect(await session.unlock('654321')).toBe(true);
+		await session.unlock('654321');
 		expect(session.isUnlocked()).toBe(true);
 	});
 
@@ -107,7 +107,7 @@ describe('NoteLockSession', () => {
 		session.lock();
 		release();
 
-		expect(await unlocking).toBe(false);
+		await expect(unlocking).rejects.toThrow('locked while unlocking');
 		expect(session.isUnlocked()).toBe(false);
 	});
 
@@ -120,7 +120,7 @@ describe('NoteLockSession', () => {
 		NoteLockSession.destroyInstance();
 		release();
 
-		expect(await unlocking).toBe(false);
+		await expect(unlocking).rejects.toThrow('locked while unlocking');
 		expect(session.isUnlocked()).toBe(false);
 	});
 
@@ -134,7 +134,7 @@ describe('NoteLockSession', () => {
 		changeSyncedKeyId('0123456789abcdef0123456789abcdef');
 		release();
 
-		expect(await unlocking).toBe(false);
+		await expect(unlocking).rejects.toThrow('key changed while unlocking');
 		expect(session.isUnlocked()).toBe(false);
 	});
 
@@ -147,7 +147,7 @@ describe('NoteLockSession', () => {
 		await session.reset('654321');
 		release();
 
-		expect(await unlocking).toBe(false);
+		await expect(unlocking).rejects.toThrow('locked while unlocking');
 		expect(session.isUnlocked()).toBe(false);
 	});
 
@@ -156,11 +156,10 @@ describe('NoteLockSession', () => {
 		const releaseRotation = gateKeyGeneration();
 
 		const resetting = session.reset('654321');
-		const unlockResult = await session.unlock('123456');
+		await expect(session.unlock('123456')).rejects.toThrow('reset is in progress');
 		releaseRotation();
 		await resetting;
 
-		expect(unlockResult).toBe(false);
 		expect(session.isUnlocked()).toBe(false);
 	});
 
