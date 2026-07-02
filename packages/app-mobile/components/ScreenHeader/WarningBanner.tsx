@@ -24,6 +24,8 @@ interface Props {
 	showInvalidJoplinCloudCredential: boolean;
 }
 
+const androidGooglePlayUrl = 'https://play.google.com/store/apps/details?id=net.cozic.joplin';
+const androidPreReleaseUrl = 'https://github.com/laurent22/joplin-android/tags';
 const iosAppStoreUrl = 'https://apps.apple.com/us/app/joplin/id1315599797';
 
 export const WarningBannerComponent: React.FC<Props> = props => {
@@ -40,19 +42,32 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 	};
 
 	const renderMustUpgradeAppMessage = () => {
-		if (Platform.OS === 'ios' && props.syncTargetAppMinVersion) {
-			const isPreRelease = props.syncTargetAppMinVersion.includes('-');
-			if (isPreRelease) {
+		const syncTargetAppMinVersion = props.syncTargetAppMinVersion;
+		if (syncTargetAppMinVersion) {
+			const isPreRelease = syncTargetAppMinVersion.includes('-');
+
+			if (Platform.OS === 'android') {
 				return renderWarningBox(
-					'UpgradeApp',
-					_('Please upgrade your application to version %s: Update it from TestFlight', props.syncTargetAppMinVersion),
+					isPreRelease ? androidPreReleaseUrl : androidGooglePlayUrl,
+					isPreRelease ?
+						_('Please upgrade your application to version %s: Download it from the Joplin Android tags page', syncTargetAppMinVersion) :
+						_('Please upgrade your application to version %s: Update it from Google Play', syncTargetAppMinVersion),
 				);
 			}
 
-			return renderWarningBox(
-				iosAppStoreUrl,
-				_('Please upgrade your application to version %s: Update it from the App Store', props.syncTargetAppMinVersion),
-			);
+			if (Platform.OS === 'ios') {
+				if (isPreRelease) {
+					return renderWarningBox(
+						'UpgradeApp',
+						_('Please upgrade your application to version %s: Update it from TestFlight', syncTargetAppMinVersion),
+					);
+				}
+
+				return renderWarningBox(
+					iosAppStoreUrl,
+					_('Please upgrade your application to version %s: Update it from the App Store', syncTargetAppMinVersion),
+				);
+			}
 		}
 
 		return renderWarningBox('UpgradeApp', props.mustUpgradeAppMessage);
