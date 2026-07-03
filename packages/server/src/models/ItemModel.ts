@@ -1,5 +1,5 @@
 import BaseModel, { SaveOptions, LoadOptions, DeleteOptions as BaseDeleteOptions, ValidateOptions, AclAction } from './BaseModel';
-import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, User, UserItem } from '../services/database/types';
+import { ItemType, databaseSchema, Uuid, Item, ShareType, ShareUserStatus, Share, ChangeType, User, UserItem } from '../services/database/types';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -135,7 +135,7 @@ export default class ItemModel extends BaseModel<Item> {
 			} else {
 				if (share.owner_id !== user.id) {
 					const shareUser = await this.models().shareUser().byShareAndUserId(share.id, user.id);
-					if (!shareUser) throw new ErrorForbidden('user has no access to this share');
+					if (!shareUser || shareUser.status !== ShareUserStatus.Accepted) throw new ErrorForbidden('user has no access to this share');
 				}
 			}
 		}

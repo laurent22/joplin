@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useMemo, useEffect, useCallback, useContext } from 'react';
-import { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View, Image, ImageStyle } from 'react-native';
+import { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View, Image, ImageStyle, Platform } from 'react-native';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import Icon from './Icon';
@@ -349,6 +349,11 @@ const SideMenuContentComponent = (props: Props) => {
 		const folder = folderOrAll as FolderEntity;
 
 		const menuItems: PromptButtonSpec[] = [];
+		menuItems.push({
+			text: _('Cancel'),
+			onPress: () => {},
+			style: 'cancel',
+		});
 
 		if (folder && folder.id === getConflictFolderId()) return;
 
@@ -408,15 +413,15 @@ const SideMenuContentComponent = (props: Props) => {
 				const folderDeletion = (message: string) => {
 					dialogs.prompt('', message, [
 						{
+							text: _('Cancel'),
+							onPress: () => { },
+							style: 'cancel',
+						},
+						{
 							text: _('OK'),
 							onPress: () => {
 								void Folder.delete(folder.id, { toTrash: true, sourceDescription: 'side-menu-content (long-press)' });
 							},
-						},
-						{
-							text: _('Cancel'),
-							onPress: () => { },
-							style: 'cancel',
 						},
 					]);
 				};
@@ -429,7 +434,12 @@ const SideMenuContentComponent = (props: Props) => {
 				return folderDeletion(_('Move notebook "%s" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.', substrWithEllipsis(folder.title, 0, 32)));
 			};
 
-			menuItems.push({
+			const deleteButton: PromptButtonSpec = {
+				text: _('Delete'),
+				onPress: generateFolderDeletion,
+				style: 'destructive',
+			};
+			const editButton: PromptButtonSpec = {
 				text: _('Edit'),
 				onPress: () => {
 					props.dispatch({ type: 'SIDE_MENU_CLOSE' });
@@ -440,20 +450,16 @@ const SideMenuContentComponent = (props: Props) => {
 						folderId: folder.id,
 					});
 				},
-			});
+			};
 
-			menuItems.push({
-				text: _('Delete'),
-				onPress: generateFolderDeletion,
-				style: 'destructive',
-			});
+			// On iOS, "cancel" is always shown at the bottom. Push the edit button first
+			// so that "delete" is still shown in the middle.
+			if (Platform.OS === 'ios') {
+				menuItems.push(editButton, deleteButton);
+			} else {
+				menuItems.push(deleteButton, editButton);
+			}
 		}
-
-		menuItems.push({
-			text: _('Cancel'),
-			onPress: () => {},
-			style: 'cancel',
-		});
 
 		dialogs.prompt(
 			'',

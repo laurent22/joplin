@@ -250,6 +250,14 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		checkboxDisabled: true,
 
 		linkRenderingType: 2,
+
+		// KaTeX defaults to strict:'warn' and dumps to console.warn on any
+		// LaTeX-incompatible input (commonly U+00A0 from email/Word pastes).
+		// Shared-note viewers see the same output either way; silence the
+		// server logs.
+		plugins: {
+			katex: { strict: 'ignore' },
+		},
 	};
 
 	try {

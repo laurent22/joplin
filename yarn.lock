@@ -12455,7 +12455,7 @@ __metadata:
     styled-components: "npm:5.3.11"
     styled-system: "npm:5.1.5"
     taboverride: "npm:4.0.3"
-    tesseract.js: "npm:6.0.1"
+    tesseract.js: "npm:7.0.0"
     tinymce: "npm:6.8.5"
     ts-jest: "npm:29.4.6"
     ts-node: "npm:10.9.2"
@@ -12826,7 +12826,7 @@ __metadata:
     string-to-stream: "npm:3.0.1"
     tar: "npm:7.5.13"
     tcp-port-used: "npm:1.0.2"
-    tesseract.js: "npm:6.0.1"
+    tesseract.js: "npm:7.0.0"
     typescript: "npm:5.9.3"
     uglifycss: "npm:0.0.29"
     url-parse: "npm:1.5.10"
@@ -13021,7 +13021,7 @@ __metadata:
     nodemailer: "npm:6.10.1"
     nodemon: "npm:3.1.14"
     otplib: "npm:12.0.1"
-    pg: "npm:8.19.0"
+    pg: "npm:8.20.0"
     pretty-bytes: "npm:5.6.0"
     prettycron: "npm:0.10.0"
     qrcode: "npm:1.5.4"
@@ -13124,7 +13124,7 @@ __metadata:
     browserify: "npm:14.5.0"
     rollup: "npm:0.50.1"
     standard: "npm:17.1.2"
-    turndown: "npm:7.2.2"
+    turndown: "npm:7.2.4"
     turndown-attendant: "npm:0.0.3"
   languageName: unknown
   linkType: soft
@@ -46404,10 +46404,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-connection-string@npm:^2.11.0":
-  version: 2.13.0
-  resolution: "pg-connection-string@npm:2.13.0"
-  checksum: 10/b38bb5e27ff375b1c53e7fd805dba7c0380674db1325860d1b59a4ad668970ef0d9a97b15b8625ce393696a4b47083af9f345d998afa8abfe99a5180de52922a
+"pg-connection-string@npm:^2.12.0":
+  version: 2.14.0
+  resolution: "pg-connection-string@npm:2.14.0"
+  checksum: 10/9434e5fbb918b9224a18ad8b739c3da83940ec95c113a0e38371dbd3e8f84c6e3cbaf4dbfaf36d02a1281b0e844af290a1bc240b8d865a98cae6864d89ee11a0
   languageName: node
   linkType: hard
 
@@ -46434,7 +46434,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-pool@npm:^3.12.0":
+"pg-pool@npm:^3.13.0":
   version: 3.14.0
   resolution: "pg-pool@npm:3.14.0"
   peerDependencies:
@@ -46450,10 +46450,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg-protocol@npm:^1.12.0":
-  version: 1.14.0
-  resolution: "pg-protocol@npm:1.14.0"
-  checksum: 10/81c69dba142f3cecf3926afbef97c18c53ba54717d2073d759e2cde98dff61ac7b178c4676950e0e3e6bd43fcf4ba21ef96a217b2765020aadeef6bf6bf82a7e
+"pg-protocol@npm:^1.13.0":
+  version: 1.15.0
+  resolution: "pg-protocol@npm:1.15.0"
+  checksum: 10/be9a534a45cbae8edfa1766f7ee261cb63e8bd136e0e9e216656853ae2ab6acfb281e467c7b362ac0eb5270dad146fd9a553e25ef5c425749114630b79aca8fd
   languageName: node
   linkType: hard
 
@@ -46470,14 +46470,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pg@npm:8.19.0":
-  version: 8.19.0
-  resolution: "pg@npm:8.19.0"
+"pg@npm:8.20.0":
+  version: 8.20.0
+  resolution: "pg@npm:8.20.0"
   dependencies:
     pg-cloudflare: "npm:^1.3.0"
-    pg-connection-string: "npm:^2.11.0"
-    pg-pool: "npm:^3.12.0"
-    pg-protocol: "npm:^1.12.0"
+    pg-connection-string: "npm:^2.12.0"
+    pg-pool: "npm:^3.13.0"
+    pg-protocol: "npm:^1.13.0"
     pg-types: "npm:2.2.0"
     pgpass: "npm:1.0.5"
   peerDependencies:
@@ -46488,7 +46488,7 @@ __metadata:
   peerDependenciesMeta:
     pg-native:
       optional: true
-  checksum: 10/0d552512b6c65c20b4054a203632f8ad51f6c5e60b8aaf65f5dc9f07a698da1e8974ca3918964999ea783c370bda9d230e662d2bab333b3968a28086923934e0
+  checksum: 10/a30b99c799eddbd4f7f98bef906fe25e17c17d7d8918bc7545108947388df0d9c490858b04dabd37ce0063f40b1e58987b0079f99d5a661fb66f40c17f172bfc
   languageName: node
   linkType: hard
 
@@ -56089,16 +56089,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tesseract.js-core@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "tesseract.js-core@npm:6.0.0"
-  checksum: 10/ba56c733f772ff5e4fc82b1a8482a2053fd2f0e289a6e0cf7a2df40e1167ff5723acb5ed16af4be00add39a16cf1b48470f2d591eedd3d2a80232cb8887616b6
+"tesseract.js-core@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "tesseract.js-core@npm:7.0.0"
+  checksum: 10/6eab7ecb462abc4c4c15f5a61f924700a48f5d1c8ce7f2b1447960b0f6f10063d7c0e5ac56f1905ae87d643a99c6ee28a90b827148aa006b712d5cecd2991f19
   languageName: node
   linkType: hard
 
-"tesseract.js@npm:6.0.1":
-  version: 6.0.1
-  resolution: "tesseract.js@npm:6.0.1"
+"tesseract.js@npm:7.0.0":
+  version: 7.0.0
+  resolution: "tesseract.js@npm:7.0.0"
   dependencies:
     bmp-js: "npm:^0.1.0"
     idb-keyval: "npm:^6.2.0"
@@ -56106,10 +56106,10 @@ __metadata:
     node-fetch: "npm:^2.6.9"
     opencollective-postinstall: "npm:^2.0.3"
     regenerator-runtime: "npm:^0.13.3"
-    tesseract.js-core: "npm:^6.0.0"
-    wasm-feature-detect: "npm:^1.2.11"
+    tesseract.js-core: "npm:^7.0.0"
+    wasm-feature-detect: "npm:^1.8.0"
     zlibjs: "npm:^0.3.1"
-  checksum: 10/94f9b6a2e148cfcb7068b3ce12b9d15ac90208dd1ae7a8c58bd1af83765cc952831e6cca39f3bf5c6288b75f7da47529e07a28693cc297f20d703533161553d4
+  checksum: 10/eefcce0c143b1f78c81220d32e83631778280d402e5439d4c50316779d7ecc4a11486690ca0748e1419100ceb33ef78121ff51876ef807b9de7c74bfb848690d
   languageName: node
   linkType: hard
 
@@ -57089,12 +57089,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"turndown@npm:7.2.2":
-  version: 7.2.2
-  resolution: "turndown@npm:7.2.2"
+"turndown@npm:7.2.4":
+  version: 7.2.4
+  resolution: "turndown@npm:7.2.4"
   dependencies:
     "@mixmark-io/domino": "npm:^2.2.0"
-  checksum: 10/e0a6f7f0c2bc8447ca7ea145348c9e337163a00c9d95f49e5eecdbc9931002aa0253c7561fbc299280c854d5308ed5a0eacfc9b4e399d698fce64be4d2d7bb52
+  checksum: 10/90e3e0370a26aba34e61f354c1faec5346f0a943dd794f13300b1656aa393ded8c0e384dee63887e80509c788a26aa90c19bb17362c032d5b779f99ccb65105d
   languageName: node
   linkType: hard
 
@@ -59104,10 +59104,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wasm-feature-detect@npm:^1.2.11":
-  version: 1.5.1
-  resolution: "wasm-feature-detect@npm:1.5.1"
-  checksum: 10/e5a63a0a4abe78227f851b631c6079095a59dbc6e77c9c1fe65358cb2618368b762a1e8a75d43447e42afffe574f143de5497fac3dac771444868b6e7826b269
+"wasm-feature-detect@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "wasm-feature-detect@npm:1.8.0"
+  checksum: 10/54662197b41b1d60969ac58b41d8792241a405354775d3e35d0915da2551b0a3b87a5b55a1c93ef51606bf52d420e02b8d0a932a5b00f9a6f9b333a49dda1ece
   languageName: node
   linkType: hard
 

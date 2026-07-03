@@ -1,5 +1,10 @@
-import { _internal } from './noteChat';
+import { _internal, NoteContext } from './noteChat';
 import { applyAnchorEdits } from './applyNoteEdits';
+
+const getEditOperationSchema = (note: NoteContext) => {
+	const schema = _internal.responseSchema(note).json_schema.schema;
+	return schema.properties.edits.items;
+};
 
 describe('noteChat', () => {
 
@@ -13,32 +18,6 @@ describe('noteChat', () => {
 		expect(prompt).toContain('just this bit');
 		expect(prompt).toContain('BEGIN SELECTION');
 		expect(prompt).not.toContain('long body text');
-	});
-
-	test('systemPrompt restricts ops to replaceSelection when selection present', () => {
-		const prompt = _internal.systemPrompt({
-			title: 'n',
-			body: 'b',
-			selection: 'sel',
-		});
-		expect(prompt).toContain('replaceSelection');
-		expect(prompt).not.toContain('insertBefore');
-		expect(prompt).not.toContain('insertAfter');
-		expect(prompt).not.toContain('appendToNote');
-		expect(prompt).not.toContain('replaceRange');
-		expect(prompt).not.toContain('replaceFencedBlock');
-	});
-
-	test('systemPrompt offers anchor ops when no selection', () => {
-		const prompt = _internal.systemPrompt({
-			title: 'n',
-			body: 'b',
-			selection: null,
-		});
-		expect(prompt).toContain('insertBefore');
-		expect(prompt).toContain('insertAfter');
-		expect(prompt).toContain('appendToNote');
-		expect(prompt).toContain('replaceRange');
 	});
 
 	test('systemPrompt advertises Joplin-specific Markdown features', () => {
@@ -64,6 +43,76 @@ describe('noteChat', () => {
 		});
 		expect(prompt).toContain('the whole body');
 		expect(prompt).toContain('BEGIN NOTE');
+	});
+
+	test.each([
+		true, false,
+	])('responseSchema should require "op" and disallow additional properties (has selection: %b)', (selection) => {
+		const schema = getEditOperationSchema({
+			title: 'Note',
+			body: 'some body',
+			selection: selection ? 'body' : null,
+		});
+
+		const operations = [
+			...(schema.type === 'object' ? [schema] : []),
+			...(schema.anyOf ?? []),
+		];
+
+		for (const operation of operations) {
+			expect(operation.required).toContain('op');
+			expect(operation.additionalProperties).toBe(false);
+		}
+	});
+
+	test.each([
+		{
+			label: 'restricts ops to replaceSelection when selection present',
+			note: {
+				title: 'My note',
+				body: 'long body text',
+				selection: 'just this bit',
+			},
+			expectedOperations: ['replaceSelection'],
+		},
+		{
+			label: 'offers anchor operations when no selection present',
+			note: {
+				title: 'n',
+				body: 'b',
+				selection: null,
+			},
+			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock'],
+		},
+	])('responseSchema is consistent with systemPrompt (case $label)', ({ note, expectedOperations }) => {
+		const allOperations = new Set([
+			'insertBefore',
+			'insertAfter',
+			'appendToNote',
+			'replaceRange',
+			'replaceFencedBlock',
+		]);
+		const expectedMissingOperations = new Set(allOperations);
+		for (const operation of expectedOperations) {
+			expectedMissingOperations.delete(operation);
+		}
+
+		const prompt = _internal.systemPrompt(note);
+		const editSchemaItems = getEditOperationSchema(note);
+
+		const allowedSchemaOperations = [
+			...(editSchemaItems.properties?.op?.enum ?? []),
+			...(editSchemaItems.anyOf?.map(item => item.properties.op.enum)?.flat() ?? []),
+		].sort();
+		expect(allowedSchemaOperations).toEqual([...expectedOperations].sort());
+
+		// Prompt's operations list should be correct
+		for (const operation of expectedOperations) {
+			expect(prompt).toContain(operation);
+		}
+		for (const operation of expectedMissingOperations) {
+			expect(prompt).not.toContain(operation);
+		}
 	});
 
 	test.each([
