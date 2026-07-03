@@ -12455,7 +12455,7 @@ __metadata:
     styled-components: "npm:5.3.11"
     styled-system: "npm:5.1.5"
     taboverride: "npm:4.0.3"
-    tesseract.js: "npm:6.0.1"
+    tesseract.js: "npm:7.0.0"
     tinymce: "npm:6.8.5"
     ts-jest: "npm:29.4.6"
     ts-node: "npm:10.9.2"
@@ -12826,7 +12826,7 @@ __metadata:
     string-to-stream: "npm:3.0.1"
     tar: "npm:7.5.13"
     tcp-port-used: "npm:1.0.2"
-    tesseract.js: "npm:6.0.1"
+    tesseract.js: "npm:7.0.0"
     typescript: "npm:5.9.3"
     uglifycss: "npm:0.0.29"
     url-parse: "npm:1.5.10"
@@ -56089,16 +56089,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tesseract.js-core@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "tesseract.js-core@npm:6.0.0"
-  checksum: 10/ba56c733f772ff5e4fc82b1a8482a2053fd2f0e289a6e0cf7a2df40e1167ff5723acb5ed16af4be00add39a16cf1b48470f2d591eedd3d2a80232cb8887616b6
+"tesseract.js-core@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "tesseract.js-core@npm:7.0.0"
+  checksum: 10/6eab7ecb462abc4c4c15f5a61f924700a48f5d1c8ce7f2b1447960b0f6f10063d7c0e5ac56f1905ae87d643a99c6ee28a90b827148aa006b712d5cecd2991f19
   languageName: node
   linkType: hard
 
-"tesseract.js@npm:6.0.1":
-  version: 6.0.1
-  resolution: "tesseract.js@npm:6.0.1"
+"tesseract.js@npm:7.0.0":
+  version: 7.0.0
+  resolution: "tesseract.js@npm:7.0.0"
   dependencies:
     bmp-js: "npm:^0.1.0"
     idb-keyval: "npm:^6.2.0"
@@ -56106,10 +56106,10 @@ __metadata:
     node-fetch: "npm:^2.6.9"
     opencollective-postinstall: "npm:^2.0.3"
     regenerator-runtime: "npm:^0.13.3"
-    tesseract.js-core: "npm:^6.0.0"
-    wasm-feature-detect: "npm:^1.2.11"
+    tesseract.js-core: "npm:^7.0.0"
+    wasm-feature-detect: "npm:^1.8.0"
     zlibjs: "npm:^0.3.1"
-  checksum: 10/94f9b6a2e148cfcb7068b3ce12b9d15ac90208dd1ae7a8c58bd1af83765cc952831e6cca39f3bf5c6288b75f7da47529e07a28693cc297f20d703533161553d4
+  checksum: 10/eefcce0c143b1f78c81220d32e83631778280d402e5439d4c50316779d7ecc4a11486690ca0748e1419100ceb33ef78121ff51876ef807b9de7c74bfb848690d
   languageName: node
   linkType: hard
 
@@ -59104,10 +59104,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wasm-feature-detect@npm:^1.2.11":
-  version: 1.5.1
-  resolution: "wasm-feature-detect@npm:1.5.1"
-  checksum: 10/e5a63a0a4abe78227f851b631c6079095a59dbc6e77c9c1fe65358cb2618368b762a1e8a75d43447e42afffe574f143de5497fac3dac771444868b6e7826b269
+"wasm-feature-detect@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "wasm-feature-detect@npm:1.8.0"
+  checksum: 10/54662197b41b1d60969ac58b41d8792241a405354775d3e35d0915da2551b0a3b87a5b55a1c93ef51606bf52d420e02b8d0a932a5b00f9a6f9b333a49dda1ece
   languageName: node
   linkType: hard
 
