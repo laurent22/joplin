@@ -1,6 +1,7 @@
+import { pregQuote } from '../../../string-utils';
 
 const fencedBlockRegex = (tag: string) =>
-	new RegExp(`\`\`\`${tag}\\s*\\n([\\s\\S]*?)\\n?\`\`\``, 'gi');
+	new RegExp(`\`\`\`${pregQuote(tag)}\\s*\\n([\\s\\S]*?)\\n?\`\`\``, 'gi');
 
 // Cursor=0 fallback (no selection) makes the first match win naturally.
 const findFencedBlock = (body: string, tag: string, cursorPos: number) => {
