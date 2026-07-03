@@ -350,7 +350,9 @@ export const createUserAndSession = async function(index = 1, isAdmin = false, o
 	if (options.account_type) user.account_type = options.account_type;
 
 	user = await models().user().save(user, { skipValidation: true });
-	const session = await models().session().authenticate(options.email, options.password, '');
+
+	const ctx = await koaAppContext();
+	const session = await models().session().authenticate(options.email, options.password, ctx.joplin.services, '');
 
 	return {
 		user: await models().user().load(user.id),

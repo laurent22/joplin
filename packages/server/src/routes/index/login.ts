@@ -118,7 +118,7 @@ router.post('login', async (path: SubPath, ctx: AppContext) => {
 		}
 
 		const session = await ctx.joplin.models.session().authenticate(
-			body.fields.email, body.fields.password, body.fields.mfaCode, body.fields.recoveryCode,
+			body.fields.email, body.fields.password, ctx.joplin.services, body.fields.mfaCode, body.fields.recoveryCode,
 		);
 		cookieSet(ctx, 'sessionId', session.id);
 		const owner = await ctx.joplin.models.user().load(session.user_id, { fields: ['id', 'is_admin'] });

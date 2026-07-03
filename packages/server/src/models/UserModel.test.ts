@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow, expectHttpError, createUser } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow, expectHttpError, createUser, koaAppContext } from '../utils/testing/testUtils';
 import { EmailSender, UserFlagType } from '../services/database/types';
 import { ErrorBadRequest, ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
@@ -556,8 +556,9 @@ describe('UserModel', () => {
 		config().LOCAL_AUTH_ENABLED = false;
 
 		const user = await createUser();
+		const ctx = await koaAppContext();
 
-		expect(await models().user().login(user.email, '123456')).toBe(null);
+		expect(await models().user().login(user.email, '123456', ctx.joplin.services)).toBe(null);
 	});
 
 	test('should not change user properties managed by SAML', async () => {
@@ -599,7 +600,8 @@ describe('UserModel', () => {
 		config().SAML_ENABLED = true;
 
 		try {
-			const result = await models().user().ssoLogin(localUser.email, 'Attacker Controlled Name');
+			const ctx = await koaAppContext();
+			const result = await models().user().ssoLogin(localUser.email, 'Attacker Controlled Name', ctx.joplin.services);
 			expect(result).toBeNull();
 
 			const reloaded = await models().user().load(localUser.id);
