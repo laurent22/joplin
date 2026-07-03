@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useMemo, useCallback } from 'react';
-import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, Linking } from 'react-native';
 import { themeStyle } from '../global-style';
 import NavService from '@joplin/lib/services/NavService';
 
@@ -32,6 +32,11 @@ const WarningBox: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
 
 	const onPress = useCallback(() => {
+		if (props.targetScreen.startsWith('http')) {
+			void Linking.openURL(props.targetScreen);
+			return;
+		}
+
 		void NavService.go(props.targetScreen);
 	}, [props.targetScreen]);
 

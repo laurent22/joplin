@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Platform } from 'react-native';
 import { AppState } from '../../utils/types';
 import WarningBox from './WarningBox';
 import { _ } from '@joplin/lib/locale';
@@ -17,11 +18,13 @@ interface Props {
 	showShouldUpgradeSyncTargetMessage: boolean|undefined;
 	hasDisabledEncryptionItems: boolean;
 	mustUpgradeAppMessage: string;
+	syncTargetAppMinVersion?: string;
 	shareInvitations: ShareInvitation[];
 	processingShareInvitationResponse: boolean;
 	showInvalidJoplinCloudCredential: boolean;
 }
 
+const iosAppStoreUrl = 'https://apps.apple.com/us/app/joplin/id1315599797';
 
 export const WarningBannerComponent: React.FC<Props> = props => {
 	const warningComps = [];
@@ -36,6 +39,25 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 		/>;
 	};
 
+	const renderMustUpgradeAppMessage = () => {
+		if (Platform.OS === 'ios' && props.syncTargetAppMinVersion) {
+			const isPreRelease = props.syncTargetAppMinVersion.includes('-');
+			if (isPreRelease) {
+				return renderWarningBox(
+					'UpgradeApp',
+					_('Please upgrade your application to version %s: Update it from TestFlight', props.syncTargetAppMinVersion),
+				);
+			}
+
+			return renderWarningBox(
+				iosAppStoreUrl,
+				_('Please upgrade your application to version %s: Update it from the App Store', props.syncTargetAppMinVersion),
+			);
+		}
+
+		return renderWarningBox('UpgradeApp', props.mustUpgradeAppMessage);
+	};
+
 	if (props.showMissingMasterKeyMessage) {
 		warningComps.push(renderWarningBox('EncryptionConfig', _('Press to set the decryption password.')));
 	}
@@ -46,7 +68,7 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 		warningComps.push(renderWarningBox('UpgradeSyncTarget', _('The sync target needs to be upgraded. Press this banner to proceed.')));
 	}
 	if (props.mustUpgradeAppMessage) {
-		warningComps.push(renderWarningBox('UpgradeApp', props.mustUpgradeAppMessage));
+		warningComps.push(renderMustUpgradeAppMessage());
 	}
 	if (props.hasDisabledEncryptionItems) {
 		warningComps.push(renderWarningBox('Status', _('Some items cannot be decrypted.')));
@@ -87,6 +109,7 @@ export default connect((state: AppState) => {
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
+		syncTargetAppMinVersion: syncInfo.appMinVersion,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
