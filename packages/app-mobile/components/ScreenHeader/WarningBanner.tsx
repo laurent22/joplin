@@ -45,13 +45,23 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 		const syncTargetAppMinVersion = props.syncTargetAppMinVersion;
 		if (syncTargetAppMinVersion) {
 			const isPreRelease = syncTargetAppMinVersion.includes('-');
+			const upgradeMessage = (message: string) => _(
+				'Please upgrade your application to version %s: %s',
+				syncTargetAppMinVersion,
+				message,
+			);
 
 			if (Platform.OS === 'android') {
+				if (isPreRelease) {
+					return renderWarningBox(
+						androidPreReleaseUrl,
+						upgradeMessage(_('Download it from the Joplin Android tags page')),
+					);
+				}
+
 				return renderWarningBox(
-					isPreRelease ? androidPreReleaseUrl : androidGooglePlayUrl,
-					isPreRelease ?
-						_('Please upgrade your application to version %s: Download it from the Joplin Android tags page', syncTargetAppMinVersion) :
-						_('Please upgrade your application to version %s: Update it from Google Play', syncTargetAppMinVersion),
+					androidGooglePlayUrl,
+					upgradeMessage(_('Update it from Google Play')),
 				);
 			}
 
@@ -59,13 +69,13 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 				if (isPreRelease) {
 					return renderWarningBox(
 						'UpgradeApp',
-						_('Please upgrade your application to version %s: Check TestFlight for an update', syncTargetAppMinVersion),
+						upgradeMessage(_('Check TestFlight for an update')),
 					);
 				}
 
 				return renderWarningBox(
 					iosAppStoreUrl,
-					_('Please upgrade your application to version %s: Update it from the App Store', syncTargetAppMinVersion),
+					upgradeMessage(_('Update it from the App Store')),
 				);
 			}
 		}
