@@ -288,7 +288,6 @@ const ChatPanel: React.FC<Props> = (props) => {
 						? <InlineMarkdownDisplay
 							className='content'
 							markdown={m.text}
-							themeId={props.themeId}
 							allowLinks={false} />
 						: <div className='content'>{m.text}</div>;
 					const summary = m.role === 'assistant' ? editsSummary(m.editsApplied ?? 0, m.editsMissed ?? 0) : '';

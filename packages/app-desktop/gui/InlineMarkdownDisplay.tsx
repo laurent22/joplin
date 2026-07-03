@@ -9,7 +9,6 @@ interface Props {
 	className: string;
 	markdown: string;
 	allowLinks: boolean;
-	themeId: number;
 }
 
 const InlineMarkdownDisplay: React.FC<Props> = props => {
