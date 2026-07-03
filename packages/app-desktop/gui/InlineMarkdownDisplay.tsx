@@ -27,9 +27,13 @@ export default InlineMarkdownDisplay;
 const renderMarkdownToElement = (markdown: string) => {
 	// Since we're including the output in the main document, use markdown-it directly with minimal
 	// settings (e.g. HTML rendering disabled).
-	const markdownIt = new MarkdownIt({
-		linkify: true,
-	});
+	const markdownIt = MarkdownIt()
+		.set({
+			// Match Joplin's main renderer
+			breaks: false,
+			linkify: true,
+		})
+		.disable('image');
 	const rendered = markdownIt.render(markdown);
 
 	const markdownContainer = document.createElement('div');
