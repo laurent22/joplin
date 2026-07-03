@@ -99,7 +99,7 @@ const useIsLongRunning = (isPending: boolean) => {
 	return isLongRunning;
 };
 
-const containerStyle = { flex: 1, marginHorizontal: 16 };
+const containerStyle = { flex: 1 };
 
 const SearchResults: React.FC<Props> = props => {
 	const { notes, highlightedWord, isPending } = useResults(props);

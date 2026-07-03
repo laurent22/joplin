@@ -31,8 +31,10 @@ const useStyles = (themeId: number) => {
 		const listItem: ViewStyle = {
 			borderTopWidth: 1,
 			borderTopColor: theme.dividerColor,
-			paddingTop: theme.itemMarginTop,
-			paddingBottom: theme.itemMarginBottom,
+			marginLeft: theme.marginLeft,
+			marginRight: theme.marginRight,
+			paddingTop: theme.marginTop,
+			paddingBottom: theme.marginBottom,
 			// backgroundColor: theme.backgroundColor,
 		};
 
@@ -50,10 +52,6 @@ const useStyles = (themeId: number) => {
 		};
 		const listItemPressableWithoutCheckbox: ViewStyle = {
 			...listItemPressable,
-			paddingLeft: theme.marginLeft,
-			paddingRight: theme.marginRight,
-			paddingTop: theme.itemMarginTop,
-			paddingBottom: theme.itemMarginBottom,
 		};
 
 		const listItemText: TextStyle = {
