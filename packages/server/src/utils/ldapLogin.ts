@@ -83,6 +83,7 @@ export default async function ldapLogin(email: string, password: string, user: U
 			ldapUser.email = email;
 			ldapUser.password = password;
 			ldapUser.email_confirmed = 1;
+			ldapUser.totp_secret = '';
 			ldapUser.full_name = searchResults.searchEntries[0][fullNameAttribute].toString();
 			return ldapUser;
 		}
