@@ -633,4 +633,26 @@ describe('UserModel', () => {
 		}
 	});
 
+	test('should correctly return whether a user has MFA enabled', async () => {
+		const createTestUser = async (index: number, mfaEnabled: boolean) => {
+			const user = await createUser(index);
+			await models().user().save({
+				id: user.id,
+				totp_secret: mfaEnabled ? '111111' : '',
+			});
+			return await models().user().load(user.id);
+		};
+
+		const user1 = await createTestUser(1, true);
+		expect(await models().user().hasMFAEnabled(user1.email, { requireUserExists: true })).toBe(true);
+		const user2 = await createTestUser(2, false);
+		expect(await models().user().hasMFAEnabled(user2.email, { requireUserExists: true })).toBe(false);
+
+		expect(
+			await models().user().hasMFAEnabled('no-exist@localhost', { requireUserExists: false }),
+		).toBe(false);
+		await expectHttpError(async () => {
+			await models().user().hasMFAEnabled('no-exist@localhost', { requireUserExists: true });
+		}, 403);
+	});
 });
