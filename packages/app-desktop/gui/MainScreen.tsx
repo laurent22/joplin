@@ -584,18 +584,18 @@ class MainScreenComponent extends React.Component<Props, State> {
 		} else if (this.props.mustUpgradeAppMessage) {
 			if (!this.props.syncTargetAppMinVersion) {
 				msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
-			} else if (Setting.value('autoUpdate.includePreReleases') && shim.isLinux()) {
+			} else if (this.props.syncTargetAppMinVersion.includes('-') && shim.isLinux()) {
 				msg = this.renderNotificationMessage(
 					_('Please upgrade your application to version %s or update it using your package manager:', this.props.syncTargetAppMinVersion),
 					_('Download it from GitHub Releases'),
 					() => shim.openUrl('https://github.com/laurent22/joplin/releases'),
 				);
 			} else {
-				const includePreReleases = Setting.value('autoUpdate.includePreReleases');
+				const isTargetPreRelease = this.props.syncTargetAppMinVersion.includes('-');
 				msg = this.renderNotificationMessage(
 					_('Please upgrade your application to version %s:', this.props.syncTargetAppMinVersion),
-					includePreReleases ? _('Download it from GitHub Releases') : _('Check for updates'),
-					includePreReleases ? () => shim.openUrl('https://github.com/laurent22/joplin/releases') : onCheckForUpdates,
+					isTargetPreRelease ? _('Download it from GitHub Releases') : _('Check for updates'),
+					isTargetPreRelease ? () => shim.openUrl('https://github.com/laurent22/joplin/releases') : onCheckForUpdates,
 				);
 			}
 		} else if (this.props.shouldSwitchToAppleSiliconVersion) {
