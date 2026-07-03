@@ -52,6 +52,10 @@ interface UserEmailDetails {
 
 export type GetUsersApiResponse = User;
 
+interface HasMfaEnabledOptions {
+	requireUserExists: boolean;
+}
+
 export interface Account {
 	account_type: number;
 	can_share_folder: number;
@@ -887,9 +891,12 @@ export default class UserModel extends BaseModel<User> {
 		}, 'UserModel::saveMulti');
 	}
 
-	public async hasMFAEnabled(email: string) {
+	public async hasMFAEnabled(email: string, { requireUserExists }: HasMfaEnabledOptions) {
 		const user = await this.loadByEmail(email, { fields: ['totp_secret'] });
-		if (!user) throw new ErrorForbidden('Invalid email or password', { details: { email } });
+		if (!user) {
+			if (requireUserExists) throw new ErrorForbidden('Invalid email or password', { details: { email } });
+			return false;
+		}
 		return getIsMFAEnabled(user);
 	}
 

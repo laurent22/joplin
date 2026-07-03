@@ -107,7 +107,11 @@ router.post('login', async (path: SubPath, ctx: AppContext) => {
 	const body = await formParse(ctx.req);
 
 	try {
-		const hasMFAEnabled = !!config().MFA_ENABLED && await ctx.joplin.models.user().hasMFAEnabled(body.fields.email);
+		// Non-existent users may be created by session().authenticate in some setups -- we need to allow
+		// non-existent users here.
+		const hasMFAEnabled = await ctx.joplin.models.user().hasMFAEnabled(
+			body.fields.email, { requireUserExists: false },
+		);
 
 		if (hasMFAEnabled && (!body.fields.mfaCode && !body.fields.recoveryCode)) {
 			return internalRedirect(path, ctx, router, 'login', body.fields, { showMfaCodeInput: true });
