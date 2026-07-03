@@ -68,6 +68,14 @@ const getRedirectUrl = (isAdmin: number, applicationAuthId?: string) => {
 	return homeUrl();
 };
 
+router.post('login', async (_path: SubPath, _ctx: AppContext) => {
+	if (!config().LOCAL_AUTH_ENABLED) {
+		return await generateRedirectHtml('web-login');
+	}
+
+	return makeView();
+});
+
 router.get('login', async (_path: SubPath, ctx: AppContext, fields: LoginInputFields = {}, options: LoginViewContentOptions) => {
 	const viewContentOptions = {
 		showMfaCodeInput: !!options?.showMfaCodeInput,
@@ -99,10 +107,6 @@ router.get('login/:id', async (path: SubPath, ctx: AppContext) => {
 
 router.post('login', async (path: SubPath, ctx: AppContext) => {
 	await limiterLoginBruteForce(userIp(ctx));
-
-	if (!config().LOCAL_AUTH_ENABLED) {
-		return await generateRedirectHtml('web-login');
-	}
 
 	const body = await formParse(ctx.req);
 
