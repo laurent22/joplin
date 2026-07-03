@@ -67,6 +67,10 @@
 	color: var(--joplin-color2);
 	align-self: flex-end;
 	max-width: 90%;
+
+	> .content {
+		white-space: pre-wrap;
+	}
 }
 
 // Assistant turn uses the secondary panel scheme (light gray in light theme,
