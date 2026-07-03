@@ -9,7 +9,12 @@
 
 	// Decrease space between paragraphs to better fit
 	p {
-		margin-bottom: var(--joplin-margin-small);
+		margin-bottom: var(--joplin-margin);
+	}
+	// Avoid a large space at the end of the chat bubble after
+	// the last paragraph
+	p:last-child {
+		margin-bottom: 0;
 	}
 
 	ul, ol {
