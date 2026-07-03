@@ -140,19 +140,21 @@ const SecondaryWindow: React.FC<Props> = props => {
 		onClose={onWindowClose}
 		title={windowTitle}
 	>
-		<LibraryStyleRoot>
-			<WindowCommandsAndDialogs windowId={props.windowId} />
-			<ResizableLayout
-				layout={layout.layout}
-				onResize={layout.onResize}
-				onMoveButtonClick={() => {}}
-				renderItem={onRenderItem}
-				layoutKeyToLabel={layout.onKeyToLabel}
-				moveMode={false}
-				moveModeMessage={''}
-			/>
-		</LibraryStyleRoot>
-		<StyleSheetContainer />
+		<div id='react-root' className='secondary-window-root'>
+			<LibraryStyleRoot>
+				<WindowCommandsAndDialogs windowId={props.windowId} />
+				<ResizableLayout
+					layout={layout.layout}
+					onResize={layout.onResize}
+					onMoveButtonClick={() => {}}
+					renderItem={onRenderItem}
+					layoutKeyToLabel={layout.onKeyToLabel}
+					moveMode={false}
+					moveModeMessage={''}
+				/>
+			</LibraryStyleRoot>
+			<StyleSheetContainer />
+		</div>
 	</NewWindowOrIFrame>;
 };
 
