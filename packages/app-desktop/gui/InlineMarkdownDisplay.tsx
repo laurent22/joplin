@@ -8,6 +8,7 @@ import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 import CommandService from '@joplin/lib/services/CommandService';
 import isItemId from '@joplin/lib/models/utils/isItemId';
 import { RenderResult } from '@joplin/renderer/types';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 
 interface Props {
 	className: string;
@@ -15,14 +16,17 @@ interface Props {
 	themeId: number;
 }
 
+const emptyPluginStates: PluginStates = {};
+
 const InlineMarkdownDisplay: React.FC<Props> = props => {
 	const markupToHtml = useMarkupToHtml({
 		themeId: props.themeId,
 		customCss: '',
-		plugins: {},
 		whiteBackgroundNoteRendering: false,
 		scrollbarSize: ScrollbarSize.Medium,
 		baseFontFamily: 'inherit',
+		// For now, don't load plugins:
+		plugins: emptyPluginStates,
 	});
 
 	const outputElementRef = useRef<HTMLDivElement|null>(null);
