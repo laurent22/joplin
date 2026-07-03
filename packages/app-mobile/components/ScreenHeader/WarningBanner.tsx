@@ -59,7 +59,7 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 				if (isPreRelease) {
 					return renderWarningBox(
 						'UpgradeApp',
-						_('Please upgrade your application to version %s: Update it from TestFlight', syncTargetAppMinVersion),
+						_('Please upgrade your application to version %s: Check TestFlight for an update', syncTargetAppMinVersion),
 					);
 				}
 
