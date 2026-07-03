@@ -3,6 +3,7 @@ import { ChatMessage } from './types';
 import JoplinError from '../../JoplinError';
 import Logger from '@joplin/utils/Logger';
 import JSON5 from 'json5';
+import findFencedBlock from './utils/findFencedBlock';
 
 const logger = Logger.create('noteChat');
 
@@ -62,7 +63,7 @@ const joplinMarkdownNotes = [
 ].join('\n');
 
 const hasStructuredBlock = (note: NoteContext) => {
-	return supportedStructuredBlockTags.some(tag => note.body.includes(`\`\`\`${tag}`));
+	return supportedStructuredBlockTags.some(tag => !!findFencedBlock(note.body, tag, 0));
 };
 
 const systemPrompt = (note: NoteContext) => {

@@ -1609,6 +1609,7 @@ packages/lib/services/ai/providers/OpenAiCompatible.js
 packages/lib/services/ai/testing/TestEmbeddingProvider.test.js
 packages/lib/services/ai/testing/TestEmbeddingProvider.js
 packages/lib/services/ai/types.js
+packages/lib/services/ai/utils/findFencedBlock.js
 packages/lib/services/commands/MenuUtils.js
 packages/lib/services/commands/ToolbarButtonUtils.test.js
 packages/lib/services/commands/ToolbarButtonUtils.js
