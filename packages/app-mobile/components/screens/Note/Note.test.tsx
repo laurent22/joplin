@@ -535,6 +535,7 @@ describe('screens/Note', () => {
 			currentPosition: () => new Promise(resolve => { resolveGeoloc = resolve; }),
 		};
 
+		let unmount = () => {};
 		try {
 			const noteId = await openNewNote({ title: '', body: '' });
 			store.dispatch({
@@ -543,7 +544,7 @@ describe('screens/Note', () => {
 				provisional: true,
 			});
 
-			const { unmount } = render(<WrappedNoteScreen />);
+			({ unmount } = render(<WrappedNoteScreen />));
 			const editor = await getMarkdownEditorControl();
 
 			await act(async () => {
@@ -562,9 +563,8 @@ describe('screens/Note', () => {
 			});
 
 			expect(screen.getByDisplayValue('Derived from body')).toBeVisible();
-
-			unmount();
 		} finally {
+			unmount();
 			shim.Geolocation = originalGeolocation;
 			Setting.setValue('trackLocation', false);
 		}
