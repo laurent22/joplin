@@ -1,14 +1,9 @@
 import * as React from 'react';
-import { useRef } from 'react';
-import useMarkupToHtml from './hooks/useMarkupToHtml';
-import { ScrollbarSize } from '@joplin/lib/models/settings/builtInMetadata';
-import { MarkupLanguage } from '@joplin/renderer';
-import dompurify = require('dompurify');
-import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import { useEffect, useRef } from 'react';
+import MarkdownIt = require('markdown-it');
+import { isResourceUrl } from '@joplin/lib/urlUtils';
+import { isHttpOrHttpsUrl } from '@joplin/utils/url';
 import CommandService from '@joplin/lib/services/CommandService';
-import isItemId from '@joplin/lib/models/utils/isItemId';
-import { RenderResult } from '@joplin/renderer/types';
-import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 
 interface Props {
 	className: string;
@@ -16,48 +11,34 @@ interface Props {
 	themeId: number;
 }
 
-const emptyPluginStates: PluginStates = {};
-
 const InlineMarkdownDisplay: React.FC<Props> = props => {
-	const markupToHtml = useMarkupToHtml({
-		themeId: props.themeId,
-		customCss: '',
-		whiteBackgroundNoteRendering: false,
-		scrollbarSize: ScrollbarSize.Medium,
-		baseFontFamily: 'inherit',
-		// For now, don't load plugins:
-		plugins: emptyPluginStates,
-	});
-
 	const outputElementRef = useRef<HTMLDivElement|null>(null);
-	useAsyncEffect(async (event) => {
-		const result = await markupToHtml(MarkupLanguage.Markdown, props.markdown, { bodyOnly: true });
-		if (event.cancelled) return;
-
+	useEffect(() => {
 		outputElementRef.current.replaceChildren(
-			sanitizeAndPostprocessRenderedOutput(result),
+			renderMarkdownToElement(props.markdown),
 		);
-	}, [props.markdown, markupToHtml]);
+	}, [props.markdown]);
 
 	return <div className={`inline-markdown ${props.className}`} ref={outputElementRef} />;
 };
 
 export default InlineMarkdownDisplay;
 
+const renderMarkdownToElement = (markdown: string) => {
+	// Since we're including the output in the main document, use markdown-it directly with minimal
+	// settings (e.g. HTML rendering disabled).
+	const markdownIt = new MarkdownIt({
+		linkify: true,
+	});
+	const rendered = markdownIt.render(markdown);
 
-const sanitizeAndPostprocessRenderedOutput = (renderResult: RenderResult) => {
-	const renderedContent = document.createElement('div');
-	// Since we're including the output in the main document, do an additional sanitization step.
-	// Disallow inline styles to avoid absolutely positioned content that can render outside the
-	// Markdown region.
-	renderedContent.innerHTML = dompurify.sanitize(
-		renderResult.html, { FORBID_ATTR: ['style'] },
-	);
+	const markdownContainer = document.createElement('div');
+	markdownContainer.innerHTML = rendered;
 
 	// Make links clickable
-	for (const link of renderedContent.querySelectorAll<HTMLAnchorElement>('a[href]')) {
-		const resourceId = link.getAttribute('data-resource-id');
-		const url = resourceId && isItemId(resourceId) ? `:/${resourceId}` : link.getAttribute('href');
+	for (const link of markdownContainer.querySelectorAll<HTMLAnchorElement>('a[href]')) {
+		const href = link.getAttribute('href');
+		const url = isResourceUrl(href) || isHttpOrHttpsUrl(href) ? href : '#';
 		link.href = '#';
 		link.title = url;
 
@@ -68,10 +49,5 @@ const sanitizeAndPostprocessRenderedOutput = (renderResult: RenderResult) => {
 		};
 	}
 
-	// Avoid duplicate math caused by missing styles (show only the MathML)
-	for (const katexDisplay of renderedContent.querySelectorAll('.katex-html')) {
-		katexDisplay.remove();
-	}
-
-	return renderedContent;
+	return markdownContainer;
 };
