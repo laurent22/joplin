@@ -33,7 +33,7 @@ const InlineMarkdownDisplay: React.FC<Props> = props => {
 		outputElementRef.current.replaceChildren(
 			sanitizeAndPostprocessRenderedOutput(result),
 		);
-	}, [props.markdown]);
+	}, [props.markdown, markupToHtml]);
 
 	return <div className={`inline-markdown ${props.className}`} ref={outputElementRef} />;
 };
