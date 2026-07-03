@@ -494,11 +494,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		};
 
 		const onCheckForUpdates = () => {
-			if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) {
-				ipcRenderer.send('check-for-updates');
-			} else {
-				void checkForUpdates(false, bridge().mainWindow(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
-			}
+			void checkForUpdates(false, bridge().mainWindow(), { includePreReleases: false });
 		};
 
 		const onRestartAndUpgrade = async () => {

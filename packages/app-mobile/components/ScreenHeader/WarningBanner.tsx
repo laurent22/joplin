@@ -26,7 +26,7 @@ interface Props {
 
 const androidGooglePlayUrl = 'https://play.google.com/store/apps/details?id=net.cozic.joplin';
 const androidPreReleaseUrl = 'https://github.com/laurent22/joplin-android/tags';
-const iosAppStoreUrl = 'https://apps.apple.com/us/app/joplin/id1315599797';
+const iosAppStoreUrl = 'https://apps.apple.com/app/id1315599797';
 
 export const WarningBannerComponent: React.FC<Props> = props => {
 	const warningComps = [];
