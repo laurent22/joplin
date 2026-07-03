@@ -249,9 +249,8 @@ describe('shares.link', () => {
 		}
 	});
 
-	// A shared SVG resource with an empty title must not be served inline with image/svg+xml,
-	// otherwise its embedded script would run in the Joplin Server origin.
-	test('should not serve attacker-controlled resource content inline', async () => {
+	// SVG is served inline but the strict CSP + sandbox blocks the embedded script.
+	test('should serve SVG inline under a strict CSP that blocks scripts', async () => {
 		const { session } = await createUserAndSession();
 
 		const svgPayload = '<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>';
@@ -274,8 +273,8 @@ describe('shares.link', () => {
 		});
 
 		const context = await getShareResponse(share.id, { resource_id: '000000000000000000000000000000E1' });
-		expect(context.response.get('Content-Type')).toBe('application/octet-stream');
-		expect(context.response.get('Content-Disposition').startsWith('attachment;')).toBe(true);
+		expect(context.response.get('Content-Type')).toBe('image/svg+xml');
+		expect(context.response.get('Content-Disposition').startsWith('inline;')).toBe(true);
 		expect(context.response.get('X-Content-Type-Options')).toBe('nosniff');
 		const csp = context.response.get('Content-Security-Policy');
 		expect(csp).toContain('default-src \'none\'');

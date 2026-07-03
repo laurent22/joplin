@@ -6,6 +6,7 @@ import { useId, useMemo, useState } from 'react';
 import PromptButton from './PromptButton';
 import { _ } from '@joplin/lib/locale';
 import TextInput from '../TextInput';
+import { themeStyle } from '../global-style';
 
 interface Props {
 	dialog: TextInputDialogData;
@@ -13,22 +14,32 @@ interface Props {
 	themeId: number;
 }
 
-const useStyles = () => {
+const useStyles = (themeId: number) => {
 	return useMemo(() => {
+		const theme = themeStyle(themeId);
 		return StyleSheet.create({
 			dialogContent: {
-				paddingBottom: 14,
+				paddingBottom: theme.margin,
+				paddingHorizontal: theme.margin,
 			},
 			dialogActions: {
-				paddingBottom: 14,
+				paddingBottom: theme.margin,
 				paddingTop: 4,
+				paddingHorizontal: theme.margin,
+				gap: theme.marginMedium,
+			},
+			textInput: {
+				borderBottomColor: theme.dividerColor,
+				borderBottomWidth: 1,
+				paddingLeft: 6,
+				paddingBottom: 8,
 			},
 		});
-	}, []);
+	}, [themeId]);
 };
 
 const TextInputDialog: React.FC<Props> = ({ dialog, containerStyle, themeId }) => {
-	const styles = useStyles();
+	const styles = useStyles(themeId);
 	const [text, setText] = useState(dialog.initialValue ?? '');
 	const labelId = useId();
 
@@ -41,14 +52,17 @@ const TextInputDialog: React.FC<Props> = ({ dialog, containerStyle, themeId }) =
 		>
 			<Dialog.Content style={styles.dialogContent}>
 				<Text
-					variant='bodyMedium'
+					variant='titleMedium'
 					nativeID={labelId}
 				>{dialog.message}</Text>
 				<TextInput
 					aria-labelledby={labelId}
 					themeId={themeId}
+					style={styles.textInput}
 					value={text}
 					onChangeText={setText}
+					// Underline styles are set via styles
+					underlineColorAndroid='transparent'
 				/>
 			</Dialog.Content>
 			<Dialog.Actions
@@ -57,8 +71,10 @@ const TextInputDialog: React.FC<Props> = ({ dialog, containerStyle, themeId }) =
 				<PromptButton
 					buttonSpec={{
 						text: _('Cancel'),
+						style: 'cancel',
 						onPress: dialog.onDismiss,
 					}}
+					isMenu={false}
 					themeId={themeId}
 				/>
 				<PromptButton
@@ -66,6 +82,7 @@ const TextInputDialog: React.FC<Props> = ({ dialog, containerStyle, themeId }) =
 						text: _('OK'),
 						onPress: () => dialog.onSubmit(text),
 					}}
+					isMenu={false}
 					themeId={themeId}
 				/>
 			</Dialog.Actions>

@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 import Setting from '@joplin/lib/models/Setting';
-import { defaultState, defaultWindowState, State, WindowState } from '@joplin/lib/reducer';
+import { defaultState, defaultWindowId, defaultWindowState, State, stateUtils, WindowState } from '@joplin/lib/reducer';
 import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
@@ -58,6 +58,8 @@ export interface AppWindowState extends WindowState {
 	// In window state so the conversation survives panel hide/show (the
 	// layout container can swap component types and unmount the panel).
 	aiChatMessages: AiChatMessage[];
+	// Layout for secondary windows
+	secondaryWindowLayout: LayoutItem|null;
 }
 
 interface BackgroundWindowStates {
@@ -92,6 +94,7 @@ export const createAppDefaultWindowState = (): AppWindowState => {
 		whiteboardForceMarkdown: {},
 		activeNoteIsWhiteboard: false,
 		aiChatMessages: [],
+		secondaryWindowLayout: null,
 	};
 };
 
@@ -126,6 +129,42 @@ const hideBackgroundDialogsWithId = produce((state: AppState, id: string) => {
 		}
 	}
 });
+
+const withWindowStateUpdated = <Key extends keyof AppWindowState> (
+	state: AppState, windowId: string, stateKey: Key, value: (oldValue: AppWindowState[Key])=> AppWindowState[Key],
+) => {
+	return produce((state: AppState) => {
+		const windowState = stateUtils.windowStateById(state, windowId);
+		windowState[stateKey] = value(windowState[stateKey]);
+	})(state);
+};
+
+interface SetLayoutPropOptions {
+	key: string;
+	prop: string;
+	value: string;
+}
+
+const setLayoutProp = (layout: LayoutItem, { key, prop, value }: SetLayoutPropOptions) => {
+	let newLayout = produce(layout, (draftLayout: LayoutItem) => {
+		iterateItems(draftLayout, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
+			if (!item) {
+				logger.warn('MAIN_LAYOUT_SET_ITEM_PROP: Found an empty item in layout: ', JSON.stringify(layout));
+			} else {
+				if (item.key === key) {
+					(item as unknown as Record<string, unknown>)[prop] = value;
+					return false;
+				}
+			}
+
+			return true;
+		});
+	});
+
+	if (newLayout !== layout) newLayout = validateLayout(newLayout);
+
+	return newLayout;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux actions are heterogeneous; typing this would require an action-type union and many narrowing casts inside the switch
 export default function(state: AppState, action: any) {
@@ -245,65 +284,56 @@ export default function(state: AppState, action: any) {
 			break;
 
 		case 'AI_CHAT_APPEND':
-			newState = {
-				...state,
-				aiChatMessages: [...state.aiChatMessages, action.message as AiChatMessage],
-			};
+			newState = withWindowStateUpdated(
+				state, action.windowId, 'aiChatMessages', messages => [...messages, action.message as AiChatMessage],
+			);
 			break;
 
 		case 'AI_CHAT_REMOVE':
-			newState = {
-				...state,
-				aiChatMessages: state.aiChatMessages.filter(m => m.id !== action.id),
-			};
+			newState = withWindowStateUpdated(
+				state, action.windowId, 'aiChatMessages', messages => messages.filter(m => m.id !== action.id),
+			);
 			break;
 
 		case 'AI_CHAT_RESET':
-			newState = {
-				...state,
-				aiChatMessages: [],
-			};
+			newState = withWindowStateUpdated(
+				state, action.windowId, 'aiChatMessages', (): AiChatMessage[] => [],
+			);
 			break;
 
+		case 'WINDOW_LAYOUT_SET':
 		case 'MAIN_LAYOUT_SET':
-
-			newState = {
-				...state,
-				mainLayout: action.value,
-			};
+			if ((action.windowId ?? defaultWindowId) === defaultWindowId) {
+				newState = {
+					...state,
+					mainLayout: action.value,
+				};
+			} else {
+				newState = withWindowStateUpdated(
+					state, action.windowId, 'secondaryWindowLayout', () => action.value,
+				);
+			}
 			break;
 
-		case 'MAIN_LAYOUT_SET_ITEM_PROP':
+		case 'WINDOW_LAYOUT_SET_ITEM_PROP':
+		case 'MAIN_LAYOUT_SET_ITEM_PROP': {
+			const updateOption = { key: action.itemKey, prop: action.propName, value: action.propValue };
 
-			{
-				if (!state.mainLayout) {
-					logger.warn('MAIN_LAYOUT_SET_ITEM_PROP: Trying to set an item prop on the layout, but layout is empty: ', JSON.stringify(action));
-				} else {
-					let newLayout = produce(state.mainLayout, (draftLayout: LayoutItem) => {
-						iterateItems(draftLayout, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
-							if (!item) {
-								logger.warn('MAIN_LAYOUT_SET_ITEM_PROP: Found an empty item in layout: ', JSON.stringify(state.mainLayout));
-							} else {
-								if (item.key === action.itemKey) {
-									(item as unknown as Record<string, unknown>)[action.propName] = action.propValue;
-									return false;
-								}
-							}
-
-							return true;
-						});
-					});
-
-					if (newLayout !== state.mainLayout) newLayout = validateLayout(newLayout);
-
-					newState = {
-						...state,
-						mainLayout: newLayout,
-					};
-				}
+			if ((action.windowId ?? defaultWindowId) !== defaultWindowId) {
+				newState = withWindowStateUpdated(
+					state, action.windowId, 'secondaryWindowLayout', oldLayout => (
+						setLayoutProp(oldLayout, updateOption)
+					),
+				);
+			} else {
+				newState = {
+					...state,
+					mainLayout: setLayoutProp(state.mainLayout, updateOption),
+				};
 			}
 
 			break;
+		}
 
 		case 'SHOW_MODAL_MESSAGE':
 			newState = { ...newState, modalOverlayMessage: action.message };

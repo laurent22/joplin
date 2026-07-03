@@ -1047,3 +1047,97 @@ export interface SearchResult {
 	score: number;
 }
 
+/**
+ * Parameters for {@link JoplinAi.getEmbeddings}.
+ */
+export interface GetEmbeddingsOptions {
+	/**
+	 * Restrict the result to these notes. Omit to page through every indexed
+	 * chunk in the vault. Requesting a note that isn't indexed yet (e.g. still
+	 * in the initial backfill) is not an error — it's silently skipped.
+	 */
+	noteIds?: string[];
+	/**
+	 * Opaque pagination cursor returned by a previous call. Treat as a black
+	 * box: pass it back unchanged to get the next page. Omit on the first
+	 * call.
+	 */
+	cursor?: string;
+	/**
+	 * Maximum chunks to return in this page. Defaults to 500. Hard-capped at
+	 * 5000 to keep payload size bounded.
+	 */
+	limit?: number;
+}
+
+/**
+ * One chunk's raw embedding vector and the text it was computed from.
+ */
+export interface EmbeddingChunk {
+	noteId: string;
+	chunkIndex: number;
+	chunkText: string;
+	/**
+	 * Unit-norm vector of length {@link EmbeddingsPage.dimension}. Only
+	 * comparable to vectors with the same {@link EmbeddingsPage.modelId}.
+	 */
+	vector: number[];
+}
+
+/**
+ * Returned by {@link JoplinAi.getEmbeddings}.
+ *
+ * The vectors are produced by a specific model: comparing vectors across
+ * different `modelId` values (or persisting vectors across model changes) is
+ * meaningless. Plugins that cache vectors must key the cache by `modelId` and
+ * invalidate when it changes between calls.
+ */
+export interface EmbeddingsPage {
+	/** Identifier of the model that produced these vectors, e.g. `'multilingual-e5-small'`. */
+	modelId: string;
+	/** Length of each `vector` array. */
+	dimension: number;
+	chunks: EmbeddingChunk[];
+	/**
+	 * Pass this back as `cursor` on the next call to get the following page.
+	 * `undefined` means there are no more results in the current snapshot.
+	 *
+	 * If the index is wiped between pages (e.g. the user changes the embedding
+	 * model), pagination ends silently — the next call with this cursor
+	 * returns an empty `chunks` array. Plugins should watch for a `modelId`
+	 * change between pages and discard partial results if it differs.
+	 */
+	nextCursor?: string;
+}
+
+/**
+ * State of the on-device embedding indexer.
+ *
+ * - `unavailable`: vector search isn't supported on this platform (won't change this session).
+ * - `disabled`: AI or the embedding index is turned off in settings.
+ * - `preparing`: the embedding model is downloading or loading.
+ * - `indexing`: the background scan is embedding notes; search works but results are incomplete.
+ * - `ready`: the index is idle and the model is loaded. Indexed-note count
+ *   may still be 0 (e.g. empty vault) — see the separate `ready` boolean.
+ */
+export type AiIndexState = 'unavailable' | 'disabled' | 'preparing' | 'indexing' | 'ready';
+
+/**
+ * Returned by {@link JoplinAi.getIndexStatus}. Lets plugins decide whether to
+ * use Joplin's native AI or fall back to their own implementation.
+ */
+export interface AiIndexStatus {
+	/** `true` when `state === 'ready'` and at least one note is indexed. */
+	ready: boolean;
+	state: AiIndexState;
+	/**
+	 * Identifier of the model producing the current vectors, e.g.
+	 * `'multilingual-e5-small'`. `null` when no provider is active. Plugins
+	 * that cache derived data should key it by `modelId`.
+	 */
+	modelId: string | null;
+	notesIndexed: number;
+	/** Indexable notes in the vault (excludes trashed, conflict, locked). */
+	totalNotes: number;
+}
+

@@ -33,9 +33,10 @@ const useDialogControl = (setPromptDialogs: SetPromptDialogs) => {
 				});
 			},
 			prompt: (title: string, message: string, buttons: PromptButtonSpec[] = defaultButtons, options?: PromptOptions) => {
-				// Alert.alert doesn't work on web.
-				if (Platform.OS !== 'web') {
-					// Note: Alert.alert provides a more native style on iOS.
+				// Note: Alert.alert doesn't work on web.
+				if (Platform.OS === 'ios') {
+					// Alert.alert provides a more native style on iOS.
+					// It also allows displaying confirmation dialogs on top of modals.
 					Alert.alert(title, message, buttons, options);
 				} else {
 					const cancelable = options?.cancelable ?? true;

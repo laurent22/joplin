@@ -198,6 +198,100 @@ describe('SearchService', () => {
 		expect(strict.length).toBeLessThanOrEqual(loose.length);
 	});
 
+	it('getEmbeddings: throws when no embedding provider is active', async () => {
+		AiService.instance().setEmbeddingProvider(null);
+		await expect(SearchService.instance().getEmbeddings())
+			.rejects.toThrow(/No embedding provider/);
+	});
+
+	it('getEmbeddings: returns chunks with raw vectors and model metadata', async () => {
+		if (skipIfNoVec()) return;
+		const { catNote, dogNote, carNote } = await seed();
+
+		const page = await SearchService.instance().getEmbeddings();
+
+		expect(page.modelId).toBe(provider.modelId);
+		expect(page.dimension).toBe(64);
+		expect(page.chunks.length).toBeGreaterThanOrEqual(3);
+		for (const chunk of page.chunks) {
+			expect(chunk.vector).toHaveLength(64);
+			expect(typeof chunk.chunkText).toBe('string');
+		}
+		const seenNotes = new Set(page.chunks.map(c => c.noteId));
+		expect(seenNotes).toEqual(new Set([catNote.id, dogNote.id, carNote.id]));
+	});
+
+	it('getEmbeddings: filters by noteIds and silently skips unindexed ids', async () => {
+		if (skipIfNoVec()) return;
+		const { catNote } = await seed();
+
+		const page = await SearchService.instance().getEmbeddings({
+			noteIds: [catNote.id, 'doesnotexist'],
+		});
+
+		const noteIds = new Set(page.chunks.map(c => c.noteId));
+		expect(noteIds).toEqual(new Set([catNote.id]));
+	});
+
+	it('getEmbeddings: paginates with a cursor and signals end-of-stream by omitting nextCursor', async () => {
+		if (skipIfNoVec()) return;
+		await seed();
+
+		const collected: string[] = [];
+		let cursor: string | undefined;
+		let pageCount = 0;
+		do {
+			const page = await SearchService.instance().getEmbeddings({ cursor, limit: 1 });
+			pageCount++;
+			for (const c of page.chunks) collected.push(`${c.noteId}:${c.chunkIndex}`);
+			cursor = page.nextCursor;
+			if (pageCount > 50) throw new Error('Pagination did not terminate');
+		} while (cursor);
+
+		// Three seeded notes, one chunk each (titles + short bodies fit in a
+		// single chunk). With look-ahead, the final page that contains the
+		// third chunk must omit nextCursor — so we expect exactly 3 pages,
+		// not 4 (which would mean a wasted empty-page round-trip).
+		expect(collected).toHaveLength(3);
+		expect(new Set(collected).size).toBe(3);
+		expect(pageCount).toBe(3);
+	});
+
+	it('getEmbeddings: does not emit nextCursor when the page fills exactly to limit', async () => {
+		if (skipIfNoVec()) return;
+		// Three indexed chunks total; requesting a limit that exactly matches
+		// the row count would, without look-ahead, return a cursor pointing at
+		// an empty next page.
+		await seed();
+		const page = await SearchService.instance().getEmbeddings({ limit: 3 });
+		expect(page.chunks).toHaveLength(3);
+		expect(page.nextCursor).toBeUndefined();
+	});
+
+	it('getEmbeddings: rejects a malformed cursor', async () => {
+		if (skipIfNoVec()) return;
+		await expect(SearchService.instance().getEmbeddings({ cursor: 'garbage' }))
+			.rejects.toThrow(/Invalid embeddings cursor/);
+	});
+
+	it.each([NaN, Infinity, -1, 0, 1.5])('getEmbeddings: rejects invalid limit %p', async (limit) => {
+		await expect(SearchService.instance().getEmbeddings({ limit }))
+			.rejects.toThrow(/Invalid embeddings limit/);
+	});
+
+	it('getEmbeddings: reads modelId from rows so a mid-flight provider swap cannot mislabel them', async () => {
+		if (skipIfNoVec()) return;
+		const { catNote } = await seed();
+		// Swap the active provider *after* indexing. Rows in the table still
+		// carry the original modelId; the page envelope must reflect that, not
+		// the live provider.
+		AiService.instance().setEmbeddingProvider(new TestEmbeddingProvider({ dimension: 64, modelId: 'different-model' }));
+
+		const page = await SearchService.instance().getEmbeddings({ noteIds: [catNote.id] });
+		expect(page.chunks.length).toBeGreaterThan(0);
+		expect(page.modelId).toBe('test-model-v1');
+	});
+
 	it('uses embedQuery when the provider exposes it', async () => {
 		if (skipIfNoVec()) return;
 		const { catNote } = await seed();

@@ -3,6 +3,7 @@ import { _ } from '@joplin/lib/locale';
 import layoutItemProp from '../../ResizableLayout/utils/layoutItemProp';
 import { AppState } from '../../../app.reducer';
 import { WindowControl } from '../utils/useWindowControl';
+import { defaultWindowId } from '@joplin/lib/reducer';
 
 export const declaration: CommandDeclaration = {
 	name: 'toggleAiChat',
@@ -13,7 +14,8 @@ export const declaration: CommandDeclaration = {
 export const runtime = (control: WindowControl): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext) => {
-			const layout = (context.state as AppState).mainLayout;
+			const state = context.state as AppState;
+			const layout = state.windowId === defaultWindowId ? state.mainLayout : state.secondaryWindowLayout;
 			if (!layout) return;
 
 			const visible = !layoutItemProp(layout, 'chatPanel', 'visible');
@@ -22,7 +24,8 @@ export const runtime = (control: WindowControl): CommandRuntime => {
 			window.dispatchEvent(new Event('resize'));
 
 			context.dispatch({
-				type: 'MAIN_LAYOUT_SET_ITEM_PROP',
+				type: 'WINDOW_LAYOUT_SET_ITEM_PROP',
+				windowId: context.state.windowId,
 				itemKey: 'chatPanel',
 				propName: 'visible',
 				propValue: visible,

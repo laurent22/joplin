@@ -28,7 +28,9 @@ export interface CommandRuntime {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- State is lib's State for cli but app-desktop runtimes type this as AppState; narrowing here breaks downstream contravariance
 	mapStateToTitle?(state: any): string;
 	// Used to break ties when commands are registered by different components.
-	getPriority?(state: State): number;
+	// `state` should be the main app state. `targetWindowId` should be the window ID
+	// the command should run in, or `null` for any window.
+	getPriority?(state: State, targetWindowId: string|null): number;
 }
 
 export interface CommandDeclaration {
@@ -105,6 +107,11 @@ export interface SearchResult {
 
 export interface RegisteredRuntime {
 	deregister: ()=> void;
+}
+
+export interface ExecuteInWindowOptions {
+	windowId: string|null; // null -> active window
+	args: unknown[];
 }
 
 export default class CommandService extends BaseService {
@@ -299,14 +306,14 @@ export default class CommandService extends BaseService {
 		};
 	}
 
-	private getRuntime(command: Command) {
+	private getRuntime(command: Command, targetWindowId: string|null = null) {
 		if (!Array.isArray(command.runtime)) return command.runtime;
 		if (!command.runtime.length) return null;
 
 		let bestRuntime = null;
 		let bestRuntimeScore = -1;
 		for (const runtime of command.runtime) {
-			const score = runtime.getPriority?.(this.store_.getState()) ?? 0;
+			const score = runtime.getPriority?.(this.store_.getState(), targetWindowId) ?? 0;
 			if (score >= bestRuntimeScore) {
 				bestRuntime = runtime;
 				bestRuntimeScore = score;
@@ -317,16 +324,20 @@ export default class CommandService extends BaseService {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Args/return shape varies per command, see CommandRuntime.execute
 	public async execute(commandName: string, ...args: any[]): Promise<any | void> {
+		return this.executeInWindow(commandName, { windowId: null, args });
+	}
+
+	public async executeInWindow(commandName: string, options: ExecuteInWindowOptions): Promise<unknown | void> {
 		const command = this.commandByName(commandName);
 		// Some commands such as "showModalMessage" can be executed many
 		// times per seconds, so we should only display this message in
 		// debug mode.
-		if (commandName !== 'showModalMessage') this.logger().debug('CommandService::execute:', commandName, args);
+		if (commandName !== 'showModalMessage') this.logger().debug('CommandService::execute:', commandName, options.args);
 
-		const runtime = this.getRuntime(command);
+		const runtime = this.getRuntime(command, options.windowId);
 		if (!runtime) throw new Error(`Cannot execute a command without a runtime: ${commandName}`);
 
-		return runtime.execute(this.createContext(), ...args);
+		return runtime.execute(this.createContext(), ...options.args);
 	}
 
 	public scheduleExecute(commandName: string, args: unknown) {

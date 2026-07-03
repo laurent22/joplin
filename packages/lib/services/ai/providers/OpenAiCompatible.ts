@@ -1,8 +1,11 @@
 import shim from '../../../shim';
 import JoplinError from '../../../JoplinError';
+import Logger from '@joplin/utils/Logger';
 import { rtrimSlashes } from '@joplin/utils/path';
 import { ChatMessage, ChatOptions, ChatResult, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
+
+const logger = Logger.create('OpenAiCompatibleProvider');
 
 interface OpenAiUsage {
 	prompt_tokens?: number;
@@ -90,6 +93,7 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 		// Older OpenAI models might reject `response_format` json_schema (see https://stackoverflow.com/q/79039544).
 		// For compatibility, retry without response_format on failure:
 		if (response.status === 400 && 'response_format' in body && /json_schema|response_format/i.test(errorMessage())) {
+			logger.warn(`Model ${this.model_} rejected response_format; retrying without structured output schema.`);
 			delete body.response_format;
 			({ response, json } = await doFetch());
 		}

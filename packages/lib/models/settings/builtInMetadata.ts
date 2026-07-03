@@ -679,7 +679,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 				return '';
 			},
 			options: () => ({
-				'joplin-cloud': _('Joplin Cloud AI'),
+				'joplin-cloud': _('Joplin Cloud AI (beta)'),
 				'openai-compatible': _('OpenAI-compatible'),
 				'anthropic': _('Anthropic'),
 			}),
