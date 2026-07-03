@@ -116,8 +116,12 @@ const systemPrompt = (note: NoteContext) => {
 		lines.push('');
 		lines.push('Anchors must be exact substrings of the current note body. Keep them short but unique.');
 		lines.push('');
+
+		const addNewFencedBlockInstructions = 'use appendToNote with the complete fenced block including the ```<tag> markers';
 		if (hasFencedBlock) {
-			lines.push('To edit a structured block already in the note (whiteboard / mermaid / abc / fountain), use replaceFencedBlock with the full new content — do not try to anchor inside the block\'s contents. To create one that doesn\'t exist yet, use appendToNote with the complete fenced block including the ```<tag> markers.');
+			lines.push(`To edit a structured block already in the note (${supportedStructuredBlockTags.join(' / ')}), use replaceFencedBlock with the full new content — do not try to anchor inside the block's contents. To create one that doesn't exist yet, ${addNewFencedBlockInstructions}.`);
+		} else {
+			lines.push(`To add a structured block to the note (${supportedStructuredBlockTags.join(' / ')}), ${addNewFencedBlockInstructions}.`);
 		}
 	}
 
