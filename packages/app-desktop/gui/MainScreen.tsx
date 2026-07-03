@@ -439,6 +439,17 @@ class MainScreenComponent extends React.Component<Props, State> {
 			</a>
 		);
 
+		if (!callForAction2 && message.includes(callForAction)) {
+			const actionIndex = message.indexOf(callForAction);
+			return (
+				<span>
+					{message.substring(0, actionIndex)}
+					{cfa}
+					{message.substring(actionIndex + callForAction.length)}
+				</span>
+			);
+		}
+
 		return (
 			<span>
 				{message}{callForAction ? ' ' : ''}
@@ -581,16 +592,26 @@ class MainScreenComponent extends React.Component<Props, State> {
 			if (!this.props.syncTargetAppMinVersion) {
 				msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
 			} else if (this.props.syncTargetAppMinVersion.includes('-') && shim.isLinux()) {
+				const callForAction = _('Download it from GitHub Releases');
 				msg = this.renderNotificationMessage(
-					_('Please upgrade your application to version %s or update it using your package manager:', this.props.syncTargetAppMinVersion),
-					_('Download it from GitHub Releases'),
+					_(
+						'Please upgrade your application to version %s: %s or update it using your package manager',
+						this.props.syncTargetAppMinVersion,
+						callForAction,
+					),
+					callForAction,
 					() => shim.openUrl('https://github.com/laurent22/joplin/releases'),
 				);
 			} else {
 				const isTargetPreRelease = this.props.syncTargetAppMinVersion.includes('-');
+				const callForAction = isTargetPreRelease ? _('Download it from GitHub Releases') : _('Check for updates');
 				msg = this.renderNotificationMessage(
-					_('Please upgrade your application to version %s:', this.props.syncTargetAppMinVersion),
-					isTargetPreRelease ? _('Download it from GitHub Releases') : _('Check for updates'),
+					_(
+						'Please upgrade your application to version %s: %s',
+						this.props.syncTargetAppMinVersion,
+						callForAction,
+					),
+					callForAction,
 					isTargetPreRelease ? () => shim.openUrl('https://github.com/laurent22/joplin/releases') : onCheckForUpdates,
 				);
 			}
