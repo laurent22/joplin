@@ -25,6 +25,10 @@
 		white-space: pre;
 		white-space: pre-wrap;
 		word-wrap: break-word;
+
+		span {
+			font-family: inherit;
+		}
 	}
 
 	.mermaid-export-graph {
