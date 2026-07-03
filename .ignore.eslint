@@ -2035,6 +2035,7 @@ packages/renderer/MdToHtml/rules/frontmatter.js
 packages/renderer/MdToHtml/rules/highlight_keywords.js
 packages/renderer/MdToHtml/rules/html_image.js
 packages/renderer/MdToHtml/rules/image.js
+packages/renderer/MdToHtml/rules/katex.test.js
 packages/renderer/MdToHtml/rules/katex.js
 packages/renderer/MdToHtml/rules/link_close.js
 packages/renderer/MdToHtml/rules/link_open.js
