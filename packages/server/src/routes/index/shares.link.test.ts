@@ -346,22 +346,23 @@ describe('shares.link', () => {
 		expect(bodyHtml).toContain('folder-tree-data');
 	});
 
-	test('should reject a note_id that is not inside the published folder', async () => {
+	test('should show an empty state for a note_id that is not inside the published folder', async () => {
 		const { session } = await createUserAndSession();
 
 		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Notebook' });
 		await createFolder(session.id, { id: '000000000000000000000000000000F2', title: 'Other Notebook' });
-		await createNote(session.id, { id: '00000000000000000000000000000099', parent_id: '000000000000000000000000000000F2' });
+		await createNote(session.id, { id: '00000000000000000000000000000099', parent_id: '000000000000000000000000000000F2', title: 'Other Note' });
 
 		const share = await postApi<Share>(session.id, 'shares', {
 			folder_id: '000000000000000000000000000000F1',
 			type: ShareType.PublishedFolder,
 		});
 
-		await expectHttpError(
-			async () => getShareContent(share.id, { note_id: '00000000000000000000000000000099' }),
-			ErrorNotFound.httpCode,
-		);
+		const bodyHtml = await getShareContent(share.id, { note_id: '00000000000000000000000000000099' }) as string;
+
+		expect(bodyHtml).toContain('folder-tree-data');
+		expect(bodyHtml).toContain('Item &quot;00000000000000000000000000000099&quot; does not belong to this share');
+		expect(bodyHtml).not.toContain('Other Note');
 	});
 
 	test('should serve a resource linked from a note inside the published folder', async () => {
