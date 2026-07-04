@@ -44,7 +44,7 @@ const useStyles = (themeId: number) => {
 			alignSelf: 'stretch',
 			flexDirection: 'row',
 			alignItems: 'center',
-			gap: theme.itemMarginTop,
+			gap: theme.marginExtraSmall,
 		};
 		const listItemPressableWithCheckbox: ViewStyle = {
 			...listItemPressable,
