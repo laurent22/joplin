@@ -47,8 +47,8 @@
   },
   "dependencies": {
     "@adobe/css-tools": "4.4.4",
-    "@aws-sdk/client-s3": "3.296.0",
-    "@aws-sdk/s3-request-presigner": "3.296.0",
+    "@aws-sdk/client-s3": "3.928.0",
+    "@aws-sdk/s3-request-presigner": "3.928.0",
     "@joplin/fork-htmlparser2": "^4.1.63",
     "@joplin/fork-sax": "^1.2.67",
     "@joplin/fork-uslug": "^2.0.6",
