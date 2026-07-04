@@ -28,6 +28,13 @@ export interface ChatUsage {
 export interface ChatResult {
 	text: string;
 	usage: ChatUsage;
+	// Joplin Cloud degradation / budget signals. Populated only by the
+	// joplin-cloud provider; other providers leave them undefined. Consumed
+	// internally to drive the aiStatus Redux slice — plugins receive only
+	// the assistant text via JoplinAi.chat().
+	degraded?: boolean;
+	tokensUsed?: number;
+	tokensBudget?: number;
 }
 
 export type ProviderClassification = 'local' | 'remote';

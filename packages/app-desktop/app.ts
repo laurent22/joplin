@@ -68,6 +68,7 @@ import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
 import AiService from '@joplin/lib/services/ai/AiService';
 import LocalEmbeddingProvider from '@joplin/lib/services/ai/LocalEmbeddingProvider';
+import { installAiStatusBridge } from './services/aiStatusBridge';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -794,6 +795,11 @@ class Application extends BaseApplication {
 		if (shim.onnxRuntime()) {
 			AiService.instance().setEmbeddingProvider(new LocalEmbeddingProvider());
 		}
+
+		// BaseApplication.store() is typed against the shared State; the
+		// runtime store carries AppState. The bridge only needs dispatch and
+		// getState, so narrow through unknown.
+		installAiStatusBridge(this.store() as unknown as import('./services/aiStatusBridge').AiStatusStore);
 
 		await this.applySettingsSideEffects();
 

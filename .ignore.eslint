@@ -223,6 +223,7 @@ packages/app-desktop/gui/ConfigScreen/ConfigScreen.js
 packages/app-desktop/gui/ConfigScreen/Sidebar.js
 packages/app-desktop/gui/ConfigScreen/configSearch.js
 packages/app-desktop/gui/ConfigScreen/controls/AiIndexStatus.js
+packages/app-desktop/gui/ConfigScreen/controls/AiStatus.js
 packages/app-desktop/gui/ConfigScreen/controls/FontSearch.js
 packages/app-desktop/gui/ConfigScreen/controls/GlobalHotkeyInput.test.js
 packages/app-desktop/gui/ConfigScreen/controls/GlobalHotkeyInput.js
@@ -641,6 +642,8 @@ packages/app-desktop/main-html.js
 packages/app-desktop/main.js
 packages/app-desktop/playwright.config.js
 packages/app-desktop/plugins/GotoAnything.js
+packages/app-desktop/services/aiStatusBridge.test.js
+packages/app-desktop/services/aiStatusBridge.js
 packages/app-desktop/services/autoUpdater/AutoUpdaterService.test.js
 packages/app-desktop/services/autoUpdater/AutoUpdaterService.js
 packages/app-desktop/services/bridge.js
@@ -1604,6 +1607,7 @@ packages/lib/services/ai/noteChat.test.js
 packages/lib/services/ai/noteChat.js
 packages/lib/services/ai/providers/Anthropic.js
 packages/lib/services/ai/providers/ChatProviderBase.js
+packages/lib/services/ai/providers/JoplinCloud.test.js
 packages/lib/services/ai/providers/JoplinCloud.js
 packages/lib/services/ai/providers/OpenAiCompatible.js
 packages/lib/services/ai/testing/TestEmbeddingProvider.test.js
