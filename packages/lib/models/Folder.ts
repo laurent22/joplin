@@ -22,6 +22,7 @@ import Setting from './Setting';
 import { itemIsReadOnlySync, ItemSlice } from './utils/readOnly';
 import ItemChange from './ItemChange';
 import { substrWithEllipsis } from '../string-utils';
+import { unique } from '../ArrayUtils';
 
 const logger = Logger.create('models/Folder');
 
@@ -787,9 +788,9 @@ export default class Folder extends BaseItem {
 		const directlyPublishedNoteIds = activeShares
 			.filter(share => share.type === ShareType.Note && !!share.note_id)
 			.map(share => share.note_id);
-		const publishedFolderIds = Array.from(new Set(publishedFolderRootIds.concat(
+		const publishedFolderIds = unique(publishedFolderRootIds.concat(
 			...(await Promise.all(publishedFolderRootIds.map(id => this.allChildrenFolders(id)))).map(folders => folders.map(f => f.id)),
-		)));
+		));
 
 		const publishedFolderIdSet = new Set(publishedFolderIds);
 		const directlyPublishedNoteIdSet = new Set(directlyPublishedNoteIds);
