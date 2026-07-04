@@ -110,9 +110,12 @@ export function isFolderPublished(state: RootState, folderId: string): boolean {
 			.filter(s => s.type === ShareType.PublishedFolder && !!s.folder_id)
 			.map(s => s.folder_id),
 	);
+	const visitedFolderIds = new Set<string>();
 	let currentId = folderId;
 	while (currentId) {
 		if (publishedIds.has(currentId)) return true;
+		if (visitedFolderIds.has(currentId)) break;
+		visitedFolderIds.add(currentId);
 		const folder = state.folders.find(f => f.id === currentId);
 		if (!folder) break;
 		currentId = folder.parent_id;
