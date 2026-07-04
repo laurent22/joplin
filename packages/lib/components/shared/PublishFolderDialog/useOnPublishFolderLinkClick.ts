@@ -5,7 +5,7 @@ import ShareService from '../../../services/share/ShareService';
 import { StateShare } from '../../../services/share/reducer';
 import shim from '../../../shim';
 import { SharingStatus } from '../ShareNoteDialog/types';
-const { useCallback } = shim.react();
+const { useCallback, useEffect, useRef } = shim.react();
 
 const logger = Logger.create('PublishFolderDialog/useOnPublishFolderLinkClick');
 
@@ -22,6 +22,14 @@ const useOnPublishFolderLinkClick = ({
 	setPublishFolderStatus,
 	onShareUrlReady,
 }: Props) => {
+	const isMountedRef = useRef(true);
+
+	useEffect(() => {
+		isMountedRef.current = true;
+		return () => {
+			isMountedRef.current = false;
+		};
+	}, []);
 
 	return useCallback(async () => {
 		const service = ShareService.instance();
@@ -31,19 +39,24 @@ const useOnPublishFolderLinkClick = ({
 		while (true) {
 			try {
 				if (tryToSync) {
+					if (!isMountedRef.current) return;
 					setPublishFolderStatus(SharingStatus.Synchronizing);
 					await reg.waitForSyncFinishedThenSync();
+					if (!isMountedRef.current) return;
 					tryToSync = false;
 					hasSynced = true;
 				}
 
+				if (!isMountedRef.current) return;
 				setPublishFolderStatus(SharingStatus.Creating);
 
 				const share = publishedShare || await service.publishFolder(folderId);
+				if (!isMountedRef.current) return;
 
 				if (!publishedShare) {
 					setPublishFolderStatus(SharingStatus.Synchronizing);
 					await reg.waitForSyncFinishedThenSync();
+					if (!isMountedRef.current) return;
 					setPublishFolderStatus(SharingStatus.Creating);
 				}
 
@@ -53,6 +66,8 @@ const useOnPublishFolderLinkClick = ({
 
 				await ShareService.instance().refreshShares();
 			} catch (error) {
+				if (!isMountedRef.current) return;
+
 				if ((error as { code?: number }).code === 404 && !hasSynced) {
 					logger.info('PublishFolderDialog: Notebook does not exist on server - trying to sync it.', error);
 					tryToSync = true;
