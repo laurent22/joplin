@@ -794,8 +794,11 @@ export default class Folder extends BaseItem {
 		const publishedFolderIdSet = new Set(publishedFolderIds);
 		const directlyPublishedNoteIdSet = new Set(directlyPublishedNoteIds);
 
-		for (const folder of await this.all({ fields: ['id', 'is_shared'] })) {
-			await this.updateShareStatus({ ...folder, type_: BaseModel.TYPE_FOLDER }, publishedFolderIdSet.has(folder.id));
+		if (publishedFolderIds.length) {
+			for (const folder of await this.all({ fields: ['id', 'is_shared'] })) {
+				if (!publishedFolderIdSet.has(folder.id)) continue;
+				await this.updateShareStatus({ ...folder, type_: BaseModel.TYPE_FOLDER }, true);
+			}
 		}
 
 		const noteIsSharedSql = [
@@ -808,8 +811,7 @@ export default class Folder extends BaseItem {
 			notesToUpdate = await this.db().selectAll(`
 				SELECT id, parent_id, is_shared
 				FROM notes
-				WHERE (is_shared = 0 AND (${noteIsSharedSql}))
-					OR (is_shared = 1 AND NOT (${noteIsSharedSql}))
+				WHERE is_shared = 0 AND (${noteIsSharedSql})
 			`);
 		}
 

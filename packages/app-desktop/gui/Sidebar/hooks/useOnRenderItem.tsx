@@ -388,6 +388,9 @@ const useOnRenderItem = (props: Props) => {
 	}, [props.folders]);
 	const publishedFolderIds = useMemo(() => {
 		const output = new Set(props.shares.filter(share => share.type === ShareType.PublishedFolder).map(share => share.folder_id));
+		for (const folder of props.folders) {
+			if (folder.is_shared && !folder.share_id) output.add(folder.id);
+		}
 		let size = 0;
 		while (size !== output.size) {
 			size = output.size;

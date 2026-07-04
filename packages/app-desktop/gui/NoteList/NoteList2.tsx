@@ -258,7 +258,7 @@ const NoteList = (props: Props) => {
 					focusVisible={focusVisible && activeNoteId === note.id}
 					isSelected={isSelected}
 					isWatched={props.watchedNoteFiles.includes(note.id)}
-					isPublished={props.publishedNoteIds.includes(note.id) || props.isFolderPublished}
+					isPublished={props.publishedNoteIds.includes(note.id) || (!!note.is_shared && !note.share_id) || props.isFolderPublished}
 					listRenderer={listRenderer}
 					dispatch={props.dispatch}
 					columns={props.columns}
