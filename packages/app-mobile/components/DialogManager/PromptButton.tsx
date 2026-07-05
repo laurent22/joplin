@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { StyleSheet, TextStyle, View } from 'react-native';
-import { TouchableRipple, Text } from 'react-native-paper';
+import { TouchableRipple, Text, useTheme } from 'react-native-paper';
 import { PromptButtonSpec } from './types';
 import { ThemeStyle, themeStyle } from '../global-style';
 import Icon from '../Icon';
@@ -9,25 +9,61 @@ import Icon from '../Icon';
 interface Props {
 	themeId: number;
 	buttonSpec: PromptButtonSpec;
+	isMenu: boolean;
 }
 
-const useStyles = (theme: ThemeStyle) => {
-	return useMemo(() => {
+const useStyles = (theme: ThemeStyle, spec: PromptButtonSpec, isMenu: boolean) => {
+	const paperTheme = useTheme();
+
+	const { backgroundColor, color } = (() => {
+		const style = spec.style ?? 'default';
+		if (style === 'destructive') {
+			return {
+				backgroundColor: paperTheme.colors.errorContainer,
+				color: paperTheme.colors.onErrorContainer,
+			};
+		} else if (style === 'cancel') {
+			return {
+				backgroundColor: theme.backgroundColor4Dimmed,
+				color: theme.color4,
+			};
+		} else if (isMenu) {
+			return {
+				backgroundColor: theme.backgroundColor4,
+				color: theme.color4,
+			};
+		} else {
+			return {
+				backgroundColor: theme.backgroundColor5,
+				color: theme.color5,
+			};
+		}
+	})();
+
+	const styles = useMemo(() => {
 		const buttonText: TextStyle = {
-			color: theme.color4,
+			color: color,
 			textAlign: 'center',
 		};
 
 		return StyleSheet.create({
 			buttonContainer: {
+				backgroundColor: backgroundColor,
+
 				// This applies the borderRadius to the TouchableRipple's parent, which
 				// seems necessary on Android.
 				borderRadius: theme.borderRadius,
 				overflow: 'hidden',
+				// Add additional padding to prevent the focus indicator from clipped by
+				// the overflow: 'hidden':
+				padding: 1,
 			},
 			button: {
 				borderRadius: theme.borderRadius,
-				padding: 10,
+				paddingHorizontal: (theme.marginMedium - 1) * 2,
+				paddingTop: theme.marginMedium - 1,
+				paddingBottom: theme.marginMedium - 1,
+				minWidth: theme.margin * 4,
 			},
 			buttonContent: {
 				display: 'flex',
@@ -38,15 +74,17 @@ const useStyles = (theme: ThemeStyle) => {
 			buttonText,
 			icon: {
 				...buttonText,
-				marginRight: 8,
+				marginRight: theme.marginSmall,
 			},
 		});
-	}, [theme]);
+	}, [theme, color, backgroundColor]);
+
+	return styles;
 };
 
 const PromptButton: React.FC<Props> = props => {
 	const theme = themeStyle(props.themeId);
-	const styles = useStyles(theme);
+	const styles = useStyles(theme, props.buttonSpec, props.isMenu);
 
 	const { checked, text, iconChecked, onPress } = props.buttonSpec;
 

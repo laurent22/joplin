@@ -1,4 +1,4 @@
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, expectHttpError } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, expectHttpError, koaAppContext } from '../../utils/testing/testUtils';
 import { execRequest } from '../../utils/testing/apiUtils';
 import { uuidgen } from '@joplin/lib/uuid';
 import { ErrorNotFound } from '../../utils/errors';
@@ -18,14 +18,16 @@ describe('index/password', () => {
 	});
 
 	test('should queue an email to reset password', async () => {
-		const { user, password } = await createUserAndSession(1);
+		const { user, session, password } = await createUserAndSession(1);
+		const context = await koaAppContext({ sessionId: session.id });
 		const mfaCode = '';
 
 		// Create a few sessions, to verify that they are all deleted when the
 		// password is changed.
-		await models().session().authenticate(user.email, password, mfaCode);
-		await models().session().authenticate(user.email, password, mfaCode);
-		await models().session().authenticate(user.email, password, mfaCode);
+		const services = context.joplin.services;
+		await models().session().authenticate(user.email, password, services, mfaCode);
+		await models().session().authenticate(user.email, password, services, mfaCode);
+		await models().session().authenticate(user.email, password, services, mfaCode);
 		expect(await models().session().count()).toBe(4);
 
 		await models().email().deleteAll();
@@ -41,7 +43,7 @@ describe('index/password', () => {
 			password2: newPassword,
 		}, { query: { token: match[2] } });
 
-		const loggedInUser = await models().user().login(user.email, newPassword);
+		const loggedInUser = await models().user().login(user.email, newPassword, context.joplin.services);
 		expect(loggedInUser.id).toBe(user.id);
 
 		// Check that all sessions have been deleted
@@ -56,7 +58,8 @@ describe('index/password', () => {
 	});
 
 	test('should not reset the password if the token is invalid', async () => {
-		const { user } = await createUserAndSession(1);
+		const { user, session } = await createUserAndSession(1);
+		const context = await koaAppContext({ sessionId: session.id });
 		await models().email().deleteAll();
 
 		const newPassword = uuidgen();
@@ -68,7 +71,7 @@ describe('index/password', () => {
 			}, { query: { token: 'stilltryingtohack' } });
 		}, ErrorNotFound.httpCode);
 
-		const loggedInUser = await models().user().login(user.email, newPassword);
+		const loggedInUser = await models().user().login(user.email, newPassword, context.joplin.services);
 		expect(loggedInUser).toBeFalsy();
 	});
 

@@ -294,9 +294,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	private async promptSaveChanges(): Promise<void> {
 		if (this.hasUnsavedChanges()) {
 			const response = await shim.showMessageBox(_('There are unsaved changes.'), {
-				buttons: [_('Save changes'), _('Discard changes')],
+				buttons: [_('Discard changes'), _('Save changes')],
+				cancelId: 0,
 			});
-			if (response === 0) {
+			if (response === 1) {
 				await this.saveButton_press();
 			}
 		}

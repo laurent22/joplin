@@ -173,6 +173,23 @@ describe('api_transcribe', () => {
 	});
 
 	test.each([
+		// cSpell:disable
+		'..%2Fadmin',
+		'..%2F..%2Fhealth',
+		// cSpell:enable
+		'abc.def',
+	])('should reject invalid job IDs to prevent path traversal (%s)', async (jobId: string) => {
+		const { session } = await createUserAndSession(1);
+
+		const fetchSpy = jest.spyOn(global, 'fetch').mockImplementation(jest.fn() as jest.Mock);
+		fetchSpy.mockClear();
+
+		const error = await expectThrow(() => getApi<JobWithResult>(session.id, `transcribe/${jobId}`, {}));
+		expect(error.httpCode).toBe(400);
+		expect(fetchSpy).not.toHaveBeenCalled();
+	});
+
+	test.each([
 		['non-json', 'Something went wrong'],
 		['json', JSON.stringify({ error: 'Something went wrong' })],
 	])('should be able to handle %s error responses', async (_type: string, result: string) => {

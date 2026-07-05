@@ -1,8 +1,10 @@
 import { friendlySafeFilename } from '@joplin/lib/path-utils';
 
-// Anything not in this allow-list (notably image/svg+xml and text/html) is
-// served as application/octet-stream with attachment disposition, to prevent
-// script execution from user-uploaded resources.
+// Anything not in this allow-list (notably text/html) is served as
+// application/octet-stream with attachment disposition. SVG is inline because
+// the strict CSP + sandbox below blocks script execution inside the document.
+// This assumes user content is served from a separate origin (configured via
+// USER_CONTENT_BASE_URL).
 const safeInlineMimeTypes = new Set<string>([
 	'image/png',
 	'image/jpeg',
@@ -15,6 +17,7 @@ const safeInlineMimeTypes = new Set<string>([
 	'image/avif',
 	'image/heic',
 	'image/heif',
+	'image/svg+xml',
 	'audio/mpeg',
 	'audio/mp4',
 	'audio/ogg',

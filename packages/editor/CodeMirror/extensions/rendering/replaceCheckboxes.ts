@@ -68,10 +68,18 @@ const replaceCheckboxes = [
 	EditorView.theme({
 		[`& .${checkboxClassName}`]: {
 			'& > input': {
+				// Native inputs don't inherit font-size, so `em` units below
+				// would otherwise resolve against the UA default rather than
+				// the editor's font size.
+				fontSize: 'inherit',
 				width: '1.1em',
 				height: '1.1em',
 				margin: '4px',
+				// `vertical-align: middle` aligns to the parent's x-height
+				// midpoint, which sits below the visual centre of the line;
+				// nudge up so the checkbox appears centred with the text.
 				verticalAlign: 'middle',
+				transform: 'translateY(calc(-0.1em - 1px))',
 			},
 			'&:not(.-depth-1) > input': {
 				marginInlineStart: 0,

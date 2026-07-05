@@ -66,6 +66,7 @@ export default class JoplinCloudProvider extends ChatProviderBase {
 		};
 		if (options?.maxTokens !== undefined) body.max_tokens = options.maxTokens;
 		if (options?.temperature !== undefined) body.temperature = options.temperature;
+		if (options?.responseFormat !== undefined) body.response_format = options.responseFormat;
 
 		// JoplinServerApi.exec() returns the parsed JSON object directly when
 		// the response format is JSON (the default). No need to JSON.parse.

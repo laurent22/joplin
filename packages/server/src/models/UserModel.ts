@@ -39,6 +39,7 @@ import config, { isUsingExternalAuth } from '../config';
 import { randomInt } from 'node:crypto';
 import { samlOwnedUserProperties } from '../utils/saml';
 import { AccountType, PlanName } from '@joplin/lib/utils/joplinCloud';
+import { Services } from '../services/types';
 export { AccountType };
 
 const logger = Logger.create('UserModel');
@@ -51,6 +52,10 @@ interface UserEmailDetails {
 }
 
 export type GetUsersApiResponse = User;
+
+interface HasMfaEnabledOptions {
+	requireUserExists: boolean;
+}
 
 export interface Account {
 	account_type: number;
@@ -210,7 +215,7 @@ export default class UserModel extends BaseModel<User> {
 		return this.db<User>(this.tableName).where(user).first();
 	}
 
-	public async login(email: string, password: string): Promise<User> {
+	public async login(email: string, password: string, _services: Services): Promise<User> {
 		if (!config().LOCAL_AUTH_ENABLED) {
 			return null;
 		}
@@ -235,7 +240,7 @@ export default class UserModel extends BaseModel<User> {
 		return user;
 	}
 
-	public async ssoLogin(email: string, displayName: string) {
+	public async ssoLogin(email: string, displayName: string, _services: Services) {
 		if (!email || !displayName) {
 			return null;
 		}
@@ -887,9 +892,12 @@ export default class UserModel extends BaseModel<User> {
 		}, 'UserModel::saveMulti');
 	}
 
-	public async hasMFAEnabled(email: string) {
+	public async hasMFAEnabled(email: string, { requireUserExists }: HasMfaEnabledOptions) {
 		const user = await this.loadByEmail(email, { fields: ['totp_secret'] });
-		if (!user) throw new ErrorForbidden('Invalid email or password', { details: { email } });
+		if (!user) {
+			if (requireUserExists) throw new ErrorForbidden('Invalid email or password', { details: { email } });
+			return false;
+		}
 		return getIsMFAEnabled(user);
 	}
 

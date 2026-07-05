@@ -55,6 +55,12 @@ const replaceLinks = [
 			}
 			return null;
 		},
+		getDecorationRange: (node, state) => {
+			const previous = node.name === 'URL' ? node.node.prevSibling : null;
+			if (previous?.name !== 'LinkMark') return null;
+			if (state.sliceDoc(previous.from, previous.to) !== '(') return null;
+			return [previous.to, node.to];
+		},
 	}),
 ];
 

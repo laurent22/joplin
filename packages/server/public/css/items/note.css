@@ -9,6 +9,10 @@
 	box-shadow: 0px 2px 8px #cccccc;
 }
 
+.note-main {
+	position: relative;
+}
+
 .page-note .note-main {
 	margin-top: 2em;
 	max-width: 840px;

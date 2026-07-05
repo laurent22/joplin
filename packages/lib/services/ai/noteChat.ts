@@ -3,6 +3,7 @@ import { ChatMessage } from './types';
 import JoplinError from '../../JoplinError';
 import Logger from '@joplin/utils/Logger';
 import JSON5 from 'json5';
+import findFencedBlock from './utils/findFencedBlock';
 
 const logger = Logger.create('noteChat');
 
@@ -23,6 +24,10 @@ export type EditOp =
 const knownOps = new Set<EditOp['op']>([
 	'replaceSelection', 'insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock',
 ]);
+
+// Structured-document fences where the model regenerates the whole block —
+// plain code fences (```js, ```python) are deliberately excluded.
+export const supportedStructuredBlockTags = ['jsoncanvas', 'mermaid', 'abc', 'fountain'];
 
 export interface ChatTurn {
 	role: 'user' | 'assistant';
@@ -56,6 +61,10 @@ const joplinMarkdownNotes = [
 	'- Whiteboards (canvas): ```` ```jsoncanvas ```` fenced blocks containing JSONCanvas 1.0 — the open spec at jsoncanvas.org. Use this when the user asks for a whiteboard, canvas, mind map, sticky notes, or similar spatial layout. A note that already contains a `jsoncanvas` block is a whiteboard; modifying its prose without preserving the block will break the whiteboard.',
 	'- HTML is allowed for features without a Markdown equivalent (e.g. `<s>strikethrough</s>`).',
 ].join('\n');
+
+const hasStructuredBlock = (note: NoteContext) => {
+	return supportedStructuredBlockTags.some(tag => !!findFencedBlock(note.body, tag, 0));
+};
 
 const systemPrompt = (note: NoteContext) => {
 	const lines: string[] = [
@@ -96,21 +105,99 @@ const systemPrompt = (note: NoteContext) => {
 		lines.push('');
 		lines.push('Do not use any other operation. The selection is the only part of the note you can modify in this turn.');
 	} else {
+		const hasFencedBlock = hasStructuredBlock(note);
 		lines.push('Each edit must be one of:');
 		lines.push('  { "op": "insertBefore", "anchor": "...", "text": "..." } — inserts text immediately before the first occurrence of "anchor".');
 		lines.push('  { "op": "insertAfter", "anchor": "...", "text": "..." } — inserts text immediately after the first occurrence of "anchor".');
 		lines.push('  { "op": "appendToNote", "text": "..." } — appends text at the end of the note.');
 		lines.push('  { "op": "replaceRange", "anchor": "...", "text": "..." } — replaces the first occurrence of "anchor" with "text".');
-		lines.push('  { "op": "replaceFencedBlock", "tag": "...", "text": "..." } — replaces the inner content of the first ```<tag>``` fenced block. "text" is the new content inside the fence (no fence markers). Supported tags: jsoncanvas, mermaid, abc, fountain.');
+		if (hasFencedBlock) {
+			lines.push(`  { "op": "replaceFencedBlock", "tag": "...", "text": "..." } — replaces the inner content of the first \`\`\`<tag>\`\`\` fenced block. "text" is the new content inside the fence (no fence markers). Supported tags: ${supportedStructuredBlockTags.join(', ')}.`);
+		}
 		lines.push('');
 		lines.push('Anchors must be exact substrings of the current note body. Keep them short but unique.');
 		lines.push('');
-		lines.push('To edit a structured block already in the note (whiteboard / mermaid / abc / fountain), use replaceFencedBlock with the full new content — do not try to anchor inside the block\'s contents. To create one that doesn\'t exist yet, use appendToNote with the complete fenced block including the ```<tag> markers.');
+
+		const addNewFencedBlockInstructions = 'use appendToNote with the complete fenced block including the ```<tag> markers';
+		if (hasFencedBlock) {
+			lines.push(`To edit a structured block already in the note (${supportedStructuredBlockTags.join(' / ')}), use replaceFencedBlock with the full new content — do not try to anchor inside the block's contents. To create one that doesn't exist yet, ${addNewFencedBlockInstructions}.`);
+		} else {
+			lines.push(`To add a structured block to the note (${supportedStructuredBlockTags.join(' / ')}), ${addNewFencedBlockInstructions}.`);
+		}
 	}
 
 	lines.push('Preserve the user\'s existing formatting conventions, including any Joplin-specific blocks already in the note.');
 
 	return lines.join('\n');
+};
+
+const responseSchema = (note: NoteContext) => {
+	const editOperationSchema = note.selection ? {
+		type: 'object',
+		properties: {
+			op: {
+				type: 'string',
+				enum: ['replaceSelection'],
+			},
+			text: { type: 'string' },
+		},
+		required: ['op', 'text'],
+		additionalProperties: false,
+	} : {
+		anyOf: [
+			{
+				type: 'object',
+				properties: {
+					op: { type: 'string', enum: ['insertBefore', 'insertAfter', 'replaceRange'] },
+					anchor: { type: 'string' },
+					text: { type: 'string' },
+				},
+				required: ['op', 'anchor', 'text'],
+				additionalProperties: false,
+			},
+			{
+				type: 'object',
+				properties: {
+					op: { type: 'string', enum: ['appendToNote'] },
+					text: { type: 'string' },
+				},
+				required: ['op', 'text'],
+				additionalProperties: false,
+			},
+			...(hasStructuredBlock(note) ? [{
+				type: 'object',
+				properties: {
+					op: { type: 'string', enum: ['replaceFencedBlock'] },
+					tag: { type: 'string', enum: [...supportedStructuredBlockTags] },
+					text: { type: 'string' },
+				},
+				required: ['op', 'tag', 'text'],
+				additionalProperties: false,
+			}] : []),
+		],
+	};
+
+	const schema = {
+		name: 'NoteChatResponse',
+		strict: true,
+		schema: {
+			type: 'object',
+			properties: {
+				reply: { type: 'string' },
+				edits: {
+					type: 'array',
+					items: editOperationSchema,
+				},
+			},
+			required: ['reply', 'edits'],
+			additionalProperties: false,
+		},
+	};
+
+	return {
+		type: 'json_schema' as const,
+		json_schema: schema,
+	};
 };
 
 const estimateTokens = (text: string) => Math.ceil(text.length / charsPerToken);
@@ -175,7 +262,7 @@ export const runNoteChat = async (
 		);
 	}
 
-	const result = await AiService.instance().chat(messages);
+	const result = await AiService.instance().chat(messages, { responseFormat: responseSchema(note) });
 	return enforceSelectionScope(tryParseReply(result.text), note.selection);
 };
 
@@ -188,4 +275,4 @@ const enforceSelectionScope = (reply: ChatReply, selection: string | null): Chat
 };
 
 // Exported for tests.
-export const _internal = { systemPrompt, tryParseReply, estimateTokens, sanitizeEdits, enforceSelectionScope, noteBodyTokenBudget };
+export const _internal = { systemPrompt, responseSchema, tryParseReply, estimateTokens, sanitizeEdits, enforceSelectionScope, noteBodyTokenBudget };

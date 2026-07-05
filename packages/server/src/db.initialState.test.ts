@@ -1,4 +1,4 @@
-import { afterAllTests, beforeAllDb, models } from './utils/testing/testUtils';
+import { afterAllTests, beforeAllDb, koaAppContext, models } from './utils/testing/testUtils';
 
 describe('db.initialState', () => {
 
@@ -14,8 +14,9 @@ describe('db.initialState', () => {
 				DEFAULT_ADMIN_PASSWORD: 'test-default',
 			},
 			test: async () => {
-				expect(await models().user().login('admin@localhost', 'admin')).toBeNull();
-				expect(await models().user().login('admin@localhost', 'test-default')).toBeTruthy();
+				const ctx = await koaAppContext();
+				expect(await models().user().login('admin@localhost', 'admin', ctx.joplin.services)).toBeNull();
+				expect(await models().user().login('admin@localhost', 'test-default', ctx.joplin.services)).toBeTruthy();
 			},
 		},
 		{
@@ -24,8 +25,9 @@ describe('db.initialState', () => {
 				DEFAULT_ADMIN_PASSWORD: undefined,
 			},
 			test: async () => {
-				expect(await models().user().login('admin@localhost', 'admin')).toBeTruthy();
-				expect(await models().user().login('admin@localhost', 'test-default')).toBeNull();
+				const ctx = await koaAppContext();
+				expect(await models().user().login('admin@localhost', 'admin', ctx.joplin.services)).toBeTruthy();
+				expect(await models().user().login('admin@localhost', 'test-default', ctx.joplin.services)).toBeNull();
 			},
 		},
 	])('$label', async ({ envValues, test }) => {

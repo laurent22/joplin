@@ -679,7 +679,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 				return '';
 			},
 			options: () => ({
-				'joplin-cloud': _('Joplin Cloud AI'),
+				'joplin-cloud': _('Joplin Cloud AI (beta)'),
 				'openai-compatible': _('OpenAI-compatible'),
 				'anthropic': _('Anthropic'),
 			}),
@@ -2254,6 +2254,13 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		'featureFlag.noteLock': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			storage: SettingStorage.File,
+		},
+
+		'noteLock.lockOnNoteSwitch': {
 			value: false,
 			type: SettingItemType.Bool,
 			public: false,

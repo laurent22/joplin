@@ -5,8 +5,18 @@ export interface ChatMessage {
 	content: string;
 }
 
+export interface ResponseFormat {
+	type: 'json_schema';
+	json_schema: {
+		name: string;
+		strict: boolean;
+		schema: unknown;
+	};
+}
+
 export interface ChatOptions {
 	temperature?: number;
+	responseFormat?: ResponseFormat;
 	maxTokens?: number;
 }
 
