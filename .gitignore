@@ -401,6 +401,8 @@ packages/app-desktop/gui/NoteListItem/utils/useRenderedNote.js
 packages/app-desktop/gui/NoteListItem/utils/useRootElement.test.js
 packages/app-desktop/gui/NoteListItem/utils/useRootElement.js
 packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.js
+packages/app-desktop/gui/NoteLockConfigScreen/NoteLockConfigScreen.js
+packages/app-desktop/gui/NoteLockConfigScreen/useNoteLockMode.js
 packages/app-desktop/gui/NotePropertiesDialog.js
 packages/app-desktop/gui/NoteRevisionViewer.js
 packages/app-desktop/gui/NoteSearchBar.js

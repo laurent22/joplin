@@ -55,6 +55,24 @@ export default class NoteLockKey {
 		return this.save(await this.encryptionService_.generateMasterKey(password));
 	}
 
+	public async changePassword(currentPassword: string, newPassword: string) {
+		const key = this.load();
+		if (!key) throw new Error('Note lock key has not been created');
+		return this.save(await this.encryptionService_.reencryptMasterKey(key, currentPassword, newPassword));
+	}
+
+	public needsUpgrade() {
+		const key = this.load();
+		return !!key && !!this.encryptionService_.masterKeysThatNeedUpgrading([key]).length;
+	}
+
+	public async upgrade(password: string) {
+		const key = this.load();
+		if (!key) throw new Error('Note lock key has not been created');
+		if (!this.needsUpgrade()) return key;
+		return this.changePassword(password, password);
+	}
+
 	public async decrypt(password: string): Promise<DecryptedNoteLockKey> {
 		const key = this.load();
 		if (!key) throw new Error('Note lock key has not been created');

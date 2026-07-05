@@ -7,6 +7,7 @@ import bridge from '../../services/bridge';
 import Setting, { AppType, SettingMetadataSection, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import { AppState } from '../../app.reducer';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
+import NoteLockConfigScreen from '../NoteLockConfigScreen/NoteLockConfigScreen';
 import { reg } from '@joplin/lib/registry';
 import { connect } from 'react-redux';
 import { themeStyle } from '@joplin/lib/theme';
@@ -161,6 +162,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	public screenFromName(screenName: string) {
 		if (screenName === 'encryption') return <EncryptionConfigScreen/>;
+		if (screenName === 'noteLock') return <NoteLockConfigScreen/>;
 		if (screenName === 'server') return <ClipperConfigScreen themeId={this.props.themeId}/>;
 		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.themeId}/>;
 		if (screenName === 'joplinCloud') return <JoplinCloudConfigScreen />;
