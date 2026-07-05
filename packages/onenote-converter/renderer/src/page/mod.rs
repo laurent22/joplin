@@ -42,8 +42,6 @@ impl<'a> Renderer<'a> {
         let mut content = String::new();
 
         if let Some(title) = page.title() {
-            content.push_str("<!-- joplin-metadata-print-title = false -->");
-
             let mut styles = StyleSet::new();
             styles.set("position", "absolute".to_string());
             styles.set(
