@@ -1,0 +1,30 @@
+flowchart LR
+    subgraph TypeScript["TypeScript side"]
+        RS["RankingService"]
+        PM["PythonProcessManager"]
+    end
+
+    subgraph Python["Python process"]
+        W["Worker<br/>Process boundary adapter"]
+        O["RankingOrchestrator<br/>Use-case coordinator"]
+        WN["WordNetService<br/>Candidate provider"]
+        SR["SimilarityRanker<br/>Scoring component"]
+        M["MiniLM model"]
+        DB[("WordNet DB")]
+    end
+
+    RS -->|"creates RankRequest"| PM
+    PM -->|"serialized RankRequest"| W
+
+    W -->|"validated RankRequest"| O
+    O -->|"word"| WN
+    WN -->|"queries"| DB
+    WN -->|"Candidate[]"| O
+
+    O -->|"word + context + candidates"| SR
+    SR -->|"embeds contexts"| M
+    SR -->|"ScoredCandidate[]"| O
+
+    O -->|"SynonymEntry[]"| W
+    W -->|"RankResponse"| PM
+    PM --> RS
