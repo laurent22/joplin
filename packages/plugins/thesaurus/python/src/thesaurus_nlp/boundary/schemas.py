@@ -6,14 +6,14 @@ class RankRequest(BaseModel):
     
     id: str
     word: str
-    context: str | None
+    context: str | None = None
     top_n: int | None = Field(default=10, ge=1, alias='topN')
 
 class SynonymEntry(BaseModel):
     """A synonym entry."""
     word: str
     score: float = Field(ge=0, le=1)
-    pos: str | None
+    pos: str | None = None
 
 class RankResponse(BaseModel):
     """Response to be sent."""
