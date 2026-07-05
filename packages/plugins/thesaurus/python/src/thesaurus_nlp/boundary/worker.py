@@ -46,7 +46,10 @@ class Worker:
 
 if __name__ == "__main__":
     # Use the NoOpPipeline for demonstration purposes.
-    from thesaurus_nlp.pipeline import NoOpPipeline
-
-    worker = Worker(callback=NoOpPipeline().rank)
+    from thesaurus_nlp.pipeline import Pipeline
+    from thesaurus_nlp.similarity_ranker import NoOpSimilarityRanker
+    from thesaurus_nlp.wordnet_service import NoOpWordNetService
+    
+    pipeline = Pipeline(NoOpWordNetService(), NoOpSimilarityRanker())
+    worker = Worker(callback=pipeline.rank)
     worker.run()
