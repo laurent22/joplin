@@ -36,7 +36,7 @@ When disabled, no new revision is saved, but the existing one remain there, and 
 
 ## Revision settings are global
 
-Since all the revisions are synced across all devices, it means these settings are kind of global. So for example, if on one device you set it to keep revisions for 30 days, and on another to 100 days, the revisions older than 30 days will be deleted, and then this deletion will be synced. So in practice it means revisions are kept for whatever is the minimum number of days as set on any of the devices. In that particular case, the 100 days setting will be essentially ignored, and only the 30 days one will apply.
+All the revisions are synced across all devices, and so is the `revisionService.oldNoteInterval` setting (default 90 days).
 
 ## Why is there less than 10 minutes between some revisions?
 
