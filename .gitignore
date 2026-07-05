@@ -189,6 +189,7 @@ packages/app-desktop/commands/switchProfile3.js
 packages/app-desktop/commands/toggleExternalEditing.js
 packages/app-desktop/commands/toggleSafeMode.js
 packages/app-desktop/commands/toggleTabMovesFocus.js
+packages/app-desktop/gui/AiDegradedNotice.js
 packages/app-desktop/gui/Button/Button.js
 packages/app-desktop/gui/ChatPanel/ChatPanel.js
 packages/app-desktop/gui/ClipperConfigScreen.js

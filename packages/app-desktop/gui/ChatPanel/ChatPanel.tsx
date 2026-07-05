@@ -13,9 +13,7 @@ import { runNoteChat, ChatTurn } from '@joplin/lib/services/ai/noteChat';
 import { applyAnchorEdits } from '@joplin/lib/services/ai/applyNoteEdits';
 import { chatAvailability } from '@joplin/lib/services/ai/availability';
 import { WindowIdContext } from '../NewWindowOrIFrame';
-import bridge from '../../services/bridge';
-
-const joplinCloudCreditsUrl = 'https://joplincloud.com/users/me';
+import AiDegradedNotice from '../AiDegradedNotice';
 
 const logger = Logger.create('ChatPanel');
 
@@ -272,17 +270,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 					<button type='button' className='reset' onClick={handleReset}>{_('Reset')}</button>
 				)}
 			</div>
-			{props.aiDegraded && (
-				<div className='degraded-status' role='status'>
-					{_('AI is running in reduced-quality mode — monthly allowance exceeded. Credits replenish on a rolling 30-day basis, or you can')}
-					{' '}
-					<a
-						href='#'
-						onClick={(e) => { e.preventDefault(); void bridge().openExternal(joplinCloudCreditsUrl); }}
-					>{_('buy more credits')}</a>
-					{'.'}
-				</div>
-			)}
+			{props.aiDegraded && <AiDegradedNotice className='degraded-status' />}
 			<div className='messages'>
 				{messages.length === 0 && (
 					<div className='empty'>

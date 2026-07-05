@@ -36,6 +36,14 @@ export const mapErrorByCode = (code: string | number | null, status: number, det
 	if (status === 401) return new JoplinError('Please sign in to use AI features.', status);
 	if (status === 501) return new JoplinError('AI is not enabled on this server.', status);
 
+	// Unknown string code (e.g. a code added server-side that this client
+	// version doesn't know yet): preserve it on both the message and the
+	// error's `code` field so callers switching on error.code and log
+	// scrapers looking at the message can still distinguish it.
+	if (typeof code === 'string') {
+		return new JoplinError(`Joplin Cloud AI returned ${code}${detail ? `: ${detail}` : ''}`, code);
+	}
+
 	return new JoplinError(`Joplin Cloud AI returned ${status}${detail ? `: ${detail}` : ''}`, status);
 };
 

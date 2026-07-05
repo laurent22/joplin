@@ -32,6 +32,16 @@ describe('JoplinCloud provider', () => {
 		expect(error.message).toMatch(/oops/);
 	});
 
+	it('preserves an unknown string code in both message and error.code', () => {
+		// Future-proofing: server may add a new code before this client knows
+		// about it. The raw code must remain diagnosable in logs and to any
+		// caller that switches on error.code.
+		const error = mapErrorByCode('aiSomeNewThing', 0, 'unknown thing happened');
+		expect(error.code).toBe('aiSomeNewThing');
+		expect(error.message).toMatch(/aiSomeNewThing/);
+		expect(error.message).toMatch(/unknown thing happened/);
+	});
+
 	it('code wins over status', () => {
 		// A 429 that also carries aiBudgetExhausted must produce the budget
 		// message, not a generic 429 message.
