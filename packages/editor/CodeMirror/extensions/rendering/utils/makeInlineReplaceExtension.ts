@@ -4,12 +4,32 @@
 import { EditorView, Decoration, DecorationSet, WidgetType } from '@codemirror/view';
 import { ViewPlugin, ViewUpdate } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { Range, StateEffect } from '@codemirror/state';
+import { EditorSelection, EditorState, Range, SelectionRange, StateEffect, TransactionSpec } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
 import { ReplacementExtension } from '../types';
 import nodeIntersectsSelection from './nodeIntersectsSelection';
 
 const updateInlineDecorationsEffect = StateEffect.define();
+
+const expandSelectionToFormattingParent = (state: EditorState, selection: SelectionRange) => {
+	if (selection.empty) return null;
+
+	const expandEdge = (position: number, side: -1|1, otherEdge: number) => {
+		const node = syntaxTree(state).resolveInner(position, side);
+		const parent = node.parent;
+		if (!parent) return position;
+
+		if (side < 0 && node.from === parent.from && node.to === position && otherEdge <= parent.to) return parent.from;
+		if (side > 0 && node.to === parent.to && node.from === position && otherEdge >= parent.from) return parent.to;
+		return position;
+	};
+
+	const from = expandEdge(selection.from, -1, selection.to);
+	const to = expandEdge(selection.to, 1, selection.from);
+	if (from === selection.from && to === selection.to) return null;
+
+	return selection.anchor <= selection.head ? EditorSelection.single(from, to) : EditorSelection.single(to, from);
+};
 
 export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
 	public decorations: DecorationSet;
@@ -35,6 +55,8 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 	private onMouseUp = () => {
 		if (this.mouseSelectionInProgress) {
 			const selection = this.view.state.selection.main;
+			let selectionUpdate: TransactionSpec['selection'] = expandSelectionToFormattingParent(this.view.state, selection) ?? undefined;
+
 			let coveredTo = selection.from;
 			this.decorations.between(selection.from, selection.to, (from, to, decoration) => {
 				if (!Object.keys(decoration.spec).length && from <= coveredTo) {
@@ -42,7 +64,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 				}
 			});
 
-			let selectionUpdate = !selection.empty && coveredTo >= selection.to ? { anchor: selection.head } : undefined;
+			selectionUpdate ??= !selection.empty && coveredTo >= selection.to ? { anchor: selection.head } : undefined;
 			const line = this.view.state.doc.lineAt(selection.from);
 			syntaxTree(this.view.state).iterate({
 				from: line.from,
