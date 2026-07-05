@@ -991,6 +991,14 @@ export interface ChatOptions {
 }
 
 /**
+ * Result of a chat call.
+ */
+export interface ChatResult {
+	/** The assistant's text response. */
+	text: string;
+}
+
+/**
  * Relevance preset for semantic search. Maps internally to model-specific
  * `(k, minScore)` tuning — the preset is the public contract so plugins keep
  * working when the bundled embedding model changes.
