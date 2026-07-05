@@ -1,0 +1,41 @@
+sequenceDiagram
+    participant TS as RankingService
+    participant PM as PythonProcessManager
+    participant W as Worker
+    participant O as RankingOrchestrator
+    participant WN as WordNetService
+    participant SR as SimilarityRanker
+
+    TS->>PM: send RankRequest
+    PM->>W: deliver serialized request
+
+    W->>W: deserialize + validate
+    W->>O: rank(validated RankRequest)
+
+    O->>WN: get_related_words(word)
+    WN->>WN: query WordNet for candidates
+    WN-->>O: Candidate[]
+
+    alt no candidates
+        O-->>W: []
+        W-->>PM: RankResponse(id, results=[])
+        PM-->>TS: RankResponse
+    else candidates found
+        O->>SR: score_candidates(word, context, candidates)
+        SR->>SR: generate candidate contexts
+        SR->>SR: embed original + modified contexts
+        SR->>SR: compute cosine similarity
+        SR-->>O: ScoredCandidate[]
+
+        O->>O: sort, filter, limit topN
+        O->>O: map to SynonymEntry[]
+        O-->>W: SynonymEntry[]
+
+        W-->>PM: RankResponse(id, results)
+        PM-->>TS: RankResponse
+    end
+
+    alt unrecoverable error
+        W-->>PM: RankResponse(id, error)
+        PM-->>TS: RankResponse
+    end
