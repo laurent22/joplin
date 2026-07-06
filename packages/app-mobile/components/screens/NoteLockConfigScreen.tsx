@@ -148,7 +148,7 @@ const NoteLockConfigScreen = (props: Props) => {
 
 	return (
 		<View style={styles.root}>
-			<ScreenHeader title={_('Note lock')} />
+			<ScreenHeader title={_('Note Lock Config')} />
 			<ScrollView>
 				<View style={styles.container}>
 					<Text style={styles.normalText}>{_('Note lock protects notes which have note level encryption enabled. These notes are encrypted when stored, and are only decrypted for the current session by entering the note lock password')}</Text>

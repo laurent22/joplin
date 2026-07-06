@@ -555,7 +555,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			addSettingButton('sync_wizard_button', _('Open Sync Wizard...'), this.onShowSyncWizard_);
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
 			if (settings['featureFlag.noteLock']) {
-				addSettingButton('note_lock_config_button', _('Note lock'), this.noteLockConfig_);
+				addSettingButton('note_lock_config_button', _('Note Lock Config'), this.noteLockConfig_);
 			}
 		}
 
