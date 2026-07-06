@@ -1978,6 +1978,9 @@ packages/plugin-repo-cli/lib/validateUntrustedManifest.js
 packages/plugins/ToggleSidebars/api/index.js
 packages/plugins/ToggleSidebars/api/types.js
 packages/plugins/ToggleSidebars/src/index.js
+packages/plugins/thesaurus/api/index.js
+packages/plugins/thesaurus/api/types.js
+packages/plugins/thesaurus/src/contentScript.js
 packages/plugins/thesaurus/src/errors/errors.js
 packages/plugins/thesaurus/src/index.js
 packages/plugins/thesaurus/src/infrastructure/PythonProcessManager.js

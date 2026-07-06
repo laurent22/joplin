@@ -12,7 +12,7 @@ const getRootDir = async () => {
 
 	let p = dirname(dirname(dirname(__dirname)));
 	for (let i = 0; i < 9999; i++) {
-		if (await pathExists(`${p}/eslint.config.js`)) {
+		if (await pathExists(`${p}/eslint.config.js`) || await pathExists(`${p}/eslint.config.mjs`)) {
 			rootDir_ = p;
 			return rootDir_;
 		}
