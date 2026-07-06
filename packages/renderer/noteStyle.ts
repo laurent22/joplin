@@ -166,7 +166,7 @@ export default function(theme: RendererTheme, options: Options = null) {
 			padding-top: 0;
 		}
 		
-		p, h1, h2, h3, h4, h5, h6, ul, table {
+		p, h1, h2, h3, h4, h5, h6, ul, ol, table {
 			margin-top: .6em;
 			margin-bottom: 1.35em;
 
@@ -177,7 +177,7 @@ export default function(theme: RendererTheme, options: Options = null) {
 			unicode-bidi: plaintext;
 		}
 
-		h1, h2, h3, h4, h5, h6, ul, table {
+		h1, h2, h3, h4, h5, h6, ul, ol, table {
 			margin-bottom: 0.65em;
 		}
 
@@ -218,10 +218,13 @@ export default function(theme: RendererTheme, options: Options = null) {
 		}
 		ul, ol {
 			padding-left: 0;
-			margin-left: ${theme.listTabSize};
+			padding-inline-start: 0;
+			margin-left: 0;
+			margin-inline-start: ${theme.listTabSize};
 		}
 		li {
 			margin-bottom: .4em;
+			unicode-bidi: plaintext;
 		}
 		li p {
 			margin-top: 0.2em;
