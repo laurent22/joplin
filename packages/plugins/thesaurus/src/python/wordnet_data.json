@@ -1,0 +1,18 @@
+{
+  "large": [
+    {"word": "big", "pos": "a"},
+    {"word": "huge", "pos": "a"},
+    {"word": "massive", "pos": "a"},
+    {"word": "great", "pos": "a"}
+  ],
+  "happy": [
+    {"word": "glad", "pos": "a"},
+    {"word": "joyful", "pos": "a"},
+    {"word": "pleased", "pos": "a"}
+  ],
+  "small": [
+    {"word": "little", "pos": "a"},
+    {"word": "tiny", "pos": "a"},
+    {"word": "mini", "pos": "a"}
+  ]
+}

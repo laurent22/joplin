@@ -1,44 +1,26 @@
+import json
 import re
-from typing import Dict, List, Optional, Set
+from pathlib import Path
+from typing import Dict, List, Set
 
 SUPPORTED_POS = ['n', 'v', 'a', 'r']
 _wordnet_backend = None
 
 
 def normalize_word(word: str) -> str:
+    """Normalize a lookup key so casing and whitespace do not affect results."""
     return re.sub(r'\s+', '', word.strip().lower())
 
 
 def load_wordnet_data() -> None:
-    """Initialize the WordNet backend once.
-
-    This function is responsible for loading the WordNet data or library
-    and storing the backend in a module-level variable.
-
-    Later, get_synonym_candidates() can call this once before looking up a word.
-    """
+    """Initialize a bundled offline WordNet-style lookup table once."""
     global _wordnet_backend
     if _wordnet_backend is not None:
         return
 
-    # TODO: choose one of these approaches and replace the placeholder below.
-    # 1) Use an installed WordNet library such as NLTK and a bundled corpus.
-    # 2) Load preprocessed WordNet files from src/python/wordnet_data.
-    # 3) Initialize a custom local lookup index built at build time.
-    _wordnet_backend = _init_placeholder_backend()
-
-
-def _init_placeholder_backend() -> object:
-    """Return a placeholder backend until real WordNet loading is implemented."""
-    return {
-        'synonyms': {
-            'large': [
-                ('big', 'a'),
-                ('huge', 'a'),
-                ('massive', 'a'),
-            ],
-        },
-    }
+    data_path = Path(__file__).with_name('wordnet_data.json')
+    with data_path.open('r', encoding='utf-8') as handle:
+        _wordnet_backend = json.load(handle)
 
 
 def format_synonym(word: str, pos: str) -> Dict[str, object]:
@@ -55,13 +37,16 @@ def _lookup_wordnet_synonyms(normalized_word: str) -> List[Dict[str, object]]:
     if _wordnet_backend is None:
         return []
 
-    # TODO: replace this with the actual backend lookup call.
-    placeholder = _wordnet_backend.get('synonyms', {})
+    if normalized_word not in _wordnet_backend:
+        return []
+
     candidates: List[Dict[str, object]] = []
     seen: Set[str] = set()
 
-    for word, pos in placeholder.get(normalized_word, []):
-        if word not in seen:
+    for entry in _wordnet_backend.get(normalized_word, []):
+        word = entry.get('word')
+        pos = entry.get('pos', 'n')
+        if isinstance(word, str) and word not in seen:
             seen.add(word)
             candidates.append(format_synonym(word, pos))
 
@@ -69,8 +54,26 @@ def _lookup_wordnet_synonyms(normalized_word: str) -> List[Dict[str, object]]:
 
 
 def get_synonym_candidates(word: str) -> List[Dict[str, object]]:
+    """Return candidate synonym entries for a word from the offline dataset."""
     normalized = normalize_word(word)
     if not normalized:
         return []
 
-    return _lookup_wordnet_synonyms(normalized)
+    candidates = _lookup_wordnet_synonyms(normalized)
+    return sorted(candidates, key=lambda item: item['word'])
+
+
+def main(words: List[str] | None = None) -> None:
+    """Simple CLI entrypoint for manual testing from the terminal."""
+    targets = words or []
+    if not targets:
+        targets = ['large']
+
+    for word in targets:
+        results = get_synonym_candidates(word)
+        print(f'{word}: {results}')
+
+
+if __name__ == '__main__':
+    import sys
+    main(sys.argv[1:])
