@@ -2,7 +2,7 @@ import shim from '../../../shim';
 import JoplinError from '../../../JoplinError';
 import Logger from '@joplin/utils/Logger';
 import { rtrimSlashes } from '@joplin/utils/path';
-import { ChatMessage, ChatOptions, ChatResult, ProviderClassification } from '../types';
+import { ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 
 const logger = Logger.create('OpenAiCompatibleProvider');
@@ -120,6 +120,8 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 		const inputTokens = json.usage?.prompt_tokens ?? 0;
 		const outputTokens = json.usage?.completion_tokens ?? 0;
 
-		return { text: content, usage: { inputTokens, outputTokens } };
+		const toolCalls: ChatToolCall[] = []; // TODO
+
+		return { text: content, toolCalls, usage: { inputTokens, outputTokens } };
 	}
 }

@@ -5,17 +5,31 @@ export interface ChatMessage {
 	content: string;
 }
 
+export interface JsonSchema {
+	type: string,
+	properties?: unknown;
+	required?: string[];
+}
+
 export interface ResponseFormat {
 	type: 'json_schema';
 	json_schema: {
 		name: string;
 		strict: boolean;
-		schema: unknown;
+		schema: JsonSchema;
 	};
+}
+
+export interface ToolSpec {
+	name: string;
+	description: string;
+	// Information provided by the model to the tool
+	inputSchema: JsonSchema;
 }
 
 export interface ChatOptions {
 	temperature?: number;
+	tools: ToolSpec[];
 	responseFormat?: ResponseFormat;
 	maxTokens?: number;
 }
@@ -25,8 +39,14 @@ export interface ChatUsage {
 	outputTokens: number;
 }
 
+export interface ChatToolCall {
+	toolName: string;
+	input: unknown;
+}
+
 export interface ChatResult {
 	text: string;
+	toolCalls: ChatToolCall[];
 	usage: ChatUsage;
 }
 
