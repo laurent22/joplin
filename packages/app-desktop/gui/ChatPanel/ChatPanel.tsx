@@ -93,8 +93,13 @@ const ChatPanel: React.FC<Props> = (props) => {
 
 	const conversationTurns = useMemo<ChatTurn[]>(() => {
 		return messages
-			.filter(m => m.role === 'user' || m.role === 'assistant')
-			.map(m => ({ role: m.role as 'user' | 'assistant', content: m.text }));
+			.filter(m => m.role === 'user' || m.role === 'assistant' || m.role === 'tool')
+			.map(m => ({
+				role: m.role as 'user' | 'assistant' | 'tool',
+				content: m.text,
+				toolCallId: m.toolCallId,
+				toolName: m.toolName,
+			}));
 	}, [messages]);
 
 	// Joplin Cloud is remote but the user already consented via sync setup.
@@ -138,17 +143,36 @@ const ChatPanel: React.FC<Props> = (props) => {
 
 			if (generationRef.current !== startGeneration) return;
 
+			const toolCallMessages: AiChatMessage[] = [];
+			const appendError = (userMessage: string, agentMessage: string) => {
+				appendMessage({
+					id: makeId(),
+					role: 'error',
+					text: userMessage,
+				});
+
+				// Provide a different message for agents
+				for (const edit of reply.edits) {
+					toolCallMessages.push({
+						id: makeId(),
+						toolCallId: edit.toolCallId,
+						role: 'tool',
+						text: agentMessage,
+					});
+				}
+			};
+
 			let editsApplied = 0;
 			let editsMissed = 0;
+
 			if (reply.edits.length > 0) {
 				// Editor commands run against the focused editor, which may now
 				// be a different note. Refuse rather than mutate the wrong one.
 				if (noteIdRef.current !== noteIdAtStart) {
-					appendMessage({
-						id: makeId(),
-						role: 'error',
-						text: _('You switched notes while the request was running; edits were not applied. Try again.'),
-					});
+					appendError(
+						_('You switched notes while the request was running; edits were not applied. Try again.'),
+						'Cancelled',
+					);
 				} else {
 					// Re-read live body: the user may have typed while the
 					// request was in flight, and we don't want to overwrite that.
@@ -156,11 +180,10 @@ const ChatPanel: React.FC<Props> = (props) => {
 					const liveBody = fresh?.body ?? '';
 
 					if (liveBody !== (note.body || '')) {
-						appendMessage({
-							id: makeId(),
-							role: 'error',
-							text: _('The note changed while the request was running; edits were not applied. Try again.'),
-						});
+						appendError(
+							_('The note changed while the request was running; edits were not applied. Try again.'),
+							'Cancelled',
+						);
 					} else {
 						const selectionEdits = reply.edits.filter(e => e.op === 'replaceSelection');
 						const anchorEdits = reply.edits.filter(e => e.op !== 'replaceSelection');
@@ -175,15 +198,44 @@ const ChatPanel: React.FC<Props> = (props) => {
 								windowId,
 								args: [edit.text],
 							});
+							toolCallMessages.push({
+								id: makeId(),
+								toolName: edit.op,
+								toolCallId: edit.toolCallId,
+								role: 'tool',
+								text: 'Success',
+							});
 							editsApplied++;
 						}
 
 						if (anchorEdits.length > 0) {
 							const cursorPos = selection ? Math.max(0, liveBody.indexOf(selection)) : 0;
 							const { newBody, appliedEdits } = applyAnchorEdits(liveBody, anchorEdits, cursorPos);
-							const missed = appliedEdits.filter(e => e.status !== 'applied').length;
-							editsMissed += missed;
-							editsApplied += appliedEdits.length - missed;
+
+							for (const edit of appliedEdits) {
+								if (edit.status === 'applied') {
+									editsApplied ++;
+
+									toolCallMessages.push({
+										id: makeId(),
+										toolName: edit.op.op,
+										toolCallId: edit.op.toolCallId,
+										role: 'tool',
+										text: 'Success',
+									});
+								} else {
+									editsMissed ++;
+
+									toolCallMessages.push({
+										id: makeId(),
+										toolName: edit.op.op,
+										toolCallId: edit.op.toolCallId,
+										role: 'tool',
+										text: 'Failed',
+									});
+								}
+							}
+
 							if (newBody !== liveBody) {
 								await CommandService.instance().executeInWindow('editor.setText', {
 									windowId,
@@ -204,6 +256,9 @@ const ChatPanel: React.FC<Props> = (props) => {
 				editsApplied,
 				editsMissed,
 			});
+			for (const message of toolCallMessages) {
+				appendMessage(message);
+			}
 		} catch (error) {
 			logger.warn('Chat failed:', error);
 			if (generationRef.current !== startGeneration) return;
@@ -274,7 +329,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 						{_('Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.')}
 					</div>
 				)}
-				{messages.map(m => {
+				{messages.filter(m => m.role !== 'tool').map(m => {
 					if (m.role === 'separator') {
 						return <div key={m.id} className='separator'>{m.text}</div>;
 					}

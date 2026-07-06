@@ -1,10 +1,5 @@
-import { _internal, NoteContext } from './noteChat';
+import { _internal } from './noteChat';
 import { applyAnchorEdits } from './applyNoteEdits';
-
-const getEditOperationSchema = (note: NoteContext) => {
-	const schema = _internal.responseSchema(note).json_schema.schema;
-	return schema.properties.edits.items;
-};
 
 describe('noteChat', () => {
 
@@ -46,26 +41,6 @@ describe('noteChat', () => {
 	});
 
 	test.each([
-		true, false,
-	])('responseSchema should require "op" and disallow additional properties (has selection: %b)', (selection) => {
-		const schema = getEditOperationSchema({
-			title: 'Note',
-			body: 'some body',
-			selection: selection ? 'body' : null,
-		});
-
-		const operations = [
-			...(schema.type === 'object' ? [schema] : []),
-			...(schema.anyOf ?? []),
-		];
-
-		for (const operation of operations) {
-			expect(operation.required).toContain('op');
-			expect(operation.additionalProperties).toBe(false);
-		}
-	});
-
-	test.each([
 		{
 			label: 'restricts ops to replaceSelection when selection present',
 			note: {
@@ -93,35 +68,11 @@ describe('noteChat', () => {
 			},
 			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock'],
 		},
-	])('responseSchema is consistent with systemPrompt (case $label)', ({ note, expectedOperations }) => {
-		const allOperations = new Set([
-			'insertBefore',
-			'insertAfter',
-			'appendToNote',
-			'replaceRange',
-			'replaceFencedBlock',
-		]);
-		const expectedMissingOperations = new Set(allOperations);
-		for (const operation of expectedOperations) {
-			expectedMissingOperations.delete(operation);
-		}
+	])('toolDefinitions should include the expected operations (case $label)', ({ note, expectedOperations }) => {
+		const editSchemaItems = _internal.toolDefinitions(note);
 
-		const prompt = _internal.systemPrompt(note);
-		const editSchemaItems = getEditOperationSchema(note);
-
-		const allowedSchemaOperations = [
-			...(editSchemaItems.properties?.op?.enum ?? []),
-			...(editSchemaItems.anyOf?.map(item => item.properties.op.enum)?.flat() ?? []),
-		].sort();
+		const allowedSchemaOperations = editSchemaItems.map(item => item.name).sort();
 		expect(allowedSchemaOperations).toEqual([...expectedOperations].sort());
-
-		// Prompt's operations list should be correct
-		for (const operation of expectedOperations) {
-			expect(prompt).toContain(operation);
-		}
-		for (const operation of expectedMissingOperations) {
-			expect(prompt).not.toContain(operation);
-		}
 	});
 
 	test.each([
@@ -267,13 +218,14 @@ describe('noteChat', () => {
 		expect(appliedEdits[0].status).toBe('invalid');
 	});
 
-	test('systemPrompt advertises replaceFencedBlock with structured-block guidance', () => {
-		const prompt = _internal.systemPrompt({ title: 'n', body: '```abc\n```', selection: null });
-		expect(prompt).toContain('replaceFencedBlock');
-		expect(prompt).toContain('jsoncanvas');
+	test('toolDefinitions advertises replaceFencedBlock with structured-block guidance', () => {
+		const tools = _internal.toolDefinitions({ title: 'n', body: '```abc\n```', selection: null });
+		const toolDefinition = tools.find(tool => tool.name === 'replaceFencedBlock');
+		expect(toolDefinition).toBeTruthy();
+		expect(toolDefinition.description).toContain('jsoncanvas');
 		// Guidance to use the op for structured blocks, appendToNote for creation.
-		expect(prompt).toContain('replaceFencedBlock with the full new content');
-		expect(prompt).toContain('use appendToNote');
+		expect(toolDefinition.description).toContain('"text" is the new content inside the fence (no fence markers)');
+		expect(toolDefinition.description).toContain('Use appendToNote');
 	});
 
 	test('applyAnchorEdits refuses replaceRange anchor covering most of the body', () => {

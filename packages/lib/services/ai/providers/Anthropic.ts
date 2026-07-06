@@ -1,7 +1,7 @@
 import shim from '../../../shim';
 import JoplinError from '../../../JoplinError';
 import Logger from '@joplin/utils/Logger';
-import { ChatMessage, ChatOptions, ChatResult, ProviderClassification } from '../types';
+import { ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 
 const logger = Logger.create('AnthropicProvider');
@@ -112,6 +112,8 @@ export default class AnthropicProvider extends ChatProviderBase {
 		const inputTokens = json.usage?.input_tokens ?? 0;
 		const outputTokens = json.usage?.output_tokens ?? 0;
 
-		return { text: content, usage: { inputTokens, outputTokens } };
+		const toolCalls: ChatToolCall[] = [];
+
+		return { text: content, toolCalls, usage: { inputTokens, outputTokens } };
 	}
 }

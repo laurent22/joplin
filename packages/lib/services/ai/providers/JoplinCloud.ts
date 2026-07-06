@@ -2,7 +2,7 @@ import Setting from '../../../models/Setting';
 import JoplinError from '../../../JoplinError';
 import JoplinServerApi, { Session } from '../../../JoplinServerApi';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
-import { ChatMessage, ChatOptions, ChatResult, ProviderClassification } from '../types';
+import { ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 
 const joplinCloudSyncTarget = () => SyncTargetRegistry.nameToId('joplinCloud');
@@ -78,11 +78,15 @@ export default class JoplinCloudProvider extends ChatProviderBase {
 			const detail = error?.message ?? '';
 			throw mapErrorByStatus(status, detail);
 		}
+		console.log('received output:', json.choices);
+
 
 		const content = json?.choices?.[0]?.message?.content ?? '';
 		const inputTokens = json?.usage?.prompt_tokens ?? 0;
 		const outputTokens = json?.usage?.completion_tokens ?? 0;
 
-		return { text: content, usage: { inputTokens, outputTokens } };
+		const toolCalls: ChatToolCall[] = []; // TODO
+
+		return { text: content, toolCalls, usage: { inputTokens, outputTokens } };
 	}
 }

@@ -13,13 +13,16 @@ const noteBodyTokenBudget = 80000;
 
 const charsPerToken = 4;
 
-export type EditOp =
+type BaseEditOp = { toolCallId: string };
+
+export type EditOp = BaseEditOp & (
 	| { op: 'replaceSelection'; text: string }
 	| { op: 'insertBefore'; anchor: string; text: string }
 	| { op: 'insertAfter'; anchor: string; text: string }
 	| { op: 'appendToNote'; text: string }
 	| { op: 'replaceRange'; anchor: string; text: string }
-	| { op: 'replaceFencedBlock'; tag: string; text: string };
+	| { op: 'replaceFencedBlock'; tag: string; text: string }
+);
 
 const knownOps = new Set<EditOp['op']>([
 	'replaceSelection', 'insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock',
@@ -30,9 +33,10 @@ const knownOps = new Set<EditOp['op']>([
 export const supportedStructuredBlockTags = ['jsoncanvas', 'mermaid', 'abc', 'fountain'];
 
 export interface ChatTurn {
-	role: 'user' | 'assistant';
+	role: 'user' | 'assistant' | 'tool';
+	toolCallId?: string;
+	toolName?: string;
 	content: string;
-	edits?: EditOp[];
 }
 
 export interface NoteContext {
@@ -88,15 +92,6 @@ const systemPrompt = (note: NoteContext) => {
 		lines.push('--- END NOTE ---');
 	}
 
-	lines.push('');
-	lines.push('Reply with a single JSON object and nothing else. The object must have this shape:');
-	lines.push('{');
-	lines.push('  "reply": "A short message to show the user in the chat.",');
-	lines.push('  "edits": []');
-	lines.push('}');
-	lines.push('');
-	lines.push('"edits" is an array of operations to apply to the note. Leave it empty for chat-only answers (e.g. questions about the note).');
-
 	if (note.selection) {
 		lines.push('The selection is the only part of the note you can modify in this turn.');
 	} else {
@@ -116,7 +111,12 @@ const toolDefinitions = (note: NoteContext) => {
 			name: 'replaceSelection',
 			description: 'Replaces the text currently selected by the user.',
 			inputSchema: {
-				type: 'string',
+				type: 'object',
+				properties: {
+					text: { type: 'string' },
+				},
+				required: ['text'],
+				additionalProperties: false,
 			},
 		});
 	} else {
@@ -128,6 +128,7 @@ const toolDefinitions = (note: NoteContext) => {
 				text: { type: 'string' },
 			},
 			required: ['anchor', 'text'],
+			additionalProperties: false,
 		};
 		result.push(
 			{
@@ -149,21 +150,34 @@ const toolDefinitions = (note: NoteContext) => {
 				name: 'appendToNote',
 				description: 'Appends text at the end of the note.',
 				inputSchema: {
-					type: 'string'
+					type: 'object',
+					properties: {
+						text: { type: 'string' },
+					},
+					required: ['text'],
+					additionalProperties: false,
 				},
 			},
 		);
 		if (hasFencedBlock) {
 			result.push({
 				name: 'replaceFencedBlock',
-				description: `Replaces the inner content of the first \`\`\`<tag>\`\`\` fenced block. "text" is the new content inside the fence (no fence markers). Supported tags: ${supportedStructuredBlockTags.join(', ')}.`,
+				description: [
+					'Replaces the inner content of the first ```<tag>``` fenced block.',
+					`"text" is the new content inside the fence (no fence markers). Supported tags: ${supportedStructuredBlockTags.join(', ')}.`,
+					'Use appendToNote to create a new fenced block.',
+				].join(' '),
 				inputSchema: {
 					type: 'object',
 					properties: {
-						tag: { type: 'string' },
+						tag: {
+							type: 'string',
+							enum: supportedStructuredBlockTags,
+						},
 						text: { type: 'string' },
 					},
 					required: ['tag', 'text'],
+					additionalProperties: false,
 				},
 			});
 		}
@@ -221,7 +235,7 @@ export const runNoteChat = async (
 ): Promise<ChatReply> => {
 	const messages: ChatMessage[] = [
 		{ role: 'system', content: systemPrompt(note) },
-		...history.map<ChatMessage>(t => ({ role: t.role, content: t.content })),
+		...history.map<ChatMessage>(t => ({ role: t.role, content: t.content, toolCallId: t.toolCallId, toolName: t.toolName })),
 		{ role: 'user', content: userMessage },
 	];
 
@@ -236,7 +250,22 @@ export const runNoteChat = async (
 	}
 
 	const result = await AiService.instance().chat(messages, { tools: toolDefinitions(note) });
-	return enforceSelectionScope(tryParseReply(result.text), note.selection);
+	const reply: ChatReply = {
+		reply: result.text,
+		edits: result.toolCalls.map(toolCall => {
+			const parsedArguments = JSON.parse(toolCall.arguments);
+			return {
+				op: toolCall.toolName,
+				id: toolCall.callId,
+				text: parsedArguments.text,
+				anchor: parsedArguments.anchor,
+				tag: parsedArguments.tag,
+
+				toolCallId: toolCall.callId,
+			} as EditOp;
+		}),
+	};
+	return enforceSelectionScope(reply, note.selection);
 };
 
 // Defence-in-depth: the prompt already tells the model to only use

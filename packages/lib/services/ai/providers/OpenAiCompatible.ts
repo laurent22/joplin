@@ -2,7 +2,7 @@ import shim from '../../../shim';
 import JoplinError from '../../../JoplinError';
 import Logger from '@joplin/utils/Logger';
 import { rtrimSlashes } from '@joplin/utils/path';
-import { ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification } from '../types';
+import { ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification, ToolSpec } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 
 const logger = Logger.create('OpenAiCompatibleProvider');
@@ -12,8 +12,23 @@ interface OpenAiUsage {
 	completion_tokens?: number;
 }
 
+interface OpenAiToolCall {
+	id: string;
+	index: number;
+	type: 'function';
+	function: {
+		arguments: string;
+		name: string;
+	};
+}
+
+interface OpenAiMessage {
+	content?: string;
+	tool_calls?: OpenAiToolCall[];
+}
+
 interface OpenAiChoice {
-	message?: { content?: string };
+	message?: OpenAiMessage;
 }
 
 interface OpenAiResponse {
@@ -28,6 +43,31 @@ interface Options {
 	model: string;
 	classification: ProviderClassification;
 }
+
+const convertTool = (tool: ToolSpec) => {
+	return {
+		type: 'function',
+		function: {
+			name: tool.name,
+			description: tool.description,
+			parameters: tool.inputSchema,
+			strict: true,
+		},
+	};
+};
+
+const convertMessage = (message: ChatMessage) => {
+	if (message.role === 'tool') {
+		return {
+			role: 'tool',
+			name: message.toolName,
+			content: message.content,
+			tool_call_id: message.toolCallId,
+		};
+	} else {
+		return { role: message.role, content: message.content };
+	}
+};
 
 export default class OpenAiCompatibleProvider extends ChatProviderBase {
 
@@ -51,12 +91,13 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 
 		const body: Record<string, unknown> = {
 			model: this.model_,
-			messages: messages.map(m => ({ role: m.role, content: m.content })),
+			messages: messages.map(convertMessage),
 			stream: false,
 		};
 		if (options?.temperature !== undefined) body.temperature = options.temperature;
 		if (options?.maxTokens !== undefined) body.max_tokens = options.maxTokens;
 		if (options?.responseFormat !== undefined) body.response_format = options.responseFormat;
+		if (options?.tools !== undefined) body.tools = options.tools.map(convertTool);
 
 		const headers: Record<string, string> = { 'Content-Type': 'application/json' };
 		if (this.apiKey_) headers['Authorization'] = `Bearer ${this.apiKey_}`;
@@ -120,7 +161,17 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 		const inputTokens = json.usage?.prompt_tokens ?? 0;
 		const outputTokens = json.usage?.completion_tokens ?? 0;
 
-		const toolCalls: ChatToolCall[] = []; // TODO
+		const toolCalls: ChatToolCall[] = (json.choices ?? []).map(choice => {
+			const toolCalls = choice.message?.tool_calls ?? [];
+			return toolCalls.map(call => {
+				if (!call.function) return null;
+				return {
+					toolName: call.function.name,
+					callId: call.id,
+					arguments: call.function.arguments,
+				};
+			}).filter(toolCall => !!toolCall);
+		}).flat();
 
 		return { text: content, toolCalls, usage: { inputTokens, outputTokens } };
 	}

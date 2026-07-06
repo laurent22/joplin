@@ -1,14 +1,17 @@
-export type ChatRole = 'system' | 'user' | 'assistant';
+export type ChatRole = 'system' | 'user' | 'assistant' | 'tool';
 
 export interface ChatMessage {
 	role: ChatRole;
+	toolName?: string;
+	toolCallId?: string;
 	content: string;
 }
 
 export interface JsonSchema {
-	type: string,
+	type: string;
 	properties?: unknown;
 	required?: string[];
+	additionalProperties?: boolean;
 }
 
 export interface ResponseFormat {
@@ -29,7 +32,7 @@ export interface ToolSpec {
 
 export interface ChatOptions {
 	temperature?: number;
-	tools: ToolSpec[];
+	tools?: ToolSpec[];
 	responseFormat?: ResponseFormat;
 	maxTokens?: number;
 }
@@ -41,7 +44,8 @@ export interface ChatUsage {
 
 export interface ChatToolCall {
 	toolName: string;
-	input: unknown;
+	callId: string;
+	arguments: string;
 }
 
 export interface ChatResult {
