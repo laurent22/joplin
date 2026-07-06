@@ -11,7 +11,7 @@ The underlying `joplin.ai.chat()` primitive described in [ai_chat.md](ai_chat.md
 
 ## Motivation
 
-The sidebar today (see [noteChat.ts](../../packages/lib/services/ai/noteChat.ts)) makes one LLM call per user turn. The response is constrained by a JSON schema to `{ reply, edits[] }` where `edits[]` is a hard-coded enum of operations. Three consequences push us toward tool calling:
+The sidebar today (see `noteChat.ts`) makes one LLM call per user turn. The response is constrained by a JSON schema to `{ reply, edits[] }` where `edits[]` is a hard-coded enum of operations. Three consequences push us toward tool calling:
 
 - The sidebar can only touch the focused note. Anything cross-workspace is impossible without leaving structured-output mode.
 - Plugins have no seam to extend chat behaviour.
@@ -60,7 +60,7 @@ Initial set (mapping from current `EditOp` operations):
 | `append_to_note(text)` | `appendToNote` | Note focused, no selection |
 | `replace_structured_block(tag, text)` | `replaceFencedBlock` | Note focused, block present |
 
-Selection scope enforcement (currently `enforceSelectionScope` in [noteChat.ts:272-275](../../packages/lib/services/ai/noteChat.ts#L272-L275)) moves from post-hoc filter to tool-list gate: when a selection exists, only `edit_selection` is offered. The dispatcher additionally rejects any call to a tool not in the current turn's list.
+Selection scope enforcement (currently `enforceSelectionScope` in `noteChat.ts` moves from post-hoc filter to tool-list gate: when a selection exists, only `edit_selection` is offered. The dispatcher additionally rejects any call to a tool not in the current turn's list.
 
 ### Tier 2 — Workspace tools (MCP)
 
@@ -94,7 +94,7 @@ Three mechanisms combine:
    - No note focused → workspace tools only.
    - Note focused, no selection → workspace tools + anchor / append session tools.
    - Note focused, selection present → workspace tools + `edit_selection` only.
-   Same context-dependent logic today in [noteChat.ts:100-127](../../packages/lib/services/ai/noteChat.ts#L100-L127), lifted from "which JSON ops are legal" to "which tools appear."
+   Same context-dependent logic today in `noteChat.ts`, lifted from "which JSON ops are legal" to "which tools appear."
 2. **Tool descriptions.** The model routes on semantic intent match. No routing code, no intent classifier.
 3. **The system prompt.** Frames Joplin context, current note title/body/selection (when focused), Joplin-Markdown rules (current `joplinMarkdownNotes` block survives verbatim), and instructs the model to scope edits to selection when one exists.
 
