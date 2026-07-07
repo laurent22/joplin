@@ -40,7 +40,7 @@ import PluginNotification from './PluginNotification/PluginNotification';
 import { Toast } from '@joplin/lib/services/plugins/api/types';
 import QuitSyncDialog from './QuitSyncDialog';
 import Logger from '@joplin/utils/Logger';
-import checkForUpdates from '../checkForUpdates';
+import checkForUpdates, { isReleaseVersion } from '../checkForUpdates';
 
 const logger = Logger.create('MainScreen');
 
@@ -90,6 +90,7 @@ interface State {
 	noteContentPropertiesDialogOptions: Record<string, unknown>;
 	shareNoteDialogOptions: Record<string, unknown>;
 	shareFolderDialogOptions: ShareFolderDialogOptions;
+	syncTargetAppMinVersionIsRelease: boolean | null;
 }
 
 const StyledUserWebviewDialogContainer = styled.div`
@@ -132,6 +133,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				visible: false,
 				folderId: '',
 			},
+			syncTargetAppMinVersionIsRelease: null,
 		};
 
 		this.updateMainLayout(this.buildLayout(props.plugins));
@@ -349,6 +351,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 				value: false,
 			});
 		}
+
+		if (
+			this.props.mustUpgradeAppMessage !== prevProps.mustUpgradeAppMessage ||
+			this.props.syncTargetAppMinVersion !== prevProps.syncTargetAppMinVersion
+		) {
+			void this.loadSyncTargetAppMinVersionIsRelease();
+		}
 	}
 
 	public layoutModeListenerKeyDown(event: KeyboardEvent) {
@@ -359,11 +368,27 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public componentDidMount() {
 		window.addEventListener('keydown', this.layoutModeListenerKeyDown);
+		void this.loadSyncTargetAppMinVersionIsRelease();
 	}
 
 	public componentWillUnmount() {
 		window.removeEventListener('resize', this.window_resize);
 		window.removeEventListener('keydown', this.layoutModeListenerKeyDown);
+	}
+
+	private async loadSyncTargetAppMinVersionIsRelease() {
+		const version = this.props.syncTargetAppMinVersion;
+
+		this.setState({ syncTargetAppMinVersionIsRelease: null });
+		if (!this.props.mustUpgradeAppMessage || !version) return;
+
+		try {
+			const syncTargetAppMinVersionIsRelease = await isReleaseVersion(version);
+			if (!this.props.mustUpgradeAppMessage || this.props.syncTargetAppMinVersion !== version) return;
+			this.setState({ syncTargetAppMinVersionIsRelease });
+		} catch (error) {
+			logger.error(error);
+		}
 	}
 
 	public rootLayoutSize() {
@@ -591,7 +616,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 		} else if (this.props.mustUpgradeAppMessage) {
 			if (!this.props.syncTargetAppMinVersion) {
 				msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
-			} else if (this.props.syncTargetAppMinVersion.includes('-') && shim.isLinux()) {
+			} else if (this.state.syncTargetAppMinVersionIsRelease === false && shim.isLinux()) {
 				const callForAction = _('Download it from GitHub Releases');
 				msg = this.renderNotificationMessage(
 					_(
@@ -603,7 +628,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 					() => shim.openUrl('https://github.com/laurent22/joplin/releases'),
 				);
 			} else {
-				const isTargetPreRelease = this.props.syncTargetAppMinVersion.includes('-');
+				const isTargetPreRelease = this.state.syncTargetAppMinVersionIsRelease === false;
 				const callForAction = isTargetPreRelease ? _('Download it from GitHub Releases') : _('Check for updates');
 				msg = this.renderNotificationMessage(
 					_(

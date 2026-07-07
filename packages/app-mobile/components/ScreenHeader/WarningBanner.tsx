@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { Platform } from 'react-native';
 import { AppState } from '../../utils/types';
@@ -9,6 +10,11 @@ import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncIn
 import Setting from '@joplin/lib/models/Setting';
 import { ShareInvitation, ShareUserStatus } from '@joplin/lib/services/share/reducer';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
+import shim from '@joplin/lib/shim';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('WarningBanner');
 
 interface Props {
 	themeId: number;
@@ -28,8 +34,29 @@ const androidGooglePlayUrl = 'https://play.google.com/store/apps/details?id=net.
 const androidPreReleaseUrl = 'https://github.com/laurent22/joplin-android/tags';
 const iosAppStoreUrl = 'https://apps.apple.com/app/id1315599797';
 
+const fetchAndroidVersionIsPreRelease = async (version: string) => {
+	const response = await shim.fetch(`https://api.github.com/repos/laurent22/joplin-android/releases/tags/android-v${version}`);
+	if (!response.ok) return null;
+	const release = await response.json();
+	return !!release.prerelease;
+};
+
 export const WarningBannerComponent: React.FC<Props> = props => {
 	const warningComps = [];
+
+	const [isAndroidTargetPreRelease, setIsAndroidTargetPreRelease] = useState<boolean|null>(null);
+
+	useAsyncEffect(async event => {
+		setIsAndroidTargetPreRelease(null);
+		if (Platform.OS !== 'android' || !props.mustUpgradeAppMessage || !props.syncTargetAppMinVersion) return;
+
+		try {
+			const isPreRelease = await fetchAndroidVersionIsPreRelease(props.syncTargetAppMinVersion);
+			if (!event.cancelled) setIsAndroidTargetPreRelease(isPreRelease);
+		} catch (error) {
+			logger.error('Could not load release metadata for version', props.syncTargetAppMinVersion, error);
+		}
+	}, [props.mustUpgradeAppMessage, props.syncTargetAppMinVersion]);
 
 	const renderWarningBox = (screen: string, message: string) => {
 		return <WarningBox
@@ -42,17 +69,15 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 	};
 
 	const renderMustUpgradeAppMessage = () => {
-		const syncTargetAppMinVersion = props.syncTargetAppMinVersion;
-		if (syncTargetAppMinVersion) {
-			const isPreRelease = syncTargetAppMinVersion.includes('-');
+		if (props.syncTargetAppMinVersion) {
 			const upgradeMessage = (message: string) => _(
 				'Please upgrade your application to version %s: %s',
-				syncTargetAppMinVersion,
+				props.syncTargetAppMinVersion,
 				message,
 			);
 
-			if (Platform.OS === 'android') {
-				if (isPreRelease) {
+			if (Platform.OS === 'android' && isAndroidTargetPreRelease !== null) {
+				if (isAndroidTargetPreRelease) {
 					return renderWarningBox(
 						androidPreReleaseUrl,
 						upgradeMessage(_('Download it from the Joplin Android tags page')),
@@ -66,16 +91,9 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 			}
 
 			if (Platform.OS === 'ios') {
-				if (isPreRelease) {
-					return renderWarningBox(
-						'UpgradeApp',
-						upgradeMessage(_('Check TestFlight for an update')),
-					);
-				}
-
 				return renderWarningBox(
 					iosAppStoreUrl,
-					upgradeMessage(_('Update it from the App Store')),
+					upgradeMessage(_('If it is a release, update it from the App Store. If it is a pre-release, check TestFlight')),
 				);
 			}
 		}
