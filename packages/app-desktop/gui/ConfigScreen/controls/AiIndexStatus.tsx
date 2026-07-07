@@ -23,6 +23,7 @@ const indexerStateLabel = (s: IndexStatus['indexerState']) => {
 	case 'running': return _('Indexing…');
 	case 'ai-disabled': return _('AI is disabled');
 	case 'index-disabled': return _('Indexing is disabled');
+	case 'vector-search-unavailable': return _('Vector search is not available on this platform');
 	}
 };
 

@@ -7,13 +7,10 @@ import { move } from './ResizableLayout/utils/movements';
 import { LayoutItem } from './ResizableLayout/utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
-import Sidebar from './Sidebar/Sidebar';
-import UserWebview from '../services/plugins/UserWebview';
 import UserWebviewDialog from '../services/plugins/UserWebviewDialog';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { defaultWindowId, StateLastDeletion, stateUtils } from '@joplin/lib/reducer';
 import { _ } from '@joplin/lib/locale';
-import NoteListWrapper from './NoteListWrapper/NoteListWrapper';
 import { AppState } from '../app.reducer';
 import { saveLayout, loadLayout } from './ResizableLayout/utils/persist';
 import Setting from '@joplin/lib/models/Setting';
@@ -37,25 +34,22 @@ import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import invitationRespond from '@joplin/lib/services/share/invitationRespond';
 import restart from '../services/restart';
 import { connect } from 'react-redux';
-import { NoteListColumns } from '@joplin/lib/services/plugins/api/noteListType';
-import validateColumns from './NoteListHeader/utils/validateColumns';
 import TrashNotification from './TrashNotification/TrashNotification';
 import UpdateNotification from './UpdateNotification/UpdateNotification';
-import NoteEditor from './NoteEditor/NoteEditor';
 import PluginNotification from './PluginNotification/PluginNotification';
 import { Toast } from '@joplin/lib/services/plugins/api/types';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
 import QuitSyncDialog from './QuitSyncDialog';
 import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('MainScreen');
 
 import { ipcRenderer } from 'electron';
+import layoutKeyToLabel from '../utils/layout/layoutKeyToLabel';
+import MainLayoutPane from './MainLayoutPane';
 
 interface Props {
 	plugins: PluginStates;
 	pluginHtmlContents: PluginHtmlContents;
-	pluginsLoaded: boolean;
 	hasNotesBeingSaved: boolean;
 	dispatch: Dispatch;
 	mainLayout: LayoutItem;
@@ -69,21 +63,15 @@ interface Props {
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
 	themeId: number;
-	startupPluginsLoaded: boolean;
 	shareInvitations: ShareInvitation[];
 	isSafeMode: boolean;
 	enableLegacyMarkdownEditor: boolean;
 	needApiAuth: boolean;
 	processingShareInvitationResponse: boolean;
 	isResettingLayout: boolean;
-	listRendererId: string;
 	lastDeletion: StateLastDeletion;
 	lastDeletionNotificationTime: number;
-	selectedFolderId: string;
 	mustUpgradeAppMessage: string;
-	notesSortOrderField: string;
-	notesSortOrderReverse: boolean;
-	notesColumns: NoteListColumns;
 	showInvalidJoplinCloudCredential: boolean;
 	toast: Toast;
 	shouldSwitchToAppleSiliconVersion: boolean;
@@ -118,20 +106,9 @@ const defaultLayout: LayoutItem = {
 	children: [
 		{ key: 'sideBar', width: 250 },
 		{ key: 'noteList', width: 250 },
-		{ key: 'editor' },
+		{ key: 'editor', flexible: true },
+		{ key: 'chatPanel', width: 340, visible: false },
 	],
-};
-
-const layoutKeyToLabel = (key: string, plugins: PluginStates) => {
-	if (key === 'sideBar') return _('Sidebar');
-	if (key === 'noteList') return _('Note list');
-	if (key === 'editor') return _('Editor');
-
-	const viewInfo = pluginUtils.viewInfoByViewId(plugins, key);
-	if (viewInfo) {
-		return PluginService.instance().safePluginNameById(viewInfo.plugin.id);
-	}
-	return key;
 };
 
 class MainScreenComponent extends React.Component<Props, State> {
@@ -233,10 +210,22 @@ class MainScreenComponent extends React.Component<Props, State> {
 	private buildLayout(plugins: PluginStates): LayoutItem {
 		const rootLayoutSize = this.rootLayoutSize();
 
-		const userLayout = Setting.value('ui.layout');
+		let userLayout = Setting.value('ui.layout');
 		let output = null;
 
 		try {
+			// Migration: stamp the flexible flag on the editor and clear any
+			// stale width before validateLayout's first pass.
+			if (userLayout && Object.keys(userLayout).length) {
+				userLayout = produce(userLayout as LayoutItem, (draft: LayoutItem) => {
+					const editor = findItemByKey(draft, 'editor');
+					if (editor && !editor.flexible) {
+						editor.flexible = true;
+						delete editor.width;
+					}
+				});
+			}
+
 			output = loadLayout(Object.keys(userLayout).length ? userLayout : null, defaultLayout, rootLayoutSize);
 
 			// For unclear reasons, layout items sometimes end up without a key.
@@ -249,6 +238,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 			if (!findItemByKey(output, 'sideBar') || !findItemByKey(output, 'noteList') || !findItemByKey(output, 'editor')) {
 				throw new Error('"sideBar", "noteList" and "editor" must be present in the layout');
+			}
+
+			// Migration: existing users have layouts saved before chatPanel
+			// existed. Add it (hidden) so the toggle works.
+			if (!findItemByKey(output, 'chatPanel')) {
+				output = produce(output, (draft: LayoutItem) => {
+					draft.children.push({ key: 'chatPanel', width: 340, visible: false });
+				});
 			}
 		} catch (error) {
 			console.warn('Could not load layout - restoring default layout:', error);
@@ -633,102 +630,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	private resizableLayout_renderItem(key: string, event: RenderItemEvent): React.ReactNode {
-		// Key should never be undefined but somehow it can happen, also not
-		// clear how. For now in this case render nothing so that the app
-		// doesn't crash.
-		// https://discourse.joplinapp.org/t/rearranging-the-pannels-crushed-the-app-and-generated-fatal-error/14373?u=laurent
-		if (!key) {
-			console.error('resizableLayout_renderItem: Trying to render an item using an empty key. Full layout is:', this.props.mainLayout);
-			return null;
-		}
-
-		const eventEmitter = event.eventEmitter;
-
-		// const viewsToRemove:string[] = [];
-
-		const components: Record<string, ()=> React.ReactNode> = {
-			sideBar: () => {
-				return <Sidebar key={key} />;
-			},
-
-			noteList: () => {
-				return <NoteListWrapper
-					key={key}
-					resizableLayoutEventEmitter={eventEmitter}
-					visible={event.visible}
-					size={event.size}
-					themeId={this.props.themeId}
-					listRendererId={this.props.listRendererId}
-					startupPluginsLoaded={this.props.startupPluginsLoaded}
-					notesSortOrderField={this.props.notesSortOrderField}
-					notesSortOrderReverse={this.props.notesSortOrderReverse}
-					columns={this.props.notesColumns}
-					selectedFolderId={this.props.selectedFolderId}
-				/>;
-			},
-
-			editor: () => {
-				return <div className='note-editor-wrapper' role='main' aria-label={_('Note')}>
-					<NoteEditor
-						windowId={defaultWindowId}
-						key={key}
-						startupPluginsLoaded={this.props.startupPluginsLoaded}
-					/>
-				</div>;
-			},
-		};
-
-		if (components[key]) return components[key]();
-
-		const viewsToRemove: string[] = [];
-
-		if (key.indexOf('plugin-view') === 0) {
-			const viewInfo = pluginUtils.viewInfoByViewId(this.props.plugins, event.item.key);
-
-			if (!viewInfo) {
-				// Once all startup plugins have loaded, we know that all the
-				// views are ready so we can remove the orphans ones.
-				//
-				// Before they are loaded, there might be views that don't match
-				// any plugins, but that's only because it hasn't loaded yet.
-				if (this.props.startupPluginsLoaded) {
-					console.warn(`Could not find plugin associated with view: ${event.item.key}`);
-					viewsToRemove.push(event.item.key);
-				}
-			} else {
-				const { view, plugin } = viewInfo;
-				const html = this.props.pluginHtmlContents[plugin.id]?.[view.id] ?? '';
-
-				return <UserWebview
-					key={view.id}
-					viewId={view.id}
-					themeId={this.props.themeId}
-					html={html}
-					scripts={view.scripts}
-					pluginId={plugin.id}
-					borderBottom={true}
-					fitToContent={false}
-				/>;
-			}
-		} else {
-			throw new Error(`Invalid layout component: ${key}`);
-		}
-
-		if (viewsToRemove.length) {
-			window.requestAnimationFrame(() => {
-				let newLayout = this.props.mainLayout;
-				for (const itemKey of viewsToRemove) {
-					newLayout = removeItem(newLayout, itemKey);
-				}
-
-				if (newLayout !== this.props.mainLayout) {
-					console.warn('Removed invalid views:', viewsToRemove);
-					this.updateMainLayout(newLayout);
-				}
-			});
-		}
-
-		return null;
+		return <MainLayoutPane
+			key={key}
+			contentKey={key}
+			event={event}
+			windowId={defaultWindowId}
+			onUpdateLayout={this.updateMainLayout}
+			layout={this.props.mainLayout}
+		/>;
 	}
 
 	public renderPluginDialogs() {
@@ -814,7 +723,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 const mapStateToProps = (state: AppState) => {
 	const syncInfo = localSyncInfoFromState(state);
 	const showNeedUpgradingEnabledMasterKeyMessage = !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys.filter((k) => !!k.enabled)).length;
-	const windowState = stateUtils.windowStateById(state, defaultWindowId);
 
 	return {
 		themeId: state.settings.theme,
@@ -830,21 +738,15 @@ const mapStateToProps = (state: AppState) => {
 		hasNotesBeingSaved: stateUtils.hasNotesBeingSaved(state),
 		layoutMoveMode: state.layoutMoveMode,
 		mainLayout: state.mainLayout,
-		startupPluginsLoaded: state.startupPluginsLoaded,
 		shareInvitations: state.shareService.shareInvitations,
 		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		isSafeMode: state.settings.isSafeMode,
 		enableLegacyMarkdownEditor: state.settings['editor.legacyMarkdown'],
 		needApiAuth: state.needApiAuth,
 		isResettingLayout: state.isResettingLayout,
-		listRendererId: state.settings['notes.listRendererId'],
 		lastDeletion: state.lastDeletion,
 		lastDeletionNotificationTime: state.lastDeletionNotificationTime,
-		selectedFolderId: windowState.selectedFolderId,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
-		notesSortOrderField: state.settings['notes.sortOrder.field'],
-		notesSortOrderReverse: state.settings['notes.sortOrder.reverse'],
-		notesColumns: validateColumns(state.settings['notes.columns']),
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 		toast: state.toast,
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && shim.isMac() && process.arch !== 'arm64',

@@ -80,10 +80,11 @@ describe('index/users', () => {
 
 	test('new user should be able to login', async () => {
 		const { session } = await createUserAndSession(1, true);
+		const context = await koaAppContext({ sessionId: session.id });
 
 		const password = uuidgen();
 		await postUser(session.id, 'test@example.com', password);
-		const loggedInUser = await models().user().login('test@example.com', password);
+		const loggedInUser = await models().user().login('test@example.com', password, context.joplin.services);
 		expect(!!loggedInUser).toBe(true);
 		expect(loggedInUser.email).toBe('test@example.com');
 	});
@@ -100,12 +101,13 @@ describe('index/users', () => {
 
 	test('should change the password', async () => {
 		const { user, session } = await createUserAndSession(1, true);
+		const context = await koaAppContext({ sessionId: session.id });
 
 		const userModel = models().user();
 
 		const password = uuidgen();
 		await patchUser(session.id, { id: user.id, password: password, password2: password });
-		const modUser = await userModel.login('user1@localhost', password);
+		const modUser = await userModel.login('user1@localhost', password, context.joplin.services);
 		expect(!!modUser).toBe(true);
 		expect(modUser.id).toBe(user.id);
 	});
@@ -185,7 +187,7 @@ describe('index/users', () => {
 		expect(session.user_id).toBe(user1.id);
 
 		// Check that the password has been set
-		const loggedInUser = await models().user().login(user1.email, newPassword);
+		const loggedInUser = await models().user().login(user1.email, newPassword, context.joplin.services);
 		expect(loggedInUser.id).toBe(user1.id);
 
 		// Check that the email has been verified
@@ -317,9 +319,10 @@ describe('index/users', () => {
 
 	test('should delete all sessions when changing the password but the current one', async () => {
 		const { user, session, password } = await createUserAndSession(1, true);
+		const ctx = await koaAppContext();
 
-		await models().session().authenticate(user.email, password, '');
-		await models().session().authenticate(user.email, password, '');
+		await models().session().authenticate(user.email, password, ctx.joplin.services, '');
+		await models().session().authenticate(user.email, password, ctx.joplin.services, '');
 
 		expect(await models().session().count()).toBe(3);
 

@@ -28,6 +28,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { ALL_NOTES_FILTER_ID } from '../reserved-ids';
 import NoteLockNote from '../services/noteLock/NoteLockNote';
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
+import isItemId from './utils/isItemId';
 
 export interface PreviewsOrder {
 	by: string;
@@ -173,6 +174,15 @@ export default class Note extends BaseItem {
 		}
 
 		return unique(itemIds);
+	}
+
+	public static serializeExtractedResourceIds(resourceIds: string[]) {
+		return unique(resourceIds.map(id => id.trim()).filter(id => !!isItemId(id))).join(',');
+	}
+
+	public static unserializeExtractedResourceIds(serializedIds: string) {
+		if (!serializedIds) return [];
+		return unique(serializedIds.split(',').map(id => id.trim()).filter(id => !!isItemId(id)));
 	}
 
 	public static async linkedItems(body: string) {
@@ -570,11 +580,11 @@ export default class Note extends BaseItem {
 	}
 
 	// Count of notes that are eligible for indexing (anything searchable):
-	// not trashed, not in conflict. Used by the AI status reporter as the
+	// not trashed, not in conflict, and not locked. Used by the AI status reporter as the
 	// denominator in "N / total indexed".
 	public static async indexableCount() {
 		const r = await this.db().selectOne(
-			'SELECT count(*) as total FROM notes WHERE (deleted_time IS NULL OR deleted_time = 0) AND (is_conflict IS NULL OR is_conflict = 0)',
+			'SELECT count(*) as total FROM notes WHERE (deleted_time IS NULL OR deleted_time = 0) AND (is_conflict IS NULL OR is_conflict = 0) AND is_locked = 0',
 		);
 		return r && r.total ? r.total : 0;
 	}
@@ -839,7 +849,7 @@ export default class Note extends BaseItem {
 		// in the item_changes table
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
 		if (isNoteLockEnabled() && !!options?.useNoteLock) {
-			await NoteLockNote.prepareForSave(o, this.linkedItemIds, isNew);
+			await NoteLockNote.prepareForSave(o, this.linkedItemIds, this.serializeExtractedResourceIds, isNew);
 		}
 
 		syncDebugLog.info('Save Note: P:', oldNote);

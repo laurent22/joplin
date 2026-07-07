@@ -5,8 +5,18 @@ export interface ChatMessage {
 	content: string;
 }
 
+export interface ResponseFormat {
+	type: 'json_schema';
+	json_schema: {
+		name: string;
+		strict: boolean;
+		schema: unknown;
+	};
+}
+
 export interface ChatOptions {
 	temperature?: number;
+	responseFormat?: ResponseFormat;
 	maxTokens?: number;
 }
 
@@ -36,7 +46,7 @@ export interface ChatProvider {
 export type ProviderModelDownloadStatus = 'not-started' | 'downloading' | 'downloaded';
 
 export type ModelDownloadStatus = ProviderModelDownloadStatus | 'unavailable';
-export type IndexerState = 'idle' | 'running' | 'ai-disabled' | 'index-disabled';
+export type IndexerState = 'idle' | 'running' | 'ai-disabled' | 'index-disabled' | 'vector-search-unavailable';
 export interface IndexStatus {
 	modelDownloadStatus: ModelDownloadStatus;
 	indexerState: IndexerState;

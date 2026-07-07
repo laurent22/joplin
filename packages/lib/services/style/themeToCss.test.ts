@@ -39,6 +39,7 @@ const input: Theme = {
 	// Color scheme "4" is used for secondary-style buttons. It makes a white
 	// button with blue text.
 	backgroundColor4: '#ffffff',
+	backgroundColor4Dimmed: '#e3eaff',
 	color4: '#2D6BDC',
 
 	raisedBackgroundColor: '#e5e5e5',
@@ -71,6 +72,7 @@ const expected = `
 	--joplin-background-color2: #313640;
 	--joplin-background-color3: #F4F5F6;
 	--joplin-background-color4: #ffffff;
+	--joplin-background-color4-dimmed: #e3eaff;
 	--joplin-background-color-hover3: #CBDAF1;
 	--joplin-background-color-transparent: rgba(255,255,255,0.9);
 	--joplin-background-color-transparent2: rgba(0, 0, 0, 0.1);

@@ -11,6 +11,7 @@ export function saveLayout(layout: LayoutItem): Partial<LayoutItem> {
 		'children',
 		'key',
 		'context',
+		'flexible',
 	];
 
 	return produce(layout, (draft: LayoutItem) => {

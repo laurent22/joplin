@@ -28,6 +28,11 @@ type_: 4`,
 };
 
 async function getShareContent(shareId: string, query: Record<string, string> = {}): Promise<string | Buffer> {
+	const context = await getShareResponse(shareId, query);
+	return context.response.body as string | Buffer;
+}
+
+async function getShareResponse(shareId: string, query: Record<string, string> = {}) {
 	const context = await koaAppContext({
 		request: {
 			method: 'GET',
@@ -37,7 +42,7 @@ async function getShareContent(shareId: string, query: Record<string, string> = 
 	});
 	await routeHandler(context);
 	await checkContextError(context);
-	return context.response.body as string | Buffer;
+	return context;
 }
 
 describe('shares.link', () => {
@@ -242,6 +247,67 @@ describe('shares.link', () => {
 
 			await expectNotThrow(async () => getShareContent(share.id));
 		}
+	});
+
+	// SVG is served inline but the strict CSP + sandbox blocks the embedded script.
+	test('should serve SVG inline under a strict CSP that blocks scripts', async () => {
+		const { session } = await createUserAndSession();
+
+		const svgPayload = '<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>';
+
+		const resource = await createResource(session.id, {
+			id: '000000000000000000000000000000E1',
+			title: '',
+			mime: 'image/svg+xml',
+			file_extension: 'svg',
+		}, svgPayload);
+
+		const noteItem = await createNote(session.id, {
+			id: '00000000000000000000000000000001',
+			body: `![x](:/${resource.jop_id})`,
+		});
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			type: ShareType.Note,
+			note_id: noteItem.jop_id,
+		});
+
+		const context = await getShareResponse(share.id, { resource_id: '000000000000000000000000000000E1' });
+		expect(context.response.get('Content-Type')).toBe('image/svg+xml');
+		expect(context.response.get('Content-Disposition').startsWith('inline;')).toBe(true);
+		expect(context.response.get('X-Content-Type-Options')).toBe('nosniff');
+		const csp = context.response.get('Content-Security-Policy');
+		expect(csp).toContain('default-src \'none\'');
+		expect(csp).toContain('sandbox');
+	});
+
+	test('should serve safe resource mimes inline with hardened headers', async () => {
+		const { session } = await createUserAndSession();
+
+		const resource = await createResource(session.id, {
+			id: '000000000000000000000000000000E1',
+			title: 'photo.png',
+			mime: 'image/png',
+			file_extension: 'png',
+		}, 'fake-png-bytes');
+
+		const noteItem = await createNote(session.id, {
+			id: '00000000000000000000000000000001',
+			body: `![x](:/${resource.jop_id})`,
+		});
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			type: ShareType.Note,
+			note_id: noteItem.jop_id,
+		});
+
+		const context = await getShareResponse(share.id, { resource_id: '000000000000000000000000000000E1' });
+		expect(context.response.get('Content-Type')).toBe('image/png');
+		expect(context.response.get('Content-Disposition').startsWith('inline;')).toBe(true);
+		expect(context.response.get('X-Content-Type-Options')).toBe('nosniff');
+		const csp = context.response.get('Content-Security-Policy');
+		expect(csp).toContain('default-src \'none\'');
+		expect(csp).toContain('sandbox');
 	});
 
 	test('should throw an error if owner of share is disabled', async () => {

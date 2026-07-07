@@ -45,8 +45,16 @@ export default class NoteEmbedding extends BaseModel {
 		return this.db() as JoplinDatabase;
 	}
 
+	// Single source of truth for "can we use vector search?". Callers that
+	// would otherwise throw (the indexer, search APIs) should gate on this and
+	// no-op when it's false, so users on platforms without sqlite-vec don't
+	// get a flood of failed-to-index errors.
+	public static vectorSearchAvailable(): boolean {
+		return this.joplinDb().sqliteVecAvailable();
+	}
+
 	private static requireVec() {
-		if (!this.joplinDb().sqliteVecAvailable()) {
+		if (!this.vectorSearchAvailable()) {
 			throw new Error('Vector search is unavailable: sqlite-vec extension is not loaded on this platform');
 		}
 	}
@@ -92,6 +100,7 @@ export default class NoteEmbedding extends BaseModel {
 			`SELECT n.id FROM notes n
 			 WHERE (n.deleted_time IS NULL OR n.deleted_time = 0)
 			   AND (n.is_conflict IS NULL OR n.is_conflict = 0)
+			   AND n.is_locked = 0
 			   AND NOT EXISTS (SELECT 1 FROM note_embeddings_meta m WHERE m.note_id = n.id)${excludeSql}
 			 LIMIT ?`,
 			[...excludeIds, limit],
@@ -159,6 +168,15 @@ export default class NoteEmbedding extends BaseModel {
 			const lastID = row?.id;
 			if (!lastID) throw new Error('Failed to obtain rowid after embedding insert');
 
+			// Wipe any orphan vec-row at this rowid before inserting. Orphans
+			// show up when a prior saveChunks crashed between the meta insert
+			// and the vec insert: meta was wiped on the next pass but the vec
+			// row stayed, and sqlite later hands us the same rowid (#15761).
+			// vec0 doesn't support INSERT OR REPLACE — explicit DELETE then INSERT.
+			await this.db().exec({
+				sql: 'DELETE FROM note_embeddings_vec WHERE rowid = ?',
+				params: [lastID],
+			});
 			await this.db().exec({
 				sql: 'INSERT INTO note_embeddings_vec(rowid, embedding) VALUES (?, ?)',
 				params: [lastID, JSON.stringify(chunk.vector)],
@@ -219,6 +237,62 @@ export default class NoteEmbedding extends BaseModel {
 			return results.filter(r => r.distance <= options.maxDistance);
 		}
 		return results;
+	}
+
+	// Page through stored chunks (with raw vectors) ordered by rowid. rowid is
+	// monotonic on insert so a cursor positioned at rowid=N is guaranteed to
+	// never miss a chunk with rowid<N inserted later — the only chunks the
+	// caller can miss are those added ahead of an in-flight cursor, which is
+	// the documented snapshot tradeoff for the plugin API.
+	//
+	// noteIds is an optional filter; afterRowid is the cursor (exclusive).
+	// Returns rows in rowid order so the last row's id is the next cursor.
+	public static async chunksPage(options: {
+		noteIds?: string[];
+		afterRowid?: number;
+		limit: number;
+	}): Promise<{ rowid: number; noteId: string; modelId: string; chunkIndex: number; chunkText: string; vector: number[] }[]> {
+		this.requireVec();
+		if (!await this.vecTableExists()) return [];
+		if (options.noteIds && options.noteIds.length === 0) return [];
+
+		const whereParts: string[] = [];
+		const params: (string | number)[] = [];
+		if (options.afterRowid !== undefined) {
+			whereParts.push('m.id > ?');
+			params.push(options.afterRowid);
+		}
+		if (options.noteIds && options.noteIds.length) {
+			whereParts.push(`m.note_id IN (${options.noteIds.map(() => '?').join(',')})`);
+			params.push(...options.noteIds);
+		}
+		const where = whereParts.length ? `WHERE ${whereParts.join(' AND ')}` : '';
+
+		const rows = await this.db().selectAll<{
+			id: number;
+			note_id: string;
+			model_id: string;
+			chunk_index: number;
+			chunk_text: string;
+			embedding: string;
+		}>(
+			`SELECT m.id, m.note_id, m.model_id, m.chunk_index, m.chunk_text, vec_to_json(v.embedding) AS embedding
+			 FROM note_embeddings_meta m
+			 JOIN note_embeddings_vec v ON v.rowid = m.id
+			 ${where}
+			 ORDER BY m.id ASC
+			 LIMIT ?`,
+			[...params, options.limit],
+		);
+
+		return rows.map(r => ({
+			rowid: r.id,
+			noteId: r.note_id,
+			modelId: r.model_id,
+			chunkIndex: r.chunk_index,
+			chunkText: r.chunk_text,
+			vector: JSON.parse(r.embedding) as number[],
+		}));
 	}
 
 	// Loads the stored vectors for a note's chunks in chunk-index order.

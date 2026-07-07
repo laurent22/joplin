@@ -1,4 +1,4 @@
-import Setting, { Env } from './Setting';
+import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import shim from '../shim';
 import markdownUtils from '../markdownUtils';
@@ -22,6 +22,7 @@ import getConflictFolderId from './utils/getConflictFolderId';
 import Revision from './Revision';
 import RevisionService from '../services/RevisionService';
 import NoteLockKey from '../services/noteLock/NoteLockKey';
+import NoteLockSession from '../services/noteLock/NoteLockSession';
 import NoteLockService from '../services/noteLock/NoteLockService';
 import EncryptionService from '../services/e2ee/EncryptionService';
 
@@ -36,8 +37,10 @@ describe('models/Note', () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		NoteLockKey.destroyInstance();
+		NoteLockSession.destroyInstance();
 		NoteLockService.destroyInstance();
 		EncryptionService.instance_ = encryptionService();
+		Setting.setValue('featureFlag.noteLock', true);
 	});
 
 	it('should find resource and note IDs', (async () => {
@@ -249,8 +252,34 @@ describe('models/Note', () => {
 		expect(Note.previewFields()).not.toContain('extracted_resource_ids');
 	});
 
+	const resourceId1 = '06894e83b8f84d3d8cbe0f1587f9e226';
+	const resourceId2 = '06894e83b8f84d3d8cbe0f1587f9e227';
+
+	test.each<[string[], string]>([
+		[[], ''],
+		[[' '], ''],
+		[[resourceId1], resourceId1],
+		[[` ${resourceId1} `, resourceId2], `${resourceId1},${resourceId2}`],
+		[[resourceId1, resourceId1, 'invalid'], resourceId1],
+	])('should serialize extracted resource IDs: %j', (resourceIds, expected) => {
+		expect(Note.serializeExtractedResourceIds(resourceIds)).toBe(expected);
+	});
+
+	test.each<[string, string[]]>([
+		['', []],
+		[' ', []],
+		[',,', []],
+		[resourceId1, [resourceId1]],
+		[`${resourceId1},,${resourceId2}`, [resourceId1, resourceId2]],
+		[` ${resourceId1}, ${resourceId2} `, [resourceId1, resourceId2]],
+		[`${resourceId1},${resourceId1},invalid`, [resourceId1]],
+	])('should unserialize extracted resource IDs: %j', (serializedIds, expected) => {
+		expect(Note.unserializeExtractedResourceIds(serializedIds)).toEqual(expected);
+	});
+
 	it('should store note lock ciphertext while decrypting only gated loads', async () => {
 		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
 		const resourceId1 = '06894e83b8f84d3d8cbe0f1587f9e226';
 		const resourceId2 = '06894e83b8f84d3d8cbe0f1587f9e227';
 		const plainTextBody = `secret [](:/${resourceId1}) [](:/${resourceId2})`;
@@ -296,35 +325,34 @@ describe('models/Note', () => {
 
 	it('should not decrypt locked notes while the feature is disabled', async () => {
 		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
 		const note = await Note.save({
 			body: 'secret',
 			is_locked: 1,
 		}, { useNoteLock: true });
 
-		Setting.setConstant('env', Env.Prod);
-		try {
-			expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(note.body);
-		} finally {
-			Setting.setConstant('env', Env.Dev);
-		}
+		Setting.setValue('featureFlag.noteLock', false);
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(note.body);
 	});
 
 	it('should fail closed when note lock encryption cannot decrypt or encrypt', async () => {
 		const noteLockKey = NoteLockKey.instance();
+		const session = NoteLockSession.instance();
 		await noteLockKey.create('123456');
+		await session.unlock('123456');
 		const note = await Note.save({
 			body: 'secret',
 			is_locked: 1,
 		}, { useNoteLock: true });
 
-		noteLockKey.lock();
+		session.lock();
 		await expect(Note.save({
 			body: 'must not be stored',
 			is_locked: 1,
-		}, { useNoteLock: true })).rejects.toThrow('Note lock key is not unlocked');
+		}, { useNoteLock: true })).rejects.toThrow('Note lock session is locked');
 		expect(await Note.all()).toHaveLength(1);
 
-		await noteLockKey.unlock('123456');
+		await session.unlock('123456');
 		const corruptedBody = `${note.body}invalid`;
 		await db().exec('UPDATE notes SET body = ? WHERE id = ?', [corruptedBody, note.id]);
 		await expect(Note.load(note.id, { useNoteLock: true })).rejects.toThrow();
@@ -349,6 +377,7 @@ describe('models/Note', () => {
 		});
 
 		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
 		await Note.save({
 			...await Note.load(note.id),
 			is_locked: 1,

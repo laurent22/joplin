@@ -139,10 +139,19 @@ describe('index/stripe', () => {
 	test('should not process the same event twice', async () => {
 		const ctx = await koaAppContext();
 		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com', eventId: 'evt_1' });
-		const v = await models().keyValue().value('stripeEventDone::evt_1');
-		expect(v).toBe(1);
+		const loadUser = () => models().user().loadByEmail('toto@example.com');
+
+		let user = await loadUser();
+		expect(user).toMatchObject({
+			account_type: AccountType.Pro,
+		});
+		await models().user().delete(user.id);
+
 		// This event should simply be skipped
 		await expectNotThrow(async () => createUserViaSubscription(ctx, { userEmail: 'toto@example.com', eventId: 'evt_1' }));
+
+		user = await loadUser();
+		expect(user).toBeUndefined();
 	});
 
 	test('should check if it is a beta user', async () => {

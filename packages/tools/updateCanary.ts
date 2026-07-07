@@ -24,17 +24,6 @@ function ordinal(day: number): string {
 	}
 }
 
-function addMonths(date: Date, months: number): Date {
-	const result = new Date(date);
-	const targetMonth = result.getUTCMonth() + months;
-	const day = result.getUTCDate();
-	result.setUTCDate(1);
-	result.setUTCMonth(targetMonth);
-	const lastDayOfTargetMonth = new Date(Date.UTC(result.getUTCFullYear(), result.getUTCMonth() + 1, 0)).getUTCDate();
-	result.setUTCDate(Math.min(day, lastDayOfTargetMonth));
-	return result;
-}
-
 function addDays(date: Date, days: number): Date {
 	const result = new Date(date);
 	result.setUTCDate(result.getUTCDate() + days);
@@ -42,24 +31,22 @@ function addDays(date: Date, days: number): Date {
 }
 
 // The canary is on a fixed bi-monthly schedule anchored to the 19th of
-// even-parity months (Feb, Apr, Jun, Aug, Oct, Dec). The statement date is the
-// nearest scheduled slot to today so that being a few days late doesn't drift
-// the schedule — a warrant canary's signal depends on predictable timing.
+// even-parity months (Feb, Apr, Jun, Aug, Oct, Dec). "Valid until" is the
+// next scheduled slot strictly after today, so observers know when to start
+// worrying regardless of whether the signer was a few days late.
 const scheduleDay = 19;
 const scheduleMonthParity = 1; // 0=Jan, 1=Feb, ... — Feb/Apr/Jun/Aug/Oct/Dec.
 
-function nearestScheduledDate(today: Date): Date {
+function nextScheduledDate(today: Date): Date {
 	const year = today.getUTCFullYear();
-	const candidates: Date[] = [];
-	for (let y = year - 1; y <= year + 1; y++) {
+	for (let y = year; y <= year + 1; y++) {
 		for (let m = 0; m < 12; m++) {
-			if (m % 2 === scheduleMonthParity) {
-				candidates.push(new Date(Date.UTC(y, m, scheduleDay)));
-			}
+			if (m % 2 !== scheduleMonthParity) continue;
+			const candidate = new Date(Date.UTC(y, m, scheduleDay));
+			if (candidate.getTime() > today.getTime()) return candidate;
 		}
 	}
-	candidates.sort((a, b) => Math.abs(a.getTime() - today.getTime()) - Math.abs(b.getTime() - today.getTime()));
-	return candidates[0];
+	throw new Error('Could not compute next scheduled canary date');
 }
 
 function prompt(rl: ReadlineInterface, question: string): Promise<string> {
@@ -77,9 +64,9 @@ async function promptNonEmpty(rl: ReadlineInterface, question: string): Promise<
 }
 
 function buildCanaryContent(statementDate: Date, headline1: string, headline2: string): string {
-	const validUntil = addMonths(statementDate, 2);
+	const validUntil = nextScheduledDate(statementDate);
 	const expiresAt = addDays(validUntil, 15);
-	const dayOfMonth = ordinal(statementDate.getUTCDate());
+	const dayOfMonth = ordinal(scheduleDay);
 	return `Joplin Warrant Canary
 
 Statement date: ${formatDate(statementDate)}
@@ -127,7 +114,7 @@ async function main() {
 		const headline1 = await promptNonEmpty(rl, 'Headline 1: ');
 		const headline2 = await promptNonEmpty(rl, 'Headline 2: ');
 
-		const statementDate = nearestScheduledDate(new Date());
+		const statementDate = new Date();
 		const content = buildCanaryContent(statementDate, headline1, headline2);
 
 		const tmpFile = `${canaryFile}.tmp`;

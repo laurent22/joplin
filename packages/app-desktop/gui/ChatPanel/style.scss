@@ -1,0 +1,202 @@
+.chat-panel {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	background-color: var(--joplin-background-color);
+	color: var(--joplin-color);
+	border-left: 1px solid var(--joplin-divider-color);
+	font-size: var(--joplin-font-size);
+}
+
+.chat-panel > .header {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 6px 10px;
+	border-bottom: 1px solid var(--joplin-divider-color);
+	font-weight: 600;
+}
+
+.chat-panel > .header > .title {
+	flex: 1;
+}
+
+.chat-panel > .header > .reset {
+	background: none;
+	border: none;
+	color: var(--joplin-color-faded);
+	cursor: pointer;
+	font-size: 0.85em;
+	padding: 2px 6px;
+}
+
+.chat-panel > .header > .reset:hover {
+	color: var(--joplin-color);
+}
+
+.chat-panel > .messages {
+	flex: 1;
+	overflow-y: auto;
+	padding: 8px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.chat-panel > .messages > .empty {
+	color: var(--joplin-color-faded);
+	font-style: italic;
+	text-align: center;
+	margin-top: 20px;
+	padding: 0 20px;
+	line-height: 1.5;
+}
+
+.chat-panel > .messages > .turn {
+	padding: 8px 10px;
+	border-radius: 6px;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	line-height: 1.4;
+}
+
+// User turn uses the sidebar colour scheme (dark blue bg, white text).
+.chat-panel > .messages > .turn.-user {
+	background-color: var(--joplin-background-color2);
+	color: var(--joplin-color2);
+	align-self: flex-end;
+	max-width: 90%;
+}
+
+// Assistant turn uses the secondary panel scheme (light gray in light theme,
+// near-black in dark theme), with regular text colour so contrast is correct
+// in both themes. align-self stretch so a short reply still fills the column
+// width instead of leaving empty space on the right.
+.chat-panel > .messages > .turn.-assistant {
+	background-color: var(--joplin-background-color3);
+	color: var(--joplin-color);
+	align-self: stretch;
+}
+
+.chat-panel > .messages > .turn > .meta {
+	font-size: 0.8em;
+	color: var(--joplin-color-faded);
+	margin-top: 4px;
+}
+
+.chat-panel > .messages > .turn > .meta > .warning {
+	color: var(--joplin-color-warn);
+}
+
+.chat-panel > .messages > .separator {
+	text-align: center;
+	color: var(--joplin-color-faded);
+	font-size: 0.8em;
+	margin: 6px 0;
+}
+
+.chat-panel > .messages > .error {
+	color: var(--joplin-color-warn);
+	background-color: var(--joplin-background-color3);
+	border-left: 3px solid var(--joplin-color-warn);
+	padding: 6px 10px;
+	border-radius: 0 4px 4px 0;
+}
+
+.chat-panel > .composer {
+	border-top: 1px solid var(--joplin-divider-color);
+	padding: 8px;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.chat-panel > .composer > .disclosure {
+	font-size: 0.8em;
+	color: var(--joplin-color-faded);
+	padding: 4px 0;
+}
+
+// Compose box: an outer wrapper that visually behaves as the input, with the
+// real <textarea> filling it and the send button floating in the
+// bottom-right corner.
+.chat-panel > .composer > .input-wrapper {
+	position: relative;
+	display: flex;
+	border: 1px solid var(--joplin-divider-color);
+	border-radius: 4px;
+	background-color: var(--joplin-background-color);
+
+	&:focus-within {
+		border-color: var(--joplin-background-color5);
+	}
+}
+
+.chat-panel > .composer > .input-wrapper > .input {
+	flex: 1;
+	resize: none;
+	min-height: 70px;
+	max-height: 200px;
+	padding: 8px 44px 8px 10px;
+	border: none;
+	border-radius: 4px;
+	background-color: transparent;
+	color: var(--joplin-color);
+	font-family: inherit;
+	font-size: inherit;
+	outline: none;
+}
+
+.chat-panel > .composer > .input-wrapper > .send {
+	position: absolute;
+	right: 6px;
+	bottom: 6px;
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--joplin-background-color5);
+	color: var(--joplin-color5);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 0.9em;
+	padding: 0;
+}
+
+.chat-panel > .composer > .input-wrapper > .send:hover:not(:disabled) {
+	background-color: var(--joplin-background-color-hover5);
+}
+
+.chat-panel > .composer > .input-wrapper > .send:active:not(:disabled) {
+	background-color: var(--joplin-background-color-active5);
+}
+
+.chat-panel > .composer > .input-wrapper > .send:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+// Spinner animation while the request is in flight.
+.chat-panel > .composer > .input-wrapper > .send > .fa-spinner {
+	animation: chat-panel-spin 0.9s linear infinite;
+}
+
+@keyframes chat-panel-spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+.chat-panel > .disabled-message {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	text-align: center;
+	color: var(--joplin-color-faded);
+	line-height: 1.5;
+}

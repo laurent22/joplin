@@ -5,6 +5,7 @@ import { ErrorForbidden } from '../utils/errors';
 import { Hour } from '../utils/time';
 import { isValidMFACode } from '../utils/crypto';
 import { getIsMFAEnabled } from './utils/user';
+import { Services } from '../services/types';
 
 export const defaultSessionTtl = 12 * Hour;
 
@@ -36,16 +37,16 @@ export default class SessionModel extends BaseModel<Session> {
 		}, { isNew: true });
 	}
 
-	public async authenticate(emailOrApplicationId: string, password: string, mfaCode?: string, recoveryCode?: string) {
+	public async authenticate(emailOrApplicationId: string, password: string, services: Services, mfaCode?: string, recoveryCode?: string) {
 		if (this.models().application().isApplicationId(emailOrApplicationId)) {
 			return this.authenticateApplication(emailOrApplicationId, password);
 		} else {
-			return this.authenticateUser(emailOrApplicationId, password, mfaCode, recoveryCode);
+			return this.authenticateUser(emailOrApplicationId, password, services, mfaCode, recoveryCode);
 		}
 	}
 
-	private async authenticateUser(email: string, password: string, mfaCode?: string, recoveryCode?: string) {
-		const user = await this.models().user().login(email, password);
+	private async authenticateUser(email: string, password: string, services: Services, mfaCode?: string, recoveryCode?: string) {
+		const user = await this.models().user().login(email, password, services);
 		if (!user) throw new ErrorForbidden('Invalid email or password', { details: { email } });
 
 		if (getIsMFAEnabled(user)) {

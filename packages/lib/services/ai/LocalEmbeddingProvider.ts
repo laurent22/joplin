@@ -19,6 +19,14 @@ const logger = Logger.create('LocalEmbeddingProvider');
 // Capped to keep background indexing from pegging every core.
 const INTRA_OP_NUM_THREADS = 2;
 
+// Cap on how many texts go through a single ONNX run. The peak working set of
+// a transformer pass scales with batch_size × seq_len × hidden_dim × layers.
+// On a fat note (hundreds of chunks), feeding everything at once produces a
+// tensor large enough to crash the renderer on low-free-memory machines
+// (#15761). 8 keeps the per-call peak below ~100MB while still amortising the
+// session.run() overhead.
+const MAX_EMBED_BATCH = 8;
+
 // Fixed at the model's known output size — the sqlite-vec table dimension
 // is set on first create() and must match.
 const E5_SMALL_DIMENSION = 384;
@@ -101,6 +109,18 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 		// "query: " for searches. Mixing them up measurably hurts retrieval.
 		const prefixed = texts.map(t => `${prefix}${t}`);
 
+		// Split into mini-batches so a note with hundreds of chunks doesn't
+		// produce one huge tensor — see MAX_EMBED_BATCH.
+		const results: number[][] = [];
+		for (let i = 0; i < prefixed.length; i += MAX_EMBED_BATCH) {
+			const slice = prefixed.slice(i, i + MAX_EMBED_BATCH);
+			const vectors = await this.runEmbedBatch(slice);
+			for (const v of vectors) results.push(v);
+		}
+		return results;
+	}
+
+	private async runEmbedBatch(prefixed: string[]): Promise<number[][]> {
 		const tokenized = this.tokenizer_!(prefixed, {
 			padding: true,
 			truncation: true,
@@ -247,6 +267,9 @@ export const meanPoolAndNormalise = (
 		let norm = 0;
 		for (let h = 0; h < hidden; h++) norm += vec[h] * vec[h];
 		norm = Math.sqrt(norm);
+		if (!Number.isFinite(norm)) {
+			throw new Error(`meanPoolAndNormalise: non-finite norm at batch index ${b}`);
+		}
 		if (norm > 0) {
 			for (let h = 0; h < hidden; h++) vec[h] /= norm;
 		}

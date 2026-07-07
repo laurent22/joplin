@@ -6,7 +6,7 @@ import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { Item, Share } from '../../services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { FileViewerResponse, renderItem as renderJoplinItem } from '../../utils/joplinUtils';
-import { friendlySafeFilename } from '@joplin/lib/path-utils';
+import safeUserContentResponse from '../../utils/safeUserContentResponse';
 
 async function renderItem(context: AppContext, item: Item, share: Share): Promise<FileViewerResponse> {
 	if (item.jop_type === ModelType.Note) {
@@ -19,11 +19,6 @@ async function renderItem(context: AppContext, item: Item, share: Share): Promis
 		size: item.content_size,
 		filename: '',
 	};
-}
-
-function createContentDispositionHeader(filename: string) {
-	const encoded = encodeURIComponent(friendlySafeFilename(filename, null, true));
-	return `attachment; filename*=UTF-8''${encoded}; filename="${encoded}"`;
 }
 
 const router: Router = new Router(RouteType.Web);
@@ -55,9 +50,21 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 	ctx.joplin.models.share().checkShareUrl(share, ctx.URL.origin);
 
 	ctx.response.body = result.body;
-	ctx.response.set('Content-Type', result.mime);
 	ctx.response.set('Content-Length', result.size.toString());
-	if (result.filename) ctx.response.set('Content-disposition', createContentDispositionHeader(result.filename));
+
+	// Note HTML is server-rendered, so it can be served as-is. Resource
+	// attachments use user-controlled MIME/filename and must be sanitized.
+	const isRenderedNoteHtml = item.jop_type === ModelType.Note && !ctx.query.resource_id;
+	if (isRenderedNoteHtml) {
+		ctx.response.set('Content-Type', result.mime);
+	} else {
+		const safe = safeUserContentResponse(result.mime, result.filename);
+		ctx.response.set('Content-Type', safe.mime);
+		ctx.response.set('Content-Disposition', safe.contentDisposition);
+		ctx.response.set('Content-Security-Policy', safe.contentSecurityPolicy);
+		ctx.response.set('X-Content-Type-Options', safe.xContentTypeOptions);
+	}
+
 	return new Response(ResponseType.KoaResponse, ctx.response);
 }, RouteType.UserContent);
 

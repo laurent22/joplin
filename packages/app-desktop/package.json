@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "3.7.3",
+  "version": "3.7.6",
   "description": "Joplin for Desktop",
   "main": "main.bundle.js",
   "private": true,
@@ -45,7 +45,10 @@
     ],
     "afterAllArtifactBuild": "./afterAllArtifactBuild.js",
     "asar": true,
-    "asarUnpack": "./node_modules/node-notifier/vendor/**",
+    "asarUnpack": [
+      "./node_modules/node-notifier/vendor/**",
+      "./node_modules/sqlite-vec-*/**"
+    ],
     "win": {
       "publisherName": [
         "Joplin"
@@ -211,7 +214,7 @@
     "styled-components": "5.3.11",
     "styled-system": "5.1.5",
     "taboverride": "4.0.3",
-    "tesseract.js": "6.0.1",
+    "tesseract.js": "7.0.0",
     "tinymce": "6.8.5",
     "ts-jest": "29.4.6",
     "ts-node": "10.9.2",

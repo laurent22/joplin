@@ -5,7 +5,8 @@ import Note from '../../models/Note';
 import ItemChange from '../../models/ItemChange';
 import NoteEmbedding from '../../models/NoteEmbedding';
 import AiService from './AiService';
-import EmbeddingIndexer from './EmbeddingIndexer';
+import EmbeddingIndexer, { coarseStateFrom } from './EmbeddingIndexer';
+import { IndexStatus } from './types';
 import TestEmbeddingProvider from './testing/TestEmbeddingProvider';
 
 // Note.save() and Note.delete() record ItemChange rows fire-and-forget
@@ -120,6 +121,23 @@ describe('EmbeddingIndexer', () => {
 
 		const cursorAfterFirst = Setting.value('ai.embedding.lastProcessedChangeId') as number;
 		await Note.delete(note.id);
+		await waitForChangesSince(cursorAfterFirst, 1);
+
+		await EmbeddingIndexer.instance().maintenance();
+		expect(await NoteEmbedding.countByNoteId(note.id)).toBe(0);
+	});
+
+	it('removes embeddings for a locked note on the next maintenance', async () => {
+		if (skipIfNoVec()) return;
+		const folder = await Folder.save({ title: 'f' });
+		const note = await Note.save({ title: 't', body: 'some body text', parent_id: folder.id });
+		await waitForChangesSince(0, 1);
+
+		await EmbeddingIndexer.instance().maintenance();
+		expect(await NoteEmbedding.countByNoteId(note.id)).toBeGreaterThan(0);
+
+		const cursorAfterFirst = Setting.value('ai.embedding.lastProcessedChangeId') as number;
+		await Note.save({ id: note.id, is_locked: 1 });
 		await waitForChangesSince(cursorAfterFirst, 1);
 
 		await EmbeddingIndexer.instance().maintenance();
@@ -287,15 +305,20 @@ describe('EmbeddingIndexer', () => {
 		const folder = await Folder.save({ title: 'f' });
 		await Note.save({ title: 'A', body: 'apples', parent_id: folder.id });
 		await Note.save({ title: 'B', body: 'bananas', parent_id: folder.id });
-		await waitForChangesSince(0, 2);
+		const locked = await Note.save({ title: 'C', body: 'cherries', parent_id: folder.id, is_locked: 1 });
+		await waitForChangesSince(0, 3);
 		const lastChange = await ItemChange.lastChangeId();
 		Setting.setValue('ai.embedding.lastProcessedChangeId', lastChange);
 
 		await EmbeddingIndexer.instance().maintenance();
+		await EmbeddingIndexer.instance().maintenance();
 
-		// Both notes should be indexed via the backfill path even though no
+		// The unlocked notes should be indexed via the backfill path even though no
 		// new item_changes were available.
 		expect(await NoteEmbedding.distinctNoteIdCount()).toBe(2);
+		expect(await NoteEmbedding.countByNoteId(locked.id)).toBe(0);
+		expect(Setting.value('ai.embedding.initialScanDone')).toBe(true);
+		expect((await EmbeddingIndexer.instance().getStatus()).totalNotes).toBe(2);
 	});
 
 	it('skips a note that fails during the initial scan instead of looping on it', async () => {
@@ -328,6 +351,91 @@ describe('EmbeddingIndexer', () => {
 		expect(await NoteEmbedding.countByNoteId(good.id)).toBeGreaterThan(0);
 		expect(await NoteEmbedding.countByNoteId(bad.id)).toBe(0);
 		expect(Setting.value('ai.embedding.initialScanDone')).toBe(true);
+	});
+
+	it('does not start in background when vector search is unavailable', async () => {
+		// On platforms where the sqlite-vec extension fails to load (see
+		// #15761) the indexer would otherwise pull every note into the
+		// expensive embedding provider and then throw at saveChunks — burning
+		// CPU/memory on every tick for no result. Confirm we bail at startup
+		// and surface the state to the UI instead.
+		Setting.setValue('ai.enabled', true);
+		const spy = jest.spyOn(NoteEmbedding, 'vectorSearchAvailable').mockReturnValue(false);
+		try {
+			await EmbeddingIndexer.instance().runInBackground();
+			const status = await EmbeddingIndexer.instance().getStatus();
+			expect(status.indexerState).toBe('vector-search-unavailable');
+		} finally {
+			spy.mockRestore();
+			Setting.setValue('ai.enabled', false);
+			await EmbeddingIndexer.instance().stopRunInBackground();
+		}
+	});
+
+	test.each([
+		{ name: 'unavailable wins over disabled',
+			status: { indexerState: 'vector-search-unavailable', modelDownloadStatus: 'unavailable', notesIndexed: 0, totalNotes: 0 },
+			expected: 'unavailable' },
+		{ name: 'ai-disabled → disabled',
+			status: { indexerState: 'ai-disabled', modelDownloadStatus: 'downloaded', notesIndexed: 0, totalNotes: 0 },
+			expected: 'disabled' },
+		{ name: 'index-disabled → disabled',
+			status: { indexerState: 'index-disabled', modelDownloadStatus: 'downloaded', notesIndexed: 0, totalNotes: 0 },
+			expected: 'disabled' },
+		{ name: 'no provider but enabled → preparing',
+			status: { indexerState: 'idle', modelDownloadStatus: 'unavailable', notesIndexed: 0, totalNotes: 0 },
+			expected: 'preparing' },
+		{ name: 'model downloading → preparing',
+			status: { indexerState: 'idle', modelDownloadStatus: 'downloading', notesIndexed: 0, totalNotes: 0 },
+			expected: 'preparing' },
+		{ name: 'model not-started → preparing',
+			status: { indexerState: 'idle', modelDownloadStatus: 'not-started', notesIndexed: 0, totalNotes: 0 },
+			expected: 'preparing' },
+		{ name: 'running with model ready → indexing',
+			status: { indexerState: 'running', modelDownloadStatus: 'downloaded', notesIndexed: 1, totalNotes: 5 },
+			expected: 'indexing' },
+		{ name: 'idle with model ready → ready',
+			status: { indexerState: 'idle', modelDownloadStatus: 'downloaded', notesIndexed: 3, totalNotes: 3 },
+			expected: 'ready' },
+	] as { name: string; status: IndexStatus; expected: string }[])('coarseStateFrom: $name', ({ status, expected }) => {
+		expect(coarseStateFrom(status)).toBe(expected);
+	});
+
+	it('getPluginStatus: ready is false until at least one note is indexed', async () => {
+		if (skipIfNoVec()) return;
+		Setting.setValue('ai.enabled', true);
+		// note_embeddings isn't reset by test-utils — start clean.
+		await NoteEmbedding.clearAll();
+		try {
+			const before = await EmbeddingIndexer.instance().getPluginStatus();
+			expect(before.state).toBe('ready');
+			expect(before.ready).toBe(false);
+			expect(before.modelId).toBe(provider.modelId);
+
+			const folder = await Folder.save({ title: 'f' });
+			await Note.save({ title: 't', body: 'something', parent_id: folder.id });
+			await waitForChangesSince(0, 1);
+			await EmbeddingIndexer.instance().maintenance();
+
+			const after = await EmbeddingIndexer.instance().getPluginStatus();
+			expect(after.state).toBe('ready');
+			expect(after.ready).toBe(true);
+			expect(after.notesIndexed).toBe(1);
+		} finally {
+			Setting.setValue('ai.enabled', false);
+		}
+	});
+
+	it('getPluginStatus: modelId is null when no provider is active', async () => {
+		const original = AiService.instance().getActiveEmbeddingProvider();
+		AiService.instance().setEmbeddingProvider(null);
+		try {
+			const status = await EmbeddingIndexer.instance().getPluginStatus();
+			expect(status.modelId).toBeNull();
+			expect(status.ready).toBe(false);
+		} finally {
+			AiService.instance().setEmbeddingProvider(original);
+		}
 	});
 
 	it('getStatus counts indexed vs total notes and excludes trashed ones', async () => {

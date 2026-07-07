@@ -42,7 +42,7 @@
     "react-dom": "19.1.5",
     "sharp": "0.34.5",
     "sqlite-vec": "0.1.9",
-    "tesseract.js": "6.0.1",
+    "tesseract.js": "7.0.0",
     "typescript": "5.9.3"
   },
   "dependencies": {
@@ -58,7 +58,7 @@
     "@joplin/turndown": "^4.0.85",
     "@joplin/turndown-plugin-gfm": "^1.0.67",
     "@joplin/utils": "^3.7",
-    "adm-zip": "0.5.16",
+    "adm-zip": "0.5.17",
     "async-mutex": "0.5.0",
     "base-64": "1.0.0",
     "base64-stream": "1.0.0",
@@ -79,6 +79,7 @@
     "image-data-uri": "2.0.1",
     "immer": "9.0.21",
     "js-yaml": "4.1.1",
+    "json5": "2.2.3",
     "markdown-it": "13.0.2",
     "md5": "2.3.0",
     "md5-file": "5.0.0",

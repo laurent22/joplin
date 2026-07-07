@@ -823,13 +823,16 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 						version: 3,
 						colors: {
 							...paperTheme.colors,
+
+							primary: theme.backgroundColor5,
+							onPrimary: theme.color5,
+							secondary: theme.backgroundColor4Dimmed,
+							onSecondary: theme.color4,
+
 							onPrimaryContainer: theme.color5,
 							primaryContainer: theme.backgroundColor5,
 
 							outline: theme.codeBorderColor,
-
-							primary: theme.color4,
-							onPrimary: theme.backgroundColor4,
 
 							background: theme.backgroundColor,
 

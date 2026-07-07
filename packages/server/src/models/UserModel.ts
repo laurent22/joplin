@@ -38,7 +38,9 @@ const thirtyTwo = require('thirty-two');
 import config, { isUsingExternalAuth } from '../config';
 import { randomInt } from 'node:crypto';
 import { samlOwnedUserProperties } from '../utils/saml';
-import { PlanName } from '@joplin/lib/utils/joplinCloud';
+import { AccountType, PlanName } from '@joplin/lib/utils/joplinCloud';
+import { Services } from '../services/types';
+export { AccountType };
 
 const logger = Logger.create('UserModel');
 
@@ -51,11 +53,8 @@ interface UserEmailDetails {
 
 export type GetUsersApiResponse = User;
 
-export enum AccountType {
-	Default = 0,
-	Basic = 1,
-	Pro = 2,
-	Pro100Gb = 4,
+interface HasMfaEnabledOptions {
+	requireUserExists: boolean;
 }
 
 export interface Account {
@@ -100,6 +99,20 @@ const accountMetadata: Record<AccountType, Account> = {
 		max_item_size: 200 * MB,
 		max_total_item_size: 100 * GB,
 	},
+	[AccountType.Team]: {
+		account_type: AccountType.Team,
+		can_share_folder: 1,
+		can_receive_folder: 1,
+		max_item_size: 200 * MB,
+		max_total_item_size: 50 * GB,
+	},
+	[AccountType.SelfHosted]: {
+		account_type: AccountType.SelfHosted,
+		can_share_folder: 0,
+		can_receive_folder: 0,
+		max_item_size: 200 * MB,
+		max_total_item_size: 1 * MB,
+	},
 };
 
 interface AccountTypeSelectOptions {
@@ -139,6 +152,8 @@ export function accountTypeToString(accountType: AccountType): string {
 	if (accountType === AccountType.Basic) return 'Basic';
 	if (accountType === AccountType.Pro) return 'Pro';
 	if (accountType === AccountType.Pro100Gb) return 'Pro 100 GB';
+	if (accountType === AccountType.Team) return 'Team';
+	if (accountType === AccountType.SelfHosted) return 'Self hosted';
 	const exhaustivenessCheck: never = accountType;
 	throw new Error(`Invalid type: ${exhaustivenessCheck}`);
 }
@@ -147,6 +162,8 @@ export const accountTypeToPlan = (accountType: AccountType): PlanName => {
 	if (accountType === AccountType.Basic) return PlanName.Basic;
 	if (accountType === AccountType.Pro) return PlanName.Pro;
 	if (accountType === AccountType.Pro100Gb) return PlanName.Pro100Gb;
+	if (accountType === AccountType.Team) return PlanName.Teams;
+	if (accountType === AccountType.SelfHosted) return PlanName.JoplinServerBusiness;
 	if (accountType === AccountType.Default) throw new Error('No plan exists for account type "Default"');
 	const exhaustivenessCheck: never = accountType;
 	throw new Error(`Invalid type: ${exhaustivenessCheck}`);
@@ -198,7 +215,7 @@ export default class UserModel extends BaseModel<User> {
 		return this.db<User>(this.tableName).where(user).first();
 	}
 
-	public async login(email: string, password: string): Promise<User> {
+	public async login(email: string, password: string, _services: Services): Promise<User> {
 		if (!config().LOCAL_AUTH_ENABLED) {
 			return null;
 		}
@@ -223,7 +240,7 @@ export default class UserModel extends BaseModel<User> {
 		return user;
 	}
 
-	public async ssoLogin(email: string, displayName: string) {
+	public async ssoLogin(email: string, displayName: string, _services: Services) {
 		if (!email || !displayName) {
 			return null;
 		}
@@ -875,9 +892,12 @@ export default class UserModel extends BaseModel<User> {
 		}, 'UserModel::saveMulti');
 	}
 
-	public async hasMFAEnabled(email: string) {
+	public async hasMFAEnabled(email: string, { requireUserExists }: HasMfaEnabledOptions) {
 		const user = await this.loadByEmail(email, { fields: ['totp_secret'] });
-		if (!user) throw new ErrorForbidden('Invalid email or password', { details: { email } });
+		if (!user) {
+			if (requireUserExists) throw new ErrorForbidden('Invalid email or password', { details: { email } });
+			return false;
+		}
 		return getIsMFAEnabled(user);
 	}
 

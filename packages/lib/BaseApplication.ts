@@ -9,6 +9,7 @@ import KeychainServiceDriverElectron from './services/keychain/KeychainServiceDr
 import { setLocale } from './locale';
 import KvStore from './services/KvStore';
 import AiService from './services/ai/AiService';
+import { embeddingAvailability } from './services/ai/availability';
 import EmbeddingIndexer from './services/ai/EmbeddingIndexer';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
 import SyncTargetJoplinServerSAML from './SyncTargetJoplinServerSAML';
@@ -72,6 +73,7 @@ import getAppName from './getAppName';
 import PerformanceLogger from './PerformanceLogger';
 import Synchronizer from './Synchronizer';
 import NoteLockKey from './services/noteLock/NoteLockKey';
+import NoteLockSession from './services/noteLock/NoteLockSession';
 import NoteLockService from './services/noteLock/NoteLockService';
 
 const appLogger: LoggerWrapper = Logger.create('App');
@@ -138,8 +140,9 @@ export default class BaseApplication {
 		ResourceService.isRunningInBackground_ = false;
 		// ResourceService.isRunningInBackground_ = false;
 		ResourceFetcher.instance_ = null;
-		NoteLockKey.destroyInstance();
 		NoteLockService.destroyInstance();
+		NoteLockSession.destroyInstance();
+		NoteLockKey.destroyInstance();
 		EncryptionService.instance_ = null;
 		DecryptionWorker.instance_ = null;
 
@@ -357,16 +360,11 @@ export default class BaseApplication {
 
 	// Starts or stops the embedding indexer to match current state. Called
 	// from the settings-side-effects path (on ai.enabled / ai.embedding.enabled
-	// toggles) and from app startup. The indexer runs when AI is enabled,
-	// embedding is enabled (the user-facing kill switch — defaults on), and
-	// an embedding provider has been installed by the host app (desktop ships
-	// the ONNX-backed local provider in a follow-up; tests inject a stub via
-	// AiService.setEmbeddingProvider()).
+	// toggles) and from app startup. Gates on the shared embeddingAvailability
+	// helper so the same preconditions used by the panel/settings UI control
+	// whether the background indexer runs.
 	protected async applyEmbeddingIndexerState() {
-		const shouldRun = Setting.value('ai.enabled')
-			&& Setting.value('ai.embedding.enabled')
-			&& !!AiService.instance().getActiveEmbeddingProvider();
-		if (shouldRun) {
+		if (embeddingAvailability().available) {
 			await EmbeddingIndexer.instance().runInBackground();
 		} else {
 			await EmbeddingIndexer.instance().stopRunInBackground();

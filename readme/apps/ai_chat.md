@@ -1,8 +1,8 @@
 # AI chat
 
-Joplin can connect to a chat model — either a cloud service or one running on your own machine — so that plugins can use it to summarise, rewrite, or answer questions about your notes. The model itself is configured in **one place** in the settings. Plugins then use that model without needing their own API keys.
+Joplin can connect to a chat model — either a cloud service or one running on your own machine — so that the [AI chat panel](https://github.com/laurent22/joplin/blob/dev/readme/apps/ai_chat_panel.md) and plugins can use it to summarise, rewrite, or answer questions about your notes. The model itself is configured in **one place** in the settings. Plugins then use that model without needing their own API keys.
 
-There is no built-in chat sidebar in Joplin; this is the foundation that plugins build on.
+This page covers the underlying configuration. For the chat panel built into the editor, see [AI chat panel](https://github.com/laurent22/joplin/blob/dev/readme/apps/ai_chat_panel.md).
 
 ## Turning it on
 

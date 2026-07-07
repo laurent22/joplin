@@ -4,7 +4,7 @@ Hash: SHA512
 Joplin Warrant Canary
 
 Statement date: 19 June 2026
-Valid until: 19 August 2026
+Valid until: 18 August 2026
 
 This warrant canary is updated every 60 days.
 If this document has not been updated within 75 days of the

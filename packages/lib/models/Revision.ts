@@ -365,8 +365,8 @@ export default class Revision extends BaseItem {
 					const bodyDiff = this.createTextPatch('', merged.body);
 					const metadataDiff = this.createObjectPatch({}, merged.metadata);
 					queries.push({
-						sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ?, updated_time = ? WHERE id = ?',
-						params: [titleDiff, bodyDiff, metadataDiff, time.unixMs(), keptRev.id],
+						sql: 'UPDATE revisions SET title_diff = ?, body_diff = ?, metadata_diff = ?, updated_time = ?, parent_id = ? WHERE id = ?',
+						params: [titleDiff, bodyDiff, metadataDiff, time.unixMs(), '', keptRev.id],
 					});
 				}
 			}

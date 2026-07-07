@@ -679,7 +679,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 				return '';
 			},
 			options: () => ({
-				'joplin-cloud': _('Joplin Cloud AI'),
+				'joplin-cloud': _('Joplin Cloud AI (beta)'),
 				'openai-compatible': _('OpenAI-compatible'),
 				'anthropic': _('Anthropic'),
 			}),
@@ -777,6 +777,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 			show: (settings) => !!settings['ai.enabled'],
 			label: () => _('Test AI configuration'),
+		},
+
+		// First-send disclosure for non-cloud providers. The chat panel shows
+		// an inline banner the first time the user sends a message; clicking
+		// "Don't show again" flips this so the banner stays away.
+		'ai.chat.disclosureAcknowledged': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
 		},
 
 		// User toggle for the background embedding indexer. On by default —
@@ -2240,6 +2251,20 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			type: SettingItemType.Bool,
 			public: false,
 			appTypes: [AppType.Mobile],
+		},
+
+		'featureFlag.noteLock': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			storage: SettingStorage.File,
+		},
+
+		'noteLock.lockOnNoteSwitch': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			storage: SettingStorage.File,
 		},
 
 		'featureFlag.autoUpdaterServiceEnabled': {

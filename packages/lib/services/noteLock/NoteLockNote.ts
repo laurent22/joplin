@@ -1,5 +1,4 @@
 import { NoteEntity } from '../database/types';
-import isItemId from '../../models/utils/isItemId';
 import NoteLockService from './NoteLockService';
 
 export default class NoteLockNote {
@@ -27,7 +26,7 @@ export default class NoteLockNote {
 		return note;
 	}
 
-	public static async prepareForSave(note: NoteEntity, linkedItemIds: (body: string)=> string[], isNew: boolean) {
+	public static async prepareForSave(note: NoteEntity, linkedItemIds: (body: string)=> string[], serializeResourceIds: (resourceIds: string[])=> string, isNew: boolean) {
 		if (!note) throw new Error('Gated note lock save is missing note');
 		// Gated saves for existing notes should be based on a loaded note, so missing lock state is a logic error.
 		if (note.is_locked === undefined && !isNew) throw new Error('Gated note lock save is missing lock state');
@@ -36,7 +35,7 @@ export default class NoteLockNote {
 
 		const plainTextBody = note.body ?? '';
 		if (isLocked) {
-			note.extracted_resource_ids = linkedItemIds(plainTextBody).filter(id => !!isItemId(id)).join(',');
+			note.extracted_resource_ids = serializeResourceIds(linkedItemIds(plainTextBody));
 			note.body = await NoteLockService.instance().encryptString(plainTextBody);
 		}
 	}

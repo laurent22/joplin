@@ -97,6 +97,41 @@ describe('LocalEmbeddingProvider', () => {
 		expect(norm(vectors[1])).toBeCloseTo(1, 5);
 	});
 
+	it('splits large inputs into mini-batches to cap peak ONNX memory', async () => {
+		// Fat notes can produce hundreds of chunks; feeding them all to ONNX in
+		// one tensor blows up the renderer on low-free-memory machines
+		// (see #15761). The provider must split into ≤ MAX_EMBED_BATCH-sized
+		// sub-batches and return the concatenated result in order.
+		const runs: number[] = [];
+		const onnx = makeFakeOnnxRuntime();
+		const realCreate = onnx.InferenceSession.create;
+		onnx.InferenceSession.create = async () => {
+			const session = await realCreate();
+			const realRun = session.run;
+			session.run = async (feeds) => {
+				runs.push(feeds.input_ids.dims[0]);
+				return realRun(feeds);
+			};
+			return session;
+		};
+
+		const provider = new LocalEmbeddingProvider({
+			overrides: {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- test fakes intentionally loose
+				onnxRuntime: onnx as any,
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- test fakes intentionally loose
+				tokenizer: makeFakeTokenizer(4) as any,
+			},
+		});
+
+		const inputs = Array.from({ length: 20 }, (_, i) => `t${i}`);
+		const vectors = await provider.embed(inputs);
+
+		expect(vectors).toHaveLength(20);
+		// 20 inputs / batch 8 → 8, 8, 4
+		expect(runs).toEqual([8, 8, 4]);
+	});
+
 	it('returns an empty array for empty input without initialising', async () => {
 		// No overrides — embed([]) must early-return before any setup runs.
 		const provider = new LocalEmbeddingProvider();
@@ -130,6 +165,12 @@ describe('LocalEmbeddingProvider', () => {
 		const mask = new BigInt64Array([BigInt(0), BigInt(0)]);
 		const out = meanPoolAndNormalise(hidden, [1, 2, 2], mask);
 		expect(out[0]).toEqual([0, 0]);
+	});
+
+	it('throws when the model produces non-finite values, instead of writing NaN to the index', () => {
+		const hidden = new Float32Array([1, NaN, 3, 4]);
+		const mask = new BigInt64Array([BigInt(1), BigInt(1)]);
+		expect(() => meanPoolAndNormalise(hidden, [1, 2, 2], mask)).toThrow(/non-finite/);
 	});
 
 	it('modelDownloadStatus reports not-started when no cached model exists', async () => {

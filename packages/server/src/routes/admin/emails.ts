@@ -6,20 +6,33 @@ import defaultView from '../../utils/defaultView';
 import { makeTablePagination, makeTableView, Row, Table, renderUserIcon } from '../../utils/views/table';
 import { PaginationOrderDir } from '../../models/utils/pagination';
 import { formatDateTime } from '../../utils/time';
-import { adminEmailsUrl, adminEmailUrl, adminUserUrl } from '../../utils/urlUtils';
+import { adminEmailsUrl, adminEmailUrl, adminUserUrl, setQueryParameters } from '../../utils/urlUtils';
 import { createCsrfTag } from '../../utils/csrf';
 import { senderInfo } from '../../models/utils/email';
 import { _ } from '@joplin/lib/locale';
 import { View } from '../../services/MustacheService';
 import { markdownBodyToHtml } from '../../services/email/utils';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import { Knex } from 'knex';
 
 const router: Router = new Router(RouteType.Web);
 
 router.get('admin/emails', async (_path: SubPath, ctx: AppContext) => {
 	const models = ctx.joplin.models;
+	const searchQuery = (ctx.query.query && ctx.query.query.toString().toLowerCase()) || '';
 	const pagination = makeTablePagination(ctx.query, 'created_time', PaginationOrderDir.DESC);
-	const page = await models.email().allPaginated(pagination);
+	const page = await models.email().allPaginated(pagination, {
+		queryCallback: (query: Knex.QueryBuilder) => {
+			if (searchQuery) {
+				void query.where(qb => {
+					void qb
+						.whereRaw('lower(recipient_name) like ?', [`%${searchQuery}%`])
+						.orWhereRaw('lower(recipient_email) like ?', [`%${searchQuery}%`]);
+				});
+			}
+			return query;
+		},
+	});
 
 	const table: Table = {
 		baseUrl: adminEmailsUrl(),
@@ -112,6 +125,11 @@ router.get('admin/emails', async (_path: SubPath, ctx: AppContext) => {
 		content: {
 			emailTable: makeTableView(table),
 			csrfTag: await createCsrfTag(ctx),
+			query: searchQuery,
+			searchUrl: setQueryParameters(adminEmailsUrl(), ctx.query),
+			queryArray: Object.entries(ctx.query).map(([name, value]) => {
+				return { name, value };
+			}).filter(e => e.name !== 'query'),
 		},
 	};
 

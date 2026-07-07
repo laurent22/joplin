@@ -7,6 +7,7 @@ import { AppContext } from '../../utils/types';
 import { ErrorNotFound } from '../../utils/errors';
 import { AclAction } from '../../models/BaseModel';
 import { uuidgen } from '../../utils/uuid';
+import checkCanCreateUser from '../utils/checkCanCreateUser';
 
 const router = new Router(RouteType.Api);
 
@@ -43,7 +44,7 @@ router.get('api/users/:id/public_key', async (path: SubPath, ctx: AppContext) =>
 });
 
 router.post('api/users', async (_path: SubPath, ctx: AppContext) => {
-	await ctx.joplin.models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Create);
+	await checkCanCreateUser(ctx.joplin.services, ctx.joplin.models, ctx.joplin.owner);
 	const user = await postedUserFromContext(ctx);
 
 	// We set a random password because it's required, but user will have to

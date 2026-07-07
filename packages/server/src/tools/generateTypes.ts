@@ -43,6 +43,7 @@ const config: Config = {
 		'main.user_flags': 'WithDates',
 		'main.user_items': 'WithDates',
 		'main.users': 'WithDates, WithUuid',
+		'main.stripe_events': 'WithDates, WithUuid',
 	},
 };
 
@@ -51,6 +52,7 @@ const propertyTypes: Record<string, string> = {
 	'backup_items.content': 'Buffer',
 	'changes.type': 'ChangeType',
 	'changes_2.type': 'ChangeType',
+	'stripe_events.status': 'StripeEventStatus',
 	'emails.sender_id': 'EmailSender',
 	'emails.sent_time': 'number',
 	'events.created_time': 'number',

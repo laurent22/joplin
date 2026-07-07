@@ -190,6 +190,7 @@ packages/app-desktop/commands/toggleExternalEditing.js
 packages/app-desktop/commands/toggleSafeMode.js
 packages/app-desktop/commands/toggleTabMovesFocus.js
 packages/app-desktop/gui/Button/Button.js
+packages/app-desktop/gui/ChatPanel/ChatPanel.js
 packages/app-desktop/gui/ClipperConfigScreen.js
 packages/app-desktop/gui/ConfigScreen/ButtonBar.js
 packages/app-desktop/gui/ConfigScreen/ConfigScreen.js
@@ -238,6 +239,7 @@ packages/app-desktop/gui/KeymapConfig/styles/index.js
 packages/app-desktop/gui/KeymapConfig/utils/getLabel.js
 packages/app-desktop/gui/KeymapConfig/utils/useCommandStatus.js
 packages/app-desktop/gui/KeymapConfig/utils/useKeymap.js
+packages/app-desktop/gui/MainLayoutPane.js
 packages/app-desktop/gui/MainScreen.js
 packages/app-desktop/gui/MasterPasswordDialog/Dialog.js
 packages/app-desktop/gui/MenuBar.js
@@ -531,6 +533,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareFolderDialog
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showSpellCheckerMenu.test.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showSpellCheckerMenu.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleAiChat.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleEditors.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleLayoutMoveMode.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleMenuBar.js
@@ -658,6 +661,7 @@ packages/app-desktop/utils/initReact.js
 packages/app-desktop/utils/initializeCommandService.js
 packages/app-desktop/utils/isSafeToOpen.test.js
 packages/app-desktop/utils/isSafeToOpen.js
+packages/app-desktop/utils/layout/layoutKeyToLabel.js
 packages/app-desktop/utils/restartInSafeModeFromMain.test.js
 packages/app-desktop/utils/restartInSafeModeFromMain.js
 packages/app-desktop/utils/sourceMapSetup.js
@@ -1564,9 +1568,14 @@ packages/lib/services/ai/SearchService.js
 packages/lib/services/ai/SqliteVec.test.js
 packages/lib/services/ai/aiSettingsTransition.test.js
 packages/lib/services/ai/aiSettingsTransition.js
+packages/lib/services/ai/applyNoteEdits.js
+packages/lib/services/ai/availability.test.js
+packages/lib/services/ai/availability.js
 packages/lib/services/ai/chunker.test.js
 packages/lib/services/ai/chunker.js
 packages/lib/services/ai/classification.js
+packages/lib/services/ai/noteChat.test.js
+packages/lib/services/ai/noteChat.js
 packages/lib/services/ai/providers/Anthropic.js
 packages/lib/services/ai/providers/ChatProviderBase.js
 packages/lib/services/ai/providers/JoplinCloud.js
@@ -1574,6 +1583,7 @@ packages/lib/services/ai/providers/OpenAiCompatible.js
 packages/lib/services/ai/testing/TestEmbeddingProvider.test.js
 packages/lib/services/ai/testing/TestEmbeddingProvider.js
 packages/lib/services/ai/types.js
+packages/lib/services/ai/utils/findFencedBlock.js
 packages/lib/services/commands/MenuUtils.js
 packages/lib/services/commands/ToolbarButtonUtils.test.js
 packages/lib/services/commands/ToolbarButtonUtils.js
@@ -1688,6 +1698,8 @@ packages/lib/services/noteLock/NoteLockKey.js
 packages/lib/services/noteLock/NoteLockNote.js
 packages/lib/services/noteLock/NoteLockService.test.js
 packages/lib/services/noteLock/NoteLockService.js
+packages/lib/services/noteLock/NoteLockSession.test.js
+packages/lib/services/noteLock/NoteLockSession.js
 packages/lib/services/noteLock/isNoteLockEnabled.js
 packages/lib/services/ocr/OcrDriverBase.js
 packages/lib/services/ocr/OcrService.test.js
@@ -2000,6 +2012,7 @@ packages/renderer/MdToHtml/rules/frontmatter.js
 packages/renderer/MdToHtml/rules/highlight_keywords.js
 packages/renderer/MdToHtml/rules/html_image.js
 packages/renderer/MdToHtml/rules/image.js
+packages/renderer/MdToHtml/rules/katex.test.js
 packages/renderer/MdToHtml/rules/katex.js
 packages/renderer/MdToHtml/rules/link_close.js
 packages/renderer/MdToHtml/rules/link_open.js
