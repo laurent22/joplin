@@ -29,8 +29,10 @@ import { Toast, ToastType } from './services/plugins/api/types';
 import { unique } from './array';
 import fastDeepEqual = require('fast-deep-equal');
 import { ALL_NOTES_FILTER_ID } from './reserved-ids';
+import ItemChange from './models/ItemChange';
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
+export const secondaryWindowPrefix = 'window';
 
 const logger = Logger.create('lib/reducer');
 
@@ -1168,7 +1170,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'NOTE_UPDATE_ONE':
 			{
 				const modNote: NoteEntity = action.note;
-				const handleWindowState = (windowDraft: Draft<WindowState>, isActiveWindow: boolean) => {
+				const handleWindowState = (windowDraft: Draft<WindowState>) => {
 					const isViewingAllNotes = (windowDraft.notesParentType === 'SmartFilter' && windowDraft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 					const isViewingConflictFolder = windowDraft.notesParentType === 'Folder' && windowDraft.selectedFolderId === Folder.conflictFolderId();
 
@@ -1228,7 +1230,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					// a new note should be selected.
 					// In some cases, however, the selection needs to be preserved (e.g. the mobile app).
 					const preserveSelection = action.preserveSelection ?? draft.allowSelectionInOtherFolders;
-					if (noteFolderHasChanged && !preserveSelection && isActiveWindow) {
+					const selectedNoteHasMoved = windowDraft.selectedNoteIds.length > 0 && !newNotes.map(o => o.id).includes(windowDraft.selectedNoteIds[0]);
+					const isSecondaryWindow = windowDraft.windowId.startsWith(secondaryWindowPrefix);
+					if (noteFolderHasChanged && !preserveSelection && !isSecondaryWindow && (action.changeSource !== ItemChange.SOURCE_SYNC || selectedNoteHasMoved)) {
 						let newIndex = movedNotePreviousIndex;
 						if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
 						if (!newNotes.length) newIndex = -1;
@@ -1253,9 +1257,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					}
 				};
 
-				handleWindowState(draft, true);
+				handleWindowState(draft);
 				for (const backgroundWindow of Object.values(draft.backgroundWindows)) {
-					handleWindowState(backgroundWindow, false);
+					handleWindowState(backgroundWindow);
 				}
 			}
 			break;
