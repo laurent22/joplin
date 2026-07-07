@@ -1291,6 +1291,7 @@ class Setting extends BaseModel {
 			'appearance',
 			'sync',
 			'encryption',
+			'noteLock',
 			'joplinCloud',
 			'ai',
 			'mcp',
@@ -1362,6 +1363,7 @@ class Setting extends BaseModel {
 		if (name === 'application') return _('Application');
 		if (name === 'revisionService') return _('Note History');
 		if (name === 'encryption') return _('Encryption');
+		if (name === 'noteLock') return _('Note lock');
 		if (name === 'server') return _('Web Clipper');
 		if (name === 'keymap') return _('Keyboard Shortcuts');
 		if (name === 'joplinCloud') return _('Joplin Cloud');
@@ -1395,6 +1397,7 @@ class Setting extends BaseModel {
 			'general': _('Language, date format'),
 			'appearance': _('Themes, notebook sort order'),
 			'sync': _('Sync, encryption, proxy'),
+			'noteLock': _('Note lock password, auto lock'),
 			'joplinCloud': _('Email To Note, login information'),
 			'editor': _('Typography, spellcheck, layout'),
 			'markdownPlugins': _('Media player, math, diagrams, table of contents'),
@@ -1440,6 +1443,7 @@ class Setting extends BaseModel {
 			'application': 'icon-application',
 			'revisionService': 'icon-note-history',
 			'encryption': 'icon-encryption',
+			'noteLock': 'fa fa-lock',
 			'server': 'far fa-hand-scissors',
 			'keymap': 'fa fa-keyboard',
 			'joplinCloud': 'fa fa-cloud',

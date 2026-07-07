@@ -305,6 +305,13 @@ export const settingsSections = createSelector(
 				isScreen: true,
 			});
 		} else {
+			if (settings['featureFlag.noteLock']) {
+				output.push({
+					name: 'noteLock',
+					metadatas: [],
+				});
+			}
+
 			output.push(...([
 				'tools', 'importOrExport', 'moreInfo',
 			].map((name): SettingMetadataSection => {

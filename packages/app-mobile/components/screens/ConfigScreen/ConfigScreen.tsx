@@ -36,6 +36,7 @@ import SectionDescription from './SectionDescription';
 import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
 import getVersionInfoText from '../../../utils/getVersionInfoText';
 import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './JoplinCloudConfig';
+import NoteLockConfig from '../NoteLockConfig';
 import shim from '@joplin/lib/shim';
 import SettingsToggle from './SettingsToggle';
 import { UpdateSettingValueCallback } from './types';
@@ -131,10 +132,6 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	private e2eeConfig_ = () => {
 		void NavService.go('EncryptionConfig');
-	};
-
-	private noteLockConfig_ = () => {
-		void NavService.go('NoteLockConfig');
 	};
 
 	private onShowSyncWizard_ = () => {
@@ -554,9 +551,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		if (section.name === 'sync') {
 			addSettingButton('sync_wizard_button', _('Open Sync Wizard...'), this.onShowSyncWizard_);
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
-			if (settings['featureFlag.noteLock']) {
-				addSettingButton('note_lock_config_button', _('Note Lock Config'), this.noteLockConfig_);
-			}
+		}
+
+		if (section.name === 'noteLock') {
+			addSettingComponent(<NoteLockConfig key='note-lock-config'/>, [_('Password setup'), _('Auto lock when switching note')]);
 		}
 
 		if (section.name === 'joplinCloud') {

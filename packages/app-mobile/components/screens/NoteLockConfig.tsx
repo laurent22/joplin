@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
-import { View, Text, TextInput, Button, ScrollView, Switch, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Switch, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import ScreenHeader from '../ScreenHeader';
 import { themeStyle } from '../global-style';
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
@@ -16,7 +15,7 @@ interface Props {
 	lockOnNoteSwitch: boolean;
 }
 
-const NoteLockConfigScreen = (props: Props) => {
+const NoteLockConfig = (props: Props) => {
 	const [password, setPassword] = useState('');
 	const [passwordRepeat, setPasswordRepeat] = useState('');
 	const [error, setError] = useState('');
@@ -26,12 +25,7 @@ const NoteLockConfigScreen = (props: Props) => {
 
 	const styles = useMemo(() => {
 		return StyleSheet.create({
-			root: {
-				flex: 1,
-				backgroundColor: theme.backgroundColor,
-			},
 			container: {
-				flex: 1,
 				padding: theme.margin,
 			},
 			titleText: {
@@ -147,22 +141,17 @@ const NoteLockConfigScreen = (props: Props) => {
 	};
 
 	return (
-		<View style={styles.root}>
-			<ScreenHeader title={_('Note Lock Config')} />
-			<ScrollView>
-				<View style={styles.container}>
-					<Text style={styles.normalText}>{_('Note lock protects notes which have note level encryption enabled. These notes are encrypted when stored, and are only decrypted for the current session by entering the note lock password')}</Text>
-					<Text style={styles.normalText}><Text style={styles.boldText}>{_('Note lock password:')}</Text> {hasKey ? _('Set') : _('Not set')}</Text>
+		<View style={styles.container}>
+			<Text style={styles.normalText}>{_('Note lock protects notes which have note level encryption enabled. These notes are encrypted when stored, and are only decrypted for the current session by entering the note lock password')}</Text>
+			<Text style={styles.normalText}><Text style={styles.boldText}>{_('Note lock password:')}</Text> {hasKey ? _('Set') : _('Not set')}</Text>
 
-					{renderPasswordSetup()}
+			{renderPasswordSetup()}
 
-					<Text style={styles.titleText} accessibilityRole='header'>{_('Session')}</Text>
-					<View style={styles.sessionRow}>
-						<Text nativeID={autoLockLabelId} style={styles.normalText}>{_('Auto lock when switching note')}</Text>
-						<Switch accessibilityLabelledBy={autoLockLabelId} value={props.lockOnNoteSwitch} onValueChange={onAutoLockChange} />
-					</View>
-				</View>
-			</ScrollView>
+			<Text style={styles.titleText} accessibilityRole='header'>{_('Session')}</Text>
+			<View style={styles.sessionRow}>
+				<Text nativeID={autoLockLabelId} style={styles.normalText}>{_('Auto lock when switching note')}</Text>
+				<Switch accessibilityLabelledBy={autoLockLabelId} value={props.lockOnNoteSwitch} onValueChange={onAutoLockChange} />
+			</View>
 		</View>
 	);
 };
@@ -173,4 +162,4 @@ export default connect((state: State) => {
 		hasNoteLockKey: !!new SyncInfo(state.settings['syncInfoCache']).noteLockKey,
 		lockOnNoteSwitch: state.settings['noteLock.lockOnNoteSwitch'],
 	};
-})(NoteLockConfigScreen);
+})(NoteLockConfig);

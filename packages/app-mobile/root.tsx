@@ -51,7 +51,6 @@ import SearchScreen from './components/screens/SearchScreen';
 import ResourceScreen from './components/screens/ResourceScreen';
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
 import EncryptionConfigScreen from './components/screens/encryption-config';
-import NoteLockConfigScreen from './components/screens/NoteLockConfigScreen';
 import DropboxLoginScreen from './components/screens/dropbox-login.js';
 import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu, { SideMenuPosition } from './components/SideMenu';
@@ -750,7 +749,6 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen },
 			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()) },
 			EncryptionConfig: { screen: EncryptionConfigScreen },
-			NoteLockConfig: { screen: NoteLockConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
 			ShareManager: { screen: ShareManager },
 			ProfileSwitcher: { screen: ProfileSwitcher },
