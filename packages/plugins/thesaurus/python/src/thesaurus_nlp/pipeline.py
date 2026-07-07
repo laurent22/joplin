@@ -2,11 +2,12 @@ from thesaurus_nlp.boundary.schemas import RankRequest, RankResponse, SynonymEnt
 from thesaurus_nlp.interfaces import AbstractPipeline, AbstractSimilarityRanker, AbstractWordNetService
 
 class Pipeline(AbstractPipeline):
-    def __init__(self, wordnet_service: AbstractWordNetService, similarity_ranker: AbstractSimilarityRanker):
+    def __init__(self, wordnet_service: AbstractWordNetService, similarity_ranker: AbstractSimilarityRanker, min_score: float = 0.0):
         self.wordnet_service = wordnet_service
         self.similarity_ranker = similarity_ranker
-        
-    def rank(self, request: RankRequest, min_score: float = 0.0) -> RankResponse:
+        self.min_score = min_score
+
+    def rank(self, request: RankRequest) -> RankResponse:
         """Run the pipeline with the given request."""
         # Step 1: Get related words from the WordNet service
         candidates = self.wordnet_service.get_related_words(request.word)
@@ -18,7 +19,7 @@ class Pipeline(AbstractPipeline):
         # Step 3: Prepare the response
         synonyms = [SynonymEntry(word=candidate.word, score=candidate.score, pos=candidate.pos) for candidate in scored_candidates]
         synonyms = synonyms[:request.top_n] if request.top_n is not None else synonyms
-        synonyms = [syn for syn in synonyms if syn.score >= min_score]
-        
+        synonyms = [syn for syn in synonyms if syn.score >= self.min_score]
+
         return RankResponse(id=request.id, results=synonyms)
 
