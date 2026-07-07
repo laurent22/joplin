@@ -6,7 +6,7 @@ class Pipeline(AbstractPipeline):
         self.wordnet_service = wordnet_service
         self.similarity_ranker = similarity_ranker
         
-    def rank(self, request: RankRequest) -> RankResponse:
+    def rank(self, request: RankRequest, min_score: float = 0.0) -> RankResponse:
         """Run the pipeline with the given request."""
         # Step 1: Get related words from the WordNet service
         candidates = self.wordnet_service.get_related_words(request.word)
@@ -17,6 +17,8 @@ class Pipeline(AbstractPipeline):
 
         # Step 3: Prepare the response
         synonyms = [SynonymEntry(word=candidate.word, score=candidate.score, pos=candidate.pos) for candidate in scored_candidates]
+        synonyms = synonyms[:request.top_n] if request.top_n is not None else synonyms
+        synonyms = [syn for syn in synonyms if syn.score >= min_score]
         
         return RankResponse(id=request.id, results=synonyms)
 
