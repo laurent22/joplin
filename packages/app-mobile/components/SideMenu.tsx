@@ -21,9 +21,6 @@ interface Props {
 
 	menu: React.ReactNode;
 	children: React.ReactNode|React.ReactNode[];
-	edgeHitWidth: number;
-	toleranceX: number;
-	toleranceY: number;
 	openMenuOffset: number;
 	menuPosition: SideMenuPosition;
 
@@ -221,17 +218,28 @@ const SideMenuComponent: React.FC<Props> = props => {
 					dx = -gestureState.dx;
 				}
 
-				const motionWithinToleranceY = Math.abs(dy) <= props.toleranceY;
-				let startWithinTolerance, motionWithinToleranceX;
+				// Horizontal swipe gestures can be made anywhere within the middle of the screen, except within the outer edges, to avoid conflicting with OS gesture navigation
+				const toleranceX = 4;
+				const gestureMargin = 35;
+				const minHorizontalSwipe = 35;
+
+				const startWithinTolerance = startX >= gestureMargin && startX <= contentWidth - gestureMargin; // Check the start position is not within the edge margins
+				const horizontalEnough = Math.abs(dx) >= minHorizontalSwipe; // Check that the dead zone has passed before starting the gesture, catering for curved swipes
+				const horizontalDominant = Math.abs(dx) > Math.abs(dy) * 2; // Check the direction is horizontal, allowing diagonal swipes up to a certain angle
+				let motionWithinToleranceX; // Check the correct direction is used in relation to whether swiping open / closed
+
 				if (open) {
-					startWithinTolerance = startX >= menuWidth - props.edgeHitWidth;
-					motionWithinToleranceX = dx <= -props.toleranceX;
+					motionWithinToleranceX = dx <= -toleranceX;
 				} else {
-					startWithinTolerance = startX <= props.edgeHitWidth;
-					motionWithinToleranceX = dx >= props.toleranceX;
+					motionWithinToleranceX = dx >= toleranceX;
 				}
 
-				return startWithinTolerance && motionWithinToleranceX && motionWithinToleranceY;
+				return (
+					startWithinTolerance &&
+					motionWithinToleranceX &&
+					horizontalEnough &&
+					horizontalDominant
+				);
 			},
 			onPanResponderGrant: () => {
 				setIsAnimating(true);
@@ -250,7 +258,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 				}
 			},
 		});
-	}, [isLeftMenu, menuDragOffset, menuWidth, props.toleranceX, props.toleranceY, contentWidth, open, props.disableGestures, props.edgeHitWidth, updateMenuPosition, setIsAnimating]);
+	}, [isLeftMenu, menuDragOffset, contentWidth, open, props.disableGestures, updateMenuPosition, setIsAnimating]);
 
 	const onChangeRef = useRef(props.onChange);
 	onChangeRef.current = props.onChange;
