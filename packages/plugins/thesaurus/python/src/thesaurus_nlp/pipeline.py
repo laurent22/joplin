@@ -12,8 +12,9 @@ class Pipeline(AbstractPipeline):
         candidates = self.wordnet_service.get_related_words(request.word)
         
         # Step 2: Score the candidates based on the context
-        scored_candidates = self.similarity_ranker.score_candidates(candidates, request.context)
-        
+        scored_candidates = self.similarity_ranker.score_candidates(candidates, request.word, request.context)
+        scored_candidates.sort(key=lambda x: x.score, reverse=True)
+
         # Step 3: Prepare the response
         synonyms = [SynonymEntry(word=candidate.word, score=candidate.score, pos=candidate.pos) for candidate in scored_candidates]
         

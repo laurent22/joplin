@@ -17,7 +17,7 @@ class AbstractWordNetService(ABC):
 
 class AbstractSimilarityRanker(ABC):
     @abstractmethod
-    def score_candidates(self, candidates: list[Candidate], context: str | None) -> list[ScoredCandidate]:
+    def score_candidates(self, candidates: list[Candidate], word: str, context: str | None) -> list[ScoredCandidate]:
         """Score the given candidates based on the context."""
         ...
 
