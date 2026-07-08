@@ -37,6 +37,7 @@ export interface ExecOptions {
 	path?: string;
 	source?: string;
 	ignoreError?: (error: Error)=> boolean;
+	signal?: AbortSignal;
 }
 
 export interface Session {
@@ -178,8 +179,10 @@ export default class JoplinServerApi {
 		headers['X-API-MIN-VERSION'] = '2.6.0'; // Need server 2.6 for new lock support
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See exec_.body above
-		const fetchOptions: { headers: Record<string, string>; method: string; path?: string; body?: any } = { headers, method };
+		type FetchOptions = { headers: Record<string, string>; method: string; path?: string; body?: any; signal?: AbortSignal };
+		const fetchOptions: FetchOptions = { headers, method };
 		if (options.path) fetchOptions.path = options.path;
+		if (options.signal) fetchOptions.signal = options.signal;
 
 		if (body) {
 			if (typeof body === 'object') {

@@ -62,7 +62,7 @@ export default class JoplinCloudProvider extends OpenAiCompatibleProvider {
 		});
 	}
 
-	protected override async sendChatRequest(body: Record<string, unknown>, _options: ChatRequestOptions) {
+	protected override async sendChatRequest(body: Record<string, unknown>, options: ChatRequestOptions) {
 		if (Setting.value('sync.target') !== joplinCloudSyncTarget()) {
 			throw new JoplinError('Joplin Cloud AI requires Joplin Cloud sync', 'aiJoplinCloudSyncRequired');
 		}
@@ -73,7 +73,7 @@ export default class JoplinCloudProvider extends OpenAiCompatibleProvider {
 		// the response format is JSON (the default). No need to JSON.parse.
 		let json: JoplinCloudResponse;
 		try {
-			json = await api.exec('POST', 'api/ai/chat/completions', null, body) as JoplinCloudResponse;
+			json = await api.exec('POST', 'api/ai/chat/completions', null, body, null, { signal: options.signal }) as JoplinCloudResponse;
 		} catch (error) {
 			const status = typeof error?.code === 'number' ? error.code : 0;
 			const detail = error?.message ?? '';
