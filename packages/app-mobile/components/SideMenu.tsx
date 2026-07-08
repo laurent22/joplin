@@ -221,7 +221,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 				// Horizontal swipe gestures can be made anywhere within the middle of the screen, except within the outer edges, to avoid conflicting with OS gesture navigation
 				const toleranceX = 4;
 				const gestureMargin = 35;
-				const minHorizontalSwipe = 35;
+				const minHorizontalSwipe = isLeftMenu ? 10 : 35; // Use a smaller dead zone for the left menu, as the notebook list uses FlatList, which greedily locks vertical scroll
 
 				const startWithinTolerance = startX >= gestureMargin && startX <= contentWidth - gestureMargin; // Check the start position is not within the edge margins
 				const horizontalEnough = Math.abs(dx) >= minHorizontalSwipe; // Check that the dead zone has passed before starting the gesture, catering for curved swipes
