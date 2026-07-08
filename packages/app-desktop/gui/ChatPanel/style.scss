@@ -57,7 +57,6 @@
 .chat-panel > .messages > .turn {
 	padding: 8px 10px;
 	border-radius: 6px;
-	white-space: pre-wrap;
 	overflow-wrap: anywhere;
 	line-height: 1.4;
 }
@@ -68,6 +67,10 @@
 	color: var(--joplin-color2);
 	align-self: flex-end;
 	max-width: 90%;
+
+	> .content {
+		white-space: pre-wrap;
+	}
 }
 
 // Assistant turn uses the secondary panel scheme (light gray in light theme,
