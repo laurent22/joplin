@@ -42,7 +42,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 				}
 			});
 
-			const containsHiddenDecoration = (from: number, to: number) => {
+			const hasHiddenDecoration = (from: number, to: number) => {
 				let found = false;
 				this.decorations.between(from, to, (_from, _to, decoration) => {
 					if (!Object.keys(decoration.spec).length) {
@@ -64,9 +64,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 					const closingBracket = node.node.getChildren('LinkMark').find(mark => (
 						this.view.state.sliceDoc(mark.from, mark.to) === ']'
 					));
-					if (
-						closingBracket && selection.from >= closingBracket.from && selection.to <= node.to && containsHiddenDecoration(closingBracket.from, node.to)
-					) {
+					if (closingBracket && selection.from >= closingBracket.from && selection.to <= node.to && hasHiddenDecoration(closingBracket.from, node.to)) {
 						selectionUpdate = { anchor: node.to };
 					}
 				},
