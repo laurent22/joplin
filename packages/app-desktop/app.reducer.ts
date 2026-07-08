@@ -5,6 +5,7 @@ import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
 import Logger from '@joplin/utils/Logger';
+import { ChatMessage } from '@joplin/lib/services/ai/types';
 
 const logger = Logger.create('app.reducer');
 
@@ -12,10 +13,11 @@ export interface AiChatMessage {
 	id: string;
 	role: 'user' | 'assistant' | 'tool' | 'error' | 'separator';
 	text: string;
-	toolName?: string;
-	toolCallId?: string;
 	editsApplied?: number;
 	editsMissed?: number;
+
+	// The raw message(s) corresponding to this event
+	raw: ChatMessage[];
 }
 
 export interface AppStateRoute {
@@ -288,6 +290,32 @@ export default function(state: AppState, action: any) {
 		case 'AI_CHAT_APPEND':
 			newState = withWindowStateUpdated(
 				state, action.windowId, 'aiChatMessages', messages => [...messages, action.message as AiChatMessage],
+			);
+			break;
+
+		case 'AI_CHAT_ADD_TOOL_RESULT':
+			newState = withWindowStateUpdated(
+				state, action.windowId, 'aiChatMessages', messages => {
+					let lastMessage = messages[messages.length - 1];
+					if (lastMessage) {
+						const toolCall = action.toolCall;
+						const error = toolCall.isError;
+
+						lastMessage = {
+							...lastMessage,
+							editsApplied: (lastMessage.editsApplied ?? 0) + (error ? 0 : 1),
+							editsMissed: (lastMessage.editsMissed ?? 0) + (error ? 1 : 0),
+							raw: [
+								...lastMessage.raw,
+								action.toolCall,
+							],
+						};
+
+						return [...messages.slice(0, messages.length - 1), lastMessage];
+					}
+
+					return messages;
+				},
 			);
 			break;
 

@@ -9,10 +9,13 @@ import CommandService from '@joplin/lib/services/CommandService';
 import Logger from '@joplin/utils/Logger';
 import { stateUtils } from '@joplin/lib/reducer';
 import { AiChatMessage, AppState } from '../../app.reducer';
-import { runNoteChat, ChatTurn } from '@joplin/lib/services/ai/noteChat';
-import { applyAnchorEdits } from '@joplin/lib/services/ai/applyNoteEdits';
+import { runNoteChat } from '@joplin/lib/services/ai/noteChat';
 import { chatAvailability } from '@joplin/lib/services/ai/availability';
 import { WindowIdContext } from '../NewWindowOrIFrame';
+import { ChatMessage, ChatRole, ChatToolMessage } from '@joplin/lib/services/ai/types';
+import JoplinError from '@joplin/lib/JoplinError';
+import eventManager, { EventName, ItemChangeEvent } from '@joplin/lib/eventManager';
+import { Second } from '@joplin/utils/time';
 
 const logger = Logger.create('ChatPanel');
 
@@ -39,6 +42,29 @@ const editsSummary = (applied: number, missed: number) => {
 	return _('%d edit(s) applied, %d could not be placed automatically.', applied, missed);
 };
 
+const waitForNextNoteChangeOrTimeout = (noteId: string, timeout: number) => {
+	return new Promise<void>((resolve) => {
+		const listener = (event: ItemChangeEvent) => {
+			if (event.itemId === noteId) {
+				onComplete();
+			}
+		};
+		const onComplete = () => {
+			if (timeoutId) {
+				clearTimeout(timeoutId);
+				timeoutId = null;
+			}
+			eventManager.off(EventName.ItemChange, listener);
+			resolve();
+		};
+		eventManager.on(EventName.ItemChange, listener);
+
+		let timeoutId = setTimeout(() => {
+			onComplete();
+		}, timeout);
+	});
+};
+
 // Single-window for v1: mapStateToProps hard-codes defaultWindowId and the
 // toggle writes to the app-wide layout. A second window would mirror the main.
 const ChatPanel: React.FC<Props> = (props) => {
@@ -59,6 +85,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 	// Lets async work detect note switches without re-running its closure.
 	const noteIdRef = useRef(props.noteId);
 	noteIdRef.current = props.noteId;
+	const abortControllerRef = useRef(new AbortController());
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
 	// Bumped on Reset / unmount so an in-flight reply can detect it should
@@ -72,6 +99,10 @@ const ChatPanel: React.FC<Props> = (props) => {
 		dispatch({ type: 'AI_CHAT_APPEND', windowId, message });
 	}, [dispatch, windowId]);
 
+	const addToolResult = useCallback((result: ChatToolMessage) => {
+		dispatch({ type: 'AI_CHAT_ADD_TOOL_RESULT', windowId, toolCall: result });
+	}, [dispatch, windowId]);
+
 	// Drop a separator when the active note changes mid-conversation. Skip
 	// the first ever opened note (no prior context to separate from).
 	useEffect(() => {
@@ -83,6 +114,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 			id: makeId(),
 			role: 'separator',
 			text: _('— now viewing: %s —', props.noteTitle || _('(untitled)')),
+			raw: [],
 		});
 	}, [props.noteId, props.noteTitle, appendMessage]);
 
@@ -91,15 +123,10 @@ const ChatPanel: React.FC<Props> = (props) => {
 		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 	}, [messages]);
 
-	const conversationTurns = useMemo<ChatTurn[]>(() => {
+	const conversationTurns = useMemo<ChatMessage[]>(() => {
 		return messages
-			.filter(m => m.role === 'user' || m.role === 'assistant' || m.role === 'tool')
-			.map(m => ({
-				role: m.role as 'user' | 'assistant' | 'tool',
-				content: m.text,
-				toolCallId: m.toolCallId,
-				toolName: m.toolName,
-			}));
+			.map(m => m.raw)
+			.flat();
 	}, [messages]);
 
 	// Joplin Cloud is remote but the user already consented via sync setup.
@@ -110,7 +137,9 @@ const ChatPanel: React.FC<Props> = (props) => {
 		const text = input.trim();
 		if (!text || sending) return;
 		if (!props.noteId) {
-			appendMessage({ id: makeId(), role: 'error', text: _('Open a note to start chatting.') });
+			appendMessage({
+				id: makeId(), role: 'error', text: _('Open a note to start chatting.'), raw: [],
+			});
 			return;
 		}
 
@@ -122,153 +151,111 @@ const ChatPanel: React.FC<Props> = (props) => {
 		// Captured so we can roll it back on failure — otherwise a retry would
 		// send the prior user turn as history alongside the new prompt.
 		const userTurnId = makeId();
-		appendMessage({ id: userTurnId, role: 'user', text });
+		let hadSuccessfulResponse = false;
+		appendMessage({ id: userTurnId, role: 'user', text, raw: [] });
 
 		try {
 			const note = await Note.load(props.noteId);
 			if (!note) throw new Error(`Note not found: ${props.noteId}`);
 
-			let selection = '';
-			try {
-				selection = await CommandService.instance().execute('selectedText') || '';
-			} catch {
-				// Editor may not be ready; treat as no selection.
-			}
+			const getContext = async () => {
+				let selection = '';
+				try {
+					selection = await CommandService.instance().executeInWindow(
+						'selectedText', { windowId, args: [] },
+					) as string || '';
+				} catch {
+					// Editor may not be ready; treat as no selection.
+				}
 
-			const reply = await runNoteChat({
-				title: note.title || '',
-				body: note.body || '',
-				selection: selection || null,
-			}, conversationTurns, text);
+				const note = await Note.load(props.noteId);
+				if (!note) throw new Error(`Note not found: ${props.noteId}`);
 
-			if (generationRef.current !== startGeneration) return;
+				return {
+					body: note.body,
+					title: note.title,
+					selection,
+				};
+			};
 
-			const toolCallMessages: AiChatMessage[] = [];
-			const appendError = (userMessage: string, agentMessage: string) => {
-				appendMessage({
-					id: makeId(),
-					role: 'error',
-					text: userMessage,
-				});
+			const abortController = abortControllerRef.current;
+			let lastHistory = [
+				{ role: ChatRole.System, content: 'placeholder' },
+				...conversationTurns,
+			];
 
-				// Provide a different message for agents
-				for (const edit of reply.edits) {
-					toolCallMessages.push({
-						id: makeId(),
-						toolCallId: edit.toolCallId,
-						role: 'tool',
-						text: agentMessage,
-					});
+			const onHistoryChanged = (history: ChatMessage[]) => {
+				if (abortController.signal.aborted) return;
+
+				for (let i = lastHistory.length; i < history.length; i++) {
+					const entry = history[i];
+
+					// User and system messages are either added elsewhere or not shown in the UI
+					if (entry.role === ChatRole.System || entry.role === ChatRole.User) continue;
+
+					hadSuccessfulResponse = true;
+
+					if (entry.role === ChatRole.Tool) {
+						addToolResult(entry);
+					} else {
+						appendMessage({
+							id: makeId(),
+							role: entry.role,
+							text: entry.content,
+							raw: [entry],
+						});
+					}
+				}
+
+				lastHistory = history;
+			};
+
+			const assertSameNote = () => {
+				if (noteIdAtStart !== noteIdRef.current) {
+					abortController.abort();
+					abortControllerRef.current = new AbortController();
+					throw new JoplinError(_('Note changed while editing'), 'aiNoteChanged');
 				}
 			};
 
-			let editsApplied = 0;
-			let editsMissed = 0;
+			await runNoteChat(
+				getContext, conversationTurns, text, {
+					replaceSelection: async (text, oldText) => {
+						if (text === oldText) return;
+						assertSameNote();
 
-			if (reply.edits.length > 0) {
-				// Editor commands run against the focused editor, which may now
-				// be a different note. Refuse rather than mutate the wrong one.
-				if (noteIdRef.current !== noteIdAtStart) {
-					appendError(
-						_('You switched notes while the request was running; edits were not applied. Try again.'),
-						'Cancelled',
-					);
-				} else {
-					// Re-read live body: the user may have typed while the
-					// request was in flight, and we don't want to overwrite that.
-					const fresh = await Note.load(noteIdAtStart);
-					const liveBody = fresh?.body ?? '';
+						const changeListener = waitForNextNoteChangeOrTimeout(props.noteId, Second);
+						await CommandService.instance().executeInWindow('replaceSelection', {
+							windowId,
+							args: [text],
+						});
+						await changeListener;
+					},
+					updateNoteBody: async (newBody, oldBody) => {
+						if (newBody === oldBody) return;
+						assertSameNote();
 
-					if (liveBody !== (note.body || '')) {
-						appendError(
-							_('The note changed while the request was running; edits were not applied. Try again.'),
-							'Cancelled',
-						);
-					} else {
-						const selectionEdits = reply.edits.filter(e => e.op === 'replaceSelection');
-						const anchorEdits = reply.edits.filter(e => e.op !== 'replaceSelection');
-
-						for (const edit of selectionEdits) {
-							if (edit.op !== 'replaceSelection') continue;
-							if (!selection) {
-								editsMissed++;
-								continue;
-							}
-							await CommandService.instance().executeInWindow('replaceSelection', {
-								windowId,
-								args: [edit.text],
-							});
-							toolCallMessages.push({
-								id: makeId(),
-								toolName: edit.op,
-								toolCallId: edit.toolCallId,
-								role: 'tool',
-								text: 'Success',
-							});
-							editsApplied++;
-						}
-
-						if (anchorEdits.length > 0) {
-							const cursorPos = selection ? Math.max(0, liveBody.indexOf(selection)) : 0;
-							const { newBody, appliedEdits } = applyAnchorEdits(liveBody, anchorEdits, cursorPos);
-
-							for (const edit of appliedEdits) {
-								if (edit.status === 'applied') {
-									editsApplied ++;
-
-									toolCallMessages.push({
-										id: makeId(),
-										toolName: edit.op.op,
-										toolCallId: edit.op.toolCallId,
-										role: 'tool',
-										text: 'Success',
-									});
-								} else {
-									editsMissed ++;
-
-									toolCallMessages.push({
-										id: makeId(),
-										toolName: edit.op.op,
-										toolCallId: edit.op.toolCallId,
-										role: 'tool',
-										text: 'Failed',
-									});
-								}
-							}
-
-							if (newBody !== liveBody) {
-								await CommandService.instance().executeInWindow('editor.setText', {
-									windowId,
-									args: [newBody],
-								});
-							}
-						}
-					}
-				}
-			}
-
-			if (generationRef.current !== startGeneration) return;
-
-			appendMessage({
-				id: makeId(),
-				role: 'assistant',
-				text: reply.reply || _('(no message)'),
-				editsApplied,
-				editsMissed,
-			});
-			for (const message of toolCallMessages) {
-				appendMessage(message);
-			}
+						const changeListener = waitForNextNoteChangeOrTimeout(props.noteId, Second);
+						await CommandService.instance().executeInWindow('editor.setText', {
+							windowId,
+							args: [newBody],
+						});
+						await changeListener;
+					},
+				}, onHistoryChanged, abortController.signal,
+			);
 		} catch (error) {
 			logger.warn('Chat failed:', error);
 			if (generationRef.current !== startGeneration) return;
-			dispatch({ type: 'AI_CHAT_REMOVE', windowId, id: userTurnId });
-			setInput(text);
-			appendMessage({ id: makeId(), role: 'error', text: error.message || _('Something went wrong.') });
+			if (!hadSuccessfulResponse) {
+				dispatch({ type: 'AI_CHAT_REMOVE', windowId, id: userTurnId });
+				setInput(text);
+			}
+			appendMessage({ id: makeId(), role: 'error', text: error.message || _('Something went wrong.'), raw: [] });
 		} finally {
 			setSending(false);
 		}
-	}, [input, sending, props.noteId, conversationTurns, windowId, appendMessage, dispatch]);
+	}, [input, sending, props.noteId, conversationTurns, windowId, addToolResult, appendMessage, dispatch]);
 
 	const handleAcknowledgeDisclosure = useCallback(() => {
 		Setting.setValue(disclosureSetting, true);
@@ -277,6 +264,9 @@ const ChatPanel: React.FC<Props> = (props) => {
 
 	const handleReset = useCallback(() => {
 		generationRef.current++;
+		abortControllerRef.current.abort();
+		abortControllerRef.current = new AbortController();
+
 		dispatch({ type: 'AI_CHAT_RESET', windowId: windowId });
 	}, [dispatch, windowId]);
 
@@ -339,7 +329,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 					const summary = m.role === 'assistant' ? editsSummary(m.editsApplied ?? 0, m.editsMissed ?? 0) : '';
 					return (
 						<div key={m.id} className={`turn -${m.role}`}>
-							<div className='content'>{m.text}</div>
+							<div className='content'>{m.text || _('(no message)')}</div>
 							{summary && (
 								<div className='meta'>
 									{(m.editsMissed ?? 0) > 0

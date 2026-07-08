@@ -65,7 +65,22 @@ const convertMessage = (message: ChatMessage) => {
 			tool_call_id: message.toolCallId,
 		};
 	} else {
-		return { role: message.role, content: message.content };
+		return {
+			role: message.role,
+			content: message.content,
+			...(message.toolCalls ? {
+				tool_calls: message.toolCalls.map(call => {
+					return {
+						id: call.callId,
+						type: 'function',
+						function: {
+							name: call.toolName,
+							arguments: call.arguments,
+						},
+					};
+				}),
+			} : {}),
+		};
 	}
 };
 
@@ -107,7 +122,9 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 				method: 'POST',
 				headers,
 				body: JSON.stringify(body),
+				signal: options.signal,
 			});
+
 			const text = await response.text();
 			let json: OpenAiResponse;
 			try {

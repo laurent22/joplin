@@ -1,16 +1,33 @@
-export type ChatRole = 'system' | 'user' | 'assistant' | 'tool';
+export enum ChatRole {
+	System = 'system',
+	User = 'user',
+	Assistant = 'assistant',
+	Tool = 'tool',
+}
 
-export interface ChatMessage {
-	role: ChatRole;
-	toolName?: string;
-	toolCallId?: string;
+interface ChatBaseMessage {
 	content: string;
 }
+
+export interface ChatStandardMessage extends ChatBaseMessage {
+	role: ChatRole.System | ChatRole.User | ChatRole.Assistant;
+	toolCalls?: ChatToolCall[];
+}
+
+export interface ChatToolMessage extends ChatBaseMessage {
+	role: ChatRole.Tool;
+	toolName: string;
+	toolCallId: string;
+	isError: boolean;
+}
+
+export type ChatMessage = ChatStandardMessage | ChatToolMessage;
 
 export interface JsonSchema {
 	type: string;
 	properties?: unknown;
 	required?: string[];
+	description?: string;
 	additionalProperties?: boolean;
 }
 
@@ -35,6 +52,7 @@ export interface ChatOptions {
 	tools?: ToolSpec[];
 	responseFormat?: ResponseFormat;
 	maxTokens?: number;
+	signal?: AbortSignal;
 }
 
 export interface ChatUsage {

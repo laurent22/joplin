@@ -9,6 +9,7 @@ import { type Registry } from '../../../registry';
 import settingValidations from '../../../models/settings/settingValidations';
 import { convertValuesToFunctions } from '../../../ObjectUtils';
 import aiSettingsTransition from '../../../services/ai/aiSettingsTransition';
+import { ChatRole } from '../../../services/ai/types';
 
 const logger = Logger.create('config-shared');
 
@@ -123,7 +124,7 @@ export const checkAiConfig = async (comp: ConfigScreenComponent) => {
 	try {
 		const { default: AiService } = await import('../../../services/ai/AiService');
 		const result = await AiService.instance().chat([
-			{ role: 'user', content: 'Reply with the single word OK.' },
+			{ role: ChatRole.User, content: 'Reply with the single word OK.' },
 		], { maxTokens: 20 });
 		const text = (result.text || '').trim();
 		if (!text) {

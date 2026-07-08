@@ -75,23 +75,6 @@ describe('noteChat', () => {
 		expect(allowedSchemaOperations).toEqual([...expectedOperations].sort());
 	});
 
-	test.each([
-		['{"reply":"hi","edits":[]}', 'hi', 0],
-		['```json\n{"reply":"hi","edits":[]}\n```', 'hi', 0],
-		['{"reply":"done","edits":[{"op":"appendToNote","text":"x"}]}', 'done', 1],
-		// JSON5 tolerances — trailing commas, single quotes, unquoted keys.
-		// Models emit these despite instructions; the parser absorbs the drift.
-		['{"reply":"done","edits":[{"op":"appendToNote","text":"x"},]}', 'done', 1],
-		['{"reply":"done","edits":[{"op":"appendToNote","text":"x",}]}', 'done', 1],
-		['{reply:"done",edits:[{op:"appendToNote",text:"x"}]}', 'done', 1],
-		['{\'reply\':\'done\',\'edits\':[]}', 'done', 0],
-		['not json at all', 'not json at all', 0],
-	])('tryParseReply parses %s', (input, expectedReply, expectedEditCount) => {
-		const parsed = _internal.tryParseReply(input);
-		expect(parsed.reply).toBe(expectedReply);
-		expect(parsed.edits.length).toBe(expectedEditCount);
-	});
-
 	test('estimateTokens approximates char/4', () => {
 		expect(_internal.estimateTokens('')).toBe(0);
 		expect(_internal.estimateTokens('a'.repeat(400))).toBe(100);
@@ -236,42 +219,6 @@ describe('noteChat', () => {
 		], 0);
 		expect(newBody).toBe(body);
 		expect(appliedEdits[0].status).toBe('invalid');
-	});
-
-	test('tryParseReply ignores primitive top-level values', () => {
-		// Bare string parses as JSON5 but isn't a reply envelope.
-		expect(_internal.tryParseReply('"hello"').reply).toBe('"hello"');
-		expect(_internal.tryParseReply('"hello"').edits.length).toBe(0);
-		expect(_internal.tryParseReply('null').reply).toBe('null');
-		expect(_internal.tryParseReply('[1,2,3]').reply).toBe('[1,2,3]');
-	});
-
-	test('enforceSelectionScope strips anchor ops when selection present, passes through otherwise', () => {
-		const reply = {
-			reply: 'ok',
-			edits: [
-				{ op: 'replaceSelection' as const, text: 'A' },
-				{ op: 'appendToNote' as const, text: 'B' },
-				{ op: 'insertBefore' as const, anchor: 'x', text: 'C' },
-				{ op: 'replaceRange' as const, anchor: 'y', text: 'D' },
-			],
-		};
-		// With selection: only replaceSelection survives.
-		const scoped = _internal.enforceSelectionScope(reply, 'some selection');
-		expect(scoped.edits.length).toBe(1);
-		expect(scoped.edits[0].op).toBe('replaceSelection');
-		// Without selection: everything passes through unchanged.
-		const unscoped = _internal.enforceSelectionScope(reply, null);
-		expect(unscoped.edits.length).toBe(4);
-	});
-
-	test('tryParseReply drops malformed edits but keeps valid ones', () => {
-		// Mixed array: missing op, unknown op, primitive, and one valid entry.
-		const text = '{"reply":"ok","edits":["lol",{"op":"bogus"},{"op":"appendToNote","text":"good"},{}]}';
-		const parsed = _internal.tryParseReply(text);
-		expect(parsed.reply).toBe('ok');
-		expect(parsed.edits.length).toBe(1);
-		expect(parsed.edits[0].op).toBe('appendToNote');
 	});
 
 });

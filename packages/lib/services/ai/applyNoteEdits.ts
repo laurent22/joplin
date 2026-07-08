@@ -1,7 +1,12 @@
-import { EditOp, supportedStructuredBlockTags } from './noteChat';
+import type { EditOp } from './noteChat';
 import findFencedBlock from './utils/findFencedBlock';
 
 export type ApplyEditStatus = 'applied' | 'anchor-not-found' | 'invalid';
+
+
+// Structured-document fences where the model regenerates the whole block —
+// plain code fences (```js, ```python) are deliberately excluded.
+export const supportedStructuredBlockTags = ['jsoncanvas', 'mermaid', 'abc', 'fountain'];
 
 export const structuredBlockTags = new Set<string>([...supportedStructuredBlockTags]);
 
