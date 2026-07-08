@@ -1,4 +1,5 @@
 {
 	"cSpell.enabled": true,
-	"editor.insertSpaces": false
+	"editor.insertSpaces": false,
+	"python-envs.defaultEnvManager": "ms-python.python:system"
 }
