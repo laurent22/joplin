@@ -23,8 +23,8 @@ export type EditOp =
 	| { op: 'replaceFencedBlock'; tag: string; text: string }
 ;
 
-const knownOps = new Set<EditOp['op']|'readNote'>([
-	'readNote', 'replaceSelection', 'insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock',
+const knownOps = new Set<EditOp['op']>([
+	'replaceSelection', 'insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock',
 ]);
 
 export interface NoteContext {
@@ -108,11 +108,6 @@ const toolDefinitions = (note: NoteContext) => {
 		});
 	} else {
 		result.push(
-			{
-				name: 'readNote',
-				description: 'Get the current, up-to-date content of the note.',
-				inputSchema: { type: 'string', description: 'ignored' },
-			},
 			{
 				name: 'appendToNote',
 				description: 'Appends text at the end of the note.',
@@ -350,10 +345,6 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 		for (const toolCall of chat.toolCalls) {
 			if (toolCall.toolName === 'replaceSelection') {
 				respondFailure(toolCall, 'replaceSelection is invalid in this context');
-				continue;
-			}
-			if (toolCall.toolName === 'readNote') {
-				respondSuccess(toolCall, body);
 				continue;
 			}
 
