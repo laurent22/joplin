@@ -76,7 +76,7 @@ const convertMessage = (message: ChatMessage) => {
 						type: 'function',
 						function: {
 							name: call.toolName,
-							arguments: call.arguments,
+							arguments: JSON.stringify(call.arguments),
 						},
 					};
 				}),
