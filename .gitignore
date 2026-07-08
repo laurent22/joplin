@@ -1576,6 +1576,7 @@ packages/lib/services/ai/chunker.js
 packages/lib/services/ai/classification.js
 packages/lib/services/ai/noteChat.test.js
 packages/lib/services/ai/noteChat.js
+packages/lib/services/ai/providers/Anthropic.test.js
 packages/lib/services/ai/providers/Anthropic.js
 packages/lib/services/ai/providers/ChatProviderBase.js
 packages/lib/services/ai/providers/JoplinCloud.js

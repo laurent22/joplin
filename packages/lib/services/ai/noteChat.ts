@@ -2,9 +2,9 @@ import AiService from './AiService';
 import { ChatMessage, ChatResult, ChatRole, ChatToolCall, ToolSpec } from './types';
 import JoplinError from '../../JoplinError';
 import Logger from '@joplin/utils/Logger';
-import JSON5 from 'json5';
 import findFencedBlock from './utils/findFencedBlock';
 import { applyAnchorEdits, supportedStructuredBlockTags } from './applyNoteEdits';
+import { hasOwnProperty } from '@joplin/utils/object';
 
 const logger = Logger.create('noteChat');
 
@@ -104,13 +104,20 @@ const toolDefinitions = (note: NoteContext) => {
 		result.push({
 			name: 'replaceSelection',
 			description: 'Replaces the text currently selected by the user.',
-			inputSchema: { type: 'string' },
+			inputSchema: {
+				type: 'object',
+				properties: {
+					text: { type: 'string' },
+				},
+				required: ['text'],
+				additionalProperties: false,
+			},
 		});
 	} else {
 		result.push(
 			{
 				name: 'appendToNote',
-				description: 'Appends text at the end of the note.',
+				description: 'Adds text to the end of the note. Usually, this is the tool you should use when a user asks you to add something to a note.',
 				inputSchema: {
 					type: 'object',
 					properties: {
@@ -134,7 +141,7 @@ const toolDefinitions = (note: NoteContext) => {
 		result.push(
 			{
 				name: 'insertBefore',
-				description: 'Insert text immediately before the first occurrence of "anchor".',
+				description: 'Insert text immediately before the first occurrence of `anchor`.',
 				inputSchema: anchoredSchema(
 					'Text to find',
 					'What to insert just **before** the found text',
@@ -142,7 +149,7 @@ const toolDefinitions = (note: NoteContext) => {
 			},
 			{
 				name: 'insertAfter',
-				description: 'Insert text immediately after the first occurrence of "anchor".',
+				description: 'Insert text immediately after the first occurrence of `anchor`.',
 				inputSchema: anchoredSchema(
 					'Text to find',
 					'What to insert just **after** the found text',
@@ -150,7 +157,7 @@ const toolDefinitions = (note: NoteContext) => {
 			},
 			{
 				name: 'replaceRange',
-				description: 'Replace the first occurrence of "anchor" with "text".',
+				description: 'Replace the first occurrence of `anchor` with `text`.',
 				inputSchema: anchoredSchema(
 					'The text to replace',
 					'What to replace it with',
@@ -317,7 +324,10 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 		const action = chat.toolCalls.find(toolCall => toolCall.toolName === 'replaceSelection');
 		if (action) {
 			try {
-				await commands.replaceSelection(action.arguments, currentContext.selection);
+				if (!hasOwnProperty(action.arguments, 'text')) throw new JoplinError('Missing text property');
+				if (typeof action.arguments.text !== 'string') throw new JoplinError('Property "text" must be a string');
+
+				await commands.replaceSelection(action.arguments.text, currentContext.selection);
 				respondSuccess(action);
 			} catch (error) {
 				logger.error('Failed to replace selection', error);
@@ -389,13 +399,13 @@ const toolCallToEditOperation = (toolCall: ChatToolCall): EditOp => {
 		throw new Error(`Invalid edit operation: ${op}`);
 	}
 
-	const args = JSON5.parse(toolCall.arguments);
+	const args = toolCall.arguments;
 	return {
 		op,
-		text: args.text,
-		anchor: args.anchor,
-		tag: args.tag,
-	};
+		...('text' in args && typeof args.text === 'string' ? { text: args.text } : {}),
+		...('anchor' in args && typeof args.anchor === 'string' ? { anchor: args.anchor } : {}),
+		...('tag' in args && typeof args.tag === 'string' ? { tag: args.tag } : {}),
+	} as EditOp;
 };
 
 // Exported for tests.

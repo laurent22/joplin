@@ -4,6 +4,7 @@ import Logger from '@joplin/utils/Logger';
 import { rtrimSlashes } from '@joplin/utils/path';
 import { ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification, ToolSpec } from '../types';
 import ChatProviderBase from './ChatProviderBase';
+import JSON5 from 'json5';
 
 const logger = Logger.create('OpenAiCompatibleProvider');
 
@@ -169,7 +170,7 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 			return {
 				toolName: call.function.name,
 				callId: call.id,
-				arguments: call.function.arguments,
+				arguments: JSON5.parse(call.function.arguments),
 			};
 		}).filter(toolCall => !!toolCall);
 

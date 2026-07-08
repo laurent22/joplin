@@ -63,7 +63,7 @@ export interface ChatUsage {
 export interface ChatToolCall {
 	toolName: string;
 	callId: string;
-	arguments: string;
+	arguments: Record<string, unknown>;
 }
 
 export interface ChatResult {
