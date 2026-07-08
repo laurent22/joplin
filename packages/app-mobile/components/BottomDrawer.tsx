@@ -82,7 +82,7 @@ const useStyles = ({ theme, dragging, draggable, dragOffset }: UseStylesProps) =
 				// The drag handle should be at the very top of the menu
 				paddingTop: draggable ? 0 : undefined,
 				paddingBottom: 14 + safeAreaPadding.paddingBottom,
-				paddingHorizontal: 20,
+				padding: 20,
 			},
 			modalBackground: {
 				paddingTop: 0,
