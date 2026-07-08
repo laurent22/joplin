@@ -102,6 +102,7 @@ const useStyles = ({ theme, dragging, draggable, dragOffset }: UseStylesProps) =
 				display: draggable ? 'flex' : 'none',
 				width: '100%',
 				height: theme.margin,
+				cursor: 'auto',
 			},
 			dragHandle: {
 				marginLeft: 'auto',
@@ -282,13 +283,12 @@ interface DragHandleProps {
 }
 
 const DragHandle: React.FC<DragHandleProps> = props => {
-	return <View style={props.containerStyle}>
-		<Pressable
-			onPress={props.onDismiss}
-			aria-label={_('Dismiss')}
-		>
-			<View style={props.style}/>
-		</Pressable>
-	</View>;
+	return <Pressable
+		onPress={props.onDismiss}
+		style={props.containerStyle}
+		aria-label={_('Dismiss')}
+	>
+		<View style={props.style}/>
+	</Pressable>;
 };
 
