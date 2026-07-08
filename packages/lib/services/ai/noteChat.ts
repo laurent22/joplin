@@ -181,7 +181,10 @@ const toolDefinitions = (note: NoteContext) => {
 							type: 'string',
 							enum: supportedStructuredBlockTags,
 						},
-						text: { type: 'string' },
+						text: {
+							type: 'string',
+							description: 'The new content for the block content. Should not include the fenced block delimiters.',
+						},
 					},
 					required: ['tag', 'text'],
 					additionalProperties: false,
