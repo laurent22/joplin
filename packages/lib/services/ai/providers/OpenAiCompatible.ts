@@ -84,6 +84,10 @@ const convertMessage = (message: ChatMessage) => {
 	}
 };
 
+export interface ChatRequestOptions {
+	signal?: AbortSignal;
+}
+
 export default class OpenAiCompatibleProvider extends ChatProviderBase {
 
 	public id = 'openai-compatible';
@@ -101,7 +105,6 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 	}
 
 	protected async doChat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult> {
-		if (!this.baseUrl_) throw new JoplinError('OpenAI-compatible provider has no base URL configured', 'aiProviderNotConfigured');
 		if (!this.model_) throw new JoplinError('OpenAI-compatible provider has no model configured', 'aiProviderNotConfigured');
 
 		const body: Record<string, unknown> = {
@@ -114,26 +117,8 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 		if (options?.responseFormat !== undefined) body.response_format = options.responseFormat;
 		if (options?.tools !== undefined) body.tools = options.tools.map(convertTool);
 
-		const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-		if (this.apiKey_) headers['Authorization'] = `Bearer ${this.apiKey_}`;
 
-		const doFetch = async () => {
-			const response = await shim.fetch(`${this.baseUrl_}/chat/completions`, {
-				method: 'POST',
-				headers,
-				body: JSON.stringify(body),
-				signal: options.signal,
-			});
-
-			const text = await response.text();
-			let json: OpenAiResponse;
-			try {
-				json = JSON.parse(text) as OpenAiResponse;
-			} catch {
-				throw new JoplinError(`AI provider returned non-JSON response: ${text.slice(0, 200)}`, response.status);
-			}
-			return { response, json };
-		};
+		const doFetch = () => this.sendChatRequest(body, { signal: options.signal });
 
 		let { response, json } = await doFetch();
 
@@ -172,24 +157,48 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 			);
 		}
 
-		const content = json.choices?.[0]?.message?.content ?? '';
+		const responseMessage = json.choices?.[0]?.message;
+		const content = responseMessage?.content ?? '';
 		// Some "OpenAI-compatible" providers (notably older Ollama versions)
 		// omit `usage` entirely. Default to zeros rather than throw.
 		const inputTokens = json.usage?.prompt_tokens ?? 0;
 		const outputTokens = json.usage?.completion_tokens ?? 0;
 
-		const toolCalls: ChatToolCall[] = (json.choices ?? []).map(choice => {
-			const toolCalls = choice.message?.tool_calls ?? [];
-			return toolCalls.map(call => {
-				if (!call.function) return null;
-				return {
-					toolName: call.function.name,
-					callId: call.id,
-					arguments: call.function.arguments,
-				};
-			}).filter(toolCall => !!toolCall);
-		}).flat();
+		const toolCalls: ChatToolCall[] = (responseMessage?.tool_calls ?? []).map(call => {
+			if (!call.function) return null;
+			return {
+				toolName: call.function.name,
+				callId: call.id,
+				arguments: call.function.arguments,
+			};
+		}).filter(toolCall => !!toolCall);
 
 		return { text: content, toolCalls, usage: { inputTokens, outputTokens } };
+	}
+
+	protected async sendChatRequest(body: Record<string, unknown>, options: ChatRequestOptions) {
+		if (!this.baseUrl_) throw new JoplinError('OpenAI-compatible provider has no base URL configured', 'aiProviderNotConfigured');
+
+		const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+		if (this.apiKey_) headers['Authorization'] = `Bearer ${this.apiKey_}`;
+
+		const response = await shim.fetch(`${this.baseUrl_}/chat/completions`, {
+			method: 'POST',
+			headers,
+			body: JSON.stringify(body),
+			signal: options.signal,
+		});
+
+		const text = await response.text();
+		let json: OpenAiResponse;
+		try {
+			json = JSON.parse(text) as OpenAiResponse;
+		} catch {
+			throw new JoplinError(`AI provider returned non-JSON response: ${text.slice(0, 200)}`, response.status);
+		}
+		return {
+			response: { status: response.status },
+			json,
+		};
 	}
 }

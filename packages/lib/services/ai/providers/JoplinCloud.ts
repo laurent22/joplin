@@ -2,8 +2,8 @@ import Setting from '../../../models/Setting';
 import JoplinError from '../../../JoplinError';
 import JoplinServerApi, { Session } from '../../../JoplinServerApi';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
-import { ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification } from '../types';
-import ChatProviderBase from './ChatProviderBase';
+import { ProviderClassification } from '../types';
+import OpenAiCompatibleProvider, { ChatRequestOptions } from './OpenAiCompatible';
 
 const joplinCloudSyncTarget = () => SyncTargetRegistry.nameToId('joplinCloud');
 
@@ -33,10 +33,19 @@ const mapErrorByStatus = (status: number, detail: string): JoplinError => {
 	return new JoplinError(`Joplin Cloud AI returned ${status}${detail ? `: ${detail}` : ''}`, status);
 };
 
-export default class JoplinCloudProvider extends ChatProviderBase {
+export default class JoplinCloudProvider extends OpenAiCompatibleProvider {
 
 	public id = 'joplin-cloud';
 	public classification: ProviderClassification = 'remote';
+
+	public constructor() {
+		super({
+			baseUrl: '',
+			model: 'joplin-cloud',
+			classification: 'remote',
+			apiKey: '',
+		});
+	}
 
 	private buildApi(): JoplinServerApi {
 		// Build a fresh API object per call so re-auth survives without drift.
@@ -53,20 +62,12 @@ export default class JoplinCloudProvider extends ChatProviderBase {
 		});
 	}
 
-	protected async doChat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult> {
+	protected override async sendChatRequest(body: Record<string, unknown>, _options: ChatRequestOptions) {
 		if (Setting.value('sync.target') !== joplinCloudSyncTarget()) {
 			throw new JoplinError('Joplin Cloud AI requires Joplin Cloud sync', 'aiJoplinCloudSyncRequired');
 		}
 
 		const api = this.buildApi();
-		// Body deliberately omits `model` — the Joplin Cloud server picks the
-		// model based on quota / degraded state. Sending one would be ignored.
-		const body: Record<string, unknown> = {
-			messages: messages.map(m => ({ role: m.role, content: m.content })),
-		};
-		if (options?.maxTokens !== undefined) body.max_tokens = options.maxTokens;
-		if (options?.temperature !== undefined) body.temperature = options.temperature;
-		if (options?.responseFormat !== undefined) body.response_format = options.responseFormat;
 
 		// JoplinServerApi.exec() returns the parsed JSON object directly when
 		// the response format is JSON (the default). No need to JSON.parse.
@@ -78,15 +79,7 @@ export default class JoplinCloudProvider extends ChatProviderBase {
 			const detail = error?.message ?? '';
 			throw mapErrorByStatus(status, detail);
 		}
-		console.log('received output:', json.choices);
 
-
-		const content = json?.choices?.[0]?.message?.content ?? '';
-		const inputTokens = json?.usage?.prompt_tokens ?? 0;
-		const outputTokens = json?.usage?.completion_tokens ?? 0;
-
-		const toolCalls: ChatToolCall[] = []; // TODO
-
-		return { text: content, toolCalls, usage: { inputTokens, outputTokens } };
+		return { response: { status: 200 }, json };
 	}
 }
