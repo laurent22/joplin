@@ -118,7 +118,7 @@ const toolDefinitions = (note: NoteContext) => {
 		result.push(
 			{
 				name: 'appendToNote',
-				description: 'Adds text to the end of the note. Usually, this is the tool you should use when a user asks you to add something to a note.',
+				description: 'Adds text to the end of the note. Text is always added to the end of the note. This tool does not require an anchor.',
 				inputSchema: {
 					type: 'object',
 					properties: {
