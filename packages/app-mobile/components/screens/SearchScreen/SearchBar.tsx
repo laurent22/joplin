@@ -58,8 +58,7 @@ const SearchBar: React.FC<Props> = ({ themeId, value, autoFocus, placeholder, on
 			placeholder={placeholder ?? _('Search')}
 			placeholderTextColor={theme.colorFaded}
 			value={value}
-			selectionColor={theme.color4}
-			cursorColor={theme.color4}
+			selectionColor={theme.textSelectionColor}
 			keyboardAppearance={theme.keyboardAppearance}
 		/>
 	);
