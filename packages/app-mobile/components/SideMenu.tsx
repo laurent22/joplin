@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { AccessibilityInfo, Animated, Dimensions, Easing, I18nManager, LayoutChangeEvent, PanResponder, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { AccessibilityInfo, Animated, Dimensions, Easing, I18nManager, LayoutChangeEvent, PanResponder, PanResponderGestureState, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { State } from '@joplin/lib/reducer';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AccessibleView from './accessibility/AccessibleView';
@@ -194,6 +194,16 @@ const SideMenuComponent: React.FC<Props> = props => {
 		isLeftMenu, menuWidth, open,
 	});
 
+	const onGestureEnd = useCallback((gestureState: PanResponderGestureState) => {
+		const newOpen = (gestureState.dx > 0) === isLeftMenu;
+
+		if (newOpen === open) {
+			updateMenuPosition();
+		} else {
+			setIsOpen(newOpen);
+		}
+	}, [isLeftMenu, open, updateMenuPosition]);
+
 	const panResponder = useMemo(() => {
 		return PanResponder.create({
 			onMoveShouldSetPanResponderCapture: (_event, gestureState) => {
@@ -242,15 +252,14 @@ const SideMenuComponent: React.FC<Props> = props => {
 				{ dx: menuDragOffset },
 			], { useNativeDriver: false }),
 			onPanResponderEnd: (_event, gestureState) => {
-				const newOpen = (gestureState.dx > 0) === isLeftMenu;
-				if (newOpen === open) {
-					updateMenuPosition();
-				} else {
-					setIsOpen(newOpen);
-				}
+				onGestureEnd(gestureState);
+			},
+			onPanResponderTerminate: (_event, gestureState) => {
+				// This prevents the gesture from leaving the menu partially open on web
+				onGestureEnd(gestureState);
 			},
 		});
-	}, [isLeftMenu, menuDragOffset, props.toleranceX, props.minHorizontalSwipe, open, props.disableGestures, props.disableOpenGesture, updateMenuPosition, setIsAnimating]);
+	}, [isLeftMenu, menuDragOffset, props.toleranceX, props.minHorizontalSwipe, open, props.disableGestures, props.disableOpenGesture, onGestureEnd, setIsAnimating]);
 
 	const onChangeRef = useRef(props.onChange);
 	onChangeRef.current = props.onChange;
