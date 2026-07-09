@@ -644,7 +644,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 					callForAction,
 					() => shim.openUrl('https://github.com/laurent22/joplin/releases'),
 				);
-			} else {
+			} else if (this.state.syncTargetAppMinVersionIsRelease !== null) {
 				const isTargetPreRelease = this.state.syncTargetAppMinVersionIsRelease === false;
 				const callForAction = isTargetPreRelease ? _('Download it from GitHub Releases') : _('Check for updates');
 				msg = this.renderNotificationMessage(
