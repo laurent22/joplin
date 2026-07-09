@@ -339,7 +339,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 						{_('Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.')}
 					</div>
 				)}
-				{messages.filter(m => m.role !== 'tool').map(m => {
+				{messages.map(m => {
 					if (m.role === 'separator') {
 						return <div key={m.id} className='separator'>{m.text}</div>;
 					}
