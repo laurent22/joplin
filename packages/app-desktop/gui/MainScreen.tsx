@@ -91,6 +91,7 @@ interface State {
 	shareNoteDialogOptions: Record<string, unknown>;
 	shareFolderDialogOptions: ShareFolderDialogOptions;
 	syncTargetAppMinVersionIsRelease: boolean | null;
+	didSyncTargetAppMinVersionReleaseLoadFail: boolean;
 }
 
 const StyledUserWebviewDialogContainer = styled.div`
@@ -134,6 +135,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				folderId: '',
 			},
 			syncTargetAppMinVersionIsRelease: null,
+			didSyncTargetAppMinVersionReleaseLoadFail: false,
 		};
 
 		this.updateMainLayout(this.buildLayout(props.plugins));
@@ -379,15 +381,23 @@ class MainScreenComponent extends React.Component<Props, State> {
 	private async loadSyncTargetAppMinVersionIsRelease() {
 		const version = this.props.syncTargetAppMinVersion;
 
-		this.setState({ syncTargetAppMinVersionIsRelease: null });
+		this.setState({
+			syncTargetAppMinVersionIsRelease: null,
+			didSyncTargetAppMinVersionReleaseLoadFail: false,
+		});
 		if (!this.props.mustUpgradeAppMessage || !version) return;
 
 		try {
 			const syncTargetAppMinVersionIsRelease = await isReleaseVersion(version);
 			if (!this.props.mustUpgradeAppMessage || this.props.syncTargetAppMinVersion !== version) return;
-			this.setState({ syncTargetAppMinVersionIsRelease });
+			this.setState({
+				syncTargetAppMinVersionIsRelease,
+				didSyncTargetAppMinVersionReleaseLoadFail: syncTargetAppMinVersionIsRelease === null,
+			});
 		} catch (error) {
 			logger.error(error);
+			if (!this.props.mustUpgradeAppMessage || this.props.syncTargetAppMinVersion !== version) return;
+			this.setState({ didSyncTargetAppMinVersionReleaseLoadFail: true });
 		}
 	}
 
@@ -616,6 +626,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 		} else if (this.props.mustUpgradeAppMessage) {
 			if (!this.props.syncTargetAppMinVersion) {
 				msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
+			} else if (this.state.didSyncTargetAppMinVersionReleaseLoadFail) {
+				msg = this.renderNotificationMessage(
+					_(
+						'Please upgrade your application to version %s. Joplin could not check update information.',
+						this.props.syncTargetAppMinVersion,
+					),
+				);
 			} else if (this.state.syncTargetAppMinVersionIsRelease === false && shim.isLinux()) {
 				const callForAction = _('Download it from GitHub Releases');
 				msg = this.renderNotificationMessage(
