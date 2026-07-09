@@ -89,6 +89,15 @@ const fixToolResults = (messages: AnthropicMessage[]) => {
 
 
 const convertMessages = (messages: ChatMessage[]) => {
+	const convertToolCall = (toolCall: ChatToolCall) => {
+		return {
+			type: 'tool_use' as const,
+			name: toolCall.toolName,
+			id: toolCall.callId,
+			input: toolCall.arguments,
+		};
+	};
+
 	const result = messages
 		.map((message): AnthropicMessage => {
 			if (message.role === ChatRole.System) return null;
@@ -96,7 +105,12 @@ const convertMessages = (messages: ChatMessage[]) => {
 				return {
 					role: 'user',
 					content: [
-						{ type: 'tool_result', tool_use_id: message.toolCallId, content: message.content },
+						{
+							type: 'tool_result',
+							tool_use_id: message.toolCallId,
+							content: message.content,
+							...(message.isError ? { is_error: true } : {}),
+						},
 					],
 				};
 			} else if (message.role === ChatRole.Assistant || message.role === ChatRole.User) {
@@ -104,12 +118,7 @@ const convertMessages = (messages: ChatMessage[]) => {
 					role: message.role,
 					content: message.toolCalls ? [
 						message.content ? { type: 'text' as const, text: message.content } : null,
-						...message.toolCalls.map(call => ({
-							type: 'tool_use' as const,
-							name: call.toolName,
-							id: call.callId,
-							input: call.arguments,
-						})),
+						...message.toolCalls.map(convertToolCall),
 					].filter(item => !!item) : message.content,
 				};
 			}
