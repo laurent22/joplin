@@ -4,6 +4,7 @@ import JoplinServerApi, { Session } from '../../../JoplinServerApi';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
 import { ProviderClassification } from '../types';
 import OpenAiCompatibleProvider, { ChatRequestOptions } from './OpenAiCompatible';
+import { msleep, Second } from '@joplin/utils/time';
 
 const joplinCloudSyncTarget = () => SyncTargetRegistry.nameToId('joplinCloud');
 
@@ -33,10 +34,15 @@ const mapErrorByStatus = (status: number, detail: string): JoplinError => {
 	return new JoplinError(`Joplin Cloud AI returned ${status}${detail ? `: ${detail}` : ''}`, status);
 };
 
+// If too many events are received in a short window, Joplin Cloud starts rejecting events.
+// For now, avoid more than one event every few seconds:
+const minimumTimeBetweenEvents = 3 * Second;
+
 export default class JoplinCloudProvider extends OpenAiCompatibleProvider {
 
 	public id = 'joplin-cloud';
 	public classification: ProviderClassification = 'remote';
+	private lastEventTime_ = 0;
 
 	public constructor() {
 		super({
@@ -67,6 +73,11 @@ export default class JoplinCloudProvider extends OpenAiCompatibleProvider {
 			throw new JoplinError('Joplin Cloud AI requires Joplin Cloud sync', 'aiJoplinCloudSyncRequired');
 		}
 
+		const timeSinceLastEvent = Date.now() - this.lastEventTime_;
+		if (timeSinceLastEvent < minimumTimeBetweenEvents) {
+			await msleep(minimumTimeBetweenEvents - timeSinceLastEvent);
+		}
+
 		const api = this.buildApi();
 
 		// JoplinServerApi.exec() returns the parsed JSON object directly when
@@ -79,6 +90,8 @@ export default class JoplinCloudProvider extends OpenAiCompatibleProvider {
 			const detail = error?.message ?? '';
 			throw mapErrorByStatus(status, detail);
 		}
+
+		this.lastEventTime_ = Date.now();
 
 		return { response: { status: 200 }, json };
 	}
