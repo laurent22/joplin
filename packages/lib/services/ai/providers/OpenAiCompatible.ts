@@ -118,7 +118,7 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 		if (options?.tools !== undefined) body.tools = options.tools.map(convertTool);
 
 
-		const doFetch = () => this.sendChatRequest(body, { signal: options.signal });
+		const doFetch = () => this.sendChatRequest(body, { signal: options?.signal });
 
 		let { response, json } = await doFetch();
 

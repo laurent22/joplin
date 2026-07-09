@@ -165,7 +165,7 @@ export default class AnthropicProvider extends ChatProviderBase {
 				},
 			};
 		}
-		if (options.tools) {
+		if (options?.tools) {
 			body.tools = options.tools.map(tool => {
 				return {
 					name: tool.name,
