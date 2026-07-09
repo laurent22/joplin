@@ -25,6 +25,8 @@ export default function stateToWhenClauseContext(state: AppState, options: WhenC
 		markdownViewerPaneVisible: windowState.editorCodeView && windowState.noteVisiblePanes.includes('viewer'),
 		modalDialogVisible: !!Object.keys(state.visibleDialogs).length,
 		gotoAnythingVisible: !!state.visibleDialogs['gotoAnything'],
+		appLockEnabled: !!state.appLock?.enabled,
+		appLocked: !!state.appLock?.locked,
 		sidebarVisible: isMainWindow && !!state.mainLayout && layoutItemProp(state.mainLayout, 'sideBar', 'visible'),
 		noteListHasNotes: !!windowState.notes.length,
 		isAltInstance,

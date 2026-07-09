@@ -30,9 +30,19 @@ import type PdfJs from '@joplin/lib/utils/types/pdfJs';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import FileApiDriverLocal from '@joplin/lib/file-api-driver-local';
 import * as React from 'react';
-import nodeSqlite = require('sqlite3');
-import sqliteVec = require('sqlite-vec');
 import * as path from 'path';
+import { loadDesktopSqliteModuleAfterProbe, probeDesktopSqlCipherCapability } from './services/encryptedProfile/loadDesktopSqliteModule';
+import { resolveDesktopProfilePaths } from './services/encryptedProfile/resolveProfileDir';
+import { decideEncryptedProfileStartupAction } from '@joplin/lib/services/encryptedProfile/EncryptedProfileService';
+import renderEncryptedProfileUnlockScreen from './gui/Root_EncryptedProfileUnlock';
+import renderEncryptedProfileBackupPromptScreen from './gui/Root_EncryptedProfileBackupPrompt';
+import renderEncryptedProfileMigrationFailedScreen from './gui/Root_EncryptedProfileMigrationFailed';
+import { runPendingEncryptedProfileMigration } from './services/encryptedProfile/encryptExistingProfileDatabase';
+import { profileHasPlaintextMigrationBackup } from './services/encryptedProfile/deletePlaintextMigrationBackup';
+import { setRuntimeDatabaseKeyHex } from './services/encryptedProfile/runtimeDatabaseKey';
+import formatEncryptedProfileMigrationError from '@joplin/lib/services/encryptedProfile/migrationErrors';
+import { _ } from '@joplin/lib/locale';
+import sqliteVec = require('sqlite-vec');
 import initLib from '@joplin/lib/initLib';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import * as pdfJs from 'pdfjs-dist';
@@ -113,6 +123,9 @@ const main = async () => {
 		getLoadablePath: () => sqliteVec.getLoadablePath().replace(`${path.sep}app.asar${path.sep}`, `${path.sep}app.asar.unpacked${path.sep}`),
 	};
 
+	const sqlCipherProbe = await probeDesktopSqlCipherCapability();
+	const nodeSqlite = await loadDesktopSqliteModuleAfterProbe();
+
 	shimInit({
 		keytar,
 		React,
@@ -129,7 +142,33 @@ const main = async () => {
 	Logger.initializeGlobalLogger(logger);
 	initLib(logger);
 
-	const startResult = await app().start(bridge().processArgv());
+	let databaseKeyHex: string | null = null;
+	const profilePaths = await resolveDesktopProfilePaths(bridge().processArgv());
+	const startupAction = decideEncryptedProfileStartupAction(profilePaths.metadata, sqlCipherProbe.available);
+	if (startupAction === 'errorSqlCipherUnavailable') {
+		throw new Error(_('Encrypted profile requires SQLCipher, but the SQLCipher native module is unavailable in this build. Encrypted profile cannot start until you use a build that includes SQLCipher or disable encrypted profile in profile-encryption.json.'));
+	}
+
+	if (startupAction === 'migrate' && profilePaths.metadata) {
+		databaseKeyHex = await renderEncryptedProfileUnlockScreen(profilePaths.metadata, { purpose: 'migration' });
+		const migrationResult = await runPendingEncryptedProfileMigration(profilePaths.profileDir, databaseKeyHex);
+		if (!migrationResult.success) {
+			await renderEncryptedProfileMigrationFailedScreen(migrationResult.error ? formatEncryptedProfileMigrationError(migrationResult.error) : _('Encrypted profile migration failed'));
+			databaseKeyHex = null;
+		} else {
+			setRuntimeDatabaseKeyHex(databaseKeyHex);
+			if (await profileHasPlaintextMigrationBackup(profilePaths.profileDir)) {
+				await renderEncryptedProfileBackupPromptScreen(profilePaths.profileDir);
+			}
+		}
+	} else if (startupAction === 'unlock' && profilePaths.metadata) {
+		databaseKeyHex = await renderEncryptedProfileUnlockScreen(profilePaths.metadata, { purpose: 'unlock' });
+		setRuntimeDatabaseKeyHex(databaseKeyHex);
+	}
+
+	const startResult = await app().start(bridge().processArgv(), {
+		databaseKeyHex: databaseKeyHex ?? undefined,
+	});
 
 	if (!startResult || !startResult.action) {
 		require('./gui/Root');

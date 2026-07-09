@@ -3,6 +3,54 @@ import appReducer, { createAppDefaultState } from './app.reducer';
 
 describe('app.reducer', () => {
 
+	it('should initialize app lock from startup settings', () => {
+		const state: AppState = createAppDefaultState({});
+		const passwordHash = { version: 1, algorithm: 'scrypt', hash: 'abc' };
+		const newState = appReducer(state, {
+			type: 'APP_LOCK_INIT',
+			locked: true,
+			settings: {
+				'security.appLock.enabled': true,
+				'security.appLock.lockOnStartup': true,
+				'security.appLock.idleLockEnabled': true,
+				'security.appLock.idleMinutes': 10,
+				'security.appLock.passwordHash': passwordHash,
+			},
+		});
+
+		expect(newState.appLock.enabled).toBe(true);
+		expect(newState.appLock.locked).toBe(true);
+		expect(newState.appLock.lockOnStartup).toBe(true);
+		expect(newState.appLock.idleLockEnabled).toBe(true);
+		expect(newState.appLock.idleMinutes).toBe(10);
+	});
+
+	it('should block navigation and dialog opening while locked', () => {
+		const defaultState = createAppDefaultState({});
+		const state: AppState = {
+			...defaultState,
+			appLock: {
+				...defaultState.appLock,
+				enabled: true,
+				locked: true,
+			},
+		};
+
+		const afterNav = appReducer(state, {
+			type: 'NAV_GO',
+			routeName: 'Config',
+			props: {},
+		});
+		expect(afterNav.route.routeName).toBe('Main');
+
+		const afterDialog = appReducer(state, {
+			type: 'DIALOG_OPEN',
+			name: 'syncWizard',
+			props: {},
+		});
+		expect(afterDialog.dialogs).toEqual([]);
+	});
+
 	it('should handle DIALOG_OPEN', async () => {
 		const state: AppState = createAppDefaultState({});
 

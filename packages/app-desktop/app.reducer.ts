@@ -40,6 +40,17 @@ export interface VisibleDialogs {
 	[dialogKey: string]: boolean;
 }
 
+export interface AppLockState {
+	enabled: boolean;
+	locked: boolean;
+	lockOnStartup: boolean;
+	idleLockEnabled: boolean;
+	idleMinutes: number;
+	failedAttempts: number;
+	cooldownUntil: number;
+	initialized: boolean;
+}
+
 export interface AppWindowState extends WindowState {
 	noteVisiblePanes: string[];
 	editorCodeView: boolean;
@@ -76,11 +87,42 @@ export interface AppState extends State, AppWindowState {
 	layoutMoveMode: boolean;
 	startupPluginsLoaded: boolean;
 	modalOverlayMessage: string|null;
+	appLock: AppLockState;
 
 	// Extra reducer keys go here
 	mainLayout: LayoutItem;
 	isResettingLayout: boolean;
 }
+
+const hasAppLockPasswordHash = (settings: Record<string, unknown>) => {
+	const hash = settings?.['security.appLock.passwordHash'];
+	return !!hash && typeof hash === 'object' && typeof (hash as Record<string, unknown>).hash === 'string';
+};
+
+const appLockStateFromSettings = (settings: Record<string, unknown>, currentState: AppLockState): AppLockState => {
+	const enabled = !!settings?.['security.appLock.enabled'] && hasAppLockPasswordHash(settings);
+	const locked = enabled ? currentState.locked : false;
+
+	return {
+		...currentState,
+		enabled,
+		locked,
+		lockOnStartup: !!settings?.['security.appLock.lockOnStartup'],
+		idleLockEnabled: !!settings?.['security.appLock.idleLockEnabled'],
+		idleMinutes: Number(settings?.['security.appLock.idleMinutes'] || 5),
+	};
+};
+
+export const createDefaultAppLockState = (): AppLockState => ({
+	enabled: false,
+	locked: false,
+	lockOnStartup: false,
+	idleLockEnabled: false,
+	idleMinutes: 5,
+	failedAttempts: 0,
+	cooldownUntil: 0,
+	initialized: false,
+});
 
 export const createAppDefaultWindowState = (): AppWindowState => {
 	return {
@@ -117,6 +159,7 @@ export function createAppDefaultState(resourceEditWatcherDefaultState: Partial<A
 		startupPluginsLoaded: false,
 		isResettingLayout: false,
 		modalOverlayMessage: null,
+		appLock: createDefaultAppLockState(),
 		...resourceEditWatcherDefaultState,
 	};
 }
@@ -177,6 +220,8 @@ export default function(state: AppState, action: any) {
 		case 'NAV_GO':
 
 			{
+				if (state.appLock?.locked) break;
+
 				const goingBack = action.type === 'NAV_BACK';
 
 				if (goingBack && !state.navHistory.length) break;
@@ -201,6 +246,79 @@ export default function(state: AppState, action: any) {
 				if (!goingBack) newNavHistory.push(currentRoute);
 				newState.navHistory = newNavHistory;
 				newState.route = action;
+			}
+			break;
+
+		case 'APP_LOCK_INIT':
+			{
+				const nextAppLock = appLockStateFromSettings(action.settings || state.settings, state.appLock || createDefaultAppLockState());
+				newState = {
+					...state,
+					appLock: {
+						...nextAppLock,
+						locked: !!action.locked,
+						initialized: true,
+						failedAttempts: 0,
+						cooldownUntil: 0,
+					},
+				};
+			}
+			break;
+
+		case 'APP_LOCK_LOCK':
+			if (state.appLock?.enabled) {
+				newState = {
+					...state,
+					appLock: {
+						...state.appLock,
+						locked: true,
+						failedAttempts: 0,
+						cooldownUntil: 0,
+					},
+				};
+			}
+			break;
+
+		case 'APP_LOCK_UNLOCK_SUCCEEDED':
+			newState = {
+				...state,
+				appLock: {
+					...state.appLock,
+					locked: false,
+					failedAttempts: 0,
+					cooldownUntil: 0,
+				},
+			};
+			break;
+
+		case 'APP_LOCK_UNLOCK_FAILED':
+			newState = {
+				...state,
+				appLock: {
+					...state.appLock,
+					failedAttempts: action.failedAttempts,
+					cooldownUntil: action.cooldownUntil,
+				},
+			};
+			break;
+
+		case 'SETTING_UPDATE_ALL':
+			newState = {
+				...state,
+				appLock: appLockStateFromSettings(action.settings, state.appLock || createDefaultAppLockState()),
+			};
+			break;
+
+		case 'SETTING_UPDATE_ONE':
+			if (String(action.key).indexOf('security.appLock.') === 0) {
+				const settings = {
+					...state.settings,
+					[action.key]: action.value,
+				};
+				newState = {
+					...state,
+					appLock: appLockStateFromSettings(settings, state.appLock || createDefaultAppLockState()),
+				};
 			}
 			break;
 
@@ -417,6 +535,8 @@ export default function(state: AppState, action: any) {
 		case 'DIALOG_CLOSE':
 
 			{
+				if (state.appLock?.locked) break;
+
 				let isOpen = true;
 
 				if (action.type === 'DIALOG_CLOSE') {

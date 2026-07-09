@@ -21,6 +21,11 @@ const globalCommands = appCommands.concat(libCommands);
 
 export default function initializeCommandService(store: object, devMode: boolean) {
 	CommandService.instance().initialize(store, devMode, stateToWhenClauseContext);
+	CommandService.instance().setAppLockAllowedCommands([
+		'appLockLockNow',
+		'hideModalMessage',
+		'showModalMessage',
+	]);
 
 	for (const command of commands) {
 		CommandService.instance().registerDeclaration(command.declaration);

@@ -12390,6 +12390,7 @@ __metadata:
     "@joplin/renderer": "npm:~3.7"
     "@joplin/tools": "npm:~3.7"
     "@joplin/utils": "npm:~3.7"
+    "@journeyapps/sqlcipher": "npm:5.3.1"
     "@playwright/test": "npm:1.58.2"
     "@sentry/electron": "npm:4.24.0"
     "@testing-library/dom": "npm:10.4.1"
@@ -13205,6 +13206,16 @@ __metadata:
     react-native-nitro-modules: "*"
   languageName: unknown
   linkType: soft
+
+"@journeyapps/sqlcipher@npm:5.3.1":
+  version: 5.3.1
+  resolution: "@journeyapps/sqlcipher@npm:5.3.1"
+  dependencies:
+    "@mapbox/node-pre-gyp": "npm:^1.0.0"
+    node-addon-api: "npm:^3.0.0"
+  checksum: 10/b7ff06373b52050aaea80db784a9fc56846dcc0a467dbaacdb03c1c612d95f5634bd8a902d19a698eab298ecaca052fe02da013ce442dd4ad0d92eda64ce7bf5
+  languageName: node
+  linkType: hard
 
 "@jridgewell/gen-mapping@npm:^0.3.0":
   version: 0.3.3
@@ -43814,6 +43825,15 @@ __metadata:
   dependencies:
     node-gyp: "npm:latest"
   checksum: 10/6bf8217a8cd8148f4bbfd319b46d33587e9fb2e63e3c856ded67a76715167f7a6b17e1d9b8bbf3b8508befeb6a4adb10d92b8998ed5c19ca8448343f4cea11d6
+  languageName: node
+  linkType: hard
+
+"node-addon-api@npm:^3.0.0":
+  version: 3.2.1
+  resolution: "node-addon-api@npm:3.2.1"
+  dependencies:
+    node-gyp: "npm:latest"
+  checksum: 10/681b52dfa3e15b0a8e5cf283cc0d8cd5fd2a57c559ae670fcfd20544cbb32f75de7648674110defcd17ab2c76ebef630aa7d2d2f930bc7a8cc439b20fe233518
   languageName: node
   linkType: hard
 

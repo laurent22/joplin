@@ -68,6 +68,7 @@ import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
 import AiService from '@joplin/lib/services/ai/AiService';
 import LocalEmbeddingProvider from '@joplin/lib/services/ai/LocalEmbeddingProvider';
+import { shouldLockOnStartup } from './services/appLock/AppLockService';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -127,6 +128,12 @@ class Application extends BaseApplication {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux middleware signature; matches the base class which takes heterogeneous action types
 	protected async generalMiddleware(store: any, next: any, action: any) {
+		if (action.type === 'APP_LOCK_LOCK' || action.type === 'APP_LOCK_INIT' && action.locked) {
+			void ClipperServer.instance().stop();
+		} else if (action.type === 'APP_LOCK_UNLOCK_SUCCEEDED' && ClipperServer.instance().enabled() && Setting.value('clipperServer.autoStart')) {
+			void ClipperServer.instance().start();
+		}
+
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'locale' || action.type === 'SETTING_UPDATE_ALL') {
 			this.updateLanguage();
 		}
@@ -530,6 +537,12 @@ class Application extends BaseApplication {
 			// which mean state.settings will not be initialised. So we
 			// manually call dispatchUpdateAll() to force an update.
 			Setting.dispatchUpdateAll();
+			const settings = Setting.toPlainObject();
+			this.dispatch({
+				type: 'APP_LOCK_INIT',
+				settings,
+				locked: shouldLockOnStartup(settings),
+			});
 		});
 
 		addTask('app/update folders and tags', async () => {
@@ -677,7 +690,7 @@ class Application extends BaseApplication {
 			ClipperServer.instance().setLogger(clipperLogger);
 			ClipperServer.instance().setDispatch(this.store().dispatch);
 
-			if (ClipperServer.instance().enabled() && Setting.value('clipperServer.autoStart')) {
+			if (ClipperServer.instance().enabled() && Setting.value('clipperServer.autoStart') && !(this.store().getState() as AppState).appLock?.locked) {
 				void ClipperServer.instance().start();
 			}
 		});

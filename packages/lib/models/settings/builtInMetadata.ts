@@ -1524,6 +1524,104 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			},
 		},
 
+		'security.appLock.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			section: 'security',
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Enable App Lock'),
+			description: () => _('Require the App Lock password before notes can be viewed from the desktop user interface. This does not encrypt the local profile database.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'security.appLock.lockOnStartup': {
+			value: false,
+			type: SettingItemType.Bool,
+			section: 'security',
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Lock on startup'),
+			show: settings => !!settings['security.appLock.enabled'],
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'security.appLock.idleLockEnabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			section: 'security',
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Lock after idle'),
+			show: settings => !!settings['security.appLock.enabled'],
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'security.appLock.idleMinutes': {
+			value: 5,
+			type: SettingItemType.Int,
+			section: 'security',
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Idle timeout'),
+			unitLabel: (value: number = null) => value === null ? _('minutes') : _n('%d minute', '%d minutes', value, value),
+			show: settings => !!settings['security.appLock.enabled'] && !!settings['security.appLock.idleLockEnabled'],
+			minimum: 1,
+			maximum: 240,
+			step: 1,
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
+		'security.appLock.setPasswordButton': {
+			value: null as boolean,
+			type: SettingItemType.Button,
+			section: 'security',
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Set or change App Lock password...'),
+		},
+
+		'security.appLock.clearPasswordButton': {
+			value: null as boolean,
+			type: SettingItemType.Button,
+			section: 'security',
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Clear App Lock password...'),
+			show: settings => !!settings['security.appLock.enabled'],
+		},
+
+		'security.appLock.passwordHash': {
+			value: {} as Record<string, unknown>,
+			type: SettingItemType.Object,
+			public: false,
+			appTypes: [AppType.Desktop],
+		},
+
+		'security.encryptedProfile.enableButton': {
+			value: null as boolean,
+			type: SettingItemType.Button,
+			section: 'security',
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Enable encrypted profile (SQLCipher prototype)...'),
+			description: () => _('Encrypts database.sqlite only. Resources, settings files, cache, logs, plugins, and plugin data remain readable on disk. This is separate from Joplin sync end-to-end encryption.'),
+		},
+
+		'security.encryptedProfile.plaintextBackupButton': {
+			value: null as boolean,
+			type: SettingItemType.Button,
+			section: 'security',
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Plaintext migration backup...'),
+			description: () => _('Opens database.sqlite.before-encryption-backup in this profile and optionally deletes that plaintext copy.'),
+		},
+
 		collapsedFolderIds: { value: [] as string[], type: SettingItemType.Array, public: false },
 
 		'keychain.supported': { value: -1, type: SettingItemType.Int, public: false },

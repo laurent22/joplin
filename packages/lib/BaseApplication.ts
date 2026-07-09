@@ -88,6 +88,7 @@ export interface StartOptions {
 	rootProfileDir?: string;
 	appName?: string;
 	appId?: string;
+	databaseKeyHex?: string;
 }
 export const safeModeFlagFilename = 'force-safe-mode-on-next-start';
 
@@ -808,7 +809,10 @@ export default class BaseApplication {
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
 		this.database_.setLogger(globalLogger);
 
-		await this.database_.open({ name: `${profileDir}/database.sqlite` });
+		await this.database_.open({
+			name: `${profileDir}/database.sqlite`,
+			keyHex: options.databaseKeyHex,
+		});
 
 		// if (Setting.value('env') === 'dev') await this.database_.clearForTesting();
 

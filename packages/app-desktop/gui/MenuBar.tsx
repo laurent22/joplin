@@ -184,6 +184,7 @@ interface Props {
 	secondaryWindowFocused: boolean;
 	showMenuBar: boolean;
 	syncPending: boolean;
+	appLockLocked: boolean;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -354,6 +355,8 @@ function useMenu(props: Props) {
 			const keymapService = KeymapService.instance();
 
 			const navigateTo = (routeName: string) => {
+				if (props.appLockLocked) return;
+
 				void NavService.go(routeName);
 
 				// NavService.go opens in the main window -- switch to it to show the screen:
@@ -439,7 +442,9 @@ function useMenu(props: Props) {
 					if (module.isNoteArchive !== false) {
 						exportItems.push({
 							label: module.fullLabel(),
+							enabled: !props.appLockLocked,
 							click: async () => {
+								if (props.appLockLocked) return;
 								await InteropServiceHelper.export(
 									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Electron MenuItemConstructorOptions has heterogeneous shapes (submenu/role/type/click vary by item kind); the menu structure is built dynamically
 									(action: any) => props.dispatch(action),
@@ -521,6 +526,7 @@ function useMenu(props: Props) {
 				{
 					label: _('Options'),
 					accelerator: keymapService.getAccelerator('config'),
+					enabled: !props.appLockLocked,
 					click: () => {
 						navigateTo('Config');
 					},
@@ -534,6 +540,7 @@ function useMenu(props: Props) {
 				separator(),
 				{
 					label: _('Note attachments...'),
+					enabled: !props.appLockLocked,
 					click: () => {
 						navigateTo('Resources');
 					},
@@ -590,6 +597,7 @@ function useMenu(props: Props) {
 					label: _('Preferences...'),
 					visible: !!shim.isMac(),
 					accelerator: shim.isMac() && keymapService.getAccelerator('config'),
+					enabled: !props.appLockLocked,
 					click: () => {
 						navigateTo('Config');
 					},
@@ -924,7 +932,9 @@ function useMenu(props: Props) {
 					{
 						id: 'help:toggleDevTools',
 						label: _('Toggle development tools'),
+						enabled: !props.appLockLocked,
 						click: () => {
+							if (props.appLockLocked) return;
 							props.dispatch({
 								type: 'NOTE_DEVTOOLS_TOGGLE',
 							});
@@ -974,6 +984,7 @@ function useMenu(props: Props) {
 
 			rootMenus.go.submenu.push(menuItemDic.gotoAnything);
 			rootMenus.tools.submenu.push(menuItemDic.commandPalette);
+			rootMenus.tools.submenu.push(menuItemDic.appLockLockNow);
 			rootMenus.tools.submenu.push(menuItemDic.openMasterPasswordDialog);
 
 			for (const view of props.pluginMenuItems) {
@@ -1061,6 +1072,7 @@ function useMenu(props: Props) {
 		switchProfileMenuItems,
 		menuItemDic,
 		props.syncPending,
+		props.appLockLocked,
 	]);
 
 	useMenuStates(menu, props);
@@ -1148,6 +1160,7 @@ const mapStateToProps = (state: AppState): Partial<Props> => {
 		noteListRendererId: state.settings['notes.listRendererId'],
 		showMenuBar: state.settings.showMenuBar,
 		syncPending: state.syncPending,
+		appLockLocked: !!state.appLock?.locked,
 	};
 };
 

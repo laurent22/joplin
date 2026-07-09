@@ -26,6 +26,14 @@ import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingCom
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { OnChangeEvent } from '../lib/SearchInput/SearchInput';
 import highlightSearchText from './searchHighlight';
+import dialogs from '../dialogs';
+import { appLockHasPasswordHash, clearAppLockPassword, setAppLockPassword, verifyAppLockPassword } from '../../services/appLock/AppLockService';
+import { scheduleEncryptedProfileMigrationAndRestart } from '../../services/encryptedProfile/scheduleEncryptedProfileMigrationAndRestart';
+import { deletePlaintextMigrationBackupForProfile, profileHasPlaintextMigrationBackup } from '../../services/encryptedProfile/deletePlaintextMigrationBackup';
+import { readEncryptedProfileMetadata } from '@joplin/lib/services/encryptedProfile/metadata';
+import { validateEncryptedProfilePassword } from '@joplin/lib/services/encryptedProfile/EncryptedProfileService';
+import { encryptedProfilePlaintextBackupPathFromMigration } from '@joplin/lib/services/encryptedProfile/backup';
+import { probeDesktopSqlCipherCapability } from '../../services/encryptedProfile/loadDesktopSqliteModule';
 
 
 interface Font {
@@ -56,6 +64,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			screenName: '',
 			changedSettingKeys: [],
 			needRestart: false,
+			encryptedProfileMigrationPending: false,
 			fonts: [],
 			searchQuery: '',
 			searchSectionFilter: null,
@@ -116,6 +125,26 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		const fonts = (await window.queryLocalFonts()).map((font: Font) => font.family);
 		const uniqueFonts = [...new Set(fonts)];
 		this.setState({ fonts: uniqueFonts });
+
+		const encryptedProfileMetadata = await this.refreshEncryptedProfileStatus();
+		if (encryptedProfileMetadata?.migrationState === 'pending') {
+			this.setState({ encryptedProfileMigrationPending: true });
+		}
+	}
+
+	private async refreshEncryptedProfileStatus() {
+		return await readEncryptedProfileMetadata(Setting.value('profileDir'), async (path) => {
+			return await shim.fsDriver().readFile(path, 'utf8');
+		});
+	}
+
+	private async promptEncryptedProfileMigrationRestart() {
+		if (!await shim.showConfirmationDialog(_('Encrypted profile migration is scheduled. Restart Joplin now to complete it?'))) return;
+
+		const restartResult = await restart();
+		if (restartResult.requiresManualRestart) {
+			await dialogs.alert(_('Please restart Joplin manually to complete encrypted profile migration.'), _('Encrypted profile'));
+		}
 	}
 
 	private async handleSettingButton(key: string) {
@@ -145,6 +174,101 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				type: 'DIALOG_OPEN',
 				name: 'syncWizard',
 			});
+		} else if (key === 'security.appLock.setPasswordButton') {
+			if (appLockHasPasswordHash()) {
+				const currentPassword = await dialogs.prompt(_('Enter current App Lock password'), _('App Lock'), '', { type: 'password' });
+				if (currentPassword === null) return;
+				if (!await verifyAppLockPassword(currentPassword)) {
+					await dialogs.alert(_('Incorrect password.'), _('App Lock'));
+					return;
+				}
+			}
+
+			const newPassword = await dialogs.prompt(_('Enter new App Lock password'), _('App Lock'), '', { type: 'password' });
+			if (newPassword === null) return;
+
+			try {
+				await setAppLockPassword(newPassword);
+				this.setState({ settings: Setting.toPlainObject() });
+			} catch (error) {
+				await dialogs.alert(error instanceof Error ? error.message : String(error), _('App Lock'));
+			}
+		} else if (key === 'security.appLock.clearPasswordButton') {
+			const currentPassword = await dialogs.prompt(_('Enter current App Lock password'), _('App Lock'), '', { type: 'password' });
+			if (currentPassword === null) return;
+			if (!await verifyAppLockPassword(currentPassword)) {
+				await dialogs.alert(_('Incorrect password.'), _('App Lock'));
+				return;
+			}
+
+			if (!await shim.showConfirmationDialog(_('Clear App Lock password?'))) return;
+			await clearAppLockPassword();
+			this.setState({ settings: Setting.toPlainObject() });
+		} else if (key === 'security.encryptedProfile.enableButton') {
+			const sqlCipherProbe = await probeDesktopSqlCipherCapability();
+			if (!sqlCipherProbe.available) {
+				await dialogs.alert(_('SQLCipher native module is not available in this build. Encrypted profile cannot be enabled.'), _('Encrypted profile'));
+				return;
+			}
+
+			const existing = await this.refreshEncryptedProfileStatus();
+			if (existing?.enabled && existing.migrationState === 'complete') {
+				await dialogs.alert(_('Encrypted profile is already enabled for this profile.'), _('Encrypted profile'));
+				return;
+			}
+			if (existing?.migrationState === 'pending') {
+				await this.promptEncryptedProfileMigrationRestart();
+				return;
+			}
+			if (existing?.migrationState === 'failed') {
+				if (!await shim.showConfirmationDialog(_('A previous encrypted profile migration failed and your database.sqlite was left unencrypted. You can try again. This feature is separate from Joplin sync end-to-end encryption. Continue?'))) return;
+			}
+
+			if (!await shim.showConfirmationDialog(_('This prototype encrypts only database.sqlite. Resources, settings files, cache, logs, plugins, and plugin data remain readable on disk. Migration leaves a plaintext backup at database.sqlite.before-encryption-backup in this profile — you must securely store or delete it yourself. Joplin will restart and encrypt the database before it opens. Continue?'))) return;
+
+			const password = await dialogs.prompt(_('Enter encrypted profile password'), _('Encrypted profile'), '', { type: 'password' });
+			if (password === null) return;
+			const confirmPassword = await dialogs.prompt(_('Confirm encrypted profile password'), _('Encrypted profile'), '', { type: 'password' });
+			if (confirmPassword === null) return;
+			if (password !== confirmPassword) {
+				await dialogs.alert(_('Passwords do not match.'), _('Encrypted profile'));
+				return;
+			}
+
+			try {
+				validateEncryptedProfilePassword(password);
+			} catch (error) {
+				await dialogs.alert(error instanceof Error ? error.message : String(error), _('Encrypted profile'));
+				return;
+			}
+
+			const result = await scheduleEncryptedProfileMigrationAndRestart(Setting.value('profileDir'), password);
+			if (!result.success) {
+				await dialogs.alert(result.error ? _(result.error) : _('Encrypted profile migration could not be scheduled.'), _('Encrypted profile'));
+				return;
+			}
+
+			this.setState({ encryptedProfileMigrationPending: true });
+			if (result.restartResult?.requiresManualRestart) {
+				await dialogs.alert(_('Encrypted profile migration is scheduled. Please restart Joplin manually to complete it.'), _('Encrypted profile'));
+			}
+		} else if (key === 'security.encryptedProfile.plaintextBackupButton') {
+			const profileDir = Setting.value('profileDir');
+			if (!await profileHasPlaintextMigrationBackup(profileDir)) {
+				await dialogs.alert(_('No plaintext migration backup was found in this profile.'), _('Encrypted profile'));
+				return;
+			}
+
+			const backupPath = encryptedProfilePlaintextBackupPathFromMigration(profileDir);
+			bridge().showItemInFolder(backupPath);
+			if (!await shim.showConfirmationDialog(_('Delete database.sqlite.before-encryption-backup from this profile only? This cannot be undone. Only delete it if you no longer need the pre-migration plaintext copy.'))) return;
+
+			const result = await deletePlaintextMigrationBackupForProfile(profileDir);
+			if (result === 'deleted') {
+				await dialogs.alert(_('Plaintext migration backup deleted.'), _('Encrypted profile'));
+				return;
+			}
+			await dialogs.alert(_('Plaintext migration backup was not found.'), _('Encrypted profile'));
 		} else {
 			throw new Error(`Unhandled key: ${key}`);
 		}
@@ -389,7 +513,30 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		);
 	}
 
+	private async updateAppLockEnabledSetting(value: unknown) {
+		if (!!value && !appLockHasPasswordHash(this.state.settings['security.appLock.passwordHash'])) {
+			await dialogs.alert(_('Set an App Lock password before enabling App Lock.'), _('App Lock'));
+			return;
+		}
+
+		if (!value && appLockHasPasswordHash(this.state.settings['security.appLock.passwordHash'])) {
+			const currentPassword = await dialogs.prompt(_('Enter current App Lock password'), _('App Lock'), '', { type: 'password' });
+			if (currentPassword === null) return;
+			if (!await verifyAppLockPassword(currentPassword)) {
+				await dialogs.alert(_('Incorrect password.'), _('App Lock'));
+				return;
+			}
+		}
+
+		shared.updateSettingValue(this, 'security.appLock.enabled', value);
+	}
+
 	private onUpdateSettingValue = ({ key, value }: UpdateSettingValueEvent) => {
+		if (key === 'security.appLock.enabled') {
+			void this.updateAppLockEnabledSetting(value);
+			return;
+		}
+
 		const md = Setting.settingMetadata(key);
 		if (md.needRestart) {
 			this.setState({ needRestart: true });
@@ -494,6 +641,13 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			<div style={{ ...theme.textStyle, padding: 10, paddingLeft: 24, backgroundColor: theme.warningBackgroundColor, color: theme.color }}>
 				{this.restartMessage()}
 				<a style={{ ...theme.urlStyle, marginLeft: 10 }} href="#" onClick={() => { void this.restartApp(); }}>{_('Restart now')}</a>
+			</div>
+		) : null;
+
+		const encryptedProfileMigrationPendingComp: React.ReactNode = this.state.encryptedProfileMigrationPending ? (
+			<div style={{ ...theme.textStyle, padding: 10, paddingLeft: 24, backgroundColor: theme.warningBackgroundColor, color: theme.color }}>
+				{_('Encrypted profile migration is scheduled. Restart Joplin to complete it.')}
+				<a style={{ ...theme.urlStyle, marginLeft: 10 }} href="#" onClick={() => { void this.promptEncryptedProfileMigrationRestart(); }}>{_('Restart now')}</a>
 			</div>
 		) : null;
 
@@ -607,6 +761,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				/>
 				<div style={rightStyle}>
 					{needRestartComp}
+					{encryptedProfileMigrationPendingComp}
 					{tabComponents}
 					<ButtonBar
 						hasChanges={hasChanges}

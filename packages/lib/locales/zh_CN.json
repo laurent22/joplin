@@ -4484,6 +4484,204 @@
 	"Your version: %s": [
 		"您的版本：%s"
 	],
+	"A previous encrypted profile migration failed and your database.sqlite was left unencrypted. You can try again. This feature is separate from Joplin sync end-to-end encryption. Continue?": [
+		"上一次 Encrypted Profile 迁移失败，database.sqlite 仍未加密。你可以重新尝试。此功能独立于 Joplin 同步端到端加密。继续吗？"
+	],
+	"App Lock": [
+		"App Lock"
+	],
+	"App Lock password": [
+		"App Lock 密码"
+	],
+	"App Lock password must be at least %d characters.": [
+		"App Lock 密码至少需要 %d 个字符。"
+	],
+	"Clear App Lock password...": [
+		"清除 App Lock 密码..."
+	],
+	"Clear App Lock password?": [
+		"清除 App Lock 密码？"
+	],
+	"Complete encrypted profile migration": [
+		"完成 Encrypted Profile 迁移"
+	],
+	"Confirm encrypted profile password": [
+		"确认 Encrypted Profile 密码"
+	],
+	"Continue to Joplin": [
+		"继续进入 Joplin"
+	],
+	"Database file does not exist.": [
+		"数据库文件不存在。"
+	],
+	"Delete database.sqlite.before-encryption-backup from this profile only? This cannot be undone. Only delete it if you no longer need the pre-migration plaintext copy.": [
+		"仅从此 profile 删除 database.sqlite.before-encryption-backup？此操作无法撤销。仅在你不再需要迁移前明文副本时删除。"
+	],
+	"Delete plaintext backup": [
+		"删除明文备份"
+	],
+	"Delete the plaintext migration backup database.sqlite.before-encryption-backup from this profile only? This cannot be undone. Only use this if you already have another safe backup or no longer need the pre-migration copy.": [
+		"仅从此 profile 删除明文迁移备份 database.sqlite.before-encryption-backup？此操作无法撤销。仅在你已有其他安全备份或不再需要迁移前副本时使用。"
+	],
+	"Enable App Lock": [
+		"启用 App Lock"
+	],
+	"Enable encrypted profile (SQLCipher prototype)...": [
+		"启用 Encrypted Profile（SQLCipher 原型）..."
+	],
+	"Encrypted profile": [
+		"Encrypted Profile"
+	],
+	"Encrypted profile is already enabled.": [
+		"Encrypted Profile 已启用。"
+	],
+	"Encrypted profile is already enabled for this profile.": [
+		"此 profile 已启用 Encrypted Profile。"
+	],
+	"Encrypted profile migration could not be scheduled.": [
+		"无法安排 Encrypted Profile 迁移。"
+	],
+	"Encrypted profile migration could not find database.sqlite in this profile.": [
+		"Encrypted Profile 迁移找不到此 profile 中的 database.sqlite。"
+	],
+	"Encrypted profile migration could not verify the encrypted database. Your original database.sqlite was restored from the backup.": [
+		"Encrypted Profile 迁移无法验证加密后的数据库。原始 database.sqlite 已从备份恢复。"
+	],
+	"Encrypted profile migration failed": [
+		"Encrypted Profile 迁移失败"
+	],
+	"Encrypted profile migration failed a security check. Your original database.sqlite was restored from the backup.": [
+		"Encrypted Profile 迁移未通过安全检查。原始 database.sqlite 已从备份恢复。"
+	],
+	"Encrypted profile migration failed: %s. Your original database.sqlite was restored when possible.": [
+		"Encrypted Profile 迁移失败：%s。已尽可能恢复原始 database.sqlite。"
+	],
+	"Encrypted profile migration is already scheduled.": [
+		"Encrypted Profile 迁移已安排。"
+	],
+	"Encrypted profile migration is not scheduled for this profile.": [
+		"此 profile 没有待执行的 Encrypted Profile 迁移。"
+	],
+	"Encrypted profile migration is scheduled. Please restart Joplin manually to complete it.": [
+		"Encrypted Profile 迁移已安排。请手动重启 Joplin 以完成迁移。"
+	],
+	"Encrypted profile migration is scheduled. Restart Joplin now to complete it?": [
+		"Encrypted Profile 迁移已安排。现在重启 Joplin 以完成迁移吗？"
+	],
+	"Encrypted profile migration is scheduled. Restart Joplin to complete it.": [
+		"Encrypted Profile 迁移已安排。请重启 Joplin 完成迁移。"
+	],
+	"Encrypted profile migration succeeded. Only database.sqlite is now encrypted. Resources, settings files, cache, logs, plugins, and plugin data remain readable on disk.": [
+		"Encrypted Profile 迁移成功。现在仅 database.sqlite 已加密。resources、settings 文件、cache、logs、plugins 和插件数据仍会以明文保存在磁盘上。"
+	],
+	"Encrypted profile password": [
+		"Encrypted Profile 密码"
+	],
+	"Encrypted profile password must be at least %d characters.": [
+		"Encrypted Profile 密码至少需要 %d 个字符。"
+	],
+	"Encrypted profile requires SQLCipher, but the SQLCipher native module is unavailable in this build. Encrypted profile cannot start until you use a build that includes SQLCipher or disable encrypted profile in profile-encryption.json.": [
+		"Encrypted Profile 需要 SQLCipher，但此构建不包含可用的 SQLCipher 原生模块。请使用包含 SQLCipher 的构建，或在 profile-encryption.json 中停用 Encrypted Profile 后再启动。"
+	],
+	"Encrypts database.sqlite only. Resources, settings files, cache, logs, plugins, and plugin data remain readable on disk. This is separate from Joplin sync end-to-end encryption.": [
+		"仅加密 database.sqlite。resources、settings 文件、cache、logs、plugins 和插件数据仍会以明文保存在磁盘上。此功能独立于 Joplin 同步端到端加密。"
+	],
+	"Enter current App Lock password": [
+		"输入当前 App Lock 密码"
+	],
+	"Enter encrypted profile password": [
+		"输入 Encrypted Profile 密码"
+	],
+	"Enter new App Lock password": [
+		"输入新的 App Lock 密码"
+	],
+	"Enter your App Lock password to continue.": [
+		"输入 App Lock 密码以继续。"
+	],
+	"Enter your encrypted profile password to encrypt the local database before Joplin starts.": [
+		"输入 Encrypted Profile 密码，在 Joplin 启动前加密本地数据库。"
+	],
+	"Enter your encrypted profile password to open the local database.": [
+		"输入 Encrypted Profile 密码以打开本地数据库。"
+	],
+	"I understand": [
+		"我知道了"
+	],
+	"Incorrect password.": [
+		"密码错误。"
+	],
+	"Joplin also left a plaintext copy of your old database at database.sqlite.before-encryption-backup in this profile. Anyone with access to your profile folder can read it. Move it to secure storage or delete it when you no longer need it.": [
+		"Joplin 还在此 profile 中保留了旧数据库的明文副本：database.sqlite.before-encryption-backup。任何能访问此 profile 文件夹的人都可以读取它。请将其移到安全存储位置，或在不再需要时删除。"
+	],
+	"Joplin is locked": [
+		"Joplin 已锁定"
+	],
+	"Joplin will continue with your unencrypted database.sqlite. Encrypted profile is not enabled. You can try again from Settings -> Security. This is separate from Joplin sync end-to-end encryption.": [
+		"Joplin 将继续使用未加密的 database.sqlite。Encrypted Profile 未启用。你可以稍后在“设置 -> Security”中重试。此功能独立于 Joplin 同步端到端加密。"
+	],
+	"Lock after idle": [
+		"空闲后锁定"
+	],
+	"Lock on startup": [
+		"启动时锁定"
+	],
+	"No plaintext migration backup was found in this profile.": [
+		"此 profile 中未找到明文迁移备份。"
+	],
+	"Open backup location": [
+		"打开备份位置"
+	],
+	"Opens database.sqlite.before-encryption-backup in this profile and optionally deletes that plaintext copy.": [
+		"打开此 profile 中的 database.sqlite.before-encryption-backup，并可选择删除这份明文副本。"
+	],
+	"Passwords do not match.": [
+		"两次输入的密码不一致。"
+	],
+	"Plaintext migration backup": [
+		"明文迁移备份"
+	],
+	"Plaintext migration backup deleted.": [
+		"明文迁移备份已删除。"
+	],
+	"Plaintext migration backup was not found.": [
+		"未找到明文迁移备份。"
+	],
+	"Plaintext migration backup...": [
+		"明文迁移备份..."
+	],
+	"Please restart Joplin manually to complete encrypted profile migration.": [
+		"请手动重启 Joplin 以完成 Encrypted Profile 迁移。"
+	],
+	"Please wait %d seconds before trying again.": [
+		"请等待 %d 秒后再试。"
+	],
+	"Require the App Lock password before notes can be viewed from the desktop user interface. This does not encrypt the local profile database.": [
+		"在桌面界面查看笔记前要求输入 App Lock 密码。此功能不会加密本地 profile 数据库。"
+	],
+	"SQLCipher native module is not available in this build. Encrypted profile cannot be enabled.": [
+		"此构建不包含 SQLCipher 原生模块，无法启用 Encrypted Profile。"
+	],
+	"Set an App Lock password before enabling App Lock.": [
+		"请先设置 App Lock 密码，再启用 App Lock。"
+	],
+	"Set or change App Lock password...": [
+		"设置或更改 App Lock 密码..."
+	],
+	"This prototype encrypts only database.sqlite. Resources, settings files, cache, logs, plugins, and plugin data remain readable on disk. Migration leaves a plaintext backup at database.sqlite.before-encryption-backup in this profile — you must securely store or delete it yourself. Joplin will restart and encrypt the database before it opens. Continue?": [
+		"此原型仅加密 database.sqlite。resources、settings 文件、cache、logs、plugins 和插件数据仍会以明文保存在磁盘上。迁移会在此 profile 中留下明文备份 database.sqlite.before-encryption-backup，你需要自行安全保存或删除。Joplin 将重启，并在打开数据库前执行加密。继续吗？"
+	],
+	"Too many incorrect attempts. Please wait before trying again.": [
+		"密码错误次数过多。请稍后再试。"
+	],
+	"Try again in %d seconds.": [
+		"%d 秒后重试。"
+	],
+	"Unlock": [
+		"解锁"
+	],
+	"Unlock encrypted profile": [
+		"解锁 Encrypted Profile"
+	],
 	"Zoom In": [
 		"放大"
 	],

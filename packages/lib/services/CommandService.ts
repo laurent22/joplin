@@ -129,6 +129,11 @@ export default class CommandService extends BaseService {
 	private devMode_: boolean;
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Concrete state-to-context function is parametrised over per-app state (AppState in desktop/mobile, State in cli); typing too narrowly here breaks derived classes
 	private stateToWhenClauseContext_: Function;
+	private appLockAllowedCommands_ = new Set<string>([
+		'appLockLockNow',
+		'hideModalMessage',
+		'showModalMessage',
+	]);
 
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- See stateToWhenClauseContext_
 	public initialize(store: ReduxStore, devMode: boolean, stateToWhenClauseContext: Function) {
@@ -136,6 +141,23 @@ export default class CommandService extends BaseService {
 		this.store_ = store;
 		this.devMode_ = devMode;
 		this.stateToWhenClauseContext_ = stateToWhenClauseContext;
+	}
+
+	public setAppLockAllowedCommands(commandNames: string[]) {
+		this.appLockAllowedCommands_ = new Set(commandNames);
+	}
+
+	private isAppLocked(): boolean {
+		try {
+			return !!this.store_?.getState?.()?.appLock?.locked;
+		} catch {
+			return false;
+		}
+	}
+
+	private commandBlockedByAppLock(commandName: string): boolean {
+		if (!this.isAppLocked()) return false;
+		return !this.appLockAllowedCommands_.has(commandName);
 	}
 
 	public on<Name extends EventName>(eventName: Name, callback: EventListenerCallback<Name>) {
@@ -336,6 +358,7 @@ export default class CommandService extends BaseService {
 
 		const runtime = this.getRuntime(command, options.windowId);
 		if (!runtime) throw new Error(`Cannot execute a command without a runtime: ${commandName}`);
+		if (this.commandBlockedByAppLock(commandName)) throw new Error(`Command blocked while app is locked: ${commandName}`);
 
 		return runtime.execute(this.createContext(), ...options.args);
 	}
@@ -363,6 +386,7 @@ export default class CommandService extends BaseService {
 		if (!command) return false;
 		const runtime = this.getRuntime(command);
 		if (!runtime) return false;
+		if (this.commandBlockedByAppLock(commandName)) return false;
 
 		if (!whenClauseContext) whenClauseContext = this.currentWhenClauseContext();
 

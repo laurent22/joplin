@@ -10,11 +10,11 @@ interface TestCommand {
 	runtime: CommandRuntime;
 }
 
-function newService(): CommandService {
+function newService(state: Record<string, unknown> = {}): CommandService {
 	const service = new CommandService();
 	const mockStore = {
 		getState: () => {
-			return {};
+			return state;
 		},
 	};
 	service.initialize(mockStore, true, stateToWhenClauseContext);
@@ -116,6 +116,23 @@ describe('services_CommandService', () => {
 
 		expect(service.isEnabled('test1', {})).toBe(true);
 	}));
+
+	it('should block non-allowlisted commands while app lock is active', async () => {
+		const service = newService({ appLock: { locked: true } });
+		service.setAppLockAllowedCommands(['allowedCommand']);
+
+		registerCommand(service, createCommand('blockedCommand', {
+			execute: () => {},
+		}));
+		registerCommand(service, createCommand('allowedCommand', {
+			execute: () => 'ok',
+		}));
+
+		expect(service.isEnabled('blockedCommand', {})).toBe(false);
+		expect(service.isEnabled('allowedCommand', {})).toBe(true);
+		await expect(service.execute('blockedCommand')).rejects.toThrow('Command blocked while app is locked');
+		await expect(service.execute('allowedCommand')).resolves.toBe('ok');
+	});
 
 	it('should return the same toolbarButtons array if nothing has changed', (async () => {
 		const service = newService();

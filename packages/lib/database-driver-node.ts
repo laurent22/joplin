@@ -1,5 +1,6 @@
 import shim from './shim';
 import { SqlParams } from './services/database/types';
+import formatSqlCipherHexKeyLiteral from './services/encryptedProfile/sqlcipherKeyLiteral';
 
 interface SqliteDatabase {
 	close(cb: ()=> void): void;
@@ -7,6 +8,11 @@ interface SqliteDatabase {
 	all(sql: string, params: SqlParams | Record<string, unknown>, cb: (error: Error | null, rows: unknown)=> void): void;
 	run(sql: string, params: SqlParams | Record<string, unknown>, cb: (error: Error | null)=> void): void;
 	loadExtension(path: string, cb: (error: Error | null)=> void): void;
+}
+
+export interface DatabaseDriverOpenOptions {
+	name: string;
+	keyHex?: string;
 }
 
 interface ErrorWithCode extends Error {
@@ -17,23 +23,77 @@ interface ErrorWithCode extends Error {
 export class DatabaseDriverNode {
 	private db_: SqliteDatabase | null = null;
 
-	public open(options: { name: string }) {
+	public open(options: DatabaseDriverOpenOptions) {
 		return new Promise<void>((resolve, reject) => {
 			const sqlite3 = shim.nodeSqlite().verbose();
 
-			this.db_ = new sqlite3.Database(options.name, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (error: Error | null) => {
+			this.db_ = new sqlite3.Database(options.name, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, async (error: Error | null) => {
 				if (error) {
 					reject(error);
 					return;
 				}
+
+				if (options.keyHex) {
+					try {
+						await this.applyDatabaseKey_(options.keyHex);
+					} catch (keyError) {
+						await this.closeOpenDatabase_();
+						reject(keyError);
+						return;
+					}
+				}
+
 				resolve();
+			});
+		});
+	}
+
+	private closeOpenDatabase_() {
+		return new Promise<void>(resolve => {
+			if (!this.db_) {
+				resolve();
+				return;
+			}
+			this.db_.close(() => {
+				this.db_ = null;
+				resolve();
+			});
+		});
+	}
+
+	private applyDatabaseKey_(keyHex: string) {
+		return new Promise<void>((resolve, reject) => {
+			const keyLiteral = formatSqlCipherHexKeyLiteral(keyHex);
+			this.db_.run(`PRAGMA key = ${keyLiteral}`, {}, (error: Error | null) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+				this.db_.get('SELECT count(*) AS count FROM sqlite_master', {}, (verifyError, row) => {
+					if (verifyError) {
+						reject(verifyError);
+						return;
+					}
+					if (!row || typeof row !== 'object' || !('count' in row)) {
+						reject(new Error('Encrypted database verification failed'));
+						return;
+					}
+					resolve();
+				});
 			});
 		});
 	}
 
 	public close() {
 		return new Promise<void>(resolve => {
-			this.db_.close(() => resolve());
+			if (!this.db_) {
+				resolve();
+				return;
+			}
+			this.db_.close(() => {
+				this.db_ = null;
+				resolve();
+			});
 		});
 	}
 

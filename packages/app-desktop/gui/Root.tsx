@@ -3,6 +3,7 @@ import { Dispatch } from 'redux';
 import app from '../app';
 import { AppState, AppStateDialog } from '../app.reducer';
 import MainScreen from './MainScreen';
+import AppLockScreen from './AppLockScreen';
 import ConfigScreen from './ConfigScreen/ConfigScreen';
 import StatusScreen from './StatusScreen/StatusScreen';
 import OneDriveLoginScreen from './OneDriveLoginScreen';
@@ -43,6 +44,7 @@ interface Props {
 	needApiAuth: boolean;
 	dialogs: AppStateDialog[];
 	secondaryWindowStates: WindowState[];
+	appLocked: boolean;
 }
 
 interface ModalDialogProps {
@@ -145,6 +147,8 @@ class RootComponent extends React.Component<Props, any> {
 	}
 
 	private renderSecondaryWindows() {
+		if (this.props.appLocked) return null;
+
 		return this.props.secondaryWindowStates.map((windowState: WindowState) => {
 			return <EditorWindow
 				key={`new-window-note-${windowState.windowId}`}
@@ -181,6 +185,7 @@ class RootComponent extends React.Component<Props, any> {
 						<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
 						{this.renderSecondaryWindows()}
 						{this.renderModalMessage(this.modalDialogProps())}
+						<AppLockScreen/>
 					</PopupNotificationProvider>
 				</ThemeProvider>
 			</StyleSheetManager>
@@ -197,6 +202,7 @@ const mapStateToProps = (state: AppState) => {
 		dialogs: state.dialogs,
 		profileConfigCurrentProfileId: state.profileConfig.currentProfileId,
 		secondaryWindowStates: stateUtils.secondaryWindowStates(state),
+		appLocked: !!state.appLock?.locked,
 	};
 };
 

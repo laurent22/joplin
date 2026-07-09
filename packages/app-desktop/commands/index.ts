@@ -1,4 +1,5 @@
 // AUTO-GENERATED using `gulp buildScriptIndexes`
+import * as appLockLockNow from './appLockLockNow';
 import * as copyDevCommand from './copyDevCommand';
 import * as copyToClipboard from './copyToClipboard';
 import * as createAccessibleDocument from './createAccessibleDocument';
@@ -26,6 +27,7 @@ import * as toggleSafeMode from './toggleSafeMode';
 import * as toggleTabMovesFocus from './toggleTabMovesFocus';
 
 const index: any[] = [
+	appLockLockNow,
 	copyDevCommand,
 	copyToClipboard,
 	createAccessibleDocument,

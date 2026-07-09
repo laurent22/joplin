@@ -1288,6 +1288,7 @@ class Setting extends BaseModel {
 		return [
 			'general',
 			'application',
+			'security',
 			'appearance',
 			'sync',
 			'encryption',
@@ -1313,7 +1314,7 @@ class Setting extends BaseModel {
 	}
 
 	public static isSubSection(sectionName: string) {
-		return ['encryption', 'application', 'appearance', 'joplinCloud'].includes(sectionName);
+		return ['encryption', 'application', 'security', 'appearance', 'joplinCloud'].includes(sectionName);
 	}
 
 	public static groupMetadatasBySections(metadatas: SettingItem[]): MetadataBySection {
@@ -1360,6 +1361,7 @@ class Setting extends BaseModel {
 		if (name === 'markdownPlugins') return _('Markdown');
 		if (name === 'plugins') return _('Plugins');
 		if (name === 'application') return _('Application');
+		if (name === 'security') return _('Security');
 		if (name === 'revisionService') return _('Note History');
 		if (name === 'encryption') return _('Encryption');
 		if (name === 'server') return _('Web Clipper');
@@ -1438,6 +1440,7 @@ class Setting extends BaseModel {
 			'plugins': 'icon-plugins',
 			'markdownPlugins': 'fab fa-markdown',
 			'application': 'icon-application',
+			'security': 'fa fa-lock',
 			'revisionService': 'icon-note-history',
 			'encryption': 'icon-encryption',
 			'server': 'far fa-hand-scissors',
@@ -1464,6 +1467,7 @@ class Setting extends BaseModel {
 			'revisionService': 'far fa-history',
 			'plugins': 'fa fa-puzzle-piece',
 			'application': 'fa fa-cog',
+			'security': 'fa fa-lock',
 			'encryption': 'fa fa-key',
 		};
 

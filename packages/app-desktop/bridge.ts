@@ -15,6 +15,7 @@ import { closeSync, openSync, readSync, statSync } from 'fs';
 import { KB } from '@joplin/utils/bytes';
 import { defaultWindowId } from '@joplin/lib/reducer';
 import { execCommand } from '@joplin/utils';
+import restartRelaunchArgs from './utils/restartRelaunchArgs';
 
 interface LastSelectedPath {
 	file: string;
@@ -618,16 +619,18 @@ export class Bridge {
 		// to notify services and component that the app is about to close
 		// but for the current use-case it's not really needed.
 		const { app } = require('electron');
+		let requiresManualRestart = false;
 
 		if (shim.isPortable()) {
 			const options = {
 				execPath: process.env.PORTABLE_EXECUTABLE_FILE,
+				args: restartRelaunchArgs(process.argv),
 			};
 			app.relaunch(options);
 		} else if (process.env.APPIMAGE && !this.altInstanceId_) {
 			app.relaunch({
 				execPath: process.env.APPIMAGE,
-				args: ['--appimage-extract-and-run'],
+				args: ['--appimage-extract-and-run', ...restartRelaunchArgs(process.argv)],
 			});
 		} else if (this.altInstanceId_) {
 			// Couldn't get it to work using relaunch() - it would just "close" the app, but it
@@ -646,6 +649,7 @@ export class Bridge {
 			const r = responses.find(r => !!r.response);
 
 			if (!r || !r.response) {
+				requiresManualRestart = true;
 				this.showInfoMessageBox(_('The app is now going to close. Please relaunch it to complete the process.'));
 
 				// Note: this should work, but doesn't:
@@ -658,10 +662,13 @@ export class Bridge {
 				// });
 			}
 		} else {
-			app.relaunch();
+			app.relaunch({
+				args: restartRelaunchArgs(process.argv),
+			});
 		}
 
 		this.electronApp().exit();
+		return { requiresManualRestart };
 	}
 
 	public createImageFromPath(path: string) {
