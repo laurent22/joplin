@@ -41,6 +41,7 @@ const describeTool = (toolName: string) => {
 	if (toolName === 'replaceSelection') return _('Replaced selection');
 	if (toolName === 'insertBefore' || toolName === 'insertAfter') return _('Inserted text');
 	if (toolName === 'replaceRange' || toolName === 'replaceFencedBlock') return _('Replaced text');
+	if (toolName === 'appendToNote') return _('Added text');
 	return _('Edited');
 };
 
