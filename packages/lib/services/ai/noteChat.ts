@@ -344,7 +344,8 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 	// Only replaceSelection operations allowed when there's a selection
 	const currentContext = await context();
 	if (currentContext.selection) {
-		const action = chat.toolCalls.find(toolCall => toolCall.toolName === 'replaceSelection');
+		const expectedName = 'replaceSelection';
+		const action = chat.toolCalls.find(toolCall => toolCall.toolName === expectedName);
 		if (action) {
 			try {
 				if (!hasOwnProperty(action.arguments, 'text')) throw new JoplinError('Missing text property');
@@ -361,8 +362,11 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 
 		// Only one replaceSelection action is allowed
 		for (const toolCall of chat.toolCalls) {
-			if (action !== toolCall) {
-				respondFailure(toolCall, 'Only a single replaceSelection tool call is valid in this context');
+			if (action === toolCall) continue;
+			if (toolCall.toolName === expectedName) {
+				respondFailure(toolCall, `Only a single ${expectedName} tool call is valid in this context`);
+			} else {
+				respondFailure(toolCall, `Only the ${expectedName} tool is valid in this context.`);
 			}
 		}
 	} else {
