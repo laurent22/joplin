@@ -37,9 +37,21 @@ const disclosureSetting = 'ai.chat.disclosureAcknowledged';
 let nextMessageId = 0;
 const makeId = () => `m-${Date.now()}-${++nextMessageId}`;
 
-const editsSummary = (applied: number, missed: number) => {
+const describeTool = (toolName: string) => {
+	if (toolName === 'replaceSelection') return _('Replaced selection');
+	if (toolName === 'insertBefore' || toolName === 'insertAfter') return _('Inserted text');
+	if (toolName === 'replaceRange' || toolName === 'replaceFencedBlock') return _('Replaced text');
+	return _('Edited');
+};
+
+const editsSummary = (actions: ChatMessage[], applied: number, missed: number) => {
 	if (applied + missed === 0) return '';
-	if (missed === 0) return _('%d edit(s) applied.', applied);
+	if (missed === 0 && applied > 1) return _('%d edit(s) applied.', applied);
+	if (missed === 0) {
+		const toolResults = actions.filter(action => action.role === ChatRole.Tool);
+		const toolNames = toolResults.map(tool => tool.toolName);
+		return toolNames.map(describeTool).join('\n');
+	}
 	return _('%d edit(s) applied, %d could not be placed automatically.', applied, missed);
 };
 
@@ -347,7 +359,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 						return <div key={m.id} className='error'>{m.text}</div>;
 					}
 
-					const summary = m.role === 'assistant' ? editsSummary(m.editsApplied ?? 0, m.editsMissed ?? 0) : '';
+					const summary = m.role === 'assistant' ? editsSummary(m.raw, m.editsApplied ?? 0, m.editsMissed ?? 0) : '';
 					// Always show something in the message box:
 					const textContent = !m.text && !summary ? _('(no message)') : m.text;
 
