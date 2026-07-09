@@ -174,7 +174,6 @@ const SideMenuComponent: React.FC<Props> = props => {
 	}, [props.isOpen]);
 
 	const [menuWidth, setMenuWidth] = useState(0);
-	const [contentWidth, setContentWidth] = useState(0);
 
 	// In right-to-left layout, swap left and right to be consistent with other parts of
 	// the app's layout.
@@ -185,7 +184,6 @@ const SideMenuComponent: React.FC<Props> = props => {
 		const openMenuOffsetPercentage = props.openMenuOffset / Dimensions.get('window').width;
 		const menuWidth = Math.floor(width * openMenuOffsetPercentage);
 
-		setContentWidth(width);
 		setMenuWidth(menuWidth);
 	}, [props.openMenuOffset]);
 
@@ -200,30 +198,26 @@ const SideMenuComponent: React.FC<Props> = props => {
 					return false;
 				}
 
-				let startX;
+				// Opening the right menu requires using the kebab menu on the note viewer / editor, as gestures would interfere with horizontally scrollable content
+				if (!isLeftMenu && !open) {
+					return false;
+				}
+
 				let dx;
 				const dy = gestureState.dy;
-
-				// Untransformed start position of the gesture -- moveX is the current position of
-				// the pointer. Subtracting dx gives us the original start position.
-				const gestureStartScreenX = gestureState.moveX - gestureState.dx;
 
 				// Transform x, dx such that they are relative to the target screen edge -- this simplifies later
 				// math.
 				if (isLeftMenu) {
-					startX = gestureStartScreenX;
 					dx = gestureState.dx;
 				} else {
-					startX = contentWidth - gestureStartScreenX;
 					dx = -gestureState.dx;
 				}
 
-				// Horizontal swipe gestures can be made anywhere within the middle of the screen, except within the outer edges, to avoid conflicting with OS gesture navigation
+				// Horizontal swipe gestures can be made anywhere on the screen
 				const toleranceX = 4;
-				const gestureMargin = 35;
-				const minHorizontalSwipe = isLeftMenu ? 10 : 35; // Use a smaller dead zone for the left menu, as the notebook list uses FlatList, which greedily locks vertical scroll
+				const minHorizontalSwipe = 10;
 
-				const startWithinTolerance = startX >= gestureMargin && startX <= contentWidth - gestureMargin; // Check the start position is not within the edge margins
 				const horizontalEnough = Math.abs(dx) >= minHorizontalSwipe; // Check that the dead zone has passed before starting the gesture, catering for curved swipes
 				const horizontalDominant = Math.abs(dx) > Math.abs(dy) * 2; // Check the direction is horizontal, allowing diagonal swipes up to a certain angle
 				let motionWithinToleranceX; // Check the correct direction is used in relation to whether swiping open / closed
@@ -235,7 +229,6 @@ const SideMenuComponent: React.FC<Props> = props => {
 				}
 
 				return (
-					startWithinTolerance &&
 					motionWithinToleranceX &&
 					horizontalEnough &&
 					horizontalDominant
@@ -258,7 +251,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 				}
 			},
 		});
-	}, [isLeftMenu, menuDragOffset, contentWidth, open, props.disableGestures, updateMenuPosition, setIsAnimating]);
+	}, [isLeftMenu, menuDragOffset, open, props.disableGestures, updateMenuPosition, setIsAnimating]);
 
 	const onChangeRef = useRef(props.onChange);
 	onChangeRef.current = props.onChange;
