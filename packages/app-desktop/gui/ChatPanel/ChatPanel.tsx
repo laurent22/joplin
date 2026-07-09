@@ -347,14 +347,17 @@ const ChatPanel: React.FC<Props> = (props) => {
 						return <div key={m.id} className='error'>{m.text}</div>;
 					}
 
+					const summary = m.role === 'assistant' ? editsSummary(m.editsApplied ?? 0, m.editsMissed ?? 0) : '';
+					// Always show something in the message box:
+					const textContent = !m.text && !summary ? _('(no message)') : m.text;
+
 					const renderMarkdown = m.role === 'assistant';
 					const content = renderMarkdown
 						? <InlineMarkdownDisplay
 							className='content'
-							markdown={m.text}
+							markdown={textContent}
 							allowLinks={false} />
-						: <div className='content'>{m.text || _('(no message)')}</div>;
-					const summary = m.role === 'assistant' ? editsSummary(m.editsApplied ?? 0, m.editsMissed ?? 0) : '';
+						: <div className='content'>{textContent}</div>;
 
 					return (
 						<div key={m.id} className={`turn -${m.role}`}>
