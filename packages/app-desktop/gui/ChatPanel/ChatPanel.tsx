@@ -66,6 +66,25 @@ const waitForNextNoteChangeOrTimeout = (noteId: string, timeout: number) => {
 	});
 };
 
+const useCancelCallback = () => {
+	const abortControllerRef = useRef(new AbortController());
+
+	const cancelRequest = useCallback(() => {
+		abortControllerRef.current.abort();
+		abortControllerRef.current = new AbortController();
+	}, []);
+
+	// Cancel on Reset / unmount so an in-flight reply can detect it should
+	// abort instead of landing in a cleared or destroyed conversation.
+	const cancelRequestRef = useRef(cancelRequest);
+	cancelRequestRef.current = cancelRequest;
+	useEffect(() => () => {
+		cancelRequestRef.current();
+	}, []);
+
+	return { abortControllerRef, cancelRequest };
+};
+
 // Single-window for v1: mapStateToProps hard-codes defaultWindowId and the
 // toggle writes to the app-wide layout. A second window would mirror the main.
 const ChatPanel: React.FC<Props> = (props) => {
@@ -86,13 +105,9 @@ const ChatPanel: React.FC<Props> = (props) => {
 	// Lets async work detect note switches without re-running its closure.
 	const noteIdRef = useRef(props.noteId);
 	noteIdRef.current = props.noteId;
-	const abortControllerRef = useRef(new AbortController());
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
-	// Bumped on Reset / unmount so an in-flight reply can detect it should
-	// abort instead of landing in a cleared or destroyed conversation.
-	const generationRef = useRef(0);
-	useEffect(() => () => { generationRef.current++; }, []);
+	const { abortControllerRef, cancelRequest } = useCancelCallback();
 
 	const windowId = useContext(WindowIdContext);
 
@@ -143,8 +158,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 			});
 			return;
 		}
+		const abortController = abortControllerRef.current;
 
-		const startGeneration = generationRef.current;
 		const noteIdAtStart = props.noteId;
 		setSending(true);
 		setInput('');
@@ -179,7 +194,6 @@ const ChatPanel: React.FC<Props> = (props) => {
 				};
 			};
 
-			const abortController = abortControllerRef.current;
 			let lastHistory = [
 				{ role: ChatRole.System, content: 'placeholder' },
 				...conversationTurns,
@@ -191,8 +205,10 @@ const ChatPanel: React.FC<Props> = (props) => {
 				for (let i = lastHistory.length; i < history.length; i++) {
 					const entry = history[i];
 
-					// User and system messages are either added elsewhere or not shown in the UI
-					if (entry.role === ChatRole.System || entry.role === ChatRole.User) continue;
+					// User messages are added elsewhere, when the user submits the chat
+					if (entry.role === ChatRole.User) continue;
+					// System messages are not shown in the UI
+					if (entry.role === ChatRole.System) continue;
 
 					hadSuccessfulResponse = true;
 
@@ -213,8 +229,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 
 			const assertSameNote = () => {
 				if (noteIdAtStart !== noteIdRef.current) {
-					abortController.abort();
-					abortControllerRef.current = new AbortController();
+					cancelRequest();
 					throw new JoplinError(_('Note changed while editing'), 'aiNoteChanged');
 				}
 			};
@@ -247,7 +262,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 			);
 		} catch (error) {
 			logger.warn('Chat failed:', error);
-			if (generationRef.current !== startGeneration) return;
+			if (abortController.signal.aborted) return;
+
 			if (!hadSuccessfulResponse) {
 				dispatch({ type: 'AI_CHAT_REMOVE', windowId, id: userTurnId });
 				setInput(text);
@@ -256,7 +272,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 		} finally {
 			setSending(false);
 		}
-	}, [input, sending, props.noteId, conversationTurns, windowId, addToolResult, appendMessage, dispatch]);
+	}, [input, sending, props.noteId, conversationTurns, windowId, addToolResult, appendMessage, dispatch, cancelRequest, abortControllerRef]);
 
 	const handleAcknowledgeDisclosure = useCallback(() => {
 		Setting.setValue(disclosureSetting, true);
@@ -264,12 +280,10 @@ const ChatPanel: React.FC<Props> = (props) => {
 	}, []);
 
 	const handleReset = useCallback(() => {
-		generationRef.current++;
-		abortControllerRef.current.abort();
-		abortControllerRef.current = new AbortController();
+		cancelRequest();
 
 		dispatch({ type: 'AI_CHAT_RESET', windowId: windowId });
-	}, [dispatch, windowId]);
+	}, [dispatch, windowId, cancelRequest]);
 
 	const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 		// Don't send while an IME composition is in flight — Enter commits
