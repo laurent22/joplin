@@ -21,11 +21,14 @@ interface Props {
 
 	menu: React.ReactNode;
 	children: React.ReactNode|React.ReactNode[];
+	toleranceX: number;
+	minHorizontalSwipe: number;
 	openMenuOffset: number;
 	menuPosition: SideMenuPosition;
 
 	onChange: OnChangeCallback;
 	disableGestures: boolean;
+	disableOpenGesture: boolean;
 }
 
 interface UseStylesProps {
@@ -198,8 +201,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 					return false;
 				}
 
-				// Opening the right menu requires using the kebab menu on the note viewer / editor, as gestures would interfere with horizontally scrollable content
-				if (!isLeftMenu && !open) {
+				if (props.disableOpenGesture && !open) {
 					return false;
 				}
 
@@ -214,18 +216,15 @@ const SideMenuComponent: React.FC<Props> = props => {
 					dx = -gestureState.dx;
 				}
 
-				// Horizontal swipe gestures can be made anywhere on the screen
-				const toleranceX = 4;
-				const minHorizontalSwipe = 10;
-
-				const horizontalEnough = Math.abs(dx) >= minHorizontalSwipe; // Check that the dead zone has passed before starting the gesture, catering for curved swipes
+				// Allowed horizontal swipe gestures can be made from anywhere on the screen
+				const horizontalEnough = Math.abs(dx) >= props.minHorizontalSwipe; // Check that the dead zone has passed before starting the gesture, catering for curved swipes
 				const horizontalDominant = Math.abs(dx) > Math.abs(dy) * 2; // Check the direction is horizontal, allowing diagonal swipes up to a certain angle
 				let motionWithinToleranceX; // Check the correct direction is used in relation to whether swiping open / closed
 
 				if (open) {
-					motionWithinToleranceX = dx <= -toleranceX;
+					motionWithinToleranceX = dx <= -props.toleranceX;
 				} else {
-					motionWithinToleranceX = dx >= toleranceX;
+					motionWithinToleranceX = dx >= props.toleranceX;
 				}
 
 				return (
@@ -251,7 +250,7 @@ const SideMenuComponent: React.FC<Props> = props => {
 				}
 			},
 		});
-	}, [isLeftMenu, menuDragOffset, open, props.disableGestures, updateMenuPosition, setIsAnimating]);
+	}, [isLeftMenu, menuDragOffset, props.toleranceX, props.minHorizontalSwipe, open, props.disableGestures, props.disableOpenGesture, updateMenuPosition, setIsAnimating]);
 
 	const onChangeRef = useRef(props.onChange);
 	onChangeRef.current = props.onChange;
