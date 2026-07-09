@@ -14,6 +14,7 @@ import { applyAnchorEdits } from '@joplin/lib/services/ai/applyNoteEdits';
 import { chatAvailability } from '@joplin/lib/services/ai/availability';
 import { WindowIdContext } from '../NewWindowOrIFrame';
 import AiDegradedNotice from '../AiDegradedNotice';
+import InlineMarkdownDisplay from '../InlineMarkdownDisplay';
 
 const logger = Logger.create('ChatPanel');
 
@@ -284,10 +285,20 @@ const ChatPanel: React.FC<Props> = (props) => {
 					if (m.role === 'error') {
 						return <div key={m.id} className='error'>{m.text}</div>;
 					}
+
+					const renderMarkdown = m.role === 'assistant';
+					const content = renderMarkdown
+						? <InlineMarkdownDisplay
+							className='content'
+							markdown={m.text}
+							allowLinks={false} />
+						: <div className='content'>{m.text}</div>;
 					const summary = m.role === 'assistant' ? editsSummary(m.editsApplied ?? 0, m.editsMissed ?? 0) : '';
+
 					return (
 						<div key={m.id} className={`turn -${m.role}`}>
-							<div className='content'>{m.text}</div>
+							{content}
+
 							{summary && (
 								<div className='meta'>
 									{(m.editsMissed ?? 0) > 0

@@ -47,7 +47,8 @@ joplin.plugins.register({
 					// must reach .chat from `joplin` in a single chain and call it
 					// immediately. Storing `joplin.ai` or `joplin.ai.chat` first and
 					// then invoking it later corrupts the path tracking.
-					summary = await (joplin as any).ai.chat(messages);
+					const result = await (joplin as any).ai.chat(messages);
+					summary = result.text;
 				} catch (error) {
 					alert(`AI call failed: ${error.message}`);
 					return;
