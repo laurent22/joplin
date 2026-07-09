@@ -1,166 +1,290 @@
-<!-- DONATELINKS -->
-[![Donate using PayPal](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=WQCERTSSLCC7U) [![Sponsor on GitHub](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg)](https://github.com/sponsors/laurent22/) [![Become a patron](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg)](https://www.patreon.com/joplin) [![Donate using IBAN](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg)](https://joplinapp.org/donate/#donations)
-<!-- DONATELINKS -->
+# Joplin Privacy Toolkit
 
-<img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png" align="left" style="margin-right:15px"/>
+Joplin Privacy Toolkit is an unofficial desktop fork based on Joplin Desktop. It provides local profile access control and data-at-rest protection.
 
-**Joplin** is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](https://github.com/laurent22/joplin/blob/dev/readme/apps/markdown.md).
+This project is not affiliated with, sponsored by, or endorsed by the official Joplin project.
 
-Notes exported from Evernote [can be imported](https://github.com/laurent22/joplin/blob/dev/readme/apps/import_export.md) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
+[![中文](https://img.shields.io/badge/Language-%E4%B8%AD%E6%96%87-2f80ed?style=for-the-badge)](#简介)
+[![English](https://img.shields.io/badge/Language-English-2f80ed?style=for-the-badge)](#project-positioning)
 
-Joplin is "offline first", which means you always have all your data on your phone or computer. This ensures that your notes are always accessible, whether you have an internet connection or not.
+## 简介
 
-The notes can be securely [synchronised](https://github.com/laurent22/joplin/blob/dev/readme/apps/sync/index.md) using [end-to-end encryption](https://github.com/laurent22/joplin/blob/dev/readme/apps/sync/e2ee.md) with various cloud services including Nextcloud, Dropbox, OneDrive and [Joplin Cloud](https://joplinapp.org/plans/).
+Joplin Privacy Toolkit 是一个基于 Joplin Desktop 的非官方桌面端分支，用于实现本地 profile 的访问控制和静态数据保护能力
 
-Full text search is available on all platforms to quickly find the information you need. The app can be customised using plugins and themes, and you can also easily create your own.
+当前源码基于 Joplin Desktop `3.7.6`，保留了 Joplin 上游的 monorepo 结构、数据模型，采用以下思路实现本地隐私保护：
 
-The application is available for Windows, Linux, macOS, Android and iOS. A [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/apps/clipper.md), to save web pages and screenshots from your browser, is also available for [Firefox](https://addons.mozilla.org/firefox/addon/joplin-web-clipper/) and [Chrome](https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB).
+- 在桌面 UI 层提供 App Lock，降低已开启的 Joplin 界面被直接访问的风险
+- 在数据库开启前增加 Encrypted Profile 解锁流程
+- 使用 SQLCipher 对 `database.sqlite` 做静态加密
+- 保留 Joplin 原有笔记、同步、插件和 profile 结构，避免把隐私功能做成不可维护的旁路实现
 
-<div class="top-screenshot"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/home-top-img.png" style="max-width: 100%; max-height: 35em;"></div>
+## 功能
 
-# Help and documentation
+### App Lock
 
-For more information about the applications, see the [full Joplin documentation](https://joplinapp.org)
+App Lock 是桌面端界面访问锁，用于控制正在运行的 Joplin 桌面界面访问
 
-# Donations
+- 启用或关闭 App Lock
+- 启动时锁定
+- 空闲后锁定
+- 手动锁定命令
+- 设置、更改和清除 App Lock 密码
 
-Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
+App Lock 不加密本地文件，只控制 UI 访问
 
-Please see the [donation page](https://github.com/laurent22/joplin/blob/dev/readme/donate.md) for information on how to support the development of Joplin.
+### Encrypted Profile
 
-# Sponsors
+为实现数据库的静态加密，我们引入了Encrypted Profile功能，需要注意的是，Encrypted Profile尚处于测试阶段
 
-<!-- SPONSORS-ORG -->
-<a href="https://seirei.ne.jp"><img title="Serei Network" width="256" src="https://joplinapp.org/images/sponsors/SeireiNetwork.png"/></a> <a href="https://citricsheep.com"><img title="Citric Sheep" width="256" src="https://joplinapp.org/images/sponsors/CitricSheep.png"/></a> <a href="https://sorted.travel/?utm_source=joplinapp"><img title="Sorted Travel" width="256" src="https://joplinapp.org/images/sponsors/SortedTravel.png"/></a> <a href="https://celebian.com"><img title="Celebian" width="256" src="https://joplinapp.org/images/sponsors/Celebian.png"/></a> <a href="https://bestkru.com"><img title="BestKru" width="256" src="https://joplinapp.org/images/sponsors/BestKru.png"/></a> <a href="https://route4me.com"><img title="Route4Me" width="256" src="https://joplinapp.org/images/sponsors/Route4Me.png"/></a>
-<!-- SPONSORS-ORG -->
+- 使用 scrypt 从用户密码派生密钥
+- 使用 AES-256-GCM 包装数据库密钥
+- 使用 SQLCipher 打开加密后的 `database.sqlite`
+- 从明文 `database.sqlite` 迁移到 SQLCipher 数据库
+- 迁移失败时保留原数据库，避免启动锁死
+- 迁移后保留明文备份，供用户确认后手动处理
 
-* * *
+需要注意的是，Encrypted Profile 密码与 App Lock 密码相互独立，可以选择性开启
 
-<!-- SPONSORS-GITHUB -->
-|       |       |       |       |
-| :---: | :---: | :---: | :---: |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/552452?s=96&v=4"/></br>[andypiper](https://github.com/andypiper) | <img width="50" src="https://avatars2.githubusercontent.com/u/215668?s=96&v=4"/></br>[avanderberg](https://github.com/avanderberg) | <img width="50" src="https://avatars2.githubusercontent.com/u/67130?s=96&v=4"/></br>[chr15m](https://github.com/chr15m) | <img width="50" src="https://avatars2.githubusercontent.com/u/1177810?s=96&v=4"/></br>[felixstorm](https://github.com/felixstorm) |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/8030470?s=96&v=4"/></br>[Galliver7](https://github.com/Galliver7) | <img width="50" src="https://avatars2.githubusercontent.com/u/4721118?s=96&v=4"/></br>[GPrimola](https://github.com/GPrimola) | <img width="50" src="https://avatars2.githubusercontent.com/u/64712218?s=96&v=4"/></br>[Hegghammer](https://github.com/Hegghammer) | <img width="50" src="https://avatars2.githubusercontent.com/u/42319182?s=96&v=4"/></br>[marcdw1289](https://github.com/marcdw1289) |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/668977?s=96&v=4"/></br>[ugoertz](https://github.com/ugoertz) |       |       |       |
-<!-- SPONSORS-GITHUB -->
-	
-# Community
+以及，Joplin 官方提供了云端存储的端到端加密能力，本项目的 Encrypted Profile 是本地数据库静态加密路径，无法替代云端存储的端到端加密能力，因此仍建议你保持开启端到端加密能力
 
-Name | Description
---- | ---
-[Support Forum](https://discourse.joplinapp.org/) | This is the main place for general discussion about Joplin, user support, software development questions, and to discuss new features. Also where the latest beta versions are released and discussed.
-[Patreon page](https://www.patreon.com/joplin) |The latest news are often posted there
-[Bluesky feed](https://bsky.app/profile/joplinapp.bsky.social) | Follow us on Bluesky
-[Mastodon feed](https://mastodon.social/@joplinapp) | Follow us on Mastodon
-[YouTube](https://www.youtube.com/@joplinapp) | Discover information and tutorials on how to use the apps
-[Discord server](https://discord.gg/VSj7AFHvpq) | Our chat server
-[LinkedIn](https://www.linkedin.com/company/joplin) | Our LinkedIn page
-[Lemmy Community](https://sopuli.xyz/c/joplinapp) | Also a good place to get help
+## 安全模型
 
-# Contributing
+### 加密实现原理
 
-Please see the guide for information on how to contribute to the development of Joplin: https://github.com/laurent22/joplin/blob/dev/readme/dev/index.md
+Encrypted Profile 使用两层密钥结构。用户输入的 Encrypted Profile 密码不会直接作为数据库密钥保存，也不会以明文形式写入 profile
 
-## Warrant Canary Signing Key
+启用时，程序生成独立的数据库密钥，并使用 scrypt 从用户密码派生出的包装密钥对数据库密钥进行 AES-256-GCM 加密，相关 salt、nonce、KDF 参数和加密后的数据库密钥写入 `profile-encryption.json`
 
-Fingerprint:
+Joplin 启动时会在打开本地数据库之前读取 `profile-encryption.json`，要求用户输入 Encrypted Profile 密码。密码校验成功后，程序解出数据库密钥，并在创建 SQLite 连接后立即向 SQLCipher 注入 key，再验证数据库是否可以正常读取。密码错误时，SQLCipher 无法打开加密后的 `database.sqlite`
 
-F820 F830 6DD0 05A1 02D1  8CD5 946A E9FA 5915 EF53
+从明文数据库迁移时，程序先保留原始 `database.sqlite`，再创建 SQLCipher 数据库并导出数据。迁移完成并验证成功后，新的 SQLCipher 数据库替换原数据库；如果迁移失败，原数据库会保留，避免 profile 进入无法启动的状态
 
-Public key: https://github.com/laurent22/joplin/raw/dev/Assets/keys/joplin-canary-signing-key.asc
+### 受保护的内容
 
-# Contributors
+在 Encrypted Profile 已启用、迁移完成且 SQLCipher native 模块可用的情况下，
 
-Thank you to everyone who've contributed to Joplin's source code!
+- `database.sqlite` 会以 SQLCipher 数据库形式存储
 
-<!-- CONTRIBUTORS-TABLE-AUTO-GENERATED -->
-|     |     |     |     |     |
-| :---: | :---: | :---: | :---: | :---: |
-| <img width="50" src="https://avatars.githubusercontent.com/u/1285584?v=4"/></br>[laurent22](https://github.com/laurent22) | <img width="50" src="https://avatars.githubusercontent.com/u/46334387?v=4"/></br>[personalizedrefrigerator](https://github.com/personalizedrefrigerator) | <img width="50" src="https://avatars.githubusercontent.com/u/223439?v=4"/></br>[tessus](https://github.com/tessus) | <img width="50" src="https://avatars.githubusercontent.com/u/2179547?v=4"/></br>[CalebJohn](https://github.com/CalebJohn) | <img width="50" src="https://avatars.githubusercontent.com/u/5051088?v=4"/></br>[pedr](https://github.com/pedr) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/995612?v=4"/></br>[roman-r-m](https://github.com/roman-r-m) | <img width="50" src="https://avatars.githubusercontent.com/u/1732810?v=4"/></br>[miciasto](https://github.com/miciasto) | <img width="50" src="https://avatars.githubusercontent.com/u/16041683?v=4"/></br>[ken1kob](https://github.com/ken1kob) | <img width="50" src="https://avatars.githubusercontent.com/u/29672555?v=4"/></br>[genneko](https://github.com/genneko) | <img width="50" src="https://avatars.githubusercontent.com/u/62299611?v=4"/></br>[wh201906](https://github.com/wh201906) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/2063957?v=4"/></br>[Ardakilic](https://github.com/Ardakilic) | <img width="50" src="https://avatars.githubusercontent.com/u/58074586?v=4"/></br>[Daeraxa](https://github.com/Daeraxa) | <img width="50" src="https://avatars.githubusercontent.com/u/84130654?v=4"/></br>[NickWick13](https://github.com/NickWick13) | <img width="50" src="https://avatars.githubusercontent.com/u/4553672?v=4"/></br>[tanrax](https://github.com/tanrax) | <img width="50" src="https://avatars.githubusercontent.com/u/63491353?v=4"/></br>[j-krl](https://github.com/j-krl) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/24863925?v=4"/></br>[JackGruber](https://github.com/JackGruber) | <img width="50" src="https://avatars.githubusercontent.com/u/30305957?v=4"/></br>[naviji](https://github.com/naviji) | <img width="50" src="https://avatars.githubusercontent.com/u/3542031?v=4"/></br>[PackElend](https://github.com/PackElend) | <img width="50" src="https://avatars.githubusercontent.com/u/32807437?v=4"/></br>[julien-me](https://github.com/julien-me) | <img width="50" src="https://avatars.githubusercontent.com/u/53339016?v=4"/></br>[AliceHincu](https://github.com/AliceHincu) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/4374338?v=4"/></br>[potatogim](https://github.com/potatogim) | <img width="50" src="https://avatars.githubusercontent.com/u/68117355?v=4"/></br>[Mr-Kanister](https://github.com/Mr-Kanister) | <img width="50" src="https://avatars.githubusercontent.com/u/43657314?v=4"/></br>[milotype](https://github.com/milotype) | <img width="50" src="https://avatars.githubusercontent.com/u/44570278?v=4"/></br>[asrient](https://github.com/asrient) | <img width="50" src="https://avatars.githubusercontent.com/u/8701534?v=4"/></br>[rtmkrlv](https://github.com/rtmkrlv) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/10997189?v=4"/></br>[fmrtn](https://github.com/fmrtn) | <img width="50" src="https://avatars.githubusercontent.com/u/19213902?v=4"/></br>[hubertfilho](https://github.com/hubertfilho) | <img width="50" src="https://avatars.githubusercontent.com/u/6979755?v=4"/></br>[devonzuegel](https://github.com/devonzuegel) | <img width="50" src="https://avatars.githubusercontent.com/u/63025323?v=4"/></br>[ScriptInfra](https://github.com/ScriptInfra) | <img width="50" src="https://avatars.githubusercontent.com/u/10927304?v=4"/></br>[matsest](https://github.com/matsest) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/4299398?v=4"/></br>[palerdot](https://github.com/palerdot) | <img width="50" src="https://avatars.githubusercontent.com/u/6319051?v=4"/></br>[abonte](https://github.com/abonte) | <img width="50" src="https://avatars.githubusercontent.com/u/51550769?v=4"/></br>[rnbastos](https://github.com/rnbastos) | <img width="50" src="https://avatars.githubusercontent.com/u/1685517?v=4"/></br>[Abijeet](https://github.com/Abijeet) | <img width="50" src="https://avatars.githubusercontent.com/u/6196533?v=4"/></br>[jd1378](https://github.com/jd1378) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/27751740?v=4"/></br>[ishantgupta777](https://github.com/ishantgupta777) | <img width="50" src="https://avatars.githubusercontent.com/u/35633575?v=4"/></br>[coderrsid](https://github.com/coderrsid) | <img width="50" src="https://avatars.githubusercontent.com/u/44024553?v=4"/></br>[rabeehrz](https://github.com/rabeehrz) | <img width="50" src="https://avatars.githubusercontent.com/u/7415668?v=4"/></br>[mablin7](https://github.com/mablin7) | <img width="50" src="https://avatars.githubusercontent.com/u/608014?v=4"/></br>[jackytsu](https://github.com/jackytsu) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/77744862?v=4"/></br>[mak2002](https://github.com/mak2002) | <img width="50" src="https://avatars.githubusercontent.com/u/80313840?v=4"/></br>[ERYpTION](https://github.com/ERYpTION) | <img width="50" src="https://avatars.githubusercontent.com/u/3985557?v=4"/></br>[XarisA](https://github.com/XarisA) | <img width="50" src="https://avatars.githubusercontent.com/u/32354598?v=4"/></br>[CptMeetKat](https://github.com/CptMeetKat) | <img width="50" src="https://avatars.githubusercontent.com/u/208212?v=4"/></br>[foxmask](https://github.com/foxmask) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/6557454?v=4"/></br>[innocuo](https://github.com/innocuo) | <img width="50" src="https://avatars.githubusercontent.com/u/54268438?v=4"/></br>[Rahulm2310](https://github.com/Rahulm2310) | <img width="50" src="https://avatars.githubusercontent.com/u/8184424?v=4"/></br>[Ahmad45123](https://github.com/Ahmad45123) | <img width="50" src="https://avatars.githubusercontent.com/u/49979415?v=4"/></br>[jonath92](https://github.com/jonath92) | <img width="50" src="https://avatars.githubusercontent.com/u/25811098?v=4"/></br>[qx100](https://github.com/qx100) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/134083?v=4"/></br>[xavivars](https://github.com/xavivars) | <img width="50" src="https://avatars.githubusercontent.com/u/1904967?v=4"/></br>[readingsnail](https://github.com/readingsnail) | <img width="50" src="https://avatars.githubusercontent.com/u/40627944?v=4"/></br>[krotesk](https://github.com/krotesk) | <img width="50" src="https://avatars.githubusercontent.com/u/4245227?v=4"/></br>[zblesk](https://github.com/zblesk) | <img width="50" src="https://avatars.githubusercontent.com/u/3760093?v=4"/></br>[findrakecil](https://github.com/findrakecil) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/5730052?v=4"/></br>[vsimkus](https://github.com/vsimkus) | <img width="50" src="https://avatars.githubusercontent.com/u/20461071?v=4"/></br>[Vaso3](https://github.com/Vaso3) | <img width="50" src="https://avatars.githubusercontent.com/u/37639389?v=4"/></br>[petrz12](https://github.com/petrz12) | <img width="50" src="https://avatars.githubusercontent.com/u/99097412?v=4"/></br>[mrkaato0](https://github.com/mrkaato0) | <img width="50" src="https://avatars.githubusercontent.com/u/5365582?v=4"/></br>[marcosvega91](https://github.com/marcosvega91) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/30352484?v=4"/></br>[Tolu-Mals](https://github.com/Tolu-Mals) | <img width="50" src="https://avatars.githubusercontent.com/u/3250983?v=4"/></br>[shinglyu](https://github.com/shinglyu) | <img width="50" src="https://avatars.githubusercontent.com/u/35904727?v=4"/></br>[Runo-saduwa](https://github.com/Runo-saduwa) | <img width="50" src="https://avatars.githubusercontent.com/u/36989112?v=4"/></br>[nishantwrp](https://github.com/nishantwrp) | <img width="50" src="https://avatars.githubusercontent.com/u/33229141?v=4"/></br>[marph91](https://github.com/marph91) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/42747216?v=4"/></br>[Mannivu](https://github.com/Mannivu) | <img width="50" src="https://avatars.githubusercontent.com/u/71190696?v=4"/></br>[Elaborendum](https://github.com/Elaborendum) | <img width="50" src="https://avatars.githubusercontent.com/u/4237724?v=4"/></br>[alexdevero](https://github.com/alexdevero) | <img width="50" src="https://avatars.githubusercontent.com/u/54888685?v=4"/></br>[RedDocMD](https://github.com/RedDocMD) | <img width="50" src="https://avatars.githubusercontent.com/u/88243938?v=4"/></br>[wljince007](https://github.com/wljince007) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/17768566?v=4"/></br>[RenatoXSR](https://github.com/RenatoXSR) | <img width="50" src="https://avatars.githubusercontent.com/u/359140?v=4"/></br>[leematos](https://github.com/leematos) | <img width="50" src="https://avatars.githubusercontent.com/u/8716226?v=4"/></br>[amandamcg](https://github.com/amandamcg) | <img width="50" src="https://avatars.githubusercontent.com/u/12264626?v=4"/></br>[ylc395](https://github.com/ylc395) | <img width="50" src="https://avatars.githubusercontent.com/u/32196447?v=4"/></br>[yaozeye](https://github.com/yaozeye) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/5199995?v=4"/></br>[zuphilip](https://github.com/zuphilip) | <img width="50" src="https://avatars.githubusercontent.com/u/77619?v=4"/></br>[kna](https://github.com/kna) | <img width="50" src="https://avatars.githubusercontent.com/u/10289737?v=4"/></br>[Retr0ve](https://github.com/Retr0ve) | <img width="50" src="https://avatars.githubusercontent.com/u/40512816?v=4"/></br>[maxpatiiuk](https://github.com/maxpatiiuk) | <img width="50" src="https://avatars.githubusercontent.com/u/54576074?v=4"/></br>[Rishabh-malhotraa](https://github.com/Rishabh-malhotraa) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/559346?v=4"/></br>[metbril](https://github.com/metbril) | <img width="50" src="https://avatars.githubusercontent.com/u/36622934?v=4"/></br>[SFulpius](https://github.com/SFulpius) | <img width="50" src="https://avatars.githubusercontent.com/u/531704?v=4"/></br>[TaoK](https://github.com/TaoK) | <img width="50" src="https://avatars.githubusercontent.com/u/47623588?v=4"/></br>[WhiredPlanck](https://github.com/WhiredPlanck) | <img width="50" src="https://avatars.githubusercontent.com/u/32396?v=4"/></br>[ProgramFan](https://github.com/ProgramFan) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/3194829?v=4"/></br>[moltenform](https://github.com/moltenform) | <img width="50" src="https://avatars.githubusercontent.com/u/91818868?v=4"/></br>[cagnusmarlsen](https://github.com/cagnusmarlsen) | <img width="50" src="https://avatars.githubusercontent.com/u/73994103?v=4"/></br>[cedecode](https://github.com/cedecode) | <img width="50" src="https://avatars.githubusercontent.com/u/13251?v=4"/></br>[piotrb](https://github.com/piotrb) | <img width="50" src="https://avatars.githubusercontent.com/u/102242?v=4"/></br>[nathanleiby](https://github.com/nathanleiby) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/3870964?v=4"/></br>[marcushill](https://github.com/marcushill) | <img width="50" src="https://avatars.githubusercontent.com/u/63918341?v=4"/></br>[adarsh-sgh](https://github.com/adarsh-sgh) | <img width="50" src="https://avatars.githubusercontent.com/u/226708?v=4"/></br>[RaphaelKimmig](https://github.com/RaphaelKimmig) | <img width="50" src="https://avatars.githubusercontent.com/u/22592201?v=4"/></br>[tfinnberg](https://github.com/tfinnberg) | <img width="50" src="https://avatars.githubusercontent.com/u/36228623?v=4"/></br>[mrkaato](https://github.com/mrkaato) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/1340627?v=4"/></br>[jcgurango](https://github.com/jcgurango) | <img width="50" src="https://avatars.githubusercontent.com/u/32770029?v=4"/></br>[bradmcl](https://github.com/bradmcl) | <img width="50" src="https://avatars.githubusercontent.com/u/937861?v=4"/></br>[archont00](https://github.com/archont00) | <img width="50" src="https://avatars.githubusercontent.com/u/49116134?v=4"/></br>[anihm136](https://github.com/anihm136) | <img width="50" src="https://avatars.githubusercontent.com/u/12906090?v=4"/></br>[amitsin6h](https://github.com/amitsin6h) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/628474?v=4"/></br>[Atalanttore](https://github.com/Atalanttore) | <img width="50" src="https://avatars.githubusercontent.com/u/31567272?v=4"/></br>[t1011](https://github.com/t1011) | <img width="50" src="https://avatars.githubusercontent.com/u/5058349?v=4"/></br>[hieuthi](https://github.com/hieuthi) | <img width="50" src="https://avatars.githubusercontent.com/u/23281486?v=4"/></br>[martonpaulo](https://github.com/martonpaulo) | <img width="50" src="https://avatars.githubusercontent.com/u/390889?v=4"/></br>[mmahmoudian](https://github.com/mmahmoudian) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/120276541?v=4"/></br>[mimeyn](https://github.com/mimeyn) | <img width="50" src="https://avatars.githubusercontent.com/u/168931?v=4"/></br>[bobchao](https://github.com/bobchao) | <img width="50" src="https://avatars.githubusercontent.com/u/4497566?v=4"/></br>[rc2dev](https://github.com/rc2dev) | <img width="50" src="https://avatars.githubusercontent.com/u/43534227?v=4"/></br>[Rishabhraghwendra18](https://github.com/Rishabhraghwendra18) | <img width="50" src="https://avatars.githubusercontent.com/u/7091080?v=4"/></br>[sinkuu](https://github.com/sinkuu) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/97161173?v=4"/></br>[Sidd-R](https://github.com/Sidd-R) | <img width="50" src="https://avatars.githubusercontent.com/u/6734573?v=4"/></br>[stweil](https://github.com/stweil) | <img width="50" src="https://avatars.githubusercontent.com/u/59690052?v=4"/></br>[Subhra264](https://github.com/Subhra264) | <img width="50" src="https://avatars.githubusercontent.com/u/692072?v=4"/></br>[conyx](https://github.com/conyx) | <img width="50" src="https://avatars.githubusercontent.com/u/250887?v=4"/></br>[fstanis](https://github.com/fstanis) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/5077221?v=4"/></br>[axq](https://github.com/axq) | <img width="50" src="https://avatars.githubusercontent.com/u/337455?v=4"/></br>[alexchee](https://github.com/alexchee) | <img width="50" src="https://avatars.githubusercontent.com/u/15380913?v=4"/></br>[kowalskidev](https://github.com/kowalskidev) | <img width="50" src="https://avatars.githubusercontent.com/u/29891001?v=4"/></br>[jyuvaraj03](https://github.com/jyuvaraj03) | <img width="50" src="https://avatars.githubusercontent.com/u/13502069?v=4"/></br>[Shoatally](https://github.com/Shoatally) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/10060747?v=4"/></br>[Wartijn](https://github.com/Wartijn) | <img width="50" src="https://avatars.githubusercontent.com/u/32552798?v=4"/></br>[HahaBill](https://github.com/HahaBill) | <img width="50" src="https://avatars.githubusercontent.com/u/53571657?v=4"/></br>[tmclo](https://github.com/tmclo) | <img width="50" src="https://avatars.githubusercontent.com/u/5912371?v=4"/></br>[TobiasDev](https://github.com/TobiasDev) | <img width="50" src="https://avatars.githubusercontent.com/u/1782292?v=4"/></br>[SubodhDahal](https://github.com/SubodhDahal) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/34258070?v=4"/></br>[StarFang208](https://github.com/StarFang208) | <img width="50" src="https://avatars.githubusercontent.com/u/132750919?v=4"/></br>[LEVIII007](https://github.com/LEVIII007) | <img width="50" src="https://avatars.githubusercontent.com/u/28362310?v=4"/></br>[sealch](https://github.com/sealch) | <img width="50" src="https://avatars.githubusercontent.com/u/2486806?v=4"/></br>[sebastienjust](https://github.com/sebastienjust) | <img width="50" src="https://avatars.githubusercontent.com/u/40538506?v=4"/></br>[criticic](https://github.com/criticic) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/27608187?v=4"/></br>[rt-oliveira](https://github.com/rt-oliveira) | <img width="50" src="https://avatars.githubusercontent.com/u/59133880?v=4"/></br>[thearchivalone](https://github.com/thearchivalone) | <img width="50" src="https://avatars.githubusercontent.com/u/11596277?v=4"/></br>[ikunya](https://github.com/ikunya) | <img width="50" src="https://avatars.githubusercontent.com/u/7471938?v=4"/></br>[ShuiHuo](https://github.com/ShuiHuo) | <img width="50" src="https://avatars.githubusercontent.com/u/34542665?v=4"/></br>[paventyang](https://github.com/paventyang) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/661892?v=4"/></br>[tiberiusteng](https://github.com/tiberiusteng) | <img width="50" src="https://avatars.githubusercontent.com/u/36303913?v=4"/></br>[sensor-freak](https://github.com/sensor-freak) | <img width="50" src="https://avatars.githubusercontent.com/u/10117386?v=4"/></br>[kornava](https://github.com/kornava) | <img width="50" src="https://avatars.githubusercontent.com/u/23638148?v=4"/></br>[s1nceri7y](https://github.com/s1nceri7y) | <img width="50" src="https://avatars.githubusercontent.com/u/17232523?v=4"/></br>[ruuti](https://github.com/ruuti) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/17399340?v=4"/></br>[pf-siedler](https://github.com/pf-siedler) | <img width="50" src="https://avatars.githubusercontent.com/u/6963004?v=4"/></br>[mrjo118](https://github.com/mrjo118) | <img width="50" src="https://avatars.githubusercontent.com/u/29355048?v=4"/></br>[majsterkovic](https://github.com/majsterkovic) | <img width="50" src="https://avatars.githubusercontent.com/u/11711053?v=4"/></br>[lscolombo](https://github.com/lscolombo) | <img width="50" src="https://avatars.githubusercontent.com/u/4316805?v=4"/></br>[stingray-11](https://github.com/stingray-11) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/4346449?v=4"/></br>[kik0220](https://github.com/kik0220) | <img width="50" src="https://avatars.githubusercontent.com/u/29166402?v=4"/></br>[jduar](https://github.com/jduar) | <img width="50" src="https://avatars.githubusercontent.com/u/151744644?v=4"/></br>[ihan1004](https://github.com/ihan1004) | <img width="50" src="https://avatars.githubusercontent.com/u/42007357?v=4"/></br>[eresytter](https://github.com/eresytter) | <img width="50" src="https://avatars.githubusercontent.com/u/8808502?v=4"/></br>[barbowza](https://github.com/barbowza) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/15636584?v=4"/></br>[balmag](https://github.com/balmag) | <img width="50" src="https://avatars.githubusercontent.com/u/1044056?v=4"/></br>[daniellandau](https://github.com/daniellandau) | <img width="50" src="https://avatars.githubusercontent.com/u/11857950?v=4"/></br>[djunho](https://github.com/djunho) | <img width="50" src="https://avatars.githubusercontent.com/u/17257053?v=4"/></br>[idcristi](https://github.com/idcristi) | <img width="50" src="https://avatars.githubusercontent.com/u/1686759?v=4"/></br>[chrmoritz](https://github.com/chrmoritz) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/560571?v=4"/></br>[chrisb86](https://github.com/chrisb86) | <img width="50" src="https://avatars.githubusercontent.com/u/606038?v=4"/></br>[cas--](https://github.com/cas--) | <img width="50" src="https://avatars.githubusercontent.com/u/60824?v=4"/></br>[brttbndr](https://github.com/brttbndr) | <img width="50" src="https://avatars.githubusercontent.com/u/2494769?v=4"/></br>[mrwulf](https://github.com/mrwulf) | <img width="50" src="https://avatars.githubusercontent.com/u/94234459?v=4"/></br>[betty-alagwu](https://github.com/betty-alagwu) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/21161146?v=4"/></br>[BartBucknill](https://github.com/BartBucknill) | <img width="50" src="https://avatars.githubusercontent.com/u/55127997?v=4"/></br>[entrymaster](https://github.com/entrymaster) | <img width="50" src="https://avatars.githubusercontent.com/u/28987176?v=4"/></br>[infinity052](https://github.com/infinity052) | <img width="50" src="https://avatars.githubusercontent.com/u/17809291?v=4"/></br>[antontkv](https://github.com/antontkv) | <img width="50" src="https://avatars.githubusercontent.com/u/552452?v=4"/></br>[andypiper](https://github.com/andypiper) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/81777961?v=4"/></br>[k33pn3xtlvl](https://github.com/k33pn3xtlvl) | <img width="50" src="https://avatars.githubusercontent.com/u/41290751?v=4"/></br>[serenitatis](https://github.com/serenitatis) | <img width="50" src="https://avatars.githubusercontent.com/u/31825085?v=4"/></br>[akirataguchi115](https://github.com/akirataguchi115) | <img width="50" src="https://avatars.githubusercontent.com/u/113056556?v=4"/></br>[ab-elhaddad](https://github.com/ab-elhaddad) | <img width="50" src="https://avatars.githubusercontent.com/u/40672207?v=4"/></br>[xUser5000](https://github.com/xUser5000) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/22528145?v=4"/></br>[PiotrNarel](https://github.com/PiotrNarel) | <img width="50" src="https://avatars.githubusercontent.com/u/2501211?v=4"/></br>[Philipp91](https://github.com/Philipp91) | <img width="50" src="https://avatars.githubusercontent.com/u/104646586?v=4"/></br>[RadCod3](https://github.com/RadCod3) | <img width="50" src="https://avatars.githubusercontent.com/u/7561827?v=4"/></br>[popovoleksandr](https://github.com/popovoleksandr) | <img width="50" src="https://avatars.githubusercontent.com/u/2136373?v=4"/></br>[mjjzf](https://github.com/mjjzf) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/71315378?v=4"/></br>[Mohamad-Shiro](https://github.com/Mohamad-Shiro) | <img width="50" src="https://avatars.githubusercontent.com/u/25288?v=4"/></br>[maicki](https://github.com/maicki) | <img width="50" src="https://avatars.githubusercontent.com/u/50887230?v=4"/></br>[itzTheMeow](https://github.com/itzTheMeow) | <img width="50" src="https://avatars.githubusercontent.com/u/4168339?v=4"/></br>[solariz](https://github.com/solariz) | <img width="50" src="https://avatars.githubusercontent.com/u/5001259?v=4"/></br>[ethan42411](https://github.com/ethan42411) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/2733783?v=4"/></br>[JOJ0](https://github.com/JOJ0) | <img width="50" src="https://avatars.githubusercontent.com/u/17108695?v=4"/></br>[jalajcodes](https://github.com/jalajcodes) | <img width="50" src="https://avatars.githubusercontent.com/u/238088?v=4"/></br>[jblunck](https://github.com/jblunck) | <img width="50" src="https://avatars.githubusercontent.com/u/3140223?v=4"/></br>[jdrobertso](https://github.com/jdrobertso) | <img width="50" src="https://avatars.githubusercontent.com/u/37297218?v=4"/></br>[Jesssullivan](https://github.com/Jesssullivan) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/339645?v=4"/></br>[jmontane](https://github.com/jmontane) | <img width="50" src="https://avatars.githubusercontent.com/u/69011?v=4"/></br>[johanhammar](https://github.com/johanhammar) | <img width="50" src="https://avatars.githubusercontent.com/u/71817691?v=4"/></br>[krishna8421](https://github.com/krishna8421) | <img width="50" src="https://avatars.githubusercontent.com/u/118282653?v=4"/></br>[Linkosred](https://github.com/Linkosred) | <img width="50" src="https://avatars.githubusercontent.com/u/16933735?v=4"/></br>[kirtanprht](https://github.com/kirtanprht) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/1660460?v=4"/></br>[xuhcc](https://github.com/xuhcc) | <img width="50" src="https://avatars.githubusercontent.com/u/11942650?v=4"/></br>[kkoyung](https://github.com/kkoyung) | <img width="50" src="https://avatars.githubusercontent.com/u/42113313?v=4"/></br>[khuongduy354](https://github.com/khuongduy354) | <img width="50" src="https://avatars.githubusercontent.com/u/98966350?v=4"/></br>[Kevin-vdberg](https://github.com/Kevin-vdberg) | <img width="50" src="https://avatars.githubusercontent.com/u/56685204?v=4"/></br>[kevinshu1995](https://github.com/kevinshu1995) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/1560189?v=4"/></br>[y-usuzumi](https://github.com/y-usuzumi) | <img width="50" src="https://avatars.githubusercontent.com/u/37601331?v=4"/></br>[kaustubhsh](https://github.com/kaustubhsh) | <img width="50" src="https://avatars.githubusercontent.com/u/20700283?v=4"/></br>[KaneGreen](https://github.com/KaneGreen) | <img width="50" src="https://avatars.githubusercontent.com/u/31921499?v=4"/></br>[Juvecu](https://github.com/Juvecu) | <img width="50" src="https://avatars.githubusercontent.com/u/976639?v=4"/></br>[dodog](https://github.com/dodog) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/6048003?v=4"/></br>[joybinchen](https://github.com/joybinchen) | <img width="50" src="https://avatars.githubusercontent.com/u/1586795?v=4"/></br>[joserebelo](https://github.com/joserebelo) | <img width="50" src="https://avatars.githubusercontent.com/u/1248504?v=4"/></br>[joesfer](https://github.com/joesfer) | <img width="50" src="https://avatars.githubusercontent.com/u/2520458?v=4"/></br>[joschaschmiedt](https://github.com/joschaschmiedt) | <img width="50" src="https://avatars.githubusercontent.com/u/37491732?v=4"/></br>[K0UR05H](https://github.com/K0UR05H) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/7824233?v=4"/></br>[kklas](https://github.com/kklas) | <img width="50" src="https://avatars.githubusercontent.com/u/8622992?v=4"/></br>[xmlangel](https://github.com/xmlangel) | <img width="50" src="https://avatars.githubusercontent.com/u/465678?v=4"/></br>[Letty](https://github.com/Letty) | <img width="50" src="https://avatars.githubusercontent.com/u/1055100?v=4"/></br>[troilus](https://github.com/troilus) | <img width="50" src="https://avatars.githubusercontent.com/u/1550856?v=4"/></br>[LightTreasure](https://github.com/LightTreasure) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/35413451?v=4"/></br>[Longhao-Chen](https://github.com/Longhao-Chen) | <img width="50" src="https://avatars.githubusercontent.com/u/50335724?v=4"/></br>[diogocaveiro](https://github.com/diogocaveiro) | <img width="50" src="https://avatars.githubusercontent.com/u/2599210?v=4"/></br>[lboullo0](https://github.com/lboullo0) | <img width="50" src="https://avatars.githubusercontent.com/u/1562062?v=4"/></br>[mrlpm](https://github.com/mrlpm) | <img width="50" src="https://avatars.githubusercontent.com/u/18382454?v=4"/></br>[MHolkamp](https://github.com/MHolkamp) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/1333214?v=4"/></br>[mshibanami](https://github.com/mshibanami) | <img width="50" src="https://avatars.githubusercontent.com/u/15436007?v=4"/></br>[marc-bouvier](https://github.com/marc-bouvier) | <img width="50" src="https://avatars.githubusercontent.com/u/5699725?v=4"/></br>[mvonmaltitz](https://github.com/mvonmaltitz) | <img width="50" src="https://avatars.githubusercontent.com/u/63354547?v=4"/></br>[nicholas-10](https://github.com/nicholas-10) | <img width="50" src="https://avatars.githubusercontent.com/u/1716229?v=4"/></br>[Vistaus](https://github.com/Vistaus) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/77807053?v=4"/></br>[beonma](https://github.com/beonma) | <img width="50" src="https://avatars.githubusercontent.com/u/47787284?v=4"/></br>[gtlsgamr](https://github.com/gtlsgamr) | <img width="50" src="https://avatars.githubusercontent.com/u/32321396?v=4"/></br>[horaceyoung](https://github.com/horaceyoung) | <img width="50" src="https://avatars.githubusercontent.com/u/6509881?v=4"/></br>[ianjs](https://github.com/ianjs) | <img width="50" src="https://avatars.githubusercontent.com/u/19862172?v=4"/></br>[iahmedbacha](https://github.com/iahmedbacha) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/22633385?v=4"/></br>[eltociear](https://github.com/eltociear) | <img width="50" src="https://avatars.githubusercontent.com/u/76095?v=4"/></br>[caseycs](https://github.com/caseycs) | <img width="50" src="https://avatars.githubusercontent.com/u/1533624?v=4"/></br>[IrvinDominin](https://github.com/IrvinDominin) | <img width="50" src="https://avatars.githubusercontent.com/u/33200024?v=4"/></br>[ishammahajan](https://github.com/ishammahajan) | <img width="50" src="https://avatars.githubusercontent.com/u/6916297?v=4"/></br>[ffadilaputra](https://github.com/ffadilaputra) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/64505041?v=4"/></br>[Oriwantgreencard](https://github.com/Oriwantgreencard) | <img width="50" src="https://avatars.githubusercontent.com/u/16137232?v=4"/></br>[j0hn-mc-clane](https://github.com/j0hn-mc-clane) | <img width="50" src="https://avatars.githubusercontent.com/u/19985741?v=4"/></br>[JRaiden16](https://github.com/JRaiden16) | <img width="50" src="https://avatars.githubusercontent.com/u/11466782?v=4"/></br>[jacobherrington](https://github.com/jacobherrington) | <img width="50" src="https://avatars.githubusercontent.com/u/9365179?v=4"/></br>[jamesadjinwa](https://github.com/jamesadjinwa) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/20801821?v=4"/></br>[jrwrigh](https://github.com/jrwrigh) | <img width="50" src="https://avatars.githubusercontent.com/u/7652978?v=4"/></br>[analogist](https://github.com/analogist) | <img width="50" src="https://avatars.githubusercontent.com/u/97527096?v=4"/></br>[JanhaviAlekar](https://github.com/JanhaviAlekar) | <img width="50" src="https://avatars.githubusercontent.com/u/4995433?v=4"/></br>[jaredcrowe](https://github.com/jaredcrowe) | <img width="50" src="https://avatars.githubusercontent.com/u/936006?v=4"/></br>[jasonwilliams](https://github.com/jasonwilliams) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/15687495?v=4"/></br>[J-U-B](https://github.com/J-U-B) | <img width="50" src="https://avatars.githubusercontent.com/u/524685?v=4"/></br>[imsardine](https://github.com/imsardine) | <img width="50" src="https://avatars.githubusercontent.com/u/4087105?v=4"/></br>[volatilevar](https://github.com/volatilevar) | <img width="50" src="https://avatars.githubusercontent.com/u/47724360?v=4"/></br>[innkuika](https://github.com/innkuika) | <img width="50" src="https://avatars.githubusercontent.com/u/31085601?v=4"/></br>[Jia35](https://github.com/Jia35) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/163555?v=4"/></br>[JoelRSimpson](https://github.com/JoelRSimpson) | <img width="50" src="https://avatars.githubusercontent.com/u/6965062?v=4"/></br>[joeltaylor](https://github.com/joeltaylor) | <img width="50" src="https://avatars.githubusercontent.com/u/1133852?v=4"/></br>[thejohnfreeman](https://github.com/thejohnfreeman) | <img width="50" src="https://avatars.githubusercontent.com/u/242107?v=4"/></br>[exic](https://github.com/exic) | <img width="50" src="https://avatars.githubusercontent.com/u/13716151?v=4"/></br>[JonathanPlasse](https://github.com/JonathanPlasse) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/11778560?v=4"/></br>[nickhobbs94](https://github.com/nickhobbs94) | <img width="50" src="https://avatars.githubusercontent.com/u/10386884?v=4"/></br>[Frichetten](https://github.com/Frichetten) | <img width="50" src="https://avatars.githubusercontent.com/u/5541611?v=4"/></br>[nicolas-suzuki](https://github.com/nicolas-suzuki) | <img width="50" src="https://avatars.githubusercontent.com/u/15157120?v=4"/></br>[Nicryc](https://github.com/Nicryc) | <img width="50" src="https://avatars.githubusercontent.com/u/52013393?v=4"/></br>[nightknighto](https://github.com/nightknighto) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/40800932?v=4"/></br>[nik-gautam](https://github.com/nik-gautam) | <img width="50" src="https://avatars.githubusercontent.com/u/102589425?v=4"/></br>[nitingururajk](https://github.com/nitingururajk) | <img width="50" src="https://avatars.githubusercontent.com/u/48302704?v=4"/></br>[noah-nash](https://github.com/noah-nash) | <img width="50" src="https://avatars.githubusercontent.com/u/2463969?v=4"/></br>[vulpivia](https://github.com/vulpivia) | <img width="50" src="https://avatars.githubusercontent.com/u/90026187?v=4"/></br>[OmGole](https://github.com/OmGole) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/12369770?v=4"/></br>[Ouvill](https://github.com/Ouvill) | <img width="50" src="https://avatars.githubusercontent.com/u/43815417?v=4"/></br>[shorty2380](https://github.com/shorty2380) | <img width="50" src="https://avatars.githubusercontent.com/u/15014287?v=4"/></br>[dist3r](https://github.com/dist3r) | <img width="50" src="https://avatars.githubusercontent.com/u/2866972?v=4"/></br>[BCSharp](https://github.com/BCSharp) | <img width="50" src="https://avatars.githubusercontent.com/u/19418601?v=4"/></br>[rakleed](https://github.com/rakleed) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/7881932?v=4"/></br>[idle-code](https://github.com/idle-code) | <img width="50" src="https://avatars.githubusercontent.com/u/13076552?v=4"/></br>[Oaklight](https://github.com/Oaklight) | <img width="50" src="https://avatars.githubusercontent.com/u/53913724?v=4"/></br>[Perkolator](https://github.com/Perkolator) | <img width="50" src="https://avatars.githubusercontent.com/u/24394304?v=4"/></br>[petzi53](https://github.com/petzi53) | <img width="50" src="https://avatars.githubusercontent.com/u/3096423?v=4"/></br>[phavekes](https://github.com/phavekes) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/29787?v=4"/></br>[phitsc](https://github.com/phitsc) | <img width="50" src="https://avatars.githubusercontent.com/u/56399446?v=4"/></br>[KowalskiPiotr98](https://github.com/KowalskiPiotr98) | <img width="50" src="https://avatars.githubusercontent.com/u/64375061?v=4"/></br>[Polaris66](https://github.com/Polaris66) | <img width="50" src="https://avatars.githubusercontent.com/u/6306608?v=4"/></br>[Diadlo](https://github.com/Diadlo) | <img width="50" src="https://avatars.githubusercontent.com/u/42793024?v=4"/></br>[pranavmodx](https://github.com/pranavmodx) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/59203815?v=4"/></br>[DarkFalc0n](https://github.com/DarkFalc0n) | <img width="50" src="https://avatars.githubusercontent.com/u/87557?v=4"/></br>[psy-q](https://github.com/psy-q) | <img width="50" src="https://avatars.githubusercontent.com/u/50834839?v=4"/></br>[R3dError](https://github.com/R3dError) | <img width="50" src="https://avatars.githubusercontent.com/u/42652941?v=4"/></br>[rajprakash00](https://github.com/rajprakash00) | <img width="50" src="https://avatars.githubusercontent.com/u/32304956?v=4"/></br>[rahil1304](https://github.com/rahil1304) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/36333308?v=4"/></br>[marcorombach](https://github.com/marcorombach) | <img width="50" src="https://avatars.githubusercontent.com/u/11036464?v=4"/></br>[mlkood](https://github.com/mlkood) | <img width="50" src="https://avatars.githubusercontent.com/u/2480960?v=4"/></br>[plextoriano](https://github.com/plextoriano) | <img width="50" src="https://avatars.githubusercontent.com/u/5788516?v=4"/></br>[Marmo](https://github.com/Marmo) | <img width="50" src="https://avatars.githubusercontent.com/u/29300939?v=4"/></br>[mcejp](https://github.com/mcejp) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/640949?v=4"/></br>[freaktechnik](https://github.com/freaktechnik) | <img width="50" src="https://avatars.githubusercontent.com/u/79802125?v=4"/></br>[martinkorelic](https://github.com/martinkorelic) | <img width="50" src="https://avatars.githubusercontent.com/u/287105?v=4"/></br>[Petemir](https://github.com/Petemir) | <img width="50" src="https://avatars.githubusercontent.com/u/5218859?v=4"/></br>[matsair](https://github.com/matsair) | <img width="50" src="https://avatars.githubusercontent.com/u/7098804?v=4"/></br>[MattDemers](https://github.com/MattDemers) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/12831489?v=4"/></br>[mgroth0](https://github.com/mgroth0) | <img width="50" src="https://avatars.githubusercontent.com/u/21796?v=4"/></br>[silentmatt](https://github.com/silentmatt) | <img width="50" src="https://avatars.githubusercontent.com/u/8590?v=4"/></br>[moorage](https://github.com/moorage) | <img width="50" src="https://avatars.githubusercontent.com/u/76700192?v=4"/></br>[maxs-test](https://github.com/maxs-test) | <img width="50" src="https://avatars.githubusercontent.com/u/59669349?v=4"/></br>[MichBoi](https://github.com/MichBoi) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/6817500?v=4"/></br>[msorens](https://github.com/msorens) | <img width="50" src="https://avatars.githubusercontent.com/u/3941344?v=4"/></br>[MikkCZ](https://github.com/MikkCZ) | <img width="50" src="https://avatars.githubusercontent.com/u/51273874?v=4"/></br>[MichipX](https://github.com/MichipX) | <img width="50" src="https://avatars.githubusercontent.com/u/59350?v=4"/></br>[Elleo](https://github.com/Elleo) | <img width="50" src="https://avatars.githubusercontent.com/u/14942380?v=4"/></br>[phucbm](https://github.com/phucbm) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/72992390?v=4"/></br>[maholmlund](https://github.com/maholmlund) | <img width="50" src="https://avatars.githubusercontent.com/u/40818895?v=4"/></br>[MovingEarth](https://github.com/MovingEarth) | <img width="50" src="https://avatars.githubusercontent.com/u/53177864?v=4"/></br>[MrTraduttore](https://github.com/MrTraduttore) | <img width="50" src="https://avatars.githubusercontent.com/u/58155247?v=4"/></br>[ZhReimu](https://github.com/ZhReimu) | <img width="50" src="https://avatars.githubusercontent.com/u/48156230?v=4"/></br>[sanjarcode](https://github.com/sanjarcode) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/43955099?v=4"/></br>[Mustafa-ALD](https://github.com/Mustafa-ALD) | <img width="50" src="https://avatars.githubusercontent.com/u/1592048?v=4"/></br>[LeMyst](https://github.com/LeMyst) | <img width="50" src="https://avatars.githubusercontent.com/u/66901039?v=4"/></br>[matmolni](https://github.com/matmolni) | <img width="50" src="https://avatars.githubusercontent.com/u/9076687?v=4"/></br>[NJannasch](https://github.com/NJannasch) | <img width="50" src="https://avatars.githubusercontent.com/u/47940898?v=4"/></br>[njmulsqb](https://github.com/njmulsqb) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/8016073?v=4"/></br>[zomglings](https://github.com/zomglings) | <img width="50" src="https://avatars.githubusercontent.com/u/47456195?v=4"/></br>[hexclover](https://github.com/hexclover) | <img width="50" src="https://avatars.githubusercontent.com/u/922429?v=4"/></br>[adrynov](https://github.com/adrynov) | <img width="50" src="https://avatars.githubusercontent.com/u/94937?v=4"/></br>[andrewperry](https://github.com/andrewperry) | <img width="50" src="https://avatars.githubusercontent.com/u/5417051?v=4"/></br>[tekdel](https://github.com/tekdel) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/4471821?v=4"/></br>[fobo66](https://github.com/fobo66) | <img width="50" src="https://avatars.githubusercontent.com/u/7015947?v=4"/></br>[andzs](https://github.com/andzs) | <img width="50" src="https://avatars.githubusercontent.com/u/54475686?v=4"/></br>[pandeymangg](https://github.com/pandeymangg) | <img width="50" src="https://avatars.githubusercontent.com/u/498326?v=4"/></br>[Shaxine](https://github.com/Shaxine) | <img width="50" src="https://avatars.githubusercontent.com/u/9095073?v=4"/></br>[antonio-ramadas](https://github.com/antonio-ramadas) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/28067395?v=4"/></br>[aprvsh](https://github.com/aprvsh) | <img width="50" src="https://avatars.githubusercontent.com/u/3063132?v=4"/></br>[archisman-panigrahi](https://github.com/archisman-panigrahi) | <img width="50" src="https://avatars.githubusercontent.com/u/75756768?v=4"/></br>[aynp](https://github.com/aynp) | <img width="50" src="https://avatars.githubusercontent.com/u/201215?v=4"/></br>[assimd](https://github.com/assimd) | <img width="50" src="https://avatars.githubusercontent.com/u/26827848?v=4"/></br>[Atrate](https://github.com/Atrate) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/794314?v=4"/></br>[austindoupnik](https://github.com/austindoupnik) | <img width="50" src="https://avatars.githubusercontent.com/u/7589142?v=4"/></br>[azurelunatic](https://github.com/azurelunatic) | <img width="50" src="https://avatars.githubusercontent.com/u/110668146?v=4"/></br>[BeeverTeeth](https://github.com/BeeverTeeth) | <img width="50" src="https://avatars.githubusercontent.com/u/16528381?v=4"/></br>[be-we](https://github.com/be-we) | <img width="50" src="https://avatars.githubusercontent.com/u/1899506?v=4"/></br>[ei8fdb](https://github.com/ei8fdb) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/7034200?v=4"/></br>[bimlas](https://github.com/bimlas) | <img width="50" src="https://avatars.githubusercontent.com/u/58605547?v=4"/></br>[bishoy-magdy](https://github.com/bishoy-magdy) | <img width="50" src="https://avatars.githubusercontent.com/u/1614?v=4"/></br>[brad](https://github.com/brad) | <img width="50" src="https://avatars.githubusercontent.com/u/47641641?v=4"/></br>[brenobaptista](https://github.com/brenobaptista) | <img width="50" src="https://avatars.githubusercontent.com/u/889871?v=4"/></br>[cuihaoleo](https://github.com/cuihaoleo) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/1001769?v=4"/></br>[CandleCandle](https://github.com/CandleCandle) | <img width="50" src="https://avatars.githubusercontent.com/u/16287077?v=4"/></br>[carlbordum](https://github.com/carlbordum) | <img width="50" src="https://avatars.githubusercontent.com/u/36130773?v=4"/></br>[carlosngo](https://github.com/carlosngo) | <img width="50" src="https://avatars.githubusercontent.com/u/20382?v=4"/></br>[carlosedp](https://github.com/carlosedp) | <img width="50" src="https://avatars.githubusercontent.com/u/105843?v=4"/></br>[chaifeng](https://github.com/chaifeng) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/549349?v=4"/></br>[charles-e](https://github.com/charles-e) | <img width="50" src="https://avatars.githubusercontent.com/u/19870089?v=4"/></br>[cyy53589](https://github.com/cyy53589) | <img width="50" src="https://avatars.githubusercontent.com/u/45535789?v=4"/></br>[2jaeyeol](https://github.com/2jaeyeol) | <img width="50" src="https://avatars.githubusercontent.com/u/25622825?v=4"/></br>[thackeraaron](https://github.com/thackeraaron) | <img width="50" src="https://avatars.githubusercontent.com/u/32984653?v=4"/></br>[AIbnuHIbban](https://github.com/AIbnuHIbban) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/8325984?v=4"/></br>[asalthobaity](https://github.com/asalthobaity) | <img width="50" src="https://avatars.githubusercontent.com/u/147910430?v=4"/></br>[awesome-pro](https://github.com/awesome-pro) | <img width="50" src="https://avatars.githubusercontent.com/u/63901956?v=4"/></br>[abhi-bhatra](https://github.com/abhi-bhatra) | <img width="50" src="https://avatars.githubusercontent.com/u/56785486?v=4"/></br>[iamabhi222](https://github.com/iamabhi222) | <img width="50" src="https://avatars.githubusercontent.com/u/69760168?v=4"/></br>[waditos](https://github.com/waditos) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/15086425?v=4"/></br>[AdrienPoupa](https://github.com/AdrienPoupa) | <img width="50" src="https://avatars.githubusercontent.com/u/61756360?v=4"/></br>[sandstone991](https://github.com/sandstone991) | <img width="50" src="https://avatars.githubusercontent.com/u/63443657?v=4"/></br>[aksh-konda](https://github.com/aksh-konda) | <img width="50" src="https://avatars.githubusercontent.com/u/3660978?v=4"/></br>[alanfortlink](https://github.com/alanfortlink) | <img width="50" src="https://avatars.githubusercontent.com/u/32174181?v=4"/></br>[alecmaly](https://github.com/alecmaly) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/53372753?v=4"/></br>[alessandroberna](https://github.com/alessandroberna) | <img width="50" src="https://avatars.githubusercontent.com/u/51818821?v=4"/></br>[adw2019](https://github.com/adw2019) | <img width="50" src="https://avatars.githubusercontent.com/u/4056990?v=4"/></br>[afischer211](https://github.com/afischer211) | <img width="50" src="https://avatars.githubusercontent.com/u/61735677?v=4"/></br>[bablecopherye](https://github.com/bablecopherye) | <img width="50" src="https://avatars.githubusercontent.com/u/26230870?v=4"/></br>[a13xk](https://github.com/a13xk) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/14836659?v=4"/></br>[apankratov](https://github.com/apankratov) | <img width="50" src="https://avatars.githubusercontent.com/u/7045739?v=4"/></br>[teterkin](https://github.com/teterkin) | <img width="50" src="https://avatars.githubusercontent.com/u/215668?v=4"/></br>[avanderberg](https://github.com/avanderberg) | <img width="50" src="https://avatars.githubusercontent.com/u/4408379?v=4"/></br>[lex111](https://github.com/lex111) | <img width="50" src="https://avatars.githubusercontent.com/u/60134194?v=4"/></br>[Alkindi42](https://github.com/Alkindi42) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/7129815?v=4"/></br>[Jumanjii](https://github.com/Jumanjii) | <img width="50" src="https://avatars.githubusercontent.com/u/19962243?v=4"/></br>[AlphaJack](https://github.com/AlphaJack) | <img width="50" src="https://avatars.githubusercontent.com/u/65647302?v=4"/></br>[captain-aman-11](https://github.com/captain-aman-11) | <img width="50" src="https://avatars.githubusercontent.com/u/12948692?v=4"/></br>[aminvakil](https://github.com/aminvakil) | <img width="50" src="https://avatars.githubusercontent.com/u/14096959?v=4"/></br>[richtwin567](https://github.com/richtwin567) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/487182?v=4"/></br>[andrejilderda](https://github.com/andrejilderda) | <img width="50" src="https://avatars.githubusercontent.com/u/18169566?v=4"/></br>[deining](https://github.com/deining) | <img width="50" src="https://avatars.githubusercontent.com/u/32337926?v=4"/></br>[Chillu1](https://github.com/Chillu1) | <img width="50" src="https://avatars.githubusercontent.com/u/92958867?v=4"/></br>[eduebernal](https://github.com/eduebernal) | <img width="50" src="https://avatars.githubusercontent.com/u/67867099?v=4"/></br>[eduardokimmel](https://github.com/eduardokimmel) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/17415256?v=4"/></br>[ei-ke](https://github.com/ei-ke) | <img width="50" src="https://avatars.githubusercontent.com/u/1962738?v=4"/></br>[einverne](https://github.com/einverne) | <img width="50" src="https://avatars.githubusercontent.com/u/15069703?v=4"/></br>[etho201](https://github.com/etho201) | <img width="50" src="https://avatars.githubusercontent.com/u/16492558?v=4"/></br>[eodeluga](https://github.com/eodeluga) | <img width="50" src="https://avatars.githubusercontent.com/u/67684689?v=4"/></br>[Fabien-jrt](https://github.com/Fabien-jrt) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/29729920?v=4"/></br>[fabiogvdneto](https://github.com/fabiogvdneto) | <img width="50" src="https://avatars.githubusercontent.com/u/16875937?v=4"/></br>[fathyar](https://github.com/fathyar) | <img width="50" src="https://avatars.githubusercontent.com/u/73366988?v=4"/></br>[Fejby](https://github.com/Fejby) | <img width="50" src="https://avatars.githubusercontent.com/u/37376099?v=4"/></br>[fernandonagase](https://github.com/fernandonagase) | <img width="50" src="https://avatars.githubusercontent.com/u/3057302?v=4"/></br>[ferk6a](https://github.com/ferk6a) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/43272148?v=4"/></br>[fpindado](https://github.com/fpindado) | <img width="50" src="https://avatars.githubusercontent.com/u/1714374?v=4"/></br>[FleischKarussel](https://github.com/FleischKarussel) | <img width="50" src="https://avatars.githubusercontent.com/u/23738961?v=4"/></br>[easyteacher](https://github.com/easyteacher) | <img width="50" src="https://avatars.githubusercontent.com/u/32201227?v=4"/></br>[glemco](https://github.com/glemco) | <img width="50" src="https://avatars.githubusercontent.com/u/110087?v=4"/></br>[halkeye](https://github.com/halkeye) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/19814827?v=4"/></br>[gmaubach](https://github.com/gmaubach) | <img width="50" src="https://avatars.githubusercontent.com/u/6190183?v=4"/></br>[gmag11](https://github.com/gmag11) | <img width="50" src="https://avatars.githubusercontent.com/u/6209647?v=4"/></br>[Jackymancs4](https://github.com/Jackymancs4) | <img width="50" src="https://avatars.githubusercontent.com/u/1501599?v=4"/></br>[gitstart](https://github.com/gitstart) | <img width="50" src="https://avatars.githubusercontent.com/u/297578?v=4"/></br>[Glandos](https://github.com/Glandos) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/24235344?v=4"/></br>[ggteixeira](https://github.com/ggteixeira) | <img width="50" src="https://avatars.githubusercontent.com/u/2257024?v=4"/></br>[gusbemacbe](https://github.com/gusbemacbe) | <img width="50" src="https://avatars.githubusercontent.com/u/64917442?v=4"/></br>[HOLLYwyh](https://github.com/HOLLYwyh) | <img width="50" src="https://avatars.githubusercontent.com/u/18524580?v=4"/></br>[Fvbor](https://github.com/Fvbor) | <img width="50" src="https://avatars.githubusercontent.com/u/16725441?v=4"/></br>[hamishmb](https://github.com/hamishmb) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/22606250?v=4"/></br>[bennetthanna](https://github.com/bennetthanna) | <img width="50" src="https://avatars.githubusercontent.com/u/78360007?v=4"/></br>[graueneko](https://github.com/graueneko) | <img width="50" src="https://avatars.githubusercontent.com/u/67231570?v=4"/></br>[harshitkathuria](https://github.com/harshitkathuria) | <img width="50" src="https://avatars.githubusercontent.com/u/1410453?v=4"/></br>[ckant](https://github.com/ckant) | <img width="50" src="https://avatars.githubusercontent.com/u/2348463?v=4"/></br>[Techwolf12](https://github.com/Techwolf12) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/22433652?v=4"/></br>[christopher-o-toole](https://github.com/christopher-o-toole) | <img width="50" src="https://avatars.githubusercontent.com/u/2282880?v=4"/></br>[cloudtrends](https://github.com/cloudtrends) | <img width="50" src="https://avatars.githubusercontent.com/u/49568618?v=4"/></br>[cicerotcv](https://github.com/cicerotcv) | <img width="50" src="https://avatars.githubusercontent.com/u/166844316?v=4"/></br>[CoolCu](https://github.com/CoolCu) | <img width="50" src="https://avatars.githubusercontent.com/u/60951091?v=4"/></br>[CyrusYip](https://github.com/CyrusYip) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/15956322?v=4"/></br>[damienmascre](https://github.com/damienmascre) | <img width="50" src="https://avatars.githubusercontent.com/u/1102886?v=4"/></br>[da2x](https://github.com/da2x) | <img width="50" src="https://avatars.githubusercontent.com/u/26678?v=4"/></br>[danielb2](https://github.com/danielb2) | <img width="50" src="https://avatars.githubusercontent.com/u/93351930?v=4"/></br>[danimnunes](https://github.com/danimnunes) | <img width="50" src="https://avatars.githubusercontent.com/u/12847693?v=4"/></br>[danil-tolkachev](https://github.com/danil-tolkachev) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/7279100?v=4"/></br>[darshani28](https://github.com/darshani28) | <img width="50" src="https://avatars.githubusercontent.com/u/5661336?v=4"/></br>[dhgoldberg](https://github.com/dhgoldberg) | <img width="50" src="https://avatars.githubusercontent.com/u/3041566?v=4"/></br>[DavidBeale](https://github.com/DavidBeale) | <img width="50" src="https://avatars.githubusercontent.com/u/28535750?v=4"/></br>[NeverMendel](https://github.com/NeverMendel) | <img width="50" src="https://avatars.githubusercontent.com/u/81250703?v=4"/></br>[deeepsig](https://github.com/deeepsig) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/2138893?v=4"/></br>[DG0lden](https://github.com/DG0lden) | <img width="50" src="https://avatars.githubusercontent.com/u/54697735?v=4"/></br>[deunlee](https://github.com/deunlee) | <img width="50" src="https://avatars.githubusercontent.com/u/11378282?v=4"/></br>[diego-betto](https://github.com/diego-betto) | <img width="50" src="https://avatars.githubusercontent.com/u/215270?v=4"/></br>[erdody](https://github.com/erdody) | <img width="50" src="https://avatars.githubusercontent.com/u/36959928?v=4"/></br>[diragb](https://github.com/diragb) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/10371667?v=4"/></br>[domgoodwin](https://github.com/domgoodwin) | <img width="50" src="https://avatars.githubusercontent.com/u/72066?v=4"/></br>[b4mboo](https://github.com/b4mboo) | <img width="50" src="https://avatars.githubusercontent.com/u/5131923?v=4"/></br>[donbowman](https://github.com/donbowman) | <img width="50" src="https://avatars.githubusercontent.com/u/60024671?v=4"/></br>[DeeJayLSP](https://github.com/DeeJayLSP) | <img width="50" src="https://avatars.githubusercontent.com/u/579727?v=4"/></br>[sirnacnud](https://github.com/sirnacnud) |
-| <img width="50" src="https://avatars.githubusercontent.com/u/47756?v=4"/></br>[dflock](https://github.com/dflock) | <img width="50" src="https://avatars.githubusercontent.com/u/7990534?v=4"/></br>[drobilica](https://github.com/drobilica) | <img width="50" src="https://avatars.githubusercontent.com/u/21699905?v=4"/></br>[educbraga](https://github.com/educbraga) |  |  |
-<!-- CONTRIBUTORS-TABLE-AUTO-GENERATED -->
+### 尚且无法保护的内容
+
+当前实现不是完整 profile 加密，以下内容仍然以明文形式存在：
+
+- `resources/` 中的附件和资源文件
+- tmp 目录
+
+## 仓库结构
+
+仓库保留了 Joplin 上游 monorepo 结构，引入的安全模块集中在以下位置：
+
+```text
+packages/app-desktop/gui/
+packages/app-desktop/services/appLock/
+packages/app-desktop/services/encryptedProfile/
+packages/lib/services/encryptedProfile/
+packages/lib/database-driver-node.ts
+packages/lib/models/settings/builtInMetadata.ts
+```
+
+- `AppLockService`：桌面端 UI 锁状态、密码校验和锁定行为
+- `EncryptedProfileService`：profile 加密元数据、密码派生、数据库密钥包装
+- `DatabaseDriverNode`：SQLCipher key 注入和数据库打开验证
+- `EncryptedProfileUnlockScreen`：数据库打开前的解锁界面
+- `encryptExistingProfileDatabase`：明文数据库迁移到 SQLCipher 数据库
+- `verifyEncryptedProfile.manual.test.ts`：手动 profile 验证辅助脚本
+
+## 构建
+
+安装依赖：
+
+```bash
+yarn install --immutable
+```
+
+构建桌面端：
+
+```bash
+yarn workspace @joplin/app-desktop build
+```
+
+以开发模式启动桌面端：
+
+```bash
+cd packages/app-desktop
+yarn start
+```
+
+如果本地 native 依赖下载失败，可以临时使用：
+
+```bash
+yarn install --immutable --mode=skip-build
+```
+
+只适合做 TypeScript 检查和部分测试，完整打包仍需要 native 依赖正常构建或下载
+
+## 验证
+
+建议至少运行以下检查：
+
+```bash
+yarn workspace @joplin/app-desktop tsc --noEmit
+yarn workspace @joplin/renderer tsc
+yarn workspace @joplin/lib tsc
+yarn workspace @joplin/lib test services/encryptedProfile/EncryptedProfileService.test.ts services/encryptedProfile/migration.test.ts services/encryptedProfile/backup.test.ts services/encryptedProfile/migrationErrors.test.ts
+yarn workspace @joplin/app-desktop test services/encryptedProfile/EncryptedProfileService.test.ts services/encryptedProfile/loadDesktopSqliteModule.test.ts services/encryptedProfile/scheduleEncryptedProfileMigrationAndRestart.test.ts services/appLock/AppLockService.test.ts utils/restartRelaunchArgs.test.ts app.reducer.test.ts
+```
+
+如果要验证 SQLCipher 迁移，请使用一次性测试 profile，不要直接在重要笔记数据上测试
+
+## 平台状态
+
+| 平台 | 状态 |
+| --- | --- |
+| Windows | 完成了相关单元测试和 SQLCipher native 模块的测试 |
+| macOS | 我太懒了 还没在mac端测试hhh |
+| Linux | 同上 |
+| Mobile | 不在支持范围内 请启用OS提供的应用锁 |
+
+## 许可证
+
+沿用 Joplin 的许可证条款，见 [LICENSE](LICENSE)。
+
+## Project Positioning
+
+Joplin Privacy Toolkit is an unofficial desktop fork based on Joplin Desktop. It provides local profile access control and data-at-rest protection.
+
+The current source is based on Joplin Desktop `3.7.6`. It keeps the upstream Joplin monorepo layout and data model, and implements local privacy protection through the following path:
+
+- App Lock at the desktop UI layer to reduce the risk of direct access to an already-open Joplin window.
+- Encrypted Profile unlock before the database is opened.
+- SQLCipher encryption for `database.sqlite` at rest.
+- Preservation of Joplin's existing notes, sync, plugin, and profile structure, avoiding an unmaintainable side path for privacy features.
+
+## Current Features
+
+### App Lock
+
+App Lock protects access to the running desktop user interface.
+
+- Enable or disable App Lock.
+- Lock on startup.
+- Lock after idle.
+- Manual lock command.
+- Set, change, and clear the App Lock password.
+
+App Lock does not encrypt local files. It is a UI access control feature.
+
+### Encrypted Profile
+
+To provide database-at-rest encryption, this project introduces Encrypted Profile. Encrypted Profile is still experimental.
+
+- scrypt-based password key derivation.
+- AES-256-GCM wrapping for the database key.
+- SQLCipher-backed access to the encrypted `database.sqlite`.
+- Migration from plaintext `database.sqlite` to a SQLCipher database.
+- Failure handling that avoids locking the user out of the original database.
+- Plaintext migration backup retention for explicit user review.
+
+The Encrypted Profile password is independent from the App Lock password.
+
+Joplin provides end-to-end encryption for synced cloud storage. Encrypted Profile is a local database-at-rest encryption path and does not replace Joplin's sync end-to-end encryption. Keeping Joplin sync encryption enabled is still recommended.
+
+## Security Model
+
+### Encryption Design
+
+Encrypted Profile uses a two-layer key structure. The user-entered Encrypted Profile password is not stored as plaintext and is not saved directly as the database key.
+
+When the feature is enabled, the application generates a separate database key, derives a wrapping key from the user password with scrypt, and wraps the database key with AES-256-GCM. The salt, nonce, KDF parameters, and wrapped database key are stored in `profile-encryption.json`.
+
+On startup, Joplin reads `profile-encryption.json` before opening the local database and asks for the Encrypted Profile password. After a successful password check, the application unwraps the database key, injects the key into SQLCipher immediately after creating the SQLite connection, and verifies that the database can be read. With an incorrect password, SQLCipher cannot open the encrypted `database.sqlite`.
+
+During migration from a plaintext database, the application keeps the original `database.sqlite`, creates a SQLCipher database, and exports the data into it. After successful migration and verification, the SQLCipher database replaces the original database. If migration fails, the original database is preserved so that the profile remains usable.
+
+### Protected Data
+
+When Encrypted Profile is enabled, migration has completed, and the SQLCipher native module is available:
+
+- `database.sqlite` is stored as a SQLCipher database.
+
+### Data Outside the Current Protection Boundary
+
+The current implementation is not full-profile encryption. The following data is still stored in plaintext:
+
+- attachments and resources under `resources/`
+- temporary files
+
+## Repository Layout
+
+This repository keeps the upstream Joplin monorepo layout. Privacy-related changes are concentrated in:
+
+```text
+packages/app-desktop/gui/
+packages/app-desktop/services/appLock/
+packages/app-desktop/services/encryptedProfile/
+packages/lib/services/encryptedProfile/
+packages/lib/database-driver-node.ts
+packages/lib/models/settings/builtInMetadata.ts
+```
+
+- `AppLockService`: desktop UI lock state, password verification, and lock behavior.
+- `EncryptedProfileService`: encrypted profile metadata, password key derivation, and database key wrapping.
+- `DatabaseDriverNode`: SQLCipher key injection and database open verification.
+- `EncryptedProfileUnlockScreen`: pre-database-open unlock screen.
+- `encryptExistingProfileDatabase`: plaintext-to-SQLCipher database migration.
+- `verifyEncryptedProfile.manual.test.ts`: helper for manual profile verification.
+
+## Build
+
+Install dependencies:
+
+```bash
+yarn install --immutable
+```
+
+Build the desktop app:
+
+```bash
+yarn workspace @joplin/app-desktop build
+```
+
+Start the desktop app in development mode:
+
+```bash
+cd packages/app-desktop
+yarn start
+```
+
+If native dependency downloads fail in a local environment, the following can be used for type checking and partial tests:
+
+```bash
+yarn install --immutable --mode=skip-build
+```
+
+Full packaging still requires native dependencies to build or download correctly.
+
+## Verification
+
+Recommended checks:
+
+```bash
+yarn workspace @joplin/app-desktop tsc --noEmit
+yarn workspace @joplin/renderer tsc
+yarn workspace @joplin/lib tsc
+yarn workspace @joplin/lib test services/encryptedProfile/EncryptedProfileService.test.ts services/encryptedProfile/migration.test.ts services/encryptedProfile/backup.test.ts services/encryptedProfile/migrationErrors.test.ts
+yarn workspace @joplin/app-desktop test services/encryptedProfile/EncryptedProfileService.test.ts services/encryptedProfile/loadDesktopSqliteModule.test.ts services/encryptedProfile/scheduleEncryptedProfileMigrationAndRestart.test.ts services/appLock/AppLockService.test.ts utils/restartRelaunchArgs.test.ts app.reducer.test.ts
+```
+
+Use a disposable test profile when verifying SQLCipher migration. Do not test migration directly on important note data without an independent backup.
+
+## Platform Status
+
+| Platform | Status |
+| --- | --- |
+| Windows | Relevant unit tests and SQLCipher native module tests have been completed. |
+| macOS | I have not tested this on macOS yet. |
+| Linux | I have not configured a Linux test environment yet. |
+| Mobile | Out of scope. Please use the application lock provided by the operating system. |
+
+## License
+
+This project follows Joplin's license terms. See [LICENSE](LICENSE).
