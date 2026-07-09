@@ -387,6 +387,10 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 				respondFailure(toolCall, 'replaceSelection is invalid in this context');
 				continue;
 			}
+			if (!isValidEditOp(toolCall.toolName)) {
+				respondFailure(toolCall, 'tool not found');
+				continue;
+			}
 
 			const editOperation = toolCallToEditOperation(toolCall);
 			const { newBody, appliedEdits } = applyAnchorEdits(body, [editOperation], 0);
@@ -425,9 +429,13 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 	return chatResponses;
 };
 
+const isValidEditOp = (operation: string): operation is EditOp['op'] => {
+	return knownOps.has(operation as EditOp['op']);
+};
+
 const toolCallToEditOperation = (toolCall: ChatToolCall): EditOp => {
-	const op = toolCall.toolName as EditOp['op'];
-	if (!knownOps.has(op)) {
+	const op = toolCall.toolName;
+	if (!isValidEditOp(op)) {
 		throw new Error(`Invalid edit operation: ${op}`);
 	}
 
