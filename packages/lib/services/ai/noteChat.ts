@@ -360,7 +360,7 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 			}
 		}
 
-		// Only one replaceSelection action is allowed
+		// Only one tool call is allowed in this context
 		for (const toolCall of chat.toolCalls) {
 			if (action === toolCall) continue;
 			if (toolCall.toolName === expectedName) {
