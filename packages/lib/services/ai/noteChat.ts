@@ -5,6 +5,7 @@ import Logger from '@joplin/utils/Logger';
 import findFencedBlock from './utils/findFencedBlock';
 import { applyAnchorEdits, supportedStructuredBlockTags } from './applyNoteEdits';
 import { hasOwnProperty } from '@joplin/utils/object';
+import { _ } from '../../locale';
 
 const logger = Logger.create('noteChat');
 
@@ -202,6 +203,7 @@ const estimateTokens = (text: string) => Math.ceil(text.length / charsPerToken);
 interface Commands {
 	replaceSelection: (text: string, originalText: string)=> Promise<void>;
 	updateNoteBody: (body: string, originalBody: string)=> Promise<void>;
+	displayError: (message: string)=> void;
 }
 
 type OnContext = ()=> Promise<NoteContext>;
@@ -335,6 +337,7 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 			} catch (error) {
 				logger.error('Failed to replace selection', error);
 				respondFailure(action, 'failed to replace selection');
+				commands.displayError(error.message ?? String(error));
 			}
 		}
 
@@ -352,6 +355,8 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 			for (const toolCall of chat.toolCalls) {
 				respondFailure(toolCall, 'body changed externally, before edit could be applied');
 			}
+			commands.displayError(_('The note changed while the request was running; edits were not applied. Try again.'));
+
 			return chatResponses;
 		}
 
@@ -389,6 +394,8 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 				for (const toolCall of chat.toolCalls) {
 					respondFailure(toolCall, 'failed to update body');
 				}
+
+				commands.displayError(error.message ?? String(error));
 			}
 		}
 	}

@@ -230,7 +230,9 @@ const ChatPanel: React.FC<Props> = (props) => {
 			const assertSameNote = () => {
 				if (noteIdAtStart !== noteIdRef.current) {
 					cancelRequest();
-					throw new JoplinError(_('Note changed while editing'), 'aiNoteChanged');
+					throw new JoplinError(
+						_('You switched notes while the request was running; edits were not applied. Try again.'), 'aiNoteChanged',
+					);
 				}
 			};
 
@@ -257,6 +259,9 @@ const ChatPanel: React.FC<Props> = (props) => {
 							args: [newBody],
 						});
 						await changeListener;
+					},
+					displayError: (message) => {
+						appendMessage({ id: makeId(), role: 'error', text: message, raw: [] });
 					},
 				}, onHistoryChanged, abortController.signal,
 			);
