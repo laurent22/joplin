@@ -251,7 +251,7 @@ const stepNoteChat = async (
 ) => {
 	const note = await context();
 
-	assertWithinTokenBudget(messages);
+	assertWithinTokenBudget(messages, noteBodyTokenBudget);
 	const chatResult = await AiService.instance().chat(
 		messages, { tools: toolDefinitions(note), signal },
 	);
@@ -277,11 +277,29 @@ const removeSystemPrompt = (history: ChatMessage[]) => {
 	return history.filter(message => message.role !== 'system');
 };
 
-const assertWithinTokenBudget = (history: ChatMessage[]) => {
+const assertWithinTokenBudget = (history: ChatMessage[], budget: number) => {
+	const estimateToolCallTokens = (toolCalls: ChatToolCall[]) => {
+		let sum = 0;
+		for (const toolCall of toolCalls) {
+			sum += estimateTokens(JSON.stringify(toolCall.arguments));
+		}
+		return sum;
+	};
+
 	// Budget the full payload — sticky history grows turn-by-turn and would
 	// eventually blow the context window even if no single note is too big.
-	const totalTokens = history.reduce((sum, m) => sum + estimateTokens(m.content), 0);
-	if (totalTokens > noteBodyTokenBudget) {
+	let totalTokens = 0;
+	for (const message of history) {
+		totalTokens += estimateTokens(message.content);
+		if (message.role === ChatRole.Assistant) {
+			totalTokens += estimateToolCallTokens(message.toolCalls ?? []);
+		}
+		if (message.role === ChatRole.Tool) {
+			totalTokens += estimateTokens(message.content);
+		}
+	}
+
+	if (totalTokens > budget) {
 		throw new JoplinError(
 			'This conversation has grown too large to send. Reset the chat, or select the part of the note you want to ask about.',
 			'aiNoteTooLarge',
@@ -419,4 +437,4 @@ const toolCallToEditOperation = (toolCall: ChatToolCall): EditOp => {
 };
 
 // Exported for tests.
-export const _internal = { systemPrompt, toolDefinitions, estimateTokens, noteBodyTokenBudget };
+export const _internal = { systemPrompt, toolDefinitions, assertWithinTokenBudget, estimateTokens, noteBodyTokenBudget };

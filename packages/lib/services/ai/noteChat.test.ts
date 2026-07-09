@@ -1,5 +1,7 @@
 import { _internal } from './noteChat';
 import { applyAnchorEdits } from './applyNoteEdits';
+import { ChatRole } from './types';
+import { expectThrow } from '../../testing/test-utils';
 
 describe('noteChat', () => {
 
@@ -219,6 +221,26 @@ describe('noteChat', () => {
 		], 0);
 		expect(newBody).toBe(body);
 		expect(appliedEdits[0].status).toBe('invalid');
+	});
+
+	test('assertWithinTokenBudget should include tool calls in the token budget', async () => {
+		_internal.assertWithinTokenBudget([
+			{ role: ChatRole.Assistant, content: 'Testing... '.repeat(5) },
+		], 100);
+
+		await expectThrow(async () => {
+			_internal.assertWithinTokenBudget([
+				{
+					role: ChatRole.Assistant,
+					content: 'Testing...'.repeat(5),
+					toolCalls: [{
+						toolName: 'replaceSelection',
+						callId: 'call-1',
+						arguments: { text: 'Testing... '.repeat(50) },
+					}],
+				},
+			], 100);
+		}, 'aiNoteTooLarge');
 	});
 
 });
