@@ -103,7 +103,7 @@ describe('app.reducer', () => {
 			message: buildMessage(
 				ChatRole.Assistant,
 				'Testing',
-				[{ toolName: 'testTool', callId: 'call-1', arguments: { arg: 1 } }],
+				[{ toolName: 'testTool', callId: 'call-1', arguments: { arg: 1 }, parseError: undefined }],
 			),
 		});
 		state = appReducer(state, {
