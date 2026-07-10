@@ -23,13 +23,13 @@ export default class ConflictNoteState extends BaseModel {
 
 	public static async save(state: ConflictNoteStateEntity) {
 		await this.db().exec(
-			'INSERT OR REPLACE INTO conflict_note_states (note_id, base_body, base_title, remote_body, remote_title, remote_updated_time) VALUES (?, ?, ?, ?, ?, ?)',
+			'INSERT OR REPLACE INTO conflict_note_states (note_id, base_body, base_title, resolved_body, resolved_title, remote_updated_time) VALUES (?, ?, ?, ?, ?, ?)',
 			[
 				state.note_id,
 				state.base_body ?? '',
 				state.base_title ?? '',
-				state.remote_body ?? '',
-				state.remote_title ?? '',
+				state.resolved_body ?? '',
+				state.resolved_title ?? '',
 				state.remote_updated_time ?? 0,
 			],
 		);

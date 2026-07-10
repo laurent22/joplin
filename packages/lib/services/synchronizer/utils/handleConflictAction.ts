@@ -73,8 +73,8 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 				note_id: conflictNote.id,
 				base_body: base ? base.base_body : '',
 				base_title: base ? base.base_title : '',
-				remote_body: remoteNote ? remoteNote.body : '',
-				remote_title: remoteNote ? remoteNote.title : '',
+				resolved_body: remoteNote ? remoteNote.body : '',
+				resolved_title: remoteNote ? remoteNote.title : '',
 				remote_updated_time: remoteNote ? remoteNote.updated_time : 0,
 			});
 		}

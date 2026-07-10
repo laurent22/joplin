@@ -101,8 +101,8 @@ export interface ConflictNoteStateEntity {
   'base_title'?: string;
   'id'?: number | null;
   'note_id'?: string;
-  'remote_body'?: string;
-  'remote_title'?: string;
+  'resolved_body'?: string;
+  'resolved_title'?: string;
   'remote_updated_time'?: number;
   'type_'?: number;
 }
@@ -722,8 +722,8 @@ export const databaseSchema: DatabaseTables = {
 		base_title: { type: 'string' },
 		id: { type: 'number' },
 		note_id: { type: 'string' },
-		remote_body: { type: 'string' },
-		remote_title: { type: 'string' },
+		resolved_body: { type: 'string' },
+		resolved_title: { type: 'string' },
 		remote_updated_time: { type: 'number' },
 		type_: { type: 'number' },
 	},

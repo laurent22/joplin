@@ -83,7 +83,7 @@ describe('Synchronizer.baseFields', () => {
 
 		expect(state.base_body).toBe('base body');
 		expect(state.base_title).toBe('base title');
-		expect(state.remote_body).toBe('remote body');
+		expect(state.resolved_body).toBe('remote body');
 		expect(state.remote_updated_time).toBeGreaterThan(0);
 	}));
 
