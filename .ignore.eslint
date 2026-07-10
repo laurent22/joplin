@@ -1606,6 +1606,7 @@ packages/lib/services/ai/noteChat.js
 packages/lib/services/ai/providers/Anthropic.test.js
 packages/lib/services/ai/providers/Anthropic.js
 packages/lib/services/ai/providers/ChatProviderBase.js
+packages/lib/services/ai/providers/JoplinCloud.test.js
 packages/lib/services/ai/providers/JoplinCloud.js
 packages/lib/services/ai/providers/OpenAiCompatible.js
 packages/lib/services/ai/testing/TestEmbeddingProvider.test.js
