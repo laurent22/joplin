@@ -66,7 +66,7 @@ export interface ChatToolCall {
 	toolName: string;
 	callId: string;
 	arguments: Record<string, unknown>;
-	parseError: string|undefined;
+	parseError: string|null;
 }
 
 export interface ChatResult {

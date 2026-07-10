@@ -168,7 +168,7 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 			if (!call.function) return null;
 
 			let args;
-			let parseError: string|undefined = undefined;
+			let parseError: string|null = null;
 			try {
 				args = JSON.parse(call.function.arguments);
 			} catch (_error) {
