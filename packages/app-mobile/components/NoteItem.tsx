@@ -185,7 +185,7 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 			onPress={onPress}
 			beforePressable={todoCheckbox}
 		>
-			<Icon name='ionicon document-text-outline' style={styles.noteIcon} accessibilityLabel={null}/>
+			{!isTodo && <Icon name='ionicon document-text-outline' style={styles.noteIcon} accessibilityLabel={null}/>}
 			<Text style={listItemTextStyle}>{displayedNoteTitle}</Text>
 		</MultiTouchableOpacity>
 	);
