@@ -283,7 +283,7 @@
 		return this
 	  },
 
-      countOnce: count,
+	  countOnce: count,
   
 	  /**
 	   * The `enabled` method checks if the live-counting functionality is bound
