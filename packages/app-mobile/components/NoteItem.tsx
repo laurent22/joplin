@@ -35,6 +35,7 @@ const useStyles = (themeId: number) => {
 			marginRight: theme.marginRight,
 			paddingTop: theme.marginTop,
 			paddingBottom: theme.marginBottom,
+			flexDirection: 'row',
 			// backgroundColor: theme.backgroundColor,
 		};
 
@@ -61,8 +62,6 @@ const useStyles = (themeId: number) => {
 		};
 
 		const listItemTextWithCheckbox = { ...listItemText };
-		listItemTextWithCheckbox.marginTop = theme.itemMarginTop - 1;
-		listItemTextWithCheckbox.marginBottom = listItem.paddingBottom;
 
 		const selectionWrapper: ViewStyle = { };
 
@@ -88,9 +87,6 @@ const useStyles = (themeId: number) => {
 			checkboxStyle: {
 				color: theme.color,
 				paddingRight: 10,
-				paddingTop: theme.itemMarginTop,
-				paddingBottom: theme.itemMarginBottom,
-				paddingLeft: theme.marginLeft,
 			},
 			checkedOpacityStyle: {
 				opacity: 0.4,
