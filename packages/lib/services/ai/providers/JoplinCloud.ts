@@ -1,10 +1,15 @@
 import Setting from '../../../models/Setting';
 import JoplinError from '../../../JoplinError';
-import JoplinServerApi, { Session } from '../../../JoplinServerApi';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
 import { ProviderClassification } from '../types';
-import OpenAiCompatibleProvider, { ChatRequestOptions } from './OpenAiCompatible';
+import OpenAiCompatibleProvider, { ChatRequestOptions, OpenAiChatResponse } from './OpenAiCompatible';
 import { msleep, Second } from '@joplin/utils/time';
+import Logger from '@joplin/utils/Logger';
+import { reg } from '../../../registry';
+import SyncTargetJoplinCloud from '../../../SyncTargetJoplinCloud';
+import FileApiDriverJoplinServer from '../../../file-api-driver-joplinServer';
+
+const logger = Logger.create('ai/providers/JoplinCloud');
 
 const joplinCloudSyncTarget = () => SyncTargetRegistry.nameToId('joplinCloud');
 
@@ -23,6 +28,10 @@ interface JoplinCloudResponse {
 	joplin?: { degraded?: boolean; tokens_used?: number; tokens_budget?: number };
 }
 
+interface JoplinCloudChatRequestOptions extends ChatRequestOptions {
+	retry?: number;
+}
+
 // Maps the server-side errors thrown by the Joplin Cloud AI route to messages
 // the user can act on. See joplin-server/packages/server/src/routes/api/ai.ts.
 const mapErrorByStatus = (status: number, detail: string): JoplinError => {
@@ -35,8 +44,16 @@ const mapErrorByStatus = (status: number, detail: string): JoplinError => {
 };
 
 // If too many events are received in a short window, Joplin Cloud starts rejecting events.
-// For now, avoid more than one event every few seconds:
-const minimumTimeBetweenEvents = 3 * Second;
+// For now, avoid more than one event every second or two.
+const minimumTimeBetweenEvents = Second;
+
+type ApiError = Error & { code?: number; retryAfterSeconds?: number };
+
+const isRateLimitError = (error: ApiError) => error.code === 429 && typeof error.retryAfterSeconds === 'number';
+
+const canAutoRetryError = (error: ApiError) => {
+	return isRateLimitError(error) && error.retryAfterSeconds < 10;
+};
 
 export default class JoplinCloudProvider extends OpenAiCompatibleProvider {
 
@@ -53,22 +70,18 @@ export default class JoplinCloudProvider extends OpenAiCompatibleProvider {
 		});
 	}
 
-	private buildApi(): JoplinServerApi {
-		// Build a fresh API object per call so re-auth survives without drift.
-		// JoplinServerApi caches its session internally on the instance, so
-		// we can't safely keep one across logout/login transitions.
+	private async api() {
+		// Fetch the API from the registry, rather than caching the API locally.
+		// This avoids authentication drift if the user changes the sync target credentials.
+		// Note that recreating the API each time can cause the user to quickly encounter login rate limiting.
 		const id = joplinCloudSyncTarget();
-		return new JoplinServerApi({
-			baseUrl: () => Setting.value(`sync.${id}.path`),
-			userContentBaseUrl: () => Setting.value(`sync.${id}.userContentPath`),
-			username: () => Setting.value(`sync.${id}.username`),
-			password: () => Setting.value(`sync.${id}.password`),
-			apiKey: () => Setting.value(`sync.${id}.apiKey`),
-			session: (): Session | null => null,
-		});
+		const syncTarget = reg.syncTarget(id) as SyncTargetJoplinCloud;
+		const driver: FileApiDriverJoplinServer = (await syncTarget.fileApi()).driver();
+		const api = driver.api();
+		return api;
 	}
 
-	protected override async sendChatRequest(body: Record<string, unknown>, options: ChatRequestOptions) {
+	protected override async sendChatRequest(body: Record<string, unknown>, options: JoplinCloudChatRequestOptions): Promise<OpenAiChatResponse> {
 		if (Setting.value('sync.target') !== joplinCloudSyncTarget()) {
 			throw new JoplinError('Joplin Cloud AI requires Joplin Cloud sync', 'aiJoplinCloudSyncRequired');
 		}
@@ -78,16 +91,31 @@ export default class JoplinCloudProvider extends OpenAiCompatibleProvider {
 			await msleep(minimumTimeBetweenEvents - timeSinceLastEvent);
 		}
 
-		const api = this.buildApi();
+		const api = await this.api();
 
 		// JoplinServerApi.exec() returns the parsed JSON object directly when
 		// the response format is JSON (the default). No need to JSON.parse.
 		let json: JoplinCloudResponse;
 		try {
-			json = await api.exec('POST', 'api/ai/chat/completions', null, body, null, { signal: options.signal }) as JoplinCloudResponse;
+			const execOptions = {
+				signal: options.signal,
+				// Rate limit errors happen during normal use and don't need to be logged as warnings
+				ignoreError: isRateLimitError,
+			};
+			json = await api.exec(
+				'POST', 'api/ai/chat/completions', null, body, null, execOptions,
+			) as JoplinCloudResponse;
 		} catch (error) {
+			const retry = options.retry ?? 0;
+			if (canAutoRetryError(error) && retry < 3) {
+				logger.info('Retrying AI request after', error.retryAfterSeconds, 's...');
+				await msleep(error.retryAfterSeconds * Second);
+				return this.sendChatRequest(body, { ...options, retry: retry + 1 });
+			}
+
 			const status = typeof error?.code === 'number' ? error.code : 0;
 			const detail = error?.message ?? '';
+
 			throw mapErrorByStatus(status, detail);
 		}
 
