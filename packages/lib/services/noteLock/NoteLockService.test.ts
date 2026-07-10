@@ -194,4 +194,23 @@ describe('NoteLockService', () => {
 
 		await expect(escaped.decryptString('does not matter')).rejects.toThrow('Note lock operation key is no longer available');
 	});
+
+	it('should not overwrite a key that arrives through sync while create is generating', async () => {
+		const encryptionServiceInstance = EncryptionService.instance();
+		const realGenerate = encryptionServiceInstance.generateMasterKey.bind(encryptionServiceInstance);
+		const spy = jest.spyOn(encryptionServiceInstance, 'generateMasterKey').mockImplementation(async (password: string) => {
+			const generated = await realGenerate(password);
+			const syncInfo = localSyncInfo();
+			syncInfo.noteLockKey = { id: 'synced-key' };
+			saveLocalSyncInfo(syncInfo);
+			return generated;
+		});
+
+		try {
+			await expect(NoteLockKey.instance().create('123456')).rejects.toThrow('Note lock key already exists');
+			expect(NoteLockKey.instance().load().id).toBe('synced-key');
+		} finally {
+			spy.mockRestore();
+		}
+	});
 });

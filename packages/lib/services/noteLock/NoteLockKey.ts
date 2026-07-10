@@ -46,7 +46,11 @@ export default class NoteLockKey {
 
 	public async create(password: string) {
 		if (this.load()) throw new Error('Note lock key already exists');
-		return this.save(await this.encryptionService_.generateMasterKey(password));
+		const key = await this.encryptionService_.generateMasterKey(password);
+		// A key may have arrived through sync while the new one was being generated - keep it,
+		// since notes may already be locked with it on another device.
+		if (this.load()) throw new Error('Note lock key already exists');
+		return this.save(key);
 	}
 
 	// Rotate through NoteLockSession.reset() rather than calling this directly, so the session locks

@@ -2,19 +2,17 @@ import * as React from 'react';
 import { useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import { _ } from '@joplin/lib/locale';
-import Setting from '@joplin/lib/models/Setting';
 import NoteLockKey from '@joplin/lib/services/noteLock/NoteLockKey';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import LabelledPasswordInput from '../PasswordInput/LabelledPasswordInput';
-import Button, { ButtonLevel } from '../Button/Button';
-import { AppState } from '../../app.reducer';
+import LabelledPasswordInput from '../../PasswordInput/LabelledPasswordInput';
+import Button, { ButtonLevel } from '../../Button/Button';
+import { AppState } from '../../../app.reducer';
 import useNoteLockMode, { ActionMode } from './useNoteLockMode';
 
 interface Props {
 	hasNoteLockKey: boolean;
 	needsNoteLockKeyUpgrade: boolean;
-	lockOnNoteSwitch: boolean;
 }
 
 // WebCrypto reports a wrong password as an OperationError with an unhelpful generic message
@@ -24,12 +22,11 @@ const errorMessage = (error: unknown) => {
 	return error.message;
 };
 
-const NoteLockConfigScreen: React.FC<Props> = props => {
+const NoteLockSettings: React.FC<Props> = props => {
 	const hasKey = props.hasNoteLockKey;
 	const {
 		mode,
 		onModeChange,
-		clearForm,
 		currentPassword,
 		setCurrentPassword,
 		password,
@@ -48,6 +45,8 @@ const NoteLockConfigScreen: React.FC<Props> = props => {
 	const canSave = !!password && !!passwordRepeat && !passwordMismatch && !saving && (mode !== ActionMode.Change || !!currentPassword);
 	const canUpgrade = !!upgradePassword && !saving;
 
+	const forgotPasswordDescription = _('Only do this if you\'ve forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.');
+
 	const onCurrentPasswordChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		setCurrentPassword(event.target.value);
 	}, [setCurrentPassword]);
@@ -64,10 +63,6 @@ const NoteLockConfigScreen: React.FC<Props> = props => {
 		setUpgradePassword(event.target.value);
 	}, []);
 
-	const onAutoLockChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-		Setting.setValue('noteLock.lockOnNoteSwitch', event.target.checked);
-	}, []);
-
 	const submit = useCallback(async () => {
 		if (!canSave) return;
 
@@ -82,17 +77,13 @@ const NoteLockConfigScreen: React.FC<Props> = props => {
 			} else if (mode === ActionMode.Reset) {
 				await NoteLockSession.instance().reset(password);
 			}
-			if (mode === ActionMode.Change) {
-				clearForm();
-			} else {
-				onModeChange(ActionMode.Change);
-			}
+			onModeChange(ActionMode.Collapsed);
 		} catch (error) {
 			setError(errorMessage(error));
 		} finally {
 			setSaving(false);
 		}
-	}, [canSave, clearForm, onModeChange, currentPassword, mode, password, setError]);
+	}, [canSave, onModeChange, currentPassword, mode, password, setError]);
 
 	const submitUpgrade = useCallback(async () => {
 		if (!canUpgrade) return;
@@ -109,13 +100,16 @@ const NoteLockConfigScreen: React.FC<Props> = props => {
 		}
 	}, [canUpgrade, upgradePassword]);
 
-	const onResetPasswordClick = useCallback((event: React.MouseEvent<HTMLAnchorElement>) => {
-		event.preventDefault();
+	const onChangePasswordClick = useCallback(() => {
+		onModeChange(ActionMode.Change);
+	}, [onModeChange]);
+
+	const onForgotPasswordClick = useCallback(() => {
 		onModeChange(ActionMode.Reset);
 	}, [onModeChange]);
 
-	const onCancelReset = useCallback(() => {
-		onModeChange(ActionMode.Change);
+	const onCancel = useCallback(() => {
+		onModeChange(ActionMode.Collapsed);
 	}, [onModeChange]);
 
 	const resetPasswordTitle = `⚠️ ${_('Reset password')} ⚠️`;
@@ -123,14 +117,37 @@ const NoteLockConfigScreen: React.FC<Props> = props => {
 
 	const getSectionTitle = () => {
 		if (mode === ActionMode.Reset) return resetPasswordTitle;
-		if (hasKey) return _('Manage password');
+		if (mode === ActionMode.Change) return _('Change note lock password');
+		if (mode === ActionMode.Collapsed) return _('Manage password');
 		return _('Password setup');
+	};
+
+	const renderManageButtons = () => {
+		return (
+			<div className='form'>
+				<div className='buttons'>
+					<Button
+						title={_('Change note lock password')}
+						level={ButtonLevel.Secondary}
+						onClick={onChangePasswordClick}
+					/>
+				</div>
+				<div className='buttons'>
+					<Button
+						title={_('Forgot password?')}
+						level={ButtonLevel.Secondary}
+						onClick={onForgotPasswordClick}
+					/>
+				</div>
+				<p className='description'>{forgotPasswordDescription}</p>
+			</div>
+		);
 	};
 
 	const renderPasswordForm = () => {
 		return (
 			<div className='form'>
-				{mode === ActionMode.Reset && <p className='warning' role='alert'><strong>{_('Warning:')}</strong> {_('Reset creates a new key. Existing encrypted notes use the old key and will no longer be readable after reset.')}</p>}
+				{mode === ActionMode.Reset && <p className='warning' role='alert'><strong>{_('Warning:')}</strong> {forgotPasswordDescription}</p>}
 				{mode === ActionMode.Change && (
 					<LabelledPasswordInput
 						labelText={_('Current password')}
@@ -154,7 +171,6 @@ const NoteLockConfigScreen: React.FC<Props> = props => {
 				/>
 				{passwordMismatch && <p className='error'>{_('Passwords do not match')}</p>}
 				{error ? <p className='error' role='alert'>{error}</p> : null}
-				{hasKey && mode === ActionMode.Change && <p className='reset-link'><a href='#' onClick={onResetPasswordClick}>{_('Reset password')}</a></p>}
 				<div className='buttons'>
 					<Button
 						title={actionButtonTitle}
@@ -162,12 +178,12 @@ const NoteLockConfigScreen: React.FC<Props> = props => {
 						disabled={!canSave}
 						onClick={submit}
 					/>
-					{mode === ActionMode.Reset && (
+					{mode !== ActionMode.Create && (
 						<Button
 							title={_('Cancel')}
 							level={ButtonLevel.Secondary}
 							disabled={saving}
-							onClick={onCancelReset}
+							onClick={onCancel}
 						/>
 					)}
 				</div>
@@ -205,28 +221,12 @@ const NoteLockConfigScreen: React.FC<Props> = props => {
 	};
 
 	return (
-		<div className='note-lock-config-screen'>
-			<div className='section'>
-				<h2>{_('Note lock')}</h2>
-				<p>{_('Note lock protects notes which have note level encryption enabled. These notes are encrypted when stored, and are only decrypted for the current session by entering the note lock password')}</p>
-				<p><strong>{_('Note lock password:')}</strong> {hasKey ? _('Set') : _('Not set')}</p>
-			</div>
+		<div className='note-lock-settings'>
 			<div className='section'>
 				<h2>{getSectionTitle()}</h2>
-				{renderPasswordForm()}
+				{mode === ActionMode.Collapsed ? renderManageButtons() : renderPasswordForm()}
 			</div>
 			{renderUpgradeSection()}
-			<div className='section'>
-				<h2>{_('Session')}</h2>
-				<label className='setting-row'>
-					<input
-						type='checkbox'
-						checked={props.lockOnNoteSwitch}
-						onChange={onAutoLockChange}
-					/>
-					<span>{_('Auto lock when switching note')}</span>
-				</label>
-			</div>
 		</div>
 	);
 };
@@ -235,8 +235,7 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		hasNoteLockKey: !!new SyncInfo(state.settings['syncInfoCache']).noteLockKey,
 		needsNoteLockKeyUpgrade: NoteLockKey.instance().needsUpgrade(),
-		lockOnNoteSwitch: state.settings['noteLock.lockOnNoteSwitch'],
 	};
 };
 
-export default connect(mapStateToProps)(NoteLockConfigScreen);
+export default connect(mapStateToProps)(NoteLockSettings);

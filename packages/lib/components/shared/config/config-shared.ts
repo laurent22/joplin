@@ -293,14 +293,6 @@ export const settingsSections = createSelector(
 				isScreen: true,
 			});
 
-			if (device === AppType.Desktop && settings['featureFlag.noteLock']) {
-				output.push({
-					name: 'noteLock',
-					metadatas: [],
-					isScreen: true,
-				});
-			}
-
 			output.push({
 				name: 'server',
 				metadatas: [],

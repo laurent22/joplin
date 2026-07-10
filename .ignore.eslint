@@ -227,6 +227,7 @@ packages/app-desktop/gui/ConfigScreen/controls/FontSearch.js
 packages/app-desktop/gui/ConfigScreen/controls/GlobalHotkeyInput.test.js
 packages/app-desktop/gui/ConfigScreen/controls/GlobalHotkeyInput.js
 packages/app-desktop/gui/ConfigScreen/controls/MissingPasswordHelpLink.js
+packages/app-desktop/gui/ConfigScreen/controls/NoteLockSettings.js
 packages/app-desktop/gui/ConfigScreen/controls/SettingComponent.js
 packages/app-desktop/gui/ConfigScreen/controls/SettingDescription.js
 packages/app-desktop/gui/ConfigScreen/controls/SettingHeader.js
@@ -235,6 +236,7 @@ packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js
+packages/app-desktop/gui/ConfigScreen/controls/useNoteLockMode.js
 packages/app-desktop/gui/ConfigScreen/searchHighlight.test.js
 packages/app-desktop/gui/ConfigScreen/searchHighlight.js
 packages/app-desktop/gui/DialogButtonRow.js
@@ -427,8 +429,6 @@ packages/app-desktop/gui/NoteListItem/utils/useRenderedNote.js
 packages/app-desktop/gui/NoteListItem/utils/useRootElement.test.js
 packages/app-desktop/gui/NoteListItem/utils/useRootElement.js
 packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.js
-packages/app-desktop/gui/NoteLockConfigScreen/NoteLockConfigScreen.js
-packages/app-desktop/gui/NoteLockConfigScreen/useNoteLockMode.js
 packages/app-desktop/gui/NotePropertiesDialog.js
 packages/app-desktop/gui/NoteRevisionViewer.js
 packages/app-desktop/gui/NoteSearchBar.js

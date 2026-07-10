@@ -1385,6 +1385,9 @@ class Setting extends BaseModel {
 		if (name === 'general' && appType === AppType.Desktop) {
 			return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
 		}
+		if (name === 'noteLock') {
+			return _('Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.');
+		}
 
 		if (this.customSections_[name] && this.customSections_[name].description) return this.customSections_[name].description;
 
