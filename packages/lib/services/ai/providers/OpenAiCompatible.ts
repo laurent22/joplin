@@ -166,10 +166,21 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 
 		const toolCalls: ChatToolCall[] = (responseMessage?.tool_calls ?? []).map(call => {
 			if (!call.function) return null;
+
+			let args;
+			let parseError: string|undefined = undefined;
+			try {
+				args = JSON.parse(call.function.arguments);
+			} catch (_error) {
+				args = {};
+				parseError = 'failed to parse JSON';
+			}
+
 			return {
 				toolName: call.function.name,
 				callId: call.id,
-				arguments: JSON.parse(call.function.arguments),
+				arguments: args,
+				parseError,
 			};
 		}).filter(toolCall => !!toolCall);
 

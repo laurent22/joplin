@@ -237,6 +237,7 @@ describe('noteChat', () => {
 						toolName: 'replaceSelection',
 						callId: 'call-1',
 						arguments: { text: 'Testing... '.repeat(50) },
+						parseError: undefined,
 					}],
 				},
 			], 100);
@@ -245,8 +246,8 @@ describe('noteChat', () => {
 
 	test('runTools should describe successful edit operations', async () => {
 		const toolCalls: ChatToolCall[] = [
-			{ toolName: 'appendToNote', callId: 'call-1', arguments: { text: 'Test.' } },
-			{ toolName: 'replaceRange', callId: 'call-2', arguments: { anchor: 'Body', text: 'Updated' } },
+			{ toolName: 'appendToNote', callId: 'call-1', arguments: { text: 'Test.' }, parseError: undefined },
+			{ toolName: 'replaceRange', callId: 'call-2', arguments: { anchor: 'Body', text: 'Updated' }, parseError: undefined },
 		];
 		let body = 'Body';
 		const initialContext: NoteContext = {

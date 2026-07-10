@@ -350,16 +350,20 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 		const expectedName = 'replaceSelection';
 		const action = chat.toolCalls.find(toolCall => toolCall.toolName === expectedName);
 		if (action) {
-			try {
-				if (!hasOwnProperty(action.arguments, 'text')) throw new JoplinError('Missing text property');
-				if (typeof action.arguments.text !== 'string') throw new JoplinError('Property "text" must be a string');
-
-				await commands.replaceSelection(action.arguments.text, currentContext.selection);
-				respondSuccess(action, describeEditOperation(toolCallToEditOperation(action)));
-			} catch (error) {
-				logger.error('Failed to replace selection', error);
-				respondFailure(action, 'failed to replace selection');
-				commands.displayError(error.message ?? String(error));
+			const args = action.arguments;
+			if (action.parseError) {
+				respondFailure(action, action.parseError);
+			} else if (!hasOwnProperty(args, 'text') || typeof args.text !== 'string') {
+				respondFailure(action, 'missing or invalid `text` property');
+			} else {
+				try {
+					await commands.replaceSelection(args.text, currentContext.selection);
+					respondSuccess(action, describeEditOperation(toolCallToEditOperation(action)));
+				} catch (error) {
+					logger.error('Failed to replace selection', error);
+					respondFailure(action, 'failed to replace selection');
+					commands.displayError(error.message ?? String(error));
+				}
 			}
 		}
 
@@ -392,6 +396,10 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 			}
 			if (!isValidEditOp(toolCall.toolName)) {
 				respondFailure(toolCall, 'tool not found');
+				continue;
+			}
+			if (toolCall.parseError) {
+				respondFailure(toolCall, toolCall.parseError);
 				continue;
 			}
 
