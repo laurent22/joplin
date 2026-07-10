@@ -246,6 +246,7 @@ describe('noteChat', () => {
 	test('runTools should describe successful edit operations', async () => {
 		const toolCalls: ChatToolCall[] = [
 			{ toolName: 'appendToNote', callId: 'call-1', arguments: { text: 'Test.' } },
+			{ toolName: 'replaceRange', callId: 'call-2', arguments: { anchor: 'Body', text: 'Updated' } },
 		];
 		let body = 'Body';
 		const initialContext: NoteContext = {
@@ -269,7 +270,7 @@ describe('noteChat', () => {
 			new AbortController().signal,
 		);
 
-		expect(body).toBe('Body\n\nTest.');
+		expect(body).toBe('Updated\n\nTest.');
 		expect(result).toMatchObject([
 			{
 				role: ChatRole.Tool,
@@ -277,6 +278,13 @@ describe('noteChat', () => {
 				toolCallId: 'call-1',
 				isError: false,
 				userDescription: 'Added 1 word',
+			},
+			{
+				role: ChatRole.Tool,
+				toolName: 'replaceRange',
+				toolCallId: 'call-2',
+				isError: false,
+				userDescription: 'Removed 1 word\nAdded 1 word',
 			},
 		]);
 	});
