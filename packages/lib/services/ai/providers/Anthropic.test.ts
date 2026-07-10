@@ -16,12 +16,14 @@ describe('ai/providers/Anthropic', () => {
 			{
 				role: ChatRole.Tool,
 				content: 'success',
+				userDescription: 'replaced',
 				toolCallId: 'call-1',
 				toolName: 'replaceRange',
 				isError: false,
 			},
 			{
 				role: ChatRole.Tool,
+				userDescription: 'failed',
 				content: 'anchor-not-found',
 				toolCallId: 'call-2',
 				toolName: 'replaceRange',

@@ -5,7 +5,8 @@ import Logger from '@joplin/utils/Logger';
 import findFencedBlock from './utils/findFencedBlock';
 import { applyAnchorEdits, supportedStructuredBlockTags } from './applyNoteEdits';
 import { hasOwnProperty } from '@joplin/utils/object';
-import { _ } from '../../locale';
+const Countable = require('../../countable/Countable');
+import { _, _n } from '../../locale';
 
 const logger = Logger.create('noteChat');
 
@@ -321,12 +322,13 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 
 	let chatResponses: ChatMessage[] = [];
 
-	const respondSuccess = (action: ChatToolCall, message = 'edit applied') => {
+	const respondSuccess = (action: ChatToolCall, message: string) => {
 		chatResponses.push({
 			role: ChatRole.Tool,
 			toolName: action.toolName,
 			toolCallId: action.callId,
 			content: message,
+			userDescription: message,
 			isError: false,
 		});
 	};
@@ -337,6 +339,7 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 			toolName: action.toolName,
 			toolCallId: action.callId,
 			content: `failed: ${reason}`,
+			userDescription: reason,
 			isError: true,
 		});
 	};
@@ -352,7 +355,7 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 				if (typeof action.arguments.text !== 'string') throw new JoplinError('Property "text" must be a string');
 
 				await commands.replaceSelection(action.arguments.text, currentContext.selection);
-				respondSuccess(action);
+				respondSuccess(action, describeEditOperation(toolCallToEditOperation(action)));
 			} catch (error) {
 				logger.error('Failed to replace selection', error);
 				respondFailure(action, 'failed to replace selection');
@@ -402,7 +405,7 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 
 			const edit = appliedEdits[0];
 			if (edit.status === 'applied') {
-				respondSuccess(toolCall);
+				respondSuccess(toolCall, describeEditOperation(editOperation));
 			} else {
 				respondFailure(toolCall, edit.status);
 			}
@@ -448,5 +451,27 @@ const toolCallToEditOperation = (toolCall: ChatToolCall): EditOp => {
 	} as EditOp;
 };
 
+const countWords = (text: string): number => Countable.countOnce(text, { stripTags: true }).words;
+
+const describeEditOperation = (editOp: EditOp) => {
+	const describeWordsAdded = (count: number) => _n('Added %d word', 'Added %d words', count, count);
+	const describeWordsRemoved = (count: number) => _n('Removed %d word', 'Removed %d words', count, count);
+
+	let actionDescription;
+	if (editOp.op === 'replaceRange') {
+		actionDescription = [
+			describeWordsRemoved(countWords(editOp.anchor)),
+			describeWordsAdded(countWords(editOp.text)),
+		].join('\n');
+	} else if (editOp.op === 'replaceFencedBlock') {
+		actionDescription = _('Updated %s block', editOp.tag);
+	} else if (editOp.op === 'replaceSelection') {
+		actionDescription = _('Replaced selection');
+	} else {
+		actionDescription = describeWordsAdded(countWords(editOp.text));
+	}
+	return actionDescription;
+};
+
 // Exported for tests.
-export const _internal = { systemPrompt, toolDefinitions, assertWithinTokenBudget, estimateTokens, noteBodyTokenBudget };
+export const _internal = { systemPrompt, toolDefinitions, assertWithinTokenBudget, estimateTokens, runTools, noteBodyTokenBudget };

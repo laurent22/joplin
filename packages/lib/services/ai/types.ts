@@ -19,6 +19,8 @@ export interface ChatToolMessage extends ChatBaseMessage {
 	toolName: string;
 	toolCallId: string;
 	isError: boolean;
+	// A very brief description of the result that can be shown to the user
+	userDescription: string;
 }
 
 export type ChatMessage = ChatStandardMessage | ChatToolMessage;

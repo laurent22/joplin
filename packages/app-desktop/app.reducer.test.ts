@@ -113,6 +113,7 @@ describe('app.reducer', () => {
 				role: ChatRole.Tool,
 				toolName: 'testTool',
 				toolCallId: 'call-1',
+				userDescription: '',
 				isError: false,
 				content: 'Result',
 			} satisfies ChatToolMessage),

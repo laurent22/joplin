@@ -1,6 +1,6 @@
-import { _internal } from './noteChat';
+import { _internal, NoteContext } from './noteChat';
 import { applyAnchorEdits } from './applyNoteEdits';
-import { ChatRole } from './types';
+import { ChatRole, ChatToolCall } from './types';
 import { expectThrow } from '../../testing/test-utils';
 
 describe('noteChat', () => {
@@ -243,4 +243,41 @@ describe('noteChat', () => {
 		}, 'aiNoteTooLarge');
 	});
 
+	test('runTools should describe successful edit operations', async () => {
+		const toolCalls: ChatToolCall[] = [
+			{ toolName: 'appendToNote', callId: 'call-1', arguments: { text: 'Test.' } },
+		];
+		let body = 'Body';
+		const initialContext: NoteContext = {
+			title: 'Test',
+			body,
+			selection: null,
+		};
+
+		const result = await _internal.runTools(
+			{ text: 'Test...', toolCalls, usage: { inputTokens: 10, outputTokens: 300 } },
+			initialContext,
+			() => Promise.resolve({ ...initialContext, body }),
+			{
+				replaceSelection: jest.fn(),
+				updateNoteBody: (newBody) => {
+					body = newBody;
+					return Promise.resolve();
+				},
+				displayError: jest.fn(),
+			},
+			new AbortController().signal,
+		);
+
+		expect(body).toBe('Body\n\nTest.');
+		expect(result).toMatchObject([
+			{
+				role: ChatRole.Tool,
+				toolName: 'appendToNote',
+				toolCallId: 'call-1',
+				isError: false,
+				userDescription: 'Added 1 word',
+			},
+		]);
+	});
 });
