@@ -14,8 +14,8 @@ export default (): (SqlQuery|string)[] => {
 			note_id TEXT NOT NULL UNIQUE,
 			base_body TEXT NOT NULL DEFAULT "",
 			base_title TEXT NOT NULL DEFAULT "",
-			resolved_body TEXT NOT NULL DEFAULT "",
-			resolved_title TEXT NOT NULL DEFAULT "",
+			remote_body TEXT NOT NULL DEFAULT "",
+			remote_title TEXT NOT NULL DEFAULT "",
 			remote_updated_time INT NOT NULL DEFAULT 0
 		)`,
 	];
