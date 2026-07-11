@@ -1370,6 +1370,7 @@ packages/lib/components/shared/ShareNoteDialog/useShareStatusMessage.js
 packages/lib/components/shared/SsoScreenShared.js
 packages/lib/components/shared/config/config-search-text.js
 packages/lib/components/shared/config/config-search.test.js
+packages/lib/components/shared/config/config-shared.test.js
 packages/lib/components/shared/config/config-shared.js
 packages/lib/components/shared/config/plugins/types.js
 packages/lib/components/shared/config/plugins/useOnDeleteHandler.js

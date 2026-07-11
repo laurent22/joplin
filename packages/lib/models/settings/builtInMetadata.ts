@@ -2264,7 +2264,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
-			appTypes: [AppType.Desktop],
+			appTypes: [AppType.Desktop, AppType.Mobile],
 			section: 'noteLock',
 			label: () => _('Auto lock when switching note'),
 			show: (settings) => !!settings['featureFlag.noteLock'],

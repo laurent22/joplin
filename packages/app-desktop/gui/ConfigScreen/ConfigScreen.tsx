@@ -8,6 +8,7 @@ import Setting, { AppType, SettingMetadataSection, SettingValueType, SyncStartup
 import { AppState } from '../../app.reducer';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 import NoteLockSettings from './controls/NoteLockSettings';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import { reg } from '@joplin/lib/registry';
 import { connect } from 'react-redux';
 import { themeStyle } from '@joplin/lib/theme';
@@ -271,7 +272,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			settingComps.push(<AiIndexStatus key='ai_index_status' />);
 		}
 
-		if (section.name === 'noteLock') {
+		if (section.name === 'noteLock' && isNoteLockEnabled()) {
 			settingComps.push(<NoteLockSettings key='note_lock_settings'/>);
 		}
 
