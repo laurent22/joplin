@@ -1,6 +1,41 @@
-import { mapErrorByCode } from './JoplinCloud';
+import { Second } from '@joplin/utils/time';
+import { mockFetch, runWithFakeTimers, setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
+import JoplinCloudProvider, { mapErrorByCode } from './JoplinCloud';
+import Setting from '../../../models/Setting';
 
-describe('JoplinCloud provider', () => {
+const mockRateLimitedChatApi = () => {
+	let counter = 0;
+	const mock = mockFetch((request) => {
+		if (request.url.endsWith('ai/chat/completions')) {
+			counter ++;
+			if (counter < 2) {
+				return new Response('{}', {
+					status: 429,
+					headers: [
+						['Retry-After', '3'],
+					],
+				});
+			} else {
+				return new Response('{ "choices": [] }', {
+					status: 200,
+				});
+			}
+		}
+		return new Response('{ }', {
+			status: 200,
+		});
+	});
+
+	return { mock, requestCount: () => counter };
+};
+
+describe('ai/providers/JoplinCloud', () => {
+
+	beforeEach(async () => {
+		await setupDatabaseAndSynchronizer(0);
+		await switchClient(0);
+		Setting.setValue('sync.target', 10);
+	});
 
 	test.each([
 		['aiRateLimitExceeded', /sending requests too quickly/i],
@@ -48,5 +83,22 @@ describe('JoplinCloud provider', () => {
 		const error = mapErrorByCode('aiBudgetExhausted', 429, 'ignored');
 		expect(error.code).toBe('aiBudgetExhausted');
 		expect(error.message).toMatch(/reached your AI usage budget/i);
+	});
+
+	it('should retry rate-limited requests', async () => {
+		const { mock, requestCount } = mockRateLimitedChatApi();
+		try {
+			await runWithFakeTimers(async () => {
+				const provider = new JoplinCloudProvider();
+				const result = provider.chat([]);
+				await jest.advanceTimersByTimeAsync(Second * 5);
+				await result;
+
+				// Should have retried
+				expect(requestCount()).toBe(2);
+			});
+		} finally {
+			mock.reset();
+		}
 	});
 });

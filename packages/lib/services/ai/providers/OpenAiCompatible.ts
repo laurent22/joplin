@@ -88,6 +88,11 @@ export interface ChatRequestOptions {
 	signal?: AbortSignal;
 }
 
+export interface OpenAiChatResponse {
+	response: { status: number };
+	json: OpenAiResponse;
+}
+
 export default class OpenAiCompatibleProvider extends ChatProviderBase {
 
 	public id = 'openai-compatible';
@@ -176,7 +181,7 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 		return { text: content, toolCalls, usage: { inputTokens, outputTokens } };
 	}
 
-	protected async sendChatRequest(body: Record<string, unknown>, options: ChatRequestOptions) {
+	protected async sendChatRequest(body: Record<string, unknown>, options: ChatRequestOptions): Promise<OpenAiChatResponse> {
 		if (!this.baseUrl_) throw new JoplinError('OpenAI-compatible provider has no base URL configured', 'aiProviderNotConfigured');
 
 		const headers: Record<string, string> = { 'Content-Type': 'application/json' };
