@@ -33,6 +33,10 @@
 	border-bottom: none;
 }
 
+.page-note .note-body {
+	position: relative;
+}
+
 /* Overrides Bulma's style for <pre>s to prevent Mermaid elements from having a grey background */
 .mermaid {
 	background-color: white;

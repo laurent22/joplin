@@ -2,6 +2,7 @@
 // Imported from dead package https://github.com/RadLikeWhoa/Countable
 //
 // 2023-06-05: Added "—" as word separator.
+// 2026-07-09: Exposed countOnce for synchronous counting.
 // ========================================================================
 
 /**
@@ -281,6 +282,8 @@
   
 		return this
 	  },
+
+	  countOnce: count,
   
 	  /**
 	   * The `enabled` method checks if the live-counting functionality is bound

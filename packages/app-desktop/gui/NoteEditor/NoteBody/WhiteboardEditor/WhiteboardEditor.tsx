@@ -6,6 +6,7 @@ import Note from '@joplin/lib/models/Note';
 import { Canvas, CanvasNode, FileCanvasNode, TextCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 import { parseWhiteboard } from '@joplin/lib/services/whiteboard/parse';
 import { serializeWhiteboard } from '@joplin/lib/services/whiteboard/serialize';
+import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
 import { WhiteboardContext } from './WhiteboardContext';
 import WhiteboardSurface from './WhiteboardSurface';
@@ -159,15 +160,18 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 		}));
 	}, [props.noteId]);
 
+	const themeAppearance = useMemo(() => themeStyle(props.themeId).appearance, [props.themeId]);
+
 	const contextValue = useMemo(() => ({
 		markupToHtml: props.markupToHtml,
 		resourceInfos: props.resourceInfos,
 		resourceDirectory: props.resourceDirectory,
 		themeId: props.themeId,
+		themeAppearance,
 		onOpenRef,
 		onUpdateNode,
 		onPromoteTextNode,
-	}), [props.markupToHtml, props.resourceInfos, props.resourceDirectory, props.themeId, onOpenRef, onUpdateNode, onPromoteTextNode]);
+	}), [props.markupToHtml, props.resourceInfos, props.resourceDirectory, props.themeId, themeAppearance, onOpenRef, onUpdateNode, onPromoteTextNode]);
 
 	if (parseError) {
 		return (

@@ -1,5 +1,7 @@
-import { AppState, createAppDefaultWindowState } from './app.reducer';
+import { ChatRole, ChatToolCall, ChatToolMessage } from '@joplin/lib/services/ai/types';
+import { AiChatMessage, AppState, createAppDefaultWindowState } from './app.reducer';
 import appReducer, { createAppDefaultState } from './app.reducer';
+import { defaultWindowId } from '@joplin/lib/reducer';
 
 describe('app.reducer', () => {
 
@@ -102,4 +104,63 @@ describe('app.reducer', () => {
 		expect(newState.visibleDialogs).toEqual({ testDialog: true });
 	});
 
+	it('should build AI chat history', () => {
+		let state: AppState = {
+			...createAppDefaultState({}),
+		};
+
+		let idCounter = 0;
+		const buildMessage = (role: ChatRole.User | ChatRole.Assistant, content: string, toolCalls: ChatToolCall[]) => ({
+			id: `id-${idCounter++}`,
+			role,
+			text: content,
+			raw: [
+				{
+					role,
+					content: content,
+					...(toolCalls.length ? { toolCalls } : {}),
+				},
+			],
+		} satisfies AiChatMessage);
+
+		state = appReducer(state, {
+			type: 'AI_CHAT_APPEND',
+			windowId: defaultWindowId,
+			message: buildMessage(ChatRole.User, 'Test', []),
+		});
+		state = appReducer(state, {
+			type: 'AI_CHAT_APPEND',
+			windowId: defaultWindowId,
+			message: buildMessage(
+				ChatRole.Assistant,
+				'Testing',
+				[{ toolName: 'testTool', callId: 'call-1', arguments: { arg: 1 } }],
+			),
+		});
+		state = appReducer(state, {
+			type: 'AI_CHAT_ADD_TOOL_RESULT',
+			windowId: defaultWindowId,
+			toolCall: ({
+				role: ChatRole.Tool,
+				toolName: 'testTool',
+				toolCallId: 'call-1',
+				userDescription: '',
+				isError: false,
+				content: 'Result',
+			} satisfies ChatToolMessage),
+		});
+
+		expect(state.aiChatMessages).toMatchObject([
+			{ id: 'id-0', role: 'user', text: 'Test', raw: [{ role: 'user' }] },
+			{ id: 'id-1', role: 'assistant', text: 'Testing', editsApplied: 1, editsMissed: 0 },
+		]);
+
+
+		state = appReducer(state, {
+			type: 'AI_CHAT_RESET',
+			windowId: defaultWindowId,
+		});
+
+		expect(state.aiChatMessages).toEqual([]);
+	});
 });

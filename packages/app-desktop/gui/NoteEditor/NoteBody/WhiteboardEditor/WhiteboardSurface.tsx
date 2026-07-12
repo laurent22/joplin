@@ -13,15 +13,19 @@ import {
 	OnConnect,
 	OnEdgesChange,
 	OnNodesChange,
+	OnReconnect,
 	ReactFlow,
 	ReactFlowProvider,
 	applyEdgeChanges,
 	applyNodeChanges,
+	reconnectEdge,
 	useReactFlow,
 } from '@xyflow/react';
 import generateId from '@joplin/lib/services/whiteboard/generateId';
 import { _, _n } from '@joplin/lib/locale';
-import { Canvas, CanvasEdge, CanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
+import { Canvas, CanvasColor, CanvasEdge, CanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
+import { presetColors, resolveCanvasColor } from '@joplin/lib/services/whiteboard/presetColors';
+import { useWhiteboardContext } from './WhiteboardContext';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { webUtils } from 'electron';
@@ -32,7 +36,7 @@ import TextNode from './nodes/TextNode';
 import FileNode from './nodes/FileNode';
 import LinkNode from './nodes/LinkNode';
 import GroupNode from './nodes/GroupNode';
-import { ActionButton, ActionDivider, ActionInput, ActionPanel } from './ActionPanel';
+import { ActionButton, ActionDivider, ActionInput, ActionPanel, ActionSwatch } from './ActionPanel';
 
 const makeArrowMarker = () => ({ type: MarkerType.ArrowClosed, width: 27, height: 27, markerUnits: 'userSpaceOnUse' });
 
@@ -59,9 +63,11 @@ const nodeTypes: NodeTypes = {
 };
 
 const InnerSurface = ({ canvas, onChange }: Props) => {
+	const ctx = useWhiteboardContext();
 	const initial = useMemo(() => canvasToFlow(canvas), [canvas]);
 	const [flowNodes, setFlowNodes] = useState<WhiteboardFlowNode[]>(initial.nodes);
 	const [flowEdges, setFlowEdges] = useState<WhiteboardFlowEdge[]>(initial.edges);
+	const [labelFocusToken, setLabelFocusToken] = useState(0);
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const rf = useReactFlow();
 
@@ -163,6 +169,18 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 		setFlowEdges(prev => [...prev, edge]);
 	}, []);
 
+	const onReconnect: OnReconnect = useCallback((oldEdge, newConnection) => {
+		setFlowEdges(prev => reconnectEdge(oldEdge as unknown as WhiteboardFlowEdge, newConnection, prev) as WhiteboardFlowEdge[]);
+	}, []);
+
+	// Double-clicking an edge selects it exclusively and focuses the label
+	// input, so a user can start typing without moving the mouse to the panel.
+	const onEdgeDoubleClick = useCallback((_e: React.MouseEvent, edge: Edge) => {
+		setFlowEdges(prev => prev.map(x => ({ ...x, selected: x.id === edge.id })));
+		setFlowNodes(prev => prev.some(n => n.selected) ? prev.map(n => ({ ...n, selected: false })) : prev);
+		setLabelFocusToken(t => t + 1);
+	}, []);
+
 	const defaultEdgeOptions = useMemo(() => ({
 		markerEnd: makeArrowMarker(),
 	}), []);
@@ -185,10 +203,10 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 		addCanvasNode({
 			id: generateId(),
 			type: 'text',
-			x: cx - 100,
-			y: cy - 50,
-			width: 200,
-			height: 100,
+			x: cx - 120,
+			y: cy - 70,
+			width: 240,
+			height: 140,
 			text: _('New text card'),
 		});
 	}, [viewportCentre, addCanvasNode]);
@@ -198,10 +216,10 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 		addCanvasNode({
 			id: generateId(),
 			type: 'group',
-			x: cx - 200,
-			y: cy - 140,
-			width: 400,
-			height: 280,
+			x: cx - 240,
+			y: cy - 200,
+			width: 480,
+			height: 400,
 			label: _('New group'),
 		});
 	}, [viewportCentre, addCanvasNode]);
@@ -209,15 +227,26 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 	const selectedEdges = useMemo(() => flowEdges.filter(e => e.selected), [flowEdges]);
 	const selectedNodes = useMemo(() => flowNodes.filter(n => n.selected), [flowNodes]);
 
-	const SELECTED_EDGE_COLOR = '#4a90e2';
+	const DEFAULT_SELECTION_COLOR = '#4a90e2';
 	const renderedEdges = useMemo<WhiteboardFlowEdge[]>(() => {
 		return flowEdges.map(e => {
-			if (!e.selected) return e;
+			// If the edge has a colour, use it for both the stroke and (when
+			// selected) the selection affordance — otherwise fall back to the
+			// default blue for selected edges, and to nothing (React Flow's
+			// theme default) for unselected ones.
+			const own = resolveCanvasColor(e.data?.color, ctx.themeAppearance, 'stroke');
+			const stroke = own ?? (e.selected ? DEFAULT_SELECTION_COLOR : undefined);
+			if (!stroke) return e;
 			const tint = (m: WhiteboardFlowEdge['markerEnd']) =>
-				(m && typeof m === 'object') ? { ...m, color: SELECTED_EDGE_COLOR } : m;
-			return { ...e, markerEnd: tint(e.markerEnd), markerStart: tint(e.markerStart) };
+				(m && typeof m === 'object') ? { ...m, color: stroke } : m;
+			return {
+				...e,
+				style: { ...(e.style ?? {}), stroke },
+				markerEnd: tint(e.markerEnd),
+				markerStart: tint(e.markerStart),
+			};
 		});
-	}, [flowEdges]);
+	}, [flowEdges, ctx.themeAppearance]);
 
 	const updateSelectedEdges = useCallback((patch: (e: WhiteboardFlowEdge)=> WhiteboardFlowEdge) => {
 		setFlowEdges(prev => prev.map(e => e.selected ? patch(e) : e));
@@ -253,6 +282,53 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 	const setEdgeLabel = useCallback((label: string) => {
 		updateSelectedEdges(e => ({ ...e, label }));
 	}, [updateSelectedEdges]);
+
+	const setSelectedColor = useCallback((color: CanvasColor | undefined) => {
+		setFlowEdges(prev => prev.map(e => e.selected
+			? { ...e, data: { ...(e.data as WhiteboardFlowEdge['data'] & object), color } }
+			: e));
+		setFlowNodes(prev => prev.map(n => {
+			if (!n.selected) return n;
+			const cn = n.data?.canvasNode;
+			if (!cn) return n;
+			const nextCanvasNode = { ...cn, ...(color ? { color } : {}) } as CanvasNode;
+			if (!color) delete (nextCanvasNode as { color?: CanvasColor }).color;
+			return { ...n, data: { ...n.data, canvasNode: nextCanvasNode } };
+		}));
+	}, []);
+
+	// A single preset "wins" as the current colour only when every selected
+	// item shares it. Mixed selections show no active swatch — clicking one
+	// still applies it to everything, which matches the arrow-mode behaviour.
+	const currentColor = useMemo<CanvasColor | undefined>(() => {
+		const colors: (CanvasColor | undefined)[] = [
+			...selectedEdges.map(e => e.data?.color),
+			...selectedNodes.map(n => n.data?.canvasNode?.color),
+		];
+		if (!colors.length) return undefined;
+		const first = colors[0];
+		return colors.every(c => c === first) ? first : undefined;
+	}, [selectedEdges, selectedNodes]);
+
+	const colorSwatches = (
+		<>
+			<ActionSwatch
+				color={null}
+				active={currentColor === undefined}
+				title={_('No colour')}
+				onClick={() => setSelectedColor(undefined)}
+			/>
+			{presetColors.map(p => (
+				<ActionSwatch
+					key={p.id}
+					color={resolveCanvasColor(p.id, ctx.themeAppearance, 'stroke') ?? '#888'}
+					active={currentColor === p.id}
+					title={p.label}
+					onClick={() => setSelectedColor(p.id)}
+				/>
+			))}
+		</>
+	);
 
 	const onDragOver = useCallback((e: ReactDragEvent<HTMLDivElement>) => {
 		const types = Array.from(e.dataTransfer.types);
@@ -333,6 +409,9 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 				onNodesChange={onNodesChange}
 				onEdgesChange={onEdgesChange}
 				onConnect={onConnect}
+				onReconnect={onReconnect}
+				onEdgeDoubleClick={onEdgeDoubleClick}
+				edgesReconnectable
 				onNodeDragStart={onNodeDragStart}
 				onNodeDrag={onNodeDrag}
 				onNodeDragStop={onNodeDragStop}
@@ -367,12 +446,15 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 						<ActionButton onClick={() => setArrowMode('both')} active={currentArrowMode === 'both'} title={_('Bidirectional')}>↔</ActionButton>
 						<ActionDivider />
 						<ActionButton onClick={flipDirection} title={_('Swap source and target')}>{_('Flip')}</ActionButton>
+						<ActionDivider />
+						{colorSwatches}
 						{selectedEdges.length === 1 ? (
 							<>
 								<ActionDivider />
 								<ActionInput
 									value={typeof selectedEdges[0].label === 'string' ? selectedEdges[0].label : ''}
 									placeholder={_('Label')}
+									focusToken={labelFocusToken}
 									onChange={setEdgeLabel}
 								/>
 							</>
@@ -384,7 +466,9 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 					<ActionPanel
 						position="bottom-center"
 						caption={_n('%d card', '%d cards', selectedNodes.length, selectedNodes.length)}
-					/>
+					>
+						{colorSwatches}
+					</ActionPanel>
 				) : null}
 			</ReactFlow>
 		</div>

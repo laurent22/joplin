@@ -333,3 +333,4 @@ heic
 heif
 logits
 tradeoff
+Reconnectable

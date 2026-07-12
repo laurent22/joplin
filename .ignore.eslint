@@ -338,6 +338,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/LinkNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/handlePositions.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/useCardWheel.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.test.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.js
 packages/app-desktop/gui/NoteEditor/NoteEditor.js
@@ -1607,6 +1608,7 @@ packages/lib/services/ai/chunker.js
 packages/lib/services/ai/classification.js
 packages/lib/services/ai/noteChat.test.js
 packages/lib/services/ai/noteChat.js
+packages/lib/services/ai/providers/Anthropic.test.js
 packages/lib/services/ai/providers/Anthropic.js
 packages/lib/services/ai/providers/ChatProviderBase.js
 packages/lib/services/ai/providers/JoplinCloud.test.js
@@ -1917,6 +1919,7 @@ packages/lib/services/trash/restoreItems.js
 packages/lib/services/whiteboard/generateId.js
 packages/lib/services/whiteboard/jsoncanvas.js
 packages/lib/services/whiteboard/parse.js
+packages/lib/services/whiteboard/presetColors.js
 packages/lib/services/whiteboard/resolveRef.js
 packages/lib/services/whiteboard/serialize.js
 packages/lib/services/whiteboard/whiteboard.test.js
