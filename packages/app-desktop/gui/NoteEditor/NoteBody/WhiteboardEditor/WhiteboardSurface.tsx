@@ -22,6 +22,7 @@ import {
 	useReactFlow,
 } from '@xyflow/react';
 import generateId from '@joplin/lib/services/whiteboard/generateId';
+import findEmptySpot from '@joplin/lib/services/whiteboard/findEmptySpot';
 import { _, _n } from '@joplin/lib/locale';
 import { Canvas, CanvasColor, CanvasEdge, CanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
 import { presetColors, resolveCanvasColor } from '@joplin/lib/services/whiteboard/presetColors';
@@ -198,6 +199,28 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 		return { x: cx, y: cy };
 	}, [rf]);
 
+	// Viewport bounds in canvas coordinates.
+	const viewportBounds = useCallback((): { x: number; y: number; width: number; height: number } | null => {
+		const view = rf.getViewport();
+		const rect = containerRef.current?.getBoundingClientRect();
+		if (!rect) return null;
+		return {
+			x: -view.x / view.zoom,
+			y: -view.y / view.zoom,
+			width: rect.width / view.zoom,
+			height: rect.height / view.zoom,
+		};
+	}, [rf]);
+
+	const existingRects = useCallback(() => {
+		return flowNodes.map(n => ({
+			x: n.position.x,
+			y: n.position.y,
+			width: (typeof n.width === 'number' ? n.width : (typeof n.style?.width === 'number' ? n.style.width : 0)) ?? 0,
+			height: (typeof n.height === 'number' ? n.height : (typeof n.style?.height === 'number' ? n.style.height : 0)) ?? 0,
+		}));
+	}, [flowNodes]);
+
 	const onAddText = useCallback(() => {
 		const { x: cx, y: cy } = viewportCentre();
 		addCanvasNode({
@@ -212,17 +235,23 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 	}, [viewportCentre, addCanvasNode]);
 
 	const onAddGroup = useCallback(() => {
-		const { x: cx, y: cy } = viewportCentre();
+		const { x, y, width, height } = findEmptySpot({
+			existing: existingRects(),
+			viewport: viewportBounds(),
+			centre: viewportCentre(),
+			preferred: { width: 320, height: 240 },
+			min: { width: 100, height: 100 },
+		});
 		addCanvasNode({
 			id: generateId(),
 			type: 'group',
-			x: cx - 240,
-			y: cy - 200,
-			width: 480,
-			height: 400,
+			x,
+			y,
+			width,
+			height,
 			label: _('New group'),
 		});
-	}, [viewportCentre, addCanvasNode]);
+	}, [existingRects, viewportBounds, viewportCentre, addCanvasNode]);
 
 	const selectedEdges = useMemo(() => flowEdges.filter(e => e.selected), [flowEdges]);
 	const selectedNodes = useMemo(() => flowNodes.filter(n => n.selected), [flowNodes]);
