@@ -86,8 +86,12 @@ const convertMessage = (message: ChatMessage) => {
 
 const describeJsonParseFailure = (rawContent: string) => {
 	const parseError = ['Failed to parse JSON.'];
-	if (rawContent.startsWith('{') && !rawContent.endsWith('}') && rawContent.length > 1_000) {
-		parseError.push('(Hint: Is the JSON too long?)');
+
+	// With certain providers (e.g. Joplin Cloud), long messages are truncated. Include this information in the error message so that
+	// the model knows to retry with a shorter message:
+	const suggestedRetryLengthLimit = 1000;
+	if (rawContent.startsWith('{') && rawContent.length > suggestedRetryLengthLimit) {
+		parseError.push(`It's likely that the tool call JSON is too long. Please try again with a message shorter than ${suggestedRetryLengthLimit} characters.`);
 	}
 
 	return parseError.join(' ');
@@ -186,9 +190,10 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 			const argumentString = call.function.arguments;
 			try {
 				args = JSON.parse(argumentString);
-			} catch (_error) {
+			} catch (error) {
 				args = {};
 				parseError = describeJsonParseFailure(argumentString);
+				logger.debug('JSON parse failed', error, parseError);
 			}
 
 			return {
