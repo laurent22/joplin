@@ -84,6 +84,7 @@ import { Second } from '@joplin/utils/time';
 import TextWrapCalculator from '../Notes/TextWrapCalculator';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
+import { MenuOptionButton, MenuOptionStyle } from '../../ScreenHeader/Menu';
 
 const emptyArray: never[] = [];
 
@@ -1304,6 +1305,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (canAttachPicture) {
 			output.push({
 				title: _('Attach...'),
+				icon: 'material paperclip',
 				onPress: () => this.onAttach(),
 				disabled: readOnly,
 			});
@@ -1313,6 +1315,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			title: _('Draw picture'),
 			onPress: () => this.drawPicture_onPress(),
 			disabled: readOnly,
+			icon: 'material draw',
 		});
 
 		if (isTodo) {
@@ -1322,6 +1325,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					this.setState({ alarmDialogShown: true });
 				},
 				disabled: readOnly,
+				icon: 'material bell-outline',
 			});
 		}
 
@@ -1329,6 +1333,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (shareSupported) {
 			output.push({
 				title: _('Share'),
+				icon: 'material share-outline',
 				onPress: () => {
 					void this.share_onPress();
 				},
@@ -1339,6 +1344,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (VoiceTyping.supported()) {
 			output.push({
 				title: _('Voice typing...'),
+				icon: 'material microphone-outline',
 				onPress: () => {
 					// this.voiceRecording_onPress();
 					this.setState({ showSpeechToTextDialog: true });
@@ -1349,26 +1355,32 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		const commandService = CommandService.instance();
 		const whenContext = commandService.currentWhenClauseContext();
-		const addButtonFromCommand = (commandName: string, title?: string) => {
+
+
+		const addButtonFromCommand = (commandName: string, overrides: Partial<MenuOptionButton> = {}) => {
 			if (commandName === '-') {
 				output.push({ isDivider: true });
 			} else {
 				output.push({
-					title: title ?? commandService.description(commandName),
+					isDivider: false,
+					title: commandService.description(commandName),
+					icon: commandService.iconName(commandName),
 					onPress: async () => {
 						void commandService.execute(commandName);
 					},
 					disabled: !commandService.isEnabled(commandName, whenContext),
+					...overrides,
 				});
 			}
 		};
 
 		if (isSaved && !isDeleted) {
-			addButtonFromCommand('setTags');
+			addButtonFromCommand('setTags', { icon: 'material tag-outline' });
 		}
 
 		output.push({
 			title: isTodo ? _('Convert to note') : _('Convert to todo'),
+			icon: isTodo ? 'material file-document-outline' : 'material file-send-outline',
 			onPress: () => {
 				this.toggleIsTodo_onPress();
 			},
@@ -1378,6 +1390,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		if (isSaved && !isDeleted) {
 			output.push({
 				title: _('Copy Markdown link'),
+				icon: 'material content-copy',
 				onPress: () => {
 					this.copyMarkdownLink_onPress();
 				},
@@ -1387,6 +1400,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			if (Platform.OS !== 'web') {
 				output.push({
 					title: _('Copy external link'),
+					icon: 'material content-copy',
 					onPress: () => {
 						this.copyExternalLink_onPress();
 					},
@@ -1394,33 +1408,49 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			}
 		}
 
-		output.push({
-			title: _('Properties'),
-			onPress: () => {
-				this.properties_onPress();
-			},
-		});
-
 		if (this.state.mode === 'edit') {
 			const newCodeView = !isCodeView;
 			output.push({
 				title: newCodeView ? _('Edit as Markdown') : _('Edit as Rich Text'),
+				icon: newCodeView ? 'material file-edit-outline' : 'material file-edit',
 				onPress: () => {
 					Setting.setValue('editor.codeView', newCodeView);
 				},
 			});
 		}
 
+		if (pluginCommands.length) {
+			output.push({ isDivider: true });
+
+			for (const commandName of pluginCommands) {
+				addButtonFromCommand(commandName);
+			}
+		}
+
+		output.push({ isDivider: true });
+
+		output.push({
+			title: _('Properties'),
+			icon: 'material information-outline',
+			onPress: () => {
+				this.properties_onPress();
+			},
+		});
+
 		output.push({
 			title: _('Reveal in notebook'),
+			icon: 'material folder-file-outline',
 			onPress: () => {
 				this.revealInNotebook_onPress();
 			},
 		});
 
+		output.push({ isDivider: true });
+
 		if (isDeleted) {
 			output.push({
 				title: _('Restore'),
+				icon: 'material delete-off-outline',
 				onPress: async () => {
 					await restoreItems(ModelType.Note, [this.state.note.id]);
 					this.props.dispatch({
@@ -1432,17 +1462,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		}
 
 		if (whenContext.inTrash) {
-			addButtonFromCommand('permanentlyDeleteNote');
+			addButtonFromCommand('permanentlyDeleteNote', { icon: 'material delete-outline', style: MenuOptionStyle.Destructive });
 		} else {
-			addButtonFromCommand('deleteNote', _('Delete'));
-		}
-
-		if (pluginCommands.length) {
-			output.push({ isDivider: true });
-
-			for (const commandName of pluginCommands) {
-				addButtonFromCommand(commandName);
-			}
+			addButtonFromCommand('deleteNote', { title: _('Delete'), icon: 'material delete-outline', style: MenuOptionStyle.Destructive });
 		}
 
 		this.menuOptionsCache_ = {};
@@ -1758,10 +1780,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			}
 		}
 
-		// Save button is not really needed anymore with the improved save logic
-		const showSaveButton = false; // this.state.mode === 'edit' || this.isModified() || this.saveButtonHasBeenShown_;
-		const saveButtonDisabled = true;// !this.isModified();
-
 		const titleContainerStyle = isTodo ? this.styles().titleContainerTodo : this.styles().titleContainer;
 
 		const dueDate = Note.dueDateObject(note);
@@ -1857,9 +1875,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		const header = <ScreenHeader
 			folderPickerOptions={this.folderPickerOptions()}
 			menuOptions={this.menuOptions()}
-			showSaveButton={showSaveButton}
-			saveButtonDisabled={saveButtonDisabled}
-			onSaveButtonPress={this.saveNoteButton_press}
 			showSideMenuButton={false}
 			showSearchButton={false}
 			showUndoButton={(this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo) && this.state.mode === 'edit'}

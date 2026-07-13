@@ -80,14 +80,14 @@ const ProfileListItem: React.FC<ProfileItemProps> = ({ profile, profileConfig, s
 				switchProfileMessage,
 				[
 					{
-						text: _('Continue'),
-						onPress: () => doIt(),
-						style: 'default',
-					},
-					{
 						text: _('Cancel'),
 						onPress: () => {},
 						style: 'cancel',
+					},
+					{
+						text: _('Continue'),
+						onPress: () => doIt(),
+						style: 'default',
 					},
 				],
 			);

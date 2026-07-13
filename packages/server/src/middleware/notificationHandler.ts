@@ -21,7 +21,7 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 		// is only applied on first startup:
 		const dangerousPasswords = unique([config().defaultAdminPassword, 'admin']);
 		for (const password of dangerousPasswords) {
-			const admin = await ctx.joplin.models.user().login(defaultAdminEmail, password);
+			const admin = await ctx.joplin.models.user().login(defaultAdminEmail, password, ctx.joplin.services);
 			if (admin) {
 				return password;
 			}

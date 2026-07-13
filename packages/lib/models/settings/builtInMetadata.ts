@@ -679,7 +679,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 				return '';
 			},
 			options: () => ({
-				'joplin-cloud': _('Joplin Cloud AI'),
+				'joplin-cloud': _('Joplin Cloud AI (beta)'),
 				'openai-compatible': _('OpenAI-compatible'),
 				'anthropic': _('Anthropic'),
 			}),
@@ -748,6 +748,20 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'ai.usage.outputTokens': {
 			value: 0,
 			type: SettingItemType.Int,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
+		// Joplin Cloud degradation / budget snapshot. Kept as one JSON blob
+		// because the fields are meaningless individually — always written and
+		// read as a set after a chat() completes. Seeded into the aiStatus
+		// Redux slice at boot so plugin callers hitting the endpoint while the
+		// sidebar and settings screen are both closed still show a fresh
+		// status the next time either is opened.
+		'ai.status': {
+			value: { degraded: false, tokensUsed: 0, tokensBudget: 0, lastToastShownAt: null as number | null },
+			type: SettingItemType.Object,
 			public: false,
 			appTypes: [AppType.Desktop],
 			storage: SettingStorage.Database,
@@ -2254,6 +2268,13 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		'featureFlag.noteLock': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: false,
+			storage: SettingStorage.File,
+		},
+
+		'noteLock.lockOnNoteSwitch': {
 			value: false,
 			type: SettingItemType.Bool,
 			public: false,

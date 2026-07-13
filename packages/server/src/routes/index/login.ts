@@ -111,14 +111,18 @@ router.post('login', async (path: SubPath, ctx: AppContext) => {
 	const body = await formParse(ctx.req);
 
 	try {
-		const hasMFAEnabled = await ctx.joplin.models.user().hasMFAEnabled(body.fields.email);
+		// Non-existent users may be created by session().authenticate in some setups -- we need to allow
+		// non-existent users here.
+		const hasMFAEnabled = await ctx.joplin.models.user().hasMFAEnabled(
+			body.fields.email, { requireUserExists: false },
+		);
 
 		if (hasMFAEnabled && (!body.fields.mfaCode && !body.fields.recoveryCode)) {
 			return internalRedirect(path, ctx, router, 'login', body.fields, { showMfaCodeInput: true });
 		}
 
 		const session = await ctx.joplin.models.session().authenticate(
-			body.fields.email, body.fields.password, body.fields.mfaCode, body.fields.recoveryCode,
+			body.fields.email, body.fields.password, ctx.joplin.services, body.fields.mfaCode, body.fields.recoveryCode,
 		);
 		cookieSet(ctx, 'sessionId', session.id);
 		const owner = await ctx.joplin.models.user().load(session.user_id, { fields: ['id', 'is_admin'] });

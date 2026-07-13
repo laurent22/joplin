@@ -1,4 +1,4 @@
-import { ChatMessage, ChatOptions, SearchOptions, SearchResult } from './types';
+import { ChatMessage, ChatOptions, ChatResult, SearchOptions, SearchResult } from './types';
 /**
  * Provides access to AI models configured by the user. The active provider
  * (Joplin Cloud AI, OpenAI-compatible, or Anthropic) and the model are picked
@@ -15,8 +15,10 @@ import { ChatMessage, ChatOptions, SearchOptions, SearchResult } from './types';
  */
 export default class JoplinAi {
     /**
-     * Sends a chat completion request to the active AI provider and returns the
-     * assistant's text response.
+     * Sends a chat completion request to the active AI provider and returns
+     * the assistant's response as an object with a `text` property. The object
+     * shape is stable so future fields (e.g. token usage, finish reason) can be
+     * added without breaking existing plugins.
      *
      * The active provider and model are controlled by the user in Settings →
      * AI. Plugins should not assume any particular provider or model.
@@ -40,10 +42,10 @@ export default class JoplinAi {
      *     { role: 'system', content: 'You are a concise assistant.' },
      *     { role: 'user', content: 'Summarise this note: ...' },
      * ]);
-     * console.log(reply);
+     * console.log(reply.text);
      * ```
      */
-    chat(messages: ChatMessage[], options?: ChatOptions): Promise<string>;
+    chat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult>;
     /**
      * Runs a semantic search against the locally-indexed embeddings and
      * returns matching chunks ranked by similarity.

@@ -33,7 +33,9 @@
 		{{#note}}
 		<p class="last-updated">Last updated: {{updatedDateTime}}</p>
 		<h1 class="title">{{title}}</h1>
-		{{{bodyHtml}}}
+		<div class="note-body">
+			{{{note.bodyHtml}}}
+		</div>
 		{{/note}}
 
 		{{^note}}

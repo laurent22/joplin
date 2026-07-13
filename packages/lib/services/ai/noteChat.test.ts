@@ -1,5 +1,7 @@
-import { _internal } from './noteChat';
+import { _internal, NoteContext } from './noteChat';
 import { applyAnchorEdits } from './applyNoteEdits';
+import { ChatRole, ChatToolCall } from './types';
+import { expectThrow } from '../../testing/test-utils';
 
 describe('noteChat', () => {
 
@@ -13,32 +15,6 @@ describe('noteChat', () => {
 		expect(prompt).toContain('just this bit');
 		expect(prompt).toContain('BEGIN SELECTION');
 		expect(prompt).not.toContain('long body text');
-	});
-
-	test('systemPrompt restricts ops to replaceSelection when selection present', () => {
-		const prompt = _internal.systemPrompt({
-			title: 'n',
-			body: 'b',
-			selection: 'sel',
-		});
-		expect(prompt).toContain('replaceSelection');
-		expect(prompt).not.toContain('insertBefore');
-		expect(prompt).not.toContain('insertAfter');
-		expect(prompt).not.toContain('appendToNote');
-		expect(prompt).not.toContain('replaceRange');
-		expect(prompt).not.toContain('replaceFencedBlock');
-	});
-
-	test('systemPrompt offers anchor ops when no selection', () => {
-		const prompt = _internal.systemPrompt({
-			title: 'n',
-			body: 'b',
-			selection: null,
-		});
-		expect(prompt).toContain('insertBefore');
-		expect(prompt).toContain('insertAfter');
-		expect(prompt).toContain('appendToNote');
-		expect(prompt).toContain('replaceRange');
 	});
 
 	test('systemPrompt advertises Joplin-specific Markdown features', () => {
@@ -67,20 +43,38 @@ describe('noteChat', () => {
 	});
 
 	test.each([
-		['{"reply":"hi","edits":[]}', 'hi', 0],
-		['```json\n{"reply":"hi","edits":[]}\n```', 'hi', 0],
-		['{"reply":"done","edits":[{"op":"appendToNote","text":"x"}]}', 'done', 1],
-		// JSON5 tolerances — trailing commas, single quotes, unquoted keys.
-		// Models emit these despite instructions; the parser absorbs the drift.
-		['{"reply":"done","edits":[{"op":"appendToNote","text":"x"},]}', 'done', 1],
-		['{"reply":"done","edits":[{"op":"appendToNote","text":"x",}]}', 'done', 1],
-		['{reply:"done",edits:[{op:"appendToNote",text:"x"}]}', 'done', 1],
-		['{\'reply\':\'done\',\'edits\':[]}', 'done', 0],
-		['not json at all', 'not json at all', 0],
-	])('tryParseReply parses %s', (input, expectedReply, expectedEditCount) => {
-		const parsed = _internal.tryParseReply(input);
-		expect(parsed.reply).toBe(expectedReply);
-		expect(parsed.edits.length).toBe(expectedEditCount);
+		{
+			label: 'restricts ops to replaceSelection when selection present',
+			note: {
+				title: 'My note',
+				body: 'long body text',
+				selection: 'just this bit',
+			},
+			expectedOperations: ['replaceSelection'],
+		},
+		{
+			label: 'offers anchor operations when no selection present',
+			note: {
+				title: 'n',
+				body: 'b',
+				selection: null,
+			},
+			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange'],
+		},
+		{
+			label: 'offers replaceFencedBlock when Mermaid block present',
+			note: {
+				title: 'n',
+				body: '```mermaid\ngitGraph\n\tcommit\n```\n',
+				selection: null,
+			},
+			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock'],
+		},
+	])('toolDefinitions should include the expected operations (case $label)', ({ note, expectedOperations }) => {
+		const editSchemaItems = _internal.toolDefinitions(note);
+
+		const allowedSchemaOperations = editSchemaItems.map(item => item.name).sort();
+		expect(allowedSchemaOperations).toEqual([...expectedOperations].sort());
 	});
 
 	test('estimateTokens approximates char/4', () => {
@@ -209,13 +203,14 @@ describe('noteChat', () => {
 		expect(appliedEdits[0].status).toBe('invalid');
 	});
 
-	test('systemPrompt advertises replaceFencedBlock with structured-block guidance', () => {
-		const prompt = _internal.systemPrompt({ title: 'n', body: 'b', selection: null });
-		expect(prompt).toContain('replaceFencedBlock');
-		expect(prompt).toContain('jsoncanvas');
+	test('toolDefinitions advertises replaceFencedBlock with structured-block guidance', () => {
+		const tools = _internal.toolDefinitions({ title: 'n', body: '```abc\n```', selection: null });
+		const toolDefinition = tools.find(tool => tool.name === 'replaceFencedBlock');
+		expect(toolDefinition).toBeTruthy();
+		expect(toolDefinition.description).toContain('jsoncanvas');
 		// Guidance to use the op for structured blocks, appendToNote for creation.
-		expect(prompt).toContain('replaceFencedBlock with the full new content');
-		expect(prompt).toContain('use appendToNote');
+		expect(toolDefinition.description).toContain('"text" is the new content inside the fence (no fence markers)');
+		expect(toolDefinition.description).toContain('Use appendToNote');
 	});
 
 	test('applyAnchorEdits refuses replaceRange anchor covering most of the body', () => {
@@ -228,40 +223,69 @@ describe('noteChat', () => {
 		expect(appliedEdits[0].status).toBe('invalid');
 	});
 
-	test('tryParseReply ignores primitive top-level values', () => {
-		// Bare string parses as JSON5 but isn't a reply envelope.
-		expect(_internal.tryParseReply('"hello"').reply).toBe('"hello"');
-		expect(_internal.tryParseReply('"hello"').edits.length).toBe(0);
-		expect(_internal.tryParseReply('null').reply).toBe('null');
-		expect(_internal.tryParseReply('[1,2,3]').reply).toBe('[1,2,3]');
+	test('assertWithinTokenBudget should include tool calls in the token budget', async () => {
+		_internal.assertWithinTokenBudget([
+			{ role: ChatRole.Assistant, content: 'Testing... '.repeat(5) },
+		], 100);
+
+		await expectThrow(async () => {
+			_internal.assertWithinTokenBudget([
+				{
+					role: ChatRole.Assistant,
+					content: 'Testing...'.repeat(5),
+					toolCalls: [{
+						toolName: 'replaceSelection',
+						callId: 'call-1',
+						arguments: { text: 'Testing... '.repeat(50) },
+					}],
+				},
+			], 100);
+		}, 'aiNoteTooLarge');
 	});
 
-	test('enforceSelectionScope strips anchor ops when selection present, passes through otherwise', () => {
-		const reply = {
-			reply: 'ok',
-			edits: [
-				{ op: 'replaceSelection' as const, text: 'A' },
-				{ op: 'appendToNote' as const, text: 'B' },
-				{ op: 'insertBefore' as const, anchor: 'x', text: 'C' },
-				{ op: 'replaceRange' as const, anchor: 'y', text: 'D' },
-			],
+	test('runTools should describe successful edit operations', async () => {
+		const toolCalls: ChatToolCall[] = [
+			{ toolName: 'appendToNote', callId: 'call-1', arguments: { text: 'Test.' } },
+			{ toolName: 'replaceRange', callId: 'call-2', arguments: { anchor: 'Body', text: 'Updated' } },
+		];
+		let body = 'Body';
+		const initialContext: NoteContext = {
+			title: 'Test',
+			body,
+			selection: null,
 		};
-		// With selection: only replaceSelection survives.
-		const scoped = _internal.enforceSelectionScope(reply, 'some selection');
-		expect(scoped.edits.length).toBe(1);
-		expect(scoped.edits[0].op).toBe('replaceSelection');
-		// Without selection: everything passes through unchanged.
-		const unscoped = _internal.enforceSelectionScope(reply, null);
-		expect(unscoped.edits.length).toBe(4);
-	});
 
-	test('tryParseReply drops malformed edits but keeps valid ones', () => {
-		// Mixed array: missing op, unknown op, primitive, and one valid entry.
-		const text = '{"reply":"ok","edits":["lol",{"op":"bogus"},{"op":"appendToNote","text":"good"},{}]}';
-		const parsed = _internal.tryParseReply(text);
-		expect(parsed.reply).toBe('ok');
-		expect(parsed.edits.length).toBe(1);
-		expect(parsed.edits[0].op).toBe('appendToNote');
-	});
+		const result = await _internal.runTools(
+			{ text: 'Test...', toolCalls, usage: { inputTokens: 10, outputTokens: 300 } },
+			initialContext,
+			() => Promise.resolve({ ...initialContext, body }),
+			{
+				replaceSelection: jest.fn(),
+				updateNoteBody: (newBody) => {
+					body = newBody;
+					return Promise.resolve();
+				},
+				displayError: jest.fn(),
+			},
+			new AbortController().signal,
+		);
 
+		expect(body).toBe('Updated\n\nTest.');
+		expect(result).toMatchObject([
+			{
+				role: ChatRole.Tool,
+				toolName: 'appendToNote',
+				toolCallId: 'call-1',
+				isError: false,
+				userDescription: 'Added 1 word',
+			},
+			{
+				role: ChatRole.Tool,
+				toolName: 'replaceRange',
+				toolCallId: 'call-2',
+				isError: false,
+				userDescription: 'Removed 1 word\nAdded 1 word',
+			},
+		]);
+	});
 });

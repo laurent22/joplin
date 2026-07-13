@@ -21,10 +21,10 @@ import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { Dispatch } from 'redux';
 import WarningBanner from './WarningBanner';
 
-import Menu, { MenuOptionType } from './Menu';
 import shim from '@joplin/lib/shim';
 import CommandService from '@joplin/lib/services/CommandService';
 import Icon from '../Icon';
+import Menu, { MenuOptionType } from './Menu';
 export { MenuOptionType };
 
 // Rather than applying a padding to the whole bar, it is applied to each
@@ -564,21 +564,17 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const selectedFolder = this.props.notesParentType === 'Folder' ? Folder.byId(this.props.folders, this.props.selectedFolderId) : null;
 		const selectedFolderInTrash = itemIsInTrash(selectedFolder);
 
-		if (!this.props.noteSelectionEnabled) {
-			if (menuOptions.length) {
-				menuOptions.push({ isDivider: true });
-			}
-		} else {
+		if (this.props.noteSelectionEnabled) {
 			menuOptions.push({
 				key: 'delete',
 				title: _('Delete'),
-				onPress: this.deleteButton_press,
+				onPress: () => this.deleteButton_press(),
 			});
 
 			menuOptions.push({
 				key: 'duplicate',
 				title: _('Duplicate'),
-				onPress: this.duplicateButton_press,
+				onPress: () => this.duplicateButton_press(),
 			});
 		}
 

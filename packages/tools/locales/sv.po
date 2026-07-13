@@ -1,7 +1,9 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Laurent Cozic
+# Swedish translation for Joplin.
+# Copyright (C) 2026 Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # Jonatan Nyberg, 2023, 2024, 2025, 2026.
+# Isak Bergdahl
+# Daniel Nylander
 #
 msgid ""
 msgstr ""
@@ -9,14 +11,14 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: Isak Bergdahl\n"
+"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: \n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.9\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -96,11 +98,11 @@ msgstr "&Hjälp"
 
 #: packages/app-desktop/gui/MenuBar.tsx:837
 msgid "&Note"
-msgstr "&Anteckning"
+msgstr "A&nteckning"
 
 #: packages/app-desktop/gui/MenuBar.tsx:853
 msgid "&Tools"
-msgstr "&Verktyg"
+msgstr "Ver&ktyg"
 
 #: packages/app-desktop/gui/MenuBar.tsx:730
 msgid "&View"
@@ -297,10 +299,10 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 "<todo-command> kan antingen vara \"toggle\" eller \"clear\". Använd "
-"\"toggle\" för att växla status på den givna att-göra-posten mellan "
-"slutförd och ej slutförd (om målet är en vanlig anteckning kommer den att "
-"konverteras till en att-göra-post). Använd \"clear\" för att konvertera "
-"att-göra-posten tillbaka till en vanlig anteckning."
+"\"toggle\" för att växla status på den givna att-göra-posten mellan slutförd "
+"och ej slutförd (om målet är en vanlig anteckning kommer den att konverteras "
+"till en att-göra-post). Använd \"clear\" för att konvertera att-göra-posten "
+"tillbaka till en vanlig anteckning."
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
@@ -921,7 +923,7 @@ msgstr "Det går inte att ändra krypterat objekt"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:42
 msgid "Cannot convert read-only item: \"%s\""
-msgstr "Kan inte konvertera skrivskyddat objekt: \"%s\""
+msgstr "Det går inte att konvertera skrivskyddat objekt: \"%s\""
 
 #: packages/lib/models/Note.ts:622
 msgid "Cannot copy note to \"%s\" notebook"
@@ -2358,7 +2360,7 @@ msgstr "Aktivera förkortningssyntax"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1093
 msgid "Enable ABC musical notation support"
-msgstr "Aktivera stöd för ABC musiknotation"
+msgstr "Aktivera stöd för ABC-notation"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1095
 msgid "Enable audio player"
@@ -3203,7 +3205,6 @@ msgstr ""
 "2. Klicka på \"%s\".\n"
 "3. Låt den köras tills den är klar. Undvik att ändra några anteckningar på "
 "dina andra enheter medan den körs, för att undvika konflikter.\n"
-"\n"
 "4. När synkroniseringen är klar på den här enheten, synkronisera alla dina "
 "andra enheter och låt den köras tills den är klar.\n"
 "\n"
@@ -3377,7 +3378,7 @@ msgstr "Objekt med fel: %s"
 
 #: packages/app-desktop/gui/MenuBar.tsx:885
 msgid "Join us on %s"
-msgstr "Följ oss ​​på %s"
+msgstr "Följ oss på %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:310
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:114
@@ -3930,8 +3931,8 @@ msgid ""
 msgstr ""
 "Flytta %d anteckningsböcker till papperskorgen?\n"
 "\n"
-"Alla anteckningar och underanteckningsböcker i dessa anteckningsböcker "
-"flyttas också till papperskorgen."
+"Alla anteckningar och underliggande anteckningsböcker i dessa "
+"anteckningsböcker flyttas också till papperskorgen."
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
 msgid "Move down"
@@ -6411,8 +6412,8 @@ msgstr[0] ""
 "Anteckningen har konverterats till Markdown och den ursprungliga "
 "anteckningen har flyttats till papperskorgen"
 msgstr[1] ""
-"Anteckningarna har konverterats till Markdown och originalanteckningarna har "
-"flyttats till papperskorgen"
+"Anteckningarna har konverterats till Markdown och de ursprungliga "
+"anteckningarna har flyttats till papperskorgen"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."

@@ -9,6 +9,14 @@ body, :root {
 	overflow: hidden;
 }
 
+*:focus-visible {
+	/* Override the focus indicator color. The default is invisible for
+	   some buttons on some platforms. For example, on MacOS/Chrome, the
+	   default focus indicator has the same color as some of Joplin's
+	   buttons. */
+	outline: 2px solid orange;
+}
+
 /* Dialog styling */
 
 dialog.dialog-modal-layer {

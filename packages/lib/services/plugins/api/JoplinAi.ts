@@ -3,7 +3,8 @@
 import AiService from '../../ai/AiService';
 import EmbeddingIndexer from '../../ai/EmbeddingIndexer';
 import SearchService from '../../ai/SearchService';
-import { AiIndexStatus, ChatMessage, ChatOptions, EmbeddingsPage, GetEmbeddingsOptions, SearchOptions, SearchResult } from './types';
+import { ChatRole } from '../../ai/types';
+import { AiIndexStatus, ChatMessage, ChatOptions, ChatResult, EmbeddingsPage, GetEmbeddingsOptions, SearchOptions, SearchResult } from './types';
 
 /**
  * Provides access to AI models configured by the user. The active provider
@@ -22,8 +23,10 @@ import { AiIndexStatus, ChatMessage, ChatOptions, EmbeddingsPage, GetEmbeddingsO
 export default class JoplinAi {
 
 	/**
-	 * Sends a chat completion request to the active AI provider and returns the
-	 * assistant's text response.
+	 * Sends a chat completion request to the active AI provider and returns
+	 * the assistant's response as an object with a `text` property. The object
+	 * shape is stable so future fields (e.g. token usage, finish reason) can be
+	 * added without breaking existing plugins.
 	 *
 	 * The active provider and model are controlled by the user in Settings →
 	 * AI. Plugins should not assume any particular provider or model.
@@ -47,12 +50,18 @@ export default class JoplinAi {
 	 *     { role: 'system', content: 'You are a concise assistant.' },
 	 *     { role: 'user', content: 'Summarise this note: ...' },
 	 * ]);
-	 * console.log(reply);
+	 * console.log(reply.text);
 	 * ```
 	 */
-	public async chat(messages: ChatMessage[], options?: ChatOptions): Promise<string> {
-		const result = await AiService.instance().chat(messages, options);
-		return result.text;
+	public async chat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult> {
+		const result = await AiService.instance().chat(
+			messages.map(message => ({
+				role: message.role as ChatRole.System | ChatRole.User | ChatRole.Assistant,
+				content: message.content,
+			})),
+			options,
+		);
+		return { text: result.text };
 	}
 
 	/**
