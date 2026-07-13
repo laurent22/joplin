@@ -44,12 +44,19 @@ const overlapsAny = (candidate: Rect, existing: Rect[]): boolean => {
 	return false;
 };
 
-const buildSizes = (preferred: Size, min: Size, shrinkStep: number): Size[] => {
+export const buildSizes = (preferred: Size, min: Size, shrinkStep: number): Size[] => {
 	const sizes: Size[] = [];
 	const ratio = preferred.height / preferred.width;
-	for (let w = preferred.width, h = preferred.height; w >= min.width && h >= min.height; w -= shrinkStep, h -= Math.round(shrinkStep * ratio)) {
+	// Keep shrinking while EITHER dimension is still above its minimum, so the
+	// other one can be clamped instead of terminating the search early. This
+	// matters for non-square preferred/min pairs where one axis reaches its
+	// minimum well before the other.
+	let w = preferred.width;
+	let h = preferred.height;
+	while (w > min.width || h > min.height) {
 		sizes.push({ width: Math.max(w, min.width), height: Math.max(h, min.height) });
-		if (w === min.width && h === min.height) break;
+		w -= shrinkStep;
+		h -= Math.round(shrinkStep * ratio);
 	}
 	const last = sizes[sizes.length - 1];
 	if (!last || last.width !== min.width || last.height !== min.height) sizes.push({ width: min.width, height: min.height });

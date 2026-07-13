@@ -1,4 +1,4 @@
-import findEmptySpot, { Rect } from './findEmptySpot';
+import findEmptySpot, { buildSizes, Rect } from './findEmptySpot';
 
 const viewport: Rect = { x: 0, y: 0, width: 1000, height: 800 };
 const centre = { x: 500, y: 400 };
@@ -70,6 +70,19 @@ describe('findEmptySpot', () => {
 	test('returns centre-based rect when viewport is null', () => {
 		const result = findEmptySpot({ existing: [], viewport: null, centre, preferred, min });
 		expect(result).toEqual({ x: 340, y: 280, width: 320, height: 240 });
+	});
+
+	test('buildSizes keeps shrinking width when height clamps first (non-square)', () => {
+		// Preferred 320x80, min 100x50, step 40. Height decrement is round(40 *
+		// 0.25) = 10. Height reaches min (50) at width=200, and the old
+		// implementation stopped there — skipping intermediate widths like 160
+		// and 120. The fix must keep shrinking width while clamping height.
+		const sizes = buildSizes({ width: 320, height: 80 }, { width: 100, height: 50 }, 40);
+		const widths = sizes.map(s => s.width);
+		expect(widths).toContain(120);
+		expect(widths).toContain(160);
+		for (const s of sizes) expect(s.height).toBeGreaterThanOrEqual(50);
+		expect(sizes[sizes.length - 1]).toEqual({ width: 100, height: 50 });
 	});
 
 	test('spiral finds an empty cell adjacent to a centred blocker', () => {
