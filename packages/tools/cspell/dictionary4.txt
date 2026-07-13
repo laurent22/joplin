@@ -333,3 +333,6 @@ heic
 heif
 logits
 tradeoff
+Reconnectable
+doleocent1
+Socialboom

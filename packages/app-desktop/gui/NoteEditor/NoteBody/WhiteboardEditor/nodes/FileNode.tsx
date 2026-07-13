@@ -13,11 +13,13 @@ import Logger from '@joplin/utils/Logger';
 import { resourceFullPath } from '@joplin/lib/models/utils/resourceUtils';
 import { ResourceEntity } from '@joplin/lib/services/database/types';
 import { FileCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
+import { resolveCanvasColor } from '@joplin/lib/services/whiteboard/presetColors';
 import { isInternalRef, RefKind, resolveFileRef } from '@joplin/lib/services/whiteboard/resolveRef';
 import { useWhiteboardContext } from '../WhiteboardContext';
 import { WhiteboardNodeData } from '../canvasFlow';
 import useCheckboxToggle from '../useCheckboxToggle';
 import handlePositions from './handlePositions';
+import useCardWheel from './useCardWheel';
 
 const logger = Logger.create('WhiteboardFileNode');
 
@@ -91,6 +93,7 @@ const useResolvedRef = (file: string): { resolved: ResolvedItem | null; refetch:
 const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; data: WhiteboardNodeData; position: { x: number; y: number } }>) => {
 	const ctx = useWhiteboardContext();
 	const node = data.canvasNode as FileCanvasNode;
+	const onWheel = useCardWheel();
 
 	const onDoubleClick = useCallback((e: React.MouseEvent) => {
 		e.stopPropagation();
@@ -214,7 +217,15 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 			{handlePositions.map(({ id: hid, position }) => (
 				<Handle key={hid} type="source" position={position} id={hid} />
 			))}
-			<div className={`whiteboard-node ${selected ? '-selected' : ''}`} onDoubleClick={onDoubleClick}>
+			<div
+				className={`whiteboard-node ${selected ? '-selected' : ''}`}
+				onDoubleClick={onDoubleClick}
+				onWheelCapture={onWheel}
+				style={{
+					borderColor: resolveCanvasColor(node.color, ctx.themeAppearance, 'stroke') ?? (selected ? '#4a90e2' : undefined),
+					backgroundColor: resolveCanvasColor(node.color, ctx.themeAppearance, 'fill'),
+				}}
+			>
 				{renderContent()}
 			</div>
 		</>

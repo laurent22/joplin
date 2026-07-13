@@ -57,6 +57,9 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 			forcePathStyle: Setting.value('sync.8.forcePathStyle'), // Older implementations may not support more modern access, so we expose this to allow people the option to toggle.
 			endpoint: Setting.value('sync.8.url'),
 			ignoreTlsErrors: Setting.value('net.ignoreTlsErrors'),
+			// Keep checksums opt-in: aws-sdk-js-v3 >= 3.729.0 defaults to sending CRC32 headers that many S3-compatible providers reject.
+			requestChecksumCalculation: 'WHEN_REQUIRED',
+			responseChecksumValidation: 'WHEN_REQUIRED',
 		};
 	}
 
@@ -89,6 +92,9 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 			forcePathStyle: options.forcePathStyle(),
 			endpoint: options.url(),
 			ignoreTlsErrors: options.ignoreTlsErrors(),
+			// Keep checksums opt-in: aws-sdk-js-v3 >= 3.729.0 defaults to sending CRC32 headers that many S3-compatible providers reject.
+			requestChecksumCalculation: 'WHEN_REQUIRED',
+			responseChecksumValidation: 'WHEN_REQUIRED',
 		};
 
 		const api = new S3Client(apiOptions);

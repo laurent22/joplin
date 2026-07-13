@@ -1,13 +1,16 @@
 import { CSSProperties } from 'react';
 import { Edge as FlowEdge, MarkerType, Node as FlowNode } from '@xyflow/react';
-import { Canvas, CanvasEdge, CanvasNode, CanvasNodeSide } from '@joplin/lib/services/whiteboard/jsoncanvas';
+import { Canvas, CanvasColor, CanvasEdge, CanvasNode, CanvasNodeSide } from '@joplin/lib/services/whiteboard/jsoncanvas';
 
 export type WhiteboardNodeData = {
 	canvasNode: CanvasNode;
 };
 
 export type WhiteboardFlowNode = FlowNode<WhiteboardNodeData>;
-export type WhiteboardFlowEdge = FlowEdge<{ canvasEdge: CanvasEdge }>;
+// The `color` field mirrors CanvasEdge.color but is stored at the flow-edge
+// data level (like `label` on the flow edge itself) so live edits reflect the
+// current value instead of the value captured when the edge was first loaded.
+export type WhiteboardFlowEdge = FlowEdge<{ canvasEdge: CanvasEdge; color?: CanvasColor }>;
 
 const flowTypeForCanvasType = (type: CanvasNode['type']): string => {
 	switch (type) {
@@ -69,7 +72,7 @@ export const canvasToFlow = (canvas: Canvas): CanvasToFlowResult => {
 		sourceHandle: sideToHandle(e.fromSide),
 		targetHandle: sideToHandle(e.toSide),
 		label: e.label,
-		data: { canvasEdge: e },
+		data: { canvasEdge: e, color: e.color },
 		type: 'default',
 		markerStart: e.fromEnd === 'arrow' ? arrowMarker() : undefined,
 		markerEnd: e.toEnd === 'none' ? undefined : arrowMarker(),
@@ -117,6 +120,7 @@ export const flowToCanvas = (
 		const orig = fe.data?.canvasEdge;
 		const fromEnd: CanvasEdge['fromEnd'] = fe.markerStart ? 'arrow' : 'none';
 		const toEnd: CanvasEdge['toEnd'] = fe.markerEnd ? 'arrow' : 'none';
+		const color = fe.data?.color;
 		return {
 			id: fe.id,
 			fromNode: fe.source,
@@ -124,7 +128,7 @@ export const flowToCanvas = (
 			fromSide: handleToSide(fe.sourceHandle),
 			toSide: handleToSide(fe.targetHandle),
 			label: typeof fe.label === 'string' ? fe.label : (orig?.label),
-			...(orig?.color ? { color: orig.color } : {}),
+			...(color ? { color } : {}),
 			fromEnd,
 			toEnd,
 		};
