@@ -41,6 +41,7 @@ const useStyles = (themeId: number) => {
 		const listItemPressable: ViewStyle = {
 			flexGrow: 1,
 			flexShrink: 1,
+			alignSelf: 'stretch',
 		};
 		const listItemPressableWithCheckbox: ViewStyle = {
 			...listItemPressable,
