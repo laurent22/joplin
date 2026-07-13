@@ -226,7 +226,7 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 		// See dynamicEsmImport.js for why this isn't a plain `await import()`.
 		// eslint-disable-next-line @typescript-eslint/no-require-imports -- see dynamicEsmImport.js
 		const dynamicImport = require('./dynamicEsmImport') as (s: string)=> Promise<{
-			env: { localModelPath: string; allowRemoteModels: boolean };
+			env: { localModelPath: string; allowRemoteModels: boolean; allowLocalModels: boolean };
 			AutoTokenizer: { from_pretrained: (name: string)=> Promise<Tokenizer> };
 		}>;
 		const transformers = await dynamicImport('@huggingface/transformers');
@@ -235,6 +235,7 @@ export default class LocalEmbeddingProvider implements EmbeddingProvider {
 		// allowRemoteModels=false stops it falling back to huggingface.co.
 		transformers.env.localModelPath = `${modelDir}/..`;
 		transformers.env.allowRemoteModels = false;
+		transformers.env.allowLocalModels = true;
 		const tokenizer = await transformers.AutoTokenizer.from_pretrained(this.model_.archiveName);
 		return tokenizer as Tokenizer;
 	}
