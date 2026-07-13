@@ -281,23 +281,5 @@
 		initSidebarToggle();
 	};
 
-	const initWhenLayoutReady = function() {
-		const footer = document.querySelector('body > .footer');
-		// The next node is added after the footer is fully parsed.
-		if (!footer || !footer.nextSibling) return false;
-
-		initFolderTree();
-		return true;
-	};
-
-	if (!initWhenLayoutReady()) {
-		const layoutObserver = new MutationObserver(() => {
-			if (initWhenLayoutReady()) layoutObserver.disconnect();
-		});
-
-		layoutObserver.observe(document.documentElement, {
-			childList: true,
-			subtree: true,
-		});
-	}
+	onDocumentReady(initFolderTree);
 })();
