@@ -1,5 +1,25 @@
 # Joplin Android Changelog
 
+## [android-v3.7.3](https://github.com/laurent22/joplin/releases/tag/android-v3.7.3) - 2026-07-13T15:04:29Z
+
+- Improved: Adjust UI padding to match the mobile app redesign (#15741 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Editor: Display tooltip above links to allow opening the link (7979cf8)
+- Improved: Editor: Ensure checkbox size is proportional to font size (c6cc90a)
+- Improved: Implement redesigned note action menu (#15873 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Index locked note resources (#15717) (#15714 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Slightly adjust button colors and add new theme variable (#15764 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update appearance of dialogs (#15706 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update note lock session state (#15773) (#15772 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Updated packages react-native-localize (v3.7.0)
+- Fixed: Add safeguard to prevent revision chains being broken by revision cleaning, where old revisions still exist unexpectedly (#15812) (#15811 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Editor: Fixed vertical alignment of checkboxes (89884e9)
+- Fixed: Fix auto-derived title being cleared after saving a new note (#15846) (#13901)
+- Fixed: Fix sharing to Joplin when opening in edit mode with the RTE enabled (#15746) (#15618 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Harden share to Joplin logic, to prevent overwriting existing notes in certain cases (#15794) (#11479 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Hide private feature flags (#15730) (#15729 by [@keshav0479](https://github.com/keshav0479))
+- Fixed: Improve sidebar swipe gestures and reduce the likelihood of gesture navigation conflicts (#15875) (#12962 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Prevent data loss when toggling the checkbox on a todo immediately after changing note data (#15815) (#15663 by [@mrjo118](https://github.com/mrjo118))
+
 ## [android-v3.7.2](https://github.com/laurent22/joplin/releases/tag/android-v3.7.2) - 2026-06-22T20:27:04Z
 
 - Improved: Preserve customised note history settings when syncing across clients (#15728)

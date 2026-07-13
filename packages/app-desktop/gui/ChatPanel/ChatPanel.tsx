@@ -12,6 +12,7 @@ import { AiChatMessage, AppState } from '../../app.reducer';
 import { runNoteChat } from '@joplin/lib/services/ai/noteChat';
 import { chatAvailability } from '@joplin/lib/services/ai/availability';
 import { WindowIdContext } from '../NewWindowOrIFrame';
+import AiDegradedNotice from '../AiDegradedNotice';
 import { ChatMessage, ChatRole, ChatToolMessage } from '@joplin/lib/services/ai/types';
 import JoplinError from '@joplin/lib/JoplinError';
 import eventManager, { EventName, ItemChangeEvent } from '@joplin/lib/eventManager';
@@ -29,6 +30,7 @@ interface Props {
 	noteTitle: string;
 	noteIsEncrypted: boolean;
 	messages: AiChatMessage[];
+	aiDegraded: boolean;
 	dispatch: Dispatch;
 }
 
@@ -337,6 +339,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 					<button type='button' className='reset' onClick={handleReset}>{_('Reset')}</button>
 				)}
 			</div>
+			{props.aiDegraded && <AiDegradedNotice className='degraded-status' />}
 			<div className='messages'>
 				{messages.length === 0 && (
 					<div className='empty'>
@@ -429,6 +432,7 @@ const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
 		noteTitle: note?.title || '',
 		noteIsEncrypted: !!note?.encryption_applied,
 		messages: windowState.aiChatMessages || [],
+		aiDegraded: !!state.aiStatus?.degraded,
 	};
 };
 

@@ -2,6 +2,8 @@ import { hasWhiteboardFence, parseWhiteboard } from './parse';
 import { newWhiteboardBody, serializeWhiteboard } from './serialize';
 import { isInternalRef, RefKind, resolveFileRef } from './resolveRef';
 import { Canvas } from './jsoncanvas';
+import { resolveCanvasColor } from './presetColors';
+import { ThemeAppearance } from '../../themes/type';
 
 const sampleCanvas: Canvas = {
 	nodes: [
@@ -15,7 +17,7 @@ const sampleCanvas: Canvas = {
 	],
 };
 
-describe('whiteboard format module', () => {
+describe('whiteboard', () => {
 	test('parses a body with a jsoncanvas fence and preserves surrounding text', () => {
 		const before = '# My note\n\nSome intro text.\n\n';
 		const after = '\nA closing paragraph.\n';
@@ -160,5 +162,37 @@ describe('whiteboard format module', () => {
 		expect(isInternalRef(':/0123456789abcdef0123456789abcdef')).toBe(true);
 		expect(isInternalRef(':/short')).toBe(false);
 		expect(isInternalRef('not internal')).toBe(false);
+	});
+
+	test.each([
+		[undefined, ThemeAppearance.Light, undefined],
+		// Preset IDs resolve to different hex values per theme.
+		['1', ThemeAppearance.Light, '#d64545'],
+		['1', ThemeAppearance.Dark, '#e57373'],
+		// Arbitrary hex strings (the spec's escape hatch) pass through untouched.
+		['#abcdef', ThemeAppearance.Light, '#abcdef'],
+		['#abcdef', ThemeAppearance.Dark, '#abcdef'],
+		// Unknown non-preset strings also pass through — browsers will fall
+		// back to their default handling for unrecognised colours.
+		['not-a-preset', ThemeAppearance.Light, 'not-a-preset'],
+	])('resolveCanvasColor(%s, %s) → %s', (input, appearance, expected) => {
+		expect(resolveCanvasColor(input, appearance, 'stroke')).toBe(expected);
+	});
+
+	test('preset canvas color round-trips through serialize + parse on both nodes and edges', () => {
+		const colored: Canvas = {
+			nodes: [
+				{ id: 'a', type: 'text', x: 0, y: 0, width: 100, height: 100, text: 'a', color: '3' },
+				{ id: 'b', type: 'text', x: 200, y: 0, width: 100, height: 100, text: 'b' },
+			],
+			edges: [
+				{ id: 'e', fromNode: 'a', toNode: 'b', color: '4' },
+			],
+		};
+		const body = serializeWhiteboard('', colored);
+		const result = parseWhiteboard(body);
+		expect(result.hasCanvas).toBe(true);
+		expect(result.canvas.nodes.find(n => n.id === 'a')?.color).toBe('3');
+		expect(result.canvas.edges[0].color).toBe('4');
 	});
 });

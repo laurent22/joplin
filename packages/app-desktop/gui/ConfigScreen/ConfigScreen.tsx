@@ -21,6 +21,7 @@ import { normalizeQuery } from '@joplin/lib/components/shared/config/config-sear
 import { searchResultGroups, matchedSearchSections } from './configSearch';
 import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 import AiIndexStatus from './controls/AiIndexStatus';
+import AiStatus from './controls/AiStatus';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
@@ -268,6 +269,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				);
 			}
 			settingComps.push(<AiIndexStatus key='ai_index_status' />);
+			settingComps.push(<AiStatus key='ai_status' />);
 		}
 
 		if (section.name === 'sync') {

@@ -36,6 +36,20 @@
 	color: var(--joplin-color);
 }
 
+.chat-panel > .degraded-status {
+	padding: 6px 10px;
+	font-size: 0.8em;
+	color: var(--joplin-color-warn);
+	background-color: var(--joplin-background-color3);
+	border-bottom: 1px solid var(--joplin-divider-color);
+	line-height: 1.3;
+
+	> a {
+		color: var(--joplin-url-color);
+		text-decoration: underline;
+	}
+}
+
 .chat-panel > .messages {
 	flex: 1;
 	overflow-y: auto;
