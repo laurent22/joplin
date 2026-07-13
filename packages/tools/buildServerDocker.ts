@@ -8,6 +8,7 @@ interface Argv {
 	repository?: string;
 	imageName?: string;
 	tagName?: string;
+	licenseRequired?: boolean;
 	platform?: string;
 	source?: string;
 	addLatestTag?: boolean;
@@ -39,6 +40,11 @@ function parseArgv(): Argv {
 		})
 		.option('addLatestTag', {
 			describe: 'Add `latest` tag even for pre-release images.',
+			type: 'boolean',
+			default: false,
+		})
+		.option('licenseRequired', {
+			describe: 'Whether a license key is required to use the built image.',
 			type: 'boolean',
 			default: false,
 		})
@@ -111,6 +117,7 @@ async function main() {
 	}
 
 	const buildArgs = [];
+	buildArgs.push(`LICENSE_REQUIRED="${argv.licenseRequired ? 1 : 0}"`);
 	buildArgs.push(`BUILD_DATE="${buildDate}"`);
 	buildArgs.push(`REVISION="${revision}"`);
 	buildArgs.push(`VERSION="${imageVersion}"`);
