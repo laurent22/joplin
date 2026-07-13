@@ -84,6 +84,15 @@ const convertMessage = (message: ChatMessage) => {
 	}
 };
 
+const describeJsonParseFailure = (rawContent: string) => {
+	const parseError = ['Failed to parse JSON.'];
+	if (rawContent.startsWith('{') && !rawContent.endsWith('}') && rawContent.length > 1_000) {
+		parseError.push('(Hint: Is the JSON too long?)');
+	}
+
+	return parseError.join(' ');
+};
+
 export interface ChatRequestOptions {
 	signal?: AbortSignal;
 }
@@ -174,11 +183,12 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 
 			let args;
 			let parseError: string|null = null;
+			const argumentString = call.function.arguments;
 			try {
-				args = JSON.parse(call.function.arguments);
+				args = JSON.parse(argumentString);
 			} catch (_error) {
 				args = {};
-				parseError = 'failed to parse JSON';
+				parseError = describeJsonParseFailure(argumentString);
 			}
 
 			return {
