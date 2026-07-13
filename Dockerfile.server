@@ -89,7 +89,7 @@ RUN pm2 install https://registry.npmjs.org/pm2-logrotate/-/pm2-logrotate-3.0.0.t
 	&& pm2 set pm2-logrotate:retain 5 \
 	&& pm2 set pm2-logrotate:compress true
 
-ARG LICENSE_REQUIRED="1"
+ARG LICENSE_REQUIRED="0"
 ENV LICENSE_REQUIRED=${LICENSE_REQUIRED}
 
 ENV NODE_ENV=production
