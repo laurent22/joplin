@@ -193,7 +193,7 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 			} catch (error) {
 				args = {};
 				parseError = describeJsonParseFailure(argumentString);
-				logger.debug('JSON parse failed', error, parseError);
+				logger.error('JSON parse failed', error, parseError);
 			}
 
 			return {
