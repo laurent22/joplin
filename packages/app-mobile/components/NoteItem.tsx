@@ -41,7 +41,6 @@ const useStyles = (themeId: number) => {
 		const listItemPressable: ViewStyle = {
 			flexGrow: 1,
 			flexShrink: 1,
-			gap: 40,
 		};
 		const listItemPressableWithCheckbox: ViewStyle = {
 			...listItemPressable,
