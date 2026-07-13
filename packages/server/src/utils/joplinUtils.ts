@@ -495,7 +495,7 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 		const note = models_.item().itemToJoplinItem(noteItem);
 		if (itemIsInTrash(note)) throw new ErrorNotFound(`No such note: ${query.note_id}`);
 
-		const linkedItemInfos = await noteLinkedItemInfos(userId, models_.item(), noteItem.content.toString());
+		const linkedItemInfos = await noteLinkedItemInfos(userId, models_.item(), note.body);
 
 		if (query.resource_id) {
 			const linkedItemInfo = linkedItemInfos[query.resource_id];
@@ -562,9 +562,9 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 			jopItemId: query.note_id,
 		};
 
-		linkedItemInfos = await noteLinkedItemInfos(userId, models_.item(), noteItem.content.toString());
-		resourceInfos = await getResourceInfos(linkedItemInfos);
 		itemToRender = models_.item().itemToJoplinItem(noteItem);
+		linkedItemInfos = await noteLinkedItemInfos(userId, models_.item(), itemToRender.body);
+		resourceInfos = await getResourceInfos(linkedItemInfos);
 	} else {
 		// ------------------------------------------------------------------------------------------
 		// Render the root note
