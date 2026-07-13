@@ -31,7 +31,8 @@ services:
         networks:
             - app-network
         ports:
-            - "5432:5432"
+            # (Optional): Allow accessing the database using an external tool (e.g. `psql`) from the host:
+            - "127.0.0.1:5432:5432"
         restart: unless-stopped
         environment:
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
