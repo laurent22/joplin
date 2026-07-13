@@ -84,11 +84,13 @@ const useCancelCallback = () => {
 	// abort instead of landing in a cleared or destroyed conversation.
 	const cancelRequestRef = useRef(cancelRequest);
 	cancelRequestRef.current = cancelRequest;
+	const generationIdRef = useRef(makeId());
 	useEffect(() => () => {
 		cancelRequestRef.current();
+		generationIdRef.current = makeId();
 	}, []);
 
-	return { abortControllerRef, cancelRequest };
+	return { abortControllerRef, cancelRequest, generationIdRef };
 };
 
 // Single-window for v1: mapStateToProps hard-codes defaultWindowId and the
@@ -113,7 +115,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 	noteIdRef.current = props.noteId;
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
-	const { abortControllerRef, cancelRequest } = useCancelCallback();
+	const { abortControllerRef, cancelRequest, generationIdRef } = useCancelCallback();
 
 	const windowId = useContext(WindowIdContext);
 
@@ -155,6 +157,10 @@ const ChatPanel: React.FC<Props> = (props) => {
 	const requiresDisclosure = props.providerType !== 'joplin-cloud';
 	const showDisclosure = requiresDisclosure && !disclosureShown && messages.length === 0;
 
+	const handleCancel = useCallback(() => {
+		cancelRequest();
+	}, [cancelRequest]);
+
 	const handleSend = useCallback(async () => {
 		const text = input.trim();
 		if (!text || sending) return;
@@ -165,6 +171,9 @@ const ChatPanel: React.FC<Props> = (props) => {
 			return;
 		}
 		const abortController = abortControllerRef.current;
+		const generationId = makeId();
+		generationIdRef.current = generationId;
+		const newChatStarted = () => generationId !== generationIdRef.current;
 
 		const noteIdAtStart = props.noteId;
 		setSending(true);
@@ -273,17 +282,18 @@ const ChatPanel: React.FC<Props> = (props) => {
 			);
 		} catch (error) {
 			logger.warn('Chat failed:', error);
-			if (abortController.signal.aborted) return;
 
-			if (!hadSuccessfulResponse) {
+			if (!hadSuccessfulResponse && !newChatStarted()) {
 				dispatch({ type: 'AI_CHAT_REMOVE', windowId, id: userTurnId });
 				setInput(text);
 			}
-			appendMessage({ id: makeId(), role: 'error', text: error.message || _('Something went wrong.'), raw: [] });
+			if (!abortController.signal.aborted) {
+				appendMessage({ id: makeId(), role: 'error', text: error.message || _('Something went wrong.'), raw: [] });
+			}
 		} finally {
 			setSending(false);
 		}
-	}, [input, sending, props.noteId, conversationTurns, windowId, addToolResult, appendMessage, dispatch, cancelRequest, abortControllerRef]);
+	}, [input, sending, props.noteId, conversationTurns, windowId, addToolResult, appendMessage, dispatch, cancelRequest, abortControllerRef, generationIdRef]);
 
 	const handleAcknowledgeDisclosure = useCallback(() => {
 		Setting.setValue(disclosureSetting, true);
@@ -401,12 +411,12 @@ const ChatPanel: React.FC<Props> = (props) => {
 					<button
 						type='button'
 						className='send'
-						onClick={() => { void handleSend(); }}
-						disabled={sending || !input.trim()}
-						aria-label={sending ? _('Sending') : _('Send')}
-						title={sending ? _('Sending…') : _('Send')}
+						onClick={sending ? handleCancel : handleSend}
+						disabled={!sending && !input.trim()}
+						aria-label={sending ? _('Cancel send') : _('Send')}
+						title={sending ? _('Cancel send') : _('Send')}
 					>
-						<i className={sending ? 'fas fa-spinner' : 'fas fa-paper-plane'} aria-hidden='true' />
+						<i className={sending ? 'fas fa-stop' : 'fas fa-paper-plane'} aria-hidden='true' />
 					</button>
 				</div>
 			</div>
