@@ -188,6 +188,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 
 	public async retrievePeriodEnd(stripe: Stripe, subscription: Subscription) {
 		subscription = subscription.id ? await this.load(subscription.id) : await this.byUserId(subscription.user_id);
+		if (!subscription) throw new ErrorNotFound(`No subscription found with ID ${subscription.id}`);
 
 		// Older subscriptions might not have a trial_end or current_period_end
 		const isUninitialized = subscription.trial_end === 0 && subscription.current_period_end === 0;
