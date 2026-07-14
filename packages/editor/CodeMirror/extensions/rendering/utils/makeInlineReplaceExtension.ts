@@ -64,6 +64,18 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 				}
 			});
 
+			const hasHiddenDecoration = (from: number, to: number) => {
+				let found = false;
+				this.decorations.between(from, to, (_from, _to, decoration) => {
+					if (!Object.keys(decoration.spec).length) {
+						found = true;
+						return false;
+					}
+					return undefined;
+				});
+				return found;
+			};
+
 			selectionUpdate ??= !selection.empty && coveredTo >= selection.to ? { anchor: selection.head } : undefined;
 			const line = this.view.state.doc.lineAt(selection.from);
 			syntaxTree(this.view.state).iterate({
@@ -74,7 +86,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 					const closingBracket = node.node.getChildren('LinkMark').find(mark => (
 						this.view.state.sliceDoc(mark.from, mark.to) === ']'
 					));
-					if (closingBracket && selection.from >= closingBracket.from && selection.to <= node.to) {
+					if (closingBracket && selection.from >= closingBracket.from && selection.to <= node.to && hasHiddenDecoration(closingBracket.from, node.to)) {
 						selectionUpdate = { anchor: node.to };
 					}
 				},
@@ -166,7 +178,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			transaction.effects.some(effect => effect.is(updateInlineDecorationsEffect))
 			|| extensionSpec.shouldFullReRender?.(transaction)
 		));
-		if (this.mouseSelectionInProgress && update.selectionSet && !update.docChanged && !forceUpdate) {
+		if (this.mouseSelectionInProgress && !update.docChanged && (update.selectionSet || forceUpdate)) {
 			return;
 		}
 

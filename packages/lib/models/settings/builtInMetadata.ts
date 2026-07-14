@@ -753,6 +753,20 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.Database,
 		},
 
+		// Joplin Cloud degradation / budget snapshot. Kept as one JSON blob
+		// because the fields are meaningless individually — always written and
+		// read as a set after a chat() completes. Seeded into the aiStatus
+		// Redux slice at boot so plugin callers hitting the endpoint while the
+		// sidebar and settings screen are both closed still show a fresh
+		// status the next time either is opened.
+		'ai.status': {
+			value: { degraded: false, tokensUsed: 0, tokensBudget: 0, lastToastShownAt: null as number | null },
+			type: SettingItemType.Object,
+			public: false,
+			appTypes: [AppType.Desktop],
+			storage: SettingStorage.Database,
+		},
+
 		'ai.usage.resetButton': {
 			value: null as null,
 			type: SettingItemType.Button,

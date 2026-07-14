@@ -60,10 +60,12 @@ $hover-bg: rgba(127, 127, 127, 0.12);
 		--xy-controls-button-border-color-default: var(--joplin-divider-color);
 	}
 
+	// Only bump the stroke width on selection — the stroke colour is set
+	// inline (edge's own colour, or the default blue when unset) so we don't
+	// override it here.
 	.react-flow__edge.selected .react-flow__edge-path,
 	.react-flow__edge:focus .react-flow__edge-path,
 	.react-flow__edge:focus-visible .react-flow__edge-path {
-		stroke: $selection-color !important;
 		stroke-width: 2 !important;
 	}
 	.react-flow__edge.selected .react-flow__edge-textbg { fill: $selection-color; }
@@ -96,6 +98,9 @@ $hover-bg: rgba(127, 127, 127, 0.12);
 	font-size: 12px;
 	height: 36px;
 	color: var(--joplin-color);
+	user-select: none;
+
+	> .input { user-select: text; }
 
 	&.-bottom-center { bottom: 16px; left: 50%; transform: translateX(-50%); }
 	&.-top-center { top: 16px; left: 50%; transform: translateX(-50%); }
@@ -144,6 +149,36 @@ $hover-bg: rgba(127, 127, 127, 0.12);
 		background: var(--joplin-background-color);
 		color: var(--joplin-color);
 	}
+
+	> .swatch {
+		width: 18px;
+		height: 18px;
+		border-radius: 50%;
+		border: 1px solid var(--joplin-divider-color);
+		padding: 0;
+		margin: 0 2px;
+		cursor: pointer;
+		background: transparent;
+
+		&:hover { transform: scale(1.15); }
+		&.-active { outline: 2px solid $selection-color; outline-offset: 1px; }
+
+		// "No colour" swatch: diagonal slash on empty background.
+		&.-none {
+			position: relative;
+			background: var(--joplin-background-color);
+		}
+		&.-none::after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: -1px;
+			right: -1px;
+			height: 1px;
+			background: var(--joplin-color-faded);
+			transform: rotate(-45deg);
+		}
+	}
 }
 
 .whiteboard-node {
@@ -159,8 +194,12 @@ $hover-bg: rgba(127, 127, 127, 0.12);
 	flex-direction: column;
 	color: var(--joplin-color);
 
+	// Only bump the border width and shadow on selection — the border colour
+	// is either the node's own colour (inline style) or falls back to the
+	// default selection blue set inline by the renderer.
 	&.-selected {
-		border: 2px solid $selection-color;
+		border-width: 2px;
+		border-style: solid;
 		box-shadow: $card-shadow-selected;
 	}
 
@@ -389,7 +428,17 @@ $hover-bg: rgba(127, 127, 127, 0.12);
 	h2 { font-size: 15px; margin: 4px 0; }
 	h3 { font-size: 14px; margin: 3px 0; }
 	h4, h5, h6 { font-size: 13px; margin: 3px 0; }
-	p { margin: 4px 0; }
+	// Cards are informal — preserve typed newlines and tabs inside a
+	// paragraph rather than collapsing them per standard markdown rules, so
+	// what the user typed is what they see. Paragraph breaks (blank lines
+	// in the source) still work via <p> boundaries.
+	p { margin: 8px 0; white-space: pre-wrap; tab-size: 4; }
+	// Drop the top margin on whatever comes first so a leading heading /
+	// paragraph / list sits flush against the card's own 8px padding
+	// instead of stacking margins on top of it. The renderer wraps its
+	// output in a `#rendered-md` div, so we also target the first child
+	// inside that wrapper — `:first-child` alone would only match the div.
+	> :first-child, > * > :first-child { margin-top: 0; }
 	ul, ol { margin: 4px 0; padding-left: 20px; }
 	li { margin: 2px 0; }
 	li.md-checkbox, li.joplin-checkbox { list-style: none; margin-left: -20px; }
@@ -409,19 +458,44 @@ $hover-bg: rgba(127, 127, 127, 0.12);
 		font-size: 12px;
 		background: var(--joplin-code-background-color);
 		color: var(--joplin-code-color);
-		padding: 1px 4px;
+		border: 1px solid var(--joplin-code-border-color);
+		padding: 0 3px;
 		border-radius: 3px;
 	}
 	pre code { background: transparent; padding: 0; border: none; }
 	blockquote {
 		margin: 4px 0;
 		padding-left: 8px;
-		border-left: 3px solid var(--joplin-divider-color);
+		border-left: 3px solid var(--joplin-code-border-color);
 		color: var(--joplin-color-faded);
 	}
 	img { max-width: 100%; height: auto; }
-	table { font-size: 12px; border-collapse: collapse; }
-	th, td { padding: 2px 6px; border: 1px solid var(--joplin-divider-color); }
-	hr { margin: 6px 0; border: none; border-top: 1px solid var(--joplin-divider-color); }
-	a { color: var(--joplin-url-color, #{$selection-color}); }
+	table {
+		font-size: 12px;
+		border-collapse: collapse;
+		border: 1px solid var(--joplin-code-border-color);
+	}
+	th, td { padding: 2px 6px; border: 1px solid var(--joplin-code-border-color); }
+	th {
+		background: var(--joplin-background-color-hover3, var(--joplin-background-color3));
+		border-bottom-width: 2px;
+	}
+	// Only zebra rows for tables with an explicit thead — matches the viewer
+	// (see noteStyle.ts) so freeform key/value tables don't get striped.
+	table:has(thead) tr:nth-child(even) {
+		background: var(--joplin-background-color-hover3, var(--joplin-background-color3));
+	}
+	hr { margin: 6px 0; border: none; border-top: 2px solid var(--joplin-divider-color); }
+	a {
+		color: var(--joplin-url-color, #{$selection-color});
+		&:hover { text-decoration: underline; }
+	}
+	mark {
+		background: var(--joplin-search-marker-background-color);
+		color: var(--joplin-search-marker-color);
+	}
+	// Match the viewer's checked-checkbox affordance so completed items visually
+	// recede without disappearing.
+	.md-checkbox input[type=checkbox]:checked { opacity: 0.7; }
+	.md-checkbox .checkbox-label-checked { opacity: 0.5; }
 }

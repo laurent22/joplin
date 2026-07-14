@@ -3,6 +3,7 @@
 import AiService from '../../ai/AiService';
 import EmbeddingIndexer from '../../ai/EmbeddingIndexer';
 import SearchService from '../../ai/SearchService';
+import { ChatRole } from '../../ai/types';
 import { AiIndexStatus, ChatMessage, ChatOptions, ChatResult, EmbeddingsPage, GetEmbeddingsOptions, SearchOptions, SearchResult } from './types';
 
 /**
@@ -53,7 +54,13 @@ export default class JoplinAi {
 	 * ```
 	 */
 	public async chat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult> {
-		const result = await AiService.instance().chat(messages, options);
+		const result = await AiService.instance().chat(
+			messages.map(message => ({
+				role: message.role as ChatRole.System | ChatRole.User | ChatRole.Assistant,
+				content: message.content,
+			})),
+			options,
+		);
 		return { text: result.text };
 	}
 
