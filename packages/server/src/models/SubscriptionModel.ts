@@ -176,6 +176,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 		if (!subscription.id) {
 			subscription = await this.byUserId(subscription.user_id);
 		}
+		if (!subscription) throw new ErrorNotFound('Failed to update subscription from Stripe: Unable to load full subscription');
 
 		// Depending on the source of the stripeSubscription and the API version, current_period_end is stored in different locations:
 		const periodEndSeconds = stripeSubscription.current_period_end
@@ -200,7 +201,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 	}
 
 	public async retrievePeriodEnd(stripe: Stripe, subscription: Subscription) {
-		const assertHasSubscription = () => {
+		const assertSubscriptionExists = (subscription: Subscription|null) => {
 			// Handles the case where the subscription is disabled/deleted while retrieving its period end
 			if (!subscription) {
 				throw new ErrorNotFound('Failed to reload subscription: Subscription not found');
@@ -208,7 +209,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 		};
 
 		subscription = subscription.id ? await this.load(subscription.id) : await this.byUserId(subscription.user_id);
-		assertHasSubscription();
+		assertSubscriptionExists(subscription);
 
 		// Older subscriptions might not have a trial_end or current_period_end
 		const isUninitialized = subscription.trial_end === 0 && subscription.current_period_end === 0;
@@ -216,7 +217,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 			const stripeSubscription = await stripe.subscriptions.retrieve(subscription.stripe_subscription_id);
 			await this.updateFromStripe(subscription, stripeSubscription);
 			subscription = await this.load(subscription.id);
-			assertHasSubscription();
+			assertSubscriptionExists(subscription);
 		}
 
 		return {
