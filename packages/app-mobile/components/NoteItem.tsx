@@ -21,14 +21,15 @@ interface Props {
 	noteSelectionEnabled: boolean;
 	selectedNoteIds: string[];
 	highlightedWord?: string;
+	index?: number;
 }
 
-const useStyles = (themeId: number) => {
+const useStyles = (themeId: number, showTopBorder: boolean) => {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 
 		const listItem: ViewStyle = {
-			borderTopWidth: 1,
+			borderTopWidth: showTopBorder ? 1 : 0,
 			borderTopColor: theme.dividerColor,
 			marginLeft: theme.marginLeft,
 			marginRight: theme.marginRight,
@@ -85,11 +86,11 @@ const useStyles = (themeId: number) => {
 			},
 			uncheckedOpacityStyle: { },
 		});
-	}, [themeId]);
+	}, [themeId, showTopBorder]);
 };
 
 const NoteItemComponent: React.FC<Props> = memo(props => {
-	const styles = useStyles(props.themeId);
+	const styles = useStyles(props.themeId, props.index !== 0);
 
 	const todoCheckbox_change = useCallback(async (checked: boolean) => {
 		if (!props.note) return;
