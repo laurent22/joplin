@@ -363,10 +363,10 @@ export const postHandlers: PostHandlers = {
 				const user = await models.user().load(sub.user_id, { fields: ['id'] });
 				if (!user) throw new Error(`No such user: ${sub.user_id}`);
 
-				await models.subscription().updateFromStripe(sub, stripeSub);
-
 				logger.info(`Updating subscription of user ${user.id} to ${newAccountType}`);
 				await models.user().save({ id: user.id, account_type: newAccountType });
+
+				await models.subscription().updateFromStripe(sub, stripeSub);
 			},
 
 		};
