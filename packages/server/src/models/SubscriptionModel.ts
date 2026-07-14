@@ -187,8 +187,8 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 			throw new ErrorBadRequest('Failed to update subscription from Stripe -- missing both trial_end and current_period_end');
 		}
 
-		const stripePeriodEnd = periodEndSeconds * Second;
-		const stripeTrialEnd = trialEndSeconds * Second;
+		const stripePeriodEnd = (periodEndSeconds ?? 0) * Second;
+		const stripeTrialEnd = (trialEndSeconds ?? 0) * Second;
 
 		if (subscription.current_period_end !== stripePeriodEnd || subscription.trial_end !== stripeTrialEnd) {
 			await this.save({
