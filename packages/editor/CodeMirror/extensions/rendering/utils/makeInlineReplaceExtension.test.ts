@@ -18,15 +18,17 @@ describe('makeInlineReplaceExtension', () => {
 		);
 
 		editor.dom.dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
-		editor.dispatch({ selection });
+		editor.dispatch({ selection, userEvent: 'select.pointer' });
 
 		expect(editor.state.selection.main).toMatchObject({
 			anchor: selection.anchor,
 			head: selection.head,
 		});
+		expect(editor.contentDOM.textContent).toBe('bold');
 
 		editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
 
 		expect(editor.state.selection.main).toMatchObject(expectedSelection);
+		expect(editor.contentDOM.textContent).toBe('**bold**');
 	});
 });
