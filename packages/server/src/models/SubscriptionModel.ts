@@ -27,9 +27,18 @@ interface PaymentAttempt {
 	time: number;
 }
 
+interface StripeSubscriptionItemSlice {
+	current_period_end?: number;
+	quantity?: number;
+}
+
 export interface StripeSubscriptionSlice {
-	current_period_end: number|null;
-	trial_end: number|null;
+	trial_end: number|undefined;
+
+	// When retrieved from the webhook with newer API versions, current_period_end is stored in `items.data`.
+	// With older API versions and when retrieved directly, current_period_end is present directly on the subscription.
+	current_period_end: number|undefined;
+	items?: { data: StripeSubscriptionItemSlice[] };
 }
 
 export default class SubscriptionModel extends BaseModel<Subscription> {
@@ -168,14 +177,18 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 			subscription = await this.byUserId(subscription.user_id);
 		}
 
-		if ((stripeSubscription.current_period_end ?? null) === null && (stripeSubscription.trial_end ?? null) === null) {
+		// Depending on the source of the stripeSubscription and the API version, current_period_end is stored in different locations:
+		const periodEndSeconds = stripeSubscription.current_period_end
+			?? stripeSubscription.items?.data?.[0]?.current_period_end
+			?? null;
+		const trialEndSeconds = stripeSubscription.trial_end ?? null;
+
+		if (periodEndSeconds === null && trialEndSeconds === null) {
 			throw new ErrorBadRequest('Failed to update subscription from Stripe -- missing both trial_end and current_period_end');
 		}
 
-		// Stripe subscriptions date/time properties are in seconds. Handling undefined is important, since
-		// current_period_end can be undefined when creating a new trial subscription:
-		const stripePeriodEnd = (stripeSubscription.current_period_end ?? 0) * Second;
-		const stripeTrialEnd = (stripeSubscription.trial_end ?? 0) * Second;
+		const stripePeriodEnd = periodEndSeconds * Second;
+		const stripeTrialEnd = trialEndSeconds * Second;
 
 		if (subscription.current_period_end !== stripePeriodEnd || subscription.trial_end !== stripeTrialEnd) {
 			await this.save({
