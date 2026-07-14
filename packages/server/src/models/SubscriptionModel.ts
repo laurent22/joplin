@@ -200,8 +200,15 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 	}
 
 	public async retrievePeriodEnd(stripe: Stripe, subscription: Subscription) {
+		const assertHasSubscription = () => {
+			// Handles the case where the subscription is disabled/deleted while retrieving its period end
+			if (!subscription) {
+				throw new ErrorNotFound('Failed to reload subscription: Subscription not found');
+			}
+		};
+
 		subscription = subscription.id ? await this.load(subscription.id) : await this.byUserId(subscription.user_id);
-		if (!subscription) throw new ErrorNotFound(`No subscription found with ID ${subscription.id}`);
+		assertHasSubscription();
 
 		// Older subscriptions might not have a trial_end or current_period_end
 		const isUninitialized = subscription.trial_end === 0 && subscription.current_period_end === 0;
@@ -209,6 +216,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 			const stripeSubscription = await stripe.subscriptions.retrieve(subscription.stripe_subscription_id);
 			await this.updateFromStripe(subscription, stripeSubscription);
 			subscription = await this.load(subscription.id);
+			assertHasSubscription();
 		}
 
 		return {
