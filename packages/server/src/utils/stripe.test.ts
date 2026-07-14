@@ -1,7 +1,7 @@
 import { AccountType } from '../models/UserModel';
 import { stripe, mock as stripeMock, reset as resetStripe } from '../utils/testing/mockStripe';
 import { recheckPaymentStatus } from './stripe';
-import { afterAllTests, beforeAllDb, models } from './testing/testUtils';
+import { afterAllTests, beforeAllDb, beforeEachDb, models } from './testing/testUtils';
 
 describe('utils/stripe', () => {
 	beforeAll(async () => {
@@ -12,7 +12,8 @@ describe('utils/stripe', () => {
 		await afterAllTests();
 	});
 
-	beforeEach(() => {
+	beforeEach(async () => {
+		await beforeEachDb();
 		resetStripe();
 	});
 

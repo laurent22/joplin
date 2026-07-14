@@ -336,8 +336,8 @@ describe('index/stripe', () => {
 		await simulateWebhook(ctx, 'customer.subscription.created', {
 			id: 'sub_1',
 			customer: 'cus_toto',
-			current_period_end: Date.now() + Month,
-			trial_end: Date.now() + Month,
+			current_period_end: Math.floor((Date.now() + Month) / Second),
+			trial_end: Math.floor((Date.now() + Month) / Second),
 			items: { data: [{ price: { id: stripePrice.id } }] },
 		}, { stripe });
 
