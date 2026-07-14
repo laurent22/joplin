@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.9\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -3225,7 +3225,7 @@ msgstr "In: %s"
 
 #: packages/app-cli/app/command-share.ts:170
 msgid "Incoming shares:"
-msgstr "Met mij gedeeld"
+msgstr "Met mij gedeeld:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:69
 msgid "Incompatible"
@@ -3919,7 +3919,7 @@ msgid ""
 "All notes and sub-notebooks within these notebooks will also be moved to the "
 "trash."
 msgstr ""
-"Notitieboek %d naar de prullenbak verplaatsen?\n"
+"%d notitieboeken naar de prullenbak verplaatsen?\n"
 "\n"
 "Alle notities en sub-notitieboeken in dit notitieboek worden eveneens naar "
 "de prullenbak verplaatst."
@@ -5109,7 +5109,7 @@ msgstr "Verwijderen"
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:134
 msgid "Remove %d tags from all notes? This cannot be undone."
 msgstr ""
-"Label “%s” van alle notities verwijderen? Dit kan niet ongedaan worden "
+"%d labels van alle notities verwijderen? Dit kan niet ongedaan worden "
 "gemaakt."
 
 #: packages/app-mobile/components/TagEditor.tsx:136
@@ -6815,8 +6815,8 @@ msgstr ""
 msgid ""
 "To allow Joplin to synchronise with your account, please follow these steps:"
 msgstr ""
-"Om Joplin te laten synchroniseren met jouw account, log alsjeblieft in via "
-"deze URL:"
+"Om Joplin te laten synchroniseren met jouw account, volg alsjeblieft de "
+"volgend stappen:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
@@ -7036,13 +7036,11 @@ msgstr "Kan hulpbron van type %s niet bewerken"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:108
 msgid "Unable to share log data. Reason: %s"
-msgstr ""
-"De logboekgegevens kunnen niet worden gedeeld of geëxporteerd. Reden: %s"
+msgstr "De logboekgegevens kunnen niet worden gedeeld. Reden: %s"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1125
 msgid "Unable to share note data. Reason: %s"
-msgstr ""
-"De notitiegegevens kunnen niet worden gedeeld of geëxporteerd. Reden: %s"
+msgstr "De notitiegegevens kunnen niet worden gedeeld. Reden: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
@@ -7621,7 +7619,7 @@ msgstr ""
 
 #: packages/app-desktop/checkForUpdates.ts:108
 msgid "Your version: %s"
-msgstr "jouw versie: %s"
+msgstr "Jouw versie: %s"
 
 #: packages/app-desktop/gui/MenuBar.tsx:798
 #: packages/app-desktop/gui/MenuBar.tsx:804
