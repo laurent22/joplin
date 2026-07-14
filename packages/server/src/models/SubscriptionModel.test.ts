@@ -16,6 +16,7 @@ describe('SubscriptionModel', () => {
 
 	beforeEach(async () => {
 		await beforeEachDb();
+		resetStripe();
 	});
 
 	test('should create a user and subscription', async () => {
@@ -67,19 +68,16 @@ describe('SubscriptionModel', () => {
 		const periodEnd = new Date('2026-05-06');
 		const trialEnd = new Date('2026-05-05');
 		stripeMock.setMockSubscription('sub_001', { periodEnd, trialEnd });
-		try {
-			const { subscription, user } = await models().subscription().saveUserAndSubscription('user@example.com', 'Test', AccountType.Basic, 'cus_001', 'sub_001');
-			const fetched = await models().subscription().retrievePeriodEnd(stripe, subscription);
-			expect(fetched.currentPeriodEnd).toBe(periodEnd.getTime());
-			expect(fetched.trialEnd).toBe(trialEnd.getTime());
 
-			// Period end and trial end should be saved in the database for future accesses:
-			expect(await models().subscription().byUserId(user.id)).toMatchObject({
-				current_period_end: periodEnd.getTime(),
-				trial_end: trialEnd.getTime(),
-			});
-		} finally {
-			resetStripe();
-		}
+		const { subscription, user } = await models().subscription().saveUserAndSubscription('user@example.com', 'Test', AccountType.Basic, 'cus_001', 'sub_001');
+		const fetched = await models().subscription().retrievePeriodEnd(stripe, subscription);
+		expect(fetched.currentPeriodEnd).toBe(periodEnd.getTime());
+		expect(fetched.trialEnd).toBe(trialEnd.getTime());
+
+		// Period end and trial end should be saved in the database for future accesses:
+		expect(await models().subscription().byUserId(user.id)).toMatchObject({
+			current_period_end: periodEnd.getTime(),
+			trial_end: trialEnd.getTime(),
+		});
 	});
 });
