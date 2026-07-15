@@ -72,7 +72,7 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 	const renderMustUpgradeAppMessage = () => {
 		if (props.syncTargetAppMinVersion) {
 			const upgradeMessage = (message: string) => _(
-				'Please upgrade your application to version %s: %s',
+				'In order to synchronise, Please upgrade your application to version %s: %s',
 				props.syncTargetAppMinVersion,
 				message,
 			);
@@ -101,7 +101,7 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 				);
 			}
 
-			return renderWarningBox('UpgradeApp', _('Please upgrade your application to version %s', props.syncTargetAppMinVersion));
+			return renderWarningBox('UpgradeApp', _('In order to synchronise, Please upgrade your application to version %s', props.syncTargetAppMinVersion));
 		}
 
 		return renderWarningBox('UpgradeApp', props.mustUpgradeAppMessage);

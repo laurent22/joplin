@@ -629,7 +629,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 			} else if (this.state.didSyncTargetAppMinVersionReleaseLoadFail) {
 				msg = this.renderNotificationMessage(
 					_(
-						'Please upgrade your application to version %s. Joplin could not check update information.',
+						'In order to synchronise, Please upgrade your application to version %s. Joplin could not check update information.',
 						this.props.syncTargetAppMinVersion,
 					),
 				);
@@ -637,7 +637,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				const callForAction = _('Download it from GitHub Releases');
 				msg = this.renderNotificationMessage(
 					_(
-						'Please upgrade your application to version %s: %s or update it using your package manager',
+						'In order to synchronise, Please upgrade your application to version %s: %s or update it using your package manager',
 						this.props.syncTargetAppMinVersion,
 						callForAction,
 					),
@@ -649,7 +649,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				const callForAction = isTargetPreRelease ? _('Download it from GitHub Releases') : _('Check for updates');
 				msg = this.renderNotificationMessage(
 					_(
-						'Please upgrade your application to version %s: %s',
+						'In order to synchronise, Please upgrade your application to version %s: %s',
 						this.props.syncTargetAppMinVersion,
 						callForAction,
 					),
