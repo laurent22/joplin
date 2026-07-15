@@ -84,13 +84,11 @@ const useCancelCallback = () => {
 	// abort instead of landing in a cleared or destroyed conversation.
 	const cancelRequestRef = useRef(cancelRequest);
 	cancelRequestRef.current = cancelRequest;
-	const generationIdRef = useRef(makeId());
 	useEffect(() => () => {
 		cancelRequestRef.current();
-		generationIdRef.current = makeId();
 	}, []);
 
-	return { abortControllerRef, cancelRequest, generationIdRef };
+	return { abortControllerRef, cancelRequest };
 };
 
 // Single-window for v1: mapStateToProps hard-codes defaultWindowId and the
@@ -115,7 +113,7 @@ const ChatPanel: React.FC<Props> = (props) => {
 	noteIdRef.current = props.noteId;
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
-	const { abortControllerRef, cancelRequest, generationIdRef } = useCancelCallback();
+	const { abortControllerRef, cancelRequest } = useCancelCallback();
 
 	const windowId = useContext(WindowIdContext);
 
@@ -159,7 +157,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 
 	const handleCancel = useCallback(() => {
 		cancelRequest();
-	}, [cancelRequest]);
+		appendMessage({ id: makeId(), role: 'assistant', text: _('(Cancelled)'), raw: [] });
+	}, [cancelRequest, appendMessage]);
 
 	const handleSend = useCallback(async () => {
 		const text = input.trim();
@@ -171,9 +170,6 @@ const ChatPanel: React.FC<Props> = (props) => {
 			return;
 		}
 		const abortController = abortControllerRef.current;
-		const generationId = makeId();
-		generationIdRef.current = generationId;
-		const newChatStarted = () => generationId !== generationIdRef.current;
 
 		const noteIdAtStart = props.noteId;
 		setSending(true);
@@ -183,7 +179,12 @@ const ChatPanel: React.FC<Props> = (props) => {
 		// send the prior user turn as history alongside the new prompt.
 		const userTurnId = makeId();
 		let hadSuccessfulResponse = false;
-		appendMessage({ id: userTurnId, role: 'user', text, raw: [] });
+		appendMessage({
+			id: userTurnId,
+			role: 'user',
+			text,
+			raw: [{ role: ChatRole.User, content: text }],
+		});
 
 		try {
 			const note = await Note.load(props.noteId);
@@ -282,18 +283,17 @@ const ChatPanel: React.FC<Props> = (props) => {
 			);
 		} catch (error) {
 			logger.warn('Chat failed:', error);
+			if (abortController.signal.aborted) return;
 
-			if (!hadSuccessfulResponse && !newChatStarted()) {
+			if (!hadSuccessfulResponse) {
 				dispatch({ type: 'AI_CHAT_REMOVE', windowId, id: userTurnId });
 				setInput(text);
 			}
-			if (!abortController.signal.aborted) {
-				appendMessage({ id: makeId(), role: 'error', text: error.message || _('Something went wrong.'), raw: [] });
-			}
+			appendMessage({ id: makeId(), role: 'error', text: error.message || _('Something went wrong.'), raw: [] });
 		} finally {
 			setSending(false);
 		}
-	}, [input, sending, props.noteId, conversationTurns, windowId, addToolResult, appendMessage, dispatch, cancelRequest, abortControllerRef, generationIdRef]);
+	}, [input, sending, props.noteId, conversationTurns, windowId, addToolResult, appendMessage, dispatch, cancelRequest, abortControllerRef]);
 
 	const handleAcknowledgeDisclosure = useCallback(() => {
 		Setting.setValue(disclosureSetting, true);
