@@ -656,6 +656,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 					callForAction,
 					isTargetPreRelease ? () => shim.openUrl('https://github.com/laurent22/joplin/releases') : onCheckForUpdates,
 				);
+			} else {
+				msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
 			}
 		} else if (this.props.shouldSwitchToAppleSiliconVersion) {
 			msg = this.renderNotificationMessage(
