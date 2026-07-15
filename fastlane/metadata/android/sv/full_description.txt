@@ -1,0 +1,13 @@
+<strong>Joplin</strong> är ett fritt program med öppen källkod för anteckningar och uppgifter. Det kan hantera ett stort antal anteckningar som organiseras i anteckningsböcker. Anteckningarna är sökbara och kan kopieras, märkas med taggar och redigeras antingen direkt i programmen eller i en valfri textredigerare.
+
+Anteckningarna sparas i <a href="https://joplinapp.org/help/apps/markdown">Markdown-format</a>.
+
+Anteckningar som exporterats från Evernote <a href="https://joplinapp.org/help/apps/import_export">kan importeras</a> till Joplin, inklusive formaterat innehåll (som konverteras till Markdown), resurser (bilder, bilagor med mera) och fullständiga metadata (geografisk plats, ändringstid, skapelsetid med mera). Vanliga Markdown-filer kan också importeras.
+
+Joplin bygger på principen ”offline först”, vilket innebär att alla data alltid finns på din telefon eller dator. Därmed är dina anteckningar alltid tillgängliga, oavsett om du har en internetanslutning eller inte.
+
+Anteckningarna kan <a href="https://joplinapp.org/help/apps/sync">synkroniseras</a> säkert med <a href="https://joplinapp.org/help/apps/sync/e2ee">end-to-end-kryptering</a> via olika molntjänster, däribland Nextcloud, Dropbox, OneDrive och <a href="https://joplinapp.org/plans/">Joplin Cloud</a>.
+
+Fulltextsökning finns på alla plattformar så att du snabbt kan hitta informationen du behöver. Programmet kan anpassas med insticksmoduler och teman, och du kan även enkelt skapa egna.
+
+Programmet finns för Windows, Linux, macOS, Android och iOS. Ett <a href="https://joplinapp.org/help/apps/clipper">webbklippverktyg</a> för att spara webbsidor och skärmbilder från webbläsaren finns också för <a href="https://addons.mozilla.org/firefox/addon/joplin-web-clipper/">Firefox</a> och <a href="https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek">Chrome</a>.
