@@ -1,9 +1,39 @@
-import { _internal, NoteContext } from './noteChat';
+import { _internal, ChatCommands, NoteContext, runNoteChat } from './noteChat';
 import { applyAnchorEdits } from './applyNoteEdits';
 import { ChatRole, ChatToolCall } from './types';
-import { expectThrow } from '../../testing/test-utils';
+import { expectThrow, setupDatabase, switchClient } from '../../testing/test-utils';
+import Setting from '../../models/Setting';
+
+const makeTestContext = () => {
+	let body = 'Body';
+	const initialContext: NoteContext = {
+		title: 'Test',
+		body,
+		selection: null,
+	};
+
+	const commands: ChatCommands = {
+		replaceSelection: jest.fn(),
+		updateNoteBody: (newBody) => {
+			body = newBody;
+			return Promise.resolve();
+		},
+		displayError: jest.fn(),
+	};
+
+	return {
+		onContext: () => Promise.resolve({ ...initialContext, body }),
+		commands,
+	};
+};
 
 describe('noteChat', () => {
+	beforeAll(async () => {
+		await setupDatabase(0);
+		await switchClient(0);
+		Setting.setValue('ai.chat.providerType', 'test-provider');
+		Setting.setValue('ai.enabled', true);
+	});
 
 	test('systemPrompt includes selection when present and omits full body', () => {
 		const prompt = _internal.systemPrompt({
@@ -248,29 +278,18 @@ describe('noteChat', () => {
 			{ toolName: 'appendToNote', callId: 'call-1', arguments: { text: 'Test.' } },
 			{ toolName: 'replaceRange', callId: 'call-2', arguments: { anchor: 'Body', text: 'Updated' } },
 		];
-		let body = 'Body';
-		const initialContext: NoteContext = {
-			title: 'Test',
-			body,
-			selection: null,
-		};
+
+		const { onContext, commands } = makeTestContext();
 
 		const result = await _internal.runTools(
 			{ text: 'Test...', toolCalls, usage: { inputTokens: 10, outputTokens: 300 } },
-			initialContext,
-			() => Promise.resolve({ ...initialContext, body }),
-			{
-				replaceSelection: jest.fn(),
-				updateNoteBody: (newBody) => {
-					body = newBody;
-					return Promise.resolve();
-				},
-				displayError: jest.fn(),
-			},
+			await onContext(),
+			onContext,
+			commands,
 			new AbortController().signal,
 		);
 
-		expect(body).toBe('Updated\n\nTest.');
+		expect((await onContext()).body).toBe('Updated\n\nTest.');
 		expect(result).toMatchObject([
 			{
 				role: ChatRole.Tool,
@@ -286,6 +305,45 @@ describe('noteChat', () => {
 				isError: false,
 				userDescription: 'Removed 1 word\nAdded 1 word',
 			},
+		]);
+	});
+
+	test('noteChat should stop retry loop if several responses in a row include tool failures', async () => {
+		const { onContext, commands } = makeTestContext();
+		const failingAndSucceedingToolCall = (repeat: number) => [
+			`/repeat ${repeat}`,
+			// one failing tool
+			`/tool replaceRange ${JSON.stringify({ anchor: 'does not exist', text: 'replaced' })}`,
+			// and one tool call that should succeed
+			'/tool appendToNote { "text": "test" }',
+		].join('\n');
+
+		const userMessage = failingAndSucceedingToolCall(32);
+		const result = await runNoteChat(
+			onContext,
+			[],
+			userMessage,
+			commands,
+			() => {},
+			new AbortController().signal,
+		);
+
+		const failedAttempts = [];
+		for (let i = 0; i < 5; i++) {
+			failedAttempts.push(
+				{ role: ChatRole.Assistant },
+				{ role: ChatRole.Tool, isError: true, toolName: 'replaceRange' },
+				{ role: ChatRole.Tool, isError: false, toolName: 'appendToNote' },
+			);
+		}
+
+		expect(result).toMatchObject([
+			{ role: ChatRole.System },
+			{ role: ChatRole.User, content: userMessage },
+
+			...failedAttempts,
+
+			{ role: ChatRole.Assistant, content: 'tool not found: replaceRange\ntool not found: appendToNote' },
 		]);
 	});
 });
