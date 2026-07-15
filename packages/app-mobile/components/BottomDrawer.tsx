@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Easing, NativeScrollEvent, NativeScrollPoint, NativeSyntheticEvent, PanResponder, Platform, Pressable, StyleSheet, useWindowDimensions, View, ViewStyle } from 'react-native';
+import { Animated, Easing, GestureResponderEvent, LayoutChangeEvent, NativeScrollEvent, NativeScrollPoint, NativeSyntheticEvent, PanResponder, PanResponderGestureState, Platform, Pressable, StyleSheet, useWindowDimensions, View, ViewStyle } from 'react-native';
 import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 import { themeStyle, ThemeStyle } from './global-style';
 import Modal from './Modal';
@@ -23,10 +23,11 @@ interface UseStylesProps {
 	theme: ThemeStyle;
 	dragging: boolean;
 	draggable: boolean;
+	backgroundOpacity: Animated.AnimatedInterpolation<number>;
 	dragOffset: Animated.AnimatedInterpolation<number>;
 }
 
-const useStyles = ({ theme, dragging, draggable, dragOffset }: UseStylesProps) => {
+const useStyles = ({ theme, dragging, draggable, dragOffset, backgroundOpacity }: UseStylesProps) => {
 	const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 	const safeAreaPadding = useSafeAreaPadding();
 
@@ -39,7 +40,22 @@ const useStyles = ({ theme, dragging, draggable, dragOffset }: UseStylesProps) =
 		const spaceBelowScreenEdge = Platform.OS === 'web' ? 0 : windowHeight;
 
 		return StyleSheet.create({
+			backgroundStyle: {
+				backgroundColor: theme.backgroundColorTransparent2,
+				opacity: backgroundOpacity.interpolate({
+					inputRange: [0, 1],
+					outputRange: [0, 1],
+					extrapolate: 'clamp',
+				}),
+				position: 'absolute',
+				top: 0,
+				bottom: 0,
+				left: 0,
+				right: 0,
+				zIndex: 0,
+			},
 			menuStyle: {
+				zIndex: 1,
 				alignSelf: 'flex-end',
 				...(isSmallWidthScreen ? {
 					// Center on small screens, rather than float right.
@@ -85,10 +101,10 @@ const useStyles = ({ theme, dragging, draggable, dragOffset }: UseStylesProps) =
 				padding: 20,
 			},
 			modalBackground: {
-				paddingTop: 0,
 				paddingLeft: 0,
 				paddingRight: 0,
 				paddingBottom: 0,
+				paddingTop: theme.margin + safeAreaPadding.paddingTop,
 				justifyContent: 'flex-end',
 				flexDirection: 'column',
 			},
@@ -127,36 +143,49 @@ const useStyles = ({ theme, dragging, draggable, dragOffset }: UseStylesProps) =
 				zIndex: 2,
 			},
 		});
-	}, [theme, safeAreaPadding, windowWidth, dragging, draggable, dragOffset, windowHeight]);
+	}, [theme, safeAreaPadding, windowWidth, dragging, draggable, dragOffset, windowHeight, backgroundOpacity]);
 };
 
-const usePanResponder = (
+const usePanResponderWithTolerance = (
+	tolerance: number,
 	setDragging: (dragging: boolean)=> void,
 	onDragEnd: (dx: number, dy: number)=> void,
 	dragValue: Animated.Value,
+	currentScrollRef: RefObject<NativeScrollPoint|null>,
+	menuY: number,
 ) => {
-	const currentScrollRef = useRef<NativeScrollPoint|null>(null);
-	const onScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-		currentScrollRef.current = event.nativeEvent.contentOffset;
-	}, []);
-	const panResponder = useMemo(() => {
+	const menuYRef = useRef(menuY);
+	menuYRef.current = menuY;
+
+	return useMemo(() => {
+		const isNearMenuTop = (gestureState: PanResponderGestureState) => {
+			return Math.abs(gestureState.moveY - menuYRef.current) <= tolerance;
+		};
+		// Don't use panResponderCapture on web to prevent buttons from incorrectly being pressed
+		const onMoveEvent = Platform.OS === 'android' ? 'onMoveShouldSetPanResponderCapture' as const : 'onMoveShouldSetPanResponder' as const;
 		return PanResponder.create({
-			// Don't use panResponderCapture
-			onMoveShouldSetPanResponder: (_event, gestureState) => {
+			onStartShouldSetPanResponder: (_event, gestureState) => isNearMenuTop(gestureState),
+			[onMoveEvent]: (_event: GestureResponderEvent, gestureState: PanResponderGestureState) => {
 				if (currentScrollRef.current) {
 					const top = currentScrollRef.current.y;
 
-					const tolerance = 3;
-					if (top > tolerance && gestureState.dy > 0) return false;
+					const tolerance = 5;
+					if (top > tolerance) return false;
 				}
+
+				if (isNearMenuTop(gestureState)) return true;
+
 				// Use a large tolerance so that buttons in the menu are still clickable, even
 				// with a noisy input source:
-				return Math.abs(gestureState.dx) < 40 && gestureState.dy > 22;
+				return Math.abs(gestureState.dx) < 40 && gestureState.dy >= tolerance;
 			},
+			onShouldBlockNativeResponder: () => true,
 			onPanResponderGrant: () => {
 				setDragging(true);
 			},
-			onPanResponderTerminate: () => setDragging(false),
+			onPanResponderTerminate: () => {
+				setDragging(false);
+			},
 			onPanResponderMove: Animated.event([
 				null,
 				// Updates menuDragOffset with the .dy property of the second argument:
@@ -167,28 +196,60 @@ const usePanResponder = (
 				setDragging(false);
 			},
 		});
-	}, [dragValue, onDragEnd, setDragging]);
+	}, [dragValue, onDragEnd, setDragging, tolerance, currentScrollRef]);
+};
 
-	return { panResponder, onScroll };
+const usePanResponders = (
+	setDragging: (dragging: boolean)=> void,
+	onDragEnd: (dx: number, dy: number)=> void,
+	dragValue: Animated.Value,
+	menuY: number,
+) => {
+	const currentScrollRef = useRef<NativeScrollPoint|null>(null);
+	const onScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
+		currentScrollRef.current = event.nativeEvent.contentOffset;
+	}, []);
+	// Use a large tolerance for the default responder to avoid interfering with menu content (e.g. buttons)
+	const basePanResponder = usePanResponderWithTolerance(22, setDragging, onDragEnd, dragValue, currentScrollRef, menuY);
+
+	return { basePanResponder, onScroll };
 };
 
 interface UseSyncVisibleProps {
 	visible: boolean;
-	dragToOffset: (offset: number)=> void;
+	dragToOffset: (offset: number)=> Promise<void>;
+	onDismiss: ()=> void;
 	containerRef: RefObject<View|null>;
 }
 
 const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 	const propsRef = useRef(props);
+
+	const dragDismiss = useCallback(() => {
+		return new Promise<void>((resolve, reject) => {
+			propsRef.current.containerRef.current.measure(async (_x, _y, _width, height) => {
+				try {
+					await propsRef.current.dragToOffset(height);
+					resolve();
+				} catch (error) {
+					reject(error);
+				}
+			});
+		});
+	}, []);
+
 	useEffect(() => {
 		if (props.visible) {
-			propsRef.current.dragToOffset(0);
-		} else {
-			propsRef.current.containerRef.current?.measure((_x, _y, _width, height) => {
-				propsRef.current.dragToOffset(height);
-			});
+			void propsRef.current.dragToOffset(0);
+		} else if (propsRef.current.containerRef.current) {
+			void dragDismiss();
 		}
-	}, [props.visible]);
+	}, [props.visible, dragDismiss]);
+
+	return useCallback(async () => {
+		await dragDismiss();
+		propsRef.current.onDismiss();
+	}, [dragDismiss]);
 };
 
 const BottomDrawer: React.FC<Props> = props => {
@@ -196,72 +257,106 @@ const BottomDrawer: React.FC<Props> = props => {
 	const [dragging, setDragging] = useState(false);
 
 	const menuDragOffset = useMemo(() => new Animated.Value(0), []);
+
+	const [menuHeight, setMenuHeight] = useState(0);
+	const [menuY, setMenuY] = useState(0);
+	const onContainerLayout = useCallback((layout: LayoutChangeEvent) => {
+		setMenuHeight(layout.nativeEvent.layout.height);
+		setMenuY(layout.nativeEvent.layout.y);
+	}, []);
+	const backgroundOpacity = useMemo(() => {
+		return Animated.divide(
+			Animated.add(Animated.multiply(menuDragOffset, -1), menuHeight), Math.max(menuHeight, 1),
+		);
+	}, [menuHeight, menuDragOffset]);
+
 	const menuYOffset = useMemo(() => menuDragOffset, [menuDragOffset]);
-	const styles = useStyles({ theme, dragging, draggable: props.draggable, dragOffset: menuYOffset });
+	const styles = useStyles({ theme, dragging, draggable: props.draggable, dragOffset: menuYOffset, backgroundOpacity });
 
 	const reduceMotionEnabled = useReduceMotionEnabled();
 	const reduceMotionEnabledRef = useRef(false);
 	reduceMotionEnabledRef.current = reduceMotionEnabled;
 
-	const dragToOffset = useCallback((offset: number) => {
-		const animation = Animated.timing(menuDragOffset, {
+
+	const dragToOffset = useCallback(async (offset: number) => {
+		const baseAnimationProps = {
 			toValue: offset,
 			easing: Easing.elastic(0.5),
-			duration: reduceMotionEnabledRef.current ? 0 : 200,
+			duration: reduceMotionEnabledRef.current ? 0 : 300,
 			useNativeDriver: true,
+		};
+		const animation = Animated.timing(menuDragOffset, baseAnimationProps);
+
+		return new Promise<void>(resolve => {
+			animation.start(result => {
+				if (result.finished) {
+					resolve();
+				}
+			});
 		});
-		animation.start();
 	}, [menuDragOffset]);
 
 	const clearDragOffset = useCallback(() => {
-		dragToOffset(0);
+		void dragToOffset(0);
 	}, [dragToOffset]);
 
 	const containerRef = useRef<View|null>(null);
-	useUpdateOnVisibilityChange({
-		visible: props.visible, dragToOffset, containerRef,
+	const onHide = useUpdateOnVisibilityChange({
+		visible: props.visible, dragToOffset, containerRef, onDismiss: props.onDismiss,
 	});
 
 	const onDragEnd = useCallback((_dx: number, dy: number) => {
 		if (dy > 50) {
-			props.onDismiss();
+			void onHide();
 		} else {
 			clearDragOffset();
 		}
-	}, [clearDragOffset, props.onDismiss]);
+	}, [clearDragOffset, onHide]);
 
-	const { panResponder, onScroll: onPanResponderScroll } = usePanResponder(
-		setDragging, onDragEnd, menuDragOffset,
+	const { basePanResponder, onScroll: onPanResponderScroll } = usePanResponders(
+		setDragging, onDragEnd, menuDragOffset, menuY,
 	);
 
 	const onContainerScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
 		const offsetY = event.nativeEvent.contentOffset.y;
 		// On iOS, support menu dismissal through the native scrollview's overscroll behavior:
 		if (offsetY < -80) {
-			props.onDismiss();
+			void onHide();
 		} else {
 			onPanResponderScroll(event);
 		}
-	}, [props.onDismiss, onPanResponderScroll]);
+	}, [onHide, onPanResponderScroll]);
 
 	return <Modal
 		visible={props.visible}
-		onClose={props.onDismiss}
+		onClose={onHide}
 		onShow={props.onShow}
-		backgroundColor={theme.backgroundColorTransparent2}
+		backgroundColor='transparent'
 		modalBackgroundStyle={styles.modalBackground}
 		dismissButtonStyle={styles.dismissButton}
+		wrapContent={view => {
+			return <>
+				<Animated.View style={styles.backgroundStyle}/>
+				{view}
+			</>;
+		}}
 		containerStyle={styles.menuStyle}
+		animationType={reduceMotionEnabled ? 'fade' : 'none'}
 		scrollOverflow={{
 			onScroll: onContainerScroll,
 		}}
 	>
-		<View {...panResponder.panHandlers} style={[styles.contentContainer, props.style]} ref={containerRef}>
+		<View
+			{...basePanResponder.panHandlers}
+			onLayout={onContainerLayout}
+			style={[styles.contentContainer, props.style]}
+			ref={containerRef}
+		>
 			{dragging && <View style={styles.dragOverlay} />}
 			<DragHandle
 				containerStyle={styles.dragHandleContainer}
 				style={styles.dragHandle}
-				onDismiss={props.onDismiss}
+				onDismiss={onHide}
 			/>
 			{props.children}
 		</View>
@@ -285,10 +380,11 @@ interface DragHandleProps {
 const DragHandle: React.FC<DragHandleProps> = props => {
 	return <Pressable
 		onPress={props.onDismiss}
-		style={props.containerStyle}
 		aria-label={_('Dismiss')}
+		style={props.containerStyle}
+		data-isDragHandle={true}
 	>
-		<View style={props.style}/>
+		<View style={props.style} data-isDragHandle={true}/>
 	</Pressable>;
 };
 
