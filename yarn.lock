@@ -12453,7 +12453,7 @@ __metadata:
     md5: "npm:2.3.0"
     moment: "npm:2.30.1"
     mustache: "npm:4.2.0"
-    nan: "npm:2.25.0"
+    nan: "npm:2.26.0"
     node-fetch: "npm:2.6.7"
     node-notifier: "npm:10.0.1"
     node-rsa: "npm:1.1.1"
@@ -43570,12 +43570,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:2.25.0":
-  version: 2.25.0
-  resolution: "nan@npm:2.25.0"
+"nan@npm:2.26.0":
+  version: 2.26.0
+  resolution: "nan@npm:2.26.0"
   dependencies:
     node-gyp: "npm:latest"
-  checksum: 10/eb3ac555512ec865be3c6e5d65aa94fe13ef6fc36254854687db950adbce61119839ff2217913c1798033f760cda354e3f50c812bb94fd19f7995b84df1a4b57
+  checksum: 10/e6f8a720f2c30df7df97c7d7535410b379d84c1b7a0776c92dcea82886d1030b43e0404145510cc34de5e5fb120ad9c90ce82d10447f50ba92bba291b7845bf5
   languageName: node
   linkType: hard
 
