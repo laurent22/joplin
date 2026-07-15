@@ -48,6 +48,7 @@ const NoteLockSettings: React.FC<Props> = props => {
 
 	const forgotPasswordDescription = _('Only do this if you\'ve forgotten your current password. A new password will be created, and any notes locked with the old one will become permanently unreadable.');
 	const forgotPasswordWarning = `${_('Warning:')} ${forgotPasswordDescription}`;
+	const resetConfirmationMessage = `${forgotPasswordWarning}\n\n${_('Continue?')}`;
 
 	const onCurrentPasswordChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		setCurrentPassword(event.target.value);
@@ -67,7 +68,7 @@ const NoteLockSettings: React.FC<Props> = props => {
 
 	const submit = useCallback(async () => {
 		if (!canSave) return;
-		if (mode === ActionMode.Reset && !await shim.showConfirmationDialog(forgotPasswordWarning)) return;
+		if (mode === ActionMode.Reset && !await shim.showConfirmationDialog(resetConfirmationMessage)) return;
 
 		setSaving(true);
 		setError('');
@@ -86,7 +87,7 @@ const NoteLockSettings: React.FC<Props> = props => {
 		} finally {
 			setSaving(false);
 		}
-	}, [canSave, onModeChange, currentPassword, mode, password, setError, forgotPasswordWarning]);
+	}, [canSave, onModeChange, currentPassword, mode, password, setError, resetConfirmationMessage]);
 
 	const submitUpgrade = useCallback(async () => {
 		if (!canUpgrade) return;
@@ -177,7 +178,7 @@ const NoteLockSettings: React.FC<Props> = props => {
 				<div className='buttons'>
 					<Button
 						title={actionButtonTitle}
-						level={ButtonLevel.Primary}
+						level={mode === ActionMode.Reset ? ButtonLevel.Secondary : ButtonLevel.Primary}
 						disabled={!canSave}
 						onClick={submit}
 					/>
