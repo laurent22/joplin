@@ -283,8 +283,12 @@ const stepNoteChat = async ({
 	});
 	onHistoryChanged([...messages]);
 
-	const toolResults = await runTools(chatResult, note, context, commands, signal);
+	let toolResults: ChatToolMessage[] = [];
+	if (allowTools) {
+		toolResults = await runTools(chatResult, note, context, commands, signal);
+	}
 	messages.push(...toolResults);
+
 	onHistoryChanged([...messages]);
 
 	return { messages, failedToolCount: toolResults.filter(t => t.isError).length };
