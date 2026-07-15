@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { _ } from '@joplin/lib/locale';
 import NoteLockKey from '@joplin/lib/services/noteLock/NoteLockKey';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
-import shim from '@joplin/lib/shim';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import LabelledPasswordInput from '../../PasswordInput/LabelledPasswordInput';
 import Button, { ButtonLevel } from '../../Button/Button';
@@ -68,7 +68,13 @@ const NoteLockSettings: React.FC<Props> = props => {
 
 	const submit = useCallback(async () => {
 		if (!canSave) return;
-		if (mode === ActionMode.Reset && !await shim.showConfirmationDialog(resetConfirmationMessage)) return;
+		if (mode === ActionMode.Reset) {
+			const response = await shim.showMessageBox(resetConfirmationMessage, {
+				buttons: [_('Yes'), _('No')],
+				type: MessageBoxType.Confirm,
+			});
+			if (response !== 0) return;
+		}
 
 		setSaving(true);
 		setError('');
