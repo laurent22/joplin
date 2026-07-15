@@ -92,7 +92,7 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 			if (Platform.OS === 'ios') {
 				return renderWarningBox(
 					'UpgradeApp',
-					upgradeMessage(_('If it is a release, update it from the App Store. If it is a pre-release, check TestFlight')),
+					upgradeMessage(_('Update it from the App Store')),
 				);
 			}
 		}
