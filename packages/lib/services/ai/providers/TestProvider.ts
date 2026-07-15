@@ -41,7 +41,7 @@ export default class TestProvider extends ChatProviderBase {
 		super();
 	}
 
-	protected async doChat(messages: ChatMessage[], { tools = [] }: ChatOptions): Promise<ChatResult> {
+	protected async doChat(messages: ChatMessage[], { tools = [] }: ChatOptions = {}): Promise<ChatResult> {
 		const lastMessage = messages[messages.length - 1];
 
 		const toolCalls: ChatToolCall[] = [];
