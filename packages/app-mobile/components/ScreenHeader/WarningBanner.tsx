@@ -95,6 +95,8 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 					upgradeMessage(_('Update it from the App Store')),
 				);
 			}
+
+			return renderWarningBox('UpgradeApp', _('Please upgrade your application to version %s', props.syncTargetAppMinVersion));
 		}
 
 		return renderWarningBox('UpgradeApp', props.mustUpgradeAppMessage);
