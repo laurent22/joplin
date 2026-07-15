@@ -117,10 +117,10 @@
 		"&Hjälp"
 	],
 	"&Note": [
-		"&Anteckning"
+		"A&nteckning"
 	],
 	"&Tools": [
-		"&Verktyg"
+		"Ver&ktyg"
 	],
 	"&View": [
 		"&Visa"
@@ -141,28 +141,28 @@
 		"(Ingen)"
 	],
 	"(Read-only)": [
-		"(skrivskyddad)"
+		"(Skrivskyddad)"
 	],
 	"(wysiwyg: %s)": [
 		"(wysiwyg: %s)"
 	],
 	"(You may disable this prompt in the options)": [
-		"(Du kan inaktivera denna prompt i alternativen)"
+		"(Du kan inaktivera den här frågan i inställningarna)"
 	],
 	"- Camera: to allow taking a picture and attaching it to a note.": [
 		"- Kamera: gör det möjligt att ta en bild och bifoga den till en anteckning."
 	],
 	"- Location: to allow attaching geo-location information to a note.": [
-		"- Plats: gör det möjligt att bifoga geo-platsinformation till en anteckning."
+		"- Plats: gör det möjligt att bifoga platsinformation till en anteckning."
 	],
 	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
-		"- Lagring: gör det möjligt att bifoga filer till anteckningar och för att möjliggöra filsystemsynkronisering."
+		"- Lagring: gör det möjligt att bifoga filer till anteckningar och synkronisera via filsystemet."
 	],
 	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
-		"<tag-command> kan vara \"add\", \"remove\", \"list\" eller \"notetags\" för att tilldela eller ta bort [tag] från [note], eller för att lista anteckningarna som är associerade med [tag]. Kommandot `tag list` kan användas för att lista alla taggar (använd -l för långt alternativ)."
+		"<tag-command> kan vara \"add\", \"remove\", \"list\" eller \"notetags\" för att tilldela eller ta bort [tag] från [note], för att lista anteckningar associerade med [tag] eller för att lista taggar associerade med [note]. Kommandot `tag list` kan användas för att lista alla taggar (använd -l för långt alternativ)."
 	],
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
-		"<todo-command> kan antingen vara \"toggle\" eller \"clear\". Använd \"toggle\" för att växla mellan givna uppgifter mellan slutförda och inte slutförda tillstånd (Om målet är en vanlig anteckning kommer den att konverteras till en att-göra). Använd \"clear\" för att konvertera uppgiften att-göra tillbaka till en vanlig anteckning."
+		"<todo-command> kan vara \"toggle\" eller \"clear\". Använd \"toggle\" för att växla att-göra-posten mellan slutförd och ej slutförd (en vanlig anteckning konverteras då till en att-göra-post). Använd \"clear\" för att konvertera att-göra-posten tillbaka till en vanlig anteckning."
 	],
 	"[None]": [
 		"[Ingen]"
@@ -186,7 +186,7 @@
 		"A5"
 	],
 	"ABC musical notation: Options": [
-		""
+		"ABC-notation: Alternativ"
 	],
 	"About": [
 		"Om"
@@ -195,13 +195,13 @@
 		"Om Joplin"
 	],
 	"accelerator": [
-		"accelerator"
+		"kortkommando"
 	],
 	"Accelerator \"%s\" is not valid.": [
-		"Acceleratorn \"%s\" är inte giltig."
+		"Kortkommandot \"%s\" är ogiltigt."
 	],
 	"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to unexpected behaviour.": [
-		"Acceleratorn \"%s\" används för \"%s\" och \"%s\" kommandon. Detta kan leda till oväntat beteende."
+		"Kortkommandot \"%s\" används av kommandona \"%s\" och \"%s\". Detta kan leda till oväntat beteende."
 	],
 	"Accept": [
 		"Acceptera"
@@ -210,7 +210,7 @@
 		"Accepterade inbjudningar"
 	],
 	"Accepted: Notebook %s from %s": [
-		"Godkänd: Anteckningsbok %s från %s"
+		"Accepterad: Anteckningsboken %s från %s"
 	],
 	"Accepting share...": [
 		"Accepterar delning..."
@@ -240,7 +240,7 @@
 		"Aktiv"
 	],
 	"Actual Size": [
-		"Faktisk storlek"
+		"Verklig storlek"
 	],
 	"Add body": [
 		"Lägg till brödtext"
@@ -249,7 +249,7 @@
 		"Lägg till kolumn"
 	],
 	"Add new": [
-		"Lägg till ny"
+		"Lägg till nytt"
 	],
 	"Add or remove tags:": [
 		"Lägg till eller ta bort taggar:"
@@ -273,7 +273,7 @@
 		"Lägg till i anteckning"
 	],
 	"Added new: %s": [
-		"Lagt till nya: %s"
+		"Nytillagt: %s"
 	],
 	"Added tag: %s": [
 		"Lagt till tagg: %s"
@@ -300,7 +300,7 @@
 		"alla"
 	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
-		"All data, inklusive anteckningar, anteckningsböcker och taggar kommer att tas bort permanent."
+		"Alla data, inklusive anteckningar, anteckningsböcker och taggar, kommer att raderas permanent."
 	],
 	"All item sync failures have been marked as \"ignored\".": [
 		"Alla objektsynkroniseringsfel har markerats som \"ignorerade\"."
@@ -309,7 +309,7 @@
 		"Alla anteckningar"
 	],
 	"All potential ports are in use - please report the issue at %s": [
-		"Alla potentiella portar används - rapportera problemet på %s"
+		"Alla möjliga portar används – rapportera problemet på %s."
 	],
 	"All shared folders:": [
 		"Alla delade mappar:"
@@ -318,7 +318,7 @@
 		"Tillåter felsökning av mobila insticksmoduler. Se %s för detaljer."
 	],
 	"Also displays unset and hidden config variables.": [
-		"Visar även inte inställda och dolda konfigurationsvariabler."
+		"Visar även konfigurationsvariabler som inte har angetts samt dolda variabler."
 	],
 	"Also publish linked notes": [
 		"Publicera även länkade anteckningar"
@@ -339,10 +339,10 @@
 		"Ändra alltid storlek"
 	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
-		"Tvetydig anteckningsbok \"%s\". Använd anteckningsbok-id istället - tryck på \"ti\" för att se det korta anteckningsbok-id:t eller använd $b för aktuellt vald anteckningsbok"
+		"Anteckningsboken \"%s\" är tvetydig. Använd anteckningsbokens ID i stället – tryck på \"ti\" för att se det korta ID:t eller använd $b för den valda anteckningsboken."
 	],
 	"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the short notebook id": [
-		"Tvetydig anteckningsbok \"%s\". Använd kort anteckningsbok-id istället - tryck på \"ti\" för att se det korta anteckningsbok-id:t"
+		"Anteckningsboken \"%s\" är tvetydig. Använd anteckningsbokens korta ID i stället – tryck på \"ti\" för att visa det."
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"En automatiskt sparad teckning hittades. Bifoga en kopia av den till anteckningen?"
@@ -360,7 +360,7 @@
 		"Android API-nivå: %d"
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
-		"Alla e-postmeddelanden som skickas till den här adressen kommer att omvandlas till en anteckning och läggas till i din samling. Anteckningen kommer att sparas anteckningsboken Inbox"
+		"Alla e-postmeddelanden som skickas till den här adressen omvandlas till en anteckning och läggs till i din samling. Anteckningen sparas i anteckningsboken Inbox."
 	],
 	"Appearance": [
 		"Utseende"
@@ -387,7 +387,7 @@
 		"Argument:"
 	],
 	"Aritim Dark": [
-		"Aritim mörkt"
+		"Aritim Dark"
 	],
 	"Associated tags:": [
 		"Associerade taggar:"
@@ -429,10 +429,10 @@
 		"Bilagor som inte kunde hämtas"
 	],
 	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
-		"OBS! Om du ändrar denna plats så se till att du har en kopia på allt innehåll innan du synkroniserar. Annars kommer samtliga filer att raderas. Läs FAQ för mer information: %s"
+		"OBS! Om du ändrar den här platsen måste du kopiera allt innehåll dit innan du synkroniserar. Annars tas alla filer bort. Mer information finns i vanliga frågor: %s"
 	],
 	"Authentication was not completed (did not receive an authentication token).": [
-		"Autentisering slutfördes inte (mottog inte en autentiseringstoken)."
+		"Autentiseringen slutfördes inte (ingen autentiseringstoken togs emot)."
 	],
 	"Authorisation token:": [
 		"Auktoriseringstoken:"
@@ -447,10 +447,10 @@
 		"Lägg automatiskt till inaktiverade konton för radering"
 	],
 	"Auto-format Markdown in the Rich Text Editor": [
-		"Formatera Markdown automatiskt i Avancerad textredigerare"
+		"Formatera Markdown automatiskt i redigeraren för formaterad text"
 	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
-		"Para automatiskt hakparenteser, paranteser, situationstecken, etc."
+		"Para automatiskt ihop klammerparenteser, parenteser, citattecken osv."
 	],
 	"Autocomplete Markdown and HTML": [
 		"Slutför automatiskt Markdown och HTML"
@@ -462,7 +462,7 @@
 		"Radera anteckningar i papperskorgen automatiskt efter ett antal dagar"
 	],
 	"Automatically switch theme to match system theme": [
-		"Växla automatiskt tema för att matcha systemtema"
+		"Växla automatiskt tema så att det matchar systemets tema"
 	],
 	"Back": [
 		"Tillbaka"
@@ -474,7 +474,7 @@
 		"Beta"
 	],
 	"Block code": [
-		""
+		"Kodblock"
 	],
 	"Bold": [
 		"Fet"
@@ -530,8 +530,11 @@
 	"Cannot change encrypted item": [
 		"Det går inte att ändra krypterat objekt"
 	],
+	"Cannot convert read-only item: \"%s\"": [
+		"Det går inte att konvertera skrivskyddat objekt: \"%s\""
+	],
 	"Cannot copy note to \"%s\" notebook": [
-		"Det går inte att kopiera anteckningen till \"%s\" anteckningsbok"
+		"Det går inte att kopiera anteckningen till anteckningsboken \"%s\""
 	],
 	"Cannot create a new note: %s": [
 		"Kan inte skapa en ny anteckning: %s"
@@ -540,7 +543,7 @@
 		"Det går inte att hitta \"%s\"."
 	],
 	"Cannot find: \"%s\"": [
-		"Det går inte att hitta: \"%s\"."
+		"Det går inte att hitta: \"%s\""
 	],
 	"Cannot initialise synchroniser.": [
 		"Det går inte att initiera synkroniseraren."
@@ -552,7 +555,7 @@
 		"Det går inte att läsa in \"%s\"-modulen för formatet \"%s\" och målet \"%s\""
 	],
 	"Cannot move note to \"%s\" notebook": [
-		"Det går inte att flytta anteckningen till \"%s\" anteckningsbok"
+		"Det går inte att flytta anteckningen till anteckningsboken \"%s\""
 	],
 	"Cannot move notebook to this location": [
 		"Det går inte att flytta anteckningsboken till den här platsen"
@@ -561,13 +564,13 @@
 		"Det går inte att uppdatera token: autentiseringsdata saknas. Om du startar synkroniseringen igen kan det lösa problemet."
 	],
 	"Cannot save %s \"%s\" because it is larger than the allowed limit (%s)": [
-		"Det går inte att spara %s \"%s\" eftersom den är större än den tillåtna gränsen (%s)"
+		"Det går inte att spara %s \"%s\" eftersom storleken överskrider den tillåtna gränsen (%s)"
 	],
 	"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for this account": [
-		"Det går inte att spara%s \"%s\" eftersom det skulle gå över den totala tillåtna storleken (%s) för det här kontot"
+		"Det går inte att spara %s \"%s\" eftersom kontots högsta tillåtna totalstorlek (%s) då skulle överskridas"
 	],
 	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
-		"Det går inte att dela krypterad anteckningsbok med mottagaren %s eftersom de inte har aktiverat helvägskryptering. De kan göra det från skärmen Inställningar > Kryptering."
+		"Det går inte att dela den krypterade anteckningsboken med %s eftersom mottagaren inte har aktiverat end-to-end-kryptering. Funktionen kan aktiveras under Inställningar > Kryptering."
 	],
 	"Case sensitive": [
 		"Skiftlägeskänslig"
@@ -615,7 +618,7 @@
 		"Kontrollerar... vänta."
 	],
 	"Chinese/Japanese/Korean characters": [
-		""
+		"Kinesiska/japanska/koreanska tecken"
 	],
 	"Choose an option": [
 		"Välj ett alternativ"
@@ -627,7 +630,7 @@
 		"Rensa"
 	],
 	"Clear alarm": [
-		"Ta bort larm"
+		"Rensa larm"
 	],
 	"Clear search": [
 		"Rensa sökning"
@@ -651,7 +654,7 @@
 		"Stäng"
 	],
 	"Close dialog": [
-		"Stäng dialogruta"
+		"Stäng dialogrutan"
 	],
 	"Close dropdown": [
 		"Stäng rullgardinsmenyn"
@@ -663,7 +666,7 @@
 		"Stäng programmet, radera sedan din profil i \"%s\" och starta programmet igen. Se till att du skapar en säkerhetskopia först genom att exportera alla dina anteckningar som JEX."
 	],
 	"Close Window": [
-		"Stäng fönster"
+		"Stäng fönstret"
 	],
 	"Closing session...": [
 		"Avslutar sessionen..."
@@ -684,10 +687,10 @@
 		"Kodvy"
 	],
 	"Collaborate on a notebook with others": [
-		"Samarbeta på en anteckningsbok med andra"
+		"Samarbeta med andra i en anteckningsbok"
 	],
 	"Collaborate on notebooks with others": [
-		"Samarbeta på anteckningsböcker tillsammans med andra"
+		"Samarbeta med andra i anteckningsböcker"
 	],
 	"Collapse all notebooks": [
 		"Fäll ihop anteckningsböcker"
@@ -711,7 +714,7 @@
 		"Kommando"
 	],
 	"COMMAND": [
-		""
+		"KOMMANDO"
 	],
 	"Command palette": [
 		"Kommandopalett"
@@ -720,7 +723,7 @@
 		"Kommandopalett..."
 	],
 	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
-		"Kommandon: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`."
+		"Kommandon: `add`, `remove`, `list`, `delete`, `accept`, `leave` och `reject`."
 	],
 	"Compact": [
 		"Kompakt"
@@ -735,16 +738,16 @@
 		"Slutförd"
 	],
 	"Completed decryption.": [
-		"Dekryptering färdig."
+		"Dekrypteringen är klar."
 	],
 	"Completed with warnings:\n%s": [
-		"Kompletterad med varningar:\n%s"
+		"Slutfört med varningar:\n%s"
 	],
 	"Completed: %s (%s)": [
 		"Slutfört: %s (%s)"
 	],
 	"completion date": [
-		"slutförande datum"
+		"slutförandedatum"
 	],
 	"Compress old changes": [
 		"Komprimera gamla ändringar"
@@ -752,11 +755,14 @@
 	"Configuration": [
 		"Konfiguration"
 	],
+	"Configured keyboard shortcuts:": [
+		"Konfigurerade tangentbordsgenvägar:"
+	],
 	"Configures the size of scrollbars used in the app.": [
 		"Konfigurerar storleken på rullningslister som används i appen."
 	],
 	"Confirm password cannot be empty": [
-		"Bekräfta lösenordet inte kan vara tomt"
+		"Fältet Bekräfta lösenord får inte vara tomt"
 	],
 	"Confirm password:": [
 		"Bekräfta lösenord:"
@@ -790,7 +796,7 @@
 		"Innehåll tillhandahålls av %s"
 	],
 	"Content provided by: %s": [
-		"Innehåll tillhandahållet av: %s"
+		"Innehåll från: %s"
 	],
 	"Continue": [
 		"Fortsätt"
@@ -801,6 +807,9 @@
 	"Convert it": [
 		"Konvertera den"
 	],
+	"Convert to Markdown": [
+		"Konvertera till Markdown"
+	],
 	"Convert to note": [
 		"Konvertera till anteckning"
 	],
@@ -808,13 +817,13 @@
 		"Konvertera till att-göra"
 	],
 	"Converting speech to text...": [
-		"Konverterar tal till text..."
+		"Omvandlar tal till text..."
 	],
 	"Copy": [
 		"Kopiera"
 	],
 	"Copy dev mode command to clipboard": [
-		"Kopiera kommandot för dev-läget till urklipp"
+		"Kopiera kommandot för utvecklarläge till urklipp"
 	],
 	"Copy external link": [
 		"Kopiera extern länk"
@@ -835,8 +844,8 @@
 		"Kopiera sökväg till urklipp"
 	],
 	"Copy Shareable Link": [
-		"Kopiera delbar länk",
-		"Kopiera delbara länkar"
+		"Kopiera delningslänk",
+		"Kopiera delningslänkar"
 	],
 	"Copy to clipboard": [
 		"Kopiera till urklipp"
@@ -851,10 +860,13 @@
 		"Kunde inte auktorisera programmet:\n\n%s\n\nFörsök igen."
 	],
 	"Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s": [
-		"Kunde inte ansluta till Joplin Server. Kontrollera konfigurationen i synkroniseringsinställningarna. Fullständigt fel var:\n\n%s"
+		"Det gick inte att ansluta till Joplin Server. Kontrollera synkroniseringsalternativen i inställningarna. Det fullständiga felet var:\n\n%s"
 	],
 	"Could not connect to plugin repository.": [
-		"Det gick inte att ansluta till insticksmodulsförrådet."
+		"Det gick inte att ansluta till katalogen över insticksmoduler."
+	],
+	"Could not convert notes to Markdown: %s": [
+		"Det gick inte att konvertera anteckningar till Markdown: %s"
 	],
 	"Could not export notes: %s": [
 		"Det gick inte att exportera anteckningar: %s"
@@ -869,7 +881,7 @@
 		"Det gick inte att byta profil: %s"
 	],
 	"Could not upgrade master key: %s": [
-		"Lyckades inte uppgradera huvudnyckel: %s"
+		"Det gick inte att uppgradera huvudnyckeln: %s"
 	],
 	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
 		"Det gick inte att verifiera delningsstatusen för den här anteckningsboken - avbryter. Försök igen när du är ansluten till internet."
@@ -884,10 +896,10 @@
 		"Skapa en ny anteckningsbok under en överordnad anteckningsbok."
 	],
 	"Create a notebook": [
-		"Skapar en anteckningsbok"
+		"Skapa en anteckningsbok"
 	],
 	"Create new notebook": [
-		"Skapar en ny anteckningsbok"
+		"Skapa en ny anteckningsbok"
 	],
 	"Create new profile...": [
 		"Skapa ny profil..."
@@ -905,7 +917,7 @@
 		"Skapad"
 	],
 	"created date": [
-		"skapat datum"
+		"skapandedatum"
 	],
 	"Created local items: %d.": [
 		"Skapade lokala objekt: %d."
@@ -959,13 +971,13 @@
 		"Ctrl-klicka för att öppna: %s"
 	],
 	"current match": [
-		"aktuell matchning"
+		"aktuell sökträff"
 	],
 	"Current password": [
-		"Aktuellt lösenord"
+		"Nuvarande lösenord"
 	],
 	"Current version is up-to-date.": [
-		"Nuvarande version är uppdaterad."
+		"Du använder den senaste versionen."
 	],
 	"custom order": [
 		"anpassad ordning"
@@ -974,10 +986,10 @@
 		"Anpassad ordning"
 	],
 	"Custom stylesheet for Joplin-wide app styles": [
-		"Anpassat formatmall för appformat för hela Joplin"
+		"Anpassad formatmall för hela Joplin-programmet"
 	],
 	"Custom stylesheet for rendered Markdown": [
-		"Anpassat formatmall för renderad Markdown"
+		"Anpassad formatmall för renderad Markdown"
 	],
 	"Custom TLS certificates": [
 		"Anpassade TLS-certifikat"
@@ -1060,6 +1072,9 @@
 	"Delete profile \"%s\"": [
 		"Ta bort profilen \"%s\""
 	],
+	"Delete profile \"%s\"?\n\nAll data, including notes, notebooks and tags will be permanently deleted.": [
+		"Ta bort profilen \"%s\"?\n\nAlla data, inklusive anteckningar, anteckningsböcker och taggar, kommer att raderas permanent."
+	],
 	"Delete row": [
 		"Ta bort rad"
 	],
@@ -1067,13 +1082,13 @@
 		"Ta bort valda anteckningar"
 	],
 	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
-		""
+		"Ta bort taggen \"%s\"?\n\nAlla anteckningar som är kopplade till denna tagg kommer att finnas kvar, men taggen kommer att tas bort från alla anteckningar."
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Ta bort anteckningsboken Inbox?\n\nOm du tar bort anteckningsboken Inbox kan all e-post som nyligen har skickats till den gå förlorad."
 	],
 	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
-		"Ta bort denna inbjudan? Mottagaren har inte längre tillgång till den delade anteckningsboken."
+		"Ta bort inbjudan? Mottagaren kommer inte längre att ha åtkomst till den delade anteckningsboken."
 	],
 	"Delete this profile?": [
 		"Ta bort denna profil?"
@@ -1097,13 +1112,13 @@
 		"Tar bort anteckningsboken utan att be om bekräftelse."
 	],
 	"Deletes the notes matching <note-pattern>.": [
-		"Tar bort noterna som matchar <note-pattern>."
+		"Tar bort anteckningarna som matchar <note-pattern>."
 	],
 	"Deletes the notes without asking for confirmation.": [
 		"Tar bort anteckningarna utan att be om bekräftelse."
 	],
 	"Deletion log": [
-		"Borttagningslogg"
+		"Raderingslogg"
 	],
 	"Deselect": [
 		"Avmarkera"
@@ -1160,22 +1175,22 @@
 		"Avfärda"
 	],
 	"Displays a geolocation URL for the note.": [
-		"Visar en geolokaliserings-URL för anteckningen."
+		"Visar en webbadress med anteckningens platsinformation."
 	],
 	"Displays only the first top <num> notes.": [
-		"Visar endast de första övre <num> anteckningarna."
+		"Visar endast de första <num> anteckningarna."
 	],
 	"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": [
-		"Visar endast objekt av den specifika typen/typerna. Kan vara `n` för anteckningar, `t` för att-göra eller `nt` för anteckningar och att-göra (t.ex. `-tt` skulle bara visa att-göra, medan `-tnt` skulle visa anteckningar och att-göra."
+		"Visar endast objekt av angiven typ. Använd `n` för anteckningar, `t` för att-göra eller `nt` för både anteckningar och att-göra (t.ex. visar `-tt` endast att-göra, medan `-tnt` visar både anteckningar och att-göra)."
 	],
 	"Displays summary about the notes and notebooks.": [
-		"Visar sammanfattning om anteckningarna och anteckningsböckerna."
+		"Visar en sammanfattning av anteckningarna och anteckningsböckerna."
 	],
 	"Displays the complete information about note.": [
-		"Visar fullständig information om anteckning."
+		"Visar all information om anteckningen."
 	],
 	"Displays the configured keyboard shortcuts.": [
-		""
+		"Visar de konfigurerade tangentbordsgenvägarna."
 	],
 	"Displays the given note.": [
 		"Visar den angivna anteckningen."
@@ -1199,7 +1214,7 @@
 		"Fråga inte om bekräftelse från användaren."
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
-		"Förlora inte lösenordet som för säkerhetsändamål kommer det att vara det *enda* sättet att dekryptera data! För att aktivera kryptering, ange ditt lösenord nedan."
+		"Tappa inte bort lösenordet. Av säkerhetsskäl är det *det enda* sättet att dekryptera dina data. Ange lösenordet nedan för att aktivera kryptering."
 	],
 	"Do you find the Joplin web app useful?": [
 		"Tycker du att Joplin-webbappen är användbar?"
@@ -1208,7 +1223,7 @@
 		"Dokumentskanner: Titelmall"
 	],
 	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
-		"Tillåt inte delningsmottagaren att skriva till den delade anteckningsboken. Gäller endast för underkommandot `add`."
+		"Tillåt inte mottagaren av delningen att skriva till den delade anteckningsboken. Gäller endast för underkommandot `add`."
 	],
 	"Don't show this message again": [
 		"Visa inte detta meddelande igen"
@@ -1232,10 +1247,10 @@
 		"Hämtad"
 	],
 	"Downloaded and decrypted": [
-		"Hämtade och dekrypterade"
+		"Hämtade och dekrypterade objekt"
 	],
 	"Downloaded and encrypted": [
-		"Hämtade och krypterade"
+		"Hämtade och krypterade objekt"
 	],
 	"Downloading": [
 		"Hämtar"
@@ -1292,7 +1307,7 @@
 		"Redigera som Markdown"
 	],
 	"Edit as Rich Text": [
-		"Redigera som Avancerad text"
+		"Redigera som formaterad text"
 	],
 	"Edit link": [
 		"Redigera länk"
@@ -1308,6 +1323,9 @@
 	],
 	"Edit profile configuration...": [
 		"Redigera profilkonfiguration..."
+	],
+	"Edit tag": [
+		"Redigera tagg"
 	],
 	"Editor": [
 		"Redigerare"
@@ -1328,7 +1346,7 @@
 		"Redigerarens maximala bredd"
 	],
 	"Editor monospace font family": [
-		"Redigerarens monospace teckensnittsfamilj"
+		"Redigerarens teckensnittsfamilj med fast bredd"
 	],
 	"Editor: %s": [
 		"Redigerare: %s"
@@ -1364,7 +1382,7 @@
 		"Aktivera"
 	],
 	"Enable ++insert++ syntax": [
-		"Aktivera ++ insert ++ syntax"
+		"Aktivera ++insert++-syntax"
 	],
 	"Enable ==mark== syntax": [
 		"Aktivera ==mark== syntax"
@@ -1374,6 +1392,9 @@
 	],
 	"Enable abbreviation syntax": [
 		"Aktivera förkortningssyntax"
+	],
+	"Enable ABC musical notation support": [
+		"Aktivera stöd för ABC-notation"
 	],
 	"Enable audio player": [
 		"Aktivera ljudspelare"
@@ -1388,7 +1409,7 @@
 		"Aktivera kryptering"
 	],
 	"Enable file:// URLs for images and videos": [
-		"Aktivera file:// URL:er för bilder och videor"
+		"Aktivera file://-webbadresser för bilder och videor"
 	],
 	"Enable footnotes": [
 		"Aktivera fotnoter"
@@ -1400,13 +1421,13 @@
 		"Aktivera handskriven transkription"
 	],
 	"Enable HTML-to-Markdown conversion banner": [
-		"Aktivera banderoll för HTML till Markdown-konvertering"
+		"Aktivera banderollen för konvertering från HTML till Markdown"
 	],
 	"Enable Linkify": [
 		"Aktivera Linkify"
 	],
 	"Enable markdown emoji": [
-		"Aktivera markdown-emoji"
+		"Aktivera Markdown-emojier"
 	],
 	"Enable math expressions": [
 		"Aktivera matematiska uttryck"
@@ -1415,7 +1436,7 @@
 		"Aktivera stöd för Mermaid-diagram"
 	],
 	"Enable multimarkdown table extension": [
-		"Aktivera tabellförlängning för multimarkdown"
+		"Aktivera tabelltillägget för MultiMarkdown"
 	],
 	"Enable note history": [
 		"Aktivera anteckningshistorik"
@@ -1442,7 +1463,7 @@
 		"Aktivera stavningskontroll i textredigeraren"
 	],
 	"Enable table of contents extension": [
-		"Aktivera innehållsförteckningen"
+		"Aktivera tillägget för innehållsförteckning"
 	],
 	"Enable the Markdown toolbar": [
 		"Aktivera Markdown-verktygsfältet"
@@ -1463,10 +1484,10 @@
 		"Aktiverad"
 	],
 	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
-		"Aktiverar Markdown-listfortsättning, automatisk stängning av HTML-taggar och andra märkspråksautokompletteringar."
+		"Aktiverar automatisk fortsättning av Markdown-listor, automatisk stängning av HTML-taggar och annan automatisk komplettering av märkspråk."
 	],
 	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
-		"Aktiverar Markdown-mönsterersättning i Avancerad textredigerare. Om du till exempel skriver **fet** skapas fet text när detta är aktiverat."
+		"Aktiverar ersättning av Markdown-mönster i redigeraren för formaterad text. När funktionen är aktiverad skapar exempelvis **fet** fetstil."
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"Aktivera kryptering betyder att *alla* dina anteckningar och bilagor kommer att synkroniseras på nytt och skickas krypterade till synkroniseringsmålet."
@@ -1493,7 +1514,7 @@
 		"Kryptering:"
 	],
 	"End-to-end encryption": [
-		"Helvägskryptering"
+		"End-to-end-kryptering"
 	],
 	"Ends voice typing": [
 		"Avslutar röstinmatning"
@@ -1619,7 +1640,7 @@
 		"Felsäkert läge: Synkroniseringen avbröts för att förhindra dataförlust, eftersom synkroniseringsmålet är tomt eller skadat. För att åsidosätta detta beteende, inaktivera felsäkert läge i synkroniseringsinställningarna."
 	],
 	"Failed to connect to your account. Please try again.": [
-		"Det gick inte att ansluta till ditt konto. Vänligen försök igen."
+		"Det gick inte att ansluta till ditt konto. Försök igen."
 	],
 	"Fatal error:": [
 		"Allvarligt fel:"
@@ -1685,13 +1706,13 @@
 		"Till exempel \"%s\""
 	],
 	"For information on how to customise the shortcuts please visit %s": [
-		"För information om hur du anpassar snabbkommandon, besök %s"
+		"Information om hur du anpassar snabbkommandona finns på %s."
 	],
 	"For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:": [
-		"För mer information om helvägskryptering (E2EE) och råd om hur du aktiverar det finns i dokumentationen:"
+		"Mer information om end-to-end-kryptering (E2EE) och hur den aktiveras finns i dokumentationen:"
 	],
 	"For the list of keyboard shortcuts and config options, type `help keymap`": [
-		"För listan över snabbkommandon och konfigurationsinställningar, skriv `help keymap`"
+		"Skriv `help keymap` för att visa snabbkommandon och konfigurationsalternativ."
 	],
 	"Force path style": [
 		"Tvinga sökvägsstil"
@@ -1752,16 +1773,16 @@
 		"Gå till rad"
 	],
 	"Go to source URL": [
-		"Gå till källans URL"
+		"Gå till källwebbadressen"
 	],
 	"Goto Anything...": [
-		"Gå till varsomhelst…"
+		"Gå till varsomhelst..."
 	],
 	"Grant authorisation": [
 		"Bevilja auktorisation"
 	],
 	"Have you authorised the application login in the above URL?": [
-		"Har du auktoriserat applikationsinloggningen i ovanstående URL?"
+		"Har du godkänt programinloggningen via webbadressen ovan?"
 	],
 	"Header %d": [
 		"Rubrik %d"
@@ -1836,7 +1857,7 @@
 		"Om en bildbilaga är på en egen rad och följs av en tom rad kommer den att återges precis under sin Markdown-källa."
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
-		"Om du redan har auktoriserat, vänta tills applikationen synkroniseras med Joplin Cloud."
+		"Om du redan har auktoriserat, vänta tills programmet synkroniseras med Joplin Cloud."
 	],
 	"Ignore": [
 		"Ignorera"
@@ -1868,6 +1889,9 @@
 	"Import or export your data": [
 		"Importera eller exportera dina data"
 	],
+	"Import...": [
+		"Importera..."
+	],
 	"Imported successfully!": [
 		"Importen lyckades!"
 	],
@@ -1887,13 +1911,13 @@
 		"I läget \"Manuellt\" hämtas bilagorna bara när du klickar på dem. I \"Automatiskt\" hämtas de när du öppnar anteckningen. I \"Alltid\" hämtas alla bilagor oavsett om du öppnar anteckningen eller inte."
 	],
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
-		"I ett kommando kan en anteckning eller anteckningsbok hänvisas till med titeln eller ID eller med snabbkommandona `$n` eller `$b` för respektive den för närvarande valda anteckningen eller anteckningsboken. `$c` kan användas för att referera till det för närvarande valda objektet."
+		"I alla kommandon kan du hänvisa till en anteckning eller anteckningsbok med dess titel eller ID. Du kan också använda kortformerna `$n` och `$b` för den valda anteckningen respektive anteckningsboken. `$c` avser det valda objektet."
 	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
-		"För att göra detta måste all din datauppsättning vara krypterad och synkroniserad, det är bäst köra processen över natten.\n\nFör att starta processen, följ dessa instruktioner:\n\n1. Synkronisera alla dina enheter.\\n\n2. Klicka \\\"%s\\\"\n3. Låt den köra färdigt. Medan den kör, undvik att göra ändringar i några anteckningar på dina andra enheter för att undvika konflikter.\n4. När synkroniseringen är färdig på denna enhet, synkronisera alla dina andra enheter och låt processen köra färdigt.\n\nViktigt: du behöver bara köra denna process EN gång på en enhet."
+		"För att göra det måste hela din datamängd krypteras och synkroniseras, så det är bäst att köra den över natten.\n\nFör att börja, följ dessa instruktioner:\n\n1. Synkronisera alla dina enheter.\n2. Klicka på \"%s\".\n3. Låt den köras tills den är klar. Undvik att ändra några anteckningar på dina andra enheter medan den körs, för att undvika konflikter.\n4. När synkroniseringen är klar på den här enheten, synkronisera alla dina andra enheter och låt den köras tills den är klar.\n\nViktigt: du behöver bara köra detta EN GÅNG på en enhet."
 	],
 	"In order to synchronise, please upgrade your application to version %s+": [
-		"För att synkronisera, uppgradera din applikation till version %s+"
+		"För att synkronisera, uppgradera programmet till version %s+"
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"För att kunna använda filsystemssynkronisering krävs ditt tillstånd att skriva till extern lagring."
@@ -1917,7 +1941,7 @@
 		"Ofullständig"
 	],
 	"Incomplete to-do": [
-		"Ofullständig att-göra"
+		"Ej slutförd att-göra"
 	],
 	"Increase indent level": [
 		"Öka indragsnivå"
@@ -2004,7 +2028,7 @@
 		"Objekt med fel: %s"
 	],
 	"Join us on %s": [
-		"Följ oss ​​på %s"
+		"Följ oss på %s"
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		"Joplin kan synkronisera dina anteckningar med olika leverantörer. Välj en från listan nedan."
@@ -2013,7 +2037,7 @@
 		"Joplin Cloud"
 	],
 	"Joplin Cloud Login": [
-		"Joplin Cloud Logga in"
+		"Inloggning på Joplin Cloud"
 	],
 	"Joplin Desktop": [
 		"Joplin Desktop"
@@ -2073,7 +2097,7 @@
 		"Joplin-webbplats"
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
-		"Joplins egen synkroniseringstjänst. Ger också åtkomst till Joplin-specifika funktioner som att publicera anteckningar eller samarbeta med anteckningsböcker."
+		"Joplins egen synkroniseringstjänst. Den ger också tillgång till Joplin-specifika funktioner, exempelvis publicering av anteckningar och samarbete med andra i anteckningsböcker."
 	],
 	"Keep note history for": [
 		"Behåll anteckningshistorik under"
@@ -2091,10 +2115,10 @@
 		"Tangentbordsgenvägar"
 	],
 	"Keychain Supported: %s": [
-		"Nyckelring som stöds: %s"
+		"Nyckelring stöds: %s"
 	],
 	"KEYS": [
-		""
+		"TANGENTER"
 	],
 	"Keys that need upgrading": [
 		"Nycklar som behöver uppgradering"
@@ -2201,7 +2225,7 @@
 		"Logga in med din webbläsare"
 	],
 	"Login to Joplin Cloud.": [
-		"Logga in till Joplin Cloud."
+		"Loggar in på Joplin Cloud."
 	],
 	"Login with Dropbox": [
 		"Logga in med Dropbox"
@@ -2243,10 +2267,10 @@
 		"Hantera dina insticksmoduler"
 	],
 	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
-		""
+		"Hantera dina profiler. Du kan byta namn på eller ta bort profiler. Den aktiva profilen kan inte tas bort."
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
-		"Hanterar E2EE-konfigurationen. Kommandona är `enable`,` disable`, `decrypt`,` status`, `decrypt-file` och `target-status`."
+		"Hanterar E2EE-konfigurationen. Kommandona är `enable`, `disable`, `decrypt`, `status`, `decrypt-file` och `target-status`."
 	],
 	"Manual": [
 		"Manuellt"
@@ -2270,10 +2294,10 @@
 		"Markdown-redigerare: Rendera märkkod i redigeraren"
 	],
 	"Marks a to-do as done.": [
-		"Markerar en att-göra som gjord."
+		"Markerar en att-göra som slutförd."
 	],
 	"Marks a to-do as non-completed.": [
-		"Markerar en att-göra som inte fullständig."
+		"Markerar en att-göra som ej slutförd."
 	],
 	"Markup": [
 		"Märkspråk"
@@ -2351,6 +2375,9 @@
 		"Flytta %d anteckning till anteckningsboken \"%s\"?",
 		"Flytta %d anteckningar till anteckningsboken \"%s\"?"
 	],
+	"Move %d notebooks to the trash?\n\nAll notes and sub-notebooks within these notebooks will also be moved to the trash.": [
+		"Flytta %d anteckningsböcker till papperskorgen?\n\nAlla anteckningar och underliggande anteckningsböcker i dessa anteckningsböcker flyttas också till papperskorgen."
+	],
 	"Move down": [
 		"Flytta ner"
 	],
@@ -2376,7 +2403,7 @@
 		"Flytta upp"
 	],
 	"Moves the given <item> to [notebook]": [
-		"Flyttar det givna <item> till [notebook]"
+		"Flyttar <item> till [notebook]"
 	],
 	"n": [
 		"n"
@@ -2502,7 +2529,7 @@
 		"Inga uppdateringar tillgängliga"
 	],
 	"No URL for SAML authentication set.": [
-		""
+		"Ingen webbadress för SAML-autentisering har angetts."
 	],
 	"None": [
 		"Ingen"
@@ -2544,7 +2571,7 @@
 		"Anteckningsbilagor..."
 	],
 	"Note body": [
-		"Texten"
+		"Anteckningstext"
 	],
 	"Note does not exist: \"%s\". Create it?": [
 		"Anteckning finns inte: \"%s\". Skapa den?"
@@ -2565,7 +2592,7 @@
 		"Anteckningshistoriken har raderats."
 	],
 	"Note is not a to-do: \"%s\"": [
-		"Anteckning är inte en att-göra: \"%s\""
+		"Anteckningen är inte en att-göra: \"%s\""
 	],
 	"Note list": [
 		"Anteckningslista"
@@ -2586,7 +2613,7 @@
 		"Anteckningens egenskaper"
 	],
 	"Note title": [
-		"Rubriken"
+		"Anteckningstitel"
 	],
 	"Note viewer": [
 		"Anteckningsvisare"
@@ -2646,7 +2673,7 @@
 		"OK"
 	],
 	"OLED Dark": [
-		"OLED mörkt"
+		"OLED Dark"
 	],
 	"On %s: %s": [
 		"På %s: %s"
@@ -2709,13 +2736,13 @@
 		"Öppna inställningar"
 	],
 	"Open Source": [
-		"Öppna källa"
+		"Öppen källkod"
 	],
 	"Open Sync Wizard...": [
 		"Öppna synkroniseringsguiden..."
 	],
 	"Open-source licences": [
-		""
+		"Licenser för öppen källkod"
 	],
 	"Open...": [
 		"Öppna..."
@@ -2739,7 +2766,7 @@
 		"Inställningar"
 	],
 	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
-		""
+		"Alternativ som bör användas vid rendering av ABC-kod. Det måste vara ett JSON5-objekt. Den fullständiga listan över alternativ finns på: %s"
 	],
 	"Ordered list": [
 		"Numrerad lista"
@@ -2824,7 +2851,7 @@
 		"Observera att om det är en stor anteckningsbok kan det ta några minuter för alla anteckningar att dyka upp på mottagarens enhet."
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
-		"Öppna följande webbadress i webbläsaren för att verifiera programmet. Programmet skapar en katalog i \"Apps/Joplin\" och kommer endast att läsa och skriva filer i den här katalogen. Det kommer inte att ha tillgång till några filer utanför den här katalogen eller till någon annan personlig information. Ingen data kommer att delas med tredje part."
+		"Öppna följande webbadress i webbläsaren för att autentisera programmet. Programmet skapar en katalog i \"Apps/Joplin\" och läser och skriver endast filer i den katalogen. Det får inte åtkomst till filer utanför katalogen eller till andra personuppgifter. Inga data delas med tredje part."
 	],
 	"Please provide the recipient email": [
 		"Ange mottagarens e-postadress"
@@ -2854,7 +2881,7 @@
 		"Vänta tills alla bilagor hämtas och dekrypteras. Du kan också växla till %s för att redigera anteckningen."
 	],
 	"Please wait while we load your organisation sign-in page...": [
-		"Vänligen vänta medan vi laddar din organisations inloggningssida..."
+		"Vänta medan vi laddar din organisations inloggningssida..."
 	],
 	"Please wait...": [
 		"Vänta..."
@@ -2866,7 +2893,7 @@
 		"Insticksmodulspaneler"
 	],
 	"Plugin repository failed to load": [
-		"Det gick inte att läsa in insticksmodulsförrådet"
+		"Det gick inte att läsa in katalogen över insticksmoduler"
 	],
 	"Plugin search": [
 		"Insticksmodulssökning"
@@ -2878,7 +2905,7 @@
 		"Insticksmodulsverktyg"
 	],
 	"Plugin WebView debugging": [
-		"Plugin WebView-felsökning"
+		"WebView-felsökning för insticksmoduler"
 	],
 	"Plugins": [
 		"Insticksmoduler"
@@ -2911,7 +2938,7 @@
 		"Föredraget ljust tema"
 	],
 	"Preserve colours when pasting text in Rich Text Editor": [
-		"Bevara färger när du klistrar in text i Avancerad textredigerare"
+		"Bevara färger när text klistras in i redigeraren för formaterad text"
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Tryck Ctrl+D eller skriv \"exit\" för att avsluta programmet"
@@ -2920,7 +2947,7 @@
 		"Tryck på genvägen"
 	],
 	"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the shortcut.": [
-		"Tryck på genvägen och tryck sedan på ENTER. Eller tryck på BACKSPACE för att rensa genvägen."
+		"Tryck på genvägen och sedan på Enter. Tryck på Backsteg för att rensa genvägen."
 	],
 	"Press to set the decryption password.": [
 		"Tryck för att ställa in dekrypteringslösenordet."
@@ -2959,7 +2986,7 @@
 		"Bearbeta raderingar av användare"
 	],
 	"Processing": [
-		"Bearbetning"
+		"Bearbetar"
 	],
 	"Processing photo...": [
 		"Bearbetar foto..."
@@ -2969,6 +2996,9 @@
 	],
 	"Profile name": [
 		"Profilnamn"
+	],
+	"Profile name cannot be empty": [
+		"Profilnamnet får inte vara tomt"
 	],
 	"Profile name:": [
 		"Profilnamn:"
@@ -3102,6 +3132,9 @@
 	"Remove": [
 		"Ta bort"
 	],
+	"Remove %d tags from all notes? This cannot be undone.": [
+		"Ta bort %d taggar från alla anteckningar? Detta kan inte ångras."
+	],
 	"Remove %s": [
 		"Ta bort %s"
 	],
@@ -3151,7 +3184,7 @@
 		"Ersätt alla"
 	],
 	"Replace with...": [
-		"Ersätt med…"
+		"Ersätt med..."
 	],
 	"Replace: ": [
 		"Ersätt: "
@@ -3178,7 +3211,7 @@
 		"Rapporter"
 	],
 	"Reset application layout": [
-		"Återställ applikationslayout"
+		"Återställ programmets layout"
 	],
 	"Reset master password": [
 		"Återställ huvudlösenord"
@@ -3226,10 +3259,10 @@
 		"Försök igen"
 	],
 	"Retry All": [
-		"Försök igen alla"
+		"Försök igen med alla"
 	],
 	"Reveal file in folder": [
-		"Visa filen i mappen"
+		"Visa fil i mapp"
 	],
 	"Reverse sort order": [
 		"Omvänd sorteringsordning"
@@ -3244,10 +3277,10 @@
 		"Revision: %s (%s)"
 	],
 	"Rich Text": [
-		"Avancerad text"
+		"Formaterad text"
 	],
 	"Rich Text editor. Press Escape then Tab to escape focus.": [
-		"Avancerad textredigerare. Tryck på ESC och sedan på Tab för att undvika fokus."
+		"Redigerare för formaterad text. Tryck på Esc och sedan på Tabb för att flytta fokus från redigeraren."
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"Kör kommandona i textfilen. Det ska finnas ett kommando per rad."
@@ -3259,10 +3292,10 @@
 		"S3 åtkomstnyckel"
 	],
 	"S3 bucket": [
-		"S3 bucket"
+		"S3-bucket"
 	],
 	"S3 region": [
-		"S3 region"
+		"S3-region"
 	],
 	"S3 secret key": [
 		"S3 hemlig nyckel"
@@ -3340,7 +3373,7 @@
 		"Sök:"
 	],
 	"Searches for the given <pattern> in all the notes.": [
-		"Söker efter det givna <pattern> i alla anteckningarna."
+		"Söker efter <pattern> i alla anteckningar."
 	],
 	"See changelog": [
 		"Se ändringslogg"
@@ -3373,7 +3406,7 @@
 		"Välj överordnad anteckningsbok"
 	],
 	"Select the type of file to be imported:": [
-		""
+		"Välj vilken typ av fil som ska importeras:"
 	],
 	"Selected: %s": [
 		"Markerad: %s"
@@ -3406,13 +3439,13 @@
 		"Ställ in larm:"
 	],
 	"Set it to 0 to make it take the complete available space. Recommended width is 600.": [
-		"Ställ in det till 0 för att få det att ta det kompletta lediga utrymmet. Rekommenderad bredd är 600."
+		"Sätt den till 0 för att den ska ta upp hela det tillgängliga utrymmet. Rekommenderad bredd är 600."
 	],
 	"Set the password": [
-		"Ställ in lösenord"
+		"Välj lösenord"
 	],
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
-		"Ställer in egenskapen <name> av den givna <note> till det angivna [value]. Möjliga egenskaper är:\n\n%s"
+		"Anger egenskapen <name> för <note> till [value]. Möjliga egenskaper är:\n\n%s"
 	],
 	"Settings": [
 		"Inställningar"
@@ -3451,7 +3484,7 @@
 		"Delar anteckningsboken..."
 	],
 	"Shortcuts are not available in CLI mode.": [
-		"Snabbkommandon är inte tillgängliga i läge för kommandotolk."
+		"Snabbkommandon är inte tillgängliga i CLI-läge."
 	],
 	"Show advanced": [
 		"Visa avancerade"
@@ -3472,7 +3505,7 @@
 		"Visa inaktiverade nycklar"
 	],
 	"Show monospace fonts only.": [
-		"Visa endast monospace-teckensnitt."
+		"Visa endast teckensnitt med fast bredd."
 	],
 	"Show note counts": [
 		"Visa anteckningsantal"
@@ -3514,7 +3547,7 @@
 		"Storlek"
 	],
 	"Skip this version": [
-		"Hoppa över denna versionen"
+		"Hoppa över den här versionen"
 	],
 	"Skipped items: %d (use --retry-failed-items to retry decrypting them)": [
 		"Överhoppade objekt: %d (använd --retry-failed-items för att försöka dekryptera dem igen)"
@@ -3526,10 +3559,10 @@
 		"Liten"
 	],
 	"Solarised Dark": [
-		"Solariserad mörkt"
+		"Solarised Dark"
 	],
 	"Solarised Light": [
-		"Solariserad ljust"
+		"Solarised Light"
 	],
 	"Some attachments could not be downloaded. Please try to download them again.": [
 		"Vissa bilagor kunde inte hämtas. Försök att hämta dem igen."
@@ -3580,10 +3613,10 @@
 		"Källa: "
 	],
 	"SPACE": [
-		""
+		"BLANKSTEG"
 	],
 	"Spacer": [
-		"Spacer"
+		"Mellanrum"
 	],
 	"Specify the port that should be used by the API server. If not set, a default will be used.": [
 		"Ange vilken port som ska användas av API-servern. Om ingen port anges används standardinställningen."
@@ -3592,7 +3625,7 @@
 		"Stavningskontroll"
 	],
 	"Split View": [
-		"Dela vy"
+		"Delad vy"
 	],
 	"Start application minimised in the tray icon": [
 		"Starta programmet minimerat i systemfältsikonen"
@@ -3601,7 +3634,7 @@
 		"Starta inspelning"
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
-		"Starta, stoppa eller kontrollera API-server. För att ange vilken port den ska köra på, ställ in api.port config variabeln. Kommandon är (%s)."
+		"Startar, stoppar eller kontrollerar API-servern. Ange port genom att ställa in konfigurationsvariabeln api.port. Kommandona är (%s)."
 	],
 	"Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.": [
 		"Startar dekryptering... Vänta eftersom det kan ta flera minuter beroende på hur mycket som ska dekrypteras."
@@ -3610,7 +3643,7 @@
 		"Startar synkronisering..."
 	],
 	"Starting to edit note. Close the editor to get back to the prompt.": [
-		"Börjar redigera anteckning. Stäng redigeraren för att komma tillbaka till prompten."
+		"Anteckningen redigeras. Stäng redigeraren för att återgå till kommandoraden."
 	],
 	"Statistics": [
 		"Statistik"
@@ -3679,7 +3712,7 @@
 		"Växla rad uppåt"
 	],
 	"Switch between note and to-do type": [
-		"Växla mellan antecknings- och att-göra-typ"
+		"Växla mellan anteckning och att-göra"
 	],
 	"Switch profile": [
 		"Byt profil"
@@ -3706,7 +3739,7 @@
 		"Byt till den nya redigeraren"
 	],
 	"Switch to to-do type": [
-		"Byt till att-göra-typ"
+		"Byt till att-göra"
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Växlar till [notebook] - alla ytterligare åtgärder sker inom denna anteckningsbok."
@@ -3780,8 +3813,14 @@
 	"Tab moves focus": [
 		"Tabb flyttar fokus"
 	],
+	"Table": [
+		"Tabell"
+	],
 	"Tabloid": [
 		"Tabloid"
+	],
+	"Tag: %s": [
+		"Tagg: %s"
 	],
 	"Tagged: %d.": [
 		"Taggad: %d."
@@ -3838,25 +3877,25 @@
 		"Bilagorna kommer inte längre att bevakas när du byter till en annan anteckning."
 	],
 	"The command \"%s\" is only available in GUI mode": [
-		"Kommandot \"%s\" är endast tillgängligt i läge för grafiskt gränssnitt"
+		"Kommandot \"%s\" är endast tillgängligt i GUI-läge"
 	],
 	"The default admin password is insecure and has not been changed! [Change it now](%s)": [
-		"Standardadministratörslösenordet är osäkert och har inte ändrats! [Ändra det nu](%s)"
+		"Administratörens standardlösenord är osäkert och har inte ändrats! [Ändra det nu](%s)"
 	],
 	"The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.": [
-		"Standard krypteringsmetod har ändrats till en säkrare och det är rekommenderat att du tillämpar den på dina data."
+		"Standardmetoden för kryptering har ändrats till en säkrare metod. Du rekommenderas att använda den för dina data."
 	],
 	"The default encryption method has been changed, you should re-encrypt your data.": [
-		"Standardkrypteringsmetoden har ändrats, du bör omkryptera dina data."
+		"Standardmetoden för kryptering har ändrats. Du bör kryptera om dina data."
 	],
 	"The default profile cannot be deleted": [
 		"Standardprofilen kan inte tas bort"
 	],
 	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
-		"Redigeringskommandot (kan inkludera argument) som används för att öppna en anteckning. Om inget tillhandahålls försöker det automatiskt identifiera standardredigeraren."
+		"Redigeringskommandot (eventuellt med argument) som används för att öppna en anteckning. Om inget anges försöker Joplin identifiera standardredigeraren automatiskt."
 	],
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
-		"Faktoregenskapen anger hur objektet kommer att växa eller krympa för att passa det tillgängliga utrymmet i sin behållare i förhållande till de andra artiklarna. Således tar ett objekt med faktorn 2 dubbelt så mycket utrymme som ett objekt med faktorn 1. Starta om appen för att se förändringar."
+		"Egenskapen faktor anger hur objektet växer eller krymper för att passa det tillgängliga utrymmet i sin behållare i förhållande till övriga objekt. Ett objekt med faktorn 2 tar därför dubbelt så mycket utrymme som ett objekt med faktorn 1. Starta om programmet för att se ändringarna."
 	],
 	"The following attachment matches your search query:": [
 		"Följande bilaga matchar din sökfråga:",
@@ -3869,7 +3908,7 @@
 		"Följande nycklar använder en föråldrad krypteringsalgoritm och det rekommenderas att uppgradera dem. Den uppgraderade nyckeln kommer fortfarande att kunna dekryptera och kryptera dina data som vanligt."
 	],
 	"The following plugins may not support the current markdown editor:": [
-		"Följande insticksmoduler kanske inte stöder den nuvarande markdown-redigeraren:"
+		"Följande insticksmoduler kanske inte stöder den aktuella Markdown-redigeraren:"
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Joplin-teamet har granskat denna insticksmodul och den uppfyller våra standarder för säkerhet och prestanda."
@@ -3881,13 +3920,17 @@
 		"Den gamla Markdown-redigeraren verkar ha kraschat på grund av en inkompatibilitet med en insticksmodul. Vi rekommenderar att du använder den nya redigeraren."
 	],
 	"The master key has been upgraded successfully!": [
-		"Huvudnyckeln har framgångsrikt uppgraderats!"
+		"Huvudnyckeln har uppgraderats."
 	],
 	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"Huvudnycklarna med dessa ID används för att kryptera några av dina objekt, men programmet har inte tillgång till dem. Det är troligt att de så småningom kommer att hämtas via synkronisering."
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Den här anteckningen \"%s\" har framgångsrikt återställts till anteckningsboken \"%s\"."
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"Anteckningen har konverterats till Markdown och den ursprungliga anteckningen har flyttats till papperskorgen",
+		"Anteckningarna har konverterats till Markdown och de ursprungliga anteckningarna har flyttats till papperskorgen"
 	],
 	"The note was successfully moved to the trash.": [
 		"Anteckningen har flyttats till papperskorgen.",
@@ -3903,7 +3946,7 @@
 		"Anteckningarna har importerats: %s"
 	],
 	"The possible commands are:": [
-		"De möjliga kommandona är:"
+		"Tillgängliga kommandon:"
 	],
 	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
 		"Det gick inte att ta bort mottagaren från listan. Försök igen.\n\nFelet var: \"%s\""
@@ -3915,7 +3958,7 @@
 		"Synkroniseringsmålet måste uppgraderas innan Joplin kan synkronisera. Åtgärden kan ta några minuter att slutföra och appen måste startas om. Klicka på länken för att fortsätta."
 	],
 	"The sync target needs to be upgraded. Press this banner to proceed.": [
-		"Synkroniseringsmålet måste uppgraderas. Tryck på den här bannern för att fortsätta."
+		"Synkroniseringsmålet måste uppgraderas. Tryck på banderollen för att fortsätta."
 	],
 	"The synchronisation password is missing.": [
 		"Synkroniseringslösenordet saknas."
@@ -3927,7 +3970,7 @@
 		"Målet att synkronisera till. Varje synkroniseringsmål kan ha ytterligare parametrar som heter `sync.NUM.NAME` (alla dokumenterade nedan)."
 	],
 	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
-		"Webbklienten stöder inte accepterande av krypterade delade anteckningsböcker. Byt till skrivbords- eller mobilappen innan du accepterar delningen.\n\nFel: \"%s\""
+		"Webbklienten kan inte ta emot krypterade delade anteckningsböcker. Byt till skrivbords- eller mobilappen innan du accepterar delningen.\n\nFel: \"%s\""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Web Clipper behöver din behörighet för att få åtkomst till dina data."
@@ -4035,7 +4078,7 @@
 		"Denna insticksmodul stöder inte %s."
 	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
-		"Denna Avancerade textredigerare har ett antal begränsningar och det rekommenderas att vara medveten om dem innan du använder den."
+		"Redigeraren för formaterad text har vissa begränsningar. Läs om dem innan du börjar använda redigeraren."
 	],
 	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
 		"Denna tjänst tillåter webbläsarens tillägg att kommunicera med Joplin. När du aktiverar den kan din brandvägg be dig ge tillstånd till Joplin att lyssna på en viss port."
@@ -4068,7 +4111,7 @@
 		"För att tillåta Joplin att synkronisera med Dropbox, följ stegen nedan:"
 	],
 	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
-		"För att tillåta Joplin att synkronisera med Joplin Cloud, vänligen logga in med denna URL:"
+		"För att tillåta Joplin att synkronisera med Joplin Cloud, logga in med denna URL:"
 	],
 	"To allow Joplin to synchronise with your account, please follow these steps:": [
 		"Följ dessa steg för att låta Joplin synkronisera med ditt konto:"
@@ -4086,10 +4129,10 @@
 		"För att ta bort: %d"
 	],
 	"To enter command line mode, press \":\"": [
-		"För att komma in i kommandoradsläget, tryck på \":\""
+		"Tryck på \":\" för att öppna kommandoradsläget."
 	],
 	"To exit command line mode, press ESCAPE": [
-		"För att avsluta kommandoradsläge, tryck på ESC"
+		"Tryck på Esc för att avsluta kommandoradsläget."
 	],
 	"To manually sort the notes, the sort order must be changed to \"%s\" in the menu \"%s\" > \"%s\"": [
 		"För att manuellt sortera anteckningarna måste sorteringsordningen ändras till \"%s\" i menyn \"%s\"> \"%s\""
@@ -4155,7 +4198,7 @@
 		"Växla egen sorteringsordning"
 	],
 	"Toggle plugin editor": [
-		"Växla tilläggsredigeraren"
+		"Växla insticksmodulredigeraren"
 	],
 	"Toggle safe mode": [
 		"Växla säkert läge"
@@ -4191,7 +4234,7 @@
 		"Prova det nu"
 	],
 	"TYPE": [
-		""
+		"TYP"
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Skriv `help [command]` för mer information om ett kommando; eller skriv `help all` för fullständig användningsinformation."
@@ -4200,7 +4243,7 @@
 		"Skriv `joplin help` för användningsinformation."
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
-		"Skriv titeln på en anteckning för att hoppa till den. Eller skriv # följt av namnet på en tagg eller@ följt av namnet på en anteckningsbok. Eller skriv : för att söka efter kommandon."
+		"Skriv en anteckningstitel eller en del av innehållet för att gå till anteckningen. Skriv # följt av ett taggnamn, @ följt av ett anteckningsboksnamn eller : för att söka efter kommandon."
 	],
 	"Type a note title to search for it.": [
 		"Skriv en anteckningsrubrik för att söka efter den."
@@ -4221,13 +4264,13 @@
 		"Omarkerad"
 	],
 	"Uncompleted to-dos on top": [
-		"Inte slutförda att-göra högst upp"
+		"Ej slutförda att-göra högst upp"
 	],
 	"Undo": [
 		"Ångra"
 	],
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
-		"Avinstallera och installera om applikationen. Se till att du skapar en säkerhetskopia först genom att exportera alla dina anteckningar som JEX från skrivbordsapplikationen."
+		"Avinstallera och installera om programmet. Se till att du skapar en säkerhetskopia först genom att exportera alla dina anteckningar som JEX från skrivbordsapplikationen."
 	],
 	"Unknown": [
 		"Okänd"
@@ -4332,10 +4375,10 @@
 		"Användning: %s"
 	],
 	"Use biometrics to secure access to the app": [
-		"Använd biometri för att säkra åtkomsten till appen"
+		"Använd biometrisk autentisering för att skydda åtkomsten till programmet"
 	],
 	"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": [
-		"Använd långt listformat. Format är ID, NOTE_COUNT (för anteckningsbok), DATE, TODO_CHECKED (för att-göra), TITLE"
+		"Använd långt listformat. Formatet är ID, NOTE_COUNT (för anteckningsbok), DATE, TODO_CHECKED (för att-göra), TITLE"
 	],
 	"Use spell checker": [
 		"Använd stavningskontroll"
@@ -4350,16 +4393,16 @@
 		"Använd den äldre Markdown-redigeraren"
 	],
 	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
-		"Använd detta för att återuppbygga sökindex om det finns sökproblem. Det kan ta lång tid beroende på antal anteckningar."
+		"Använd detta för att återuppbygga sökindex om det är problem med sökningen. Det kan ta lång tid beroende på antal anteckningar."
 	],
 	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
-		"Använd din biometri för att säkra åtkomsten till din applikation. Du kan alltid ställa in det senare i Inställningar."
+		"Använd biometrisk autentisering för att skydda åtkomsten till programmet. Du kan konfigurera den senare under Inställningar."
 	],
 	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
-		"Används för mest text i markdown-redigeraren. Om det inte hittas används ett generiskt proportionellt (variabelt bredd) teckensnitt."
+		"Används för huvuddelen av texten i Markdown-redigeraren. Om teckensnittet inte hittas används ett generiskt proportionellt teckensnitt (med variabel bredd)."
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
-		"Används där ett teckensnitt med fast bredd behövs för att lägga ut texten läsbart (t.ex. tabeller, kryssrutor, kod). Om det inte hittas används ett generiskt teckensnitt med monospace (fast bredd)."
+		"Används när ett teckensnitt med fast bredd behövs för tydlig layout, till exempel i tabeller, kryssrutor och kod. Om teckensnittet inte hittas används ett generiskt teckensnitt med fast bredd."
 	],
 	"Useful": [
 		"Användbar"
@@ -4392,7 +4435,7 @@
 		"Visare"
 	],
 	"Viewer and Rich Text Editor font family": [
-		"Teckensnitt för Viewer och Avancerad textredigerare"
+		"Teckensnittsfamilj för visaren och redigeraren för formaterad text"
 	],
 	"Viewer font size": [
 		"Teckenstorlek för visningsprogram"
@@ -4422,7 +4465,7 @@
 		"Varning"
 	],
 	"Warning: not all resources shown for performance reasons (limit: %s).": [
-		"Varning: alla resurser visas inte för förbättrad prestanda (limit: %s)."
+		"Varning: Av prestandaskäl visas inte alla resurser (gräns: %s)."
 	],
 	"We have a system for reporting and removing problematic plugins.": [
 		"Vi har ett system för att rapportera och ta bort problematiska insticksmoduler."
@@ -4455,7 +4498,7 @@
 		"WebView-version: %s"
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
-		"Välkommen till Joplin!\n\nSkriv `:help shortcuts` för listan över snabbkommandon eller bara`:help` för användningsinformation.\n\nTill exempel, för att skapa en anteckningsbok, tryck på `mb`; För att skapa en anteckning, tryck på `mn`."
+		"Välkommen till Joplin!\n\nSkriv `:help shortcuts` för att visa snabbkommandona eller bara `:help` för användningsinformation.\n\nTryck exempelvis på `mb` för att skapa en anteckningsbok och på `mn` för att skapa en anteckning."
 	],
 	"Welcome!": [
 		"Välkommen!"
@@ -4467,13 +4510,13 @@
 		"När du skapar en ny anteckning:"
 	],
 	"When creating a new to-do:": [
-		"När du skapar en ny att-göra:"
+		"När en ny att-göra skapas:"
 	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
 		"När detta är aktiverat begärs att bilderna i anteckningen transkriberas med en serverbaserad transkriberingstjänst av högre kvalitet. Kräver synkronisering med en kopia från skrivbordsappen."
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
-		"När det är aktiverat kommer programmet att skanna dina bilagor och extrahera texten från den. Detta gör att du kan söka efter text i dessa bilagor."
+		"När det är aktiverat kommer programmet att skanna dina bilagor och extrahera texten från dem. Detta gör att du kan söka efter text i dessa bilagor."
 	],
 	"Window unresponsive.": [
 		"Fönstret svarar inte."
@@ -4518,7 +4561,7 @@
 		"Du kan också skriva `status` för mer information."
 	],
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
-		"Du kan använda verktyget nedan för att omkryptera dina data, exempelvis om du vill veta om vissa av dina anteckningar är krypterade med en gammal krypteringsmetod."
+		"Du kan använda verktyget nedan för att omkryptera dina data, exempelvis om du vet att vissa av dina anteckningar är krypterade med en gammal krypteringsmetod."
 	],
 	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
 		"Du kunde inte ansluta till Joplin Cloud. Kontrollera dina uppgifter och försök igen. Fel:"
