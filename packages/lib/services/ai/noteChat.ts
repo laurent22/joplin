@@ -283,15 +283,16 @@ const stepNoteChat = async ({
 	});
 	onHistoryChanged([...messages]);
 
-	let toolResults: ChatToolMessage[] = [];
+	let failedToolCount = 0;
 	if (allowTools) {
-		toolResults = await runTools(chatResult, note, context, commands, signal);
+		const toolResults = await runTools(chatResult, note, context, commands, signal);
+		messages.push(...toolResults);
+		onHistoryChanged([...messages]);
+
+		failedToolCount = toolResults.filter(t => t.isError).length;
 	}
-	messages.push(...toolResults);
 
-	onHistoryChanged([...messages]);
-
-	return { messages, failedToolCount: toolResults.filter(t => t.isError).length };
+	return { messages, failedToolCount };
 };
 
 const removeSystemPrompt = (history: ChatMessage[]) => {
