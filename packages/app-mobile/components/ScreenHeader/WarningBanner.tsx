@@ -58,11 +58,12 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 		}
 	}, [props.mustUpgradeAppMessage, props.syncTargetAppMinVersion]);
 
-	const renderWarningBox = (screen: string, message: string) => {
+	const renderWarningBox = (screen: string, message: string, url?: string) => {
 		return <WarningBox
 			key={screen}
 			themeId={props.themeId}
 			targetScreen={screen}
+			url={url}
 			message={message}
 			testID='warning-box'
 		/>;
@@ -79,21 +80,24 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 			if (Platform.OS === 'android' && isAndroidTargetPreRelease !== null) {
 				if (isAndroidTargetPreRelease) {
 					return renderWarningBox(
-						androidPreReleaseUrl,
+						'UpgradeApp',
 						upgradeMessage(_('Download it from the Joplin Android tags page')),
+						androidPreReleaseUrl,
 					);
 				}
 
 				return renderWarningBox(
-					androidGooglePlayUrl,
+					'UpgradeApp',
 					upgradeMessage(_('Update it from Google Play')),
+					androidGooglePlayUrl,
 				);
 			}
 
 			if (Platform.OS === 'ios') {
 				return renderWarningBox(
-					iosAppStoreUrl,
+					'UpgradeApp',
 					upgradeMessage(_('Update it from the App Store')),
+					iosAppStoreUrl,
 				);
 			}
 

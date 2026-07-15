@@ -7,6 +7,7 @@ import NavService from '@joplin/lib/services/NavService';
 interface Props {
 	themeId: number;
 	targetScreen: string;
+	url?: string;
 	message: string;
 	testID?: string;
 }
@@ -32,13 +33,13 @@ const WarningBox: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
 
 	const onPress = useCallback(() => {
-		if (props.targetScreen.startsWith('http')) {
-			void Linking.openURL(props.targetScreen);
+		if (props.url !== undefined) {
+			void Linking.openURL(props.url);
 			return;
 		}
 
 		void NavService.go(props.targetScreen);
-	}, [props.targetScreen]);
+	}, [props.targetScreen, props.url]);
 
 	return (
 		<TouchableOpacity
