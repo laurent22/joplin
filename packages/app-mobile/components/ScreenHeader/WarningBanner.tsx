@@ -32,6 +32,7 @@ interface Props {
 
 const androidGooglePlayUrl = 'https://play.google.com/store/apps/details?id=net.cozic.joplin';
 const androidPreReleaseUrl = 'https://github.com/laurent22/joplin-android/tags';
+const iosAppStoreUrl = 'https://apps.apple.com/app/id1315599797';
 
 const fetchAndroidVersionIsPreRelease = async (version: string) => {
 	const response = await shim.fetch(`https://api.github.com/repos/laurent22/joplin-android/releases/tags/android-v${version}`);
@@ -91,7 +92,7 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 
 			if (Platform.OS === 'ios') {
 				return renderWarningBox(
-					'UpgradeApp',
+					iosAppStoreUrl,
 					upgradeMessage(_('Update it from the App Store')),
 				);
 			}
