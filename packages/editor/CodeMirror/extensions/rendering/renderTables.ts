@@ -222,7 +222,7 @@ class TableWidget extends WidgetType {
 				for (let ci = 0; ci < allCells[ri].length; ci++) {
 					const td = allCells[ri][ci].querySelector('.cm-tw-text') as HTMLElement;
 					if (td !== active) continue;
-					const v = (td.textContent || '').trim().replace(/\n/g, '<br>').replace(/\|/g, '\\|');
+					const v = (td.textContent || '').replace(/\n/g, '<br>').replace(/\|/g, '\\|');
 					const isH = ri === 0;
 					if (isH) table.header.cells[ci].content = v;
 					else if (ri - 1 < table.body.length) table.body[ri - 1].cells[ci].content = v;
@@ -250,7 +250,7 @@ class TableWidget extends WidgetType {
 			// rebuild is triggered by an external event (image paste, toolbar
 			// command, etc.) before the deferred blur handler runs.
 			const pushToModel = () => {
-				const v = (textDiv.textContent || '').trim()
+				const v = (textDiv.textContent || '')
 					.replace(/\n/g, '<br>').replace(/\|/g, '\\|');
 				if (isHdr) table.header.cells[c].content = v;
 				else if (r - 1 < table.body.length) table.body[r - 1].cells[c].content = v;
@@ -389,7 +389,7 @@ class TableWidget extends WidgetType {
 					// context menu action), the old container is detached.
 					// Do nothing — the rebuild already has the latest data.
 					if (!container.isConnected) return;
-					const v = (textDiv.textContent || '').trim();
+					const v = textDiv.textContent || '';
 					const orig = isHdr
 						? table.header.cells[c]?.content
 						: table.body[r - 1]?.cells[c]?.content;
