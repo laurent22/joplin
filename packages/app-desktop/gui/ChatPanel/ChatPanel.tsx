@@ -341,6 +341,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 		);
 	}
 
+	const sendButtonLabel = sending ? _('Stop generating') : _('Send');
+
 	return (
 		<div className='chat-panel'>
 			<div className='header'>
@@ -413,8 +415,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 						className='send'
 						onClick={sending ? handleCancel : handleSend}
 						disabled={!sending && !input.trim()}
-						aria-label={sending ? _('Cancel send') : _('Send')}
-						title={sending ? _('Cancel send') : _('Send')}
+						aria-label={sendButtonLabel}
+						title={sendButtonLabel}
 					>
 						<i className={sending ? 'fas fa-stop' : 'fas fa-paper-plane'} aria-hidden='true' />
 					</button>
