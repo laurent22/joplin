@@ -23,7 +23,7 @@ export enum EventName {
 	WindowClose = 'windowClose',
 }
 
-interface ItemChangeEvent {
+export interface ItemChangeEvent {
 	itemType: ModelType;
 	itemId: string;
 	// Passing a changeId to Note.save causes that changeId to be included

@@ -1,6 +1,7 @@
 @use "./styles/index.scss";
 @use "./Sidebar/style.scss" as sidebar-styles;
 @use "./controls/AiIndexStatus.scss" as ai-index-status;
+@use "./controls/AiStatus.scss" as ai-status;
 
 .config-screen-content-wrapper {
 	padding: 24px;

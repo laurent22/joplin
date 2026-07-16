@@ -6,7 +6,9 @@ interface Argv {
 	dryRun?: boolean;
 	pushImages?: boolean;
 	repository?: string;
+	imageName?: string;
 	tagName?: string;
+	licenseRequired?: boolean;
 	platform?: string;
 	source?: string;
 	addLatestTag?: boolean;
@@ -27,12 +29,22 @@ function parseArgv(): Argv {
 			demandOption: true,
 			type: 'string',
 		})
+		.option('imageName', {
+			describe: 'Name to associate with the image',
+			type: 'string',
+			default: 'Joplin Server',
+		})
 		.option('tagName', {
 			describe: 'Base image tag. Usually should be in format `server-v1.2.3` or `server-v1.2.3-beta`. The latest `server-v*` git tag will be used by default.',
 			type: 'string',
 		})
 		.option('addLatestTag', {
 			describe: 'Add `latest` tag even for pre-release images.',
+			type: 'boolean',
+			default: false,
+		})
+		.option('licenseRequired', {
+			describe: 'Whether a license key is required to use the built image.',
 			type: 'boolean',
 			default: false,
 		})
@@ -92,6 +104,7 @@ async function main() {
 	const platform = argv.platform;
 	const source = argv.source;
 	const architecture = argv.platform.split('/')[1];
+	const imageName = argv.imageName;
 
 	const isPreRelease = getIsPreRelease(tagName);
 	const imageVersion = getVersionFromTag(tagName, isPreRelease);
@@ -104,10 +117,12 @@ async function main() {
 	}
 
 	const buildArgs = [];
+	buildArgs.push(`LICENSE_REQUIRED="${argv.licenseRequired ? 1 : 0}"`);
 	buildArgs.push(`BUILD_DATE="${buildDate}"`);
 	buildArgs.push(`REVISION="${revision}"`);
 	buildArgs.push(`VERSION="${imageVersion}"`);
 	buildArgs.push(`SOURCE="${source}"`);
+	buildArgs.push(`IMAGE_NAME="${imageName}"`);
 
 	const dockerTags: string[] = [];
 	const versionParts = imageVersion.split('.');

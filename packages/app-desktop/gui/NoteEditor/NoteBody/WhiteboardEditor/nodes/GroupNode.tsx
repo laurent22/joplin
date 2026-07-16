@@ -4,6 +4,7 @@ import { NodeProps, NodeResizer } from '@xyflow/react';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { _ } from '@joplin/lib/locale';
 import { GroupCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
+import { resolveCanvasColor } from '@joplin/lib/services/whiteboard/presetColors';
 import { useWhiteboardContext } from '../WhiteboardContext';
 import { WhiteboardNodeData } from '../canvasFlow';
 
@@ -55,15 +56,18 @@ const GroupNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbGrou
 		beginEdit();
 	}, [beginEdit]);
 
+	const colorStroke = resolveCanvasColor(node.color, ctx.themeAppearance, 'stroke');
+	const colorFill = resolveCanvasColor(node.color, ctx.themeAppearance, 'fill');
+	const edgeStyle = colorStroke ? { borderColor: colorStroke } : undefined;
 	return (
 		<>
 			<NodeResizer minWidth={80} minHeight={60} isVisible={selected && !editing} />
 			<div className={`whiteboard-group ${selected ? '-selected' : ''}`}>
-				<div className="background" />
-				<div className="edge -top whiteboard-group-handle" />
-				<div className="edge -right whiteboard-group-handle" />
-				<div className="edge -bottom whiteboard-group-handle" />
-				<div className="edge -left whiteboard-group-handle" />
+				<div className="background" style={colorFill ? { background: colorFill } : undefined} />
+				<div className="edge -top whiteboard-group-handle" style={edgeStyle} />
+				<div className="edge -right whiteboard-group-handle" style={edgeStyle} />
+				<div className="edge -bottom whiteboard-group-handle" style={edgeStyle} />
+				<div className="edge -left whiteboard-group-handle" style={edgeStyle} />
 				<div className="anchor whiteboard-group-handle" title={_('Drag to move group')} aria-label={_('Drag to move group')}>
 					<i className="fas fa-arrows-alt" aria-hidden="true" />
 				</div>

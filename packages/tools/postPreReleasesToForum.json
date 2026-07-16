@@ -239,6 +239,10 @@
 		"android-v3.7.2": true,
 		"v3.7.3": true,
 		"v3.7.4": true,
-		"v3.7.6": true
+		"v3.7.6": true,
+		"v3.7.8": true,
+		"android-v3.7.3": true,
+		"ios-v13.7.1": true,
+		"v3.7.9": true
 	}
 }

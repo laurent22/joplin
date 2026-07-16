@@ -1,11 +1,13 @@
 import { Knex } from 'knex';
 import { EmailSender, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
-import { ErrorNotFound } from '../utils/errors';
+import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
 import { Day } from '../utils/time';
 import { uuidgen } from '../utils/uuid';
 import paymentFailedTemplate from '../views/emails/paymentFailedTemplate';
 import BaseModel from './BaseModel';
 import { AccountType } from './UserModel';
+import { Second } from '@joplin/utils/time';
+import type Stripe from 'stripe';
 
 export const failedPaymentWarningInterval = 7 * Day;
 export const failedPaymentFinalAccount = 14 * Day;
@@ -23,6 +25,20 @@ enum PaymentAttemptStatus {
 interface PaymentAttempt {
 	status: PaymentAttemptStatus;
 	time: number;
+}
+
+interface StripeSubscriptionItemSlice {
+	current_period_end?: number;
+	quantity?: number;
+}
+
+export interface StripeSubscriptionSlice {
+	trial_end: number|undefined;
+
+	// When retrieved from the webhook with newer API versions, current_period_end is stored in `items.data`.
+	// With older API versions and when retrieved directly, current_period_end is present directly on the subscription.
+	current_period_end: number|undefined;
+	items?: { data: StripeSubscriptionItemSlice[] };
 }
 
 export default class SubscriptionModel extends BaseModel<Subscription> {
@@ -156,4 +172,57 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 		await this.save({ id, is_deleted: isDeleted ? 1 : 0 });
 	}
 
+	public async updateFromStripe(subscription: Subscription, stripeSubscription: StripeSubscriptionSlice) {
+		if (!subscription.id) {
+			subscription = await this.byUserId(subscription.user_id);
+		}
+		if (!subscription) throw new ErrorNotFound('Failed to update subscription from Stripe: Unable to load full subscription');
+
+		// Depending on the source of the stripeSubscription and the API version, current_period_end is stored in different locations:
+		const periodEndSeconds = stripeSubscription.current_period_end
+			?? stripeSubscription.items?.data?.[0]?.current_period_end
+			?? null;
+		const trialEndSeconds = stripeSubscription.trial_end ?? null;
+
+		if (periodEndSeconds === null && trialEndSeconds === null) {
+			throw new ErrorBadRequest('Failed to update subscription from Stripe -- missing both trial_end and current_period_end');
+		}
+
+		const stripePeriodEnd = (periodEndSeconds ?? 0) * Second;
+		const stripeTrialEnd = (trialEndSeconds ?? 0) * Second;
+
+		if (subscription.current_period_end !== stripePeriodEnd || subscription.trial_end !== stripeTrialEnd) {
+			await this.save({
+				id: subscription.id,
+				current_period_end: stripePeriodEnd,
+				trial_end: stripeTrialEnd,
+			});
+		}
+	}
+
+	public async retrievePeriodEnd(stripe: Stripe, subscription: Subscription) {
+		const assertSubscriptionExists = (subscription: Subscription|null) => {
+			// Handles the case where the subscription is disabled/deleted while retrieving its period end
+			if (!subscription) {
+				throw new ErrorNotFound('Failed to reload subscription: Subscription not found');
+			}
+		};
+
+		subscription = subscription.id ? await this.load(subscription.id) : await this.byUserId(subscription.user_id);
+		assertSubscriptionExists(subscription);
+
+		// Older subscriptions might not have a trial_end or current_period_end
+		const isUninitialized = subscription.trial_end === 0 && subscription.current_period_end === 0;
+		if (isUninitialized) {
+			const stripeSubscription = await stripe.subscriptions.retrieve(subscription.stripe_subscription_id);
+			await this.updateFromStripe(subscription, stripeSubscription);
+			subscription = await this.load(subscription.id);
+			assertSubscriptionExists(subscription);
+		}
+
+		return {
+			trialEnd: subscription.trial_end,
+			currentPeriodEnd: subscription.current_period_end,
+		};
+	}
 }

@@ -2,7 +2,7 @@ import shim from '../../../shim';
 import JoplinError from '../../../JoplinError';
 import Logger from '@joplin/utils/Logger';
 import { rtrimSlashes } from '@joplin/utils/path';
-import { ChatMessage, ChatOptions, ChatResult, ProviderClassification } from '../types';
+import { ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification, ToolSpec } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 
 const logger = Logger.create('OpenAiCompatibleProvider');
@@ -12,8 +12,23 @@ interface OpenAiUsage {
 	completion_tokens?: number;
 }
 
+interface OpenAiToolCall {
+	id: string;
+	index: number;
+	type: 'function';
+	function: {
+		arguments: string;
+		name: string;
+	};
+}
+
+interface OpenAiMessage {
+	content?: string;
+	tool_calls?: OpenAiToolCall[];
+}
+
 interface OpenAiChoice {
-	message?: { content?: string };
+	message?: OpenAiMessage;
 }
 
 interface OpenAiResponse {
@@ -27,6 +42,68 @@ interface Options {
 	apiKey: string;
 	model: string;
 	classification: ProviderClassification;
+}
+
+const convertTool = (tool: ToolSpec) => {
+	return {
+		type: 'function',
+		function: {
+			name: tool.name,
+			description: tool.description,
+			parameters: tool.inputSchema,
+			strict: true,
+		},
+	};
+};
+
+const convertMessage = (message: ChatMessage) => {
+	if (message.role === 'tool') {
+		return {
+			role: 'tool',
+			name: message.toolName,
+			content: message.content,
+			tool_call_id: message.toolCallId,
+		};
+	} else {
+		return {
+			role: message.role,
+			content: message.content,
+			...(message.toolCalls ? {
+				tool_calls: message.toolCalls.map(call => {
+					return {
+						id: call.callId,
+						type: 'function',
+						function: {
+							name: call.toolName,
+							arguments: JSON.stringify(call.arguments),
+						},
+					};
+				}),
+			} : {}),
+		};
+	}
+};
+
+const describeJsonParseFailure = (rawContent: string) => {
+	const parseError = ['Failed to parse JSON.'];
+
+	// With certain providers (e.g. Joplin Cloud), long messages are truncated. Include this information in the error message so that
+	// the model knows to retry with a shorter message:
+	const suggestedRetryLengthLimit = 1000;
+	if (rawContent.startsWith('{') && rawContent.length > suggestedRetryLengthLimit) {
+		parseError.push(`It's likely that the tool call JSON is too long. Please try again with a message shorter than ${suggestedRetryLengthLimit} characters.`);
+	}
+
+	return parseError.join(' ');
+};
+
+export interface ChatRequestOptions {
+	signal?: AbortSignal;
+}
+
+export interface OpenAiChatResponse {
+	response: { status: number };
+	json: OpenAiResponse;
 }
 
 export default class OpenAiCompatibleProvider extends ChatProviderBase {
@@ -46,36 +123,20 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 	}
 
 	protected async doChat(messages: ChatMessage[], options?: ChatOptions): Promise<ChatResult> {
-		if (!this.baseUrl_) throw new JoplinError('OpenAI-compatible provider has no base URL configured', 'aiProviderNotConfigured');
 		if (!this.model_) throw new JoplinError('OpenAI-compatible provider has no model configured', 'aiProviderNotConfigured');
 
 		const body: Record<string, unknown> = {
 			model: this.model_,
-			messages: messages.map(m => ({ role: m.role, content: m.content })),
+			messages: messages.map(convertMessage),
 			stream: false,
 		};
 		if (options?.temperature !== undefined) body.temperature = options.temperature;
 		if (options?.maxTokens !== undefined) body.max_tokens = options.maxTokens;
 		if (options?.responseFormat !== undefined) body.response_format = options.responseFormat;
+		if (options?.tools !== undefined) body.tools = options.tools.map(convertTool);
 
-		const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-		if (this.apiKey_) headers['Authorization'] = `Bearer ${this.apiKey_}`;
 
-		const doFetch = async () => {
-			const response = await shim.fetch(`${this.baseUrl_}/chat/completions`, {
-				method: 'POST',
-				headers,
-				body: JSON.stringify(body),
-			});
-			const text = await response.text();
-			let json: OpenAiResponse;
-			try {
-				json = JSON.parse(text) as OpenAiResponse;
-			} catch {
-				throw new JoplinError(`AI provider returned non-JSON response: ${text.slice(0, 200)}`, response.status);
-			}
-			return { response, json };
-		};
+		const doFetch = () => this.sendChatRequest(body, { signal: options?.signal });
 
 		let { response, json } = await doFetch();
 
@@ -114,12 +175,61 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 			);
 		}
 
-		const content = json.choices?.[0]?.message?.content ?? '';
+		const responseMessage = json.choices?.[0]?.message;
+		const content = responseMessage?.content ?? '';
 		// Some "OpenAI-compatible" providers (notably older Ollama versions)
 		// omit `usage` entirely. Default to zeros rather than throw.
 		const inputTokens = json.usage?.prompt_tokens ?? 0;
 		const outputTokens = json.usage?.completion_tokens ?? 0;
 
-		return { text: content, usage: { inputTokens, outputTokens } };
+		const toolCalls: ChatToolCall[] = (responseMessage?.tool_calls ?? []).map(call => {
+			if (!call.function) return null;
+
+			let args;
+			let parseError: string|null = null;
+			const argumentString = call.function.arguments;
+			try {
+				args = JSON.parse(argumentString);
+			} catch (error) {
+				args = {};
+				parseError = describeJsonParseFailure(argumentString);
+				logger.error('JSON parse failed', error, parseError);
+			}
+
+			return {
+				toolName: call.function.name,
+				callId: call.id,
+				arguments: args,
+				parseError,
+			};
+		}).filter(toolCall => !!toolCall);
+
+		return { text: content, toolCalls, usage: { inputTokens, outputTokens } };
+	}
+
+	protected async sendChatRequest(body: Record<string, unknown>, options: ChatRequestOptions): Promise<OpenAiChatResponse> {
+		if (!this.baseUrl_) throw new JoplinError('OpenAI-compatible provider has no base URL configured', 'aiProviderNotConfigured');
+
+		const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+		if (this.apiKey_) headers['Authorization'] = `Bearer ${this.apiKey_}`;
+
+		const response = await shim.fetch(`${this.baseUrl_}/chat/completions`, {
+			method: 'POST',
+			headers,
+			body: JSON.stringify(body),
+			signal: options.signal,
+		});
+
+		const text = await response.text();
+		let json: OpenAiResponse;
+		try {
+			json = JSON.parse(text) as OpenAiResponse;
+		} catch {
+			throw new JoplinError(`AI provider returned non-JSON response: ${text.slice(0, 200)}`, response.status);
+		}
+		return {
+			response: { status: response.status },
+			json,
+		};
 	}
 }

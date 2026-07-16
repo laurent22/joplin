@@ -39,6 +39,7 @@ export interface FetchOptions {
 	headers?: Record<string, string>;
 	body?: string;
 	agent?: unknown;
+	signal?: AbortSignal;
 }
 
 interface AttachFileToNoteOptions {

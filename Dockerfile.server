@@ -40,6 +40,9 @@ COPY packages/server ./packages/server
 # We don't want to build onenote-converter since it is not used by the server
 RUN sed --in-place '/onenote-converter/d' ./packages/lib/package.json
 
+# Joplin Server -- and the Joplin packages, when included with it -- are licensed under their own license.
+RUN sed --in-place 's/"license": "AGPL-3.0-or-later"/"license": "UNLICENSED"/' ./package.json ./packages/*/package.json
+
 # For some reason there's both a .yarn/cache and .yarn/berry/cache that are
 # being generated, and both have the same content. Not clear why it does this
 # but we can delete it anyway. We can delete the cache because we use
@@ -86,6 +89,9 @@ RUN pm2 install https://registry.npmjs.org/pm2-logrotate/-/pm2-logrotate-3.0.0.t
 	&& pm2 set pm2-logrotate:retain 5 \
 	&& pm2 set pm2-logrotate:compress true
 
+ARG LICENSE_REQUIRED="0"
+ENV LICENSE_REQUIRED=${LICENSE_REQUIRED}
+
 ENV NODE_ENV=production
 ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
@@ -102,8 +108,9 @@ ARG BUILD_DATE
 ARG REVISION
 ARG VERSION
 ARG SOURCE
+ARG IMAGE_NAME="Joplin Server"
 LABEL org.opencontainers.image.created="$BUILD_DATE" \
-      org.opencontainers.image.title="Joplin Server" \
+      org.opencontainers.image.title="$IMAGE_NAME" \
       org.opencontainers.image.description="Docker image for Joplin Server" \
       org.opencontainers.image.url="https://joplinapp.org/" \
       org.opencontainers.image.revision="$REVISION" \
