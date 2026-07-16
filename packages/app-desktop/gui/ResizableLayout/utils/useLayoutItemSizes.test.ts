@@ -134,8 +134,11 @@ describe('useLayoutItemSizes', () => {
 		expect(itemSize(layout.children[0], layout, sizes, true)).toEqual({ width: 100, height: 100 });
 
 		const parent = layout.children[0];
-		expect(itemSize(parent.children[0], parent, sizes, false)).toEqual({ width: 95, height: 45 });
-		expect(itemSize(parent.children[1], parent, sizes, false)).toEqual({ width: 95, height: 50 });
+		// row1: inside a column that has a right divider, and row1 itself has a
+		// bottom divider (there's a visible sibling below it).
+		expect(itemSize(parent.children[0], parent, sizes, false, { ownRight: false, ownBottom: true, parentRight: true, parentBottom: false })).toEqual({ width: 95, height: 45 });
+		// row2: same column, no bottom divider (it is the last row).
+		expect(itemSize(parent.children[1], parent, sizes, false, { ownRight: false, ownBottom: false, parentRight: true, parentBottom: false })).toEqual({ width: 95, height: 50 });
 	});
 
 	test('should decrease size of the largest item if the total size would be larger than the container', () => {
