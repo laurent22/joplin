@@ -29,6 +29,7 @@ import { Toast, ToastType } from './services/plugins/api/types';
 import { unique } from './array';
 import fastDeepEqual = require('fast-deep-equal');
 import { ALL_NOTES_FILTER_ID } from './reserved-ids';
+import ItemChange from './models/ItemChange';
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
 
@@ -1168,7 +1169,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'NOTE_UPDATE_ONE':
 			{
 				const modNote: NoteEntity = action.note;
-				const handleWindowState = (windowDraft: Draft<WindowState>, isActiveWindow: boolean) => {
+				const handleWindowState = (windowDraft: Draft<WindowState>) => {
 					const isViewingAllNotes = (windowDraft.notesParentType === 'SmartFilter' && windowDraft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 					const isViewingConflictFolder = windowDraft.notesParentType === 'Folder' && windowDraft.selectedFolderId === Folder.conflictFolderId();
 
@@ -1226,9 +1227,11 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					// Ensure that the selected note is still in the current folder.
 					// For example, if the user drags the current note to a different folder,
 					// a new note should be selected.
-					// In some cases, however, the selection needs to be preserved (e.g. the mobile app).
+					// In some cases, however, the selection needs to be preserved (e.g. the mobile app, in secondary windows, or when an unselected note is moved by sync).
 					const preserveSelection = action.preserveSelection ?? draft.allowSelectionInOtherFolders;
-					if (noteFolderHasChanged && !preserveSelection && isActiveWindow) {
+					const selectedNoteHasMoved = windowDraft.selectedNoteIds.length > 0 && !newNotes.some(o => windowDraft.selectedNoteIds.includes(o.id));
+					const isSecondaryWindow = windowDraft.windowId !== defaultWindowId;
+					if (noteFolderHasChanged && !preserveSelection && !isSecondaryWindow && (action.changeSource !== ItemChange.SOURCE_SYNC || selectedNoteHasMoved)) {
 						let newIndex = movedNotePreviousIndex;
 						if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
 						if (!newNotes.length) newIndex = -1;
@@ -1253,9 +1256,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					}
 				};
 
-				handleWindowState(draft, true);
+				handleWindowState(draft);
 				for (const backgroundWindow of Object.values(draft.backgroundWindows)) {
-					handleWindowState(backgroundWindow, false);
+					handleWindowState(backgroundWindow);
 				}
 			}
 			break;

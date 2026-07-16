@@ -2277,7 +2277,11 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'noteLock.lockOnNoteSwitch': {
 			value: false,
 			type: SettingItemType.Bool,
-			public: false,
+			public: true,
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			section: 'noteLock',
+			label: () => _('Auto lock when switching note'),
+			show: (settings) => !!settings['featureFlag.noteLock'],
 			storage: SettingStorage.File,
 		},
 

@@ -915,6 +915,7 @@ export default class Note extends BaseItem {
 				ignoreProvisionalFlag: ignoreProvisionalFlag,
 				changedFields: changedFields,
 				changeId: options?.changeId,
+				changeSource,
 				...options?.dispatchOptions,
 			});
 		}

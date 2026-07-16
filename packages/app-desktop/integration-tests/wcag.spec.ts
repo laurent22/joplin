@@ -115,5 +115,21 @@ test.describe('wcag', () => {
 		await mainScreen.changeLayoutScreen.open(electronApp);
 		await expectNoViolations(mainWindow);
 	});
+
+	test('should not detect significant issues in the AI chat panel', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('test');
+
+		await mainScreen.chatPanel.configure(electronApp);
+		await mainScreen.chatPanel.open(electronApp);
+
+		await mainScreen.chatPanel.sendMessage('/reply-with test');
+		await mainScreen.chatPanel.sendMessage(
+			'/tool appendToNote {"text": "test"}\n/reply-with done',
+		);
+		await mainScreen.chatPanel.waitForMessageCount(5);
+
+		await expectNoViolations(mainWindow);
+	});
 });
 
