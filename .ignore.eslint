@@ -1614,6 +1614,7 @@ packages/lib/services/ai/providers/ChatProviderBase.js
 packages/lib/services/ai/providers/JoplinCloud.test.js
 packages/lib/services/ai/providers/JoplinCloud.js
 packages/lib/services/ai/providers/OpenAiCompatible.js
+packages/lib/services/ai/providers/TestProvider.js
 packages/lib/services/ai/testing/TestEmbeddingProvider.test.js
 packages/lib/services/ai/testing/TestEmbeddingProvider.js
 packages/lib/services/ai/types.js

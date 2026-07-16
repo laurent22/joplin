@@ -9,6 +9,7 @@ interface PackageJson {
 	version: string;
 	joplinServer: {
 		forkVersion: string;
+		businessServerVersion?: string;
 	};
 }
 
@@ -168,6 +169,15 @@ export const isUsingExternalAuth = (env: EnvVariables) => {
 	return !!env.SAML_ENABLED || !!env.LDAP_1_ENABLED || !!env.LDAP_2_ENABLED;
 };
 
+const determineAppVersion = (isJoplinServerBusiness: boolean) => {
+	const forkVersion = packageJson.joplinServer?.forkVersion;
+	const businessServerVersion = packageJson.joplinServer?.businessServerVersion;
+
+	if (isJoplinServerBusiness) return businessServerVersion;
+	if (forkVersion) return forkVersion;
+	return packageJson.version;
+};
+
 let config_: Config = null;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- `Partial<Config>` would be ideal, but `Config` requires `resourceDir: string` which is only set via `overrides` in some test paths — tightening would expose a pre-existing missing-field issue
@@ -178,16 +188,16 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const stripePublicConfig = loadStripeConfig(envType === Env.BuildTypes ? Env.Dev : envType, `${rootDir}/stripeConfig.json`);
 	const appName = env.APP_NAME;
 	const viewDir = `${rootDir}/src/views`;
+	const assetsDir = `${rootDir}/assets`;
 	const appPort = env.APP_PORT;
 	const baseUrl = baseUrlFromEnv(env, appPort);
 	const apiBaseUrl = env.API_BASE_URL ? env.API_BASE_URL : baseUrl;
 	const supportEmail = env.SUPPORT_EMAIL;
-	const forkVersion = packageJson.joplinServer?.forkVersion;
 	const dbConfig = databaseConfigFromEnv(runningInDocker_, env, false);
 
 	config_ = {
 		...env,
-		appVersion: forkVersion ? forkVersion : packageJson.version,
+		appVersion: determineAppVersion(false),
 		joplinServerVersion: packageJson.version,
 		appName,
 		isJoplinCloud: apiBaseUrl.includes('.joplincloud.com') || apiBaseUrl.includes('.joplincloud.local'),
@@ -195,8 +205,10 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		env: envType,
 		rootDir: rootDir,
 		viewDir: viewDir,
+		assetsDir: assetsDir,
 		layoutDir: `${viewDir}/layouts`,
 		tempDir: `${rootDir}/temp`,
+		resourceDir: `${rootDir}/resource`,
 		logDir: `${rootDir}/logs`,
 		database: dbConfig,
 		databaseSlave: env.DB_USE_SLAVE ? databaseConfigFromEnv(runningInDocker_, env, true) : dbConfig,

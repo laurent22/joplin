@@ -1,5 +1,5 @@
 import AiService from './AiService';
-import { ChatMessage, ChatResult, ChatRole, ChatToolCall, ToolSpec } from './types';
+import { ChatMessage, ChatResult, ChatRole, ChatToolCall, ChatToolMessage, ToolSpec } from './types';
 import JoplinError from '../../JoplinError';
 import Logger from '@joplin/utils/Logger';
 import findFencedBlock from './utils/findFencedBlock';
@@ -201,7 +201,7 @@ const toolDefinitions = (note: NoteContext) => {
 
 const estimateTokens = (text: string) => Math.ceil(text.length / charsPerToken);
 
-interface Commands {
+export interface ChatCommands {
 	replaceSelection: (text: string, originalText: string)=> Promise<void>;
 	updateNoteBody: (body: string, originalBody: string)=> Promise<void>;
 	displayError: (message: string)=> void;
@@ -214,7 +214,7 @@ export const runNoteChat = async (
 	context: OnContext,
 	history: ChatMessage[],
 	userMessage: string,
-	commands: Commands,
+	commands: ChatCommands,
 	onHistoryChanged: OnHistoryChanged,
 	signal: AbortSignal,
 ) => {
@@ -229,32 +229,49 @@ export const runNoteChat = async (
 	onHistoryChanged([...history]);
 
 	const hasUndeliveredToolResults = () => history[history.length - 1]?.role === ChatRole.Tool;
+	let runsWithFailedTools = 0;
 	do {
-		history = await stepNoteChat(
+		// If the model fails to successfully use tools more than 4 times in a row, disallow tool use
+		// to avoid an infinite loop:
+		const allowTools = runsWithFailedTools < 5;
+		const { messages, failedToolCount } = await stepNoteChat({
 			context,
-			history,
+			messages: history,
 			commands,
 			onHistoryChanged,
 			signal,
-		);
+			allowTools,
+		});
+
+		history = messages;
+		if (failedToolCount > 0) {
+			runsWithFailedTools ++;
+		} else {
+			runsWithFailedTools = 0;
+		}
 	}
 	while (!signal.aborted && hasUndeliveredToolResults());
 
 	return history;
 };
 
-const stepNoteChat = async (
-	context: OnContext,
-	messages: ChatMessage[],
-	commands: Commands,
-	onHistoryChanged: OnHistoryChanged,
-	signal: AbortSignal,
-) => {
+interface StepNoteChatOptions {
+	context: OnContext;
+	messages: ChatMessage[];
+	commands: ChatCommands;
+	onHistoryChanged: OnHistoryChanged;
+	signal: AbortSignal;
+	allowTools: boolean;
+}
+
+const stepNoteChat = async ({
+	context, messages, commands, onHistoryChanged, signal, allowTools,
+}: StepNoteChatOptions) => {
 	const note = await context();
 
 	assertWithinTokenBudget(messages, noteBodyTokenBudget);
 	const chatResult = await AiService.instance().chat(
-		messages, { tools: toolDefinitions(note), signal },
+		messages, { tools: allowTools ? toolDefinitions(note) : [], signal },
 	);
 
 	// Chat results can contain sensitive information -- only log in dev mode
@@ -262,16 +279,20 @@ const stepNoteChat = async (
 	messages.push({
 		role: ChatRole.Assistant,
 		content: chatResult.text ?? '',
-		toolCalls: chatResult.toolCalls,
+		toolCalls: allowTools ? chatResult.toolCalls : [],
 	});
 	onHistoryChanged([...messages]);
 
-	messages.push(
-		...await runTools(chatResult, note, context, commands, signal),
-	);
-	onHistoryChanged([...messages]);
+	let failedToolCount = 0;
+	if (allowTools) {
+		const toolResults = await runTools(chatResult, note, context, commands, signal);
+		messages.push(...toolResults);
+		onHistoryChanged([...messages]);
 
-	return messages;
+		failedToolCount = toolResults.filter(t => t.isError).length;
+	}
+
+	return { messages, failedToolCount };
 };
 
 const removeSystemPrompt = (history: ChatMessage[]) => {
@@ -317,10 +338,10 @@ const assertNotCancelled = (signal: AbortSignal) => {
 	}
 };
 
-const runTools = async (chat: ChatResult, initialContext: NoteContext, context: OnContext, commands: Commands, signal: AbortSignal) => {
+const runTools = async (chat: ChatResult, initialContext: NoteContext, context: OnContext, commands: ChatCommands, signal: AbortSignal) => {
 	assertNotCancelled(signal);
 
-	let chatResponses: ChatMessage[] = [];
+	let chatResponses: ChatToolMessage[] = [];
 
 	const respondSuccess = (action: ChatToolCall, message: string) => {
 		chatResponses.push({
@@ -350,16 +371,20 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 		const expectedName = 'replaceSelection';
 		const action = chat.toolCalls.find(toolCall => toolCall.toolName === expectedName);
 		if (action) {
-			try {
-				if (!hasOwnProperty(action.arguments, 'text')) throw new JoplinError('Missing text property');
-				if (typeof action.arguments.text !== 'string') throw new JoplinError('Property "text" must be a string');
-
-				await commands.replaceSelection(action.arguments.text, currentContext.selection);
-				respondSuccess(action, describeEditOperation(toolCallToEditOperation(action)));
-			} catch (error) {
-				logger.error('Failed to replace selection', error);
-				respondFailure(action, 'failed to replace selection');
-				commands.displayError(error.message ?? String(error));
+			const args = action.arguments;
+			if (action.parseError) {
+				respondFailure(action, action.parseError);
+			} else if (!hasOwnProperty(args, 'text') || typeof args.text !== 'string') {
+				respondFailure(action, 'missing or invalid `text` property');
+			} else {
+				try {
+					await commands.replaceSelection(args.text, currentContext.selection);
+					respondSuccess(action, describeEditOperation(toolCallToEditOperation(action)));
+				} catch (error) {
+					logger.error('Failed to replace selection', error);
+					respondFailure(action, 'failed to replace selection');
+					commands.displayError(error.message ?? String(error));
+				}
 			}
 		}
 
@@ -392,6 +417,10 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 			}
 			if (!isValidEditOp(toolCall.toolName)) {
 				respondFailure(toolCall, 'tool not found');
+				continue;
+			}
+			if (toolCall.parseError) {
+				respondFailure(toolCall, toolCall.parseError);
 				continue;
 			}
 

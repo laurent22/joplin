@@ -8,6 +8,7 @@ import ChatProviderBase from './providers/ChatProviderBase';
 import OpenAiCompatibleProvider from './providers/OpenAiCompatible';
 import AnthropicProvider from './providers/Anthropic';
 import JoplinCloudProvider from './providers/JoplinCloud';
+import TestProvider from './providers/TestProvider';
 
 const logger = Logger.create('AiService');
 
@@ -72,6 +73,10 @@ export default class AiService {
 				model: Setting.value('ai.chat.model'),
 				classification: deriveClassification('openai-compatible', baseUrl),
 			}));
+		}
+
+		if (providerType === 'test-provider') {
+			return this.attachRecorder(new TestProvider());
 		}
 
 		throw new JoplinError(`Unknown AI provider type: ${providerType}`, 'aiUnknownProvider');
