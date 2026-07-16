@@ -1037,4 +1037,40 @@ describe('reducer', () => {
 		// Moved note should no longer be visible
 		expect(state.notes.every(n => n.id !== notes[0].id)).toBe(true);
 	});
+
+	test('sync moving the selected note in a background window should not change its selection', async () => {
+		const folders = await createNTestFolders(2);
+		const notes = await createNTestNotes(3, folders[0]);
+
+		// Primary window selects note[0]
+		let state = initTestState(folders, 0, notes, [0]);
+
+		// Background window selects note[2]
+		const secondaryWindowId = 'window1';
+		state = createBackgroundWindow(state, secondaryWindowId, notes[2], notes);
+
+		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+
+		const movedNote = {
+			...notes[2],
+			parent_id: folders[1].id,
+		};
+
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ONE',
+			note: movedNote,
+			changeSource: ItemChange.SOURCE_SYNC,
+		});
+
+		// The moved note should no longer be in the background window's list
+		expect(
+			state.backgroundWindows[secondaryWindowId].notes.every(n => n.id !== notes[2].id),
+		).toBe(true);
+
+		// The background window should continue rendering the moved note
+		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+
+		// The primary window should be unaffected
+		expect(state.selectedNoteIds).toEqual([notes[0].id]);
+	});
 });

@@ -1227,7 +1227,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					// Ensure that the selected note is still in the current folder.
 					// For example, if the user drags the current note to a different folder,
 					// a new note should be selected.
-					// In some cases, however, the selection needs to be preserved (e.g. the mobile app).
+					// In some cases, however, the selection needs to be preserved (e.g. the mobile app, in secondary windows, or when an unselected note is moved by sync).
 					const preserveSelection = action.preserveSelection ?? draft.allowSelectionInOtherFolders;
 					const selectedNoteHasMoved = windowDraft.selectedNoteIds.length > 0 && !newNotes.some(o => windowDraft.selectedNoteIds.includes(o.id));
 					const isSecondaryWindow = windowDraft.windowId !== defaultWindowId;
