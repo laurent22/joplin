@@ -2,10 +2,11 @@ import * as React from 'react';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import useWindowResizeEvent from './utils/useWindowResizeEvent';
 import setLayoutItemProps from './utils/setLayoutItemProps';
-import useLayoutItemSizes, { EdgeFlags, LayoutItemSizes, itemSize, calculateMaxSizeAvailableForItem, itemMinWidth, itemMinHeight } from './utils/useLayoutItemSizes';
+import useLayoutItemSizes, { EdgeFlags, LayoutItemSizes, itemSize, calculateMaxSizeAvailableForItem } from './utils/useLayoutItemSizes';
 import validateLayout from './utils/validateLayout';
 import { Size, LayoutItem } from './utils/types';
 import { canMove, MoveDirection } from './utils/movements';
+import { buildResizeSnapshot, computeEdges, isItemVisibleInRender, lastVisibleChildIndex, planResize, ResizeStartSnapshot } from './utils/resizeLogic';
 import MoveButtons, { MoveButtonClickEvent } from './MoveButtons';
 import { StyledWrapperRoot, StyledMoveOverlay, MoveModeRootMessage } from './utils/style';
 import type { ResizeCallback, ResizeStartCallback } from 're-resizable';
@@ -17,18 +18,8 @@ interface OnResizeEvent {
 	layout: LayoutItem;
 }
 
-interface ResizedItem {
-	key: string;
-	initialWidth: number;
-	initialHeight: number;
+interface ResizedItem extends ResizeStartSnapshot {
 	maxSize: Size;
-	// A divider drag updates the dragged item and its next visible sibling,
-	// so the delta stays between the two panels on either side of it.
-	nextSiblingKey: string | null;
-	nextSiblingInitialWidth: number;
-	nextSiblingInitialHeight: number;
-	itemAbsorbsAlongAxis: { width: boolean; height: boolean };
-	nextAbsorbsAlongAxis: { width: boolean; height: boolean };
 }
 
 export interface RenderItemEvent {
@@ -50,11 +41,7 @@ interface Props {
 	moveModeMessage: string;
 }
 
-function itemVisible(item: LayoutItem, moveMode: boolean) {
-	if (moveMode) return true;
-	if (item.children && !item.children.length) return false;
-	return item.visible !== false;
-}
+const itemVisible = isItemVisibleInRender;
 
 function ResizableLayout(props: Props) {
 	const eventEmitter = useRef(new EventEmitter());
@@ -97,93 +84,20 @@ function ResizableLayout(props: Props) {
 	function renderLayoutItem(
 		item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isVisible: boolean, isLastChild: boolean, onlyMoveControls: boolean, parentEdges: EdgeFlags = { ownRight: false, ownBottom: false, parentRight: false, parentBottom: false },
 	): React.ReactNode {
-		const parentDir = parent?.direction;
-		const ownRight = parentDir === 'row' && !isLastChild;
-		const ownBottom = parentDir === 'column' && !isLastChild;
-		// A child inherits the parent's trailing gap when its own trailing
-		// edge coincides with the parent's. In a column the right edge is
-		// shared by every child; in a row the bottom edge is shared. And the
-		// last child of any direction inherits the parent's own trailing gap.
-		const parentRight = parentDir === 'column'
-			? parentEdges.ownRight || parentEdges.parentRight
-			: (isLastChild && (parentEdges.ownRight || parentEdges.parentRight));
-		const parentBottom = parentDir === 'row'
-			? parentEdges.ownBottom || parentEdges.parentBottom
-			: (isLastChild && (parentEdges.ownBottom || parentEdges.parentBottom));
-		const edges: EdgeFlags = { ownRight, ownBottom, parentRight, parentBottom };
+		const edges = computeEdges(parent, isLastChild, parentEdges);
 
 		const onResizeStart: ResizeStartCallback = () => {
-			// A panel counts as the container's absorber only when it (or its
-			// subtree) is flagged flexible. A width-less panel that isn't
-			// flagged (e.g. chatPanel being shown in moveMode without a
-			// persisted width) should still receive drag deltas, so we don't
-			// treat it as the absorber here.
-			const isSubtreeFlexible = (i: LayoutItem) => {
-				if (i.flexible) return true;
-				if (!i.children) return false;
-				for (const c of i.children) if (isSubtreeFlexible(c)) return true;
-				return false;
-			};
-
-			let nextSiblingKey: string | null = null;
-			const nextAbsorbsAlongAxis = { width: false, height: false };
-			if (parent) {
-				const siblings = parent.children;
-				const idx = siblings.findIndex(c => c.key === item.key);
-				for (let i = idx + 1; i < siblings.length; i++) {
-					if (itemVisible(siblings[i], props.moveMode)) {
-						nextSiblingKey = siblings[i].key;
-						const flex = isSubtreeFlexible(siblings[i]);
-						nextAbsorbsAlongAxis.width = flex && !('width' in siblings[i]);
-						nextAbsorbsAlongAxis.height = flex && !('height' in siblings[i]);
-						break;
-					}
-				}
-			}
-
-			const itemFlex = isSubtreeFlexible(item);
 			setResizedItem({
-				key: item.key,
-				initialWidth: sizes[item.key].width,
-				initialHeight: sizes[item.key].height,
+				...buildResizeSnapshot(item, parent, props.moveMode, sizes),
 				maxSize: calculateMaxSizeAvailableForItem(item, parent, sizes),
-				nextSiblingKey,
-				nextSiblingInitialWidth: nextSiblingKey ? sizes[nextSiblingKey].width : 0,
-				nextSiblingInitialHeight: nextSiblingKey ? sizes[nextSiblingKey].height : 0,
-				itemAbsorbsAlongAxis: {
-					width: itemFlex && !('width' in item),
-					height: itemFlex && !('height' in item),
-				},
-				nextAbsorbsAlongAxis,
 			});
 		};
 
 		const onResize: ResizeCallback = (_event, direction, _refToElement, delta) => {
-			// A sized panel is skipped only if the other side is fixed; when
-			// both panels are absorbers, we write to the dragged one so the
-			// divider actually moves (the next sibling then absorbs the rest).
-			const isHorizontal = direction !== 'bottom';
-			const minSize = isHorizontal ? itemMinWidth : itemMinHeight;
-			const rawDelta = isHorizontal ? delta.width : delta.height;
-
-			const itemIsAbsorber = isHorizontal ? resizedItem.itemAbsorbsAlongAxis.width : resizedItem.itemAbsorbsAlongAxis.height;
-			const nextIsAbsorber = isHorizontal ? resizedItem.nextAbsorbsAlongAxis.width : resizedItem.nextAbsorbsAlongAxis.height;
-			const bothAbsorb = itemIsAbsorber && nextIsAbsorber;
-
 			let newLayout = props.layout;
-
-			if (!itemIsAbsorber || bothAbsorb) {
-				const initial = isHorizontal ? resizedItem.initialWidth : resizedItem.initialHeight;
-				const newSize = Math.max(minSize, initial + rawDelta);
-				newLayout = setLayoutItemProps(newLayout, resizedItem.key, isHorizontal ? { width: newSize } : { height: newSize });
+			for (const update of planResize(resizedItem, direction, delta)) {
+				newLayout = setLayoutItemProps(newLayout, update.key, update.props);
 			}
-
-			if (!nextIsAbsorber && resizedItem.nextSiblingKey) {
-				const initial = isHorizontal ? resizedItem.nextSiblingInitialWidth : resizedItem.nextSiblingInitialHeight;
-				const newSize = Math.max(minSize, initial - rawDelta);
-				newLayout = setLayoutItemProps(newLayout, resizedItem.nextSiblingKey, isHorizontal ? { width: newSize } : { height: newSize });
-			}
-
 			props.onResize({ layout: newLayout });
 			eventEmitter.current.emit('resize');
 		};
@@ -213,15 +127,7 @@ function ResizableLayout(props: Props) {
 				{wrapper}
 			</LayoutItemContainer>;
 		} else {
-			// Compute the index of the last visible-in-render child so each
-			// child knows whether it has any visible sibling after it. In
-			// moveMode, itemVisible treats hidden panels as visible, so their
-			// dividers stay usable while the layout is being rearranged.
-			let lastVisibleIdx = -1;
-			for (let i = item.children.length - 1; i >= 0; i--) {
-				if (itemVisible(item.children[i], props.moveMode)) { lastVisibleIdx = i; break; }
-			}
-
+			const lastVisibleIdx = lastVisibleChildIndex(item, props.moveMode);
 			const childrenComponents = [];
 			for (let i = 0; i < item.children.length; i++) {
 				const child = item.children[i];
