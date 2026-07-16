@@ -310,6 +310,11 @@ export const postHandlers: PostHandlers = {
 					stripeUserId,
 					stripeSubscriptionId,
 				);
+
+				const subscription = await models.subscription().byStripeSubscriptionId(stripeSubscriptionId);
+				if (subscription) {
+					await models.subscription().updateFromStripe(subscription, stripeSub);
+				}
 			},
 
 			'invoice.paid': async () => {
@@ -360,6 +365,8 @@ export const postHandlers: PostHandlers = {
 
 				logger.info(`Updating subscription of user ${user.id} to ${newAccountType}`);
 				await models.user().save({ id: user.id, account_type: newAccountType });
+
+				await models.subscription().updateFromStripe(sub, stripeSub);
 			},
 
 		};

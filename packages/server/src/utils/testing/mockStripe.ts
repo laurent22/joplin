@@ -66,7 +66,11 @@ jest.mock('stripe', () => {
 	return () => mock;
 });
 
-export const mock: StripeMock = require('stripe')();
+const mockedStripe = require('stripe')();
+// Export mockedStripe as both Stripe and StripeMock to limit the number of casts
+// needed in testing logic
+export const stripe: Stripe = mockedStripe;
+export const mock: StripeMock = mockedStripe;
 
 export const reset = () => {
 	mock.resetMock();

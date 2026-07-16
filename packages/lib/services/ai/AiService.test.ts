@@ -2,6 +2,7 @@ import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-u
 import Setting from '../../models/Setting';
 import AiService from './AiService';
 import deriveClassification from './classification';
+import { ChatRole } from './types';
 
 describe('AiService', () => {
 
@@ -13,7 +14,7 @@ describe('AiService', () => {
 
 	it('throws when AI is disabled', async () => {
 		Setting.setValue('ai.enabled', false);
-		await expect(AiService.instance().chat([{ role: 'user', content: 'hi' }]))
+		await expect(AiService.instance().chat([{ role: ChatRole.User, content: 'hi' }]))
 			.rejects.toMatchObject({ code: 'aiDisabled' });
 	});
 
@@ -24,7 +25,7 @@ describe('AiService', () => {
 		Setting.setValue('ai.chat.apiKey', 'sk-test');
 		Setting.setValue('ai.chat.model', 'claude-3-5-sonnet-latest');
 
-		await expect(AiService.instance().chat([{ role: 'user', content: 'hi' }]))
+		await expect(AiService.instance().chat([{ role: ChatRole.User, content: 'hi' }]))
 			.rejects.toMatchObject({ code: 'aiRemoteNotAllowed' });
 	});
 
