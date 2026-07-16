@@ -66,6 +66,7 @@
     "react-native-device-info": "15.0.2",
     "react-native-dropdownalert": "5.2.0",
     "react-native-file-viewer": "2.1.5",
+    "react-native-gesture-handler": "2.32.0",
     "react-native-get-random-values": "2.0.0",
     "react-native-image-picker": "8.2.1",
     "react-native-localize": "3.7.0",

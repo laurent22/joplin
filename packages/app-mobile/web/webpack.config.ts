@@ -84,6 +84,7 @@ const buildSharedConfig = (hotReload: boolean): webpack.Configuration => {
 				'expo-image-manipulator': emptyLibraryMock,
 				'react-native-nitro-modules': emptyLibraryMock,
 				'react-native-vector-icons/MaterialCommunityIcons': throwOnLoadLibraryMock,
+				'react-native-reanimated': emptyLibraryMock,
 
 				// Workaround for applying serviceworker types to a single file.
 				// See https://joshuatz.com/posts/2021/strongly-typed-service-workers/.

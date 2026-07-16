@@ -41,7 +41,7 @@ export interface ModalElementProps {
 	// If scrollOverflow is provided, the modal is wrapped in a vertical
 	// ScrollView. This allows the user to scroll parts of dialogs into
 	// view that would otherwise be clipped by the screen edge.
-	scrollOverflow?: boolean|ScrollViewProps;
+	scrollOverflow?: boolean|(ScrollViewProps & { ref?: RefObject<ScrollView|null> });
 }
 
 const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) => {
