@@ -4,6 +4,7 @@ import { BaseItemEntity, FolderEntity, NoteEntity, TagEntity } from './services/
 import Note from './models/Note';
 import BaseModel from './BaseModel';
 import Folder from './models/Folder';
+import ItemChange from './models/ItemChange';
 // const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 
 function initTestState(folders: FolderEntity[], selectedFolderIndex: number, notes: NoteEntity[], selectedNoteIndexes: number[], tags: TagEntity[] = null, selectedTagIndex: number = null) {
@@ -983,5 +984,57 @@ describe('reducer', () => {
 		// background window should still be on notes[2], not have jumped to whatever
 		// the primary window selected next
 		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+	});
+
+	test('sync moving an unselected note should not change the selection', async () => {
+		const folders = await createNTestFolders(2);
+		const notes = await createNTestNotes(3, folders[0]);
+
+		// Select note[0]
+		let state = initTestState(folders, 0, notes, [0]);
+		state = goToNote(notes, [0], state);
+
+		const movedNote = {
+			...notes[1],
+			parent_id: folders[1].id,
+		};
+
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ONE',
+			note: movedNote,
+			changeSource: ItemChange.SOURCE_SYNC,
+		});
+
+		// Selected note should remain selected
+		expect(state.selectedNoteIds).toEqual([notes[0].id]);
+
+		// Moved note should no longer be visible
+		expect(state.notes.every(n => n.id !== notes[1].id)).toBe(true);
+	});
+
+	test('sync moving the selected note should select the next note', async () => {
+		const folders = await createNTestFolders(2);
+		const notes = await createNTestNotes(3, folders[0]);
+
+		// Select note[0]
+		let state = initTestState(folders, 0, notes, [0]);
+		state = goToNote(notes, [0], state);
+
+		const movedNote = {
+			...notes[0],
+			parent_id: folders[1].id,
+		};
+
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ONE',
+			note: movedNote,
+			changeSource: ItemChange.SOURCE_SYNC,
+		});
+
+		// Selected note should change
+		expect(state.selectedNoteIds).toEqual([notes[1].id]);
+
+		// Moved note should no longer be visible
+		expect(state.notes.every(n => n.id !== notes[0].id)).toBe(true);
 	});
 });
