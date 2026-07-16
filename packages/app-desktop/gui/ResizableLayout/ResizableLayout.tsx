@@ -106,10 +106,10 @@ function ResizableLayout(props: Props) {
 		// last child of any direction inherits the parent's own trailing gap.
 		const parentRight = parentDir === 'column'
 			? parentEdges.ownRight || parentEdges.parentRight
-			: (isLastChild && parentEdges.parentRight);
+			: (isLastChild && (parentEdges.ownRight || parentEdges.parentRight));
 		const parentBottom = parentDir === 'row'
 			? parentEdges.ownBottom || parentEdges.parentBottom
-			: (isLastChild && parentEdges.parentBottom);
+			: (isLastChild && (parentEdges.ownBottom || parentEdges.parentBottom));
 		const edges: EdgeFlags = { ownRight, ownBottom, parentRight, parentBottom };
 
 		const onResizeStart: ResizeStartCallback = () => {

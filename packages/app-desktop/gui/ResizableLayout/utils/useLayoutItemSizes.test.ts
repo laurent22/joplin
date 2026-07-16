@@ -461,6 +461,42 @@ describe('useLayoutItemSizes', () => {
 		expect(after.editor.width).toBe(after.col.width);
 	});
 
+	test('itemSize propagates the ancestor divider gap through last-child same-axis nesting', () => {
+		// Same-axis nesting is unusual but valid; a row nested at the end of
+		// another row should inherit its outer sibling's right gap.
+		const sizes = { outer: { width: 200, height: 100 }, inner: { width: 200, height: 100 } };
+		const inner: LayoutItem = { key: 'inner' };
+		// The outer has its own trailing gap because it has a sibling to its right.
+		const edgesFromLastRowChild = { ownRight: false, ownBottom: false, parentRight: true, parentBottom: false };
+		const size = itemSize(inner, null, sizes, false, edgesFromLastRowChild);
+		// 5px reserved for the propagated right gap.
+		expect(size.width).toBe(195);
+	});
+
+	test('multiple width-less siblings stay within the container width even when combined fallbacks exceed it', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 400,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				// Three unsized non-absorber siblings would want 250 each (=750),
+				// far above the 400 container. The absorber (editor) must still
+				// get at least its minimum.
+				{ key: 'a' },
+				{ key: 'b' },
+				{ key: 'c' },
+				{ key: 'editor', flexible: true },
+			],
+		});
+
+		const { result } = renderHook(() => useLayoutItemSizes(layout));
+		const sizes = result.current;
+		const total = sizes.a.width + sizes.b.width + sizes.c.width + sizes.editor.width;
+		expect(total).toBeLessThanOrEqual(400);
+		expect(sizes.editor.width).toBeGreaterThanOrEqual(40); // itemMinWidth
+	});
+
 	test('flexible flag on a hidden child falls back to the last visible sibling', () => {
 		const layout: LayoutItem = validateLayout({
 			key: 'root',

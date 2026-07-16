@@ -126,14 +126,17 @@ function calculateChildrenSizes(item: LayoutItem, parent: LayoutItem | null, siz
 	if (noWidthChildren.length && item.direction === 'row' && noWidthChildren.length > 1) {
 		const absorber = noWidthChildren.find(c => containsFlexibleDescendant(c.item));
 		if (absorber) {
-			let absorberWidth = remainingSize.width;
+			const absorberMin = absorber.item.minWidth || itemMinWidth;
+			let budget = Math.max(0, remainingSize.width - absorberMin);
 			for (const child of noWidthChildren) {
 				if (child.item.key === absorber.item.key) continue;
-				const w = child.item.minWidth || nonAbsorberFallbackWidth;
+				const min = child.item.minWidth || itemMinWidth;
+				const desired = child.item.minWidth || nonAbsorberFallbackWidth;
+				const w = Math.max(min, Math.min(desired, budget));
 				sizes[child.item.key].width = w;
-				absorberWidth -= w;
+				budget -= w;
 			}
-			sizes[absorber.item.key].width = Math.max(absorber.item.minWidth || itemMinWidth, absorberWidth);
+			sizes[absorber.item.key].width = Math.max(absorberMin, remainingSize.width - (noWidthChildren.reduce((sum, c) => c.item.key === absorber.item.key ? sum : sum + sizes[c.item.key].width, 0)));
 		} else {
 			const w = Math.floor(remainingSize.width / noWidthChildren.length);
 			for (const child of noWidthChildren) sizes[child.item.key].width = w;
@@ -146,14 +149,17 @@ function calculateChildrenSizes(item: LayoutItem, parent: LayoutItem | null, siz
 	if (noHeightChildren.length && item.direction === 'column' && noHeightChildren.length > 1) {
 		const absorber = noHeightChildren.find(c => containsFlexibleDescendant(c.item));
 		if (absorber) {
-			let absorberHeight = remainingSize.height;
+			const absorberMin = absorber.item.minHeight || itemMinHeight;
+			let budget = Math.max(0, remainingSize.height - absorberMin);
 			for (const child of noHeightChildren) {
 				if (child.item.key === absorber.item.key) continue;
-				const h = child.item.minHeight || nonAbsorberFallbackHeight;
+				const min = child.item.minHeight || itemMinHeight;
+				const desired = child.item.minHeight || nonAbsorberFallbackHeight;
+				const h = Math.max(min, Math.min(desired, budget));
 				sizes[child.item.key].height = h;
-				absorberHeight -= h;
+				budget -= h;
 			}
-			sizes[absorber.item.key].height = Math.max(absorber.item.minHeight || itemMinHeight, absorberHeight);
+			sizes[absorber.item.key].height = Math.max(absorberMin, remainingSize.height - (noHeightChildren.reduce((sum, c) => c.item.key === absorber.item.key ? sum : sum + sizes[c.item.key].height, 0)));
 		} else {
 			const h = Math.floor(remainingSize.height / noHeightChildren.length);
 			for (const child of noHeightChildren) sizes[child.item.key].height = h;
