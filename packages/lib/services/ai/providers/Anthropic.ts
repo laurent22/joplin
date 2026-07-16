@@ -230,6 +230,7 @@ export default class AnthropicProvider extends ChatProviderBase {
 					callId: response.id,
 					toolName: response.name,
 					arguments: response.input,
+					parseError: null,
 				});
 			} else if (response.type === 'text' && typeof response.text === 'string') {
 				textMessages.push(response.text);

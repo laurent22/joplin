@@ -155,6 +155,11 @@ const ChatPanel: React.FC<Props> = (props) => {
 	const requiresDisclosure = props.providerType !== 'joplin-cloud';
 	const showDisclosure = requiresDisclosure && !disclosureShown && messages.length === 0;
 
+	const handleCancel = useCallback(() => {
+		cancelRequest();
+		appendMessage({ id: makeId(), role: 'assistant', text: _('(Cancelled)'), raw: [] });
+	}, [cancelRequest, appendMessage]);
+
 	const handleSend = useCallback(async () => {
 		const text = input.trim();
 		if (!text || sending) return;
@@ -174,7 +179,12 @@ const ChatPanel: React.FC<Props> = (props) => {
 		// send the prior user turn as history alongside the new prompt.
 		const userTurnId = makeId();
 		let hadSuccessfulResponse = false;
-		appendMessage({ id: userTurnId, role: 'user', text, raw: [] });
+		appendMessage({
+			id: userTurnId,
+			role: 'user',
+			text,
+			raw: [{ role: ChatRole.User, content: text }],
+		});
 
 		try {
 			const note = await Note.load(props.noteId);
@@ -331,6 +341,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 		);
 	}
 
+	const sendButtonLabel = sending ? _('Stop generating') : _('Send');
+
 	return (
 		<div className='chat-panel'>
 			<div className='header'>
@@ -401,12 +413,12 @@ const ChatPanel: React.FC<Props> = (props) => {
 					<button
 						type='button'
 						className='send'
-						onClick={() => { void handleSend(); }}
-						disabled={sending || !input.trim()}
-						aria-label={sending ? _('Sending') : _('Send')}
-						title={sending ? _('Sending…') : _('Send')}
+						onClick={sending ? handleCancel : handleSend}
+						disabled={!sending && !input.trim()}
+						aria-label={sendButtonLabel}
+						title={sendButtonLabel}
 					>
-						<i className={sending ? 'fas fa-spinner' : 'fas fa-paper-plane'} aria-hidden='true' />
+						<i className={sending ? 'fas fa-stop' : 'fas fa-paper-plane'} aria-hidden='true' />
 					</button>
 				</div>
 			</div>

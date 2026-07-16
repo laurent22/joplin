@@ -9,8 +9,8 @@ describe('ai/providers/Anthropic', () => {
 				role: ChatRole.Assistant,
 				content: 'okay',
 				toolCalls: [
-					{ toolName: 'replaceRange', callId: 'call-1', arguments: { text: 'test', anchor: 'original' } },
-					{ toolName: 'replaceRange', callId: 'call-2', arguments: { text: 'test-2', anchor: 'other' } },
+					{ toolName: 'replaceRange', callId: 'call-1', arguments: { text: 'test', anchor: 'original' }, parseError: null },
+					{ toolName: 'replaceRange', callId: 'call-2', arguments: { text: 'test-2', anchor: 'other' }, parseError: null },
 				],
 			},
 			{
