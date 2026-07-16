@@ -172,12 +172,26 @@ describe('resizeLogic', () => {
 		]);
 	});
 
-	test('planResize: clamps the dragged panel to itemMinWidth (40) when the delta would shrink it below', () => {
-		// Only the individual write is clamped; the reciprocal update on the
-		// next sibling isn't rebalanced. The layout system's downstream
-		// distribution handles the resulting overflow.
-		const updates = planResize(baseSnap(), 'right', { width: -500, height: 0 });
+	test('planResize: clamps a shared delta so both sides respect min and the combined size is preserved', () => {
+		const snap = baseSnap();
+		const originalSum = snap.initialWidth + snap.nextSiblingInitialWidth;
+		const updates = planResize(snap, 'right', { width: -500, height: 0 });
+		// itemMinWidth is 40; dragged clamps to 40, next grows by the same
+		// amount so the two sizes sum to the original combined width.
 		expect(updates[0].props.width).toBe(40);
+		expect(updates[1].props.width).toBe(originalSum - 40);
+		expect(updates[0].props.width + updates[1].props.width).toBe(originalSum);
+	});
+
+	test('planResize: preserves the combined size when the delta would push the next sibling below min', () => {
+		const snap = baseSnap();
+		const originalSum = snap.initialWidth + snap.nextSiblingInitialWidth;
+		const updates = planResize(snap, 'right', { width: 500, height: 0 });
+		// The next sibling clamps to itemMinWidth (40); the dragged panel
+		// grows by exactly the same amount so the sum is preserved.
+		expect(updates[1].props.width).toBe(40);
+		expect(updates[0].props.width).toBe(originalSum - 40);
+		expect(updates[0].props.width + updates[1].props.width).toBe(originalSum);
 	});
 
 });

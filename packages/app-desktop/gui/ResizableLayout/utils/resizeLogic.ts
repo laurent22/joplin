@@ -127,17 +127,26 @@ export function planResize(
 	const nextIsAbsorber = isHorizontal ? snapshot.nextAbsorbsAlongAxis.width : snapshot.nextAbsorbsAlongAxis.height;
 	const bothAbsorb = itemIsAbsorber && nextIsAbsorber;
 
-	const updates: ResizeUpdate[] = [];
+	const writeItem = !itemIsAbsorber || bothAbsorb;
+	const writeNext = !nextIsAbsorber && !!snapshot.nextSiblingKey;
 
-	if (!itemIsAbsorber || bothAbsorb) {
-		const initial = isHorizontal ? snapshot.initialWidth : snapshot.initialHeight;
-		const newSize = Math.max(minSize, initial + rawDelta);
+	const itemInitial = isHorizontal ? snapshot.initialWidth : snapshot.initialHeight;
+	const nextInitial = isHorizontal ? snapshot.nextSiblingInitialWidth : snapshot.nextSiblingInitialHeight;
+
+	// When both panels are written, clamp a single shared delta against both
+	// minimums so their combined size is preserved. When only one side is
+	// written, the other is absorbing and we don't clamp against it.
+	let effectiveDelta = rawDelta;
+	if (writeItem) effectiveDelta = Math.max(effectiveDelta, minSize - itemInitial);
+	if (writeNext) effectiveDelta = Math.min(effectiveDelta, nextInitial - minSize);
+
+	const updates: ResizeUpdate[] = [];
+	if (writeItem) {
+		const newSize = itemInitial + effectiveDelta;
 		updates.push({ key: snapshot.key, props: isHorizontal ? { width: newSize } : { height: newSize } });
 	}
-
-	if (!nextIsAbsorber && snapshot.nextSiblingKey) {
-		const initial = isHorizontal ? snapshot.nextSiblingInitialWidth : snapshot.nextSiblingInitialHeight;
-		const newSize = Math.max(minSize, initial - rawDelta);
+	if (writeNext) {
+		const newSize = nextInitial - effectiveDelta;
 		updates.push({ key: snapshot.nextSiblingKey, props: isHorizontal ? { width: newSize } : { height: newSize } });
 	}
 
