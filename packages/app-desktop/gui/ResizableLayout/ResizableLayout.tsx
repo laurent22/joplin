@@ -130,18 +130,20 @@ function ResizableLayout(props: Props) {
 		};
 
 		const onResize: ResizeCallback = (_event, direction, _refToElement, delta) => {
-			// The absorber (width/height-less side) is skipped so the layout
-			// system keeps it flexible.
+			// A sized panel is skipped only if the other side is fixed; when
+			// both panels are absorbers, we write to the dragged one so the
+			// divider actually moves (the next sibling then absorbs the rest).
 			const isHorizontal = direction !== 'bottom';
 			const minSize = isHorizontal ? itemMinWidth : itemMinHeight;
 			const rawDelta = isHorizontal ? delta.width : delta.height;
 
 			const itemIsAbsorber = isHorizontal ? resizedItem.itemAbsorbsAlongAxis.width : resizedItem.itemAbsorbsAlongAxis.height;
 			const nextIsAbsorber = isHorizontal ? resizedItem.nextAbsorbsAlongAxis.width : resizedItem.nextAbsorbsAlongAxis.height;
+			const bothAbsorb = itemIsAbsorber && nextIsAbsorber;
 
 			let newLayout = props.layout;
 
-			if (!itemIsAbsorber) {
+			if (!itemIsAbsorber || bothAbsorb) {
 				const initial = isHorizontal ? resizedItem.initialWidth : resizedItem.initialHeight;
 				const newSize = Math.max(minSize, initial + rawDelta);
 				newLayout = setLayoutItemProps(newLayout, resizedItem.key, isHorizontal ? { width: newSize } : { height: newSize });
