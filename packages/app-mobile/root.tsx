@@ -22,7 +22,6 @@ import { Keyboard, BackHandler, Animated, StatusBar, Platform, Dimensions } from
 import { AppState as RNAppState, EmitterSubscription, View, Text, Linking, NativeEventSubscription, Appearance, ActivityIndicator } from 'react-native';
 import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 const DropdownAlert = require('react-native-dropdownalert').default;
 
 // Mirrors the DropdownAlertData type from react-native-dropdownalert
@@ -852,22 +851,20 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 							},
 						},
 					}}>
-						<GestureHandlerRootView>
-							<DialogManager themeId={this.props.themeId}>
-								<StatusBar barStyle={statusBarStyle} />
-								<SafeAreaProvider>
-									<FocusControl.MainAppContent style={{ flex: 1 }}>
-										{shouldShowMainContent ? mainContent : (
-											<BiometricPopup
-												dispatch={this.props.dispatch}
-												themeId={this.props.themeId}
-												sensorInfo={this.state.sensorInfo}
-											/>
-										)}
-									</FocusControl.MainAppContent>
-								</SafeAreaProvider>
-							</DialogManager>
-						</GestureHandlerRootView>
+						<DialogManager themeId={this.props.themeId}>
+							<StatusBar barStyle={statusBarStyle} />
+							<SafeAreaProvider>
+								<FocusControl.MainAppContent style={{ flex: 1 }}>
+									{shouldShowMainContent ? mainContent : (
+										<BiometricPopup
+											dispatch={this.props.dispatch}
+											themeId={this.props.themeId}
+											sensorInfo={this.state.sensorInfo}
+										/>
+									)}
+								</FocusControl.MainAppContent>
+							</SafeAreaProvider>
+						</DialogManager>
 					</PaperProvider>
 				</MenuProvider>
 			</FocusControl.Provider>

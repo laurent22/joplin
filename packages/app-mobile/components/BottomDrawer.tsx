@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Easing, LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, Platform, Pressable, StyleSheet, useWindowDimensions, View, ViewStyle } from 'react-native';
+import { Animated, Easing, GestureResponderEvent, LayoutChangeEvent, NativeScrollEvent, NativeScrollPoint, NativeSyntheticEvent, PanResponder, PanResponderGestureState, Platform, Pressable, StyleSheet, useWindowDimensions, View, ViewStyle } from 'react-native';
 import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 import { themeStyle, ThemeStyle } from './global-style';
 import Modal from './Modal';
 import { AppState } from '../utils/types';
 import useReduceMotionEnabled from '../utils/hooks/useReduceMotionEnabled';
 import { _ } from '@joplin/lib/locale';
-import { Gesture, GestureDetector, GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 
 interface Props {
 	themeId: number;
@@ -147,38 +146,73 @@ const useStyles = ({ theme, dragging, draggable, dragOffset, backgroundOpacity }
 	}, [theme, safeAreaPadding, windowWidth, dragging, draggable, dragOffset, windowHeight, backgroundOpacity]);
 };
 
-const useGesture = (
+const usePanResponderWithTolerance = (
+	tolerance: number,
 	setDragging: (dragging: boolean)=> void,
 	onDragEnd: (dx: number, dy: number)=> void,
 	dragValue: Animated.Value,
-	scrollViewRef: RefObject<ScrollView|null>,
+	currentScrollRef: RefObject<NativeScrollPoint|null>,
+	menuY: number,
 ) => {
-	const [scrolledToTop, setScrolledToTop] = useState(true);
-	const onScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-		setScrolledToTop(event.nativeEvent.contentOffset.y < 10);
-	}, []);
+	const menuYRef = useRef(menuY);
+	menuYRef.current = menuY;
 
-	const gesture = Gesture.Pan()
-		.minDistance(22)
-		.enabled(scrolledToTop)
-		.simultaneousWithExternalGesture(scrollViewRef)
-		.onBegin(() => {
-			console.log('onStart');
+	return useMemo(() => {
+		const isNearMenuTop = (gestureState: PanResponderGestureState) => {
+			return Math.abs(gestureState.moveY - menuYRef.current) <= tolerance;
+		};
+		// Don't use panResponderCapture on web to prevent buttons from incorrectly being pressed
+		const onMoveEvent = Platform.OS === 'android' ? 'onMoveShouldSetPanResponderCapture' as const : 'onMoveShouldSetPanResponder' as const;
+		return PanResponder.create({
+			onStartShouldSetPanResponder: (_event, gestureState) => isNearMenuTop(gestureState),
+			[onMoveEvent]: (_event: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+				if (currentScrollRef.current) {
+					const top = currentScrollRef.current.y;
 
-			setDragging(true);
-		})
-		.onEnd((event) => {
-			console.log('onEnd', event.translationY);
+					const tolerance = 5;
+					if (top > tolerance) return false;
+				}
 
-			setDragging(false);
-			onDragEnd(event.translationX, event.translationY);
-		})
-		.onUpdate((event) => {
-			console.log('onupdate', event.translationY);
-			dragValue.setValue(event.translationY);
+				if (isNearMenuTop(gestureState)) return true;
+
+				// Use a large tolerance so that buttons in the menu are still clickable, even
+				// with a noisy input source:
+				return Math.abs(gestureState.dx) < 40 && gestureState.dy >= tolerance;
+			},
+			onShouldBlockNativeResponder: () => true,
+			onPanResponderGrant: () => {
+				setDragging(true);
+			},
+			onPanResponderTerminate: () => {
+				setDragging(false);
+			},
+			onPanResponderMove: Animated.event([
+				null,
+				// Updates menuDragOffset with the .dy property of the second argument:
+				{ dy: dragValue },
+			], { useNativeDriver: false }),
+			onPanResponderEnd: (_event, gestureState) => {
+				onDragEnd(gestureState.dx, gestureState.dy);
+				setDragging(false);
+			},
 		});
+	}, [dragValue, onDragEnd, setDragging, tolerance, currentScrollRef]);
+};
 
-	return { gesture, onScroll };
+const usePanResponders = (
+	setDragging: (dragging: boolean)=> void,
+	onDragEnd: (dx: number, dy: number)=> void,
+	dragValue: Animated.Value,
+	menuY: number,
+) => {
+	const currentScrollRef = useRef<NativeScrollPoint|null>(null);
+	const onScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
+		currentScrollRef.current = event.nativeEvent.contentOffset;
+	}, []);
+	// Use a large tolerance for the default responder to avoid interfering with menu content (e.g. buttons)
+	const basePanResponder = usePanResponderWithTolerance(22, setDragging, onDragEnd, dragValue, currentScrollRef, menuY);
+
+	return { basePanResponder, onScroll };
 };
 
 interface UseSyncVisibleProps {
@@ -225,8 +259,10 @@ const BottomDrawer: React.FC<Props> = props => {
 	const menuDragOffset = useMemo(() => new Animated.Value(0), []);
 
 	const [menuHeight, setMenuHeight] = useState(0);
+	const [menuY, setMenuY] = useState(0);
 	const onContainerLayout = useCallback((layout: LayoutChangeEvent) => {
 		setMenuHeight(layout.nativeEvent.layout.height);
+		setMenuY(layout.nativeEvent.layout.y);
 	}, []);
 	const backgroundOpacity = useMemo(() => {
 		return Animated.divide(
@@ -277,9 +313,8 @@ const BottomDrawer: React.FC<Props> = props => {
 		}
 	}, [clearDragOffset, onHide]);
 
-	const scrollViewRef = useRef<ScrollView|null>(null);
-	const { gesture, onScroll: onPanResponderScroll } = useGesture(
-		setDragging, onDragEnd, menuDragOffset, scrollViewRef,
+	const { basePanResponder, onScroll: onPanResponderScroll } = usePanResponders(
+		setDragging, onDragEnd, menuDragOffset, menuY,
 	);
 
 	const onContainerScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -301,34 +336,30 @@ const BottomDrawer: React.FC<Props> = props => {
 		dismissButtonStyle={styles.dismissButton}
 		wrapContent={view => {
 			return <>
-				<GestureHandlerRootView>
-					<Animated.View style={styles.backgroundStyle}/>
-					{view}
-				</GestureHandlerRootView>
+				<Animated.View style={styles.backgroundStyle}/>
+				{view}
 			</>;
 		}}
 		containerStyle={styles.menuStyle}
 		animationType={reduceMotionEnabled ? 'fade' : 'none'}
 		scrollOverflow={{
 			onScroll: onContainerScroll,
-			ref: scrollViewRef,
 		}}
 	>
-		<GestureDetector gesture={gesture} touchAction='pan-y'>
-			<View
-				onLayout={onContainerLayout}
-				style={[styles.contentContainer, props.style]}
-				ref={containerRef}
-			>
-				{dragging && <View style={styles.dragOverlay} />}
-				<DragHandle
-					containerStyle={styles.dragHandleContainer}
-					style={styles.dragHandle}
-					onDismiss={onHide}
-				/>
-				{props.children}
-			</View>
-		</GestureDetector>
+		<View
+			{...basePanResponder.panHandlers}
+			onLayout={onContainerLayout}
+			style={[styles.contentContainer, props.style]}
+			ref={containerRef}
+		>
+			{dragging && <View style={styles.dragOverlay} />}
+			<DragHandle
+				containerStyle={styles.dragHandleContainer}
+				style={styles.dragHandle}
+				onDismiss={onHide}
+			/>
+			{props.children}
+		</View>
 	</Modal>;
 };
 
