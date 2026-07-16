@@ -19,6 +19,7 @@ const parseUserCommand = (message: ChatMessage, availableTools: ToolSpec[]) => {
 					callId: `tool-call-${toolCalls.length}`,
 					toolName: args[0],
 					arguments: JSON.parse(args.slice(1).join(' ')),
+					parseError: null,
 				});
 			}
 		} else if (command[1] === 'reply-with') {
