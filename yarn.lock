@@ -2127,14 +2127,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@axe-core/playwright@npm:4.11.1":
-  version: 4.11.1
-  resolution: "@axe-core/playwright@npm:4.11.1"
+"@axe-core/playwright@npm:4.11.2":
+  version: 4.11.2
+  resolution: "@axe-core/playwright@npm:4.11.2"
   dependencies:
-    axe-core: "npm:~4.11.1"
+    axe-core: "npm:~4.11.3"
   peerDependencies:
     playwright-core: ">= 1.0.0"
-  checksum: 10/d2a0fce217fa415682c4730a0f82a5f3cf2b3081281ea4373f10aeb8a83417e84214e6bd75954a9ba3a23532e0afa0dad87cfcbfc88358170a50702266fad0cd
+  checksum: 10/3e4b3d75c56442dadc42717ab28167edcef8df1442bd3b51ddf25947d3be63ff08a2e3e1a382a04a681a1438f81d4685d099d093afa9abb0ec485b535df2a830
   languageName: node
   linkType: hard
 
@@ -12397,7 +12397,7 @@ __metadata:
   resolution: "@joplin/app-desktop@workspace:packages/app-desktop"
   dependencies:
     7zip-bin: "npm:5.2.0"
-    "@axe-core/playwright": "npm:4.11.1"
+    "@axe-core/playwright": "npm:4.11.2"
     "@electron/notarize": "npm:2.5.0"
     "@electron/rebuild": "npm:3.7.2"
     "@electron/remote": "npm:2.1.3"
@@ -22410,7 +22410,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axe-core@npm:~4.11.1":
+"axe-core@npm:~4.11.3":
   version: 4.11.4
   resolution: "axe-core@npm:4.11.4"
   checksum: 10/49095daa422d05d99a90b39301a3b5c971e234a4593403dfd6701df637a3e550bcfd7bd096709c5643564dd069208513247791f367790e0605d15386fb2a7bfe
