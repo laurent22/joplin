@@ -1,6 +1,6 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
-import { secondaryWindowPrefix, stateUtils } from '@joplin/lib/reducer';
+import { stateUtils } from '@joplin/lib/reducer';
 import Note from '@joplin/lib/models/Note';
 import { createAppDefaultWindowState } from '../app.reducer';
 import Setting from '@joplin/lib/models/Setting';
@@ -23,7 +23,7 @@ export const runtime = (): CommandRuntime => {
 				type: 'WINDOW_OPEN',
 				noteId,
 				folderId: note.parent_id,
-				windowId: `${secondaryWindowPrefix}-${noteId}-${idCounter++}`,
+				windowId: `window-${noteId}-${idCounter++}`,
 				defaultAppWindowState: {
 					...createAppDefaultWindowState(),
 					noteVisiblePanes: Setting.value('noteVisiblePanes'),

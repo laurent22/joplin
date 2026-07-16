@@ -32,7 +32,6 @@ import { ALL_NOTES_FILTER_ID } from './reserved-ids';
 import ItemChange from './models/ItemChange';
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
-export const secondaryWindowPrefix = 'window';
 
 const logger = Logger.create('lib/reducer');
 
@@ -1230,8 +1229,8 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					// a new note should be selected.
 					// In some cases, however, the selection needs to be preserved (e.g. the mobile app).
 					const preserveSelection = action.preserveSelection ?? draft.allowSelectionInOtherFolders;
-					const selectedNoteHasMoved = windowDraft.selectedNoteIds.length > 0 && !newNotes.map(o => o.id).includes(windowDraft.selectedNoteIds[0]);
-					const isSecondaryWindow = windowDraft.windowId.startsWith(secondaryWindowPrefix);
+					const selectedNoteHasMoved = windowDraft.selectedNoteIds.length > 0 && !newNotes.some(o => windowDraft.selectedNoteIds.includes(o.id));
+					const isSecondaryWindow = windowDraft.windowId !== defaultWindowId;
 					if (noteFolderHasChanged && !preserveSelection && !isSecondaryWindow && (action.changeSource !== ItemChange.SOURCE_SYNC || selectedNoteHasMoved)) {
 						let newIndex = movedNotePreviousIndex;
 						if (newIndex >= newNotes.length) newIndex = newNotes.length - 1;
