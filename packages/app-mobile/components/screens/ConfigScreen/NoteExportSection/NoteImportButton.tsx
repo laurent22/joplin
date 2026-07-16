@@ -12,6 +12,7 @@ import TaskButton, { OnProgressCallback, SetAfterCompleteListenerCallback, TaskS
 import { Platform } from 'react-native';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import Folder from '@joplin/lib/models/Folder';
+import { fileExtension } from '@joplin/lib/path-utils';
 
 const logger = Logger.create('NoteImportButton');
 
@@ -64,8 +65,17 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 			default: sourceFileUri,
 			ios: decodeURIComponent(sourceFileUri),
 		});
+
+		let validExtensions = ['jex'];
+		if (props.format === 'txt') validExtensions = ['md', 'markdown', 'txt', 'html'];
+
 		// importFiles[0].fileName can be null on iOS
 		const sourceFileName = importFiles[0].fileName ?? basename(sourceFilePath);
+		const extension = fileExtension(sourceFileName).toLowerCase();
+
+		if (!validExtensions.includes(extension)) {
+			throw new Error(_('Unsupported file extension. Expected: %s', validExtensions.join(', ')));
+		}
 
 		const importTargetPath = join(await makeImportExportCacheDirectory(), sourceFileName);
 		setAfterCompleteListener(async (_success: boolean) => {

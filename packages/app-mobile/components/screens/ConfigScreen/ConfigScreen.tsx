@@ -590,11 +590,11 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				<NoteImportButton key='import_as_jex_button' styles={this.styles()} defaultTitle={importJexLabel()} description={importJexDescription()} format='jex' />,
 				[importJexLabel(), importJexDescription()],
 			);
-			const importTxtLabel = () => _('Import from TXT');
+			const importTxtLabel = () => _('Import from text file');
 			const importTxtDescription = () => {
 				let folderTitle = importedFolderTitle();
 				if (this.state.activeFolder) folderTitle = this.state.activeFolder.title;
-				return _('Import a note from a Text file. The note will be imported into notebook \'%s\'.', substrWithEllipsis(folderTitle, 0, 32));
+				return _('Import a note from an md, markdown, txt, or html file. The note will be imported into notebook \'%s\'.', substrWithEllipsis(folderTitle, 0, 32));
 			};
 			addSettingComponent(
 				<NoteImportButton key='import_as_txt_button' styles={this.styles()} defaultTitle={importTxtLabel()} description={importTxtDescription()} format='txt' activeFolder={this.state.activeFolder} />,
