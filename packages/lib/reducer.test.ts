@@ -986,7 +986,10 @@ describe('reducer', () => {
 		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
 	});
 
-	test('sync moving an unselected note should not change the selection', async () => {
+	it.each([
+		['sync moving an unselected note should not change the selection', 1, 0],
+		['sync moving the selected note should select the next note', 0, 1],
+	])('%s', async (_, movedNoteIndex, expectedSelectedNoteIndex) => {
 		const folders = await createNTestFolders(2);
 		const notes = await createNTestNotes(3, folders[0]);
 
@@ -995,7 +998,7 @@ describe('reducer', () => {
 		state = goToNote(notes, [0], state);
 
 		const movedNote = {
-			...notes[1],
+			...notes[movedNoteIndex],
 			parent_id: folders[1].id,
 		};
 
@@ -1005,37 +1008,11 @@ describe('reducer', () => {
 			changeSource: ItemChange.SOURCE_SYNC,
 		});
 
-		// Selected note should remain selected
-		expect(state.selectedNoteIds).toEqual([notes[0].id]);
+		// Moved note should either remain selected or change
+		expect(state.selectedNoteIds).toEqual([notes[expectedSelectedNoteIndex].id]);
 
 		// Moved note should no longer be visible
-		expect(state.notes.every(n => n.id !== notes[1].id)).toBe(true);
-	});
-
-	test('sync moving the selected note should select the next note', async () => {
-		const folders = await createNTestFolders(2);
-		const notes = await createNTestNotes(3, folders[0]);
-
-		// Select note[0]
-		let state = initTestState(folders, 0, notes, [0]);
-		state = goToNote(notes, [0], state);
-
-		const movedNote = {
-			...notes[0],
-			parent_id: folders[1].id,
-		};
-
-		state = reducer(state, {
-			type: 'NOTE_UPDATE_ONE',
-			note: movedNote,
-			changeSource: ItemChange.SOURCE_SYNC,
-		});
-
-		// Selected note should change
-		expect(state.selectedNoteIds).toEqual([notes[1].id]);
-
-		// Moved note should no longer be visible
-		expect(state.notes.every(n => n.id !== notes[0].id)).toBe(true);
+		expect(state.notes.every(n => n.id !== notes[movedNoteIndex].id)).toBe(true);
 	});
 
 	test('sync moving the selected note in a background window should not change its selection', async () => {
