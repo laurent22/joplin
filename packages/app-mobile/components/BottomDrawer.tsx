@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RefObject, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Easing, GestureResponderEvent, LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, PanResponder, PanResponderGestureState, Platform, Pressable, StyleSheet, useWindowDimensions, View, ViewStyle } from 'react-native';
+import { Animated, Dimensions, Easing, GestureResponderEvent, LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, PanResponder, PanResponderGestureState, Platform, Pressable, StyleSheet, useWindowDimensions, View, ViewStyle } from 'react-native';
 import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 import { themeStyle, ThemeStyle } from './global-style';
 import Modal from './Modal';
@@ -233,6 +233,7 @@ interface UseSyncVisibleProps {
 	visible: boolean;
 	dragToOffset: (offset: number)=> Promise<void>;
 	onDismiss: ()=> void;
+	dragValue: Animated.Value;
 	containerRef: RefObject<View|null>;
 }
 
@@ -254,7 +255,10 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 
 	useEffect(() => {
 		if (props.visible) {
-			void propsRef.current.dragToOffset(0);
+			propsRef.current.containerRef.current.measure((_x, _y, _width, height) => {
+				propsRef.current.dragValue.setValue(height);
+				void propsRef.current.dragToOffset(0);
+			});
 		} else if (propsRef.current.containerRef.current) {
 			void dragDismiss();
 		}
@@ -270,9 +274,12 @@ const BottomDrawer: React.FC<Props> = props => {
 	const theme = themeStyle(props.themeId);
 	const [dragging, setDragging] = useState(false);
 
-	const menuDragOffset = useMemo(() => new Animated.Value(0), []);
-
 	const [menuHeight, setMenuHeight] = useState(0);
+	const menuDragOffset = useMemo(() => (
+		// Start with the menu offscreen
+		new Animated.Value(Dimensions.get('window').height)
+	), []);
+
 	const onContainerLayout = useCallback((layout: LayoutChangeEvent) => {
 		setMenuHeight(layout.nativeEvent.layout.height);
 	}, []);
@@ -316,7 +323,7 @@ const BottomDrawer: React.FC<Props> = props => {
 
 	const containerRef = useRef<View|null>(null);
 	const onHide = useUpdateOnVisibilityChange({
-		visible: props.visible, dragToOffset, containerRef, onDismiss: props.onDismiss,
+		visible: props.visible, dragToOffset, containerRef, onDismiss: props.onDismiss, dragValue: menuDragOffset,
 	});
 
 	const onDragEnd = useCallback((_dx: number, dy: number) => {
