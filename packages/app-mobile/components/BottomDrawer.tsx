@@ -50,10 +50,13 @@ const useStyles = ({ theme, dragging, draggable, dragOffset, backgroundOpacity }
 					extrapolate: 'clamp',
 				}),
 				position: 'absolute',
-				top: 0,
-				bottom: 0,
 				left: 0,
 				right: 0,
+				// Add additional space to prevent the edge of the background from being visible
+				// during overscroll on iOS
+				top: -spaceBelowScreenEdge,
+				bottom: -spaceBelowScreenEdge,
+
 				zIndex: 0,
 			},
 			menuStyle: {
