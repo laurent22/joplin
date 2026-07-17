@@ -242,7 +242,7 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 	const propsRef = useRef(props);
 	propsRef.current = props;
 
-	const dragDismiss = useCallback(() => {
+	const slideMenuOut = useCallback(() => {
 		return new Promise<void>((resolve, reject) => {
 			propsRef.current.containerRef.current.measure(async (_x, _y, _width, height) => {
 				try {
@@ -259,14 +259,14 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 		if (props.visible) {
 			void propsRef.current.dragToOffset(0);
 		} else if (propsRef.current.containerRef.current) {
-			void dragDismiss();
+			void slideMenuOut();
 		}
-	}, [props.visible, dragDismiss]);
+	}, [props.visible, slideMenuOut]);
 
 	return useCallback(async () => {
-		await dragDismiss();
+		await slideMenuOut();
 		propsRef.current.onDismiss();
-	}, [dragDismiss]);
+	}, [slideMenuOut]);
 };
 
 const BottomDrawer: React.FC<Props> = props => {
