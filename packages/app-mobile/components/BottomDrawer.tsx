@@ -350,11 +350,14 @@ const BottomDrawer: React.FC<Props> = props => {
 		const offsetY = event.nativeEvent.contentOffset.y;
 		// On iOS, support menu dismissal through the native scrollview's overscroll behavior:
 		if (offsetY < -80) {
+			// Start the animation at the current scroll position, to avoid a jump when starting
+			// the animation:
+			menuDragOffset.setValue(-offsetY);
 			void onHide();
 		} else {
 			onPanResponderScroll(event);
 		}
-	}, [onHide, onPanResponderScroll]);
+	}, [onHide, onPanResponderScroll, menuDragOffset]);
 
 	return <Modal
 		visible={props.visible}
