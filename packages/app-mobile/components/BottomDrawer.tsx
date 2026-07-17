@@ -275,6 +275,9 @@ const BottomDrawer: React.FC<Props> = props => {
 	const [dragging, setDragging] = useState(false);
 
 	const [menuHeight, setMenuHeight] = useState(0);
+	const menuHeightRef = useRef(0);
+	menuHeightRef.current = menuHeight;
+
 	const menuDragOffset = useMemo(() => (
 		// Start with the menu offscreen
 		new Animated.Value(Dimensions.get('window').height)
@@ -303,7 +306,7 @@ const BottomDrawer: React.FC<Props> = props => {
 		const baseAnimationProps = {
 			toValue: offset,
 			easing: Easing.elastic(0.5),
-			duration: reduceMotionEnabledRef.current ? 0 : 300,
+			duration: reduceMotionEnabledRef.current ? 0 : 250,
 			useNativeDriver: true,
 		};
 		const animation = Animated.timing(menuDragOffset, baseAnimationProps);
@@ -348,8 +351,11 @@ const BottomDrawer: React.FC<Props> = props => {
 
 	const onContainerScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
 		const offsetY = event.nativeEvent.contentOffset.y;
+		// Use a smaller tolerance for smaller menus to ensure that they're still dismissible
+		const overscrollTolerance = Math.min(80, menuHeightRef.current / 4);
+
 		// On iOS, support menu dismissal through the native scrollview's overscroll behavior:
-		if (offsetY < -80) {
+		if (offsetY < -overscrollTolerance) {
 			// Start the animation at the current scroll position, to avoid a jump when starting
 			// the animation:
 			menuDragOffset.setValue(-offsetY);
@@ -375,9 +381,13 @@ const BottomDrawer: React.FC<Props> = props => {
 		containerStyle={styles.menuStyle}
 		animationType={reduceMotionEnabled ? 'fade' : 'none'}
 		scrollOverflow={{
-			scrollEnabled: !animating,
 			onScroll: onContainerScroll,
-			scrollEventThrottle: 100,
+
+			// Throttling scroll events avoids a warning on web
+			scrollEventThrottle: 30,
+
+			// Disable scrollbars during in/out animations on web to avoid layout shift
+			scrollEnabled: !animating,
 		}}
 	>
 		<View
