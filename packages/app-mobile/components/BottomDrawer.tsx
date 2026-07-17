@@ -233,7 +233,6 @@ interface UseSyncVisibleProps {
 	visible: boolean;
 	dragToOffset: (offset: number)=> Promise<void>;
 	onDismiss: ()=> void;
-	dragValue: Animated.Value;
 	containerRef: RefObject<View|null>;
 }
 
@@ -255,10 +254,7 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 
 	useEffect(() => {
 		if (props.visible) {
-			propsRef.current.containerRef.current.measure((_x, _y, _width, height) => {
-				propsRef.current.dragValue.setValue(height);
-				void propsRef.current.dragToOffset(0);
-			});
+			void propsRef.current.dragToOffset(0);
 		} else if (propsRef.current.containerRef.current) {
 			void dragDismiss();
 		}
@@ -323,7 +319,7 @@ const BottomDrawer: React.FC<Props> = props => {
 
 	const containerRef = useRef<View|null>(null);
 	const onHide = useUpdateOnVisibilityChange({
-		visible: props.visible, dragToOffset, containerRef, onDismiss: props.onDismiss, dragValue: menuDragOffset,
+		visible: props.visible, dragToOffset, containerRef, onDismiss: props.onDismiss,
 	});
 
 	const onDragEnd = useCallback((_dx: number, dy: number) => {
