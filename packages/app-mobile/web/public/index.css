@@ -32,6 +32,10 @@ dialog.dialog-modal-layer {
 	background-color: transparent;
 }
 
+dialog.dialog-modal-layer::backdrop {
+	background-color: transparent;
+}
+
 /* Dialog animation
    (see "Animating dialogs" on MDN: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog#animating_dialogs) */
 dialog.dialog-modal-layer {
