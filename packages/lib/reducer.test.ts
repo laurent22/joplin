@@ -4,6 +4,7 @@ import { BaseItemEntity, FolderEntity, NoteEntity, TagEntity } from './services/
 import Note from './models/Note';
 import BaseModel from './BaseModel';
 import Folder from './models/Folder';
+import ItemChange from './models/ItemChange';
 // const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 
 function initTestState(folders: FolderEntity[], selectedFolderIndex: number, notes: NoteEntity[], selectedNoteIndexes: number[], tags: TagEntity[] = null, selectedTagIndex: number = null) {
@@ -983,5 +984,70 @@ describe('reducer', () => {
 		// background window should still be on notes[2], not have jumped to whatever
 		// the primary window selected next
 		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+	});
+
+	it.each([
+		['sync moving an unselected note should not change the selection', 1, 0],
+		['sync moving the selected note should select the next note', 0, 1],
+	])('%s', async (_, movedNoteIndex, expectedSelectedNoteIndex) => {
+		const folders = await createNTestFolders(2);
+		const notes = await createNTestNotes(3, folders[0]);
+
+		// Select note[0]
+		let state = initTestState(folders, 0, notes, [0]);
+		state = goToNote(notes, [0], state);
+
+		const movedNote = {
+			...notes[movedNoteIndex],
+			parent_id: folders[1].id,
+		};
+
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ONE',
+			note: movedNote,
+			changeSource: ItemChange.SOURCE_SYNC,
+		});
+
+		// Moved note should either remain selected or change
+		expect(state.selectedNoteIds).toEqual([notes[expectedSelectedNoteIndex].id]);
+
+		// Moved note should no longer be visible
+		expect(state.notes.every(n => n.id !== notes[movedNoteIndex].id)).toBe(true);
+	});
+
+	test('sync moving the selected note in a background window should not change its selection', async () => {
+		const folders = await createNTestFolders(2);
+		const notes = await createNTestNotes(3, folders[0]);
+
+		// Primary window selects note[0]
+		let state = initTestState(folders, 0, notes, [0]);
+
+		// Background window selects note[2]
+		const secondaryWindowId = 'window1';
+		state = createBackgroundWindow(state, secondaryWindowId, notes[2], notes);
+
+		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+
+		const movedNote = {
+			...notes[2],
+			parent_id: folders[1].id,
+		};
+
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ONE',
+			note: movedNote,
+			changeSource: ItemChange.SOURCE_SYNC,
+		});
+
+		// The moved note should no longer be in the background window's list
+		expect(
+			state.backgroundWindows[secondaryWindowId].notes.every(n => n.id !== notes[2].id),
+		).toBe(true);
+
+		// The background window should continue rendering the moved note
+		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+
+		// The primary window should be unaffected
+		expect(state.selectedNoteIds).toEqual([notes[0].id]);
 	});
 });

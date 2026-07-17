@@ -1,6 +1,3 @@
+import { ChangeEventHandler as ReactChangeEventHandler } from 'react';
 
-export interface ChangeEvent {
-	value: string;
-}
-
-export type ChangeEventHandler = (event: ChangeEvent)=> void;
+export type ChangeEventHandler = ReactChangeEventHandler<HTMLInputElement>;

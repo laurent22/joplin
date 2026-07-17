@@ -8,6 +8,7 @@ import NoteList from './NoteList';
 import { expect } from '../util/test';
 import ChangeAppLayoutScreen from './ChangeAppLayoutScreen';
 import waitForNextWindowMatching from '../util/waitForNextWindowMatching';
+import ChatPanel from './ChatPanel';
 
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
@@ -17,6 +18,7 @@ export default class MainScreen {
 	public readonly noteEditor: NoteEditorScreen;
 	public readonly goToAnything: GoToAnything;
 	public readonly changeLayoutScreen: ChangeAppLayoutScreen;
+	public readonly chatPanel: ChatPanel;
 
 	public constructor(private page: Page) {
 		this.newNoteButton = page.locator('.new-note-button');
@@ -26,6 +28,7 @@ export default class MainScreen {
 		this.noteEditor = new NoteEditorScreen(page);
 		this.goToAnything = new GoToAnything(page, this);
 		this.changeLayoutScreen = new ChangeAppLayoutScreen(page, this);
+		this.chatPanel = new ChatPanel(page, this);
 	}
 
 	public async setup() {

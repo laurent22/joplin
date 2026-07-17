@@ -1291,6 +1291,7 @@ class Setting extends BaseModel {
 			'appearance',
 			'sync',
 			'encryption',
+			'noteLock',
 			'joplinCloud',
 			'ai',
 			'mcp',
@@ -1362,6 +1363,7 @@ class Setting extends BaseModel {
 		if (name === 'application') return _('Application');
 		if (name === 'revisionService') return _('Note History');
 		if (name === 'encryption') return _('Encryption');
+		if (name === 'noteLock') return _('Note lock');
 		if (name === 'server') return _('Web Clipper');
 		if (name === 'keymap') return _('Keyboard Shortcuts');
 		if (name === 'joplinCloud') return _('Joplin Cloud');
@@ -1382,6 +1384,9 @@ class Setting extends BaseModel {
 		}
 		if (name === 'general' && appType === AppType.Desktop) {
 			return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
+		}
+		if (name === 'noteLock') {
+			return _('Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.');
 		}
 
 		if (this.customSections_[name] && this.customSections_[name].description) return this.customSections_[name].description;
@@ -1440,6 +1445,7 @@ class Setting extends BaseModel {
 			'application': 'icon-application',
 			'revisionService': 'icon-note-history',
 			'encryption': 'icon-encryption',
+			'noteLock': 'fa fa-lock',
 			'server': 'far fa-hand-scissors',
 			'keymap': 'fa fa-keyboard',
 			'joplinCloud': 'fa fa-cloud',
