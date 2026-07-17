@@ -289,14 +289,16 @@ const BottomDrawer: React.FC<Props> = props => {
 		);
 	}, [menuHeight, menuDragOffset]);
 
+	const [animating, setAnimating] = useState(false);
 	const menuYOffset = useMemo(() => menuDragOffset, [menuDragOffset]);
-	const styles = useStyles({ theme, dragging, draggable: props.draggable, dragOffset: menuYOffset, backgroundOpacity });
+	const styles = useStyles({
+		theme, dragging, draggable: props.draggable, dragOffset: menuYOffset, backgroundOpacity,
+	});
 
 	const reduceMotionEnabled = useReduceMotionEnabled();
 	const reduceMotionEnabledRef = useRef(false);
 	reduceMotionEnabledRef.current = reduceMotionEnabled;
 
-	const [animating, setAnimating] = useState(false);
 	const dragToOffset = useCallback(async (offset: number) => {
 		const baseAnimationProps = {
 			toValue: offset,
@@ -370,6 +372,7 @@ const BottomDrawer: React.FC<Props> = props => {
 		containerStyle={styles.menuStyle}
 		animationType={reduceMotionEnabled ? 'fade' : 'none'}
 		scrollOverflow={{
+			scrollEnabled: !animating,
 			onScroll: onContainerScroll,
 			scrollEventThrottle: 100,
 		}}
