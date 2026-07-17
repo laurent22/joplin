@@ -371,6 +371,7 @@ const BottomDrawer: React.FC<Props> = props => {
 		animationType={reduceMotionEnabled ? 'fade' : 'none'}
 		scrollOverflow={{
 			onScroll: onContainerScroll,
+			scrollEventThrottle: 100,
 		}}
 	>
 		<View
