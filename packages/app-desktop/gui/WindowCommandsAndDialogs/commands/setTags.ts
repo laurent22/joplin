@@ -3,6 +3,7 @@ import { _ } from '@joplin/lib/locale';
 import Tag from '@joplin/lib/models/Tag';
 import { TagEntity } from '@joplin/lib/services/database/types';
 import hasLockedNoteWhileSessionLocked from '@joplin/lib/services/noteLock/hasLockedNoteWhileSessionLocked';
+import bridge from '../../../services/bridge';
 import { WindowControl } from '../utils/useWindowControl';
 
 export const declaration: CommandDeclaration = {
@@ -21,7 +22,10 @@ export const runtime = (comp: WindowControl): CommandRuntime => {
 		execute: async (context: CommandContext, noteIds: string[] = null) => {
 			noteIds = noteIds || context.state.selectedNoteIds;
 
-			if (await hasLockedNoteWhileSessionLocked(noteIds)) throw new Error('Tags cannot be changed for locked notes, while the session is locked');
+			if (await hasLockedNoteWhileSessionLocked(noteIds)) {
+				bridge().showErrorMessageBox(_('Tags cannot be changed for locked notes, while the session is locked'));
+				return;
+			}
 
 			const tags = await Tag.commonTagsByNoteIds(noteIds);
 			const startTags: TagOption[] = tags
