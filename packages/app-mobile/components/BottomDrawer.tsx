@@ -210,7 +210,6 @@ const usePanResponder = ({
 				const tolerance = 22;
 				return Math.abs(gestureState.dx) < 40 && gestureState.dy >= tolerance;
 			},
-			onShouldBlockNativeResponder: () => true,
 			onPanResponderGrant: () => {
 				setDragging(true);
 			},
