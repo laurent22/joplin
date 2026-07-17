@@ -278,7 +278,9 @@ const BottomDrawer: React.FC<Props> = props => {
 	menuHeightRef.current = menuHeight;
 
 	const menuDragOffset = useMemo(() => (
-		// Start with the menu offscreen
+		// Start with the menu offscreen so that the slide-in animation works.
+		// Using the window height as an initial offset ensures that the menu starts completely
+		// offscreen.
 		new Animated.Value(Dimensions.get('window').height)
 	), []);
 
