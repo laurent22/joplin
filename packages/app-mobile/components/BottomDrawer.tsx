@@ -238,6 +238,7 @@ interface UseSyncVisibleProps {
 
 const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 	const propsRef = useRef(props);
+	propsRef.current = props;
 
 	const dragDismiss = useCallback(() => {
 		return new Promise<void>((resolve, reject) => {
