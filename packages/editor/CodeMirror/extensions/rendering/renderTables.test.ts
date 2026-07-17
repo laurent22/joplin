@@ -125,4 +125,32 @@ describe('renderTables', () => {
 		const editor = await createEditor(source);
 		expect(editor.state.doc.toString()).toBe(source);
 	});
+
+	test('typing a trailing space in a cell should keep it visible after live-sync', async () => {
+		jest.useFakeTimers();
+		try {
+			const editor = await createEditor('| Head | b |\n|---|---|\n| x | y |');
+			// The widget must be connected for the live-sync flush to run.
+			document.body.appendChild(editor.dom);
+
+			const cell = findCellTextDivs(editor)[0];
+			focusCell(cell);
+
+			// Simulate the user typing "Hello " (with a trailing space).
+			cell.textContent = 'Hello ';
+			cell.dispatchEvent(new Event('input'));
+
+			// Fire the 500ms debounced live-sync and the follow-up rAF that
+			// restores focus + caret to the rebuilt cell.
+			jest.advanceTimersByTime(600);
+			jest.runOnlyPendingTimers();
+
+			// The rebuilt-and-refocused cell must still show the trailing space
+			// rather than the markdown-trimmed "Hello".
+			const refocused = findCellTextDivs(editor)[0];
+			expect(refocused.textContent).toBe('Hello ');
+		} finally {
+			jest.useRealTimers();
+		}
+	});
 });

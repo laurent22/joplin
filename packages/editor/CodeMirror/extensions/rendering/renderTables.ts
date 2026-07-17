@@ -249,8 +249,10 @@ class TableWidget extends WidgetType {
 			// Called on every input so the model stays in sync even if a
 			// rebuild is triggered by an external event (image paste, toolbar
 			// command, etc.) before the deferred blur handler runs.
+			// Not trimmed: an edge space the user just typed is real content
+			// and must stay visible while editing (see #15918).
 			const pushToModel = () => {
-				const v = (textDiv.textContent || '').trim()
+				const v = (textDiv.textContent || '')
 					.replace(/\n/g, '<br>').replace(/\|/g, '\\|');
 				if (isHdr) table.header.cells[c].content = v;
 				else if (r - 1 < table.body.length) table.body[r - 1].cells[c].content = v;
@@ -278,6 +280,9 @@ class TableWidget extends WidgetType {
 					if (!container.isConnected) return;
 					const newText = serializeTable(table);
 					if (newText === this.tableText) return;
+					// The serialize/parse round-trip strips edge whitespace, so
+					// keep the raw value to re-inject after the rebuild (#15918).
+					const rawValue = textDiv.textContent || '';
 					this.apply(view, table, 'input.type');
 					// Rebuild discards this DOM — locate the same cell in the
 					// new widget and restore focus + caret.
@@ -288,6 +293,8 @@ class TableWidget extends WidgetType {
 						const target = cells && idx < cells.length ? cells[idx] as HTMLElement : null;
 						if (!target) return;
 						focus('TableWidget', target);
+						// Restore the raw value onfocus trimmed.
+						if (target.textContent !== rawValue) target.textContent = rawValue;
 						// Caret restoration: put it `offset` characters into
 						// the cell's text content.
 						const sel = win.getSelection();
