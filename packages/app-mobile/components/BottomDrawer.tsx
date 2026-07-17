@@ -314,11 +314,9 @@ const BottomDrawer: React.FC<Props> = props => {
 
 		setAnimating(true);
 		return new Promise<void>(resolve => {
-			animation.start(result => {
-				if (result.finished) {
-					setAnimating(false);
-					resolve();
-				}
+			animation.start(() => {
+				setAnimating(false);
+				resolve();
 			});
 		});
 	}, [menuDragOffset]);
