@@ -28,6 +28,8 @@ export const importedFolderTitle = () => {
 	return _('Imported Notes');
 };
 
+export const textImportExtensions = ['md', 'markdown', 'txt', 'html'];
+
 const importedFolder = async () => {
 	let folder = await Folder.loadByFields({
 		title: importedFolderTitle(),
@@ -67,7 +69,7 @@ const NoteImportButton: FunctionComponent<Props> = props => {
 		});
 
 		let validExtensions = ['jex'];
-		if (props.format === 'txt') validExtensions = ['md', 'markdown', 'txt', 'html'];
+		if (props.format === 'txt') validExtensions = textImportExtensions;
 
 		// importFiles[0].fileName can be null on iOS
 		const sourceFileName = importFiles[0].fileName ?? basename(sourceFilePath);
