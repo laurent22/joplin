@@ -21,6 +21,6 @@ export const runtime = (comp: WindowControl): CommandRuntime => {
 				bridge().showErrorMessageBox(error.message);
 			}
 		},
-		enabledCondition: 'someNotesSelected',
+		enabledCondition: 'someNotesSelected && !noteIsReadOnly',
 	};
 };

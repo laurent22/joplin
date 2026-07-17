@@ -7,6 +7,9 @@ import useItemElement from './utils/useItemElement';
 import { ItemEventHandlers, OnInputChange } from './utils/types';
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
+import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import useRenderedNote from './utils/useRenderedNote';
 import { Dispatch } from 'redux';
 import getNoteElementIdFromJoplinId from './utils/getNoteElementIdFromJoplinId';
@@ -56,6 +59,12 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		};
 
 		if (changeEvent.elementId === 'todo-checkbox') {
+			if (isNoteLockEnabled()) {
+				const lockState = await Note.load(changeEvent.noteId, { fields: ['is_locked'] });
+				if (NoteLockNote.isLocked(lockState) && !NoteLockSession.instance().isUnlocked()) {
+					throw new Error('Cannot change a locked note, while the session is locked');
+				}
+			}
 			await Note.save({
 				id: changeEvent.noteId,
 				todo_completed: changeEvent.value ? Date.now() : 0,

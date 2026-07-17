@@ -37,5 +37,6 @@ export async function formNoteToNote(formNote: FormNote): Promise<NoteEntity> {
 		is_conflict: formNote.is_conflict,
 		title: formNote.title,
 		body: formNote.body,
+		is_locked: formNote.is_locked,
 	};
 }

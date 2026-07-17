@@ -1,6 +1,7 @@
 import { _ } from '../../locale';
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import { ItemFlow, ListRenderer } from '../plugins/api/noteListType';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
 
 interface Props {
 	note: {
@@ -9,6 +10,7 @@ interface Props {
 		is_todo: number;
 		todo_completed: number;
 		body: string;
+		is_locked: number;
 	};
 	item: {
 		size: {
@@ -37,6 +39,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 		'item.size.height',
 		'note.body',
 		'note.id',
+		'note.is_locked',
 		'note.is_shared',
 		'note.is_todo',
 		'note.isWatched',
@@ -103,6 +106,11 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 					color: var(--joplin-color);
 				}
 
+				> .lockedicon {
+					padding-right: 4px;
+					color: var(--joplin-color);
+				}
+
 				> .titlecontent {
 					word-break: break-all;
 					overflow: hidden;
@@ -149,6 +157,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 					<input class="checkbox" data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>
 				{{/note.is_todo}}
 				<i class="watchedicon fa fa-share-square"></i>
+				{{#note.is_locked}}<i class="lockedicon fa fa-lock"></i>{{/note.is_locked}}
 				<div class="titlecontent">{{note.title}}</div>
 			</div>
 			<div class="preview">{{notePreview}}</div>
@@ -157,10 +166,13 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 
 	onRenderNote: async (props: Props) => {
 		const markupToHtml_ = new MarkupToHtml();
+		const isLocked = isNoteLockEnabled() ? props.note.is_locked : 0;
 
 		return {
 			...props,
-			notePreview: markupToHtml_.stripMarkup(MarkupLanguage.Markdown, props.note.body).substring(0, 200),
+			note: { ...props.note, is_locked: isLocked },
+			// A locked note's body is ciphertext, so there is no meaningful preview to show.
+			notePreview: isLocked ? '' : markupToHtml_.stripMarkup(MarkupLanguage.Markdown, props.note.body).substring(0, 200),
 			titleWidth: props.item.size.width - 32,
 		};
 	},

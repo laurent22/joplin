@@ -290,6 +290,7 @@ describe('models/Note', () => {
 		}, { useNoteLock: true });
 		const storedNote = await Note.load(note.id);
 
+		expect(note.body).toBe(plainTextBody);
 		expect(storedNote.body).not.toBe(plainTextBody);
 		expect(storedNote.extracted_resource_ids).toBe(`${resourceId1},${resourceId2}`);
 		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(plainTextBody);
@@ -305,6 +306,10 @@ describe('models/Note', () => {
 			id: note.id,
 			body: 'must not be stored',
 		}, { useNoteLock: true })).rejects.toThrow('Gated note lock save is missing lock state');
+		await expect(Note.save({
+			id: note.id,
+			is_locked: 1,
+		}, { useNoteLock: true })).rejects.toThrow('Gated note lock save is missing body');
 		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(plainTextBody);
 
 		await Note.save({
@@ -323,16 +328,36 @@ describe('models/Note', () => {
 		expect(unlockedNote.extracted_resource_ids).toBe('');
 	});
 
-	it('should not decrypt locked notes while the feature is disabled', async () => {
+	it('should treat a locked note as a normal note while the feature is disabled', async () => {
 		await NoteLockKey.instance().create('123456');
 		await NoteLockSession.instance().unlock('123456');
 		const note = await Note.save({
 			body: 'secret',
 			is_locked: 1,
 		}, { useNoteLock: true });
+		const cipherText = (await Note.load(note.id)).body;
 
 		Setting.setValue('featureFlag.noteLock', false);
-		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(note.body);
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe(cipherText);
+		await Note.save({ id: note.id, is_locked: 1, body: 'overwrite' });
+		expect((await Note.load(note.id)).body).toBe('overwrite');
+	});
+
+	it('should encrypt a gated save with a captured key while the session is locked, but not after a key rotation', async () => {
+		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
+		const note = await Note.save({ body: 'secret', is_locked: 1 }, { useNoteLock: true });
+		const capturedKey = NoteLockSession.instance().decryptedKey();
+		NoteLockSession.instance().lock();
+
+		await Note.save({ ...await Note.load(note.id), body: 'updated' }, { useNoteLock: true, noteLockKey: capturedKey });
+		await NoteLockSession.instance().unlock('123456');
+		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe('updated');
+
+		await NoteLockSession.instance().reset('654321');
+		const bodyBeforeStaleAttempt = (await Note.load(note.id)).body;
+		await expect(Note.save({ ...await Note.load(note.id), body: 'stale' }, { useNoteLock: true, noteLockKey: capturedKey })).rejects.toThrow('Note lock key changed during operation');
+		expect((await Note.load(note.id)).body).toBe(bodyBeforeStaleAttempt);
 	});
 
 	it('should fail closed when note lock encryption cannot decrypt or encrypt', async () => {

@@ -1,6 +1,7 @@
 @use 'gui/ConfigScreen/style.scss' as config-screen;
 @use 'gui/EditFolderDialog/style.scss' as edit-folder-dialog;
 @use 'gui/EncryptionConfigScreen/style.scss' as encryption-config-screen;
+@use 'gui/NoteEditor/NoteLockPanel/style.scss' as note-lock-panel;
 @use 'gui/PasswordInput/style.scss' as password-input;
 @use 'gui/lib/SearchInput/style.scss' as search-input;
 @use 'gui/JoplinCloudConfigScreen.scss' as joplin-cloud-config-screen;

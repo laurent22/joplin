@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { _ } from '@joplin/lib/locale';
 import NoteLockKey from '@joplin/lib/services/noteLock/NoteLockKey';
+import CommandService from '@joplin/lib/services/CommandService';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
@@ -10,10 +11,12 @@ import LabelledPasswordInput from '../../PasswordInput/LabelledPasswordInput';
 import Button, { ButtonLevel } from '../../Button/Button';
 import { AppState } from '../../../app.reducer';
 import useNoteLockMode, { ActionMode } from './useNoteLockMode';
+import { takeNoteLockSetupContinuation } from './noteLockSetupContinuation';
 
 interface Props {
 	hasNoteLockKey: boolean;
 	needsNoteLockKeyUpgrade: boolean;
+	selected: boolean;
 }
 
 // WebCrypto reports a wrong password as an OperationError with an unhelpful generic message
@@ -37,6 +40,20 @@ const NoteLockSettings: React.FC<Props> = props => {
 		error,
 		setError,
 	} = useNoteLockMode(hasKey);
+
+	// The screen mounts on the general section before the default section applies, so only a
+	// real deselection may drop the pending enable-encryption continuation.
+	const wasSelected = useRef(false);
+	useEffect(() => {
+		if (wasSelected.current && !props.selected) takeNoteLockSetupContinuation();
+		wasSelected.current = props.selected;
+	}, [props.selected]);
+
+	useEffect(() => {
+		return () => {
+			takeNoteLockSetupContinuation();
+		};
+	}, []);
 
 	const [upgradePassword, setUpgradePassword] = useState('');
 	const [upgradeError, setUpgradeError] = useState('');
@@ -82,6 +99,8 @@ const NoteLockSettings: React.FC<Props> = props => {
 			const noteLockKey = NoteLockKey.instance();
 			if (mode === ActionMode.Create) {
 				await noteLockKey.create(password);
+				const pendingNoteId = takeNoteLockSetupContinuation();
+				if (pendingNoteId) void CommandService.instance().execute('enableNoteEncryption', pendingNoteId);
 			} else if (mode === ActionMode.Change) {
 				await noteLockKey.changePassword(currentPassword, password);
 			} else if (mode === ActionMode.Reset) {

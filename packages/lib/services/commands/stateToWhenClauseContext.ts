@@ -9,6 +9,7 @@ import ItemChange from '../../models/ItemChange';
 import { getTrashFolderId } from '../trash';
 import getActivePluginEditorView from '../plugins/utils/getActivePluginEditorView';
 import { MarkupLanguage } from '@joplin/renderer';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
 
 export interface WhenClauseContextOptions {
 	commandFolderId?: string;
@@ -40,8 +41,11 @@ export interface WhenClauseContext {
 	noNotesSelected: boolean;
 	noteIsDeleted: boolean;
 	noteIsHtml: boolean;
+	noteIsLocked: boolean;
+	noteLockSessionUnlocked: boolean;
 	noteIsMarkdown: boolean;
 	noteIsReadOnly: boolean;
+	noteIsReadOnlyShare: boolean;
 	noteIsTodo: boolean;
 	notesAreBeingSaved: boolean;
 	noteTodoCompleted: boolean;
@@ -82,6 +86,12 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		: null;
 	const selectedFolderIsValid = !!selectedFolder && !selectedFolder.deleted_time;
 
+	const noteIsLocked = isNoteLockEnabled() && selectedNote ? !!selectedNote.is_locked : false;
+	// While the unlock or the cannot-decrypt overlay covers the editor, menu actions (attach file,
+	// insert date, etc.) could still modify the note underneath it, so treat the note as read-only.
+	const noteLockContentUnavailable = noteIsLocked && (!state.noteLockSessionUnlocked || state.activeNoteIsUndecryptable);
+	const noteIsReadOnlyShare = selectedNote ? itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, selectedNote as ItemSlice, settings['sync.userId'], state.shareService) : false;
+
 	return {
 		// Application state
 		notesAreBeingSaved: stateUtils.hasNotesBeingSaved(state),
@@ -114,7 +124,10 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		noteTodoCompleted: selectedNote ? !!selectedNote.todo_completed : false,
 		noteIsMarkdown: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN : false,
 		noteIsHtml: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML : false,
-		noteIsReadOnly: selectedNote ? itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, selectedNote as ItemSlice, settings['sync.userId'], state.shareService) : false,
+		noteIsLocked,
+		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
+		noteIsReadOnly: noteLockContentUnavailable || noteIsReadOnlyShare,
+		noteIsReadOnlyShare,
 		noteIsDeleted: selectedNote ? !!selectedNote.deleted_time : false,
 
 		// Current context folder -- if multiple folders are selected, this only applies to one

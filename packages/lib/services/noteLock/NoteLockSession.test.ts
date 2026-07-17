@@ -4,6 +4,7 @@ import { localSyncInfo, saveLocalSyncInfo } from '../synchronizer/syncInfoUtils'
 import NoteLockKey, { DecryptedNoteLockKey } from './NoteLockKey';
 import NoteLockSession from './NoteLockSession';
 import NoteLockService from './NoteLockService';
+import eventManager, { EventName, NoteLockSessionChangeEvent } from '../../eventManager';
 
 const unlockedSession = async (password = '123456') => {
 	const session = NoteLockSession.instance();
@@ -173,6 +174,53 @@ describe('NoteLockSession', () => {
 		await firstReset;
 
 		expect(session.isUnlocked()).toBe(false);
+	});
+
+	it('should emit a session change event on unlock and on an effective lock only', async () => {
+		const events: NoteLockSessionChangeEvent[] = [];
+		const listener = (event: NoteLockSessionChangeEvent) => events.push(event);
+		eventManager.on(EventName.NoteLockSessionChange, listener);
+
+		try {
+			const session = NoteLockSession.instance();
+			await NoteLockKey.instance().create('123456');
+
+			session.lock();
+			expect(events).toEqual([]);
+
+			await session.unlock('123456');
+			expect(events).toEqual([{ unlocked: true }]);
+
+			session.lock();
+			session.lock();
+			expect(events).toEqual([{ unlocked: true }, { unlocked: false }]);
+
+			await session.unlock('123456');
+			await session.reset('654321');
+			expect(events.slice(2)).toEqual([{ unlocked: true }, { unlocked: false }]);
+
+			await session.unlock('654321');
+			NoteLockSession.destroyInstance();
+			expect(events.slice(4)).toEqual([{ unlocked: true }, { unlocked: false }]);
+		} finally {
+			eventManager.off(EventName.NoteLockSessionChange, listener);
+		}
+	});
+
+	it('should emit a lock event when the synced key changes', async () => {
+		const session = await unlockedSession();
+
+		const events: NoteLockSessionChangeEvent[] = [];
+		const listener = (event: NoteLockSessionChangeEvent) => events.push(event);
+		eventManager.on(EventName.NoteLockSessionChange, listener);
+
+		try {
+			changeSyncedKeyId('0123456789abcdef0123456789abcdef');
+			expect(session.isUnlocked()).toBe(false);
+			expect(events).toEqual([{ unlocked: false }]);
+		} finally {
+			eventManager.off(EventName.NoteLockSessionChange, listener);
+		}
 	});
 
 	it('should sync the encrypted note lock key without auto-unlocking or loading it into the E2EE registry', async () => {
