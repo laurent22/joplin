@@ -12515,7 +12515,7 @@ __metadata:
     "@react-native-community/netinfo": "npm:11.5.2"
     "@react-native-community/push-notification-ios": "npm:1.12.0"
     "@react-native-documents/picker": "npm:11.0.4"
-    "@react-native-vector-icons/fontawesome5": "npm:12.3.3"
+    "@react-native-vector-icons/fontawesome5": "npm:12.4.0"
     "@react-native-vector-icons/get-image": "npm:12.3.0"
     "@react-native-vector-icons/ionicons": "npm:12.4.3"
     "@react-native-vector-icons/material-design-icons": "npm:12.4.3"
@@ -15991,15 +15991,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/fontawesome5@npm:12.3.3":
-  version: 12.3.3
-  resolution: "@react-native-vector-icons/fontawesome5@npm:12.3.3"
+"@react-native-vector-icons/fontawesome5@npm:12.4.0":
+  version: 12.4.0
+  resolution: "@react-native-vector-icons/fontawesome5@npm:12.4.0"
   dependencies:
     "@react-native-vector-icons/common": "npm:^12.4.2"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/894a439cc22d7ba71389293a2a67f2166ce5ddd95e22b8cfae13057966e6558a9e68a7cdea7e78f45275970b51c76dd0b9b2ce66d23a85294f92028d1458d733
+  checksum: 10/087dd587ba35a74034f2acaf3981c51474c340e9a6834a9e182fe78ee9604ee1aae196b0f6ebc8d0353b3ed96ed476806fbbfa14fea3e1aa0074ef31f5d3a580
   languageName: node
   linkType: hard
 
