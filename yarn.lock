@@ -11386,13 +11386,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/react-fontawesome@npm:3.2.0":
-  version: 3.2.0
-  resolution: "@fortawesome/react-fontawesome@npm:3.2.0"
+"@fortawesome/react-fontawesome@npm:3.3.0":
+  version: 3.3.0
+  resolution: "@fortawesome/react-fontawesome@npm:3.3.0"
   peerDependencies:
     "@fortawesome/fontawesome-svg-core": ~6 || ~7
     react: ^18.0.0 || ^19.0.0
-  checksum: 10/2493746e00db4a7fb001f3f098d0456fa6351186c6b1856af6916ac444bbabead8f2cc3a9da0c7f6684a9c7beff34bdbbcdd3845d68f20de320c796c62112117
+  checksum: 10/da87e97597d8a3d82f719225bc934c7556b8efaa7fadd72147294853ff1dba5ae77d95497d41f050ceae4a84cc40bfe80665f3a028e64a21aa5a3224029d5514
   languageName: node
   linkType: hard
 
@@ -12872,7 +12872,7 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-svg-core": "npm:6.1.2"
     "@fortawesome/free-solid-svg-icons": "npm:6.1.2"
-    "@fortawesome/react-fontawesome": "npm:3.2.0"
+    "@fortawesome/react-fontawesome": "npm:3.3.0"
     "@joplin/lib": "npm:~3.7"
     "@types/jest": "npm:29.5.14"
     "@types/pdfjs-dist": "npm:2.10.378"
