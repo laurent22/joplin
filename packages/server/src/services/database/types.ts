@@ -92,6 +92,7 @@ export const getDefaultValue = (tableName: string, colName: string): string|numb
 export enum ShareType {
 	Note = 1, // When a note is shared via a public link
 	Folder = 3, // When a complete folder is shared with another Joplin Server user
+	PublishedFolder = 4, // When a folder is shared via a public link
 }
 
 export enum ShareUserStatus {

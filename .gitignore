@@ -427,6 +427,7 @@ packages/app-desktop/gui/PopupNotification/types.js
 packages/app-desktop/gui/ProfileEditor.js
 packages/app-desktop/gui/PromptDialog.test.js
 packages/app-desktop/gui/PromptDialog.js
+packages/app-desktop/gui/PublishFolderDialog.js
 packages/app-desktop/gui/QuitSyncDialog.js
 packages/app-desktop/gui/ResizableLayout/LayoutItemContainer.js
 packages/app-desktop/gui/ResizableLayout/MoveButtons.js
@@ -538,6 +539,7 @@ packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showModalMessage.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteContentProperties.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showNoteProperties.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showPrompt.js
+packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showPublishFolderDialog.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareFolderDialog.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.js
 packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showSpellCheckerMenu.test.js
@@ -1371,6 +1373,7 @@ packages/lib/components/shared/NoteEditor/WarningBanner/useEditorTypeMigrationBa
 packages/lib/components/shared/NoteList/getEmptyFolderMessage.js
 packages/lib/components/shared/NoteRevisionViewer/getHelpMessage.js
 packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.js
+packages/lib/components/shared/PublishFolderDialog/useOnPublishFolderLinkClick.js
 packages/lib/components/shared/SamlShared.js
 packages/lib/components/shared/ShareNoteDialog/onUnshareNoteClick.js
 packages/lib/components/shared/ShareNoteDialog/types.js
