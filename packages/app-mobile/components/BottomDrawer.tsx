@@ -176,14 +176,17 @@ const usePanResponder = ({
 	const dragHandleTop = useRef(0);
 	const dragHandleBottom = useRef(0);
 
+	const windowSize = useWindowDimensions();
+	// windowSizeKey forces re-measures on window size changes:
+	const windowSizeKey = `${windowSize.width}x${windowSize.height}`;
 	useLayoutEffect(() => {
-		if (!visible || animating) return;
+		if (!visible || animating || !windowSizeKey) return;
 
 		dragHandleRef.current?.measure((_x, _y, _width, height, _pageX, pageY) => {
 			dragHandleTop.current = pageY;
 			dragHandleBottom.current = pageY + height;
 		});
-	}, [visible, animating, dragHandleRef]);
+	}, [visible, animating, dragHandleRef, windowSizeKey]);
 
 	const panResponder = useMemo(() => {
 		const isInDragHandle = (eventY: number) => {
