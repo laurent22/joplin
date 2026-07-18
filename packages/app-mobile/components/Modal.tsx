@@ -25,7 +25,7 @@ export interface ModalElementProps {
 	onClose: OnClose|null;
 	onShow?: OnShow;
 	animationType?: 'fade'|'none';
-	wrapContent?: (view: React.ReactNode)=>React.ReactNode;
+	wrapContent?: (view: React.ReactNode)=> React.ReactNode;
 
 	statusBarTranslucent?: boolean;
 
