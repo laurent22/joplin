@@ -90,4 +90,48 @@ describe('checkIfPluginCanBeAdded', () => {
 		}
 	});
 
+	test('should not add if already a plugin with this ID but different repository url', () => {
+		const testCases = [
+			[
+				{
+					'test': {
+						id: 'test',
+						repository_url: 'https://github.com/laurent22/joplin',
+					},
+				},
+				{
+					id: 'test',
+					repository_url: 'https://github.com/laurent22/joplin.git',
+				},
+				true,
+			],
+			[
+				{
+					'test': {
+						id: 'test',
+						repository_url: 'https://github.com/laurent22/joplin',
+					},
+				},
+				{
+					id: 'test',
+					repository_url: 'https://github.com/someone/else',
+				},
+				false,
+			],
+		];
+
+		for (const t of testCases) {
+			const [existingManifests, manifest, shouldWork] = t;
+
+			let hasThrown = false;
+			try {
+				checkIfPluginCanBeAdded(existingManifests as unknown as Parameters<typeof checkIfPluginCanBeAdded>[0], manifest as unknown as Parameters<typeof checkIfPluginCanBeAdded>[1]);
+			} catch (error) {
+				hasThrown = true;
+			}
+
+			expect(!hasThrown).toBe(shouldWork);
+		}
+	});
+
 });
