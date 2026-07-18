@@ -265,7 +265,11 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 
 	return useCallback(async () => {
 		await slideMenuOut();
-		propsRef.current.onDismiss();
+
+		// Avoid duplicate calls to onDismiss if the animation is cancelled:
+		if (propsRef.current.visible) {
+			propsRef.current.onDismiss();
+		}
 	}, [slideMenuOut]);
 };
 
