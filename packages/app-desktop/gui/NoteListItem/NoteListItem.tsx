@@ -66,7 +66,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 				if (NoteLockNote.isLocked(lockState) && !NoteLockSession.instance().isUnlocked()) {
 					// event.currentTarget is already cleared here, after the await - target is the same input
 					event.target.checked = !changeEvent.value;
-					bridge().showErrorMessageBox(_('Cannot change a locked note, while the session is locked'));
+					bridge().showErrorMessageBox(_('Cannot change a locked note while the session is locked'));
 					return;
 				}
 			}

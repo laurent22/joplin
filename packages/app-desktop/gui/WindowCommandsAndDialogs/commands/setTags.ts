@@ -23,7 +23,7 @@ export const runtime = (comp: WindowControl): CommandRuntime => {
 			noteIds = noteIds || context.state.selectedNoteIds;
 
 			if (await hasLockedNoteWhileSessionLocked(noteIds)) {
-				bridge().showErrorMessageBox(_('Tags cannot be changed for locked notes, while the session is locked'));
+				bridge().showErrorMessageBox(_('Tags cannot be changed for locked notes while the session is locked'));
 				return;
 			}
 

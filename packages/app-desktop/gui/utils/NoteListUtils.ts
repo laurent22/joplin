@@ -74,7 +74,7 @@ export default class NoteListUtils {
 			} else {
 				const switchNoteType = async (noteIds: string[], type: string) => {
 					if (await hasLockedNoteWhileSessionLocked(noteIds)) {
-						bridge().showErrorMessageBox(_('Cannot change a locked note, while the session is locked'));
+						bridge().showErrorMessageBox(_('Cannot change a locked note while the session is locked'));
 						return;
 					}
 					for (let i = 0; i < noteIds.length; i++) {

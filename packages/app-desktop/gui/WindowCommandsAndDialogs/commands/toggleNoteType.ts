@@ -15,7 +15,7 @@ export const runtime = (): CommandRuntime => {
 			if (noteIds === null) noteIds = context.state.selectedNoteIds;
 
 			if (await hasLockedNoteWhileSessionLocked(noteIds)) {
-				bridge().showErrorMessageBox(_('Cannot change a locked note, while the session is locked'));
+				bridge().showErrorMessageBox(_('Cannot change a locked note while the session is locked'));
 				return;
 			}
 

@@ -102,7 +102,7 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 		if (isNoteLockEnabled()) {
 			const lockState = await Note.load(props.note.id, { fields: ['is_locked'] });
 			if (NoteLockNote.isLocked(lockState) && !NoteLockSession.instance().isUnlocked()) {
-				throw new Error('Cannot change a locked note, while the session is locked');
+				throw new Error('Cannot change a locked note while the session is locked');
 			}
 		}
 
