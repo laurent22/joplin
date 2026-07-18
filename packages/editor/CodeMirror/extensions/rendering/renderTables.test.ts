@@ -2,13 +2,19 @@ import { EditorSelection } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import createTestEditor from '../../testing/createTestEditor';
 import renderTables, { renderInlineMarkdown } from './renderTables';
+import { RenderedContentContext } from './types';
 
-const createEditor = async (initialMarkdown: string) => {
+const createEditor = async (initialMarkdown: string, context?: Partial<RenderedContentContext>) => {
+	const fullContext: RenderedContentContext = {
+		resolveImageSrc: async () => '',
+		openLink: () => {},
+		...context,
+	};
 	return await createTestEditor(
 		initialMarkdown,
 		EditorSelection.cursor(0),
 		['TableHeader'],
-		[renderTables],
+		[renderTables(fullContext)],
 	);
 };
 
@@ -125,4 +131,41 @@ describe('renderTables', () => {
 		const editor = await createEditor(source);
 		expect(editor.state.doc.toString()).toBe(source);
 	});
+
+	test('ctrl/cmd-clicking a rendered cell link should open it', async () => {
+		const opened: string[] = [];
+		const editor = await createEditor(
+			'| [label](https://example.com) | b |\n|---|---|\n| x | y |',
+			{ openLink: (link) => opened.push(link) },
+		);
+		const anchor = editor.dom.querySelector<HTMLAnchorElement>('.cm-tw-text a[href]');
+		expect(anchor).not.toBeNull();
+
+		// A plain click should not open the link (it focuses the cell for editing).
+		anchor!.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+		expect(opened).toEqual([]);
+
+		// Ctrl/Cmd-click opens it, matching the editor's normal link behaviour.
+		anchor!.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, ctrlKey: true }));
+		expect(opened).toEqual(['https://example.com']);
+	});
+
+	test('holding the modifier over a link should show the pointer cursor', async () => {
+		const editor = await createEditor('| [label](https://example.com) | b |\n|---|---|\n| x | y |');
+		const container = editor.dom.querySelector<HTMLElement>('.cm-tw')!;
+		const anchor = editor.dom.querySelector<HTMLAnchorElement>('.cm-tw-text a[href]')!;
+
+		// Without the modifier, no pointer cursor.
+		anchor.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
+		expect(container.classList.contains('cm-tw-mod-link')).toBe(false);
+
+		// With the modifier held over the link, the class is added.
+		anchor.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, ctrlKey: true }));
+		expect(container.classList.contains('cm-tw-mod-link')).toBe(true);
+
+		// Releasing the modifier removes it again.
+		anchor.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
+		expect(container.classList.contains('cm-tw-mod-link')).toBe(false);
+	});
+
 });

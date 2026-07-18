@@ -19,6 +19,8 @@ import {
 	Table,
 } from '../../utils/markdown/tableUtils';
 import { getCellContentPosition } from '../../editorCommands/tableCommands';
+import { RenderedContentContext } from './types';
+import { editorSettingsFacet } from '../editorSettingsExtension';
 
 // Short class name prefix
 const W = 'cm-tw';
@@ -101,6 +103,7 @@ class TableWidget extends WidgetType {
 		private tableText: string,
 		private from: number,
 		private to: number,
+		private context: RenderedContentContext,
 	) {
 		super();
 		this.cacheKey_ = `table_${from}_${to}_${tableText.length}`;
@@ -787,6 +790,32 @@ class TableWidget extends WidgetType {
 			}
 		});
 
+		const hasOpenLinkModifier = (e: MouseEvent) => {
+			const settings = view.state.facet(editorSettingsFacet);
+			return settings?.preferMacShortcuts ? e.metaKey : e.ctrlKey;
+		};
+
+		// Ctrl/Cmd-click a rendered cell link to open it, matching the
+		// editor's normal link behaviour. This must run on mousedown (before
+		// the cell's focus handler swaps the rendered <a> for raw markdown
+		// text) and preventDefault so the cell does not enter edit mode.
+		container.addEventListener('mousedown', (e) => {
+			if (!hasOpenLinkModifier(e)) return;
+			const anchor = (e.target as Element | null)?.closest<HTMLAnchorElement>('a[href]');
+			if (!anchor) return;
+			e.preventDefault();
+			this.context.openLink(anchor.getAttribute('href')!);
+		});
+
+		// Show the pointer cursor while the modifier is held over a link, so
+		// it's clear the link is clickable. Mousemove carries the live
+		// modifier state, so no separate keydown/keyup tracking is needed.
+		container.addEventListener('mousemove', (e) => {
+			const overLink = hasOpenLinkModifier(e)
+				&& !!(e.target as Element | null)?.closest('a[href]');
+			container.classList.toggle('cm-tw-mod-link', overLink);
+		});
+
 		return container;
 	}
 
@@ -820,6 +849,11 @@ const tableTheme = EditorView.theme({
 	['& .cm-tw-text.cm-tw-match']: {
 		backgroundColor: 'var(--joplin-search-marker-background-color, rgba(255, 220, 0, 0.45))',
 		color: 'var(--joplin-search-marker-color, inherit)',
+	},
+	// Pointer cursor on links while the ctrl/cmd modifier is held (see the
+	// mousemove handler that toggles cm-tw-mod-link).
+	[`& .${W}.cm-tw-mod-link .cm-tw-text a[href]`]: {
+		cursor: 'pointer',
 	},
 
 	// Cells
@@ -1016,7 +1050,7 @@ const searchHighlight = ViewPlugin.fromClass(class {
 });
 
 // ===================== EXTENSION =====================
-const renderTables = [
+const renderTables = (context: RenderedContentContext) => [
 	tableTheme,
 	selectionHighlight,
 	searchHighlight,
@@ -1041,7 +1075,7 @@ const renderTables = [
 			}
 			const text = state.doc.sliceString(startLine.from, endLine.to);
 			if (!parseTable(text)) return null;
-			return new TableWidget(text, startLine.from, endLine.to);
+			return new TableWidget(text, startLine.from, endLine.to, context);
 		},
 		getDecorationRange: (node: SyntaxNodeRef, state: EditorState) => {
 			if (node.name !== 'TableHeader') return null;
