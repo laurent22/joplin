@@ -141,11 +141,9 @@ describe('renderTables', () => {
 		const anchor = editor.dom.querySelector<HTMLAnchorElement>('.cm-tw-text a[href]');
 		expect(anchor).not.toBeNull();
 
-		// A plain click should not open the link (it focuses the cell for editing).
 		anchor!.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
 		expect(opened).toEqual([]);
 
-		// Ctrl/Cmd-click opens it, matching the editor's normal link behaviour.
 		anchor!.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, ctrlKey: true }));
 		expect(opened).toEqual(['https://example.com']);
 	});
@@ -155,15 +153,12 @@ describe('renderTables', () => {
 		const container = editor.dom.querySelector<HTMLElement>('.cm-tw')!;
 		const anchor = editor.dom.querySelector<HTMLAnchorElement>('.cm-tw-text a[href]')!;
 
-		// Without the modifier, no pointer cursor.
 		anchor.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
 		expect(container.classList.contains('cm-tw-mod-link')).toBe(false);
 
-		// With the modifier held over the link, the class is added.
 		anchor.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, ctrlKey: true }));
 		expect(container.classList.contains('cm-tw-mod-link')).toBe(true);
 
-		// Releasing the modifier removes it again.
 		anchor.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
 		expect(container.classList.contains('cm-tw-mod-link')).toBe(false);
 	});

@@ -795,10 +795,9 @@ class TableWidget extends WidgetType {
 			return settings?.preferMacShortcuts ? e.metaKey : e.ctrlKey;
 		};
 
-		// Ctrl/Cmd-click a rendered cell link to open it, matching the
-		// editor's normal link behaviour. This must run on mousedown (before
-		// the cell's focus handler swaps the rendered <a> for raw markdown
-		// text) and preventDefault so the cell does not enter edit mode.
+		// Run on mousedown (before the cell's focus handler swaps the <a>
+		// for raw markdown) and preventDefault so the cell stays out of edit
+		// mode.
 		container.addEventListener('mousedown', (e) => {
 			if (!hasOpenLinkModifier(e)) return;
 			const anchor = (e.target as Element | null)?.closest<HTMLAnchorElement>('a[href]');
@@ -807,9 +806,8 @@ class TableWidget extends WidgetType {
 			this.context.openLink(anchor.getAttribute('href')!);
 		});
 
-		// Show the pointer cursor while the modifier is held over a link, so
-		// it's clear the link is clickable. Mousemove carries the live
-		// modifier state, so no separate keydown/keyup tracking is needed.
+		// Mousemove carries the live modifier state, so it can toggle the
+		// pointer cursor without separate keydown/keyup tracking.
 		container.addEventListener('mousemove', (e) => {
 			const overLink = hasOpenLinkModifier(e)
 				&& !!(e.target as Element | null)?.closest('a[href]');
@@ -850,8 +848,6 @@ const tableTheme = EditorView.theme({
 		backgroundColor: 'var(--joplin-search-marker-background-color, rgba(255, 220, 0, 0.45))',
 		color: 'var(--joplin-search-marker-color, inherit)',
 	},
-	// Pointer cursor on links while the ctrl/cmd modifier is held (see the
-	// mousemove handler that toggles cm-tw-mod-link).
 	[`& .${W}.cm-tw-mod-link .cm-tw-text a[href]`]: {
 		cursor: 'pointer',
 	},
