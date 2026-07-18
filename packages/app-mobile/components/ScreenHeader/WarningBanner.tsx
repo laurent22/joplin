@@ -81,7 +81,7 @@ export const WarningBannerComponent: React.FC<Props> = props => {
 				if (isAndroidTargetPreRelease) {
 					return renderWarningBox(
 						'UpgradeApp',
-						upgradeMessage(_('Download it from the Joplin Android tags page')),
+						upgradeMessage(_('Download it from the Joplin Android repository')),
 						androidPreReleaseUrl,
 					);
 				}
