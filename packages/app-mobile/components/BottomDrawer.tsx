@@ -259,19 +259,24 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 	}, []);
 
 	useEffect(() => {
+		const slideMenuIn = () => propsRef.current.dragToOffset(0);
+
 		if (props.visible) {
-			void propsRef.current.dragToOffset(0);
-		} else if (propsRef.current.containerRef.current) {
-			void slideMenuOut();
+			void slideMenuIn();
 		}
-	}, [props.visible, slideMenuOut]);
+	}, [props.visible]);
 
+	const isDismissingRef = useRef(false);
 	return useCallback(async () => {
-		await slideMenuOut();
+		// Avoid duplicate dismiss animations
+		if (isDismissingRef.current) return;
+		try {
+			isDismissingRef.current = true;
 
-		// Avoid duplicate calls to onDismiss if the animation is cancelled:
-		if (propsRef.current.visible) {
+			await slideMenuOut();
 			propsRef.current.onDismiss();
+		} finally {
+			isDismissingRef.current = false;
 		}
 	}, [slideMenuOut]);
 };
