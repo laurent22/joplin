@@ -33,8 +33,6 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 			borderTopColor: theme.dividerColor,
 			marginLeft: theme.marginLeft,
 			marginRight: theme.marginRight,
-			paddingTop: theme.marginTop,
-			paddingBottom: theme.marginBottom,
 			flexDirection: 'row',
 			// backgroundColor: theme.backgroundColor,
 		};
@@ -43,6 +41,8 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 			flexGrow: 1,
 			flexShrink: 1,
 			alignSelf: 'stretch',
+			paddingTop: theme.marginTop,
+			paddingBottom: theme.marginBottom,
 		};
 		const listItemPressableWithCheckbox: ViewStyle = {
 			...listItemPressable,
