@@ -195,19 +195,23 @@ describe('makeInlineReplaceExtension', () => {
 			extensions,
 		);
 
-		editor.dom.dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
-		editor.dispatch({ selection, userEvent: 'select.pointer' });
+		try {
+			editor.dom.dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
+			editor.dispatch({ selection, userEvent: 'select.pointer' });
 
-		expect(editor.state.selection.main).toMatchObject({
-			anchor: selection.anchor,
-			head: selection.head,
-		});
-		expect(editor.contentDOM.textContent).toBe(renderedText);
+			expect(editor.state.selection.main).toMatchObject({
+				anchor: selection.anchor,
+				head: selection.head,
+			});
+			expect(editor.contentDOM.textContent).toBe(renderedText);
 
-		editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
+			editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
 
-		expect(editor.state.selection.main).toMatchObject(expectedSelection);
-		expect(editor.contentDOM.textContent).toBe(markdown.trimEnd());
+			expect(editor.state.selection.main).toMatchObject(expectedSelection);
+			expect(editor.contentDOM.textContent).toBe(markdown.trimEnd());
+		} finally {
+			editor.destroy();
+		}
 	});
 
 	it.each(fullyCoveredSelectionTestCases)('should turn a $direction $label selection into a cursor', async ({
@@ -220,13 +224,17 @@ describe('makeInlineReplaceExtension', () => {
 			extensions,
 		);
 
-		editor.dom.dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
-		editor.dispatch({ selection, userEvent: 'select.pointer' });
-		editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
+		try {
+			editor.dom.dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
+			editor.dispatch({ selection, userEvent: 'select.pointer' });
+			editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
 
-		expect(editor.state.selection.main).toMatchObject({
-			anchor: expectedCursor,
-			head: expectedCursor,
-		});
+			expect(editor.state.selection.main).toMatchObject({
+				anchor: expectedCursor,
+				head: expectedCursor,
+			});
+		} finally {
+			editor.destroy();
+		}
 	});
 });
