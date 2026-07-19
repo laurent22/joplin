@@ -97,7 +97,7 @@ interface Shared {
 	installResourceHandling?: (refreshResourceHandler: ResourceHandler)=> void;
 	uninstallResourceHandling?: (refreshResourceHandler: ResourceHandler)=> void;
 
-	reloadNote?: (comp: BaseNoteScreenComponent)=> Promise<NoteEntity>;
+	reloadNote?: (comp: BaseNoteScreenComponent, useDefaultEditorState?: boolean)=> Promise<NoteEntity>;
 }
 
 const shared: Shared = {};
@@ -295,7 +295,7 @@ shared.isModified = function(comp: BaseNoteScreenComponent) {
 	return !!Object.getOwnPropertyNames(diff).length;
 };
 
-shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
+shared.reloadNote = async (comp: BaseNoteScreenComponent, useDefaultEditorState = true) => {
 	const isProvisionalNote = comp.props.provisionalNoteIds.includes(comp.props.noteId);
 
 	const note = await Note.load(comp.props.noteId);
@@ -303,10 +303,12 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent) => {
 	const panes = comp.props.noteVisiblePanes;
 	let mode = panes.includes('editor') ? 'edit' : 'view';
 
-	// Override the mode if the default state is not last
-	const defaultState = Setting.value('editor.mobile.defaultEditState');
-	if (defaultState === 'view') mode = 'view';
-	if (defaultState === 'edit') mode = 'edit';
+	if (useDefaultEditorState) {
+		// Override the mode if the default state is not last
+		const defaultState = Setting.value('editor.mobile.defaultEditState');
+		if (defaultState === 'view') mode = 'view';
+		if (defaultState === 'edit') mode = 'edit';
+	}
 
 	// Prevent trashed notes and notes created via sharing from opening in edit mode.
 	if (note?.deleted_time || comp.props.sharedData) {
