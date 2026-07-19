@@ -152,6 +152,38 @@ const directedTestCases = testCases.flatMap(testCase => [
 	},
 ]);
 
+const fullyCoveredSelectionTestCases = [
+	{
+		label: 'hidden Markdown',
+		markdown: '**bold**\n',
+		selectionFrom: 0,
+		selectionTo: 2,
+		expectedSyntaxTreeTags: ['StrongEmphasis'],
+		extensions: [replaceFormatCharacters],
+	},
+	{
+		label: 'widget',
+		markdown: '- item\n',
+		selectionFrom: 0,
+		selectionTo: 1,
+		expectedSyntaxTreeTags: ['BulletList'],
+		extensions: [replaceBulletLists],
+	},
+].flatMap(testCase => [
+	{
+		...testCase,
+		direction: 'forward',
+		selection: EditorSelection.range(testCase.selectionFrom, testCase.selectionTo),
+		expectedCursor: testCase.selectionTo,
+	},
+	{
+		...testCase,
+		direction: 'backward',
+		selection: EditorSelection.range(testCase.selectionTo, testCase.selectionFrom),
+		expectedCursor: testCase.selectionFrom,
+	},
+]);
+
 describe('makeInlineReplaceExtension', () => {
 	it.each(directedTestCases)('should include Markdown syntax for $label in a $direction mouse selection', async ({
 		markdown, renderedText, selection, expectedSelection, expectedSyntaxTreeTags, extensions,
@@ -178,42 +210,14 @@ describe('makeInlineReplaceExtension', () => {
 		expect(editor.contentDOM.textContent).toBe(markdown.trimEnd());
 	});
 
-	it.each([
-		{ direction: 'forward', selection: EditorSelection.range(0, 2), expectedCursor: 2 },
-		{ direction: 'backward', selection: EditorSelection.range(2, 0), expectedCursor: 0 },
-	])('should collapse a $direction mouse selection fully covered by hidden Markdown', async ({
-		selection, expectedCursor,
+	it.each(fullyCoveredSelectionTestCases)('should turn a $direction $label selection into a cursor', async ({
+		markdown, selection, expectedCursor, expectedSyntaxTreeTags, extensions,
 	}) => {
-		const markdown = '**bold**\n';
 		const editor = await createTestEditor(
 			markdown,
 			EditorSelection.cursor(markdown.length),
-			['StrongEmphasis'],
-			[replaceFormatCharacters],
-		);
-
-		editor.dom.dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
-		editor.dispatch({ selection, userEvent: 'select.pointer' });
-		editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
-
-		expect(editor.state.selection.main).toMatchObject({
-			anchor: expectedCursor,
-			head: expectedCursor,
-		});
-	});
-
-	it.each([
-		{ direction: 'forward', selection: EditorSelection.range(0, 1), expectedCursor: 1 },
-		{ direction: 'backward', selection: EditorSelection.range(1, 0), expectedCursor: 0 },
-	])('should collapse a $direction mouse selection fully covered by a widget', async ({
-		selection, expectedCursor,
-	}) => {
-		const markdown = '- item\n';
-		const editor = await createTestEditor(
-			markdown,
-			EditorSelection.cursor(markdown.length),
-			['BulletList'],
-			[replaceBulletLists],
+			expectedSyntaxTreeTags,
+			extensions,
 		);
 
 		editor.dom.dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
