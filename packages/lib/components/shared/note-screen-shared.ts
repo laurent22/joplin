@@ -299,11 +299,12 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent, useDefaultEditorState 
 	const isProvisionalNote = comp.props.provisionalNoteIds.includes(comp.props.noteId);
 
 	const note = await Note.load(comp.props.noteId);
-
-	const panes = comp.props.noteVisiblePanes;
-	let mode = panes.includes('editor') ? 'edit' : 'view';
+	let mode = comp.state.mode;
 
 	if (useDefaultEditorState) {
+		const panes = comp.props.noteVisiblePanes;
+		mode = panes.includes('editor') ? 'edit' : 'view';
+
 		// Override the mode if the default state is not last
 		const defaultState = Setting.value('editor.mobile.defaultEditState');
 		if (defaultState === 'view') mode = 'view';
