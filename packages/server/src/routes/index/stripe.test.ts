@@ -12,6 +12,7 @@ import { Hour, Month, Second } from '@joplin/utils/time';
 
 interface StripeOptions {
 	userEmail?: string;
+	source?: string;
 }
 
 function mockStripe(options: StripeOptions = null) {
@@ -26,8 +27,10 @@ function mockStripe(options: StripeOptions = null) {
 				return {
 					name: 'Toto',
 					email: options.userEmail,
+					metadata: { source: options.source || '' },
 				};
 			},
+			update: jest.fn(),
 		},
 		subscriptions: {
 			cancel: jest.fn(),
@@ -60,11 +63,12 @@ interface WebhookOptions {
 	userEmail?: string;
 	accountType?: AccountType;
 	quantity?: number;
+	source?: string;
 }
 
 async function simulateWebhook(ctx: AppContext, type: string, object: Record<string, unknown>, options: WebhookOptions = {}) {
 	options = {
-		stripe: mockStripe({ userEmail: options.userEmail }),
+		stripe: mockStripe({ userEmail: options.userEmail, source: options.source }),
 		eventId: uuidgen(),
 		...options,
 	};
@@ -137,6 +141,24 @@ describe('index/stripe', () => {
 		expect(sub.is_deleted).toBe(0);
 		expect(sub.last_payment_time).toBeGreaterThanOrEqual(startTime);
 		expect(sub.last_payment_failed_time).toBe(0);
+	});
+
+	test('should store the signup source on the subscription', async () => {
+		const ctx = await koaAppContext();
+		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com', source: 'desktop-wizard' });
+
+		const user = await models().user().loadByEmail('toto@example.com');
+		const sub = await models().subscription().byUserId(user.id);
+		expect(sub.source).toBe('desktop-wizard');
+	});
+
+	test('should default the source to an empty string when none is provided', async () => {
+		const ctx = await koaAppContext();
+		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com' });
+
+		const user = await models().user().loadByEmail('toto@example.com');
+		const sub = await models().subscription().byUserId(user.id);
+		expect(sub.source).toBe('');
 	});
 
 	test('should not process the same event twice', async () => {

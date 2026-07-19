@@ -15,6 +15,7 @@ const renderer: ListRenderer = {
 		'note.todo_completed',
 		'item.selected',
 		'note.is_locked',
+		'note.is_published',
 		'note.is_shared',
 		'note.isWatched',
 	],
@@ -89,6 +90,14 @@ const renderer: ListRenderer = {
 			color: var(--joplin-color-warn3);
 		}
 
+		> .row.-published {
+			color: var(--joplin-color4);
+		}
+
+		> .row.-published.-selected {
+			color: var(--joplin-color);
+		}
+
 		> .row.-completed {
 			opacity: 0.5;
 		}
@@ -107,7 +116,7 @@ const renderer: ListRenderer = {
 
 	itemTemplate: // html
 		`
-			<div class="row {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}} {{#note.is_locked}}-locked{{/note.is_locked}}">
+			<div class="row {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.is_published}}-published{{/note.is_published}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}} {{#note.is_locked}}-locked{{/note.is_locked}}">
 				{{#cells}}
 					<div data-name="{{name}}" class="item" style="{{{styleHtml}}}">
 						<div class="content">

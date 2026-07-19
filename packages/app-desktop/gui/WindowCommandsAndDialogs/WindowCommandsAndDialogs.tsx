@@ -4,6 +4,7 @@ import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
 import NotePropertiesDialog from '../NotePropertiesDialog';
 import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
 import ShareNoteDialog from '../ShareNoteDialog';
+import PublishFolderDialog from '../PublishFolderDialog';
 import { PluginHtmlContents, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DialogState } from './types';
@@ -47,6 +48,9 @@ const defaultDialogState: DialogState = {
 		visible: false,
 	},
 	shareFolderDialogOptions: {
+		visible: false,
+	},
+	publishFolderDialogOptions: {
 		visible: false,
 	},
 	promptOptions: null,
@@ -116,7 +120,7 @@ const WindowCommandsAndDialogs: React.FC<Props> = props => {
 	const pluginDialog = !dialogInfo || !Dialog ? null : <Dialog {...dialogInfo.props} />;
 
 	const {
-		noteContentPropertiesDialogOptions, notePropertiesDialogOptions, shareNoteDialogOptions, shareFolderDialogOptions, promptOptions,
+		noteContentPropertiesDialogOptions, notePropertiesDialogOptions, shareNoteDialogOptions, shareFolderDialogOptions, publishFolderDialogOptions, promptOptions,
 	} = dialogState;
 
 
@@ -163,6 +167,13 @@ const WindowCommandsAndDialogs: React.FC<Props> = props => {
 				themeId={props.themeId}
 				folderId={shareFolderDialogOptions.folderId}
 				onClose={onDialogHideCallbacks.shareFolderDialogOptions}
+			/>
+		)}
+		{publishFolderDialogOptions.visible && (
+			<PublishFolderDialog
+				themeId={props.themeId}
+				folderId={publishFolderDialogOptions.folderId}
+				onClose={onDialogHideCallbacks.publishFolderDialogOptions}
 			/>
 		)}
 

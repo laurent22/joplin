@@ -48,6 +48,7 @@ const renderer: ListRenderer = {
 		'note.checkboxes',
 		'note.id',
 		'note.is_locked',
+		'note.is_published',
 		'note.is_shared',
 		'note.is_todo',
 		'note.isWatched',
@@ -113,6 +114,7 @@ const renderer: ListRenderer = {
 					padding-right: 4px;
 					color: var(--joplin-color);
 				}
+	
 			}
 
 			> .checkbox-pie {
@@ -128,6 +130,18 @@ const renderer: ListRenderer = {
 		> .content.-shared {
 			> .title {
 				color: var(--joplin-color-warn3);
+			}
+		}
+
+		> .content.-published {
+			> .title {
+				color: var(--joplin-color4);
+			}
+		}
+
+		> .content.-published.-selected {
+			> .title {
+				color: var(--joplin-color);
 			}
 		}
 
@@ -158,7 +172,7 @@ const renderer: ListRenderer = {
 
 	itemTemplate: // html
 		`
-		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
+		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.is_published}}-published{{/note.is_published}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
 			{{#note.is_todo}}
 				<div class="checkbox">
 					<input

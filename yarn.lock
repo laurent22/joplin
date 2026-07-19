@@ -11386,13 +11386,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/react-fontawesome@npm:3.2.0":
-  version: 3.2.0
-  resolution: "@fortawesome/react-fontawesome@npm:3.2.0"
+"@fortawesome/react-fontawesome@npm:3.3.0":
+  version: 3.3.0
+  resolution: "@fortawesome/react-fontawesome@npm:3.3.0"
   peerDependencies:
     "@fortawesome/fontawesome-svg-core": ~6 || ~7
     react: ^18.0.0 || ^19.0.0
-  checksum: 10/2493746e00db4a7fb001f3f098d0456fa6351186c6b1856af6916ac444bbabead8f2cc3a9da0c7f6684a9c7beff34bdbbcdd3845d68f20de320c796c62112117
+  checksum: 10/da87e97597d8a3d82f719225bc934c7556b8efaa7fadd72147294853ff1dba5ae77d95497d41f050ceae4a84cc40bfe80665f3a028e64a21aa5a3224029d5514
   languageName: node
   linkType: hard
 
@@ -12515,11 +12515,11 @@ __metadata:
     "@react-native-community/netinfo": "npm:11.5.2"
     "@react-native-community/push-notification-ios": "npm:1.12.0"
     "@react-native-documents/picker": "npm:11.0.4"
-    "@react-native-vector-icons/fontawesome5": "npm:12.3.3"
+    "@react-native-vector-icons/fontawesome5": "npm:12.4.0"
     "@react-native-vector-icons/get-image": "npm:12.3.0"
-    "@react-native-vector-icons/ionicons": "npm:12.4.3"
+    "@react-native-vector-icons/ionicons": "npm:12.5.0"
     "@react-native-vector-icons/material-design-icons": "npm:12.4.3"
-    "@react-native-vector-icons/material-icons": "npm:12.4.3"
+    "@react-native-vector-icons/material-icons": "npm:12.5.0"
     "@react-native/babel-preset": "npm:0.81.6"
     "@react-native/metro-config": "npm:0.81.6"
     "@react-native/typescript-config": "npm:0.83.1"
@@ -12872,7 +12872,7 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-svg-core": "npm:6.1.2"
     "@fortawesome/free-solid-svg-icons": "npm:6.1.2"
-    "@fortawesome/react-fontawesome": "npm:3.2.0"
+    "@fortawesome/react-fontawesome": "npm:3.3.0"
     "@joplin/lib": "npm:~3.7"
     "@types/jest": "npm:29.5.14"
     "@types/pdfjs-dist": "npm:2.10.378"
@@ -13055,6 +13055,7 @@ __metadata:
     stripe: "npm:13.9.0"
     typescript: "npm:5.9.3"
     uuid: "npm:11.1.0"
+    wunderbaum: "npm:0.14.1"
     yargs: "npm:17.7.2"
     zxcvbn: "npm:4.4.2"
   languageName: unknown
@@ -15990,15 +15991,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/fontawesome5@npm:12.3.3":
-  version: 12.3.3
-  resolution: "@react-native-vector-icons/fontawesome5@npm:12.3.3"
+"@react-native-vector-icons/fontawesome5@npm:12.4.0":
+  version: 12.4.0
+  resolution: "@react-native-vector-icons/fontawesome5@npm:12.4.0"
   dependencies:
     "@react-native-vector-icons/common": "npm:^12.4.2"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/894a439cc22d7ba71389293a2a67f2166ce5ddd95e22b8cfae13057966e6558a9e68a7cdea7e78f45275970b51c76dd0b9b2ce66d23a85294f92028d1458d733
+  checksum: 10/087dd587ba35a74034f2acaf3981c51474c340e9a6834a9e182fe78ee9604ee1aae196b0f6ebc8d0353b3ed96ed476806fbbfa14fea3e1aa0074ef31f5d3a580
   languageName: node
   linkType: hard
 
@@ -16012,15 +16013,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/ionicons@npm:12.4.3":
-  version: 12.4.3
-  resolution: "@react-native-vector-icons/ionicons@npm:12.4.3"
+"@react-native-vector-icons/ionicons@npm:12.5.0":
+  version: 12.5.0
+  resolution: "@react-native-vector-icons/ionicons@npm:12.5.0"
   dependencies:
     "@react-native-vector-icons/common": "npm:^12.4.2"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/f06a1a892e6c7ff3b9d34de31c17244afe4df5a51c9cc923a0e98b606599bfcfe87d07aea12614e5b662ebd3fca6b96bdf28678838ee47c862ae1d6cbd6ad069
+  checksum: 10/cb94eb66993e926d2714fe650ffb446feb63f63dcc070c07087d39908fa8afd0428d4b4b422c17231bbeafb38d8cfdf0866bb4c23f60fcbaea53bb87f0efa784
   languageName: node
   linkType: hard
 
@@ -16036,15 +16037,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/material-icons@npm:12.4.3":
-  version: 12.4.3
-  resolution: "@react-native-vector-icons/material-icons@npm:12.4.3"
+"@react-native-vector-icons/material-icons@npm:12.5.0":
+  version: 12.5.0
+  resolution: "@react-native-vector-icons/material-icons@npm:12.5.0"
   dependencies:
     "@react-native-vector-icons/common": "npm:^12.4.2"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/6101caa334488858e99a09d243c4758548c2ca2d7ae1a135d477d108d3a5d7fa62d4172d6b227ea5931c0f2654e805fc2823a2563ebaa003dad731df5458565f
+  checksum: 10/4e7824c145df199e949f62620ca92ea02bdf085e485cbc5e59eb4277b99c19311ec463da410a21dc4ac81c04675aed59d604ad7234a5969d1e9e62c10cda751c
   languageName: node
   linkType: hard
 
@@ -60350,6 +60351,13 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: 10/f759ea19e42f6d94727b3d8590693f2d92521a78ec2de5c6064c3356f50d4815d427b7ddb10bf39596cc67d3b18232a1b2dfbc3b6361d4772bdfec69d4c130f4
+  languageName: node
+  linkType: hard
+
+"wunderbaum@npm:0.14.1":
+  version: 0.14.1
+  resolution: "wunderbaum@npm:0.14.1"
+  checksum: 10/b0a652e105ca35a4b909de79cb699b25a1a41938f8569abd5a1db624caa22243474d6931e4875eadfea3038651bfbc8a9ef0722cdffe2513a07712f6fac1ec29
   languageName: node
   linkType: hard
 
