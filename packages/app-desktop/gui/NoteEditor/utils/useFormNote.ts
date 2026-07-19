@@ -9,13 +9,12 @@ import attachedResources, { clearResourceCache } from '@joplin/lib/utils/attache
 import { MarkupToHtml } from '@joplin/renderer';
 import Note from '@joplin/lib/models/Note';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-import { NoteEntity } from '@joplin/lib/services/database/types';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import Logger from '@joplin/utils/Logger';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
-import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
+import NoteLockNote, { GatedNoteEntity } from '@joplin/lib/services/noteLock/NoteLockNote';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 
@@ -73,7 +72,7 @@ function resourceInfosChanged(a: ResourceInfos, b: ResourceInfos): boolean {
 
 // While the session is locked, a locked note produces no form note at all - the unlock panel
 // takes the editor's place. So no placeholder body exists that a save could write over the note.
-const loadNoteForForm = async (noteId: string): Promise<{ note: NoteEntity|null; blocked: boolean; decryptFailed: boolean }> => {
+const loadNoteForForm = async (noteId: string): Promise<{ note: GatedNoteEntity|null; blocked: boolean; decryptFailed: boolean }> => {
 	if (isNoteLockEnabled()) {
 		const lockState = await Note.load(noteId, { fields: ['is_locked'] });
 		if (lockState && NoteLockNote.isLocked(lockState)) {
@@ -91,7 +90,7 @@ const loadNoteForForm = async (noteId: string): Promise<{ note: NoteEntity|null;
 	return { note: await Note.load(noteId), blocked: false, decryptFailed: false };
 };
 
-type InitNoteStateCallback = (note: NoteEntity, isNew: boolean)=> Promise<FormNote>;
+type InitNoteStateCallback = (note: GatedNoteEntity, isNew: boolean)=> Promise<FormNote>;
 const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: string, noteId: string, initNoteState: InitNoteStateCallback, clearFormNote: ()=> void, builtInEditorVisible: boolean, noteLockSessionUnlocked: boolean, setDecryptFailed: (value: boolean)=> void, setLoadBlocked: (value: boolean)=> void) => {
 	// Increasing the value of this counter cancels any ongoing note refreshes and starts
 	// a new refresh.
@@ -251,6 +250,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			encryption_applied: n.encryption_applied,
 			is_locked: n.is_locked,
 			noteLockKey,
+			isDecrypted: !!n.isDecrypted,
 		};
 
 		logger.debug('Initializing note state');

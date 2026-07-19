@@ -175,6 +175,8 @@ export interface FormNote {
 	// The key captured when the locked note was decrypted; pending saves encrypt with it so they
 	// can complete even if the session locks before they run.
 	noteLockKey: DecryptedNoteLockKey|null;
+	// Proof for gated saves that the body is plaintext - see GatedNoteEntity.
+	isDecrypted: boolean;
 	deleted_time: number;
 
 	hasChanged: boolean;
@@ -229,6 +231,7 @@ export function defaultFormNote(): FormNote {
 		encryption_applied: 0,
 		is_locked: 0,
 		noteLockKey: null,
+		isDecrypted: false,
 	};
 }
 
