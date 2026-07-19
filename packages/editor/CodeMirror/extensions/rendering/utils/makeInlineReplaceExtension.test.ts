@@ -118,6 +118,17 @@ const testCases: TestCase[] = [
 		expectedSyntaxTreeTags: ['BulletList'],
 		extensions: [replaceBulletLists],
 	},
+	{
+		label: 'bullet list item with selected leading space',
+		markdown: '- item\n',
+		renderedText: '- item',
+		selectionFrom: 1,
+		selectionTo: 6,
+		expectedSelectionFrom: 0,
+		expectedSelectionTo: 6,
+		expectedSyntaxTreeTags: ['BulletList'],
+		extensions: [replaceBulletLists],
+	},
 ];
 
 const directedTestCases = testCases.flatMap(testCase => [
@@ -165,5 +176,53 @@ describe('makeInlineReplaceExtension', () => {
 
 		expect(editor.state.selection.main).toMatchObject(expectedSelection);
 		expect(editor.contentDOM.textContent).toBe(markdown.trimEnd());
+	});
+
+	it.each([
+		{ direction: 'forward', selection: EditorSelection.range(0, 2), expectedCursor: 2 },
+		{ direction: 'backward', selection: EditorSelection.range(2, 0), expectedCursor: 0 },
+	])('should collapse a $direction mouse selection fully covered by hidden Markdown', async ({
+		selection, expectedCursor,
+	}) => {
+		const markdown = '**bold**\n';
+		const editor = await createTestEditor(
+			markdown,
+			EditorSelection.cursor(markdown.length),
+			['StrongEmphasis'],
+			[replaceFormatCharacters],
+		);
+
+		editor.dom.dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
+		editor.dispatch({ selection, userEvent: 'select.pointer' });
+		editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
+
+		expect(editor.state.selection.main).toMatchObject({
+			anchor: expectedCursor,
+			head: expectedCursor,
+		});
+	});
+
+	it.each([
+		{ direction: 'forward', selection: EditorSelection.range(0, 1), expectedCursor: 1 },
+		{ direction: 'backward', selection: EditorSelection.range(1, 0), expectedCursor: 0 },
+	])('should collapse a $direction mouse selection fully covered by a widget', async ({
+		selection, expectedCursor,
+	}) => {
+		const markdown = '- item\n';
+		const editor = await createTestEditor(
+			markdown,
+			EditorSelection.cursor(markdown.length),
+			['BulletList'],
+			[replaceBulletLists],
+		);
+
+		editor.dom.dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
+		editor.dispatch({ selection, userEvent: 'select.pointer' });
+		editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
+
+		expect(editor.state.selection.main).toMatchObject({
+			anchor: expectedCursor,
+			head: expectedCursor,
+		});
 	});
 });

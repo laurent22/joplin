@@ -11,19 +11,23 @@ import nodeIntersectsSelection from './nodeIntersectsSelection';
 
 const updateInlineDecorationsEffect = StateEffect.define();
 
+const isHiddenDecoration = (decoration: Decoration) => (
+	!Object.keys(decoration.spec).length || decoration.spec.widget instanceof WidgetType
+);
+
 const expandSelectionToFormattingCharacters = (decorations: DecorationSet, selection: SelectionRange, docLength: number) => {
 	if (selection.empty) return null;
 
 	const hiddenRanges: { from: number; to: number }[] = [];
 	decorations.between(0, docLength, (from, to, decoration) => {
-		if (!Object.keys(decoration.spec).length) hiddenRanges.push({ from, to });
+		if (isHiddenDecoration(decoration)) hiddenRanges.push({ from, to });
 	});
 
 	let coveredTo = selection.from;
 	for (const range of hiddenRanges) {
 		if (range.from <= coveredTo) coveredTo = Math.max(coveredTo, range.to);
 	}
-	if (coveredTo >= selection.to) return null;
+	if (coveredTo >= selection.to) return EditorSelection.single(selection.head);
 
 	let { from, to } = selection;
 	for (let index = hiddenRanges.length - 1; index >= 0; index--) {
@@ -65,17 +69,10 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 				this.decorations, selection, this.view.state.doc.length,
 			) ?? undefined;
 
-			let coveredTo = selection.from;
-			this.decorations.between(selection.from, selection.to, (from, to, decoration) => {
-				if (!Object.keys(decoration.spec).length && from <= coveredTo) {
-					coveredTo = Math.max(coveredTo, to);
-				}
-			});
-
 			const hasHiddenDecoration = (from: number, to: number) => {
 				let found = false;
 				this.decorations.between(from, to, (_from, _to, decoration) => {
-					if (!Object.keys(decoration.spec).length || decoration.spec.widget instanceof WidgetType) {
+					if (isHiddenDecoration(decoration)) {
 						found = true;
 						return false;
 					}
@@ -84,7 +81,6 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 				return found;
 			};
 
-			selectionUpdate ??= !selection.empty && coveredTo >= selection.to ? { anchor: selection.head } : undefined;
 			const line = this.view.state.doc.lineAt(selection.from);
 			syntaxTree(this.view.state).iterate({
 				from: line.from,
