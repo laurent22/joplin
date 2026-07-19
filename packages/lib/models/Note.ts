@@ -890,9 +890,9 @@ export default class Note extends BaseItem {
 
 		// Applied to both savedNote assignments because the dispatch block below can replace it
 		// with an ungated reload.
-		const applyGatedResult = (note: NoteEntity): GatedNoteEntity => {
+		const applyGatedResult = (note: NoteEntity) => {
 			if (!(isNoteLockEnabled() && !!options?.useNoteLock)) return note;
-			const result: GatedNoteEntity = { ...note, isDecrypted: NoteLockNote.isLocked(o) };
+			const result = { ...note, isDecrypted: NoteLockNote.isLocked(o) };
 			if (plainTextBodyToReturn !== null) result.body = plainTextBodyToReturn;
 			return result;
 		};
