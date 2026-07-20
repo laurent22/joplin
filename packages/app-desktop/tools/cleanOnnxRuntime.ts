@@ -1,5 +1,6 @@
 import { pathExists, readdirSync, remove } from 'fs-extra';
 import { join, sep } from 'path';
+import { env } from 'process';
 
 const findBaseOnnxRuntimePath = () => {
 	const fullPath = require.resolve('onnxruntime-node').split(sep);
@@ -11,6 +12,11 @@ const findBaseOnnxRuntimePath = () => {
 		}
 	}
 	throw new Error('Failed to resolve path to onnxruntime-node');
+};
+
+// As of onnxruntime-node 1.24.3, only MacOS+ARM64 and Windows/Linux x64/ARM64 are supported
+const isUnsupportedPlatform = (platform: string, arch: string) => {
+	return !['x64', 'arm64'].includes(arch) || (platform === 'darwin' && arch === 'x64');
 };
 
 // onnxruntime-node includes large binary artifacts for all platforms. Remove these during build to
@@ -30,15 +36,23 @@ const cleanOnnxRuntime = async () => {
 		await remove(fullPath);
 	};
 
+	const targetArch = env['npm_config_target_arch'] || process.arch;
 	for (const subDir of readdirSync(baseDir)) {
 		const fullPath = join(baseDir, subDir);
 		if (subDir !== process.platform) {
 			await removeDir(fullPath);
-		} else if (process.arch === 'x64') {
+		} else if (targetArch === 'x64') {
 			await removeDir(join(fullPath, 'arm64'));
-		} else if (process.arch === 'arm64') {
+		} else if (targetArch === 'arm64') {
 			await removeDir(join(fullPath, 'x64'));
 		}
+	}
+
+	if (!await pathExists(join(baseDir, process.platform, targetArch)) && !isUnsupportedPlatform(process.platform, targetArch)) {
+		throw new Error([
+			'Missing onnxruntime-node for the current platform. It may have been deleted as part of a previous cross-platform build.',
+			`To resolve: Delete ${JSON.stringify(onnxRuntimePath)} and re-run "yarn install".`,
+		].join('\n'));
 	}
 };
 
