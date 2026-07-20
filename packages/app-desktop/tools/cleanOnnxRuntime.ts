@@ -32,7 +32,7 @@ const cleanOnnxRuntime = async () => {
 
 	const removeDir = async (fullPath: string) => {
 		if (!await pathExists(fullPath)) return;
-		console.log('rm -r', fullPath);
+		console.log('Clearing unused onnxruntime files: rm -r', fullPath);
 		await remove(fullPath);
 	};
 
