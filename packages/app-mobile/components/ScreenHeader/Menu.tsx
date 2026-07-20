@@ -46,6 +46,8 @@ const useStyles = (themeId: number) => {
 			menuItem: {
 				alignItems: 'flex-start',
 				padding: theme.marginMedium,
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
 				minWidth: Math.min(350, windowWidth),
 			},
 			menuItemContent: {
