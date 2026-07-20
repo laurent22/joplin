@@ -45,9 +45,7 @@ const useStyles = (themeId: number) => {
 			menuContent: { flexDirection: 'column', width: '100%' },
 			menuItem: {
 				alignItems: 'flex-start',
-				padding: theme.margin,
-				paddingLeft: theme.marginLeft,
-				paddingRight: theme.marginRight,
+				padding: theme.marginMedium,
 				minWidth: Math.min(350, windowWidth),
 			},
 			menuItemContent: {
