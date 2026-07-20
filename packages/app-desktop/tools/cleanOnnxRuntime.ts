@@ -51,7 +51,9 @@ const cleanOnnxRuntime = async () => {
 	if (!await pathExists(join(baseDir, process.platform, targetArch)) && !isUnsupportedPlatform(process.platform, targetArch)) {
 		throw new Error([
 			'Missing onnxruntime-node for the current platform. It may have been deleted as part of a previous cross-platform build.',
-			`To resolve: Delete ${JSON.stringify(onnxRuntimePath)} and re-run "yarn install".`,
+			'To resolve, either:',
+			`1. Delete ${JSON.stringify(onnxRuntimePath)} and re-run "yarn install".`,
+			`2. Update the list of platforms unsupported by onnxruntime-node in ${JSON.stringify(__filename)}.`,
 		].join('\n'));
 	}
 };
