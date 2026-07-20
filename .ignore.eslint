@@ -680,6 +680,7 @@ packages/app-desktop/services/plugins/types.js
 packages/app-desktop/services/restart.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/tools/bundleJs.js
+packages/app-desktop/tools/cleanOnnxRuntime.js
 packages/app-desktop/tools/copy7Zip.js
 packages/app-desktop/tools/generateLatestArm64Yml.js
 packages/app-desktop/tools/githubReleasesUtils.js

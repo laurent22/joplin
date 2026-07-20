@@ -7,6 +7,7 @@ import copy7Zip from './tools/copy7Zip';
 import bundleJs from './tools/bundleJs';
 import { remove } from 'fs-extra';
 import execa = require('execa');
+import cleanOnnxRuntime from './tools/cleanOnnxRuntime';
 
 const tasks = {
 	installElectron: {
@@ -69,6 +70,9 @@ const tasks = {
 			);
 		},
 	},
+	cleanOnnxRuntime: {
+		fn: cleanOnnxRuntime,
+	},
 };
 
 utils.registerGulpTasks(gulp, tasks);
@@ -82,6 +86,7 @@ const buildBeforeStartParallel = gulp.parallel(
 	'updateIgnoredTypeScriptBuild',
 	'buildScriptIndexes',
 	'compileSass',
+	'cleanOnnxRuntime',
 );
 const buildRequiresTsc = gulp.series('bundle');
 
