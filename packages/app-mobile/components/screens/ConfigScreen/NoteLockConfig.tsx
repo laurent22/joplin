@@ -43,7 +43,7 @@ const NoteLockConfig = (props: Props) => {
 			},
 			passwordInput: {
 				marginTop: 5,
-				marginBottom: 10,
+				marginBottom: theme.itemMarginBottom,
 				color: theme.color,
 				borderWidth: 1,
 				borderColor: theme.dividerColor,
@@ -53,13 +53,13 @@ const NoteLockConfig = (props: Props) => {
 			errorText: {
 				fontSize: theme.fontSize,
 				color: theme.colorError,
-				marginBottom: 10,
+				marginBottom: theme.itemMarginBottom,
 			},
 			reminderText: {
 				fontSize: theme.fontSize,
 				fontWeight: 'bold',
 				color: theme.color,
-				marginTop: 10,
+				marginTop: theme.itemMarginTop,
 			},
 		});
 	}, [theme]);
@@ -121,7 +121,7 @@ const NoteLockConfig = (props: Props) => {
 				/>
 				{passwordMismatch ? <Text style={styles.errorText}>{_('Passwords do not match')}</Text> : null}
 				{error ? <Text style={styles.errorText}>{error}</Text> : null}
-				<Button title={_('Save')} disabled={!canSave} onPress={() => void onCreate()} />
+				<Button title={_('Save')} disabled={!canSave} onPress={onCreate} />
 				<Text style={styles.reminderText}>{_('Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.')}</Text>
 			</View>
 		);
