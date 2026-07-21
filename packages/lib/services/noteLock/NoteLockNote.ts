@@ -33,7 +33,7 @@ export default class NoteLockNote {
 		if (!('body' in note)) throw new Error('Gated note lock save is missing body');
 		const isLocked = this.isLocked(note);
 		// A body that never went through a gated decrypt would be encrypted a second time here.
-		if (isLocked && !isNew && !('isDecrypted' in note && !!note.isDecrypted)) throw new Error('Gated note lock save is missing decrypted state');
+		if (isLocked && !isNew && !(note as Record<string, unknown>).isDecrypted) throw new Error('Gated note lock save is missing decrypted state');
 		if (!isLocked) note.extracted_resource_ids = '';
 
 		const plainTextBody = note.body ?? '';
