@@ -23,7 +23,8 @@ export const enableNoteLock = async (noteId: string) => {
 	checkCanChangeLockState(note, noteId);
 	if (note.is_locked) throw new Error(`Note is already locked: ${noteId}`);
 	// The body is plaintext because the note was not locked, so mark it decrypted for the gated save.
-	await Note.save({ ...note, is_locked: 1, isDecrypted: true }, { useNoteLock: true });
+	const toSave = { ...note, is_locked: 1, isDecrypted: true };
+	await Note.save(toSave, { useNoteLock: true });
 	eventManager.emit(EventName.NoteLockNoteStateChange, { noteId, isLocked: true });
 };
 

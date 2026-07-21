@@ -350,13 +350,15 @@ describe('models/Note', () => {
 		const capturedKey = NoteLockSession.instance().decryptedKey();
 		NoteLockSession.instance().lock();
 
-		await Note.save({ ...await Note.load(note.id), body: 'updated', isDecrypted: true }, { useNoteLock: true, noteLockKey: capturedKey });
+		const updatedNote = { ...await Note.load(note.id), body: 'updated', isDecrypted: true };
+		await Note.save(updatedNote, { useNoteLock: true, noteLockKey: capturedKey });
 		await NoteLockSession.instance().unlock('123456');
 		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe('updated');
 
 		await NoteLockSession.instance().reset('654321');
 		const bodyBeforeStaleAttempt = (await Note.load(note.id)).body;
-		await expect(Note.save({ ...await Note.load(note.id), body: 'stale', isDecrypted: true }, { useNoteLock: true, noteLockKey: capturedKey })).rejects.toThrow('Note lock key changed during operation');
+		const staleNote = { ...await Note.load(note.id), body: 'stale', isDecrypted: true };
+		await expect(Note.save(staleNote, { useNoteLock: true, noteLockKey: capturedKey })).rejects.toThrow('Note lock key changed during operation');
 		expect((await Note.load(note.id)).body).toBe(bodyBeforeStaleAttempt);
 	});
 
@@ -365,30 +367,27 @@ describe('models/Note', () => {
 		await NoteLockSession.instance().unlock('123456');
 		const note = await Note.save({ body: 'secret', is_locked: 1 }, { useNoteLock: true });
 
-		expect(note.isDecrypted).toBe(true);
-		expect((await Note.load(note.id, { useNoteLock: true })).isDecrypted).toBe(true);
-		expect((await Note.load(note.id)).isDecrypted).toBeUndefined();
+		expect(note).toMatchObject({ isDecrypted: true });
+		expect(await Note.load(note.id, { useNoteLock: true })).toMatchObject({ isDecrypted: true });
+		expect('isDecrypted' in await Note.load(note.id)).toBe(false);
 
 		// The ungated load returned cipher text, so saving it back through the gated path would
 		// encrypt it a second time.
 		await expect(Note.save({ ...await Note.load(note.id) }, { useNoteLock: true })).rejects.toThrow('Gated note lock save is missing decrypted state');
 
 		const saved = await Note.save({ ...await Note.load(note.id, { useNoteLock: true }), body: 'edited' }, { useNoteLock: true });
-		expect(saved.isDecrypted).toBe(true);
-		expect(saved.body).toBe('edited');
+		expect(saved).toMatchObject({ isDecrypted: true, body: 'edited' });
 		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe('edited');
 
 		// The editor saves partial notes without share_id, which makes the dispatch path reload the
 		// note with a field list built from the saved note's keys - the marker must not leak into it.
-		const editorShaped = await Note.save({
-			id: note.id, deleted_time: 0, title: 'edited', body: 'edited again', is_locked: 1, isDecrypted: true,
-		}, { useNoteLock: true });
-		expect(editorShaped.isDecrypted).toBe(true);
-		expect(editorShaped.body).toBe('edited again');
+		const editorShapedNote = { id: note.id, deleted_time: 0, title: 'edited', body: 'edited again', is_locked: 1, isDecrypted: true };
+		const editorShaped = await Note.save(editorShapedNote, { useNoteLock: true });
+		expect(editorShaped).toMatchObject({ isDecrypted: true, body: 'edited again' });
 		expect((await Note.load(note.id, { useNoteLock: true })).body).toBe('edited again');
 
 		const unlocked = await Note.save({ ...await Note.load(note.id, { useNoteLock: true }), is_locked: 0 }, { useNoteLock: true });
-		expect(unlocked.isDecrypted).toBe(false);
+		expect(unlocked).toMatchObject({ isDecrypted: false });
 	});
 
 	it('should fail closed when note lock encryption cannot decrypt or encrypt', async () => {
@@ -434,11 +433,8 @@ describe('models/Note', () => {
 
 		await NoteLockKey.instance().create('123456');
 		await NoteLockSession.instance().unlock('123456');
-		await Note.save({
-			...await Note.load(note.id),
-			is_locked: 1,
-			isDecrypted: true,
-		}, { useNoteLock: true });
+		const lockedNote = { ...await Note.load(note.id), is_locked: 1, isDecrypted: true };
+		await Note.save(lockedNote, { useNoteLock: true });
 
 		expect(await Revision.countRevisions(Note.modelType(), note.id)).toBe(1);
 		expect(await Revision.load(encryptedRevision.id)).toBeTruthy();

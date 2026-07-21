@@ -65,12 +65,14 @@ export default function NoteLockPanel(props: Props) {
 		return (
 			<form className="form unlock-form" onSubmit={onSubmit}>
 				<p className="message">{_('This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.')}</p>
-				<LabelledPasswordInput
-					labelText={_('Note lock password')}
-					value={password}
-					onChange={onPasswordChange}
-				/>
-				{!!errorMessage && <p className="error-message" role="alert">{errorMessage}</p>}
+				<div className="field">
+					<LabelledPasswordInput
+						labelText={_('Note lock password')}
+						value={password}
+						onChange={onPasswordChange}
+					/>
+				</div>
+				{!!errorMessage && <p className="error" role="alert">{errorMessage}</p>}
 				<Button type='button' level={ButtonLevel.Primary} title={_('Unlock')} disabled={!password || unlocking} onClick={unlock} />
 			</form>
 		);

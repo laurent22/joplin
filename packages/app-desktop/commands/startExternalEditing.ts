@@ -21,7 +21,7 @@ export const runtime = (): CommandRuntime => {
 				const note = await Note.load(noteId);
 				// The enabled condition can be bypassed when the command is executed directly (e.g. via
 				// toggleExternalEditing): the external editor would get ciphertext, or write plaintext to disk.
-				if (isNoteLockEnabled() && note.is_locked) return;
+				if (isNoteLockEnabled() && note.is_locked) throw new Error(_('Locked notes cannot be opened in an external editor'));
 				void ExternalEditWatcher.instance().openAndWatch(note);
 			} catch (error) {
 				bridge().showErrorMessageBox(_('Error opening note in editor: %s', error.message));

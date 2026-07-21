@@ -2,7 +2,6 @@ import { FormNote } from './types';
 
 import HtmlToMd, { ParseOptions } from '@joplin/lib/HtmlToMd';
 import Note from '@joplin/lib/models/Note';
-import { NoteEntity } from '@joplin/lib/services/database/types';
 import { MarkupToHtml } from '@joplin/renderer';
 
 export async function htmlToMarkdown(markupLanguage: number, html: string, originalCss: string, parseOptions: ParseOptions = null): Promise<string> {
@@ -26,7 +25,7 @@ export async function htmlToMarkdown(markupLanguage: number, html: string, origi
 	return newBody;
 }
 
-export async function formNoteToNote(formNote: FormNote): Promise<NoteEntity> {
+export async function formNoteToNote(formNote: FormNote) {
 	return {
 		id: formNote.id,
 		// Should also include parent_id and deleted_time so that the reducer
@@ -38,5 +37,6 @@ export async function formNoteToNote(formNote: FormNote): Promise<NoteEntity> {
 		title: formNote.title,
 		body: formNote.body,
 		is_locked: formNote.is_locked,
+		isDecrypted: formNote.isDecrypted,
 	};
 }

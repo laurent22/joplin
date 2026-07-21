@@ -8,7 +8,6 @@ import type { Dispatch } from 'redux';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
 import type { OnSetFormNote } from './useFormNote';
 import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
-import type { GatedNoteEntity } from '@joplin/lib/services/noteLock/NoteLockNote';
 
 const logger = Logger.create('useScheduleSaveCallbacks');
 
@@ -31,10 +30,9 @@ const useScheduleSaveCallbacks = (props: Props) => {
 				// The lock state may change between scheduling and execution (e.g. encryption enabled
 				// from the note list menu), so the save uses the latest form state for this note.
 				const latestFormNote = props.formNote.current?.id === formNote.id ? props.formNote.current : formNote;
-				let note: GatedNoteEntity;
+				let note;
 				if (isNoteLockEnabled()) {
-					note = await formNoteToNote({ ...formNote, is_locked: latestFormNote.is_locked });
-					note.isDecrypted = latestFormNote.isDecrypted;
+					note = await formNoteToNote({ ...formNote, is_locked: latestFormNote.is_locked, isDecrypted: latestFormNote.isDecrypted });
 				} else {
 					note = await formNoteToNote(formNote);
 				}

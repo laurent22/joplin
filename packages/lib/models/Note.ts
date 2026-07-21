@@ -26,7 +26,7 @@ import { resolveFileRef, RefKind } from '../services/whiteboard/resolveRef';
 const { isImageMimeType } = require('../resourceUtils');
 import { MarkupToHtml } from '@joplin/renderer';
 import { ALL_NOTES_FILTER_ID } from '../reserved-ids';
-import NoteLockNote, { GatedNoteEntity } from '../services/noteLock/NoteLockNote';
+import NoteLockNote from '../services/noteLock/NoteLockNote';
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
 import isItemId from './utils/isItemId';
 
@@ -801,13 +801,13 @@ export default class Note extends BaseItem {
 		return n.updated_time < date;
 	}
 
-	public static async load(id: string, options: LoadOptions = null): Promise<GatedNoteEntity> {
+	public static async load(id: string, options: LoadOptions = null): Promise<NoteEntity> {
 		const note = await super.load(id, options);
 		if (isNoteLockEnabled() && !!options?.useNoteLock) return NoteLockNote.decryptBody(note);
 		return note;
 	}
 
-	public static async save(o: GatedNoteEntity, options: SaveOptions = null): Promise<GatedNoteEntity> {
+	public static async save(o: NoteEntity, options: SaveOptions = null): Promise<NoteEntity> {
 		const isNew = this.isNew(o, options);
 
 		// If true, this is a provisional note - it will be saved permanently
@@ -855,6 +855,8 @@ export default class Note extends BaseItem {
 			if (NoteLockNote.isLocked(o) && 'body' in o) plainTextBodyToReturn = o.body;
 			await NoteLockNote.prepareForSave(o, this.linkedItemIds, this.serializeExtractedResourceIds, isNew, options.noteLockKey);
 		}
+		// Cleared for ungated saves too, in case a gated load is fed to an ungated save.
+		delete (o as Record<string, unknown>).isDecrypted;
 
 		syncDebugLog.info('Save Note: P:', oldNote);
 
@@ -888,16 +890,7 @@ export default class Note extends BaseItem {
 
 		syncDebugLog.info('Save Note: N:', o);
 
-		// Applied to both savedNote assignments because the dispatch block below can replace it
-		// with an ungated reload.
-		const applyGatedResult = (note: NoteEntity) => {
-			if (!(isNoteLockEnabled() && !!options?.useNoteLock)) return note;
-			const result = { ...note, isDecrypted: NoteLockNote.isLocked(o) };
-			if (plainTextBodyToReturn !== null) result.body = plainTextBodyToReturn;
-			return result;
-		};
-
-		let savedNote = applyGatedResult(await super.save(o, options));
+		let savedNote = await super.save(o, options);
 
 		if (isNoteLockEnabled() && !!options?.useNoteLock && NoteLockNote.isLocking(o, oldNote)) {
 			await ItemChange.waitForAllSaved();
@@ -918,11 +911,10 @@ export default class Note extends BaseItem {
 			// Ensures that any note added to the state has all the required
 			// properties for the UI to work.
 			if (!('deleted_time' in savedNote) || !('share_id' in savedNote)) {
-				// isDecrypted comes from applyGatedResult above and is not a database field.
-				const fields = removeElement(removeElement(unique(this.previewFields().concat(Object.keys(savedNote))), 'type_'), 'isDecrypted');
-				savedNote = applyGatedResult(await this.load(savedNote.id, {
+				const fields = removeElement(unique(this.previewFields().concat(Object.keys(savedNote))), 'type_');
+				savedNote = await this.load(savedNote.id, {
 					fields,
-				}));
+				});
 			}
 
 			this.dispatch({
@@ -942,6 +934,15 @@ export default class Note extends BaseItem {
 				type: 'EVENT_NOTE_ALARM_FIELD_CHANGE',
 				id: savedNote.id,
 			});
+		}
+
+		if (isNoteLockEnabled() && !!options?.useNoteLock) {
+			const gatedResult = {
+				...savedNote,
+				body: plainTextBodyToReturn !== null ? plainTextBodyToReturn : savedNote.body,
+				isDecrypted: NoteLockNote.isLocked(o),
+			};
+			savedNote = gatedResult;
 		}
 
 		return savedNote;

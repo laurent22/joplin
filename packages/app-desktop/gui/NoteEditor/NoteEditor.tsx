@@ -147,8 +147,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 			// Enabling requires an unlocked session, so capture the key the same way a decrypt
 			// does - a pending save can then still encrypt if the session locks before it runs.
 			const noteLockKey = event.isLocked && NoteLockSession.instance().isUnlocked() ? NoteLockSession.instance().decryptedKey() : null;
-			// The form body is plaintext whichever way the lock state flips.
-			const newFormNote = { ...formNoteRef.current, is_locked: event.isLocked ? 1 : 0, noteLockKey, isDecrypted: true };
+			const newFormNote = { ...formNoteRef.current, is_locked: event.isLocked ? 1 : 0, noteLockKey, isDecrypted: event.isLocked };
 			setFormNote(newFormNote);
 			void scheduleSaveNote(newFormNote);
 		};
