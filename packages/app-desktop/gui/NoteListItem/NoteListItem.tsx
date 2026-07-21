@@ -28,6 +28,7 @@ interface NoteItemProps {
 	style: CSSProperties;
 	note: NoteEntity;
 	isWatched: boolean;
+	isPublished: boolean;
 
 	isSelected: boolean;
 	tabIndex: number;
@@ -69,7 +70,7 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 
 	const rootElement = useRootElement(elementId);
 
-	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.listRenderer, props.highlightedWords, props.index, props.columns);
+	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.isPublished, props.listRenderer, props.highlightedWords, props.index, props.columns);
 
 	const itemEventHandlers = useMemo((): ItemEventHandlers => ({ onInputChange, onClick: null }), [onInputChange]);
 

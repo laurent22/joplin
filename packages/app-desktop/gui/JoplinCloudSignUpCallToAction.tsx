@@ -2,10 +2,16 @@ import { _ } from '@joplin/lib/locale';
 import * as React from 'react';
 import bridge from '../services/bridge';
 
-const JoplinCloudSignUpCallToAction = () => {
+interface Props {
+	source?: string;
+}
+
+const JoplinCloudSignUpCallToAction = (props: Props) => {
+
+	const source = props.source ?? 'desktop-app';
 
 	const onJoplinCloudSignUpClick = async () => {
-		await bridge().openExternal('https://joplinapp.org/plans/');
+		await bridge().openExternal(`https://joplinapp.org/plans/?source=${encodeURIComponent(source)}`);
 	};
 
 	return <div className="joplin-cloud-sign-up">

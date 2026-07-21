@@ -144,7 +144,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 		return this.db(this.tableName).select(this.defaultFields).where('user_id', '=', userId).where('is_deleted', '=', 0).first();
 	}
 
-	public async saveUserAndSubscription(email: string, fullName: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) {
+	public async saveUserAndSubscription(email: string, fullName: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string, source = '') {
 		return this.withTransaction<UserAndSubscription>(async () => {
 			const user = await this.models().user().save({
 				account_type: accountType,
@@ -160,6 +160,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 				stripe_user_id: stripeUserId,
 				stripe_subscription_id: stripeSubscriptionId,
 				last_payment_time: Date.now(),
+				source,
 			});
 
 			return { user, subscription };

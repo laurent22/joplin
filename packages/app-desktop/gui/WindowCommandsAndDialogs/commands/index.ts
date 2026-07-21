@@ -37,6 +37,7 @@ import * as showModalMessage from './showModalMessage';
 import * as showNoteContentProperties from './showNoteContentProperties';
 import * as showNoteProperties from './showNoteProperties';
 import * as showPrompt from './showPrompt';
+import * as showPublishFolderDialog from './showPublishFolderDialog';
 import * as showShareFolderDialog from './showShareFolderDialog';
 import * as showShareNoteDialog from './showShareNoteDialog';
 import * as showSpellCheckerMenu from './showSpellCheckerMenu';
@@ -92,6 +93,7 @@ const index: any[] = [
 	showNoteContentProperties,
 	showNoteProperties,
 	showPrompt,
+	showPublishFolderDialog,
 	showShareFolderDialog,
 	showShareNoteDialog,
 	showSpellCheckerMenu,

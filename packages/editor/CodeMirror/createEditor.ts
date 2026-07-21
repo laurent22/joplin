@@ -72,6 +72,9 @@ const createEditor = (
 		resolveImageSrc: (src, counter) => {
 			return props.resolveImageSrc(src, counter);
 		},
+		openLink: (link) => {
+			props.onEvent({ kind: EditorEventType.FollowLink, link });
+		},
 	};
 
 
