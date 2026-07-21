@@ -239,7 +239,7 @@ const assertNoOrphanedMigrations = async () => {
 	if (missingMigrations.length > 0) {
 		throw new Error([
 			`Missing .ts files for migrations: ${missingMigrations.join(', ')}.`,
-			'If these migrations are left over from another branch, please rebuild packages/server using "yarn rebuild".',
+			'If these migrations are left over from another branch, please rebuild packages/server using "yarn run rebuild" (**not** "yarn rebuild").',
 		].join('\n'));
 	}
 };
