@@ -455,10 +455,10 @@ export default class ElectronAppWrapper {
 
 					if (w.isFullScreen()) {
 						// leave fullscreen, then hide
-						w.once('leave-full-screen', () => this.electronApp_.hide());
+						w.once('leave-full-screen', () => w.hide());
 						w.setFullScreen(false);
 					} else {
-						this.electronApp_.hide();
+						w.hide();
 					}
 				}
 			} else {
@@ -950,11 +950,19 @@ export default class ElectronAppWrapper {
 		});
 
 		this.electronApp_.on('activate', () => {
-			if (this.win_ && !this.win_.isDestroyed()) this.win_.show();
+			if (this.win_ && !this.win_.isDestroyed()) {
+				if (this.win_.isMinimized()) this.win_.restore();
+				this.win_.show();
+				this.win_.focus();
+			}
 		});
 
 		this.electronApp_.on('did-become-active', () => {
-			if (this.win_ && !this.win_.isDestroyed()) this.win_.show();
+			if (this.win_ && !this.win_.isDestroyed()) {
+				if (this.win_.isMinimized()) this.win_.restore();
+				this.win_.show();
+				this.win_.focus();
+			}
 		});
 
 		this.electronApp_.on('open-url', (event: import('electron').Event, url: string) => {

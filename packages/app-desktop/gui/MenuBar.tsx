@@ -890,8 +890,27 @@ function useMenu(props: Props) {
 					visible: !!shim.isMac(),
 					submenu: [
 						{
+							label: _('Main Window'),
+							click() {
+								const win = bridge().mainWindow();
+								if (win) {
+									if (win.isMinimized()) win.restore();
+									win.show();
+									win.focus();
+								}
+							},
+						},
+						separator(),
+						{
 							role: 'minimize',
 							accelerator: shim.isMac() && keymapService.getAccelerator('minimizeWindow'),
+						},
+						{
+							role: 'zoom',
+						},
+						separator(),
+						{
+							role: 'front',
 						},
 					],
 				},
