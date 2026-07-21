@@ -262,7 +262,7 @@ export default function(props: Props) {
 					<JoplinCloudSignUpCallToAction source='desktop-sync-wizard' primary={true}/>
 					<LoginLink
 						href="#"
-						onClick={() => onSelectButtonClick(info.name as SyncTargetInfoName)}
+						onClick={event => { event.preventDefault(); void onSelectButtonClick(info.name as SyncTargetInfoName); }}
 						aria-describedby={describedById}
 					>{_('Already have an account? Log in')}</LoginLink>
 				</>
