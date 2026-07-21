@@ -2,10 +2,15 @@
 
 import sqlts, { Config, Table } from '@rmp135/sql-ts';
 import { hasOwnProperty } from '@joplin/utils/object';
+import { join } from 'node:path';
+import { readdir } from 'node:fs/promises';
 
 require('source-map-support').install();
 
-const dbFilePath = `${__dirname}/../../src/services/database/types.ts`;
+const baseDir = `${__dirname}/../..`;
+const srcDir = `${baseDir}/src`;
+const distDir = `${baseDir}/dist`;
+const dbFilePath = `${srcDir}/services/database/types.ts`;
 
 const fileReplaceWithinMarker = '// AUTO-GENERATED-TYPES';
 
@@ -217,7 +222,31 @@ function createRuntimeObject(table: Table) {
 	return `\t${table.name}: {\n${colStrings.join('\n')}\n\t},`;
 }
 
+const assertNoOrphanedMigrations = async () => {
+	const migrationsSource = join(srcDir, 'migrations');
+	const migrationsDest = join(distDir, 'migrations');
+	const sourceMigrations = await readdir(migrationsSource);
+	const distMigrations = await readdir(migrationsDest);
+
+	const missingMigrations = [];
+	for (const distMigration of distMigrations) {
+		if (!distMigration.endsWith('.js')) continue;
+		if (!sourceMigrations.includes(distMigration.replace(/\.js$/, '.ts'))) {
+			missingMigrations.push(distMigration);
+		}
+	}
+
+	if (missingMigrations.length > 0) {
+		throw new Error([
+			`Missing .ts files for migrations: ${missingMigrations.join(', ')}.`,
+			'If these migrations are left over from another branch, please rebuild packages/server using "yarn rebuild".',
+		].join('\n'));
+	}
+};
+
 async function main() {
+	await assertNoOrphanedMigrations();
+
 	const definitions = await sqlts.toObject(config);
 
 	const typeStrings = [];
