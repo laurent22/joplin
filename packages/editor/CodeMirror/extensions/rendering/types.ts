@@ -31,4 +31,5 @@ export interface ReplacementExtension {
 
 export interface RenderedContentContext {
 	resolveImageSrc(src: string, reloadCounter: number): Promise<string>;
+	openLink(link: string): void;
 }

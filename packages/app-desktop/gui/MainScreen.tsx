@@ -40,6 +40,7 @@ import PluginNotification from './PluginNotification/PluginNotification';
 import { Toast } from '@joplin/lib/services/plugins/api/types';
 import QuitSyncDialog from './QuitSyncDialog';
 import Logger from '@joplin/utils/Logger';
+import checkForUpdates, { isReleaseVersion } from '../checkForUpdates';
 
 const logger = Logger.create('MainScreen');
 
@@ -72,6 +73,7 @@ interface Props {
 	lastDeletion: StateLastDeletion;
 	lastDeletionNotificationTime: number;
 	mustUpgradeAppMessage: string;
+	syncTargetAppMinVersion: string;
 	showInvalidJoplinCloudCredential: boolean;
 	toast: Toast;
 	shouldSwitchToAppleSiliconVersion: boolean;
@@ -88,6 +90,8 @@ interface State {
 	noteContentPropertiesDialogOptions: Record<string, unknown>;
 	shareNoteDialogOptions: Record<string, unknown>;
 	shareFolderDialogOptions: ShareFolderDialogOptions;
+	syncTargetAppMinVersionIsRelease: boolean | null;
+	didSyncTargetAppMinVersionReleaseLoadFail: boolean;
 }
 
 const StyledUserWebviewDialogContainer = styled.div`
@@ -130,6 +134,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 				visible: false,
 				folderId: '',
 			},
+			syncTargetAppMinVersionIsRelease: null,
+			didSyncTargetAppMinVersionReleaseLoadFail: false,
 		};
 
 		this.updateMainLayout(this.buildLayout(props.plugins));
@@ -347,6 +353,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 				value: false,
 			});
 		}
+
+		if (
+			this.props.mustUpgradeAppMessage !== prevProps.mustUpgradeAppMessage ||
+			this.props.syncTargetAppMinVersion !== prevProps.syncTargetAppMinVersion
+		) {
+			void this.loadSyncTargetAppMinVersionIsRelease();
+		}
 	}
 
 	public layoutModeListenerKeyDown(event: KeyboardEvent) {
@@ -357,11 +370,35 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	public componentDidMount() {
 		window.addEventListener('keydown', this.layoutModeListenerKeyDown);
+		void this.loadSyncTargetAppMinVersionIsRelease();
 	}
 
 	public componentWillUnmount() {
 		window.removeEventListener('resize', this.window_resize);
 		window.removeEventListener('keydown', this.layoutModeListenerKeyDown);
+	}
+
+	private async loadSyncTargetAppMinVersionIsRelease() {
+		const version = this.props.syncTargetAppMinVersion;
+
+		this.setState({
+			syncTargetAppMinVersionIsRelease: null,
+			didSyncTargetAppMinVersionReleaseLoadFail: false,
+		});
+		if (!this.props.mustUpgradeAppMessage || !version) return;
+
+		try {
+			const syncTargetAppMinVersionIsRelease = await isReleaseVersion(version);
+			if (!this.props.mustUpgradeAppMessage || this.props.syncTargetAppMinVersion !== version) return;
+			this.setState({
+				syncTargetAppMinVersionIsRelease,
+				didSyncTargetAppMinVersionReleaseLoadFail: syncTargetAppMinVersionIsRelease === null,
+			});
+		} catch (error) {
+			logger.error(error);
+			if (!this.props.mustUpgradeAppMessage || this.props.syncTargetAppMinVersion !== version) return;
+			this.setState({ didSyncTargetAppMinVersionReleaseLoadFail: true });
+		}
 	}
 
 	public rootLayoutSize() {
@@ -437,6 +474,17 @@ class MainScreenComponent extends React.Component<Props, State> {
 			</a>
 		);
 
+		if (!callForAction2 && message.includes(callForAction)) {
+			const actionIndex = message.indexOf(callForAction);
+			return (
+				<span>
+					{message.substring(0, actionIndex)}
+					{cfa}
+					{message.substring(actionIndex + callForAction.length)}
+				</span>
+			);
+		}
+
 		return (
 			<span>
 				{message}{callForAction ? ' ' : ''}
@@ -489,6 +537,10 @@ class MainScreenComponent extends React.Component<Props, State> {
 		const onDownloadAppleSiliconVersion = () => {
 			// The website should redirect to the correct version
 			shim.openUrl('https://joplinapp.org/download/');
+		};
+
+		const onCheckForUpdates = () => {
+			void checkForUpdates(false, bridge().mainWindow(), { includePreReleases: false });
 		};
 
 		const onRestartAndUpgrade = async () => {
@@ -572,7 +624,41 @@ class MainScreenComponent extends React.Component<Props, State> {
 				onViewEncryptionConfigScreen,
 			);
 		} else if (this.props.mustUpgradeAppMessage) {
-			msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
+			if (!this.props.syncTargetAppMinVersion) {
+				msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
+			} else if (this.state.didSyncTargetAppMinVersionReleaseLoadFail) {
+				msg = this.renderNotificationMessage(
+					_(
+						'In order to synchronise, Please upgrade your application to version %s. Joplin could not check update information.',
+						this.props.syncTargetAppMinVersion,
+					),
+				);
+			} else if (this.state.syncTargetAppMinVersionIsRelease === false && shim.isLinux()) {
+				const callForAction = _('Download it from GitHub Releases');
+				msg = this.renderNotificationMessage(
+					_(
+						'In order to synchronise, Please upgrade your application to version %s: %s or update it using your package manager',
+						this.props.syncTargetAppMinVersion,
+						callForAction,
+					),
+					callForAction,
+					() => shim.openUrl('https://github.com/laurent22/joplin/releases'),
+				);
+			} else if (this.state.syncTargetAppMinVersionIsRelease !== null) {
+				const isTargetPreRelease = this.state.syncTargetAppMinVersionIsRelease === false;
+				const callForAction = isTargetPreRelease ? _('Download it from GitHub Releases') : _('Check for updates');
+				msg = this.renderNotificationMessage(
+					_(
+						'In order to synchronise, Please upgrade your application to version %s: %s',
+						this.props.syncTargetAppMinVersion,
+						callForAction,
+					),
+					callForAction,
+					isTargetPreRelease ? () => shim.openUrl('https://github.com/laurent22/joplin/releases') : onCheckForUpdates,
+				);
+			} else {
+				msg = this.renderNotificationMessage(this.props.mustUpgradeAppMessage);
+			}
 		} else if (this.props.shouldSwitchToAppleSiliconVersion) {
 			msg = this.renderNotificationMessage(
 				_('You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.'),
@@ -747,6 +833,7 @@ const mapStateToProps = (state: AppState) => {
 		lastDeletion: state.lastDeletion,
 		lastDeletionNotificationTime: state.lastDeletionNotificationTime,
 		mustUpgradeAppMessage: state.mustUpgradeAppMessage,
+		syncTargetAppMinVersion: syncInfo.appMinVersion,
 		showInvalidJoplinCloudCredential: state.settings['sync.target'] === 10 && state.mustAuthenticate,
 		toast: state.toast,
 		shouldSwitchToAppleSiliconVersion: shim.isAppleSilicon() && shim.isMac() && process.arch !== 'arm64',

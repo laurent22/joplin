@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { memo, useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { Text, StyleSheet, TextStyle, ViewStyle, AccessibilityInfo } from 'react-native';
+import { Text, StyleSheet, TextStyle, View, ViewStyle, AccessibilityInfo } from 'react-native';
 import Checkbox from './Checkbox';
 import Note from '@joplin/lib/models/Note';
 import time from '@joplin/lib/time';
@@ -28,11 +28,16 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 
-		const listItem: ViewStyle = {
+		const listItemDivider: ViewStyle = {
 			borderTopWidth: showTopBorder ? 1 : 0,
 			borderTopColor: theme.dividerColor,
 			marginLeft: theme.marginLeft,
 			marginRight: theme.marginRight,
+		};
+
+		const selectionWrapper: ViewStyle = {
+			paddingLeft: theme.marginLeft,
+			paddingRight: theme.marginRight,
 			paddingTop: theme.marginTop,
 			paddingBottom: theme.marginBottom,
 			flexDirection: 'row',
@@ -60,13 +65,15 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 
 		const listItemTextWithCheckbox = { ...listItemText };
 
-		const selectionWrapper: ViewStyle = { };
-
 		const selectionWrapperSelected = { ...selectionWrapper };
 		selectionWrapperSelected.backgroundColor = theme.selectedColor;
+		selectionWrapperSelected.borderColor = theme.selectedColor;
+		selectionWrapperSelected.borderTopWidth = 1;
+		selectionWrapperSelected.borderBottomWidth = 1;
+		selectionWrapperSelected.marginVertical = -1;
 
 		return StyleSheet.create({
-			listItem,
+			listItemDivider,
 			listItemText,
 			selectionWrapper,
 			listItemPressableWithoutCheckbox,
@@ -170,16 +177,19 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 		...onLongPressProps,
 	};
 	return (
-		<MultiTouchableOpacity
-			{...pressableProps}
-			containerProps={{
-				style: [selectionWrapperStyle, opacityStyle, styles.listItem],
-			}}
-			onPress={onPress}
-			beforePressable={todoCheckbox}
-		>
-			<Text style={listItemTextStyle}>{displayedNoteTitle}</Text>
-		</MultiTouchableOpacity>
+		<View style={opacityStyle}>
+			<View style={styles.listItemDivider}/>
+			<MultiTouchableOpacity
+				{...pressableProps}
+				containerProps={{
+					style: selectionWrapperStyle,
+				}}
+				onPress={onPress}
+				beforePressable={todoCheckbox}
+			>
+				<Text style={listItemTextStyle}>{displayedNoteTitle}</Text>
+			</MultiTouchableOpacity>
+		</View>
 	);
 });
 

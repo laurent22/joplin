@@ -8,4 +8,5 @@ export interface PostSharesInput {
 	note_id?: string;
 	master_key_id?: string;
 	recursive?: number;
+	type?: number;
 }

@@ -24,6 +24,8 @@ export interface ModalElementProps {
 	// but can be `null` to prevent the default close behavior.
 	onClose: OnClose|null;
 	onShow?: OnShow;
+	animationType?: 'fade'|'none';
+	wrapContent?: (view: React.ReactNode)=> React.ReactNode;
 
 	statusBarTranslucent?: boolean;
 
@@ -154,6 +156,7 @@ const ModalElement: React.FC<ModalElementProps> = ({
 	modalBackgroundStyle: extraModalBackgroundStyles,
 	dismissButtonStyle,
 	onClose,
+	wrapContent,
 	...forwardedProps
 }) => {
 	const styles = useStyles(!!scrollOverflow, backgroundColor);
@@ -165,7 +168,6 @@ const ModalElement: React.FC<ModalElementProps> = ({
 			{children}
 		</Animated.View>
 	);
-
 
 	const [containerComponent, setContainerComponent] = useState<View|null>(null);
 	const modalStatus = useModalStatus(containerComponent, forwardedProps.visible);
@@ -183,7 +185,7 @@ const ModalElement: React.FC<ModalElementProps> = ({
 		accessibilityRole='button'
 	/> : null;
 
-	const contentAndBackdrop = <View
+	let contentAndBackdrop: React.ReactNode = <View
 		ref={setContainerComponent}
 		style={[styles.modalBackground, extraModalBackgroundStyles]}
 		onStartShouldSetResponder={onShouldBackgroundCaptureTouch}
@@ -192,6 +194,9 @@ const ModalElement: React.FC<ModalElementProps> = ({
 		{content}
 		{closeButton}
 	</View>;
+	if (wrapContent) {
+		contentAndBackdrop = wrapContent(contentAndBackdrop);
+	}
 
 	const extraScrollViewProps = (typeof scrollOverflow === 'object' ? scrollOverflow : {});
 	const result = (

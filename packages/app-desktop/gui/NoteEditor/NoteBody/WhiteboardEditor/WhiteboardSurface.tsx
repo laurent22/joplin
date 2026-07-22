@@ -171,7 +171,15 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 	}, []);
 
 	const onReconnect: OnReconnect = useCallback((oldEdge, newConnection) => {
-		setFlowEdges(prev => reconnectEdge(oldEdge as unknown as WhiteboardFlowEdge, newConnection, prev) as WhiteboardFlowEdge[]);
+		// `oldEdge` is the rendered edge, which carries the derived `style.stroke`
+		// (blue when selected) baked in by `renderedEdges`. reconnectEdge copies
+		// those fields onto the new edge, so it would persist that stroke into
+		// state and leave the edge blue-but-not-bold after deselection. Reconnect
+		// against the clean edge from state instead, keyed by id.
+		setFlowEdges(prev => {
+			const clean = prev.find(e => e.id === oldEdge.id);
+			return reconnectEdge((clean ?? oldEdge) as unknown as WhiteboardFlowEdge, newConnection, prev) as WhiteboardFlowEdge[];
+		});
 	}, []);
 
 	// Double-clicking an edge selects it exclusively and focuses the label
@@ -444,6 +452,7 @@ const InnerSurface = ({ canvas, onChange }: Props) => {
 				onNodeDragStart={onNodeDragStart}
 				onNodeDrag={onNodeDrag}
 				onNodeDragStop={onNodeDragStop}
+				elevateEdgesOnSelect
 				deleteKeyCode={['Backspace', 'Delete']}
 				multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
 				selectionKeyCode={['Shift']}

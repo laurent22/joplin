@@ -15,10 +15,7 @@ jobs:
           node-version: '24'
           cache: 'yarn'
 
-      - name: Install Yarn
-        run: |
-          # https://yarnpkg.com/getting-started/install
-          corepack enable
+      - uses: ./.github/workflows/shared/install-yarn
 
       - name: Install macOs dependencies
         if: runner.os == 'macOS'

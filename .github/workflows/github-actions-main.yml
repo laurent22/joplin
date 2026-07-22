@@ -164,10 +164,7 @@ jobs:
           docker builder prune -af || true
           sudo rm -rf /var/lib/docker/tmp/* || true
 
-      - name: Install Yarn
-        run: |
-          # https://yarnpkg.com/getting-started/install
-          corepack enable
+      - uses: ./.github/workflows/shared/install-yarn
 
       - name: Build Docker Image
         env:
