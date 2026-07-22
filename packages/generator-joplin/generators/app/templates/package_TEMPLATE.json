@@ -5,7 +5,8 @@
     "dist": "webpack --env joplin-plugin-config=buildMain && webpack --env joplin-plugin-config=buildExtraScripts && webpack --env joplin-plugin-config=createArchive",
     "prepare": "npm run dist",
     "updateVersion": "webpack --env joplin-plugin-config=updateVersion",
-    "update": "npm install -g generator-joplin && yo joplin --node-package-manager npm --update --force"
+    "update": "npm install -g generator-joplin && yo joplin --node-package-manager npm --update --force",
+    "publish": "tsc ./script/publish/index.ts && node ./script/publish/index.js"
   },
   "license": "MIT",
   "keywords": [
