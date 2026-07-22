@@ -11,7 +11,7 @@
     "devDropTables": "node dist/index.js --env dev --drop-tables",
     "devDropDb": "node dist/index.js --env dev --drop-db",
     "start": "node dist/index.js",
-    "generateTypes": "rm -f db-buildTypes.sqlite && yarn start --env buildTypes migrate latest && node dist/tools/generateTypes.js && mv db-buildTypes.sqlite schema.sqlite",
+    "generateTypes": "yarn run rebuild && rm -f db-buildTypes.sqlite && yarn start --env buildTypes migrate latest && node dist/tools/generateTypes.js && mv db-buildTypes.sqlite schema.sqlite",
     "tsc": "tsc --project tsconfig.json",
     "test": "NODE_OPTIONS=--disable-proto=delete jest --verbose=false",
     "test-ci": "yarn test",

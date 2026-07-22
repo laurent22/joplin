@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Dispatch } from 'redux';
-import { useRef, useCallback, useId } from 'react';
+import { useRef, useCallback, useId, useState } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow from '../DialogButtonRow';
 import Dialog from '@joplin/lib/components/Dialog';
@@ -18,9 +18,9 @@ interface Props {
 	dispatch: Dispatch;
 }
 
-const StyledRoot = styled.div`
-	min-width: 500px;
-	max-width: 1200px;
+const StyledRoot = styled.div<{ expanded: boolean }>`
+	width: ${props => props.expanded ? '832px' : '432px'};
+	max-width: 100%;
 `;
 
 const SyncTargetDescription = styled.div<{ height: number }>`
@@ -33,12 +33,10 @@ const SyncTargetDescription = styled.div<{ height: number }>`
 const ContentRoot = styled.div`
 	background-color: ${props => props.theme.backgroundColor3};
 	padding: 1em;
-	padding-right: 0;
 `;
 
 const SelfHostingMessage = styled.div`
 	color: ${props => props.theme.color};
-	padding-right: 1em;
 	font-style: italic;
 	margin-top: 1em;
 	opacity: 0.6;
@@ -48,6 +46,42 @@ const SyncTargetBoxes = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
+`;
+
+const OtherOptions = styled.div`
+	margin-top: 1.5em;
+`;
+
+const OtherOptionsToggle = styled.button`
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	width: 100%;
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-family: ${props => props.theme.fontFamily};
+	font-size: 16px;
+	font-weight: bold;
+	color: ${props => props.theme.color};
+	padding: 0.5em 0;
+	text-align: left;
+
+	&:hover {
+		opacity: 0.8;
+	}
+`;
+
+const OtherOptionsBoxes = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	gap: 1em;
+	margin-top: 1em;
+
+	> * {
+		margin-right: 0;
+	}
 `;
 
 const SyncTargetTitle = styled.h2`
@@ -64,17 +98,18 @@ const SyncTargetLogo = styled.img`
 	margin-right: 0.4em;
 `;
 
-const SyncTargetBox = styled.div`
+const SyncTargetBox = styled.div<{ hero?: boolean }>`
 	display: flex;
-	flex: 1;
 	flex-direction: column;
+	box-sizing: border-box;
 	font-family: ${props => props.theme.fontFamily};
 	color: ${props => props.theme.color};
 	background-color: ${props => props.theme.backgroundColor};
-	border: 1px solid ${props => props.theme.dividerColor};
+	border: ${props => props.hero ? `2px solid ${props.theme.color4}` : `1px solid ${props.theme.dividerColor}`};
 	border-radius: 8px;
 	padding: 2em 2.2em 2em 2.2em;
-	margin-right: 1em;
+	flex: 1 1 0;
+	min-width: 0;
 	max-width: 400px;
 	opacity: 1;
 `;
@@ -112,6 +147,13 @@ const SelectButton = styled(Button)`
     min-height: auto;
     max-height: fit-content;
     font-size: 1em;
+`;
+
+const LoginLink = styled.a`
+	margin-top: 0.8em;
+	font-size: 14px;
+	align-self: center;
+	color: ${props => props.theme.urlColor};
 `;
 
 const SlowSyncWarning = styled.div`
@@ -199,6 +241,7 @@ export default function(props: Props) {
 	}, [props.dispatch, closeDialog]);
 
 	const baseId = useId();
+	const [otherOptionsExpanded, setOtherOptionsExpanded] = useState(false);
 
 	function renderSelectArea(info: SyncTargetInfo, describedById: string) {
 		return (
@@ -212,12 +255,23 @@ export default function(props: Props) {
 		);
 	}
 
-	function renderSignUpArea(info: SyncTargetInfo) {
-		if (info.name !== 'joplinCloud') return null;
-		return <JoplinCloudSignUpCallToAction source='desktop-sync-wizard'/>;
+	function renderActionArea(info: SyncTargetInfo, describedById: string) {
+		if (info.name === 'joplinCloud') {
+			return (
+				<>
+					<JoplinCloudSignUpCallToAction source='desktop-sync-wizard' primary={true}/>
+					<LoginLink
+						href="#"
+						onClick={event => { event.preventDefault(); void onSelectButtonClick(info.name as SyncTargetInfoName); }}
+						aria-describedby={describedById}
+					>{_('Already have an account? Log in')}</LoginLink>
+				</>
+			);
+		}
+		return renderSelectArea(info, describedById);
 	}
 
-	function renderSyncTarget(info: SyncTargetInfo) {
+	function renderSyncTarget(info: SyncTargetInfo, hero: boolean) {
 		const key = `syncTarget_${info.name}`;
 		const height = info.name !== 'joplinCloud' ? descriptionHeight : null;
 
@@ -240,12 +294,11 @@ export default function(props: Props) {
 
 		const headerId = `${baseId}-${info.id}`;
 		return (
-			<SyncTargetBox id={key} key={key}>
+			<SyncTargetBox id={key} key={key} hero={hero}>
 				<SyncTargetTitle id={headerId}>{logo}{info.label}</SyncTargetTitle>
 				{descriptionComp}
 				{featuresComp}
-				{renderSelectArea(info, headerId)}
-				{renderSignUpArea(info)}
+				{renderActionArea(info, headerId)}
 				{renderSlowSyncWarning()}
 			</SyncTargetBox>
 		);
@@ -264,12 +317,17 @@ export default function(props: Props) {
 	}, [props.dispatch, closeDialog]);
 
 	function renderContent() {
-		const boxes: React.ReactNode[] = [];
+		const heroBoxes: React.ReactNode[] = [];
+		const otherBoxes: React.ReactNode[] = [];
 
 		for (const name of syncTargetNames) {
 			const info = SyncTargetRegistry.infoByName(name);
 			if (info.supportsSelfHosted) continue;
-			boxes.push(renderSyncTarget(info));
+			if (info.name === 'joplinCloud') {
+				heroBoxes.push(renderSyncTarget(info, true));
+			} else {
+				otherBoxes.push(renderSyncTarget(info, false));
+			}
 		}
 
 		const selfHostingLabelId = `${baseId}-selfHosting`;
@@ -293,20 +351,39 @@ export default function(props: Props) {
 			</a>.
 		</SelfHostingMessage>;
 
+		const otherOptionsRegionId = `${baseId}-otherOptions`;
+		const otherOptions = <OtherOptions>
+			<OtherOptionsToggle
+				type='button'
+				aria-expanded={otherOptionsExpanded}
+				aria-controls={otherOptionsRegionId}
+				onClick={() => setOtherOptionsExpanded(prev => !prev)}
+			>
+				<i className={otherOptionsExpanded ? 'fas fa-chevron-down' : 'fas fa-chevron-right'} aria-hidden={true}/>
+				{_('Other sync options')}
+			</OtherOptionsToggle>
+			<div id={otherOptionsRegionId} hidden={!otherOptionsExpanded}>
+				<OtherOptionsBoxes>
+					{otherBoxes}
+				</OtherOptionsBoxes>
+				{selfHostingMessage}
+			</div>
+		</OtherOptions>;
+
 		return (
 			<ContentRoot>
 				<SyncTargetBoxes>
-					{boxes}
+					{heroBoxes}
 				</SyncTargetBoxes>
-				{selfHostingMessage}
+				{otherOptions}
 			</ContentRoot>
 		);
 	}
 
 	function renderDialogWrapper() {
 		return (
-			<StyledRoot>
-				<DialogTitle title={_('Joplin can synchronise your notes using various providers. Select one from the list below.')} justifyContent="center"/>
+			<StyledRoot expanded={otherOptionsExpanded}>
+				<DialogTitle title={_('Sync your notes with Joplin Cloud to access them on all your devices. Other sync options are also available.')} justifyContent="center"/>
 				{renderContent()}
 				<DialogButtonRow
 					themeId={props.themeId}
