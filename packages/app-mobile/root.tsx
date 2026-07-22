@@ -52,6 +52,7 @@ import ResourceScreen from './components/screens/ResourceScreen';
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
 import EncryptionConfigScreen from './components/screens/encryption-config';
 import DropboxLoginScreen from './components/screens/dropbox-login.js';
+import PCloudLoginScreen from './components/screens/pcloud-login.js';
 import { MenuProvider } from 'react-native-popup-menu';
 import SideMenu, { SideMenuPosition } from './components/SideMenu';
 import SideMenuContent from './components/side-menu-content';
@@ -66,6 +67,7 @@ import SyncTargetFilesystem from '@joplin/lib/SyncTargetFilesystem';
 import SyncTargetNextcloud from '@joplin/lib/SyncTargetNextcloud';
 import SyncTargetWebDAV from '@joplin/lib/SyncTargetWebDAV';
 import SyncTargetDropbox from '@joplin/lib/SyncTargetDropbox';
+import SyncTargetPCloud from '@joplin/lib/SyncTargetPCloud';
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import BiometricPopup from './components/biometrics/BiometricPopup';
@@ -81,6 +83,7 @@ SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
+SyncTargetRegistry.addClass(SyncTargetPCloud);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
@@ -763,6 +766,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 			Folder: { screen: FolderScreen },
 			OneDriveLogin: { screen: OneDriveLoginScreen },
 			DropboxLogin: { screen: DropboxLoginScreen },
+			PCloudLogin: { screen: PCloudLoginScreen },
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen },
 			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()) },
 			EncryptionConfig: { screen: EncryptionConfigScreen },

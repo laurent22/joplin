@@ -20,6 +20,7 @@ function historyCanGoBackTo(route: Route) {
 	// it can be buggy to do so, due to incorrectly relying on global state (reg.syncTarget...)
 	if (route.routeName === 'OneDriveLogin') return false;
 	if (route.routeName === 'DropboxLogin') return false;
+	if (route.routeName === 'PCloudLogin') return false;
 
 	return true;
 }

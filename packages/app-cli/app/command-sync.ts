@@ -89,6 +89,23 @@ class Command extends BaseCommand {
 			Setting.setValue(`sync.${this.syncTargetId_}.auth`, response.access_token);
 			api.setAuthToken(response.access_token);
 			return true;
+		} else if (syncTargetMd.name === 'pcloud') {
+			// pCloud
+			const api = await syncTarget.api();
+			const loginUrl = api.loginUrl();
+			this.stdout(_('To allow Joplin to synchronise with pCloud, please follow the steps below:'));
+			this.stdout(_('Step 1: Open this URL in your browser to authorise the application:'));
+			this.stdout(loginUrl);
+			const authCode = await this.prompt(_('Step 2: Enter the code provided by pCloud:'), { type: 'string' });
+			if (!authCode) {
+				this.stdout(_('Authentication was not completed (did not receive an authentication token).'));
+				return false;
+			}
+
+			// The auth is persisted via the "authRefreshed" event, which is
+			// dispatched by execTokenRequest.
+			await api.execTokenRequest(authCode.trim());
+			return true;
 		} else if (syncTargetMd.name === 'joplinCloud') {
 			const applicationAuthId = uuidgen();
 			const checkForCredentials = async () => {

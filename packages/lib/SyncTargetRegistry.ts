@@ -96,6 +96,7 @@ export default class SyncTargetRegistry {
 			'10', // Joplin Cloud
 			'7', // Dropbox
 			'3', // OneDrive
+			'12', // pCloud
 		];
 	}
 

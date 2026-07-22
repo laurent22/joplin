@@ -168,6 +168,7 @@ const syncTargetNames: string[] = [
 	'joplinCloud',
 	'dropbox',
 	'onedrive',
+	'pcloud',
 	'nextcloud',
 	'webdav',
 	'amazon_s3',
@@ -180,9 +181,10 @@ const logosImageNames: Record<string, string> = {
 	'dropbox': 'SyncTarget_Dropbox.svg',
 	'joplinCloud': 'SyncTarget_JoplinCloud.svg',
 	'onedrive': 'SyncTarget_OneDrive.svg',
+	'pcloud': 'SyncTarget_PCloud.svg',
 };
 
-type SyncTargetInfoName = 'dropbox' | 'onedrive' | 'joplinCloud';
+type SyncTargetInfoName = 'dropbox' | 'onedrive' | 'joplinCloud' | 'pcloud';
 
 export default function(props: Props) {
 	const joplinCloudDescriptionRef = useRef(null);
@@ -227,6 +229,7 @@ export default function(props: Props) {
 			'dropbox': { name: 'DropboxLogin', target: 7 },
 			'onedrive': { name: 'OneDriveLogin', target: 3 },
 			'joplinCloud': { name: 'JoplinCloudLogin', target: 10 },
+			'pcloud': { name: 'PCloudLogin', target: 12 },
 		};
 		const route = routes[name];
 		if (!route) return; // throw error??

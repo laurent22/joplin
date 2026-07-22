@@ -34,11 +34,14 @@ import FileApiDriverLocal from '../file-api-driver-local';
 const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('../file-api-driver-dropbox.js');
 import FileApiDriverOneDrive from '../file-api-driver-onedrive';
+import PCloudApi, { PCloudAuth } from '../pcloud-api';
+import FileApiDriverPCloud from '../file-api-driver-pcloud';
 import SyncTargetRegistry from '../SyncTargetRegistry';
 import SyncTargetMemory from '../SyncTargetMemory';
 import SyncTargetFilesystem from '../SyncTargetFilesystem';
 import SyncTargetNextcloud from '../SyncTargetNextcloud';
 import SyncTargetDropbox from '../SyncTargetDropbox';
+import SyncTargetPCloud from '../SyncTargetPCloud';
 const SyncTargetAmazonS3 = require('../SyncTargetAmazonS3.js');
 import SyncTargetWebDAV from '../SyncTargetWebDAV';
 import SyncTargetJoplinServer from '../SyncTargetJoplinServer';
@@ -130,6 +133,7 @@ SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetDropbox);
+SyncTargetRegistry.addClass(SyncTargetPCloud);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
@@ -151,7 +155,7 @@ function setSyncTargetName(name: string) {
 	syncTargetName_ = name;
 	syncTargetId_ = SyncTargetRegistry.nameToId(syncTargetName_);
 	sleepTime = syncTargetId_ === SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
-	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'onedrive', 'amazon_s3', 'joplinServer', 'joplinServerSaml', 'joplinCloud'].includes(syncTargetName_);
+	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'onedrive', 'pcloud', 'amazon_s3', 'joplinServer', 'joplinServerSaml', 'joplinCloud'].includes(syncTargetName_);
 	synchronizers_ = [];
 	return previousName;
 }
@@ -639,6 +643,41 @@ async function initFileApi() {
 		if (!authToken) throw new Error(`Dropbox auth token missing in ${authTokenPath}`);
 		api.setAuthToken(authToken);
 		fileApi = new FileApi('', new FileApiDriverDropbox(api));
+	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('pcloud')) {
+		// To get an auth object, open the pCloud login URL
+		// (https://my.pcloud.com/oauth2/authorize?client_id=CLIENT_ID&response_type=code),
+		// authorise the application, then exchange the code using the
+		// oauth2_token end point (or the app login flow) and save the result
+		// in pcloud-auth.json. The file should contain the auth object as
+		// stored in the "sync.12.auth" setting, along with the "clientId"
+		// and "clientSecret" of the pCloud app:
+		// { "accessToken": "", "hostname": "api.pcloud.com", "locationid": 1, "uid": 0,
+		//   "clientId": "", "clientSecret": "" }
+
+		// The tests share the same pCloud directory, so they cannot run in
+		// parallel (same as for the other network sync targets).
+		mustRunInBand();
+
+		interface PCloudTestAuth extends PCloudAuth {
+			clientId?: string;
+			clientSecret?: string;
+		}
+
+		const authPath = `${oldTestDir}/support/pcloud-auth.json`;
+		const auth: PCloudTestAuth = JSON.parse(fs.readFileSync(authPath, 'utf8'));
+		if (!auth || !auth.accessToken) throw new Error(`pCloud auth missing in ${authPath}`);
+		const api = new PCloudApi(auth.clientId || '', auth.clientSecret || '');
+		api.setAuth({
+			accessToken: auth.accessToken,
+			hostname: auth.hostname,
+			locationid: auth.locationid,
+			uid: auth.uid,
+		});
+		// Always use a dedicated directory so that the tests never clear a
+		// real /Joplin sync directory
+		const pCloudTestDir = 'JoplinTest';
+		await api.createFolderIfNotExists(`/${pCloudTestDir}`);
+		fileApi = new FileApi(pCloudTestDir, new FileApiDriverPCloud(api));
 	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('onedrive')) {
 		// To get a token, open the URL below corresponding to your account type,
 		// then copy the *complete* redirection URL in onedrive-auth.txt. Keep in mind that auth

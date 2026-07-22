@@ -479,6 +479,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'sync.7.auth': { value: '', type: SettingItemType.String, public: false },
 		'sync.9.auth': { value: '', type: SettingItemType.String, public: false },
 		'sync.10.auth': { value: '', type: SettingItemType.String, public: false },
+		'sync.12.auth': { value: '', type: SettingItemType.String, public: false },
 		'sync.1.context': { value: '', type: SettingItemType.String, public: false },
 		'sync.2.context': { value: '', type: SettingItemType.String, public: false },
 		'sync.3.context': { value: '', type: SettingItemType.String, public: false },
@@ -490,6 +491,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		'sync.9.context': { value: '', type: SettingItemType.String, public: false },
 		'sync.10.context': { value: '', type: SettingItemType.String, public: false },
 		'sync.11.context': { value: '', type: SettingItemType.String, public: false },
+		'sync.12.context': { value: '', type: SettingItemType.String, public: false },
 
 		'sync.maxConcurrentConnections': { value: 5, type: SettingItemType.Int, storage: SettingStorage.File, isGlobal: true, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 

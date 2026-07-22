@@ -12,6 +12,7 @@ interface ParametersForEnv {
 	oneDriveDemo?: AppCredentials;
 	oneDriveTest?: AppCredentials;
 	dropbox?: AppCredentials;
+	pCloud?: AppCredentials;
 }
 
 // cSpell:disable
@@ -36,6 +37,13 @@ const parameters_: Record<Env, ParametersForEnv> = {
 			id: 'cx9li9ur8taq1z7',
 			secret: 'i8f9a1mvx3bijrt',
 		},
+		// For development builds, register your own application in the pCloud
+		// app console (https://docs.pcloud.com/oauth/index.html, "My Apps")
+		// and fill these in.
+		pCloud: {
+			id: 'YOUR_PCLOUD_CLIENT_ID',
+			secret: 'YOUR_PCLOUD_CLIENT_SECRET',
+		},
 	},
 
 	prod: {
@@ -50,6 +58,14 @@ const parameters_: Record<Env, ParametersForEnv> = {
 		dropbox: {
 			id: 'm044w3cvmxhzvop',
 			secret: 'r298deqisz0od56',
+		},
+		// For production builds, the Joplin maintainers must register an
+		// official application in the pCloud app console
+		// (https://docs.pcloud.com/oauth/index.html, "My Apps") and fill
+		// these in.
+		pCloud: {
+			id: 'YOUR_PCLOUD_CLIENT_ID',
+			secret: 'YOUR_PCLOUD_CLIENT_SECRET',
 		},
 	},
 };
