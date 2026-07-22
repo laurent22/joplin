@@ -295,7 +295,7 @@ shared.isModified = function(comp: BaseNoteScreenComponent) {
 	return !!Object.getOwnPropertyNames(diff).length;
 };
 
-shared.reloadNote = async (comp: BaseNoteScreenComponent, useDefaultEditorState = true) => {
+shared.reloadNote = async (comp: BaseNoteScreenComponent, useDefaultEditorState = false) => {
 	const isProvisionalNote = comp.props.provisionalNoteIds.includes(comp.props.noteId);
 
 	const note = await Note.load(comp.props.noteId);
@@ -357,7 +357,7 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent, useDefaultEditorState 
 };
 
 shared.initState = async function(comp: BaseNoteScreenComponent) {
-	const note = await shared.reloadNote(comp);
+	const note = await shared.reloadNote(comp, true);
 
 	// Ensure that only empty notes created for shared content are populated with sharedData, because in some cases
 	// existing notes can be overwritten by the shared data. See https://github.com/laurent22/joplin/issues/11479

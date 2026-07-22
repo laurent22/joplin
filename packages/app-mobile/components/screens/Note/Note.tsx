@@ -764,7 +764,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private async reloadNoteAndUpdateRefreshKey() {
-		await shared.reloadNote(this, false);
+		await shared.reloadNote(this);
 		this.refreshKey = this.props.editorNoteReloadTimeRequest;
 	}
 
