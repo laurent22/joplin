@@ -14,7 +14,6 @@ import { clipboard } from 'electron';
 import { Dispatch } from 'redux';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { MarkupLanguage } from '@joplin/renderer';
-import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import hasLockedNoteWhileSessionLocked from '@joplin/lib/services/noteLock/hasLockedNoteWhileSessionLocked';
 
 const Menu = bridge().Menu;
@@ -113,17 +112,6 @@ export default class NoteListUtils {
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
 				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds) as any),
 			);
-
-			if (isNoteLockEnabled() && singleNoteId) {
-				menu.append(
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
-					new MenuItem(menuUtils.commandToStatefulMenuItem('enableNoteEncryption', singleNoteId) as any),
-				);
-				menu.append(
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
-					new MenuItem(menuUtils.commandToStatefulMenuItem('disableNoteEncryption', singleNoteId) as any),
-				);
-			}
 
 			menu.append(
 				new MenuItem(

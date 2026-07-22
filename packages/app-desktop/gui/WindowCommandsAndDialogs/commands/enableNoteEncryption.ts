@@ -59,7 +59,11 @@ export const runtime = (): CommandRuntime => {
 				await ExternalEditWatcher.instance().stopWatching(noteId);
 			}
 
-			await enableNoteLock(noteId);
+			try {
+				await enableNoteLock(noteId);
+			} catch (error) {
+				bridge().showErrorMessageBox(error.message);
+			}
 		},
 		enabledCondition: 'oneNoteSelected && !noteIsLocked && !noteIsReadOnly && !noteIsDeleted && !inTrash && !inConflictFolder',
 	};
