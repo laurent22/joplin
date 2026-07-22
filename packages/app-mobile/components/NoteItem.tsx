@@ -67,6 +67,10 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 
 		const selectionWrapperSelected = { ...selectionWrapper };
 		selectionWrapperSelected.backgroundColor = theme.selectedColor;
+		selectionWrapperSelected.borderColor = theme.selectedColor;
+		selectionWrapperSelected.borderTopWidth = 1;
+		selectionWrapperSelected.borderBottomWidth = 1;
+		selectionWrapperSelected.marginVertical = -1;
 
 		return StyleSheet.create({
 			listItemDivider,
