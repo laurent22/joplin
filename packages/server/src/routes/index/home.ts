@@ -119,6 +119,7 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 			betaStartSubUrl: betaStartSubUrl(user.email, user.account_type),
 			setupMessageHtml: setupMessageHtml(),
 			syncTargetName: isExternal ? 'Joplin Server Business' : config().appName,
+			isExternal,
 			isJoplinCloud: config().isJoplinCloud,
 			socialFeeds: socialFeeds(),
 		};
