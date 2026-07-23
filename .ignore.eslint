@@ -1638,6 +1638,10 @@ packages/lib/services/commands/isEditorCommand.js
 packages/lib/services/commands/propsHaveChanged.js
 packages/lib/services/commands/stateToWhenClauseContext.test.js
 packages/lib/services/commands/stateToWhenClauseContext.js
+packages/lib/services/conflict/autoMergeNote.test.js
+packages/lib/services/conflict/autoMergeNote.js
+packages/lib/services/conflict/diffNotes.test.js
+packages/lib/services/conflict/diffNotes.js
 packages/lib/services/contextkey/contextkey.js
 packages/lib/services/database/addMigrationFile.js
 packages/lib/services/database/isSqliteSyntaxError.js
@@ -1890,6 +1894,7 @@ packages/lib/services/synchronizer/ItemUploader.test.js
 packages/lib/services/synchronizer/ItemUploader.js
 packages/lib/services/synchronizer/LockHandler.js
 packages/lib/services/synchronizer/MigrationHandler.js
+packages/lib/services/synchronizer/Synchronizer.autoMerge.test.js
 packages/lib/services/synchronizer/Synchronizer.baseFields.test.js
 packages/lib/services/synchronizer/Synchronizer.basics.test.js
 packages/lib/services/synchronizer/Synchronizer.conflicts.test.js
