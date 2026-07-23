@@ -78,8 +78,28 @@ const useWebViewSetup = ({
 				${setInitialSelectionJs}
 				${setInitialSearchJs}
 
+				let previousInnerHeight = window.innerHeight;
+				let previousViewportHeight = window.visualViewport?.height;
+
 				window.onresize = () => {
-					cm.execCommand('scrollSelectionIntoView');
+					// Delay by 100 ms to ensure the height values are updated before making the comparison
+					setTimeout(() => {
+						const currentInnerHeight = window.innerHeight;
+						const currentViewportHeight = window.visualViewport?.height;
+
+						// Only scroll into view if the viewport decreased, to avoid scrolling when dismissing the keyboard
+						if (
+							currentInnerHeight < previousInnerHeight ||
+							currentViewportHeight < previousViewportHeight
+						) {
+							if (window.cm) {
+								window.cm.execCommand('scrollSelectionIntoView');
+							}
+						}
+
+						previousInnerHeight = currentInnerHeight;
+						previousViewportHeight = currentViewportHeight;
+					}, 100);
 				};
 			} else if (parentClassName) {
 				console.log('No parent element found with class name ', parentClassName);
