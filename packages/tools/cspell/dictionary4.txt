@@ -338,3 +338,4 @@ doleocent1
 Socialboom
 AABB
 Koofr
+mergeable
