@@ -491,24 +491,7 @@ export default class SearchEngine {
 			this.processNonFtsSearchResults_(rows, parsedQuery);
 		}
 
-		rows.sort((a, b) => {
-			const aIsNote = a.item_type === ModelType.Note;
-			const bIsNote = b.item_type === ModelType.Note;
-
-			if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
-			if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
-			if (a.weight < b.weight) return +1;
-			if (a.weight > b.weight) return -1;
-
-			if (aIsNote && bIsNote) {
-				if (a.is_todo && a.todo_completed) return +1;
-				if (b.is_todo && b.todo_completed) return -1;
-			}
-
-			if (a.user_updated_time < b.user_updated_time) return +1;
-			if (a.user_updated_time > b.user_updated_time) return -1;
-			return 0;
-		});
+		sortRows(rows);
 	}
 
 	// https://stackoverflow.com/a/13818704/561309
@@ -682,11 +665,12 @@ export default class SearchEngine {
 
 	public async semanticSearch(query: string, parsedQuery: ParsedQuery) {
 		const rows: ProcessResultsRow[] = [];
-		const results = await SearchService.instance().search({ query: { text: query } });
+		const results = await SearchService.instance().search({ query: { text: query }, relevance: 'strict' });
 
 		const seenNotes = new Map<string, ProcessResultsRow>();
 		for (const result of results) {
 			let row = seenNotes.get(result.noteId);
+			// Results are received in order of relevance, so ignore the less-relevant result
 			if (row) continue;
 
 			const item = await Note.load(
@@ -705,7 +689,9 @@ export default class SearchEngine {
 				user_created_time: item.user_created_time,
 				matchinfo: null,
 				item_type: ModelType.Note,
-				weight: result.score,
+				// Standard results weights are usually 0-10, but semantic results usually are much less
+				// relevant than standard results, so weight them 0-4.
+				weight: result.score * 4,
 				is_todo: item.is_todo,
 				todo_completed: item.todo_completed,
 
@@ -921,14 +907,19 @@ export default class SearchEngine {
 			rows = await this.searchFromItemIds(searchString);
 		}
 
-		if (rows.length === 0
-			&& this.canSemanticSearch_(parsedQuery)
+		if (this.canSemanticSearch_(parsedQuery)
 			// Don't use semantic search if another search type was explicitly requested
 			&& options.searchType === SearchType.Auto
 			// Avoid doing semantic search twice
 			&& searchType !== SearchType.Semantic
 		) {
 			rows = rows.concat(await this.semanticSearch(searchString, parsedQuery));
+			sortRows(rows);
+
+			// Remove duplicate rows
+			rows = rows.filter((row, index, rows) => {
+				return row.id !== rows[index - 1]?.id;
+			});
 		}
 
 		return rows;
@@ -957,3 +948,24 @@ export default class SearchEngine {
 		return terms.map(term => typeof term === 'string' ? term : term.value).join(' ');
 	}
 }
+
+const sortRows = (rows: ProcessResultsRow[]) => {
+	rows.sort((a, b) => {
+		const aIsNote = a.item_type === ModelType.Note;
+		const bIsNote = b.item_type === ModelType.Note;
+
+		if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
+		if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
+		if (a.weight < b.weight) return +1;
+		if (a.weight > b.weight) return -1;
+
+		if (aIsNote && bIsNote) {
+			if (a.is_todo && a.todo_completed) return +1;
+			if (b.is_todo && b.todo_completed) return -1;
+		}
+
+		if (a.user_updated_time < b.user_updated_time) return +1;
+		if (a.user_updated_time > b.user_updated_time) return -1;
+		return 0;
+	});
+};

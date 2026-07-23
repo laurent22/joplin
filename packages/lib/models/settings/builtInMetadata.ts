@@ -2383,7 +2383,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			storage: SettingStorage.File,
 			appTypes: [AppType.Desktop],
-			label: () => 'Use semantic search when the default search finds no results',
+			label: () => 'Include semantic search results in the search panel',
 			description: () => 'Allows using semantic search from the search panel',
 			section: 'general',
 			isGlobal: true,
