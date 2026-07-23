@@ -7,7 +7,7 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>CFBundleDisplayName</key>
-	<string>Joplin</string>
+	<string>Booz Allen Notes</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -28,10 +28,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>CFBundleURLName</key>
-			<string>net.cozic.joplin</string>
+			<string>com.boozallen.bahnotes</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>joplin</string>
+				<string>bahnotes</string>
 			</array>
 		</dict>
 	</array>

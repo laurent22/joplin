@@ -6,7 +6,7 @@ permissions:
 jobs:
   Main:
     # Don't run on forks
-    if: github.repository == 'laurent22/joplin'
+    if: github.repository == 'boozallen/bah-joplin'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -44,7 +44,7 @@ jobs:
           path: packages/app-desktop/playwright-report/
           retention-days: 7
   Mobile:
-    if: github.repository == 'laurent22/joplin'
+    if: github.repository == 'boozallen/bah-joplin'
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v6

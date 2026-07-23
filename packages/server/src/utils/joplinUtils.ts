@@ -98,7 +98,7 @@ export async function initializeJoplinUtils(config: Config, models: Models, must
 	BaseService.logger_ = new Logger();
 
 	Setting.allowFileStorage = false;
-	Setting.setConstant('appId', 'net.cozic.joplin-desktop');
+	Setting.setConstant('appId', 'com.boozallen.bahnotes-desktop');
 	Setting.setConstant('tempDir', config.tempDir);
 	Setting.setConstant('resourceDir', config.resourceDir);
 	await loadKeychainServiceAndSettings([KeychainServiceDriverDummy]);

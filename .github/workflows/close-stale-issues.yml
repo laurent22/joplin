@@ -6,7 +6,7 @@ permissions:
   issues: write
 jobs:
   ProcessStaleIssues:
-    if: github.repository == 'laurent22/joplin'
+    if: github.repository == 'boozallen/bah-joplin'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/stale@v9

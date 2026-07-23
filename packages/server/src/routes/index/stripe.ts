@@ -406,7 +406,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 			logger.error('Could not automatically redirect user to account confirmation page. They will have to follow the link in the confirmation email. Error was:', error);
 			return `
 				<p>Thank you for signing up for ${globalConfig().appName}! You should receive an email shortly with instructions on how to connect to your account.</p>
-				<p><a href="https://joplinapp.org">Go back to JoplinApp.org</a></p>
+				<p><a href="https://notes.boozallen.com">Go back to notes.boozallen.com</a></p>
 			`;
 		}
 	},
@@ -414,7 +414,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 	cancel: async (_stripe: Stripe, _path: SubPath, _ctx: AppContext) => {
 		return `
 			<p>Your payment has been cancelled.</p>
-			<p><a href="https://joplinapp.org">Go back to JoplinApp.org</a></p>
+			<p><a href="https://notes.boozallen.com">Go back to notes.boozallen.com</a></p>
 		`;
 	},
 

@@ -50,7 +50,7 @@ export default function PdfViewer(props: Props) {
 	}, [props.dispatch]);
 
 	const openExternalViewer = useCallback(async () => {
-		await CommandService.instance().execute('openItem', `joplin://${props.resource.id}`);
+		await CommandService.instance().execute('openItem', `bahnotes://${props.resource.id}`);
 	}, [props.resource.id]);
 
 	const textSelected = useCallback(async (text: string) => {

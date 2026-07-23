@@ -1,21 +1,27 @@
 const URL = require('url-parse');
 
+const callbackProtocols = ['bahnotes://', 'joplin://'];
+const callbackCommands = ['openNote', 'openFolder', 'openTag'];
+
 export function isCallbackUrl(s: string) {
-	return s.startsWith('joplin://x-callback-url/openNote?') ||
-		s.startsWith('joplin://x-callback-url/openFolder?') ||
-		s.startsWith('joplin://x-callback-url/openTag?');
+	for (const protocol of callbackProtocols) {
+		for (const command of callbackCommands) {
+			if (s.startsWith(`${protocol}x-callback-url/${command}?`)) return true;
+		}
+	}
+	return false;
 }
 
 export function getNoteCallbackUrl(noteId: string) {
-	return `joplin://x-callback-url/openNote?id=${encodeURIComponent(noteId)}`;
+	return `bahnotes://x-callback-url/openNote?id=${encodeURIComponent(noteId)}`;
 }
 
 export function getFolderCallbackUrl(folderId: string) {
-	return `joplin://x-callback-url/openFolder?id=${encodeURIComponent(folderId)}`;
+	return `bahnotes://x-callback-url/openFolder?id=${encodeURIComponent(folderId)}`;
 }
 
 export function getTagCallbackUrl(tagId: string) {
-	return `joplin://x-callback-url/openTag?id=${encodeURIComponent(tagId)}`;
+	return `bahnotes://x-callback-url/openTag?id=${encodeURIComponent(tagId)}`;
 }
 
 export const enum CallbackUrlCommand {

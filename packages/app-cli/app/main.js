@@ -6,7 +6,7 @@
 const compareVersion = require('compare-version');
 const nodeVersion = process && process.versions && process.versions.node ? process.versions.node : '0.0.0';
 if (compareVersion(nodeVersion, '10.0.0') < 0) {
-	console.error(`Joplin requires Node 10+. Detected version ${nodeVersion}`);
+	console.error(`Booz Allen Notes requires Node 10+. Detected version ${nodeVersion}`);
 	process.exit(1);
 }
 
@@ -57,7 +57,7 @@ BaseItem.loadClass('NoteTag', NoteTag);
 BaseItem.loadClass('MasterKey', MasterKey);
 BaseItem.loadClass('Revision', Revision);
 
-Setting.setConstant('appId', `net.cozic.joplin${env === 'dev' ? 'dev' : ''}-cli`);
+Setting.setConstant('appId', `com.boozallen.bahnotes${env === 'dev' ? 'dev' : ''}-cli`);
 Setting.setConstant('appType', 'cli');
 
 let keytar;
@@ -102,7 +102,7 @@ process.stdout.on('error', (error) => {
 application.start(process.argv).catch(error => {
 	if (error.code === 'flagError') {
 		console.error(error.message);
-		console.error(_('Type `joplin help` for usage information.'));
+		console.error(_('Type `bah-notes help` for usage information.'));
 	} else {
 		console.error(_('Fatal error:'));
 		console.error(error);

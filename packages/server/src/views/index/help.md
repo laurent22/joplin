@@ -1,4 +1,4 @@
-# Joplin Cloud Help
+# Booz Allen Notes Help
 
 ## Account management
 
@@ -34,13 +34,13 @@ To update your card or other payment details, open your [profile](/users/me), th
 
 This can happen for various reasons, for example if your card is expired, if your bank has blocked the payment, or simply if the card details are not correct. So you may want to check all this, and possibly contact your bank to tell them to authorise the payment.
 
-When a payment has failed, Stripe will retry again a few times, a few days later, so you don't need to do anything. However please note that after 14 days the Joplin Cloud account will be restricted until the payment is made - it will still be possible to download your data, but it will not be possible to upload more.
+When a payment has failed, Stripe will retry again a few times, a few days later, so you don't need to do anything. However please note that after 14 days the Booz Allen Notes account will be restricted until the payment is made - it will still be possible to download your data, but it will not be possible to upload more.
 
 ### How to manually pay an invoice when a payment has failed?
 
 In case of a failed payment, Stripe will retry automatically. However you may also manually pay the invoice by following these steps:
 
-Open your [profile](/users/me), then click on "[Manage subscription](/stripe/portal)". This will open your Joplin Cloud subscription page. Scroll down and, under "Invoice history", click on the invoice that has a failed payment. This will open a new page where you can pay the invoice.
+Open your [profile](/users/me), then click on "[Manage subscription](/stripe/portal)". This will open your Booz Allen Notes subscription page. Scroll down and, under "Invoice history", click on the invoice that has a failed payment. This will open a new page where you can pay the invoice.
 
 ## Team billing
 
@@ -67,11 +67,11 @@ Open your [profile](/users/me), then scroll down and click on "[Manage subscript
 
 ## Data retention
 
-Disabled accounts on Joplin Cloud are automatically deleted 99 days after they have been disabled (*). A disabled account is one where the Stripe subscription has been cancelled either by the user or automatically (eg for unpaid invoices).
+Disabled accounts on Booz Allen Notes are automatically deleted 99 days after they have been disabled (*). A disabled account is one where the Stripe subscription has been cancelled either by the user or automatically (eg for unpaid invoices).
 
 When an account is deleted, all notes, notebooks, tags, attachments, etc. are permanently deleted. User information, in particular emails and full names will be removed from the system within 92 days, but archived for an additional 90 days for legal reasons, after which they will be deleted too.
 
-If you wish to delete your data before this delay, simply delete all your notes and notebooks from the app, then synchronise with Joplin Cloud. You can use the [Victor plugin](https://joplinapp.org/plugins/plugin/org.joplinapp.plugins.Victor/) to make this easier. After synchronisation, the data will be removed from the server too. For safety reasons, we do not delete data on request.
+If you wish to delete your data before this delay, simply delete all your notes and notebooks from the app, then synchronise with Booz Allen Notes. You can use the [Victor plugin](https://notes.boozallen.com/plugins/plugin/org.joplinapp.plugins.Victor/) to make this easier. After synchronisation, the data will be removed from the server too. For safety reasons, we do not delete data on request.
 
 (*) After 90 days, they are queued for deletion; 2 days later, they are removed from the system (no longer accessible); and 7 days later they are permanently deleted.
 
@@ -85,7 +85,7 @@ In general, cancelling a subscription does not cancel existing invoices.
 
 ## Further information
 
-- [Joplin Official Website](https://joplinapp.org)
-- [Joplin Support Forum](https://discourse.joplinapp.org/)
-- [Joplin Cloud Privacy Policy](/privacy)
-- [Joplin Cloud Terms & Conditions](/terms)
+- [Booz Allen Notes Website](https://notes.boozallen.com)
+- [Booz Allen Notes Support](https://notes.boozallen.com/help)
+- [Booz Allen Notes Privacy Policy](/privacy)
+- [Booz Allen Notes Terms & Conditions](/terms)

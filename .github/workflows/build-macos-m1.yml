@@ -4,7 +4,7 @@ on: [push, pull_request]
 jobs:
   Main:
     # We always process desktop release tags, because they also publish the release
-    if: github.repository == 'laurent22/joplin'
+    if: github.repository == 'boozallen/bah-joplin'
     runs-on: macos-latest
     steps:
 

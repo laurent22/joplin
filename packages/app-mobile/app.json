@@ -1,6 +1,6 @@
 {
-  "name": "Joplin",
-  "displayName": "Joplin",
+  "name": "BoozAllenNotes",
+  "displayName": "Booz Allen Notes",
   "plugins": [
     "@react-native-community/datetimepicker"
   ]

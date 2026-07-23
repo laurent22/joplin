@@ -42,7 +42,7 @@ export const runtime = (): CommandRuntime => {
 			if (!link) throw new Error('Link cannot be empty');
 
 			try {
-				if (link.startsWith('joplin://') || link.startsWith(':/')) {
+				if (link.startsWith('bahnotes://') || link.startsWith('joplin://') || link.startsWith(':/')) {
 					const parsedResourceUrl = parseResourceUrl(link);
 					const parsedCallbackUrl = isCallbackUrl(link) ? parseCallbackUrl(link) : null;
 

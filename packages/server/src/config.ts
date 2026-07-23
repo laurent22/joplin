@@ -40,7 +40,7 @@ function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables, slave:
 export const fullVersionString = (config: Config) => {
 	const output: string[] = [];
 	output.push(`v${config.appVersion}`);
-	if (config.appVersion !== config.joplinServerVersion) output.push(`(Based on Joplin Server v${config.joplinServerVersion})`);
+	if (config.appVersion !== config.joplinServerVersion) output.push(`(Based on Booz Allen Notes Server v${config.joplinServerVersion})`);
 	return output.join(' ');
 };
 
@@ -190,7 +190,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		appVersion: forkVersion ? forkVersion : packageJson.version,
 		joplinServerVersion: packageJson.version,
 		appName,
-		isJoplinCloud: apiBaseUrl.includes('.joplincloud.com') || apiBaseUrl.includes('.joplincloud.local'),
+		isJoplinCloud: apiBaseUrl.includes('.notes.boozallen.com') || apiBaseUrl.includes('.notes.boozallen.local'),
 		defaultAdminPassword: env.DEFAULT_ADMIN_PASSWORD || 'admin',
 		env: envType,
 		rootDir: rootDir,

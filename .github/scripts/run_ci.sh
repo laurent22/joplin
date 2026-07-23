@@ -8,7 +8,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 ROOT_DIR="$SCRIPT_DIR/../.."
 
 TRANSCRIBE_TAG_PREFIX=transcribe
-TRANSCRIBE_REPOSITORY=joplin/transcribe
+TRANSCRIBE_REPOSITORY=boozallen/bah-joplin-transcribe
 
 IS_PULL_REQUEST=0
 IS_DESKTOP_RELEASE=0
@@ -347,11 +347,11 @@ if [ "$IS_DESKTOP_RELEASE" == "1" ]; then
 	fi
 	run_yarn_dist
 elif [[ $IS_LINUX = 1 ]] && [ "$IS_SERVER_RELEASE" == "1" ]; then
-	echo "Step: Building Joplin Server Docker Image..."
+	echo "Step: Building Booz Allen Notes Server Docker Image..."
 	cd "$ROOT_DIR"
 	yarn buildServerDocker --docker-file Dockerfile.server --platform $DOCKER_IMAGE_PLATFORM --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
 elif [[ $IS_LINUX = 1 ]] && [ "$IS_TRANSCRIBE_RELEASE" == "1" ]; then
-	echo "Step: Building Joplin Transcribe Docker Image..."
+	echo "Step: Building Booz Allen Notes Transcribe Docker Image..."
 	cd "$ROOT_DIR"
 	yarn buildServerDocker --docker-file Dockerfile.transcribe --platform $DOCKER_IMAGE_PLATFORM --tag-name $GIT_TAG_NAME --push-images --repository $TRANSCRIBE_REPOSITORY
 else

@@ -28,7 +28,7 @@ describe('api_ping', () => {
 
 		expect(context.response.status).toBe(200);
 		expect(body.status).toBe('ok');
-		expect(body.message).toBe('Joplin Server is running');
+		expect(body.message).toBe('Booz Allen Notes Server is running');
 	});
 
 });

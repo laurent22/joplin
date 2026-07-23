@@ -78,9 +78,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "net.cozic.joplin"
+    namespace "com.boozallen.bahnotes"
     defaultConfig {
-        applicationId "net.cozic.joplin"
+        applicationId "com.boozallen.bahnotes"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
 		versionCode 2097811
@@ -103,11 +103,15 @@ android {
             keyPassword 'android'
         }
         release {
-            if (project.hasProperty('JOPLIN_RELEASE_STORE_FILE')) {
-                storeFile file(JOPLIN_RELEASE_STORE_FILE)
-                storePassword JOPLIN_RELEASE_STORE_PASSWORD
-                keyAlias JOPLIN_RELEASE_KEY_ALIAS
-                keyPassword JOPLIN_RELEASE_KEY_PASSWORD
+            if (project.hasProperty('BAHNOTES_RELEASE_STORE_FILE') || project.hasProperty('JOPLIN_RELEASE_STORE_FILE')) {
+                def releaseStoreFile = project.hasProperty('BAHNOTES_RELEASE_STORE_FILE') ? BAHNOTES_RELEASE_STORE_FILE : JOPLIN_RELEASE_STORE_FILE
+                def releaseStorePassword = project.hasProperty('BAHNOTES_RELEASE_STORE_PASSWORD') ? BAHNOTES_RELEASE_STORE_PASSWORD : JOPLIN_RELEASE_STORE_PASSWORD
+                def releaseKeyAlias = project.hasProperty('BAHNOTES_RELEASE_KEY_ALIAS') ? BAHNOTES_RELEASE_KEY_ALIAS : JOPLIN_RELEASE_KEY_ALIAS
+                def releaseKeyPassword = project.hasProperty('BAHNOTES_RELEASE_KEY_PASSWORD') ? BAHNOTES_RELEASE_KEY_PASSWORD : JOPLIN_RELEASE_KEY_PASSWORD
+                storeFile file(releaseStoreFile)
+                storePassword releaseStorePassword
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
             }
         }
     }

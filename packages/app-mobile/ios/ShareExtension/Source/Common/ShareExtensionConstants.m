@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-NSString* const ShareExtensionGroupIdentifier = @"group.net.cozic.joplin";
-NSString* const ShareExtensionShareURL = @"joplin://shareData";
+NSString* const ShareExtensionGroupIdentifier = @"group.com.boozallen.bahnotes";
+NSString* const ShareExtensionShareURL = @"bahnotes://shareData";
 NSString* const ShareExtensionShareDataFilename = @"shareData";

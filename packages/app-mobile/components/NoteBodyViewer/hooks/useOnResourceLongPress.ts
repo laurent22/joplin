@@ -46,7 +46,7 @@ export default function useOnResourceLongPress(callbacks: Callbacks) {
 			const action = await dialogManager.showMenu(name, actions);
 
 			if (action === 'open') {
-				onJoplinLinkClick(`joplin://${resourceId}`);
+				onJoplinLinkClick(`bahnotes://${resourceId}`);
 			} else if (action === 'share') {
 				const fileToShare = await copyToCache(resource);
 				await shareFile(fileToShare, resource.mime);

@@ -3,7 +3,7 @@ import { reg } from '@joplin/lib/registry';
 import Setting from '@joplin/lib/models/Setting';
 
 const exportProfile = async (profileExportPath: string) => {
-	const dbPath = '/data/data/net.cozic.joplin/databases';
+	const dbPath = '/data/data/com.boozallen.bahnotes/databases';
 	const exportPath = profileExportPath;
 	const resourcePath = `${exportPath}/resources`;
 	try {

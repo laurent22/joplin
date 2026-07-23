@@ -1,4 +1,4 @@
-package net.cozic.joplin
+package com.boozallen.bahnotes
 import expo.modules.ReactActivityDelegateWrapper
 
 import com.facebook.react.ReactActivity

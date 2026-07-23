@@ -1,4 +1,4 @@
-package net.cozic.joplin.ssl;
+package com.boozallen.bahnotes.ssl;
 
 import android.util.Log;
 
@@ -11,8 +11,8 @@ import com.facebook.react.modules.network.NetworkingModule;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static net.cozic.joplin.ssl.SslUtils.TRUST_ALL_CERTS;
-import static net.cozic.joplin.ssl.SslUtils.getTrustySocketFactory;
+import static com.boozallen.bahnotes.ssl.SslUtils.TRUST_ALL_CERTS;
+import static com.boozallen.bahnotes.ssl.SslUtils.getTrustySocketFactory;
 
 public class SslModule extends ReactContextBaseJavaModule {
 

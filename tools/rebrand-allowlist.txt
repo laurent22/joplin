@@ -1,0 +1,9 @@
+# Runtime compatibility: accept legacy links while parsers/readers migrate.
+^packages/lib/callbackUrlUtils\.ts:\d+:const callbackProtocols = \['bahnotes://', 'joplin://'\];
+^packages/app-mobile/commands/openItem\.ts:\d+:\s*if \(link\.startsWith\('bahnotes://'\) \|\| link\.startsWith\('joplin://'\) \|\| link\.startsWith\(':/'\)\) \{
+^packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem\.ts:\d+:\s*if \(link\.startsWith\('bahnotes://'\) \|\| link\.startsWith\('joplin://'\) \|\| link\.startsWith\(':/'\)\) \{
+^packages/app-desktop/gui/NoteRevisionViewer\.tsx:\d+:\s*\} else if \(msg\.indexOf\('bahnotes://'\) === 0 \|\| msg\.indexOf\('joplin://'\) === 0\) \{
+
+# Historical fixtures retained for regression coverage.
+^packages/server/src/utils/testing/serializedItems\.ts:\d+:source_application: net\.cozic\.joplindev-desktop
+^packages/server/src/migrations/20210412110640_item_refactor\.ts:\d+:// source_application: net\.cozic\.joplindev-desktop

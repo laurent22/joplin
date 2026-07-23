@@ -14,7 +14,7 @@ const defaultEnvValues: EnvVariables = {
 	// General config
 	// ==================================================
 
-	APP_NAME: 'Joplin Server',
+	APP_NAME: 'Booz Allen Notes Server',
 	APP_PORT: 22300,
 	SIGNUP_ENABLED: false,
 	TERMS_ENABLED: false,
@@ -55,7 +55,7 @@ const defaultEnvValues: EnvVariables = {
 	APP_BASE_URL: '',
 	USER_CONTENT_BASE_URL: '',
 	API_BASE_URL: '',
-	JOPLINAPP_BASE_URL: 'https://joplinapp.org',
+	JOPLINAPP_BASE_URL: 'https://notes.boozallen.com',
 	TERMS_URL: '',
 	PRIVACY_URL: '',
 

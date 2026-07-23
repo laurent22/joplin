@@ -7,7 +7,7 @@ on:
 
 jobs:
   CLAAssistant:
-    if: github.repository == 'laurent22/joplin'
+    if: github.repository == 'boozallen/bah-joplin'
     runs-on: ubuntu-latest
     steps:
       - name: "CLA Assistant"
@@ -20,7 +20,7 @@ jobs:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
           path-to-signatures: 'readme/cla/signatures.json'
-          path-to-document: 'https://github.com/laurent22/joplin/blob/dev/readme/cla.md' # e.g. a CLA or a DCO document
+          path-to-document: 'https://github.com/boozallen/bah-joplin/blob/dev/readme/cla.md' # e.g. a CLA or a DCO document
           # branch should not be protected
           branch: 'cla_signatures'
           allowlist: joplinbot,renovate[bot]

@@ -127,10 +127,10 @@ async function main() {
 	// routeHandler uses data from both previous middlewares. It would be good to
 	// layout these dependencies in code but not clear how to do this.
 	const corsAllowedDomains = [
-		'https://joplinapp.org',
+		'https://notes.boozallen.com',
 
-		// Allows sync with the web version of Joplin
-		'https://app.joplincloud.com',
+		// Allows sync with the web version of Booz Allen Notes
+		'https://app.notes.boozallen.com',
 	];
 
 	if (env === Env.Dev) {

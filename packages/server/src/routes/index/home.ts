@@ -18,7 +18,7 @@ function setupMessageHtml() {
 	if (config().isJoplinCloud) {
 		return `In this screen, select "<strong>${escapeHtml(config().appName)}</strong>" as a synchronisation target and enter your username and password`;
 	} else {
-		return `In this screen, select "<strong>Joplin Server</strong>" as a synchronisation target, then enter the URL <strong>${config().apiBaseUrl}</strong> and your username and password`;
+		return `In this screen, select "<strong>Booz Allen Notes Server</strong>" as a synchronisation target, then enter the URL <strong>${config().apiBaseUrl}</strong> and your username and password`;
 	}
 }
 
@@ -26,36 +26,20 @@ function setupMessageHtml() {
 const socialFeeds = () => {
 	return [
 		{
-			label: 'Bluesky',
-			href: 'https://bsky.app/profile/joplinapp.bsky.social',
+			label: 'Website',
+			href: 'https://notes.boozallen.com',
 		},
 		{
-			label: 'Patreon',
-			href: 'https://www.patreon.com/joplin',
-		},
-		{
-			label: 'YouTube',
-			href: 'https://www.youtube.com/@joplinapp',
-		},
-		{
-			label: 'LinkedIn',
-			href: 'https://www.linkedin.com/company/joplin',
-		},
-		{
-			label: 'Discord',
-			href: 'https://discord.gg/VSj7AFHvpq',
-		},
-		{
-			label: 'Mastodon',
-			href: 'https://mastodon.social/@joplinapp',
-		},
-		{
-			label: 'Lemmy',
-			href: 'https://sopuli.xyz/c/joplinapp',
+			label: 'Support',
+			href: 'https://notes.boozallen.com/help',
 		},
 		{
 			label: 'GitHub',
-			href: 'https://github.com/laurent22/joplin/',
+			href: 'https://github.com/boozallen/bah-joplin',
+		},
+		{
+			label: 'LinkedIn',
+			href: 'https://www.linkedin.com/company/booz-allen-hamilton',
 		},
 	];
 };

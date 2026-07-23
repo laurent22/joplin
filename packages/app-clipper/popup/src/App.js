@@ -139,7 +139,7 @@ class AppComponent extends Component {
 		};
 
 		this.clipperServerHelpLink_click = () => {
-			bridge().tabsCreate({ url: 'https://joplinapp.org/help/apps/clipper' });
+			bridge().tabsCreate({ url: 'https://notes.boozallen.com/help/apps/clipper' });
 		};
 
 		this.folderSelect_change = (event) => {
@@ -251,18 +251,18 @@ class AppComponent extends Component {
 	renderStartupScreen() {
 		const messages = {
 			serverFoundState: {
-				// We need to display the "Connecting to the Joplin
+				// We need to display the "Connecting to the Booz Allen Notes
 				// application..." message because if the app doesn't currently
 				// allow access to the clipper API, the clipper tries several
 				// ports and it takes time before failing. So if we don't
 				// display any message, it looks like it's not doing anything
 				// when clicking on the extension button.
-				'searching': 'Connecting to the Joplin application...',
-				'not_found': 'Error: Could not connect to the Joplin application. Please ensure that it is started and that the clipper service is enabled in the configuration.',
+				'searching': 'Connecting to the Booz Allen Notes application...',
+				'not_found': 'Error: Could not connect to the Booz Allen Notes application. Please ensure that it is started and that the clipper service is enabled in the configuration.',
 			},
 			authState: {
 				'starting': 'Starting...',
-				'waiting': 'The Joplin Web Clipper requires your authorisation in order to access your data. To proceed, please open the Joplin desktop application and grant permission. Note: Joplin 2.1+ is needed to use this version of the Web Clipper.',
+				'waiting': 'The Booz Allen Notes Web Clipper requires your authorisation in order to access your data. To proceed, please open the Booz Allen Notes desktop application and grant permission. Note: Booz Allen Notes 2.1+ is needed to use this version of the Web Clipper.',
 				'rejected': 'Permission to access your data was not granted. To try again please close this popup and open it again.',
 			},
 		};
@@ -296,7 +296,7 @@ class AppComponent extends Component {
 
 		if (!this.state.contentScriptLoaded) {
 			let msg = 'Loading...';
-			if (this.state.contentScriptError) msg = `The Joplin extension is not available on this tab due to: ${this.state.contentScriptError}`;
+			if (this.state.contentScriptError) msg = `The Booz Allen Notes extension is not available on this tab due to: ${this.state.contentScriptError}`;
 			return (
 				<div className="App Startup">
 					{msg}
@@ -317,9 +317,9 @@ class AppComponent extends Component {
 			let msg = '';
 
 			if (operation.searchingClipperServer) {
-				msg = 'Searching clipper service... Please make sure that Joplin is running.';
+				msg = 'Searching clipper service... Please make sure that Booz Allen Notes is running.';
 			} else if (operation.uploading) {
-				msg = 'Processing note... The note will be available in Joplin as soon as the web page and images have been downloaded and converted. In the meantime you may close this popup.';
+				msg = 'Processing note... The note will be available in Booz Allen Notes as soon as the web page and images have been downloaded and converted. In the meantime you may close this popup.';
 			} else if (operation.success) {
 				msg = 'Note was successfully created!';
 			} else {
@@ -424,11 +424,11 @@ class AppComponent extends Component {
 
 			if (!this.state.newNoteId) { return null; } else {
 				return (
-					// The jopin:// link must be opened in a new tab. When it's opened for the first time, a system dialog will ask for the user's permission.
+					// The bahnotes:// link must be opened in a new tab. When it's opened for the first time, a system dialog will ask for the user's permission.
 					// The system dialog is too big to fit into the popup so the user will not be able to see the dialog buttons and get stuck.
 					<a
 						className="Button"
-						href={`joplin://x-callback-url/openNote?id=${encodeURIComponent(this.state.newNoteId)}`}
+						href={`bahnotes://x-callback-url/openNote?id=${encodeURIComponent(this.state.newNoteId)}`}
 						target="_blank"
 						onClick={() => this.setState({ newNoteId: null })}
 					>

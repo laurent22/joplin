@@ -1,4 +1,4 @@
-package net.cozic.joplin.versioninfo;
+package com.boozallen.bahnotes.versioninfo;
 
 import android.content.pm.PackageInfo;
 import android.os.Build;

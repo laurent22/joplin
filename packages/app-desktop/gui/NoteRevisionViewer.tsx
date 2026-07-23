@@ -147,7 +147,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 	const webview_ipcMessage = useCallback(async (event: { channel?: string; args?: unknown[] }) => {
 		// For the revision view, we only support a minimal subset of the IPC messages.
 		// For example, we don't need interactive checkboxes or sync between viewer and editor view.
-		// We try to get most links work though, except for internal (joplin://) links.
+		// We try to get most links work though, except for internal app links.
 
 		const msg = event.channel ? event.channel : '';
 		// const args = event.args;
@@ -158,7 +158,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 			if (msg.indexOf('checkboxclick:') === 0) {
 				// Revision previews are read-only. Ignore checkbox toggle IPC messages so they
 				// don't fall through to URL handling (`checkboxclick:` looks like a protocol).
-			} else if (msg.indexOf('joplin://') === 0) {
+			} else if (msg.indexOf('bahnotes://') === 0 || msg.indexOf('joplin://') === 0) {
 				throw new Error(_('Unsupported link or message: %s', msg));
 			} else if (urlUtils.urlProtocol(msg)) {
 				await bridge().openExternal(msg);

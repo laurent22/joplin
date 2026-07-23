@@ -1,0 +1,24 @@
+name: Rebrand Identity Guard
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  rebrand-identity-guard:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Check rebrand identity leakage
+        run: node .github/scripts/check_rebrand_identity.js

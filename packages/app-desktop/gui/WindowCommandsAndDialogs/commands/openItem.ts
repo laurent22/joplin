@@ -22,7 +22,7 @@ export const runtime = (): CommandRuntime => {
 				link = fromFileUrl;
 			}
 
-			if (link.startsWith('joplin://') || link.startsWith(':/')) {
+			if (link.startsWith('bahnotes://') || link.startsWith('joplin://') || link.startsWith(':/')) {
 				const parsedUrl = parseResourceUrl(link);
 				if (parsedUrl) {
 					const { itemId, hash } = parsedUrl;

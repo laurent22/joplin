@@ -57,7 +57,7 @@ export default class AlarmServiceDriver {
 		const alarmNotifData = {
 			title: notification.title,
 			message: notification.body ? notification.body : '-', // Required
-			channel: 'net.cozic.joplin.notification',
+			channel: 'com.boozallen.bahnotes.notification',
 			small_icon: 'ic_launcher_foreground', // Android requires the icon to be transparent
 			color: 'blue',
 			data: {

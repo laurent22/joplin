@@ -6,7 +6,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/laurent22/joplin.git"
+    "url": "git+https://github.com/boozallen/bah-joplin.git"
   },
   "engines": {
     "node": ">=22.12",
@@ -26,6 +26,7 @@
     "checkIgnoredFiles": "node ./packages/tools/checkIgnoredFiles.js",
     "checkLibPaths": "node ./packages/tools/checkLibPaths.js",
     "checkGeneratedFiles": "node ./packages/tools/checkGeneratedFiles.js",
+    "checkRebrandIdentity": "node .github/scripts/check_rebrand_identity.js",
     "circularDependencyCheck": "madge --warning --circular --extensions js ./",
     "clean": "npm run clean --workspaces --if-present && node packages/tools/clean && yarn cache clean",
     "crowdin": "crowdin",
@@ -33,7 +34,7 @@
     "crowdinUpload": "crowdin upload",
     "dependencyTree": "madge",
     "generateTypes": "node packages/tools/generate-database-types",
-    "linkChecker": "linkchecker https://joplinapp.org/ && linkchecker --check-extern https://joplinapp.org/api/references/plugin_api/classes/joplin.html",
+    "linkChecker": "linkchecker https://notes.boozallen.com/ && linkchecker --check-extern https://notes.boozallen.com/api/references/plugin_api/classes/joplin.html",
     "linter-ci": "eslint --quiet",
     "linter-interactive": "eslint-interactive --fix --quiet",
     "linter-precommit": "eslint --fix",

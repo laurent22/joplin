@@ -1,0 +1,12 @@
+{
+  "pathExemptions": [
+    "readme/rebrand_identity_matrix.md",
+    "readme/dev/rebrand_identity_guard.md",
+    "readme/dev/rebrand_identity_guard_exceptions.json",
+    ".github/scripts/check_rebrand_identity.js",
+    "packages/lib/callbackUrlUtils.ts",
+    "packages/app-mobile/commands/openItem.ts",
+    "packages/app-desktop/gui/WindowCommandsAndDialogs/commands/openItem.ts",
+    "packages/app-desktop/gui/NoteRevisionViewer.tsx"
+  ]
+}

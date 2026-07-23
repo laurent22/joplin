@@ -22975,6 +22975,51 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bah-notes@workspace:packages/app-cli":
+  version: 0.0.0-use.local
+  resolution: "bah-notes@workspace:packages/app-cli"
+  dependencies:
+    "@joplin/lib": "npm:~3.7"
+    "@joplin/renderer": "npm:~3.7"
+    "@joplin/tools": "npm:~3.7"
+    "@joplin/utils": "npm:~3.7"
+    "@types/fs-extra": "npm:11.0.4"
+    "@types/jest": "npm:29.5.14"
+    "@types/node": "npm:18.19.130"
+    "@types/proper-lockfile": "npm:^4.1.2"
+    aws-sdk: "npm:2.1340.0"
+    chalk: "npm:4.1.2"
+    compare-version: "npm:0.1.2"
+    file-type: "npm:16.5.4"
+    fs-extra: "npm:11.3.4"
+    gulp: "npm:4.0.2"
+    html-entities: "npm:1.4.0"
+    jest: "npm:29.7.0"
+    keytar: "npm:7.9.0"
+    md5: "npm:2.3.0"
+    node-rsa: "npm:1.1.1"
+    open: "npm:8.4.2"
+    proper-lockfile: "npm:4.1.2"
+    redux: "npm:4.2.1"
+    server-destroy: "npm:1.0.1"
+    sharp: "npm:0.34.5"
+    sprintf-js: "npm:1.1.3"
+    sqlite3: "npm:5.1.6"
+    string-padding: "npm:1.0.2"
+    strip-ansi: "npm:6.0.1"
+    tcp-port-used: "npm:1.0.2"
+    temp: "npm:0.9.4"
+    terminal-kit: "npm:3.1.2"
+    tkwidgets: "npm:0.5.27"
+    typescript: "npm:5.9.3"
+    url-parse: "npm:1.5.10"
+    word-wrap: "npm:1.2.5"
+    yargs-parser: "npm:21.1.1"
+  bin:
+    bah-notes: ./main.js
+  languageName: unknown
+  linkType: soft
+
 "bail@npm:^1.0.0":
   version: 1.0.5
   resolution: "bail@npm:1.0.5"
@@ -38643,51 +38688,6 @@ __metadata:
   checksum: 10/b9ee96e149637f4bd52e894f75ba72e5c64b2512002df3a95ecf23c0b6593fdb260d61c0a30cab5450da142520b1aec63c709b11bf3a2491caa3049db0174fdf
   languageName: node
   linkType: hard
-
-"joplin@workspace:packages/app-cli":
-  version: 0.0.0-use.local
-  resolution: "joplin@workspace:packages/app-cli"
-  dependencies:
-    "@joplin/lib": "npm:~3.7"
-    "@joplin/renderer": "npm:~3.7"
-    "@joplin/tools": "npm:~3.7"
-    "@joplin/utils": "npm:~3.7"
-    "@types/fs-extra": "npm:11.0.4"
-    "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.130"
-    "@types/proper-lockfile": "npm:^4.1.2"
-    aws-sdk: "npm:2.1340.0"
-    chalk: "npm:4.1.2"
-    compare-version: "npm:0.1.2"
-    file-type: "npm:16.5.4"
-    fs-extra: "npm:11.3.4"
-    gulp: "npm:4.0.2"
-    html-entities: "npm:1.4.0"
-    jest: "npm:29.7.0"
-    keytar: "npm:7.9.0"
-    md5: "npm:2.3.0"
-    node-rsa: "npm:1.1.1"
-    open: "npm:8.4.2"
-    proper-lockfile: "npm:4.1.2"
-    redux: "npm:4.2.1"
-    server-destroy: "npm:1.0.1"
-    sharp: "npm:0.34.5"
-    sprintf-js: "npm:1.1.3"
-    sqlite3: "npm:5.1.6"
-    string-padding: "npm:1.0.2"
-    strip-ansi: "npm:6.0.1"
-    tcp-port-used: "npm:1.0.2"
-    temp: "npm:0.9.4"
-    terminal-kit: "npm:3.1.2"
-    tkwidgets: "npm:0.5.27"
-    typescript: "npm:5.9.3"
-    url-parse: "npm:1.5.10"
-    word-wrap: "npm:1.2.5"
-    yargs-parser: "npm:21.1.1"
-  bin:
-    joplin: ./main.js
-  languageName: unknown
-  linkType: soft
 
 "jpeg-js@npm:^0.4.1":
   version: 0.4.3

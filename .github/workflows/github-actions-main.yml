@@ -1,10 +1,10 @@
-name: Joplin Continuous Integration
+name: Booz Allen Notes Continuous Integration
 on: [push, pull_request]
 
 jobs:
   Main:
     # We always process server or desktop release tags, because they also publish the release
-    if: github.repository == 'laurent22/joplin'
+    if: github.repository == 'boozallen/bah-joplin'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -79,7 +79,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
-          SERVER_REPOSITORY: joplin/server
+          SERVER_REPOSITORY: boozallen/bah-joplin-server
           SERVER_TAG_PREFIX: server
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
         run: |
@@ -109,7 +109,7 @@ jobs:
         env:
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
-          SERVER_REPOSITORY: joplin/server
+          SERVER_REPOSITORY: boozallen/bah-joplin-server
           SERVER_TAG_PREFIX: server
         run: |
           . "${env:GITHUB_WORKSPACE}/.github/scripts/build_windows.ps1"
@@ -118,14 +118,14 @@ jobs:
       - name: Publish Docker manifest
         if: runner.os == 'Linux'
         env:
-          SERVER_REPOSITORY: joplin/server
+          SERVER_REPOSITORY: boozallen/bah-joplin-server
           SERVER_TAG_PREFIX: server
         run: |
           chmod 700 "${GITHUB_WORKSPACE}/.github/scripts/publish_docker_manifest.sh"
           "${GITHUB_WORKSPACE}/.github/scripts/publish_docker_manifest.sh"
 
   ServerDockerImage:
-    if: github.repository == 'laurent22/joplin'
+    if: github.repository == 'boozallen/bah-joplin'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -182,16 +182,16 @@ jobs:
           echo "DOCKER_IMAGE_PLATFORM=$DOCKER_IMAGE_PLATFORM"
 
           yarn install
-          yarn buildServerDocker --docker-file Dockerfile.server --platform $DOCKER_IMAGE_PLATFORM --tag-name server-v0.0.0 --repository joplin/server
+          yarn buildServerDocker --docker-file Dockerfile.server --platform $DOCKER_IMAGE_PLATFORM --tag-name server-v0.0.0 --repository boozallen/bah-joplin-server
 
           # Basic test to ensure that the created build is valid. It should exit with
           # code 0 if it works.
-          docker run joplin/server:$(dpkg --print-architecture)-0.0.0 node dist/index.js migrate list
+          docker run boozallen/bah-joplin-server:$(dpkg --print-architecture)-0.0.0 node dist/index.js migrate list
  
       - name: Check HTTP request
         run: |
           # Need to pass environment variables:
-          docker run --env MAX_TIME_DRIFT=0 --publish 22300:22300 joplin/server:$(dpkg --print-architecture)-0.0.0 node dist/index.js --env dev &
+          docker run --env MAX_TIME_DRIFT=0 --publish 22300:22300 boozallen/bah-joplin-server:$(dpkg --print-architecture)-0.0.0 node dist/index.js --env dev &
 
           # Wait for server to start
           sleep 120
@@ -211,7 +211,7 @@ jobs:
           
           # Check if the body response is correct
           # if the actual_body is different of expected_body exit with code 1
-          expected_body='{"status":"ok","message":"Joplin Server is running"}'
+          expected_body='{"status":"ok","message":"Booz Allen Notes Server is running"}'
           actual_body=$(curl http://localhost:22300/api/ping)
           
           if [[ "$actual_body" != "$expected_body" ]]; then

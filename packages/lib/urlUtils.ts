@@ -46,7 +46,7 @@ export const prependBaseUrl = (url: string, baseUrl: string) => {
 };
 
 
-const resourceRegex = /^(joplin:\/\/|:\/)([0-9a-zA-Z]{32})(|#[^\s]*)(|\s".*?")$/;
+const resourceRegex = /^(bahnotes:\/\/|joplin:\/\/|:\/)([0-9a-zA-Z]{32})(|#[^\s]*)(|\s".*?")$/;
 
 export const isResourceUrl = (url: string) => {
 	return !!url.match(resourceRegex);
@@ -83,7 +83,7 @@ export const fileUrlToResourceUrl = (fileUrl: string, resourceDir: string, os: s
 		result = result.replace(/\?t=\d+(#.*)?$/, '$1');
 		// Remove the file extension.
 		result = result.replace(/\.[a-z0-9]+(#.*)?$/, '$1');
-		result = `joplin://${result}`;
+		result = `bahnotes://${result}`;
 
 		if (isResourceUrl(result)) {
 			return result;

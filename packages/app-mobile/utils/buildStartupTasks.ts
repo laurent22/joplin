@@ -173,7 +173,7 @@ const buildStartupTasks = (
 	});
 	addTask('buildStartupTasks/set constants', async () => {
 		Setting.setConstant('env', __DEV__ ? Env.Dev : Env.Prod);
-		Setting.setConstant('appId', 'net.cozic.joplin-mobile');
+		Setting.setConstant('appId', 'com.boozallen.bahnotes-mobile');
 		Setting.setConstant('appType', AppType.Mobile);
 		Setting.setConstant('tempDir', await initializeTempDir());
 		Setting.setConstant('cacheDir', `${getProfilesRootDir()}/cache`);

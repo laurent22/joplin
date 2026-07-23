@@ -109,7 +109,7 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 	const onOpenRef = useCallback((value: string) => {
 		if (!value) return;
 		// `openItem` already handles every supported link form: `:/id`,
-		// `joplin://`, `file://`, any other URL scheme (http/https/mailto/
+		// `bahnotes://`, `file://`, any other URL scheme (http/https/mailto/
 		// ftp/...), and shows a user-facing error for unsupported strings.
 		void CommandService.instance().execute('openItem', value);
 	}, []);

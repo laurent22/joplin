@@ -33,7 +33,7 @@ export default async (params: Params) => {
 	}
 
 	// Same appId in electron-builder.
-	const appId = 'net.cozic.joplin-desktop';
+	const appId = 'com.boozallen.bahnotes-desktop';
 
 	const appPath = join(params.appOutDir, `${params.packager.appInfo.productFilename}.app`);
 	if (!existsSync(appPath)) {

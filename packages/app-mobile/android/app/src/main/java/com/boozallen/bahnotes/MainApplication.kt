@@ -1,4 +1,4 @@
-package net.cozic.joplin
+package com.boozallen.bahnotes
 import android.content.res.Configuration
 import expo.modules.ApplicationLifecycleDispatcher
 import expo.modules.ReactNativeHostWrapper
@@ -14,9 +14,9 @@ import com.facebook.react.common.ReleaseLevel
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
-import net.cozic.joplin.versioninfo.SystemVersionInformationPackage
-import net.cozic.joplin.share.SharePackage
-import net.cozic.joplin.ssl.SslPackage
+import com.boozallen.bahnotes.versioninfo.SystemVersionInformationPackage
+import com.boozallen.bahnotes.share.SharePackage
+import com.boozallen.bahnotes.ssl.SslPackage
 
 class MainApplication : Application(), ReactApplication {
     override val reactNativeHost: ReactNativeHost = ReactNativeHostWrapper(

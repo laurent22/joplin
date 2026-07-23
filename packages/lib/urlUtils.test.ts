@@ -30,9 +30,11 @@ describe('urlUtils', () => {
 			[':/1234abcd1234abcd1234abcd1234abcd#hash', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: 'hash' }],
 			[':/1234abcd1234abcd1234abcd1234abcd#Книги-из-номер', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: 'Книги-из-номер' }],
 			[':/1234abcd1234abcd1234abcd1234abcd#hash "some text"', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: 'hash' }],
+			['bahnotes://1234abcd1234abcd1234abcd1234abcd', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: '' }],
+			['bahnotes://1234abcd1234abcd1234abcd1234abcd#hash', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: 'hash' }],
 			['joplin://1234abcd1234abcd1234abcd1234abcd', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: '' }],
-			['joplin://1234abcd1234abcd1234abcd1234abcd#hash', { itemId: '1234abcd1234abcd1234abcd1234abcd', hash: 'hash' }],
 			[':/1234abcd1234abcd1234abcd1234abc', null],
+			['bahnotes://1234abcd1234abcd1234abcd1234abc', null],
 			['joplin://1234abcd1234abcd1234abcd1234abc', null],
 		];
 

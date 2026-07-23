@@ -1,7 +1,7 @@
 {
   "name": "@joplin/app-desktop",
   "version": "3.7.6",
-  "description": "Joplin for Desktop",
+  "description": "Booz Allen Notes for Desktop",
   "main": "main.bundle.js",
   "private": true,
   "scripts": {
@@ -21,17 +21,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/laurent22/joplin.git"
+    "url": "git+https://github.com/boozallen/bah-joplin.git"
   },
-  "author": "Laurent Cozic",
+  "author": "Booz Allen Hamilton",
   "license": "AGPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/laurent22/joplin/issues"
+    "url": "https://github.com/boozallen/bah-joplin/issues"
   },
   "build": {
-    "appId": "net.cozic.joplin-desktop",
+    "appId": "com.boozallen.bahnotes-desktop",
     "compression": "normal",
-    "productName": "Joplin",
+    "productName": "Booz Allen Notes",
     "npmRebuild": false,
     "afterSign": "./tools/notarizeMacApp.js",
     "extraResources": [
@@ -51,7 +51,7 @@
     ],
     "win": {
       "publisherName": [
-        "Joplin"
+        "Booz Allen Hamilton"
       ],
       "sign": "./sign.js",
       "rfc3161TimeStampServer": "http://timestamp.digicert.com",
@@ -118,10 +118,10 @@
         "CFBundleURLTypes": [
           {
             "CFBundleURLSchemes": [
-              "joplin"
+              "bahnotes"
             ],
             "CFBundleTypeRole": "Editor",
-            "CFBundleURLName": "org.joplinapp.x-callback-url"
+            "CFBundleURLName": "com.boozallen.bahnotes.x-callback-url"
           }
         ]
       }
@@ -131,19 +131,19 @@
       "category": "Office",
       "desktop": {
         "Icon": "joplin",
-        "MimeType": "x-scheme-handler/joplin;",
+        "MimeType": "x-scheme-handler/bahnotes;",
         "StartupWMClass": "@joplin/app-desktop"
       },
       "target": [
         "AppImage",
         "deb"
       ],
-      "executableName": "joplin",
-      "maintainer": "Joplin Team <no-reply@joplinapp.org>",
-      "artifactName": "Joplin-${version}.${ext}"
+      "executableName": "bahnotes",
+      "maintainer": "Booz Allen Hamilton <no-reply@boozallen.com>",
+      "artifactName": "BoozAllenNotes-${version}.${ext}"
     }
   },
-  "homepage": "https://github.com/laurent22/joplin#readme",
+  "homepage": "https://github.com/boozallen/bah-joplin#readme",
   "devDependencies": {
     "7zip-bin": "5.2.0",
     "@axe-core/playwright": "4.11.1",

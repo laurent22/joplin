@@ -1,4 +1,4 @@
-package net.cozic.joplin.ssl;
+package com.boozallen.bahnotes.ssl;
 
 import androidx.annotation.NonNull;
 

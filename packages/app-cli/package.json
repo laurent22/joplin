@@ -1,8 +1,8 @@
 {
   "name": "joplin",
-  "description": "Joplin CLI Client",
+  "description": "Booz Allen Notes CLI Client",
   "license": "AGPL-3.0-or-later",
-  "author": "Laurent Cozic",
+  "author": "Booz Allen Hamilton",
   "private": true,
   "scripts": {
     "test": "jest --verbose=false --config=jest.config.js --bail --forceExit",
@@ -15,14 +15,14 @@
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json"
   },
   "bugs": {
-    "url": "https://github.com/laurent22/joplin/issues"
+    "url": "https://github.com/boozallen/bah-joplin/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/laurent22/joplin"
+    "url": "https://github.com/boozallen/bah-joplin"
   },
   "copyright": {
-    "title": "Joplin CLI",
+    "title": "Booz Allen Notes CLI",
     "years": [
       2016,
       2017,
@@ -33,7 +33,7 @@
       2022,
       2023
     ],
-    "owner": "Laurent Cozic"
+    "owner": "Booz Allen Hamilton"
   },
   "version": "3.7.0",
   "bin": "./main.js",
