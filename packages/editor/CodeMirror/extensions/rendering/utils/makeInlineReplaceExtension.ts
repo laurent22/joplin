@@ -14,16 +14,24 @@ const updateInlineDecorationsEffect = StateEffect.define();
 export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
 	public decorations: DecorationSet;
 	private mouseSelectionInProgress = false;
+	private touchSelectionInProgress = false;
 
 	public constructor(private view: EditorView) {
 		view.dom.addEventListener('mousedown', this.onMouseDown, true);
 		view.dom.ownerDocument.addEventListener('mouseup', this.onMouseUp);
+		view.dom.addEventListener('touchstart', this.onTouchStart);
+		view.dom.addEventListener('click', this.onMouseUp);
+		view.dom.ownerDocument.addEventListener('touchcancel', this.onMouseUp);
 		this.updateDecorations(view);
 	}
 
 	public destroy() {
 		this.view.dom.removeEventListener('mousedown', this.onMouseDown, true);
 		this.view.dom.ownerDocument.removeEventListener('mouseup', this.onMouseUp);
+		this.view.dom.removeEventListener('touchstart', this.onTouchStart);
+		this.view.dom.removeEventListener('click', this.onMouseUp);
+		this.view.dom.ownerDocument.removeEventListener('touchcancel', this.onMouseUp);
+		this.touchSelectionInProgress = false;
 	}
 
 	private onMouseDown = (event: MouseEvent) => {
@@ -32,8 +40,15 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 		}
 	};
 
-	private onMouseUp = () => {
-		if (this.mouseSelectionInProgress) {
+	private onTouchStart = () => {
+		this.touchSelectionInProgress = true;
+	};
+
+	private onMouseUp = (event?: Event) => {
+		if (event?.type === 'mouseup' && this.touchSelectionInProgress) return;
+
+		if (this.mouseSelectionInProgress || this.touchSelectionInProgress) {
+			const isTouchSelection = this.touchSelectionInProgress;
 			const selection = this.view.state.selection.main;
 			let coveredTo = selection.from;
 			this.decorations.between(selection.from, selection.to, (from, to, decoration) => {
@@ -64,13 +79,18 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 					const closingBracket = node.node.getChildren('LinkMark').find(mark => (
 						this.view.state.sliceDoc(mark.from, mark.to) === ']'
 					));
-					if (closingBracket && selection.from >= closingBracket.from && selection.to <= node.to && hasHiddenDecoration(closingBracket.from, node.to)) {
+					const isTouchCursorInLinkLabel = !!closingBracket && isTouchSelection && selection.empty
+						&& selection.from >= node.from && selection.to <= closingBracket.to;
+					if (closingBracket && (isTouchCursorInLinkLabel || (
+						selection.from >= closingBracket.from && selection.to <= node.to
+					)) && hasHiddenDecoration(closingBracket.from, node.to)) {
 						selectionUpdate = { anchor: node.to };
 					}
 				},
 			});
 
 			this.mouseSelectionInProgress = false;
+			this.touchSelectionInProgress = false;
 			this.view.dispatch({
 				selection: selectionUpdate,
 				effects: updateInlineDecorationsEffect.of(null),
@@ -156,7 +176,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			transaction.effects.some(effect => effect.is(updateInlineDecorationsEffect))
 			|| extensionSpec.shouldFullReRender?.(transaction)
 		));
-		if (this.mouseSelectionInProgress && !update.docChanged && (update.selectionSet || forceUpdate)) {
+		if ((this.mouseSelectionInProgress || this.touchSelectionInProgress) && !update.docChanged && (update.selectionSet || forceUpdate)) {
 			return;
 		}
 

@@ -51,4 +51,30 @@ describe('replaceLinks', () => {
 
 		expect(editor.state.selection.main.anchor).toBe(clickedCursor);
 	});
+
+	it('should place cursor after link when tapped on mobile', async () => {
+		const markup = 'before [link](https://example.com/)';
+		const clickedCursor = markup.indexOf('link') + 2;
+		const editor = await createTestEditor(markup, EditorSelection.cursor(0), ['URL', 'LinkMark', 'Link'], [replaceLinks]);
+
+		const touchStart = new Event('touchstart', { bubbles: true });
+		Object.defineProperty(touchStart, 'targetTouches', { value: [] });
+		editor.contentDOM.dispatchEvent(touchStart);
+		editor.dispatch({ selection: EditorSelection.cursor(clickedCursor) });
+		editor.contentDOM.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+		expect(editor.state.selection.main.anchor).toBe(markup.length);
+	});
+
+	it('should keep cursor in link text on mouse click', async () => {
+		const markup = 'before [link](https://example.com/)';
+		const clickedCursor = markup.indexOf('link') + 2;
+		const editor = await createTestEditor(markup, EditorSelection.cursor(0), ['URL', 'LinkMark', 'Link'], [replaceLinks]);
+
+		editor.contentDOM.dispatchEvent(new MouseEvent('mousedown', { button: 0, bubbles: true }));
+		editor.dispatch({ selection: EditorSelection.cursor(clickedCursor) });
+		editor.contentDOM.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
+
+		expect(editor.state.selection.main.anchor).toBe(clickedCursor);
+	});
 });
