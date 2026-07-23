@@ -36,10 +36,6 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 		};
 
 		const selectionWrapper: ViewStyle = {
-			paddingLeft: theme.marginLeft,
-			paddingRight: theme.marginRight,
-			paddingTop: theme.marginTop,
-			paddingBottom: theme.marginBottom,
 			flexDirection: 'row',
 			// backgroundColor: theme.backgroundColor,
 		};
@@ -48,6 +44,8 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 			flexGrow: 1,
 			flexShrink: 1,
 			alignSelf: 'stretch',
+			paddingTop: theme.marginTop,
+			paddingBottom: theme.marginBottom,
 		};
 		const listItemPressableWithCheckbox: ViewStyle = {
 			...listItemPressable,
@@ -55,6 +53,8 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 		};
 		const listItemPressableWithoutCheckbox: ViewStyle = {
 			...listItemPressable,
+			paddingLeft: theme.marginLeft,
+			paddingRight: theme.marginRight,
 		};
 
 		const listItemText: TextStyle = {
@@ -86,6 +86,7 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 			selectionWrapperSelected,
 			checkboxStyle: {
 				color: theme.color,
+				paddingLeft: theme.marginLeft,
 				paddingRight: 10,
 			},
 			checkedOpacityStyle: {
