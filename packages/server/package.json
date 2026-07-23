@@ -39,7 +39,7 @@
     "fs-extra": "11.3.4",
     "html-entities": "1.4.0",
     "jquery": "3.7.1",
-    "knex": "3.1.0",
+    "knex": "3.2.6",
     "koa": "2.16.4",
     "ldapts": "8.1.7",
     "markdown-it": "13.0.2",
