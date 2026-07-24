@@ -2,6 +2,7 @@
 import * as addNoteToWhiteboard from './addNoteToWhiteboard';
 import * as addProfile from './addProfile';
 import * as commandPalette from './commandPalette';
+import * as copyNoteExternalLink from './copyNoteExternalLink';
 import * as deleteFolder from './deleteFolder';
 import * as duplicateNote from './duplicateNote';
 import * as editAlarm from './editAlarm';
@@ -58,6 +59,7 @@ const index: any[] = [
 	addNoteToWhiteboard,
 	addProfile,
 	commandPalette,
+	copyNoteExternalLink,
 	deleteFolder,
 	duplicateNote,
 	editAlarm,

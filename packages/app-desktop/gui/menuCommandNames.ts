@@ -2,6 +2,7 @@ export default function() {
 	return [
 		'attachFile',
 		'copyDevCommand',
+		'copyNoteExternalLink',
 		'exportPdf',
 		'focusElementNoteBody',
 		'focusElementNoteViewer',

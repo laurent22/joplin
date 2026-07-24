@@ -864,6 +864,7 @@ function useMenu(props: Props) {
 						menuItemDic.toggleExternalEditing,
 						separator(),
 						menuItemDic.linkToNote,
+						menuItemDic.copyNoteExternalLink,
 						menuItemDic.setTags,
 						menuItemDic.showShareNoteDialog,
 						menuItemDic.convertNoteToMarkdown,

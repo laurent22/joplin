@@ -5,7 +5,6 @@ import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
-import { getNoteCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import bridge from '../../services/bridge';
 import BaseModel from '@joplin/lib/BaseModel';
 import Note from '@joplin/lib/models/Note';
@@ -133,12 +132,8 @@ export default class NoteListUtils {
 
 			if (noteIds.length === 1) {
 				menu.append(
-					new MenuItem({
-						label: _('Copy external link'),
-						click: () => {
-							clipboard.writeText(getNoteCallbackUrl(noteIds[0]));
-						},
-					}),
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
+					new MenuItem(menuUtils.commandToStatefulMenuItem('copyNoteExternalLink', noteIds[0]) as any),
 				);
 			}
 

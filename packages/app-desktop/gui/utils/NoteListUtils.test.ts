@@ -100,7 +100,7 @@ describe('NoteListUtils', () => {
 			'deleteNote',
 			'separator',
 			'Copy Markdown link',
-			'Copy external link',
+			'copyNoteExternalLink',
 			'separator',
 			'Export',
 
