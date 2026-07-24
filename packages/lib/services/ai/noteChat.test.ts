@@ -100,7 +100,7 @@ describe('noteChat', () => {
 				body: 'b',
 				selection: null,
 			},
-			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'readNoteContent'],
+			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'readNote'],
 		},
 		{
 			label: 'offers replaceFencedBlock when Mermaid block present',
@@ -109,14 +109,16 @@ describe('noteChat', () => {
 				body: '```mermaid\ngitGraph\n\tcommit\n```\n',
 				selection: null,
 			},
-			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock', 'readNoteContent'],
+			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock', 'readNote'],
 		},
 	])('toolDefinitions should include the expected operations (case $label)', ({ note, expectedOperations }) => {
 		const { commands, context } = makeTestContext(note);
 		const editSchemaItems = new ToolIndex({ note: context, commands }).enabledTools();
 
 		const allowedSchemaOperations = editSchemaItems.map(item => item.id).sort();
-		expect(allowedSchemaOperations).toEqual([...expectedOperations, 'help.disabled_tools'].sort());
+		expect(
+			allowedSchemaOperations.filter(id => id.startsWith('editor.')),
+		).toEqual(expectedOperations.map(id => `editor.${id}`).sort());
 	});
 
 	test('estimateTokens approximates char/4', () => {
@@ -252,8 +254,8 @@ describe('noteChat', () => {
 		expect(result).toMatchObject([
 			{ role: ChatRole.System },
 			{ role: ChatRole.User, content: 'test' },
-			{ role: ChatRole.Assistant, content: '', toolCalls: [{ toolName: 'readNoteContent' }] },
-			{ role: ChatRole.Tool, content: 'Body', toolName: 'readNoteContent' },
+			{ role: ChatRole.Assistant, content: '', toolCalls: [{ toolName: 'editor.readNote' }] },
+			{ role: ChatRole.Tool, content: 'Body', toolName: 'editor.readNote' },
 			{ role: ChatRole.Assistant, content: '' },
 		]);
 	});

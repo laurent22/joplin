@@ -93,14 +93,14 @@ const createHistory = (history: ChatMessage[], newMessage: string, context: Note
 				content: '',
 				hide: true,
 				toolCalls: [
-					{ callId, arguments: { }, toolName: 'readNoteContent', parseError: null },
+					{ callId, arguments: { }, toolName: 'editor.readNote', parseError: null },
 				],
 			},
 			{
 				role: ChatRole.Tool,
 				content: context.body,
 				toolCallId: callId,
-				toolName: 'readNoteContent',
+				toolName: 'editor.readNote',
 				userDescription: '',
 				isEdit: false,
 				isError: false,

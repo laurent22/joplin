@@ -30,7 +30,9 @@ export const isValidEditOp = (operation: string): operation is EditOp['op'] => {
 
 // Tools that interact with the editor
 export const isEditorToolCall = (toolId: string) => {
-	return isValidEditOp(toolId) || toolId === 'readNoteContent';
+	if (!toolId.startsWith('editor.')) return false;
+	toolId = toolId.replace(/^editor\./, '');
+	return isValidEditOp(toolId) || toolId === 'readNote';
 };
 
 const toolCallToEditOperation = (toolName: string, args: ToolInput): EditOp => {
@@ -76,7 +78,7 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 	const result: ToolDefinition[] = [];
 	const addSelectionOperations = () => {
 		result.push(buildTool({
-			id: 'replaceSelection',
+			id: 'editor.replaceSelection',
 			userDescription: (_input: ToolInput, output: string) => output,
 			description: 'Replaces the text currently selected by the user.',
 			inputSchema: {
@@ -106,7 +108,7 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 	const addReadEditOperations = () => {
 		result.push(
 			{
-				id: 'readNoteContent',
+				id: 'editor.readNote',
 				userDescription: () => _('Read note'),
 				description: 'Get the current, up-to-date content of the note. This returns the full content of the note that\'s currently open in Joplin\'s editor.',
 				inputSchema: {
@@ -121,7 +123,7 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 		);
 
 		const buildEditTool = (id: EditOp['op']) => ({
-			id,
+			id: `editor.${id}`,
 			userDescription: (args: ToolInput) => (
 				describeEditOperation(toolCallToEditOperation(id, args))
 			),
