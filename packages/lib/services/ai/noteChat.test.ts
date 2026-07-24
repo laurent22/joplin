@@ -4,6 +4,7 @@ import { expectThrow, setupDatabase, switchClient, withWarningSilenced } from '.
 import Setting from '../../models/Setting';
 import { NoteContext } from './tools/types';
 import ToolIndex from './tools/ToolIndex';
+import { isEditorToolCall } from './tools/buildEditorTools';
 
 const makeTestContext = (defaultContext: Partial<NoteContext>) => {
 	const initialContext: NoteContext = {
@@ -100,7 +101,7 @@ describe('noteChat', () => {
 				body: 'b',
 				selection: null,
 			},
-			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'readNote'],
+			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'readNoteBody'],
 		},
 		{
 			label: 'offers replaceFencedBlock when Mermaid block present',
@@ -109,7 +110,7 @@ describe('noteChat', () => {
 				body: '```mermaid\ngitGraph\n\tcommit\n```\n',
 				selection: null,
 			},
-			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock', 'readNote'],
+			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock', 'readNoteBody'],
 		},
 	])('toolDefinitions should include the expected operations (case $label)', ({ note, expectedOperations }) => {
 		const { commands, context } = makeTestContext(note);
@@ -117,8 +118,8 @@ describe('noteChat', () => {
 
 		const allowedSchemaOperations = editSchemaItems.map(item => item.id).sort();
 		expect(
-			allowedSchemaOperations.filter(id => id.startsWith('editor.')),
-		).toEqual(expectedOperations.map(id => `editor.${id}`).sort());
+			allowedSchemaOperations.filter(id => isEditorToolCall(id)),
+		).toEqual([...expectedOperations].sort());
 	});
 
 	test('estimateTokens approximates char/4', () => {
@@ -129,7 +130,7 @@ describe('noteChat', () => {
 	test('toolDefinitions advertises replaceFencedBlock with structured-block guidance', () => {
 		const { context, commands } = makeTestContext({ title: 'n', body: '```abc\n```', selection: null });
 		const tools = new ToolIndex({ note: context, commands }).enabledTools();
-		const toolDefinition = tools.find(tool => tool.id === 'editor.replaceFencedBlock');
+		const toolDefinition = tools.find(tool => tool.id === 'replaceFencedBlock');
 		expect(toolDefinition).toBeTruthy();
 		expect(toolDefinition.description).toContain('jsoncanvas');
 		// Guidance to use the op for structured blocks, appendToNote for creation.
@@ -160,8 +161,8 @@ describe('noteChat', () => {
 
 	test('runTools should describe successful edit operations', async () => {
 		const toolCalls: ChatToolCall[] = [
-			{ toolName: 'editor.appendToNote', callId: 'call-1', arguments: { text: 'Test.' }, parseError: null },
-			{ toolName: 'editor.replaceRange', callId: 'call-2', arguments: { anchor: 'Body', text: 'Updated' }, parseError: null },
+			{ toolName: 'appendToNote', callId: 'call-1', arguments: { text: 'Test.' }, parseError: null },
+			{ toolName: 'replaceRange', callId: 'call-2', arguments: { anchor: 'Body', text: 'Updated' }, parseError: null },
 		];
 
 		const { onContext, commands } = makeTestContext({});
@@ -178,14 +179,14 @@ describe('noteChat', () => {
 		expect(result).toMatchObject([
 			{
 				role: ChatRole.Tool,
-				toolName: 'editor.appendToNote',
+				toolName: 'appendToNote',
 				toolCallId: 'call-1',
 				isError: false,
 				userDescription: 'Added 1 word',
 			},
 			{
 				role: ChatRole.Tool,
-				toolName: 'editor.replaceRange',
+				toolName: 'replaceRange',
 				toolCallId: 'call-2',
 				isError: false,
 				userDescription: 'Removed 1 word\nAdded 1 word',
@@ -198,14 +199,14 @@ describe('noteChat', () => {
 		const failingAndSucceedingToolCall = (repeat: number) => [
 			`/repeat ${repeat}`,
 			// one failing tool
-			`/tool editor.replaceRange ${JSON.stringify({ anchor: 'does not exist', text: 'replaced' })}`,
+			`/tool replaceRange ${JSON.stringify({ anchor: 'does not exist', text: 'replaced' })}`,
 			// and one tool call that should succeed
-			'/tool editor.appendToNote { "text": "test" }',
+			'/tool appendToNote { "text": "test" }',
 		].join('\n');
 
 		const userMessage = failingAndSucceedingToolCall(32);
 		const result = await withWarningSilenced(
-			/call editor\.replaceRange failed/,
+			/call replaceRange failed/,
 			() => runNoteChat(
 				onContext,
 				[],
@@ -220,8 +221,8 @@ describe('noteChat', () => {
 		for (let i = 0; i < 5; i++) {
 			failedAttempts.push(
 				{ role: ChatRole.Assistant },
-				{ role: ChatRole.Tool, isError: true, toolName: 'editor.replaceRange' },
-				{ role: ChatRole.Tool, isError: false, toolName: 'editor.appendToNote' },
+				{ role: ChatRole.Tool, isError: true, toolName: 'replaceRange' },
+				{ role: ChatRole.Tool, isError: false, toolName: 'appendToNote' },
 			);
 		}
 
@@ -235,7 +236,7 @@ describe('noteChat', () => {
 
 			...failedAttempts,
 
-			{ role: ChatRole.Assistant, content: 'tool not found: editor.replaceRange\ntool not found: editor.appendToNote' },
+			{ role: ChatRole.Assistant, content: 'tool not found: replaceRange\ntool not found: appendToNote' },
 		]);
 	});
 
@@ -254,8 +255,8 @@ describe('noteChat', () => {
 		expect(result).toMatchObject([
 			{ role: ChatRole.System },
 			{ role: ChatRole.User, content: 'test' },
-			{ role: ChatRole.Assistant, content: '', toolCalls: [{ toolName: 'editor.readNote' }] },
-			{ role: ChatRole.Tool, content: 'Body', toolName: 'editor.readNote' },
+			{ role: ChatRole.Assistant, content: '', toolCalls: [{ toolName: 'readNoteBody' }] },
+			{ role: ChatRole.Tool, content: 'Body', toolName: 'readNoteBody' },
 			{ role: ChatRole.Assistant, content: '' },
 		]);
 	});

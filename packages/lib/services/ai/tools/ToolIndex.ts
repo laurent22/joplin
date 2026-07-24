@@ -75,7 +75,7 @@ export default class ToolIndex {
 				'**Getting access to more tools:** The following tools/capabilities are currently **disabled** in Joplin\'s settings:',
 				'| Tool ID | Setting name | Description |',
 				'|---------|--------------|-------------|',
-				...tools.map((tool) => `| ${tool.id} | ${toolSettingName(tool.id)} | ${substrWithEllipsis(tool.description, 0, 50)} |`),
+				...tools.map((tool) => `| \`${tool.id}\` | ${toolSettingName(tool.id)} | ${substrWithEllipsis(tool.description, 0, 50)} |`),
 				'',
 				'Communication is important here! The user may not know that these tools exist or how to enable them:',
 				`If you need one or more of these tools, please ask the user to enable them from the **${toolsSectionName()}** tab of Joplin's settings screen.`,
