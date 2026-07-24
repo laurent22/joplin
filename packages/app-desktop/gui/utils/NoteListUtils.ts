@@ -132,8 +132,7 @@ export default class NoteListUtils {
 
 			if (noteIds.length === 1) {
 				menu.append(
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
-					new MenuItem(menuUtils.commandToStatefulMenuItem('copyNoteExternalLink', noteIds[0]) as any),
+					new MenuItem(menuUtils.commandToStatefulMenuItem('copyNoteExternalLink', noteIds[0])),
 				);
 			}
 
