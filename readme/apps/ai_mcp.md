@@ -21,15 +21,13 @@ Joplin exposes a small, fixed set of tools. Each can be turned on or off individ
 | Edit tags on a note | Add or remove tags by title. | **Off** |
 | Create notebook | Create a new notebook, optionally inside an existing one. | **Off** |
 
-The "write" tools default to off so you have to deliberately let an AI app modify your data.
-
 ## Turning it on
 
 The MCP server runs on top of the [Web Clipper service](https://github.com/laurent22/joplin/blob/dev/readme/apps/clipper.md), so the Web Clipper must be running.
 
 1. Open the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md) and go to **Web Clipper**. Make sure the service is started, and note the port number and authorisation token.
-2. Go to the **MCP** section. Tick **Enable MCP server**.
-3. Decide which tools to allow.
+2. Go to the **AI** section. Tick **Enable MCP server**.
+3. Open the **Tools** section. Decide which tools to allow.
 
 Joplin's MCP server is HTTP-based and listens on the same port as the Web Clipper.
 
