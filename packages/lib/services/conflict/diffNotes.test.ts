@@ -95,7 +95,9 @@ describe('autoMerge', () => {
 		const remote = 'Line one  \nLine two\n\nLast para.';
 		const result = autoMerge(base, local, remote);
 		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
-		expect(result.mergedText).toContain('Line one  \n');
+		// Assert the full result: the hard line break survives and the edited last
+		// paragraph is merged correctly, with nothing else altered.
+		expect(result.mergedText).toBe('Line one  \nLine two\n\nLast para, edited.');
 	});
 
 	test('with empty base should mark only the differing line as a conflict', () => {
