@@ -62,7 +62,8 @@ const systemPrompt = (note: NoteContext) => {
 	} else {
 		lines.push(
 			'Tool guidance:',
-			'- You have access to various tools that allow updating the note. For example, if you need to add the text "test" to the end of the note, do this using the "appendToNote" tool.',
+			'- You have access to various tools that allow updating the note. For example, if you need to add the text "test" to the end of the note, do this using the "editor.appendToNote" tool.',
+			'- Tools scoped to the current note editor have an "editor." prefix. Prefer these to global tools.',
 			'- Some tools call for anchors. Anchors must be exact substrings of the current note body. Keep them short but unique.',
 		);
 	}
