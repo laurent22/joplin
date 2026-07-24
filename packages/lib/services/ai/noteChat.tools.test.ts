@@ -71,10 +71,10 @@ describe('noteChat.tools', () => {
 		expect(await Tag.tagsByNoteId(note.id)).toHaveLength(1);
 	});
 
-	test('disabled_tool_info\'s description should list the disabled tools', async () => {
+	test('help.disabled_tools\'s description should list the disabled tools', async () => {
 		const note = await Note.save({ title: 'test' });
 
-		const toolInfoMessage = '/describe-tool disabled_tool_info';
+		const toolInfoMessage = '/describe-tool help.disabled_tools';
 		const runChat = () => (
 			runChatForNote(
 				note,
@@ -91,14 +91,14 @@ describe('noteChat.tools', () => {
 		expect(infoMessage).toBeTruthy();
 
 		const content = infoMessage.content;
-		expect(content).toContain('disabled_tool_info: **Getting access to more tools:**');
+		expect(content).toContain('help.disabled_tools: **Getting access to more tools:**');
 		expect(content).toContain('appendToNote');
 	});
 
-	test('running disabled_tool_info should provide information about disabled tools', async () => {
+	test('running help.disabled_tools should provide information about disabled tools', async () => {
 		const note = await Note.save({ title: 'test' });
 
-		const toolCallMessage = `/tool disabled_tool_info ${JSON.stringify({ tool_id: 'manage_tags' })}`;
+		const toolCallMessage = `/tool help.disabled_tools ${JSON.stringify({ tool_id: 'manage_tags' })}`;
 		const runChat = () => (
 			runChatForNote(
 				note,
@@ -111,7 +111,7 @@ describe('noteChat.tools', () => {
 		// Should not allow managing tags when disabled in settings
 		Setting.setValue('ai.tool.manage_tags.enabled', false);
 		const messages = await runChat();
-		const infoMessage = messages.find(message => message.role === ChatRole.Tool && message.toolName === 'disabled_tool_info');
+		const infoMessage = messages.find(message => message.role === ChatRole.Tool && message.toolName === 'help.disabled_tools');
 		expect(infoMessage).toBeTruthy();
 		expect(infoMessage.content).toContain('Tool `manage_tags` is disabled in Joplin\'s settings');
 	});

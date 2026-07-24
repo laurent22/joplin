@@ -91,7 +91,7 @@ describe('noteChat', () => {
 				body: 'long body text',
 				selection: 'just this bit',
 			},
-			expectedOperations: ['replaceSelection', 'disabled_tool_info'],
+			expectedOperations: ['replaceSelection'],
 		},
 		{
 			label: 'offers anchor operations when no selection present',
@@ -100,7 +100,7 @@ describe('noteChat', () => {
 				body: 'b',
 				selection: null,
 			},
-			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'readNoteContent', 'disabled_tool_info'],
+			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'readNoteContent'],
 		},
 		{
 			label: 'offers replaceFencedBlock when Mermaid block present',
@@ -109,14 +109,14 @@ describe('noteChat', () => {
 				body: '```mermaid\ngitGraph\n\tcommit\n```\n',
 				selection: null,
 			},
-			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock', 'readNoteContent', 'disabled_tool_info'],
+			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock', 'readNoteContent'],
 		},
 	])('toolDefinitions should include the expected operations (case $label)', ({ note, expectedOperations }) => {
 		const { commands, context } = makeTestContext(note);
 		const editSchemaItems = new ToolIndex({ note: context, commands }).enabledTools();
 
 		const allowedSchemaOperations = editSchemaItems.map(item => item.id).sort();
-		expect(allowedSchemaOperations).toEqual([...expectedOperations].sort());
+		expect(allowedSchemaOperations).toEqual([...expectedOperations, 'help.disabled_tools'].sort());
 	});
 
 	test('estimateTokens approximates char/4', () => {

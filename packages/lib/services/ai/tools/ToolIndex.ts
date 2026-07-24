@@ -69,7 +69,7 @@ export default class ToolIndex {
 		const disabledToolIds = tools.map(t => t.id);
 
 		return buildTool<{ tool_id: string }>({
-			id: 'disabled_tool_info',
+			id: 'help.disabled_tools',
 			enabled: true,
 			description: [
 				'**Getting access to more tools:** The following tools/capabilities are currently **disabled** in Joplin\'s settings:',
