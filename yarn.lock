@@ -8064,8 +8064,8 @@ __metadata:
   linkType: hard
 
 "@crowdin/cli@npm:4":
-  version: 4.14.1
-  resolution: "@crowdin/cli@npm:4.14.1"
+  version: 4.14.3
+  resolution: "@crowdin/cli@npm:4.14.3"
   dependencies:
     command-exists-promise: "npm:^2.0.2"
     node-fetch: "npm:2.7.0"
@@ -8074,7 +8074,7 @@ __metadata:
     yauzl: "npm:^3.2.0"
   bin:
     crowdin: jdeploy-bundle/jdeploy.js
-  checksum: 10/ea45a7e6c7668cb4d8d3a08bfcba7988cccb2b52f815838f913c4ca50c0d2b9834a8e2ebaf476489c3e4e4731d8f7eb3f7f880b2452817b5126ae31013a86775
+  checksum: 10/6a62223b6df96ba06777b8f1985843abccb5fc5421fca6fc4189e3498ce5cd3ccdfd0d5aad8ae14dc50306021047a72b1e0c65b46e9ca073a3ba140e402c3d52
   languageName: node
   linkType: hard
 
@@ -12514,7 +12514,7 @@ __metadata:
     "@react-native-community/geolocation": "npm:3.4.0"
     "@react-native-community/netinfo": "npm:11.5.2"
     "@react-native-community/push-notification-ios": "npm:1.12.0"
-    "@react-native-documents/picker": "npm:11.0.4"
+    "@react-native-documents/picker": "npm:12.0.1"
     "@react-native-vector-icons/fontawesome5": "npm:12.4.0"
     "@react-native-vector-icons/get-image": "npm:12.3.0"
     "@react-native-vector-icons/ionicons": "npm:12.5.0"
@@ -12962,7 +12962,7 @@ __metadata:
     "@types/json5": "npm:2.2.0"
     "@types/markdown-it": "npm:13.0.9"
     "@types/node": "npm:18.19.130"
-    abcjs: "npm:6.6.2"
+    abcjs: "npm:6.6.3"
     font-awesome-filetypes: "npm:2.1.0"
     fs-extra: "npm:11.3.4"
     highlight.js: "npm:11.11.1"
@@ -15961,13 +15961,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-documents/picker@npm:11.0.4":
-  version: 11.0.4
-  resolution: "@react-native-documents/picker@npm:11.0.4"
+"@react-native-documents/picker@npm:12.0.1":
+  version: 12.0.1
+  resolution: "@react-native-documents/picker@npm:12.0.1"
   peerDependencies:
     react: "*"
     react-native: ">=0.79.0"
-  checksum: 10/61f37a2bcdbe99da949e24991921fa55cb11e66f4b5e5df684ca2bb599b43c42c4a49cff174f9bffa0baa18582b6069ac691179887969b62213144a4873a847d
+  checksum: 10/5d915828a2baade9b476589738c2dc4ac192b4444006e198e15676e952991bdbf472163bb739592abf581fb7402a193c9cc49319fa986fb7fd6434aaae3a3a68
   languageName: node
   linkType: hard
 
@@ -20812,10 +20812,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"abcjs@npm:6.6.2":
-  version: 6.6.2
-  resolution: "abcjs@npm:6.6.2"
-  checksum: 10/f026bbbf38fb14bb8d711cb5222a2e6f2380dff9de3cc6a094135dd8a6612190a67fc1640e244309067d0379675ca48988c850c1fb0a0226ba20a2fbd5c549b8
+"abcjs@npm:6.6.3":
+  version: 6.6.3
+  resolution: "abcjs@npm:6.6.3"
+  checksum: 10/7975552dcb9b7269a37b3d05c830021b44ceac8d49afa0c74e98def0dd759db0e57359c0c4cf8a0e6be4b7c5a8cbaf7c284b17d8a0ae3688153509e5aee56460
   languageName: node
   linkType: hard
 
