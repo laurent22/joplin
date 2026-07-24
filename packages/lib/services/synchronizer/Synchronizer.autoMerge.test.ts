@@ -1,4 +1,4 @@
-import { synchronizerStart, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { synchronizerStart, setupDatabaseAndSynchronizer, switchClient, synchronizer } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import ConflictNoteState from '../../models/ConflictNoteState';
@@ -190,5 +190,27 @@ describe('Synchronizer.autoMerge', () => {
 		// changes merged into it. This confirms that auto-merge was skipped.
 		expect(conflicts[0].body).toContain('First paragraph, edited locally.');
 		expect(conflicts[0].body).not.toContain('Third paragraph, edited remotely.');
+	}));
+
+	it('should skip auto-merge for read-only items and keep the local change as a conflict note', (async () => {
+		// A read-only item cannot have its local change pushed to the sync target, so
+		// the change must be preserved as a conflict note. Even a title change that
+		// only one side made (which would normally auto-merge) must not be applied.
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'un', parent_id: folder.id });
+		await synchronizerStart();
+
+		await Note.save({ id: note.id, title: 'un mod' });
+		synchronizer().testingHooks_ = ['itemIsReadOnly'];
+		await synchronizerStart();
+		synchronizer().testingHooks_ = [];
+
+		// The original note keeps the read-only remote title, not the merged one.
+		expect((await Note.load(note.id)).title).toBe('un');
+
+		// The user's change is preserved as a conflict note.
+		const conflicts = await Note.conflictedNotes();
+		expect(conflicts).toHaveLength(1);
+		expect(conflicts[0].title).toBe('un mod');
 	}));
 });

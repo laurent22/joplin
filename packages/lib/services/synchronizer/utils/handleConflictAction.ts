@@ -64,13 +64,15 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		// automatically, and only real conflicts are left for the user.
 		//
 		// Skip this when the content cannot be merged safely:
+		// - Read-only items: the local change cannot be pushed to the sync target, so
+		//   it must be preserved as a conflict note rather than merged into the note.
 		// - Encrypted notes: the note body is still encrypted.
 		// - Locked notes : these do not use the new conflict
 		//   resolution flow and continue with the existing manual conflict process.
 		// ------------------------------------------------------------------------------
 
 		let merge: ReturnType<typeof autoMergeNote>|null = null;
-		if (mustHandleConflict && remoteContent) {
+		if (mustHandleConflict && remoteContent && !itemIsReadOnly) {
 			const localNote = local as NoteEntity;
 			const remoteNote = remoteContent as NoteEntity;
 			const cannotAutoMerge = (note: NoteEntity) => !!note.encryption_applied || !!note.encryption_cipher_text || !!note.is_locked;
