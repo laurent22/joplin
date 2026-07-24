@@ -101,23 +101,7 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 		}));
 	};
 
-	const addReadEditOperations = () => {
-		result.push(
-			{
-				id: 'editor.readNote',
-				userDescription: () => _('Read note'),
-				description: 'Get the current, up-to-date content of the note. This returns the full content of the note that\'s currently open in Joplin\'s editor.',
-				inputSchema: {
-					type: 'object',
-					required: [],
-					additionalProperties: false,
-				},
-				handler: () => {
-					return Promise.resolve(note.body);
-				},
-			},
-		);
-
+	const addEditOperations = () => {
 		const buildEditTool = (id: EditOp['op']) => ({
 			id: `editor.${id}`,
 			userDescription: (args: ToolInput) => (
@@ -219,11 +203,31 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 			});
 		}
 	};
+	const addReadOperation = () => {
+		result.push(
+			{
+				id: 'editor.readNote',
+				// Always enabled in the editor context:
+				enabled: true,
+				userDescription: () => _('Read note'),
+				description: 'Get the current, up-to-date content of the note. This returns the full content of the note that\'s currently open in Joplin\'s editor.',
+				inputSchema: {
+					type: 'object',
+					required: [],
+					additionalProperties: false,
+				},
+				handler: () => {
+					return Promise.resolve(note.body);
+				},
+			},
+		);
+	};
 
 	if (note.selection) {
 		addSelectionOperations();
 	} else {
-		addReadEditOperations();
+		addReadOperation();
+		addEditOperations();
 	}
 
 	return result;

@@ -875,7 +875,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 			show: showAiTools,
 			label: () => _('Allow editing the current note (chat panel only)'),
-			description: () => _('Enables the default read and edit operations for notes with an open AI chat panel. Does not apply to MCP.'),
+			description: () => _('Enables the default edit operations for notes with an open AI chat panel. When disabled, the chat panel can still read the open note. Does not apply to MCP.'),
 			storage: SettingStorage.File,
 		},
 

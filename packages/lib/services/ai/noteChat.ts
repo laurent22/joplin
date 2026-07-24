@@ -250,10 +250,11 @@ const assertNotCancelled = (signal: AbortSignal) => {
 };
 
 const runTools = async (
-	chat: ChatResult, initialContext: NoteContext, context: OnContext, commands: ChatCommands, signal: AbortSignal,
+	chat: ChatResult, initialContext: NoteContext, getContext: OnContext, commands: ChatCommands, signal: AbortSignal,
 ) => {
 	assertNotCancelled(signal);
 
+	const currentContext = await getContext();
 	let chatResponses: ChatToolMessage[] = [];
 
 	const isEdit = (toolName: string) => isEditorToolCall(toolName) && toolName !== 'editor.readNote';
@@ -315,67 +316,43 @@ const runTools = async (
 		return body;
 	};
 
-	// Only replaceSelection operations allowed when there's a selection
-	const currentContext = await context();
-	if (currentContext.selection) {
-		const expectedName = 'replaceSelection';
-		const action = chat.toolCalls.find(toolCall => toolCall.toolName === expectedName);
-		if (action) {
-			if (action.parseError) {
-				respondFailure(action, action.parseError);
-			} else {
-				await runTool(action, currentContext.body);
-			}
+	const initialBody = initialContext.body;
+	let body = currentContext.body;
+	const hadExternalBodyChanges = initialBody !== body;
+
+	for (const toolCall of chat.toolCalls) {
+		if (toolCall.parseError) {
+			respondFailure(toolCall, toolCall.parseError);
+		} else {
+			body = await runTool(toolCall, body);
 		}
+	}
 
-		// Only one tool call is allowed in this context
-		for (const toolCall of chat.toolCalls) {
-			if (action === toolCall) continue;
-			if (toolCall.toolName === expectedName) {
-				respondFailure(toolCall, `Only a single ${expectedName} tool call is valid in this context`);
-			} else {
-				respondFailure(toolCall, `Only the ${expectedName} tool is valid in this context.`);
+	const appliedEdits = chatResponses.filter(r => r.isEdit && !r.isError);
+	if (appliedEdits.length > 0 && body !== initialBody) {
+		try {
+			// Avoid overwriting user-created changes
+			if (hadExternalBodyChanges) {
+				throw new Error(_('The note changed while the request was running; edits were not applied. Try again.'));
 			}
-		}
-	} else {
-		const initialBody = initialContext.body;
-		let body = currentContext.body;
-		const hadExternalBodyChanges = initialBody !== body;
 
-		for (const toolCall of chat.toolCalls) {
-			if (toolCall.parseError) {
-				respondFailure(toolCall, toolCall.parseError);
-			} else {
-				body = await runTool(toolCall, body);
-			}
-		}
+			await commands.updateNoteBody(body, initialBody);
+		} catch (error) {
+			logger.error('Failed to update body', error);
 
-		const appliedEdits = chatResponses.filter(r => r.isEdit && !r.isError);
-		if (appliedEdits.length > 0 && body !== initialBody) {
-			try {
-				// Avoid overwriting user-created changes
-				if (hadExternalBodyChanges) {
-					throw new Error(_('The note changed while the request was running; edits were not applied. Try again.'));
-				}
+			// All of the edit operations depend on updating the body, so they all
+			// need to be marked as failures:
+			const successfulEditResponses = new Set(appliedEdits);
+			chatResponses = chatResponses.map(response => {
+				if (!successfulEditResponses.has(response)) return response;
+				return {
+					...response,
+					content: 'failed to update body',
+					isError: true,
+				};
+			});
 
-				await commands.updateNoteBody(body, initialBody);
-			} catch (error) {
-				logger.error('Failed to update body', error);
-
-				// All of the edit operations depend on updating the body, so they all
-				// need to be marked as failures:
-				const successfulEditResponses = new Set(appliedEdits);
-				chatResponses = chatResponses.map(response => {
-					if (!successfulEditResponses.has(response)) return response;
-					return {
-						...response,
-						content: 'failed to update body',
-						isError: true,
-					};
-				});
-
-				commands.displayError(error.message ?? String(error));
-			}
+			commands.displayError(error.message ?? String(error));
 		}
 	}
 
