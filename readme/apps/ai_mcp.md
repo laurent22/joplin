@@ -29,7 +29,7 @@ The MCP server runs on top of the [Web Clipper service](https://github.com/laure
 
 1. Open the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md) and go to **Web Clipper**. Make sure the service is started, and note the port number and authorisation token.
 2. Go to the **MCP** section. Tick **Enable MCP server**.
-3. Decide which tools to allow. The read-only tools are pre-ticked; the write tools are not.
+3. Decide which tools to allow.
 
 Joplin's MCP server is HTTP-based and listens on the same port as the Web Clipper.
 
