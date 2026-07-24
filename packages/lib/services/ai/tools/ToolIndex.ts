@@ -97,7 +97,7 @@ export default class ToolIndex {
 			},
 			handler: async (input) => {
 				const toolId = input.tool_id;
-				if (typeof toolId !== 'string') throw new ToolError('Missing or invalid input_id');
+				if (typeof toolId !== 'string') throw new ToolError('Missing or invalid tool_id');
 				if (!disabledToolIds.includes(toolId)) throw new ToolError(`Invalid tool_id: ${JSON.stringify(toolId)}. Must be one of ${JSON.stringify(disabledToolIds)}`);
 
 				const description = this.disabledTools_().find(tool => tool.id === input.tool_id)?.description;
