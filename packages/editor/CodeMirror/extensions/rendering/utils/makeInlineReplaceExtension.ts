@@ -21,7 +21,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 		view.dom.ownerDocument.addEventListener('mouseup', this.onMouseUp);
 		view.dom.addEventListener('touchstart', this.onTouchStart);
 		view.dom.addEventListener('click', this.onMouseUp);
-		view.dom.ownerDocument.addEventListener('touchcancel', this.onMouseUp);
+		view.dom.ownerDocument.addEventListener('touchcancel', this.onTouchCancel);
 		this.updateDecorations(view);
 	}
 
@@ -30,7 +30,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 		this.view.dom.ownerDocument.removeEventListener('mouseup', this.onMouseUp);
 		this.view.dom.removeEventListener('touchstart', this.onTouchStart);
 		this.view.dom.removeEventListener('click', this.onMouseUp);
-		this.view.dom.ownerDocument.removeEventListener('touchcancel', this.onMouseUp);
+		this.view.dom.ownerDocument.removeEventListener('touchcancel', this.onTouchCancel);
 		this.touchSelectionInProgress = false;
 	}
 
@@ -42,6 +42,12 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 
 	private onTouchStart = () => {
 		this.touchSelectionInProgress = true;
+	};
+
+	private onTouchCancel = () => {
+		this.mouseSelectionInProgress = false;
+		this.touchSelectionInProgress = false;
+		this.view.dispatch({ effects: updateInlineDecorationsEffect.of(null) });
 	};
 
 	private onMouseUp = (event?: Event) => {
