@@ -1,4 +1,4 @@
-import type { ToolDefinition, ToolOutput } from '../ai/types';
+import { ToolDefinition, ToolOutput } from '../ai/tools/types';
 
 export interface ToolTextContent {
 	type: 'text';
