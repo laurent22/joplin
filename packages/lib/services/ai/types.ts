@@ -1,3 +1,5 @@
+import { ToolSpec } from './tools/types';
+
 export enum ChatRole {
 	System = 'system',
 	User = 'user',
@@ -43,32 +45,6 @@ export interface ResponseFormat {
 		schema: JsonSchema;
 	};
 }
-
-export type ToolInput = Record<string, unknown>;
-
-// Throw this from a tool handler for failure modes the LLM should see and
-// recover from (note not found, ambiguous match, missing parameter, etc.).
-// Plain Errors are treated as internal bugs.
-export class ToolError extends Error {}
-
-export type ToolOutput = string|Record<string, unknown>;
-
-export interface ToolSpec {
-	id: string;
-	description: string;
-	// Information provided by the model to the tool
-	inputSchema: JsonSchema;
-}
-
-export interface ToolContext {
-	selectedFolderId?: string;
-}
-
-export type ToolDefinition<Output extends ToolOutput|unknown = unknown> = ToolSpec & {
-	handler: (input: ToolInput, context: ToolContext)=> Promise<Output>;
-	// A human-readable description of an action completed by the tool
-	userDescription: (input: ToolInput, output: Output)=> string;
-};
 
 export interface ChatOptions {
 	temperature?: number;

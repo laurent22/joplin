@@ -1,9 +1,9 @@
-import Note from '../../../models/Note';
-import Folder from '../../../models/Folder';
-import Tag from '../../../models/Tag';
-import { ToolError } from '../../ai/types';
-import { _ } from '../../../locale';
-import buildTool from './utils/buildTool';
+import Note from '../../../../models/Note';
+import Folder from '../../../../models/Folder';
+import Tag from '../../../../models/Tag';
+import { _ } from '../../../../locale';
+import buildTool from '../utils/buildTool';
+import { ToolError } from '../types';
 
 interface Input {
 	id?: string;

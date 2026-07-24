@@ -1,15 +1,11 @@
 import AiService from './AiService';
-import { ChatMessage, ChatResult, ChatRole, ChatToolCall, ChatToolMessage, ToolDefinition, ToolError, ToolInput } from './types';
+import { ChatMessage, ChatResult, ChatRole, ChatToolCall, ChatToolMessage } from './types';
 import JoplinError from '../../JoplinError';
 import Logger from '@joplin/utils/Logger';
-import findFencedBlock from './utils/findFencedBlock';
-import { applyAnchorEdits, supportedStructuredBlockTags } from './applyNoteEdits';
-import { hasOwnProperty } from '@joplin/utils/object';
-const Countable = require('../../countable/Countable');
-import { _, _n } from '../../locale';
-import Setting from '../../models/Setting';
-import { describeToolNotFoundFailure, enabledTools } from './tools/index';
-import buildTool from './tools/utils/buildTool';
+import { _ } from '../../locale';
+import { EditOp, isValidEditOp } from './tools/buildEditorTools';
+import { NoteContext, ToolError } from './tools/types';
+import ToolIndex from './tools/ToolIndex';
 
 const logger = Logger.create('noteChat');
 
@@ -18,27 +14,6 @@ const logger = Logger.create('noteChat');
 const noteBodyTokenBudget = 80000;
 
 const charsPerToken = 4;
-
-export type EditOp =
-	| { op: 'replaceSelection'; text: string }
-	| { op: 'insertBefore'; anchor: string; text: string }
-	| { op: 'insertAfter'; anchor: string; text: string }
-	| { op: 'appendToNote'; text: string }
-	| { op: 'replaceRange'; anchor: string; text: string }
-	| { op: 'replaceFencedBlock'; tag: string; text: string }
-;
-
-const knownOps = new Set<EditOp['op']>([
-	'replaceSelection', 'insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock',
-]);
-
-export interface NoteContext {
-	title: string;
-	noteId: string;
-	folderId: string;
-	body: string;
-	selection: string | null;
-}
 
 export interface ChatReply {
 	reply: string;
@@ -60,10 +35,6 @@ const joplinMarkdownNotes = [
 	'- Whiteboards (canvas): ```` ```jsoncanvas ```` fenced blocks containing JSONCanvas 1.0 — the open spec at jsoncanvas.org. Use this when the user asks for a whiteboard, canvas, mind map, sticky notes, or similar spatial layout. A note that already contains a `jsoncanvas` block is a whiteboard; modifying its prose without preserving the block will break the whiteboard.',
 	'- HTML is allowed for features without a Markdown equivalent (e.g. `<s>strikethrough</s>`).',
 ].join('\n');
-
-const hasStructuredBlock = (note: NoteContext) => {
-	return supportedStructuredBlockTags.some(tag => !!findFencedBlock(note.body, tag, 0));
-};
 
 // The system prompt should be relatively constant across note changes to take advantage of prompt caching.
 // See https://developers.openai.com/api/docs/guides/prompt-caching
@@ -99,173 +70,6 @@ const systemPrompt = (note: NoteContext) => {
 	lines.push('Preserve the user\'s existing formatting conventions, including any Joplin-specific blocks already in the note.');
 
 	return lines.join('\n');
-};
-
-const toolDefinitions = (note: NoteContext, commands: ChatCommands) => {
-	const result: ToolDefinition[] = [];
-
-	const addSelectionOperations = () => {
-		result.push(buildTool({
-			id: 'replaceSelection',
-			userDescription: (_input: ToolInput, output: string) => output,
-			description: 'Replaces the text currently selected by the user.',
-			inputSchema: {
-				type: 'object',
-				properties: {
-					text: { type: 'string' },
-				},
-				required: ['text'],
-				additionalProperties: false,
-			},
-			handler: async (args: ToolInput) => {
-				if (!hasOwnProperty(args, 'text') || typeof args.text !== 'string') {
-					throw new ToolError('missing or invalid `text` property');
-				} else {
-					try {
-						await commands.replaceSelection(args.text, note.selection);
-					} catch (error) {
-						commands.displayError(error.message ?? String(error));
-						throw new ToolError('failed to replace selection');
-					}
-					return describeEditOperation({ op: 'replaceSelection', text: args.text });
-				}
-			},
-		}));
-	};
-
-	const addReadEditOperations = () => {
-		result.push(
-			{
-				id: 'readNoteContent',
-				userDescription: () => _('Read note'),
-				description: 'Get the current, up-to-date content of the note. This returns the full content of the note that\'s currently open in Joplin\'s editor.',
-				inputSchema: {
-					type: 'object',
-					required: [],
-					additionalProperties: false,
-				},
-				handler: () => {
-					return Promise.resolve(note.body);
-				},
-			},
-		);
-
-		const buildEditTool = (id: EditOp['op']) => ({
-			id,
-			userDescription: (args: ToolInput) => (
-				describeEditOperation(toolCallToEditOperation(id, args))
-			),
-			handler: async (args: ToolInput) => {
-				const editOperation = toolCallToEditOperation(id, args);
-				const { newBody, appliedEdits } = applyAnchorEdits(note.body, [editOperation], 0);
-				await commands.updateNoteBody(newBody, note.body);
-
-				if (appliedEdits.length !== 1) {
-					throw new Error(`Invalid state: Wrong number of applied edits, ${appliedEdits.length}`);
-				}
-
-				const edit = appliedEdits[0];
-				if (edit.status === 'applied') {
-					return describeEditOperation(editOperation);
-				} else {
-					throw new ToolError(edit.status);
-				}
-			},
-		});
-
-		result.push(
-			{
-				...buildEditTool('appendToNote'),
-				description: 'Adds text to the end of the current note: Text is always added to the end of the note. This tool does not require an anchor.',
-				inputSchema: {
-					type: 'object',
-					properties: {
-						text: { type: 'string' },
-					},
-					required: ['text'],
-					additionalProperties: false,
-				},
-			},
-		);
-
-		const anchoredSchema = (anchorDescription: string, textDescription: string) => ({
-			type: 'object',
-			properties: {
-				anchor: { type: 'string', description: anchorDescription },
-				text: { type: 'string', description: textDescription },
-			},
-			required: ['anchor', 'text'],
-			additionalProperties: false,
-		});
-		result.push(
-			{
-				...buildEditTool('insertBefore'),
-				description: 'Add text before an `anchor` in the current note: Insert text immediately before the first occurrence of `anchor`.',
-				inputSchema: anchoredSchema(
-					'Text to find',
-					'What to insert just **before** the found text',
-				),
-			},
-			{
-				...buildEditTool('insertAfter'),
-				description: 'Add text after an `anchor` in the current note: Inserts text immediately after the first occurrence of `anchor` in the current note.',
-				inputSchema: anchoredSchema(
-					'Text to find',
-					'What to insert just **after** the found text',
-				),
-			},
-			{
-				...buildEditTool('replaceRange'),
-				description: 'Remove or replace text in the current note: Replaces the first occurrence of `anchor` with `text`.',
-				inputSchema: anchoredSchema(
-					'The text to replace',
-					'What to replace it with',
-				),
-			},
-		);
-
-		const hasFencedBlock = hasStructuredBlock(note);
-		if (hasFencedBlock) {
-			result.push({
-				...buildEditTool('replaceFencedBlock'),
-				description: [
-					'Replaces the inner content of the first ```<tag>``` fenced block in the current note.',
-					`"text" is the new content inside the fence (no fence markers). Supported tags: ${supportedStructuredBlockTags.join(', ')}.`,
-					'Use appendToNote to create a new fenced block.',
-				].join(' '),
-				inputSchema: {
-					type: 'object',
-					properties: {
-						tag: {
-							type: 'string',
-							enum: supportedStructuredBlockTags,
-						},
-						text: {
-							type: 'string',
-							description: 'The new content for the block content. Should not include the fenced block delimiters.',
-						},
-					},
-					required: ['tag', 'text'],
-					additionalProperties: false,
-				},
-			});
-		}
-	};
-
-	const allowStandardOperations = Setting.value('ai.tool.edit_current.enabled');
-	if (allowStandardOperations) {
-		if (note.selection) {
-			addSelectionOperations();
-		} else {
-			addReadEditOperations();
-		}
-	}
-
-	for (const tool of enabledTools()) {
-		result.push(tool);
-	}
-
-	return result;
 };
 
 const createHistory = (history: ChatMessage[], newMessage: string, context: NoteContext): ChatMessage[] => {
@@ -369,11 +173,13 @@ interface StepNoteChatOptions {
 const stepNoteChat = async ({
 	context, messages, commands, onHistoryChanged, signal, allowTools,
 }: StepNoteChatOptions) => {
+	assertWithinTokenBudget(messages, noteBodyTokenBudget);
 	const note = await context();
 
-	assertWithinTokenBudget(messages, noteBodyTokenBudget);
+	const toolIndex = new ToolIndex({ note, commands });
+
 	const chatResult = await AiService.instance().chat(messages, {
-		tools: allowTools ? toolDefinitions(note, commands) : [],
+		tools: allowTools ? toolIndex.enabledTools() : [],
 		signal,
 	});
 
@@ -389,7 +195,7 @@ const stepNoteChat = async ({
 	let failedToolCount = 0;
 	if (allowTools) {
 		const toolResults = await runTools(
-			chatResult, note, context, allowTools ? toolDefinitions : ()=>[], commands, signal,
+			chatResult, note, context, commands, signal,
 		);
 		messages.push(...toolResults);
 		onHistoryChanged([...messages]);
@@ -443,10 +249,8 @@ const assertNotCancelled = (signal: AbortSignal) => {
 	}
 };
 
-type OnBuildTools = (note: NoteContext, commands: ChatCommands)=> ToolDefinition[];
-
 const runTools = async (
-	chat: ChatResult, initialContext: NoteContext, context: OnContext, tools: OnBuildTools, commands: ChatCommands, signal: AbortSignal,
+	chat: ChatResult, initialContext: NoteContext, context: OnContext, commands: ChatCommands, signal: AbortSignal,
 ) => {
 	assertNotCancelled(signal);
 
@@ -467,13 +271,18 @@ const runTools = async (
 	};
 
 	const runTool = async (toolCall: ChatToolCall, body: string) => {
-		const tool = tools({ ...currentContext, body }, {
-			...commands,
-			updateNoteBody: newBody => {
-				body = newBody;
-				return Promise.resolve();
+		const index = new ToolIndex({
+			note: { ...currentContext, body },
+			commands: {
+				...commands,
+				updateNoteBody: newBody => {
+					body = newBody;
+					return Promise.resolve();
+				},
 			},
-		}).find(tool => tool.id === toolCall.toolName);
+		});
+		const toolId = toolCall.toolName;
+		const tool = index.findTool(toolId);
 
 		if (tool) {
 			try {
@@ -499,8 +308,8 @@ const runTools = async (
 		} else {
 			respondFailure(
 				toolCall,
-				describeToolNotFoundFailure(toolCall.toolName),
-				_('Tool not found: %s', toolCall.toolName),
+				index.describeToolNotFoundFailure(toolId),
+				_('Tool not found: %s', toolId),
 			);
 		}
 		return body;
@@ -578,44 +387,6 @@ const runTools = async (
 	return chatResponses;
 };
 
-const isValidEditOp = (operation: string): operation is EditOp['op'] => {
-	return knownOps.has(operation as EditOp['op']);
-};
-
-const toolCallToEditOperation = (toolName: string, args: ToolInput): EditOp => {
-	if (!isValidEditOp(toolName)) {
-		throw new ToolError(`Invalid edit operation: ${toolName}`);
-	}
-
-	return {
-		op: toolName,
-		...('text' in args && typeof args.text === 'string' ? { text: args.text } : {}),
-		...('anchor' in args && typeof args.anchor === 'string' ? { anchor: args.anchor } : {}),
-		...('tag' in args && typeof args.tag === 'string' ? { tag: args.tag } : {}),
-	} as EditOp;
-};
-
-const countWords = (text: string): number => Countable.countOnce(text, { stripTags: true }).words;
-
-const describeEditOperation = (editOp: EditOp) => {
-	const describeWordsAdded = (count: number) => _n('Added %d word', 'Added %d words', count, count);
-	const describeWordsRemoved = (count: number) => _n('Removed %d word', 'Removed %d words', count, count);
-
-	let actionDescription;
-	if (editOp.op === 'replaceRange') {
-		actionDescription = [
-			describeWordsRemoved(countWords(editOp.anchor)),
-			describeWordsAdded(countWords(editOp.text)),
-		].join('\n');
-	} else if (editOp.op === 'replaceFencedBlock') {
-		actionDescription = _('Updated %s block', editOp.tag);
-	} else if (editOp.op === 'replaceSelection') {
-		actionDescription = _('Replaced selection');
-	} else {
-		actionDescription = describeWordsAdded(countWords(editOp.text));
-	}
-	return actionDescription;
-};
 
 // Exported for tests.
-export const _internal = { systemPrompt, toolDefinitions, assertWithinTokenBudget, estimateTokens, runTools, noteBodyTokenBudget };
+export const _internal = { systemPrompt, assertWithinTokenBudget, estimateTokens, runTools, noteBodyTokenBudget };

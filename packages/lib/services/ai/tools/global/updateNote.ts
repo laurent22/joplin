@@ -1,9 +1,9 @@
-import Note from '../../../models/Note';
-import Folder from '../../../models/Folder';
-import { NoteEntity } from '../../database/types';
-import { ToolError } from '../../ai/types';
-import { _ } from '../../../locale';
-import buildTool from './utils/buildTool';
+import Note from '../../../../models/Note';
+import Folder from '../../../../models/Folder';
+import { NoteEntity } from '../../../database/types';
+import { _ } from '../../../../locale';
+import buildTool from '../utils/buildTool';
+import { ToolError } from '../types';
 
 interface ReplaceTextOp {
 	find: string;

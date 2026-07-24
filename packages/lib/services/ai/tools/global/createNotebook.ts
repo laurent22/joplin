@@ -1,7 +1,7 @@
-import { _ } from '../../../locale';
-import Folder from '../../../models/Folder';
-import { ToolError } from '../../ai/types';
-import buildTool from './utils/buildTool';
+import { _ } from '../../../../locale';
+import Folder from '../../../../models/Folder';
+import { ToolError } from '../types';
+import buildTool from '../utils/buildTool';
 
 interface Input {
 	title?: string;

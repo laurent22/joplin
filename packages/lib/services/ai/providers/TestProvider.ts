@@ -1,4 +1,5 @@
-import { ChatMessage, ChatOptions, ChatResult, ChatRole, ChatToolCall, ProviderClassification, ToolSpec } from '../types';
+import { ToolSpec } from '../tools/types';
+import { ChatMessage, ChatOptions, ChatResult, ChatRole, ChatToolCall, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 
 const parseUserCommand = (message: ChatMessage, availableTools: ToolSpec[]) => {
@@ -6,14 +7,19 @@ const parseUserCommand = (message: ChatMessage, availableTools: ToolSpec[]) => {
 	const reply = [];
 	let repeat = 0;
 	for (const line of message.content.split('\n')) {
-		const command = line.match(/^\/(tool|reply-with|repeat) (.*)$/);
+		const command = line.match(/^\/(tool|describe-tool|reply-with|repeat) (.*)$/);
 		if (!command) continue;
 
-		if (command[1] === 'tool') {
+		const isToolCall = command[1] === 'tool';
+		const isDescribeToolRequest = command[1] === 'describe-tool';
+		if (isToolCall || isDescribeToolRequest) {
 			const args = command[2].split(' ');
 			const toolName = args[0];
-			if (!availableTools.some(tool => tool.id === toolName)) {
+			const tool = availableTools.find(t => t.id === toolName);
+			if (!tool) {
 				reply.push(`tool not found: ${toolName}`);
+			} else if (isDescribeToolRequest) {
+				reply.push(`${toolName}: ${tool.description}`);
 			} else {
 				toolCalls.push({
 					callId: `tool-call-${toolCalls.length}`,

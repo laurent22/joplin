@@ -1,7 +1,7 @@
-import { _ } from '../../../locale';
-import Folder from '../../../models/Folder';
-import { FolderEntity } from '../../database/types';
-import buildTool from './utils/buildTool';
+import { _ } from '../../../../locale';
+import Folder from '../../../../models/Folder';
+import { FolderEntity } from '../../../database/types';
+import buildTool from '../utils/buildTool';
 
 const tool = buildTool({
 	id: 'list_notebooks',

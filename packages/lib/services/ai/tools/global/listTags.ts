@@ -1,6 +1,6 @@
-import { _ } from '../../../locale';
-import Tag from '../../../models/Tag';
-import buildTool from './utils/buildTool';
+import { _ } from '../../../../locale';
+import Tag from '../../../../models/Tag';
+import buildTool from '../utils/buildTool';
 
 const tool = buildTool({
 	id: 'list_tags',

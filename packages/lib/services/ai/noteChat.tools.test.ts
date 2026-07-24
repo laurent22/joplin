@@ -1,10 +1,11 @@
-import { NoteContext, runNoteChat } from './noteChat';
+import { runNoteChat } from './noteChat';
 import { ChatMessage, ChatRole } from './types';
 import { setupDatabase, switchClient } from '../../testing/test-utils';
 import Setting from '../../models/Setting';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import { NoteEntity } from '../database/types';
+import { NoteContext } from './tools/types';
 
 const runChatForNote = (note: NoteEntity, history: ChatMessage[], message: string) => {
 	const getContext = async () => {
@@ -70,7 +71,31 @@ describe('noteChat.tools', () => {
 		expect(await Tag.tagsByNoteId(note.id)).toHaveLength(1);
 	});
 
-	test('should provide information about disabled tools', async () => {
+	test('disabled_tool_info\'s description should list the disabled tools', async () => {
+		const note = await Note.save({ title: 'test' });
+
+		const toolInfoMessage = '/describe-tool disabled_tool_info';
+		const runChat = () => (
+			runChatForNote(
+				note,
+				// Avoid the default history
+				[{ role: ChatRole.User, content: 'testing' }],
+				toolInfoMessage,
+			)
+		);
+
+		// Should not allow managing tags when disabled in settings
+		Setting.setValue('ai.tool.edit_current.enabled', false);
+		const messages = await runChat();
+		const infoMessage = messages[messages.length - 1];
+		expect(infoMessage).toBeTruthy();
+
+		const content = infoMessage.content;
+		expect(content).toContain('disabled_tool_info: **Getting access to more tools:**');
+		expect(content).toContain('appendToNote');
+	});
+
+	test('running disabled_tool_info should provide information about disabled tools', async () => {
 		const note = await Note.save({ title: 'test' });
 
 		const toolCallMessage = `/tool disabled_tool_info ${JSON.stringify({ tool_id: 'manage_tags' })}`;
@@ -87,6 +112,7 @@ describe('noteChat.tools', () => {
 		Setting.setValue('ai.tool.manage_tags.enabled', false);
 		const messages = await runChat();
 		const infoMessage = messages.find(message => message.role === ChatRole.Tool && message.toolName === 'disabled_tool_info');
+		expect(infoMessage).toBeTruthy();
 		expect(infoMessage.content).toContain('Tool `manage_tags` is disabled in Joplin\'s settings');
 	});
 });

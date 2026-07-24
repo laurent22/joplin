@@ -1,4 +1,4 @@
-import { ToolDefinition, ToolOutput } from '../../../ai/types';
+import { ToolDefinition, ToolOutput } from '../types';
 
 const buildTool = <OutputType extends ToolOutput> (spec: ToolDefinition<OutputType>) => {
 	return spec as ToolDefinition<unknown>;

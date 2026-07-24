@@ -1,8 +1,8 @@
-import { _ } from '../../../locale';
-import Note from '../../../models/Note';
-import SearchService from '../../ai/SearchService';
-import { ToolError } from '../../ai/types';
-import buildTool from './utils/buildTool';
+import { _ } from '../../../../locale';
+import Note from '../../../../models/Note';
+import SearchService from '../../../ai/SearchService';
+import { ToolError } from '../types';
+import buildTool from '../utils/buildTool';
 
 interface Input {
 	query?: string;

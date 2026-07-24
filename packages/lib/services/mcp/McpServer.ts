@@ -1,8 +1,8 @@
 import Logger from '@joplin/utils/Logger';
 import Setting from '../../models/Setting';
-import { describeToolNotFoundFailure, enabledTools, findTool } from '../ai/tools';
+import ToolIndex from '../ai/tools/ToolIndex';
 import { JsonRpcRequest, JsonRpcResponse, JsonRpcErrorCodes, McpProtocolVersion, ToolCallResult } from './types';
-import { ToolError } from '../ai/types';
+import { ToolError } from '../ai/tools/types';
 
 const logger = Logger.create('McpServer');
 
@@ -76,7 +76,7 @@ export default class McpServer {
 
 	private handleToolsList() {
 		return {
-			tools: enabledTools().map(t => ({
+			tools: new ToolIndex(null).enabledTools().map(t => ({
 				name: t.id,
 				description: t.description,
 				inputSchema: t.inputSchema,
@@ -89,9 +89,10 @@ export default class McpServer {
 		if (!params || typeof params.name !== 'string') {
 			throw new InvalidParamsError('Missing or invalid "name" parameter');
 		}
-		const tool = findTool(params.name);
+		const index = new ToolIndex(null);
+		const tool = index.findTool(params.name);
 		if (!tool) {
-			return toolErrorResult(describeToolNotFoundFailure(params.name));
+			return toolErrorResult(index.describeToolNotFoundFailure(params.name));
 		}
 		const input = params.arguments ?? {};
 		try {

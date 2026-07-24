@@ -1,8 +1,8 @@
-import { _n } from '../../../locale';
-import Note from '../../../models/Note';
-import Tag from '../../../models/Tag';
-import { ToolError } from '../../ai/types';
-import buildTool from './utils/buildTool';
+import { _n } from '../../../../locale';
+import Note from '../../../../models/Note';
+import Tag from '../../../../models/Tag';
+import { ToolError } from '../types';
+import buildTool from '../utils/buildTool';
 
 interface Input {
 	note_id?: string;

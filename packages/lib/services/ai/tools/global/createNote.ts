@@ -1,8 +1,8 @@
-import Note from '../../../models/Note';
-import Folder from '../../../models/Folder';
-import { ToolError, ToolInput } from '../../ai/types';
-import { _ } from '../../../locale';
-import buildTool from './utils/buildTool';
+import Note from '../../../../models/Note';
+import Folder from '../../../../models/Folder';
+import { _ } from '../../../../locale';
+import buildTool from '../utils/buildTool';
+import { ToolError, ToolInput } from '../types';
 
 interface Input {
 	title?: string;

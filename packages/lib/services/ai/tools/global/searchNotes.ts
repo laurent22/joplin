@@ -1,8 +1,8 @@
-import SearchEngineUtils from '../../search/SearchEngineUtils';
-import { NoteEntity } from '../../database/types';
-import { ToolError } from '../../ai/types';
-import { _ } from '../../../locale';
-import buildTool from './utils/buildTool';
+import SearchEngineUtils from '../../../search/SearchEngineUtils';
+import { NoteEntity } from '../../../database/types';
+import { _ } from '../../../../locale';
+import buildTool from '../utils/buildTool';
+import { ToolError } from '../types';
 
 interface Input {
 	query?: string;

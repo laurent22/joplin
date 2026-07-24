@@ -1,7 +1,7 @@
-import { _ } from '../../../locale';
-import Note from '../../../models/Note';
-import { ToolError } from '../../ai/types';
-import buildTool from './utils/buildTool';
+import { _ } from '../../../../locale';
+import Note from '../../../../models/Note';
+import { ToolError } from '../types';
+import buildTool from '../utils/buildTool';
 
 interface Input {
 	id?: string;
