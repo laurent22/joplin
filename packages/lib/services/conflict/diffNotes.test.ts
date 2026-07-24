@@ -86,6 +86,18 @@ describe('autoMerge', () => {
 		expect(result.mergedText).toBe('Visit Google.: https://youtube.com/\n\nVisit GitHub.: https://github.com/inbox');
 	});
 
+	test('should preserve a two-space Markdown hard line break on an untouched line', () => {
+		// Two trailing spaces create a Markdown line break, so they must be kept even
+		// though other trailing spaces are removed. In this test, only the last
+		// paragraph changes, and the line break above it should stay the same.
+		const base = 'Line one  \nLine two\n\nLast para.';
+		const local = 'Line one  \nLine two\n\nLast para, edited.';
+		const remote = 'Line one  \nLine two\n\nLast para.';
+		const result = autoMerge(base, local, remote);
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
+		expect(result.mergedText).toContain('Line one  \n');
+	});
+
 	test('with empty base should mark only the differing line as a conflict', () => {
 		const result = autoMerge('', 'my version', 'their version');
 		expect(result.sections.length).toBe(1);

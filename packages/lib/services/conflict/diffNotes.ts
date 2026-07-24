@@ -75,13 +75,14 @@ const tryWordMerge = (local: string, base: string, remote: string): { merged: st
 	return { merged, conflict: false };
 };
 
-// Remove trailing spaces and tabs from each line. Editors and the markdown
-// save process can leave invisible whitespace at the end of lines, which can
-// make diff3 think a line has changed when it really hasn't. This helps avoid
-// false conflicts. The only exception is the two-space markdown line break,
-// which is ignored to prevent unnecessary conflicts.
-const stripTrailingWhitespace = (text: string): string => {
-	return text.split('\n').map(line => line.replace(/[ \t]+$/, '')).join('\n');
+// Remove extra spaces at the end of each line. Editors and the markdown save
+// process can leave invisible spaces there, which can make diff3 think a line
+// has changed when it really hasn't, causing a false conflict.
+//
+// Exactly two spaces at the end of a line are kept because they create a
+// Markdown line break. Any other trailing spaces or tabs are removed.
+const normaliseTrailingWhitespace = (text: string): string => {
+	return text.split('\n').map(line => line.replace(/[ \t]+$/, match => match === '  ' ? '  ' : '')).join('\n');
 };
 
 // Run a three-way merge on the note content. Changes made by only one side
@@ -89,9 +90,9 @@ const stripTrailingWhitespace = (text: string): string => {
 // remain as conflicts. If there is no base version, it falls back to a
 // line-by-line comparison where only different lines become conflicts.
 export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string): AutoMergeResult => {
-	const base = stripTrailingWhitespace(baseRaw);
-	const local = stripTrailingWhitespace(localRaw);
-	const remote = stripTrailingWhitespace(remoteRaw);
+	const base = normaliseTrailingWhitespace(baseRaw);
+	const local = normaliseTrailingWhitespace(localRaw);
+	const remote = normaliseTrailingWhitespace(remoteRaw);
 
 	if (base === '') {
 		// Without a base version, we cannot know which side made which changes,
