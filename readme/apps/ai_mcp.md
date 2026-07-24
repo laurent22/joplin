@@ -10,11 +10,11 @@ Joplin exposes a small, fixed set of tools. Each can be turned on or off individ
 
 | Tool | What it does | Default |
 |---|---|---|
-| Search notes | Keyword search using Joplin's regular search syntax. | On |
-| Semantic search | Search by meaning, using the [local embeddings index](https://github.com/laurent22/joplin/blob/dev/readme/apps/ai_semantic_search.md). | On |
-| Read note | Return one note (title, markdown body, notebook, tags). | On |
-| List notebooks | List notebooks with their hierarchy. | On |
-| List tags | List tags. | On |
+| Search notes | Keyword search using Joplin's regular search syntax. | **Off** |
+| Semantic search | Search by meaning, using the [local embeddings index](https://github.com/laurent22/joplin/blob/dev/readme/apps/ai_semantic_search.md). | **Off** |
+| Read note | Return one note (title, markdown body, notebook, tags). | **Off** |
+| List notebooks | List notebooks with their hierarchy. | **Off** |
+| List tags | List tags. | **Off** |
 | Create note | Create a new note in a chosen notebook. | **Off** |
 | Update note | Change the title, body, notebook, or to-do state of an existing note. | **Off** |
 | Trash note | Move a note to the trash. | **Off** |
