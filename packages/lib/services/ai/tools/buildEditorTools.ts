@@ -24,7 +24,7 @@ const knownOps = new Set<EditOp['op']>([
 ]);
 
 // Tools that make changes to the current note body
-export const isValidEditOp = (operation: string): operation is EditOp['op'] => {
+const isValidEditOp = (operation: string): operation is EditOp['op'] => {
 	return knownOps.has(operation as EditOp['op']);
 };
 
@@ -35,13 +35,9 @@ export const isEditorToolCall = (toolId: string) => {
 	return isValidEditOp(toolId) || toolId === 'readNote';
 };
 
-const toolCallToEditOperation = (toolName: string, args: ToolInput): EditOp => {
-	if (!isValidEditOp(toolName)) {
-		throw new ToolError(`Invalid edit operation: ${toolName}`);
-	}
-
+const toolCallToEditOperation = (operationId: EditOp['op'], args: ToolInput): EditOp => {
 	return {
-		op: toolName,
+		op: operationId,
 		...('text' in args && typeof args.text === 'string' ? { text: args.text } : {}),
 		...('anchor' in args && typeof args.anchor === 'string' ? { anchor: args.anchor } : {}),
 		...('tag' in args && typeof args.tag === 'string' ? { tag: args.tag } : {}),

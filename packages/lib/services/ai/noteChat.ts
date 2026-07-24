@@ -3,7 +3,7 @@ import { ChatMessage, ChatResult, ChatRole, ChatToolCall, ChatToolMessage } from
 import JoplinError from '../../JoplinError';
 import Logger from '@joplin/utils/Logger';
 import { _ } from '../../locale';
-import { EditOp, isValidEditOp } from './tools/buildEditorTools';
+import { EditOp, isEditorToolCall } from './tools/buildEditorTools';
 import { NoteContext, ToolError } from './tools/types';
 import ToolIndex from './tools/ToolIndex';
 
@@ -256,7 +256,7 @@ const runTools = async (
 
 	let chatResponses: ChatToolMessage[] = [];
 
-	const isEdit = (toolName: string) => isValidEditOp(toolName);
+	const isEdit = (toolName: string) => isEditorToolCall(toolName) && toolName !== 'editor.readNote';
 
 	const respondFailure = (action: ChatToolCall, reason: string, userDescription?: string) => {
 		chatResponses.push({
@@ -295,7 +295,7 @@ const runTools = async (
 					content: typeof output === 'string' ? output : JSON.stringify(output),
 					userDescription: tool.userDescription(toolCall.arguments, output),
 					isError: false,
-					isEdit: isValidEditOp(toolCall.toolName),
+					isEdit: isEdit(tool.id),
 				});
 			} catch (error) {
 				logger.error('Tool call', toolCall.toolName, 'failed', error);
@@ -341,21 +341,16 @@ const runTools = async (
 		const initialBody = initialContext.body;
 		let body = currentContext.body;
 		const hadExternalBodyChanges = initialBody !== body;
-		const appliedEdits: ChatToolCall[] = [];
 
 		for (const toolCall of chat.toolCalls) {
-			if (toolCall.toolName === 'replaceSelection') {
-				respondFailure(toolCall, 'replaceSelection is invalid in this context');
-			} else if (toolCall.parseError) {
+			if (toolCall.parseError) {
 				respondFailure(toolCall, toolCall.parseError);
-			} else if (isValidEditOp(toolCall.toolName)) {
-				body = await runTool(toolCall, body);
-				appliedEdits.push(toolCall);
 			} else {
 				body = await runTool(toolCall, body);
 			}
 		}
 
+		const appliedEdits = chatResponses.filter(r => r.isEdit && !r.isError);
 		if (appliedEdits.length > 0 && body !== initialBody) {
 			try {
 				// Avoid overwriting user-created changes
@@ -369,9 +364,9 @@ const runTools = async (
 
 				// All of the edit operations depend on updating the body, so they all
 				// need to be marked as failures:
-				const successfulEditIds = new Set(appliedEdits.map(edit => edit.callId));
+				const successfulEditResponses = new Set(appliedEdits);
 				chatResponses = chatResponses.map(response => {
-					if (!successfulEditIds.has(response.toolCallId)) return response;
+					if (!successfulEditResponses.has(response)) return response;
 					return {
 						...response,
 						content: 'failed to update body',
