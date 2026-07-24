@@ -8,6 +8,7 @@ import { BaseItemEntity, NoteEntity } from '../../database/types';
 import { SyncAction, conflictActions } from './types';
 import ConflictNoteState from '../../../models/ConflictNoteState';
 import autoMergeNote from '../../conflict/autoMergeNote';
+import isAutoMergeEnabled from '../../conflict/isAutoMergeEnabled';
 import time from '../../../time';
 
 const logger = Logger.create('handleConflictAction');
@@ -72,7 +73,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		// ------------------------------------------------------------------------------
 
 		let merge: ReturnType<typeof autoMergeNote>|null = null;
-		if (mustHandleConflict && remoteContent && !itemIsReadOnly) {
+		if (mustHandleConflict && remoteContent && !itemIsReadOnly && isAutoMergeEnabled()) {
 			const localNote = local as NoteEntity;
 			const remoteNote = remoteContent as NoteEntity;
 			const cannotAutoMerge = (note: NoteEntity) => !!note.encryption_applied || !!note.encryption_cipher_text || !!note.is_locked;

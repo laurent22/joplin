@@ -2274,6 +2274,19 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 		},
 
+		// Off by default for now, since this is new behaviour on the sync path. Once
+		// the feature is proven the default can be changed to on later.
+		'sync.autoMergeConflicts': {
+			value: false,
+			type: SettingItemType.Bool,
+			section: 'sync',
+			public: true,
+			label: () => _('Automatically merge non-conflicting note changes'),
+			description: () => _('When the same note is edited on two devices, changes that do not overlap are merged automatically instead of creating a conflict note.'),
+			storage: SettingStorage.File,
+			isGlobal: true,
+		},
+
 		'noteLock.lockOnNoteSwitch': {
 			value: false,
 			type: SettingItemType.Bool,

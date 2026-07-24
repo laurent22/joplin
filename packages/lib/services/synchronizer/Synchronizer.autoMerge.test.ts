@@ -1,8 +1,16 @@
 import { synchronizerStart, setupDatabaseAndSynchronizer, switchClient, synchronizer } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
+import Setting from '../../models/Setting';
 import ConflictNoteState from '../../models/ConflictNoteState';
 import { NoteEntity } from '../database/types';
+
+// Auto-merge is disabled by default, so these tests enable it. It runs only on
+// the client that detects the conflict (client 1 here), so only that client
+// needs it.
+const enableAutoMerge = () => {
+	Setting.setValue('sync.autoMergeConflicts', true);
+};
 
 // Sets up a three-way merge for the given note: client 2 makes its change and
 // syncs first (becoming the remote version), then client 1 makes its change
@@ -26,6 +34,7 @@ describe('Synchronizer.autoMerge', () => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(2);
 		await switchClient(1);
+		enableAutoMerge();
 	});
 
 	it('should fully auto-merge non-overlapping body edits without creating a conflict note', (async () => {
@@ -212,5 +221,23 @@ describe('Synchronizer.autoMerge', () => {
 		const conflicts = await Note.conflictedNotes();
 		expect(conflicts).toHaveLength(1);
 		expect(conflicts[0].title).toBe('un mod');
+	}));
+
+	it('should not auto-merge when the setting is disabled', (async () => {
+		// With the setting off, even non-overlapping changes create a normal conflict
+		// note instead of being merged.
+		Setting.setValue('sync.autoMergeConflicts', false);
+
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'Title', body: baseBody, parent_id: folder.id });
+		await synchronizerStart();
+
+		await makeConcurrentEdits(
+			note.id,
+			{ body: baseBody.replace('Third paragraph.', 'Third paragraph, edited remotely.') },
+			{ body: baseBody.replace('First paragraph.', 'First paragraph, edited locally.') },
+		);
+
+		expect(await Note.conflictedNotes()).toHaveLength(1);
 	}));
 });
