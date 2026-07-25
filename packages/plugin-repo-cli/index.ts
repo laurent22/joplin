@@ -384,7 +384,6 @@ async function main() {
 
 		.command('update-release <plugin-repo-dir>', 'Update GitHub release', () => { }, (args: CommandUpdateReleaseArgs) => setSelectedCommand('updateRelease', args))
 
-		// new plugin-submission command
 		.command('publish-plugin <plugin-repo-dir> <manifest-file> <jpl-file>', 'Publish a plugin to the repository', (yargs: { positional: (name: string, opts: object)=> void }) => {
 			yargs.positional('plugin-repo-dir', {
 				type: 'string',

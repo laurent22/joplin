@@ -38,7 +38,7 @@ export default function(existingManifests: PluginManifests, manifest: PluginMani
 		// Don't add a plugin if there is already a plugin with the same ID
 		// but different casing
 		if (originalManifest.id !== manifest.id) {
-			throw new Error(`Plugin "${manifest.id}" cannot be published because there is already a plugin with ID "${originalManifest.id}".`);
+			throw new Error(`Plugin "${manifest.id}" cannot be published because there is already a plugin with ID "${originalManifest.id}". A new package, under a different name, should be published if the plugin ID needs to change.`);
 		}
 	}
 }
