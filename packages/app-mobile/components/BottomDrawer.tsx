@@ -47,6 +47,7 @@ const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset
 	const safeAreaPadding = useSafeAreaPadding();
 
 	const menuMarginTop = theme.margin + safeAreaPadding.paddingTop;
+	const showDragHandle = draggable && menuType === MenuType.Docked;
 
 	return useMemo(() => {
 		const isSmallWidthScreen = windowWidth < 500;
@@ -120,10 +121,16 @@ const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset
 
 				marginBottom: spaceBelowScreenEdge,
 
-				// The drag handle should be at the very top of the menu
-				paddingTop: draggable ? 0 : undefined,
-				paddingBottom: (menuType === MenuType.Docked ? 14 + safeAreaPadding.paddingBottom : 0),
 				padding: 20,
+
+				...(menuType === MenuType.Docked ? {
+					paddingBottom: 14 + safeAreaPadding.paddingBottom,
+					// The drag handle should be at the very top of the menu
+					paddingTop: showDragHandle ? 0 : undefined,
+				} : {
+					paddingTop: theme.marginSmall,
+					paddingBottom: theme.marginSmall,
+				}),
 			},
 			modalBackground: {
 				paddingLeft: 0,
@@ -140,7 +147,7 @@ const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset
 			},
 
 			dragHandleContainer: {
-				display: draggable && menuType !== MenuType.Floating ? 'flex' : 'none',
+				display: showDragHandle ? 'flex' : 'none',
 				width: '100%',
 				height: theme.margin,
 				cursor: 'auto',
@@ -168,7 +175,7 @@ const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset
 				zIndex: 2,
 			},
 		});
-	}, [theme, menuType, safeAreaPadding, windowWidth, dragging, draggable, alignment, dragOffset, windowHeight, backgroundOpacity, menuMarginTop]);
+	}, [theme, menuType, safeAreaPadding, showDragHandle, windowWidth, dragging, alignment, dragOffset, windowHeight, backgroundOpacity, menuMarginTop]);
 };
 
 interface UsePanResponderProps {
