@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { StyleSheet, View, Text, useWindowDimensions, TextStyle } from 'react-native';
+import { StyleSheet, View, Text, useWindowDimensions, TextStyle, ViewStyle, StyleProp } from 'react-native';
 import { themeStyle } from './global-style';
-import BottomDrawer, { MenuAlignment } from './BottomDrawer';
+import BottomDrawer, { MenuAlignment, MenuType } from './BottomDrawer';
 import { TouchableRipple } from 'react-native-paper';
 import Icon from './Icon';
 
@@ -30,6 +30,8 @@ export type MenuOption = MenuOptionDivider|MenuOptionButton;
 interface Props {
 	themeId: number;
 	visible: boolean;
+	style?: StyleProp<ViewStyle>;
+	menuType?: MenuType;
 	alignment: MenuAlignment;
 	onDismiss: ()=> void;
 	options: MenuOption[];
@@ -128,7 +130,9 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 		onDismiss={props.onDismiss}
 		alignment={props.alignment}
 		draggable={true}
-		style={styles.menu}
+		menuType={props.menuType}
+		contentStyle={styles.menu}
+		style={props.style}
 	>
 		<View
 			style={styles.menuContent}

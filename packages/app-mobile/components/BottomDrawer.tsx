@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RefObject, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Dimensions, Easing, GestureResponderEvent, LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, PanResponder, PanResponderGestureState, Platform, Pressable, StyleSheet, useWindowDimensions, View, ViewStyle } from 'react-native';
+import { Animated, Dimensions, Easing, GestureResponderEvent, LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, PanResponder, PanResponderGestureState, Platform, Pressable, StyleProp, StyleSheet, useWindowDimensions, View, ViewStyle } from 'react-native';
 import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 import { themeStyle, ThemeStyle } from './global-style';
 import Modal from './Modal';
@@ -14,9 +14,16 @@ export enum MenuAlignment {
 	Right,
 }
 
+export enum MenuType {
+	Docked,
+	Floating,
+}
+
 interface Props {
 	themeId: number;
-	style: ViewStyle;
+	menuType?: MenuType;
+	style?: StyleProp<ViewStyle>;
+	contentStyle?: StyleProp<ViewStyle>;
 	alignment?: MenuAlignment;
 	children: React.ReactNode;
 	visible: boolean;
@@ -27,6 +34,7 @@ interface Props {
 
 interface UseStylesProps {
 	alignment: MenuAlignment;
+	menuType: MenuType;
 	theme: ThemeStyle;
 	dragging: boolean;
 	draggable: boolean;
@@ -34,7 +42,7 @@ interface UseStylesProps {
 	dragOffset: Animated.AnimatedInterpolation<number>;
 }
 
-const useStyles = ({ theme, dragging, alignment, draggable, dragOffset, backgroundOpacity }: UseStylesProps) => {
+const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset, backgroundOpacity }: UseStylesProps) => {
 	const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 	const safeAreaPadding = useSafeAreaPadding();
 
@@ -46,7 +54,7 @@ const useStyles = ({ theme, dragging, alignment, draggable, dragOffset, backgrou
 		const menuGapRight = safeAreaPadding.paddingRight + 6;
 
 		// On web, any spaceBelowScreenEdge results in a scrollbar and extra scroll.
-		const spaceBelowScreenEdge = Platform.OS === 'web' ? 0 : windowHeight;
+		const spaceBelowScreenEdge = Platform.OS === 'web' || menuType === MenuType.Floating ? 0 : windowHeight;
 
 		return StyleSheet.create({
 			backgroundStyle: {
@@ -79,11 +87,16 @@ const useStyles = ({ theme, dragging, alignment, draggable, dragOffset, backgrou
 
 				backgroundColor: theme.backgroundColor,
 				borderRadius: 16,
-				borderBottomRightRadius: 0,
-				borderBottomLeftRadius: 0,
-				maxWidth: Math.min(400, windowWidth - menuGapRight - menuGapLeft),
+				...(menuType === MenuType.Docked ? {
+					borderBottomRightRadius: 0,
+					borderBottomLeftRadius: 0,
+				} : { }),
+				maxWidth: Math.min(
+					menuType === MenuType.Floating ? 250 : 400,
+					windowWidth - menuGapRight - menuGapLeft,
+				),
 
-				marginBottom: -spaceBelowScreenEdge,
+				marginBottom: menuType === MenuType.Floating ? safeAreaPadding.paddingBottom : -spaceBelowScreenEdge,
 
 				userSelect: dragging ? 'none' : 'auto',
 				transform: [
@@ -109,7 +122,7 @@ const useStyles = ({ theme, dragging, alignment, draggable, dragOffset, backgrou
 
 				// The drag handle should be at the very top of the menu
 				paddingTop: draggable ? 0 : undefined,
-				paddingBottom: 14 + safeAreaPadding.paddingBottom,
+				paddingBottom: (menuType === MenuType.Docked ? 14 + safeAreaPadding.paddingBottom : 0),
 				padding: 20,
 			},
 			modalBackground: {
@@ -127,7 +140,7 @@ const useStyles = ({ theme, dragging, alignment, draggable, dragOffset, backgrou
 			},
 
 			dragHandleContainer: {
-				display: draggable ? 'flex' : 'none',
+				display: draggable && menuType !== MenuType.Floating ? 'flex' : 'none',
 				width: '100%',
 				height: theme.margin,
 				cursor: 'auto',
@@ -155,7 +168,7 @@ const useStyles = ({ theme, dragging, alignment, draggable, dragOffset, backgrou
 				zIndex: 2,
 			},
 		});
-	}, [theme, safeAreaPadding, windowWidth, dragging, draggable, alignment, dragOffset, windowHeight, backgroundOpacity, menuMarginTop]);
+	}, [theme, menuType, safeAreaPadding, windowWidth, dragging, draggable, alignment, dragOffset, windowHeight, backgroundOpacity, menuMarginTop]);
 };
 
 interface UsePanResponderProps {
@@ -252,11 +265,16 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 	const propsRef = useRef(props);
 	propsRef.current = props;
 
+	const screenSize = useWindowDimensions();
+	const screenSizeRef = useRef(screenSize);
+	screenSizeRef.current = screenSize;
+
 	const slideMenuOut = useCallback(() => {
 		return new Promise<void>((resolve, reject) => {
-			propsRef.current.containerRef.current.measure(async (_x, _y, _width, height) => {
+			propsRef.current.containerRef.current.measure(async (_x, _y, _width, height, _pageX, pageY) => {
+				const menuBottom = screenSizeRef.current.height - (pageY + height);
 				try {
-					await propsRef.current.dragToOffset(height);
+					await propsRef.current.dragToOffset(height + menuBottom);
 					resolve();
 				} catch (error) {
 					reject(error);
@@ -289,6 +307,7 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 };
 
 const BottomDrawer: React.FC<Props> = props => {
+	const menuType = props.menuType ?? MenuType.Docked;
 	const theme = themeStyle(props.themeId);
 	const [dragging, setDragging] = useState(false);
 
@@ -315,7 +334,7 @@ const BottomDrawer: React.FC<Props> = props => {
 	const [animating, setAnimating] = useState(false);
 	const menuYOffset = useMemo(() => menuDragOffset, [menuDragOffset]);
 	const styles = useStyles({
-		theme, dragging, alignment: props.alignment, draggable: props.draggable, dragOffset: menuYOffset, backgroundOpacity,
+		theme, menuType: menuType, dragging, alignment: props.alignment, draggable: props.draggable, dragOffset: menuYOffset, backgroundOpacity,
 	});
 
 	const reduceMotionEnabled = useReduceMotionEnabled();
@@ -396,7 +415,7 @@ const BottomDrawer: React.FC<Props> = props => {
 				{view}
 			</>;
 		}}
-		containerStyle={styles.menuStyle}
+		containerStyle={[styles.menuStyle, props.style]}
 		animationType={reduceMotionEnabled ? 'fade' : 'none'}
 		scrollOverflow={{
 			onScroll: onContainerScroll,
@@ -411,7 +430,7 @@ const BottomDrawer: React.FC<Props> = props => {
 		<View
 			{...panResponder.panHandlers}
 			onLayout={onContainerLayout}
-			style={[styles.contentContainer, props.style]}
+			style={[styles.contentContainer, props.contentStyle]}
 			ref={containerRef}
 		>
 			{dragging && <View style={styles.dragOverlay} />}
@@ -426,11 +445,12 @@ const BottomDrawer: React.FC<Props> = props => {
 	</Modal>;
 };
 
-export default connect((state: AppState) => {
+const BottomDrawerComponent: React.FC<Omit<Props, 'themeId'>> = connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 	};
 })(BottomDrawer);
+export default BottomDrawerComponent;
 
 
 interface DragHandleProps {

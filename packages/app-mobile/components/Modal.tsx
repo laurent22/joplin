@@ -4,7 +4,7 @@
 
 import * as React from 'react';
 import { RefObject, useCallback, useMemo, useRef, useState } from 'react';
-import { Animated, GestureResponderEvent, Modal, Platform, Pressable, ScrollView, ScrollViewProps, StyleSheet, View, ViewStyle } from 'react-native';
+import { Animated, GestureResponderEvent, Modal, Platform, Pressable, ScrollView, ScrollViewProps, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import FocusControl from './accessibility/FocusControl/FocusControl';
 import { msleep, Second } from '@joplin/utils/time';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -30,7 +30,7 @@ export interface ModalElementProps {
 	statusBarTranslucent?: boolean;
 
 	children: React.ReactNode;
-	containerStyle?: ViewStyle;
+	containerStyle?: StyleProp<ViewStyle>;
 	backgroundColor?: string;
 	modalBackgroundStyle?: ViewStyle;
 	// Extra styles for the accessibility tools dismiss button. For example,

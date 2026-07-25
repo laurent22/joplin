@@ -5,8 +5,10 @@ import { _ } from '@joplin/lib/locale';
 import { Dispatch } from 'redux';
 import { AccessibilityActionEvent, AccessibilityActionInfo, View } from 'react-native';
 import { connect } from 'react-redux';
-import BottomDrawer from '../BottomDrawer';
+import { MenuAlignment, MenuType } from '../BottomDrawer';
 import { Ionicons as Icon } from '@react-native-vector-icons/ionicons';
+import BottomDrawerMenu, { MenuOption } from '../BottomDrawerMenu';
+import { AppState } from '../../utils/types';
 
 type OnButtonPress = ()=> void;
 interface ButtonSpec {
@@ -17,11 +19,13 @@ interface ButtonSpec {
 }
 
 interface ActionButtonProps {
+	themeId: number;
+
 	// If not given, an "add" button will be used.
 	mainButton: ButtonSpec;
 	dispatch: Dispatch;
 
-	menuContent?: React.ReactNode;
+	menuContent?: MenuOption[];
 	onMenuShow?: ()=> void;
 
 	accessibilityActions?: readonly AccessibilityActionInfo[];
@@ -87,14 +91,21 @@ const FloatingActionButton = (props: ActionButtonProps) => {
 		>
 			{menuButton}
 		</View>
-		<BottomDrawer
+		{ props.menuContent && <BottomDrawerMenu
 			visible={open}
 			onDismiss={onDismiss}
-			onShow={props.onMenuShow}
-		>
-			{props.menuContent}
-		</BottomDrawer>
+			alignment={MenuAlignment.Right}
+			style={{
+				marginBottom: 128,
+			}}
+			menuType={MenuType.Floating}
+			themeId={props.themeId}
+			options={props.menuContent}
+		/> }
 	</>;
 };
 
-export default connect()(FloatingActionButton);
+const ConnectedComponent: React.FC<Omit<ActionButtonProps, 'themeId'|'dispatch'>> = (
+	connect((state: AppState) => ({ themeId: state.settings.theme }))(FloatingActionButton)
+);
+export default ConnectedComponent;
