@@ -15,8 +15,12 @@ const respond = (target: string, params: Record<string, string> = {}) => {
 	const query = Object.entries(params)
 		.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
 		.join('&');
-	const separator = target.includes('?') ? '&' : '?';
-	const responseUrl = query ? `${target}${separator}${query}` : target;
+
+	const fragmentIndex = target.indexOf('#');
+	const base = fragmentIndex === -1 ? target : target.substring(0, fragmentIndex);
+	const fragment = fragmentIndex === -1 ? '' : target.substring(fragmentIndex);
+	const separator = base.includes('?') ? '&' : '?';
+	const responseUrl = query ? `${base}${separator}${query}${fragment}` : target;
 	void bridge().openExternal(responseUrl);
 };
 
