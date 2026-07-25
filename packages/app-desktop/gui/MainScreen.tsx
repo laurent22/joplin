@@ -27,7 +27,8 @@ import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import removeKeylessItems from './ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { isCallbackUrl, parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
+import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
+import executeCallbackUrl from './MainScreen/handleCallbackUrl';
 import ElectronAppWrapper from '../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
@@ -165,8 +166,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	private openCallbackUrl(url: string) {
 		if (!isCallbackUrl(url)) throw new Error(`Invalid callback URL: ${url}`);
-		const { command, params } = parseCallbackUrl(url);
-		void CommandService.instance().execute(command.toString(), params.id);
+		void executeCallbackUrl(url);
 	}
 
 	private updateLayoutPluginViews(layout: LayoutItem, plugins: PluginStates) {
