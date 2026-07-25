@@ -32,11 +32,11 @@ const NewNoteButton: React.FC<Props> = () => {
 			{ icon: 'material file-document-outline', title: _('New note'), onPress: () => makeNewNote(false) },
 			{ icon: 'material folder-outline', title: _('New notebook'), onPress: makeNewFolder },
 			{ isDivider: true },
-			{ icon: 'material microphone-outline', title: _('Recording'), onPress: () => makeNewNote(false, AttachFileAction.RecordAudio) },
-			{ icon: 'material attachment', title: _('Attachment'), onPress: () => makeNewNote(false, AttachFileAction.AttachFile) },
 			{ icon: 'material camera', title: _('Camera'), onPress: () => makeNewNote(false, AttachFileAction.TakePhoto) },
-			{ icon: 'material draw', title: _('Drawing'), onPress: () => makeNewNote(false, AttachFileAction.AttachDrawing) },
+			{ icon: 'material attachment', title: _('Attachment'), onPress: () => makeNewNote(false, AttachFileAction.AttachFile) },
 			{ icon: 'material data-matrix-scan', title: _('Scan notebook'), onPress: () => NavService.go('DocumentScanner') },
+			{ icon: 'material draw', title: _('Drawing'), onPress: () => makeNewNote(false, AttachFileAction.AttachDrawing) },
+			{ icon: 'material microphone-outline', title: _('Recording'), onPress: () => makeNewNote(false, AttachFileAction.RecordAudio) },
 		];
 		return items;
 	}, []);
