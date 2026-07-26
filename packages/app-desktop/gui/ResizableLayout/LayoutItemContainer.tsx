@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Resizable, ResizeCallback, ResizeStartCallback, Size } from 're-resizable';
-import { LayoutItem } from './utils/types';
-import { itemMinHeight, itemMinWidth, itemSize, LayoutItemSizes } from './utils/useLayoutItemSizes';
+import { LayoutItem, LayoutItemDirection } from './utils/types';
+import { EdgeFlags, itemMinHeight, itemMinWidth, itemSize, LayoutItemSizes } from './utils/useLayoutItemSizes';
 
 interface Props {
 	item: LayoutItem;
@@ -14,24 +14,31 @@ interface Props {
 	children: React.ReactNode;
 	isLastChild: boolean;
 	visible: boolean;
+	edges: EdgeFlags;
 }
 
 const LayoutItemContainer: React.FC<Props> = ({
-	item, visible, parent, sizes, resizedItemMaxSize, onResize, onResizeStart, onResizeStop, children, isLastChild,
+	item, visible, parent, sizes, resizedItemMaxSize, onResize, onResizeStart, onResizeStop, children, isLastChild, edges,
 }) => {
 	const style: React.CSSProperties = {
 		display: visible ? 'flex' : 'none',
 		flexDirection: item.direction,
 	};
 
-	const size: Size = itemSize(item, parent, sizes, true);
+	const size: Size = itemSize(item, parent, sizes, true, edges);
+
+	// Drag rules follow the runtime "last visible in render" flag so hidden
+	// panels shown by moveMode still get proper dividers.
+	const parentDir = parent?.direction;
+	const canResizeRight = parentDir === LayoutItemDirection.Row && !isLastChild;
+	const canResizeBottom = parentDir === LayoutItemDirection.Column && !isLastChild;
 
 	const className = `resizableLayoutItem rli-${item.key}`;
-	if (item.resizableRight || item.resizableBottom) {
+	if (canResizeRight || canResizeBottom) {
 		const enable = {
 			top: false,
-			right: !!item.resizableRight && !isLastChild,
-			bottom: !!item.resizableBottom && !isLastChild,
+			right: canResizeRight,
+			bottom: canResizeBottom,
 			left: false,
 			topRight: false,
 			bottomRight: false,

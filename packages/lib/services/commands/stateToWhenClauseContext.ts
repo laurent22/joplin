@@ -2,7 +2,7 @@ import { State, stateUtils } from '../../reducer';
 import BaseModel, { ModelType } from '../../BaseModel';
 import Folder from '../../models/Folder';
 import MarkupToHtml from '@joplin/renderer/MarkupToHtml';
-import { isRootSharedFolder, isSharedFolderOwner } from '../share/reducer';
+import { isFolderPublished, isRootSharedFolder, isSharedFolderOwner } from '../share/reducer';
 import { NoteEntity } from '../database/types';
 import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
@@ -24,6 +24,7 @@ export interface WhenClauseContext {
 	foldersIncludeReadOnly: boolean;
 	folderIsDeleted: boolean;
 	folderIsReadOnly: boolean;
+	folderIsPublished: boolean;
 	folderIsShared: boolean;
 	folderIsShareRoot: boolean;
 	folderIsShareRootAndNotOwnedByUser: boolean;
@@ -118,6 +119,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		noteIsDeleted: selectedNote ? !!selectedNote.deleted_time : false,
 
 		// Current context folder -- if multiple folders are selected, this only applies to one
+		folderIsPublished: commandFolder ? isFolderPublished(state, commandFolder.id) : false,
 		folderIsShareRoot: commandFolder ? isRootSharedFolder(commandFolder) : false,
 		folderIsShareRootAndNotOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && !isSharedFolderOwner(state, commandFolder.id) : false,
 		folderIsShareRootAndOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && isSharedFolderOwner(state, commandFolder.id) : false,
