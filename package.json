@@ -107,8 +107,8 @@
   },
   "packageManager": "yarn@4.16.0",
   "resolutions": {
-    "@codemirror/view": "6.42.1",
-    "@codemirror/state": "6.6.0",
+    "@codemirror/view": "6.43.6",
+    "@codemirror/state": "6.7.1",
     "@codemirror/language": "6.12.3",
     "@codemirror/lint": "6.9.5",
     "@codemirror/autocomplete": "6.20.1",
