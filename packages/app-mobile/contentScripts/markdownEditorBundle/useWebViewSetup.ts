@@ -90,7 +90,11 @@ const useWebViewSetup = ({
 						const currentViewportHeight = window.visualViewport?.height;
 
 						// Do not scroll into view if the viewport increased, to avoid scrolling when dismissing the keyboard
-						if (currentInnerHeight <= previousInnerHeight || currentViewportHeight <= previousViewportHeight) {
+						if (
+							currentInnerHeight < previousInnerHeight ||
+							currentViewportHeight < previousViewportHeight ||
+							(currentInnerHeight === previousInnerHeight && currentViewportHeight === previousViewportHeight)
+						) {
 							if (window.cm) {
 								window.cm.execCommand('scrollSelectionIntoView');
 							}
