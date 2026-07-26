@@ -82,7 +82,7 @@ const useWebViewSetup = ({
 				let previousViewportHeight = window.visualViewport?.height;
 
 				window.onresize = () => {
-					// Delay by 100 ms to ensure the height values are updated before making the comparison
+					// Delay by 100 ms to allow the height values to be updated before making the comparison
 					setTimeout(() => {
 						const currentInnerHeight = window.innerHeight;
 						const currentViewportHeight = window.visualViewport?.height;
