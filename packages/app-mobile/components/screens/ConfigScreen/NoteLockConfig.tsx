@@ -83,6 +83,16 @@ const NoteLockConfig = (props: Props) => {
 		}
 	}, [canSave, password]);
 
+	const onPasswordChange = useCallback((value: string) => {
+		setPassword(value);
+		setError('');
+	}, []);
+
+	const onPasswordRepeatChange = useCallback((value: string) => {
+		setPasswordRepeat(value);
+		setError('');
+	}, []);
+
 	const passwordLabelId = 'note-lock-password';
 	const repeatLabelId = 'note-lock-password-repeat';
 
@@ -103,7 +113,7 @@ const NoteLockConfig = (props: Props) => {
 					textContentType='newPassword'
 					importantForAutofill='yes'
 					value={password}
-					onChangeText={setPassword}
+					onChangeText={onPasswordChange}
 				/>
 				<Text nativeID={repeatLabelId} style={styles.normalText}>{_('Repeat password')}</Text>
 				<TextInput
@@ -117,7 +127,7 @@ const NoteLockConfig = (props: Props) => {
 					textContentType='newPassword'
 					importantForAutofill='yes'
 					value={passwordRepeat}
-					onChangeText={setPasswordRepeat}
+					onChangeText={onPasswordRepeatChange}
 				/>
 				{passwordMismatch ? <Text style={styles.errorText}>{_('Passwords do not match')}</Text> : null}
 				{error ? <Text style={styles.errorText}>{error}</Text> : null}
