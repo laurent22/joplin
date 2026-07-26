@@ -154,19 +154,23 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		ipcRenderer.on('asynchronous-message', (_event: import('electron').IpcRendererEvent, message: string, args: { url: string }) => {
 			if (message === 'openCallbackUrl') {
-				this.openCallbackUrl(args.url);
+				void this.openCallbackUrl(args.url);
 			}
 		});
 
 		const initialCallbackUrl = (bridge().electronApp() as ElectronAppWrapper).initialCallbackUrl();
 		if (initialCallbackUrl) {
-			this.openCallbackUrl(initialCallbackUrl);
+			void this.openCallbackUrl(initialCallbackUrl);
 		}
 	}
 
-	private openCallbackUrl(url: string) {
-		if (!isCallbackUrl(url)) throw new Error(`Invalid callback URL: ${url}`);
-		void executeCallbackUrl(url);
+	private async openCallbackUrl(url: string) {
+		try {
+			if (!isCallbackUrl(url)) throw new Error(`Invalid callback URL: ${url}`);
+			await executeCallbackUrl(url);
+		} catch (error) {
+			logger.error('Error handling callback URL:', error);
+		}
 	}
 
 	private updateLayoutPluginViews(layout: LayoutItem, plugins: PluginStates) {

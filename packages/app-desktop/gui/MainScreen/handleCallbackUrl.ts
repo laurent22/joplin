@@ -78,23 +78,25 @@ const openCommands: string[] = [
 const executeCallbackUrl = async (url: string) => {
 	const info = parseCallbackUrl(url);
 
-	if (info.command === CallbackUrlCommand.GetCurrentNote) {
-		await handleGetCurrentNote(info.params);
-		return;
+	if (!openCommands.includes(info.command) &&
+		info.command !== CallbackUrlCommand.GetCurrentNote &&
+		info.command !== CallbackUrlCommand.CreateNote) {
+		throw new Error(`Unhandled callback URL command: ${info.command}`);
 	}
 
-	if (info.command === CallbackUrlCommand.CreateNote) {
-		await handleCreateNote(info.params);
-		return;
+	try {
+		if (info.command === CallbackUrlCommand.GetCurrentNote) {
+			await handleGetCurrentNote(info.params);
+		} else if (info.command === CallbackUrlCommand.CreateNote) {
+			await handleCreateNote(info.params);
+		} else {
+			await CommandService.instance().execute(info.command.toString(), info.params.id);
+			logger.info(`Executed callback URL command: ${info.command}`);
+		}
+	} catch (error) {
+		logger.error(`Error handling callback URL command "${info.command}":`, error);
+		respond(info.params['x-error'], { errorMessage: error.message });
 	}
-
-	if (openCommands.includes(info.command)) {
-		await CommandService.instance().execute(info.command.toString(), info.params.id);
-		logger.info(`Executed callback URL command: ${info.command}`);
-		return;
-	}
-
-	throw new Error(`Unhandled callback URL command: ${info.command}`);
 };
 
 export default executeCallbackUrl;
