@@ -178,7 +178,8 @@ jobs:
           echo "RUNNER_ARCH=$RUNNER_ARCH"
           echo "DOCKER_IMAGE_PLATFORM=$DOCKER_IMAGE_PLATFORM"
 
-          yarn install
+          source "${GITHUB_WORKSPACE}/.github/scripts/retry.sh"
+          retry yarn install
           yarn buildServerDocker --docker-file Dockerfile.server --platform $DOCKER_IMAGE_PLATFORM --tag-name server-v0.0.0 --repository joplin/server
 
           # Basic test to ensure that the created build is valid. It should exit with
