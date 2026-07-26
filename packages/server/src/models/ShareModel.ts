@@ -70,7 +70,7 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	protected async validate(share: Share, options: ValidateOptions = {}): Promise<Share> {
-		if ('type' in share && ![ShareType.Note, ShareType.Folder].includes(share.type)) throw new ErrorBadRequest(`Invalid share type: ${share.type}`);
+		if ('type' in share && ![ShareType.Note, ShareType.PublishedFolder, ShareType.Folder].includes(share.type)) throw new ErrorBadRequest(`Invalid share type: ${share.type}`);
 		if (share.type !== ShareType.Note && await this.itemIsShared(share.type, share.item_id)) throw new ErrorBadRequest('A shared item cannot be shared again');
 
 		const item = await this.models().item().load(share.item_id);
@@ -169,11 +169,14 @@ export default class ShareModel extends BaseModel<Share> {
 		return query1.union(query2);
 	}
 
-	public async byUserAndItemId(userId: Uuid, itemId: Uuid): Promise<Share> {
-		return this.db(this.tableName).select(this.defaultFields)
+	public async byUserAndItemId(userId: Uuid, itemId: Uuid, type: ShareType = null): Promise<Share> {
+		const query = this.db(this.tableName).select(this.defaultFields)
 			.where('owner_id', '=', userId)
-			.where('item_id', '=', itemId)
-			.first();
+			.where('item_id', '=', itemId);
+
+		if (type !== null) void query.andWhere('type', '=', type);
+
+		return query.first();
 	}
 
 	public async sharesByUser(userId: Uuid, type: ShareType = null): Promise<Share[]> {
@@ -612,7 +615,7 @@ export default class ShareModel extends BaseModel<Share> {
 		const folderItem = await this.models().item().loadByJopId(owner.id, folderId);
 		if (!folderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
 
-		const share = await this.models().share().byUserAndItemId(owner.id, folderItem.id);
+		const share = await this.models().share().byUserAndItemId(owner.id, folderItem.id, ShareType.Folder);
 		if (share) return share;
 
 		const shareToSave: Share = {
@@ -625,6 +628,24 @@ export default class ShareModel extends BaseModel<Share> {
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
 		return super.save(shareToSave);
+	}
+
+	public async sharePublishedFolder(owner: User, folderId: string): Promise<Share> {
+		const folderItem = await this.models().item().loadByJopId(owner.id, folderId);
+		if (!folderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
+
+		const existingShare = await this.models().share().byUserAndItemId(owner.id, folderItem.id, ShareType.PublishedFolder);
+		if (existingShare) return existingShare;
+
+		const shareToSave: Share = {
+			type: ShareType.PublishedFolder,
+			item_id: folderItem.id,
+			owner_id: owner.id,
+			folder_id: folderId,
+		};
+
+		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
+		return this.save(shareToSave);
 	}
 
 	public async shareNote(owner: User, noteId: string, masterKeyId: string, recursive: boolean): Promise<Share> {

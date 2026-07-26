@@ -214,7 +214,7 @@ export default function(props: Props) {
 
 	function renderSignUpArea(info: SyncTargetInfo) {
 		if (info.name !== 'joplinCloud') return null;
-		return <JoplinCloudSignUpCallToAction/>;
+		return <JoplinCloudSignUpCallToAction source='desktop-sync-wizard'/>;
 	}
 
 	function renderSyncTarget(info: SyncTargetInfo) {
