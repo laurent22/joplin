@@ -1050,4 +1050,30 @@ describe('reducer', () => {
 		// The primary window should be unaffected
 		expect(state.selectedNoteIds).toEqual([notes[0].id]);
 	});
+
+	it.each([
+		['without a noteId', undefined, true],
+		['for the selected note', 0, true],
+		['for a different note', 1, false],
+	])('should request an editor reload %s', async (_, noteIndex, shouldReload) => {
+		jest.useFakeTimers();
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(2, folders[0]);
+
+		let state = initTestState(folders, 0, notes, [0]);
+
+		const previousReloadTime = state.editorNoteReloadTimeRequest;
+		const now = Date.now();
+
+		state = reducer(state, {
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: noteIndex === undefined ? undefined : notes[noteIndex].id,
+		});
+
+		expect(state.editorNoteReloadTimeRequest).toBe(
+			shouldReload ? now : previousReloadTime,
+		);
+
+		jest.useRealTimers();
+	});
 });
