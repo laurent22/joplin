@@ -78,14 +78,18 @@ const useWebViewSetup = ({
 				${setInitialSelectionJs}
 				${setInitialSearchJs}
 
+				let resizeId = 0;
 				let previousInnerHeight = window.innerHeight;
 				let previousViewportHeight = window.visualViewport?.height;
 
 				window.onresize = () => {
+					const id = ++resizeId;
+
 					// Delay by 100 ms to allow the height values to be updated before making the comparison. A race condition is still possible here, but
 					// this would normally only happen on a very slow device such as an emulator, or when editing an excessively large note. In those cases
 					// though, the behaviour would be the same as prior to this fix, so issue #15923 can at least be fixed in the majority of cases
 					setTimeout(() => {
+						if (id !== resizeId) return; // newer resize happened
 						const currentInnerHeight = window.innerHeight;
 						const currentViewportHeight = window.visualViewport?.height;
 
