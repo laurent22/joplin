@@ -62,14 +62,14 @@ describe('noteChat', () => {
 		expect(prompt).toContain('- [ ]');
 	});
 
-	test('systemPrompt includes full body when no selection', () => {
+	test('systemPrompt should not include body', () => {
 		const prompt = _internal.systemPrompt({
 			title: 'My note',
 			body: 'the whole body',
 			selection: null,
 		});
-		expect(prompt).toContain('the whole body');
-		expect(prompt).toContain('BEGIN NOTE');
+		// Including the body in the prompt would cause a cache invalidation on each note change
+		expect(prompt).not.toContain('the whole body');
 	});
 
 	test.each([
@@ -89,7 +89,7 @@ describe('noteChat', () => {
 				body: 'b',
 				selection: null,
 			},
-			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange'],
+			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'readNote'],
 		},
 		{
 			label: 'offers replaceFencedBlock when Mermaid block present',
@@ -98,7 +98,7 @@ describe('noteChat', () => {
 				body: '```mermaid\ngitGraph\n\tcommit\n```\n',
 				selection: null,
 			},
-			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock'],
+			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock', 'readNote'],
 		},
 	])('toolDefinitions should include the expected operations (case $label)', ({ note, expectedOperations }) => {
 		const editSchemaItems = _internal.toolDefinitions(note);
@@ -342,9 +342,34 @@ describe('noteChat', () => {
 			{ role: ChatRole.System },
 			{ role: ChatRole.User, content: userMessage },
 
+			// Reading the body
+			{ role: ChatRole.Assistant },
+			{ role: ChatRole.Tool },
+
 			...failedAttempts,
 
 			{ role: ChatRole.Assistant, content: 'tool not found: replaceRange\ntool not found: appendToNote' },
+		]);
+	});
+
+	test('noteChat initialize the chat history with the note body', async () => {
+		const { onContext, commands } = makeTestContext();
+
+		const result = await runNoteChat(
+			onContext,
+			[],
+			'test',
+			commands,
+			() => {},
+			new AbortController().signal,
+		);
+
+		expect(result).toMatchObject([
+			{ role: ChatRole.System },
+			{ role: ChatRole.User, content: 'test' },
+			{ role: ChatRole.Assistant, content: '', toolCalls: [{ toolName: 'readNote' }] },
+			{ role: ChatRole.Tool, content: 'Body', toolName: 'readNote' },
+			{ role: ChatRole.Assistant, content: '' },
 		]);
 	});
 });
