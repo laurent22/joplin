@@ -13032,7 +13032,7 @@ __metadata:
     jest-expect-message: "npm:1.1.3"
     jquery: "npm:3.7.1"
     jsdom: "npm:26.1.0"
-    knex: "npm:3.2.7"
+    knex: "npm:3.2.9"
     koa: "npm:2.16.4"
     ldapts: "npm:8.1.7"
     markdown-it: "npm:13.0.2"
@@ -13129,7 +13129,7 @@ __metadata:
     gulp: "npm:4.0.2"
     jest: "npm:29.7.0"
     jest-expect-message: "npm:1.1.3"
-    knex: "npm:3.2.7"
+    knex: "npm:3.2.9"
     koa: "npm:2.16.4"
     koa-body: "npm:6.0.1"
     pg-boss: "npm:10.4.2"
@@ -39346,9 +39346,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"knex@npm:3.2.7":
-  version: 3.2.7
-  resolution: "knex@npm:3.2.7"
+"knex@npm:3.2.9":
+  version: 3.2.9
+  resolution: "knex@npm:3.2.9"
   dependencies:
     colorette: "npm:2.0.19"
     commander: "npm:^10.0.0"
@@ -39385,7 +39385,7 @@ __metadata:
       optional: true
   bin:
     knex: bin/cli.js
-  checksum: 10/8943ddcbdb24275e6191eef8f9787718ac7728e39b5b4a732a7f4a81dc7ac881a95b00c18e7a39b6496f1a6b0108dd70c08f487b66c174940f3b02993af58d8a
+  checksum: 10/208bcae8645a4bfd681a4dfca3b3200219dbc6fb864c0b7f38e13953fe6e02b702960b99966ac950f4dfaa40964629e01e9ee583bd4315e5cb99036ed02d6d0b
   languageName: node
   linkType: hard
 
