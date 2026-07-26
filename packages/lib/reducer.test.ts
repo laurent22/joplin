@@ -117,7 +117,6 @@ describe('reducer', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
-		jest.useFakeTimers({ advanceTimers: true });
 	});
 
 	// tests for NOTE_DELETE
@@ -1057,6 +1056,7 @@ describe('reducer', () => {
 		['for the selected note', 0, true],
 		['for a different note', 1, false],
 	])('should request an editor reload %s', async (_, noteIndex, shouldReload) => {
+		jest.useFakeTimers();
 		const folders = await createNTestFolders(1);
 		const notes = await createNTestNotes(2, folders[0]);
 
@@ -1073,5 +1073,7 @@ describe('reducer', () => {
 		expect(state.editorNoteReloadTimeRequest).toBe(
 			shouldReload ? now : previousReloadTime,
 		);
+
+		jest.useRealTimers();
 	});
 });
