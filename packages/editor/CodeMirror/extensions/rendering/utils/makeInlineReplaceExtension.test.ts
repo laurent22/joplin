@@ -184,6 +184,21 @@ const fullyCoveredSelectionTestCases = [
 	},
 ]);
 
+// Temporary CI diagnostic. Intermittently, `expect(textContent).toBe('red text')` fails with
+// Expected: "red text" / Received: "red text" - visually identical but unequal, so the actual
+// string differs by an invisible codepoint (e.g. char code 160/8203 where the healthy value has
+// a normal space, 32). This logs the char codes on mismatch to identify it. Remove once diagnosed.
+const expectTextContentToBe = (actual: string, expected: string) => {
+	if (actual !== expected) {
+		// eslint-disable-next-line no-console
+		console.error('FLAKE_DIAGNOSTIC', JSON.stringify({
+			expectedCodes: [...expected].map(character => character.charCodeAt(0)),
+			actualCodes: [...actual].map(character => character.charCodeAt(0)),
+		}));
+	}
+	expect(actual).toBe(expected);
+};
+
 describe('makeInlineReplaceExtension', () => {
 	it.each(directedTestCases)('should include Markdown syntax for $label in a $direction mouse selection', async ({
 		markdown, renderedText, selection, expectedSelection, expectedSyntaxTreeTags, extensions,
@@ -203,12 +218,12 @@ describe('makeInlineReplaceExtension', () => {
 				anchor: selection.anchor,
 				head: selection.head,
 			});
-			expect(editor.contentDOM.textContent).toBe(renderedText);
+			expectTextContentToBe(editor.contentDOM.textContent, renderedText);
 
 			editor.dom.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
 
 			expect(editor.state.selection.main).toMatchObject(expectedSelection);
-			expect(editor.contentDOM.textContent).toBe(markdown.trimEnd());
+			expectTextContentToBe(editor.contentDOM.textContent, markdown.trimEnd());
 		} finally {
 			editor.destroy();
 		}
