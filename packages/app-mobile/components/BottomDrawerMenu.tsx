@@ -47,8 +47,6 @@ const useStyles = (themeId: number) => {
 				marginVertical: theme.marginSmall,
 				lineHeight: theme.fontSizeLarger,
 				fontSize: theme.fontSizeLarger,
-				borderBottomColor: theme.dividerColor,
-				borderBottomWidth: 1,
 			},
 			menu: {
 				paddingHorizontal: 0,
