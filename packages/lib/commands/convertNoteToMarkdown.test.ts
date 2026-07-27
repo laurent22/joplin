@@ -6,6 +6,7 @@ import { setupDatabaseAndSynchronizer, switchClient } from '../testing/test-util
 import Folder from '../models/Folder';
 import { NoteEntity } from '../services/database/types';
 import shim from '../shim';
+import Setting from '../models/Setting';
 
 describe('convertNoteToMarkdown', () => {
 	let state: State = undefined;
@@ -104,6 +105,23 @@ describe('convertNoteToMarkdown', () => {
 		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
 
 		expect(shim.showToast).toHaveBeenCalled();
+	});
+
+	it.each([
+		{ label: 'not convert a locked note', flagEnabled: true, blocked: true },
+		{ label: 'convert a locked note when note lock is disabled', flagEnabled: false, blocked: false },
+	])('should $label', async ({ flagEnabled, blocked }) => {
+		Setting.setValue('featureFlag.noteLock', flagEnabled);
+		shim.showErrorDialog = jest.fn();
+		const folder = await Folder.save({ title: 'test_folder' });
+		const htmlNote = await Note.save({ title: 'test', body: '<p>Hello</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html, is_locked: 1 });
+		state.selectedNoteIds = [htmlNote.id];
+
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
+
+		expect(shim.showErrorDialog).toHaveBeenCalledTimes(blocked ? 1 : 0);
+		// The original note is only moved to the trash once it has been converted.
+		expect((await Note.load(htmlNote.id)).deleted_time === 0).toBe(blocked);
 	});
 
 });

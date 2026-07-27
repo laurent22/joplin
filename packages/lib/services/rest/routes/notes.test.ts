@@ -231,4 +231,48 @@ describe('routes/notes', () => {
 		expect(await Revision.load(revision.id)).toBeFalsy();
 	});
 
+	test('should fail closed on locked note bodies', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const api = new Api();
+		// A direct save with is_locked keeps the raw body, standing in for ciphertext.
+		const note = await Note.save({ title: 'locked', body: 'ciphertext', is_locked: 1 });
+
+		const metadata = await api.route(RequestMethod.GET, `notes/${note.id}`);
+		expect(metadata.id).toBe(note.id);
+		// The guard only fires on a requested body, so it relies on the default fields not including one.
+		expect('body' in metadata).toBe(false);
+		await expect(api.route(RequestMethod.GET, `notes/${note.id}`, { fields: 'id,body' })).rejects.toThrow('locked note');
+		await expect(api.route(RequestMethod.GET, `notes/${note.id}`, { fields: 'id,BODY' })).rejects.toThrow('locked note');
+		await expect(api.route(RequestMethod.GET, `notes/${note.id}/resources`)).rejects.toThrow('locked note');
+
+		const renamed = await api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ title: 'renamed' }));
+		expect(renamed.title).toBe('renamed');
+		expect('body' in renamed).toBe(false);
+		expect((await Note.load(note.id)).title).toBe('renamed');
+		await expect(api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ body: 'overwrite' }))).rejects.toThrow('locked note');
+		await expect(api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ is_locked: 0 }))).rejects.toThrow('lock state');
+		expect((await Note.load(note.id)).body).toBe('ciphertext');
+	});
+
+	test.each([
+		{ label: 'lock a plaintext note', startLocked: 0, value: '1foo' },
+		{ label: 'unlock an encrypted note', startLocked: 1, value: '0x1' },
+	])('should reject a malformed lock state that would $label', async ({ startLocked, value }) => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const api = new Api();
+		const note = await Note.save({ title: 'note', body: 'body', is_locked: startLocked });
+
+		await expect(api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ is_locked: value }))).rejects.toThrow('lock state');
+		expect((await Note.load(note.id)).is_locked).toBe(startLocked);
+	});
+
+	test('should not restrict locked notes when note lock is disabled', async () => {
+		Setting.setValue('featureFlag.noteLock', false);
+		const api = new Api();
+		const note = await Note.save({ title: 'locked', body: 'ciphertext', is_locked: 1 });
+
+		const loaded = await api.route(RequestMethod.GET, `notes/${note.id}`, { fields: 'id,body' });
+		expect(loaded.body).toBe('ciphertext');
+	});
+
 });

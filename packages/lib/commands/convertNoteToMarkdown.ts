@@ -9,6 +9,8 @@ import { itemIsReadOnly } from '../models/utils/readOnly';
 import { ModelType } from '../BaseModel';
 import ItemChange from '../models/ItemChange';
 import Setting from '../models/Setting';
+import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
+import NoteLockNote from '../services/noteLock/NoteLockNote';
 import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('convertNoteToMarkdown');
@@ -40,6 +42,9 @@ export const runtime = (): CommandRuntime => {
 					}
 					if (await itemIsReadOnly(Note, ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note.id, Setting.value('sync.userId'), context.state.shareService)) {
 						throw new Error(_('Cannot convert read-only item: "%s"', note.title));
+					}
+					if (isNoteLockEnabled() && NoteLockNote.isLocked(note)) {
+						throw new Error(_('Cannot convert locked note: "%s"', note.title));
 					}
 
 					const markdownBody = await convertHtmlToMarkdown().execute(context, note.body);

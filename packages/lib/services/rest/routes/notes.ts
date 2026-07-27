@@ -25,7 +25,10 @@ import Logger from '@joplin/utils/Logger';
 const { mimeTypeFromHeaders } = require('../../../net-utils');
 import { fileExtension, safeFileExtension, safeFilename, filename } from '../../../path-utils';
 import { MarkupToHtml } from '@joplin/renderer';
-const { ErrorNotFound } = require('../utils/errors');
+const { ErrorNotFound, ErrorForbidden } = require('../utils/errors');
+import requestFields from '../utils/requestFields';
+import isNoteLockEnabled from '../../noteLock/isNoteLockEnabled';
+import NoteLockNote from '../../noteLock/NoteLockNote';
 import { fileUriToPath } from '@joplin/utils/url';
 import { NoteEntity, ResourceEntity } from '../../database/types';
 import { DownloadController } from '../../../downloadController';
@@ -471,6 +474,8 @@ export default async function(request: Request, id: string = null, link: string 
 		} else if (link && link === 'resources') {
 			const note = await Note.load(id);
 			if (!note) throw new ErrorNotFound();
+			// linkedResourceIds parses the body, which is ciphertext for a locked note.
+			if (isNoteLockEnabled() && NoteLockNote.isLocked(note)) throw new ErrorForbidden('The resources of a locked note cannot be listed through the API');
 			const resourceIds = await Note.linkedResourceIds(note.body);
 			const output = [];
 			const loadOptions = defaultLoadOptions(request, BaseModel.TYPE_RESOURCE);
@@ -480,6 +485,15 @@ export default async function(request: Request, id: string = null, link: string 
 			return collectionToPaginatedResults(ModelType.Resource, output, request);
 		} else if (link) {
 			throw new ErrorNotFound();
+		}
+
+		if (isNoteLockEnabled() && id) {
+			// SQLite column names are case-insensitive.
+			const fields = requestFields(request, BaseModel.TYPE_NOTE).map((f: string) => f.toLowerCase());
+			if (fields.includes('body') || fields.includes('*')) {
+				const note = await Note.load(id, { fields: ['is_locked'] });
+				if (NoteLockNote.isLocked(note)) throw new ErrorForbidden('The body of a locked note cannot be read through the API');
+			}
 		}
 
 		const sql: string[] = [];
@@ -539,6 +553,13 @@ export default async function(request: Request, id: string = null, link: string 
 		const timestamp = Date.now();
 
 		const newProps = request.bodyJson(readonlyProperties('PUT'));
+
+		if (isNoteLockEnabled()) {
+			// Compare through the model's own coercion: Number() reads "1foo" as NaN, but the save path stores it as 1.
+			if ('is_locked' in newProps && !!Note.filter({ is_locked: newProps.is_locked }).is_locked !== !!note.is_locked) throw new ErrorForbidden('The note lock state cannot be changed through the API');
+			if (NoteLockNote.isLocked(note) && 'body' in newProps) throw new ErrorForbidden('The body of a locked note cannot be modified through the API');
+		}
+
 		if (!('user_updated_time' in newProps)) newProps.user_updated_time = timestamp;
 
 		let newNote = {
@@ -558,6 +579,13 @@ export default async function(request: Request, id: string = null, link: string 
 		if (requestNote.tags || requestNote.tags === '') {
 			const tagTitles = requestNote.tags.split(',');
 			await Tag.setNoteTagsByTitles(id, tagTitles);
+		}
+
+		if (isNoteLockEnabled() && NoteLockNote.isLocked(newNote)) {
+			// The response would otherwise return the ciphertext body that GET refuses to serve. Copied
+			// rather than deleted in place, since Note.save has already dispatched this object.
+			newNote = { ...newNote };
+			delete newNote.body;
 		}
 
 		return newNote;
