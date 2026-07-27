@@ -36,6 +36,8 @@ import SectionDescription from './SectionDescription';
 import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
 import getVersionInfoText from '../../../utils/getVersionInfoText';
 import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './JoplinCloudConfig';
+import NoteLockConfig from './NoteLockConfig';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import shim from '@joplin/lib/shim';
 import SettingsToggle from './SettingsToggle';
 import { UpdateSettingValueCallback } from './types';
@@ -550,6 +552,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		if (section.name === 'sync') {
 			addSettingButton('sync_wizard_button', _('Open Sync Wizard...'), this.onShowSyncWizard_);
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
+		}
+
+		if (section.name === 'noteLock' && isNoteLockEnabled()) {
+			addSettingComponent(<NoteLockConfig key='note-lock-config'/>, [_('Password setup'), _('Note lock password')]);
 		}
 
 		if (section.name === 'joplinCloud') {

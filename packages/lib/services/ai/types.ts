@@ -11,6 +11,7 @@ interface ChatBaseMessage {
 
 export interface ChatStandardMessage extends ChatBaseMessage {
 	role: ChatRole.System | ChatRole.User | ChatRole.Assistant;
+	hide?: boolean;
 	toolCalls?: ChatToolCall[];
 }
 
@@ -21,6 +22,7 @@ export interface ChatToolMessage extends ChatBaseMessage {
 	isError: boolean;
 	// A very brief description of the result that can be shown to the user
 	userDescription: string;
+	isEdit: boolean;
 }
 
 export type ChatMessage = ChatStandardMessage | ChatToolMessage;

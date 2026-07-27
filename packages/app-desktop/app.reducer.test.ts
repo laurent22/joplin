@@ -146,13 +146,14 @@ describe('app.reducer', () => {
 				toolCallId: 'call-1',
 				userDescription: '',
 				isError: false,
+				isEdit: true,
 				content: 'Result',
 			} satisfies ChatToolMessage),
 		});
 
 		expect(state.aiChatMessages).toMatchObject([
 			{ id: 'id-0', role: 'user', text: 'Test', raw: [{ role: 'user' }] },
-			{ id: 'id-1', role: 'assistant', text: 'Testing', editsApplied: 1, editsMissed: 0 },
+			{ id: 'id-1', role: 'assistant', text: 'Testing' },
 		]);
 
 
