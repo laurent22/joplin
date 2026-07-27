@@ -392,10 +392,31 @@ const buildStartupTasks = (
 	addTask('buildStartupTasks/go: initial route', async () => {
 		const folder = await getInitialActiveFolder();
 
-		const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+		const getNotesParent = async () => {
+			let notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+			if (notesParent.type === 'Tag' && !(await Tag.load(notesParent.selectedItemId))) {
+				notesParent = {
+					type: 'Folder',
+					selectedItemId: Setting.value('activeFolderId'),
+				};
+			}
+			return notesParent;
+		};
+
+		const notesParent = await getNotesParent();
 
 		if (notesParent && notesParent.type === 'SmartFilter') {
-			dispatch(DEFAULT_ROUTE);
+			dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				smartFilterId: notesParent.selectedItemId,
+			});
+		} else if (notesParent && notesParent.type === 'Tag') {
+			dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				tagId: notesParent.selectedItemId,
+			});
 		} else if (!folder) {
 			dispatch(DEFAULT_ROUTE);
 		} else {
