@@ -29,6 +29,7 @@ const TextWrapCalculator: React.FC<Props> = props => {
 		<>
 			<View
 				pointerEvents='none'
+				aria-hidden={true}
 				style={[
 					props.textCompContainerStyle,
 					{
