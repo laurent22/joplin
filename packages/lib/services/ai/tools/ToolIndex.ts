@@ -30,6 +30,7 @@ export default class ToolIndex {
 			return {
 				...tool,
 				description: enabled ? tool.description : [
+					'(Disabled tool)',
 					substrWithEllipsis(tool.description, 0, 64),
 					`**Disabled**: The setting "${toolSettingName(tool.id)}" must be enabled to use this tool.`,
 				].join('\n'),
