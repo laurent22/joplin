@@ -102,13 +102,15 @@ WORKDIR /home/$user/packages/server
 ENTRYPOINT ["tini", "--"]
 CMD ["yarn", "start-prod"]
 
+ARG IMAGE_NAME="Joplin Server"
+ENV APP_NAME=${IMAGE_NAME}
+
 # Build-time metadata
 # https://github.com/opencontainers/image-spec/blob/master/annotations.md
 ARG BUILD_DATE
 ARG REVISION
 ARG VERSION
 ARG SOURCE
-ARG IMAGE_NAME="Joplin Server"
 LABEL org.opencontainers.image.created="$BUILD_DATE" \
       org.opencontainers.image.title="$IMAGE_NAME" \
       org.opencontainers.image.description="Docker image for Joplin Server" \

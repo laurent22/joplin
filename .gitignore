@@ -1142,6 +1142,7 @@ packages/editor/CodeMirror/extensions/rendering/replaceLinks.test.js
 packages/editor/CodeMirror/extensions/rendering/replaceLinks.js
 packages/editor/CodeMirror/extensions/rendering/types.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeBlockReplaceExtension.js
+packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.test.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.js
 packages/editor/CodeMirror/extensions/rendering/utils/nodeIntersectsSelection.js
 packages/editor/CodeMirror/extensions/searchExtension.test.js
@@ -1613,6 +1614,7 @@ packages/lib/services/commands/isEditorCommand.js
 packages/lib/services/commands/propsHaveChanged.js
 packages/lib/services/commands/stateToWhenClauseContext.test.js
 packages/lib/services/commands/stateToWhenClauseContext.js
+packages/lib/services/conflict/isConflictResolutionEnabled.js
 packages/lib/services/contextkey/contextkey.js
 packages/lib/services/database/addMigrationFile.js
 packages/lib/services/database/isSqliteSyntaxError.js
