@@ -543,8 +543,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		styles.titleTextInput = {
 			flex: 1,
 			marginTop: 0,
+			marginRight: theme.marginRight,
 			paddingLeft: 0,
-			paddingRight: theme.marginRight,
 			color: theme.color,
 			fontWeight: 'bold',
 			fontSize: theme.fontSize,
@@ -1831,7 +1831,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					autoCapitalize="sentences"
 					style={{
 						...this.styles().titleTextInput,
-						paddingRight: titleToggleButton ? 0 : theme.marginRight,
+						marginRight: titleToggleButton ? 0 : theme.marginRight,
 					}}
 					value={note.title}
 					onChangeText={this.title_changeText}
