@@ -114,7 +114,7 @@ describe('noteChat', () => {
 		},
 	])('toolDefinitions should include the expected operations (case $label)', ({ note, expectedOperations }) => {
 		const { commands, context } = makeTestContext(note);
-		const editSchemaItems = new ToolIndex({ note: context, commands }).enabledTools();
+		const editSchemaItems = new ToolIndex({ note: context, commands }).getTools();
 
 		const allowedSchemaOperations = editSchemaItems.map(item => item.id).sort();
 		expect(
@@ -129,7 +129,7 @@ describe('noteChat', () => {
 
 	test('toolDefinitions advertises replaceFencedBlock with structured-block guidance', () => {
 		const { context, commands } = makeTestContext({ title: 'n', body: '```abc\n```', selection: null });
-		const tools = new ToolIndex({ note: context, commands }).enabledTools();
+		const tools = new ToolIndex({ note: context, commands }).getTools();
 		const toolDefinition = tools.find(tool => tool.id === 'replaceFencedBlock');
 		expect(toolDefinition).toBeTruthy();
 		expect(toolDefinition.description).toContain('jsoncanvas');

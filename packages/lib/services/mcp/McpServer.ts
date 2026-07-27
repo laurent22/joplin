@@ -76,7 +76,7 @@ export default class McpServer {
 
 	private handleToolsList() {
 		return {
-			tools: new ToolIndex(null).enabledTools().map(t => ({
+			tools: new ToolIndex(null).getTools().map(t => ({
 				name: t.id,
 				description: t.description,
 				inputSchema: t.inputSchema,

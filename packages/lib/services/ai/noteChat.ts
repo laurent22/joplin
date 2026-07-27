@@ -179,7 +179,7 @@ const stepNoteChat = async ({
 	const toolIndex = new ToolIndex({ note, commands });
 
 	const chatResult = await AiService.instance().chat(messages, {
-		tools: allowTools ? toolIndex.enabledTools() : [],
+		tools: allowTools ? toolIndex.getTools() : [],
 		signal,
 	});
 
