@@ -28,8 +28,6 @@ const NewNoteButton: React.FC<Props> = () => {
 
 	const menuContent = useMemo(() => {
 		const items: MenuOption[] = [
-			{ icon: 'material file-document-check-outline', title: _('New to-do'), onPress: () => makeNewNote(true) },
-			{ icon: 'material file-document-outline', title: _('New note'), onPress: () => makeNewNote(false) },
 			{ icon: 'material folder-outline', title: _('New notebook'), onPress: makeNewFolder },
 			{ isDivider: true },
 			{ icon: 'material camera', title: _('Camera'), onPress: () => makeNewNote(false, AttachFileAction.TakePhoto) },
@@ -37,6 +35,9 @@ const NewNoteButton: React.FC<Props> = () => {
 			{ icon: 'material data-matrix-scan', title: _('Scan notebook'), onPress: () => NavService.go('DocumentScanner') },
 			{ icon: 'material draw', title: _('Drawing'), onPress: () => makeNewNote(false, AttachFileAction.AttachDrawing) },
 			{ icon: 'material microphone-outline', title: _('Recording'), onPress: () => makeNewNote(false, AttachFileAction.RecordAudio) },
+			{ isDivider: true },
+			{ icon: 'material file-document-check-outline', title: _('New to-do'), onPress: () => makeNewNote(true) },
+			{ icon: 'material file-document-outline', title: _('New note'), onPress: () => makeNewNote(false) },
 		];
 		return items;
 	}, []);
