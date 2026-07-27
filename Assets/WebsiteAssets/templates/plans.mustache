@@ -216,6 +216,11 @@
 				applyPeriod(period);
 			});
 
+			// Keep the ?source= label so it can be sent to Stripe at checkout.
+			// Only overwrite when the param is present, to preserve an earlier one.
+			const sourceParam = urlQuery.get('source');
+			if (sourceParam) localStorage.setItem('source', sourceParam);
+
 			setupBetaHandling(urlQuery);
 			if (urlQuery.get('period') === 'monthly') {
 				// Nothing - this is the default

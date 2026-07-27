@@ -24,6 +24,7 @@ import { DialogContext } from '../DialogManager';
 import useDeleteHistoryClick from '@joplin/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick';
 import { OnScrollCallback } from '../NoteBodyViewer/types';
 import TextWrapCalculator from './Notes/TextWrapCalculator';
+import { MenuOptionStyle } from '../ScreenHeader/Menu';
 
 interface Props {
 	themeId: number;
@@ -195,6 +196,8 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 	const menuOptions = useMemo(() => {
 		const output: MenuOptionType[] = [{
 			title: _('Delete history'),
+			icon: 'material delete-outline',
+			style: MenuOptionStyle.Destructive,
 			onPress: deleteHistory_onPress,
 			disabled: disableDeleteHistory,
 		}];

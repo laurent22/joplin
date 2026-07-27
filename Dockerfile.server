@@ -89,6 +89,9 @@ RUN pm2 install https://registry.npmjs.org/pm2-logrotate/-/pm2-logrotate-3.0.0.t
 	&& pm2 set pm2-logrotate:retain 5 \
 	&& pm2 set pm2-logrotate:compress true
 
+ARG LICENSE_REQUIRED="0"
+ENV LICENSE_REQUIRED=${LICENSE_REQUIRED}
+
 ENV NODE_ENV=production
 ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
@@ -99,13 +102,15 @@ WORKDIR /home/$user/packages/server
 ENTRYPOINT ["tini", "--"]
 CMD ["yarn", "start-prod"]
 
+ARG IMAGE_NAME="Joplin Server"
+ENV APP_NAME=${IMAGE_NAME}
+
 # Build-time metadata
 # https://github.com/opencontainers/image-spec/blob/master/annotations.md
 ARG BUILD_DATE
 ARG REVISION
 ARG VERSION
 ARG SOURCE
-ARG IMAGE_NAME="Joplin Server"
 LABEL org.opencontainers.image.created="$BUILD_DATE" \
       org.opencontainers.image.title="$IMAGE_NAME" \
       org.opencontainers.image.description="Docker image for Joplin Server" \

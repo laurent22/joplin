@@ -49,6 +49,37 @@ describe('app.reducer', () => {
 		]);
 	});
 
+	it('aI_STATUS_UPDATE merges a partial payload without clobbering unrelated fields', () => {
+		const state: AppState = {
+			...createAppDefaultState({}),
+			aiStatus: { degraded: true, tokensUsed: 500, tokensBudget: 1000, lastToastShownAt: 12345 },
+		};
+
+		const afterUsage = appReducer(state, {
+			type: 'AI_STATUS_UPDATE',
+			payload: { tokensUsed: 600 },
+		});
+
+		expect(afterUsage.aiStatus).toEqual({
+			degraded: true,
+			tokensUsed: 600,
+			tokensBudget: 1000,
+			lastToastShownAt: 12345,
+		});
+
+		const afterToast = appReducer(afterUsage, {
+			type: 'AI_STATUS_UPDATE',
+			payload: { lastToastShownAt: 67890 },
+		});
+
+		expect(afterToast.aiStatus).toEqual({
+			degraded: true,
+			tokensUsed: 600,
+			tokensBudget: 1000,
+			lastToastShownAt: 67890,
+		});
+	});
+
 	it('showing a dialog in one window should hide dialogs with the same ID in background windows', () => {
 		const state: AppState = {
 			...createAppDefaultState({}),
@@ -103,7 +134,7 @@ describe('app.reducer', () => {
 			message: buildMessage(
 				ChatRole.Assistant,
 				'Testing',
-				[{ toolName: 'testTool', callId: 'call-1', arguments: { arg: 1 } }],
+				[{ toolName: 'testTool', callId: 'call-1', arguments: { arg: 1 }, parseError: null }],
 			),
 		});
 		state = appReducer(state, {
@@ -115,13 +146,14 @@ describe('app.reducer', () => {
 				toolCallId: 'call-1',
 				userDescription: '',
 				isError: false,
+				isEdit: true,
 				content: 'Result',
 			} satisfies ChatToolMessage),
 		});
 
 		expect(state.aiChatMessages).toMatchObject([
 			{ id: 'id-0', role: 'user', text: 'Test', raw: [{ role: 'user' }] },
-			{ id: 'id-1', role: 'assistant', text: 'Testing', editsApplied: 1, editsMissed: 0 },
+			{ id: 'id-1', role: 'assistant', text: 'Testing' },
 		]);
 
 

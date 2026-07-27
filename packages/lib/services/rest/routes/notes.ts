@@ -551,6 +551,7 @@ export default async function(request: Request, id: string = null, link: string 
 
 		BaseModel.dispatch({
 			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: id,
 		});
 
 		const requestNote = JSON.parse(request.body);

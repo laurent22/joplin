@@ -6,6 +6,7 @@ interface Props {
 	note: {
 		id: string;
 		title: string;
+		is_published: boolean;
 		is_todo: number;
 		todo_completed: number;
 		body: string;
@@ -37,6 +38,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 		'item.size.height',
 		'note.body',
 		'note.id',
+		'note.is_published',
 		'note.is_shared',
 		'note.is_todo',
 		'note.isWatched',
@@ -126,6 +128,18 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 			}
 		}
 
+		> .content.-published {
+			> .title {
+				color: var(--joplin-color4);
+			}
+		}
+
+		> .content.-published.-selected {
+			> .title {
+				color: var(--joplin-color);
+			}
+		}
+
 		> .content.-completed {
 			> .title {
 				opacity: 0.5;
@@ -143,7 +157,7 @@ const defaultLeftToRightItemRenderer: ListRenderer = {
 
 	itemTemplate: // html
 		`
-		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
+		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.is_published}}-published{{/note.is_published}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
 			<div style="width: {{titleWidth}}px;" class="title" data-id="{{note.id}}">
 				{{#note.is_todo}}
 					<input class="checkbox" data-id="todo-checkbox" type="checkbox" {{#note.todo_completed}}checked="checked"{{/note.todo_completed}}>

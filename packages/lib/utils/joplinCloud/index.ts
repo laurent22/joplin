@@ -598,8 +598,7 @@ const getTieredPricingTable = (price: StripePublicConfigPrice) => {
 };
 
 export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Plan> {
-	// TODO: Set to true to enable self-hosting self-service.
-	const selfServiceSelfHostingEnabled = false;
+	const selfServiceSelfHostingEnabled = true;
 	return {
 		basic: {
 			name: 'basic',

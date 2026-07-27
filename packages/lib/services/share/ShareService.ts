@@ -13,7 +13,7 @@ import { MasterKeyEntity } from '../e2ee/types';
 import { getMasterPassword } from '../e2ee/utils';
 import ResourceService from '../ResourceService';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
-import { ShareInvitation, SharePermissions, State, stateRootKey, StateShare } from './reducer';
+import { ShareInvitation, SharePermissions, ShareType, State, stateRootKey, StateShare } from './reducer';
 import PerformanceLogger from '../../PerformanceLogger';
 
 const logger = Logger.create('ShareService');
@@ -22,7 +22,9 @@ const perfLogger = PerformanceLogger.create();
 export interface ApiShare {
 	id: string;
 	master_key_id: string;
-	folder_id: string;
+	folder_id?: string;
+	note_id?: string;
+	type?: number;
 }
 
 export interface ApiTeamUsers {
@@ -305,6 +307,20 @@ export default class ShareService {
 		return share;
 	}
 
+	public async publishFolder(folderId: string): Promise<StateShare> {
+		const folder = await Folder.load(folderId);
+		if (!folder) throw new Error(`No such folder: ${folderId}`);
+
+		const share = await this.api().exec('POST', 'api/shares', {}, {
+			folder_id: folderId,
+			type: ShareType.PublishedFolder,
+		});
+
+		await this.refreshShares();
+
+		return share;
+	}
+
 	public async unshareNote(noteId: string) {
 		const note = await Note.load(noteId);
 		if (!note) throw new Error(`No such note: ${noteId}`);
@@ -335,7 +351,7 @@ export default class ShareService {
 	}
 
 	public folderShare(folderId: string): StateShare {
-		return this.shares.find(s => s.folder_id === folderId);
+		return this.shares.find(s => s.type === ShareType.Folder && s.folder_id === folderId);
 	}
 
 	public isSharedFolderOwner(folderId: string, userId: string = null): boolean {

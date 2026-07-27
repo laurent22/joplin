@@ -6,18 +6,43 @@ const dragBarThickness = 5;
 export const itemMinWidth = 40;
 export const itemMinHeight = 40;
 
+// Bigger than itemMinWidth: used as a fallback for width-less non-absorber
+// siblings so newly-shown panels (moveMode) get a usable width instead of
+// squeezing to the minimum.
+const nonAbsorberFallbackWidth = 250;
+const nonAbsorberFallbackHeight = 250;
+
 export interface LayoutItemSizes {
 	[key: string]: Size;
 }
 
+function containsFlexibleDescendant(item: LayoutItem): boolean {
+	if (item.flexible) return true;
+	if (!item.children) return false;
+	for (const child of item.children) {
+		if (containsFlexibleDescendant(child)) return true;
+	}
+	return false;
+}
+
+// Whether this item's trailing (right/bottom) edge is a divider against a
+// visible-in-render sibling. The parent-side flags cover the case where the
+// item's edge coincides with an ancestor's divider (e.g. a column-nested item
+// inheriting its column container's right edge).
+export interface EdgeFlags {
+	ownRight: boolean;
+	ownBottom: boolean;
+	parentRight: boolean;
+	parentBottom: boolean;
+}
+
+const noEdges: EdgeFlags = { ownRight: false, ownBottom: false, parentRight: false, parentBottom: false };
+
 // Container always take the full space while the items within it need to
 // accommodate for the resize handle.
-export function itemSize(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isContainer: boolean): Size {
-	const parentResizableRight = !!parent && parent.resizableRight;
-	const parentResizableBottom = !!parent && parent.resizableBottom;
-
-	const rightGap = !isContainer && (item.resizableRight || parentResizableRight) ? dragBarThickness : 0;
-	const bottomGap = !isContainer && (item.resizableBottom || parentResizableBottom) ? dragBarThickness : 0;
+export function itemSize(item: LayoutItem, _parent: LayoutItem | null, sizes: LayoutItemSizes, isContainer: boolean, edges: EdgeFlags = noEdges): Size {
+	const rightGap = !isContainer && (edges.ownRight || edges.parentRight) ? dragBarThickness : 0;
+	const bottomGap = !isContainer && (edges.ownBottom || edges.parentBottom) ? dragBarThickness : 0;
 
 	return {
 		width: sizes[item.key].width - rightGap,
@@ -93,20 +118,55 @@ function calculateChildrenSizes(item: LayoutItem, parent: LayoutItem | null, siz
 		remainingSize.height += dh;
 	}
 
-	if (noWidthChildren.length) {
-		const w = item.direction === 'row' ? Math.floor(remainingSize.width / noWidthChildren.length) : parentSize.width;
-		for (const child of noWidthChildren) {
-			const finalWidth = w;
-			sizes[child.item.key].width = finalWidth;
+	// When several children lack a size on the parent's axis (e.g. in
+	// moveMode, where normally-hidden panels are shown without one), route
+	// remaining space to the one that carries the flexible descendant and
+	// give the others a fallback size. This keeps the absorber's role
+	// intact and avoids equal-split behaviour that would eat editor space.
+	if (noWidthChildren.length && item.direction === 'row' && noWidthChildren.length > 1) {
+		const absorber = noWidthChildren.find(c => containsFlexibleDescendant(c.item));
+		if (absorber) {
+			const absorberMin = absorber.item.minWidth || itemMinWidth;
+			let budget = Math.max(0, remainingSize.width - absorberMin);
+			for (const child of noWidthChildren) {
+				if (child.item.key === absorber.item.key) continue;
+				const min = child.item.minWidth || itemMinWidth;
+				const desired = child.item.minWidth || nonAbsorberFallbackWidth;
+				const w = Math.max(min, Math.min(desired, budget));
+				sizes[child.item.key].width = w;
+				budget -= w;
+			}
+			sizes[absorber.item.key].width = Math.max(absorberMin, remainingSize.width - (noWidthChildren.reduce((sum, c) => c.item.key === absorber.item.key ? sum : sum + sizes[c.item.key].width, 0)));
+		} else {
+			const w = Math.floor(remainingSize.width / noWidthChildren.length);
+			for (const child of noWidthChildren) sizes[child.item.key].width = w;
 		}
+	} else if (noWidthChildren.length) {
+		const w = item.direction === 'row' ? Math.floor(remainingSize.width / noWidthChildren.length) : parentSize.width;
+		for (const child of noWidthChildren) sizes[child.item.key].width = w;
 	}
 
-	if (noHeightChildren.length) {
-		const h = item.direction === 'column' ? Math.floor(remainingSize.height / noHeightChildren.length) : parentSize.height;
-		for (const child of noHeightChildren) {
-			const finalHeight = h;
-			sizes[child.item.key].height = finalHeight;
+	if (noHeightChildren.length && item.direction === 'column' && noHeightChildren.length > 1) {
+		const absorber = noHeightChildren.find(c => containsFlexibleDescendant(c.item));
+		if (absorber) {
+			const absorberMin = absorber.item.minHeight || itemMinHeight;
+			let budget = Math.max(0, remainingSize.height - absorberMin);
+			for (const child of noHeightChildren) {
+				if (child.item.key === absorber.item.key) continue;
+				const min = child.item.minHeight || itemMinHeight;
+				const desired = child.item.minHeight || nonAbsorberFallbackHeight;
+				const h = Math.max(min, Math.min(desired, budget));
+				sizes[child.item.key].height = h;
+				budget -= h;
+			}
+			sizes[absorber.item.key].height = Math.max(absorberMin, remainingSize.height - (noHeightChildren.reduce((sum, c) => c.item.key === absorber.item.key ? sum : sum + sizes[c.item.key].height, 0)));
+		} else {
+			const h = Math.floor(remainingSize.height / noHeightChildren.length);
+			for (const child of noHeightChildren) sizes[child.item.key].height = h;
 		}
+	} else if (noHeightChildren.length) {
+		const h = item.direction === 'column' ? Math.floor(remainingSize.height / noHeightChildren.length) : parentSize.height;
+		for (const child of noHeightChildren) sizes[child.item.key].height = h;
 	}
 
 	for (const child of item.children) {

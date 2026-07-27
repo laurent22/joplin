@@ -63,7 +63,7 @@ async function getSubscriptionInfo(event: Stripe.Event, ctx: AppContext): Promis
 	return { sub, stripeSub };
 }
 
-export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, customerName: string, userEmail: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) => {
+export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, customerName: string, userEmail: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string, source: string) => {
 	const existingUser = await models.user().loadByEmail(userEmail);
 
 	if (existingUser) {
@@ -94,6 +94,7 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 				stripe_user_id: stripeUserId,
 				stripe_subscription_id: stripeSubscriptionId,
 				last_payment_time: Date.now(),
+				source,
 			});
 		} else {
 			if (sub.stripe_subscription_id === stripeSubscriptionId) {
@@ -117,6 +118,7 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 			accountType,
 			stripeUserId,
 			stripeSubscriptionId,
+			source,
 		);
 	}
 };
@@ -279,7 +281,7 @@ export const postHandlers: PostHandlers = {
 				const checkoutSession: Stripe.Checkout.Session = event.data.object as Stripe.Checkout.Session;
 				const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email;
 				const customer = await stripe.customers.retrieve(checkoutSession.customer as string) as Stripe.Customer;
-				await stripe.customers.update(customer.id, { metadata: { source: checkoutSession.metadata.source } });
+				await stripe.customers.update(customer.id, { metadata: { source: checkoutSession.metadata?.source || '' } });
 				logger.info('Checkout session completed:', checkoutSession.id);
 				logger.info('User email:', userEmail);
 			},
@@ -309,7 +311,13 @@ export const postHandlers: PostHandlers = {
 					accountType,
 					stripeUserId,
 					stripeSubscriptionId,
+					customer.metadata?.source || '',
 				);
+
+				const subscription = await models.subscription().byStripeSubscriptionId(stripeSubscriptionId);
+				if (subscription) {
+					await models.subscription().updateFromStripe(subscription, stripeSub);
+				}
 			},
 
 			'invoice.paid': async () => {
@@ -360,6 +368,8 @@ export const postHandlers: PostHandlers = {
 
 				logger.info(`Updating subscription of user ${user.id} to ${newAccountType}`);
 				await models.user().save({ id: user.id, account_type: newAccountType });
+
+				await models.subscription().updateFromStripe(sub, stripeSub);
 			},
 
 		};

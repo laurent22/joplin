@@ -162,6 +162,7 @@ export interface Config extends EnvVariables {
 	rootDir: string;
 	viewDir: string;
 	layoutDir: string;
+	assetsDir: string;
 	// Note that, for now, nothing is being logged to file. Log is just printed
 	// to stdout, which is then handled by Docker own log mechanism
 	logDir: string;

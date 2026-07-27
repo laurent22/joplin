@@ -65,6 +65,10 @@ export interface Account {
 	max_total_item_size: number;
 }
 
+interface EnabledUserCountOptions {
+	excludeMainAdmin: boolean;
+}
+
 const accountMetadata: Record<AccountType, Account> = {
 	// The "default" account is the account that would be used on a self-hosted
 	// Joplin Server, or a user that can be created from the admin UI (or API).
@@ -928,4 +932,21 @@ export default class UserModel extends BaseModel<User> {
 		await this.models().notification().add(userId, NotificationKey.Any, NotificationLevel.Important, 'Multi-factor authentication has been enabled for your account. Please remember to copy and save your recovery codes');
 	}
 
+	public async enabledUserCount({ excludeMainAdmin }: EnabledUserCountOptions) {
+		const result = await this.db('users')
+			.where('enabled', '=', 1)
+			.count('*', { as: 'count' });
+		let count = Number(result[0].count);
+
+		if (excludeMainAdmin) {
+			const hasAdminUser = !!await this.db('users')
+				.select({ 'id': 'id' })
+				.where('is_admin', '=', 1)
+				.where('enabled', '=', 1)
+				.first();
+			count -= (hasAdminUser ? 1 : 0);
+		}
+
+		return count;
+	}
 }

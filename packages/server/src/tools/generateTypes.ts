@@ -65,6 +65,8 @@ const propertyTypes: Record<string, string> = {
 	'shares.type': 'ShareType',
 	'subscriptions.last_payment_failed_time': 'number',
 	'subscriptions.last_payment_time': 'number',
+	'subscriptions.trial_end': 'number',
+	'subscriptions.current_period_end': 'number',
 	'task_states.task_id': 'TaskId',
 	'user_deletions.end_time': 'number',
 	'user_deletions.scheduled_time': 'number',

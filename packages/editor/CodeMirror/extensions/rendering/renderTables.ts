@@ -19,6 +19,8 @@ import {
 	Table,
 } from '../../utils/markdown/tableUtils';
 import { getCellContentPosition } from '../../editorCommands/tableCommands';
+import { RenderedContentContext } from './types';
+import { editorSettingsFacet } from '../editorSettingsExtension';
 
 // Short class name prefix
 const W = 'cm-tw';
@@ -101,6 +103,7 @@ class TableWidget extends WidgetType {
 		private tableText: string,
 		private from: number,
 		private to: number,
+		private context: RenderedContentContext,
 	) {
 		super();
 		this.cacheKey_ = `table_${from}_${to}_${tableText.length}`;
@@ -249,8 +252,10 @@ class TableWidget extends WidgetType {
 			// Called on every input so the model stays in sync even if a
 			// rebuild is triggered by an external event (image paste, toolbar
 			// command, etc.) before the deferred blur handler runs.
+			// Not trimmed: an edge space the user just typed is real content
+			// and must stay visible while editing (see #15918).
 			const pushToModel = () => {
-				const v = (textDiv.textContent || '').trim()
+				const v = (textDiv.textContent || '')
 					.replace(/\n/g, '<br>').replace(/\|/g, '\\|');
 				if (isHdr) table.header.cells[c].content = v;
 				else if (r - 1 < table.body.length) table.body[r - 1].cells[c].content = v;
@@ -278,6 +283,9 @@ class TableWidget extends WidgetType {
 					if (!container.isConnected) return;
 					const newText = serializeTable(table);
 					if (newText === this.tableText) return;
+					// The serialize/parse round-trip strips edge whitespace, so
+					// keep the raw value to re-inject after the rebuild (#15918).
+					const rawValue = textDiv.textContent || '';
 					this.apply(view, table, 'input.type');
 					// Rebuild discards this DOM — locate the same cell in the
 					// new widget and restore focus + caret.
@@ -288,6 +296,8 @@ class TableWidget extends WidgetType {
 						const target = cells && idx < cells.length ? cells[idx] as HTMLElement : null;
 						if (!target) return;
 						focus('TableWidget', target);
+						// Restore the raw value onfocus trimmed.
+						if (target.textContent !== rawValue) target.textContent = rawValue;
 						// Caret restoration: put it `offset` characters into
 						// the cell's text content.
 						const sel = win.getSelection();
@@ -787,6 +797,30 @@ class TableWidget extends WidgetType {
 			}
 		});
 
+		const hasOpenLinkModifier = (e: MouseEvent) => {
+			const settings = view.state.facet(editorSettingsFacet);
+			return settings?.preferMacShortcuts ? e.metaKey : e.ctrlKey;
+		};
+
+		// Run on mousedown (before the cell's focus handler swaps the <a>
+		// for raw markdown) and preventDefault so the cell stays out of edit
+		// mode.
+		container.addEventListener('mousedown', (e) => {
+			if (!hasOpenLinkModifier(e)) return;
+			const anchor = (e.target as Element | null)?.closest<HTMLAnchorElement>('a[href]');
+			if (!anchor) return;
+			e.preventDefault();
+			this.context.openLink(anchor.getAttribute('href')!);
+		});
+
+		// Mousemove carries the live modifier state, so it can toggle the
+		// pointer cursor without separate keydown/keyup tracking.
+		container.addEventListener('mousemove', (e) => {
+			const overLink = hasOpenLinkModifier(e)
+				&& !!(e.target as Element | null)?.closest('a[href]');
+			container.classList.toggle('cm-tw-mod-link', overLink);
+		});
+
 		return container;
 	}
 
@@ -820,6 +854,9 @@ const tableTheme = EditorView.theme({
 	['& .cm-tw-text.cm-tw-match']: {
 		backgroundColor: 'var(--joplin-search-marker-background-color, rgba(255, 220, 0, 0.45))',
 		color: 'var(--joplin-search-marker-color, inherit)',
+	},
+	[`& .${W}.cm-tw-mod-link .cm-tw-text a[href]`]: {
+		cursor: 'pointer',
 	},
 
 	// Cells
@@ -1016,7 +1053,7 @@ const searchHighlight = ViewPlugin.fromClass(class {
 });
 
 // ===================== EXTENSION =====================
-const renderTables = [
+const renderTables = (context: RenderedContentContext) => [
 	tableTheme,
 	selectionHighlight,
 	searchHighlight,
@@ -1041,7 +1078,7 @@ const renderTables = [
 			}
 			const text = state.doc.sliceString(startLine.from, endLine.to);
 			if (!parseTable(text)) return null;
-			return new TableWidget(text, startLine.from, endLine.to);
+			return new TableWidget(text, startLine.from, endLine.to, context);
 		},
 		getDecorationRange: (node: SyntaxNodeRef, state: EditorState) => {
 			if (node.name !== 'TableHeader') return null;

@@ -350,8 +350,7 @@ export const EncryptionConfigScreen = (props: Props) => {
 			}
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- PasswordInput's ChangeEventHandler is typed as a custom {value} event but the runtime hands a React.ChangeEvent through
-		const onPasswordInputChange = (event: any) => {
+		const onPasswordInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 			setEnableEncryptionError('');
 			setEnableEncryptionPassword(event.target.value);
 		};

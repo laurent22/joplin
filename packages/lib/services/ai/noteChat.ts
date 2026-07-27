@@ -1,5 +1,5 @@
 import AiService from './AiService';
-import { ChatMessage, ChatResult, ChatRole, ChatToolCall, ToolSpec } from './types';
+import { ChatMessage, ChatResult, ChatRole, ChatToolCall, ChatToolMessage, ToolSpec } from './types';
 import JoplinError from '../../JoplinError';
 import Logger from '@joplin/utils/Logger';
 import findFencedBlock from './utils/findFencedBlock';
@@ -60,6 +60,8 @@ const hasStructuredBlock = (note: NoteContext) => {
 	return supportedStructuredBlockTags.some(tag => !!findFencedBlock(note.body, tag, 0));
 };
 
+// The system prompt should be relatively constant across note changes to take advantage of prompt caching.
+// See https://developers.openai.com/api/docs/guides/prompt-caching
 const systemPrompt = (note: NoteContext) => {
 	const lines: string[] = [
 		'You are an assistant helping the user work on a note in Joplin, a note-taking application.',
@@ -75,12 +77,6 @@ const systemPrompt = (note: NoteContext) => {
 		lines.push('--- BEGIN SELECTION ---');
 		lines.push(note.selection);
 		lines.push('--- END SELECTION ---');
-		lines.push();
-	} else {
-		lines.push('Note body:');
-		lines.push('--- BEGIN NOTE ---');
-		lines.push(note.body);
-		lines.push('--- END NOTE ---');
 		lines.push();
 	}
 
@@ -116,6 +112,18 @@ const toolDefinitions = (note: NoteContext) => {
 			},
 		});
 	} else {
+		result.push(
+			{
+				name: 'readNote',
+				description: 'Get the current, up-to-date content of the note.',
+				inputSchema: {
+					type: 'object',
+					required: [],
+					additionalProperties: false,
+				},
+			},
+		);
+
 		result.push(
 			{
 				name: 'appendToNote',
@@ -199,9 +207,48 @@ const toolDefinitions = (note: NoteContext) => {
 	return result;
 };
 
+const createHistory = (history: ChatMessage[], newMessage: string, context: NoteContext): ChatMessage[] => {
+	history = removeSystemPrompt(history);
+
+	const isNewChat = history.length === 0 && !context.selection;
+	history = [
+		{ role: ChatRole.System, content: systemPrompt(context) },
+		...history,
+		{ role: ChatRole.User, content: newMessage },
+	];
+
+	// The assistant almost always needs to fetch the current content of the note. Initializing the
+	// chat transcript with a `readNote` tool call saves one round-trip:
+	const addReadNote = isNewChat;
+	if (addReadNote) {
+		const callId = `call_read${history.length}`;
+		history.push(
+			{
+				role: ChatRole.Assistant,
+				content: '',
+				hide: true,
+				toolCalls: [
+					{ callId, arguments: { }, toolName: 'readNote', parseError: null },
+				],
+			},
+			{
+				role: ChatRole.Tool,
+				content: context.body,
+				toolCallId: callId,
+				toolName: 'readNote',
+				userDescription: '',
+				isEdit: false,
+				isError: false,
+			},
+		);
+	}
+
+	return history;
+};
+
 const estimateTokens = (text: string) => Math.ceil(text.length / charsPerToken);
 
-interface Commands {
+export interface ChatCommands {
 	replaceSelection: (text: string, originalText: string)=> Promise<void>;
 	updateNoteBody: (body: string, originalBody: string)=> Promise<void>;
 	displayError: (message: string)=> void;
@@ -214,47 +261,58 @@ export const runNoteChat = async (
 	context: OnContext,
 	history: ChatMessage[],
 	userMessage: string,
-	commands: Commands,
+	commands: ChatCommands,
 	onHistoryChanged: OnHistoryChanged,
 	signal: AbortSignal,
 ) => {
-	history = [
-		// Ensure that the system prompt is up-to-date with the context.
-		// TODO: This will invalidate the prompt cache.
-		//       See https://developers.openai.com/api/docs/guides/prompt-caching
-		{ role: ChatRole.System, content: systemPrompt(await context()) },
-		...removeSystemPrompt(history),
-		{ role: ChatRole.User, content: userMessage },
-	];
+	const initialContext = await context();
+	history = createHistory(history, userMessage, initialContext);
 	onHistoryChanged([...history]);
 
 	const hasUndeliveredToolResults = () => history[history.length - 1]?.role === ChatRole.Tool;
+	let runsWithFailedTools = 0;
 	do {
-		history = await stepNoteChat(
+		// If the model fails to successfully use tools more than 4 times in a row, disallow tool use
+		// to avoid an infinite loop:
+		const allowTools = runsWithFailedTools < 5;
+		const { messages, failedToolCount } = await stepNoteChat({
 			context,
-			history,
+			messages: history,
 			commands,
 			onHistoryChanged,
 			signal,
-		);
+			allowTools,
+		});
+
+		history = messages;
+		if (failedToolCount > 0) {
+			runsWithFailedTools ++;
+		} else {
+			runsWithFailedTools = 0;
+		}
 	}
 	while (!signal.aborted && hasUndeliveredToolResults());
 
 	return history;
 };
 
-const stepNoteChat = async (
-	context: OnContext,
-	messages: ChatMessage[],
-	commands: Commands,
-	onHistoryChanged: OnHistoryChanged,
-	signal: AbortSignal,
-) => {
+interface StepNoteChatOptions {
+	context: OnContext;
+	messages: ChatMessage[];
+	commands: ChatCommands;
+	onHistoryChanged: OnHistoryChanged;
+	signal: AbortSignal;
+	allowTools: boolean;
+}
+
+const stepNoteChat = async ({
+	context, messages, commands, onHistoryChanged, signal, allowTools,
+}: StepNoteChatOptions) => {
 	const note = await context();
 
 	assertWithinTokenBudget(messages, noteBodyTokenBudget);
 	const chatResult = await AiService.instance().chat(
-		messages, { tools: toolDefinitions(note), signal },
+		messages, { tools: allowTools ? toolDefinitions(note) : [], signal },
 	);
 
 	// Chat results can contain sensitive information -- only log in dev mode
@@ -262,16 +320,20 @@ const stepNoteChat = async (
 	messages.push({
 		role: ChatRole.Assistant,
 		content: chatResult.text ?? '',
-		toolCalls: chatResult.toolCalls,
+		toolCalls: allowTools ? chatResult.toolCalls : [],
 	});
 	onHistoryChanged([...messages]);
 
-	messages.push(
-		...await runTools(chatResult, note, context, commands, signal),
-	);
-	onHistoryChanged([...messages]);
+	let failedToolCount = 0;
+	if (allowTools) {
+		const toolResults = await runTools(chatResult, note, context, commands, signal);
+		messages.push(...toolResults);
+		onHistoryChanged([...messages]);
 
-	return messages;
+		failedToolCount = toolResults.filter(t => t.isError).length;
+	}
+
+	return { messages, failedToolCount };
 };
 
 const removeSystemPrompt = (history: ChatMessage[]) => {
@@ -317,19 +379,22 @@ const assertNotCancelled = (signal: AbortSignal) => {
 	}
 };
 
-const runTools = async (chat: ChatResult, initialContext: NoteContext, context: OnContext, commands: Commands, signal: AbortSignal) => {
+const runTools = async (chat: ChatResult, initialContext: NoteContext, context: OnContext, commands: ChatCommands, signal: AbortSignal) => {
 	assertNotCancelled(signal);
 
-	let chatResponses: ChatMessage[] = [];
+	let chatResponses: ChatToolMessage[] = [];
 
-	const respondSuccess = (action: ChatToolCall, message: string) => {
+	const isEdit = (toolName: string) => isValidEditOp(toolName);
+
+	const respondSuccess = (action: ChatToolCall, message: string, userDescription?: string) => {
 		chatResponses.push({
 			role: ChatRole.Tool,
 			toolName: action.toolName,
 			toolCallId: action.callId,
 			content: message,
-			userDescription: message,
+			userDescription: userDescription ?? message,
 			isError: false,
+			isEdit: isEdit(action.toolName),
 		});
 	};
 
@@ -341,6 +406,7 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 			content: `failed: ${reason}`,
 			userDescription: reason,
 			isError: true,
+			isEdit: isEdit(action.toolName),
 		});
 	};
 
@@ -350,16 +416,20 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 		const expectedName = 'replaceSelection';
 		const action = chat.toolCalls.find(toolCall => toolCall.toolName === expectedName);
 		if (action) {
-			try {
-				if (!hasOwnProperty(action.arguments, 'text')) throw new JoplinError('Missing text property');
-				if (typeof action.arguments.text !== 'string') throw new JoplinError('Property "text" must be a string');
-
-				await commands.replaceSelection(action.arguments.text, currentContext.selection);
-				respondSuccess(action, describeEditOperation(toolCallToEditOperation(action)));
-			} catch (error) {
-				logger.error('Failed to replace selection', error);
-				respondFailure(action, 'failed to replace selection');
-				commands.displayError(error.message ?? String(error));
+			const args = action.arguments;
+			if (action.parseError) {
+				respondFailure(action, action.parseError);
+			} else if (!hasOwnProperty(args, 'text') || typeof args.text !== 'string') {
+				respondFailure(action, 'missing or invalid `text` property');
+			} else {
+				try {
+					await commands.replaceSelection(args.text, currentContext.selection);
+					respondSuccess(action, describeEditOperation(toolCallToEditOperation(action)));
+				} catch (error) {
+					logger.error('Failed to replace selection', error);
+					respondFailure(action, 'failed to replace selection');
+					commands.displayError(error.message ?? String(error));
+				}
 			}
 		}
 
@@ -375,43 +445,45 @@ const runTools = async (chat: ChatResult, initialContext: NoteContext, context: 
 	} else {
 		const initialBody = initialContext.body;
 		let body = currentContext.body;
-
-		if (initialBody !== body && chat.toolCalls.length > 0) {
-			for (const toolCall of chat.toolCalls) {
-				respondFailure(toolCall, 'body changed externally, before edit could be applied');
-			}
-			commands.displayError(_('The note changed while the request was running; edits were not applied. Try again.'));
-
-			return chatResponses;
-		}
+		const hadExternalBodyChanges = initialBody !== body;
+		let attemptedEdit = false;
 
 		for (const toolCall of chat.toolCalls) {
 			if (toolCall.toolName === 'replaceSelection') {
 				respondFailure(toolCall, 'replaceSelection is invalid in this context');
-				continue;
-			}
-			if (!isValidEditOp(toolCall.toolName)) {
+			} else if (toolCall.parseError) {
+				respondFailure(toolCall, toolCall.parseError);
+			} else if (toolCall.toolName === 'readNote') {
+				respondSuccess(toolCall, body, _('Read note'));
+			} else if (!isValidEditOp(toolCall.toolName)) {
 				respondFailure(toolCall, 'tool not found');
-				continue;
-			}
-
-			const editOperation = toolCallToEditOperation(toolCall);
-			const { newBody, appliedEdits } = applyAnchorEdits(body, [editOperation], 0);
-			body = newBody;
-
-			if (appliedEdits.length !== 1) {
-				throw new Error(`Invalid state: Wrong number of applied edits, ${appliedEdits.length}`);
-			}
-
-			const edit = appliedEdits[0];
-			if (edit.status === 'applied') {
-				respondSuccess(toolCall, describeEditOperation(editOperation));
+			} else if (hadExternalBodyChanges) {
+				attemptedEdit = true;
+				respondFailure(toolCall, 'body changed externally, before edit could be applied');
 			} else {
-				respondFailure(toolCall, edit.status);
+				attemptedEdit = true;
+				const editOperation = toolCallToEditOperation(toolCall);
+				const { newBody, appliedEdits } = applyAnchorEdits(body, [editOperation], 0);
+				body = newBody;
+
+				if (appliedEdits.length !== 1) {
+					throw new Error(`Invalid state: Wrong number of applied edits, ${appliedEdits.length}`);
+				}
+
+				const edit = appliedEdits[0];
+				if (edit.status === 'applied') {
+					respondSuccess(toolCall, describeEditOperation(editOperation));
+				} else {
+					respondFailure(toolCall, edit.status);
+				}
 			}
 		}
 
-		if (body !== initialBody) {
+		if (attemptedEdit && hadExternalBodyChanges) {
+			commands.displayError(_('The note changed while the request was running; edits were not applied. Try again.'));
+		}
+		// Avoid overwriting user-created changes
+		if (!hadExternalBodyChanges && body !== initialBody) {
 			try {
 				await commands.updateNoteBody(body, initialBody);
 			} catch (error) {

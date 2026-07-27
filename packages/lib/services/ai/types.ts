@@ -11,6 +11,7 @@ interface ChatBaseMessage {
 
 export interface ChatStandardMessage extends ChatBaseMessage {
 	role: ChatRole.System | ChatRole.User | ChatRole.Assistant;
+	hide?: boolean;
 	toolCalls?: ChatToolCall[];
 }
 
@@ -21,6 +22,7 @@ export interface ChatToolMessage extends ChatBaseMessage {
 	isError: boolean;
 	// A very brief description of the result that can be shown to the user
 	userDescription: string;
+	isEdit: boolean;
 }
 
 export type ChatMessage = ChatStandardMessage | ChatToolMessage;
@@ -66,12 +68,20 @@ export interface ChatToolCall {
 	toolName: string;
 	callId: string;
 	arguments: Record<string, unknown>;
+	parseError: string|null;
 }
 
 export interface ChatResult {
 	text: string;
 	toolCalls: ChatToolCall[];
 	usage: ChatUsage;
+	// Joplin Cloud degradation / budget signals. Populated only by the
+	// joplin-cloud provider; other providers leave them undefined. Consumed
+	// internally to drive the aiStatus Redux slice — plugins receive only
+	// the assistant text via JoplinAi.chat().
+	degraded?: boolean;
+	tokensUsed?: number;
+	tokensBudget?: number;
 }
 
 export type ProviderClassification = 'local' | 'remote';

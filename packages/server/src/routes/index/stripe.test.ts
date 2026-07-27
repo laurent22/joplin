@@ -8,9 +8,11 @@ import { uuidgen } from '@joplin/lib/uuid';
 import { postHandlers } from './stripe';
 import Stripe from 'stripe';
 import { SubPath } from '../../utils/routeUtils';
+import { Hour, Month, Second } from '@joplin/utils/time';
 
 interface StripeOptions {
 	userEmail?: string;
+	source?: string;
 }
 
 function mockStripe(options: StripeOptions = null) {
@@ -25,8 +27,10 @@ function mockStripe(options: StripeOptions = null) {
 				return {
 					name: 'Toto',
 					email: options.userEmail,
+					metadata: { source: options.source || '' },
 				};
 			},
+			update: jest.fn(),
 		},
 		subscriptions: {
 			cancel: jest.fn(),
@@ -53,16 +57,18 @@ interface WebhookOptions {
 	stripe?: ReturnType<typeof mockStripe>;
 	eventId?: string;
 	subscriptionId?: string;
+	currentPeriodEndSeconds?: number;
 	customerId?: string;
 	sessionId?: string;
 	userEmail?: string;
 	accountType?: AccountType;
 	quantity?: number;
+	source?: string;
 }
 
 async function simulateWebhook(ctx: AppContext, type: string, object: Record<string, unknown>, options: WebhookOptions = {}) {
 	options = {
-		stripe: mockStripe({ userEmail: options.userEmail }),
+		stripe: mockStripe({ userEmail: options.userEmail, source: options.source }),
 		eventId: uuidgen(),
 		...options,
 	};
@@ -93,6 +99,7 @@ async function createUserViaSubscription(ctx: AppContext, options: WebhookOption
 	await simulateWebhook(ctx, 'customer.subscription.created', {
 		id: options.subscriptionId,
 		customer: options.customerId,
+		current_period_end: options.currentPeriodEndSeconds ?? Math.floor((Date.now() + Month) / Second),
 		items: {
 			data: [
 				{
@@ -134,6 +141,24 @@ describe('index/stripe', () => {
 		expect(sub.is_deleted).toBe(0);
 		expect(sub.last_payment_time).toBeGreaterThanOrEqual(startTime);
 		expect(sub.last_payment_failed_time).toBe(0);
+	});
+
+	test('should store the signup source on the subscription', async () => {
+		const ctx = await koaAppContext();
+		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com', source: 'desktop-wizard' });
+
+		const user = await models().user().loadByEmail('toto@example.com');
+		const sub = await models().subscription().byUserId(user.id);
+		expect(sub.source).toBe('desktop-wizard');
+	});
+
+	test('should default the source to an empty string when none is provided', async () => {
+		const ctx = await koaAppContext();
+		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com' });
+
+		const user = await models().user().loadByEmail('toto@example.com');
+		const sub = await models().subscription().byUserId(user.id);
+		expect(sub.source).toBe('');
 	});
 
 	test('should not process the same event twice', async () => {
@@ -291,6 +316,7 @@ describe('index/stripe', () => {
 		await simulateWebhook(ctx, 'customer.subscription.created', {
 			id: 'sub_new',
 			customer: 'cus_toto',
+			current_period_end: Math.floor((Date.now() + Month) / Second),
 			items: { data: [{ price: { id: stripePrice.id } }] },
 		}, { stripe });
 
@@ -332,6 +358,8 @@ describe('index/stripe', () => {
 		await simulateWebhook(ctx, 'customer.subscription.created', {
 			id: 'sub_1',
 			customer: 'cus_toto',
+			current_period_end: Math.floor((Date.now() + Month) / Second),
+			trial_end: Math.floor((Date.now() + Month) / Second),
 			items: { data: [{ price: { id: stripePrice.id } }] },
 		}, { stripe });
 
@@ -339,4 +367,31 @@ describe('index/stripe', () => {
 		expect(stripe.subscriptions.cancel).toHaveBeenCalledTimes(0);
 	});
 
+	test('should update subscription period end/trial end dates in the database when updated in Stripe', async () => {
+		const stripe = mockStripe({ userEmail: 'toto@example.com' });
+		const ctx = await koaAppContext();
+
+		const stripePrice = findPrice(stripeConfig(), { accountType: AccountType.Basic, period: PricePeriod.Monthly });
+		const sendWebhookEvent = (eventType: 'created'|'updated', currentPeriodEndSeconds: number) => {
+			return simulateWebhook(ctx, `customer.subscription.${eventType}`, {
+				id: 'sub_1',
+				customer: 'cus_toto',
+				current_period_end: currentPeriodEndSeconds,
+				items: { data: [{ price: { id: stripePrice.id } }] },
+			}, { stripe });
+		};
+
+		// Should update the subscription on created events
+		let periodEndSeconds = Math.floor((Date.now() + Hour) / Second);
+		await sendWebhookEvent('created', periodEndSeconds);
+
+		const subscription = () => models().subscription().byStripeSubscriptionId('sub_1');
+		expect(await subscription()).toMatchObject({ current_period_end: periodEndSeconds * Second });
+
+		periodEndSeconds += 300;
+
+		// Should update the subscription on updated events
+		await sendWebhookEvent('updated', periodEndSeconds);
+		expect(await subscription()).toMatchObject({ current_period_end: periodEndSeconds * Second });
+	});
 });

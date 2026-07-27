@@ -22,7 +22,7 @@ const hashContent = (content: unknown) => {
 	return createHash('sha1').update(JSON.stringify(content)).digest('hex');
 };
 
-export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listRenderer: ListRenderer, highlightedWords: string[], itemIndex: number, columns: NoteListColumns) => {
+export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, isPublished: boolean, listRenderer: ListRenderer, highlightedWords: string[], itemIndex: number, columns: NoteListColumns) => {
 	const [renderedNote, setRenderedNote] = useState<RenderedNote>(null);
 
 	let dependencies = columns && columns.length ? columns.map(c => c.name) as ListRendererDependency[] : [];
@@ -50,6 +50,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 				note.updated_time,
 				isSelected,
 				isWatched,
+				isPublished,
 				highlightedWords,
 				note.encryption_applied,
 				JSON.stringify(columns),
@@ -71,6 +72,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 				noteTags,
 				folder,
 				itemIndex,
+				isPublished,
 			);
 
 			if (event.cancelled) return null;
@@ -96,7 +98,7 @@ export default (note: NoteEntity, isSelected: boolean, isWatched: boolean, listR
 		};
 
 		void renderNote();
-	}, [note, isSelected, isWatched, listRenderer, renderedNote, columns]);
+	}, [note, isSelected, isWatched, isPublished, listRenderer, renderedNote, columns]);
 
 	return renderedNote;
 };

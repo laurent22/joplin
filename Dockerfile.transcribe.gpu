@@ -23,7 +23,7 @@
 FROM ghcr.io/ggml-org/llama.cpp:full-cuda-b5449 AS llama-cuda
 
 # Stage 2: our runtime image.
-FROM nvidia/cuda:13.1.1-cudnn-runtime-ubuntu22.04
+FROM nvidia/cuda:13.2.1-cudnn-runtime-ubuntu22.04
 
 RUN apt-get update \
     && apt-get install -y \

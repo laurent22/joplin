@@ -126,8 +126,12 @@ const NewNoteButton: React.FC<Props> = _props => {
 		return Promise.resolve();
 	}, []);
 	const onMenuShown = useCallback(() => {
-		// Note: May apply only to web:
-		focusView('NewNoteButton', newNoteRef.current);
+		focusView(
+			'NewNoteButton',
+			newNoteRef.current,
+			// Don't scroll into view: This breaks the slide-in animation on web
+			{ scrollIntoView: false },
+		);
 	}, []);
 
 	return <FloatingActionButton
