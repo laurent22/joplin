@@ -26,6 +26,10 @@ export default function(existingManifests: PluginManifests, manifest: PluginMani
 		const newRepo = normalizeRepoUrl(manifest.repository_url);
 
 		if (options.source === 'npm') {
+			if (originalRepo && !originalManifest._npm_package_name) {
+				throw new Error(`Plugin "${manifest.id}" is owned by repository "${originalManifest.repository_url}" and cannot be updated from npm package "${manifest._npm_package_name}".`);
+			}
+
 			if (originalManifest._npm_package_name !== manifest._npm_package_name) {
 				throw new Error(`Plugin "${manifest.id}" from npm package "${manifest._npm_package_name}" has already been published under npm package "${originalManifest._npm_package_name}". Plugin from package "${originalManifest._npm_package_name}" will not be imported.`);
 			}

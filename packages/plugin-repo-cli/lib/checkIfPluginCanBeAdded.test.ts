@@ -199,4 +199,25 @@ describe('checkIfPluginCanBeAdded', () => {
 		).toThrow('has already been published under repository');
 	});
 
+	test('should report repository ownership when npm targets a repository-origin plugin', () => {
+		const existingManifests = {
+			'test': {
+				id: 'test',
+				repository_url: 'https://github.com/original/plugin',
+			},
+		};
+		const manifest = {
+			id: 'test',
+			_npm_package_name: 'attacker-package',
+		};
+
+		expect(
+			() => checkIfPluginCanBeAdded(
+				existingManifests as unknown as Parameters<typeof checkIfPluginCanBeAdded>[0],
+				manifest as unknown as Parameters<typeof checkIfPluginCanBeAdded>[1],
+				{ source: 'npm' },
+			),
+		).toThrow('is owned by repository "https://github.com/original/plugin" and cannot be updated from npm package "attacker-package"');
+	});
+
 });
