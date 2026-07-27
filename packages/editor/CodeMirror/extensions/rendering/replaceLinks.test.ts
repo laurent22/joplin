@@ -103,7 +103,7 @@ describe('replaceLinks', () => {
 		expect(editor.state.selection.main.anchor).toBe(markup.length);
 	});
 
-	it('should allow mouse selection when a touch-generated click does not fire', async () => {
+	it('should handle mouse selection after touch ends without click', async () => {
 		const markup = 'before [link](https://example.com/)';
 		const clickedCursor = markup.indexOf('link') + 2;
 		const editor = await createTestEditor(markup, EditorSelection.cursor(0), ['URL', 'LinkMark', 'Link'], [replaceLinks]);
