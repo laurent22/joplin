@@ -7,7 +7,8 @@ index 47367741632726ba0886ac516461dbe98b7aea58..c40a0907688cd8b1b8d09047cb0b380e
 +++ b/templates/nsis/include/installUtil.nsh
 @@ -128,8 +128,9 @@ Function handleUninstallResult
    ${if} $R0 != 0
-     MessageBox MB_OK|MB_ICONEXCLAMATION "$(uninstallFailed): $R0"
+-    MessageBox MB_OK|MB_ICONEXCLAMATION "$(uninstallFailed): $R0"
++    # MessageBox MB_OK|MB_ICONEXCLAMATION "$(uninstallFailed): $R0"
      DetailPrint `Uninstall was not successful. Uninstaller error code: $R0.`
 -    SetErrorLevel 2
 -    Quit
