@@ -345,6 +345,7 @@ const SideMenuContentComponent = (props: Props) => {
 	};
 
 	const [folderMenuVisible, setFolderMenuVisible] = useState(false);
+	const [folderMenuTitle, setFolderMenuTitle] = useState('');
 	const [folderMenuOptions, setFolderMenuOptions] = useState<MenuOption[]>([]);
 	const folder_longPress = async (folderOrAll: FolderEntity | string) => {
 		if (folderOrAll === 'all') return;
@@ -457,6 +458,7 @@ const SideMenuContentComponent = (props: Props) => {
 		}
 
 		setFolderMenuOptions(menuItems);
+		setFolderMenuTitle(_('Notebook: %s', folder.title));
 		setFolderMenuVisible(true);
 	};
 
@@ -737,6 +739,7 @@ const SideMenuContentComponent = (props: Props) => {
 				onDismiss={() => setFolderMenuVisible(false)}
 				themeId={props.themeId}
 				alignment={MenuAlignment.Left}
+				title={folderMenuTitle}
 				options={folderMenuOptions}
 			/>
 		</View>

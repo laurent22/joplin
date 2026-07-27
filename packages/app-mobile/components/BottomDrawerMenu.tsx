@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { StyleSheet, View, Text, useWindowDimensions, TextStyle } from 'react-native';
+import { StyleSheet, View, useWindowDimensions, TextStyle } from 'react-native';
 import { themeStyle } from './global-style';
 import BottomDrawer, { MenuAlignment } from './BottomDrawer';
-import { TouchableRipple } from 'react-native-paper';
+import { TouchableRipple, Text } from 'react-native-paper';
 import Icon from './Icon';
 
 interface MenuOptionDivider {
@@ -31,6 +31,7 @@ interface Props {
 	themeId: number;
 	visible: boolean;
 	alignment: MenuAlignment;
+	title?: string;
 	onDismiss: ()=> void;
 	options: MenuOption[];
 }
@@ -41,6 +42,14 @@ const useStyles = (themeId: number) => {
 		const theme = themeStyle(themeId);
 
 		return StyleSheet.create({
+			title: {
+				marginHorizontal: theme.margin,
+				marginVertical: theme.marginSmall,
+				lineHeight: theme.fontSizeLarger,
+				fontSize: theme.fontSizeLarger,
+				borderBottomColor: theme.dividerColor,
+				borderBottomWidth: 1,
+			},
 			menu: {
 				paddingHorizontal: 0,
 			},
@@ -134,6 +143,7 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 			style={styles.menuContent}
 			testID={`menu-content-${props.visible ? 'open' : 'closed'}`}
 		>
+			{props.title ? <Text role='heading' variant='titleMedium' style={styles.title}>{props.title}</Text> : null}
 			{menuOptionComponents}
 		</View>
 	</BottomDrawer>;
