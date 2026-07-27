@@ -3,12 +3,13 @@ import { useState, useCallback, useMemo, useRef } from 'react';
 import { FAB } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { Dispatch } from 'redux';
-import { AccessibilityActionEvent, AccessibilityActionInfo, View } from 'react-native';
+import { AccessibilityActionEvent, AccessibilityActionInfo, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { connect } from 'react-redux';
 import { MenuAlignment, MenuType } from '../BottomDrawer';
 import { Ionicons as Icon } from '@react-native-vector-icons/ionicons';
 import BottomDrawerMenu, { MenuOption } from '../BottomDrawerMenu';
 import { AppState } from '../../utils/types';
+import { themeStyle } from '../global-style';
 
 type OnButtonPress = ()=> void;
 interface ButtonSpec {
@@ -46,6 +47,33 @@ const useIcon = (iconName: string) => {
 	}, [iconName]);
 };
 
+interface StylesProps {
+	buttonTop: number;
+	themeId: number;
+}
+
+const useStyles = ({ buttonTop, themeId }: StylesProps) => {
+	const { height: windowHeight } = useWindowDimensions();
+	return useMemo(() => {
+		const theme = themeStyle(themeId);
+		return StyleSheet.create({
+			menu: {
+				marginBottom: (windowHeight - buttonTop) + theme.marginBottom,
+				// Always float right:
+				alignSelf: 'flex-end',
+			},
+			buttonContainer: {
+				position: 'absolute',
+				bottom: 10,
+				right: 10,
+			},
+			button: {
+				alignSelf: 'flex-end',
+			},
+		});
+	}, [buttonTop, windowHeight, themeId]);
+};
+
 const FloatingActionButton = (props: ActionButtonProps) => {
 	const [open, setOpen] = useState(false);
 	const onMenuToggled = useCallback(() => {
@@ -69,24 +97,28 @@ const FloatingActionButton = (props: ActionButtonProps) => {
 
 	const label = props.mainButton?.label ?? _('Add new');
 
+	const [buttonTop, setButtonTop] = useState(0);
+	const styles = useStyles({ buttonTop, themeId: props.themeId });
+
 	const menuButton = <FAB
 		ref={mainButtonRef}
 		icon={open ? openIcon : closedIcon}
 		accessibilityLabel={label}
 		onPress={props.mainButton?.onPress ?? onMenuToggled}
-		style={{
-			alignSelf: 'flex-end',
-		}}
+		style={styles.button}
 		accessibilityActions={props.accessibilityActions}
 		onAccessibilityAction={props.onAccessibilityAction}
 	/>;
 
+	const buttonContainerRef = useRef<View|null>(null);
 	return <>
 		<View
-			style={{
-				position: 'absolute',
-				bottom: 10,
-				right: 10,
+			style={styles.buttonContainer}
+			ref={buttonContainerRef}
+			onLayout={() => {
+				buttonContainerRef.current?.measure((_x, _y, _width, _height, _pageX, pageY) => {
+					setButtonTop(pageY);
+				});
 			}}
 		>
 			{menuButton}
@@ -95,9 +127,7 @@ const FloatingActionButton = (props: ActionButtonProps) => {
 			visible={open}
 			onDismiss={onDismiss}
 			alignment={MenuAlignment.Right}
-			style={{
-				marginBottom: 128,
-			}}
+			style={styles.menu}
 			menuType={MenuType.Floating}
 			themeId={props.themeId}
 			options={props.menuContent}
