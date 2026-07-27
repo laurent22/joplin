@@ -76,6 +76,10 @@ const useStyles = ({ theme, dragging, draggable, dragOffset, backgroundOpacity }
 				borderBottomLeftRadius: 0,
 				maxWidth: Math.min(400, windowWidth - menuGapRight - menuGapLeft),
 
+				shadowRadius: 4,
+				shadowColor: theme.color,
+				shadowOpacity: 0.15,
+
 				marginBottom: -spaceBelowScreenEdge,
 
 				userSelect: dragging ? 'none' : 'auto',
