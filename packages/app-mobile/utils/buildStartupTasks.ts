@@ -393,12 +393,9 @@ const buildStartupTasks = (
 		const folder = await getInitialActiveFolder();
 
 		const getNotesParent = async () => {
-			let notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+			const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
 			if (notesParent.type === 'Tag' && !(await Tag.load(notesParent.selectedItemId))) {
-				notesParent = {
-					type: 'Folder',
-					selectedItemId: Setting.value('activeFolderId'),
-				};
+				return null;
 			}
 			return notesParent;
 		};
