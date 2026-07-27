@@ -1,5 +1,6 @@
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import { normalizeRepoUrl } from './utils';
+import { PluginSubmissionOptions } from './types';
 
 type PluginManifests = Record<string, PluginManifest>;
 
@@ -10,7 +11,7 @@ function caseInsensitiveFindManifest(manifests: PluginManifests, manifestId: str
 	return null;
 }
 
-export default function(existingManifests: PluginManifests, manifest: PluginManifest) {
+export default function(existingManifests: PluginManifests, manifest: PluginManifest, options: PluginSubmissionOptions) {
 	// If there's already a plugin with this ID published under a different
 	// repository/package name, we skip it. Otherwise it would allow anyone to overwrite
 	// someone else plugin just by using the same ID. So the first plugin with
@@ -24,14 +25,24 @@ export default function(existingManifests: PluginManifests, manifest: PluginMani
 		const originalRepo = normalizeRepoUrl(originalManifest.repository_url);
 		const newRepo = normalizeRepoUrl(manifest.repository_url);
 
-		if (originalRepo && newRepo && originalRepo !== newRepo) {
-			throw new Error(`Plugin "${manifest.id}" from repository "${manifest.repository_url}" has already been published under repository "${originalManifest.repository_url}".`);
-		}
-
-		// Backward compatibility fallback for npm packages if repository URL is missing on either side
-		if (!originalRepo || !newRepo) {
-			if (originalManifest._npm_package_name && manifest._npm_package_name && originalManifest._npm_package_name !== manifest._npm_package_name) {
+		if (options.source === 'npm') {
+			if (originalManifest._npm_package_name !== manifest._npm_package_name) {
 				throw new Error(`Plugin "${manifest.id}" from npm package "${manifest._npm_package_name}" has already been published under npm package "${originalManifest._npm_package_name}". Plugin from package "${originalManifest._npm_package_name}" will not be imported.`);
+			}
+
+			// We will include repository check as a mandatory check even in npm
+			// The repository URL must not be removed or changed, but this will allow
+			// updating of plugin if both old and new manifest does not have repository url
+			if (originalRepo && (!newRepo || originalRepo !== newRepo)) {
+				throw new Error(`Plugin "${manifest.id}" from repository "${manifest.repository_url}" has already been published under repository "${originalManifest.repository_url}".`);
+			}
+		} else if (options.source === 'repository') {
+			if (originalRepo) {
+				if (!newRepo || originalRepo !== newRepo) {
+					throw new Error(`Plugin "${manifest.id}" from repository "${manifest.repository_url}" has already been published under repository "${originalManifest.repository_url}".`);
+				}
+			} else if (newRepo) {
+				throw new Error(`Plugin "${manifest.id}" has already been published from npm package "${originalManifest._npm_package_name}". A maintainer must verify and register its repository URL before it can be published from a repository.`);
 			}
 		}
 

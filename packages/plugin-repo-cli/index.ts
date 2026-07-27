@@ -70,7 +70,7 @@ async function extractPluginFilesFromPackage(existingManifests: PluginManifests,
 
 	// We need to validate the manifest to make sure the plugin author isn't
 	// trying to override an existing plugin, use an invalid ID, etc..
-	validateUntrustedManifest(manifest, existingManifests);
+	validateUntrustedManifest(manifest, existingManifests, { source: 'npm' });
 
 	const pluginDestDir = resolveRelativePathWithinDir(destDir, manifest.id);
 	await fs.mkdirp(pluginDestDir);
@@ -300,14 +300,8 @@ const commandPublishPlugin = async (args: CommandPublishPluginArgs) => {
 		...obsoleteManifests,
 	} as PluginManifests;
 
-	// If the original manifest has _npm_package_name but the new one doesn't, preserve it
-	const originalManifest = existingManifests[manifest.id];
-	if (originalManifest && originalManifest._npm_package_name && !manifest._npm_package_name) {
-		manifest._npm_package_name = originalManifest._npm_package_name;
-	}
-
 	// Validate the manifest
-	validateUntrustedManifest(manifest, existingManifests);
+	validateUntrustedManifest(manifest, existingManifests, { source: 'repository' });
 
 	// Copy the manifest.json and plugin.jpl to plugins/<plugin_id>/
 	const destDir = path.resolve(repoDir, 'plugins', manifest.id);
