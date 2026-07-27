@@ -36,9 +36,7 @@ describe('autoMergeNote', () => {
 	});
 
 	test('should partially merge when a genuine conflict remains elsewhere in the body', () => {
-		// Section 1 (first paragraph) has non-overlapping changes, so it should be
-		// merged automatically on both sides. Section 2 (second paragraph) is a real
-		// conflict, so each side should keep its own text.
+		// First paragraph: both sides make the same edit. Second: they conflict.
 		const local = baseBody
 			.replace('First paragraph.', 'First paragraph, edited locally.')
 			.replace('Second paragraph.', 'Second paragraph, local.');
@@ -53,15 +51,12 @@ describe('autoMergeNote', () => {
 		);
 
 		expect(merged.fullyMerged).toBe(false);
-		// Non-conflicting section applied identically on both sides.
 		expect(merged.resolvedLocal.body).toContain('First paragraph, edited locally.');
 		expect(merged.resolvedCurrent.body).toContain('First paragraph, edited locally.');
-		// Conflicting section kept as each side's own text.
 		expect(merged.resolvedLocal.body).toContain('Second paragraph, local.');
 		expect(merged.resolvedLocal.body).not.toContain('Second paragraph, remote.');
 		expect(merged.resolvedCurrent.body).toContain('Second paragraph, remote.');
 		expect(merged.resolvedCurrent.body).not.toContain('Second paragraph, local.');
-		// Untouched section unaffected on both sides.
 		expect(merged.resolvedLocal.body).toContain('Third paragraph.');
 		expect(merged.resolvedCurrent.body).toContain('Third paragraph.');
 	});

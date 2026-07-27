@@ -44,24 +44,18 @@ describe('autoMerge', () => {
 		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
 	});
 
-	// / KNOWN LIMITATION: Word-level merging within a single line is all or nothing.
-	// If a line contains both a real conflict (both sides changed the same words)
-	// and a change that could be merged automatically (only one side changed other
-	// words), the entire line is treated as a conflict and the mergeable change is
-	// not applied. In the future, the line could be split into auto-merged and
-	// conflict parts. This test documents the current behavior so any future
-	// change is intentional.
+	// KNOWN LIMITATION: If a line has both a real conflict and a change that can
+	// be merged, then the whole line is treated as a conflict.
+	// In future, the line could be split into auto-merged and conflict parts
 	test('should treat a line with both a conflict and a mergeable edit as a whole-line conflict (known limitation)', () => {
+		// Both sides changed "quick" (conflict); only remote changed "dog"->"cat".
 		const base = 'The quick brown fox jumps over the dog';
-		// Both sides rewrote "quick" differently (conflict), and only remote also
-		// changed "dog" -> "cat" (independently mergeable).
 		const local = 'The slow brown fox jumps over the dog';
 		const remote = 'The fast brown fox jumps over the cat';
 		const result = autoMerge(base, local, remote);
 		const conflicts = result.sections.filter(s => s.type === 'conflict');
 		expect(conflicts.length).toBe(1);
-		// The whole line is the conflict, including the mergeable "dog"/"cat" edit,
-		// which is therefore not auto-applied.
+		// The "dog" -> "cat" change is not merged because the whole line is treated as a conflict.
 		expect(conflicts[0].localText).toBe(local);
 		expect(conflicts[0].remoteText).toBe(remote);
 	});
@@ -76,8 +70,7 @@ describe('autoMerge', () => {
 	});
 
 	test('should not treat an invisible trailing-whitespace edit as a conflict', () => {
-		// The editor can leave a trailing space on a line the user did not really
-		// change. Only remote makes a real edit here, so it must merge cleanly.
+		// Local's only change to the GitHub line is a stray trailing space
 		const base = 'Visit Google.\n\nVisit GitHub.';
 		const local = 'Visit Google.: https://youtube.com/\n\nVisit GitHub. ';
 		const remote = 'Visit Google.: https://youtube.com/\n\nVisit GitHub.: https://github.com/inbox';
@@ -87,16 +80,12 @@ describe('autoMerge', () => {
 	});
 
 	test('should preserve a two-space Markdown hard line break on an untouched line', () => {
-		// Two trailing spaces create a Markdown line break, so they must be kept even
-		// though other trailing spaces are removed. In this test, only the last
-		// paragraph changes, and the line break above it should stay the same.
+		// Only the last paragraph changes. The two-space line break above it must stay
 		const base = 'Line one  \nLine two\n\nLast para.';
 		const local = 'Line one  \nLine two\n\nLast para, edited.';
 		const remote = 'Line one  \nLine two\n\nLast para.';
 		const result = autoMerge(base, local, remote);
 		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
-		// Assert the full result: the hard line break survives and the edited last
-		// paragraph is merged correctly, with nothing else altered.
 		expect(result.mergedText).toBe('Line one  \nLine two\n\nLast para, edited.');
 	});
 

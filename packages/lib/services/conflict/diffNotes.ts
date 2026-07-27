@@ -1,6 +1,4 @@
-// node-diff3 does not export its types in a way that this package's
-// moduleResolution can use, so we require it instead of importing it.
-// The types we need are defined locally.
+// require: node-diff3's type exports are not resolvable under this moduleResolution
 const { diff3MergeRegions, diffComm } = require('node-diff3');
 
 interface StableRegion {
@@ -18,9 +16,7 @@ interface UnstableRegion {
 
 type Region = StableRegion | UnstableRegion;
 
-// diffComm returns a `common` array for matching parts and buffer1/buffer2
-// for different parts. node-diff3's types do not include `common`,
-// so it is defined here.
+// diffComm's `common` field is missing from the node-diff3 types
 interface CommRegion {
 	common?: string[];
 	buffer1: string[];
@@ -41,24 +37,15 @@ export interface AutoMergeResult {
 	sections: MergedSection[];
 }
 
-// Marker added to mergedText when a real conflict is found. Git's conflict
-// markers are used so it is easy to recognize. mergedText is only used when
-// there are no conflict sections, so this marker is never saved. It is only
-// added to keep mergedText accurate.
+// These markers only appears in mergedText, which is never saved while conflicts still exist
 const conflictPlaceholder = (local: string, remote: string): string => {
 	return `<<<<<<< local\n${local}\n=======\n${remote}\n>>>>>>> remote`;
 };
 
-// // Split the text into words and separate punctuation marks, so "hello,"
-// becomes ["hello", ","]. Comparing these tokens allows two changes in the
-// same line to merge if they modify different words.
 const tokenizeWords = (text: string): string[] => {
 	return text.match(/[\p{L}\p{N}_]+|\s+|[^\p{L}\p{N}_\s]/gu) ?? [];
 };
 
-// A line conflict can still be merged automatically if both sides changed
-// different words in the same line. Run the three-way merge again on word
-// tokens. It is only a real conflict if some word changes still overlap.
 const tryWordMerge = (local: string, base: string, remote: string): { merged: string; conflict: boolean } => {
 	const regions: Region[] = diff3MergeRegions(tokenizeWords(local), tokenizeWords(base), tokenizeWords(remote));
 	let merged = '';
@@ -66,7 +53,6 @@ const tryWordMerge = (local: string, base: string, remote: string): { merged: st
 		if (region.stable === true) {
 			merged += region.bufferContent.join('');
 		} else if (region.aContent.join('') === region.bContent.join('')) {
-			// Not a real word-level conflict because both sides made the same change.
 			merged += region.aContent.join('');
 		} else {
 			return { merged: '', conflict: true };
@@ -75,30 +61,20 @@ const tryWordMerge = (local: string, base: string, remote: string): { merged: st
 	return { merged, conflict: false };
 };
 
-// Remove extra spaces at the end of each line. Editors and the markdown save
-// process can leave invisible spaces there, which can make diff3 think a line
-// has changed when it really hasn't, causing a false conflict.
-//
-// Exactly two spaces at the end of a line are kept because they create a
-// Markdown line break. Any other trailing spaces or tabs are removed.
+// Trailing whitespace is invisible noise which can cause false conflicts
+// Two trailing spaces are kept (markdown hard line break)
 const normaliseTrailingWhitespace = (text: string): string => {
 	return text.split('\n').map(line => line.replace(/[ \t]+$/, match => match === '  ' ? '  ' : '')).join('\n');
 };
 
-// Run a three-way merge on the note content. Changes made by only one side
-// are merged automatically, while changes made differently on both sides
-// remain as conflicts. If there is no base version, it falls back to a
-// line-by-line comparison where only different lines become conflicts.
 export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string): AutoMergeResult => {
 	const base = normaliseTrailingWhitespace(baseRaw);
 	const local = normaliseTrailingWhitespace(localRaw);
 	const remote = normaliseTrailingWhitespace(remoteRaw);
 
 	if (base === '') {
-		// Without a base version, we cannot know which side made which changes,
-		// so nothing can be merged automatically. We still compare both versions
-		// line by line and only mark the different lines as conflicts, while
-		// keeping matching lines (including unchanged paragraphs) unchanged.
+		// No base version: we can't tell which side made the changes, so the every
+		// different line is treated as a conflict
 		const comm: CommRegion[] = diffComm(local.split('\n'), remote.split('\n'));
 
 		const sections: MergedSection[] = [];
@@ -129,8 +105,7 @@ export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string):
 	for (const region of regions) {
 		if (region.stable === true) {
 			const text = region.bufferContent.join('\n');
-			// buffer 'o' means all three sides agreed here; 'a'/'b' means one side
-			// changed it and diff3 took that change cleanly.
+			// buffer 'o' = all sides agreed; 'a'/'b' = one side's change, taken cleanly
 			sections.push({ text, type: region.buffer === 'o' ? 'unchanged' : 'auto-merged' });
 			mergedParts.push(text);
 		} else {
@@ -138,8 +113,7 @@ export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string):
 			const baseText = region.oContent.join('\n');
 			const remoteText = region.bContent.join('\n');
 
-			// False conflict: both sides made the identical change. diff3MergeRegions
-			// still reports it as unstable, so collapse it to an auto-merge here.
+			// Both sides made the identical change: diff3 flags it as unstable, but it's not a real conflict
 			if (localText === remoteText) {
 				sections.push({ text: localText, type: 'auto-merged' });
 				mergedParts.push(localText);

@@ -59,19 +59,9 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 			mustHandleConflict = Note.mustHandleConflict(local, remoteContent);
 		}
 
-		// ------------------------------------------------------------------------------
-		// Try a three-way merge using the saved base version before deciding how to
-		// handle the conflict. Non-overlapping changes from both sides are merged
-		// automatically, and only real conflicts are left for the user.
-		//
-		// Skip this when the content cannot be merged safely:
-		// - Read-only items: the local change cannot be pushed to the sync target, so
-		//   it must be preserved as a conflict note rather than merged into the note.
-		// - Encrypted notes: the note body is still encrypted.
-		// - Locked notes : these do not use the new conflict
-		//   resolution flow and continue with the existing manual conflict process.
-		// ------------------------------------------------------------------------------
-
+		// Try a three-way merge before creating a conflict note. This step is skipped for content
+		// that can't be merged safely: read-only items (the local change can't be  pushed),
+		// encrypted notes (body still ciphertext) and the locked notes
 		let merge: ReturnType<typeof autoMergeNote>|null = null;
 		if (mustHandleConflict && remoteContent && !itemIsReadOnly && isAutoMergeEnabled()) {
 			const localNote = local as NoteEntity;
@@ -88,19 +78,14 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 			}
 		}
 
-		// ------------------------------------------------------------------------------
-		// If all changes were merged successfully, there is no need to create a
-		// conflict note. Save the merged note and skip conflict-note creation.
-		// ------------------------------------------------------------------------------
-
+		// Everything merged cleanly: save the result and no conflict note creation is needed
 		if (merge && merge.fullyMerged) {
 			const remoteNote = remoteContent as NoteEntity;
 			const mergedNote: NoteEntity = {
 				...remoteNote,
 				title: merge.resolvedLocal.title,
 				body: merge.resolvedLocal.body,
-				// Keep the timestamp newer than the remote version so the merged note is
-				// treated as a local change and uploaded, even if the remote clock is ahead.
+				// Ahead of the remote time so the merge uploads as a local change
 				updated_time: Math.max(time.unixMs(), remoteNote.updated_time + 1),
 			};
 			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, mergedNote, BaseItem.remoteItemSyncTime(remoteNote.updated_time), remoteNote.updated_time);
@@ -116,10 +101,8 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		// ------------------------------------------------------------------------------
 
 		if (mustHandleConflict) {
-			// Non-conflicting changes from both sides are merged before creating the
-			// conflict note, so it only differs from the resolved note in the parts that
-			// still have real conflicts. The remote version is merged the same way below,
-			// so the updated original matches as well.
+			// Merge the non-conflicting changes into both sides before creating the
+			// conflict note, so they only differ where a real conflict remain
 			if (merge) {
 				local = { ...local, title: merge.resolvedLocal.title, body: merge.resolvedLocal.body } as NoteEntity;
 				remoteContent = { ...remoteContent, title: merge.resolvedCurrent.title, body: merge.resolvedCurrent.body } as NoteEntity;

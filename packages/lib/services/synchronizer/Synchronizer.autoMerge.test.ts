@@ -5,16 +5,14 @@ import Setting from '../../models/Setting';
 import ConflictNoteState from '../../models/ConflictNoteState';
 import { NoteEntity } from '../database/types';
 
-// Auto-merge is disabled by default, so these tests enable it. It runs only on
-// the client that detects the conflict (client 1 here), so only that client
-// needs it.
+// Auto-merge is off by default and runs on the client that detects the conflict
+// (client 1 here), so only that client needs it be enabled
 const enableAutoMerge = () => {
 	Setting.setValue('sync.autoMergeConflicts', true);
 };
 
-// Sets up a three-way merge for the given note: client 2 makes its change and
-// syncs first (becoming the remote version), then client 1 makes its change
-// and syncs, which triggers conflict detection and the auto-merge attempt.
+// Client 2 edits and syncs first (becoming the remote), then client 1 edits and
+// syncs, which is when the conflict is detected on client 1.
 const makeConcurrentEdits = async (noteId: string, client2Changes: NoteEntity, client1Changes: NoteEntity) => {
 	await switchClient(2);
 	await synchronizerStart();
@@ -54,7 +52,6 @@ describe('Synchronizer.autoMerge', () => {
 		expect(merged.body).toContain('First paragraph, edited locally.');
 		expect(merged.body).toContain('Third paragraph, edited remotely.');
 
-		// The merged result is uploaded on the next sync and reaches the other client.
 		await synchronizerStart();
 		await switchClient(2);
 		await synchronizerStart();
@@ -81,20 +78,13 @@ describe('Synchronizer.autoMerge', () => {
 		expect(conflicts).toHaveLength(1);
 		const conflictNote = conflicts[0];
 
-		// The non-conflicting change (first paragraph) is merged into both the
-		// conflict note and the resolved original note.
 		expect(conflictNote.body).toContain('First paragraph, edited locally.');
 		const resolved = await Note.load(note.id);
 		expect(resolved.body).toContain('First paragraph, edited locally.');
 
-		// The still-conflicting section keeps each side's own text.
 		expect(conflictNote.body).toContain('Second paragraph, local.');
 		expect(resolved.body).toContain('Second paragraph, remote.');
 
-		// The conflict state's remote_body is saved in the database, not just kept in
-		// memory. It contains the same partial merge as the resolved note, so the
-		// conflict resolution UI later reads a consistent version. It never contains
-		// raw Git conflict markers.
 		const state = await ConflictNoteState.byNoteId(conflictNote.id);
 		expect(state.remote_body).toBe(resolved.body);
 		expect(state.remote_body).toContain('First paragraph, edited locally.');
@@ -191,12 +181,10 @@ describe('Synchronizer.autoMerge', () => {
 			{ body: baseBody.replace('First paragraph.', 'First paragraph, edited locally.'), is_locked: 1 },
 		);
 
-		// A conflict note is created despite the edits being non-overlapping.
 		const conflicts = await Note.conflictedNotes();
 		expect(conflicts).toHaveLength(1);
 
-		// The local conflict note keeps the user's original changes, with no remote
-		// changes merged into it. This confirms that auto-merge was skipped.
+		// Auto-merge was skipped: no remote change folded into the conflict note.
 		expect(conflicts[0].body).toContain('First paragraph, edited locally.');
 		expect(conflicts[0].body).not.toContain('Third paragraph, edited remotely.');
 	}));
@@ -214,10 +202,8 @@ describe('Synchronizer.autoMerge', () => {
 		await synchronizerStart();
 		synchronizer().testingHooks_ = [];
 
-		// The original note keeps the read-only remote title, not the merged one.
 		expect((await Note.load(note.id)).title).toBe('un');
 
-		// The user's change is preserved as a conflict note.
 		const conflicts = await Note.conflictedNotes();
 		expect(conflicts).toHaveLength(1);
 		expect(conflicts[0].title).toBe('un mod');
