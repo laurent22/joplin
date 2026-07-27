@@ -132,6 +132,13 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 		}
 	}
 
+	const titleComponent = props.title ? (
+		<Text
+			role='heading'
+			variant='titleMedium'
+			style={styles.title}
+		>{props.title}</Text>
+	) : null;
 	return <BottomDrawer
 		visible={props.visible}
 		onDismiss={props.onDismiss}
@@ -143,7 +150,7 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 			style={styles.menuContent}
 			testID={`menu-content-${props.visible ? 'open' : 'closed'}`}
 		>
-			{props.title ? <Text role='heading' variant='titleMedium' style={styles.title}>{props.title}</Text> : null}
+			{titleComponent}
 			{menuOptionComponents}
 		</View>
 	</BottomDrawer>;
