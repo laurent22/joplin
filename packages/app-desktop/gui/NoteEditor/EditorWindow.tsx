@@ -26,10 +26,15 @@ interface Props {
 	plugins: PluginStates;
 	newWindow: boolean;
 	windowId: string;
+	showAppNameInWindowTitle: boolean;
 }
 
+export const buildEditorWindowTitle = (noteTitle: string, showAppNameInWindowTitle: boolean) => {
+	return showAppNameInWindowTitle ? `Joplin - ${noteTitle}` : noteTitle;
+};
+
 const emptyCallback = () => {};
-const useWindowTitle = (isNewWindow: boolean) => {
+const useWindowTitle = (isNewWindow: boolean, showAppNameInWindowTitle: boolean) => {
 	const [title, setTitle] = useState('Untitled');
 
 	if (!isNewWindow) {
@@ -39,7 +44,7 @@ const useWindowTitle = (isNewWindow: boolean) => {
 		};
 	}
 
-	return { windowTitle: `Joplin - ${title}`, onNoteTitleChange: setTitle };
+	return { windowTitle: buildEditorWindowTitle(title, showAppNameInWindowTitle), onNoteTitleChange: setTitle };
 };
 
 const defaultLayout = {
@@ -110,7 +115,7 @@ const useLayout = ({ windowId, layout, plugins, dispatch }: Props) => {
 };
 
 const SecondaryWindow: React.FC<Props> = props => {
-	const { windowTitle, onNoteTitleChange } = useWindowTitle(props.newWindow);
+	const { windowTitle, onNoteTitleChange } = useWindowTitle(props.newWindow, props.showAppNameInWindowTitle);
 
 	const newWindow = props.newWindow;
 	const onWindowClose = useCallback(() => {
@@ -195,6 +200,7 @@ export default connect((state: AppState, ownProps: ConnectProps) => {
 	return {
 		themeId: state.settings.theme,
 		isSafeMode: state.settings.isSafeMode,
+		showAppNameInWindowTitle: state.settings.showAppNameInWindowTitle,
 		layout: windowState.secondaryWindowLayout,
 		codeView: windowState?.editorCodeView ?? state.settings['editor.codeView'],
 		legacyMarkdown: state.settings['editor.legacyMarkdown'],

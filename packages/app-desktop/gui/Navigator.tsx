@@ -17,20 +17,29 @@ interface AppScreen {
 interface Props {
 	route: AppStateRoute;
 	screens: Record<string, AppScreen>;
+	showAppNameInWindowTitle: boolean;
 
 	style: React.CSSProperties;
 	className?: string;
 }
 
-const useWindowTitleManager = (screenInfo: AppScreen) => {
+export const buildWindowTitle = (screenTitle: string, showAppNameInWindowTitle: boolean, devMarker: string) => {
+	if (!showAppNameInWindowTitle && screenTitle) {
+		return `${screenTitle}${devMarker}`;
+	}
+	const windowTitle = [`Joplin${devMarker}`];
+	if (screenTitle) {
+		windowTitle.push(screenTitle);
+	}
+	return windowTitle.join(' - ');
+};
+
+const useWindowTitleManager = (screenInfo: AppScreen, showAppNameInWindowTitle: boolean) => {
 	const windowTitle = useMemo(() => {
 		const devMarker = Setting.value('env') === 'dev' ? ` (DEV - ${Setting.value('profileDir')})` : '';
-		const windowTitle = [`Joplin${devMarker}`];
-		if (screenInfo?.title) {
-			windowTitle.push(screenInfo.title());
-		}
-		return windowTitle.join(' - ');
-	}, [screenInfo]);
+		const screenTitle = screenInfo?.title ? screenInfo.title() : '';
+		return buildWindowTitle(screenTitle, showAppNameInWindowTitle, devMarker);
+	}, [screenInfo, showAppNameInWindowTitle]);
 
 	const windowId = useContext(WindowIdContext);
 	useEffect(() => {
@@ -96,7 +105,7 @@ const NavigatorComponent: React.FC<Props> = props => {
 	const screenInfo = props.screens[route?.routeName];
 	const [container, setContainer] = useState<HTMLElement|null>(null);
 
-	useWindowTitleManager(screenInfo);
+	useWindowTitleManager(screenInfo, props.showAppNameInWindowTitle);
 	useWindowRefocusManager(route);
 	const size = useContainerSize(container);
 
@@ -115,6 +124,7 @@ const NavigatorComponent: React.FC<Props> = props => {
 const Navigator = connect((state: AppState) => {
 	return {
 		route: state.route,
+		showAppNameInWindowTitle: state.settings.showAppNameInWindowTitle,
 	};
 })(NavigatorComponent);
 

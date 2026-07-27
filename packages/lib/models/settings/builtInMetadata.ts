@@ -1517,6 +1517,18 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 		},
 
+		showAppNameInWindowTitle: {
+			value: true,
+			type: SettingItemType.Bool,
+			storage: SettingStorage.File,
+			isGlobal: true,
+			section: 'appearance',
+			public: true,
+			appTypes: [AppType.Desktop],
+			label: () => _('Show "Joplin" in the window title'),
+			description: () => _('If disabled, window titles will show only the current note or screen name, without the leading "Joplin - " prefix.'),
+		},
+
 		startMinimized: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'application', public: true, appTypes: [AppType.Desktop], label: () => _('Start application minimised in the tray icon'), show: settings => !!settings['showTrayIcon'] },
 
 		'globalHotkey': {
