@@ -17,6 +17,7 @@ export default class ToolIndex {
 
 	private isEnabled(toolId: string) {
 		const tool = this.tools_.find(tool => tool.id === toolId);
+		if (!tool) return false;
 		// For tools with no corresponding setting
 		if (tool.enabled !== undefined) return tool.enabled;
 
