@@ -102,4 +102,26 @@ describe('replaceLinks', () => {
 
 		expect(editor.state.selection.main.anchor).toBe(markup.length);
 	});
+
+	it('should allow mouse selection when a touch-generated click does not fire', async () => {
+		const markup = 'before [link](https://example.com/)';
+		const clickedCursor = markup.indexOf('link') + 2;
+		const editor = await createTestEditor(markup, EditorSelection.cursor(0), ['URL', 'LinkMark', 'Link'], [replaceLinks]);
+
+		const touchStart = new Event('touchstart', { bubbles: true });
+		Object.defineProperty(touchStart, 'targetTouches', { value: [] });
+		editor.contentDOM.dispatchEvent(touchStart);
+		editor.contentDOM.dispatchEvent(new MouseEvent('mousedown', { button: 0, bubbles: true }));
+		editor.contentDOM.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
+
+		const mousePointerDown = new Event('pointerdown', { bubbles: true });
+		Object.defineProperty(mousePointerDown, 'pointerType', { value: 'mouse' });
+		editor.contentDOM.dispatchEvent(mousePointerDown);
+		editor.contentDOM.dispatchEvent(new MouseEvent('mousedown', { button: 0, bubbles: true }));
+		editor.dispatch({ selection: EditorSelection.cursor(clickedCursor) });
+		editor.contentDOM.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
+
+		expect(editor.state.selection.main.anchor).toBe(clickedCursor);
+		expect(editor.contentDOM.textContent).toBe(markup);
+	});
 });

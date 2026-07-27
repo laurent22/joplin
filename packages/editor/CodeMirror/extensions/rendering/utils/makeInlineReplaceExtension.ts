@@ -18,6 +18,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 
 	public constructor(private view: EditorView) {
 		view.dom.addEventListener('mousedown', this.onMouseDown, true);
+		view.dom.addEventListener('pointerdown', this.onPointerDown, true);
 		view.dom.ownerDocument.addEventListener('mouseup', this.onMouseUp);
 		view.dom.addEventListener('touchstart', this.onTouchStart);
 		view.dom.addEventListener('click', this.onMouseUp);
@@ -27,6 +28,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 
 	public destroy() {
 		this.view.dom.removeEventListener('mousedown', this.onMouseDown, true);
+		this.view.dom.removeEventListener('pointerdown', this.onPointerDown, true);
 		this.view.dom.ownerDocument.removeEventListener('mouseup', this.onMouseUp);
 		this.view.dom.removeEventListener('touchstart', this.onTouchStart);
 		this.view.dom.removeEventListener('click', this.onMouseUp);
@@ -37,6 +39,13 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 	private onMouseDown = (event: MouseEvent) => {
 		if (event.button === 0) {
 			this.mouseSelectionInProgress = true;
+		}
+	};
+
+	private onPointerDown = (event: PointerEvent) => {
+		if (event.pointerType !== 'touch' && this.touchSelectionInProgress) {
+			this.mouseSelectionInProgress = false;
+			this.touchSelectionInProgress = false;
 		}
 	};
 
