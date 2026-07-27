@@ -107,6 +107,7 @@ const useStyles = (themeId: number) => {
 			},
 			titleViewContainer: {
 				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
 				borderTopColor: theme.dividerColor,
 				borderTopWidth: 1,
 				borderBottomColor: theme.dividerColor,
@@ -239,9 +240,14 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 			style={{ width: 30, height: 30, alignSelf: 'center' }}
 		/>;
 
+	const titleViewContainerWithToggle = {
+		...styles.titleViewContainer,
+		paddingRight: titleToggleButton ? 0 : styles.titleViewContainer.paddingRight,
+	};
+
 	const titleComponent = (
 		<View
-			style={styles.titleViewContainer}
+			style={titleViewContainerWithToggle}
 			onLayout={(e) => {
 				const width = e.nativeEvent.layout.width;
 				if (width !== titleContainerWidth) {
@@ -251,6 +257,7 @@ const NoteRevisionViewer: React.FC<Props> = props => {
 		>
 			<TextWrapCalculator
 				textCompStyle={styles.titleText}
+				textCompContainerStyle={styles.titleViewContainer}
 				textCompContainerWidth={titleContainerWidth}
 				showMultilineToggle={showMultilineToggle}
 				multiline={multiline}

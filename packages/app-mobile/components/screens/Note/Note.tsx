@@ -532,6 +532,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			flexDirection: 'row',
 			flexBasis: 'auto',
 			paddingLeft: theme.marginLeft,
+			paddingRight: theme.marginRight,
 			borderBottomColor: theme.dividerColor,
 			borderBottomWidth: 1,
 			maxHeight: '40%',
@@ -543,7 +544,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		styles.titleTextInput = {
 			flex: 1,
 			marginTop: 0,
-			marginRight: theme.marginRight,
 			paddingLeft: 0,
 			color: theme.color,
 			fontWeight: 'bold',
@@ -1781,8 +1781,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			}
 		}
 
-		const titleContainerStyle = isTodo ? this.styles().titleContainerTodo : this.styles().titleContainer;
-
 		const dueDate = Note.dueDateObject(note);
 
 		const textWrapCalculator_updateState = (showToggle: boolean, enableMultiline: boolean) => {
@@ -1798,9 +1796,17 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				style={{ width: 30, height: 30, alignSelf: 'center' }}
 			/>;
 
+		const titleContainerStyle = isTodo ? this.styles().titleContainerTodo : this.styles().titleContainer; // Must be stable for width calculation
+		const titleContainerStyleWithToggle = {
+			...titleContainerStyle,
+			paddingRight: titleToggleButton ? 0 : titleContainerStyle.paddingRight,
+		};
+
+		const checkboxComp = isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />;
+
 		const titleComp = (
 			<View
-				style={titleContainerStyle}
+				style={titleContainerStyleWithToggle}
 				onLayout={(e) => {
 					const width = e.nativeEvent.layout.width;
 					if (width !== this.state.titleContainerWidth) {
@@ -1815,7 +1821,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				aria-label={_('Title')}
 			>
 				<TextWrapCalculator
+					checkboxComp={checkboxComp}
 					textCompStyle={this.styles().titleTextInput}
+					textCompContainerStyle={titleContainerStyle}
 					textCompContainerWidth={this.state.titleContainerWidth}
 					showMultilineToggle={this.state.showMultilineToggle}
 					multiline={this.state.multiline}
@@ -1823,16 +1831,13 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					updateState={textWrapCalculator_updateState}
 					readOnly={false}
 				/>
-				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
+				{ checkboxComp }
 				<TextInput
 					key={this.state.multiline ? 'multiLine' : 'singleLine'}
 					ref={this.titleTextFieldRef}
 					underlineColorAndroid="#ffffff00"
 					autoCapitalize="sentences"
-					style={{
-						...this.styles().titleTextInput,
-						marginRight: titleToggleButton ? 0 : theme.marginRight,
-					}}
+					style={this.styles().titleTextInput}
 					value={note.title}
 					onChangeText={this.title_changeText}
 					selectionColor={theme.textSelectionColor}
