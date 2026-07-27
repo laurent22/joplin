@@ -43,6 +43,7 @@ export interface WhenClauseContext {
 	noteIsDeleted: boolean;
 	noteIsHtml: boolean;
 	noteIsLocked: boolean;
+	noteLockContentUnavailable: boolean;
 	noteLockSessionUnlocked: boolean;
 	noteIsMarkdown: boolean;
 	noteIsReadOnly: boolean;
@@ -90,7 +91,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 	const noteIsLocked = isNoteLockEnabled() && selectedNote ? !!selectedNote.is_locked : false;
 	// While the unlock or the cannot-decrypt overlay covers the editor, menu actions (attach file,
 	// insert date, etc.) could still modify the note underneath it, so treat the note as read-only.
-	const noteLockContentUnavailable = noteIsLocked && (!state.noteLockSessionUnlocked || state.activeNoteIsUndecryptable);
+	const noteLockContentUnavailable = noteIsLocked && (!state.noteLockSessionUnlocked || windowState.activeNoteIsUndecryptable);
 	const noteIsReadOnlyShare = selectedNote ? itemIsReadOnlySync(ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, selectedNote as ItemSlice, settings['sync.userId'], state.shareService) : false;
 
 	return {
@@ -126,6 +127,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		noteIsMarkdown: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN : false,
 		noteIsHtml: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML : false,
 		noteIsLocked,
+		noteLockContentUnavailable,
 		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
 		noteIsReadOnly: noteLockContentUnavailable || noteIsReadOnlyShare,
 		noteIsReadOnlyShare,

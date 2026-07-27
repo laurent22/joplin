@@ -7,7 +7,6 @@ import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import { enableNoteLock } from '@joplin/lib/services/noteLock/setNoteLockState';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import bridge from '../../../services/bridge';
-import { setNoteLockSetupContinuation } from '../../ConfigScreen/controls/noteLockSetupContinuation';
 
 export const declaration: CommandDeclaration = {
 	name: 'enableNoteEncryption',
@@ -33,7 +32,6 @@ export const runtime = (): CommandRuntime => {
 			if (!NoteLockKey.instance().load()) {
 				const setUpNow = bridge().showConfirmMessageBox(_('Encrypting a note requires a note lock password, which has not yet been set. Set it up now?'));
 				if (setUpNow) {
-					setNoteLockSetupContinuation(noteId);
 					context.dispatch({
 						type: 'NAV_GO',
 						routeName: 'Config',

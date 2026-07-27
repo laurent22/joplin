@@ -210,7 +210,6 @@ packages/app-desktop/gui/ConfigScreen/controls/SettingDescription.js
 packages/app-desktop/gui/ConfigScreen/controls/SettingHeader.js
 packages/app-desktop/gui/ConfigScreen/controls/SettingLabel.js
 packages/app-desktop/gui/ConfigScreen/controls/ToggleAdvancedSettingsButton.js
-packages/app-desktop/gui/ConfigScreen/controls/noteLockSetupContinuation.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js

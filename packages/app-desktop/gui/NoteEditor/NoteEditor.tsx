@@ -119,9 +119,10 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const effectiveNoteId = useEffectiveNoteId(props);
 	const { editorPlugin, editorView } = usePluginEditorView(props.plugins);
 	const builtInEditorVisible = !editorPlugin;
+	const windowId = useContext(WindowIdContext);
 	const onDecryptFailedChange = useCallback((value: boolean) => {
-		props.dispatch({ type: 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE', value });
-	}, [props.dispatch]);
+		props.dispatch({ type: 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE', value, windowId });
+	}, [props.dispatch, windowId]);
 
 	const { formNote, setFormNote, isNewNote, resourceInfos, decryptFailed, loadBlocked } = useFormNote({
 		noteId: effectiveNoteId,
@@ -157,9 +158,21 @@ function NoteEditorContent(props: NoteEditorProps) {
 		};
 	}, [setFormNote, scheduleSaveNote]);
 
+	useAsyncEffect(async () => {
+		if (!isNoteLockEnabled() || props.noteLockSessionUnlocked) return;
+		const lockedFormNote = formNoteRef.current;
+		if (!lockedFormNote?.is_locked || !lockedFormNote.hasChanged) return;
+		// The panel replaces the editor only once the edits are written, so flush them the same way
+		// a note switch does before locking.
+		await saveNoteIfWillChange(lockedFormNote);
+		// The editor dispatches its pending change when it unmounts, which would be saved over the
+		// flushed one - clearing the change id makes onFieldChange drop it, as a note switch does.
+		setFormNote(prev => ({ ...prev, bodyWillChangeId: 0 }));
+		await lockedFormNote.saveActionQueue?.waitForAllDone();
+	}, [props.noteLockSessionUnlocked, saveNoteIfWillChange]);
+
 	const formNoteFolder = useFolder({ folderId: formNote.parent_id });
 
-	const windowId = useContext(WindowIdContext);
 	const shownEditorViewIds = useVisiblePluginEditorViewIds(props.plugins, windowId);
 	useConnectToEditorPlugin({
 		startupPluginsLoaded: props.startupPluginsLoaded,
