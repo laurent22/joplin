@@ -30,6 +30,8 @@ const isValidEditOp = (operation: string): operation is EditOp['op'] => {
 
 // Tools that interact with the editor
 export const isEditorToolCall = (toolId: string) => {
+	if (!toolId.startsWith('editor.')) return false;
+	toolId = toolId.replace(/^editor\./, '');
 	return isValidEditOp(toolId) || toolId === 'readNoteBody';
 };
 
@@ -72,7 +74,7 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 	const result: ToolDefinition[] = [];
 	const addSelectionOperations = () => {
 		result.push(buildTool({
-			id: 'replaceSelection',
+			id: 'editor.replaceSelection',
 			userDescription: (_input: ToolInput, output: string) => output,
 			description: 'Replaces the text currently selected by the user.',
 			inputSchema: {
@@ -101,7 +103,7 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 
 	const addEditOperations = () => {
 		const buildEditTool = (id: EditOp['op']) => ({
-			id: `${id}`,
+			id: `editor.${id}`,
 			userDescription: (args: ToolInput) => (
 				describeEditOperation(toolCallToEditOperation(id, args))
 			),
@@ -204,7 +206,7 @@ const buildEditorTools = ({ note, commands }: EditorToolContext) => {
 	const addReadOperation = () => {
 		result.push(
 			{
-				id: 'readNoteBody',
+				id: 'editor.readNoteBody',
 				// Always enabled in the editor context:
 				enabled: true,
 				userDescription: () => _('Read note'),
