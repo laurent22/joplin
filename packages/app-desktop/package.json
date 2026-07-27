@@ -28,6 +28,7 @@
   "bugs": {
     "url": "https://github.com/laurent22/joplin/issues"
   },
+  "desktopName": "appimagekit-joplin",
   "build": {
     "appId": "net.cozic.joplin-desktop",
     "compression": "normal",
@@ -130,6 +131,7 @@
     },
     "linux": {
       "icon": "../../Assets/LinuxIcons",
+      "syncDesktopName": true,
       "category": "Office",
       "desktop": {
         "entry": {
