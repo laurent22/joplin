@@ -544,6 +544,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			flex: 1,
 			marginTop: 0,
 			paddingLeft: 0,
+			paddingRight: theme.marginRight,
 			color: theme.color,
 			fontWeight: 'bold',
 			fontSize: theme.fontSize,
@@ -1828,7 +1829,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					ref={this.titleTextFieldRef}
 					underlineColorAndroid="#ffffff00"
 					autoCapitalize="sentences"
-					style={this.styles().titleTextInput}
+					style={{
+						...this.styles().titleTextInput,
+						paddingRight: titleToggleButton ? 0 : theme.marginRight,
+					}}
 					value={note.title}
 					onChangeText={this.title_changeText}
 					selectionColor={theme.textSelectionColor}
