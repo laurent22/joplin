@@ -738,7 +738,7 @@ const SideMenuContentComponent = (props: Props) => {
 				visible={folderMenuVisible}
 				onDismiss={() => setFolderMenuVisible(false)}
 				themeId={props.themeId}
-				alignment={MenuAlignment.Left}
+				alignment={MenuAlignment.Center}
 				title={folderMenuTitle}
 				options={folderMenuOptions}
 			/>
