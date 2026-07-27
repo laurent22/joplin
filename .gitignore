@@ -654,6 +654,7 @@ packages/app-desktop/services/plugins/types.js
 packages/app-desktop/services/restart.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/tools/bundleJs.js
+packages/app-desktop/tools/cleanOnnxRuntime.js
 packages/app-desktop/tools/copy7Zip.js
 packages/app-desktop/tools/generateLatestArm64Yml.js
 packages/app-desktop/tools/githubReleasesUtils.js
@@ -854,6 +855,8 @@ packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/expo
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/exportDebugReport.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/exportProfile.js
 packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/utils/makeImportExportCacheDirectory.js
+packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.test.js
+packages/app-mobile/components/screens/ConfigScreen/NoteLockConfig.js
 packages/app-mobile/components/screens/ConfigScreen/SectionDescription.js
 packages/app-mobile/components/screens/ConfigScreen/SectionHeader.js
 packages/app-mobile/components/screens/ConfigScreen/SectionSelector/SectionTab.js
@@ -1141,6 +1144,7 @@ packages/editor/CodeMirror/extensions/rendering/replaceLinks.test.js
 packages/editor/CodeMirror/extensions/rendering/replaceLinks.js
 packages/editor/CodeMirror/extensions/rendering/types.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeBlockReplaceExtension.js
+packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.test.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.js
 packages/editor/CodeMirror/extensions/rendering/utils/nodeIntersectsSelection.js
 packages/editor/CodeMirror/extensions/searchExtension.test.js
@@ -1617,6 +1621,7 @@ packages/lib/services/conflict/autoMergeNote.js
 packages/lib/services/conflict/diffNotes.test.js
 packages/lib/services/conflict/diffNotes.js
 packages/lib/services/conflict/isAutoMergeEnabled.js
+packages/lib/services/conflict/isConflictResolutionEnabled.js
 packages/lib/services/contextkey/contextkey.js
 packages/lib/services/database/addMigrationFile.js
 packages/lib/services/database/isSqliteSyntaxError.js
