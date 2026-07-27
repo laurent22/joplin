@@ -1598,7 +1598,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'EDITOR_NOTE_NEEDS_RELOAD':
 			{
-				draft.editorNoteReloadTimeRequest = Date.now();
+				if (!action.noteId || (draft.selectedNoteIds.length && draft.selectedNoteIds[0] === action.noteId)) {
+					draft.editorNoteReloadTimeRequest = Date.now();
+				}
 			}
 			break;
 
