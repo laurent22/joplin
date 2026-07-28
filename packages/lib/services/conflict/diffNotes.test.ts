@@ -44,6 +44,19 @@ describe('autoMerge', () => {
 		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
 	});
 
+	// The word tokenizer keeps newlines as their own tokens, so the line structure of a
+	// multi-line region survives the merge rather than being rebuilt from the words
+	test.each([
+		['a blank line', 'p1 x\n\np2 y', 'p1 X\n\np2 y', 'p1 x\n\np2 Y', 'p1 X\n\np2 Y'],
+		['indentation', '  a x\n  b y', '  a X\n  b y', '  a x\n  b Y', '  a X\n  b Y'],
+		['a hard line break', 'a x  \nb y', 'a X  \nb y', 'a x  \nb Y', 'a X  \nb Y'],
+		['a line inserted by one side', 'one a\ntwo b', 'one A\ntwo b', 'one a\nINSERT\ntwo B', 'one A\nINSERT\ntwo B'],
+	])('should keep the line structure when word-merging a multi-line region containing %s', (_label, base, local, remote, expected) => {
+		const result = autoMerge(base, local, remote);
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
+		expect(result.mergedText).toBe(expected);
+	});
+
 	// KNOWN LIMITATION: If a line has both a real conflict and a change that can
 	// be merged, then the whole line is treated as a conflict.
 	// In future, the line could be split into auto-merged and conflict parts
