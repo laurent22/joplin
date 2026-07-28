@@ -79,6 +79,7 @@ const useStyles = ({ theme, dragging, draggable, dragOffset, backgroundOpacity }
 				shadowRadius: 4,
 				shadowColor: theme.color,
 				shadowOpacity: 0.15,
+				elevation: 2,
 
 				marginBottom: -spaceBelowScreenEdge,
 
