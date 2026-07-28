@@ -180,6 +180,12 @@ const TagsScreenComponent: React.FC<Props> = props => {
 		});
 
 		menuItems.push({
+			text: _('Delete'),
+			onPress: generateTagDeletion(),
+			style: 'destructive',
+		});
+
+		menuItems.push({
 			text: _('Rename'),
 			onPress: async () => {
 				const newName = await dialogs.promptForText(_('Rename tag:'), tag.title);
@@ -193,12 +199,6 @@ const TagsScreenComponent: React.FC<Props> = props => {
 					}
 				}
 			},
-		});
-
-		menuItems.push({
-			text: _('Delete'),
-			onPress: generateTagDeletion(),
-			style: 'destructive',
 		});
 
 		dialogs.prompt(

@@ -144,13 +144,13 @@ const ProfileListItem: React.FC<ProfileItemProps> = ({ profile, profileConfig, s
 					style: 'cancel',
 				},
 				{
-					text: _('Edit'),
-					onPress: () => onEditProfile(profile.id),
-					style: 'default',
-				},
-				{
 					text: _('Delete'),
 					onPress: () => onDeleteProfile(profile),
+					style: 'destructive',
+				},
+				{
+					text: _('Edit'),
+					onPress: () => onEditProfile(profile.id),
 					style: 'default',
 				},
 			],
