@@ -10,6 +10,7 @@ import { Ionicons as Icon } from '@react-native-vector-icons/ionicons';
 import BottomDrawerMenu, { MenuOption } from '../BottomDrawerMenu';
 import { AppState } from '../../utils/types';
 import { themeStyle } from '../global-style';
+import useSafeAreaPadding from '../../utils/hooks/useSafeAreaPadding';
 
 type OnButtonPress = ()=> void;
 interface ButtonSpec {
@@ -54,6 +55,7 @@ interface StylesProps {
 
 const useStyles = ({ buttonContainerRef, themeId }: StylesProps) => {
 	const { height: windowHeight } = useWindowDimensions();
+	const safeAreaPadding = useSafeAreaPadding();
 	const [menuMarginBottom, setMenuMarginBottom] = useState(0);
 
 	useLayoutEffect(() => {
@@ -67,7 +69,7 @@ const useStyles = ({ buttonContainerRef, themeId }: StylesProps) => {
 
 		return StyleSheet.create({
 			menu: {
-				marginBottom: menuMarginBottom + theme.marginBottom,
+				marginBottom: menuMarginBottom + theme.marginBottom + safeAreaPadding.paddingBottom,
 				// Always float right:
 				alignSelf: 'flex-end',
 			},
@@ -80,7 +82,7 @@ const useStyles = ({ buttonContainerRef, themeId }: StylesProps) => {
 				alignSelf: 'flex-end',
 			},
 		});
-	}, [menuMarginBottom, themeId]);
+	}, [menuMarginBottom, safeAreaPadding, themeId]);
 };
 
 const FloatingActionButton = (props: ActionButtonProps) => {
