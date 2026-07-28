@@ -43,10 +43,15 @@ const useStyles = (themeId: number) => {
 
 		return StyleSheet.create({
 			title: {
-				marginHorizontal: theme.margin,
-				marginVertical: theme.marginSmall,
+				marginLeft: theme.marginLeft,
+				marginRight: theme.marginRight,
+				paddingVertical: theme.marginMedium,
 				lineHeight: theme.fontSizeLarger,
 				fontSize: theme.fontSizeLarger,
+				marginBottom: theme.marginSmall,
+
+				borderColor: theme.dividerColor,
+				borderBottomWidth: 1,
 			},
 			menu: {
 				paddingHorizontal: 0,
@@ -130,13 +135,13 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 		}
 	}
 
-	const titleComponent = props.title ? (
+	const titleComponent = props.title ? <>
 		<Text
 			role='heading'
 			variant='titleMedium'
 			style={styles.title}
 		>{props.title}</Text>
-	) : null;
+	</> : null;
 	return <BottomDrawer
 		visible={props.visible}
 		onDismiss={props.onDismiss}
