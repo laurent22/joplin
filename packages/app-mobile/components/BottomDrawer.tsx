@@ -55,7 +55,7 @@ const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset
 		const menuGapRight = safeAreaPadding.paddingRight + 6;
 
 		// On web, any spaceBelowScreenEdge results in a scrollbar and extra scroll.
-		const spaceBelowScreenEdge = Platform.OS === 'web' || menuType === MenuType.Floating ? 0 : windowHeight;
+		const spaceBelowScreenEdge = Platform.OS === 'web' ? 0 : windowHeight;
 
 		return StyleSheet.create({
 			backgroundStyle: {
@@ -101,7 +101,7 @@ const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset
 				shadowColor: theme.color,
 				shadowOpacity: 0.15,
 
-				marginBottom: menuType === MenuType.Floating ? safeAreaPadding.paddingBottom : -spaceBelowScreenEdge,
+				marginBottom: safeAreaPadding.paddingBottom,
 
 				userSelect: dragging ? 'none' : 'auto',
 				transform: [
@@ -123,14 +123,13 @@ const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset
 				flexShrink: 1,
 				flexGrow: 1,
 
-				marginBottom: spaceBelowScreenEdge,
-
 				padding: 20,
 
 				...(menuType === MenuType.Docked ? {
 					paddingBottom: 14 + safeAreaPadding.paddingBottom,
 					// The drag handle should be at the very top of the menu
 					paddingTop: showDragHandle ? 0 : undefined,
+					marginBottom: spaceBelowScreenEdge,
 				} : {
 					paddingTop: theme.marginSmall,
 					paddingBottom: theme.marginSmall,

@@ -45,6 +45,8 @@ const useStyles = (themeId: number) => {
 		return StyleSheet.create({
 			menu: {
 				paddingHorizontal: 0,
+				width: 350,
+				maxWidth: windowWidth,
 			},
 			menuContent: { flexDirection: 'column', width: '100%' },
 			menuItem: {
@@ -52,7 +54,6 @@ const useStyles = (themeId: number) => {
 				padding: theme.marginMedium,
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
-				minWidth: Math.min(350, windowWidth),
 			},
 			menuItemContent: {
 				flexDirection: 'row',
