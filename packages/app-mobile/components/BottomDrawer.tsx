@@ -10,7 +10,7 @@ import useReduceMotionEnabled from '../utils/hooks/useReduceMotionEnabled';
 import { _ } from '@joplin/lib/locale';
 
 export enum MenuAlignment {
-	Left,
+	Center,
 	Right,
 }
 
@@ -78,7 +78,7 @@ const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset
 			},
 			menuStyle: {
 				zIndex: 1,
-				alignSelf: alignment === MenuAlignment.Left ? 'flex-start' : 'flex-end',
+				alignSelf: alignment === MenuAlignment.Center ? 'center' : 'flex-end',
 				...(isSmallWidthScreen ? {
 					// Center on small screens, rather than float right.
 					alignSelf: 'center',

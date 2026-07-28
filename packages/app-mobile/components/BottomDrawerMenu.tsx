@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { StyleSheet, View, Text, useWindowDimensions, TextStyle, ViewStyle, StyleProp } from 'react-native';
+import { StyleSheet, View, useWindowDimensions, TextStyle, StyleProp, ViewStyle } from 'react-native';
 import { themeStyle } from './global-style';
 import BottomDrawer, { MenuAlignment, MenuType } from './BottomDrawer';
-import { TouchableRipple } from 'react-native-paper';
+import { TouchableRipple, Text } from 'react-native-paper';
 import Icon from './Icon';
 
 interface MenuOptionDivider {
@@ -34,6 +34,7 @@ interface Props {
 	menuType?: MenuType;
 	alignment: MenuAlignment;
 	autoScrollToEnd?: boolean;
+	title?: string;
 	onDismiss: ()=> void;
 	options: MenuOption[];
 }
@@ -44,6 +45,17 @@ const useStyles = (themeId: number) => {
 		const theme = themeStyle(themeId);
 
 		return StyleSheet.create({
+			title: {
+				marginLeft: theme.marginLeft,
+				marginRight: theme.marginRight,
+				paddingVertical: theme.marginMedium,
+				lineHeight: theme.fontSizeLarger,
+				fontSize: theme.fontSizeLarger,
+				marginBottom: theme.marginSmall,
+
+				borderColor: theme.dividerColor,
+				borderBottomWidth: 1,
+			},
 			menu: {
 				paddingHorizontal: 0,
 				width: 350,
@@ -127,6 +139,13 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 		}
 	}
 
+	const titleComponent = props.title ? <>
+		<Text
+			role='heading'
+			variant='titleMedium'
+			style={styles.title}
+		>{props.title}</Text>
+	</> : null;
 	return <BottomDrawer
 		visible={props.visible}
 		onDismiss={props.onDismiss}
@@ -141,6 +160,7 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 			style={styles.menuContent}
 			testID={`menu-content-${props.visible ? 'open' : 'closed'}`}
 		>
+			{titleComponent}
 			{menuOptionComponents}
 		</View>
 	</BottomDrawer>;
