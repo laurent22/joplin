@@ -4,6 +4,8 @@ const { diff3MergeRegions, diffComm } = require('node-diff3');
 interface StableRegion {
 	stable: true;
 	buffer: 'a' | 'o' | 'b';
+	bufferStart: number;
+	bufferLength: number;
 	bufferContent: string[];
 }
 
@@ -63,31 +65,54 @@ const tryWordMerge = (local: string, base: string, remote: string): { merged: st
 
 // Trailing whitespace is invisible noise which can cause false conflicts
 // Two trailing spaces are kept (markdown hard line break)
-const normaliseTrailingWhitespace = (text: string): string => {
-	return text.split('\n').map(line => line.replace(/[ \t]+$/, match => match === '  ' ? '  ' : '')).join('\n');
+const normaliseLine = (line: string): string => {
+	return line.replace(/[ \t]+$/, match => match === '  ' ? '  ' : '');
+};
+
+// Lines are compared normalised so invisible whitespace can't cause a false
+// conflict, but the originals are what get written back
+const splitLines = (text: string) => {
+	const original = text.split('\n');
+	return { original, normalised: original.map(normaliseLine) };
+};
+
+const originalRegionLines = (region: StableRegion, sides: Record<'a' | 'o' | 'b', string[]>): string[] => {
+	const source = sides[region.buffer];
+	const originals = source.slice(region.bufferStart, region.bufferStart + region.bufferLength);
+	return originals.length === region.bufferContent.length ? originals : region.bufferContent;
 };
 
 export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string): AutoMergeResult => {
-	const base = normaliseTrailingWhitespace(baseRaw);
-	const local = normaliseTrailingWhitespace(localRaw);
-	const remote = normaliseTrailingWhitespace(remoteRaw);
+	const baseLines = splitLines(baseRaw);
+	const localLines = splitLines(localRaw);
+	const remoteLines = splitLines(remoteRaw);
+
+	const base = baseLines.normalised.join('\n');
 
 	if (base === '') {
 		// No base version: we can't tell which side made the changes, so the every
 		// different line is treated as a conflict
-		const comm: CommRegion[] = diffComm(local.split('\n'), remote.split('\n'));
+		const comm: CommRegion[] = diffComm(localLines.normalised, remoteLines.normalised);
 
 		const sections: MergedSection[] = [];
 		const mergedParts: string[] = [];
 
+		// diffComm does not return buffer positions, so track them to find original locations
+		let localIndex = 0;
+		let remoteIndex = 0;
+
 		for (const region of comm) {
 			if (region.common) {
-				const text = region.common.join('\n');
+				const text = localLines.original.slice(localIndex, localIndex + region.common.length).join('\n');
+				localIndex += region.common.length;
+				remoteIndex += region.common.length;
 				sections.push({ text, type: 'unchanged' });
 				mergedParts.push(text);
 			} else {
-				const localText = region.buffer1.join('\n');
-				const remoteText = region.buffer2.join('\n');
+				const localText = localLines.original.slice(localIndex, localIndex + region.buffer1.length).join('\n');
+				const remoteText = remoteLines.original.slice(remoteIndex, remoteIndex + region.buffer2.length).join('\n');
+				localIndex += region.buffer1.length;
+				remoteIndex += region.buffer2.length;
 				const text = conflictPlaceholder(localText, remoteText);
 				sections.push({ text, type: 'conflict', localText, remoteText });
 				mergedParts.push(text);
@@ -97,14 +122,16 @@ export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string):
 		return { mergedText: mergedParts.join('\n'), sections };
 	}
 
-	const regions: Region[] = diff3MergeRegions(local.split('\n'), base.split('\n'), remote.split('\n'));
+	const regions: Region[] = diff3MergeRegions(localLines.normalised, baseLines.normalised, remoteLines.normalised);
+
+	const sides = { a: localLines.original, o: baseLines.original, b: remoteLines.original };
 
 	const sections: MergedSection[] = [];
 	const mergedParts: string[] = [];
 
 	for (const region of regions) {
 		if (region.stable === true) {
-			const text = region.bufferContent.join('\n');
+			const text = originalRegionLines(region, sides).join('\n');
 			// buffer 'o' = all sides agreed; 'a'/'b' = one side's change, taken cleanly
 			sections.push({ text, type: region.buffer === 'o' ? 'unchanged' : 'auto-merged' });
 			mergedParts.push(text);

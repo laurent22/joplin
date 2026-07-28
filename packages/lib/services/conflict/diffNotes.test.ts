@@ -89,6 +89,20 @@ describe('autoMerge', () => {
 		expect(result.mergedText).toBe('Line one  \nLine two\n\nLast para, edited.');
 	});
 
+	test.each([
+		['a single trailing space', 'Alpha '],
+		['a trailing tab', 'Alpha\t'],
+		['three trailing spaces', 'Alpha   '],
+		['a two-space hard line break', 'Alpha  '],
+	])('should keep %s on a line neither side changed', (_label, firstLine) => {
+		const base = `${firstLine}\nBeta\nGamma`;
+		const local = `${firstLine}\nBeta edited\nGamma`;
+		const remote = `${firstLine}\nBeta\nGamma edited`;
+		const result = autoMerge(base, local, remote);
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
+		expect(result.mergedText).toBe(`${firstLine}\nBeta edited\nGamma edited`);
+	});
+
 	test('with empty base should mark only the differing line as a conflict', () => {
 		const result = autoMerge('', 'my version', 'their version');
 		expect(result.sections.length).toBe(1);
