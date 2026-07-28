@@ -12721,7 +12721,7 @@ __metadata:
     stream: "npm:0.0.3"
     stream-browserify: "npm:3.0.0"
     string-natural-compare: "npm:3.0.1"
-    tar-stream: "npm:3.1.8"
+    tar-stream: "npm:3.1.9"
     timers: "npm:0.1.1"
     timers-browserify: "npm:2.0.12"
     ts-jest: "npm:29.4.6"
@@ -55761,15 +55761,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar-stream@npm:3.1.8":
-  version: 3.1.8
-  resolution: "tar-stream@npm:3.1.8"
+"tar-stream@npm:3.1.9":
+  version: 3.1.9
+  resolution: "tar-stream@npm:3.1.9"
   dependencies:
     b4a: "npm:^1.6.4"
     bare-fs: "npm:^4.5.5"
     fast-fifo: "npm:^1.2.0"
     streamx: "npm:^2.15.0"
-  checksum: 10/c26647792d0b64a0d2aaf3e6df075dbc51f02b071835ea69636c4f91aa47e234e2bf0404c282d415d75307522083ac34c273f00feff765c95d9d414881f8ae93
+  checksum: 10/dc848a5e8ea506bbe9dca1baa5d5811a35c58932bd917804c95973f4ae0932f10f728dff329f4b21b07cebf0cc7d597c179f177300a0ba00b8524fd69746cd8e
   languageName: node
   linkType: hard
 
