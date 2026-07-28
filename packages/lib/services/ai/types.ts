@@ -1,3 +1,5 @@
+import { ToolSpec } from './tools/types';
+
 export enum ChatRole {
 	System = 'system',
 	User = 'user',
@@ -42,13 +44,6 @@ export interface ResponseFormat {
 		strict: boolean;
 		schema: JsonSchema;
 	};
-}
-
-export interface ToolSpec {
-	name: string;
-	description: string;
-	// Information provided by the model to the tool
-	inputSchema: JsonSchema;
 }
 
 export interface ChatOptions {

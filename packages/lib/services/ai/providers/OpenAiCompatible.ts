@@ -2,8 +2,9 @@ import shim from '../../../shim';
 import JoplinError from '../../../JoplinError';
 import Logger from '@joplin/utils/Logger';
 import { rtrimSlashes } from '@joplin/utils/path';
-import { ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification, ToolSpec } from '../types';
+import { ChatMessage, ChatOptions, ChatResult, ChatToolCall, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
+import { ToolSpec } from '../tools/types';
 
 const logger = Logger.create('OpenAiCompatibleProvider');
 
@@ -48,7 +49,7 @@ const convertTool = (tool: ToolSpec) => {
 	return {
 		type: 'function',
 		function: {
-			name: tool.name,
+			name: tool.id,
 			description: tool.description,
 			parameters: tool.inputSchema,
 			strict: true,

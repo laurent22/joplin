@@ -18,6 +18,7 @@ import JoplinError from '@joplin/lib/JoplinError';
 import eventManager, { EventName, ItemChangeEvent } from '@joplin/lib/eventManager';
 import { Second } from '@joplin/utils/time';
 import ChatMessageItem from './ChatMessageItem';
+import NavService from '@joplin/lib/services/NavService';
 
 const logger = Logger.create('ChatPanel');
 
@@ -219,6 +220,8 @@ const ChatPanel: React.FC<Props> = (props) => {
 					body: note.body,
 					title: note.title,
 					selection,
+					noteId: note.id,
+					folderId: note.parent_id,
 				};
 			};
 
@@ -354,6 +357,13 @@ const ChatPanel: React.FC<Props> = (props) => {
 				{visibleMessages.length === 0 && (
 					<div className='empty'>
 						{_('Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.')}
+						<br/>
+						<br/>
+						<button
+							type='button'
+							className='link-button'
+							onClick={() => NavService.go('Config', { props: { defaultSection: 'ai.tools' } })}
+						>{_('Manage capabilities')}</button>
 					</div>
 				)}
 				{visibleMessages.map(m => <ChatMessageItem key={m.id} message={m}/>)}

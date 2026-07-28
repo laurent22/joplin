@@ -1,5 +1,5 @@
-import type { EditOp } from './noteChat';
-import findFencedBlock from './utils/findFencedBlock';
+import type { EditOp } from '../buildEditorTools';
+import findFencedBlock from '../../utils/findFencedBlock';
 
 export type ApplyEditStatus = 'applied' | 'anchor-not-found' | 'invalid';
 

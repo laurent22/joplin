@@ -1,7 +1,9 @@
-import Note from '../../../models/Note';
-import Folder from '../../../models/Folder';
-import { NoteEntity } from '../../database/types';
-import { McpTool, ToolError } from '../types';
+import Note from '../../../../models/Note';
+import Folder from '../../../../models/Folder';
+import { NoteEntity } from '../../../database/types';
+import { _ } from '../../../../locale';
+import buildTool from '../utils/buildTool';
+import { ToolError } from '../types';
 
 interface ReplaceTextOp {
 	find: string;
@@ -19,8 +21,9 @@ interface Input {
 	todo_completed?: boolean;
 }
 
-const tool: McpTool = {
+const tool = buildTool({
 	id: 'update_note',
+	userDescription: () => _('Updated note'),
 	description: [
 		'Update an existing note. Only the fields you pass are changed; omitted fields keep their current value.',
 		'',
@@ -103,6 +106,6 @@ const tool: McpTool = {
 
 		return { id: saved.id, updated_time: saved.updated_time };
 	},
-};
+});
 
 export default tool;

@@ -1,16 +1,21 @@
-import { _internal, ChatCommands, NoteContext, runNoteChat } from './noteChat';
-import { applyAnchorEdits } from './applyNoteEdits';
+import { _internal, ChatCommands, runNoteChat } from './noteChat';
 import { ChatRole, ChatToolCall } from './types';
-import { expectThrow, setupDatabase, switchClient } from '../../testing/test-utils';
+import { expectThrow, setupDatabase, switchClient, withWarningSilenced } from '../../testing/test-utils';
 import Setting from '../../models/Setting';
+import { NoteContext } from './tools/types';
+import ToolIndex from './tools/ToolIndex';
+import { isEditorToolCall } from './tools/buildEditorTools';
 
-const makeTestContext = () => {
-	let body = 'Body';
+const makeTestContext = (defaultContext: Partial<NoteContext>) => {
 	const initialContext: NoteContext = {
 		title: 'Test',
-		body,
+		body: 'Body',
+		noteId: '00000000000000000000000000000000',
+		folderId: '00000000000000000000000000000001',
 		selection: null,
+		...defaultContext,
 	};
+	let body = initialContext.body;
 
 	const commands: ChatCommands = {
 		replaceSelection: jest.fn(),
@@ -21,8 +26,11 @@ const makeTestContext = () => {
 		displayError: jest.fn(),
 	};
 
+	const context = () => ({ ...initialContext, body });
+
 	return {
-		onContext: () => Promise.resolve({ ...initialContext, body }),
+		onContext: () => Promise.resolve(context()),
+		get context() { return context(); },
 		commands,
 	};
 };
@@ -40,6 +48,8 @@ describe('noteChat', () => {
 			title: 'My note',
 			body: 'long body text',
 			selection: 'just this bit',
+			noteId: '',
+			folderId: '',
 		});
 		expect(prompt).toContain('My note');
 		expect(prompt).toContain('just this bit');
@@ -48,7 +58,7 @@ describe('noteChat', () => {
 	});
 
 	test('systemPrompt advertises Joplin-specific Markdown features', () => {
-		const prompt = _internal.systemPrompt({ title: 'n', body: 'b', selection: null });
+		const prompt = _internal.systemPrompt({ title: 'n', body: 'b', noteId: '', folderId: '', selection: null });
 		// The fence tags are the load-bearing strings — the model knows the
 		// syntax inside (JSONCanvas, Mermaid, KaTeX) but needs the Joplin
 		// fence tag to wrap it correctly.
@@ -66,6 +76,8 @@ describe('noteChat', () => {
 		const prompt = _internal.systemPrompt({
 			title: 'My note',
 			body: 'the whole body',
+			noteId: '',
+			folderId: '',
 			selection: null,
 		});
 		// Including the body in the prompt would cause a cache invalidation on each note change
@@ -89,7 +101,7 @@ describe('noteChat', () => {
 				body: 'b',
 				selection: null,
 			},
-			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'readNote'],
+			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'readNoteBody'],
 		},
 		{
 			label: 'offers replaceFencedBlock when Mermaid block present',
@@ -98,13 +110,16 @@ describe('noteChat', () => {
 				body: '```mermaid\ngitGraph\n\tcommit\n```\n',
 				selection: null,
 			},
-			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock', 'readNote'],
+			expectedOperations: ['insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock', 'readNoteBody'],
 		},
 	])('toolDefinitions should include the expected operations (case $label)', ({ note, expectedOperations }) => {
-		const editSchemaItems = _internal.toolDefinitions(note);
+		const { commands, context } = makeTestContext(note);
+		const editSchemaItems = new ToolIndex({ note: context, commands }).getTools();
 
-		const allowedSchemaOperations = editSchemaItems.map(item => item.name).sort();
-		expect(allowedSchemaOperations).toEqual([...expectedOperations].sort());
+		const allowedSchemaOperations = editSchemaItems.map(item => item.id).sort();
+		expect(
+			allowedSchemaOperations.filter(id => isEditorToolCall(id)),
+		).toEqual([...expectedOperations].map(o => `editor.${o}`).sort());
 	});
 
 	test('estimateTokens approximates char/4', () => {
@@ -112,145 +127,15 @@ describe('noteChat', () => {
 		expect(_internal.estimateTokens('a'.repeat(400))).toBe(100);
 	});
 
-	test('applyAnchorEdits appends with paragraph break (covered in detail below)', () => {
-		const { newBody } = applyAnchorEdits('hello', [
-			{ op: 'appendToNote', text: 'world' },
-		], 0);
-		expect(newBody).toBe('hello\n\nworld');
-	});
-
-	test('applyAnchorEdits inserts before/after anchor', () => {
-		const before = applyAnchorEdits('one two three', [
-			{ op: 'insertBefore', anchor: 'two', text: 'X ' },
-		], 0);
-		expect(before.newBody).toBe('one X two three');
-
-		const after = applyAnchorEdits('one two three', [
-			{ op: 'insertAfter', anchor: 'two', text: ' X' },
-		], 0);
-		expect(after.newBody).toBe('one two X three');
-	});
-
-	test('applyAnchorEdits replaces range and reports missing anchor', () => {
-		const replaced = applyAnchorEdits('alpha beta gamma', [
-			{ op: 'replaceRange', anchor: 'beta', text: 'BETA' },
-		], 0);
-		expect(replaced.newBody).toBe('alpha BETA gamma');
-
-		const missing = applyAnchorEdits('alpha beta gamma', [
-			{ op: 'replaceRange', anchor: 'delta', text: 'X' },
-		], 0);
-		expect(missing.newBody).toBe('alpha beta gamma');
-		expect(missing.appliedEdits[0].status).toBe('anchor-not-found');
-	});
-
-	test('applyAnchorEdits picks anchor closest to cursor on duplicates', () => {
-		// "foo" appears at index 0 and index 8. Cursor near second occurrence.
-		const body = 'foo bar foo baz';
-		const { newBody } = applyAnchorEdits(body, [
-			{ op: 'insertAfter', anchor: 'foo', text: '!' },
-		], 10);
-		expect(newBody).toBe('foo bar foo! baz');
-	});
-
-	test('applyAnchorEdits appends with blank line for Markdown paragraph break', () => {
-		// Empty body — no separator needed.
-		expect(applyAnchorEdits('', [{ op: 'appendToNote', text: 'first' }], 0).newBody).toBe('first');
-		// No trailing newline — needs full \n\n.
-		expect(applyAnchorEdits('hello', [{ op: 'appendToNote', text: 'world' }], 0).newBody).toBe('hello\n\nworld');
-		// One trailing newline — add one more to make a blank line.
-		expect(applyAnchorEdits('hello\n', [{ op: 'appendToNote', text: 'world' }], 0).newBody).toBe('hello\n\nworld');
-		// Already has blank line — no extra separator.
-		expect(applyAnchorEdits('hello\n\n', [{ op: 'appendToNote', text: 'world' }], 0).newBody).toBe('hello\n\nworld');
-	});
-
-	test('applyAnchorEdits rejects invalid edits without mutating the body', () => {
-		// Empty anchor, missing text, wrong shape, unknown op.
-		const body = 'hello world';
-		const cases = [
-			{ op: 'insertBefore', anchor: '', text: 'X' },
-			{ op: 'insertAfter', anchor: 'world' }, // missing text
-			{ op: 'appendToNote' }, // missing text
-			{ op: 'mysteryOp', text: 'X' },
-		];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const result = applyAnchorEdits(body, cases as any, 0);
-		expect(result.newBody).toBe(body);
-		expect(result.appliedEdits.every(e => e.status === 'invalid')).toBe(true);
-	});
-
-	test('applyAnchorEdits replaces the inner content of a fenced block', () => {
-		const body = 'Intro paragraph.\n\n```jsoncanvas\n{"nodes":[],"edges":[]}\n```\n\nOutro.';
-		const { newBody, appliedEdits } = applyAnchorEdits(body, [
-			{ op: 'replaceFencedBlock', tag: 'jsoncanvas', text: '{"nodes":[{"id":"a"}],"edges":[]}' },
-		], 0);
-		expect(appliedEdits[0].status).toBe('applied');
-		expect(newBody).toContain('```jsoncanvas\n{"nodes":[{"id":"a"}],"edges":[]}\n```');
-		// Surrounding prose is preserved.
-		expect(newBody).toContain('Intro paragraph.');
-		expect(newBody).toContain('Outro.');
-	});
-
-	test('applyAnchorEdits picks the fenced block closest to the cursor', () => {
-		const first = '```jsoncanvas\n{"v":1}\n```';
-		const second = '```jsoncanvas\n{"v":2}\n```';
-		const body = `${first}\n\nSome prose between.\n\n${second}`;
-		// Cursor near the second block — should edit that one, leaving the first untouched.
-		const cursorNearSecond = body.indexOf(second) + 5;
-		const { newBody } = applyAnchorEdits(body, [
-			{ op: 'replaceFencedBlock', tag: 'jsoncanvas', text: '{"v":99}' },
-		], cursorNearSecond);
-		expect(newBody).toContain('{"v":1}'); // first untouched
-		expect(newBody).toContain('{"v":99}'); // second replaced
-		expect(newBody).not.toContain('{"v":2}');
-
-		// Cursor at 0 — first block wins (fallback behaviour preserved).
-		const { newBody: firstWins } = applyAnchorEdits(body, [
-			{ op: 'replaceFencedBlock', tag: 'jsoncanvas', text: '{"v":0}' },
-		], 0);
-		expect(firstWins).toContain('{"v":0}');
-		expect(firstWins).toContain('{"v":2}'); // second untouched
-		expect(firstWins).not.toContain('{"v":1}');
-	});
-
-	test('applyAnchorEdits reports anchor-not-found when fenced block missing', () => {
-		const body = 'No whiteboard in this note.';
-		const { newBody, appliedEdits } = applyAnchorEdits(body, [
-			{ op: 'replaceFencedBlock', tag: 'jsoncanvas', text: '{}' },
-		], 0);
-		expect(newBody).toBe(body);
-		expect(appliedEdits[0].status).toBe('anchor-not-found');
-	});
-
-	test('applyAnchorEdits rejects replaceFencedBlock with unsupported tag', () => {
-		// Plain code fences (```js, ```python, ...) are not structured-document
-		// formats — the model should use anchor-based ops instead.
-		const body = '```js\nconsole.log("x");\n```';
-		const { newBody, appliedEdits } = applyAnchorEdits(body, [
-			{ op: 'replaceFencedBlock', tag: 'js', text: 'console.log("y");' },
-		], 0);
-		expect(newBody).toBe(body);
-		expect(appliedEdits[0].status).toBe('invalid');
-	});
-
 	test('toolDefinitions advertises replaceFencedBlock with structured-block guidance', () => {
-		const tools = _internal.toolDefinitions({ title: 'n', body: '```abc\n```', selection: null });
-		const toolDefinition = tools.find(tool => tool.name === 'replaceFencedBlock');
+		const { context, commands } = makeTestContext({ title: 'n', body: '```abc\n```', selection: null });
+		const tools = new ToolIndex({ note: context, commands }).getTools();
+		const toolDefinition = tools.find(tool => tool.id === 'editor.replaceFencedBlock');
 		expect(toolDefinition).toBeTruthy();
 		expect(toolDefinition.description).toContain('jsoncanvas');
 		// Guidance to use the op for structured blocks, appendToNote for creation.
 		expect(toolDefinition.description).toContain('"text" is the new content inside the fence (no fence markers)');
 		expect(toolDefinition.description).toContain('Use appendToNote');
-	});
-
-	test('applyAnchorEdits refuses replaceRange anchor covering most of the body', () => {
-		const body = 'short text';
-		// Anchor is >50% of body — would be destructive; refuse.
-		const { newBody, appliedEdits } = applyAnchorEdits(body, [
-			{ op: 'replaceRange', anchor: 'short text', text: '' },
-		], 0);
-		expect(newBody).toBe(body);
-		expect(appliedEdits[0].status).toBe('invalid');
 	});
 
 	test('assertWithinTokenBudget should include tool calls in the token budget', async () => {
@@ -264,7 +149,7 @@ describe('noteChat', () => {
 					role: ChatRole.Assistant,
 					content: 'Testing...'.repeat(5),
 					toolCalls: [{
-						toolName: 'replaceSelection',
+						toolName: 'editor.replaceSelection',
 						callId: 'call-1',
 						arguments: { text: 'Testing... '.repeat(50) },
 						parseError: null,
@@ -276,11 +161,11 @@ describe('noteChat', () => {
 
 	test('runTools should describe successful edit operations', async () => {
 		const toolCalls: ChatToolCall[] = [
-			{ toolName: 'appendToNote', callId: 'call-1', arguments: { text: 'Test.' }, parseError: null },
-			{ toolName: 'replaceRange', callId: 'call-2', arguments: { anchor: 'Body', text: 'Updated' }, parseError: null },
+			{ toolName: 'editor.appendToNote', callId: 'call-1', arguments: { text: 'Test.' }, parseError: null },
+			{ toolName: 'editor.replaceRange', callId: 'call-2', arguments: { anchor: 'Body', text: 'Updated' }, parseError: null },
 		];
 
-		const { onContext, commands } = makeTestContext();
+		const { onContext, commands } = makeTestContext({});
 
 		const result = await _internal.runTools(
 			{ text: 'Test...', toolCalls, usage: { inputTokens: 10, outputTokens: 300 } },
@@ -294,14 +179,14 @@ describe('noteChat', () => {
 		expect(result).toMatchObject([
 			{
 				role: ChatRole.Tool,
-				toolName: 'appendToNote',
+				toolName: 'editor.appendToNote',
 				toolCallId: 'call-1',
 				isError: false,
 				userDescription: 'Added 1 word',
 			},
 			{
 				role: ChatRole.Tool,
-				toolName: 'replaceRange',
+				toolName: 'editor.replaceRange',
 				toolCallId: 'call-2',
 				isError: false,
 				userDescription: 'Removed 1 word\nAdded 1 word',
@@ -310,31 +195,34 @@ describe('noteChat', () => {
 	});
 
 	test('noteChat should stop retry loop if several responses in a row include tool failures', async () => {
-		const { onContext, commands } = makeTestContext();
+		const { onContext, commands } = makeTestContext({});
 		const failingAndSucceedingToolCall = (repeat: number) => [
 			`/repeat ${repeat}`,
 			// one failing tool
-			`/tool replaceRange ${JSON.stringify({ anchor: 'does not exist', text: 'replaced' })}`,
+			`/tool editor.replaceRange ${JSON.stringify({ anchor: 'does not exist', text: 'replaced' })}`,
 			// and one tool call that should succeed
-			'/tool appendToNote { "text": "test" }',
+			'/tool editor.appendToNote { "text": "test" }',
 		].join('\n');
 
 		const userMessage = failingAndSucceedingToolCall(32);
-		const result = await runNoteChat(
-			onContext,
-			[],
-			userMessage,
-			commands,
-			() => {},
-			new AbortController().signal,
+		const result = await withWarningSilenced(
+			/call editor.replaceRange failed/,
+			() => runNoteChat(
+				onContext,
+				[],
+				userMessage,
+				commands,
+				() => {},
+				new AbortController().signal,
+			),
 		);
 
 		const failedAttempts = [];
 		for (let i = 0; i < 5; i++) {
 			failedAttempts.push(
 				{ role: ChatRole.Assistant },
-				{ role: ChatRole.Tool, isError: true, toolName: 'replaceRange' },
-				{ role: ChatRole.Tool, isError: false, toolName: 'appendToNote' },
+				{ role: ChatRole.Tool, isError: true, toolName: 'editor.replaceRange' },
+				{ role: ChatRole.Tool, isError: false, toolName: 'editor.appendToNote' },
 			);
 		}
 
@@ -348,12 +236,12 @@ describe('noteChat', () => {
 
 			...failedAttempts,
 
-			{ role: ChatRole.Assistant, content: 'tool not found: replaceRange\ntool not found: appendToNote' },
+			{ role: ChatRole.Assistant, content: 'tool not found: editor.replaceRange\ntool not found: editor.appendToNote' },
 		]);
 	});
 
 	test('noteChat initialize the chat history with the note body', async () => {
-		const { onContext, commands } = makeTestContext();
+		const { onContext, commands } = makeTestContext({});
 
 		const result = await runNoteChat(
 			onContext,
@@ -367,8 +255,8 @@ describe('noteChat', () => {
 		expect(result).toMatchObject([
 			{ role: ChatRole.System },
 			{ role: ChatRole.User, content: 'test' },
-			{ role: ChatRole.Assistant, content: '', toolCalls: [{ toolName: 'readNote' }] },
-			{ role: ChatRole.Tool, content: 'Body', toolName: 'readNote' },
+			{ role: ChatRole.Assistant, content: '', toolCalls: [{ toolName: 'editor.readNoteBody' }] },
+			{ role: ChatRole.Tool, content: 'Body', toolName: 'editor.readNoteBody' },
 			{ role: ChatRole.Assistant, content: '' },
 		]);
 	});
