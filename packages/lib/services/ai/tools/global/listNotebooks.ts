@@ -1,9 +1,11 @@
-import Folder from '../../../models/Folder';
-import { FolderEntity } from '../../database/types';
-import { McpTool } from '../types';
+import { _ } from '../../../../locale';
+import Folder from '../../../../models/Folder';
+import { FolderEntity } from '../../../database/types';
+import buildTool from '../utils/buildTool';
 
-const tool: McpTool = {
+const tool = buildTool({
 	id: 'list_notebooks',
+	userDescription: () => _('Read notebooks'),
 	description: 'List all notebooks (folders) with their ids, titles, and parent ids. Returned in a flat list — use parent_id to reconstruct the tree.',
 	inputSchema: {
 		type: 'object',
@@ -23,6 +25,6 @@ const tool: McpTool = {
 			})),
 		};
 	},
-};
+});
 
 export default tool;

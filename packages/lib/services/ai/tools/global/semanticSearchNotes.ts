@@ -1,6 +1,8 @@
-import Note from '../../../models/Note';
-import SearchService from '../../ai/SearchService';
-import { McpTool, ToolError } from '../types';
+import { _ } from '../../../../locale';
+import Note from '../../../../models/Note';
+import SearchService from '../../../ai/SearchService';
+import { ToolError } from '../types';
+import buildTool from '../utils/buildTool';
 
 interface Input {
 	query?: string;
@@ -9,8 +11,9 @@ interface Input {
 	relevance?: 'strict' | 'normal' | 'loose';
 }
 
-const tool: McpTool = {
+const tool = buildTool({
 	id: 'semantic_search_notes',
+	userDescription: (input: Input) => _('Searched for: %s', input.query || _('(empty)')),
 	description: [
 		'Semantic search across notes using the local embeddings index.',
 		'Use this when the user asks by meaning rather than exact words — for example "the note about pet sitters for my dog" rather than "pet sitter".',
@@ -78,6 +81,6 @@ const tool: McpTool = {
 
 		return { results, total: results.length };
 	},
-};
+});
 
 export default tool;

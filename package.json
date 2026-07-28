@@ -107,8 +107,8 @@
   },
   "packageManager": "yarn@4.16.0",
   "resolutions": {
-    "@codemirror/view": "6.42.1",
-    "@codemirror/state": "6.6.0",
+    "@codemirror/view": "6.43.6",
+    "@codemirror/state": "6.7.1",
     "@codemirror/language": "6.12.3",
     "@codemirror/lint": "6.9.5",
     "@codemirror/autocomplete": "6.20.1",
@@ -121,8 +121,6 @@
     "pdfjs-dist": "patch:pdfjs-dist@npm%3A3.11.174#./.yarn/patches/pdfjs-dist-npm-3.11.174-67f2fee6d6.patch",
     "chokidar@^2.0.0": "3.5.3",
     "rn-fetch-blob@0.12.0": "patch:rn-fetch-blob@npm%3A0.12.0#./.yarn/patches/rn-fetch-blob-npm-0.12.0-cf02e3c544.patch",
-    "app-builder-lib@26.0.0-alpha.7": "patch:app-builder-lib@npm%3A26.0.0-alpha.7#./.yarn/patches/app-builder-lib-npm-26.0.0-alpha.7-e1b3dca119.patch",
-    "app-builder-lib@24.13.3": "patch:app-builder-lib@npm%3A24.13.3#./.yarn/patches/app-builder-lib-npm-24.13.3-86a66c0bf3.patch",
     "react-native-sqlite-storage@6.0.1": "patch:react-native-sqlite-storage@npm%3A6.0.1#./.yarn/patches/react-native-sqlite-storage-npm-6.0.1-8369d747bd.patch",
     "react-native-paper@5.13.1": "patch:react-native-paper@npm%3A5.13.1#./.yarn/patches/react-native-paper-npm-5.13.1-f153e542e2.patch",
     "react-native-popup-menu@0.17.0": "patch:react-native-popup-menu@npm%3A0.17.0#./.yarn/patches/react-native-popup-menu-npm-0.17.0-8b745d88dd.patch",
@@ -135,7 +133,7 @@
     "node-gyp@npm:^9.0.0": "11.2.0",
     "node-forge@npm:^1": "1.3.2",
     "node-forge@npm:^1.3.0": "1.3.2",
-    "moment@npm:^2.8.4": "2.29.4",
+    "moment@npm:^2.8.4": "2.30.1",
     "depd@npm:^2.0.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
     "depd@npm:~2.0.0": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
     "depd@npm:~1.1.2": "patch:depd@npm%3A2.0.0#~/.yarn/patches/depd-npm-2.0.0-b6c51a4b43.patch",
@@ -147,6 +145,7 @@
     "@react-native-vector-icons/fontawesome5@npm:12.3.0": "patch:@react-native-vector-icons/fontawesome5@npm%3A12.3.0#~/.yarn/patches/@react-native-vector-icons-fontawesome5-npm-12.3.0-a1ca46610f.patch",
     "@react-native-vector-icons/ionicons@npm:12.3.0": "patch:@react-native-vector-icons/ionicons@npm%3A12.3.0#~/.yarn/patches/@react-native-vector-icons-ionicons-npm-12.3.0-9bd4746f3f.patch",
     "@react-native-vector-icons/material-design-icons@npm:12.4.0": "patch:@react-native-vector-icons/material-design-icons@npm%3A12.4.0#~/.yarn/patches/@react-native-vector-icons-material-design-icons-npm-12.4.0-890f7f618b.patch",
-    "@react-native-vector-icons/material-icons@npm:12.4.0": "patch:@react-native-vector-icons/material-icons@npm%3A12.4.0#~/.yarn/patches/@react-native-vector-icons-material-icons-npm-12.4.0-94138e627b.patch"
+    "@react-native-vector-icons/material-icons@npm:12.4.0": "patch:@react-native-vector-icons/material-icons@npm%3A12.4.0#~/.yarn/patches/@react-native-vector-icons-material-icons-npm-12.4.0-94138e627b.patch",
+    "app-builder-lib@npm:26.15.6": "patch:app-builder-lib@npm%3A26.15.6#~/.yarn/patches/app-builder-lib-npm-26.15.6-010811df92.patch"
   }
 }
