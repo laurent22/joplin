@@ -14,16 +14,9 @@ import { FolderEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../../utils/types';
 import { Dispatch } from 'redux';
 
-interface NavProps {
-	state: { initialParentId?: string };
-}
-
 interface Props {
 	folderId: string;
 	selectedFolderId: string;
-
-	navigation?: NavProps;
-
 	themeId: number;
 	folders: FolderEntity[];
 	dispatch: Dispatch;
@@ -34,24 +27,19 @@ interface State {
 	lastSavedFolder: FolderEntity|null;
 }
 
-const makeEmptyFolder = (props: Props) => ({
-	...Folder.new(),
-	parent_id: props.navigation?.state?.initialParentId ?? '',
-});
-
 class FolderScreenComponent extends BaseScreenComponent<Props, State> {
 
 	public constructor(props: Props) {
 		super(props);
 		this.state = {
-			folder: makeEmptyFolder(props),
+			folder: Folder.new(),
 			lastSavedFolder: null,
 		};
 	}
 
 	public override UNSAFE_componentWillMount() {
 		if (!this.props.folderId) {
-			const folder = makeEmptyFolder(this.props);
+			const folder = Folder.new();
 			this.setState({
 				folder: folder,
 				lastSavedFolder: { ...folder },
