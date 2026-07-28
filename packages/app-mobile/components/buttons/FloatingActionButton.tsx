@@ -3,7 +3,7 @@ import { useState, useCallback, useMemo, useRef, RefObject, useLayoutEffect } fr
 import { FAB } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { Dispatch } from 'redux';
-import { AccessibilityActionEvent, AccessibilityActionInfo, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { AccessibilityActionEvent, AccessibilityActionInfo, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { connect } from 'react-redux';
 import { MenuAlignment, MenuType } from '../BottomDrawer';
 import { Ionicons as Icon } from '@react-native-vector-icons/ionicons';
@@ -57,7 +57,12 @@ const useMenuMarginBottom = (buttonContainerRef: RefObject<View>, themeId: numbe
 		const theme = themeStyle(themeId);
 
 		buttonContainerRef.current?.measure((_x, _y, _width, _height, _pageX, pageY) => {
-			setMenuMarginBottom(windowHeight - pageY + theme.marginBottom + safeAreaPadding.paddingBottom);
+			// On Android, the safe area padding doesn't seem to be included in windowHeight,
+			// but **does** seem to be taken into account when determining absolute/relative positioning
+			const includeSafeArea = Platform.OS === 'android';
+			const extraMargin = theme.marginBottom + (includeSafeArea ? safeAreaPadding.paddingBottom : 0);
+
+			setMenuMarginBottom(windowHeight - pageY + extraMargin);
 		});
 	}, [windowHeight, buttonContainerRef, themeId, safeAreaPadding]);
 
