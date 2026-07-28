@@ -15,6 +15,8 @@ import KeyboardAvoidingView from './KeyboardAvoidingView';
 import Dialog from '@joplin/lib/components/Dialog';
 import useKeyboardState from '../utils/hooks/useKeyboardState';
 
+type AllScrollViewProps = ScrollViewProps & { ref?: React.Ref<ScrollView> };
+
 type OnClose = ()=> void;
 type OnShow = ()=> void;
 export interface ModalElementProps {
@@ -41,7 +43,7 @@ export interface ModalElementProps {
 	// If scrollOverflow is provided, the modal is wrapped in a vertical
 	// ScrollView. This allows the user to scroll parts of dialogs into
 	// view that would otherwise be clipped by the screen edge.
-	scrollOverflow?: boolean|ScrollViewProps;
+	scrollOverflow?: boolean|AllScrollViewProps;
 }
 
 const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) => {

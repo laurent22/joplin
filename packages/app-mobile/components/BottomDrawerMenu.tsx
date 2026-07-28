@@ -33,6 +33,7 @@ interface Props {
 	style?: StyleProp<ViewStyle>;
 	menuType?: MenuType;
 	alignment: MenuAlignment;
+	autoScrollToEnd?: boolean;
 	onDismiss: ()=> void;
 	options: MenuOption[];
 }
@@ -130,6 +131,7 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 		visible={props.visible}
 		onDismiss={props.onDismiss}
 		alignment={props.alignment}
+		autoScrollToEnd={props.autoScrollToEnd}
 		draggable={true}
 		menuType={props.menuType}
 		contentStyle={styles.menu}

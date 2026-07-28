@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RefObject, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Animated, Dimensions, Easing, GestureResponderEvent, LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, PanResponder, PanResponderGestureState, Platform, Pressable, StyleProp, StyleSheet, useWindowDimensions, View, ViewStyle } from 'react-native';
+import { Animated, Dimensions, Easing, GestureResponderEvent, LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, PanResponder, PanResponderGestureState, Platform, Pressable, ScrollView, StyleProp, StyleSheet, useWindowDimensions, View, ViewStyle } from 'react-native';
 import useSafeAreaPadding from '../utils/hooks/useSafeAreaPadding';
 import { themeStyle, ThemeStyle } from './global-style';
 import Modal from './Modal';
@@ -28,6 +28,7 @@ interface Props {
 	children: React.ReactNode;
 	visible: boolean;
 	draggable: boolean;
+	autoScrollToEnd?: boolean;
 	onDismiss: ()=> void;
 	onShow?: ()=> void;
 }
@@ -269,6 +270,8 @@ interface UseSyncVisibleProps {
 	dragToOffset: (offset: number)=> Promise<void>;
 	onDismiss: ()=> void;
 	containerRef: RefObject<View|null>;
+	scrollViewRef: RefObject<ScrollView|null>;
+	autoScrollToEnd: boolean;
 }
 
 const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
@@ -297,9 +300,13 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 		const slideMenuIn = () => propsRef.current.dragToOffset(0);
 
 		if (props.visible) {
+			if (propsRef.current.autoScrollToEnd) {
+				props.scrollViewRef.current?.scrollToEnd();
+			}
+
 			void slideMenuIn();
 		}
-	}, [props.visible]);
+	}, [props.visible, props.scrollViewRef]);
 
 	const isDismissingRef = useRef(false);
 	return useCallback(async () => {
@@ -374,8 +381,9 @@ const BottomDrawer: React.FC<Props> = props => {
 	}, [dragToOffset]);
 
 	const containerRef = useRef<View|null>(null);
+	const scrollViewRef = useRef<ScrollView|null>(null);
 	const onHide = useUpdateOnVisibilityChange({
-		visible: props.visible, dragToOffset, containerRef, onDismiss: props.onDismiss,
+		visible: props.visible, dragToOffset, containerRef, onDismiss: props.onDismiss, scrollViewRef, autoScrollToEnd: props.autoScrollToEnd,
 	});
 
 	const onDragEnd = useCallback((_dx: number, dy: number) => {
@@ -435,6 +443,7 @@ const BottomDrawer: React.FC<Props> = props => {
 
 			// Disable scrollbars during in/out animations on web to avoid layout shift
 			scrollEnabled: !animating,
+			ref: scrollViewRef,
 		}}
 	>
 		<View

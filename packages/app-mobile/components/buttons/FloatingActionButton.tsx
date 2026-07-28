@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef, RefObject, useLayoutEffect } from 'react';
 import { FAB } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { Dispatch } from 'redux';
@@ -48,17 +48,26 @@ const useIcon = (iconName: string) => {
 };
 
 interface StylesProps {
-	buttonTop: number;
+	buttonContainerRef: RefObject<View|null>;
 	themeId: number;
 }
 
-const useStyles = ({ buttonTop, themeId }: StylesProps) => {
+const useStyles = ({ buttonContainerRef, themeId }: StylesProps) => {
 	const { height: windowHeight } = useWindowDimensions();
+	const [menuMarginBottom, setMenuMarginBottom] = useState(0);
+
+	useLayoutEffect(() => {
+		buttonContainerRef.current?.measure((_x, _y, _width, _height, _pageX, pageY) => {
+			setMenuMarginBottom(windowHeight - pageY);
+		});
+	}, [windowHeight, buttonContainerRef]);
+
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
+
 		return StyleSheet.create({
 			menu: {
-				marginBottom: (windowHeight - buttonTop) + theme.marginBottom,
+				marginBottom: menuMarginBottom + theme.marginBottom,
 				// Always float right:
 				alignSelf: 'flex-end',
 			},
@@ -71,7 +80,7 @@ const useStyles = ({ buttonTop, themeId }: StylesProps) => {
 				alignSelf: 'flex-end',
 			},
 		});
-	}, [buttonTop, windowHeight, themeId]);
+	}, [menuMarginBottom, themeId]);
 };
 
 const FloatingActionButton = (props: ActionButtonProps) => {
@@ -97,8 +106,9 @@ const FloatingActionButton = (props: ActionButtonProps) => {
 
 	const label = props.mainButton?.label ?? _('Add new');
 
-	const [buttonTop, setButtonTop] = useState(0);
-	const styles = useStyles({ buttonTop, themeId: props.themeId });
+	const buttonContainerRef = useRef<View|null>(null);
+
+	const styles = useStyles({ themeId: props.themeId, buttonContainerRef });
 
 	const menuButton = <FAB
 		ref={mainButtonRef}
@@ -110,16 +120,10 @@ const FloatingActionButton = (props: ActionButtonProps) => {
 		onAccessibilityAction={props.onAccessibilityAction}
 	/>;
 
-	const buttonContainerRef = useRef<View|null>(null);
 	return <>
 		<View
 			style={styles.buttonContainer}
 			ref={buttonContainerRef}
-			onLayout={() => {
-				buttonContainerRef.current?.measure((_x, _y, _width, _height, _pageX, pageY) => {
-					setButtonTop(pageY);
-				});
-			}}
 		>
 			{menuButton}
 		</View>
@@ -131,6 +135,7 @@ const FloatingActionButton = (props: ActionButtonProps) => {
 			menuType={MenuType.Floating}
 			themeId={props.themeId}
 			options={props.menuContent}
+			autoScrollToEnd
 		/> }
 	</>;
 };
