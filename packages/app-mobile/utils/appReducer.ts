@@ -175,6 +175,7 @@ const appReducer = (state = appDefaultState, action: any) => {
 			{
 				let newNavHistoryForFolder = navHistory.filter(route => !(route.routeName === 'Notes' && route.folderId === action.id));
 				newNavHistoryForFolder = removeAdjacentFolderDuplicates(newNavHistoryForFolder);
+				removeLatestFolderIfSelected(newNavHistoryForFolder, state.route);
 				navHistory.splice(0, navHistory.length, ...newNavHistoryForFolder);
 
 				// Prevent the deleted folder from being added to the navigation history again when navigating forward, where the selected folder was deleted
