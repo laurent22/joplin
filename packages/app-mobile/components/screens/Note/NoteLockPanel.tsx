@@ -4,6 +4,7 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { themeStyle } from '../../global-style';
 import { _ } from '@joplin/lib/locale';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import NavService from '@joplin/lib/services/NavService';
 import Icon from '../../Icon';
 
 interface Props {
@@ -59,6 +60,10 @@ const NoteLockPanel = (props: Props) => {
 		});
 	}, [theme]);
 
+	const onSetUp = useCallback(() => {
+		void NavService.go('Config', { sectionName: 'noteLock' });
+	}, []);
+
 	const onUnlock = useCallback(async () => {
 		if (!password || unlocking) return;
 		setUnlocking(true);
@@ -75,7 +80,12 @@ const NoteLockPanel = (props: Props) => {
 	const renderForm = () => {
 		if (!props.hasNoteLockKey) {
 			return (
-				<Text style={styles.message}>{_('Reading this note requires the note lock password, which has not been set up on this device yet.')}</Text>
+				<>
+					<Text style={styles.message}>{_('Reading this note requires the note lock password, which has not been set up on this device yet.')}</Text>
+					<View style={styles.buttonContainer}>
+						<Button title={_('Set up note lock')} onPress={onSetUp} />
+					</View>
+				</>
 			);
 		}
 

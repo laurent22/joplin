@@ -892,9 +892,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private enableNoteEncryption_onPress = () => {
 		if (!NoteLockKey.instance().load()) {
 			this.props.dialogs.prompt(_('Enable encryption'), _('Encrypting a note requires a note lock password, which has not been set yet. Set it up now?'), [
-				// Dead route until the mobile note lock config section PR is merged.
-				{ text: _('OK'), onPress: () => void NavService.go('Config', { sectionName: 'noteLock' }) },
-				{ text: _('Cancel'), style: 'cancel' },
+				{ text: _('Yes'), onPress: () => void NavService.go('Config', { sectionName: 'noteLock' }) },
+				{ text: _('No'), style: 'cancel' },
 			]);
 			return;
 		}
@@ -1512,7 +1511,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				output.push({
 					title: _('Lock encrypted notes'),
 					onPress: () => {
-						NoteLockSession.instance().lock();
+						void (async () => {
+							// Lock only after the queue drains, so a pending save cannot leave the note
+							// visible because it still counted as modified.
+							await this.saveActionQueue(this.state.note.id).processAllNow();
+							NoteLockSession.instance().lock();
+						})();
 					},
 					disabled: !this.props.noteLockSessionUnlocked,
 				});
