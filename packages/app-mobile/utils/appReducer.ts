@@ -156,6 +156,8 @@ const appReducer = (state = appDefaultState, action: any) => {
 		case 'TAG_UPDATE_ALL':
 
 			{
+				// A tag can be removed from the UI via deleting a tag, deleting a note, deleting a notebook, or manually removing all note associations for
+				// a tag. Cleaning history here covers all of these scenarios
 				const availableTagIds = new Set(
 					action.items.map((o: TagsWithNoteCountEntity) => o.id),
 				);
@@ -165,17 +167,6 @@ const appReducer = (state = appDefaultState, action: any) => {
 				removeLatestTagScreenIfSelected(newNavHistoryForTags, state.route);
 				navHistory.splice(0, navHistory.length, ...newNavHistoryForTags);
 
-			}
-			break;
-
-		case 'TAG_DELETE':
-
-			{
-				let newNavHistoryForTag = navHistory.filter(route => !(route.routeName === 'Notes' && route.tagId === action.id));
-				newNavHistoryForTag = removeAdjacentTagDuplicates(newNavHistoryForTag);
-				newNavHistoryForTag = removeAdjacentTagScreenDuplicates(newNavHistoryForTag);
-				removeLatestTagScreenIfSelected(newNavHistoryForTag, state.route);
-				navHistory.splice(0, navHistory.length, ...newNavHistoryForTag);
 			}
 			break;
 
