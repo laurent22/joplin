@@ -4,14 +4,18 @@ import CommandService from '@joplin/lib/services/CommandService';
 import FloatingActionButton from '../../buttons/FloatingActionButton';
 import { AccessibilityActionEvent, AccessibilityActionInfo } from 'react-native';
 import { AttachFileAction } from '../Note/commands/attachFile';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import Logger from '@joplin/utils/Logger';
 import NavService from '@joplin/lib/services/NavService';
 import { MenuOption } from '../../BottomDrawerMenu';
+import { AppState } from '../../../utils/types';
+import { connect } from 'react-redux';
+import Folder from '@joplin/lib/models/Folder';
 
 const logger = Logger.create('NewNoteButton');
 
 interface Props {
+	selectedFolderId: string;
 }
 
 const makeNewNote = (isTodo: boolean, action?: AttachFileAction) => {
@@ -20,15 +24,23 @@ const makeNewNote = (isTodo: boolean, action?: AttachFileAction) => {
 	return CommandService.instance().execute('newNote', body, isTodo, { attachFileAction: action });
 };
 
-const makeNewFolder = () => {
-	return NavService.go('Folder', { folderId: null });
+const makeNewFolder = async (parentId: string) => {
+	const parent = await Folder.load(parentId);
+	const parentExists = !!parent && parent.deleted_time === 0;
+
+	await NavService.go('Folder', {
+		folderId: null,
+		initialParentId: parentExists ? parentId : '',
+	});
 };
 
-const NewNoteButton: React.FC<Props> = () => {
+const NewNoteButton: React.FC<Props> = props => {
+	const propsRef = useRef(props);
+	propsRef.current = props;
 
 	const menuContent = useMemo(() => {
 		const items: MenuOption[] = [
-			{ icon: 'material folder-outline', title: _('New notebook'), onPress: makeNewFolder },
+			{ icon: 'material folder-outline', title: _('New notebook'), onPress: () => makeNewFolder(propsRef.current.selectedFolderId) },
 			{ isDivider: true },
 			{ icon: 'material camera-outline', title: _('Camera'), onPress: () => makeNewNote(false, AttachFileAction.TakePhoto) },
 			{ icon: 'material attachment', title: _('Attachment'), onPress: () => makeNewNote(false, AttachFileAction.AttachFile) },
@@ -75,4 +87,4 @@ const NewNoteButton: React.FC<Props> = () => {
 	/>;
 };
 
-export default NewNoteButton;
+export default connect((state: AppState) => ({ selectedFolderId: state.selectedFolderId }))(NewNoteButton);
