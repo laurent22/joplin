@@ -17,6 +17,7 @@ const useDeleteHistoryClick = ({
 		const response = await shim.showMessageBox(_('Are you sure you want to delete all history for this note? This cannot be undone.'), {
 			title: _('Warning'),
 			buttons: [_('Yes'), _('No')],
+			cancelId: 1,
 			type: MessageBoxType.Confirm,
 		});
 

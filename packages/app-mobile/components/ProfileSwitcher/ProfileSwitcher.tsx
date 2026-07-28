@@ -139,6 +139,11 @@ const ProfileListItem: React.FC<ProfileItemProps> = ({ profile, profileConfig, s
 			'',
 			[
 				{
+					text: _('Close'),
+					onPress: () => {},
+					style: 'cancel',
+				},
+				{
 					text: _('Edit'),
 					onPress: () => onEditProfile(profile.id),
 					style: 'default',
@@ -147,11 +152,6 @@ const ProfileListItem: React.FC<ProfileItemProps> = ({ profile, profileConfig, s
 					text: _('Delete'),
 					onPress: () => onDeleteProfile(profile),
 					style: 'default',
-				},
-				{
-					text: _('Close'),
-					onPress: () => {},
-					style: 'cancel',
 				},
 			],
 		);

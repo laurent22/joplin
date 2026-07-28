@@ -571,6 +571,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					{
 						buttons: [_('Yes'), _('No')],
 						title: _('Save geolocation?'),
+						cancelId: 1,
 					},
 				);
 				return result === yesIndex;
