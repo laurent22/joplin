@@ -1,5 +1,6 @@
 import PluginAssetsLoader from '../PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
+import eventManager, { EventName } from '@joplin/lib/eventManager';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
@@ -346,6 +347,14 @@ const buildStartupTasks = (
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		await loadMasterKeysFromSettings(EncryptionService.instance());
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', decryptionWorker_resourceMetadataButNotBlobDecrypted);
+	});
+	addTask('buildStartupTasks/listen for note lock session events', async () => {
+		eventManager.on(EventName.NoteLockSessionChange, (event) => {
+			dispatch({
+				type: 'SET_NOTE_LOCK_SESSION_UNLOCKED',
+				value: event.unlocked,
+			});
+		});
 	});
 	addTask('buildStartupTasks/set up sharing', async () => {
 		await ShareService.instance().initialize(store, EncryptionService.instance());
