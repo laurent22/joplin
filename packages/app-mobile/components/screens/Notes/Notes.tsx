@@ -11,7 +11,7 @@ import { themeStyle } from '../../global-style';
 import { FolderPickerOptions, ScreenHeader } from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import { BaseScreenComponent } from '../../base-screen';
-import { AppState } from '../../../utils/types';
+import { AppState, Route } from '../../../utils/types';
 import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { getTrashFolderId, itemIsInTrash } from '@joplin/lib/services/trash';
 import AccessibleView from '../../accessibility/AccessibleView';
@@ -43,6 +43,7 @@ interface Props {
 	selectedTagId: string;
 	selectedSmartFilterId: string;
 	notesParentType: string;
+	route: Route;
 }
 
 interface State {
@@ -275,7 +276,7 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 	public render() {
 		const parent = this.parentItem();
 
-		if (!parent) {
+		if (!parent && this.props.route?.routeName === 'Notes') {
 			// Avoid showing a blank notebook screen for certain routes which result in a deleted item remaining in history,
 			// such as removing all associations of a tag, or removing tags via note or tag deletions
 			this.props.dispatch({
@@ -362,6 +363,7 @@ const NotesScreen = connect((state: AppState) => {
 		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		notesOrder: stateUtils.notesOrder(state.settings),
+		route: state.route,
 	};
 })(NotesScreenWrapper);
 
