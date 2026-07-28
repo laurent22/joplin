@@ -80,6 +80,8 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 
 		// Everything merged cleanly: save the result and no conflict note creation is needed
 		if (merge && merge.fullyMerged) {
+			// Preserve the remote note's metadata and replace only the merged title/body.
+			// This matches the normal conflict path, so fields such as user_updated_time remain consistent.
 			const remoteNote = remoteContent as NoteEntity;
 			const mergedNote: NoteEntity = {
 				...remoteNote,
