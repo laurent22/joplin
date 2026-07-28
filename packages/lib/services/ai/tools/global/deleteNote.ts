@@ -1,12 +1,15 @@
-import Note from '../../../models/Note';
-import { McpTool, ToolError } from '../types';
+import { _ } from '../../../../locale';
+import Note from '../../../../models/Note';
+import { ToolError } from '../types';
+import buildTool from '../utils/buildTool';
 
 interface Input {
 	id?: string;
 }
 
-const tool: McpTool = {
+const tool = buildTool({
 	id: 'delete_note',
+	userDescription: () => _('Deleted note'),
 	description: 'Move a note to the trash. The note is not permanently removed and the user can restore it from the trash.',
 	inputSchema: {
 		type: 'object',
@@ -27,6 +30,6 @@ const tool: McpTool = {
 
 		return { id: input.id, trashed: true };
 	},
-};
+});
 
 export default tool;

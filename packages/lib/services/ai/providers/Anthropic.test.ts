@@ -20,6 +20,7 @@ describe('ai/providers/Anthropic', () => {
 				toolCallId: 'call-1',
 				toolName: 'replaceRange',
 				isError: false,
+				isEdit: true,
 			},
 			{
 				role: ChatRole.Tool,
@@ -28,6 +29,7 @@ describe('ai/providers/Anthropic', () => {
 				toolCallId: 'call-2',
 				toolName: 'replaceRange',
 				isError: true,
+				isEdit: true,
 			},
 			{
 				role: ChatRole.User,

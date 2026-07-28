@@ -1,6 +1,8 @@
-import SearchEngineUtils from '../../search/SearchEngineUtils';
-import { NoteEntity } from '../../database/types';
-import { McpTool, ToolError } from '../types';
+import SearchEngineUtils from '../../../search/SearchEngineUtils';
+import { NoteEntity } from '../../../database/types';
+import { _ } from '../../../../locale';
+import buildTool from '../utils/buildTool';
+import { ToolError } from '../types';
 
 interface Input {
 	query?: string;
@@ -12,8 +14,9 @@ const defaultLimit = 20;
 const maxLimit = 100;
 const snippetChars = 240;
 
-const tool: McpTool = {
+const tool = buildTool({
 	id: 'search_notes',
+	userDescription: (input: Input) => _('Searched for: %s', input.query || _('(empty)')),
 	description: [
 		'Search notes. Returns a ranked list of matches with id, title, notebook id, updated_time, and a short snippet anchored on the keyword match. The snippet often answers the question without a follow-up read_note call.',
 		'',
@@ -72,7 +75,7 @@ const tool: McpTool = {
 
 		return { results, total: notes.length };
 	},
-};
+});
 
 const makeSnippet = (body: string, keywords: string[]) => {
 	const normalised = body.replace(/\s+/g, ' ').trim();

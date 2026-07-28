@@ -1,7 +1,9 @@
-import Note from '../../../models/Note';
-import Folder from '../../../models/Folder';
-import Tag from '../../../models/Tag';
-import { McpTool, ToolError } from '../types';
+import Note from '../../../../models/Note';
+import Folder from '../../../../models/Folder';
+import Tag from '../../../../models/Tag';
+import { _ } from '../../../../locale';
+import buildTool from '../utils/buildTool';
+import { ToolError } from '../types';
 
 interface Input {
 	id?: string;
@@ -11,8 +13,9 @@ interface Input {
 
 const defaultMaxChars = 0;
 
-const tool: McpTool = {
+const tool = buildTool({
 	id: 'read_note',
+	userDescription: (_input, output) => _('Read note: %s', output.title ?? _('(untitled)')),
 	description: 'Read a single note by id. Returns title, markdown body, notebook name, tags, and timestamps. For very long notes, use offset and max_chars to page through the body.',
 	inputSchema: {
 		type: 'object',
@@ -57,6 +60,6 @@ const tool: McpTool = {
 			updated_time: note.updated_time,
 		};
 	},
-};
+});
 
 export default tool;

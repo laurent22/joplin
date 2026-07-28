@@ -848,9 +848,15 @@ export default class Note extends BaseItem {
 		// we should set beforeNoteJson to the current contents in the database, or the last value which was stored
 		// in the item_changes table
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
+		let plainTextBodyToReturn: string = null;
 		if (isNoteLockEnabled() && !!options?.useNoteLock) {
-			await NoteLockNote.prepareForSave(o, this.linkedItemIds, this.serializeExtractedResourceIds, isNew);
+			// Callers use the returned note to update UI state, so it must carry the plaintext
+			// body even though the encrypted one is what gets persisted.
+			if (NoteLockNote.isLocked(o) && 'body' in o) plainTextBodyToReturn = o.body;
+			await NoteLockNote.prepareForSave(o, this.linkedItemIds, this.serializeExtractedResourceIds, isNew, options.noteLockKey);
 		}
+		// Cleared for ungated saves too, in case a gated load is fed to an ungated save.
+		delete (o as Record<string, unknown>).isDecrypted;
 
 		syncDebugLog.info('Save Note: P:', oldNote);
 
@@ -859,7 +865,10 @@ export default class Note extends BaseItem {
 		// has just been downloaded from the sync target and save is invoked when the note has not yet been decrypted
 		if (oldNote && !oldNote.encryption_applied) {
 			const changedSinceCollection = this.revisionService().changedSinceCollection(o.id);
-			if (isNoteLockEnabled() && NoteLockNote.isLocked(o)) {
+			// If the note is transitioning from is_locked 0 > 1, clear the beforeNoteJson to avoid creating
+			// an unencrypted revision. After the transition has taken place, it is fine to populate it,
+			// because the oldNote is an ungated full load which will include the data encrypted when locked
+			if (isNoteLockEnabled() && NoteLockNote.isLocked(o) && !NoteLockNote.isLocked(oldNote)) {
 				beforeNoteJson = null;
 			} else if (changedSinceCollection) {
 				beforeNoteJson = await ItemChange.oldNoteContent(o.id);
@@ -925,6 +934,15 @@ export default class Note extends BaseItem {
 				type: 'EVENT_NOTE_ALARM_FIELD_CHANGE',
 				id: savedNote.id,
 			});
+		}
+
+		if (isNoteLockEnabled() && !!options?.useNoteLock) {
+			const gatedResult = {
+				...savedNote,
+				body: plainTextBodyToReturn !== null ? plainTextBodyToReturn : savedNote.body,
+				isDecrypted: NoteLockNote.isLocked(o),
+			};
+			savedNote = gatedResult;
 		}
 
 		return savedNote;

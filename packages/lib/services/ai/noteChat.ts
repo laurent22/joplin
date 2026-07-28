@@ -1,12 +1,11 @@
 import AiService from './AiService';
-import { ChatMessage, ChatResult, ChatRole, ChatToolCall, ChatToolMessage, ToolSpec } from './types';
+import { ChatMessage, ChatResult, ChatRole, ChatToolCall, ChatToolMessage } from './types';
 import JoplinError from '../../JoplinError';
 import Logger from '@joplin/utils/Logger';
-import findFencedBlock from './utils/findFencedBlock';
-import { applyAnchorEdits, supportedStructuredBlockTags } from './applyNoteEdits';
-import { hasOwnProperty } from '@joplin/utils/object';
-const Countable = require('../../countable/Countable');
-import { _, _n } from '../../locale';
+import { _ } from '../../locale';
+import { EditOp, isEditorToolCall } from './tools/buildEditorTools';
+import { NoteContext, ToolError } from './tools/types';
+import ToolIndex from './tools/ToolIndex';
 
 const logger = Logger.create('noteChat');
 
@@ -15,25 +14,6 @@ const logger = Logger.create('noteChat');
 const noteBodyTokenBudget = 80000;
 
 const charsPerToken = 4;
-
-export type EditOp =
-	| { op: 'replaceSelection'; text: string }
-	| { op: 'insertBefore'; anchor: string; text: string }
-	| { op: 'insertAfter'; anchor: string; text: string }
-	| { op: 'appendToNote'; text: string }
-	| { op: 'replaceRange'; anchor: string; text: string }
-	| { op: 'replaceFencedBlock'; tag: string; text: string }
-;
-
-const knownOps = new Set<EditOp['op']>([
-	'replaceSelection', 'insertBefore', 'insertAfter', 'appendToNote', 'replaceRange', 'replaceFencedBlock',
-]);
-
-export interface NoteContext {
-	title: string;
-	body: string;
-	selection: string | null;
-}
 
 export interface ChatReply {
 	reply: string;
@@ -56,15 +36,14 @@ const joplinMarkdownNotes = [
 	'- HTML is allowed for features without a Markdown equivalent (e.g. `<s>strikethrough</s>`).',
 ].join('\n');
 
-const hasStructuredBlock = (note: NoteContext) => {
-	return supportedStructuredBlockTags.some(tag => !!findFencedBlock(note.body, tag, 0));
-};
-
+// The system prompt should be relatively constant across note changes to take advantage of prompt caching.
+// See https://developers.openai.com/api/docs/guides/prompt-caching
 const systemPrompt = (note: NoteContext) => {
 	const lines: string[] = [
 		'You are an assistant helping the user work on a note in Joplin, a note-taking application.',
 		'',
 		`Note title: ${note.title || '(untitled)'}`,
+		`Note ID: ${note.noteId}`,
 		'',
 		joplinMarkdownNotes,
 		'',
@@ -76,12 +55,6 @@ const systemPrompt = (note: NoteContext) => {
 		lines.push(note.selection);
 		lines.push('--- END SELECTION ---');
 		lines.push();
-	} else {
-		lines.push('Note body:');
-		lines.push('--- BEGIN NOTE ---');
-		lines.push(note.body);
-		lines.push('--- END NOTE ---');
-		lines.push();
 	}
 
 	if (note.selection) {
@@ -89,7 +62,8 @@ const systemPrompt = (note: NoteContext) => {
 	} else {
 		lines.push(
 			'Tool guidance:',
-			'- You have access to various tools that allow updating the note. For example, if you need to add the text "test" to the end of the note, do this using the "appendToNote" tool.',
+			'- You have access to various tools that allow updating the note. For example, if you need to add the text "test" to the end of the note, do this using the "editor.appendToNote" tool.',
+			'- For tasks modifying the current note, prefer "editor." tools to global tools.',
 			'- Some tools call for anchors. Anchors must be exact substrings of the current note body. Keep them short but unique.',
 		);
 	}
@@ -99,104 +73,43 @@ const systemPrompt = (note: NoteContext) => {
 	return lines.join('\n');
 };
 
-const toolDefinitions = (note: NoteContext) => {
-	const result: ToolSpec[] = [];
+const createHistory = (history: ChatMessage[], newMessage: string, context: NoteContext): ChatMessage[] => {
+	history = removeSystemPrompt(history);
 
-	if (note.selection) {
-		result.push({
-			name: 'replaceSelection',
-			description: 'Replaces the text currently selected by the user.',
-			inputSchema: {
-				type: 'object',
-				properties: {
-					text: { type: 'string' },
-				},
-				required: ['text'],
-				additionalProperties: false,
-			},
-		});
-	} else {
-		result.push(
+	const isNewChat = history.length === 0 && !context.selection;
+	history = [
+		{ role: ChatRole.System, content: systemPrompt(context) },
+		...history,
+		{ role: ChatRole.User, content: newMessage },
+	];
+
+	// The assistant almost always needs to fetch the current content of the note. Initializing the
+	// chat transcript with a `readNote` tool call saves one round-trip:
+	const addReadNote = isNewChat;
+	if (addReadNote) {
+		const callId = `call_read${history.length}`;
+		history.push(
 			{
-				name: 'appendToNote',
-				description: 'Adds text to the end of the note. Text is always added to the end of the note. This tool does not require an anchor.',
-				inputSchema: {
-					type: 'object',
-					properties: {
-						text: { type: 'string' },
-					},
-					required: ['text'],
-					additionalProperties: false,
-				},
+				role: ChatRole.Assistant,
+				content: '',
+				hide: true,
+				toolCalls: [
+					{ callId, arguments: { }, toolName: 'editor.readNoteBody', parseError: null },
+				],
+			},
+			{
+				role: ChatRole.Tool,
+				content: context.body,
+				toolCallId: callId,
+				toolName: 'editor.readNoteBody',
+				userDescription: '',
+				isEdit: false,
+				isError: false,
 			},
 		);
-
-		const anchoredSchema = (anchorDescription: string, textDescription: string) => ({
-			type: 'object',
-			properties: {
-				anchor: { type: 'string', description: anchorDescription },
-				text: { type: 'string', description: textDescription },
-			},
-			required: ['anchor', 'text'],
-			additionalProperties: false,
-		});
-		result.push(
-			{
-				name: 'insertBefore',
-				description: 'Insert text immediately before the first occurrence of `anchor`.',
-				inputSchema: anchoredSchema(
-					'Text to find',
-					'What to insert just **before** the found text',
-				),
-			},
-			{
-				name: 'insertAfter',
-				description: 'Insert text immediately after the first occurrence of `anchor`.',
-				inputSchema: anchoredSchema(
-					'Text to find',
-					'What to insert just **after** the found text',
-				),
-			},
-			{
-				name: 'replaceRange',
-				description: 'Replace the first occurrence of `anchor` with `text`.',
-				inputSchema: anchoredSchema(
-					'The text to replace',
-					'What to replace it with',
-				),
-			},
-		);
-
-		const hasFencedBlock = hasStructuredBlock(note);
-		if (hasFencedBlock) {
-			result.push({
-				name: 'replaceFencedBlock',
-				description: [
-					'Replaces the inner content of the first ```<tag>``` fenced block.',
-					`"text" is the new content inside the fence (no fence markers). Supported tags: ${supportedStructuredBlockTags.join(', ')}.`,
-					'Use appendToNote to create a new fenced block.',
-				].join(' '),
-				inputSchema: {
-					type: 'object',
-					properties: {
-						tag: {
-							type: 'string',
-							enum: supportedStructuredBlockTags,
-						},
-						text: {
-							type: 'string',
-							description: 'The new content for the block content. Should not include the fenced block delimiters.',
-						},
-					},
-					required: ['tag', 'text'],
-					additionalProperties: false,
-				},
-			});
-		}
-
 	}
 
-	return result;
+	return history;
 };
 
 const estimateTokens = (text: string) => Math.ceil(text.length / charsPerToken);
@@ -218,14 +131,8 @@ export const runNoteChat = async (
 	onHistoryChanged: OnHistoryChanged,
 	signal: AbortSignal,
 ) => {
-	history = [
-		// Ensure that the system prompt is up-to-date with the context.
-		// TODO: This will invalidate the prompt cache.
-		//       See https://developers.openai.com/api/docs/guides/prompt-caching
-		{ role: ChatRole.System, content: systemPrompt(await context()) },
-		...removeSystemPrompt(history),
-		{ role: ChatRole.User, content: userMessage },
-	];
+	const initialContext = await context();
+	history = createHistory(history, userMessage, initialContext);
 	onHistoryChanged([...history]);
 
 	const hasUndeliveredToolResults = () => history[history.length - 1]?.role === ChatRole.Tool;
@@ -267,12 +174,15 @@ interface StepNoteChatOptions {
 const stepNoteChat = async ({
 	context, messages, commands, onHistoryChanged, signal, allowTools,
 }: StepNoteChatOptions) => {
+	assertWithinTokenBudget(messages, noteBodyTokenBudget);
 	const note = await context();
 
-	assertWithinTokenBudget(messages, noteBodyTokenBudget);
-	const chatResult = await AiService.instance().chat(
-		messages, { tools: allowTools ? toolDefinitions(note) : [], signal },
-	);
+	const toolIndex = new ToolIndex({ note, commands });
+
+	const chatResult = await AiService.instance().chat(messages, {
+		tools: allowTools ? toolIndex.getTools() : [],
+		signal,
+	});
 
 	// Chat results can contain sensitive information -- only log in dev mode
 	logger.debug('Received chat result', chatResult);
@@ -285,7 +195,9 @@ const stepNoteChat = async ({
 
 	let failedToolCount = 0;
 	if (allowTools) {
-		const toolResults = await runTools(chatResult, note, context, commands, signal);
+		const toolResults = await runTools(
+			chatResult, note, context, commands, signal,
+		);
 		messages.push(...toolResults);
 		onHistoryChanged([...messages]);
 
@@ -338,169 +250,116 @@ const assertNotCancelled = (signal: AbortSignal) => {
 	}
 };
 
-const runTools = async (chat: ChatResult, initialContext: NoteContext, context: OnContext, commands: ChatCommands, signal: AbortSignal) => {
+const runTools = async (
+	chat: ChatResult, initialContext: NoteContext, getContext: OnContext, commands: ChatCommands, signal: AbortSignal,
+) => {
 	assertNotCancelled(signal);
 
+	const currentContext = await getContext();
 	let chatResponses: ChatToolMessage[] = [];
 
-	const respondSuccess = (action: ChatToolCall, message: string) => {
-		chatResponses.push({
-			role: ChatRole.Tool,
-			toolName: action.toolName,
-			toolCallId: action.callId,
-			content: message,
-			userDescription: message,
-			isError: false,
-		});
-	};
+	const isEdit = (toolName: string) => isEditorToolCall(toolName) && toolName !== 'editor.readNoteBody';
 
-	const respondFailure = (action: ChatToolCall, reason: string) => {
+	const respondFailure = (action: ChatToolCall, reason: string, userDescription?: string) => {
 		chatResponses.push({
 			role: ChatRole.Tool,
 			toolName: action.toolName,
 			toolCallId: action.callId,
 			content: `failed: ${reason}`,
-			userDescription: reason,
+			userDescription: userDescription ?? reason,
 			isError: true,
+			isEdit: isEdit(action.toolName),
 		});
 	};
 
-	// Only replaceSelection operations allowed when there's a selection
-	const currentContext = await context();
-	if (currentContext.selection) {
-		const expectedName = 'replaceSelection';
-		const action = chat.toolCalls.find(toolCall => toolCall.toolName === expectedName);
-		if (action) {
-			const args = action.arguments;
-			if (action.parseError) {
-				respondFailure(action, action.parseError);
-			} else if (!hasOwnProperty(args, 'text') || typeof args.text !== 'string') {
-				respondFailure(action, 'missing or invalid `text` property');
-			} else {
-				try {
-					await commands.replaceSelection(args.text, currentContext.selection);
-					respondSuccess(action, describeEditOperation(toolCallToEditOperation(action)));
-				} catch (error) {
-					logger.error('Failed to replace selection', error);
-					respondFailure(action, 'failed to replace selection');
-					commands.displayError(error.message ?? String(error));
-				}
-			}
-		}
+	const runTool = async (toolCall: ChatToolCall, body: string) => {
+		const index = new ToolIndex({
+			note: { ...currentContext, body },
+			commands: {
+				...commands,
+				updateNoteBody: newBody => {
+					body = newBody;
+					return Promise.resolve();
+				},
+			},
+		});
+		const toolId = toolCall.toolName;
+		const tool = index.findTool(toolId);
 
-		// Only one tool call is allowed in this context
-		for (const toolCall of chat.toolCalls) {
-			if (action === toolCall) continue;
-			if (toolCall.toolName === expectedName) {
-				respondFailure(toolCall, `Only a single ${expectedName} tool call is valid in this context`);
-			} else {
-				respondFailure(toolCall, `Only the ${expectedName} tool is valid in this context.`);
-			}
-		}
-	} else {
-		const initialBody = initialContext.body;
-		let body = currentContext.body;
-
-		if (initialBody !== body && chat.toolCalls.length > 0) {
-			for (const toolCall of chat.toolCalls) {
-				respondFailure(toolCall, 'body changed externally, before edit could be applied');
-			}
-			commands.displayError(_('The note changed while the request was running; edits were not applied. Try again.'));
-
-			return chatResponses;
-		}
-
-		for (const toolCall of chat.toolCalls) {
-			if (toolCall.toolName === 'replaceSelection') {
-				respondFailure(toolCall, 'replaceSelection is invalid in this context');
-				continue;
-			}
-			if (!isValidEditOp(toolCall.toolName)) {
-				respondFailure(toolCall, 'tool not found');
-				continue;
-			}
-			if (toolCall.parseError) {
-				respondFailure(toolCall, toolCall.parseError);
-				continue;
-			}
-
-			const editOperation = toolCallToEditOperation(toolCall);
-			const { newBody, appliedEdits } = applyAnchorEdits(body, [editOperation], 0);
-			body = newBody;
-
-			if (appliedEdits.length !== 1) {
-				throw new Error(`Invalid state: Wrong number of applied edits, ${appliedEdits.length}`);
-			}
-
-			const edit = appliedEdits[0];
-			if (edit.status === 'applied') {
-				respondSuccess(toolCall, describeEditOperation(editOperation));
-			} else {
-				respondFailure(toolCall, edit.status);
-			}
-		}
-
-		if (body !== initialBody) {
+		if (tool) {
 			try {
-				await commands.updateNoteBody(body, initialBody);
+				const output = await tool.handler(toolCall.arguments, { selectedFolderId: currentContext.folderId });
+
+				chatResponses.push({
+					role: ChatRole.Tool,
+					toolName: tool.id,
+					toolCallId: toolCall.callId,
+					content: typeof output === 'string' ? output : JSON.stringify(output),
+					userDescription: tool.userDescription(toolCall.arguments, output),
+					isError: false,
+					isEdit: isEdit(tool.id),
+				});
 			} catch (error) {
-				logger.error('Failed to update body', error);
-
-				// Replace any 'success' messages with failures, since all tools
-				// currently depend on updating the body.
-				chatResponses = [];
-				for (const toolCall of chat.toolCalls) {
-					respondFailure(toolCall, 'failed to update body');
+				logger.error('Tool call', toolCall.toolName, 'failed', error);
+				if (error instanceof ToolError) {
+					respondFailure(toolCall, error.message);
+				} else {
+					respondFailure(toolCall, 'failed');
 				}
-
-				commands.displayError(error.message ?? String(error));
 			}
+		} else {
+			respondFailure(
+				toolCall,
+				index.describeToolNotFoundFailure(toolId),
+				_('Tool not found: %s', toolId),
+			);
+		}
+		return body;
+	};
+
+	const initialBody = initialContext.body;
+	let body = currentContext.body;
+	const hadExternalBodyChanges = initialBody !== body;
+
+	for (const toolCall of chat.toolCalls) {
+		if (toolCall.parseError) {
+			respondFailure(toolCall, toolCall.parseError);
+		} else {
+			body = await runTool(toolCall, body);
+		}
+	}
+
+	const appliedEdits = chatResponses.filter(r => r.isEdit && !r.isError);
+	if (appliedEdits.length > 0 && body !== initialBody) {
+		try {
+			// Avoid overwriting user-created changes
+			if (hadExternalBodyChanges) {
+				throw new Error(_('The note changed while the request was running; edits were not applied. Try again.'));
+			}
+
+			await commands.updateNoteBody(body, initialBody);
+		} catch (error) {
+			logger.error('Failed to update body', error);
+
+			// All of the edit operations depend on updating the body, so they all
+			// need to be marked as failures:
+			const successfulEditResponses = new Set(appliedEdits);
+			chatResponses = chatResponses.map(response => {
+				if (!successfulEditResponses.has(response)) return response;
+				return {
+					...response,
+					content: 'failed to update body',
+					isError: true,
+				};
+			});
+
+			commands.displayError(error.message ?? String(error));
 		}
 	}
 
 	return chatResponses;
 };
 
-const isValidEditOp = (operation: string): operation is EditOp['op'] => {
-	return knownOps.has(operation as EditOp['op']);
-};
-
-const toolCallToEditOperation = (toolCall: ChatToolCall): EditOp => {
-	const op = toolCall.toolName;
-	if (!isValidEditOp(op)) {
-		throw new Error(`Invalid edit operation: ${op}`);
-	}
-
-	const args = toolCall.arguments;
-	return {
-		op,
-		...('text' in args && typeof args.text === 'string' ? { text: args.text } : {}),
-		...('anchor' in args && typeof args.anchor === 'string' ? { anchor: args.anchor } : {}),
-		...('tag' in args && typeof args.tag === 'string' ? { tag: args.tag } : {}),
-	} as EditOp;
-};
-
-const countWords = (text: string): number => Countable.countOnce(text, { stripTags: true }).words;
-
-const describeEditOperation = (editOp: EditOp) => {
-	const describeWordsAdded = (count: number) => _n('Added %d word', 'Added %d words', count, count);
-	const describeWordsRemoved = (count: number) => _n('Removed %d word', 'Removed %d words', count, count);
-
-	let actionDescription;
-	if (editOp.op === 'replaceRange') {
-		actionDescription = [
-			describeWordsRemoved(countWords(editOp.anchor)),
-			describeWordsAdded(countWords(editOp.text)),
-		].join('\n');
-	} else if (editOp.op === 'replaceFencedBlock') {
-		actionDescription = _('Updated %s block', editOp.tag);
-	} else if (editOp.op === 'replaceSelection') {
-		actionDescription = _('Replaced selection');
-	} else {
-		actionDescription = describeWordsAdded(countWords(editOp.text));
-	}
-	return actionDescription;
-};
 
 // Exported for tests.
-export const _internal = { systemPrompt, toolDefinitions, assertWithinTokenBudget, estimateTokens, runTools, noteBodyTokenBudget };
+export const _internal = { systemPrompt, assertWithinTokenBudget, estimateTokens, runTools, noteBodyTokenBudget };
