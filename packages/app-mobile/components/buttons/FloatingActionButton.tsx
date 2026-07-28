@@ -48,28 +48,43 @@ const useIcon = (iconName: string) => {
 	}, [iconName]);
 };
 
-interface StylesProps {
-	buttonContainerRef: RefObject<View|null>;
-	themeId: number;
-}
-
-const useStyles = ({ buttonContainerRef, themeId }: StylesProps) => {
+const useMenuMarginBottom = (buttonContainerRef: RefObject<View>, themeId: number) => {
 	const { height: windowHeight } = useWindowDimensions();
 	const safeAreaPadding = useSafeAreaPadding();
 	const [menuMarginBottom, setMenuMarginBottom] = useState(0);
 
-	useLayoutEffect(() => {
-		buttonContainerRef.current?.measure((_x, _y, _width, _height, _pageX, pageY) => {
-			setMenuMarginBottom(windowHeight - pageY);
-		});
-	}, [windowHeight, buttonContainerRef]);
-
-	return useMemo(() => {
+	const recomputeMargin = useCallback(() => {
 		const theme = themeStyle(themeId);
 
+		buttonContainerRef.current?.measure((_x, _y, _width, _height, _pageX, pageY) => {
+			setMenuMarginBottom(windowHeight - pageY + theme.marginBottom + safeAreaPadding.paddingBottom);
+		});
+	}, [windowHeight, buttonContainerRef, themeId, safeAreaPadding]);
+
+	useLayoutEffect(() => {
+		recomputeMargin();
+	}, [recomputeMargin]);
+
+	const recomputeMarginRef = useRef(recomputeMargin);
+	recomputeMarginRef.current = recomputeMargin;
+
+	const onMenuContainerLayout = useCallback(() => {
+		recomputeMarginRef.current();
+	}, []);
+
+	return { onMenuContainerLayout, menuMarginBottom };
+};
+
+
+interface StylesProps {
+	menuMarginBottom: number;
+}
+
+const useStyles = ({ menuMarginBottom }: StylesProps) => {
+	return useMemo(() => {
 		return StyleSheet.create({
 			menu: {
-				marginBottom: menuMarginBottom + theme.marginBottom + safeAreaPadding.paddingBottom,
+				marginBottom: menuMarginBottom,
 				// Always float right:
 				alignSelf: 'flex-end',
 			},
@@ -82,7 +97,7 @@ const useStyles = ({ buttonContainerRef, themeId }: StylesProps) => {
 				alignSelf: 'flex-end',
 			},
 		});
-	}, [menuMarginBottom, safeAreaPadding, themeId]);
+	}, [menuMarginBottom]);
 };
 
 const FloatingActionButton = (props: ActionButtonProps) => {
@@ -110,7 +125,8 @@ const FloatingActionButton = (props: ActionButtonProps) => {
 
 	const buttonContainerRef = useRef<View|null>(null);
 
-	const styles = useStyles({ themeId: props.themeId, buttonContainerRef });
+	const { menuMarginBottom, onMenuContainerLayout } = useMenuMarginBottom(buttonContainerRef, props.themeId);
+	const styles = useStyles({ menuMarginBottom });
 
 	const menuButton = <FAB
 		ref={mainButtonRef}
@@ -126,6 +142,7 @@ const FloatingActionButton = (props: ActionButtonProps) => {
 		<View
 			style={styles.buttonContainer}
 			ref={buttonContainerRef}
+			onLayout={onMenuContainerLayout}
 		>
 			{menuButton}
 		</View>
