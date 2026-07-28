@@ -274,6 +274,16 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 
 	public render() {
 		const parent = this.parentItem();
+
+		if (!parent) {
+			// Avoid showing a blank notebook screen for certain routes which result in a deleted item remaining in history,
+			// such as removing all associations of a tag, or removing tags via note or tag deletions
+			this.props.dispatch({
+				type: 'NAV_BACK',
+			});
+			return null;
+		}
+
 		const theme = themeStyle(this.props.themeId);
 
 		const rootStyle = this.props.visible ? theme.rootStyle : theme.hiddenRootStyle;
