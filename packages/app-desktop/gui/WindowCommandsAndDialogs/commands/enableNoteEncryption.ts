@@ -30,7 +30,9 @@ export const runtime = (): CommandRuntime => {
 			}
 
 			if (!NoteLockKey.instance().load()) {
-				const setUpNow = bridge().showConfirmMessageBox(_('Encrypting a note requires a note lock password, which has not yet been set. Set it up now?'));
+				const setUpNow = bridge().showConfirmMessageBox(_('Encrypting a note requires a note lock password, which has not yet been set. Set it up now?'), {
+					buttons: [_('Yes'), _('No')],
+				});
 				if (setUpNow) {
 					context.dispatch({
 						type: 'NAV_GO',
