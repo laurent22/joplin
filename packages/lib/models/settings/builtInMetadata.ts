@@ -2274,9 +2274,8 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 		},
 
-		// Off by default as this is a new behaviour on  sync path
 		'sync.autoMergeConflicts': {
-			value: false,
+			value: true,
 			type: SettingItemType.Bool,
 			section: 'sync',
 			public: true,
