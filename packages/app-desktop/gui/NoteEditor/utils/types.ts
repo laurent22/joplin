@@ -16,6 +16,7 @@ import { RefObject, SetStateAction } from 'react';
 import * as React from 'react';
 import { ResourceEntity, ResourceLocalStateEntity } from '@joplin/lib/services/database/types';
 import { EditorCursorLocations } from '@joplin/lib/services/NotePositionService';
+import type { DecryptedNoteLockKey } from '@joplin/lib/services/noteLock/NoteLockKey';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -73,6 +74,8 @@ export interface NoteEditorProps {
 	enableHtmlToMarkdownBanner: boolean;
 	showNoteLinkIcon: boolean;
 	whiteboardForceMarkdown: Record<string, boolean>;
+	noteLockSessionUnlocked: boolean;
+	hasNoteLockKey: boolean;
 }
 
 export interface NoteBodyEditorRef {
@@ -168,6 +171,12 @@ export interface FormNote {
 	markup_language: number;
 	user_updated_time: number;
 	encryption_applied: number;
+	is_locked: number;
+	// The key captured when the locked note was decrypted; pending saves encrypt with it so they
+	// can complete even if the session locks before they run.
+	noteLockKey: DecryptedNoteLockKey|null;
+	// Proof for gated saves that the body is plaintext.
+	isDecrypted: boolean;
 	deleted_time: number;
 
 	hasChanged: boolean;
@@ -220,6 +229,9 @@ export function defaultFormNote(): FormNote {
 		hasChanged: false,
 		user_updated_time: 0,
 		encryption_applied: 0,
+		is_locked: 0,
+		noteLockKey: null,
+		isDecrypted: false,
 	};
 }
 

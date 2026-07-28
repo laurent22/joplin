@@ -1,13 +1,16 @@
-import Folder from '../../../models/Folder';
-import { McpTool, ToolError } from '../types';
+import { _ } from '../../../../locale';
+import Folder from '../../../../models/Folder';
+import { ToolError } from '../types';
+import buildTool from '../utils/buildTool';
 
 interface Input {
 	title?: string;
 	parent_id?: string;
 }
 
-const tool: McpTool = {
+const tool = buildTool({
 	id: 'create_notebook',
+	userDescription: (input: Input) => _('Created notebook: %s', input.title ?? _('(no title)')),
 	description: 'Create a new notebook. Optionally nest it under an existing notebook by passing parent_id.',
 	inputSchema: {
 		type: 'object',
@@ -32,6 +35,6 @@ const tool: McpTool = {
 
 		return { id: saved.id, title: saved.title, parent_id: saved.parent_id || null };
 	},
-};
+});
 
 export default tool;

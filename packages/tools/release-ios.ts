@@ -61,12 +61,20 @@ async function updateCodeProjVersions(filePath: string) {
 // https://github.com/laurent22/joplin/issues/4945#issuecomment-995802706
 async function checkDeploymentTargets(filePath: string) {
 	const content = await fs.readFile(filePath, 'utf8');
-	const re = /IPHONEOS_DEPLOYMENT_TARGET = ([0-9.]+)/g;
-	let match = re.exec(content);
+
+	// Only check the app targets - the test target (which sets TEST_TARGET_NAME)
+	// is allowed to have a different deployment target.
+	const blockRe = /isa = XCBuildConfiguration;([\s\S]*?)\n\t\t\t\};/g;
+	const targetRe = /IPHONEOS_DEPLOYMENT_TARGET = ([0-9.]+)/;
 	let versions: string[] = [];
-	while (match) {
-		versions.push(match[1]);
-		match = re.exec(content);
+	let block = blockRe.exec(content);
+	while (block) {
+		const blockContent = block[1];
+		const targetMatch = targetRe.exec(blockContent);
+		if (targetMatch && !/TEST_TARGET_NAME = /.test(blockContent)) {
+			versions.push(targetMatch[1]);
+		}
+		block = blockRe.exec(content);
 	}
 
 	versions = unique(versions);

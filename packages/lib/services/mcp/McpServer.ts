@@ -1,7 +1,8 @@
 import Logger from '@joplin/utils/Logger';
 import Setting from '../../models/Setting';
-import { allTools, enabledTools, findTool } from './registry';
-import { JsonRpcRequest, JsonRpcResponse, JsonRpcErrorCodes, McpProtocolVersion, ToolCallResult, ToolError } from './types';
+import ToolIndex from '../ai/tools/ToolIndex';
+import { JsonRpcRequest, JsonRpcResponse, JsonRpcErrorCodes, McpProtocolVersion, ToolCallResult } from './types';
+import { ToolError } from '../ai/tools/types';
 
 const logger = Logger.create('McpServer');
 
@@ -75,7 +76,7 @@ export default class McpServer {
 
 	private handleToolsList() {
 		return {
-			tools: enabledTools().map(t => ({
+			tools: new ToolIndex(null).getTools().map(t => ({
 				name: t.id,
 				description: t.description,
 				inputSchema: t.inputSchema,
@@ -88,15 +89,14 @@ export default class McpServer {
 		if (!params || typeof params.name !== 'string') {
 			throw new InvalidParamsError('Missing or invalid "name" parameter');
 		}
-		const tool = findTool(params.name);
+		const index = new ToolIndex(null);
+		const tool = index.findTool(params.name);
 		if (!tool) {
-			// "Disabled" vs "unknown" surface differently so the LLM gets actionable feedback.
-			const exists = allTools().some(t => t.id === params.name);
-			return toolErrorResult(exists ? `Tool '${params.name}' is disabled in Joplin settings` : `Unknown tool '${params.name}'`);
+			return toolErrorResult(index.describeToolNotFoundFailure(params.name));
 		}
 		const input = params.arguments ?? {};
 		try {
-			const payload = await tool.handler(input);
+			const payload = await tool.handler(input, {});
 			return {
 				content: [{ type: 'text', text: serialisePayload(payload) }],
 			};

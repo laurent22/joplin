@@ -27,7 +27,8 @@ import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import removeKeylessItems from './ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { isCallbackUrl, parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
+import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
+import executeCallbackUrl from './MainScreen/handleCallbackUrl';
 import ElectronAppWrapper from '../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
@@ -153,20 +154,23 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		ipcRenderer.on('asynchronous-message', (_event: import('electron').IpcRendererEvent, message: string, args: { url: string }) => {
 			if (message === 'openCallbackUrl') {
-				this.openCallbackUrl(args.url);
+				void this.openCallbackUrl(args.url);
 			}
 		});
 
 		const initialCallbackUrl = (bridge().electronApp() as ElectronAppWrapper).initialCallbackUrl();
 		if (initialCallbackUrl) {
-			this.openCallbackUrl(initialCallbackUrl);
+			void this.openCallbackUrl(initialCallbackUrl);
 		}
 	}
 
-	private openCallbackUrl(url: string) {
-		if (!isCallbackUrl(url)) throw new Error(`Invalid callback URL: ${url}`);
-		const { command, params } = parseCallbackUrl(url);
-		void CommandService.instance().execute(command.toString(), params.id);
+	private async openCallbackUrl(url: string) {
+		try {
+			if (!isCallbackUrl(url)) throw new Error(`Invalid callback URL: ${url}`);
+			await executeCallbackUrl(url);
+		} catch (error) {
+			logger.error('Error handling callback URL:', error);
+		}
 	}
 
 	private updateLayoutPluginViews(layout: LayoutItem, plugins: PluginStates) {

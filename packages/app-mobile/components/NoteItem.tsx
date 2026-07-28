@@ -13,6 +13,9 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import useOnLongPressProps from '../utils/hooks/useOnLongPressProps';
 import MultiTouchableOpacity from './buttons/MultiTouchableOpacity';
 import { escapeRegExp } from '@joplin/lib/string-utils';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
+import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 
 interface Props {
 	dispatch: Dispatch;
@@ -102,6 +105,14 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 
 	const todoCheckbox_change = useCallback(async (checked: boolean) => {
 		if (!props.note) return;
+
+		// Duplicates the locked-note guard in app-desktop/gui/NoteListItem/NoteListItem.tsx.
+		if (isNoteLockEnabled()) {
+			const lockState = await Note.load(props.note.id, { fields: ['is_locked'] });
+			if (NoteLockNote.isLocked(lockState) && !NoteLockSession.instance().isUnlocked()) {
+				throw new Error('Cannot change a locked note while the session is locked');
+			}
+		}
 
 		const newNote = {
 			id: props.note.id,

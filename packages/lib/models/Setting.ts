@@ -164,7 +164,7 @@ const globalMigrations: GlobalMigration[] = [
 interface UserSettingMigration {
 	oldName: string;
 	newName: string;
-	transformValue: (value: string)=> string | string[];
+	transformValue: (value: unknown)=> unknown;
 
 	// Currently the migration code only supports migrating a plugin setting to the regular settings
 	// (not a plugin setting to a different name). So "oldName" should be the plugin setting name
@@ -182,13 +182,13 @@ const userSettingMigration: UserSettingMigration[] = [
 	{
 		oldName: 'spellChecker.language',
 		newName: 'spellChecker.languages',
-		transformValue: (value: string) => { return [value]; },
+		transformValue: (value) => { return [value]; },
 		isPluginSetting: false,
 	},
 	{
 		oldName: 'plugin-org.joplinapp.plugins.AbcSheetMusic.options',
 		newName: 'markdown.plugin.abc.options',
-		transformValue: (value: string) => { return value; },
+		transformValue: (value) => { return value; },
 		isPluginSetting: true,
 	},
 ];
@@ -1294,6 +1294,7 @@ class Setting extends BaseModel {
 			'noteLock',
 			'joplinCloud',
 			'ai',
+			'ai.tools',
 			'mcp',
 			'editor',
 			'plugins',
@@ -1314,7 +1315,7 @@ class Setting extends BaseModel {
 	}
 
 	public static isSubSection(sectionName: string) {
-		return ['encryption', 'application', 'appearance', 'joplinCloud'].includes(sectionName);
+		return ['encryption', 'application', 'appearance', 'joplinCloud', 'ai.tools'].includes(sectionName);
 	}
 
 	public static groupMetadatasBySections(metadatas: SettingItem[]): MetadataBySection {
@@ -1371,7 +1372,7 @@ class Setting extends BaseModel {
 		if (name === 'importOrExport') return _('Import and Export');
 		if (name === 'moreInfo') return _('More information');
 		if (name === 'ai') return _('AI');
-		if (name === 'mcp') return _('MCP Server');
+		if (name === 'ai.tools') return _('Tools');
 
 		if (this.customSections_[name] && this.customSections_[name].label) return this.customSections_[name].label;
 
@@ -1387,6 +1388,9 @@ class Setting extends BaseModel {
 		}
 		if (name === 'noteLock') {
 			return _('Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.');
+		}
+		if (name === 'ai.tools') {
+			return _('Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin\'s MCP server (if enabled).');
 		}
 
 		if (this.customSections_[name] && this.customSections_[name].description) return this.customSections_[name].description;
@@ -1454,7 +1458,7 @@ class Setting extends BaseModel {
 			'importOrExport': 'fa fa-file-export',
 			'moreInfo': 'fa fa-info-circle',
 			'ai': 'fa fa-robot',
-			'mcp': 'fa fa-plug',
+			'ai.tools': 'fa fa-plug',
 		};
 
 		// Icomoon icons are currently not present in the mobile app -- we override these
