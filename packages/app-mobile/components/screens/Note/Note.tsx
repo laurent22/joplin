@@ -894,8 +894,8 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private enableNoteEncryption_onPress = () => {
 		if (!NoteLockKey.instance().load()) {
 			this.props.dialogs.prompt(_('Enable encryption'), _('Encrypting a note requires a note lock password, which has not been set yet. Set it up now?'), [
-				{ text: _('Yes'), onPress: () => void NavService.go('Config', { sectionName: 'noteLock' }) },
 				{ text: _('No'), style: 'cancel' },
+				{ text: _('Yes'), onPress: () => void NavService.go('Config', { sectionName: 'noteLock' }) },
 			]);
 			return;
 		}
