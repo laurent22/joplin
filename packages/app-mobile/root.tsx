@@ -229,10 +229,24 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 			Setting.setValue('activeFolderId', newState.selectedFolderId);
 		}
 
-		const notesParent: NotesParent = {
-			type: action.smartFilterId ? 'SmartFilter' : 'Folder',
-			selectedItemId: action.smartFilterId ? action.smartFilterId : newState.selectedFolderId,
-		};
+		let notesParent: NotesParent;
+		if (action.smartFilterId) {
+			notesParent = {
+				type: 'SmartFilter',
+				selectedItemId: action.smartFilterId,
+			};
+		} else if (action.tagId) {
+			notesParent = {
+				type: 'Tag',
+				selectedItemId: action.tagId,
+			};
+		} else {
+			notesParent = {
+				type: 'Folder',
+				selectedItemId: newState.selectedFolderId,
+			};
+		}
+
 		Setting.setValue('notesParent', serializeNotesParent(notesParent));
 	}
 

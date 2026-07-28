@@ -76,6 +76,10 @@ const useStyles = ({ theme, dragging, draggable, dragOffset, backgroundOpacity }
 				borderBottomLeftRadius: 0,
 				maxWidth: Math.min(400, windowWidth - menuGapRight - menuGapLeft),
 
+				shadowRadius: 4,
+				shadowColor: theme.color,
+				shadowOpacity: 0.15,
+
 				marginBottom: -spaceBelowScreenEdge,
 
 				userSelect: dragging ? 'none' : 'auto',
@@ -360,21 +364,20 @@ const BottomDrawer: React.FC<Props> = props => {
 		dragHandleRef,
 	});
 
-	const onContainerScroll = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
+	const onScrollDragEnd = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
 		const offsetY = event.nativeEvent.contentOffset.y;
 		// Use a smaller tolerance for smaller menus to ensure that they're still dismissible
 		const overscrollTolerance = Math.min(80, menuHeightRef.current / 4);
 
-		// On iOS, support menu dismissal through the native scrollview's overscroll behavior:
+		// On platforms that support overscroll (iOS), support menu dismissal through the
+		// native scrollview's overscroll behavior:
 		if (offsetY < -overscrollTolerance) {
 			// Start the animation at the current scroll position, to avoid a jump when starting
 			// the animation:
 			menuDragOffset.setValue(-offsetY);
 			void onHide();
-		} else {
-			onPanResponderScroll(event);
 		}
-	}, [onHide, onPanResponderScroll, menuDragOffset]);
+	}, [onHide, menuDragOffset]);
 
 	return <Modal
 		visible={props.visible}
@@ -392,7 +395,8 @@ const BottomDrawer: React.FC<Props> = props => {
 		containerStyle={styles.menuStyle}
 		animationType={reduceMotionEnabled ? 'fade' : 'none'}
 		scrollOverflow={{
-			onScroll: onContainerScroll,
+			onScroll: onPanResponderScroll,
+			onScrollEndDrag: onScrollDragEnd,
 
 			// Throttling scroll events avoids a warning on web
 			scrollEventThrottle: 30,

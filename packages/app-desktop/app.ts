@@ -772,6 +772,15 @@ class Application extends BaseApplication {
 			});
 		});
 
+		addTask('app/listen for note lock session events', () => {
+			eventManager.on(EventName.NoteLockSessionChange, (event) => {
+				this.dispatch({
+					type: 'SET_NOTE_LOCK_SESSION_UNLOCKED',
+					value: event.unlocked,
+				});
+			});
+		});
+
 		addTask('app/setupOcrService', () => this.setupOcrService());
 
 		return tasks;

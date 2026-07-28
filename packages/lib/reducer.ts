@@ -101,6 +101,9 @@ export interface WindowState {
 
 	selectedNoteIds: string[];
 	selectedNoteHash: string;
+	// Only used to disable menu actions that update the active note in the editor. Bulk actions
+	// do not need to be disabled because they do not result in an error.
+	activeNoteIsUndecryptable: boolean;
 	selectedFolderId: string;
 	selectedFolderIds: string[];
 	selectedTagId: string;
@@ -125,6 +128,7 @@ export const defaultWindowState: WindowState = {
 	notesParentType: null,
 	selectedNoteIds: [],
 	selectedNoteHash: '',
+	activeNoteIsUndecryptable: false,
 	selectedFolderId: null,
 	selectedFolderIds: [],
 	selectedTagId: null,
@@ -182,6 +186,7 @@ export interface State extends WindowState {
 	editorNoteStatuses: EditorNoteStatuses;
 	isInsertingNotes: boolean;
 	hasEncryptedItems: boolean;
+	noteLockSessionUnlocked: boolean;
 	needApiAuth: boolean;
 	profileConfig: ProfileConfig;
 	noteListRendererIds: string[];
@@ -253,6 +258,7 @@ export const defaultState: State = {
 	editorNoteStatuses: {},
 	isInsertingNotes: false,
 	hasEncryptedItems: false,
+	noteLockSessionUnlocked: false,
 	needApiAuth: false,
 	profileConfig: null,
 	noteListRendererIds: getListRendererIds(),
@@ -1511,6 +1517,19 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'ENCRYPTION_HAS_DISABLED_ITEMS':
 			draft.hasDisabledEncryptionItems = action.value;
+			break;
+
+		case 'SET_NOTE_LOCK_SESSION_UNLOCKED':
+			draft.noteLockSessionUnlocked = action.value;
+			break;
+
+		case 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE':
+			{
+				// The editor reporting this may be in a background window, so the flag follows that
+				// window rather than whichever one currently has focus.
+				const windowDraft = stateUtils.windowStateById(draft, action.windowId ?? draft.windowId);
+				if (windowDraft) windowDraft.activeNoteIsUndecryptable = action.value;
+			}
 			break;
 
 		case 'CLIPPER_SERVER_SET':
