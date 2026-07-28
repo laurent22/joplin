@@ -30,7 +30,7 @@ const NewNoteButton: React.FC<Props> = () => {
 		const items: MenuOption[] = [
 			{ icon: 'material folder-outline', title: _('New notebook'), onPress: makeNewFolder },
 			{ isDivider: true },
-			{ icon: 'material camera', title: _('Camera'), onPress: () => makeNewNote(false, AttachFileAction.TakePhoto) },
+			{ icon: 'material camera-outline', title: _('Camera'), onPress: () => makeNewNote(false, AttachFileAction.TakePhoto) },
 			{ icon: 'material attachment', title: _('Attachment'), onPress: () => makeNewNote(false, AttachFileAction.AttachFile) },
 			{ icon: 'material data-matrix-scan', title: _('Scan notebook'), onPress: () => NavService.go('DocumentScanner') },
 			{ icon: 'material draw', title: _('Drawing'), onPress: () => makeNewNote(false, AttachFileAction.AttachDrawing) },
