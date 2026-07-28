@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useCallback, useContext, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { Text, StyleSheet, TextStyle, View, ViewStyle, AccessibilityInfo } from 'react-native';
 import Checkbox from './Checkbox';
@@ -16,6 +16,7 @@ import { escapeRegExp } from '@joplin/lib/string-utils';
 import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import { DialogContext } from './DialogManager';
 import Icon from './Icon';
 
 interface Props {
@@ -112,6 +113,8 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 
 const NoteItemComponent: React.FC<Props> = memo(props => {
 	const styles = useStyles(props.themeId, props.index !== 0);
+	const dialogs = useContext(DialogContext);
+	const [checkboxKey, setCheckboxKey] = useState(0);
 
 	const todoCheckbox_change = useCallback(async (checked: boolean) => {
 		if (!props.note) return;
@@ -120,7 +123,10 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 		if (isNoteLockEnabled()) {
 			const lockState = await Note.load(props.note.id, { fields: ['is_locked'] });
 			if (NoteLockNote.isLocked(lockState) && !NoteLockSession.instance().isUnlocked()) {
-				throw new Error('Cannot change a locked note while the session is locked');
+				// The checkbox keeps its own checked state, so a remount reverts the tick.
+				setCheckboxKey(key => key + 1);
+				await dialogs.error(_('Cannot change a locked note while the session is locked'));
+				return;
 			}
 		}
 
@@ -131,7 +137,7 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 		await Note.save(newNote);
 
 		props.dispatch({ type: 'NOTE_SORT' });
-	}, [props.note, props.dispatch]);
+	}, [props.note, props.dispatch, dialogs]);
 
 	const onPress = useCallback(() => {
 		if (!props.note) return;
@@ -185,6 +191,7 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 	const onLongPressProps = useOnLongPressProps({ onLongPress, actionDescription: selectDeselectLabel });
 
 	const todoCheckbox = isTodo ? <Checkbox
+		key={checkboxKey}
 		style={checkboxStyle}
 		checked={checkboxChecked}
 		onChange={todoCheckbox_change}

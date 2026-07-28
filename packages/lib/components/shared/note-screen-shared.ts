@@ -353,6 +353,9 @@ shared.isModified = function(comp: BaseNoteScreenComponent) {
 	if (!comp.state.note || !comp.state.lastSavedNote) return false;
 	const diff = BaseModel.diffObjects(comp.state.lastSavedNote, comp.state.note);
 	delete diff.type_;
+	// The decrypted-state marker is screen bookkeeping, not a user change, and saves can
+	// stamp it onto only one side of the comparison.
+	if (isNoteLockEnabled()) delete diff.isDecrypted;
 	return !!Object.getOwnPropertyNames(diff).length;
 };
 

@@ -239,6 +239,17 @@ describe('note-screen-shared', () => {
 		expect(savedNote.body).toBe('enc(plain text)');
 	});
 
+	it('should not report a note as modified once its save has completed', async () => {
+		const testNote = await Note.load((await Note.save({ title: 'Plain', body: 'plain text', parent_id: folderId })).id);
+
+		// The save stamps the decrypted-state marker onto only one of the state notes; counting
+		// that as a modification hides a locked note's lock panel, which exposes the ciphertext.
+		const comp = makeComp(testNote, { note: { ...testNote, body: 'edited text' } });
+		await shared.saveNoteButton_press(comp, comp.state, null, null);
+
+		expect(shared.isModified(comp)).toBe(false);
+	});
+
 	it('should save with the latest lock state when it changed after scheduling', async () => {
 		const testNote = await Note.save({ title: 'Plain', body: 'plain text', parent_id: folderId });
 

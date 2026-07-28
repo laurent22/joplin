@@ -165,6 +165,7 @@ interface State {
 	noteLastLoadTime: number;
 	noteLockKey: DecryptedNoteLockKey|null;
 	noteLockUnlockPromptVisible: boolean;
+	todoCheckboxKey: number;
 
 	undoRedoButtonState: {
 		canUndo: boolean;
@@ -239,6 +240,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			noteLastLoadTime: Date.now(),
 			noteLockKey: null,
 			noteLockUnlockPromptVisible: false,
+			todoCheckboxKey: 0,
 
 			undoRedoButtonState: {
 				canUndo: false,
@@ -1589,6 +1591,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private async todoCheckbox_change(checked: boolean) {
+		if (isNoteLockEnabled() && NoteLockNote.isLocked(this.state.note) && !this.props.noteLockSessionUnlocked) {
+			// The checkbox keeps its own checked state, so a remount reverts the tick.
+			this.setState(state => ({ todoCheckboxKey: state.todoCheckboxKey + 1 }));
+			await this.props.dialogs.error(_('Cannot change a locked note while the session is locked'));
+			return;
+		}
 		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
 	}
 
@@ -1945,7 +1953,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					updateState={textWrapCalculator_updateState}
 					readOnly={false}
 				/>
-				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
+				{isTodo && <Checkbox key={this.state.todoCheckboxKey} style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
 				<TextInput
 					key={this.state.multiline ? 'multiLine' : 'singleLine'}
 					ref={this.titleTextFieldRef}
