@@ -28,6 +28,7 @@
   "bugs": {
     "url": "https://github.com/laurent22/joplin/issues"
   },
+  "desktopName": "appimagekit-joplin",
   "build": {
     "appId": "net.cozic.joplin-desktop",
     "compression": "normal",
@@ -50,11 +51,13 @@
       "./node_modules/sqlite-vec-*/**"
     ],
     "win": {
-      "publisherName": [
-        "Joplin"
-      ],
-      "sign": "./sign.js",
-      "rfc3161TimeStampServer": "http://timestamp.digicert.com",
+      "signtoolOptions": {
+        "sign": "./sign.js",
+        "rfc3161TimeStampServer": "http://timestamp.digicert.com",
+        "publisherName": [
+          "Joplin"
+        ]
+      },
       "icon": "../../Assets/ImageSources/Joplin.ico",
       "target": [
         {
@@ -128,11 +131,14 @@
     },
     "linux": {
       "icon": "../../Assets/LinuxIcons",
+      "syncDesktopName": true,
       "category": "Office",
       "desktop": {
-        "Icon": "joplin",
-        "MimeType": "x-scheme-handler/joplin;",
-        "StartupWMClass": "@joplin/app-desktop"
+        "entry": {
+          "Icon": "joplin",
+          "MimeType": "x-scheme-handler/joplin;",
+          "StartupWMClass": "@joplin/app-desktop"
+        }
       },
       "target": [
         "AppImage",
@@ -141,6 +147,9 @@
       "executableName": "joplin",
       "maintainer": "Joplin Team <no-reply@joplinapp.org>",
       "artifactName": "Joplin-${version}.${ext}"
+    },
+    "toolsets": {
+      "appimage": "1.0.3"
     }
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
@@ -148,7 +157,7 @@
     "7zip-bin": "5.2.0",
     "@axe-core/playwright": "4.11.2",
     "@electron/notarize": "2.5.0",
-    "@electron/rebuild": "3.7.2",
+    "@electron/rebuild": "4.1.0",
     "@fortawesome/fontawesome-free": "5.15.4",
     "@joeattardi/emoji-button": "4.6.4",
     "@joplin/default-plugins": "~3.7",
@@ -177,7 +186,7 @@
     "compare-versions": "6.1.1",
     "debounce": "1.2.1",
     "electron": "42.3.0",
-    "electron-builder": "24.13.3",
+    "electron-builder": "26.15.6",
     "electron-updater": "6.6.8",
     "electron-window-state": "5.0.3",
     "esbuild": "^0.27.0",
