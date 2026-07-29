@@ -532,6 +532,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			flexDirection: 'row',
 			flexBasis: 'auto',
 			paddingLeft: theme.marginLeft,
+			paddingRight: theme.marginRight,
 			borderBottomColor: theme.dividerColor,
 			borderBottomWidth: 1,
 			maxHeight: '40%',
@@ -1780,8 +1781,6 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			}
 		}
 
-		const titleContainerStyle = isTodo ? this.styles().titleContainerTodo : this.styles().titleContainer;
-
 		const dueDate = Note.dueDateObject(note);
 
 		const textWrapCalculator_updateState = (showToggle: boolean, enableMultiline: boolean) => {
@@ -1796,6 +1795,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				size={30}
 				style={{ width: 30, height: 30, alignSelf: 'center' }}
 			/>;
+
+		let titleContainerStyle = isTodo ? this.styles().titleContainerTodo : this.styles().titleContainer;
+		titleContainerStyle = {
+			...titleContainerStyle,
+			paddingRight: titleToggleButton ? 0 : titleContainerStyle.paddingRight,
+		};
 
 		const titleComp = (
 			<View
