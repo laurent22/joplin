@@ -158,7 +158,11 @@ impl PropertyValue {
 
             v => {
                 return Err(ErrorKind::MalformedOneStoreData(
-                    format!("unexpected property type: 0x{:x}", v).into(),
+                    format!(
+                        "section skipped: file contains an unsupported or invalid property type (0x{:x})",
+                        v
+                    )
+                    .into(),
                 )
                 .into());
             }
