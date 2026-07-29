@@ -1,4 +1,5 @@
 import NoteLockKey, { DecryptedNoteLockKey } from './NoteLockKey';
+import eventManager, { EventName } from '../../eventManager';
 
 export default class NoteLockSession {
 
@@ -33,11 +34,14 @@ export default class NoteLockSession {
 		if (this.lockGeneration_ !== generation) throw new Error('Cannot unlock: the session was locked while unlocking');
 		if (this.noteLockKey_.load()?.id !== decrypted.id) throw new Error('Cannot unlock: the note lock key changed while unlocking');
 		this.key_ = decrypted;
+		eventManager.emit(EventName.NoteLockSessionChange, { unlocked: true });
 	}
 
 	public lock() {
 		this.lockGeneration_++;
+		const wasUnlocked = !!this.key_;
 		this.key_ = null;
+		if (wasUnlocked) eventManager.emit(EventName.NoteLockSessionChange, { unlocked: false });
 	}
 
 	// Blocks unlock during rotation so the still-persisted old key can't be unlocked before the new one is saved.

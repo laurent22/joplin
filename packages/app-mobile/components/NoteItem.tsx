@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { memo, useCallback, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { Text, StyleSheet, TextStyle, ViewStyle, AccessibilityInfo } from 'react-native';
+import { Text, StyleSheet, TextStyle, View, ViewStyle, AccessibilityInfo } from 'react-native';
 import Checkbox from './Checkbox';
 import Note from '@joplin/lib/models/Note';
 import time from '@joplin/lib/time';
@@ -13,6 +13,9 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import useOnLongPressProps from '../utils/hooks/useOnLongPressProps';
 import MultiTouchableOpacity from './buttons/MultiTouchableOpacity';
 import { escapeRegExp } from '@joplin/lib/string-utils';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
+import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 
 interface Props {
 	dispatch: Dispatch;
@@ -28,13 +31,14 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 
-		const listItem: ViewStyle = {
+		const listItemDivider: ViewStyle = {
 			borderTopWidth: showTopBorder ? 1 : 0,
 			borderTopColor: theme.dividerColor,
 			marginLeft: theme.marginLeft,
 			marginRight: theme.marginRight,
-			paddingTop: theme.marginTop,
-			paddingBottom: theme.marginBottom,
+		};
+
+		const selectionWrapper: ViewStyle = {
 			flexDirection: 'row',
 			// backgroundColor: theme.backgroundColor,
 		};
@@ -43,6 +47,8 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 			flexGrow: 1,
 			flexShrink: 1,
 			alignSelf: 'stretch',
+			paddingTop: theme.marginTop,
+			paddingBottom: theme.marginBottom,
 		};
 		const listItemPressableWithCheckbox: ViewStyle = {
 			...listItemPressable,
@@ -50,6 +56,8 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 		};
 		const listItemPressableWithoutCheckbox: ViewStyle = {
 			...listItemPressable,
+			paddingLeft: theme.marginLeft,
+			paddingRight: theme.marginRight,
 		};
 
 		const listItemText: TextStyle = {
@@ -60,13 +68,15 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 
 		const listItemTextWithCheckbox = { ...listItemText };
 
-		const selectionWrapper: ViewStyle = { };
-
 		const selectionWrapperSelected = { ...selectionWrapper };
 		selectionWrapperSelected.backgroundColor = theme.selectedColor;
+		selectionWrapperSelected.borderColor = theme.selectedColor;
+		selectionWrapperSelected.borderTopWidth = 1;
+		selectionWrapperSelected.borderBottomWidth = 1;
+		selectionWrapperSelected.marginVertical = -1;
 
 		return StyleSheet.create({
-			listItem,
+			listItemDivider,
 			listItemText,
 			selectionWrapper,
 			listItemPressableWithoutCheckbox,
@@ -79,6 +89,7 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 			selectionWrapperSelected,
 			checkboxStyle: {
 				color: theme.color,
+				paddingLeft: theme.marginLeft,
 				paddingRight: 10,
 			},
 			checkedOpacityStyle: {
@@ -94,6 +105,14 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 
 	const todoCheckbox_change = useCallback(async (checked: boolean) => {
 		if (!props.note) return;
+
+		// Duplicates the locked-note guard in app-desktop/gui/NoteListItem/NoteListItem.tsx.
+		if (isNoteLockEnabled()) {
+			const lockState = await Note.load(props.note.id, { fields: ['is_locked'] });
+			if (NoteLockNote.isLocked(lockState) && !NoteLockSession.instance().isUnlocked()) {
+				throw new Error('Cannot change a locked note while the session is locked');
+			}
+		}
 
 		const newNote = {
 			id: props.note.id,
@@ -170,16 +189,19 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 		...onLongPressProps,
 	};
 	return (
-		<MultiTouchableOpacity
-			{...pressableProps}
-			containerProps={{
-				style: [selectionWrapperStyle, opacityStyle, styles.listItem],
-			}}
-			onPress={onPress}
-			beforePressable={todoCheckbox}
-		>
-			<Text style={listItemTextStyle}>{displayedNoteTitle}</Text>
-		</MultiTouchableOpacity>
+		<View style={opacityStyle}>
+			<View style={styles.listItemDivider}/>
+			<MultiTouchableOpacity
+				{...pressableProps}
+				containerProps={{
+					style: selectionWrapperStyle,
+				}}
+				onPress={onPress}
+				beforePressable={todoCheckbox}
+			>
+				<Text style={listItemTextStyle}>{displayedNoteTitle}</Text>
+			</MultiTouchableOpacity>
+		</View>
 	);
 });
 

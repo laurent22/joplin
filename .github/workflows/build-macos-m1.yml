@@ -15,10 +15,7 @@ jobs:
           node-version: '24'
           cache: 'yarn'
 
-      - name: Install Yarn
-        run: |
-          # https://yarnpkg.com/getting-started/install
-          corepack enable
+      - uses: ./.github/workflows/shared/install-yarn
 
       - name: Install macOs dependencies
         if: runner.os == 'macOS'
@@ -56,7 +53,8 @@ jobs:
         run: |
           export npm_config_arch=arm64
           export npm_config_target_arch=arm64
-          yarn install
+          source "${GITHUB_WORKSPACE}/.github/scripts/retry.sh"
+          retry yarn install
           cd packages/app-desktop
           npm pkg set 'build.mac.artifactName'='${productName}-${version}-${arch}.${ext}'
 

@@ -4,12 +4,42 @@
 import { EditorView, Decoration, DecorationSet, WidgetType } from '@codemirror/view';
 import { ViewPlugin, ViewUpdate } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { EditorSelection, Range, StateEffect } from '@codemirror/state';
+import { EditorSelection, Range, SelectionRange, StateEffect, TransactionSpec } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
 import { ReplacementExtension } from '../types';
 import nodeIntersectsSelection from './nodeIntersectsSelection';
 
 const updateInlineDecorationsEffect = StateEffect.define();
+
+const isHiddenDecoration = (decoration: Decoration) => (
+	!Object.keys(decoration.spec).length || decoration.spec.widget instanceof WidgetType
+);
+
+const expandSelectionToFormattingCharacters = (decorations: DecorationSet, selection: SelectionRange, docLength: number) => {
+	if (selection.empty) return null;
+
+	const hiddenRanges: { from: number; to: number }[] = [];
+	decorations.between(0, docLength, (from, to, decoration) => {
+		if (isHiddenDecoration(decoration)) hiddenRanges.push({ from, to });
+	});
+
+	let coveredTo = selection.from;
+	for (const range of hiddenRanges) {
+		if (range.from <= coveredTo) coveredTo = Math.max(coveredTo, range.to);
+	}
+	if (coveredTo >= selection.to) return EditorSelection.single(selection.head);
+
+	let { from, to } = selection;
+	for (let index = hiddenRanges.length - 1; index >= 0; index--) {
+		if (hiddenRanges[index].to === from) from = hiddenRanges[index].from;
+	}
+	for (const range of hiddenRanges) {
+		if (range.from === to) to = range.to;
+	}
+
+	if (from === selection.from && to === selection.to) return null;
+	return selection.anchor <= selection.head ? EditorSelection.single(from, to) : EditorSelection.single(to, from);
+};
 
 export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
 	public decorations: DecorationSet;
@@ -70,17 +100,14 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			const selection = isTouchSelection && this.touchSelectionPosition !== null
 				? EditorSelection.cursor(this.touchSelectionPosition)
 				: this.view.state.selection.main;
-			let coveredTo = selection.from;
-			this.decorations.between(selection.from, selection.to, (from, to, decoration) => {
-				if (!Object.keys(decoration.spec).length && from <= coveredTo) {
-					coveredTo = Math.max(coveredTo, to);
-				}
-			});
+			let selectionUpdate: TransactionSpec['selection'] = expandSelectionToFormattingCharacters(
+				this.decorations, selection, this.view.state.doc.length,
+			) ?? undefined;
 
 			const hasHiddenDecoration = (from: number, to: number) => {
 				let found = false;
 				this.decorations.between(from, to, (_from, _to, decoration) => {
-					if (!Object.keys(decoration.spec).length) {
+					if (isHiddenDecoration(decoration)) {
 						found = true;
 						return false;
 					}
@@ -89,13 +116,26 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 				return found;
 			};
 
-			let selectionUpdate = !selection.empty && coveredTo >= selection.to ? { anchor: selection.head } : undefined;
 			const line = this.view.state.doc.lineAt(selection.from);
 			syntaxTree(this.view.state).iterate({
 				from: line.from,
 				to: line.to,
 				enter: node => {
-					if (selectionUpdate || node.name !== 'Link') return;
+					if (selectionUpdate) return;
+
+					const isHiddenPrefixBeforeSelection = (node.name === 'QuoteMark' || node.name === 'ListMark')
+						&& (node.name === 'ListMark' || node.from === line.from)
+						&& node.to < selection.from
+						&& !this.view.state.sliceDoc(node.to, selection.from).trim()
+						&& hasHiddenDecoration(node.from, node.to);
+					if (isHiddenPrefixBeforeSelection) {
+						selectionUpdate = selection.anchor <= selection.head
+							? EditorSelection.single(node.from, selection.to)
+							: EditorSelection.single(selection.to, node.from);
+						return;
+					}
+
+					if (node.name !== 'Link') return;
 					const closingBracket = node.node.getChildren('LinkMark').find(mark => (
 						this.view.state.sliceDoc(mark.from, mark.to) === ']'
 					));

@@ -11,7 +11,7 @@
     },
     "nodejs":     "24.12.0",
     "pkg-config": "latest",
-    "python": "3.14.2",
+    "python": "3.14.3",
     "bat":    "latest",
     "electron": {
       "version":            "latest",

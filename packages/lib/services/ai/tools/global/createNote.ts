@@ -1,6 +1,8 @@
-import Note from '../../../models/Note';
-import Folder from '../../../models/Folder';
-import { McpTool, ToolError } from '../types';
+import Note from '../../../../models/Note';
+import Folder from '../../../../models/Folder';
+import { _ } from '../../../../locale';
+import buildTool from '../utils/buildTool';
+import { ToolError, ToolInput } from '../types';
 
 interface Input {
 	title?: string;
@@ -9,8 +11,9 @@ interface Input {
 	is_todo?: boolean;
 }
 
-const tool: McpTool = {
+const tool = buildTool({
 	id: 'create_note',
+	userDescription: (input: ToolInput) => _('Created note: %s', input.title ?? _('(no title)')),
 	description: 'Create a new note. Returns the created note id. If notebook_id is omitted, the note is created in the default notebook.',
 	inputSchema: {
 		type: 'object',
@@ -22,7 +25,7 @@ const tool: McpTool = {
 		},
 		required: ['title'],
 	},
-	handler: async (input: Input) => {
+	handler: async (input: Input, context) => {
 		if (typeof input.title !== 'string' || !input.title.trim()) {
 			throw new ToolError('Missing or invalid "title" parameter');
 		}
@@ -31,7 +34,7 @@ const tool: McpTool = {
 			throw new ToolError('"is_todo" must be a boolean');
 		}
 
-		let parentId = input.notebook_id;
+		let parentId = input.notebook_id ?? context.selectedFolderId;
 		if (parentId) {
 			const folder = await Folder.load(parentId);
 			if (!folder) throw new ToolError(`Notebook not found: ${parentId}`);
@@ -50,6 +53,6 @@ const tool: McpTool = {
 
 		return { id: saved.id, title: saved.title, notebook_id: saved.parent_id };
 	},
-};
+});
 
 export default tool;

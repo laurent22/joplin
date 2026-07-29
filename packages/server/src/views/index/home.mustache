@@ -7,20 +7,24 @@
 	</div>
 {{/showBetaMessage}}
 
-<h2 class="title">Welcome to {{global.appName}}</h2>
+<h2 class="title">Welcome to {{syncTargetName}}</h2>
 <div class="block readable-block content">
-	<p>To start using {{syncTargetName}}, make sure to <a href="{{{global.joplinAppBaseUrl}}}/download">download one of the Joplin applications</a>, either for desktop or for your mobile phone.</p>
-	<p>Once the app is installed, open the <strong>Configuration</strong> screen, then the <strong>Synchronisation</strong> section. {{{setupMessageHtml}}}<p>
-	<p>Once it is set up {{syncTargetName}} allows you to synchronise your devices, to publish notes, or to collaborate on notebooks with other {{syncTargetName}} users.</p>
+	{{^isExternal}}
+		<p>To start using {{syncTargetName}}, make sure to <a href="{{{global.joplinAppBaseUrl}}}/download">download one of the Joplin applications</a>, either for desktop or for your mobile phone.</p>
+		<p>Once the app is installed, open the <strong>Configuration</strong> screen, then the <strong>Synchronisation</strong> section. {{{setupMessageHtml}}}<p>
+		<p>Once it is set up {{syncTargetName}} allows you to synchronise your devices, to publish notes, or to collaborate on notebooks with other {{syncTargetName}} users.</p>
+	{{/isExternal}}
 </div>
 
 {{#isJoplinCloud}}
+{{^isExternal}}
 <h2 class="title">Joplin Web App</h2>
 
 <div class="block readable-block content">
 	<p>You may access your notes from any web browser using the <a href="https://app.joplincloud.com">Joplin Web App</a>. It is essentially the Joplin mobile app running in a browser, and you can synchronise it with your Joplin Cloud notes.</p>
 	<p>For more information, please see the <a href="https://joplinapp.org/help/apps/web">Joplin Web App documentation</a>.</p>
 </div>
+{{/isExternal}}
 {{/isJoplinCloud}}
 
 <h2 class="title">Your account</h2>
