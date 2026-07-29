@@ -52,7 +52,7 @@ describe('replaceLinks', () => {
 		expect(editor.state.selection.main.anchor).toBe(clickedCursor);
 	});
 
-	it('should place cursor after link when tapped on mobile', async () => {
+	it('should move a manually positioned touch cursor after a hidden link on click', async () => {
 		const markup = 'before [link](https://example.com/)';
 		const clickedCursor = markup.indexOf('link') + 2;
 		const editor = await createTestEditor(markup, EditorSelection.cursor(0), ['URL', 'LinkMark', 'Link'], [replaceLinks]);
@@ -66,7 +66,7 @@ describe('replaceLinks', () => {
 		expect(editor.state.selection.main.anchor).toBe(markup.length);
 	});
 
-	it('should not move cursor after touch is cancelled', async () => {
+	it('should restore link decorations without moving cursor on touchcancel', async () => {
 		const markup = 'before [link](https://example.com/)';
 		const clickedCursor = markup.indexOf('link') + 2;
 		const editor = await createTestEditor(markup, EditorSelection.cursor(0), ['URL', 'LinkMark', 'Link'], [replaceLinks]);
@@ -84,7 +84,7 @@ describe('replaceLinks', () => {
 		expect(editor.contentDOM.textContent).toBe(markup);
 	});
 
-	it('should wait for click after a touch-generated mouseup', async () => {
+	it('should defer touch cursor handling from mouseup until click', async () => {
 		const markup = 'before [link](https://example.com/)';
 		const clickedCursor = markup.indexOf('link') + 2;
 		const editor = await createTestEditor(markup, EditorSelection.cursor(0), ['URL', 'LinkMark', 'Link'], [replaceLinks]);
@@ -103,7 +103,7 @@ describe('replaceLinks', () => {
 		expect(editor.state.selection.main.anchor).toBe(markup.length);
 	});
 
-	it('should handle mouse selection after touch ends without click', async () => {
+	it('should clear unfinished touch state before mouse pointer selection', async () => {
 		const markup = 'before [link](https://example.com/)';
 		const clickedCursor = markup.indexOf('link') + 2;
 		const editor = await createTestEditor(markup, EditorSelection.cursor(0), ['URL', 'LinkMark', 'Link'], [replaceLinks]);

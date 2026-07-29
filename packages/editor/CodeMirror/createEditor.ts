@@ -268,6 +268,16 @@ const createEditor = (
 				dynamicConfig.of(configFromSettings(props.settings, context)),
 				historyCompartment.of(history()),
 				searchExtension(props.onEvent, props.settings),
+				EditorView.theme({
+					'&::after': {
+						content: '"version_07"',
+						position: 'fixed',
+						top: '4px',
+						right: '4px',
+						color: 'red',
+						pointerEvents: 'none',
+					},
+				}),
 
 				// Allows multiple selections and allows selecting a rectangle
 				// with ctrl (as in CodeMirror 5)
@@ -388,5 +398,4 @@ const createEditor = (
 };
 
 export default createEditor;
-
 

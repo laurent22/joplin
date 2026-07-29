@@ -4,7 +4,7 @@
 import { EditorView, Decoration, DecorationSet, WidgetType } from '@codemirror/view';
 import { ViewPlugin, ViewUpdate } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { Range, StateEffect } from '@codemirror/state';
+import { EditorSelection, Range, StateEffect } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
 import { ReplacementExtension } from '../types';
 import nodeIntersectsSelection from './nodeIntersectsSelection';
@@ -15,6 +15,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 	public decorations: DecorationSet;
 	private mouseSelectionInProgress = false;
 	private touchSelectionInProgress = false;
+	private touchSelectionPosition: number|null = null;
 
 	public constructor(private view: EditorView) {
 		view.dom.addEventListener('mousedown', this.onMouseDown, true);
@@ -49,8 +50,10 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 		}
 	};
 
-	private onTouchStart = () => {
+	private onTouchStart = (event: TouchEvent) => {
 		this.touchSelectionInProgress = true;
+		const touch = event.targetTouches[0];
+		this.touchSelectionPosition = touch ? this.view.posAtCoords({ x: touch.clientX, y: touch.clientY }, false) : null;
 	};
 
 	private onTouchCancel = () => {
@@ -64,7 +67,9 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 
 		if (this.mouseSelectionInProgress || this.touchSelectionInProgress) {
 			const isTouchSelection = this.touchSelectionInProgress;
-			const selection = this.view.state.selection.main;
+			const selection = isTouchSelection && this.touchSelectionPosition !== null
+				? EditorSelection.cursor(this.touchSelectionPosition)
+				: this.view.state.selection.main;
 			let coveredTo = selection.from;
 			this.decorations.between(selection.from, selection.to, (from, to, decoration) => {
 				if (!Object.keys(decoration.spec).length && from <= coveredTo) {
