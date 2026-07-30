@@ -18,6 +18,7 @@ const submitPayload = async (metadata: PluginMetadata, commitHash: string, token
 	const issueTitle = `[Plugin Submission] ${metadata.name} v${metadata.version}`;
 	const payload = {
 		plugin_name: metadata.name,
+		version: metadata.version,
 		repository_url: metadata.repositoryUrl,
 		commit_hash: commitHash,
 	};

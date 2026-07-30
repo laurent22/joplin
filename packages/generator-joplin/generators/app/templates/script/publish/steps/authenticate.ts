@@ -7,8 +7,7 @@ import { promisify } from 'util';
 import { exec } from 'child_process';
 import logger from '../utils/logger';
 
-// replace with joplin's official o-auth client app id
-const githubClientId = 'client id to put';
+const githubClientId = 'Ov23liiKfv0K6bqN2BbP';
 
 const execAsync = promisify(exec);
 
