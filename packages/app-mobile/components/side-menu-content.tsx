@@ -454,7 +454,7 @@ const SideMenuContentComponent = (props: Props) => {
 				},
 			};
 
-			menuItems.push(editButton, { isDivider: true }, deleteButton);
+			menuItems.push(editButton, deleteButton);
 		}
 
 		setFolderMenuOptions(menuItems);
