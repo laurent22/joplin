@@ -3,7 +3,7 @@ import { HighlightedWord, SearchEntry } from '@joplin/lib/reducer';
 import SearchService from '@joplin/lib/services/ai/SearchService';
 import { ProcessResultsRow, SearchType } from '@joplin/lib/services/search/SearchEngine';
 import { Second } from '@joplin/utils/time';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface SearchMarkersOptions {
 	searchTimestamp: number;
@@ -30,25 +30,32 @@ function defaultSearchMarkers(): SearchMarkers {
 }
 
 const useSemanticSearchMatches = (query: string, noteId: string, noteBody: string, noteTitle: string) => {
-	const [matchingChunks, setMatchingChunks] = useState([]);
+	const [matchingChunks, setMatchingChunks] = useState<string[]>([]);
 	const matchingChunksRef = useRef(matchingChunks);
 	matchingChunksRef.current = matchingChunks;
 
+	useEffect(() => {
+		if (!query && matchingChunksRef.current.length !== 0) {
+			setMatchingChunks([]);
+		}
+	}, [query]);
+
 	useQueuedAsyncEffect(async (event) => {
 		if (!query) {
-			if (matchingChunksRef.current.length === 0) return;
-			setMatchingChunks([]);
 			return;
 		}
 
-		const results = await SearchService.instance().search({ query: { text: query }, scope: { type: 'note', noteId } });
+		const results = await SearchService.instance().search({ query: { text: query }, scope: { type: 'note', noteId }, relevance: 'strict' });
 		if (event.cancelled) return;
+
 		setMatchingChunks(results.map(r => {
 			let text = r.chunkText.trim();
-			// The indexer sometimes prepends the note title
+
+			// The indexer sometimes prepends the note title: Remove it.
 			while (r.chunkIndex === 0 && noteTitle && text.startsWith(noteTitle)) {
 				text = text.substring(noteTitle.length).trim();
 			}
+
 			return text;
 		}));
 	}, [query, noteId, noteBody, noteTitle], { interval: Second });
@@ -89,9 +96,14 @@ export default function useSearchMarkers(
 		output.keywords = highlightedWords;
 
 		if (semanticSearchMatches.length) {
-			output.keywords = output.keywords.concat(semanticSearchMatches.map(match => (
-				{ type: 'text', accuracy: 'partial', value: match }
-			)));
+			output.keywords = output.keywords.concat(semanticSearchMatches.flatMap(match =>
+				match
+					.split('\n')
+					.filter(line => line.length > 0)
+					.map(line => (
+						{ type: 'text', accuracy: 'partial', value: line }
+					)),
+			));
 		}
 
 		return output;
