@@ -1,3 +1,4 @@
+import { authenticate, clearCachedToken } from './authenticate';
 import logger from '../utils/logger';
 
 interface GitHubIssueResponse {
@@ -13,6 +14,21 @@ export interface PluginMetadata {
 
 const registryRepo = 'joplin/plugins-test';
 
+const createSubmissionIssue = async (issueTitle: string, issueBody: string, token: string) => {
+	return await fetch(`https://api.github.com/repos/${registryRepo}/issues`, {
+		method: 'POST',
+		headers: {
+			'Authorization': `Bearer ${token}`,
+			'Accept': 'application/vnd.github.v3+json',
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			title: issueTitle,
+			body: issueBody,
+		}),
+	});
+};
+
 // Creates an issue on the joplin/plugins repository for the plugin submission
 const submitPayload = async (metadata: PluginMetadata, commitHash: string, token: string) => {
 	const issueTitle = `[Plugin Submission] ${metadata.name} v${metadata.version}`;
@@ -26,18 +42,14 @@ const submitPayload = async (metadata: PluginMetadata, commitHash: string, token
 
 	logger.info('Submitting to Joplin registry...');
 
-	const response = await fetch(`https://api.github.com/repos/${registryRepo}/issues`, {
-		method: 'POST',
-		headers: {
-			'Authorization': `Bearer ${token}`,
-			'Accept': 'application/vnd.github.v3+json',
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			title: issueTitle,
-			body: issueBody,
-		}),
-	});
+	let response = await createSubmissionIssue(issueTitle, issueBody, token);
+
+	if (response.status === 401) {
+		logger.warn('Cached GitHub credentials are no longer valid. Re-authenticating...');
+		await clearCachedToken();
+		const refreshedToken = await authenticate();
+		response = await createSubmissionIssue(issueTitle, issueBody, refreshedToken);
+	}
 
 	// If the issue is not created show the response message and status on terminal
 	if (response.status !== 201) {

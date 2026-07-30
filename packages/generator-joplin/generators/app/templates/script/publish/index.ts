@@ -1,4 +1,4 @@
-import authenticate from './steps/authenticate';
+import { authenticate } from './steps/authenticate';
 import submitPayload from './steps/submitPayload';
 import verifyBuild from './steps/verifyBuild';
 import verifyGitState from './steps/verifyGitState';

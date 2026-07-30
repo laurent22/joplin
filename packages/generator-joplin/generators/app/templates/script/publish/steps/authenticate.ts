@@ -1,6 +1,6 @@
 // cspell:ignore wslview
 
-import { readFile, access, mkdir, writeFile } from 'fs/promises';
+import { readFile, mkdir, unlink, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { homedir } from 'os';
 import { promisify } from 'util';
@@ -13,7 +13,6 @@ const execAsync = promisify(exec);
 
 interface Credentials {
 	token: string;
-	expires_at: string;
 }
 
 interface PollResponse {
@@ -26,7 +25,6 @@ interface DeviceFlowResponse {
 	device_code: string;
 	user_code: string;
 	verification_uri: string;
-	expires_in: number;
 	interval: number;
 }
 
@@ -34,7 +32,7 @@ interface DeviceFlowResponse {
 const configDir = join(homedir(), '.config', 'joplin-plugin');
 const credentialPath = join(configDir, 'credentials.json');
 
-const authenticate = async () => {
+export const authenticate = async () => {
 
 	// check if the user is authenticated by getting cache token
 	const cachedToken = await getCachedToken();
@@ -87,32 +85,16 @@ const openBrowser = async (url: string) => {
 	}
 };
 
-const fileExists = async (path: string) => {
-	try {
-		await access(path);
-		return true;
-	} catch {
-		return false;
-	}
-};
-
 const getCachedToken = async () => {
-	const hasCachedToken = await fileExists(credentialPath);
-
-	if (hasCachedToken) {
-		try {
-			const creds: Credentials = JSON.parse(await readFile(credentialPath, 'utf8'));
-			const expiresAt = new Date(creds.expires_at);
-			const thirtyMinFromNow = new Date();
-			thirtyMinFromNow.setMinutes(thirtyMinFromNow.getMinutes() + 30);
-
-			if (expiresAt > thirtyMinFromNow) {
-				return creds.token;
-			}
-		} catch {
-			// Ignore parsing errors and proceed to auth
+	try {
+		const creds: Credentials = JSON.parse(await readFile(credentialPath, 'utf8'));
+		if (typeof creds.token === 'string' && creds.token) {
+			return creds.token;
 		}
+	} catch {
+		// Ignore missing or invalid credentials and proceed to authentication
 	}
+
 	return null;
 };
 
@@ -198,13 +180,8 @@ const pollForToken = async (deviceCode: string, initialInterval: number, clientI
 const saveToken = async (token: string) => {
 	await mkdir(configDir, { recursive: true });
 
-	// 8 hours expiry
-	const expiresAt = new Date();
-	expiresAt.setHours(expiresAt.getHours() + 8);
-
 	const creds: Credentials = {
 		token,
-		expires_at: expiresAt.toISOString(),
 	};
 
 	await writeFile(credentialPath, JSON.stringify(creds, null, 2), {
@@ -213,4 +190,12 @@ const saveToken = async (token: string) => {
 	});
 };
 
-export default authenticate;
+export const clearCachedToken = async () => {
+	try {
+		await unlink(credentialPath);
+	} catch (error: unknown) {
+		if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+			throw error;
+		}
+	}
+};
