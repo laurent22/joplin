@@ -40,10 +40,11 @@ interface UseStylesProps {
 	dragging: boolean;
 	draggable: boolean;
 	backgroundOpacity: Animated.AnimatedInterpolation<number>;
+	containerOpacity: Animated.AnimatedInterpolation<number>;
 	dragOffset: Animated.AnimatedInterpolation<number>;
 }
 
-const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset, backgroundOpacity }: UseStylesProps) => {
+const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset, backgroundOpacity, containerOpacity }: UseStylesProps) => {
 	const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 	const safeAreaPadding = useSafeAreaPadding();
 
@@ -107,6 +108,7 @@ const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset
 
 
 				userSelect: dragging ? 'none' : 'auto',
+				opacity: containerOpacity,
 				transform: [
 					{
 						translateY: dragOffset.interpolate({
@@ -351,30 +353,48 @@ const BottomDrawer: React.FC<Props> = props => {
 	const onContainerLayout = useCallback((layout: LayoutChangeEvent) => {
 		setMenuHeight(layout.nativeEvent.layout.height);
 	}, []);
+	const containerOpacity = useMemo(() => new Animated.Value(0), []);
 	const backgroundOpacity = useMemo(() => {
-		return Animated.divide(
+		return Animated.multiply(Animated.divide(
 			Animated.add(Animated.multiply(menuDragOffset, -1), menuHeight), Math.max(menuHeight, 1),
-		);
-	}, [menuHeight, menuDragOffset]);
+		), containerOpacity);
+	}, [menuHeight, menuDragOffset, containerOpacity]);
 
 	const [animating, setAnimating] = useState(false);
-	const menuYOffset = useMemo(() => menuDragOffset, [menuDragOffset]);
 	const styles = useStyles({
-		theme, menuType: menuType, dragging, alignment: props.alignment, draggable: props.draggable, dragOffset: menuYOffset, backgroundOpacity,
+		theme,
+		menuType: menuType,
+		dragging,
+		alignment: props.alignment,
+		draggable: props.draggable,
+		dragOffset: menuDragOffset,
+		containerOpacity,
+		backgroundOpacity,
 	});
 
 	const reduceMotionEnabled = useReduceMotionEnabled();
-	const reduceMotionEnabledRef = useRef(false);
+	const reduceMotionEnabledRef = useRef(reduceMotionEnabled);
 	reduceMotionEnabledRef.current = reduceMotionEnabled;
 
 	const dragToOffset = useCallback(async (offset: number) => {
+		const slideAnimation = !reduceMotionEnabledRef.current && menuType === MenuType.Docked;
 		const baseAnimationProps = {
 			toValue: offset,
 			easing: Easing.elastic(0.5),
-			duration: reduceMotionEnabledRef.current ? 0 : 250,
+			duration: 250,
 			useNativeDriver: true,
 		};
-		const animation = Animated.timing(menuDragOffset, baseAnimationProps);
+		const animation = Animated.parallel([
+			Animated.timing(menuDragOffset, {
+				...baseAnimationProps,
+				toValue: slideAnimation ? offset : 0,
+			}),
+			Animated.timing(containerOpacity, {
+				...baseAnimationProps,
+				duration: slideAnimation ? 0 : baseAnimationProps.duration,
+				toValue: slideAnimation ? 1 : Math.max(0, Math.min(1 - offset / menuHeightRef.current, 1)),
+			}),
+		]);
 
 		setAnimating(true);
 		return new Promise<void>(resolve => {
@@ -383,7 +403,7 @@ const BottomDrawer: React.FC<Props> = props => {
 				resolve();
 			});
 		});
-	}, [menuDragOffset]);
+	}, [menuDragOffset, containerOpacity, menuType]);
 
 	const clearDragOffset = useCallback(() => {
 		void dragToOffset(0);
@@ -442,7 +462,7 @@ const BottomDrawer: React.FC<Props> = props => {
 			</>;
 		}}
 		containerStyle={[styles.menuStyle, props.style]}
-		animationType={reduceMotionEnabled ? 'fade' : 'none'}
+		animationType='none'
 		scrollOverflow={{
 			onScroll: onPanResponderScroll,
 			onScrollEndDrag: onScrollDragEnd,
