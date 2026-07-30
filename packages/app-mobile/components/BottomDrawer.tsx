@@ -24,7 +24,7 @@ interface Props {
 	menuType?: MenuType;
 	style?: StyleProp<ViewStyle>;
 	contentStyle?: StyleProp<ViewStyle>;
-	alignment?: MenuAlignment;
+	alignment: MenuAlignment;
 	children: React.ReactNode;
 	visible: boolean;
 	draggable: boolean;
