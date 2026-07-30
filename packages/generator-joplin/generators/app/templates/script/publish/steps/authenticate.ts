@@ -1,15 +1,16 @@
-// cspell:ignore wslview
+// cspell:ignore rundll wslview
 
 import { readFile, mkdir, unlink, writeFile } from 'fs/promises';
 import { join } from 'path';
 import { homedir } from 'os';
 import { promisify } from 'util';
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import logger from '../utils/logger';
 
 const githubClientId = 'Ov23liiKfv0K6bqN2BbP';
+const githubVerificationUrl = 'https://github.com/login/device';
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 interface Credentials {
 	token: string;
@@ -32,6 +33,12 @@ interface DeviceFlowResponse {
 const configDir = join(homedir(), '.config', 'joplin-plugin');
 const credentialPath = join(configDir, 'credentials.json');
 
+const validateVerificationUrl = (url: string) => {
+	if (url !== githubVerificationUrl) {
+		throw new Error(`Unexpected GitHub verification URL: ${url}`);
+	}
+};
+
 export const authenticate = async () => {
 
 	// check if the user is authenticated by getting cache token
@@ -43,6 +50,7 @@ export const authenticate = async () => {
 
 	const deviceCodeResponse = await initiateDeviceFlow(githubClientId);
 	const { device_code, user_code, verification_uri, interval } = deviceCodeResponse;
+	validateVerificationUrl(verification_uri);
 
 	logger.info(`
   ------ GitHub Authentication Required ------
@@ -65,21 +73,28 @@ export const authenticate = async () => {
 
 // Opens browser for the given URL based on the OS the user is using
 const openBrowser = async (url: string) => {
+	validateVerificationUrl(url);
+
 	const platform = process.platform;
-	let cmd: string;
+	let command: string;
+	let args: string[];
 
 	if (platform === 'win32') {
-		cmd = `start "" "${url}"`;
+		command = 'rundll32.exe';
+		args = ['url.dll,FileProtocolHandler', url];
 	} else if (platform === 'darwin') {
-		cmd = `open "${url}"`;
+		command = 'open';
+		args = [url];
 	} else if (process.env.WSL_DISTRO_NAME || process.env.WSL_INTEROP) {
-		cmd = `wslview "${url}"`;
+		command = 'wslview';
+		args = [url];
 	} else {
-		cmd = `xdg-open "${url}"`;
+		command = 'xdg-open';
+		args = [url];
 	}
 
 	try {
-		await execAsync(cmd);
+		await execFileAsync(command, args);
 	} catch {
 		logger.warn(`Could not open browser automatically. Please visit: ${url}`);
 	}

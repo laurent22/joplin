@@ -13,6 +13,7 @@ export interface PluginMetadata {
 }
 
 const registryRepo = 'joplin/plugins-test';
+const submissionTimeoutMs = 30_000;
 
 const createSubmissionIssue = async (issueTitle: string, issueBody: string, token: string) => {
 	return await fetch(`https://api.github.com/repos/${registryRepo}/issues`, {
@@ -26,10 +27,11 @@ const createSubmissionIssue = async (issueTitle: string, issueBody: string, toke
 			title: issueTitle,
 			body: issueBody,
 		}),
+		signal: AbortSignal.timeout(submissionTimeoutMs),
 	});
 };
 
-// Creates an issue on the joplin/plugins repository for the plugin submission
+// Creates an issue on the joplin/plugins-test repository for the plugin submission
 const submitPayload = async (metadata: PluginMetadata, commitHash: string, token: string) => {
 	const issueTitle = `[Plugin Submission] ${metadata.name} v${metadata.version}`;
 	const payload = {
