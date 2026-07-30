@@ -330,7 +330,7 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 
 		if (props.visible) {
 			if (propsRef.current.autoScrollToEnd) {
-				props.scrollViewRef.current?.scrollToEnd();
+				props.scrollViewRef.current?.scrollToEnd({ animated: false });
 			}
 
 			void slideMenuIn();
