@@ -92,7 +92,7 @@ const useStyles = ({ theme, menuType, dragging, alignment, draggable, dragOffset
 				...(menuType === MenuType.Docked ? {
 					borderBottomRightRadius: 0,
 					borderBottomLeftRadius: 0,
-					marginBottom: safeAreaPadding.paddingBottom - spaceBelowScreenEdge,
+					marginBottom: -spaceBelowScreenEdge,
 				} : {
 					marginBottom: safeAreaPadding.paddingBottom,
 				}),
