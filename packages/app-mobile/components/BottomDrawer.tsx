@@ -212,6 +212,13 @@ const usePanResponder = ({
 			[onStartEvent]: (event: GestureResponderEvent) => {
 				return isInDragHandle(event.nativeEvent.pageY);
 			},
+
+			// On Android, we need to set the pan responder immediately to allow dragging the menu on non-Pressable elements
+			...(Platform.OS === 'android' ? {
+				onStartShouldSetPanResponder: () => isScrolledToTopRef.current,
+				onShouldBlockNativeResponder: event => isInDragHandle(event.nativeEvent.pageY),
+			} : {}),
+
 			[onMoveEvent]: (_event: GestureResponderEvent, gestureState: PanResponderGestureState) => {
 				if (!isScrolledToTopRef.current) {
 					return false;
