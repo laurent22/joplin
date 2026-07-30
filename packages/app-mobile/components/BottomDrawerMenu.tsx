@@ -40,15 +40,18 @@ const useStyles = (themeId: number) => {
 	const windowWidth = useWindowDimensions().width;
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
+		const dividerMargin = theme.marginSmall;
 
 		return StyleSheet.create({
 			title: {
-				marginLeft: theme.marginLeft,
-				marginRight: theme.marginRight,
-				paddingVertical: theme.marginMedium,
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
+				// Match the space from button text to a neighbouring divider:
+				paddingVertical: theme.marginMedium + dividerMargin,
+				marginBottom: theme.marginSmall,
+
 				lineHeight: theme.fontSizeLarger,
 				fontSize: theme.fontSizeLarger,
-				marginBottom: theme.marginSmall,
 
 				borderColor: theme.dividerColor,
 				borderBottomWidth: 1,
@@ -83,7 +86,7 @@ const useStyles = (themeId: number) => {
 				height: 0,
 				borderBottomWidth: 1,
 				borderColor: theme.dividerColor,
-				marginVertical: theme.marginSmall,
+				marginVertical: dividerMargin,
 				marginHorizontal: theme.margin,
 			},
 		});
