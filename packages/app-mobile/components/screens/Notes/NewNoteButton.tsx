@@ -20,16 +20,10 @@ const makeNewNote = (isTodo: boolean, action?: AttachFileAction) => {
 	return CommandService.instance().execute('newNote', body, isTodo, { attachFileAction: action });
 };
 
-const makeNewFolder = () => {
-	return NavService.go('Folder', { folderId: null });
-};
-
 const NewNoteButton: React.FC<Props> = () => {
 
 	const menuContent = useMemo(() => {
 		const items: MenuOption[] = [
-			{ icon: 'material folder-outline', title: _('New notebook'), onPress: makeNewFolder },
-			{ isDivider: true },
 			{ icon: 'material camera-outline', title: _('Camera'), onPress: () => makeNewNote(false, AttachFileAction.TakePhoto) },
 			{ icon: 'material attachment', title: _('Attachment'), onPress: () => makeNewNote(false, AttachFileAction.AttachFile) },
 			{ icon: 'material data-matrix-scan', title: _('Scan notebook'), onPress: () => NavService.go('DocumentScanner') },
