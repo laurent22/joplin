@@ -155,7 +155,7 @@
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
     "7zip-bin": "5.2.0",
-    "@axe-core/playwright": "4.11.2",
+    "@axe-core/playwright": "4.11.3",
     "@electron/notarize": "2.5.0",
     "@electron/rebuild": "4.1.0",
     "@fortawesome/fontawesome-free": "5.15.4",
