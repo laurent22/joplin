@@ -109,7 +109,7 @@ export default function useEditorSearchExtension() {
 
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Escaping
 	function escapeRegExp(keyword: string) {
-		return keyword.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+		return keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 	}
 
 	function getSearchTerm(keyword: HighlightedWord) {
