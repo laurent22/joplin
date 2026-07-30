@@ -335,7 +335,7 @@ interface CommandUpdateReleaseArgs {
 	dryRun?: boolean;
 }
 
-type CommandArgs = CommandBuildArgs | CommandPublishPluginArgs | CommandUpdateReleaseArgs | Record<string, never>;
+type CommandArgs = CommandBuildArgs | CommandPublishPluginArgs | CommandUpdateReleaseArgs;
 
 type CommandMap = {
 	build: (args: CommandBuildArgs)=> Promise<void>;
@@ -357,7 +357,7 @@ async function main() {
 	let selectedCommand = '';
 	let selectedCommandArgs: CommandArgs | null = null;
 
-	function setSelectedCommand(name: string, args: CommandArgs) {
+	function setSelectedCommand(name: string, args: CommandArgs | null) {
 		selectedCommand = name;
 		selectedCommandArgs = args;
 	}
@@ -374,7 +374,7 @@ async function main() {
 			});
 		}, (args: CommandBuildArgs) => setSelectedCommand('build', args))
 
-		.command('version', 'Gives version info', () => { }, (args: Record<string, never>) => setSelectedCommand('version', args))
+		.command('version', 'Gives version info', () => { }, () => setSelectedCommand('version', null))
 
 		.command('update-release <plugin-repo-dir>', 'Update GitHub release', () => { }, (args: CommandUpdateReleaseArgs) => setSelectedCommand('updateRelease', args))
 
