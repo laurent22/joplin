@@ -276,7 +276,8 @@ const usePanResponder = ({
 
 interface UseSyncVisibleProps {
 	visible: boolean;
-	dragToOffset: (offset: number)=> Promise<void>;
+	slideAnimation: boolean;
+	menuDragOffset: Animated.Value;
 	onDismiss: ()=> void;
 	containerRef: RefObject<View|null>;
 	scrollViewRef: RefObject<ScrollView|null>;
@@ -291,22 +292,41 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 	const screenSizeRef = useRef(screenSize);
 	screenSizeRef.current = screenSize;
 
+	const [animating, setAnimating] = useState(false);
+	const dragToOffset = useCallback(async (offset: number, animate: boolean) => {
+		const baseAnimationProps = {
+			toValue: offset,
+			easing: Easing.elastic(0.5),
+			duration: animate ? 250 : 0,
+			useNativeDriver: true,
+		};
+		const animation = Animated.timing(propsRef.current.menuDragOffset, baseAnimationProps);
+
+		setAnimating(true);
+		return new Promise<void>(resolve => {
+			animation.start(() => {
+				setAnimating(false);
+				resolve();
+			});
+		});
+	}, []);
+
 	const slideMenuOut = useCallback(() => {
 		return new Promise<void>((resolve, reject) => {
 			propsRef.current.containerRef.current.measure(async (_x, _y, _width, height, _pageX, pageY) => {
 				const menuBottom = screenSizeRef.current.height - (pageY + height);
 				try {
-					await propsRef.current.dragToOffset(height + menuBottom);
+					await dragToOffset(height + menuBottom, propsRef.current.slideAnimation);
 					resolve();
 				} catch (error) {
 					reject(error);
 				}
 			});
 		});
-	}, []);
+	}, [dragToOffset]);
 
 	useEffect(() => {
-		const slideMenuIn = () => propsRef.current.dragToOffset(0);
+		const slideMenuIn = () => dragToOffset(0, propsRef.current.slideAnimation);
 
 		if (props.visible) {
 			if (propsRef.current.autoScrollToEnd) {
@@ -315,21 +335,30 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 
 			void slideMenuIn();
 		}
-	}, [props.visible, props.scrollViewRef]);
+	}, [props.visible, props.scrollViewRef, dragToOffset]);
 
 	const isDismissingRef = useRef(false);
-	return useCallback(async () => {
+
+	const resetDrag = useCallback(() => {
+		void dragToOffset(0, true);
+	}, [dragToOffset]);
+
+	const onHide = useCallback(async () => {
 		// Avoid duplicate dismiss animations
 		if (isDismissingRef.current) return;
 		try {
 			isDismissingRef.current = true;
+			if (propsRef.current.slideAnimation) {
+				await slideMenuOut();
+			}
 
-			await slideMenuOut();
 			propsRef.current.onDismiss();
 		} finally {
 			isDismissingRef.current = false;
 		}
 	}, [slideMenuOut]);
+
+	return { onHide, resetDrag, animating };
 };
 
 const BottomDrawer: React.FC<Props> = props => {
@@ -357,51 +386,30 @@ const BottomDrawer: React.FC<Props> = props => {
 		);
 	}, [menuHeight, menuDragOffset]);
 
-	const [animating, setAnimating] = useState(false);
 	const menuYOffset = useMemo(() => menuDragOffset, [menuDragOffset]);
 	const styles = useStyles({
 		theme, menuType: menuType, dragging, alignment: props.alignment, draggable: props.draggable, dragOffset: menuYOffset, backgroundOpacity,
 	});
 
-	const reduceMotionEnabled = useReduceMotionEnabled();
-	const reduceMotionEnabledRef = useRef(false);
-	reduceMotionEnabledRef.current = reduceMotionEnabled;
-
-	const dragToOffset = useCallback(async (offset: number) => {
-		const baseAnimationProps = {
-			toValue: offset,
-			easing: Easing.elastic(0.5),
-			duration: reduceMotionEnabledRef.current ? 0 : 250,
-			useNativeDriver: true,
-		};
-		const animation = Animated.timing(menuDragOffset, baseAnimationProps);
-
-		setAnimating(true);
-		return new Promise<void>(resolve => {
-			animation.start(() => {
-				setAnimating(false);
-				resolve();
-			});
-		});
-	}, [menuDragOffset]);
-
-	const clearDragOffset = useCallback(() => {
-		void dragToOffset(0);
-	}, [dragToOffset]);
+	const reduceMotion = useReduceMotionEnabled();
+	const slideAnimationEnabled = !reduceMotion && menuType === MenuType.Docked;
+	const nativeFadeAnimation = !slideAnimationEnabled;
+	const slideAnimationEnabledRef = useRef(false);
+	slideAnimationEnabledRef.current = slideAnimationEnabled;
 
 	const containerRef = useRef<View|null>(null);
 	const scrollViewRef = useRef<ScrollView|null>(null);
-	const onHide = useUpdateOnVisibilityChange({
-		visible: props.visible, dragToOffset, containerRef, onDismiss: props.onDismiss, scrollViewRef, autoScrollToEnd: props.autoScrollToEnd,
+	const { onHide, resetDrag, animating } = useUpdateOnVisibilityChange({
+		visible: props.visible, slideAnimation: slideAnimationEnabled, menuDragOffset, containerRef, onDismiss: props.onDismiss, scrollViewRef, autoScrollToEnd: props.autoScrollToEnd,
 	});
 
 	const onDragEnd = useCallback((_dx: number, dy: number) => {
 		if (dy > 50) {
 			void onHide();
 		} else {
-			clearDragOffset();
+			resetDrag();
 		}
-	}, [clearDragOffset, onHide]);
+	}, [resetDrag, onHide]);
 
 	const dragHandleRef = useRef<View|null>(null);
 	const { panResponder, onScroll: onPanResponderScroll } = usePanResponder({
@@ -442,7 +450,7 @@ const BottomDrawer: React.FC<Props> = props => {
 			</>;
 		}}
 		containerStyle={[styles.menuStyle, props.style]}
-		animationType={reduceMotionEnabled ? 'fade' : 'none'}
+		animationType={nativeFadeAnimation ? 'fade' : 'none'}
 		scrollOverflow={{
 			onScroll: onPanResponderScroll,
 			onScrollEndDrag: onScrollDragEnd,
