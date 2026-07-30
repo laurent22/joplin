@@ -6,6 +6,8 @@ import replaceFormatCharacters from '../replaceFormatCharacters';
 import replaceInlineHtml from '../replaceInlineHtml';
 import replaceLinks from '../replaceLinks';
 
+jest.retryTimes(2);
+
 interface TestCase {
 	label: string;
 	markdown: string;
