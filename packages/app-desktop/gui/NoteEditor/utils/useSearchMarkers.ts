@@ -29,7 +29,7 @@ function defaultSearchMarkers(): SearchMarkers {
 	};
 }
 
-const useSemanticSearchMatches = (query: string, noteId: string, noteBody: string, noteTitle: string) => {
+const useSemanticSearchMatches = (query: string, noteId: string, _noteBody: string, noteTitle: string) => {
 	const [matchingChunks, setMatchingChunks] = useState<string[]>([]);
 	const matchingChunksRef = useRef(matchingChunks);
 	matchingChunksRef.current = matchingChunks;
@@ -48,17 +48,24 @@ const useSemanticSearchMatches = (query: string, noteId: string, noteBody: strin
 		const results = await SearchService.instance().search({ query: { text: query }, scope: { type: 'note', noteId }, relevance: 'strict' });
 		if (event.cancelled) return;
 
-		setMatchingChunks(results.map(r => {
-			let text = r.chunkText.trim();
+		const matches = [];
+		for (const result of results) {
+			const bestMatch = await SearchService.instance().bestMatchInResult(query, result);
+			if (event.cancelled) return;
+			matches.push(bestMatch);
+		}
 
-			// The indexer sometimes prepends the note title: Remove it.
-			while (r.chunkIndex === 0 && noteTitle && text.startsWith(noteTitle)) {
+		setMatchingChunks(matches.map((match, index) => {
+			let text = match;
+
+			// The indexer sometimes prepends the note title: Remove it so that the results are exact substrings of the note body
+			while (index === 0 && noteTitle && text.startsWith(`${noteTitle}\n`)) {
 				text = text.substring(noteTitle.length).trim();
 			}
 
 			return text;
 		}));
-	}, [query, noteId, noteBody, noteTitle], { interval: Second });
+	}, [query, noteId], { interval: Second });
 
 	return matchingChunks;
 };

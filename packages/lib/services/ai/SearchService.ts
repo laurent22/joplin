@@ -58,6 +58,12 @@ const cosineFromDistance = (distance: number) => {
 	return score;
 };
 
+class MissingProviderError extends Error {
+	public constructor() {
+		super('No embedding provider is active. Enable AI features in Settings → AI.');
+	}
+}
+
 export default class SearchService {
 
 	private static instance_: SearchService;
@@ -70,7 +76,7 @@ export default class SearchService {
 	public async getEmbeddings(options: GetEmbeddingsOptions = {}): Promise<EmbeddingsPage> {
 		const provider = AiService.instance().getActiveEmbeddingProvider();
 		if (!provider) {
-			throw new Error('No embedding provider is active. Enable AI features in Settings → AI.');
+			throw new MissingProviderError();
 		}
 
 		const limit = resolveEmbeddingsLimit(options.limit);
@@ -169,6 +175,104 @@ export default class SearchService {
 		return Array.from(best.values())
 			.sort((a, b) => b.score - a.score)
 			.slice(0, tuning.k);
+	}
+
+	public async bestMatchInResult(query: string, result: SearchResult) {
+		return this.bestSubMatchInText_(query, result.chunkText);
+	}
+
+	private async bestSubMatchInText_(query: string, text: string) {
+		const provider = AiService.instance().getActiveEmbeddingProvider();
+		if (!provider) {
+			throw new MissingProviderError();
+		}
+
+		const queryVectors = await this.resolveQueryVectors({ text: query }, provider);
+
+		const dot = (a: number[], b: number[]) => {
+			if (a.length !== b.length) throw new Error(`Length mismatch: ${a.length} != ${b.length}`);
+
+			let sum = 0;
+			for (let i = 0; i < a.length; i++) {
+				sum += a[i] * b[i];
+			}
+
+			return sum;
+		};
+		const norm = (v: number[]) => {
+			return Math.sqrt(dot(v, v));
+		};
+		const cosineSimilarity = (a: number[], b: number[]) => {
+			return dot(a, b) / norm(a) / norm(b);
+		};
+
+		const scoreChunk = (embedding: number[]) => {
+			let bestScore = 0;
+			for (const query of queryVectors) {
+				const score = cosineSimilarity(query, embedding);
+				if (score >= bestScore) {
+					bestScore = score;
+				}
+			}
+			return bestScore;
+		};
+
+		const findBestIndex = (scores: number[]) => {
+			let bestIndex = 0;
+			let bestScore = 0;
+			for (let i = 0; i < scores.length; i++) {
+				if (scores[i] > bestScore) {
+					bestScore = scores[i];
+					bestIndex = i;
+				}
+			}
+			return bestIndex;
+		};
+
+		const spaceAlignedSubstring = (text: string, from: number, to: number, tolerance = 10) => {
+			for (let i = 0; i < tolerance; i++) {
+				const result = text.substring(from - 1, to + 1);
+				const startsWithSpace = /^\s/.test(result);
+				const endsWithSpace = /\s$/.test(result);
+				if (from < to && !startsWithSpace) {
+					from ++;
+				}
+
+				if (to > from && !endsWithSpace) {
+					to --;
+				}
+
+				if (startsWithSpace && endsWithSpace) {
+					break;
+				}
+			}
+
+			return text.substring(from, to);
+		};
+
+		const getBestSubtext = async (chunks: string[]) => {
+			const embeddings = await provider.embed(chunks);
+			const scores = embeddings.map(scoreChunk);
+
+			return chunks[findBestIndex(scores)];
+		};
+
+		const overlap = 40;
+		while (text.length > 100 + overlap) {
+			const chunkSize = Math.floor(text.length / 2);
+			const chunks = [
+				spaceAlignedSubstring(text, 0, chunkSize + overlap, overlap).trim(),
+				spaceAlignedSubstring(text, chunkSize - overlap, text.length, overlap).trim(),
+			];
+			text = await getBestSubtext(chunks);
+		}
+
+		const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 10);
+		if (lines.length) {
+			text = await getBestSubtext(lines);
+		}
+
+		return text;
 	}
 
 	private async resolveQueryVectors(
