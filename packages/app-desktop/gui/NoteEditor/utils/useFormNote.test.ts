@@ -5,7 +5,6 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import useFormNote, { HookDependencies } from './useFormNote';
 import shim from '@joplin/lib/shim';
 import Resource from '@joplin/lib/models/Resource';
-import ItemChange from '@joplin/lib/models/ItemChange';
 import { join } from 'path';
 import { formNoteToNote } from '.';
 import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
@@ -95,8 +94,6 @@ describe('useFormNote', () => {
 	it('should report a decryption failure instead of throwing, without producing a form note', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
 		const testNote = await Note.save({ title: 'Locked note', body: 'ciphertext', is_locked: 1 });
-		// The save's own change event would otherwise reach the hook's listener and reload the note.
-		await ItemChange.waitForAllSaved();
 
 		const isUnlockedMock = jest.spyOn(NoteLockSession.instance(), 'isUnlocked').mockReturnValue(true);
 		const decryptBodyMock = jest.spyOn(NoteLockNote, 'decryptBody').mockRejectedValue(new Error('OperationError'));
