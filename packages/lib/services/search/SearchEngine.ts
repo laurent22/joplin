@@ -20,6 +20,7 @@ import { pregQuote, scriptType, removeDiacritics } from '../../string-utils';
 import PerformanceLogger from '../../PerformanceLogger';
 import SearchService from '../ai/SearchService';
 import AiService from '../ai/AiService';
+import { unique } from '../../ArrayUtils';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -57,13 +58,13 @@ export interface ProcessResultsRow {
 	fields?: string[];
 	weight?: number;
 	fuzziness?: number;
-	matchingChunks?: string[];
+	searchType: SearchType[];
 	is_todo?: number;
 	todo_completed?: number;
 }
 
 export interface ComplexTerm {
-	type: 'regex' | 'text';
+	type: 'regex' | 'text' | 'fuzzy';
 	value: string;
 	scriptType?: string;
 	valueRegex?: string;
@@ -478,6 +479,7 @@ export default class SearchEngine {
 			row.fields = Object.keys(matchedFields).filter(key => matchedFields[key]);
 			row.weight ??= 0;
 			row.fuzziness ??= 0;
+			row.searchType ??= [SearchType.Basic];
 		}
 	}
 
@@ -488,6 +490,7 @@ export default class SearchEngine {
 				const row = rows[i];
 				const offsets = row.offsets.split(' ').map(o => Number(o));
 				row.fields = this.fieldNamesFromOffsets_(offsets);
+				row.searchType = [SearchType.Fts];
 			}
 		} else {
 			this.processNonFtsSearchResults_(rows, parsedQuery);
@@ -662,7 +665,7 @@ export default class SearchEngine {
 			if (key === 'body') searchOptions.bodyPattern = `*${term}*`;
 		}
 
-		return Note.previews(null, searchOptions);
+		return await Note.previews(null, searchOptions);
 	}
 
 	public async semanticSearch(query: string, parsedQuery: ParsedQuery) {
@@ -673,10 +676,7 @@ export default class SearchEngine {
 		for (const result of results) {
 			let row = seenNotes.get(result.noteId);
 			// Results are received in order of relevance, so ignore the less-relevant result
-			if (row) {
-				row.matchingChunks.push(result.chunkText);
-				continue;
-			}
+			if (row) continue;
 
 			const item = await Note.load(
 				result.noteId,
@@ -699,7 +699,7 @@ export default class SearchEngine {
 				weight: result.score * 4,
 				is_todo: item.is_todo,
 				todo_completed: item.todo_completed,
-				matchingChunks: [result.chunkText],
+				searchType: [SearchType.Semantic],
 
 				// For now, estimate whether the match is in the title or the body.
 				// For performance, we avoid loading 'body'.
@@ -788,6 +788,7 @@ export default class SearchEngine {
 						user_updated_time: item.user_updated_time || item.updated_time,
 						user_created_time: item.user_created_time || item.created_time,
 						fields: ['id'],
+						searchType: [SearchType.Basic],
 					},
 				];
 			}
@@ -838,7 +839,7 @@ export default class SearchEngine {
 				});
 			}
 
-			const useFts = searchType === SearchEngine.SEARCH_TYPE_FTS;
+			const useFts = searchType === SearchType.Fts;
 			try {
 				const { query, params } = queryBuilder(parsedQuery.allTerms, useFts);
 
@@ -849,6 +850,7 @@ export default class SearchEngine {
 					return {
 						...r,
 						item_type: ModelType.Note,
+						searchType: [searchType],
 					};
 				});
 
@@ -920,12 +922,9 @@ export default class SearchEngine {
 			&& searchType !== SearchType.Semantic
 		) {
 			rows = rows.concat(await this.semanticSearch(searchString, parsedQuery));
-			sortRows(rows);
 
-			// Remove duplicate rows
-			rows = rows.filter((row, index, rows) => {
-				return row.id !== rows[index - 1]?.id;
-			});
+			// Merge duplicate rows
+			deduplicateAndSort(rows);
 		}
 
 		return rows;
@@ -974,4 +973,27 @@ const sortRows = (rows: ProcessResultsRow[]) => {
 		if (a.user_updated_time > b.user_updated_time) return -1;
 		return 0;
 	});
+};
+
+const deduplicateAndSort = (rows: ProcessResultsRow[]) => {
+	const idToRow = new Map<string, ProcessResultsRow>();
+	for (let row of rows) {
+		const existing = idToRow.get(row.id);
+		if (existing) {
+			row = {
+				...row,
+				weight: Math.max(existing.weight ?? 0, row.weight ?? 0),
+				fields: unique([...(row.fields ?? []), ...(existing.fields ?? [])]),
+				searchType: unique([...row.searchType, ...existing.searchType]),
+			};
+		}
+		idToRow.set(row.id, row);
+	}
+
+	const result = [];
+	for (const row of idToRow.values()) {
+		result.push(row);
+	}
+	sortRows(result);
+	return result;
 };

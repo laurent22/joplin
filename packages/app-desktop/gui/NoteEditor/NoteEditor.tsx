@@ -465,7 +465,10 @@ function NoteEditorContent(props: NoteEditorProps) {
 		return <div style={emptyDivStyle} ref={containerRef}></div>;
 	}
 
-	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.highlightedWords);
+	const searchMarkers = useSearchMarkers(
+		showLocalSearch, localSearchMarkerOptions, props.noteId, props.searchResults, props.selectedSearchId, props.searches, props.highlightedWords,
+		formNote.body, formNote.title,
+	);
 	const initialCursorLocation = useInitialCursorLocation({
 		noteId: props.noteId,
 	});

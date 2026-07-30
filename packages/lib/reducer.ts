@@ -12,7 +12,7 @@ import { MasterKeyEntity } from './services/e2ee/types';
 import type { ProgressReport } from './Synchronizer';
 import type { SharedData } from './components/shared/note-screen-shared';
 
-interface SearchEntry {
+export interface SearchEntry {
 	id: string;
 	type_: number;
 	title: string;
