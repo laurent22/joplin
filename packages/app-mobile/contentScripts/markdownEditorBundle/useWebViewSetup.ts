@@ -78,7 +78,22 @@ const useWebViewSetup = ({
 				${setInitialSelectionJs}
 				${setInitialSearchJs}
 
+				let pendingScroll = false;
+				let pendingTimeout;
+
+				window.onclick = () => {
+					pendingScroll = true;
+
+					clearTimeout(pendingTimeout);
+					pendingTimeout = setTimeout(() => {
+						pendingScroll = false;
+					}, 1000);
+				};
+
 				window.onresize = () => {
+					if (!pendingScroll) return;
+					// Do not reset pendingScroll here, let pendingTimeout do it, because multiple resize events fire on keyboard open,
+					// so scroll should not be suppressed after the first one
 					cm.execCommand('scrollSelectionIntoView');
 				};
 			} else if (parentClassName) {
