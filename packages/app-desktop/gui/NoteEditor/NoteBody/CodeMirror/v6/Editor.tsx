@@ -109,7 +109,10 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 		}
 
 		const searchState = editor.getSearchState();
-		const externalSearchText = props.externalSearch.keywords.map(k => k.value).join(' ') || searchState.searchText;
+		const externalSearchText = props.externalSearch
+			.keywords
+			.map(k => typeof k === 'string' ? k : k.value)
+			.join(' ') || searchState.searchText;
 
 		if (externalSearchText === searchState.searchText && searchState.dialogVisible === props.useLocalSearch) {
 			return;

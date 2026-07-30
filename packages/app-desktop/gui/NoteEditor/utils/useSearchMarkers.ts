@@ -1,3 +1,4 @@
+import { HighlightedWord } from '@joplin/lib/reducer';
 import { useMemo } from 'react';
 
 interface SearchMarkersOptions {
@@ -7,8 +8,9 @@ interface SearchMarkersOptions {
 	withSelection?: boolean;
 }
 
+
 export interface SearchMarkers {
-	keywords: { value: string; type?: string; accuracy?: string }[];
+	keywords: HighlightedWord[];
 	options: SearchMarkersOptions;
 }
 
@@ -23,9 +25,7 @@ function defaultSearchMarkers(): SearchMarkers {
 	};
 }
 
-
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type, @typescript-eslint/no-explicit-any -- Function type matches the original signature; any[] matches the lib reducer's searches shape and the heterogeneous highlightedWords shape (string[] at the call site, keyword shapes inside)
-export default function useSearchMarkers(showLocalSearch: boolean, localSearchMarkerOptions: Function, searches: any[], selectedSearchId: string, highlightedWords: any[] = []) {
+export default function useSearchMarkers(showLocalSearch: boolean, localSearchMarkerOptions: ()=> SearchMarkers, highlightedWords: HighlightedWord[] = []) {
 	return useMemo((): SearchMarkers => {
 		if (showLocalSearch) return localSearchMarkerOptions();
 
@@ -33,6 +33,5 @@ export default function useSearchMarkers(showLocalSearch: boolean, localSearchMa
 		output.keywords = highlightedWords;
 
 		return output;
-		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [highlightedWords, showLocalSearch, localSearchMarkerOptions, searches, selectedSearchId]);
+	}, [highlightedWords, showLocalSearch, localSearchMarkerOptions]);
 }

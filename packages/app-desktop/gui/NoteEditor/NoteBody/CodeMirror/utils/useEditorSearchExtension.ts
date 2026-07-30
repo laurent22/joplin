@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import CodeMirror5Emulation from '@joplin/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation';
+import { HighlightedWord } from '@joplin/lib/reducer';
 
 const logger = Logger.create('useEditorSearch');
 
@@ -14,9 +15,8 @@ interface SetMarkersOptions {
 	showEditorMarkers?: boolean;
 	withSelection?: boolean;
 }
-type Keyword = { value: string };
 
-export type OnSetMarkers = (cm: CodeMirror5Emulation, keywords: Keyword[], options: SetMarkersOptions)=> number;
+export type OnSetMarkers = (cm: CodeMirror5Emulation, keywords: HighlightedWord[], options: SetMarkersOptions)=> number;
 
 
 // Modified from codemirror/addons/search/search.js
@@ -112,8 +112,8 @@ export default function useEditorSearchExtension() {
 		return keyword.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 	}
 
-	function getSearchTerm(keyword: Keyword) {
-		const value = escapeRegExp(keyword.value);
+	function getSearchTerm(keyword: HighlightedWord) {
+		const value = escapeRegExp(typeof keyword === 'string' ? keyword : keyword.value);
 		return new RegExp(value, 'gi');
 	}
 
@@ -139,6 +139,8 @@ export default function useEditorSearchExtension() {
 
 		clearMarkers();
 
+		const keywordValue = (keyword: HighlightedWord) => typeof keyword === 'string' ? keyword : keyword.value;
+
 		// HIGHLIGHT KEYWORDS
 		// When doing a global search it's possible to have multiple keywords
 		// This means we need to highlight each one
@@ -146,12 +148,12 @@ export default function useEditorSearchExtension() {
 		for (let i = 0; i < keywords.length; i++) {
 			const keyword = keywords[i];
 
-			if (keyword.value === '') continue;
+			if (keywordValue(keyword) === '') continue;
 
 			const searchTerm = getSearchTerm(keyword);
 
 			// We only want to scroll the first keyword into view in the case of a multi keyword search
-			const scrollTo = i === 0 && (previousKeywordValue !== keyword.value || previousIndex !== options.selectedIndex || options.searchTimestamp !== previousSearchTimestamp);
+			const scrollTo = i === 0 && (previousKeywordValue !== keywordValue(keyword) || previousIndex !== options.selectedIndex || options.searchTimestamp !== previousSearchTimestamp);
 
 			try {
 				const match = highlightSearch(cm, searchTerm, options.selectedIndex, scrollTo, !!options.withSelection);
@@ -173,9 +175,9 @@ export default function useEditorSearchExtension() {
 
 		// SEARCHOVERLAY
 		// We only want to highlight all matches when there is only 1 search term
-		if (keywords.length !== 1 || keywords[0].value === '') {
+		if (keywords.length !== 1 || keywordValue(keywords[0]) === '') {
 			clearOverlay(cm);
-			const prev = keywords.length > 1 ? keywords[0].value : '';
+			const prev = keywords.length > 1 ? keywordValue(keywords[0]) : '';
 			setPreviousKeywordValue(prev);
 			return 0;
 		}
@@ -189,10 +191,10 @@ export default function useEditorSearchExtension() {
 
 		// Don't bother clearing and re-calculating the overlay if the search term
 		// hasn't changed
-		if (keywords[0].value === previousKeywordValue) return nMatches;
+		if (keywordValue(keywords[0]) === previousKeywordValue) return nMatches;
 
 		clearOverlay(cm);
-		setPreviousKeywordValue(keywords[0].value);
+		setPreviousKeywordValue(keywordValue(keywords[0]));
 
 		// These operations are pretty slow, so we won't add use them until the user
 		// has finished typing, 500ms is probably enough time

@@ -17,6 +17,7 @@ import * as React from 'react';
 import { ResourceEntity, ResourceLocalStateEntity } from '@joplin/lib/services/database/types';
 import { EditorCursorLocations } from '@joplin/lib/services/NotePositionService';
 import type { DecryptedNoteLockKey } from '@joplin/lib/services/noteLock/NoteLockKey';
+import { HighlightedWord } from '@joplin/lib/reducer';
 
 export interface AllAssetsOptions {
 	contentMaxWidthTarget?: string;
@@ -54,7 +55,7 @@ export interface NoteEditorProps {
 	customCss: string;
 	noteVisiblePanes: string[];
 	watchedResources: Record<string, unknown>;
-	highlightedWords: string[];
+	highlightedWords: HighlightedWord[];
 	tabMovesFocus: boolean;
 	plugins: PluginStates;
 	toolbarButtonInfos: ToolbarItem[];

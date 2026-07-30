@@ -57,6 +57,7 @@ export interface ProcessResultsRow {
 	fields?: string[];
 	weight?: number;
 	fuzziness?: number;
+	matchingChunks?: string[];
 	is_todo?: number;
 	todo_completed?: number;
 }
@@ -64,8 +65,9 @@ export interface ProcessResultsRow {
 export interface ComplexTerm {
 	type: 'regex' | 'text';
 	value: string;
-	scriptType: string;
+	scriptType?: string;
 	valueRegex?: string;
+	accuracy?: string;
 }
 
 export interface Terms {
@@ -671,7 +673,10 @@ export default class SearchEngine {
 		for (const result of results) {
 			let row = seenNotes.get(result.noteId);
 			// Results are received in order of relevance, so ignore the less-relevant result
-			if (row) continue;
+			if (row) {
+				row.matchingChunks.push(result.chunkText);
+				continue;
+			}
 
 			const item = await Note.load(
 				result.noteId,
@@ -694,6 +699,7 @@ export default class SearchEngine {
 				weight: result.score * 4,
 				is_todo: item.is_todo,
 				todo_completed: item.todo_completed,
+				matchingChunks: [result.chunkText],
 
 				// For now, estimate whether the match is in the title or the body.
 				// For performance, we avoid loading 'body'.
