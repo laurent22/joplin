@@ -17,7 +17,7 @@ export enum MenuAlignment {
 interface Props {
 	themeId: number;
 	style: ViewStyle;
-	alignment?: MenuAlignment;
+	alignment: MenuAlignment;
 	children: React.ReactNode;
 	visible: boolean;
 	draggable: boolean;
