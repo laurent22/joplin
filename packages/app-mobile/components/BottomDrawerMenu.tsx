@@ -5,6 +5,7 @@ import { themeStyle } from './global-style';
 import BottomDrawer, { MenuAlignment, MenuType } from './BottomDrawer';
 import { TouchableRipple, Text } from 'react-native-paper';
 import Icon from './Icon';
+import focusView from '../utils/focusView';
 
 interface MenuOptionDivider {
 	isDivider: true;
@@ -23,6 +24,7 @@ export interface MenuOptionButton {
 	onPress: ()=> void;
 	icon?: string;
 	title: string;
+	autoFocus?: boolean;
 }
 
 export type MenuOption = MenuOptionDivider|MenuOptionButton;
@@ -97,6 +99,13 @@ const useStyles = (themeId: number) => {
 	}, [themeId, windowWidth]);
 };
 
+const autoFocusView = (view: View|null) => {
+	if (!view) return;
+	setTimeout(() => {
+		focusView('BottomDrawerMenu', view);
+	}, 100);
+};
+
 const BottomDrawerMenu: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
 
@@ -127,6 +136,7 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 						option.onPress();
 						props.onDismiss();
 					}}
+					ref={(option.autoFocus && props.visible) ? autoFocusView : undefined}
 					key={key}
 					disabled={!!option.disabled}
 				>

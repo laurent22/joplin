@@ -30,7 +30,7 @@ const NewNoteButton: React.FC<Props> = () => {
 			{ icon: 'material draw', title: _('Drawing'), onPress: () => makeNewNote(false, AttachFileAction.AttachDrawing) },
 			{ icon: 'material microphone-outline', title: _('Recording'), onPress: () => makeNewNote(false, AttachFileAction.RecordAudio) },
 			{ isDivider: true },
-			{ icon: 'material file-document-check-outline', title: _('New to-do'), onPress: () => makeNewNote(true) },
+			{ icon: 'material file-document-check-outline', title: _('New to-do'), onPress: () => makeNewNote(true), autoFocus: true },
 			{ icon: 'material file-document-outline', title: _('New note'), onPress: () => makeNewNote(false) },
 		];
 		return items;
