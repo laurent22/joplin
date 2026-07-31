@@ -1,4 +1,4 @@
-import { Client, EqualityFilter } from 'ldapts';
+import { Client } from 'ldapts';
 import { User } from '../services/database/types';
 import Logger from '@joplin/utils/Logger';
 import { LdapConfig } from './types';
@@ -26,8 +26,11 @@ export default async function ldapLogin(email: string, password: string, user: U
 	}
 
 	if (enabled) {
+		// Check if connection is ldaps or not
+		const isLdaps = host.toLowerCase().startsWith('ldaps://');
+		// Use if connection uses startTLS
+		let startTLS = false;
 		let searchResults;
-
 		let tlsOptions;
 		if (tlsCaFile.length !== 0) {
 			tlsOptions = {
@@ -35,47 +38,63 @@ export default async function ldapLogin(email: string, password: string, user: U
 			};
 		}
 
+		// Create client with connection without encryption or using ldaps://
 		const client = new Client({
 			url: host,
 			timeout: 5000,
 			connectTimeout: 1000,
-			tlsOptions: tlsOptions,
+			tlsOptions: isLdaps ? tlsOptions : undefined,
 		});
 
+		// If it's not 'ldaps://' and a tlsCaFile is provided then function 'startTLS' must be used
+		// Reference: https://www.npmjs.com/package/ldapts#starttls and
+		// 	https://www.npmjs.com/package/ldapts#configuring-secure-connections
+		if (!isLdaps && tlsCaFile.length !== 0) {
+			startTLS = true;
+			try {
+				await client.startTLS(tlsOptions);
+			} catch (error) {
+				error.message = `Could not start TLS with the ldap server ${host}: ${error.message}`;
+				throw error;
+			}
+		}
+
+		if (bindDN.length !== 0) {
+			try {
+				await client.bind(bindDN, bindPW);
+			} catch (error) {
+				error.message = `Could not bind to the ldap server ${host}: ${error.message}`;
+				throw error;
+			}
+		}
+
 		try {
-			if (bindDN.length !== 0) {
-				try {
-					await client.bind(bindDN, bindPW);
-				} catch (error) {
-					error.message = `Could not bind to the ldap server ${host}: ${error.message}`;
-					throw error;
-				}
+			searchResults = await client.search(baseDN, {
+				filter: `(${mailAttribute}=${email})`,
+				attributes: ['dn', fullNameAttribute],
+			});
+
+			if (searchResults.searchEntries.length === 0) return null;
+
+		} catch (error) {
+			error.message = `Could not search the ldap server ${host}: ${error.message}`;
+			throw error;
+		}
+
+		if (bindDN.length !== 0) {
+			await client.unbind();
+		}
+
+		try {
+			// After an "unbind" if communication uses startTLS, the function 'startTLS' must be use.
+			if (startTLS) {
+				await client.startTLS(tlsOptions);
 			}
-
-			try {
-				searchResults = await client.search(baseDN, {
-					filter: new EqualityFilter({ attribute: mailAttribute, value: email }),
-					attributes: ['dn', fullNameAttribute],
-				});
-
-				if (searchResults.searchEntries.length === 0) return null;
-
-			} catch (error) {
-				error.message = `Could not search the ldap server ${host}: ${error.message}`;
-				throw error;
-			}
-
-			if (bindDN.length !== 0) {
-				await client.unbind();
-			}
-
-			try {
-				await client.bind(searchResults.searchEntries[0].dn, password);
-			} catch (error) {
-				if (error.code === 49) return null;
-				error.message = `Could not login ${host}: ${error.message}`;
-				throw error;
-			}
+			await client.bind(searchResults.searchEntries[0].dn, password);
+		} catch (error) {
+			if (error.code === 49) return null;
+			error.message = `Could not login ${host}: ${error.message}`;
+			throw error;
 		} finally {
 			await client.unbind();
 		}
@@ -85,7 +104,6 @@ export default async function ldapLogin(email: string, password: string, user: U
 			ldapUser.email = email;
 			ldapUser.password = password;
 			ldapUser.email_confirmed = 1;
-			ldapUser.totp_secret = '';
 			ldapUser.full_name = searchResults.searchEntries[0][fullNameAttribute].toString();
 			return ldapUser;
 		}
