@@ -640,6 +640,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('OCR: Search in extracted content'),
 		},
 
+		'ai.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			label: () => _('Enable AI features (Beta)'),
+			description: () => _('When enabled, plugins and built-in features can use AI models to generate or analyse text.'),
+			storage: SettingStorage.File,
+		},
+
 		'mcp.enabled': {
 			value: false,
 			type: SettingItemType.Bool,
@@ -648,17 +659,6 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 			label: () => _('Enable MCP server (Beta)'),
 			description: () => _('Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.'),
-			storage: SettingStorage.File,
-		},
-
-		'ai.enabled': {
-			value: false,
-			type: SettingItemType.Bool,
-			public: true,
-			section: 'ai',
-			appTypes: [AppType.Desktop],
-			label: () => _('Enable AI features (Beta)'),
-			description: () => _('When enabled, plugins and built-in features can use AI models to generate or analyse text. AI is off by default.'),
 			storage: SettingStorage.File,
 		},
 
