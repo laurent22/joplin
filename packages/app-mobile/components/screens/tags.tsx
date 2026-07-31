@@ -155,21 +155,27 @@ const TagsScreenComponent: React.FC<Props> = props => {
 		const menuItems: PromptButtonSpec[] = [];
 
 		const generateTagDeletion = () => {
+			const options = [
+				{
+					text: _('Cancel'),
+					onPress: () => { },
+					style: 'cancel' as const,
+				},
+				{
+					text: _('OK'),
+					onPress: async () => {
+						await Tag.delete(tag.id, { sourceDescription: 'tags-screen (long-press)' });
+						setRefreshTrigger(prev => prev + 1);
+					},
+				},
+
+			];
 			return () => {
-				dialogs.prompt('', _('Delete tag "%s"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.', substrWithEllipsis(tag.title, 0, 32)), [
-					{
-						text: _('Cancel'),
-						onPress: () => { },
-						style: 'cancel',
-					},
-					{
-						text: _('OK'),
-						onPress: async () => {
-							await Tag.delete(tag.id, { sourceDescription: 'tags-screen (long-press)' });
-							setRefreshTrigger(prev => prev + 1);
-						},
-					},
-				]);
+				dialogs.prompt(
+					_('Delete tag "%s"?', substrWithEllipsis(tag.title, 0, 32)),
+					_('All notes associated with this tag will remain, but the tag will be removed from all notes.'),
+					options,
+				);
 			};
 		};
 
