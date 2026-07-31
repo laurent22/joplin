@@ -6,6 +6,7 @@ import BottomDrawer, { MenuAlignment, MenuType } from './BottomDrawer';
 import { TouchableRipple, Text } from 'react-native-paper';
 import Icon from './Icon';
 import focusView from '../utils/focusView';
+import debounce from '../utils/debounce';
 
 interface MenuOptionDivider {
 	isDivider: true;
@@ -101,12 +102,11 @@ const useStyles = (themeId: number) => {
 	}, [themeId, windowWidth]);
 };
 
-const autoFocusView = (view: View|null) => {
+// Debounce: Auto-focus seems to need to occur after a delay
+const autoFocusView = debounce((view: View|null) => {
 	if (!view) return;
-	setTimeout(() => {
-		focusView('BottomDrawerMenu', view);
-	}, 100);
-};
+	focusView('BottomDrawerMenu', view);
+}, 100);
 
 const BottomDrawerMenu: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
