@@ -33,7 +33,7 @@ const NewNoteButton: React.FC<Props> = () => {
 		const attachmentMenuItem = (icon: string, title: string, action: AttachFileAction, attachmentLabel: string|null = null) => {
 			return {
 				...menuItem(icon, title, () => makeNewNote(false, action)),
-				accessibilityHint: _('Create note with %s attachment', attachmentLabel ?? title),
+				accessibilityHint: _('Creates a new note with an attachment of type %s', attachmentLabel ?? title),
 			};
 		};
 
