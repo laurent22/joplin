@@ -696,21 +696,35 @@ class TableWidget extends WidgetType {
 			menu.style.left = `${e.clientX}px`;
 			menu.style.top = `${e.clientY}px`;
 
-			type MenuItem = { label: string; action: ()=> void; hlRow?: number; hlCol?: number };
-			const items: MenuItem[] = [
-				{ label: '+ Insert row above', action: () => { syncDirtyCells(); this.apply(view, addRow(table, r <= 0 ? -1 : r - 2)); } },
-				{ label: '+ Insert row below', action: () => { syncDirtyCells(); this.apply(view, addRow(table, r === 0 ? -1 : r - 1)); } },
-				{ label: '+ Insert column left', action: () => { syncDirtyCells(); this.apply(view, addColumn(table, c - 1)); } },
-				{ label: '+ Insert column right', action: () => { syncDirtyCells(); this.apply(view, addColumn(table, c)); } },
+			type MenuItem = { icon: string; label: string; action: ()=> void; hlRow?: number; hlCol?: number; danger?: boolean };
+			type MenuEntry = MenuItem | 'divider';
+
+			// Localised via the CodeMirror phrase table. Each string below must
+			// also exist as a _() entry in the host's localisation table (desktop:
+			// gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts).
+			const _ = (text: string) => view.state.phrase(text);
+
+			// Grouped into: insert, move, then delete, with dividers between.
+			const insertGroup: MenuItem[] = [
+				{ icon: '⤒', label: _('Insert row above'), action: () => { syncDirtyCells(); this.apply(view, addRow(table, r <= 0 ? -1 : r - 2)); } },
+				{ icon: '⤓', label: _('Insert row below'), action: () => { syncDirtyCells(); this.apply(view, addRow(table, r === 0 ? -1 : r - 1)); } },
+				{ icon: '⇤', label: _('Insert column left'), action: () => { syncDirtyCells(); this.apply(view, addColumn(table, c - 1)); } },
+				{ icon: '⇥', label: _('Insert column right'), action: () => { syncDirtyCells(); this.apply(view, addColumn(table, c)); } },
 			];
-			if (r > 1) items.push({ label: '↑ Move row up', action: () => { syncDirtyCells(); this.apply(view, swapRows(table, r - 1, r - 2)); }, hlRow: r });
-			if (r > 0 && r < numBodyRows) items.push({ label: '↓ Move row down', action: () => { syncDirtyCells(); this.apply(view, swapRows(table, r - 1, r)); }, hlRow: r });
-			if (c > 0) items.push({ label: '← Move column left', action: () => { syncDirtyCells(); this.apply(view, swapColumns(table, c, c - 1)); }, hlCol: c });
-			if (c < numCols - 1) items.push({ label: '→ Move column right', action: () => { syncDirtyCells(); this.apply(view, swapColumns(table, c, c + 1)); }, hlCol: c });
+
+			const moveGroup: MenuItem[] = [];
+			if (r > 1) moveGroup.push({ icon: '↑', label: _('Move row up'), action: () => { syncDirtyCells(); this.apply(view, swapRows(table, r - 1, r - 2)); }, hlRow: r });
+			if (r > 0 && r < numBodyRows) moveGroup.push({ icon: '↓', label: _('Move row down'), action: () => { syncDirtyCells(); this.apply(view, swapRows(table, r - 1, r)); }, hlRow: r });
+			if (c > 0) moveGroup.push({ icon: '←', label: _('Move column left'), action: () => { syncDirtyCells(); this.apply(view, swapColumns(table, c, c - 1)); }, hlCol: c });
+			if (c < numCols - 1) moveGroup.push({ icon: '→', label: _('Move column right'), action: () => { syncDirtyCells(); this.apply(view, swapColumns(table, c, c + 1)); }, hlCol: c });
+
+			const deleteGroup: MenuItem[] = [];
 			// Delete row: only for body rows (header row cannot be removed)
 			if (r > 0) {
-				items.push({
-					label: '✕ Delete row',
+				deleteGroup.push({
+					icon: '✕',
+					label: _('Delete row'),
+					danger: true,
 					action: () => {
 						syncDirtyCells();
 						this.apply(view, deleteRow(table, r - 1));
@@ -719,8 +733,10 @@ class TableWidget extends WidgetType {
 				});
 			}
 			// Delete column: last column → delete entire table, otherwise delete that column
-			items.push({
-				label: '✕ Delete column',
+			deleteGroup.push({
+				icon: '✕',
+				label: _('Delete column'),
+				danger: true,
 				action: () => {
 					syncDirtyCells();
 					if (numCols <= 1) {
@@ -732,13 +748,35 @@ class TableWidget extends WidgetType {
 				hlCol: c,
 			});
 
-			for (const item of items) {
+			const entries: MenuEntry[] = [];
+			for (const group of [insertGroup, moveGroup, deleteGroup]) {
+				if (!group.length) continue;
+				if (entries.length) entries.push('divider');
+				entries.push(...group);
+			}
+
+			for (const entry of entries) {
+				if (entry === 'divider') {
+					const sep = doc.createElement('div');
+					sep.classList.add('cm-tw-ctx-divider');
+					menu.appendChild(sep);
+					continue;
+				}
 				const div = doc.createElement('div');
-				div.textContent = item.label;
+				div.classList.add('cm-tw-ctx-item');
+				if (entry.danger) div.classList.add('cm-tw-ctx-danger');
+				const icon = doc.createElement('span');
+				icon.classList.add('cm-tw-ctx-icon');
+				icon.textContent = entry.icon;
+				const label = doc.createElement('span');
+				label.classList.add('cm-tw-ctx-label');
+				label.textContent = entry.label;
+				div.appendChild(icon);
+				div.appendChild(label);
 				div.onmouseenter = () => {
 					clearHighlight();
-					if (item.hlRow !== undefined) highlightRow(item.hlRow);
-					if (item.hlCol !== undefined) highlightCol(item.hlCol);
+					if (entry.hlRow !== undefined) highlightRow(entry.hlRow);
+					if (entry.hlCol !== undefined) highlightCol(entry.hlCol);
 				};
 				div.onmouseleave = () => clearHighlight();
 				div.onmousedown = (ev) => {
@@ -746,7 +784,7 @@ class TableWidget extends WidgetType {
 					ev.stopPropagation();
 					clearHighlight();
 					menu.remove();
-					item.action();
+					entry.action();
 				};
 				menu.appendChild(div);
 			}
@@ -958,13 +996,36 @@ const tableTheme = EditorView.theme({
 		minWidth: '190px',
 		padding: '4px 0',
 		fontSize: '13px',
-		'& > div': {
+		'& .cm-tw-ctx-item': {
+			display: 'flex',
+			alignItems: 'center',
+			gap: '10px',
 			padding: '6px 14px',
 			cursor: 'pointer',
 			whiteSpace: 'nowrap',
+			color: 'var(--joplin-color, #222)',
 			'&:hover': {
 				backgroundColor: 'var(--joplin-background-color-hover3, #f0f0f0)',
 			},
+		},
+		'& .cm-tw-ctx-icon': {
+			flex: '0 0 auto',
+			width: '16px',
+			textAlign: 'center',
+			fontSize: '14px',
+			lineHeight: '1',
+			opacity: '0.75',
+		},
+		'& .cm-tw-ctx-danger': {
+			color: 'var(--joplin-destructive-color, #d3392c)',
+		},
+		'& .cm-tw-ctx-danger:hover': {
+			backgroundColor: 'var(--joplin-background-color-hover3, #f0f0f0)',
+		},
+		'& .cm-tw-ctx-divider': {
+			height: '1px',
+			margin: '4px 0',
+			backgroundColor: 'var(--joplin-divider-color, #ddd)',
 		},
 	},
 });
