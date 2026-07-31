@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { StyleSheet, View, useWindowDimensions, TextStyle, StyleProp, ViewStyle } from 'react-native';
 import { themeStyle } from './global-style';
 import BottomDrawer, { MenuAlignment, MenuType } from './BottomDrawer';
@@ -102,14 +102,25 @@ const useStyles = (themeId: number) => {
 	}, [themeId, windowWidth]);
 };
 
-// Debounce: Auto-focus seems to need to occur after a delay
-const autoFocusView = debounce((view: View|null) => {
-	if (!view) return;
-	focusView('BottomDrawerMenu', view);
-}, 100);
+const useFocusView = (visible: boolean) => {
+	const visibleRef = useRef(visible);
+	visibleRef.current = visible;
+
+	const autoFocusView = useMemo(() => {
+		// Debounce: Auto-focus seems to need to occur after a delay
+		return debounce((view: View|null) => {
+			if (!view || !visibleRef.current) return;
+			focusView('BottomDrawerMenu', view);
+		}, 100);
+	}, []);
+
+	return autoFocusView;
+};
 
 const BottomDrawerMenu: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
+
+	const autoFocusView = useFocusView(props.visible);
 
 	const menuOptionComponents: React.ReactNode[] = [];
 
