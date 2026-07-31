@@ -1,8 +1,8 @@
-import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import { SyntaxNodeRef } from '@lezer/common';
 import { EditorState } from '@codemirror/state';
 import referenceLinkStateField, { isReferenceLink, resolveReferenceFromLink } from '../links/referenceLinksStateField';
-import { Decoration } from '@codemirror/view';
+import { EditorView } from '@codemirror/view';
+import makeHideReplaceExtension from './utils/makeHideReplaceExtension';
 
 const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	const isUrl = node.name === 'URL';
@@ -41,19 +41,25 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	return true;
 };
 
-const hideDecoration = Decoration.replace({});
-
 const replaceLinks = [
 	// Dependency
 	referenceLinkStateField,
 
-	makeInlineReplaceExtension({
+	EditorView.theme({
+		['& .cm-hidden']: {
+			width: '1px',
+			height: '1em',
+			opacity: '0',
+			marginRight: '-0.9px',
+			display: 'inline-block',
+			overflow: 'hidden',
+		},
+	}),
+
+	makeHideReplaceExtension({
 		getRevealStrategy: () => 'active',
-		createDecoration: (node, state) => {
-			if (shouldFullReplace(node, state)) {
-				return hideDecoration;
-			}
-			return null;
+		shouldHide: (node, state) => {
+			return shouldFullReplace(node, state);
 		},
 		getDecorationRange: (node, state) => {
 			const previous = node.name === 'URL' ? node.node.prevSibling : null;

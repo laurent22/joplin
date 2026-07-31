@@ -34,33 +34,8 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 
 	private onMouseUp = () => {
 		if (this.mouseSelectionInProgress) {
-			const selection = this.view.state.selection.main;
-			let coveredTo = selection.from;
-			this.decorations.between(selection.from, selection.to, (from, to, decoration) => {
-				if (!Object.keys(decoration.spec).length && from <= coveredTo) {
-					coveredTo = Math.max(coveredTo, to);
-				}
-			});
-
-			let selectionUpdate = !selection.empty && coveredTo >= selection.to ? { anchor: selection.head } : undefined;
-			const line = this.view.state.doc.lineAt(selection.from);
-			syntaxTree(this.view.state).iterate({
-				from: line.from,
-				to: line.to,
-				enter: node => {
-					if (selectionUpdate || node.name !== 'Link') return;
-					const closingBracket = node.node.getChildren('LinkMark').find(mark => (
-						this.view.state.sliceDoc(mark.from, mark.to) === ']'
-					));
-					if (closingBracket && selection.from >= closingBracket.from && selection.to <= node.to) {
-						selectionUpdate = { anchor: node.to };
-					}
-				},
-			});
-
 			this.mouseSelectionInProgress = false;
 			this.view.dispatch({
-				selection: selectionUpdate,
 				effects: updateInlineDecorationsEffect.of(null),
 			});
 		}
@@ -99,7 +74,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			}
 		};
 
-		const widgets: Range<Decoration>[] = [];
+		let widgets: Range<Decoration>[] = [];
 		for (const { from, to } of view.visibleRanges) {
 			parentTagCounts.clear();
 			syntaxTree(view.state).iterate({
@@ -137,6 +112,34 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			});
 		}
 		this.decorations = Decoration.set(widgets, true);
+
+		if (extensionSpec.mergeNeighbors && widgets.length > 0) {
+			const originalLength = widgets.length;
+			widgets = [];
+
+			const iter = this.decorations.iter();
+			let previous = iter.value;
+			let previousFrom = iter.from;
+			let previousTo = iter.to;
+			widgets.push(iter.value.range(iter.from, iter.to));
+
+			for (iter.next(); iter.value; iter.next()) {
+				let from = iter.from;
+				if (previousTo === iter.from && previous.eq(iter.value)) {
+					from = previousFrom;
+					widgets.pop();
+				}
+				widgets.push(iter.value.range(from, iter.to));
+
+				previous = iter.value;
+				previousTo = iter.to;
+				previousFrom = from;
+			}
+
+			if (widgets.length < originalLength) {
+				this.decorations = Decoration.set(widgets, true);
+			}
+		}
 	}
 
 	public update(update: ViewUpdate) {
@@ -144,7 +147,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			transaction.effects.some(effect => effect.is(updateInlineDecorationsEffect))
 			|| extensionSpec.shouldFullReRender?.(transaction)
 		));
-		if (this.mouseSelectionInProgress && update.selectionSet && update.state.selection.main.empty && !update.docChanged && !forceUpdate) {
+		if (this.mouseSelectionInProgress && !update.docChanged && !forceUpdate) {
 			return;
 		}
 
