@@ -24,6 +24,8 @@ export interface MenuOptionButton {
 	onPress: ()=> void;
 	icon?: string;
 	title: string;
+
+	accessibilityHint?: string;
 	autoFocus?: boolean;
 }
 
@@ -136,6 +138,7 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 						option.onPress();
 						props.onDismiss();
 					}}
+					accessibilityHint={option.accessibilityHint}
 					ref={(option.autoFocus && props.visible) ? autoFocusView : undefined}
 					key={key}
 					disabled={!!option.disabled}

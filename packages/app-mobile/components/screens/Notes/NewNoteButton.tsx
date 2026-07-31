@@ -23,12 +23,26 @@ const makeNewNote = (isTodo: boolean, action?: AttachFileAction) => {
 const NewNoteButton: React.FC<Props> = () => {
 
 	const menuContent = useMemo(() => {
+		const menuItem = (icon: string, title: string, action: ()=> void) => {
+			return {
+				icon,
+				title,
+				onPress: action,
+			};
+		};
+		const attachmentMenuItem = (icon: string, title: string, action: AttachFileAction, attachmentLabel: string|null = null) => {
+			return {
+				...menuItem(icon, title, () => makeNewNote(false, action)),
+				accessibilityHint: _('Create note with %s attachment', attachmentLabel ?? title),
+			};
+		};
+
 		const items: MenuOption[] = [
-			{ icon: 'material camera-outline', title: _('Camera'), onPress: () => makeNewNote(false, AttachFileAction.TakePhoto) },
-			{ icon: 'material attachment', title: _('Attachment'), onPress: () => makeNewNote(false, AttachFileAction.AttachFile) },
+			attachmentMenuItem('material camera-outline', _('Camera'), AttachFileAction.TakePhoto),
+			attachmentMenuItem('material attachment', _('Attachment'), AttachFileAction.AttachFile, _('File')),
 			{ icon: 'material data-matrix-scan', title: _('Scan notebook'), onPress: () => NavService.go('DocumentScanner') },
-			{ icon: 'material draw', title: _('Drawing'), onPress: () => makeNewNote(false, AttachFileAction.AttachDrawing) },
-			{ icon: 'material microphone-outline', title: _('Recording'), onPress: () => makeNewNote(false, AttachFileAction.RecordAudio) },
+			attachmentMenuItem('material draw', _('Drawing'), AttachFileAction.AttachDrawing),
+			attachmentMenuItem('material microphone-outline', _('Recording'), AttachFileAction.RecordAudio),
 			{ isDivider: true },
 			{ icon: 'material file-document-check-outline', title: _('New to-do'), onPress: () => makeNewNote(true), autoFocus: true },
 			{ icon: 'material file-document-outline', title: _('New note'), onPress: () => makeNewNote(false) },
