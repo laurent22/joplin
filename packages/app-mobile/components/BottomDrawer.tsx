@@ -321,18 +321,21 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 		});
 	}, []);
 
-	const slideMenuOut = useCallback(() => {
-		return new Promise<void>((resolve, reject) => {
-			propsRef.current.containerRef.current.measure(async (_x, _y, _width, height, _pageX, pageY) => {
+	const slideMenuOut = useCallback(async () => {
+		const getMenuDismissedOffset = () => new Promise<number>((resolve) => {
+			const container = propsRef.current.containerRef.current;
+			if (!container) {
+				// If the container isn't mounted use the screen height as an offset for fully-dismissed:
+				resolve(screenSizeRef.current.height);
+				return;
+			}
+
+			container.measure(async (_x, _y, _width, height, _pageX, pageY) => {
 				const menuBottom = screenSizeRef.current.height - (pageY + height);
-				try {
-					await dragToOffset(height + menuBottom, propsRef.current.slideAnimation);
-					resolve();
-				} catch (error) {
-					reject(error);
-				}
+				resolve(height + menuBottom);
 			});
 		});
+		return await dragToOffset(await getMenuDismissedOffset(), propsRef.current.slideAnimation);
 	}, [dragToOffset]);
 
 	useEffect(() => {
