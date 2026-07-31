@@ -22,7 +22,7 @@ import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/li
 import { ModelType } from '@joplin/lib/BaseModel';
 import { fileExtension, safeFileExtension } from '@joplin/lib/path-utils';
 import * as mimeUtils from '@joplin/lib/mime-utils';
-import ScreenHeader, { FolderPickerOptions, MenuOptionType, ViewToggleButtonMode } from '../../ScreenHeader';
+import ScreenHeader, { FolderPickerOptions, MenuOption, ViewToggleButtonMode } from '../../ScreenHeader';
 import NoteTagsDialog from '../NoteTagsDialog';
 import time from '@joplin/lib/time';
 import Checkbox from '../../Checkbox';
@@ -84,7 +84,7 @@ import { Second } from '@joplin/utils/time';
 import TextWrapCalculator from '../Notes/TextWrapCalculator';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
-import { MenuOptionButton, MenuOptionStyle } from '../../ScreenHeader/Menu';
+import { MenuOptionStyle, MenuOptionButton } from '../../BottomDrawerMenu';
 
 const emptyArray: never[] = [];
 
@@ -184,7 +184,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private noteTagDialog_closeRequested: ()=> void;
 	private refreshResource: (resource: ResourceEntity, noteBody?: string)=> Promise<void>;
 	private selection: SelectionRange;
-	private menuOptionsCache_: Record<string, MenuOptionType[]>;
+	private menuOptionsCache_: Record<string, MenuOption[]>;
 	private focusUpdateIID_: ReturnType<typeof setTimeout> | null;
 	private folderPickerOptions_: FolderPickerOptions;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- dialogbox is the react-native-dialogbox ref; the library ships no types
@@ -1292,7 +1292,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
 
-		const output: MenuOptionType[] = [];
+		const output: MenuOption[] = [];
 
 		// The file attachment modules only work in Android >= 5 (Version 21)
 		// https://github.com/react-community/react-native-image-picker/issues/606
