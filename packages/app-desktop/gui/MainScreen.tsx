@@ -186,6 +186,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				if (!existingItem) {
 					draftLayout.children.push({
 						key: viewId,
+						visible: info.view.opened,
 						context: {
 							pluginId: info.plugin.id,
 						},

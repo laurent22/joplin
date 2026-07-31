@@ -42,7 +42,7 @@ const expandSelectionToFormattingCharacters = (decorations: DecorationSet, selec
 };
 
 export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
-	public decorations: DecorationSet;
+	public decorations: DecorationSet = Decoration.set([]);
 	private mouseSelectionInProgress = false;
 
 	public constructor(private view: EditorView) {

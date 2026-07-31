@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useMemo, useEffect, useCallback, useContext } from 'react';
-import { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View, Image, ImageStyle, Platform } from 'react-native';
+import { useMemo, useEffect, useCallback, useContext, useState } from 'react';
+import { Easing, Animated, TouchableOpacity, Text, StyleSheet, ScrollView, View, Image, ImageStyle } from 'react-native';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import Icon from './Icon';
@@ -20,7 +20,6 @@ import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import emptyTrash from '@joplin/lib/services/trash/emptyTrash';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { DialogContext } from './DialogManager';
-import { PromptButtonSpec } from './DialogManager/types';
 import { TextStyle, ViewStyle } from 'react-native';
 import { StateDecryptionWorker, StateResourceFetcher } from '@joplin/lib/reducer';
 import useOnLongPressProps from '../utils/hooks/useOnLongPressProps';
@@ -28,6 +27,8 @@ import { TouchableRipple } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
 import getConflictFolderId from '@joplin/lib/models/utils/getConflictFolderId';
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
+import BottomDrawerMenu, { MenuOption, MenuOptionStyle } from './BottomDrawerMenu';
+import { MenuAlignment } from './BottomDrawer';
 
 interface Props {
 	syncStarted: boolean;
@@ -343,48 +344,47 @@ const SideMenuContentComponent = (props: Props) => {
 		});
 	};
 
+	const [folderMenuVisible, setFolderMenuVisible] = useState(false);
+	const [folderMenuTitle, setFolderMenuTitle] = useState('');
+	const [folderMenuOptions, setFolderMenuOptions] = useState<MenuOption[]>([]);
 	const folder_longPress = async (folderOrAll: FolderEntity | string) => {
 		if (folderOrAll === 'all') return;
 
 		const folder = folderOrAll as FolderEntity;
 
-		const menuItems: PromptButtonSpec[] = [];
-		menuItems.push({
-			text: _('Cancel'),
-			onPress: () => {},
-			style: 'cancel',
-		});
+		const menuItems: MenuOption[] = [];
 
 		if (folder && folder.id === getConflictFolderId()) return;
 
 		if (folder && folder.id === getTrashFolderId()) {
 			menuItems.push({
-				text: _('Empty trash'),
+				title: _('Empty trash'),
+				icon: 'material delete-outline',
 				onPress: async () => {
 					dialogs.prompt('', _('This will permanently delete all items in the trash. Continue?'), [
+						{
+							text: _('Cancel'),
+							onPress: () => { },
+							style: 'cancel',
+						},
 						{
 							text: _('Empty trash'),
 							onPress: async () => {
 								await emptyTrash();
 							},
 						},
-						{
-							text: _('Cancel'),
-							onPress: () => { },
-							style: 'cancel',
-						},
 					]);
 				},
-				style: 'destructive',
+				style: MenuOptionStyle.Destructive,
 			});
 
 		} else if (folder && !!folder.deleted_time) {
 			menuItems.push({
-				text: _('Restore'),
+				title: _('Restore'),
+				icon: 'material delete-off-outline',
 				onPress: async () => {
 					await restoreItems(ModelType.Folder, [folder.id]);
 				},
-				style: 'destructive',
 			});
 
 			// Alert.alert(
@@ -434,13 +434,15 @@ const SideMenuContentComponent = (props: Props) => {
 				return folderDeletion(_('Move notebook "%s" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.', substrWithEllipsis(folder.title, 0, 32)));
 			};
 
-			const deleteButton: PromptButtonSpec = {
-				text: _('Delete'),
+			const deleteButton: MenuOption = {
+				title: _('Delete'),
 				onPress: generateFolderDeletion,
-				style: 'destructive',
+				icon: 'material delete-outline',
+				style: MenuOptionStyle.Destructive,
 			};
-			const editButton: PromptButtonSpec = {
-				text: _('Edit'),
+			const editButton: MenuOption = {
+				title: _('Edit'),
+				icon: 'material file-edit-outline',
 				onPress: () => {
 					props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
@@ -452,20 +454,12 @@ const SideMenuContentComponent = (props: Props) => {
 				},
 			};
 
-			// On iOS, "cancel" is always shown at the bottom. Push the edit button first
-			// so that "delete" is still shown in the middle.
-			if (Platform.OS === 'ios') {
-				menuItems.push(editButton, deleteButton);
-			} else {
-				menuItems.push(deleteButton, editButton);
-			}
+			menuItems.push(editButton, deleteButton);
 		}
 
-		dialogs.prompt(
-			'',
-			_('Notebook: %s', folder.title),
-			menuItems,
-		);
+		setFolderMenuOptions(menuItems);
+		setFolderMenuTitle(_('Notebook: %s', folder.title));
+		setFolderMenuVisible(true);
 	};
 
 	const folder_togglePress = (folder: FolderEntity) => {
@@ -740,6 +734,14 @@ const SideMenuContentComponent = (props: Props) => {
 				</ScrollView>
 				{renderBottomPanel()}
 			</View>
+			<BottomDrawerMenu
+				visible={folderMenuVisible}
+				onDismiss={() => setFolderMenuVisible(false)}
+				themeId={props.themeId}
+				alignment={MenuAlignment.Center}
+				title={folderMenuTitle}
+				options={folderMenuOptions}
+			/>
 		</View>
 	);
 };
