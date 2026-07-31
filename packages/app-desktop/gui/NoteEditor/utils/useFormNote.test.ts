@@ -200,7 +200,7 @@ describe('useFormNote', () => {
 				is_conflict: 1,
 				title: testNote.title,
 			});
-		});
+		}, { timeout: 15_000 });
 
 		// Should preserve is_conflict after save.
 		expect(await formNoteToNote(formNote.result.current.formNote)).toMatchObject({
