@@ -699,26 +699,31 @@ class TableWidget extends WidgetType {
 			type MenuItem = { icon: string; label: string; action: ()=> void; hlRow?: number; hlCol?: number; danger?: boolean };
 			type MenuEntry = MenuItem | 'divider';
 
+			// Localised via the CodeMirror phrase table. Each string below must
+			// also exist as a _() entry in the host's localisation table (desktop:
+			// gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts).
+			const _ = (text: string) => view.state.phrase(text);
+
 			// Grouped into: insert, move, then delete, with dividers between.
 			const insertGroup: MenuItem[] = [
-				{ icon: '⤒', label: 'Insert row above', action: () => { syncDirtyCells(); this.apply(view, addRow(table, r <= 0 ? -1 : r - 2)); } },
-				{ icon: '⤓', label: 'Insert row below', action: () => { syncDirtyCells(); this.apply(view, addRow(table, r === 0 ? -1 : r - 1)); } },
-				{ icon: '⇤', label: 'Insert column left', action: () => { syncDirtyCells(); this.apply(view, addColumn(table, c - 1)); } },
-				{ icon: '⇥', label: 'Insert column right', action: () => { syncDirtyCells(); this.apply(view, addColumn(table, c)); } },
+				{ icon: '⤒', label: _('Insert row above'), action: () => { syncDirtyCells(); this.apply(view, addRow(table, r <= 0 ? -1 : r - 2)); } },
+				{ icon: '⤓', label: _('Insert row below'), action: () => { syncDirtyCells(); this.apply(view, addRow(table, r === 0 ? -1 : r - 1)); } },
+				{ icon: '⇤', label: _('Insert column left'), action: () => { syncDirtyCells(); this.apply(view, addColumn(table, c - 1)); } },
+				{ icon: '⇥', label: _('Insert column right'), action: () => { syncDirtyCells(); this.apply(view, addColumn(table, c)); } },
 			];
 
 			const moveGroup: MenuItem[] = [];
-			if (r > 1) moveGroup.push({ icon: '↑', label: 'Move row up', action: () => { syncDirtyCells(); this.apply(view, swapRows(table, r - 1, r - 2)); }, hlRow: r });
-			if (r > 0 && r < numBodyRows) moveGroup.push({ icon: '↓', label: 'Move row down', action: () => { syncDirtyCells(); this.apply(view, swapRows(table, r - 1, r)); }, hlRow: r });
-			if (c > 0) moveGroup.push({ icon: '←', label: 'Move column left', action: () => { syncDirtyCells(); this.apply(view, swapColumns(table, c, c - 1)); }, hlCol: c });
-			if (c < numCols - 1) moveGroup.push({ icon: '→', label: 'Move column right', action: () => { syncDirtyCells(); this.apply(view, swapColumns(table, c, c + 1)); }, hlCol: c });
+			if (r > 1) moveGroup.push({ icon: '↑', label: _('Move row up'), action: () => { syncDirtyCells(); this.apply(view, swapRows(table, r - 1, r - 2)); }, hlRow: r });
+			if (r > 0 && r < numBodyRows) moveGroup.push({ icon: '↓', label: _('Move row down'), action: () => { syncDirtyCells(); this.apply(view, swapRows(table, r - 1, r)); }, hlRow: r });
+			if (c > 0) moveGroup.push({ icon: '←', label: _('Move column left'), action: () => { syncDirtyCells(); this.apply(view, swapColumns(table, c, c - 1)); }, hlCol: c });
+			if (c < numCols - 1) moveGroup.push({ icon: '→', label: _('Move column right'), action: () => { syncDirtyCells(); this.apply(view, swapColumns(table, c, c + 1)); }, hlCol: c });
 
 			const deleteGroup: MenuItem[] = [];
 			// Delete row: only for body rows (header row cannot be removed)
 			if (r > 0) {
 				deleteGroup.push({
 					icon: '✕',
-					label: 'Delete row',
+					label: _('Delete row'),
 					danger: true,
 					action: () => {
 						syncDirtyCells();
@@ -730,7 +735,7 @@ class TableWidget extends WidgetType {
 			// Delete column: last column → delete entire table, otherwise delete that column
 			deleteGroup.push({
 				icon: '✕',
-				label: 'Delete column',
+				label: _('Delete column'),
 				danger: true,
 				action: () => {
 					syncDirtyCells();
