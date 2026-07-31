@@ -56,7 +56,7 @@
     "expo-image-manipulator": "14.0.8",
     "expo-local-authentication": "17.0.8",
     "js-draw": "1.33.0",
-    "lodash": "4.17.23",
+    "lodash": "4.18.1",
     "md5": "2.3.0",
     "path-browserify": "1.0.1",
     "prop-types": "15.8.1",
