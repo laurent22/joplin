@@ -97,7 +97,8 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 	// a new refresh.
 	const [formNoteRefreshScheduled, setFormNoteRefreshScheduled] = useState<number>(0);
 	const prevBuiltInEditorVisible = usePrevious<boolean>(builtInEditorVisible);
-	const prevNoteLockSessionUnlocked = usePrevious<boolean>(noteLockSessionUnlocked);
+	// Seeded because usePrevious defaults to null, which would read as a session change on mount.
+	const prevNoteLockSessionUnlocked = usePrevious<boolean>(noteLockSessionUnlocked, noteLockSessionUnlocked);
 
 	useQueuedAsyncEffect(async (event) => {
 		if (formNoteRefreshScheduled <= 0) return;
@@ -162,7 +163,7 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 	// Unlocking loads the note the panel was blocking (the form is then empty), locking must drop
 	// a locked note's plaintext - reload to recompute.
 	useEffect(() => {
-		if (isNoteLockEnabled() && prevNoteLockSessionUnlocked !== undefined && prevNoteLockSessionUnlocked !== noteLockSessionUnlocked && (formNoteRef.current.is_locked || formNoteRef.current.id !== noteId)) {
+		if (isNoteLockEnabled() && prevNoteLockSessionUnlocked !== noteLockSessionUnlocked && (formNoteRef.current.is_locked || formNoteRef.current.id !== noteId)) {
 			refreshFormNote();
 		}
 	}, [noteLockSessionUnlocked, prevNoteLockSessionUnlocked, noteId, formNoteRef, refreshFormNote]);
