@@ -17,19 +17,16 @@ export default async function ldapLogin(email: string, password: string, user: U
 	const baseDN = config.baseDN;
 	const bindDN = config.bindDN;
 	const bindPW = config.bindPW;
+	const startTLS = config.startTLS;
 	const tlsCaFile = config.tlsCaFile;
-
-	logger.info(`Starting authentication with Server ${host}`);
 
 	if (password === '') {
 		throw new ErrorForbidden('no password entered');
 	}
 
+	logger.info(`Starting authentication with Server ${host}`);
+
 	if (enabled) {
-		// Check if connection is ldaps or not
-		const isLdaps = host.toLowerCase().startsWith('ldaps://');
-		// Use if connection uses startTLS
-		let startTLS = false;
 		let searchResults;
 		let tlsOptions;
 		if (tlsCaFile.length !== 0) {
@@ -38,19 +35,14 @@ export default async function ldapLogin(email: string, password: string, user: U
 			};
 		}
 
-		// Create client with connection without encryption or using ldaps://
 		const client = new Client({
 			url: host,
 			timeout: 5000,
 			connectTimeout: 1000,
-			tlsOptions: isLdaps ? tlsOptions : undefined,
+			tlsOptions: !startTLS ? tlsOptions : undefined,
 		});
 
-		// If it's not 'ldaps://' and a tlsCaFile is provided then function 'startTLS' must be used
-		// Reference: https://www.npmjs.com/package/ldapts#starttls and
-		// 	https://www.npmjs.com/package/ldapts#configuring-secure-connections
-		if (!isLdaps && tlsCaFile.length !== 0) {
-			startTLS = true;
+		if (startTLS) {
 			try {
 				await client.startTLS(tlsOptions);
 			} catch (error) {
@@ -86,7 +78,6 @@ export default async function ldapLogin(email: string, password: string, user: U
 		}
 
 		try {
-			// After an "unbind" if communication uses startTLS, the function 'startTLS' must be use.
 			if (startTLS) {
 				await client.startTLS(tlsOptions);
 			}

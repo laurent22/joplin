@@ -143,6 +143,7 @@ export interface LdapConfig {
 	baseDN: string;
 	bindDN: string;
 	bindPW: string;
+	startTLS: boolean;
 	tlsCaFile: string;
 }
 

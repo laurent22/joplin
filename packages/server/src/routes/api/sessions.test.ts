@@ -106,6 +106,7 @@ describe('api/sessions', () => {
 			baseDN: '',
 			bindDN: '',
 			bindPW: '',
+			startTLS: false,
 			tlsCaFile: '',
 		};
 
@@ -144,6 +145,7 @@ describe('api/sessions', () => {
 			baseDN: '',
 			bindDN: '',
 			bindPW: '',
+			startTLS: false,
 			tlsCaFile: '',
 		};
 
@@ -171,6 +173,7 @@ describe('api/sessions', () => {
 			baseDN: '',
 			bindDN: '',
 			bindPW: '',
+			startTLS: false,
 			tlsCaFile: '',
 		};
 
@@ -198,6 +201,7 @@ describe('api/sessions', () => {
 			baseDN: '',
 			bindDN: '',
 			bindPW: '',
+			startTLS: false,
 			tlsCaFile: '',
 		};
 
@@ -223,6 +227,7 @@ describe('api/sessions', () => {
 			baseDN: '',
 			bindDN: '',
 			bindPW: '',
+			startTLS: false,
 			tlsCaFile: '',
 		};
 
