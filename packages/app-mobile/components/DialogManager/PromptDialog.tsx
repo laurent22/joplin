@@ -39,6 +39,10 @@ const useStyles = (themeId: number, isMenu: boolean) => {
 			dialogLabel: isMenu ? {
 				textAlign: 'center',
 			} : {},
+			dialogTitle: isMenu ? {} : {
+				fontWeight: 'bold',
+				marginBottom: theme.margin,
+			},
 		});
 	}, [isMenu, themeId]);
 };
@@ -58,7 +62,7 @@ const PromptDialog: React.FC<Props> = ({ dialog, containerStyle, themeId }) => {
 	const titleComponent = <Text
 		variant='titleMedium'
 		accessibilityRole='header'
-		style={styles.dialogLabel}
+		style={[styles.dialogLabel, styles.dialogTitle]}
 	>{dialog.title}</Text>;
 
 	return (

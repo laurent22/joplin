@@ -33,7 +33,8 @@ export default class MainScreen {
 
 	public async setup() {
 		await this.waitFor();
-		await this.sidebar.createNewFolder('Test');
+		const folder = await this.sidebar.createNewFolder('Test');
+		await folder.waitFor();
 		return this;
 	}
 
