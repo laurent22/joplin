@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@joplin/utils": "~3.7",
-    "dotenv": "17.4.0",
+    "dotenv": "17.4.2",
     "file-type": "16.5.4",
     "fs-extra": "11.3.4",
     "knex": "3.2.9",

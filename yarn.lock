@@ -13221,7 +13221,7 @@ __metadata:
     "@types/koa": "npm:2.15.0"
     "@types/sharp": "npm:0.32.0"
     "@types/uuid": "npm:11.0.0"
-    dotenv: "npm:17.4.0"
+    dotenv: "npm:17.4.2"
     file-type: "npm:16.5.4"
     fs-extra: "npm:11.3.4"
     gulp: "npm:4.0.2"
@@ -29327,10 +29327,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:17.4.0":
-  version: 17.4.0
-  resolution: "dotenv@npm:17.4.0"
-  checksum: 10/b78852cf21de5eeb7db0777bebcf40871cd776b43edb4c52e1dcebadf6794eb35524abe68ea2436dd0f1691ccb8d273ec5cf301b8ca5071f56340308a317e199
+"dotenv@npm:17.4.2":
+  version: 17.4.2
+  resolution: "dotenv@npm:17.4.2"
+  checksum: 10/ca1b6f54d58e39914901e1518958e86083aca8deb5aa2e7f2a51acd53291d97852479b0ab26ed949b6a45a0e9adcc7b0d1c3c72375e8ea670f7005e341c6daba
   languageName: node
   linkType: hard
 
