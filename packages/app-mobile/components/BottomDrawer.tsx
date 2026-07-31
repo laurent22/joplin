@@ -294,7 +294,10 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 	screenSizeRef.current = screenSize;
 
 	const [animating, setAnimating] = useState(false);
+	const currentAnimation = useRef<Animated.CompositeAnimation|null>(null);
 	const dragToOffset = useCallback(async (offset: number, animate: boolean) => {
+		currentAnimation.current?.stop();
+
 		const baseAnimationProps = {
 			toValue: offset,
 			easing: Easing.elastic(0.5),
@@ -302,11 +305,17 @@ const useUpdateOnVisibilityChange = (props: UseSyncVisibleProps) => {
 			useNativeDriver: true,
 		};
 		const animation = Animated.timing(propsRef.current.menuDragOffset, baseAnimationProps);
+		currentAnimation.current = animation;
 
 		setAnimating(true);
 		return new Promise<void>(resolve => {
 			animation.start(() => {
-				setAnimating(false);
+				const interrupted = currentAnimation.current !== animation;
+				if (!interrupted) {
+					setAnimating(false);
+					currentAnimation.current = null;
+				}
+
 				resolve();
 			});
 		});
