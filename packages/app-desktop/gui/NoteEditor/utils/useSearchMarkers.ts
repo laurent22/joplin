@@ -134,14 +134,9 @@ export default function useSearchMarkers({
 		output.keywords = highlightedWords ?? [];
 
 		if (semanticSearchMatches.length) {
-			output.keywords = output.keywords.concat(semanticSearchMatches.flatMap(match =>
-				match
-					.split('\n')
-					.filter(line => line.length > 0)
-					.map(line => (
-						{ type: 'text', accuracy: 'partial', value: line }
-					)),
-			));
+			output.keywords = output.keywords.concat(semanticSearchMatches.map(match => (
+				{ type: 'text', accuracy: 'partial', value: match }
+			)));
 		}
 
 		return output;
