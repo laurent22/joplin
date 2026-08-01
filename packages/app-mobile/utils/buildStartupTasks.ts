@@ -407,12 +407,14 @@ const buildStartupTasks = (
 				type: 'NAV_GO',
 				routeName: 'Notes',
 				smartFilterId: notesParent.selectedItemId,
+				clearHistory: true,
 			});
 		} else if (notesParent && notesParent.type === 'Tag') {
 			dispatch({
 				type: 'NAV_GO',
 				routeName: 'Notes',
 				tagId: notesParent.selectedItemId,
+				clearHistory: true,
 			});
 		} else if (!folder) {
 			dispatch(DEFAULT_ROUTE);
@@ -421,6 +423,7 @@ const buildStartupTasks = (
 				type: 'NAV_GO',
 				routeName: 'Notes',
 				folderId: folder.id,
+				clearHistory: true,
 			});
 		}
 	});

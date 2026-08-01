@@ -700,6 +700,7 @@ packages/app-mobile/commands/util/goToNote.js
 packages/app-mobile/commands/util/showResource.js
 packages/app-mobile/components/BetaChip.js
 packages/app-mobile/components/BottomDrawer.js
+packages/app-mobile/components/BottomDrawerMenu.js
 packages/app-mobile/components/CameraView/ActionButtons.js
 packages/app-mobile/components/CameraView/Camera/index.jest.js
 packages/app-mobile/components/CameraView/Camera/index.js

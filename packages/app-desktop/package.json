@@ -155,7 +155,7 @@
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
     "7zip-bin": "5.2.0",
-    "@axe-core/playwright": "4.11.2",
+    "@axe-core/playwright": "4.11.3",
     "@electron/notarize": "2.5.0",
     "@electron/rebuild": "4.1.0",
     "@fortawesome/fontawesome-free": "5.15.4",
@@ -166,7 +166,7 @@
     "@joplin/renderer": "~3.7",
     "@joplin/tools": "~3.7",
     "@joplin/utils": "~3.7",
-    "@playwright/test": "1.58.2",
+    "@playwright/test": "1.59.1",
     "@sentry/electron": "4.24.0",
     "@testing-library/dom": "10.4.1",
     "@testing-library/react": "16.3.2",

@@ -85,7 +85,7 @@
     "moment": "2.30.1",
     "multiparty": "4.2.3",
     "mustache": "4.2.0",
-    "nanoid": "5.1.9",
+    "nanoid": "5.1.11",
     "node-diff3": "3.2.0",
     "node-fetch": "2.6.7",
     "node-notifier": "10.0.1",
@@ -106,7 +106,7 @@
     "tcp-port-used": "1.0.2",
     "uglifycss": "0.0.29",
     "url-parse": "1.5.10",
-    "uuid": "11.1.0",
+    "uuid": "11.1.1",
     "word-wrap": "1.2.5",
     "xml2js": "0.4.23"
   },
