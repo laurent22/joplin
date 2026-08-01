@@ -467,7 +467,6 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const searchMarkers = useSearchMarkers(
 		showLocalSearch, localSearchMarkerOptions, props.noteId, props.searchResults, props.selectedSearchId, props.searches, props.highlightedWords,
-		formNote.body, formNote.title,
 	);
 	const initialCursorLocation = useInitialCursorLocation({
 		noteId: props.noteId,
