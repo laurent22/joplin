@@ -1,9 +1,10 @@
 import Note from '../../models/Note';
+import Setting from '../../models/Setting';
 import { db, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import AiService from '../ai/AiService';
 import EmbeddingIndexer from '../ai/EmbeddingIndexer';
 import TestEmbeddingProvider from '../ai/testing/TestEmbeddingProvider';
-import SearchEngine, { SearchType } from './SearchEngine';
+import SearchEngine from './SearchEngine';
 
 describe('SearchEngine.semantic', () => {
 	let engine: SearchEngine = null;
@@ -17,6 +18,8 @@ describe('SearchEngine.semantic', () => {
 
 		const provider = new TestEmbeddingProvider();
 		AiService.instance().setEmbeddingProvider(provider);
+
+		Setting.setValue('featureFlag.enableSemanticSearch', true);
 	});
 
 	afterEach(async () => {
@@ -24,14 +27,11 @@ describe('SearchEngine.semantic', () => {
 		await EmbeddingIndexer.instance().stopRunInBackground();
 	});
 
-	it('should fall back to semantic search when there are no FTS results', async () => {
+	it('should include semantic results in general search output', async () => {
 		await Note.save({ title: 'test', body: 'letter letter letter letter' });
 
 		await EmbeddingIndexer.instance().maintenance();
 		await engine.syncTables();
-
-		const ftsRows = await engine.search('letters', { searchType: SearchType.Fts });
-		expect(ftsRows).toHaveLength(0);
 
 		const rows = await engine.search('letters');
 		expect(rows).toHaveLength(1);
