@@ -71,9 +71,11 @@ describe('string-utils', () => {
 	}));
 
 	test.each([
-		{ text: 'testing this is a test', from: 4, to: 'testing this'.length, tolerance: 6, expected: 'this' },
-		{ text: 'testing this is a test', from: 4, to: 'testing this'.length, tolerance: 1, expected: 'ing this' },
-	])('should return a space-aligned substring (case %#)', ({ text, from, to, tolerance, expected }) => {
-		expect(StringUtils.spaceAlignedSubstring(text, from, to, tolerance)).toBe(expected);
+		['### Test', ['Test']],
+		['[test](http://example.com)... *test*', ['test', '...', 'test']],
+		['- this\n- is a\n\t- list', ['this', 'is a', 'list']],
+		['```js\ncode\n```', ['code']],
+	])('should roughly split by Markdown formatting (input: %j)', (input, expected) => {
+		expect(StringUtils.splitByMarkdownFormattingApproximate(input)).toEqual(expected);
 	});
 });

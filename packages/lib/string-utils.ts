@@ -309,31 +309,36 @@ export const stripBom = (text: string) => {
 	return text.replace(/^\ufeff/u, '');
 };
 
-// Returns a substring of `text`, contracted by up to `tolerance`
-export const spaceAlignedSubstring = (text: string, from: number, to: number, tolerance: number) => {
-	let newFrom = from;
-	let newTo = to;
-
-	for (let i = 0; i < tolerance; i++) {
-		const result = text.substring(newFrom - 1, newTo + 1);
-		const startsWithSpace = /^\s/.test(result);
-		const endsWithSpace = /\s$/.test(result);
-		if (startsWithSpace) {
-			from = newFrom;
-		} else if (newFrom < newTo) {
-			newFrom ++;
-		}
-
-		if (endsWithSpace) {
-			to = newTo;
-		} else if (newTo > newFrom) {
-			newTo --;
-		}
-
-		if (startsWithSpace && endsWithSpace) {
-			break;
-		}
-	}
-
-	return text.substring(from, to);
+// *Roughly* splits the given `text` into words. This function does no parsing and
+// will not be correct in all cases.
+export const splitByMarkdownFormattingApproximate = (text: string) => {
+	const regexParts = [
+		// Headers
+		'^#+',
+		// Block quotes
+		'^>',
+		// Code blocks
+		'^```{1,4}\\w*',
+		// Lists
+		'^\\s{0,5}[-*] (:?\\[[xX ]\\])?',
+		'^\\s{0,5}\\d{1,4}\\. ',
+		// HTML
+		'<[^>]{0,128}>',
+		// Inline formatting
+		'\\*+',
+		'`+',
+		'\\$([^$]){0,128}\\$',
+		// Links
+		'\\[([^\\]]{0,128})\\]\\([^)]{0,128}\\)',
+		// Tables
+		'\\|([^|]{0,128})\\|',
+	];
+	const regex = new RegExp(regexParts.join('|'));
+	return text
+		.split('\n')
+		.flatMap(line => line
+			.split(regex)
+			.filter(entry => !!entry)
+			.map(entry => entry.trim()),
+		);
 };

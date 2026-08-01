@@ -5,6 +5,7 @@ import Tag from '../../models/Tag';
 import AiService from './AiService';
 import { EmbeddingProvider } from './types';
 import { EmbeddingsPage, GetEmbeddingsOptions, SearchOptions, SearchQuery, SearchRelevance, SearchResult, SearchScope } from '../plugins/api/types';
+import { splitByMarkdownFormattingApproximate } from '../../string-utils';
 
 export type { EmbeddingsPage, GetEmbeddingsOptions, SearchOptions, SearchQuery, SearchRelevance, SearchResult, SearchScope };
 
@@ -237,9 +238,17 @@ export default class SearchService {
 
 		const lines = text.split('\n')
 			.map(line => line.trim())
-			.filter(line => line.length > 40);
+			.filter(line => line.length > 0);
 		if (lines.length) {
 			text = await getBestSubtext(lines);
+		}
+
+		// Try to get a sub-section that doesn't include Markdown formatting:
+		const segments = splitByMarkdownFormattingApproximate(text);
+		if (segments.length > 1) {
+			text = await getBestSubtext(segments);
+		} else if (segments.length > 0) {
+			text = segments[0];
 		}
 
 		return text;
