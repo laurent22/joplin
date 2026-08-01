@@ -813,8 +813,9 @@ export default class SearchEngine {
 		let rows: ProcessResultsRow[] = [];
 
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
-			searchString = this.normalizeText_(searchString);
-			rows = (await this.basicSearch(searchString)) as unknown as ProcessResultsRow[];
+			rows = (await this.basicSearch(
+				this.normalizeText_(searchString),
+			)) as unknown as ProcessResultsRow[];
 			this.processResults_(rows, parsedQuery, false);
 		} else if (searchType === SearchType.Semantic) {
 			rows = await this.semanticSearch(searchString, parsedQuery);
@@ -924,7 +925,7 @@ export default class SearchEngine {
 			rows = rows.concat(await this.semanticSearch(searchString, parsedQuery));
 
 			// Merge duplicate rows
-			deduplicateAndSort(rows);
+			rows = deduplicateAndSort(rows);
 		}
 
 		return rows;

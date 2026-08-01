@@ -320,7 +320,7 @@ export const splitByMarkdownFormattingApproximate = (text: string) => {
 		// Code blocks
 		'^```{1,4}\\w*',
 		// Lists
-		'^\\s{0,5}[-*] (:?\\[[xX ]\\])?',
+		'^\\s{0,5}[-*] (?:\\[[xX ]\\])?',
 		'^\\s{0,5}\\d{1,4}\\. ',
 		// HTML
 		'<[^>]{0,128}>',
