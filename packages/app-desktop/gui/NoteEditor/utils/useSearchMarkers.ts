@@ -29,6 +29,7 @@ function defaultSearchMarkers(): SearchMarkers {
 	};
 }
 
+// Returns matching substrings of the note for the given search query
 const useSemanticSearchMatches = (query: string, noteId: string, _noteBody: string, noteTitle: string) => {
 	const [matchingChunks, setMatchingChunks] = useState<string[]>([]);
 	const matchingChunksRef = useRef(matchingChunks);

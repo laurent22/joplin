@@ -70,4 +70,10 @@ describe('string-utils', () => {
 		expect(splitCommandBatch(batch)).toEqual(expected);
 	}));
 
+	test.each([
+		{ text: 'testing this is a test', from: 4, to: 'testing this'.length, tolerance: 6, expected: 'this' },
+		{ text: 'testing this is a test', from: 4, to: 'testing this'.length, tolerance: 1, expected: 'ing this' },
+	])('should return a space-aligned substring (case %#)', ({ text, from, to, tolerance, expected }) => {
+		expect(StringUtils.spaceAlignedSubstring(text, from, to, tolerance)).toBe(expected);
+	});
 });

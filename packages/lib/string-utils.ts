@@ -308,3 +308,32 @@ export const stripBom = (text: string) => {
 	// when reading files.
 	return text.replace(/^\ufeff/u, '');
 };
+
+// Returns a substring of `text`, contracted by up to `tolerance`
+export const spaceAlignedSubstring = (text: string, from: number, to: number, tolerance: number) => {
+	let newFrom = from;
+	let newTo = to;
+
+	for (let i = 0; i < tolerance; i++) {
+		const result = text.substring(newFrom - 1, newTo + 1);
+		const startsWithSpace = /^\s/.test(result);
+		const endsWithSpace = /\s$/.test(result);
+		if (startsWithSpace) {
+			from = newFrom;
+		} else if (newFrom < newTo) {
+			newFrom ++;
+		}
+
+		if (endsWithSpace) {
+			to = newTo;
+		} else if (newTo > newFrom) {
+			newTo --;
+		}
+
+		if (startsWithSpace && endsWithSpace) {
+			break;
+		}
+	}
+
+	return text.substring(from, to);
+};
