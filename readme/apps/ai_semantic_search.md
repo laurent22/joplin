@@ -33,6 +33,16 @@ There is no dedicated "semantic search" box in Joplin's UI today. Semantic searc
 
 If you want to try it directly, the MCP server is the easiest path.
 
+## What it's good at (and what it isn't)
+
+Semantic search works by turning text into a numerical representation of its **meaning**, so it's best when the query itself carries enough meaning to work with:
+
+- **Good for:** conceptual or paraphrased queries, natural-language questions, and finding notes that don't share the exact words you searched for ("the note about pet sitters for my dog").
+
+- **Weak for:** single-word and very short queries, and exact-token lookups such as names, IDs or error codes. A single word carries too little meaning to match reliably, so it tends to return unrelated results — sometimes with high scores. Use Joplin's regular keyword search for these.
+
+The two approaches are complementary: keyword search is best for exact words, semantic search for meaning. If you're a plugin author, don't route single-word or exact-match queries through `joplin.ai.search()` — combine it with keyword search instead.
+
 ## Switching providers / re-indexing
 
 If you change the embedding model — for example by switching providers — Joplin **wipes the index and rebuilds it**. Fingerprints from different models aren't comparable, so a clean rebuild is the only safe option. The indexer status panel shows what's happening.
