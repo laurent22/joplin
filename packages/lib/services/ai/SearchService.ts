@@ -245,8 +245,12 @@ export default class SearchService {
 			text = await getBestSubtext(lines);
 		}
 
-		// Try to get a sub-section that doesn't include Markdown formatting:
-		const segments = splitByMarkdownFormattingApproximate(text);
+		// Try to get a sub-section that doesn't include Markdown formatting. Results including
+		// Markdown are more difficult to highlight after rendering:
+		const segments = splitByMarkdownFormattingApproximate(text)
+			.map(segment => segment.trim())
+			// Marking short or single-character matches usually isn't helpful
+			.filter(segment => segment.length > 1);
 		if (segments.length > 1) {
 			text = await getBestSubtext(segments);
 		} else if (segments.length > 0) {
