@@ -219,7 +219,7 @@ export default class SearchService {
 
 		const findBestIndex = (scores: number[]) => {
 			let bestIndex = 0;
-			let bestScore = 0;
+			let bestScore = -Infinity;
 			for (let i = 0; i < scores.length; i++) {
 				if (scores[i] > bestScore) {
 					bestScore = scores[i];
