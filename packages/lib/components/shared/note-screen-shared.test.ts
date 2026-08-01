@@ -102,6 +102,33 @@ describe('note-screen-shared', () => {
 		expect(unlockedComp.state.noteLockKey).toEqual({ id: 'key-id', plainText: 'key' });
 	});
 
+	it('should report a locked note as undecryptable only when the session is still unlocked', async () => {
+		const testNote = await Note.save({ title: 'Locked', body: 'ciphertext', is_locked: 1, parent_id: folderId });
+
+		jest.spyOn(NoteLockSession.instance(), 'isUnlocked').mockReturnValue(true);
+		jest.spyOn(NoteLockSession.instance(), 'decryptedKey').mockReturnValue({ id: 'key-id', plainText: 'key' });
+		jest.spyOn(NoteLockNote, 'decryptBody').mockRejectedValue(new Error('OperationError'));
+
+		const undecryptableComp = makeComp(testNote);
+		await shared.reloadNote(undecryptableComp);
+		expect(undecryptableComp.state.noteLockUndecryptable).toBe(true);
+		expect(undecryptableComp.state.note.body).toBe('ciphertext');
+		expect(undecryptableComp.state.readOnly).toBe(true);
+		expect(undecryptableComp.state.noteLockKey).toBeNull();
+
+		// Unlocked when the load starts, locked by the time the key is captured: still recoverable.
+		jest.spyOn(NoteLockSession.instance(), 'isUnlocked').mockReturnValueOnce(true).mockReturnValue(false);
+		jest.spyOn(NoteLockNote, 'decryptBody').mockImplementation(async note => ({ ...note, body: 'secret content' }));
+		jest.spyOn(NoteLockSession.instance(), 'decryptedKey').mockImplementation(() => {
+			throw new Error('Note lock session is locked');
+		});
+
+		const racedComp = makeComp(testNote);
+		await shared.reloadNote(racedComp);
+		expect(racedComp.state.noteLockUndecryptable).toBe(false);
+		expect(racedComp.state.note.body).toBe('ciphertext');
+	});
+
 	it('should persist the encrypted body together with a lock state change', async () => {
 		const testNote = await Note.save({ title: 'Plain', body: 'plain text', parent_id: folderId });
 

@@ -10,6 +10,7 @@ import Icon from '../../Icon';
 interface Props {
 	themeId: number;
 	hasNoteLockKey: boolean;
+	undecryptable?: boolean;
 	onUnlocked?: ()=> void;
 }
 
@@ -78,6 +79,12 @@ const NoteLockPanel = (props: Props) => {
 	}, [password, unlocking, props.onUnlocked]);
 
 	const renderForm = () => {
+		if (props.undecryptable) {
+			return (
+				<Text style={styles.message}>{_('This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.')}</Text>
+			);
+		}
+
 		if (!props.hasNoteLockKey) {
 			return (
 				<>

@@ -164,6 +164,7 @@ interface State {
 	newAndNoTitleChangeNoteId: boolean|null;
 	noteLastLoadTime: number;
 	noteLockKey: DecryptedNoteLockKey|null;
+	noteLockUndecryptable: boolean;
 	noteLockUnlockPromptVisible: boolean;
 	todoCheckboxKey: number;
 
@@ -239,6 +240,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			newAndNoTitleChangeNoteId: null,
 			noteLastLoadTime: Date.now(),
 			noteLockKey: null,
+			noteLockUndecryptable: false,
 			noteLockUnlockPromptVisible: false,
 			todoCheckboxKey: 0,
 
@@ -659,6 +661,14 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			this.scheduleFocusUpdate();
 		}
 
+		if (isNoteLockEnabled() && prevState.noteLockUndecryptable !== this.state.noteLockUndecryptable) {
+			this.props.dispatch({
+				type: 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE',
+				value: this.state.noteLockUndecryptable,
+				windowId: this.props.windowId,
+			});
+		}
+
 		if (prevProps.showSideMenu !== this.props.showSideMenu && this.props.showSideMenu) {
 			this.props.dispatch({
 				type: 'NOTE_SIDE_MENU_OPTIONS_SET',
@@ -788,6 +798,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.commandRegistration_?.deregister();
 		this.commandRegistration_ = null;
 
+		if (isNoteLockEnabled() && this.state.noteLockUndecryptable) {
+			// The screen remounts per note id, so the next note never dispatches the clear itself.
+			this.props.dispatch({
+				type: 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE',
+				value: false,
+				windowId: this.props.windowId,
+			});
+		}
+
 		this.props.dispatch({
 			type: 'SET_NOTE_EDITOR_VISIBLE',
 			visible: false,
@@ -900,6 +919,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			return;
 		}
 		if (!NoteLockSession.instance().isUnlocked()) {
+			// Enabling is completed by enableNoteEncryptionUnlockCallback once the panel unlocks.
 			this.setState({ noteLockUnlockPromptVisible: true });
 			return;
 		}
@@ -910,7 +930,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		void this.setNoteLockState_(false);
 	};
 
-	private noteLockUnlockPrompt_unlocked = () => {
+	private enableNoteEncryptionUnlockCallback = () => {
 		this.setState({ noteLockUnlockPromptVisible: false });
 		void this.setNoteLockState_(true);
 	};
@@ -1497,6 +1517,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			if (!note.is_locked) {
 				output.push({
 					title: _('Enable encryption'),
+					icon: 'material lock-outline',
 					onPress: () => {
 						this.enableNoteEncryption_onPress();
 					},
@@ -1505,6 +1526,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			} else {
 				output.push({
 					title: _('Disable encryption'),
+					icon: 'material lock-open-variant-outline',
 					onPress: () => {
 						this.disableNoteEncryption_onPress();
 					},
@@ -1512,6 +1534,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 				});
 				output.push({
 					title: _('Lock encrypted notes'),
+					icon: 'material lock-outline',
 					onPress: () => {
 						void (async () => {
 							// Lock only after the queue drains, so a pending save cannot leave the note
@@ -1807,6 +1830,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			bodyComponent = <NoteLockPanel
 				themeId={this.props.themeId}
 				hasNoteLockKey={!!NoteLockKey.instance().load()}
+				undecryptable={this.state.noteLockUndecryptable}
 			/>;
 		} else if (editorView) {
 			bodyComponent = renderPluginEditor();
@@ -2044,7 +2068,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						<NoteLockPanel
 							themeId={this.props.themeId}
 							hasNoteLockKey={true}
-							onUnlocked={this.noteLockUnlockPrompt_unlocked}
+							onUnlocked={this.enableNoteEncryptionUnlockCallback}
 						/>
 					</DismissibleDialog>
 				)}
