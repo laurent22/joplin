@@ -8,6 +8,7 @@ import { BaseItemEntity, NoteEntity } from '../../database/types';
 import { SyncAction, conflictActions } from './types';
 import ConflictNoteState from '../../../models/ConflictNoteState';
 import autoMergeNote from '../../conflict/autoMergeNote';
+import decryptNoteInMemory from '../../conflict/decryptNoteInMemory';
 import isAutoMergeEnabled from '../../conflict/isAutoMergeEnabled';
 import time from '../../../time';
 
@@ -59,21 +60,22 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 			mustHandleConflict = Note.mustHandleConflict(local, remoteContent);
 		}
 
-		// Try a three-way merge before creating a conflict note. This step is skipped for content
-		// that can't be merged safely: read-only items (the local change can't be  pushed),
-		// encrypted notes (body still ciphertext) and the locked notes
+		// The remote note is only decrypted after it's saved, so decrypt it in memory here
+		const decryptedRemoteNote = mustHandleConflict && remoteContent ? await decryptNoteInMemory(remoteContent as NoteEntity) : null;
+
+		// Skipped for content that can't be merged safely: read-only items (the local change
+		// can't be pushed), still encrypted local notes and the locked notes
 		let merge: ReturnType<typeof autoMergeNote>|null = null;
-		if (mustHandleConflict && remoteContent && !itemIsReadOnly && isAutoMergeEnabled()) {
+		if (mustHandleConflict && decryptedRemoteNote && !itemIsReadOnly && isAutoMergeEnabled()) {
 			const localNote = local as NoteEntity;
-			const remoteNote = remoteContent as NoteEntity;
 			const cannotAutoMerge = (note: NoteEntity) => !!note.encryption_applied || !!note.encryption_cipher_text || !!note.is_locked;
 
-			if (!cannotAutoMerge(localNote) && !cannotAutoMerge(remoteNote)) {
+			if (!cannotAutoMerge(localNote) && !cannotAutoMerge(decryptedRemoteNote)) {
 				const base = await Note.syncBaseContent(syncTargetId, local.id);
 				merge = autoMergeNote(
 					{ title: base ? base.base_title : '', body: base ? base.base_body : '' },
 					{ title: localNote.title, body: localNote.body },
-					{ title: remoteNote.title, body: remoteNote.body },
+					{ title: decryptedRemoteNote.title, body: decryptedRemoteNote.body },
 				);
 			}
 		}
@@ -82,7 +84,8 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		if (merge && merge.fullyMerged) {
 			// Preserve the remote note's metadata and replace only the merged title/body.
 			// This matches the normal conflict path, so fields such as user_updated_time remain consistent.
-			const remoteNote = remoteContent as NoteEntity;
+			// The decrypted copy is used so the saved note doesn't keep the encrypted fields.
+			const remoteNote = decryptedRemoteNote;
 			const mergedNote: NoteEntity = {
 				...remoteNote,
 				title: merge.resolvedLocal.title,
@@ -103,6 +106,12 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		// ------------------------------------------------------------------------------
 
 		if (mustHandleConflict) {
+			// An encrypted remote has no readable title or body. This must run before the
+			// merge results are applied below, which is where the remoteContent is read from
+			if (decryptedRemoteNote && (remoteContent as NoteEntity).encryption_cipher_text) {
+				remoteContent = { ...remoteContent, title: decryptedRemoteNote.title, body: decryptedRemoteNote.body } as NoteEntity;
+			}
+
 			// Merge the non-conflicting changes into both sides before creating the
 			// conflict note, so they only differ where a real conflict remain
 			if (merge) {

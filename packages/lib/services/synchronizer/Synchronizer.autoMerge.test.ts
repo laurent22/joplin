@@ -1,14 +1,30 @@
-import { synchronizerStart, setupDatabaseAndSynchronizer, switchClient, synchronizer } from '../../testing/test-utils';
+import { synchronizerStart, setupDatabaseAndSynchronizer, switchClient, synchronizer, loadEncryptionMasterKey, encryptionService, decryptionWorker } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import ConflictNoteState from '../../models/ConflictNoteState';
 import { NoteEntity } from '../database/types';
+import { MasterKeyEntity } from '../e2ee/types';
+import { setEncryptionEnabled } from './syncInfoUtils';
+import { loadMasterKeysFromSettings } from '../e2ee/utils';
 
 // Auto-merge is off by default and runs on the client that detects the conflict
 // (client 1 here), so only that client needs it be enabled
 const enableAutoMerge = () => {
 	Setting.setValue('sync.autoMergeConflicts', true);
+};
+
+const enableEncryption = async () => {
+	setEncryptionEnabled(true);
+	return loadEncryptionMasterKey();
+};
+
+// A client that receives the master key by sync still needs the password before it
+// can read encrypted items.
+const loadMasterKey = async (masterKey: MasterKeyEntity) => {
+	Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
+	await loadMasterKeysFromSettings(encryptionService());
+	await decryptionWorker().start();
 };
 
 // Client 2 edits and syncs first (becoming the remote), then client 1 edits and
@@ -223,6 +239,80 @@ describe('Synchronizer.autoMerge', () => {
 			{ body: baseBody.replace('Third paragraph.', 'Third paragraph, edited remotely.') },
 			{ body: baseBody.replace('First paragraph.', 'First paragraph, edited locally.') },
 		);
+
+		expect(await Note.conflictedNotes()).toHaveLength(1);
+	}));
+
+	it('should auto-merge when the remote note is encrypted', (async () => {
+		const masterKey = await enableEncryption();
+
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'Title', body: baseBody, parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		await loadMasterKey(masterKey);
+		await Note.save({ id: note.id, body: baseBody.replace('Third paragraph.', 'Third paragraph, edited remotely.') });
+		await synchronizerStart();
+
+		await switchClient(1);
+		await Note.save({ id: note.id, body: baseBody.replace('First paragraph.', 'First paragraph, edited locally.') });
+		await synchronizerStart();
+
+		expect(await Note.conflictedNotes()).toHaveLength(0);
+
+		const merged = await Note.load(note.id);
+		expect(merged.body).toContain('First paragraph, edited locally.');
+		expect(merged.body).toContain('Third paragraph, edited remotely.');
+		expect(merged.encryption_applied).toBeFalsy();
+	}));
+
+	it('should record the decrypted remote version in the conflict state', (async () => {
+		// Without this the state would be saved empty and the resolution UI would have
+		// nothing to compare against
+		const masterKey = await enableEncryption();
+
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'Title', body: baseBody, parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		await loadMasterKey(masterKey);
+		await Note.save({ id: note.id, body: baseBody.replace('Second paragraph.', 'Second paragraph, remote.') });
+		await synchronizerStart();
+
+		await switchClient(1);
+		await Note.save({ id: note.id, body: baseBody.replace('Second paragraph.', 'Second paragraph, local.') });
+		await synchronizerStart();
+
+		const conflicts = await Note.conflictedNotes();
+		expect(conflicts).toHaveLength(1);
+
+		const state = await ConflictNoteState.byNoteId(conflicts[0].id);
+		expect(state.remote_body).toContain('Second paragraph, remote.');
+		expect(state.remote_title).toBe('Title');
+	}));
+
+	it('should create a plain conflict note when the remote note cannot be decrypted', (async () => {
+		const masterKey = await enableEncryption();
+
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'Title', body: baseBody, parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		await loadMasterKey(masterKey);
+		await Note.save({ id: note.id, body: baseBody.replace('Third paragraph.', 'Third paragraph, edited remotely.') });
+		await synchronizerStart();
+
+		await switchClient(1);
+		// Drop the key so the incoming note can't be read
+		encryptionService().unloadMasterKey(masterKey);
+		await Note.save({ id: note.id, body: baseBody.replace('First paragraph.', 'First paragraph, edited locally.') });
+		await synchronizerStart();
 
 		expect(await Note.conflictedNotes()).toHaveLength(1);
 	}));

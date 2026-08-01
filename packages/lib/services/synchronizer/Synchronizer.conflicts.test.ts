@@ -4,6 +4,7 @@ import { synchronizerStart, setupDatabaseAndSynchronizer, sleep, switchClient, s
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
+import Setting from '../../models/Setting';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { NoteEntity } from '../database/types';
 
@@ -253,6 +254,10 @@ describe('Synchronizer.conflicts', () => {
 	}));
 
 	async function ignorableNoteConflictTest(withEncryption: boolean) {
+		// This covers the conflict behaviour without auto-merge, which would otherwise
+		// merge the encrypted case instead of creating a conflict note
+		Setting.setValue('sync.autoMergeConflicts', false);
+
 		if (withEncryption) {
 			setEncryptionEnabled(true);
 			await loadEncryptionMasterKey();
