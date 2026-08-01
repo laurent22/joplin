@@ -111,6 +111,7 @@ const Editor = (props: Props, ref: ForwardedRef<CodeMirrorControl>) => {
 		const searchState = editor.getSearchState();
 		const externalSearchText = props.externalSearch
 			.keywords
+			.filter(k => typeof k === 'string' || k.source !== 'semantic')
 			.map(k => typeof k === 'string' ? k : k.value)
 			.join(' ') || searchState.searchText;
 

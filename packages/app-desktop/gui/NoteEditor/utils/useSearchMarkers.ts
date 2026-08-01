@@ -133,7 +133,7 @@ export default function useSearchMarkers({
 
 		if (semanticSearchMatches.length) {
 			output.keywords = output.keywords.concat(semanticSearchMatches.map(match => (
-				{ type: 'text', accuracy: 'partial', value: match }
+				{ type: 'text', accuracy: 'partial', value: match, source: 'semantic' }
 			)));
 		}
 

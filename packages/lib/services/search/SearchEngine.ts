@@ -69,6 +69,7 @@ export interface ComplexTerm {
 	scriptType?: string;
 	valueRegex?: string;
 	accuracy?: string;
+	source?: 'semantic';
 }
 
 export interface Terms {

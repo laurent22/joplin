@@ -174,15 +174,16 @@ export default function useEditorSearchExtension() {
 		setPreviousSearchTimestamp(options.searchTimestamp);
 
 		// SEARCHOVERLAY
-		// We only want to highlight all matches when there is only 1 search term
-		if (keywords.length !== 1 || keywordValue(keywords[0]) === '') {
+		// We only want to highlight all matches when there is only 1 main search term
+		const mainSearch = keywords.filter(keyword => typeof keyword === 'string' || keyword.source !== 'semantic');
+		if (mainSearch.length !== 1 || keywordValue(mainSearch[0]) === '') {
 			clearOverlay(cm);
 			const prev = keywords.length > 1 ? keywordValue(keywords[0]) : '';
 			setPreviousKeywordValue(prev);
 			return 0;
 		}
 
-		const searchTerm = getSearchTerm(keywords[0]);
+		const searchTerm = getSearchTerm(mainSearch[0]);
 
 		// Determine the number of matches in the source, this is passed on
 		// to the NoteEditor component
