@@ -63,7 +63,7 @@ export const authenticate = async () => {
 	return accessToken;
 };
 
-// Opens browser for the given URL based on the OS the user is using
+// Opens browser based on the OS the user is using
 const openBrowser = async () => {
 	const platform = process.platform;
 	let command: string;
