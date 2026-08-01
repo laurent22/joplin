@@ -76,7 +76,7 @@
     "@joplin/utils": "~2.12",
     "@seiyab/eslint-plugin-react-hooks": "4.5.1-beta.0",
     "@stylistic/eslint-plugin": "5.10.0",
-    "@types/jest": "29.5.14",
+    "@types/jest": "30.0.0",
     "@typescript-eslint/eslint-plugin": "8.60.0",
     "@typescript-eslint/parser": "8.60.0",
     "cspell": "5.21.2",
@@ -100,7 +100,7 @@
   },
   "dependencies": {
     "@types/fs-extra": "11.0.4",
-    "eslint-plugin-github": "4.10.2",
+    "eslint-plugin-github": "6.0.0",
     "http-server": "14.1.1",
     "node-gyp": "11.5.0",
     "nodemon": "3.1.14"
