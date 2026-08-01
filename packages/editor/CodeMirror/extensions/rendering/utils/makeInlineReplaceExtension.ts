@@ -34,9 +34,13 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 
 	private onMouseUp = () => {
 		if (this.mouseSelectionInProgress) {
-			this.mouseSelectionInProgress = false;
-			this.view.dispatch({
-				effects: updateInlineDecorationsEffect.of(null),
+			// To prevent unnecessary scroll on iOS, decoration changes need to
+			// happen *after* the gesture ends.
+			requestAnimationFrame(() => {
+				this.mouseSelectionInProgress = false;
+				this.view.dispatch({
+					effects: updateInlineDecorationsEffect.of(null),
+				});
 			});
 		}
 	};
