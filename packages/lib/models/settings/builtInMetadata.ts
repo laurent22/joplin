@@ -2378,7 +2378,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 		},
 
 		'featureFlag.enableSemanticSearch': {
-			value: false,
+			value: true,
 			type: SettingItemType.Bool,
 			public: true,
 			storage: SettingStorage.File,

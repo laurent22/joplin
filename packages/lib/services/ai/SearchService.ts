@@ -21,8 +21,10 @@ interface RelevanceTuning {
 }
 
 // Tuned for multilingual-e5-small. Becomes a per-model map when we add more.
+// multilingual-e5-small usually returns results in the range [0.7,1]
 const RELEVANCE_DEFAULTS: Record<SearchRelevance, RelevanceTuning> = {
-	strict: { k: 5, minScore: 0.55 },
+	strict: { k: 5, minScore: 0.86 },
+	// TODO: Adjust minScore to avoid returning irrelevant results:
 	normal: { k: 10, minScore: 0.40 },
 	loose: { k: 20, minScore: 0.25 },
 };

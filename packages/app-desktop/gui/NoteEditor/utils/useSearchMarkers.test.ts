@@ -21,17 +21,17 @@ describe('useSearchMarkers', () => {
 	it.each([
 		{
 			label: 'should return markers for semantic search results',
-			noteBody: 'this is a test',
-			searchQuery: 'tests',
-			expected: [{ type: 'text', value: 'this is a test' }],
+			noteBody: 'example example example example',
+			searchQuery: 'examples example example example',
+			expected: [{ type: 'text', value: 'example example example example' }],
 		},
 		{
 			label: 'should exclude Markdown from keywords',
-			noteBody: '*test*!',
+			noteBody: '*test-test-test-test*! test',
 			// cSpell:disable
-			searchQuery: 'testt',
+			searchQuery: 'testt-test-test-test',
 			// cSpell:enable
-			expected: [{ type: 'text', value: 'test' }],
+			expected: [{ type: 'text', value: 'test-test-test-test' }],
 		},
 	])('should return keywords for semantic search matches: $label', async ({ noteBody, searchQuery, expected }) => {
 		const note = await Note.save({ title: 'test', body: noteBody });

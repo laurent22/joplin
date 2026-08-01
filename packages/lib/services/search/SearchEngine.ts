@@ -695,9 +695,9 @@ export default class SearchEngine {
 				user_created_time: item.user_created_time,
 				matchinfo: null,
 				item_type: ModelType.Note,
-				// Standard results weights are usually 0-10, but semantic results usually are much less
-				// relevant than standard results, so weight them 0-4.
-				weight: result.score * 4,
+				// Standard results weights are usually 0-10, semantic search scores are usually
+				// 0.7-1.
+				weight: result.score * 5,
 				is_todo: item.is_todo,
 				todo_completed: item.todo_completed,
 				searchType: [SearchType.Semantic],
