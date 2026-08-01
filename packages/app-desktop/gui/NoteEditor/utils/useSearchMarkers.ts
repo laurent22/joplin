@@ -1,6 +1,6 @@
 import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
 import { HighlightedWord, SearchEntry } from '@joplin/lib/reducer';
-import SearchService from '@joplin/lib/services/ai/SearchService';
+import SearchService, { SearchResult } from '@joplin/lib/services/ai/SearchService';
 import { ProcessResultsRow, SearchType } from '@joplin/lib/services/search/SearchEngine';
 import { Second } from '@joplin/utils/time';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -29,8 +29,29 @@ function defaultSearchMarkers(): SearchMarkers {
 	};
 }
 
+
+const removeNoteTitle = (result: SearchResult, noteTitle: string) => {
+	if (result.chunkIndex !== 0) return result;
+
+	let chunkText = result.chunkText;
+	while (chunkText.startsWith(`${noteTitle}\n`)) {
+		chunkText = chunkText.substring(noteTitle.length).trim();
+	}
+
+	return {
+		...result,
+		chunkText,
+	};
+};
+
+interface UseSemanticSearchMatchesProps {
+	query: string;
+	noteId: string;
+	noteTitle: string;
+}
+
 // Returns matching substrings of the note for the given search query
-const useSemanticSearchMatches = (query: string, noteId: string, _noteBody: string, noteTitle: string) => {
+const useSemanticSearchMatches = ({ query, noteId, noteTitle }: UseSemanticSearchMatchesProps) => {
 	const [matchingChunks, setMatchingChunks] = useState<string[]>([]);
 	const matchingChunksRef = useRef(matchingChunks);
 	matchingChunksRef.current = matchingChunks;
@@ -51,7 +72,9 @@ const useSemanticSearchMatches = (query: string, noteId: string, _noteBody: stri
 
 		const matches = [];
 		for (const result of results) {
-			const bestMatch = await SearchService.instance().bestMatchInResult(query, result);
+			const bestMatch = await SearchService.instance().bestMatchInResult(
+				query, removeNoteTitle(result, noteTitle),
+			);
 			if (event.cancelled) return;
 			matches.push(bestMatch);
 		}
@@ -71,17 +94,27 @@ const useSemanticSearchMatches = (query: string, noteId: string, _noteBody: stri
 	return matchingChunks;
 };
 
-export default function useSearchMarkers(
-	showLocalSearch: boolean,
-	localSearchMarkerOptions: ()=> SearchMarkers,
-	noteId: string,
-	searchResults: ProcessResultsRow[],
-	searchId: string,
-	searches: SearchEntry[],
-	highlightedWords: HighlightedWord[] = [],
-	noteBody: string,
-	noteTitle: string,
-) {
+interface UseSearchMarkersProps {
+	showLocalSearch: boolean;
+	localSearchMarkerOptions: ()=> SearchMarkers;
+	noteId: string;
+	searchResults: ProcessResultsRow[];
+	searchId: string;
+	searches: SearchEntry[];
+	highlightedWords: HighlightedWord[];
+	noteTitle: string;
+}
+
+export default function useSearchMarkers({
+	showLocalSearch,
+	localSearchMarkerOptions,
+	noteId,
+	searchResults,
+	searchId,
+	searches,
+	highlightedWords,
+	noteTitle,
+}: UseSearchMarkersProps) {
 	const searchResultsRef = useRef(searchResults);
 	searchResultsRef.current = searchResults;
 	const currentNoteSearchResult = useMemo(() => {
@@ -95,13 +128,15 @@ export default function useSearchMarkers(
 		return search.query_pattern;
 	}, [searches, searchId, currentNoteSearchResult]);
 
-	const semanticSearchMatches = useSemanticSearchMatches(semanticSearchQuery, noteId, noteBody, noteTitle);
+	const semanticSearchMatches = useSemanticSearchMatches({
+		query: semanticSearchQuery, noteId, noteTitle,
+	});
 
 	return useMemo((): SearchMarkers => {
 		if (showLocalSearch) return localSearchMarkerOptions();
 
 		const output = defaultSearchMarkers();
-		output.keywords = highlightedWords;
+		output.keywords = highlightedWords ?? [];
 
 		if (semanticSearchMatches.length) {
 			output.keywords = output.keywords.concat(semanticSearchMatches.flatMap(match =>
