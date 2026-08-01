@@ -71,7 +71,9 @@ const useSemanticSearchMatches = ({ query, noteId, noteTitle }: UseSemanticSearc
 			return;
 		}
 
-		const results = await SearchService.instance().search({ query: { text: query }, scope: { type: 'note', noteId } });
+		const results = await SearchService.instance().search({
+			query: { text: query }, scope: { type: 'note', noteId }, relevance: 'strict',
+		});
 		if (event.cancelled) return;
 
 		const matches = [];
