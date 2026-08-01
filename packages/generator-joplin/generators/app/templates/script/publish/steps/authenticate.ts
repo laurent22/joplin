@@ -25,19 +25,12 @@ interface PollResponse {
 interface DeviceFlowResponse {
 	device_code: string;
 	user_code: string;
-	verification_uri: string;
 	interval: number;
 }
 
 // ~/.config/joplin-plugin -> For saving the token received after authentication
 const configDir = join(homedir(), '.config', 'joplin-plugin');
 const credentialPath = join(configDir, 'credentials.json');
-
-const validateVerificationUrl = (url: string) => {
-	if (url !== githubVerificationUrl) {
-		throw new Error(`Unexpected GitHub verification URL: ${url}`);
-	}
-};
 
 export const authenticate = async () => {
 
@@ -49,18 +42,17 @@ export const authenticate = async () => {
 	}
 
 	const deviceCodeResponse = await initiateDeviceFlow(githubClientId);
-	const { device_code, user_code, verification_uri, interval } = deviceCodeResponse;
-	validateVerificationUrl(verification_uri);
+	const { device_code, user_code, interval } = deviceCodeResponse;
 
 	logger.info(`
   ------ GitHub Authentication Required ------
-  1. Your browser will open: ${verification_uri}
+  1. Your browser will open: ${githubVerificationUrl}
   2. Enter this code when prompted: ${user_code}
 
   Waiting for authorization...
   `);
 
-	await openBrowser(verification_uri);
+	await openBrowser();
 
 	// repeatedly checks if the user has authenticated or not
 	const accessToken = await pollForToken(device_code, interval, githubClientId);
@@ -72,31 +64,29 @@ export const authenticate = async () => {
 };
 
 // Opens browser for the given URL based on the OS the user is using
-const openBrowser = async (url: string) => {
-	validateVerificationUrl(url);
-
+const openBrowser = async () => {
 	const platform = process.platform;
 	let command: string;
 	let args: string[];
 
 	if (platform === 'win32') {
 		command = 'rundll32.exe';
-		args = ['url.dll,FileProtocolHandler', url];
+		args = ['url.dll,FileProtocolHandler', githubVerificationUrl];
 	} else if (platform === 'darwin') {
 		command = 'open';
-		args = [url];
+		args = [githubVerificationUrl];
 	} else if (process.env.WSL_DISTRO_NAME || process.env.WSL_INTEROP) {
 		command = 'wslview';
-		args = [url];
+		args = [githubVerificationUrl];
 	} else {
 		command = 'xdg-open';
-		args = [url];
+		args = [githubVerificationUrl];
 	}
 
 	try {
 		await execFileAsync(command, args);
 	} catch {
-		logger.warn(`Could not open browser automatically. Please visit: ${url}`);
+		logger.warn(`Could not open browser automatically. Please visit: ${githubVerificationUrl}`);
 	}
 };
 
