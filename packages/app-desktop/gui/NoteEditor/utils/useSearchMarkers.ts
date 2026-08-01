@@ -30,7 +30,7 @@ function defaultSearchMarkers(): SearchMarkers {
 }
 
 // Returns matching substrings of the note for the given search query
-const useSemanticSearchMatches = (query: string, noteId: string) => {
+const useSemanticSearchMatches = (query: string, noteId: string, _noteBody: string, noteTitle: string) => {
 	const [matchingChunks, setMatchingChunks] = useState<string[]>([]);
 	const matchingChunksRef = useRef(matchingChunks);
 	matchingChunksRef.current = matchingChunks;
@@ -56,7 +56,16 @@ const useSemanticSearchMatches = (query: string, noteId: string) => {
 			matches.push(bestMatch);
 		}
 
-		setMatchingChunks(matches);
+		setMatchingChunks(matches.map((match, index) => {
+			let text = match;
+
+			// The indexer sometimes prepends the note title: Remove it so that the results are exact substrings of the note body
+			while (index === 0 && noteTitle && text.startsWith(`${noteTitle}\n`)) {
+				text = text.substring(noteTitle.length).trim();
+			}
+
+			return text;
+		}));
 	}, [query, noteId], { interval: Second });
 
 	return matchingChunks;
@@ -70,6 +79,8 @@ export default function useSearchMarkers(
 	searchId: string,
 	searches: SearchEntry[],
 	highlightedWords: HighlightedWord[] = [],
+	noteBody: string,
+	noteTitle: string,
 ) {
 	const searchResultsRef = useRef(searchResults);
 	searchResultsRef.current = searchResults;
@@ -84,7 +95,7 @@ export default function useSearchMarkers(
 		return search.query_pattern;
 	}, [searches, searchId, currentNoteSearchResult]);
 
-	const semanticSearchMatches = useSemanticSearchMatches(semanticSearchQuery, noteId);
+	const semanticSearchMatches = useSemanticSearchMatches(semanticSearchQuery, noteId, noteBody, noteTitle);
 
 	return useMemo((): SearchMarkers => {
 		if (showLocalSearch) return localSearchMarkerOptions();
