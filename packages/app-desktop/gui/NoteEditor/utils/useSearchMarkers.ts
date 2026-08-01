@@ -110,11 +110,9 @@ export default function useSearchMarkers({
 	highlightedWords,
 	noteTitle,
 }: UseSearchMarkersProps) {
-	const searchResultsRef = useRef(searchResults);
-	searchResultsRef.current = searchResults;
 	const currentNoteSearchResult = useMemo(() => {
-		return searchResultsRef.current.find(result => result.id === noteId);
-	}, [noteId]);
+		return searchResults.find(result => result.id === noteId);
+	}, [searchResults, noteId]);
 
 	const semanticSearchQuery = useMemo(() => {
 		if (!currentNoteSearchResult) return null;
