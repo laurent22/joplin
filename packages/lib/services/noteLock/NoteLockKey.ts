@@ -3,7 +3,7 @@ import EncryptionService from '../e2ee/EncryptionService';
 import { MasterKeyEntity } from '../e2ee/types';
 import { localSyncInfo, saveLocalSyncInfo } from '../synchronizer/syncInfoUtils';
 
-interface DecryptedNoteLockKey {
+export interface DecryptedNoteLockKey {
 	id: string;
 	plainText: string;
 }
@@ -11,10 +11,6 @@ interface DecryptedNoteLockKey {
 export default class NoteLockKey {
 
 	public static instance_: NoteLockKey = null;
-
-	private decryptedKey_: string = null;
-	private keyId_: string = null;
-	private unlockExpiryTimestamp_: number = null;
 
 	private constructor(private encryptionService_: EncryptionService = EncryptionService.instance()) {}
 
@@ -26,7 +22,6 @@ export default class NoteLockKey {
 	}
 
 	public static destroyInstance() {
-		this.instance_?.lock();
 		this.instance_ = null;
 	}
 
@@ -46,58 +41,48 @@ export default class NoteLockKey {
 		syncInfo.noteLockKey = key;
 		saveLocalSyncInfo(syncInfo);
 
-		if (this.keyId_ && this.keyId_ !== key.id) this.lock();
-
 		return key;
 	}
 
-	public async create(password: string, unlockExpiryTimestamp: number = null) {
+	public async create(password: string) {
 		if (this.load()) throw new Error('Note lock key already exists');
-		return this.createNewKey_(password, unlockExpiryTimestamp);
+		const key = await this.encryptionService_.generateMasterKey(password);
+		// A key may have arrived through sync while the new one was being generated - keep it,
+		// since notes may already be locked with it on another device.
+		if (this.load()) throw new Error('Note lock key already exists');
+		return this.save(key);
 	}
 
-	public async reset(password: string, unlockExpiryTimestamp: number = null) {
-		return this.createNewKey_(password, unlockExpiryTimestamp);
+	// Rotate through NoteLockSession.reset() rather than calling this directly, so the session locks
+	// and drops the old key as part of the rotation.
+	public async reset(password: string) {
+		return this.save(await this.encryptionService_.generateMasterKey(password));
 	}
 
-	public async unlock(password: string, unlockExpiryTimestamp: number = null) {
+	public async changePassword(currentPassword: string, newPassword: string) {
+		const key = this.load();
+		if (!key) throw new Error('Note lock key has not been created');
+		return this.save(await this.encryptionService_.reencryptMasterKey(key, currentPassword, newPassword));
+	}
+
+	public needsUpgrade() {
+		const key = this.load();
+		return !!key && !!this.encryptionService_.masterKeysThatNeedUpgrading([key]).length;
+	}
+
+	public async upgrade(password: string) {
+		const key = this.load();
+		if (!key) throw new Error('Note lock key has not been created');
+		if (!this.needsUpgrade()) return key;
+		return this.changePassword(password, password);
+	}
+
+	public async decrypt(password: string): Promise<DecryptedNoteLockKey> {
 		const key = this.load();
 		if (!key) throw new Error('Note lock key has not been created');
 		if (!key.id) throw new Error('Note lock key does not have an ID');
 
-		const decryptedKey = await this.encryptionService_.decryptMasterKeyContent(key, password);
-		this.keyId_ = key.id;
-		this.decryptedKey_ = decryptedKey;
-		this.unlockExpiryTimestamp_ = unlockExpiryTimestamp;
-	}
-
-	public lock() {
-		this.keyId_ = null;
-		this.decryptedKey_ = null;
-		this.unlockExpiryTimestamp_ = null;
-	}
-
-	public isUnlocked() {
-		this.invalidateExpiredKey_();
-		if (this.keyId_ && this.keyId_ !== this.load()?.id) this.lock();
-		return !!this.decryptedKey_;
-	}
-
-	public decryptedKey(): DecryptedNoteLockKey {
-		if (!this.isUnlocked()) throw new Error('Note lock key is not unlocked');
-		return {
-			id: this.keyId_,
-			plainText: this.decryptedKey_,
-		};
-	}
-
-	private async createNewKey_(password: string, unlockExpiryTimestamp: number = null) {
-		const key = this.save(await this.encryptionService_.generateMasterKey(password));
-		await this.unlock(password, unlockExpiryTimestamp);
-		return key;
-	}
-
-	private invalidateExpiredKey_() {
-		if (this.unlockExpiryTimestamp_ !== null && this.unlockExpiryTimestamp_ <= Date.now()) this.lock();
+		const plainText = await this.encryptionService_.decryptMasterKeyContent(key, password);
+		return { id: key.id, plainText };
 	}
 }

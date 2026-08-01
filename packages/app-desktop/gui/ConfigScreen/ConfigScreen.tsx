@@ -7,6 +7,8 @@ import bridge from '../../services/bridge';
 import Setting, { AppType, SettingMetadataSection, SettingValueType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import { AppState } from '../../app.reducer';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
+import NoteLockSettings from './controls/NoteLockSettings';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import { reg } from '@joplin/lib/registry';
 import { connect } from 'react-redux';
 import { themeStyle } from '@joplin/lib/theme';
@@ -21,6 +23,7 @@ import { normalizeQuery } from '@joplin/lib/components/shared/config/config-sear
 import { searchResultGroups, matchedSearchSections } from './configSearch';
 import MacOSMissingPasswordHelpLink from './controls/MissingPasswordHelpLink';
 import AiIndexStatus from './controls/AiIndexStatus';
+import AiStatus from './controls/AiStatus';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 import SettingComponent, { UpdateSettingValueEvent } from './controls/SettingComponent';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
@@ -268,6 +271,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				);
 			}
 			settingComps.push(<AiIndexStatus key='ai_index_status' />);
+			settingComps.push(<AiStatus key='ai_status' />);
+		}
+
+		if (section.name === 'noteLock' && isNoteLockEnabled()) {
+			settingComps.push(<NoteLockSettings key='note_lock_settings'/>);
 		}
 
 		if (section.name === 'sync') {

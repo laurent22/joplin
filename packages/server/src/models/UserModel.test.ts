@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow, expectHttpError, createUser } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow, expectHttpError, createUser, koaAppContext } from '../utils/testing/testUtils';
 import { EmailSender, UserFlagType } from '../services/database/types';
 import { ErrorBadRequest, ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
@@ -556,8 +556,9 @@ describe('UserModel', () => {
 		config().LOCAL_AUTH_ENABLED = false;
 
 		const user = await createUser();
+		const ctx = await koaAppContext();
 
-		expect(await models().user().login(user.email, '123456')).toBe(null);
+		expect(await models().user().login(user.email, '123456', ctx.joplin.services)).toBe(null);
 	});
 
 	test('should not change user properties managed by SAML', async () => {
@@ -599,7 +600,8 @@ describe('UserModel', () => {
 		config().SAML_ENABLED = true;
 
 		try {
-			const result = await models().user().ssoLogin(localUser.email, 'Attacker Controlled Name');
+			const ctx = await koaAppContext();
+			const result = await models().user().ssoLogin(localUser.email, 'Attacker Controlled Name', ctx.joplin.services);
 			expect(result).toBeNull();
 
 			const reloaded = await models().user().load(localUser.id);
@@ -633,4 +635,48 @@ describe('UserModel', () => {
 		}
 	});
 
+	test('should correctly return whether a user has MFA enabled', async () => {
+		const createTestUser = async (index: number, mfaEnabled: boolean) => {
+			const user = await createUser(index);
+			await models().user().save({
+				id: user.id,
+				totp_secret: mfaEnabled ? '111111' : '',
+			});
+			return await models().user().load(user.id);
+		};
+
+		const user1 = await createTestUser(1, true);
+		expect(await models().user().hasMFAEnabled(user1.email, { requireUserExists: true })).toBe(true);
+		const user2 = await createTestUser(2, false);
+		expect(await models().user().hasMFAEnabled(user2.email, { requireUserExists: true })).toBe(false);
+
+		expect(
+			await models().user().hasMFAEnabled('no-exist@localhost', { requireUserExists: false }),
+		).toBe(false);
+		await expectHttpError(async () => {
+			await models().user().hasMFAEnabled('no-exist@localhost', { requireUserExists: true });
+		}, 403);
+	});
+
+	test('should return the number of enabled non-admin users from enabledUserCount', async () => {
+		const user1 = await createUser(1);
+		const user2 = await createUser(2);
+		await createUser(3, true);
+
+		expect(await models().user().enabledUserCount({ excludeMainAdmin: true })).toBe(2);
+		expect(await models().user().enabledUserCount({ excludeMainAdmin: false })).toBe(3);
+
+		await models().user().save({
+			id: user2.id,
+			enabled: 0,
+		});
+		expect(await models().user().enabledUserCount({ excludeMainAdmin: true })).toBe(1);
+		expect(await models().user().enabledUserCount({ excludeMainAdmin: false })).toBe(2);
+
+		await models().user().save({
+			id: user1.id,
+			enabled: 0,
+		});
+		expect(await models().user().enabledUserCount({ excludeMainAdmin: true })).toBe(0);
+	});
 });

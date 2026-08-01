@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { _ } from '@joplin/lib/locale';
@@ -9,10 +9,16 @@ import CommandService from '@joplin/lib/services/CommandService';
 import Logger from '@joplin/utils/Logger';
 import { stateUtils } from '@joplin/lib/reducer';
 import { AiChatMessage, AppState } from '../../app.reducer';
-import { runNoteChat, ChatTurn } from '@joplin/lib/services/ai/noteChat';
-import { applyAnchorEdits } from '@joplin/lib/services/ai/applyNoteEdits';
+import { runNoteChat } from '@joplin/lib/services/ai/noteChat';
 import { chatAvailability } from '@joplin/lib/services/ai/availability';
 import { WindowIdContext } from '../NewWindowOrIFrame';
+import AiDegradedNotice from '../AiDegradedNotice';
+import { ChatMessage, ChatRole, ChatToolMessage } from '@joplin/lib/services/ai/types';
+import JoplinError from '@joplin/lib/JoplinError';
+import eventManager, { EventName, ItemChangeEvent } from '@joplin/lib/eventManager';
+import { Second } from '@joplin/utils/time';
+import ChatMessageItem from './ChatMessageItem';
+import NavService from '@joplin/lib/services/NavService';
 
 const logger = Logger.create('ChatPanel');
 
@@ -25,6 +31,7 @@ interface Props {
 	noteTitle: string;
 	noteIsEncrypted: boolean;
 	messages: AiChatMessage[];
+	aiDegraded: boolean;
 	dispatch: Dispatch;
 }
 
@@ -33,10 +40,64 @@ const disclosureSetting = 'ai.chat.disclosureAcknowledged';
 let nextMessageId = 0;
 const makeId = () => `m-${Date.now()}-${++nextMessageId}`;
 
-const editsSummary = (applied: number, missed: number) => {
-	if (applied + missed === 0) return '';
-	if (missed === 0) return _('%d edit(s) applied.', applied);
-	return _('%d edit(s) applied, %d could not be placed automatically.', applied, missed);
+const waitForNextNoteChangeOrTimeout = (noteId: string, timeout: number) => {
+	return new Promise<void>((resolve) => {
+		const listener = (event: ItemChangeEvent) => {
+			if (event.itemId === noteId) {
+				onComplete();
+			}
+		};
+		const onComplete = () => {
+			if (timeoutId) {
+				clearTimeout(timeoutId);
+				timeoutId = null;
+			}
+			eventManager.off(EventName.ItemChange, listener);
+			resolve();
+		};
+		eventManager.on(EventName.ItemChange, listener);
+
+		let timeoutId = setTimeout(() => {
+			onComplete();
+		}, timeout);
+	});
+};
+
+const useCancelCallback = () => {
+	const abortControllerRef = useRef(new AbortController());
+
+	const cancelRequest = useCallback(() => {
+		abortControllerRef.current.abort();
+		abortControllerRef.current = new AbortController();
+	}, []);
+
+	// Cancel on Reset / unmount so an in-flight reply can detect it should
+	// abort instead of landing in a cleared or destroyed conversation.
+	const cancelRequestRef = useRef(cancelRequest);
+	cancelRequestRef.current = cancelRequest;
+	useEffect(() => () => {
+		cancelRequestRef.current();
+	}, []);
+
+	return { abortControllerRef, cancelRequest };
+};
+
+const useHasFocus = () => {
+	const [hasFocus, setHasFocus] = useState(false);
+	const onFocus = useCallback(() => setHasFocus(true), []);
+	const onBlur: React.FocusEventHandler<HTMLDivElement> = useCallback((event) => {
+		const chatPanelContainer = event.currentTarget;
+		const newElementWithFocus = event.relatedTarget;
+		const movingFocusOut = !chatPanelContainer.contains(newElementWithFocus);
+
+		// Avoid quickly toggling hasFocus: onBlur/onFocus are emitted when moving focus between
+		// elements within the container.
+		if (movingFocusOut) {
+			setHasFocus(false);
+		}
+	}, []);
+
+	return { hasFocus, onFocus, onBlur };
 };
 
 // Single-window for v1: mapStateToProps hard-codes defaultWindowId and the
@@ -61,15 +122,18 @@ const ChatPanel: React.FC<Props> = (props) => {
 	noteIdRef.current = props.noteId;
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
-	// Bumped on Reset / unmount so an in-flight reply can detect it should
-	// abort instead of landing in a cleared or destroyed conversation.
-	const generationRef = useRef(0);
-	useEffect(() => () => { generationRef.current++; }, []);
+	const { hasFocus, onFocus, onBlur } = useHasFocus();
+
+	const { abortControllerRef, cancelRequest } = useCancelCallback();
 
 	const windowId = useContext(WindowIdContext);
 
 	const appendMessage = useCallback((message: AiChatMessage) => {
 		dispatch({ type: 'AI_CHAT_APPEND', windowId, message });
+	}, [dispatch, windowId]);
+
+	const addToolResult = useCallback((result: ChatToolMessage) => {
+		dispatch({ type: 'AI_CHAT_ADD_TOOL_RESULT', windowId, toolCall: result });
 	}, [dispatch, windowId]);
 
 	// Drop a separator when the active note changes mid-conversation. Skip
@@ -79,10 +143,13 @@ const ChatPanel: React.FC<Props> = (props) => {
 		lastNoteIdRef.current = props.noteId;
 		if (prev === null || prev === props.noteId || !props.noteId) return;
 		if (messagesLengthRef.current === 0) return;
+
+		const text = _('— now viewing: %s —', props.noteTitle || _('(untitled)'));
 		appendMessage({
 			id: makeId(),
 			role: 'separator',
-			text: _('— now viewing: %s —', props.noteTitle || _('(untitled)')),
+			text,
+			raw: [{ role: ChatRole.User, content: _('Switched notes: %s', text) }],
 		});
 	}, [props.noteId, props.noteTitle, appendMessage]);
 
@@ -91,25 +158,32 @@ const ChatPanel: React.FC<Props> = (props) => {
 		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 	}, [messages]);
 
-	const conversationTurns = useMemo<ChatTurn[]>(() => {
+	const conversationTurns = useMemo<ChatMessage[]>(() => {
 		return messages
-			.filter(m => m.role === 'user' || m.role === 'assistant')
-			.map(m => ({ role: m.role as 'user' | 'assistant', content: m.text }));
+			.map(m => m.raw)
+			.flat();
 	}, [messages]);
 
 	// Joplin Cloud is remote but the user already consented via sync setup.
 	const requiresDisclosure = props.providerType !== 'joplin-cloud';
 	const showDisclosure = requiresDisclosure && !disclosureShown && messages.length === 0;
 
+	const handleCancel = useCallback(() => {
+		cancelRequest();
+		appendMessage({ id: makeId(), role: 'assistant', text: _('(Cancelled)'), raw: [] });
+	}, [cancelRequest, appendMessage]);
+
 	const handleSend = useCallback(async () => {
 		const text = input.trim();
 		if (!text || sending) return;
 		if (!props.noteId) {
-			appendMessage({ id: makeId(), role: 'error', text: _('Open a note to start chatting.') });
+			appendMessage({
+				id: makeId(), role: 'error', text: _('Open a note to start chatting.'), raw: [],
+			});
 			return;
 		}
+		const abortController = abortControllerRef.current;
 
-		const startGeneration = generationRef.current;
 		const noteIdAtStart = props.noteId;
 		setSending(true);
 		setInput('');
@@ -117,103 +191,125 @@ const ChatPanel: React.FC<Props> = (props) => {
 		// Captured so we can roll it back on failure — otherwise a retry would
 		// send the prior user turn as history alongside the new prompt.
 		const userTurnId = makeId();
-		appendMessage({ id: userTurnId, role: 'user', text });
+		let hadVisibleResponse = false;
+		appendMessage({
+			id: userTurnId,
+			role: 'user',
+			text,
+			raw: [{ role: ChatRole.User, content: text }],
+		});
 
 		try {
 			const note = await Note.load(props.noteId);
 			if (!note) throw new Error(`Note not found: ${props.noteId}`);
 
-			let selection = '';
-			try {
-				selection = await CommandService.instance().execute('selectedText') || '';
-			} catch {
-				// Editor may not be ready; treat as no selection.
-			}
+			const getContext = async () => {
+				let selection = '';
+				try {
+					selection = await CommandService.instance().executeInWindow(
+						'selectedText', { windowId, args: [] },
+					) as string || '';
+				} catch {
+					// Editor may not be ready; treat as no selection.
+				}
 
-			const reply = await runNoteChat({
-				title: note.title || '',
-				body: note.body || '',
-				selection: selection || null,
-			}, conversationTurns, text);
+				const note = await Note.load(props.noteId);
+				if (!note) throw new Error(`Note not found: ${props.noteId}`);
 
-			if (generationRef.current !== startGeneration) return;
+				return {
+					body: note.body,
+					title: note.title,
+					selection,
+					noteId: note.id,
+					folderId: note.parent_id,
+				};
+			};
 
-			let editsApplied = 0;
-			let editsMissed = 0;
-			if (reply.edits.length > 0) {
-				// Editor commands run against the focused editor, which may now
-				// be a different note. Refuse rather than mutate the wrong one.
-				if (noteIdRef.current !== noteIdAtStart) {
-					appendMessage({
-						id: makeId(),
-						role: 'error',
-						text: _('You switched notes while the request was running; edits were not applied. Try again.'),
-					});
-				} else {
-					// Re-read live body: the user may have typed while the
-					// request was in flight, and we don't want to overwrite that.
-					const fresh = await Note.load(noteIdAtStart);
-					const liveBody = fresh?.body ?? '';
+			let lastHistory = [
+				{ role: ChatRole.System, content: 'placeholder' },
+				...conversationTurns,
+			];
 
-					if (liveBody !== (note.body || '')) {
+			const onHistoryChanged = (history: ChatMessage[]) => {
+				if (abortController.signal.aborted) return;
+
+				for (let i = lastHistory.length; i < history.length; i++) {
+					const entry = history[i];
+
+					// User messages are added elsewhere, when the user submits the chat
+					if (entry.role === ChatRole.User) continue;
+					// System messages are not shown in the UI
+					if (entry.role === ChatRole.System) continue;
+
+					if (entry.role === ChatRole.Tool) {
+						addToolResult(entry);
+					} else {
+						hadVisibleResponse ||= !entry.hide;
+
 						appendMessage({
 							id: makeId(),
-							role: 'error',
-							text: _('The note changed while the request was running; edits were not applied. Try again.'),
+							role: entry.role,
+							text: entry.content,
+							hide: entry.hide,
+							raw: [entry],
 						});
-					} else {
-						const selectionEdits = reply.edits.filter(e => e.op === 'replaceSelection');
-						const anchorEdits = reply.edits.filter(e => e.op !== 'replaceSelection');
-
-						for (const edit of selectionEdits) {
-							if (edit.op !== 'replaceSelection') continue;
-							if (!selection) {
-								editsMissed++;
-								continue;
-							}
-							await CommandService.instance().executeInWindow('replaceSelection', {
-								windowId,
-								args: [edit.text],
-							});
-							editsApplied++;
-						}
-
-						if (anchorEdits.length > 0) {
-							const cursorPos = selection ? Math.max(0, liveBody.indexOf(selection)) : 0;
-							const { newBody, appliedEdits } = applyAnchorEdits(liveBody, anchorEdits, cursorPos);
-							const missed = appliedEdits.filter(e => e.status !== 'applied').length;
-							editsMissed += missed;
-							editsApplied += appliedEdits.length - missed;
-							if (newBody !== liveBody) {
-								await CommandService.instance().executeInWindow('editor.setText', {
-									windowId,
-									args: [newBody],
-								});
-							}
-						}
 					}
 				}
-			}
 
-			if (generationRef.current !== startGeneration) return;
+				lastHistory = history;
+			};
 
-			appendMessage({
-				id: makeId(),
-				role: 'assistant',
-				text: reply.reply || _('(no message)'),
-				editsApplied,
-				editsMissed,
-			});
+			const assertSameNote = () => {
+				if (noteIdAtStart !== noteIdRef.current) {
+					cancelRequest();
+					throw new JoplinError(
+						_('You switched notes while the request was running; edits were not applied. Try again.'), 'aiNoteChanged',
+					);
+				}
+			};
+
+			await runNoteChat(
+				getContext, conversationTurns, text, {
+					replaceSelection: async (text, oldText) => {
+						if (text === oldText) return;
+						assertSameNote();
+
+						const changeListener = waitForNextNoteChangeOrTimeout(props.noteId, Second);
+						await CommandService.instance().executeInWindow('replaceSelection', {
+							windowId,
+							args: [text],
+						});
+						await changeListener;
+					},
+					updateNoteBody: async (newBody, oldBody) => {
+						if (newBody === oldBody) return;
+						assertSameNote();
+
+						const changeListener = waitForNextNoteChangeOrTimeout(props.noteId, Second);
+						await CommandService.instance().executeInWindow('editor.setText', {
+							windowId,
+							args: [newBody],
+						});
+						await changeListener;
+					},
+					displayError: (message) => {
+						appendMessage({ id: makeId(), role: 'error', text: message, raw: [] });
+					},
+				}, onHistoryChanged, abortController.signal,
+			);
 		} catch (error) {
 			logger.warn('Chat failed:', error);
-			if (generationRef.current !== startGeneration) return;
-			dispatch({ type: 'AI_CHAT_REMOVE', windowId, id: userTurnId });
-			setInput(text);
-			appendMessage({ id: makeId(), role: 'error', text: error.message || _('Something went wrong.') });
+			if (abortController.signal.aborted) return;
+
+			if (!hadVisibleResponse) {
+				dispatch({ type: 'AI_CHAT_REMOVE', windowId, id: userTurnId });
+				setInput(text);
+			}
+			appendMessage({ id: makeId(), role: 'error', text: error.message || _('Something went wrong.'), raw: [] });
 		} finally {
 			setSending(false);
 		}
-	}, [input, sending, props.noteId, conversationTurns, windowId, appendMessage, dispatch]);
+	}, [input, sending, props.noteId, conversationTurns, windowId, addToolResult, appendMessage, dispatch, cancelRequest, abortControllerRef]);
 
 	const handleAcknowledgeDisclosure = useCallback(() => {
 		Setting.setValue(disclosureSetting, true);
@@ -221,9 +317,10 @@ const ChatPanel: React.FC<Props> = (props) => {
 	}, []);
 
 	const handleReset = useCallback(() => {
-		generationRef.current++;
+		cancelRequest();
+
 		dispatch({ type: 'AI_CHAT_RESET', windowId: windowId });
-	}, [dispatch, windowId]);
+	}, [dispatch, windowId, cancelRequest]);
 
 	const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 		// Don't send while an IME composition is in flight — Enter commits
@@ -234,67 +331,42 @@ const ChatPanel: React.FC<Props> = (props) => {
 		}
 	}, [handleSend, sending]);
 
-	if (!props.available) {
-		return (
-			<div className='chat-panel'>
-				<div className='header'>
-					<span className='title'>{_('AI Chat')}</span>
-				</div>
+	const renderContent = () => {
+		if (!props.available) {
+			const content = (
 				<div className='disabled-message'>
 					{props.unavailableHint}
 				</div>
-			</div>
-		);
-	}
-
-	if (props.noteIsEncrypted) {
-		return (
-			<div className='chat-panel'>
-				<div className='header'>
-					<span className='title'>{_('AI Chat')}</span>
-				</div>
+			);
+			return { content, showingMessages: false };
+		}
+		if (props.noteIsEncrypted) {
+			const content = (
 				<div className='disabled-message'>
 					{_('This note is encrypted and cannot be used with AI Chat.')}
 				</div>
-			</div>
-		);
-	}
+			);
+			return { content, showingMessages: false };
+		}
 
-	return (
-		<div className='chat-panel'>
-			<div className='header'>
-				<span className='title'>{_('AI Chat')}</span>
-				{messages.length > 0 && (
-					<button type='button' className='reset' onClick={handleReset}>{_('Reset')}</button>
-				)}
-			</div>
-			<div className='messages'>
-				{messages.length === 0 && (
+		const visibleMessages = messages.filter(m => !m.hide);
+
+		const content = <>
+			{props.aiDegraded && <AiDegradedNotice className='degraded-status' />}
+			<div className='messages' aria-live={hasFocus ? 'polite' : undefined}>
+				{visibleMessages.length === 0 && (
 					<div className='empty'>
 						{_('Ask about this note, or request changes. Select text in the editor first to scope the request to that selection.')}
+						<br/>
+						<br/>
+						<button
+							type='button'
+							className='link-button'
+							onClick={() => NavService.go('Config', { props: { defaultSection: 'ai.tools' } })}
+						>{_('Manage capabilities')}</button>
 					</div>
 				)}
-				{messages.map(m => {
-					if (m.role === 'separator') {
-						return <div key={m.id} className='separator'>{m.text}</div>;
-					}
-					if (m.role === 'error') {
-						return <div key={m.id} className='error'>{m.text}</div>;
-					}
-					const summary = m.role === 'assistant' ? editsSummary(m.editsApplied ?? 0, m.editsMissed ?? 0) : '';
-					return (
-						<div key={m.id} className={`turn -${m.role}`}>
-							<div className='content'>{m.text}</div>
-							{summary && (
-								<div className='meta'>
-									{(m.editsMissed ?? 0) > 0
-										? <span className='warning'>{summary}</span>
-										: <span>{summary}</span>}
-								</div>
-							)}
-						</div>
-					);
-				})}
+				{visibleMessages.map(m => <ChatMessageItem key={m.id} message={m}/>)}
 				<div ref={messagesEndRef} />
 			</div>
 			<div className='composer'>
@@ -317,15 +389,39 @@ const ChatPanel: React.FC<Props> = (props) => {
 					<button
 						type='button'
 						className='send'
-						onClick={() => { void handleSend(); }}
-						disabled={sending || !input.trim()}
-						aria-label={sending ? _('Sending') : _('Send')}
-						title={sending ? _('Sending…') : _('Send')}
+						onClick={sending ? handleCancel : handleSend}
+						disabled={!sending && !input.trim()}
+						aria-label={sendButtonLabel}
+						title={sendButtonLabel}
 					>
-						<i className={sending ? 'fas fa-spinner' : 'fas fa-paper-plane'} aria-hidden='true' />
+						<i className={sending ? 'fas fa-stop' : 'fas fa-paper-plane'} aria-hidden='true' />
 					</button>
 				</div>
 			</div>
+		</>;
+
+		return { content, showingMessages: visibleMessages.length > 0 };
+	};
+
+	const sendButtonLabel = sending ? _('Stop generating') : _('Send');
+	const headerId = useId();
+	const { content, showingMessages } = renderContent();
+
+	return (
+		<div
+			className='chat-panel'
+			role='region'
+			aria-labelledby={headerId}
+			onFocus={onFocus}
+			onBlur={onBlur}
+		>
+			<div className='header'>
+				<h1 className='title' id={headerId}>{_('AI Chat')}</h1>
+				{showingMessages && (
+					<button type='button' className='reset' onClick={handleReset}>{_('Reset')}</button>
+				)}
+			</div>
+			{content}
 		</div>
 	);
 };
@@ -348,6 +444,7 @@ const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
 		noteTitle: note?.title || '',
 		noteIsEncrypted: !!note?.encryption_applied,
 		messages: windowState.aiChatMessages || [],
+		aiDegraded: !!state.aiStatus?.degraded,
 	};
 };
 

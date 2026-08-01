@@ -1,5 +1,45 @@
 # Joplin Android Changelog
 
+## [android-v3.7.4](https://github.com/laurent22/joplin/releases/tag/android-v3.7.4) - 2026-07-28T12:43:17Z
+
+- New: Add shadow to note actions menu (#16053 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Add note lock configuration section (#15963) (#15853 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Consider tags and smart filters when opening the last open location on app start (#16058 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Note action menu: Vertically align icons (#15996 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Note actions menu: Decrease padding size (#15998 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Provide a clear message on what needs to be done when sync fails due to wrong version (#15837) (#15828 by [@Rygaa](https://github.com/Rygaa))
+- Improved: Update Search screen (#15736 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Add file extension validation to import actions (#15960) (#15915 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Avoid reverting to the default editor state when the editor reloads the same note (#15986) (#15968 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix WebDAV support for Koofr (#15983) (#15975 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix auto navigate to latest notebook shortly after app start, when the selected notebook was previously deleted (#15950) (#15914 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix menu animations and drag-to-dismiss  (#15971) (#15928 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Increase minimum prompt button width (#15966) (#15959 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: New note list design does not include the padding in the touch target to open notes (#15987) (#15972 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: New note list design does not look good in multi select mode (#15990) (#15973 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Prevent update to note via the api from refreshing the editor if the change is for a different note (#15985) (#15968 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Upgrade CodeMirror View to v6.43.6 (#16017) (#16009 by [@mrjo118](https://github.com/mrjo118))
+
+## [android-v3.7.3](https://github.com/laurent22/joplin/releases/tag/android-v3.7.3) - 2026-07-13T15:04:29Z
+
+- Improved: Adjust UI padding to match the mobile app redesign (#15741 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Editor: Display tooltip above links to allow opening the link (7979cf8)
+- Improved: Editor: Ensure checkbox size is proportional to font size (c6cc90a)
+- Improved: Implement redesigned note action menu (#15873 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Index locked note resources (#15717) (#15714 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Slightly adjust button colors and add new theme variable (#15764 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update appearance of dialogs (#15706 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update note lock session state (#15773) (#15772 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Updated packages react-native-localize (v3.7.0)
+- Fixed: Add safeguard to prevent revision chains being broken by revision cleaning, where old revisions still exist unexpectedly (#15812) (#15811 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Editor: Fixed vertical alignment of checkboxes (89884e9)
+- Fixed: Fix auto-derived title being cleared after saving a new note (#15846) (#13901)
+- Fixed: Fix sharing to Joplin when opening in edit mode with the RTE enabled (#15746) (#15618 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Harden share to Joplin logic, to prevent overwriting existing notes in certain cases (#15794) (#11479 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Hide private feature flags (#15730) (#15729 by [@keshav0479](https://github.com/keshav0479))
+- Fixed: Improve sidebar swipe gestures and reduce the likelihood of gesture navigation conflicts (#15875) (#12962 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Prevent data loss when toggling the checkbox on a todo immediately after changing note data (#15815) (#15663 by [@mrjo118](https://github.com/mrjo118))
+
 ## [android-v3.7.2](https://github.com/laurent22/joplin/releases/tag/android-v3.7.2) - 2026-06-22T20:27:04Z
 
 - Improved: Preserve customised note history settings when syncing across clients (#15728)

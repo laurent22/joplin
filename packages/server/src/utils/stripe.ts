@@ -187,7 +187,17 @@ export const getLastInvoiceStatus = async (stripe: Stripe, subscriptionId: strin
 // manually check the invoice status and update the related flags.
 export const recheckPaymentStatus = async (stripe: Stripe, models: Models, userId: Uuid) => {
 	const subInfo = await subscriptionInfoByUserId(stripe, models, userId);
-	const status = await getLastInvoiceStatus(stripe, subInfo.sub.stripe_subscription_id);
-	if (status === InvoiceStatus.None) return;
-	await models.subscription().handlePayment(subInfo.sub.stripe_subscription_id, status === InvoiceStatus.Paid);
+
+	const recheckBillingPeriod = async () => {
+		await models.subscription().updateFromStripe(subInfo.sub, subInfo.stripeSub);
+	};
+
+	const recheckInvoice = async () => {
+		const status = await getLastInvoiceStatus(stripe, subInfo.sub.stripe_subscription_id);
+		if (status === InvoiceStatus.None) return;
+		await models.subscription().handlePayment(subInfo.sub.stripe_subscription_id, status === InvoiceStatus.Paid);
+	};
+
+	await recheckBillingPeriod();
+	await recheckInvoice();
 };

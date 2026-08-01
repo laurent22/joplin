@@ -38,6 +38,7 @@ import overwriteModeExtension from './extensions/overwriteModeExtension';
 import handleLinkEditRequests, { showLinkEditor } from './utils/handleLinkEditRequests';
 import selectedNoteIdExtension, { setNoteIdEffect } from './extensions/selectedNoteIdExtension';
 import ctrlKeyStateClassExtension from './extensions/modifierKeyCssExtension';
+import followLinkTooltip from './extensions/links/followLinkTooltipExtension';
 import ctrlClickLinksExtension from './extensions/links/ctrlClickLinksExtension';
 import { RenderedContentContext } from './extensions/rendering/types';
 import ctrlClickCheckboxExtension from './extensions/ctrlClickCheckboxExtension';
@@ -70,6 +71,9 @@ const createEditor = (
 	const context: RenderedContentContext = {
 		resolveImageSrc: (src, counter) => {
 			return props.resolveImageSrc(src, counter);
+		},
+		openLink: (link) => {
+			props.onEvent({ kind: EditorEventType.FollowLink, link });
 		},
 	};
 
@@ -270,7 +274,7 @@ const createEditor = (
 				EditorState.allowMultipleSelections.of(true),
 				rectangularSelection(),
 				drawSelection(),
-				ctrlClickLinksExtension(link => {
+				(settings.themeData.isDesktop ? ctrlClickLinksExtension : followLinkTooltip)(link => {
 					props.onEvent({ kind: EditorEventType.FollowLink, link });
 				}),
 				ctrlClickCheckboxExtension(),

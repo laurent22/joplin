@@ -2,14 +2,15 @@ import { AppContext, KoaNext, NotificationView } from '../utils/types';
 import { isApiRequest } from '../utils/requestUtils';
 import { NotificationLevel } from '../services/database/types';
 import { defaultAdminEmail } from '../db';
-import { _ } from '@joplin/lib/locale';
+import { _, _n } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
 import { NotificationKey } from '../models/NotificationModel';
-import { helpUrl, profileUrl } from '../utils/urlUtils';
+import { adminUsersUrl, helpUrl, profileUrl } from '../utils/urlUtils';
 import { userFlagToString } from '../models/UserFlagModel';
 import renderMarkdown from '../utils/renderMarkdown';
 import config from '../config';
 import { unique } from '../utils/array';
+import { formatDurationToDays } from '../utils/time';
 
 const logger = Logger.create('notificationHandler');
 
@@ -21,7 +22,7 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 		// is only applied on first startup:
 		const dangerousPasswords = unique([config().defaultAdminPassword, 'admin']);
 		for (const password of dangerousPasswords) {
-			const admin = await ctx.joplin.models.user().login(defaultAdminEmail, password);
+			const admin = await ctx.joplin.models.user().login(defaultAdminEmail, password, ctx.joplin.services);
 			if (admin) {
 				return password;
 			}
@@ -52,6 +53,76 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 		await notificationModel.setRead(ctx.joplin.owner.id, NotificationKey.ChangeAdminPassword);
 	}
 }
+
+const handleLicenseStatusNotification = async (ctx: AppContext): Promise<NotificationView|null> => {
+	const licenseStatus = { gracePeriod: false, expired: false, maximumUserCount: -1, licenceRemainingTime: -1 };
+	const isOverUserCapacity = () => Promise.resolve(false);
+
+	const licenseDashboardUrl = () => '';
+	const getUpdateLicenseKeyCallToAction = () => _('Please update the license key from the [admin dashboard](%s).', licenseDashboardUrl());
+
+	if (licenseStatus.gracePeriod && ctx.joplin.owner?.is_admin) {
+		return {
+			id: 'licenseExpiring',
+			messageHtml: renderMarkdown([
+				_('The license key for this Joplin Server Business instance has expired and needs to be renewed.'),
+				_('Item upload will be disabled in %s.', formatDurationToDays(licenseStatus.licenceRemainingTime)),
+				'',
+				getUpdateLicenseKeyCallToAction(),
+			].join('\n')),
+			levelClassName: levelClassName(NotificationLevel.Important),
+			closeUrl: '',
+		};
+	} else if (licenseStatus.expired) {
+		return {
+			id: 'licenseExpiring',
+			messageHtml: renderMarkdown([
+				_('The license key for this Joplin Server Business instance has expired or is invalid. Uploading items has been disabled until the license is renewed.'),
+				'',
+				getUpdateLicenseKeyCallToAction(),
+			].join('\n')),
+			levelClassName: levelClassName(NotificationLevel.Important),
+			closeUrl: '',
+		};
+	} else if (await isOverUserCapacity() && ctx.joplin.owner?.is_admin) {
+		return {
+			id: 'licenseCapacityExceeded',
+			messageHtml: renderMarkdown([
+				_('Item upload has been disabled.'),
+				_n(
+					'This Joplin Server Business instance is only licensed for %d user.',
+					'This Joplin Server Business instance is only licensed for %d users.',
+					licenseStatus.maximumUserCount,
+					licenseStatus.maximumUserCount,
+				),
+				'\n\n',
+				_('Please disable users from the [admin dashboard](%s) to bring this server under the limit.', adminUsersUrl()),
+			].join(' ')),
+			levelClassName: levelClassName(NotificationLevel.Important),
+			closeUrl: '',
+		};
+	}
+
+	if (ctx.joplin.owner?.is_admin) {
+		const licenseRefreshError = '';
+
+		if (licenseRefreshError) {
+			return {
+				id: 'licenseRefreshError',
+				messageHtml: renderMarkdown([
+					_('The license for this server failed to refresh.'),
+					_('Error: %s', licenseRefreshError),
+					'\n\n',
+					_('Manage this server\'s license from the [admin dashboard](%s).', licenseDashboardUrl()),
+				].join(' ')),
+				levelClassName: levelClassName(NotificationLevel.Important),
+				closeUrl: '',
+			};
+		}
+	}
+
+	return null;
+};
 
 // Special notification that cannot be dismissed.
 async function handleUserFlags(ctx: AppContext): Promise<NotificationView> {
@@ -150,6 +221,7 @@ export default async function(ctx: AppContext, next: KoaNext): Promise<void> {
 
 		const nonDismisableViews = [
 			await handleUserFlags(ctx),
+			await handleLicenseStatusNotification(ctx),
 			await handleConfirmEmailNotification(ctx),
 		];
 

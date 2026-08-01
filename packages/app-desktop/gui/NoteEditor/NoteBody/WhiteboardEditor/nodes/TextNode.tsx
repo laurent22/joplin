@@ -5,10 +5,12 @@ import { MarkupLanguage } from '@joplin/renderer';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { _ } from '@joplin/lib/locale';
 import { TextCanvasNode } from '@joplin/lib/services/whiteboard/jsoncanvas';
+import { resolveCanvasColor } from '@joplin/lib/services/whiteboard/presetColors';
 import { useWhiteboardContext, WhiteboardContextValue } from '../WhiteboardContext';
 import { WhiteboardNodeData } from '../canvasFlow';
 import useCheckboxToggle from '../useCheckboxToggle';
 import handlePositions from './handlePositions';
+import useCardWheel from './useCardWheel';
 
 const useRenderedMarkdown = (md: string, ctx: WhiteboardContextValue) => {
 	const [html, setHtml] = useState<string>('');
@@ -38,6 +40,7 @@ const useRenderedMarkdown = (md: string, ctx: WhiteboardContextValue) => {
 const TextNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbText'; data: WhiteboardNodeData; position: { x: number; y: number } }>) => {
 	const ctx = useWhiteboardContext();
 	const node = data.canvasNode as TextCanvasNode;
+	const onWheel = useCardWheel();
 
 	const [editing, setEditing] = useState(false);
 	const [draft, setDraft] = useState(node.text);
@@ -112,7 +115,16 @@ const TextNode = ({ data, selected, id }: NodeProps<{ id: string; type: 'wbText'
 			{handlePositions.map(({ id: hid, position }) => (
 				<Handle key={hid} type="source" position={position} id={hid} />
 			))}
-			<div className={`whiteboard-node -text ${selected ? '-selected' : ''}`} onDoubleClick={onDoubleClick} onKeyDown={onCardKeyDown}>
+			<div
+				className={`whiteboard-node -text ${selected ? '-selected' : ''}`}
+				onDoubleClick={onDoubleClick}
+				onKeyDown={onCardKeyDown}
+				onWheelCapture={onWheel}
+				style={{
+					borderColor: resolveCanvasColor(node.color, ctx.themeAppearance, 'stroke') ?? (selected ? '#4a90e2' : undefined),
+					backgroundColor: resolveCanvasColor(node.color, ctx.themeAppearance, 'fill'),
+				}}
+			>
 				{editing ? (
 					<textarea
 						ref={textareaRef}

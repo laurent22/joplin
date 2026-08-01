@@ -35,7 +35,7 @@
 					<label class="label">Authentication code</label>
 					<div class="field has-addons">
 						<div class="control is-expanded">
-							<input class="input" inputmode="number" name="mfaCode" maxlength="6" placeholder="XXXXXX" autocomplete="off" required/>
+							<input class="input" inputmode="number" name="mfaCode" maxlength="6" placeholder="XXXXXX" autocomplete="off" required autofocus/>
 						</div>
 					</div>
 					<p class="help"><a href="{{{global.baseUrl}}}/login?showRecoveryCodeInput=1">Use a recovery code</a></p>
@@ -46,7 +46,7 @@
 					<label class="label">Recovery Code</label>
 					<div class="field has-addons">
 						<div class="control is-expanded">
-							<input class="input" name="recoveryCode" maxlength="11" required/>
+							<input class="input" name="recoveryCode" maxlength="11" required autofocus/>
 						</div>
 					</div>
 				</div>

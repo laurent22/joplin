@@ -36,4 +36,19 @@ describe('replaceLinks', () => {
 		const editor = await createTestEditor(markup, EditorSelection.cursor(0), expectedSyntaxTags, [replaceLinks]);
 		expect(editor.contentDOM.textContent).toBe(expectedText);
 	});
+
+	it('should not move cursor when URL is already visible', async () => {
+		const markup = '[test](https://example.com/)';
+		const initialCursor = markup.indexOf('test');
+		const clickedCursor = markup.indexOf('example');
+		const editor = await createTestEditor(markup, EditorSelection.cursor(initialCursor), ['URL', 'LinkMark', 'Link'], [replaceLinks]);
+
+		expect(editor.contentDOM.textContent).toBe(markup);
+
+		editor.contentDOM.dispatchEvent(new MouseEvent('mousedown', { button: 0, bubbles: true }));
+		editor.dispatch({ selection: EditorSelection.cursor(clickedCursor) });
+		editor.contentDOM.ownerDocument.dispatchEvent(new MouseEvent('mouseup', { button: 0 }));
+
+		expect(editor.state.selection.main.anchor).toBe(clickedCursor);
+	});
 });

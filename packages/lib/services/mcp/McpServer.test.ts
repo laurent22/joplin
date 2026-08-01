@@ -8,16 +8,16 @@ import McpServer from './McpServer';
 import { McpProtocolVersion } from './types';
 
 const allToolSettings = [
-	'mcp.tool.search_notes.enabled',
-	'mcp.tool.semantic_search_notes.enabled',
-	'mcp.tool.read_note.enabled',
-	'mcp.tool.list_notebooks.enabled',
-	'mcp.tool.list_tags.enabled',
-	'mcp.tool.create_note.enabled',
-	'mcp.tool.update_note.enabled',
-	'mcp.tool.delete_note.enabled',
-	'mcp.tool.manage_tags.enabled',
-	'mcp.tool.create_notebook.enabled',
+	'ai.tool.search_notes.enabled',
+	'ai.tool.semantic_search_notes.enabled',
+	'ai.tool.read_note.enabled',
+	'ai.tool.list_notebooks.enabled',
+	'ai.tool.list_tags.enabled',
+	'ai.tool.create_note.enabled',
+	'ai.tool.update_note.enabled',
+	'ai.tool.delete_note.enabled',
+	'ai.tool.manage_tags.enabled',
+	'ai.tool.create_notebook.enabled',
 ];
 
 const enableAllTools = () => {
@@ -45,17 +45,28 @@ describe('McpServer', () => {
 		expect(response.result.capabilities.tools).toBeDefined();
 	});
 
-	test('lists enabled tools only', async () => {
-		Setting.setValue('mcp.tool.create_note.enabled', false);
-		Setting.setValue('mcp.tool.update_note.enabled', false);
+	test('lists disabled tools as disabled', async () => {
+		Setting.setValue('ai.tool.search_notes.enabled', true);
+		Setting.setValue('ai.tool.read_note.enabled', true);
+		Setting.setValue('ai.tool.list_notebooks.enabled', true);
+		Setting.setValue('ai.tool.list_tags.enabled', true);
+		Setting.setValue('ai.tool.create_note.enabled', false);
+		Setting.setValue('ai.tool.update_note.enabled', false);
 
 		const response = await McpServer.instance().handleRequest({
 			jsonrpc: '2.0', id: 1, method: 'tools/list',
 		});
-		const names = response.result.tools.map((t: { name: string }) => t.name);
+		type ToolSlice = { name: string; description: string };
+		const names = response.result.tools.map((t: ToolSlice) => t.name);
+		// Enabled
 		expect(names).toEqual(expect.arrayContaining(['search_notes', 'read_note', 'list_notebooks', 'list_tags']));
-		expect(names).not.toContain('create_note');
-		expect(names).not.toContain('update_note');
+		// Disabled
+		const createNote = response.result.tools.find((t: ToolSlice) => t.name === 'create_note');
+		const updateNote = response.result.tools.find((t: ToolSlice) => t.name === 'update_note');
+		expect(createNote).toBeTruthy();
+		expect(updateNote).toBeTruthy();
+		expect(createNote.description).toMatch(/^\(Disabled tool\)/);
+		expect(updateNote.description).toMatch(/^\(Disabled tool\)/);
 	});
 
 	test('returns MethodNotFound for unknown methods', async () => {
@@ -66,7 +77,7 @@ describe('McpServer', () => {
 	});
 
 	test('returns isError when calling a disabled tool', async () => {
-		Setting.setValue('mcp.tool.search_notes.enabled', false);
+		Setting.setValue('ai.tool.search_notes.enabled', false);
 		const response = await McpServer.instance().handleRequest({
 			jsonrpc: '2.0', id: 1, method: 'tools/call',
 			params: { name: 'search_notes', arguments: { query: 'x' } },

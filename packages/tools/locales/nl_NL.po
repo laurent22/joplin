@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: MHolkamp <mholkamp@users.noreply.github.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch / Nederlands\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.9\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -44,7 +46,7 @@ msgstr "(%s)"
 
 #: packages/lib/services/plugins/api/JoplinViewsDialogs.ts:76
 msgid "(In plugin: %s)"
-msgstr "(In toepassing: %s)"
+msgstr "(In plugin: %s)"
 
 #: packages/app-mobile/components/side-menu-content.tsx:269
 msgid "(level %d)"
@@ -61,7 +63,7 @@ msgstr "(Alleen lezen)"
 #: packages/lib/models/settings/builtInMetadata.ts:54
 #: packages/lib/models/settings/builtInMetadata.ts:55
 msgid "(wysiwyg: %s)"
-msgstr "(wuziwuk: %s)"
+msgstr "(wysiwyg: %s)"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:859
 #: packages/lib/shim-init-node.ts:277
@@ -85,11 +87,11 @@ msgstr "&Bestand"
 
 #: packages/app-desktop/gui/MenuBar.tsx:819
 msgid "&Go"
-msgstr "&Ga"
+msgstr "&Gaan"
 
 #: packages/app-desktop/gui/MenuBar.tsx:875
 msgid "&Help"
-msgstr "&Help"
+msgstr "&Hulp"
 
 #: packages/app-desktop/gui/MenuBar.tsx:837
 msgid "&Note"
@@ -157,10 +159,8 @@ msgstr[1] "%d minuten"
 #: packages/app-cli/app/command-rmnote.ts:34
 msgid "%d note matches this pattern. Delete it?"
 msgid_plural "%d notes match this pattern. Delete them?"
-msgstr[0] ""
-"Er komt %d notitie overeen met dit patroon. Wilt u deze verwijderen?"
-msgstr[1] ""
-"Er komen %d notities overeen met dit patroon. Wilt u ze verwijderen?"
+msgstr[0] "%d notitie komt overeen met dit patroon. Verwijderen?"
+msgstr[1] "%d notities komen overeen met dit patroon. Verwijderen?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
 msgid "%d note will be permanently deleted. Continue?"
@@ -170,7 +170,7 @@ msgstr[1] "%d notities zullen permanent verwijderd worden. Doorgaan?"
 
 #: packages/app-mobile/components/CameraView/PhotoPreview.tsx:60
 msgid "%d photo(s) taken"
-msgstr "%d foto's gemaakt"
+msgstr "%d foto(s) gemaakt"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:229
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:239
@@ -183,7 +183,7 @@ msgstr "%s - Kopiëren"
 
 #: packages/lib/services/ReportService.ts:192
 msgid "%s (%s) could not be uploaded: %s"
-msgstr "%s (%s) kon niet worden geupload: %s"
+msgstr "%s (%s) kon niet worden geüpload: %s"
 
 #: packages/app-desktop/gui/MainScreen.tsx:563
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:68
@@ -222,11 +222,11 @@ msgstr "%s = %s (%s)"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:32
 msgid "%s cannot be greater than %s"
-msgstr "%s kan niet groter zijn van %s"
+msgstr "%s mag niet groter zijn van %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ValidatedIntegerInput.tsx:36
 msgid "%s cannot be less than %s"
-msgstr "%s kan niet kleiner zijn dan %s"
+msgstr "%s mag niet kleiner zijn dan %s"
 
 #: packages/app-cli/app/command-share.ts:202
 msgid "%s from %s"
@@ -273,7 +273,7 @@ msgstr "%s: %s"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:224
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:265
 msgid "%s: Missing password."
-msgstr "%s: Ontbrekend wachtwoord"
+msgstr "%s: Wachtwoord ontbreekt."
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -308,6 +308,8 @@ msgid ""
 "A comma-separated list of words. May be used for uncommon words, to help "
 "voice typing spell them correctly."
 msgstr ""
+"Een lijst met woorden, gescheiden door komma's. Kan worden gebruikt voor "
+"minder gebruikelijke woorden, om te helpen dat spraaktypens ze correct spelt."
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:37
 msgid "A new update (%s) is available"
@@ -327,7 +329,7 @@ msgstr "A5"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1121
 msgid "ABC musical notation: Options"
-msgstr ""
+msgstr "ABC-muzieknotatie: Opties"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:62
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:240
@@ -370,21 +372,20 @@ msgid "Accepted: Notebook %s from %s"
 msgstr "Geaccepteerd: Notitieboek %s van %s"
 
 #: packages/app-cli/app/command-share.ts:229
-#, fuzzy
 msgid "Accepting share..."
-msgstr "Rapport maken..."
+msgstr "Delen accepteren..."
 
 #: packages/lib/WebDavApi.js:460
 msgid "Access denied: Please check your username and password"
-msgstr "Geen toegang: Controleer je inlognaam en wachtwoord"
+msgstr "Toegang geweigerd: Controleer je inlognaam en wachtwoord"
 
 #: packages/lib/WebDavApi.js:458
 msgid "Access denied: Please re-enter your password and/or username"
-msgstr "Geen toegang: Geen je inlognaam en/of wachtwoord opnieuw"
+msgstr "Toegang geweigerd: Geen je inlognaam en/of wachtwoord opnieuw"
 
 #: packages/server/src/routes/admin/users.ts:144
 msgid "Account"
-msgstr "Inloggegevens"
+msgstr "Account"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:31
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:48
@@ -415,7 +416,7 @@ msgstr "Actief"
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:18
 #: packages/app-desktop/gui/MenuBar.tsx:787
 msgid "Actual Size"
-msgstr "Ware Grootte"
+msgstr "Ware grootte"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1676
 msgid "Add body"
@@ -437,15 +438,15 @@ msgstr "Labels toevoegen of verwijderen:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:267
 msgid "Add recipient:"
-msgstr "Voeg ontvanger toe:"
+msgstr "Ontvanger toevoegen:"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:26
 msgid "Add row"
-msgstr "Regel toevoegen"
+msgstr "Rij toevoegen"
 
 #: packages/app-mobile/components/TagEditor.tsx:281
 msgid "Add tags:"
-msgstr "Voeg labels toe:"
+msgstr "Labels toevoegen:"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1777
 msgid "Add title"
@@ -457,7 +458,7 @@ msgstr "Toevoegen aan woordenboek"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:99
 msgid "Add to note"
-msgstr "Voeg toe aan notitie"
+msgstr "Toevoegen aan notitie"
 
 #: packages/app-mobile/components/ComboBox.tsx:93
 msgid "Added new: %s"
@@ -465,7 +466,7 @@ msgstr "Nieuw toegevoegd: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:233
 msgid "Added tag: %s"
-msgstr "Toegevoegd label: %s"
+msgstr "Label toegevoegd: %s"
 
 #: packages/app-mobile/components/TagEditor.tsx:220
 msgid "Adds tag"
@@ -505,7 +506,7 @@ msgstr ""
 
 #: packages/lib/services/ReportService.ts:227
 msgid "All item sync failures have been marked as \"ignored\"."
-msgstr ""
+msgstr "Alle item synchronisatie-fouten zijn als 'genegeerd' gemarkeerd."
 
 #: packages/app-desktop/gui/Sidebar/hooks/useSidebarListData.ts:72
 #: packages/app-mobile/components/screens/Notes/Notes.tsx:208
@@ -523,7 +524,7 @@ msgstr "Alle gedeelde mappen:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1033
 msgid "Allows debugging mobile plugins. See %s for details."
-msgstr "Sta toe mobiele plugins te debuggen. Zie %s voor details."
+msgstr "Staat foutopsporing toe van mobiele plugins. Zie %s voor details."
 
 #: packages/app-cli/app/command-config.ts:19
 msgid "Also displays unset and hidden config variables."
@@ -531,11 +532,11 @@ msgstr "Toont ook niet-ingestelde en verborgen configuratiewaarden."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:107
 msgid "Also publish linked notes"
-msgstr "Ook gekoppelde notities publiceren"
+msgstr "Gekoppelde notities ook publiceren"
 
 #: packages/lib/versionInfo.ts:93
 msgid "Alternative instance ID: %s"
-msgstr "Alternatieve instance ID: %s"
+msgstr "Alternative instance ID: %s"
 
 #: packages/lib/models/settings/builtInMetadata.ts:471
 msgid "Always"
@@ -559,7 +560,7 @@ msgid ""
 "see the short notebook id or use $b for current selected notebook"
 msgstr ""
 "Niet eenduidig notitieboek \"%s\". Gebruik het id van het notitieboek - "
-"toets \"ti\" om het korte notitieboek id te zien, of gebruik $b voor het "
+"toets \"ti\" om het korte notitieboek-id te zien, of gebruik $b voor het "
 "huidige notitieboek"
 
 #: packages/app-cli/app/command-mkbook.ts:33
@@ -583,6 +584,9 @@ msgid ""
 "offline or cannot connect to the server.\n"
 "Error: %s"
 msgstr ""
+"Er is een fout opgetreden bij het verzenden van de reactie. Dit kan gebeuren "
+"als de app offline is of geen verbinding kan maken met de server.\n"
+"Fout: %s"
 
 #: packages/app-desktop/ElectronAppWrapper.ts:190
 msgid "An error occurred: %s"
@@ -590,11 +594,11 @@ msgstr "Er is iets fout gegaan: %s"
 
 #: packages/app-desktop/checkForUpdates.ts:107
 msgid "An update is available, do you want to download it now?"
-msgstr "Er is een update beschikbaar. Wilt u deze nu downloaden?"
+msgstr "Er is een update beschikbaar. Wil je deze nu downloaden?"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:22
 msgid "Android API level: %d"
-msgstr "Android API niveau: %d"
+msgstr "Android API-niveau: %d"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:48
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:24
@@ -602,8 +606,8 @@ msgid ""
 "Any email sent to this address will be converted into a note and added to "
 "your collection. The note will be saved into the Inbox notebook"
 msgstr ""
-"Alle email naar dit adres wordt omgezet in een notitie in jouw verzameling. "
-"De notitie wordt opgeslagen in het inbox notitieboek"
+"Alle e-mail naar dit adres wordt omgezet in een notitie in jouw verzameling. "
+"De notitie wordt opgeslagen in het notitieboek Inbox"
 
 #: packages/lib/models/Setting.ts:1354
 msgid "Appearance"
@@ -619,26 +623,24 @@ msgid "Apply"
 msgstr "Toepassen"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:146
-#, fuzzy
 msgid ""
 "Are you sure that you want to restore the default toolbar layout?\n"
 "This cannot be undone."
 msgstr ""
-"Weet je zeker dat je terug wil naar de standaard layout? Alle aanpassingen "
-"gaan verloren."
+"Weet je zeker dat je de standaard werkbalkindeling wilt herstellen?\n"
+"Dit kan niet ongedaan worden gemaakt."
 
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:19
-#, fuzzy
 msgid ""
 "Are you sure you want to delete all history for this note? This cannot be "
 "undone."
 msgstr ""
-"Weet je zeker dat je terug wil naar de standaard layout? Alle aanpassingen "
-"gaan verloren."
+"Weet je zeker dat je alle geschiedenis van deze notitie wilt verwijderen? "
+"Dit kan niet ongedaan gemaakt worden."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr "Weet u zeker dat u het autorisatietoken wilt vernieuwen?"
+msgstr "Weet je zeker dat je het autorisatietoken wilt vernieuwen?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/resetLayout.ts:14
 msgid ""
@@ -658,7 +660,7 @@ msgstr "Aritim Dark"
 
 #: packages/app-mobile/components/TagEditor.tsx:188
 msgid "Associated tags:"
-msgstr ""
+msgstr "Gerelateerde labels:"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:16
 msgid ""
@@ -702,7 +704,7 @@ msgstr "Bijlage"
 
 #: packages/lib/models/Resource.ts:509
 msgid "Attachment conflict: \"%s\""
-msgstr "Conflict in bijlage: \"%s\""
+msgstr "Conflict met bijlage: \"%s\""
 
 #: packages/lib/models/settings/builtInMetadata.ts:467
 msgid "Attachment download behaviour"
@@ -722,7 +724,7 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
-"Let op: Als u deze locatie wijzigt, zorg dan dat u eerst alle inhoud hier "
+"Let op: Als je deze locatie wijzigt, zorg dan dat u eerst alle inhoud hier "
 "naartoe kopieert voor synchronisatie. Anders worden alle bestanden "
 "verwijderd! Zie de FAQ voor meer details: %s"
 
@@ -740,7 +742,7 @@ msgstr "Autorisatietoken:"
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:90
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:162
 msgid "Authorise"
-msgstr "Autoriseer"
+msgstr "Autoriseren"
 
 #: packages/lib/models/settings/builtInMetadata.ts:473
 msgid "Auto"
@@ -756,7 +758,7 @@ msgstr "Markdown automatisch formateren in de Rich Text Editor"
 
 #: packages/lib/models/settings/builtInMetadata.ts:743
 msgid "Auto-pair braces, parentheses, quotations, etc."
-msgstr "Auto-paar accolades, haakjes, citaten, enz."
+msgstr "Autom. dubbele accolades, haakjes, citaten, enz."
 
 #: packages/lib/models/settings/builtInMetadata.ts:754
 msgid "Autocomplete Markdown and HTML"
@@ -768,7 +770,7 @@ msgstr "Automatisch controleren op updates"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2020
 msgid "Automatically delete notes in the trash after a number of days"
-msgstr "Verwijder notities automatisch uit de prullenbak na een aantal dagen"
+msgstr "Automatisch notities uit de prullenbak verwijderen na een aantal dagen"
 
 #: packages/lib/models/settings/builtInMetadata.ts:654
 msgid "Automatically switch theme to match system theme"
@@ -796,13 +798,13 @@ msgstr "Beta"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:123
 msgid "Block code"
-msgstr ""
+msgstr "Codeblok"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:55
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:80
 #: packages/app-mobile/components/NoteEditor/NoteEditor.test.tsx:104
 msgid "Bold"
-msgstr "Vetgedrukt"
+msgstr "Vet"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:222
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:319
@@ -840,11 +842,11 @@ msgstr "Kan delen"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:122
 msgid "Can view"
-msgstr "Kan bekijken"
+msgstr "Kan weergeven"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:123
 msgid "Can view and edit"
-msgstr "Kan bekijken en bewerken"
+msgstr "Kan weeregeven en bewerken"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:405 packages/app-desktop/bridge.ts:421
@@ -886,22 +888,24 @@ msgstr "Annuleren"
 
 #: packages/app-cli/app/app.ts:147
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "Bezig met annuleren van achtergrondsynchronisatie... even geduld."
+msgstr "Annuleren van achtergrondsynchronisatie... Even geduld."
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:200
 msgid ""
 "Cancelling will discard the recording. This cannot be undone. Are you sure "
 "you want to proceed?"
 msgstr ""
+"Annuleren zal de opname verwijderen. Dit kan niet ongedaan worden gemaakt. "
+"Weet je zeker dat je wilt doorgaan?"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotificationMessage.tsx:23
 #: packages/lib/Synchronizer.ts:208
 msgid "Cancelling..."
-msgstr "Bezig met annuleren..."
+msgstr "Annuleren..."
 
 #: packages/app-cli/app/command-sync.ts:294
 msgid "Cancelling... Please wait."
-msgstr "Bezig met annuleren... Een ogenblik geduld."
+msgstr "Annuleren... Even geduld."
 
 #: packages/lib/shim-init-node.ts:338
 msgid "Cannot access %s"
@@ -912,9 +916,8 @@ msgid "Cannot change encrypted item"
 msgstr "Kan versleuteld item niet wijzigen"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:42
-#, fuzzy
 msgid "Cannot convert read-only item: \"%s\""
-msgstr "Kan de nieuwe notitie niet maken: %s"
+msgstr "Kan alleen-lezen item niet omzetten: \"%s\""
 
 #: packages/lib/models/Note.ts:622
 msgid "Cannot copy note to \"%s\" notebook"
@@ -1042,7 +1045,7 @@ msgstr "Selectievakje"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:168
 msgid "Check elements to display in the toolbar"
-msgstr ""
+msgstr "Selecteer de elementen om in de werkbalk weer te geven"
 
 #: packages/app-desktop/gui/MenuBar.tsx:583
 #: packages/app-desktop/gui/MenuBar.tsx:891
@@ -1072,7 +1075,7 @@ msgstr "Controleren... Even geduld."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:114
 msgid "Chinese/Japanese/Korean characters"
-msgstr ""
+msgstr "Chinese/Japanse/Koreaanse tekens"
 
 #: packages/app-mobile/components/screens/Note/commands/attachFile.ts:98
 msgid "Choose an option"
@@ -1110,7 +1113,7 @@ msgstr ""
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:234
 msgid "Click \"start\" to attach a new voice memo to the note."
-msgstr "Klik \"start\" om een nieuwe voicememo toe te voegen aan de notitie"
+msgstr "Klik \"start\" om een nieuwe voicememo toe te voegen aan de notitie."
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:61
 msgid "Click to add tags..."
@@ -1156,6 +1159,9 @@ msgid ""
 "application again. Make sure you create a backup first by exporting all your "
 "notes as JEX."
 msgstr ""
+"Sluit de applicatie, verwijder vervolgens je profiel in \"%s\" en start de "
+"applicatie opnieuw. Zorg ervoor dat je eerst een back-up maakt door al je "
+"notities als JEX te exporteren."
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
 #: packages/app-desktop/gui/MenuBar.tsx:648
@@ -1236,7 +1242,7 @@ msgstr "Commando"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "COMMAND"
-msgstr ""
+msgstr "OPDRACHT"
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:783
 msgid "Command palette"
@@ -1279,6 +1285,8 @@ msgid ""
 "Completed with warnings:\n"
 "%s"
 msgstr ""
+"Voltooid met waarschuwingen:\n"
+"%s"
 
 #: packages/lib/Synchronizer.ts:209
 msgid "Completed: %s (%s)"
@@ -1299,13 +1307,12 @@ msgid "Configuration"
 msgstr "Configuratie"
 
 #: packages/app-cli/app/command-keymap.ts:24
-#, fuzzy
 msgid "Configured keyboard shortcuts:"
-msgstr "Sneltoetsen"
+msgstr "Geconfigureerde sneltoetsen:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1296
 msgid "Configures the size of scrollbars used in the app."
-msgstr ""
+msgstr "Stelt de grootte van de schuifbalken in die in de app worden gebruikt."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:155
 msgid "Confirm password cannot be empty"
@@ -1376,9 +1383,8 @@ msgid "Convert it"
 msgstr "Omzetten"
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:18
-#, fuzzy
 msgid "Convert to Markdown"
-msgstr "Notitie omzetten naar Markdown"
+msgstr "Omzetten naar Markdown"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1350
 msgid "Convert to note"
@@ -1409,11 +1415,11 @@ msgstr "Ontwikkelaarsmodus commando kopiëren naar klembord"
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:137
 #: packages/app-mobile/components/screens/Note/Note.tsx:1368
 msgid "Copy external link"
-msgstr "Kopieer externe link"
+msgstr "Externe link kopiëren"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:216
 msgid "Copy image"
-msgstr "Kopieer afbeelding"
+msgstr "Afbeelding kopiëren"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:254
 msgid "Copy Link Address"
@@ -1422,7 +1428,7 @@ msgstr "Linkadres kopiëren"
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:96
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:169
 msgid "Copy link to website"
-msgstr "Kopieer link naar website"
+msgstr "Link naar website kopiëren"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:122
 #: packages/app-mobile/components/screens/Note/Note.tsx:1359
@@ -1431,14 +1437,14 @@ msgstr "Markdownlink kopiëren"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:201
 msgid "Copy path to clipboard"
-msgstr "Pad kopiëren naar klembord"
+msgstr "Pad naar klembord kopiëren"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:122
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:174
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "Kopieer Deelbare Link"
-msgstr[1] "Kopieer Deelbare Links"
+msgstr[0] "Deelbare link kopiëren"
+msgstr[1] "Deelbare links kopiëren"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:52
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:75
@@ -1447,11 +1453,11 @@ msgstr "Kopiëren naar klembord"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:156
 msgid "Copy token"
-msgstr "Kopieer token"
+msgstr "Token kopiëren"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:640
 msgid "Copy version info"
-msgstr "Kopieer versie-informatie"
+msgstr "Versie-informatie kopiëren"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:43
 msgid ""
@@ -1484,9 +1490,8 @@ msgid "Could not connect to plugin repository."
 msgstr "Kan geen verbinding maken met de plugin bibliotheek."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:70
-#, fuzzy
 msgid "Could not convert notes to Markdown: %s"
-msgstr "Kon notitie niet converteren naar Markdown: %s"
+msgstr "Kon de notities niet omzetten naar Markdown: %s"
 
 #: packages/app-desktop/InteropServiceHelper.ts:235
 msgid "Could not export notes: %s"
@@ -1521,8 +1526,8 @@ msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
 msgstr ""
-"Kan de sharestatus van dit notitieboek - afbreken - niet controleren. "
-"Probeer het opnieuw wanneer u verbonden bent met internet."
+"Kan de deelstatus van dit notitieboek - afbreken - niet controleren. Probeer "
+"het opnieuw wanneer u verbonden bent met internet."
 
 #: packages/app-mobile/components/biometrics/biometricAuthenticate.ts:26
 msgid "Could not verify your identity: %s"
@@ -1542,7 +1547,7 @@ msgstr "Creëer een notitieboek"
 
 #: packages/app-mobile/components/FolderPicker.tsx:112
 msgid "Create new notebook"
-msgstr "Creëer een nieuw notitieboek."
+msgstr "Nieuw notitieboek aanmaken"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:9
 #: packages/app-mobile/components/ProfileSwitcher/ProfileEditor.tsx:88
@@ -1674,7 +1679,7 @@ msgstr "Aangepaste TLS-certificaten"
 
 #: packages/lib/utils/joplinCloud/index.ts:208
 msgid "Customise the note publishing banner"
-msgstr ""
+msgstr "De banner voor het publiceren van notities aanpassen"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:40
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/useContextMenu.ts:85
@@ -1756,9 +1761,8 @@ msgid "Delete attachment \"%s\"?"
 msgstr "Bijlage “%s” verwijderen?"
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:41
-#, fuzzy
 msgid "Delete column"
-msgstr "Regel verwijderen"
+msgstr "Kolom verwijderen"
 
 #: packages/server/src/services/TaskService.ts:27
 msgid "Delete expired sessions"
@@ -1800,18 +1804,19 @@ msgid "Delete profile \"%s\""
 msgstr "Verwijder profiel “%s”"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:147
-#, fuzzy
 msgid ""
 "Delete profile \"%s\"?\n"
 "\n"
 "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
-"Alle gegevens, inclusief notities, notitieboeken en labels worden permanent "
+"Profiel \"%s\" verwijderen?\n"
+"\n"
+"Alle gegevens, incl. notities, notitieboeken en labels, worden permanent "
 "verwijderd."
 
 #: packages/editor/ProseMirror/plugins/tablePlugin.ts:36
 msgid "Delete row"
-msgstr "Verwijder regel"
+msgstr "Rij verwijderen"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:487
 msgid "Delete selected notes"
@@ -1824,6 +1829,10 @@ msgid ""
 "All notes associated with this tag will remain, but the tag will be removed "
 "from all notes."
 msgstr ""
+"Label \"%s\" verwijderen?\n"
+"\n"
+"Alle notities die aan dit label gekoppeld zijn blijven behouden, maar het "
+"label wordt uit alle notities verwijderd."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:38
 #: packages/app-mobile/components/side-menu-content.tsx:414
@@ -1835,7 +1844,7 @@ msgid ""
 msgstr ""
 "Wil je het notitieboek inbox verwijderen?\n"
 "\n"
-"Als je het inbox-notitieboek weggooit, kunnen recent ontvangen emails kwijt "
+"Als je het notitieboek Inbox weggooit, kunnen recent ontvangen e-mails kwijt "
 "raken.."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:236
@@ -1852,9 +1861,8 @@ msgstr "Dit profiel verwijderen?"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:83
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:207
-#, fuzzy
 msgid "Deleted"
-msgstr "Verwijderen"
+msgstr "Verwijderd"
 
 #: packages/lib/Synchronizer.ts:205
 msgid "Deleted local items: %d."
@@ -1885,9 +1893,8 @@ msgid "Deletes the notes without asking for confirmation."
 msgstr "Verwijdert de notities zonder te vragen om bevestiging."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:579
-#, fuzzy
 msgid "Deletion log"
-msgstr "Regel verwijderen"
+msgstr "Verwijderingslogboek"
 
 #: packages/app-mobile/components/NoteItem.tsx:152
 msgid "Deselect"
@@ -2008,7 +2015,7 @@ msgstr "Toont volledige informatie over de notitie."
 
 #: packages/app-cli/app/command-keymap.ts:14
 msgid "Displays the configured keyboard shortcuts."
-msgstr ""
+msgstr "Toont de ingestelde sneltoetsen."
 
 #: packages/app-cli/app/command-cat.ts:14
 msgid "Displays the given note."
@@ -2061,13 +2068,15 @@ msgstr "Vind je de Joplin-webapp bruikbaar?"
 
 #: packages/lib/models/settings/builtInMetadata.ts:2003
 msgid "Document scanner: Title template"
-msgstr ""
+msgstr "Documentscanner: Titelsjabloon"
 
 #: packages/app-cli/app/command-share.ts:65
 msgid ""
 "Don't allow the share recipient to write to the shared notebook. Valid only "
 "for the `add` subcommand."
 msgstr ""
+"Sta de ontvanger van de gedeelde notitieboek niet toe om te schrijven in het "
+"gedeelde notitieboek. Alleen geldig voor de subopdracht `add`."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:668
 msgid "Don't show this message again"
@@ -2128,7 +2137,7 @@ msgstr "Dracula"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1292
 msgid "Draw picture"
-msgstr ""
+msgstr "Teken een plaatje"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1026
 #: packages/app-mobile/components/screens/Notes/NewNoteButton.tsx:80
@@ -2227,9 +2236,8 @@ msgid "Edit profile configuration..."
 msgstr "Profielconfiguratie bewerken..."
 
 #: packages/app-mobile/components/screens/tags.tsx:64
-#, fuzzy
 msgid "Edit tag"
-msgstr "Notitie bewerken."
+msgstr "Label bewerken"
 
 #: packages/app-desktop/gui/MainScreen.tsx:129
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:151
@@ -2240,9 +2248,8 @@ msgid "Editor"
 msgstr "Editor"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.tsx:40
-#, fuzzy
 msgid "Editor actions"
-msgstr "Lettertype van editor"
+msgstr "Acties van editor"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1221
 msgid "Editor font"
@@ -2340,9 +2347,8 @@ msgid "Enable abbreviation syntax"
 msgstr "Afkortingen syntaxis inschakelen"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1093
-#, fuzzy
 msgid "Enable ABC musical notation support"
-msgstr "Ondersteuning voor Fountain syntaxis inschakelen"
+msgstr "Ondersteuning voor ABC-muziekschrift inschakelen"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1095
 msgid "Enable audio player"
@@ -2374,9 +2380,8 @@ msgid "Enable Fountain syntax support"
 msgstr "Ondersteuning voor Fountain syntaxis inschakelen"
 
 #: packages/lib/models/settings/builtInMetadata.ts:587
-#, fuzzy
 msgid "Enable handwritten transcription"
-msgstr "Encryptie inschakelen"
+msgstr "Handschrifttranscriptie inschakelen"
 
 #: packages/lib/models/settings/builtInMetadata.ts:766
 msgid "Enable HTML-to-Markdown conversion banner"
@@ -2468,12 +2473,17 @@ msgid ""
 "Enables Markdown list continuation, auto-closing HTML tags, and other markup "
 "autocompletions."
 msgstr ""
+"Maakt het mogelijk om Markdown-lijsten voort te zetten, HTML-tags "
+"automatisch te sluiten en andere opmaak automatisch aan te vullen."
 
 #: packages/lib/models/settings/builtInMetadata.ts:787
 msgid ""
 "Enables Markdown pattern replacement in the Rich Text Editor. For example, "
 "when enabled, typing **bold** creates bold text."
 msgstr ""
+"Maakt het mogelijk om Markdown-patronen te vervangen in de Rich Text Editor. "
+"Bijvoorbeeld, als het is ingeschakeld, wordt het typen van **vet** "
+"vetgedrukte tekst."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:50
 msgid ""
@@ -2520,9 +2530,8 @@ msgid "End-to-end encryption"
 msgstr "End-to end encryptie"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:192
-#, fuzzy
 msgid "Ends voice typing"
-msgstr "Steminvoer..."
+msgstr "Beëindigt steminvoer"
 
 #: packages/app-mobile/components/screens/dropbox-login.tsx:70
 msgid "Enter code here"
@@ -2659,9 +2668,8 @@ msgid "Export Debug Report"
 msgstr "Foutopsporingsrapportage exporteren"
 
 #: packages/app-desktop/commands/exportDeletionLog.ts:11
-#, fuzzy
 msgid "Export deletion log"
-msgstr "Alles exporteren"
+msgstr "Verwijderingslogboek exporteren"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:16
 msgid "Export profile"
@@ -2718,6 +2726,9 @@ msgid ""
 "target is empty or damaged. To override this behaviour disable the fail-safe "
 "in the sync settings."
 msgstr ""
+"Fail-safe: De synchronisatie is onderbroken om gegevensverlies te voorkomen, "
+"omdat het synchronisatiedoel leeg of beschadigd is. Om dit gedrag te "
+"negeren, schakel je de fail-safe uit in de synchronisatie-instellingen."
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:29
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:54
@@ -2769,7 +2780,7 @@ msgstr "Zoeken: "
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:215
 msgid "Finishes recording"
-msgstr ""
+msgstr "Beëindigt de opname"
 
 #: packages/app-desktop/gui/ExtensionBadge.tsx:65
 msgid "Firefox Extension"
@@ -2809,7 +2820,7 @@ msgstr "Map \"%s\" is gedeeld met:"
 
 #: packages/app-mobile/components/CameraView/ScannedBarcodes.tsx:98
 msgid "Follow link"
-msgstr ""
+msgstr "Link volgen"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportProfileButton.tsx:38
 msgid "For debugging purpose only: export your profile to an external SD card."
@@ -3051,12 +3062,16 @@ msgid ""
 "If an image attachment is on its own line and followed by a blank line, it "
 "will be rendered just below its Markdown source."
 msgstr ""
+"Als een afbeelding als bijlage op een aparte regel staat en gevolgd wordt "
+"door een lege regel, wordt deze net onder de Markdown-bron weergegeven."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
 "If you have already authorised, please wait for the application to sync to "
 "Joplin Cloud."
 msgstr ""
+"Als je al toestemming hebt gegeven, wacht dan tot de applicatie is "
+"gesynchroniseerd met Joplin Cloud."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:184
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:360
@@ -3070,9 +3085,8 @@ msgid "Ignore TLS certificate errors"
 msgstr "TLS-certificaatfouten negeren"
 
 #: packages/lib/services/ReportService.ts:236
-#, fuzzy
 msgid "Ignored items that cannot be synchronised"
-msgstr "Items die niet kunnen worden gesynchroniseerd"
+msgstr "Genegeerde items die niet kunnen worden gesynchroniseerd"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:106
 msgid "Images"
@@ -3086,9 +3100,8 @@ msgid "Import"
 msgstr "Importeren"
 
 #: packages/lib/models/Setting.ts:1366
-#, fuzzy
 msgid "Import and Export"
-msgstr "Foutopsporingsrapportage exporteren"
+msgstr "Import en export"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:66
 msgid ""
@@ -3104,16 +3117,15 @@ msgstr "Importeren vanuit JEX"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:22
 msgid "Import notes from a JEX (Joplin Export) file."
-msgstr "Importeer notities uit een JEX (Joplin Export) bestand"
+msgstr "Notities importeren uit een JEX-bestand (Joplin Export)."
 
 #: packages/lib/models/Setting.ts:1398
 msgid "Import or export your data"
 msgstr "Importeer of exporteer jouw gegevens"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:20
-#, fuzzy
 msgid "Import..."
-msgstr "Importeren..."
+msgstr "Import..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:76
 msgid "Imported successfully!"
@@ -3212,9 +3224,8 @@ msgid "In: %s"
 msgstr "In: %s"
 
 #: packages/app-cli/app/command-share.ts:170
-#, fuzzy
 msgid "Incoming shares:"
-msgstr "Aankomende alarmen"
+msgstr "Met mij gedeeld:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:69
 msgid "Incompatible"
@@ -3385,6 +3396,8 @@ msgid ""
 "Joplin doesn't recognise the %s extension. Opening this file could be "
 "dangerous. What would you like to do?"
 msgstr ""
+"Joplin herkent de %s-extensie niet. Het openen van dit bestand kan "
+"gevaarlijk zijn. Wat wil je doen?"
 
 #: packages/lib/services/interop/InteropService.ts:168
 #: packages/lib/services/interop/InteropService.ts:72
@@ -3457,6 +3470,9 @@ msgid ""
 "Joplin supports saving the location at which notes are saved or created. Do "
 "you want to enable it? This can be changed at any time in settings."
 msgstr ""
+"Joplin ondersteunt het opslaan van de locatie waar notities worden "
+"opgeslagen of gemaakt. Wil je dit inschakelen? Dit kan op elk moment in de "
+"instellingen worden veranderd."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
@@ -3506,7 +3522,7 @@ msgstr "Ondersteunde Sleutelhanger: %s"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "KEYS"
-msgstr ""
+msgstr "TOETSEN"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:74
 msgid "Keys that need upgrading"
@@ -3672,7 +3688,7 @@ msgstr "Inloggen met je webbrowser"
 
 #: packages/app-desktop/gui/MainScreen.tsx:592
 msgid "Login to Joplin Cloud."
-msgstr "Inloggen op de Joplin Cloud"
+msgstr "Inloggen bij Joplin Cloud."
 
 #: packages/app-mobile/components/screens/dropbox-login.tsx:59
 msgid "Login with Dropbox"
@@ -3723,9 +3739,8 @@ msgid "Manage shared notebooks"
 msgstr "Gedeelde notitieboek beheren"
 
 #: packages/app-mobile/components/EditorToolbar/ToolbarEditorDialog.tsx:165
-#, fuzzy
 msgid "Manage toolbar options"
-msgstr "Beheer plugins"
+msgstr "Werkbalkopties beheren"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:331
 msgid "Manage your plugins"
@@ -3736,6 +3751,8 @@ msgid ""
 "Manage your profiles. You can rename or delete profiles. The active profile "
 "cannot be deleted."
 msgstr ""
+"Profielen beheren. Je kunt profielen hernoemen of verwijderen. Het actieve "
+"profiel kan niet worden verwijderd."
 
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:19
@@ -3808,7 +3825,7 @@ msgstr "Hoofdwachtwoord:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:19
 msgid "match case"
-msgstr ""
+msgstr "hoofdlettergevoelig"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:98
 msgid "Math"
@@ -3832,11 +3849,11 @@ msgstr "Maximale totale grootte"
 
 #: packages/lib/models/Setting.ts:1394
 msgid "Media player, math, diagrams, table of contents"
-msgstr ""
+msgstr "Mediaspeler, wiskunde, diagrammen, inhoudsopgave"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1291
 msgid "Medium"
-msgstr ""
+msgstr "Medium"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
 msgid "Minimise"
@@ -3856,7 +3873,7 @@ msgstr "Ontbrekende hoofdsleutels"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:121
 msgid "Missing permission to record audio."
-msgstr "Toestemming voor opnemen audio ontbreekt"
+msgstr "Toestemming voor opnemen van audio ontbreekt."
 
 #: packages/app-cli/app/cli-utils.js:112
 msgid "Missing required argument: %s"
@@ -3896,14 +3913,13 @@ msgstr[0] "Verplaats %d notitie naar notitieboek \"%s\"?"
 msgstr[1] "Verplaats %d notities naar notitieboek \"%s\"?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:34
-#, fuzzy
 msgid ""
 "Move %d notebooks to the trash?\n"
 "\n"
 "All notes and sub-notebooks within these notebooks will also be moved to the "
 "trash."
 msgstr ""
-"Notitieboek \"%s\" naar de prullenbak verplaatsen?\n"
+"%d notitieboeken naar de prullenbak verplaatsen?\n"
 "\n"
 "Alle notities en sub-notitieboeken in dit notitieboek worden eveneens naar "
 "de prullenbak verplaatst."
@@ -3919,7 +3935,6 @@ msgstr "Verplaats naar links"
 #: packages/app-cli/app/command-rmbook.ts:37
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:32
 #: packages/app-mobile/components/side-menu-content.tsx:417
-#, fuzzy
 msgid ""
 "Move notebook \"%s\" to the trash?\n"
 "\n"
@@ -3981,11 +3996,12 @@ msgid "New invitations"
 msgstr "Nieuwe uitnodiging"
 
 #: packages/app-mobile/components/voiceTyping/SpeechToTextBanner.tsx:56
-#, fuzzy
 msgid ""
 "New model available\n"
 "A new voice typing model is available. Do you want to download it?"
-msgstr "Er is een update beschikbaar. Wilt u deze nu downloaden?"
+msgstr ""
+"Nieuw model beschikbaar\n"
+"Een nieuw stemtypemodel is beschikbaar. Wil je het downloaden?"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:112
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:72
@@ -4105,7 +4121,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:197
 msgid "No plugins are installed."
-msgstr "Geen plug-ins geïnstalleerd"
+msgstr "Geen plug-ins geïnstalleerd."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:318
 msgid "No resources!"
@@ -4118,7 +4134,7 @@ msgstr "Geen resultaten"
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:283
 msgid "No revision selected"
-msgstr "Geen revisie geselecteerd."
+msgstr "Geen revisie geselecteerd"
 
 #: packages/app-cli/app/app.ts:237
 msgid "No such command: %s"
@@ -4130,7 +4146,7 @@ msgstr "Geen suggesties"
 
 #: packages/app-mobile/components/plugins/dialogs/PluginPanelViewer.tsx:119
 msgid "No tab selected"
-msgstr "Geen tab geselecteerd."
+msgstr "Geen tab geselecteerd"
 
 #: packages/app-mobile/components/TagEditor.tsx:183
 msgid "No tags"
@@ -4144,13 +4160,12 @@ msgstr ""
 "editor>`"
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:63
-#, fuzzy
 msgid "No updates available"
-msgstr "Profiel bijwerken"
+msgstr "Geen updates beschikbaar"
 
 #: packages/lib/components/shared/SamlShared.ts:12
 msgid "No URL for SAML authentication set."
-msgstr ""
+msgstr "Geen URL ingesteld voor SAML-authenticatie."
 
 #: packages/app-cli/app/command-share.ts:188
 #: packages/app-cli/app/command-share.ts:208
@@ -4280,9 +4295,8 @@ msgstr "Titel van notitie"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteViewer.ts:8
 #: packages/app-desktop/gui/NoteTextViewer.tsx:244
-#, fuzzy
 msgid "Note viewer"
-msgstr "Titel van notitie"
+msgstr "Notitieweergave"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1135
 msgid "Note: Does not work in all desktop environments."
@@ -4352,17 +4366,15 @@ msgstr "Genummerde lijst"
 
 #: packages/lib/models/settings/builtInMetadata.ts:619
 msgid "OCR: Clear cache and re-download language data files"
-msgstr ""
+msgstr "OCR: De cache wissen en de taalbestanden opnieuw downloaden"
 
 #: packages/lib/models/settings/builtInMetadata.ts:600
-#, fuzzy
 msgid "OCR: Language data URL or path"
-msgstr "Datumopmaak"
+msgstr "OCR: URL of pad naar taaldata"
 
 #: packages/lib/models/settings/builtInMetadata.ts:629
-#, fuzzy
 msgid "OCR: Search in extracted content"
-msgstr "Alle notities doorzoeken"
+msgstr "OCR: Zoeken in geëxtraheerde inhoud"
 
 #: packages/app-cli/app/utils/shimInitCli.ts:12
 #: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
@@ -4471,7 +4483,7 @@ msgstr "Open de PDF weergave"
 
 #: packages/app-desktop/commands/openPrimaryAppInstance.ts:8
 msgid "Open primary app instance..."
-msgstr ""
+msgstr "Primaire app-instantie openen..."
 
 #: packages/app-desktop/commands/openProfileDirectory.ts:8
 msgid "Open profile directory"
@@ -4479,7 +4491,7 @@ msgstr "Open profiel map"
 
 #: packages/app-desktop/commands/openSecondaryAppInstance.ts:8
 msgid "Open secondary app instance..."
-msgstr ""
+msgstr "Secundaire app-instantie openen..."
 
 #: packages/app-mobile/components/CameraView/CameraView.tsx:149
 msgid "Open settings"
@@ -4496,7 +4508,7 @@ msgstr "Open Sync Wizard..."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:635
 msgid "Open-source licences"
-msgstr ""
+msgstr "Open-source licenties"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:87
 msgid "Open..."
@@ -4507,9 +4519,8 @@ msgid "Opening section %s"
 msgstr "Sectie %s wordt geopend"
 
 #: packages/app-mobile/components/Dropdown.tsx:241
-#, fuzzy
 msgid "Opens dropdown"
-msgstr "Lijst sluiten"
+msgstr "Opent dropdown-menu"
 
 #: packages/app-mobile/components/NoteItem.tsx:164
 msgid "Opens note"
@@ -4536,6 +4547,8 @@ msgid ""
 "Options that should be used whenever rendering ABC code. It must be a JSON5 "
 "object. The full list of options is available at: %s"
 msgstr ""
+"Opties die gebruikt moeten worden bij het weergeven van ABC-code. Het moet "
+"een JSON5-object zijn. De volledige lijst met opties is beschikbaar op: %s"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:103
 msgid "Ordered list"
@@ -4563,11 +4576,11 @@ msgstr "Paginaformaat voor PDF-export"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:46
 msgid "Panel \"%s\" is visible"
-msgstr ""
+msgstr "Paneel \"%s\" is zichtbaar"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/utils/useWindowControl.ts:46
 msgid "Panel %s is hidden"
-msgstr ""
+msgstr "Paneel \"%s\" is verborgen"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
 msgid "Password"
@@ -4621,14 +4634,14 @@ msgid "Permanently delete note \"%s\"?"
 msgstr "Notitie \"%s\" permanent verwijderen?"
 
 #: packages/app-cli/app/command-rmbook.ts:35
-#, fuzzy
 msgid ""
 "Permanently delete notebook \"%s\"?\n"
 "\n"
 "All notes and sub-notebooks within this notebook will be permanently deleted."
 msgstr ""
-"Notitieboek verwijderen? Alle notities en sub-notitieboeken worden eveneens "
-"verwijderd."
+"Notitieboek \"%s\" definitief verwijderen? \n"
+"\n"
+"Alle notities en sub-notitieboeken worden definitief verwijderd."
 
 #: packages/lib/models/Note.ts:967
 msgid "Permanently delete this note?"
@@ -4637,9 +4650,10 @@ msgstr[0] "Deze notitie permanent verwijderen?"
 msgstr[1] "Deze notities permanent verwijderen?"
 
 #: packages/app-cli/app/command-rmbook.ts:20
-#, fuzzy
 msgid "Permanently deletes the notebook, skipping the trash."
-msgstr "Deze %d notities verwijderen?"
+msgstr ""
+"Verwijdert het notitieboek permanent, zonder het naar de prullenbak te "
+"verplaatsen."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:105
 msgid "Photo %d"
@@ -4719,7 +4733,7 @@ msgstr ""
 
 #: packages/lib/services/plugins/PluginService.ts:527
 msgid "Please upgrade Joplin to version %s or later to use this plugin."
-msgstr "Upgrade Joplin naar versie %s of later om deze plug-in te gebruiken"
+msgstr "Upgrade Joplin naar versie %s of later om deze plug-in te gebruiken."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1580
 msgid ""
@@ -4731,7 +4745,7 @@ msgstr ""
 
 #: packages/server/src/utils/saml.ts:58
 msgid "Please wait while we load your organisation sign-in page..."
-msgstr ""
+msgstr "Even geduld terwijl we de loginpagina van je organisatie laden..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:118
 #: packages/app-desktop/gui/ResourceScreen.tsx:315
@@ -4739,28 +4753,24 @@ msgid "Please wait..."
 msgstr "Even geduld..."
 
 #: packages/app-mobile/services/plugins/PlatformImplementation.ts:51
-#, fuzzy
 msgid "Plugin message"
-msgstr "Plugins"
+msgstr "Pluginbericht"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:436
-#, fuzzy
 msgid "Plugin panels"
-msgstr "Plugin tools"
+msgstr "Pluginpanelen"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:110
 msgid "Plugin repository failed to load"
-msgstr ""
+msgstr "Pluginbibliotheek kon niet laden"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginStates.tsx:28
-#, fuzzy
 msgid "Plugin search"
-msgstr "Plugins"
+msgstr "Plugin zoeken"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:107
-#, fuzzy
 msgid "Plugin security"
-msgstr "Plugins"
+msgstr "Pluginbeveiliging"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:329
 msgid "Plugin tools"
@@ -4768,7 +4778,7 @@ msgstr "Plugin tools"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1032
 msgid "Plugin WebView debugging"
-msgstr ""
+msgstr "Plugin WebView foutopsporing"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:148
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:550
@@ -4782,6 +4792,8 @@ msgid ""
 "Plugins extend Joplin with features that are not present by default. Plugins "
 "can extend Joplin's editor, viewer, and more."
 msgstr ""
+"Plugins breiden Joplin uit met functies die standaard niet aanwezig zijn. "
+"Plugins kunnen de editor, viewer en meer van Joplin uitbreiden."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1446
 msgid "Portrait"
@@ -4901,9 +4913,8 @@ msgid "Profile name"
 msgstr "Profielnaam"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:120
-#, fuzzy
 msgid "Profile name cannot be empty"
-msgstr "Wachtwoord bevestigen mag niet blanco zijn"
+msgstr "Profiel mag niet blanco zijn"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:116
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/addProfile.ts:18
@@ -4943,9 +4954,8 @@ msgid "Publish Note"
 msgstr "Publiceer notitie"
 
 #: packages/app-cli/app/command-publish.ts:47
-#, fuzzy
 msgid "Publish note \"%s\" (in notebook \"%s\")?"
-msgstr "Publiceer notitie \"%s\" (in notitieboek \"%s\")?"
+msgstr "Notitie \"%s\" (in notitieboek \"%s\") publiceren?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -4963,7 +4973,7 @@ msgstr "Publiceer notities op het internet"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1245
 msgid "Publish/unpublish"
-msgstr ""
+msgstr "Publiceren/publicatie intrekken"
 
 #: packages/app-cli/app/command-publish.ts:60
 msgid "Published at URL: %s"
@@ -5019,7 +5029,7 @@ msgstr "Leestijd: %s min"
 
 #: packages/app-cli/app/command-batch.ts:45
 msgid "Reading commands from standard input is only available in CLI mode."
-msgstr "Opdracht van standaard input lezen is alleen beschikbaar in CLI-modus"
+msgstr "Opdracht van standaard input lezen is alleen beschikbaar in CLI-modus."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:303
 msgid "Recipient has accepted the invitation"
@@ -5089,18 +5099,18 @@ msgid "Reject"
 msgstr "Weiger"
 
 #: packages/app-cli/app/command-share.ts:229
-#, fuzzy
 msgid "Rejecting share..."
-msgstr "Rapport maken..."
+msgstr "Delen afwijzen..."
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:127
 msgid "Remove"
 msgstr "Verwijderen"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:134
-#, fuzzy
 msgid "Remove %d tags from all notes? This cannot be undone."
-msgstr "Label “%s” verwijderen van alle notities?"
+msgstr ""
+"%d labels van alle notities verwijderen? Dit kan niet ongedaan worden "
+"gemaakt."
 
 #: packages/app-mobile/components/TagEditor.tsx:136
 msgid "Remove %s"
@@ -5108,7 +5118,7 @@ msgstr "Verwijder %s"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:320
 msgid "Remove %s from share"
-msgstr "Verwijder %s van delen"
+msgstr "%s van delen verwijderen"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:132
 msgid "Remove tag \"%s\" from all notes?"
@@ -5120,7 +5130,7 @@ msgstr "Deze zoekopdracht verwijderen uit de zijbalk?"
 
 #: packages/app-cli/app/command-share.ts:112
 msgid "Removed %s from share."
-msgstr "%s is verwijderd van delen"
+msgstr "%s is van delen verwijderd."
 
 #: packages/app-mobile/components/TagEditor.tsx:247
 msgid "Removed tag: %s"
@@ -5149,7 +5159,7 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:1499
 msgid "Renders markup on all lines that don't include the cursor."
-msgstr ""
+msgstr "Geeft opmaak weer op alle regels waar de cursor niet staat."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:162
 msgid "Renew token"
@@ -5157,7 +5167,7 @@ msgstr "Vernieuw token"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:21
 msgid "replace"
-msgstr "Vervang"
+msgstr "vervangen"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:15
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:302
@@ -5182,11 +5192,11 @@ msgstr "Vervang: "
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:25
 msgid "replaced $ matches"
-msgstr ""
+msgstr "$ overeenkomsten vervangen"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:26
 msgid "replaced match on line $"
-msgstr ""
+msgstr "overeenkomst vervangen p regel $"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:162
 msgid "Report an issue"
@@ -5194,7 +5204,7 @@ msgstr "Meldt een probleem"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:219
 msgid "Report any issues concerning the plugin."
-msgstr "Meldt een probleem met de plug-in"
+msgstr "Een probleem melden met deze plug-in."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:224
 msgid "Report fraudulent plugin"
@@ -5262,9 +5272,8 @@ msgid "Restore notebook"
 msgstr "Herstel notitieboek"
 
 #: packages/app-cli/app/command-restore.ts:12
-#, fuzzy
 msgid "Restore the items matching <pattern> from the trash."
-msgstr "Verwijdert de notities die overeenkomen met <note-pattern>."
+msgstr "Items die overeenkomen met <pattern> uit de prullenbak halen."
 
 #: packages/lib/services/trash/index.ts:88
 msgid "Restored items"
@@ -5319,6 +5328,7 @@ msgstr "Rich Text"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:716
 msgid "Rich Text editor. Press Escape then Tab to escape focus."
 msgstr ""
+"Rijke-teksteditor. Druk op Escape en dan op Tab om de focus te verlaten."
 
 #: packages/app-cli/app/command-batch.ts:29
 msgid ""
@@ -5412,7 +5422,7 @@ msgstr "Gescande code"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1295
 msgid "Scrollbar size"
-msgstr ""
+msgstr "Grootte van de schuifbalk"
 
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.tsx:67
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:163
@@ -5455,7 +5465,7 @@ msgstr "Zoeken tonen"
 #: packages/app-mobile/components/screens/tags.tsx:234
 #: packages/app-mobile/components/TagEditor.tsx:289
 msgid "Search tags"
-msgstr "Zoek labels"
+msgstr "Labels zoeken"
 
 #: packages/app-cli/app/gui/FolderListWidget.ts:70
 msgid "Search:"
@@ -5509,7 +5519,7 @@ msgstr "Selecteer notitieboek"
 
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:131
 msgid "Select one of the other supported sync targets."
-msgstr ""
+msgstr "Selecteer een van de andere ondersteunde synchronisatiedoelen."
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
@@ -5517,7 +5527,7 @@ msgstr "Kies hoofdnotitieboek"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:42
 msgid "Select the type of file to be imported:"
-msgstr ""
+msgstr "Selecteer het type bestand dat geïmporteerd moet worden:"
 
 #: packages/app-mobile/components/ComboBox.tsx:378
 msgid "Selected: %s"
@@ -5617,30 +5627,31 @@ msgstr "Delen van %s (%s)"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:401
 msgid "Share Notebook"
-msgstr "Deel Notitieboek"
+msgstr "Notitieboek delen"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showShareFolderDialog.ts:6
 msgid "Share notebook..."
-msgstr "Deel notitieboek..."
+msgstr "Notitieboek delen..."
 
 #: packages/lib/utils/joplinCloud/index.ts:231
 msgid "Share permissions"
-msgstr "Deel rechten"
+msgstr "Rechten delen"
 
 #: packages/app-desktop/gui/Sidebar/listItemComponents/FolderItem.tsx:58
 msgid "Shared"
 msgstr "Gedeeld"
 
 #: packages/app-mobile/components/screens/ShareManager/index.tsx:107
-#, fuzzy
 msgid "Shares"
-msgstr "Delen"
+msgstr "Shares"
 
 #: packages/app-cli/app/command-share.ts:58
 msgid ""
 "Shares or unshares the specified [notebook] with [user]. Requires Joplin "
 "Cloud or Joplin Server."
 msgstr ""
+"Deelt of stopt met delen van het opgegeven [notebook] met [user]. Vereist "
+"Joplin Cloud of Joplin Server."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:354
 msgid "Sharing notebook..."
@@ -5675,9 +5686,8 @@ msgid "Show disabled keys"
 msgstr "Toon uigeschakelde sleutels"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/FontSearch.tsx:51
-#, fuzzy
 msgid "Show monospace fonts only."
-msgstr "Editor monospace lettertypefamilie"
+msgstr "Alleen monospace-lettertypen weergeven."
 
 #: packages/lib/models/settings/builtInMetadata.ts:697
 msgid "Show note counts"
@@ -5705,7 +5715,7 @@ msgstr "Toon/Verberg de zijbalk"
 
 #: packages/app-mobile/components/screens/tags.tsx:68
 msgid "Shows notes for tag"
-msgstr "Toon notitie van labels"
+msgstr "Notities met label weergeven"
 
 #: packages/lib/models/settings/builtInMetadata.ts:986
 msgid "Shrink large images before adding them to notes."
@@ -5713,13 +5723,12 @@ msgstr ""
 "Verklein grote afbeeldingen voordat ze aan een notitie toegevoegd worden."
 
 #: packages/app-mobile/components/SideMenu.tsx:258
-#, fuzzy
 msgid "Side menu closed"
-msgstr "Meer acties verbergen"
+msgstr "Zijmenu gesloten"
 
 #: packages/app-mobile/components/SideMenu.tsx:258
 msgid "Side menu opened"
-msgstr ""
+msgstr "Zijmenu geopend"
 
 #: packages/app-desktop/gui/MainScreen.tsx:127
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:10
@@ -5776,6 +5785,8 @@ msgid ""
 "Some attachments need to be downloaded. Set the attachment download mode to "
 "\"always\" and try again."
 msgstr ""
+"Sommige bijlagen moeten worden gedownload. Stel de bijlage-downloadmodus in "
+"op 'altijd' en probeer het opnieuw."
 
 #: packages/app-desktop/gui/MainScreen.tsx:542
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:52
@@ -5844,11 +5855,11 @@ msgstr "Bron: "
 
 #: packages/app-cli/app/command-keymap.ts:35
 msgid "SPACE"
-msgstr ""
+msgstr "SPATIE"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:456
 msgid "Spacer"
-msgstr ""
+msgstr "Opvulling"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1680
 msgid ""
@@ -6011,12 +6022,11 @@ msgstr "Wissel van profiel"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:101
 msgid "Switch to back-facing camera"
-msgstr ""
+msgstr "Overschakelen naar de camera aan de achterkant"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:101
-#, fuzzy
 msgid "Switch to front-facing camera"
-msgstr "Overschakelen naar profiel %d"
+msgstr "Overschakelen naar de camera aan de voorkant"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:84
 msgid "Switch to note type"
@@ -6033,9 +6043,8 @@ msgid "Switch to the %s Editor"
 msgstr "Overschakelen naar de %s Editor"
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:71
-#, fuzzy
 msgid "Switch to the legacy editor"
-msgstr "Overschakelen naar de legacy editor"
+msgstr "Overschakelen naar de klassieke editor"
 
 #: packages/app-desktop/gui/ErrorBoundary.tsx:52
 msgid "Switch to the new editor"
@@ -6147,26 +6156,24 @@ msgstr "Synchroniseren..."
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:72
 msgid "Tab indents"
-msgstr ""
+msgstr "Tab-inspringingen"
 
 #: packages/app-desktop/gui/NoteEditor/StatusBar.tsx:72
 #: packages/lib/models/settings/builtInMetadata.ts:806
 msgid "Tab moves focus"
-msgstr ""
+msgstr "Tab verplaatst de focus"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:118
-#, fuzzy
 msgid "Table"
-msgstr "Inschakelen"
+msgstr "Tabel"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1440
 msgid "Tabloid"
 msgstr "Tabloid"
 
 #: packages/app-mobile/components/screens/tags.tsx:206
-#, fuzzy
 msgid "Tag: %s"
-msgstr "Gebruik: %s"
+msgstr "Label: %s"
 
 #: packages/app-cli/app/command-import.ts:58
 #: packages/app-desktop/gui/ImportScreen.tsx:94
@@ -6188,13 +6195,12 @@ msgid "Take photo"
 msgstr "Foto maken"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:164
-#, fuzzy
 msgid "Take survey"
-msgstr "Foto maken"
+msgstr "Enquête invullen"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:73
 msgid "Task \"%s\" failed with error: %s"
-msgstr ""
+msgstr "Taak \"%s\" is mislukt met fout: %s"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:113
 msgid "Task list"
@@ -6222,6 +6228,8 @@ msgid ""
 "Thank you for the feedback!\n"
 "Do you have time to complete a short survey?"
 msgstr ""
+"Bedankt voor de feedback!\n"
+"Heb je tijd om een korte enquête in te vullen?"
 
 #: packages/app-desktop/gui/ProfileEditor.tsx:143
 #: packages/lib/services/profileConfig/index.ts:106
@@ -6343,8 +6351,8 @@ msgstr ""
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:76
 msgid "The following plugins may not support the current markdown editor:"
 msgstr ""
-"De volgende plug-ins worden mogelijk niet ondersteund in the huidige "
-"Markdown Editor"
+"De volgende plug-ins worden in the huidige Markdown Editor mogelijk niet "
+"ondersteund:"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:257
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:49
@@ -6371,6 +6379,8 @@ msgid ""
 "The legacy Markdown editor appears to have crashed due to an incompatibility "
 "with a plugin. We recommend using the new editor."
 msgstr ""
+"De klassieke Markdown-editor lijkt gecrasht te zijn vanwege een "
+"incompatibiliteit met een plugin. We raden aan de nieuwe editor te gebruiken."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:222
 msgid "The master key has been upgraded successfully!"
@@ -6391,15 +6401,18 @@ msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "De notitie “%s” is succesvol hersteld naar notitieboek “%s”."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:64
-#, fuzzy
 msgid ""
 "The note has been converted to Markdown and the original note has been moved "
 "to the trash"
 msgid_plural ""
 "The notes have been converted to Markdown and the original notes have been "
 "moved to the trash"
-msgstr[0] "De notitie “%s” is succesvol hersteld naar notitieboek “%s”."
-msgstr[1] "De notitie “%s” is succesvol hersteld naar notitieboek “%s”."
+msgstr[0] ""
+"De notitie is omgezet naar Markdown en de originele notitie is naar de "
+"prullenbak verplaatst"
+msgstr[1] ""
+"De notities zijn omgezet naar Markdown en de originele notities zijn naar de "
+"prullenbak verplaatst"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6445,6 +6458,12 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Het synchronisatiedoel kan om de volgende reden niet worden gewijzigd: %s\n"
+"\n"
+"Als het probleem niet kan worden opgelost, moet je misschien eerst je "
+"gegevens wissen door deze instructies te volgen:\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/MainScreen.tsx:536
 msgid ""
@@ -6486,6 +6505,11 @@ msgid ""
 "\n"
 "Error: \"%s\""
 msgstr ""
+"De webclient ondersteunt het accepteren van versleutelde gedeelde "
+"notitieboeken niet. Schakel over naar de desktop- of mobiele app voordat je "
+"de gedeelde notitie accepteert.\n"
+"\n"
+"Fout: \"%s\""
 
 #: packages/app-desktop/gui/Root.tsx:129
 msgid "The Web Clipper needs your authorisation to access your data."
@@ -6494,9 +6518,9 @@ msgstr ""
 "gegevens."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:104
-#, fuzzy
 msgid "The web clipper service cannot be enabled in this instance of Joplin."
-msgstr "De webclipper-dienst is ingeschakeld en wordt automatisch opgestart."
+msgstr ""
+"De webclipper-dienst kan niet worden ingeschakeld in deze versie van Joplin."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
@@ -6560,6 +6584,10 @@ msgid ""
 "cause the sync warning to appear, but still aren't synced. To unignore, "
 "click \"retry\"."
 msgstr ""
+"Deze items konden niet worden gesynchroniseerd, maar zijn gemarkeerd als "
+"'genegeerd'. Ze zullen de synchronisatiemelding niet veroorzaken, maar zijn "
+"nog steeds niet gesynchroniseerd. Om het negeren ongedaan te maken, klik op "
+"'opnieuw proberen'."
 
 #: packages/lib/services/ReportService.ts:187
 msgid ""
@@ -6595,10 +6623,14 @@ msgid ""
 "collaborate on it. It does not however allow you to share a notebook with "
 "someone else, unless you have the feature \"%s\"."
 msgstr ""
+"Dit stelt een andere gebruiker in staat om een notitieboek met je te delen, "
+"en jullie kunnen er dan samen aan werken. Het geeft je echter niet de "
+"mogelijkheid om een notitieboek met iemand anders te delen, tenzij je de "
+"functie \"%s\" hebt."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:193
 msgid "This attachment does not have OCR data (Status: %s)"
-msgstr ""
+msgstr "Deze bijlage heeft geen OCR-gegevens (Status: %s)"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:54
 #: packages/lib/services/ResourceEditWatcher/index.ts:241
@@ -6614,23 +6646,25 @@ msgstr ""
 "geven tot Joplin."
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/ImageEditor.tsx:44
-#, fuzzy
 msgid "This drawing may have unsaved changes."
-msgstr "Er zijn niet opgeslagen wijzigingen."
+msgstr "Deze tekening kan onopgeslagen wijzigingen hebben."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:151
 msgid ""
 "This feature is disabled by default, you need to manually enable it by "
 "turning on the option to 'Enable handwritten transcription'."
 msgstr ""
+"Deze functie is standaard uitgeschakeld, je moet hem handmatig inschakelen "
+"door de optie 'Handschrifttranscriptie inschakelen' aan te zetten."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
-msgstr ""
+msgstr "Deze functie is alleen beschikbaar op Joplin Cloud en Joplin Server."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
 msgstr ""
+"Dit afbeeldingsformaat wordt niet ondersteund door het herkenningssysteem."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:304
 msgid ""
@@ -6769,18 +6803,20 @@ msgstr "Volg de onderstaande stappen om Joplin te synchroniseren met Dropbox:"
 #: packages/app-cli/app/command-sync.ts:111
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:86
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:153
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with Joplin Cloud, please login using this "
 "URL:"
-msgstr "Volg de onderstaande stappen om Joplin te synchroniseren met Dropbox:"
+msgstr ""
+"Om Joplin te laten synchroniseren met Joplin Cloud, log alsjeblieft in via "
+"deze URL:"
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:36
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:64
-#, fuzzy
 msgid ""
 "To allow Joplin to synchronise with your account, please follow these steps:"
-msgstr "Volg de onderstaande stappen om Joplin te synchroniseren met Dropbox:"
+msgstr ""
+"Om Joplin te laten synchroniseren met jouw account, volg alsjeblieft de "
+"volgend stappen:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:53
 msgid "To continue, please enter your master password below."
@@ -6862,9 +6898,8 @@ msgid "to-do: %s"
 msgstr "taak: %s"
 
 #: packages/lib/commands/toggleAllFolders.ts:8
-#, fuzzy
 msgid "Toggle all notebooks"
-msgstr "Kies hoofdnotitieboek"
+msgstr "Alle notitieboeken schakelen"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:134
 msgid "Toggle comment"
@@ -6879,14 +6914,12 @@ msgid "Toggle editor layout"
 msgstr "Bewerkindeling tonen/verbergen"
 
 #: packages/lib/commands/toggleEditorPlugin.ts:11
-#, fuzzy
 msgid "Toggle editor plugin"
-msgstr "Bewerkindeling tonen/verbergen"
+msgstr "Editor-plugin schakelen"
 
 #: packages/app-desktop/commands/toggleTabMovesFocus.ts:8
-#, fuzzy
 msgid "Toggle editor tab key navigation"
-msgstr "Bewerkindeling tonen/verbergen"
+msgstr "Editor tab-toetsnavigatie schakelen"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleEditors.ts:8
 msgid "Toggle editors"
@@ -6897,14 +6930,12 @@ msgid "Toggle external editing"
 msgstr "Extern bewerken in- of uitschakelen"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleMenuBar.ts:7
-#, fuzzy
 msgid "Toggle menu bar"
-msgstr "Zijbalk tonen/verbergen"
+msgstr "Menubalk schakelen"
 
 #: packages/lib/models/Setting.ts:1396
-#, fuzzy
 msgid "Toggle note history, keep notes for"
-msgstr "Bewaar geschiedenis van notities voor"
+msgstr "Notitiegeschiedenis schakelen, bewaar notities voor"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteList.ts:10
 msgid "Toggle note list"
@@ -6915,9 +6946,8 @@ msgid "Toggle own sort order"
 msgstr "Eigen sorteervolgorde in-/uitschakelen"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:468
-#, fuzzy
 msgid "Toggle plugin editor"
-msgstr "Schakel tussen editors"
+msgstr "Plugin-editor schakelen"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
@@ -6936,9 +6966,8 @@ msgid "Token has been copied to the clipboard!"
 msgstr "Token is naar het klembord gekopieerd!"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementToolbar.ts:8
-#, fuzzy
 msgid "Toolbar"
-msgstr "Hulpmiddelen"
+msgstr "Werkbalk"
 
 #: packages/lib/models/Setting.ts:1365
 msgid "Tools"
@@ -6969,7 +6998,7 @@ msgstr "Probeer het nu"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "TYPE"
-msgstr ""
+msgstr "TYPE"
 
 #: packages/app-cli/app/command-help.ts:72
 msgid ""
@@ -6994,32 +7023,28 @@ msgstr ""
 "van een notitieboek, of : om te zoeken op commando's."
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:706
-#, fuzzy
 msgid "Type a note title to search for it."
-msgstr "Typ nieuwe labels of kies ze uit de lijst"
+msgstr "Typ een notitietitel om te zoeken."
 
 #: packages/app-cli/app/help-utils.js:56
 msgid "Type: %s."
 msgstr "Type: %s."
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1100
-#, fuzzy
 msgid "Unable to edit resource of type %s"
-msgstr "De data kan niet gedeeld of geëxporteerd worden. Reden: %s"
+msgstr "Kan hulpbron van type %s niet bewerken"
 
 #: packages/app-mobile/components/screens/LogScreen.tsx:108
-#, fuzzy
 msgid "Unable to share log data. Reason: %s"
-msgstr "De data kan niet gedeeld of geëxporteerd worden. Reden: %s"
+msgstr "De logboekgegevens kunnen niet worden gedeeld. Reden: %s"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1125
-#, fuzzy
 msgid "Unable to share note data. Reason: %s"
-msgstr "De data kan niet gedeeld of geëxporteerd worden. Reden: %s"
+msgstr "De notitiegegevens kunnen niet worden gedeeld. Reden: %s"
 
 #: packages/app-mobile/components/Checkbox.tsx:51
 msgid "Unchecked"
-msgstr ""
+msgstr "Niet geselecteerd"
 
 #: packages/lib/models/settings/builtInMetadata.ts:714
 msgid "Uncompleted to-dos on top"
@@ -7037,6 +7062,9 @@ msgid ""
 "Uninstall and reinstall the application. Make sure you create a backup first "
 "by exporting all your notes as JEX from the desktop application."
 msgstr ""
+"Verwijder de applicatie en installeer deze opnieuw. Zorg ervoor dat je eerst "
+"een back-up maakt door al je notities als JEX te exporteren vanuit de "
+"desktopapplicatie."
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:13
 #: packages/app-mobile/utils/getVersionInfoText.ts:14
@@ -7044,9 +7072,8 @@ msgid "Unknown"
 msgstr "Onbekend"
 
 #: packages/app-desktop/bridge.ts:478
-#, fuzzy
 msgid "Unknown file type"
-msgstr "Onbekend argument: %s"
+msgstr "Onbekend bestandstype"
 
 #: packages/lib/utils/processStartFlags.ts:216
 msgid "Unknown flag: %s"
@@ -7059,23 +7086,20 @@ msgstr ""
 "Onbekend type item gedownload - graag Joplin upgraden naar de laatste versie"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:28
-#, fuzzy
 msgid "Unknown platform"
-msgstr "Onbekend argument: %s"
+msgstr "Onbekend platform"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:108
 msgid "Unordered list"
 msgstr "Ongesorteerde lijst"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:79
-#, fuzzy
 msgid "Unpublish"
-msgstr "Publicatie van notitie intrekken"
+msgstr "Publicatie intrekken"
 
 #: packages/app-mobile/components/screens/ShareNoteDialog.tsx:74
-#, fuzzy
 msgid "Unpublish \"%s\""
-msgstr "Publicatie van notitie intrekken"
+msgstr "Publicatie van \"%s\" intrekken"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:72
 msgid "Unpublish note"
@@ -7090,6 +7114,8 @@ msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
 msgstr ""
+"Notitieboek \"%s\" niet meer delen? Andere gebruikers kunnen hierdoor de "
+"toegang tot het notitieboek verliezen."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:377
 msgid ""
@@ -7238,9 +7264,8 @@ msgstr ""
 "af te sluiten."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1563
-#, fuzzy
 msgid "Use the legacy Markdown editor"
-msgstr "Markdown balk inschakelen"
+msgstr "Klassieke Markdown-editor gebruiken"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:580
 msgid ""
@@ -7304,33 +7329,32 @@ msgstr "Valideer je identiteit"
 
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:10
 msgid "View"
-msgstr "Beeld"
+msgstr "Weergave"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:184
 msgid "View OCR text"
-msgstr "Toon OCR-tekst"
+msgstr "OCR-tekst weergeven"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1221
 msgid "View on map"
-msgstr "Tonen op kaart"
+msgstr "Weergeven op kaart"
 
 #: packages/app-desktop/gui/MainScreen.tsx:543
 #: packages/app-desktop/gui/MainScreen.tsx:549
 #: packages/app-desktop/gui/MainScreen.tsx:572
 msgid "View them now"
-msgstr "Items tonen"
+msgstr "Nu weeregevn"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:152
 #: packages/lib/models/settings/builtInMetadata.ts:706
 #: packages/lib/models/settings/builtInMetadata.ts:707
 #: packages/lib/models/settings/builtInMetadata.ts:709
 msgid "Viewer"
-msgstr "Viewer"
+msgstr "Weergave"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1273
-#, fuzzy
 msgid "Viewer and Rich Text Editor font family"
-msgstr "Lettertype van editor"
+msgstr "Lettertypefamilie voor viewer en rijke-tekstdocument-editor"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1195
 msgid "Viewer font size"
@@ -7381,12 +7405,15 @@ msgstr ""
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
 msgid "We have a system for reporting and removing problematic plugins."
 msgstr ""
+"We hebben een systeem om problematische plugins te melden en te verwijderen."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:114
 msgid ""
 "We mark plugins developed by trusted Joplin community members as "
 "\"recommended\"."
 msgstr ""
+"Plug-ins ontwikkeld door vertrouwde Joplin-communityleden worden gemarkeerd "
+"als 'aanbevolen'."
 
 #: packages/lib/models/Setting.ts:1362
 msgid "Web Clipper"
@@ -7460,16 +7487,21 @@ msgid ""
 "higher-quality on-server transcription service. Requires sync with a copy of "
 "the desktop app."
 msgstr ""
+"Wanneer ingeschakeld, worden verzoeken om de afbeeldingen in de notitie te "
+"transcriberen met een hogere kwaliteit via de transcriptieservice op de "
+"server. Vereist synchronisatie met een kopie van de desktopapp."
 
 #: packages/lib/models/settings/builtInMetadata.ts:577
 msgid ""
 "When enabled, the application will scan your attachments and extract the "
 "text from it. This will allow you to search for text in these attachments."
 msgstr ""
+"Wanneer ingeschakeld, zal de applicatie je bijlagen scannen en de tekst "
+"eruit halen. Dit stelt je in staat om naar tekst in deze bijlagen te zoeken."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:281
 msgid "Window unresponsive."
-msgstr ""
+msgstr "Venster reageert niet."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:111
 msgid "Words"
@@ -7502,64 +7534,63 @@ msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
-"U staat op het punt een grote afbeelding (%dx%d pixels) bij te voegen. Wilt "
-"u dit verkleinen tot %d pixels voordat het wordt toegevoegd?"
+"Je staat op het punt een grote afbeelding (%dx%d pixels) bij te voegen. Wil "
+"je dit verkleinen tot %d pixels voordat het wordt toegevoegd?"
 
 #: packages/lib/services/joplinCloudUtils.ts:45
 msgid "You are logged in into Joplin Cloud, you can leave this screen now."
-msgstr ""
+msgstr "Je bent ingelogd op Joplin Cloud, je kunt dit scherm nu verlaten."
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:24
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:48
 msgid "You are now logged into your account."
-msgstr ""
+msgstr "Je bent nu ingelogd op je account."
 
 #: packages/app-desktop/gui/ErrorBoundary.tsx:46
 msgid "You are now using the latest version of the Markdown editor."
-msgstr ""
+msgstr "Je gebruikt nu de nieuwste versie van de Markdown-editor."
 
 #: packages/app-desktop/gui/MainScreen.tsx:585
 msgid ""
 "You are running the Intel version of Joplin on an Apple Silicon processor. "
 "Download the Apple Silicon one for better performance."
 msgstr ""
+"Je gebruikt de Intel-versie van Joplin op een Apple Silicon-processor. "
+"Download de Apple Silicon-versie voor betere prestaties."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
-msgstr "U heeft nog geen notitieboeken."
+msgstr "Je hebt nog geen notitieboeken."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:280
 msgid "You do not have any installed plugin."
-msgstr "U heeft geen geïnstalleerde plugins."
+msgstr "Je hebt geen geïnstalleerde plugins."
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
-msgstr "U kunt ook `status` typen voor meer informatie."
+msgstr "Je kunt ook `status` typen voor meer informatie."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:344
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"U kunt onderstaande tool gebruiken om uw data opnieuw te versleutelen, "
-"bijvoorbeeld als u weet dat enkele van uw notities zijn versleuteld met een "
+"Je kunt onderstaande tool gebruiken om uw data opnieuw te versleutelen, "
+"bijvoorbeeld als je weet dat enkele van je notities zijn versleuteld met een "
 "verouderde versleutelmethode."
 
 #: packages/lib/services/joplinCloudUtils.ts:53
-#, fuzzy
 msgid ""
 "You were unable to connect to Joplin Cloud. Please check your credentials "
 "and try again. Error:"
 msgstr ""
-"Er is een fout opgetreden bij het instellen van uw Joplin Cloud-account. "
-"Verifieer uw e-mailadres en wachtwoord en probeer het opnieuw. Fout was: \n"
-"\n"
-"%s"
+"Je kon geen verbinding maken met Joplin Cloud. Controleer je gegevens en "
+"probeer het opnieuw. Fout:"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:55
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:70
 msgid "Your account doesn't have access to this feature"
-msgstr ""
+msgstr "Je account heeft geen toegang tot deze functie"
 
 #: packages/app-cli/app/cli-utils.js:160
 msgid "Your choice: "
@@ -7567,28 +7598,28 @@ msgstr "Jouw keuze: "
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:70
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr "Uw data wordt opnieuw versleuteld en gesynchroniseerd."
+msgstr "Je gegevens worden opnieuw versleuteld en gesynchroniseerd."
 
 #: packages/app-desktop/gui/MainScreen.tsx:591
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:55
 msgid "Your Joplin Cloud credentials are invalid, please login."
-msgstr ""
+msgstr "Je Joplin Cloud-gegevens zijn ongeldig, log alsjeblieft in."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:259
 msgid "Your password is needed to decrypt some of your data."
-msgstr "Uw wachtwoord is nodig om sommige van uw gegevens te decoderen."
+msgstr "Je wachtwoord is nodig om sommige van je gegevens te decoderen."
 
 #: packages/app-cli/app/command-sync.ts:267
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
 msgstr ""
-"Uw wachtwoord is nodig om sommige van uw gegevens te decoderen. Typ ':e2ee "
+"Je wachtwoord is nodig om sommige van je gegevens te decoderen. Typ ':e2ee "
 "decrypt' om het in te stellen."
 
 #: packages/app-desktop/checkForUpdates.ts:108
 msgid "Your version: %s"
-msgstr "Uw versie: %s"
+msgstr "Jouw versie: %s"
 
 #: packages/app-desktop/gui/MenuBar.tsx:798
 #: packages/app-desktop/gui/MenuBar.tsx:804

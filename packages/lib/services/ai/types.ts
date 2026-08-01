@@ -1,13 +1,57 @@
-export type ChatRole = 'system' | 'user' | 'assistant';
+import { ToolSpec } from './tools/types';
 
-export interface ChatMessage {
-	role: ChatRole;
+export enum ChatRole {
+	System = 'system',
+	User = 'user',
+	Assistant = 'assistant',
+	Tool = 'tool',
+}
+
+interface ChatBaseMessage {
 	content: string;
+}
+
+export interface ChatStandardMessage extends ChatBaseMessage {
+	role: ChatRole.System | ChatRole.User | ChatRole.Assistant;
+	hide?: boolean;
+	toolCalls?: ChatToolCall[];
+}
+
+export interface ChatToolMessage extends ChatBaseMessage {
+	role: ChatRole.Tool;
+	toolName: string;
+	toolCallId: string;
+	isError: boolean;
+	// A very brief description of the result that can be shown to the user
+	userDescription: string;
+	isEdit: boolean;
+}
+
+export type ChatMessage = ChatStandardMessage | ChatToolMessage;
+
+export interface JsonSchema {
+	type: string;
+	properties?: unknown;
+	required?: string[];
+	description?: string;
+	additionalProperties?: boolean;
+}
+
+export interface ResponseFormat {
+	type: 'json_schema';
+	json_schema: {
+		name: string;
+		strict: boolean;
+		schema: JsonSchema;
+	};
 }
 
 export interface ChatOptions {
 	temperature?: number;
+	tools?: ToolSpec[];
+	responseFormat?: ResponseFormat;
 	maxTokens?: number;
+	signal?: AbortSignal;
 }
 
 export interface ChatUsage {
@@ -15,9 +59,24 @@ export interface ChatUsage {
 	outputTokens: number;
 }
 
+export interface ChatToolCall {
+	toolName: string;
+	callId: string;
+	arguments: Record<string, unknown>;
+	parseError: string|null;
+}
+
 export interface ChatResult {
 	text: string;
+	toolCalls: ChatToolCall[];
 	usage: ChatUsage;
+	// Joplin Cloud degradation / budget signals. Populated only by the
+	// joplin-cloud provider; other providers leave them undefined. Consumed
+	// internally to drive the aiStatus Redux slice — plugins receive only
+	// the assistant text via JoplinAi.chat().
+	degraded?: boolean;
+	tokensUsed?: number;
+	tokensBudget?: number;
 }
 
 export type ProviderClassification = 'local' | 'remote';

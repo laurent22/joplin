@@ -43,7 +43,7 @@ router.post('api/saml', async (_path: SubPath, ctx: AppContext) => {
 	if (typeof displayName !== 'string') throw new ErrorBadRequest('displayName must be a string');
 
 	// Load the user
-	const user = await ctx.joplin.models.user().ssoLogin(email, displayName);
+	const user = await ctx.joplin.models.user().ssoLogin(email, displayName, ctx.joplin.services);
 	if (!user) throw new ErrorForbidden(`Could not login using email "${email}" and displayName "${displayName}"`);
 
 	if (fields.RelayState) {

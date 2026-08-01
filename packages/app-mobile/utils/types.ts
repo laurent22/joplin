@@ -7,6 +7,7 @@ import type { SideMenuContentOptions } from '../components/SideMenuContentNote';
 export interface Route {
 	routeName: string;
 	folderId?: string;
+	tagId?: string;
 	noteId?: string;
 	isDeleted?: boolean;
 }

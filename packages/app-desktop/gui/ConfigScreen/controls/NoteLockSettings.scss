@@ -1,0 +1,54 @@
+.note-lock-settings > .section {
+	padding-bottom: 16px;
+	margin-bottom: 16px;
+	border-bottom: 1px solid var(--joplin-divider-color);
+}
+
+.note-lock-settings > .section:last-child {
+	padding-bottom: 0;
+	margin-bottom: 0;
+	border-bottom: 0;
+}
+
+.note-lock-settings > .section > h2 {
+	margin-top: 0;
+}
+
+.note-lock-settings > .section > .form {
+	max-width: 420px;
+}
+
+.note-lock-settings > .section > .form > .buttons {
+	display: flex;
+	gap: 8px;
+	margin-top: 12px;
+}
+
+.note-lock-settings > .section > .form > .buttons + .buttons {
+	margin-top: 20px;
+}
+
+.note-lock-settings > .section > .form > .description {
+	margin-top: 8px;
+	margin-bottom: 0;
+	color: var(--joplin-color-faded);
+	font-style: italic;
+	line-height: var(--joplin-line-height);
+}
+
+.note-lock-settings > .section > .form > .reminder {
+	margin-top: 16px;
+	margin-bottom: 0;
+}
+
+.note-lock-settings > .section > .form > .warning {
+	padding: 12px;
+	border-left: 3px solid var(--joplin-color-warn);
+	background-color: var(--joplin-background-color);
+	color: var(--joplin-color);
+	line-height: 1.4;
+}
+
+.note-lock-settings > .section > .form > .error {
+	color: var(--joplin-color-error);
+}

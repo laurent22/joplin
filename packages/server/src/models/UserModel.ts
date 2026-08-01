@@ -39,6 +39,7 @@ import config, { isUsingExternalAuth } from '../config';
 import { randomInt } from 'node:crypto';
 import { samlOwnedUserProperties } from '../utils/saml';
 import { AccountType, PlanName } from '@joplin/lib/utils/joplinCloud';
+import { Services } from '../services/types';
 export { AccountType };
 
 const logger = Logger.create('UserModel');
@@ -52,12 +53,20 @@ interface UserEmailDetails {
 
 export type GetUsersApiResponse = User;
 
+interface HasMfaEnabledOptions {
+	requireUserExists: boolean;
+}
+
 export interface Account {
 	account_type: number;
 	can_share_folder: number;
 	can_receive_folder: number;
 	max_item_size: number;
 	max_total_item_size: number;
+}
+
+interface EnabledUserCountOptions {
+	excludeMainAdmin: boolean;
 }
 
 const accountMetadata: Record<AccountType, Account> = {
@@ -210,7 +219,7 @@ export default class UserModel extends BaseModel<User> {
 		return this.db<User>(this.tableName).where(user).first();
 	}
 
-	public async login(email: string, password: string): Promise<User> {
+	public async login(email: string, password: string, _services: Services): Promise<User> {
 		if (!config().LOCAL_AUTH_ENABLED) {
 			return null;
 		}
@@ -235,7 +244,7 @@ export default class UserModel extends BaseModel<User> {
 		return user;
 	}
 
-	public async ssoLogin(email: string, displayName: string) {
+	public async ssoLogin(email: string, displayName: string, _services: Services) {
 		if (!email || !displayName) {
 			return null;
 		}
@@ -887,9 +896,12 @@ export default class UserModel extends BaseModel<User> {
 		}, 'UserModel::saveMulti');
 	}
 
-	public async hasMFAEnabled(email: string) {
+	public async hasMFAEnabled(email: string, { requireUserExists }: HasMfaEnabledOptions) {
 		const user = await this.loadByEmail(email, { fields: ['totp_secret'] });
-		if (!user) throw new ErrorForbidden('Invalid email or password', { details: { email } });
+		if (!user) {
+			if (requireUserExists) throw new ErrorForbidden('Invalid email or password', { details: { email } });
+			return false;
+		}
 		return getIsMFAEnabled(user);
 	}
 
@@ -920,4 +932,21 @@ export default class UserModel extends BaseModel<User> {
 		await this.models().notification().add(userId, NotificationKey.Any, NotificationLevel.Important, 'Multi-factor authentication has been enabled for your account. Please remember to copy and save your recovery codes');
 	}
 
+	public async enabledUserCount({ excludeMainAdmin }: EnabledUserCountOptions) {
+		const result = await this.db('users')
+			.where('enabled', '=', 1)
+			.count('*', { as: 'count' });
+		let count = Number(result[0].count);
+
+		if (excludeMainAdmin) {
+			const hasAdminUser = !!await this.db('users')
+				.select({ 'id': 'id' })
+				.where('is_admin', '=', 1)
+				.where('enabled', '=', 1)
+				.first();
+			count -= (hasAdminUser ? 1 : 0);
+		}
+
+		return count;
+	}
 }

@@ -35,7 +35,7 @@ const PasswordInput = (props: Props) => {
 				value={props.value}
 				onChange={props.onChange}
 			/>
-			<button onClick={onShowPassword} className="showpasswordbutton">
+			<button type="button" onClick={onShowPassword} className="showpasswordbutton">
 				<i className={icon} role='img' aria-label={title} title={title}></i>
 			</button>
 		</div>

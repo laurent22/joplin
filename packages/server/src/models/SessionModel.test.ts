@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext } from '../utils/testing/testUtils';
 import { defaultSessionTtl } from './SessionModel';
 
 describe('SessionModel', () => {
@@ -24,11 +24,14 @@ describe('SessionModel', () => {
 		const mfaCode = '';
 
 		const { user, password } = await createUserAndSession(1);
-		await models().session().authenticate(user.email, password, mfaCode);
+		const ctx = await koaAppContext();
+		const services = ctx.joplin.services;
+
+		await models().session().authenticate(user.email, password, services, mfaCode);
 
 		jest.setSystemTime(new Date(t0 + defaultSessionTtl + 10));
 
-		const lastSession = await models().session().authenticate(user.email, password, mfaCode);
+		const lastSession = await models().session().authenticate(user.email, password, services, mfaCode);
 
 		expect(await models().session().count()).toBe(3);
 
@@ -37,7 +40,7 @@ describe('SessionModel', () => {
 		expect(await models().session().count()).toBe(1);
 		expect((await models().session().all())[0].id).toBe(lastSession.id);
 
-		await models().session().authenticate(user.email, password, mfaCode);
+		await models().session().authenticate(user.email, password, services, mfaCode);
 		await models().session().deleteExpiredSessions();
 
 		expect(await models().session().count()).toBe(2);

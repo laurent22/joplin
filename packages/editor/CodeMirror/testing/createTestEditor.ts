@@ -1,6 +1,6 @@
 import { markdown } from '@codemirror/lang-markdown';
 import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
-import { indentUnit, syntaxTree } from '@codemirror/language';
+import { forceParsing, indentUnit, syntaxTree } from '@codemirror/language';
 import { SelectionRange, EditorSelection, EditorState, Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import forceFullParse from './forceFullParse';
@@ -69,6 +69,12 @@ const createTestEditor = async (
 			});
 		}
 	}
+
+	// forceFullParse populates the parse cache for editor.state, but the view keeps its own
+	// tree that the background parser advances lazily. Extensions that build decorations from
+	// syntaxTree(view.state) (e.g. makeInlineReplaceExtension) can then run against an incomplete
+	// tree and skip their decorations, so force the view's own tree to complete before returning.
+	forceParsing(editor, editor.state.doc.length);
 
 	return editor;
 };

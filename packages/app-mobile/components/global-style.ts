@@ -16,6 +16,7 @@ const baseStyle = {
 	// Smaller margins for spacing between/around items:
 	marginSmall: 8,
 	marginMedium: 12,
+	marginExtraSmall: 6,
 
 	disabledOpacity: 0.2,
 	lineHeight: '1.6em',

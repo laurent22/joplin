@@ -392,10 +392,30 @@ const buildStartupTasks = (
 	addTask('buildStartupTasks/go: initial route', async () => {
 		const folder = await getInitialActiveFolder();
 
-		const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+		const getNotesParent = async () => {
+			const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+			if (notesParent.type === 'Tag' && !(await Tag.load(notesParent.selectedItemId))) {
+				return null;
+			}
+			return notesParent;
+		};
+
+		const notesParent = await getNotesParent();
 
 		if (notesParent && notesParent.type === 'SmartFilter') {
-			dispatch(DEFAULT_ROUTE);
+			dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				smartFilterId: notesParent.selectedItemId,
+				clearHistory: true,
+			});
+		} else if (notesParent && notesParent.type === 'Tag') {
+			dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				tagId: notesParent.selectedItemId,
+				clearHistory: true,
+			});
 		} else if (!folder) {
 			dispatch(DEFAULT_ROUTE);
 		} else {
@@ -403,6 +423,7 @@ const buildStartupTasks = (
 				type: 'NAV_GO',
 				routeName: 'Notes',
 				folderId: folder.id,
+				clearHistory: true,
 			});
 		}
 	});

@@ -5,6 +5,7 @@ import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
 import Logger from '@joplin/utils/Logger';
+import { ChatMessage } from '@joplin/lib/services/ai/types';
 
 const logger = Logger.create('app.reducer');
 
@@ -12,9 +13,28 @@ export interface AiChatMessage {
 	id: string;
 	role: 'user' | 'assistant' | 'error' | 'separator';
 	text: string;
-	editsApplied?: number;
-	editsMissed?: number;
+	hide?: boolean;
+
+	// The raw message(s) corresponding to this event
+	raw: ChatMessage[];
 }
+
+// Joplin Cloud degradation / budget snapshot. Populated from the provider's
+// InternalChatResult after each chat() call, and persisted to Setting so it
+// survives restarts and reflects plugin-driven calls even when no UI was open.
+export interface AiStatus {
+	degraded: boolean;
+	tokensUsed: number;
+	tokensBudget: number;
+	lastToastShownAt: number | null;
+}
+
+export const defaultAiStatus = (): AiStatus => ({
+	degraded: false,
+	tokensUsed: 0,
+	tokensBudget: 0,
+	lastToastShownAt: null,
+});
 
 export interface AppStateRoute {
 	type: string;
@@ -80,6 +100,7 @@ export interface AppState extends State, AppWindowState {
 	// Extra reducer keys go here
 	mainLayout: LayoutItem;
 	isResettingLayout: boolean;
+	aiStatus: AiStatus;
 }
 
 export const createAppDefaultWindowState = (): AppWindowState => {
@@ -117,6 +138,7 @@ export function createAppDefaultState(resourceEditWatcherDefaultState: Partial<A
 		startupPluginsLoaded: false,
 		isResettingLayout: false,
 		modalOverlayMessage: null,
+		aiStatus: defaultAiStatus(),
 		...resourceEditWatcherDefaultState,
 	};
 }
@@ -289,6 +311,27 @@ export default function(state: AppState, action: any) {
 			);
 			break;
 
+		case 'AI_CHAT_ADD_TOOL_RESULT':
+			newState = withWindowStateUpdated(
+				state, action.windowId, 'aiChatMessages', messages => {
+					let lastMessage = messages[messages.length - 1];
+					if (lastMessage) {
+						lastMessage = {
+							...lastMessage,
+							raw: [
+								...lastMessage.raw,
+								action.toolCall,
+							],
+						};
+
+						return [...messages.slice(0, messages.length - 1), lastMessage];
+					}
+
+					return messages;
+				},
+			);
+			break;
+
 		case 'AI_CHAT_REMOVE':
 			newState = withWindowStateUpdated(
 				state, action.windowId, 'aiChatMessages', messages => messages.filter(m => m.id !== action.id),
@@ -299,6 +342,18 @@ export default function(state: AppState, action: any) {
 			newState = withWindowStateUpdated(
 				state, action.windowId, 'aiChatMessages', (): AiChatMessage[] => [],
 			);
+			break;
+
+		case 'AI_STATUS_UPDATE':
+			// Partial merge — callers can bump `lastToastShownAt` alone after
+			// firing the toast without clobbering the degraded/usage numbers.
+			newState = {
+				...state,
+				aiStatus: {
+					...(state.aiStatus ?? defaultAiStatus()),
+					...(action.payload as Partial<AiStatus>),
+				},
+			};
 			break;
 
 		case 'WINDOW_LAYOUT_SET':

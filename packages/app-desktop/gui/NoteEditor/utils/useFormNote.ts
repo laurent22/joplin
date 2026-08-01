@@ -9,12 +9,15 @@ import attachedResources, { clearResourceCache } from '@joplin/lib/utils/attache
 import { MarkupToHtml } from '@joplin/renderer';
 import Note from '@joplin/lib/models/Note';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-import { NoteEntity } from '@joplin/lib/services/database/types';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import Logger from '@joplin/utils/Logger';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
+import { NoteEntity } from '@joplin/lib/services/database/types';
+import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
+import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 
 const logger = Logger.create('useFormNote');
 
@@ -31,6 +34,8 @@ export interface HookDependencies {
 	onBeforeLoad(event: OnLoadEvent): void;
 	onAfterLoad(event: OnLoadEvent): void;
 	builtInEditorVisible: boolean;
+	noteLockSessionUnlocked: boolean;
+	onDecryptFailedChange(value: boolean): void;
 }
 
 type MapFormNoteCallback = (previousFormNote: FormNote)=> FormNote;
@@ -66,12 +71,34 @@ function resourceInfosChanged(a: ResourceInfos, b: ResourceInfos): boolean {
 	return false;
 }
 
+// While the session is locked, a locked note produces no form note at all - the unlock panel
+// takes the editor's place. So no placeholder body exists that a save could write over the note.
+const loadNoteForForm = async (noteId: string): Promise<{ note: NoteEntity|null; blocked: boolean; decryptFailed: boolean }> => {
+	if (isNoteLockEnabled()) {
+		const lockState = await Note.load(noteId, { fields: ['is_locked'] });
+		if (lockState && NoteLockNote.isLocked(lockState)) {
+			if (!NoteLockSession.instance().isUnlocked()) return { note: null, blocked: true, decryptFailed: false };
+			try {
+				return { note: await Note.load(noteId, { useNoteLock: true }), blocked: false, decryptFailed: false };
+			} catch (error) {
+				// Happens when the note was encrypted with a different key, e.g. before a password
+				// reset. Fail closed and let the editor show the cannot-decrypt panel.
+				logger.warn('Could not decrypt locked note:', noteId, error);
+				return { note: null, blocked: false, decryptFailed: true };
+			}
+		}
+	}
+	return { note: await Note.load(noteId), blocked: false, decryptFailed: false };
+};
+
 type InitNoteStateCallback = (note: NoteEntity, isNew: boolean)=> Promise<FormNote>;
-const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: string, noteId: string, initNoteState: InitNoteStateCallback, builtInEditorVisible: boolean) => {
+const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: string, noteId: string, initNoteState: InitNoteStateCallback, clearFormNote: ()=> void, builtInEditorVisible: boolean, noteLockSessionUnlocked: boolean, setDecryptFailed: (value: boolean)=> void, setLoadBlocked: (value: boolean)=> void) => {
 	// Increasing the value of this counter cancels any ongoing note refreshes and starts
 	// a new refresh.
 	const [formNoteRefreshScheduled, setFormNoteRefreshScheduled] = useState<number>(0);
 	const prevBuiltInEditorVisible = usePrevious<boolean>(builtInEditorVisible);
+	// Seeded because usePrevious defaults to null, which would read as a session change on mount.
+	const prevNoteLockSessionUnlocked = usePrevious<boolean>(noteLockSessionUnlocked, noteLockSessionUnlocked);
 
 	useQueuedAsyncEffect(async (event) => {
 		if (formNoteRefreshScheduled <= 0) return;
@@ -83,19 +110,28 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 		logger.info('Sync has finished and note has never been changed - reloading it');
 
 		const loadNote = async () => {
-			const n = await Note.load(noteId);
+			setDecryptFailed(false);
+			const { note: n, blocked, decryptFailed } = await loadNoteForForm(noteId);
 			if (event.cancelled || formNoteRef.current.hasChanged) return;
 
-			// Normally should not happened because if the note has been deleted via sync
-			// it would not have been loaded in the editor (due to note selection changing
-			// on delete)
-			if (!n) {
-				logger.warn('Trying to reload note that has been deleted:', noteId);
-				return;
-			}
+			setLoadBlocked(blocked);
+			setDecryptFailed(decryptFailed);
+			if (blocked || decryptFailed) {
+				// The session locked with this note open (or its content stopped decrypting) - drop
+				// the decrypted content and let the corresponding panel take over.
+				if (formNoteRef.current.id) clearFormNote();
+			} else {
+				// Normally should not happened because if the note has been deleted via sync
+				// it would not have been loaded in the editor (due to note selection changing
+				// on delete)
+				if (!n) {
+					logger.warn('Trying to reload note that has been deleted:', noteId);
+					return;
+				}
 
-			await initNoteState(n, false);
-			if (event.cancelled) return;
+				await initNoteState(n, false);
+				if (event.cancelled) return;
+			}
 			setFormNoteRefreshScheduled(oldValue => {
 				// If a new refresh was scheduled between initNoteState
 				// and now:
@@ -108,7 +144,7 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 		};
 
 		await loadNote();
-	}, [formNoteRefreshScheduled, noteId, editorId, initNoteState]);
+	}, [formNoteRefreshScheduled, noteId, editorId, initNoteState, clearFormNote, setDecryptFailed]);
 
 	const refreshFormNote = useCallback(() => {
 		// Increase the counter to cancel any ongoing refresh attempts
@@ -123,6 +159,14 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 			refreshFormNote();
 		}
 	}, [builtInEditorVisible, prevBuiltInEditorVisible, refreshFormNote]);
+
+	// Unlocking loads the note the panel was blocking (the form is then empty), locking must drop
+	// a locked note's plaintext - reload to recompute.
+	useEffect(() => {
+		if (isNoteLockEnabled() && prevNoteLockSessionUnlocked !== noteLockSessionUnlocked && (formNoteRef.current.is_locked || formNoteRef.current.id !== noteId)) {
+			refreshFormNote();
+		}
+	}, [noteLockSessionUnlocked, prevNoteLockSessionUnlocked, noteId, formNoteRef, refreshFormNote]);
 
 
 	useEffect(() => {
@@ -153,11 +197,19 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 
 export default function useFormNote(dependencies: HookDependencies) {
 	const {
-		noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad, builtInEditorVisible, editorId,
+		noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad, builtInEditorVisible, editorId, noteLockSessionUnlocked, onDecryptFailedChange,
 	} = dependencies;
 
 	const [formNote, setFormNote] = useState<FormNote>(defaultFormNote());
 	const [isNewNote, setIsNewNote] = useState(false);
+	// Keyed by note id so a failure can never carry over to another note the user switches to.
+	const [decryptFailedId, setDecryptFailedId] = useState<string|null>(null);
+	const setDecryptFailed = useCallback((value: boolean) => {
+		setDecryptFailedId(value ? noteId : null);
+		onDecryptFailedChange(value);
+	}, [noteId, onDecryptFailedChange]);
+	const [loadBlockedId, setLoadBlockedId] = useState<string|null>(null);
+	const setLoadBlocked = useCallback((value: boolean) => setLoadBlockedId(value ? noteId : null), [noteId]);
 	const previousNoteId = usePrevious(formNote.id);
 	const [resourceInfos, setResourceInfos] = useState<ResourceInfos>({});
 
@@ -165,6 +217,16 @@ export default function useFormNote(dependencies: HookDependencies) {
 	formNoteRef.current = formNote;
 
 	const initNoteState: InitNoteStateCallback = useCallback(async (n, isNewNote) => {
+		let noteLockKey = null;
+		if (isNoteLockEnabled() && NoteLockNote.isLocked(n)) {
+			// The session can lock between the gated load and here (e.g. lock-on-switch) - drop
+			// the load rather than show plaintext that pending saves could no longer encrypt.
+			if (!NoteLockSession.instance().isUnlocked()) return null;
+			// Capture the key with the plaintext so pending saves can re-encrypt even after
+			// the session locks.
+			noteLockKey = NoteLockSession.instance().decryptedKey();
+		}
+
 		let originalCss = '';
 
 		if (n.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
@@ -188,6 +250,9 @@ export default function useFormNote(dependencies: HookDependencies) {
 			hasChanged: false,
 			user_updated_time: n.user_updated_time,
 			encryption_applied: n.encryption_applied,
+			is_locked: n.is_locked,
+			noteLockKey,
+			isDecrypted: 'isDecrypted' in n && !!n.isDecrypted,
 		};
 
 		logger.debug('Initializing note state');
@@ -215,10 +280,16 @@ export default function useFormNote(dependencies: HookDependencies) {
 		return newFormNote;
 	}, []);
 
-	useRefreshFormNoteOnChange(formNoteRef, editorId, noteId, initNoteState, builtInEditorVisible);
+	const clearFormNote = useCallback(() => {
+		formNoteRef.current = defaultFormNote();
+		setFormNote(formNoteRef.current);
+	}, []);
+
+	useRefreshFormNoteOnChange(formNoteRef, editorId, noteId, initNoteState, clearFormNote, builtInEditorVisible, noteLockSessionUnlocked, setDecryptFailed, setLoadBlocked);
 
 	useEffect(() => {
 		if (!noteId) {
+			setDecryptFailed(false);
 			if (formNote.id) setFormNote(defaultFormNote());
 			return () => {};
 		}
@@ -244,8 +315,21 @@ export default function useFormNote(dependencies: HookDependencies) {
 		}
 
 		async function loadNote() {
-			const n = await Note.load(noteId);
+			setDecryptFailed(false);
+			const { note: n, blocked, decryptFailed } = await loadNoteForForm(noteId);
 			if (cancelled) return;
+
+			setLoadBlocked(blocked);
+			setDecryptFailed(decryptFailed);
+			if (blocked || decryptFailed) {
+				await onBeforeLoad({ formNote });
+				if (cancelled) return;
+				// Drop the previous form so no note content lingers behind the unlock or
+				// cannot-decrypt panel. The id guard stops the resulting effect re-run from looping.
+				if (formNoteRef.current.id) clearFormNote();
+				return;
+			}
+
 			if (!n) throw new Error(`Cannot find note with ID: ${noteId}`);
 			logger.debug('Loaded note:', n);
 
@@ -327,5 +411,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		formNote,
 		setFormNote: onSetFormNote,
 		resourceInfos,
+		decryptFailed: !!noteId && decryptFailedId === noteId,
+		loadBlocked: !!noteId && loadBlockedId === noteId,
 	};
 }

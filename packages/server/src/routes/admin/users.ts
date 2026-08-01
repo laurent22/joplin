@@ -24,6 +24,7 @@ import { userFlagToString } from '../../models/UserFlagModel';
 import { _ } from '@joplin/lib/locale';
 import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
 import { PaginationOrderDir } from '../../models/utils/pagination';
+import checkCanCreateUser from '../utils/checkCanCreateUser';
 
 export interface CheckRepeatPasswordInput {
 	password: string;
@@ -347,12 +348,15 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 
 		if (fields.post_button) {
 			const userToSave: User = models.user().fromApiInput(user);
-			await models.user().checkIfAllowed(owner, isNew ? AclAction.Create : AclAction.Update, userToSave);
 
 			if (isNew) {
+				await checkCanCreateUser(ctx.joplin.services, ctx.joplin.models, ctx.joplin.owner);
+
 				const savedUser = await models.user().save(userToSave);
 				userId = savedUser.id;
 			} else {
+				await models.user().checkIfAllowed(owner, AclAction.Update, userToSave);
+
 				await models.user().save(userToSave, { isNew: false });
 
 				// When changing the password, we also clear all session IDs for

@@ -92,6 +92,7 @@ export const getDefaultValue = (tableName: string, colName: string): string|numb
 export enum ShareType {
 	Note = 1, // When a note is shared via a public link
 	Folder = 3, // When a complete folder is shared with another Joplin Server user
+	PublishedFolder = 4, // When a folder is shared via a public link
 }
 
 export enum ShareUserStatus {
@@ -248,6 +249,9 @@ export interface Subscription {
 	updated_time?: string;
 	created_time?: string;
 	is_deleted?: number;
+	trial_end?: number;
+	current_period_end?: number;
+	source?: string;
 }
 
 export interface UserFlag extends WithDates {
@@ -497,6 +501,9 @@ export const databaseSchema: DatabaseTables = {
 		updated_time: { type: 'string', defaultValue: null },
 		created_time: { type: 'string', defaultValue: null },
 		is_deleted: { type: 'number', defaultValue: 0 },
+		trial_end: { type: 'string', defaultValue: 0 },
+		current_period_end: { type: 'string', defaultValue: 0 },
+		source: { type: 'string', defaultValue: '' },
 	},
 	user_flags: {
 		id: { type: 'number', defaultValue: null },

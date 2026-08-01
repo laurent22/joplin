@@ -3,6 +3,7 @@ import dayJsUtc = require('dayjs/plugin/utc');
 import dayJsDuration = require('dayjs/plugin/duration');
 import dayJsTimezone = require('dayjs/plugin/timezone');
 import { LoggerWrapper } from '@joplin/utils/Logger';
+import { _n } from '@joplin/lib/locale';
 
 function defaultTimezone() {
 	return dayjs.tz.guess();
@@ -49,6 +50,11 @@ export function formatDate(ms: number | Date): string {
 	ms = ms instanceof Date ? ms.getTime() : ms;
 	return `${dayjs(ms).format('D MMM YYYY')}`;
 }
+
+export const formatDurationToDays = (ms: number) => {
+	const days = Math.floor(ms / Day);
+	return _n('1 day', '%d days', days, days);
+};
 
 export const durationToMilliseconds = (durationIso8601: string) => {
 	const d = dayjs.duration(durationIso8601).asMilliseconds();

@@ -63,7 +63,7 @@ const useStyles = (theme: ThemeStyle, spec: PromptButtonSpec, isMenu: boolean) =
 				paddingHorizontal: (theme.marginMedium - 1) * 2,
 				paddingTop: theme.marginMedium - 1,
 				paddingBottom: theme.marginMedium - 1,
-				minWidth: theme.margin * 4,
+				minWidth: theme.margin * 5,
 			},
 			buttonContent: {
 				display: 'flex',
