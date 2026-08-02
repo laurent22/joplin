@@ -86,6 +86,7 @@
     "multiparty": "4.2.3",
     "mustache": "4.2.0",
     "nanoid": "5.1.11",
+    "node-diff3": "3.2.0",
     "node-fetch": "2.6.7",
     "node-notifier": "10.0.1",
     "node-persist": "3.1.3",
