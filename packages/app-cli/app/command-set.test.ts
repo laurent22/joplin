@@ -32,4 +32,13 @@ describe('command-set', () => {
 		expect((await Note.load(note.id)).title).toBe(expectedTitle);
 	});
 
+	it('should block changing the lock state of a plain note', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const note = await Note.save({ title: 'hello', body: 'plain', parent_id: '' });
+
+		const command = setupCommandForTesting(Command);
+		await expect(command.action({ note: note.id, name: 'is_locked', value: '1' })).rejects.toThrow('The note lock state cannot be changed from the command line');
+		expect((await Note.load(note.id)).is_locked).toBe(0);
+	});
+
 });

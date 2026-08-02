@@ -11,6 +11,7 @@ import ItemChange from '../models/ItemChange';
 import Setting from '../models/Setting';
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
 import NoteLockNote from '../services/noteLock/NoteLockNote';
+import NoteLockSession from '../services/noteLock/NoteLockSession';
 import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('convertNoteToMarkdown');
@@ -43,11 +44,16 @@ export const runtime = (): CommandRuntime => {
 					if (await itemIsReadOnly(Note, ModelType.Note, ItemChange.SOURCE_UNSPECIFIED, note.id, Setting.value('sync.userId'), context.state.shareService)) {
 						throw new Error(_('Cannot convert read-only item: "%s"', note.title));
 					}
-					if (isNoteLockEnabled() && NoteLockNote.isLocked(note)) {
+					const noteIsLocked = isNoteLockEnabled() && NoteLockNote.isLocked(note);
+					if (noteIsLocked && !NoteLockSession.instance().isUnlocked()) {
 						throw new Error(_('Cannot convert locked note: "%s"', note.title));
 					}
 
-					const markdownBody = await convertHtmlToMarkdown().execute(context, note.body);
+					// A locked note converts through a full gated load and save, so the body is
+					// decrypted for the conversion and the converted copy is encrypted again.
+					const sourceNote = noteIsLocked ? await Note.load(note.id, { useNoteLock: true }) : note;
+
+					const markdownBody = await convertHtmlToMarkdown().execute(context, sourceNote.body);
 					const newNote = await Note.duplicate(note.id);
 
 					newNote.body = markdownBody;
@@ -56,7 +62,8 @@ export const runtime = (): CommandRuntime => {
 					newNote.user_updated_time = note.user_updated_time;
 					newNote.updated_time = Date.now();
 
-					await Note.save(newNote, { autoTimestamp: false });
+					const toSave = noteIsLocked ? { ...newNote, isDecrypted: true } : newNote;
+					await Note.save(toSave, { autoTimestamp: false, useNoteLock: noteIsLocked });
 					await Note.delete(note.id, { toTrash: true });
 					processedCount ++;
 
@@ -78,6 +85,6 @@ export const runtime = (): CommandRuntime => {
 				await shim.showErrorDialog(_('Could not convert notes to Markdown: %s', error.message));
 			}
 		},
-		enabledCondition: 'selectionIncludesHtmlNotes && (multipleNotesSelected || !noteIsReadOnly)',
+		enabledCondition: 'selectionIncludesHtmlNotes && (multipleNotesSelected || !noteIsReadOnly) && !noteLockContentUnavailable',
 	};
 };

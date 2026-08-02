@@ -216,7 +216,7 @@ conflict_note_state | 18
 
 Gets all notes
 
-By default, this call will return the all notes **except** the notes in the trash folder and any conflict note. To include these too, you can specify `include_deleted=1` and `include_conflicts=1` as query parameters.
+By default, this call will return the all notes **except** the notes in the trash folder and any conflict note. To include these too, you can specify `include_deleted=1` and `include_conflicts=1` as query parameters. Locked notes are always excluded.
 
 ### GET /notes/:id
 
@@ -314,7 +314,7 @@ Gets folder with ID :id
 
 ### GET /folders/:id/notes
 
-Gets all the notes inside this folder.
+Gets all the notes inside this folder. Locked notes are excluded.
 
 ### POST /folders
 
@@ -453,7 +453,7 @@ Gets tag with ID :id
 
 ### GET /tags/:id/notes
 
-Gets all the notes with this tag.
+Gets all the notes with this tag. Locked notes are excluded.
 
 ### POST /tags
 
@@ -497,7 +497,7 @@ Remove the tag from the note.
 
 ### GET /revisions
 
-Gets all revisions
+Gets all revisions, except the revisions of locked notes
 
 ### GET /revisions/:id
 

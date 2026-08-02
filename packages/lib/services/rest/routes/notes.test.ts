@@ -6,9 +6,12 @@ import { readFile, readdir, remove, writeFile } from 'fs-extra';
 import Resource from '../../../models/Resource';
 import Api, { RequestMethod } from '../Api';
 import Note from '../../../models/Note';
+import Folder from '../../../models/Folder';
+import Tag from '../../../models/Tag';
 import { setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
 import Revision from '../../../models/Revision';
 import { ModelType } from '../../../BaseModel';
+import { NoteEntity } from '../../database/types';
 const md5 = require('md5');
 
 const imagePath = `${__dirname}/../../../images/SideMenuHeader.png`;
@@ -264,6 +267,25 @@ describe('routes/notes', () => {
 
 		await expect(api.route(RequestMethod.PUT, `notes/${note.id}`, null, JSON.stringify({ is_locked: value }))).rejects.toThrow('lock state');
 		expect((await Note.load(note.id)).is_locked).toBe(startLocked);
+	});
+
+	test('should exclude locked notes from collection responses', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const api = new Api();
+		const folder = await Folder.save({ title: 'folder' });
+		const plain = await Note.save({ title: 'plain', body: 'text', parent_id: folder.id });
+		const locked = await Note.save({ title: 'locked', body: 'ciphertext', is_locked: 1, parent_id: folder.id });
+		const tag = await Tag.save({ title: 'tag' });
+		await Tag.addNote(tag.id, plain.id);
+		await Tag.addNote(tag.id, locked.id);
+
+		for (const path of ['notes', `folders/${folder.id}/notes`, `tags/${tag.id}/notes`]) {
+			const response = await api.route(RequestMethod.GET, path, { fields: 'id,body' });
+			expect(response.items.map((n: NoteEntity) => n.id)).toEqual([plain.id]);
+		}
+
+		Setting.setValue('featureFlag.noteLock', false);
+		expect((await api.route(RequestMethod.GET, 'notes')).items.length).toBe(2);
 	});
 
 	test('should not restrict locked notes when note lock is disabled', async () => {

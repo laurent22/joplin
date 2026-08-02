@@ -2,11 +2,15 @@ import * as convertHtmlToMarkdown from './convertNoteToMarkdown';
 import { defaultState, State } from '../reducer';
 import Note from '../models/Note';
 import { MarkupLanguage } from '@joplin/renderer';
-import { setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
+import { encryptionService, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import { NoteEntity } from '../services/database/types';
 import shim from '../shim';
 import Setting from '../models/Setting';
+import EncryptionService from '../services/e2ee/EncryptionService';
+import NoteLockKey from '../services/noteLock/NoteLockKey';
+import NoteLockService from '../services/noteLock/NoteLockService';
+import NoteLockSession from '../services/noteLock/NoteLockSession';
 
 describe('convertNoteToMarkdown', () => {
 	let state: State = undefined;
@@ -122,6 +126,36 @@ describe('convertNoteToMarkdown', () => {
 		expect(shim.showErrorDialog).toHaveBeenCalledTimes(blocked ? 1 : 0);
 		// The original note is only moved to the trash once it has been converted.
 		expect((await Note.load(htmlNote.id)).deleted_time === 0).toBe(blocked);
+	});
+
+	it('should convert a locked note when the session is unlocked', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		shim.showErrorDialog = jest.fn();
+		NoteLockService.destroyInstance();
+		NoteLockSession.destroyInstance();
+		NoteLockKey.destroyInstance();
+		EncryptionService.instance_ = encryptionService();
+		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
+
+		const folder = await Folder.save({ title: 'test_folder' });
+		const htmlNote = await Note.save({ title: 'test', body: '<p>Hello</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
+		const lockedNote = { ...(await Note.load(htmlNote.id)), is_locked: 1, isDecrypted: true };
+		await Note.save(lockedNote, { useNoteLock: true });
+		state.selectedNoteIds = [htmlNote.id];
+
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
+
+		expect(shim.showErrorDialog).not.toHaveBeenCalled();
+		const notes = await Note.previews(folder.id);
+		expect(notes).toHaveLength(1);
+		const converted = await Note.load(notes[0].id, { useNoteLock: true });
+		expect(converted.is_locked).toBe(1);
+		expect(converted.markup_language).toBe(MarkupLanguage.Markdown);
+		expect(converted.body).toContain('Hello');
+		// The stored row keeps a ciphertext body.
+		expect((await Note.load(notes[0].id)).body).not.toContain('Hello');
+		expect((await Note.load(htmlNote.id)).deleted_time).not.toBe(0);
 	});
 
 });

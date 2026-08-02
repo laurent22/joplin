@@ -4,6 +4,7 @@ import Revision from '../../../models/Revision';
 import Setting from '../../../models/Setting';
 import BaseModel from '../../../BaseModel';
 import { setupDatabaseAndSynchronizer, switchClient } from '../../../testing/test-utils';
+import { RevisionEntity } from '../../database/types';
 
 const createNoteAndRevision = async (isLocked: number) => {
 	const note = await Note.save({ title: 'note', body: 'body', is_locked: isLocked });
@@ -15,6 +16,7 @@ const createNoteAndRevision = async (isLocked: number) => {
 		title_diff: '[]',
 		body_diff: '[]',
 		metadata_diff: '{"new":{},"deleted":[]}',
+		is_locked: isLocked,
 	});
 	return { note, revision };
 };
@@ -62,6 +64,19 @@ describe('routes/revisions', () => {
 
 		await api.route(RequestMethod.DELETE, `revisions/${revision.id}`);
 		expect(await Revision.load(revision.id)).toBeFalsy();
+	});
+
+	test('should exclude the revisions of locked notes from the collection response', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		const api = new Api();
+		await createNoteAndRevision(1);
+		const { revision: plainRevision } = await createNoteAndRevision(0);
+
+		const response = await api.route(RequestMethod.GET, 'revisions');
+		expect(response.items.map((r: RevisionEntity) => r.id)).toEqual([plainRevision.id]);
+
+		Setting.setValue('featureFlag.noteLock', false);
+		expect((await api.route(RequestMethod.GET, 'revisions')).items.length).toBe(2);
 	});
 
 	test.each([

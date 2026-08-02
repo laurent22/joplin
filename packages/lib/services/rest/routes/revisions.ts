@@ -27,5 +27,7 @@ export default async function(request: Request, id: string = null, link: string 
 			if (NoteLockNote.isLocked(note)) throw new ErrorForbidden('The revisions of a locked note cannot be accessed through the API');
 		}
 	}
-	return defaultAction(ModelType.Revision, request, id, link, ['id']);
+	// A locked note's revisions are not all flagged themselves, so the note state is checked too.
+	const whereQuery = isNoteLockEnabled() ? { sql: 'is_locked = 0 AND item_id NOT IN (SELECT id FROM notes WHERE is_locked = 1)' } : null;
+	return defaultAction(ModelType.Revision, request, id, link, ['id'], whereQuery);
 }
