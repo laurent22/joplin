@@ -51,12 +51,12 @@ class PCloudLoginScreenComponent extends React.Component<Props, State> {
 				<div style={containerStyle}>
 					<p style={theme.textStyle}>{_('To allow Joplin to synchronise with pCloud, please follow the steps below:')}</p>
 					<p style={theme.textStyle}>{_('Step 1: Open this URL in your browser to authorise the application:')}</p>
-					<a style={theme.textStyle} href="#" onClick={this.shared_.loginUrl_click}>
+					<a style={theme.textStyle} href="#" onClick={event => { event.preventDefault(); this.shared_.loginUrl_click(); }}>
 						{this.state.loginUrl}
 					</a>
-					<p style={theme.textStyle}>{_('Step 2: Enter the code provided by pCloud:')}</p>
+					<p style={theme.textStyle}><label htmlFor="pcloud-auth-code-input">{_('Step 2: Enter the code provided by pCloud:')}</label></p>
 					<p>
-						<input type="text" value={this.state.authCode} onChange={this.shared_.authCodeInput_change} style={inputStyle} />
+						<input id="pcloud-auth-code-input" type="text" value={this.state.authCode} onChange={this.shared_.authCodeInput_change} style={inputStyle} />
 					</p>
 					<button disabled={this.state.checkingAuthToken} style={buttonStyle} onClick={this.shared_.submit_click}>
 						{_('Submit')}
