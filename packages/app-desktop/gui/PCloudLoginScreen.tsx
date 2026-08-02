@@ -34,6 +34,10 @@ class PCloudLoginScreenComponent extends React.Component<Props, State> {
 		void this.shared_.refreshUrl();
 	}
 
+	public componentWillUnmount() {
+		this.shared_.dispose();
+	}
+
 	public render() {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
@@ -63,7 +67,7 @@ class PCloudLoginScreenComponent extends React.Component<Props, State> {
 					</button>
 				</div>
 				<ButtonBar
-					onCancelClick={() => this.props.dispatch({ type: 'NAV_BACK' })}
+					onCancelClick={this.shared_.cancel_click}
 				/>
 			</div>
 		);

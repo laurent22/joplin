@@ -32,10 +32,12 @@ type MessageBox = (message: string)=> unknown;
 export default class Shared<Host extends BaseComponent> {
 	private comp_: Host;
 	private pcloudApi_: PCloudApi | null = null;
+	private cancelled_ = false;
 
 	public loginUrl_click: ()=> void;
 	public authCodeInput_change: (event: InputChangeEvent | string)=> void;
 	public submit_click: ()=> Promise<void>;
+	public cancel_click: ()=> void;
 
 	public constructor(comp: Host, showInfoMessageBox: MessageBox, showErrorMessageBox: MessageBox) {
 		this.comp_ = comp;
@@ -73,15 +75,33 @@ export default class Shared<Host extends BaseComponent> {
 				}
 
 				await api.execTokenRequest(authCode);
+
+				// The user may have cancelled or left the screen while the token
+				// request was pending - in that case do not show a message,
+				// navigate, or start a sync.
+				if (this.cancelled_) return;
+
 				await showInfoMessageBox(_('The application has been authorised!'));
 				this.comp_.props.dispatch({ type: 'NAV_BACK' });
 				void reg.scheduleSync(0);
 			} catch (error) {
+				if (this.cancelled_) return;
 				await showErrorMessageBox(_('Could not authorise application:\n\n%s\n\nPlease try again.', (error as Error).message));
 			} finally {
-				this.comp_.setState({ checkingAuthToken: false });
+				if (!this.cancelled_) this.comp_.setState({ checkingAuthToken: false });
 			}
 		};
+
+		this.cancel_click = () => {
+			this.cancelled_ = true;
+			this.comp_.props.dispatch({ type: 'NAV_BACK' });
+		};
+	}
+
+	// To be called when the host screen is unmounted, so that any pending
+	// continuation (e.g. from submit_click) does not run afterwards.
+	public dispose() {
+		this.cancelled_ = true;
 	}
 
 	public syncTargetId() {

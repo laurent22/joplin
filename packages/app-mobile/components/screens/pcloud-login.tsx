@@ -41,6 +41,10 @@ class PCloudLoginScreenComponent extends BaseScreenComponent<Props, State> {
 		void this.shared_.refreshUrl();
 	}
 
+	public componentWillUnmount() {
+		this.shared_.dispose();
+	}
+
 	private styles() {
 		const themeId = this.props.themeId;
 		const theme = themeStyle(themeId);
