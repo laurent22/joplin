@@ -82,6 +82,11 @@ export default class Shared<Host extends BaseComponent> {
 				if (this.cancelled_) return;
 
 				await showInfoMessageBox(_('The application has been authorised!'));
+
+				// Also re-check after the dialog, since the screen may have been
+				// cancelled or unmounted while it was open.
+				if (this.cancelled_) return;
+
 				this.comp_.props.dispatch({ type: 'NAV_BACK' });
 				void reg.scheduleSync(0);
 			} catch (error) {
