@@ -12893,6 +12893,7 @@ __metadata:
     chokidar: "npm:3.6.0"
     color: "npm:3.2.1"
     compare-versions: "npm:6.1.1"
+    diff: "npm:9.0.0"
     diff-match-patch: "npm:1.0.5"
     fast-deep-equal: "npm:3.1.3"
     fast-xml-parser: "npm:3.21.1"
@@ -28969,6 +28970,13 @@ __metadata:
   version: 29.6.3
   resolution: "diff-sequences@npm:29.6.3"
   checksum: 10/179daf9d2f9af5c57ad66d97cb902a538bcf8ed64963fa7aa0c329b3de3665ce2eb6ffdc2f69f29d445fa4af2517e5e55e5b6e00c00a9ae4f43645f97f7078cb
+  languageName: node
+  linkType: hard
+
+"diff@npm:9.0.0":
+  version: 9.0.0
+  resolution: "diff@npm:9.0.0"
+  checksum: 10/f8b5e38a6a7ec73d1850ccb7ff19cda1d02502dc0f2c562ada0f40d7211bfb3075c2f3742104619a1f8f47ae333d48a6c77bffb080a2df900db36935080ea4fb
   languageName: node
   linkType: hard
 

@@ -1649,6 +1649,8 @@ packages/lib/services/conflict/diffNotes.js
 packages/lib/services/conflict/isConflictResolutionEnabled.js
 packages/lib/services/conflict/loadConflictData.test.js
 packages/lib/services/conflict/loadConflictData.js
+packages/lib/services/conflict/wordDiff.test.js
+packages/lib/services/conflict/wordDiff.js
 packages/lib/services/contextkey/contextkey.js
 packages/lib/services/database/addMigrationFile.js
 packages/lib/services/database/isSqliteSyntaxError.js
