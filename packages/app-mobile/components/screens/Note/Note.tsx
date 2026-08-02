@@ -1517,7 +1517,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			if (!note.is_locked) {
 				output.push({
 					title: _('Enable encryption'),
-					icon: 'material lock-outline',
+					icon: 'material lock-plus-outline',
 					onPress: () => {
 						this.enableNoteEncryption_onPress();
 					},
@@ -1526,7 +1526,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			} else {
 				output.push({
 					title: _('Disable encryption'),
-					icon: 'material lock-open-variant-outline',
+					icon: 'material lock-off-outline',
 					onPress: () => {
 						this.disableNoteEncryption_onPress();
 					},
