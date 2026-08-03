@@ -31,6 +31,10 @@ export class ToolImageResponse {
 	public get length() {
 		return this.dataUrl.length;
 	}
+
+	public get base64Only() {
+		return this.dataUrl.replace(/^data:[^;]+;base64,/, '');
+	}
 }
 
 export type ToolOutput = string|Record<string, unknown>|ToolImageResponse;

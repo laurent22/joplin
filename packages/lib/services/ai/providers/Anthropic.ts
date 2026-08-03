@@ -118,7 +118,7 @@ const convertMessages = (messages: ChatMessage[]) => {
 						source: {
 							type: 'base64' as const,
 							media_type: message.content.mimeType,
-							data: message.content.dataUrl,
+							data: message.content.base64Only,
 						},
 					}];
 				return {
