@@ -30,6 +30,8 @@ const showAiTools = (settings: Record<string, unknown>) => {
 	return !!settings['mcp.enabled'] || !!settings['ai.enabled'];
 };
 
+const addBetaMarker = (text: string) => _('%s (Beta)', text);
+
 export enum CameraDirection {
 	Back,
 	Front,
@@ -646,7 +648,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			section: 'ai',
 			appTypes: [AppType.Desktop],
-			label: () => _('Enable AI features (Beta)'),
+			label: () => addBetaMarker(_('Enable AI features')),
 			description: () => _('When enabled, plugins and built-in features can use AI models to generate or analyse text.'),
 			storage: SettingStorage.File,
 		},
@@ -657,7 +659,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			section: 'ai',
 			appTypes: [AppType.Desktop],
-			label: () => _('Enable MCP server (Beta)'),
+			label: () => addBetaMarker(_('Enable MCP server')),
 			description: () => _('Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.'),
 			storage: SettingStorage.File,
 		},
