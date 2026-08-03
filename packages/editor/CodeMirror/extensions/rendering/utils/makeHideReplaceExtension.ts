@@ -4,7 +4,12 @@ import { EditorState } from '@codemirror/state';
 import { Decoration, EditorView } from '@codemirror/view';
 import { ParentTags, ReplacementExtension } from '../types';
 
-const hideDecoration = Decoration.mark({ class: 'cm-hidden' });
+const hideDecoration = Decoration.mark({
+	class: 'cm-hidden',
+	// TODO: These regions are visually hidden, but it *might* be more accessible to show them to screen readers.
+	// It would be good to get feedback and see what users prefer.
+	attributes: { 'aria-hidden': 'true' },
+});
 // Don't fully hide replaced Markdown:
 // - Hiding text with 'display: none' causes selection to behave unexpectedly
 // - Screen readers skip text with 'display: none', which can lead to a confusing editing experience
