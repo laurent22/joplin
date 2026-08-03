@@ -2369,7 +2369,7 @@ msgstr "Encryptie inschakelen"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1118
 msgid "Enable file:// URLs for images and videos"
-msgstr "file:// URLs inschakelen voor afbeeldingen en video's"
+msgstr "URL's van type file:// inschakelen voor afbeeldingen en video's"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1099
 msgid "Enable footnotes"
