@@ -5,10 +5,10 @@ import { join } from 'path';
 import { homedir } from 'os';
 import { promisify } from 'util';
 import { execFile } from 'child_process';
+import { createOAuthDeviceAuth } from '@octokit/auth-oauth-device';
 import logger from '../utils/logger';
 
 const githubClientId = 'Ov23liiKfv0K6bqN2BbP';
-const githubVerificationUrl = 'https://github.com/login/device';
 
 const execFileAsync = promisify(execFile);
 
@@ -16,16 +16,9 @@ interface Credentials {
 	token: string;
 }
 
-interface PollResponse {
-	access_token?: string;
-	error?: string;
-	error_description?: string;
-}
-
-interface DeviceFlowResponse {
-	device_code: string;
+interface DeviceVerification {
+	verification_uri: string;
 	user_code: string;
-	interval: number;
 }
 
 // ~/.config/joplin-plugin -> For saving the token received after authentication
@@ -41,21 +34,24 @@ export const authenticate = async () => {
 		return cachedToken;
 	}
 
-	const deviceCodeResponse = await initiateDeviceFlow(githubClientId);
-	const { device_code, user_code, interval } = deviceCodeResponse;
-
-	logger.info(`
+	const deviceAuth = createOAuthDeviceAuth({
+		clientType: 'oauth-app',
+		clientId: githubClientId,
+		scopes: ['public_repo'],
+		onVerification: async ({ verification_uri, user_code }: DeviceVerification) => {
+			logger.info(`
   ------ GitHub Authentication Required ------
-  1. Your browser will open: ${githubVerificationUrl}
+  1. Your browser will open: ${verification_uri}
   2. Enter this code when prompted: ${user_code}
 
   Waiting for authorization...
   `);
 
-	await openBrowser();
+			await openBrowser(verification_uri);
+		},
+	});
 
-	// repeatedly checks if the user has authenticated or not
-	const accessToken = await pollForToken(device_code, interval, githubClientId);
+	const { token: accessToken } = await deviceAuth({ type: 'oauth' });
 
 	await saveToken(accessToken);
 	logger.success('Authenticated successfully!!');
@@ -63,30 +59,30 @@ export const authenticate = async () => {
 	return accessToken;
 };
 
-// Opens browser based on the OS the user is using
-const openBrowser = async () => {
+// Opens browser for the given URL based on the OS the user is using
+const openBrowser = async (url: string) => {
 	const platform = process.platform;
 	let command: string;
 	let args: string[];
 
 	if (platform === 'win32') {
 		command = 'rundll32.exe';
-		args = ['url.dll,FileProtocolHandler', githubVerificationUrl];
+		args = ['url.dll,FileProtocolHandler', url];
 	} else if (platform === 'darwin') {
 		command = 'open';
-		args = [githubVerificationUrl];
+		args = [url];
 	} else if (process.env.WSL_DISTRO_NAME || process.env.WSL_INTEROP) {
 		command = 'wslview';
-		args = [githubVerificationUrl];
+		args = [url];
 	} else {
 		command = 'xdg-open';
-		args = [githubVerificationUrl];
+		args = [url];
 	}
 
 	try {
 		await execFileAsync(command, args);
 	} catch {
-		logger.warn(`Could not open browser automatically. Please visit: ${githubVerificationUrl}`);
+		logger.warn(`Could not open browser automatically. Please visit: ${url}`);
 	}
 };
 
@@ -101,85 +97,6 @@ const getCachedToken = async () => {
 	}
 
 	return null;
-};
-
-const initiateDeviceFlow = async (clientId: string) => {
-	const response = await fetch('https://github.com/login/device/code', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-			'Accept': 'application/json',
-		},
-		body: JSON.stringify({
-			client_id: clientId,
-			scope: 'public_repo',
-		}),
-	});
-
-	if (!response.ok) {
-		throw new Error(`Failed to initiate device flow: ${response.statusText}`);
-	}
-
-	return await response.json() as DeviceFlowResponse;
-};
-
-// Checks if the user is authenticated or not every few seconds
-// and returns the access_token if authenticated
-const pollForToken = async (deviceCode: string, initialInterval: number, clientId: string) => {
-	let interval = initialInterval;
-
-	while (true) {
-		// few second pause between each request
-		await new Promise(resolve => setTimeout(resolve, interval * 1000));
-
-		// shows a dot for each try in the terminal
-		process.stdout.write('.');
-
-		const response = await fetch('https://github.com/login/oauth/access_token', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Accept': 'application/json',
-			},
-			body: JSON.stringify({
-				client_id: clientId,
-				device_code: deviceCode,
-				grant_type: 'urn:ietf:params:oauth:grant-type:device_code',
-			}),
-		});
-
-		if (!response.ok) {
-			throw new Error(`Polling failed: ${response.statusText}`);
-		}
-
-		const data = await response.json() as PollResponse;
-
-		if (data.access_token) {
-			process.stdout.write('\n');
-			return data.access_token;
-		}
-
-		if (!data.access_token && !data.error) {
-			throw new Error('Unexpected response from GitHub. Try again.');
-		}
-
-		// Continue the loop if authorization is pending or we hit rate limit
-		if (data.error) {
-			switch (data.error) {
-			case 'authorization_pending':
-				continue;
-			case 'slow_down':
-				interval += 5;
-				continue;
-			case 'expired_token':
-				throw new Error('\n Authentication timed out. Run the command again.');
-			case 'access_denied':
-				throw new Error('\n Authentication was denied.');
-			default:
-				throw new Error(`\n Authentication error: ${data.error_description || data.error}`);
-			}
-		}
-	}
 };
 
 const saveToken = async (token: string) => {
