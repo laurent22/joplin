@@ -1,6 +1,7 @@
 import createTestEditor from '../../testing/createTestEditor';
 import { EditorSelection } from '@codemirror/state';
 import replaceLinks from './replaceLinks';
+import visibleEditorText from '../../testing/visibleEditorText';
 
 describe('replaceLinks', () => {
 	it.each([
@@ -34,6 +35,6 @@ describe('replaceLinks', () => {
 		},
 	])('$label', async ({ markup, expectedText, expectedSyntaxTags }) => {
 		const editor = await createTestEditor(markup, EditorSelection.cursor(0), expectedSyntaxTags, [replaceLinks]);
-		expect(editor.contentDOM.textContent).toBe(expectedText);
+		expect(visibleEditorText(editor)).toBe(expectedText);
 	});
 });
