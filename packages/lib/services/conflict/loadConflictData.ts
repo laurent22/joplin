@@ -1,6 +1,7 @@
 import Note from '../../models/Note';
 import ConflictNoteState from '../../models/ConflictNoteState';
 import { autoMerge, MergedSection } from './diffNotes';
+import isConflictResolutionEnabled from './isConflictResolutionEnabled';
 
 export enum ConflictDataStatus {
 	Ok = 'ok',
@@ -31,6 +32,8 @@ const unavailable = (): ConflictData => {
 
 // Sections are recomputed on each call because they were never stored.
 export default async (noteId: string): Promise<ConflictData> => {
+	if (!isConflictResolutionEnabled()) return unavailable();
+
 	const note = await Note.load(noteId);
 	if (!note) return unavailable();
 

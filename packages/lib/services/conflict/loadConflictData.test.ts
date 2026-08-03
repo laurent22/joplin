@@ -1,5 +1,6 @@
 import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import Note from '../../models/Note';
+import Setting from '../../models/Setting';
 import ConflictNoteState from '../../models/ConflictNoteState';
 import loadConflictData, { ConflictDataStatus } from './loadConflictData';
 import { ConflictNoteStateEntity } from '../database/types';
@@ -25,6 +26,7 @@ describe('loadConflictData', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		Setting.setValue('featureFlag.conflictResolution', true);
 	});
 
 	test('should three-way merge a note that has a base', async () => {
@@ -98,6 +100,17 @@ describe('loadConflictData', () => {
 		await saveState(note.id, { base_body: 'one\ntwo', remote_body: 'one\nTWO' });
 
 		expect((await loadConflictData(note.id)).mergedText).toBe('one\nTWO');
+	});
+
+	test('should be unavailable when the feature flag is off', async () => {
+		Setting.setValue('featureFlag.conflictResolution', false);
+		const note = await createConflictNote('one\ntwo');
+		await saveState(note.id, { base_body: 'one\ntwo', remote_body: 'one\nTWO' });
+
+		const data = await loadConflictData(note.id);
+
+		expect(data.status).toBe(ConflictDataStatus.Unavailable);
+		expect(data.sections).toEqual([]);
 	});
 
 	test('should be unavailable when there is no state row', async () => {
