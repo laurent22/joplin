@@ -47,6 +47,7 @@ const tool = buildTool({
 		}
 
 		const fullPath = Resource.fullPath(resource);
+		// Use a small default image size: Images can use a large number of tokens.
 		const url = await shim.imageToDataUrl(fullPath, 128);
 		return new ReadImageResponse(url, resource);
 	},
