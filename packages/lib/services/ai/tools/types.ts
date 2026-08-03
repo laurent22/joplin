@@ -25,7 +25,15 @@ export type ToolInput = Record<string, unknown>;
 // Plain Errors are treated as internal bugs.
 export class ToolError extends Error {}
 
-export type ToolOutput = string|Record<string, unknown>;
+export class ToolImageResponse {
+	public constructor(public readonly dataUrl: string, public readonly mimeType: string) {}
+
+	public get length() {
+		return this.dataUrl.length;
+	}
+}
+
+export type ToolOutput = string|Record<string, unknown>|ToolImageResponse;
 
 export interface ToolSpec {
 	id: string;

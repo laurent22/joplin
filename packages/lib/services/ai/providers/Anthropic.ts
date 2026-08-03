@@ -23,10 +23,19 @@ interface AnthropicToolUseContentBlock {
 	input: Record<string, unknown>;
 }
 
+interface AnthropicImageContent {
+	type: 'image';
+	source: {
+		type: 'base64';
+		media_type: string;
+		data: string;
+	};
+}
+
 interface AnthropicToolResultContentBlock {
 	type: 'tool_result';
 	tool_use_id: string;
-	content: string;
+	content: string|AnthropicImageContent[];
 }
 
 type AnthropicContentBlock = AnthropicToolUseContentBlock|AnthropicToolResultContentBlock|AnthropicTextContentBlock;
@@ -102,13 +111,23 @@ const convertMessages = (messages: ChatMessage[]) => {
 		.map((message): AnthropicMessage => {
 			if (message.role === ChatRole.System) return null;
 			if (message.role === ChatRole.Tool) {
+				const content = typeof message.content === 'string'
+					? message.content
+					: [{
+						type: 'image' as const,
+						source: {
+							type: 'base64' as const,
+							media_type: message.content.mimeType,
+							data: message.content.dataUrl,
+						},
+					}];
 				return {
 					role: 'user',
 					content: [
 						{
 							type: 'tool_result',
 							tool_use_id: message.toolCallId,
-							content: message.content,
+							content,
 							...(message.isError ? { is_error: true } : {}),
 						},
 					],

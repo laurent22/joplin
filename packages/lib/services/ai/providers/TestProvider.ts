@@ -1,8 +1,8 @@
 import { ToolSpec } from '../tools/types';
-import { ChatMessage, ChatOptions, ChatResult, ChatRole, ChatToolCall, ProviderClassification } from '../types';
+import { ChatMessage, ChatOptions, ChatResult, ChatRole, ChatStandardMessage, ChatToolCall, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 
-const parseUserCommand = (message: ChatMessage, availableTools: ToolSpec[]) => {
+const parseUserCommand = (message: ChatStandardMessage, availableTools: ToolSpec[]) => {
 	const toolCalls: ChatToolCall[] = [];
 	const reply = [];
 	let repeat = 0;
@@ -61,11 +61,12 @@ export default class TestProvider extends ChatProviderBase {
 			let lastUserMessage;
 			let replyCount = 0;
 			for (let i = messages.length - 1; i >= 0; i--) {
-				if (messages[i].role === ChatRole.User) {
-					lastUserMessage = messages[i];
+				const message = messages[i];
+				if (message.role === ChatRole.User) {
+					lastUserMessage = message;
 					break;
 				}
-				if (messages[i].role === ChatRole.Assistant) {
+				if (message.role === ChatRole.Assistant) {
 					replyCount ++;
 				}
 			}
@@ -80,7 +81,7 @@ export default class TestProvider extends ChatProviderBase {
 		}
 
 		const output = content.join(' ');
-		const inputTokens = lastMessage.content.length;
+		const inputTokens = typeof lastMessage.content === 'string' ? lastMessage.content.length : lastMessage.content.length;
 		const outputTokens = output.length + toolCalls.length;
 		return { text: output, toolCalls, usage: { inputTokens, outputTokens } };
 	}

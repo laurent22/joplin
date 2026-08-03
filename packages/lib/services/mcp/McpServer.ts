@@ -1,8 +1,8 @@
 import Logger from '@joplin/utils/Logger';
 import Setting from '../../models/Setting';
 import ToolIndex from '../ai/tools/ToolIndex';
-import { JsonRpcRequest, JsonRpcResponse, JsonRpcErrorCodes, McpProtocolVersion, ToolCallResult } from './types';
-import { ToolError } from '../ai/tools/types';
+import { JsonRpcRequest, JsonRpcResponse, JsonRpcErrorCodes, McpProtocolVersion, ToolCallResult, ToolContent, ToolTextContent } from './types';
+import { ToolError, ToolImageResponse, ToolOutput } from '../ai/tools/types';
 
 const logger = Logger.create('McpServer');
 
@@ -96,9 +96,10 @@ export default class McpServer {
 		}
 		const input = params.arguments ?? {};
 		try {
-			const payload = await tool.handler(input, {});
+			const payload = await tool.handler(input, {}) as ToolOutput;
+
 			return {
-				content: [{ type: 'text', text: serialisePayload(payload) }],
+				content: [serialisePayload(payload)],
 			};
 		} catch (error) {
 			if (error instanceof ToolError) {
@@ -129,8 +130,18 @@ const toolErrorResult = (message: string): ToolCallResult => ({
 
 // MCP content is always text, so we JSON-serialise objects/arrays and pass
 // strings through unchanged. null/undefined collapse to an empty string.
-const serialisePayload = (payload: unknown) => {
-	if (payload === null || payload === undefined) return '';
-	if (typeof payload === 'string') return payload;
-	return JSON.stringify(payload, null, 2);
+const serialisePayload = (payload: unknown): ToolContent => {
+	const textResponse = (text: string): ToolTextContent => ({
+		type: 'text', text,
+	});
+	if (payload === null || payload === undefined) return textResponse('');
+	if (typeof payload === 'string') return textResponse(payload);
+	if (payload instanceof ToolImageResponse) {
+		return {
+			type: 'image',
+			data: payload.dataUrl,
+			mimeType: payload.mimeType,
+		};
+	}
+	return textResponse(JSON.stringify(payload, null, 2));
 };

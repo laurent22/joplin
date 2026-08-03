@@ -4,8 +4,9 @@ import JoplinError from '../../JoplinError';
 import Logger from '@joplin/utils/Logger';
 import { _ } from '../../locale';
 import { EditOp, isEditorToolCall } from './tools/buildEditorTools';
-import { NoteContext, ToolError } from './tools/types';
+import { NoteContext, ToolError, ToolOutput } from './tools/types';
 import ToolIndex from './tools/ToolIndex';
+import serializeToolOutput from './tools/utils/serializeToolOutput';
 
 const logger = Logger.create('noteChat');
 
@@ -112,7 +113,7 @@ const createHistory = (history: ChatMessage[], newMessage: string, context: Note
 	return history;
 };
 
-const estimateTokens = (text: string) => Math.ceil(text.length / charsPerToken);
+const estimateTokens = (text: { length: number }) => Math.ceil(text.length / charsPerToken);
 
 export interface ChatCommands {
 	replaceSelection: (text: string, originalText: string)=> Promise<void>;
@@ -294,7 +295,7 @@ const runTools = async (
 					role: ChatRole.Tool,
 					toolName: tool.id,
 					toolCallId: toolCall.callId,
-					content: typeof output === 'string' ? output : JSON.stringify(output),
+					content: serializeToolOutput(output as ToolOutput),
 					userDescription: tool.userDescription(toolCall.arguments, output),
 					isError: false,
 					isEdit: isEdit(tool.id),
