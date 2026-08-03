@@ -15,7 +15,7 @@ const hideDecoration = Decoration.mark({
 // - Screen readers skip text with 'display: none', which can lead to a confusing editing experience
 const hiddenStyles = EditorView.theme({
 	['& .cm-hidden']: {
-		width: '1px',
+		width: '0.1px', // This needs to be non-zero to avoid selection issues
 		height: '1em',
 		opacity: '0',
 		display: 'inline-block',
