@@ -47,7 +47,7 @@ const tool = buildTool({
 		}
 
 		const fullPath = Resource.fullPath(resource);
-		const url = await shim.imageToDataUrl(fullPath, 256);
+		const url = await shim.imageToDataUrl(fullPath, 128);
 		return new ReadImageResponse(url, resource);
 	},
 });
