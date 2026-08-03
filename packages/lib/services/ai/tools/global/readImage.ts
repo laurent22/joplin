@@ -14,7 +14,11 @@ interface Input {
 
 class ReadImageResponse extends ToolImageResponse {
 	public constructor(dataUrl: string, public readonly resource: ResourceEntity) {
-		super(dataUrl, resource.mime);
+		super({
+			dataUrl,
+			mimeType: resource.mime,
+			id: resource.id,
+		});
 	}
 }
 
