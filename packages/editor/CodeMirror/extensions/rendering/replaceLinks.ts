@@ -1,7 +1,6 @@
 import { SyntaxNodeRef } from '@lezer/common';
 import { EditorState } from '@codemirror/state';
 import referenceLinkStateField, { isReferenceLink, resolveReferenceFromLink } from '../links/referenceLinksStateField';
-import { EditorView } from '@codemirror/view';
 import makeHideReplaceExtension from './utils/makeHideReplaceExtension';
 
 const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
@@ -44,17 +43,6 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 const replaceLinks = [
 	// Dependency
 	referenceLinkStateField,
-
-	EditorView.theme({
-		['& .cm-hidden']: {
-			width: '1px',
-			height: '1em',
-			opacity: '0',
-			marginRight: '-0.9px',
-			display: 'inline-block',
-			overflow: 'hidden',
-		},
-	}),
 
 	makeHideReplaceExtension({
 		getRevealStrategy: () => 'active',
