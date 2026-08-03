@@ -6,9 +6,6 @@ import { ParentTags, ReplacementExtension } from '../types';
 
 const hideDecoration = Decoration.mark({
 	class: 'cm-hidden',
-	// TODO: These regions are visually hidden, but it *might* be more accessible to show them to screen readers.
-	// It would be good to get feedback and see what users prefer.
-	attributes: { 'aria-hidden': 'true' },
 });
 // Don't fully hide replaced Markdown:
 // - Hiding text with 'display: none' causes selection to behave unexpectedly
