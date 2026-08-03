@@ -4,6 +4,7 @@ import { ToolError, ToolImageResponse } from '../types';
 import Resource from '../../../../models/Resource';
 import shim from '../../../../shim';
 import { ResourceEntity } from '@joplin/renderer/types';
+import isItemId from '../../../../models/utils/isItemId';
 
 interface Input {
 	id?: string;
@@ -20,7 +21,7 @@ class ReadImageResponse extends ToolImageResponse {
 const tool = buildTool({
 	id: 'read_image',
 	userDescription: (_input, output) => _('Read image: %s', output?.resource?.title ?? _('(untitled)')),
-	description: 'Read a single image attachment by id.',
+	description: 'View an image attachment. Use this to inspect the content of an image that\'s attached to a note. Returns the image data.',
 	inputSchema: {
 		type: 'object',
 		properties: {
@@ -30,13 +31,16 @@ const tool = buildTool({
 	},
 	handler: async (input: Input): Promise<ReadImageResponse> => {
 		if (!input.id) throw new ToolError('Missing "id" parameter');
+		// Models sometimes try to pass the full resource link. Handle this gracefully:
+		const id = input.id.replace(/^:?\//, '');
+		if (!isItemId(id)) throw new ToolError(`Invalid ID: ${id}`);
 
-		const resource = await Resource.load(input.id);
+		const resource = await Resource.load(id);
 		if (!resource || resource.is_locked) {
-			throw new ToolError(`Resource not found: ${input.id}`);
+			throw new ToolError(`Resource not found: ${id}`);
 		}
 		if (resource.encryption_applied) {
-			throw new ToolError(`Resource is encrypted: ${input.id}`);
+			throw new ToolError(`Resource is encrypted: ${id}`);
 		}
 		if (!resource.mime.startsWith('image/')) {
 			throw new ToolError(`Unsupported image MIME type: ${resource.mime}`);
