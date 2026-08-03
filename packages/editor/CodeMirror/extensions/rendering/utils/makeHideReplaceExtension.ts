@@ -1,6 +1,6 @@
 import makeInlineReplaceExtension from './makeInlineReplaceExtension';
 import { SyntaxNodeRef } from '@lezer/common';
-import { EditorState } from '@codemirror/state';
+import { EditorState, Facet } from '@codemirror/state';
 import { Decoration, EditorView } from '@codemirror/view';
 import { ParentTags, ReplacementExtension } from '../types';
 
@@ -24,22 +24,37 @@ const hiddenStyles = EditorView.theme({
 	},
 });
 
-type Options = Omit<ReplacementExtension, 'createDecoration'> & {
+type Options = Pick<ReplacementExtension, 'getRevealStrategy'|'getDecorationRange'> & {
 	shouldHide: (node: SyntaxNodeRef, state: EditorState, parentTags: ParentTags)=> boolean;
 };
 
+const hideReplaceFacet = Facet.define<Options>({
+	combine: values => values.flat(),
+	enables: facet => [
+		hiddenStyles,
+		makeInlineReplaceExtension({
+			createDecoration: (node, state, parentTags) => {
+				const options = state.facet(facet);
+				if (options.some(o => o.shouldHide(node, state, parentTags))) {
+					return hideDecoration;
+				}
+				return null;
+			},
+			getDecorationRange: (node, state, parentTags) => {
+				const options = state.facet(facet).find(o => o.shouldHide(node, state, parentTags));
+				return options?.getDecorationRange?.(node, state, parentTags);
+			},
+			getRevealStrategy: (node, state, parentTags) => {
+				const options = state.facet(facet).find(o => o.shouldHide(node, state, parentTags));
+				return options?.getRevealStrategy?.(node, state, parentTags);
+			},
+			mergeNeighbors: true,
+		}),
+	],
+});
+
 const makeHideReplaceExtension = (options: Options) => [
-	hiddenStyles,
-	makeInlineReplaceExtension({
-		createDecoration: (node, state, parentTags) => {
-			if (options.shouldHide(node, state, parentTags)) {
-				return hideDecoration;
-			}
-			return null;
-		},
-		mergeNeighbors: true,
-		...options,
-	}),
+	hideReplaceFacet.of(options),
 ];
 
 export default makeHideReplaceExtension;

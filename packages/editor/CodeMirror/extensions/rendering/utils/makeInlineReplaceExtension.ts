@@ -63,7 +63,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			}
 
 			if (decoration) {
-				const range = extensionSpec.getDecorationRange?.(node, view.state) ?? [node.from, node.to];
+				const range = extensionSpec.getDecorationRange?.(node, view.state, parentTagCounts) ?? [node.from, node.to];
 				const rangeLineFrom = doc.lineAt(range[0]);
 				const rangeLineTo = range.length === 2 ? doc.lineAt(range[1]) : rangeLineFrom;
 
@@ -86,7 +86,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 				enter: node => {
 					parentTagCounts.set(node.name, (parentTagCounts.get(node.name) ?? 0) + 1);
 
-					const strategy = extensionSpec.getRevealStrategy?.(node, view.state) ?? 'line';
+					const strategy = extensionSpec.getRevealStrategy?.(node, view.state, parentTagCounts) ?? 'line';
 
 					let isSelected = false;
 					if (typeof strategy === 'boolean') {

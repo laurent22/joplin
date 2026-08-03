@@ -13,7 +13,7 @@ export interface ReplacementExtension {
 	// Returns a range ([from, to]) to which the decoration should be applied. Returning `null`
 	// replaces the entire widget with the decoration.
 	// Only a single number should be returned to create a point/full line range.
-	getDecorationRange?(node: SyntaxNodeRef, state: EditorState): DecorationRange|null;
+	getDecorationRange?(node: SyntaxNodeRef, state: EditorState, parentTags: ParentTags): DecorationRange|null;
 
 	// Disable the decoration when near the cursor. Defaults to true.
 	hideWhenContainsSelection?: boolean;
@@ -23,7 +23,7 @@ export interface ReplacementExtension {
 	// 'select': Reveal raw markup if the cursor intersects the node.
 	// 'active': Reveal raw markup if the cursor is inside the node or its structural parent.
 	// 'boolean': Custom logic. Return true to reveal, false to keep the decoration.
-	getRevealStrategy?: (node: SyntaxNodeRef, state: EditorState)=> RevealStrategy;
+	getRevealStrategy?: (node: SyntaxNodeRef, state: EditorState, parentTags: ParentTags)=> RevealStrategy;
 
 	// Allows specifying custom logic to refresh all decorations associated with the extension
 	shouldFullReRender?: (transaction: Transaction)=> boolean;
