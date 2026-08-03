@@ -328,6 +328,16 @@ describe('models/Note', () => {
 		expect(unlockedNote.extracted_resource_ids).toBe('');
 	});
 
+	it('should refuse an ungated save of gated loaded data', async () => {
+		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
+		const note = await Note.save({ body: 'secret', is_locked: 1 }, { useNoteLock: true });
+
+		const gatedLoaded = await Note.load(note.id, { useNoteLock: true });
+		await expect(Note.save(gatedLoaded)).rejects.toThrow('Gated note lock data cannot be saved without the note lock save option');
+		expect((await Note.load(note.id)).body).not.toBe('secret');
+	});
+
 	it('should treat a locked note as a normal note while the feature is disabled', async () => {
 		await NoteLockKey.instance().create('123456');
 		await NoteLockSession.instance().unlock('123456');

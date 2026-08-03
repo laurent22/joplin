@@ -849,13 +849,17 @@ export default class Note extends BaseItem {
 		// in the item_changes table
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
 		let plainTextBodyToReturn: string = null;
-		if (isNoteLockEnabled() && !!options?.useNoteLock) {
-			// Callers use the returned note to update UI state, so it must carry the plaintext
-			// body even though the encrypted one is what gets persisted.
-			if (NoteLockNote.isLocked(o) && 'body' in o) plainTextBodyToReturn = o.body;
-			await NoteLockNote.prepareForSave(o, this.linkedItemIds, this.serializeExtractedResourceIds, isNew, options.noteLockKey);
+		if (isNoteLockEnabled()) {
+			if (options?.useNoteLock) {
+				// Callers use the returned note to update UI state, so it must carry the plaintext
+				// body even though the encrypted one is what gets persisted.
+				if (NoteLockNote.isLocked(o) && 'body' in o) plainTextBodyToReturn = o.body;
+				await NoteLockNote.prepareForSave(o, this.linkedItemIds, this.serializeExtractedResourceIds, isNew, options.noteLockKey);
+			} else if ((o as Record<string, unknown>).isDecrypted) {
+				// Writing a gated load back through an ungated save would leave is_locked out of sync with the body.
+				throw new Error('Gated note lock data cannot be saved without the note lock save option');
+			}
 		}
-		// Cleared for ungated saves too, in case a gated load is fed to an ungated save.
 		delete (o as Record<string, unknown>).isDecrypted;
 
 		syncDebugLog.info('Save Note: P:', oldNote);
