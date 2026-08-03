@@ -21,7 +21,7 @@ class ReadImageResponse extends ToolImageResponse {
 const tool = buildTool({
 	id: 'read_image',
 	userDescription: (_input, output) => _('Read image: %s', output?.resource?.title ?? _('(untitled)')),
-	description: 'View an image attachment. Use this to inspect the content of an image that\'s attached to a note. Returns the image data.',
+	description: 'View an image attachment. Use this to inspect the content of an image that\'s attached to a note or to generate ALT text. Returns the image data.',
 	inputSchema: {
 		type: 'object',
 		properties: {
