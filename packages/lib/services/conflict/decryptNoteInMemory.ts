@@ -9,10 +9,10 @@ const logger = Logger.create('decryptNoteInMemory');
 // Returns a decrypted copy of the note, or null if it can't be decrypted, Unlike the
 // BaseItem.decrypt() nothing is saved, so the remote can't overwrite the local note.
 export default async (note: NoteEntity): Promise<NoteEntity|null> => {
+	if (!note.encryption_cipher_text) return note;
+
 	// Disabling auto-merge must also stop this decryption, so a sync failing on memory can complete
 	if (!isAutoMergeEnabled()) return null;
-
-	if (!note.encryption_cipher_text) return note;
 
 	try {
 		const plainText = await BaseItem.encryptionService().decryptString(note.encryption_cipher_text);
