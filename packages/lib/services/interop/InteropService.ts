@@ -136,7 +136,7 @@ export default class InteropService {
 					sources: [FileSystemItem.Directory],
 					isNoteArchive: false,
 					description: _('Obsidian Vault'),
-					supportsMobile: false,
+					supportsMobile: true,
 				}, () => new InteropService_Importer_Obsidian()),
 
 				makeImportModule({
