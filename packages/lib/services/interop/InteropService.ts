@@ -11,6 +11,7 @@ import * as ArrayUtils from '../../ArrayUtils';
 import InteropService_Importer_Jex from './InteropService_Importer_Jex';
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 import InteropService_Importer_Md_frontmatter from './InteropService_Importer_Md_frontmatter';
+import InteropService_Importer_Obsidian from './InteropService_Importer_Obsidian';
 import InteropService_Importer_Raw from './InteropService_Importer_Raw';
 import InteropService_Exporter_Jex from './InteropService_Exporter_Jex';
 import InteropService_Exporter_Raw from './InteropService_Exporter_Raw';
@@ -128,6 +129,15 @@ export default class InteropService {
 					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 					description: _('Markdown + Front Matter'),
 				}, () => new InteropService_Importer_Md_frontmatter()),
+
+				makeImportModule({
+					format: 'obsidian',
+					fileExtensions: ['md'],
+					sources: [FileSystemItem.Directory],
+					isNoteArchive: false,
+					description: _('Obsidian Vault'),
+					supportsMobile: false,
+				}, () => new InteropService_Importer_Obsidian()),
 
 				makeImportModule({
 					format: 'txt',

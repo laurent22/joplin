@@ -341,3 +341,5 @@ Socialboom
 AABB
 Koofr
 undecryptable
+wikilink
+wikilinks
