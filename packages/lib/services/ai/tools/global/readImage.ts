@@ -31,7 +31,7 @@ const tool = buildTool({
 		properties: {
 			id: { type: 'string', description: 'The attachment id (32-character hex).' },
 		},
-		required: ['id'],
+		required: ['id', 'resolution'],
 	},
 	handler: async (input: Input): Promise<ReadImageResponse> => {
 		if (!input.id) throw new ToolError('Missing "id" parameter');
@@ -52,7 +52,7 @@ const tool = buildTool({
 
 		const fullPath = Resource.fullPath(resource);
 		// Use a small default image size: Images can use a large number of tokens.
-		const url = await shim.imageToDataUrl(fullPath, 128);
+		const url = await shim.imageToDataUrl(fullPath, 256);
 		return new ReadImageResponse(url, resource);
 	},
 });
