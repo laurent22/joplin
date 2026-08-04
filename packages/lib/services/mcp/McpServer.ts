@@ -139,7 +139,7 @@ const serialisePayload = (payload: unknown): ToolContent => {
 	if (payload instanceof ToolImageResponse) {
 		return {
 			type: 'image',
-			data: payload.dataUrl,
+			data: payload.base64Only,
 			mimeType: payload.mimeType,
 		};
 	}
