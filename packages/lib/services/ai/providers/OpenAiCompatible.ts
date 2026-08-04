@@ -73,16 +73,16 @@ const convertMessage = (message: ChatMessage) => {
 			return [{
 				role: 'tool',
 				name: message.toolName,
-				content: `success: see next message for image ${content.id}`,
+				content: 'success: will be attached in user message',
 				tool_call_id: message.toolCallId,
 			}, {
 				role: 'user',
-				content: [{
-					type: 'image_url',
-					image_url: {
-						url: content.dataUrl,
+				content: [
+					{
+						type: 'image_url',
+						image_url: content.dataUrl,
 					},
-				}, { type: 'text', text: `[image ${content.id}]` }],
+				],
 			}];
 		}
 	} else {
