@@ -116,7 +116,7 @@ const createHistory = (history: ChatMessage[], newMessage: string, context: Note
 const estimateTokens = (text: string|ToolImageResponse) => {
 	// In the case of images, this is a *very* rough estimate:
 	if (text instanceof ToolImageResponse) {
-		const approximateByteLength = text.base64Only.length * 4 / 3;
+		const approximateByteLength = text.base64Only.length * 3 / 4;
 		// Assuming a 50% compression ratio
 		const approximatePixelCount = approximateByteLength * 2;
 		// Assuming a patch size of 24
