@@ -1,7 +1,7 @@
 import shim from '../../../shim';
 import JoplinError from '../../../JoplinError';
 import Logger from '@joplin/utils/Logger';
-import { ChatMessage, ChatOptions, ChatResult, ChatRole, ChatToolCall, ProviderClassification } from '../types';
+import { ChatMessage, ChatOptions, ChatResult, ChatRole, ChatToolCall, ChatToolMessage, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 
 const logger = Logger.create('AnthropicProvider');
@@ -107,31 +107,39 @@ const convertMessages = (messages: ChatMessage[]) => {
 		};
 	};
 
+	const convertToolResponse = (message: ChatToolMessage): AnthropicMessage => {
+		let content;
+		if (typeof message.content === 'string') {
+			content = message.content;
+		} else {
+			content = [{
+				type: 'image' as const,
+				source: {
+					type: 'base64' as const,
+					media_type: message.content.mimeType,
+					data: message.content.base64Only,
+				},
+			}];
+		}
+
+		return {
+			role: 'user',
+			content: [
+				{
+					type: 'tool_result',
+					tool_use_id: message.toolCallId,
+					content,
+					...(message.isError ? { is_error: true } : {}),
+				},
+			],
+		};
+	};
+
 	const result = messages
 		.map((message): AnthropicMessage => {
 			if (message.role === ChatRole.System) return null;
 			if (message.role === ChatRole.Tool) {
-				const content = typeof message.content === 'string'
-					? message.content
-					: [{
-						type: 'image' as const,
-						source: {
-							type: 'base64' as const,
-							media_type: message.content.mimeType,
-							data: message.content.base64Only,
-						},
-					}];
-				return {
-					role: 'user',
-					content: [
-						{
-							type: 'tool_result',
-							tool_use_id: message.toolCallId,
-							content,
-							...(message.isError ? { is_error: true } : {}),
-						},
-					],
-				};
+				return convertToolResponse(message);
 			} else if (message.role === ChatRole.Assistant || message.role === ChatRole.User) {
 				return {
 					role: message.role,

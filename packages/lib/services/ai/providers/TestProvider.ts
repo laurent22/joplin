@@ -81,7 +81,8 @@ export default class TestProvider extends ChatProviderBase {
 		}
 
 		const output = content.join(' ');
-		const inputTokens = typeof lastMessage.content === 'string' ? lastMessage.content.length : lastMessage.content.length;
+		const lastContent = lastMessage.content;
+		const inputTokens = typeof lastContent === 'string' ? lastContent.length : lastContent.dataUrl.length;
 		const outputTokens = output.length + toolCalls.length;
 		return { text: output, toolCalls, usage: { inputTokens, outputTokens } };
 	}
