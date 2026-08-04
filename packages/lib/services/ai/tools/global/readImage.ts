@@ -11,11 +11,19 @@ interface Input {
 	resolution?: 'low'|'medium'|'high';
 }
 
+const dataUrlToMimeType = (url: string) => {
+	const dataUrlMatch = url.match(/^data:(.*);/);
+	if (!dataUrlMatch) throw new Error('Invalid data URL');
+	return dataUrlMatch[1];
+};
+
 class ReadImageResponse extends ToolImageResponse {
 	public constructor(dataUrl: string, public readonly resource: ResourceEntity) {
 		super({
 			dataUrl,
-			mimeType: resource.mime,
+			// Prefer the mime type from the data URL over the one in the resource, in case the
+			// resource was re-encoded while converting to a data URL:
+			mimeType: dataUrlToMimeType(dataUrl),
 			id: resource.id,
 		});
 	}
