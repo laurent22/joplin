@@ -40,7 +40,7 @@ describe('loadConflictData', () => {
 
 		expect(data.status).toBe(ConflictDataStatus.Ok);
 		expect(data.sections.some(s => s.type === 'conflict')).toBe(false);
-		expect(data.mergedText).toBe('one\ntwo\nTHREE');
+		expect(data.sections.some(s => s.type === 'auto-merged')).toBe(true);
 	});
 
 	test('should report a conflict section when both sides changed the same line', async () => {
@@ -95,11 +95,13 @@ describe('loadConflictData', () => {
 		const note = await createConflictNote('one\ntwo');
 		await saveState(note.id, { base_body: 'one\ntwo', remote_body: 'one\ntwo' });
 
-		expect((await loadConflictData(note.id)).mergedText).toBe('one\ntwo');
+		const before = await loadConflictData(note.id);
+		expect(before.sections.every(s => s.type === 'unchanged')).toBe(true);
 
 		await saveState(note.id, { base_body: 'one\ntwo', remote_body: 'one\nTWO' });
 
-		expect((await loadConflictData(note.id)).mergedText).toBe('one\nTWO');
+		const after = await loadConflictData(note.id);
+		expect(after.sections.some(s => s.type === 'auto-merged')).toBe(true);
 	});
 
 	test('should be unavailable when the feature flag is off', async () => {

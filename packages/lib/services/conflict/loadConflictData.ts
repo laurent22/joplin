@@ -13,7 +13,6 @@ export enum ConflictDataStatus {
 export interface ConflictData {
 	status: ConflictDataStatus;
 	sections: MergedSection[];
-	mergedText: string;
 	localTitle: string;
 	remoteTitle: string;
 	titleConflict: boolean;
@@ -23,7 +22,6 @@ const unavailable = (): ConflictData => {
 	return {
 		status: ConflictDataStatus.Unavailable,
 		sections: [],
-		mergedText: '',
 		localTitle: '',
 		remoteTitle: '',
 		titleConflict: false,
@@ -56,7 +54,6 @@ export default async (noteId: string): Promise<ConflictData> => {
 	return {
 		status: ConflictDataStatus.Ok,
 		sections: merged.sections,
-		mergedText: merged.mergedText,
 		localTitle,
 		remoteTitle,
 		titleConflict: localTitle !== remoteTitle,
