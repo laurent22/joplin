@@ -26,7 +26,7 @@ const tool = buildTool({
 	userDescription: (_input, output) => {
 		return _('Read image: %s', output?.resource?.title ?? _('(untitled)'));
 	},
-	description: 'View an image attachment. Use this to inspect the content of an image that\'s attached to a note or to generate ALT text. Returns the image data.',
+	description: 'View an image attachment. Use this to describe image content or text. Returns the image data.',
 	inputSchema: {
 		type: 'object',
 		properties: {
@@ -65,7 +65,7 @@ const tool = buildTool({
 		if (input.resolution === 'medium') {
 			maximumSize = 256;
 		} else if (input.resolution === 'high') {
-			maximumSize = 400;
+			maximumSize = 512;
 		}
 
 		const fullPath = Resource.fullPath(resource);
