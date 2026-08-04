@@ -80,7 +80,7 @@ const convertMessage = (message: ChatMessage) => {
 				content: [
 					{
 						type: 'image_url',
-						image_url: content.dataUrl,
+						image_url: { url: content.dataUrl },
 					},
 				],
 			}];
