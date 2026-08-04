@@ -65,7 +65,7 @@ const tool = buildTool({
 		if (input.resolution === 'medium') {
 			maximumSize = 256;
 		} else if (input.resolution === 'high') {
-			maximumSize = 312;
+			maximumSize = 400;
 		}
 
 		const fullPath = Resource.fullPath(resource);
