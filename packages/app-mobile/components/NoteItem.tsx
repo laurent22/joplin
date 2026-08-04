@@ -125,6 +125,7 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 	}, [props.note, props.dispatch]);
 
 	const onPress = useCallback(() => {
+		// Suppress touch release triggers during interval, to avoid conflicting with right click event handling on web
 		if (Date.now() < suppressPressUntilRef.current) return;
 		if (!props.note) return;
 		if (props.note.encryption_applied) return;
@@ -145,6 +146,7 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 
 	const onLongPress = useCallback(() => {
 		const now = Date.now();
+		// Suppress duplicate long press triggers during interval, to avoid conflicting with right click event handling on web
 		if (now < suppressPressUntilRef.current) return;
 		suppressPressUntilRef.current = now + 500;
 
