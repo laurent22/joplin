@@ -8,8 +8,7 @@ import isItemId from '../../../../models/utils/isItemId';
 
 interface Input {
 	id?: string;
-	offset?: number;
-	max_chars?: number;
+	resolution?: 'low'|'medium'|'high';
 }
 
 class ReadImageResponse extends ToolImageResponse {
@@ -24,14 +23,22 @@ class ReadImageResponse extends ToolImageResponse {
 
 const tool = buildTool({
 	id: 'read_image',
-	userDescription: (_input, output) => _('Read image: %s', output?.resource?.title ?? _('(untitled)')),
+	userDescription: (_input, output) => {
+		return _('Read image: %s', output?.resource?.title ?? _('(untitled)'));
+	},
 	description: 'View an image attachment. Use this to inspect the content of an image that\'s attached to a note or to generate ALT text. Returns the image data.',
 	inputSchema: {
 		type: 'object',
 		properties: {
 			id: { type: 'string', description: 'The attachment id (32-character hex).' },
+			resolution: {
+				type: 'string',
+				enum: ['low', 'medium', 'high'],
+				default: 'low',
+				description: 'The quality of the image. Use low or medium resolution where possible. Higher quality images use more tokens, but are better for OCR.',
+			},
 		},
-		required: ['id', 'resolution'],
+		required: ['id'],
 	},
 	handler: async (input: Input): Promise<ReadImageResponse> => {
 		if (!input.id) throw new ToolError('Missing "id" parameter');
@@ -50,9 +57,21 @@ const tool = buildTool({
 			throw new ToolError(`Unsupported image MIME type: ${resource.mime}`);
 		}
 
+		if (input.resolution && !['low', 'medium', 'high'].includes(input.resolution)) {
+			throw new ToolError(`Invalid resolution: ${JSON.stringify(input.resolution)}`);
+		}
+
+		let maximumSize = 128;
+		if (input.resolution === 'medium') {
+			maximumSize = 256;
+		} else if (input.resolution === 'high') {
+			maximumSize = 512;
+		}
+
+
 		const fullPath = Resource.fullPath(resource);
 		// Use a small default image size: Images can use a large number of tokens.
-		const url = await shim.imageToDataUrl(fullPath, 256);
+		const url = await shim.imageToDataUrl(fullPath, maximumSize);
 		return new ReadImageResponse(url, resource);
 	},
 });
