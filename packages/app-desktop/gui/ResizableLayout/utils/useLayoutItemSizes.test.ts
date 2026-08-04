@@ -514,4 +514,23 @@ describe('useLayoutItemSizes', () => {
 		expect(col3).not.toHaveProperty('width');
 	});
 
+	test('should not assign negative sizes to hidden first siblings in small windows', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 200,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{ key: 'sideBar', width: 250, visible: false },
+				{ key: 'editor', flexible: true },
+				{ key: 'chatPanel', width: 340 },
+			],
+		});
+
+		const { result } = renderHook(() => useLayoutItemSizes(layout));
+		const sizes = result.current;
+		expect(sizes.sideBar.width).toBeGreaterThanOrEqual(0);
+		expect(sizes.chatPanel.width).toBeGreaterThanOrEqual(0);
+	});
+
 });

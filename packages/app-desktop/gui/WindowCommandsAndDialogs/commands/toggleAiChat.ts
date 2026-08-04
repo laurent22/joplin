@@ -21,8 +21,6 @@ export const runtime = (control: WindowControl): CommandRuntime => {
 			const visible = !layoutItemProp(layout, 'chatPanel', 'visible');
 			control.announcePanelVisibility(_('AI Chat'), visible);
 
-			window.dispatchEvent(new Event('resize'));
-
 			context.dispatch({
 				type: 'WINDOW_LAYOUT_SET_ITEM_PROP',
 				windowId: context.state.windowId,
@@ -30,6 +28,8 @@ export const runtime = (control: WindowControl): CommandRuntime => {
 				propName: 'visible',
 				propValue: visible,
 			});
+
+			window.dispatchEvent(new Event('resize'));
 		},
 	};
 };
