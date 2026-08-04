@@ -35,7 +35,7 @@ const tool = buildTool({
 				type: 'string',
 				enum: ['low', 'medium', 'high'],
 				default: 'low',
-				description: 'The quality of the image. Use low or medium resolution where possible. Higher quality images use more tokens, but are better for OCR.',
+				description: 'The quality of the image.',
 			},
 		},
 		required: ['id'],
@@ -65,9 +65,8 @@ const tool = buildTool({
 		if (input.resolution === 'medium') {
 			maximumSize = 256;
 		} else if (input.resolution === 'high') {
-			maximumSize = 512;
+			maximumSize = 312;
 		}
-
 
 		const fullPath = Resource.fullPath(resource);
 		// Use a small default image size: Images can use a large number of tokens.
