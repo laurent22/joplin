@@ -34,8 +34,8 @@ const tool = buildTool({
 			resolution: {
 				type: 'string',
 				enum: ['low', 'medium', 'high'],
-				default: 'low',
-				description: 'The quality of the image.',
+				default: 'medium',
+				description: 'The quality of the image. High resolution is better for OCR, but uses more tokens.',
 			},
 		},
 		required: ['id'],
@@ -57,14 +57,15 @@ const tool = buildTool({
 			throw new ToolError(`Unsupported image MIME type: ${resource.mime}`);
 		}
 
-		if (input.resolution && !['low', 'medium', 'high'].includes(input.resolution)) {
-			throw new ToolError(`Invalid resolution: ${JSON.stringify(input.resolution)}`);
+		const resolution = input.resolution ?? 'medium';
+		if (!['low', 'medium', 'high'].includes(resolution)) {
+			throw new ToolError(`Invalid resolution: ${JSON.stringify(resolution)}`);
 		}
 
 		let maximumSize = 128;
-		if (input.resolution === 'medium') {
+		if (resolution === 'medium') {
 			maximumSize = 256;
-		} else if (input.resolution === 'high') {
+		} else if (resolution === 'high') {
 			maximumSize = 512;
 		}
 
