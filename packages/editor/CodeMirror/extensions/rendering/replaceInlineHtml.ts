@@ -8,7 +8,7 @@ import makeHideReplaceExtension from './utils/makeHideReplaceExtension';
 type OnRenderTagContent = (openingTag: HtmlNodeInfo)=> Decoration;
 const createHtmlReplacementExtension = (tagName: string, onRenderContent: OnRenderTagContent) => {
 	const isMatchingTag = (info: HtmlNodeInfo) => {
-		return info.tagName().toLowerCase() === tagName;
+		return info.tagName()?.toLowerCase() === tagName;
 	};
 	const isMatchingOpeningTag = (info: HtmlNodeInfo) => {
 		return isMatchingTag(info) && info.opening;
