@@ -28,27 +28,32 @@ type Options = Pick<ReplacementExtension, 'getRevealStrategy'|'getDecorationRang
 
 const hideReplaceFacet = Facet.define<Options>({
 	combine: values => values.flat(),
-	enables: facet => [
-		hiddenStyles,
-		makeInlineReplaceExtension({
-			createDecoration: (node, state, parentTags) => {
-				const options = state.facet(facet);
-				if (options.some(o => o.shouldHide(node, state, parentTags))) {
-					return hideDecoration;
-				}
-				return null;
-			},
-			getDecorationRange: (node, state, parentTags) => {
-				const options = state.facet(facet).find(o => o.shouldHide(node, state, parentTags));
-				return options?.getDecorationRange?.(node, state, parentTags);
-			},
-			getRevealStrategy: (node, state, parentTags) => {
-				const options = state.facet(facet).find(o => o.shouldHide(node, state, parentTags));
-				return options?.getRevealStrategy?.(node, state, parentTags);
-			},
-			mergeNeighbors: true,
-		}),
-	],
+	enables: facet => {
+		const getActivePluginOptions = (node: SyntaxNodeRef, state: EditorState, parentTags: ParentTags) => {
+			const allPluginOptions = state.facet(facet);
+			return allPluginOptions.find(o => o.shouldHide(node, state, parentTags));
+		};
+		return [
+			hiddenStyles,
+			makeInlineReplaceExtension({
+				createDecoration: (node, state, parentTags) => {
+					if (getActivePluginOptions(node, state, parentTags)) {
+						return hideDecoration;
+					}
+					return null;
+				},
+				getDecorationRange: (node, state, parentTags) => {
+					const options = getActivePluginOptions(node, state, parentTags);
+					return options?.getDecorationRange?.(node, state, parentTags);
+				},
+				getRevealStrategy: (node, state, parentTags) => {
+					const options = getActivePluginOptions(node, state, parentTags);
+					return options?.getRevealStrategy?.(node, state, parentTags);
+				},
+				mergeNeighbors: true,
+			}),
+		];
+	},
 });
 
 const makeHideReplaceExtension = (options: Options) => [
