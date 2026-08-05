@@ -3,20 +3,8 @@ import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../te
 import { ImportModuleOutputFormat, ImportOptions } from './types';
 import InteropService from './InteropService';
 import Folder from '../../models/Folder';
-const moment = require('moment');
 
-// Suppress warning:
-//
-// Deprecation warning: value provided is not in a recognized RFC2822 or ISO format. moment
-// construction falls back to js Date(), which is not reliable across all browsers and versions. Non
-// RFC2822/ISO date formats are discouraged. Please refer to
-// http://momentjs.com/guides/#/warnings/js-date/ for more info.
-//
-// But what moment.js does it correct when you don't know the format of the date, which is what we
-// simulate here with imported files.
-moment.suppressDeprecationWarnings = true;
-
-async function importFolder(path: string) {
+const importFolder = async (path: string) => {
 	const importOptions: ImportOptions = {
 		path: path,
 		format: 'enex',
@@ -24,7 +12,7 @@ async function importFolder(path: string) {
 	};
 
 	await InteropService.instance().import(importOptions);
-}
+};
 
 const importTestFile = async (name: string) => {
 	const enexSampleBaseDir = `${supportDir}/../enex_to_md`;

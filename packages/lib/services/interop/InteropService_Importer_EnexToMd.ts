@@ -25,7 +25,7 @@ const restoreLinks = async (noteIds: string[], importedFolderIds: string[], impo
 		}
 	};
 	const titleToIds = async (title: string) => {
-		const notes = await Note.allByTitleAndParent({ title, whereParentIn: importedFolderIds, fields: ['id'], includeDeleted: false });
+		const notes = await Note.allByTitleAndParent({ title, whereParentIn: importedFolderIds, fields: ['id'] });
 		return notes.map(n => n.id);
 	};
 
