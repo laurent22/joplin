@@ -3,6 +3,7 @@ import { AppState, Route } from './types';
 import appDefaultState, { DEFAULT_ROUTE } from './appDefaultState';
 import fastDeepEqual = require('fast-deep-equal');
 import Logger from '@joplin/utils/Logger';
+import { TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 
 const logger = Logger.create('appReducer');
 
@@ -24,15 +25,29 @@ function historyCanGoBackTo(route: Route) {
 }
 
 function removeAdjacentNoteDuplicates(items: Route[]) {
-	return items.filter((item, idx) => (idx >= 1) ? !(item.routeName === 'Note' && items[idx - 1].routeName === 'Note' && items[idx - 1].noteId === item.noteId) : true);
+	return items.filter((item, idx) => (idx >= 1) ? !(item.routeName === 'Note' && items[idx - 1].routeName === 'Note' && item.noteId && items[idx - 1].noteId === item.noteId) : true);
 }
 
 function removeAdjacentFolderDuplicates(items: Route[]) {
-	return items.filter((item, idx) => (idx >= 1) ? !(item.routeName === 'Notes' && items[idx - 1].routeName === 'Notes' && items[idx - 1].folderId === item.folderId) : true);
+	return items.filter((item, idx) => (idx >= 1) ? !(item.routeName === 'Notes' && items[idx - 1].routeName === 'Notes' && item.folderId && items[idx - 1].folderId === item.folderId) : true);
+}
+
+function removeAdjacentTagDuplicates(items: Route[]) {
+	return items.filter((item, idx) => (idx >= 1) ? !(item.routeName === 'Notes' && items[idx - 1].routeName === 'Notes' && item.tagId && items[idx - 1].tagId === item.tagId) : true);
+}
+
+function removeAdjacentTagScreenDuplicates(items: Route[]) {
+	return items.filter((item, idx) => (idx >= 1) ? !(item.routeName === 'Tags' && items[idx - 1].routeName === 'Tags') : true);
 }
 
 function removeLatestFolderIfSelected(items: Route[], route: Route) {
-	if (items.length && route.routeName === 'Notes' && items[items.length - 1].folderId === route.folderId) {
+	if (items.length && route.routeName === 'Notes' && items[items.length - 1].routeName === 'Notes' && route.folderId && items[items.length - 1].folderId === route.folderId) {
+		items.splice(items.length - 1, 1);
+	}
+}
+
+function removeLatestTagScreenIfSelected(items: Route[], route: Route) {
+	if (items.length && route.routeName === 'Tags' && items[items.length - 1].routeName === 'Tags') {
 		items.splice(items.length - 1, 1);
 	}
 }
@@ -138,11 +153,29 @@ const appReducer = (state = appDefaultState, action: any) => {
 			}
 			break;
 
+		case 'TAG_UPDATE_ALL':
+
+			{
+				// A tag can be removed from the UI via deleting a tag, deleting a note, deleting a notebook, or manually removing all note associations for
+				// a tag. Cleaning history here covers all of these scenarios
+				const availableTagIds = new Set(
+					action.items.map((o: TagsWithNoteCountEntity) => o.id),
+				);
+				let newNavHistoryForTags = navHistory.filter(route => route.routeName !== 'Notes' || !route.tagId || availableTagIds.has(route.tagId));
+				newNavHistoryForTags = removeAdjacentTagDuplicates(newNavHistoryForTags);
+				newNavHistoryForTags = removeAdjacentTagScreenDuplicates(newNavHistoryForTags);
+				removeLatestTagScreenIfSelected(newNavHistoryForTags, state.route);
+				navHistory.splice(0, navHistory.length, ...newNavHistoryForTags);
+
+			}
+			break;
+
 		case 'FOLDER_DELETE':
 
 			{
 				let newNavHistoryForFolder = navHistory.filter(route => !(route.routeName === 'Notes' && route.folderId === action.id));
 				newNavHistoryForFolder = removeAdjacentFolderDuplicates(newNavHistoryForFolder);
+				removeLatestFolderIfSelected(newNavHistoryForFolder, state.route);
 				navHistory.splice(0, navHistory.length, ...newNavHistoryForFolder);
 
 				// Prevent the deleted folder from being added to the navigation history again when navigating forward, where the selected folder was deleted
