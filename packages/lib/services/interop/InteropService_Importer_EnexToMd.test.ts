@@ -43,12 +43,14 @@ describe('InteropService_Importer_EnexToMd', () => {
 			{ title: 'Testing', parent_id: folders[1].id },
 		]);
 
-		// Same-folder link
+		// Same-folder link (https:// link)
 		expect(notes[1].body).toContain(`[Example note](:/${notes[0].id})`);
-		// Cross-folder link
+		// Cross-folder link (https:// link)
 		expect(notes[1].body).toContain(`[Test](:/${notes[2].id})`);
 
-		// Cross-folder link, using an https:// link
+		// Cross-folder link (https:// link)
 		expect(notes[2].body).toContain(`[Example note](:/${notes[0].id})`);
+		// Same-folder link (evernote:// link)
+		expect(notes[2].body).toContain(`[Test note](:/${notes[3].id})`);
 	});
 });
