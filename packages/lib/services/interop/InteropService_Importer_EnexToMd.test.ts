@@ -52,5 +52,6 @@ describe('InteropService_Importer_EnexToMd', () => {
 		expect(notes[2].body).toContain(`[Example note](:/${notes[0].id})`);
 		// Same-folder link (evernote:// link)
 		expect(notes[2].body).toContain(`[Test note](:/${notes[3].id})`);
+		expect(notes[4].body).toContain(`[Test](:/${notes[2].id})`);
 	});
 });
