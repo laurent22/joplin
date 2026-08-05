@@ -44,25 +44,6 @@ const conflictPlaceholder = (local: string, remote: string): string => {
 	return `<<<<<<< local\n${local}\n=======\n${remote}\n>>>>>>> remote`;
 };
 
-const tokenizeWords = (text: string): string[] => {
-	return text.match(/[\p{L}\p{N}_]+|\s+|[^\p{L}\p{N}_\s]/gu) ?? [];
-};
-
-const tryWordMerge = (local: string, base: string, remote: string): { merged: string; conflict: boolean } => {
-	const regions: Region[] = diff3MergeRegions(tokenizeWords(local), tokenizeWords(base), tokenizeWords(remote));
-	let merged = '';
-	for (const region of regions) {
-		if (region.stable === true) {
-			merged += region.bufferContent.join('');
-		} else if (region.aContent.join('') === region.bContent.join('')) {
-			merged += region.aContent.join('');
-		} else {
-			return { merged: '', conflict: true };
-		}
-	}
-	return { merged, conflict: false };
-};
-
 // Trailing whitespace is invisible noise which can cause false conflicts
 // Two trailing spaces are kept (markdown hard line break)
 const normaliseLine = (line: string): string => {
@@ -137,7 +118,6 @@ export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string):
 			mergedParts.push(text);
 		} else {
 			const localText = region.aContent.join('\n');
-			const baseText = region.oContent.join('\n');
 			const remoteText = region.bContent.join('\n');
 
 			// Both sides made the identical change: diff3 flags it as unstable, but it's not a real conflict
@@ -147,15 +127,9 @@ export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string):
 				continue;
 			}
 
-			const word = tryWordMerge(localText, baseText, remoteText);
-			if (!word.conflict) {
-				sections.push({ text: word.merged, type: 'auto-merged' });
-				mergedParts.push(word.merged);
-			} else {
-				const text = conflictPlaceholder(localText, remoteText);
-				sections.push({ text, type: 'conflict', localText, remoteText });
-				mergedParts.push(text);
-			}
+			const text = conflictPlaceholder(localText, remoteText);
+			sections.push({ text, type: 'conflict', localText, remoteText });
+			mergedParts.push(text);
 		}
 	}
 

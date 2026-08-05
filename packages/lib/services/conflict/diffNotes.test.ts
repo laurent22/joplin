@@ -35,40 +35,15 @@ describe('autoMerge', () => {
 		expect(result.mergedText).toContain('TITLE');
 	});
 
-	test('should merge two edits to different words in the same paragraph', () => {
+	// Merging is line based, so two edits to different words on the same line are a
+	// conflict even though the words themselves don't overlap
+	test('should treat two edits to different words on the same line as a conflict', () => {
 		const base = 'The quick brown fox jumps over the lazy dog';
 		const local = 'The slow brown fox jumps over the lazy dog';
 		const remote = 'The quick brown fox jumps over the sleepy dog';
 		const result = autoMerge(base, local, remote);
-		expect(result.mergedText).toBe('The slow brown fox jumps over the sleepy dog');
-		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
-	});
-
-	// The word tokenizer keeps newlines as their own tokens, so the line structure of a
-	// multi-line region survives the merge rather than being rebuilt from the words
-	test.each([
-		['a blank line', 'p1 x\n\np2 y', 'p1 X\n\np2 y', 'p1 x\n\np2 Y', 'p1 X\n\np2 Y'],
-		['indentation', '  a x\n  b y', '  a X\n  b y', '  a x\n  b Y', '  a X\n  b Y'],
-		['a hard line break', 'a x  \nb y', 'a X  \nb y', 'a x  \nb Y', 'a X  \nb Y'],
-		['a line inserted by one side', 'one a\ntwo b', 'one A\ntwo b', 'one a\nINSERT\ntwo B', 'one A\nINSERT\ntwo B'],
-	])('should keep the line structure when word-merging a multi-line region containing %s', (_label, base, local, remote, expected) => {
-		const result = autoMerge(base, local, remote);
-		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
-		expect(result.mergedText).toBe(expected);
-	});
-
-	// KNOWN LIMITATION: If a line has both a real conflict and a change that can
-	// be merged, then the whole line is treated as a conflict.
-	// In future, the line could be split into auto-merged and conflict parts
-	test('should treat a line with both a conflict and a mergeable edit as a whole-line conflict (known limitation)', () => {
-		// Both sides changed "quick" (conflict); only remote changed "dog"->"cat".
-		const base = 'The quick brown fox jumps over the dog';
-		const local = 'The slow brown fox jumps over the dog';
-		const remote = 'The fast brown fox jumps over the cat';
-		const result = autoMerge(base, local, remote);
 		const conflicts = result.sections.filter(s => s.type === 'conflict');
 		expect(conflicts.length).toBe(1);
-		// The "dog" -> "cat" change is not merged because the whole line is treated as a conflict.
 		expect(conflicts[0].localText).toBe(local);
 		expect(conflicts[0].remoteText).toBe(remote);
 	});
@@ -108,12 +83,13 @@ describe('autoMerge', () => {
 		['three trailing spaces', 'Alpha   '],
 		['a two-space hard line break', 'Alpha  '],
 	])('should keep %s on a line neither side changed', (_label, firstLine) => {
-		const base = `${firstLine}\nBeta\nGamma`;
-		const local = `${firstLine}\nBeta edited\nGamma`;
-		const remote = `${firstLine}\nBeta\nGamma edited`;
+		// The edits are kept in separate paragraphs so they land in different regions
+		const base = `${firstLine}\nBeta\n\nGamma\n\nDelta`;
+		const local = `${firstLine}\nBeta edited\n\nGamma\n\nDelta`;
+		const remote = `${firstLine}\nBeta\n\nGamma\n\nDelta edited`;
 		const result = autoMerge(base, local, remote);
 		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
-		expect(result.mergedText).toBe(`${firstLine}\nBeta edited\nGamma edited`);
+		expect(result.mergedText).toBe(`${firstLine}\nBeta edited\n\nGamma\n\nDelta edited`);
 	});
 
 	test('with empty base should mark only the differing line as a conflict', () => {
