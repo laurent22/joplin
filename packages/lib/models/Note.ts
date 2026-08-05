@@ -59,7 +59,6 @@ interface ByTitleAndParentOptions {
 	title: string;
 	whereParentIn: string[];
 	fields: string[];
-	includeDeleted: boolean;
 }
 
 export default class Note extends BaseItem {
@@ -1297,14 +1296,13 @@ export default class Note extends BaseItem {
 		}
 	}
 
-	public static allByTitleAndParent({ title, whereParentIn: parentIds, fields, includeDeleted }: ByTitleAndParentOptions) {
+	public static allByTitleAndParent({ title, whereParentIn: parentIds, fields }: ByTitleAndParentOptions) {
 		const sql = `
 			SELECT ${this.db().escapeFieldsToString(fields)}
 			FROM \`${this.tableName()}\`
 			WHERE
 				\`title\` = ?
 				AND \`parent_id\` IN (${this.escapeIdsForSql(parentIds)})
-		  		${includeDeleted ? '' : 'AND `deleted_time` = 0'}
 		`;
 		return this.modelSelectAll(sql, [title]);
 	}
