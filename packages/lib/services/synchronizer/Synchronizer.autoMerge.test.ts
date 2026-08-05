@@ -100,12 +100,11 @@ describe('Synchronizer.autoMerge', () => {
 
 		expect(conflictNote.body).toContain('Second paragraph, local.');
 		expect(resolved.body).toContain('Second paragraph, remote.');
+		expect(resolved.body).not.toContain('<<<<<<<');
 
+		// The remote and base versions are recorded for the resolution UI
 		const state = await ConflictNoteState.byNoteId(conflictNote.id);
 		expect(state.remote_body).toBe(resolved.body);
-		expect(state.remote_body).toContain('First paragraph, edited locally.');
-		expect(state.remote_body).toContain('Second paragraph, remote.');
-		expect(state.remote_body).not.toContain('<<<<<<<');
 		expect(state.base_body).toBe(baseBody);
 	}));
 
@@ -289,6 +288,10 @@ describe('Synchronizer.autoMerge', () => {
 
 		const conflicts = await Note.conflictedNotes();
 		expect(conflicts).toHaveLength(1);
+		expect(conflicts[0].body).toContain('Second paragraph, local.');
+
+		const resolved = await Note.load(note.id);
+		expect(resolved.body).toContain('Second paragraph, remote.');
 
 		const state = await ConflictNoteState.byNoteId(conflicts[0].id);
 		expect(state.remote_body).toContain('Second paragraph, remote.');
@@ -314,6 +317,10 @@ describe('Synchronizer.autoMerge', () => {
 		await Note.save({ id: note.id, body: baseBody.replace('First paragraph.', 'First paragraph, edited locally.') });
 		await synchronizerStart();
 
-		expect(await Note.conflictedNotes()).toHaveLength(1);
+		// The local change is preserved as a conflict note and nothing is merged
+		const conflicts = await Note.conflictedNotes();
+		expect(conflicts).toHaveLength(1);
+		expect(conflicts[0].body).toContain('First paragraph, edited locally.');
+		expect(conflicts[0].body).not.toContain('Third paragraph, edited remotely.');
 	}));
 });
