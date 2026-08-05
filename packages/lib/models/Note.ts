@@ -8,7 +8,7 @@ import Setting from './Setting';
 import shim from '../shim';
 import time from '../time';
 import markdownUtils from '../markdownUtils';
-import { FolderEntity, NoteEntity, SqlQuery, SyncItemEntity } from '../services/database/types';
+import { FolderEntity, NoteEntity, SyncItemEntity } from '../services/database/types';
 import Tag from './Tag';
 const { sprintf } = require('sprintf-js');
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
@@ -53,6 +53,13 @@ export interface PreviewsOptions {
 	itemTypes?: string[];
 	limit?: number;
 	titlePattern?: string;
+}
+
+interface ByTitleAndSourceApplicationOptions {
+	application: string;
+	title: string;
+	fields: string[];
+	includeDeleted: boolean;
 }
 
 export default class Note extends BaseItem {
@@ -1290,15 +1297,15 @@ export default class Note extends BaseItem {
 		}
 	}
 
-	private static queryByTitleAndApplication_(title: string, application: string, rawFields: string[]): SqlQuery {
-		return {
-			sql: `SELECT ${rawFields.join(',')} FROM \`${this.tableName()}\` WHERE \`title\` = ? AND \`source_application\` = ?`,
-			params: [title, application],
-		};
-	}
-
-	public static allByTitleAndApplication(title: string, application: string, fields: string[]) {
-		const query = this.queryByTitleAndApplication_(title, application, fields.map(field => this.db().escapeField(field)));
-		return this.modelSelectAll(query, query.params);
+	public static allByTitleAndApplication({ title, application, fields, includeDeleted }: ByTitleAndSourceApplicationOptions) {
+		const sql = `
+			SELECT ${this.db().escapeFieldsToString(fields)}
+			FROM \`${this.tableName()}\`
+			WHERE
+				\`title\` = ?
+				AND \`source_application\` = ?
+		  		${includeDeleted ? '' : 'AND `deleted_time` = 0'}
+		`;
+		return this.modelSelectAll(sql, [title, application]);
 	}
 }

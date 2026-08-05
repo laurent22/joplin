@@ -25,7 +25,7 @@ const restoreLinks = async (noteIds: string[], importOptions: ImportOptions) => 
 		}
 	};
 	const titleToIds = async (title: string) => {
-		const notes = await Note.allByTitleAndApplication(title, 'evernote', ['id']);
+		const notes = await Note.allByTitleAndApplication({ title, application: 'evernote', fields: ['id'], includeDeleted: false });
 		return notes.map(n => n.id);
 	};
 
