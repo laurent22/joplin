@@ -492,7 +492,6 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 					note.markup_language = importOptions.outputFormat === 'html' ?
 						MarkupToHtml.MARKUP_LANGUAGE_HTML :
 						MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
-					note.source_application = 'evernote';
 
 					note.parent_id = parentFolderId;
 					note.body = body;
@@ -745,9 +744,11 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 		}
 	})();
 	const titleToIds = (title: string) => result.noteTitlesToIds.get(title) ?? [];
-	return await restoreEnexNoteLinks(
+
+	const { noteIdsWithUnresolvedLinks } = await restoreEnexNoteLinks(
 		noteIterator,
 		titleToIds,
 		importOptions,
 	);
+	return { noteIdsWithUnresolvedLinks, parentFolderId };
 }

@@ -17,7 +17,7 @@ const doImportEnex = async (destFolder: FolderEntity, sourcePath: string, option
 	return await importEnex(destFolder.id, sourcePath, options);
 };
 
-const restoreLinks = async (noteIds: string[], importOptions: ImportOptions) => {
+const restoreLinks = async (noteIds: string[], importedFolderIds: string[], importOptions: ImportOptions) => {
 	const readNotes = async function*() {
 		for (const id of noteIds) {
 			const note = await Note.load(id, { fields: ['id', 'body'] });
@@ -25,7 +25,7 @@ const restoreLinks = async (noteIds: string[], importOptions: ImportOptions) => 
 		}
 	};
 	const titleToIds = async (title: string) => {
-		const notes = await Note.allByTitleAndApplication({ title, application: 'evernote', fields: ['id'], includeDeleted: false });
+		const notes = await Note.allByTitleAndParent({ title, whereParentIn: importedFolderIds, fields: ['id'], includeDeleted: false });
 		return notes.map(n => n.id);
 	};
 
@@ -40,6 +40,7 @@ export const enexImporterExec = async (result: ImportExportResult, destinationFo
 	sourcePath = rtrimSlashes(sourcePath);
 
 	const notesWithUnresolvedLinks = [];
+	const importedFolderIds = new Set<string>();
 
 	if (await shim.fsDriver().isDirectory(sourcePath)) {
 		const stats = await shim.fsDriver().readDirStats(sourcePath);
@@ -50,6 +51,7 @@ export const enexImporterExec = async (result: ImportExportResult, destinationFo
 			try {
 				const importResult = await doImportEnex(null, fullPath, options);
 				notesWithUnresolvedLinks.push(...importResult.noteIdsWithUnresolvedLinks);
+				importedFolderIds.add(importResult.parentFolderId);
 			} catch (error) {
 				result.warnings.push(`When importing "${fullPath}": ${error.message}`);
 			}
@@ -59,7 +61,7 @@ export const enexImporterExec = async (result: ImportExportResult, destinationFo
 		notesWithUnresolvedLinks.push(...importResult.noteIdsWithUnresolvedLinks);
 	}
 
-	await restoreLinks(notesWithUnresolvedLinks, options);
+	await restoreLinks(notesWithUnresolvedLinks, [...importedFolderIds], options);
 
 	return result;
 };

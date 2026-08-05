@@ -55,9 +55,9 @@ export interface PreviewsOptions {
 	titlePattern?: string;
 }
 
-interface ByTitleAndSourceApplicationOptions {
-	application: string;
+interface ByTitleAndParentOptions {
 	title: string;
+	whereParentIn: string[];
 	fields: string[];
 	includeDeleted: boolean;
 }
@@ -1297,15 +1297,15 @@ export default class Note extends BaseItem {
 		}
 	}
 
-	public static allByTitleAndApplication({ title, application, fields, includeDeleted }: ByTitleAndSourceApplicationOptions) {
+	public static allByTitleAndParent({ title, whereParentIn: parentIds, fields, includeDeleted }: ByTitleAndParentOptions) {
 		const sql = `
 			SELECT ${this.db().escapeFieldsToString(fields)}
 			FROM \`${this.tableName()}\`
 			WHERE
 				\`title\` = ?
-				AND \`source_application\` = ?
+				AND \`parent_id\` IN (${this.escapeIdsForSql(parentIds)})
 		  		${includeDeleted ? '' : 'AND `deleted_time` = 0'}
 		`;
-		return this.modelSelectAll(sql, [title, application]);
+		return this.modelSelectAll(sql, [title]);
 	}
 }
