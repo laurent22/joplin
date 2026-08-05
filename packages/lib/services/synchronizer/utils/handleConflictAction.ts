@@ -7,7 +7,6 @@ import Resource from '../../../models/Resource';
 import { BaseItemEntity, NoteEntity } from '../../database/types';
 import { SyncAction, conflictActions } from './types';
 import ConflictNoteState from '../../../models/ConflictNoteState';
-import BaseModel from '../../../BaseModel';
 
 const logger = Logger.create('handleConflictAction');
 
@@ -109,7 +108,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 
 			if (action === SyncAction.NoteConflict) {
 				// Force the viewer / editor to reload on mobile, if the conflicting note is currently open
-				BaseModel.dispatch({
+				dispatch({
 					type: 'EDITOR_NOTE_NEEDS_RELOAD',
 					noteId: local.id,
 				});
