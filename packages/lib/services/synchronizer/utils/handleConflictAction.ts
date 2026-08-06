@@ -82,9 +82,8 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 
 		// Everything merged cleanly: save the result and no conflict note creation is needed
 		if (merge && merge.fullyMerged) {
-			// Preserve the remote note's metadata and replace only the merged title/body.
-			// This matches the normal conflict path, so fields such as user_updated_time remain consistent.
-			// The decrypted copy is used so the saved note doesn't keep the encrypted fields.
+			// Only the title and body are replaced, so fields such as user_updated_time stay
+			// consistent with the normal conflict path. The decrypted copy drops the cipher text
 			const remoteNote = decryptedRemoteNote;
 			const mergedNote: NoteEntity = {
 				...remoteNote,
@@ -106,8 +105,8 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		// ------------------------------------------------------------------------------
 
 		if (mustHandleConflict) {
-			// An encrypted remote has no readable title or body. This must run before the
-			// merge results are applied below, which is where the remoteContent is read from
+			// An encrypted remote has no readable title or body, so the merge below would
+			// otherwise be applied on top of the cipher text
 			if (decryptedRemoteNote && (remoteContent as NoteEntity).encryption_cipher_text) {
 				remoteContent = { ...remoteContent, title: decryptedRemoteNote.title, body: decryptedRemoteNote.body } as NoteEntity;
 			}
@@ -122,16 +121,14 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 			const conflictNote = await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
 			createdConflictNoteId = conflictNote.id;
 
-			// Record base (read now, before the rebuild below) and remote. The local
-			// version is already preserved as the conflict note itself.
+			// Read the base before the rebuild below. The remote version is the original
+			// note, so only its updated_time is kept, to detect it changing later.
 			const base = await Note.syncBaseContent(syncTargetId, local.id);
 			const remoteNote = remoteContent as NoteEntity;
 			await ConflictNoteState.save({
 				note_id: conflictNote.id,
 				base_body: base ? base.base_body : '',
 				base_title: base ? base.base_title : '',
-				remote_body: remoteNote ? remoteNote.body : '',
-				remote_title: remoteNote ? remoteNote.title : '',
 				remote_updated_time: remoteNote ? remoteNote.updated_time : 0,
 			});
 		}

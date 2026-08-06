@@ -69,7 +69,7 @@ describe('Synchronizer.baseFields', () => {
 		expect(syncItem.base_conflict_note_id).toBe(conflictNote.id);
 	}));
 
-	it('should record base and remote content in conflict_note_states', (async () => {
+	it('should record the base content in conflict_note_states', (async () => {
 		const note = await Note.save({ title: 'base title', body: 'base body' });
 		await synchronizerStart();
 		await switchClient(2);
@@ -83,7 +83,6 @@ describe('Synchronizer.baseFields', () => {
 
 		expect(state.base_body).toBe('base body');
 		expect(state.base_title).toBe('base title');
-		expect(state.remote_body).toBe('remote body');
 		expect(state.remote_updated_time).toBeGreaterThan(0);
 	}));
 

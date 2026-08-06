@@ -102,10 +102,10 @@ describe('Synchronizer.autoMerge', () => {
 		expect(resolved.body).toContain('Second paragraph, remote.');
 		expect(resolved.body).not.toContain('<<<<<<<');
 
-		// The remote and base versions are recorded for the resolution UI
+		// The remote version is the original note, so only its updated_time is stored
 		const state = await ConflictNoteState.byNoteId(conflictNote.id);
-		expect(state.remote_body).toBe(resolved.body);
 		expect(state.base_body).toBe(baseBody);
+		expect(state.remote_updated_time).toBe(resolved.updated_time);
 	}));
 
 	it('should create an unmerged conflict note when both sides change the same line with no non-conflicting changes', (async () => {
@@ -267,9 +267,9 @@ describe('Synchronizer.autoMerge', () => {
 		expect(merged.encryption_applied).toBeFalsy();
 	}));
 
-	it('should record the decrypted remote version in the conflict state', (async () => {
-		// Without this the state would be saved empty and the resolution UI would have
-		// nothing to compare against
+	it('should partially merge an encrypted remote note', (async () => {
+		// The resolution UI reads the remote version from the original note, so the
+		// decrypted content has to reach it rather than staying as cipher text
 		const masterKey = await enableEncryption();
 
 		const folder = await Folder.save({ title: 'folder' });
@@ -292,10 +292,10 @@ describe('Synchronizer.autoMerge', () => {
 
 		const resolved = await Note.load(note.id);
 		expect(resolved.body).toContain('Second paragraph, remote.');
+		expect(resolved.title).toBe('Title');
 
 		const state = await ConflictNoteState.byNoteId(conflicts[0].id);
-		expect(state.remote_body).toContain('Second paragraph, remote.');
-		expect(state.remote_title).toBe('Title');
+		expect(state.remote_updated_time).toBe(resolved.updated_time);
 	}));
 
 	it('should create a plain conflict note when the remote note cannot be decrypted', (async () => {
