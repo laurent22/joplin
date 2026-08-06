@@ -63,14 +63,14 @@ describe('Synchronizer.basics', () => {
 	}));
 
 	it('should update local items', (async () => {
-		const dispatch = jest.fn();
-		synchronizer().dispatch = dispatch;
-
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'un', parent_id: folder1.id });
 		await synchronizerStart();
 
 		await switchClient(2);
+
+		const dispatchC2 = jest.fn();
+		synchronizer(2).dispatch = dispatchC2;
 
 		await synchronizerStart();
 
@@ -83,16 +83,19 @@ describe('Synchronizer.basics', () => {
 
 		await synchronizerStart();
 
-		expect(dispatch).not.toHaveBeenCalledWith({
+		expect(dispatchC2).not.toHaveBeenCalledWith({
 			type: 'EDITOR_NOTE_NEEDS_RELOAD',
 			noteId: note1.id,
 		});
 
 		await switchClient(1);
 
+		const dispatchC1 = jest.fn();
+		synchronizer(1).dispatch = dispatchC1;
+
 		await synchronizerStart();
 
-		expect(dispatch).toHaveBeenCalledWith({
+		expect(dispatchC1).toHaveBeenCalledWith({
 			type: 'EDITOR_NOTE_NEEDS_RELOAD',
 			noteId: note1.id,
 		});
