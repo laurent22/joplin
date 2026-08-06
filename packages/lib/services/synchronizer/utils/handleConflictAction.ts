@@ -95,6 +95,12 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, mergedNote, BaseItem.remoteItemSyncTime(remoteNote.updated_time), remoteNote.updated_time);
 			await ItemClass.save(mergedNote, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 
+			// No conflict note is created, so the mobile viewer/editor must reload the merged note
+			dispatch({
+				type: 'EDITOR_NOTE_NEEDS_RELOAD',
+				noteId: local.id,
+			});
+
 			logger.info(`Auto-merged conflict for note ${local.id} - no conflict note created`);
 			return;
 		}
