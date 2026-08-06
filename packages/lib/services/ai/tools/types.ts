@@ -1,3 +1,4 @@
+import isItemId from '../../../models/utils/isItemId';
 import { JsonSchema } from '../types';
 
 export interface EditorCommands {
@@ -25,7 +26,35 @@ export type ToolInput = Record<string, unknown>;
 // Plain Errors are treated as internal bugs.
 export class ToolError extends Error {}
 
-export type ToolOutput = string|Record<string, unknown>;
+export interface ImageProperties {
+	dataUrl: string;
+	mimeType: string;
+	// A unique identifier, should be the same if the image is included in the chat
+	// transcript again.
+	id: string;
+}
+
+export class ToolImageResponse {
+	public readonly dataUrl: string;
+	public readonly mimeType: string;
+	public readonly id: string;
+
+	public constructor(props: ImageProperties) {
+		if (!isItemId(props.id)) {
+			throw new Error('Invalid image ID: Must be compatible with Joplin IDs');
+		}
+
+		this.dataUrl = props.dataUrl;
+		this.mimeType = props.mimeType;
+		this.id = props.id;
+	}
+
+	public get base64Only() {
+		return this.dataUrl.replace(/^data:[^;]+;base64,/, '');
+	}
+}
+
+export type ToolOutput = string|Record<string, unknown>|ToolImageResponse;
 
 export interface ToolSpec {
 	id: string;

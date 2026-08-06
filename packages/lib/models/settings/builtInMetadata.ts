@@ -903,6 +903,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 		},
 
+		'ai.tool.read_image.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow reading images'),
+			storage: SettingStorage.File,
+		},
+
 		'ai.tool.list_notebooks.enabled': {
 			value: false,
 			type: SettingItemType.Bool,
