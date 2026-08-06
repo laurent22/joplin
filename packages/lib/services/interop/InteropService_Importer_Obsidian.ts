@@ -6,9 +6,12 @@ import markdownUtils from '../../markdownUtils';
 import { toForwardSlashes } from '../../path-utils';
 import shim from '../../shim';
 
-const tagRegex = /(?:^|\s)#(\w+)/g;
+const emojiRegex = /\p{Extended_Pictographic}/u;
+const tagRegex = new RegExp(`(?:^|\\s)#([\\w\\p{L}${emojiRegex.source}/-]+)`, 'gu');
 const normalizedTag = (tag: string) => tag.toLowerCase();
 const wikilinkRegex = /(?<![!\\])\[\[([^|\r\n]+?)(?:\|([^\r\n]+?))?\]\]/g;
+// Matches Obsidian file embeds such as ![[photo.png]].
+const embedRegex = /(?<!\\)!\[\[([^|\r\n]+?)\]\]/g;
 const withoutMarkdownExtension = (path: string) => path.replace(/\.md$/i, '');
 
 const addToIndex = (index: Map<string, string[]>, key: string, noteId: string) => {
@@ -65,12 +68,20 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 		}
 	}
 
+	public async importLocalFiles(filePath: string, body: string, parentFolderId: string) {
+		// Convert Obsidian embeds to Markdown so the existing importer can import the linked files.
+		const markdownBody = body.replace(embedRegex, '![$1]($1)');
+		return super.importLocalFiles(filePath, markdownBody, parentFolderId);
+	}
+
 	public async importFile(filePath: string, parentFolderId: string) {
 		const note = await super.importFile(filePath, parentFolderId);
 		const existingTags = await Tag.tagsByNoteId(note.id);
 		const existingTagNames = new Set(existingTags.map(tag => normalizedTag(tag.title)));
 
 		for (const [, tag] of note.body.matchAll(tagRegex)) {
+			if (/^\d+$/.test(tag)) continue;
+
 			const key = normalizedTag(tag);
 			if (existingTagNames.has(key)) continue;
 
