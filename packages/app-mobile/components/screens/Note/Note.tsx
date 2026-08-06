@@ -69,7 +69,7 @@ import SpeechToTextBanner from '../../voiceTyping/SpeechToTextBanner';
 import CameraView from '../../CameraView/CameraView';
 import ShareNoteDialog from '../ShareNoteDialog';
 import stateToWhenClauseContext from '../../../services/commands/stateToWhenClauseContext';
-import { defaultWindowId } from '@joplin/lib/reducer';
+import { defaultWindowId, HighlightedWord } from '@joplin/lib/reducer';
 import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
 import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
 import { EditorType } from '../../NoteEditor/types';
@@ -117,7 +117,7 @@ interface Props extends BaseProps {
 	showSideMenu: boolean;
 	searchQuery: string;
 	ftsEnabled: number;
-	highlightedWords: string[];
+	highlightedWords: HighlightedWord[];
 	noteHash: string;
 	toolbarEnabled: boolean;
 	pluginHtmlContents: PluginHtmlContents;
