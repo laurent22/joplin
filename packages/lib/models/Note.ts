@@ -1297,6 +1297,7 @@ export default class Note extends BaseItem {
 	}
 
 	public static async allByTitleAndParent({ title, whereParentIn: parentIds, fields }: ByTitleAndParentOptions) {
+		// Avoids invalid SQL when parentIds is empty:
 		if (parentIds.length === 0) return [];
 
 		const sql = `
