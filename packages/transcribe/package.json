@@ -17,7 +17,7 @@
     "@joplin/utils": "~3.7",
     "dotenv": "17.4.2",
     "file-type": "16.5.4",
-    "fs-extra": "11.3.4",
+    "fs-extra": "11.3.5",
     "knex": "3.2.10",
     "koa": "2.16.4",
     "koa-body": "6.0.1",
