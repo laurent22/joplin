@@ -17,7 +17,7 @@ const doImportEnex = async (destFolder: FolderEntity, sourcePath: string, option
 	return await importEnex(destFolder.id, sourcePath, options);
 };
 
-const restoreLinks = async (noteIds: string[], importedFolderIds: string[], importOptions: ImportOptions) => {
+const restoreCrossFolderLinks = async (noteIds: string[], importedFolderIds: string[], importOptions: ImportOptions) => {
 	const readNotes = async function*() {
 		for (const id of noteIds) {
 			const note = await Note.load(id, { fields: ['id', 'body'] });
@@ -39,10 +39,11 @@ const restoreLinks = async (noteIds: string[], importedFolderIds: string[], impo
 export const enexImporterExec = async (result: ImportExportResult, destinationFolder: FolderEntity, sourcePath: string, fileExtensions: string[], options: ImportOptions) => {
 	sourcePath = rtrimSlashes(sourcePath);
 
-	const notesWithUnresolvedLinks = [];
-	const importedFolderIds = new Set<string>();
 
 	if (await shim.fsDriver().isDirectory(sourcePath)) {
+		const notesWithUnresolvedLinks = [];
+		const importedFolderIds = new Set<string>();
+
 		const stats = await shim.fsDriver().readDirStats(sourcePath);
 		for (const stat of stats) {
 			const fullPath = `${sourcePath}/${stat.path}`;
@@ -56,12 +57,12 @@ export const enexImporterExec = async (result: ImportExportResult, destinationFo
 				result.warnings.push(`When importing "${fullPath}": ${error.message}`);
 			}
 		}
+
+		await restoreCrossFolderLinks(notesWithUnresolvedLinks, [...importedFolderIds], options);
 	} else {
-		const importResult = await doImportEnex(destinationFolder, sourcePath, options);
-		notesWithUnresolvedLinks.push(...importResult.noteIdsWithUnresolvedLinks);
+		await doImportEnex(destinationFolder, sourcePath, options);
 	}
 
-	await restoreLinks(notesWithUnresolvedLinks, [...importedFolderIds], options);
 
 	return result;
 };
