@@ -77,7 +77,7 @@ const autoScrollToMatchPlugin = ViewPlugin.fromClass(class {
 		startState: EditorState,
 		cancelEvent: CancelEvent,
 	) {
-		const isOpenSearchPanelEvent = () => searchPanelOpen(startState) && !searchPanelOpen(state);
+		const isOpenSearchPanelEvent = () => !searchPanelOpen(startState) && searchPanelOpen(state);
 		if (
 			!query || query.search.length === 0
 			// Avoid auto-scrolling to the search result when first opening the search panel
