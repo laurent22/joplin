@@ -5,8 +5,13 @@ export interface ToolTextContent {
 	text: string;
 }
 
-// MCP also allows image and resource content; v1 ships text only.
-export type ToolContent = ToolTextContent;
+export interface ToolImageContent {
+	type: 'image';
+	data: string;
+	mimeType: string;
+}
+
+export type ToolContent = ToolTextContent|ToolImageContent;
 
 export interface ToolCallResult {
 	content: ToolContent[];
