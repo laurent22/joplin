@@ -1296,7 +1296,9 @@ export default class Note extends BaseItem {
 		}
 	}
 
-	public static allByTitleAndParent({ title, whereParentIn: parentIds, fields }: ByTitleAndParentOptions) {
+	public static async allByTitleAndParent({ title, whereParentIn: parentIds, fields }: ByTitleAndParentOptions) {
+		if (parentIds.length === 0) return [];
+
 		const sql = `
 			SELECT ${this.db().escapeFieldsToString(fields)}
 			FROM \`${this.tableName()}\`
@@ -1304,6 +1306,6 @@ export default class Note extends BaseItem {
 				\`title\` = ?
 				AND \`parent_id\` IN (${this.escapeIdsForSql(parentIds)})
 		`;
-		return this.modelSelectAll(sql, [title]);
+		return this.modelSelectAll<NoteEntity>(sql, [title]);
 	}
 }
