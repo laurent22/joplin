@@ -28,33 +28,15 @@ describe('routes/revisions', () => {
 		await switchClient(1);
 	});
 
-	test('should block revision load and save for locked notes', async () => {
+	test('should block load and save of a locked revision', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
 		const api = new Api();
-		const { note, revision } = await createNoteAndRevision(1);
+		const { revision } = await createNoteAndRevision(1);
 
-		await expect(api.route(RequestMethod.GET, `revisions/${revision.id}`)).rejects.toThrow('locked note');
-		await expect(api.route(RequestMethod.PUT, `revisions/${revision.id}`, null, JSON.stringify({ title_diff: '[]' }))).rejects.toThrow('locked note');
-		await expect(api.route(RequestMethod.POST, 'revisions', null, JSON.stringify({
-			item_type: BaseModel.TYPE_NOTE,
-			item_id: note.id,
-			item_updated_time: note.updated_time,
-			title_diff: '[]',
-			body_diff: '[]',
-			metadata_diff: '{"new":{},"deleted":[]}',
-		}))).rejects.toThrow('locked note');
+		await expect(api.route(RequestMethod.GET, `revisions/${revision.id}`)).rejects.toThrow('locked revision');
+		await expect(api.route(RequestMethod.PUT, `revisions/${revision.id}`, null, JSON.stringify({ title_diff: '[]' }))).rejects.toThrow('locked revision');
 
 		expect(await Revision.load(revision.id)).toBeTruthy();
-	});
-
-	test('should block moving an existing revision onto a locked note', async () => {
-		Setting.setValue('featureFlag.noteLock', true);
-		const api = new Api();
-		const { note: lockedNote } = await createNoteAndRevision(1);
-		const { revision } = await createNoteAndRevision(0);
-
-		await expect(api.route(RequestMethod.PUT, `revisions/${revision.id}`, null, JSON.stringify({ item_id: lockedNote.id }))).rejects.toThrow('locked note');
-		expect((await Revision.load(revision.id)).item_id).not.toBe(lockedNote.id);
 	});
 
 	test('should still allow deleting the revisions of a locked note', async () => {

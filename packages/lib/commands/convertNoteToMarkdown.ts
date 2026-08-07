@@ -12,6 +12,7 @@ import Setting from '../models/Setting';
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
 import NoteLockNote from '../services/noteLock/NoteLockNote';
 import NoteLockSession from '../services/noteLock/NoteLockSession';
+import type { DecryptedNoteLockKey } from '../services/noteLock/NoteLockKey';
 import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('convertNoteToMarkdown');
@@ -36,6 +37,7 @@ export const runtime = (): CommandRuntime => {
 			try {
 				let isFirst = true;
 				let processedCount = 0;
+				let noteLockKey: DecryptedNoteLockKey = null;
 				for (const note of notes) {
 					if (note.markup_language === MarkupLanguage.Markdown) {
 						logger.warn('Skipping item: Already Markdown.');
@@ -45,13 +47,17 @@ export const runtime = (): CommandRuntime => {
 						throw new Error(_('Cannot convert read-only item: "%s"', note.title));
 					}
 					const noteIsLocked = isNoteLockEnabled() && NoteLockNote.isLocked(note);
-					if (noteIsLocked && !NoteLockSession.instance().isUnlocked()) {
-						throw new Error(_('Cannot convert locked note: "%s"', note.title));
+					if (noteIsLocked && !noteLockKey) {
+						if (!NoteLockSession.instance().isUnlocked()) {
+							throw new Error(_('Cannot convert locked note: "%s"', note.title));
+						}
+						// Captured once so a session lock mid-run cannot fail the remaining conversions.
+						noteLockKey = NoteLockSession.instance().decryptedKey();
 					}
 
 					// A locked note converts through a full gated load and save, so the body is
 					// decrypted for the conversion and the converted copy is encrypted again.
-					const sourceNote = noteIsLocked ? await Note.load(note.id, { useNoteLock: true }) : note;
+					const sourceNote = noteIsLocked ? await Note.load(note.id, { useNoteLock: true, noteLockKey }) : note;
 
 					const markdownBody = await convertHtmlToMarkdown().execute(context, sourceNote.body);
 					const newNote = await Note.duplicate(note.id);
@@ -63,7 +69,7 @@ export const runtime = (): CommandRuntime => {
 					newNote.updated_time = Date.now();
 
 					const toSave = noteIsLocked ? { ...newNote, isDecrypted: true } : newNote;
-					await Note.save(toSave, { autoTimestamp: false, useNoteLock: noteIsLocked });
+					await Note.save(toSave, { autoTimestamp: false, useNoteLock: noteIsLocked, noteLockKey });
 					await Note.delete(note.id, { toTrash: true });
 					processedCount ++;
 
