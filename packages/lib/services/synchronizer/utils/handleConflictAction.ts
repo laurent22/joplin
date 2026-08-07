@@ -106,6 +106,14 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteContent.updated_time), remoteContent.updated_time);
 			await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 
+			if (action === SyncAction.NoteConflict) {
+				// Force the viewer / editor to reload on mobile, if the conflicting note is currently open
+				dispatch({
+					type: 'EDITOR_NOTE_NEEDS_RELOAD',
+					noteId: local.id,
+				});
+			}
+
 			// Link after the save above, which rebuilds the sync_items row.
 			if (createdConflictNoteId) {
 				await Note.setBaseConflictNoteId(syncTargetId, local.id, createdConflictNoteId);

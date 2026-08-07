@@ -30,6 +30,8 @@ const showAiTools = (settings: Record<string, unknown>) => {
 	return !!settings['mcp.enabled'] || !!settings['ai.enabled'];
 };
 
+const addBetaMarker = (text: string) => _('%s (Beta)', text);
+
 export enum CameraDirection {
 	Back,
 	Front,
@@ -640,25 +642,25 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			label: () => _('OCR: Search in extracted content'),
 		},
 
-		'mcp.enabled': {
-			value: false,
-			type: SettingItemType.Bool,
-			public: true,
-			section: 'ai',
-			appTypes: [AppType.Desktop],
-			label: () => _('Enable MCP server'),
-			description: () => _('Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.'),
-			storage: SettingStorage.File,
-		},
-
 		'ai.enabled': {
 			value: false,
 			type: SettingItemType.Bool,
 			public: true,
 			section: 'ai',
 			appTypes: [AppType.Desktop],
-			label: () => _('Enable AI features'),
-			description: () => _('When enabled, plugins and built-in features can use AI models to generate or analyse text. AI is off by default.'),
+			label: () => addBetaMarker(_('Enable AI features')),
+			description: () => _('When enabled, plugins and built-in features can use AI models to generate or analyse text.'),
+			storage: SettingStorage.File,
+		},
+
+		'mcp.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai',
+			appTypes: [AppType.Desktop],
+			label: () => addBetaMarker(_('Enable MCP server')),
+			description: () => _('Exposes Joplin notes to external AI applications (Claude Desktop, Cursor, etc.) via the Model Context Protocol. Requires the Web Clipper service to be running. Connected AI tools can read your note content; any text they retrieve may be sent to the external LLM provider those tools use.'),
 			storage: SettingStorage.File,
 		},
 
@@ -898,6 +900,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			appTypes: [AppType.Desktop],
 			show: showAiTools,
 			label: () => _('Allow reading notes'),
+			storage: SettingStorage.File,
+		},
+
+		'ai.tool.read_image.enabled': {
+			value: false,
+			type: SettingItemType.Bool,
+			public: true,
+			section: 'ai.tools',
+			appTypes: [AppType.Desktop],
+			show: showAiTools,
+			label: () => _('Allow reading images'),
 			storage: SettingStorage.File,
 		},
 
@@ -2375,6 +2388,19 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			description: () => 'Improves the security of plugin WebViews. This may break some plugins.',
 			section: 'note',
 			isGlobal: true,
+		},
+
+		'featureFlag.enableSemanticSearch': {
+			value: true,
+			type: SettingItemType.Bool,
+			public: true,
+			storage: SettingStorage.File,
+			appTypes: [AppType.Desktop],
+			label: () => 'Include semantic search results in the search panel',
+			description: () => 'Allows using semantic search from the search panel',
+			section: 'general',
+			isGlobal: true,
+			advanced: true,
 		},
 
 		// As of December 2025, the voice typing feature doesn't work well on low-resource devices.

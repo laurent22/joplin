@@ -363,6 +363,7 @@ packages/app-desktop/gui/NoteEditor/utils/usePluginServiceRegistration.js
 packages/app-desktop/gui/NoteEditor/utils/useResourceUnwatcher.js
 packages/app-desktop/gui/NoteEditor/utils/useScheduleSaveCallbacks.js
 packages/app-desktop/gui/NoteEditor/utils/useScrollWhenReadyOptions.js
+packages/app-desktop/gui/NoteEditor/utils/useSearchMarkers.test.js
 packages/app-desktop/gui/NoteEditor/utils/useSearchMarkers.js
 packages/app-desktop/gui/NoteEditor/utils/useWindowCommandHandler.js
 packages/app-desktop/gui/NoteList/NoteList2.js
@@ -1621,6 +1622,7 @@ packages/lib/services/ai/tools/global/index.js
 packages/lib/services/ai/tools/global/listNotebooks.js
 packages/lib/services/ai/tools/global/listTags.js
 packages/lib/services/ai/tools/global/manageTags.js
+packages/lib/services/ai/tools/global/readImage.js
 packages/lib/services/ai/tools/global/readNote.js
 packages/lib/services/ai/tools/global/searchNotes.js
 packages/lib/services/ai/tools/global/semanticSearchNotes.js
@@ -1629,6 +1631,7 @@ packages/lib/services/ai/tools/types.js
 packages/lib/services/ai/tools/utils/applyNoteEdits.test.js
 packages/lib/services/ai/tools/utils/applyNoteEdits.js
 packages/lib/services/ai/tools/utils/buildTool.js
+packages/lib/services/ai/tools/utils/serializeToolOutput.js
 packages/lib/services/ai/tools/utils/settings.js
 packages/lib/services/ai/types.js
 packages/lib/services/ai/utils/findFencedBlock.js
@@ -1694,6 +1697,7 @@ packages/lib/services/interop/InteropService_Exporter_Raw.js
 packages/lib/services/interop/InteropService_Importer_Base.js
 packages/lib/services/interop/InteropService_Importer_Custom.js
 packages/lib/services/interop/InteropService_Importer_EnexToHtml.js
+packages/lib/services/interop/InteropService_Importer_EnexToMd.test.js
 packages/lib/services/interop/InteropService_Importer_EnexToMd.js
 packages/lib/services/interop/InteropService_Importer_Jex.js
 packages/lib/services/interop/InteropService_Importer_Md.test.js
@@ -1857,6 +1861,7 @@ packages/lib/services/rest/utils/readonlyProperties.js
 packages/lib/services/rest/utils/requestFields.js
 packages/lib/services/rest/utils/requestPaginationOptions.js
 packages/lib/services/search/SearchEngine.resources.test.js
+packages/lib/services/search/SearchEngine.semantic.test.js
 packages/lib/services/search/SearchEngine.test.js
 packages/lib/services/search/SearchEngine.js
 packages/lib/services/search/SearchEngineUtils.test.js
@@ -1937,6 +1942,7 @@ packages/lib/shim-init-node.js
 packages/lib/shim.js
 packages/lib/string-utils.test.js
 packages/lib/string-utils.js
+packages/lib/testing/ai/semanticSearch.js
 packages/lib/testing/dom-test-environment.js
 packages/lib/testing/plugins/createTestPlugin.js
 packages/lib/testing/share/makeMockShareInvitation.js
