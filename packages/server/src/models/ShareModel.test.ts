@@ -1,8 +1,10 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree, expectNotThrow, createNote, createFolder } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree, expectNotThrow, createNote, createFolder, expectHttpError } from '../utils/testing/testUtils';
 import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
-import { Change2, ChangeType, ShareType } from '../services/database/types';
+import { Change2, ChangeType, ShareType, ShareUserStatus } from '../services/database/types';
 import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept, updateItemShareId } from '../utils/testing/shareApiUtils';
 import { withWarningSilenced } from '@joplin/lib/testing/test-utils';
+import { AclAction } from './BaseModel';
+import { patchApi } from '../utils/testing/apiUtils';
 
 // Goes through the process of:
 // 1. Creating two users/sessions
@@ -511,5 +513,30 @@ describe('ShareModel', () => {
 		const note2Share = await models().share().shareNote(user1, '00000000000000000000000000000002', '', false);
 		const url = await models().share().linkedNoteShareUrl(share, '00000000000000000000000000000002');
 		expect(url).toContain(`/shares/${note2Share.id}`);
+	});
+
+	test('should allow deleting published note shares only from users with access to the share', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		const { user: user3, session: session3 } = await createUserAndSession(3);
+
+		const folderShare = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000002': null,
+			},
+		});
+		const noteShare = await models().share().shareNote(user2, '00000000000000000000000000000002', '', false);
+
+		await expectNotThrow(() => models().share().checkIfAllowed(user1, AclAction.Delete, noteShare));
+		await expectNotThrow(() => models().share().checkIfAllowed(user2, AclAction.Delete, noteShare));
+		await expectHttpError(() => models().share().checkIfAllowed(user3, AclAction.Delete, noteShare), 403);
+
+		// User 3 should be unable to unpublish notes before accepting the invitation
+		const shareUser3 = await inviteUserToShare(folderShare.share, session1.id, user3.email, false);
+		await expectHttpError(() => models().share().checkIfAllowed(user3, AclAction.Delete, noteShare), 403);
+
+		// After accepting the invitation, user 3 should be able to unpublish the item
+		await patchApi(session3.id, `share_users/${shareUser3.id}`, { status: ShareUserStatus.Accepted });
+		await expectNotThrow(() => models().share().checkIfAllowed(user3, AclAction.Delete, noteShare));
 	});
 });
