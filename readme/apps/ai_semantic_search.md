@@ -26,7 +26,7 @@ After the initial scan, new and edited notes are picked up within a few minutes.
 
 ## Using it
 
-When enabled, semantic search results are included in Joplin's built-in search UI. Semantic search results are mixed with the default [full-text search matches](./search.md).
+When enabled, semantic search results are included in Joplin's built-in search UI. Semantic search results are mixed with the default [full-text search matches](https://github.com/laurent22/joplin/blob/dev/readme/apps/search.md).
 
 Semantic search is also exposed to:
 
