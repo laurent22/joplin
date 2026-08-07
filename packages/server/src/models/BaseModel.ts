@@ -303,7 +303,9 @@ export default abstract class BaseModel<T> {
 		return { ...object };
 	}
 
-	public async toApiOutput(object: T | T[]): Promise<T | T[]> {
+	public async toApiOutput(object: T[]): Promise<T[]>;
+	public async toApiOutput(object: T): Promise<T>;
+	public async toApiOutput(object: T|T[]): Promise<T|T[]> {
 		if (Array.isArray(object)) {
 			const output: T[] = [];
 			for (let i = 0; i < object.length; i++) {

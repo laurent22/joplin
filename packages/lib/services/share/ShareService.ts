@@ -325,8 +325,7 @@ export default class ShareService {
 		const note = await Note.load(noteId);
 		if (!note) throw new Error(`No such note: ${noteId}`);
 
-		const shares = await this.refreshShares();
-		const noteShares = shares.filter(s => s.note_id === noteId);
+		const noteShares = await this.loadSharesByNote(noteId);
 
 		const promises: Promise<void>[] = [];
 
@@ -413,6 +412,15 @@ export default class ShareService {
 
 	public async deleteShare(shareId: string) {
 		await this.api().exec('DELETE', `api/shares/${shareId}`);
+	}
+
+	private async loadSharesByNote(noteId: string) {
+		const shares = await this.api().exec('GET', `api/shares?note=${noteId}`);
+		const items: StateShare[] = shares.items.filter(
+			// For compatibility with older server versions that don't support search
+			(i: StateShare) => i.type === ShareType.Note && i.note_id === noteId,
+		);
+		return items;
 	}
 
 	private async loadShares() {

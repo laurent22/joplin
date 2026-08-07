@@ -6,6 +6,7 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { AclAction } from '../../models/BaseModel';
+import isItemId from '@joplin/lib/models/utils/isItemId';
 
 interface ShareApiInput extends Share {
 	folder_id?: string;
@@ -124,12 +125,31 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
-	const ownedShares = (await ctx.joplin.models.share().toApiOutput(await ctx.joplin.models.share().sharesByUser(ctx.joplin.owner.id))) as Share[];
-	const participatedShares = (await ctx.joplin.models.share().toApiOutput(await ctx.joplin.models.share().participatedSharesByUser(ctx.joplin.owner.id)));
+	const parseFilter = () => {
+		const noteIdQuery = ctx.query.note;
+		if (typeof noteIdQuery !== 'string') return { noteId: null };
+		if (!isItemId(noteIdQuery)) throw new ErrorBadRequest('Invalid note ID');
+		return { noteId: noteIdQuery };
+	};
+
+	const filter = parseFilter();
+	let rawShares: Share[] = [];
+	if (filter.noteId) {
+		const item = await ctx.joplin.models.item().loadByJopId(ctx.joplin.owner.id, filter.noteId, { fields: ['id'] });
+		if (item) {
+			const shares = await ctx.joplin.models.share().byItemIds([item.id]);
+			rawShares.push(...shares.filter(s => s.type === ShareType.Note));
+		}
+	} else {
+		const ownedShares = await ctx.joplin.models.share().sharesByUser(ctx.joplin.owner.id);
+		const participatedShares = await ctx.joplin.models.share().participatedSharesByUser(ctx.joplin.owner.id);
+		rawShares = ownedShares.concat(participatedShares);
+	}
 
 	// Fake paginated results so that it can be added later on, if needed.
+	const shares = await ctx.joplin.models.share().toApiOutput(rawShares);
 	return {
-		items: ownedShares.concat(participatedShares).map(share => {
+		items: shares.map(share => {
 			return {
 				...share,
 				user: {
