@@ -197,6 +197,14 @@ describe('models/Note', () => {
 		expect(!!changedNote.is_todo).toBe(false);
 	}));
 
+	it('should still save a note after a save was rejected by validation', (async () => {
+		const note = await Note.save({ title: 'ok' });
+		await expect(Note.save({ id: note.id, title: `bad${String.fromCharCode(0)}title` }, { userSideValidation: true })).rejects.toThrow(/null byte/);
+		// Deadlocks on the note's save mutex if the rejected save above failed to release it.
+		const saved = await Note.save({ id: note.id, title: 'fixed' });
+		expect(saved.title).toBe('fixed');
+	}));
+
 	it('should serialize and unserialize without modifying data', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const testCases = [

@@ -26,12 +26,12 @@ After the initial scan, new and edited notes are picked up within a few minutes.
 
 ## Using it
 
-There is no dedicated "semantic search" box in Joplin's UI today. Semantic search is exposed in two ways:
+When enabled, semantic search results are included in Joplin's built-in search UI. Semantic search results are mixed with the default [full-text search matches](./search.md).
+
+Semantic search is also exposed to:
 
 - **Plugins** can call `joplin.ai.search()` to look up notes by meaning. The plugin's description tells you whether it uses this.
 - **External AI apps** (Claude Desktop, Cursor, etc.) can use it through the [MCP server](https://github.com/laurent22/joplin/blob/dev/readme/apps/ai_mcp.md), via the `semantic_search_notes` tool.
-
-If you want to try it directly, the MCP server is the easiest path.
 
 ## What it's good at (and what it isn't)
 
@@ -39,7 +39,7 @@ Semantic search works by turning text into a numerical representation of its **m
 
 - **Good for:** conceptual or paraphrased queries, natural-language questions, and finding notes that don't share the exact words you searched for ("the note about pet sitters for my dog").
 
-- **Weak for:** single-word and very short queries, and exact-token lookups such as names, IDs or error codes. A single word carries too little meaning to match reliably, so it tends to return unrelated results — sometimes with high scores. Use Joplin's regular keyword search for these.
+- **Weak for:** exact-token lookups such as names, IDs or error codes. A single word carries too little meaning to match reliably, so it tends to return unrelated results — sometimes with high scores. Use Joplin's regular keyword search for these.
 
 The two approaches are complementary: keyword search is best for exact words, semantic search for meaning. If you're a plugin author, don't route single-word or exact-match queries through `joplin.ai.search()` — combine it with keyword search instead.
 
@@ -48,6 +48,8 @@ The two approaches are complementary: keyword search is best for exact words, se
 If you change the embedding model — for example by switching providers — Joplin **wipes the index and rebuilds it**. Fingerprints from different models aren't comparable, so a clean rebuild is the only safe option. The indexer status panel shows what's happening.
 
 ## Platform support
+
+Semantic search requires Joplin >= v3.7 and isn't supported on all platforms:
 
 | Platform | Embeddings work? |
 |---|---|

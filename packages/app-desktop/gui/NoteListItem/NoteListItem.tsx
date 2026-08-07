@@ -15,11 +15,12 @@ import { _ } from '@joplin/lib/locale';
 import useRenderedNote from './utils/useRenderedNote';
 import { Dispatch } from 'redux';
 import getNoteElementIdFromJoplinId from './utils/getNoteElementIdFromJoplinId';
+import { HighlightedWord } from '@joplin/lib/reducer';
 
 interface NoteItemProps {
 	dragIndex: number;
 	flow: ItemFlow;
-	highlightedWords: string[];
+	highlightedWords: HighlightedWord[];
 	index: number;
 	isProvisional: boolean;
 	itemSize: Size;

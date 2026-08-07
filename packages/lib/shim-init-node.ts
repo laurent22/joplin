@@ -492,6 +492,19 @@ function shimInit(options: ShimInitOptions = null) {
 			}
 
 			return image.toDataURL();
+		} else if (shim.sharpEnabled()) {
+			let image = sharp(filePath);
+			const metadata = await image.metadata();
+
+			const maxDimensionIsWidth = metadata.width > metadata.height;
+			if (metadata.width > maxSize && maxDimensionIsWidth) {
+				image = image.resize({ width: maxSize });
+			} else if (metadata.height > maxSize) {
+				image = image.resize({ height: maxSize });
+			}
+
+			const base64 = (await image.png().toBuffer()).toString('base64');
+			return `data:image/png;base64,${base64}`;
 		} else {
 			throw new Error('Unsupported method');
 		}

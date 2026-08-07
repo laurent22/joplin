@@ -12,7 +12,7 @@ import { MasterKeyEntity } from './services/e2ee/types';
 import type { ProgressReport } from './Synchronizer';
 import type { SharedData } from './components/shared/note-screen-shared';
 
-interface SearchEntry {
+export interface SearchEntry {
 	id: string;
 	type_: number;
 	title: string;
@@ -21,7 +21,7 @@ interface SearchEntry {
 	parent_id?: string;
 }
 import { getListRendererIds } from './services/noteList/renderers';
-import { ProcessResultsRow } from './services/search/SearchEngine';
+import { ComplexTerm, ProcessResultsRow } from './services/search/SearchEngine';
 import { getDisplayParentId } from './services/trash';
 import Logger from '@joplin/utils/Logger';
 import { SettingsRecord } from './models/settings/types';
@@ -90,6 +90,8 @@ export interface StateLastDeletion {
 	timestamp: number;
 }
 
+export type HighlightedWord = ComplexTerm|string;
+
 export interface WindowState {
 	windowId: string;
 	notes: NoteEntity[];
@@ -112,7 +114,7 @@ export interface WindowState {
 	selectedItemType: string;
 	selectedSmartFilterId: string;
 
-	highlightedWords: string[];
+	highlightedWords: HighlightedWord[];
 
 	backwardHistoryNotes: NoteEntity[];
 	forwardHistoryNotes: NoteEntity[];
