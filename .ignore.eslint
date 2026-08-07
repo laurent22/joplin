@@ -1723,6 +1723,7 @@ packages/lib/services/interop/InteropService_Exporter_Raw.js
 packages/lib/services/interop/InteropService_Importer_Base.js
 packages/lib/services/interop/InteropService_Importer_Custom.js
 packages/lib/services/interop/InteropService_Importer_EnexToHtml.js
+packages/lib/services/interop/InteropService_Importer_EnexToMd.test.js
 packages/lib/services/interop/InteropService_Importer_EnexToMd.js
 packages/lib/services/interop/InteropService_Importer_Jex.js
 packages/lib/services/interop/InteropService_Importer_Md.test.js
