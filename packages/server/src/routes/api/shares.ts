@@ -122,6 +122,8 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 
 // This end points returns both the shares owned by the user, and those they
 // participate in.
+// By default, only published items owned by the user are returned. To access
+// published items owned by another user, query using the ?note=... filter.
 router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
@@ -132,22 +134,24 @@ router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
 		return { noteId: noteIdQuery };
 	};
 
+	const models = ctx.joplin.models;
+
 	const filter = parseFilter();
 	let rawShares: Share[] = [];
 	if (filter.noteId) {
-		const item = await ctx.joplin.models.item().loadByJopId(ctx.joplin.owner.id, filter.noteId, { fields: ['id'] });
+		const item = await models.item().loadByJopId(ctx.joplin.owner.id, filter.noteId, { fields: ['id'] });
 		if (item) {
-			const shares = await ctx.joplin.models.share().byItemIds([item.id]);
+			const shares = await models.share().byItemIds([item.id]);
 			rawShares.push(...shares.filter(s => s.type === ShareType.Note));
 		}
 	} else {
-		const ownedShares = await ctx.joplin.models.share().sharesByUser(ctx.joplin.owner.id);
-		const participatedShares = await ctx.joplin.models.share().participatedSharesByUser(ctx.joplin.owner.id);
+		const ownedShares = await models.share().sharesByUser(ctx.joplin.owner.id);
+		const participatedShares = await models.share().participatedSharesByUser(ctx.joplin.owner.id);
 		rawShares = ownedShares.concat(participatedShares);
 	}
 
 	// Fake paginated results so that it can be added later on, if needed.
-	const shares = await ctx.joplin.models.share().toApiOutput(rawShares);
+	const shares = await models.share().toApiOutput(rawShares);
 	return {
 		items: shares.map(share => {
 			return {

@@ -38,10 +38,11 @@ export default class ShareModel extends BaseModel<Share> {
 		}
 
 		if (action === AclAction.Delete) {
-			// Users can unpublish notes in shares that they have access to
+			// Users with access to a share can unpublish folders and notes contained within the share:
 			const isUnpublishingItemInShare = async () => {
 				if (resource.type !== ShareType.Note && resource.type !== ShareType.PublishedFolder) return false;
 				const joplinId = resource.type === ShareType.Note ? resource.note_id : resource.folder_id;
+
 				const item = await this.models().item().loadByJopId(user.id, joplinId, { fields: ['jop_share_id'] });
 				if (!item || !item.jop_share_id) return false;
 

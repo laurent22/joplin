@@ -515,7 +515,7 @@ describe('ShareModel', () => {
 		expect(url).toContain(`/shares/${note2Share.id}`);
 	});
 
-	test('should allow deleting published note shares only from users with access to the share', async () => {
+	test('should allow unpublishing notes only from users with access to the share', async () => {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
 		const { user: user3, session: session3 } = await createUserAndSession(3);
