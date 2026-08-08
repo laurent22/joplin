@@ -5,7 +5,7 @@ import ConflictNoteState from '../../models/ConflictNoteState';
 import loadConflictData, { ConflictDataStatus } from './loadConflictData';
 import { ConflictNoteStateEntity } from '../database/types';
 
-// The remote version stays as the original note, and the conflict note is the copy of the local version 
+// The remote version stays as the original note, and the conflict note is the copy of the local version
 const createConflictNote = async (localBody: string, remoteBody = '', localTitle = 'Title', remoteTitle = 'Title') => {
 	const original = await Note.save({ title: remoteTitle, body: remoteBody });
 	return Note.save({ title: localTitle, body: localBody, is_conflict: 1, conflict_original_id: original.id });
