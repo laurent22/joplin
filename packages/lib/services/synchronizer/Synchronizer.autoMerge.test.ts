@@ -106,6 +106,33 @@ describe('Synchronizer.autoMerge', () => {
 		const state = await ConflictNoteState.byNoteId(conflictNote.id);
 		expect(state.base_body).toBe(baseBody);
 		expect(state.remote_updated_time).toBe(resolved.updated_time);
+
+		// The merged changes must upload, or the other device never receives them
+		await synchronizerStart();
+		await switchClient(2);
+		await synchronizerStart();
+		expect((await Note.load(note.id)).body).toBe(resolved.body);
+	}));
+
+	it('should not update the note when the merge changed nothing on the remote side', (async () => {
+		// The title conflicts and the bodies are untouched, so the merge leaves the remote
+		// version exactly as it was and it doesn't need uploading again
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'Title', body: baseBody, parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		await Note.save({ id: note.id, title: 'Remote title' });
+		const remoteUpdatedTime = (await Note.load(note.id)).updated_time;
+		await synchronizerStart();
+
+		await switchClient(1);
+		await Note.save({ id: note.id, title: 'Local title' });
+		await synchronizerStart();
+
+		expect(await Note.conflictedNotes()).toHaveLength(1);
+		expect((await Note.load(note.id)).updated_time).toBe(remoteUpdatedTime);
 	}));
 
 	it('should create an unmerged conflict note when both sides change the same line with no non-conflicting changes', (async () => {

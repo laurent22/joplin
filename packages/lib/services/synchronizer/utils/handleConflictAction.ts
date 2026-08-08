@@ -21,6 +21,9 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 	// rebuilds the sync_items row and would otherwise wipe the link.
 	let createdConflictNoteId = '';
 
+	// Keep the server's own timestamp, before a partial merge moves it ahead
+	const remoteSyncedTime = remoteContent ? remoteContent.updated_time : 0;
+
 	logger.debug(`Handling conflict: ${action}`);
 	logger.debug('local:', local, 'remoteContent', remoteContent);
 	logger.debug('remoteExists:', remoteExists);
@@ -120,8 +123,18 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 			// Merge the non-conflicting changes into both sides before creating the
 			// conflict note, so they only differ where a real conflict remain
 			if (merge) {
+				const remoteNote = remoteContent as NoteEntity;
+				// Nothing was merged into the remote side, so it don't need uploading again
+				const remoteUnchanged = merge.resolvedCurrent.title === remoteNote.title && merge.resolvedCurrent.body === remoteNote.body;
+
 				local = { ...local, title: merge.resolvedLocal.title, body: merge.resolvedLocal.body } as NoteEntity;
-				remoteContent = { ...remoteContent, title: merge.resolvedCurrent.title, body: merge.resolvedCurrent.body } as NoteEntity;
+				remoteContent = {
+					...remoteNote,
+					title: merge.resolvedCurrent.title,
+					body: merge.resolvedCurrent.body,
+					// Ahead of the remote time so the merged changes upload as a local change
+					updated_time: remoteUnchanged ? remoteNote.updated_time : Math.max(time.unixMs(), remoteNote.updated_time + 1),
+				} as NoteEntity;
 			}
 
 			const conflictNote = await Note.createConflictNote(local, ItemChange.SOURCE_SYNC);
@@ -163,7 +176,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 
 		if (remoteExists) {
 			local = remoteContent;
-			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteContent.updated_time), remoteContent.updated_time);
+			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteSyncedTime), remoteSyncedTime);
 			await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 
 			// Link after the save above, which rebuilds the sync_items row.
