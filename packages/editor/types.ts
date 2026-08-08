@@ -224,6 +224,8 @@ export interface EditorSettings {
 	readOnly: boolean;
 	highlightActiveLine: boolean;
 
+	featureFlagRevealMarkdownOnMouseup: boolean;
+
 	indentWithTabs: boolean;
 
 	editorLabel: string;

@@ -23,6 +23,8 @@ const createEditorSettings = (themeId: number) => {
 		language: EditorLanguageType.Markdown,
 		themeData,
 
+		featureFlagRevealMarkdownOnMouseup: false,
+
 		indentWithTabs: true,
 		editorLabel: 'Markdown editor',
 		imageRenderingEnabled: false,

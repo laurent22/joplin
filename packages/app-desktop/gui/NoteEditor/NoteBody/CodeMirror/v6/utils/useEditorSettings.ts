@@ -28,6 +28,7 @@ const useEditorSettings = (props: EditorSettingsProps) => {
 		automatchBraces: state.settings['editor.autoMatchingBraces'],
 		autocompleteMarkup: state.settings['editor.autocompleteMarkup'],
 		spellcheckEnabled: state.settings['editor.spellcheckBeta'],
+		featureFlagRevealMarkdownOnMouseup: state.settings['featureFlag.editor.revealMarkdownOnMouseup'],
 	});
 	type SelectedSettings = ReturnType<typeof stateToSettings>;
 	const settings = useSelector<AppState, SelectedSettings>(stateToSettings, isDeepStrictEqual);
@@ -52,6 +53,7 @@ const useEditorSettings = (props: EditorSettingsProps) => {
 			tableEditingEnabled: settings.tableEditing,
 			imageRenderingEnabled: settings.imageRendering,
 			highlightActiveLine: settings.highlightActiveLine,
+			featureFlagRevealMarkdownOnMouseup: settings.featureFlagRevealMarkdownOnMouseup,
 			themeData: {
 				...props.baseTheme,
 				marginLeft: 0,

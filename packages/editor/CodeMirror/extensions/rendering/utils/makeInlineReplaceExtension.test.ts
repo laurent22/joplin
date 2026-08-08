@@ -5,6 +5,7 @@ import replaceBulletLists from '../replaceBulletLists';
 import replaceFormatCharacters from '../replaceFormatCharacters';
 import replaceInlineHtml from '../replaceInlineHtml';
 import replaceLinks from '../replaceLinks';
+import { revealOnMouseupFacet } from './makeInlineReplaceExtension';
 
 jest.retryTimes(2);
 
@@ -209,7 +210,7 @@ describe('makeInlineReplaceExtension', () => {
 			markdown,
 			EditorSelection.cursor(markdown.length),
 			expectedSyntaxTreeTags,
-			extensions,
+			[...extensions, revealOnMouseupFacet.of(true)],
 		);
 
 		try {
@@ -238,7 +239,7 @@ describe('makeInlineReplaceExtension', () => {
 			markdown,
 			EditorSelection.cursor(markdown.length),
 			expectedSyntaxTreeTags,
-			extensions,
+			[...extensions, revealOnMouseupFacet.of(true)],
 		);
 
 		try {

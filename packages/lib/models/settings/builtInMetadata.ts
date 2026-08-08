@@ -2352,6 +2352,17 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			isGlobal: true,
 		},
 
+		'featureFlag.editor.revealMarkdownOnMouseup': {
+			value: false,
+			public: true,
+			type: SettingItemType.Bool,
+			storage: SettingStorage.File,
+			appTypes: [AppType.Desktop, AppType.Mobile],
+			show: (settings) => settings['editor.inlineRendering'],
+			label: () => 'Editor: Reveal Markdown on mouse up',
+			isGlobal: true,
+		},
+
 		// 'featureFlag.syncAccurateTimestamps': {
 		// 	value: false,
 		// 	type: SettingItemType.Bool,

@@ -19,6 +19,7 @@ import renderTables from './extensions/rendering/renderTables';
 import { RenderedContentContext } from './extensions/rendering/types';
 import highlightActiveLineExtension from './extensions/highlightActiveLineExtension';
 import renderBlockImages from './extensions/rendering/renderBlockImages';
+import { revealOnMouseupFacet } from './extensions/rendering/utils/makeInlineReplaceExtension';
 
 const closingFencedBlock = StateField.define<boolean>({
 	create: () => false,
@@ -126,6 +127,10 @@ const configFromSettings = (settings: EditorSettings, context: RenderedContentCo
 
 	if (settings.highlightActiveLine) {
 		extensions.push(highlightActiveLineExtension());
+	}
+
+	if (settings.featureFlagRevealMarkdownOnMouseup) {
+		extensions.push(revealOnMouseupFacet.of(true));
 	}
 
 	return extensions;

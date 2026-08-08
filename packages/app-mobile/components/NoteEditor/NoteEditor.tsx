@@ -301,6 +301,8 @@ const useEditorSettings = (props: Props) => {
 		ignoreModifiers: false,
 		autocompleteMarkup: Setting.value('editor.autocompleteMarkup'),
 
+		featureFlagRevealMarkdownOnMouseup: Setting.value('featureFlag.editor.revealMarkdownOnMouseup'),
+
 		// For now, mobile CodeMirror uses its built-in focus toggle shortcut.
 		tabMovesFocus: false,
 		indentWithTabs: true,

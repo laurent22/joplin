@@ -4,7 +4,7 @@
 import { EditorView, Decoration, DecorationSet, WidgetType } from '@codemirror/view';
 import { ViewPlugin, ViewUpdate } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { EditorSelection, Range, SelectionRange, StateEffect, TransactionSpec } from '@codemirror/state';
+import { EditorSelection, Facet, Range, SelectionRange, StateEffect, TransactionSpec } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
 import { ReplacementExtension } from '../types';
 import nodeIntersectsSelection from './nodeIntersectsSelection';
@@ -41,6 +41,10 @@ const expandSelectionToFormattingCharacters = (decorations: DecorationSet, selec
 	return selection.anchor <= selection.head ? EditorSelection.single(from, to) : EditorSelection.single(to, from);
 };
 
+export const revealOnMouseupFacet = Facet.define<boolean, boolean>({
+	combine: values => values[0] ?? false,
+});
+
 export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
 	public decorations: DecorationSet = Decoration.set([]);
 	private mouseSelectionInProgress = false;
@@ -58,7 +62,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 
 	private onMouseDown = (event: MouseEvent) => {
 		if (event.button === 0) {
-			this.mouseSelectionInProgress = true;
+			this.mouseSelectionInProgress = this.view.state.facet(revealOnMouseupFacet);
 		}
 	};
 
