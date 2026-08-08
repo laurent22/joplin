@@ -4,8 +4,8 @@ import verifyBuild from './steps/verifyBuild';
 import verifyGitState from './steps/verifyGitState';
 import logger from './utils/logger';
 
-// Central command to run all the steps of the `npm run publish` flow
-async function publish() {
+// Central command to run all the steps of the `npm run submit` flow
+async function submit() {
 	logger.header('Starting Joplin Plugin Publication');
 
 	logger.step('Phase 1: Metadata & Build Verification');
@@ -24,4 +24,4 @@ async function publish() {
 	await submitPayload(metadata, commitHash, token);
 }
 
-void publish();
+void submit();

@@ -6,7 +6,7 @@
     "prepare": "npm run dist",
     "updateVersion": "webpack --env joplin-plugin-config=updateVersion",
     "update": "npm install -g generator-joplin && yo joplin --node-package-manager npm --update --force",
-    "publish": "tsc --project tsconfig.json && node ./dist/script/publish/index.js"
+    "submit": "tsc --project script/publish/tsconfig.json && node ./script/publish/dist/index.js"
   },
   "license": "MIT",
   "keywords": [
