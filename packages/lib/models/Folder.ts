@@ -781,19 +781,22 @@ export default class Folder extends BaseItem {
 	public static async updateAllShareIds(resourceService: ResourceService, activeShares: StateShare[]) {
 		await this.updateFolderShareIds(activeShares);
 		await this.updateNoteShareIds();
+		await this.updateResourceShareIds(resourceService);
 
+		await this.updateFolderPublishStatus_(activeShares);
+		// Don't update directly published notes to avoid unexpected conflicts
+		await this.updateNotePublicationStatus(activeShares, false);
+	}
+
+	private static async updateFolderPublishStatus_(activeShares: StateShare[]) {
 		const publishedFolderRootIds = activeShares
 			.filter(share => share.type === ShareType.PublishedFolder && !!share.folder_id)
 			.map(share => share.folder_id);
-		const directlyPublishedNoteIds = activeShares
-			.filter(share => share.type === ShareType.Note && !!share.note_id)
-			.map(share => share.note_id);
 		const publishedFolderIds = unique(publishedFolderRootIds.concat(
 			...(await Promise.all(publishedFolderRootIds.map(id => this.allChildrenFolders(id)))).map(folders => folders.map(f => f.id)),
 		));
 
 		const publishedFolderIdSet = new Set(publishedFolderIds);
-		const directlyPublishedNoteIdSet = new Set(directlyPublishedNoteIds);
 
 		if (publishedFolderIds.length) {
 			for (const folder of await this.all({ fields: ['id', 'is_shared'] })) {
@@ -801,29 +804,34 @@ export default class Folder extends BaseItem {
 				await this.updateShareStatus({ ...folder, type_: BaseModel.TYPE_FOLDER }, true);
 			}
 		}
+	}
 
-		const noteIsSharedSql = [
-			directlyPublishedNoteIds.length ? `id IN (${this.escapeIdsForSql(directlyPublishedNoteIds)})` : '',
-			publishedFolderIds.length ? `parent_id IN (${this.escapeIdsForSql(publishedFolderIds)})` : '',
-		].filter(v => !!v).join(' OR ');
+	public static async updateNotePublicationStatus(activeShares: StateShare[], includeDirectlyPublished: boolean) {
+		const directlyPublishedNoteIds = activeShares
+			.filter(share => share.type === ShareType.Note && !!share.note_id)
+			.map(share => share.note_id);
 
-		let notesToUpdate: NoteEntity[] = [];
-		if (noteIsSharedSql) {
-			notesToUpdate = await this.db().selectAll(`
-				SELECT id, parent_id, is_shared
-				FROM notes
-				WHERE is_shared = 0 AND (${noteIsSharedSql})
-			`);
-		}
+		const locallyUnpublishedNotesWithShares: NoteEntity[] = directlyPublishedNoteIds.length > 0 && includeDirectlyPublished ? (
+			await this.db().selectAll(`
+					SELECT id, parent_id, is_shared
+					FROM notes
+					WHERE is_shared = 0 AND id IN (${this.escapeIdsForSql(directlyPublishedNoteIds)})
+				`)
+		) : [];
+		const unpublishedNotesInPublishedFolders: NoteEntity[] = await this.db().selectAll(`
+			SELECT notes.id, notes.parent_id, notes.is_shared
+			FROM notes
+			JOIN folders ON notes.parent_id = folders.id
+			WHERE notes.is_shared = 0 AND folders.is_shared = 1
+		`);
 
-		for (const note of notesToUpdate) {
+		const notesToPublish = locallyUnpublishedNotesWithShares.concat(unpublishedNotesInPublishedFolders);
+		for (const note of notesToPublish) {
 			await this.updateShareStatus(
 				{ ...note, type_: BaseModel.TYPE_NOTE },
-				directlyPublishedNoteIdSet.has(note.id) || publishedFolderIdSet.has(note.parent_id),
+				true,
 			);
 		}
-
-		await this.updateResourceShareIds(resourceService);
 	}
 
 	// Clear the "share_id" property for the items that are associated with a
