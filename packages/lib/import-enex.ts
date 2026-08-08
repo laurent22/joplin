@@ -12,6 +12,7 @@ import { extractUrls as extractUrlsFromHtml } from '@joplin/utils/html';
 import { extractUrls as extractUrlsFromMarkdown } from '@joplin/utils/markdown';
 import moment from 'moment';
 import { wrapError } from './errorUtils';
+import markdownUtils from './markdownUtils';
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
 const md5 = require('md5');
 const { Base64Decode } = require('base64-stream');
@@ -337,7 +338,20 @@ export const restoreEnexNoteLinks = async (notes: AsyncIterable<SavedNote>, note
 
 			const matchingNoteIds = await noteTitlesToIds(link.title);
 			if (matchingNoteIds.length === 1) {
-				note.body = note.body.replace(link.url, `:/${matchingNoteIds[0]}`);
+				const noteId = matchingNoteIds[0];
+				// Escape brackets in the note title so they don't prematurely
+				// close the Markdown link (#15935). HTML output swaps the URL only.
+				const markdownLink = `[${link.title}](${link.url})`;
+				if (importOptions.outputFormat !== 'html' && note.body.includes(markdownLink)) {
+					// A replacer function is used so "$$" / "$&" etc. in the title are
+					// inserted literally — a plain string replacement would interpret them.
+					note.body = note.body.replace(
+						markdownLink,
+						() => `[${markdownUtils.escapeTitleText(link.title)}](:/${noteId})`,
+					);
+				} else {
+					note.body = note.body.replace(link.url, `:/${noteId}`);
+				}
 				noteChanged = true;
 			} else {
 				hasUnresolvedLink = true;

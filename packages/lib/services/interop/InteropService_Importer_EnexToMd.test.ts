@@ -54,4 +54,34 @@ describe('InteropService_Importer_EnexToMd', () => {
 		expect(notes[2].body).toContain(`[Test note](:/${notes[3].id})`);
 		expect(notes[4].body).toContain(`[Test](:/${notes[2].id})`);
 	});
+
+	it('should escape square brackets in note link text', async () => {
+		await importTestFile('links-brackets/');
+
+		const notes = await Note.all();
+		const linkerNote = notes.find(note => note.title === 'Linker note');
+		const targetNote = notes.find(note => note.title === 'simple note version [1]');
+
+		expect(targetNote).toBeTruthy();
+
+		// Brackets in the link text must be backslash-escaped so the inner "]"
+		// does not prematurely close the link. See #15935.
+		expect(linkerNote.body).toContain(`[simple note version \\[1\\]](:/${targetNote.id})`);
+		expect(linkerNote.body).not.toContain(`[simple note version [1]](:/${targetNote.id})`);
+	});
+
+	it('should not mangle dollar signs in note link text', async () => {
+		await importTestFile('links-dollar/');
+
+		const notes = await Note.all();
+		const linkerNote = notes.find(note => note.title === 'Linker note');
+		const targetNote = notes.find(note => note.title === 'Cost $$ total');
+
+		expect(targetNote).toBeTruthy();
+
+		// "$$" in the title must be preserved verbatim. A plain string replacement
+		// would interpret it and collapse it to a single "$".
+		expect(linkerNote.body).toContain(`[Cost $$ total](:/${targetNote.id})`);
+		expect(linkerNote.body).not.toContain(`[Cost $ total](:/${targetNote.id})`);
+	});
 });

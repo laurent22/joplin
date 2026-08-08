@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE en-export SYSTEM "http://xml.evernote.com/pub/evernote-export4.dtd">
+<en-export export-date="20260808T000000Z" application="Evernote" version="11.28.2">
+  <note>
+    <title>Linker note</title>
+    <created>20260805T185318Z</created>
+    <updated>20260805T200333Z</updated>
+    <note-attributes>
+      <author>author</author>
+    </note-attributes>
+    <content>
+      <![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><div style="display:none;"> </div><div>Link to a note whose title contains square brackets: <a type="inline-richlink" rev="{&quot;isCached&quot;:false}" href="https://share.evernote.com/note/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee">simple note version [1]</a></div></en-note>      ]]>
+    </content>
+  </note>
+  <note>
+    <title>simple note version [1]</title>
+    <created>20260805T200313Z</created>
+    <updated>20260805T200320Z</updated>
+    <note-attributes>
+      <author>author</author>
+    </note-attributes>
+    <content>
+      <![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd"><en-note><div style="display:none;"> </div><div>Target note body.</div></en-note>      ]]>
+    </content>
+  </note>
+</en-export>
