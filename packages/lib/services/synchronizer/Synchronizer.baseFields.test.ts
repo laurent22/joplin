@@ -86,6 +86,25 @@ describe('Synchronizer.baseFields', () => {
 		expect(state.remote_updated_time).toBeGreaterThan(0);
 	}));
 
+	it('should delete the conflict state when its conflict note is deleted', (async () => {
+		const note = await Note.save({ title: 'base title', body: 'base body' });
+		await synchronizerStart();
+		await switchClient(2);
+		await synchronizerStart();
+		await switchClient(1);
+
+		await makeConflictOnClient1(note.id, 'remote body', 'local body');
+
+		const conflictNote = (await Note.conflictedNotes())[0];
+		expect(await ConflictNoteState.byNoteId(conflictNote.id)).toBeTruthy();
+
+		await Note.delete(conflictNote.id, { toTrash: false });
+		expect(await ConflictNoteState.byNoteId(conflictNote.id)).toBeFalsy();
+
+		// The original note keeps working, it has no state row of its own
+		expect(await Note.load(note.id)).toBeTruthy();
+	}));
+
 	it('should not overwrite the base snapshot during a conflict', (async () => {
 		const note = await Note.save({ title: 'title', body: 'original base' });
 		await synchronizerStart();
