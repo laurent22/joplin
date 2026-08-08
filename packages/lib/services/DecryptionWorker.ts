@@ -48,6 +48,9 @@ export default class DecryptionWorker {
 	private maxDecryptionAttempts_ = 2;
 	private taskQueue_: AsyncActionQueue = new AsyncActionQueue();
 	private encryptionService_: EncryptionService = null;
+	// IDs of items that are currently being decrypted on demand (via decryptItem()).
+	// The main decryption loop skips these items to avoid decrypting them twice.
+	private decryptingItemIds_: Set<string> = new Set();
 
 	public constructor() {
 		this.state_ = 'idle';
@@ -204,6 +207,14 @@ export default class DecryptionWorker {
 
 					const ItemClass = BaseItem.itemClass(item);
 
+					// The item might be being decrypted on demand (or have just been
+					// decrypted that way), so skip it - the on-demand decryption is
+					// responsible for updating the UI in that case.
+					if (this.decryptingItemIds_.has(item.id)) {
+						excludedIds.push(item.id);
+						continue;
+					}
+
 					this.dispatchReport({
 						itemIndex: i,
 						itemCount: items.length,
@@ -323,6 +334,52 @@ export default class DecryptionWorker {
 		}
 
 		return finalReport;
+	}
+
+	// Decrypt a single item immediately, without waiting for the whole decryption
+	// queue to be processed. This is used for example when the user selects an
+	// encrypted note and wants to view it right away.
+	//
+	// Returns true if the item has been decrypted, false otherwise - for example if
+	// the item doesn't exist, is not encrypted, is already being decrypted, or if a
+	// master key needs to be loaded first (in which case a MASTERKEY_ADD_NOT_LOADED
+	// action is dispatched, so that the UI can ask the user to enter the password).
+	public async decryptItem(itemId: string): Promise<boolean> {
+		// Add the item to the set before any await so that concurrent calls for the
+		// same item are rejected right away instead of both proceeding to decrypt.
+		if (this.decryptingItemIds_.has(itemId)) return false;
+		this.decryptingItemIds_.add(itemId);
+
+		try {
+			const item = await BaseItem.loadItemById(itemId);
+			if (!item || item.encryption_applied !== 1) return false;
+
+			const ItemClass = BaseItem.itemClass(item);
+			const decryptedItem = await ItemClass.decrypt(item);
+
+			// Keep the events in sync with the ones emitted by the main decryption
+			// loop in start_().
+			if (decryptedItem.type_ === Resource.modelType() && !!decryptedItem.encryption_blob_encrypted) {
+				this.eventEmitter_.emit('resourceMetadataButNotBlobDecrypted', { id: decryptedItem.id });
+			} else if (decryptedItem.type_ === Resource.modelType() && !decryptedItem.encryption_blob_encrypted) {
+				this.eventEmitter_.emit('resourceDecrypted', { id: decryptedItem.id });
+			}
+
+			return true;
+		} catch (error) {
+			if (error.code === 'masterKeyNotLoaded' && error.masterKeyId) {
+				this.dispatch({
+					type: 'MASTERKEY_ADD_NOT_LOADED',
+					id: error.masterKeyId,
+				});
+			} else {
+				this.logger().warn(`DecryptionWorker: could not decrypt item on demand: ${itemId}`, error);
+			}
+
+			return false;
+		} finally {
+			this.decryptingItemIds_.delete(itemId);
+		}
 	}
 
 	public async start(options: DecryptionWorkerStartOptions = {}): Promise<DecryptionResult> {

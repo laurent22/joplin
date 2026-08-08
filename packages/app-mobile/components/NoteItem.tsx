@@ -128,7 +128,6 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 		// Suppress touch release triggers during interval, to avoid conflicting with right click event handling on web
 		if (Date.now() < suppressPressUntilRef.current) return;
 		if (!props.note) return;
-		if (props.note.encryption_applied) return;
 
 		if (props.noteSelectionEnabled) {
 			props.dispatch({

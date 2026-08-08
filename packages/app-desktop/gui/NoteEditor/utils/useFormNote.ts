@@ -333,6 +333,13 @@ export default function useFormNote(dependencies: HookDependencies) {
 			if (!n) throw new Error(`Cannot find note with ID: ${noteId}`);
 			logger.debug('Loaded note:', n);
 
+			// If the note is still encrypted, decrypt it on demand so that it can be
+			// displayed without waiting for the whole decryption queue to be processed.
+			// The ItemChange event emitted on decryption triggers a refresh of the note.
+			if (n.encryption_applied) {
+				void DecryptionWorker.instance().decryptItem(n.id);
+			}
+
 			await onBeforeLoad({ formNote });
 
 			const newFormNote = await initNoteState(n, true);

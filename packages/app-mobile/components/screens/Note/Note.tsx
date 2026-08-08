@@ -32,6 +32,7 @@ import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { BaseScreenComponent } from '../../base-screen';
 import { themeStyle, editorFont } from '../../global-style';
 import shared, { BaseNoteScreenComponent, Props as BaseProps } from '@joplin/lib/components/shared/note-screen-shared';
+import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import SelectDateTimeDialog from '../../SelectDateTimeDialog';
 import ShareExtension from '../../../utils/ShareExtension.js';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
@@ -596,6 +597,10 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 		await shared.initState(this);
 
+		// If the note is still encrypted, decrypt it on demand so that it can be
+		// displayed without waiting for the whole decryption queue to be processed.
+		void this.decryptNoteOnDemand();
+
 		this.undoRedoService_ = new UndoRedoService();
 		this.undoRedoService_.on('stackChange', this.undoRedoService_stackChange);
 
@@ -767,6 +772,16 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	private async reloadNoteAndUpdateRefreshKey() {
 		await shared.reloadNote(this);
 		this.refreshKey = this.props.editorNoteReloadTimeRequest;
+	}
+
+	private async decryptNoteOnDemand() {
+		const note = this.state.note;
+		if (!note?.id || !note.encryption_applied) return;
+
+		const wasDecrypted = await DecryptionWorker.instance().decryptItem(note.id);
+		if (wasDecrypted) {
+			this.props.dispatch({ type: 'EDITOR_NOTE_NEEDS_RELOAD' });
+		}
 	}
 
 	private title_changeText(text: string) {
