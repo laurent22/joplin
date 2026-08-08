@@ -24,4 +24,8 @@ async function submit() {
 	await submitPayload(metadata, commitHash, token);
 }
 
-void submit();
+void submit().catch((error: unknown) => {
+	const message = error instanceof Error ? error.message : String(error);
+	logger.error(`Submission failed: ${message}`);
+	process.exitCode = 1;
+});
