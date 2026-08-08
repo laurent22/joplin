@@ -51,9 +51,10 @@ const normaliseLine = (line: string): string => {
 };
 
 // Lines are compared normalised so invisible whitespace can't cause a false
-// conflict, but the originals are what get written back
+// conflict, but the originals are what get written back. All three line endings are
+// split on, otherwise a note written on Windows keeps a \r on every line.
 const splitLines = (text: string) => {
-	const original = text.split('\n');
+	const original = text.split(/\r\n|\n|\r/);
 	return { original, normalised: original.map(normaliseLine) };
 };
 

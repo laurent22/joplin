@@ -92,6 +92,17 @@ describe('autoMerge', () => {
 		expect(result.mergedText).toBe(`${firstLine}\nBeta edited\n\nGamma\n\nDelta edited`);
 	});
 
+	test('should merge a note written with Windows line endings', () => {
+		// Splitting on \n alone would leave a \r on every line, so the trailing space
+		// below would never be normalised and both sides would look changed
+		const base = 'Alpha \r\nBeta\r\n\r\nGamma';
+		const local = 'Alpha \r\nBeta edited\r\n\r\nGamma';
+		const remote = 'Alpha \r\nBeta\r\n\r\nGamma edited';
+		const result = autoMerge(base, local, remote);
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
+		expect(result.mergedText).toBe('Alpha \nBeta edited\n\nGamma edited');
+	});
+
 	test('with empty base should mark only the differing line as a conflict', () => {
 		const result = autoMerge('', 'my version', 'their version');
 		expect(result.sections.length).toBe(1);
