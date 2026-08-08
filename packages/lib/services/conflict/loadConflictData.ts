@@ -42,14 +42,19 @@ export default async (noteId: string): Promise<ConflictData> => {
 	const state = await ConflictNoteState.byNoteId(noteId);
 	if (!state) return unavailable();
 
+	// The remote version stays as the original note.
+	const remoteNote = note.conflict_original_id ? await Note.load(note.conflict_original_id) : null;
+	if (!remoteNote) return unavailable();
+	if (remoteNote.encryption_applied || remoteNote.is_locked) return unavailable();
+
 	const localBody = note.body ?? '';
-	const remoteBody = state.remote_body ?? '';
+	const remoteBody = remoteNote.body ?? '';
 	const baseBody = state.base_body ?? '';
 
 	const merged = autoMerge(baseBody, localBody, remoteBody);
 
 	const localTitle = note.title ?? '';
-	const remoteTitle = state.remote_title ?? '';
+	const remoteTitle = remoteNote.title ?? '';
 
 	return {
 		status: ConflictDataStatus.Ok,

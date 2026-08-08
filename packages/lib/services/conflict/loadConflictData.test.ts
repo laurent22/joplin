@@ -5,8 +5,10 @@ import ConflictNoteState from '../../models/ConflictNoteState';
 import loadConflictData, { ConflictDataStatus } from './loadConflictData';
 import { ConflictNoteStateEntity } from '../database/types';
 
-const createConflictNote = async (body: string, title = 'Title') => {
-	return Note.save({ title, body, is_conflict: 1 });
+// The remote version stays as the original note, and the conflict note is the copy of the local version 
+const createConflictNote = async (localBody: string, remoteBody = '', localTitle = 'Title', remoteTitle = 'Title') => {
+	const original = await Note.save({ title: remoteTitle, body: remoteBody });
+	return Note.save({ title: localTitle, body: localBody, is_conflict: 1, conflict_original_id: original.id });
 };
 
 const saveState = async (noteId: string, state: Partial<ConflictNoteStateEntity>) => {
@@ -14,8 +16,6 @@ const saveState = async (noteId: string, state: Partial<ConflictNoteStateEntity>
 		note_id: noteId,
 		base_body: '',
 		base_title: '',
-		remote_body: '',
-		remote_title: '',
 		remote_updated_time: 0,
 		...state,
 	});
@@ -30,11 +30,8 @@ describe('loadConflictData', () => {
 	});
 
 	test('should three-way merge a note that has a base', async () => {
-		const note = await createConflictNote('one\ntwo\nthree');
-		await saveState(note.id, {
-			base_body: 'one\ntwo\nthree',
-			remote_body: 'one\ntwo\nTHREE',
-		});
+		const note = await createConflictNote('one\ntwo\nthree', 'one\ntwo\nTHREE');
+		await saveState(note.id, { base_body: 'one\ntwo\nthree' });
 
 		const data = await loadConflictData(note.id);
 
@@ -44,11 +41,8 @@ describe('loadConflictData', () => {
 	});
 
 	test('should report a conflict section when both sides changed the same line', async () => {
-		const note = await createConflictNote('one\nMINE');
-		await saveState(note.id, {
-			base_body: 'one\ntwo',
-			remote_body: 'one\nTHEIRS',
-		});
+		const note = await createConflictNote('one\nMINE', 'one\nTHEIRS');
+		await saveState(note.id, { base_body: 'one\ntwo' });
 
 		const data = await loadConflictData(note.id);
 
@@ -60,8 +54,8 @@ describe('loadConflictData', () => {
 	});
 
 	test('should fall back to a two-way diff when there is no base', async () => {
-		const note = await createConflictNote('same\nMINE');
-		await saveState(note.id, { base_body: '', remote_body: 'same\nTHEIRS' });
+		const note = await createConflictNote('same\nMINE', 'same\nTHEIRS');
+		await saveState(note.id, { base_body: '' });
 
 		const data = await loadConflictData(note.id);
 
@@ -72,8 +66,8 @@ describe('loadConflictData', () => {
 	});
 
 	test('should report the title versions and whether they differ', async () => {
-		const note = await createConflictNote('body', 'My title');
-		await saveState(note.id, { remote_body: 'body', remote_title: 'Their title' });
+		const note = await createConflictNote('body', 'body', 'My title', 'Their title');
+		await saveState(note.id, {});
 
 		const data = await loadConflictData(note.id);
 
@@ -83,8 +77,8 @@ describe('loadConflictData', () => {
 	});
 
 	test('should not flag a title conflict when both titles match', async () => {
-		const note = await createConflictNote('body', 'Same');
-		await saveState(note.id, { remote_body: 'body', remote_title: 'Same' });
+		const note = await createConflictNote('body', 'body', 'Same', 'Same');
+		await saveState(note.id, {});
 
 		const data = await loadConflictData(note.id);
 
@@ -92,13 +86,13 @@ describe('loadConflictData', () => {
 	});
 
 	test('should recompute on demand rather than reading stored sections', async () => {
-		const note = await createConflictNote('one\ntwo');
-		await saveState(note.id, { base_body: 'one\ntwo', remote_body: 'one\ntwo' });
+		const note = await createConflictNote('one\ntwo', 'one\ntwo');
+		await saveState(note.id, { base_body: 'one\ntwo' });
 
 		const before = await loadConflictData(note.id);
 		expect(before.sections.every(s => s.type === 'unchanged')).toBe(true);
 
-		await saveState(note.id, { base_body: 'one\ntwo', remote_body: 'one\nTWO' });
+		await Note.save({ id: note.conflict_original_id, body: 'one\nTWO' });
 
 		const after = await loadConflictData(note.id);
 		expect(after.sections.some(s => s.type === 'auto-merged')).toBe(true);
@@ -106,8 +100,8 @@ describe('loadConflictData', () => {
 
 	test('should be unavailable when the feature flag is off', async () => {
 		Setting.setValue('featureFlag.conflictResolution', false);
-		const note = await createConflictNote('one\ntwo');
-		await saveState(note.id, { base_body: 'one\ntwo', remote_body: 'one\nTWO' });
+		const note = await createConflictNote('one\ntwo', 'one\nTWO');
+		await saveState(note.id, { base_body: 'one\ntwo' });
 
 		const data = await loadConflictData(note.id);
 
@@ -134,9 +128,9 @@ describe('loadConflictData', () => {
 		['encrypted', { encryption_applied: 1 }],
 		['locked', { is_locked: 1 }],
 	])('should be unavailable when the note is %s', async (_label, fields) => {
-		const note = await createConflictNote('body');
+		const note = await createConflictNote('body', 'other');
 		await Note.save({ id: note.id, ...fields });
-		await saveState(note.id, { base_body: 'body', remote_body: 'other' });
+		await saveState(note.id, { base_body: 'body' });
 
 		const data = await loadConflictData(note.id);
 
