@@ -90,9 +90,13 @@ const replaceCheckboxes = [
 		},
 	}),
 	EditorView.domEventHandlers({
-		mousedown: (event) => {
+		mousedown: (event, view) => {
 			const target = event.target as Element;
 			if (target.nodeName === 'INPUT' && target.parentElement?.classList?.contains(checkboxClassName)) {
+				view.dispatch({
+					selection: { anchor: view.state.doc.lineAt(view.posAtDOM(target.parentElement)).from },
+					userEvent: 'select.checkbox',
+				});
 				// Let the checkbox handle the event
 				return true;
 			}
@@ -110,6 +114,7 @@ const replaceCheckboxes = [
 				const rangeFrom = listMarker ? listMarker.from : node.from;
 				const rangeTo = node.to;
 
+				if (selection.empty && selection.from === rangeFrom) return false;
 				const rangeContains = (point: number) => point >= rangeFrom && point <= rangeTo;
 				const selectionContains = (point: number) => point >= selection.from && point <= selection.to;
 

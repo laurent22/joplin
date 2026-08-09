@@ -127,7 +127,8 @@ const createEditor = (
 	};
 
 	const notifySelectionChange = (viewUpdate: ViewUpdate) => {
-		if (!viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
+		const isCheckboxSelection = viewUpdate.transactions.some(transaction => transaction.isUserEvent('select.checkbox'));
+		if (!viewUpdate.state.selection.eq(viewUpdate.startState.selection) && !isCheckboxSelection) {
 			const mainRange = viewUpdate.state.selection.main;
 			const event: SelectionRangeChangeEvent = {
 				kind: EditorEventType.SelectionRangeChange,
