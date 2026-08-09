@@ -587,7 +587,11 @@ async function basicDelta(path: string, getDirStatFn: (path: string)=> ItemStat[
 		} else {
 			if (stat.updated_time < context.timestamp) {
 				updateReport.older++;
-				continue;
+				if (itemIds.includes(itemId)) {
+					// Only ignore items which already exist, to allow items to be automatically re-downloaded if they are deleted by the sync,
+					// due to the stat temporarily reporting existing items as missing, which has been found to happen on some sync targets
+					continue;
+				}
 			}
 
 			// Special case for items that exactly match the timestamp
