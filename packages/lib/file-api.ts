@@ -608,7 +608,9 @@ async function basicDelta(path: string, getDirStatFn: (path: string)=> ItemStat[
 				updateReport.newer++;
 			}
 
-			newContext.filesAtTimestamp.push(stat.path);
+			if (stat.updated_time >= context.timestamp) {
+				newContext.filesAtTimestamp.push(stat.path);
+			}
 			output.push(stat);
 		}
 
