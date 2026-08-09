@@ -61,6 +61,12 @@ describe('readOnly', () => {
 		expect(checkReadOnly(ModelType.Folder, folder as ItemSlice)).toBe(true);
 	});
 
+	test('should treat a note without a deleted_time property as not read-only', async () => {
+		const oldNote = { id: '3c8ad8a9d33142d6b47717ae8e825df3', share_id: '' } as ItemSlice;
+		expect(() => checkReadOnly(ModelType.Note, oldNote)).not.toThrow();
+		expect(checkReadOnly(ModelType.Note, oldNote)).toBe(false);
+	});
+
 	test('should support checking if resources are not read-only', async () => {
 		await createTestResource();
 		const resource = (await Resource.all())[0];

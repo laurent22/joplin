@@ -1,4 +1,4 @@
-import { getDisplayParentId, getTrashFolderId } from '.';
+import { getDisplayParentId, getTrashFolderId, itemIsInTrash } from '.';
 import { ModelType } from '../../BaseModel';
 import Folder from '../../models/Folder';
 
@@ -68,5 +68,11 @@ describe('services/trash', () => {
 		const defaultProps = { type_: ModelType.Folder };
 		const actual = getDisplayParentId({ ...defaultProps, ...item }, { ...defaultProps, ...itemParent });
 		expect(actual).toBe(expected);
+	});
+
+	test('should not throw for an item without a deleted_time property', () => {
+		const oldNote = { id: '3c8ad8a9d33142d6b47717ae8e825df3' };
+		expect(() => itemIsInTrash(oldNote)).not.toThrow();
+		expect(itemIsInTrash(oldNote)).toBe(false);
 	});
 });
