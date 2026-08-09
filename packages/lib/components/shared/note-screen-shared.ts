@@ -298,7 +298,15 @@ shared.isModified = function(comp: BaseNoteScreenComponent) {
 shared.reloadNote = async (comp: BaseNoteScreenComponent, useDefaultEditorState = false) => {
 	const isProvisionalNote = comp.props.provisionalNoteIds.includes(comp.props.noteId);
 
-	const note = await Note.load(comp.props.noteId);
+	let note = await Note.load(comp.props.noteId);
+	if (note.encryption_cipher_text) {
+		try {
+			note = await Note.decrypt(note);
+		} catch (error) {
+			reg.logger().info(`Could not decrypt note ${note.id}, note could not be refreshed:`, error.message);
+			note = null; // fall into the non existent note handling
+		}
+	}
 	let mode = comp.state.mode;
 
 	if (useDefaultEditorState) {
