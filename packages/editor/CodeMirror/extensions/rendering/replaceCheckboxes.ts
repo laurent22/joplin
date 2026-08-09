@@ -38,7 +38,12 @@ class CheckboxWidget extends WidgetType {
 		container.appendChild(checkbox);
 
 		checkbox.oninput = () => {
-			toggleCheckboxAt(view.posAtDOM(container))(view);
+			const checkboxPosition = view.posAtDOM(container);
+			view.dispatch({
+				selection: { anchor: view.state.doc.lineAt(checkboxPosition).from },
+				userEvent: 'select.checkbox',
+			});
+			toggleCheckboxAt(checkboxPosition)(view);
 		};
 
 		this.applyContainerClasses(container);
@@ -90,13 +95,9 @@ const replaceCheckboxes = [
 		},
 	}),
 	EditorView.domEventHandlers({
-		mousedown: (event, view) => {
+		mousedown: (event) => {
 			const target = event.target as Element;
 			if (target.nodeName === 'INPUT' && target.parentElement?.classList?.contains(checkboxClassName)) {
-				view.dispatch({
-					selection: { anchor: view.state.doc.lineAt(view.posAtDOM(target.parentElement)).from },
-					userEvent: 'select.checkbox',
-				});
 				// Let the checkbox handle the event
 				return true;
 			}
