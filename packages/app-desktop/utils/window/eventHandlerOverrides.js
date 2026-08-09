@@ -19,5 +19,10 @@ document.addEventListener('click', (event) => {
 	// https://github.com/facebook/react/issues/13477#issuecomment-489274045
 	if (['LABEL', 'INPUT'].includes(event.target.nodeName)) return;
 
+	// Do not prevent default click events on TinyMCE elements (like dialog buttons, toolbars, menus, etc.)
+	// because preventing default behavior breaks focus transitions/selection inside modeless dialogs
+	// (such as the searchreplace find box).
+	if (typeof event.target.closest === 'function' && event.target.closest('.tox')) return;
+
 	event.preventDefault();
 });

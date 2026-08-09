@@ -687,6 +687,7 @@ packages/app-desktop/utils/layout/layoutKeyToLabel.js
 packages/app-desktop/utils/restartInSafeModeFromMain.test.js
 packages/app-desktop/utils/restartInSafeModeFromMain.js
 packages/app-desktop/utils/sourceMapSetup.js
+packages/app-desktop/utils/window/eventHandlerOverrides.test.js
 packages/app-desktop/utils/window/types.js
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/commands/dismissPluginPanels.js
