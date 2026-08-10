@@ -12618,7 +12618,7 @@ __metadata:
     "@testing-library/react-native": "npm:13.2.0"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.130"
+    "@types/node": "npm:22.19.0"
     "@types/react": "npm:19.1.10"
     "@types/react-redux": "npm:7.1.34"
     "@types/serviceworker": "npm:0.0.197"
@@ -12940,7 +12940,7 @@ __metadata:
     tesseract.js: "npm:7.0.0"
     typescript: "npm:5.9.3"
     uglifycss: "npm:0.0.29"
-    undici: "patch:undici@npm%3A7.16.0#~/.yarn/patches/undici-npm-7.16.0-f6b1c9157f.patch"
+    undici: "npm:8.10.0"
     url-parse: "npm:1.5.10"
     uuid: "npm:11.1.1"
     word-wrap: "npm:1.2.5"
@@ -13104,7 +13104,7 @@ __metadata:
     "@types/koa": "npm:2.15.0"
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
-    "@types/node": "npm:18.19.130"
+    "@types/node": "npm:22.19.0"
     "@types/nodemailer": "npm:6.4.23"
     "@types/qrcode": "npm:1.5.6"
     "@types/uuid": "npm:11.0.0"
@@ -19168,15 +19168,6 @@ __metadata:
   version: 16.11.11
   resolution: "@types/node@npm:16.11.11"
   checksum: 10/d894b8ebc3d755ec51c23d40fa2174b2143f4f1709907eb68d8c838d446f27bf6b279aac6d0cc93574ed14510c4a2f077fbafe99b6427bd0c532db0340d4913b
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:18.19.130":
-  version: 18.19.130
-  resolution: "@types/node@npm:18.19.130"
-  dependencies:
-    undici-types: "npm:~5.26.4"
-  checksum: 10/ebb85c6edcec78df926de27d828ecbeb1b3d77c165ceef95bfc26e171edbc1924245db4eb2d7d6230206fe6b1a1f7665714fe1c70739e9f5980d8ce31af6ef82
   languageName: node
   linkType: hard
 
@@ -38731,7 +38722,7 @@ __metadata:
     "@joplin/utils": "npm:~3.7"
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
-    "@types/node": "npm:18.19.130"
+    "@types/node": "npm:22.19.0"
     "@types/proper-lockfile": "npm:^4.1.2"
     aws-sdk: "npm:2.1340.0"
     chalk: "npm:4.1.2"
@@ -57808,13 +57799,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~5.26.4":
-  version: 5.26.5
-  resolution: "undici-types@npm:5.26.5"
-  checksum: 10/0097779d94bc0fd26f0418b3a05472410408877279141ded2bd449167be1aed7ea5b76f756562cb3586a07f251b90799bab22d9019ceba49c037c76445f7cddd
-  languageName: node
-  linkType: hard
-
 "undici-types@npm:~6.21.0":
   version: 6.21.0
   resolution: "undici-types@npm:6.21.0"
@@ -57829,10 +57813,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:7.16.0":
-  version: 7.16.0
-  resolution: "undici@npm:7.16.0"
-  checksum: 10/2bb71672b23d3dc0f56f1b7fb6c936e4487a350db46eaafc03f2f9107f99cdf8e51ecdd32e589e2381ef47a64b6369cfb31f328b2c3ea663023aa47bc5258b9e
+"undici@npm:8.10.0":
+  version: 8.10.0
+  resolution: "undici@npm:8.10.0"
+  checksum: 10/254219966d4a2fb110f565ffe73131caa82e949f207b9dd88930ebc23dfb6561db72ca187391cbd408ceeba7c647cb47d4110e8ae00df44c0c66e8a21e091dc0
   languageName: node
   linkType: hard
 
@@ -57854,13 +57838,6 @@ __metadata:
   version: 7.26.0
   resolution: "undici@npm:7.26.0"
   checksum: 10/c55b8f8e378dce6e645853faf0834d66b9f470c6ee1430c6e2b7971d831de36081f7e2e21ac1fc11297657d7c856241b0bf746b2a24f1277f8d156df9c181ba7
-  languageName: node
-  linkType: hard
-
-"undici@patch:undici@npm%3A7.16.0#~/.yarn/patches/undici-npm-7.16.0-f6b1c9157f.patch":
-  version: 7.16.0
-  resolution: "undici@patch:undici@npm%3A7.16.0#~/.yarn/patches/undici-npm-7.16.0-f6b1c9157f.patch::version=7.16.0&hash=26f548"
-  checksum: 10/39798bca08591e5afc30a3201db9617c1c07388d317f9e193d6e196bd54ccf7959a186a12fc82a0ae00911d0f012437d9cd181fd9b69eb3aca6e2667fc0f26f4
   languageName: node
   linkType: hard
 
