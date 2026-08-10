@@ -619,6 +619,8 @@ export default class Note extends BaseItem {
 			FROM notes
 			JOIN folders ON notes.parent_id = folders.id
 			WHERE notes.is_shared = 0 AND folders.is_shared = 1
+				AND notes.is_conflict = 0
+				AND notes.deleted_time = 0
 		`);
 
 		const notesToPublish = unpublishedNotesInPublishedFolders.concat(await loadUnpublishedWithDirectShare());
