@@ -27,7 +27,7 @@ describe('models/Folder.publishing', () => {
 		await switchClient(1);
 	});
 
-	it('should set is_shared=1 for descendants of a published folder', async () => {
+	it('should set is_shared=1 on descendants of a published folder', async () => {
 		const root = await createFolderTree('', [
 			{
 				title: 'root',
