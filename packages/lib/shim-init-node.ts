@@ -22,7 +22,7 @@ import { cpus } from 'os';
 import { pathToFileURL } from 'url';
 // Use fetch from undici rather than the built-in fetch: Undici's fetch provides
 // more information when fetch fails.
-import { fetch } from 'undici';
+import { fetch, FormData } from 'undici';
 import tls from 'tls';
 import type PdfJs from './utils/types/pdfJs';
 import { _ } from './locale';
@@ -158,7 +158,7 @@ function shimInit(options: ShimInitOptions = null) {
 	};
 	shim.FileApiDriverLocal = FileApiDriverLocal;
 	shim.Geolocation = GeolocationNode;
-	shim.FormData = require('form-data');
+	shim.FormData = FormData as unknown as typeof shim.FormData;
 	shim.sjclModule = require('./vendor/sjcl.js');
 	shim.crypto = crypto;
 	shim.electronBridge_ = options.electronBridge;
