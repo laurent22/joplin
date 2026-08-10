@@ -1,16 +1,35 @@
 {
-	"clientCount": 1,
-	"description": "Changes a note, then publishes it",
+	"clientCount": 2,
+	"description": "Sample fuzzer setup: Reproduces the case where (at least historically) a large number of conflicts are created after adding a new client to an account",
 	"actions": [
-		"// Setup: Start with two clients on the same account",
 		["switchClient", { "id": 0 }],
-		["newNote", { "id": "11111111111111111111111111111110" }],
-		["newClientOnSameAccount", { "welcomeNoteCount": 0 }],
+		"sync",
+
+		"// Switch to the second client & share a folder",
+		["switchClient", { "id": 1 }],
+		["newToplevelFolder", { "id": "11111111111111111111111111111112" }],
+		["newNote", { "id": "11111111111111111111111111111113", "parentId": "11111111111111111111111111111112" }],
+		["shareFolder", { "folderId": "11111111111111111111111111111112", "otherClientId": 0, "readOnly": false }],
 		"syncAndCheckState",
 
-		"// Change a note, then publish it",
-		["updateNoteBody", { "id": "11111111111111111111111111111110"}],
-		["publishNote", { "id": "11111111111111111111111111111110" }],
+		"// Switch to the first client and do a large number of actions",
+		["switchClient", { "id": 0 }],
+		"syncAndCheckState",
+		["createOrUpdateMany", { "deleteProbability": 0, "count": 400 }],
+		"syncAndCheckState",
+
+		"// Switch back to the second client. Unshare the folder and do a large number of actions",
+		["switchClient", { "id": 1 }],
+		["unshareFolder", { "folderId": "11111111111111111111111111111112", "clientId": 0 }],
+		["createOrUpdateMany", { "deleteProbability": 0, "count": 300 }],
+
+		"// ...then share it again...",
+		["shareFolder", { "folderId": "11111111111111111111111111111112", "otherClientId": 0, "readOnly": false }],
+		"syncAndCheckState",
+
+		"// Switch back to the first client and add a new client to the same account",
+		["switchClient", { "id": 0 }],
+		["newClientOnSameAccount", { "welcomeNoteCount": 10 }],
 		"syncAndCheckState"
 	]
 }
