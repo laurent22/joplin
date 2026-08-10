@@ -12,13 +12,20 @@ const hideDecoration = Decoration.mark({
 // - Screen readers skip text with 'display: none', which can lead to a confusing editing experience
 const hiddenStyles = EditorView.theme({
 	['& .cm-hidden']: {
-		width: '1px', // This needs to be non-zero to avoid selection issues
+		// This needs to be non-zero to avoid selection issues. To avoid screen reader issues
+		// the width also needs to be >= 1px.
+		width: '1px',
 		height: '1em',
 		marginRight: '-0.9px',
+
 		opacity: '0',
 		display: 'inline-block',
 		whiteSpace: 'nowrap',
 		overflow: 'hidden',
+
+		// Decrease the size of the content: Work around cursor placement issues when a
+		// line ends with a long hidden decoration:
+		transform: 'scale(0.1, 1)',
 	},
 });
 
