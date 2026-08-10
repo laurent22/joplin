@@ -185,6 +185,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"Quant a"
 	],
@@ -470,6 +473,9 @@
 	"Beta": [
 		"Beta"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Negreta"
 	],
@@ -608,6 +614,9 @@
 	"Checking... Please wait.": [
 		"Verificant... Espereu."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Escolliu una opció"
 	],
@@ -674,9 +683,6 @@
 	"Code View": [
 		"Vista de codi"
 	],
-	"Code:": [
-		"Codi:"
-	],
 	"Collaborate on a notebook with others": [
 		"Col·laborar en una llibreta amb altres"
 	],
@@ -703,6 +709,9 @@
 	],
 	"Command": [
 		"Ordre"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Paleta d'ordres"
@@ -792,9 +801,6 @@
 	"Convert it": [
 		"Converteix-lo"
 	],
-	"Convert note to Markdown": [
-		"Converteix la nota a Markdown"
-	],
 	"Convert to note": [
 		"Converteix a nota"
 	],
@@ -849,9 +855,6 @@
 	],
 	"Could not connect to plugin repository.": [
 		"No s'ha pogut connectar al repositori d'extensions."
-	],
-	"Could not convert note to Markdown: %s": [
-		"No s'ha pogut convertir la nota a Markdown: %s"
 	],
 	"Could not export notes: %s": [
 		"No s'han pogut exportar les notes: %s"
@@ -1063,6 +1066,9 @@
 	"Delete selected notes": [
 		"Suprimeix les notes seleccionades"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Suprimir la llibreta de la safata d'entrada?\n\nSi suprimiu la llibreta de la safata d'entrada, és possible que es perdin els correus electrònics que s'hagin enviat recentment."
 	],
@@ -1167,6 +1173,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Mostra la informació completa sobre la nota."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Mostra la nota indicada."
@@ -2084,6 +2093,9 @@
 	"Keychain Supported: %s": [
 		"Clauer admès: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Claus que requereixen actualització"
 	],
@@ -2229,6 +2241,9 @@
 	],
 	"Manage your plugins": [
 		"Gestioneu les extensions"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Gestiona la configuració E2EE. Les ordres són `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, i `target-status`."
@@ -2486,6 +2501,9 @@
 	"No updates available": [
 		"No hi ha actualitzacions disponibles"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"(cap)"
 	],
@@ -2696,6 +2714,9 @@
 	"Open Sync Wizard...": [
 		"Obre l'assistent de sincronització..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Obre..."
 	],
@@ -2716,6 +2737,9 @@
 	],
 	"Options": [
 		"Opcions"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Llista ordenada"
@@ -3348,6 +3372,9 @@
 	"Select parent notebook": [
 		"Selecciona la llibreta principal"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selected: %s": [
 		"Seleccionat: %s"
 	],
@@ -3551,6 +3578,9 @@
 	],
 	"Source: ": [
 		"Font: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Espaiador"
@@ -3859,9 +3889,6 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"La nota \"%s\" s'ha restaurat correctament a la llibreta \"%s\"."
 	],
-	"The note has been converted to Markdown and the original note has been moved to the trash": [
-		"La nota s'ha convertit a Markdown i la nota original s'ha traslladat a la paperera"
-	],
 	"The note was successfully moved to the trash.": [
 		"La nota s'ha traslladat amb èxit a la paperera.",
 		"Les notes s'han traslladat amb èxit a la paperera."
@@ -4162,6 +4189,9 @@
 	],
 	"Try it now": [
 		"Proveu-ho ara"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Escriviu «help [command]» per a més informació sobre l'ordre; o escriviu «help all» per a la informació d'ús completa."

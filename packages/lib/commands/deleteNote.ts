@@ -23,6 +23,6 @@ export const runtime = (): CommandRuntime => {
 				},
 			});
 		},
-		enabledCondition: '!noteIsReadOnly && !inTrash && someNotesSelected',
+		enabledCondition: '!noteIsReadOnlyShare && !inTrash && someNotesSelected',
 	};
 };

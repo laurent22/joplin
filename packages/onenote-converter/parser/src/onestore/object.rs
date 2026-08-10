@@ -22,7 +22,7 @@ impl ObjectFileData for FileBlob {
 
 /// See [\[MS-ONESTORE\] 2.1.5](https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-onestore/ce60b62f-82e5-401a-bf2c-3255457732ad)
 #[derive(Clone)]
-pub(crate) struct Object {
+pub struct Object {
     pub(crate) context_id: ExGuid,
 
     pub(crate) jc_id: JcId,
@@ -51,17 +51,17 @@ impl std::fmt::Debug for Object {
 }
 
 impl Object {
-    pub fn id(&self) -> JcId {
+    pub(crate) fn id(&self) -> JcId {
         self.jc_id
     }
 
-    pub fn props(&self) -> &ObjectPropSet {
+    pub(crate) fn props(&self) -> &ObjectPropSet {
         &self.props
     }
 
     pub(crate) fn fallback() -> Object {
         Self {
-            jc_id: JcId { 0: 0 },
+            jc_id: JcId(0),
             context_id: ExGuid::fallback(),
             file_data: None,
             mapping: mapping_table_fallback(),

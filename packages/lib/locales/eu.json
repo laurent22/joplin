@@ -120,6 +120,9 @@
 	"A5": [
 		""
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		""
 	],
@@ -330,6 +333,9 @@
 	"Beta": [
 		""
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		""
 	],
@@ -441,6 +447,9 @@
 	"Checked": [
 		""
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Chrome Web Store": [
 		""
 	],
@@ -489,9 +498,6 @@
 	"Code View": [
 		""
 	],
-	"Code:": [
-		""
-	],
 	"Collapsed": [
 		""
 	],
@@ -505,6 +511,9 @@
 		""
 	],
 	"Command": [
+		""
+	],
+	"COMMAND": [
 		""
 	],
 	"Command palette": [
@@ -530,6 +539,9 @@
 	],
 	"Configuration": [
 		"Konfigurazioa"
+	],
+	"Configured keyboard shortcuts:": [
+		""
 	],
 	"Configures the size of scrollbars used in the app.": [
 		""
@@ -700,6 +712,9 @@
 	"Delete local data and re-download from sync target": [
 		""
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -777,6 +792,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Erakutsi oharrari buruzko informazio guztia."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Oharra erakutsi"
@@ -1405,6 +1423,9 @@
 	"Keychain Supported: %s": [
 		""
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		""
 	],
@@ -1488,6 +1509,9 @@
 		""
 	],
 	"Manage your plugins": [
+		""
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
 		""
 	],
 	"Manual": [
@@ -1640,6 +1664,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Testu editorerik ez dago definituta. Egin hau erabilita, mesedez: `config editor <editorearen-helbidea>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		""
 	],
@@ -1739,6 +1766,9 @@
 	"Open Sync Wizard...": [
 		""
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		""
 	],
@@ -1750,6 +1780,9 @@
 	],
 	"Options": [
 		"Aukerak"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Other": [
 		""
@@ -2153,6 +2186,9 @@
 	"Select one of the other supported sync targets.": [
 		""
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2275,6 +2311,9 @@
 	],
 	"Source": [
 		"Iturburua"
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		""
@@ -2509,6 +2548,7 @@
 		""
 	],
 	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"",
 		""
 	],
 	"The note was successfully moved to the trash.": [
@@ -2720,6 +2760,9 @@
 		""
 	],
 	"Try it now": [
+		""
+	],
+	"TYPE": [
 		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [

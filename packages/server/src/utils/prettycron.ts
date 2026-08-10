@@ -74,8 +74,7 @@ const later = require('later');
 	// For an array of numbers, e.g. a list of hours in a schedule,
 	// return a string listing out all of the values (complete with
 	// "and" plus ordinal text on the last item).
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const numberList = function(numbers: any[]) {
+	const numberList = function(numbers: number[]) {
 		if (numbers.length < 2) {
 			return ordinal.toOrdinal(numbers[0]);
 		}
@@ -84,8 +83,7 @@ const later = require('later');
 		return `${numbers.join(', ')} and ${ordinal.toOrdinal(last_val)}`;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const stepSize = function(numbers: any[]) {
+	const stepSize = function(numbers: number[]) {
 		if (!numbers || numbers.length <= 1) return 0;
 
 		const expectedStep = numbers[1] - numbers[0];
@@ -97,28 +95,23 @@ const later = require('later');
 		}) ? expectedStep : 0;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const isEveryOther = function(stepsize: number, numbers: any[]) {
+	const isEveryOther = function(stepsize: number, numbers: number[]) {
 		return numbers.length === 30 && stepsize === 2;
 	};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const isTwicePerHour = function(stepsize: number, numbers: any[]) {
+	const isTwicePerHour = function(stepsize: number, numbers: number[]) {
 		return numbers.length === 2 && stepsize === 30;
 	};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const isOnTheHour = function(numbers: any[]) {
+	const isOnTheHour = function(numbers: number[]) {
 		return numbers.length === 1 && numbers[0] === 0;
 	};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const isStepValue = function(stepsize: number, numbers: any[]) {
+	const isStepValue = function(stepsize: number, numbers: number[]) {
 		// Value with slash (https://en.wikipedia.org/wiki/Cron#Non-Standard_Characters)
 		return numbers.length > 2 && stepsize > 0;
 	};
 	// For an array of numbers of seconds, return a string
 	// listing all the values unless they represent a frequency divisible by 60:
 	// /2, /3, /4, /5, /6, /10, /12, /15, /20 and /30
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const getMinutesTextParts = function(numbers: any[]) {
+	const getMinutesTextParts = function(numbers: number[]) {
 		const stepsize = stepSize(numbers);
 		if (!numbers) {
 			return { beginning: 'minute', text: '' };
@@ -141,8 +134,7 @@ const later = require('later');
 	// For an array of numbers of seconds, return a string
 	// listing all the values unless they represent a frequency divisible by 60:
 	// /2, /3, /4, /5, /6, /10, /12, /15, /20 and /30
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const getSecondsTextParts = function(numbers: any[]) {
+	const getSecondsTextParts = function(numbers: number[]) {
 		const stepsize = stepSize(numbers);
 		if (!numbers) {
 			return { beginning: 'second', text: '' };
@@ -158,19 +150,17 @@ const later = require('later');
 
 	// Parse a number into day of week, or a month name;
 	// used in dateList below.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const numberToDateName = function(value: any, type: any) {
+	const numberToDateName = function(value: number | string, type: 'dow' | 'mon') {
 		if (type === 'dow') {
-			return dayjs().day(value - 1).format('ddd');
+			return dayjs().day(Number(value) - 1).format('ddd');
 		} else if (type === 'mon') {
-			return dayjs().month(value - 1).format('MMM');
+			return dayjs().month(Number(value) - 1).format('MMM');
 		}
 	};
 
 	// From an array of numbers corresponding to dates (given in type: either
 	// days of the week, or months), return a string listing all the values.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const dateList = function(numbers: any[], type: any) {
+	const dateList = function(numbers: number[], type: 'dow' | 'mon') {
 		if (numbers.length < 2) {
 			return numberToDateName(`${numbers[0]}`, type);
 		}
@@ -195,8 +185,9 @@ const later = require('later');
 	//   return (x < 10) ? '0' + x : x;
 	// };
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const removeFromSchedule = function(schedule: any, member: any, length: any) {
+	type LaterSchedule = Record<string, number[]>;
+
+	const removeFromSchedule = function(schedule: LaterSchedule, member: string, length: number) {
 		if (schedule[member] && schedule[member].length === length) {
 			delete schedule[member];
 		}
@@ -206,8 +197,7 @@ const later = require('later');
 
 	// Given a schedule from later.js (i.e. after parsing the cronspec),
 	// generate a friendly sentence description.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const scheduleToSentence = function(schedule: any, useSeconds: boolean) {
+	const scheduleToSentence = function(schedule: LaterSchedule, useSeconds: boolean) {
 		let textParts = [];
 
 		// A later.js schedules contains no member for time units where an asterisk is used,
@@ -348,16 +338,14 @@ const later = require('later');
 	// ----------------
 
 	// Given a cronspec, return the human-readable string.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const toString = function(cronspec: any, sixth: boolean) {
+	const toString = function(cronspec: string, sixth: boolean) {
 		const schedule = later.parse.cron(cronspec, sixth);
 		return scheduleToSentence(schedule['schedules'][0], sixth);
 	};
 
 	// Given a cronspec, return the next date for when it will next run.
 	// (This is just a wrapper for later.js)
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const getNextDate = function(cronspec: any, sixth: boolean) {
+	const getNextDate = function(cronspec: string, sixth: boolean) {
 		later.date.localTime();
 		const schedule = later.parse.cron(cronspec, sixth);
 		return later.schedule(schedule).next();
@@ -365,16 +353,14 @@ const later = require('later');
 
 	// Given a cronspec, return a friendly string for when it will next run.
 	// (This is just a wrapper for later.js and moment.js)
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const getNext = function(cronspec: any, sixth: boolean) {
+	const getNext = function(cronspec: string, sixth: boolean) {
 		return dayjs(getNextDate(cronspec, sixth)).calendar();
 	};
 
 	// Given a cronspec and numDates, return a list of formatted dates
 	// of the next set of runs.
 	// (This is just a wrapper for later.js and moment.js)
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const getNextDates = function(cronspec: any, numDates: any, sixth: boolean) {
+	const getNextDates = function(cronspec: string, numDates: number, sixth: boolean) {
 		const schedule = later.parse.cron(cronspec, sixth);
 		const nextDates = later.schedule(schedule).next(numDates);
 
@@ -390,8 +376,7 @@ const later = require('later');
 
 	// attach ourselves to window in the browser, and to exports in Node,
 	// so our functions can always be called as prettyCron.toString()
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const global_obj = (typeof exports !== 'undefined' && exports !== null) ? exports : (window as any).prettyCron = {};
+	const global_obj = (typeof exports !== 'undefined' && exports !== null) ? exports : (window as Window & { prettyCron?: Record<string, unknown> }).prettyCron = {};
 
 	global_obj.toString = toString;
 	global_obj.getNext = getNext;

@@ -1,7 +1,7 @@
 {
   "name": "@joplin/fork-htmlparser2",
   "description": "Fast & forgiving HTML/XML/RSS parser",
-  "version": "4.1.60",
+  "version": "4.1.63",
   "author": "Felix Boehm <me@feedic.com>",
   "publishConfig": {
     "access": "public"
@@ -33,7 +33,7 @@
   },
   "scripts": {
     "coverage": "cat coverage/lcov.info | coveralls",
-    "lint": "eslint --ext=js,ts src",
+    "lint": "eslint src",
     "format": "prettier --write '**/*.{ts,md,json}'",
     "build": "tsc",
     "prepare": "npm run build"
@@ -50,11 +50,11 @@
     "@typescript-eslint/eslint-plugin": "6.21.0",
     "@typescript-eslint/parser": "6.21.0",
     "coveralls": "3.1.1",
-    "eslint": "8.57.1",
+    "eslint": "9.39.4",
     "jest": "29.7.0",
-    "prettier": "3.6.2",
-    "ts-jest": "29.4.1",
-    "typescript": "5.8.3"
+    "prettier": "3.7.4",
+    "ts-jest": "29.4.6",
+    "typescript": "5.9.3"
   },
   "jest": {
     "preset": "ts-jest",
@@ -64,5 +64,5 @@
   "prettier": {
     "tabWidth": 4
   },
-  "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
+  "gitHead": "500e4c02809d3ebe463aa590e86f541d1ef0661c"
 }

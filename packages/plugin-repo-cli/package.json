@@ -1,6 +1,6 @@
 {
   "name": "@joplin/plugin-repo-cli",
-  "version": "3.5.3",
+  "version": "3.7.0",
   "description": "",
   "main": "index.js",
   "bin": "./dist/index.js",
@@ -18,10 +18,10 @@
   "author": "",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@joplin/lib": "^3.5.1",
-    "@joplin/tools": "^3.5.1",
-    "@joplin/utils": "^3.5.1",
-    "fs-extra": "11.3.2",
+    "@joplin/lib": "~3.7",
+    "@joplin/tools": "~3.7",
+    "@joplin/utils": "~3.7",
+    "fs-extra": "11.3.5",
     "gh-release-assets": "2.0.1",
     "source-map-support": "0.5.21",
     "yargs": "17.7.2"
@@ -32,9 +32,9 @@
     "@types/node": "22.19.0",
     "jest": "29.7.0",
     "source-map-loader": "5.0.0",
-    "typescript": "5.8.3",
+    "typescript": "5.9.3",
     "webpack": "5.97.1",
     "webpack-cli": "4.10.0"
   },
-  "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
+  "gitHead": "500e4c02809d3ebe463aa590e86f541d1ef0661c"
 }

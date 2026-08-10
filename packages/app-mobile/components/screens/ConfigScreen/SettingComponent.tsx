@@ -16,8 +16,7 @@ interface Props {
 	settingId: string;
 
 	// The value associated with the given settings key
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	value: any;
+	value: unknown;
 
 	styles: ConfigScreenStyles;
 	themeId: number;
@@ -29,8 +28,7 @@ interface Props {
 const SettingComponent: React.FunctionComponent<Props> = props => {
 	const themeId = props.themeId;
 	const theme = themeStyle(themeId);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = null;
+	const output: React.ReactElement | null = null;
 
 	const md = Setting.settingMetadata(props.settingId);
 	const settingDescription = md.description ? md.description(AppType.Mobile) : '';
@@ -54,8 +52,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 					</Text>
 					<Dropdown
 						key="control"
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						items={items as any}
+						items={items}
 						selectedValue={value}
 						itemListStyle={{
 							backgroundColor: theme.backgroundColor,
@@ -81,7 +78,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 		return (
 			<SettingsToggle
 				settingId={props.settingId}
-				value={props.value}
+				value={!!props.value}
 				themeId={props.themeId}
 				styles={props.styles}
 				label={md.label()}
@@ -93,7 +90,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 		return (
 			<ValidatedIntegerInput
 				settingId={props.settingId}
-				value={props.value}
+				value={props.value as number}
 				themeId={props.themeId}
 				styles={props.styles}
 				label={md.label()}
@@ -118,7 +115,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 		return (
 			<SettingTextInput
 				settingId={props.settingId}
-				value={props.value}
+				value={props.value as string}
 				themeId={props.themeId}
 				styles={props.styles}
 				label={md.label()}

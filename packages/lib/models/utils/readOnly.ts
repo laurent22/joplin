@@ -47,8 +47,7 @@ export const checkIfItemCanBeChanged = (itemType: ModelType, changeSource: numbe
 	}
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder: any, changeSource: number, shareState: ShareState, parentId: string) => {
+export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder: typeof import('../Folder').default, changeSource: number, shareState: ShareState, parentId: string) => {
 	if (needsShareReadOnlyChecks(itemType, changeSource, shareState) && parentId) {
 		const parentFolder = await Folder.load(parentId, { fields: ['id', 'share_id'] });
 
@@ -63,7 +62,7 @@ export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder:
 			return;
 		}
 
-		if (itemIsReadOnlySync(itemType, changeSource, parentFolder, Setting.value('sync.userId'), shareState, true)) {
+		if (itemIsReadOnlySync(itemType, changeSource, parentFolder as ItemSlice, Setting.value('sync.userId'), shareState, true)) {
 			throw new JoplinError('Cannot add an item as a child of a read-only item', ErrorCode.IsReadOnly);
 		}
 	}
@@ -104,8 +103,7 @@ export const itemIsReadOnlySync = (itemType: ModelType, changeSource: number, it
 	return !shareUser.can_write;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const itemIsReadOnly = async (BaseItem: any, itemType: ModelType, changeSource: number, itemId: string, userId: string, shareState: ShareState): Promise<boolean> => {
+export const itemIsReadOnly = async (BaseItem: typeof import('../BaseItem').default, itemType: ModelType, changeSource: number, itemId: string, userId: string, shareState: ShareState): Promise<boolean> => {
 	// if (!needsShareReadOnlyChecks(itemType, changeSource, shareState)) return false;
 	const item: ItemSlice = await BaseItem.loadItem(itemType, itemId, { fields: ['id', 'share_id', 'deleted_time'] });
 	if (!item) throw new JoplinError(`No such item: ${itemType}: ${itemId}`, ErrorCode.NotFound);

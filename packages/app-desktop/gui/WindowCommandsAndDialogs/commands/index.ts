@@ -1,19 +1,26 @@
 // AUTO-GENERATED using `gulp buildScriptIndexes`
+import * as addNoteToWhiteboard from './addNoteToWhiteboard';
 import * as addProfile from './addProfile';
 import * as commandPalette from './commandPalette';
 import * as deleteFolder from './deleteFolder';
+import * as disableNoteEncryption from './disableNoteEncryption';
 import * as duplicateNote from './duplicateNote';
 import * as editAlarm from './editAlarm';
+import * as enableNoteEncryption from './enableNoteEncryption';
 import * as exportPdf from './exportPdf';
+import * as globalRedo from './globalRedo';
+import * as globalUndo from './globalUndo';
 import * as gotoAnything from './gotoAnything';
 import * as hideModalMessage from './hideModalMessage';
 import * as importFrom from './importFrom';
 import * as linkToNote from './linkToNote';
+import * as lockEncryptedNotes from './lockEncryptedNotes';
 import * as moveToFolder from './moveToFolder';
 import * as newFolder from './newFolder';
 import * as newNote from './newNote';
 import * as newSubFolder from './newSubFolder';
 import * as newTodo from './newTodo';
+import * as newWhiteboard from './newWhiteboard';
 import * as openFolder from './openFolder';
 import * as openFolderDialog from './openFolderDialog';
 import * as openItem from './openItem';
@@ -33,9 +40,11 @@ import * as showModalMessage from './showModalMessage';
 import * as showNoteContentProperties from './showNoteContentProperties';
 import * as showNoteProperties from './showNoteProperties';
 import * as showPrompt from './showPrompt';
+import * as showPublishFolderDialog from './showPublishFolderDialog';
 import * as showShareFolderDialog from './showShareFolderDialog';
 import * as showShareNoteDialog from './showShareNoteDialog';
 import * as showSpellCheckerMenu from './showSpellCheckerMenu';
+import * as toggleAiChat from './toggleAiChat';
 import * as toggleEditors from './toggleEditors';
 import * as toggleLayoutMoveMode from './toggleLayoutMoveMode';
 import * as toggleMenuBar from './toggleMenuBar';
@@ -46,23 +55,31 @@ import * as toggleNotesSortOrderReverse from './toggleNotesSortOrderReverse';
 import * as togglePerFolderSortOrder from './togglePerFolderSortOrder';
 import * as toggleSideBar from './toggleSideBar';
 import * as toggleVisiblePanes from './toggleVisiblePanes';
+import * as toggleWhiteboardEditor from './toggleWhiteboardEditor';
 
 const index: any[] = [
+	addNoteToWhiteboard,
 	addProfile,
 	commandPalette,
 	deleteFolder,
+	disableNoteEncryption,
 	duplicateNote,
 	editAlarm,
+	enableNoteEncryption,
 	exportPdf,
+	globalRedo,
+	globalUndo,
 	gotoAnything,
 	hideModalMessage,
 	importFrom,
 	linkToNote,
+	lockEncryptedNotes,
 	moveToFolder,
 	newFolder,
 	newNote,
 	newSubFolder,
 	newTodo,
+	newWhiteboard,
 	openFolder,
 	openFolderDialog,
 	openItem,
@@ -82,9 +99,11 @@ const index: any[] = [
 	showNoteContentProperties,
 	showNoteProperties,
 	showPrompt,
+	showPublishFolderDialog,
 	showShareFolderDialog,
 	showShareNoteDialog,
 	showSpellCheckerMenu,
+	toggleAiChat,
 	toggleEditors,
 	toggleLayoutMoveMode,
 	toggleMenuBar,
@@ -95,6 +114,7 @@ const index: any[] = [
 	togglePerFolderSortOrder,
 	toggleSideBar,
 	toggleVisiblePanes,
+	toggleWhiteboardEditor,
 ];
 
 export default index;

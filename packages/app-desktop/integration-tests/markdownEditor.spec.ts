@@ -1,32 +1,48 @@
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
 import { join } from 'path';
+import { readFile } from 'fs-extra';
 import getImageSourceSize from './util/getImageSourceSize';
 import setFilePickerResponse from './util/setFilePickerResponse';
 import activateMainMenuItem from './util/activateMainMenuItem';
 import setSettingValue from './util/setSettingValue';
 import { toForwardSlashes } from '@joplin/utils/path';
 import mockClipboard from './util/mockClipboard';
+import { ElectronApplication, Page } from '@playwright/test';
+import { extractResourceUrls } from '@joplin/lib/urlUtils';
 
+const importAndOpenHtmlExport = async (mainWindow: Page, electronApp: ElectronApplication, noteTitle: string) => {
+	const mainScreen = await new MainScreen(mainWindow).setup();
+	await mainScreen.waitFor();
+
+	await mainScreen.importHtmlDirectory(electronApp, join(__dirname, 'resources', 'html-import'));
+	const importedFolder = mainScreen.sidebar.container.getByText('html-import');
+	await importedFolder.waitFor();
+
+	// Retry -- focusing the imported-folder may fail in some cases
+	await expect(async () => {
+		await importedFolder.click();
+
+		await mainScreen.noteList.focusContent(electronApp);
+
+		const importedHtmlFileItem = mainScreen.noteList.getNoteItemByTitle(noteTitle);
+		await importedHtmlFileItem.click({ timeout: 300 });
+	}).toPass();
+
+	return { mainScreen };
+};
 
 test.describe('markdownEditor', () => {
+	test('editor should render the full content of HTML notes', async ({ mainWindow, electronApp }) => {
+		const { mainScreen } = await importAndOpenHtmlExport(mainWindow, electronApp, 'test-html-file-with-spans');
+
+		const editor = mainScreen.noteEditor.codeMirrorEditor;
+		// Regression test: The <span> should not be hidden by inline Markdown rendering (since this is an HTML note):
+		await expect(editor).toHaveText('<p><span style="margin-left: 100px;">test</span></p>');
+	});
+
 	test('preview pane should render images in HTML notes', async ({ mainWindow, electronApp }) => {
-		const mainScreen = await new MainScreen(mainWindow).setup();
-		await mainScreen.waitFor();
-
-		await mainScreen.importHtmlDirectory(electronApp, join(__dirname, 'resources', 'html-import'));
-		const importedFolder = mainScreen.sidebar.container.getByText('html-import');
-		await importedFolder.waitFor();
-
-		// Retry -- focusing the imported-folder may fail in some cases
-		await expect(async () => {
-			await importedFolder.click();
-
-			await mainScreen.noteList.focusContent(electronApp);
-
-			const importedHtmlFileItem = mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
-			await importedHtmlFileItem.click({ timeout: 300 });
-		}).toPass();
+		const { mainScreen } = await importAndOpenHtmlExport(mainWindow, electronApp, 'test-html-file-with-image');
 
 		const viewerFrame = mainScreen.noteEditor.getNoteViewerFrameLocator();
 		// Should render headers
@@ -67,8 +83,9 @@ test.describe('markdownEditor', () => {
 			// 2. replace this test with a screenshot comparison (https://playwright.dev/docs/test-snapshots)
 			await expect.poll(
 				() => pdfViewer.evaluate((handle) => {
-					const embed = (handle as HTMLObjectElement).contentDocument.querySelector('embed');
-					return !!embed;
+					const contentDocument = (handle as HTMLObjectElement).contentDocument;
+					const pdfViewerAsset = contentDocument.querySelector('link[href*=pdf_embedder]');
+					return !!pdfViewerAsset;
 				}),
 			).toBe(true);
 		};
@@ -161,7 +178,7 @@ test.describe('markdownEditor', () => {
 		const viewer = noteEditor.getNoteViewerFrameLocator();
 		await expect(viewer.locator('h1')).toHaveText('Testing');
 
-		const matches = viewer.locator('mark');
+		const matches = viewer.locator('mark-ghost');
 		await expect(matches).toHaveCount(0);
 
 		await mainWindow.keyboard.press(process.platform === 'darwin' ? 'Meta+f' : 'Control+f');
@@ -276,8 +293,12 @@ test.describe('markdownEditor', () => {
 		expect(imageSize[1]).toBeGreaterThan(0);
 	});
 
-	test('ctrl-clicking on note links should open the linked note (when the viewer is hidden)', async ({ mainWindow }) => {
-		const mainScreen = await new MainScreen(mainWindow).setup();
+	test('ctrl-clicking on note links should open the linked note (when the viewer is hidden)', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow);
+		// Workaround: Required for extracting content accurately from the Markdown editor
+		await mainScreen.noteEditor.disableInlineRendering(electronApp);
+
+		await mainScreen.setup();
 		await mainScreen.createNewNote('Original');
 		const noteEditor = mainScreen.noteEditor;
 		await noteEditor.hideViewer();
@@ -381,5 +402,105 @@ test.describe('markdownEditor', () => {
 		await goToAnything.runCommand(electronApp, 'textPaste');
 		await noteEditor.expectToHaveText(/^Test \(new content!\)[\n]+/);
 	});
-});
 
+	for (const testCase of [
+		{ name: 'CodeMirror 6', useLegacyMarkdownEditor: false },
+		{ name: 'CodeMirror 5', useLegacyMarkdownEditor: true },
+	]) {
+		test(`should paste Affinity Copy Merged clipboard data as an image resource (${testCase.name})`, async ({ electronApp, mainWindow }) => {
+			const mainScreen = new MainScreen(mainWindow);
+			await setSettingValue(electronApp, mainWindow, 'editor.legacyMarkdown', testCase.useLegacyMarkdownEditor);
+			await mainScreen.noteEditor.disableInlineRendering(electronApp);
+			await setSettingValue(electronApp, mainWindow, 'imageResizing', 'neverResize');
+			await mainScreen.setup();
+
+			const noteEditor = await mainScreen.createNewNote('Test Affinity image paste');
+			const editorContent = testCase.useLegacyMarkdownEditor ? mainWindow.locator('.rli-editor .CodeMirror5 .CodeMirror-code') : await noteEditor.contentLocator();
+			const editorToFocus = testCase.useLegacyMarkdownEditor ? mainWindow.locator('.rli-editor .CodeMirror5') : editorContent;
+			const noteBody = async () => editorContent.innerText();
+			await editorToFocus.click();
+
+			const affinityClipboardText = await readFile(join(__dirname, 'resources', 'affinity.txt'), 'utf8');
+
+			await mainWindow.evaluate((affinityClipboardText: string) => {
+				const { clipboard, nativeImage } = require('electron');
+				const affinityImageData = affinityClipboardText.match(/data:image\/png;base64,[^"]+/)?.[0];
+				if (!affinityImageData) throw new Error('Affinity clipboard text does not contain PNG image data');
+				const image = nativeImage.createFromDataURL(affinityImageData);
+				if (image.isEmpty()) throw new Error('Could not create image from Affinity clipboard data');
+
+				clipboard.write({
+					text: affinityClipboardText,
+					image,
+				});
+			}, affinityClipboardText);
+
+			await mainScreen.goToAnything.runCommand(electronApp, 'textPaste');
+
+			await expect.poll(async () => {
+				const currentNoteBody = (await noteBody()).trimEnd();
+				const resourceUrls = extractResourceUrls(currentNoteBody);
+				const isImageResource = currentNoteBody.startsWith('![') && resourceUrls.length === 1 && currentNoteBody.endsWith(`](:/${resourceUrls[0].itemId})`);
+				const doesNotContainSvg = !currentNoteBody.includes('<svg');
+				const doesNotContainBase64 = !currentNoteBody.includes('data:image/png;base64,');
+				return isImageResource && doesNotContainSvg && doesNotContainBase64;
+			}).toBe(true);
+
+			const renderedImage = noteEditor.getNoteViewerFrameLocator().locator('img');
+			await expect(renderedImage).toHaveCount(1);
+			await expect(await getImageSourceSize(renderedImage.first())).toMatchObject([64, 64]);
+		});
+	}
+
+	test('the undo and redo menu items should work', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.createNewNote('Test undo/redo');
+
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.focusCodeMirrorEditor();
+
+		await mainWindow.keyboard.type('A');
+		await noteEditor.expectToHaveText('A');
+
+		await activateMainMenuItem(electronApp, 'Undo');
+		await noteEditor.expectToHaveText('\n');
+
+		await activateMainMenuItem(electronApp, 'Redo');
+		await noteEditor.expectToHaveText('A');
+	});
+
+	test('copying from the preview pane should not include theme background color and should preserve bold formatting', async ({ mainWindow, electronApp }) => {
+		// Set dark theme so background-color would be present in clipboard without the fix
+		await setSettingValue(electronApp, mainWindow, 'theme', 2);
+
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.createNewNote('Test copy formatting');
+		const noteEditor = mainScreen.noteEditor;
+		await noteEditor.focusCodeMirrorEditor();
+		await mainWindow.keyboard.type('**hello**');
+
+		const viewerFrame = noteEditor.getNoteViewerFrameLocator();
+		await expect(viewerFrame.locator('strong')).toHaveText('hello');
+
+		// Double-click selects the text node inside <strong>, not <strong> itself.
+		// Without the ancestor re-wrapping fix, <strong> would be dropped.
+		await viewerFrame.locator('strong').dblclick();
+		const modifier = process.platform === 'darwin' ? 'Meta' : 'Control';
+		await mainWindow.keyboard.press(`${modifier}+c`);
+
+		const clipboardHtml = await mainWindow.evaluate(() => {
+			const { clipboard } = require('electron');
+			return clipboard.readHTML();
+		});
+
+		expect(clipboardHtml).toContain('hello');
+		// Dark theme background (#1D2024) must not leak into clipboard
+		expect(clipboardHtml).not.toMatch(/1D2024/i);
+		expect(clipboardHtml).toContain('<strong');
+		expect(clipboardHtml).toMatch(/font-weight/i);
+	});
+});

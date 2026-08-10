@@ -204,7 +204,7 @@ class StatusScreenComponent extends BaseScreenComponent<Props, State> {
 				</View>
 			) : null;
 
-			const textComponent = text ? <Text style={style} role={textRole}>{text}</Text> : null;
+			const textComponent = text ? <Text style={style} role={textRole} numberOfLines={2} ellipsizeMode='tail'>{text}</Text> : null;
 			if (item.isDivider) {
 				return <View style={styles.divider} role='separator' key={item.key} />;
 			} else if (item.listItems) {

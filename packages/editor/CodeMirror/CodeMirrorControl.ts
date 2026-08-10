@@ -28,8 +28,7 @@ interface Callbacks {
 	onLogMessage: LogMessageCallback;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type EditorUserCommand = (...args: any[])=> any;
+type EditorUserCommand = (...args: unknown[])=> unknown;
 
 // Copied from CodeMirror source code since type is not exported
 export type ScrollStrategy = 'nearest' | 'start' | 'end' | 'center';
@@ -53,8 +52,7 @@ export default class CodeMirrorControl extends CodeMirror5Emulation implements E
 		return name in editorCommands || this._userCommands.has(name) || super.commandExists(name);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override execCommand(name: string, ...args: any[]) {
+	public override execCommand(name: string, ...args: unknown[]) {
 		let commandOutput;
 		if (this._userCommands.has(name)) {
 			commandOutput = this._userCommands.get(name)(...args);

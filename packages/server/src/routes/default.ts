@@ -9,6 +9,7 @@ import { localFileFromUrl } from '../utils/joplinUtils';
 import { homeUrl, loginUrl } from '../utils/urlUtils';
 import * as mime from '@joplin/lib/mime-utils';
 import { hasOwnProperty } from '@joplin/utils/object';
+import { toForwardSlashes } from '@joplin/utils/path';
 
 const publicDir = `${dirname(dirname(__dirname))}/public`;
 
@@ -21,10 +22,12 @@ interface PathToFileMap {
 const pathToFileMap: PathToFileMap = {
 	'css/bulma.min.css': 'node_modules/bulma/css/bulma.min.css',
 	'css/fontawesome/css/all.min.css': 'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
+	'css/wunderbaum.css': 'node_modules/wunderbaum/dist/wunderbaum.css',
 	'js/zxcvbn.js': 'node_modules/zxcvbn/dist/zxcvbn.js',
 	'js/zxcvbn.js.map': 'node_modules/zxcvbn/dist/zxcvbn.js.map',
 	'js/jquery.min.js': 'node_modules/jquery/dist/jquery.min.js',
 	'js/jquery.min.map': 'node_modules/jquery/dist/jquery.min.map',
+	'js/wunderbaum.umd.min.js': 'node_modules/wunderbaum/dist/wunderbaum.umd.min.js',
 
 	// Hard-coded for now but it could be made dynamic later on
 	// 'apps/joplin/css/note.css': 'src/apps/joplin/css/note.css',
@@ -34,7 +37,7 @@ async function findLocalFile(path: string): Promise<string> {
 	const appFilePath = await localFileFromUrl(path);
 	if (appFilePath) return appFilePath;
 
-	let localPath = normalize(path);
+	let localPath = toForwardSlashes(normalize(path));
 	if (localPath.indexOf('..') >= 0) throw new ErrorNotFound(`Cannot resolve path: ${path}`);
 
 	if (hasOwnProperty(pathToFileMap, path)) return pathToFileMap[path];

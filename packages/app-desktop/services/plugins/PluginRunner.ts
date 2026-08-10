@@ -10,14 +10,13 @@ import Logger from '@joplin/utils/Logger';
 import getPathToExecutable7Zip from '../../utils/7zip/getPathToExecutable7Zip';
 import getAssetPath from '../../utils/getAssetPath';
 // import BackOffHandler from './BackOffHandler';
-const ipcRenderer = require('electron').ipcRenderer;
+import { ipcRenderer } from 'electron';
 
 const logger = Logger.create('PluginRunner');
 
 // Electron error messages are useless so wrap the renderer call and print
 // additional information when an error occurs.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function ipcRendererSend(message: string, args: any) {
+function ipcRendererSend(message: string, args: unknown) {
 	try {
 		return ipcRenderer.send(message, args);
 	} catch (error) {
@@ -36,21 +35,21 @@ export interface PluginMessage {
 	pluginId: string;
 	callbackId?: string;
 	path?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	args?: any[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	result?: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	error?: any;
+	args?: unknown[];
+	result?: unknown;
+	error?: unknown;
 	mainWindowCallbackId?: string;
 }
 
-let callbackIndex = 1;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const callbackPromises: any = {};
+interface CallbackPromise {
+	resolve: (value: unknown)=> void;
+	reject: (reason: unknown)=> void;
+}
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function mapEventIdsToHandlers(pluginId: string, arg: any) {
+let callbackIndex = 1;
+const callbackPromises: Record<string, CallbackPromise> = {};
+
+function mapEventIdsToHandlers(pluginId: string, arg: unknown): unknown {
 	if (Array.isArray(arg)) {
 		for (let i = 0; i < arg.length; i++) {
 			arg[i] = mapEventIdsToHandlers(pluginId, arg[i]);
@@ -59,8 +58,7 @@ function mapEventIdsToHandlers(pluginId: string, arg: any) {
 	} else if (typeof arg === 'string' && arg.indexOf('___plugin_event_') === 0) {
 		const eventId = arg;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return async (...args: any[]) => {
+		return async (...args: unknown[]) => {
 			const callbackId = `cb_${pluginId}_${Date.now()}_${callbackIndex++}`;
 
 			const promise = new Promise((resolve, reject) => {
@@ -82,8 +80,9 @@ function mapEventIdsToHandlers(pluginId: string, arg: any) {
 	} else if (arg === undefined) {
 		return undefined;
 	} else if (typeof arg === 'object') {
-		for (const n in arg) {
-			arg[n] = mapEventIdsToHandlers(pluginId, arg[n]);
+		const argAsRecord = arg as Record<string, unknown>;
+		for (const n in argAsRecord) {
+			argAsRecord[n] = mapEventIdsToHandlers(pluginId, argAsRecord[n]);
 		}
 	}
 
@@ -101,8 +100,7 @@ export default class PluginRunner extends BasePluginRunner {
 		this.eventHandler = this.eventHandler.bind(this);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async eventHandler(eventHandlerId: string, args: any[]) {
+	private async eventHandler(eventHandlerId: string, args: unknown[]) {
 		const cb = this.eventHandlers_[eventHandlerId];
 		return cb(...args);
 	}
@@ -149,18 +147,20 @@ export default class PluginRunner extends BasePluginRunner {
 			});
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		ipcRenderer.on('pluginMessage', async (_event: any, message: PluginMessage) => {
+		ipcRenderer.on('pluginMessage', async (_event: import('electron').IpcRendererEvent, message: PluginMessage) => {
 			if (message.target !== PluginMessageTarget.MainWindow) return;
 			if (message.pluginId !== plugin.id) return;
 
 			if (message.mainWindowCallbackId) {
-				const promise = callbackPromises[message.mainWindowCallbackId];
+				const callbackId = message.mainWindowCallbackId;
+				const promise = callbackPromises[callbackId];
 
 				if (!promise) {
 					console.error('Got a callback without matching promise: ', message);
 					return;
 				}
+
+				delete callbackPromises[callbackId];
 
 				if (message.error) {
 					promise.reject(message.error);
@@ -168,6 +168,16 @@ export default class PluginRunner extends BasePluginRunner {
 					promise.resolve(message.result);
 				}
 			} else {
+				// Handle notification that a plugin failed to start before
+				// calling register(). Emit 'started' so allPluginsStarted
+				// is not blocked. See: https://github.com/laurent22/joplin/issues/12793
+				if (message.path === '__pluginFailedToStart__') {
+					logger.error(`Plugin "${plugin.id}" failed to start:`, message.args?.[0]);
+					plugin.running = false;
+					plugin.emit('started');
+					return;
+				}
+
 				const mappedArgs = mapEventIdsToHandlers(plugin.id, message.args);
 				const fullPath = `joplin.${message.path}`;
 
@@ -184,14 +194,12 @@ export default class PluginRunner extends BasePluginRunner {
 				// 	return;
 				// }
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				let result: any = null;
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				let error: any = null;
+				let result: unknown = null;
+				let error: Error | null = null;
 				try {
-					result = await executeSandboxCall(plugin.id, pluginApi, fullPath, mappedArgs, this.eventHandler);
+					result = await executeSandboxCall(plugin.id, pluginApi, fullPath, mappedArgs as unknown[], this.eventHandler);
 				} catch (e) {
-					error = e ? e : new Error('Unknown error');
+					error = e ? (e as Error) : new Error('Unknown error');
 				}
 
 				ipcRendererSend('pluginMessage', {

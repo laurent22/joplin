@@ -6,7 +6,7 @@ import { clipboard } from 'electron';
 import Button, { ButtonLevel } from './Button/Button';
 import { uuidgen } from '@joplin/lib/uuid';
 import { Dispatch } from 'redux';
-import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful } from '@joplin/lib/services/joplinCloudUtils';
+import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful, saveApplicationAuthId } from '@joplin/lib/services/joplinCloudUtils';
 import { AppState } from '../app.reducer';
 import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
@@ -14,7 +14,7 @@ import JoplinCloudSignUpCallToAction from './JoplinCloudSignUpCallToAction';
 import bridge from '../services/bridge';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 
 interface Props {
 	dispatch: Dispatch;
@@ -53,23 +53,24 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		setIntervalIdentifier(interval);
 	};
 
-	const onButtonUsed = () => {
+	const onButtonUsed = async () => {
 		if (state.next === 'LINK_USED') {
 			dispatch({ type: 'LINK_USED' });
 		}
+		await saveApplicationAuthId(applicationAuthId);
 		periodicallyCheckForCredentials();
 	};
 
 	const onAuthorizeClicked = async () => {
 		const url = await generateApplicationConfirmUrl(confirmUrl(applicationAuthId));
+		await onButtonUsed();
 		void bridge().openExternal(url);
-		onButtonUsed();
 	};
 
 	const onCopyToClipboardClicked = async () => {
 		const url = await generateApplicationConfirmUrl(confirmUrl(applicationAuthId));
+		await onButtonUsed();
 		clipboard.writeText(url);
-		onButtonUsed();
 	};
 
 	useEffect(() => {
@@ -107,7 +108,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 					) : null}
 				</p>
 				{state.active === 'LINK_USED' ? <div className="loading-animation" /> : null}
-				<JoplinCloudSignUpCallToAction />
+				{state.active !== 'COMPLETED' ? <JoplinCloudSignUpCallToAction source='desktop-login-screen' withLeadIn={true} /> : null}
 			</div>
 			<ButtonBar onCancelClick={() => props.dispatch({ type: 'NAV_BACK' })} />
 		</div>

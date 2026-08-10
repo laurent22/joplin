@@ -8,8 +8,12 @@ import BaseModel from '../../BaseModel';
 import InteropService from './InteropService';
 import InteropService_Importer_OneNote from './InteropService_Importer_OneNote';
 import { JSDOM } from 'jsdom';
-import { ImportModuleOutputFormat } from './types';
+import { ImportModuleOutputFormat, ImportOptions } from './types';
 import HtmlToMd from '../../HtmlToMd';
+import Resource from '../../models/Resource';
+import sharp from 'sharp';
+
+// cspell:ignore xpsdocument
 
 const instructionMessage = `
 --------------------------------------
@@ -42,18 +46,34 @@ const normalizeNoteForSnapshot = (body: string) => {
 	return removeItemIds(removeDefaultCss(body));
 };
 
+// A single Markdown string is much easier to visually compare during snapshot testing.
+// Prefer notesToMarkdownString to normalizeNoteForSnapshot when the exact output HTML
+// doesn't matter.
+const notesToMarkdownString = (notes: NoteEntity[]) => {
+	const converter = new HtmlToMd();
+	return notes.map(note => {
+		return [
+			`# Note: ${note.title}`,
+			converter.parse(normalizeNoteForSnapshot(note.body)),
+		].join('\n\n');
+	}).sort().join('\n\n\n');
+};
+
 // This file is ignored if not running in CI. Look at onenote-converter/README.md and jest.config.js for more information
 describe('InteropService_Importer_OneNote', () => {
 	let tempDir: string;
-	async function importNote(path: string) {
+	async function importNote(path: string, options: Partial<ImportOptions> = {}) {
 		const newFolder = await Folder.save({ title: 'folder' });
 		const service = InteropService.instance();
+
 		await service.import({
 			outputFormat: ImportModuleOutputFormat.Markdown,
 			path,
 			destinationFolder: newFolder,
 			destinationFolderId: newFolder.id,
+			...options,
 		});
+
 		const allNotes: NoteEntity[] = await Note.all();
 		return allNotes;
 	}
@@ -87,6 +107,92 @@ describe('InteropService_Importer_OneNote', () => {
 		expectWithInstructions(normalizeNoteForSnapshot(mainNote.body)).toMatchSnapshot(mainNote.title);
 	});
 
+	it('should convert XPS printouts to image resources on Windows', async () => {
+		if (process.platform !== 'win32') return;
+
+		const notes = await withWarningSilenced(/OneNoteConverter:/, async () => importNote(`${supportDir}/onenote/simple-xps.one`));
+		const resources = await Resource.all();
+		const note = notes.find(note => note.title === 'Printout');
+
+		expectWithInstructions(note).toBeTruthy();
+
+		const imageResourceIds = [
+			...note.body.matchAll(/!\[[^\]]*\]\(:\/([a-f0-9]{32})\)/g),
+			...note.body.matchAll(/<img[^>]+src=["']:\/([a-f0-9]{32})["']/g),
+		].map(match => match[1]);
+
+		const imageResources = await Promise.all(imageResourceIds.map(resourceId => Resource.load(resourceId)));
+
+		expectWithInstructions(imageResources.length).toBe(1);
+
+		for (const resource of imageResources) {
+			expectWithInstructions(resource.mime).toMatch(/^image\//);
+			const content = await Resource.content(resource);
+			const metadata = await sharp(content).metadata();
+			expectWithInstructions(metadata.width).toBeGreaterThan(0);
+			expectWithInstructions(metadata.height).toBeGreaterThan(0);
+		}
+
+		expectWithInstructions(resources.map(resource => resource.mime)).not.toContain('application/vnd.ms-xpsdocument');
+		expectWithInstructions(note.body).not.toMatch(/\.xps/i);
+	});
+
+	it('should convert PDF-named XPS printouts to image resources on Windows', async () => {
+		if (process.platform !== 'win32') return;
+
+		const notes = await withWarningSilenced(/OneNoteConverter:/, async () => importNote(`${supportDir}/onenote/pdf-named-xps.one`));
+		const resources = await Resource.all();
+		const note = notes.find(note => note.title === 'The Importance of Being Earnest (1895)');
+
+		expectWithInstructions(note).toBeTruthy();
+		expectWithInstructions(note.body).not.toMatch(/<img[^>]+Importance of being earnest analysis jana\.pdf/i);
+		expectWithInstructions(note.body).not.toContain('XPS printout page 1: Open original XPS file');
+
+		const imageResourceIds = [
+			...note.body.matchAll(/!\[[^\]]*\]\(:\/([a-f0-9]{32})\)/g),
+			...note.body.matchAll(/<img[^>]+src=["']:\/([a-f0-9]{32})["']/g),
+		].map(match => match[1]);
+
+		expectWithInstructions(imageResourceIds.length).toBe(1);
+
+		const imageResource = await Resource.load(imageResourceIds[0]);
+		expectWithInstructions(imageResource.mime).toMatch(/^image\//);
+
+		const content = await Resource.content(imageResource);
+		const metadata = await sharp(content).metadata();
+		expectWithInstructions(metadata.width).toBeGreaterThan(0);
+		expectWithInstructions(metadata.height).toBeGreaterThan(0);
+
+		expectWithInstructions(resources.map(resource => resource.mime)).not.toContain('application/vnd.ms-xpsdocument');
+		expectWithInstructions(note.body).not.toMatch(/\.xps/i);
+	});
+
+	// Covers the anomaly reported in https://github.com/laurent22/joplin/issues/14211:
+	// In the reported file, a printout page has a .pdf filename, but its content
+	// is XPS. Non-Windows imports should link to the XPS resource.
+	it('should import PDF-named XPS printouts as resource links on non-Windows', async () => {
+		if (process.platform === 'win32') return;
+
+		const notes = await withWarningSilenced(/OneNoteConverter:/, async () => importNote(`${supportDir}/onenote/pdf-named-xps.one`));
+		const note = notes.find(note => note.title === 'The Importance of Being Earnest (1895)');
+
+		expectWithInstructions(note).toBeTruthy();
+		expectWithInstructions(note.body).toContain('XPS printout page 1: Open original XPS file');
+		expectWithInstructions(note.body).not.toMatch(/<img[^>]+Importance of being earnest analysis jana\.pdf/i);
+
+		const linkResourceIds = [
+			...note.body.matchAll(/\[[^\]]*\]\(:\/([a-f0-9]{32})\)/g),
+			...note.body.matchAll(/<a[^>]+href=["']:\/([a-f0-9]{32})["']/g),
+		].map(match => match[1]);
+
+		expectWithInstructions(linkResourceIds.length).toBe(1);
+
+		const linkedResource = await Resource.load(linkResourceIds[0]);
+		expectWithInstructions(linkedResource.mime).toBe('application/vnd.ms-xpsdocument');
+		expectWithInstructions(linkedResource.title).toMatch(/\.xps$/i);
+		expectWithInstructions(linkedResource.title).not.toMatch(/\.pdf$/i);
+	});
+
 	it('should preserve indentation of subpages in Section page', async () => {
 		const notes = await importNote(`${supportDir}/onenote/subpages.zip`);
 
@@ -96,15 +202,19 @@ describe('InteropService_Importer_OneNote', () => {
 
 		const pageTwo = notes.find(n => n.title === 'Page 2');
 		expectWithInstructions(menuLines[3].trim()).toBe(`<li class="l1"><a href=":/${pageTwo.id}" target="content" title="Page 2">${pageTwo.title}</a>`);
+		expectWithInstructions(pageTwo.order).toBe(-3);
 
 		const pageTwoA = notes.find(n => n.title === 'Page 2-a');
 		expectWithInstructions(menuLines[4].trim()).toBe(`<li class="l2"><a href=":/${pageTwoA.id}" target="content" title="Page 2-a">${pageTwoA.title}</a>`);
+		expectWithInstructions(pageTwoA.order).toBe(-4);
 
 		const pageTwoAA = notes.find(n => n.title === 'Page 2-a-a');
 		expectWithInstructions(menuLines[5].trim()).toBe(`<li class="l3"><a href=":/${pageTwoAA.id}" target="content" title="Page 2-a-a">${pageTwoAA.title}</a>`);
+		expectWithInstructions(pageTwoAA.order).toBe(-5);
 
 		const pageTwoB = notes.find(n => n.title === 'Page 2-b');
 		expectWithInstructions(menuLines[7].trim()).toBe(`<li class="l2"><a href=":/${pageTwoB.id}" target="content" title="Page 2-b">${pageTwoB.title}</a>`);
+		expectWithInstructions(pageTwoB.order).toBe(-7);
 	});
 
 	it('should created subsections', async () => {
@@ -185,16 +295,21 @@ describe('InteropService_Importer_OneNote', () => {
 		const content = await readFile(filepath, 'utf-8');
 
 		const jsdom = new JSDOM('<div></div>');
-		InteropService.instance().domParser = new jsdom.window.DOMParser();
-		InteropService.instance().xmlSerializer = new jsdom.window.XMLSerializer();
+		const domParser = new jsdom.window.DOMParser();
+		const xmlSerializer = new jsdom.window.XMLSerializer();
 
 		const importer = new InteropService_Importer_OneNote();
 		await importer.init('asdf', {
-			domParser: new jsdom.window.DOMParser(),
-			xmlSerializer: new jsdom.window.XMLSerializer(),
+			domParser,
+			xmlSerializer,
 		});
 
-		expectWithInstructions(importer.extractSvgs(content, titleGenerator())).toMatchSnapshot();
+		const dom = domParser.parseFromString(content, 'text/html');
+		const extracted = importer.extractSvgs(dom, titleGenerator());
+		expect(extracted).toMatchObject({ changed: true });
+		expectWithInstructions(
+			{ html: dom.body.outerHTML, svgs: extracted.svgs },
+		).toMatchSnapshot();
 	});
 
 	it('should ignore broken characters at the start of paragraph', async () => {
@@ -223,10 +338,10 @@ describe('InteropService_Importer_OneNote', () => {
 	it('should group link parts even if they have different css styles', async () => {
 		const notes = await importNote(`${supportDir}/onenote/remove_hyperlink_on_title.zip`);
 
-		const noteToTest = notes.find(n => n.title === 'Tips from a Pro Using Trees for Dramatic Landscape Photography');
+		const noteToTest = notes.find(n => n.title === 'Tips from a Pro: Using Trees for Dramatic Landscape Photography');
 
 		expectWithInstructions(noteToTest).toBeTruthy();
-		expectWithInstructions(noteToTest.body).toContain('<a href="onenote:https://d.docs.live.net/c8d3bbab7f1acf3a/Documents/Photography/%E9%A3%8E%E6%99%AF.one#Tips%20from%20a%20Pro%20Using%20Trees%20for%20Dramatic%20Landscape%20Photography&section-id={262ADDFB-A4DC-4453-A239-0024D6769962}&page-id={88D803A5-4F43-48D4-9B16-4C024F5787DC}&end" style="">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a>');
+		expectWithInstructions(noteToTest.body).toContain('<a href="onenote:https://d.docs.live.net/c8d3bbab7f1acf3a/Documents/Photography/%E9%A3%8E%E6%99%AF.one#Tips%20from%20a%20Pro%20Using%20Trees%20for%20Dramatic%20Landscape%20Photography&amp;section-id={262ADDFB-A4DC-4453-A239-0024D6769962}&amp;page-id={88D803A5-4F43-48D4-9B16-4C024F5787DC}&amp;end" style="">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a>');
 	});
 
 	it('should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker', async () => {
@@ -278,6 +393,14 @@ describe('InteropService_Importer_OneNote', () => {
 		expect(normalizeNoteForSnapshot(note2Content)).toMatchSnapshot();
 	});
 
+	it('should import vertically-scaled ink', async () => {
+		const notes = await importNote(`${supportDir}/onenote/scaled_ink.one`);
+
+		const note = notes.find(n => n.title === 'Scaled');
+		expectWithInstructions(note).toBeTruthy();
+		expectWithInstructions(normalizeNoteForSnapshot(note.body)).toMatchSnapshot();
+	});
+
 	it('should support directly importing .one files', async () => {
 		const notes = await importNote(`${supportDir}/onenote/onenote_desktop.one`);
 
@@ -316,5 +439,66 @@ describe('InteropService_Importer_OneNote', () => {
 		const markdown = converter.parse(importedNote.body);
 
 		expect(markdown).toMatchSnapshot('Math');
+	});
+
+	it('should apply position data for embedded files', async () => {
+		const notes = await importNote(`${supportDir}/onenote/testOneNoteEmbeddedWordDoc.one`);
+		const importedNote = notes.find(n => n.title.startsWith('Embedded doc sheet'));
+
+		expect(normalizeNoteForSnapshot(importedNote.body)).toMatchSnapshot('EmbeddedFiles');
+	});
+
+	it('should correctly import .onepkg notebooks', async () => {
+		const notes = await importNote(`${supportDir}/onenote/test.onepkg`);
+
+		expect(notesToMarkdownString(notes)).toMatchSnapshot();
+	});
+
+	it('should report failure, but continue importing other sections', async () => {
+		let errorMessage;
+		const onError = jest.fn((error: unknown) => {
+			errorMessage = String(error);
+		});
+
+		const notes = await withWarningSilenced(
+			/Unexpected end of file/,
+			() => importNote(`${supportDir}/onenote/truncated.zip`, { onError }),
+		);
+		// The truncated section should have failed to import
+		expect(onError).toHaveBeenCalledTimes(1);
+		expect(errorMessage).toMatch(/Unexpected end of file/);
+		// The other section should import successfully
+		expect(notes.map(note => note.title).sort()).toEqual(['Test note', 'Test section']);
+	});
+
+	it('should import nested ink', async () => {
+		const notes = await importNote(`${supportDir}/onenote/desktop_missing_ink.one`);
+		expect(
+			notes
+				.filter(note => note.title === 'Ink Missing - only one example missing part')
+				.map(note => normalizeNoteForSnapshot(note.body))
+				.sort(),
+		).toMatchSnapshot();
+	});
+
+	it('should import inline tags', async () => {
+		const notes = await importNote(`${supportDir}/onenote/tagged-lines.one`);
+		const note = notes.find(note => note.title === 'Checklists');
+		expect(notesToMarkdownString([note])).toMatchSnapshot();
+		expect(normalizeNoteForSnapshot(note.body)).toMatchSnapshot();
+	});
+
+	it('should import bold and italic in a way that can be converted to Markdown', async () => {
+		const notes = await importNote(`${supportDir}/onenote/bold_and_italic.one`);
+		const matchingNotes = notes.filter(n => n.title === 'Bold & italic');
+		expect(notesToMarkdownString(matchingNotes)).toMatchSnapshot();
+	});
+
+	it('should import updated/created timestamps', async () => {
+		const notes = await importNote(`${supportDir}/onenote/testOneNoteEmbeddedWordDoc.one`);
+		const importedNote = notes.find(n => n.title.startsWith('Embedded doc sheet'));
+
+		expect(importedNote.user_updated_time).toBe(new Date('2019-12-11T23:37:28.000Z').getTime());
+		expect(importedNote.user_created_time).toBe(new Date('2019-12-11T23:35:52.000Z').getTime());
 	});
 });

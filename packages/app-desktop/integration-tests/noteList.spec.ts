@@ -101,6 +101,35 @@ test.describe('noteList', () => {
 		await expect(testNoteItem).toBeVisible();
 	});
 
+	test('should remain focused after deleting a note to the trash', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('test note 1');
+		await mainScreen.createNewNote('test note 2');
+		await mainScreen.createNewNote('test note 3');
+
+		const noteList = mainScreen.noteList;
+		await noteList.sortByTitle(electronApp);
+		await noteList.focusContent(electronApp);
+
+		// The most-recently created note should be selected
+		await noteList.expectNoteToBeSelected('test note 3');
+
+		// All three notes should be visible
+		const getNote = (i: number) => noteList.getNoteItemByTitle(`test note ${i}`);
+		await expect(getNote(1)).toBeVisible();
+		await expect(getNote(2)).toBeVisible();
+		await expect(getNote(3)).toBeVisible();
+
+		await getNote(3).press('Delete');
+		await expect(getNote(3)).not.toBeVisible();
+
+		// Pressing the up arrow should change the selection
+		// (Regression test for https://github.com/laurent22/joplin/issues/10753)
+		await noteList.expectNoteToBeSelected('test note 2');
+		await noteList.container.press('ArrowUp');
+		await noteList.expectNoteToBeSelected('test note 1');
+	});
+
 	test('arrow keys should navigate the note list', async ({ electronApp, mainWindow }) => {
 		const mainScreen = await new MainScreen(mainWindow).setup();
 		const sidebar = mainScreen.sidebar;

@@ -26,7 +26,7 @@ export interface Command {
 	/**
 	 * Code to be ran when the command is executed. It may return a result.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin commands accept arbitrary args and return arbitrary results; this is part of the public plugin API
 	execute(...args: any[]): Promise<any | void>;
 
 	/**
@@ -116,13 +116,13 @@ export interface ExportModule {
 	/**
 	 * Called when an item needs to be processed. An "item" can be any Joplin object, such as a note, a folder, a notebook, etc.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: item type depends on itemType (NoteEntity, FolderEntity, ResourceEntity, etc.); plugin authors discriminate at use site
 	onProcessItem(context: ExportContext, itemType: number, item: any): Promise<void>;
 
 	/**
 	 * Called when a resource file needs to be exported.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See onProcessItem; resource here is a ResourceEntity but the plugin API keeps it loosely typed
 	onProcessResource(context: ExportContext, resource: any, filePath: string): Promise<void>;
 
 	/**
@@ -186,13 +186,13 @@ export interface ExportContext {
 	/**
 	 * You can attach your own custom data using this property - it will then be passed to each event handler, allowing you to keep state from one event to the next.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: userData is arbitrary per-plugin state
 	userData?: any;
 }
 
 export interface ImportContext {
 	sourcePath: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: import options are arbitrary per-importer
 	options: any;
 	warnings: string[];
 }
@@ -202,7 +202,7 @@ export interface ImportContext {
 // =================================================================
 
 export interface Script {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: event payload shape depends on the host context
 	onStart?(event: any): Promise<void>;
 }
 
@@ -308,7 +308,7 @@ export interface MenuItem {
 	 * Arguments that should be passed to the command. They will be as rest
 	 * parameters.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: command args depend on the command
 	commandArgs?: any[];
 
 	/**
@@ -362,13 +362,13 @@ export type ViewHandle = string;
 
 export interface EditorCommand {
 	name: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: command value depends on the command
 	value?: any;
 }
 
 export interface DialogResult {
 	id: ButtonId;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: form data shape depends on the dialog
 	formData?: any;
 }
 
@@ -434,8 +434,30 @@ export interface EditorPluginCallbacks {
 
 export type VisibleHandler = ()=> Promise<void>;
 
+/**
+ * Identifies the type of element that was right-clicked in the editor context menu.
+ */
+export enum ContextMenuItemType {
+	None = '',
+	Image = 'image',
+	Resource = 'resource',
+	Text = 'text',
+	Link = 'link',
+	NoteLink = 'noteLink',
+}
+
 export interface EditContextMenuFilterObject {
 	items: MenuItem[];
+	/**
+	 * Context about what was right-clicked. Plugins should use this instead of
+	 * checking the editor cursor position, as the cursor may not reflect the
+	 * actual click location.
+	 */
+	context?: {
+		resourceId?: string;
+		itemType?: ContextMenuItemType;
+		textToCopy?: string;
+	};
 }
 
 export interface EditorActivationCheckFilterObject {
@@ -497,7 +519,7 @@ export enum SettingStorage {
 // Redefine a simplified interface to mask internal details
 // and to remove function calls as they would have to be async.
 export interface SettingItem {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Setting values are heterogeneous per setting (string/number/bool/Record/Array); plugin authors narrow at use site
 	value: any;
 	type: SettingItemType;
 
@@ -534,8 +556,7 @@ export interface SettingItem {
 	 * This property is required when `isEnum` is `true`. In which case, it
 	 * should contain a map of value => label.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	options?: Record<any, any>;
+	options?: Record<string | number, string>;
 
 	/**
 	 * Reserved property. Not used at the moment.
@@ -616,7 +637,7 @@ export interface ClipboardContent {
 // Content Script types
 // =================================================================
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: messages between content scripts and plugins are arbitrary serialisable data
 export type PostMessageHandler = (message: any)=> Promise<any>;
 
 /**
@@ -640,38 +661,38 @@ export interface ContentScriptContext {
 }
 
 export interface ContentScriptModuleLoadedEvent {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: userData is arbitrary per-plugin state
 	userData?: any;
 }
 
 export interface ContentScriptModule {
 	onLoaded?: (event: ContentScriptModuleLoadedEvent)=> void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin entry point returns a plugin-specific module (markdown-it plugin, CodeMirror plugin, etc.); shape varies per content script type
 	plugin: ()=> any;
 	assets?: ()=> void;
 }
 
 export interface MarkdownItContentScriptModule extends Omit<ContentScriptModule, 'plugin'> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- markdown-it and options are external library types not imported here; plugin authors annotate concretely
 	plugin: (markdownIt: any, options: any)=> any;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror command callbacks accept and return arbitrary values; matches CM6 Command type
 type EditorCommandCallback = (...args: any[])=> any;
 
 export interface CodeMirrorControl {
 	/** Points to a CodeMirror 6 EditorView instance. */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CM6 EditorView is an external library type not imported here
 	editor: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CM6 module namespace; types come from the external library
 	cm6: any;
 
 	/** `extension` should be a [CodeMirror 6 extension](https://codemirror.net/docs/ref/#state.Extension). */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CM6 Extension type comes from the external library
 	addExtension(extension: any|any[]): void;
 
 	supportsCommand(name: string): boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See EditorCommandCallback
 	execCommand(name: string, ...args: any[]): any;
 	registerCommand(name: string, callback: EditorCommandCallback): void;
 
@@ -685,13 +706,13 @@ export interface CodeMirrorControl {
 		 *
 		 * Using `autocompletion({ override: [ ... ]})` causes errors when done by multiple plugins.
 		 */
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CM6 CompletionSource and Extension types come from the external library
 		completionSource(completionSource: any): any;
 
 		/**
 		 * Creates an extension that enables or disables [`languageData`-based autocompletion](https://codemirror.net/docs/ref/#autocomplete.autocompletion^config.override).
 		 */
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See completionSource above
 		enableLanguageDataAutocomplete: { of: (enabled: boolean)=> any };
 
 		/**
@@ -938,3 +959,193 @@ export enum ContentScriptType {
 	 */
 	CodeMirrorPlugin = 'codeMirrorPlugin',
 }
+
+// =================================================================
+// AI API types
+// =================================================================
+
+/**
+ * Role of a chat message. `system` messages set the assistant's behaviour,
+ * `user` messages come from the end user, and `assistant` messages are model
+ * responses fed back as conversation history.
+ */
+export type ChatMessageRole = 'system' | 'user' | 'assistant';
+
+/**
+ * A single message in a chat conversation.
+ */
+export interface ChatMessage {
+	role: ChatMessageRole;
+	content: string;
+}
+
+/**
+ * Optional parameters for a chat call. The active model and provider are
+ * controlled by the user in the Joplin settings — plugins cannot pick a model.
+ */
+export interface ChatOptions {
+	/** Sampling temperature, typically between 0 and 1. Provider default if omitted. */
+	temperature?: number;
+	/** Maximum number of tokens to generate. Provider default if omitted. */
+	maxTokens?: number;
+}
+
+/**
+ * Result of a chat call.
+ */
+export interface ChatResult {
+	/** The assistant's text response. */
+	text: string;
+}
+
+/**
+ * Relevance preset for semantic search. Maps internally to model-specific
+ * `(k, minScore)` tuning — the preset is the public contract so plugins keep
+ * working when the bundled embedding model changes.
+ */
+export type SearchRelevance = 'strict' | 'normal' | 'loose';
+
+/**
+ * Where to look for matches.
+ *
+ * - `all`: every indexed note (default).
+ * - `note`: a single note (rarely useful directly — mainly an internal
+ *   building block).
+ * - `folder`: all notes in the given folder (a "notebook" in the UI).
+ * - `tag`: all notes tagged with the given tag.
+ *
+ * Trashed and conflict notes are always excluded.
+ */
+export type SearchScope =
+	| { type: 'all' }
+	| { type: 'note'; noteId: string }
+	| { type: 'folder'; folderId: string }
+	| { type: 'tag'; tagId: string };
+
+/**
+ * What to search for: free text (embedded internally), or an existing note
+ * whose stored chunks are reused as the query — useful for "related notes",
+ * tag suggestions, and graph-style use cases without a second embedding pass.
+ */
+export type SearchQuery =
+	| { text: string }
+	| { noteId: string };
+
+/**
+ * Parameters for {@link JoplinAi.search}.
+ */
+export interface SearchOptions {
+	query: SearchQuery;
+	scope?: SearchScope;
+	relevance?: SearchRelevance;
+}
+
+/**
+ * A single hit from {@link JoplinAi.search}.
+ */
+export interface SearchResult {
+	noteId: string;
+	chunkIndex: number;
+	chunkText: string;
+	/**
+	 * Cosine similarity in `[0, 1]`. Higher means more similar. Plugins should
+	 * use this for ranking but not as an absolute threshold — that's what the
+	 * `relevance` preset is for.
+	 */
+	score: number;
+}
+
+/**
+ * Parameters for {@link JoplinAi.getEmbeddings}.
+ */
+export interface GetEmbeddingsOptions {
+	/**
+	 * Restrict the result to these notes. Omit to page through every indexed
+	 * chunk in the vault. Requesting a note that isn't indexed yet (e.g. still
+	 * in the initial backfill) is not an error — it's silently skipped.
+	 */
+	noteIds?: string[];
+	/**
+	 * Opaque pagination cursor returned by a previous call. Treat as a black
+	 * box: pass it back unchanged to get the next page. Omit on the first
+	 * call.
+	 */
+	cursor?: string;
+	/**
+	 * Maximum chunks to return in this page. Defaults to 500. Hard-capped at
+	 * 5000 to keep payload size bounded.
+	 */
+	limit?: number;
+}
+
+/**
+ * One chunk's raw embedding vector and the text it was computed from.
+ */
+export interface EmbeddingChunk {
+	noteId: string;
+	chunkIndex: number;
+	chunkText: string;
+	/**
+	 * Unit-norm vector of length {@link EmbeddingsPage.dimension}. Only
+	 * comparable to vectors with the same {@link EmbeddingsPage.modelId}.
+	 */
+	vector: number[];
+}
+
+/**
+ * Returned by {@link JoplinAi.getEmbeddings}.
+ *
+ * The vectors are produced by a specific model: comparing vectors across
+ * different `modelId` values (or persisting vectors across model changes) is
+ * meaningless. Plugins that cache vectors must key the cache by `modelId` and
+ * invalidate when it changes between calls.
+ */
+export interface EmbeddingsPage {
+	/** Identifier of the model that produced these vectors, e.g. `'multilingual-e5-small'`. */
+	modelId: string;
+	/** Length of each `vector` array. */
+	dimension: number;
+	chunks: EmbeddingChunk[];
+	/**
+	 * Pass this back as `cursor` on the next call to get the following page.
+	 * `undefined` means there are no more results in the current snapshot.
+	 *
+	 * If the index is wiped between pages (e.g. the user changes the embedding
+	 * model), pagination ends silently — the next call with this cursor
+	 * returns an empty `chunks` array. Plugins should watch for a `modelId`
+	 * change between pages and discard partial results if it differs.
+	 */
+	nextCursor?: string;
+}
+
+/**
+ * State of the on-device embedding indexer.
+ *
+ * - `unavailable`: vector search isn't supported on this platform (won't change this session).
+ * - `disabled`: AI or the embedding index is turned off in settings.
+ * - `preparing`: the embedding model is downloading or loading.
+ * - `indexing`: the background scan is embedding notes; search works but results are incomplete.
+ * - `ready`: the index is idle and the model is loaded. Indexed-note count
+ *   may still be 0 (e.g. empty vault) — see the separate `ready` boolean.
+ */
+export type AiIndexState = 'unavailable' | 'disabled' | 'preparing' | 'indexing' | 'ready';
+
+/**
+ * Returned by {@link JoplinAi.getIndexStatus}. Lets plugins decide whether to
+ * use Joplin's native AI or fall back to their own implementation.
+ */
+export interface AiIndexStatus {
+	/** `true` when `state === 'ready'` and at least one note is indexed. */
+	ready: boolean;
+	state: AiIndexState;
+	/**
+	 * Identifier of the model producing the current vectors, e.g.
+	 * `'multilingual-e5-small'`. `null` when no provider is active. Plugins
+	 * that cache derived data should key it by `modelId`.
+	 */
+	modelId: string | null;
+	notesIndexed: number;
+	/** Indexable notes in the vault (excludes trashed, conflict, locked). */
+	totalNotes: number;
+}
+

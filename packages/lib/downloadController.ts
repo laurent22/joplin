@@ -5,14 +5,21 @@ import { bytesToHuman } from '@joplin/utils/bytes';
 
 const logger = Logger.create('downloadController');
 
+interface DownloadRequest {
+	destroy(error?: Error): void;
+}
+
+interface DownloadChunk {
+	length: number;
+}
+
 export interface DownloadController {
 	totalBytes: number;
 	imagesCount: number;
 	maxImagesCount: number;
 	imageCountExpected: number;
 	printStats(imagesCountExpected: number): void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	handleChunk(request: any): (chunk: any)=> void;
+	handleChunk(request: DownloadRequest): (chunk: DownloadChunk)=> void;
 	limitMessage(): string;
 }
 
@@ -64,10 +71,8 @@ export class LimitedDownloadController implements DownloadController {
 		return this.imageCountExpected_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public handleChunk(request: any) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return (chunk: any) => {
+	public handleChunk(request: DownloadRequest) {
+		return (chunk: DownloadChunk) => {
 			try {
 				this.totalBytes += chunk.length;
 			} catch (error) {

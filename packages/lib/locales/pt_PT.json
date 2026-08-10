@@ -149,6 +149,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"Sobre"
 	],
@@ -401,6 +404,9 @@
 	"Beta": [
 		"Beta"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Negrito"
 	],
@@ -530,6 +536,9 @@
 	"Checking... Please wait.": [
 		"A verificar… Por favor, aguarde."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Escolher a opção"
 	],
@@ -607,6 +616,9 @@
 	],
 	"Command": [
 		"Comando"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Painel de comandos"
@@ -915,6 +927,9 @@
 	"Delete selected notes": [
 		"Eliminar notas selecionadas"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Apagar o caderno Caixa de Entrada?\n\nSe apagar o caderno caixa de entrada, qualquer email enviado recentemente será perdido."
 	],
@@ -1004,6 +1019,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Apresenta a informação completa relativamente à nota."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Apresenta a nota especificada."
@@ -1837,6 +1855,9 @@
 	"Keychain Supported: %s": [
 		"Porta-Chaves Suportado: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Chaves que necessitam de atualização"
 	],
@@ -1966,6 +1987,9 @@
 	],
 	"Manage your plugins": [
 		"Gerir os seus plugins"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Gere a configuração E2EE. Os comandos são `enable`, `disable`, `decrypt`, `status`, `decrypt-file` e `target-status`."
@@ -2171,6 +2195,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Nenhum editor de texto está definido. Por favor, defina-o utilizando `config editor <editor-path>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"Nórdico"
 	],
@@ -2342,6 +2369,9 @@
 	"Open Sync Wizard...": [
 		"Abrir Assistente de Sincronização..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Abrir..."
 	],
@@ -2353,6 +2383,9 @@
 	],
 	"Options": [
 		"Opções"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Lista ordenada"
@@ -2888,6 +2921,9 @@
 	"Select parent notebook": [
 		"Selecionar caderno pai"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -3064,6 +3100,9 @@
 	],
 	"Source: ": [
 		"Origem: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Espaçador"
@@ -3630,6 +3669,9 @@
 	],
 	"Try it now": [
 		"Tentar agora"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Digite `help [command]` para mais informação relativamente ao comando; ou digite `help all` para informações completas de utilização."

@@ -1,6 +1,15 @@
 import { _ } from '../../locale';
 import CommandService from '../CommandService';
 import { ItemFlow, ListRenderer, OnClickEvent } from '../plugins/api/noteListType';
+import checkboxPieCss from './checkboxPieCss';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
+
+interface CheckboxStats {
+	total: number;
+	checked: number;
+	percent: number;
+	isComplete: boolean;
+}
 
 interface Props {
 	note: {
@@ -8,6 +17,8 @@ interface Props {
 		title: string;
 		is_todo: number;
 		todo_completed: number;
+		is_locked: number;
+		checkboxes: CheckboxStats | null;
 	};
 	item: {
 		// index: number;
@@ -34,7 +45,10 @@ const renderer: ListRenderer = {
 		// 'item.index',
 		'item.selected',
 		'item.size.height',
+		'note.checkboxes',
 		'note.id',
+		'note.is_locked',
+		'note.is_published',
 		'note.is_shared',
 		'note.is_todo',
 		'note.isWatched',
@@ -95,12 +109,39 @@ const renderer: ListRenderer = {
 					padding-right: 4px;
 					color: var(--joplin-color);
 				}
+
+				> .lockedicon {
+					padding-right: 4px;
+					color: var(--joplin-color);
+				}
+	
+			}
+
+			> .checkbox-pie {
+				display: flex;
+				align-items: center;
+				padding-right: 12px;
+				padding-left: 8px;
 			}
 		}
+
+		${checkboxPieCss}
 
 		> .content.-shared {
 			> .title {
 				color: var(--joplin-color-warn3);
+			}
+		}
+
+		> .content.-published {
+			> .title {
+				color: var(--joplin-color4);
+			}
+		}
+
+		> .content.-published.-selected {
+			> .title {
+				color: var(--joplin-color);
 			}
 		}
 
@@ -131,7 +172,7 @@ const renderer: ListRenderer = {
 
 	itemTemplate: // html
 		`
-		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
+		<div class="content {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.is_published}}-published{{/note.is_published}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
 			{{#note.is_todo}}
 				<div class="checkbox">
 					<input
@@ -145,13 +186,28 @@ const renderer: ListRenderer = {
 			{{/note.is_todo}}
 			<div class="title" data-id="{{note.id}}">
 				<i class="watchedicon fa fa-share-square"></i>
+				{{#note.is_locked}}<i class="lockedicon fa fa-lock"></i>{{/note.is_locked}}
 				<span>{{note.title}}</span>
 			</div>
+			{{#checkboxStats}}
+				<div class="checkbox-pie" title="{{checked}}/{{total}}">
+					{{#isComplete}}
+						<div class="pie -complete">✓</div>
+					{{/isComplete}}
+					{{^isComplete}}
+						<div class="pie" style="--percent: {{percent}};"></div>
+					{{/isComplete}}
+				</div>
+			{{/checkboxStats}}
 		</div>
 	`,
 
 	onRenderNote: async (props: Props) => {
-		return props;
+		return {
+			...props,
+			note: { ...props.note, is_locked: isNoteLockEnabled() ? props.note.is_locked : 0 },
+			checkboxStats: props.note.checkboxes,
+		};
 	},
 };
 

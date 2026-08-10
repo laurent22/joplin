@@ -180,7 +180,7 @@ impl TextRegionParser {
             };
 
             self.parts.push(TextRegion {
-                text: text,
+                text,
                 style: styles.cloned(),
                 hyperlink: Some(Hyperlink {
                     is_link_start,

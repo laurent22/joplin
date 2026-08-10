@@ -6,7 +6,7 @@ import Button, { ButtonLevel, ButtonSize, buttonSizePx } from '../Button/Button'
 import CommandService from '@joplin/lib/services/CommandService';
 import { runtime as focusSearchRuntime } from './commands/focusSearch';
 import Note from '@joplin/lib/models/Note';
-import { notesSortOrderNextField } from '../../services/sortOrder/notesSortOrderUtils';
+import { notesSortOrderNextField } from '@joplin/lib/services/sortOrder/notesSortOrderUtils';
 import { _ } from '@joplin/lib/locale';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -35,11 +35,14 @@ interface Props {
 	buttonVerticalGap: number;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-type StyleProps = any;
+interface StyleProps {
+	theme: { backgroundColor3: string };
+	padding?: number;
+	buttonVerticalGap?: number;
+	size?: ButtonSize;
+}
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-const StyledRoot: any = styled.div`
+const StyledRoot = styled.div`
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
@@ -192,8 +195,7 @@ function NoteListControls(props: Props) {
 		const defaultIcon = 'fas fa-cog';
 
 		const field = props.sortOrderField;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const iconMap: any = {
+		const iconMap: Record<string, string> = {
 			user_updated_time: 'far fa-calendar-alt',
 			user_created_time: 'far fa-calendar-plus',
 			title: 'fas fa-font',
@@ -284,9 +286,11 @@ interface ConnectProps {
 const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const whenClauseContext = stateToWhenClauseContext(state, { windowId: ownProps.windowId });
 	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
+	const hasFolderForNewNotes = whenClauseContext.selectedFolderIsValid
+		&& windowState.selectedFolderId !== getTrashFolderId();
 
 	return {
-		showNewNoteButtons: windowState.selectedFolderId !== getTrashFolderId(),
+		showNewNoteButtons: hasFolderForNewNotes,
 		newNoteButtonEnabled: CommandService.instance().isEnabled('newNote', whenClauseContext),
 		newTodoButtonEnabled: CommandService.instance().isEnabled('newTodo', whenClauseContext),
 		sortOrderButtonsVisible: state.settings['notes.sortOrder.buttonsVisible'],

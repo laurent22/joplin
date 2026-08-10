@@ -1,12 +1,19 @@
 import BaseModel from '../BaseModel';
+import migration20 from '../migrations/20';
+import migration27 from '../migrations/27';
+import migration33 from '../migrations/33';
+import migration35 from '../migrations/35';
 import migration42 from '../migrations/42';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const migrationScripts: Record<number, any> = {
-	20: require('../migrations/20.js'),
-	27: require('../migrations/27.js'),
-	33: require('../migrations/33.js'),
-	35: require('../migrations/35.js'),
+interface MigrationScript {
+	exec: ()=> Promise<void>;
+}
+
+const migrationScripts: Record<number, MigrationScript> = {
+	20: migration20,
+	27: migration27,
+	33: migration33,
+	35: migration35,
 	42: migration42,
 };
 

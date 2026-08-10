@@ -7,7 +7,7 @@ import BannerContent from './NoteEditor/WarningBanner/BannerContent';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
 const packageInfo: PackageInfo = require('../packageInfo.js');
-const ipcRenderer = require('electron').ipcRenderer;
+import { ipcRenderer } from 'electron';
 
 const logger = Logger.create('ErrorBoundary');
 
@@ -31,8 +31,7 @@ interface State {
 
 interface Props {
 	message?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	children: any;
+	children: React.ReactNode;
 }
 
 interface BannerProps {
@@ -61,9 +60,8 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 
 	public state: State = { error: null, errorInfo: null, pluginInfos: [], plugins: {} };
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public componentDidCatch(error: any, errorInfo: ErrorInfo) {
-		if (typeof error === 'string') error = { message: error };
+	public componentDidCatch(error: Error | string, errorInfo: ErrorInfo) {
+		if (typeof error === 'string') error = { message: error } as Error;
 
 		const pluginInfos: PluginInfo[] = [];
 		let plugins: Plugins = {};

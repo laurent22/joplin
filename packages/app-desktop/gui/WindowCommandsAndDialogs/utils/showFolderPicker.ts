@@ -17,7 +17,7 @@ interface Options {
 }
 
 const showFolderPicker = async (control: WindowControl, { label, allowSelectNone, showFolder }: Options) => {
-	const folders = await Folder.sortFolderTree();
+	const folders = await Folder.sortFolderTree(null, { includeDeleted: false });
 	const startFolders: FolderEntry[] = [];
 	const maxDepth = 15;
 

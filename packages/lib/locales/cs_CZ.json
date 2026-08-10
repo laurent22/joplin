@@ -143,6 +143,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		""
 	],
@@ -374,6 +377,9 @@
 	"Beta": [
 		""
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Tučně"
 	],
@@ -500,6 +506,9 @@
 	"Checking... Please wait.": [
 		"Probíhá kontrola... Počkejte prosím."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Zvolit možnost"
 	],
@@ -571,6 +580,9 @@
 	],
 	"Command": [
 		"Příkaz"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Nabídka příkazů"
@@ -844,6 +856,9 @@
 	"Delete selected notes": [
 		"Odstranění vybraných poznámek"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -930,6 +945,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Zobrazí veškeré informace o poznámce."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Zobrazí vybranou poznámku."
@@ -1689,6 +1707,9 @@
 	"Keychain Supported: %s": [
 		"Podpora klíčenky: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Klíče, které je třeba aktualizovat"
 	],
@@ -1801,6 +1822,9 @@
 	],
 	"Manage your plugins": [
 		"Správa vašich rozšíření"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Spravuje konfiguraci koncového šifrování. Příkazy jsou `zapnout`, `vypnout`, `dešifrovat`, `stav`, `dešifrovat soubor` a `cílový stav`."
@@ -1997,6 +2021,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Nebyl vybrán textový editor. Prosím nastavte jej pomocí `config editor <editor-path>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"Nord"
 	],
@@ -2156,6 +2183,9 @@
 	"Open Sync Wizard...": [
 		"Otevřete Průvodce synchronizací..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Otevřít..."
 	],
@@ -2167,6 +2197,9 @@
 	],
 	"Options": [
 		"Nastavení"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Seznam objednávek"
@@ -2639,6 +2672,9 @@
 	"Select one of the other supported sync targets.": [
 		""
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2794,6 +2830,9 @@
 	],
 	"Source: ": [
 		"Zdroj: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		""
@@ -3307,6 +3346,9 @@
 	],
 	"Try it now": [
 		"Vyzkoušejte to nyní"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Zadejte `help [příkaz]` pro více informací o příkazu; nebo `help all` pro kompletní nápovědu."

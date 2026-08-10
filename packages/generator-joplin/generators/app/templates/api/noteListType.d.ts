@@ -1,5 +1,5 @@
 import { Size } from './types';
-type ListRendererDatabaseDependency = 'folder.created_time' | 'folder.deleted_time' | 'folder.encryption_applied' | 'folder.encryption_cipher_text' | 'folder.icon' | 'folder.id' | 'folder.is_shared' | 'folder.master_key_id' | 'folder.parent_id' | 'folder.share_id' | 'folder.title' | 'folder.updated_time' | 'folder.user_created_time' | 'folder.user_data' | 'folder.user_updated_time' | 'folder.type_' | 'note.altitude' | 'note.application_data' | 'note.author' | 'note.body' | 'note.conflict_original_id' | 'note.created_time' | 'note.deleted_time' | 'note.encryption_applied' | 'note.encryption_cipher_text' | 'note.id' | 'note.is_conflict' | 'note.is_shared' | 'note.is_todo' | 'note.latitude' | 'note.longitude' | 'note.markup_language' | 'note.master_key_id' | 'note.order' | 'note.parent_id' | 'note.share_id' | 'note.source' | 'note.source_application' | 'note.source_url' | 'note.title' | 'note.todo_completed' | 'note.todo_due' | 'note.updated_time' | 'note.user_created_time' | 'note.user_data' | 'note.user_updated_time' | 'note.type_';
+type ListRendererDatabaseDependency = 'folder.created_time' | 'folder.deleted_time' | 'folder.encryption_applied' | 'folder.encryption_cipher_text' | 'folder.icon' | 'folder.id' | 'folder.is_shared' | 'folder.master_key_id' | 'folder.parent_id' | 'folder.share_id' | 'folder.title' | 'folder.updated_time' | 'folder.user_created_time' | 'folder.user_data' | 'folder.user_updated_time' | 'folder.type_' | 'note.altitude' | 'note.application_data' | 'note.author' | 'note.body' | 'note.conflict_original_id' | 'note.created_time' | 'note.deleted_time' | 'note.encryption_applied' | 'note.encryption_cipher_text' | 'note.extracted_resource_ids' | 'note.id' | 'note.is_conflict' | 'note.is_locked' | 'note.is_shared' | 'note.is_todo' | 'note.latitude' | 'note.longitude' | 'note.markup_language' | 'note.master_key_id' | 'note.order' | 'note.parent_id' | 'note.share_id' | 'note.source' | 'note.source_application' | 'note.source_url' | 'note.title' | 'note.todo_completed' | 'note.todo_due' | 'note.updated_time' | 'note.user_created_time' | 'note.user_data' | 'note.user_updated_time' | 'note.type_';
 export declare enum ItemFlow {
     TopToBottom = "topToBottom",
     LeftToRight = "leftToRight"
@@ -30,9 +30,9 @@ export type OnClickHandler = (event: OnClickEvent) => Promise<void>;
  * The `item.*` properties are specific to the rendered item. The most important being
  * `item.selected`, which you can use to display the selected note in a different way.
  */
-export type ListRendererDependency = ListRendererDatabaseDependency | 'item.index' | 'item.selected' | 'item.size.height' | 'item.size.width' | 'note.folder.title' | 'note.isWatched' | 'note.tags' | 'note.todoStatusText' | 'note.titleHtml';
+export type ListRendererDependency = ListRendererDatabaseDependency | 'item.index' | 'item.selected' | 'item.size.height' | 'item.size.width' | 'note.checkboxes' | 'note.folder.title' | 'note.isWatched' | 'note.tags' | 'note.todoStatusText' | 'note.titleHtml';
 export type ListRendererItemValueTemplates = Record<string, string>;
-export declare const columnNames: readonly ["note.folder.title", "note.is_todo", "note.latitude", "note.longitude", "note.source_url", "note.tags", "note.title", "note.todo_completed", "note.todo_due", "note.user_created_time", "note.user_updated_time"];
+export declare const columnNames: readonly ["note.checkboxes", "note.folder.title", "note.is_todo", "note.latitude", "note.longitude", "note.source_url", "note.tags", "note.title", "note.todo_completed", "note.todo_due", "note.user_created_time", "note.user_updated_time"];
 export type ColumnName = typeof columnNames[number];
 export interface ListRenderer {
     /**

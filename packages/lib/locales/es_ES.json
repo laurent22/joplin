@@ -185,6 +185,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"Acerca de"
 	],
@@ -470,6 +473,9 @@
 	"Beta": [
 		"Beta"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Negrita"
 	],
@@ -608,6 +614,9 @@
 	"Checking... Please wait.": [
 		"Comprobando... Por favor espere."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Seleccione una opción"
 	],
@@ -674,9 +683,6 @@
 	"Code View": [
 		"Vista de código"
 	],
-	"Code:": [
-		"Código:"
-	],
 	"Collaborate on a notebook with others": [
 		"Colaborar en una libreta con otros usuarios"
 	],
@@ -703,6 +709,9 @@
 	],
 	"Command": [
 		"Comando"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Paleta de comandos"
@@ -792,9 +801,6 @@
 	"Convert it": [
 		"Conviértelo"
 	],
-	"Convert note to Markdown": [
-		"Convertir nota a Markdown"
-	],
 	"Convert to note": [
 		"Convertir en nota"
 	],
@@ -849,9 +855,6 @@
 	],
 	"Could not connect to plugin repository.": [
 		"No se ha podido conectar con el repositorio de plugins."
-	],
-	"Could not convert note to Markdown: %s": [
-		"No se pudo convertir la nota a Markdown: %s"
 	],
 	"Could not export notes: %s": [
 		"No se pudo exportar las notas: %s"
@@ -1063,6 +1066,9 @@
 	"Delete selected notes": [
 		"Borrar notas seleccionadas"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"¿Eliminar la libreta de la bandeja de entrada?\n\nSi eliminas la libreta de la bandeja de entrada, es posible que se pierda cualquier correo electrónico que se haya enviado recientemente."
 	],
@@ -1167,6 +1173,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Mostrar la información completa acerca de la nota."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Muestra la nota dada."
@@ -2084,6 +2093,9 @@
 	"Keychain Supported: %s": [
 		"Llavero Soportado: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Claves que necesitan actualizarse"
 	],
@@ -2229,6 +2241,9 @@
 	],
 	"Manage your plugins": [
 		"Gestione sus plugins"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Administra la configuración E2EE. Los comandos son `enable`, `disable`, `decrypt`, `status`, `decrypt-file` y `target-status`."
@@ -2486,6 +2501,9 @@
 	"No updates available": [
 		"No hay actualizaciones disponibles"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Ninguno"
 	],
@@ -2696,6 +2714,9 @@
 	"Open Sync Wizard...": [
 		"Abrir el asistente de sincronización..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Abrir..."
 	],
@@ -2716,6 +2737,9 @@
 	],
 	"Options": [
 		"Opciones"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Lista ordenada"
@@ -3348,6 +3372,9 @@
 	"Select parent notebook": [
 		"Seleccionar libreta principal"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selected: %s": [
 		"Seleccionado: %s"
 	],
@@ -3551,6 +3578,9 @@
 	],
 	"Source: ": [
 		"Origen: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Espaciador"
@@ -3859,9 +3889,6 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"La nota «%s» se ha restaurado exitosamente a la libreta «%s»."
 	],
-	"The note has been converted to Markdown and the original note has been moved to the trash": [
-		"La nota se ha convertido a Markdown y la nota original se ha movido a la papelera"
-	],
 	"The note was successfully moved to the trash.": [
 		"La nota se movió con éxito a la papelera.",
 		"Las notas se movieron con éxito a la papelera."
@@ -4162,6 +4189,9 @@
 	],
 	"Try it now": [
 		"Intentar ahora"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Escriba `help [command]` para obtener más información sobre el comando o escriba `help all` para obtener toda la información acerca del uso del programa."

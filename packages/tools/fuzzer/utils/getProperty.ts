@@ -5,7 +5,9 @@ const getProperty = (object: unknown, propertyName: string) => {
 	}
 
 	if (!(propertyName in object)) {
-		throw new Error(`No such property ${JSON.stringify(propertyName)} in object`);
+		throw new Error(
+			`No such property ${JSON.stringify(propertyName)} in object. Available keys: (${JSON.stringify(Object.keys(object))})`,
+		);
 	}
 
 	return object[propertyName as keyof object];

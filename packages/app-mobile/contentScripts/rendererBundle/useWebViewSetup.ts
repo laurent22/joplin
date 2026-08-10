@@ -1,23 +1,24 @@
 import { RefObject, useEffect, useMemo, useRef } from 'react';
 import shim from '@joplin/lib/shim';
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { AppType } from '@joplin/lib/models/Setting';
 import { Platform } from 'react-native';
 import { SetUpResult } from '../types';
 import { themeStyle } from '../../components/global-style';
 import Logger from '@joplin/utils/Logger';
 import { WebViewControl } from '../../components/ExtendedWebView/types';
 import { MainProcessApi, OnScrollCallback, RendererControl, RendererProcessApi, RendererWebViewOptions, RenderOptions } from './types';
+import { PluginOptions } from '@joplin/renderer/MarkupToHtml';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import RNToWebViewMessenger from '../../utils/ipc/RNToWebViewMessenger';
 import useEditPopup from './utils/useEditPopup';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { RenderSettings } from './contentScript/Renderer';
-import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 import Resource from '@joplin/lib/models/Resource';
 import { ResourceInfos } from '@joplin/renderer/types';
 import useContentScripts from './utils/useContentScripts';
 import uuid from '@joplin/lib/uuid';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
+import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
 
 const logger = Logger.create('renderer/useWebViewSetup');
 
@@ -33,10 +34,11 @@ interface Props {
 const useSource = (tempDirPath: string) => {
 	const injectedJs = useMemo(() => {
 		const subValues = Setting.subValues('markdown.plugin', Setting.toPlainObject());
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const pluginOptions: any = {};
+		const pluginOptions: PluginOptions = {};
 		for (const n in subValues) {
-			pluginOptions[n] = { enabled: subValues[n] };
+			const appTypes = Setting.settingMetadata(`markdown.plugin.${n}`).appTypes;
+			const enabled = !appTypes.includes(AppType.Mobile) ? false : !!subValues[n];
+			pluginOptions[n] = { enabled };
 		}
 
 		const rendererWebViewStaticOptions: RendererWebViewOptions = {
@@ -91,8 +93,8 @@ const useMessenger = (props: UseMessengerProps) => {
 
 	const messenger = useMemo(() => {
 		const fsDriver = shim.fsDriver();
-		const localApi = {
-			onScroll: (fraction: number) => onScrollRef.current?.(fraction),
+		const localApi: MainProcessApi = {
+			onScroll: (event) => onScrollRef.current?.(event),
 			onPostMessage: (message: string) => onPostMessageRef.current?.(message),
 			onPostPluginMessage,
 			fsDriver: {
@@ -151,7 +153,21 @@ const useWebViewSetup = (props: Props): Result => {
 
 	const contentScripts = useContentScripts(props.pluginStates);
 	useEffect(() => {
-		void messenger.remoteApi.renderer.setExtraContentScriptsAndRerender(contentScripts);
+		const startTime = Date.now();
+		const totalBytes = contentScripts.reduce((sum, s) => sum + s.js.length, 0);
+		logger.info(`[perf] setExtraContentScriptsAndRerender: sending ${contentScripts.length} script(s), ${Math.round(totalBytes / 1024)} KiB`);
+		void (async () => {
+			try {
+				const result = await messenger.remoteApi.renderer.setExtraContentScriptsAndRerender(contentScripts);
+				const totalMs = Date.now() - startTime;
+				const evalMs = result?.evalMs ?? -1;
+				const renderMs = result?.renderMs ?? -1;
+				const bridge = totalMs - evalMs - renderMs;
+				logger.info(`[perf] setExtraContentScriptsAndRerender: round-trip ${totalMs} ms (eval ${evalMs} ms, rerender ${renderMs} ms, bridge ~${bridge} ms)`);
+			} catch (error) {
+				logger.error(`[perf] setExtraContentScriptsAndRerender FAILED after ${Date.now() - startTime} ms:`, error);
+			}
+		})();
 	}, [messenger, contentScripts]);
 
 	const onRerenderRequestRef = useRef(()=>{});
@@ -212,22 +228,35 @@ const useWebViewSetup = (props: Props): Result => {
 						settingsChanged = true;
 					}
 				},
-				readAssetBlob: (assetPath: string): Promise<Blob> => {
-					// Built-in assets are in resourceDir, external plugin assets are in cacheDir.
-					const assetsDirs = [Setting.value('resourceDir'), Setting.value('cacheDir')];
+				// Handles plugin asset loading on web (where the WebView can't load assets directly).
+				readAssetBlob: async (assetPath: string): Promise<Blob> => {
+					if (assetPath.startsWith('pluginAssets/')) { // Built-in plugin asset
+						assetPath = assetPath.replace(/^pluginAssets\//, '');
 
-					let resolvedPath = null;
-					for (const assetDir of assetsDirs) {
-						resolvedPath ??= resolvePathWithinDir(assetDir, assetPath);
-						if (resolvedPath) break;
-					}
+						const fullPath = shim.fsDriver().resolveRelativePathWithinDir(
+							Setting.value('pluginAssetDir'), assetPath,
+						);
+						return shim.fsDriver().fileAtPath(fullPath);
+					} else { // Asset from an installed/development plugin
+						// User-installed plugins are stored in cacheDir
+						const allowedBasePaths = [Setting.value('cacheDir')];
+						// Development plugins are stored in other locations. Add them separately:
+						if (Setting.value('plugins.devPluginPaths')) {
+							allowedBasePaths.push(...Setting.value('plugins.devPluginPaths').split(','));
+						}
 
-					if (!resolvedPath) {
-						throw new Error(`Failed to load asset at ${assetPath} -- not in any of the allowed asset directories: ${assetsDirs.join(',')}.`);
+						for (const basePath of allowedBasePaths) {
+							const resolved = resolvePathWithinDir(basePath, assetPath);
+							if (resolved) {
+								return shim.fsDriver().fileAtPath(resolved);
+							}
+						}
+
+						throw new Error(`Unable to resolve plugin asset: ${assetPath}`);
 					}
-					return shim.fsDriver().fileAtPath(resolvedPath);
 				},
 				removeUnusedPluginAssets: options.removeUnusedPluginAssets,
+				showNoteLinkIcon: options.showNoteLinkIcon,
 				globalSettings: {
 					'markdown.plugin.abc.options': Setting.value('markdown.plugin.abc.options'),
 				},

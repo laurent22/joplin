@@ -10,8 +10,7 @@ export interface WebViewControl {
 	postMessage(message: unknown): void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Needs to interface with old code from before rule was applied.
-export type OnMessageEvent = { nativeEvent: { data: any } };
+export type OnMessageEvent = { nativeEvent: { data: string } };
 
 export type OnMessageCallback = (event: OnMessageEvent)=> void;
 export type OnErrorCallback = (event: WebViewErrorEvent)=> void;

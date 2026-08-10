@@ -73,7 +73,7 @@ export default async (params: Params) => {
 			teamId: process.env.APPLE_ASC_PROVIDER,
 
 			tool: 'notarytool',
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- @electron/notarize's NotaryToolStartOptions no longer accepts appBundleId; keeping it because the field is still required by some Apple paths
 		} as any);
 	} catch (error) {
 		console.error(error);

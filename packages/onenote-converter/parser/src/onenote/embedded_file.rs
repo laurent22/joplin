@@ -1,3 +1,5 @@
+use std::io::Read;
+
 use crate::one::property::file_type::FileType;
 use crate::one::property_set::{embedded_file_container, embedded_file_node};
 use crate::onenote::note_tag::{NoteTag, parse_note_tags};
@@ -11,7 +13,7 @@ use parser_utils::errors::{ErrorKind, Result};
 /// See [\[MS-ONE\] 2.2.32].
 ///
 /// [\[MS-ONE\] 2.2.32]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/a665b5ad-ff40-4c0c-9e42-4b707254dc3f
-#[derive(Clone, PartialEq, PartialOrd, Debug)]
+#[derive(Clone, PartialEq, Debug)]
 pub struct EmbeddedFile {
     pub(crate) filename: String,
     pub(crate) file_type: FileType,
@@ -45,9 +47,9 @@ impl EmbeddedFile {
         &self.file_type
     }
 
-    /// The file's binary data.
-    pub fn data(&self) -> &[u8] {
-        self.data.as_ref()
+    /// A reader over the file's binary data.
+    pub fn read(&self) -> Result<Box<dyn Read>> {
+        self.data.read()
     }
 
     /// The max width of the embedded file's icon in half-inch increments.

@@ -2,7 +2,7 @@ import { readFileSync, readdirSync, writeFileSync } from 'fs-extra';
 import { dirname } from 'path';
 import { fileExtension, basename } from '@joplin/lib/path-utils';
 import markdownUtils from '@joplin/lib/markdownUtils';
-import { AssetContent, ItemMetadata, WelcomeAssetNote, WelcomeAssetResource, WelcomeAssets } from '@joplin/lib/WelcomeUtils';
+import { AssetContent, ItemMetadata, WelcomeAssetNote, WelcomeAssetPlatform, WelcomeAssetResource, WelcomeAssets } from '@joplin/lib/WelcomeUtils';
 
 const rootDir = dirname(dirname(__dirname));
 const enWelcomeDir = `${rootDir}/readme/welcome`;
@@ -10,6 +10,10 @@ const enWelcomeDir = `${rootDir}/readme/welcome`;
 const createdDate = new Date('2018-06-22T12:00:00Z');
 
 const itemMetadata_: ItemMetadata = {
+	'0_web.md': {
+		id: '4ec2e7505fc2e7505ec2e7505ec2a751',
+		platform: WelcomeAssetPlatform.Web,
+	},
 	'1_welcome_to_joplin.md': {
 		id: '8a1556e382704160808e9a7bef7135d3',
 	},
@@ -81,6 +85,10 @@ function itemIdFromPath(metadata: ItemMetadata, path: string) {
 	return md.id;
 }
 
+function itemPlatformFromPath(metadata: ItemMetadata, path: string) {
+	return itemMetadata(metadata, path).platform;
+}
+
 function fileToBase64(filePath: string) {
 	const content = readFileSync(filePath);
 	return Buffer.from(content).toString('base64');
@@ -110,6 +118,7 @@ function parseNoteFile(metadata: ItemMetadata, locale: string, filePath: string)
 
 	return {
 		id: itemIdFromPath(metadata, filePath),
+		platform: itemPlatformFromPath(metadata, filePath),
 		title: title,
 		body: body,
 		resources: resources,

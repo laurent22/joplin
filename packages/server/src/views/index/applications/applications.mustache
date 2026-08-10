@@ -1,0 +1,33 @@
+<h2 class="title">Manage application credentials</h2>
+
+<div class="block readable-block content">
+	<p>Your active application connections are listed below.</p>
+	<p>Your application credential is how you connect from your desktop, mobile or CLI application to Joplin Cloud.</p>
+</div>
+
+<h3 class="title is-4">Last connected applications</h3>
+<div class="m-2" id="applications-table">
+	{{#applications}}
+	 	<div class="columns is-mobile is-vcentered mb-3 application-item">
+
+		 	<div class="column">
+				<div class="columns -is-multiline ">
+					{{#columns}}
+						<div class="column"> 
+							<div class=""><strong>{{label}}</strong></div>
+							<div class="">{{value}}</div>
+						</div>
+					{{/columns}}
+				</div>
+			</div>
+
+			<div class="column is-narrow">
+				<form action="{{deleteUrl}}" method="POST">
+					{{{csrfTag}}}
+					<button class="button is-primary">Delete</button>
+				</form>
+			</div>
+
+		</div>
+	{{/applications}}
+</div>

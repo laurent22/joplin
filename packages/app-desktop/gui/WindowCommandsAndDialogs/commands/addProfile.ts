@@ -3,14 +3,14 @@ import { _ } from '@joplin/lib/locale';
 import { createNewProfile, saveProfileConfig } from '@joplin/lib/services/profileConfig';
 import Setting from '@joplin/lib/models/Setting';
 import restart from '../../../services/restart';
+import { WindowControl } from '../utils/useWindowControl';
 
 export const declaration: CommandDeclaration = {
 	name: 'addProfile',
 	label: () => _('Create new profile...'),
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const runtime = (comp: any): CommandRuntime => {
+export const runtime = (comp: WindowControl): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext) => {
 			comp.setState({
@@ -18,9 +18,9 @@ export const runtime = (comp: any): CommandRuntime => {
 					label: _('Profile name:'),
 					buttons: ['create', 'cancel'],
 					value: '',
-					onClose: async (answer: string) => {
+					onClose: async (answer: unknown) => {
 						if (answer) {
-							const { newConfig, newProfile } = createNewProfile(context.state.profileConfig, answer);
+							const { newConfig, newProfile } = createNewProfile(context.state.profileConfig, answer as string);
 							newConfig.currentProfileId = newProfile.id;
 							await saveProfileConfig(`${Setting.value('rootProfileDir')}/profiles.json`, newConfig);
 							await restart();

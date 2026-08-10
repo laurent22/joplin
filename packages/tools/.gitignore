@@ -5,3 +5,4 @@ patreon_oauth_token.txt
 *.mo
 *.mo~
 fuzzer/profiles-tmp/
+fuzzer/snapshots/

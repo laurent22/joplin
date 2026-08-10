@@ -13,7 +13,7 @@ const theme: Theme = {
 	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
 	oddBackgroundColor: '#141517',
 	color: '#dddddd',
-	colorError: 'red',
+	colorError: '#ff4444',
 	colorCorrect: '#72b972',
 	colorWarn: '#9A5B00',
 	colorWarnUrl: '#ffff82',
@@ -21,6 +21,7 @@ const theme: Theme = {
 	dividerColor: '#555555',
 	selectedColor: '#616161',
 	urlColor: 'rgb(166,166,255)',
+	colorErrorSelected: '#FFD7D7',
 
 	// Color scheme "2" is used for the sidebar. It's white text over
 	// dark blue background.
@@ -28,8 +29,10 @@ const theme: Theme = {
 	color2: '#ffffff',
 	selectedColor2: '#013F74',
 	colorError2: '#ff6c6c',
+	colorPublished2: '#789FE9',
 	colorWarn2: '#ffcb81',
 	colorWarn3: '#ffcb81',
+	backgroundColorTransparent2: 'rgba(255, 255, 255, 0.1)',
 
 	// Color scheme "3" is used for the config screens for example/
 	// It's dark text over gray background.
@@ -41,6 +44,7 @@ const theme: Theme = {
 	// button with blue text.
 	backgroundColor4: '#1D2024',
 	color4: '#789FE9',
+	backgroundColor4Dimmed: '#303543',
 
 	raisedBackgroundColor: '#474747',
 	raisedColor: '#ffffff',

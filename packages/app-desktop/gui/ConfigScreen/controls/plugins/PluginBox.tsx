@@ -100,8 +100,7 @@ const BoxedLabel = styled.div`
 	margin-top: auto;
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const StyledNameAndVersion = styled.div<{ mb: any }>`
+const StyledNameAndVersion = styled.div<{ mb: string | number }>`
 	font-family: ${props => props.theme.fontFamily};
 	color: ${props => props.theme.color};
 	font-size: ${props => props.theme.fontSize}px;
@@ -173,7 +172,7 @@ export default function(props: Props) {
 			themeId={props.themeId}
 			value={item.enabled}
 			onToggle={() => props.onToggle({ item })}
-			aria-label={_('Enabled')}
+			aria-label={item.enabled ? _('Disable %s', item.manifest.name) : _('Enable %s', item.manifest.name)}
 		/>;
 	}
 

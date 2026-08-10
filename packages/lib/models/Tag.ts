@@ -1,11 +1,12 @@
 import { TagEntity, TagsWithNoteCountEntity } from '../services/database/types';
 
-import BaseModel, { DeleteOptions } from '../BaseModel';
+import BaseModel, { DeleteOptions, SearchOptions } from '../BaseModel';
 import BaseItem from './BaseItem';
 import NoteTag from './NoteTag';
-import Note from './Note';
+import Note, { PreviewsOptions } from './Note';
 import { _ } from '../locale';
 import ActionLogger from '../utils/ActionLogger';
+import { LoadOptions, SaveOptions } from './utils/types';
 
 export default class Tag extends BaseItem {
 	public static tableName() {
@@ -30,8 +31,7 @@ export default class Tag extends BaseItem {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async notes(tagId: string, options: any = null) {
+	public static async notes(tagId: string, options: PreviewsOptions = null) {
 		if (options === null) options = {};
 
 		const noteIds = await this.noteIds(tagId);
@@ -114,6 +114,7 @@ export default class Tag extends BaseItem {
 		this.dispatch({
 			type: 'NOTE_TAG_REMOVE',
 			item: tag,
+			noteId: noteId,
 		});
 	}
 
@@ -137,16 +138,14 @@ export default class Tag extends BaseItem {
 		return await Tag.modelSelectAll('SELECT * FROM tags_with_note_count');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async searchAllWithNotes(options: any) {
+	public static async searchAllWithNotes(options: SearchOptions) {
 		if (!options) options = {};
 		if (!options.conditions) options.conditions = [];
 		options.conditions.push('id IN (SELECT distinct id FROM tags_with_note_count)');
 		return this.search(options);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async tagsByNoteId(noteId: string, options: any = null) {
+	public static async tagsByNoteId(noteId: string, options: LoadOptions = null) {
 		options = {
 			...options,
 		};
@@ -171,10 +170,22 @@ export default class Tag extends BaseItem {
 		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN (${this.escapeIdsForSql(commonTagIds)})`);
 	}
 
-	public static async loadByTitle(title: string): Promise<TagEntity> {
-		// Case insensitive doesn't work with special Unicode characters like Ö, but as these characters are no longer converted to lowercase on save, this is ok
-		// For the original issue, see https://github.com/laurent22/joplin/issues/11179
-		return this.loadByField('title', title, { caseInsensitive: true });
+	public static async loadByTitle(title: string): Promise<TagEntity | null> {
+		// Case insensitive matching via NOCASE does not work for certain characters, such as Ö or Cyrillic characters, but this is an accepted limitation
+		// now that mixed case tags are supported
+		const trimmedTitle = title.trim();
+		const normalizedTitle = trimmedTitle.normalize('NFC');
+		// We use a manual query here instead of loadByField to ensure deterministic ordering (ORDER BY created_time ASC)
+		// when visually similar tags exist in the database.
+		// We use created_time instead of id because IDs are UUIDs and cannot be meaningfully ordered.
+		const tag = await this.modelSelectOne(`SELECT * FROM ${this.tableName()} WHERE title = ? COLLATE NOCASE ORDER BY created_time ASC`, [trimmedTitle]);
+		if (tag) return tag;
+
+		if (normalizedTitle !== trimmedTitle) {
+			return await this.modelSelectOne(`SELECT * FROM ${this.tableName()} WHERE title = ? COLLATE NOCASE ORDER BY created_time ASC`, [normalizedTitle]);
+		}
+
+		return null;
 	}
 
 	public static async addNoteTagByTitle(noteId: string, tagTitle: string) {
@@ -184,24 +195,38 @@ export default class Tag extends BaseItem {
 	}
 
 	public static async setNoteTagsByTitles(noteId: string, tagTitles: string[]) {
-		// We still compare lowercased tag titles here, so that special unicode characters will match regardless of case. But this won't stop the user from renaming
-		// a tag to a title which matches another tag except for one or more special unicode characters having a different case. But this seems a reasonable compromise
-		// due to the lack of native case insensitive text comparison functionality for special unicode characters in sqlite without any extensions
+		// We deduplicate incoming tag titles by their lowercased NFC form before processing them.
+		// General case-insensitive lookup for special unicode characters is still limited by sqlite without extra extensions.
 		const previousTags = await this.tagsByNoteId(noteId);
 		const addedTitlesLowercased = [];
+		const addedTagIds = [];
 
-		for (let i = 0; i < tagTitles.length; i++) {
-			const title = tagTitles[i].trim();
-			if (!title) continue;
+		const uniqueTagTitles = new Map<string, string>();
+		for (const title of tagTitles) {
+			const trimmedTitle = (title || '').trim();
+			if (!trimmedTitle) continue;
+
+			const normalizedLowercaseTitle = trimmedTitle.normalize('NFC').toLowerCase();
+			if (!uniqueTagTitles.has(normalizedLowercaseTitle)) {
+				uniqueTagTitles.set(normalizedLowercaseTitle, trimmedTitle);
+			}
+		}
+
+		for (const [normalizedLowercaseTitle, title] of uniqueTagTitles) {
 			let tag = await this.loadByTitle(title);
 			if (!tag) tag = await Tag.save({ title: title }, { userSideValidation: true });
 			await this.addNote(tag.id, noteId);
-			addedTitlesLowercased.push(title.toLowerCase());
+			addedTitlesLowercased.push(normalizedLowercaseTitle);
+			addedTagIds.push(tag.id);
 		}
 
 		for (let i = 0; i < previousTags.length; i++) {
-			if (addedTitlesLowercased.indexOf(previousTags[i].title.toLowerCase()) < 0) {
-				await this.removeNote(previousTags[i].id, noteId);
+			const tag = previousTags[i];
+			const title = (tag.title || '').trim().normalize('NFC');
+			if (!title) continue;
+			const prevTitleLower = title.toLowerCase();
+			if (addedTitlesLowercased.indexOf(prevTitleLower) < 0 || addedTagIds.indexOf(tag.id) < 0) {
+				await this.removeNote(tag.id, noteId);
 			}
 		}
 	}
@@ -223,22 +248,28 @@ export default class Tag extends BaseItem {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async save(o: TagEntity, options: any = null) {
-		options = { dispatchUpdateAction: true,
-			userSideValidation: false, ...options };
+	public static async save(o: TagEntity, options: SaveOptions = null) {
+		options = {
+			dispatchUpdateAction: true,
+			userSideValidation: false, ...options,
+		};
+
+		const tagToSave = { ...o };
+		const trimmedTitle = tagToSave.title ? tagToSave.title.trim() : tagToSave.title;
 
 		if (options.userSideValidation) {
-			if ('title' in o) {
-				o.title = o.title.trim();
-
-				const existingTag = await Tag.loadByTitle(o.title);
-				if (existingTag && existingTag.id !== o.id) throw new Error(_('The tag "%s" already exists. Please choose a different name.', o.title));
+			if ('title' in tagToSave && trimmedTitle) {
+				const existingTag = await Tag.loadByTitle(trimmedTitle);
+				if (existingTag && existingTag.id !== tagToSave.id) throw new Error(_('The tag "%s" already exists. Please choose a different name.', trimmedTitle));
 			}
 		}
 
+		if (trimmedTitle) {
+			tagToSave.title = trimmedTitle.normalize('NFC');
+		}
+
 		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-		return super.save(o, options).then((tag: TagEntity) => {
+		return super.save(tagToSave, options).then((tag: TagEntity) => {
 			if (options.dispatchUpdateAction) {
 				this.dispatch({
 					type: 'TAG_UPDATE_ONE',

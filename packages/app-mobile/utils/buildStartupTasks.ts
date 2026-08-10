@@ -1,6 +1,6 @@
 import PluginAssetsLoader from '../PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
-import Logger, { TargetType } from '@joplin/utils/Logger';
+import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
 import ResourceService from '@joplin/lib/services/ResourceService';
@@ -13,9 +13,10 @@ import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtil
 import { setLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
+import { completePendingAuthentication } from '@joplin/lib/services/joplinCloudUtils';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 import initProfile from '@joplin/lib/services/profileConfig/initProfile';
-const VersionInfo = require('react-native-version-info').default;
+import VersionInfo from 'react-native-version-info';
 const AlarmServiceDriver = require('../services/AlarmServiceDriver').default;
 import NavService from '@joplin/lib/services/NavService';
 import { Dispatch, Store } from 'redux';
@@ -39,9 +40,9 @@ import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import SyncTargetFilesystem from '@joplin/lib/SyncTargetFilesystem';
-const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
-const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
-const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
+import SyncTargetNextcloud from '@joplin/lib/SyncTargetNextcloud';
+import SyncTargetWebDAV from '@joplin/lib/SyncTargetWebDAV';
+import SyncTargetDropbox from '@joplin/lib/SyncTargetDropbox';
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 import SyncTargetJoplinServerSAML from '@joplin/lib/SyncTargetJoplinServerSAML';
 import initLib from '@joplin/lib/initLib';
@@ -90,10 +91,13 @@ import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import { Profile } from '@joplin/lib/services/profileConfig/types';
 import shim from '@joplin/lib/shim';
 import { Platform } from 'react-native';
+import VoiceTyping from '../services/voiceTyping/VoiceTyping';
+import whisper from '../services/voiceTyping/whisper';
+import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
+const { runStartupTests } = require('@joplin/mobile-config');
 
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function resourceFetcher_downloadComplete(event: any) {
+function resourceFetcher_downloadComplete(event: { id: string; encrypted: boolean }) {
 	if (event.encrypted) {
 		void DecryptionWorker.instance().scheduleStart();
 	}
@@ -178,6 +182,10 @@ const buildStartupTasks = (
 		Setting.setConstant('pluginAssetDir', `${Setting.value('resourceDir')}/pluginAssets`);
 		Setting.setConstant('pluginDir', `${getProfilesRootDir()}/plugins`);
 		Setting.setConstant('pluginDataDir', getPluginDataDir(currentProfile, isSubProfile));
+		Setting.setConstant('sync.9.apiKey', '');
+		Setting.setConstant('sync.10.apiKey', '');
+		Setting.setConstant('sync.11.apiKey', '');
+		Setting.setConstant('isJoplinCloudWebApp', Platform.OS === 'web' && location.origin === 'https://app.joplincloud.com');
 	});
 	addTask('buildStartupTasks/make resource directory', async () => {
 		await shim.fsDriver().mkdir(Setting.value('resourceDir'));
@@ -195,11 +203,8 @@ const buildStartupTasks = (
 		const mainLogger = new Logger();
 		mainLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
 		mainLogger.setLevel(Logger.LEVEL_INFO);
-
-		if (Setting.value('env') === 'dev') {
-			mainLogger.addTarget(TargetType.Console);
-			mainLogger.setLevel(Logger.LEVEL_DEBUG);
-		}
+		mainLogger.addTarget(TargetType.Console);
+		mainLogger.setLevel(Setting.value('env') === 'dev' ? LogLevel.Debug : LogLevel.Info);
 
 		Logger.initializeGlobalLogger(mainLogger);
 		initLib(mainLogger);
@@ -255,13 +260,8 @@ const buildStartupTasks = (
 		AlarmService.setDriver(new AlarmServiceDriver(reg.logger()));
 	});
 	addTask('buildStartupTasks/openDatabase', async () => {
-		if (Setting.value('env') === 'prod') {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
-		} else {
-			await db.open({ name: getDatabaseName(currentProfile, isSubProfile, '-20240127-1') });
-
-			// await db.clearForTesting();
-		}
+		await db.open({ name: getDatabaseName(currentProfile, isSubProfile) });
+		// if (Setting.value('env') === 'dev') await db.clearForTesting();
 	});
 	addTask('buildStartupTasks/setUpSettings', async () => {
 		await loadKeychainServiceAndSettings([]);
@@ -314,12 +314,6 @@ const buildStartupTasks = (
 			Setting.setValue('welcome.enabled', false);
 		}
 
-		// Note: for now we hard-code the folder sort order as we need to
-		// create a UI to allow customisation (started in branch mobile_add_sidebar_buttons)
-		Setting.setValue('folders.sortOrder.field', 'title');
-		Setting.setValue('folders.sortOrder.reverse', false);
-
-
 		reg.logger().info(`Sync target: ${Setting.value('sync.target')}`);
 
 		setLocale(Setting.value('locale'));
@@ -359,12 +353,28 @@ const buildStartupTasks = (
 	addTask('buildStartupTasks/migrate PPK', async () => {
 		await migratePpk();
 	});
+	addTask('buildStartupTasks/set up voice typing', async () => {
+		VoiceTyping.initialize([whisper]);
+	});
 	addTask('buildStartupTasks/load folders', async () => {
 		await refreshFolders(dispatch, '');
 
 		dispatch({
 			type: 'FOLDER_SET_COLLAPSED_ALL',
 			ids: Setting.value('collapsedFolderIds'),
+		});
+	});
+	addTask('buildStartupTasks/initialize note visible panes', async () => {
+		const panes = Setting.value('noteVisiblePanes') || ['viewer'];
+
+		dispatch({
+			type: 'NOTE_VISIBLE_PANES_SET',
+			panes: panes,
+		});
+
+		dispatch({
+			type: 'NOTE_EDITOR_VISIBLE_CHANGE',
+			visible: panes.includes('editor'),
 		});
 	});
 	addTask('buildStartupTasks/load tags', async () => {
@@ -376,13 +386,36 @@ const buildStartupTasks = (
 		});
 	});
 	addTask('buildStartupTasks/clear shared files cache', clearSharedFilesCache);
+	addTask('buildStartupTasks/initialize PerFolderSortOrderService', async () => {
+		PerFolderSortOrderService.initialize();
+	});
 	addTask('buildStartupTasks/go: initial route', async () => {
 		const folder = await getInitialActiveFolder();
 
-		const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+		const getNotesParent = async () => {
+			const notesParent = parseNotesParent(Setting.value('notesParent'), Setting.value('activeFolderId'));
+			if (notesParent.type === 'Tag' && !(await Tag.load(notesParent.selectedItemId))) {
+				return null;
+			}
+			return notesParent;
+		};
+
+		const notesParent = await getNotesParent();
 
 		if (notesParent && notesParent.type === 'SmartFilter') {
-			dispatch(DEFAULT_ROUTE);
+			dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				smartFilterId: notesParent.selectedItemId,
+				clearHistory: true,
+			});
+		} else if (notesParent && notesParent.type === 'Tag') {
+			dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+				tagId: notesParent.selectedItemId,
+				clearHistory: true,
+			});
 		} else if (!folder) {
 			dispatch(DEFAULT_ROUTE);
 		} else {
@@ -390,6 +423,7 @@ const buildStartupTasks = (
 				type: 'NAV_GO',
 				routeName: 'Notes',
 				folderId: folder.id,
+				clearHistory: true,
 			});
 		}
 	});
@@ -400,6 +434,9 @@ const buildStartupTasks = (
 	});
 	addTask('buildStartupTasks/run migrations', async () => {
 		await MigrationService.instance().run();
+	});
+	addTask('buildStartupTasks/complete pending Joplin Cloud auth', async () => {
+		await completePendingAuthentication();
 	});
 	addTask('buildStartupTasks/set up background tasks', async () => {
 		initializeUserFetcher();
@@ -417,24 +454,27 @@ const buildStartupTasks = (
 		ResourceFetcher.instance().on('downloadComplete', resourceFetcher_downloadComplete);
 		void ResourceFetcher.instance().start();
 
-		// Collect revisions more frequently on mobile because it doesn't auto-save
-		// and it cannot collect anything when the app is not active.
-		RevisionService.instance().runInBackground(1000 * 30);
-
 		reg.setupRecurrentSync();
 
 		// When the app starts we want the full sync to
 		// start almost immediately to get the latest data.
 		// doWifiConnectionCheck set to true so initial sync
 		// doesn't happen on mobile data
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-		void reg.scheduleSync(100, null, true).then(() => {
-			// Wait for the first sync before updating the notifications, since synchronisation
-			// might change the notifications.
-			void AlarmService.updateAllNotifications();
+		setTimeout(() => {
+			// Schedule sync with a delay of 0 and wrap with the desired timeout, as shim.setTimeout may not fire on first run or after an upgrade
+			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+			void reg.scheduleSync(0, null, true).then(() => {
+				// Wait for the first sync before updating the notifications, since synchronisation
+				// might change the notifications.
+				void AlarmService.updateAllNotifications();
 
-			void DecryptionWorker.instance().scheduleStart();
-		});
+				void DecryptionWorker.instance().scheduleStart();
+
+				// Collect revisions more frequently on mobile because it doesn't auto-save
+				// and it cannot collect anything when the app is not active.
+				RevisionService.instance().runInBackground(1000 * 30);
+			});
+		}, 100);
 	});
 	addTask('buildStartupTasks/set up welcome utils', async () => {
 		await WelcomeUtils.install(Setting.value('locale'), dispatch);
@@ -465,7 +505,7 @@ const buildStartupTasks = (
 		// call will throw an error, alerting us of the issue. Otherwise it will
 		// just print some messages in the console.
 		// ----------------------------------------------------------------------------
-		if (Setting.value('env') === 'dev') {
+		if (runStartupTests) {
 			await runRsaIntegrationTests();
 			await runCryptoIntegrationTests();
 			await runOnDeviceFsDriverTests();

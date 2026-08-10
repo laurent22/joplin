@@ -39,8 +39,6 @@ const styles = (() => {
 		display: 'flex',
 		flexDirection: 'column',
 		gap: 20,
-		marginLeft: 10,
-		marginRight: 10,
 	};
 	return StyleSheet.create({
 		descriptionText: {
@@ -64,7 +62,7 @@ const styles = (() => {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			alignItems: 'center',
-			padding: 10,
+			paddingVertical: 10,
 			marginTop: 12,
 			marginBottom: 14,
 		},
@@ -123,7 +121,7 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 	});
 
 	const aboutPlugin = (
-		<Card mode='outlined' style={{ margin: 8 }} testID='plugin-card'>
+		<Card mode='outlined' style={{ marginVertical: 8 }} testID='plugin-card'>
 			<Card.Content>
 				<PluginTitle manifest={manifest}/>
 				<Text variant='bodyMedium'>{_('by %s', manifest.author)}</Text>

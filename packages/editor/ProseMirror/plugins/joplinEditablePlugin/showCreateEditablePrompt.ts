@@ -5,13 +5,20 @@ import postProcessRenderedHtml from './utils/postProcessRenderedHtml';
 import schema from '../../schema';
 import { JoplinEditableAttributes } from './joplinEditablePlugin';
 
-const showCreateEditablePrompt = (source: string, inline: boolean): Command => (_state, dispatch, view) => {
+interface EditablePromptOptions {
+	source: string;
+	inline: boolean;
+	cursor: number;
+}
+
+const showCreateEditablePrompt = ({ source, inline, cursor }: EditablePromptOptions): Command => (_state, dispatch, view) => {
 	if (!dispatch) return true;
 	if (!view) throw new Error('Missing required argument: view');
 
 	createEditorDialog({
 		editorApi: getEditorApi(view.state),
 		source,
+		cursor,
 		onSave: async (newSource) => {
 			source = newSource;
 		},

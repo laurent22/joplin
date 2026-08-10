@@ -7,7 +7,7 @@ import { AppState } from '../../../../app.reducer';
 import ToolbarButtonUtils, { ToolbarItem } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import stateToWhenClauseContext from '../../../../services/commands/stateToWhenClauseContext';
 import { _ } from '@joplin/lib/locale';
-const { buildStyle } = require('@joplin/lib/theme');
+import { buildStyle } from '@joplin/lib/theme';
 
 interface ToolbarProps {
 	themeId: number;
@@ -58,6 +58,7 @@ const mapStateToProps = (state: AppState, connectProps: ConnectProps) => {
 		'textItalic',
 		'-',
 		'textLink',
+		'linkToNote',
 		'textCode',
 		'attachFile',
 		'-',
@@ -66,6 +67,7 @@ const mapStateToProps = (state: AppState, connectProps: ConnectProps) => {
 		'textCheckbox',
 		'textHeading',
 		'textHorizontalRule',
+		'editor.textTable',
 		'insertDateTime',
 		'toggleEditors',
 	].concat(pluginUtils.commandNamesFromViews(state.pluginService.plugins, 'editorToolbar'));

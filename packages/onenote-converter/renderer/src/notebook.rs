@@ -38,7 +38,7 @@ impl Renderer {
                     )?));
                 }
                 SectionEntry::SectionGroup(group) => {
-                    let dir_name = sanitize_filename::sanitize(group.display_name());
+                    let dir_name = fs_driver().sanitize_file_name(group.display_name());
                     let section_group_dir =
                         fs_driver().join(notebook_dir.as_str(), dir_name.as_str());
 

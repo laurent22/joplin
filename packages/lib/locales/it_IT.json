@@ -149,6 +149,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"Informazioni"
 	],
@@ -401,6 +404,9 @@
 	"Beta": [
 		"Beta"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Grassetto"
 	],
@@ -530,6 +536,9 @@
 	"Checking... Please wait.": [
 		"Controllo... Attendere per favore."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Scegli un'opzione"
 	],
@@ -607,6 +616,9 @@
 	],
 	"Command": [
 		"Comando"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Comandi"
@@ -915,6 +927,9 @@
 	"Delete selected notes": [
 		"Eliminare le note selezionate"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Eliminare il taccuino della Posta in arrivo?\n\nSe elimini il taccuino della posta in arrivo, tutti i messaggi di posta elettronica recentemente inviati ad esso potrebbero andare perduti."
 	],
@@ -1004,6 +1019,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Mostra le informazioni complete sulla nota."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Mostra la seguente nota."
@@ -1837,6 +1855,9 @@
 	"Keychain Supported: %s": [
 		"Portachiavi supportato: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Chiavi master che devono essere aggiornate"
 	],
@@ -1966,6 +1987,9 @@
 	],
 	"Manage your plugins": [
 		"Gestisci plugins"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Gestisci la configurazione E2EE. I comandi sono `abilita`, `disabilita`, `decripta`, `stato`, `decripta-file` e `stato-target`."
@@ -2171,6 +2195,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Non è definito nessun editor di testo. Per favore impostalo usando `config editor <editor-path>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"Nord"
 	],
@@ -2342,6 +2369,9 @@
 	"Open Sync Wizard...": [
 		"Apri la procedura guidata di sincronizzazione..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Apri..."
 	],
@@ -2353,6 +2383,9 @@
 	],
 	"Options": [
 		"Opzioni"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Lista ordinata"
@@ -2888,6 +2921,9 @@
 	"Select parent notebook": [
 		"Seleziona il taccuino principale"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -3064,6 +3100,9 @@
 	],
 	"Source: ": [
 		"Sorgente: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Separatore"
@@ -3630,6 +3669,9 @@
 	],
 	"Try it now": [
 		"Prova subito"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Digita `help [command]` per ottenere maggiori informazioni su un comando; o scrivi `help all` per le informazioni di utilizzo complete."

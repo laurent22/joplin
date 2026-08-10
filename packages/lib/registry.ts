@@ -1,26 +1,24 @@
 import Logger from '@joplin/utils/Logger';
+import JoplinDatabase from './JoplinDatabase';
 import Setting from './models/Setting';
 import shim from './shim';
 import SyncTargetRegistry from './SyncTargetRegistry';
 import { AnyAction, Dispatch } from 'redux';
+import Synchronizer, { SyncStartOptions } from './Synchronizer';
 
 class Registry {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous: each sync target subclass adds methods (e.g. OneDrive .api(), JoplinServer .driver()) accessed by callers
 	private syncTargets_: any = {};
 	private logger_: Logger = null;
 	private schedSyncCalls_: boolean[] = [];
 	private waitForReSyncCalls_: boolean[] = [];
 	private setupRecurrentCalls_: boolean[] = [];
 	private timerCallbackCalls_: boolean[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private showErrorMessageBoxHandler_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private scheduleSyncId_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private recurrentSyncId_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private db_: any;
+	private showErrorMessageBoxHandler_: (message: string)=> void;
+	private scheduleSyncId_: ReturnType<typeof shim.setTimeout> = null;
+	private recurrentSyncId_: ReturnType<typeof shim.setInterval> = null;
+	private db_: JoplinDatabase;
 	private isOnMobileData_ = false;
 	private dispatch_: Dispatch = (() => {}) as Dispatch;
 
@@ -37,8 +35,7 @@ class Registry {
 		this.logger_ = l;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setShowErrorMessageBoxHandler(v: any) {
+	public setShowErrorMessageBoxHandler(v: (message: string)=> void) {
 		this.showErrorMessageBoxHandler_ = v;
 	}
 
@@ -80,6 +77,10 @@ class Registry {
 		}
 	}
 
+	public defaultScheduleInterval() {
+		return 1000 * 10;
+	}
+
 	public syncTarget = (syncTargetId: number = null) => {
 		if (syncTargetId === null) syncTargetId = Setting.value('sync.target');
 		if (this.syncTargets_[syncTargetId]) return this.syncTargets_[syncTargetId];
@@ -112,16 +113,14 @@ class Registry {
 		}
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public scheduleSync = async (delay: number = null, syncOptions: any = null, doWifiConnectionCheck = false) => {
+	public scheduleSync = async (delay: number = null, syncOptions: SyncStartOptions = null, doWifiConnectionCheck = false) => {
 		this.schedSyncCalls_.push(true);
 
 		try {
-			if (delay === null) delay = 1000 * 10;
+			if (delay === null) delay = this.defaultScheduleInterval();
 			if (syncOptions === null) syncOptions = {};
 
-			// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-			let promiseResolve: Function = null;
+			let promiseResolve: ((value?: unknown)=> void) = null;
 			const promise = new Promise((resolve) => {
 				promiseResolve = resolve;
 			});
@@ -129,6 +128,15 @@ class Registry {
 			if (this.scheduleSyncId_) {
 				shim.clearTimeout(this.scheduleSyncId_);
 				this.scheduleSyncId_ = null;
+			}
+
+			const syncTargetId = Setting.value('sync.target');
+			const isAuthenticated = syncTargetId ? await this.syncTarget(syncTargetId).isAuthenticated() : false;
+			const isPartialSync = syncOptions.syncSteps?.toString() === Synchronizer.partialSyncSteps.toString();
+
+			if (isAuthenticated && isPartialSync) {
+				// Only dispatch the event if a partial sync is scheduled, which is triggered by making a change
+				this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: true });
 			}
 
 			if (Setting.value('env') === 'dev' && delay !== 0) {
@@ -140,6 +148,8 @@ class Registry {
 
 			const timeoutCallback = async () => {
 				this.timerCallbackCalls_.push(true);
+				let newContext;
+
 				try {
 					this.scheduleSyncId_ = null;
 					this.logger().info('Preparing scheduled sync');
@@ -192,16 +202,16 @@ class Registry {
 							this.logger().info('Starting scheduled sync');
 							const options = { ...syncOptions, context: context };
 							if (!options.saveContextHandler) {
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-								options.saveContextHandler = (newContext: any) => {
+								options.saveContextHandler = (newContext: unknown) => {
 									Setting.setValue(contextKey, JSON.stringify(newContext));
 								};
 							}
-							const newContext = await sync.start(options);
+							newContext = await sync.start(options);
 							Setting.setValue(contextKey, JSON.stringify(newContext));
 						} catch (error) {
 							if (error.code === 'alreadyStarted') {
 								this.logger().info(error.message);
+								newContext = null; // Prevent resetting syncPending to false if another sync is triggered while one is in progress
 							} else {
 								promiseResolve();
 								throw error;
@@ -215,6 +225,11 @@ class Registry {
 					promiseResolve();
 
 				} finally {
+					if (newContext === undefined) {
+						// If the logic in the try block returns before executing the sync, ensure syncPending is reset back to false
+						this.dispatch({ type: 'SYNC_PENDING_UPDATE', value: false });
+					}
+
 					this.timerCallbackCalls_.pop();
 				}
 			};
@@ -260,8 +275,7 @@ class Registry {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setDb = (v: any) => {
+	public setDb = (v: JoplinDatabase) => {
 		this.db_ = v;
 	};
 

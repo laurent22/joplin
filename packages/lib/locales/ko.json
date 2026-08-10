@@ -146,6 +146,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"정보"
 	],
@@ -386,6 +389,9 @@
 	"Beta": [
 		""
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"굵게"
 	],
@@ -515,6 +521,9 @@
 	"Checking... Please wait.": [
 		"확인 중입니다... 잠시만 기다리세요."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"옵션 선택"
 	],
@@ -589,6 +598,9 @@
 	],
 	"Command": [
 		"명령"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"명령 팔레트"
@@ -890,6 +902,9 @@
 	"Delete selected notes": [
 		"선택된 노트 삭제"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"인박스 노트북을 삭제하시겠습니까?\n\n인박스 노트북을 삭제하면 최근에 해당 노트북으로 전송된 모든 이메일이 손실될 수 있습니다."
 	],
@@ -979,6 +994,9 @@
 	],
 	"Displays the complete information about note.": [
 		"노트와 관련된 모든 정보를 표시합니다."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"주어진 노트를 표시합니다."
@@ -1769,6 +1787,9 @@
 	"Keychain Supported: %s": [
 		"키체인 지원: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"키 업그레이드가 필요합니다"
 	],
@@ -1885,6 +1906,9 @@
 	],
 	"Manage your plugins": [
 		"플러그인 관리"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"E2EE(종단간 암호화) 설정을 관리합니다. `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, `target-status`와 같은 명령들이 있습니다."
@@ -2084,6 +2108,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"텍스트 편집기가 지정되지 않았습니다. `config editor <editor-path>` 명령어로 지정해주세요"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"노드"
 	],
@@ -2246,6 +2273,9 @@
 	"Open Sync Wizard...": [
 		"동기화 마법사 열기..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"열기..."
 	],
@@ -2257,6 +2287,9 @@
 	],
 	"Options": [
 		"옵션"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"정렬 목록"
@@ -2768,6 +2801,9 @@
 	"Select parent notebook": [
 		"상위 노트북 선택"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2935,6 +2971,9 @@
 	],
 	"Source: ": [
 		"원본: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		""
@@ -3490,6 +3529,9 @@
 	],
 	"Try it now": [
 		"지금 시도하기"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"명령어에 관한 정보는 `help [command]`를 입력하시면 찾으실 수 있습니다. 'help all'을 입력하시면 완전한 명령어 용법에 대한 정보를 보실 수 있습니다."

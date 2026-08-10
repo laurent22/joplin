@@ -4,18 +4,23 @@ import { ItemFlow, ListRenderer, NoteListColumns, OnChangeEvent, OnChangeHandler
 import { Size } from '@joplin/utils/types';
 import useRootElement from './utils/useRootElement';
 import useItemElement from './utils/useItemElement';
-import useItemEventHandlers from './utils/useItemEventHandlers';
-import { OnInputChange } from './utils/types';
+import { ItemEventHandlers, OnInputChange } from './utils/types';
 import Note from '@joplin/lib/models/Note';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import NoteLockNote from '@joplin/lib/services/noteLock/NoteLockNote';
+import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import bridge from '../../services/bridge';
+import { _ } from '@joplin/lib/locale';
 import useRenderedNote from './utils/useRenderedNote';
 import { Dispatch } from 'redux';
 import getNoteElementIdFromJoplinId from './utils/getNoteElementIdFromJoplinId';
+import { HighlightedWord } from '@joplin/lib/reducer';
 
 interface NoteItemProps {
 	dragIndex: number;
 	flow: ItemFlow;
-	highlightedWords: string[];
+	highlightedWords: HighlightedWord[];
 	index: number;
 	isProvisional: boolean;
 	itemSize: Size;
@@ -29,6 +34,7 @@ interface NoteItemProps {
 	style: CSSProperties;
 	note: NoteEntity;
 	isWatched: boolean;
+	isPublished: boolean;
 
 	isSelected: boolean;
 	tabIndex: number;
@@ -57,6 +63,15 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		};
 
 		if (changeEvent.elementId === 'todo-checkbox') {
+			if (isNoteLockEnabled()) {
+				const lockState = await Note.load(changeEvent.noteId, { fields: ['is_locked'] });
+				if (NoteLockNote.isLocked(lockState) && !NoteLockSession.instance().isUnlocked()) {
+					// event.currentTarget is already cleared here, after the await - target is the same input
+					event.target.checked = !changeEvent.value;
+					bridge().showErrorMessageBox(_('Cannot change a locked note while the session is locked'));
+					return;
+				}
+			}
 			await Note.save({
 				id: changeEvent.noteId,
 				todo_completed: changeEvent.value ? Date.now() : 0,
@@ -70,9 +85,13 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 
 	const rootElement = useRootElement(elementId);
 
-	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.listRenderer, props.highlightedWords, props.index, props.columns);
+	const renderedNote = useRenderedNote(props.note, props.isSelected, props.isWatched, props.isPublished, props.listRenderer, props.highlightedWords, props.index, props.columns);
 
-	const itemElement = useItemElement(
+	const itemEventHandlers = useMemo((): ItemEventHandlers => ({ onInputChange, onClick: null }), [onInputChange]);
+
+	const displayTitle = useMemo(() => Note.displayTitle(props.note), [props.note]);
+
+	useItemElement(
 		rootElement,
 		noteId,
 		renderedNote ? renderedNote.html : '',
@@ -82,9 +101,10 @@ const NoteListItem = (props: NoteItemProps, ref: LegacyRef<HTMLDivElement>) => {
 		props.onClick,
 		props.onDoubleClick,
 		props.flow,
+		itemEventHandlers,
+		displayTitle,
 	);
 
-	useItemEventHandlers(rootElement, itemElement, onInputChange, null);
 
 	const className = useMemo(() => {
 		return [

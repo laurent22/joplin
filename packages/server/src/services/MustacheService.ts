@@ -3,19 +3,18 @@ import * as fs from 'fs-extra';
 import { extname } from 'path';
 import config, { fullVersionString } from '../config';
 import { filename } from '@joplin/lib/path-utils';
-import { NotificationView } from '../utils/types';
+import { Config, NotificationView } from '../utils/types';
 import { User } from '../services/database/types';
 import { makeUrl, SubPath, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
-import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, homeUrl, itemsUrl, adminReportUrl } from '../utils/urlUtils';
+import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, homeUrl, itemsUrl, adminReportUrl, applicationsUrl } from '../utils/urlUtils';
 import { MenuItem, setSelectedMenu } from '../utils/views/menu';
 import { ReportType } from './reports/types';
 
 export interface RenderOptions {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	partials?: any;
+	partials?: Record<string, string>;
 	cssFiles?: string[];
 	jsFiles?: string[];
 }
@@ -27,7 +26,7 @@ export interface View {
 	path: string;
 	layout?: string;
 	navbar?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- View content is highly heterogeneous (each view contributes different fields); tightening propagates through every view consumer
 	content?: any;
 	partials?: string[];
 	cssFiles?: string[];
@@ -58,12 +57,12 @@ interface GlobalParams {
 	isAdminPage?: boolean;
 	adminMenu?: MenuItem[];
 	navbarMenu?: MenuItem[];
+	config?: Config;
 	currentPath?: SubPath;
 	appShortName?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function isView(o: any): boolean {
+export function isView(o: unknown): boolean {
 	if (typeof o !== 'object' || !o) return false;
 	return 'path' in o && 'name' in o;
 }
@@ -149,6 +148,10 @@ export default class MustacheService {
 			{
 				title: _('Home'),
 				url: homeUrl(),
+			},
+			{
+				title: _('Applications'),
+				url: applicationsUrl(),
 			},
 		];
 
@@ -289,8 +292,7 @@ export default class MustacheService {
 
 		const contentHtml = await this.renderFileContent(filePath, view, globalParams);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const layoutView: any = {
+		const layoutView: Record<string, unknown> = {
 			global: globalParams,
 			pageName: this.formatPageName(view.name),
 			pageTitle: view.titleOverride ? view.title : `${config().appName} - ${view.title}`,

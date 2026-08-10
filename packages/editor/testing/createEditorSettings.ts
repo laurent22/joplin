@@ -2,9 +2,10 @@ import { themeStyle } from '@joplin/lib/theme';
 import { EditorKeymap, EditorLanguageType, EditorSettings } from '../types';
 
 const createEditorSettings = (themeId: number) => {
-	const themeData = { themeId, ...themeStyle(themeId) };
+	const themeData = { themeId, paddingBottom: 0, ...themeStyle(themeId) };
 	const editorSettings: EditorSettings = {
 		markdownMarkEnabled: true,
+		markdownInsertEnabled: true,
 		katexEnabled: true,
 		spellcheckEnabled: true,
 		useExternalSearch: true,
@@ -14,6 +15,7 @@ const createEditorSettings = (themeId: number) => {
 		autocompleteMarkup: true,
 		tabMovesFocus: false,
 		inlineRenderingEnabled: true,
+		tableEditingEnabled: true,
 		highlightActiveLine: false,
 
 		keymap: EditorKeymap.Default,

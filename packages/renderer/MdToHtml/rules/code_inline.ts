@@ -1,14 +1,15 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function plugin(markdownIt: any) {
-	const defaultRender =
+import type * as MarkdownIt from 'markdown-it';
+import type Token = require('markdown-it/lib/token');
+import type Renderer = require('markdown-it/lib/renderer');
+
+function plugin(markdownIt: MarkdownIt) {
+	const defaultRender: Renderer.RenderRule =
 		markdownIt.renderer.rules.code_inline ||
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function(tokens: any, idx: any, options: any, _env: any, self: any) {
+		function(tokens, idx, options, _env, self) {
 			return self.renderToken(tokens, idx, options);
 		};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	markdownIt.renderer.rules.code_inline = (tokens: any[], idx: number, options: any, env: any, self: any) => {
+	markdownIt.renderer.rules.code_inline = (tokens: Token[], idx: number, options: MarkdownIt.Options, env: unknown, self: Renderer) => {
 		const token = tokens[idx];
 		let tokenClass = token.attrGet('class');
 		if (!tokenClass) tokenClass = '';

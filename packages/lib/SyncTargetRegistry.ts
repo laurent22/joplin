@@ -14,7 +14,7 @@ export interface SyncTargetInfo {
 
 export default class SyncTargetRegistry {
 
-	private static reg_: Record<number, typeof BaseSyncTarget> = {};
+	private static reg_: Record<string, typeof BaseSyncTarget> = {};
 
 	private static get reg() {
 		return this.reg_;
@@ -74,9 +74,11 @@ export default class SyncTargetRegistry {
 		return this.reg[id].targetName();
 	}
 
-	public static idAndLabelPlainObject(os: string) {
+	public static idAndLabelPlainObject(os: string, includeKeys: string[]|null = null) {
+		includeKeys ??= Object.keys(this.reg);
+
 		const output: Record<string, string> = {};
-		for (const n in this.reg) {
+		for (const n of includeKeys) {
 			if (!this.reg.hasOwnProperty(n)) continue;
 			const info = this.infoById(this.reg[n].id());
 			if (info.classRef.unsupportedPlatforms().indexOf(os) >= 0) {

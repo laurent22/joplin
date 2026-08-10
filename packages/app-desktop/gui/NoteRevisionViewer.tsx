@@ -12,9 +12,9 @@ import time from '@joplin/lib/time';
 import bridge from '../services/bridge';
 import { NoteEntity, RevisionEntity } from '@joplin/lib/services/database/types';
 import { AppState } from '../app.reducer';
-const urlUtils = require('@joplin/lib/urlUtils');
+import * as urlUtils from '@joplin/lib/urlUtils';
 const ReactTooltip = require('react-tooltip');
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import shared from '@joplin/lib/components/shared/note-screen-shared';
 import getHelpMessage from '@joplin/lib/components/shared/NoteRevisionViewer/getHelpMessage';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
@@ -35,6 +35,7 @@ interface Props {
 	customCss: string;
 	scrollbarSize: ScrollbarSize;
 	fontFamily: string;
+	showNoteLinkIcon: boolean;
 }
 
 const useNoteContent = (
@@ -45,6 +46,7 @@ const useNoteContent = (
 	customCss: string,
 	scrollbarSize: ScrollbarSize,
 	fontFamily: string,
+	showNoteLinkIcon: boolean,
 ) => {
 	const [note, setNote] = useState<NoteEntity>(null);
 
@@ -75,17 +77,18 @@ const useNoteContent = (
 			resources: await shared.attachedResources(noteBody),
 			whiteBackgroundNoteRendering: markupLanguage === MarkupLanguage.Html,
 			globalSettings: getGlobalSettings(Setting),
+			showNoteLinkIcon,
 		});
 
 		viewerRef.current.setHtml(result.html, {
 			pluginAssets: result.pluginAssets,
 		});
-	}, [note, viewerRef]);
+	}, [note, viewerRef, markupToHtml, showNoteLinkIcon]);
 
 	return note;
 };
 
-const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack, customCss, scrollbarSize, fontFamily }) => {
+const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack, customCss, scrollbarSize, fontFamily, showNoteLinkIcon }) => {
 	const helpButton_onClick = useCallback(() => {}, []);
 	const viewerRef = useRef<NoteViewerControl|null>(null);
 	const revisionListRef = useRef<HTMLSelectElement|null>(null);
@@ -96,7 +99,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 	const [deleting, setDeleting] = useState(false);
 
 	const note = useNoteContent(
-		viewerRef, currentRevId, revisions, themeId, customCss, scrollbarSize, fontFamily,
+		viewerRef, currentRevId, revisions, themeId, customCss, scrollbarSize, fontFamily, showNoteLinkIcon,
 	);
 
 	const viewer_domReady = useCallback(async () => {
@@ -131,7 +134,6 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		if (onBack) onBack();
 	}, [onBack]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	const revisionList_onChange: React.ChangeEventHandler<HTMLSelectElement> = useCallback((event) => {
 		const value = event.target.value;
 
@@ -142,8 +144,7 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		}
 	}, [onBack]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const webview_ipcMessage = useCallback(async (event: any) => {
+	const webview_ipcMessage = useCallback(async (event: { channel?: string; args?: unknown[] }) => {
 		// For the revision view, we only support a minimal subset of the IPC messages.
 		// For example, we don't need interactive checkboxes or sync between viewer and editor view.
 		// We try to get most links work though, except for internal (joplin://) links.
@@ -154,7 +155,10 @@ const NoteRevisionViewerComponent: React.FC<Props> = ({ themeId, noteId, onBack,
 		// if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, args);
 
 		try {
-			if (msg.indexOf('joplin://') === 0) {
+			if (msg.indexOf('checkboxclick:') === 0) {
+				// Revision previews are read-only. Ignore checkbox toggle IPC messages so they
+				// don't fall through to URL handling (`checkboxclick:` looks like a protocol).
+			} else if (msg.indexOf('joplin://') === 0) {
 				throw new Error(_('Unsupported link or message: %s', msg));
 			} else if (urlUtils.urlProtocol(msg)) {
 				await bridge().openExternal(msg);
@@ -229,6 +233,7 @@ const mapStateToProps = (state: AppState) => {
 		themeId: state.settings.theme,
 		scrollbarSize: state.settings['style.scrollbarSize'],
 		fontFamily: state.settings['style.viewer.fontFamily'],
+		showNoteLinkIcon: state.settings['notes.showNoteLinkIcon'],
 	};
 };
 

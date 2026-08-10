@@ -3,13 +3,12 @@ import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { rtrimSlashes } from '@joplin/utils/path';
 import { dirname, join } from 'path';
-import { NativeModules } from 'react-native';
+import { openSession, test as testWhisper, Session as WhisperSession } from '@joplin/whisper-voice-typing';
 import { SpeechToTextCallbacks, VoiceTypingProvider, VoiceTypingSession } from './VoiceTyping';
 import { languageCodeOnly, stringByLocale } from '@joplin/lib/locale';
+import { Platform } from 'react-native';
 
 const logger = Logger.create('voiceTyping/whisper');
-
-const { SpeechToTextModule } = NativeModules;
 
 class WhisperConfig {
 	public prompts: Map<string, string> = new Map();
@@ -86,7 +85,7 @@ class Whisper implements VoiceTypingSession {
 	private isFirstParagraph = true;
 
 	public constructor(
-		private sessionId: number|null,
+		private session: WhisperSession|null,
 		private callbacks: SpeechToTextCallbacks,
 		private config: WhisperConfig,
 	) {
@@ -124,18 +123,18 @@ class Whisper implements VoiceTypingSession {
 	}
 
 	public async start() {
-		if (this.sessionId === null) {
+		if (this.session === null) {
 			throw new Error('Session closed.');
 		}
 		try {
 			logger.debug('starting recorder');
-			await SpeechToTextModule.startRecording(this.sessionId);
+			await this.session.open();
 			logger.debug('recorder started');
 
 			const loopStartCounter = this.closeCounter;
-			while (this.closeCounter === loopStartCounter && this.sessionId !== null) {
+			while (this.closeCounter === loopStartCounter && this.session !== null) {
 				logger.debug('reading block');
-				const data: string = await SpeechToTextModule.convertNext(this.sessionId, 4);
+				const data: string = await this.session.convertNext(4);
 				this.onDataFinalize(data);
 
 				logger.debug('done reading block. Length', data?.length);
@@ -148,13 +147,13 @@ class Whisper implements VoiceTypingSession {
 	}
 
 	public async stop() {
-		if (this.sessionId === null) {
+		if (this.session === null) {
 			logger.debug('Session already closed.');
 			return;
 		}
 
 		try {
-			const data: string = await SpeechToTextModule.convertAvailable(this.sessionId);
+			const data: string = await this.session.convertNext(null);
 			this.onDataFinalize(data);
 		} catch (error) {
 			logger.error('Error stopping session: ', error);
@@ -164,17 +163,17 @@ class Whisper implements VoiceTypingSession {
 	}
 
 	public cancel() {
-		if (this.sessionId === null) {
+		if (this.session === null) {
 			logger.debug('No session to cancel.');
-			return;
+			return Promise.resolve();
 		}
 
 		logger.info('Closing session...');
-		const sessionId = this.sessionId;
-		this.sessionId = null;
+		this.session.close();
+		this.session = null;
 		this.closeCounter ++;
 
-		return SpeechToTextModule.closeSession(sessionId);
+		return Promise.resolve();
 	}
 }
 
@@ -213,7 +212,7 @@ const modelLocalFilepath = () => {
 };
 
 const whisper: VoiceTypingProvider = {
-	supported: () => !!SpeechToTextModule,
+	supported: () => Platform.OS === 'android' && Setting.value('buildFlag.voiceTypingEnabled'),
 	modelLocalFilepath: modelLocalFilepath,
 	getDownloadUrl: (locale) => {
 		const lang = languageCodeOnly(locale).toLowerCase();
@@ -251,7 +250,7 @@ const whisper: VoiceTypingProvider = {
 
 		if (Setting.value('env') === Env.Dev) {
 			try {
-				await SpeechToTextModule.runTests();
+				await testWhisper();
 			} catch (error) {
 				logger.error('Testing error', error);
 				await shim.showErrorDialog(`Test failure: ${error}`);
@@ -268,10 +267,10 @@ const whisper: VoiceTypingProvider = {
 		}
 
 		logger.debug('Starting whisper session', config.supportsShortAudioCtx ? '(short audio context)' : '');
-		const sessionId = await SpeechToTextModule.openSession(
-			modelPath, locale, getPrompt(locale, config.prompts), config.supportsShortAudioCtx,
-		);
-		return new Whisper(sessionId, callbacks, config);
+		const session = openSession({
+			modelPath, locale, prompt: getPrompt(locale, config.prompts), shortAudioContext: config.supportsShortAudioCtx,
+		});
+		return new Whisper(session, callbacks, config);
 	},
 	modelName: 'whisper',
 };

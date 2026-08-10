@@ -143,6 +143,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"詳細"
 	],
@@ -386,6 +389,9 @@
 	"Beta": [
 		"ベータ版"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"太字"
 	],
@@ -515,6 +521,9 @@
 	"Checking... Please wait.": [
 		"確認中...お待ちください。"
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"オプションを選択"
 	],
@@ -586,6 +595,9 @@
 	],
 	"Command": [
 		"コマンド"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"コマンドパレット"
@@ -884,6 +896,9 @@
 	"Delete selected notes": [
 		"選択したノートを削除"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Inboxノートブックを削除しますか?\n\nInboxノートブックを削除すると、最近メール送信によって作成したノートが失われる可能性があります。"
 	],
@@ -970,6 +985,9 @@
 	],
 	"Displays the complete information about note.": [
 		"ノートに関するすべての情報を表示します。"
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"選択したノートを表示します。"
@@ -1763,6 +1781,9 @@
 	"Keychain Supported: %s": [
 		"キーチェーンのサポート: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"アップグレードが必要なキー"
 	],
@@ -1882,6 +1903,9 @@
 	],
 	"Manage your plugins": [
 		"プラグインを管理"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"エンドツーエンド暗号化(E2EE)の設定コマンドです。`enable`, `disable`, `decrypt`, `status`, `decrypt-file`, `target-status` があります。"
@@ -2078,6 +2102,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"テキストエディターが定義されていません。`config editor <editor-path>`で設定を行ってください"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"なし"
 	],
@@ -2246,6 +2273,9 @@
 	"Open Sync Wizard...": [
 		"同期ウィザードを開く..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"開く..."
 	],
@@ -2257,6 +2287,9 @@
 	],
 	"Options": [
 		"オプション"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"番号付きリスト"
@@ -2750,6 +2783,9 @@
 	"Select parent notebook": [
 		"親ノートブックを選択"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2911,6 +2947,9 @@
 	],
 	"Source: ": [
 		"ソース: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		""
@@ -3448,6 +3487,9 @@
 	],
 	"Try it now": [
 		"今すぐ試す"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"コマンドのさらなる情報は、`help [command]`で見ることができます；または、`help all`ですべての使用方法の情報を表示できます。"

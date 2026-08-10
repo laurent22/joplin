@@ -1,7 +1,8 @@
 import buildDefaultPlugins from '../buildDefaultPlugins';
 
 const buildAll = (outputDirectory: string) => {
-	return buildDefaultPlugins(outputDirectory, {
+	return buildDefaultPlugins({
+		outputParentDir: outputDirectory,
 		beforeInstall: async () => { },
 		beforePatch: async () => { },
 	});

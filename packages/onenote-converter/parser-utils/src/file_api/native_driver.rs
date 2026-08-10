@@ -1,12 +1,25 @@
 use super::ApiResult;
 use super::FileApiDriver;
+use super::FileHandle;
 use std::fs;
+use std::fs::File;
+use std::io::BufReader;
 use std::path;
 use std::path::Path;
 
 pub struct FileApiDriverImpl {}
 
 impl FileApiDriver for FileApiDriverImpl {
+    #[cfg(target_os = "windows")]
+    fn is_windows(&self) -> bool {
+        true
+    }
+
+    #[cfg(not(target_os = "windows"))]
+    fn is_windows(&self) -> bool {
+        false
+    }
+
     fn is_directory(&self, path: &str) -> ApiResult<bool> {
         let metadata = fs::metadata(path)?;
         let file_type = metadata.file_type();
@@ -26,8 +39,18 @@ impl FileApiDriver for FileApiDriverImpl {
         fs::read(path)
     }
 
+    fn open_file(&self, path: &str) -> ApiResult<Box<dyn FileHandle>> {
+        Ok(Box::new(BufReader::new(fs::File::open(path)?)))
+    }
+
     fn write_file(&self, path: &str, data: &[u8]) -> ApiResult<()> {
         fs::write(path, data)
+    }
+
+    fn stream_to_file(&self, path: &str, data: &mut dyn std::io::Read) -> ApiResult<()> {
+        let mut f = File::create(path)?;
+        std::io::copy(data, &mut f)?;
+        Ok(())
     }
 
     fn exists(&self, path: &str) -> ApiResult<bool> {
@@ -69,6 +92,12 @@ impl FileApiDriver for FileApiDriverImpl {
             path_2
         };
         Path::new(path_1).join(path_2).to_string_lossy().into()
+    }
+}
+
+impl FileHandle for BufReader<fs::File> {
+    fn byte_length(&self) -> u64 {
+        self.get_ref().metadata().map(|m| m.len()).unwrap_or(0)
     }
 }
 

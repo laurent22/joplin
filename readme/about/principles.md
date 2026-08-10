@@ -1,6 +1,6 @@
 # Joplin guiding principles
 
-Our guiding principles are at the core of every decisions we make. They define how we work and what we strive for.
+Our guiding principles are at the core of every decision we make. They define how we work and what we strive for.
 
 ## Freedom of choice
 
@@ -30,10 +30,10 @@ At Joplin, we understand the significance of personal notes and the valuable inf
 
 We achieve this by conducting rigorous testing, with over 3500 automated tests, to ensure optimal functionality. We also continuously review and upgrade the technologies we utilize, adapting to evolving needs. Furthermore, we work closely with security researchers who help us identify and address potential vulnerabilities, enhancing the security of our software.
 
-Moreover, we value open accessibility. The data stored in our application is stored in an open format, enabling you to access and retrieve their information even without using our application. This commitment to open formats ensures that your data remains accessible and provides you with the freedom to interact with your notes as you desire.
+Moreover, we value open accessibility. The data stored in our application is stored in an open format, enabling you to access and retrieve your information even without using our application. This commitment to open formats ensures that your data remains accessible and provides you with the freedom to interact with your notes as you desire.
 
 ## Sustainability
 
 Sustainability in software encompasses various practices aimed at reducing the environmental impact of software throughout its lifecycle. By prioritizing sustainability, we can play a significant role in mitigating our environmental footprint and fostering a more sustainable future.
 
-At Joplin we achieve this through efficient coding, optimization, and resource management to help minimize energy consumption and carbon emissions. We have also partnered with the non-profit carbone.eco and invested in the reforestation of a four hectares of forest in France.
+At Joplin we achieve this through efficient coding, optimization, and resource management to help minimize energy consumption and carbon emissions. We have also partnered with the non-profit carbone.eco and invested in the reforestation of four hectares of forest in France.

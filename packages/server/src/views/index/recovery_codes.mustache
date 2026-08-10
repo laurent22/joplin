@@ -1,0 +1,46 @@
+<h1 class="title">Recovery codes</h1>
+
+<div class="block readable-block content">
+	<p>Recovery codes can be used to access your account in the event you lose access to your device and cannot receive multi-factor authentication codes.</p>
+	<p>Keep your recovery codes as safe as your password. </p>
+
+	<ul id="recovery-codes" class="ml-6 my-5">
+		{{#codes}}
+			{{^is_used}}
+				<li class="my-3">
+					<span>{{code}}<span>
+				</li>
+			{{/is_used}}
+
+			{{#is_used}}
+				<li class="my-3">
+					<span data-is-code-used="1">{{code}}</span> <em>{{ isUsedText }}</em>
+				</li>
+			{{/is_used}}
+		{{/codes}}
+	</ul>
+
+	{{^isNewlyCreated}}
+	<form id="user_form" action="{{{postUrl}}}" method="POST" class="block mt-5">
+
+		<div class="block">
+			{{{csrfTag}}}
+			<input type="hidden" name="id" value="{{user.id}}"/>
+
+			<div class="control block is-pulled-right">
+				<input type="submit" name="postButton" class="button is-primary" value="{{buttonTitle}}" />
+			</div>
+		</div>
+	</form>
+	{{/isNewlyCreated}}
+
+	{{#isNewlyCreated}}
+		<div class="block">
+			<div class="control block is-pulled-right">
+				<a name="goToDashboard" class="button is-primary" href="{{{global.baseUrl}}}/home">
+				Continue
+				</a>
+			</div>
+		</div>
+	{{/isNewlyCreated}}
+</div>

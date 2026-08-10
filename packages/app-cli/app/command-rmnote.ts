@@ -2,7 +2,7 @@ import BaseCommand from './base-command';
 import app from './app';
 import { _, _n } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
-import BaseModel, { DeleteOptions } from '@joplin/lib/BaseModel';
+import { DeleteOptions, ModelType } from '@joplin/lib/BaseModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 
 class Command extends BaseCommand {
@@ -21,12 +21,11 @@ class Command extends BaseCommand {
 		];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { 'note-pattern': string; options?: { force?: boolean; permanent?: boolean } }) {
 		const pattern = args['note-pattern'];
 		const force = args.options && args.options.force === true;
 
-		const notes: NoteEntity[] = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
+		const notes: NoteEntity[] = await app().loadItems(ModelType.Note, pattern);
 		if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
 
 		let ok = true;

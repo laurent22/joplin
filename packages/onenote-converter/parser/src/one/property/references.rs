@@ -6,10 +6,10 @@ use parser_utils::errors::{ErrorKind, Result};
 pub(crate) struct References;
 
 impl References {
-    pub(crate) fn get_predecessors<'a>(
+    pub(crate) fn get_predecessors(
         prop_type: PropertyType,
-        object: &'a Object,
-    ) -> Result<impl Iterator<Item = &'a PropertyValue>> {
+        object: &Object,
+    ) -> Result<impl Iterator<Item = &PropertyValue>> {
         let prop_index = object
             .props()
             .properties()

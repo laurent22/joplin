@@ -2,12 +2,11 @@ export type OnNavigateCallback = ()=> Promise<boolean>;
 
 export default class NavService {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Set by each app to its redux dispatch; defaults to a no-op and per-app action types diverge, so it is typed loosely here (see BaseModel.dispatch)
 	public static dispatch: Function = () => {};
 	private static handlers_: OnNavigateCallback[] = [];
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async go(routeName: string, additionalProps: Record<string, any>|null = null) {
+	public static async go(routeName: string, additionalProps: Record<string, unknown>|null = null) {
 		if (this.handlers_.length) {
 			const r = await this.handlers_[this.handlers_.length - 1]();
 			if (r) return r;
@@ -21,7 +20,6 @@ export default class NavService {
 		return false;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public static addHandler(handler: OnNavigateCallback) {
 		for (let i = this.handlers_.length - 1; i >= 0; i--) {
 			const h = this.handlers_[i];
@@ -31,7 +29,6 @@ export default class NavService {
 		this.handlers_.push(handler);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
 	public static removeHandler(handler: OnNavigateCallback) {
 		for (let i = this.handlers_.length - 1; i >= 0; i--) {
 			const h = this.handlers_[i];

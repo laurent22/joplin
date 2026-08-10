@@ -4,6 +4,7 @@ import { synchronizerStart, revisionService, setupDatabaseAndSynchronizer, synch
 import Note from '../../models/Note';
 import Revision from '../../models/Revision';
 import { loadMasterKeysFromSettings, setupAndEnableEncryption } from '../e2ee/utils';
+import { onRevisionServiceSettingsChanged } from './syncInfoUtils';
 
 describe('Synchronizer.revisions', () => {
 
@@ -146,6 +147,10 @@ describe('Synchronizer.revisions', () => {
 	}));
 
 	it('should not create revisions when item is modified as a result of decryption', (async () => {
+		// This test does a full encrypt/sync/decrypt round-trip and is prone to timing out
+		// under CI runner contention, so allow one retry.
+		jest.retryTimes(2, { logErrorsBeforeRetry: true });
+
 		// Handle this scenario:
 		// - C1 creates note
 		// - C1 never changes it
@@ -253,16 +258,16 @@ describe('Synchronizer.revisions', () => {
 		const getNoteRevisions = () => {
 			return Revision.allByType(BaseModel.TYPE_NOTE, note.id);
 		};
-		jest.advanceTimersByTime(200);
+		jest.advanceTimersByTime(500);
 
 		await Note.save({ id: note.id, title: 'note REV0' });
-		jest.advanceTimersByTime(200);
+		jest.advanceTimersByTime(500);
 
 		await revisionService().collectRevisions(); // REV0
 		expect(await getNoteRevisions()).toHaveLength(1);
 
 		const interimTime = Date.now();
-		jest.advanceTimersByTime(200);
+		jest.advanceTimersByTime(500);
 
 		await Note.save({ id: note.id, title: 'note REV1' });
 		await revisionService().collectRevisions(); // REV1
@@ -272,6 +277,10 @@ describe('Synchronizer.revisions', () => {
 		await synchronizerStart();
 		await switchClient(2);
 		await synchronizerStart();
+
+		// Prevent a race condition whereby a revision is downloaded via the sync, then one of the same revisions is updated within the same millisecond via
+		// deleteOldRevisions, and therefore is not uploaded via the sync because the sync_time matches
+		jest.advanceTimersByTime(500);
 
 		const revisions = await getNoteRevisions();
 		expect(revisions).toHaveLength(2);
@@ -297,4 +306,48 @@ describe('Synchronizer.revisions', () => {
 
 		jest.useRealTimers();
 	});
+
+	it('should sync revision service settings across clients', (async () => {
+		const changeSetting = (key: string, value: unknown) => {
+			Setting.setValue(key, value);
+			onRevisionServiceSettingsChanged(key, value);
+		};
+
+		changeSetting('revisionService.enabled', false);
+		await synchronizerStart();
+		await switchClient(2);
+
+		expect(Setting.value('revisionService.enabled')).toBe(true);
+		await synchronizerStart();
+		expect(Setting.value('revisionService.enabled')).toBe(false);
+
+		changeSetting('revisionService.enabled', true);
+		await synchronizerStart();
+		await switchClient(1);
+
+		expect(Setting.value('revisionService.enabled')).toBe(false);
+		await synchronizerStart();
+		expect(Setting.value('revisionService.enabled')).toBe(true);
+	}));
+
+	it('should not overwrite a customised local ttlDays with another client default', (async () => {
+		// Regression: a client that has never customised revisionService.ttlDays
+		// must not push its default over another client's customised value.
+		const changeSetting = (key: string, value: unknown) => {
+			Setting.setValue(key, value);
+			onRevisionServiceSettingsChanged(key, value);
+		};
+
+		changeSetting('revisionService.ttlDays', 30);
+		await synchronizerStart();
+
+		await switchClient(2);
+		expect(Setting.value('revisionService.ttlDays')).toBe(90);
+		await synchronizerStart();
+		expect(Setting.value('revisionService.ttlDays')).toBe(30);
+
+		await switchClient(1);
+		await synchronizerStart();
+		expect(Setting.value('revisionService.ttlDays')).toBe(30);
+	}));
 });

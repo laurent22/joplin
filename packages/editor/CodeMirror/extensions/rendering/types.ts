@@ -14,10 +14,22 @@ export interface ReplacementExtension {
 	// Disable the decoration when near the cursor. Defaults to true.
 	hideWhenContainsSelection?: boolean;
 
+	// Determines when the decoration is revealed (showing the underlying raw markup instead of the rendered decoration).
+	// 'line': Reveal raw markup if the cursor is on the same line (default).
+	// 'select': Reveal raw markup if the cursor intersects the node.
+	// 'active': Reveal raw markup if the cursor is inside the node or its structural parent.
+	// 'boolean': Custom logic. Return true to reveal, false to keep the decoration.
+	getRevealStrategy?: (node: SyntaxNodeRef, state: EditorState)=> 'line' | 'select' | 'active' | boolean;
+
 	// Allows specifying custom logic to refresh all decorations associated with the extension
 	shouldFullReRender?: (transaction: Transaction)=> boolean;
+
+	// Treat the decorated ranges as atomic for cursor motion, so arrow keys
+	// jump over them rather than landing inside the replaced range.
+	atomic?: boolean;
 }
 
 export interface RenderedContentContext {
 	resolveImageSrc(src: string, reloadCounter: number): Promise<string>;
+	openLink(link: string): void;
 }

@@ -22,7 +22,7 @@ const collectChanges = async (db: DbConnection, options: Options) => {
 	const cutOffTime = Date.now() - options.interval;
 
 	while (true) {
-		const query = db('changes')
+		const query = db('changes_2')
 			.select('user_id', 'updated_time', 'counter', 'item_id', 'type')
 			.orderBy('counter', 'desc')
 			.limit(options.batchSize);

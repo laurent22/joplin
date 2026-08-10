@@ -23,6 +23,14 @@ describe('interop/InteropService_Exporter_Md', () => {
 		await fs.mkdirp(exportDir());
 	});
 
+	const createExportItems = () => {
+		const items: { type: number; itemOrId: string | NoteEntity }[] = [];
+		const queue = (itemType: number, itemOrId: string | NoteEntity) => {
+			items.push({ type: itemType, itemOrId });
+		};
+		return { items, queue };
+	};
+
 	it('should create resources directory', (async () => {
 		const service = new InteropService_Exporter_Md();
 		await service.init(exportDir());
@@ -34,15 +42,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemsToExport: any[] = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const queueExportItem = (itemType: number, itemOrId: any) => {
-			itemsToExport.push({
-				type: itemType,
-				itemOrId: itemOrId,
-			});
-		};
+		const { items: itemsToExport, queue: queueExportItem } = createExportItems();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
@@ -78,15 +78,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemsToExport: any[] = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const queueExportItem = (itemType: number, itemOrId: any) => {
-			itemsToExport.push({
-				type: itemType,
-				itemOrId: itemOrId,
-			});
-		};
+		const { items: itemsToExport, queue: queueExportItem } = createExportItems();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
@@ -97,7 +89,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
 		queueExportItem(BaseModel.TYPE_NOTE, note2);
 		queueExportItem(BaseModel.TYPE_RESOURCE, (await Note.linkedResourceIds(note1.body))[0]);
-		const resource1 = await Resource.load(itemsToExport[3].itemOrId);
+		const resource1 = await Resource.load(itemsToExport[3].itemOrId as string);
 
 		const folder2 = await Folder.save({ title: 'folder2' });
 		let note3 = await Note.save({ title: 'note3', parent_id: folder2.id });
@@ -106,7 +98,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		queueExportItem(BaseModel.TYPE_FOLDER, folder2.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note3);
 		queueExportItem(BaseModel.TYPE_RESOURCE, (await Note.linkedResourceIds(note3.body))[0]);
-		const resource2 = await Resource.load(itemsToExport[6].itemOrId);
+		const resource2 = await Resource.load(itemsToExport[6].itemOrId as string);
 
 		await exporter.processItem(Folder.modelType(), folder1);
 		await exporter.processItem(Folder.modelType(), folder2);
@@ -126,15 +118,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemsToExport: any[] = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const queueExportItem = (itemType: number, itemOrId: any) => {
-			itemsToExport.push({
-				type: itemType,
-				itemOrId: itemOrId,
-			});
-		};
+		const { items: itemsToExport, queue: queueExportItem } = createExportItems();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
@@ -155,15 +139,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemsToExport: any[] = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const queueExportItem = (itemType: number, itemOrId: any) => {
-			itemsToExport.push({
-				type: itemType,
-				itemOrId: itemOrId,
-			});
-		};
+		const { items: itemsToExport, queue: queueExportItem } = createExportItems();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
@@ -184,15 +160,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemsToExport: any[] = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const queueExportItem = (itemType: number, itemOrId: any) => {
-			itemsToExport.push({
-				type: itemType,
-				itemOrId: itemOrId,
-			});
-		};
+		const { items: itemsToExport, queue: queueExportItem } = createExportItems();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
@@ -201,7 +169,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note1);
 		queueExportItem(BaseModel.TYPE_RESOURCE, (await Note.linkedResourceIds(note1.body))[0]);
-		const resource1 = await Resource.load(itemsToExport[2].itemOrId);
+		const resource1 = await Resource.load(itemsToExport[2].itemOrId as string);
 
 		const folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
 		let note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
@@ -210,7 +178,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		queueExportItem(BaseModel.TYPE_FOLDER, folder2.id);
 		queueExportItem(BaseModel.TYPE_NOTE, note2);
 		queueExportItem(BaseModel.TYPE_RESOURCE, (await Note.linkedResourceIds(note2.body))[0]);
-		const resource2 = await Resource.load(itemsToExport[5].itemOrId);
+		const resource2 = await Resource.load(itemsToExport[5].itemOrId as string);
 
 		await exporter.processResource(resource1, Resource.fullPath(resource1));
 		await exporter.processResource(resource2, Resource.fullPath(resource2));
@@ -223,15 +191,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemsToExport: any[] = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const queueExportItem = (itemType: number, itemOrId: any) => {
-			itemsToExport.push({
-				type: itemType,
-				itemOrId: itemOrId,
-			});
-		};
+		const { items: itemsToExport, queue: queueExportItem } = createExportItems();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 
@@ -256,15 +216,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemsToExport: any[] = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const queueExportItem = (itemType: number, itemOrId: any) => {
-			itemsToExport.push({
-				type: itemType,
-				itemOrId: itemOrId,
-			});
-		};
+		const { items: itemsToExport, queue: queueExportItem } = createExportItems();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
@@ -295,15 +247,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemsToExport: any[] = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const queueExportItem = (itemType: number, itemOrId: any) => {
-			itemsToExport.push({
-				type: itemType,
-				itemOrId: itemOrId,
-			});
-		};
+		const { items: itemsToExport, queue: queueExportItem } = createExportItems();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
@@ -342,8 +286,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		await exporter.processResource(resource2, Resource.fullPath(resource2));
 		await exporter.processResource(resource3, Resource.fullPath(resource3));
 		await exporter.processResource(resource4, Resource.fullPath(resource3));
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const context: any = {
+		const context: { resourcePaths: Record<string, string> } = {
 			resourcePaths: {},
 		};
 		context.resourcePaths[resource1.id] = 'resource1.jpg';
@@ -371,15 +314,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemsToExport: any[] = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const queueExportItem = (itemType: number, itemOrId: any) => {
-			itemsToExport.push({
-				type: itemType,
-				itemOrId: itemOrId,
-			});
-		};
+		const { items: itemsToExport, queue: queueExportItem } = createExportItems();
 
 		const changeNoteBodyAndReload = async (note: NoteEntity, newBody: string) => {
 			note.body = newBody;
@@ -425,15 +360,7 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemsToExport: any[] = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const queueExportItem = (itemType: number, itemOrId: any) => {
-			itemsToExport.push({
-				type: itemType,
-				itemOrId: itemOrId,
-			});
-		};
+		const { items: itemsToExport, queue: queueExportItem } = createExportItems();
 
 		const folder1 = await Folder.save({ title: 'folder with space1' });
 		const note1 = await Note.save({ title: 'note1 name with space', parent_id: folder1.id });
@@ -487,6 +414,70 @@ describe('interop/InteropService_Exporter_Md', () => {
 		const note_body = await shim.fsDriver().readFile(`${exportDir()}/testing/mynote.md`);
 		expect(note_body).toContain('[photo.jpg](../_resources/name%20with%20spaces.jpg)');
 	}));
+
+	it.each([
+		{ titles: ['folder:', 'folder?'], expectedPaths: ['folder_/note1.md', 'folder_-1/note2.md'], description: 'special characters' },
+		{ titles: ['CON', 'NUL'], expectedPaths: ['___/note1.md', '___-1/note2.md'], description: 'Windows-banned names' },
+	])('should handle folders that collide after sanitization ($description)', async ({ titles, expectedPaths }) => {
+		const exporter = new InteropService_Exporter_Md();
+		await exporter.init(exportDir());
+
+		const { items, queue } = createExportItems();
+
+		const folder1 = await Folder.save({ title: titles[0] });
+		const folder2 = await Folder.save({ title: titles[1] });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
+		queue(BaseModel.TYPE_FOLDER, folder1.id);
+		queue(BaseModel.TYPE_FOLDER, folder2.id);
+		queue(BaseModel.TYPE_NOTE, note1);
+		queue(BaseModel.TYPE_NOTE, note2);
+
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_FOLDER, items);
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, items);
+
+		await exporter.processItem(Folder.modelType(), folder1);
+		await exporter.processItem(Folder.modelType(), folder2);
+		await exporter.processItem(Note.modelType(), note1);
+		await exporter.processItem(Note.modelType(), note2);
+
+		expect(Object.keys(exporter.context().notePaths).length).toBe(2);
+		expect(exporter.context().notePaths[note1.id]).toBe(expectedPaths[0]);
+		expect(exporter.context().notePaths[note2.id]).toBe(expectedPaths[1]);
+
+		expect(await shim.fsDriver().exists(`${exportDir()}/${expectedPaths[0]}`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${expectedPaths[1]}`)).toBe(true);
+	});
+
+	it('should handle folders that collide after sanitization when the export path contains a dot', async () => {
+		const exporter = new InteropService_Exporter_Md();
+		await exporter.init(`${exportDir()}/parent.with.dot/export`);
+
+		const { items, queue } = createExportItems();
+
+		const folder1 = await Folder.save({ title: 'folder:' });
+		const folder2 = await Folder.save({ title: 'folder?' });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder2.id });
+		queue(BaseModel.TYPE_FOLDER, folder1.id);
+		queue(BaseModel.TYPE_FOLDER, folder2.id);
+		queue(BaseModel.TYPE_NOTE, note1);
+		queue(BaseModel.TYPE_NOTE, note2);
+
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_FOLDER, items);
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, items);
+
+		await exporter.processItem(Folder.modelType(), folder1);
+		await exporter.processItem(Folder.modelType(), folder2);
+		await exporter.processItem(Note.modelType(), note1);
+		await exporter.processItem(Note.modelType(), note2);
+
+		expect(exporter.context().notePaths[note1.id]).toBe('folder_/note1.md');
+		expect(exporter.context().notePaths[note2.id]).toBe('folder_-1/note2.md');
+
+		expect(await shim.fsDriver().exists(`${exportDir()}/parent.with.dot/export/folder_/note1.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/parent.with.dot/export/folder_-1/note2.md`)).toBe(true);
+	});
 
 	it('should handle filenames that contain slashes', (async () => {
 		const folder = await Folder.save({ title: 'testing' });

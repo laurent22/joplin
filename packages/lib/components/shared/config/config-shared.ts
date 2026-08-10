@@ -1,40 +1,47 @@
-import Setting, { AppType, SettingMetadataSection, SettingSectionSource } from '../../../models/Setting';
+import Setting, { AppType, SettingMetadataSection, SettingSectionSource, type SettingsRecord } from '../../../models/Setting';
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
-const ObjectUtils = require('../../../ObjectUtils');
-const { _ } = require('../../../locale');
+import { _ } from '../../../locale';
 import { createSelector } from 'reselect';
 import Logger from '@joplin/utils/Logger';
 
 import { type ReactNode } from 'react';
 import { type Registry } from '../../../registry';
 import settingValidations from '../../../models/settings/settingValidations';
+import { convertValuesToFunctions } from '../../../ObjectUtils';
+import aiSettingsTransition from '../../../services/ai/aiSettingsTransition';
+import { ChatRole } from '../../../services/ai/types';
 
 const logger = Logger.create('config-shared');
 
+type SettingsMap = Partial<SettingsRecord> & Record<string, unknown>;
+
 interface ConfigScreenState {
 	checkSyncConfigResult: { ok: boolean; errorMessage: string }|'checking'|null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	settings: any;
+	checkAiConfigResult: { ok: boolean; message: string }|'checking'|null;
+	settings: SettingsMap;
 	changedSettingKeys: string[];
 	showAdvancedSettings: boolean;
+	searchQuery: string;
+	searchSectionFilter: string|null;
 }
 
 export const defaultScreenState: ConfigScreenState = {
 	checkSyncConfigResult: null,
+	checkAiConfigResult: null,
 	settings: {},
 	changedSettingKeys: [],
 	showAdvancedSettings: false,
+	searchQuery: '',
+	searchSectionFilter: null,
 };
 
 interface ConfigScreenComponent {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	settingToComponent(settingId: string, setting: any): ReactNode;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	sectionToComponent(sectionName: string, section: any, settings: any, isSelected: boolean): ReactNode;
+	settingToComponent(settingId: string, setting: unknown): ReactNode;
+	sectionToComponent(sectionName: string, section: SettingMetadataSection, settings: SettingsMap, isSelected: boolean): ReactNode;
 
 	state: Partial<ConfigScreenState>;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mirrors React.Component.setState signature (Pick<S, K> etc.); a narrower local type breaks subclass assignment of `this` to ConfigScreenComponent
 	setState(callbackOrNew: any, callback?: ()=> void): void;
 }
 
@@ -69,17 +76,17 @@ export const advancedSettingsButton_click = (comp: ConfigScreenComponent) => {
 	});
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const checkSyncConfig = async (comp: ConfigScreenComponent, settings: any) => {
+export const checkSyncConfig = async (comp: ConfigScreenComponent, settings: SettingsMap) => {
+
 	const syncTargetId = settings['sync.target'];
 	const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId);
 
 	const options = {
-		...Setting.subValues(`sync.${syncTargetId}`, settings),
-		...Setting.subValues('net', settings) };
+		...Setting.subValues(`sync.${syncTargetId}`, settings, { includeConstants: true }),
+		...Setting.subValues('net', settings, { includeConstants: true }) };
 
 	comp.setState({ checkSyncConfigResult: 'checking' });
-	const result = await SyncTargetClass.checkConfig(ObjectUtils.convertValuesToFunctions(options));
+	const result = await SyncTargetClass.checkConfig(convertValuesToFunctions(options));
 	comp.setState({ checkSyncConfigResult: result });
 
 	if (result.ok) {
@@ -105,8 +112,52 @@ export const checkSyncConfigMessages = (comp: ConfigScreenComponent) => {
 	return output;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const updateSettingValue = (comp: ConfigScreenComponent, key: string, value: any, callback?: ()=> void) => {
+export const checkAiConfig = async (comp: ConfigScreenComponent) => {
+	// Pending edits aren't persisted until Apply, so flush first — otherwise
+	// the test runs against the previously-saved provider config. saveSettings
+	// returns false when validation fails; bail out in that case so the user
+	// sees the validation message instead of a misleading AI error.
+	const saved = await saveSettings(comp);
+	if (!saved) return;
+
+	comp.setState({ checkAiConfigResult: 'checking' });
+	try {
+		const { default: AiService } = await import('../../../services/ai/AiService');
+		const result = await AiService.instance().chat([
+			{ role: ChatRole.User, content: 'Reply with the single word OK.' },
+		], { maxTokens: 20 });
+		const text = (result.text || '').trim();
+		if (!text) {
+			comp.setState({ checkAiConfigResult: { ok: false, message: _('The provider returned an empty response. Check that the base URL ends with /v1 and that a model is loaded.') } });
+		} else {
+			comp.setState({ checkAiConfigResult: { ok: true, message: text } });
+		}
+	} catch (error) {
+		// Log the full error to the console — the user-facing status only shows
+		// the short message, but the dev tools console gets the stack trace too.
+		logger.warn('AI configuration test failed:', error);
+		comp.setState({ checkAiConfigResult: { ok: false, message: error.message } });
+	}
+};
+
+export const checkAiConfigMessages = (comp: ConfigScreenComponent) => {
+	const result = comp.state.checkAiConfigResult;
+	const output: string[] = [];
+
+	if (result === 'checking') {
+		output.push(_('Checking... Please wait.'));
+	} else if (result && result.ok) {
+		output.push(_('Success! The AI provider responded:'));
+		output.push(result.message);
+	} else if (result && !result.ok) {
+		output.push(_('Error. The AI provider test failed:'));
+		output.push(result.message);
+	}
+
+	return output;
+};
+
+export const updateSettingValue = (comp: ConfigScreenComponent, key: string, value: unknown, callback?: ()=> void) => {
 	if (!callback) callback = () => {};
 
 	comp.setState((state: ConfigScreenState) => {
@@ -127,6 +178,26 @@ export const updateSettingValue = (comp: ConfigScreenComponent, key: string, val
 		const changedSettingKeys = state.changedSettingKeys.slice();
 		settings[key] = Setting.formatValue(key, value);
 		if (changedSettingKeys.indexOf(key) < 0) changedSettingKeys.push(key);
+
+		// Live AI first-enable default: when the user ticks `ai.enabled` and
+		// they're on Joplin Cloud sync, pre-select Joplin Cloud AI in the
+		// form so the change is visible immediately (the same logic runs at
+		// save-time too, but applying it here makes the UI reflect it before
+		// the user clicks Apply). Read sync.target and configured from the
+		// pending form state with a fallback to the persisted value, so the
+		// hook reacts to changes the user has made in the same session but
+		// not yet applied.
+		const pendingSyncTarget = 'sync.target' in settings ? settings['sync.target'] : Setting.value('sync.target');
+		const pendingConfigured = 'ai.chat.providerType.configured' in settings ? settings['ai.chat.providerType.configured'] : Setting.value('ai.chat.providerType.configured');
+		if (
+			key === 'ai.enabled'
+			&& settings['ai.enabled'] === true
+			&& !pendingConfigured
+			&& pendingSyncTarget === SyncTargetRegistry.nameToId('joplinCloud')
+		) {
+			settings['ai.chat.providerType'] = 'joplin-cloud';
+			if (changedSettingKeys.indexOf('ai.chat.providerType') < 0) changedSettingKeys.push('ai.chat.providerType');
+		}
 
 		return {
 			settings: settings,
@@ -159,9 +230,11 @@ export const saveSettings = async (comp: ConfigScreenComponent) => {
 		return false;
 	}
 
+	aiSettingsTransition({ changedKeys: savedSettingKeys, settings: comp.state.settings });
+
 	for (const key in comp.state.settings) {
 		if (!comp.state.settings.hasOwnProperty(key)) continue;
-		if (comp.state.changedSettingKeys.indexOf(key) < 0) continue;
+		if (savedSettingKeys.indexOf(key) < 0) continue;
 		Setting.setValue(key, comp.state.settings[key]);
 	}
 
@@ -172,8 +245,7 @@ export const saveSettings = async (comp: ConfigScreenComponent) => {
 	return true;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const settingsToComponents = (comp: ConfigScreenComponent, device: AppType, settings: any) => {
+export const settingsToComponents = (comp: ConfigScreenComponent, device: AppType, settings: SettingsMap) => {
 	const keys = Setting.keys(true, device);
 	const settingComps = [];
 
@@ -192,8 +264,7 @@ export const settingsToComponents = (comp: ConfigScreenComponent, device: AppTyp
 	return settingComps;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type SettingsSelectorState = { device: AppType; settings: any };
+type SettingsSelectorState = { device: AppType; settings: SettingsMap };
 const deviceSelector = (state: SettingsSelectorState) => state.device;
 const settingsSelector = (state: SettingsSelectorState) => state.settings;
 
@@ -286,8 +357,7 @@ export const settingsSections = createSelector(
 );
 
 export const settingsToComponents2 = (
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	comp: ConfigScreenComponent, device: AppType, settings: any, selectedSectionName = '',
+	comp: ConfigScreenComponent, device: AppType, settings: SettingsMap, selectedSectionName = '',
 ) => {
 	const sectionComps: ReactNode[] = [];
 	const sections = settingsSections({ device, settings });

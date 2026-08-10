@@ -1,7 +1,6 @@
 import SyncTargetRegistry from '../../../SyncTargetRegistry';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const shouldShowMissingPasswordWarning = (syncTargetId: number, settings: any) => {
+const shouldShowMissingPasswordWarning = (syncTargetId: number, settings: Record<string, unknown>) => {
 	const syncTargetClass = SyncTargetRegistry.classById(syncTargetId);
 
 	return syncTargetClass.requiresPassword() && !settings[`sync.${syncTargetId}.password`];

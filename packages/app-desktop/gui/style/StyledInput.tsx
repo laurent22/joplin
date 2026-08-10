@@ -1,8 +1,16 @@
 const styled = require('styled-components').default;
 const Color = require('color');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type StyleProps = any;
+interface StyleProps {
+	theme: {
+		color: string;
+		color3: string;
+		colorFaded: string;
+		fontSize: number;
+		toolbarHeight: number;
+		backgroundColor4: string;
+	};
+}
 
 const StyledInput = styled.input`
 	border: 1px solid ${(props: StyleProps) => Color(props.theme.color3).alpha(0.6)};

@@ -43,8 +43,12 @@ describe('SearchResult', () => {
 		const noteCount = 8;
 		await createNotes(noteCount);
 
-		render(<WrappedSearchResults query='abcd' paused={false}/>);
+		const { unmount } = render(<WrappedSearchResults query='abcd' paused={false}/>);
+
 		const items = await screen.findAllByText(/abcd \d\d?\d?/);
 		expect(items.length).toBe(noteCount);
+
+		// Unmount early to prevent state changes after the test finishes.
+		unmount();
 	});
 });

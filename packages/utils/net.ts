@@ -2,8 +2,13 @@
 
 import { msleep } from './time';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const fetchWithRetry = async (url: string, opts: any = null) => {
+interface FetchWithRetryOptions extends RequestInit {
+	retry?: number;
+	callback?: (retry: number)=> void;
+	pause?: number;
+}
+
+export const fetchWithRetry = async (url: string, opts: FetchWithRetryOptions | null = null) => {
 	if (!opts) opts = {};
 	let retry = opts && opts.retry || 3;
 

@@ -2,59 +2,54 @@ import * as React from 'react';
 import bridge from '../services/bridge';
 import { _ } from '@joplin/lib/locale';
 import { ThemeStyle, themeStyle } from '@joplin/lib/theme';
-const { createSelector } = require('reselect');
+import { createSelector } from 'reselect';
 
 interface Props {
 	themeId: number;
 	type: string;
 	url: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	style?: any;
+	style?: React.CSSProperties;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const themeSelector = (_state: any, props: any) => themeStyle(props.themeId);
+const themeSelector = (_state: unknown, props: Props) => themeStyle(props.themeId);
 
 const styleSelector = createSelector(
 	themeSelector,
 	(theme: ThemeStyle) => {
-		const output = {
-			root: {
-				width: 220,
-				height: 60,
-				borderRadius: 4,
-				border: '1px solid',
-				borderColor: theme.dividerColor,
-				backgroundColor: theme.backgroundColor,
-				paddingLeft: 14,
-				paddingRight: 14,
-				paddingTop: 8,
-				paddingBottom: 8,
-				boxSizing: 'border-box',
-				display: 'flex',
-				flexDirection: 'row',
-				boxShadow: '0px 1px 1px rgba(0,0,0,0.3)',
-			},
-			logo: {
-				width: 42,
-				height: 42,
-			},
-			labelGroup: {
-				display: 'flex',
-				flexDirection: 'column',
-				justifyContent: 'center',
-				marginLeft: 14,
-				fontFamily: theme.fontFamily,
-				color: theme.color,
-				fontSize: theme.fontSize,
-			},
-			locationLabel: {
-				fontSize: theme.fontSize * 1.2,
-				fontWeight: 'bold',
-			},
+		const root: React.CSSProperties = {
+			width: 220,
+			height: 60,
+			borderRadius: 4,
+			border: '1px solid',
+			borderColor: theme.dividerColor,
+			backgroundColor: theme.backgroundColor,
+			paddingLeft: 14,
+			paddingRight: 14,
+			paddingTop: 8,
+			paddingBottom: 8,
+			boxSizing: 'border-box',
+			display: 'flex',
+			flexDirection: 'row',
+			boxShadow: '0px 1px 1px rgba(0,0,0,0.3)',
 		};
-
-		return output;
+		const logo: React.CSSProperties = {
+			width: 42,
+			height: 42,
+		};
+		const labelGroup: React.CSSProperties = {
+			display: 'flex',
+			flexDirection: 'column',
+			justifyContent: 'center',
+			marginLeft: 14,
+			fontFamily: theme.fontFamily,
+			color: theme.color,
+			fontSize: theme.fontSize,
+		};
+		const locationLabel: React.CSSProperties = {
+			fontSize: theme.fontSize * 1.2,
+			fontWeight: 'bold',
+		};
+		return { root, logo, labelGroup, locationLabel };
 	},
 );
 

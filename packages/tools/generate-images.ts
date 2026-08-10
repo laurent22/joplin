@@ -2,8 +2,8 @@ import { fileExtension } from '@joplin/lib/path-utils';
 import { copyFile, pathExists, readdir, readFile, writeFile } from 'fs-extra';
 import { dirname } from 'path';
 import { execCommand } from './tool-utils';
-const md5File = require('md5-file');
-const sharp = require('sharp');
+import md5File = require('md5-file');
+import sharp = require('sharp');
 
 interface Source {
 	id: number;
@@ -600,8 +600,7 @@ const saveResults = async (filePath: string, results: Results) => {
 };
 
 const makeOperationKey = async (source: Source, sourcePath: string, operation: Operation): Promise<string> => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any[] = [];
+	const output: (string | number | undefined)[] = [];
 	output.push(source.id);
 	output.push(await md5File(sourcePath));
 	output.push(operation.dest);
@@ -680,7 +679,7 @@ async function main() {
 				throw new Error(`Unsupported extension: ${destExt}`);
 			}
 
-			s = s.toFile(destPath);
+			await s.toFile(destPath);
 		} else {
 			await copyFile(sourcePath, destPath);
 		}

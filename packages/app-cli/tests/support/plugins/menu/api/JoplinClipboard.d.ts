@@ -1,3 +1,4 @@
+import { ClipboardContent } from './types';
 export default class JoplinClipboard {
     private electronClipboard_;
     private electronNativeImage_;
@@ -26,4 +27,19 @@ export default class JoplinClipboard {
      * For example [ 'text/plain', 'text/html' ]
      */
     availableFormats(): Promise<string[]>;
+    /**
+     * Writes multiple formats to the clipboard simultaneously.
+     * This allows setting both text/plain and text/html at the same time.
+     *
+     * <span class="platform-desktop">desktop</span>
+     *
+     * @example
+     * ```typescript
+     * await joplin.clipboard.write({
+     *   text: 'Plain text version',
+     *   html: '<strong>HTML version</strong>'
+     * });
+     * ```
+     */
+    write(content: ClipboardContent): Promise<void>;
 }

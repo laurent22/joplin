@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, Linking, View, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo } from 'react-native';
+import { Platform, Linking, View, ScrollView, Text, TouchableOpacity, Alert, PermissionsAndroid, Dimensions, AccessibilityInfo, LayoutChangeEvent } from 'react-native';
 import Setting, { AppType, SettingMetadataSection } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
@@ -14,6 +14,7 @@ import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
 import BaseScreenComponent from '../../base-screen';
 import * as shared from '@joplin/lib/components/shared/config/config-shared';
+import { shouldShowBySearch, hasNormalizedQuery } from '@joplin/lib/components/shared/config/config-search-text';
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 import biometricAuthenticate from '../../biometrics/biometricAuthenticate';
 import configScreenStyles, { ConfigScreenStyles } from './configScreenStyles';
@@ -30,21 +31,27 @@ import { TextInput, List } from 'react-native-paper';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginStates, { getSearchText as getPluginStatesSearchText } from './plugins/PluginStates';
 import PluginUploadButton, { canInstallPluginsFromFile, buttonLabel as pluginUploadButtonSearchText } from './plugins/PluginUploadButton';
-import NoteImportButton, { importButtonDefaultTitle, importButtonDescription } from './NoteExportSection/NoteImportButton';
+import NoteImportButton, { importedFolderTitle, textImportExtensions } from './NoteExportSection/NoteImportButton';
 import SectionDescription from './SectionDescription';
 import EnablePluginSupportPage from './plugins/EnablePluginSupportPage';
 import getVersionInfoText from '../../../utils/getVersionInfoText';
 import JoplinCloudConfig, { emailToNoteDescription, emailToNoteLabel } from './JoplinCloudConfig';
+import NoteLockConfig from './NoteLockConfig';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 import shim from '@joplin/lib/shim';
 import SettingsToggle from './SettingsToggle';
 import { UpdateSettingValueCallback } from './types';
+import Folder from '@joplin/lib/models/Folder';
+import { FolderEntity } from '@joplin/lib/services/database/types';
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 
 interface ConfigScreenState {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	settings: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Settings values are heterogeneous (string/number/boolean/object) and accessed by string key across many call sites; tightening to `unknown` forces casts everywhere
+	settings: Record<string, any>;
 	changedSettingKeys: string[];
 
 	searchQuery: string;
+	searchSectionFilter: string|null;
 	searching: boolean;
 
 	fixingSearchIndex: boolean;
@@ -53,20 +60,19 @@ interface ConfigScreenState {
 
 	selectedSectionName: string|null;
 	sidebarWidth: number;
+	activeFolder: FolderEntity;
 }
 
 interface ConfigScreenProps {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	settings: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
+	settings: Record<string, any>;
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	navigation: any;
+	navigation: { state?: { sectionName?: string } };
 	dispatch: Dispatch;
 }
 
 class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, ConfigScreenState> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static navigationOptions(): any {
+	public static navigationOptions(): { header: null } {
 		return { header: null };
 	}
 
@@ -84,6 +90,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			sidebarWidth: 100,
 			searchQuery: '',
 			searching: false,
+			activeFolder: null,
 		};
 
 		this.scrollViewRef_ = React.createRef<ScrollView>();
@@ -165,6 +172,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 	private manageProfilesButtonPress_ = () => {
 		void NavService.go('ProfileSwitcher');
+	};
+
+	private noteResourcesButtonPress_ = () => {
+		void NavService.go('NoteResources');
 	};
 
 	private fixSearchEngineIndexButtonPress_ = async () => {
@@ -261,14 +272,12 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return this.styles_[themeId];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private onHeaderLayout(key: string, event: any) {
+	private onHeaderLayout(key: string, event: LayoutChangeEvent) {
 		const layout = event.nativeEvent.layout;
 		this.componentsY_[`header_${key}`] = layout.y;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private onSectionLayout(key: string, event: any) {
+	private onSectionLayout(key: string, event: LayoutChangeEvent) {
 		const layout = event.nativeEvent.layout;
 		this.componentsY_[`section_${key}`] = layout.y;
 	}
@@ -287,9 +296,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 	private async promptSaveChanges(): Promise<void> {
 		if (this.hasUnsavedChanges()) {
 			const response = await shim.showMessageBox(_('There are unsaved changes.'), {
-				buttons: [_('Save changes'), _('Discard changes')],
+				buttons: [_('Discard changes'), _('Save changes')],
+				cancelId: 0,
 			});
-			if (response === 0) {
+			if (response === 1) {
 				await this.saveButton_press();
 			}
 		}
@@ -331,7 +341,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return false;
 	};
 
-	public componentDidMount() {
+	public async componentDidMount() {
 		if (this.props.navigation.state.sectionName) {
 			this.setState({ selectedSectionName: this.props.navigation.state.sectionName });
 			setTimeout(() => {
@@ -347,6 +357,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		NavService.addHandler(this.handleNavigateToNewScreen);
 		Dimensions.addEventListener('change', this.updateSidebarWidth);
 		this.updateSidebarWidth();
+
+		const activeFolder = await Folder.getValidActiveFolder();
+		this.setState({ activeFolder });
 	}
 
 	public componentWillUnmount() {
@@ -354,8 +367,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		NavService.removeHandler(this.handleNavigateToNewScreen);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private renderButton(key: string, title: string, clickHandler: ()=> void, options: any = null) {
+	private renderButton(key: string, title: string, clickHandler: ()=> void, options: { description?: string; statusComp?: ReactElement; disabled?: boolean } = null) {
 		return (
 			<SettingsButton
 				key={key}
@@ -369,8 +381,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public sectionToComponent(key: string, section: SettingMetadataSection, settings: any, isSelected: boolean) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
+	public sectionToComponent(key: string, section: SettingMetadataSection, settings: Record<string, any>, isSelected: boolean) {
 		const settingComps: ReactElement[] = [];
 		const advancedSettingComps: ReactElement[] = [];
 
@@ -386,22 +398,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		}
 
 		const matchesSearchQuery = (relatedText: string|string[]) => {
-			let searchThrough;
-			if (Array.isArray(relatedText)) {
-				searchThrough = relatedText.join('\n');
-			} else {
-				searchThrough = relatedText;
-			}
-			searchThrough = searchThrough.toLocaleLowerCase();
-
-			const searchQuery = this.state.searchQuery.toLocaleLowerCase().trim();
-
-			const hasSearchMatches =
-				headerTitle.toLocaleLowerCase() === searchQuery
-				|| searchThrough.includes(searchQuery);
-
-			// Don't show results when the search input is empty
-			return this.state.searchQuery.length > 0 && hasSearchMatches;
+			return shouldShowBySearch(this.state.searchQuery, headerTitle, relatedText);
 		};
 
 		const addSettingComponent = (
@@ -409,7 +406,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			relatedText: string|string[],
 			settingMetadata?: { advanced?: boolean },
 		) => {
-			const hiddenBySearch = this.state.searching && !matchesSearchQuery(relatedText);
+			const hiddenBySearch = this.state.searching && hasNormalizedQuery(this.state.searchQuery) && !matchesSearchQuery(relatedText);
 			if (component && !hiddenBySearch) {
 				if (settingMetadata?.advanced) {
 					advancedSettingComps.push(component);
@@ -419,8 +416,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			}
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const addSettingButton = (key: string, title: string, clickHandler: ()=> void, options: any = null) => {
+		const addSettingButton = (key: string, title: string, clickHandler: ()=> void, options: { description?: string; statusComp?: ReactElement; disabled?: boolean } = null) => {
 			const relatedText = [title];
 			if (typeof options === 'object' && options?.description) {
 				relatedText.push(options.description);
@@ -558,6 +554,10 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 			addSettingButton('e2ee_config_button', _('Encryption Config'), this.e2eeConfig_);
 		}
 
+		if (section.name === 'noteLock' && isNoteLockEnabled()) {
+			addSettingComponent(<NoteLockConfig key='note-lock-config'/>, [_('Password setup'), _('Note lock password')]);
+		}
+
 		if (section.name === 'joplinCloud') {
 			addSettingComponent(
 				<JoplinCloudConfig
@@ -574,6 +574,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 
 		if (section.name === 'tools') {
 			addSettingButton('profiles_buttons', _('Manage profiles'), this.manageProfilesButtonPress_);
+			addSettingButton('note_resources_button', _('Note attachments'), this.noteResourcesButtonPress_);
 			addSettingButton('status_button', _('Sync Status'), this.syncStatusButtonPress_);
 			addSettingButton('log_button', _('Log'), this.logButtonPress_);
 			addSettingButton('deletion_log_button', _('Deletion log'), this.deletionLogButtonPress_);
@@ -589,9 +590,21 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				<NoteExportButton key='export_as_jex_button' styles={this.styles()} />,
 				[exportButtonDefaultTitle(), exportButtonDescription()],
 			);
+			const importJexLabel = () => _('Import from JEX');
+			const importJexDescription = () => _('Import notes from a JEX (Joplin Export) file.');
 			addSettingComponent(
-				<NoteImportButton key='import_as_jex_button' styles={this.styles()} />,
-				[importButtonDefaultTitle(), importButtonDescription()],
+				<NoteImportButton key='import_as_jex_button' styles={this.styles()} defaultTitle={importJexLabel()} description={importJexDescription()} format='jex' />,
+				[importJexLabel(), importJexDescription()],
+			);
+			const importTxtLabel = () => _('Import from text file');
+			const importTxtDescription = () => {
+				let folderTitle = importedFolderTitle();
+				if (this.state.activeFolder) folderTitle = this.state.activeFolder.title;
+				return _('Import a note from a text file (%s). The note will be imported into notebook \'%s\'.', textImportExtensions.join(', '), substrWithEllipsis(folderTitle, 0, 32));
+			};
+			addSettingComponent(
+				<NoteImportButton key='import_as_txt_button' styles={this.styles()} defaultTitle={importTxtLabel()} description={importTxtDescription()} format='txt' activeFolder={this.state.activeFolder} />,
+				[importTxtLabel(), importTxtDescription()],
 			);
 			addSettingComponent(
 				<ExportDebugReportButton key='export_report_button' styles={this.styles()}/>,
@@ -641,7 +654,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				Clipboard.setString(versionInfoText);
 			});
 
-			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile);
+			const featureFlagKeys = Setting.featureFlagKeys(AppType.Mobile).filter(key => Setting.isPublic(key));
 			if (featureFlagKeys.length) {
 				const headerKey = 'featureFlags';
 				const featureFlagsTitle = _('Feature flags');
@@ -692,8 +705,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		};
 
 		return (
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			<View key={key} onLayout={(event: any) => this.onSectionLayout(key, event)}>
+			<View key={key} onLayout={(event: LayoutChangeEvent) => this.onSectionLayout(key, event)}>
 				<View>
 					{this.state.searching ? headerComponent : null}
 					{settingComps}
@@ -707,7 +719,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return <SettingsToggle
 			key={key}
 			settingId={key}
-			value={value}
+			value={!!value}
 			label={label}
 			updateSettingValue={updateSettingValue}
 			styles={this.styles()}
@@ -715,8 +727,7 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		/>;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private handleSetting = async (key: string, value: any): Promise<boolean> => {
+	private handleSetting = async (key: string, value: unknown): Promise<boolean> => {
 		// When the user tries to enable biometrics unlock, we ask for the
 		// fingerprint or Face ID, and if it's correct we save immediately. If
 		// it's not, we don't turn on the setting.
@@ -739,10 +750,8 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		return false;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public settingToComponent(key: string, value: any) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const updateSettingValue = async (key: string, value: any) => {
+	public settingToComponent(key: string, value: unknown) {
+		const updateSettingValue = async (key: string, value: unknown) => {
 			const handled = await this.handleSetting(key, value);
 			if (!handled) shared.updateSettingValue(this, key, value);
 		};
@@ -759,15 +768,13 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private renderFeatureFlags(settings: any, featureFlagKeys: string[]): any[] {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const updateSettingValue = (key: string, value: any) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See ConfigScreenState.settings — same reason
+	private renderFeatureFlags(settings: Record<string, any>, featureFlagKeys: string[]): ReactElement[] {
+		const updateSettingValue = (key: string, value: unknown) => {
 			return shared.updateSettingValue(this, key, value);
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any[] = [];
+		const output: ReactElement[] = [];
 		for (const key of featureFlagKeys) {
 			output.push(this.renderToggle(key, key, settings[key], updateSettingValue));
 		}
@@ -814,6 +821,9 @@ class ConfigScreenComponent extends BaseScreenComponent<ConfigScreenProps, Confi
 				placeholder={_('Search...')}
 				onChangeText={this.onSearchUpdate_}
 				autoFocus={true}
+				autoCapitalize='none'
+				autoComplete='off'
+				autoCorrect={false}
 			/>;
 
 			currentSection = (

@@ -6,12 +6,12 @@ export enum ErrorCode {
 	NoSub = 'no_sub',
 	NoStripeSub = 'no_stripe_sub',
 	InvalidOrigin = 'invalidOrigin',
+	IsReadOnly = 'isReadOnly',
 	TaskAlreadyRunning = 'taskAlreadyRunning',
 }
 
 export interface ErrorOptions {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	details?: any;
+	details?: unknown;
 	code?: ErrorCode;
 }
 
@@ -22,8 +22,7 @@ export class ApiError extends Error {
 
 	public httpCode: number;
 	public code: ErrorCode;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public details: any;
+	public details: unknown;
 
 	public constructor(message: string, httpCode: number = null, code: ErrorCode | ErrorOptions = undefined) {
 		super(message);
@@ -189,15 +188,15 @@ interface PlainObjectError {
 	stack?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function errorToPlainObject(error: any): PlainObjectError {
+export function errorToPlainObject(error: unknown): PlainObjectError {
 	if (typeof error === 'string') return { message: error };
 
 	const output: PlainObjectError = {};
-	if ('httpCode' in error) output.httpCode = error.httpCode;
-	if ('code' in error) output.code = error.code;
-	if ('message' in error) output.message = error.message;
-	if ('stack' in error) output.stack = error.stack;
+	if (typeof error !== 'object' || !error) return output;
+	if ('httpCode' in error) output.httpCode = (error as { httpCode?: number }).httpCode;
+	if ('code' in error) output.code = (error as { code?: string }).code;
+	if ('message' in error) output.message = (error as { message?: string }).message;
+	if ('stack' in error) output.stack = (error as { stack?: string }).stack;
 	return output;
 }
 

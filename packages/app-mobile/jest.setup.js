@@ -73,7 +73,36 @@ jest.mock('./components/CameraView/Camera', () => {
 });
 
 jest.mock('@react-native-clipboard/clipboard', () => {
-	return { default: { getString: jest.fn(), setString: jest.fn() } };
+	return { getString: jest.fn(), setString: jest.fn() };
+});
+
+jest.doMock('expo-audio', () => {
+	return {
+		AudioQuality: {
+			MIN: 'min',
+		},
+		IOSOutputFormat: {
+			MPEG4AAC: 'mpeg4aac',
+		},
+		getRecordingPermissionsAsync: jest.fn(async () => ({
+			status: 'granted',
+			granted: true,
+		})),
+		requestRecordingPermissionsAsync: jest.fn(async () => ({
+			status: 'granted',
+			granted: true,
+		})),
+		setAudioModeAsync: jest.fn(async () => null),
+		useAudioRecorder: jest.fn(() => ({
+			prepareToRecordAsync: jest.fn(async () => null),
+			record: jest.fn(),
+			stop: jest.fn(async () => null),
+			uri: null,
+		})),
+		useAudioRecorderState: jest.fn(() => ({
+			durationMillis: 0,
+		})),
+	};
 });
 
 const emptyMockPackages = [
@@ -82,8 +111,7 @@ const emptyMockPackages = [
 	'react-native-image-picker',
 	'@react-native-documents/picker',
 	'@joplin/react-native-saf-x',
-	'expo-av',
-	'expo-av/build/Audio',
+	'expo-image-manipulator',
 ];
 for (const packageName of emptyMockPackages) {
 	jest.doMock(packageName, () => {
@@ -112,20 +140,25 @@ jest.doMock('@expo/vector-icons/MaterialCommunityIcons', () => {
 	throw new Error('Not supported in testing environments.');
 });
 
-// Used by the renderer
-jest.doMock('react-native-vector-icons/Ionicons', () => {
-	return {
-		default: class extends require('react-native').View {
-			static getImageSourceSync = () => ({ uri: '' });
-		},
-	};
-});
+const mockIconLibrary = (libraryName, exportName) => {
+	jest.doMock(libraryName, () => {
+		const MockIconComponent = require('react-native').View;
+		return {
+			default: MockIconComponent,
+			[exportName]: MockIconComponent,
+		};
+	});
+};
+
+mockIconLibrary('@react-native-vector-icons/ionicons', 'Ionicons');
+mockIconLibrary('@react-native-vector-icons/material-design-icons', 'MaterialDesignIcons');
+mockIconLibrary('@react-native-vector-icons/fontawesome5', 'FontAwesome5');
 
 // react-native-fs's CachesDirectoryPath export doesn't work in a testing environment.
 // Use a temporary folder instead.
 const tempDirectoryPath = path.join(tmpdir(), `appmobile-test-${uuid.createNano()}`);
 
-jest.doMock('react-native-fs', () => {
+jest.doMock('@dr.pogodin/react-native-fs', () => {
 	return {
 		CachesDirectoryPath: tempDirectoryPath,
 	};

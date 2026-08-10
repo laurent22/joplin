@@ -23,6 +23,7 @@ const localPackages = {
 	'@joplin/tools': path.resolve(__dirname, '../tools/'),
 	'@joplin/utils': path.resolve(__dirname, '../utils/'),
 	'@joplin/fork-htmlparser2': path.resolve(__dirname, '../fork-htmlparser2/'),
+	'@joplin/whisper-voice-typing': path.resolve(__dirname, '../whisper-voice-typing/'),
 	'@joplin/fork-uslug': path.resolve(__dirname, '../fork-uslug/'),
 	'@joplin/react-native-saf-x': path.resolve(__dirname, '../react-native-saf-x/'),
 	'@joplin/react-native-alarm-notification': path.resolve(__dirname, '../react-native-alarm-notification/'),
@@ -45,6 +46,9 @@ const polyfilledPackages = {
 const remappedPackages = {
 	...localPackages,
 	...polyfilledPackages,
+	'@joplin/mobile-config': process.env.RUNNING_UI_TESTS
+		? path.resolve(__dirname, 'config', 'config.testing.js')
+		: path.resolve(__dirname, 'config', 'config.default.js'),
 };
 
 const watchedFolders = [];

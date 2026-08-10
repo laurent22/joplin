@@ -7,11 +7,13 @@ import Note from '@joplin/lib/models/Note';
 import type { Dispatch } from 'redux';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
 import type { OnSetFormNote } from './useFormNote';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
 
 const logger = Logger.create('useScheduleSaveCallbacks');
 
 interface Props {
 	setFormNote: RefObject<OnSetFormNote>;
+	formNote: RefObject<FormNote>;
 	editorId: string;
 	dispatch: Dispatch;
 	editorRef: RefObject<NoteBodyEditorRef>;
@@ -25,9 +27,17 @@ const useScheduleSaveCallbacks = (props: Props) => {
 
 		const makeAction = (formNote: FormNote) => {
 			return async function() {
-				const note = await formNoteToNote(formNote);
-				logger.debug('Saving note...', note);
-				const savedNote = await Note.save(note, { changeId: `editorChange-${props.editorId}` });
+				// The lock state may change between scheduling and execution (e.g. encryption enabled
+				// from the note list menu), so the save uses the latest form state for this note.
+				const latestFormNote = props.formNote.current?.id === formNote.id ? props.formNote.current : formNote;
+				let note;
+				if (isNoteLockEnabled()) {
+					note = await formNoteToNote({ ...formNote, is_locked: latestFormNote.is_locked, isDecrypted: latestFormNote.isDecrypted });
+				} else {
+					note = await formNoteToNote(formNote);
+				}
+				logger.debug('Saving note...', isNoteLockEnabled() && note.is_locked ? note.id : note);
+				const savedNote = await Note.save(note, { changeId: `editorChange-${props.editorId}`, useNoteLock: true, noteLockKey: latestFormNote.noteLockKey });
 
 				props.setFormNote.current((prev: FormNote) => {
 					return { ...prev, user_updated_time: savedNote.user_updated_time, hasChanged: false };
@@ -46,7 +56,7 @@ const useScheduleSaveCallbacks = (props: Props) => {
 
 		formNote.saveActionQueue.push(makeAction(formNote));
 		return formNote.saveActionQueue.waitForAllDone();
-	}, [props.dispatch, props.editorId, props.setFormNote]);
+	}, [props.dispatch, props.editorId, props.setFormNote, props.formNote]);
 
 	const saveNoteIfWillChange = useCallback(async (formNote: FormNote) => {
 		if (!formNote.id || !formNote.bodyWillChangeId || !props.editorRef.current) return;

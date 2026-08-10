@@ -5,6 +5,7 @@
 				"exceptions": [
 					"@joplin/editor",
 					"@joplin/fork-htmlparser2",
+					"@joplin/whisper-voice-typing",
 					"@joplin/fork-sax",
 					"@joplin/fork-uslug",
 					"@joplin/htmlpack",

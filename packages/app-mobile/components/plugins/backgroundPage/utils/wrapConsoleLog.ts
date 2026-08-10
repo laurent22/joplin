@@ -10,11 +10,9 @@ const wrapConsoleLog = (onLog: OnLogCallback) => {
 	let inOnLogCallback = false;
 
 	const wrapLogFunction = (key: keyof typeof console, logLevel: LogLevel) => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const originalLog = (console[key] as any) ?? (()=>{});
+		const originalLog = (console[key] as ((...args: unknown[])=> void) | undefined) ?? (()=>{});
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		console[key] = function(...args: any[]) {
+		console[key] = function(...args: unknown[]) {
 			originalLog.call(this, ...args);
 			if (inOnLogCallback) return;
 
@@ -42,7 +40,7 @@ const wrapConsoleLog = (onLog: OnLogCallback) => {
 			} finally {
 				inOnLogCallback = false;
 			}
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Assigning a generic (...args: unknown[]) function to a specific console method (which is the union of all method types) requires a cast through `any`
 		} as any;
 	};
 

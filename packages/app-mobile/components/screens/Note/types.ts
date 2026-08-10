@@ -1,5 +1,6 @@
 import { ResourceEntity } from '@joplin/lib/services/database/types';
 import { DialogControl } from '../../DialogManager';
+import { Dispatch } from 'redux';
 
 export interface PickerResponse {
 	uri?: string;
@@ -20,4 +21,5 @@ export interface CommandRuntimeProps {
 	setTagDialogVisible(visible: boolean): void;
 	setAudioRecorderVisible(visible: boolean): void;
 	dialogs: DialogControl;
+	dispatch: Dispatch;
 }

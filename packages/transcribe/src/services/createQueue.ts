@@ -1,11 +1,11 @@
 import Logger from '@joplin/utils/Logger';
 import PgBossQueue from './queue/PgBossQueue';
 import SqliteQueue from './queue/SqliteQueue';
-import { EnvVariables } from '../env';
+import { ComputedEnvVariables } from '../env';
 
 const logger = Logger.create('createQueue');
 
-const createQueue = async (envVariables: EnvVariables, isPrimary: boolean) => {
+const createQueue = async (envVariables: ComputedEnvVariables, isPrimary: boolean) => {
 	logger.info('Choosing queue');
 
 	if (envVariables.QUEUE_DRIVER === 'pg') {

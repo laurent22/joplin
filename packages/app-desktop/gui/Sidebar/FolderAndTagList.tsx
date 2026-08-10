@@ -2,7 +2,9 @@ import * as React from 'react';
 import { AppState } from '../../app.reducer';
 import { FolderEntity, TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 import areAllFoldersCollapsed from '@joplin/lib/models/utils/areAllFoldersCollapsed';
+import getCanBeCollapsedFolderIds from '@joplin/lib/models/utils/getCanBeCollapsedFolderIds';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
+import { StateShare } from '@joplin/lib/services/share/reducer';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { useMemo, useRef, useState } from 'react';
@@ -22,6 +24,7 @@ interface Props {
 	dispatch: Dispatch;
 	themeId: number;
 	plugins: PluginStates;
+	shares: StateShare[];
 
 	tags: TagsWithNoteCountEntity[];
 	folders: FolderEntity[];
@@ -47,6 +50,11 @@ const FolderAndTagList: React.FC<Props> = props => {
 	const allFoldersCollapsed = useMemo(() => {
 		return areAllFoldersCollapsed(props.folders, props.collapsedFolderIds);
 	}, [props.collapsedFolderIds, props.folders]);
+
+	const hasSubFolders = useMemo(() => {
+		return getCanBeCollapsedFolderIds(props.folders).length > 0;
+	}, [props.folders]);
+
 
 	const listContainerRef = useRef<HTMLDivElement|null>(null);
 	const onRenderItem = useOnRenderItem({
@@ -76,7 +84,7 @@ const FolderAndTagList: React.FC<Props> = props => {
 	const listHeight = useElementHeight(itemListContainer);
 	const listStyle = useMemo(() => ({ height: listHeight }), [listHeight]);
 
-	const onRenderContentWrapper = useOnRenderListWrapper({ allFoldersCollapsed, selectedIndex, onKeyDown: onKeyEventHandler });
+	const onRenderContentWrapper = useOnRenderListWrapper({ allFoldersCollapsed, selectedIndex, onKeyDown: onKeyEventHandler, hasSubFolders });
 
 	return (
 		<div
@@ -118,6 +126,7 @@ const mapStateToProps = (state: AppState) => {
 		collapsedFolderIds: state.collapsedFolderIds,
 		selectedSmartFilterId: mainWindowState.selectedSmartFilterId,
 		plugins: state.pluginService.plugins,
+		shares: state.shareService.shares,
 		tagHeaderIsExpanded: state.settings.tagHeaderIsExpanded,
 		folderHeaderIsExpanded: state.settings.folderHeaderIsExpanded,
 	};

@@ -137,6 +137,9 @@
 	"A5": [
 		"А5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		""
 	],
@@ -341,6 +344,9 @@
 	"Beta": [
 		""
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Подебљај"
 	],
@@ -455,6 +461,9 @@
 	"Checking... Please wait.": [
 		"Проверавам... Молимо сачекајте."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Chrome Web Store": [
 		"Chrome Web продавница"
 	],
@@ -514,6 +523,9 @@
 	],
 	"Command": [
 		"Наредба"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Командна палета"
@@ -698,6 +710,9 @@
 	"Delete local data and re-download from sync target": [
 		"Избришите локалне податке и поново их скините са одредишта за синхронизацију"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		""
 	],
@@ -778,6 +793,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Приказује потпунe информацијe о белешци."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Приказује дату белешку."
@@ -1421,6 +1439,9 @@
 	"Keychain Supported: %s": [
 		""
 	],
+	"KEYS": [
+		""
+	],
 	"Label": [
 		""
 	],
@@ -1498,6 +1519,9 @@
 	],
 	"Manage your plugins": [
 		"Управљајте својим додацима"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manual": [
 		"Ручно"
@@ -1655,6 +1679,9 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Није дефинисан уредник текста. Молимо вас да га подесите користећи `config editor <editor-path>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		""
 	],
@@ -1775,6 +1802,9 @@
 	"Open Sync Wizard...": [
 		""
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Отвори..."
 	],
@@ -1786,6 +1816,9 @@
 	],
 	"Options": [
 		"Опције"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Other": [
 		""
@@ -2174,6 +2207,9 @@
 	"Select one of the other supported sync targets.": [
 		""
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Self-hosted": [
 		""
 	],
@@ -2293,6 +2329,9 @@
 	],
 	"Source format: %s": [
 		"Избворни формат: %s"
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		""
@@ -2734,6 +2773,9 @@
 	],
 	"Try again": [
 		"Покушајте поново"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Укуцајте `help [команду]` за више информација о команди; или укуцајте `help all` за потпуну информацију о коришћењу."

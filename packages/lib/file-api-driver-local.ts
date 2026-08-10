@@ -22,8 +22,7 @@ export default class FileApiDriverLocal {
 	private fsErrorToJsError_(error: JoplinError, path: string|null = null) {
 		let msg = error.toString();
 		if (path !== null) msg += `. Path: ${path}`;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old coe from before rule was applied
-		const output: any = new Error(msg);
+		const output = new Error(msg) as Error & { code?: JoplinError['code'] };
 		if (error.code) output.code = error.code;
 		return output;
 	}

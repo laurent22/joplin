@@ -29,6 +29,8 @@ export const initialize = async (
 		settings,
 		initialText,
 		initialNoteId,
+		initialSelection,
+		initialScroll,
 		parentElementClassName,
 		initialSearch,
 	}: EditorProps,
@@ -40,6 +42,14 @@ export const initialize = async (
 	if (!(parentElement instanceof HTMLElement)) {
 		throw new Error('Parent node is not an element.');
 	}
+
+	document.addEventListener('scrollend', () => {
+		const fraction = document.scrollingElement.scrollTop / (document.scrollingElement.scrollHeight || 1);
+		void messenger.remoteApi.onEditorEvent({
+			kind: EditorEventType.Scroll,
+			fraction,
+		});
+	});
 
 	const assetContainer = document.createElement('div');
 	assetContainer.id = 'joplin-container-pluginAssetsContainer';
@@ -99,6 +109,13 @@ export const initialize = async (
 		});
 	});
 	editor.setSearchState(initialSearch, 'initialSearch');
+
+	if (initialSelection) {
+		editor.select(initialSelection.start, initialSelection.end);
+	}
+	if (initialScroll) {
+		editor.setScrollPercent(initialScroll);
+	}
 
 	messenger.setLocalInterface({
 		editor,

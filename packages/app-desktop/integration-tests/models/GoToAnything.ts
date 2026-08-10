@@ -14,15 +14,18 @@ export default class GoToAnything {
 		this.inputLocator = this.containerLocator.getByRole('textbox');
 	}
 
-	public async waitFor() {
-		await this.containerLocator.waitFor();
+	public async waitFor(timeout?: number) {
+		await this.containerLocator.waitFor({ timeout });
 	}
 
 	public async open(electronApp: ElectronApplication) {
 		await this.mainScreen.waitFor();
 		const openFromMenu = async () => {
 			await activateMainMenuItem(electronApp, 'Goto Anything...');
-			await this.waitFor();
+			// Use a shorter per-attempt timeout so multiple retries fit within the
+			// overall test timeout — otherwise a slow CI runner can exhaust the
+			// per-test budget mid-retry and force a hard worker teardown.
+			await this.waitFor(10_000);
 		};
 		await retryOnFailure(openFromMenu, { maxRetries: 3 });
 	}

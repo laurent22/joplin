@@ -22,7 +22,7 @@ describe('convertNoteToMarkdown', () => {
 		const htmlNote = await Note.save({ title: 'test', body: '<p>Hello</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
 		state.selectedNoteIds = [htmlNote.id];
 
-		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: () => {} });
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
 
 		const refreshedNote = await Note.load(htmlNote.id);
 
@@ -56,6 +56,35 @@ describe('convertNoteToMarkdown', () => {
 		for (const field of fields) {
 			expect(htmlNote[field]).toEqual(markdownNote[field]);
 		}
+	});
+
+	it('should preserve user timestamps from the original note', async () => {
+		const folder = await Folder.save({ title: 'test_folder' });
+		const createdTime = new Date('2026-05-04T10:59:00Z').getTime();
+		const updatedTime = new Date('2026-05-04T10:59:00Z').getTime();
+		const userCreatedTime = new Date('2019-07-15T10:02:00Z').getTime();
+		const userUpdatedTime = new Date('2020-08-16T11:03:00Z').getTime();
+		const htmlNote = await Note.save({
+			title: 'test',
+			body: '<p>Hello</p>',
+			parent_id: folder.id,
+			markup_language: MarkupLanguage.Html,
+			created_time: createdTime,
+			updated_time: updatedTime,
+			user_created_time: userCreatedTime,
+			user_updated_time: userUpdatedTime,
+		}, { autoTimestamp: false });
+		state.selectedNoteIds = [htmlNote.id];
+
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
+
+		const notes = await Note.previews(folder.id);
+		expect(notes).toHaveLength(1);
+		const markdownNote = await Note.load(notes[0].id);
+
+		expect(markdownNote.user_created_time).toBe(userCreatedTime);
+		expect(markdownNote.user_updated_time).toBe(userUpdatedTime);
+		expect(markdownNote.updated_time).toBeGreaterThan(updatedTime);
 	});
 
 	it('should generate action to trigger notification', async () => {

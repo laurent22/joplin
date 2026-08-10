@@ -7,6 +7,8 @@ describe('locale', () => {
 			['fr', ['fr_FR', 'en_GB'], 'fr_FR'],
 			['pt-br', ['fr_FR', 'en_GB', 'pt_BR'], 'pt_BR'],
 			['ro', ['fr_FR', 'en_GB', 'pt_BR'], 'en_GB'],
+			['zh-TW', ['en_GB', 'zh_CN', 'zh_TW'], 'zh_TW'],
+			['zh-CN', ['en_GB', 'zh_CN', 'zh_TW'], 'zh_CN'],
 		];
 
 		for (const [input, locales, expected] of testCases) {

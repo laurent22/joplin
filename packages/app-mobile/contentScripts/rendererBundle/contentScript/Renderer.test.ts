@@ -10,7 +10,7 @@ const defaultRendererSettings: RenderSettings = {
 	resources: {},
 	codeTheme: 'atom-one-light.css',
 	noteHash: '',
-	initialScroll: 0,
+	initialScrollPercent: 0,
 	readAssetBlob: async (_path: string) => new Blob(),
 	removeUnusedPluginAssets: true,
 
@@ -21,6 +21,7 @@ const defaultRendererSettings: RenderSettings = {
 
 	pluginSettings: {},
 	requestPluginSetting: () => { },
+	showNoteLinkIcon: true,
 };
 
 const makeRenderer = (options: Partial<RendererSetupOptions>) => {
@@ -114,8 +115,7 @@ describe('Renderer', () => {
 		const renderer = makeRenderer({});
 
 		const requestPluginSetting = jest.fn();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const rerenderToBody = (pluginSettings: Record<string, any>) => {
+		const rerenderToBody = (pluginSettings: Record<string, unknown>) => {
 			return renderer.rerenderToBody(
 				{ language: MarkupLanguage.Markdown, markup: '```\ntest\n```' },
 				{ ...defaultRendererSettings, pluginSettings, requestPluginSetting },

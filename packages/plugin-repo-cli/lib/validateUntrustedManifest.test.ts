@@ -1,5 +1,6 @@
 
 import validateUntrustedManifest from './validateUntrustedManifest';
+import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 
 const originalManifests = {
 	'joplin-plugin.this.is.a.test': {
@@ -7,7 +8,7 @@ const originalManifests = {
 		_npm_package_name: 'joplin-plugin-this-is-a-test',
 		version: '0.0.1',
 	},
-};
+} as unknown as Record<string, PluginManifest>;
 
 // Note: Most of the checks below have additional tests in other files.
 // This test suite is primarily to ensure that the checks are present.
@@ -21,7 +22,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(badManifest, originalManifests),
+			() => validateUntrustedManifest(badManifest as unknown as PluginManifest, originalManifests, { source: 'npm' }),
 		).toThrow('ID cannot be shorter than');
 
 
@@ -31,7 +32,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(goodManifest, originalManifests),
+			() => validateUntrustedManifest(goodManifest as unknown as PluginManifest, originalManifests, { source: 'npm' }),
 		).not.toThrow();
 	});
 
@@ -43,7 +44,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(badManifest, originalManifests),
+			() => validateUntrustedManifest(badManifest as unknown as PluginManifest, originalManifests, { source: 'npm' }),
 		).toThrow();
 
 
@@ -53,7 +54,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(goodManifest, originalManifests),
+			() => validateUntrustedManifest(goodManifest as unknown as PluginManifest, originalManifests, { source: 'npm' }),
 		).not.toThrow();
 	});
 
@@ -66,7 +67,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(badManifest, originalManifests),
+			() => validateUntrustedManifest(badManifest as unknown as PluginManifest, originalManifests, { source: 'npm' }),
 		).toThrow();
 
 		const goodManifest = {
@@ -75,7 +76,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(goodManifest, originalManifests),
+			() => validateUntrustedManifest(goodManifest as unknown as PluginManifest, originalManifests, { source: 'npm' }),
 		).not.toThrow();
 	});
 
@@ -88,7 +89,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(newManifest1, originalManifests),
+			() => validateUntrustedManifest(newManifest1 as unknown as PluginManifest, originalManifests, { source: 'npm' }),
 		).toThrow('mark itself as recommended');
 
 		// Should also throw for falsey values
@@ -100,7 +101,7 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(newManifest2, originalManifests),
+			() => validateUntrustedManifest(newManifest2 as unknown as PluginManifest, originalManifests, { source: 'npm' }),
 		).toThrow('mark itself as recommended');
 	});
 
@@ -112,7 +113,134 @@ describe('validateUntrustedManifest', () => {
 		};
 
 		expect(
-			() => validateUntrustedManifest(newManifest, originalManifests),
+			() => validateUntrustedManifest(newManifest as unknown as PluginManifest, originalManifests, { source: 'npm' }),
 		).toThrow();
+	});
+
+	test('should allow the same npm package to register its first repository URL', () => {
+		const newManifest = {
+			id: 'joplin-plugin.this.is.a.test',
+			_npm_package_name: 'joplin-plugin-this-is-a-test',
+			repository_url: 'https://github.com/example/this-is-a-test',
+			version: '0.0.2',
+		};
+
+		expect(
+			() => validateUntrustedManifest(
+				newManifest as unknown as PluginManifest,
+				originalManifests,
+				{ source: 'npm' },
+			),
+		).not.toThrow();
+	});
+
+	test('should require the same npm package after repository ownership is registered', () => {
+		const manifestsWithRepository = {
+			'joplin-plugin.this.is.a.test': {
+				...originalManifests['joplin-plugin.this.is.a.test'],
+				repository_url: 'https://github.com/example/this-is-a-test',
+			},
+		};
+		const newManifest = {
+			id: 'joplin-plugin.this.is.a.test',
+			_npm_package_name: 'joplin-plugin-attacker',
+			repository_url: 'https://github.com/example/this-is-a-test',
+			version: '0.0.2',
+		};
+
+		expect(
+			() => validateUntrustedManifest(
+				newManifest as unknown as PluginManifest,
+				manifestsWithRepository,
+				{ source: 'npm' },
+			),
+		).toThrow('has already been published under npm package');
+	});
+
+	test('should not allow the npm package to change an established repository URL', () => {
+		const manifestsWithRepository = {
+			'joplin-plugin.this.is.a.test': {
+				...originalManifests['joplin-plugin.this.is.a.test'],
+				repository_url: 'https://github.com/example/this-is-a-test',
+			},
+		};
+		const newManifest = {
+			id: 'joplin-plugin.this.is.a.test',
+			_npm_package_name: 'joplin-plugin-this-is-a-test',
+			repository_url: 'https://github.com/attacker/this-is-a-test',
+			version: '0.0.2',
+		};
+
+		expect(
+			() => validateUntrustedManifest(
+				newManifest as unknown as PluginManifest,
+				manifestsWithRepository,
+				{ source: 'npm' },
+			),
+		).toThrow('has already been published under repository');
+	});
+
+	test('should reject an unverified repository migration for a legacy npm plugin', () => {
+		const newManifest = {
+			id: 'joplin-plugin.this.is.a.test',
+			repository_url: 'https://github.com/attacker/this-is-a-test',
+			version: '0.0.2',
+		};
+
+		expect(
+			() => validateUntrustedManifest(
+				newManifest as unknown as PluginManifest,
+				originalManifests,
+				{ source: 'repository' },
+			),
+		).toThrow('A maintainer must verify and register its repository URL');
+	});
+
+	test('should require a repository URL for repository submissions', () => {
+		const manifest = {
+			id: 'com.example.repository-plugin',
+			version: '1.0.0',
+		};
+
+		expect(
+			() => validateUntrustedManifest(
+				manifest as unknown as PluginManifest,
+				originalManifests,
+				{ source: 'repository' },
+			),
+		).toThrow('must specify repository_url');
+	});
+
+	test('should not accept an npm package name from a repository submission', () => {
+		const manifest = {
+			id: 'com.example.repository-plugin',
+			version: '1.0.0',
+			repository_url: 'https://github.com/example/repository-plugin',
+			_npm_package_name: 'copied-package-name',
+		};
+
+		expect(
+			() => validateUntrustedManifest(
+				manifest as unknown as PluginManifest,
+				originalManifests,
+				{ source: 'repository' },
+			),
+		).toThrow('cannot specify _npm_package_name');
+	});
+
+	test('should accept a new repository submission with a repository URL', () => {
+		const manifest = {
+			id: 'com.example.repository-plugin',
+			version: '1.0.0',
+			repository_url: 'https://github.com/example/repository-plugin',
+		};
+
+		expect(
+			() => validateUntrustedManifest(
+				manifest as unknown as PluginManifest,
+				originalManifests,
+				{ source: 'repository' },
+			),
+		).not.toThrow();
 	});
 });

@@ -5,7 +5,7 @@
 // -----------------------------------------------------------------------------------------------
 
 import shim from './shim';
-const moment = require('moment');
+import moment = require('moment');
 
 type ConditionHandler = ()=> boolean;
 
@@ -116,8 +116,7 @@ class Time {
 		return moment(ms).format(format) as string;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public formatLocalToMs(localDateTime: any, format: string = null) {
+	public formatLocalToMs(localDateTime: string | number | Date, format: string = null) {
 		if (format === null) format = this.dateTimeFormat();
 		const m = moment(localDateTime, format);
 		if (m.isValid()) return m.toDate().getTime();
@@ -125,33 +124,32 @@ class Time {
 	}
 
 	// Mostly used as a utility function for the DateTime Electron component
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public anythingToDateTime(o: any, defaultValue: Date = null) {
-		if (o && o.toDate) return o.toDate();
+	public anythingToDateTime(o: string | number | Date | { toDate(): Date } | null, defaultValue: Date = null) {
+		if (o && typeof o === 'object' && 'toDate' in o) return o.toDate();
 		if (!o) return defaultValue;
-		let m = moment(o, time.dateTimeFormat());
+		const input = o as string | number | Date;
+		let m = moment(input, time.dateTimeFormat());
 		if (m.isValid()) return m.toDate();
-		m = moment(o, time.dateFormat());
+		m = moment(input, time.dateFormat());
 		return m.isValid() ? m.toDate() : defaultValue;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public anythingToMs(o: any, defaultValue: number = null) {
-		if (o && o.toDate) return o.toDate();
+	public anythingToMs(o: string | number | Date | { toDate(): Date } | null, defaultValue: number = null) {
+		if (o && typeof o === 'object' && 'toDate' in o) return o.toDate();
 		if (!o) return defaultValue;
 		// There are a few date formats supported by Joplin that are not supported by
 		// moment without an explicit format specifier. The typical case is that a user
 		// has a preferred data format. This means we should try the currently assigned
 		// date first, and then attempt to load a generic date string.
-		const m = moment(o, this.dateTimeFormat());
+		const input = o as string | number | Date;
+		const m = moment(input, this.dateTimeFormat());
 		if (m.isValid()) return m.toDate().getTime();
-		const d = moment(o);
+		const d = moment(input);
 		return d.isValid() ? d.toDate().getTime() : defaultValue;
 	}
 
 	public msleep(ms: number) {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		return new Promise((resolve: Function) => {
+		return new Promise<void>(resolve => {
 			shim.setTimeout(() => {
 				resolve();
 			}, ms);
@@ -163,15 +161,13 @@ class Time {
 	}
 
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public goBackInTime(startDate: any, n: number, period: any) {
+	public goBackInTime(startDate: string | number | Date, n: number, period: string) {
 		// period is a string (eg. "day", "week", "month", "year" ), n is an integer
-		return moment(startDate).startOf(period).subtract(n, period).format('x');
+		return moment(startDate).startOf(period as moment.unitOfTime.StartOf).subtract(n, period as moment.unitOfTime.DurationConstructor).format('x');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public goForwardInTime(startDate: any, n: number, period: any) {
-		return moment(startDate).startOf(period).add(n, period).format('x');
+	public goForwardInTime(startDate: string | number | Date, n: number, period: string) {
+		return moment(startDate).startOf(period as moment.unitOfTime.StartOf).add(n, period as moment.unitOfTime.DurationConstructor).format('x');
 	}
 
 	public async waitTillCondition(condition: ConditionHandler) {

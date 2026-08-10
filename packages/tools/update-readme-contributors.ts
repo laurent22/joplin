@@ -1,4 +1,4 @@
-import { rootDir } from './tool-utils';
+import { insertContentIntoFile, rootDir } from './tool-utils';
 
 const request = require('request');
 
@@ -9,7 +9,6 @@ interface Contributor {
 }
 
 const readmePath = `${rootDir}/README.md`;
-const { insertContentIntoFile } = require('./tool-utils.js');
 
 async function gitHubContributors(page: number): Promise<Contributor[]> {
 	return new Promise((resolve, reject) => {
@@ -17,8 +16,7 @@ async function gitHubContributors(page: number): Promise<Contributor[]> {
 			url: `https://api.github.com/repos/laurent22/joplin/contributors${page ? `?page=${page}` : ''}`,
 			json: true,
 			headers: { 'User-Agent': 'Joplin Readme Updater' },
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		}, (error: any, response: any, data: any) => {
+		}, (error: Error | null, response: { statusCode: number }, data: Contributor[]) => {
 			if (error) {
 				reject(error);
 			} else if (response.statusCode !== 200) {

@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import { useState, useEffect } from 'react';
 import ButtonBar from '../ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import Setting from '@joplin/lib/models/Setting';
 import { themeStyle } from '@joplin/lib/theme';
 import ReportService, { ReportItem, ReportSection, RetryAllHandler } from '@joplin/lib/services/ReportService';
@@ -14,10 +15,9 @@ import { writeFileSync } from 'fs';
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- style is also spread into theme.containerStyle which is loosely typed; tightening to React.CSSProperties forces narrowing changes
 	style: any;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 }
 
 const StyledAdvancedToolItem = styled.div`

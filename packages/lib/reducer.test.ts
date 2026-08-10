@@ -4,6 +4,7 @@ import { BaseItemEntity, FolderEntity, NoteEntity, TagEntity } from './services/
 import Note from './models/Note';
 import BaseModel from './BaseModel';
 import Folder from './models/Folder';
+import ItemChange from './models/ItemChange';
 // const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 
 function initTestState(folders: FolderEntity[], selectedFolderIndex: number, notes: NoteEntity[], selectedNoteIndexes: number[], tags: TagEntity[] = null, selectedTagIndex: number = null) {
@@ -389,6 +390,26 @@ describe('reducer', () => {
 
 		expect(getIds(state.tags)).toEqual(getIds(expected.items));
 		expect(state.selectedTagId).toEqual(expected.selectedIds[0]);
+	}));
+
+	it('should remove note from list when tag is removed', (async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(3, folders[0]);
+		const tags = await createNTestTags(1);
+
+		// Current view is the tag we're about to remove from a note
+		let state = initTestState(folders, 0, notes, [0], tags, 0);
+
+		expect(state.notes.length).toBe(3);
+		expect(state.notesParentType).toBe('Tag');
+		expect(state.selectedTagId).toBe(tags[0].id);
+
+		// Remove tag from the first note
+		state = reducer(state, { type: 'NOTE_TAG_REMOVE', item: tags[0], noteId: notes[0].id });
+
+		// Expect the note to be removed from state.notes
+		expect(state.notes.length).toBe(2);
+		expect(state.notes.map(n => n.id)).not.toContain(notes[0].id);
 	}));
 
 	it.each([false, true])('should select multiple folders (extend:%j)', async (extendSelection) => {
@@ -787,7 +808,6 @@ describe('reducer', () => {
 		}
 	});
 
-	// Regression test for #10589.
 	it.each([
 		[true, false],
 		[undefined, false],
@@ -924,5 +944,136 @@ describe('reducer', () => {
 		// The other window should be focused
 		expect(state.windowId).toBe(defaultWindowId);
 		expect(state.selectedNoteIds).toEqual([notes[0].id]);
+	});
+
+	it.each([
+		undefined,
+		false,
+	])('should not change selected note in background window when active window note moves folders (preserveSelection: %j)', async (
+		preserveSelectionOption,
+	) => {
+		const folders = await createNTestFolders(2);
+		const notes = await createNTestNotes(3, folders[0]);
+
+		// select the 1st folder and the 1st note in the primary window
+		let state = initTestState(folders, 0, notes, [0]);
+
+		// open note[2] in a background (secondary) window
+		const secondaryWindowId = 'window1';
+		state = createBackgroundWindow(state, secondaryWindowId, notes[2], notes);
+
+		// background window should be on notes[2]
+		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+
+		BaseModel.dispatch = jest.fn((action: unknown) => {
+			state = reducer(state, action);
+		});
+
+		// move notes[0] (selected in primary window) to a different folder
+		await Note.moveToFolder(
+			state.selectedNoteIds[0],
+			folders[1].id,
+			{ dispatchOptions: { preserveSelection: preserveSelectionOption } },
+		);
+
+		expect(BaseModel.dispatch).toHaveBeenCalled();
+
+		// primary window should have switched away from the moved note
+		expect(state.notes.every(n => n.id !== notes[0].id)).toBe(true);
+
+		// background window should still be on notes[2], not have jumped to whatever
+		// the primary window selected next
+		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+	});
+
+	it.each([
+		['sync moving an unselected note should not change the selection', 1, 0],
+		['sync moving the selected note should select the next note', 0, 1],
+	])('%s', async (_, movedNoteIndex, expectedSelectedNoteIndex) => {
+		const folders = await createNTestFolders(2);
+		const notes = await createNTestNotes(3, folders[0]);
+
+		// Select note[0]
+		let state = initTestState(folders, 0, notes, [0]);
+		state = goToNote(notes, [0], state);
+
+		const movedNote = {
+			...notes[movedNoteIndex],
+			parent_id: folders[1].id,
+		};
+
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ONE',
+			note: movedNote,
+			changeSource: ItemChange.SOURCE_SYNC,
+		});
+
+		// Moved note should either remain selected or change
+		expect(state.selectedNoteIds).toEqual([notes[expectedSelectedNoteIndex].id]);
+
+		// Moved note should no longer be visible
+		expect(state.notes.every(n => n.id !== notes[movedNoteIndex].id)).toBe(true);
+	});
+
+	test('sync moving the selected note in a background window should not change its selection', async () => {
+		const folders = await createNTestFolders(2);
+		const notes = await createNTestNotes(3, folders[0]);
+
+		// Primary window selects note[0]
+		let state = initTestState(folders, 0, notes, [0]);
+
+		// Background window selects note[2]
+		const secondaryWindowId = 'window1';
+		state = createBackgroundWindow(state, secondaryWindowId, notes[2], notes);
+
+		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+
+		const movedNote = {
+			...notes[2],
+			parent_id: folders[1].id,
+		};
+
+		state = reducer(state, {
+			type: 'NOTE_UPDATE_ONE',
+			note: movedNote,
+			changeSource: ItemChange.SOURCE_SYNC,
+		});
+
+		// The moved note should no longer be in the background window's list
+		expect(
+			state.backgroundWindows[secondaryWindowId].notes.every(n => n.id !== notes[2].id),
+		).toBe(true);
+
+		// The background window should continue rendering the moved note
+		expect(state.backgroundWindows[secondaryWindowId].selectedNoteIds).toEqual([notes[2].id]);
+
+		// The primary window should be unaffected
+		expect(state.selectedNoteIds).toEqual([notes[0].id]);
+	});
+
+	it.each([
+		['without a noteId', undefined, true],
+		['for the selected note', 0, true],
+		['for a different note', 1, false],
+	])('should request an editor reload %s', async (_, noteIndex, shouldReload) => {
+		jest.useFakeTimers();
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(2, folders[0]);
+
+		let state = initTestState(folders, 0, notes, [0]);
+
+		const previousReloadTime = state.editorNoteReloadTimeRequest;
+		const now = Date.now();
+
+		state = reducer(state, {
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: noteIndex === undefined ? undefined : notes[noteIndex].id,
+		});
+
+		expect(state.editorNoteReloadTimeRequest).toBe(
+			shouldReload ? now : previousReloadTime,
+		);
+
+		jest.useRealTimers();
 	});
 });

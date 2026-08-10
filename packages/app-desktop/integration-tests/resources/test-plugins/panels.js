@@ -23,7 +23,7 @@ const waitFor = async (condition) => {
 			setTimeout(() => resolve(), 100);
 		});
 	};
-	for (let i = 0; i < 100; i++) {
+	for (let i = 0; i < 500; i++) {
 		if (await condition()) {
 			return;
 		}

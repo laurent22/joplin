@@ -2,8 +2,7 @@ import time from './time';
 import Setting from './models/Setting';
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type TaskCallback = ()=> Promise<any>;
+type TaskCallback = ()=> Promise<unknown>;
 
 interface Task {
 	id: string;
@@ -12,8 +11,7 @@ interface Task {
 
 interface TaskResult {
 	id: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	result: any;
+	result: unknown;
 	error?: Error;
 }
 
@@ -78,8 +76,7 @@ export default class TaskQueue {
 
 		this.processingQueue_ = true;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const completeTask = (task: Task, result: any, error: Error) => {
+		const completeTask = (task: Task, result: unknown, error: Error) => {
 			delete this.processingTasks_[task.id];
 
 			if (this.keepTaskResults) {
@@ -106,8 +103,8 @@ export default class TaskQueue {
 			// the task to complete, but still want to capture the result.
 			task
 				.callback()
-				// eslint-disable-next-line promise/prefer-await-to-then, @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				.then((result: any) => {
+				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+				.then((result: unknown) => {
 					completeTask(task, result, null);
 				})
 				// eslint-disable-next-line promise/prefer-await-to-then

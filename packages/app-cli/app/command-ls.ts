@@ -34,13 +34,12 @@ class Command extends BaseCommand {
 		];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { 'note-pattern'?: string; options: { limit?: number; sort?: string; reverse?: boolean; type?: string; format?: string; long?: boolean } }) {
 		const pattern = args['note-pattern'];
 		let items = [];
 		const options = args.options;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Passed to both Folder.all and Note.previews which expect different option shapes
 		const queryOptions: any = {};
 		if (options.limit) queryOptions.limit = options.limit;
 		if (options.sort) {

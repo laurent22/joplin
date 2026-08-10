@@ -1,15 +1,17 @@
 import { EditorApi } from '../../joplinEditorApiPlugin';
 import { EditorLanguageType } from '../../../../types';
 import showModal from '../../../utils/dom/showModal';
+import { focus } from '@joplin/lib/utils/focusHandler';
 
 interface Options {
 	source: string;
+	cursor: number;
 	editorApi: EditorApi;
 	onSave: (newContent: string)=> void;
 	onDismiss: ()=> void;
 }
 
-const createEditorDialog = ({ editorApi, source, onSave, onDismiss }: Options) => {
+const createEditorDialog = ({ editorApi, source, cursor, onSave, onDismiss }: Options) => {
 	const content = document.createElement('div');
 	content.classList.add('editor-dialog-content');
 	document.body.appendChild(content);
@@ -22,9 +24,10 @@ const createEditorDialog = ({ editorApi, source, onSave, onDismiss }: Options) =
 		},
 	);
 	editor.updateBody(source);
+	editor.select(cursor, cursor);
 
 	const _ = editorApi.localize;
-	return showModal({
+	const modal = showModal({
 		content,
 		doneLabel: _('Done'),
 		onDismiss: () => {
@@ -32,6 +35,10 @@ const createEditorDialog = ({ editorApi, source, onSave, onDismiss }: Options) =
 			editor.remove();
 		},
 	});
+
+	focus('createEditorDialog', editor);
+
+	return modal;
 };
 
 export default createEditorDialog;

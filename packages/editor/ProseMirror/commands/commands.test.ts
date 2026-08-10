@@ -2,9 +2,14 @@ import { EditorView } from 'prosemirror-view';
 import { EditorCommandType } from '../../types';
 import commands from './commands';
 import createTestEditor from '../testing/createTestEditor';
+import selectDocumentEnd from './selectDocumentEnd';
 
 const selectAll = (editor: EditorView) => {
 	commands[EditorCommandType.SelectAll](editor.state, editor.dispatch, editor);
+};
+
+const moveCursorToEnd = (editor: EditorView) => {
+	selectDocumentEnd(editor.state, editor.dispatch, editor);
 };
 
 describe('ProseMirror/commands', () => {
@@ -92,5 +97,68 @@ describe('ProseMirror/commands', () => {
 				type: 'table',
 			}],
 		});
+	});
+
+	test.each([
+		{
+			label: 'should indent the selected paragraph',
+			before: '<p>Test</p>',
+			select: selectAll,
+			expectedDoc: [
+				{ type: 'paragraph', content: [{ type: 'text', text: '    Test' }] },
+			],
+		},
+		{
+			label: 'should not throw an error if the selection is at the end of the document (after the last block)',
+			before: '<p>Test</p><p>Test 2</p>',
+			select: moveCursorToEnd,
+			expectedDoc: [
+				{ type: 'paragraph', content: [{ type: 'text', text: 'Test' }] },
+				{ type: 'paragraph', content: [{ type: 'text', text: 'Test 2' }] },
+				{ type: 'paragraph', content: [{ type: 'text', text: '    ' }] },
+			],
+		},
+	])('indentMore should add spaces to the beginning of the selected lines ($label)', ({ before, select, expectedDoc }) => {
+		const editor = createTestEditor({ html: before });
+		select(editor);
+
+		commands[EditorCommandType.IndentMore](editor.state, editor.dispatch, editor);
+
+		expect(editor.state.doc.toJSON()).toMatchObject({
+			content: expectedDoc,
+		});
+	});
+
+	test('indentLess should remove spaces from the beginning of the line', () => {
+		const editor = createTestEditor({ html: '<p>    test</p>' });
+		selectAll(editor);
+
+		commands[EditorCommandType.IndentLess](editor.state, editor.dispatch, editor);
+
+		expect(editor.state.doc.toJSON()).toMatchObject({
+			content: [{
+				content: [
+					{ type: 'text', text: 'test' },
+				],
+				type: 'paragraph',
+			}],
+		});
+	});
+
+	test('goDocEnd should move the cursor to the end of the document', () => {
+		const editor = createTestEditor({ html: '<p>First</p><p>Last</p>' });
+
+		commands[EditorCommandType.GoDocEnd](editor.state, editor.dispatch, editor);
+
+		expect(editor.state.selection.from).toBe(editor.state.doc.content.size - 1);
+	});
+
+	test('goDocStart should move the cursor to the start of the document', () => {
+		const editor = createTestEditor({ html: '<p>First</p><p>Last</p>' });
+
+		moveCursorToEnd(editor);
+		commands[EditorCommandType.GoDocStart](editor.state, editor.dispatch, editor);
+
+		expect(editor.state.selection.from).toBe(1);
 	});
 });

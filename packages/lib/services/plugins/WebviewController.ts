@@ -1,7 +1,8 @@
-import ViewController, { EmitMessageEvent } from './ViewController';
+import ViewController, { EmitMessageEvent, PluginStore } from './ViewController';
+import { MessageListenerCallback } from './Plugin';
 import shim from '../../shim';
 import { ButtonSpec, DialogResult, ViewHandle } from './api/types';
-const { toSystemSlashes } = require('../../path-utils');
+import { toSystemSlashes } from '../../path-utils';
 import PostMessageService, { MessageParticipant } from '../PostMessageService';
 import { PluginEditorViewState, PluginViewState } from './reducer';
 import { defaultWindowId } from '../../reducer';
@@ -20,20 +21,22 @@ export interface Options {
 }
 
 interface CloseResponse {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	resolve: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	reject: Function;
+	resolve: (value: DialogResult | PromiseLike<DialogResult>)=> void;
+	reject: (reason?: unknown)=> void;
+}
+
+interface LayoutItem {
+	key?: string;
+	children?: LayoutItem[];
+	visible?: boolean;
 }
 
 // TODO: Copied from:
 // packages/app-desktop/gui/ResizableLayout/utils/findItemByKey.ts
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function findItemByKey(layout: any, key: string): any {
+function findItemByKey(layout: LayoutItem, key: string): LayoutItem | null {
 	if (!layout) throw new Error('Layout cannot be null');
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	function recurseFind(item: any): any {
+	function recurseFind(item: LayoutItem): LayoutItem | null {
 		if (item.key === key) return item;
 
 		if (item.children) {
@@ -63,15 +66,13 @@ type OnSaveNoteCallback = (saveNoteEvent: SaveNoteEvent)=> void;
 export default class WebviewController extends ViewController {
 
 	private baseDir_: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private messageListener_: Function = null;
+	private messageListener_: MessageListenerCallback = null;
 	private updateListener_: EditorUpdateListener|null = null;
 	private closeResponse_: CloseResponse = null;
 	private containerType_: ContainerType = null;
 	private saveNoteListener_: OnSaveNoteCallback|null = null;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(handle: ViewHandle, pluginId: string, store: any, baseDir: string, containerType: ContainerType, parentWindowId: string|null) {
+	public constructor(handle: ViewHandle, pluginId: string, store: PluginStore, baseDir: string, containerType: ContainerType, parentWindowId: string|null) {
 		super(handle, pluginId, store);
 		this.baseDir_ = toSystemSlashes(baseDir, 'linux');
 		this.containerType_ = containerType;
@@ -116,8 +117,7 @@ export default class WebviewController extends ViewController {
 		return this.storeView.parentWindowId;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private setStoreProp(name: string, value: any) {
+	private setStoreProp(name: string, value: unknown) {
 		this.store.dispatch({
 			type: 'PLUGIN_VIEW_PROP_SET',
 			pluginId: this.pluginId,
@@ -153,8 +153,7 @@ export default class WebviewController extends ViewController {
 		});
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public postMessage(message: any) {
+	public postMessage(message: unknown) {
 		const messageId = `plugin_${Date.now()}${Math.random()}`;
 
 		void PostMessageService.instance().postMessage({
@@ -171,7 +170,7 @@ export default class WebviewController extends ViewController {
 	}
 
 	public async emitMessage(event: EmitMessageEvent) {
-		if (!this.messageListener_) return;
+		if (!this.messageListener_) return undefined;
 
 		return this.messageListener_(event.message);
 	}
@@ -187,8 +186,7 @@ export default class WebviewController extends ViewController {
 		this.updateListener_(event);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public onMessage(callback: any) {
+	public onMessage(callback: MessageListenerCallback) {
 		this.messageListener_ = callback;
 	}
 

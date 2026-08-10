@@ -7,8 +7,9 @@ use parser_utils::errors::{ErrorKind, Result};
 /// See [\[MS-ONE\] 2.3.36].
 ///
 /// [\[MS-ONE\] 2.3.36]: https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-one/8866c05a-602d-4868-95de-2d8b1a0b9d2e
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub(crate) enum PageSize {
+    #[default]
     Auto,
     Us,
     AnsiLetter,
@@ -60,16 +61,10 @@ impl PageSize {
                 return Err(ErrorKind::MalformedOneNoteFileData(
                     format!("invalid page size: {}", value).into(),
                 )
-                .into())
+                .into());
             }
         };
 
         Ok(Some(page_size))
-    }
-}
-
-impl Default for PageSize {
-    fn default() -> Self {
-        PageSize::Auto
     }
 }

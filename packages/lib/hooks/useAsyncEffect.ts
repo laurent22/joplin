@@ -1,3 +1,4 @@
+import { type DependencyList } from 'react';
 import shim from '../shim';
 const { useEffect } = shim.react();
 
@@ -10,8 +11,7 @@ export interface AsyncEffectEvent {
 
 export type EffectFunction = (event: AsyncEffectEvent)=> Promise<void>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default function(effect: EffectFunction, dependencies: any[]) {
+export default function(effect: EffectFunction, dependencies: DependencyList) {
 	useEffect(() => {
 		const onCleanupCallbacks: CleanupCallback[] = [];
 		const event: AsyncEffectEvent = {

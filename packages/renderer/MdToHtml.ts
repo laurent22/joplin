@@ -1,25 +1,23 @@
 import InMemoryCache from './InMemoryCache';
+import defaultNoteStyle from './defaultNoteStyle';
 import noteStyle from './noteStyle';
 import { fileExtension } from '@joplin/utils/path';
 import setupLinkify from './MdToHtml/setupLinkify';
 import validateLinks from './MdToHtml/validateLinks';
 import { Options as NoteStyleOptions } from './noteStyle';
-import { FsDriver, ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RenderResultPluginAsset, ResourceInfos } from './types';
+import { FsDriver, ItemIdToUrlHandler, MarkupRenderer, OptionsResourceModel, RenderOptions, RenderResult, RenderResultPluginAsset, RendererTheme, ResourceEntity, ResourceInfos } from './types';
 import hljs from './highlight';
 // Use a require() to support bundling on mobile:
 import MarkdownIt = require('markdown-it');
 
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 const md5 = require('md5');
 
 interface RendererRule {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	install(context: any, ruleOptions: any): any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	assets?(theme: any): PluginAsset[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	plugin?: any;
+	install?(context: PluginContext, ruleOptions: RuleOptions): unknown;
+	assets?(theme: RendererTheme): PluginAsset[];
+	plugin?: MarkdownIt.PluginWithOptions;
 	assetPath?: string;
 	assetPathIsAbsolute?: boolean;
 	pluginId?: string;
@@ -30,10 +28,8 @@ interface RendererRules {
 }
 
 interface RendererPlugin {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	module: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	options?: any;
+	module: MarkdownIt.PluginWithOptions;
+	options?: Record<string, unknown>;
 }
 
 interface RendererPlugins {
@@ -42,6 +38,7 @@ interface RendererPlugins {
 
 // /!\/!\ Note: the order of rules is important!! /!\/!\
 const rules: RendererRules = {
+	frontmatter: require('./MdToHtml/rules/frontmatter').default,
 	fence: require('./MdToHtml/rules/fence').default,
 	sanitize_html: require('./MdToHtml/rules/sanitize_html').default,
 	image: require('./MdToHtml/rules/image').default,
@@ -55,6 +52,7 @@ const rules: RendererRules = {
 	fountain: require('./MdToHtml/rules/fountain').default,
 	abc: require('./MdToHtml/rules/abc').default,
 	mermaid: require('./MdToHtml/rules/mermaid').default,
+	externalEmbed: require('./MdToHtml/rules/externalEmbed').default,
 	source_map: require('./MdToHtml/rules/source_map').default,
 	tableHorizontallyScrollable: require('./MdToHtml/rules/tableHorizontallyScrollable').default,
 };
@@ -76,7 +74,6 @@ const plugins: RendererPlugins = {
 	toc: { module: require('markdown-it-toc-done-right'), options: { listType: 'ul', slugify: slugify, uniqueSlugStartIndex: 2 } },
 	expand_tabs: { module: require('markdown-it-expand-tabs'), options: { tabWidth: 4 } },
 };
-const defaultNoteStyle = require('./defaultNoteStyle');
 
 function slugify(s: string): string {
 	return uslug(s);
@@ -87,8 +84,7 @@ const inMemoryCache = new InMemoryCache(20);
 
 export interface ExtraRendererRule {
 	id: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	module: any;
+	module: Omit<RendererRule, 'assetPath' | 'pluginId' | 'assetPathIsAbsolute'>;
 	assetPath: string;
 	pluginId: string;
 }
@@ -96,8 +92,7 @@ export interface ExtraRendererRule {
 export interface Options {
 	resourceBaseUrl?: string;
 	ResourceModel?: OptionsResourceModel;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	pluginOptions?: any;
+	pluginOptions?: Record<string, { enabled?: boolean } & Record<string, unknown>>;
 	tempDir?: string;
 	fsDriver?: FsDriver;
 	extraRendererRules?: ExtraRendererRule[];
@@ -121,21 +116,16 @@ interface PluginAssets {
 
 export interface Link {
 	href: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	resource: any;
+	resource: ResourceEntity | null;
 	resourceReady: boolean;
 	resourceFullPath: string;
 }
 
 interface PluginContext {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	css: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	pluginAssets: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	cache: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	userData: any;
+	css: Record<string, string>;
+	pluginAssets: Record<string, PluginAsset[]>;
+	cache: InMemoryCache;
+	userData: Record<string, Record<string, unknown>>;
 	currentLinks: Link[];
 
 	// This must be set by the plugin to indicate whether the document contains markup that was
@@ -159,8 +149,7 @@ export enum LinkRenderingType {
 
 export interface RuleOptions {
 	context: PluginContext;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	theme: any;
+	theme: RendererTheme;
 	postMessageSyntax: string;
 	ResourceModel: OptionsResourceModel;
 	resourceBaseUrl: string;
@@ -171,8 +160,7 @@ export interface RuleOptions {
 	checkboxDisabled?: boolean;
 
 	// Used by the keyword highlighting plugin (mobile only)
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	highlightedKeywords?: any[];
+	highlightedKeywords?: unknown[];
 
 	// Use by resource-rendering logic to signify that it should be rendered
 	// as a plain HTML string without any attached JavaScript. Used for example
@@ -208,28 +196,33 @@ export interface RuleOptions {
 	allowedFilePrefixes?: string[];
 
 	platformName?: string;
+
+	showNoteLinkIcon?: boolean;
+
+	globalSettings?: RenderOptions['globalSettings'];
+
+	// Set by MdToHtml.render() when loading each plugin; takes the plugin's own
+	// settings key and returns the stored value.
+	settingValue?: (key: string)=> unknown;
+
+	mapsToLine?: boolean;
 }
 
 export default class MdToHtml implements MarkupRenderer {
 
 	private resourceBaseUrl_: string;
 	private ResourceModel_: OptionsResourceModel;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private contextCache_: any;
+	private contextCache_: InMemoryCache;
 	private fsDriver_: FsDriver;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private cachedOutputs_: any = {};
+	private cachedOutputs_: Record<string, RenderResult> = {};
 	private lastCodeHighlightCacheKey_: string = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private cachedHighlightedCode_: any = {};
+	private cachedHighlightedCode_: Record<string, string> = {};
 
 	// Markdown-It plugin options (not Joplin plugin options)
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private pluginOptions_: any = {};
+	private pluginOptions_: NonNullable<Options['pluginOptions']> = {};
 	private extraRendererRules_: RendererRules = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private allProcessedAssets_: any = {};
+	private allProcessedAssets_: Record<string, RenderResult> = {};
 	private customCss_ = '';
 
 	public constructor(options: Options = null) {
@@ -291,8 +284,7 @@ export default class MdToHtml implements MarkupRenderer {
 	}
 
 	// `module` is a file that has already been `required()`
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public loadExtraRendererRule(id: string, assetPath: string, module: any, pluginId: string) {
+	public loadExtraRendererRule(id: string, assetPath: string, module: ExtraRendererRule['module'], pluginId: string) {
 		if (this.extraRendererRules_[id]) throw new Error(`A renderer rule with this ID has already been loaded: ${id}`);
 
 		this.extraRendererRules_[id] = {
@@ -369,13 +361,11 @@ export default class MdToHtml implements MarkupRenderer {
 
 	// This return all the assets for all the plugins. Since it is called
 	// on each render, the result is cached.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private allProcessedAssets(rules: RendererRules, theme: any, codeTheme: string) {
+	private allProcessedAssets(rules: RendererRules, theme: RendererTheme, codeTheme: string) {
 		const cacheKey: string = theme.cacheKey + codeTheme;
 
 		if (this.allProcessedAssets_[cacheKey]) return this.allProcessedAssets_[cacheKey];
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const assets: PluginAssets = {};
 		for (const key in rules) {
 			if (!this.pluginEnabled(key)) continue;
@@ -398,10 +388,8 @@ export default class MdToHtml implements MarkupRenderer {
 	}
 
 	// This is similar to allProcessedAssets() but used only by the Rich Text editor
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async allAssets(theme: any, noteStyleOptions: NoteStyleOptions = null) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const assets: any = {};
+	public async allAssets(theme: RendererTheme, noteStyleOptions: NoteStyleOptions = null) {
+		const assets: PluginAssets = {};
 		const allRules = { ...rules, ...this.extraRendererRules_ };
 		for (const key in allRules) {
 			if (!this.pluginEnabled(key)) continue;
@@ -419,7 +407,7 @@ export default class MdToHtml implements MarkupRenderer {
 		return output.pluginAssets;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- output mutates the cssStrings property away (delete) which RenderResult does not allow
 	private async outputAssetsToExternalAssets_(output: any) {
 		for (const cssString of output.cssStrings) {
 			const filePath = await this.fsDriver().cacheCssToFile(cssString);
@@ -465,8 +453,7 @@ export default class MdToHtml implements MarkupRenderer {
 	}
 
 	// "theme" is the theme as returned by themeStyle()
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async render(body: string, theme: any = null, options: RenderOptions = null): Promise<RenderResult> {
+	public async render(body: string, theme: RendererTheme = null, options: RenderOptions = null): Promise<RenderResult> {
 
 		options = {
 			// In bodyOnly mode, the rendered Markdown is returned without the wrapper DIV
@@ -529,14 +516,14 @@ export default class MdToHtml implements MarkupRenderer {
 			typographer: this.pluginEnabled('typographer'),
 			linkify: this.pluginEnabled('linkify'),
 			html: true,
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			highlight: (str: string, lang: string, _attrs: any): any => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- markdown-it's highlight() type requires returning a string, but our impl returns { wrapCode, html } when rules.fence is enabled
+			highlight: (str: string, lang: string, _attrs: string): any => {
 				let outputCodeHtml = '';
 
 				// The strings includes the last \n that is part of the fence,
 				// so we remove it because we need the exact code in the source block
 				const trimmedStr = this.removeLastNewLine(str);
-				const sourceBlockHtml = `<pre class="joplin-source" data-joplin-language="${htmlentities(lang)}" data-joplin-source-open="\`\`\`${htmlentities(lang)}&#10;" data-joplin-source-close="&#10;\`\`\`">${markdownIt.utils.escapeHtml(trimmedStr)}</pre>`;
+				const sourceBlockHtml = `<pre class="joplin-source" hidden data-joplin-language="${htmlentities(lang)}" data-joplin-source-open="\`\`\`${htmlentities(lang)}&#10;" data-joplin-source-close="&#10;\`\`\`">${markdownIt.utils.escapeHtml(trimmedStr)}</pre>`;
 
 				if (this.shouldSkipHighlighting(trimmedStr, lang)) {
 					outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
@@ -605,7 +592,7 @@ export default class MdToHtml implements MarkupRenderer {
 
 		const allRules = { ...rules, ...this.extraRendererRules_ };
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- plugin parameter may be a function or an ES-module wrapper containing `.default`; options shape varies per plugin
 		const loadPlugin = (plugin: any, options: any) => {
 			// Handle the case where we're bundling with webpack --
 			// some modules that are commonjs imports in nodejs

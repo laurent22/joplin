@@ -1,10 +1,29 @@
 import shim from '@joplin/lib/shim';
 import Button from '../../Button/Button';
-import { css } from 'styled-components';
-const styled = require('styled-components').default;
+import styled, { css } from 'styled-components';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type StyleProps = any;
+interface StyleProps {
+	theme: {
+		backgroundColor2: string;
+		backgroundColor: string;
+		backgroundColorHover2: string;
+		color2: string;
+		color4: string;
+		colorError2: string;
+		colorFaded2: string;
+		colorPublished2: string;
+		colorWarn2: string;
+		topRowHeight: number;
+		mainPadding: number;
+		fontSize: number;
+		toolbarIconSize: number;
+	};
+	isConflictFolder?: boolean;
+	isSpecialItem?: boolean;
+	isPublished?: boolean;
+	shareId?: string;
+	selected?: boolean;
+}
 
 export const StyledRoot = styled.div`
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor2};
@@ -57,6 +76,8 @@ export const StyledHeaderLabel = styled.span`
 function listItemTextColor(props: StyleProps) {
 	if (props.isConflictFolder) return props.theme.colorError2;
 	if (props.isSpecialItem) return props.theme.colorFaded2;
+	if (props.selected && props.isPublished) return props.theme.color2;
+	if (props.isPublished) return props.theme.colorPublished2;
 	if (props.shareId) return props.theme.colorWarn2;
 	return props.theme.color2;
 }
@@ -70,7 +91,7 @@ export const StyledListItemAnchor = styled.a`
 		// So that the conflicts folder and shared folders have sufficient contrast,
 		// use an opacity of 1 even when unselected.
 		const needsHigherContrast = props.isConflictFolder || props.isSpecialItem;
-		return (props.selected || props.shareId || needsHigherContrast) ? 1 : 0.8;
+		return (props.selected || props.shareId || props.isPublished || needsHigherContrast) ? 1 : 0.8;
 	}};
 	white-space: nowrap;
 	display: flex;

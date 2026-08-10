@@ -1,7 +1,7 @@
 import { insertContentIntoFile, rootDir } from './tool-utils';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableJustify, MarkdownTableRow } from '@joplin/lib/markdownUtils';
 import { GithubSponsor, loadSponsors, OrgSponsor } from './utils/loadSponsors';
-const { escapeHtml } = require('@joplin/lib/string-utils');
+import { escapeHtml } from '@joplin/lib/string-utils';
 
 const readmePath = `${rootDir}/README.md`;
 

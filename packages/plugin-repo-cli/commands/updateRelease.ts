@@ -5,11 +5,12 @@ import { pathExists, readdir, readFile, stat, writeFile } from 'fs-extra';
 
 const ghReleaseAssets = require('gh-release-assets');
 
-const apiBaseUrl = 'https://api.github.com/repos/joplin/plugins';
+const repoFullName = process.env.GITHUB_REPOSITORY || 'joplin/plugins';
+const apiBaseUrl = `https://api.github.com/repos/${repoFullName}`;
 
 interface Args {
 	pluginRepoDir: string;
-	dryRun: boolean;
+	dryRun?: boolean;
 }
 
 interface PluginInfo {
@@ -82,8 +83,7 @@ async function deleteAsset(oauthToken: string, id: number) {
 }
 
 async function uploadAsset(oauthToken: string, uploadUrl: string, pluginInfo: PluginInfo) {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	return new Promise((resolve: Function, reject: Function) => {
+	return new Promise((resolve: (assets: unknown)=> void, reject: (error: Error)=> void) => {
 		ghReleaseAssets({
 			url: uploadUrl,
 			token: oauthToken,
@@ -93,8 +93,7 @@ async function uploadAsset(oauthToken: string, uploadUrl: string, pluginInfo: Pl
 					path: pluginInfo.path,
 				},
 			],
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		}, (error: Error, assets: any) => {
+		}, (error: Error, assets: unknown) => {
 			if (error) {
 				reject(error);
 			} else {
@@ -104,9 +103,15 @@ async function uploadAsset(oauthToken: string, uploadUrl: string, pluginInfo: Pl
 	});
 }
 
+interface PluginVersionStats {
+	downloadCount: number;
+	createdAt: string;
+}
+
+type PluginStats = Record<string, Record<string, PluginVersionStats>>;
+
 async function createStats(statFilePath: string, release: Release) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: Record<string, any> = await pathExists(statFilePath) ? JSON.parse(await readFile(statFilePath, 'utf8')) : {};
+	const output: PluginStats = await pathExists(statFilePath) ? JSON.parse(await readFile(statFilePath, 'utf8')) : {};
 
 	if (release.assets) {
 		for (const asset of release.assets) {
@@ -123,8 +128,7 @@ async function createStats(statFilePath: string, release: Release) {
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function saveStats(statFilePath: string, stats: any) {
+async function saveStats(statFilePath: string, stats: PluginStats) {
 	await writeFile(statFilePath, JSON.stringify(stats, null, '\t'));
 }
 

@@ -1,5 +1,6 @@
 import type * as MarkdownIt from 'markdown-it';
 import * as JSON5 from 'json5';
+import { RuleOptions } from '../../MdToHtml';
 
 interface AbcContent {
 	options: object;
@@ -41,8 +42,7 @@ const parseGlobalOptions = (content: string) => {
 	}
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we still don't have a type for ruleOptions (and it's not RuleOptions)
-const plugin = (markdownIt: MarkdownIt, ruleOptions: any) => {
+const plugin = (markdownIt: MarkdownIt, ruleOptions: RuleOptions) => {
 	const defaultRender = markdownIt.renderer.rules.fence || function(tokens, idx, options, env, self) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Imported from ABC plugin and don't want to change the function signature as I'm not sure if it's a type issue or if env and self really aren't needed
 		return (self.renderToken as any)(tokens, idx, options, env, self);
@@ -52,25 +52,33 @@ const plugin = (markdownIt: MarkdownIt, ruleOptions: any) => {
 		const token = tokens[idx];
 		if (token.info !== 'abc') return defaultRender(tokens, idx, options, env, self);
 
+		const escapeHtml = markdownIt.utils.escapeHtml;
+
 		ruleOptions.context.pluginWasUsed.abc = true;
 
 		try {
 			const parsed = parseAbcContent(token.content);
 			const globalOptions = ruleOptions.globalSettings ? parseGlobalOptions(ruleOptions.globalSettings['markdown.plugin.abc.options']) : {};
-			const contentHtml = markdownIt.utils.escapeHtml(parsed.markup.trim());
-			const optionsHtml = markdownIt.utils.escapeHtml(JSON.stringify({
+			const content = parsed.markup.trim();
+			const contentHtml = escapeHtml(content);
+			const optionsHtml = escapeHtml(JSON.stringify({
 				...globalOptions,
 				...parsed.options,
 			}));
 
+			const sourceContentLines: string[] = [];
+			if (parsed.options && Object.keys(parsed.options).length) sourceContentLines.push(JSON5.stringify(parsed.options));
+			sourceContentLines.push(content);
+			const sourceContentHtml = escapeHtml(sourceContentLines.join('\n---\n'));
+
 			return `
 				<div class="joplin-editable joplin-abc-notation">
-					<pre class="joplin-source" data-abc-options="${optionsHtml}" data-joplin-language="abc" data-joplin-source-open="\`\`\`abc&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${contentHtml}</pre>
+					<pre class="joplin-source" hidden data-abc-options="${optionsHtml}" data-joplin-language="abc" data-joplin-source-open="\`\`\`abc&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${sourceContentHtml}</pre>
 					<pre class="joplin-rendered joplin-abc-notation-rendered">${contentHtml}</pre>
 				</div>
 			`;
 		} catch (error) {
-			return `<div class="inline-code">${markdownIt.utils.escapeHtml(error.message)}</div}>`;
+			return `<div class="inline-code">${escapeHtml(error.message)}</div}>`;
 		}
 	};
 };
@@ -83,6 +91,20 @@ const assets = () => {
 			text: `
 				.abc-notation-block svg {
 					background-color: white;
+				}
+				.joplin-abc-notation-rendered {
+					overflow-x: auto !important;
+					overflow-y: hidden;
+				}
+				@media print {
+					.joplin-abc-notation-rendered {
+						overflow: visible !important;
+					}
+
+					.joplin-abc-notation-rendered svg {
+						max-width: 100% !important;
+						height: auto !important;
+					}
 				}
 			`,
 		},

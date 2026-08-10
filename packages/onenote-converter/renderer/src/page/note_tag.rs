@@ -8,36 +8,42 @@ use std::borrow::Cow;
 
 const COLOR_BLUE: &str = "#4673b7";
 const COLOR_GREEN: &str = "#369950";
-const COLOR_ORANGE: &str = "#dba24d";
-const COLOR_PINK: &str = "#f78b9d";
 const COLOR_RED: &str = "#db5b4d";
 const COLOR_YELLOW: &str = "#ffd678";
 
-const ICON_ARROW_RIGHT: &str = include_str!("../../assets/icons/arrow-right-line.svg");
-const ICON_AWARD: &str = include_str!("../../assets/icons/award-line.svg");
-const ICON_BOOK: &str = include_str!("../../assets/icons/book-open-line.svg");
-const ICON_BUBBLE: &str = include_str!("../../assets/icons/chat-4-line.svg");
-const ICON_CHECKBOX_COMPLETE: &str = include_str!("../../assets/icons/checkbox-fill.svg");
-const ICON_CHECKBOX_EMPTY: &str = include_str!("../../assets/icons/checkbox-blank-line.svg");
-const ICON_CHECK_MARK: &str = include_str!("../../assets/icons/check-line.svg");
-const ICON_CIRCLE: &str = include_str!("../../assets/icons/checkbox-blank-circle-fill.svg");
-const ICON_CONTACT: &str = include_str!("../../assets/icons/contacts-line.svg");
-const ICON_EMAIL: &str = include_str!("../../assets/icons/send-plane-2-line.svg");
-const ICON_ERROR: &str = include_str!("../../assets/icons/error-warning-line.svg");
-const ICON_FILM: &str = include_str!("../../assets/icons/film-line.svg");
-const ICON_FLAG: &str = include_str!("../../assets/icons/flag-fill.svg");
-const ICON_HOME: &str = include_str!("../../assets/icons/home-4-line.svg");
-const ICON_LIGHT_BULB: &str = include_str!("../../assets/icons/lightbulb-line.svg");
-const ICON_LINK: &str = include_str!("../../assets/icons/link.svg");
-const ICON_LOCK: &str = include_str!("../../assets/icons/lock-line.svg");
-const ICON_MUSIC: &str = include_str!("../../assets/icons/music-fill.svg");
-const ICON_PAPER: &str = include_str!("../../assets/icons/file-list-2-line.svg");
-const ICON_PEN: &str = include_str!("../../assets/icons/mark-pen-line.svg");
-const ICON_PERSON: &str = include_str!("../../assets/icons/user-line.svg");
-const ICON_PHONE: &str = include_str!("../../assets/icons/phone-line.svg");
-const ICON_QUESTION_MARK: &str = include_str!("../../assets/icons/question-mark.svg");
-const ICON_SQUARE: &str = include_str!("../../assets/icons/checkbox-blank-fill.svg");
-const ICON_STAR: &str = include_str!("../../assets/icons/star-fill.svg");
+const ICON_ARROW_RIGHT: &str = "→";
+const ICON_AWARD: &str = "🎖️";
+const ICON_BOOK: &str = "📖";
+const ICON_BUBBLE: &str = "🗨️";
+const ICON_CHECKBOX_COMPLETE: &str = "☑";
+const ICON_CHECKBOX_EMPTY: &str = "☐";
+const ICON_CHECK_MARK: &str = "✓";
+const ICON_CIRCLE_BLUE: &str = "🔵";
+const ICON_CIRCLE_GREEN: &str = "🟢";
+const ICON_CIRCLE_ORANGE: &str = "🟠";
+const ICON_CONTACT: &str = "👥";
+const ICON_EMAIL: &str = "📨";
+const ICON_ERROR: &str = "❗";
+const ICON_FILM: &str = "🎞️";
+const ICON_FLAG: &str = "🚩";
+const ICON_HOME: &str = "🏠";
+const ICON_LIGHT_BULB: &str = "💡";
+const ICON_LINK: &str = "🔗";
+const ICON_LOCK: &str = "🔒";
+const ICON_MUSIC: &str = "🎵";
+const ICON_PAPER: &str = "📄";
+const ICON_PEN: &str = "🖊️";
+const ICON_PERSON: &str = "👤";
+const ICON_PHONE: &str = "📞";
+const ICON_QUESTION_MARK: &str = "❓";
+const ICON_SQUARE_RED: &str = "🟥";
+const ICON_SQUARE_YELLOW: &str = "🟨";
+const ICON_SQUARE_ORANGE: &str = "🟧";
+const ICON_SQUARE_GREEN: &str = "🟩";
+const ICON_SQUARE_BLUE: &str = "🟦";
+const ICON_SQUARE_PURPLE: &str = "🟪";
+const ICON_STAR: &str = "🟊";
+const ICON_YELLOW_STAR: &str = "⭐";
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 enum IconSize {
@@ -46,7 +52,7 @@ enum IconSize {
 }
 
 struct NoteTagIcon {
-    html: Cow<'static, str>,
+    emoji_html: Cow<'static, str>,
     size: IconSize,
     styles: StyleSet,
     is_checkbox: bool,
@@ -55,7 +61,7 @@ struct NoteTagIcon {
 impl From<(Cow<'static, str>, IconSize)> for NoteTagIcon {
     fn from((html, size): (Cow<'static, str>, IconSize)) -> Self {
         Self {
-            html,
+            emoji_html: html,
             size,
             styles: StyleSet::new(),
             is_checkbox: false,
@@ -66,7 +72,7 @@ impl From<(Cow<'static, str>, IconSize)> for NoteTagIcon {
 impl From<(Cow<'static, str>, IconSize, StyleSet)> for NoteTagIcon {
     fn from((html, size, styles): (Cow<'static, str>, IconSize, StyleSet)) -> Self {
         Self {
-            html,
+            emoji_html: html,
             size,
             styles,
             is_checkbox: false,
@@ -100,11 +106,7 @@ impl<'a> Renderer<'a> {
             icon_classes.push(class.to_string());
 
             self.global_styles
-                // Select both `svg` and `img`: `svg`s may be replaced with `img` later in the import process:
-                .insert(
-                    format!(".{} > svg, .{} > img", class, class),
-                    icon.styles.clone(),
-                );
+                .insert(format!(".{} > .text", class), icon.styles.clone());
         }
 
         if icon.is_checkbox {
@@ -165,7 +167,10 @@ impl<'a> Renderer<'a> {
                     let attrs =
                         self.get_note_tag_attrs(&icon, note_tag.item_status(), &icon_classes);
 
-                    markup.push_str(&format!("<span {}>{}</span>", attrs, icon.html,));
+                    markup.push_str(&format!(
+                        "<span {}><span class=\"text\">{}</span></span>",
+                        attrs, icon.emoji_html
+                    ));
                 }
             }
         }
@@ -187,7 +192,9 @@ impl<'a> Renderer<'a> {
             NoteTagShape::YellowCheckBox => self.icon_checkbox(status, COLOR_YELLOW),
             NoteTagShape::BlueCheckBox => self.icon_checkbox(status, COLOR_BLUE),
             NoteTagShape::GreenStarCheckBox => self.icon_checkbox_with_star(status, COLOR_GREEN),
-            NoteTagShape::YellowStarCheckBox => self.icon_checkbox_with_star(status, COLOR_YELLOW),
+            NoteTagShape::YellowStarCheckBox => {
+                self.icon_checkbox_with(status, COLOR_YELLOW, ICON_YELLOW_STAR)
+            }
             NoteTagShape::BlueStarCheckBox => self.icon_checkbox_with_star(status, COLOR_BLUE),
             NoteTagShape::GreenExclamationCheckBox => {
                 self.icon_checkbox_with_exclamation(status, COLOR_GREEN)
@@ -209,9 +216,9 @@ impl<'a> Renderer<'a> {
             }
             NoteTagShape::YellowStar => {
                 let mut style = StyleSet::new();
-                style.set("fill", COLOR_YELLOW.to_string());
+                style.set("color", COLOR_YELLOW.to_string());
 
-                (Cow::from(ICON_STAR), IconSize::Normal, style).into()
+                (Cow::from(ICON_YELLOW_STAR), IconSize::Normal, style).into()
             }
 
             NoteTagShape::QuestionMark => (Cow::from(ICON_QUESTION_MARK), IconSize::Normal).into(),
@@ -233,7 +240,7 @@ impl<'a> Renderer<'a> {
             NoteTagShape::BlueCheckBox3 => self.icon_checkbox_with_3(status, COLOR_BLUE),
 
             NoteTagShape::BlueCheckMark => self.icon_checkmark(COLOR_BLUE),
-            NoteTagShape::BlueCircle => self.icon_circle(COLOR_BLUE),
+            NoteTagShape::BlueCircle => self.normal_icon(ICON_CIRCLE_BLUE),
 
             NoteTagShape::GreenCheckBox1 => self.icon_checkbox_with_1(status, COLOR_GREEN),
 
@@ -242,7 +249,7 @@ impl<'a> Renderer<'a> {
             NoteTagShape::GreenCheckBox3 => self.icon_checkbox_with_3(status, COLOR_GREEN),
 
             NoteTagShape::GreenCheckMark => self.icon_checkmark(COLOR_GREEN),
-            NoteTagShape::GreenCircle => self.icon_circle(COLOR_GREEN),
+            NoteTagShape::GreenCircle => self.normal_icon(ICON_CIRCLE_GREEN),
 
             NoteTagShape::YellowCheckBox1 => self.icon_checkbox_with_1(status, COLOR_YELLOW),
 
@@ -251,7 +258,8 @@ impl<'a> Renderer<'a> {
             NoteTagShape::YellowCheckBox3 => self.icon_checkbox_with_3(status, COLOR_YELLOW),
 
             NoteTagShape::YellowCheckMark => self.icon_checkmark(COLOR_YELLOW),
-            NoteTagShape::YellowCircle => self.icon_circle(COLOR_YELLOW),
+            // This icon is more orange than yellow in OneNote
+            NoteTagShape::YellowCircle => self.normal_icon(ICON_CIRCLE_ORANGE),
 
             NoteTagShape::BluePersonCheckBox => self.icon_checkbox_with_person(status, COLOR_BLUE),
             NoteTagShape::YellowPersonCheckBox => {
@@ -263,12 +271,13 @@ impl<'a> Renderer<'a> {
             NoteTagShape::BlueFlagCheckBox => self.icon_checkbox_with_flag(status, COLOR_BLUE),
             NoteTagShape::RedFlagCheckBox => self.icon_checkbox_with_flag(status, COLOR_RED),
             NoteTagShape::GreenFlagCheckBox => self.icon_checkbox_with_flag(status, COLOR_GREEN),
-            NoteTagShape::RedSquare => self.icon_square(COLOR_RED),
-            NoteTagShape::YellowSquare => self.icon_square(COLOR_YELLOW),
-            NoteTagShape::BlueSquare => self.icon_square(COLOR_BLUE),
-            NoteTagShape::GreenSquare => self.icon_square(COLOR_GREEN),
-            NoteTagShape::OrangeSquare => self.icon_square(COLOR_ORANGE),
-            NoteTagShape::PinkSquare => self.icon_square(COLOR_PINK),
+            NoteTagShape::RedSquare => self.normal_icon(ICON_SQUARE_RED),
+            NoteTagShape::YellowSquare => self.normal_icon(ICON_SQUARE_YELLOW),
+            NoteTagShape::BlueSquare => self.normal_icon(ICON_SQUARE_BLUE),
+            NoteTagShape::GreenSquare => self.normal_icon(ICON_SQUARE_GREEN),
+            NoteTagShape::OrangeSquare => self.normal_icon(ICON_SQUARE_ORANGE),
+            // The pink square is labelled "pink" in OneNote, but displays purple:
+            NoteTagShape::PinkSquare => self.normal_icon(ICON_SQUARE_PURPLE),
             NoteTagShape::EMailMessage => (Cow::from(ICON_EMAIL), IconSize::Normal).into(),
 
             NoteTagShape::Contact => (Cow::from(ICON_CONTACT), IconSize::Normal).into(),
@@ -297,7 +306,7 @@ impl<'a> Renderer<'a> {
 
     fn icon_checkbox(&self, status: ActionItemStatus, color: &'static str) -> NoteTagIcon {
         let mut styles = StyleSet::new();
-        styles.set("fill", color.to_string());
+        styles.set("color", color.to_string());
 
         let html = if status.completed() {
             Cow::from(ICON_CHECKBOX_COMPLETE)
@@ -306,7 +315,7 @@ impl<'a> Renderer<'a> {
         };
 
         NoteTagIcon {
-            html,
+            emoji_html: html,
             size: IconSize::Large,
             styles,
             is_checkbox: true,
@@ -346,15 +355,15 @@ impl<'a> Renderer<'a> {
     }
 
     fn icon_checkbox_with_1(&self, status: ActionItemStatus, color: &'static str) -> NoteTagIcon {
-        self.icon_checkbox_with(status, color, "<span class=\"content\">1</span>")
+        self.icon_checkbox_with(status, color, "1")
     }
 
     fn icon_checkbox_with_2(&self, status: ActionItemStatus, color: &'static str) -> NoteTagIcon {
-        self.icon_checkbox_with(status, color, "<span class=\"content\">2</span>")
+        self.icon_checkbox_with(status, color, "2")
     }
 
     fn icon_checkbox_with_3(&self, status: ActionItemStatus, color: &'static str) -> NoteTagIcon {
-        self.icon_checkbox_with(status, color, "<span class=\"content\">3</span>")
+        self.icon_checkbox_with(status, color, "3")
     }
 
     fn icon_checkbox_with_exclamation(
@@ -362,7 +371,7 @@ impl<'a> Renderer<'a> {
         status: ActionItemStatus,
         color: &'static str,
     ) -> NoteTagIcon {
-        self.icon_checkbox_with(status, color, "<span class=\"content\">!</span>")
+        self.icon_checkbox_with(status, color, "!")
     }
 
     fn icon_checkbox_with(
@@ -372,7 +381,7 @@ impl<'a> Renderer<'a> {
         secondary_icon: &'static str,
     ) -> NoteTagIcon {
         let mut style = StyleSet::new();
-        style.set("fill", color.to_string());
+        style.set("color", color.to_string());
 
         let mut content = String::new();
         content.push_str(if status.completed() {
@@ -381,13 +390,17 @@ impl<'a> Renderer<'a> {
             ICON_CHECKBOX_EMPTY
         });
 
+        // The secondary icon's styles expect a content element to allow the
+        // icon to be overlayed
+        let secondary_icon = format!("<span class=\"content\">{secondary_icon}</span>");
+
         content.push_str(&format!(
             "<span class=\"icon-secondary\">{}</span>",
             secondary_icon
         ));
 
         NoteTagIcon {
-            html: Cow::from(content),
+            emoji_html: Cow::from(content),
             size: IconSize::Large,
             styles: style,
             is_checkbox: true,
@@ -396,27 +409,17 @@ impl<'a> Renderer<'a> {
 
     fn icon_checkmark(&self, color: &'static str) -> NoteTagIcon {
         let mut style = StyleSet::new();
-        style.set("fill", color.to_string());
+        style.set("color", color.to_string());
 
         NoteTagIcon {
             is_checkbox: true,
-            html: Cow::from(ICON_CHECK_MARK),
+            emoji_html: Cow::from(ICON_CHECK_MARK),
             size: IconSize::Large,
             styles: style,
         }
     }
 
-    fn icon_circle(&self, color: &'static str) -> NoteTagIcon {
-        let mut style = StyleSet::new();
-        style.set("fill", color.to_string());
-
-        (Cow::from(ICON_CIRCLE), IconSize::Normal, style).into()
-    }
-
-    fn icon_square(&self, color: &'static str) -> NoteTagIcon {
-        let mut style = StyleSet::new();
-        style.set("fill", color.to_string());
-
-        (Cow::from(ICON_SQUARE), IconSize::Large, style).into()
+    fn normal_icon(&self, icon_html: &'static str) -> NoteTagIcon {
+        (Cow::from(icon_html), IconSize::Normal).into()
     }
 }

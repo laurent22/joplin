@@ -53,12 +53,20 @@ export const parsePoFile = async (filePath: string) => {
 	return gettextParser.po.parse(content);
 };
 
+interface GettextTranslation {
+	msgstr: string[];
+	comments?: { flag?: string };
+}
+
+interface GettextParsed {
+	translations: Record<string, Record<string, GettextTranslation>>;
+}
+
 // Convert the gettext translations, as returned by `gettextParser.po.parse()`
 // to a <string, string> map, with the English text on the left and the
 // translation on the right. If a particular translation is missing, no entry
 // will be returned. The caller should display the English text in this case.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const parseTranslations = (gettextTranslations: any) => {
+export const parseTranslations = (gettextTranslations: GettextParsed) => {
 	const output: Translations = {};
 
 	// Translations are grouped by "msgctxt"

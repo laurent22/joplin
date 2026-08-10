@@ -4,10 +4,14 @@
 import { VersionInfo } from './api/types';
 import { Implementation as ImagingImplementation } from './api/JoplinImaging';
 
+export interface ShowOpenDialogOptions {
+	filters?: { name: string; extensions: string[] }[];
+	properties?: string[];
+}
+
 export interface JoplinViewsDialogs {
 	showMessageBox(message: string): Promise<number>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	showOpenDialog(options: any): Promise<any>;
+	showOpenDialog(options: ShowOpenDialogOptions): Promise<string[] | null>;
 }
 
 export interface JoplinViews {
@@ -25,18 +29,15 @@ export default class BasePlatformImplementation {
 		throw new Error('Not implemented: versionInfo');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public get clipboard(): any {
+	public get clipboard(): unknown {
 		throw new Error('Not implemented: clipboard');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public get nativeImage(): any {
+	public get nativeImage(): unknown {
 		throw new Error('Not implemented: nativeImage');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public registerComponent(_name: string, _component: any) {
+	public registerComponent(_name: string, _component: unknown) {
 		throw new Error('Not implemented: registerComponent');
 	}
 

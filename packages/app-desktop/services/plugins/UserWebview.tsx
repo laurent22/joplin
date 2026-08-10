@@ -27,18 +27,18 @@ export interface Props {
 	minHeight?: number;
 	fitToContent?: boolean;
 	borderBottom?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	theme?: any;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onSubmit?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onDismiss?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onReady?: Function;
+	theme?: Record<string, unknown>;
+	onSubmit?: ()=> void;
+	onDismiss?: ()=> void;
+	onReady?: ()=> void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function UserWebview(props: Props, ref: any) {
+export interface UserWebviewRef {
+	formData: ()=> unknown;
+	focus: ()=> void;
+}
+
+function UserWebview(props: Props, ref: React.Ref<UserWebviewRef>) {
 	const minWidth = props.minWidth ? props.minWidth : 200;
 	const minHeight = props.minHeight ? props.minHeight : 20;
 
@@ -125,14 +125,16 @@ function UserWebview(props: Props, ref: any) {
 	} as React.CSSProperties), [contentSize.width, contentSize.height]);
 
 	const src = useMemo(() => {
-		const isolate = Setting.value('featureFlag.plugins.isolatePluginWebViews');
+		let isolate = Setting.value('featureFlag.plugins.isolatePluginWebViews');
+		isolate ||= needsIsolation(props.pluginId);
+
 		const path = toForwardSlashes(getAssetPath('services/plugins/UserWebviewIndex.html'));
 		if (isolate) {
 			return `joplin-content://plugin-webview/${path}`;
 		} else {
 			return `file://${path}`;
 		}
-	}, []);
+	}, [props.pluginId]);
 
 	return <iframe
 		id={props.viewId}
@@ -144,3 +146,9 @@ function UserWebview(props: Props, ref: any) {
 }
 
 export default forwardRef(UserWebview);
+
+const needsIsolation = (pluginId: string) => {
+	// Some plugins are broken unless isolated from the main application.
+	// Always enable isolation for these plugins, even if disabled in settings:
+	return ['joplin.plugin.note.tabs', 'joplin.plugin.benji.favorites', 'outline'].includes(pluginId);
+};

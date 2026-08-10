@@ -6,6 +6,33 @@ import makeBlockReplaceExtension from './utils/makeBlockReplaceExtension';
 
 const imageClassName = 'cm-md-image';
 
+class ImageHeightCache {
+	private readonly cache = new Map<string, number>();
+	private readonly maxEntries = 500;
+
+	public get(key: string): number | undefined {
+		const value = this.cache.get(key);
+		if (value !== undefined) {
+			// Refresh recency
+			this.cache.delete(key);
+			this.cache.set(key, value);
+		}
+		return value;
+	}
+
+	public set(key: string, height: number): void {
+		if (this.cache.has(key)) {
+			this.cache.delete(key);
+		} else if (this.cache.size >= this.maxEntries) {
+			const firstKey = this.cache.keys().next().value;
+			if (firstKey) this.cache.delete(firstKey);
+		}
+		this.cache.set(key, height);
+	}
+}
+
+const imageHeightCache = new ImageHeightCache();
+
 class ImageWidget extends WidgetType {
 	private resolvedSrc_: string;
 
@@ -15,18 +42,20 @@ class ImageWidget extends WidgetType {
 		private readonly alt_: string,
 		private readonly reloadCounter_ = 0,
 		private readonly width_: string | null = null,
+		private readonly sourceFrom_ = 0,
 	) {
 		super();
 	}
 
 	public eq(other: ImageWidget) {
-		return this.src_ === other.src_ && this.alt_ === other.alt_ && this.reloadCounter_ === other.reloadCounter_ && this.width_ === other.width_;
+		return this.src_ === other.src_ && this.alt_ === other.alt_ && this.reloadCounter_ === other.reloadCounter_ && this.width_ === other.width_ && this.sourceFrom_ === other.sourceFrom_;
 	}
 
 	public updateDOM(dom: HTMLElement): boolean {
 		const image = dom.querySelector<HTMLImageElement>('img.image');
 		if (!image) return false;
 
+		dom.dataset.sourceFrom = String(this.sourceFrom_);
 		image.ariaLabel = this.alt_;
 		image.role = 'image';
 
@@ -41,9 +70,16 @@ class ImageWidget extends WidgetType {
 
 		const updateImageUrl = () => {
 			if (this.resolvedSrc_) {
-				// Use a background-image style property rather than img[src=]. This
-				// simplifies setting the image to the correct size/position.
 				image.src = this.resolvedSrc_;
+				// When the image loads, measure and cache the height
+				image.onload = () => {
+					// Measure container height (what CodeMirror uses for scroll calculations).
+					if (dom.isConnected) {
+						imageHeightCache.set(this.cacheKey, dom.offsetHeight);
+					}
+
+					dom.style.minHeight = '';
+				};
 			}
 		};
 
@@ -56,12 +92,19 @@ class ImageWidget extends WidgetType {
 			updateImageUrl();
 		}
 
+		// Apply cached height as min-height to prevent collapse during load.
+		const cached = imageHeightCache.get(this.cacheKey);
+		if (cached) {
+			dom.style.minHeight = `${cached}px`;
+		}
+
 		return true;
 	}
 
-	public toDOM() {
+	public toDOM(view: EditorView) {
 		const container = document.createElement('div');
 		container.classList.add(imageClassName);
+		container.dataset.sourceFrom = String(this.sourceFrom_);
 
 		const image = document.createElement('img');
 		image.classList.add('image');
@@ -69,11 +112,29 @@ class ImageWidget extends WidgetType {
 		container.appendChild(image);
 		this.updateDOM(container);
 
+		container.addEventListener('mousedown', (e) => {
+			if (e.button !== 0) return;
+			e.preventDefault();
+			const pos = Math.min(view.posAtDOM(container), view.state.doc.length);
+			view.dispatch({
+				selection: { anchor: view.state.doc.lineAt(pos).from },
+				scrollIntoView: false,
+			});
+		});
+
 		return container;
 	}
 
+	private get cacheKey() {
+		return `${this.src_}_${this.width_ ?? ''}_${this.reloadCounter_}`;
+	}
+
 	public get estimatedHeight() {
-		return -1;
+		return imageHeightCache.get(this.cacheKey) ?? -1;
+	}
+
+	public ignoreEvent() {
+		return true;
 	}
 }
 
@@ -188,7 +249,7 @@ const renderBlockImages = (context: RenderedContentContext) => [
 					if (src) {
 						const isLastLine = lineTo.number === state.doc.lines;
 						return Decoration.widget({
-							widget: new ImageWidget(context, src, alt, imageToRefreshCounters.get(src) ?? 0, width),
+							widget: new ImageWidget(context, src, alt, imageToRefreshCounters.get(src) ?? 0, width, lineFrom.from),
 							// "side: -1": In general, when the cursor is at the widget's location, it should be at
 							// the start of the next line (and so "side" should be -1).
 							//

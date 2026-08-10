@@ -1,5 +1,5 @@
 import Logger from '@joplin/utils/Logger';
-import ClientPool from '../ClientPool';
+import ClientPool from '../ipc/ClientPool';
 import { createInterface } from 'readline/promises';
 
 const logger = Logger.create('openDebugSession');

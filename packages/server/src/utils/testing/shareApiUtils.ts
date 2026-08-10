@@ -1,10 +1,10 @@
-import { FolderEntity } from '@joplin/lib/services/database/types';
-import { linkedResourceIds } from '../joplinUtils';
-import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../../services/database/types';
+import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
+import { linkedResourceIds, serializeJoplinItem } from '../joplinUtils';
+import { Item, Session, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { AppContext } from '../types';
 import { patchApi, postApi } from './apiUtils';
-import { checkContextError, createFolder, createItem, koaAppContext, models, updateFolder, createResource } from './testUtils';
+import { checkContextError, createFolder, createItem, koaAppContext, models, updateFolder, createResource, updateItem } from './testUtils';
 import { makeFolderSerializedBody, makeNoteSerializedBody } from './serializedItems';
 
 interface ShareResult {
@@ -22,15 +22,23 @@ export async function createFolderShare(sessionId: string, folderId: string): Pr
 	});
 }
 
+interface LegacyTreeNode {
+	[jopId: string]: LegacyTreeNode | null;
+}
+
+interface ShareTreeNode {
+	id: string;
+	children?: ShareTreeNode[];
+	body?: string;
+	[key: string]: unknown;
+}
+
 // For backward compatibility with old tests that used a different tree format.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function convertTree(tree: any): any[] {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any[] = [];
+function convertTree(tree: LegacyTreeNode): ShareTreeNode[] {
+	const output: ShareTreeNode[] = [];
 
 	for (const jopId in tree) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const children: any = tree[jopId];
+		const children = tree[jopId];
 		const isFolder = children !== null;
 
 		if (isFolder) {
@@ -48,8 +56,7 @@ function convertTree(tree: any): any[] {
 	return output;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: string, shareId: Uuid, tree: any[]): Promise<void> {
+async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: string, shareId: Uuid, tree: ShareTreeNode[]): Promise<void> {
 	const user = await models().user().load(userId);
 
 	for (const jopItem of tree) {
@@ -66,10 +73,28 @@ async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: st
 		}
 
 		const result = await models().item().saveFromRawContent(user, [{ name: `${jopItem.id}.md`, body: Buffer.from(serializedBody) }]);
+
+		for (const [, resultItem] of Object.entries(result)) {
+			if (resultItem.error) {
+				resultItem.error.message = `Cannot create item tree: ${resultItem.error.message}`;
+				throw resultItem.error;
+			}
+		}
+
 		const newItem = result[`${jopItem.id}.md`].item;
 		if (isFolder && jopItem.children.length) await createItemTree3(sessionId, userId, newItem.jop_id, shareId, jopItem.children);
 	}
 }
+
+export const updateItemShareId = async (session: Session, itemId: Uuid, shareId: Uuid) => {
+	const item = await models().item().load(itemId);
+	const joplinItem = await models().item().loadAsJoplinItem<FolderEntity|NoteEntity>(itemId);
+
+	return await updateItem(session.id, `root:/${item.name}:`, await serializeJoplinItem({
+		...joplinItem,
+		share_id: shareId,
+	}));
+};
 
 export async function inviteUserToShare(share: Share, sharerSessionId: string, recipientEmail: string, acceptShare = true) {
 	let shareUser = await postApi(sharerSessionId, `shares/${share.id}/users`, {
@@ -86,8 +111,7 @@ export async function inviteUserToShare(share: Share, sharerSessionId: string, r
 	return shareUser;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function shareFolderWithUser(sharerSessionId: string, shareeSessionId: string, sharedFolderId: string, itemTree: any, acceptShare = true): Promise<ShareResult> {
+export async function shareFolderWithUser(sharerSessionId: string, shareeSessionId: string, sharedFolderId: string, itemTree: ShareTreeNode[] | LegacyTreeNode, acceptShare = true): Promise<ShareResult> {
 	itemTree = Array.isArray(itemTree) ? itemTree : convertTree(itemTree);
 
 	const sharee = await models().session().sessionUser(shareeSessionId);

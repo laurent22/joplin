@@ -9,7 +9,7 @@ interface DraggedHeader {
 	name: string;
 }
 
-interface InsertAt {
+export interface InsertAt {
 	columnName: NoteListColumn['name'];
 	location: 'before' | 'after';
 	x: number;
@@ -83,8 +83,7 @@ export const dropHeaderAt = (columns: NoteListColumns, header: DraggedHeader, in
 	return newColumns;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const setupDataTransfer = (event: React.DragEvent, dataType: string, image: HTMLImageElement, data: any) => {
+const setupDataTransfer = (event: React.DragEvent, dataType: string, image: HTMLImageElement, data: unknown) => {
 	event.dataTransfer.setDragImage(image, 1, 1);
 	event.dataTransfer.clearData();
 	event.dataTransfer.setData(dataType, JSON.stringify(data));
@@ -219,8 +218,7 @@ export default (columns: NoteListColumns) => {
 	}, []);
 
 	const onResizerDragEnd: React.DragEventHandler = useCallback(() => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		document.removeEventListener('dragover', onResizerDragOver as any);
+		document.removeEventListener('dragover', onResizerDragOver as unknown as EventListener);
 	}, [onResizerDragOver]);
 
 	const onResizerDragStart: React.DragEventHandler = useCallback(event => {
@@ -239,8 +237,7 @@ export default (columns: NoteListColumns) => {
 			initBoundaries: boundaries,
 		});
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		document.addEventListener('dragover', onResizerDragOver as any);
+		document.addEventListener('dragover', onResizerDragOver as unknown as EventListener);
 	}, [columns, onResizerDragOver, emptyImage]);
 
 	return {

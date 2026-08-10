@@ -2,6 +2,7 @@
 
 use widestring::U16CString;
 
+pub mod debug;
 pub mod errors;
 mod file_api;
 pub mod log;
@@ -9,6 +10,7 @@ pub mod parse;
 pub mod reader;
 
 pub use errors::Result;
+pub use file_api::FileHandle;
 pub use file_api::fs_driver;
 
 pub type Reader<'a, 'b> = &'b mut crate::reader::Reader<'a>;
@@ -25,6 +27,6 @@ impl Utf16ToString for &[u8] {
             .collect();
 
         let value = U16CString::from_vec_truncate(data);
-        Ok(value.to_string().unwrap())
+        value.to_string().map_err(|err| err.into())
     }
 }

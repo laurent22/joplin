@@ -18,6 +18,7 @@ const theme: Theme = {
 	dividerColor: '#dddddd',
 	selectedColor: '#e5e5e5',
 	urlColor: '#155BDA',
+	colorErrorSelected: '#d00000',
 
 	// Color scheme "2" is used for the sidebar. It's white text over
 	// dark blue background.
@@ -25,6 +26,7 @@ const theme: Theme = {
 	color2: '#ffffff',
 	selectedColor2: '#131313',
 	colorError2: '#ff7070',
+	colorPublished2: '#789FE9',
 	colorWarn2: '#ffcb81',
 	colorWarn3: '#ff7626',
 	backgroundColorTransparent2: 'rgba(0, 0, 0, 0.1)',
@@ -38,7 +40,8 @@ const theme: Theme = {
 	// Color scheme "4" is used for secondary-style buttons. It makes a white
 	// button with blue text.
 	backgroundColor4: '#ffffff',
-	color4: '#2D6BDC',
+	color4: '#2D5BE5',
+	backgroundColor4Dimmed: '#e3eaff',
 
 	raisedBackgroundColor: '#e5e5e5',
 	raisedColor: '#222222',

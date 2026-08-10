@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, useMemo, ForwardedRef, useContext } from 'react';
+import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, ForwardedRef, useContext } from 'react';
 
+import { RenderResultPluginAsset } from '@joplin/renderer/types';
 import { EditorCommand, MarkupToHtmlOptions, NoteBodyEditorProps, NoteBodyEditorRef, OnChangeEvent } from '../../../utils/types';
-import { getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
+import { getResourceFromClipboardImage, getResourcesFromPasteEvent, plainTextLooksLikeAffinityImageData } from '../../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../../utils/types';
 import NoteTextViewer from '../../../../NoteTextViewer';
 import Editor from './Editor';
@@ -12,11 +13,10 @@ import Note from '@joplin/lib/models/Note';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../../../../services/bridge';
 import shim from '@joplin/lib/shim';
-import { MarkupToHtml } from '@joplin/renderer';
 import { clipboard } from 'electron';
 import { reg } from '@joplin/lib/registry';
 import ErrorBoundary from '../../../../ErrorBoundary';
-import { EditorKeymap, EditorLanguageType, EditorSettings, SearchState, UserEventSource } from '@joplin/editor/types';
+import { SearchState, UserEventSource } from '@joplin/editor/types';
 import useStyles from '../utils/useStyles';
 import { EditorEvent, EditorEventType } from '@joplin/editor/events';
 import useScrollHandler from '../utils/useScrollHandler';
@@ -33,14 +33,14 @@ import { WindowIdContext } from '../../../../NewWindowOrIFrame';
 import eventManager, { EventName, ResourceChangeEvent } from '@joplin/lib/eventManager';
 import useSyncEditorValue from './utils/useSyncEditorValue';
 import { getGlobalSettings } from '@joplin/renderer/types';
+import useEditorSettings from './utils/useEditorSettings';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
 
 interface RenderedBody {
 	html: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	pluginAssets: any[];
+	pluginAssets: RenderResultPluginAsset[];
 }
 
 function defaultRenderedBody(): RenderedBody {
@@ -106,7 +106,9 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	const editorPasteText = useCallback(async () => {
 		if (editorRef.current) {
-			const modifiedMd = await Note.replaceResourceExternalToInternalLinks(clipboard.readText(), { useAbsolutePaths: true });
+			const pastedText = clipboard.readText();
+			const resourceMd = plainTextLooksLikeAffinityImageData(pastedText) ? await getResourceFromClipboardImage() : null;
+			const modifiedMd = resourceMd || await Note.replaceResourceExternalToInternalLinks(pastedText, { useAbsolutePaths: true });
 			editorRef.current.insertText(modifiedMd, UserEventSource.Paste);
 		}
 	}, []);
@@ -166,8 +168,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 				let commandOutput = null;
 				if (cmd.name in commands) {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					commandOutput = (commands as any)[cmd.name](cmd.value);
+					commandOutput = (commands as unknown as Record<string, (value: unknown)=> unknown>)[cmd.name](cmd.value);
 				} else if (editorRef.current.supportsCommand(cmd.name)) {
 					commandOutput = editorRef.current.execCommand(cmd.name);
 				} else if (editorRef.current.supportsJoplinCommand(cmd.name)) {
@@ -222,6 +223,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				noteId: props.noteId,
 				vendorDir: bridge().vendorDir(),
 				globalSettings: getGlobalSettings(Setting),
+				showNoteLinkIcon: props.showNoteLinkIcon,
 			}));
 
 			if (cancelled) return;
@@ -244,7 +246,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	}, [
 		props.content, props.contentKey, renderedBodyContentKey, props.contentMarkupLanguage,
 		props.visiblePanes, props.resourceInfos, props.markupToHtml, props.contentMaxWidth,
-		props.noteId, props.useCustomPdfViewer,
+		props.noteId, props.useCustomPdfViewer, props.showNoteLinkIcon,
 	]);
 
 	useEffect(() => {
@@ -266,8 +268,12 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			lineCount = editorRef.current.editor.state.doc.lines;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const options: any = {
+		const options: {
+			pluginAssets: RenderResultPluginAsset[];
+			downloadResources: string;
+			markupLineCount: number;
+			percent?: number;
+		} = {
 			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),
 			markupLineCount: lineCount,
@@ -303,6 +309,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	useContextMenu({
 		plugins: props.plugins,
+		dispatch: props.dispatch,
 		editorCutText, editorCopyText, editorPaste,
 		editorRef,
 		editorClassName: 'cm-editor',
@@ -336,46 +343,6 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		void CommandService.instance().execute('focusElement', 'noteTitle');
 	}, []);
 
-	const editorSettings = useMemo((): EditorSettings => {
-		const isHTMLNote = props.contentMarkupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML;
-
-		let keyboardMode = EditorKeymap.Default;
-		if (props.keyboardMode === 'vim') {
-			keyboardMode = EditorKeymap.Vim;
-		} else if (props.keyboardMode === 'emacs') {
-			keyboardMode = EditorKeymap.Emacs;
-		}
-
-		return {
-			language: isHTMLNote ? EditorLanguageType.Html : EditorLanguageType.Markdown,
-			readOnly: props.disabled,
-			markdownMarkEnabled: Setting.value('markdown.plugin.mark'),
-			katexEnabled: Setting.value('markdown.plugin.katex'),
-			inlineRenderingEnabled: Setting.value('editor.inlineRendering'),
-			imageRenderingEnabled: Setting.value('editor.imageRendering'),
-			highlightActiveLine: Setting.value('editor.highlightActiveLine'),
-			themeData: {
-				...styles.globalTheme,
-				marginLeft: 0,
-				marginRight: 0,
-				monospaceFont: Setting.value('style.editor.monospaceFontFamily'),
-			},
-			automatchBraces: Setting.value('editor.autoMatchingBraces'),
-			autocompleteMarkup: Setting.value('editor.autocompleteMarkup'),
-			useExternalSearch: false,
-			ignoreModifiers: true,
-			spellcheckEnabled: Setting.value('editor.spellcheckBeta'),
-			keymap: keyboardMode,
-			preferMacShortcuts: shim.isMac(),
-			indentWithTabs: true,
-			tabMovesFocus: props.tabMovesFocus,
-			editorLabel: _('Markdown editor'),
-		};
-	}, [
-		props.contentMarkupLanguage, props.disabled, props.keyboardMode, styles.globalTheme,
-		props.tabMovesFocus,
-	]);
-
 	const initialCursorLocationRef = useRef(0);
 	initialCursorLocationRef.current = props.initialCursorLocation.markdown ?? 0;
 
@@ -388,6 +355,14 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		initialCursorLocationRef,
 	});
 
+	const settings = useEditorSettings({
+		baseTheme: styles.globalTheme,
+		contentMarkupLanguage: props.contentMarkupLanguage,
+		disabled: props.disabled,
+		keyboardMode: props.keyboardMode,
+		tabMovesFocus: props.tabMovesFocus,
+	});
+
 	const renderEditor = () => {
 		return (
 			<div className='editor'>
@@ -397,7 +372,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 					initialSelectionRef={initialCursorLocationRef}
 					initialNoteId={props.noteId}
 					ref={editorRef}
-					settings={editorSettings}
+					settings={settings}
 					pluginStates={props.plugins}
 					onPasteFile={null}
 					onEvent={onEditorEvent}

@@ -16,4 +16,4 @@ To upload an item to Joplin Server:
 
 - `items.jop_id` is the ID as it was generated on the client. `items.id` is the server-side ID. We need two different IDs because we have no way to guarantee that `items.jop_id` is globally unique since it's generated client-side.
 
-- In `ItemModel` there are various utility functions to deal with the content. This is because it may be saved in different places depending on configuration. It can be saved to the `items.content` field in the database, or it can be saved to S3, or to the filesystem. This is why any code that deals with item content must used these utility functions.
+- In `ItemModel` there are various utility functions to deal with the content. This is because it may be saved in different places depending on configuration. It can be saved to the `items.content` field in the database, or it can be saved to S3, or to the filesystem. This is why any code that deals with item content must use these utility functions.

@@ -11,6 +11,7 @@ const logger = Logger.create('linkToNote');
 export const declaration: CommandDeclaration = {
 	name: 'linkToNote',
 	label: () => _('Link to note...'),
+	iconName: 'fas fa-file-export',
 };
 
 export const runtime = (): CommandRuntime => {
@@ -18,6 +19,7 @@ export const runtime = (): CommandRuntime => {
 		execute: async (_context: CommandContext) => {
 			const options: GotoAnythingOptions = {
 				mode: Mode.TitleOnly,
+				alwaysShowHelp: true,
 			};
 			const result = await CommandService.instance().execute('gotoAnything', UiType.ControlledApi, options);
 			if (!result) return result;

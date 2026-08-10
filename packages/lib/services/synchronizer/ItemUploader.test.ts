@@ -8,30 +8,28 @@ import { ApiCallFunction } from './utils/types';
 
 interface ApiCall {
 	name: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	args: any[];
+	args: unknown[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function clearArray(a: any[]) {
+type MultiPutItem = { name: string; body: string };
+type MultiPutResult = { item: string | null; error: Error | null };
+type ItemBodyCallback = (item: MultiPutItem)=> MultiPutResult;
+
+function clearArray<T>(a: T[]) {
 	a.splice(0, a.length);
 }
 
 function newFakeApi(): FileApi {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return { supportsMultiPut: true } as any;
+	return { supportsMultiPut: true } as FileApi;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-function newFakeApiCall(callRecorder: ApiCall[], itemBodyCallback: Function = null): ApiCallFunction {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const apiCall = async (callName: string, ...args: any[]): Promise<any> => {
+function newFakeApiCall(callRecorder: ApiCall[], itemBodyCallback: ItemBodyCallback = null): ApiCallFunction {
+	const apiCall = async (callName: string, ...args: unknown[]): Promise<unknown> => {
 		callRecorder.push({ name: callName, args });
 
 		if (callName === 'multiPut') {
-			const [batch] = args;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const output: any = { items: {} };
+			const [batch] = args as [MultiPutItem[]];
+			const output: { items: Record<string, MultiPutResult> } = { items: {} };
 			for (const item of batch) {
 				if (itemBodyCallback) {
 					output.items[item.name] = itemBodyCallback(item);
@@ -44,6 +42,7 @@ function newFakeApiCall(callRecorder: ApiCall[], itemBodyCallback: Function = nu
 			}
 			return output;
 		}
+		return undefined;
 	};
 	return apiCall;
 }
@@ -139,8 +138,8 @@ describe('synchronizer/ItemUploader', () => {
 		// only one note.
 		await itemUploader.preUploadItems(notes);
 		expect(callRecorder.length).toBe(2);
-		expect(callRecorder[0].args[0].length).toBe(2);
-		expect(callRecorder[1].args[0].length).toBe(1);
+		expect((callRecorder[0].args[0] as MultiPutItem[]).length).toBe(2);
+		expect((callRecorder[1].args[0] as MultiPutItem[]).length).toBe(1);
 	}));
 
 	it('should rethrow error for items within the batch', (async () => {
@@ -153,8 +152,7 @@ describe('synchronizer/ItemUploader', () => {
 		];
 
 		// Simulates throwing an error on note 2
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemBodyCallback = (item: any): any => {
+		const itemBodyCallback: ItemBodyCallback = item => {
 			if (item.name === BaseItem.systemPath(notes[1])) {
 				return { error: new Error('Could not save item'), item: null };
 			} else {

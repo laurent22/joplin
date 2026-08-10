@@ -215,8 +215,7 @@ describe('RichTextEditor', () => {
 		firstCheckbox.click();
 
 		await waitFor(async () => {
-			// At present, lists are saved as non-tight lists:
-			expect(body.trim()).toBe('- [x] Test\n    \n- [x] Another test');
+			expect(body.trim()).toBe('- [x] Test\n- [x] Another test');
 		});
 	});
 
@@ -433,8 +432,14 @@ describe('RichTextEditor', () => {
 		expect(editor.textContent).toContain('3^2 + 4^2 = 5^2');
 	});
 
-	it('should save lists as single-spaced', async () => {
-		let body = 'Test:\n\n- this\n- is\n- a\n- test.';
+	it.each(['-', '- [ ]'])('should save lists as single-spaced (list markers: %j)', async (marker) => {
+		let body = [
+			'Test:\n',
+			'this',
+			'is',
+			'a',
+			'test.',
+		].join(`\n${marker} `);
 
 		render(<WrappedEditor
 			noteBody={body}
@@ -445,7 +450,31 @@ describe('RichTextEditor', () => {
 		mockTyping(window, ' Testing');
 
 		await waitFor(async () => {
-			expect(body.trim()).toBe('Test:\n\n- this\n- is\n- a\n- test. Testing');
+			expect(body.trim()).toBe([
+				'Test:\n',
+				'this',
+				'is',
+				'a',
+				'test. Testing',
+			].join(`\n${marker} `));
+		});
+	});
+
+	it.each(['-', '1.'])('should not add extra blank lines around nested lists (marker: %j)', async (marker) => {
+		const nested = marker === '1.' ? '1.' : '-';
+		let body = `${marker} a\n${marker} b\n    ${nested} c\n    ${nested} d\n${marker} e`;
+
+		render(<WrappedEditor
+			noteBody={body}
+			onBodyChange={newBody => { body = newBody; }}
+		/>);
+
+		const window = await getEditorWindow();
+		mockTyping(window, ' testing');
+
+		await waitFor(async () => {
+			// Nested lists should not have extra blank lines above or below
+			expect(body).not.toMatch(/\n\n\s*[-\d]/);
 		});
 	});
 

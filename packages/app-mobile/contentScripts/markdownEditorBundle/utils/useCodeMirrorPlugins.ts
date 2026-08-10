@@ -33,8 +33,14 @@ const useCodeMirrorPlugins = (pluginStates: PluginStates) => {
 				plugins.push({
 					pluginId,
 					contentScriptId,
-					contentScriptJs: async () => {
-						return await shim.fsDriver().readFile(contentScript.path);
+					contentScriptJs: async (context) => {
+						return {
+							sourceJs: [
+								context.contentScriptStartJs,
+								await shim.fsDriver().readFile(contentScript.path),
+								context.contentScriptEndJs,
+							].join('\n'),
+						};
 					},
 					loadCssAsset: (name: string) => {
 						// TODO: This logic is currently shared with app-desktop. Refactor
@@ -42,8 +48,7 @@ const useCodeMirrorPlugins = (pluginStates: PluginStates) => {
 						const path = shim.fsDriver().resolveRelativePathWithinDir(assetPath, name);
 						return shim.fsDriver().readFile(path, 'utf8');
 					},
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					postMessageHandler: async (message: any): Promise<any> => {
+					postMessageHandler: async (message: unknown): Promise<unknown> => {
 						logger.debug(`Got message from plugin ${pluginId} content script ${contentScriptId}. Message:`, message);
 						return plugin.emitContentScriptMessage(contentScriptId, message);
 					},

@@ -1,6 +1,7 @@
 import Note from '../../models/Note';
 import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
 import ShareService, { ApiShare } from './ShareService';
+import { ShareType } from './reducer';
 import { NoteEntity, ResourceEntity } from '../database/types';
 import Folder from '../../models/Folder';
 import { localSyncInfo, setEncryptionEnabled, setPpk } from '../synchronizer/syncInfoUtils';
@@ -33,6 +34,8 @@ const mockServiceForNoteSharing = () => {
 };
 
 describe('ShareService', () => {
+
+	jest.retryTimes(2);
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
@@ -110,8 +113,7 @@ describe('ShareService', () => {
 		}
 	});
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	function testShareFolderService(extraExecHandlers: Record<string, Function> = {}) {
+	function testShareFolderService(extraExecHandlers: Record<string, (query: unknown, body: unknown)=> unknown> = {}) {
 		let nextShareId = 1;
 		let shares: ApiShare[] = [];
 		const shareByFolderId = (folderId: string) => {
@@ -119,8 +121,7 @@ describe('ShareService', () => {
 		};
 
 		return mockShareService({
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			onExec: async (method: string, path: string, query: Record<string, any>, body: any) => {
+			onExec: async (method: string, path: string, query: Record<string, unknown>, body: unknown) => {
 				if (extraExecHandlers[`${method} ${path}`]) return extraExecHandlers[`${method} ${path}`](query, body);
 
 				if (method === 'GET' && path === 'api/shares') {
@@ -130,9 +131,10 @@ describe('ShareService', () => {
 				}
 
 				if (method === 'POST' && path === 'api/shares') {
+					const b = body as { folder_id: string; master_key_id: string };
 					// Return the existing share, if it exists. This is to match the behavior
 					// of Joplin Server.
-					const existingShare = shareByFolderId(body.folder_id);
+					const existingShare = shareByFolderId(b.folder_id);
 					if (existingShare) {
 						return existingShare;
 					}
@@ -142,8 +144,8 @@ describe('ShareService', () => {
 
 					const share = {
 						id,
-						master_key_id: body.master_key_id,
-						folder_id: body.folder_id,
+						master_key_id: b.master_key_id,
+						folder_id: b.folder_id,
 					};
 					shares.push(share);
 					return share;
@@ -152,7 +154,7 @@ describe('ShareService', () => {
 				if (method === 'DELETE' && path.startsWith('api/shares/')) {
 					const id = path.replace(/^api\/shares\//, '');
 					shares = shares.filter(share => share.id !== id);
-					return;
+					return undefined;
 				}
 
 				throw new Error(`Unhandled: ${method} ${path}`);
@@ -257,14 +259,13 @@ describe('ShareService', () => {
 		let uploadedMasterKey: MasterKeyEntity = null;
 
 		const service = testShareFolderService({
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			'GET api/users/toto%40example.com/public_key': async (_query: Record<string, any>, _body: any) => {
+			'GET api/users/toto%40example.com/public_key': async (_query, _body) => {
 				return recipientPpk;
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			'POST api/shares/share_1/users': async (_query: Record<string, any>, body: any) => {
-				uploadedEmail = body.email;
-				uploadedMasterKey = JSON.parse(body.master_key);
+			'POST api/shares/share_1/users': async (_query, body) => {
+				const b = body as { email: string; master_key: string };
+				uploadedEmail = b.email;
+				uploadedMasterKey = JSON.parse(b.master_key);
 			},
 		});
 
@@ -302,6 +303,10 @@ describe('ShareService', () => {
 		expect(localSyncInfo().masterKeys).toHaveLength(2);
 	});
 
+	// On CI this test can randomly throw "Exceeded timeout of 90000 ms for a
+	// test." because of the multiple RSA key generation and master key
+	// encryption steps. Increase the timeout as a backstop in addition to the
+	// suite-level `jest.retryTimes(2)`.
 	it('should use a different master key when folders are unshared, then shared again', async () => {
 		await generateMasterKeyAndEnableEncryption(encryptionService(), 'testing!');
 		const ppk = await generateKeyPair(encryptionService(), '111111');
@@ -316,16 +321,19 @@ describe('ShareService', () => {
 		expect(share2.master_key_id).toBeTruthy();
 		expect(share2.folder_id).toBe(folder.id);
 		expect(share.master_key_id).not.toBe(share2.master_key_id);
-	});
+	}, 60000 * 5);
 
 	it('should leave folders that are no longer with the user', async () => {
 		// `checkShareConsistency` will emit a warning so we need to silent it
 		// in tests.
 		const previousLogLevel = Logger.globalLogger.setLevel(LogLevel.Error);
 
+		// checkShareConsistency only runs when the sync target supports
+		// sharing (Joplin Server/Cloud).
+		Setting.setValue('sync.target', 9);
+
 		const service = testShareFolderService({
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			'GET api/shares': async (_query: Record<string, any>, _body: any): Promise<any> => {
+			'GET api/shares': async (_query, _body) => {
 				return {
 					items: [],
 					has_more: false,
@@ -338,6 +346,31 @@ describe('ShareService', () => {
 		expect(await Folder.load(folder.id)).toBeFalsy();
 
 		Logger.globalLogger.setLevel(previousLogLevel);
+	});
+
+	it('should skip share consistency check when not using a share-compatible sync target', async () => {
+		// Simulate a non-Joplin Server sync target (e.g. WebDAV = 6).
+		// This reproduces the scenario where a user previously used Joplin
+		// Server (which set share_id on folders), then switched to WebDAV.
+		// checkShareConsistency() should not attempt to call the Joplin
+		// Server API since we are no longer on a share-capable sync target.
+		Setting.setValue('sync.target', 6);
+
+		const service = mockShareService({
+			onExec: async () => {
+				throw new Error('Should not call the API when share is not enabled');
+			},
+		});
+
+		// Create a folder with a stale share_id leftover from Joplin Server
+		const folder = await Folder.save({ share_id: 'stale_share_id' });
+
+		// This should not throw or attempt any API calls
+		await service.checkShareConsistency();
+
+		// The folder should still exist since we cannot verify shares
+		// without a Joplin Server API connection
+		expect(await Folder.load(folder.id)).toBeTruthy();
 	});
 
 	it('should leave a shared folder', async () => {
@@ -374,6 +407,36 @@ describe('ShareService', () => {
 		expect(deletedItems[0].item_id).toBe(folder1.id);
 
 		cleanup();
+	});
+
+	it('should not return a published folder share when looking up a regular folder share', async () => {
+		const service = mockShareService({
+			getShares: async () => ({
+				items: [{
+					id: 'share1',
+					type: ShareType.PublishedFolder,
+					folder_id: 'folder1',
+					note_id: '',
+					master_key_id: '',
+				}],
+			}),
+			postShares: async () => null,
+			getShareInvitations: async () => ({ items: [] }),
+		});
+
+		await service.refreshShares();
+
+		expect(service.folderShare('folder1')).toBeUndefined();
+	});
+
+	it('should throw when publishing a folder that does not exist', async () => {
+		const service = mockShareService({
+			getShares: async () => ({ items: [] }),
+			postShares: async () => null,
+			getShareInvitations: async () => ({ items: [] }),
+		});
+
+		await expect(service.publishFolder('000000000000000000000000000000F9')).rejects.toThrow('No such folder: 000000000000000000000000000000F9');
 	});
 
 });

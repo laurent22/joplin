@@ -1,6 +1,6 @@
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { Server } from 'http';
-import Logger from './Logger';
+import Logger, { LoggerWrapper } from './Logger';
 import { pathExists } from 'fs-extra';
 import { readFile, writeFile } from 'fs/promises';
 import { getSecureRandomString } from './crypto';
@@ -73,7 +73,7 @@ export interface IpcServer {
 }
 
 interface StartServerOptions {
-	logger?: Logger;
+	logger?: Logger | LoggerWrapper;
 }
 
 const getSecretKey = async (filePath: string) => {
@@ -186,7 +186,7 @@ export interface SendMessageOutput {
 }
 
 export interface SendMessageOptions {
-	logger?: Logger;
+	logger?: Logger | LoggerWrapper;
 	sendToSpecificPortOnly?: boolean;
 }
 

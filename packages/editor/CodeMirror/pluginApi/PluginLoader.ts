@@ -5,9 +5,14 @@ import codeMirrorRequire from './codeMirrorRequire';
 let pluginScriptIdCounter = 0;
 let pluginLoaderCounter = 0;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin exports have dynamic structure
 type OnScriptLoadCallback = (exports: any)=> void;
 type OnPluginRemovedCallback = ()=> void;
+
+type PluginLoaderWindow = Window & {
+	__pluginLoaderScriptLoadCallbacks: Record<number, OnScriptLoadCallback>;
+	__pluginLoaderRequireFunctions: Record<number, typeof codeMirrorRequire>;
+};
 
 const contentScriptToId = (contentScript: ContentScriptData) => `${contentScript.pluginId}--${contentScript.contentScriptId}`;
 
@@ -28,14 +33,11 @@ export default class PluginLoader {
 
 		// addPlugin works by creating <script> elements with the plugin's content. To pass
 		// information to this <script>, we use global objects:
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		(window as any).__pluginLoaderScriptLoadCallbacks ??= Object.create(null);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		(window as any).__pluginLoaderRequireFunctions ??= Object.create(null);
+		(window as unknown as PluginLoaderWindow).__pluginLoaderScriptLoadCallbacks ??= Object.create(null);
+		(window as unknown as PluginLoaderWindow).__pluginLoaderRequireFunctions ??= Object.create(null);
 
 		this.pluginLoaderId = pluginLoaderCounter++;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		(window as any).__pluginLoaderRequireFunctions[this.pluginLoaderId] = codeMirrorRequire;
+		(window as unknown as PluginLoaderWindow).__pluginLoaderRequireFunctions[this.pluginLoaderId] = codeMirrorRequire;
 	}
 
 	public async setPlugins(contentScripts: ContentScriptData[]) {
@@ -72,30 +74,34 @@ export default class PluginLoader {
 
 			void (async () => {
 				const scriptId = pluginScriptIdCounter++;
-				const js = await plugin.contentScriptJs();
+				const js = await plugin.contentScriptJs({
+					contentScriptStartJs: `
+						(async () => {
+							const exports = {};
+							const module = { exports: exports };
+							const require = window.__pluginLoaderRequireFunctions[${JSON.stringify(this.pluginLoaderId)}];
+							const joplin = {
+								require,
+							};
+					`,
+					contentScriptEndJs: `
+							window.__pluginLoaderScriptLoadCallbacks[${JSON.stringify(scriptId)}](module.exports);
+						})();
+					`,
+				});
 
 				// Stop if cancelled
 				if (!this.loadedContentScriptIds.includes(contentScriptToId(plugin))) {
 					return;
 				}
 
-				scriptElement.appendChild(document.createTextNode(`
-				(async () => {
-					const exports = {};
-					const module = { exports: exports };
-					const require = window.__pluginLoaderRequireFunctions[${JSON.stringify(this.pluginLoaderId)}];
-					const joplin = {
-						require,
-					};
-		
-					${js};
-		
-					window.__pluginLoaderScriptLoadCallbacks[${JSON.stringify(scriptId)}](module.exports);
-				})();
-				`));
+				if (js.sourceJs) {
+					scriptElement.appendChild(document.createTextNode(js.sourceJs));
+				} else {
+					scriptElement.src = js.uri;
+				}
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(window as any).__pluginLoaderScriptLoadCallbacks[scriptId] = onLoad;
+				(window as unknown as PluginLoaderWindow).__pluginLoaderScriptLoadCallbacks[scriptId] = onLoad;
 
 				this.pluginScriptsContainer.appendChild(scriptElement);
 			})();

@@ -165,6 +165,10 @@
 				if (a && a.toLowerCase().indexOf('math/tex') >= 0) isVisible = true;
 			}
 
+			if (nodeName === 'annotation') {
+				if (node.getAttribute('encoding') === 'application/x-tex') isVisible = true;
+			}
+
 			if (nodeName === 'source' && nodeParentName === 'picture') {
 				isVisible = false;
 			}

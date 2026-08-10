@@ -2,14 +2,15 @@ import * as React from 'react';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import useWindowResizeEvent from './utils/useWindowResizeEvent';
 import setLayoutItemProps from './utils/setLayoutItemProps';
-import useLayoutItemSizes, { LayoutItemSizes, itemSize, calculateMaxSizeAvailableForItem, itemMinWidth, itemMinHeight } from './utils/useLayoutItemSizes';
+import useLayoutItemSizes, { EdgeFlags, LayoutItemSizes, itemSize, calculateMaxSizeAvailableForItem } from './utils/useLayoutItemSizes';
 import validateLayout from './utils/validateLayout';
 import { Size, LayoutItem } from './utils/types';
 import { canMove, MoveDirection } from './utils/movements';
+import { buildResizeSnapshot, computeEdges, isItemVisibleInRender, lastVisibleChildIndex, planResize, ResizeStartSnapshot } from './utils/resizeLogic';
 import MoveButtons, { MoveButtonClickEvent } from './MoveButtons';
 import { StyledWrapperRoot, StyledMoveOverlay, MoveModeRootMessage } from './utils/style';
 import type { ResizeCallback, ResizeStartCallback } from 're-resizable';
-import Dialog from '../Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import EventEmitter = require('events');
 import LayoutItemContainer from './LayoutItemContainer';
 
@@ -17,11 +18,15 @@ interface OnResizeEvent {
 	layout: LayoutItem;
 }
 
-interface ResizedItem {
-	key: string;
-	initialWidth: number;
-	initialHeight: number;
+interface ResizedItem extends ResizeStartSnapshot {
 	maxSize: Size;
+}
+
+export interface RenderItemEvent {
+	eventEmitter: EventEmitter;
+	visible: boolean;
+	size: Size;
+	item: LayoutItem;
 }
 
 interface Props {
@@ -30,18 +35,13 @@ interface Props {
 	onResize(event: OnResizeEvent): void;
 	width?: number;
 	height?: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	renderItem: Function;
+	renderItem: (key: string, event: RenderItemEvent)=> React.ReactNode;
 	onMoveButtonClick(event: MoveButtonClickEvent): void;
 	moveMode: boolean;
 	moveModeMessage: string;
 }
 
-function itemVisible(item: LayoutItem, moveMode: boolean) {
-	if (moveMode) return true;
-	if (item.children && !item.children.length) return false;
-	return item.visible !== false;
-}
+const itemVisible = isItemVisibleInRender;
 
 function ResizableLayout(props: Props) {
 	const eventEmitter = useRef(new EventEmitter());
@@ -82,35 +82,22 @@ function ResizableLayout(props: Props) {
 	}
 
 	function renderLayoutItem(
-		item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isVisible: boolean, isLastChild: boolean, onlyMoveControls: boolean,
+		item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isVisible: boolean, isLastChild: boolean, onlyMoveControls: boolean, parentEdges: EdgeFlags = { ownRight: false, ownBottom: false, parentRight: false, parentBottom: false },
 	): React.ReactNode {
+		const edges = computeEdges(parent, isLastChild, parentEdges);
+
 		const onResizeStart: ResizeStartCallback = () => {
 			setResizedItem({
-				key: item.key,
-				initialWidth: sizes[item.key].width,
-				initialHeight: sizes[item.key].height,
+				...buildResizeSnapshot(item, parent, props.moveMode, sizes),
 				maxSize: calculateMaxSizeAvailableForItem(item, parent, sizes),
 			});
 		};
 
 		const onResize: ResizeCallback = (_event, direction, _refToElement, delta) => {
-			const newWidth = Math.max(itemMinWidth, resizedItem.initialWidth + delta.width);
-			const newHeight = Math.max(itemMinHeight, resizedItem.initialHeight + delta.height);
-
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const newSize: any = {};
-
-			if (item.width) newSize.width = item.width;
-			if (item.height) newSize.height = item.height;
-
-			if (direction === 'bottom') {
-				newSize.height = newHeight;
-			} else {
-				newSize.width = newWidth;
+			let newLayout = props.layout;
+			for (const update of planResize(resizedItem, direction, delta)) {
+				newLayout = setLayoutItemProps(newLayout, update.key, update.props);
 			}
-
-			const newLayout = setLayoutItemProps(props.layout, item.key, newSize);
-
 			props.onResize({ layout: newLayout });
 			eventEmitter.current.emit('resize');
 		};
@@ -123,10 +110,10 @@ function ResizableLayout(props: Props) {
 		const resizedItemMaxSize = resizedItem && item.key === resizedItem.key ? resizedItem.maxSize : null;
 		const visible = itemVisible(item, props.moveMode);
 		const itemContainerProps = {
-			key: item.key, item, parent, sizes, resizedItemMaxSize, onResizeStart, onResizeStop, onResize, isLastChild, visible,
+			key: item.key, item, parent, sizes, resizedItemMaxSize, onResizeStart, onResizeStop, onResize, isLastChild, visible, edges,
 		};
 		if (!item.children) {
-			const size = itemSize(item, parent, sizes, false);
+			const size = itemSize(item, parent, sizes, false, edges);
 
 			const comp = props.renderItem(item.key, {
 				item: item,
@@ -140,11 +127,12 @@ function ResizableLayout(props: Props) {
 				{wrapper}
 			</LayoutItemContainer>;
 		} else {
+			const lastVisibleIdx = lastVisibleChildIndex(item, props.moveMode);
 			const childrenComponents = [];
 			for (let i = 0; i < item.children.length; i++) {
 				const child = item.children[i];
 				childrenComponents.push(
-					renderLayoutItem(child, item, sizes, isVisible && itemVisible(child, props.moveMode), i === item.children.length - 1, onlyMoveControls),
+					renderLayoutItem(child, item, sizes, isVisible && itemVisible(child, props.moveMode), i === lastVisibleIdx, onlyMoveControls, edges),
 				);
 			}
 

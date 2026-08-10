@@ -1,6 +1,6 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep, fileApi } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { checkIfCanSync, localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo } from './syncInfoUtils';
+import { checkIfCanSync, localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo, onRevisionServiceSettingsChanged } from './syncInfoUtils';
 import Setting from '../../models/Setting';
 import BaseItem from '../../models/BaseItem';
 import BaseModel from '../../models/BaseItem';
@@ -121,6 +121,25 @@ describe('syncInfoUtils', () => {
 		expect(mergeSyncInfos(syncInfo1, syncInfo2).appMinVersion).toBe('0.0.0');
 	});
 
+	it('should merge sync target info and keep the latest note lock key', () => {
+		const syncInfo1 = new SyncInfo();
+		syncInfo1.noteLockKey = {
+			id: '1',
+			content: 'content1',
+			updated_time: 100,
+		};
+
+		const syncInfo2 = new SyncInfo();
+		syncInfo2.noteLockKey = {
+			id: '2',
+			content: 'content2',
+			updated_time: 200,
+		};
+
+		expect(mergeSyncInfos(syncInfo1, syncInfo2).noteLockKey).toEqual(syncInfo2.noteLockKey);
+		expect(mergeSyncInfos(new SyncInfo(), syncInfo1).noteLockKey).toEqual(syncInfo1.noteLockKey);
+	});
+
 	it('should merge sync target info and takes into account usage of master key - 1', async () => {
 		const syncInfo1 = new SyncInfo();
 		syncInfo1.masterKeys = [{
@@ -229,6 +248,15 @@ describe('syncInfoUtils', () => {
 					'hasBeenUsed': true,
 				},
 			],
+			'noteLockKey': {
+				'id': '400227d8a77c4d3bb7346514861c643c',
+				'created_time': 1515008161362,
+				'updated_time': 1708103706234,
+				'source_application': 'net.cozic.joplin-desktop',
+				'encryption_method': 4,
+				'checksum': '',
+				'content': '{"iv":"M1uezlW1Pu1g3dwrCTqcHg=="}',
+			},
 			'ppk': {
 				'value': {
 					'id': 'SNQ5ZCs61KDVUW2qqqqHd3',
@@ -270,6 +298,13 @@ describe('syncInfoUtils', () => {
 					'updated_time': 1708103706234,
 				},
 			],
+			'noteLockKey': {
+				'created_time': 1515008161362,
+				'encryption_method': 4,
+				'id': '400227d8a77c4d3bb7346514861c643c',
+				'source_application': 'net.cozic.joplin-desktop',
+				'updated_time': 1708103706234,
+			},
 			'ppk': {
 				'updatedTime': 1633274368892,
 				'value': {
@@ -282,6 +317,14 @@ describe('syncInfoUtils', () => {
 					},
 					'publicKey': '-----BEGIN RSA PUBLIC KEY-----\nMIIBCgKCA...',
 				},
+			},
+			'revisionServiceEnabled': {
+				'updatedTime': 0,
+				'value': true,
+			},
+			'revisionServiceTtlDays': {
+				'updatedTime': 0,
+				'value': 90,
 			},
 			'version': 3,
 		});
@@ -324,8 +367,9 @@ describe('syncInfoUtils', () => {
 		expect(result.version).toEqual(0);
 		expect(result.ppk).toEqual(null);
 		expect(result.e2ee).toEqual(false);
-		expect(result.appMinVersion).toEqual('3.0.0');
+		expect(result.appMinVersion).toEqual('3.7.0');
 		expect(result.masterKeys).toEqual([]);
+		expect(result.noteLockKey).toEqual(null);
 
 		Logger.globalLogger.enabled = true;
 	});
@@ -334,12 +378,12 @@ describe('syncInfoUtils', () => {
 		Setting.setValue('sync.wipeOutFailSafe', true);
 		const syncInfo = new SyncInfo();
 		await fileApi().put('info.json', syncInfo.serialize());
-		expect(checkSyncTargetIsValid(fileApi())).resolves.not.toThrow();
+		await expect(checkSyncTargetIsValid(fileApi())).resolves.not.toThrow();
 	}));
 
 	it('should succeed when info.json does not exist and failsafe is disabled for checkSyncTargetIsValid', (async () => {
 		Setting.setValue('sync.wipeOutFailSafe', false);
-		expect(checkSyncTargetIsValid(fileApi())).resolves.not.toThrow();
+		await expect(checkSyncTargetIsValid(fileApi())).resolves.not.toThrow();
 	}));
 
 	it('should fail with failsafe error when info.json does not exist for checkSyncTargetIsValid', (async () => {
@@ -390,6 +434,68 @@ describe('syncInfoUtils', () => {
 
 	it('should succeed when info.json and .sync/version.txt does not exist when sync items are not present for fetchSyncInfo', (async () => {
 		Setting.setValue('sync.wipeOutFailSafe', true);
-		expect(fetchSyncInfo(fileApi())).resolves.not.toThrow();
+		await expect(fetchSyncInfo(fileApi())).resolves.not.toThrow();
 	}));
+
+	it('should merge revision service settings based on timestamps', () => {
+		const s1 = new SyncInfo();
+		s1.revisionServiceEnabled = false;
+		s1.revisionServiceTtlDays = 30;
+
+		const s2 = new SyncInfo();
+		s2.revisionServiceEnabled = true;
+		s2.revisionServiceTtlDays = 90;
+
+		s1.setKeyTimestamp('revisionServiceEnabled', 200);
+		s1.setKeyTimestamp('revisionServiceTtlDays', 100);
+		s2.setKeyTimestamp('revisionServiceEnabled', 100);
+		s2.setKeyTimestamp('revisionServiceTtlDays', 200);
+
+		const merged = mergeSyncInfos(s1, s2);
+		expect(merged.revisionServiceEnabled).toBe(false);
+		expect(merged.revisionServiceTtlDays).toBe(90);
+	});
+
+	it('should use default revision service settings when not present in sync info', () => {
+		const s = new SyncInfo(JSON.stringify({ version: 3 }));
+		expect(s.revisionServiceEnabled).toBe(true);
+		expect(s.revisionServiceTtlDays).toBe(90);
+	});
+
+	it('should update syncInfo when revision service setting changes', async () => {
+		const s = new SyncInfo();
+		s.revisionServiceTtlDays = 90;
+		s.setKeyTimestamp('revisionServiceTtlDays', 0);
+		saveLocalSyncInfo(s);
+
+		onRevisionServiceSettingsChanged('revisionService.ttlDays', 30);
+
+		const updated = localSyncInfo();
+		expect(updated.revisionServiceTtlDays).toBe(30);
+		expect(updated.keyTimestamp('revisionServiceTtlDays')).toBeGreaterThan(0);
+	});
+
+	it('should not update syncInfo when revision service setting value is unchanged', async () => {
+		const s = new SyncInfo();
+		s.revisionServiceTtlDays = 90;
+		s.setKeyTimestamp('revisionServiceTtlDays', 0);
+		saveLocalSyncInfo(s);
+
+		onRevisionServiceSettingsChanged('revisionService.ttlDays', 90);
+
+		const updated = localSyncInfo();
+		expect(updated.keyTimestamp('revisionServiceTtlDays')).toBe(0);
+	});
+
+	it('should ignore unrelated keys in onRevisionServiceSettingsChanged', async () => {
+		const s = new SyncInfo();
+		s.revisionServiceTtlDays = 90;
+		s.setKeyTimestamp('revisionServiceTtlDays', 0);
+		saveLocalSyncInfo(s);
+
+		onRevisionServiceSettingsChanged('sync.target', 1);
+
+		const updated = localSyncInfo();
+		expect(updated.keyTimestamp('revisionServiceTtlDays')).toBe(0);
+	});
 });

@@ -1,8 +1,8 @@
 import { CommandRuntime, CommandDeclaration } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import shim, { MessageBoxType } from '@joplin/lib/shim';
-const app = require('@electron/remote').app;
-const { clipboard } = require('electron');
+import { app } from '@electron/remote';
+import { clipboard } from 'electron';
 
 export const declaration: CommandDeclaration = {
 	name: 'copyDevCommand',
@@ -13,7 +13,8 @@ export const runtime = (): CommandRuntime => {
 	return {
 		execute: async () => {
 			const appPath = app.getPath('exe');
-			const cmd = `${appPath} --env dev`;
+			// Quote the path so it works when it contains spaces (e.g. "C:\Program Files\Joplin\Joplin.exe" on Windows)
+			const cmd = `"${appPath}" --env dev`;
 			clipboard.writeText(cmd);
 			await shim.showMessageBox(`The dev mode command has been copied to clipboard:\n\n${cmd}`, { type: MessageBoxType.Info });
 		},

@@ -1,4 +1,4 @@
-const mimeTypes = require('./mime-utils-types');
+import mimeTypes from './mime-utils-types';
 
 export const fromFileExtension = (ext: string) => {
 	ext = ext.toLowerCase();

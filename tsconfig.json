@@ -2,8 +2,9 @@
     "compilerOptions": {
 		"module": "commonjs",
 		"target": "es2017",
-		"esModuleInterop": false,
+		"esModuleInterop": true,
 		//"lib": ["es2015", "es2020.string", "dom", "dom.iterable"],
+		"strict": false,
 		"alwaysStrict": true,
 		"forceConsistentCasingInFileNames": true,
 		"listEmittedFiles": false,
@@ -18,6 +19,7 @@
 		"jsx": "react",
 		"skipLibCheck": true,
 		"allowUmdGlobalAccess": true,
+		"types": ["node", "jest"]
 	},
 	"exclude": [
 		"**/node_modules",

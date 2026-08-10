@@ -2,8 +2,8 @@ import { NoteEntity, ResourceEntity, TagEntity } from './services/database/types
 import shim from './shim';
 
 import { readFile, stat } from 'fs/promises';
-const os = require('os');
-const { filename } = require('./path-utils');
+import * as os from 'os';
+import { filename } from './path-utils';
 import { setupDatabaseAndSynchronizer, switchClient, expectNotThrow, supportDir, expectThrow } from './testing/test-utils';
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
 import importEnex, { ImportOptions } from './import-enex';
@@ -247,4 +247,13 @@ describe('import-enex-md-gen', () => {
 		expect(note4.body).toBe('[Note 5](https://joplinapp.org)');
 	});
 
+	it('should remove empty hidden divs from imported notes', async () => {
+		const empty = await enexXmlToMd('<div style="display:none;--en-chs:&quot;metadata&quot;"> </div><div>Test content</div>', [], []);
+		const withContent = await enexXmlToMd('<div style="display:none;">Important data</div><div>Visible text</div>', [], []);
+
+		expect(empty).not.toContain('<div style="display: none;">');
+		expect(empty).toContain('Test content');
+		expect(withContent).toContain('<div style="display: none;">');
+		expect(withContent).toContain('Important data');
+	});
 });

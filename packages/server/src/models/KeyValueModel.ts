@@ -1,7 +1,7 @@
 import { returningSupported } from '../db';
 import { KeyValue } from '../services/database/types';
 import { msleep } from '../utils/time';
-import BaseModel from './BaseModel';
+import BaseModel, { DeleteOptions } from './BaseModel';
 
 export enum ValueType {
 	Integer = 1,
@@ -57,10 +57,8 @@ export default class KeyValueModel extends BaseModel<KeyValue> {
 
 	public async value<T>(key: string, defaultValue: Value = null): Promise<T> {
 		const row: KeyValue = await this.db(this.tableName).where('key', '=', key).first();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (!row) return defaultValue as any;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return this.unserializeValue(row.type, row.value) as any;
+		if (!row) return defaultValue as T;
+		return this.unserializeValue(row.type, row.value) as T;
 	}
 
 	public async readThenWrite(key: string, handler: ReadThenWriteHandler) {
@@ -68,8 +66,7 @@ export default class KeyValueModel extends BaseModel<KeyValue> {
 			// While inside a transaction SQlite should lock the whole database
 			// file, which should allow atomic read then write.
 			await this.withTransaction(async () => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const value: any = await this.value(key);
+				const value = await this.value<Value>(key);
 				const newValue = await handler(value);
 				await this.setValue(key, newValue);
 			}, 'KeyValueModel::readThenWrite');
@@ -107,8 +104,7 @@ export default class KeyValueModel extends BaseModel<KeyValue> {
 		await this.db(this.tableName).where('key', '=', key).delete();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async delete(_id: string | string[] | number | number[], _options: any = {}): Promise<void> {
+	public async delete(_id: string | string[] | number | number[], _options: DeleteOptions = {}): Promise<void> {
 		throw new Error('Call ::deleteValue()');
 	}
 

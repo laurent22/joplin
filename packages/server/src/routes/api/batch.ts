@@ -15,18 +15,15 @@ interface SubRequest {
 	method: HttpMethod;
 	url: string;
 	headers: Record<string, string>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	body: any;
+	body: unknown;
 }
 
 type SubRequests = Record<string, SubRequest>;
 
 interface SubRequestResponse {
 	status: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	body: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	header: Record<string, any>;
+	body: unknown;
+	header: Record<string, unknown>;
 }
 
 type BatchResponse = Record<string, SubRequestResponse>;

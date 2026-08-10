@@ -1,6 +1,8 @@
 import { _ } from '../../locale';
 import CommandService from '../CommandService';
 import { ItemFlow, ListRenderer, OnClickEvent } from '../plugins/api/noteListType';
+import checkboxPieCss from './checkboxPieCss';
+import isNoteLockEnabled from '../noteLock/isNoteLockEnabled';
 
 const renderer: ListRenderer = {
 	id: 'detailed',
@@ -12,6 +14,8 @@ const renderer: ListRenderer = {
 	dependencies: [
 		'note.todo_completed',
 		'item.selected',
+		'note.is_locked',
+		'note.is_published',
 		'note.is_shared',
 		'note.isWatched',
 	],
@@ -54,7 +58,8 @@ const renderer: ListRenderer = {
 			}
 
 			> .item[data-name="note.is_todo"],
-			> .item[data-name="note.title"] {
+			> .item[data-name="note.title"],
+			> .item[data-name="note.checkboxes"] {
 				opacity: 1;
 			}
 
@@ -62,9 +67,18 @@ const renderer: ListRenderer = {
 				display: none;
 				margin-right: 8px;
 			}
+
+			> .item > .content > .lockedicon {
+				display: none;
+				margin-right: 8px;
+			}
 		}
 
 		> .row.-watched > .item[data-name="note.title"] > .content > .watchedicon {
+			display: inline-block;
+		}
+
+		> .row.-locked > .item[data-name="note.title"] > .content > .lockedicon {
 			display: inline-block;
 		}
 
@@ -76,6 +90,14 @@ const renderer: ListRenderer = {
 			color: var(--joplin-color-warn3);
 		}
 
+		> .row.-published {
+			color: var(--joplin-color4);
+		}
+
+		> .row.-published.-selected {
+			color: var(--joplin-color);
+		}
+
 		> .row.-completed {
 			opacity: 0.5;
 		}
@@ -83,6 +105,8 @@ const renderer: ListRenderer = {
 		> .row:hover, &.-focus-visible > .row {
 			background-color: var(--joplin-background-color-hover3);
 		}
+
+		${checkboxPieCss}
 	`,
 
 	onHeaderClick: async (event: OnClickEvent) => {
@@ -92,11 +116,11 @@ const renderer: ListRenderer = {
 
 	itemTemplate: // html
 		`
-			<div class="row {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}}">
+			<div class="row {{#item.selected}}-selected{{/item.selected}} {{#note.is_shared}}-shared{{/note.is_shared}} {{#note.is_published}}-published{{/note.is_published}} {{#note.todo_completed}}-completed{{/note.todo_completed}} {{#note.isWatched}}-watched{{/note.isWatched}} {{#note.is_locked}}-locked{{/note.is_locked}}">
 				{{#cells}}
 					<div data-name="{{name}}" class="item" style="{{{styleHtml}}}">
 						<div class="content">
-							<i class="watchedicon fa fa-share-square"></i>{{{contentHtml}}}
+							<i class="watchedicon fa fa-share-square"></i><i class="lockedicon fa fa-lock"></i>{{{contentHtml}}}
 						</div>
 					</div>
 				{{/cells}}
@@ -117,12 +141,26 @@ const renderer: ListRenderer = {
 				</div>
 			{{/note.is_todo}}
 		`,
+		'note.checkboxes': // html
+			`
+			{{#note.checkboxes}}
+				<div class="checkbox-pie" title="{{note.checkboxes.checked}}/{{note.checkboxes.total}}">
+					{{#note.checkboxes.isComplete}}
+						<div class="pie -complete">✓</div>
+					{{/note.checkboxes.isComplete}}
+					{{^note.checkboxes.isComplete}}
+						<div class="pie" style="--percent: {{note.checkboxes.percent}};"></div>
+					{{/note.checkboxes.isComplete}}
+				</div>
+			{{/note.checkboxes}}
+		`,
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Matches OnRenderNoteHandler in noteListType.ts; props are heterogeneous (any subset of note fields per renderer's itemProps)
 	onRenderNote: async (props: any) => {
 		return {
 			...props,
+			note: { ...props.note, is_locked: isNoteLockEnabled() ? props.note.is_locked : 0 },
 		};
 	},
 };

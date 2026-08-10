@@ -32,7 +32,7 @@ pub(crate) fn parse(object: &Object) -> Result<Data> {
     let entity_guid = simple::parse_guid(PropertyType::NotebookManagementEntityGuid, object)?
         .unwrap_or_else(|| {
             log_warn!("page series has no guid");
-            return Guid::nil();
+            Guid::nil()
         });
     let page_spaces =
         ObjectSpaceReference::parse_vec(PropertyType::ChildGraphSpaceElementNodes, object)?

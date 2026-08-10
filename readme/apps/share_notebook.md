@@ -28,6 +28,11 @@ To make use of this feature, simply select "Can view" or "Can view and edit" fro
 
 ![](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20230825-share-permissions.png)
 
+## Video tutorial
+Watch this short video to learn how to share a notebook and manage share permissions:
+
+[![Watch the video](https://img.youtube.com/vi/NvQAnea_Lk8/hqdefault.jpg)](https://www.youtube.com/watch?v=NvQAnea_Lk8)
+
 ## FAQ
 
 ### What's the availability of the notebook sharing feature?
@@ -58,4 +63,4 @@ Some ideas:
 
 * Work on a project with colleagues. Everybody can access various work-related documents, add to them, modify them, etc. That could serve as a knowledge base for a project.
 
-* Another possible use, which has been requested many times, is to support multiple profiles. You could create a main profile that have access to all notes, and in there create a Work and Personal notebook. Then you would create a separate account for work. You can then share your Work notebook with that other account. That way the work account will only have access to the Work notebooks. You can use this technique in various ways to split your notebooks between multiple accounts and ensure strict separation between datasets.
+* Another possible use, which has been requested many times, is to support multiple profiles. You could create a main profile that has access to all notes, and in there create a Work and Personal notebook. Then you would create a separate account for work. You can then share your Work notebook with that other account. That way the work account will only have access to the Work notebooks. You can use this technique in various ways to split your notebooks between multiple accounts and ensure strict separation between datasets.

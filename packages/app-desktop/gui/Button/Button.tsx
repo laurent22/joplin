@@ -1,9 +1,50 @@
 import * as React from 'react';
-const styled = require('styled-components').default;
+import styled from 'styled-components';
 const { space } = require('styled-system');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-type StyleProps = any;
+type SpaceValue = number | string;
+// The props for styled-system's space
+interface SpaceProps {
+	m?: SpaceValue;
+	mt?: SpaceValue;
+	mr?: SpaceValue;
+	mb?: SpaceValue;
+	ml?: SpaceValue;
+	mx?: SpaceValue;
+	my?: SpaceValue;
+	p?: SpaceValue;
+	pt?: SpaceValue;
+	pr?: SpaceValue;
+	pb?: SpaceValue;
+	pl?: SpaceValue;
+	px?: SpaceValue;
+	py?: SpaceValue;
+}
+
+interface StyleProps {
+	theme: {
+		toolbarIconSize: number;
+		backgroundColor3: string;
+		backgroundColor4: string;
+		backgroundColor5: string;
+		backgroundColorActive3: string;
+		backgroundColorActive4: string;
+		backgroundColorActive5: string;
+		backgroundColorHover4: string;
+		backgroundColorHover5: string;
+		backgroundColorHoverDim3: string;
+		borderColor4: string;
+		color: string;
+		color2: string;
+		color3: string;
+		color4: string;
+		color5: string;
+		colorActive2: string;
+		colorHover2: string;
+		warningBackgroundColor: string;
+	};
+	animation?: string;
+}
 
 export enum ButtonLevel {
 	Primary = 'primary',
@@ -18,8 +59,8 @@ export enum ButtonSize {
 	Normal = 2,
 }
 
-type ReactButtonProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
-interface Props extends Omit<ReactButtonProps, 'onClick'> {
+type ReactButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+interface Props extends Omit<ReactButtonProps, 'onClick'>, SpaceProps {
 	title?: string;
 	iconName?: string;
 	level?: ButtonLevel;
@@ -72,16 +113,17 @@ const StyledButtonBase = styled.button`
 	${(props: Props) => props.fontSize ? `font-size: ${props.fontSize}px;` : ''}
 `;
 
-const StyledIcon = styled(styled.span(space))`
-	font-size: ${(props: StyleProps) => props.theme.toolbarIconSize}px;
-	${(props: StyleProps) => props.animation ? `animation: ${props.animation}` : ''};
+const StyledIcon = styled.span<SpaceProps & StyleProps>`
+	${space}
+	font-size: ${(props) => props.theme.toolbarIconSize}px;
+	${(props) => props.animation ? `animation: ${props.animation}` : ''};
 `;
 
 const StyledButtonPrimary = styled(StyledButtonBase)`
 	border: none;
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor5};
 
-	${(props: StyleProps) => props.disabled} {
+	&:not(:disabled) {
 		&:hover {
 			background-color: ${(props: StyleProps) => props.theme.backgroundColorHover5};
 		}
@@ -104,7 +146,7 @@ const StyledButtonSecondary = styled(StyledButtonBase)`
 	border: 1px solid ${(props: StyleProps) => props.theme.borderColor4};
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor4};
 
-	${(props: StyleProps) => props.disabled} {
+	&:not(:disabled) {
 		&:hover {
 			background-color: ${(props: StyleProps) => props.theme.backgroundColorHover4};
 		}
@@ -211,8 +253,7 @@ function buttonClass(level: ButtonLevel) {
 
 const Button = React.forwardRef(({
 	iconName, iconLabel, iconAnimation, color, title, level, fontSize, isSquare, tooltip, disabled, onClick: propsOnClick, ...unusedProps
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-}: Props, ref: any) => {
+}: Props, ref: React.Ref<HTMLButtonElement>) => {
 	const iconOnly = iconName && !title;
 
 	const StyledButton = buttonClass(level);

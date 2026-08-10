@@ -32,6 +32,8 @@ const defaultEnvValues: EnvVariables = {
 	IS_ADMIN_INSTANCE: true,
 	INSTANCE_NAME: '',
 
+	DEFAULT_ADMIN_PASSWORD: 'admin',
+
 	// Maximum allowed drift between NTP time and server time. A few
 	// milliseconds is normally not an issue unless many clients are modifying
 	// the same note at the exact same time. But past a certain limit, it might
@@ -41,8 +43,6 @@ const defaultEnvValues: EnvVariables = {
 
 	MAX_TIME_DRIFT: 2000,
 	NTP_SERVER: 'pool.ntp.org:123',
-
-	DELTA_INCLUDES_ITEMS: true,
 
 	// Whether or not to allow users logging in with a username/password combo.
 	// If this is disabled, a SAML-based login flow must be configured.
@@ -56,6 +56,8 @@ const defaultEnvValues: EnvVariables = {
 	USER_CONTENT_BASE_URL: '',
 	API_BASE_URL: '',
 	JOPLINAPP_BASE_URL: 'https://joplinapp.org',
+	TERMS_URL: '',
+	PRIVACY_URL: '',
 
 	// ==================================================
 	// Database config
@@ -131,6 +133,13 @@ const defaultEnvValues: EnvVariables = {
 	USER_DATA_AUTO_DELETE_AFTER_DAYS: 90,
 
 	// ==================================================
+	// ==================================================
+	// MFA - 32+ bytes hex string
+	// ==================================================
+	MFA_ENCRYPTION_KEY: '',
+	MFA_ENABLED: 0,
+
+	// ==================================================
 	// Events deletion
 	// ==================================================
 
@@ -197,7 +206,6 @@ export interface EnvVariables {
 
 	MAX_TIME_DRIFT: number;
 	NTP_SERVER: string;
-	DELTA_INCLUDES_ITEMS: boolean;
 	IS_ADMIN_INSTANCE: boolean;
 	INSTANCE_NAME: string;
 
@@ -205,6 +213,10 @@ export interface EnvVariables {
 	USER_CONTENT_BASE_URL: string;
 	API_BASE_URL: string;
 	JOPLINAPP_BASE_URL: string;
+	TERMS_URL: string;
+	PRIVACY_URL: string;
+
+	DEFAULT_ADMIN_PASSWORD: string;
 
 	DB_CLIENT: string;
 	DB_SLOW_QUERY_LOG_ENABLED: boolean;
@@ -253,6 +265,9 @@ export interface EnvVariables {
 	USER_DATA_AUTO_DELETE_ENABLED: boolean;
 	USER_DATA_AUTO_DELETE_AFTER_DAYS: number;
 
+	MFA_ENCRYPTION_KEY: string;
+	MFA_ENABLED: number;
+
 	EVENTS_AUTO_DELETE_ENABLED: boolean;
 	EVENTS_AUTO_DELETE_AFTER_DAYS: number;
 
@@ -294,12 +309,12 @@ const parseBoolean = (s: string): boolean => {
 	throw new Error(`Invalid boolean value: "${s}" (Must be one of "true", "false", "0, "1")`);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function parseEnv(rawEnv: Record<string, string>, defaultOverrides: any = null): EnvVariables {
+export function parseEnv(rawEnv: Record<string, string>, defaultOverrides: Partial<EnvVariables> = null): EnvVariables {
 	const output: EnvVariables = {
 		...defaultEnvValues,
 		...defaultOverrides,
 	};
+	const outputAsRecord = output as unknown as Record<string, unknown>;
 
 	for (const [key, value] of Object.entries(defaultEnvValues)) {
 		const rawEnvValue = rawEnv[key];
@@ -310,14 +325,11 @@ export function parseEnv(rawEnv: Record<string, string>, defaultOverrides: any =
 			if (typeof value === 'number') {
 				const v = Number(rawEnvValue);
 				if (isNaN(v)) throw new Error(`Invalid number value "${rawEnvValue}"`);
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(output as any)[key] = v;
+				outputAsRecord[key] = v;
 			} else if (typeof value === 'boolean') {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(output as any)[key] = parseBoolean(rawEnvValue);
+				outputAsRecord[key] = parseBoolean(rawEnvValue);
 			} else if (typeof value === 'string') {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(output as any)[key] = `${rawEnvValue}`;
+				outputAsRecord[key] = `${rawEnvValue}`;
 			} else {
 				throw new Error(`Invalid env default value type: ${typeof value}`);
 			}

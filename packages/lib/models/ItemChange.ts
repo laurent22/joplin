@@ -2,7 +2,7 @@ import BaseModel, { ModelType } from '../BaseModel';
 import shim from '../shim';
 import eventManager, { EventName } from '../eventManager';
 import { ItemChangeEntity, SqlQuery } from '../services/database/types';
-const Mutex = require('async-mutex').Mutex;
+import { Mutex } from 'async-mutex';
 
 export interface ChangeSinceIdOptions {
 	limit?: number;
@@ -24,10 +24,8 @@ interface AddMultiOptions extends BaseAddOptions {
 
 export default class ItemChange extends BaseModel {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static addChangeMutex_: any = new Mutex();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static saveCalls_: any[] = [];
+	private static addChangeMutex_: Mutex = new Mutex();
+	private static saveCalls_: boolean[] = [];
 
 	public static TYPE_CREATE = 1;
 	public static TYPE_UPDATE = 2;
@@ -150,22 +148,28 @@ export default class ItemChange extends BaseModel {
 		`, [changeId, options.limit]);
 	}
 
-	public static async oldNoteContent(noteId: string): Promise<string> {
-		const row = await this.db().selectOne(`
-			SELECT before_change_item
+	public static async itemChange(itemType: ModelType, itemId: string): Promise<ItemChangeEntity> {
+		return await this.db().selectOne(`
+			SELECT item_type, item_id, type, source, created_time, before_change_item
 			FROM item_changes
 			WHERE item_type = ? AND item_id = ?
 			ORDER BY created_time DESC
 			LIMIT 1
-		`, [ModelType.Note, noteId]);
-		return row && row.before_change_item ? row.before_change_item : null;
+		`, [itemType, itemId]);
 	}
 
-	public static async updateOldNoteContent(noteId: string, beforeChangeItemJson: string) {
-		const beforeChangeItem = beforeChangeItemJson ? beforeChangeItemJson : '';
-		return this.db().exec(`
-			UPDATE item_changes SET before_change_item = ? WHERE item_type = ? AND item_id = ?
-		`, [beforeChangeItem, ModelType.Note, noteId]);
+	public static async oldNoteContent(noteId: string): Promise<string> {
+		const itemChange = await this.itemChange(ModelType.Note, noteId);
+		return itemChange && itemChange.before_change_item ? itemChange.before_change_item : null;
+	}
+
+	public static async resetOldNoteContent(noteId: string) {
+		const itemChange = await this.itemChange(ModelType.Note, noteId);
+
+		// Only create a new item change if there is an existing item change and it has the before_change_item populated on it
+		if (itemChange && itemChange.before_change_item) {
+			await this.add(itemChange.item_type, itemChange.item_id, itemChange.type);
+		}
 	}
 
 }

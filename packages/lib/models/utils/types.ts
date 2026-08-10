@@ -1,4 +1,5 @@
 import { SqlQuery } from '../../services/database/types';
+import type { DecryptedNoteLockKey } from '../../services/noteLock/NoteLockKey';
 
 export enum PaginationOrderDir {
 	ASC = 'ASC',
@@ -22,8 +23,7 @@ export interface LoadOptions {
 	caseInsensitive?: boolean;
 	fields?: string | string[];
 	where?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	whereParams?: any[];
+	whereParams?: (string | number | boolean)[];
 	order?: {
 		by: string;
 		dir: string;
@@ -32,6 +32,7 @@ export interface LoadOptions {
 	limit?: number;
 	includeConflicts?: boolean;
 	includeDeleted?: boolean;
+	useNoteLock?: boolean;
 }
 
 export interface FolderLoadOptions extends LoadOptions {
@@ -41,8 +42,8 @@ export interface FolderLoadOptions extends LoadOptions {
 
 export interface SaveOptions {
 	isNew?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	oldItem?: any;
+	oldItem?: Record<string, unknown>;
+	fields?: string[];
 	userSideValidation?: boolean;
 	nextQueries?: SqlQuery[];
 	autoTimestamp?: boolean;
@@ -51,6 +52,10 @@ export interface SaveOptions {
 	dispatchUpdateAction?: boolean;
 	dispatchOptions?: { preserveSelection: boolean };
 	disableReadOnlyCheck?: boolean;
+	useNoteLock?: boolean;
+	// Encrypt with this key captured when the note was decrypted, instead of the live session key.
+	// Lets a pending editor save complete after the session locks; a real key rotation still aborts it.
+	noteLockKey?: DecryptedNoteLockKey;
 
 	changeSource?: number;
 

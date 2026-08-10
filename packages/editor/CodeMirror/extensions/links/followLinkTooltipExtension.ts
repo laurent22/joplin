@@ -20,6 +20,9 @@ const getLinkTooltips = (onOpenLink: OnOpenLink, state: EditorState) => {
 		return {
 			pos: range.head,
 			arrow: true,
+			// Below the cursor Android often shows selection handles that
+			// overlap the tooltip.
+			above: true,
 			create: (view) => {
 				const dom = document.createElement('div');
 				dom.classList.add('cm-md-link-tooltip');
@@ -73,7 +76,6 @@ const followLinkTooltip = (onOpenExternalLink: OnOpenLink) => {
 				textOverflow: 'ellipsis',
 				overflowX: 'hidden',
 
-				textDecoration: 'underline',
 				cursor: 'pointer',
 				color: 'var(--joplin-url-color)',
 			},

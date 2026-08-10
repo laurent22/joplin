@@ -108,6 +108,12 @@ export default class OcrDriverTesseract extends OcrDriverBase {
 
 		const createWorkerOptions: Partial<WorkerOptions> = {
 			workerBlobURL: false,
+
+			// Sometimes Tesseract stops working (especially in dev mode?) as the worker is stuck
+			// loading the language file. In that case, setting the cacheMode to "none" fixes the
+			// issue.
+
+			// cacheMethod: 'none',
 		};
 
 		if (this.workerPath_) createWorkerOptions.workerPath = this.workerPath_;

@@ -47,8 +47,11 @@ export const runtime = (): CommandRuntime => {
 
 					newNote.body = markdownBody;
 					newNote.markup_language = MarkupLanguage.Markdown;
+					newNote.user_created_time = note.user_created_time;
+					newNote.user_updated_time = note.user_updated_time;
+					newNote.updated_time = Date.now();
 
-					await Note.save(newNote);
+					await Note.save(newNote, { autoTimestamp: false });
 					await Note.delete(note.id, { toTrash: true });
 					processedCount ++;
 

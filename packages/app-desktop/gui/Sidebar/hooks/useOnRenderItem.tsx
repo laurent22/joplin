@@ -18,7 +18,7 @@ import { FolderEntity } from '@joplin/lib/services/database/types';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import InteropServiceHelper from '../../../InteropServiceHelper';
 import Setting from '@joplin/lib/models/Setting';
-import PerFolderSortOrderService from '../../../services/sortOrder/PerFolderSortOrderService';
+import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
@@ -31,6 +31,7 @@ import ListItemWrapper, { ItemSelectionState } from '../listItemComponents/ListI
 import { focus } from '@joplin/lib/utils/focusHandler';
 import shim from '@joplin/lib/shim';
 import useOnItemClick from './useOnItemClick';
+import { ShareType, StateShare } from '@joplin/lib/services/share/reducer';
 
 const Menu = bridge().Menu;
 const MenuItem: typeof MenuItemType = bridge().MenuItem;
@@ -41,6 +42,7 @@ interface Props {
 	dispatch: Dispatch;
 	themeId: number;
 	plugins: PluginStates;
+	shares: StateShare[];
 	folders: FolderEntity[];
 	collapsedFolderIds: string[];
 	containerRef: React.RefObject<HTMLDivElement>;
@@ -54,12 +56,42 @@ type ItemContextMenuListener = MouseEventHandler<HTMLElement>;
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
+// Checks whether an element is at least partially visible within a scrollable
+// container by comparing their bounding rectangles.
+const isElementVisibleInContainer = (element: HTMLElement, container: HTMLElement) => {
+	const elementRect = element.getBoundingClientRect();
+	const containerRect = container.getBoundingClientRect();
+
+	return elementRect.bottom > containerRect.top && elementRect.top < containerRect.bottom;
+};
+
 const focusListItem = (item: HTMLElement|null) => {
 	if (item) {
-		// Avoid scrolling to the selected item when refocusing the note list. Such a refocus
-		// can happen if the note list rerenders and the selection is scrolled out of view and
-		// can cause scroll to change unexpectedly.
-		focus('useOnRenderItem', item, { preventScroll: true });
+		const activeElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+		const itemList = item.closest('.item-list');
+		const activeTreeItem = activeElement?.closest('[role="treeitem"]');
+		const focusWasLost = activeElement === document.body;
+
+		// If the currently focused element is a tree item inside the same list,
+		// the user is navigating with the keyboard — always allow focus to move
+		// to the newly selected item so arrow-key scrolling is not interrupted.
+		const isKeyboardNavigating = !!activeTreeItem && itemList?.contains(activeTreeItem);
+
+		// Avoid disturbing scroll while user is manually scrolling through the list.
+		// However, if focus was lost (activeElement -> <body>), or the user is
+		// navigating with the keyboard, allow re-focusing even when the selected
+		// item is currently out of view.
+		if (itemList instanceof HTMLElement && !isElementVisibleInContainer(item, itemList) && !focusWasLost && !isKeyboardNavigating) {
+			return;
+		}
+
+		// Move focus only if needed: either focus was lost, or selection changed
+		// to a different tree item.
+		if (focusWasLost || activeTreeItem !== item) {
+			// preventScroll: true avoids a secondary scroll caused by the focus() call
+			// itself when the item is near the edge of the visible area.
+			focus('useOnRenderItem', item, { preventScroll: true });
+		}
 	}
 };
 
@@ -225,6 +257,8 @@ const useOnRenderItem = (props: Props) => {
 				if (shareFolderItem.enabled) menu.append(shareFolderItem);
 				const leaveSharedFolderItem = folderCommandToMenuItem('leaveSharedFolder', itemId);
 				if (leaveSharedFolderItem.enabled) menu.append(leaveSharedFolderItem);
+				const publishFolderItem = folderCommandToMenuItem('showPublishFolderDialog', itemId);
+				if (publishFolderItem.enabled) menu.append(publishFolderItem);
 
 				menu.append(
 					new MenuItem({
@@ -352,6 +386,20 @@ const useOnRenderItem = (props: Props) => {
 	const showFolderIcons = useMemo(() => {
 		return Folder.shouldShowFolderIcons(props.folders);
 	}, [props.folders]);
+	const publishedFolderIds = useMemo(() => {
+		const output = new Set(props.shares.filter(share => share.type === ShareType.PublishedFolder).map(share => share.folder_id));
+		for (const folder of props.folders) {
+			if (folder.is_shared && !folder.share_id) output.add(folder.id);
+		}
+		let size = 0;
+		while (size !== output.size) {
+			size = output.size;
+			for (const folder of props.folders) {
+				if (output.has(folder.parent_id)) output.add(folder.id);
+			}
+		}
+		return output;
+	}, [props.folders, props.shares]);
 
 	const itemCount = props.listItems.length;
 	return useCallback((item: ListItem, index: number) => {
@@ -363,7 +411,12 @@ const useOnRenderItem = (props: Props) => {
 			multipleItemsSelected: props.selectedIndexes.length > 1,
 		};
 
-		const focusInList = document.hasFocus() && props.containerRef.current?.contains(document.activeElement);
+		const sidebarContainsFocus = props.containerRef.current?.contains(document.activeElement);
+		// Focus moves to <body> when the previously-focused element is removed
+		// from the DOM (e.g. scrolled out of the virtualized list). We still
+		// want to restore focus to the newly-selected item in that case.
+		const focusLostFromDom = document.activeElement === document.body;
+		const focusInList = document.hasFocus() && (sidebarContainsFocus || focusLostFromDom);
 		const anchorRef = (focusInList && primarySelected) ? focusListItem : noFocusListItem;
 
 		if (item.kind === ListItemType.Tag) {
@@ -383,8 +436,7 @@ const useOnRenderItem = (props: Props) => {
 		} else if (item.kind === ListItemType.Folder) {
 			const folder = item.folder;
 			const isExpanded = props.collapsedFolderIds.indexOf(folder.id) < 0;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			let noteCount = (folder as any).note_count;
+			let noteCount = (folder as FolderEntity & { note_count?: number }).note_count;
 
 			// For now hide the count for folders in the trash because it doesn't work and getting it to
 			// work would be tricky.
@@ -394,8 +446,7 @@ const useOnRenderItem = (props: Props) => {
 			if (isExpanded) {
 				for (let i = 0; i < props.folders.length; i++) {
 					if (props.folders[i].parent_id === folder.id) {
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						noteCount -= (props.folders[i] as any).note_count;
+						noteCount -= (props.folders[i] as FolderEntity & { note_count?: number }).note_count;
 					}
 				}
 			}
@@ -417,6 +468,7 @@ const useOnRenderItem = (props: Props) => {
 				folderItem_click={onItemClick}
 				onFolderToggleClick_={onFolderToggleClick_}
 				shareId={folder.share_id}
+				isPublished={publishedFolderIds.has(folder.id)}
 				parentId={folder.parent_id}
 				showFolderIcon={showFolderIcons}
 				index={index}
@@ -470,6 +522,7 @@ const useOnRenderItem = (props: Props) => {
 		onTagDrop_,
 		props.collapsedFolderIds,
 		props.folders,
+		publishedFolderIds,
 		showFolderIcons,
 		props.selectedIndex,
 		props.selectedIndexes,

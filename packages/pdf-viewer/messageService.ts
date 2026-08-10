@@ -3,8 +3,7 @@ export default class MessageService {
 	public constructor(type: string) {
 		this.viewerType = type;
 	}
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private sendMessage = (name: string, data?: any) => {
+	private sendMessage = (name: string, data?: Record<string, unknown>) => {
 		if (this.viewerType === 'full') {
 			const message = {
 				name,

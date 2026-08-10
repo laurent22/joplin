@@ -7,8 +7,7 @@ import { createNewProfile, saveProfileConfig } from '../services/profileConfig';
 import initProfile from '../services/profileConfig/initProfile';
 import { defaultPluginSetting } from '../services/plugins/PluginService';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function loadSettingsFromFile(): Promise<any> {
+async function loadSettingsFromFile(): Promise<Record<string, unknown>> {
 	return JSON.parse(await readFile(Setting.settingFilePath, 'utf8'));
 }
 
@@ -207,6 +206,7 @@ describe('models/Setting', () => {
 
 		expect(Setting.sectionNameToLabel('mySection')).toBe('My section');
 	}));
+
 
 	it('should save and load settings from file', (async () => {
 		Setting.setValue('sync.target', 9); // Saved to file
@@ -579,5 +579,21 @@ describe('models/Setting', () => {
 		Setting.setValue('editor.imageRendering', true);
 		expect(Setting.value('editor.imageRendering')).toBe(true);
 		expect(Setting.value(testSettingId)).toBe(false);
+	});
+
+	test('should limit listed sync targets on app.joplincloud.com', async () => {
+		try {
+			Setting.setConstant('isJoplinCloudWebApp', true);
+			expect(Setting.enumOptionValues('sync.target')).toEqual(['0', '10']);
+
+			// Should list other sync targets on other apps
+			Setting.setConstant('isJoplinCloudWebApp', false);
+			const fullSyncOptions = Setting.enumOptionValues('sync.target');
+			expect(fullSyncOptions).toContain('0');
+			expect(fullSyncOptions).toContain('5');
+			expect(fullSyncOptions).toContain('10');
+		} finally {
+			Setting.setConstant('isJoplinCloudWebApp', false);
+		}
 	});
 });

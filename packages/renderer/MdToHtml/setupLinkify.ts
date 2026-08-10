@@ -1,10 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default function(markdownIt: any) {
+import type MarkdownIt from 'markdown-it';
+import type LinkifyIt = require('linkify-it');
+
+export default function(markdownIt: MarkdownIt) {
 	// Add `file:` protocol in linkify to allow text in the format of "file://..." to translate into
 	// file-URL links in html view
 	markdownIt.linkify.add('file:', {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		validate: function(text: string, pos: number, self: any) {
+		validate: function(text: string, pos: number, self: LinkifyIt.LinkifyIt) {
 			const tail = text.slice(pos);
 			if (!self.re.file) {
 				// matches all local file URI on Win/Unix/MacOS systems including reserved characters in some OS (i.e. no OS specific sanity check)

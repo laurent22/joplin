@@ -7,6 +7,8 @@ import setFilePickerResponse from '../util/setFilePickerResponse';
 import NoteList from './NoteList';
 import { expect } from '../util/test';
 import ChangeAppLayoutScreen from './ChangeAppLayoutScreen';
+import waitForNextWindowMatching from '../util/waitForNextWindowMatching';
+import ChatPanel from './ChatPanel';
 
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
@@ -16,6 +18,7 @@ export default class MainScreen {
 	public readonly noteEditor: NoteEditorScreen;
 	public readonly goToAnything: GoToAnything;
 	public readonly changeLayoutScreen: ChangeAppLayoutScreen;
+	public readonly chatPanel: ChatPanel;
 
 	public constructor(private page: Page) {
 		this.newNoteButton = page.locator('.new-note-button');
@@ -25,22 +28,25 @@ export default class MainScreen {
 		this.noteEditor = new NoteEditorScreen(page);
 		this.goToAnything = new GoToAnything(page, this);
 		this.changeLayoutScreen = new ChangeAppLayoutScreen(page, this);
+		this.chatPanel = new ChatPanel(page, this);
 	}
 
 	public async setup() {
 		await this.waitFor();
-		await this.sidebar.createNewFolder('Test');
+		const folder = await this.sidebar.createNewFolder('Test');
+		await folder.waitFor();
 		return this;
 	}
 
 	public async waitFor() {
-		await this.newNoteButton.waitFor();
 		await this.noteList.waitFor();
 	}
 
 	// Follows the steps a user would use to create a new note.
 	public async createNewNote(title: string) {
 		await this.waitFor();
+		// The new note button is only visible when a folder is selected -- wait for it explicitly.
+		await this.newNoteButton.waitFor();
 
 		// Create the new note. Retry this -- creating new notes can sometimes fail if done just after
 		// application startup.
@@ -61,6 +67,13 @@ export default class MainScreen {
 	public async openSettings(electronApp: ElectronApplication) {
 		// Check both labels so this works on MacOS
 		await activateMainMenuItem(electronApp, /^(Preferences\.\.\.|Options)$/);
+	}
+
+	public async openNewWindow(electronApp: ElectronApplication) {
+		const pagePromise = waitForNextWindowMatching(/^Joplin -/, electronApp);
+
+		await activateMainMenuItem(electronApp, 'Open in new window');
+		return pagePromise;
 	}
 
 	public async search(text: string) {

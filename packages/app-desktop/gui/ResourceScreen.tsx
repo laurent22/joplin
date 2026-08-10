@@ -1,13 +1,15 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 
-const { connect } = require('react-redux');
-const { themeStyle } = require('@joplin/lib/theme');
+import { connect } from 'react-redux';
+import { themeStyle } from '@joplin/lib/theme';
 import bridge from '../services/bridge';
-const prettyBytes = require('pretty-bytes');
+import prettyBytes = require('pretty-bytes');
 import Resource from '@joplin/lib/models/Resource';
 import { LoadOptions } from '@joplin/lib/models/utils/types';
+import { AppState } from '../app.reducer';
 
 interface Style {
 	width: number;
@@ -17,8 +19,7 @@ interface Style {
 interface Props {
 	themeId: number;
 	style: Style;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 }
 
 interface InnerResource {
@@ -38,12 +39,9 @@ interface State {
 interface ResourceTable {
 	resources: InnerResource[];
 	sorting: ActiveSorting;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	onResourceClick: (resource: InnerResource)=> any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	onResourceDelete: (resource: InnerResource)=> any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	onToggleSorting: (order: SortingOrder)=> any;
+	onResourceClick: (resource: InnerResource)=> void;
+	onResourceDelete: (resource: InnerResource)=> void;
+	onToggleSorting: (order: SortingOrder)=> void;
 	filter: string;
 	themeId: number;
 	style: Style;
@@ -60,7 +58,7 @@ interface ActiveSorting {
 const ResourceTableComp = (props: ResourceTable) => {
 	const theme = themeStyle(props.themeId);
 
-	const titleCellStyle = {
+	const titleCellStyle: React.CSSProperties = {
 		...theme.textStyle,
 		textOverflow: 'ellipsis',
 		overflowX: 'hidden',
@@ -69,14 +67,14 @@ const ResourceTableComp = (props: ResourceTable) => {
 		whiteSpace: 'nowrap',
 	};
 
-	const cellStyle = {
+	const cellStyle: React.CSSProperties = {
 		...theme.textStyle,
 		whiteSpace: 'nowrap',
 		color: theme.colorFaded,
 		width: 1,
 	};
 
-	const headerStyle = {
+	const headerStyle: React.CSSProperties = {
 		...theme.textStyle,
 		whiteSpace: 'nowrap',
 		width: 1,
@@ -282,8 +280,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const rootStyle: any = {
+		const rootStyle: React.CSSProperties & { height?: number; width?: number } = {
 			...style,
 			overflowY: 'scroll',
 			color: theme.color,
@@ -342,8 +339,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: AppState) => ({
 	themeId: state.settings.theme,
 });
 

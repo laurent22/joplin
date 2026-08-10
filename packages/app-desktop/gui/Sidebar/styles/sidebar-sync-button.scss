@@ -5,6 +5,25 @@
 	}
 }
 
+@keyframes icon-fade-in-a {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+@keyframes icon-fade-in-b {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+.sidebar-sync-button > .icon {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	width: 16px !important;
+	height: 16px;
+	margin-right: 8px !important;
+}
+
 .sidebar-sync-button {
 	&.-syncing > .icon {
 		animation: icon-infinite-rotation 1s linear infinite;
@@ -12,5 +31,30 @@
 		@media (prefers-reduced-motion: reduce) {
 			animation: none;
 		}
+	}
+
+	&:not(.-syncing).-synced > .icon {
+		animation: icon-fade-in-a 300ms ease-in-out;
+		font-size: 0.85em;
+	}
+
+	&:not(.-syncing):not(.-synced) > .icon {
+		animation: icon-fade-in-b 300ms ease-in-out;
+	}
+}
+
+.sync-report-toggle {
+	display: block;
+	width: 100%;
+	background: none;
+	border: none;
+	padding: 0;
+	text-align: center;
+	cursor: pointer;
+	opacity: 0.5;
+	margin-bottom: 4px;
+
+	&:hover {
+		opacity: 1;
 	}
 }

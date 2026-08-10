@@ -77,8 +77,8 @@ impl Parse for OneStoreFile {
         let mut free_chunk_list = Vec::new();
         let mut free_chunk_ref = header.fcr_free_chunk_list.clone();
         while !free_chunk_ref.is_fcr_nil() && !free_chunk_ref.is_fcr_zero() {
-            let mut reader = free_chunk_ref.resolve_to_reader(reader)?;
-            let fragment = FreeChunkListFragment::parse(&mut reader, free_chunk_ref.cb.into())?;
+            free_chunk_ref.seek_reader_to(reader)?;
+            let fragment = FreeChunkListFragment::parse(reader, free_chunk_ref.cb.into())?;
             free_chunk_ref = fragment.fcr_next_chunk.clone();
             free_chunk_list.push(fragment);
         }
@@ -86,10 +86,9 @@ impl Parse for OneStoreFile {
         let mut transaction_log = Vec::new();
         let mut transaction_log_ref = header.fcr_transaction_log.clone();
         loop {
-            let mut reader = transaction_log_ref.resolve_to_reader(reader)?;
+            transaction_log_ref.seek_reader_to(reader)?;
 
-            let fragment =
-                TransactionLogFragment::parse(&mut reader, transaction_log_ref.cb as usize)?;
+            let fragment = TransactionLogFragment::parse(reader, transaction_log_ref.cb as usize)?;
             transaction_log_ref = fragment.next_fragment.clone();
             transaction_log.push(fragment);
 
@@ -104,9 +103,9 @@ impl Parse for OneStoreFile {
         let mut hashed_chunk_list = Vec::new();
         let mut hash_chunk_ref = header.fcr_hashed_chunk_list.clone();
         while !hash_chunk_ref.is_fcr_nil() && !hash_chunk_ref.is_fcr_zero() {
-            let mut reader = hash_chunk_ref.resolve_to_reader(reader)?;
+            hash_chunk_ref.seek_reader_to(reader)?;
             let fragment = FileNodeListFragment::parse(
-                &mut reader,
+                reader,
                 &mut parse_context,
                 hash_chunk_ref.cb as usize,
             )?;
@@ -117,12 +116,8 @@ impl Parse for OneStoreFile {
         let file_node_list_root = &header.fcr_file_node_list_root;
         let raw_file_node_list =
             if !file_node_list_root.is_fcr_nil() && !file_node_list_root.is_fcr_zero() {
-                let mut reader = file_node_list_root.resolve_to_reader(reader)?;
-                FileNodeList::parse(
-                    &mut reader,
-                    &mut parse_context,
-                    file_node_list_root.cb as usize,
-                )?
+                file_node_list_root.seek_reader_to(reader)?;
+                FileNodeList::parse(reader, &mut parse_context, file_node_list_root.cb as usize)?
             } else {
                 FileNodeList::default()
             };

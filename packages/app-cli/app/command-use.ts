@@ -1,7 +1,7 @@
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
-import BaseModel from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
 
 class Command extends BaseCommand {
@@ -17,9 +17,8 @@ class Command extends BaseCommand {
 		return ['cli'];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
-		const folder = await app().loadItem(BaseModel.TYPE_FOLDER, args['notebook']);
+	public override async action(args: { 'notebook': string }) {
+		const folder = await app().loadItem(ModelType.Folder, args['notebook']);
 		if (!folder) throw new Error(_('Cannot find "%s".', args['notebook']));
 
 		// Auto-expand parent folders in GUI if present

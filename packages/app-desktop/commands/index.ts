@@ -1,6 +1,7 @@
 // AUTO-GENERATED using `gulp buildScriptIndexes`
 import * as copyDevCommand from './copyDevCommand';
 import * as copyToClipboard from './copyToClipboard';
+import * as createAccessibleDocument from './createAccessibleDocument';
 import * as editProfileConfig from './editProfileConfig';
 import * as emptyTrash from './emptyTrash';
 import * as exportDeletionLog from './exportDeletionLog';
@@ -27,6 +28,7 @@ import * as toggleTabMovesFocus from './toggleTabMovesFocus';
 const index: any[] = [
 	copyDevCommand,
 	copyToClipboard,
+	createAccessibleDocument,
 	editProfileConfig,
 	emptyTrash,
 	exportDeletionLog,

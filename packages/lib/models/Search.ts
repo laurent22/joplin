@@ -11,12 +11,9 @@ export default class Search extends BaseModel {
 		return BaseModel.TYPE_SEARCH;
 	}
 
-	public static keywords(query: string) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let output: any = query.trim();
-		output = output.split(/[\s\t\n]+/);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		output = output.filter((o: any) => !!o);
-		return output;
+	public static keywords(query: string): string[] {
+		const trimmed = query.trim();
+		const output = trimmed.split(/[\s\t\n]+/);
+		return output.filter((o: string) => !!o);
 	}
 }

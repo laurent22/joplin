@@ -9,6 +9,7 @@ import { BaseItemEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import showResource from './util/showResource';
 import { isCallbackUrl, parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
+import goToFolder from './util/goToFolder';
 
 const logger = Logger.create('openItemCommand');
 
@@ -20,10 +21,16 @@ const openItemById = async (itemId: string, hash?: string) => {
 	logger.info(`Navigating to item ${itemId}`);
 	const item: BaseItemEntity = await BaseItem.loadItemById(itemId);
 
+	if (!item) {
+		throw new Error(`Item not found: ${itemId}`);
+	}
+
 	if (item.type_ === ModelType.Note) {
 		await goToNote(itemId, hash);
 	} else if (item.type_ === ModelType.Resource) {
 		await showResource(item);
+	} else if (item.type_ === ModelType.Folder) {
+		await goToFolder(item.id);
 	} else {
 		throw new Error(`Unsupported item type for links: ${item.type_}`);
 	}

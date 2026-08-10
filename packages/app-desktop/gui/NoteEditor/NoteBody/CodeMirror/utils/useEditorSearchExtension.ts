@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import CodeMirror5Emulation from '@joplin/editor/CodeMirror/CodeMirror5Emulation/CodeMirror5Emulation';
+import { HighlightedWord } from '@joplin/lib/reducer';
 
 const logger = Logger.create('useEditorSearch');
 
@@ -14,14 +15,13 @@ interface SetMarkersOptions {
 	showEditorMarkers?: boolean;
 	withSelection?: boolean;
 }
-type Keyword = { value: string };
 
-export type OnSetMarkers = (cm: CodeMirror5Emulation, keywords: Keyword[], options: SetMarkersOptions)=> number;
+export type OnSetMarkers = (cm: CodeMirror5Emulation, keywords: HighlightedWord[], options: SetMarkersOptions)=> number;
 
 
 // Modified from codemirror/addons/search/search.js
 const searchOverlay = (query: RegExp) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 StringStream; no @types/codemirror available so the overlay token signature must stay loose
 	return { token: function(stream: any) {
 		query.lastIndex = stream.pos;
 		const match = query.exec(stream.string);
@@ -81,12 +81,10 @@ export default function useEditorSearchExtension() {
 	// Highlights the currently active found work
 	// It's possible to get tricky with this functions and just use findNext/findPrev
 	// but this is fast enough and works more naturally with the current search logic
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	function highlightSearch(cm: CodeMirror5Emulation, searchTerm: RegExp, index: number, scrollTo: boolean, withSelection: boolean) {
 		const cursor = cm.getSearchCursor(searchTerm);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let match: any = null;
+		let match: { from: { line: number; ch: number }; to: { line: number; ch: number } } | null = null;
 		for (let j = 0; j < index + 1; j++) {
 			if (!cursor.findNext()) {
 				// If we run out of matches then just highlight the final match
@@ -111,12 +109,11 @@ export default function useEditorSearchExtension() {
 
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Escaping
 	function escapeRegExp(keyword: string) {
-		return keyword.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+		return keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	function getSearchTerm(keyword: any) {
-		const value = escapeRegExp(keyword.value);
+	function getSearchTerm(keyword: HighlightedWord) {
+		const value = escapeRegExp(typeof keyword === 'string' ? keyword : keyword.value);
 		return new RegExp(value, 'gi');
 	}
 
@@ -142,20 +139,21 @@ export default function useEditorSearchExtension() {
 
 		clearMarkers();
 
+		const keywordValue = (keyword: HighlightedWord) => typeof keyword === 'string' ? keyword : keyword.value;
+
 		// HIGHLIGHT KEYWORDS
 		// When doing a global search it's possible to have multiple keywords
 		// This means we need to highlight each one
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const marks: any = [];
+		const marks: ReturnType<typeof highlightSearch>[] = [];
 		for (let i = 0; i < keywords.length; i++) {
 			const keyword = keywords[i];
 
-			if (keyword.value === '') continue;
+			if (keywordValue(keyword) === '') continue;
 
 			const searchTerm = getSearchTerm(keyword);
 
 			// We only want to scroll the first keyword into view in the case of a multi keyword search
-			const scrollTo = i === 0 && (previousKeywordValue !== keyword.value || previousIndex !== options.selectedIndex || options.searchTimestamp !== previousSearchTimestamp);
+			const scrollTo = i === 0 && (previousKeywordValue !== keywordValue(keyword) || previousIndex !== options.selectedIndex || options.searchTimestamp !== previousSearchTimestamp);
 
 			try {
 				const match = highlightSearch(cm, searchTerm, options.selectedIndex, scrollTo, !!options.withSelection);
@@ -176,15 +174,16 @@ export default function useEditorSearchExtension() {
 		setPreviousSearchTimestamp(options.searchTimestamp);
 
 		// SEARCHOVERLAY
-		// We only want to highlight all matches when there is only 1 search term
-		if (keywords.length !== 1 || keywords[0].value === '') {
+		// We only want to highlight all matches when there is only 1 main search term
+		const mainSearch = keywords.filter(keyword => typeof keyword === 'string' || keyword.source !== 'semantic');
+		if (mainSearch.length !== 1 || keywordValue(mainSearch[0]) === '') {
 			clearOverlay(cm);
-			const prev = keywords.length > 1 ? keywords[0].value : '';
+			const prev = keywords.length > 1 ? keywordValue(keywords[0]) : '';
 			setPreviousKeywordValue(prev);
 			return 0;
 		}
 
-		const searchTerm = getSearchTerm(keywords[0]);
+		const searchTerm = getSearchTerm(mainSearch[0]);
 
 		// Determine the number of matches in the source, this is passed on
 		// to the NoteEditor component
@@ -193,10 +192,10 @@ export default function useEditorSearchExtension() {
 
 		// Don't bother clearing and re-calculating the overlay if the search term
 		// hasn't changed
-		if (keywords[0].value === previousKeywordValue) return nMatches;
+		if (keywordValue(keywords[0]) === previousKeywordValue) return nMatches;
 
 		clearOverlay(cm);
-		setPreviousKeywordValue(keywords[0].value);
+		setPreviousKeywordValue(keywordValue(keywords[0]));
 
 		// These operations are pretty slow, so we won't add use them until the user
 		// has finished typing, 500ms is probably enough time

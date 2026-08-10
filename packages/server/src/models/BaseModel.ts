@@ -24,10 +24,8 @@ export enum UuidType {
 export interface SaveOptions {
 	isNew?: boolean;
 	skipValidation?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	validationRules?: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	previousItem?: any;
+	validationRules?: Record<string, unknown>;
+	previousItem?: Record<string, unknown>;
 	queryContext?: QueryContext;
 }
 
@@ -40,16 +38,14 @@ export interface AllPaginatedOptions extends LoadOptions {
 }
 
 export interface DeleteOptions {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	validationRules?: any;
+	validationRules?: Record<string, unknown>;
 	allowNoOp?: boolean;
 	deletedItemUserIds?: Record<Uuid, Uuid[]>;
 }
 
 export interface ValidateOptions {
 	isNew?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	rules?: any;
+	rules?: Record<string, unknown>;
 }
 
 export enum AclAction {
@@ -124,6 +120,10 @@ export default abstract class BaseModel<T> {
 			this.defaultFields_ = Object.keys(databaseSchema[this.tableName]);
 		}
 		return this.defaultFields_.slice();
+	}
+
+	protected get defaultFieldsWithPrefix(): string[] {
+		return this.defaultFields.map(f => `${this.tableName}.${f}`);
 	}
 
 	public async checkIfAllowed(_user: User, _action: AclAction, _resource: T = null): Promise<void> {
@@ -206,8 +206,7 @@ export default abstract class BaseModel<T> {
 	//
 	// The `name` argument is only for debugging, so that any stuck transaction
 	// can be more easily identified.
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	protected async withTransaction<T>(fn: Function, name = ''): Promise<T> {
+	protected async withTransaction<T>(fn: ()=> Promise<T>, name = ''): Promise<T> {
 		const debugSteps = false;
 		const debugTimeout = true;
 		const timeoutMs = 10000;
@@ -248,8 +247,7 @@ export default abstract class BaseModel<T> {
 	}
 
 	public async all(options: LoadOptions = {}): Promise<T[]> {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const rows: any[] = await this.db(this.tableName).select(this.selectFields(options));
+		const rows = await this.db(this.tableName).select(this.selectFields(options));
 		return rows as T[];
 	}
 
@@ -291,24 +289,27 @@ export default abstract class BaseModel<T> {
 	public fromApiInput(object: T): T {
 		const blackList = ['updated_time', 'created_time', 'owner_id'];
 		const whiteList = Object.keys(databaseSchema[this.tableName]);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = { ...object };
+		const output: Record<string, unknown> = { ...(object as Record<string, unknown>) };
 
 		for (const f in object) {
 			if (blackList.includes(f)) delete output[f];
 			if (!whiteList.includes(f)) delete output[f];
 		}
 
-		return output;
+		return output as T;
 	}
 
-	protected objectToApiOutput(object: T): T {
+	protected async objectToApiOutput(object: T): Promise<T> {
 		return { ...object };
 	}
 
-	public toApiOutput(object: T | T[]): T | T[] {
+	public async toApiOutput(object: T | T[]): Promise<T | T[]> {
 		if (Array.isArray(object)) {
-			return object.map(f => this.objectToApiOutput(f));
+			const output: T[] = [];
+			for (let i = 0; i < object.length; i++) {
+				output.push(await this.objectToApiOutput(object[i]));
+			}
+			return output;
 		} else {
 			return this.objectToApiOutput(object);
 		}
@@ -322,8 +323,7 @@ export default abstract class BaseModel<T> {
 	protected async isNew(object: T, options: SaveOptions): Promise<boolean> {
 		if (options.isNew === false) return false;
 		if (options.isNew === true) return true;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if ('id' in (object as any) && !(object as WithUuid).id) throw new Error('ID cannot be undefined or null');
+		if (typeof object === 'object' && object && 'id' in object && !(object as WithUuid).id) throw new Error('ID cannot be undefined or null');
 		return !(object as WithUuid).id;
 	}
 
@@ -409,12 +409,10 @@ export default abstract class BaseModel<T> {
 		if (!ids.length) throw new Error('no id provided');
 
 		await this.withTransaction(async () => {
-			const query = this.db(this.tableName).where({ id: ids[0] });
-			for (let i = 1; i < ids.length; i++) {
-				await query.orWhere({ id: ids[i] });
-			}
-
-			const deletedCount = await query.del();
+			// Use whereIn rather than chaining orWhere in a loop: the latter
+			// builds a giant OR clause that's expensive for both Knex to
+			// assemble and Postgres to parse.
+			const deletedCount = await this.db(this.tableName).whereIn('id', ids as (string|number)[]).del();
 			if (!options.allowNoOp && deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted but ${deletedCount} row(s) were deleted. ID: ${id}`);
 		}, 'BaseModel::delete');
 	}

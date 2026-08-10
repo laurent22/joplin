@@ -1,16 +1,15 @@
 import reducer from '@joplin/lib/reducer';
-import { AppState } from './types';
-import appDefaultState from './appDefaultState';
+import { AppState, Route } from './types';
+import appDefaultState, { DEFAULT_ROUTE } from './appDefaultState';
 import fastDeepEqual = require('fast-deep-equal');
 import Logger from '@joplin/utils/Logger';
+import { TagsWithNoteCountEntity } from '@joplin/lib/services/database/types';
 
 const logger = Logger.create('appReducer');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const navHistory: any[] = [];
+const navHistory: Route[] = [];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function historyCanGoBackTo(route: any) {
+function historyCanGoBackTo(route: Route) {
 	if (route.routeName === 'Folder') return false;
 
 	// This is an intermediate screen that acts more like a modal -- it should be skipped in the
@@ -25,7 +24,35 @@ function historyCanGoBackTo(route: any) {
 	return true;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+function removeAdjacentNoteDuplicates(items: Route[]) {
+	return items.filter((item, idx) => (idx >= 1) ? !(item.routeName === 'Note' && items[idx - 1].routeName === 'Note' && item.noteId && items[idx - 1].noteId === item.noteId) : true);
+}
+
+function removeAdjacentFolderDuplicates(items: Route[]) {
+	return items.filter((item, idx) => (idx >= 1) ? !(item.routeName === 'Notes' && items[idx - 1].routeName === 'Notes' && item.folderId && items[idx - 1].folderId === item.folderId) : true);
+}
+
+function removeAdjacentTagDuplicates(items: Route[]) {
+	return items.filter((item, idx) => (idx >= 1) ? !(item.routeName === 'Notes' && items[idx - 1].routeName === 'Notes' && item.tagId && items[idx - 1].tagId === item.tagId) : true);
+}
+
+function removeAdjacentTagScreenDuplicates(items: Route[]) {
+	return items.filter((item, idx) => (idx >= 1) ? !(item.routeName === 'Tags' && items[idx - 1].routeName === 'Tags') : true);
+}
+
+function removeLatestFolderIfSelected(items: Route[], route: Route) {
+	if (items.length && route.routeName === 'Notes' && items[items.length - 1].routeName === 'Notes' && route.folderId && items[items.length - 1].folderId === route.folderId) {
+		items.splice(items.length - 1, 1);
+	}
+}
+
+function removeLatestTagScreenIfSelected(items: Route[], route: Route) {
+	if (items.length && route.routeName === 'Tags' && items[items.length - 1].routeName === 'Tags') {
+		items.splice(items.length - 1, 1);
+	}
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Routes/actions are heterogeneous redux NAV payloads (NAV_GO/NAV_BACK with optional folderId/tagId/noteId/isDeleted/etc.); typing them requires defining a discriminated action union across the mobile codebase
 const appReducer = (state = appDefaultState, action: any) => {
 	let newState = state;
 	let historyGoingBack = false;
@@ -54,7 +81,14 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 					// Avoid multiple consecutive duplicate screens in the navigation history -- these can make
 					// pressing "back" seem to have no effect.
-					if (isDifferentRoute) {
+					if (currentRoute.isDeleted) {
+						// Do not add the item to the history, and remove the last item in the history if that is now the selected item
+						removeLatestFolderIfSelected(navHistory, action);
+						// Push DEFAULT_ROUTE so there's always a valid back target after deletion
+						if (!navHistory.length) {
+							navHistory.push(DEFAULT_ROUTE);
+						}
+					} else if (isDifferentRoute) {
 						navHistory.push(currentRoute);
 					}
 				}
@@ -116,6 +150,56 @@ const appReducer = (state = appDefaultState, action: any) => {
 				newState.historyCanGoBack = !!navHistory.length;
 
 				logger.debug('Navigated to route:', newState.route?.routeName, 'with notesParentType:', newState.notesParentType);
+			}
+			break;
+
+		case 'TAG_UPDATE_ALL':
+
+			{
+				// A tag can be removed from the UI via deleting a tag, deleting a note, deleting a notebook, or manually removing all note associations for
+				// a tag. Cleaning history here covers all of these scenarios
+				const availableTagIds = new Set(
+					action.items.map((o: TagsWithNoteCountEntity) => o.id),
+				);
+				let newNavHistoryForTags = navHistory.filter(route => route.routeName !== 'Notes' || !route.tagId || availableTagIds.has(route.tagId));
+				newNavHistoryForTags = removeAdjacentTagDuplicates(newNavHistoryForTags);
+				newNavHistoryForTags = removeAdjacentTagScreenDuplicates(newNavHistoryForTags);
+				removeLatestTagScreenIfSelected(newNavHistoryForTags, state.route);
+				navHistory.splice(0, navHistory.length, ...newNavHistoryForTags);
+
+			}
+			break;
+
+		case 'FOLDER_DELETE':
+
+			{
+				let newNavHistoryForFolder = navHistory.filter(route => !(route.routeName === 'Notes' && route.folderId === action.id));
+				newNavHistoryForFolder = removeAdjacentFolderDuplicates(newNavHistoryForFolder);
+				removeLatestFolderIfSelected(newNavHistoryForFolder, state.route);
+				navHistory.splice(0, navHistory.length, ...newNavHistoryForFolder);
+
+				// Prevent the deleted folder from being added to the navigation history again when navigating forward, where the selected folder was deleted
+				newState = {
+					...state,
+					route: {
+						...state.route,
+						isDeleted: true,
+					},
+				};
+			}
+			break;
+
+		case 'NOTE_DELETE':
+
+			{
+				let newNavHistory = navHistory.filter(route => !(route.routeName === 'Note' && route.noteId === action.id));
+				newNavHistory = removeAdjacentNoteDuplicates(newNavHistory);
+
+				// Fix the case where after deletion, the currently selected folder is also the latest in history
+				// Notes are not relevant for this scenario, because both note and folder deletion redirects to a folder rather than a note on mobile
+				removeLatestFolderIfSelected(newNavHistory, state.route);
+
+				navHistory.splice(0, navHistory.length, ...newNavHistory);
 			}
 			break;
 
@@ -205,6 +289,13 @@ const appReducer = (state = appDefaultState, action: any) => {
 
 		case 'SYNC_WIZARD_VISIBLE_CHANGE':
 			newState = { ...state, syncWizardVisible: action.visible };
+			break;
+
+		case 'NOTE_VISIBLE_PANES_SET':
+			newState = {
+				...state,
+				noteVisiblePanes: Array.isArray(action.panes) && action.panes.length ? action.panes : ['viewer'],
+			};
 			break;
 		}
 	} catch (error) {

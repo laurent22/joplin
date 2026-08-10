@@ -1,12 +1,16 @@
 import * as React from 'react';
-import { useState, useCallback, useMemo, useRef } from 'react';
+import { useState, useCallback, useMemo, useRef, RefObject, useLayoutEffect } from 'react';
 import { FAB } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { Dispatch } from 'redux';
-import { AccessibilityActionEvent, AccessibilityActionInfo, View } from 'react-native';
+import { AccessibilityActionEvent, AccessibilityActionInfo, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { connect } from 'react-redux';
-import BottomDrawer from '../BottomDrawer';
-const Icon = require('react-native-vector-icons/Ionicons').default;
+import { MenuAlignment, MenuType } from '../BottomDrawer';
+import { Ionicons as Icon } from '@react-native-vector-icons/ionicons';
+import BottomDrawerMenu, { MenuOption } from '../BottomDrawerMenu';
+import { AppState } from '../../utils/types';
+import { themeStyle } from '../global-style';
+import useSafeAreaPadding from '../../utils/hooks/useSafeAreaPadding';
 
 type OnButtonPress = ()=> void;
 interface ButtonSpec {
@@ -17,11 +21,13 @@ interface ButtonSpec {
 }
 
 interface ActionButtonProps {
+	themeId: number;
+
 	// If not given, an "add" button will be used.
 	mainButton: ButtonSpec;
 	dispatch: Dispatch;
 
-	menuContent?: React.ReactNode;
+	menuContent?: MenuOption[];
 	onMenuShow?: ()=> void;
 
 	accessibilityActions?: readonly AccessibilityActionInfo[];
@@ -32,14 +38,71 @@ interface ActionButtonProps {
 
 // Returns a render function compatible with React Native Paper.
 const getIconRenderFunction = (iconName: string) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return (props: any) => <Icon name={iconName} {...props} />;
+	type NameProp = React.ComponentProps<typeof Icon>['name'];
+	return (props: Omit<React.ComponentProps<typeof Icon>, 'name'>) => <Icon name={iconName as NameProp} {...props} />;
 };
 
 const useIcon = (iconName: string) => {
 	return useMemo(() => {
 		return getIconRenderFunction(iconName);
 	}, [iconName]);
+};
+
+const useMenuMarginBottom = (buttonContainerRef: RefObject<View>, themeId: number) => {
+	const { height: windowHeight } = useWindowDimensions();
+	const safeAreaPadding = useSafeAreaPadding();
+	const [menuMarginBottom, setMenuMarginBottom] = useState(0);
+
+	const recomputeMargin = useCallback(() => {
+		const theme = themeStyle(themeId);
+
+		buttonContainerRef.current?.measure((_x, _y, _width, _height, _pageX, pageY) => {
+			// On Android, the safe area padding doesn't seem to be included in windowHeight,
+			// but **does** seem to be taken into account when determining absolute/relative positioning
+			const includeSafeArea = Platform.OS === 'android';
+			const extraMargin = theme.marginBottom + (includeSafeArea ? safeAreaPadding.paddingBottom : 0);
+
+			setMenuMarginBottom(windowHeight - pageY + extraMargin);
+		});
+	}, [windowHeight, buttonContainerRef, themeId, safeAreaPadding]);
+
+	useLayoutEffect(() => {
+		recomputeMargin();
+	}, [recomputeMargin]);
+
+	const recomputeMarginRef = useRef(recomputeMargin);
+	recomputeMarginRef.current = recomputeMargin;
+
+	const onMenuContainerLayout = useCallback(() => {
+		recomputeMarginRef.current();
+	}, []);
+
+	return { onMenuContainerLayout, menuMarginBottom };
+};
+
+
+interface StylesProps {
+	menuMarginBottom: number;
+}
+
+const useStyles = ({ menuMarginBottom }: StylesProps) => {
+	return useMemo(() => {
+		return StyleSheet.create({
+			menu: {
+				marginBottom: menuMarginBottom,
+				// Always float right:
+				alignSelf: 'flex-end',
+			},
+			buttonContainer: {
+				position: 'absolute',
+				bottom: 10,
+				right: 10,
+			},
+			button: {
+				alignSelf: 'flex-end',
+			},
+		});
+	}, [menuMarginBottom]);
 };
 
 const FloatingActionButton = (props: ActionButtonProps) => {
@@ -65,36 +128,43 @@ const FloatingActionButton = (props: ActionButtonProps) => {
 
 	const label = props.mainButton?.label ?? _('Add new');
 
+	const buttonContainerRef = useRef<View|null>(null);
+
+	const { menuMarginBottom, onMenuContainerLayout } = useMenuMarginBottom(buttonContainerRef, props.themeId);
+	const styles = useStyles({ menuMarginBottom });
+
 	const menuButton = <FAB
 		ref={mainButtonRef}
 		icon={open ? openIcon : closedIcon}
 		accessibilityLabel={label}
 		onPress={props.mainButton?.onPress ?? onMenuToggled}
-		style={{
-			alignSelf: 'flex-end',
-		}}
+		style={styles.button}
 		accessibilityActions={props.accessibilityActions}
 		onAccessibilityAction={props.onAccessibilityAction}
 	/>;
 
 	return <>
 		<View
-			style={{
-				position: 'absolute',
-				bottom: 10,
-				right: 10,
-			}}
+			style={styles.buttonContainer}
+			ref={buttonContainerRef}
+			onLayout={onMenuContainerLayout}
 		>
 			{menuButton}
 		</View>
-		<BottomDrawer
+		{ props.menuContent && <BottomDrawerMenu
 			visible={open}
 			onDismiss={onDismiss}
-			onShow={props.onMenuShow}
-		>
-			{props.menuContent}
-		</BottomDrawer>
+			alignment={MenuAlignment.Right}
+			style={styles.menu}
+			menuType={MenuType.Floating}
+			themeId={props.themeId}
+			options={props.menuContent}
+			autoScrollToEnd
+		/> }
 	</>;
 };
 
-export default connect()(FloatingActionButton);
+const ConnectedComponent: React.FC<Omit<ActionButtonProps, 'themeId'|'dispatch'>> = (
+	connect((state: AppState) => ({ themeId: state.settings.theme }))(FloatingActionButton)
+);
+export default ConnectedComponent;

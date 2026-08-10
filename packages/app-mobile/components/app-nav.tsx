@@ -1,24 +1,35 @@
 import * as React from 'react';
+import { ComponentType } from 'react';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import NotesScreen from './screens/Notes/Notes';
 import SearchScreen from './screens/SearchScreen';
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
-import { AppState } from '../utils/types';
+import { Platform, View, StyleSheet } from 'react-native';
+import { AppState, Route } from '../utils/types';
 import { themeStyle } from './global-style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useKeyboardState from '../utils/hooks/useKeyboardState';
 import usePrevious from '@joplin/lib/hooks/usePrevious';
-import FeedbackBanner from './FeedbackBanner';
+import { Theme } from '@joplin/lib/themes/type';
+import { useMemo } from 'react';
+import KeyboardAvoidingView from './KeyboardAvoidingView';
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	route: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	screens: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	dispatch: (action: any)=> void;
+	route: Route;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each screen has different props (themeId, dispatch, navigation, visible, ...); typing the union would force a refactor of every screen
+	screens: Record<string, { screen: ComponentType<any> }>;
+	dispatch: Dispatch;
 	themeId: number;
 }
+
+const useStyles = (theme: Theme) => {
+	return useMemo(() => {
+		return StyleSheet.create({
+			keyboardAvoidingView: { flex: 1, backgroundColor: theme.backgroundColor },
+		});
+	}, [theme]);
+};
+
 
 const AppNavComponent: React.FC<Props> = (props) => {
 	const keyboardState = useKeyboardState();
@@ -50,25 +61,22 @@ const AppNavComponent: React.FC<Props> = (props) => {
 	const searchScreenLoaded = searchScreenVisible || (previousRouteName === 'Search' && route.routeName === 'Note');
 
 	const theme = themeStyle(props.themeId);
-
-	const style = { flex: 1, backgroundColor: theme.backgroundColor };
-
-	// When the floating keyboard is enabled, the KeyboardAvoidingView can have a very small
-	// height. Don't use the KeyboardAvoidingView when the floating keyboard is enabled.
-	// See https://github.com/facebook/react-native/issues/29473
-	const keyboardAvoidingViewEnabled = !keyboardState.isFloatingKeyboard;
-	const autocompletionBarPadding = Platform.OS === 'ios' && keyboardState.keyboardVisible ? safeAreaPadding.top : 0;
+	const styles = useStyles(theme);
+	// Workaround: On Android 15 and 16, the main app content seems to auto-resize when the keyboard is shown.
+	// On earlier Android versions (and in modals), this does not seem to be the case.
+	const keyboardAvoidingViewEnabled =
+		(Platform.OS === 'android' && Platform.Version < 35)
+		|| Platform.OS === 'ios';
+	const autocompletionBarPadding = keyboardState.keyboardVisible && keyboardAvoidingViewEnabled ? safeAreaPadding.top : 0;
 
 	return (
 		<KeyboardAvoidingView
+			style={styles.keyboardAvoidingView}
 			enabled={keyboardAvoidingViewEnabled}
-			behavior={Platform.OS === 'ios' ? 'padding' : null}
-			style={style}
 		>
 			<NotesScreen visible={notesScreenVisible} />
 			{searchScreenLoaded && <SearchScreen visible={searchScreenVisible} />}
 			{!notesScreenVisible && !searchScreenVisible && <Screen navigation={{ state: route }} themeId={props.themeId} dispatch={props.dispatch} />}
-			{notesScreenVisible ? <FeedbackBanner/> : null}
 			<View style={{ height: autocompletionBarPadding }} />
 		</KeyboardAvoidingView>
 	);

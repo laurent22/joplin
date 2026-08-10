@@ -17,17 +17,11 @@ type Args = {
 
 class Command extends BaseCommand {
 	public usage() {
-		return 'publish [note]';
+		return 'unpublish [note]';
 	}
 
 	public description() {
-		return _('Publishes a note to Joplin Server or Joplin Cloud');
-	}
-
-	public options() {
-		return [
-			['-f, --force', _('Do not ask for user confirmation.')],
-		];
+		return _('Unpublishes a note from Joplin Server or Joplin Cloud');
 	}
 
 	public enabled() {

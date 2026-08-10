@@ -2,8 +2,9 @@ import { ElectronApplication, Locator, Page } from '@playwright/test';
 import { expect } from '../util/test';
 import activateMainMenuItem from '../util/activateMainMenuItem';
 import EditorCodeDialog from './EditorCodeDialog';
+import setSettingValue from '../util/setSettingValue';
 
-export default class NoteEditorPage {
+export default class NoteEditorScreen {
 	public readonly codeMirrorEditor: Locator;
 	public readonly noteViewerContainer: Locator;
 	public readonly editorPluginFrame: Locator;
@@ -24,8 +25,9 @@ export default class NoteEditorPage {
 
 	private readonly containerLocator: Locator;
 
-	public constructor(page: Page) {
-		this.containerLocator = page.locator('.rli-editor');
+	public constructor(private page_: Page) {
+		// .rli-editor is used in the main window, .note-editor-wrapper in secondary windows
+		this.containerLocator = page_.locator('.rli-editor, .note-editor-wrapper');
 		this.codeMirrorEditor = this.containerLocator.locator('.cm-editor');
 		this.richTextEditor = this.containerLocator.locator('iframe[title="Rich Text Area"]');
 		this.editorPluginFrame = this.containerLocator.locator('iframe[id^="plugin-view-"]');
@@ -41,7 +43,7 @@ export default class NoteEditorPage {
 		this.disableTabNavigationButton = this.containerLocator.getByRole('button', { name: 'Tab moves focus' });
 		this.toggleEditorPluginButton = this.containerLocator.getByRole('button', { name: 'Toggle editor plugin' });
 
-		this.richTextCodeEditor = new EditorCodeDialog(page);
+		this.richTextCodeEditor = new EditorCodeDialog(page_);
 	}
 
 	public toolbarButtonLocator(title: string) {
@@ -63,6 +65,10 @@ export default class NoteEditorPage {
 		} else {
 			return markdownEditor;
 		}
+	}
+
+	public async disableInlineRendering(electronApp: ElectronApplication) {
+		await setSettingValue(electronApp, this.page_, 'editor.inlineRendering', false);
 	}
 
 	public async expectToHaveText(expected: string|RegExp) {

@@ -1,9 +1,8 @@
 import Global from '../api/Global';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-type EventHandler = (callbackId: string, args: any[])=> void;
+type EventHandler = (callbackId: string, args: unknown[])=> unknown;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Recursive walker over heterogeneous plugin sandbox arguments; tightening to `unknown` forces narrowing at every branch and recursive call
 function createEventHandlers(arg: any, eventHandler: EventHandler) {
 	if (Array.isArray(arg)) {
 		for (let i = 0; i < arg.length; i++) {
@@ -12,8 +11,7 @@ function createEventHandlers(arg: any, eventHandler: EventHandler) {
 		return arg;
 	} else if (typeof arg === 'string' && arg.indexOf('___plugin_event_') === 0) {
 		const callbackId = arg;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return async (...args: any[]) => {
+		return async (...args: unknown[]) => {
 			const result = await eventHandler(callbackId, args);
 			return result;
 		};
@@ -28,13 +26,12 @@ function createEventHandlers(arg: any, eventHandler: EventHandler) {
 	return arg;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default async function executeSandboxCall(pluginId: string, sandbox: Global, path: string, args: any[], eventHandler: EventHandler) {
+export default async function executeSandboxCall(pluginId: string, sandbox: Global, path: string, args: unknown[], eventHandler: EventHandler) {
 	const pathFragments = path.split('.');
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Walks the sandbox object tree by dotted path; intermediate nodes can be any sandbox sub-API
 	let parent: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See parent above
 	let fn: any = sandbox;
 
 	if (!fn) throw new Error(`No sandbox for plugin ${pluginId}`); // Sanity check as normally cannot happen

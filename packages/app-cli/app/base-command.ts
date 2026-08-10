@@ -1,29 +1,32 @@
 import { _ } from '@joplin/lib/locale';
 import { reg } from '@joplin/lib/registry.js';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Stdout can be called with formatted strings or arbitrary values
+type StdoutFn = (text: any)=> void;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Prompt response varies by type and tests pass sync mocks
+type PromptFn = (message: string, options: any)=> any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux dispatch action shape varies
+type DispatcherFn = (action: any)=> any;
+
 export default class BaseCommand {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	protected stdout_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	protected prompt_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	protected dispatcher_: any;
+	protected stdout_: StdoutFn | null = null;
+	protected prompt_: PromptFn | null = null;
+	protected dispatcher_: DispatcherFn | null = null;
 
 	public usage(): string {
 		throw new Error('Usage not defined');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public encryptionCheck(item: any) {
+	public encryptionCheck(item: { encryption_applied?: number } | null) {
 		if (item && item.encryption_applied) throw new Error(_('Cannot change encrypted item'));
 	}
 
-	public description() {
+	public description(): string {
 		throw new Error('Description not defined');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Subclasses override with command-specific arg shapes; parameters are contravariant so a narrower base would break all overrides
 	public async action(_args: any) {
 		throw new Error('Action not defined');
 	}
@@ -36,8 +39,7 @@ export default class BaseCommand {
 		return this.compatibleUis().indexOf(ui) >= 0;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public options(): any[] {
+	public options(): unknown[] {
 		return [];
 	}
 
@@ -60,19 +62,16 @@ export default class BaseCommand {
 		return r[0];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public setDispatcher(fn: Function) {
+	public setDispatcher(fn: DispatcherFn) {
 		this.dispatcher_ = fn;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public dispatch(action: any) {
+	public dispatch(action: unknown) {
 		if (!this.dispatcher_) throw new Error('Dispatcher not defined');
 		return this.dispatcher_(action);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public setStdout(fn: Function) {
+	public setStdout(fn: StdoutFn) {
 		this.stdout_ = fn;
 	}
 
@@ -80,13 +79,11 @@ export default class BaseCommand {
 		if (this.stdout_) this.stdout_(text);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public setPrompt(fn: Function) {
+	public setPrompt(fn: PromptFn) {
 		this.prompt_ = fn;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async prompt(message: string, options: any = null) {
+	public async prompt(message: string, options: unknown = null) {
 		if (!this.prompt_) throw new Error('Prompt is undefined');
 		return await this.prompt_(message, options);
 	}

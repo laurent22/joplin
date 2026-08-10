@@ -1,22 +1,21 @@
 import { RefObject, useCallback } from 'react';
-import { FormNote, HtmlToMarkdownHandler, MarkupToHtmlHandler, ScrollOptions, MessageEvent } from './types';
+import { Dispatch } from 'redux';
+import { FormNote, HtmlToMarkdownHandler, MarkupToHtmlHandler, ScrollOptions, MessageEvent, NoteBodyEditorRef } from './types';
 import contextMenu from './contextMenu';
 import CommandService from '@joplin/lib/services/CommandService';
 import PostMessageService from '@joplin/lib/services/PostMessageService';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { reg } from '@joplin/lib/registry';
 import bridge from '../../../services/bridge';
+import { resolveContextMenuItemType } from './contextMenuUtils';
 
 export default function useMessageHandler(
 	scrollWhenReadyRef: RefObject<ScrollOptions|null>,
 	clearScrollWhenReady: ()=> void,
 	windowId: string,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	editorRef: any,
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	setLocalSearchResultCount: Function,
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function,
+	editorRef: RefObject<NoteBodyEditorRef>,
+	setLocalSearchResultCount: (count: number)=> void,
+	dispatch: Dispatch,
 	formNote: FormNote,
 	htmlToMd: HtmlToMarkdownHandler,
 	mdToHtml: MarkupToHtmlHandler,
@@ -46,9 +45,11 @@ export default function useMessageHandler(
 			if (s.length < 2) throw new Error(`Invalid message: ${msg}`);
 			void ResourceFetcher.instance().markForDownload(s[1]);
 		} else if (msg === 'contextMenu') {
+			const resourceId = arg0.resourceId;
+			const itemType = await resolveContextMenuItemType(arg0 && arg0.type, resourceId);
 			const menu = await contextMenu({
-				itemType: arg0 && arg0.type,
-				resourceId: arg0.resourceId,
+				itemType,
+				resourceId: resourceId,
 				filename: arg0.filename,
 				mime: arg0.mime,
 				linkToOpen: null,

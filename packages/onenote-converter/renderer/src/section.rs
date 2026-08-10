@@ -16,6 +16,8 @@ pub(crate) struct RenderedSection {
     pub(crate) section_dir: String,
 }
 
+const ERRORS_NOTE_NAME: &str = "⚠️ Errors ⚠️";
+
 impl Renderer {
     pub fn new() -> Self {
         Renderer {
@@ -26,7 +28,9 @@ impl Renderer {
     pub fn render(&mut self, section: &Section, output_dir: String) -> Result<RenderedSection> {
         let section_dir = fs_driver().join(
             output_dir.as_str(),
-            sanitize_filename::sanitize(section.display_name()).as_str(),
+            fs_driver()
+                .sanitize_file_name(section.display_name())
+                .as_str(),
         );
         log!(
             "section_dir: {:?} \n output_dir: {:?}",
@@ -49,11 +53,16 @@ impl Renderer {
             }
 
             for page in page_series.pages() {
-                let render_result =
-                    self.render_page_to_file(page, &section_dir, &output_dir, || {
+                let render_result = self.render_page_to_file(
+                    page,
+                    toc.len() as u32,
+                    &section_dir,
+                    &output_dir,
+                    || {
                         fallback_title_index += 1;
                         fallback_title_index
-                    });
+                    },
+                );
                 match render_result {
                     Ok(toc_entry) => {
                         toc.push(toc_entry);
@@ -81,11 +90,11 @@ impl Renderer {
         let toc_path = self.write_html_file(&output_dir, section.display_name(), &toc_html)?;
         log!("ToC: {}", toc_path);
 
-        if let Some(errors_path) = errors_path {
+        if errors_path.is_some() {
             Err(ErrorKind::RenderFailed(format!(
                 "Some pages failed to render. First error: {:?}. Full error report written to {}",
                 errors.first(),
-                errors_path
+                ERRORS_NOTE_NAME,
             ))
             .into())
         } else {
@@ -96,6 +105,7 @@ impl Renderer {
     fn render_page_to_file<F>(
         &mut self,
         page: &Page,
+        page_order_index: u32,
         section_dir: &str,
         output_dir: &str,
         fallback_title_idx: F,
@@ -109,7 +119,7 @@ impl Renderer {
             .unwrap_or_else(|| format!("Untitled Page {}", fallback_title_idx()));
 
         let mut renderer = page::Renderer::new(section_dir.into(), self);
-        let page_html = renderer.render_page(page)?;
+        let page_html = renderer.render_page(page, page_order_index)?;
 
         let page_path = self.write_html_file(section_dir, &title, &page_html)?;
         log!("Created page file: {:?}", page_path);
@@ -129,21 +139,21 @@ impl Renderer {
         errors: &Vec<String>,
         output_dir: &str,
     ) -> Result<TocEntry> {
-        let error_html = templates::errors::render(&errors)?;
-        let errors_path = self.write_html_file(&output_dir, "Errors", &error_html)?;
+        let error_html = templates::errors::render(errors)?;
+        let errors_path = self.write_html_file(output_dir, "Errors", &error_html)?;
         log!("Errors: {}", errors_path);
 
         Ok(TocEntry {
             level: 1,
             is_error: true,
-            name: "⚠️ Errors ⚠️".into(),
-            relative_path: fs_driver().remove_prefix(&errors_path, &output_dir).into(),
+            name: ERRORS_NOTE_NAME.into(),
+            relative_path: fs_driver().remove_prefix(&errors_path, output_dir).into(),
         })
     }
 
     fn write_html_file(&mut self, parent_dir: &str, title: &str, html: &str) -> Result<String> {
         let filename = self.title_to_unique_safe_filename(parent_dir, title, ".html")?;
-        let path = fs_driver().join(&parent_dir, &filename);
+        let path = fs_driver().join(parent_dir, &filename);
         fs_driver().write_file(&path, html.as_bytes())?;
         Ok(path)
     }
@@ -166,7 +176,7 @@ impl Renderer {
         let filename = filename_base.trim().replace("/", "_");
         let mut i = 0;
         let mut current_filename =
-            sanitize_filename::sanitize(format!("{}{}", filename, extension));
+            fs_driver().sanitize_file_name(&format!("{}{}", filename, extension));
 
         loop {
             let current_full_path = fs_driver().join(parent_dir, &current_filename);
@@ -177,7 +187,7 @@ impl Renderer {
 
             i += 1;
             current_filename =
-                sanitize_filename::sanitize(format!("{}_{}{}", filename, i, extension));
+                fs_driver().sanitize_file_name(&format!("{}_{}{}", filename, i, extension));
         }
 
         Ok(current_filename)

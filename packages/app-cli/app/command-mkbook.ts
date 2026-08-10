@@ -1,7 +1,7 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
-import BaseModel from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 
@@ -23,7 +23,7 @@ class Command extends BaseCommand {
 	// validDestinationFolder check for presents and ambiguous folders
 	public async validDestinationFolder(targetFolder: string) {
 
-		const destinationFolder = await app().loadItem(BaseModel.TYPE_FOLDER, targetFolder);
+		const destinationFolder = await app().loadItem(ModelType.Folder, targetFolder);
 		if (!destinationFolder) {
 			throw new Error(_('Cannot find: "%s"', targetFolder));
 		}
@@ -43,8 +43,7 @@ class Command extends BaseCommand {
 
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async action(args: any) {
+	public async action(args: { 'new-notebook': string; options: { parent?: string } }) {
 		const targetFolder = args.options.parent;
 
 		const newFolder: FolderEntity = {

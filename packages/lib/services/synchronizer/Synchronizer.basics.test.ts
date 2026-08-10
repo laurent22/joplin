@@ -1,13 +1,15 @@
 import Setting from '../../models/Setting';
 import { allNotesFolders, remoteNotesAndFolders, localNotesFoldersSameAsRemote } from '../../testing/test-utils-synchronizer';
-import { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi, expectThrow } from '../../testing/test-utils';
+import { syncTargetName, afterAllCleanUp, synchronizerStart, setupDatabaseAndSynchronizer, synchronizer, sleep, switchClient, syncTargetId, fileApi, expectThrow, createNoteAndResource } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
-import WelcomeUtils from '../../WelcomeUtils';
+import WelcomeUtils, { WelcomeAssetPlatform } from '../../WelcomeUtils';
 import { NoteEntity } from '../database/types';
 import { fetchSyncInfo, setAppMinVersion, uploadSyncInfo } from './syncInfoUtils';
 import { ErrorCode } from '../../errors';
+import Resource from '../../models/Resource';
+import { exists } from 'fs-extra';
 
 describe('Synchronizer.basics', () => {
 
@@ -67,6 +69,9 @@ describe('Synchronizer.basics', () => {
 
 		await switchClient(2);
 
+		const dispatchC2 = jest.fn();
+		synchronizer(2).dispatch = dispatchC2;
+
 		await synchronizerStart();
 
 		await sleep(0.1);
@@ -78,9 +83,22 @@ describe('Synchronizer.basics', () => {
 
 		await synchronizerStart();
 
+		expect(dispatchC2).not.toHaveBeenCalledWith({
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: note1.id,
+		});
+
 		await switchClient(1);
 
+		const dispatchC1 = jest.fn();
+		synchronizer(1).dispatch = dispatchC1;
+
 		await synchronizerStart();
+
+		expect(dispatchC1).toHaveBeenCalledWith({
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: note1.id,
+		});
 
 		const all = await allNotesFolders();
 
@@ -103,11 +121,65 @@ describe('Synchronizer.basics', () => {
 		await synchronizerStart();
 
 		const remotes = await remoteNotesAndFolders();
-		expect(remotes.length).toBe(1);
+		expect(remotes).toHaveLength(1);
 		expect(remotes[0].id).toBe(folder1.id);
 
 		const deletedItems = await BaseItem.deletedItems(syncTargetId());
 		expect(deletedItems.length).toBe(0);
+	}));
+
+	it('should delete multiple remote notes', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const count = 25;
+
+		const notes = [];
+		for (let i = 0; i < count; i++) {
+			notes.push(await Note.save({ title: 'test', parent_id: folder1.id }));
+		}
+		await synchronizerStart();
+		await switchClient(2);
+		await synchronizerStart();
+
+		await sleep(0.1);
+
+		await Note.batchDelete(notes.map(n => n.id));
+
+		await synchronizerStart();
+
+		const remotes = await remoteNotesAndFolders();
+		expect(remotes).toMatchObject([{ id: folder1.id }]);
+
+		const deletedItems = await BaseItem.deletedItems(syncTargetId());
+		expect(deletedItems.length).toBe(0);
+	}));
+
+	it('should delete a remote resource', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const { resource } = await createNoteAndResource({ parentId: folder1.id });
+
+		const expectResourceExists = async (expected: boolean) => {
+			expect(!!await Resource.load(resource.id)).toBe(expected);
+			const resourcePath = Resource.fullPath(resource);
+			expect(await exists(resourcePath)).toBe(expected);
+		};
+
+		await expectResourceExists(true);
+
+		await synchronizerStart();
+		await switchClient(2);
+		await synchronizerStart();
+
+		await sleep(0.1);
+
+		await Resource.delete(resource.id);
+
+		await synchronizerStart();
+		await expectResourceExists(false);
+
+		await switchClient(1);
+
+		await synchronizerStart();
+		await expectResourceExists(false);
 	}));
 
 	it('should not created deleted_items entries for items deleted via sync', (async () => {
@@ -283,6 +355,26 @@ describe('Synchronizer.basics', () => {
 		expect(conflictNote.id).not.toBe(note.id);
 	}));
 
+	it('should revert local changes to read-only folders', (async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		await synchronizerStart();
+		await Folder.save({
+			id: folder.id,
+			title: 'folder (changed)',
+			share_id: 'some-incorrect-share-id',
+		});
+		synchronizer().testingHooks_ = ['itemIsReadOnly'];
+		await synchronizerStart();
+		synchronizer().testingHooks_ = [];
+
+		const reloadedFolder = await Folder.load(folder.id);
+		expect(reloadedFolder.title).toBe('folder');
+		expect(reloadedFolder.share_id).toBe('');
+
+		// Should not have created a conflict
+		expect(await Folder.all()).toHaveLength(1);
+	}));
+
 	it('should allow duplicate folder titles', (async () => {
 		await Folder.save({ title: 'folder' });
 
@@ -355,12 +447,12 @@ describe('Synchronizer.basics', () => {
 	it('should create a new Welcome notebook on each client', (async () => {
 		// Create the Welcome items on two separate clients
 
-		await WelcomeUtils.createWelcomeItems('en_GB');
+		await WelcomeUtils.createWelcomeItems('en_GB', WelcomeAssetPlatform.Cli);
 		await synchronizerStart();
 
 		await switchClient(2);
 
-		await WelcomeUtils.createWelcomeItems('en_GB');
+		await WelcomeUtils.createWelcomeItems('en_GB', WelcomeAssetPlatform.Cli);
 		const beforeFolderCount = (await Folder.all()).length;
 		const beforeNoteCount = (await Note.all()).length;
 		expect(beforeFolderCount === 1).toBe(true);
@@ -486,7 +578,7 @@ describe('Synchronizer.basics', () => {
 		// Then after sync, appMinVersion should be the same as that client version
 		const remoteInfoAfter = await fetchSyncInfo(synchronizer().api());
 
-		expect(remoteInfoBefore.appMinVersion).toBe('3.0.0');
+		expect(remoteInfoBefore.appMinVersion).toBe('3.7.0');
 		expect(remoteInfoAfter.appMinVersion).toBe('100.0.0');
 
 		// Now simulates synchronising with an older client version. In that case, it should not be

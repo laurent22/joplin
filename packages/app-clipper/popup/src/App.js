@@ -297,7 +297,11 @@ class AppComponent extends Component {
 		if (!this.state.contentScriptLoaded) {
 			let msg = 'Loading...';
 			if (this.state.contentScriptError) msg = `The Joplin extension is not available on this tab due to: ${this.state.contentScriptError}`;
-			return <div style={{ padding: 10, fontSize: 12, maxWidth: 200 }}>{msg}</div>;
+			return (
+				<div className="App Startup">
+					{msg}
+				</div>
+			);
 		}
 
 		const warningComponent = !this.props.warning ? null : <div className="Warning">{ this.props.warning }</div>;

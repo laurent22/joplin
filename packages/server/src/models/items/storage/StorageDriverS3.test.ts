@@ -2,15 +2,15 @@
 // defined in the below config file. If the credentials are missing, all the
 // tests are skipped.
 
-import { afterAllTests, beforeAllDb, beforeEachDb, readCredentialFileSync } from '../../../utils/testing/testUtils';
+import { readCredentialFileSync } from '../../../utils/testing/credentialFile';
+import { afterAllTests, beforeAllDb, beforeEachDb } from '../../../utils/testing/testUtils';
 import { StorageDriverConfig, StorageDriverMode, StorageDriverType } from '../../../utils/types';
 import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldSupportFallbackDriver, shouldSupportFallbackDriverInReadWriteMode, shouldThrowNotFoundIfNotExist, shouldUpdateContentStorageIdAfterSwitchingDriver, shouldWriteToContentAndReadItBack } from './testUtils';
 
 let s3config_: StorageDriverConfig;
 const s = readCredentialFileSync('server-s3-test-units.json', '');
 if (s) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const parse: any = JSON.parse(s);
+	const parse: StorageDriverConfig & { enabled?: boolean } = JSON.parse(s);
 	if ('enabled' in parse && parse.enabled === false) {
 		// disable S3 tests
 	} else {

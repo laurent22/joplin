@@ -1,5 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, import/prefer-default-export -- Old code before rule was applied
-export function cursorPositionToTextOffset(cursorPos: any, body: string) {
+// eslint-disable-next-line import/prefer-default-export -- Single exported function is intentional
+export function cursorPositionToTextOffset(cursorPos: { line: number; ch: number }, body: string) {
 	if (!body) return 0;
 
 	const noteLines = body.split('\n');

@@ -31,7 +31,11 @@ const subRoutes: Record<string, RouteHandler> = {
 			try {
 				await ctx.joplin.models.user().sendResetPasswordEmail(fields.email || '');
 			} catch (error) {
-				logger.warn(`Could not send reset email for ${fields.email}`, error);
+				if (error instanceof ErrorNotFound) {
+					logger.info(`Could not send reset email for ${fields.email}`, error);
+				} else {
+					logger.warn(`Could not send reset email for ${fields.email}`, error);
+				}
 			}
 
 			confirmationMessage = 'If we have an account that matches your email, you should receive an email with instructions on how to reset your password shortly.';

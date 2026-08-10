@@ -20,8 +20,9 @@ export interface LayoutItem {
 	resizableRight?: boolean;
 	resizableBottom?: boolean;
 	visible?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	context?: any;
+	context?: Record<string, unknown>;
+	// Absorbs remaining space in its container, regardless of position.
+	flexible?: boolean;
 }
 
 export const tempContainerPrefix = 'tempContainer-';

@@ -13,6 +13,7 @@ import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { Props, WebViewControl } from './types';
 import useCss from './utils/useCss';
+import { Platform } from 'react-native';
 
 const logger = Logger.create('ExtendedWebView');
 
@@ -41,8 +42,7 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 
 				true;`);
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			postMessage(message: any) {
+			postMessage(message: unknown) {
 				webviewRef.current.postMessage(JSON.stringify(message));
 			},
 		};
@@ -115,14 +115,15 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 	return (
 		<WebView
 			key={`webview-${reloadCounter}`}
-			style={{
-				// `backgroundColor: transparent` prevents a white fhash on iOS.
-				// It seems that `backgroundColor: theme.backgroundColor` does not
-				// prevent the flash.
-				backgroundColor: 'transparent',
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				...(props.style as any),
-			}}
+			style={[
+				{
+					// `backgroundColor: transparent` prevents a white fhash on iOS.
+					// It seems that `backgroundColor: theme.backgroundColor` does not
+					// prevent the flash.
+					backgroundColor: 'transparent',
+				},
+				props.style,
+			]}
 			ref={webviewRef}
 			scrollEnabled={props.scrollEnabled}
 			useWebKit={true}
@@ -138,10 +139,12 @@ const ExtendedWebView = (props: Props, ref: Ref<WebViewControl>) => {
 			injectedJavaScript={injectedJavaScript}
 			onMessage={props.onMessage}
 			onError={props.onError ?? onError}
+			onLoadStart={props.onLoadStart}
 			onLoadEnd={props.onLoadEnd}
 			onContentProcessDidTerminate={refreshWebViewAfterCrash}
 			onRenderProcessGone={refreshWebViewAfterCrash}
-			decelerationRate='normal'
+			// See https://github.com/react-native-webview/react-native-webview/issues/3814
+			decelerationRate={Platform.OS === 'ios' ? 'normal' : undefined}
 		/>
 	);
 };

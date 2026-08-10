@@ -1,4 +1,5 @@
 import { Models } from '../models/factory';
+import { connectDb } from '../db';
 import { TaskId } from '../services/database/types';
 import TaskService, { Task, taskIdToLabel } from '../services/TaskService';
 import { Services } from '../services/types';
@@ -7,7 +8,12 @@ import { Config, Env } from './types';
 import { Day } from './time';
 
 export default async function(env: Env, models: Models, config: Config, services: Services): Promise<TaskService> {
-	const taskService = new TaskService(env, models, config, services);
+	// In production, use a separate DB connection pool for task state
+	// management so that it is not affected by failed transactions in the
+	// main connection pool. In dev/test, we reuse the main connection to
+	// avoid exhausting Postgres connection slots in CI.
+	const taskStateDb = env === Env.Prod ? await connectDb({ ...config.database, maxConnections: 1 }) : null;
+	const taskService = new TaskService(env, models, config, services, taskStateDb);
 
 	let tasks: Task[] = [
 		{

@@ -30,7 +30,7 @@ import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import ClipperServer from '@joplin/lib/ClipperServer';
 import { ipcRenderer } from 'electron';
 const Menu = bridge().Menu;
-const PluginManager = require('@joplin/lib/services/PluginManager');
+import PluginManager from '@joplin/lib/services/PluginManager';
 import RevisionService from '@joplin/lib/services/RevisionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
 import { loadCustomCss } from '@joplin/lib/CssUtils';
@@ -43,11 +43,12 @@ const electronContextMenu = require('./services/electron-context-menu');
 // Commands that are not tied to any particular component.
 // The runtime for these commands can be loaded when the app starts.
 
-import PerFolderSortOrderService from './services/sortOrder/PerFolderSortOrderService';
+import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
+import { completePendingAuthentication } from '@joplin/lib/services/joplinCloudUtils';
 import eventManager, { EventName } from '@joplin/lib/eventManager';
 import path = require('path');
 import { afterDefaultPluginsLoaded, loadAndRunDefaultPlugins } from '@joplin/lib/services/plugins/defaultPlugins/defaultPluginsUtils';
@@ -58,13 +59,16 @@ import OcrDriverTesseract from '@joplin/lib/services/ocr/drivers/OcrDriverTesser
 import OcrDriverTranscribe from '@joplin/lib/services/ocr/drivers/OcrDriverTranscribe';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { PackageInfo } from '@joplin/lib/versionInfo';
-import { CustomProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
+import { CustomContentProtocolHandler } from './utils/customProtocols/handleCustomProtocols';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils';
 import initializeCommandService from './utils/initializeCommandService';
 import OcrDriverBase from '@joplin/lib/services/ocr/OcrDriverBase';
 import PerformanceLogger from '@joplin/lib/PerformanceLogger';
 import Note from '@joplin/lib/models/Note';
 import Resource from '@joplin/lib/models/Resource';
+import AiService from '@joplin/lib/services/ai/AiService';
+import LocalEmbeddingProvider from '@joplin/lib/services/ai/LocalEmbeddingProvider';
+import { installAiStatusBridge, AiStatusStore } from './services/aiStatusBridge';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -78,11 +82,10 @@ type StartupTask = { label: string; task: ()=> void|Promise<void> };
 
 class Application extends BaseApplication {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private checkAllPluginStartedIID_: any = null;
+	private checkAllPluginStartedIID_: ReturnType<typeof setInterval> = null;
 	private initPluginServiceDone_ = false;
 	private ocrService_: OcrService;
-	private protocolHandler_: CustomProtocolHandler;
+	private protocolHandler_: CustomContentProtocolHandler;
 
 	public constructor() {
 		super();
@@ -94,7 +97,7 @@ class Application extends BaseApplication {
 		return true;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux actions are heterogeneous; typing would require an action-type union and base class signature change
 	public reducer(state: AppState = appDefaultState, action: any) {
 		let newState = appReducer(state, action);
 		newState = resourceEditWatcherReducer(newState, action);
@@ -123,14 +126,14 @@ class Application extends BaseApplication {
 		htmlContainer.setAttribute('lang', htmlLang);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux middleware signature; matches the base class which takes heterogeneous action types
 	protected async generalMiddleware(store: any, next: any, action: any) {
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'locale' || action.type === 'SETTING_UPDATE_ALL') {
 			this.updateLanguage();
 		}
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'renderer.fileUrls' || action.type === 'SETTING_UPDATE_ALL') {
-			bridge().electronApp().getCustomProtocolHandler().setMediaAccessEnabled(
+			bridge().electronApp().getContentProtocolHandler().setMediaAccessEnabled(
 				Setting.value('renderer.fileUrls'),
 			);
 		}
@@ -149,6 +152,10 @@ class Application extends BaseApplication {
 
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'linking.extraAllowedExtensions' || action.type === 'SETTING_UPDATE_ALL') {
 			bridge().extraAllowedOpenExtensions = Setting.value('linking.extraAllowedExtensions');
+		}
+
+		if ((action.type === 'SETTING_UPDATE_ONE' && action.key === 'globalHotkey') || action.type === 'SETTING_UPDATE_ALL') {
+			bridge().updateGlobalHotkey(Setting.value('globalHotkey'));
 		}
 
 		if (['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >= 0) {
@@ -212,7 +219,12 @@ class Application extends BaseApplication {
 			const contextMenu = Menu.buildFromTemplate([
 				{ label: _('Open %s', app.electronApp().name), click: () => { app.mainWindow().show(); } },
 				{ type: 'separator' },
-				{ label: _('Quit'), click: () => { void app.quit(); } },
+				{ label: _('Quit'), click: () => {
+					app.quitWithSyncCheck(
+						(action: { type: string; [key: string]: unknown }) => this.store().dispatch(action),
+						this.store().getState().syncPending,
+					);
+				} },
 			]);
 			app.createTray(contextMenu);
 		}
@@ -236,16 +248,15 @@ class Application extends BaseApplication {
 		// The context menu must be setup in renderer process because that's where
 		// the spell checker service lives.
 		electronContextMenu({
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			shouldShowMenu: (_event: any, params: any) => {
+			shouldShowMenu: (_event: unknown, params: { isEditable: boolean; inputFieldType: string }) => {
 				// params.inputFieldType === 'none' when right-clicking the text editor. This is a bit of a hack to detect it because in this
 				// case we don't want to use the built-in context menu but a custom one.
 				return params.isEditable && params.inputFieldType !== 'none';
 			},
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- electron-context-menu's actions/props don't have public types in this version
 			menu: (actions: any, props: any) => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- contextMenuItems returns a heterogeneous menu shape that doesn't satisfy Electron's MenuItemConstructorOptions structurally
 				const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions).map((item: any) => new MenuItem(item));
 
 				const output = [
@@ -366,7 +377,7 @@ class Application extends BaseApplication {
 		if (Setting.value('ocr.enabled')) {
 
 			if (!this.ocrService_) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- tesseract.js is loaded via <script> onto window; the published createWorker type is stricter than the runtime accepts
 				const Tesseract = (window as any).Tesseract;
 
 				const drivers: OcrDriverBase[] = [];
@@ -477,7 +488,7 @@ class Application extends BaseApplication {
 		}
 
 		addTask('app/set up custom protocol handler', async () => {
-			this.protocolHandler_ = bridge().electronApp().getCustomProtocolHandler();
+			this.protocolHandler_ = bridge().electronApp().getContentProtocolHandler();
 			this.protocolHandler_.allowReadAccessToDirectory(__dirname); // App bundle directory
 			this.protocolHandler_.allowReadAccessToDirectory(Setting.value('cacheDir'));
 			this.protocolHandler_.allowReadAccessToDirectory(Setting.value('resourceDir'));
@@ -495,6 +506,11 @@ class Application extends BaseApplication {
 			PluginManager.instance().register(pluginClasses);
 
 			this.initRedux();
+
+			// BaseApplication.store() is typed against the shared State; the
+			// runtime store carries AppState. The bridge only needs dispatch and
+			// getState, so narrow through unknown.
+			installAiStatusBridge(this.store() as unknown as AiStatusStore);
 
 			initializeCommandService(this.store(), Setting.value('env') === 'dev');
 
@@ -599,6 +615,10 @@ class Application extends BaseApplication {
 			}
 		});
 
+		addTask('app/complete pending Joplin Cloud auth', async () => {
+			await completePendingAuthentication();
+		});
+
 		addTask('app/start maintenance tasks', () => {
 			// Always disable on Mac for now - and disable too for the few apps that may have the flag enabled.
 			// At present, it only seems to work on Windows.
@@ -633,18 +653,23 @@ class Application extends BaseApplication {
 
 			if (Setting.value('env') === 'dev') {
 				void AlarmService.updateAllNotifications();
+				RevisionService.instance().runInBackground();
 			} else {
-				// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-				void reg.scheduleSync(1000).then(() => {
-					// Wait for the first sync before updating the notifications, since synchronisation
-					// might change the notifications.
-					void AlarmService.updateAllNotifications();
+				setTimeout(() => {
+					// Schedule sync with a delay of 0 and wrap with the desired timeout, as shim.setTimeout may not fire on first run or after an upgrade
+					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
+					void reg.scheduleSync(0).then(() => {
+						// Wait for the first sync before updating the notifications, since synchronisation
+						// might change the notifications.
+						void AlarmService.updateAllNotifications();
 
-					void DecryptionWorker.instance().scheduleStart();
-				});
+						void DecryptionWorker.instance().scheduleStart();
+
+						RevisionService.instance().runInBackground();
+					});
+				}, 1000);
 			}
 
-			RevisionService.instance().runInBackground();
 			this.startRotatingLogMaintenance(Setting.value('profileDir'));
 		});
 
@@ -669,7 +694,7 @@ class Application extends BaseApplication {
 
 			ResourceEditWatcher.instance().initialize(
 				reg.logger(),
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux action — heterogeneous; tightening would require a typed action union shared with the store
 				(action: any) => { this.store().dispatch(action); },
 				(path: string) => bridge().openItem(path),
 				() => this.store().getState().windowId,
@@ -677,8 +702,7 @@ class Application extends BaseApplication {
 
 			// Forwards the local event to the global event manager, so that it can
 			// be picked up by the plugin manager.
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			ResourceEditWatcher.instance().on('resourceChange', (event: any) => {
+			ResourceEditWatcher.instance().on('resourceChange', (event: { id: string }) => {
 				eventManager.emit(EventName.ResourceChange, event);
 			});
 		});
@@ -686,8 +710,7 @@ class Application extends BaseApplication {
 		// Make it available to the console window - useful to call revisionService.collectRevisions()
 		if (Setting.value('env') === 'dev') {
 			addTask('app/add debug variables', () => {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(window as any).joplin = {
+				(window as unknown as Record<string, unknown>).joplin = {
 					revisionService: RevisionService.instance(),
 					migrationService: MigrationService.instance(),
 					decryptionWorker: DecryptionWorker.instance(),
@@ -723,6 +746,10 @@ class Application extends BaseApplication {
 					});
 				}
 			});
+
+			ipcRenderer.on('secondary-window-closing', (_event, windowId: string) => {
+				this.dispatch({ type: 'WINDOW_CLOSE', windowId });
+			});
 		});
 
 		addTask('app/initPluginService', () => this.initPluginService());
@@ -745,12 +772,21 @@ class Application extends BaseApplication {
 			});
 		});
 
+		addTask('app/listen for note lock session events', () => {
+			eventManager.on(EventName.NoteLockSessionChange, (event) => {
+				this.dispatch({
+					type: 'SET_NOTE_LOCK_SESSION_UNLOCKED',
+					value: event.unlocked,
+				});
+			});
+		});
+
 		addTask('app/setupOcrService', () => this.setupOcrService());
 
 		return tasks;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Matches the base class signature (BaseApplication.start returns Promise<any>)
 	public async start(argv: string[], startOptions: StartOptions = null): Promise<any> {
 		const startupTask = perfLogger.taskStart('app/start');
 
@@ -764,6 +800,16 @@ class Application extends BaseApplication {
 		await this.setupIntegrationTestUtils();
 
 		bridge().setLogFilePath(Logger.globalLogger.logFilePath());
+
+		// Install the local embedding provider before applySettingsSideEffects()
+		// — applyEmbeddingIndexerState() consults AiService for an active
+		// provider, so the indexer will silently sit idle if we wire it up after.
+		// Only install when ONNX is actually available; otherwise embeddings
+		// remain unavailable and the indexer stays off.
+		if (shim.onnxRuntime()) {
+			AiService.instance().setEmbeddingProvider(new LocalEmbeddingProvider());
+		}
+
 		await this.applySettingsSideEffects();
 
 		if (Setting.value('sync.upgradeState') === Setting.SYNC_UPGRADE_STATE_MUST_DO) {

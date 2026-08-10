@@ -38,7 +38,11 @@ describe('showCreateEditorPrompt', () => {
 
 	test('should allow creating a new code block', async () => {
 		const editor = createEditor('');
-		showCreateEditablePrompt('```\ntest\n```', false)(editor.state, editor.dispatch, editor);
+		showCreateEditablePrompt({
+			source: '```\ntest\n```',
+			inline: false,
+			cursor: 8,
+		})(editor.state, editor.dispatch, editor);
 
 		const dialog = findEditorDialog();
 		dialog.submitButton.click();
@@ -53,5 +57,17 @@ describe('showCreateEditorPrompt', () => {
 				},
 			}],
 		});
+	});
+
+	test('should position the cursor at the provided location', () => {
+		const editor = createEditor('');
+		showCreateEditablePrompt({
+			source: '```\n\n```',
+			inline: false,
+			cursor: 4,
+		})(editor.state, editor.dispatch, editor);
+
+		const dialog = findEditorDialog();
+		expect(dialog.editor.selectionStart).toBe(4);
 	});
 });

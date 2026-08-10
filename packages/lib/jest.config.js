@@ -1,3 +1,4 @@
+const baseConfig = require('../../jest.config.base.js');
 
 const testPathIgnorePatterns = [
 	'<rootDir>/node_modules/',
@@ -11,6 +12,7 @@ if (!process.env.IS_CONTINUOUS_INTEGRATION) {
 }
 
 module.exports = {
+	...baseConfig,
 	testMatch: [
 		'**/*.test.js',
 	],

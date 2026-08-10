@@ -24,12 +24,10 @@ impl ObjectReference {
         // Find the correct object reference
         let index = Self::get_offset(prop_type, object)?;
 
-        let id = object
-            .props()
-            .object_ids()
-            .iter()
-            .nth(index)
-            .ok_or_else(|| ErrorKind::MalformedOneNoteFileData("object id index corrupt".into()))?;
+        let id =
+            object.props().object_ids().get(index).ok_or_else(|| {
+                ErrorKind::MalformedOneNoteFileData("object id index corrupt".into())
+            })?;
 
         Ok(Self::resolve_id(index, id, object))
     }

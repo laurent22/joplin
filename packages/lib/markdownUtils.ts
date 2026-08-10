@@ -2,7 +2,7 @@ import { validateLinks } from '@joplin/renderer';
 const stringPadding = require('string-padding');
 const urlUtils = require('./urlUtils');
 import type * as MarkdownItType from 'markdown-it';
-const MarkdownIt = require('markdown-it');
+import MarkdownIt from 'markdown-it';
 
 // Taken from codemirror/addon/edit/continuelist.js
 const listRegex = /^(\s*)([*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/;
@@ -11,7 +11,7 @@ const emptyListRegex = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s+)$/;
 export enum MarkdownTableJustify {
 	Left = 'left',
 	Center = 'center',
-	Right = 'right,',
+	Right = 'right',
 }
 
 export interface MarkdownTableHeader {
@@ -72,15 +72,15 @@ const markdownUtils = {
 	},
 
 	prependBaseUrl(md: string, baseUrl: string) {
-		// eslint-disable-next-line no-useless-escape, @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
+		// eslint-disable-next-line no-useless-escape -- Old code before rule was applied
+		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (_match: string, before: string, url: string, after: string) => {
 			return before + urlUtils.prependBaseUrl(url, baseUrl) + after;
 		});
 	},
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
 	extractFileUrls(md: string, onlyType: string = null): string[] {
-		const markdownIt: MarkdownItType = new MarkdownIt();
+		const markdownIt = new MarkdownIt();
 		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
 
 		const env = {};
@@ -90,8 +90,7 @@ const markdownUtils = {
 		let linkType = onlyType;
 		if (linkType === 'pdf') linkType = 'link_open';
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const searchUrls = (tokens: any[]) => {
+		const searchUrls = (tokens: MarkdownItType.Token[]) => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
 				if ((!onlyType && (token.type === 'link_open' || token.type === 'image')) || (!!onlyType && token.type === onlyType) || (onlyType === 'pdf' && token.type === 'link_open')) {
@@ -224,17 +223,44 @@ const markdownUtils = {
 		if (!body) return '';
 		const spaceEntities = /&nbsp;/g;
 		body = body.replace(spaceEntities, ' ');
-		const lines = body.trim().split('\n');
-		const title = lines[0].trim();
+		const lines = body.split('\n');
+		let title = '';
 
-		const mdLinkRegex = /!?\[([^\]]+?)\]\(.+?\)/g;
-		const emptyMdLinkRegex = /!?\[\]\((.+?)\)/g;
-		const filterRegex = /^[# \n\t*`-]*/;
-		return title
-			.replace(filterRegex, '')
-			.replace(mdLinkRegex, '$1')
-			.replace(emptyMdLinkRegex, '$1')
-			.substring(0, 80);
+		for (const line of lines) {
+			const trimmed = line.trim();
+			if (trimmed) {
+				title = trimmed;
+				break;
+			}
+		}
+
+		title = title.replace(/<\/?(ins|del|mark|sub|sup)>/g, '');
+		title = title.replace(/!?\[([^\]]*)\]\(([^()\n]+(?:\([^()\n]*\)[^()\n]*)*)\)/g, (_match, text, url) => {
+			return text || url;
+		});
+		const formattingPatterns = [
+			/(\*\*\*|___)(.*?)\1/g,
+			/(\*\*|__)(.*?)\1/g,
+			/(\*|_)(.*?)\1/g,
+			/(~~)(.*?)\1/g,
+			/(==)(.*?)\1/g,
+			/(\^)(.*?)\1/g,
+		];
+
+		let prev;
+		do {
+			prev = title;
+			for (const pattern of formattingPatterns) {
+				title = title.replace(pattern, '$2');
+			}
+		} while (title !== prev);
+
+		title = title.replace(/^\s*([-*+]|\d+[.)])\s+(\[[ xX]\]\s+)?/, '');
+		title = title.replace(/^(~{2,}|={2,})$/, '');
+		title = title.replace(/^[#>\-*`\s=]+/, '');
+		title = title.replace(/[#>\-*`\s=]+$/, '');
+		title = title.trim();
+		return title.substring(0, 80);
 	},
 };
 

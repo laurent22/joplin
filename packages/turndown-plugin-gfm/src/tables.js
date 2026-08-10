@@ -119,7 +119,8 @@ rules.table = {
         }
       }
 
-      const captionContent = node.caption ? node.caption.textContent || '' : '';
+      const captionNode = node.querySelector ? node.querySelector('caption') : node.caption;
+      const captionContent = captionNode ? captionNode.textContent || '' : '';
       const caption = captionContent ? `${captionContent}\n\n` : '';
       const tableContent = `${emptyHeader}${content}`.trimStart();
       return `\n\n${caption}${tableContent}\n\n`;
@@ -209,6 +210,93 @@ const nodeContains = (node, types) => {
   return false;
 }
 
+// Style properties that count as user customization.
+// Excludes TinyMCE/Joplin defaults:
+//   - border-collapse: set by default on all tables
+//   - width: set on every cell by TinyMCE
+//   - text-align: converted to Markdown alignment (:---, :---:, ---:)
+//   - height: false positives from TinyMCE defaults
+const customStyleProperties = [
+  'background-color', 'background',
+  'border-color', 'border',
+  'border-top', 'border-right', 'border-bottom', 'border-left',
+  'border-style', 'border-width',
+  'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+  'float', 'margin-left', 'margin-right',
+];
+
+// HTML attributes TinyMCE may set instead of CSS.
+const customAttributeNames = [
+  'bgcolor',
+  'bordercolor',
+  'background',
+];
+
+const nodeHasCustomStyle = (node) => {
+  if (!node || !node.getAttribute) return false;
+  const styleAttr = node.getAttribute('style');
+  if (!styleAttr) return false;
+  // Extract property names from the raw style string
+  const properties = styleAttr.split(';')
+    .map(s => s.split(':')[0].trim().toLowerCase())
+    .filter(s => s.length > 0);
+  for (let i = 0; i < properties.length; i++) {
+    if (customStyleProperties.includes(properties[i])) return true;
+  }
+  return false;
+};
+
+const hasNonDefaultSpacingAttribute = (node, name) => {
+  if (!node || !node.getAttribute) return false;
+  const value = node.getAttribute(name);
+  if (value === null) return false;
+  const normalisedValue = `${value}`.trim().toLowerCase();
+  if (!normalisedValue) return false;
+  if (normalisedValue === '0' || normalisedValue === '0px') return false;
+  return true;
+};
+
+const nodeHasCustomAttributes = (node) => {
+  if (!node || !node.getAttribute) return false;
+
+  for (let i = 0; i < customAttributeNames.length; i++) {
+    const value = node.getAttribute(customAttributeNames[i]);
+    if (value !== null && `${value}`.trim() !== '') return true;
+  }
+
+  if (node.nodeName === 'TABLE') {
+    if (hasNonDefaultSpacingAttribute(node, 'cellpadding')) return true;
+    if (hasNonDefaultSpacingAttribute(node, 'cellspacing')) return true;
+  }
+
+  return false;
+};
+
+const nodeHasCustomFormatting = (node) => {
+  return nodeHasCustomStyle(node) || nodeHasCustomAttributes(node);
+};
+
+// Returns true if the table or any of its rows/cells have custom formatting.
+const tableHasCustomStyles = (tableNode) => {
+  if (nodeHasCustomFormatting(tableNode)) return true;
+
+  const rows = tableNode.rows;
+  if (!rows) return false;
+
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    if (nodeHasCustomFormatting(row)) return true;
+    for (let j = 0; j < row.childNodes.length; j++) {
+      const cell = row.childNodes[j];
+      if ((cell.nodeName === 'TD' || cell.nodeName === 'TH') && nodeHasCustomFormatting(cell)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+};
+
 const tableShouldBeHtml = (tableNode, options) => {
   const possibleTags = [
     'UL',
@@ -231,7 +319,8 @@ const tableShouldBeHtml = (tableNode, options) => {
   if (options.preserveNestedTables) possibleTags.push('TABLE');
 
   return nodeContains(tableNode, 'code') ||
-    nodeContains(tableNode, possibleTags);
+    nodeContains(tableNode, possibleTags) ||
+    (options.preserveTableStyles && tableHasCustomStyles(tableNode));
 }
 
 // Various conditions under which a table should be skipped - i.e. each cell

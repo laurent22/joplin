@@ -4,7 +4,7 @@ import { _ } from '@joplin/lib/locale';
 import bridge from './services/bridge';
 import KvStore from '@joplin/lib/services/KvStore';
 import * as ArrayUtils from '@joplin/lib/ArrayUtils';
-import { CheckForUpdateOptions, extractVersionInfo, GitHubRelease } from './utils/checkForUpdatesUtils';
+import { CheckForUpdateOptions, extractVersionInfo, GitHubRelease, handleReleaseResponseError } from './utils/checkForUpdatesUtils';
 import { PackageInfo } from '@joplin/lib/versionInfo';
 import { compareVersions } from 'compare-versions';
 const packageInfo: PackageInfo = require('./packageInfo.js');
@@ -29,10 +29,17 @@ async function fetchLatestReleases() {
 
 	if (!response.ok) {
 		const responseText = await response.text();
-		throw new Error(`Cannot get latest release info: ${responseText.substr(0, 500)}`);
+		logger.error(`Cannot get latest release info (${response.status}): ${responseText.substr(0, 500)}`);
+		handleReleaseResponseError(response.status, responseText);
 	}
 
 	return (await response.json()) as GitHubRelease[];
+}
+
+export async function isReleaseVersion(version: string): Promise<boolean | null> {
+	const releases = await fetchLatestReleases();
+	const release = releases.find(release => release.tag_name === `v${version}`);
+	return release ? !release.prerelease : null;
 }
 
 function truncateText(text: string, length: number) {
@@ -48,8 +55,8 @@ function truncateText(text: string, length: number) {
 }
 
 async function getSkippedVersions(): Promise<string[]> {
-	const r = await KvStore.instance().value<string>('updateCheck::skippedVersions');
-	return r ? JSON.parse(r) : [];
+	const r = await KvStore.instance().value('updateCheck::skippedVersions');
+	return r && typeof r === 'string' ? JSON.parse(r) : [];
 }
 
 async function isSkippedVersion(v: string): Promise<boolean> {
@@ -64,7 +71,7 @@ async function addSkippedVersion(s: string) {
 	await KvStore.instance().setValue('updateCheck::skippedVersions', JSON.stringify(versions));
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- parentWindow is passed to bridge().showMessageBox but the bridge signature no longer accepts a window arg; tightening would expose a pre-existing call-site mismatch (logic change)
 export default async function checkForUpdates(inBackground: boolean, parentWindow: any, options: CheckForUpdateOptions) {
 	if (isCheckingForUpdate_) {
 		logger.info('Skipping check because it is already running');

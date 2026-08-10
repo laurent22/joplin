@@ -115,6 +115,15 @@ describe('markdownUtils', () => {
 		['These are [link1](one), [link2](two) and ![link3](three)', 'These are link1, link2 and link3'],
 		['No description link to [](https://joplinapp.org)', 'No description link to https://joplinapp.org'],
 		['&nbsp;\n\nThis is a test &nbsp; test.', 'This is a test   test.'],
+		['***Example title***', 'Example title'],
+		['==~~Formatted title~~==', 'Formatted title'],
+		['<ins>Important note title</ins>', 'Important note title'],
+		['`Inline code title`', 'Inline code title'],
+		['<ins>~~==***Deeply formatted title***==~~</ins>', 'Deeply formatted title'],
+		['C++ <vector> usage guide', 'C++ <vector> usage guide'],
+		['C# programming basics', 'C# programming basics'],
+		['Understanding a ~ b relationship', 'Understanding a ~ b relationship'],
+		['***~~***', ''],
 	])('should create a default note title from the note body (%j -> %j)', (body, expectedTitle) => {
 		expect(markdownUtils.titleFromBody(body)).toBe(expectedTitle);
 	});

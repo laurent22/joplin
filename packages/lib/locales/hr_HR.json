@@ -25,9 +25,9 @@
 		"%d MB po bilješci ili privitku"
 	],
 	"%d minute": [
-		"%d minunta",
-		"%d minunte",
-		"%d minunta"
+		"%d minuta",
+		"%d minute",
+		"%d minuta"
 	],
 	"%d note matches this pattern. Delete it?": [
 		"%d bilješka se poklapa s ovim uzorkom. Želiš li je izbrisati?",
@@ -174,7 +174,7 @@
 		"[Ništa]"
 	],
 	"A brief description of the image:": [
-		""
+		"Kratki opis slike:"
 	],
 	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
 		"Popis riječi odvojenih zarezima. Može se koristiti za neobične riječi, kako bi se glasovnom tipkanju pomoglo da ih ispravno napiše."
@@ -190,6 +190,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		"Informacije"
@@ -249,7 +252,7 @@
 		"Dodaj sadržaj"
 	],
 	"Add column": [
-		""
+		"Dodaj stupac"
 	],
 	"Add new": [
 		"Dodaj novu"
@@ -259,6 +262,9 @@
 	],
 	"Add recipient:": [
 		"Dodaj primaoca:"
+	],
+	"Add row": [
+		"Dodaj redak"
 	],
 	"Add tags:": [
 		"Dodaj oznake:"
@@ -348,7 +354,7 @@
 		"Pronađen je automatski spremljen crtež. Priložiti kopiju bilješci?"
 	],
 	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
-		""
+		"Dogodila se greška prilikom slanja odgovora. To se može dogoditi ako je aplikacija offline ili se ne može spojiti na server.\nGreška: %s"
 	],
 	"An error occurred: %s": [
 		"Dogodila se greška: %s"
@@ -472,6 +478,9 @@
 	],
 	"Beta": [
 		"Beta"
+	],
+	"Block code": [
+		""
 	],
 	"Bold": [
 		"Podebljano"
@@ -611,6 +620,9 @@
 	"Checking... Please wait.": [
 		"Provjeravanje … Pričekaj."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Odaberi jednu opciju"
 	],
@@ -669,16 +681,13 @@
 		"Cmd-klik za otvaranje: %s"
 	],
 	"Code": [
-		"Kȏd"
+		"Kod"
 	],
 	"Code Block": [
 		"Blok koda"
 	],
 	"Code View": [
 		"Prikaz koda"
-	],
-	"Code:": [
-		"Kod:"
 	],
 	"Collaborate on a notebook with others": [
 		"Surađuj s drugima na bilježnici"
@@ -689,8 +698,11 @@
 	"Collapse all notebooks": [
 		"Sklopi sve bilježnice"
 	],
+	"Collapse title": [
+		"Sklopi naslov"
+	],
 	"Collapsed": [
-		"Skupljeno"
+		"Sklopljeno"
 	],
 	"Coming alarms": [
 		"Nadolazeća upozorenja"
@@ -703,6 +715,9 @@
 	],
 	"Command": [
 		"Naredba"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Paleta naredbi"
@@ -793,9 +808,6 @@
 	"Convert it": [
 		"Pretvori"
 	],
-	"Convert note to Markdown": [
-		"Pretvori bilješku u Markdown"
-	],
 	"Convert to note": [
 		"Pretvori u bilješku"
 	],
@@ -847,13 +859,10 @@
 		"Neuspjelo autoriziranje programa:\n\n%s\n\nPokušaj ponovo."
 	],
 	"Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s": [
-		"Neuspjelo povezivanje s Joplin poslužiteljem. Provjeri opcije sinkronizacije u prozoru konfiguracije. Potpuna greška glasi:\n\n%s"
+		"Neuspjelo povezivanje s Joplin Server. Provjeri opcije sinkronizacije u prozoru konfiguracije. Potpuna greška glasi:\n\n%s"
 	],
 	"Could not connect to plugin repository.": [
 		"Neuspjelo povezivanje s repozitorijem dodataka."
-	],
-	"Could not convert note to Markdown: %s": [
-		"Neuspjelo pretvaranja bilješke u Markdown: %s"
 	],
 	"Could not export notes: %s": [
 		"Neuspio izvoz bilježaka: %s"
@@ -1029,6 +1038,9 @@
 	"Delete attachment \"%s\"?": [
 		"Izbrisati privitak „%s”?"
 	],
+	"Delete column": [
+		"Izbriši stupac"
+	],
 	"Delete expired sessions": [
 		"Izbriši istekle sesije"
 	],
@@ -1056,8 +1068,14 @@
 	"Delete profile \"%s\"": [
 		"Izbriši profil „%s”"
 	],
+	"Delete row": [
+		"Izbriši redak"
+	],
 	"Delete selected notes": [
 		"Izbriši odabrane bilješke"
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Izbrisati bilježnicu „Dolazna pošta”?\n\nAko izbrišeš bilježnicu dolazne pošte, sva e-pošta koja je nedavno poslana na nju će se možda izgubiti."
@@ -1164,6 +1182,9 @@
 	"Displays the complete information about note.": [
 		"Prikazuje potpune podatke o bilješci."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Prikazuje zadanu bilješku."
 	],
@@ -1189,7 +1210,7 @@
 		"Nemoj izgubiti lozinku, jer će to iz sigurnosnih razloga biti *jedini* način za dešifriranje podataka! Za aktiviranje šifriranja dolje upiši svoju lozinku."
 	],
 	"Do you find the Joplin web app useful?": [
-		""
+		"Smatraš li web aplikaciju Joplin korisnom?"
 	],
 	"Document scanner: Title template": [
 		"Skener dokumenata: Predložak naslova"
@@ -1548,6 +1569,9 @@
 	"Expand all notebooks": [
 		"Rasklopi sve bilježnice"
 	],
+	"Expand title": [
+		"Rasklopi naslov"
+	],
 	"Expanded": [
 		"Rasklopljeno"
 	],
@@ -1612,7 +1636,7 @@
 		"Oznake funkcija"
 	],
 	"Feedback": [
-		""
+		"Povratne informacije"
 	],
 	"Fetched items: %d/%d.": [
 		"Dohvaćeni elementi: %d/%d."
@@ -1746,7 +1770,7 @@
 		"Odobri autorizaciju"
 	],
 	"Have you authorised the application login in the above URL?": [
-		"Jesi li autorizirao/la prijavu program u gore navedenom URL-u?"
+		"Jesi li autorizirao/la prijavu programa u gore navedenom URL-u?"
 	],
 	"Header %d": [
 		"Zaglavlje %d"
@@ -1920,7 +1944,7 @@
 		"Informacije"
 	],
 	"Inline Code": [
-		"Umetnuti kȏd"
+		"Umetnuti kod"
 	],
 	"Insert": [
 		"Umetni"
@@ -2027,6 +2051,9 @@
 	"Joplin Server": [
 		"Joplin Server"
 	],
+	"Joplin Server (SAML)": [
+		"Joplin Server (SAML)"
+	],
 	"Joplin Server Business": [
 		"Joplin Server Business"
 	],
@@ -2046,7 +2073,7 @@
 		"Joplin SSO autentifikacija"
 	],
 	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
-		""
+		"Joplin podržava spremanje mjesta na kojoj se bilješke spremaju ili stvaraju. Želiš li to aktivirati? To možeš promijeniti u bilo kojem trenutku u postavkama."
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin Web Clipper omogućuje spremanje web-stranica i slika ekrana iz tvog preglednika u Joplin."
@@ -2075,11 +2102,14 @@
 	"Keychain Supported: %s": [
 		"Podržani privjesak ključeva: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Ključevi koji se moraju nadograditi"
 	],
 	"Label": [
-		""
+		"Etiketa"
 	],
 	"Landscape": [
 		"Polegnuto"
@@ -2223,6 +2253,9 @@
 	"Manage your plugins": [
 		"Upravljaj dodacima"
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Upravlja E2EE konfiguracijom. Naredbe su `enable` (aktiviraj), `disable` (deaktiviraj), `decrypt` (dešifriraj), `status` (stanje), `decrypt-file` (dešifriraj datoteku) i `target-status` (stanje cilja)."
 	],
@@ -2237,6 +2270,9 @@
 	],
 	"Markdown editor": [
 		"Markdown uređivač"
+	],
+	"Markdown editor: Highlight active line": [
+		"Markdown uređivač: Istakni aktivni redak"
 	],
 	"Markdown editor: Render images": [
 		"Markdown uređivač: Prikazivanje slika"
@@ -2477,6 +2513,9 @@
 	"No updates available": [
 		"Nema novih verzija"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Ništa"
 	],
@@ -2499,7 +2538,7 @@
 		"Ne sada"
 	],
 	"Not useful": [
-		""
+		"Nije korisno"
 	],
 	"note": [
 		"bilješka"
@@ -2548,6 +2587,9 @@
 	],
 	"Note list style": [
 		"Stil popisa bilježaka"
+	],
+	"Note not published: %s": [
+		"Bilješka nije objavljena: %s"
 	],
 	"Note preview": [
 		"Pregled bilješke"
@@ -2610,7 +2652,7 @@
 		"OCR: URL podataka jezika ili putanja"
 	],
 	"OCR: Search in extracted content": [
-		"OCR: Tra#i u izdvojenom sadržaju"
+		"OCR: Traži u izdvojenom sadržaju"
 	],
 	"OK": [
 		"U redu"
@@ -2684,6 +2726,9 @@
 	"Open Sync Wizard...": [
 		"Otvori programčić za sinkronizaciju …"
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Otvori …"
 	],
@@ -2705,11 +2750,14 @@
 	"Options": [
 		"Opcije"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
 		"Poredan popis"
 	],
 	"Other": [
-		""
+		"Drugi"
 	],
 	"Other applications...": [
 		"Drugi programi …"
@@ -2962,6 +3010,9 @@
 	"Publish Note": [
 		"Objavi bilješku"
 	],
+	"Publish note \"%s\" (in notebook \"%s\")?": [
+		"Objaviti bilješku „%s“ (u bilježnici „%s“)?"
+	],
 	"Publish note...": [
 		"Objavi bilješku …"
 	],
@@ -2974,8 +3025,11 @@
 	"Publish/unpublish": [
 		"Objavi/Poništi objavljivanje"
 	],
+	"Published at URL: %s": [
+		"Objavljeno na URL-u: %s"
+	],
 	"Publishes a note to Joplin Server or Joplin Cloud": [
-		""
+		"Objavljuje bilješku na Joplin Server ili Joplin Cloud"
 	],
 	"QR Code": [
 		"QR kod"
@@ -3021,6 +3075,9 @@
 	],
 	"Recipients:": [
 		"Primaoci:"
+	],
+	"Recognise text:": [
+		"Prepoznaj tekst:"
 	],
 	"Recognize handwritten image": [
 		"Prepoznaj rukom pisane slike"
@@ -3250,6 +3307,9 @@
 	"Save geo-location with notes": [
 		"Spremi geografske podatke mjesta s bilješkama"
 	],
+	"Save geolocation?": [
+		"Spremiti geografske podatke mjesta?"
+	],
 	"Scan notebook": [
 		"Skeniraj bilježnicu"
 	],
@@ -3320,10 +3380,13 @@
 		"Odaberi bilježnicu"
 	],
 	"Select one of the other supported sync targets.": [
-		""
+		"Odaberi jedan od drugih podržanih ciljeva sinkronizacije."
 	],
 	"Select parent notebook": [
 		"Odaberi nadređenu bilježnicu"
+	],
+	"Select the type of file to be imported:": [
+		""
 	],
 	"Selected: %s": [
 		"Odabrano: %s"
@@ -3529,6 +3592,9 @@
 	"Source: ": [
 		"Izvor: "
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		"Razmak"
 	],
@@ -3659,7 +3725,7 @@
 		"Prebacuje na bilježnicu [notebook] – sve daljnje operacije će se izvoditi u ovoj bilježnici."
 	],
 	"Sync": [
-		""
+		"Sinkronizraj"
 	],
 	"Sync as many devices as you want": [
 		"Sinkroniziraj koliko god uređaja želiš"
@@ -3739,6 +3805,9 @@
 	"Take photo": [
 		"Snimi sliku"
 	],
+	"Take survey": [
+		"Sudjeluj u anketi"
+	],
 	"Task \"%s\" failed with error: %s": [
 		"Zadatak „%s“ nije uspio s greškom: %s"
 	],
@@ -3758,7 +3827,7 @@
 		"Naredba za uređivača teksta"
 	],
 	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
-		""
+		"Hvala na povratnoj informaciji!\nImaš li vremena ispuniti kratku anketu?"
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"Aktivni profil se ne može izbrisati. Prebaci se na jedan drugi profil i pokušaj ponovo."
@@ -3833,9 +3902,6 @@
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Bilješka „%s” je uspješno obnovljena u bilježnicu „%s”."
-	],
-	"The note has been converted to Markdown and the original note has been moved to the trash": [
-		"Bilješka je pretvorena u Markdown, a izvorna bilješka je premještena u smeće"
 	],
 	"The note was successfully moved to the trash.": [
 		"Bilješka je uspješno premještena u smeće.",
@@ -3945,7 +4011,7 @@
 		"Ova je funkcija standardno deaktivirana. Moraš je ručno aktivirati uključivanjem opcije „Aktiviraj rukom pisanu transkripciju“."
 	],
 	"This feature is only available on Joplin Cloud and Joplin Server.": [
-		"Ova je funkcija dostupna samo na Joplin Cloudu i Joplin Serveru."
+		"Ova je funkcija dostupna samo na Joplin Cloud i Joplin Server."
 	],
 	"This image type is not supported by the recognition system.": [
 		"Sustav za prepoznavanje ne podržava ovu vrstu slike."
@@ -4142,6 +4208,9 @@
 	"Try it now": [
 		"Isprobaj"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Upiši `help [command]` za više informacija o naredbi ili `help all` za sve informacije o korištenju naredbi."
 	],
@@ -4162,6 +4231,9 @@
 	],
 	"Unable to share log data. Reason: %s": [
 		"Nije moguće izvesti ili dijeliti podatke dnevnika. Razlog: %s"
+	],
+	"Unable to share note data. Reason: %s": [
+		"Nije moguće dijeliti podatke bilješke. Razlog: %s"
 	],
 	"Unchecked": [
 		"Neoznačeno"
@@ -4308,7 +4380,7 @@
 		"Koristi se za tekst fiksne širine (npr. tablice, označiva polja, programski kod). Ako se ne pronađe, koristi se generički font fiksne širine."
 	],
 	"Useful": [
-		""
+		"Korisno"
 	],
 	"User deletions": [
 		"Brisanja korisnika"
@@ -4416,7 +4488,7 @@
 		"Prilikom stvaranja novog zadatka:"
 	],
 	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
-		""
+		"Kada je aktivirano, traži da se slike u bilješci transkribiraju kvalitetnijom uslugom transkripcije na serveru. Zahtijeva sinkronizaciju s kopijom desktop aplikacije."
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"Kada je aktivirano, program će pregledati tvoje privitke i iz njih izdvojiti tekst. To omogućuje pretraživanje teksta u tim privicima."

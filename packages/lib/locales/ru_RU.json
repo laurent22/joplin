@@ -191,6 +191,9 @@
 	"A5": [
 		"A5"
 	],
+	"ABC musical notation: Options": [
+		""
+	],
 	"About": [
 		"О программе"
 	],
@@ -473,6 +476,9 @@
 	"Beta": [
 		"Бета"
 	],
+	"Block code": [
+		""
+	],
 	"Bold": [
 		"Полужирный"
 	],
@@ -611,6 +617,9 @@
 	"Checking... Please wait.": [
 		"Проверка... Пожалуйста, подождите."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"Выберите"
 	],
@@ -677,9 +686,6 @@
 	"Code View": [
 		"Просмотр кода"
 	],
-	"Code:": [
-		"Код"
-	],
 	"Collaborate on a notebook with others": [
 		"Работайте над блокнотом вместе с другими людьми"
 	],
@@ -703,6 +709,9 @@
 	],
 	"Command": [
 		"Команда"
+	],
+	"COMMAND": [
+		""
 	],
 	"Command palette": [
 		"Палитра команд"
@@ -793,9 +802,6 @@
 	"Convert it": [
 		"Преобразовать в заметку"
 	],
-	"Convert note to Markdown": [
-		"Преобразовать в задачу"
-	],
 	"Convert to note": [
 		"Преобразовать в заметку"
 	],
@@ -851,9 +857,6 @@
 	],
 	"Could not connect to plugin repository.": [
 		"Не удалось соединиться с репозиторием плагинов."
-	],
-	"Could not convert note to Markdown: %s": [
-		"Не удалось экспортировать заметки: %s"
 	],
 	"Could not export notes: %s": [
 		"Не удалось экспортировать заметки: %s"
@@ -1059,6 +1062,9 @@
 	"Delete selected notes": [
 		"Удаление выбранных заметок"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"Удалить блокнот \"Входящие\"?\n\nПри удалении блокнота \"Входящие\" все сообщения электронной почты, недавно отправленные в него, могут быть потеряны."
 	],
@@ -1163,6 +1169,9 @@
 	],
 	"Displays the complete information about note.": [
 		"Отображает полную информацию о заметке."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
 	],
 	"Displays the given note.": [
 		"Отображает заданную заметку."
@@ -2075,6 +2084,9 @@
 	"Keychain Supported: %s": [
 		"Поддерживаемая связка ключей: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"Ключи, которые нуждаются в обновлении"
 	],
@@ -2222,6 +2234,9 @@
 	],
 	"Manage your plugins": [
 		"Управлять плагинами"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"Управляет конфигурацией E2EE. Команды: `enable`, `disable`, `decrypt`, `status`, `decrypt-file` и `target-status`."
@@ -2474,6 +2489,9 @@
 	"No updates available": [
 		"Нет доступных обновлений"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"None": [
 		"Нет"
 	],
@@ -2681,6 +2699,9 @@
 	"Open Sync Wizard...": [
 		"Открыть мастер синхронизации..."
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		"Открыть..."
 	],
@@ -2701,6 +2722,9 @@
 	],
 	"Options": [
 		"Параметры"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
 	],
 	"Ordered list": [
 		"Упорядоченный список"
@@ -3322,6 +3346,9 @@
 	"Select parent notebook": [
 		"Выбрать родительский блокнот"
 	],
+	"Select the type of file to be imported:": [
+		""
+	],
 	"Selected: %s": [
 		"Создано: %s"
 	],
@@ -3525,6 +3552,9 @@
 	],
 	"Source: ": [
 		"Источник: "
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		"Разделитель"
@@ -3831,9 +3861,6 @@
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"Заметка “%s” была успешно восстановлена в блокнот “%s”."
 	],
-	"The note has been converted to Markdown and the original note has been moved to the trash": [
-		"Блокнот и его содержимое были успешно перемещены в корзину."
-	],
 	"The note was successfully moved to the trash.": [
 		"Заметка была успешно перемещена в корзину.",
 		"Заметки были успешно перемещены в корзину.",
@@ -4138,6 +4165,9 @@
 	],
 	"Try it now": [
 		"Попробуйте прямо сейчас"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Введите `help [command]` для получения справочной информации о команде [command] или `help all` для получения полной справочной информации."

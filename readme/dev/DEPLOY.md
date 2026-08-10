@@ -18,7 +18,7 @@ The desktop application is built for Windows, macOS and Linux via continuous int
 
 ## Android application
 
-The app is built and upload to GitHub using:
+The app is built and uploaded to GitHub using:
 
 	yarn releaseAndroid --type=prerelease
 

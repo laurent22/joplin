@@ -47,9 +47,9 @@ function createHTMLParser () {
       }
     }
   } else {
-    var JSDOM = require('jsdom').JSDOM
+    var domino = require('@mixmark-io/domino')
     Parser.prototype.parseFromString = function (string) {
-      return new JSDOM(string).window.document
+      return domino.createDocument(string)
     }
   }
   return Parser

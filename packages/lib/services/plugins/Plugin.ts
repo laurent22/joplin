@@ -4,7 +4,7 @@ import shim from '../../shim';
 import { ViewHandle } from './utils/createViewHandle';
 import { ContentScriptType } from './api/types';
 import Logger from '@joplin/utils/Logger';
-const EventEmitter = require('events');
+import { EventEmitter } from 'events';
 
 const logger = Logger.create('Plugin');
 
@@ -22,6 +22,8 @@ interface ContentScripts {
 }
 
 type OnUnloadListener = ()=> void;
+export type MessageListenerCallback = (message: unknown)=> Promise<unknown>;
+export type PluginDispatchCallback = (action: { type: string; [key: string]: unknown })=> void;
 
 export default class Plugin {
 
@@ -30,24 +32,19 @@ export default class Plugin {
 	private scriptText_: string;
 	private viewControllers_: ViewControllers = {};
 	private contentScripts_: ContentScripts = {};
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private dispatch_: Function;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private eventEmitter_: any;
+	private dispatch_: PluginDispatchCallback;
+	private eventEmitter_: EventEmitter;
 	private devMode_ = false;
 	private builtIn_ = false;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private messageListener_: Function = null;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private contentScriptMessageListeners_: Record<string, Function> = {};
+	private messageListener_: MessageListenerCallback = null;
+	private contentScriptMessageListeners_: Record<string, MessageListenerCallback> = {};
 	private dataDir_: string;
 	private dataDirCreated_ = false;
 	private hasErrors_ = false;
 	private running_ = false;
 	private onUnloadListeners_: OnUnloadListener[] = [];
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: Function, dataDir: string) {
+	public constructor(baseDir: string, manifest: PluginManifest, scriptText: string, dispatch: PluginDispatchCallback, dataDir: string) {
 		this.baseDir_ = shim.fsDriver().resolve(baseDir);
 		this.manifest_ = manifest;
 		this.scriptText_ = scriptText;
@@ -123,18 +120,15 @@ export default class Plugin {
 		this.hasErrors_ = hasErrors;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	public on(eventName: string, callback: (...args: unknown[])=> void) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: string, callback: Function) {
+	public off(eventName: string, callback: (...args: unknown[])=> void) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public emit(eventName: string, event: any = null) {
+	public emit(eventName: string, event: unknown = null) {
 		return this.eventEmitter_.emit(eventName, event);
 	}
 
@@ -201,19 +195,16 @@ export default class Plugin {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public emitMessage(message: any) {
-		if (!this.messageListener_) return;
+	public emitMessage(message: unknown) {
+		if (!this.messageListener_) return undefined;
 		return this.messageListener_(message);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public onMessage(callback: any) {
+	public onMessage(callback: MessageListenerCallback) {
 		this.messageListener_ = callback;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public onContentScriptMessage(id: string, callback: any) {
+	public onContentScriptMessage(id: string, callback: MessageListenerCallback) {
 		if (!this.contentScriptById(id)) {
 			// The script could potentially be registered later on, but still
 			// best to print a warning to notify the user of a possible bug.
@@ -223,9 +214,8 @@ export default class Plugin {
 		this.contentScriptMessageListeners_[id] = callback;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public emitContentScriptMessage(id: string, message: any) {
-		if (!this.contentScriptMessageListeners_[id]) return;
+	public emitContentScriptMessage(id: string, message: unknown) {
+		if (!this.contentScriptMessageListeners_[id]) return undefined;
 		return this.contentScriptMessageListeners_[id](message);
 	}
 

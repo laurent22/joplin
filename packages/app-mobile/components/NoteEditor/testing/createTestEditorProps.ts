@@ -12,6 +12,7 @@ const defaultWrapperProps: EditorProps = {
 	noteHash: '',
 	noteId: '',
 	initialText: '',
+	initialScroll: 0,
 	editorSettings: defaultEditorSettings,
 	initialSelection: { start: 0, end: 0 },
 	globalSearch: '',

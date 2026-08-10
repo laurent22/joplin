@@ -16,3 +16,7 @@ export type EmptyObject = Record<string, never>;
 export type VirtualOpaqueType<Id extends string> = {
 	readonly __virtualOpaqueType: Id;
 };
+
+export type RecursivePartial<T> = T extends object ? {
+	[key in keyof T]?: RecursivePartial<T[key]>
+} : T;

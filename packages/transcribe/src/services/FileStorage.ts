@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { join, extname } from 'path';
 import { move, readdir, remove } from 'fs-extra';
 import { ContentStorage } from '../types';
 import Logger from '@joplin/utils/Logger';
@@ -6,21 +6,25 @@ import createFilename from './createFilename';
 
 const logger = Logger.create('FileStorage');
 
-const imagesFolderPath = join(process.cwd(), 'images');
-
 export default class FileStorage implements ContentStorage {
 
 	private isMaintenanceRunning = false;
+	private imagesFolderPath: string;
+
+	public constructor(imagesFolderPath?: string) {
+		this.imagesFolderPath = imagesFolderPath || join(process.cwd(), 'images');
+	}
 
 	public async store(filepath: string) {
-		const randomName = createFilename();
-		await move(filepath, join('images', randomName));
+		const extension = extname(filepath).replace(/^\./, '');
+		const randomName = createFilename(extension);
+		await move(filepath, join(this.imagesFolderPath, randomName));
 		return randomName;
 	}
 
 	public async remove(filename: string) {
 		logger.info(`Deleting: ${filename}`);
-		await remove(join(imagesFolderPath, filename));
+		await remove(join(this.imagesFolderPath, filename));
 	}
 
 	public initMaintenance(retentionDuration: number, maintenanceInterval: number) {
@@ -37,7 +41,7 @@ export default class FileStorage implements ContentStorage {
 	}
 
 	public async removeOldFiles(olderThan: Date) {
-		const files = await readdir(imagesFolderPath);
+		const files = await readdir(this.imagesFolderPath);
 		const filesToBeDeleted = files
 			.map(f => {
 				const datetimePart = parseInt(f.split('_')[0], 10);

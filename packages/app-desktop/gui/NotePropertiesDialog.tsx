@@ -7,16 +7,15 @@ import bridge from '../services/bridge';
 import shim from '@joplin/lib/shim';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { focus } from '@joplin/lib/utils/focusHandler';
-import Dialog from './Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import { formatDateTimeLocalToMs, formatMsToDateTimeLocal, formatMsToLocal } from '@joplin/utils/time';
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 const formatcoords = require('formatcoords');
 
 interface Props {
 	noteId: string;
 	onClose: ()=> void;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onRevisionLinkClick: Function;
+	onRevisionLinkClick: ()=> void;
 	themeId: number;
 }
 
@@ -35,8 +34,7 @@ interface FormNote {
 interface State {
 	editedKey: string;
 	formNote: FormNote;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	editedValue: any;
+	editedValue: string | number | null;
 	isValid: {
 		location: boolean;
 	};
@@ -45,17 +43,15 @@ interface State {
 const uniqueId = (key: string) => `note-properties-dialog-${key}`;
 
 const isPropertyDatetimeRelated = (key: string) => {
-	return key === 'user_created_time' || key === 'user_updated_time' || key === 'deleted_time';
+	return key === 'user_created_time' || key === 'user_updated_time' || key === 'deleted_time' || key === 'todo_completed';
 };
 
 class NotePropertiesDialog extends React.Component<Props, State> {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private okButton: any;
+	private okButton: React.RefObject<HTMLButtonElement>;
 	private keyToLabel_: Record<string, string>;
 	private styleKey_: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private styles_: any;
+	private styles_: Record<string, React.CSSProperties>;
 	private inputRef: React.RefObject<HTMLInputElement>;
 
 	public constructor(props: Props) {
@@ -114,7 +110,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	}
 
 	public latLongFromLocation(location: string) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- The output is spread into NoteEntity which expects number latitude/longitude; the existing code parses to strings and relies on runtime coercion
 		const o: any = {};
 		const l = location.split(',');
 		if (l.length === 2) {
@@ -231,8 +227,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private buttonRow_click(event: any) {
+	private buttonRow_click(event: { buttonName: string }) {
 		void this.closeDialog(event.buttonName === 'ok');
 	}
 
@@ -241,8 +236,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		if (this.props.onRevisionLinkClick) this.props.onRevisionLinkClick();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public editPropertyButtonClick(key: string, initialValue: any) {
+	public editPropertyButtonClick(key: string, initialValue: string | number | null) {
 		this.setState({
 			editedKey: key,
 			editedValue: initialValue,
@@ -261,12 +255,10 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	public async saveProperty() {
 		if (!this.state.editedKey) return null;
 
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		return new Promise((resolve: Function) => {
+		return new Promise<void>((resolve) => {
 			const newFormNote = { ...this.state.formNote };
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			(newFormNote as any)[this.state.editedKey] = this.state.editedValue;
+			(newFormNote as unknown as Record<string, unknown>)[this.state.editedKey] = this.state.editedValue;
 
 			this.setState(
 				{
@@ -282,8 +274,7 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 	}
 
 	public async cancelProperty() {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		return new Promise((resolve: Function) => {
+		return new Promise<void>((resolve) => {
 			if (this.okButton.current) focus('NotePropertiesDialog::focus', this.okButton.current);
 			this.setState({
 				editedKey: null,
@@ -312,12 +303,12 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		this.setState({ isValid: { ...this.state.isValid, location: false } });
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous per-field types (timestamps as number, urls/ids as string); tightening to a union forces narrowing at every call site
 	public createNoteField(key: keyof FormNote, value: any) {
 		const styles = this.styles(this.props.themeId);
 		const theme = themeStyle(this.props.themeId);
 		const labelText = this.formatLabel(key);
-		const labelComp = <label htmlFor={uniqueId(key)} role='rowheader' style={{ ...theme.textStyle, ...theme.controlBoxLabel }}>{labelText}</label>;
+		const labelComp = <label htmlFor={uniqueId(key)} style={{ ...theme.textStyle, ...theme.controlBoxLabel }}>{labelText}</label>;
 		let controlComp = null;
 		let editComp = null;
 		let editCompHandler = null;
@@ -422,11 +413,11 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 					textOverflow: 'ellipsis',
 					display: 'inline-block',
 				};
-				controlComp = (
+				controlComp = displayedValue ? (
 					<a href="#" onClick={() => bridge().openExternal(url)} style={urlStyle}>
 						{displayedValue}
 					</a>
-				);
+				) : null;
 			} else if (key === 'revisionsLink') {
 				controlComp = (
 					<a href="#" onClick={this.revisionsLink_click} style={theme.urlStyle}>
@@ -468,10 +459,10 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		}
 
 		return (
-			<div role='row' key={key} style={theme.controlBox} className="note-property-box">
-				{labelComp}
-				<span role='cell'>{controlComp} {editComp}</span>
-			</div>
+			<tr key={key} style={theme.controlBox} className="note-property-box">
+				<th>{labelComp}</th>
+				<td>{controlComp} {editComp}</td>
+			</tr>
 		);
 	}
 
@@ -489,18 +480,19 @@ class NotePropertiesDialog extends React.Component<Props, State> {
 		if (formNote) {
 			for (const key of Object.keys(formNote)) {
 				if (key === 'deleted_time' && !formNote.deleted_time) continue;
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const comp = this.createNoteField(key as (keyof FormNote), (formNote as any)[key]);
+				const comp = this.createNoteField(key as (keyof FormNote), (formNote as unknown as Record<string, unknown>)[key]);
 				noteComps.push(comp);
 			}
 		}
 
 		return (
 			<Dialog onCancel={this.props.onClose}>
-				<div style={theme.dialogTitle} id='note-properties-dialog-title'>{_('Note properties')}</div>
-				<div role='table' aria-labelledby='note-properties-dialog-title'>
-					{noteComps}
-				</div>
+				<h1 style={theme.dialogTitle} id='note-properties-dialog-title'>{_('Note properties')}</h1>
+				<table aria-labelledby='note-properties-dialog-title'>
+					<tbody>
+						{noteComps}
+					</tbody>
+				</table>
 				<DialogButtonRow
 					themeId={this.props.themeId}
 					okButtonShow={!this.isReadOnly()}

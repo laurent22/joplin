@@ -26,15 +26,17 @@ const useSyncEditorValue = ({ content, visiblePanes, onMessage, editorRef, noteI
 		// to the current note ID.
 		const updateProps = { noteId: noteId };
 		if (editorRef.current?.updateBody(content, updateProps)) {
-			editorRef.current?.clearHistory();
-
-			// Only reset the cursor location when switching notes. If, for example,
-			// the note is updated from a secondary window, the cursor location shouldn't
-			// reset.
 			const noteChanged = lastNoteIdRef.current !== noteId;
 			if (noteChanged) {
+				// Only reset the cursor location when switching notes. If, for example,
+				// the note is updated from a secondary window, the cursor location shouldn't
+				// reset.
 				const cursorLocation = initialCursorLocationRef.current;
 				editorRef.current?.select(cursorLocation, cursorLocation);
+
+				// Only reset history when switching notes to allow, e.g., undoing changes made from another
+				// window.
+				editorRef.current?.clearHistory();
 			}
 			lastNoteIdRef.current = noteId;
 

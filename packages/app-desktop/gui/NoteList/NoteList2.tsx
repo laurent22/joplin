@@ -30,6 +30,14 @@ import useFocusVisible from './utils/useFocusVisible';
 import { stateUtils } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 import useOnNoteDoubleClick from './utils/useOnNoteDoubleClick';
+import { createSelector } from 'reselect';
+import { isFolderPublished, ShareType } from '@joplin/lib/services/share/reducer';
+import useAutoScroll from './utils/useAutoScroll';
+
+const selectPublishedNoteIds = createSelector(
+	(state: AppState) => state.shareService.shares,
+	shares => shares.filter(s => s.type === ShareType.Note && !!s.note_id).map(s => s.note_id),
+);
 
 const commands = {
 	focusElementNoteList,
@@ -131,6 +139,10 @@ const NoteList = (props: Props) => {
 		};
 	}, [focusNote]);
 
+	const selectedNoteId = props.selectedNoteIds.length === 1 ? props.selectedNoteIds[0] : '';
+	const targetIndex = props.notes.findIndex(note => note.id === selectedNoteId);
+	useAutoScroll(selectedNoteId, props.selectedFolderId, targetIndex, makeItemIndexVisible);
+
 	const onItemContextMenu = useOnContextMenu(
 		props.selectedNoteIds,
 		props.selectedFolderId,
@@ -217,7 +229,7 @@ const NoteList = (props: Props) => {
 	const renderNotes = () => {
 		if (!props.notes.length) return [];
 
-		const output: JSX.Element[] = [];
+		const output: React.ReactNode[] = [];
 
 		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
 			const note = props.notes[i];
@@ -246,6 +258,7 @@ const NoteList = (props: Props) => {
 					focusVisible={focusVisible && activeNoteId === note.id}
 					isSelected={isSelected}
 					isWatched={props.watchedNoteFiles.includes(note.id)}
+					isPublished={props.publishedNoteIds.includes(note.id) || (!!note.is_shared && !note.share_id) || props.isFolderPublished}
 					listRenderer={listRenderer}
 					dispatch={props.dispatch}
 					columns={props.columns}
@@ -341,6 +354,8 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		searches: state.searches,
 		selectedSearchId: windowState.selectedSearchId,
 		watchedNoteFiles: state.watchedNoteFiles,
+		publishedNoteIds: selectPublishedNoteIds(state),
+		isFolderPublished: state.notesParentType === 'Folder' ? isFolderPublished(state, windowState.selectedFolderId) : false,
 		provisionalNoteIds: state.provisionalNoteIds,
 		isInsertingNotes: state.isInsertingNotes,
 		noteSortOrder: state.settings['notes.sortOrder.field'],

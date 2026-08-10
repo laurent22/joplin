@@ -9,9 +9,13 @@ export enum Env {
 }
 
 export interface Locale {
+	id: string;
 	htmlTranslations: Translations;
 	lang: string;
 	pathPrefix: string;
+	code: string;
+	name: string;
+	hreflang: string;
 }
 
 export interface GithubUser {
@@ -70,6 +74,17 @@ export interface TemplateParams {
 	openGraph: OpenGraphTags;
 	isNews?: boolean;
 	locale?: Locale;
+	currentPath?: string;
+	availableLocales?: AvailableLocale[];
+}
+
+// Used in templates for language switcher and hreflang tags
+export interface AvailableLocale {
+	code: string;
+	name: string;
+	pathPrefix: string;
+	hreflang: string;
+	isActive: boolean;
 }
 
 export interface PlanPageParams extends TemplateParams {

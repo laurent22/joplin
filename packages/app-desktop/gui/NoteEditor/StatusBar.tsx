@@ -58,7 +58,27 @@ const StatusBar: React.FC<Props> = props => {
 	function renderTagBar() {
 		const theme = themeStyle(props.themeId);
 		const noteIds = [props.noteId];
-		const instructions = <span onClick={() => { void CommandService.instance().execute('setTags', noteIds); }} style={{ ...theme.clickableTextStyle, whiteSpace: 'nowrap' }}>{_('Click to add tags...')}</span>;
+		const instructions = (
+			<span
+				aria-disabled={!props.setTagsToolbarButtonInfo.enabled}
+				onClick={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
+
+					if (!props.setTagsToolbarButtonInfo.enabled) return;
+
+					void CommandService.instance().execute('setTags', noteIds);
+				}}
+				style={{
+					...theme.clickableTextStyle,
+					whiteSpace: 'nowrap',
+					opacity: props.setTagsToolbarButtonInfo.enabled ? 1 : 0.5,
+					cursor: props.setTagsToolbarButtonInfo.enabled ? 'pointer' : 'default',
+				}}
+			>
+				{_('Click to add tags...')}
+			</span>
+		);
 		const tagList = props.selectedNoteTags.length ? <TagList items={props.selectedNoteTags} /> : null;
 
 		return <div className='tag-bar'>

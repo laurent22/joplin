@@ -1,37 +1,12 @@
 import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import { SyntaxNodeRef } from '@lezer/common';
 import { EditorState } from '@codemirror/state';
-import referenceLinkStateField, { isReferenceLink, resolveReferenceFromLink } from '../links/referenceLinksStateField';
 import { Decoration } from '@codemirror/view';
 
 const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
-	const getParentName = () => node.node.parent?.name;
 	const getNodeStartLine = () => state.doc.lineAt(node.from);
 
-	if (['HeaderMark', 'CodeMark', 'EmphasisMark', 'StrikethroughMark', 'HighlightMarker'].includes(node.name)) {
-		return true;
-	}
-
-	if ((node.name === 'URL' || node.name === 'LinkMark') && getParentName() === 'Link') {
-		const parent = node.node.parent!;
-		const parentContent = state.sliceDoc(parent.from, parent.to);
-		if (node.name === 'LinkMark') {
-			if (isReferenceLink(parentContent)) {
-				return !!resolveReferenceFromLink(parentContent, state);
-			}
-		} else if (node.name === 'URL') {
-			// Find all closing link marks
-			const closingBracketNodes = parent.getChildren('LinkMark').filter(mark => {
-				const isClosingBracket = state.sliceDoc(mark.from, mark.to) === ']';
-				return isClosingBracket;
-			});
-
-			// URLs can only be hidden if after the last ].
-			const lastClosingBracketIdx = closingBracketNodes.length > 0 ? closingBracketNodes[closingBracketNodes.length - 1].from : null;
-			if (!lastClosingBracketIdx || node.from < lastClosingBracketIdx) {
-				return false;
-			}
-		}
+	if (['HeaderMark', 'CodeMark', 'EmphasisMark', 'StrikethroughMark', 'HighlightMarker', 'InsertMarker'].includes(node.name)) {
 		return true;
 	}
 
@@ -45,10 +20,19 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 const hideDecoration = Decoration.replace({});
 
 const replaceFormatCharacters = [
-	// Dependency
-	referenceLinkStateField,
-
 	makeInlineReplaceExtension({
+		getRevealStrategy: (node) => {
+			if (node.name === 'QuoteMark') {
+				return 'line';
+			}
+			if (node.name === 'CodeMark') {
+				if (node.node.parent?.name === 'FencedCode') {
+					return 'line';
+				}
+			}
+
+			return 'active';
+		},
 		createDecoration: (node, state) => {
 			if (shouldFullReplace(node, state)) {
 				return hideDecoration;

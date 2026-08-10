@@ -9,6 +9,7 @@ class MockPluginRunner extends BasePluginRunner {
 
 const mockPluginServiceSetup = (store: Store) => {
 	const runner = new MockPluginRunner();
+	PluginService.instance().resetForTesting();
 	PluginService.instance().initialize(
 		'2.14.0', { joplin: {} }, runner, store,
 	);

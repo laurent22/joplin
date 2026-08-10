@@ -1,5 +1,7 @@
+import { MutexInterface } from 'async-mutex';
+import JoplinDatabase from '../JoplinDatabase';
 import BaseService from './BaseService';
-const Mutex = require('async-mutex').Mutex;
+import { Mutex } from 'async-mutex';
 
 enum ValueType {
 	Int = 1,
@@ -15,10 +17,8 @@ interface KvStoreKeyValue {
 
 export default class KvStore extends BaseService {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private incMutex_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private db_: any = null;
+	private incMutex_: MutexInterface = null;
+	private db_: JoplinDatabase = null;
 
 	private static instance_: KvStore = null;
 
@@ -37,8 +37,7 @@ export default class KvStore extends BaseService {
 		this.incMutex_ = new Mutex();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setDb(v: any) {
+	public setDb(v: JoplinDatabase) {
 		this.db_ = v;
 	}
 
@@ -47,15 +46,13 @@ export default class KvStore extends BaseService {
 		return this.db_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private typeFromValue_(value: any) {
+	private typeFromValue_(value: string | number) {
 		if (typeof value === 'string') return ValueType.Text;
 		if (typeof value === 'number') return ValueType.Int;
 		throw new Error(`Unsupported value type: ${typeof value}`);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private formatValues_(kvs: any[]) {
+	private formatValues_(kvs: KvStoreKeyValue[]) {
 		const output = [];
 		for (const kv of kvs) {
 			kv.value = this.formatValue_(kv.value, kv.type);
@@ -64,22 +61,19 @@ export default class KvStore extends BaseService {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private formatValue_(value: any, type: ValueType): string | number {
+	private formatValue_(value: string | number, type: ValueType): string | number {
 		if (type === ValueType.Int) return Number(value);
 		if (type === ValueType.Text) return `${value}`;
 		throw new Error(`Unknown type: ${type}`);
 	}
 
-	public async value<T>(key: string): Promise<T> {
+	public async value(key: string): Promise<string | number | null> {
 		const r = await this.db().selectOne('SELECT `value`, `type` FROM key_values WHERE `key` = ?', [key]);
 		if (!r) return null;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return this.formatValue_(r.value, r.type) as any;
+		return this.formatValue_(r.value, r.type);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async setValue(key: string, value: any) {
+	public async setValue(key: string, value: string | number) {
 		const t = Date.now();
 		await this.db().exec('INSERT OR REPLACE INTO key_values (`key`, `value`, `type`, `updated_time`) VALUES (?, ?, ?, ?)', [key, value, this.typeFromValue_(value), t]);
 	}
@@ -97,7 +91,7 @@ export default class KvStore extends BaseService {
 	}
 
 	public async all() {
-		return this.formatValues_(await this.db().selectAll('SELECT * FROM key_values'));
+		return this.formatValues_(await this.db().selectAll('SELECT * FROM key_values') as unknown as KvStoreKeyValue[]);
 	}
 
 	// Note: atomicity is done at application level so two difference instances
@@ -119,7 +113,7 @@ export default class KvStore extends BaseService {
 
 	public async searchByPrefix(prefix: string): Promise<KvStoreKeyValue[]> {
 		const results = await this.db().selectAll('SELECT `key`, `value`, `type` FROM key_values WHERE `key` LIKE ?', [`${prefix}%`]);
-		return this.formatValues_(results);
+		return this.formatValues_(results as unknown as KvStoreKeyValue[]);
 	}
 
 	public async countKeys() {

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useRef, useMemo, useContext } from 'react';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 import TinyMCE from './NoteBody/TinyMCE/TinyMCE';
 import { connect } from 'react-redux';
 import MultiNoteActions from '../MultiNoteActions';
@@ -14,10 +15,10 @@ import useFormNote, { OnLoadEvent, OnSetFormNote } from './utils/useFormNote';
 import useEffectiveNoteId from './utils/useEffectiveNoteId';
 import useFolder from './utils/useFolder';
 import styles_ from './styles';
-import { NoteEditorProps, FormNote, OnChangeEvent, AllAssetsOptions, NoteBodyEditorRef, NoteBodyEditorPropsAndRef } from './utils/types';
+import { NoteEditorProps, FormNote, OnChangeEvent, AllAssetsOptions, NoteBodyEditorRef, NoteBodyEditorPropsAndRef, NoteBodyEditorType } from './utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import Button, { ButtonLevel } from '../Button/Button';
-import eventManager, { EventName } from '@joplin/lib/eventManager';
+import eventManager, { EventName, NoteLockNoteStateChangeEvent } from '@joplin/lib/eventManager';
 import { AppState } from '../../app.reducer';
 import ToolbarButtonUtils, { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { _, _n } from '@joplin/lib/locale';
@@ -27,8 +28,12 @@ import Setting from '@joplin/lib/models/Setting';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import { itemIsReadOnly } from '@joplin/lib/models/utils/readOnly';
-const { themeStyle } = require('@joplin/lib/theme');
-const { substrWithEllipsis } = require('@joplin/lib/string-utils');
+import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import isNoteLockEnabled from '@joplin/lib/services/noteLock/isNoteLockEnabled';
+import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import NoteLockPanel from './NoteLockPanel/NoteLockPanel';
+import { themeStyle } from '@joplin/lib/theme';
+import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import NoteSearchBar from '../NoteSearchBar';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
@@ -42,6 +47,8 @@ import ItemChange from '@joplin/lib/models/ItemChange';
 import PlainEditor from './NoteBody/PlainEditor/PlainEditor';
 import CodeMirror6 from './NoteBody/CodeMirror/v6/CodeMirror';
 import CodeMirror5 from './NoteBody/CodeMirror/v5/CodeMirror';
+import WhiteboardEditor from './NoteBody/WhiteboardEditor/WhiteboardEditor';
+import { hasWhiteboardFence } from '@joplin/lib/services/whiteboard/parse';
 import { openItemById } from './utils/contextMenu';
 import { MarkupLanguage } from '@joplin/renderer';
 import useScrollWhenReadyOptions from './utils/useScrollWhenReadyOptions';
@@ -50,7 +57,7 @@ import WarningBanner from './WarningBanner/WarningBanner';
 import UserWebview from '../../services/plugins/UserWebview';
 import Logger from '@joplin/utils/Logger';
 import usePluginEditorView from './utils/usePluginEditorView';
-import { stateUtils } from '@joplin/lib/reducer';
+import { defaultWindowId, stateUtils } from '@joplin/lib/reducer';
 import { WindowIdContext } from '../NewWindowOrIFrame';
 import useResourceUnwatcher from './utils/useResourceUnwatcher';
 import StatusBar from './StatusBar';
@@ -89,11 +96,19 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, []);
 
 	const setFormNoteRef = useRef<OnSetFormNote>(null);
+	const formNoteRef = useRef<FormNote>(null);
 	const { saveNoteIfWillChange, scheduleSaveNote } = useScheduleSaveCallbacks({
-		setFormNote: setFormNoteRef, dispatch: props.dispatch, editorRef, editorId,
+		setFormNote: setFormNoteRef, formNote: formNoteRef, dispatch: props.dispatch, editorRef, editorId,
 	});
 	const formNote_beforeLoad = useCallback(async (event: OnLoadEvent) => {
 		await saveNoteIfWillChange(event.formNote);
+		// The lock must wait for the pending saves of the note being left: a locked note's save
+		// needs the unlocked session to encrypt, so locking first would drop the last edits.
+		// The note being left may have no form note at all (unlock or cannot-decrypt overlay).
+		if (isNoteLockEnabled() && Setting.value('noteLock.lockOnNoteSwitch')) {
+			await event.formNote.saveActionQueue?.waitForAllDone();
+			NoteLockSession.instance().lock();
+		}
 		setShowRevisions(false);
 	}, [saveNoteIfWillChange]);
 
@@ -104,8 +119,12 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const effectiveNoteId = useEffectiveNoteId(props);
 	const { editorPlugin, editorView } = usePluginEditorView(props.plugins);
 	const builtInEditorVisible = !editorPlugin;
+	const windowId = useContext(WindowIdContext);
+	const onDecryptFailedChange = useCallback((value: boolean) => {
+		props.dispatch({ type: 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE', value, windowId });
+	}, [props.dispatch, windowId]);
 
-	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
+	const { formNote, setFormNote, isNewNote, resourceInfos, decryptFailed, loadBlocked } = useFormNote({
 		noteId: effectiveNoteId,
 		isProvisional: props.isProvisional,
 		titleInputRef: titleInputRef,
@@ -114,14 +133,46 @@ function NoteEditorContent(props: NoteEditorProps) {
 		onAfterLoad: formNote_afterLoad,
 		builtInEditorVisible,
 		editorId,
+		noteLockSessionUnlocked: props.noteLockSessionUnlocked,
+		onDecryptFailedChange,
 	});
 	setFormNoteRef.current = setFormNote;
-	const formNoteRef = useRef<FormNote>(formNote);
 	formNoteRef.current = { ...formNote };
+
+	useEffect(() => {
+		if (!isNoteLockEnabled()) return () => {};
+		// Pending scheduled saves read the lock state from the form note, so it must follow an
+		// enable/disable triggered outside the editor (note list menu, another window) immediately.
+		const onLockStateChange = (event: NoteLockNoteStateChangeEvent) => {
+			if (formNoteRef.current.id !== event.noteId) return;
+			// Enabling requires an unlocked session, so capture the key the same way a decrypt
+			// does - a pending save can then still encrypt if the session locks before it runs.
+			const noteLockKey = event.isLocked && NoteLockSession.instance().isUnlocked() ? NoteLockSession.instance().decryptedKey() : null;
+			const newFormNote = { ...formNoteRef.current, is_locked: event.isLocked ? 1 : 0, noteLockKey, isDecrypted: event.isLocked };
+			setFormNote(newFormNote);
+			void scheduleSaveNote(newFormNote);
+		};
+		eventManager.on(EventName.NoteLockNoteStateChange, onLockStateChange);
+		return () => {
+			eventManager.off(EventName.NoteLockNoteStateChange, onLockStateChange);
+		};
+	}, [setFormNote, scheduleSaveNote]);
+
+	useAsyncEffect(async () => {
+		if (!isNoteLockEnabled() || props.noteLockSessionUnlocked) return;
+		const lockedFormNote = formNoteRef.current;
+		if (!lockedFormNote?.is_locked || !lockedFormNote.hasChanged) return;
+		// The panel replaces the editor only once the edits are written, so flush them the same way
+		// a note switch does before locking.
+		await saveNoteIfWillChange(lockedFormNote);
+		// The editor dispatches its pending change when it unmounts, which would be saved over the
+		// flushed one - clearing the change id makes onFieldChange drop it, as a note switch does.
+		setFormNote(prev => ({ ...prev, bodyWillChangeId: 0 }));
+		await lockedFormNote.saveActionQueue?.waitForAllDone();
+	}, [props.noteLockSessionUnlocked, saveNoteIfWillChange]);
 
 	const formNoteFolder = useFolder({ folderId: formNote.parent_id });
 
-	const windowId = useContext(WindowIdContext);
 	const shownEditorViewIds = useVisiblePluginEditorViewIds(props.plugins, windowId);
 	useConnectToEditorPlugin({
 		startupPluginsLoaded: props.startupPluginsLoaded,
@@ -206,8 +257,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		props.onTitleChange?.(formNote.title);
 	}, [formNote.title, props.onTitleChange]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onFieldChange = useCallback(async (field: string, value: any, changeId = 0) => {
+	const onFieldChange = useCallback(async (field: string, value: string, changeId = 0) => {
 		if (!isMountedRef.current) {
 			// When the component is unmounted, various actions can happen which can
 			// trigger onChange events, for example the textarea might be cleared.
@@ -262,8 +312,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	const onBodyChange = useCallback((event: OnChangeEvent) => onFieldChange('body', event.content, event.changeId), [onFieldChange]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onTitleChange = useCallback((event: any) => onFieldChange('title', event.target.value), [onFieldChange]);
+	const onTitleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => onFieldChange('title', event.target.value), [onFieldChange]);
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	useWindowCommandHandler({
@@ -312,8 +361,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		}
 	}, [formNote.id, props.syncUserId, shareCache]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onBodyWillChange = useCallback((event: any) => {
+	const onBodyWillChange = useCallback((event: { changeId: number }) => {
 		handleProvisionalFlag();
 
 		setFormNote(prev => {
@@ -341,8 +389,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	useResourceUnwatcher({ noteId: formNote.id, windowId });
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const externalEditWatcher_noteChange = useCallback((event: any) => {
+	const externalEditWatcher_noteChange = useCallback((event: { id: string; note: NoteEntity }) => {
 		if (event.id === formNote.id) {
 			const newFormNote = {
 				...formNote,
@@ -354,17 +401,16 @@ function NoteEditorContent(props: NoteEditorProps) {
 		}
 	}, [formNote, setFormNote]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onNotePropertyChange = useCallback((event: any) => {
+	const onNotePropertyChange = useCallback((event: { note: NoteEntity }) => {
 		setFormNote(formNote => {
 			if (formNote.id !== event.note.id) return formNote;
 
 			const newFormNote: FormNote = { ...formNote };
 
-			for (const key in event.note) {
+			const noteAsRecord = event.note as unknown as Record<string, unknown>;
+			for (const key in noteAsRecord) {
 				if (key === 'id') continue;
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(newFormNote as any)[key] = event.note[key];
+				(newFormNote as unknown as Record<string, unknown>)[key] = noteAsRecord[key];
 			}
 
 			return newFormNote;
@@ -419,7 +465,16 @@ function NoteEditorContent(props: NoteEditorProps) {
 		return <div style={emptyDivStyle} ref={containerRef}></div>;
 	}
 
-	const searchMarkers = useSearchMarkers(showLocalSearch, localSearchMarkerOptions, props.searches, props.selectedSearchId, props.highlightedWords);
+	const searchMarkers = useSearchMarkers({
+		showLocalSearch,
+		localSearchMarkerOptions,
+		noteId: props.noteId,
+		searchResults: props.searchResults,
+		searchId: props.selectedSearchId,
+		searches: props.searches,
+		highlightedWords: props.highlightedWords,
+		noteTitle: formNote.title,
+	});
 	const initialCursorLocation = useInitialCursorLocation({
 		noteId: props.noteId,
 	});
@@ -474,11 +529,28 @@ function NoteEditorContent(props: NoteEditorProps) {
 		noteId: props.noteId,
 		watchedNoteFiles: props.watchedNoteFiles,
 		enableHtmlToMarkdownBanner: props.enableHtmlToMarkdownBanner,
+		showNoteLinkIcon: props.showNoteLinkIcon,
 	};
 
 	let editor = null;
 
-	if (builtInEditorVisible) {
+	const noteHasWhiteboardFence = markupLanguage === MarkupLanguage.Markdown
+		&& hasWhiteboardFence(formNote.body);
+
+	const useWhiteboardEditor = builtInEditorVisible
+		&& noteHasWhiteboardFence
+		&& !props.whiteboardForceMarkdown?.[formNote.id];
+
+	// Mirror "active note is a whiteboard" to redux so the NoteToolbar can
+	// show the editor toggle. We can't compute this from the redux note list
+	// because note bodies aren't in the preview fields.
+	useEffect(() => {
+		props.dispatch({ type: 'WHITEBOARD_ACTIVE_NOTE_SET', value: noteHasWhiteboardFence });
+	}, [noteHasWhiteboardFence, props.dispatch]);
+
+	if (useWhiteboardEditor) {
+		editor = <WhiteboardEditor {...editorProps}/>;
+	} else if (builtInEditorVisible) {
 		if (props.bodyEditor === 'TinyMCE') {
 			editor = <TinyMCE {...editorProps}/>;
 		} else if (props.bodyEditor === 'PlainText') {
@@ -576,7 +648,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 
 	function renderResourceWatchingNotification() {
 		if (!Object.keys(props.watchedResources).length) return null;
-		const resourceTitles = Object.keys(props.watchedResources).map(id => props.watchedResources[id].title);
+		const resourceTitles = Object.keys(props.watchedResources).map(id => (props.watchedResources[id] as { title: string }).title);
 		return (
 			<div style={styles.resourceWatchBanner}>
 				<p style={styles.resourceWatchBannerLine}>{_('The following attachments are being watched for changes:')} <strong>{resourceTitles.join(', ')}</strong></p>
@@ -645,6 +717,42 @@ function NoteEditorContent(props: NoteEditorProps) {
 		/>;
 	};
 
+	// A locked note has no form note while the session is locked (see loadNoteForForm), so the
+	// panel is driven by the note metadata. A loaded form note stays mounted on lock only if it
+	// has unsaved changes, so they are not thrown away.
+	const lockedNoteMetadata = isNoteLockEnabled() && effectiveNoteId ? props.notes.find(n => n.id === effectiveNoteId) : null;
+	if (lockedNoteMetadata?.is_locked) {
+		// The session is unlocked but the note content failed to decrypt (e.g. it was encrypted
+		// prior to a password reset) - locking the session again shows the regular unlock panel.
+		if (decryptFailed && props.noteLockSessionUnlocked) {
+			return (
+				<div style={styles.root} ref={containerRef}>
+					<NoteLockPanel
+						noteTitle={lockedNoteMetadata.title}
+						hasNoteLockKey={props.hasNoteLockKey}
+						dispatch={props.dispatch}
+						undecryptable={true}
+					/>
+				</div>
+			);
+		}
+		const formNoteLoaded = formNote.id === effectiveNoteId;
+		const showLockPanel = formNoteLoaded
+			? !props.noteLockSessionUnlocked && !formNote.hasChanged
+			: !props.noteLockSessionUnlocked || loadBlocked;
+		if (showLockPanel) {
+			return (
+				<div style={styles.root} ref={containerRef}>
+					<NoteLockPanel
+						noteTitle={lockedNoteMetadata.title}
+						hasNoteLockKey={props.hasNoteLockKey}
+						dispatch={props.dispatch}
+					/>
+				</div>
+			);
+		}
+	}
+
 	if (formNote.encryption_applied || !formNote.id || !effectiveNoteId) {
 		return renderNoNotes(styles.root);
 	}
@@ -710,17 +818,28 @@ interface ConnectProps {
 	windowId: string;
 }
 
+// Memoized because mapStateToProps runs on every dispatch and SyncInfo parses the cached JSON.
+let hasNoteLockKeyCache: { syncInfoCache: string; value: boolean } = null;
+const hasNoteLockKey = (syncInfoCache: string) => {
+	if (!hasNoteLockKeyCache || hasNoteLockKeyCache.syncInfoCache !== syncInfoCache) {
+		hasNoteLockKeyCache = { syncInfoCache, value: !!new SyncInfo(syncInfoCache).noteLockKey };
+	}
+	return hasNoteLockKeyCache.value;
+};
+
 const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 	const whenClauseContext = stateToWhenClauseContext(state, { windowId: ownProps.windowId });
 	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
 	const noteId = stateUtils.selectedNoteId(windowState);
 
-	let bodyEditor = windowState.editorCodeView ? 'CodeMirror6' : 'TinyMCE';
+	let bodyEditor = windowState.editorCodeView ? NoteBodyEditorType.CodeMirror6 : NoteBodyEditorType.TinyMce;
 	if (state.settings.isSafeMode) {
-		bodyEditor = 'PlainText';
+		bodyEditor = NoteBodyEditorType.PlainText;
 	} else if (windowState.editorCodeView && state.settings['editor.legacyMarkdown']) {
-		bodyEditor = 'CodeMirror5';
+		bodyEditor = NoteBodyEditorType.CodeMirror5;
 	}
+
+	const mainWindowState = stateUtils.windowStateById(state, defaultWindowId);
 
 	return {
 		noteId,
@@ -740,7 +859,9 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		customCss: state.customViewerCss,
 		noteVisiblePanes: windowState.noteVisiblePanes,
 		watchedResources: windowState.watchedResources,
-		highlightedWords: state.highlightedWords,
+		// For now, only the main window has search UI. Show the same search markers in all
+		// windows:
+		highlightedWords: mainWindowState.highlightedWords,
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		toolbarButtonInfos: toolbarButtonUtils.commandsToToolbarButtons([
@@ -762,6 +883,11 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		shareCacheSetting: state.settings['sync.shareCache'],
 		searchResults: state.searchResults,
 		enableHtmlToMarkdownBanner: state.settings['editor.enableHtmlToMarkdownBanner'],
+		enableInEditorRendering: state.settings['editor.inlineRendering'],
+		showNoteLinkIcon: state.settings['notes.showNoteLinkIcon'],
+		whiteboardForceMarkdown: windowState.whiteboardForceMarkdown ?? {},
+		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
+		hasNoteLockKey: hasNoteLockKey(state.settings['syncInfoCache']),
 	};
 };
 

@@ -12,7 +12,6 @@ const markdownEditorOnlyCommands = [
 
 
 const richTextEditorOnlyCommands = [
-	EditorCommandType.InsertTable,
 	EditorCommandType.InsertCodeBlock,
 ].map(command => `editor.${command}`);
 
@@ -126,12 +125,12 @@ const declarations: CommandDeclaration[] = [
 	{
 		name: EditorCommandType.IndentLess,
 		label: () => _('Decrease indent level'),
-		iconName: 'ant indent-left',
+		iconName: 'material format-indent-decrease',
 	},
 	{
 		name: EditorCommandType.IndentMore,
 		label: () => _('Increase indent level'),
-		iconName: 'ant indent-right',
+		iconName: 'material format-indent-increase',
 	},
 	{
 		name: `editor.${EditorCommandType.SwapLineDown}`,
@@ -167,6 +166,16 @@ const declarations: CommandDeclaration[] = [
 		name: EditorCommandType.EditLink,
 		label: () => _('Link'),
 		iconName: 'material link',
+	},
+	{
+		name: `editor.${EditorCommandType.GoDocStart}`,
+		label: () => _('Go to start of note'),
+		iconName: 'material page-first',
+	},
+	{
+		name: `editor.${EditorCommandType.GoDocEnd}`,
+		label: () => _('Go to end of note'),
+		iconName: 'material page-last',
 	},
 ];
 

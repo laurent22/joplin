@@ -1,11 +1,14 @@
 const { sqlite3Worker1Promiser } = require('@sqlite.org/sqlite-wasm');
+import DatabaseDriver, { DatabaseCloseOptions, DatabaseOpenOptions } from '@joplin/lib/database-driver';
 import { safeFilename } from '@joplin/utils/path';
 
 type DbPromiser = (command: string, options: Record<string, unknown>)=> Promise<unknown>;
 type DbId = unknown;
 type RowResult = { rowNumber: number|null; row: unknown };
 
-export default class DatabaseDriverReactNative {
+const getDatabaseFilename = (name: string) => `${safeFilename(name)}.sqlite3`;
+
+export default class DatabaseDriverReactNative implements DatabaseDriver {
 	private lastInsertId_: string;
 	private db_: DbPromiser;
 	private dbId_: DbId;
@@ -13,18 +16,27 @@ export default class DatabaseDriverReactNative {
 		this.lastInsertId_ = null;
 	}
 
-	public async open(options: { name: string }) {
+	public async open(options: DatabaseOpenOptions) {
 		const db = await new Promise<DbPromiser>((resolve) => {
 			const db = sqlite3Worker1Promiser({
 				onready: () => resolve(db),
 			});
 		});
-		const filename = `file:${safeFilename(options.name)}.sqlite3?vfs=opfs`;
 
 		type OpenResult = { dbId: number };
-		const { dbId } = await db('open', { filename }) as OpenResult;
+		const { dbId } = await db('open', {
+			filename: `file:${getDatabaseFilename(options.name)}?vfs=opfs`,
+		}) as OpenResult;
 		this.dbId_ = dbId;
 		this.db_ = db;
+	}
+
+	public async deleteDatabase(options: DatabaseCloseOptions) {
+		const databaseContainerDirectory = await navigator.storage.getDirectory();
+		const databaseFilename = getDatabaseFilename(options.name);
+		// Note: Assumes there is only one file associated with the database (i.e. WAL mode
+		// is not enabled).
+		await databaseContainerDirectory.removeEntry(databaseFilename);
 	}
 
 	public sqliteErrorToJsError(error: Error) {

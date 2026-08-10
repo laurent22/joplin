@@ -75,11 +75,19 @@ describe('api/users', () => {
 		await createUserAndSession(2);
 		await createUserAndSession(3);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const results: any = await getApi(adminSession.id, 'users');
+		const results = await getApi<{ items: User[] }>(adminSession.id, 'users');
 		expect(results.items.length).toBe(3);
 	});
 
+
+	test('should not return password hash', async () => {
+		const { session: adminSession } = await createUserAndSession(1, true);
+		const { user } = await createUserAndSession(2);
+
+		const fetchedUser: User = await getApi(adminSession.id, `users/${user.id}`);
+
+		expect(fetchedUser.password).toBeUndefined();
+	});
 	test('should not allow changing non-whitelisted properties', async () => {
 		const { session, user } = await createUserAndSession(1, false);
 		expect(user.is_admin).toBe(0);

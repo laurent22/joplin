@@ -23,6 +23,10 @@ describe('Synchronizer.conflicts', () => {
 		await switchClient(2);
 
 		await synchronizerStart();
+
+		let syncItem = await BaseItem.syncItem(syncTargetId(), note1.id, { fields: ['sync_time'] });
+		expect(syncItem.sync_time).toBe(note1.updated_time);
+
 		let note2 = await Note.load(note1.id);
 		note2.title = 'Updated on client 2';
 		await Note.save(note2);
@@ -36,6 +40,10 @@ describe('Synchronizer.conflicts', () => {
 		await Note.save(note2conf);
 		note2conf = await Note.load(note1.id);
 		await synchronizerStart();
+
+		syncItem = await BaseItem.syncItem(syncTargetId(), note2.id, { fields: ['sync_time'] });
+		expect(syncItem.sync_time).toBe(note2.updated_time);
+
 		const conflictedNotes = await Note.conflictedNotes();
 		expect(conflictedNotes.length).toBe(1);
 
@@ -47,16 +55,27 @@ describe('Synchronizer.conflicts', () => {
 		for (const n in conflictedNote) {
 			if (!conflictedNote.hasOwnProperty(n)) continue;
 			if (n === 'id' || n === 'is_conflict' || n === 'conflict_original_id') continue;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			expect(conflictedNote[n]).toBe((note2conf as any)[n]);
+			expect((conflictedNote as Record<string, unknown>)[n]).toBe((note2conf as Record<string, unknown>)[n]);
 		}
 
 		const noteUpdatedFromRemote = await Note.load(note1.id);
 		for (const n in noteUpdatedFromRemote) {
 			if (!noteUpdatedFromRemote.hasOwnProperty(n)) continue;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			expect((noteUpdatedFromRemote as any)[n]).toBe((note2 as any)[n]);
+			expect((noteUpdatedFromRemote as Record<string, unknown>)[n]).toBe((note2 as Record<string, unknown>)[n]);
 		}
+	}));
+
+	it('should cap sync_time to the current device time in the delta step', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id, updated_time: time.unixMs() + 100_000 }, { autoTimestamp: false });
+		await synchronizerStart();
+
+		await switchClient(2);
+
+		await synchronizerStart();
+
+		const syncItem = await BaseItem.syncItem(syncTargetId(), note1.id, { fields: ['sync_time'] });
+		expect(syncItem.sync_time).toBeLessThan(note1.updated_time);
 	}));
 
 	it('should resolve folders conflicts', (async () => {

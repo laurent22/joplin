@@ -1,7 +1,7 @@
 import InteropService_Exporter_Base from './InteropService_Exporter_Base';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import { makeExportModule, makeImportModule } from './Module';
-import { FileSystemItem } from './types';
+import { ExportModuleOutputFormat, FileSystemItem } from './types';
 
 describe('Module', () => {
 	it('should return correct default fullLabel for an ImportModule', () => {
@@ -38,8 +38,7 @@ describe('Module', () => {
 
 	it('should return correct default fullLabel for an ExportModule', () => {
 		const testExportModule = makeExportModule({
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			format: 'format_test_______TEST' as any,
+			format: 'format_test_______TEST' as ExportModuleOutputFormat,
 			description: 'Testing...',
 		}, () => new InteropService_Exporter_Base());
 

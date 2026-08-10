@@ -76,7 +76,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		}
 	}
 
-	private async isDirectoryEmpty(dirPath: string) {
+	protected async isDirectoryEmpty(dirPath: string) {
 		const supportedFileExtension = this.metadata().fileExtensions;
 		const innerStats = await shim.fsDriver().readDirStats(dirPath);
 		for (let i = 0; i < innerStats.length; i++) {

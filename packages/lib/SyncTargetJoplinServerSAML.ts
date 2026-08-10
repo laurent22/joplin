@@ -12,6 +12,7 @@ export async function newFileApi(id: number, options: FileApiOptions) {
 		userContentBaseUrl: () => options.userContentPath(),
 		username: () => '',
 		password: () => '',
+		apiKey: () => Setting.value('sync.11.apiKey'),
 		session: () => ({ id: Setting.value('sync.11.id'), user_id: Setting.value('sync.11.userId') }),
 		env: Setting.value('env'),
 	};
@@ -128,6 +129,7 @@ export default class SyncTargetJoplinServerSAML extends SyncTargetJoplinServer {
 			userContentPath: () => Setting.value('sync.11.userContentPath'),
 			username: () => '',
 			password: () => '',
+			apiKey: () => Setting.value('sync.11.apiKey'),
 		};
 		return initFileApi(SyncTargetJoplinServerSAML.id(), this.logger(), this.lastFileApiOptions_);
 	}

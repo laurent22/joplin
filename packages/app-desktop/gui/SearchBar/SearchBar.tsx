@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import SearchInput from '../lib/SearchInput/SearchInput';
 import Setting from '@joplin/lib/models/Setting';
@@ -10,7 +11,7 @@ import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../app.reducer';
 import { blur, focus } from '@joplin/lib/utils/focusHandler';
 const debounce = require('debounce');
-const styled = require('styled-components').default;
+import styled from 'styled-components';
 
 export const Root = styled.div`
 	position: relative;
@@ -20,13 +21,12 @@ export const Root = styled.div`
 `;
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	inputRef?: any;
+	inputRef?: React.MutableRefObject<HTMLInputElement | null>;
 	notesParentType: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch?: Function;
+	dispatch?: Dispatch;
 	selectedNoteId: string;
 	isFocused?: boolean;
+	globalQuery?: string;
 }
 
 function SearchBar(props: Props) {
@@ -35,8 +35,7 @@ function SearchBar(props: Props) {
 	const searchId = useRef(uuid.create());
 
 	useEffect(() => {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		function search(searchId: string, query: string, dispatch: Function) {
+		function search(searchId: string, query: string, dispatch: Dispatch) {
 			dispatch({
 				type: 'SEARCH_UPDATE',
 				search: {
@@ -88,8 +87,7 @@ function SearchBar(props: Props) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.selectedNoteId]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	function onChange(event: any) {
+	function onChange(event: { value: string }) {
 		if (event.value.length === 0) {
 			// Revert to previous state if query string becomes empty
 			void onExitSearch();
@@ -118,11 +116,9 @@ function SearchBar(props: Props) {
 		}, 300);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onKeyDown = useCallback((event: any) => {
+	const onKeyDown = useCallback((event: React.KeyboardEvent) => {
 		if (event.key === 'Escape') {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			if (document.activeElement) blur('SearchBar::onKeyDown', document.activeElement as any);
+			if (document.activeElement) blur('SearchBar::onKeyDown', document.activeElement as HTMLElement);
 			void onExitSearch();
 		}
 	}, [onExitSearch]);
@@ -163,6 +159,22 @@ function SearchBar(props: Props) {
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, []);
 
+	// if the globalQuery is not undefined and is not equal to the current value of query changes the query to global query. Else the current query remains the same.
+	// used  setQuery((previousQuery)=>{}) to prevent linter error asking to have [query] in the dependency array, since this useEffect would then run every time the query is changed
+	useEffect(() => {
+		if (props.globalQuery !== undefined) {
+			setQuery((previousQuery) => {
+				if (props.globalQuery !== previousQuery) {
+					if (props.globalQuery.length > 0) {
+						setSearchStarted(true);
+					}
+					return props.globalQuery;
+				}
+				return previousQuery;
+			});
+		}
+	}, [props.globalQuery]);
+
 	return (
 		<Root className="search-bar">
 			<SearchInput
@@ -186,10 +198,20 @@ interface OwnProps {
 
 const mapStateToProps = (state: AppState, ownProps: OwnProps) => {
 	const windowState = stateUtils.windowStateById(state, ownProps.windowId);
+
+	let globalQuery = '';
+	if (windowState.notesParentType === 'Search' && windowState.selectedSearchId) {
+		const activeSearch = state.searches.find((s: { id: string; query_pattern: string }) => s.id === windowState.selectedSearchId);
+		if (activeSearch && activeSearch.query_pattern) {
+			globalQuery = activeSearch.query_pattern;
+		}
+	}
+
 	return {
 		notesParentType: windowState.notesParentType,
 		selectedNoteId: stateUtils.selectedNoteId(windowState),
 		isFocused: state.focusedField === 'globalSearch',
+		globalQuery: globalQuery,
 	};
 };
 

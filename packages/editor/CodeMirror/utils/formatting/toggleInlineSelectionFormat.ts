@@ -4,12 +4,16 @@ import { SelectionUpdate } from './types';
 import findInlineMatch, { MatchSide } from './findInlineMatch';
 import growSelectionToNode from '../growSelectionToNode';
 import toggleInlineRegionSurrounded from './toggleInlineRegionSurrounded';
+import toggleInlineMultilineSelectionFormat, { shouldUseMultilineInlineSelectionFormatting } from './toggleInlineMultilineSelectionFormat';
 
 // Returns updated selections: For all selections in the given `EditorState`, toggles
 // whether each is contained in an inline region of type [spec].
 const toggleInlineSelectionFormat = (
 	state: EditorState, spec: RegionSpec, sel: SelectionRange,
 ): SelectionUpdate => {
+	if (shouldUseMultilineInlineSelectionFormatting(state, sel, spec)) {
+		return toggleInlineMultilineSelectionFormat(state, sel, spec);
+	}
 	const endMatchLen = findInlineMatch(state.doc, spec, sel, MatchSide.End);
 
 	// If at the end of the region, move the

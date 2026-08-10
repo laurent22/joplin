@@ -20,13 +20,14 @@ export interface RenderSettings {
 	resources: ResourceInfos;
 	codeTheme: string;
 	noteHash: string;
-	initialScroll: number;
+	initialScrollPercent: number;
 	// If [null], plugin assets are not added to the document
 	pluginAssetContainerSelector: string|null;
 	removeUnusedPluginAssets: boolean;
 
 	splitted?: boolean; // Move CSS into a separate output
 	mapsToLine?: boolean; // Sourcemaps
+	showNoteLinkIcon?: boolean;
 
 	createEditPopupSyntax: string;
 	destroyEditPopupSyntax: string;
@@ -80,6 +81,7 @@ export default class Renderer {
 	public async setExtraContentScriptsAndRerender(
 		extraContentScripts: ExtraContentScriptSource[],
 	) {
+		const evalStart = Date.now();
 		this.extraContentScripts_ = extraContentScripts.map(script => {
 			const scriptModule = ((0, eval)(script.js))({
 				pluginId: script.pluginId,
@@ -99,13 +101,19 @@ export default class Renderer {
 			};
 		});
 		this.recreateMarkupToHtml_();
+		const evalMs = Date.now() - evalStart;
 
 		// If possible, rerenders with the last rendering settings. The goal
 		// of this is to reduce the number of IPC calls between the viewer and
 		// React Native. We want the first render to be as fast as possible.
+		let renderMs = 0;
 		if (this.lastBodyMarkup_) {
+			const renderStart = Date.now();
 			await this.rerenderToBody(this.lastBodyMarkup_, this.lastBodyRenderSettings_);
+			renderMs = Date.now() - renderStart;
 		}
+
+		return { evalMs, renderMs };
 	}
 
 	public async render(markup: MarkupRecord, settings: RenderSettings) {
@@ -136,6 +144,7 @@ export default class Renderer {
 			splitted: settings.splitted,
 			mapsToLine: settings.mapsToLine,
 			whiteBackgroundNoteRendering: markup.language === MarkupLanguage.Html,
+			showNoteLinkIcon: settings.showNoteLinkIcon,
 			globalSettings: settings.globalSettings,
 		};
 

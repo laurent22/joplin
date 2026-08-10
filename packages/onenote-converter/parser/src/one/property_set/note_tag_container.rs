@@ -50,15 +50,15 @@ impl Data {
     }
 
     fn parse_data(object: &Object) -> Result<Data> {
-        let definition = ObjectReference::parse(PropertyType::NoteTagDefinitionOid, &object)?;
+        let definition = ObjectReference::parse(PropertyType::NoteTagDefinitionOid, object)?;
 
-        let created_at = Time::parse(PropertyType::NoteTagCreated, &object)?.ok_or_else(|| {
+        let created_at = Time::parse(PropertyType::NoteTagCreated, object)?.ok_or_else(|| {
             ErrorKind::MalformedOneNoteFileData("note tag has no created at time".into())
         })?;
 
-        let completed_at = Time::parse(PropertyType::NoteTagCompleted, &object)?;
+        let completed_at = Time::parse(PropertyType::NoteTagCompleted, object)?;
 
-        let item_status = ActionItemStatus::parse(&object)?.ok_or_else(|| {
+        let item_status = ActionItemStatus::parse(object)?.ok_or_else(|| {
             ErrorKind::MalformedOneNoteFileData("note tag container has no item status".into())
         })?;
 

@@ -2,10 +2,15 @@
 import * as React from 'react';
 import { TextStyle, Text, StyleProp } from 'react-native';
 
-const FontAwesomeIcon = require('react-native-vector-icons/FontAwesome5').default;
-const AntIcon = require('react-native-vector-icons/AntDesign').default;
-const MaterialCommunityIcon = require('react-native-vector-icons/MaterialCommunityIcons').default;
-const Ionicon = require('react-native-vector-icons/Ionicons').default;
+import { FontAwesome5 } from '@react-native-vector-icons/fontawesome5';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
+import { Ionicons } from '@react-native-vector-icons/ionicons';
+
+type IconNameProp<IconComponent> = IconComponent extends (props: { name: infer NameType })=> unknown ? NameType : never;
+
+type FontAwesome5Name = IconNameProp<typeof FontAwesome5>;
+type MaterialIconName = IconNameProp<typeof MaterialDesignIcons>;
+type IoniconsName = IconNameProp<typeof Ionicons>;
 
 interface Props {
 	name: string;
@@ -31,7 +36,7 @@ const Icon: React.FC<Props> = props => {
 	// to read the characters from the icon font (they don't make sense
 	// without the icon font applied).
 	const accessibilityHidden = props.accessibilityLabel === null;
-	const importantForAccessibility = accessibilityHidden ? 'no-hide-descendants' : 'yes';
+	const importantForAccessibility = accessibilityHidden ? 'no-hide-descendants' as const : 'yes' as const;
 
 	const sharedProps = {
 		importantForAccessibility, // Android
@@ -43,20 +48,24 @@ const Icon: React.FC<Props> = props => {
 	};
 
 	if (namePrefix.match(/^fa[bsr]?$/)) {
+		let iconStyle: 'solid'|'brand' = 'solid';
+		if (namePrefix.startsWith('fab')) {
+			iconStyle = 'brand';
+		} else if (namePrefix.startsWith('fas')) {
+			iconStyle = 'solid';
+		}
+
 		return (
-			<FontAwesomeIcon
-				brand={namePrefix.startsWith('fab')}
-				solid={namePrefix.startsWith('fas')}
-				name={nameSuffix}
+			<FontAwesome5
+				name={nameSuffix as FontAwesome5Name}
+				iconStyle={iconStyle}
 				{...sharedProps}
 			/>
 		);
-	} else if (namePrefix === 'ant') {
-		return <AntIcon name={nameSuffix} {...sharedProps}/>;
 	} else if (namePrefix === 'material') {
-		return <MaterialCommunityIcon name={nameSuffix} {...sharedProps}/>;
+		return <MaterialDesignIcons name={nameSuffix as MaterialIconName} {...sharedProps}/>;
 	} else if (namePrefix === 'ionicon') {
-		return <Ionicon name={nameSuffix} {...sharedProps}/>;
+		return <Ionicons name={nameSuffix as IoniconsName} {...sharedProps}/>;
 	} else if (namePrefix === 'text') {
 		return (
 			<Text
@@ -69,7 +78,7 @@ const Icon: React.FC<Props> = props => {
 			</Text>
 		);
 	} else {
-		return <FontAwesomeIcon name='cog' {...sharedProps}/>;
+		return <FontAwesome5 name='cog' iconStyle='solid' {...sharedProps}/>;
 	}
 };
 

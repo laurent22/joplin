@@ -8,16 +8,56 @@ const fixResourceUrls = (container: HTMLElement) => {
 	}
 };
 
+const hasNonElementContent = (parent: Element) => {
+	for (const child of parent.childNodes) {
+		if (child.nodeType === Node.TEXT_NODE && child.textContent.trim()) return true;
+	}
+	return false;
+};
+
+const hasSingleParagraphChild = (parent: Element) => {
+	if (hasNonElementContent(parent)) return false;
+	const firstChild = parent.firstElementChild;
+	if (firstChild?.tagName !== 'P') return false;
+	return Array.from(parent.children).filter(el => el.tagName === 'P').length === 1;
+};
+
+const unwrapSingleParagraph = (parent: Element) => {
+	if (hasSingleParagraphChild(parent)) {
+		parent.firstElementChild.replaceWith(...parent.firstElementChild.childNodes);
+	}
+};
+
 const removeListItemWrapperParagraphs = (container: HTMLElement) => {
 	const listItems = container.querySelectorAll<HTMLLIElement>('li');
 	for (const item of listItems) {
 		trimEmptyParagraphs(item);
+		unwrapSingleParagraph(item);
+	}
+};
 
-		if (item.children.length === 1) {
-			const firstChild = item.children[0];
-			if (firstChild.tagName === 'P') {
-				firstChild.replaceWith(...firstChild.childNodes);
-			}
+const removeChecklistItemWrapperParagraphs = (container: HTMLElement) => {
+	const listItems = container.querySelectorAll<HTMLLIElement>('li');
+	for (const item of listItems) {
+		const input = item.firstElementChild;
+		if (input?.tagName !== 'INPUT') continue;
+		const content = input.nextElementSibling;
+		if (!content || content.tagName !== 'DIV') continue;
+
+		trimEmptyParagraphs(content);
+
+		// Hoist nested sublists out of the <div> so Turndown sees <li>
+		// as their direct parent and uses single newlines.
+		const nestedLists = content.querySelectorAll(':scope > ul, :scope > ol');
+		for (let i = nestedLists.length - 1; i >= 0; i--) {
+			content.after(nestedLists[i]);
+		}
+
+		// Replace <div><p>text</p></div> with <span>text</span>
+		if (hasSingleParagraphChild(content)) {
+			const span = document.createElement('span');
+			span.replaceChildren(...content.firstElementChild.childNodes);
+			content.replaceWith(span);
 		}
 	}
 };
@@ -63,6 +103,7 @@ const postprocessEditorOutput = (node: Node|DocumentFragment) => {
 	fixResourceUrls(html);
 	restoreOriginalLinks(html);
 	removeListItemWrapperParagraphs(html);
+	removeChecklistItemWrapperParagraphs(html);
 	removeTableItemExtraPadding(html);
 
 	return html;

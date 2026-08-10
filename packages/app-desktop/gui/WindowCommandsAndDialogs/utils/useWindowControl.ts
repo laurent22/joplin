@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMemo, useRef } from 'react';
+import { RefObject, useMemo, useRef } from 'react';
 import { DialogState } from '../types';
 import { PrintCallback } from './usePrintToCallback';
 import { _ } from '@joplin/lib/locale';
@@ -23,10 +23,11 @@ export interface WindowControl {
 	showPrompt: <T>(options: PromptOptions<T>)=> Promise<T>;
 	printTo: PrintCallback;
 	announcePanelVisibility(panelName: string, visible: boolean): void;
+	getFocusedDocument(): Document;
 }
 
 export type OnSetDialogState = React.Dispatch<React.SetStateAction<DialogState>>;
-const useWindowControl = (setDialogState: OnSetDialogState, onPrint: PrintCallback) => {
+const useWindowControl = (setDialogState: OnSetDialogState, onPrint: PrintCallback, windowDomRef: RefObject<Document>) => {
 	// Use refs to avoid reloading the output where possible -- reloading the window control
 	// may mean reloading all main window commands.
 	const onPrintRef = useRef(onPrint);
@@ -54,10 +55,9 @@ const useWindowControl = (setDialogState: OnSetDialogState, onPrint: PrintCallba
 							inputType: 'dropdown',
 							value: options.value,
 							autocomplete: options.suggestions,
-							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored code before rule was applied
-							onClose: async (answer: any) => {
+							onClose: async (answer: unknown) => {
 								if (answer) {
-									resolve(answer.value);
+									resolve((answer as PromptSuggestion<T>).value);
 								} else {
 									resolve(null);
 								}
@@ -67,9 +67,12 @@ const useWindowControl = (setDialogState: OnSetDialogState, onPrint: PrintCallba
 					});
 				});
 			},
+			getFocusedDocument: () => {
+				return windowDomRef.current;
+			},
 		};
 		return control;
-	}, [setDialogState]);
+	}, [setDialogState, windowDomRef]);
 };
 
 export default useWindowControl;

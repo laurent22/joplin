@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import PluginService, { defaultPluginSetting, Plugins, PluginSetting, PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { defaultPluginSetting, Plugins, PluginSetting, PluginSettings, SerializedPluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import SearchPlugins from './SearchPlugins';
@@ -30,8 +30,7 @@ const Root = styled.div`
 	flex-direction: column;
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const UserPluginsRoot = styled.div<any>`
+const UserPluginsRoot = styled.div<{ mb?: string }>`
 	${space}
 	display: flex;
 	flex-wrap: wrap;
@@ -41,18 +40,15 @@ const ToolsButton = styled(Button)`
 	margin-right: 6px;
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const RepoApiErrorMessage = styled(StyledMessage)<any>`
+const RepoApiErrorMessage = styled(StyledMessage)<{ maxWidth: number }>`
 	max-width: ${props => props.maxWidth}px;
 	margin-bottom: 10px;
 `;
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	value: any;
+	value: SerializedPluginSettings;
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onChange: Function;
+	onChange: (event: { value: unknown })=> void;
 }
 
 let repoApi_: RepositoryApi = null;
@@ -236,8 +232,7 @@ export default function(props: Props) {
 		setSearchQuery(event.value);
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onSearchPluginSettingsChange = useCallback((event: any) => {
+	const onSearchPluginSettingsChange = useCallback((event: OnPluginSettingChangeEvent) => {
 		props.onChange({ value: pluginService.serializePluginSettings(event.value) });
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.onChange]);

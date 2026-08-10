@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 // This is a modified version of the file-uri-to-path package:
 //
 // - It removes the dependency to the "path" package, which wouldn't work with
@@ -100,6 +98,11 @@ export const fileUriToPath = (path: string, platform = 'linux') => {
 export const isDataUrl = (path: string) => {
 	return path.startsWith('data:');
 };
+
+export const isHttpOrHttpsUrl = (url: string) => {
+	return url.startsWith('http://') || url.startsWith('https://');
+};
+
 
 export const hasProtocol = (url: string, protocol: string | string[]) => {
 	if (!url) return false;

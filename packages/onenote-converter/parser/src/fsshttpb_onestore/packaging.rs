@@ -3,9 +3,9 @@ use crate::fsshttpb::data::stream_object::ObjectHeader;
 use crate::fsshttpb::data_element::DataElementPackage;
 use crate::shared::exguid::ExGuid;
 use crate::shared::guid::Guid;
-use parser_utils::{log_warn, Reader};
 use parser_utils::errors::{ErrorKind, Result};
 use parser_utils::parse::ParseHttpb;
+use parser_utils::{Reader, log_warn};
 
 /// A OneNote file packaged in FSSHTTPB format.
 ///
@@ -57,9 +57,13 @@ impl OneStorePackaging {
         // Originally, file == legacy_file_version was used as a validity check. However,
         // it isn't specified that `file` must always equal the `legacy_file_version`.
         // Additionally, per [this forum post](https://discourse.joplinapp.org/t/onenote-zip-file-import-not-working/47499/6),
-        // it may not always be the case. For now, only log a warning. 
+        // it may not always be the case. For now, only log a warning.
         if file != legacy_file_version {
-            log_warn!("Possible file corruption: file ({}) != legacy_file_version ({})", file, legacy_file_version);
+            log_warn!(
+                "Possible file corruption: file ({}) != legacy_file_version ({})",
+                file,
+                legacy_file_version
+            );
         }
 
         if reader.get_u32()? != 0 {

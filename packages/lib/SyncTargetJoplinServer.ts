@@ -14,6 +14,7 @@ export interface FileApiOptions {
 	userContentPath(): string;
 	username(): string;
 	password(): string;
+	apiKey(): string;
 }
 
 export async function newFileApi(id: number, options: FileApiOptions) {
@@ -22,6 +23,7 @@ export async function newFileApi(id: number, options: FileApiOptions) {
 		userContentBaseUrl: () => options.userContentPath(),
 		username: () => options.username(),
 		password: () => options.password(),
+		apiKey: () => options.apiKey(),
 		session: (): Session => null,
 		env: Setting.value('env'),
 	};
@@ -148,6 +150,7 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 			userContentPath: () => Setting.value('sync.9.userContentPath'),
 			username: () => Setting.value('sync.9.username'),
 			password: () => Setting.value('sync.9.password'),
+			apiKey: () => Setting.value('sync.9.apiKey'),
 		});
 	}
 

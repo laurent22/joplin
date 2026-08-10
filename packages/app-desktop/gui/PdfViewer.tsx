@@ -1,5 +1,7 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import { useCallback, useRef, useEffect } from 'react';
+import { ResourceEntity } from '@joplin/lib/services/database/types';
 import Resource from '@joplin/lib/models/Resource';
 import bridge from '../services/bridge';
 import contextMenu from './NoteEditor/utils/contextMenu';
@@ -8,8 +10,9 @@ import CommandService from '@joplin/lib/services/CommandService';
 import styled from 'styled-components';
 import { themeStyle } from '@joplin/lib/theme';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-type StyleProps = any;
+interface StyleProps {
+	theme: { backgroundColor: string; color: string };
+}
 
 const Window = styled.div`
 	height: 100%;
@@ -30,10 +33,8 @@ const IFrame = styled.iframe`
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	resource: any;
+	dispatch: Dispatch;
+	resource: ResourceEntity;
 	pageNo: number;
 }
 
@@ -73,8 +74,7 @@ export default function PdfViewer(props: Props) {
 		menu.popup({ window: bridge().activeWindow() });
 	}, [props.dispatch]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onMessage_ = useCallback(async (event: any) => {
+	const onMessage_ = useCallback(async (event: MessageEvent<{ name: string; text?: string }>) => {
 		if (!event.data || !event.data.name) {
 			return;
 		}

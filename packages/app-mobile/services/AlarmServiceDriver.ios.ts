@@ -1,18 +1,16 @@
 import { Notification } from '@joplin/lib/models/Alarm';
 import Logger from '@joplin/utils/Logger';
-const PushNotificationIOS = require('@react-native-community/push-notification-ios').default;
+import PushNotificationIOS, { PushNotification, PushNotificationPermissions, ScheduleLocalNotificationDetails } from '@react-native-community/push-notification-ios';
 
 export default class AlarmServiceDriver {
 
 	private hasPermission_: boolean = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private inAppNotificationHandler_: any = null;
+	private inAppNotificationHandler_: ((id: string)=> void) = null;
 	private logger_: Logger;
 
 	public constructor(logger: Logger) {
 		this.logger_ = logger;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		PushNotificationIOS.addEventListener('localNotification', (instance: any) => {
+		PushNotificationIOS.addEventListener('localNotification', (instance: PushNotification & { _data?: { id?: string } }) => {
 			if (!this.inAppNotificationHandler_) return;
 
 			if (!instance || !instance._data || !instance._data.id) {
@@ -33,20 +31,17 @@ export default class AlarmServiceDriver {
 		throw new Error('Available only for non-persistent alarms');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public setInAppNotificationHandler(v: any) {
+	public setInAppNotificationHandler(v: (id: string)=> void) {
 		this.inAppNotificationHandler_ = v;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async hasPermissions(perm: any = null) {
-		if (perm !== null) return perm.alert && perm.badge && perm.sound;
+	public async hasPermissions(perm: PushNotificationPermissions = null): Promise<boolean> {
+		if (perm !== null) return !!(perm.alert && perm.badge && perm.sound);
 
 		if (this.hasPermission_ !== null) return this.hasPermission_;
 
-		return new Promise((resolve) => {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			PushNotificationIOS.checkPermissions(async (perm: any) => {
+		return new Promise<boolean>((resolve) => {
+			PushNotificationIOS.checkPermissions(async (perm: PushNotificationPermissions) => {
 				const ok = await this.hasPermissions(perm);
 				this.hasPermission_ = ok;
 				resolve(ok);
@@ -55,11 +50,10 @@ export default class AlarmServiceDriver {
 	}
 
 	public async requestPermissions() {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const options: any = {
-			alert: 1,
-			badge: 1,
-			sound: 1,
+		const options: PushNotificationPermissions = {
+			alert: true,
+			badge: true,
+			sound: true,
 		};
 		const newPerm = await PushNotificationIOS.requestPermissions(options);
 		this.hasPermission_ = null;
@@ -77,8 +71,7 @@ export default class AlarmServiceDriver {
 		}
 
 		// ID must be a string and userInfo must be supplied otherwise cancel won't work
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const iosNotification: any = {
+		const iosNotification: Partial<ScheduleLocalNotificationDetails> & { id: string } = {
 			id: `${notification.id}`,
 			alertTitle: notification.title,
 			fireDate: notification.date.toISOString(),
@@ -87,6 +80,6 @@ export default class AlarmServiceDriver {
 
 		if ('body' in notification) iosNotification.alertBody = notification.body;
 
-		PushNotificationIOS.scheduleLocalNotification(iosNotification);
+		PushNotificationIOS.scheduleLocalNotification(iosNotification as ScheduleLocalNotificationDetails);
 	}
 }

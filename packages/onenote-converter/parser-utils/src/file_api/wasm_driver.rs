@@ -1,5 +1,7 @@
 use super::ApiResult;
 use super::FileApiDriver;
+use super::FileHandle;
+use std::io::{BufReader, Read, Seek, SeekFrom};
 use wasm_bindgen::JsValue;
 use wasm_bindgen::prelude::wasm_bindgen;
 use web_sys::js_sys;
@@ -26,11 +28,38 @@ extern "C" {
     #[wasm_bindgen(js_name = normalizeAndWriteFile, catch)]
     fn write_file(path: &str, data: &[u8]) -> std::result::Result<JsValue, JsValue>;
 
+    #[wasm_bindgen(js_name = normalizeAndAppendFile, catch)]
+    fn append_file(path: &str, data: &[u8]) -> std::result::Result<JsValue, JsValue>;
+
     #[wasm_bindgen(js_name = isDirectory, catch)]
     fn is_directory(path: &str) -> std::result::Result<bool, JsValue>;
 
     #[wasm_bindgen(js_name = readDir, catch)]
     fn read_dir_js(path: &str) -> std::result::Result<JsValue, JsValue>;
+
+    #[wasm_bindgen(js_name = fileReader, catch)]
+    fn open_file_handle(path: &str) -> std::result::Result<JsFileHandle, JsValue>;
+
+    #[wasm_bindgen(js_name = isWindows)]
+    fn is_windows() -> bool;
+}
+
+#[wasm_bindgen]
+extern "C" {
+    type JsFileHandle;
+
+    #[wasm_bindgen(structural, method, catch)]
+    fn read(
+        this: &JsFileHandle,
+        offset: u64,
+        size: u64,
+    ) -> std::result::Result<Uint8Array, JsValue>;
+
+    #[wasm_bindgen(structural, method)]
+    fn size(this: &JsFileHandle) -> u64;
+
+    #[wasm_bindgen(structural, method, catch)]
+    fn close(this: &JsFileHandle) -> std::result::Result<(), JsValue>;
 }
 
 #[wasm_bindgen(module = "fs")]
@@ -73,6 +102,10 @@ fn handle_error(error: JsValue, source: &str) -> std::io::Error {
 pub struct FileApiDriverImpl {}
 
 impl FileApiDriver for FileApiDriverImpl {
+    fn is_windows(&self) -> bool {
+        is_windows()
+    }
+
     fn is_directory(&self, path: &str) -> ApiResult<bool> {
         match is_directory(path) {
             Ok(is_dir) => Ok(is_dir),
@@ -97,12 +130,59 @@ impl FileApiDriver for FileApiDriverImpl {
         }
     }
 
+    fn open_file(&self, path: &str) -> ApiResult<Box<dyn FileHandle>> {
+        match open_file_handle(path) {
+            Ok(handle) => {
+                let file = BufReader::new(SeekableFileHandle { handle, offset: 0 });
+                Ok(Box::new(file))
+            }
+            Err(e) => Err(handle_error(e, &format!("opening file {}", path))),
+        }
+    }
+
     fn write_file(&self, path: &str, data: &[u8]) -> ApiResult<()> {
         if let Err(error) = write_file(path, data) {
             Err(handle_error(error, &format!("writing file {}", path)))
         } else {
             Ok(())
         }
+    }
+
+    fn stream_to_file(&self, path: &str, data: &mut dyn std::io::Read) -> ApiResult<()> {
+        // Create and clear the file. This is important for zero-size files
+        self.write_file(path, &[])?;
+
+        let mut chunk_size = 1024 * 1024; // 1 MB
+        let max_chunk_size = 50 * 1024 * 1024;
+        let mut buffer = vec![0; chunk_size];
+
+        loop {
+            let size = match data.read(&mut buffer) {
+                Ok(size) => size,
+                // Interrupted errors can be retried
+                Err(err) if err.kind() == std::io::ErrorKind::Interrupted => {
+                    continue;
+                }
+                Err(err) => {
+                    return Err(err);
+                }
+            };
+
+            if size == 0 {
+                break;
+            }
+
+            if let Err(error) = append_file(path, &buffer[0..size]) {
+                return Err(handle_error(error, &format!("writing file {}", path)));
+            }
+
+            // For performance, try to increase the chunk size
+            if size == chunk_size && chunk_size < max_chunk_size {
+                chunk_size = (chunk_size * 2).min(max_chunk_size);
+                buffer.resize(chunk_size, 0);
+            }
+        }
+        Ok(())
     }
 
     fn exists(&self, path: &str) -> ApiResult<bool> {
@@ -136,5 +216,93 @@ impl FileApiDriver for FileApiDriverImpl {
     }
     fn join(&self, path_1: &str, path_2: &str) -> String {
         join_path(path_1, path_2).unwrap().as_string().unwrap()
+    }
+}
+
+struct SeekableFileHandle {
+    handle: JsFileHandle,
+    offset: u64,
+}
+
+impl Read for SeekableFileHandle {
+    fn read(&mut self, out: &mut [u8]) -> std::io::Result<usize> {
+        let file_size = self.handle.size();
+        let bytes_remaining = if self.offset < file_size {
+            file_size - self.offset
+        } else {
+            0
+        };
+
+        let maximum_read_size = bytes_remaining.min(out.len() as u64);
+        match self.handle.read(self.offset, maximum_read_size) {
+            Ok(data) => {
+                let data = data.to_vec();
+                let size = data.len();
+                self.offset += size as u64;
+
+                // Verify that handle.read respected the maximum length:
+                if size > out.len() {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::Other,
+                        "Invariant violation: Size read must be less than or equal to the maximum_read_size.",
+                    ));
+                }
+
+                let (target_mem, padding) = out.split_at_mut(size);
+                target_mem.copy_from_slice(&data);
+                padding.fill(0);
+
+                Ok(size)
+            }
+            Err(error) => {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::Other,
+                    format!("Read failed: {:?}.", error),
+                ));
+            }
+        }
+    }
+}
+
+impl Seek for SeekableFileHandle {
+    fn seek(&mut self, pos: SeekFrom) -> std::io::Result<u64> {
+        match pos {
+            SeekFrom::Start(pos) => {
+                self.offset = pos;
+            }
+            SeekFrom::Current(offset) => {
+                // Disallow seeking to a negative position
+                if offset < 0 && offset.unsigned_abs() > self.offset {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidInput,
+                        "Attempted to seek before the beginning of the file.",
+                    ));
+                }
+
+                self.offset = (self.offset as i64 + offset) as u64;
+            }
+            SeekFrom::End(offset) => {
+                self.offset = self.handle.size();
+                self.seek(SeekFrom::Current(offset))?;
+            }
+        }
+        Ok(self.offset)
+    }
+}
+
+impl Drop for SeekableFileHandle {
+    fn drop(&mut self) {
+        if let Err(error) = self.handle.close() {
+            // Use web_sys directly -- log_warn! can't be used from within the parser-utils package:
+            let message: JsValue =
+                format!("OneNote converter: Failed to close file: Error: {error:?}").into();
+            web_sys::console::warn_1(&message);
+        }
+    }
+}
+
+impl FileHandle for BufReader<SeekableFileHandle> {
+    fn byte_length(&self) -> u64 {
+        self.get_ref().handle.size()
     }
 }

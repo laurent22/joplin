@@ -1,18 +1,45 @@
 import { produce } from 'immer';
 import Setting from '@joplin/lib/models/Setting';
-import { defaultState, defaultWindowState, State, WindowState } from '@joplin/lib/reducer';
+import { defaultState, defaultWindowId, defaultWindowState, State, stateUtils, WindowState } from '@joplin/lib/reducer';
 import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
 import Logger from '@joplin/utils/Logger';
+import { ChatMessage } from '@joplin/lib/services/ai/types';
 
 const logger = Logger.create('app.reducer');
+
+export interface AiChatMessage {
+	id: string;
+	role: 'user' | 'assistant' | 'error' | 'separator';
+	text: string;
+	hide?: boolean;
+
+	// The raw message(s) corresponding to this event
+	raw: ChatMessage[];
+}
+
+// Joplin Cloud degradation / budget snapshot. Populated from the provider's
+// InternalChatResult after each chat() call, and persisted to Setting so it
+// survives restarts and reflects plugin-driven calls even when no UI was open.
+export interface AiStatus {
+	degraded: boolean;
+	tokensUsed: number;
+	tokensBudget: number;
+	lastToastShownAt: number | null;
+}
+
+export const defaultAiStatus = (): AiStatus => ({
+	degraded: false,
+	tokensUsed: 0,
+	tokensBudget: 0,
+	lastToastShownAt: null,
+});
 
 export interface AppStateRoute {
 	type: string;
 	routeName: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	props: any;
+	props: Record<string, unknown>;
 }
 
 export enum AppStateDialogName {
@@ -22,8 +49,7 @@ export enum AppStateDialogName {
 
 export interface AppStateDialog {
 	name: AppStateDialogName;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	props: Record<string, any>;
+	props: Record<string, unknown>;
 }
 
 export interface NoteIdToScrollPercent {
@@ -40,8 +66,20 @@ export interface AppWindowState extends WindowState {
 	visibleDialogs: VisibleDialogs;
 	dialogs: AppStateDialog[];
 	devToolsVisible: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	watchedResources: any;
+	watchedResources: Record<string, unknown>;
+	// Note IDs for which the user has chosen to view the underlying Markdown
+	// instead of the Whiteboard editor. Per-window, in-memory only.
+	whiteboardForceMarkdown: Record<string, boolean>;
+	// Whether the currently-active note in this window contains a whiteboard
+	// fence. Set by the NoteEditor when it loads / saves the body, used by
+	// the toolbar to show the editor toggle button. (We can't compute this
+	// from the redux note list because `body` isn't in the preview fields.)
+	activeNoteIsWhiteboard: boolean;
+	// In window state so the conversation survives panel hide/show (the
+	// layout container can swap component types and unmount the panel).
+	aiChatMessages: AiChatMessage[];
+	// Layout for secondary windows
+	secondaryWindowLayout: LayoutItem|null;
 }
 
 interface BackgroundWindowStates {
@@ -52,8 +90,7 @@ export interface AppState extends State, AppWindowState {
 	backgroundWindows: BackgroundWindowStates;
 
 	route: AppStateRoute;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	navHistory: any[];
+	navHistory: AppStateRoute[];
 	watchedNoteFiles: string[];
 	focusedField: string;
 	layoutMoveMode: boolean;
@@ -63,6 +100,7 @@ export interface AppState extends State, AppWindowState {
 	// Extra reducer keys go here
 	mainLayout: LayoutItem;
 	isResettingLayout: boolean;
+	aiStatus: AiStatus;
 }
 
 export const createAppDefaultWindowState = (): AppWindowState => {
@@ -74,14 +112,18 @@ export const createAppDefaultWindowState = (): AppWindowState => {
 		editorCodeView: true,
 		devToolsVisible: false,
 		watchedResources: {},
+		whiteboardForceMarkdown: {},
+		activeNoteIsWhiteboard: false,
+		aiChatMessages: [],
+		secondaryWindowLayout: null,
 	};
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function createAppDefaultState(resourceEditWatcherDefaultState: any): AppState {
+export function createAppDefaultState(resourceEditWatcherDefaultState: Partial<AppState>): AppState {
 	return {
 		...defaultState,
 		...createAppDefaultWindowState(),
+		backgroundWindows: {},
 		route: {
 			type: 'NAV_GO',
 			routeName: 'Main',
@@ -96,6 +138,7 @@ export function createAppDefaultState(resourceEditWatcherDefaultState: any): App
 		startupPluginsLoaded: false,
 		isResettingLayout: false,
 		modalOverlayMessage: null,
+		aiStatus: defaultAiStatus(),
 		...resourceEditWatcherDefaultState,
 	};
 }
@@ -109,7 +152,43 @@ const hideBackgroundDialogsWithId = produce((state: AppState, id: string) => {
 	}
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+const withWindowStateUpdated = <Key extends keyof AppWindowState> (
+	state: AppState, windowId: string, stateKey: Key, value: (oldValue: AppWindowState[Key])=> AppWindowState[Key],
+) => {
+	return produce((state: AppState) => {
+		const windowState = stateUtils.windowStateById(state, windowId);
+		windowState[stateKey] = value(windowState[stateKey]);
+	})(state);
+};
+
+interface SetLayoutPropOptions {
+	key: string;
+	prop: string;
+	value: string;
+}
+
+const setLayoutProp = (layout: LayoutItem, { key, prop, value }: SetLayoutPropOptions) => {
+	let newLayout = produce(layout, (draftLayout: LayoutItem) => {
+		iterateItems(draftLayout, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
+			if (!item) {
+				logger.warn('MAIN_LAYOUT_SET_ITEM_PROP: Found an empty item in layout: ', JSON.stringify(layout));
+			} else {
+				if (item.key === key) {
+					(item as unknown as Record<string, unknown>)[prop] = value;
+					return false;
+				}
+			}
+
+			return true;
+		});
+	});
+
+	if (newLayout !== layout) newLayout = validateLayout(newLayout);
+
+	return newLayout;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux actions are heterogeneous; typing this would require an action-type union and many narrowing casts inside the switch
 export default function(state: AppState, action: any) {
 	let newState = state;
 
@@ -164,8 +243,7 @@ export default function(state: AppState, action: any) {
 		case 'NOTE_VISIBLE_PANES_TOGGLE':
 
 			{
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const getNextLayout = (currentLayout: any) => {
+				const getNextLayout = (currentLayout: string | string[]) => {
 					currentLayout = panes.length === 2 ? 'both' : currentLayout[0];
 
 					let paneOptions;
@@ -207,46 +285,110 @@ export default function(state: AppState, action: any) {
 			};
 			break;
 
-		case 'MAIN_LAYOUT_SET':
-
+		case 'WHITEBOARD_FORCE_MARKDOWN_TOGGLE': {
+			const id: unknown = action.noteId;
+			// Guard against dispatchers forgetting to pass a noteId — writing
+			// an `undefined` key into the map would persist a junk entry.
+			if (typeof id !== 'string' || !id) break;
+			const current = !!state.whiteboardForceMarkdown?.[id];
 			newState = {
 				...state,
-				mainLayout: action.value,
+				whiteboardForceMarkdown: { ...(state.whiteboardForceMarkdown || {}), [id]: !current },
+			};
+			break;
+		}
+
+		case 'WHITEBOARD_ACTIVE_NOTE_SET':
+			newState = {
+				...state,
+				activeNoteIsWhiteboard: !!action.value,
 			};
 			break;
 
-		case 'MAIN_LAYOUT_SET_ITEM_PROP':
+		case 'AI_CHAT_APPEND':
+			newState = withWindowStateUpdated(
+				state, action.windowId, 'aiChatMessages', messages => [...messages, action.message as AiChatMessage],
+			);
+			break;
 
-			{
-				if (!state.mainLayout) {
-					logger.warn('MAIN_LAYOUT_SET_ITEM_PROP: Trying to set an item prop on the layout, but layout is empty: ', JSON.stringify(action));
-				} else {
-					let newLayout = produce(state.mainLayout, (draftLayout: LayoutItem) => {
-						iterateItems(draftLayout, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
-							if (!item) {
-								logger.warn('MAIN_LAYOUT_SET_ITEM_PROP: Found an empty item in layout: ', JSON.stringify(state.mainLayout));
-							} else {
-								if (item.key === action.itemKey) {
-									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-									(item as any)[action.propName] = action.propValue;
-									return false;
-								}
-							}
+		case 'AI_CHAT_ADD_TOOL_RESULT':
+			newState = withWindowStateUpdated(
+				state, action.windowId, 'aiChatMessages', messages => {
+					let lastMessage = messages[messages.length - 1];
+					if (lastMessage) {
+						lastMessage = {
+							...lastMessage,
+							raw: [
+								...lastMessage.raw,
+								action.toolCall,
+							],
+						};
 
-							return true;
-						});
-					});
+						return [...messages.slice(0, messages.length - 1), lastMessage];
+					}
 
-					if (newLayout !== state.mainLayout) newLayout = validateLayout(newLayout);
+					return messages;
+				},
+			);
+			break;
 
-					newState = {
-						...state,
-						mainLayout: newLayout,
-					};
-				}
+		case 'AI_CHAT_REMOVE':
+			newState = withWindowStateUpdated(
+				state, action.windowId, 'aiChatMessages', messages => messages.filter(m => m.id !== action.id),
+			);
+			break;
+
+		case 'AI_CHAT_RESET':
+			newState = withWindowStateUpdated(
+				state, action.windowId, 'aiChatMessages', (): AiChatMessage[] => [],
+			);
+			break;
+
+		case 'AI_STATUS_UPDATE':
+			// Partial merge — callers can bump `lastToastShownAt` alone after
+			// firing the toast without clobbering the degraded/usage numbers.
+			newState = {
+				...state,
+				aiStatus: {
+					...(state.aiStatus ?? defaultAiStatus()),
+					...(action.payload as Partial<AiStatus>),
+				},
+			};
+			break;
+
+		case 'WINDOW_LAYOUT_SET':
+		case 'MAIN_LAYOUT_SET':
+			if ((action.windowId ?? defaultWindowId) === defaultWindowId) {
+				newState = {
+					...state,
+					mainLayout: action.value,
+				};
+			} else {
+				newState = withWindowStateUpdated(
+					state, action.windowId, 'secondaryWindowLayout', () => action.value,
+				);
+			}
+			break;
+
+		case 'WINDOW_LAYOUT_SET_ITEM_PROP':
+		case 'MAIN_LAYOUT_SET_ITEM_PROP': {
+			const updateOption = { key: action.itemKey, prop: action.propName, value: action.propValue };
+
+			if ((action.windowId ?? defaultWindowId) !== defaultWindowId) {
+				newState = withWindowStateUpdated(
+					state, action.windowId, 'secondaryWindowLayout', oldLayout => (
+						setLayoutProp(oldLayout, updateOption)
+					),
+				);
+			} else {
+				newState = {
+					...state,
+					mainLayout: setLayoutProp(state.mainLayout, updateOption),
+				};
 			}
 
 			break;
+		}
 
 		case 'SHOW_MODAL_MESSAGE':
 			newState = { ...newState, modalOverlayMessage: action.message };

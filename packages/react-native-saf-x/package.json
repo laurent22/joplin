@@ -1,6 +1,6 @@
 {
   "name": "@joplin/react-native-saf-x",
-  "version": "3.5.1",
+  "version": "3.7.0",
   "description": "a module to help work with scoped storages on android easily",
   "main": "src/index",
   "react-native": "src/index",
@@ -23,7 +23,7 @@
   "scripts": {
     "build": "tsc --project tsconfig.json",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
-    "linter-precommit": "yarn --cwd ../../ eslint --resolve-plugins-relative-to . --fix packages/react-native-saf-x/**/*.{js,ts,tsx}",
+    "linter-precommit": "yarn --cwd ../../ eslint --fix 'packages/react-native-saf-x/**/*.{js,ts,tsx}'",
     "tsc": "tsc --project tsconfig.json"
   },
   "keywords": [
@@ -45,14 +45,13 @@
   },
   "devDependencies": {
     "@babel/core": "7.16.0",
-    "@types/react-native": "0.64.19",
-    "react": "18.3.1",
-    "react-native": "0.70.6",
-    "typescript": "5.8.3"
+    "react": "19.1.5",
+    "react-native": "0.81.6",
+    "typescript": "5.9.3"
   },
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
   },
-  "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
+  "gitHead": "500e4c02809d3ebe463aa590e86f541d1ef0661c"
 }

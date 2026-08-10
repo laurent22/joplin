@@ -1,4 +1,4 @@
-import { exists, mkdir, readFile, remove } from 'fs-extra';
+import { exists, mkdir, readFile, remove, writeFile } from 'fs-extra';
 import { join } from 'path';
 import htmlpack from '.';
 
@@ -31,5 +31,48 @@ describe('htmlpack/index', () => {
         <p>Test paragraph</p>
     </body>
 </html>`);
+	});
+
+	test('should not throw when a script asset is missing', async () => {
+		const inputFile = join(outputDirectory, 'input.html');
+		const outputFile = join(outputDirectory, 'output.html');
+
+		const inputHtml = `
+<html>
+    <head>
+        <script type="application/javascript" src="missing-script.js"></script>
+    </head>
+    <body>
+        <p>Test</p>
+    </body>
+</html>`;
+
+		await writeFile(inputFile, inputHtml, 'utf8');
+		await htmlpack(inputFile, outputFile);
+
+		const outputContent = await readFile(outputFile, 'utf8');
+		expect(outputContent).toContain('<p>Test</p>');
+	});
+
+	test('should preserve non-local anchor href values', async () => {
+		const inputFile = join(outputDirectory, 'input.html');
+		const outputFile = join(outputDirectory, 'output.html');
+
+		const inputHtml = `
+<html>
+    <body>
+        <a href="https://example.com/test">External link</a>
+        <a href="mailto:test@example.com">Email link</a>
+        <a href="#section">Fragment link</a>
+    </body>
+</html>`;
+
+		await writeFile(inputFile, inputHtml, 'utf8');
+		await htmlpack(inputFile, outputFile);
+
+		const outputContent = await readFile(outputFile, 'utf8');
+		expect(outputContent).toContain('<a href="https://example.com/test">External link</a>');
+		expect(outputContent).toContain('<a href="mailto:test@example.com">Email link</a>');
+		expect(outputContent).toContain('<a href="#section">Fragment link</a>');
 	});
 });

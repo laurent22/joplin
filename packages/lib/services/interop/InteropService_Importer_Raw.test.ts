@@ -8,6 +8,11 @@ import { ImportOptions } from './types';
 import { copyFile } from 'fs/promises';
 import Resource from '../../models/Resource';
 
+interface FolderEntityWithChildren extends FolderEntity {
+	notes?: NoteEntity[];
+	children?: FolderEntityWithChildren[];
+}
+
 const extractId = (rawContent: string): string => {
 	const lines = rawContent.split('\n');
 	for (const line of lines) {
@@ -217,8 +222,7 @@ describe('InteropService_Importer_Raw', () => {
 		await InteropService.instance().import(importOptions);
 		await InteropService.instance().import(importOptions);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const tree: any = await Folder.allAsTree(null, { includeNotes: true });
+		const tree = await Folder.allAsTree(null, { includeNotes: true }) as FolderEntityWithChildren[];
 
 		expect(tree[0].title).toBe('import test');
 		expect(tree[0].notes[0].title).toBe('Note 1');

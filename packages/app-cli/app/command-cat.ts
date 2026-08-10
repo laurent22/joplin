@@ -1,7 +1,7 @@
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
-import BaseModel from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
 
@@ -18,11 +18,10 @@ class Command extends BaseCommand {
 		return [['-v, --verbose', _('Displays the complete information about note.')]];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { note: string; options: { verbose?: boolean } }) {
 		const title = args['note'];
 
-		const item = await app().loadItem(BaseModel.TYPE_NOTE, title, { parent: app().currentFolder() });
+		const item = await app().loadItem(ModelType.Note, title, { parent: app().currentFolder() });
 		if (!item) throw new Error(_('Cannot find "%s".', title));
 
 		let content = '';

@@ -149,9 +149,11 @@ export default class JoplinSettings {
 	/**
 	 * Gets setting values (only applies to setting you registered from your plugin)
 	 */
-	public async values(keys: string[] | string): Promise<Record<string, unknown>> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: setting values are heterogeneous per setting; plugin authors narrow at use site
+	public async values(keys: string[] | string): Promise<Record<string, any>> {
 		if (typeof keys === 'string') keys = [keys];
-		const output: Record<string, unknown> = {};
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See above
+		const output: Record<string, any> = {};
 		for (const key of keys) {
 			output[key] = Setting.value(getPluginNamespacedSettingKey(this.plugin_.id, key));
 		}
@@ -165,7 +167,7 @@ export default class JoplinSettings {
 	 * it is recommended to use the `values()` function instead - it will be much faster than
 	 * calling `value()` multiple times.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: setting values are heterogeneous per setting; plugin authors narrow at use site
 	public async value(key: string): Promise<any> {
 		return Setting.value(getPluginNamespacedSettingKey(this.plugin_.id, key));
 	}
@@ -173,7 +175,7 @@ export default class JoplinSettings {
 	/**
 	 * Sets a setting value (only applies to setting you registered from your plugin)
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: see above
 	public async setValue(key: string, value: any) {
 		return Setting.setValue(getPluginNamespacedSettingKey(this.plugin_.id, key), value);
 	}
@@ -185,11 +187,11 @@ export default class JoplinSettings {
 	 *
 	 * https://github.com/laurent22/joplin/blob/dev/packages/lib/models/settings/builtInMetadata.ts
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: setting values are heterogeneous; plugin authors narrow at use site
 	public async globalValues(keys: string[]): Promise<any[]> {
-		const output: (string|number|boolean)[] = [];
+		const output: (string|number|boolean|undefined)[] = [];
 		for (const key of keys) {
-			output.push(Setting.value(key));
+			output.push(Setting.isSecureKey(key) ? undefined : Setting.value(key));
 		}
 		return output;
 	}
@@ -197,8 +199,9 @@ export default class JoplinSettings {
 	/**
 	 * @deprecated Use joplin.settings.globalValues()
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: setting values are heterogeneous; plugin authors narrow at use site
 	public async globalValue(key: string): Promise<any> {
+		if (Setting.isSecureKey(key)) return undefined;
 		return Setting.value(key);
 	}
 

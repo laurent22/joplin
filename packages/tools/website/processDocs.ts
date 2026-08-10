@@ -2,10 +2,11 @@
 
 import { execCommand, getRootDir } from '@joplin/utils';
 import { readFile, readdir, stat, writeFile } from 'fs/promises';
-import * as MarkdownIt from 'markdown-it';
+import MarkdownIt from 'markdown-it';
 import { htmlentities, isSelfClosingTag } from '@joplin/utils/html';
 import { compileWithFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
 import StateCore = require('markdown-it/lib/rules_core/state_core');
+import Token = require('markdown-it/lib/token');
 import { copy, mkdirp, remove, pathExists } from 'fs-extra';
 import { basename, dirname } from 'path';
 import markdownUtils, { MarkdownTable } from '@joplin/lib/markdownUtils';
@@ -14,10 +15,10 @@ import { chdir } from 'process';
 import yargs = require('yargs');
 import { extractOpenGraphTags } from './utils/openGraph';
 
-const md5File = require('md5-file');
-const htmlparser2 = require('@joplin/fork-htmlparser2');
-const styleToJs = require('style-to-js').default;
-const crypto = require('crypto');
+import md5File = require('md5-file');
+import * as htmlparser2 from '@joplin/fork-htmlparser2';
+import styleToJs = require('style-to-js');
+import * as crypto from 'crypto';
 
 interface Config {
 	baseUrl: string;
@@ -36,8 +37,7 @@ interface Context {
 	inHeader?: boolean;
 	listStack?: List[];
 	listStarting?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	currentLinkAttrs?: any;
+	currentLinkAttrs?: [string, string][] | null;
 	inFence?: boolean;
 	fenceStarting?: string;
 	processedFiles?: string[];
@@ -79,8 +79,7 @@ const parseHtml = (html: string) => {
 
 	const parser = new htmlparser2.Parser({
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		onopentag: (name: string, attrs: Record<string, any>) => {
+		onopentag: (name: string, attrs: Record<string, string>) => {
 			tagStack.push({ name });
 
 			const closingSign = isSelfClosingTag(name) ? '/>' : '>';
@@ -133,8 +132,7 @@ const paragraphBreak = '///PARAGRAPH_BREAK///';
 const blockQuoteStart = '///BLOCK_QUOTE_START///';
 const blockQuoteEnd = '///BLOCK_QUOTE_END///';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const processToken = (token: any, output: string[], context: Context): void => {
+const processToken = (token: Token, output: string[], context: Context): void => {
 	if (!context.listStack) context.listStack = [];
 
 	let contentProcessed = false;

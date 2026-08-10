@@ -1,6 +1,6 @@
 import { EditorView, Decoration, DecorationSet, WidgetType } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { EditorState, Range, StateField } from '@codemirror/state';
+import { EditorState, Extension, Range, StateField } from '@codemirror/state';
 import { ReplacementExtension } from '../types';
 import nodeIntersectsSelection from './nodeIntersectsSelection';
 
@@ -77,7 +77,9 @@ const makeBlockReplaceExtension = (extensionSpec: ReplacementExtension) => {
 				return extensionSpec.shouldFullReRender(transaction);
 			};
 
-			if (transaction.docChanged || selectionChanged || wasRerenderRequested()) {
+			const treeChanged = syntaxTree(transaction.state) !== syntaxTree(transaction.startState);
+
+			if (transaction.docChanged || selectionChanged || wasRerenderRequested() || treeChanged) {
 				decorations = updateDecorations(transaction.state, extensionSpec);
 			}
 
@@ -85,9 +87,11 @@ const makeBlockReplaceExtension = (extensionSpec: ReplacementExtension) => {
 		},
 		provide: f => EditorView.decorations.from(f),
 	});
-	return [
-		blockDecorationField,
-	];
+	const extensions: Extension[] = [blockDecorationField];
+	if (extensionSpec.atomic) {
+		extensions.push(EditorView.atomicRanges.of(view => view.state.field(blockDecorationField)));
+	}
+	return extensions;
 };
 
 export default makeBlockReplaceExtension;

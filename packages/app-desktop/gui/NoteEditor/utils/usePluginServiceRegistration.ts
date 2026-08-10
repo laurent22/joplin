@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, Ref } from 'react';
 import PlatformImplementation from '../../../services/plugins/PlatformImplementation';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default function usePluginServiceRegistration(ref: any) {
+export default function usePluginServiceRegistration(ref: Ref<unknown>) {
 	useEffect(() => {
 		PlatformImplementation.instance().registerComponent('textEditor', ref);
 

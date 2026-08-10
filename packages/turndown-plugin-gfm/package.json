@@ -4,14 +4,14 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.64",
+  "version": "1.0.67",
   "author": "Dom Christie",
   "main": "lib/turndown-plugin-gfm.cjs.js",
   "devDependencies": {
     "browserify": "14.5.0",
     "rollup": "0.50.1",
     "standard": "17.1.2",
-    "turndown": "7.2.1",
+    "turndown": "7.2.4",
     "turndown-attendant": "0.0.3"
   },
   "files": [
@@ -41,5 +41,5 @@
     "build-test": "browserify test/turndown-plugin-gfm-test.js --outfile test/turndown-plugin-gfm-test.browser.js",
     "prepare": "npm run build"
   },
-  "gitHead": "05a29b450962bf05a8642bbd39446a1f679a96ba"
+  "gitHead": "500e4c02809d3ebe463aa590e86f541d1ef0661c"
 }

@@ -1,12 +1,11 @@
 import { setupDatabaseAndSynchronizer, db, switchClient } from '../../testing/test-utils.js';
 import SearchEngine from './SearchEngine.js';
-import SearchEngineUtils from './SearchEngineUtils.js';
+import SearchEngineUtils, { NotesForQueryOptions } from './SearchEngineUtils.js';
 import Setting from '../../models/Setting.js';
 const Note = require('../../models/Note').default;
 
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let searchEngine: any = null;
+let searchEngine: SearchEngine = null;
 
 describe('SearchEngineUtils', () => {
 	beforeEach(async () => {
@@ -33,8 +32,7 @@ describe('SearchEngineUtils', () => {
 			expect(rows.map(r=>r.id)).toContain(todo1.id);
 			expect(rows.map(r=>r.id)).toContain(todo2.id);
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const options: any = {};
+			const options: NotesForQueryOptions = {};
 			options.fields = ['id', 'title'];
 
 			const rows2 = (await SearchEngineUtils.notesForQuery('abcd', true, options, searchEngine)).notes;
@@ -59,8 +57,7 @@ describe('SearchEngineUtils', () => {
 			expect(rows.map(r=>r.id)).toContain(note1.id);
 			expect(rows.map(r=>r.id)).toContain(todo1.id);
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const options: any = {};
+			const options: NotesForQueryOptions = {};
 			options.fields = ['id', 'title'];
 			const rows2 = (await SearchEngineUtils.notesForQuery('abcd', true, options, searchEngine)).notes;
 			expect(rows2.length).toBe(2);

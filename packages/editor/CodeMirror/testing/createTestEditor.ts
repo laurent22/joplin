@@ -1,12 +1,13 @@
 import { markdown } from '@codemirror/lang-markdown';
 import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
-import { indentUnit, syntaxTree } from '@codemirror/language';
+import { forceParsing, indentUnit, syntaxTree } from '@codemirror/language';
 import { SelectionRange, EditorSelection, EditorState, Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import forceFullParse from './forceFullParse';
 import loadLanguages from './loadLanguages';
 import markdownMathExtension from '../extensions/markdownMathExtension';
-import markdownHighlightExtension from '../extensions/markdownHighlightExtension';
+import markdownHighlightExtension, { markdownInsertExtension } from '../extensions/markdownHighlightExtension';
+import markdownFrontMatterExtension from '../extensions/markdownFrontMatterExtension';
 
 // Creates and returns a minimal editor with markdown extensions. Waits to return the editor
 // until all syntax tree tags in `expectedSyntaxTreeTags` exist.
@@ -26,7 +27,7 @@ const createTestEditor = async (
 		selection: EditorSelection.create(initialSelection),
 		extensions: [
 			markdown({
-				extensions: [markdownMathExtension, markdownHighlightExtension, GithubFlavoredMarkdownExt],
+				extensions: [markdownMathExtension, markdownHighlightExtension, markdownInsertExtension, markdownFrontMatterExtension, GithubFlavoredMarkdownExt],
 				addKeymap: addMarkdownKeymap,
 			}),
 			indentUnit.of('\t'),
@@ -68,6 +69,12 @@ const createTestEditor = async (
 			});
 		}
 	}
+
+	// forceFullParse populates the parse cache for editor.state, but the view keeps its own
+	// tree that the background parser advances lazily. Extensions that build decorations from
+	// syntaxTree(view.state) (e.g. makeInlineReplaceExtension) can then run against an incomplete
+	// tree and skip their decorations, so force the view's own tree to complete before returning.
+	forceParsing(editor, editor.state.doc.length);
 
 	return editor;
 };

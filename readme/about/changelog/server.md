@@ -1,5 +1,52 @@
 # Joplin Server Changelog
 
+## [server-v3.7.1](https://github.com/laurent22/joplin/releases/tag/server-v3.7.1) - 2026-05-18T10:41:28Z
+
+- New: Add rate limiter on SAML auth code endpoint (#15433)
+- Improved: Joplin Server/Cloud sync: Improve item deletion performance (#15392 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Performance: Store update changes per-user, rather than per-item (#14712 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix XSS vulnerability in HTML notes (#15435)
+- Fixed: Fix banner handling (51637d6)
+- Fixed: Fix conditions for sending oversized account emails (#15271 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix database connection pool corruption after transaction failures (e7631bc)
+- Fixed: Fix database connection pool corruption when processing orphaned items (2f4f0a5)
+- Fixed: Fix startup can fail after downgrading if an interrupted task no longer exists (#15301 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Static asset resolution fails on Windows due to backslash path separators (#15396) (#15395 by [@Rygaa](https://github.com/Rygaa))
+
+## [server-v3.6.1](https://github.com/laurent22/joplin/releases/tag/server-v3.6.1) - 2026-04-20T16:54:33Z
+
+- New: Add support for MFA (#14081)
+- Improved: Downgrade password reset log for non-existent users to info (#15139)
+- Improved: Downgrade unsupported image format log to info level (02d9222)
+- Improved: Improve name generation for uploaded files (#14392 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Move deletion of objects outside of transaction block (#14898)
+- Improved: Optimize orphaned items query using NOT EXISTS (#15138)
+- Improved: Performance: Improve performance of share maintenance task (#14484 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Remove support for DELTA_INCLUDES_ITEMS (#14393 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @rollup/plugin-commonjs (v28.0.9), @rollup/plugin-node-resolve (v16.0.3), @rollup/plugin-replace (v6.0.3), dayjs (v1.11.19), form-data (v4.0.5), fs-extra (v11.3.3), glob (v11.1.0), katex (v0.16.23), ldapts (v8.0.36), qrcode (v1.5.4), rate-limiter-flexible (v7.4.0), raw-body (v3.0.2), react (v19.1.5), samlify (v2.10.2), sass (v1.95.1), sharp (v0.34.5), short-uuid (v5), style-to-js (v1.1.21), turndown (v7.2.2)
+- Fixed: Admin emails sorting fails due to invalid user_id column (#14399) (#14355 by [@devanmolx](https://github.com/devanmolx))
+- Fixed: Allow changing the password for the admin account when SAML is enabled (#14135) (#14131 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix certain note content is corrupted when uploaded to the server (#14379) (#14343 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix delta API can return changes in wrong order (#14713 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix new clients on an existing account can download previously unshared items (#14289) (#14110 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix savepoint not being rolled back on unique constraint errors during sync (#15140)
+- Fixed: Fix share processing task failure (#14795 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix tasks getting permanently stuck after database errors (#15137)
+- Fixed: Fix user can incorrectly retain access to shared items in some cases (#14438 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix user can incorrectly retain access to shared items in some cases (#14445 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix warning when unsharing folder (#14134) (#14107 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed heartbeat task hanging (#15136)
+- Fixed: Redirect to correct share when following links between independently published notes (#14963) (#583 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Remove warning logged on first startup (#14401) (#14384 by [@yugalkaushik](https://github.com/yugalkaushik))
+- Fixed: Update item ownership information when the original owner no longer has access (#14469) (#14107 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [server-v3.5.2](https://github.com/laurent22/joplin/releases/tag/server-v3.5.2) - 2025-12-19T21:28:39Z
+
+- Improved: Ensure that shared items are processed in the correct order (#13858 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Periodically delete old backups for archived accounts (#13741 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages fs-extra (v11.3.2), mermaid (v11.10.1), sharp (v0.34.4)
+- Fixed: Confusing error message if a published note has not been synced to the server (#13059)
+
 ## [server-v3.5.1](https://github.com/laurent22/joplin/releases/tag/server-v3.5.1) - 2025-12-03T11:56:31Z
 
 - New: Add support for DELETE_EXPIRED_SESSIONS_SCHEDULE to prevent auto-logout when using SAML login (ae289be)
