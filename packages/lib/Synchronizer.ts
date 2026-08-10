@@ -1251,7 +1251,7 @@ export default class Synchronizer {
 		try {
 			// Update published/unpublished status after the main sync to avoid conflicts.
 			// See https://github.com/laurent22/joplin/issues/16167.
-			await Folder.updateNotePublicationStatus(this.shareService_ ? this.shareService_.shares : [], true);
+			await Folder.updateNotePublicationStatus(this.shareService_ ? this.shareService_.shares : [], { publishedFoldersOnly: false });
 		} catch (error) {
 			logger.error('Failed to save note publication status', error);
 		}

@@ -34,6 +34,10 @@ export interface SortFolderOptions {
 	includeDeleted?: boolean;
 }
 
+interface UpdateNotePublicationStatusOptions {
+	publishedFoldersOnly: boolean;
+}
+
 export default class Folder extends BaseItem {
 	public static tableName() {
 		return 'folders';
@@ -785,7 +789,7 @@ export default class Folder extends BaseItem {
 
 		await this.updateFolderPublishStatus_(activeShares);
 		// Don't update directly published notes to avoid unexpected conflicts
-		await this.updateNotePublicationStatus(activeShares, false);
+		await this.updateNotePublicationStatus(activeShares, { publishedFoldersOnly: true });
 	}
 
 	private static async updateFolderPublishStatus_(activeShares: StateShare[]) {
@@ -806,18 +810,20 @@ export default class Folder extends BaseItem {
 		}
 	}
 
-	public static async updateNotePublicationStatus(activeShares: StateShare[], includeDirectlyPublished: boolean) {
+	public static async updateNotePublicationStatus(activeShares: StateShare[], { publishedFoldersOnly }: UpdateNotePublicationStatusOptions) {
 		const directlyPublishedNoteIds = activeShares
 			.filter(share => share.type === ShareType.Note && !!share.note_id)
 			.map(share => share.note_id);
 
-		const locallyUnpublishedNotesWithShares: NoteEntity[] = directlyPublishedNoteIds.length > 0 && includeDirectlyPublished ? (
-			await this.db().selectAll(`
-					SELECT id, parent_id, is_shared
-					FROM notes
-					WHERE is_shared = 0 AND id IN (${this.escapeIdsForSql(directlyPublishedNoteIds)})
-				`)
-		) : [];
+		const loadUnpublishedWithDirectShare = async (): Promise<NoteEntity[]> => {
+			if (directlyPublishedNoteIds.length === 0 || publishedFoldersOnly) return [];
+
+			return await this.db().selectAll(`
+				SELECT id, parent_id, is_shared
+				FROM notes
+				WHERE is_shared = 0 AND id IN (${this.escapeIdsForSql(directlyPublishedNoteIds)})
+			`);
+		};
 		const unpublishedNotesInPublishedFolders: NoteEntity[] = await this.db().selectAll(`
 			SELECT notes.id, notes.parent_id, notes.is_shared
 			FROM notes
@@ -825,7 +831,7 @@ export default class Folder extends BaseItem {
 			WHERE notes.is_shared = 0 AND folders.is_shared = 1
 		`);
 
-		const notesToPublish = locallyUnpublishedNotesWithShares.concat(unpublishedNotesInPublishedFolders);
+		const notesToPublish = unpublishedNotesInPublishedFolders.concat(await loadUnpublishedWithDirectShare());
 		for (const note of notesToPublish) {
 			await this.updateShareStatus(
 				{ ...note, type_: BaseModel.TYPE_NOTE },
