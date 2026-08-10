@@ -1,7 +1,23 @@
 import { setupDatabaseAndSynchronizer, switchClient, resourceService } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import { ShareType, StateShare } from '../services/share/reducer';
+import BaseItem from './BaseItem';
 
+const publishedFolderShareState = (folderId: string): StateShare => ({
+	id: `share-${folderId}`,
+	type: ShareType.PublishedFolder,
+	folder_id: folderId,
+	note_id: '',
+	master_key_id: '',
+});
+
+const expectPublished = async (id: string, published = true) => {
+	expect(await BaseItem.loadItemsByIds([id])).toMatchObject([{
+		is_shared: published ? 1 : 0,
+	}]);
+};
+
+const expectUnpublished = (id: string) => expectPublished(id, false);
 
 describe('models/Folder.publishing', () => {
 
@@ -31,13 +47,7 @@ describe('models/Folder.publishing', () => {
 		});
 
 		const shareState: StateShare[] = [
-			{
-				id: 'share-1',
-				type: ShareType.PublishedFolder,
-				folder_id: root.id,
-				note_id: '',
-				master_key_id: '',
-			},
+			publishedFolderShareState(root.id),
 		];
 
 		await Folder.updateAllShareIds(
@@ -45,20 +55,10 @@ describe('models/Folder.publishing', () => {
 			shareState,
 		);
 
-		const expectPublished = async (id: string) => {
-			expect(await Folder.load(id)).toMatchObject({
-				is_shared: 1,
-			});
-		};
-
 		await expectPublished(root.id);
 		await expectPublished(child1.id);
 		await expectPublished(child2.id);
 		await expectPublished(grandChild1.id);
-
-		expect(await Folder.load(unpublished.id)).toMatchObject({
-			title: unpublished.title,
-			is_shared: 0,
-		});
+		await expectUnpublished(unpublished.id);
 	});
 });
