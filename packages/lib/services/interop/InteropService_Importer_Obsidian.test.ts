@@ -465,10 +465,10 @@ describe('InteropService_Importer_Obsidian', () => {
 		expect(resource.title).toBe('photo.png');
 	});
 
-	it('should keep unsupported heading wikilink', async () => {
+	it('should import heading wikilink', async () => {
 		const vaultPath = `${tempDir}/My vault`;
 		await fs.mkdirp(vaultPath);
-		await fs.writeFile(`${vaultPath}/heading.md`, '[[Note#Part]]');
+		await fs.writeFile(`${vaultPath}/heading.md`, '[[Note#Part]] [[Missing#Part]]');
 		await fs.writeFile(`${vaultPath}/Note.md`, '# Part');
 
 		await InteropService.instance().import({
@@ -477,7 +477,8 @@ describe('InteropService_Importer_Obsidian', () => {
 		});
 
 		const note = await Note.loadByTitle('heading');
+		const targetNote = await Note.loadByTitle('Note');
 
-		expect(note.body).toBe('[[Note#Part]]');
+		expect(note.body).toBe(`[Note#Part](:/${targetNote.id}#part) [[Missing#Part]]`);
 	});
 });

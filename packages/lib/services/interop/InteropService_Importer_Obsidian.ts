@@ -6,6 +6,7 @@ import markdownUtils from '../../markdownUtils';
 import { toForwardSlashes } from '../../path-utils';
 import shim from '../../shim';
 
+const uslug = require('@joplin/fork-uslug');
 const emojiRegex = /\p{Extended_Pictographic}/u;
 const tagRegex = new RegExp(`(?:^|\\s)#([\\w\\p{L}${emojiRegex.source}/-]+)`, 'gu');
 const normalizedTag = (tag: string) => tag.toLowerCase();
@@ -56,12 +57,14 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 			if (!toForwardSlashes(sourcePath).startsWith(vaultPathPrefix)) continue;
 
 			let body = note.body.replace(wikilinkRegex, (wikilink, target: string, shownName?: string) => {
-				const normalizedTarget = withoutMarkdownExtension(target);
+				const [noteTarget, heading] = target.split('#');
+				const normalizedTarget = withoutMarkdownExtension(noteTarget);
 				const matchingNoteIds = noteIdsByWikilinkTarget.get(normalizedTarget);
 				if (matchingNoteIds?.length !== 1) return wikilink;
 
 				const label = markdownUtils.escapeTitleText(shownName || target);
-				return `[${label}](:/${matchingNoteIds[0]})`;
+				const anchor = heading ? `#${uslug(heading)}` : '';
+				return `[${label}](:/${matchingNoteIds[0]}${anchor})`;
 			});
 			// Obsidian can find the linked note in another folder when no other note has the same name.
 			body = body.replace(markdownLinkRegex, (markdownLink, label: string, target: string) => {
