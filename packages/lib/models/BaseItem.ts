@@ -20,7 +20,6 @@ import { checkObjectHasProperties } from '@joplin/utils/object';
 
 const { sprintf } = require('sprintf-js');
 import moment = require('moment');
-import Note from './Note';
 
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;
@@ -572,13 +571,6 @@ export default class BaseItem extends BaseModel {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- item is a BaseItemEntity subclass with encryption_cipher_text/encryption_applied; saved back via ItemClass.save which is per-subclass
 	public static async decrypt(item: any) {
-		if (item.type_ === ModelType.Note) {
-			// Validate if still eligible to decrypt using the latest encryption_applied value, as notes may be decrypted on demand while the decryption worker is running.
-			// If it has been decrypted already, avoid decrypting it again to avoid potentially overwriting it with an outdated version
-			const encryptionApplied = (await Note.load(item.id, { fields: ['encryption_applied'] }))?.encryption_applied;
-			if (!encryptionApplied) throw new Error(`Note has already been decrypted: ${item.id}`);
-		}
-
 		if (!item.encryption_cipher_text) throw new Error(`Item is not encrypted: ${item.id}`);
 
 		const ItemClass = this.itemClass(item);

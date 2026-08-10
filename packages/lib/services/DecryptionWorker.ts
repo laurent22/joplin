@@ -1,5 +1,5 @@
 import BaseItem, { ItemsThatNeedDecryptionResult } from '../models/BaseItem';
-import BaseModel from '../BaseModel';
+import BaseModel, { ModelType } from '../BaseModel';
 import MasterKey from '../models/MasterKey';
 import Resource from '../models/Resource';
 import ResourceService from './ResourceService';
@@ -219,6 +219,12 @@ export default class DecryptionWorker {
 						await this.kvStore().deleteValue(errorKey);
 					};
 
+					const markSuccessfulDecryption = async (decryptedItemType: number) => {
+						await clearDecryptionCounter();
+						if (!decryptedItemCounts[decryptedItemType]) decryptedItemCounts[decryptedItemType] = 0;
+						decryptedItemCounts[decryptedItemType]++;
+					};
+
 					// Don't log in production as it results in many messages when importing many items
 					// this.logger().debug('DecryptionWorker: decrypting: ' + item.id + ' (' + ItemClass.tableName() + ')');
 					try {
@@ -231,13 +237,18 @@ export default class DecryptionWorker {
 							continue;
 						}
 
+						if (item.type_ === ModelType.Note) {
+							// Validate if still eligible to decrypt using the latest encryption_applied value, as notes may be decrypted on demand while the decryption worker is running.
+							// If it has been decrypted already, avoid decrypting it again to avoid potentially overwriting it with an outdated version
+							const encryptionApplied = (await ItemClass.load(item.id, { fields: ['encryption_applied'] }))?.encryption_applied;
+							if (!encryptionApplied) {
+								await markSuccessfulDecryption(item.type_);
+								continue;
+							}
+						}
+
 						const decryptedItem = await ItemClass.decrypt(item);
-
-						await clearDecryptionCounter();
-
-						if (!decryptedItemCounts[decryptedItem.type_]) decryptedItemCounts[decryptedItem.type_] = 0;
-
-						decryptedItemCounts[decryptedItem.type_]++;
+						await markSuccessfulDecryption(decryptedItem.type_);
 
 						if (decryptedItem.type_ === Resource.modelType() && !!decryptedItem.encryption_blob_encrypted) {
 							// itemsThatNeedDecryption() will return the resource again if the blob has not been decrypted,
