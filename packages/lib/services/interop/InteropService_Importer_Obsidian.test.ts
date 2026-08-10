@@ -337,6 +337,23 @@ describe('InteropService_Importer_Obsidian', () => {
 		].join('\n'));
 	});
 
+	it('should resolve a unique Markdown link target in another folder', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		await fs.mkdirp(`${vaultPath}/utils`);
+		await fs.writeFile(`${vaultPath}/md-link.md`, '[MD target](md-link-target.md)');
+		await fs.writeFile(`${vaultPath}/utils/md-link-target.md`, 'Target note.');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const sourceNote = await Note.loadByTitle('md-link');
+		const targetNote = await Note.loadByTitle('md-link-target');
+
+		expect(sourceNote.body).toBe(`[MD target](:/${targetNote.id})`);
+	});
+
 	it('should import linked attachment', async () => {
 		const vaultPath = `${tempDir}/My vault`;
 		await fs.mkdirp(vaultPath);

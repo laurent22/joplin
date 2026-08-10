@@ -10,6 +10,7 @@ const emojiRegex = /\p{Extended_Pictographic}/u;
 const tagRegex = new RegExp(`(?:^|\\s)#([\\w\\p{L}${emojiRegex.source}/-]+)`, 'gu');
 const normalizedTag = (tag: string) => tag.toLowerCase();
 const wikilinkRegex = /(?<![!\\])\[\[([^|\r\n]+?)(?:\|([^\r\n]+?))?\]\]/g;
+const markdownLinkRegex = /(?<!!)\[([^\]\r\n]+)\]\(([^)\r\n]+\.md)\)/gi;
 // Matches Obsidian file embeds such as ![[photo.png]].
 const embedRegex = /(?<!\\)!\[\[([^|\r\n]+?)\]\]/g;
 const withoutMarkdownExtension = (path: string) => path.replace(/\.md$/i, '');
@@ -54,13 +55,19 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 		for (const [sourcePath, note] of Object.entries(this.importedNotes)) {
 			if (!toForwardSlashes(sourcePath).startsWith(vaultPathPrefix)) continue;
 
-			const body = note.body.replace(wikilinkRegex, (wikilink, target: string, shownName?: string) => {
+			let body = note.body.replace(wikilinkRegex, (wikilink, target: string, shownName?: string) => {
 				const normalizedTarget = withoutMarkdownExtension(target);
 				const matchingNoteIds = noteIdsByWikilinkTarget.get(normalizedTarget);
 				if (matchingNoteIds?.length !== 1) return wikilink;
 
 				const label = markdownUtils.escapeTitleText(shownName || target);
 				return `[${label}](:/${matchingNoteIds[0]})`;
+			});
+			// Obsidian can find the linked note in another folder when no other note has the same name.
+			body = body.replace(markdownLinkRegex, (markdownLink, label: string, target: string) => {
+				const normalizedTarget = withoutMarkdownExtension(markdownUtils.unescapeLinkUrl(target));
+				const matchingNoteIds = noteIdsByWikilinkTarget.get(normalizedTarget);
+				return matchingNoteIds?.length === 1 ? `[${label}](:/${matchingNoteIds[0]})` : markdownLink;
 			});
 
 			if (body === note.body) continue;
