@@ -29,6 +29,7 @@ import { ALL_NOTES_FILTER_ID } from '../reserved-ids';
 import NoteLockNote from '../services/noteLock/NoteLockNote';
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
 import isItemId from './utils/isItemId';
+import { ShareType, StateShare } from '../services/share/reducer';
 
 export interface PreviewsOrder {
 	by: string;
@@ -597,6 +598,36 @@ export default class Note extends BaseItem {
 
 	public static unconflictedNotes() {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
+	}
+
+	public static async updatePublishedNotes(activeShares: StateShare[]) {
+		const directlyPublishedNoteIds = activeShares
+			.filter(share => share.type === ShareType.Note && !!share.note_id)
+			.map(share => share.note_id);
+
+		const loadUnpublishedWithDirectShare = async (): Promise<NoteEntity[]> => {
+			if (directlyPublishedNoteIds.length === 0) return [];
+
+			return await this.db().selectAll(`
+				SELECT id, parent_id, is_shared
+				FROM notes
+				WHERE is_shared = 0 AND id IN (${this.escapeIdsForSql(directlyPublishedNoteIds)})
+			`);
+		};
+		const unpublishedNotesInPublishedFolders: NoteEntity[] = await this.db().selectAll(`
+			SELECT notes.id, notes.parent_id, notes.is_shared
+			FROM notes
+			JOIN folders ON notes.parent_id = folders.id
+			WHERE notes.is_shared = 0 AND folders.is_shared = 1
+		`);
+
+		const notesToPublish = unpublishedNotesInPublishedFolders.concat(await loadUnpublishedWithDirectShare());
+		for (const note of notesToPublish) {
+			await this.updateShareStatus(
+				{ ...note, type_: BaseModel.TYPE_NOTE },
+				true,
+			);
+		}
 	}
 
 	public static async updateGeolocation(noteId: string): Promise<NoteEntity | null> {

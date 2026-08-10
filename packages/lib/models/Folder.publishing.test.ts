@@ -1,7 +1,6 @@
 import { setupDatabaseAndSynchronizer, switchClient, resourceService, createFolderTree } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import { ShareType, StateShare } from '../services/share/reducer';
-import BaseItem from './BaseItem';
 import Note from './Note';
 
 const publishedFolderShareState = (folderId: string): StateShare => ({
@@ -12,13 +11,19 @@ const publishedFolderShareState = (folderId: string): StateShare => ({
 	master_key_id: '',
 });
 
-const expectPublished = async (id: string, published = true) => {
-	expect(await BaseItem.loadItemsByIds([id])).toMatchObject([{
-		is_shared: published ? 1 : 0,
-	}]);
+type ItemSlice = { title: string };
+
+const expectPublished = async (items: ItemSlice[], published = true) => {
+	for (let item of items) {
+		item = (await Folder.loadByTitle(item.title)) ?? await Note.loadByTitle(item.title);
+		expect(item).toMatchObject({
+			title: item.title,
+			is_shared: published ? 1 : 0,
+		});
+	}
 };
 
-const expectUnpublished = (id: string) => expectPublished(id, false);
+const expectUnpublished = (items: ItemSlice[]) => expectPublished(items, false);
 
 describe('models/Folder.publishing', () => {
 
@@ -64,26 +69,36 @@ describe('models/Folder.publishing', () => {
 			shareState,
 		);
 
-		for (const title of [
+		// After the first round, only folders should have is_shared=1
+		await expectPublished([
 			'root',
 			'sub-folder 1',
 			'sub-folder 2',
 			'sub-sub-folder',
-		]) {
-			const id = (await Folder.loadByTitle(title)).id;
-			await expectPublished(id);
-		}
-		for (const title of [
+		].map(title => ({ title })));
+		await expectUnpublished([
 			'published note 1',
 			'published note 2',
 			'published note 3',
-		]) {
-			const id = (await Note.loadByTitle(title)).id;
-			await expectPublished(id);
-		}
+			'unpublished folder',
+			'unpublished note',
+		].map(title => ({ title })));
 
-		// Items that are not descendants of root should not be published
-		await expectUnpublished((await Folder.loadByTitle('unpublished folder')).id);
-		await expectUnpublished((await Note.loadByTitle('unpublished note')).id);
+		// Should update published notes when calling Note.updateNotePublicationStatus
+		await Note.updatePublishedNotes(shareState);
+
+		await expectPublished([
+			'root',
+			'sub-folder 1',
+			'sub-folder 2',
+			'sub-sub-folder',
+			'published note 1',
+			'published note 2',
+			'published note 3',
+		].map(title => ({ title })));
+		await expectUnpublished([
+			'unpublished folder',
+			'unpublished note',
+		].map(title => ({ title })));
 	});
 });
