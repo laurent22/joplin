@@ -299,7 +299,7 @@ shared.reloadNote = async (comp: BaseNoteScreenComponent, useDefaultEditorState 
 	const isProvisionalNote = comp.props.provisionalNoteIds.includes(comp.props.noteId);
 
 	let note = await Note.load(comp.props.noteId);
-	if (note.encryption_cipher_text) {
+	if (note?.encryption_cipher_text) {
 		try {
 			note = await Note.decrypt(note);
 		} catch (error) {
