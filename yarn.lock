@@ -12940,7 +12940,7 @@ __metadata:
     tesseract.js: "npm:7.0.0"
     typescript: "npm:5.9.3"
     uglifycss: "npm:0.0.29"
-    undici: "npm:8.10.0"
+    undici: "patch:undici@npm%3A8.10.0#~/.yarn/patches/undici-npm-8.10.0-83850c8bfa.patch"
     url-parse: "npm:1.5.10"
     uuid: "npm:11.1.1"
     word-wrap: "npm:1.2.5"
@@ -57820,24 +57820,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^6.18.2":
-  version: 6.21.2
-  resolution: "undici@npm:6.21.2"
-  checksum: 10/9cd9ead22599c23aa2a7dfa5b80fa1491bebb294bf1dc64c9c0f90ea4ec8e272a4db2810e2565d65b952249f105523d2929d7cc951f88cf0a1f082143bae8d75
-  languageName: node
-  linkType: hard
-
-"undici@npm:^6.25.0":
-  version: 6.27.0
-  resolution: "undici@npm:6.27.0"
-  checksum: 10/30c18cdb235edf4dd36f8aa3ace1ffaf44060289a7d62ad44c33180d2d74a224015d25574812f62ce9c625b5beb1b0b766495b650fedf356aca11eed7ce2c816
+"undici@npm:^6.18.2, undici@npm:^6.25.0":
+  version: 6.28.0
+  resolution: "undici@npm:6.28.0"
+  checksum: 10/672a7a53bd1f6c80edb73b357ab36e98ef9e474024c442aab2b8ea2bc32f1103cab05525c78661ae724f3e1340e23d03efb9730fba28e76218ab0ec52e15d75a
   languageName: node
   linkType: hard
 
 "undici@npm:^7.24.4":
-  version: 7.26.0
-  resolution: "undici@npm:7.26.0"
-  checksum: 10/c55b8f8e378dce6e645853faf0834d66b9f470c6ee1430c6e2b7971d831de36081f7e2e21ac1fc11297657d7c856241b0bf746b2a24f1277f8d156df9c181ba7
+  version: 7.29.0
+  resolution: "undici@npm:7.29.0"
+  checksum: 10/ca73639071bdcbc41e57be1800847fa18f86f8fbf7a5641ff9899f7bbb6f5cecdd593e225f5fd94e31703dcbfaea4a722a3b81cab90c5c4e2b406aec1ae55732
+  languageName: node
+  linkType: hard
+
+"undici@patch:undici@npm%3A8.10.0#~/.yarn/patches/undici-npm-8.10.0-83850c8bfa.patch":
+  version: 8.10.0
+  resolution: "undici@patch:undici@npm%3A8.10.0#~/.yarn/patches/undici-npm-8.10.0-83850c8bfa.patch::version=8.10.0&hash=988e59"
+  checksum: 10/4e133722db7c614cc6ede5c655b2ff0bac97fa0d2ab7d39c39f2cce9b41fc2e688bee4f1e7c3c2ac12267cb23c2c0bf2b59752747c835f11787d1e55933e070e
   languageName: node
   linkType: hard
 

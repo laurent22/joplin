@@ -103,7 +103,7 @@
     "tar": "7.5.15",
     "tcp-port-used": "1.0.2",
     "uglifycss": "0.0.29",
-    "undici": "8.10.0",
+    "undici": "patch:undici@npm%3A8.10.0#~/.yarn/patches/undici-npm-8.10.0-83850c8bfa.patch",
     "url-parse": "1.5.10",
     "uuid": "11.1.1",
     "word-wrap": "1.2.5",
