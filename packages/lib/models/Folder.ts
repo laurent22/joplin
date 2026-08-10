@@ -797,7 +797,9 @@ export default class Folder extends BaseItem {
 			.filter(share => share.type === ShareType.PublishedFolder && !!share.folder_id)
 			.map(share => share.folder_id);
 		const publishedFolderIds = unique(publishedFolderRootIds.concat(
-			...(await Promise.all(publishedFolderRootIds.map(id => this.allChildrenFolders(id)))).map(folders => folders.map(f => f.id)),
+			(await Promise.all(
+				publishedFolderRootIds.map(id => this.allChildrenFolders(id)),
+			)).flatMap(folders => folders.map(f => f.id)),
 		));
 
 		const publishedFolderIdSet = new Set(publishedFolderIds);
