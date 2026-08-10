@@ -242,6 +242,7 @@ export default class DecryptionWorker {
 							// If it has been decrypted already, avoid decrypting it again to avoid potentially overwriting it with an outdated version
 							const encryptionApplied = (await ItemClass.load(item.id, { fields: ['encryption_applied'] }))?.encryption_applied;
 							if (!encryptionApplied) {
+								this.logger().info(`DecryptionWorker: Skipping decryption for note ${item.id} as it was already decrypted on demand`);
 								await markSuccessfulDecryption(item.type_);
 								continue;
 							}
