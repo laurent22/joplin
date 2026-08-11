@@ -71,6 +71,24 @@
 			"imageName": "Socialboom.png",
 			"githubUser": "doleocent1",
 			"alt": "Buy YouTube, Instagram, TikTok & Facebook Growth Services at Socialboom"
+		},
+		{
+			"url": "https://essaypro.com/",
+			"title": "write my essay EssayPro",
+			"imageName": "EssayPro.png",
+			"alt": "write my essay EssayPro"
+		},
+		{
+			"url": "https://writepaper.com/",
+			"title": "write my paper",
+			"imageName": "WritePaper.png",
+			"alt": "write my paper"
+		},
+		{
+			"url": "https://mypaperhelp.com/",
+			"title": "MyPaperHelp",
+			"imageName": "MyPaperHelp.png",
+			"alt": "MyPaperHelp"
 		}
 	]
 }

@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { useMemo } from 'react';
-import { StyleSheet, View, useWindowDimensions, TextStyle } from 'react-native';
+import { useMemo, useRef } from 'react';
+import { StyleSheet, View, useWindowDimensions, TextStyle, StyleProp, ViewStyle } from 'react-native';
 import { themeStyle } from './global-style';
-import BottomDrawer, { MenuAlignment } from './BottomDrawer';
+import BottomDrawer, { MenuAlignment, MenuType } from './BottomDrawer';
 import { TouchableRipple, Text } from 'react-native-paper';
 import Icon from './Icon';
+import focusView from '../utils/focusView';
+import debounce from '../utils/debounce';
 
 interface MenuOptionDivider {
 	isDivider: true;
@@ -23,6 +25,9 @@ export interface MenuOptionButton {
 	onPress: ()=> void;
 	icon?: string;
 	title: string;
+
+	accessibilityHint?: string;
+	autoFocus?: boolean;
 }
 
 export type MenuOption = MenuOptionDivider|MenuOptionButton;
@@ -30,7 +35,10 @@ export type MenuOption = MenuOptionDivider|MenuOptionButton;
 interface Props {
 	themeId: number;
 	visible: boolean;
+	style?: StyleProp<ViewStyle>;
+	menuType?: MenuType;
 	alignment: MenuAlignment;
+	autoScrollToEnd?: boolean;
 	title?: string;
 	onDismiss: ()=> void;
 	options: MenuOption[];
@@ -58,6 +66,8 @@ const useStyles = (themeId: number) => {
 			},
 			menu: {
 				paddingHorizontal: 0,
+				width: 350,
+				maxWidth: windowWidth,
 			},
 			menuContent: { flexDirection: 'column', width: '100%' },
 			menuItem: {
@@ -65,7 +75,6 @@ const useStyles = (themeId: number) => {
 				padding: theme.marginMedium,
 				paddingLeft: theme.marginLeft,
 				paddingRight: theme.marginRight,
-				minWidth: Math.min(350, windowWidth),
 			},
 			menuItemContent: {
 				flexDirection: 'row',
@@ -93,8 +102,25 @@ const useStyles = (themeId: number) => {
 	}, [themeId, windowWidth]);
 };
 
+const useFocusView = (visible: boolean) => {
+	const visibleRef = useRef(visible);
+	visibleRef.current = visible;
+
+	const autoFocusView = useMemo(() => {
+		// Debounce: Auto-focus seems to need to occur after a delay
+		return debounce((view: View|null) => {
+			if (!view || !visibleRef.current) return;
+			focusView('BottomDrawerMenu', view);
+		}, 100);
+	}, []);
+
+	return autoFocusView;
+};
+
 const BottomDrawerMenu: React.FC<Props> = props => {
 	const styles = useStyles(props.themeId);
+
+	const autoFocusView = useFocusView(props.visible);
 
 	const menuOptionComponents: React.ReactNode[] = [];
 
@@ -123,6 +149,8 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 						option.onPress();
 						props.onDismiss();
 					}}
+					accessibilityHint={option.accessibilityHint}
+					ref={(option.autoFocus && props.visible) ? autoFocusView : undefined}
 					key={key}
 					disabled={!!option.disabled}
 				>
@@ -149,8 +177,11 @@ const BottomDrawerMenu: React.FC<Props> = props => {
 		visible={props.visible}
 		onDismiss={props.onDismiss}
 		alignment={props.alignment}
+		autoScrollToEnd={props.autoScrollToEnd}
 		draggable={true}
-		style={styles.menu}
+		menuType={props.menuType}
+		contentStyle={styles.menu}
+		style={props.style}
 	>
 		<View
 			style={styles.menuContent}

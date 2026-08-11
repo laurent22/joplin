@@ -55,6 +55,12 @@ export interface PreviewsOptions {
 	titlePattern?: string;
 }
 
+interface ByTitleAndParentOptions {
+	title: string;
+	whereParentIn: string[];
+	fields: string[];
+}
+
 export default class Note extends BaseItem {
 
 	public static defaultIntevalBetweenNotes = 60 * 60 * 1000;
@@ -1288,5 +1294,19 @@ export default class Note extends BaseItem {
 			const folder = await this.modelSelectOne('SELECT MIN(`order`) as `order` FROM notes WHERE parent_id = ?', [folderId]);
 			return Number(folder.order ?? 0) - this.defaultIntevalBetweenNotes;
 		}
+	}
+
+	public static async allByTitleAndParent({ title, whereParentIn: parentIds, fields }: ByTitleAndParentOptions) {
+		// Avoids invalid SQL when parentIds is empty:
+		if (parentIds.length === 0) return [];
+
+		const sql = `
+			SELECT ${this.db().escapeFieldsToString(fields)}
+			FROM \`${this.tableName()}\`
+			WHERE
+				\`title\` = ?
+				AND \`parent_id\` IN (${this.escapeIdsForSql(parentIds)})
+		`;
+		return this.modelSelectAll<NoteEntity>(sql, [title]);
 	}
 }
