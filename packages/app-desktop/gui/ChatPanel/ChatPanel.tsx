@@ -322,6 +322,10 @@ const ChatPanel: React.FC<Props> = (props) => {
 		dispatch({ type: 'AI_CHAT_RESET', windowId: windowId });
 	}, [dispatch, windowId, cancelRequest]);
 
+	const handleClose = useCallback(() => {
+		void CommandService.instance().executeInWindow('toggleAiChat', { windowId: windowId, args: [] });
+	}, [windowId]);
+
 	const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 		// Don't send while an IME composition is in flight — Enter commits
 		// the composition for CJK / accented input.
@@ -415,10 +419,12 @@ const ChatPanel: React.FC<Props> = (props) => {
 			onFocus={onFocus}
 			onBlur={onBlur}
 		>
-			<div className='header'>
+			<div className='header chat-panel-header'>
 				<h1 className='title' id={headerId}>{_('AI Chat')}</h1>
-				{showingMessages && (
+				{showingMessages ? (
 					<button type='button' className='reset' onClick={handleReset}>{_('Reset')}</button>
+				) : (
+					<button type='button' className='close' onClick={handleClose}>{_('Close')}</button>
 				)}
 			</div>
 			{content}
