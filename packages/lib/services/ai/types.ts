@@ -35,8 +35,7 @@ export interface JsonSchema {
 	properties?: unknown;
 	required?: string[];
 	description?: string;
-	// Must be false for OpenAI tools
-	additionalProperties?: false;
+	additionalProperties?: boolean;
 }
 
 export interface ResponseFormat {
