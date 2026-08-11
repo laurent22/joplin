@@ -1251,9 +1251,12 @@ export default class Synchronizer {
 		try {
 			// Update published/unpublished status after the main sync to avoid conflicts.
 			// See https://github.com/laurent22/joplin/issues/16167.
-			await Note.updatePublishedNotes(this.shareService_ ? this.shareService_.shares : []);
+			if (!hasCaughtError && !this.cancelling()) {
+				await Note.updatePublishedNotes(this.shareService_ ? this.shareService_.shares : []);
+			}
 		} catch (error) {
 			logger.error('Failed to save note publication status', error);
+			this.progressReport_.errors.push(error);
 		}
 
 		if (syncLock) {
