@@ -739,6 +739,22 @@ function shimInit(options: ShimInitOptions = null) {
 		tlsEcdhCurve = 'auto';
 	}
 
+	let clientCert: string|null = null;
+	let clientKey: string|null = null;
+	shim.setClientCertificate = async (certPath, keyPath) => {
+		if (!certPath && !keyPath) {
+			clientKey = null;
+			clientCert = null;
+			return;
+		}
+		if (!certPath || !keyPath) {
+			throw new Error(`Missing ${!certPath ? 'certPath' : 'keyPath'}: Both certPath and keyPath must be provided.`);
+		}
+
+		clientKey = await shim.fsDriver().readFile(certPath, 'utf-8');
+		clientCert = await shim.fsDriver().readFile(keyPath, 'utf-8');
+	};
+
 	shim.httpAgent = url => {
 		if (!shim.httpAgent_) {
 			const AgentSettings = {
@@ -746,6 +762,10 @@ function shimInit(options: ShimInitOptions = null) {
 				maxSockets: 1,
 				keepAliveMsecs: 5000,
 				ecdhCurve: tlsEcdhCurve,
+				connect: {
+					key: clientKey ?? undefined,
+					cert: clientCert ?? undefined,
+				},
 			};
 			shim.httpAgent_ = {
 				http: new http.Agent(AgentSettings),

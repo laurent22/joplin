@@ -435,6 +435,10 @@ const shim = {
 		throw new Error('Not implemented: httpAgent');
 	},
 
+	setClientCertificate: (_certPath: string|null, _keyPath: string|null): Promise<void> => {
+		throw new Error('Not implemented: setClientCertificate');
+	},
+
 	openOrCreateFile: (_path: string, _defaultContents: string): string => {
 		throw new Error('Not implemented: openOrCreateFile');
 	},

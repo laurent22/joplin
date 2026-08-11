@@ -2031,6 +2031,27 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			storage: SettingStorage.File,
 		},
 
+		'net.clientCertificate': {
+			value: '',
+			type: SettingItemType.String,
+			subType: SettingItemSubType.DirectoryPath,
+			section: 'sync',
+			advanced: true,
+			show: settings => {
+				return [
+					SyncTargetRegistry.nameToId('amazon_s3'),
+					SyncTargetRegistry.nameToId('nextcloud'),
+					SyncTargetRegistry.nameToId('webdav'),
+					SyncTargetRegistry.nameToId('joplinServer'),
+					SyncTargetRegistry.nameToId('joplinServerSaml'),
+				].indexOf(settings['sync.target']) >= 0;
+			},
+			public: true,
+			appTypes: [AppType.Desktop, AppType.Cli],
+			label: () => _('Client certificate'),
+			description: () => _('A path to a directory containing an mTLS client certificate (client-cert.pem) and an mTLS certificate ownership file (client-key.pem).'),
+			storage: SettingStorage.File,
+		},
 		'net.customCertificates': {
 			value: '',
 			type: SettingItemType.String,

@@ -385,6 +385,22 @@ export default class BaseApplication {
 					this.logger().error('Failed to add extra CA certificates:', error);
 				}
 			},
+			'net.clientCertificate': async () => {
+				const parentDirectory = Setting.value('net.clientCertificate');
+				if (!await shim.fsDriver().isDirectory(parentDirectory)) {
+					// TODO: Surface this error in the UI
+					this.logger().error('Failed to add client certificate:', parentDirectory, 'is not a directory.');
+					return;
+				}
+				const certPath = join(parentDirectory, 'client-cert.pem');
+				const keyPath = join(parentDirectory, 'client-key.pem');
+
+				try {
+					await shim.setClientCertificate(certPath, keyPath);
+				} catch (error) {
+					this.logger().error('Failed to set client certificate:', error);
+				}
+			},
 			'net.proxyEnabled': async () => {
 				setupProxySettings({
 					maxConcurrentConnections: Setting.value('sync.maxConcurrentConnections'),
