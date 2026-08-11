@@ -77,9 +77,12 @@ export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder:
 // extra `sharePermissionCheckOnly` boolean to do the check for one case or the other. A bit of a
 // hack but good enough for now.
 export const itemIsReadOnlySync = (itemType: ModelType, changeSource: number, item: ItemSlice, userId: string, shareState: ShareState, sharePermissionCheckOnly = false): boolean => {
+	if (!sharePermissionCheckOnly && isTrashableItem(itemType, item)) {
+		checkObjectHasProperties(item, ['deleted_time']);
+	}
 
-	// Some old notes lack the deleted_time key, so we should not throw here.
-	if (!sharePermissionCheckOnly && isTrashableItem(itemType, item) && item.deleted_time) return true;
+	// Item is in trash
+	if (!sharePermissionCheckOnly && item.deleted_time) return true;
 
 	if (!needsShareReadOnlyChecks(itemType, changeSource, shareState)) return false;
 

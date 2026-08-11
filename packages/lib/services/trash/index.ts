@@ -80,7 +80,7 @@ export const getTrashFolderIcon = (type: FolderIconType): FolderIcon => {
 
 export const itemIsInTrash = (item: FolderEntity | NoteEntity) => {
 	if (!item) return false;
-	checkObjectHasProperties(item, ['id']);
+	checkObjectHasProperties(item, ['id', 'deleted_time']);
 	return item.id === getTrashFolderId() || !!item.deleted_time;
 };
 
