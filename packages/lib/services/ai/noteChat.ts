@@ -64,7 +64,7 @@ const systemPrompt = (note: NoteContext) => {
 		lines.push(
 			'Tool guidance:',
 			'- You have access to various tools that allow updating the note. For example, if you need to add the text "test" to the end of the note, do this using the "editor.appendToNote" tool.',
-			'- For tasks modifying the current note, prefer "editor." tools to global tools.',
+			'- For tasks modifying the current note, prefer "editor_" tools to global tools.',
 			'- Some tools call for anchors. Anchors must be exact substrings of the current note body. Keep them short but unique.',
 		);
 	}
@@ -95,14 +95,14 @@ const createHistory = (history: ChatMessage[], newMessage: string, context: Note
 				content: '',
 				hide: true,
 				toolCalls: [
-					{ callId, arguments: { }, toolName: 'editor.readNoteBody', parseError: null },
+					{ callId, arguments: { }, toolName: 'editor_readNoteBody', parseError: null },
 				],
 			},
 			{
 				role: ChatRole.Tool,
 				content: context.body,
 				toolCallId: callId,
-				toolName: 'editor.readNoteBody',
+				toolName: 'editor_readNoteBody',
 				userDescription: '',
 				isEdit: false,
 				isError: false,
@@ -271,7 +271,7 @@ const runTools = async (
 	const currentContext = await getContext();
 	let chatResponses: ChatToolMessage[] = [];
 
-	const isEdit = (toolName: string) => isEditorToolCall(toolName) && toolName !== 'editor.readNoteBody';
+	const isEdit = (toolName: string) => isEditorToolCall(toolName) && toolName !== 'editor_readNoteBody';
 
 	const respondFailure = (action: ChatToolCall, reason: string, userDescription?: string) => {
 		chatResponses.push({
