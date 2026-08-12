@@ -5,7 +5,7 @@ import Setting from '../../models/Setting';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import { NoteEntity } from '../database/types';
-import { NoteContext } from './tools/types';
+import { NoteContext, ToolDefinition } from './tools/types';
 
 const runChatForNote = (note: NoteEntity, history: ChatMessage[], message: string) => {
 	const getContext = async () => {
@@ -41,6 +41,32 @@ describe('noteChat.tools', () => {
 		await switchClient(0);
 		Setting.setValue('ai.chat.providerType', 'test-provider');
 		Setting.setValue('ai.enabled', true);
+	});
+
+	test('should use valid identifiers for tools', async () => {
+		const note = await Note.save({ title: 'test' });
+
+		const allToolDefinitions = async () => {
+			const chat = await runChatForNote(
+				note,
+				[{ role: ChatRole.User, content: 'testing' }],
+				'/list-tools',
+			);
+			const lastMessage = chat[chat.length - 1];
+			expect(typeof lastMessage?.content).toBe('string');
+			const responseJson: ToolDefinition[] = JSON.parse(lastMessage.content as string);
+			return responseJson;
+		};
+
+		// Certain providers have more restrictive ID requirements. All tools exposed in the chat panel
+		// should satisfy these requirements.
+		// See https://discourse.joplinapp.org/t/400-error-with-ai-chat/50615
+		const isValidId = (id: string) => id.match(/^[a-zA-Z0-9_-]{1,128}$/);
+		const idValidity = (await allToolDefinitions()).map(tool => ({
+			id: tool.id,
+			valid: !!isValidId(tool.id),
+		}));
+		expect(idValidity).toEqual(idValidity.map(result => ({ ...result, valid: true })));
 	});
 
 	test('should allow external tools when enabled in settings', async () => {
