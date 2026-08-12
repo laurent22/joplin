@@ -49,7 +49,7 @@ import restoreItems from '@joplin/lib/services/trash/restoreItems';
 import { getDisplayParentTitle } from '@joplin/lib/services/trash';
 import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import debounce from '../../../utils/debounce';
-import { focus } from '@joplin/lib/utils/focusHandler';
+import { blur, focus } from '@joplin/lib/utils/focusHandler';
 import CommandService, { RegisteredRuntime } from '@joplin/lib/services/CommandService';
 import { ResourceInfo } from '../../NoteBodyViewer/hooks/useRerenderHandler';
 import getImageDimensions from '../../../utils/image/getImageDimensions';
@@ -154,6 +154,7 @@ interface State {
 	noteResources: Record<string, ResourceInfo>;
 	newAndNoTitleChangeNoteId: boolean|null;
 	noteLastLoadTime: number;
+	reloadInProgress: boolean;
 
 	undoRedoButtonState: {
 		canUndo: boolean;
@@ -194,6 +195,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		return shared.noteComponent_change(this, 'body', saveEvent.body);
 	});
 	private refreshKey: number | undefined;
+	private reloadInProgress_ = false;
 
 	public static navigationOptions(): { header: null } {
 		return { header: null };
@@ -226,6 +228,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			imageEditorResourceFilepath: null,
 			newAndNoTitleChangeNoteId: null,
 			noteLastLoadTime: Date.now(),
+			reloadInProgress: false,
 
 			undoRedoButtonState: {
 				canUndo: false,
@@ -709,6 +712,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			const explicitReloadRequired = !editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime;
 
 			if (explicitReloadRequired) {
+				this.reloadInProgress_ = true;
+				Keyboard.dismiss();
+				this.editorRef.current?.hideKeyboard();
+				blur('Note::reload', this.titleTextFieldRef.current);
+				this.setState({ reloadInProgress: true });
 				void this.reloadNoteAndUpdateRefreshKey();
 			}
 
@@ -765,11 +773,24 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private async reloadNoteAndUpdateRefreshKey() {
+		const refreshKey = this.props.editorNoteReloadTimeRequest;
 		await shared.reloadNote(this);
-		this.refreshKey = this.props.editorNoteReloadTimeRequest;
+		this.refreshKey = refreshKey;
+		if (this.useEditorBeta() && this.state.mode === 'edit') {
+			this.forceUpdate();
+		} else {
+			this.setState({}, () => this.editorReloadComplete(refreshKey));
+		}
 	}
 
+	private editorReloadComplete = (refreshKey: number|undefined) => {
+		if (!this.reloadInProgress_ || refreshKey !== this.props.editorNoteReloadTimeRequest) return;
+		this.reloadInProgress_ = false;
+		this.setState({ reloadInProgress: false });
+	};
+
 	private title_changeText(text: string) {
+		if (this.reloadInProgress_) return;
 		let newText = text;
 		newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
 		shared.noteComponent_change(this, 'title', newText);
@@ -784,6 +805,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	private onPlainEditorTextChange = (text: string) => {
+		if (this.reloadInProgress_) return;
 		if (!this.undoRedoService_.canUndo) {
 			this.undoRedoService_.push(this.undoState());
 		} else {
@@ -798,6 +820,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	//
 	// See https://github.com/laurent22/joplin/issues/10130
 	private onMarkdownEditorTextChange = debounce((event: EditorChangeEvent) => {
+		if (this.reloadInProgress_) return;
 		shared.noteComponent_change(this, 'body', event.value);
 	}, 100);
 
@@ -813,9 +836,12 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		);
 	};
 
-	public makeSaveAction(state: State) {
+	public makeSaveAction(state: State, editorNoteReloadTimeRequest: number) {
 		return async () => {
-			return shared.saveNoteButton_press(this, state, null, null);
+			return shared.saveNoteButton_press(this, state, null, {
+				editorNoteReloadTimeRequest,
+				getEditorNoteReloadTimeRequest: () => this.props.editorNoteReloadTimeRequest,
+			});
 		};
 	}
 
@@ -827,7 +853,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	}
 
 	public scheduleSave(state: State) {
-		this.saveActionQueue(state.note.id).push(this.makeSaveAction(state));
+		if (this.reloadInProgress_) return;
+		const editorNoteReloadTimeRequest = this.props.editorNoteReloadTimeRequest;
+		this.saveActionQueue(state.note.id).push(this.makeSaveAction(state, editorNoteReloadTimeRequest));
 	}
 
 	private async saveNoteButton_press(folderId: string = null) {
@@ -1732,6 +1760,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 							keyboardAppearance={theme.keyboardAppearance}
 							placeholder={_('Add body')}
 							placeholderTextColor={theme.colorFaded}
+							editable={!this.state.readOnly && !this.state.reloadInProgress}
 							// need some extra padding for iOS so that the keyboard won't cover last line of the note
 							// see https://github.com/laurent22/joplin/issues/3607
 							// Property is gone as of RN 0.72?
@@ -1757,7 +1786,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 						onSearchVisibleChange={this.onSearchVisibleChange_}
 						onAttach={this.onAttach}
 						noteResources={this.state.noteResources}
-						readOnly={this.state.readOnly}
+						readOnly={this.state.readOnly || this.state.reloadInProgress}
 						plugins={this.props.plugins}
 						style={{
 							...editorStyle,
@@ -1776,6 +1805,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 
 						mode={this.props.editorType}
 						refreshKey={this.refreshKey}
+						onLoadEnd={() => this.editorReloadComplete(this.refreshKey)}
 					/>;
 				}
 			}
@@ -1836,7 +1866,7 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					keyboardAppearance={theme.keyboardAppearance}
 					placeholder={_('Add title')}
 					placeholderTextColor={theme.colorFaded}
-					editable={!this.state.readOnly}
+					editable={!this.state.readOnly && !this.state.reloadInProgress}
 					multiline={this.state.multiline}
 					submitBehavior = "blurAndSubmit"
 				/>
