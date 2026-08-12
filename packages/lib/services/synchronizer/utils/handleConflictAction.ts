@@ -114,10 +114,10 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		// ------------------------------------------------------------------------------
 
 		if (mustHandleConflict) {
-			// An encrypted remote has no readable title or body, so the merge below would
-			// otherwise be applied on top of the cipher text
+			// An encrypted remote has no readable title or body. The cipher text goes with it,
+			// or the decryption worker would later overwrite the merge with the original.
 			if (decryptedRemoteNote && (remoteContent as NoteEntity).encryption_cipher_text) {
-				remoteContent = { ...remoteContent, title: decryptedRemoteNote.title, body: decryptedRemoteNote.body } as NoteEntity;
+				remoteContent = { ...remoteContent, ...decryptedRemoteNote } as NoteEntity;
 			}
 
 			// Merge the non-conflicting changes into both sides before creating the
