@@ -899,14 +899,27 @@ export default class BaseItem extends BaseModel {
 
 		if (itemLocation === null) itemLocation = BaseItem.SYNC_ITEM_LOCATION_LOCAL;
 
+		// The base version is carried over from the row being replaced, otherwise the sync
+		// steps that re-create it would lose it on every run
 		return [
 			{
-				sql: 'DELETE FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ?',
-				params: [syncTarget, itemType, itemId],
+				sql: `
+					INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, remote_item_updated_time, sync_disabled, sync_disabled_reason, base_body, base_title, base_conflict_note_id)
+					SELECT ?, ?, ?, ?, ?, ?, ?, ?,
+						COALESCE((SELECT base_body FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ?), ''),
+						COALESCE((SELECT base_title FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ?), ''),
+						COALESCE((SELECT base_conflict_note_id FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ?), '')
+				`,
+				params: [
+					syncTarget, itemType, itemId, itemLocation, syncTime, remoteItemUpdatedTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`,
+					syncTarget, itemType, itemId,
+					syncTarget, itemType, itemId,
+					syncTarget, itemType, itemId,
+				],
 			},
 			{
-				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, remote_item_updated_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-				params: [syncTarget, itemType, itemId, itemLocation, syncTime, remoteItemUpdatedTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`],
+				sql: 'DELETE FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ? AND id != (SELECT MAX(id) FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ?)',
+				params: [syncTarget, itemType, itemId, syncTarget, itemType, itemId],
 			},
 		];
 	}
