@@ -405,7 +405,8 @@ const buildStartupTasks = (
 
 		// Do not navigate to the conflicts folder if stored, because it has special behaviour and will disappear when the last note
 		// is removed from it, without being purged from notesParent and activeFolderId
-		if (notesParent.selectedItemId === getConflictFolderId() || folder.id === getConflictFolderId()) {
+		const conflictFolderId = getConflictFolderId();
+		if (notesParent?.selectedItemId === conflictFolderId || folder?.id === conflictFolderId) {
 			reg.logger().info(`JCC: ${notesParent.selectedItemId} ${folder.id}`);
 			dispatch(DEFAULT_ROUTE);
 		} else if (notesParent && notesParent.type === 'SmartFilter') {
