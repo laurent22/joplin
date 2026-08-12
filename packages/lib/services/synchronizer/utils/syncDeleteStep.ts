@@ -59,7 +59,8 @@ export default async (
 					}
 					const ItemClass = BaseItem.itemClass(item.item_type);
 					// For remote deletion, remoteItemUpdatedTime can be reset to 0
-					let nextQueries = BaseItem.updateSyncTimeQueries(syncTargetId, remoteContent, time.unixMs());
+					const baseVersion = await BaseItem.syncItemBaseVersion(syncTargetId, remoteContent.type_, remoteContent.id);
+					let nextQueries = BaseItem.updateSyncTimeQueries(syncTargetId, remoteContent, time.unixMs(), baseVersion);
 
 					if (isResource) {
 						nextQueries = nextQueries.concat(Resource.setLocalStateQueries(remoteContent.id, {

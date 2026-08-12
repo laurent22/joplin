@@ -53,6 +53,12 @@ export interface EncryptedItemsStats {
 	total: number;
 }
 
+export interface SyncItemBaseVersion {
+	base_body: string;
+	base_title: string;
+	base_conflict_note_id: string;
+}
+
 export default class BaseItem extends BaseModel {
 
 	public static encryptionService_: EncryptionService = null;
@@ -891,49 +897,49 @@ export default class BaseItem extends BaseModel {
 		return this.syncDisabledItemsCount(syncTargetId, true);
 	}
 
+	// The base version is passed in and written back, since the row is re-created here and
+	// the sync steps that do so would otherwise lose it on every run
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- item is an entity slice with id/type_ — tests pass loose objects with `id` as number
-	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
+	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, base: SyncItemBaseVersion, remoteItemUpdatedTime = 0, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
 		const itemType = item.type_;
 		const itemId = item.id;
 		if (!itemType || !itemId || syncTime === undefined) throw new Error(sprintf('Invalid parameters in updateSyncTimeQueries(): %d, %s, %d', syncTarget, JSON.stringify(item), syncTime));
 
 		if (itemLocation === null) itemLocation = BaseItem.SYNC_ITEM_LOCATION_LOCAL;
 
-		// The base version is carried over from the row being replaced, otherwise the sync
-		// steps that re-create it would lose it on every run
 		return [
 			{
-				sql: `
-					INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, remote_item_updated_time, sync_disabled, sync_disabled_reason, base_body, base_title, base_conflict_note_id)
-					SELECT ?, ?, ?, ?, ?, ?, ?, ?,
-						COALESCE((SELECT base_body FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ?), ''),
-						COALESCE((SELECT base_title FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ?), ''),
-						COALESCE((SELECT base_conflict_note_id FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ?), '')
-				`,
-				params: [
-					syncTarget, itemType, itemId, itemLocation, syncTime, remoteItemUpdatedTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`,
-					syncTarget, itemType, itemId,
-					syncTarget, itemType, itemId,
-					syncTarget, itemType, itemId,
-				],
+				sql: 'DELETE FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ?',
+				params: [syncTarget, itemType, itemId],
 			},
 			{
-				sql: 'DELETE FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ? AND id != (SELECT MAX(id) FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ?)',
-				params: [syncTarget, itemType, itemId, syncTarget, itemType, itemId],
+				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, remote_item_updated_time, sync_disabled, sync_disabled_reason, base_body, base_title, base_conflict_note_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+				params: [syncTarget, itemType, itemId, itemLocation, syncTime, remoteItemUpdatedTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`, base.base_body, base.base_title, base.base_conflict_note_id],
 			},
 		];
 	}
 
+	public static async syncItemBaseVersion(syncTarget: number, itemType: ModelType, itemId: string): Promise<SyncItemBaseVersion> {
+		const row = await this.db().selectOne('SELECT base_body, base_title, base_conflict_note_id FROM sync_items WHERE sync_target = ? AND item_type = ? AND item_id = ?', [syncTarget, itemType, itemId]);
+		return {
+			base_body: row?.base_body ?? '',
+			base_title: row?.base_title ?? '',
+			base_conflict_note_id: row?.base_conflict_note_id ?? '',
+		};
+	}
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See updateSyncTimeQueries; tests pass loose objects with `id` as number
 	public static async saveSyncTime(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0) {
-		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime, remoteItemUpdatedTime);
+		const base = await this.syncItemBaseVersion(syncTarget, item.type_, item.id);
+		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime, base, remoteItemUpdatedTime);
 		return this.db().transactionExecBatch(queries);
 	}
 
 	public static async saveSyncDisabled(syncTargetId: number, item: { id?: string; type_?: number; sync_time?: number; remote_item_updated_time?: number }, syncDisabledReason: string, itemLocation: number = null) {
 		const syncTime = 'sync_time' in item ? item.sync_time : 0;
 		const remoteItemUpdatedTime = 'remote_item_updated_time' in item ? item.remote_item_updated_time : 0;
-		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, remoteItemUpdatedTime, true, syncDisabledReason, itemLocation);
+		const base = await this.syncItemBaseVersion(syncTargetId, item.type_, item.id);
+		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, base, remoteItemUpdatedTime, true, syncDisabledReason, itemLocation);
 		return this.db().transactionExecBatch(queries);
 	}
 
