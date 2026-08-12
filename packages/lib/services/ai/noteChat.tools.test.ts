@@ -61,10 +61,10 @@ describe('noteChat.tools', () => {
 		// Certain providers have more restrictive ID requirements. All tools exposed in the chat panel
 		// should satisfy these requirements.
 		// See https://discourse.joplinapp.org/t/400-error-with-ai-chat/50615
-		const isValidId = (id: string) => id.match(/^[a-zA-Z0-9_-]{1,128}$/);
+		const isValidId = (id: string) => !!id.match(/^[a-zA-Z0-9_-]{1,128}$/);
 		const idValidity = (await allToolDefinitions()).map(tool => ({
 			id: tool.id,
-			valid: !!isValidId(tool.id),
+			valid: isValidId(tool.id),
 		}));
 		expect(idValidity).toEqual(idValidity.map(result => ({ ...result, valid: true })));
 	});
