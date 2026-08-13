@@ -32,16 +32,7 @@ const useScheduleSaveCallbacks = (props: Props) => {
 		const editorNoteReloadTimeRequest = editorNoteReloadTimeRequestRef.current;
 		const makeAction = (formNote: FormNote) => {
 			return async function() {
-				if (editorNoteReloadTimeRequestRef.current > editorNoteReloadTimeRequest) {
-					// onWillChange marks the note as saving before this action is queued. If a
-					// reload makes the action stale, no later part of the action will clear that
-					// status, leaving commands such as the RTE/MDE toggle disabled.
-					props.dispatch({
-						type: 'EDITOR_NOTE_STATUS_REMOVE',
-						id: formNote.id,
-					});
-					return;
-				}
+				if (editorNoteReloadTimeRequestRef.current > editorNoteReloadTimeRequest) return;
 
 				// The lock state may change between scheduling and execution (e.g. encryption enabled
 				// from the note list menu), so the save uses the latest form state for this note.

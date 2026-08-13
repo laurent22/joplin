@@ -129,7 +129,16 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const onReloadInProgressChange = useCallback((value: boolean) => {
 		if (value && document.activeElement instanceof HTMLElement) blur('NoteEditor::reload', document.activeElement);
 		setReloadInProgress(value);
-	}, []);
+		if (!value) {
+			// TinyMCE can report onWillChange before a reload, then have its delayed
+			// onChange rejected while the reload is in progress. Since no save is queued
+			// in that case, clear the saving status when the reload completes.
+			props.dispatch({
+				type: 'EDITOR_NOTE_STATUS_REMOVE',
+				id: effectiveNoteId,
+			});
+		}
+	}, [effectiveNoteId, props.dispatch]);
 
 	const { formNote, setFormNote, isNewNote, resourceInfos, decryptFailed, loadBlocked } = useFormNote({
 		noteId: effectiveNoteId,
