@@ -66,6 +66,7 @@ import useConnectToEditorPlugin from './utils/useConnectToEditorPlugin';
 import getResourceBaseUrl from './utils/getResourceBaseUrl';
 import useInitialCursorLocation from './utils/useInitialCursorLocation';
 import NotePositionService, { EditorCursorLocations } from '@joplin/lib/services/NotePositionService';
+import { blur } from '@joplin/lib/utils/focusHandler';
 
 const debounce = require('debounce');
 
@@ -84,6 +85,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const [showRevisions, setShowRevisions] = useState(false);
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
 	const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
+	const [reloadInProgress, setReloadInProgress] = useState(false);
 
 	const editorRef = useRef<NoteBodyEditorRef|null>(null);
 	const titleInputRef = useRef<HTMLInputElement|null>(null);
@@ -99,6 +101,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const formNoteRef = useRef<FormNote>(null);
 	const { saveNoteIfWillChange, scheduleSaveNote } = useScheduleSaveCallbacks({
 		setFormNote: setFormNoteRef, formNote: formNoteRef, dispatch: props.dispatch, editorRef, editorId,
+		editorNoteReloadTimeRequest: props.editorNoteReloadTimeRequest,
 	});
 	const formNote_beforeLoad = useCallback(async (event: OnLoadEvent) => {
 		await saveNoteIfWillChange(event.formNote);
@@ -123,6 +126,10 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const onDecryptFailedChange = useCallback((value: boolean) => {
 		props.dispatch({ type: 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE', value, windowId });
 	}, [props.dispatch, windowId]);
+	const onReloadInProgressChange = useCallback((value: boolean) => {
+		if (value && document.activeElement instanceof HTMLElement) blur('NoteEditor::reload', document.activeElement);
+		setReloadInProgress(value);
+	}, []);
 
 	const { formNote, setFormNote, isNewNote, resourceInfos, decryptFailed, loadBlocked } = useFormNote({
 		noteId: effectiveNoteId,
@@ -135,6 +142,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 		editorId,
 		noteLockSessionUnlocked: props.noteLockSessionUnlocked,
 		onDecryptFailedChange,
+		onReloadInProgressChange,
+		editorNoteReloadTimeRequest: props.editorNoteReloadTimeRequest,
 	});
 	setFormNoteRef.current = setFormNote;
 	formNoteRef.current = { ...formNote };
@@ -258,6 +267,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, [formNote.title, props.onTitleChange]);
 
 	const onFieldChange = useCallback(async (field: string, value: string, changeId = 0) => {
+		if (reloadInProgress) return;
 		if (!isMountedRef.current) {
 			// When the component is unmounted, various actions can happen which can
 			// trigger onChange events, for example the textarea might be cleared.
@@ -306,7 +316,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 			// - debounced because many calls to scheduleSaveNote can resolve at once
 			scheduleNoteListResort();
 		}
-	}, [handleProvisionalFlag, formNote, setFormNote, isNewNote, titleHasBeenManuallyChanged, scheduleNoteListResort, scheduleSaveNote]);
+	}, [reloadInProgress, handleProvisionalFlag, formNote, setFormNote, isNewNote, titleHasBeenManuallyChanged, scheduleNoteListResort, scheduleSaveNote]);
 
 	const onDrop = useDropHandler({ editorRef });
 
@@ -497,7 +507,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		htmlToMarkdown: htmlToMarkdown,
 		markupToHtml: markupToHtml,
 		allAssets: allAssets,
-		disabled: isReadOnly,
+		disabled: isReadOnly || reloadInProgress,
 		themeId: props.themeId,
 		dispatch: props.dispatch,
 		noteToolbar: null,
@@ -793,7 +803,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 					noteTitle={formNote.title}
 					noteUserUpdatedTime={formNote.user_updated_time}
 					onTitleChange={onTitleChange}
-					disabled={isReadOnly}
+					disabled={isReadOnly || reloadInProgress}
 				/>
 				{renderSearchInfo()}
 				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%', minHeight: '0' }}>
@@ -888,6 +898,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		whiteboardForceMarkdown: windowState.whiteboardForceMarkdown ?? {},
 		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
 		hasNoteLockKey: hasNoteLockKey(state.settings['syncInfoCache']),
+		editorNoteReloadTimeRequest: windowState.editorNoteReloadTimeRequest,
 	};
 };
 

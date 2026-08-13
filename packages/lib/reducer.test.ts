@@ -1076,4 +1076,23 @@ describe('reducer', () => {
 
 		jest.useRealTimers();
 	});
+
+	it('should request reload only in windows displaying the specified note', async () => {
+		jest.useFakeTimers();
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(2, folders[0]);
+		let state = initTestState(folders, 0, notes, [0]);
+		state = createBackgroundWindow(state, 'secondary', notes[1], notes);
+		const previousPrimaryReloadTime = state.editorNoteReloadTimeRequest;
+		const now = Date.now();
+
+		state = reducer(state, {
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: notes[1].id,
+		});
+
+		expect(state.editorNoteReloadTimeRequest).toBe(previousPrimaryReloadTime);
+		expect(state.backgroundWindows.secondary.editorNoteReloadTimeRequest).toBe(now);
+		jest.useRealTimers();
+	});
 });

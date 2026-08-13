@@ -76,6 +76,7 @@ export interface NoteEditorProps {
 	whiteboardForceMarkdown: Record<string, boolean>;
 	noteLockSessionUnlocked: boolean;
 	hasNoteLockKey: boolean;
+	editorNoteReloadTimeRequest: number;
 }
 
 export interface NoteBodyEditorRef {

@@ -119,6 +119,7 @@ export interface WindowState {
 	backwardHistoryNotes: NoteEntity[];
 	forwardHistoryNotes: NoteEntity[];
 	lastSelectedNotesIds: StateLastSelectedNotesIds;
+	editorNoteReloadTimeRequest: number;
 }
 
 export const defaultWindowId = 'default';
@@ -147,6 +148,7 @@ export const defaultWindowState: WindowState = {
 		Tag: {},
 		Search: {},
 	},
+	editorNoteReloadTimeRequest: 0,
 };
 
 export interface EditorNoteStatuses {
@@ -198,8 +200,6 @@ export interface State extends WindowState {
 	mustUpgradeAppMessage: string;
 	mustAuthenticate: boolean;
 	toast: Toast | null;
-	editorNoteReloadTimeRequest: number;
-
 	allowSelectionInOtherFolders: boolean;
 	noteHtmlToMarkdownDone: string;
 
@@ -274,7 +274,6 @@ export const defaultState: State = {
 	mustUpgradeAppMessage: '',
 	mustAuthenticate: false,
 	allowSelectionInOtherFolders: false,
-	editorNoteReloadTimeRequest: 0,
 	noteHtmlToMarkdownDone: '',
 
 	pluginService: pluginServiceDefaultState,
@@ -1619,8 +1618,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'EDITOR_NOTE_NEEDS_RELOAD':
 			{
-				if (!action.noteId || (draft.selectedNoteIds.length && draft.selectedNoteIds[0] === action.noteId)) {
-					draft.editorNoteReloadTimeRequest = Date.now();
+				for (const windowState of stateUtils.allWindowStates(draft)) {
+					if (!action.noteId || stateUtils.selectedNoteId(windowState) === action.noteId) {
+						windowState.editorNoteReloadTimeRequest = Date.now();
+					}
 				}
 			}
 			break;

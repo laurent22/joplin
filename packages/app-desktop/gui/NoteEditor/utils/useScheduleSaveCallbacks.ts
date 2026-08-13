@@ -1,5 +1,5 @@
 import Logger from '@joplin/utils/Logger';
-import { RefObject, useCallback } from 'react';
+import { RefObject, useCallback, useRef } from 'react';
 import { FormNote, NoteBodyEditorRef } from './types';
 import { formNoteToNote } from '.';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
@@ -17,16 +17,23 @@ interface Props {
 	editorId: string;
 	dispatch: Dispatch;
 	editorRef: RefObject<NoteBodyEditorRef>;
+	editorNoteReloadTimeRequest: number;
 }
 
 const useScheduleSaveCallbacks = (props: Props) => {
+	const editorNoteReloadTimeRequestRef = useRef(props.editorNoteReloadTimeRequest);
+	editorNoteReloadTimeRequestRef.current = props.editorNoteReloadTimeRequest;
+
 	const scheduleSaveNote = useCallback((formNote: FormNote) => {
 		if (!formNote.saveActionQueue) throw new Error('saveActionQueue is not set!!'); // Sanity check
 
 		// reg.logger().debug('Scheduling...', formNote);
 
+		const editorNoteReloadTimeRequest = editorNoteReloadTimeRequestRef.current;
 		const makeAction = (formNote: FormNote) => {
 			return async function() {
+				if (editorNoteReloadTimeRequestRef.current > editorNoteReloadTimeRequest) return;
+
 				// The lock state may change between scheduling and execution (e.g. encryption enabled
 				// from the note list menu), so the save uses the latest form state for this note.
 				const latestFormNote = props.formNote.current?.id === formNote.id ? props.formNote.current : formNote;
