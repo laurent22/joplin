@@ -79,6 +79,16 @@ export enum MobilePlatform {
 	Web = 'web',
 }
 
+export type SetClientCertificateOptions = {
+	certPath: string;
+	keyPath: string;
+	caPath: string;
+} | {
+	certPath: null;
+	keyPath: null;
+	caPath: null;
+};
+
 let isTestingEnv_ = false;
 
 // We need to ensure that there's only one instance of React being used by all
@@ -435,7 +445,7 @@ const shim = {
 		throw new Error('Not implemented: httpAgent');
 	},
 
-	setClientCertificate: (_certPath: string|null, _keyPath: string|null): Promise<void> => {
+	setClientCertificate: (_options: SetClientCertificateOptions): Promise<void> => {
 		throw new Error('Not implemented: setClientCertificate');
 	},
 

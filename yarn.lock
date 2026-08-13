@@ -12898,7 +12898,6 @@ __metadata:
     file-type: "npm:16.5.4"
     follow-redirects: "npm:1.15.11"
     fs-extra: "npm:11.3.5"
-    hpagent: "npm:1.2.0"
     html-entities: "npm:1.4.0"
     html-minifier: "npm:4.0.0"
     image-data-uri: "npm:2.0.1"
@@ -35312,13 +35311,6 @@ __metadata:
     readable-stream: "npm:^2.0.1"
     wbuf: "npm:^1.1.0"
   checksum: 10/6910e4b9d943a78fd8e84ac42729fdab9bd406789d6204ad160af9dc5aa4750fc01f208249bf7116c11dc0678207a387b4ade24e4b628b95385b251ceeeb719c
-  languageName: node
-  linkType: hard
-
-"hpagent@npm:1.2.0":
-  version: 1.2.0
-  resolution: "hpagent@npm:1.2.0"
-  checksum: 10/bad186449da7e3456788a8cbae459fc6c0a855d5872a7f460c48ce4a613020d8d914839dad10047297099299c4f9e6c65a0eec3f5886af196c0a516e4ad8a845
   languageName: node
   linkType: hard
 

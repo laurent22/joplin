@@ -22,13 +22,10 @@ import { cpus } from 'os';
 import { pathToFileURL } from 'url';
 // Use fetch from undici rather than the built-in fetch: Undici's fetch provides
 // more information when fetch fails.
-import { fetch, FormData } from 'undici';
+import { Agent, fetch, FormData, ProxyAgent } from 'undici';
 import tls from 'tls';
 import type PdfJs from './utils/types/pdfJs';
 import { _ } from './locale';
-import http from 'http';
-import https from 'https';
-const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent');
 const toRelative = require('relative');
 import timers from 'timers';
 import zlib from 'zlib';
@@ -48,10 +45,6 @@ function fileExists(filePath: string) {
 	} catch (error) {
 		return false;
 	}
-}
-
-function isUrlHttps(url: string) {
-	return url.startsWith('https');
 }
 
 function resolveProxyUrl(proxyUrl: string) {
@@ -553,10 +546,10 @@ function shimInit(options: ShimInitOptions = null) {
 			throw new Error(`Not a valid URL: ${url}`);
 		}
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
-		options.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : shim.httpAgent(url);
+		const agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : shim.httpAgent(url);
 		return shim.fetchWithRetry(async () => {
 			try {
-				return await fetch(url, options);
+				return await fetch(url, { ...options, dispatcher: agent });
 			} catch (error) {
 				// When error is a TypeError, information about the error failure is in
 				// error.cause:
@@ -739,9 +732,11 @@ function shimInit(options: ShimInitOptions = null) {
 		tlsEcdhCurve = 'auto';
 	}
 
-	let clientCert: string|null = null;
 	let clientKey: string|null = null;
-	shim.setClientCertificate = async (certPath, keyPath) => {
+	let clientCert: string|null = null;
+	let clientCertCa: string|null = null;
+	let clientKeyId = 0;
+	shim.setClientCertificate = async ({ certPath, keyPath, caPath }) => {
 		if (!certPath && !keyPath) {
 			clientKey = null;
 			clientCert = null;
@@ -751,25 +746,35 @@ function shimInit(options: ShimInitOptions = null) {
 			throw new Error(`Missing ${!certPath ? 'certPath' : 'keyPath'}: Both certPath and keyPath must be provided.`);
 		}
 
-		clientKey = await shim.fsDriver().readFile(certPath, 'utf-8');
-		clientCert = await shim.fsDriver().readFile(keyPath, 'utf-8');
+		clientKey = await shim.fsDriver().readFile(keyPath, 'utf-8');
+		clientCert = await shim.fsDriver().readFile(certPath, 'utf-8');
+		clientCertCa = await shim.fsDriver().readFile(caPath, 'utf-8');
+		clientKeyId ++;
 	};
 
+	const agentSettingsBase = (_url: string) => ({
+		keepAliveMsecs: 5000,
+		ecdhCurve: tlsEcdhCurve,
+		// TODO: Only pass `connect` when a client cert is configured
+		connect: {
+			ca: clientCertCa ? [
+				clientCertCa,
+			] : [],
+			key: clientKey ?? undefined,
+			cert: clientCert ?? undefined,
+		},
+	});
+
 	shim.httpAgent = url => {
-		if (!shim.httpAgent_) {
+		if (!shim.httpAgent_ || shim.httpAgent_.clientKeyId !== clientKeyId) {
 			const AgentSettings = {
-				keepAlive: true,
+				...agentSettingsBase(url),
 				maxSockets: 1,
-				keepAliveMsecs: 5000,
-				ecdhCurve: tlsEcdhCurve,
-				connect: {
-					key: clientKey ?? undefined,
-					cert: clientCert ?? undefined,
-				},
 			};
 			shim.httpAgent_ = {
-				http: new http.Agent(AgentSettings),
-				https: new https.Agent(AgentSettings),
+				clientKeyId,
+				http: new Agent(AgentSettings),
+				https: new Agent(AgentSettings),
 			};
 		}
 		return url.startsWith('https') ? shim.httpAgent_.https : shim.httpAgent_.http;
@@ -777,24 +782,13 @@ function shimInit(options: ShimInitOptions = null) {
 
 	shim.proxyAgent = (serverUrl: string, proxyUrl: string) => {
 		const proxyAgentConfig = {
-			keepAlive: true,
+			...agentSettingsBase(serverUrl),
 			maxSockets: proxySettings.maxConcurrentConnections,
-			keepAliveMsecs: 5000,
-			proxy: proxyUrl,
+			uri: proxyUrl,
 			timeout: proxySettings.proxyTimeout * 1000,
-			ecdhCurve: tlsEcdhCurve,
 		};
 
-		// Based on https://github.com/delvedor/hpagent#usage
-		if (!isUrlHttps(proxyUrl) && !isUrlHttps(serverUrl)) {
-			return new HttpProxyAgent(proxyAgentConfig);
-		} else if (isUrlHttps(proxyUrl) && !isUrlHttps(serverUrl)) {
-			return new HttpProxyAgent(proxyAgentConfig);
-		} else if (!isUrlHttps(proxyUrl) && isUrlHttps(serverUrl)) {
-			return new HttpsProxyAgent(proxyAgentConfig);
-		} else {
-			return new HttpsProxyAgent(proxyAgentConfig);
-		}
+		return new ProxyAgent(proxyAgentConfig);
 	};
 
 	shim.openOrCreateFile = (filepath, defaultContents) => {

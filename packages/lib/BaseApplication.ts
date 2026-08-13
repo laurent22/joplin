@@ -394,9 +394,11 @@ export default class BaseApplication {
 				}
 				const certPath = join(parentDirectory, 'client-cert.pem');
 				const keyPath = join(parentDirectory, 'client-key.pem');
+				const caPath = join(parentDirectory, 'ca-cert.pem');
 
 				try {
-					await shim.setClientCertificate(certPath, keyPath);
+					this.logger().info('Loading client certificate from', parentDirectory);
+					await shim.setClientCertificate({ certPath, keyPath, caPath });
 				} catch (error) {
 					this.logger().error('Failed to set client certificate:', error);
 				}
