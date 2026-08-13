@@ -2877,7 +2877,7 @@ msgstr[1] "Skapar länkar..."
 
 #: packages/lib/models/Setting.ts:1395
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
-msgstr "Geolokalisering, stavningskontroll, redigerarverktygsfält, bildstorleksändring"
+msgstr "Geolokalisering, stavningskontroll, redigeringsverktygsfält, bildstorleksändring"
 
 #: packages/lib/utils/joplinCloud/index.ts:461
 msgid "Get a quote"
@@ -3292,7 +3292,7 @@ msgstr "Ogiltig"
 
 #: packages/lib/services/KeymapService.ts:344
 msgid "Invalid %s: %s."
-msgstr "Ogiltig %s: %s."
+msgstr "Ogiltigt %s: %s."
 
 #: packages/app-cli/app/cli-utils.js:167
 msgid "Invalid answer: %s"
@@ -5251,7 +5251,7 @@ msgstr "Försök igen"
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:86
 #: packages/app-mobile/components/screens/status.tsx:191
 msgid "Retry All"
-msgstr "Försök igen för alla"
+msgstr "Försök igen med alla"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:176
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/revealResourceFile.ts:8
