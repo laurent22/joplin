@@ -522,6 +522,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		content: formNote.body,
 		contentMarkupLanguage: markupLanguage,
 		contentOriginalCss: formNote.originalCss,
+		editorNoteReloadTimeRequest: props.editorNoteReloadTimeRequest,
 		initialCursorLocation,
 		resourceInfos: resourceInfos,
 		resourceDirectory: Setting.value('resourceDir'),

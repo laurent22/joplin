@@ -118,6 +118,7 @@ export interface NoteBodyEditorProps {
 	contentKey: string;
 	contentMarkupLanguage: number;
 	contentOriginalCss: string;
+	editorNoteReloadTimeRequest: number;
 	initialCursorLocation: EditorCursorLocations;
 	onChange(event: OnChangeEvent): void;
 	onWillChange(event: { changeId: number }): void;
