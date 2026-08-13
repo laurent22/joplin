@@ -1,12 +1,19 @@
 import shim from '../shim';
 import { getCACertificates, setDefaultCACertificates } from 'node:tls';
 
+let defaultCaCerts_: string[]|null = null;
+const defaultCaCerts = () => {
+	defaultCaCerts_ ??= getCACertificates();
+	return defaultCaCerts_;
+};
+
 let cacheKey = '[]';
 const setExtraRootCertificates = async (paths: string[]) => {
-	if (JSON.stringify(paths) === cacheKey) return;
-	cacheKey = JSON.stringify(paths);
+	const newCacheKey = JSON.stringify(paths);
+	if (newCacheKey === cacheKey) return;
+	cacheKey = newCacheKey;
 
-	const cas = [...getCACertificates()];
+	const cas = [...defaultCaCerts()];
 	for (const caPath of paths) {
 		const path = caPath.trim();
 		if (!path) continue;
