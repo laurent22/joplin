@@ -127,7 +127,19 @@ function NoteEditorContent(props: NoteEditorProps) {
 		props.dispatch({ type: 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE', value, windowId });
 	}, [props.dispatch, windowId]);
 	const onReloadInProgressChange = useCallback((value: boolean) => {
-		if (value && document.activeElement instanceof HTMLElement) blur('NoteEditor::reload', document.activeElement);
+		if (value) {
+			// TinyMCE edits inside its own document. Blurring only the outer window does
+			// not reliably stop input when the editor is in a secondary window.
+			editorRef.current?.blurEditor?.();
+
+			// Blur only the window whose editor is being refreshed. A secondary window
+			// can refresh in response to a change saved by the main editor; blurring the
+			// global document here would incorrectly interrupt typing in the main window.
+			const editorWindowActiveElement = containerRef.current?.ownerDocument?.activeElement;
+			if (editorWindowActiveElement) {
+				blur('NoteEditor::reloadEditorWindow', editorWindowActiveElement);
+			}
+		}
 		setReloadInProgress(value);
 		if (!value) {
 			// TinyMCE can report onWillChange before a reload, then have its delayed

@@ -33,7 +33,7 @@ import { DropHandler } from '../../utils/useDropHandler';
 import Logger from '@joplin/utils/Logger';
 import useWebViewApi from './utils/useWebViewApi';
 import useLinkTooltips from './utils/useLinkTooltips';
-import { focus } from '@joplin/lib/utils/focusHandler';
+import { blur, focus } from '@joplin/lib/utils/focusHandler';
 const md5 = require('md5');
 import { clipboard } from 'electron';
 const supportedLocales = require('./supportedLocales');
@@ -185,6 +185,9 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: Ref<NoteBodyEditorRef>) => {
 			content: async () => {
 				if (!editorRef.current) return '';
 				return prop_htmlToMarkdownRef.current(props.contentMarkupLanguage, editorRef.current.getContent(), props.contentOriginalCss);
+			},
+			blurEditor: () => {
+				if (editor) blur('TinyMCE::reload', editor.getBody());
 			},
 			resetScroll: () => {
 				if (editor) editor.getWin().scrollTo(0, 0);
