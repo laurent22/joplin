@@ -13,6 +13,7 @@ import replaceUnsupportedCharacters from './utils/replaceUnsupportedCharacters';
 import { FetchBlobOptions } from './types';
 import { fromFile as fileTypeFromFile } from 'file-type';
 import crypto from './services/e2ee/crypto';
+import fastDeepEqual = require('fast-deep-equal');
 
 import FileApiDriverLocal from './file-api-driver-local';
 import * as mimeUtils from './mime-utils';
@@ -732,48 +733,56 @@ function shimInit(options: ShimInitOptions = null) {
 		tlsEcdhCurve = 'auto';
 	}
 
-	let clientKey: string|null = null;
-	let clientCert: string|null = null;
-	let clientKeyId = 0;
-	shim.setClientCertificate = async ({ certPath, keyPath }) => {
-		if (!certPath && !keyPath) {
-			clientKey = null;
-			clientCert = null;
-			clientKeyId ++;
+	interface ClientCertificatePair {
+		privateKey: string;
+		certificate: string;
+		domains: RegExp;
+	}
+	let clientCertificates: ClientCertificatePair[] = [];
+
+	shim.setClientCertificate = async (options) => {
+		if (!options) {
+			clientCertificates = [];
 			return;
 		}
+		const { certPath, keyPath, domains } = options;
 		if (!certPath || !keyPath) {
 			throw new Error(`Missing ${!certPath ? 'certPath' : 'keyPath'}: Both certPath and keyPath must be provided.`);
 		}
 
-		clientKey = await shim.fsDriver().readFile(keyPath, 'utf-8');
-		clientCert = await shim.fsDriver().readFile(certPath, 'utf-8');
-		clientKeyId ++;
+		const clientKey = await shim.fsDriver().readFile(keyPath, 'utf-8');
+		const clientCert = await shim.fsDriver().readFile(certPath, 'utf-8');
+		clientCertificates = [{ privateKey: clientKey, certificate: clientCert, domains }];
 	};
 
-	const agentSettingsBase = (_url: string) => ({
-		keepAliveMsecs: 5000,
-		ecdhCurve: tlsEcdhCurve,
-		// TODO: Only pass `connect` when a client cert is configured
-		connect: {
-			key: clientKey ?? undefined,
-			cert: clientCert ?? undefined,
-		},
-	});
+	const agentSettingsBase = (url: string) => {
+		const parsedUrl = new URL(url);
+		const clientCertPair = parsedUrl.protocol === 'https:' ? clientCertificates.find(pair => {
+			return parsedUrl.hostname.match(pair.domains);
+		}) : null;
+
+		return {
+			keepAliveMsecs: 5000,
+			ecdhCurve: tlsEcdhCurve,
+			connect: clientCertPair ? {
+				key: clientCertPair.privateKey,
+				cert: clientCertPair.certificate,
+			} : {},
+		};
+	};
 
 	shim.httpAgent = url => {
-		if (!shim.httpAgent_ || shim.httpAgent_.clientKeyId !== clientKeyId) {
-			const AgentSettings = {
-				...agentSettingsBase(url),
-				maxSockets: 1,
-			};
+		const agentSettings = {
+			...agentSettingsBase(url),
+			maxSockets: 1,
+		};
+		if (!shim.httpAgent_ || !fastDeepEqual(shim.httpAgent_.lastSettings, agentSettings)) {
 			shim.httpAgent_ = {
-				clientKeyId,
-				http: new Agent(AgentSettings),
-				https: new Agent(AgentSettings),
+				lastSettings: agentSettings,
+				agent: new Agent(agentSettings),
 			};
 		}
-		return url.startsWith('https') ? shim.httpAgent_.https : shim.httpAgent_.http;
+		return shim.httpAgent_.agent;
 	};
 
 	shim.proxyAgent = (serverUrl: string, proxyUrl: string) => {

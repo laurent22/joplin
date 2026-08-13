@@ -82,9 +82,7 @@ export enum MobilePlatform {
 export type SetClientCertificateOptions = {
 	certPath: string;
 	keyPath: string;
-} | {
-	certPath: null;
-	keyPath: null;
+	domains: RegExp;
 };
 
 let isTestingEnv_ = false;
@@ -443,7 +441,7 @@ const shim = {
 		throw new Error('Not implemented: httpAgent');
 	},
 
-	setClientCertificate: (_options: SetClientCertificateOptions): Promise<void> => {
+	setClientCertificate: (_options: SetClientCertificateOptions|null): Promise<void> => {
 		throw new Error('Not implemented: setClientCertificate');
 	},
 

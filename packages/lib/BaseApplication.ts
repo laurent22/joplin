@@ -388,7 +388,7 @@ export default class BaseApplication {
 			'net.clientCertificate': async () => {
 				const parentDirectory = Setting.value('net.clientCertificate');
 				if (!parentDirectory) {
-					await shim.setClientCertificate({ certPath: null, keyPath: null });
+					await shim.setClientCertificate(null);
 					return;
 				}
 				if (!await shim.fsDriver().isDirectory(parentDirectory)) {
@@ -398,10 +398,17 @@ export default class BaseApplication {
 				}
 				const certPath = join(parentDirectory, 'client-cert.pem');
 				const keyPath = join(parentDirectory, 'client-key.pem');
+				const domainsPath = join(parentDirectory, 'domains.regex');
 
 				try {
+					const domainsExp = await (async () => {
+						if (!await shim.fsDriver().exists(domainsPath)) return /^.*$/;
+						const text = await shim.fsDriver().readFile(domainsPath, 'utf-8');
+						return new RegExp(text.trim());
+					})();
+
 					this.logger().info('Loading client certificate from', parentDirectory);
-					await shim.setClientCertificate({ certPath, keyPath });
+					await shim.setClientCertificate({ certPath, keyPath, domains: domainsExp });
 				} catch (error) {
 					this.logger().error('Failed to set client certificate:', error);
 				}
