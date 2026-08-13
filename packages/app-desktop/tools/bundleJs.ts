@@ -1,15 +1,17 @@
 import { filename, toForwardSlashes } from '@joplin/utils/path';
 import * as esbuild from 'esbuild';
 import { existsSync, readFileSync } from 'fs';
-import { writeFile } from 'fs/promises';
+import { readFile, writeFile } from 'fs/promises';
 import { dirname, join, relative } from 'path';
 
 const baseDir = dirname(__dirname);
 const baseNodeModules = join(baseDir, 'node_modules');
 
+const undiciPath = join(__dirname, '../build/undici.bundle.js');
+
 // Note: Roughly based on js-draw's use of esbuild:
 // https://github.com/personalizedrefrigerator/js-draw/blob/6fe6d6821402a08a8d17f15a8f48d95e5d7b084f/packages/build-tool/src/BundledFile.ts#L64
-const makeBuildContext = (entryPoint: string, renderer: boolean, addDebugStats: boolean) => {
+const makeBuildContext = (entryPoint: string, renderer: boolean, addDebugStats: boolean, overrides?: Partial<esbuild.BuildOptions>) => {
 	return esbuild.context({
 		entryPoints: [entryPoint],
 		outfile: `${filename(entryPoint)}.bundle.js`,
@@ -23,6 +25,7 @@ const makeBuildContext = (entryPoint: string, renderer: boolean, addDebugStats: 
 		platform: 'node',
 		target: ['node20.0'],
 		mainFields: renderer ? ['browser', 'main'] : ['main'],
+		...overrides,
 		plugins: [
 			{
 				// Configures ESBuild to require(...) certain libraries that cause issues if included directly
@@ -117,11 +120,39 @@ const makeBuildContext = (entryPoint: string, renderer: boolean, addDebugStats: 
 					}
 				},
 			},
+			{
+				name: 'joplin--fix-undici',
+				setup: build => {
+					build.onResolve({ filter: /^undici$/ }, () => {
+						return {
+							path: undiciPath,
+						};
+					});
+				},
+			},
+			...(overrides?.plugins ?? []),
 		],
 	});
 };
 
+const bundleUndici = async () => {
+	// Undici needs special configuration, since it needs node:timers and node's performance API as globals,
+	// rather than the Electron timers to work correctly.
+	const undiciBuilder = await makeBuildContext(
+		require.resolve('undici'), true, false, { outfile: undiciPath, format: 'cjs' },
+	);
+	await undiciBuilder.rebuild();
+	await writeFile(undiciPath, `
+		const { setTimeout, setInterval, clearTimeout, clearInterval } = require('node:timers');
+		const { performance } = require('node:perf_hooks');
+		${await readFile(undiciPath, 'utf-8')}
+	`, 'utf-8');
+	await undiciBuilder.dispose();
+};
+
 const bundleJs = async (writeStats: boolean) => {
+	await bundleUndici();
+
 	const entryPoints = [
 		{ fileName: 'main.ts', renderer: false },
 		{ fileName: 'main-html.ts', renderer: true },
