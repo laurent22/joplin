@@ -99,6 +99,8 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 	// a new refresh.
 	const [formNoteRefreshRequest, setFormNoteRefreshRequest] = useState({ counter: 0, force: false });
 	const previousEditorNoteReloadTimeRequestRef = useRef(editorNoteReloadTimeRequest);
+	const editorNoteReloadTimeRequestRef = useRef(editorNoteReloadTimeRequest);
+	editorNoteReloadTimeRequestRef.current = editorNoteReloadTimeRequest;
 	const prevBuiltInEditorVisible = usePrevious<boolean>(builtInEditorVisible);
 	// Seeded because usePrevious defaults to null, which would read as a session change on mount.
 	const prevNoteLockSessionUnlocked = usePrevious<boolean>(noteLockSessionUnlocked, noteLockSessionUnlocked);
@@ -189,6 +191,7 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 		if (!noteId) return ()=>{};
 
 		let cancelled = false;
+		let itemChangeRefreshTimeout: ReturnType<typeof setTimeout>|null = null;
 
 		type ChangeEventSlice = { itemId: string; changeId: string };
 		const listener = ({ itemId, changeId }: ChangeEventSlice) => {
@@ -197,16 +200,27 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 			// aren't ignored, most user-activated note changes (e.g. a keypress)
 			// cause the note to refresh. (Undesired refreshes can cause the cursor to jump).
 			const isExternalChange = !(changeId ?? 'unknown').endsWith(editorId);
-			if (itemId === noteId && !cancelled && isExternalChange) {
+			if (itemId !== noteId || cancelled || !isExternalChange) return;
+
+			const reloadRequestAtChange = editorNoteReloadTimeRequestRef.current;
+			if (itemChangeRefreshTimeout) clearTimeout(itemChangeRefreshTimeout);
+			// A sync save emits ItemChange just before it dispatches EDITOR_NOTE_NEEDS_RELOAD.
+			// Yield one task so the reload request can reach this editor first. If its token
+			// changes, the tokened reload handles the update and this generic refresh is skipped.
+			// For other external changes the token remains unchanged, so the refresh proceeds.
+			itemChangeRefreshTimeout = setTimeout(() => {
+				itemChangeRefreshTimeout = null;
+				if (cancelled || editorNoteReloadTimeRequestRef.current !== reloadRequestAtChange) return;
 				if (formNoteRef.current.hasChanged) return;
 				refreshFormNote();
-			}
+			}, 0);
 		};
 		eventManager.on(EventName.ItemChange, listener);
 
 		return () => {
 			eventManager.off(EventName.ItemChange, listener);
 			cancelled = true;
+			if (itemChangeRefreshTimeout) clearTimeout(itemChangeRefreshTimeout);
 		};
 	}, [formNoteRef, noteId, editorId, refreshFormNote]);
 };

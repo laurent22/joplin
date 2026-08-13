@@ -267,6 +267,28 @@ describe('useFormNote', () => {
 		formNote.unmount();
 	});
 
+	it('should let the tokened reload handle sync changes', async () => {
+		const note = await Note.save({ title: 'Original', body: '...' });
+		const onReloadInProgressChange = jest.fn();
+		const props = { ...defaultFormNoteProps, noteId: note.id, editorNoteReloadTimeRequest: 0, onReloadInProgressChange };
+		const formNote = renderHook(hookProps => useFormNote(hookProps), { initialProps: props });
+		await waitFor(() => expect(formNote.result.current.formNote.title).toBe('Original'));
+
+		const loadMock = jest.spyOn(Note, 'load');
+		// A synchronizer save emits ItemChange before dispatching
+		// EDITOR_NOTE_NEEDS_RELOAD. Simulate that ordering here.
+		await Note.save({ id: note.id, title: 'Remote title' });
+		// Ignore Note.load calls internal to Note.save itself.
+		loadMock.mockClear();
+		formNote.rerender({ ...props, editorNoteReloadTimeRequest: 1 });
+		await waitFor(() => expect(loadMock).toHaveBeenCalledTimes(1));
+		await waitFor(() => expect(formNote.result.current.formNote.title).toBe('Remote title'));
+		await waitFor(() => expect(onReloadInProgressChange).toHaveBeenLastCalledWith(false));
+
+		loadMock.mockRestore();
+		formNote.unmount();
+	});
+
 	it('should clear reloadInProgress after overlapping reload requests', async () => {
 		const note = await Note.save({ title: 'Original', body: '...' });
 		const onReloadInProgressChange = jest.fn();
