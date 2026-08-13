@@ -411,6 +411,7 @@ export default class BaseApplication {
 					await shim.setClientCertificate({ certPath, keyPath, domains: domainsExp });
 				} catch (error) {
 					this.logger().error('Failed to set client certificate:', error);
+					await shim.setClientCertificate(null);
 				}
 			},
 			'net.proxyEnabled': async () => {
