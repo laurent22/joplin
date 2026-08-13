@@ -786,8 +786,11 @@ function shimInit(options: ShimInitOptions = null) {
 	};
 
 	shim.proxyAgent = (serverUrl: string, proxyUrl: string) => {
+		const baseSettings = agentSettingsBase(serverUrl);
 		const proxyAgentConfig = {
-			...agentSettingsBase(serverUrl),
+			...baseSettings,
+			requestTls: baseSettings.connect,
+
 			maxSockets: proxySettings.maxConcurrentConnections,
 			uri: proxyUrl,
 			timeout: proxySettings.proxyTimeout * 1000,
