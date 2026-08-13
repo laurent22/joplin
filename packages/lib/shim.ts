@@ -82,11 +82,9 @@ export enum MobilePlatform {
 export type SetClientCertificateOptions = {
 	certPath: string;
 	keyPath: string;
-	caPath: string;
 } | {
 	certPath: null;
 	keyPath: null;
-	caPath: null;
 };
 
 let isTestingEnv_ = false;

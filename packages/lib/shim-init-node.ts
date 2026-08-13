@@ -734,12 +734,12 @@ function shimInit(options: ShimInitOptions = null) {
 
 	let clientKey: string|null = null;
 	let clientCert: string|null = null;
-	let clientCertCa: string|null = null;
 	let clientKeyId = 0;
-	shim.setClientCertificate = async ({ certPath, keyPath, caPath }) => {
+	shim.setClientCertificate = async ({ certPath, keyPath }) => {
 		if (!certPath && !keyPath) {
 			clientKey = null;
 			clientCert = null;
+			clientKeyId ++;
 			return;
 		}
 		if (!certPath || !keyPath) {
@@ -748,7 +748,6 @@ function shimInit(options: ShimInitOptions = null) {
 
 		clientKey = await shim.fsDriver().readFile(keyPath, 'utf-8');
 		clientCert = await shim.fsDriver().readFile(certPath, 'utf-8');
-		clientCertCa = await shim.fsDriver().readFile(caPath, 'utf-8');
 		clientKeyId ++;
 	};
 
@@ -757,9 +756,6 @@ function shimInit(options: ShimInitOptions = null) {
 		ecdhCurve: tlsEcdhCurve,
 		// TODO: Only pass `connect` when a client cert is configured
 		connect: {
-			ca: clientCertCa ? [
-				clientCertCa,
-			] : [],
 			key: clientKey ?? undefined,
 			cert: clientCert ?? undefined,
 		},
