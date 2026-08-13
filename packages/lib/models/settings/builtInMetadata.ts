@@ -2049,7 +2049,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			appTypes: [AppType.Desktop, AppType.Cli],
 			label: () => _('Client certificate'),
-			description: () => _('A path to a directory containing an mTLS client certificate (client-cert.pem), a certificate key file (client-key.pem), and a CA certificate chain (ca-cert.pem).'),
+			description: () => _('A path to a directory containing an mTLS client certificate (client-cert.pem) and a certificate key file (client-key.pem).'),
 			storage: SettingStorage.File,
 		},
 		'net.customCertificates': {
