@@ -392,6 +392,7 @@ export default class BaseApplication {
 					return;
 				}
 				if (!await shim.fsDriver().isDirectory(parentDirectory)) {
+					await shim.setClientCertificate(null);
 					// TODO: Surface this error in the UI
 					this.logger().error('Failed to add client certificate:', parentDirectory, 'is not a directory.');
 					return;
