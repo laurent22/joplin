@@ -820,10 +820,15 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 	// and updating this.state.note immediately causes slow rerenders.
 	//
 	// See https://github.com/laurent22/joplin/issues/10130
-	private onMarkdownEditorTextChange = debounce((event: EditorChangeEvent) => {
-		if (this.reloadInProgress_) return;
+	private debouncedMarkdownEditorTextChange_ = debounce((event: EditorChangeEvent, reloadRequest: number) => {
+		if (this.reloadInProgress_ || reloadRequest !== this.props.editorNoteReloadTimeRequest) return;
 		shared.noteComponent_change(this, 'body', event.value);
 	}, 100);
+
+	private onMarkdownEditorTextChange = (event: EditorChangeEvent) => {
+		if (this.reloadInProgress_) return;
+		this.debouncedMarkdownEditorTextChange_(event, this.props.editorNoteReloadTimeRequest);
+	};
 
 	private onPlainEditorSelectionChange = (event: NativeSyntheticEvent<{ selection: SelectionRange }>) => {
 		this.selection = event.nativeEvent.selection;
