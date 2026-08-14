@@ -591,7 +591,14 @@ export default class BaseItem extends BaseModel {
 		plainItem.updated_time = item.updated_time;
 		plainItem.encryption_cipher_text = '';
 		plainItem.encryption_applied = 0;
-		return ItemClass.save(plainItem, { autoTimestamp: false, changeSource: ItemChange.SOURCE_DECRYPTION });
+		const saved = await ItemClass.save(plainItem, { autoTimestamp: false, changeSource: ItemChange.SOURCE_DECRYPTION });
+
+		// First point where a downloaded note has a readable body to record as the base
+		if (plainItem.type_ === BaseModel.TYPE_NOTE) {
+			await this.saveSyncBaseContent(Setting.value('sync.target'), plainItem.id, plainItem.body ?? '', plainItem.title ?? '');
+		}
+
+		return saved;
 	}
 
 	public static async unserialize(content: string) {
@@ -917,6 +924,14 @@ export default class BaseItem extends BaseModel {
 				params: [syncTarget, itemType, itemId, itemLocation, syncTime, remoteItemUpdatedTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`, base.base_body, base.base_title, base.base_conflict_note_id],
 			},
 		];
+	}
+
+	// Records the note content a sync has just made common to both sides. It is the
+	// ancestor the auto-merge and the conflict resolution work from. The link to any
+	// earlier conflict note is dropped, since it no longer relates to this base.
+	public static async saveSyncBaseContent(syncTarget: number, noteId: string, body: string, title: string) {
+		const sql = 'UPDATE sync_items SET base_body = ?, base_title = ?, base_conflict_note_id = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
+		await this.db().exec(sql, [body, title, '', noteId, ModelType.Note, syncTarget]);
 	}
 
 	public static async syncItemBaseVersion(syncTarget: number, itemType: ModelType, itemId: string): Promise<SyncItemBaseVersion> {

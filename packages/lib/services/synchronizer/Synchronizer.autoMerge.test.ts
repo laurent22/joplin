@@ -185,12 +185,12 @@ describe('Synchronizer.autoMerge', () => {
 		expect((await Note.load(note.id)).title).toBe('Remote title');
 	}));
 
-	it('should not record a base for a note this client only downloaded', (async () => {
+	it('should record a base for a note this client only downloaded', (async () => {
 		const note = await Note.save({ title: 'down title', body: 'down body' });
 		await synchronizerStart();
 
-		// Client 2 only ever downloads this note, it never uploads it, so it never
-		// records a base for it.
+		// Client 2 only ever downloads this note, but the download records a base for
+		// it too, so both sides share an ancestor
 		await switchClient(2);
 		await synchronizerStart();
 		await switchClient(1);
@@ -201,12 +201,10 @@ describe('Synchronizer.autoMerge', () => {
 		await Note.save({ id: note.id, body: 'client 2 edit' });
 		await synchronizerStart();
 
-		// No base means no attribution is possible, so the conflict is left for the
-		// user rather than risking an incorrect merge.
 		const conflicts = await Note.conflictedNotes();
 		expect(conflicts).toHaveLength(1);
 		const state = await ConflictNoteState.byNoteId(conflicts[0].id);
-		expect(state.base_body).toBe('');
+		expect(state.base_body).toBe('down body');
 	}));
 
 	it('should skip auto-merge for locked notes and fall back to a plain conflict note', (async () => {

@@ -1061,7 +1061,12 @@ export default class Synchronizer {
 							if (!content.user_updated_time) content.user_updated_time = content.updated_time;
 							if (!content.user_created_time) content.user_created_time = content.created_time;
 
-							const baseVersion = await BaseItem.syncItemBaseVersion(syncTargetId, content.type_, content.id);
+							// The downloaded version becomes the base, so both sides share an ancestor.
+							// Encrypted notes have no readable body yet and are recorded once decrypted.
+							const previousBase = await BaseItem.syncItemBaseVersion(syncTargetId, content.type_, content.id);
+							const baseVersion = content.type_ === BaseModel.TYPE_NOTE && !content.encryption_applied ?
+								{ ...previousBase, base_body: (content as NoteEntity).body ?? '', base_title: (content as NoteEntity).title ?? '' } :
+								previousBase;
 
 							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- BaseItem.save options bag with route-specific keys (isNew, oldItem) added below
 							const options: any = {
