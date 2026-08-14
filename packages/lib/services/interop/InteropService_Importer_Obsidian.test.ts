@@ -5,6 +5,8 @@ import Tag from '../../models/Tag';
 import { createTempDir, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import InteropService from './InteropService';
 
+// cspell:ignore हिन्दी
+
 describe('InteropService_Importer_Obsidian', () => {
 	let tempDir: string;
 
@@ -41,6 +43,57 @@ describe('InteropService_Importer_Obsidian', () => {
 		expect(note.body).toBe(sourceBody);
 	});
 
+	it('should keep code examples literal', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		const codeExamples = new Map([
+			['inline-code', '`example #fake [[Note]]`'],
+			['double-backtick-inline-code', '``example ` #fake [[Note]]``'],
+			['backtick-code-block', '```text\n#fake\n[[Note]]\n![[photo.png]]\n```'],
+			['tilde-code-block', '~~~text\n#fake\n[[Note]]\n![[photo.png]]\n~~~'],
+			['nested-code-block', '````md\n```text\n#fake\n[[Note]]\n```\n````'],
+			['indented-code-block', '    #fake [[Note]] ![[photo.png]]'],
+			['unclosed-code-block', '```text\n#fake\n[[Note]]\n![[photo.png]]'],
+		]);
+		await fs.mkdirp(vaultPath);
+		for (const [title, sourceBody] of codeExamples) {
+			await fs.writeFile(`${vaultPath}/${title}.md`, sourceBody);
+		}
+		await fs.writeFile(`${vaultPath}/Note.md`, 'Target note.');
+		await fs.writeFile(`${vaultPath}/photo.png`, 'Photo content');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		for (const [title, sourceBody] of codeExamples) {
+			const note = await Note.loadByTitle(title);
+			const tags = (await Tag.tagsByNoteId(note.id)).map(tag => tag.title);
+
+			expect(note.body).toBe(sourceBody);
+			expect(tags).toEqual([]);
+		}
+	});
+
+	it('should skip Obsidian config and trash folders', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		await fs.mkdirp(`${vaultPath}/.obsidian/plugins/example`);
+		await fs.mkdirp(`${vaultPath}/.trash`);
+		await fs.writeFile(`${vaultPath}/kept.md`, 'Keep this note.');
+		await fs.writeFile(`${vaultPath}/.obsidian/plugins/example/README.md`, 'Plugin documentation.');
+		await fs.writeFile(`${vaultPath}/.trash/deleted.md`, 'Deleted note.');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const notes = await Note.all();
+
+		expect(notes.map(note => note.title)).toEqual(['kept']);
+		expect(notes[0].body).toBe('Keep this note.');
+	});
+
 	it('should use YAML title and remove YAML', async () => {
 		const vaultPath = `${tempDir}/My vault`;
 		await fs.mkdirp(vaultPath);
@@ -63,7 +116,7 @@ describe('InteropService_Importer_Obsidian', () => {
 		expect(note.body).toBe('Hello.');
 	});
 
-	it('should import YAML tags and remove YAML', async () => {
+	it('should import YAML tags, remove tag YAML, and preserve cssclasses', async () => {
 		const vaultPath = `${tempDir}/My vault`;
 		await fs.mkdirp(vaultPath);
 		await fs.writeFile(`${vaultPath}/yaml.md`, [
@@ -71,6 +124,8 @@ describe('InteropService_Importer_Obsidian', () => {
 			'tags:',
 			'  - work',
 			'  - home',
+			'cssclasses:',
+			'  - red-border',
 			'---',
 			'',
 			'Hello.',
@@ -89,6 +144,11 @@ describe('InteropService_Importer_Obsidian', () => {
 		const tags = (await Tag.tagsByNoteId(note.id)).map(tag => tag.title).sort();
 
 		expect(note.body).toBe([
+			'---',
+			'cssclasses:',
+			'  - red-border',
+			'---',
+			'',
 			'Hello.',
 			'',
 			'## What you should expect',
@@ -293,6 +353,26 @@ describe('InteropService_Importer_Obsidian', () => {
 		expect(tags).toEqual(['café']);
 	});
 
+	it('should import Unicode tags containing combining marks and symbols', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		const sourceBody = '#हिन्दी #cafe\u0301 #✓';
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/unicode-tags.md`, sourceBody);
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const note = await Note.loadByTitle('unicode-tags');
+		const tags = (await Tag.tagsByNoteId(note.id)).map(tag => tag.title);
+		const expectedTags = ['हिन्दी', 'café', '✓'];
+
+		expect(note.body).toBe(sourceBody);
+		expect(tags).toHaveLength(expectedTags.length);
+		expect(tags).toEqual(expect.arrayContaining(expectedTags));
+	});
+
 	it('should keep web link', async () => {
 		const vaultPath = `${tempDir}/My vault`;
 		await fs.mkdirp(vaultPath);
@@ -357,7 +437,8 @@ describe('InteropService_Importer_Obsidian', () => {
 	it('should import linked attachment', async () => {
 		const vaultPath = `${tempDir}/My vault`;
 		await fs.mkdirp(vaultPath);
-		await fs.writeFile(`${vaultPath}/attachment.md`, '[Guide](guide.pdf)');
+		// Test normal Markdown link, attachment wikilink, and attachment wikilink with shown text.
+		await fs.writeFile(`${vaultPath}/attachment.md`, '[Guide](guide.pdf) [[guide.pdf]] [[guide.pdf|Open guide]]');
 		await fs.writeFile(`${vaultPath}/guide.pdf`, 'Guide content');
 
 		await InteropService.instance().import({
@@ -370,7 +451,8 @@ describe('InteropService_Importer_Obsidian', () => {
 		const resource = await Resource.load(resourceIds[0]);
 
 		expect(resourceIds).toHaveLength(1);
-		expect(note.body).toBe(`[Guide](:/${resource.id})`);
+		// All three links should point to same imported Joplin resource.
+		expect(note.body).toBe(`[Guide](:/${resource.id}) [guide.pdf](:/${resource.id}) [Open guide](:/${resource.id})`);
 		expect(resource.title).toBe('guide.pdf');
 	});
 
@@ -401,6 +483,30 @@ describe('InteropService_Importer_Obsidian', () => {
 			'',
 			'With Note.md: Joplin link shown as Open.',
 		].join('\n'));
+	});
+
+	it('should resolve wikilinks using front matter aliases', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/Source.md`, '[[Work|Project plan]] [[Project plan]]');
+		await fs.writeFile(`${vaultPath}/Work.md`, [
+			'---',
+			'aliases:',
+			'  - Project plan',
+			'---',
+			'',
+			'Target note.',
+		].join('\n'));
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const sourceNote = await Note.loadByTitle('Source');
+		const targetNote = await Note.loadByTitle('Work');
+
+		expect(sourceNote.body).toBe(`[Project plan](:/${targetNote.id}) [Project plan](:/${targetNote.id})`);
 	});
 
 	it('should import folder-path wikilink', async () => {
@@ -465,6 +571,41 @@ describe('InteropService_Importer_Obsidian', () => {
 		expect(resource.title).toBe('photo.png');
 	});
 
+	it('should import non-image embeds as links', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/embed.md`, [
+			'![[Document.pdf]]',
+			'![[Audio.ogg]]',
+			'![[Video.mp4]]',
+			'![[Note]]',
+		].join('\n'));
+		await fs.writeFile(`${vaultPath}/Document.pdf`, 'PDF content');
+		await fs.writeFile(`${vaultPath}/Audio.ogg`, 'Audio content');
+		await fs.writeFile(`${vaultPath}/Video.mp4`, 'Video content');
+		await fs.writeFile(`${vaultPath}/Note.md`, 'Note content');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const note = await Note.loadByTitle('embed');
+		const targetNote = await Note.loadByTitle('Note');
+		const resourceIds = await Note.linkedResourceIds(note.body);
+		const resources = await Promise.all(resourceIds.map(resourceId => Resource.load(resourceId)));
+		const resourceIdByTitle = new Map(resources.map(resource => [resource.title, resource.id]));
+
+		expect(resources.map(resource => resource.title).sort()).toEqual(['Audio.ogg', 'Document.pdf', 'Video.mp4']);
+		expect(note.body).toBe([
+			`[Document.pdf](:/${resourceIdByTitle.get('Document.pdf')})`,
+			`[Audio.ogg](:/${resourceIdByTitle.get('Audio.ogg')})`,
+			`[Video.mp4](:/${resourceIdByTitle.get('Video.mp4')})`,
+			`[Note](:/${targetNote.id})`,
+		].join('\n'));
+		expect(await Note.linkedNoteIds(note.body)).toEqual([targetNote.id]);
+	});
+
 	it('should import heading wikilink', async () => {
 		const vaultPath = `${tempDir}/My vault`;
 		await fs.mkdirp(vaultPath);
@@ -480,5 +621,22 @@ describe('InteropService_Importer_Obsidian', () => {
 		const targetNote = await Note.loadByTitle('Note');
 
 		expect(note.body).toBe(`[Note#Part](:/${targetNote.id}#part) [[Missing#Part]]`);
+	});
+
+	it('should import nested heading wikilink', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/heading.md`, '[[Note#Parent#Child]]');
+		await fs.writeFile(`${vaultPath}/Note.md`, '# Parent\n\n## Child');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const note = await Note.loadByTitle('heading');
+		const targetNote = await Note.loadByTitle('Note');
+
+		expect(note.body).toBe(`[Note#Parent#Child](:/${targetNote.id}#child)`);
 	});
 });

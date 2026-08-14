@@ -343,3 +343,4 @@ Koofr
 undecryptable
 wikilink
 wikilinks
+cssclasses
