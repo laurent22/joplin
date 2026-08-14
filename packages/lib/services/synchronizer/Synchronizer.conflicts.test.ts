@@ -90,12 +90,20 @@ describe('Synchronizer.conflicts', () => {
 		await synchronizerStart();
 
 		await switchClient(1);
-		await sleep(0.1);
-		const localChange = await Note.save({ id: note.id, title: 'local change' });
+		let localChange: NoteEntity = null;
+		const loadItemsByIds = BaseItem.loadItemsByIds.bind(BaseItem);
+		const loadItemsByIdsMock = jest.spyOn(BaseItem, 'loadItemsByIds').mockImplementation(async ids => {
+			const items = await loadItemsByIds(ids);
+			if (ids.includes(note.id)) {
+				await sleep(0.1);
+				localChange = await Note.save({ id: note.id, title: 'local change' });
+			}
+			return items;
+		});
 
-		// Simulate an edit made after this sync's upload phase but before the
-		// remotely changed note is processed by delta.
 		await synchronizerStart(null, { syncSteps: ['delta'] });
+		loadItemsByIdsMock.mockRestore();
+
 		expect((await Note.load(note.id)).title).toBe('local change');
 		const syncItem = await BaseItem.syncItem(syncTargetId(), note.id, { fields: ['sync_time'] });
 		expect(syncItem.sync_time).toBeLessThan(localChange.updated_time);
