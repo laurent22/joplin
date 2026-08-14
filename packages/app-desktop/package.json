@@ -229,7 +229,8 @@
     "tinymce": "6.8.5",
     "ts-jest": "29.4.6",
     "ts-node": "10.9.2",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "undici": "8.10.0"
   },
   "dependencies": {
     "@electron/remote": "2.1.3",

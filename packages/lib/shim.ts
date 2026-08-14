@@ -85,6 +85,10 @@ export type SetClientCertificateOptions = {
 	domains: RegExp;
 };
 
+export interface HttpAgentOptions {
+	timeout?: number;
+}
+
 let isTestingEnv_ = false;
 
 // We need to ensure that there's only one instance of React being used by all
@@ -437,7 +441,7 @@ const shim = {
 	},
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See httpAgent_ above
-	httpAgent: (_url: string): any => {
+	httpAgent: (_url: string, _options?: HttpAgentOptions): any => {
 		throw new Error('Not implemented: httpAgent');
 	},
 

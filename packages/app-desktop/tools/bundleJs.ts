@@ -139,12 +139,18 @@ const bundleUndici = async () => {
 	// Undici needs special configuration, since it needs node:timers and node's performance API as globals,
 	// rather than the Electron timers to work correctly.
 	const undiciBuilder = await makeBuildContext(
-		require.resolve('undici'), true, false, { outfile: undiciPath, format: 'cjs' },
+		require.resolve('undici'), true, false, { outfile: undiciPath, format: 'cjs', sourcemap: false, minify: false },
 	);
 	await undiciBuilder.rebuild();
 	await writeFile(undiciPath, `
+		const { Buffer, Blob, File } = require('node:buffer');
+		const { TextDecoder, TextEncoder } = require('node:util');
+		const { URLSearchParams, URL } = require('node:url');
+		const { ReadableStream } = require('node:stream/web');
+		const { MessageChannel, MessagePort } = require('node:worker_threads');
 		const { setTimeout, setInterval, clearTimeout, clearInterval } = require('node:timers');
 		const { performance } = require('node:perf_hooks');
+
 		${await readFile(undiciPath, 'utf-8')}
 	`, 'utf-8');
 	await undiciBuilder.dispose();

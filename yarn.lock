@@ -12573,6 +12573,7 @@ __metadata:
     ts-jest: "npm:29.4.6"
     ts-node: "npm:10.9.2"
     typescript: "npm:5.9.3"
+    undici: "npm:8.10.0"
   languageName: unknown
   linkType: soft
 

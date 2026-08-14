@@ -1,4 +1,4 @@
-import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, PdfInfo, PdfPageImage } from './shim';
+import shim, { CreatePdfFromImagesOptions, CreateResourceFromPathOptions, HttpAgentOptions, PdfInfo, PdfPageImage } from './shim';
 import createAccessiblePdf from './services/ocr/utils/createAccessiblePdf';
 import GeolocationNode from './geolocation-node';
 import { setLocale, defaultLocale, closestSupportedLocale } from './locale';
@@ -23,14 +23,14 @@ import { cpus } from 'os';
 import { pathToFileURL } from 'url';
 // Use fetch from undici rather than the built-in fetch: Undici's fetch provides
 // more information when fetch fails.
-import { Agent, fetch, FormData, ProxyAgent } from 'undici';
+import { Agent, Request, Response, Headers, fetch, FormData, ProxyAgent, interceptors } from 'undici';
 import tls from 'tls';
 import type PdfJs from './utils/types/pdfJs';
 import { _ } from './locale';
 const toRelative = require('relative');
 import timers from 'timers';
-import zlib from 'zlib';
 import dgram from 'dgram';
+import { pipeline } from 'stream/promises';
 
 interface ProxySettings {
 	maxConcurrentConnections?: number;
@@ -39,14 +39,6 @@ interface ProxySettings {
 	proxyUrl?: string;
 }
 const proxySettings: ProxySettings = {};
-
-function fileExists(filePath: string) {
-	try {
-		return fs.statSync(filePath).isFile();
-	} catch (error) {
-		return false;
-	}
-}
 
 function resolveProxyUrl(proxyUrl: string) {
 	return (
@@ -66,34 +58,6 @@ function callsites(): NodeJS.CallSite[] {
 	Error.prepareStackTrace = _prepareStackTrace;
 	return stack;
 }
-
-const gunzipFile = function(source: string, destination: string) {
-	if (!fileExists(source)) {
-		throw new Error(`No such file: ${source}`);
-	}
-
-	return new Promise((resolve, reject) => {
-		// prepare streams
-		const src = fs.createReadStream(source);
-		const dest = fs.createWriteStream(destination);
-
-		// extract the archive
-		src.pipe(zlib.createGunzip()).pipe(dest);
-
-		// callback on extract completion
-		dest.on('close', () => {
-			resolve(null);
-		});
-
-		src.on('error', () => {
-			reject();
-		});
-
-		dest.on('error', () => {
-			reject();
-		});
-	});
-};
 
 function setupProxySettings(options: ProxySettings) {
 	proxySettings.maxConcurrentConnections = options.maxConcurrentConnections;
@@ -563,8 +527,7 @@ function shimInit(options: ShimInitOptions = null) {
 		}, options);
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- url is passed as a string but reassigned to a parsed UrlWithStringQuery by urlParse below
-	shim.fetchBlob = async function(url: any, options: FetchBlobOptions) {
+	shim.fetchBlob = async function(url: string, options: FetchBlobOptions) {
 		if (!options || !options.path) throw new Error('fetchBlob: target file path is missing');
 		if (!options.method) options.method = 'GET';
 		// if (!('maxRetry' in options)) options.maxRetry = 5;
@@ -574,130 +537,79 @@ function shimInit(options: ShimInitOptions = null) {
 		if (!options.maxRedirects) options.maxRedirects = 21;
 		if (!options.timeout) options.timeout = undefined;
 
-		const urlParse = require('url').parse;
-
-		url = urlParse(url.trim());
 		const method = options.method ? options.method : 'GET';
-		const http = url.protocol.toLowerCase() === 'http:' ? require('follow-redirects').http : require('follow-redirects').https;
 		const headers = options.headers ? options.headers : {};
 		const filePath = options.path;
 		const downloadController = options.downloadController;
 
-		function makeResponse(response: { statusCode: number; statusMessage: string; headers: Record<string, string | string[]> }) {
+		function makeResponse(response: Response) {
 			return {
-				ok: response.statusCode < 400,
+				ok: response.status < 400,
 				path: filePath,
 				text: () => {
-					return response.statusMessage;
+					return response.statusText;
 				},
 				json: () => {
-					return { message: `${response.statusCode}: ${response.statusMessage}` };
+					return { message: `${response.status}: ${response.statusText}` };
 				},
-				status: response.statusCode,
+				status: response.status,
 				headers: response.headers,
 			};
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- requestOptions is the node http/https request options bag plus a runtime-set `agent` field
-		const requestOptions: any = {
-			protocol: url.protocol,
-			host: url.hostname,
-			port: url.port,
-			method: method,
-			path: url.pathname + (url.query ? `?${url.query}` : ''),
-			headers: headers,
-			timeout: options.timeout,
-			maxRedirects: options.maxRedirects,
-		};
-
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
-		requestOptions.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url.href, resolvedProxyUrl) : shim.httpAgent(url.href);
+		const agent: Agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl, options) : shim.httpAgent(url, options);
+		const abortController = new AbortController();
+		const requestOptions = new Request(url, {
+			method: method,
+			headers: new Headers(headers),
+			dispatcher: agent.compose([
+				interceptors.redirect({ maxRedirections: options.maxRedirects }),
+				interceptors.decompress(),
+			]),
+			signal: abortController.signal,
+		});
 
 		const doFetchOperation = async () => {
-			return new Promise((resolve, reject) => {
-				let file: fs.WriteStream | null = null;
+			const response = await fetch(requestOptions);
 
-				const cleanUpOnError = (error: Error) => {
-					// We ignore any unlink error as we only want to report on the main error
-					void fs.unlink(filePath)
-					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-						.catch(() => {})
-					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-						.then(() => {
-							if (file) {
-								file.close(() => {
-									file = null;
-									reject(error);
-								});
-							} else {
-								reject(error);
+			try {
+				const notifyController = async function*(source: AsyncIterable<Buffer>) {
+					let cancelWithError: Error|null = null;
+					const chunkHandler = downloadController.handleChunk({
+						destroy: (error) => {
+							if (!cancelWithError) {
+								cancelWithError = error ?? new Error('Cancelled');
+								abortController.abort(error);
 							}
-						});
+						},
+					});
+
+					for await (const chunk of source) {
+						chunkHandler(chunk);
+
+						if (cancelWithError) throw cancelWithError;
+
+						yield chunk;
+					}
 				};
-
-				try {
-					// Note: relative paths aren't supported
-					file = fs.createWriteStream(filePath);
-
-					file.on('error', (error: Error) => {
-						cleanUpOnError(error);
-					});
-
-					const requestStart = new Date();
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- http is dynamically required from follow-redirects (http or https variant); response is its IncomingMessage
-					const request = http.request(requestOptions, (response: any) => {
-
-						if (downloadController) {
-							response.on('data', downloadController.handleChunk(request));
-						}
-
-						response.pipe(file);
-
-						const isGzipped = response.headers['content-encoding'] === 'gzip';
-
-						file.on('finish', () => {
-							file.close(async () => {
-								if (isGzipped) {
-									const gzipFilePath = `${filePath}.gzip`;
-									await shim.fsDriver().move(filePath, gzipFilePath);
-
-									try {
-										await gunzipFile(gzipFilePath, filePath);
-										// Calling request.destroy() within the downloadController can cause problems.
-										// The response.pipe(file) will continue even after request.destroy() is called,
-										// potentially causing the same promise to resolve while the cleanUpOnError
-										// is removing the file that have been downloaded by this function.
-										if (request.destroyed) return;
-										resolve(makeResponse(response));
-									} catch (error) {
-										cleanUpOnError(error);
-									}
-
-									await shim.fsDriver().remove(gzipFilePath);
-								} else {
-									if (request.destroyed) return;
-									resolve(makeResponse(response));
-								}
-							});
-						});
-					});
-
-					request.on('timeout', () => {
-						// We choose to not destroy the request when a timeout value is not specified to keep
-						// the behavior we had before the addition of this event handler.
-						if (!requestOptions.timeout) return;
-						request.destroy(new Error(`Request timed out. Timeout value: ${requestOptions.timeout}ms. Actual connection time: ${new Date().getTime() - requestStart.getTime()}ms`));
-					});
-
-					request.on('error', (error: Error) => {
-						cleanUpOnError(error);
-					});
-
-					request.end();
-				} catch (error) {
-					cleanUpOnError(error);
+				if (downloadController) {
+					await pipeline(
+						response.body,
+						notifyController,
+						fs.createWriteStream(filePath),
+					);
+				} else {
+					await pipeline(
+						response.body,
+						fs.createWriteStream(filePath),
+					);
 				}
-			});
+				return makeResponse(response);
+			} catch (error) {
+				await fs.unlink(filePath);
+				throw error;
+			}
 		};
 
 		return shim.fetchWithRetry(doFetchOperation, options);
@@ -755,13 +667,14 @@ function shimInit(options: ShimInitOptions = null) {
 		clientCertificates = [{ privateKey: clientKey, certificate: clientCert, domains }];
 	};
 
-	const agentSettingsBase = (url: string) => {
+	const agentSettingsBase = (url: string, options?: HttpAgentOptions) => {
 		const parsedUrl = new URL(url);
 		const clientCertPair = parsedUrl.protocol === 'https:' ? clientCertificates.find(pair => {
 			return parsedUrl.hostname.match(pair.domains);
 		}) : null;
 
 		return {
+			bodyTimeout: options?.timeout,
 			keepAliveMsecs: 5000,
 			ecdhCurve: tlsEcdhCurve,
 			connect: clientCertPair ? {
@@ -771,9 +684,9 @@ function shimInit(options: ShimInitOptions = null) {
 		};
 	};
 
-	shim.httpAgent = url => {
+	shim.httpAgent = (url, options) => {
 		const agentSettings = {
-			...agentSettingsBase(url),
+			...agentSettingsBase(url, options),
 			maxSockets: 1,
 		};
 		if (!shim.httpAgent_ || !fastDeepEqual(shim.httpAgent_.lastSettings, agentSettings)) {
@@ -785,8 +698,8 @@ function shimInit(options: ShimInitOptions = null) {
 		return shim.httpAgent_.agent;
 	};
 
-	shim.proxyAgent = (serverUrl: string, proxyUrl: string) => {
-		const baseSettings = agentSettingsBase(serverUrl);
+	shim.proxyAgent = (serverUrl: string, proxyUrl: string, options?: HttpAgentOptions) => {
+		const baseSettings = agentSettingsBase(serverUrl, options);
 		const proxyAgentConfig = {
 			...baseSettings,
 			requestTls: baseSettings.connect,
