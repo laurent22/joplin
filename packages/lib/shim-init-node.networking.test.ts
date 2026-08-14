@@ -1,4 +1,4 @@
-import { Interceptable, MockAgent, setGlobalDispatcher } from 'undici';
+import { Interceptable, MockAgent } from 'undici';
 import { shimInit } from './shim-init-node';
 import shim from './shim';
 import { createTempDir } from './testing/test-utils';
@@ -11,7 +11,6 @@ describe('shim-init-node.networking', () => {
 	let tempDir: string;
 	beforeEach(async () => {
 		mockAgent = new MockAgent();
-		setGlobalDispatcher(mockAgent);
 		mockPool = mockAgent.get('http://127.0.0.1:22300');
 
 		shimInit();
