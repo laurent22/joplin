@@ -1017,7 +1017,7 @@ export default class Synchronizer {
 										// Nothing to do, and no need to fetch the content
 									} else {
 										content = await loadContent();
-										// Load the latest updated_time, otherwise a change made during a long delta step could overwrite the remote version without making a conflict
+										// Load the latest updated_time, otherwise a change made during a long delta step could overwrite the local version without making a conflict
 										const latestLocalState = await ItemClass.load(remoteId, { fields: ['updated_time'] });
 										const localUpdatedTime = latestLocalState ? latestLocalState.updated_time : local.updated_time;
 										if (content && content.updated_time > localUpdatedTime) {
