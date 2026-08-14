@@ -136,8 +136,9 @@ const makeBuildContext = (entryPoint: string, renderer: boolean, addDebugStats: 
 };
 
 const bundleUndici = async () => {
-	// Undici needs special configuration, since it needs node:timers and node's performance API as globals,
-	// rather than the Electron timers to work correctly.
+	// Undici needs special configuration, since it needs many of the NodeJS globals, rather than
+	// the versions exposed by Electron, to function correctly. Using the Electron globals can cause
+	// renderer process crashes when fetching certain URLs and errors to be logged to the console.
 	const undiciBuilder = await makeBuildContext(
 		require.resolve('undici'), true, false, { outfile: undiciPath, format: 'cjs', sourcemap: false, minify: false },
 	);
