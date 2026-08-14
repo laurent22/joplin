@@ -106,6 +106,7 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 	const prevNoteLockSessionUnlocked = usePrevious<boolean>(noteLockSessionUnlocked, noteLockSessionUnlocked);
 
 	useQueuedAsyncEffect(async (event) => {
+		if (event.cancelled) return;
 		if (formNoteRefreshRequest.counter <= 0) return;
 		const forceRefresh = formNoteRefreshRequest.force;
 		if (formNoteRef.current.hasChanged && !forceRefresh) {
