@@ -23,15 +23,20 @@ describe('shim-init-node.networking', () => {
 		await remove(tempDir);
 	});
 
-	test('fetchBlob should download a file', async () => {
+	test.each([
+		200,
+		// Should still download the file for error responses (matches the
+		// behavior of fetchBlob before switching to an undici implementation)
+		400,
+	])('should download a file to disk when the server responds with code %d', async (code) => {
 		mockPool.intercept({
 			path: '/file.txt',
 			method: 'GET',
-		}).reply(200, 'This is a test!');
+		}).reply(code, 'This is a test!');
 
 		const path = join(tempDir, 'test.txt');
 		const response = await shim.fetchBlob('http://127.0.0.1:22300/file.txt', { path });
-		expect(response.status).toBe(200);
+		expect(response.status).toBe(code);
 		expect(await readFile(path, 'utf-8')).toBe('This is a test!');
 	});
 });
