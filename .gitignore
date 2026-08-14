@@ -1937,6 +1937,7 @@ packages/lib/services/whiteboard/presetColors.js
 packages/lib/services/whiteboard/resolveRef.js
 packages/lib/services/whiteboard/serialize.js
 packages/lib/services/whiteboard/whiteboard.test.js
+packages/lib/shim-init-node.networking.test.js
 packages/lib/shim-init-node.test.js
 packages/lib/shim-init-node.js
 packages/lib/shim.js
