@@ -78,6 +78,35 @@ describe('Synchronizer.conflicts', () => {
 		expect(syncItem.sync_time).toBeLessThan(note1.updated_time);
 	}));
 
+	it('should leave changes made after the upload phase for the next sync', (async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'original', parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		await sleep(0.1);
+		await Note.save({ id: note.id, title: 'remote change' });
+		await synchronizerStart();
+
+		await switchClient(1);
+		await sleep(0.1);
+		const localChange = await Note.save({ id: note.id, title: 'local change' });
+
+		// Simulate an edit made after this sync's upload phase but before the
+		// remotely changed note is processed by delta.
+		await synchronizerStart(null, { syncSteps: ['delta'] });
+		expect((await Note.load(note.id)).title).toBe('local change');
+		const syncItem = await BaseItem.syncItem(syncTargetId(), note.id, { fields: ['sync_time'] });
+		expect(syncItem.sync_time).toBeLessThan(localChange.updated_time);
+
+		// The following upload phase sees both changes and uses the existing
+		// conflict handling path.
+		await synchronizerStart();
+		expect((await Note.load(note.id)).title).toBe('remote change');
+		expect((await Note.conflictedNotes()).map(note => note.title)).toContain('local change');
+	}));
+
 	it('should resolve folders conflicts', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		await Note.save({ title: 'un', parent_id: folder1.id });

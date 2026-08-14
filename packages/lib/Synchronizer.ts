@@ -1017,14 +1017,18 @@ export default class Synchronizer {
 										// Nothing to do, and no need to fetch the content
 									} else {
 										content = await loadContent();
-										if (content && content.updated_time > local.updated_time) {
+										// Load the latest updated_time, otherwise a change made during a long delta step could overwrite the remote version without making a conflict
+										const latestLocalState = await ItemClass.load(remoteId, { fields: ['updated_time'] });
+										const localUpdatedTime = latestLocalState ? latestLocalState.updated_time : local.updated_time;
+										if (content && content.updated_time > localUpdatedTime) {
 											action = SyncAction.UpdateLocal;
 											reason = 'remote is more recent than local';
 										} else if (enableEnhancedBasicDeltaAlgorithm()) {
+											const syncItem = await BaseItem.syncItem(syncTargetId, local.id, { fields: ['sync_time'] });
 											// When the enhanced basic delta algorithm is first used, all items are rescanned and we need to persist the remoteItemUpdatedTime
 											// to set up the initial synced state. This also catches the case if content.updated_time < local.updated_time due to manual manipulation
 											// of the md files, to prevent these items being continually fetched on every sync
-											await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time, remote.updated_time);
+											await ItemClass.saveSyncTime(syncTargetId, local, syncItem.sync_time, remote.updated_time);
 										}
 									}
 								}
