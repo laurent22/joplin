@@ -1095,4 +1095,20 @@ describe('reducer', () => {
 		expect(state.backgroundWindows.secondary.editorNoteReloadTimeRequest).toBe(now);
 		jest.useRealTimers();
 	});
+
+	it('should generate unique reload tokens within the same millisecond', async () => {
+		jest.useFakeTimers();
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(1, folders[0]);
+		let state = initTestState(folders, 0, notes, [0]);
+		const now = Date.now();
+
+		state = reducer(state, { type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId: notes[0].id });
+		expect(state.editorNoteReloadTimeRequest).toBe(now);
+
+		state = reducer(state, { type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId: notes[0].id });
+		expect(state.editorNoteReloadTimeRequest).toBe(now + 1);
+
+		jest.useRealTimers();
+	});
 });

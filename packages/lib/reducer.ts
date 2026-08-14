@@ -1620,7 +1620,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			{
 				for (const windowState of stateUtils.allWindowStates(draft)) {
 					if (!action.noteId || stateUtils.selectedNoteId(windowState) === action.noteId) {
-						windowState.editorNoteReloadTimeRequest = Date.now();
+						windowState.editorNoteReloadTimeRequest = Math.max(Date.now(), windowState.editorNoteReloadTimeRequest + 1);
 					}
 				}
 			}
