@@ -38,7 +38,7 @@
     "formidable": "2.1.2",
     "fs-extra": "11.3.5",
     "html-entities": "1.4.0",
-    "jquery": "3.7.1",
+    "jquery": "4.0.0",
     "knex": "3.2.10",
     "koa": "2.16.4",
     "ldapts": "8.1.7",
