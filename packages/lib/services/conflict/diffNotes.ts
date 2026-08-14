@@ -58,6 +58,9 @@ const splitLines = (text: string) => {
 	return { original, normalised: original.map(normaliseLine) };
 };
 
+// Stable regions keep their original text, while unstable regions use normalised text.
+// KNOWN LIMITATION: trailing-whitespace-only changes can be lost because the
+// normalised line matches the base and the original is taken from the base.
 const originalRegionLines = (region: StableRegion, sides: Record<'a' | 'o' | 'b', string[]>): string[] => {
 	const source = sides[region.buffer];
 	const originals = source.slice(region.bufferStart, region.bufferStart + region.bufferLength);
@@ -104,6 +107,9 @@ export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string):
 		return { mergedText: mergedParts.join('\n'), sections };
 	}
 
+	// KNOWN LIMITATION: when the base has consecutive identical lines, node-diff3
+	// may match an edit to the wrong line, which can produce duplicate content.
+	// Fixing this would require changing how the merge is done.
 	const regions: Region[] = diff3MergeRegions(localLines.normalised, baseLines.normalised, remoteLines.normalised);
 
 	const sides = { a: localLines.original, o: baseLines.original, b: remoteLines.original };
