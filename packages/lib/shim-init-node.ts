@@ -510,8 +510,7 @@ function shimInit(options: ShimInitOptions = null) {
 		} catch (error) { // If the url is not valid, a TypeError will be thrown
 			throw new Error(`Not a valid URL: ${url}`);
 		}
-		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
-		const agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : shim.httpAgent(url);
+		const agent = shim.httpAgent(url);
 		return shim.fetchWithRetry(async () => {
 			try {
 				return await fetch(url, { ...options, dispatcher: agent });
@@ -557,8 +556,7 @@ function shimInit(options: ShimInitOptions = null) {
 			};
 		}
 
-		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
-		const agent: Agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl, options) : shim.httpAgent(url, options);
+		const agent: Agent = shim.httpAgent(url, options);
 		const abortController = new AbortController();
 		const requestOptions = new Request(url, {
 			method: method,
@@ -685,31 +683,39 @@ function shimInit(options: ShimInitOptions = null) {
 	};
 
 	shim.httpAgent = (url, options) => {
-		const agentSettings = {
-			...agentSettingsBase(url, options),
-			maxSockets: 1,
-		};
-		if (!shim.httpAgent_ || !fastDeepEqual(shim.httpAgent_.lastSettings, agentSettings)) {
-			shim.httpAgent_ = {
-				lastSettings: agentSettings,
-				agent: new Agent(agentSettings),
+		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
+		const lastSettings = shim.httpAgent_?.lastSettings;
+
+		if (resolvedProxyUrl && proxySettings.proxyEnabled) {
+			const baseSettings = agentSettingsBase(url, options);
+			const agentSettings = {
+				...baseSettings,
+				requestTls: baseSettings.connect,
+
+				maxSockets: proxySettings.maxConcurrentConnections,
+				uri: resolvedProxyUrl,
+				timeout: proxySettings.proxyTimeout * 1000,
 			};
+			if (!fastDeepEqual(lastSettings, agentSettings)) {
+				shim.httpAgent_ = {
+					lastSettings: agentSettings,
+					agent: new ProxyAgent(agentSettings),
+				};
+			}
+		} else {
+			const agentSettings = {
+				...agentSettingsBase(url, options),
+				maxSockets: 1,
+			};
+			if (!fastDeepEqual(lastSettings, agentSettings)) {
+				shim.httpAgent_ = {
+					lastSettings: agentSettings,
+					agent: new Agent(agentSettings),
+				};
+			}
 		}
+
 		return shim.httpAgent_.agent;
-	};
-
-	shim.proxyAgent = (serverUrl: string, proxyUrl: string, options?: HttpAgentOptions) => {
-		const baseSettings = agentSettingsBase(serverUrl, options);
-		const proxyAgentConfig = {
-			...baseSettings,
-			requestTls: baseSettings.connect,
-
-			maxSockets: proxySettings.maxConcurrentConnections,
-			uri: proxyUrl,
-			timeout: proxySettings.proxyTimeout * 1000,
-		};
-
-		return new ProxyAgent(proxyAgentConfig);
 	};
 
 	shim.openOrCreateFile = (filepath, defaultContents) => {

@@ -126,8 +126,6 @@ const shim = {
 	fsDriver_: null as any,
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- http agent set per-platform (node https.Agent, RN noop); accessed structurally
 	httpAgent_: null as any,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- proxy agent set per-platform; accessed structurally
-	proxyAgent: null as any,
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See electronBridge_
 	electronBridge: (): any => {
