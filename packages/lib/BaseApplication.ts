@@ -1,6 +1,6 @@
 import Setting, { Env } from './models/Setting';
 import Logger, { TargetType, LoggerWrapper } from '@joplin/utils/Logger';
-import shim from './shim';
+import shim, { SetClientCertificateOptions } from './shim';
 import { setupProxySettings } from './shim-init-node';
 import BaseService from './services/BaseService';
 import reducer, { getNotesParent, serializeNotesParent, setStore, State } from './reducer';
@@ -364,6 +364,37 @@ export default class BaseApplication {
 		}
 	}
 
+	private async updateCustomCertificates_() {
+		const parentDirectory = Setting.value('net.clientCertificate');
+		let options: SetClientCertificateOptions|null;
+		if (!parentDirectory) {
+			options = null;
+		} else if (!await shim.fsDriver().isDirectory(parentDirectory)) {
+			this.logger().error('Failed to add client certificate:', parentDirectory, 'is not a directory.');
+			options = null;
+		} else {
+			const certPath = join(parentDirectory, 'client-cert.pem');
+			const keyPath = join(parentDirectory, 'client-key.pem');
+			const domainsPath = join(parentDirectory, 'domains.regex');
+
+			try {
+				const domainsExp = await (async () => {
+					if (!await shim.fsDriver().exists(domainsPath)) return /^.*$/;
+					const text = await shim.fsDriver().readFile(domainsPath, 'utf-8');
+					return new RegExp(text.trim());
+				})();
+
+				this.logger().info('Loading client certificate from', parentDirectory);
+				options = { certPath, keyPath, domains: domainsExp };
+			} catch (error) {
+				this.logger().error('Failed to set client certificate:', error);
+				options = null;
+			}
+		}
+
+		await shim.setClientCertificate(options);
+	}
+
 	protected async applySettingsSideEffects(action: { type?: string; key?: string; keys?: string[] } = null) {
 		const sideEffects: Record<string, ()=> Promise<void>> = {
 			'dateFormat': async () => {
@@ -385,36 +416,7 @@ export default class BaseApplication {
 					this.logger().error('Failed to add extra CA certificates:', error);
 				}
 			},
-			'net.clientCertificate': async () => {
-				const parentDirectory = Setting.value('net.clientCertificate');
-				if (!parentDirectory) {
-					await shim.setClientCertificate(null);
-					return;
-				}
-				if (!await shim.fsDriver().isDirectory(parentDirectory)) {
-					await shim.setClientCertificate(null);
-					// TODO: Surface this error in the UI
-					this.logger().error('Failed to add client certificate:', parentDirectory, 'is not a directory.');
-					return;
-				}
-				const certPath = join(parentDirectory, 'client-cert.pem');
-				const keyPath = join(parentDirectory, 'client-key.pem');
-				const domainsPath = join(parentDirectory, 'domains.regex');
-
-				try {
-					const domainsExp = await (async () => {
-						if (!await shim.fsDriver().exists(domainsPath)) return /^.*$/;
-						const text = await shim.fsDriver().readFile(domainsPath, 'utf-8');
-						return new RegExp(text.trim());
-					})();
-
-					this.logger().info('Loading client certificate from', parentDirectory);
-					await shim.setClientCertificate({ certPath, keyPath, domains: domainsExp });
-				} catch (error) {
-					this.logger().error('Failed to set client certificate:', error);
-					await shim.setClientCertificate(null);
-				}
-			},
+			'net.clientCertificate': () => this.updateCustomCertificates_(),
 			'net.proxyEnabled': async () => {
 				setupProxySettings({
 					maxConcurrentConnections: Setting.value('sync.maxConcurrentConnections'),
