@@ -920,7 +920,7 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		whiteboardForceMarkdown: windowState.whiteboardForceMarkdown ?? {},
 		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
 		hasNoteLockKey: hasNoteLockKey(state.settings['syncInfoCache']),
-		editorNoteReloadTimeRequest: windowState.editorNoteReloadTimeRequest,
+		editorNoteReloadTimeRequest: windowState.windowEditorNoteReloadTimeRequest,
 	};
 };
 

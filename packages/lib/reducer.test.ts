@@ -1063,6 +1063,7 @@ describe('reducer', () => {
 		let state = initTestState(folders, 0, notes, [0]);
 
 		const previousReloadTime = state.editorNoteReloadTimeRequest;
+		const previousWindowReloadTime = state.windowEditorNoteReloadTimeRequest;
 		const now = Date.now();
 
 		state = reducer(state, {
@@ -1072,6 +1073,9 @@ describe('reducer', () => {
 
 		expect(state.editorNoteReloadTimeRequest).toBe(
 			shouldReload ? now : previousReloadTime,
+		);
+		expect(state.windowEditorNoteReloadTimeRequest).toBe(
+			noteIndex === 0 ? now : previousWindowReloadTime,
 		);
 
 		jest.useRealTimers();
@@ -1083,7 +1087,7 @@ describe('reducer', () => {
 		const notes = await createNTestNotes(2, folders[0]);
 		let state = initTestState(folders, 0, notes, [0]);
 		state = createBackgroundWindow(state, 'secondary', notes[1], notes);
-		const previousPrimaryReloadTime = state.editorNoteReloadTimeRequest;
+		const previousPrimaryReloadTime = state.windowEditorNoteReloadTimeRequest;
 		const now = Date.now();
 
 		state = reducer(state, {
@@ -1091,8 +1095,8 @@ describe('reducer', () => {
 			noteId: notes[1].id,
 		});
 
-		expect(state.editorNoteReloadTimeRequest).toBe(previousPrimaryReloadTime);
-		expect(state.backgroundWindows.secondary.editorNoteReloadTimeRequest).toBe(now);
+		expect(state.windowEditorNoteReloadTimeRequest).toBe(previousPrimaryReloadTime);
+		expect(state.backgroundWindows.secondary.windowEditorNoteReloadTimeRequest).toBe(now);
 		jest.useRealTimers();
 	});
 
@@ -1105,9 +1109,11 @@ describe('reducer', () => {
 
 		state = reducer(state, { type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId: notes[0].id });
 		expect(state.editorNoteReloadTimeRequest).toBe(now);
+		expect(state.windowEditorNoteReloadTimeRequest).toBe(now);
 
 		state = reducer(state, { type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId: notes[0].id });
 		expect(state.editorNoteReloadTimeRequest).toBe(now + 1);
+		expect(state.windowEditorNoteReloadTimeRequest).toBe(now + 1);
 
 		jest.useRealTimers();
 	});
