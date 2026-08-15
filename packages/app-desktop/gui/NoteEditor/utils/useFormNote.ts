@@ -111,7 +111,6 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 		const forceRefresh = formNoteRefreshRequest.force;
 		if (formNoteRef.current.hasChanged && !forceRefresh) {
 			logger.info('Form note changed between scheduling a refresh and the refresh itself. Cancelling the refresh.');
-			onReloadInProgressChange(false);
 			return;
 		}
 
@@ -154,14 +153,14 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 		try {
 			await loadNote();
 		} finally {
-			if (!event.cancelled) onReloadInProgressChange(false);
+			if (forceRefresh && !event.cancelled) onReloadInProgressChange(false);
 		}
 	}, [formNoteRefreshRequest, noteId, editorId, initNoteState, clearFormNote, setDecryptFailed, onReloadInProgressChange]);
 
 	const refreshFormNote = useCallback((force = false) => {
 		// Increase the counter to cancel any ongoing refresh attempts
 		// and start a new one.
-		onReloadInProgressChange(true);
+		if (force) onReloadInProgressChange(true);
 		setFormNoteRefreshRequest(previous => ({ counter: previous.counter + 1, force: previous.force || force }));
 	}, [onReloadInProgressChange]);
 

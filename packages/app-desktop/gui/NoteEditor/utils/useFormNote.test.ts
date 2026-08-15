@@ -222,10 +222,12 @@ describe('useFormNote', () => {
 
 	it('should reload the note when it is changed outside of the editor', async () => {
 		const note = await Note.save({ title: 'Test Note!', body: '...' });
+		const onReloadInProgressChange = jest.fn();
 
 		const props = {
 			...defaultFormNoteProps,
 			noteId: note.id,
+			onReloadInProgressChange,
 		};
 
 		const formNote = renderHook(props => useFormNote(props), {
@@ -244,6 +246,7 @@ describe('useFormNote', () => {
 		await waitFor(() => {
 			expect(formNote.result.current.formNote.title).toBe('Modified');
 		});
+		expect(onReloadInProgressChange).not.toHaveBeenCalled();
 
 		formNote.unmount();
 	});
