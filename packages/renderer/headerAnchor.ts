@@ -1,44 +1,48 @@
 import type MarkdownIt from 'markdown-it';
 import type StateCore = require('markdown-it/lib/rules_core/state_core');
 
+export function headingTextToAnchorName(text: string, doneNames: string[]): string {
+	// Strip checkbox patterns at the beginning of the heading text
+	// Matches [x], [X], or [ ] followed by an optional space
+	text = text.replace(/^\[(x|X| )\]\s?/, '');
+
+	const allowed = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+	let lastWasDash = true;
+	let output = '';
+	for (let i = 0; i < text.length; i++) {
+		const c = text[i];
+		if (allowed.indexOf(c) < 0) {
+			if (lastWasDash) continue;
+			lastWasDash = true;
+			output += '-';
+		} else {
+			lastWasDash = false;
+			output += c;
+		}
+	}
+
+	output = output.toLowerCase();
+
+	while (output.length && output[output.length - 1] === '-') {
+		output = output.substr(0, output.length - 1);
+	}
+
+	let temp = output;
+	let index = 1;
+	while (doneNames.indexOf(temp) >= 0) {
+		temp = `${output}-${index}`;
+		index++;
+	}
+	output = temp;
+
+	return output;
+}
+
 export default function(markdownIt: MarkdownIt) {
 	markdownIt.core.ruler.push('anchorHeader', (state: StateCore): boolean => {
 		const tokens = state.tokens;
 		const Token = state.Token;
 		const doneNames = [];
-
-		const headingTextToAnchorName = (text: string, doneNames: string[]) => {
-			const allowed = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-			let lastWasDash = true;
-			let output = '';
-			for (let i = 0; i < text.length; i++) {
-				const c = text[i];
-				if (allowed.indexOf(c) < 0) {
-					if (lastWasDash) continue;
-					lastWasDash = true;
-					output += '-';
-				} else {
-					lastWasDash = false;
-					output += c;
-				}
-			}
-
-			output = output.toLowerCase();
-
-			while (output.length && output[output.length - 1] === '-') {
-				output = output.substr(0, output.length - 1);
-			}
-
-			let temp = output;
-			let index = 1;
-			while (doneNames.indexOf(temp) >= 0) {
-				temp = `${output}-${index}`;
-				index++;
-			}
-			output = temp;
-
-			return output;
-		};
 
 		const createAnchorTokens = (anchorName: string) => {
 			const output = [];
