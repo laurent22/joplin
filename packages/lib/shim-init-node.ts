@@ -693,15 +693,25 @@ function shimInit(options: ShimInitOptions = null) {
 		const lastSettings = shim.httpAgent_?.lastSettings;
 
 		if (resolvedProxyUrl && proxySettings.proxyEnabled) {
+			const proxyUrl = new URL(resolvedProxyUrl);
+			const auth = proxyUrl.username ? `${proxyUrl.username}:${proxyUrl.password}` : '';
+			proxyUrl.username = '';
+			proxyUrl.password = '';
 			const baseSettings = agentSettingsBase(url, options);
+
 			const agentSettings = {
 				...baseSettings,
 				requestTls: baseSettings.connect,
 
 				maxSockets: proxySettings.maxConcurrentConnections,
-				uri: resolvedProxyUrl,
+				uri: proxyUrl.toString(),
 				timeout: proxySettings.proxyTimeout * 1000,
+				...(auth ? {
+					auth: Buffer.from(auth).toString('base64'),
+				} : {}),
 			};
+			delete agentSettings.connect;
+
 			if (!fastDeepEqual(lastSettings, agentSettings)) {
 				shim.httpAgent_ = {
 					lastSettings: agentSettings,
