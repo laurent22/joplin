@@ -1,4 +1,4 @@
-import shim from '../shim';
+import shim from '../../shim';
 import { getCACertificates, setDefaultCACertificates } from 'node:tls';
 
 let defaultCaCerts_: string[]|null = null;

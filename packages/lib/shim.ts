@@ -83,6 +83,7 @@ export enum MobilePlatform {
 export type SetClientCertificateOptions = {
 	certPath: string;
 	keyPath: string;
+	keyPassword: string;
 	domains: RegExp;
 };
 

@@ -10,6 +10,7 @@ import settingValidations from '../../../models/settings/settingValidations';
 import { convertValuesToFunctions } from '../../../ObjectUtils';
 import aiSettingsTransition from '../../../services/ai/aiSettingsTransition';
 import { ChatRole } from '../../../services/ai/types';
+import loadClientCertificate, { LoadClientCertificateSettings } from '../../../utils/tls/loadClientCertificate';
 
 const logger = Logger.create('config-shared');
 
@@ -86,7 +87,15 @@ export const checkSyncConfig = async (comp: ConfigScreenComponent, settings: Set
 		...Setting.subValues('net', settings, { includeConstants: true }) };
 
 	comp.setState({ checkSyncConfigResult: 'checking' });
-	const result = await SyncTargetClass.checkConfig(convertValuesToFunctions(options));
+	let result;
+	try {
+		// Validate TLS settings
+		await loadClientCertificate(settings as LoadClientCertificateSettings);
+
+		result = await SyncTargetClass.checkConfig(convertValuesToFunctions(options));
+	} catch (error) {
+		result = { ok: false, errorMessage: String(error) };
+	}
 	comp.setState({ checkSyncConfigResult: result });
 
 	if (result.ok) {

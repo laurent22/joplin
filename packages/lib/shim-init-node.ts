@@ -31,6 +31,7 @@ const toRelative = require('relative');
 import timers from 'timers';
 import dgram from 'dgram';
 import { pipeline } from 'stream/promises';
+import { createPrivateKey } from 'crypto';
 
 interface ProxySettings {
 	maxConcurrentConnections?: number;
@@ -655,13 +656,18 @@ function shimInit(options: ShimInitOptions = null) {
 			clientCertificates = [];
 			return;
 		}
-		const { certPath, keyPath, domains } = options;
+		const { certPath, keyPath, keyPassword, domains } = options;
 		if (!certPath || !keyPath) {
 			throw new Error(`Missing ${!certPath ? 'certPath' : 'keyPath'}: Both certPath and keyPath must be provided.`);
 		}
 
-		const clientKey = await shim.fsDriver().readFile(keyPath, 'utf-8');
 		const clientCert = await shim.fsDriver().readFile(certPath, 'utf-8');
+		let clientKey = await shim.fsDriver().readFile(keyPath, 'utf-8');
+		if (keyPassword) {
+			const key = createPrivateKey({ key: clientKey, passphrase: keyPassword || undefined });
+			clientKey = key.export({ format: 'pem', type: 'pkcs8' });
+		}
+
 		clientCertificates = [{ privateKey: clientKey, certificate: clientCert, domains }];
 	};
 

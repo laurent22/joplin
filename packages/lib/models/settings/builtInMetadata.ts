@@ -32,6 +32,16 @@ const showAiTools = (settings: Record<string, unknown>) => {
 
 const addBetaMarker = (text: string) => _('%s (Beta)', text);
 
+const showClientCertificateSettings = (settings: Record<'sync.target', number>) => {
+	return [
+		SyncTargetRegistry.nameToId('amazon_s3'),
+		SyncTargetRegistry.nameToId('nextcloud'),
+		SyncTargetRegistry.nameToId('webdav'),
+		SyncTargetRegistry.nameToId('joplinServer'),
+		SyncTargetRegistry.nameToId('joplinServerSaml'),
+	].indexOf(settings['sync.target']) >= 0;
+};
+
 export enum CameraDirection {
 	Back,
 	Front,
@@ -2037,20 +2047,24 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			subType: SettingItemSubType.DirectoryPath,
 			section: 'sync',
 			advanced: true,
-			show: settings => {
-				return [
-					SyncTargetRegistry.nameToId('amazon_s3'),
-					SyncTargetRegistry.nameToId('nextcloud'),
-					SyncTargetRegistry.nameToId('webdav'),
-					SyncTargetRegistry.nameToId('joplinServer'),
-					SyncTargetRegistry.nameToId('joplinServerSaml'),
-				].indexOf(settings['sync.target']) >= 0;
-			},
+			show: showClientCertificateSettings,
 			public: true,
 			appTypes: [AppType.Desktop, AppType.Cli],
 			label: () => _('Client certificate'),
-			description: () => _('A path to a directory containing an mTLS client certificate (client-cert.pem) and a certificate key file (client-key.pem).'),
+			description: () => _('A path to a directory containing an mTLS client certificate (client-cert.pem) and a private key (client-key.pem).'),
 			storage: SettingStorage.File,
+		},
+		'net.clientCertificate.password': {
+			value: '',
+			type: SettingItemType.String,
+			section: 'sync',
+			advanced: true,
+			show: showClientCertificateSettings,
+			public: true,
+			secure: true,
+			appTypes: [AppType.Desktop, AppType.Cli],
+			label: () => _('Client certificate: Password'),
+			description: () => _('The decryption password for the client certificate\'s private key. If not provided, the private key is assumed to be unencrypted.'),
 		},
 		'net.customCertificates': {
 			value: '',
