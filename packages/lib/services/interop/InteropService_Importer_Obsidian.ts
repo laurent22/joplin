@@ -16,7 +16,7 @@ const normalizedTag = (tag: string) => tag.toLowerCase();
 const wikilinkRegex = /(?<![!\\])(!?)\[\[([^|\r\n]+?)(?:\|([^\r\n]+?))?\]\]/g;
 const markdownLinkRegex = /(?<!!)\[([^\]\r\n]+)\]\(([^)\r\n#]+\.md)(#[^)\r\n]+)?\)/gi;
 const internalLinkAnchorRegex = /(\[[^\]\r\n]+\]\(:\/[0-9a-f]{32})#([^)\r\n]+)\)/gi;
-const codeRegex = /^ {0,3}(`{3,}|~{3,})[^\r\n]*(?:\r?\n|$)[\s\S]*?(?:^ {0,3}\1[ \t]*(?:\r?\n|$)|(?![\s\S]))|^(?: {4}|\t)[^\r\n]*(?:\r?\n|$)|(`+)[^\r\n]*?\2/gm;
+const codeRegex = /^ {0,3}((`|~)\2{2,})[^\r\n]*(?:\r?\n|$)[\s\S]*?(?:^ {0,3}\1\2*[ \t]*(?:\r?\n|$)|(?![\s\S]))|^(?: {4}|\t)[^\r\n]*(?:\r?\n|$)|(`+)[^\r\n]*?\3/gm;
 const frontMatterRegex = /^\uFEFF?---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
 const withoutMarkdownExtension = (path: string) => path.replace(/\.md$/i, '');
 const ignoredFolderNames = new Set(['.obsidian', '.trash']);
