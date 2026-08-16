@@ -91,7 +91,7 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 				const [noteTarget, ...headings] = target.split('#');
 				const heading = headings[headings.length - 1];
 				const normalizedTarget = normalizedWikilinkTarget(withoutMarkdownExtension(noteTarget));
-				const matchingNoteIds = noteIdsByWikilinkTarget.get(normalizedTarget);
+				const matchingNoteIds = noteTarget ? noteIdsByWikilinkTarget.get(normalizedTarget) : [note.id];
 				if (matchingNoteIds?.length !== 1) return wikilink;
 
 				const label = markdownUtils.escapeTitleText(shownName || target);
