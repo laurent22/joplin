@@ -13,6 +13,8 @@ import { relative } from 'path';
 const uslug = require('@joplin/fork-uslug');
 const tagRegex = /(?:^|\s)#([\p{L}\p{M}\p{N}\p{Pc}\p{Pd}\p{S}\u200D/]+)/gu;
 const normalizedTag = (tag: string) => tag.toLowerCase();
+// Obsidian resolves internal links case-insensitively, so index and look up wikilink targets in lower case.
+const normalizedWikilinkTarget = (target: string) => target.toLowerCase();
 const wikilinkRegex = /(?<![!\\])(!?)\[\[([^|\r\n]+?)(?:\|([^\r\n]+?))?\]\]/g;
 const markdownLinkRegex = /(?<!!)\[([^\]\r\n]+)\]\(([^)\r\n#]+\.md)(#[^)\r\n]+)?\)/gi;
 const internalLinkAnchorRegex = /(\[[^\]\r\n]+\]\(:\/[0-9a-f]{32})#([^)\r\n]+)\)/gi;
@@ -64,7 +66,10 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 		if (!frontMatter) return;
 
 		const { aliases = [] } = (yaml.load(frontMatter[1], { schema: yaml.FAILSAFE_SCHEMA }) as { aliases?: string[] }) ?? {};
-		for (const alias of aliases) if (!noteIdsByWikilinkTarget.get(alias)?.includes(noteId)) addToIndex(noteIdsByWikilinkTarget, alias, noteId);
+		for (const alias of aliases) {
+			const key = normalizedWikilinkTarget(alias);
+			if (!noteIdsByWikilinkTarget.get(key)?.includes(noteId)) addToIndex(noteIdsByWikilinkTarget, key, noteId);
+		}
 	}
 
 	private async buildNoteIdsByWikilinkTarget(vaultPathPrefix: string) {
@@ -77,7 +82,7 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 			const relativePath = withoutMarkdownExtension(normalizedSourcePath.slice(vaultPathPrefix.length));
 			const pathParts = relativePath.split('/');
 			for (let index = 0; index < pathParts.length; index++) {
-				addToIndex(noteIdsByWikilinkTarget, pathParts.slice(index).join('/'), note.id);
+				addToIndex(noteIdsByWikilinkTarget, normalizedWikilinkTarget(pathParts.slice(index).join('/')), note.id);
 			}
 
 			await this.supportAliases(sourcePath, note.id, noteIdsByWikilinkTarget);
@@ -97,7 +102,7 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 			let body = replaceOutsideCode(note.body, text => text.replace(wikilinkRegex, (wikilink, _embed: string, target: string, shownName?: string) => {
 				const [noteTarget, ...headings] = target.split('#');
 				const heading = headings[headings.length - 1];
-				const normalizedTarget = withoutMarkdownExtension(noteTarget);
+				const normalizedTarget = normalizedWikilinkTarget(withoutMarkdownExtension(noteTarget));
 				const matchingNoteIds = noteIdsByWikilinkTarget.get(normalizedTarget);
 				if (matchingNoteIds?.length !== 1) return wikilink;
 
@@ -107,7 +112,7 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 			}));
 			// Obsidian can find the linked note in another folder when no other note has the same name.
 			body = replaceOutsideCode(body, text => text.replace(markdownLinkRegex, (markdownLink, label: string, target: string, fragment = '') => {
-				const normalizedTarget = withoutMarkdownExtension(markdownUtils.unescapeLinkUrl(target));
+				const normalizedTarget = normalizedWikilinkTarget(withoutMarkdownExtension(markdownUtils.unescapeLinkUrl(target)));
 				const matchingNoteIds = noteIdsByWikilinkTarget.get(normalizedTarget);
 				return matchingNoteIds?.length === 1 ? `[${label}](:/${matchingNoteIds[0]}${fragment})` : markdownLink;
 			}));
