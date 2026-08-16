@@ -1061,12 +1061,15 @@ export default class Synchronizer {
 							if (!content.user_updated_time) content.user_updated_time = content.updated_time;
 							if (!content.user_created_time) content.user_created_time = content.created_time;
 
-							// The downloaded version becomes the base, so both sides share an ancestor.
-							// Encrypted notes have no readable body yet and are recorded once decrypted.
-							const previousBase = await BaseItem.syncItemBaseVersion(syncTargetId, content.type_, content.id);
-							const baseVersion = content.type_ === BaseModel.TYPE_NOTE && !content.encryption_applied ?
-								{ ...previousBase, base_body: (content as NoteEntity).body ?? '', base_title: (content as NoteEntity).title ?? '' } :
-								previousBase;
+							// The downloaded version becomes the base, so both sides share an ancestor. Encrypted
+							// notes have no readable body yet, so they keep their existing base until decrypted.
+							// The conflict note link is dropped as it no longer relates to this base, as in saveSyncBaseContent()
+							const isDecryptedNote = content.type_ === BaseModel.TYPE_NOTE && !content.encryption_applied;
+							const baseVersion = isDecryptedNote ? {
+								base_body: (content as NoteEntity).body ?? '',
+								base_title: (content as NoteEntity).title ?? '',
+								base_conflict_note_id: '',
+							} : null;
 
 							// eslint-disable-next-line @typescript-eslint/no-explicit-any -- BaseItem.save options bag with route-specific keys (isNew, oldItem) added below
 							const options: any = {

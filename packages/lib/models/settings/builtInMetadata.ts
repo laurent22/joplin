@@ -2309,7 +2309,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			section: 'sync',
 			public: true,
 			label: () => _('Automatically merge non-conflicting note changes'),
-			description: () => _('When the same note is edited on two devices, changes on different lines are merged automatically. Edits to the same line or adjacent lines still create a conflict note. Merging can occasionally duplicate a repeated line, and a change that is only trailing whitespace may be lost.'),
+			description: () => _('When the same note is edited on two devices, changes made to different lines are usually merged automatically. In rare cases, automatic merging may result in duplicated content or formatting changes'),
 			storage: SettingStorage.File,
 			isGlobal: true,
 		},

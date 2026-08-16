@@ -37,8 +37,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 		if (remoteExists) {
 			local = remoteContent;
 
-			const base = await BaseItem.syncItemBaseVersion(syncTargetId, local.type_, local.id);
-			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteContent.updated_time), base, remoteContent.updated_time);
+			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteContent.updated_time), null, remoteContent.updated_time);
 			await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 		} else {
 			// If the item is a folder, avoid deleting child notes and folders, as this could cause massive data loss where this conflict happens unexpectedly
@@ -96,8 +95,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 				// Ahead of the remote time so the merge uploads as a local change
 				updated_time: Math.max(time.unixMs(), remoteNote.updated_time + 1),
 			};
-			const base = await BaseItem.syncItemBaseVersion(syncTargetId, mergedNote.type_, mergedNote.id);
-			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, mergedNote, BaseItem.remoteItemSyncTime(remoteNote.updated_time), base, remoteNote.updated_time);
+			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, mergedNote, BaseItem.remoteItemSyncTime(remoteNote.updated_time), null, remoteNote.updated_time);
 			await ItemClass.save(mergedNote, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 
 			// No conflict note is created, so the mobile viewer/editor must reload the merged note
@@ -178,8 +176,7 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 
 		if (remoteExists) {
 			local = remoteContent;
-			const base = await BaseItem.syncItemBaseVersion(syncTargetId, local.type_, local.id);
-			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteSyncedTime), base, remoteSyncedTime);
+			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteSyncedTime), null, remoteSyncedTime);
 			await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 
 			if (action === SyncAction.NoteConflict) {
