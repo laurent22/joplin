@@ -61,17 +61,6 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 		return result;
 	}
 
-	private async supportAliases(sourcePath: string, noteId: string, noteIdsByWikilinkTarget: Map<string, string[]>) {
-		const frontMatter = (await shim.fsDriver().readFile(sourcePath)).match(frontMatterRegex);
-		if (!frontMatter) return;
-
-		const { aliases = [] } = (yaml.load(frontMatter[1], { schema: yaml.FAILSAFE_SCHEMA }) as { aliases?: string[] }) ?? {};
-		for (const alias of aliases) {
-			const key = normalizedWikilinkTarget(alias);
-			if (!noteIdsByWikilinkTarget.get(key)?.includes(noteId)) addToIndex(noteIdsByWikilinkTarget, key, noteId);
-		}
-	}
-
 	private async buildNoteIdsByWikilinkTarget(vaultPathPrefix: string) {
 		const noteIdsByWikilinkTarget = new Map<string, string[]>();
 
@@ -84,8 +73,6 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 			for (let index = 0; index < pathParts.length; index++) {
 				addToIndex(noteIdsByWikilinkTarget, normalizedWikilinkTarget(pathParts.slice(index).join('/')), note.id);
 			}
-
-			await this.supportAliases(sourcePath, note.id, noteIdsByWikilinkTarget);
 		}
 
 		return noteIdsByWikilinkTarget;
