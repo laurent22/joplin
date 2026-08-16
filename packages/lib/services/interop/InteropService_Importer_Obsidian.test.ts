@@ -696,6 +696,24 @@ describe('InteropService_Importer_Obsidian', () => {
 		].join('\n'));
 	});
 
+	it('should preserve image embed caption', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/embed-caption.md`, '![[photo.png|A photo]]');
+		await fs.writeFile(`${vaultPath}/photo.png`, 'Photo content');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const note = await Note.loadByTitle('embed-caption');
+		const resourceIds = await Note.linkedResourceIds(note.body);
+
+		expect(resourceIds).toHaveLength(1);
+		expect(note.body).toBe(`![A photo](:/${resourceIds[0]})`);
+	});
+
 	it('should import non-image embeds as links', async () => {
 		const vaultPath = `${tempDir}/My vault`;
 		await fs.mkdirp(vaultPath);

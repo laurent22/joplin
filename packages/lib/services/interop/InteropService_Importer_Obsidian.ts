@@ -16,6 +16,7 @@ const normalizedTag = (tag: string) => tag.toLowerCase();
 // Obsidian resolves internal links case-insensitively, so index and look up wikilink targets in lower case.
 const normalizedWikilinkTarget = (target: string) => target.toLowerCase();
 const wikilinkRegex = /(?<![!\\])(!?)\[\[([^|\r\n]+?)(?:\|([^\r\n]+?))?\]\]/g;
+const imageDimensionRegex = /^\d+(?:x\d+)?$/;
 const markdownLinkRegex = /(?<!!)\[([^\]\r\n]+)\]\(([^)\r\n#]+\.md)(#[^)\r\n]+)?\)/gi;
 const internalLinkAnchorRegex = /(\[[^\]\r\n]+\]\(:\/[0-9a-f]{32})#([^)\r\n]+)\)/gi;
 const codeRegex = /^ {0,3}((`|~)\2{2,})[^\r\n]*(?:\r?\n|$)[\s\S]*?(?:^ {0,3}\1\2*[ \t]*(?:\r?\n|$)|(?![\s\S]))|^(?: {4}|\t)[^\r\n]*(?:\r?\n|$)|(`+)[^\r\n]*?\3/gm;
@@ -123,7 +124,7 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 	}
 
 	private convertSizedImageEmbed(target: string, shownName: string | undefined, attachmentPath: string) {
-		if (!shownName) return null;
+		if (!shownName || !imageDimensionRegex.test(shownName)) return null;
 		const [width, height] = shownName.split('x');
 		return `<img src="${markdownUtils.escapeLinkUrl(attachmentPath)}" width="${width}"${height ? ` height="${height}"` : ''} alt="${markdownUtils.escapeTitleText(target)}"/>`;
 	}
