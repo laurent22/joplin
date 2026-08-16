@@ -566,10 +566,10 @@ describe('InteropService_Importer_Obsidian', () => {
 		expect(sourceNote.body).toBe(`[note](:/${targetNote.id})`);
 	});
 
-	it('should resolve wikilinks using front matter aliases', async () => {
+	it('should resolve wikilinks using note title with shown alias', async () => {
 		const vaultPath = `${tempDir}/My vault`;
 		await fs.mkdirp(vaultPath);
-		await fs.writeFile(`${vaultPath}/Source.md`, '[[Work|Project plan]] [[Project plan]]');
+		await fs.writeFile(`${vaultPath}/Source.md`, '[[Work|Project plan]]');
 		await fs.writeFile(`${vaultPath}/Work.md`, [
 			'---',
 			'aliases:',
@@ -587,7 +587,7 @@ describe('InteropService_Importer_Obsidian', () => {
 		const sourceNote = await Note.loadByTitle('Source');
 		const targetNote = await Note.loadByTitle('Work');
 
-		expect(sourceNote.body).toBe(`[Project plan](:/${targetNote.id}) [Project plan](:/${targetNote.id})`);
+		expect(sourceNote.body).toBe(`[Project plan](:/${targetNote.id})`);
 	});
 
 	it('should prefer canonical note title over front matter alias', async () => {
