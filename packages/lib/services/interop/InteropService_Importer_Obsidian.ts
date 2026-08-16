@@ -63,7 +63,7 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 		const frontMatter = (await shim.fsDriver().readFile(sourcePath)).match(frontMatterRegex);
 		if (!frontMatter) return;
 
-		const { aliases = [] } = yaml.load(frontMatter[1], { schema: yaml.FAILSAFE_SCHEMA }) as { aliases?: string[] };
+		const { aliases = [] } = (yaml.load(frontMatter[1], { schema: yaml.FAILSAFE_SCHEMA }) as { aliases?: string[] }) ?? {};
 		for (const alias of aliases) if (!noteIdsByWikilinkTarget.get(alias)?.includes(noteId)) addToIndex(noteIdsByWikilinkTarget, alias, noteId);
 	}
 
@@ -150,7 +150,7 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 
 	private async handleCssClasses(filePath: string, note: NoteEntity) {
 		const frontMatter = (await shim.fsDriver().readFile(filePath)).match(frontMatterRegex);
-		const { cssclasses = [] } = frontMatter ? yaml.load(frontMatter[1], { schema: yaml.FAILSAFE_SCHEMA }) as { cssclasses?: string[] } : {};
+		const { cssclasses = [] } = (frontMatter ? yaml.load(frontMatter[1], { schema: yaml.FAILSAFE_SCHEMA }) as { cssclasses?: string[] } : {}) ?? {};
 		if (!cssclasses.length) return note;
 
 		note.body = `---\n${yaml.dump({ cssclasses }, { schema: yaml.FAILSAFE_SCHEMA }).trimEnd()}\n---\n\n${note.body}`;
