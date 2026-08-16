@@ -122,6 +122,12 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 		});
 	}
 
+	private convertSizedImageEmbed(target: string, shownName: string | undefined, attachmentPath: string) {
+		if (!shownName) return null;
+		const [width, height] = shownName.split('x');
+		return `<img src="${markdownUtils.escapeLinkUrl(attachmentPath)}" width="${width}"${height ? ` height="${height}"` : ''} alt="${markdownUtils.escapeTitleText(target)}"/>`;
+	}
+
 	public async importLocalFiles(filePath: string, body: string, parentFolderId: string) {
 		if (!this.vaultFilePaths_) {
 			this.vaultFilePaths_ = await this.loadVaultFilePaths();
@@ -135,6 +141,8 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 			const foundPath = findFilePath(this.vaultFilePaths_, target);
 			const absolutePath = foundPath ? shim.fsDriver().resolve(this.sourcePath_, foundPath) : '';
 			const attachmentPath = absolutePath ? relative(dirname(filePath), absolutePath) : target;
+			const sizedImageEmbed = imagePrefix && this.convertSizedImageEmbed(target, shownName, attachmentPath);
+			if (sizedImageEmbed) return sizedImageEmbed;
 			return `${imagePrefix}[${markdownUtils.escapeTitleText(shownName || target)}](${markdownUtils.escapeLinkUrl(attachmentPath)})`;
 		}));
 		return super.importLocalFiles(filePath, markdownBody, parentFolderId);
