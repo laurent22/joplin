@@ -14,7 +14,7 @@ const uslug = require('@joplin/fork-uslug');
 const tagRegex = /(?:^|\s)#([\p{L}\p{M}\p{N}\p{Pc}\p{Pd}\p{S}\u200D/]+)/gu;
 const normalizedTag = (tag: string) => tag.toLowerCase();
 const wikilinkRegex = /(?<![!\\])(!?)\[\[([^|\r\n]+?)(?:\|([^\r\n]+?))?\]\]/g;
-const markdownLinkRegex = /(?<!!)\[([^\]\r\n]+)\]\(([^)\r\n]+\.md)\)/gi;
+const markdownLinkRegex = /(?<!!)\[([^\]\r\n]+)\]\(([^)\r\n#]+\.md)(#[^)\r\n]+)?\)/gi;
 const internalLinkAnchorRegex = /(\[[^\]\r\n]+\]\(:\/[0-9a-f]{32})#([^)\r\n]+)\)/gi;
 const codeRegex = /^ {0,3}(`{3,}|~{3,})[^\r\n]*(?:\r?\n|$)[\s\S]*?(?:^ {0,3}\1[ \t]*(?:\r?\n|$)|(?![\s\S]))|^(?: {4}|\t)[^\r\n]*(?:\r?\n|$)|(`+)[^\r\n]*?\2/gm;
 const frontMatterRegex = /^\uFEFF?---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
@@ -106,10 +106,10 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 				return `[${label}](:/${matchingNoteIds[0]}${anchor})`;
 			}));
 			// Obsidian can find the linked note in another folder when no other note has the same name.
-			body = replaceOutsideCode(body, text => text.replace(markdownLinkRegex, (markdownLink, label: string, target: string) => {
+			body = replaceOutsideCode(body, text => text.replace(markdownLinkRegex, (markdownLink, label: string, target: string, fragment = '') => {
 				const normalizedTarget = withoutMarkdownExtension(markdownUtils.unescapeLinkUrl(target));
 				const matchingNoteIds = noteIdsByWikilinkTarget.get(normalizedTarget);
-				return matchingNoteIds?.length === 1 ? `[${label}](:/${matchingNoteIds[0]})` : markdownLink;
+				return matchingNoteIds?.length === 1 ? `[${label}](:/${matchingNoteIds[0]}${fragment})` : markdownLink;
 			}));
 			// Make link anchors match the way Joplin writes heading links.
 			body = replaceOutsideCode(body, text => text.replace(internalLinkAnchorRegex, (_link, linkStart: string, anchor: string) => `${linkStart}#${uslug(anchor)})`));

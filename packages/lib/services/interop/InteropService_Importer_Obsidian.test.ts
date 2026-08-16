@@ -478,11 +478,14 @@ describe('InteropService_Importer_Obsidian', () => {
 		expect(sourceNote.body).toBe(`[Overview](:/${targetNote.id}${fragment})`);
 	});
 
-	it('should resolve a unique Markdown link target in another folder', async () => {
+	test.each([
+		['without fragment', '[MD target](md-link-target.md)', ''],
+		['with fragment', '[MD target](md-link-target.md#Notes)', '#notes'],
+	])('should resolve a unique Markdown link target in another folder %s', async (_case, sourceBody, fragment) => {
 		const vaultPath = `${tempDir}/My vault`;
 		await fs.mkdirp(`${vaultPath}/utils`);
-		await fs.writeFile(`${vaultPath}/md-link.md`, '[MD target](md-link-target.md)');
-		await fs.writeFile(`${vaultPath}/utils/md-link-target.md`, 'Target note.');
+		await fs.writeFile(`${vaultPath}/md-link.md`, sourceBody);
+		await fs.writeFile(`${vaultPath}/utils/md-link-target.md`, '# Notes');
 
 		await InteropService.instance().import({
 			format: 'obsidian',
@@ -492,7 +495,7 @@ describe('InteropService_Importer_Obsidian', () => {
 		const sourceNote = await Note.loadByTitle('md-link');
 		const targetNote = await Note.loadByTitle('md-link-target');
 
-		expect(sourceNote.body).toBe(`[MD target](:/${targetNote.id})`);
+		expect(sourceNote.body).toBe(`[MD target](:/${targetNote.id}${fragment})`);
 	});
 
 	it('should import linked attachment', async () => {
