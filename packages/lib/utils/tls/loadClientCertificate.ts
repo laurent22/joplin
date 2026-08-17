@@ -24,6 +24,14 @@ const parseDomainsList = (text: string) => {
 		.filter(entry => !!entry.trim() && !entry.startsWith('#'));
 };
 
+const assertFilesExist = async (paths: string[]) => {
+	for (const path of paths) {
+		if (!await shim.fsDriver().exists(path)) {
+			throw new Error(`Reading client certificate: Missing required file: ${path}`);
+		}
+	}
+};
+
 const loadClientCertificate = async (settings: LoadClientCertificateSettings) => {
 	settings = {
 		...clientCertificateSettings(),
@@ -42,13 +50,10 @@ const loadClientCertificate = async (settings: LoadClientCertificateSettings) =>
 			const keyPath = join(parentDirectory, 'client-key.pem');
 			const domainsPath = join(parentDirectory, 'domains.txt');
 
+			await assertFilesExist([certPath, keyPath, domainsPath]);
+
 			const keyPassword = settings['net.clientCertificate.password'];
-
-			const domainsList = await (async () => {
-				if (!await shim.fsDriver().exists(domainsPath)) throw new Error('Reading client certificate: No domains.txt file found');
-
-				return parseDomainsList(await shim.fsDriver().readFile(domainsPath, 'utf-8'));
-			})();
+			const domainsList = parseDomainsList(await shim.fsDriver().readFile(domainsPath, 'utf-8'));
 
 			logger.info('Loading client certificate from', parentDirectory);
 			options = { certPath, keyPath, domains: domainsList, keyPassword };
