@@ -694,6 +694,8 @@ function shimInit(options: ShimInitOptions = null) {
 
 		if (resolvedProxyUrl && proxySettings.proxyEnabled) {
 			const proxyUrl = new URL(resolvedProxyUrl);
+			// Support username:password@url-format basic authentication for backwards compatibility
+			// with the previous `hpagent`-based proxy logic:
 			const auth = proxyUrl.username ? `${proxyUrl.username}:${proxyUrl.password}` : '';
 			proxyUrl.username = '';
 			proxyUrl.password = '';
@@ -707,7 +709,7 @@ function shimInit(options: ShimInitOptions = null) {
 				uri: proxyUrl.toString(),
 				timeout: proxySettings.proxyTimeout * 1000,
 				...(auth ? {
-					auth: Buffer.from(auth).toString('base64'),
+					token: `Basic ${Buffer.from(auth, 'utf-8').toString('base64')}`,
 				} : {}),
 			};
 			delete agentSettings.connect;
