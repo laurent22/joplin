@@ -558,18 +558,19 @@ function shimInit(options: ShimInitOptions = null) {
 		}
 
 		const agent: Agent = shim.httpAgent(url, options);
-		const abortController = new AbortController();
-		const requestOptions = new Request(url, {
-			method: method,
-			headers: new Headers(headers),
-			dispatcher: agent.compose([
-				interceptors.redirect({ maxRedirections: options.maxRedirects }),
-				interceptors.decompress(),
-			]),
-			signal: abortController.signal,
-		});
+		const dispatcher = agent.compose([
+			interceptors.redirect({ maxRedirections: options.maxRedirects }),
+			interceptors.decompress(),
+		]);
 
 		const doFetchOperation = async () => {
+			const abortController = new AbortController();
+			const requestOptions = new Request(url, {
+				method: method,
+				headers: new Headers(headers),
+				dispatcher,
+				signal: abortController.signal,
+			});
 			const response = await fetch(requestOptions);
 
 			try {
