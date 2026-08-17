@@ -12893,6 +12893,7 @@ __metadata:
     chokidar: "npm:3.6.0"
     color: "npm:3.2.1"
     compare-versions: "npm:6.1.1"
+    diff: "npm:9.0.0"
     diff-match-patch: "npm:1.0.5"
     fast-deep-equal: "npm:3.1.3"
     fast-xml-parser: "npm:3.21.1"
@@ -12916,6 +12917,7 @@ __metadata:
     multiparty: "npm:4.2.3"
     mustache: "npm:4.2.0"
     nanoid: "npm:5.1.11"
+    node-diff3: "npm:3.2.0"
     node-fetch: "npm:2.6.7"
     node-notifier: "npm:10.0.1"
     node-persist: "npm:3.1.3"
@@ -28971,6 +28973,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"diff@npm:9.0.0":
+  version: 9.0.0
+  resolution: "diff@npm:9.0.0"
+  checksum: 10/f8b5e38a6a7ec73d1850ccb7ff19cda1d02502dc0f2c562ada0f40d7211bfb3075c2f3742104619a1f8f47ae333d48a6c77bffb080a2df900db36935080ea4fb
+  languageName: node
+  linkType: hard
+
 "diff@npm:^4.0.1, diff@npm:^4.0.2":
   version: 4.0.2
   resolution: "diff@npm:4.0.2"
@@ -43875,6 +43884,13 @@ __metadata:
   version: 4.2.1
   resolution: "node-cron@npm:4.2.1"
   checksum: 10/7550b105e4aab772597383e24c4b31b6d5dc9604c96bcefb1a4b8a94a432b8835e3010a0dfc1d34492edfb64a2e55f334cf3ad0a76901b72de11ef506cbfd31a
+  languageName: node
+  linkType: hard
+
+"node-diff3@npm:3.2.0":
+  version: 3.2.0
+  resolution: "node-diff3@npm:3.2.0"
+  checksum: 10/594cdf658d38285bf529e73eadb4abaa73ed05b45ff65614a99fb9be68408918ae332a4e16ceb691855127329b4d6103c9e1ced218f1560f062fbc865fafb592
   languageName: node
   linkType: hard
 
