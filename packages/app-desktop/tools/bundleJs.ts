@@ -136,9 +136,14 @@ const makeBuildContext = (entryPoint: string, renderer: boolean, addDebugStats: 
 };
 
 const bundleUndici = async () => {
-	// Undici needs special configuration, since it needs many of the NodeJS globals, rather than
-	// the versions exposed by Electron, to function correctly. Using the Electron globals can cause
-	// renderer process crashes when fetching certain URLs and errors to be logged to the console.
+	// By default, Undici is broken in Electron renderer environments and can cause renderer process
+	// crashes when fetching certain URLs.
+	//
+	// Undici relies on several NodeJS global objects that are replaced in the Electron renderer process.
+	// For example, with the Electron globals, there's no .unref() on timer handles returned by setTimeout().
+	//
+	// As a workaround, add imports for many of the built-in objects so that Undici uses the NodeJS versions
+	// of the built-ins:
 	const undiciBuilder = await makeBuildContext(
 		require.resolve('undici'), true, false, { outfile: undiciPath, format: 'cjs', sourcemap: false, minify: false },
 	);
