@@ -13105,7 +13105,7 @@ __metadata:
     "@types/jest": "npm:29.5.14"
     "@types/jest-expect-message": "npm:1.1.0"
     "@types/jsdom": "npm:21.1.7"
-    "@types/koa": "npm:2.15.0"
+    "@types/koa": "npm:2.15.2"
     "@types/markdown-it": "npm:13.0.9"
     "@types/mustache": "npm:4.2.6"
     "@types/node": "npm:18.19.130"
@@ -13214,7 +13214,7 @@ __metadata:
     "@types/fs-extra": "npm:11.0.4"
     "@types/jest": "npm:29.5.14"
     "@types/jest-expect-message": "npm:1.1.0"
-    "@types/koa": "npm:2.15.0"
+    "@types/koa": "npm:2.15.2"
     "@types/sharp": "npm:0.32.0"
     "@types/uuid": "npm:11.0.0"
     dotenv: "npm:17.4.2"
@@ -19056,7 +19056,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/koa@npm:2.15.0, @types/koa@npm:^2.13.5":
+"@types/koa@npm:2.15.2":
+  version: 2.15.2
+  resolution: "@types/koa@npm:2.15.2"
+  dependencies:
+    "@types/accepts": "npm:*"
+    "@types/content-disposition": "npm:*"
+    "@types/cookies": "npm:*"
+    "@types/http-assert": "npm:*"
+    "@types/http-errors": "npm:*"
+    "@types/keygrip": "npm:*"
+    "@types/koa-compose": "npm:*"
+    "@types/node": "npm:*"
+  checksum: 10/1bc8fd92e5eb125102f5bae71986222d425349da1678a045f8f069155db8f29fd76bb36a30fdfa53148a37f130a93c7f0a46002ffc0b94daa0a53ea6acbb5c45
+  languageName: node
+  linkType: hard
+
+"@types/koa@npm:^2.13.5":
   version: 2.15.0
   resolution: "@types/koa@npm:2.15.0"
   dependencies:
