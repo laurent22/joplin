@@ -90,6 +90,8 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 			let body = replaceOutsideCode(note.body, text => text.replace(wikilinkRegex, (wikilink, _embed: string, target: string, shownName?: string) => {
 				const [noteTarget, ...headings] = target.split('#');
 				const heading = headings[headings.length - 1];
+				if (heading?.startsWith('^')) return wikilink;
+
 				const normalizedTarget = normalizedWikilinkTarget(withoutMarkdownExtension(noteTarget));
 				const matchingNoteIds = noteTarget ? noteIdsByWikilinkTarget.get(normalizedTarget) : [note.id];
 				if (matchingNoteIds?.length !== 1) return wikilink;

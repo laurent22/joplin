@@ -797,4 +797,31 @@ describe('InteropService_Importer_Obsidian', () => {
 
 		expect(note.body).toBe(`[Note#Parent#Child](:/${targetNote.id}#child)`);
 	});
+
+	it('should keep unsupported block wikilinks unchanged', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		const sourceBody = [
+			'Local block. ^local-id',
+			'',
+			'[[Note#^block-id]]',
+			'[[#^local-id]]',
+			'[[Note#^block-id|Shown name]]',
+			'![[Note#^block-id]]',
+			'![[#^local-id]]',
+		].join('\n');
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/Source.md`, sourceBody);
+		await fs.writeFile(`${vaultPath}/Note.md`, 'Target block. ^block-id');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const sourceNote = await Note.loadByTitle('Source');
+		const targetNote = await Note.loadByTitle('Note');
+
+		expect(sourceNote.body).toBe(sourceBody);
+		expect(targetNote.body).toBe('Target block. ^block-id');
+	});
 });
