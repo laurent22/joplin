@@ -19,8 +19,8 @@ const { sprintf } = require('sprintf-js');
 import { pregQuote, scriptType, removeDiacritics } from '../../string-utils';
 import PerformanceLogger from '../../PerformanceLogger';
 import SearchService from '../ai/SearchService';
-import AiService from '../ai/AiService';
 import { unique } from '../../ArrayUtils';
+import { embeddingAvailability } from '../ai/availability';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -754,9 +754,7 @@ export default class SearchEngine {
 		}
 
 		return Setting.value('featureFlag.enableSemanticSearch')
-			&& Setting.value('ai.enabled')
-			&& Setting.value('ai.embedding.enabled')
-			&& !!AiService.instance().getActiveEmbeddingProvider();
+			&& embeddingAvailability().available;
 	}
 
 	private async searchFromItemIds(searchString: string): Promise<ProcessResultsRow[]> {
