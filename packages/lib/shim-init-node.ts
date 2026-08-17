@@ -700,14 +700,8 @@ function shimInit(options: ShimInitOptions = null) {
 		const lastSettings = shim.httpAgent_?.lastSettings;
 
 		if (resolvedProxyUrl && proxySettings.proxyEnabled) {
-			const proxyUrl = new URL(resolvedProxyUrl);
-			// Support username:password@url-format basic authentication for backwards compatibility
-			// with the previous `hpagent`-based proxy logic:
-			const auth = proxyUrl.username ? `${proxyUrl.username}:${proxyUrl.password}` : '';
-			proxyUrl.username = '';
-			proxyUrl.password = '';
 			const baseSettings = agentSettingsBase(url, options);
-			const { connect: proxyConnectSettings } = agentSettingsBase(proxyUrl.toString(), options);
+			const { connect: proxyConnectSettings } = agentSettingsBase(resolvedProxyUrl, options);
 
 			const agentSettings = {
 				...baseSettings,
@@ -716,10 +710,7 @@ function shimInit(options: ShimInitOptions = null) {
 				connectTimeout: proxySettings.proxyTimeout * Second,
 
 				connections: proxySettings.maxConcurrentConnections ?? null,
-				uri: proxyUrl.toString(),
-				...(auth ? {
-					token: `Basic ${Buffer.from(auth, 'utf-8').toString('base64')}`,
-				} : {}),
+				uri: resolvedProxyUrl,
 			} satisfies ProxyAgent.Options;
 			delete agentSettings.connect;
 
