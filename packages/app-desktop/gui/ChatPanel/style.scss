@@ -19,23 +19,25 @@
 	font-weight: 600;
 }
 
-.chat-panel > .header > .title {
-	flex: 1;
-	font-size: inherit;
-	margin: 0;
-}
+.chat-panel-header {
+	> .title {
+		flex: 1;
+		font-size: inherit;
+		margin: 0;
+	}
 
-.chat-panel > .header > .reset {
-	background: none;
-	border: none;
-	color: var(--joplin-color-faded);
-	cursor: pointer;
-	font-size: 0.85em;
-	padding: 2px 6px;
-}
+	> .reset, > .close {
+		background: none;
+		border: none;
+		color: var(--joplin-color-faded);
+		cursor: pointer;
+		font-size: 0.85em;
+		padding: 2px 6px;
 
-.chat-panel > .header > .reset:hover {
-	color: var(--joplin-color);
+		&:hover {
+			color: var(--joplin-color);
+		}
+	}
 }
 
 .chat-panel > .degraded-status {

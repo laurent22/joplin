@@ -588,6 +588,12 @@ export default class ItemModel extends BaseModel<Item> {
 		item.encryption_applied = itemRow.jop_encryption_applied;
 		item.updated_time = itemRow.jop_updated_time;
 
+		// Old notes and folders have no deleted_time in their content, so
+		// default it to 0 here
+		if ((item.type_ === ModelType.Note || item.type_ === ModelType.Folder) && item.deleted_time === undefined) {
+			item.deleted_time = 0;
+		}
+
 		return item;
 	}
 

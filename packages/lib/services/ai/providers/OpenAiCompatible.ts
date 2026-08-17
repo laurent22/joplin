@@ -52,7 +52,6 @@ const convertTool = (tool: ToolSpec) => {
 			name: tool.id,
 			description: tool.description,
 			parameters: tool.inputSchema,
-			strict: true,
 		},
 	};
 };
@@ -89,7 +88,7 @@ const convertMessage = (message: ChatMessage) => {
 		return [{
 			role: message.role,
 			content: message.content,
-			...(message.toolCalls ? {
+			...(message.toolCalls?.length ? {
 				tool_calls: message.toolCalls.map(call => {
 					return {
 						id: call.callId,

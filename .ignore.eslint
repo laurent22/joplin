@@ -8,6 +8,7 @@ _releases/
 **/node_modules/
 **/abcjs-basic-min.js
 packages/generator-joplin/generators/app/templates/api/
+packages/generator-joplin/generators/app/templates/script/publish/dist/
 Assets/
 docs/
 highlight.pack.js
@@ -1326,9 +1327,6 @@ packages/generator-joplin/generators/app/templates/api/index.js
 packages/generator-joplin/generators/app/templates/api/noteListType.js
 packages/generator-joplin/generators/app/templates/api/types.js
 packages/generator-joplin/generators/app/templates/api_index.js
-packages/generator-joplin/generators/app/templates/script/publish/steps/verifyBuild.js
-packages/generator-joplin/generators/app/templates/script/publish/steps/verifyGitState.js
-packages/generator-joplin/generators/app/templates/script/publish/utils/logger.js
 packages/generator-joplin/generators/app/templates/src/index.js
 packages/generator-joplin/tools/updateCategories.js
 packages/htmlpack/index.test.js
@@ -1505,6 +1503,7 @@ packages/lib/models/Alarm.js
 packages/lib/models/BaseItem.test.js
 packages/lib/models/BaseItem.js
 packages/lib/models/ConflictNoteState.js
+packages/lib/models/Folder.publishing.test.js
 packages/lib/models/Folder.sharing.test.js
 packages/lib/models/Folder.test.js
 packages/lib/models/Folder.js
@@ -1677,6 +1676,10 @@ packages/lib/services/conflict/diffNotes.test.js
 packages/lib/services/conflict/diffNotes.js
 packages/lib/services/conflict/isAutoMergeEnabled.js
 packages/lib/services/conflict/isConflictResolutionEnabled.js
+packages/lib/services/conflict/loadConflictData.test.js
+packages/lib/services/conflict/loadConflictData.js
+packages/lib/services/conflict/wordDiff.test.js
+packages/lib/services/conflict/wordDiff.js
 packages/lib/services/contextkey/contextkey.js
 packages/lib/services/database/addMigrationFile.js
 packages/lib/services/database/isSqliteSyntaxError.js
