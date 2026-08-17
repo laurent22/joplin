@@ -456,8 +456,8 @@ export default class BaseApplication {
 		sideEffects['encryption.passwordCache'] = sideEffects['syncInfoCache'];
 		sideEffects['encryption.masterPassword'] = sideEffects['syncInfoCache'];
 		sideEffects['sync.maxConcurrentConnections'] = sideEffects['net.proxyEnabled'];
-		sideEffects['sync.proxyTimeout'] = sideEffects['net.proxyEnabled'];
-		sideEffects['sync.proxyUrl'] = sideEffects['net.proxyEnabled'];
+		sideEffects['net.proxyTimeout'] = sideEffects['net.proxyEnabled'];
+		sideEffects['net.proxyUrl'] = sideEffects['net.proxyEnabled'];
 		sideEffects['ai.chat.baseUrl'] = sideEffects['ai.chat.providerType'];
 		sideEffects['ai.chat.apiKey'] = sideEffects['ai.chat.providerType'];
 		sideEffects['ai.chat.model'] = sideEffects['ai.chat.providerType'];
