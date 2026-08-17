@@ -1,6 +1,8 @@
 import { pathExists, readFile, writeFile, unlink, stat, createWriteStream } from 'fs-extra';
 import { hasCredentialFile, readCredentialFile } from '@joplin/lib/utils/credentialFiles';
 import { execCommand as execCommand2, commandToString } from '@joplin/utils';
+
+import fetch from 'node-fetch';
 import execa = require('execa');
 import moment from 'moment';
 

@@ -3,6 +3,10 @@
 import { githubOauthToken } from '@joplin/tools/tool-utils';
 import { pathExists, readdir, readFile, stat, writeFile } from 'fs-extra';
 
+// We need to require `.default` due to this issue:
+// https://github.com/node-fetch/node-fetch/issues/450#issuecomment-387045223
+const fetch = require('node-fetch').default;
+
 const ghReleaseAssets = require('gh-release-assets');
 
 const repoFullName = process.env.GITHUB_REPOSITORY || 'joplin/plugins';

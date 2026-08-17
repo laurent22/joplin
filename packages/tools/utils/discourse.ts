@@ -1,5 +1,6 @@
 import { substrWithEllipsis } from '@joplin/lib/string-utils';
 import { msleep } from '@joplin/utils/time';
+import fetch from 'node-fetch';
 
 interface ApiConfig {
 	baseUrl: string;

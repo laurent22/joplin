@@ -1,5 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
+import fetch from 'node-fetch';
 import { writeFile, readFile, pathExists } from 'fs-extra';
 import { dirname } from '@joplin/lib/path-utils';
 import markdownUtils from '@joplin/lib/markdownUtils';

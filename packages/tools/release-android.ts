@@ -3,6 +3,7 @@ import { copy, mkdirp, move, readFile, readFileSync, remove, stat, writeFile, wr
 import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
 import { homedir } from 'os';
 import * as path from 'path';
+import fetch from 'node-fetch';
 import * as uriTemplate from 'uri-template';
 
 const rootDir = path.dirname(path.dirname(__dirname));

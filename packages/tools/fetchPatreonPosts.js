@@ -1,6 +1,7 @@
 // Fetch Patreon posts to Markdown so that we have them in a more versatile format
 // and to add them to the "News" notifications later on.
 
+const fetch = require('node-fetch');
 const fs = require('fs-extra');
 const { patreonOauthToken } = require('./tool-utils');
 const HtmlToMd = require('@joplin/lib/HtmlToMd').default;
