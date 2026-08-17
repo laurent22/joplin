@@ -46,10 +46,16 @@ describe('syncInfoUtils', () => {
 			hasBeenUsed: true,
 			updated_time: 123,
 		}];
+		const setValueSpy = jest.spyOn(Setting, 'setValue');
 
-		setMasterKeyHasBeenUsed(syncInfo, '1');
+		try {
+			setMasterKeyHasBeenUsed(syncInfo, '1');
 
-		expect(syncInfo.masterKeys[0].updated_time).toBe(123);
+			expect(syncInfo.masterKeys[0].updated_time).toBe(123);
+			expect(setValueSpy).not.toHaveBeenCalledWith('syncInfoCache', expect.anything());
+		} finally {
+			setValueSpy.mockRestore();
+		}
 	});
 
 	it('should tell if two sync info are equal', async () => {
