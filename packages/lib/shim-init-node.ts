@@ -32,6 +32,7 @@ import timers from 'timers';
 import dgram from 'dgram';
 import { pipeline } from 'stream/promises';
 import { createPrivateKey } from 'crypto';
+import { Second } from '@joplin/utils/time';
 
 interface ProxySettings {
 	maxConcurrentConnections?: number;
@@ -688,7 +689,7 @@ function shimInit(options: ShimInitOptions = null) {
 					cert: clientCertPair.certificate,
 				} : {}),
 			},
-		};
+		} satisfies Agent.Options;
 	};
 
 	shim.httpAgent = (url, options) => {
@@ -709,14 +710,14 @@ function shimInit(options: ShimInitOptions = null) {
 				...baseSettings,
 				requestTls: baseSettings.connect,
 				proxyTls: proxyConnectSettings,
+				connectTimeout: proxySettings.proxyTimeout * Second,
 
 				connections: proxySettings.maxConcurrentConnections ?? null,
 				uri: proxyUrl.toString(),
-				timeout: proxySettings.proxyTimeout * 1000,
 				...(auth ? {
 					token: `Basic ${Buffer.from(auth, 'utf-8').toString('base64')}`,
 				} : {}),
-			};
+			} satisfies ProxyAgent.Options;
 			delete agentSettings.connect;
 
 			if (!fastDeepEqual(lastSettings, agentSettings)) {
