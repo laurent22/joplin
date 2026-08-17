@@ -71,6 +71,8 @@ docs/**/*.mustache
 !.yarn/sdks
 !.yarn/versions
 
+packages/generator-joplin/generators/app/templates/script/publish/dist/
+
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.js
 packages/app-cli/app/ResourceServer.js
@@ -1300,9 +1302,6 @@ packages/generator-joplin/generators/app/templates/api/index.js
 packages/generator-joplin/generators/app/templates/api/noteListType.js
 packages/generator-joplin/generators/app/templates/api/types.js
 packages/generator-joplin/generators/app/templates/api_index.js
-packages/generator-joplin/generators/app/templates/script/publish/steps/verifyBuild.js
-packages/generator-joplin/generators/app/templates/script/publish/steps/verifyGitState.js
-packages/generator-joplin/generators/app/templates/script/publish/utils/logger.js
 packages/generator-joplin/generators/app/templates/src/index.js
 packages/generator-joplin/tools/updateCategories.js
 packages/htmlpack/index.test.js
