@@ -41,6 +41,8 @@ export type AttachedResources = Record<string, AttachedResource>;
 
 export interface SaveNoteOptions {
 	autoTitle?: boolean;
+	editorNoteReloadTimeRequest?: number;
+	getEditorNoteReloadTimeRequest?: ()=> number;
 }
 
 export interface BaseState {
@@ -158,6 +160,17 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 	if (hasAutoTitle && options.autoTitle) {
 		note.title = Note.defaultTitle(note.body);
 		if (saveOptions.fields && saveOptions.fields.indexOf('title') < 0) saveOptions.fields.push('title');
+	}
+
+	// This check is intentionally immediately before Note.save. The action may
+	// have been queued, or waiting for the save mutex, when the reload was
+	// requested. In that case its note snapshot is stale and must be discarded.
+	if (
+		options.editorNoteReloadTimeRequest !== undefined &&
+		options.getEditorNoteReloadTimeRequest &&
+		options.getEditorNoteReloadTimeRequest() > options.editorNoteReloadTimeRequest
+	) {
+		return releaseMutex();
 	}
 
 	const savedNote = 'fields' in saveOptions && !saveOptions.fields.length ? { ...note } : await Note.save(note, saveOptions);

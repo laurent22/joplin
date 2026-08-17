@@ -127,7 +127,7 @@ test.describe('wcag', () => {
 		await mainScreen.chatPanel.waitForMessageCount(2);
 
 		await mainScreen.chatPanel.sendMessage(
-			'/tool editor.appendToNote {"text": "test"}\n/reply-with done',
+			'/tool editor_appendToNote {"text": "test"}\n/reply-with done',
 		);
 		await mainScreen.chatPanel.waitForMessageCount(5);
 

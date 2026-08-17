@@ -9,6 +9,8 @@ import loadStorageDriver from './items/storage/loadStorageDriver';
 import { ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
 import { makeNoteSerializedBody } from '../utils/testing/serializedItems';
 import { isSqlite } from '../db';
+import { ModelType } from '@joplin/lib/BaseModel';
+import { Item } from '../services/database/types';
 
 describe('ItemModel', () => {
 
@@ -644,6 +646,19 @@ describe('ItemModel', () => {
 		})()).rejects.toThrow();
 
 		await models().item().delete('00000000000000000000000000000003', { allowNoOp: true });
+	});
+
+	test('itemToJoplinItem should default deleted_time to 0 when the item content has none', async () => {
+		const makeRow = (content: object): Item => ({
+			jop_type: ModelType.Note,
+			content: Buffer.from(JSON.stringify(content)),
+		});
+
+		const oldNote = models().item().itemToJoplinItem(makeRow({ type_: ModelType.Note, title: 'Ping' }));
+		expect(oldNote.deleted_time).toBe(0);
+
+		const trashedNote = models().item().itemToJoplinItem(makeRow({ type_: ModelType.Note, title: 'Ping', deleted_time: 123 }));
+		expect(trashedNote.deleted_time).toBe(123);
 	});
 
 });
