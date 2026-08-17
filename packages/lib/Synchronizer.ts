@@ -1025,7 +1025,7 @@ export default class Synchronizer {
 										if (content && content.updated_time > localUpdatedTime) {
 											action = SyncAction.UpdateLocal;
 											reason = 'remote is more recent than local';
-										} else if (content && enableEnhancedBasicDeltaAlgorithm()) {
+										} else if (enableEnhancedBasicDeltaAlgorithm()) {
 											// When the enhanced basic delta algorithm is first used, all items are rescanned and we need to persist the remoteItemUpdatedTime
 											// to set up the initial synced state. This also catches the case if content.updated_time < local.updated_time due to manual manipulation
 											// of the md files, to prevent these items being continually fetched on every sync
