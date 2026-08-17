@@ -951,8 +951,8 @@ export default class BaseItem extends BaseModel {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See updateSyncTimeQueries; tests pass loose objects with `id` as number
-	public static async saveSyncTime(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0) {
-		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime, null, remoteItemUpdatedTime);
+	public static async saveSyncTime(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0, base: SyncItemBaseVersion = null) {
+		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime, base, remoteItemUpdatedTime);
 		return this.db().transactionExecBatch(queries);
 	}
 

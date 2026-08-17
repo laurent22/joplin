@@ -1267,10 +1267,6 @@ export default class Note extends BaseItem {
 		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });
 	}
 
-	public static async saveSyncBaseContent(syncTarget: number, noteId: string, body: string, title: string) {
-		await BaseItem.saveSyncBaseContent(syncTarget, noteId, body, title);
-	}
-
 	public static async setBaseConflictNoteId(syncTarget: number, noteId: string, conflictNoteId: string) {
 		const sql = 'UPDATE sync_items SET base_conflict_note_id = ? WHERE item_id = ? AND item_type = ? AND sync_target = ?';
 		await this.db().exec(sql, [conflictNoteId, noteId, this.TYPE_NOTE, syncTarget]);
