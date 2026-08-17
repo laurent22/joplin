@@ -706,8 +706,10 @@ function shimInit(options: ShimInitOptions = null) {
 			const agentSettings = {
 				...baseSettings,
 				requestTls: baseSettings.connect,
-				proxyTls: proxyConnectSettings,
-				connectTimeout: proxySettings.proxyTimeout * Second,
+				proxyTls: {
+					...proxyConnectSettings,
+					timeout: (proxySettings.proxyTimeout ?? 5) * Second,
+				},
 
 				connections: proxySettings.maxConcurrentConnections ?? null,
 				uri: resolvedProxyUrl,
