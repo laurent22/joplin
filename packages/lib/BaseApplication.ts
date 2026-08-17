@@ -76,6 +76,7 @@ import NoteLockKey from './services/noteLock/NoteLockKey';
 import isNoteLockEnabled from './services/noteLock/isNoteLockEnabled';
 import NoteLockSession from './services/noteLock/NoteLockSession';
 import NoteLockService from './services/noteLock/NoteLockService';
+import { BuiltInMetadataKeys } from './models/settings/builtInMetadata';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 const perfLogger = PerformanceLogger.create();
@@ -373,7 +374,8 @@ export default class BaseApplication {
 	}
 
 	protected async applySettingsSideEffects(action: { type?: string; key?: string; keys?: string[] } = null) {
-		const sideEffects: Record<string, ()=> Promise<void>> = {
+		type SideEffects = Partial<Record<BuiltInMetadataKeys, ()=> Promise<void>>>;
+		const sideEffects: SideEffects = {
 			'dateFormat': async () => {
 				time.setLocale(Setting.value('locale'));
 				setTimeLocale(Setting.value('locale'));
@@ -463,11 +465,11 @@ export default class BaseApplication {
 		sideEffects['ai.chat.model'] = sideEffects['ai.chat.providerType'];
 
 		if (action) {
-			const effect = sideEffects[action.key];
+			const effect = sideEffects[action.key as keyof SideEffects];
 			if (effect) await effect();
 		} else {
 			for (const key in sideEffects) {
-				await sideEffects[key]();
+				await sideEffects[key as keyof SideEffects]();
 			}
 		}
 	}
