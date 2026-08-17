@@ -24,8 +24,9 @@ export type FetchBlobOptions = {
 	maxRedirects?: number;
 	maxRetry?: number;
 	timeout?: number;
-	overwrite?: boolean;
 	ignoreTlsErrors?: boolean;
 	headers?: Record<string, string>;
 	downloadController?: DownloadHandler;
+	// Defaults to true, only respected on mobile:
+	overwrite?: boolean;
 };
