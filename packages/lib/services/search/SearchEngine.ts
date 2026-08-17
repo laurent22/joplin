@@ -754,6 +754,7 @@ export default class SearchEngine {
 		}
 
 		return Setting.value('featureFlag.enableSemanticSearch')
+			&& Setting.value('ai.enabled')
 			&& Setting.value('ai.embedding.enabled')
 			&& !!AiService.instance().getActiveEmbeddingProvider();
 	}
