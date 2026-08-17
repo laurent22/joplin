@@ -680,8 +680,11 @@ function shimInit(options: ShimInitOptions = null) {
 		}) : null;
 
 		return {
+			headersTimeout: options?.timeout,
 			bodyTimeout: options?.timeout,
+			connectTimeout: options?.timeout,
 			keepAliveTimeout: 5000,
+
 			connect: {
 				ecdhCurve: tlsEcdhCurve,
 				...(clientCertPair ? {
