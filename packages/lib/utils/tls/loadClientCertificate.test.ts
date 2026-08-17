@@ -29,7 +29,7 @@ describe('loadClientCertificate', () => {
 			});
 		} finally {
 			await remove(tempDir);
-			mock.mockReset();
+			mock.mockRestore();
 		}
 	});
 });
