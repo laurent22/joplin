@@ -1,6 +1,6 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep, fileApi } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { checkIfCanSync, localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo, onRevisionServiceSettingsChanged } from './syncInfoUtils';
+import { checkIfCanSync, localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo, onRevisionServiceSettingsChanged } from './syncInfoUtils';
 import Setting from '../../models/Setting';
 import BaseItem from '../../models/BaseItem';
 import BaseModel from '../../models/BaseItem';
@@ -36,6 +36,20 @@ describe('syncInfoUtils', () => {
 
 		expect(masterKeyEnabled(await MasterKey.load(mk1.id))).toBe(true);
 		expect(masterKeyEnabled(await MasterKey.load(mk2.id))).toBe(false);
+	});
+
+	it('should not update an already-used master key', () => {
+		const syncInfo = new SyncInfo();
+		syncInfo.masterKeys = [{
+			id: '1',
+			content: 'content',
+			hasBeenUsed: true,
+			updated_time: 123,
+		}];
+
+		setMasterKeyHasBeenUsed(syncInfo, '1');
+
+		expect(syncInfo.masterKeys[0].updated_time).toBe(123);
 	});
 
 	it('should tell if two sync info are equal', async () => {
