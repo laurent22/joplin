@@ -95,7 +95,13 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 				// Ahead of the remote time so the merge uploads as a local change
 				updated_time: Math.max(time.unixMs(), remoteNote.updated_time + 1),
 			};
-			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, mergedNote, BaseItem.remoteItemSyncTime(remoteNote.updated_time), null, remoteNote.updated_time);
+			// Both sides now share the merged output, so it becomes the base for later conflicts
+			const mergedBase = {
+				base_body: mergedNote.body ?? '',
+				base_title: mergedNote.title ?? '',
+				base_conflict_note_id: '',
+			};
+			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, mergedNote, BaseItem.remoteItemSyncTime(remoteNote.updated_time), mergedBase, remoteNote.updated_time);
 			await ItemClass.save(mergedNote, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 
 			// No conflict note is created, so the mobile viewer/editor must reload the merged note
@@ -176,7 +182,17 @@ export default async (action: SyncAction, ItemClass: typeof BaseItem, remoteExis
 
 		if (remoteExists) {
 			local = remoteContent;
-			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteSyncedTime), null, remoteSyncedTime);
+
+			// The remote version becomes the base, as a conflict note may be deleted rather than
+			// resolved. An encrypted note carries no title or body, so the base is left empty
+			// and the decryption worker records it once decrypted.
+			const conflictBase = action === SyncAction.NoteConflict ? {
+				base_body: (local as NoteEntity).body ?? '',
+				base_title: (local as NoteEntity).title ?? '',
+				base_conflict_note_id: '',
+			} : null;
+
+			const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, BaseItem.remoteItemSyncTime(remoteSyncedTime), conflictBase, remoteSyncedTime);
 			await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 
 			if (action === SyncAction.NoteConflict) {

@@ -203,6 +203,60 @@ describe('Synchronizer.baseFields', () => {
 		expect(state.base_body).toBe('original base');
 		expect(state.base_body).not.toBe('remote body');
 		expect(state.base_body).not.toBe('local body');
+
+		// The sync item is updated to the version both sides now share,
+		// so future conflicts use the latest shared version as the base.
+		const syncItem = await BaseItem.syncItem(syncTargetId(), note.id, { fields: ['base_body'] });
+		expect(syncItem.base_body).toBe('remote body');
+	}));
+
+	it('should set the merged result as the base after an auto-merge', (async () => {
+		const note = await Note.save({ title: 'title', body: 'line1\nline2\nline3' });
+		await synchronizerStart();
+		await switchClient(2);
+		await synchronizerStart();
+		await switchClient(1);
+
+		await makeConflictOnClient1(note.id, 'CHANGED1\nline2\nline3', 'line1\nline2\nCHANGED3');
+
+		const merged = await Note.load(note.id);
+		expect(merged.body).toBe('CHANGED1\nline2\nCHANGED3');
+
+		const syncItem = await BaseItem.syncItem(syncTargetId(), note.id, { fields: ['base_body'] });
+		expect(syncItem.base_body).toBe(merged.body);
+	}));
+
+	it('should clear the base while a conflicting note is still encrypted', (async () => {
+		setEncryptionEnabled(true);
+		const masterKey = await loadEncryptionMasterKey();
+
+		const note = await Note.save({ title: 'title', body: 'original base' });
+		await synchronizerStart();
+
+		// Client 2 has no master key, so it holds the note encrypted
+		await switchClient(2);
+		await synchronizerStart();
+
+		await switchClient(1);
+		await Note.save({ id: note.id, body: 'client 1 edit' });
+		await synchronizerStart();
+
+		// The conflict is handled on client 2 while the note is still unreadable
+		await switchClient(2);
+		await Note.save({ id: note.id, body: 'client 2 edit' });
+		await synchronizerStart();
+
+		// Without readable content, the base cannot be written, so it is cleared until
+		// the note is decrypted.
+		let syncItem = await BaseItem.syncItem(syncTargetId(), note.id, { fields: ['base_body'] });
+		expect(syncItem.base_body).toBe('');
+
+		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
+		await decryptionWorker().start();
+
+		syncItem = await BaseItem.syncItem(syncTargetId(), note.id, { fields: ['base_body'] });
+		expect(syncItem.base_body).toBe((await Note.load(note.id)).body);
 	}));
 
 });
