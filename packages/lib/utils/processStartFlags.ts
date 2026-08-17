@@ -11,6 +11,7 @@ export interface MatchedStartFlags {
 	isSafeMode?: boolean;
 	showStackTraces?: boolean;
 	logLevel?: LogLevel;
+	allowOverridingDnsResultOrder?: boolean;
 	devPlugins?: string[];
 	altInstanceId?: string;
 }
@@ -65,6 +66,8 @@ const processStartFlags = async (argv: string[], setDefaults = true) => {
 		}
 
 		if (arg.startsWith('--dns-result-order=')) {
+			matched.allowOverridingDnsResultOrder = false;
+
 			// Handled by Electron/NodeJS (and indicates we shouldn't override this ourselves).
 			argv.splice(0, 1);
 			continue;
@@ -227,6 +230,7 @@ const processStartFlags = async (argv: string[], setDefaults = true) => {
 		if (!matched.logLevel) matched.logLevel = Logger.LEVEL_INFO;
 		if (!matched.env) matched.env = 'prod';
 		if (!matched.devPlugins) matched.devPlugins = [];
+		matched.allowOverridingDnsResultOrder ??= true;
 	}
 
 	return {

@@ -29,6 +29,7 @@ import { setDateFormat, setTimeFormat, setTimeLocale } from '@joplin/utils/time'
 import { reg } from './registry';
 import time from './time';
 import BaseSyncTarget from './BaseSyncTarget';
+import dns = require('dns');
 import reduxSharedMiddleware from './components/shared/reduxSharedMiddleware';
 import fs = require('fs-extra');
 import { EventEmitter } from 'events';
@@ -192,6 +193,13 @@ export default class BaseApplication {
 
 		if (flags.matched.showStackTraces) {
 			this.showStackTraces_ = true;
+		}
+
+		// Work around issues with ipv6 resolution -- default to ipv4first.
+		// (possibly incorrect URL serialization see https://github.com/mswjs/msw/issues/1388#issuecomment-1241180921).
+		// See also https://github.com/node-fetch/node-fetch/issues/1624#issuecomment-1407717012
+		if (flags.matched.allowOverridingDnsResultOrder) {
+			dns.setDefaultResultOrder('ipv4first');
 		}
 
 		return {
