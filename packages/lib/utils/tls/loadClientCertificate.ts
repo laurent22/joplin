@@ -16,6 +16,14 @@ const clientCertificateSettings = () => ({
 	'net.clientCertificate.password': Setting.value('net.clientCertificate.password'),
 });
 
+const parseDomainsList = (text: string) => {
+	const lines = stripBom(text).replace(/\r\n/g, '\n').trim();
+
+	return lines
+		.split('\n')
+		.filter(entry => !!entry.trim() && !entry.startsWith('#'));
+};
+
 const loadClientCertificate = async (settings: LoadClientCertificateSettings) => {
 	settings = {
 		...clientCertificateSettings(),
@@ -39,13 +47,7 @@ const loadClientCertificate = async (settings: LoadClientCertificateSettings) =>
 			const domainsList = await (async () => {
 				if (!await shim.fsDriver().exists(domainsPath)) throw new Error('Reading client certificate: No domains.txt file found');
 
-				const lines = stripBom(
-					await shim.fsDriver().readFile(domainsPath, 'utf-8'),
-				).replace(/\r\n/g, '\n').trim();
-
-				return lines
-					.split('\n')
-					.filter(entry => !!entry.trim() && !entry.startsWith('#'));
+				return parseDomainsList(await shim.fsDriver().readFile(domainsPath, 'utf-8'));
 			})();
 
 			logger.info('Loading client certificate from', parentDirectory);
