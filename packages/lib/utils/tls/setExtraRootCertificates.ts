@@ -11,7 +11,6 @@ let cacheKey = '[]';
 const setExtraRootCertificates = async (paths: string[]) => {
 	const newCacheKey = JSON.stringify(paths);
 	if (newCacheKey === cacheKey) return;
-	cacheKey = newCacheKey;
 
 	const cas = [...defaultCaCerts()];
 	for (const caPath of paths) {
@@ -23,6 +22,7 @@ const setExtraRootCertificates = async (paths: string[]) => {
 	}
 
 	setDefaultCACertificates(cas);
+	cacheKey = newCacheKey;
 };
 
 export default setExtraRootCertificates;
