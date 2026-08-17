@@ -2,15 +2,26 @@ import { join } from 'path';
 import shim, { SetClientCertificateOptions } from '../../shim';
 import Logger from '@joplin/utils/Logger';
 import { stripBom } from '../../string-utils';
+import Setting from '../../models/Setting';
 
 const logger = Logger.create('loadClientCertificate');
 
 export interface LoadClientCertificateSettings {
-	'net.clientCertificate': string;
-	'net.clientCertificate.password': string;
+	'net.clientCertificate'?: string;
+	'net.clientCertificate.password'?: string;
 }
 
+const clientCertificateSettings = () => ({
+	'net.clientCertificate': Setting.value('net.clientCertificate'),
+	'net.clientCertificate.password': Setting.value('net.clientCertificate.password'),
+});
+
 const loadClientCertificate = async (settings: LoadClientCertificateSettings) => {
+	settings = {
+		...clientCertificateSettings(),
+		...settings,
+	};
+
 	const parentDirectory = settings['net.clientCertificate'];
 	let options: SetClientCertificateOptions|null = null;
 	try {

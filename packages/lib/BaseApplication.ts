@@ -367,10 +367,7 @@ export default class BaseApplication {
 
 	private async updateCustomCertificates_() {
 		try {
-			await loadClientCertificate({
-				'net.clientCertificate': Setting.value('net.clientCertificate'),
-				'net.clientCertificate.password': Setting.value('net.clientCertificate.password'),
-			});
+			await loadClientCertificate({});
 		} catch (error) {
 			this.logger().error('Failed to set client certificate:', error);
 		}
