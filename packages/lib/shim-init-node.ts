@@ -648,7 +648,7 @@ function shimInit(options: ShimInitOptions = null) {
 	interface ClientCertificatePair {
 		privateKey: string;
 		certificate: string;
-		domains: RegExp;
+		domains: string[];
 	}
 	let clientCertificates: ClientCertificatePair[] = [];
 
@@ -675,7 +675,7 @@ function shimInit(options: ShimInitOptions = null) {
 	const agentSettingsBase = (url: string, options?: HttpAgentOptions) => {
 		const parsedUrl = new URL(url);
 		const clientCertPair = parsedUrl.protocol === 'https:' ? clientCertificates.find(pair => {
-			return parsedUrl.hostname.match(pair.domains);
+			return pair.domains.includes(parsedUrl.hostname);
 		}) : null;
 
 		return {

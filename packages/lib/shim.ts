@@ -84,7 +84,7 @@ export type SetClientCertificateOptions = {
 	certPath: string;
 	keyPath: string;
 	keyPassword: string;
-	domains: RegExp;
+	domains: string[];
 };
 
 export interface HttpAgentOptions {

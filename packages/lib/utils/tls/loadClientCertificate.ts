@@ -1,6 +1,7 @@
 import { join } from 'path';
 import shim, { SetClientCertificateOptions } from '../../shim';
 import Logger from '@joplin/utils/Logger';
+import { stripBom } from '../../string-utils';
 
 const logger = Logger.create('loadClientCertificate');
 
@@ -20,18 +21,24 @@ const loadClientCertificate = async (settings: LoadClientCertificateSettings) =>
 		} else {
 			const certPath = join(parentDirectory, 'client-cert.pem');
 			const keyPath = join(parentDirectory, 'client-key.pem');
-			const domainsPath = join(parentDirectory, 'domains.regex');
+			const domainsPath = join(parentDirectory, 'domains.txt');
 
 			const keyPassword = settings['net.clientCertificate.password'];
 
-			const domainsExp = await (async () => {
-				if (!await shim.fsDriver().exists(domainsPath)) return /^.*$/;
-				const text = await shim.fsDriver().readFile(domainsPath, 'utf-8');
-				return new RegExp(text.trim());
+			const domainsList = await (async () => {
+				if (!await shim.fsDriver().exists(domainsPath)) throw new Error('Reading client certificate: No domains.txt file found');
+
+				const lines = stripBom(
+					await shim.fsDriver().readFile(domainsPath, 'utf-8'),
+				).replace(/\r\n/g, '\n').trim();
+
+				return lines
+					.split('\n')
+					.filter(entry => !!entry.trim() && !entry.startsWith('#'));
 			})();
 
 			logger.info('Loading client certificate from', parentDirectory);
-			options = { certPath, keyPath, domains: domainsExp, keyPassword };
+			options = { certPath, keyPath, domains: domainsList, keyPassword };
 		}
 
 		await shim.setClientCertificate(options);
