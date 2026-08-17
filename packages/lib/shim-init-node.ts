@@ -680,12 +680,14 @@ function shimInit(options: ShimInitOptions = null) {
 
 		return {
 			bodyTimeout: options?.timeout,
-			keepAliveMsecs: 5000,
-			ecdhCurve: tlsEcdhCurve,
-			connect: clientCertPair ? {
-				key: clientCertPair.privateKey,
-				cert: clientCertPair.certificate,
-			} : {},
+			keepAliveTimeout: 5000,
+			connect: {
+				ecdhCurve: tlsEcdhCurve,
+				...(clientCertPair ? {
+					key: clientCertPair.privateKey,
+					cert: clientCertPair.certificate,
+				} : {}),
+			},
 		};
 	};
 
@@ -701,12 +703,14 @@ function shimInit(options: ShimInitOptions = null) {
 			proxyUrl.username = '';
 			proxyUrl.password = '';
 			const baseSettings = agentSettingsBase(url, options);
+			const { connect: proxyConnectSettings } = agentSettingsBase(proxyUrl.toString(), options);
 
 			const agentSettings = {
 				...baseSettings,
 				requestTls: baseSettings.connect,
+				proxyTls: proxyConnectSettings,
 
-				maxSockets: proxySettings.maxConcurrentConnections,
+				connections: proxySettings.maxConcurrentConnections ?? null,
 				uri: proxyUrl.toString(),
 				timeout: proxySettings.proxyTimeout * 1000,
 				...(auth ? {
