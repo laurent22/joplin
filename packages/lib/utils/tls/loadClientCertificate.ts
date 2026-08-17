@@ -21,7 +21,8 @@ const parseDomainsList = (text: string) => {
 
 	return lines
 		.split('\n')
-		.filter(entry => !!entry.trim() && !entry.startsWith('#'));
+		.map(line => line.trim())
+		.filter(line => line.length > 0 && !line.startsWith('#'));
 };
 
 const assertFilesExist = async (paths: string[]) => {
