@@ -281,5 +281,33 @@ test.describe('richTextEditor', () => {
 		await expect(editorBody).toHaveText('');
 	});
 
+	test('should save rich text changes when switching notes immediately after typing', async ({ mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Test 1');
+		await mainScreen.createNewNote('Test 2');
+		const test1Header = mainScreen.noteList.getNoteItemByTitle('Test 1');
+		const test2Header = mainScreen.noteList.getNoteItemByTitle('Test 2');
+
+		const editor = mainScreen.noteEditor;
+		await editor.toggleEditorsButton.click();
+		await editor.richTextEditor.waitFor();
+		const editorBody = editor.getRichTextEditorBody();
+
+		await test1Header.click();
+		await expect(editor.noteTitleInput).toHaveValue('Test 1');
+		await expect(editorBody).toHaveText('');
+		await editorBody.pressSequentially('Unsaved text');
+		// This confirms that onWillChange has reached the parent without waiting for
+		// TinyMCE's delayed onChange/save.
+		await expect(editor.toggleEditorsButton).toBeDisabled();
+		await test2Header.click();
+
+		await expect(editor.noteTitleInput).toHaveValue('Test 2');
+		await expect(editorBody).toHaveText('');
+		await test1Header.click();
+		await expect(editor.noteTitleInput).toHaveValue('Test 1');
+		await expect(editorBody).toHaveText('Unsaved text');
+	});
+
 });
 
