@@ -5,7 +5,7 @@ import shim from './shim';
 import MigrationHandler from './services/synchronizer/MigrationHandler';
 import eventManager, { EventName } from './eventManager';
 import { _ } from './locale';
-import BaseItem from './models/BaseItem';
+import BaseItem, { RemoteItemMetadata } from './models/BaseItem';
 import Folder from './models/Folder';
 import Note from './models/Note';
 import Resource from './models/Resource';
@@ -903,6 +903,7 @@ export default class Synchronizer {
 				while (true) {
 					if (this.cancelling() || hasCancelled) break;
 
+					let localItemMetadata: Map<string, RemoteItemMetadata> = null;
 					const listResult: PaginatedList = await this.apiCall('delta', '', {
 						context: context,
 
@@ -917,7 +918,8 @@ export default class Synchronizer {
 
 						// This is only used by the basic delta
 						allItemMetadataHandler: async () => {
-							return BaseItem.remoteItemMetadata(syncTargetId);
+							localItemMetadata = await BaseItem.remoteItemMetadata(syncTargetId);
+							return localItemMetadata;
 						},
 
 						wipeOutFailSafe: Setting.value('sync.wipeOutFailSafe'),
@@ -1017,14 +1019,18 @@ export default class Synchronizer {
 										// Nothing to do, and no need to fetch the content
 									} else {
 										content = await loadContent();
-										if (content && content.updated_time > local.updated_time) {
+										// Load the latest updated_time, otherwise a change made during a long delta step could overwrite the local version without making a conflict
+										const latestLocalState = await ItemClass.load(remoteId, { fields: ['updated_time'] });
+										const localUpdatedTime = latestLocalState ? latestLocalState.updated_time : local.updated_time;
+										if (content && content.updated_time > localUpdatedTime) {
 											action = SyncAction.UpdateLocal;
 											reason = 'remote is more recent than local';
 										} else if (enableEnhancedBasicDeltaAlgorithm()) {
 											// When the enhanced basic delta algorithm is first used, all items are rescanned and we need to persist the remoteItemUpdatedTime
 											// to set up the initial synced state. This also catches the case if content.updated_time < local.updated_time due to manual manipulation
 											// of the md files, to prevent these items being continually fetched on every sync
-											await ItemClass.saveSyncTime(syncTargetId, local, local.updated_time, remote.updated_time);
+											const syncTime = localItemMetadata.get(local.id)?.sync_time ?? 0;
+											await ItemClass.saveSyncTime(syncTargetId, local, syncTime, remote.updated_time);
 										}
 									}
 								}

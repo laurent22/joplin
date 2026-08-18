@@ -8016,13 +8016,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@craftzdog/react-native-buffer@npm:6.1.0":
-  version: 6.1.0
-  resolution: "@craftzdog/react-native-buffer@npm:6.1.0"
+"@craftzdog/react-native-buffer@npm:^6.1.2":
+  version: 6.1.2
+  resolution: "@craftzdog/react-native-buffer@npm:6.1.2"
   dependencies:
     ieee754: "npm:^1.2.1"
-    react-native-quick-base64: "npm:^2.0.5"
-  checksum: 10/78ab30297432f0f24445417ceefde6f2e8f0596f7fe6ff44d9bc0b509f4aaa5e141c23e1aca9db25678abd306802a07ed8bc3690f4b1a4375ac67a1391c1a224
+    react-native-quick-base64: "npm:^3.0.0"
+  checksum: 10/c424beec79d6438ea305c07177f39ef737dc0e6fded31dd81f47b7b26f7a34acacd40d7cc1a0f3601c840cd695c8812fad2a73ae437e7641d1f6f367c68a7112
   languageName: node
   linkType: hard
 
@@ -12670,13 +12670,13 @@ __metadata:
     react-native-popup-menu: "npm:0.17.0"
     react-native-quick-actions: "npm:0.3.13"
     react-native-quick-base64: "npm:2.2.2"
-    react-native-quick-crypto: "npm:1.1.2"
+    react-native-quick-crypto: "npm:1.1.4"
     react-native-rsa-native: "npm:2.0.5"
     react-native-safe-area-context: "npm:5.7.0"
     react-native-securerandom: "npm:1.0.1"
     react-native-share: "npm:12.2.6"
     react-native-sqlite-storage: "npm:6.0.1"
-    react-native-svg: "npm:15.15.4"
+    react-native-svg: "npm:15.15.5"
     react-native-url-polyfill: "npm:2.0.0"
     react-native-version-info: "npm:1.1.1"
     react-native-web: "npm:0.21.2"
@@ -12703,7 +12703,7 @@ __metadata:
     url-loader: "npm:4.1.1"
     webpack: "npm:5.97.1"
     webpack-cli: "npm:5.1.4"
-    webpack-dev-server: "npm:5.2.3"
+    webpack-dev-server: "npm:5.2.4"
   languageName: unknown
   linkType: soft
 
@@ -12772,7 +12772,7 @@ __metadata:
     "@types/react": "npm:19.1.10"
     "@types/react-redux": "npm:7.1.34"
     "@types/styled-components": "npm:5.1.32"
-    dompurify: "npm:3.3.3"
+    dompurify: "npm:3.4.5"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     orderedmap: "npm:2.1.1"
@@ -12898,7 +12898,7 @@ __metadata:
     fast-deep-equal: "npm:3.1.3"
     fast-xml-parser: "npm:3.21.1"
     file-type: "npm:16.5.4"
-    follow-redirects: "npm:1.15.11"
+    follow-redirects: "npm:1.16.0"
     fs-extra: "npm:11.3.5"
     html-entities: "npm:1.4.0"
     html-minifier: "npm:4.0.0"
@@ -13126,7 +13126,7 @@ __metadata:
     jsdom: "npm:26.1.0"
     knex: "npm:3.2.10"
     koa: "npm:2.16.4"
-    ldapts: "npm:8.1.7"
+    ldapts: "npm:8.1.8"
     markdown-it: "npm:13.0.2"
     mustache: "npm:4.2.0"
     node-cron: "npm:4.2.1"
@@ -29214,15 +29214,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:3.3.3":
-  version: 3.3.3
-  resolution: "dompurify@npm:3.3.3"
+"dompurify@npm:3.4.5":
+  version: 3.4.5
+  resolution: "dompurify@npm:3.4.5"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10/4cc9c539ed7136d46c6577613b8e20871c2b6165db01dfbd2a3c11c75f9e339c496ac6519a1c3190115def8cadae3720bef0417fc43fa28802c7407bab174da9
+  checksum: 10/b39c9bbd5c87dd29d1fda6446ddd7319a86c85a4c12af5cfef17697cfefbd13b8baf698d5a3cb4ee0b941f8b6e49af6a63c844246e6aee83ddb417e03470613a
   languageName: node
   linkType: hard
 
@@ -32838,13 +32838,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:1.15.11":
-  version: 1.15.11
-  resolution: "follow-redirects@npm:1.15.11"
+"follow-redirects@npm:1.16.0, follow-redirects@npm:^1.16.0":
+  version: 1.16.0
+  resolution: "follow-redirects@npm:1.16.0"
   peerDependenciesMeta:
     debug:
       optional: true
-  checksum: 10/07372fd74b98c78cf4d417d68d41fdaa0be4dcacafffb9e67b1e3cf090bc4771515e65020651528faab238f10f9b9c0d9707d6c1574a6c0387c5de1042cde9ba
+  checksum: 10/3fbe3d80b3b544c22705d837aa5d4a0d07a740d913534a2620b0a004c610af4148e3b58723536dd099aaa1c9d3a155964bde9665d6e5cb331460809a1fc572fd
   languageName: node
   linkType: hard
 
@@ -32875,16 +32875,6 @@ __metadata:
     debug:
       optional: true
   checksum: 10/70c7612c4cab18e546e36b991bbf8009a1a41cf85354afe04b113d1117569abf760269409cb3eb842d9f7b03d62826687086b081c566ea7b1e6613cf29030bf7
-  languageName: node
-  linkType: hard
-
-"follow-redirects@npm:^1.16.0":
-  version: 1.16.0
-  resolution: "follow-redirects@npm:1.16.0"
-  peerDependenciesMeta:
-    debug:
-      optional: true
-  checksum: 10/3fbe3d80b3b544c22705d837aa5d4a0d07a740d913534a2620b0a004c610af4148e3b58723536dd099aaa1c9d3a155964bde9665d6e5cb331460809a1fc572fd
   languageName: node
   linkType: hard
 
@@ -39773,12 +39763,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ldapts@npm:8.1.7":
-  version: 8.1.7
-  resolution: "ldapts@npm:8.1.7"
+"ldapts@npm:8.1.8":
+  version: 8.1.8
+  resolution: "ldapts@npm:8.1.8"
   dependencies:
     strict-event-emitter-types: "npm:2.0.0"
-  checksum: 10/6dc0002df51a62de5391066df981fc3dab5471dc733fdedd698b58dea4c802ca20d17498518757555d979abc93a320b3e88bbcf3b380c1635930e48aebf3847c
+  checksum: 10/3d9e80005e46f1895fd51dba7092c83882c8e1d0e7be846876e5f7337a8f5e4bf2f995ae743f56c97cc1e93f1bcc2415f802663b9928167a318c65d7b332d689
   languageName: node
   linkType: hard
 
@@ -49772,7 +49762,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-quick-base64@npm:2.2.2, react-native-quick-base64@npm:^2.0.5":
+"react-native-quick-base64@npm:2.2.2":
   version: 2.2.2
   resolution: "react-native-quick-base64@npm:2.2.2"
   peerDependencies:
@@ -49782,13 +49772,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-quick-crypto@npm:1.1.2":
-  version: 1.1.2
-  resolution: "react-native-quick-crypto@npm:1.1.2"
+"react-native-quick-base64@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "react-native-quick-base64@npm:3.0.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/9810adfd36f5a716f94049f6363e4d5a13614f0f1b9c26577aac1aefb8bd2076bd73f3495201807c2bd767dbae1d0bc878abafe084a11a9271b7f2fba47c1737
+  languageName: node
+  linkType: hard
+
+"react-native-quick-crypto@npm:1.1.4":
+  version: 1.1.4
+  resolution: "react-native-quick-crypto@npm:1.1.4"
   dependencies:
-    "@craftzdog/react-native-buffer": "npm:6.1.0"
+    "@craftzdog/react-native-buffer": "npm:^6.1.2"
     events: "npm:3.3.0"
-    readable-stream: "npm:4.5.2"
+    readable-stream: "npm:4.7.0"
     safe-buffer: "npm:^5.2.1"
     string_decoder: "npm:^1.3.0"
     util: "npm:0.12.5"
@@ -49798,13 +49798,13 @@ __metadata:
     react: "*"
     react-native: "*"
     react-native-nitro-modules: ">=0.31.2"
-    react-native-quick-base64: ">=2.1.0"
+    react-native-quick-base64: ">=3.0.0"
   peerDependenciesMeta:
     expo:
       optional: true
     expo-build-properties:
       optional: true
-  checksum: 10/f3abae21395e6bd342f3fdeaf55b3e244115fc062e96213ca97ab1b57b5e52c6f830e35ceb56ed00ef9f217fc531c7eeb4887220fc7cf45a1d69d6a421e7fc30
+  checksum: 10/6151263a87937d80ccb45a9e885f17aaad92b38e331aa8a6441f8b1d85f179138b7481dc2d0587b5d097e0ff4af8c63753d4a0b14f8f438ce7b47a767a588515
   languageName: node
   linkType: hard
 
@@ -49861,17 +49861,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-svg@npm:15.15.4":
-  version: 15.15.4
-  resolution: "react-native-svg@npm:15.15.4"
+"react-native-svg@npm:15.15.5":
+  version: 15.15.5
+  resolution: "react-native-svg@npm:15.15.5"
   dependencies:
     css-select: "npm:^5.1.0"
     css-tree: "npm:^1.1.3"
-    warn-once: "npm:0.1.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/07b1e9826533ecb4ad731602e720bb4208c18ba0a5f259a17f5ee3aa9b02b1006bb5ae59c81d9d49773c898578a0728724a1085d03939e64e8ddf4ef6c842fdf
+  checksum: 10/d5ffbb55506a668cc93d34363720aa054e7dba415fc81b5f76d1fb21191d6e8b279a2eabf0238af4323c99c3c7699a4c493bc587c2d1d20ec0aa6c141070ba6b
   languageName: node
   linkType: hard
 
@@ -50464,16 +50463,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:4.5.2":
-  version: 4.5.2
-  resolution: "readable-stream@npm:4.5.2"
+"readable-stream@npm:4.7.0":
+  version: 4.7.0
+  resolution: "readable-stream@npm:4.7.0"
   dependencies:
     abort-controller: "npm:^3.0.0"
     buffer: "npm:^6.0.3"
     events: "npm:^3.3.0"
     process: "npm:^0.11.10"
     string_decoder: "npm:^1.3.0"
-  checksum: 10/01b128a559c5fd76a898495f858cf0a8839f135e6a69e3409f986e88460134791657eb46a2ff16826f331682a3c4d0c5a75cef5e52ef259711021ba52b1c2e82
+  checksum: 10/bdf096c8ff59452ce5d08f13da9597f9fcfe400b4facfaa88e74ec057e5ad1fdfa140ffe28e5ed806cf4d2055f0b812806e962bca91dce31bc4cef08e53be3a4
   languageName: node
   linkType: hard
 
@@ -59189,13 +59188,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"warn-once@npm:0.1.1":
-  version: 0.1.1
-  resolution: "warn-once@npm:0.1.1"
-  checksum: 10/e6a5a1f5a8dba7744399743d3cfb571db4c3947897875d4962a7c5b1bf2195ab4518c838cb4cea652e71729f21bba2e98dc75686f5fccde0fabbd894e2ed0c0d
-  languageName: node
-  linkType: hard
-
 "wasm-feature-detect@npm:^1.8.0":
   version: 1.8.0
   resolution: "wasm-feature-detect@npm:1.8.0"
@@ -59479,9 +59471,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:5.2.3, webpack-dev-server@npm:^5.2.2":
-  version: 5.2.3
-  resolution: "webpack-dev-server@npm:5.2.3"
+"webpack-dev-server@npm:5.2.4":
+  version: 5.2.4
+  resolution: "webpack-dev-server@npm:5.2.4"
   dependencies:
     "@types/bonjour": "npm:^3.5.13"
     "@types/connect-history-api-fallback": "npm:^1.5.4"
@@ -59520,7 +59512,7 @@ __metadata:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: 10/6a3d55c5d84d10b5e23a0638e0031ef85b262947fdacc86d96b7392538ad5894ac14aebef1e2b877f8d27302c71247215b7aa6713e01b1c37d31342415b1a150
+  checksum: 10/5e5382f8cc7a73e2957542de0c755769548cbca8e7c6d17ed6b526364f11af35025be74f03827afa6723ccbdcc93730b0a0a59882d332fb3c6694a6d290c41e7
   languageName: node
   linkType: hard
 
@@ -59568,6 +59560,51 @@ __metadata:
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
   checksum: 10/fd6dfb6c71eb94696b21930ea4c2f25e95ba85fac1bbc15aa5d03af0a90712eba057901fa9131ed3e901665c95b2379208279aca61e9c48e7cda276c3caa95dd
+  languageName: node
+  linkType: hard
+
+"webpack-dev-server@npm:^5.2.2":
+  version: 5.2.3
+  resolution: "webpack-dev-server@npm:5.2.3"
+  dependencies:
+    "@types/bonjour": "npm:^3.5.13"
+    "@types/connect-history-api-fallback": "npm:^1.5.4"
+    "@types/express": "npm:^4.17.25"
+    "@types/express-serve-static-core": "npm:^4.17.21"
+    "@types/serve-index": "npm:^1.9.4"
+    "@types/serve-static": "npm:^1.15.5"
+    "@types/sockjs": "npm:^0.3.36"
+    "@types/ws": "npm:^8.5.10"
+    ansi-html-community: "npm:^0.0.8"
+    bonjour-service: "npm:^1.2.1"
+    chokidar: "npm:^3.6.0"
+    colorette: "npm:^2.0.10"
+    compression: "npm:^1.8.1"
+    connect-history-api-fallback: "npm:^2.0.0"
+    express: "npm:^4.22.1"
+    graceful-fs: "npm:^4.2.6"
+    http-proxy-middleware: "npm:^2.0.9"
+    ipaddr.js: "npm:^2.1.0"
+    launch-editor: "npm:^2.6.1"
+    open: "npm:^10.0.3"
+    p-retry: "npm:^6.2.0"
+    schema-utils: "npm:^4.2.0"
+    selfsigned: "npm:^5.5.0"
+    serve-index: "npm:^1.9.1"
+    sockjs: "npm:^0.3.24"
+    spdy: "npm:^4.0.2"
+    webpack-dev-middleware: "npm:^7.4.2"
+    ws: "npm:^8.18.0"
+  peerDependencies:
+    webpack: ^5.0.0
+  peerDependenciesMeta:
+    webpack:
+      optional: true
+    webpack-cli:
+      optional: true
+  bin:
+    webpack-dev-server: bin/webpack-dev-server.js
+  checksum: 10/6a3d55c5d84d10b5e23a0638e0031ef85b262947fdacc86d96b7392538ad5894ac14aebef1e2b877f8d27302c71247215b7aa6713e01b1c37d31342415b1a150
   languageName: node
   linkType: hard
 
