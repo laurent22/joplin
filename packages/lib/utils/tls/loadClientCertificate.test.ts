@@ -28,8 +28,8 @@ describe('loadClientCertificate', () => {
 				domains: ['example.com', 'example.net'],
 			});
 		} finally {
-			await remove(tempDir);
 			mock.mockRestore();
+			await remove(tempDir);
 		}
 	});
 });
