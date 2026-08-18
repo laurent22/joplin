@@ -416,6 +416,7 @@ export default class ShareService {
 	}
 
 	public async isPublished(item: NoteEntity|FolderEntity, shares: StateShare[]) {
+		// Try to determine whether the item is published without doing a network request:
 		const isPublishedItemShare = (s: StateShare) => s.type === ShareType.Note || s.type === ShareType.PublishedFolder;
 		if (shares.some(s => (
 			isPublishedItemShare(s) &&
@@ -424,8 +425,9 @@ export default class ShareService {
 			return true;
 		}
 
-		// In some cases, an item can have is_shared = 1, but no share in shares, and still be published
-
+		// In some cases, an item can have is_shared = 1, but no share in `shares`. In this case,
+		// either the item has been unpublished remotely and not yet synced, or the item was published
+		// by another user. Send a network request to determine whether the item is actually published:
 		if (item.is_shared) {
 			const shares = (await this.loadSharesByItem(item.id))
 				.filter(isPublishedItemShare);

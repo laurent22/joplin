@@ -17,8 +17,8 @@ import onUnshareNoteClick from '@joplin/lib/components/shared/ShareNoteDialog/on
 import useShareStatusMessage from '@joplin/lib/components/shared/ShareNoteDialog/useShareStatusMessage';
 import useEncryptionWarningMessage from '@joplin/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage';
 import { SharingStatus } from '@joplin/lib/components/shared/ShareNoteDialog/types';
+import useIsPublished from '@joplin/lib/components/shared/ShareNoteDialog/useIsPublished';
 import { clipboard } from 'electron';
-import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 
 interface Props {
 	themeId: number;
@@ -131,22 +131,14 @@ interface NoteItemProps {
 }
 
 const NoteItem: React.FC<NoteItemProps> = ({ note, shares }) => {
-	const [isShared, setIsShared] = useState(false);
+	const published = useIsPublished(note, shares);
 
-	useAsyncEffect(async (event) => {
-		const shared = await ShareService.instance().isPublished(note, shares);
-
-		if (!event.cancelled) {
-			setIsShared(shared);
-		}
-	}, [shares, note]);
-
-	const unshareButton = isShared && (
+	const unshareButton = published && (
 		<Button tooltip={_('Unpublish note')} iconName="fas fa-share-alt" onClick={() => onUnshareNoteClick({ noteId: note.id })}/>
 	);
 
 	return (
-		<div key={note.id} className='shared-note-list-item'>
+		<div key={`note-${note.id}`} className='shared-note-list-item'>
 			<span className='title'>{note.title}</span>{unshareButton}
 		</div>
 	);
