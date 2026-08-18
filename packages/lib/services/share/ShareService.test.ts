@@ -1,7 +1,7 @@
 import Note from '../../models/Note';
 import { createFolderTree, encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
 import ShareService, { ApiShare } from './ShareService';
-import { ShareType } from './reducer';
+import { ShareType, StateShare } from './reducer';
 import { NoteEntity, ResourceEntity } from '../database/types';
 import Folder from '../../models/Folder';
 import { localSyncInfo, setEncryptionEnabled, setPpk } from '../synchronizer/syncInfoUtils';
@@ -427,6 +427,80 @@ describe('ShareService', () => {
 		await service.refreshShares();
 
 		expect(service.folderShare('folder1')).toBeUndefined();
+	});
+
+	it('should unpublish a folder and all its children', async () => {
+		const folderA = await Folder.save({ title: 'folder A' });
+		const folderB = await Folder.save({ title: 'folder B', parent_id: folderA.id });
+		const noteA = await Note.save({ title: 'note A', parent_id: folderA.id });
+		const noteB = await Note.save({ title: 'note B', parent_id: folderB.id });
+
+		let serverShares: StateShare[] = [];
+		const deletedShareIds: string[] = [];
+		const service = mockShareService({
+			onExec: async (method, path) => {
+				if (method === 'GET' && path === 'api/shares') {
+					return { items: serverShares };
+				}
+				if (method === 'POST' && path === 'api/shares') {
+					const share: StateShare = {
+						id: 'published-folder-a',
+						type: ShareType.PublishedFolder,
+						folder_id: folderA.id,
+						note_id: '',
+						master_key_id: '',
+					};
+					serverShares.push(share);
+					return share;
+				}
+				if (method === 'DELETE' && path.startsWith('api/shares/')) {
+					const shareId = path.substring('api/shares/'.length);
+					deletedShareIds.push(shareId);
+					serverShares = serverShares.filter(share => share.id !== shareId);
+					return null;
+				}
+				throw new Error(`Unhandled: ${method} ${path}`);
+			},
+		});
+
+		await service.publishFolder(folderA.id);
+		await Folder.updateAllShareIds(resourceService(), service.shares);
+
+		expect((await Folder.load(folderA.id)).is_shared).toBe(1);
+		expect((await Folder.load(folderB.id)).is_shared).toBe(1);
+		expect((await Note.load(noteA.id)).is_shared).toBe(1);
+		expect((await Note.load(noteB.id)).is_shared).toBe(1);
+
+		await service.unpublishFolder(folderA.id);
+
+		expect(deletedShareIds).toEqual(['published-folder-a']);
+		expect((await Folder.load(folderA.id)).is_shared).toBe(0);
+		expect((await Folder.load(folderB.id)).is_shared).toBe(0);
+		expect((await Note.load(noteA.id)).is_shared).toBe(0);
+		expect((await Note.load(noteB.id)).is_shared).toBe(0);
+	});
+
+	it('should throw when the folder or its published share does not exist', async () => {
+		const folderA = await Folder.save({ title: 'folder A' });
+		let deleteCallCount = 0;
+		const service = mockShareService({
+			onExec: async (method, path) => {
+				if (method === 'GET' && path === 'api/shares') {
+					return { items: [] };
+				}
+				if (method === 'DELETE') {
+					deleteCallCount++;
+					return null;
+				}
+				throw new Error(`Unhandled: ${method} ${path}`);
+			},
+		});
+
+		await service.refreshShares();
+
+		await expect(service.unpublishFolder('000000000000000000000000000000F9')).rejects.toThrow('No such folder: 000000000000000000000000000000F9');
+		await expect(service.unpublishFolder(folderA.id)).rejects.toThrow(`No published share for folder: ${folderA.id}`);
+		expect(deleteCallCount).toBe(0);
 	});
 
 	it('should throw when publishing a folder that does not exist', async () => {

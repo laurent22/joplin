@@ -1,4 +1,5 @@
 import { Store } from 'redux';
+import { ModelType } from '../../BaseModel';
 import JoplinServerApi from '../../JoplinServerApi';
 import { _ } from '../../locale';
 import Logger from '@joplin/utils/Logger';
@@ -6,7 +7,7 @@ import Folder from '../../models/Folder';
 import MasterKey from '../../models/MasterKey';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
-import { FolderEntity } from '../database/types';
+import { FolderEntity, NoteEntity } from '../database/types';
 import EncryptionService from '../e2ee/EncryptionService';
 import { PublicPrivateKeyPair, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword, supportsPpkAlgorithm } from '../e2ee/ppk/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
@@ -319,6 +320,32 @@ export default class ShareService {
 		await this.refreshShares();
 
 		return share;
+	}
+
+	public async unpublishFolder(folderId: string): Promise<void> {
+		const folder = await Folder.load(folderId);
+		if (!folder) throw new Error(`No such folder: ${folderId}`);
+
+		const share = this.shares.find(s => s.type === ShareType.PublishedFolder && s.folder_id === folderId);
+		if (!share) throw new Error(`No published share for folder: ${folderId}`);
+
+		await this.deleteShare(share.id);
+
+		const remainingShares = await this.refreshShares();
+		const folderIds = [folderId, ...(await Folder.allChildrenFolders(folderId)).map(f => f.id)];
+		const folders = await Folder.loadItemsByIds(folderIds) as FolderEntity[];
+		const noteIds = (await Promise.all(folderIds.map(id => Folder.noteIds(id, { includeConflicts: true, includeDeleted: true })))).flat();
+		const notes = await Note.loadItemsByIds(noteIds) as NoteEntity[];
+
+		for (const folderItem of folders) {
+			await Folder.updateShareStatus({ ...folderItem, type_: ModelType.Folder }, false);
+		}
+
+		for (const note of notes) {
+			await Note.updateShareStatus({ ...note, type_: ModelType.Note }, false);
+		}
+
+		await Folder.updateAllShareIds(ResourceService.instance(), remainingShares);
 	}
 
 	public async unshareNote(noteId: string) {
