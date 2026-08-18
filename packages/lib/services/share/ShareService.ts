@@ -438,7 +438,9 @@ export default class ShareService {
 	}
 
 	private async loadSharesByItem(itemId: string) {
-		const shares = await this.api().exec('GET', `api/shares?item=${itemId}`);
+		const shares = await this.api().exec('GET', 'api/shares', { item: itemId });
+		if (!Array.isArray(shares?.items)) throw new Error(`Invalid response: Shares list is not an array. Was ${typeof shares?.items}.`);
+
 		const items: StateShare[] = shares.items.filter(
 			// For compatibility with older server versions that don't support search
 			(i: StateShare) => (
