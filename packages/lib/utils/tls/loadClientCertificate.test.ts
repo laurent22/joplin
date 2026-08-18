@@ -1,18 +1,27 @@
 import { remove, writeFile } from 'fs-extra';
-import { createTempDir } from '../../testing/test-utils';
+import { createTempDir, expectThrow, supportDir } from '../../testing/test-utils';
 import { join } from 'path';
 import shim, { SetClientCertificateOptions } from '../../shim';
 import loadClientCertificate from './loadClientCertificate';
 
+const mockSetClientCertificate = () => {
+	const mock = jest.spyOn(shim, 'setClientCertificate');
+
+	let clientCertificate: SetClientCertificateOptions|null = null;
+	mock.mockImplementation(async (options) => {
+		clientCertificate = options;
+	});
+
+	return {
+		get clientCertificate() { return clientCertificate; },
+		reset: () => mock.mockRestore(),
+	};
+};
+
 describe('loadClientCertificate', () => {
 	it('should correctly parse a domains.txt file', async () => {
 		const tempDir = await createTempDir();
-		const mock = jest.spyOn(shim, 'setClientCertificate');
-
-		let clientCertificate: SetClientCertificateOptions|null = null;
-		mock.mockImplementation(async (options) => {
-			clientCertificate = options;
-		});
+		const mock = mockSetClientCertificate();
 
 		try {
 			await writeFile(join(tempDir, 'client-cert.pem'), 'mock', 'utf-8');
@@ -24,12 +33,31 @@ describe('loadClientCertificate', () => {
 				'net.clientCertificate': tempDir,
 			});
 
-			expect(clientCertificate).toMatchObject({
+			expect(mock.clientCertificate).toMatchObject({
 				domains: ['example.com', 'example.net'],
 			});
 		} finally {
-			mock.mockRestore();
+			mock.reset();
 			await remove(tempDir);
+		}
+	});
+
+	it('should clear the client certificate when configuration fails', async () => {
+		const mock = mockSetClientCertificate();
+		try {
+			const nonExistentPath = join(supportDir, 'does-not-exist');
+			await shim.setClientCertificate({ certPath: nonExistentPath, keyPath: nonExistentPath, domains: [], keyPassword: '' });
+			expect(mock.clientCertificate).toBeTruthy();
+
+			await expectThrow(async () => {
+				await loadClientCertificate({
+					'net.clientCertificate.password': '',
+					'net.clientCertificate': nonExistentPath,
+				});
+			});
+			expect(mock.clientCertificate).toBeNull();
+		} finally {
+			mock.reset();
 		}
 	});
 });
