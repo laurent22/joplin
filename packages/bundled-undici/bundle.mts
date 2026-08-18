@@ -29,7 +29,7 @@ const bundleUndici = async () => {
 		const { URLSearchParams, URL } = require('node:url');
 		const { ReadableStream } = require('node:stream/web');
 		const { MessageChannel, MessagePort } = require('node:worker_threads');
-		const { setTimeout, setInterval, clearTimeout, clearInterval } = require('node:timers');
+		const { setTimeout, setInterval, clearTimeout, clearInterval, setImmediate, clearImmediate } = require('node:timers');
 		const { performance } = require('node:perf_hooks');
 
 		${await readFile(outfile, 'utf-8')}
