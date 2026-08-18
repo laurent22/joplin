@@ -127,7 +127,7 @@ export const filesApplyToPlatform = (files: string[], platform: string): boolean
 		if (file.startsWith('packages/htmlpack') && isMainApp) return true;
 		if (file.startsWith('packages/lib') && isMainApp) return true;
 		if (file.startsWith('packages/pdf-viewer') && platform === 'desktop') return true;
-		if (file.startsWith('packages/bundled-undici') && platform === 'desktop') return true;
+		if (file.startsWith('packages/bundled-undici') && ['desktop', 'cli'].includes(platform)) return true;
 		if (file.startsWith('packages/react-native-') && isMobile) return true;
 		if (file.startsWith('packages/renderer') && isMainApp) return true;
 		if (file.startsWith('packages/server') && platform === 'server') return true;
