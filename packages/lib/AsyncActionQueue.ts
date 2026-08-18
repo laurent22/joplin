@@ -41,11 +41,21 @@ export default class AsyncActionQueue<Context = void> {
 		this.resetFinishProcessingPromise_();
 	}
 
+	private async handleProcessingFailure_(promise: Promise<void>) {
+		try {
+			await promise;
+		} catch {
+			// processQueue logs the error. This handler prevents fire-and-forget queues
+			// from causing an unhandled rejection.
+		}
+	}
+
 	private resetFinishProcessingPromise_() {
 		this.processingFinishedPromise_ = new Promise<void>((resolve, reject) => {
 			this.onProcessingFinished_ = resolve;
 			this.onProcessingFailed_ = reject;
 		});
+		void this.handleProcessingFailure_(this.processingFinishedPromise_);
 	}
 
 	// Determines whether an item can be skipped in the queue. Prevents data loss in the case that
@@ -93,6 +103,7 @@ export default class AsyncActionQueue<Context = void> {
 			this.processing_ = true;
 
 			let i = 0;
+			let processingFailed = false;
 			let processingError: Error = null;
 			try {
 				for (i = 0; i < itemCount; i++) {
@@ -105,6 +116,7 @@ export default class AsyncActionQueue<Context = void> {
 			} catch (error) {
 				i ++; // Don't repeat the failed task.
 				logger.warn('Unhandled error:', error);
+				processingFailed = true;
 				processingError = error;
 			} finally {
 				// Removing processed items in a try {} finally {...} prevents
@@ -113,7 +125,7 @@ export default class AsyncActionQueue<Context = void> {
 				this.processing_ = false;
 			}
 
-			if (processingError) {
+			if (processingFailed) {
 				this.onProcessingFailed_(processingError);
 				this.resetFinishProcessingPromise_();
 				if (this.queue_.length) this.scheduleProcessing();

@@ -68,6 +68,17 @@ describe('AsyncActionQueue', () => {
 		expect(queue.isEmpty).toBe(true);
 	});
 
+	test('should handle failures when queue processing is not awaited', async () => {
+		const queue = new AsyncActionQueue(100);
+		jest.useFakeTimers();
+
+		queue.push(async () => {
+			throw new Error('Task failed');
+		});
+
+		await jest.runAllTimersAsync();
+	});
+
 	test.each([
 		{
 			tasks: [
