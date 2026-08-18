@@ -46,6 +46,10 @@ export default class NoteEditorScreen {
 		this.richTextCodeEditor = new EditorCodeDialog(page_);
 	}
 
+	public async undo(electronApp: ElectronApplication) {
+		await activateMainMenuItem(electronApp, 'Undo');
+	}
+
 	public toolbarButtonLocator(title: string) {
 		return this.containerLocator.getByRole('button', { name: title });
 	}
