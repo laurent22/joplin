@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ForwardedRef, forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { ForwardedRef, forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { NoteBodyEditorProps, NoteBodyEditorRef } from '../../utils/types';
 import CommandService from '@joplin/lib/services/CommandService';
 import Note from '@joplin/lib/models/Note';
@@ -10,12 +10,14 @@ import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
 import { WhiteboardContext } from './WhiteboardContext';
 import WhiteboardSurface from './WhiteboardSurface';
+import { blur } from '@joplin/lib/utils/focusHandler';
 
 const SAVE_DEBOUNCE_MS = 400;
 
 const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditorRef>) => {
 	const bodyRef = useRef(props.content);
 	bodyRef.current = props.content;
+	const rootRef = useRef<HTMLDivElement|null>(null);
 
 	const initialParse = useMemo(() => parseWhiteboard(props.content), [props.content]);
 	const initialCanvas = initialParse.canvas;
@@ -35,25 +37,39 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 	const pendingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const onChangeRef = useRef(props.onChange);
 	onChangeRef.current = props.onChange;
+	const disabledRef = useRef(props.disabled);
+	disabledRef.current = props.disabled;
+	const blockedReloadRequestRef = useRef(props.editorNoteReloadTimeRequest);
 
 	// Reload when the body switches to a different note, or when the body has
 	// changed underneath us (external write — e.g. the "add note to whiteboard"
 	// command — which produces a body we didn't emit).
 	const lastEmittedBodyRef = useRef<string>(props.content);
+	const lastReloadRequestRef = useRef(props.editorNoteReloadTimeRequest);
 	useEffect(() => {
-		if (props.content === lastEmittedBodyRef.current) return;
+		const forceReload = props.editorNoteReloadTimeRequest !== lastReloadRequestRef.current;
+		lastReloadRequestRef.current = props.editorNoteReloadTimeRequest;
+		if (!forceReload && props.content === lastEmittedBodyRef.current) return;
 		lastEmittedBodyRef.current = props.content;
 		const parsed = parseWhiteboard(props.content);
+		// Keep the ref in sync immediately. The canvas state update is applied on the
+		// next render, but the save effect below runs in this commit and must not see
+		// the previous canvas as a new local change.
+		canvasRef.current = parsed.canvas;
 		setCanvas(parsed.canvas);
 		// Mark the freshly-loaded canvas as already-synced so the debounced
 		// save effect doesn't echo it straight back as a write.
 		lastSerializedRef.current = JSON.stringify(parsed.canvas);
-	}, [props.content, props.contentKey]);
+	}, [props.content, props.contentKey, props.editorNoteReloadTimeRequest]);
 
 	const flushPendingSave = useCallback((): string => {
 		if (pendingTimeoutRef.current !== null) {
 			clearTimeout(pendingTimeoutRef.current);
 			pendingTimeoutRef.current = null;
+		}
+		if (disabledRef.current) {
+			pendingSerializedRef.current = null;
+			return bodyRef.current;
 		}
 		const serialized = pendingSerializedRef.current;
 		if (serialized === null) return bodyRef.current;
@@ -66,12 +82,28 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 		return newBody;
 	}, []);
 
+	useLayoutEffect(() => {
+		const reloadRequested = blockedReloadRequestRef.current !== props.editorNoteReloadTimeRequest;
+		blockedReloadRequestRef.current = props.editorNoteReloadTimeRequest;
+		if (!props.disabled && !reloadRequested) return;
+		disabledRef.current = true;
+		const activeElement = rootRef.current?.ownerDocument.activeElement;
+		if (rootRef.current?.contains(activeElement)) {
+			blur('WhiteboardEditor::disabled', activeElement);
+		}
+		if (pendingTimeoutRef.current !== null) {
+			clearTimeout(pendingTimeoutRef.current);
+			pendingTimeoutRef.current = null;
+		}
+		pendingSerializedRef.current = null;
+	}, [props.disabled, props.editorNoteReloadTimeRequest]);
+
 	useEffect(() => {
 		// Never write back when the source body had an unparseable fence —
 		// otherwise opening a corrupt note would silently overwrite the
 		// user's recoverable JSON with an empty canvas.
-		if (parseError) return undefined;
-		const serialized = JSON.stringify(canvas);
+		if (disabledRef.current || parseError) return undefined;
+		const serialized = JSON.stringify(canvasRef.current);
 		if (serialized === lastSerializedRef.current) return undefined;
 		pendingSerializedRef.current = serialized;
 		// Replace any prior pending timeout — we'll re-schedule from the new
@@ -83,7 +115,7 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 			flushPendingSave();
 		}, SAVE_DEBOUNCE_MS);
 		return undefined;
-	}, [canvas, flushPendingSave, parseError]);
+	}, [canvas, flushPendingSave, parseError, props.disabled, props.editorNoteReloadTimeRequest]);
 
 	// Flush on unmount. The empty-deps effect's cleanup only fires once.
 	useEffect(() => {
@@ -101,10 +133,16 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 	}), [flushPendingSave]);
 
 	const onUpdateNode = useCallback((nodeId: string, patch: Record<string, unknown>) => {
+		if (disabledRef.current) return;
 		setCanvas(prev => ({
 			...prev,
 			nodes: prev.nodes.map(n => n.id === nodeId ? { ...n, ...patch } as CanvasNode : n),
 		}));
+	}, []);
+
+	const onCanvasChange = useCallback((newCanvas: Canvas) => {
+		if (disabledRef.current) return;
+		setCanvas(newCanvas);
 	}, []);
 
 	const onOpenRef = useCallback((value: string) => {
@@ -120,6 +158,7 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 	// non-empty line as title; replace the text node with a file-ref node
 	// pointing at the new note.
 	const onPromoteTextNode = useCallback(async (canvasNodeId: string) => {
+		if (disabledRef.current) return;
 		const noteId = props.noteId;
 		if (!noteId) return;
 
@@ -154,6 +193,7 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 			height: latest.height,
 			file: `:/${created.id}`,
 		};
+		if (disabledRef.current) return;
 		setCanvas(curr => ({
 			...curr,
 			nodes: curr.nodes.map(n => n.id === latest.id ? replacement : n),
@@ -175,7 +215,7 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 
 	if (parseError) {
 		return (
-			<div className="whiteboard-editor" style={props.style}>
+			<div ref={rootRef} className="whiteboard-editor" style={props.style}>
 				<div className="error">
 					<div className="panel">
 						<div className="title">{_('This whiteboard could not be loaded')}</div>
@@ -188,11 +228,11 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 	}
 
 	return (
-		<div className="whiteboard-editor" style={props.style}>
+		<div ref={rootRef} className="whiteboard-editor" style={props.style}>
 			<WhiteboardContext.Provider value={contextValue}>
 				<WhiteboardSurface
 					canvas={canvas}
-					onChange={setCanvas}
+					onChange={onCanvasChange}
 				/>
 			</WhiteboardContext.Provider>
 		</div>
