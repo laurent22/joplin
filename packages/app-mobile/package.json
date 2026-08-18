@@ -75,7 +75,7 @@
     "react-native-popup-menu": "0.17.0",
     "react-native-quick-actions": "0.3.13",
     "react-native-quick-base64": "2.2.2",
-    "react-native-quick-crypto": "1.1.2",
+    "react-native-quick-crypto": "1.1.4",
     "react-native-rsa-native": "2.0.5",
     "react-native-safe-area-context": "5.7.0",
     "react-native-securerandom": "1.0.1",
