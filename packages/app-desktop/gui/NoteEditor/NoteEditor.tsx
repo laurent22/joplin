@@ -232,6 +232,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	// const waitingToSaveNote = props.noteId && formNote.id !== props.noteId && props.editorNoteStatuses[props.noteId] === 'saving';
 
 	const styles = styles_(props);
+	const theme = themeStyle(props.themeId);
 
 	const whiteBackgroundNoteRendering = formNote.markup_language === MarkupLanguage.Html;
 
@@ -488,12 +489,23 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, [windowId]);
 
 	function renderNoNotes(rootStyle: React.CSSProperties) {
-		const emptyDivStyle = {
-			backgroundColor: 'black',
-			opacity: 0.1,
+		const emptyDivStyle: React.CSSProperties = {
 			...rootStyle,
+			backgroundColor: theme.backgroundColor,
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center',
 		};
-		return <div style={emptyDivStyle} ref={containerRef}></div>;
+
+		return (
+			<div style={emptyDivStyle} ref={containerRef}>
+				{props.notesParentType === 'Search' ? (
+					<div style={{ ...theme.textStyle, color: theme.colorFaded, textAlign: 'center' }}>
+						{_('No notes match the search query.')}
+					</div>
+				) : null}
+			</div>
+		);
 	}
 
 	const searchMarkers = useSearchMarkers({
@@ -790,8 +802,6 @@ function NoteEditorContent(props: NoteEditorProps) {
 	if (formNote.encryption_applied || !formNote.id || !effectiveNoteId) {
 		return renderNoNotes(styles.root);
 	}
-
-	const theme = themeStyle(props.themeId);
 
 	function renderConvertHtmlToMarkdown(): React.ReactNode {
 		if (!props.enableHtmlToMarkdownBanner) return null;
