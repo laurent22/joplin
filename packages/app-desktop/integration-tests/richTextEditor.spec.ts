@@ -296,6 +296,7 @@ test.describe('richTextEditor', () => {
 		await test1Header.click();
 		await expect(editor.noteTitleInput).toHaveValue('Test 1');
 		await expect(editorBody).toHaveText('');
+		await expect(editor.toggleEditorsButton).toBeEnabled();
 		await editorBody.pressSequentially('Unsaved text');
 		// This confirms that onWillChange has reached the parent without waiting for
 		// TinyMCE's delayed onChange/save.
