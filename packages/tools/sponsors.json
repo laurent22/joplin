@@ -89,6 +89,13 @@
 			"title": "MyPaperHelp",
 			"imageName": "MyPaperHelp.png",
 			"alt": "MyPaperHelp"
+		},
+		{
+			"url": "https://essaypay.com/",
+			"title": "EssayPay",
+			"imageName": "EssayPay.png",
+			"githubUser": "collegeboom",
+			"alt": "EssayPay"
 		}
 	]
 }
