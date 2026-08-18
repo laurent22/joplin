@@ -12638,9 +12638,9 @@ __metadata:
     events: "npm:3.3.0"
     expo: "npm:54.0.34"
     expo-audio: "npm:1.1.1"
-    expo-camera: "npm:17.0.10"
-    expo-image-manipulator: "npm:14.0.8"
-    expo-local-authentication: "npm:17.0.8"
+    expo-camera: "npm:55.0.3"
+    expo-image-manipulator: "npm:55.0.3"
+    expo-local-authentication: "npm:55.0.3"
     fast-deep-equal: "npm:3.1.3"
     fs-extra: "npm:11.3.5"
     gulp: "npm:4.0.2"
@@ -31708,9 +31708,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-camera@npm:17.0.10":
-  version: 17.0.10
-  resolution: "expo-camera@npm:17.0.10"
+"expo-camera@npm:55.0.3":
+  version: 55.0.3
+  resolution: "expo-camera@npm:55.0.3"
   dependencies:
     invariant: "npm:^2.2.4"
   peerDependencies:
@@ -31721,7 +31721,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-web:
       optional: true
-  checksum: 10/f46f3ebe48120d4cf4ea77c1de7f553e1fe76c108ad08de85f6e133575a58d57015fdfd2ecb508a0e87af1953f57c2c8a3bb436a633b3f4d974142cb9f030cf2
+  checksum: 10/4670a25905a9f58d64248d2fb0f402a2d46622f27fb9df3530d66931875d8b293cd5ab762134b2e8b06dfadc6ce754ef1cfc4f2f7d3ec471d8ed56698b9df794
   languageName: node
   linkType: hard
 
@@ -31761,23 +31761,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-image-loader@npm:~6.0.0":
-  version: 6.0.0
-  resolution: "expo-image-loader@npm:6.0.0"
+"expo-image-loader@npm:~55.0.0":
+  version: 55.0.1
+  resolution: "expo-image-loader@npm:55.0.1"
   peerDependencies:
     expo: "*"
-  checksum: 10/896b4df1208ec071888acac0a8673ee4a67afcc8e06061de26fd189feed3369959ab9254314d51f303bcfc8f6289fd04ca9bec616007333d3dcb2e6d0618a2fe
+  checksum: 10/8c01a77e910630bc1d74227fddae45c437fb0c34fa582736b9548cdc8f61986a76bfbc8860fa19847309817f07eb6daf598f67357548f1da3cd9a7bfe5593854
   languageName: node
   linkType: hard
 
-"expo-image-manipulator@npm:14.0.8":
-  version: 14.0.8
-  resolution: "expo-image-manipulator@npm:14.0.8"
+"expo-image-manipulator@npm:55.0.3":
+  version: 55.0.3
+  resolution: "expo-image-manipulator@npm:55.0.3"
   dependencies:
-    expo-image-loader: "npm:~6.0.0"
+    expo-image-loader: "npm:~55.0.0"
   peerDependencies:
     expo: "*"
-  checksum: 10/655c8d1f8420df0d70357f68a92769eee5c8ee8691fbd3aede0e3f2645fe03b61ed257b0a7944e588f70ebd46582cc134947f74c80af9aed53b15a305957092a
+  checksum: 10/7fc2580caafbf7009973615133f74d5994eaa97ca7e9d464ed4ef6c8e441b72f713bcde4ed8100d89bf42d8edba667da812eeeea4a2bd2d7d971b6280bd62476
   languageName: node
   linkType: hard
 
@@ -31791,14 +31791,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-local-authentication@npm:17.0.8":
-  version: 17.0.8
-  resolution: "expo-local-authentication@npm:17.0.8"
+"expo-local-authentication@npm:55.0.3":
+  version: 55.0.3
+  resolution: "expo-local-authentication@npm:55.0.3"
   dependencies:
     invariant: "npm:^2.2.4"
   peerDependencies:
     expo: "*"
-  checksum: 10/6974cb203f4bf8e90dcc8df52d04cf35df0ed9454caa4dfca3df86fb0f2ca932eb90cd576463e6f8e6c4c80543890eb583ae111ece3a1d6be9a09a09dc300aa5
+  checksum: 10/78bd2470e46e05228b45550076b81d4836ed2d580846952766280eb9c1d9ee8cc06ca0af86089be81249fcd7c31419b2151621090f0d56ded5f14e094e45b4eb
   languageName: node
   linkType: hard
 
