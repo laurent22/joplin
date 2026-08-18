@@ -178,19 +178,25 @@ describe('RichTextEditor', () => {
 	});
 
 	it('should become non-editable when set to read-only', async () => {
+		const table = '| A | B |\n| --- | --- |\n| C | D |';
 		const component = render(<WrappedEditor
-			noteBody='Test'
+			noteBody={table}
 			onBodyChange={jest.fn()}
 		/>);
 		const editor = await findElement('.prosemirror-editor');
 		expect(editor.getAttribute('contenteditable')).toBe('true');
+		mockSelectionMovement(await getEditorWindow(), 4);
+		const tableToolbar = await findElement('.floating-button-bar:not(.-hidden)');
 
 		component.rerender(<WrappedEditor
-			noteBody='Test'
+			noteBody={table}
 			onBodyChange={jest.fn()}
 			readOnly={true}
 		/>);
-		await waitFor(() => expect(editor.getAttribute('contenteditable')).toBe('false'));
+		await waitFor(() => {
+			expect(editor.getAttribute('contenteditable')).toBe('false');
+			expect(tableToolbar.classList).toContain('-hidden');
+		});
 	});
 
 	it('should save repeated spaces using nonbreaking spaces', async () => {
