@@ -18,6 +18,7 @@ import useShareStatusMessage from '@joplin/lib/components/shared/ShareNoteDialog
 import useEncryptionWarningMessage from '@joplin/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage';
 import { SharingStatus } from '@joplin/lib/components/shared/ShareNoteDialog/types';
 import { clipboard } from 'electron';
+import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
 
 interface Props {
 	themeId: number;
@@ -66,22 +67,10 @@ export function ShareNoteDialog(props: Props) {
 		recursiveShare,
 	});
 
-	const renderNote = (note: NoteEntity) => {
-		const unshareButton = !props.shares.find(s => s.note_id === note.id) ? null : (
-			<Button tooltip={_('Unpublish note')} iconName="fas fa-share-alt" onClick={() => onUnshareNoteClick({ noteId: note.id })}/>
-		);
-
-		return (
-			<div key={note.id} className='shared-note-list-item'>
-				<span className='title'>{note.title}</span>{unshareButton}
-			</div>
-		);
-	};
-
 	const renderNoteList = (notes: NoteEntity[]) => {
 		const noteComps = [];
 		for (const note of notes) {
-			noteComps.push(renderNote(note));
+			noteComps.push(<NoteItem key={note.id} note={note} shares={props.shares}/>);
 		}
 		return <div className="notes">{noteComps}</div>;
 	};
@@ -135,6 +124,42 @@ export function ShareNoteDialog(props: Props) {
 		<Dialog>{renderContent()}</Dialog>
 	);
 }
+
+interface NoteItemProps {
+	note: NoteEntity;
+	shares: StateShare[];
+}
+
+const NoteItem: React.FC<NoteItemProps> = ({ note, shares }) => {
+	const [isShared, setIsShared] = useState(false);
+
+	useAsyncEffect(async (event) => {
+		const hasShareEntry = shares.some(s => s.note_id === note.id);
+
+		let shared;
+		if (hasShareEntry) {
+			shared = true;
+		} else if (note.is_shared && await ShareService.instance().isPublished(note)) {
+			shared = true;
+		} else {
+			shared = false;
+		}
+
+		if (!event.cancelled) {
+			setIsShared(shared);
+		}
+	}, [shares]);
+
+	const unshareButton = isShared && (
+		<Button tooltip={_('Unpublish note')} iconName="fas fa-share-alt" onClick={() => onUnshareNoteClick({ noteId: note.id })}/>
+	);
+
+	return (
+		<div key={note.id} className='shared-note-list-item'>
+			<span className='title'>{note.title}</span>{unshareButton}
+		</div>
+	);
+};
 
 const mapStateToProps = (state: AppState) => {
 	return {

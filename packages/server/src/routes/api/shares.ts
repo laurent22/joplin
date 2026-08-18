@@ -128,18 +128,18 @@ router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
 	const parseFilter = () => {
-		const noteIdQuery = ctx.query.note;
-		if (typeof noteIdQuery !== 'string') return { noteId: null };
-		if (!isItemId(noteIdQuery)) throw new ErrorBadRequest('Invalid note ID');
-		return { noteId: noteIdQuery };
+		const itemIdQuery = ctx.query.note;
+		if (typeof itemIdQuery !== 'string') return { itemId: null };
+		if (!isItemId(itemIdQuery)) throw new ErrorBadRequest('Invalid item ID');
+		return { itemId: itemIdQuery };
 	};
 
 	const models = ctx.joplin.models;
 
 	const filter = parseFilter();
 	let rawShares: Share[] = [];
-	if (filter.noteId) {
-		const item = await models.item().loadByJopId(ctx.joplin.owner.id, filter.noteId, { fields: ['id'] });
+	if (filter.itemId) {
+		const item = await models.item().loadByJopId(ctx.joplin.owner.id, filter.itemId, { fields: ['id'] });
 		if (item) {
 			const shares = await models.share().byItemIds([item.id]);
 			rawShares.push(...shares.filter(s => s.type === ShareType.Note));
