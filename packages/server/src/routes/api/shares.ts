@@ -128,7 +128,7 @@ router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
 	const parseFilter = () => {
-		const itemIdQuery = ctx.query.note;
+		const itemIdQuery = ctx.query.item;
 		if (typeof itemIdQuery !== 'string') return { itemId: null };
 		if (!isItemId(itemIdQuery)) throw new ErrorBadRequest('Invalid item ID');
 		return { itemId: itemIdQuery };

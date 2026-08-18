@@ -134,21 +134,12 @@ const NoteItem: React.FC<NoteItemProps> = ({ note, shares }) => {
 	const [isShared, setIsShared] = useState(false);
 
 	useAsyncEffect(async (event) => {
-		const hasShareEntry = shares.some(s => s.note_id === note.id);
-
-		let shared;
-		if (hasShareEntry) {
-			shared = true;
-		} else if (note.is_shared && await ShareService.instance().isPublished(note)) {
-			shared = true;
-		} else {
-			shared = false;
-		}
+		const shared = await ShareService.instance().isPublished(note, shares);
 
 		if (!event.cancelled) {
 			setIsShared(shared);
 		}
-	}, [shares]);
+	}, [shares, note]);
 
 	const unshareButton = isShared && (
 		<Button tooltip={_('Unpublish note')} iconName="fas fa-share-alt" onClick={() => onUnshareNoteClick({ noteId: note.id })}/>

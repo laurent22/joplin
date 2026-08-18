@@ -415,9 +415,9 @@ export default class ShareService {
 		await this.api().exec('DELETE', `api/shares/${shareId}`);
 	}
 
-	public async isPublished(item: NoteEntity|FolderEntity) {
+	public async isPublished(item: NoteEntity|FolderEntity, shares: StateShare[]) {
 		const isPublishedItemShare = (s: StateShare) => s.type === ShareType.Note || s.type === ShareType.PublishedFolder;
-		if (this.shares.some(s => (
+		if (shares.some(s => (
 			isPublishedItemShare(s) &&
 			(s.folder_id === item.id || s.note_id === item.id)
 		))) {
