@@ -407,7 +407,6 @@ const buildStartupTasks = (
 		// is removed from it, without being purged from notesParent and activeFolderId
 		const conflictFolderId = getConflictFolderId();
 		if (notesParent?.selectedItemId === conflictFolderId || folder?.id === conflictFolderId) {
-			reg.logger().info(`JCC: ${notesParent.selectedItemId} ${folder.id}`);
 			dispatch(DEFAULT_ROUTE);
 		} else if (notesParent && notesParent.type === 'SmartFilter') {
 			dispatch({
