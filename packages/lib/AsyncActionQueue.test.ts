@@ -1,4 +1,5 @@
 import AsyncActionQueue from './AsyncActionQueue';
+import { runWithFakeTimers } from './testing/test-utils';
 
 describe('AsyncActionQueue', () => {
 	beforeEach(() => {
@@ -69,14 +70,16 @@ describe('AsyncActionQueue', () => {
 	});
 
 	test('should handle failures when queue processing is not awaited', async () => {
-		const queue = new AsyncActionQueue(100);
-		jest.useFakeTimers();
+		await runWithFakeTimers(async () => {
+			const queue = new AsyncActionQueue(100);
+			const failingAction = jest.fn(async () => {
+				throw new Error('Task failed');
+			});
+			queue.push(failingAction);
 
-		queue.push(async () => {
-			throw new Error('Task failed');
+			await jest.runAllTimersAsync();
+			expect(failingAction).toHaveBeenCalledTimes(1);
 		});
-
-		await jest.runAllTimersAsync();
 	});
 
 	test.each([
