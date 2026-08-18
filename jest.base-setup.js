@@ -33,16 +33,3 @@ if (typeof document !== 'undefined') {
 		return range;
 	};
 }
-if (typeof window !== 'undefined') {
-	const { TextDecoder, TextEncoder } = require('node:util');
-	const { ReadableStream } = require('node:stream/web');
-	const { MessageChannel, MessagePort } = require('node:worker_threads');
-
-	// TextDecoder, TextEncoder, etc. are removed by jsdom, but required by
-	// some libraries
-	window.TextDecoder = TextDecoder;
-	window.TextEncoder = TextEncoder;
-	window.ReadableStream = ReadableStream;
-	window.MessageChannel = MessageChannel;
-	window.MessagePort = MessagePort;
-}

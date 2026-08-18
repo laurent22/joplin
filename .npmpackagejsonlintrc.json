@@ -19,7 +19,8 @@
 					"@joplin/tools",
 					"@joplin/turndown-plugin-gfm",
 					"@joplin/turndown",
-					"@joplin/utils"
+					"@joplin/utils",
+					"@joplin/bundled-undici"
 				]
 		  	}
 		]

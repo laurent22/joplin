@@ -23,7 +23,7 @@ import { cpus } from 'os';
 import { pathToFileURL } from 'url';
 // Use fetch from undici rather than the built-in fetch: Undici's fetch provides
 // more information when fetch fails.
-import { Agent, Request, Response, Headers, fetch, FormData, ProxyAgent, interceptors } from 'undici';
+import { Agent, Request, Response, Headers, fetch, FormData, ProxyAgent, interceptors } from '@joplin/bundled-undici';
 import tls from 'tls';
 import type PdfJs from './utils/types/pdfJs';
 import { _ } from './locale';
