@@ -45,11 +45,21 @@ const WhiteboardEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBody
 	// changed underneath us (external write — e.g. the "add note to whiteboard"
 	// command — which produces a body we didn't emit).
 	const lastEmittedBodyRef = useRef<string>(props.content);
+	const lastContentKeyRef = useRef(props.contentKey);
 	const lastReloadRequestRef = useRef(props.editorNoteReloadTimeRequest);
 	useEffect(() => {
 		const forceReload = props.editorNoteReloadTimeRequest !== lastReloadRequestRef.current;
+		const noteChanged = props.contentKey !== lastContentKeyRef.current;
+		const bodyChanged = props.content !== lastEmittedBodyRef.current;
 		lastReloadRequestRef.current = props.editorNoteReloadTimeRequest;
-		if (!forceReload && props.content === lastEmittedBodyRef.current) return;
+		lastContentKeyRef.current = props.contentKey;
+		if (!forceReload && !noteChanged && !bodyChanged) return;
+
+		if (pendingTimeoutRef.current !== null) {
+			clearTimeout(pendingTimeoutRef.current);
+			pendingTimeoutRef.current = null;
+		}
+		pendingSerializedRef.current = null;
 		lastEmittedBodyRef.current = props.content;
 		const parsed = parseWhiteboard(props.content);
 		// Keep the ref in sync immediately. The canvas state update is applied on the
