@@ -108,7 +108,9 @@ const useHighlighter = (editor: Editor, searchRegexes: RegExp[]) => {
 					for (const match of matches) {
 						const startIndex = match.index ?? 0;
 						const endIndex = (match.index ?? 0) + match[0].length;
-						childRanges.push(buildRange(node, startIndex, endIndex));
+						if (startIndex !== endIndex) {
+							childRanges.push(buildRange(node, startIndex, endIndex));
+						}
 					}
 				}
 
