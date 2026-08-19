@@ -162,8 +162,9 @@ export default class EmbeddingIndexer {
 		if (this.maintenanceRunning_) return;
 		this.maintenanceRunning_ = true;
 
-		await perfLogger.track('EmbeddingIndexer/maintenance', async () => {
-			try {
+
+		try {
+			await perfLogger.track('EmbeddingIndexer/maintenance', async () => {
 				const provider = AiService.instance().getActiveEmbeddingProvider();
 				if (!provider) return;
 
@@ -178,12 +179,12 @@ export default class EmbeddingIndexer {
 				if (Setting.value('ai.embedding.initialScanDone')) {
 					await this.processChangeBatch(provider);
 				}
-			} catch (error) {
-				logger.error('Maintenance run failed:', error);
-			} finally {
-				this.maintenanceRunning_ = false;
-			}
-		});
+			});
+		} catch (error) {
+			logger.error('Maintenance run failed:', error);
+		} finally {
+			this.maintenanceRunning_ = false;
+		}
 	}
 
 	// Wipe-and-rebuild when the active provider's modelId changes — vectors
