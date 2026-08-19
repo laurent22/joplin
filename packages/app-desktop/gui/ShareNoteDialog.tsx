@@ -138,7 +138,7 @@ const NoteItem: React.FC<NoteItemProps> = ({ note, shares }) => {
 	);
 
 	return (
-		<div key={`note-${note.id}`} className='shared-note-list-item'>
+		<div className='shared-note-list-item'>
 			<span className='title'>{note.title}</span>{unshareButton}
 		</div>
 	);
