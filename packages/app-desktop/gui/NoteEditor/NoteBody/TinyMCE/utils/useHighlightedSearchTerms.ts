@@ -36,6 +36,8 @@ const useSearchRegexes = (searchTerms: HighlightedWord[]) => {
 	}, [searchTerms]);
 };
 
+const searchHighlightKey = 'jop-search-highlight';
+
 const useHighlightStyleSheet = (editor: Editor, themeId: number) => {
 	useEffect(() => {
 		if (!editor) {
@@ -47,7 +49,7 @@ const useHighlightStyleSheet = (editor: Editor, themeId: number) => {
 			/* Avoid showing highlights when the user has the find dialog open and
 			   there are TinyMCE-provided search results */
 			body:not(:has(span.mce-match-marker)) {
-				::highlight(jop-search-highlight) {
+				::highlight(${searchHighlightKey}) {
 					background-color: ${theme.searchMarkerBackgroundColor};
 					color: ${theme.searchMarkerColor};
 				}
@@ -133,7 +135,7 @@ const useHighlighter = (editor: Editor, searchRegexes: RegExp[]) => {
 			processNode(closestParagraph(node) ?? node);
 
 			highlight = new editorWindow.Highlight(...[...ranges.values()].flat());
-			editorWindow.CSS.highlights.set('jop-search-highlight', highlight);
+			editorWindow.CSS.highlights.set(searchHighlightKey, highlight);
 		};
 
 		const onNodeRemoved = (node: Node, parent: Node) => {
@@ -151,7 +153,7 @@ const useHighlighter = (editor: Editor, searchRegexes: RegExp[]) => {
 
 		const clearHighlights = () => {
 			highlight?.clear();
-			editorWindow.CSS.highlights.delete('jop-search-highlight');
+			editorWindow.CSS.highlights.delete(searchHighlightKey);
 			ranges.clear();
 		};
 
