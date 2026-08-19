@@ -127,10 +127,13 @@ export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string):
 			const localText = region.aContent.join('\n');
 			const remoteText = region.bContent.join('\n');
 
-			// Both sides made the identical change: diff3 flags it as unstable, but it's not a real conflict
+			// Both sides made the same change, so it isn't a real conflict. Keep deleted
+			// regions deleted.
 			if (localText === remoteText) {
-				sections.push({ text: localText, type: 'auto-merged' });
-				mergedParts.push(localText);
+				if (region.aContent.length) {
+					sections.push({ text: localText, type: 'auto-merged' });
+					mergedParts.push(localText);
+				}
 				continue;
 			}
 

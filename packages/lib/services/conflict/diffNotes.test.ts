@@ -122,6 +122,14 @@ describe('autoMerge', () => {
 		expect(result.sections.some(s => s.type === 'unchanged' && s.text.includes('Shared paragraph'))).toBe(true);
 	});
 
+	test('should not reinstate a line both sides deleted', () => {
+		const base = 'intro\n\nbody\n\nend';
+		const edited = 'intro\nbody\n\nend';
+		const result = autoMerge(base, edited, edited);
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
+		expect(result.mergedText).toBe(edited);
+	});
+
 	test('should be deterministic for the same inputs', () => {
 		const base = 'a\nb\nc';
 		const local = 'A\nb\nc';

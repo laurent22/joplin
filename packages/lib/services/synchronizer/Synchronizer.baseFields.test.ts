@@ -210,6 +210,26 @@ describe('Synchronizer.baseFields', () => {
 		expect(syncItem.base_body).toBe('remote body');
 	}));
 
+	it('should not bring back a line both clients deleted', (async () => {
+		const note = await Note.save({ title: 'title', body: 'one\ntwo\nthree\nfour' });
+		await synchronizerStart();
+		await switchClient(2);
+		await synchronizerStart();
+
+		// Both delete "two", and one side also edits elsewhere so the merge still runs
+		await switchClient(1);
+		await Note.save({ id: note.id, body: 'one\nthree\nfour EDITED' });
+		await switchClient(2);
+		await Note.save({ id: note.id, body: 'one\nthree\nfour' });
+
+		await switchClient(1);
+		await synchronizerStart();
+		await switchClient(2);
+		await synchronizerStart();
+
+		expect((await Note.load(note.id)).body).toBe('one\nthree\nfour EDITED');
+	}));
+
 	it('should set the merged result as the base after an auto-merge', (async () => {
 		const note = await Note.save({ title: 'title', body: 'line1\nline2\nline3' });
 		await synchronizerStart();
