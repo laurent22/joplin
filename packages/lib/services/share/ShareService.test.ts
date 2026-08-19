@@ -483,6 +483,38 @@ describe('ShareService', () => {
 		expect((await Note.load(noteB.id)).is_shared).toBe(0);
 	});
 
+	it('should keep a separately published child folder published', async () => {
+		const folderA = await Folder.save({ title: 'folder A' });
+		const folderB = await Folder.save({ title: 'folder B', parent_id: folderA.id });
+		const publishedFolderAShare = {
+			id: 'published-folder-a',
+			type: ShareType.PublishedFolder,
+			folder_id: folderA.id,
+		};
+		const publishedFolderBShare = {
+			id: 'published-folder-b',
+			type: ShareType.PublishedFolder,
+			folder_id: folderB.id,
+		};
+		let sharesReturnedByServer = [publishedFolderAShare, publishedFolderBShare];
+		const service = mockShareService({
+			getShares: async () => ({ items: sharesReturnedByServer }),
+			postShares: async () => null,
+			getShareInvitations: async () => ({ items: [] }),
+		});
+
+		await service.refreshShares();
+		await Folder.save({ id: folderA.id, is_shared: 1 });
+		await Folder.save({ id: folderB.id, is_shared: 1 });
+		sharesReturnedByServer = [publishedFolderBShare];
+
+		await service.unpublishFolder(folderA.id);
+
+		expect(service.shares).toEqual([publishedFolderBShare]);
+		expect((await Folder.load(folderA.id)).is_shared).toBe(0);
+		expect((await Folder.load(folderB.id)).is_shared).toBe(1);
+	});
+
 	it('should throw when the folder or its published share does not exist', async () => {
 		const folderA = await Folder.save({ title: 'folder A' });
 		let deleteCallCount = 0;
