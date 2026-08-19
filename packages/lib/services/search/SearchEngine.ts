@@ -505,7 +505,7 @@ export default class SearchEngine {
 	}
 
 	// https://stackoverflow.com/a/13818704/561309
-	public queryTermToRegex(term: string, { anchorToWordBoundary = false }: QueryTermToRegexOptions) {
+	public queryTermToRegex(term: string, { anchorToWordBoundary }: QueryTermToRegexOptions = {}) {
 		while (term.length && term.indexOf('*') === 0) {
 			term = term.substr(1);
 		}
@@ -574,7 +574,7 @@ export default class SearchEngine {
 				}
 
 				if (term.indexOf('*') >= 0) {
-					terms[col][i] = { type: 'regex', value: term, scriptType: scriptType(term), valueRegex: this.queryTermToRegex(term, {}) };
+					terms[col][i] = { type: 'regex', value: term, scriptType: scriptType(term), valueRegex: this.queryTermToRegex(term) };
 				} else {
 					terms[col][i] = { type: 'text', value: term, scriptType: scriptType(term) };
 				}
