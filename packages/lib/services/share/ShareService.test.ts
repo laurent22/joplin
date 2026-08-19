@@ -464,7 +464,10 @@ describe('ShareService', () => {
 		});
 
 		await service.publishFolder(folderA.id);
-		await Folder.updateAllShareIds(resourceService(), service.shares);
+		await Folder.save({ id: folderA.id, is_shared: 1 });
+		await Folder.save({ id: folderB.id, is_shared: 1 });
+		await Note.save({ id: noteA.id, parent_id: folderA.id, is_shared: 1 });
+		await Note.save({ id: noteB.id, parent_id: folderB.id, is_shared: 1 });
 
 		expect((await Folder.load(folderA.id)).is_shared).toBe(1);
 		expect((await Folder.load(folderB.id)).is_shared).toBe(1);
