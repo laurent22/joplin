@@ -162,7 +162,6 @@ export default class EmbeddingIndexer {
 		if (this.maintenanceRunning_) return;
 		this.maintenanceRunning_ = true;
 
-
 		try {
 			await perfLogger.track('EmbeddingIndexer/maintenance', async () => {
 				const provider = AiService.instance().getActiveEmbeddingProvider();
