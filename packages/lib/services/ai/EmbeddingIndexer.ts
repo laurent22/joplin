@@ -11,8 +11,11 @@ import AiService from './AiService';
 import { chunkText } from './chunker';
 import { EmbeddingProvider, IndexStatus } from './types';
 import { AiIndexState, AiIndexStatus } from '../plugins/api/types';
+import PerformanceLogger from '../../PerformanceLogger';
 
 const logger = Logger.create('EmbeddingIndexer');
+const perfLogger = PerformanceLogger.create();
+
 
 // Tick cadence after the initial scan is done — slow enough to avoid burning
 // CPU on every edit, fast enough that newly-saved notes are searchable
@@ -158,26 +161,29 @@ export default class EmbeddingIndexer {
 	public async maintenance() {
 		if (this.maintenanceRunning_) return;
 		this.maintenanceRunning_ = true;
-		try {
-			const provider = AiService.instance().getActiveEmbeddingProvider();
-			if (!provider) return;
 
-			await this.handleModelChange(provider);
-			// Until the initial scan completes, walk the whole vault one batch
-			// per tick. Then switch to change-feed-only mode. The tick that
-			// finishes the scan still runs the change feed so edits made
-			// during the scan don't wait an extra interval.
-			if (!Setting.value('ai.embedding.initialScanDone')) {
-				await this.runInitialScanBatch(provider);
+		await perfLogger.track('EmbeddingIndexer/maintenance', async () => {
+			try {
+				const provider = AiService.instance().getActiveEmbeddingProvider();
+				if (!provider) return;
+
+				await this.handleModelChange(provider);
+				// Until the initial scan completes, walk the whole vault one batch
+				// per tick. Then switch to change-feed-only mode. The tick that
+				// finishes the scan still runs the change feed so edits made
+				// during the scan don't wait an extra interval.
+				if (!Setting.value('ai.embedding.initialScanDone')) {
+					await this.runInitialScanBatch(provider);
+				}
+				if (Setting.value('ai.embedding.initialScanDone')) {
+					await this.processChangeBatch(provider);
+				}
+			} catch (error) {
+				logger.error('Maintenance run failed:', error);
+			} finally {
+				this.maintenanceRunning_ = false;
 			}
-			if (Setting.value('ai.embedding.initialScanDone')) {
-				await this.processChangeBatch(provider);
-			}
-		} catch (error) {
-			logger.error('Maintenance run failed:', error);
-		} finally {
-			this.maintenanceRunning_ = false;
-		}
+		});
 	}
 
 	// Wipe-and-rebuild when the active provider's modelId changes — vectors
