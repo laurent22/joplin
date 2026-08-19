@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 import { _, _n } from '@joplin/lib/locale';
 import Folder from '@joplin/lib/models/Folder';
+import shim from '@joplin/lib/shim';
 import DialogButtonRow, { ClickEvent } from './DialogButtonRow';
 import Dialog from '@joplin/lib/components/Dialog';
 import DialogTitle from './DialogTitle';
@@ -74,6 +76,8 @@ export function PublishFolderDialog(props: Props) {
 		setIsUnpublishing(true);
 		try {
 			await ShareService.instance().unpublishFolder(props.folderId);
+		} catch (error) {
+			void shim.showErrorDialog(JoplinServerApi.connectionErrorMessage(error as Error));
 		} finally {
 			setIsUnpublishing(false);
 		}
