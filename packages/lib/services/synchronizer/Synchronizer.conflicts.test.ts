@@ -78,6 +78,43 @@ describe('Synchronizer.conflicts', () => {
 		expect(syncItem.sync_time).toBeLessThan(note1.updated_time);
 	}));
 
+	it('should leave changes made after the upload phase for the next sync', (async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'original', parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		await sleep(0.1);
+		await Note.save({ id: note.id, title: 'remote change' });
+		await synchronizerStart();
+
+		await switchClient(1);
+		let localChange: NoteEntity = null;
+		const loadItemsByIds = BaseItem.loadItemsByIds.bind(BaseItem);
+		const loadItemsByIdsMock = jest.spyOn(BaseItem, 'loadItemsByIds').mockImplementation(async ids => {
+			const items = await loadItemsByIds(ids);
+			if (ids.includes(note.id)) {
+				await sleep(0.1);
+				localChange = await Note.save({ id: note.id, title: 'local change' });
+			}
+			return items;
+		});
+
+		await synchronizerStart(null, { syncSteps: ['delta'] });
+		loadItemsByIdsMock.mockRestore();
+
+		expect((await Note.load(note.id)).title).toBe('local change');
+		const syncItem = await BaseItem.syncItem(syncTargetId(), note.id, { fields: ['sync_time'] });
+		expect(syncItem.sync_time).toBeLessThan(localChange.updated_time);
+
+		// The following upload phase sees both changes and uses the existing
+		// conflict handling path.
+		await synchronizerStart();
+		expect((await Note.load(note.id)).title).toBe('remote change');
+		expect((await Note.conflictedNotes()).map(note => note.title)).toContain('local change');
+	}));
+
 	it('should resolve folders conflicts', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		await Note.save({ title: 'un', parent_id: folder1.id });

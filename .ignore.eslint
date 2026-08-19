@@ -620,6 +620,7 @@ packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/dragAndDrop.js
 packages/app-desktop/gui/utils/loadScript.js
 packages/app-desktop/gulpfile.js
+packages/app-desktop/integration-tests/chatPanel.spec.js
 packages/app-desktop/integration-tests/goToAnything.spec.js
 packages/app-desktop/integration-tests/main.spec.js
 packages/app-desktop/integration-tests/markdownEditor.spec.js
@@ -1429,6 +1430,7 @@ packages/lib/components/shared/config/plugins/useOnInstallHandler.js
 packages/lib/components/shared/config/shouldShowMissingPasswordWarning.test.js
 packages/lib/components/shared/config/shouldShowMissingPasswordWarning.js
 packages/lib/components/shared/dropbox-login-shared.js
+packages/lib/components/shared/note-screen-shared.test.js
 packages/lib/components/shared/note-screen-shared.js
 packages/lib/components/shared/reduxSharedMiddleware.js
 packages/lib/components/shared/side-menu-shared.test.js

@@ -558,7 +558,9 @@ function NoteEditorContent(props: NoteEditorProps) {
 		useCustomPdfViewer: props.useCustomPdfViewer,
 		// We need it to identify the context for which media is rendered.
 		// It is currently used to remember pdf scroll position for each attachments of each note uniquely.
-		noteId: props.noteId,
+		// Use the form note object to ensure the editor is associated with the loaded form note until onBeforeLoad
+		// has flushed any pending changes from it.
+		noteId: formNote.id,
 		watchedNoteFiles: props.watchedNoteFiles,
 		enableHtmlToMarkdownBanner: props.enableHtmlToMarkdownBanner,
 		showNoteLinkIcon: props.showNoteLinkIcon,
