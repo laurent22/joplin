@@ -122,6 +122,55 @@ describe('autoMerge', () => {
 		expect(result.sections.some(s => s.type === 'unchanged' && s.text.includes('Shared paragraph'))).toBe(true);
 	});
 
+	test.each([
+		['edits at either end of a run', 'aaa\naaa\naaa', 'aaa --local\naaa\naaa', 'aaa\naaa\naaa --remote'],
+		['both sides inserting near a run', 'x\nx', 'A\nx\nx', 'x\nA\nx'],
+		['repeated list items', '- todo\n- todo\n- done', '- TODO1\n- todo\n- done', '- todo\n- todo\n- DONE'],
+	])('should conflict rather than merge when the base has duplicate lines: %s', (_name, base, local, remote) => {
+		const result = autoMerge(base, local, remote);
+		expect(result.sections.every(s => s.type === 'conflict')).toBe(true);
+		expect(result.sections[0].localText).toBe(local);
+		expect(result.sections[0].remoteText).toBe(remote);
+	});
+
+	test.each([
+		['before the run and between it', 'x\nx', 'A\nx\nx', 'x\nA\nx'],
+		['between the run and after it', 'x\nx', 'x\nA\nx', 'x\nx\nA'],
+		['before the run and after it', 'x\nx', 'A\nx\nx', 'x\nx\nA'],
+		['at either end of a longer run', 'x\nx\nx', 'A\nx\nx\nx', 'x\nx\nx\nA'],
+		['in the middle of a longer run', 'x\nx\nx', 'x\nA\nx\nx', 'x\nx\nA\nx'],
+	])('should conflict when both sides insert into a duplicate run: %s', (_name, base, local, remote) => {
+		const result = autoMerge(base, local, remote);
+		expect(result.sections.every(s => s.type === 'conflict')).toBe(true);
+	});
+
+	test('should conflict when one side deletes from a duplicate run and the other edits', () => {
+		const result = autoMerge('x\nx\nx\nA\nB', 'x\nx\nA\nB', 'x\nx\nx\nA\nB edited');
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(true);
+	});
+
+	test('should still merge when only one side changed a note with duplicate lines', () => {
+		const result = autoMerge('aaa\naaa\naaa', 'aaa --local\naaa\naaa', 'aaa\naaa\naaa');
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
+		expect(result.mergedText).toBe('aaa --local\naaa\naaa');
+	});
+
+	test('should still merge when a duplicate run is far from both edits', () => {
+		const base = 'line0\nline1\nline2\nsame\nsame\ntail0\ntail1\ntail2';
+		const local = base.replace('line0', 'line0 EDIT');
+		const remote = base.replace('tail2', 'tail2 EDIT');
+		const result = autoMerge(base, local, remote);
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
+		expect(result.mergedText).toBe('line0 EDIT\nline1\nline2\nsame\nsame\ntail0\ntail1\ntail2 EDIT');
+	});
+
+	test('should still merge a note whose blank lines are not consecutive', () => {
+		const base = 'Title\n\nAgenda\n\nBudget';
+		const result = autoMerge(base, base.replace('Agenda', 'Agenda X'), base.replace('Budget', 'Budget Y'));
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
+		expect(result.mergedText).toBe('Title\n\nAgenda X\n\nBudget Y');
+	});
+
 	test('should not reinstate a line both sides deleted', () => {
 		const base = 'intro\n\nbody\n\nend';
 		const edited = 'intro\nbody\n\nend';

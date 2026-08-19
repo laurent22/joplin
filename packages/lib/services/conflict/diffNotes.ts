@@ -1,5 +1,5 @@
 // require: node-diff3's type exports are not resolvable under this moduleResolution
-const { diff3MergeRegions, diffComm } = require('node-diff3');
+const { diff3MergeRegions, diffComm, diffIndices } = require('node-diff3');
 
 interface StableRegion {
 	stable: true;
@@ -67,6 +67,41 @@ const originalRegionLines = (region: StableRegion, sides: Record<'a' | 'o' | 'b'
 	return originals.length === region.bufferContent.length ? originals : region.bufferContent;
 };
 
+interface DiffIndicesRegion {
+	buffer1: [number, number];
+}
+
+// True when the given side edited at or next to two or more identical lines in a row
+const touchesDuplicateRun = (base: string[], side: string[]): boolean => {
+	const changes: DiffIndicesRegion[] = diffIndices(base, side);
+
+	for (const change of changes) {
+		const [start, length] = change.buffer1;
+
+		// Compare each line with the next to find identical pairs. Check the pairs
+		// touched by an edit; for an insertion, check both sides of the gap.
+		const lastLine = length > 0 ? start + length - 1 : start;
+		const from = Math.max(0, start - 1);
+		const to = Math.min(base.length - 2, lastLine);
+
+		for (let i = from; i <= to; i++) {
+			if (base[i] === base[i + 1]) return true;
+		}
+
+		// An insertion after the last line still touches the final pair.
+		if (length === 0 && start > to && base.length >= 2 && base[base.length - 2] === base[base.length - 1]) {
+			return true;
+		}
+	}
+
+	return false;
+};
+
+const bothSidesChanged = (base: string[], local: string[], remote: string[]): boolean => {
+	const same = (a: string[], b: string[]) => a.length === b.length && a.every((line, i) => line === b[i]);
+	return !same(base, local) && !same(base, remote) && !same(local, remote);
+};
+
 export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string): AutoMergeResult => {
 	const baseLines = splitLines(baseRaw);
 	const localLines = splitLines(localRaw);
@@ -107,9 +142,20 @@ export const autoMerge = (baseRaw: string, localRaw: string, remoteRaw: string):
 		return { mergedText: mergedParts.join('\n'), sections };
 	}
 
-	// KNOWN LIMITATION: when the base has consecutive identical lines, node-diff3
-	// may match an edit to the wrong line, which can produce duplicate content.
-	// Fixing this would require changing how the merge is done.
+	// With duplicate lines, diff3 can't tell which copy was changed, so it may
+	// apply both edits and duplicate content. We raise a conflict instead.
+	const ambiguous = bothSidesChanged(baseLines.normalised, localLines.normalised, remoteLines.normalised) &&
+		(touchesDuplicateRun(baseLines.normalised, localLines.normalised) || touchesDuplicateRun(baseLines.normalised, remoteLines.normalised));
+
+	if (ambiguous) {
+		const localText = localLines.original.join('\n');
+		const remoteText = remoteLines.original.join('\n');
+		return {
+			mergedText: conflictPlaceholder(localText, remoteText),
+			sections: [{ text: conflictPlaceholder(localText, remoteText), type: 'conflict', localText, remoteText }],
+		};
+	}
+
 	const regions: Region[] = diff3MergeRegions(localLines.normalised, baseLines.normalised, remoteLines.normalised);
 
 	const sides = { a: localLines.original, o: baseLines.original, b: remoteLines.original };
