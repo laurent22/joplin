@@ -5,8 +5,8 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
+	padding: 20px;
 	align-items: flex-start;
-	justify-content: center;
 	border: none;
 	margin: 0;
 	background-color: transparent;
@@ -20,11 +20,13 @@
 		color: var(--joplin-color);
 		padding: 16px;
 		box-shadow: 6px 6px 20px rgba(0,0,0,0.5);
-		margin: 20px;
 		min-height: fit-content;
 		display: flex;
 		flex-direction: column;
 		border-radius: 10px;
+
+		margin-left: auto;
+		margin-right: auto;
 	}
 
 	&::backdrop {
@@ -34,6 +36,7 @@
 	&.-fullscreen {
 		max-width: 100vw;
 		max-height: 100vh;
+		padding: 0;
 
 		&::backdrop {
 			background-color: var(--joplin-background-color);
