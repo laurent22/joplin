@@ -10,7 +10,11 @@ import SearchEngine from './search/SearchEngine';
 import ItemChangeUtils from './ItemChangeUtils';
 import time from '../time';
 import eventManager, { EventName } from '../eventManager';
+import { ItemChangeEntity } from './database/types';
+import PerformanceLogger from '../PerformanceLogger';
 const { sprintf } = require('sprintf-js');
+
+const perfLogger = PerformanceLogger.create();
 
 export default class ResourceService extends BaseService {
 
@@ -18,10 +22,8 @@ export default class ResourceService extends BaseService {
 	private isIndexing_ = false;
 
 	private maintenanceCalls_: boolean[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private maintenanceTimer1_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private maintenanceTimer2_: any = null;
+	private maintenanceTimer1_: ReturnType<typeof shim.setTimeout> = null;
+	private maintenanceTimer2_: ReturnType<typeof shim.setInterval> = null;
 
 	public async indexNoteResources() {
 		this.logger().info('ResourceService::indexNoteResources: Start');
@@ -33,6 +35,7 @@ export default class ResourceService extends BaseService {
 		}
 
 		this.isIndexing_ = true;
+		const task = perfLogger.taskStart('ResourceService/indexNoteResources');
 
 		try {
 			await ItemChange.waitForAllSaved();
@@ -40,7 +43,7 @@ export default class ResourceService extends BaseService {
 			let foundNoteWithEncryption = false;
 
 			while (true) {
-				const changes = await ItemChange.modelSelectAll(`
+				const changes: ItemChangeEntity[] = await ItemChange.modelSelectAll(`
 					SELECT id, item_id, type
 					FROM item_changes
 					WHERE item_type = ?
@@ -52,9 +55,8 @@ export default class ResourceService extends BaseService {
 
 				if (!changes.length) break;
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const noteIds = changes.map((a: any) => a.item_id);
-				const notes = await Note.modelSelectAll(`SELECT id, title, body, encryption_applied FROM notes WHERE id IN ('${noteIds.join('\',\'')}')`);
+				const noteIds = changes.map(a => a.item_id);
+				const notes = await Note.modelSelectAll(`SELECT id, title, body, encryption_applied, is_locked, extracted_resource_ids FROM notes WHERE id IN (${Note.escapeIdsForSql(noteIds)})`);
 
 				const noteById = (noteId: string) => {
 					for (let i = 0; i < notes.length; i++) {
@@ -75,16 +77,20 @@ export default class ResourceService extends BaseService {
 						const note = noteById(change.item_id);
 
 						if (note) {
-							if (note.encryption_applied) {
+							if (note.is_locked) {
+								// Recreate note links so setAssociatedResources can validate that each ID belongs to a resource.
+								const noteBody = Note.unserializeExtractedResourceIds(note.extracted_resource_ids).map(id => `[](:/${id})`).join(' ');
+								await this.setAssociatedResources(note.id, noteBody);
+							} else if (note.encryption_applied) {
 								// If we hit an encrypted note, abort processing for now.
 								// Note will eventually get decrypted and processing can resume then.
 								// This is a limitation of the change tracking system - we cannot skip a change
 								// and keep processing the rest since we only keep track of "lastProcessedChangeId".
 								foundNoteWithEncryption = true;
 								break;
+							} else {
+								await this.setAssociatedResources(note.id, note.body);
 							}
-
-							await this.setAssociatedResources(note.id, note.body);
 						} else {
 							this.logger().warn(`ResourceService::indexNoteResources: A change was recorded for a note that has been deleted: ${change.item_id}`);
 						}
@@ -110,6 +116,7 @@ export default class ResourceService extends BaseService {
 		}
 
 		this.isIndexing_ = false;
+		task.onEnd();
 
 		eventManager.emit(EventName.NoteResourceIndexed);
 
@@ -123,6 +130,8 @@ export default class ResourceService extends BaseService {
 
 	public async deleteOrphanResources(expiryDelay: number = null) {
 		if (expiryDelay === null) expiryDelay = Setting.value('revisionService.ttlDays') * 24 * 60 * 60 * 1000;
+		const task = perfLogger.taskStart('ResourceService/deleteOrphanResources');
+
 		const resourceIds = await NoteResource.orphanResources(expiryDelay);
 		this.logger().info('ResourceService::deleteOrphanResources:', resourceIds);
 		for (let i = 0; i < resourceIds.length; i++) {
@@ -138,6 +147,8 @@ export default class ResourceService extends BaseService {
 				await Resource.delete(resourceId, { sourceDescription: 'deleteOrphanResources' });
 			}
 		}
+
+		task.onEnd();
 	}
 
 	private static async autoSetFileSize(resourceId: string, filePath: string, waitTillExists = true) {

@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import type { Editor, EditorEvent } from 'tinymce';
 
-const useTabIndenter = (editor: Editor) => {
+const useTabIndenter = (editor: Editor, enabled: boolean) => {
 	useEffect(() => {
-		if (!editor) return () => {};
+		if (!editor || !enabled) return () => {};
 
 		const canChangeIndentation = () => {
 			const selectionElement = editor.selection.getNode();
@@ -70,7 +70,7 @@ const useTabIndenter = (editor: Editor) => {
 		return () => {
 			editor.off('keydown', eventHandler);
 		};
-	}, [editor]);
+	}, [editor, enabled]);
 };
 
 export default useTabIndenter;

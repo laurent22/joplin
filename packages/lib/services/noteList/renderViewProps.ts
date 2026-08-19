@@ -13,16 +13,15 @@ export interface RenderViewPropsOptions {
 	noteTitleHtml: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const renderViewProp = (name: ListRendererDependency, value: any, options: RenderViewPropsOptions): string => {
+const renderViewProp = (name: ListRendererDependency, value: unknown, options: RenderViewPropsOptions): string => {
 	const renderers: Partial<Record<ListRendererDependency, ()=> string>> = {
-		'note.user_updated_time': () => formatMsToRelative(value),
-		'note.user_created_time': () => formatMsToRelative(value),
-		'note.updated_time': () => formatMsToRelative(value),
-		'note.created_time': () => formatMsToRelative(value),
-		'note.todo_completed': () => value ? time.formatMsToLocal(value) : '',
-		'note.todo_due': () => value ? time.formatMsToLocal(value) : '',
-		'note.tags': () => value ? value.map((t: TagEntity) => t.title).join(', ') : '',
+		'note.user_updated_time': () => formatMsToRelative(value as number),
+		'note.user_created_time': () => formatMsToRelative(value as number),
+		'note.updated_time': () => formatMsToRelative(value as number),
+		'note.created_time': () => formatMsToRelative(value as number),
+		'note.todo_completed': () => value ? time.formatMsToLocal(value as number) : '',
+		'note.todo_due': () => value ? time.formatMsToLocal(value as number) : '',
+		'note.tags': () => value ? (value as TagEntity[]).map(t => t.title).join(', ') : '',
 		'note.title': () => options.noteTitleHtml,
 	};
 
@@ -33,10 +32,10 @@ const renderViewProp = (name: ListRendererDependency, value: any, options: Rende
 		// If the input value doesn't have the expected format, it may have been changed by the
 		// user. In that case we return the value without rendering it.
 		logger.warn('Could not render property:', name, 'With value:', value, 'Error:', error);
-		return value;
+		return value as string;
 	}
 
-	return value;
+	return value as string;
 };
 
 const renderViewProps = async (view: RenderNoteView, parentPath: string[], options: RenderViewPropsOptions) => {

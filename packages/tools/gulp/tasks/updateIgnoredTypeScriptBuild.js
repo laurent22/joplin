@@ -32,10 +32,12 @@ module.exports = {
 				'packages/app-mobile/android/**',
 				'packages/app-mobile/ios/**',
 				'packages/default-plugins/plugin-sources/**',
+				'packages/generator-joplin/generators/app/templates/script/publish/**',
 				'packages/fork-sax/**',
 				'packages/lib/plugin_types/**',
 				'packages/server/**',
 				'packages/utils/**',
+				'packages/transcribe/**',
 			],
 		}).filter(f => !f.endsWith('.d.ts'));
 
@@ -56,7 +58,7 @@ module.exports = {
 
 		await Promise.all([
 			utils.replaceFileText(`${rootDir}/.gitignore`, regex, replacement),
-			utils.replaceFileText(`${rootDir}/.eslintignore`, regex, replacement),
+			utils.replaceFileText(`${rootDir}/.ignore.eslint`, regex, replacement),
 		]);
 	},
 };

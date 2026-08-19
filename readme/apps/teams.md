@@ -13,7 +13,7 @@ To setup your Team, open the [Team tab](https://joplincloud.com/teams/me) at the
 
 ## Inviting members to your team
 
-To invite a member to your team, go to the [Members tag](https://joplincloud.com/teams/me/users). From there, add one or multiple emails (separated by commas) and click "Invite members".
+To invite a member to your team, go to the [Members tab](https://joplincloud.com/teams/me/users). From there, add one or multiple emails (separated by commas) and click "Invite members".
 
 These members will receive an email with a link they will need to follow in order to accept the invitation. You can see which members have accepted the invitation or not in the Members table on that same page.
 
@@ -25,3 +25,17 @@ To remove a member from your team click on the Profile icon (👤) for that user
 
 The team admin account is only for managing users and billing. To collaborate with the other members of your team, add yourself as a member using a different email address.
 
+## Migrating to a Team account
+
+If you already have a Basic or Pro account, it is not currently possible to migrate your data to a Team account, as they work very differently.
+
+You can however follow these steps to manually migrate your data to a Team account:
+
+- Open the Joplin desktop app
+- Click Synchronise and wait for it to complete
+- Export all your notes as JEX (File => Export => JEX)
+- Create a new profile (File => Switch profile)
+- Import your JEX file
+- Cancel your current Joplin Cloud subscription
+- Open a new Joplin Cloud Team subscription
+- Synchronise your new profile with this new subscription

@@ -1,13 +1,13 @@
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 
-const { _ } = require('@joplin/lib/locale.js');
-const { dialogs } = require('../../../utils/dialogs.js');
+import { _ } from '@joplin/lib/locale';
 import Resource from '@joplin/lib/models/Resource';
 import { copyToCache } from '../../../utils/ShareUtils';
 import isEditableResource from '../../NoteEditor/ImageEditor/isEditableResource';
 import shim from '@joplin/lib/shim';
 import shareFile from '../../../utils/shareFile';
 import Logger from '@joplin/utils/Logger';
+import { DialogContext } from '../../DialogManager';
 
 const logger = Logger.create('useOnResourceLongPress');
 
@@ -16,9 +16,10 @@ interface Callbacks {
 	onRequestEditResource: (message: string)=> void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default function useOnResourceLongPress(callbacks: Callbacks, dialogBoxRef: any) {
+export default function useOnResourceLongPress(callbacks: Callbacks) {
 	const { onJoplinLinkClick, onRequestEditResource } = callbacks;
+
+	const dialogManager = useContext(DialogContext);
 
 	return useCallback(async (msg: string) => {
 		try {
@@ -42,7 +43,7 @@ export default function useOnResourceLongPress(callbacks: Callbacks, dialogBoxRe
 			}
 			actions.push({ text: _('Share'), id: 'share' });
 
-			const action = await dialogs.pop({ dialogbox: dialogBoxRef.current }, name, actions);
+			const action = await dialogManager.showMenu(name, actions);
 
 			if (action === 'open') {
 				onJoplinLinkClick(`joplin://${resourceId}`);
@@ -54,7 +55,7 @@ export default function useOnResourceLongPress(callbacks: Callbacks, dialogBoxRe
 			}
 		} catch (e) {
 			logger.error('Could not handle link long press', e);
-			void shim.showMessageBox(`An error occurred, check log for details: ${e}`);
+			void shim.showErrorDialog(`An error occurred, check log for details: ${e}`);
 		}
-	}, [onJoplinLinkClick, onRequestEditResource, dialogBoxRef]);
+	}, [onJoplinLinkClick, onRequestEditResource, dialogManager]);
 }

@@ -1,0 +1,1 @@
+Some \*\*format\*\* characters \$need\$ to be \`escaped\`, if the characters were included directly in HTML.

@@ -70,6 +70,7 @@ export interface DatabaseConfig {
 	asyncStackTraces?: boolean;
 	slowQueryLogEnabled?: boolean;
 	slowQueryLogMinDuration?: number;
+	maxConnections?: number;
 	autoMigration?: boolean;
 }
 
@@ -127,6 +128,7 @@ export interface StorageDriverConfig {
 	path?: string;
 	mode?: StorageDriverMode;
 	region?: string;
+	endpoint?: string;
 	accessKeyId?: string;
 	secretAccessKeyId?: string;
 	bucket?: string;
@@ -141,6 +143,14 @@ export interface LdapConfig {
 	baseDN: string;
 	bindDN: string;
 	bindPW: string;
+	tlsCaFile: string;
+}
+
+export interface SamlConfig {
+	enabled: boolean;
+	identityProviderConfigFile: string;
+	serviceProviderConfigFile: string;
+	organizationDisplayName: string;
 }
 
 export interface Config extends EnvVariables {
@@ -152,10 +162,12 @@ export interface Config extends EnvVariables {
 	rootDir: string;
 	viewDir: string;
 	layoutDir: string;
+	assetsDir: string;
 	// Note that, for now, nothing is being logged to file. Log is just printed
 	// to stdout, which is then handled by Docker own log mechanism
 	logDir: string;
 	tempDir: string;
+	resourceDir: string;
 	baseUrl: string;
 	apiBaseUrl: string;
 	adminBaseUrl: string;
@@ -163,6 +175,7 @@ export interface Config extends EnvVariables {
 	joplinAppBaseUrl: string;
 	signupEnabled: boolean;
 	termsEnabled: boolean;
+	defaultAdminPassword: string;
 	accountTypesEnabled: boolean;
 	showErrorStackTraces: boolean;
 	database: DatabaseConfig;
@@ -174,11 +187,13 @@ export interface Config extends EnvVariables {
 	businessEmail: string;
 	isJoplinCloud: boolean;
 	cookieSecure: boolean;
+	cookieSameSite: 'strict' | 'lax' | 'none' | boolean;
 	storageDriver: StorageDriverConfig;
 	storageDriverFallback: StorageDriverConfig;
 	itemSizeHardLimit: number;
 	maxTimeDrift: number;
 	ldap: LdapConfig[];
+	saml: SamlConfig;
 }
 
 export enum HttpMethod {
@@ -199,4 +214,10 @@ export type KoaNext = ()=> Promise<void>;
 
 export interface CommandContext {
 	models: Models;
+}
+
+export type SamlRelayState = 'web-login' | 'app-login' | null;
+export interface SamlPostResponse {
+	SAMLResponse: string;
+	RelayState?: SamlRelayState;
 }

@@ -1,4 +1,8 @@
+const baseConfig = require('../../jest.config.base.js');
+
 module.exports = {
+	...baseConfig,
+
 	preset: 'react-native',
 
 	'moduleFileExtensions': [
@@ -20,7 +24,7 @@ module.exports = {
 
 	// Do transform most packages in node_modules (transformations correct unrecognized
 	// import syntax)
-	transformIgnorePatterns: ['<rootDir>/node_modules/jest', '<rootDir>/node_modules/js-draw', 'node_modules/jsdom'],
+	transformIgnorePatterns: ['<rootDir>/node_modules/jest', '<rootDir>/node_modules/js-draw', 'node_modules/jsdom', 'node_modules/whatwg-url'],
 
 	slowTestThreshold: 40,
 };

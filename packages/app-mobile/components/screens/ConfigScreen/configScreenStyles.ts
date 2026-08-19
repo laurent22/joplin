@@ -6,8 +6,11 @@ type SidebarButtonStyle = ViewStyle & { height: number };
 export interface ConfigScreenStyleSheet {
 	body: ViewStyle;
 
+	settingOuterContainer: ViewStyle;
+	settingOuterContainerNoBorder: ViewStyle;
 	settingContainer: ViewStyle;
 	settingContainerNoBottomBorder: ViewStyle;
+
 	headerWrapperStyle: ViewStyle;
 
 	headerTextStyle: TextStyle;
@@ -37,6 +40,13 @@ export interface ConfigScreenStyleSheet {
 	sidebarHeaderText: TextStyle;
 
 	settingControl: TextStyle;
+	invalidMessage: TextStyle;
+	invalidInput: TextStyle;
+}
+
+interface ContainerStyles {
+	outerContainer: ViewStyle;
+	innerContainer: ViewStyle;
 }
 
 export interface ConfigScreenStyles {
@@ -44,7 +54,7 @@ export interface ConfigScreenStyles {
 
 	selectedSectionButtonColor: string;
 	keyboardAppearance: 'default'|'light'|'dark';
-	getContainerStyle(hasDescription: boolean): ViewStyle;
+	getContainerStyle(hasDescription: boolean): ContainerStyles;
 }
 
 const configScreenStyles = (themeId: number): ConfigScreenStyles => {
@@ -105,6 +115,14 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		body: {
 			flex: 1,
 			justifyContent: 'flex-start',
+			flexDirection: 'column',
+		},
+		settingOuterContainer: {
+			flexDirection: 'column',
+			borderBottomWidth: 1,
+			borderBottomColor: theme.dividerColor,
+		},
+		settingOuterContainerNoBorder: {
 			flexDirection: 'column',
 		},
 		settingContainer: settingContainerStyle,
@@ -221,6 +239,13 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 			fontWeight: 'bold',
 			fontSize: theme.fontSize,
 		},
+		invalidMessage: {
+			color: theme.colorError,
+			fontSize: theme.fontSize * 0.9,
+		},
+		invalidInput: {
+			borderBottomColor: theme.colorWarn,
+		},
 	});
 
 	return {
@@ -229,7 +254,9 @@ const configScreenStyles = (themeId: number): ConfigScreenStyles => {
 		selectedSectionButtonColor: theme.selectedColor,
 		keyboardAppearance: theme.keyboardAppearance,
 		getContainerStyle: (hasDescription) => {
-			return !hasDescription ? styleSheet.settingContainer : styleSheet.settingContainerNoBottomBorder;
+			const outerContainer = hasDescription ? styleSheet.settingOuterContainer : styleSheet.settingOuterContainerNoBorder;
+			const innerContainer = hasDescription ? styleSheet.settingContainerNoBottomBorder : styleSheet.settingContainer;
+			return { outerContainer, innerContainer };
 		},
 	};
 };

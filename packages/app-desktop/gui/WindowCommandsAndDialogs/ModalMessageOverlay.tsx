@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Dialog from '../Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 
 interface Props {
 	message: string;
@@ -14,7 +14,7 @@ const ModalMessageOverlay: React.FC<Props> = ({ message }) => {
 
 	return <Dialog contentFillsScreen={true}>
 		<div className="modal-message">
-			<div id="loading-animation" />
+			<div className="loading-animation" />
 			<div className="text" role="status">
 				{lines}
 			</div>

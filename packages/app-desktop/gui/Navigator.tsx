@@ -1,64 +1,113 @@
 import * as React from 'react';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import Setting from '@joplin/lib/models/Setting';
 import { AppState, AppStateRoute } from '../app.reducer';
 import bridge from '../services/bridge';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { WindowIdContext } from './NewWindowOrIFrame';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each registered screen has its own props shape; the navigator just spreads them through
+type ScreenProps = any;
+
+interface AppScreen {
+	screen: React.ComponentType<ScreenProps>;
+	title?: ()=> string;
+}
 
 interface Props {
 	route: AppStateRoute;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	screens: Record<string, any>;
+	screens: Record<string, AppScreen>;
 
 	style: React.CSSProperties;
 	className?: string;
 }
 
-const NavigatorComponent: React.FC<Props> = props => {
+const useWindowTitleManager = (screenInfo: AppScreen) => {
+	const windowTitle = useMemo(() => {
+		const devMarker = Setting.value('env') === 'dev' ? ` (DEV - ${Setting.value('profileDir')})` : '';
+		const windowTitle = [`Joplin${devMarker}`];
+		if (screenInfo?.title) {
+			windowTitle.push(screenInfo.title());
+		}
+		return windowTitle.join(' - ');
+	}, [screenInfo]);
+
+	const windowId = useContext(WindowIdContext);
+	useEffect(() => {
+		bridge().windowById(windowId)?.setTitle(windowTitle);
+	}, [windowTitle, windowId]);
+};
+
+const useWindowRefocusManager = (route: AppStateRoute) => {
 	const windowId = useContext(WindowIdContext);
 
-	const route = props.route;
-	const screenInfo = props.screens[route?.routeName];
-
-	const screensRef = useRef(props.screens);
-	screensRef.current = props.screens;
-
-	const prevRoute = useRef<AppStateRoute|null>(null);
+	const prevRouteName = useRef<string|null>(null);
+	const routeName = route?.routeName;
 	useEffect(() => {
-		const routeName = route?.routeName;
-		if (route) {
-			const devMarker = Setting.value('env') === 'dev' ? ` (DEV - ${Setting.value('profileDir')})` : '';
-			const windowTitle = [`Joplin${devMarker}`];
-			if (screenInfo.title) {
-				windowTitle.push(screenInfo.title());
-			}
-			bridge().windowById(windowId)?.setTitle(windowTitle.join(' - '));
-		}
-
 		// When a navigation happens in an unfocused window, show the window to the user.
 		// This might happen if, for example, a secondary window triggers a navigation in
 		// the main window.
-		if (routeName && routeName !== prevRoute.current?.routeName) {
+		if (routeName && routeName !== prevRouteName.current) {
 			bridge().switchToWindow(windowId);
 		}
 
-		prevRoute.current = route;
-	}, [route, screenInfo, windowId]);
+		prevRouteName.current = routeName;
+	}, [routeName, windowId]);
+};
+
+const useContainerSize = (container: HTMLElement|null) => {
+	const [size, setSize] = useState({
+		// Show the container as soon as possible: Default to the window size,
+		// which is usually correct:
+		width: container?.clientWidth ?? window.innerWidth,
+		height: container?.clientHeight ?? window.innerHeight,
+	});
+
+	const currentSizeRef = useRef(size);
+	currentSizeRef.current = size;
+
+	useEffect(() => {
+		if (!container) return () => {};
+
+		const updateSizeIfDifferent = () => {
+			const { width: lastWidth, height: lastHeight } = currentSizeRef.current;
+			if (lastWidth !== container.clientWidth || lastHeight !== container.clientHeight) {
+				setSize({
+					width: container.clientWidth,
+					height: container.clientHeight,
+				});
+			}
+		};
+		// Ensure that the initial size is set, even if the ResizeObserver doesn't run the callback initially
+		updateSizeIfDifferent();
+
+		const observer = new ResizeObserver(updateSizeIfDifferent);
+		observer.observe(container);
+		return () => {
+			observer.disconnect();
+		};
+	}, [container]);
+
+	return size;
+};
+
+const NavigatorComponent: React.FC<Props> = props => {
+	const route = props.route;
+	const screenInfo = props.screens[route?.routeName];
+	const [container, setContainer] = useState<HTMLElement|null>(null);
+
+	useWindowTitleManager(screenInfo);
+	useWindowRefocusManager(route);
+	const size = useContainerSize(container);
 
 	if (!route) throw new Error('Route must not be null');
 
 	const screenProps = route.props ? route.props : {};
 	const Screen = screenInfo.screen;
 
-	const screenStyle = {
-		width: props.style.width,
-		height: props.style.height,
-	};
-
 	return (
-		<div style={props.style} className={props.className}>
-			<Screen style={screenStyle} {...screenProps} />
+		<div ref={setContainer} style={props.style} className={props.className}>
+			<Screen style={size} {...screenProps} />
 		</div>
 	);
 };

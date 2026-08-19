@@ -1,12 +1,13 @@
 import Plugin from '../Plugin';
-export interface Implementation {
-    injectCustomStyles(elementId: string, cssFilePath: string): Promise<void>;
-}
+type DispatchStore = {
+    dispatch: (action: {
+        type: string;
+        [k: string]: unknown;
+    }) => void;
+};
 export default class JoplinWindow {
-    private plugin_;
     private store_;
-    private implementation_;
-    constructor(implementation: Implementation, plugin: Plugin, store: any);
+    constructor(_plugin: Plugin, store: DispatchStore);
     /**
      * Loads a chrome CSS file. It will apply to the window UI elements, except
      * for the note viewer. It is the same as the "Custom stylesheet for
@@ -26,3 +27,4 @@ export default class JoplinWindow {
      */
     loadNoteCssFile(filePath: string): Promise<void>;
 }
+export {};

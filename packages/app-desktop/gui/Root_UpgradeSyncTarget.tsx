@@ -2,10 +2,11 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import useSyncTargetUpgrade, { SyncTargetUpgradeResult } from '@joplin/lib/services/synchronizer/gui/useSyncTargetUpgrade';
 
-const { render } = require('react-dom');
-const ipcRenderer = require('electron').ipcRenderer;
+import { createRoot } from 'react-dom/client';
+import { ipcRenderer } from 'electron';
 import Setting from '@joplin/lib/models/Setting';
 import restart from '../services/restart';
+import shim from '@joplin/lib/shim';
 
 function useAppCloseHandler(upgradeResult: SyncTargetUpgradeResult) {
 	useEffect(() => {
@@ -13,7 +14,7 @@ function useAppCloseHandler(upgradeResult: SyncTargetUpgradeResult) {
 			let canClose = true;
 
 			if (!upgradeResult.done) {
-				canClose = confirm('The synchronisation target upgrade is still running and it is recommanded to let it finish. Close the application anyway?');
+				canClose = await shim.showConfirmationDialog('The synchronisation target upgrade is still running and it is recommanded to let it finish. Close the application anyway?');
 			}
 
 			if (canClose) {
@@ -100,4 +101,5 @@ function Root_UpgradeSyncTarget() {
 	);
 }
 
-render(<Root_UpgradeSyncTarget />, document.getElementById('react-root'));
+const root = createRoot(document.getElementById('react-root'));
+root.render(<Root_UpgradeSyncTarget />);

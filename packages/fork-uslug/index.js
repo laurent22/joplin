@@ -1,1 +1,1 @@
-module.exports = require('./lib/uslug');
+module.exports = require('./lib/uslug').default;

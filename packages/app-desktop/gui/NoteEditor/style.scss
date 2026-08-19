@@ -4,3 +4,10 @@
 @use "./styles/note-title-info-group.scss";
 @use "./styles/note-title-wrapper.scss";
 @use "./styles/note-editor-wrapper.scss";
+@use "./styles/note-editor-viewer-row.scss";
+@use "./styles/revision-viewer-root.scss";
+@use "./styles/revision-viewer-title.scss";
+@use "./styles/tag-bar.scss";
+@use "./styles/editor-status-bar.scss";
+@use "./styles/editor-status-indicator.scss";
+@use "./NoteBody/WhiteboardEditor/style.scss" as whiteboard-editor;

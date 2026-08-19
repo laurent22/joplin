@@ -1,9 +1,10 @@
 import { execCommand } from '@joplin/utils';
 import { copy, mkdirp, move, readFile, readFileSync, remove, stat, writeFile, writeFileSync } from 'fs-extra';
 import { execCommandVerbose, execCommandWithPipes, githubRelease, githubOauthToken, fileExists, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
-const path = require('path');
-const fetch = require('node-fetch');
-const uriTemplate = require('uri-template');
+import { homedir } from 'os';
+import * as path from 'path';
+import fetch from 'node-fetch';
+import * as uriTemplate from 'uri-template';
 
 const rootDir = path.dirname(path.dirname(__dirname));
 const rnDir = `${rootDir}/packages/app-mobile`;
@@ -13,6 +14,7 @@ interface Release {
 	downloadUrl: string;
 	apkFilename: string;
 	apkFilePath: string;
+	publish: boolean;
 }
 
 type PatcherCallback = (content: string)=> Promise<string>;
@@ -56,6 +58,13 @@ class Patcher {
 
 }
 
+interface ReleaseConfig {
+	name: string;
+	patch?: (patcher: Patcher, rootDir: string)=> Promise<void>;
+	disabled?: boolean;
+	publish: boolean;
+}
+
 function increaseGradleVersionCode(content: string) {
 	const newContent = content.replace(/versionCode\s+(\d+)/, (_a, versionCode: string) => {
 		const n = Number(versionCode);
@@ -94,54 +103,37 @@ function gradleVersionName(content: string) {
 	return matches[1];
 }
 
-async function createRelease(projectName: string, name: string, tagName: string, version: string): Promise<Release> {
+async function createRelease(projectName: string, releaseConfig: ReleaseConfig, tagName: string, version: string, publish: boolean): Promise<Release> {
+	const name = releaseConfig.name;
 	const suffix = version + (name === 'main' ? '' : `-${name}`);
 
 	const patcher = new Patcher(`${rnDir}/patcher-work`);
 
 	console.info(`Creating release: ${suffix}`);
 
-	// if (name === '32bit') {
-	// 	await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
-	// 		content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a", "x86"');
-	// 		content = content.replace(/include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'include "armeabi-v7a", "x86"');
-	// 		return content;
-	// 	});
-	// }
+	process.chdir(rootDir);
 
-	// if (name !== 'vosk') {
-	// 	await patcher.updateFileContent(`${rnDir}/services/voiceTyping/vosk.android.ts`, async (_content: string) => {
-	// 		return readFile(`${rnDir}/services/voiceTyping/vosk.ios.ts`, 'utf8');
-	// 	});
+	console.info(`Running from: ${process.cwd()}`);
 
-	// 	await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
-	// 		content = content.replace(/\s+"react-native-vosk": ".*",/, '');
-	// 		return content;
-	// 	});
-	// }
-
-	// if (name === 'vosk') {
-	// 	await patcher.updateFileContent(`${rnDir}/android/app/build.gradle`, async (content: string) => {
-	// 		content = content.replace(/(\s+)applicationId "net.cozic.joplin"/, '$1applicationId "net.cozic.joplin.mod"');
-	// 		content = content.replace(/(\s+)versionName "(\d+\.\d+\.\d+)"/, '$1versionName "$2-mod"');
-	// 		return content;
-	// 	});
-	// }
+	if (releaseConfig.patch) await releaseConfig.patch(patcher, rootDir);
 
 	const apkFilename = `joplin-v${suffix}.apk`;
 	const apkFilePath = `${releaseDir}/${apkFilename}`;
 	const downloadUrl = `https://github.com/laurent22/${projectName}/releases/download/${tagName}/${apkFilename}`;
 
-	process.chdir(rootDir);
-
-	console.info(`Running from: ${process.cwd()}`);
-
 	await execCommand('yarn install', { showStdout: false });
 	await execCommand('yarn tsc', { showStdout: false });
+	await execCommand('yarn buildParallel', { showStdout: false });
 
 	console.info(`Building APK file v${suffix}...`);
 
-	const buildDirName = `build-${name}`;
+	// Normally we should build in the `build-main` folder but it seems Expo has a hard-coded path
+	// to `build` and fail with this error:
+	//
+	// A problem occurred evaluating project ':app'
+	// > /Users/laurent/src/joplin-new/packages/app-mobile/android/build-main/generated/autolinking/autolinking.json
+	// > (No such file or directory)
+	const buildDirName = 'build'; // name === 'main' ? 'build' : `build-${name}`;
 	const buildDirBasePath = `${rnDir}/android/app/${buildDirName}`;
 	await remove(buildDirBasePath);
 
@@ -156,7 +148,15 @@ async function createRelease(projectName: string, name: string, tagName: string,
 	} else {
 		process.chdir(`${rnDir}/android`);
 		apkBuildCmd = './gradlew';
-		apkCleanBuild = `./gradlew clean -PbuildDir=${buildDirName}`;
+
+		// Note: We intentionally do NOT run `./gradlew clean`. On React Native 0.8x+, `clean` is
+		// broken because it triggers CMake regeneration via externalNativeBuild, which re-evaluates
+		// autolinking and codegen and fails if generated JNI/CMake directories are missing (and for
+		// some reason they usually are). Manually deleting build artefacts is safer and
+		// deterministic.
+
+		// apkCleanBuild = `./gradlew clean -PbuildDir=${buildDirName}`;
+		apkCleanBuild = 'yarn clean';
 		restoreDir = rootDir;
 	}
 
@@ -186,13 +186,20 @@ async function createRelease(projectName: string, name: string, tagName: string,
 	await patcher.restore();
 
 	return {
-		downloadUrl: downloadUrl,
+		downloadUrl: publish ? downloadUrl : '',
 		apkFilename: apkFilename,
 		apkFilePath: apkFilePath,
+		publish,
 	};
 }
 
 const uploadToGitHubRelease = async (projectName: string, tagName: string, isPreRelease: boolean, releaseFiles: Record<string, Release>) => {
+	const allPublishDisabled = Object.values(releaseFiles).every(r => !r.publish);
+	if (allPublishDisabled) {
+		console.info('All release files have publishing disabled - skipping GitHub release creation');
+		return;
+	}
+
 	console.info(`Creating GitHub release ${tagName}...`);
 
 	const releaseOptions = { isPreRelease: isPreRelease };
@@ -203,6 +210,11 @@ const uploadToGitHubRelease = async (projectName: string, tagName: string, isPre
 
 	for (const releaseFilename in releaseFiles) {
 		const releaseFile = releaseFiles[releaseFilename];
+		if (!releaseFile.publish) {
+			console.info(`Skipping: ${releaseFile.apkFilename} (publishing is disabled)`);
+			continue;
+		}
+
 		const uploadUrl = uploadUrlTemplate.expand({ name: releaseFile.apkFilename });
 
 		const binaryBody = await readFile(releaseFile.apkFilePath);
@@ -215,7 +227,7 @@ const uploadToGitHubRelease = async (projectName: string, tagName: string, isPre
 			headers: {
 				'Content-Type': 'application/vnd.android.package-archive',
 				'Authorization': `token ${oauthToken}`,
-				'Content-Length': binaryBody.length,
+				'Content-Length': String(binaryBody.length),
 			},
 		});
 
@@ -225,8 +237,77 @@ const uploadToGitHubRelease = async (projectName: string, tagName: string, isPre
 	}
 };
 
+// const testPatch = async (releaseConfig:ReleaseConfig) => {
+// 	const patcher = new Patcher(`${rnDir}/patcher-work`);
+// 	await releaseConfig.patch(patcher, rootDir);
+// 	process.exit();
+// }
+
+const releaseConfigs: ReleaseConfig[] = [
+	{
+		name: 'main',
+		publish: true,
+	},
+
+	{
+		name: 'custom',
+		publish: false,
+		patch: require(`${homedir()}/joplin-credentials/android-black-icon.js`),
+	},
+
+	{
+		name: 'armeabi-v7a',
+		disabled: true,
+		publish: true,
+		patch: async (patcher, rootDir) => {
+			await patcher.updateFileContent(`${rootDir}/packages/app-mobile/android/app/build.gradle`, async (content: string) => {
+				content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "armeabi-v7a"');
+				return content;
+			});
+		},
+	},
+
+	{
+		name: 'x86',
+		disabled: true,
+		publish: true,
+		patch: async (patcher, rootDir) => {
+			await patcher.updateFileContent(`${rootDir}/packages/app-mobile/android/app/build.gradle`, async (content: string) => {
+				content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "x86"');
+				return content;
+			});
+		},
+	},
+
+	{
+		name: 'arm64-v8a',
+		disabled: true,
+		publish: true,
+		patch: async (patcher, rootDir) => {
+			await patcher.updateFileContent(`${rootDir}/packages/app-mobile/android/app/build.gradle`, async (content: string) => {
+				content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "arm64-v8a"');
+				return content;
+			});
+		},
+	},
+
+	{
+		name: 'x86_64',
+		disabled: true,
+		publish: true,
+		patch: async (patcher, rootDir) => {
+			await patcher.updateFileContent(`${rootDir}/packages/app-mobile/android/app/build.gradle`, async (content: string) => {
+				content = content.replace(/abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"/, 'abiFilters "x86_64"');
+				return content;
+			});
+		},
+	},
+];
+
 async function main() {
 	const argv = require('yargs').argv;
+
+	// await testPatch(releaseConfigs[1]);
 
 	await gitPullTry(false);
 
@@ -241,34 +322,30 @@ async function main() {
 	const newContent = updateGradleConfig();
 	const version = gradleVersionName(newContent);
 	const tagName = `android-v${version}`;
-	// const releaseNames = ['main', '32bit', 'vosk'];
-	const releaseNames = ['main'];
+
 	const releaseFiles: Record<string, Release> = {};
 	const mainProjectName = 'joplin-android';
-	const modProjectName = 'joplin-android-mod';
 
-	for (const releaseName of releaseNames) {
-		if (releaseNameOnly && releaseName !== releaseNameOnly) continue;
-		const projectName = releaseName === 'vosk' ? modProjectName : mainProjectName;
-		releaseFiles[releaseName] = await createRelease(projectName, releaseName, tagName, version);
+	for (const releaseConfig of releaseConfigs) {
+		if (releaseNameOnly && releaseConfig.name !== releaseNameOnly) continue;
+		if (releaseConfig.disabled) continue;
+		releaseFiles[releaseConfig.name] = await createRelease(mainProjectName, releaseConfig, tagName, version, releaseConfig.publish);
 	}
 
 	console.info('Created releases:');
 	console.info(releaseFiles);
 
-	const voskRelease = releaseFiles['vosk'];
-	delete releaseFiles['vosk'];
-
 	await uploadToGitHubRelease(mainProjectName, tagName, isPreRelease, releaseFiles);
 
-	if (voskRelease) {
-		await uploadToGitHubRelease(modProjectName, tagName, isPreRelease, { 'vosk': voskRelease });
-	}
-
-	console.info(`Main download URL: ${releaseFiles['main'].downloadUrl}`);
+	if (releaseFiles['main']) console.info(`Main download URL: ${releaseFiles['main'].downloadUrl}`);
 
 	const changelogPath = `${rootDir}/readme/about/changelog/android.md`;
-	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Android', isPreRelease);
+
+	// When creating the changelog, we always set `isPrerelease` to `false` - this is because we
+	// only ever publish pre-releases, and it's only later that we manually promote some of them to
+	// stable releases. So having "(Pre-release)" for each Android version in the changelog is
+	// meaningless and would be incorrect for the versions that are stable ones.
+	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Android', false);
 }
 
 main().catch((error) => {

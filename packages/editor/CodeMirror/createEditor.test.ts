@@ -5,11 +5,24 @@
 import createEditor from './createEditor';
 import Setting from '@joplin/lib/models/Setting';
 import { forceParsing } from '@codemirror/language';
-import loadLanguages from './testUtil/loadLanguages';
+import loadLanguages from './testing/loadLanguages';
 
 import { expect, describe, it } from '@jest/globals';
-import createEditorSettings from './testUtil/createEditorSettings';
+import createEditorSettings from '../testing/createEditorSettings';
+import { ContentScriptLoadOptions } from '../types';
 
+const getMockContentScriptSource = (context: ContentScriptLoadOptions) => {
+	return {
+		sourceJs: `
+			${context.contentScriptStartJs}
+			exports.default = context => {
+				context.postMessage(context.pluginId);
+				return {};
+			};
+			${context.contentScriptEndJs}
+		`,
+	};
+};
 
 describe('createEditor', () => {
 	beforeAll(() => {
@@ -36,10 +49,13 @@ describe('createEditor', () => {
 		await loadLanguages();
 		const editor = createEditor(document.body, {
 			initialText,
+			initialNoteId: '',
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onLocalize: input => input,
 			onPasteFile: null,
+			resolveImageSrc: src => Promise.resolve(src),
 		});
 
 		// Force the generation of the syntax tree now.
@@ -47,7 +63,7 @@ describe('createEditor', () => {
 
 		const headerLine = document.body.querySelector('.cm-headerLine')!;
 		expect(headerLine.textContent).toBe(headerLineText);
-		expect(getComputedStyle(headerLine).fontSize).toBe('1.6em');
+		expect(getComputedStyle(headerLine).fontSize).toBe('1.5em');
 
 		// CodeMirror nests the tag that styles the header within .cm-headerLine:
 		//  <div class='cm-headerLine'><span class='someclass'>Testing...</span></div>
@@ -64,19 +80,17 @@ describe('createEditor', () => {
 
 		const editor = createEditor(document.body, {
 			initialText,
+			initialNoteId: '',
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onLocalize: input => input,
 			onPasteFile: null,
+			resolveImageSrc: src=>Promise.resolve(src),
 		});
 
-		const getContentScriptJs = jest.fn(async () => {
-			return `
-				exports.default = context => {
-					context.postMessage(context.pluginId);
-					return {};
-				};
-			`;
+		const getContentScriptJs = jest.fn(async (context) => {
+			return getMockContentScriptSource(context);
 		});
 		const postMessageHandler = jest.fn();
 
@@ -132,19 +146,17 @@ describe('createEditor', () => {
 
 		const editor = createEditor(document.body, {
 			initialText,
+			initialNoteId: '',
 			settings: editorSettings,
 			onEvent: _event => {},
 			onLogMessage: _message => {},
+			onLocalize: input => input,
 			onPasteFile: null,
+			resolveImageSrc: src=>Promise.resolve(src),
 		});
 
-		const getContentScriptJs = jest.fn(async () => {
-			return `
-				exports.default = context => {
-					context.postMessage(context.pluginId);
-					return {};
-				};
-			`;
+		const getContentScriptJs = jest.fn(async (context) => {
+			return getMockContentScriptSource(context);
 		});
 		const postMessageHandler = jest.fn();
 
@@ -173,5 +185,24 @@ describe('createEditor', () => {
 
 		// Should be one script container for each plugin
 		expect(document.querySelectorAll('#joplin-plugin-scripts-container script')).toHaveLength(2);
+	});
+
+	it('should be possible to access the initial note ID', () => {
+		const initialText = '# Test\nThis is a test.';
+		const editorSettings = createEditorSettings(Setting.THEME_LIGHT);
+
+		const editor = createEditor(document.body, {
+			initialText,
+			initialNoteId: 'Initial note ID',
+			settings: editorSettings,
+			onEvent: () => {},
+			onLogMessage: () => {},
+			onLocalize: input => input,
+			onPasteFile: null,
+			resolveImageSrc: src=>Promise.resolve(src),
+		});
+		const editorState = editor.editor.state;
+		const idFacet = editor.joplinExtensions.noteIdFacet;
+		expect(editorState.facet(idFacet)).toBe('Initial note ID');
 	});
 });

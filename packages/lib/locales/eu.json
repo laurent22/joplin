@@ -2,7 +2,8 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		""
 	],
-	"%d days": [
+	"%d day": [
+		"",
 		""
 	],
 	"%d GB": [
@@ -11,20 +12,11 @@
 	"%d GB storage space": [
 		""
 	],
-	"%d hour": [
-		"% ordua"
-	],
-	"%d hours": [
-		"% orduak"
-	],
 	"%d MB": [
 		""
 	],
-	"%d minutes": [
-		"%d minutuak"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d oharrak bat datoz ereduarekin. Ezabatu nahi dituzu?"
+	"%d photo(s) taken": [
+		""
 	],
 	"%s": [
 		""
@@ -50,14 +42,17 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
 		""
-	],
-	"%s: %d notes": [
-		"%s: %d oharrak"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -80,7 +75,13 @@
 	"(In plugin: %s)": [
 		""
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
+		""
+	],
+	"(Read-only)": [
 		""
 	],
 	"(wysiwyg: %s)": [
@@ -101,6 +102,15 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> erabil daiteke \"txandakatzeko\" edo \"garbitzeko\". Erabili \"txandakatu\", emandako zeregina txandakatzeko bete ala ez-betea txandaketzeko (helburua ohar arrunta bada, zeregin bihurtuko da. Erabili \"garbitu\" zeregina ohar arrunt bilakatzeko."
 	],
+	"[None]": [
+		""
+	],
+	"A brief description of the image:": [
+		""
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
+	],
 	"A3": [
 		""
 	],
@@ -108,6 +118,9 @@
 		""
 	],
 	"A5": [
+		""
+	],
+	"ABC musical notation: Options": [
 		""
 	],
 	"About": [
@@ -152,6 +165,9 @@
 	"Add body": [
 		""
 	],
+	"Add column": [
+		""
+	],
 	"Add or remove tags:": [
 		"Gehitu edo ezabatu etiketak:"
 	],
@@ -161,10 +177,19 @@
 	"Add to dictionary": [
 		""
 	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
+	],
 	"Admin": [
 		""
 	],
 	"Admin dashboard": [
+		""
+	],
+	"all": [
 		""
 	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
@@ -174,6 +199,9 @@
 		""
 	],
 	"All potential ports are in use - please report the issue at %s": [
+		""
+	],
+	"All shared folders:": [
 		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
@@ -203,6 +231,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
+	],
 	"An error occurred: %s": [
 		""
 	],
@@ -221,6 +252,12 @@
 	"Apply": [
 		""
 	],
+	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
+		""
+	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
+		""
+	],
 	"Are you sure you want to renew the authorisation token?": [
 		""
 	],
@@ -231,6 +268,12 @@
 		""
 	],
 	"Aritim Dark": [
+		""
+	],
+	"Associated tags:": [
+		""
+	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
 	],
 	"Attach file": [
@@ -263,7 +306,13 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
+		""
+	],
+	"Autocomplete Markdown and HTML": [
 		""
 	],
 	"Automatically check for updates": [
@@ -284,7 +333,7 @@
 	"Beta": [
 		""
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
+	"Block code": [
 		""
 	],
 	"Bold": [
@@ -305,6 +354,12 @@
 	"by %s": [
 		""
 	],
+	"by word": [
+		""
+	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		""
 	],
@@ -319,6 +374,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Atzeko sinkronizazioa uzten... Mesedez itxaron."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Bertan behera uzten..."
@@ -365,10 +423,16 @@
 	"Change application layout": [
 		""
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		""
 	],
 	"Characters excluding spaces": [
+		""
+	],
+	"Check elements to display in the toolbar": [
 		""
 	],
 	"Check for updates...": [
@@ -380,6 +444,12 @@
 	"Checkbox list": [
 		""
 	],
+	"Checked": [
+		""
+	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Chrome Web Store": [
 		""
 	],
@@ -389,16 +459,28 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		""
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		""
 	],
+	"close": [
+		""
+	],
 	"Close": [
+		""
+	],
+	"Close side menu": [
 		""
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		""
 	],
 	"Close Window": [
+		""
+	],
+	"Closing session...": [
 		""
 	],
 	"Cmd-click to open": [
@@ -416,10 +498,7 @@
 	"Code View": [
 		""
 	],
-	"Collapse": [
-		""
-	],
-	"Collapse %s": [
+	"Collapsed": [
 		""
 	],
 	"Coming alarms": [
@@ -434,10 +513,16 @@
 	"Command": [
 		""
 	],
+	"COMMAND": [
+		""
+	],
 	"Command palette": [
 		""
 	],
 	"Command palette...": [
+		""
+	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
 		""
 	],
 	"Completed decryption.": [
@@ -455,16 +540,28 @@
 	"Configuration": [
 		"Konfigurazioa"
 	],
+	"Configured keyboard shortcuts:": [
+		""
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
+	],
 	"Conflicted: %d": [
 		"Gatazkatsua: %d"
 	],
 	"Conflicts": [
 		"Gatazkak"
 	],
+	"Connect using your organisation account": [
+		""
+	],
 	"Consolidated billing": [
 		""
 	],
 	"Continue": [
+		""
+	],
+	"Control character": [
 		""
 	],
 	"Convert to note": [
@@ -558,6 +655,9 @@
 	"Ctrl-click to open: %s": [
 		""
 	],
+	"current match": [
+		""
+	],
 	"Current version is up-to-date.": [
 		""
 	],
@@ -600,6 +700,9 @@
 	"Decrease indent level": [
 		""
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Lehenetsia: %s"
 	],
@@ -607,6 +710,9 @@
 		"Ezabatu"
 	],
 	"Delete local data and re-download from sync target": [
+		""
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
 		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
@@ -637,6 +743,12 @@
 		"Ezabatu oharrak berrespenik eskatu gabe."
 	],
 	"Detailed": [
+		""
+	],
+	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -681,6 +793,9 @@
 	"Displays the complete information about note.": [
 		"Erakutsi oharrari buruzko informazio guztia."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Oharra erakutsi"
 	],
@@ -699,6 +814,18 @@
 	"Do not ask for confirmation.": [
 		"Ez galdetu berresteko."
 	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
+	"Document scanner: Title template": [
+		""
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
+		""
+	],
 	"Donate, website": [
 		""
 	],
@@ -709,6 +836,9 @@
 		""
 	],
 	"Download and install the relevant extension for your browser:": [
+		""
+	],
+	"Download it now": [
 		""
 	],
 	"Downloaded": [
@@ -756,7 +886,10 @@
 	"Edit": [
 		"Editatu"
 	],
-	"Edit in external editor": [
+	"Edit as Markdown": [
+		""
+	],
+	"Edit as Rich Text": [
 		""
 	],
 	"Edit note.": [
@@ -822,10 +955,16 @@
 	"Enable encryption": [
 		"Zifratua gaitu"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		""
 	],
 	"Enable Fountain syntax support": [
+		""
+	],
+	"Enable HTML-to-Markdown conversion banner": [
 		""
 	],
 	"Enable markdown emoji": [
@@ -847,6 +986,9 @@
 		""
 	],
 	"Enable soft breaks": [
+		""
+	],
+	"Enable spell checking in Markdown editor": [
 		""
 	],
 	"Enable spellcheck in the text editor": [
@@ -873,6 +1015,12 @@
 	"Enabled": [
 		"Gaituta"
 	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
+	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Encrypted": [
 		"Zifratuta"
 	],
@@ -885,8 +1033,14 @@
 	"Encryption is: %s": [
 		"Zifratzea da: %s"
 	],
+	"Ends voice typing": [
+		""
+	],
 	"Enter master password:": [
 		"Sartu pasahitz nagusia:"
+	],
+	"Entering selection mode": [
+		""
 	],
 	"Enum": [
 		"Zenbakitu"
@@ -897,16 +1051,19 @@
 	"Error opening note in editor: %s": [
 		"Errorea editorean oharra zabaltzean: %s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		""
 	],
 	"Exits the application.": [
 		"Irten aplikaziotik."
 	],
-	"Expand": [
+	"Expand %s": [
 		""
 	],
-	"Expand %s": [
+	"Expanded": [
 		""
 	],
 	"Export Debug Report": [
@@ -930,10 +1087,19 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		""
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"Aio! Agur! :_( "
 	],
 	"Feature flags": [
+		""
+	],
+	"Feedback": [
 		""
 	],
 	"Fetched items: %d/%d.": [
@@ -948,10 +1114,7 @@
 	"Filter": [
 		""
 	],
-	"Filter tags": [
-		""
-	],
-	"Find and replace": [
+	"Finishes recording": [
 		""
 	],
 	"Firefox Extension": [
@@ -970,6 +1133,12 @@
 		""
 	],
 	"Focus title": [
+		""
+	],
+	"Folder \"%s\" is shared with:": [
+		""
+	],
+	"Follow link": [
 		""
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
@@ -1002,6 +1171,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		""
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		""
 	],
@@ -1010,6 +1182,18 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Konfigurazio balioa hartu edo ezartzen du. Baldin eta [balioa] ez bada ematen, [izena]ren balioa erakutsiko du. Ez bada ematen [izena] ez [balioa], oraingo konfigurazioaren zerrenda erakutsiko da."
+	],
+	"Glossary:": [
+		""
+	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
+	"Go to line": [
+		""
 	],
 	"Go to source URL": [
 		""
@@ -1026,9 +1210,6 @@
 	"Header %d": [
 		""
 	],
-	"Headers": [
-		""
-	],
 	"Heading": [
 		""
 	],
@@ -1039,6 +1220,9 @@
 		""
 	],
 	"Hide disabled keys": [
+		""
+	],
+	"Hides warning": [
 		""
 	],
 	"Highlight": [
@@ -1066,6 +1250,9 @@
 		"ID"
 	],
 	"Idle": [
+		""
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
@@ -1110,9 +1297,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"Edozein komandotan, oharra edo koadernoari erreferentzia egin ahal zaio izenburuz edo ID erabilita, edo `$n` edo `$b` lasterbideak erabilita, aukeratuta dagoen oharra edo koadernoa erabiltzeko. `$c` ere erabil daiteke aukeratutako elementua erabiltzeko."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		""
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		""
 	],
@@ -1138,6 +1322,9 @@
 		""
 	],
 	"Indent more": [
+		""
+	],
+	"Info": [
 		""
 	],
 	"Inline Code": [
@@ -1167,6 +1354,9 @@
 	"Invalid command: \"%s\"": [
 		"Komando baliogabea: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Balio aukera baliogabea: \"%s\". Litezkeen balioak: %s."
 	],
@@ -1179,7 +1369,7 @@
 	"Items that cannot be synchronised": [
 		"Itemok ezin sinkronizatu"
 	],
-	"Join us on Twitter": [
+	"Join us on %s": [
 		""
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
@@ -1194,7 +1384,16 @@
 	"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": [
 		""
 	],
+	"Joplin is already running.": [
+		""
+	],
 	"Joplin Server URL": [
+		""
+	],
+	"Joplin SSO Authentication": [
+		""
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
 		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
@@ -1204,9 +1403,6 @@
 		""
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
-		""
-	],
-	"KaTeX": [
 		""
 	],
 	"Keep note history for": [
@@ -1227,7 +1423,13 @@
 	"Keychain Supported: %s": [
 		""
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
+		""
+	],
+	"Label": [
 		""
 	],
 	"Landscape": [
@@ -1235,6 +1437,9 @@
 	],
 	"Language": [
 		"Hizkuntza"
+	],
+	"Large": [
+		""
 	],
 	"Later": [
 		""
@@ -1276,13 +1481,7 @@
 	"Link text": [
 		""
 	],
-	"Links with protocol \"%s\" are not supported": [
-		""
-	],
 	"List item": [
-		""
-	],
-	"Lists": [
 		""
 	],
 	"Loaded": [
@@ -1312,6 +1511,9 @@
 	"Manage your plugins": [
 		""
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manual": [
 		""
 	],
@@ -1319,6 +1521,9 @@
 		""
 	],
 	"Markdown + Front Matter": [
+		""
+	],
+	"Markdown editor: Render markup in editor": [
 		""
 	],
 	"Marks a to-do as done.": [
@@ -1333,6 +1538,12 @@
 	"Master Key %s": [
 		"Pasahitz Nagusia %s"
 	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
+	],
 	"Max concurrent connections": [
 		""
 	],
@@ -1340,6 +1551,9 @@
 		""
 	],
 	"Media player, math, diagrams, table of contents": [
+		""
+	],
+	"Medium": [
 		""
 	],
 	"Minimise": [
@@ -1357,8 +1571,14 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Mugitu %d oharrak \"%s\" koadernora?"
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
+	],
+	"Move up": [
+		""
 	],
 	"n": [
 		"e"
@@ -1369,10 +1589,13 @@
 	"Never resize": [
 		""
 	],
-	"New": [
+	"New drawing": [
 		""
 	],
 	"New invitations": [
+		""
+	],
+	"New model available\nA new voice typing model is available. Do you want to download it?": [
 		""
 	],
 	"New note": [
@@ -1384,13 +1607,13 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"\"%s\" koaderno berria sortuko da eta \"%s\" Fitxategia inportatuko da bertara"
 	],
-	"New tags:": [
-		""
-	],
 	"New to-do": [
 		"Zeregin berria"
 	],
 	"New version: %s": [
+		""
+	],
+	"next": [
 		""
 	],
 	"Next match": [
@@ -1407,9 +1630,6 @@
 	],
 	"No active notebook.": [
 		"Ez dago koadernorik aukeratuta."
-	],
-	"No item with ID %s": [
-		""
 	],
 	"No new invitations": [
 		""
@@ -1438,14 +1658,26 @@
 	"No suggestions": [
 		""
 	],
+	"No tags": [
+		""
+	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Testu editorerik ez dago definituta. Egin hau erabilita, mesedez: `config editor <editorearen-helbidea>`"
+	],
+	"No URL for SAML authentication set.": [
+		""
+	],
+	"None": [
+		""
 	],
 	"Nord": [
 		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Ez da autentifikatu %s -rekin. Eman galdutako kredentzialak."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		""
@@ -1454,6 +1686,9 @@
 		""
 	],
 	"Not now": [
+		""
+	],
+	"Not useful": [
 		""
 	],
 	"Note area growth factor": [
@@ -1495,8 +1730,14 @@
 	"Numbered List": [
 		""
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"OK"
+	],
+	"on line": [
+		""
 	],
 	"One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon.": [
 		"Item bat edo gehiago orain zifratuta daude eta baliteke zuk pasahitz nagusia ordezkatu behar izatea. Horixe egiteko, mesedez, idatz `e2ee decrypt`. Dagoeneko pasahitza ordezkatua baduzu, itemak deszifratzen ari izango dira atzeko planoan eta laster izango dira eskuragarri."
@@ -1510,10 +1751,22 @@
 	"Only one note can be printed at a time.": [
 		""
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
 		""
 	],
+	"Open primary app instance...": [
+		""
+	],
+	"Open secondary app instance...": [
+		""
+	],
 	"Open Sync Wizard...": [
+		""
+	],
+	"Open-source licences": [
 		""
 	],
 	"Open...": [
@@ -1528,10 +1781,22 @@
 	"Options": [
 		"Aukerak"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
+	"Other": [
+		""
+	],
 	"Page orientation for PDF export": [
 		""
 	],
 	"Page size for PDF export": [
+		""
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
 		""
 	],
 	"Password": [
@@ -1552,13 +1817,10 @@
 	"Path:": [
 		""
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
-	"Permission needed": [
-		""
-	],
-	"Permission to use camera": [
+	"Photo %d": [
 		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
@@ -1571,6 +1833,9 @@
 		""
 	],
 	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
+		""
+	],
+	"Please provide the recipient email": [
 		""
 	],
 	"Please record your voice...": [
@@ -1589,6 +1854,9 @@
 		""
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
+		""
+	],
+	"Please wait while we load your organisation sign-in page...": [
 		""
 	],
 	"Plugin message": [
@@ -1627,6 +1895,9 @@
 	"Possible values: %s.": [
 		"Litezkeen balioak: %s."
 	],
+	"Prefer JSON output.": [
+		""
+	],
 	"Preferences": [
 		""
 	],
@@ -1637,6 +1908,9 @@
 		""
 	],
 	"Preferred light theme": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
@@ -1650,6 +1924,9 @@
 	],
 	"Press to set the decryption password.": [
 		"Sakatu deszifratze pasahitza ezartzeko."
+	],
+	"previous": [
+		""
 	],
 	"Previous match": [
 		""
@@ -1705,10 +1982,28 @@
 	"Publish notes to the internet": [
 		""
 	],
+	"Publish/unpublish": [
+		""
+	],
+	"Published at URL: %s": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
+	"QR Code": [
+		""
+	],
 	"Quit": [
 		"Irten"
 	],
+	"Re-download model": [
+		""
+	],
 	"Re-upload local data to sync target": [
+		""
+	],
+	"Read more": [
 		""
 	],
 	"Read more about it": [
@@ -1729,10 +2024,22 @@
 	"Recipients:": [
 		""
 	],
+	"Recognise text:": [
+		""
+	],
+	"Recognize handwritten image": [
+		""
+	],
 	"Recommended": [
 		""
 	],
 	"Recommended plugins": [
+		""
+	],
+	"Record audio": [
+		""
+	],
+	"Recording": [
 		""
 	],
 	"Redo": [
@@ -1756,6 +2063,9 @@
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Ber izendatu emandako <item> (oharra edo koadernoa) <name> izen berriaz."
 	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
+	],
 	"Renew token": [
 		""
 	],
@@ -1766,6 +2076,12 @@
 		""
 	],
 	"Replace: ": [
+		""
+	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
 		""
 	],
 	"Report an issue": [
@@ -1807,6 +2123,12 @@
 	"Reverses the sorting order.": [
 		"Alderantziz antolatzen du."
 	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		""
 	],
@@ -1840,6 +2162,12 @@
 	"Save geo-location with notes": [
 		"Gore geokokapena oharrekin"
 	],
+	"Scanned code": [
+		""
+	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Bilatu"
 	],
@@ -1853,6 +2181,15 @@
 		"Emandako <pattern> bilatzen du ohar guztietan."
 	],
 	"See the pre-release page for more details: %s": [
+		""
+	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
+	"Self-hosted": [
 		""
 	],
 	"Server is already running on port %d": [
@@ -1879,6 +2216,9 @@
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"Emandako <note>ren <name> ezaugarrian emandako [value] balioa ezartzen du. Litezkeen ezaugarriak dira:\n\n%s"
 	],
+	"Settings": [
+		""
+	],
 	"Share": [
 		""
 	],
@@ -1886,6 +2226,9 @@
 		""
 	],
 	"Share permissions": [
+		""
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
 		""
 	],
 	"Shortcuts are not available in CLI mode.": [
@@ -1909,6 +2252,9 @@
 	"Show/hide the sidebar": [
 		""
 	],
+	"Shows notes for tag": [
+		""
+	],
 	"Shrink large images before adding them to notes.": [
 		""
 	],
@@ -1930,6 +2276,9 @@
 	"Skipped: %d.": [
 		"Saltatuta: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		""
 	],
@@ -1948,6 +2297,12 @@
 	"Some items cannot be synchronised.": [
 		"Zenbait item ezin dira sinkronizatu."
 	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
+	],
 	"Sort notes by": [
 		""
 	],
@@ -1956,6 +2311,9 @@
 	],
 	"Source": [
 		"Iturburua"
+	],
+	"SPACE": [
+		""
 	],
 	"Spacer": [
 		""
@@ -1970,6 +2328,9 @@
 		""
 	],
 	"Start application minimised in the tray icon": [
+		""
+	],
+	"Start recording": [
 		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
@@ -2026,6 +2387,12 @@
 	"Subscript": [
 		""
 	],
+	"Success": [
+		""
+	],
+	"Suggestions": [
+		""
+	],
 	"Superscript": [
 		""
 	],
@@ -2038,8 +2405,14 @@
 	"Switch between note and to-do type": [
 		"Aldatu oharra eta zeregin eren artean."
 	],
+	"Switch to back-facing camera": [
+		""
+	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Aldatu [koaderno]ra - hurrengo eragiketak koaderno horretan jazoko dira."
+	],
+	"Sync": [
+		""
 	],
 	"Sync as many devices as you want": [
 		""
@@ -2080,10 +2453,13 @@
 	"Synchronises with remote storage.": [
 		"Urruneko biltegiarekin sinkronizatzen du."
 	],
-	"Tabloid": [
+	"Tab indents": [
 		""
 	],
-	"tag1, tag2, ...": [
+	"Tab moves focus": [
+		""
+	],
+	"Tabloid": [
 		""
 	],
 	"Tagged: %d.": [
@@ -2101,16 +2477,13 @@
 	"Teams": [
 		""
 	],
-	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
 		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
-		""
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
 		""
 	],
 	"The application has been authorised - you may now close this browser tab.": [
@@ -2153,13 +2526,16 @@
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		""
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
+	"The following plugins may not support the current markdown editor:": [
 		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		""
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		""
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		""
 	],
 	"The master key has been upgraded successfully!": [
@@ -2169,6 +2545,10 @@
 		""
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
+		""
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"",
 		""
 	],
 	"The note was successfully moved to the trash.": [
@@ -2205,7 +2585,13 @@
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		"Sinkronizazio helburua. Sinkronizazio aukera bakoitzak izan ditzake parametro gehigarriak, horrela izendatuta `sync.NUM.NAME` (dena beherago dokumentatuta)."
 	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
+	],
 	"The Web Clipper needs your authorisation to access your data.": [
+		""
+	],
+	"The web clipper service cannot be enabled in this instance of Joplin.": [
 		""
 	],
 	"The web clipper service is enabled and set to auto-start.": [
@@ -2256,13 +2642,19 @@
 	"This attachment is not downloaded or not decrypted yet": [
 		""
 	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		""
-	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		""
 	],
 	"This drawing may have unsaved changes.": [
+		""
+	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
 		""
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
@@ -2275,6 +2667,9 @@
 		"Ohar hau mugitua izan da:"
 	],
 	"This note has no content. Click on \"%s\" to toggle the editor and edit the note.": [
+		""
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
 		""
 	],
 	"This plugin doesn't support %s.": [
@@ -2308,6 +2703,12 @@
 		""
 	],
 	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		""
+	],
+	"To allow Joplin to synchronise with your account, please follow these steps:": [
+		""
+	],
+	"To create a new tag, type the name and press enter.": [
 		""
 	],
 	"To delete a tag, untag the associated notes.": [
@@ -2361,13 +2762,16 @@
 	"Try it now": [
 		""
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Idatzi `help [command]` komandoari buruzko informazio gehiagorako; edo idatzi `help all` erabilerari buruzko informazio osoa lortzeko."
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		""
 	],
-	"Type new tags or select from list": [
+	"Type a note title to search for it.": [
 		""
 	],
 	"Type: %s.": [
@@ -2377,6 +2781,12 @@
 		""
 	],
 	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Unable to share note data. Reason: %s": [
+		""
+	],
+	"Unchecked": [
 		""
 	],
 	"Undo": [
@@ -2392,6 +2802,9 @@
 		""
 	],
 	"Unshare": [
+		""
+	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
 		""
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
@@ -2445,6 +2858,9 @@
 	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
 		""
 	],
+	"Use the legacy Markdown editor": [
+		""
+	],
 	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
 		""
 	],
@@ -2455,6 +2871,9 @@
 		""
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
+		""
+	],
+	"Useful": [
 		""
 	],
 	"User deletions": [
@@ -2481,13 +2900,22 @@
 	"Viewer": [
 		""
 	],
+	"Viewer and Rich Text Editor font family": [
+		""
+	],
 	"Vim": [
+		""
+	],
+	"Voice recorder": [
 		""
 	],
 	"Voice typing language files (URL)": [
 		""
 	],
 	"Voice typing...": [
+		""
+	],
+	"Voice typing: Glossary": [
 		""
 	],
 	"Warning": [
@@ -2513,6 +2941,9 @@
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Ongi etorri Joplin-era!\n\nIdatz `:help shortcuts` lasterbideak ikusteko, edo soilik `:help`erabilerako informaziorako.\n\nEsate baterako, koadernoa sortzeko sakatu `mb`: oharra sortzeko sakatu `mn`"
+	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
@@ -2541,6 +2972,15 @@
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		""
 	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
+		""
+	],
 	"You do not have any installed plugin.": [
 		""
 	],
@@ -2566,9 +3006,6 @@
 		""
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
-		""
-	],
-	"Your permission to use your camera is required.": [
 		""
 	],
 	"Your version: %s": [

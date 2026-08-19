@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 import sqlts, { Config, Table } from '@rmp135/sql-ts';
+import { hasOwnProperty } from '@joplin/utils/object';
 
 require('source-map-support').install();
 
@@ -21,14 +22,14 @@ const config: Config = {
 	],
 	'interfaceNameFormat': '${table}',
 	'singularTableNames': true,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	'tableNameCasing': 'pascal' as any,
+	'tableNameCasing': 'pascal' as Config['tableNameCasing'],
 	'filename': './db',
 	'columnSortOrder': 'source',
 	'extends': {
 		'main.api_clients': 'WithDates, WithUuid',
 		'main.backup_items': 'WithCreatedDate',
 		'main.changes': 'WithDates, WithUuid',
+		'main.changes_2': 'WithDates, WithUuid',
 		'main.emails': 'WithDates',
 		'main.events': 'WithUuid',
 		'main.items': 'WithDates, WithUuid',
@@ -42,6 +43,7 @@ const config: Config = {
 		'main.user_flags': 'WithDates',
 		'main.user_items': 'WithDates',
 		'main.users': 'WithDates, WithUuid',
+		'main.stripe_events': 'WithDates, WithUuid',
 	},
 };
 
@@ -49,17 +51,22 @@ const propertyTypes: Record<string, string> = {
 	'*.item_type': 'ItemType',
 	'backup_items.content': 'Buffer',
 	'changes.type': 'ChangeType',
+	'changes_2.type': 'ChangeType',
+	'stripe_events.status': 'StripeEventStatus',
 	'emails.sender_id': 'EmailSender',
 	'emails.sent_time': 'number',
 	'events.created_time': 'number',
 	'events.type': 'EventType',
 	'items.content': 'Buffer',
+	'files.content': 'Buffer',
 	'items.jop_updated_time': 'number',
 	'notifications.level': 'NotificationLevel',
 	'share_users.status': 'ShareUserStatus',
 	'shares.type': 'ShareType',
 	'subscriptions.last_payment_failed_time': 'number',
 	'subscriptions.last_payment_time': 'number',
+	'subscriptions.trial_end': 'number',
+	'subscriptions.current_period_end': 'number',
 	'task_states.task_id': 'TaskId',
 	'user_deletions.end_time': 'number',
 	'user_deletions.scheduled_time': 'number',
@@ -71,6 +78,11 @@ const propertyTypes: Record<string, string> = {
 	'users.max_item_size': 'number | null',
 	'users.max_total_item_size': 'number | null',
 	'users.total_item_size': 'number',
+	'users.sso_auth_code_expire_at': 'number',
+};
+
+const interfaceNameOverrides: Record<string, string> = {
+	'Changes2': 'Change2',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {
@@ -117,7 +129,12 @@ function createTypeString(table: Table) {
 	}
 
 	const header = ['export interface'];
-	header.push(table.interfaceName);
+
+	let interfaceName = table.interfaceName;
+	if (hasOwnProperty(interfaceNameOverrides, interfaceName)) {
+		interfaceName = interfaceNameOverrides[interfaceName];
+	}
+	header.push(interfaceName);
 
 	if (table.extends) header.push(`extends ${table.extends}`);
 

@@ -108,11 +108,10 @@ function iosVersionHack(majorMinorVersion: string) {
 }
 
 async function main() {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const argv: any = yargs.parserConfiguration({
+	const argv = await yargs.parserConfiguration({
 		'parse-numbers': false,
 		'parse-positional-numbers': false,
-	}).argv;
+	}).argv as { _: string[]; updateVersion?: string; updateDependenciesVersion?: string };
 
 	if (!argv._ || !argv._.length) throw new Error('Please specify the major.minor version, eg. 1.2');
 
@@ -141,8 +140,11 @@ async function main() {
 	await updatePackageVersion(`${rootDir}/packages/server/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/tools/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/utils/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/onenote-converter/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/default-plugins/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/editor/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/transcribe/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/whisper-voice-typing/package.json`, majorMinorVersion, options);
 
 	if (options.updateVersion) {
 		await updateGradleVersion(`${rootDir}/packages/app-mobile/android/app/build.gradle`, majorMinorVersion);

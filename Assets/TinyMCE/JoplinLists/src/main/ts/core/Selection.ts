@@ -8,7 +8,6 @@
 import { Node } from '@ephox/dom-globals';
 import { Arr, Option } from '@ephox/katamari';
 import { HTMLElement } from '@ephox/sand';
-import DomQuery from 'tinymce/core/api/dom/DomQuery';
 import Editor from 'tinymce/core/api/Editor';
 import Tools from 'tinymce/core/api/util/Tools';
 import * as NodeType from './NodeType';
@@ -49,7 +48,7 @@ const findParentListItemsNodes = function (editor, elms) {
     return parentLi ? parentLi : elm;
   });
 
-  return DomQuery.unique(listItemsElms);
+  return [...new Set(listItemsElms)];
 };
 
 const getSelectedListItems = function (editor) {
@@ -89,7 +88,7 @@ const getSelectedListRoots = (editor: Editor): Node[] => {
 
 const getUniqueListRoots = (editor: Editor, lists: Node[]): Node[] => {
   const listRoots = Arr.map(lists, (list) => findLastParentListNode(editor, list).getOr(list));
-  return DomQuery.unique(listRoots);
+  return [...new Set(listRoots)];
 };
 
 const isList = (editor: Editor): boolean => {

@@ -1,0 +1,1602 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InteropService_Importer_OneNote should apply position data for embedded files: EmbeddedFiles 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Embedded doc sheet</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt; line-height: 32px;">Embedded doc sheet</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">Wednesday, December 11, 2019</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">5:35 PM</span></div>
+</div></div><p style="font-size: 11pt; line-height: 17px; margin-left: 2in; margin-top: 1.7in;"><a href=":/id-here">Dude this is a super cool embedded doc.docx</a></p><div class="container-outline" style="left: 192px; position: absolute; top: 259px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should be able to create notes from corrupted attachment: new_section 1`] = `
+"<!DOCTYPE HTML>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>new_section</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            display: flex;
+        }
+
+        nav {
+            height: 100vh;
+            min-width: 200px;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            border-right: 1px solid rgb(235, 235, 235);
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        nav li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav li.active {
+            background-color: rgb(233, 233, 233);
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        
+        <li class="l1"><a href=":/3" target="content" title="title">title</a></li>
+        
+    </ul>
+</nav>
+
+
+<style>
+    .l2 { padding: 10px 20px 10px 40px }
+    .l3 { padding: 10px 20px 10px 60px }
+    .l4 { padding: 10px 20px 10px 80px }
+    .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
+</style>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should be able to create notes from corrupted attachment: title 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">title</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 120px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href=":/5">Untitled</a></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href=":/6">Untitled_1</a></p></div>
+</div><div class="container-outline" style="left: 909px; position: absolute; top: 132px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should correctly convert imported notes to Markdown: Test Todo: As Markdown 1`] = `
+" Test Todo : cases à cocher lien vers doc sur partage 
+
+Test Todo : cases à cocher lien vers doc sur partage
+
+jeudi 23 octobre 2025
+
+09:24
+
+## Todo HBA
+
+- [x] Rédiger carnet MS-OneNote jeu d'essai (case cochée)
+- [ ] Transmettre aux dev Joplin (case non cochée)
+    - [x] Exporter le carnet en \\*.onepkg (case cochée)
+    - [ ] Exporter des page en \\*.one (case non cochée)
+
+&nbsp;
+
+## Todo Team appli
+
+- [ ] Rédiger compte-rendu réunion de service
+- [ ] Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS  
+    la doc sur le partage : [\\\\\\\\mondomaine.local\\\\partage\\\\DSI\\\\Projets Techniques 2025\\\\Remplacement Office\\\\JOPLIN_Alternatives_OneNote\\\\formation](file:///\\\\mondomaine.local\\partage\\DSI\\Projets%20Techniques%202025\\Remplacement%20Office\\JOPLIN_Alternatives_OneNote\\formation)
+    - [x] Documenter configuration synchro JBS saml pour un utilisateur (case cochée)"
+`;
+
+exports[`InteropService_Importer_OneNote should correctly import .onepkg notebooks 1`] = `
+"# Note: A
+
+ A 
+
+- [Test](:/id-here "Test")
+
+
+# Note: A test
+
+ A test 
+
+A test
+
+Tuesday, January 13, 2026
+
+1:44 PM
+
+…test…
+
+
+# Note: Another section
+
+ Another section 
+
+- [Page 1](:/id-here "Page 1")
+- [Page 2](:/id-here "Page 2")
+
+
+# Note: B
+
+ B 
+
+- [Test page](:/id-here "Test page")
+
+
+# Note: Page 1
+
+ Page 1 
+
+Page 1
+
+Tuesday, January 13, 2026
+
+1:42 PM
+
+Test
+
+
+# Note: Page 2
+
+ Page 2 
+
+Page 2
+
+Tuesday, January 13, 2026
+
+1:42 PM
+
+![](:/id-here)
+
+&nbsp;
+
+
+# Note: Test
+
+ Test 
+
+Test
+
+Tuesday, January 13, 2026
+
+1:44 PM
+
+
+# Note: Test page
+
+ Test page 
+
+Test page
+
+Tuesday, January 13, 2026
+
+1:45 PM
+
+
+# Note: Testing…
+
+ Testing… 
+
+Testing…
+
+Friday, November 28, 2025
+
+2:47 PM
+
+&nbsp;
+
+&nbsp;
+
+Link to page: [Page 2](:/id-here)
+
+
+# Note: Tést!
+
+ Tést! 
+
+- [Testing…](:/id-here "Testing…")
+- [A test](:/id-here "A test")
+
+
+# Note: Untitled Page
+
+ Untitled Page 
+
+Tuesday, January 13, 2026
+
+1:45 PM
+
+
+# Note: ⅀⸨ Unicode ⸩
+
+ ⅀⸨ Unicode ⸩ 
+
+- [Untitled Page 1](:/id-here "Untitled Page 1")"
+`;
+
+exports[`InteropService_Importer_OneNote should correctly import math formulas: Math 1`] = `
+" Math 
+
+Math
+
+Friday, November 28, 2025
+
+2:47 PM
+
+Cauchy's Integral Formula: $\\def\\∫#1#2#3{\\int_{#1}^{#2}{#3}}\\def\\parens#1{\\left( {#1} \\right)}𝑓\\parens{𝑥}=\\∫{𝛾}{}{\\frac{𝑓(𝑧)}{𝑧−𝑥}𝑑𝑧}$
+
+Pythagorean Theorem: $\\def\\pow#1#2{{#1}^{#2}}\\pow{𝑎}{2}+\\pow{𝑏}{2}=\\pow{𝑐}{2}$
+
+Law of Cosines: $\\def\\pow#1#2{{#1}^{#2}}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\pow{𝑎}{2}+\\pow{𝑏}{2}=\\pow{𝑐}{2}+2𝑎𝑏\\fnCall{cos}{𝐶}$
+
+Euler's Formula: $\\def\\pow#1#2{{#1}^{#2}}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\pow{𝑒}{𝑖𝜃}=\\fnCall{cos}{𝜃}+𝑖\\fnCall{sin}{𝜃}$
+
+Determinant of a 2x2 matrix: $\\def\\parens#1{\\left( {#1} \\right)}\\def\\unknown#1{\\textsf{Unknown}(#1)}\\parens{\\unknown{20}{𝑎}{𝑏}{𝑐}{𝑑}}=𝑎𝑑−𝑏𝑐$
+
+Empty formula: $\\mathrm{Type equation here.}$
+
+Fractions: $\\frac{𝑎}{𝑏}, \\frac{𝑎}{𝑏},\\mathrm{\\frac{𝑎}{𝑏}}, \\frac{𝑎}{𝑏}$.
+
+Summation: $\\def\\∑#1#2#3{\\sum_{#1}^{#2}{#3}}\\def\\withSubscript#1#2{{#1}_{#2}}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}\\fnCall{\\withSubscript{lim}{𝑛→∞}}{\\∑{𝑘=0}{𝑛 }{\\frac{1}{𝑘}}}=∞$.
+
+Definite integral: $\\def\\∫#1#2#3{\\int_{#1}^{#2}{#3}}\\∫{0}{1}{𝑥}ⅆ𝑥=\\frac{1}{2}$
+
+&nbsp;
+
+Integral identities (see https://en.wikipedia.org/wiki/Lists_of_integrals), below, $𝐶∈ℝ$:
+
+- $\\def\\parens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}∫\\mathrm{\\frac{1}{𝑥}𝑑𝑥}=\\fnCall{ln}{\\parens{𝑥}}+𝐶$.
+- $\\def\\pow#1#2{{#1}^{#2}}∫\\pow{𝑒}{𝑎𝑥}𝑑𝑥=\\frac{1}{𝑎}\\pow{𝑒}{𝑎𝑥}+𝐶$
+- $\\def\\parens#1{\\left( {#1} \\right)}\\def\\fnCall#1#2{{ \\rm #1 }\\ {#2}}∫\\parens{\\fnCall{sin}{𝑥}}𝑑𝑥=−\\fnCall{cos}{𝑥}+𝐶$
+
+&nbsp;"
+`;
+
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A page can have any width it wants? 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>A page can have any width it wants?</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">A page can have any width it wants?</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">quinta-feira, 25 de abril de 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">15:01</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 7px; padding-top: 7px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget convallis velit. Nullam at luctus libero.</span><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt;"> Phasellus id pharetra odio. Duis luctus lorem ut tellus imperdiet, a aliquet elit pretium. Donec sit amet urna et mi gravida cursus et id felis. Ut quis congue velit, eget mollis tortor. Vestibulum porttitor lobortis justo, in imperdiet leo porta id. Sed ornare ex nisi, sed laoreet nulla suscipit a. Cras nec lectus porta, fermentum quam ac, sagittis ipsum. Ut massa lacus, ornare in hendrerit sit amet, tempor quis ligula. Nulla facilisi. Maecenas quam dolor, lacinia id magna nec, blandit tincidunt ipsum. Proin placerat dui gravida, lacinia tortor eu, rhoncus ex. Pellentesque accumsan nunc id venenatis condimentum. Aenean sodales tortor id risus varius, id tincidunt libero tincidunt. Curabitur quis interdum metus.</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 944px; position: absolute; top: 361px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">This is another paragraph by the right side</p></div>
+</div><img style="height: 165.64px; left: 135.42px; pointer-events: none; position: absolute; top: 221.29px; width: 1087.82px;" src=":/10">
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A page with a lot of svgs 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>A page with a lot of svgs</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">A page with a lot of svgs</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">quinta-feira, 25 de abril de 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">10:40</span></div>
+</div></div><img style="height: 949.4px; left: 52.35px; pointer-events: none; position: absolute; top: 121.25px; width: 1162.86px;" src=":/11"><div class="container-outline" style="left: 62px; position: absolute; top: 119px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">This is a text paragraph that should apppear behind the drawings</p></div>
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A page with text and drawing above it 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>A page with text and drawing above it</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">A page with text and drawing above it</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">quinta-feira, 25 de abril de 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">02:48</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 7px; padding-top: 7px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam </span><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt;">eget</span><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt;"> convallis velit. Nullam at luctus libero. </span><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt;">Phasellus</span><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt;"> id pharetra odio. Duis luctus lorem ut tellus imperdiet, a aliquet elit pretium. Donec sit amet urna et mi gravida cursus et id felis. Ut quis congue velit, eget mollis tortor. Vestibulum porttitor lobortis justo, in imperdiet leo porta id. Sed ornare ex nisi, sed laoreet nulla suscipit a. Cras nec lectus porta, fermentum quam ac, sagittis ipsum. Ut massa lacus, ornare in hendrerit sit amet, tempor quis ligula. Nulla facilisi. Maecenas quam dolor, lacinia id magna nec, blandit tincidunt ipsum. Proin placerat dui gravida, lacinia tortor eu, rhoncus ex. Pellentesque accumsan nunc id venenatis condimentum. Aenean sodales tortor id risus varius, id tincidunt libero tincidunt. Curabitur quis interdum metus.</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Vestibulum sed sem nec nulla tincidunt maximus. Nam nulla sapien, vestibulum ac eros a, eleifend sollicitudin lectus. Praesent pellentesque pulvinar porttitor. Morbi rutrum, erat nec blandit commodo, nunc nulla venenatis massa, at viverra leo nisi eu nisl. Sed cursus quam a sem mattis suscipit. Duis gravida tellus ut nibh congue aliquam. Nulla velit orci, pretium sed hendrerit a, vulputate in lacus. Sed vitae ligula ex.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Nullam ut ullamcorper arcu, a porta lectus. Nulla suscipit lorem et nibh viverra eleifend. Pellentesque placerat fermentum ligula. Vivamus sit amet justo quis enim convallis condimentum. Ut non aliquet dui, vel vestibulum libero. In mauris ligula, pharetra eu maximus ut, ultrices ac justo. Donec varius condimentum augue eget tincidunt. Nunc eu egestas est.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Quisque scelerisque commodo maximus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed egestas et felis consectetur bibendum. Fusce interdum purus nec commodo porta. Praesent gravida efficitur rutrum. Phasellus semper erat urna, vitae hendrerit velit dictum et. Aenean eget dignissim tellus.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Proin ullamcorper quam quis justo maximus, eget elementum justo porttitor. Duis tellus leo, vestibulum vel felis sit amet, luctus vestibulum arcu. Nullam mauris quam, consequat eget varius nec, pellentesque quis ante. Fusce vitae sollicitudin orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum ac rutrum ipsum. Nulla in sapien lorem. Etiam sit amet leo eros. Vestibulum lacinia ipsum lobortis lacus congue, a posuere urna sollicitudin. Donec fermentum, ipsum nec tempor dictum, mi sapien sodales mi, eget tempor diam diam ut erat. Integer euismod sit amet tortor ut sollicitudin. Etiam at elit massa. Vivamus faucibus ipsum eget neque semper, at maximus lectus posuere. Nam metus orci, ultricies et lorem at, iaculis placerat diam.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Vestibulum massa magna, pulvinar id tempus vitae, egestas at eros. Maecenas sollicitudin tincidunt est eget accumsan. Ut ut hendrerit lectus. Pellentesque efficitur lacus in nulla posuere convallis. Ut vulputate erat id odio tincidunt, rhoncus eleifend metus vulputate. Phasellus blandit sem diam, at auctor diam consectetur a. Aliquam sit amet fermentum massa, id ultrices ligula. Aenean tincidunt quam risus, vel aliquet massa tristique at. In lectus nulla, dapibus quis vulputate eu, luctus vel nunc. Duis sollicitudin consequat dui, nec placerat dolor euismod ut. Quisque posuere leo nec accumsan posuere. Vestibulum tristique gravida justo egestas vestibulum. Nunc placerat semper erat vel egestas. Mauris massa sapien, sodales vitae fringilla vel, volutpat dapibus velit.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+</div><img style="height: 782.93px; left: 32.35px; pointer-events: none; position: absolute; top: 98.34px; width: 724.56px;" src=":/12">
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: A simple filename 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>A simple filename</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">A simple filename</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Friday, April 19, 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">5:46 PM</span></div>
+</div></div><img style="height: 475.65px; left: 60.06px; pointer-events: none; position: absolute; top: 159.34px; width: 298.12px;" src=":/13"><div class="container-outline" style="left: 257px; position: absolute; top: 629px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: Page with more than one font size 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Page with more than one font size</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">Page with more than one font size</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">segunda-feira, 29 de abril de 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">10:27</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Suspendisse vitae odio nibh. Etiam fringilla mattis dapibus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce vel ultricies ligula. Sed a nunc ante. Praesent suscipit fermentum magna. Aliquam convallis porttitor lacus ac posuere. Vestibulum maximus leo vel tortor condimentum, et tristique leo maximus. Nulla elementum, augue eu sollicitudin tempus, arcu ex lacinia enim, ut posuere lectus libero non eros. Vestibulum a libero leo. Donec id leo commodo, ornare ante ac, molestie tellus. Aenean a neque quis turpis euismod porta. Quisque vulputate augue vitae orci accumsan, a lobortis leo luctus. Nunc sodales sapien vitae lacus faucibus hendrerit. In ac lacinia diam.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 7px; padding-top: 7px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt;">Nam tempor urna eget posuere mollis. Aliquam erat volutpat. Sed ipsum massa, dictum eget sagittis id, fermentum a justo. Vivamus in iaculis libero. Pellentesque malesuada felis dictum turpis placerat, at ultrices justo viverra. Praesent nisi lectus, tincidunt ut tellus in, convallis euismod urna. Phasellus molestie porttitor odio vitae efficitur. Curabitur vulputate congue tincidunt. Fusce mattis orci at porttitor fermentum. Cras eu placerat odio. Fusce eu tortor sit amet massa pretium efficitur. Nam consequat, mauris at blandit placerat, est sapien feugiat felis, quis imperdiet sapien neque in justo. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus vestibulum rhoncus dolor, ut ullamcorper purus scelerisque eu. Integer sem felis, pellentesque in rutrum id, porta a ante.</span><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 18pt;">Vivamus finibus imperdiet massa, at interdum turpis rhoncus et. Phasellus leo nibh, mattis vel tortor at, gravida finibus felis. Donec bibendum enim euismod, dignissim ipsum eu, laoreet nisl. Ut auctor sollicitudin eros dictum gravida.</span><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt;"> Vestibulum pellentesque, ex quis vulputate efficitur, dolor metus efficitur nisl, id elementum mi nulla sit amet orci. Nam odio sem, bibendum at hendrerit finibus, vestibulum vitae dolor. In hac habitasse platea dictumst. Curabitur et ligula elit. Donec vulputate, diam non gravida efficitur, mi odio imperdiet ipsum, nec rhoncus mi nibh non magna.</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 10.5pt; padding-bottom: 7px; padding-top: 7px;">Suspendisse varius enim vel odio congue sodales. Integer sit amet nisi sagittis, dapibus mi ut, tincidunt magna. Duis posuere est felis, et rhoncus magna volutpat a. Nullam tempor dignissim suscipit. Vestibulum cursus felis vitae libero pulvinar molestie. Donec at metus eget arcu blandit tincidunt. Donec purus felis, malesuada ac egestas eu, interdum sed erat. Praesent nec accumsan orci. Nunc bibendum rutrum erat, vel luctus odio. Pellentesque iaculis gravida arcu, eu consequat turpis congue sit amet. Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis eget urna vel erat aliquet fringilla. Praesent vel luctus ligula, nec viverra nisl. Sed ac sem consectetur, sodales ante sodales, feugiat arcu.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">It was a bright cold day in April, and the clocks were striking thirteen. Winston Smith, his chin nuzzled into his breast in an effort to escape the vile wind, slipped quickly through the glass doors of Victory Mansions, though not quickly enough to prevent a swirl of gritty dust from entering along with him. </span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">The hallway smelt of boiled cabbage and old rag mats. At one end of it a coloured poster, too large for indoor display, had been tacked to the wall. It depicted simply an enormous face, more than a metre wide: the face of a man of about forty-five, with a heavy black moustache and ruggedly handsome features. Winston made for the stairs. It was no use trying the lift. Even at the best of times it was seldom working, and at present the electric current was cut off during daylight hours. It was part of the economy drive in preparation for Hate Week. The flat was seven flights up, and Winston, who was thirty-nine and had a varicose ulcer above his right ankle, went slowly, resting several times on the way. On each landing, opposite the lift-shaft, the poster with the enormous face gazed from the wall. It was one of those pictures which are so contrived that the eyes follow you about when you move. BIG BROTHER IS WATCHING YOU, the caption beneath it ran. </span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Inside the flat a fruity voice was reading out a list of figures which had something to do with the production of pig-iron. The voice came from an oblong metal plaque like a dulled mirror which formed part of the surface of the right-hand wall. Winston turned a switch and the voice sank somewhat, though the words were still distinguishable. The instrument (the telescreen, it was called) could be dimmed, but there was no way of shutting it off completely. He moved over to the window: a smallish, frail figure, the meagreness of his body merely emphasized by the blue overalls which were the uniform of the party. His hair was very fair, his face naturally sanguine, his skin roughened by coarse soap and blunt razor blades and the cold of the winter that had just ended. </span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;"><br></span><span style="color: rgb(66,66,67); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;"><br></span>Outside, even through the shut window-pane, the world looked cold. Down in the street little eddies of wind were whirling dust and torn paper into spirals, and though the sun was shining and the sky a harsh blue, there seemed to be no colour in anything, except the posters that were plastered everywhere. The blackmoustachio'd face gazed down from every commanding corner. There was one on the house-front immediately opposite. BIG BROTHER IS WATCHING YOU, the caption said, while the dark eyes looked deep into Winston's own. Down at streetlevel another poster, torn at one corner, flapped fitfully in the wind, alternately covering and uncovering the single word INGSOC. In the far distance a helicopter skimmed down between the roofs, hovered for an instant like a bluebottle, and darted away again with a curving flight. It was the police patrol, snooping into people's windows. The patrols did not matter, however. Only the Thought Police mattered. <br><br>Behind Winston's back the voice from the telescreen was still babbling away about pig-iron and the overfulfilment of the Ninth Three-Year Plan. The telescreen received and transmitted simultaneously. Any sound that Winston made, above the level of a very low whisper, would be picked up by it, moreover, so long as he remained within the field of vision which the metal plaque commanded, he could be seen as well as heard. There was of course no way of knowing whether you were being watched at any given moment. How often, or on what system, the Thought Police plugged in on any individual wire was guesswork. It was even conceivable that they watched everybody all the time. But at any rate they could plug in your wire whenever they wanted to. You had to live -- did live, from habit that became instinct -- in the assumption that every sound you made was overheard, and, except in darkness, every movement scrutinized. </p></div>
+</div><img style="height: 1402.34px; left: 45.35px; pointer-events: none; position: absolute; top: 127.33px; width: 437.06px;" src=":/14">
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: Quick Notes 1`] = `
+"<!DOCTYPE HTML>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>Quick Notes</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            display: flex;
+        }
+
+        nav {
+            height: 100vh;
+            min-width: 200px;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            border-right: 1px solid rgb(235, 235, 235);
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        nav li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav li.active {
+            background-color: rgb(233, 233, 233);
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        
+        <li class="l1"><a href=":/6" target="content" title="A simple filename">A simple filename</a></li>
+        
+        <li class="l1"><a href=":/4" target="content" title="A page with a lot of svgs">A page with a lot of svgs</a></li>
+        
+        <li class="l1"><a href=":/3" target="content" title="A page can have any width it wants?">A page can have any width it wants?</a></li>
+        
+        <li class="l1"><a href=":/5" target="content" title="A page with text and drawing above it">A page with text and drawing above it</a></li>
+        
+        <li class="l1"><a href=":/8" target="content" title="text">text</a></li>
+        
+        <li class="l1"><a href=":/7" target="content" title="Page with more than one font size">Page with more than one font size</a></li>
+        
+    </ul>
+</nav>
+
+
+<style>
+    .l2 { padding: 10px 20px 10px 40px }
+    .l3 { padding: 10px 20px 10px 60px }
+    .l4 { padding: 10px 20px 10px 80px }
+    .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
+</style>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should expect notes to be rendered the same: text 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>text</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">text</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">quinta-feira, 25 de abril de 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">15:39</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 8pt; padding-bottom: 7px; padding-top: 7px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus egestas, enim vel tempor scelerisque, metus magna imperdiet purus, facilisis consequat mi augue eget risus. Vestibulum tincidunt lobortis turpis, id consectetur mauris consectetur et. Aliquam interdum ante ut lectus varius, ut mattis turpis tincidunt. Donec vitae sem sagittis, porta ex a, mattis tortor. Curabitur non velit suscipit, eleifend lectus quis, convallis velit. Nunc a blandit nisl. Cras rhoncus, enim a malesuada commodo, dolor dui pulvinar eros, non lobortis diam velit quis est. Donec pharetra, dolor a faucibus tincidunt, turpis dolor fermentum nibh, facilisis mollis neque urna a neque. Sed sit amet efficitur elit. Duis at elit non quam semper semper non quis mauris. Integer dignissim sodales urna, eu mattis urna viverra sit amet. In porta arcu id mauris hendrerit, in congue erat porta. In hac habitasse platea dictumst. Maecenas finibus sem pharetra blandit suscipit. Proin in nisl ac est pellentesque finibus. Cras ligula tellus, tempor eget leo in, vulputate interdum turpis.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 12pt; padding-bottom: 7px; padding-top: 7px;">Nam sit amet massa vehicula, elementum nisl feugiat, fermentum quam. Donec eros urna, ultrices vel fringilla suscipit, pretium non ligula. Sed sit amet pellentesque lorem, quis pharetra augue. Integer vitae sodales ex, luctus imperdiet arcu. Integer luctus urna eu urna ultricies ultricies. Aliquam sit amet maximus orci. Sed molestie vehicula vehicula. Morbi lacinia, dolor eu consectetur commodo, ipsum ante suscipit sem, eget facilisis nibh nisi venenatis magna. Donec ac risus ligula. In sit amet dapibus ante, sit amet pellentesque dolor. Nulla facilisi. Sed a nibh viverra, placerat purus at, rutrum justo. Fusce finibus consequat mattis. Sed felis tellus, consequat id nunc non, cursus tempus ligula. In hac habitasse platea dictumst. Praesent eget consectetur elit, ac mollis est.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 18pt; padding-bottom: 7px; padding-top: 7px;">Quisque facilisis justo diam, eget tincidunt augue lobortis non. Quisque rutrum diam sed diam feugiat, quis dictum ex bibendum. Nunc sagittis quam erat, sed pharetra nunc consequat a. Etiam in sollicitudin nunc. Aliquam non dolor laoreet ex egestas efficitur vel ut ligula. Duis mollis ornare laoreet. Nullam vitae velit feugiat leo bibendum faucibus. Morbi nisl nisl, sodales nec sodales vel, consequat in mi. Pellentesque bibendum erat iaculis dui volutpat ornare. Etiam ultricies tincidunt ipsum a congue. In at lacinia massa. Ut auctor id elit et pellentesque.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 24pt; padding-bottom: 7px; padding-top: 7px;">Donec ac condimentum dui, tincidunt rhoncus augue. Maecenas aliquam non nisl ac fringilla. Aliquam pulvinar enim sit amet accumsan tristique. Cras sapien ipsum, ultricies eu dui eget, efficitur ornare elit. Curabitur hendrerit mauris dolor, gravida elementum enim convallis quis. Vivamus varius luctus massa, in egestas mi egestas id. Nullam elementum scelerisque nisi sit amet pellentesque. In varius mollis risus, vel laoreet tortor. Pellentesque et blandit velit, nec auctor nunc. Aliquam quis purus vel ligula auctor rhoncus. Duis sed tempus metus. Praesent ac libero sed leo posuere feugiat id vel felis. Aenean commodo dapibus hendrerit. Sed eleifend, tortor sed placerat auctor, dolor dolor efficitur dolor, ut rhoncus eros libero sed ante. Mauris quis blandit sem. Nullam porta urna eros, at viverra sem iaculis in.</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+</div><img style="height: 949.63px; left: 44.07px; pointer-events: none; position: absolute; top: 224.58px; width: 237.09px;" src=":/15">
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should extract svgs 1`] = `
+{
+  "html": "<body>
+
+<div class="container-outline" style="left: 48px;position: absolute;top: 107px;width: 624px;">
+    <img src="./id1.svg">
+</div>
+
+</body>",
+  "svgs": [
+    {
+      "content": "<svg viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .small {
+      font: italic 13px sans-serif;
+    }
+    .heavy {
+      font: bold 30px sans-serif;
+    }
+    /* Note that the color of the text is set with the    *
+     * fill property, the color property is for HTML only */
+    .Rrrrr {
+      font: italic 40px serif;
+      fill: red;
+    }
+  </style>
+  <text x="20" y="35" class="small">My</text>
+  <text x="40" y="35" class="heavy">cat</text>
+  <text x="55" y="55" class="small">is</text>
+  <text x="65" y="55" class="Rrrrr">Grumpy!</text>
+</svg>",
+      "title": "id1.svg",
+    },
+  ],
+}
+`;
+
+exports[`InteropService_Importer_OneNote should extract svgs 2`] = `
+{
+  "html": "<body>
+
+
+
+<img style="height: 59px; left: 75px; overflow: visible; position: absolute; top: 2120px; width: 11px;" src="./id1.svg"><img style="height: 11px; left: 49px; overflow: visible; position: absolute; top: 2126px; width: 107px;" src="./id2.svg"><img style="height: 22px; left: 98px; overflow: visible; position: absolute; top: 2149px; width: 9px;" src="./id3.svg"><img style="height: 7px; left: 99px; overflow: visible; position: absolute; top: 2155px; width: 19px;" src="./id4.svg"><img style="height: 21px; left: 114px; overflow: visible; position: absolute; top: 2147px; width: 8px;" src="./id5.svg"><img style="height: 17px; left: 133px; overflow: visible; position: absolute; top: 2152px; width: 7px;" src="./id6.svg"><img style="height: 6px; left: 138px; overflow: visible; position: absolute; top: 2138px; width: 6px;" src="./id7.svg"><img style="height: 31px; left: 146px; overflow: visible; position: absolute; top: 2143px; width: 26px;" src="./id8.svg"><img style="height: 12px; left: 189px; overflow: visible; position: absolute; top: 2152px; width: 7px;" src="./id9.svg"><img style="height: 6px; left: 192px; overflow: visible; position: absolute; top: 2140px; width: 6px;" src="./id10.svg"><img style="height: 27px; left: 200px; overflow: visible; position: absolute; top: 2145px; width: 16px;" src="./id11.svg"><img style="height: 36px; left: 238px; overflow: visible; position: absolute; top: 2146px; width: 22px;" src="./id12.svg"><img style="height: 8px; left: 238px; overflow: visible; position: absolute; top: 2161px; width: 25px;" src="./id13.svg"><img style="height: 31px; left: 283px; overflow: visible; position: absolute; top: 2147px; width: 17px;" src="./id14.svg"><img style="height: 11px; left: 289px; overflow: visible; position: absolute; top: 2153px; width: 21px;" src="./id15.svg"><img style="height: 30px; left: 300px; overflow: visible; position: absolute; top: 2139px; width: 9px;" src="./id16.svg"><img style="height: 17px; left: 305px; overflow: visible; position: absolute; top: 2156px; width: 19px;" src="./id17.svg"><img style="height: 7px; left: 312px; overflow: visible; position: absolute; top: 2163px; width: 11px;" src="./id18.svg"><img style="height: 24px; left: 324px; overflow: visible; position: absolute; top: 2148px; width: 21px;" src="./id19.svg"><img style="height: 18px; left: 344px; overflow: visible; position: absolute; top: 2150px; width: 6px;" src="./id20.svg"><img style="height: 20px; left: 345px; overflow: visible; position: absolute; top: 2148px; width: 22px;" src="./id21.svg"><img style="height: 29px; left: 387px; overflow: visible; position: absolute; top: 2145px; width: 11px;" src="./id22.svg"><img style="height: 31px; left: 389px; overflow: visible; position: absolute; top: 2144px; width: 21px;" src="./id23.svg"><img style="height: 17px; left: 414px; overflow: visible; position: absolute; top: 2154px; width: 8px;" src="./id24.svg"><img style="height: 23px; left: 421px; overflow: visible; position: absolute; top: 2148px; width: 14px;" src="./id25.svg"><img style="height: 26px; left: 443px; overflow: visible; position: absolute; top: 2147px; width: 17px;" src="./id26.svg"><img style="height: 7px; left: 447px; overflow: visible; position: absolute; top: 2162px; width: 13px;" src="./id27.svg"><img style="height: 23px; left: 462px; overflow: visible; position: absolute; top: 2149px; width: 26px;" src="./id28.svg"><img style="height: 27px; left: 470px; overflow: visible; position: absolute; top: 2141px; width: 36px;" src="./id29.svg"><img style="height: 54px; left: 66px; overflow: visible; position: absolute; top: 2249px; width: 39px;" src="./id30.svg"><img style="height: 7px; left: 72px; overflow: visible; position: absolute; top: 2278px; width: 14px;" src="./id31.svg"><img style="height: 27px; left: 100px; overflow: visible; position: absolute; top: 2279px; width: 45px;" src="./id32.svg"><img style="height: 18px; left: 144px; overflow: visible; position: absolute; top: 2281px; width: 22px;" src="./id33.svg"><img style="height: 38px; left: 177px; overflow: visible; position: absolute; top: 2259px; width: 14px;" src="./id34.svg"><img style="height: 14px; left: 173px; overflow: visible; position: absolute; top: 2269px; width: 33px;" src="./id35.svg"><img style="height: 41px; left: 198px; overflow: visible; position: absolute; top: 2268px; width: 37px;" src="./id36.svg"><img style="height: 30px; left: 227px; overflow: visible; position: absolute; top: 2280px; width: 42px;" src="./id37.svg"><img style="height: 30px; left: 258px; overflow: visible; position: absolute; top: 2278px; width: 43px;" src="./id38.svg"><img style="height: 37px; left: 337px; overflow: visible; position: absolute; top: 2276px; width: 12px;" src="./id39.svg"><img style="height: 35px; left: 339px; overflow: visible; position: absolute; top: 2281px; width: 28px;" src="./id40.svg"><img style="height: 48px; left: 371px; overflow: visible; position: absolute; top: 2277px; width: 43px;" src="./id41.svg"><img style="height: 28px; left: 408px; overflow: visible; position: absolute; top: 2295px; width: 32px;" src="./id42.svg"><img style="height: 9px; left: 420px; overflow: visible; position: absolute; top: 2304px; width: 19px;" src="./id43.svg"><img style="height: 24px; left: 436px; overflow: visible; position: absolute; top: 2300px; width: 45px;" src="./id44.svg"><img style="height: 37px; left: 454px; overflow: visible; position: absolute; top: 2301px; width: 58px;" src="./id45.svg"><img style="height: 33px; left: 121px; overflow: visible; position: absolute; top: 2332px; width: 20px;" src="./id46.svg"><img style="height: 7px; left: 122px; overflow: visible; position: absolute; top: 2342px; width: 17px;" src="./id47.svg"><img style="height: 30px; left: 139px; overflow: visible; position: absolute; top: 2333px; width: 21px;" src="./id48.svg"><img style="height: 30px; left: 161px; overflow: visible; position: absolute; top: 2337px; width: 17px;" src="./id49.svg"><img style="height: 32px; left: 175px; overflow: visible; position: absolute; top: 2332px; width: 48px;" src="./id50.svg"><img style="height: 28px; left: 217px; overflow: visible; position: absolute; top: 2336px; width: 14px;" src="./id51.svg"><img style="height: 32px; left: 263px; overflow: visible; position: absolute; top: 2342px; width: 36px;" src="./id52.svg"><img style="height: 7px; left: 271px; overflow: visible; position: absolute; top: 2359px; width: 17px;" src="./id53.svg"><img style="height: 32px; left: 290px; overflow: visible; position: absolute; top: 2341px; width: 15px;" src="./id54.svg"><img style="height: 21px; left: 304px; overflow: visible; position: absolute; top: 2345px; width: 23px;" src="./id55.svg"><div class="container-outline" style="left: 299px; max-width: 624px; position: absolute; top: 2371px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 1056px; max-width: 624px; position: absolute; top: 347px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 720px; max-width: 624px; position: absolute; top: 147px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: Calibri; font-size: 11pt;">&nbsp;</p></div>
+</div>
+
+<script>
+    if (window.parent !== null) {
+        window.parent.postMessage(window.location.href, '*');
+    }
+</script>
+
+
+</body>",
+  "svgs": [
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 0 295 1550"><path d="M 70 1454 l 4 0 6 -14 6 -31 4 -53 4 -69 6 -73 7 -81 6 -90 5 -101 12 -116 14 -123 12 -113 10 -103 6 -95 8 -82 8 -72 6 -58 5 -47 3 -37 1 -26" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id1.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="27 0 2834 302"><path d="M 70 70 l 27 0 68 4 116 15 167 18 199 16 221 21 246 21 251 16 242 12 225 8 204 4 181 1 154 0 126 0 96 -1 69 -1 48 -1 34 -1 21 0" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id2.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 236 572"><path d="M 70 471 l 0 5 0 -3 0 -16 0 -27 0 -34 5 -45 10 -51 12 -51 10 -50 12 -47 12 -45 9 -37" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id3.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 4 492 190"><path d="M 70 70 l 0 4 4 6 15 6 31 5 39 3 49 2 50 1 52 1 48 0 38 -1" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id4.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="5 0 212 563"><path d="M 70 70 l 5 0 10 0 12 5 10 15 8 22 6 26 -2 34 -4 39 -6 41 -4 39 -4 36 -3 33 -1 30 -1 28 0 27 0 22" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id5.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 187 452"><path d="M 70 365 l 0 -9 0 -17 0 -26 0 -32 0 -33 0 -37 0 -37 5 -32 6 -27 5 -25 5 -20" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id6.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 166 166"><path d="M 70 70 l 0 0" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id7.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 676 831"><path d="M 388 70 l -4 0 -11 0 -25 0 -28 5 -29 6 -30 6 -34 9 -34 14 -33 18 -28 22 -24 24 -18 26 -13 32 -7 33 1 33 19 27 37 20 50 13 52 16 53 15 53 16 50 14 43 11 37 7 33 5 29 2 23 5 15 10 9 15 5 20 1 28 -5 32 -16 32 -19 32 -22 27 -24 19 -21 16 -29 17 -38 15 -44 10 -45 7 -46 4 -44 2 -39 0 -31 0" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id8.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 176 321"><path d="M 70 229 l 0 -4 0 -11 0 -20 0 -27 0 -30 4 -35 6 -32" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id9.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 166 166"><path d="M 70 70 l 0 0" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id10.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 423 724"><path d="M 279 70 l -4 0 -15 0 -22 0 -27 5 -24 10 -19 17 -13 29 -8 36 -4 47 -1 48 4 59 16 59 28 53 34 46 35 35 34 22 24 18 10 12 -7 12 -20 9 -32 12 -36 10 -37 8 -36 6 -33 3 -31 2 -25 0" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id11.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 0 588 965"><path d="M 70 472 l 4 -9 11 -21 21 -33 26 -46 30 -54 35 -58 32 -54 25 -48 17 -41 15 -31 11 -7 7 20 5 48 2 72 0 89 0 97 13 97 22 90 22 84 23 72 25 54 21 39 20 26 16 11 12 -4 7 -15 4 -27 -3 -28 -11 -29 -12 -23" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id12.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 0 674 203"><path d="M 70 107 l 4 0 24 0 43 0 59 0 71 0 72 0 67 0 61 0 52 -4 39 -11 17 -12 3 -10" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id13.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 462 825"><path d="M 366 734 l 0 -5 0 -15 0 -22 -4 -40 -11 -51 -20 -57 -32 -68 -35 -71 -41 -74 -37 -72 -37 -64 -31 -52 -27 -43 -21 -30" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id14.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="5 0 566 289"><path d="M 70 193 l 5 0 10 0 16 0 21 0 29 0 32 -4 32 -6 33 -6 26 -9 24 -9 22 -8 27 -10 25 -14 24 -14 24 -11 20 -13 19 -11 16 -8" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id15.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="5 0 236 802"><path d="M 70 70 l 5 0 6 9 5 30 5 48 3 68 7 80 7 85 6 87 9 78 9 64 7 51 6 36" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id16.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 490 461"><path d="M 70 359 l 0 5 0 1 5 -9 10 -26 21 -36 22 -38 24 -42 25 -41 26 -38 26 -31 27 -21 27 -13 31 2 28 18 22 28 15 33 9 34 4 33 2 36 0 36 -2 34 -1 28" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id17.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 282 188"><path d="M 70 96 l 0 -4 9 -6 20 -6 28 -5 31 -3 28 -2" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id18.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 0 559 643"><path d="M 70 523 l 4 0 6 -5 6 -10 5 -21 3 -27 2 -39 1 -51 1 -59 0 -60 -1 -56 0 -49 4 -37 11 -25 16 -14 25 2 25 15 26 28 22 38 20 50 16 62 16 56 18 54 15 47 12 41 12 35 15 26 19 17 16 6 14 -11 9 -30 6 -43 11 -48 13 -46 12 -46 8 -44 6 -38 3 -30" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id19.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 166 485"><path d="M 70 393 l 0 -4 0 -11 0 -21 0 -26 0 -30 0 -35 0 -41 0 -41 0 -39 0 -41 0 -34" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id20.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 0 590 533"><path d="M 70 70 l 4 0 11 0 16 0 20 0 29 0 32 0 33 0 32 0 31 0 29 0 33 4 38 11 34 16 31 21 24 24 16 26 10 32 5 33 -3 33 -11 28 -22 24 -33 19 -37 17 -46 14 -43 14 -39 11 -34 9 -31 6 -29 3 -27 1 -26 9 -21 12" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id21.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 282 763"><path d="M 186 672 l 0 -5 0 -10 0 -25 0 -42 0 -47 0 -56 -4 -64 -15 -66 -18 -70 -20 -68 -23 -60 -20 -51 -16 -38" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id22.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 0 566 831"><path d="M 70 70 l 4 0 11 0 16 0 20 0 25 0 26 0 27 0 27 0 33 0 37 0 39 0 37 4 35 15 27 27 20 37 11 45 6 50 3 53 -1 55 -1 55 -1 55 -2 50 -1 44 -6 37 -11 33 -20 29 -32 27 -36 21 -36 15 -35 9 -28 4" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id23.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 203 445"><path d="M 107 358 l 0 -9 0 -21 0 -28 0 -31 0 -32 -4 -41 -11 -42 -11 -45 -11 -39" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id24.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 370 621"><path d="M 107 70 l 4 0 11 0 20 0 27 4 25 11 20 16 15 21 9 24 4 26 2 27 -5 32 -15 29 -33 32 -39 27 -41 21 -30 23 -11 20 10 20 27 21 36 22 35 23 32 21 34 19 30 16" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id25.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 454 685"><path d="M 80 506 l -4 -9 -6 -17 3 -35 7 -44 17 -53 24 -58 23 -56 23 -53 19 -48 19 -37 19 -21 17 -5 13 13 12 34 11 47 12 63 16 66 14 60 12 56 8 49 5 41 3 36 5 30 6 24" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id26.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 0 352 190"><path d="M 70 94 l 4 0 15 0 23 0 26 -5 29 -6 29 -6 34 -4 30 -3" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id27.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 0 699 614"><path d="M 70 87 l 4 -5 11 -6 16 -6 21 9 24 29 26 37 27 49 23 56 22 59 21 54 19 52 17 43 15 34 19 20 23 6 26 -8 26 -22 23 -34 27 -39 23 -44 22 -48 23 -50 19 -48 22 -48 21 -43 17 -35" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id28.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="9 0 952 705"><path d="M 70 375 l 9 9 12 21 21 27 21 32 22 31 24 32 25 26 26 18 26 12 22 11 21 9 21 6 22 -6 23 -14 29 -26 36 -40 38 -46 37 -44 39 -55 47 -55 52 -59 59 -56 61 -53 57 -48 45 -37" fill="none" opacity="1.00" stroke="rgb(64, 64, 64)" stroke-linecap="round" stroke-linejoin="round" stroke-width="70"/></svg>",
+      "title": "id29.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="1756 59509 1019 1431"><path d="M 1826 60854 l 0 -10 0 -30 0 -48 0 -67 3 -90 17 -97 21 -98 35 -99 56 -104 65 -109 71 -111 69 -103 68 -91 58 -74 50 -53 46 -43 38 -30 40 -18 41 2 40 23 41 51 36 71 25 83 17 101 10 114 5 116 1 110 0 111 0 93 0 78 0 62 0 55 0 43 0 36 0 32 -10 21 -16 13" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id30.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="1917 60282 368 178"><path d="M 1984 60352 l 3 0 17 0 21 0 28 0 34 0 38 3 36 4 28 5" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id31.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="2637 60305 1178 710"><path d="M 2700 60696 l 7 0 10 0 13 0 21 0 20 -7 25 -6 23 -10 31 -20 39 -31 43 -37 51 -41 48 -37 49 -26 47 -18 41 0 33 21 28 37 27 43 23 58 16 61 15 59 22 53 23 43 18 40 15 31 20 10 20 -5 19 -26 24 -37 23 -46 25 -54 28 -60 26 -64 33 -60 30 -55 26 -43 25 -38 20 -33 12 -23" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id32.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="3823 60356 590 467"><path d="M 3890 60538 l 3 0 7 7 5 10 3 19 5 25 3 33 5 35 12 26 17 19 24 10 28 5 37 0 36 -2 42 0 38 2 43 0 39 -5 32 -14 23 -18 15 -20 6 -26 4 -33 0 -43 -9 -43 -16 -38 -22 -28 -26 -17 -28 -10 -30 -5 -28 -1 -30 0 -28 0 -28 0 -30 0 -31 3 -28 6" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id33.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="4673 59773 374 993"><path d="M 4736 60670 l 7 0 13 0 23 -7 23 -29 22 -50 18 -68 16 -81 14 -92 18 -95 20 -92 18 -81 13 -70 7 -59 3 -45 0 -33 -2 -25" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id34.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="4588 60047 884 371"><path d="M 4658 60114 l 0 3 3 17 17 21 38 22 58 23 69 28 75 25 77 20 83 16 73 17 64 11 53 5 45 0 36 -1 27 0" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id35.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="5251 59997 983 1092"><path d="M 5318 60854 l 3 0 14 -13 28 -47 33 -72 48 -96 46 -103 53 -117 46 -108 40 -92 30 -73 19 -50 12 -16 3 18 -1 41 -7 53 -11 57 -14 59 -11 55 -10 49 -13 42 -12 36 -3 28 8 18 26 10 35 4 43 1 51 -1 60 9 56 14 56 11 52 10 44 8 37 4 28 -4 18 -11 10 -18 3 -30 -5 -41 -15 -45 -26 -50 -33 -46 -33 -41 -33 -33 -30 -5 -23 26 -15 61 -8 76 -4 88 -5 89 -8 88 -7 78 -6 69 -10 66 -10 51 -8 27 -9 5" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id36.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="6003 60328 1107 790"><path d="M 6510 60934 l 0 3 0 10 0 22 -3 21 -10 20 -25 12 -38 0 -50 -12 -58 -26 -61 -45 -59 -50 -50 -54 -36 -56 -22 -53 -15 -55 -10 -59 2 -48 22 -47 36 -36 55 -30 74 -21 79 -15 81 -10 86 -5 88 -2 86 4 83 3 69 5 55 8 44 10 37 17 26 18 15 21 3 27 -8 33 -20 26 -30 23 -36 14 -38 8 -38 6 -40 2 -38 -3 -36 0 -35 1 -30 0 -29 -1 -28 3 -25 8 -27 12 -26 10 -20 6" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id37.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="6839 60272 1147 797"><path d="M 6906 60960 l 3 7 17 6 18 -3 22 -20 16 -35 20 -49 18 -55 17 -56 15 -51 19 -58 24 -53 23 -51 24 -43 25 -45 33 -40 38 -31 53 -20 61 -12 70 -6 64 -3 65 0 63 1 61 3 48 5 43 14 38 20 31 26 24 30 14 30 9 31 6 31 2 27 0 28 -12 26 -19 29 -30 26 -37 23 -38 17 -44 11 -43 5 -48 0 -45 -1 -46 0 -43 1 -43 0 -42 -1 -38 0 -33 1 -29 0 -27 -1 -25 0 -26 1 -12 0 7 2 16 13 24 25 28 33 31 45 27 46 19 45 14 36" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id38.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="8927 60230 325 979"><path d="M 9156 61120 l 0 -7 0 -29 -3 -50 -10 -74 -18 -91 -22 -93 -20 -96 -20 -89 -16 -81 -17 -71 -15 -60 -11 -46 -7 -33" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id39.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="8959 60341 744 929"><path d="M 9022 60432 l 7 0 10 0 13 0 18 -3 30 -4 38 -5 39 -5 48 -3 50 -1 51 4 53 14 56 24 53 40 42 51 33 57 21 66 13 71 7 69 3 68 0 60 -1 53 -4 43 -1 36 -7 25 -15 15 -23 13 -35 13 -39 10 -45 10 -46 8 -45 5 -46 4 -43 3 -33 1" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id40.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="9815 60244 1134 1264"><path d="M 9948 61172 l 0 -3 0 -14 0 -31 -3 -43 -10 -61 -12 -70 -11 -82 -10 -81 -9 -78 -5 -76 -3 -70 0 -57 2 -45 0 -40 8 -38 17 -26 23 -22 38 -13 51 -8 60 0 67 5 80 13 81 23 79 33 66 38 50 43 40 51 31 57 20 54 11 48 7 47 0 44 -10 40 -16 35 -28 33 -32 28 -36 23 -43 15 -48 10 -48 5 -43 1 -38 0 -35 0 -26 7 -7 13 13 23 33 27 53 38 76 46 86 51 91 53 86 50 78 46 69 38 43 27 19 18 -5 10 -20 3 -23 2" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id41.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="10807 60711 854 745"><path d="M 10874 61304 l 3 0 10 -7 18 -10 22 -13 23 -21 30 -33 38 -48 45 -57 43 -56 47 -58 48 -54 50 -50 48 -39 41 -32 37 -23 31 -15 32 -7 33 4 28 26 23 48 18 66 13 78 7 79 3 78 0 66 -1 58 0 46 1 30" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id42.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="11125 60970 500 227"><path d="M 11192 61040 l 3 0 17 0 38 7 45 10 49 9 51 9 55 8 46 10 33 8" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id43.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="11549 60854 1178 646"><path d="M 11616 60934 l 3 0 10 0 32 3 44 27 57 44 57 53 62 68 56 70 49 67 42 55 31 43 27 28 26 12 33 -7 43 -33 43 -40 48 -46 48 -43 46 -46 48 -42 43 -39 38 -35 37 -33 26 -30 22 -23 23 -22 18 -21 3 -20" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id44.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="12019 60893 1540 971"><path d="M 12066 61092 l 23 23 50 50 74 77 98 105 102 105 96 101 85 86 67 65 60 43 53 21 49 -5 50 -26 55 -51 71 -76 76 -91 79 -100 71 -91 63 -82 55 -78 46 -63 36 -51 27 -41 11 -30 -3 -20" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id45.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="3211 61689 523 875"><path d="M 3572 62468 l -3 0 -10 0 -18 -13 -22 -37 -20 -53 -20 -64 -16 -63 -20 -71 -28 -73 -27 -68 -24 -62 -27 -55 -28 -43 -23 -38 -5 -28 16 -17 30 -10 38 -4 42 -2 43 0 39 0 42 0 39 -3 38 -4 30 -1" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id46.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="3231 61976 454 189"><path d="M 3308 62046 l -7 0 7 3 17 4 29 5 38 5 45 3 43 1 41 2 38 0 30 -2" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id47.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="3686 61730 561 801"><path d="M 3784 62336 l -3 0 -7 -10 -5 -26 -3 -42 -5 -46 -3 -48 -2 -43 2 -43 0 -45 6 -48 20 -49 33 -46 46 -35 50 -23 50 -15 44 -10 38 -5 37 -2 31 7 22 20 13 33 3 43 -7 49 -18 52 -33 44 -44 37 -47 34 -39 32 -30 30 -13 29 1 28 13 22 19 26 29 22 32 26 25 25 16 23 12 28 8 25" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id48.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="4251 61827 447 787"><path d="M 4314 62124 l 7 0 6 10 7 20 6 38 4 46 3 51 2 50 1 40 0 34 5 33 14 29 21 19 23 14 28 6 28 4 30 -4 28 -15 22 -21 20 -33 15 -42 9 -52 5 -62 4 -59 -4 -63 -14 -69 -29 -68 -33 -55 -34 -40 -33 -24 -32 -14 -26 5 -19 24 -9 31 -5 41 0 40 1 36 0 30" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id49.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="4621 61691 1272 847"><path d="M 4684 62442 l 7 0 10 0 13 0 25 0 26 -3 28 -20 23 -28 25 -37 22 -44 13 -53 16 -50 17 -43 15 -41 15 -35 20 -26 21 -15 30 -7 28 2 26 20 35 44 36 57 32 57 26 53 20 42 13 33 14 28 16 16 20 0 22 -11 23 -33 34 -52 47 -66 48 -76 53 -79 54 -78 50 -66 49 -61 45 -46 38 -32 33 -20 25 -11" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id50.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="5752 61800 359 751"><path d="M 5822 61860 l 0 10 0 26 3 42 4 53 11 61 25 73 30 72 28 70 35 63 33 54 18 42 6 29" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id51.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="6949 61978 963 836"><path d="M 7012 62442 l 7 0 13 0 16 0 27 -7 38 -26 36 -36 35 -43 36 -45 37 -45 34 -43 32 -38 33 -34 23 -30 23 -23 22 -15 25 -9 33 10 39 32 43 58 47 76 48 87 46 95 41 89 33 78 23 61 14 43 -2 26 -13 15" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id52.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="7157 62422 444 193"><path d="M 7224 62522 l 3 -3 17 -7 31 -5 38 -3 43 -5 45 -3 41 -2 37 -2 26 0" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id53.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="7682 61950 402 845"><path d="M 7752 62706 l 0 -7 0 -16 0 -20 0 -25 0 -26 0 -32 0 -29 0 -27 0 -31 0 -40 0 -45 0 -46 0 -46 0 -43 0 -43 0 -38 0 -35 7 -33 13 -27 16 -23 24 -23 28 -15 31 -8 33 -7 30 -1 23 3 15 8 8 17 7 20 1 21 0 27 -4 31 -10 27 -20 28 -25 26 -30 22 -31 16 -30 13 -31 19 -25 16" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id54.svg",
+    },
+    {
+      "content": "<svg xmlns="http://www.w3.org/2000/svg" viewBox="8054 62053 601 558"><path d="M 8124 62522 l 0 -7 0 -19 7 -34 10 -36 13 -46 21 -51 23 -47 22 -41 20 -30 21 -25 30 -18 31 -16 34 -12 33 -8 29 -4 33 -3 32 -2 30 2 24 10 17 17 5 21 -8 25 -24 23 -34 23 -42 18 -43 12 -44 7 -45 14 -43 17 -38 12 -28 9" fill="none" opacity="1.00" stroke="WindowText" stroke-linecap="round" stroke-linejoin="round" stroke-width="100"/></svg>",
+      "title": "id55.svg",
+    },
+  ],
+}
+`;
+
+exports[`InteropService_Importer_OneNote should ignore broken characters at the start of paragraph 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Action research - Wikipedia</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    .list-0 li { padding-left: 10px; }
+    .list-0 li::marker { content: '•'; font-family: Georgia; }
+    .list-1 li { padding-left: 10px; }
+    .list-1 li::marker { content: '•'; font-family: Georgia; }
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">Action research - Wikipedia</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Monday, May 27, 2019</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">12:13 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 120px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 7px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">Clipped from: </span><a href="https://en.wikipedia.org/wiki/Action_research#Action_research_in_organization_development" style="font-family: Verdana; font-size: 12pt;">https://en.wikipedia.org/wiki/Action_research#Action_research_in_organization_development</a></p></div>
+<div class="outline-element" style="margin-left: 0px;"><img src=":/5" style="max-height: -48px; max-width: -48px;"></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">569 revisions since </span><a href="https://en.wikipedia.org/wiki/Special%3APermaLink%2F2264241" style="font-family: Verdana; font-size: 12pt;">2003-05-19</a><span style="font-family: Verdana; font-size: 12pt;"> (</span><a href="https://en.wikipedia.org/wiki/Special%3ADiff%2F898227450" style="font-family: Verdana; font-size: 12pt;">+5 days</a><span style="font-family: Verdana; font-size: 12pt;">), 328 editors, 90 watchers, </span><a href="https://tools.wmflabs.org/pageviews?project=en.wikipedia.org&amp;pages=Action%20research&amp;range=latest-30" style="font-family: Verdana; font-size: 12pt;">18,937 pageviews</a><span style="font-family: Verdana; font-size: 12pt;"> (30 days), created by: </span><a href="https://en.wikipedia.org/wiki/User:Thseamon" style="font-family: Verdana; font-size: 12pt;">Thseamon</a><span style="font-family: Verdana; font-size: 12pt;"> (</span><a href="http://xtools.wmflabs.org/ec/en.wikipedia.org/Thseamon" style="font-family: Verdana; font-size: 12pt;">762</a><span style="font-family: Verdana; font-size: 12pt;">) · </span><a href="http://xtools.wmflabs.org/articleinfo/en.wikipedia.org/Action%20research" style="font-family: Verdana; font-size: 12pt;">See full page statistics</a><span style="font-family: Verdana; font-size: 12pt;"> </span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><a href="https://en.wikipedia.org/wiki/Action_research#mw-head" style="font-family: Verdana; font-size: 12pt;">Jump to navigation</a><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://en.wikipedia.org/wiki/Action_research#p-search" style="font-family: Verdana; font-size: 12pt;">Jump to search</a><span style="font-family: Verdana; font-size: 12pt;"> </span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">For the British charity formerly named Action Research, see </span><a href="https://en.wikipedia.org/wiki/Action_Medical_Research" style="font-family: Verdana; font-size: 12pt;">Action Medical Research</a><span style="font-family: Verdana; font-size: 12pt;">. For the academic journal titled Action Research, see </span><a href="https://en.wikipedia.org/wiki/Action_Research_(journal)" style="font-family: Verdana; font-size: 12pt;">Action Research (journal)</a><span style="font-family: Verdana; font-size: 12pt;">.</span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><table cellpadding="0" cellspacing="0" style="border-collapse: collapse;"><tbody><tr><td style="min-width: 48px; padding: 2pt; vertical-align: top;"><div class="outline-element" style="margin-left: 0px;"><img src=":/6" style="max-height: 39px; max-width: 50px;"></div>
+</td><td style="min-width: 48px; padding: 2pt; vertical-align: top;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span style="font-family: Verdana; font-size: 12pt;">This article </span><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">needs additional citations for </strong><a href="https://en.wikipedia.org/wiki/Wikipedia:Verifiability" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">verification</a><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">. Please help </strong><a href="https://en.wikipedia.org/w/index.php?title=Action_research&amp;action=edit" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">improve this article</a><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;"> by </strong><a href="https://en.wikipedia.org/wiki/Help:Introduction_to_referencing_with_Wiki_Markup/1" style="font-family: Verdana; font-size: 12pt; font-weight: bold;">adding citations to reliable sources</a><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">. Unsourced material may be challenged and removed.</strong><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;"><br></strong><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">Find sources:</strong><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><a href="https://www.google.com/search?as_eq=wikipedia&amp;q=%22Action+research%22" style="font-family: Verdana; font-size: 12pt;">"Action research"</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;–&nbsp;</span><a href="https://www.google.com/search?tbm=nws&amp;q=%22Action+research%22+-wikipedia" style="font-family: Verdana; font-size: 12pt;">news</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</strong><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.google.com/search?&amp;q=%22Action+research%22+site:news.google.com/newspapers&amp;source=newspapers" style="font-family: Verdana; font-size: 12pt;">newspapers</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</strong><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.google.com/search?tbs=bks:1&amp;q=%22Action+research%22+-wikipedia" style="font-family: Verdana; font-size: 12pt;">books</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</strong><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://scholar.google.com/scholar?q=%22Action+research%22" style="font-family: Verdana; font-size: 12pt;">scholar</a><span style="font-family: Verdana; font-size: 12pt;">&nbsp;</span><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">·</strong><span style="font-family: Verdana; font-size: 12pt;"> </span><a href="https://www.jstor.org/action/doBasicSearch?Query=%22Action+research%22&amp;acc=on&amp;wc=on" style="font-family: Verdana; font-size: 12pt;">JSTOR</a><span style="font-family: Verdana; font-size: 12pt;"> </span><em style="font-family: Verdana; font-size: 12pt; font-style: italic;">(May 2019)</em><em style="font-family: Verdana; font-size: 12pt; font-style: italic;"> (</em><a href="https://en.wikipedia.org/wiki/Help:Maintenance_template_removal" style="font-family: Verdana; font-size: 12pt; font-style: italic;">Learn how and when to remove this template message</a><em style="font-family: Verdana; font-size: 12pt; font-style: italic;">)</em></p></div>
+</td></tr></tbody></table></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><strong style="font-family: Verdana; font-size: 12pt; font-weight: bold;">Action research</strong><span style="font-family: Verdana; font-size: 12pt;"> seeks transformative change through the simultaneous process of taking action and doing research, which are linked together by critical reflection.</span><a href="https://en.wikipedia.org/wiki/Kurt_Lewin" style="font-family: Verdana; font-size: 12pt;">Kurt Lewin</a><span style="font-family: Verdana; font-size: 12pt;">, then a professor at </span><a href="https://en.wikipedia.org/wiki/MIT" style="font-family: Verdana; font-size: 12pt;">MIT</a><span style="font-family: Verdana; font-size: 12pt;">, first coined the term "action research" in 1944. In his 1946 paper "Action Research and Minority Problems" he described action research as "a comparative research on the conditions and effects of various forms of social action and research leading to social action" that uses "a spiral of steps, each of which is composed of a circle of planning, action and fact-finding about the result of the action". </span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">Action research practitioners reflect upon the consequences of their own questions, beliefs, assumptions, and practices with the goal of understanding, developing, and improving social practices.</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-1" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[1]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> This action is designed to create three levels of change</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-2" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[2]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> (1) self-change as the only subject of action research is the person who conducting the research. This person is seeking to be better understand the effects of their action in social settings and to engage in a process of living his or her's values. The second level is a collective process of understanding change in a classroom, office, community, organization or institution. Action research enlists others and works to create a democratic sharing of voice to achieve deeper understanding of collective actions</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-3" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[3]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">. Finally action research is process of sharing finding with the community of researchers. This can be done is many ways, in journals</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-4" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[4]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">, on websites, in books, videos or at conferences. The Social Publishers Foundation</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-5" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[5]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;"> provides support for this action research process. </span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">Action research involves actively participating in a change situation, often via an existing organization, whilst simultaneously conducting research. Action research can also be undertaken by larger organizations or institutions, assisted or guided by professional researchers, with the aim of improving their strategies, practices and knowledge of the environments within which they practice. As designers and stakeholders, researchers work with others to propose a new course of action to help their community improve its work practices. Depending upon the nature of the people involved in the action research as well as the person(s) organizing it, there are different ways of describing action research</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-6" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[6]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">. </span></p></div><ul class="list-0" style="left: -10px; position: relative;"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Collaborative Action Research</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Participatory Action Research</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Community-Based Action Research</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Youth Action Research</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Action Research and Action Learning</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Participatory Action Learning and Action Research</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Collective Action Research</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Action Science</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Living Theory Action Research</span></li>
+</ul>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><span style="font-family: Verdana; font-size: 12pt;">There are also a set of approaches that share some properties with action research but have some different practices</span><a href="https://en.wikipedia.org/wiki/Action_research#cite_note-7" style="font-family: Verdana; font-size: 12pt; vertical-align: super;">[7]</a><span style="font-family: Verdana; font-size: 12pt; vertical-align: super;">. These include: </span></p></div><ul class="list-1" style="left: -10px; position: relative;"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Appreciative Inquiry is a way of starting with what is working well and then using action research to improve it.</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><em style="font-family: Verdana; font-size: 12pt; font-style: italic;">Lesson Study</em><span style="font-family: Verdana; font-size: 12pt;"> places the teaching of a shared lesson as the action and has a set of protocols for understanding the outcomes.</span></span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><em style="font-family: Verdana; font-size: 12pt; font-style: italic;">Practitioner Research</em><span style="font-family: Verdana; font-size: 12pt;"> does not have to be action research, as practitioners can engage in any form of the many forms of research.</span></span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><em style="font-family: Verdana; font-size: 12pt; font-style: italic;">Reflective Practice/Self Study</em><span style="font-family: Verdana; font-size: 12pt;"> is the first part of action research but does not require the practitioner to make the results public, to share the results of the learning with others.&nbsp; Many of these approaches will be described in these resources.</span></span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><em style="font-family: Verdana; font-size: 12pt; font-style: italic;">Teacher Research</em><span style="font-family: Verdana; font-size: 12pt;"> can be any form of research that teachers do, including action research, but not limited to it. At George Mason University, teacher research is described in a way that is very similar to what most authors understand as action research. And at some point, they suggest that action research can be a synonym of teacher research.&nbsp; The description of action research posted on this site is more closely aligned to what we have called reflective practice.&nbsp; &nbsp;This shows the variation in the way that people working in the field have of conceptualizing these terms.</span></span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Action Inquiry draws on action research and recasts evaluation research to help navigate complexity when enacting collective leadership. Find out more about by reading this document from Scotland.</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: Verdana; font-size: 12pt;">Improvement Science is explicitly designed to accelerate learning-by-doing. It's a more user-centered and problem-centered approached to improving teaching and learning that is highly similar to action research supported by the Carnegie Foundation for the Advancement of Teaching.</span></li>
+</ul>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; padding-bottom: 16px; padding-top: 7px;"><br></p></div>
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should import a simple OneNote notebook: Page title 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Page title</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">Page title</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Friday, May 3, 2024</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">6:30 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">Page content</p></div>
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should import bold and italic in a way that can be converted to Markdown 1`] = `
+"# Note: Bold & italic
+
+ Bold & italic 
+
+Bold & italic
+
+Thursday, April 23, 2026
+
+9:58 AM
+
+**Bold** and *italic* and **bold italic**."
+`;
+
+exports[`InteropService_Importer_OneNote should import inline tags 1`] = `
+"# Note: Checklists
+
+ Checklists 
+
+Checklists
+
+Wednesday, April 22, 2026
+
+1:45 PM
+
+## Tagged list
+
+This note includes a **tagged list**:
+
+&nbsp;
+
+- ❗Exclamation point
+- ❓Question mark
+- [ ] Checkbox with exclamation point
+- [x] Checkbox (complete)
+    - [ ] Sub-checkbox (incomplete)
+    - [x] [x] Sub-checkbox, with arrow (complete)
+- ⭐Star
+    - 🗨️Sub-item
+- 🖊️Pen
+- 💡Lightbulb
+- 🔒Padlock
+- 📨Paper airplane
+- 📖Book
+- 🎵Music note
+- 🟥Red
+- [x] Checkmark
+- 🏠House
+- 📞Phone
+- 🔗Link
+- 🎞️Film
+- 👥Large text
+
+- 💡💡More large text"
+`;
+
+exports[`InteropService_Importer_OneNote should import inline tags 2`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Checklists</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    .icon-0 > .text { color: #ffd678; }
+    .icon-1 > .text { color: #4673b7; }
+    .icon-2 > .text { color: #4673b7; }
+    .icon-3 > .text { color: #4673b7; }
+    .icon-4 > .text { color: #4673b7; }
+    .icon-5 > .text { color: #ffd678; }
+    .icon-6 > .text { color: #4673b7; }
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 768px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">Checklists</span></div>
+</div><div class="container-outline" style="width: 768px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Wednesday, April 22, 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">1:45 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 720px;"><div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt;">Tagged list</h2></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">This note includes a <strong style="font-weight: bold;">tagged list</strong>:</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">❗</span></span>Exclamation point</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">❓</span></span>Question mark</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><span class="text">☐<span class="icon-secondary"><span class="content">!</span></span></span></span>Checkbox with exclamation point</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><span class="text">☑</span></span>Checkbox (complete)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Sub-checkbox (incomplete)</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><span class="text">☑<span class="icon-secondary"><span class="content">→</span></span></span></span><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><span class="text">☑<span class="icon-secondary"><span class="content">→</span></span></span></span>Sub-checkbox, with arrow (complete)</span></li>
+</ul></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon icon-5 -normal"><span class="text">⭐</span></span>Star</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🗨️</span></span>Sub-item</span></li>
+</ul></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🖊️</span></span>Pen</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">💡</span></span>Lightbulb</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🔒</span></span>Padlock</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📨</span></span>Paper airplane</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📖</span></span>Book</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🎵</span></span>Music note</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🟥</span></span>Red</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-6 -checkbox -large" role="checkbox"><span class="text">✓</span></span>Checkmark</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🏠</span></span>House</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">📞</span></span>Phone</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🔗</span></span>Link</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><span class="note-tag-icon -normal"><span class="text">🎞️</span></span>Film</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 16pt;"><span class="note-tag-icon -normal"><span class="text">👥</span></span>Large text</span></li>
+</ul></div><div class="container-outline" style="left: 72px; position: absolute; top: 595px; width: 624px;"><ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="color: rgb(30,78,121); font-family: &quot;Calibri&quot;, sans-serif; font-size: 16pt; line-height: 25px;"><span class="note-tag-icon -normal"><span class="text">💡</span></span><span class="note-tag-icon -normal"><span class="text">💡</span></span>More large text</span></li>
+</ul></div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should import nested ink 1`] = `
+[
+  "<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Ink Missing - only one example missing part</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 753px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt; line-height: 32px;">Ink Missing - only one example missing part</span></div>
+</div><div class="container-outline" style="width: 753px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">Mittwoch, 1. April 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">04:25</span></div>
+</div></div><div class="container-outline" style="left: 277px; position: absolute; top: 485px; width: 474px;"><div class="outline-element" style="margin-left: 0px;"><p><span style="height: 77.37px; width: 108.4px;" class="ink-text"><img style="height: 54px; left: 22.9px; pointer-events: none; position: absolute; top: -2.61px; width: 90px;" src=":/id-here"></span><span class="ink-space" style="padding-left: 25px; padding-top: 77px;"></span><span style="height: 77.37px; width: 276.32px;" class="ink-text"><img style="height: 86px; left: -2.61px; pointer-events: none; position: absolute; top: 5.78px; width: 283px;" src=":/id-here"></span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p><span style="height: 66.41px; width: 183.38px;" class="ink-text"><img style="height: 70px; left: -2.61px; pointer-events: none; position: absolute; top: -10.05px; width: 190px;" src=":/id-here"></span></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p><span style="height: 71.28px; width: 373.91px;" class="ink-text"><img style="height: 68px; left: 34.28px; pointer-events: none; position: absolute; top: 7.56px; width: 344px;" src=":/id-here"></span></p></div>
+</div><div class="container-outline" style="left: 262px; position: absolute; top: 130px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 285px; position: absolute; top: 243px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 560px; position: absolute; top: 195px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+</div>
+
+
+
+</body></html>",
+]
+`;
+
+exports[`InteropService_Importer_OneNote should import vertically-scaled ink 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Scaled</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt; line-height: 32px;">Scaled</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">Wednesday, April 15, 2026</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">12:36 AM</span></div>
+</div></div><img style="height: 492.21px; left: 128.13px; pointer-events: none; position: absolute; top: 144.3px; width: 187.42px;" src=":/id-here">
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: Quick Notes 1`] = `
+"<!DOCTYPE HTML>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>Quick Notes</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            display: flex;
+        }
+
+        nav {
+            height: 100vh;
+            min-width: 200px;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            border-right: 1px solid rgb(235, 235, 235);
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        nav li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav li.active {
+            background-color: rgb(233, 233, 233);
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        
+        <li class="l1"><a href=":/5" target="content" title="风景  (Web view)">风景  (Web view)</a></li>
+        
+        <li class="l1"><a href=":/4" target="content" title="wikipedia link">wikipedia link</a></li>
+        
+        <li class="l1"><a href=":/6" target="content" title="风景">风景</a></li>
+        
+        <li class="l1"><a href=":/3" target="content" title="Tips from a Pro: Using Trees for Dramatic Landscape Photography">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a></li>
+        
+    </ul>
+</nav>
+
+
+<style>
+    .l2 { padding: 10px 20px 10px 40px }
+    .l3 { padding: 10px 20px 10px 60px }
+    .l4 { padding: 10px 20px 10px 80px }
+    .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
+</style>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: Tips from a Pro: Using Trees for Dramatic Landscape Photography 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Tips from a Pro: Using Trees for Dramatic Landscape Photography</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt; line-height: 32px;">&nbsp;</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">Saturday, February 11, 2023</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">12:56 AM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt; line-height: 22px;"><a href="onenote:https://d.docs.live.net/c8d3bbab7f1acf3a/Documents/Photography/%E9%A3%8E%E6%99%AF.one#Tips%20from%20a%20Pro%20Using%20Trees%20for%20Dramatic%20Landscape%20Photography&amp;section-id={262ADDFB-A4DC-4453-A239-0024D6769962}&amp;page-id={88D803A5-4F43-48D4-9B16-4C024F5787DC}&amp;end" style="">Tips from a Pro: Using Trees for Dramatic Landscape Photography</a></p></div>
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: wikipedia link 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>wikipedia link</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">&nbsp;</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Sunday, January 05, 2025</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">10:15 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><a href="https://zh.wikipedia.org/zh-hans/%E9%A3%8E%E6%99%AF" style="">wikipedia link</a></p></div>
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风景 (Web view) 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>风景  (Web view)</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">&nbsp;</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Sunday, January 5, 2025</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">10:13 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;"><a href=":/6" style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">风景</a><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">  (</span><a href="https://onedrive.live.com/edit.aspx?resid=193EE54E3252492D!s9b62db4219f740709f444bc0129de4e9&amp;migratedtospo=true&amp;wd=target%28Quick%20Notes.one%7C75256889-9e75-4ec2-82ed-fc799557e1b9%2F%E9%A3%8E%E6%99%AF%7Cd099b6f3-7f5a-4c08-aed7-e8d42c59523f%2F%29&amp;wdorigin=703&amp;wdpreservelink=1" style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">Web view</a><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">)</span></p></div>
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should remove hyperlink from title: 风景 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>风景</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">风景</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Sunday, January 05, 2025</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(102,102,102); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">10:14 PM</span></div>
+</div></div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should render audio as links to resource: My title 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>My title</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt;">My title</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">Friday, March 7, 2025</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt;">11:16 AM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-size: 11pt; line-height: 17px;"><a href=":/5">Audio Recording.wav</a></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 245px; position: absolute; top: 166px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 61px; position: absolute; top: 304px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">Some text here</p></div>
+</div><div class="container-outline" style="left: 240px; position: absolute; top: 373px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt;">&nbsp;</p></div>
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should render audio as links to resource: Quick Notes 1`] = `
+"<!DOCTYPE HTML>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>Quick Notes</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            display: flex;
+        }
+
+        nav {
+            height: 100vh;
+            min-width: 200px;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            border-right: 1px solid rgb(235, 235, 235);
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        nav li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav li.active {
+            background-color: rgb(233, 233, 233);
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        
+        <li class="l1"><a href=":/3" target="content" title="My title">My title</a></li>
+        
+    </ul>
+</nav>
+
+
+<style>
+    .l2 { padding: 10px 20px 10px 40px }
+    .l3 { padding: 10px 20px 10px 60px }
+    .l4 { padding: 10px 20px 10px 80px }
+    .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
+</style>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker: Is Mexico safe for shooting Street Photography? 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Is Mexico safe for shooting Street Photography?</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 20pt; line-height: 32px;">&nbsp;</span></div>
+</div><div class="container-outline" style="width: 624px;"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">Monday, August 28, 2023</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">10:52 AM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 12pt; line-height: 19px;"><a href="https://www.youtube.com/watch?v=-U-uj1jaHtk" style="">Is Mexico safe for shooting Street Photography?</a></p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 12pt; line-height: 19px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><img src=":/5" style="max-height: 200px; max-width: 356px;"></div>
+</div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should render links properly by ignoring wrongly set indices when the first character is a hyperlink marker: Quick Notes 1`] = `
+"<!DOCTYPE HTML>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <title>Quick Notes</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            display: flex;
+        }
+
+        nav {
+            height: 100vh;
+            min-width: 200px;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            border-right: 1px solid rgb(235, 235, 235);
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        nav li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav li.active {
+            background-color: rgb(233, 233, 233);
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        
+        <li class="l1"><a href=":/3" target="content" title="Is Mexico safe for shooting Street Photography?">Is Mexico safe for shooting Street Photography?</a></li>
+        
+    </ul>
+</nav>
+
+
+<style>
+    .l2 { padding: 10px 20px 10px 40px }
+    .l3 { padding: 10px 20px 10px 60px }
+    .l4 { padding: 10px 20px 10px 80px }
+    .l5 { padding: 10px 20px 10px 100px }
+    li.-error a { color: #C11; font-weight: bold; }
+</style>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should support importing .one files that contain checkboxes 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Test Todo : cases à cocher lien vers doc sur partage</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    .icon-0 > .text { color: #4673b7; }
+    .icon-1 > .text { color: #4673b7; }
+    .icon-2 > .text { color: #4673b7; }
+    .icon-3 > .text { color: #4673b7; }
+    .icon-4 > .text { color: #4673b7; }
+    .icon-5 > .text { color: #4673b7; }
+    .icon-6 > .text { color: #4673b7; }
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt; line-height: 32px;">Test Todo : cases à cocher lien vers doc sur partage</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">jeudi 23 octobre 2025</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(118,118,118); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">09:24</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 720px;"><div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt; line-height: 22px;">Todo HBA</h2></div>
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-0 -checkbox -large" role="checkbox"><span class="text">☑</span></span>Rédiger carnet MS-OneNote jeu d'essai (case cochée)</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-1 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Transmettre aux dev Joplin (case non cochée)</span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-2 -checkbox -large" role="checkbox"><span class="text">☑</span></span>Exporter le carnet en *.onepkg (case cochée)</span></li>
+<li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-3 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Exporter des page en *.one (case non cochée)</span></li>
+</ul></li>
+</ul><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><h2 style="color: rgb(46,117,181); font-family: &quot;Calibri&quot;, sans-serif; font-size: 14pt; line-height: 22px;">Todo Team appli</h2></div>
+<ul class="tagged-list"><li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-4 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Rédiger compte-rendu réunion de service</span></li>
+<li class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="false" aria-disabled="true" class="note-tag-icon icon-5 -checkbox -large" role="checkbox"><span class="text">☐</span></span>Rédiger présentation service Joplin et fonctionnalités complémentaires associée à JBS<br>la doc sur le partage : <a href="file:///\\\\mondomaine.local\\partage\\DSI\\Projets%20Techniques%202025\\Remplacement%20Office\\JOPLIN_Alternatives_OneNote\\formation" style="">\\\\mondomaine.local\\partage\\DSI\\Projets Techniques 2025\\Remplacement Office\\JOPLIN_Alternatives_OneNote\\formation</a> </span><ul class="tagged-list"><li class="outline-element" style="margin-left: 36px;"><span style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;"><span aria-checked="true" aria-disabled="true" class="note-tag-icon icon-6 -checkbox -large" role="checkbox"><span class="text">☑</span></span>Documenter configuration synchro JBS saml pour un utilisateur (case cochée)</span></li>
+</ul></li>
+</ul></div>
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should use default value for EntityGuid and InkBias if not found 1`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Marketing Funnel &amp; Training</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: Trebuchet MS; font-size: 20pt; line-height: 32px;">Marketing Funnel &amp; Training</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">Tuesday, October 06, 2015</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">12:27 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 115px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><img src=":/id-here"></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Trebuchet MS; font-size: 12pt; line-height: 19px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><cite style="color: rgb(89,89,89); font-family: &quot;Calibri&quot;, sans-serif; font-size: 9pt; line-height: 14px;">From &lt;<a href="http://adamhcohen.com/wp-content/uploads/New-Marketing-Funnel1.JPG" style="">http://adamhcohen.com/wp-content/uploads/New-Marketing-Funnel1.JPG</a>&gt; </cite></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: Trebuchet MS; font-size: 12pt; line-height: 19px;">&nbsp;</p></div>
+</div><div class="container-outline" style="left: 72px; position: absolute; top: 475px; width: 146px;"><div class="outline-element" style="margin-left: 0px;"><p style="color: rgb(91,155,213); font-family: Trebuchet MS; font-size: 12pt; line-height: 19px;">Customer Success Management</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="color: rgb(91,155,213); font-family: Trebuchet MS; font-size: 12pt; line-height: 19px;">and</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="color: rgb(91,155,213); font-family: Trebuchet MS; font-size: 12pt; line-height: 19px;">Training</p></div>
+</div><img style="height: 173px; left: 57.15px; pointer-events: none; position: absolute; top: 443.15px; width: 310px;" src=":/id-here">
+
+
+
+</body></html>"
+`;
+
+exports[`InteropService_Importer_OneNote should use default value for EntityGuid and InkBias if not found 2`] = `
+"<!DOCTYPE HTML>
+<html><head>
+    <meta charset="UTF-8">
+    <title>Decrease support costs</title>
+    <style>
+    
+/* (For testing: Removed default CSS) */
+
+
+    
+    </style>
+</head>
+<body>
+
+<div class="title" style="left: 48px; position: absolute; top: 24px;"><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="font-family: &quot;Calibri Light&quot;, sans-serif; font-size: 20pt; line-height: 32px;">Decrease support costs</span></div>
+</div><div class="container-outline"><div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">Saturday, October 10, 2015</span></div>
+<div class="outline-element" style="margin-left: 0px;"><span style="color: rgb(128,128,128); font-family: &quot;Calibri&quot;, sans-serif; font-size: 10pt; line-height: 16px;">11:15 PM</span></div>
+</div></div><div class="container-outline" style="left: 48px; position: absolute; top: 88px; width: 624px;"><div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">One of the strategic goals of training <strong style="font-style: italic; font-weight: bold;">must</strong> be to decrease the cost of customer support. To do this training must teach customers to "<strong style="font-weight: bold;">do</strong>" not to "know."  How many customers call asking to know something?</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+<div class="outline-element" style="margin-left: 0px;"><p style="font-family: &quot;Calibri&quot;, sans-serif; font-size: 11pt; line-height: 17px;">&nbsp;</p></div>
+</div>
+
+
+
+</body></html>"
+`;

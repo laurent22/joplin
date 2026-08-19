@@ -124,6 +124,8 @@ export function getStyleProp(node, name) {
 
   const o = css.parse('div {' + style + '}');
   if (!o.stylesheet.rules.length) return null;
-  const prop = o.stylesheet.rules[0].declarations.find(d => d.property.toLowerCase() === name);
+  const prop = o.stylesheet.rules[0].declarations.find(d => {
+    return d.type === 'declaration' && d.property.toLowerCase() === name;
+  });
   return prop ? prop.value : null;
 }

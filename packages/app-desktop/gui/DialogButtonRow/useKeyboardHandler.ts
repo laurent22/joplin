@@ -2,11 +2,10 @@ import * as React from 'react';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { isInsideContainer } from '@joplin/lib/dom';
 
+type OnButtonClick = ()=> void;
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onOkButtonClick: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onCancelButtonClick: Function;
+	onOkButtonClick: null|OnButtonClick;
+	onCancelButtonClick: null|OnButtonClick;
 }
 
 const globalKeydownHandlers: string[] = [];
@@ -30,8 +29,7 @@ export default (props: Props) => {
 		return ln && globalKeydownHandlersRef.current[ln - 1] === elementId;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const isInSubModal = (targetElement: any) => {
+	const isInSubModal = (targetElement: EventTarget | null) => {
 		// If we are inside a sub-modal within the dialog, we shouldn't handle
 		// global key events. It can be for example the emoji picker. In general
 		// it's difficult to know whether an element is a modal or not, so we'll
@@ -48,15 +46,17 @@ export default (props: Props) => {
 
 		if (!isTopDialog() || isInSubModal(event.target)) return;
 
-		if (event.keyCode === 13) {
+		if (event.keyCode === 13 && props.onOkButtonClick) {
 			if ('nodeName' in event.target && event.target.nodeName === 'INPUT') {
 				const target = event.target as HTMLInputElement;
 
 				if (target.type !== 'button' && target.type !== 'checkbox') {
+					event.preventDefault();
 					props.onOkButtonClick();
 				}
 			}
-		} else if (event.keyCode === 27) {
+		} else if (event.keyCode === 27 && props.onCancelButtonClick) {
+			event.preventDefault();
 			props.onCancelButtonClick();
 		}
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied

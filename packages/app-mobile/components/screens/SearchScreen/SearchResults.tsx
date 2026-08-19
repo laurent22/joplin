@@ -7,19 +7,21 @@ import useQueuedAsyncEffect from '@joplin/lib/hooks/useQueuedAsyncEffect';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import SearchEngineUtils from '@joplin/lib/services/search/SearchEngineUtils';
 import Note from '@joplin/lib/models/Note';
-import SearchEngine from '@joplin/lib/services/search/SearchEngine';
+import SearchEngine, { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
 import { ProgressBar } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
 
 interface Props {
 	query: string;
-	onHighlightedWordsChange: (highlightedWords: string[])=> void;
+	paused: boolean;
+	onHighlightedWordsChange: (highlightedWords: (ComplexTerm | string)[])=> void;
 
 	ftsEnabled: number;
 }
 
 const useResults = (props: Props) => {
 	const [notes, setNotes] = useState<NoteEntity[]>([]);
+	const [highlightedWord, setHighlightedWord] = useState('');
 	const [isProcessing, setIsProcessing] = useState(false);
 	const query = props.query;
 	const ftsEnabled = props.ftsEnabled;
@@ -28,7 +30,7 @@ const useResults = (props: Props) => {
 		let notes: NoteEntity[] = [];
 		setIsProcessing(true);
 		try {
-			if (query) {
+			if (query && !props.paused) {
 				if (ftsEnabled) {
 					const r = await SearchEngineUtils.notesForQuery(query, true, { appendWildCards: true });
 					notes = r.notes;
@@ -50,17 +52,21 @@ const useResults = (props: Props) => {
 			if (event.cancelled) return;
 
 			const parsedQuery = await SearchEngine.instance().parseQuery(query);
-			const highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
+			const searchTerms = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 
-			props.onHighlightedWordsChange(highlightedWords);
+			if (event.cancelled) return;
+
+			props.onHighlightedWordsChange(searchTerms);
+			setHighlightedWord(SearchEngine.instance().createQueryFromTerms(searchTerms));
 			setNotes(notes);
 		} finally {
 			setIsProcessing(false);
 		}
-	}, [query, ftsEnabled], { interval: 200 });
+	}, [query, props.paused, ftsEnabled], { interval: 200 });
 
 	return {
 		notes,
+		highlightedWord,
 		isPending: isProcessing,
 	};
 };
@@ -96,14 +102,15 @@ const useIsLongRunning = (isPending: boolean) => {
 const containerStyle = { flex: 1 };
 
 const SearchResults: React.FC<Props> = props => {
-	const { notes, isPending } = useResults(props);
+	const { notes, highlightedWord, isPending } = useResults(props);
 	// Don't show the progress bar immediately, only show if the search
 	// is taking some time.
 	const longRunning = useIsLongRunning(isPending);
+	const progressVisible = longRunning;
 
 	// To have the correct height on web, the progress bar needs to be wrapped:
-	const progressBar = <View>
-		<ProgressBar indeterminate={true} visible={longRunning}/>
+	const progressBar = <View aria-hidden={!progressVisible}>
+		<ProgressBar indeterminate={true} visible={progressVisible}/>
 	</View>;
 
 	return (
@@ -111,8 +118,9 @@ const SearchResults: React.FC<Props> = props => {
 			{progressBar}
 			<FlatList
 				data={notes}
+				extraData={highlightedWord}
 				keyExtractor={(item) => item.id}
-				renderItem={event => <NoteItem note={event.item} />}
+				renderItem={event => <NoteItem note={event.item} highlightedWord={highlightedWord} />}
 			/>
 		</View>
 	);

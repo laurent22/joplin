@@ -6,8 +6,15 @@ describe('buildServerDocker', () => {
 		type TestCase = [string, boolean, string];
 
 		const testCases: TestCase[] = [
-			['server-v1.1.2-beta', true, '1.1.2-beta'],
-			['server-v1.1.2', false, '1.1.2'],
+			['server-v1.2.3-beta', true, '1.2.3-beta'],
+			['server-v1.2.3-beta', false, '1.2.3'],
+			['server-v1.2.3', false, '1.2.3'],
+			['server-v1.2.3-zxc', true, '1.2.3-beta.zxc'],
+			['server-v1.2.3-zxc', false, '1.2.3'],
+			['server-v1.2.3-4-zxc', true, '1.2.3-beta.4.zxc'],
+			['server-v1.2.3-4-zxc', false, '1.2.3'],
+			['server-1.2.3-4-zxc', true, '1.2.3-beta.4.zxc'],
+			['server-1.2.3-4-zxc', false, '1.2.3'],
 		];
 
 		for (const testCase of testCases) {
@@ -21,8 +28,8 @@ describe('buildServerDocker', () => {
 		type TestCase = [string, boolean];
 
 		const testCases: TestCase[] = [
-			['server-v1.1.2-beta', true],
-			['server-v1.1.2', true], // For now, always returns true
+			['server-v1.1.2-beta', false], // For now, always returns false
+			['server-v1.1.2', false],
 		];
 
 		for (const testCase of testCases) {

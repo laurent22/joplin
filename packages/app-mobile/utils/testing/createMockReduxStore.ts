@@ -1,16 +1,16 @@
-import reducer from '@joplin/lib/reducer';
 import { createStore } from 'redux';
 import appDefaultState from '../appDefaultState';
 import Setting from '@joplin/lib/models/Setting';
+import { AppState } from '../types';
+import appReducer from '../appReducer';
 
-const defaultState = {
-	...appDefaultState,
-	// Mocking theme in the default state is necessary to prevent "Theme not set!" warnings.
-	settings: { theme: Setting.THEME_LIGHT },
-};
+const testReducer = (state: AppState|undefined, action: unknown): AppState => {
+	state ??= {
+		...appDefaultState,
+		settings: Setting.toPlainObject(),
+	};
 
-const testReducer = (state = defaultState, action: unknown) => {
-	return reducer(state, action);
+	return { ...state, ...appReducer(state, action) };
 };
 
 const createMockReduxStore = () => {

@@ -7,7 +7,7 @@ test.describe('simpleBackup', () => {
 	test('should have a section in settings', async ({ electronApp, startupPluginsLoaded, mainWindow }) => {
 		await startupPluginsLoaded;
 
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.waitFor();
 
 		// Open settings (check both labels so that this works on MacOS)
@@ -24,7 +24,7 @@ test.describe('simpleBackup', () => {
 	test('should be possible to create a backup', async ({ electronApp, startupPluginsLoaded, mainWindow }) => {
 		await startupPluginsLoaded;
 
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.waitFor();
 
 		// Backups should work

@@ -29,6 +29,15 @@ import getNoteElementIdFromJoplinId from '../NoteListItem/utils/getNoteElementId
 import useFocusVisible from './utils/useFocusVisible';
 import { stateUtils } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
+import useOnNoteDoubleClick from './utils/useOnNoteDoubleClick';
+import { createSelector } from 'reselect';
+import { isFolderPublished, ShareType } from '@joplin/lib/services/share/reducer';
+import useAutoScroll from './utils/useAutoScroll';
+
+const selectPublishedNoteIds = createSelector(
+	(state: AppState) => state.shareService.shares,
+	shares => shares.filter(s => s.type === ShareType.Note && !!s.note_id).map(s => s.note_id),
+);
 
 const commands = {
 	focusElementNoteList,
@@ -103,6 +112,8 @@ const NoteList = (props: Props) => {
 
 	const onNoteClick = useOnNoteClick(props.dispatch, focusNote);
 
+	const onNoteDoubleClick = useOnNoteDoubleClick();
+
 	const onKeyDown = useOnKeyDown(
 		activeNoteId,
 		props.selectedNoteIds,
@@ -115,6 +126,8 @@ const NoteList = (props: Props) => {
 		props.notes.length,
 		listRenderer.flow,
 		itemsPerLine,
+		props.showCompletedTodos,
+		props.uncompletedTodosOnTop,
 	);
 
 	useItemCss(listRenderer.itemCss);
@@ -125,6 +138,10 @@ const NoteList = (props: Props) => {
 			CommandService.instance().unregisterRuntime(commands.focusElementNoteList.declaration.name);
 		};
 	}, [focusNote]);
+
+	const selectedNoteId = props.selectedNoteIds.length === 1 ? props.selectedNoteIds[0] : '';
+	const targetIndex = props.notes.findIndex(note => note.id === selectedNoteId);
+	useAutoScroll(selectedNoteId, props.selectedFolderId, targetIndex, makeItemIndexVisible);
 
 	const onItemContextMenu = useOnContextMenu(
 		props.selectedNoteIds,
@@ -198,7 +215,9 @@ const NoteList = (props: Props) => {
 
 	const renderEmptyList = () => {
 		if (props.notes.length) return null;
-		return <div className="emptylist">{getEmptyFolderMessage(props.folders, props.selectedFolderId)}</div>;
+		// Role status is necessary for the screenreader to announce that the list is empty, since when there are
+		// zero items there is not list to render
+		return <div className="emptylist" role="status">{getEmptyFolderMessage(props.folders, props.selectedFolderId)}</div>;
 	};
 
 	const renderFiller = (key: string, style: React.CSSProperties) => {
@@ -210,7 +229,7 @@ const NoteList = (props: Props) => {
 	const renderNotes = () => {
 		if (!props.notes.length) return [];
 
-		const output: JSX.Element[] = [];
+		const output: React.ReactNode[] = [];
 
 		for (let i = startNoteIndex; i <= endNoteIndex; i++) {
 			const note = props.notes[i];
@@ -219,13 +238,14 @@ const NoteList = (props: Props) => {
 			output.push(
 				<NoteListItem
 					key={note.id}
-					ref={el => itemRefs.current[note.id] = el}
+					ref={el => { itemRefs.current[note.id] = el; }}
 					index={i}
 					dragIndex={dragOverTargetNoteIndex}
 					noteCount={props.notes.length}
 					itemSize={itemSize}
 					onChange={listRenderer.onChange}
 					onClick={onNoteClick}
+					onDoubleClick={onNoteDoubleClick}
 					onContextMenu={onItemContextMenu}
 					onDragStart={onDragStart}
 					onDragOver={onDragOver}
@@ -238,6 +258,7 @@ const NoteList = (props: Props) => {
 					focusVisible={focusVisible && activeNoteId === note.id}
 					isSelected={isSelected}
 					isWatched={props.watchedNoteFiles.includes(note.id)}
+					isPublished={props.publishedNoteIds.includes(note.id) || (!!note.is_shared && !note.share_id) || props.isFolderPublished}
 					listRenderer={listRenderer}
 					dispatch={props.dispatch}
 					columns={props.columns}
@@ -302,6 +323,7 @@ const NoteList = (props: Props) => {
 			onKeyUp={onKeyUp}
 			onDrop={onDrop}
 			onContextMenu={onContainerContextMenu}
+			id='notes-list'
 		>
 			{renderEmptyList()}
 			{renderFiller('top', topFillerStyle)}
@@ -332,6 +354,8 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		searches: state.searches,
 		selectedSearchId: windowState.selectedSearchId,
 		watchedNoteFiles: state.watchedNoteFiles,
+		publishedNoteIds: selectPublishedNoteIds(state),
+		isFolderPublished: state.notesParentType === 'Folder' ? isFolderPublished(state, windowState.selectedFolderId) : false,
 		provisionalNoteIds: state.provisionalNoteIds,
 		isInsertingNotes: state.isInsertingNotes,
 		noteSortOrder: state.settings['notes.sortOrder.field'],

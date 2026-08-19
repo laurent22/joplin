@@ -136,9 +136,9 @@ Call **GET /ping** to check if the service is available. It should return "Jopli
 
 ## Searching
 
-Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/help/#searching
+Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/help/apps/search
 
-To retrieve non-notes items, such as notebooks or tags, add a `type` parameter and set it to the required [item type name](#item-type-id). In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use `*` as a wildcard. This is convenient for example to retrieve notebooks or tags by title.
+To retrieve non-notes items, such as notebooks or tags, add a `type` parameter and set it to the required [item type name](#item-type-ids). In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use `*` as a wildcard. This is convenient for example to retrieve notebooks or tags by title.
 
 For example, to retrieve the notebook named `recipes`: **GET /search?query=recipes&type=folder**
 
@@ -166,6 +166,8 @@ revision | 13
 migration | 14   
 smart_filter | 15   
 command | 16   
+note_embedding | 17   
+conflict_note_state | 18   
 
 ## Notes
 
@@ -197,12 +199,14 @@ command | 16
 | encryption_cipher_text | text  |       |
 | encryption_applied | int   |       |
 | markup_language | int   |       |
-| is_shared | int   |       |
-| share_id | text  |       |
+| is_shared | int   | Whether the note is published. |
+| share_id | text  | The ID of the Joplin Server/Cloud share containing the note. Empty if not shared. |
 | conflict_original_id | text  |       |
 | master_key_id | text  |       |
 | user_data | text  |       |
 | deleted_time | int   |       |
+| is_locked | int   |       |
+| extracted_resource_ids | text  |       |
 | body_html | text  | Note body, in HTML format |
 | base_url | text  | If `body_html` is provided and contains relative URLs, provide the `base_url` parameter too so that all the URLs can be converted to absolute ones. The base URL is basically where the HTML was fetched from, minus the query (everything after the '?'). For example if the original page was `https://stackoverflow.com/search?q=%5Bjava%5D+test`, the base URL is `https://stackoverflow.com/search`. |
 | image_data_url | text  | An image to attach to the note, in [Data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format. |
@@ -270,6 +274,10 @@ Deletes the note with ID :id
 
 By default, the note will be moved **to the trash**. To permanently delete it, add the query parameter `permanent=1`
 
+### DELETE /notes/:id/revisions
+
+Deletes all the revisions attached to this note.
+
 ## Folders
 
 This is actually a notebook. Internally notebooks are called "folders".
@@ -288,7 +296,7 @@ This is actually a notebook. Internally notebooks are called "folders".
 | encryption_applied | int   |       |
 | parent_id | text  |       |
 | is_shared | int   |       |
-| share_id | text  |       |
+| share_id | text  | The ID of the Joplin Server/Cloud share containing the folder. Empty if not shared. |
 | master_key_id | text  |       |
 | icon  | text  |       |
 | user_data | text  |       |
@@ -342,7 +350,7 @@ By default, the folder will be moved **to the trash**. To permanently delete it,
 | encryption_blob_encrypted | int   |       |
 | size  | int   |       |
 | is_shared | int   |       |
-| share_id | text  |       |
+| share_id | text  | The ID of the Joplin Server/Cloud share containing the resource. Empty if not shared. |
 | master_key_id | text  |       |
 | user_data | text  |       |
 | blob_updated_time | int   |       |
@@ -350,6 +358,8 @@ By default, the folder will be moved **to the trash**. To permanently delete it,
 | ocr_details | text  |       |
 | ocr_status | int   |       |
 | ocr_error | text  |       |
+| ocr_driver_id | int   |       |
+| is_locked | int   |       |
 
 ### GET /resources
 
@@ -483,6 +493,7 @@ Remove the tag from the note.
 | encryption_applied | int   |       |
 | updated_time | int   |       |
 | created_time | int   |       |
+| is_locked | int   |       |
 
 ### GET /revisions
 

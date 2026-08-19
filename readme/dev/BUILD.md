@@ -18,10 +18,15 @@ There are also a few forks of existing packages under the "fork-*" name.
 
 ## Required dependencies
 
-- Install Node 18+. On Windows, also install the build tools - https://nodejs.org/en/
-  - [Enable Yarn](https://yarnpkg.com/getting-started/install): `corepack enable`
-- macOS: Install Cocoapods - `brew install cocoapods`. Apple Silicon [may require libvips](https://github.com/laurent22/joplin/pull/5966#issuecomment-1007158597) - `brew install vips`.
-- Linux: Install dependencies - `sudo apt install build-essential libnss3 libsecret-1-dev python rsync libgbm-dev libatk-bridge2.0-0 libgtk-3.0 libasound2`
+All of the required dependencies are listed within the [devbox.json](https://github.com/laurent22/joplin/blob/dev/devbox.json) file in the project root. You can either manually install them based on that list, or you can automatically install them on Linux or MacOS by using:
+
+```sh
+devbox shell
+```
+
+If you don't already have devbox, please [follow these instructions](https://www.jetify.com/docs/devbox/quickstart/).
+
+If working on the `onenote-converter` packages you will need to install the [Rust toolchain](https://rustup.rs/).
 
 ## Building
 
@@ -38,7 +43,7 @@ Then you can test the various applications:
 	cd packages/app-desktop
 	yarn start
 
-You can also run it under WSL 2. To do so, [follow these instructions](https://www.beekeeperstudio.io/blog/building-electron-windows-ubuntu-wsl2) to setup your environment.
+Use the regular Command Prompt to develop in Windows. We [do not recommend using WSL for this](https://github.com/laurent22/joplin/blob/dev/readme/dev/build_troubleshooting.md#other-issues) and we do not support this use case.
 
 ## Testing the Terminal application
 
@@ -74,7 +79,13 @@ To run the mobile app in a web browser,
 	cd packages/app-mobile
 	yarn serve-web
 
-Above, `yarn serve-web` starts a development server on port `8088`. To create a release build, instead run `yarn web`. The built output will be stored in `packages/app-mobile/web/dist`.
+Above, `yarn serve-web` starts a development server on port `8088`. The built version of the web app auto-reloads the full page when a change is made to the source files.
+
+To instead reload individual components on change (hot reload), serve with the following command:
+
+	yarn serve-web-hot-reload
+
+To create a release build, run `yarn web`. The built output will be stored in `packages/app-mobile/web/dist`.
 
 Like the iOS and Android builds, it's necessary to compile TypeScript to JS. See "Watching files" below.
 
@@ -93,6 +104,8 @@ To make changes to the application, you'll need to rebuild any TypeScript file y
 
 Running `yarn tsc` would have the same effect, but without watching.
 
+**Mobile-specific note**: If making changes to the note editor, viewer, or other WebView content, run `yarn watchInjectedJs` from `packages/app-mobile` to rebuild the WebView JavaScript files on change.
+
 ## Running an application with additional parameters
 
 You can specify additional parameters when running the desktop or CLI application. To do so, add `--` to the `yarn start` command, followed by your flags. For example:
@@ -105,4 +118,4 @@ The application was originally written in JavaScript, however it has slowly been
 
 ## Troubleshooting
 
-Please read for the [Build Troubleshooting Document](https://github.com/laurent22/joplin/blob/dev/readme/dev/build_troubleshooting.md) for various tips on how to get the build working.
+Please read the [Build Troubleshooting Document](https://github.com/laurent22/joplin/blob/dev/readme/dev/build_troubleshooting.md) for various tips on how to get the build working.

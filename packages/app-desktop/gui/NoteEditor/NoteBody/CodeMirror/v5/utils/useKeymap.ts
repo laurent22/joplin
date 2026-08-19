@@ -9,7 +9,7 @@ import { EventName } from '@joplin/lib/eventManager';
 import normalizeAccelerator from '../../utils/normalizeAccelerator';
 import { CodeMirrorVersion } from '../../utils/types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Receives dynamically-loaded CodeMirror 5 namespace; @types/codemirror's signature is too narrow for keymap registration
 export default function useKeymap(CodeMirror: any) {
 
 	function save() {

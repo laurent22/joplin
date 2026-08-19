@@ -1,14 +1,16 @@
 import Logger, { LoggerWrapper } from '@joplin/utils/Logger';
 import shim from './shim';
-import BaseItem from './models/BaseItem';
+import BaseItem, { RemoteItemMetadata } from './models/BaseItem';
 import time from './time';
 
-const { isHidden } = require('./path-utils');
+import { isHidden } from './path-utils';
 import JoplinError from './JoplinError';
 import { Lock, LockClientType, LockType } from './services/synchronizer/LockHandler';
 import * as ArrayUtils from './ArrayUtils';
+import Setting from './models/Setting';
+import SyncTargetRegistry from './SyncTargetRegistry';
 const { sprintf } = require('sprintf-js');
-const Mutex = require('async-mutex').Mutex;
+import { Mutex } from 'async-mutex';
 
 const logger = Logger.create('FileApi');
 
@@ -22,6 +24,7 @@ export interface RemoteItem {
 	path?: string;
 	type_?: number;
 	isDeleted?: boolean;
+	isDir?: boolean;
 
 	// This the time when the file was created on the server. It is used for
 	// example for the locking mechanim or any file that's not an actual Joplin
@@ -34,14 +37,14 @@ export interface RemoteItem {
 	// exact Joplin item updated_time value.
 	jop_updated_time?: number;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- jopItem holds the decrypted Joplin item shape (NoteEntity, FolderEntity, ResourceEntity, etc.); narrowing here forces every delta consumer to discriminate
 	jopItem?: any;
 }
 
 export interface PaginatedList {
 	items: RemoteItem[];
 	hasMore: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Sync context shape varies by driver (timestamp, files cache, deltaToken, etc.); used opaquely by the file-api
 	context: any;
 }
 
@@ -53,8 +56,27 @@ export const getSupportsDeltaWithItems = (deltaResponse: PaginatedList) => {
 	return 'jopItem' in deltaResponse.items[0];
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function requestCanBeRepeated(error: any) {
+export const isLocalServer = (url: string) => {
+	const regex = /^(https?:\/\/)?(localhost|127(?:\.\d{1,3}){3}|\[::1\])(?::\d{1,5})?(\/.*)?$/i;
+	return regex.test(url);
+};
+
+// The enhanced basic delta algorithm detects incoming changes based on both timestamp increases and decreases, which resolves issues where an external
+// service is syncing to the sync target directory at the same time as Joplin. Change detection is still limited by the precision of the modified timestamp
+// of the filesystem in use, but at worst this would mean that if 2 Joplin clients synced a conflicting change to the same note within 2 seconds, the incoming
+// change may get ignored (but this is a limitation of the normal basic algorithm as well). However, with the enhanced algorithm, the timing of syncs made by
+// an external sync service are irrelevant, providing the service is set to sync the modified time of files it syncs
+export const enableEnhancedBasicDeltaAlgorithm = () => {
+	if (Setting.value('sync.target') === SyncTargetRegistry.nameToId('filesystem')) {
+		return true;
+	} else if (Setting.value('sync.target') === SyncTargetRegistry.nameToId('webdav')) {
+		return isLocalServer(Setting.value('sync.6.path'));
+	} else {
+		return false;
+	}
+};
+
+function requestCanBeRepeated(error: { code?: string | number } | null) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
 
 	// Unauthorized/forbidden error - means username or password is incorrect or other
@@ -63,6 +85,9 @@ function requestCanBeRepeated(error: any) {
 
 	// The target is explicitly rejecting the item so repeating wouldn't make a difference.
 	if (errorCode === 'rejectedByTarget' || errorCode === 'isReadOnly') return false;
+
+	// The target doesn't support this route
+	if (errorCode === 'methodNotSupported') return false;
 
 	// We don't repeat failSafe errors because it's an indication of an issue at the
 	// server-level issue which usually cannot be fixed by repeating the request.
@@ -73,8 +98,7 @@ function requestCanBeRepeated(error: any) {
 	return true;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function tryAndRepeat(fn: Function, count: number) {
+async function tryAndRepeat<T>(fn: ()=> Promise<T> | T, count: number): Promise<T> {
 	let retryCount = 0;
 
 	// Don't use internal fetch retry mechanim since we
@@ -102,6 +126,7 @@ async function tryAndRepeat(fn: Function, count: number) {
 
 export interface DeltaOptions {
 	allItemIdsHandler(): Promise<string[]>;
+	allItemMetadataHandler(): Promise<Map<string, RemoteItemMetadata>>;
 	logger?: LoggerWrapper;
 	wipeOutFailSafe: boolean;
 }
@@ -124,6 +149,13 @@ export interface PutOptions {
 	source?: string;
 }
 
+export interface ListOptions {
+	includeHidden?: boolean;
+	includeDirs?: boolean;
+	syncItemsOnly?: boolean;
+	context?: { cursor?: string } | null;
+}
+
 export interface ItemStat {
 	path: string;
 	updated_time: number;
@@ -132,9 +164,8 @@ export interface ItemStat {
 
 class FileApi {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private baseDir_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private baseDir_: string | (()=> string);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each FileApi driver (joplinServer, onedrive, webdav, memory, local) has a distinct structural shape; narrowing here would force a union across many implementations
 	private driver_: any;
 	private logger_: Logger = new Logger();
 	private syncTargetId_: number = null;
@@ -145,8 +176,8 @@ class FileApi {
 	private remoteDateMutex_ = new Mutex();
 	private initialized_ = false;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-	public constructor(baseDir: string | Function, driver: any) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See driver_ above
+	public constructor(baseDir: string | (()=> string), driver: any) {
 		this.baseDir_ = baseDir;
 		this.driver_ = driver;
 		this.driver_.fileApi_ = this;
@@ -162,6 +193,12 @@ class FileApi {
 	// probably only be supported by Joplin Server.
 	public get supportsMultiPut(): boolean {
 		return !!this.driver().supportsMultiPut;
+	}
+
+	// This can be true if the driver implements deleting multiple items at once. Will
+	// probably only be supported by Joplin Server.
+	public get supportsMultiDelete(): boolean {
+		return !!this.driver().supportsMultiDelete;
 	}
 
 	// This can be true when the sync target timestamps (updated_time) provided
@@ -301,8 +338,7 @@ class FileApi {
 	}
 
 	// DRIVER MUST RETURN PATHS RELATIVE TO `path`
-	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async list(path = '', options: any = null): Promise<PaginatedList> {
+	public async list(path = '', options: ListOptions = null): Promise<PaginatedList> {
 		if (!options) options = {};
 		if (!('includeHidden' in options)) options.includeHidden = false;
 		if (!('context' in options)) options.context = null;
@@ -322,13 +358,11 @@ class FileApi {
 		}
 
 		if (!options.includeDirs) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			result.items = result.items.filter((f: any) => !f.isDir);
+			result.items = result.items.filter(f => !f.isDir);
 		}
 
 		if (options.syncItemsOnly) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			result.items = result.items.filter((f: any) => !f.isDir && BaseItem.isSystemPath(f.path));
+			result.items = result.items.filter(f => !f.isDir && BaseItem.isSystemPath(f.path));
 		}
 
 		return result;
@@ -364,8 +398,7 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.get(this.fullPath(path), options), this.requestRepeatCount());
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async put(path: string, content: any, options: PutOptions = null) {
+	public async put(path: string, content: string | Buffer | null, options: PutOptions = null) {
 		logger.debug(`put ${this.fullPath(path)}`, options);
 
 		if (options && options.source === 'file') {
@@ -375,10 +408,14 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.put(this.fullPath(path), content, options), this.requestRepeatCount());
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async multiPut(items: MultiPutItem[], options: any = null) {
+	public async multiPut(items: MultiPutItem[], options: { source?: string } = null) {
 		if (!this.driver().supportsMultiPut) throw new Error('Multi PUT not supported');
 		return tryAndRepeat(() => this.driver_.multiPut(items, options), this.requestRepeatCount());
+	}
+
+	public async multiDelete(paths: string[]) {
+		if (!this.supportsMultiDelete) throw new Error('Multi DELETE not supported');
+		return tryAndRepeat(() => this.driver_.multiDelete(paths), this.requestRepeatCount());
 	}
 
 	public delete(path: string) {
@@ -423,10 +460,16 @@ class FileApi {
 
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function basicDeltaContextFromOptions_(options: any) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = {
+interface BasicDeltaContext {
+	timestamp: number;
+	filesAtTimestamp: string[];
+	statsCache: ItemStat[] | null;
+	statIdsCache: string[] | null;
+	deletedItemsProcessed: boolean;
+}
+
+function basicDeltaContextFromOptions_(options: DeltaOptions & { context?: Partial<BasicDeltaContext> }) {
+	const output: BasicDeltaContext = {
 		timestamp: 0,
 		filesAtTimestamp: [],
 		statsCache: null,
@@ -450,10 +493,10 @@ function basicDeltaContextFromOptions_(options: any) {
 // This is the basic delta algorithm, which can be used in case the cloud service does not have
 // a built-in delta API. OneDrive and Dropbox have one for example, but Nextcloud and obviously
 // the file system do not.
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOptions) {
+async function basicDelta(path: string, getDirStatFn: (path: string)=> ItemStat[] | Promise<ItemStat[]>, options: DeltaOptions) {
 	const outputLimit = 50;
-	const itemIds = await options.allItemIdsHandler();
+	const itemIds: string[] = await options.allItemIdsHandler();
+
 	if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
 
 	const logger = options && options.logger ? options.logger : new Logger();
@@ -476,16 +519,13 @@ async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOp
 	// Stats are cached until all items have been processed (until hasMore is false)
 	if (newContext.statsCache === null) {
 		newContext.statsCache = await getDirStatFn(path);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		newContext.statsCache.sort((a: any, b: any) => {
-			return a.updated_time - b.updated_time;
-		});
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		newContext.statIdsCache = newContext.statsCache.filter((item: any) => BaseItem.isSystemPath(item.path)).map((item: any) => BaseItem.pathToId(item.path));
+		newContext.statsCache.sort((a, b) => a.updated_time - b.updated_time);
+		newContext.statIdsCache = newContext.statsCache.filter(item => BaseItem.isSystemPath(item.path)).map(item => BaseItem.pathToId(item.path));
 		newContext.statIdsCache.sort(); // Items must be sorted to use binary search below
 	}
 
-	let output = [];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mixed array of ItemStat (sync items) and { path; isDeleted } (deleted items) returned to the sync engine
+	let output: any[] = [];
 
 	const updateReport = {
 		timestamp: context.timestamp,
@@ -493,6 +533,12 @@ async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOp
 		newer: 0,
 		equal: 0,
 	};
+
+	let remoteItemMetadata: Map<string, RemoteItemMetadata>;
+
+	if (enableEnhancedBasicDeltaAlgorithm()) {
+		remoteItemMetadata = await options.allItemMetadataHandler();
+	}
 
 	// Find out which files have been changed since the last time. Note that we keep
 	// both the timestamp of the most recent change, *and* the items that exactly match
@@ -507,33 +553,72 @@ async function basicDelta(path: string, getDirStatFn: Function, options: DeltaOp
 		const stat = newContext.statsCache[i];
 
 		if (stat.isDir) continue;
+		if (!BaseItem.isSystemPath(stat.path)) continue;
 
-		if (stat.updated_time < context.timestamp) {
-			updateReport.older++;
-			continue;
-		}
+		let lastRemoteItemUpdatedTime = 0;
+		const itemId = BaseItem.pathToId(stat.path);
 
-		// Special case for items that exactly match the timestamp
-		if (stat.updated_time === context.timestamp) {
-			if (context.filesAtTimestamp.indexOf(stat.path) >= 0) {
-				updateReport.equal++;
+		if (enableEnhancedBasicDeltaAlgorithm()) {
+			const metadata = remoteItemMetadata.get(itemId);
+
+			if (metadata) {
+				// Check if update is needed
+				lastRemoteItemUpdatedTime = metadata.updated_time;
+
+				if (stat.updated_time === lastRemoteItemUpdatedTime) {
+					// Item has already been synced and is up to date
+					updateReport.equal++;
+					continue;
+				}
+
+				if (stat.updated_time < lastRemoteItemUpdatedTime) {
+					updateReport.older++;
+				}
+
+				if (stat.updated_time > lastRemoteItemUpdatedTime) {
+					updateReport.newer++;
+				}
+			} else {
+				// Item needs to be created locally
+				updateReport.newer++;
+			}
+
+			output.push(stat);
+		} else {
+			if (stat.updated_time < context.timestamp) {
+				updateReport.older++;
 				continue;
 			}
-		}
 
-		if (stat.updated_time > newContext.timestamp) {
-			newContext.timestamp = stat.updated_time;
-			newContext.filesAtTimestamp = [];
-			updateReport.newer++;
-		}
+			// Special case for items that exactly match the timestamp
+			if (stat.updated_time === context.timestamp) {
+				if (context.filesAtTimestamp.indexOf(stat.path) >= 0) {
+					updateReport.equal++;
+					continue;
+				}
+			}
 
-		newContext.filesAtTimestamp.push(stat.path);
-		output.push(stat);
+			if (stat.updated_time > newContext.timestamp) {
+				newContext.timestamp = stat.updated_time;
+				newContext.filesAtTimestamp = [];
+				updateReport.newer++;
+			}
+
+			newContext.filesAtTimestamp.push(stat.path);
+			output.push(stat);
+		}
 
 		if (output.length >= outputLimit) break;
 	}
 
-	logger.info(`BasicDelta: Report: ${JSON.stringify(updateReport)}`);
+	if (enableEnhancedBasicDeltaAlgorithm()) {
+		// context.timestamp and filesAtTimestamp are not required when syncing based on any timestamp changes, but should be updated for backwards compatibility
+		newContext.timestamp = time.unixMs();
+		newContext.filesAtTimestamp = [];
+		logger.info(`BasicDelta (enhanced): Report: ${JSON.stringify(updateReport)}`);
+	} else {
+		logger.info(`BasicDelta: Report: ${JSON.stringify(updateReport)}`);
+	}
 
 	if (!newContext.deletedItemsProcessed) {
 		// Find out which items have been deleted on the sync target by comparing the items

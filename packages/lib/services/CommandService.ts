@@ -3,27 +3,34 @@ import eventManager, { EventListenerCallback, EventName } from '../eventManager'
 import BaseService from './BaseService';
 import shim from '../shim';
 import WhenClause from './WhenClause';
-import type { WhenClauseContext } from './commands/stateToWhenClauseContext';
+import type { WhenClauseContext, WhenClauseContextOptions } from './commands/stateToWhenClauseContext';
+import { Dispatch } from 'redux';
 
 type LabelFunction = ()=> string;
 type EnabledCondition = string;
+type VisibleCondition = string;
+
+export type MenuItemRole = 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'toggleSpellChecker' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'showSubstitutions' | 'toggleSmartQuotes' | 'toggleSmartDashes' | 'toggleTextReplacement' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'shareMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'showAllTabs' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu';
 
 export interface CommandContext {
 	// The state may also be of type "AppState" (used by the desktop app), which inherits from "State" (used by all apps)
 	state: State;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 }
 
 export interface CommandRuntime {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Each command has its own args/return shape; tightening forces a generic across every CommandRuntime declaration
 	execute(context: CommandContext, ...args: any[]): Promise<any | void>;
 	enabledCondition?: EnabledCondition;
+	// Used for toolbar button visibility state
+	visibleCondition?: VisibleCondition;
 	// Used for the (optional) toolbar button title
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- State is lib's State for cli but app-desktop runtimes type this as AppState; narrowing here breaks downstream contravariance
 	mapStateToTitle?(state: any): string;
 	// Used to break ties when commands are registered by different components.
-	getPriority?(state: State): number;
+	// `state` should be the main app state. `targetWindowId` should be the window ID
+	// the command should run in, or `null` for any window.
+	getPriority?(state: State, targetWindowId: string|null): number;
 }
 
 export interface CommandDeclaration {
@@ -52,7 +59,7 @@ export interface CommandDeclaration {
 	// https://www.electronjs.org/docs/api/menu-item#new-menuitemoptions
 	// Note that due to a bug in Electron, menu items with a role cannot
 	// be disabled.
-	role?: string;
+	role?: MenuItemRole;
 }
 
 export interface Command {
@@ -74,12 +81,8 @@ interface Commands {
 	[key: string]: Command;
 }
 
-interface ReduxStore {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	dispatch(action: any): void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	getState(): any;
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Tests and platforms pass partial stores; the desktop/mobile store also exposes additional methods (subscribe, etc.) we don't use here
+type ReduxStore = any;
 
 interface Utils {
 	store: ReduxStore;
@@ -106,6 +109,11 @@ export interface RegisteredRuntime {
 	deregister: ()=> void;
 }
 
+export interface ExecuteInWindowOptions {
+	windowId: string|null; // null -> active window
+	args: unknown[];
+}
+
 export default class CommandService extends BaseService {
 
 	private static instance_: CommandService;
@@ -117,14 +125,13 @@ export default class CommandService extends BaseService {
 	}
 
 	private commands_: Commands = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 	private store_: ReduxStore;
 	private devMode_: boolean;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- Concrete state-to-context function is parametrised over per-app state (AppState in desktop/mobile, State in cli); typing too narrowly here breaks derived classes
 	private stateToWhenClauseContext_: Function;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-	public initialize(store: any, devMode: boolean, stateToWhenClauseContext: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- See stateToWhenClauseContext_
+	public initialize(store: ReduxStore, devMode: boolean, stateToWhenClauseContext: Function) {
 		utils.store = store;
 		this.store_ = store;
 		this.devMode_ = devMode;
@@ -209,6 +216,10 @@ export default class CommandService extends BaseService {
 		};
 	}
 
+	public unregisterDeclaration(name: string) {
+		delete this.commands_[name];
+	}
+
 	public registerRuntime(commandName: string, runtime: CommandRuntime, allowMultiple = false): RegisteredRuntime {
 		if (typeof commandName !== 'string') throw new Error(`Command name must be a string. Got: ${JSON.stringify(commandName)}`);
 
@@ -257,7 +268,7 @@ export default class CommandService extends BaseService {
 		}
 	}
 
-	public componentRegisterCommands<ComponentType>(component: ComponentType, commands: ComponentCommandSpec<ComponentType>[], allowMultiple?: boolean) {
+	public componentRegisterCommands<ComponentType>(component: ComponentType, commands: ComponentCommandSpec<ComponentType>[], allowMultiple?: boolean): RegisteredRuntime {
 		const runtimeHandles: RegisteredRuntime[] = [];
 		for (const command of commands) {
 			runtimeHandles.push(
@@ -273,7 +284,7 @@ export default class CommandService extends BaseService {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ComponentCommandSpec is parametrised per-component (Note, Folder, etc.); the runtime here only needs the declaration name
 	public componentUnregisterCommands(commands: ComponentCommandSpec<any>[]) {
 		for (const command of commands) {
 			CommandService.instance().unregisterRuntime(command.declaration.name);
@@ -289,21 +300,20 @@ export default class CommandService extends BaseService {
 	private createContext(): CommandContext {
 		return {
 			state: this.store_.getState(),
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			dispatch: (action: any) => {
-				this.store_.dispatch(action);
+			dispatch: (action: unknown) => {
+				return this.store_.dispatch(action);
 			},
 		};
 	}
 
-	private getRuntime(command: Command) {
+	private getRuntime(command: Command, targetWindowId: string|null = null) {
 		if (!Array.isArray(command.runtime)) return command.runtime;
 		if (!command.runtime.length) return null;
 
 		let bestRuntime = null;
 		let bestRuntimeScore = -1;
 		for (const runtime of command.runtime) {
-			const score = runtime.getPriority?.(this.store_.getState()) ?? 0;
+			const score = runtime.getPriority?.(this.store_.getState(), targetWindowId) ?? 0;
 			if (score >= bestRuntimeScore) {
 				bestRuntime = runtime;
 				bestRuntimeScore = score;
@@ -312,29 +322,32 @@ export default class CommandService extends BaseService {
 		return bestRuntime;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Args/return shape varies per command, see CommandRuntime.execute
 	public async execute(commandName: string, ...args: any[]): Promise<any | void> {
+		return this.executeInWindow(commandName, { windowId: null, args });
+	}
+
+	public async executeInWindow(commandName: string, options: ExecuteInWindowOptions): Promise<unknown | void> {
 		const command = this.commandByName(commandName);
 		// Some commands such as "showModalMessage" can be executed many
 		// times per seconds, so we should only display this message in
 		// debug mode.
-		if (commandName !== 'showModalMessage') this.logger().debug('CommandService::execute:', commandName, args);
+		if (commandName !== 'showModalMessage') this.logger().debug('CommandService::execute:', commandName, options.args);
 
-		const runtime = this.getRuntime(command);
+		const runtime = this.getRuntime(command, options.windowId);
 		if (!runtime) throw new Error(`Cannot execute a command without a runtime: ${commandName}`);
 
-		return runtime.execute(this.createContext(), ...args);
+		return runtime.execute(this.createContext(), ...options.args);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public scheduleExecute(commandName: string, args: any) {
+	public scheduleExecute(commandName: string, args: unknown) {
 		shim.setTimeout(() => {
 			void this.execute(commandName, args);
 		}, 10);
 	}
 
-	public currentWhenClauseContext(): WhenClauseContext {
-		return this.stateToWhenClauseContext_(this.store_.getState());
+	public currentWhenClauseContext(options: WhenClauseContextOptions|null = null): WhenClauseContext {
+		return this.stateToWhenClauseContext_(this.store_.getState(), options);
 	}
 
 	public isPublic(commandName: string) {
@@ -344,7 +357,7 @@ export default class CommandService extends BaseService {
 	// When looping on commands and checking their enabled state, the whenClauseContext
 	// should be specified (created using currentWhenClauseContext) to avoid having
 	// to re-create it on each call.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- WhenClauseContext is computed per-app and tests pass Partial<WhenClauseContext>; widening here keeps the test fixtures workable
 	public isEnabled(commandName: string, whenClauseContext: any = null): boolean {
 		const command = this.commandByName(commandName);
 		if (!command) return false;
@@ -357,10 +370,23 @@ export default class CommandService extends BaseService {
 		return exp.evaluate(whenClauseContext);
 	}
 
+	public isVisible(commandName: string, whenClauseContext: WhenClauseContext): boolean {
+		// Default to true, to avoid buttons appearing/disappearing as commands are
+		// declared and runtimes are loaded.
+		const command = this.commandByName(commandName);
+		if (!command) return true;
+		const runtime = this.getRuntime(command);
+		if (!runtime) return true;
+		if (!runtime.visibleCondition) return true;
+
+		const exp = new WhenClause(runtime.visibleCondition, this.devMode_);
+		return exp.evaluate(whenClauseContext);
+	}
+
 	// The title is dynamic and derived from the state, which is why the state is passed
 	// as an argument. Title can be used for example to display the alarm date on the
 	// "set alarm" toolbar button.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- State can be lib's State or app-desktop AppState; titles are computed per-runtime, see ReduxStore.getState above
 	public title(commandName: string, state: any = null): string {
 		const command = this.commandByName(commandName);
 		if (!command) return null;

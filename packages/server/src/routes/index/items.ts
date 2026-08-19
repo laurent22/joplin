@@ -68,7 +68,7 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 	};
 
 	const view: View = defaultView('items', 'Items');
-	view.content.itemTable = makeTableView(table),
+	view.content.itemTable = makeTableView(table);
 	view.content.postUrl = `${config().baseUrl}/items`;
 	view.cssFiles = ['index/items'];
 	return view;
@@ -76,6 +76,9 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 
 router.get('items/:id/content', async (path: SubPath, ctx: AppContext) => {
 	const itemModel = ctx.joplin.models.item();
+	const canAccess = ctx.joplin.owner.is_admin || await itemModel.userHasItem(ctx.joplin.owner.id, path.id);
+	if (!canAccess) throw new ErrorNotFound();
+
 	const item = await itemModel.loadWithContent(path.id);
 	if (!item) throw new ErrorNotFound();
 	return respondWithItemContent(ctx.response, item, item.content);

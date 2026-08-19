@@ -6,7 +6,8 @@ import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { ErrorNotFound } from '../../utils/errors';
 import { AclAction } from '../../models/BaseModel';
-import { uuidgen } from '@joplin/lib/uuid';
+import { uuidgen } from '../../utils/uuid';
+import checkCanCreateUser from '../utils/checkCanCreateUser';
 
 const router = new Router(RouteType.Api);
 
@@ -17,14 +18,13 @@ async function fetchUser(path: SubPath, ctx: AppContext): Promise<User> {
 }
 
 async function postedUserFromContext(ctx: AppContext): Promise<User> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return ctx.joplin.models.user().fromApiInput(await bodyFields<any>(ctx.req));
+	return ctx.joplin.models.user().fromApiInput(await bodyFields<Partial<User>>(ctx.req));
 }
 
 router.get('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 	const user = await fetchUser(path, ctx);
 	await ctx.joplin.models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Read, user);
-	return user;
+	return ctx.joplin.models.user().toApiOutput(user);
 });
 
 router.publicSchemas.push('api/users/:id/public_key');
@@ -44,7 +44,7 @@ router.get('api/users/:id/public_key', async (path: SubPath, ctx: AppContext) =>
 });
 
 router.post('api/users', async (_path: SubPath, ctx: AppContext) => {
-	await ctx.joplin.models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Create);
+	await checkCanCreateUser(ctx.joplin.services, ctx.joplin.models, ctx.joplin.owner);
 	const user = await postedUserFromContext(ctx);
 
 	// We set a random password because it's required, but user will have to
@@ -52,8 +52,8 @@ router.post('api/users', async (_path: SubPath, ctx: AppContext) => {
 	user.password = uuidgen();
 	user.must_set_password = 1;
 	user.email_confirmed = 0;
-	const output = await ctx.joplin.models.user().save(user);
-	return ctx.joplin.models.user().toApiOutput(output);
+	const createdUser = await ctx.joplin.models.user().save(user);
+	return ctx.joplin.models.user().toApiOutput(await ctx.joplin.models.user().load(createdUser.id));
 });
 
 router.get('api/users', async (_path: SubPath, ctx: AppContext) => {
@@ -73,8 +73,11 @@ router.del('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 
 router.patch('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 	const user = await fetchUser(path, ctx);
-	await ctx.joplin.models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Update, user);
-	const postedUser = await postedUserFromContext(ctx);
+	const postedUser = {
+		...await postedUserFromContext(ctx),
+		id: user.id,
+	};
+	await ctx.joplin.models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Update, postedUser);
 	await ctx.joplin.models.user().save({ id: user.id, ...postedUser });
 });
 

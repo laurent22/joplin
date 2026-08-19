@@ -1,11 +1,12 @@
 import BaseCommand from './base-command';
 import InteropService from '@joplin/lib/services/interop/InteropService';
-import BaseModel from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 const { cliUtils } = require('./cli-utils.js');
 import app from './app';
 import { _ } from '@joplin/lib/locale';
-import { ImportOptions } from '@joplin/lib/services/interop/types';
+import { ImportModuleOutputFormat, ImportOptions } from '@joplin/lib/services/interop/types';
 import { unique } from '@joplin/lib/array';
+import Folder from '@joplin/lib/models/Folder';
 
 class Command extends BaseCommand {
 	public override usage() {
@@ -30,16 +31,17 @@ class Command extends BaseCommand {
 		];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
-		const folder = await app().loadItem(BaseModel.TYPE_FOLDER, args.notebook);
+	public override async action(args: { path: string; 'notebook'?: string; options: { format?: string; outputFormat?: string } }) {
+		let destinationFolder = await app().loadItem(ModelType.Folder, args.notebook);
 
-		if (args.notebook && !folder) throw new Error(_('Cannot find "%s".', args.notebook));
+		if (args.notebook && !destinationFolder) throw new Error(_('Cannot find "%s".', args.notebook));
+
+		if (!destinationFolder) destinationFolder = await Folder.defaultFolder();
 
 		const importOptions: ImportOptions = {};
 		importOptions.path = args.path;
 		importOptions.format = args.options.format ? args.options.format : 'auto';
-		importOptions.destinationFolderId = folder ? folder.id : null;
+		importOptions.destinationFolderId = destinationFolder ? destinationFolder.id : null;
 
 		let lastProgress = '';
 
@@ -62,7 +64,7 @@ class Command extends BaseCommand {
 			this.stdout(s);
 		};
 
-		if (args.options.outputFormat) importOptions.outputFormat = args.options.outputFormat;
+		if (args.options.outputFormat) importOptions.outputFormat = args.options.outputFormat as ImportModuleOutputFormat;
 
 		app().gui().showConsole();
 		this.stdout(_('Importing notes...'));

@@ -1,7 +1,53 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree, expectNotThrow, createNote } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree, expectNotThrow, createNote, createFolder } from '../utils/testing/testUtils';
 import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
-import { ShareType } from '../services/database/types';
-import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept } from '../utils/testing/shareApiUtils';
+import { Change2, ChangeType, ShareType } from '../services/database/types';
+import { inviteUserToShare, shareFolderWithUser, shareWithUserAndAccept, updateItemShareId } from '../utils/testing/shareApiUtils';
+import { withWarningSilenced } from '@joplin/lib/testing/test-utils';
+
+// Goes through the process of:
+// 1. Creating two users/sessions
+// 2. Creating a share and accepting it
+// 3. Moving a note created by the share recipient in to the share
+//
+// This creates a note owned by the share recipient, but within the
+// share.
+const createShareWithNoteOwnedByRecipient = async () => {
+	const { session: session1 } = await createUserAndSession(1);
+	const { session: session2, user: user2 } = await createUserAndSession(2);
+
+	await createItemTree(session1.user_id, '', {
+		'000000000000000000000000000000F1': {
+		},
+	});
+	await createItemTree(session2.user_id, '', {
+		'000000000000000000000000000000F2': {
+			'00000000000000000000000000000001': null,
+		},
+	});
+
+	const shareRoot = await models().item().loadByJopId(session1.user_id, '000000000000000000000000000000F1');
+
+	// Note should initially be owned by user 2
+	let note = await models().item().loadByJopId(session2.user_id, '00000000000000000000000000000001');
+	expect(note.owner_id).toBe(session2.user_id);
+
+	const { share, shareUser } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, shareRoot);
+
+	await updateItemShareId(session1, shareRoot.id, share.id);
+	await models().share().updateSharedItems3();
+
+	// Changing the note's share ID and parent should not change the owner ID
+	note = await updateItemShareId(session2, note.id, share.id);
+	note = await models().item().saveForUser(session1.user_id, {
+		...note,
+		jop_parent_id: '000000000000000000000000000000F1',
+	});
+
+	await models().share().updateSharedItems3();
+	expect(note.owner_id).toBe(session2.user_id);
+
+	return { share, shareUser, note, session1, session2 };
+};
 
 describe('ShareModel', () => {
 
@@ -98,6 +144,29 @@ describe('ShareModel', () => {
 		expect(share1.id).toBe(share2.id);
 	});
 
+	test('should not reuse a disabled user share when publishing a shared note', async () => {
+		const { shareUser, note, session1, session2 } = await createShareWithNoteOwnedByRecipient();
+		const user1 = await models().user().load(session1.user_id);
+		const user2 = await models().user().load(session2.user_id);
+
+		const user2Share = await models().share().shareNote(user2, note.jop_id, '', false);
+		expect(user2Share.owner_id).toBe(user2.id);
+
+		await models().shareUser().delete(shareUser.id);
+		await models().user().save({
+			id: user2.id,
+			enabled: 0,
+		});
+		await models().share().updateSharedItems3();
+
+		const updatedNote = await models().item().load(note.id);
+		expect(updatedNote.owner_id).toBe(user1.id);
+
+		const user1Share = await models().share().shareNote(user1, note.jop_id, '', false);
+		expect(user1Share.id).not.toBe(user2Share.id);
+		expect(user1Share.owner_id).toBe(user1.id);
+	});
+
 	test('should delete a note that has been shared', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 
@@ -189,4 +258,258 @@ describe('ShareModel', () => {
 		expect(await models().share().itemCountByShareId(share.id)).toBe(3);
 	});
 
+	test('should be possible to run createSharedFolderUserItems multiple times concurrently', async () => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+		const { user: user3 } = await createUserAndSession(3);
+
+		const { share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+				'00000000000000000000000000000002': null,
+				'00000000000000000000000000000003': null,
+			},
+		});
+
+		expect(await models().userItem().byUserId(user3.id)).toHaveLength(0);
+		await Promise.all([
+			models().share().createSharedFolderUserItems(share.id, user3.id),
+			models().share().createSharedFolderUserItems(share.id, user3.id),
+			models().share().createSharedFolderUserItems(share.id, user3.id),
+		]);
+		expect(await models().userItem().byUserId(user3.id)).toHaveLength(4);
+	});
+
+	test.each([
+		{ alsoUnshare: false, label: '' },
+		{ alsoUnshare: true, label: 'and the item is also unshared' },
+	])('should delete UserItem records when a user no longer has access to a share $label', async ({ alsoUnshare }) => {
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2, user: user2 } = await createUserAndSession(2);
+
+		const getUser2UserItems = () => models().userItem().byUserId(user2.id);
+		expect(await getUser2UserItems()).toHaveLength(0);
+
+		await createItemTree(session1.user_id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+		const shareRoot = await models().item().loadByJopId(session1.user_id, '000000000000000000000000000000F1');
+		const note = await models().item().loadByJopId(session1.user_id, '00000000000000000000000000000001');
+		expect(shareRoot).toBeTruthy();
+
+		const { share, shareUser } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, shareRoot);
+
+		await updateItemShareId(session1, shareRoot.id, share.id);
+		await updateItemShareId(session1, note.id, share.id);
+		await models().share().updateSharedItems3();
+
+		// Should have shared successfully:
+		expect(await getUser2UserItems()).toHaveLength(2);
+
+		// Removing the user from the share should delete the UserItems
+		await models().shareUser().delete(shareUser.id);
+		expect(await getUser2UserItems()).toHaveLength(0);
+
+		// Simulate a race condition by restoring one of the user items:
+		await models().userItem().add(user2.id, note.id);
+		expect(await getUser2UserItems()).toHaveLength(1);
+
+		if (alsoUnshare) {
+			await updateItemShareId(session1, note.id, '');
+		}
+
+		// The extra UserItem should be removed when processing the share's changes:
+		await withWarningSilenced(/Deleting unexpected userItem for user/, async () => {
+			await models().share().updateSharedItems3();
+		});
+		expect(await getUser2UserItems()).toHaveLength(0);
+	});
+
+	test.each([
+		{ deleteShare: false, label: '' },
+		// Deleting the share means that the maintenance task can't use share.owner_id to
+		// determine the new owner for the item.
+		{ deleteShare: true, label: 'and the share is deleted' },
+	])('should update owner_id when the original owner no longer has access $label', async ({ deleteShare }) => {
+		const { share, shareUser, note, session1, session2 } = await createShareWithNoteOwnedByRecipient();
+		expect(note.owner_id).toBe(session2.user_id);
+
+		// Remove session2.user_id from the share either by deleting the entire share or
+		// by removing the shareUser.
+		if (deleteShare) {
+			await models().share().delete(share.id);
+		} else {
+			await models().shareUser().delete(shareUser.id);
+		}
+		await models().share().updateSharedItems3();
+
+		const updatedNote = await models().item().load(note.id);
+		// The owner_id should be updated
+		expect(updatedNote.owner_id).toBe(session1.user_id);
+		// ...but it should still be part of the share.
+		expect(updatedNote.jop_share_id).toBe(share.id);
+	});
+
+
+
+
+
+
+
+
+	test('should create a published folder share', async () => {
+		const { user, session } = await createUserAndSession(1);
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Folder' });
+
+		const share = await models().share().sharePublishedFolder(user, '000000000000000000000000000000F1');
+
+		expect(share.type).toBe(ShareType.PublishedFolder);
+		expect(share.folder_id).toBe('000000000000000000000000000000F1');
+		expect(share.owner_id).toBe(user.id);
+	});
+
+	test('should return the same share if the folder is already published', async () => {
+		const { user, session } = await createUserAndSession(1);
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Folder' });
+
+		const share1 = await models().share().sharePublishedFolder(user, '000000000000000000000000000000F1');
+		const share2 = await models().share().sharePublishedFolder(user, '000000000000000000000000000000F1');
+
+		expect(share1.id).toBe(share2.id);
+	});
+
+	test('should throw when publishing a folder that does not exist', async () => {
+		const { user } = await createUserAndSession(1);
+		const error = await checkThrowAsync(async () => models().share().sharePublishedFolder(user, '000000000000000000000000000000F9'));
+		expect(error instanceof ErrorNotFound).toBe(true);
+	});
+
+	test('should not mix up a published folder share with a regular folder share', async () => {
+		const { user, session } = await createUserAndSession(1);
+		await createFolder(session.id, { id: '000000000000000000000000000000F1', title: 'My Folder' });
+
+		const publishedShare = await models().share().sharePublishedFolder(user, '000000000000000000000000000000F1');
+		const folderItem = await models().item().loadByJopId(user.id, '000000000000000000000000000000F1');
+
+		const folderTypeResult = await models().share().byUserAndItemId(user.id, folderItem.id, ShareType.Folder);
+		expect(folderTypeResult).toBeFalsy();
+
+		const publishedTypeResult = await models().share().byUserAndItemId(user.id, folderItem.id, ShareType.PublishedFolder);
+		expect(publishedTypeResult).toBeTruthy();
+		expect(publishedTypeResult.id).toBe(publishedShare.id);
+	});
+
+
+
+
+
+
+
+	test('should not update owner_id after unsharing if an item has been moved out of a share by the item\'s owner', async () => {
+		const { shareUser, note, session2 } = await createShareWithNoteOwnedByRecipient();
+
+		await updateItemShareId(session2, note.id, '');
+
+		// Removing session2 from the share should keep the item's owner the same
+		await models().shareUser().delete(shareUser.id);
+		await models().share().updateSharedItems3();
+
+		const updatedNote = await models().item().load(note.id);
+		expect(updatedNote.owner_id).toBe(session2.user_id);
+	});
+
+	test('should add create/delete changes when an item is moved out of a share', async () => {
+		const { note, session2, session1 } = await createShareWithNoteOwnedByRecipient();
+		await models().share().updateSharedItems3();
+
+		const greatestCounterBefore = (await models().change().all())
+			.map(c => c.counter)
+			.reduce((a, b) => Math.max(a, b));
+		const isNewChange = (change: Change2) => change.counter > greatestCounterBefore;
+
+		// Move out of the share
+		await updateItemShareId(session2, note.id, '');
+		await models().share().updateSharedItems3();
+
+		const itemChanges = (await models().change().all())
+			.filter(change => change.item_id === note.id)
+			// Exclude all changes from before the item was moved out of the share
+			.filter(isNewChange)
+			.sort((a, b) => a.counter - b.counter);
+		const changesOfType = (type: ChangeType) => itemChanges.filter(c => c.type === type);
+
+		// Should delete the item for the other share participant
+		expect(changesOfType(ChangeType.Delete)).toMatchObject([
+			{ user_id: session1.user_id },
+		]);
+		// Should not need to create the item, since it wasn't moved into a new share:
+		expect(changesOfType(ChangeType.Create)).toHaveLength(0);
+	});
+
+	// linkedNoteShareUrl: R=0, I=0, P=ε → O=N
+	test('should return null from linkedNoteShareUrl when the linked note does not exist', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		const share = await models().share().shareNote(user1, '00000000000000000000000000000001', '', false);
+		const url = await models().share().linkedNoteShareUrl(share, '00000000000000000000000000000099');
+		expect(url).toBeNull();
+	});
+
+	// linkedNoteShareUrl: R=0, I=1, P=0 → O=N
+	test('should return null from linkedNoteShareUrl when the linked note has no note share', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+				'00000000000000000000000000000002': null,
+			},
+		});
+
+		const share = await models().share().shareNote(user1, '00000000000000000000000000000001', '', false);
+		// note 2 exists but is not shared via ShareType.Note
+		const url = await models().share().linkedNoteShareUrl(share, '00000000000000000000000000000002');
+		expect(url).toBeNull();
+	});
+
+	// linkedNoteShareUrl: R=1, I=ε, P=ε → O=N
+	test('should return null from linkedNoteShareUrl when the share is recursive', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		const share = await models().share().shareNote(user1, '00000000000000000000000000000001', '', true);
+		const url = await models().share().linkedNoteShareUrl(share, '00000000000000000000000000000001');
+		expect(url).toBeNull();
+	});
+
+	// linkedNoteShareUrl: R=0, I=1, P=1 → O=U
+	test('should return a URL from linkedNoteShareUrl when the linked note is shared', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+				'00000000000000000000000000000002': null,
+			},
+		});
+
+		const share = await models().share().shareNote(user1, '00000000000000000000000000000001', '', false);
+		// note 2 is shared via ShareType.Note, making P=1 for it
+		const note2Share = await models().share().shareNote(user1, '00000000000000000000000000000002', '', false);
+		const url = await models().share().linkedNoteShareUrl(share, '00000000000000000000000000000002');
+		expect(url).toContain(`/shares/${note2Share.id}`);
+	});
 });

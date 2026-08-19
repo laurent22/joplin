@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import { PluginHtmlContents, PluginStates, ViewInfo } from '@joplin/lib/services/plugins/reducer';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
-import usePlugin from '@joplin/lib/hooks/usePlugin';
+import usePlugin from '@joplin/lib/hooks/plugins/usePlugin';
 import { DialogContentSize, DialogWebViewApi } from '../types';
 import { Button } from 'react-native-paper';
 import { themeStyle } from '@joplin/lib/theme';
@@ -109,7 +109,7 @@ const PluginDialogWebView: React.FC<Props> = props => {
 			formData = await dialogControl.getFormData();
 		}
 
-		closeWithResponse({ id: button.id, formData });
+		closeWithResponse({ id: button.id, formData: formData as Record<string, unknown> });
 		button.onClick?.();
 	}, [dialogControl, plugin, viewId, view.containerType]);
 

@@ -4,14 +4,20 @@ import SpellCheckerServiceDriverBase from '@joplin/lib/services/spellChecker/Spe
 import bridge from '../bridge';
 import Logger from '@joplin/utils/Logger';
 import { languageCodeOnly, localesFromLanguageCode } from '@joplin/lib/locale';
+import { Session } from 'electron';
 
 const logger = Logger.create('SpellCheckerServiceDriverNative');
 
 export default class SpellCheckerServiceDriverNative extends SpellCheckerServiceDriverBase {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private session(): any {
+	private session(): Session {
 		return bridge().mainWindow().webContents.session;
+	}
+
+	public initialize() {
+		// Workaround: With Electron 42 on Linux, it's necessary to initialize the spellchecker with an empty set of
+		// languages. Without this, the spellchecker ignores the default provided languages.
+		this.setLanguages([]);
 	}
 
 	public get availableLanguages(): string[] {
@@ -52,12 +58,9 @@ export default class SpellCheckerServiceDriverNative extends SpellCheckerService
 
 		// If we pass an empty array, it disables spell checking
 		// https://github.com/electron/electron/issues/25228
-		if (effectiveLanguages.length === 0) {
-			this.session().setSpellCheckerLanguages([]);
-			return;
-		}
 
 		this.session().setSpellCheckerLanguages(effectiveLanguages);
+		this.session().setSpellCheckerEnabled(effectiveLanguages.length > 0);
 		logger.info(`Set effective languages to "${effectiveLanguages}"`);
 	}
 

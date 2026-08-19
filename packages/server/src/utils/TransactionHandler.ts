@@ -83,8 +83,23 @@ export default class TransactionHandler {
 		const isLastTransaction = this.finishTransaction(txIndex);
 		if (isLastTransaction) {
 			this.log(`Is last transaction - doing commit: ${txIndex}`);
-			await this.activeTransaction_.commit();
-			this.activeTransaction_ = null;
+			try {
+				await this.activeTransaction_.commit();
+			} catch (error) {
+				// If commit fails (e.g. due to statement timeout), we must
+				// rollback to clear the aborted transaction state. Otherwise
+				// the connection is returned to the pool in a broken state,
+				// causing subsequent queries to fail with "current transaction
+				// is aborted" (PostgreSQL error 25P02).
+				try {
+					await this.activeTransaction_.rollback();
+				} catch {
+					// Ignore rollback errors - connection may already be dead
+				}
+				throw error;
+			} finally {
+				this.activeTransaction_ = null;
+			}
 		}
 	}
 

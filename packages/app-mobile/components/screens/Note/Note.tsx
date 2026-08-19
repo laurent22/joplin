@@ -1,0 +1,2013 @@
+import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
+import uuid from '@joplin/lib/uuid';
+import Setting from '@joplin/lib/models/Setting';
+import shim from '@joplin/lib/shim';
+import UndoRedoService from '@joplin/lib/services/UndoRedoService';
+import NoteBodyViewer from '../../NoteBodyViewer/NoteBodyViewer';
+import checkPermissions from '../../../utils/checkPermissions';
+import NoteEditor from '../../NoteEditor/NoteEditor';
+import { EditorControl } from '../../NoteEditor/types';
+import * as React from 'react';
+import { Keyboard, View, TextInput, StyleSheet, Linking, Share, NativeSyntheticEvent, useWindowDimensions } from 'react-native';
+import { Platform, PermissionsAndroid } from 'react-native';
+import { connect } from 'react-redux';
+import Note from '@joplin/lib/models/Note';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import Resource from '@joplin/lib/models/Resource';
+import Folder from '@joplin/lib/models/Folder';
+import Clipboard from '@react-native-clipboard/clipboard';
+const md5 = require('md5');
+import BackButtonService from '../../../services/BackButtonService';
+import NavService, { OnNavigateCallback as OnNavigateCallback } from '@joplin/lib/services/NavService';
+import { ModelType } from '@joplin/lib/BaseModel';
+import { fileExtension, safeFileExtension } from '@joplin/lib/path-utils';
+import * as mimeUtils from '@joplin/lib/mime-utils';
+import ScreenHeader, { FolderPickerOptions, MenuOption, ViewToggleButtonMode } from '../../ScreenHeader';
+import NoteTagsDialog from '../NoteTagsDialog';
+import time from '@joplin/lib/time';
+import Checkbox from '../../Checkbox';
+import { _, currentLocale } from '@joplin/lib/locale';
+import { reg } from '@joplin/lib/registry';
+import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
+import { BaseScreenComponent } from '../../base-screen';
+import { themeStyle, editorFont } from '../../global-style';
+import shared, { BaseNoteScreenComponent, Props as BaseProps } from '@joplin/lib/components/shared/note-screen-shared';
+import SelectDateTimeDialog from '../../SelectDateTimeDialog';
+import ShareExtension from '../../../utils/ShareExtension.js';
+import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
+import Logger from '@joplin/utils/Logger';
+import ImageEditor from '../../NoteEditor/ImageEditor/ImageEditor';
+import promptRestoreAutosave from '../../NoteEditor/ImageEditor/promptRestoreAutosave';
+import isEditableResource from '../../NoteEditor/ImageEditor/isEditableResource';
+import { ChangeEvent as EditorChangeEvent, SelectionRangeChangeEvent, UndoRedoDepthChangeEvent } from '@joplin/editor/events';
+import { join } from 'path';
+import { Dispatch } from 'redux';
+import { RefObject, useContext } from 'react';
+import { getNoteCallbackUrl } from '@joplin/lib/callbackUrlUtils';
+import { AppState } from '../../../utils/types';
+import restoreItems from '@joplin/lib/services/trash/restoreItems';
+import { getDisplayParentTitle } from '@joplin/lib/services/trash';
+import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
+import debounce from '../../../utils/debounce';
+import { blur, focus } from '@joplin/lib/utils/focusHandler';
+import CommandService, { RegisteredRuntime } from '@joplin/lib/services/CommandService';
+import { ResourceInfo } from '../../NoteBodyViewer/hooks/useRerenderHandler';
+import getImageDimensions from '../../../utils/image/getImageDimensions';
+import resizeImage from '../../../utils/image/resizeImage';
+import { CameraResult } from '../../CameraView/types';
+import { DialogContext, DialogControl } from '../../DialogManager';
+import { CommandRuntimeProps, NoteViewerMode, PickerResponse } from './types';
+import commands from './commands';
+import { AttachFileAction, AttachFileOptions } from './commands/attachFile';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginUserWebView from '../../plugins/dialogs/PluginUserWebView';
+import getShownPluginEditorView from '@joplin/lib/services/plugins/utils/getShownPluginEditorView';
+import getActivePluginEditorView from '@joplin/lib/services/plugins/utils/getActivePluginEditorView';
+import EditorPluginHandler from '@joplin/lib/services/plugins/EditorPluginHandler';
+import AudioRecordingBanner from '../../voiceTyping/AudioRecordingBanner';
+import SpeechToTextBanner from '../../voiceTyping/SpeechToTextBanner';
+import CameraView from '../../CameraView/CameraView';
+import ShareNoteDialog from '../ShareNoteDialog';
+import stateToWhenClauseContext from '../../../services/commands/stateToWhenClauseContext';
+import { defaultWindowId, HighlightedWord } from '@joplin/lib/reducer';
+import useVisiblePluginEditorViewIds from '@joplin/lib/hooks/plugins/useVisiblePluginEditorViewIds';
+import { SelectionRange } from '../../../contentScripts/markdownEditorBundle/types';
+import { EditorType } from '../../NoteEditor/types';
+import { IconButton } from 'react-native-paper';
+import { writeTextToCacheFile } from '../../../utils/ShareUtils';
+import shareFile from '../../../utils/shareFile';
+import NotePositionService from '@joplin/lib/services/NotePositionService';
+import useKeyboardState from '../../../utils/hooks/useKeyboardState';
+import VoiceTyping from '../../../services/voiceTyping/VoiceTyping';
+import useDebounced from '../../../utils/hooks/useDebounced';
+import { Second } from '@joplin/utils/time';
+import TextWrapCalculator from '../Notes/TextWrapCalculator';
+import SearchEngine from '@joplin/lib/services/search/SearchEngine';
+import { ALL_NOTES_FILTER_ID } from '@joplin/lib/reserved-ids';
+import { MenuOptionStyle, MenuOptionButton } from '../../BottomDrawerMenu';
+
+const emptyArray: never[] = [];
+
+const logger = Logger.create('screens/Note');
+
+interface InsertTextOptions {
+	newLine?: boolean;
+}
+
+interface NoteNavigation {
+	// Arguments passed to the NAV_GO action
+	state: {
+		newNoteAttachFileAction?: AttachFileAction;
+	};
+}
+
+interface Props extends BaseProps {
+	windowId: string;
+	provisionalNoteIds: string[];
+	navigation: NoteNavigation;
+	dispatch: Dispatch;
+	noteId: string;
+	editorType: EditorType;
+	useEditorBeta: boolean;
+	plugins: PluginStates;
+	themeId: number;
+	editorFontSize: number;
+	editorFont: number; // e.g. Setting.FONT_MENLO
+	viewerFontSize: number;
+	showSideMenu: boolean;
+	searchQuery: string;
+	ftsEnabled: number;
+	highlightedWords: HighlightedWord[];
+	noteHash: string;
+	toolbarEnabled: boolean;
+	pluginHtmlContents: PluginHtmlContents;
+	editorNoteReloadTimeRequest: number;
+	canPublish: boolean;
+	noteVisiblePanes: string[];
+}
+
+interface ComponentProps extends Props {
+	dialogs: DialogControl;
+	visibleEditorPluginIds: string[];
+	lowVerticalSpace: boolean;
+}
+
+interface State {
+	note: NoteEntity;
+	mode: NoteViewerMode;
+	readOnly: boolean;
+	searchVisible: boolean;
+	folder: FolderEntity|null;
+	lastSavedNote: NoteEntity | null;
+	isLoading: boolean;
+	titleTextInputHeight: number;
+	alarmDialogShown: boolean;
+	heightBumpView: number;
+	noteTagDialogShown: boolean;
+	publishDialogShown: boolean;
+	fromShare: boolean;
+	showCamera: boolean;
+	showImageEditor: boolean;
+	showAudioRecorder: boolean;
+	imageEditorResource: ResourceEntity;
+	imageEditorResourceFilepath: string;
+	noteResources: Record<string, ResourceInfo>;
+	newAndNoTitleChangeNoteId: boolean|null;
+	noteLastLoadTime: number;
+	reloadInProgress: boolean;
+
+	undoRedoButtonState: {
+		canUndo: boolean;
+		canRedo: boolean;
+	};
+
+	showSpeechToTextDialog: boolean;
+	multiline: boolean;
+	showMultilineToggle: boolean | null;
+	titleContainerWidth: number;
+}
+
+type ScrollEventSlice = { fraction: number };
+
+class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> implements BaseNoteScreenComponent<State> {
+	// This isn't in this.state because we don't want changing scroll to trigger
+	// a re-render.
+	private lastBodyScroll: number|undefined = undefined;
+
+	private saveActionQueues_: Record<string, AsyncActionQueue>;
+	private doFocusUpdate_: boolean;
+	private styles_: Record<string, ReturnType<typeof StyleSheet.create>>;
+	private editorRef: RefObject<EditorControl>;
+	private titleTextFieldRef: RefObject<TextInput>;
+	private navHandler: OnNavigateCallback;
+	private backHandler: ()=> Promise<boolean>;
+	private undoRedoService_: UndoRedoService;
+	private noteTagDialog_closeRequested: ()=> void;
+	private refreshResource: (resource: ResourceEntity, noteBody?: string)=> Promise<void>;
+	private selection: SelectionRange;
+	private menuOptionsCache_: Record<string, MenuOption[]>;
+	private focusUpdateIID_: ReturnType<typeof setTimeout> | null;
+	private folderPickerOptions_: FolderPickerOptions;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- dialogbox is the react-native-dialogbox ref; the library ships no types
+	public dialogbox: any;
+	private commandRegistration_: RegisteredRuntime|null = null;
+	private editorPluginHandler_ = new EditorPluginHandler(PluginService.instance(), saveEvent => {
+		return shared.noteComponent_change(this, 'body', saveEvent.body);
+	});
+	private refreshKey: number | undefined;
+	private reloadInProgress_ = false;
+
+	public static navigationOptions(): { header: null } {
+		return { header: null };
+	}
+
+	public constructor(props: ComponentProps) {
+		super(props);
+
+		const initialMode = props.noteVisiblePanes?.includes('editor') ? 'edit' : 'view';
+
+		this.state = {
+			note: Note.new(),
+			mode: initialMode,
+			readOnly: false,
+			folder: null,
+			lastSavedNote: null,
+			isLoading: true,
+			titleTextInputHeight: 20,
+			alarmDialogShown: false,
+			heightBumpView: 0,
+			noteTagDialogShown: false,
+			publishDialogShown: false,
+			fromShare: false,
+			showCamera: false,
+			showImageEditor: false,
+			showAudioRecorder: false,
+			searchVisible: false,
+			imageEditorResource: null,
+			noteResources: {},
+			imageEditorResourceFilepath: null,
+			newAndNoTitleChangeNoteId: null,
+			noteLastLoadTime: Date.now(),
+			reloadInProgress: false,
+
+			undoRedoButtonState: {
+				canUndo: false,
+				canRedo: false,
+			},
+
+			showSpeechToTextDialog: false,
+			multiline: false,
+			showMultilineToggle: null,
+			titleContainerWidth: 0,
+		};
+
+		const initialScroll = NotePositionService.instance().getScrollPercent(props.noteId, defaultWindowId);
+		const initialCursorLocation = NotePositionService.instance().getCursorPosition(props.noteId, defaultWindowId).markdown;
+		// Ignore the initial scroll and cursor location when there's a note hash. The editor/viewer should jump to
+		// the hash, rather than the last position.
+		if (!props.noteHash) {
+			if (initialCursorLocation) {
+				this.selection = { start: initialCursorLocation, end: initialCursorLocation };
+			}
+			this.lastBodyScroll = initialScroll;
+		}
+
+		this.titleTextFieldRef = React.createRef();
+
+		this.saveActionQueues_ = {};
+
+		// this.markdownEditorRef = React.createRef(); // For focusing the Markdown editor
+
+		this.doFocusUpdate_ = false;
+
+		this.styles_ = {};
+
+		this.editorRef = React.createRef();
+
+		const saveDialog = async () => {
+			if (this.isModified()) {
+				const buttonId = await this.props.dialogs.showMenu(
+					_('This note has been modified:'),
+					[{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }],
+				);
+
+				if (buttonId === 'cancel') return true;
+				if (buttonId === 'save') await this.saveNoteButton_press();
+			}
+
+			return false;
+		};
+
+		this.navHandler = async () => {
+			return await saveDialog();
+		};
+
+		this.backHandler = async () => {
+
+			if (this.isModified()) {
+				await this.saveNoteButton_press();
+			}
+
+			const isProvisionalNote = this.props.provisionalNoteIds.includes(this.props.noteId);
+
+			if (isProvisionalNote) {
+				return false;
+			}
+
+			if (this.state.mode === 'edit') {
+				Keyboard.dismiss();
+				await this.undoRedoService_.reset();
+			}
+
+			if (this.state.fromShare) {
+				// Note: In the past, NAV_BACK caused undesired behaviour in this case:
+				// - share to Joplin from some other app
+				// - open Joplin and open any note
+				// - go back -- with NAV_BACK this causes the app to exit rather than just showing notes
+				// This no longer seems to happen, but this case should be checked when adjusting navigation
+				// history behavior.
+				this.props.dispatch({
+					type: 'NAV_BACK',
+				});
+
+				ShareExtension.close();
+				return true;
+			}
+
+			return false;
+		};
+
+		this.noteTagDialog_closeRequested = () => {
+			this.setState({ noteTagDialogShown: false });
+		};
+
+		this.refreshResource = async (resource: ResourceEntity, noteBody: string = null) => {
+			if (noteBody === null && this.state.note && this.state.note.body) noteBody = this.state.note.body;
+			if (noteBody === null) return;
+
+			const resourceIds = await Note.linkedResourceIds(noteBody);
+			if (resourceIds.indexOf(resource.id) >= 0) {
+				shared.clearResourceCache();
+				const attachedResources = await shared.attachedResources(noteBody);
+				this.setState({ noteResources: attachedResources });
+			}
+		};
+
+		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
+		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
+		this.properties_onPress = this.properties_onPress.bind(this);
+		this.revealInNotebook_onPress = this.revealInNotebook_onPress.bind(this);
+		this.showOnMap_onPress = this.showOnMap_onPress.bind(this);
+		this.onMarkForDownload = this.onMarkForDownload.bind(this);
+		this.sideMenuOptions = this.sideMenuOptions.bind(this);
+		this.folderPickerOptions_valueChanged = this.folderPickerOptions_valueChanged.bind(this);
+		this.saveNoteButton_press = this.saveNoteButton_press.bind(this);
+		this.onAlarmDialogAccept = this.onAlarmDialogAccept.bind(this);
+		this.onAlarmDialogReject = this.onAlarmDialogReject.bind(this);
+		this.todoCheckbox_change = this.todoCheckbox_change.bind(this);
+		this.title_changeText = this.title_changeText.bind(this);
+		this.undoRedoService_stackChange = this.undoRedoService_stackChange.bind(this);
+		this.screenHeader_undoButtonPress = this.screenHeader_undoButtonPress.bind(this);
+		this.screenHeader_redoButtonPress = this.screenHeader_redoButtonPress.bind(this);
+		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
+		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
+		this.speechToTextDialog_onText = this.speechToTextDialog_onText.bind(this);
+		this.audioRecorderDialog_onDismiss = this.audioRecorderDialog_onDismiss.bind(this);
+	}
+
+	private registerCommands() {
+		if (this.commandRegistration_) return;
+
+		const dialogs = () => this.props.dialogs;
+		this.commandRegistration_ = CommandService.instance().componentRegisterCommands<CommandRuntimeProps>(
+			{
+				attachFile: this.attachFile.bind(this),
+				hideKeyboard: () => {
+					if (this.useEditorBeta()) {
+						this.editorRef?.current?.hideKeyboard();
+					} else {
+						Keyboard.dismiss();
+					}
+				},
+				insertText: this.insertText.bind(this),
+				get dialogs() {
+					return dialogs();
+				},
+				setCameraVisible: (visible) => {
+					this.setState({ showCamera: visible });
+				},
+				setTagDialogVisible: (visible) => {
+					if (!this.state.note || !this.state.note.id) return;
+
+					this.setState({ noteTagDialogShown: visible });
+				},
+				setAudioRecorderVisible: (visible) => {
+					this.setState({ showAudioRecorder: visible });
+				},
+				getMode: () => this.state.mode,
+				setMode: (mode: 'view'|'edit') => {
+					this.setState({ mode });
+				},
+				dispatch: this.props.dispatch,
+			},
+			commands,
+			true,
+		);
+	}
+
+	private useEditorBeta(): boolean {
+		return this.props.useEditorBeta;
+	}
+
+	private onSearchVisibleChange_ = (visible: boolean) => {
+		this.setState({ searchVisible: visible });
+	};
+
+	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
+		if (this.useEditorBeta()) {
+			this.setState({ undoRedoButtonState: {
+				canUndo: !!event.undoDepth,
+				canRedo: !!event.redoDepth,
+			} });
+		}
+	}
+
+	private undoRedoService_stackChange() {
+		if (!this.useEditorBeta()) {
+			this.setState({ undoRedoButtonState: {
+				canUndo: this.undoRedoService_.canUndo,
+				canRedo: this.undoRedoService_.canRedo,
+			} });
+		}
+	}
+
+	private async undoRedo(type: 'undo'|'redo') {
+		const undoState = await this.undoRedoService_[type](this.undoState()) as { body: string } | undefined;
+		if (!undoState) return;
+
+		this.setState((state) => {
+			const newNote = { ...state.note };
+			newNote.body = undoState.body;
+			return {
+				note: newNote,
+			};
+		});
+	}
+
+	private screenHeader_undoButtonPress() {
+		if (this.useEditorBeta()) {
+			this.editorRef.current.undo();
+		} else {
+			void this.undoRedo('undo');
+		}
+	}
+
+	private screenHeader_redoButtonPress() {
+		if (this.useEditorBeta()) {
+			this.editorRef.current.redo();
+		} else {
+			void this.undoRedo('redo');
+		}
+	}
+
+	public undoState(noteBody: string = null) {
+		return {
+			body: noteBody === null ? this.state.note.body : noteBody,
+		};
+	}
+
+	private onPublishDialogClose_ = () => {
+		this.setState({
+			publishDialogShown: false,
+		});
+	};
+
+	private onPublishDialogShow_ = () => {
+		this.setState({
+			publishDialogShown: true,
+		});
+	};
+
+	public styles() {
+		const themeId = this.props.themeId;
+		const theme = themeStyle(themeId);
+
+		const cacheKey = [themeId, this.state.titleTextInputHeight].join('_');
+
+		if (this.styles_[cacheKey]) return this.styles_[cacheKey];
+		this.styles_ = {};
+
+		// TODO: Clean up these style names and nesting
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous style entries (view/text/icon styles spread together); typed split would force restructuring
+		const styles: Record<string, any> = {
+			screen: {
+				flex: 1,
+				backgroundColor: theme.backgroundColor,
+			},
+			bodyTextInput: {
+				flex: 1,
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
+
+				// Add extra space to allow scrolling past end of document, and also to fix this:
+				// https://github.com/laurent22/joplin/issues/1437
+				// 2020-04-20: removed bottom padding because it doesn't work properly in Android
+				// Instead of being inside the scrollable area, the padding is outside thus
+				// restricting the view.
+				// See https://github.com/laurent22/joplin/issues/3041#issuecomment-616267739
+				// paddingBottom: Math.round(dimensions.height / 4),
+
+				textAlignVertical: 'top',
+				color: theme.color,
+				backgroundColor: theme.backgroundColor,
+				fontSize: this.props.editorFontSize,
+				fontFamily: editorFont(this.props.editorFont),
+			},
+			noteBodyViewer: {
+				flex: 1,
+			},
+			toggleSpaceButtonContent: {
+				flex: 1,
+			},
+			checkbox: {
+				color: theme.color,
+				paddingRight: 10,
+				paddingLeft: theme.marginLeft,
+				paddingTop: 10, // Added for iOS (Not needed for Android??)
+				paddingBottom: 10, // Added for iOS (Not needed for Android??)
+			},
+			markdownButtons: {
+				borderColor: theme.dividerColor,
+				color: theme.urlColor,
+			},
+		};
+
+		styles.noteBodyViewerPreview = {
+			...styles.noteBodyViewer,
+			borderTopColor: theme.dividerColor,
+			borderTopWidth: 1,
+			borderBottomColor: theme.dividerColor,
+			borderBottomWidth: 1,
+		};
+
+		styles.titleContainer = {
+			flex: 0,
+			flexDirection: 'row',
+			flexBasis: 'auto',
+			paddingLeft: theme.marginLeft,
+			borderBottomColor: theme.dividerColor,
+			borderBottomWidth: 1,
+			maxHeight: '40%',
+		};
+
+		styles.titleContainerTodo = { ...styles.titleContainer };
+		styles.titleContainerTodo.paddingLeft = 0;
+
+		styles.titleTextInput = {
+			flex: 1,
+			marginTop: 0,
+			paddingLeft: 0,
+			color: theme.color,
+			fontWeight: 'bold',
+			fontSize: theme.fontSize,
+			paddingTop: theme.itemMarginTop, // Added for iOS (Not needed for Android??)
+			paddingBottom: theme.itemMarginBottom, // Added for iOS (Not needed for Android??)
+		};
+
+		this.styles_[cacheKey] = StyleSheet.create(styles);
+		return this.styles_[cacheKey];
+	}
+
+	public isModified() {
+		return shared.isModified(this);
+	}
+
+	public async requestGeoLocationPermissions() {
+		if (!Setting.value('trackLocation')) return;
+		if (Platform.OS === 'web') return;
+
+		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+			onRequestConfirmation: async () => {
+				const yesIndex = 0;
+				const result = await shim.showMessageBox(
+					_('Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.'),
+					{
+						buttons: [_('Yes'), _('No')],
+						title: _('Save geolocation?'),
+						cancelId: 1,
+					},
+				);
+				return result === yesIndex;
+			},
+		});
+
+		// If the user simply pressed "Deny", we don't automatically switch it off because they might accept
+		// once we show the rationale again on second try. If they press "Never again" however we switch it off.
+		// https://github.com/zoontek/react-native-permissions/issues/385#issuecomment-563132396
+		if (response === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+			reg.logger().info('Geo-location tracking has been automatically disabled');
+			Setting.setValue('trackLocation', false);
+		}
+	}
+
+	public async componentDidMount() {
+		BackButtonService.addHandler(this.backHandler);
+		NavService.addHandler(this.navHandler);
+
+		shared.clearResourceCache();
+		shared.installResourceHandling(this.refreshResource);
+
+		await shared.initState(this);
+
+		this.undoRedoService_ = new UndoRedoService();
+		this.undoRedoService_.on('stackChange', this.undoRedoService_stackChange);
+
+		// Although it is async, we don't wait for the answer so that if permission
+		// has already been granted, it doesn't slow down opening the note. If it hasn't
+		// been granted, the popup will open anyway.
+		void this.requestGeoLocationPermissions();
+
+		const action = this.props.navigation.state?.newNoteAttachFileAction;
+		if (action) {
+			setTimeout(async () => {
+				if (action === AttachFileAction.AttachDrawing) {
+					await this.drawPicture_onPress();
+				} else {
+					const options: AttachFileOptions = {
+						action: action,
+					};
+					await CommandService.instance().execute('attachFile', '', options);
+				}
+			}, 100);
+		}
+
+		await this.editorPluginHandler_.emitActivationCheck({
+			noteId: this.props.noteId,
+			parentWindowId: defaultWindowId,
+		});
+
+		setTimeout(() => {
+			this.emitEditorPluginUpdate_();
+		}, 300);
+	}
+
+	public onMarkForDownload(event: { resourceId: string }) {
+		void ResourceFetcher.instance().markForDownload(event.resourceId);
+	}
+
+	public async markAllAttachedResourcesForDownload() {
+		const resourceIds = await Note.linkedResourceIds(this.state.note.body);
+		await ResourceFetcher.instance().markForDownload(resourceIds);
+	}
+
+	public componentDidUpdate(prevProps: ComponentProps, prevState: State) {
+		if (this.doFocusUpdate_) {
+			this.doFocusUpdate_ = false;
+			this.scheduleFocusUpdate();
+		}
+
+		if (prevProps.showSideMenu !== this.props.showSideMenu && this.props.showSideMenu) {
+			this.props.dispatch({
+				type: 'NOTE_SIDE_MENU_OPTIONS_SET',
+				options: this.sideMenuOptions(),
+			});
+		}
+
+		if (prevState.isLoading !== this.state.isLoading && !this.state.isLoading) {
+			// If there's autosave data, prompt the user to restore it.
+			void promptRestoreAutosave((drawingData: string) => {
+				void this.attachNewDrawing(drawingData);
+			});
+
+			// Handle automatic resource downloading
+			if (this.state.note?.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
+				void this.markAllAttachedResourcesForDownload();
+			}
+		}
+
+		// Disable opening/closing the side menu with touch gestures
+		// when the image editor is open.
+		if (prevState.showImageEditor !== this.state.showImageEditor) {
+			this.props.dispatch({
+				type: 'SET_SIDE_MENU_TOUCH_GESTURES_DISABLED',
+				disableSideMenuGestures: this.state.showImageEditor,
+			});
+		}
+
+		if (prevState.mode !== this.state.mode) {
+			this.props.dispatch({
+				type: 'NOTE_EDITOR_VISIBLE_CHANGE',
+				visible: this.state.mode === 'edit' && !this.state.showCamera && !this.state.showImageEditor,
+			});
+		}
+
+		// Reset undo/redo button state when switching to edit mode or when switching between markdown and rich text editors, since the editor is
+		// recreated and loses its undo/redo history
+		if (this.state.mode === 'edit' && (prevState.mode !== this.state.mode || prevProps.editorType !== this.props.editorType)) {
+			this.setState({
+				undoRedoButtonState: {
+					canUndo: false,
+					canRedo: false,
+				},
+			});
+		}
+
+		if (prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) {
+			// Easier to just go back, then go to the note since
+			// the Note screen doesn't handle reloading a different note
+			const noteId = this.props.noteId;
+			const noteHash = this.props.noteHash;
+
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Note',
+				noteId: noteId,
+				noteHash: noteHash,
+			});
+		}
+
+		const editorPluginIdsChanged = this.props.visibleEditorPluginIds !== prevProps.visibleEditorPluginIds;
+		if (editorPluginIdsChanged || this.props.editorNoteReloadTimeRequest !== prevProps.editorNoteReloadTimeRequest) {
+			const { editorPlugin } = getShownPluginEditorView(this.props.plugins, this.props.windowId);
+			const explicitReloadRequired = !editorPlugin && this.props.editorNoteReloadTimeRequest > this.state.noteLastLoadTime;
+
+			if (explicitReloadRequired) {
+				this.reloadInProgress_ = true;
+				Keyboard.dismiss();
+				this.editorRef.current?.hideKeyboard();
+				blur('Note::reload', this.titleTextFieldRef.current);
+				this.setState({ reloadInProgress: true });
+				void this.reloadNoteAndUpdateRefreshKey();
+			}
+
+			if (explicitReloadRequired || (editorPlugin && editorPluginIdsChanged)) {
+				// Clear the undo / redo state, as undo / redo steps wont be in sync with the current content after the note editor has been refreshed
+				if (!this.useEditorBeta()) {
+					void this.undoRedoService_.reset();
+				}
+
+				this.setState({
+					undoRedoButtonState: {
+						canUndo: false,
+						canRedo: false,
+					},
+				});
+			}
+		}
+
+		if (prevProps.noteId && this.props.noteId && prevProps.noteId !== this.props.noteId) {
+			void this.editorPluginHandler_.emitActivationCheck({
+				noteId: this.props.noteId,
+				parentWindowId: defaultWindowId,
+			});
+		}
+
+		if (prevState.note.body !== this.state.note.body) {
+			this.emitEditorPluginUpdate_();
+		}
+
+		if (prevState.multiline !== this.state.multiline && this.titleTextFieldRef.current) {
+			focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
+		}
+	}
+
+	public componentWillUnmount() {
+		BackButtonService.removeHandler(this.backHandler);
+		NavService.removeHandler(this.navHandler);
+
+		shared.uninstallResourceHandling(this.refreshResource);
+
+		void this.saveActionQueue(this.state.note.id).processAllNow();
+
+		// It cannot theoretically be undefined, since componentDidMount should always be called before
+		// componentWillUnmount, but with React Native the impossible often becomes possible.
+		if (this.undoRedoService_) this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
+
+		this.commandRegistration_?.deregister();
+		this.commandRegistration_ = null;
+
+		this.props.dispatch({
+			type: 'SET_NOTE_EDITOR_VISIBLE',
+			visible: false,
+		});
+	}
+
+	private async reloadNoteAndUpdateRefreshKey() {
+		await shared.reloadNote(this);
+
+		const refreshKey = this.props.editorNoteReloadTimeRequest;
+		this.refreshKey = refreshKey;
+		if (this.useEditorBeta() && this.state.mode === 'edit') {
+			this.forceUpdate();
+		} else {
+			this.setState({}, () => this.editorReloadComplete(refreshKey));
+		}
+	}
+
+	private editorReloadComplete = (refreshKey: number|undefined) => {
+		if (!this.reloadInProgress_ || refreshKey !== this.props.editorNoteReloadTimeRequest) return;
+		this.reloadInProgress_ = false;
+		this.setState({ reloadInProgress: false });
+	};
+
+	private title_changeText(text: string) {
+		if (this.reloadInProgress_) return;
+		let newText = text;
+		newText = text.replace(/(\r\n|\n|\r)/gm, ' ');
+		shared.noteComponent_change(this, 'title', newText);
+		this.setState({ newAndNoTitleChangeNoteId: null });
+	}
+
+	private emitEditorPluginUpdate_() {
+		this.editorPluginHandler_.emitUpdate({
+			noteId: this.props.noteId,
+			newBody: this.state.note.body,
+		}, this.props.visibleEditorPluginIds);
+	}
+
+	private onPlainEditorTextChange = (text: string) => {
+		if (this.reloadInProgress_) return;
+		if (!this.undoRedoService_.canUndo) {
+			this.undoRedoService_.push(this.undoState());
+		} else {
+			this.undoRedoService_.schedulePush(this.undoState());
+		}
+
+		shared.noteComponent_change(this, 'body', text);
+	};
+
+	// Avoid saving immediately -- the NoteEditor's content isn't controlled by its props
+	// and updating this.state.note immediately causes slow rerenders.
+	//
+	// See https://github.com/laurent22/joplin/issues/10130
+	private debouncedMarkdownEditorTextChange_ = debounce((event: EditorChangeEvent, reloadRequest: number) => {
+		if (this.reloadInProgress_ || reloadRequest !== this.props.editorNoteReloadTimeRequest) return;
+		shared.noteComponent_change(this, 'body', event.value);
+	}, 100);
+
+	private onMarkdownEditorTextChange = (event: EditorChangeEvent) => {
+		if (this.reloadInProgress_) return;
+		this.debouncedMarkdownEditorTextChange_(event, this.props.editorNoteReloadTimeRequest);
+	};
+
+	private onPlainEditorSelectionChange = (event: NativeSyntheticEvent<{ selection: SelectionRange }>) => {
+		this.selection = event.nativeEvent.selection;
+	};
+
+	private onEditorSelectionChange = (event: SelectionRangeChangeEvent) => {
+		this.selection = { start: event.from, end: event.to };
+
+		NotePositionService.instance().updateCursorPosition(
+			this.props.noteId, defaultWindowId, { markdown: event.from },
+		);
+	};
+
+	public makeSaveAction(state: State, editorNoteReloadTimeRequest: number) {
+		return async () => {
+			return shared.saveNoteButton_press(this, state, null, {
+				editorNoteReloadTimeRequest,
+				getEditorNoteReloadTimeRequest: () => this.props.editorNoteReloadTimeRequest,
+			});
+		};
+	}
+
+	public saveActionQueue(noteId: string) {
+		if (!this.saveActionQueues_[noteId]) {
+			this.saveActionQueues_[noteId] = new AsyncActionQueue(500);
+		}
+		return this.saveActionQueues_[noteId];
+	}
+
+	public scheduleSave(state: State) {
+		if (this.reloadInProgress_) return;
+		const editorNoteReloadTimeRequest = this.props.editorNoteReloadTimeRequest;
+		this.saveActionQueue(state.note.id).push(this.makeSaveAction(state, editorNoteReloadTimeRequest));
+	}
+
+	private async saveNoteButton_press(folderId: string = null) {
+		await shared.saveNoteButton_press(this, this.state, folderId, null);
+
+		Keyboard.dismiss();
+	}
+
+	public async saveOneProperty(name: string, value: unknown) {
+		await shared.saveOneProperty(this, name, value);
+	}
+
+	public async resizeImage(localFilePath: string, targetPath: string, mimeType: string) {
+		const maxSize = Resource.IMAGE_MAX_DIMENSION;
+		const dimensions = await getImageDimensions(localFilePath);
+		reg.logger().info('Original dimensions ', dimensions);
+
+		const saveOriginalImage = async () => {
+			await shim.fsDriver().copy(localFilePath, targetPath);
+			return true;
+		};
+		const saveResizedImage = async () => {
+			dimensions.width = maxSize;
+			dimensions.height = maxSize;
+			reg.logger().info('New dimensions ', dimensions);
+
+			await resizeImage({
+				inputPath: localFilePath,
+				outputPath: targetPath,
+				maxWidth: dimensions.width,
+				maxHeight: dimensions.height,
+				quality: 0.85,
+				format: mimeType === 'image/png' ? 'PNG' : 'JPEG',
+			});
+			return true;
+		};
+
+		const canResize = dimensions.width > maxSize || dimensions.height > maxSize;
+		if (canResize) {
+			const resizeLargeImages = Setting.value('imageResizing');
+			if (resizeLargeImages === 'alwaysAsk') {
+				const userAnswer = await this.props.dialogs.showMenu(
+					`${_('You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?', dimensions.width, dimensions.height, maxSize)}\n\n${_('(You may disable this prompt in the options)')}`, [
+						{ text: _('Yes'), id: 'yes' },
+						{ text: _('No'), id: 'no' },
+						{ text: _('Cancel'), id: 'cancel' },
+					]);
+				if (userAnswer === 'yes') return await saveResizedImage();
+				if (userAnswer === 'no') return await saveOriginalImage();
+				if (userAnswer === 'cancel' || !userAnswer) return false;
+			} else if (resizeLargeImages === 'alwaysResize') {
+				return await saveResizedImage();
+			}
+		}
+
+		return await saveOriginalImage();
+	}
+
+	private async insertText(text: string, { newLine = false }: InsertTextOptions = {}) {
+		const newNote = { ...this.state.note };
+		const separator = newLine ? '\n' : '';
+
+		if (this.state.mode === 'edit') {
+			let newText = '';
+
+			if (this.selection) {
+				newText = `${separator}${text}${separator}`;
+				const prefix = newNote.body.substring(0, this.selection.start);
+				const suffix = newNote.body.substring(this.selection.end);
+				newNote.body = `${prefix}${newText}${suffix}`;
+			} else {
+				newText = `${separator}${separator}${text}`;
+				newNote.body = `${newNote.body}${newText}`;
+			}
+
+			if (this.useEditorBeta()) {
+				// The beta editor needs to be explicitly informed of changes
+				// to the note's body
+				if (this.editorRef.current) {
+					this.editorRef.current.insertText(newText);
+				} else {
+					logger.info(`Tried to insert text ${text} to the note when the editor is not visible -- updating the note body instead.`);
+				}
+			}
+		} else {
+			newNote.body += `${separator}${text}`;
+		}
+
+		this.setState({ note: newNote });
+		return newNote;
+	}
+
+	public async attachFile(
+		pickerResponse: PickerResponse,
+		fileType: string,
+	): Promise<ResourceEntity|null> {
+		logger.debug('Attaching file:', pickerResponse?.uri);
+		if (!pickerResponse) {
+			// User has cancelled
+			return null;
+		}
+
+		const localFilePath = Platform.select({
+			ios: decodeURIComponent(pickerResponse.uri),
+			default: pickerResponse.uri,
+		});
+
+		let mimeType = pickerResponse.type;
+
+		if (!mimeType) {
+			const ext = fileExtension(localFilePath);
+			mimeType = mimeUtils.fromFileExtension(ext);
+		}
+
+		if (!mimeType && fileType === 'image') {
+			// Assume JPEG if we couldn't determine the file type. It seems to happen with the image picker
+			// when the file path is something like content://media/external/images/media/123456
+			// If the image is not a JPEG, something will throw an error below, but there's a good chance
+			// it will work.
+			reg.logger().info('Missing file type and could not detect it - assuming image/jpg');
+			mimeType = 'image/jpg';
+		}
+
+		reg.logger().info(`Got file: ${localFilePath}`);
+		reg.logger().info(`Got type: ${mimeType}`);
+
+		let resource: ResourceEntity = Resource.new();
+		resource.id = uuid.create();
+		resource.mime = mimeType;
+		resource.title = pickerResponse.fileName ? pickerResponse.fileName : '';
+		resource.file_extension = safeFileExtension(fileExtension(pickerResponse.fileName ? pickerResponse.fileName : localFilePath));
+
+		if (!resource.mime) resource.mime = 'application/octet-stream';
+
+		const targetPath = Resource.fullPath(resource);
+
+		try {
+			if (mimeType === 'image/jpeg' || mimeType === 'image/jpg' || mimeType === 'image/png') {
+				const done = await this.resizeImage(localFilePath, targetPath, mimeType);
+				if (!done) return null;
+			} else {
+				if (fileType === 'image' && mimeType !== 'image/svg+xml') {
+					await this.props.dialogs.error(_('Unsupported image type: %s', mimeType));
+					return null;
+				} else {
+					await shim.fsDriver().copy(localFilePath, targetPath);
+					const stat = await shim.fsDriver().stat(targetPath);
+
+					if (stat.size >= 200 * 1024 * 1024) {
+						await shim.fsDriver().remove(targetPath);
+						throw new Error('Resources larger than 200 MB are not currently supported as they may crash the mobile applications. The issue is being investigated and will be fixed at a later time.');
+					}
+				}
+			}
+		} catch (error) {
+			reg.logger().warn('Could not attach file:', error);
+			await this.props.dialogs.error(error.message);
+			return null;
+		}
+
+		const itDoes = await shim.fsDriver().waitTillExists(targetPath);
+		if (!itDoes) throw new Error(`Resource file was not created: ${targetPath}`);
+
+		const fileStat = await shim.fsDriver().stat(targetPath);
+		resource.size = fileStat.size;
+
+		resource = await Resource.save(resource, { isNew: true });
+
+		const resourceTag = Resource.markupTag(resource, this.state.note.markup_language);
+		const newNote = await this.insertText(resourceTag, { newLine: true });
+
+		void this.refreshResource(resource, newNote.body);
+
+		this.scheduleSave({ ...this.state, note: newNote });
+
+		return resource;
+	}
+
+	private async cameraView_onPhoto(data: CameraResult|CameraResult[]) {
+		if (!Array.isArray(data)) {
+			data = [data];
+		}
+
+		for (const item of data) {
+			await this.attachFile(
+				item,
+				'image',
+			);
+		}
+
+		this.setState({ showCamera: false });
+	}
+
+	private cameraView_onInsertBarcode = (data: string) => {
+		this.setState({ showCamera: false });
+		void this.insertText(data, { newLine: true });
+	};
+
+	private cameraView_onCancel() {
+		this.setState({ showCamera: false });
+	}
+
+	private async attachNewDrawing(svgData: string) {
+		const filePath = `${Setting.value('resourceDir')}/saved-drawing.joplin.svg`;
+		await shim.fsDriver().writeFile(filePath, svgData, 'utf8');
+		logger.info('Saved new drawing to', filePath);
+
+		return await this.attachFile({
+			uri: filePath,
+			fileName: _('Drawing'),
+		}, 'image');
+	}
+
+	private async updateDrawing(svgData: string) {
+		let resource: ResourceEntity|null = this.state.imageEditorResource;
+
+		if (!resource) {
+			resource = await this.attachNewDrawing(svgData);
+
+			// Set resource and file path to allow
+			// 1. subsequent saves to update the resource
+			// 2. the editor to load from the resource's filepath (can happen
+			//    if the webview is reloaded).
+			this.setState({
+				imageEditorResourceFilepath: Resource.fullPath(resource),
+				imageEditorResource: resource,
+			});
+		} else {
+			logger.info('Saving drawing to resource', resource.id);
+
+			const tempFilePath = join(Setting.value('tempDir'), uuid.createNano());
+			await shim.fsDriver().writeFile(tempFilePath, svgData, 'utf8');
+
+			resource = await Resource.updateResourceBlobContent(
+				resource.id,
+				tempFilePath,
+			);
+			await shim.fsDriver().remove(tempFilePath);
+
+			await this.refreshResource(resource);
+		}
+	}
+
+	private onSaveDrawing = async (svgData: string) => {
+		await this.updateDrawing(svgData);
+	};
+
+	private onCloseDrawing = () => {
+		this.setState({ showImageEditor: false });
+	};
+
+	private drawPicture_onPress = async () => {
+		logger.info('Showing image editor...');
+		this.setState({
+			showImageEditor: true,
+			imageEditorResourceFilepath: null,
+			imageEditorResource: null,
+		});
+	};
+
+	private async editDrawing(item: BaseItem) {
+		const filePath = Resource.fullPath(item);
+		this.setState({
+			showImageEditor: true,
+			imageEditorResourceFilepath: filePath,
+			imageEditorResource: item,
+		});
+	}
+
+	private onEditResource = async (message: string) => {
+		const messageData = /^edit:(.*)$/.exec(message);
+		if (!messageData) {
+			throw new Error('onEditResource: Error: Invalid message');
+		}
+
+		const resourceId = messageData[1];
+
+		const resource = await BaseItem.loadItemById(resourceId);
+		await Resource.requireIsReady(resource);
+
+		if (isEditableResource(resource.mime)) {
+			await this.editDrawing(resource);
+		} else {
+			throw new Error(_('Unable to edit resource of type %s', resource.mime));
+		}
+	};
+
+	private toggleIsTodo_onPress() {
+		const newNote = shared.toggleIsTodo_onPress(this);
+
+		this.scheduleSave({ ...this.state, note: newNote });
+	}
+
+	private async share_onPress() {
+		const shareText = `${this.state.note.title}\n\n${this.state.note.body}`;
+		const filename = this.state.note.id ?? uuid.create();
+
+		if (shareText.length > 100000) {
+			let fileToShare;
+			try {
+				// Using a .txt file extension causes a "No valid provider found from URL" error
+				// and blank share sheet on iOS for larger log files (around 200 KiB).
+				fileToShare = await writeTextToCacheFile(shareText, `${filename}.md`);
+				await shareFile(fileToShare, 'text/plain');
+			} catch (e) {
+				logger.error('Unable to share note data:', e);
+
+				// Display a message to the user (e.g. in the case where the user is out of disk space).
+				void shim.showErrorDialog(_('Unable to share note data. Reason: %s', e.toString()));
+			} finally {
+				if (fileToShare) {
+					await shim.fsDriver().remove(fileToShare);
+				}
+			}
+		} else {
+			// A txt extension is automatically appended to the title when shared to a file via this route
+			await Share.share({
+				message: shareText,
+				title: filename,
+			});
+		}
+	}
+
+	private properties_onPress() {
+		this.props.dispatch({ type: 'SIDE_MENU_OPEN' });
+	}
+
+	private revealInNotebook_onPress() {
+		const folderId = this.state.folder?.id;
+		if (folderId) {
+			void NavService.go('Notes', { folderId: folderId });
+		} else {
+			void NavService.go('Notes', { smartFilterId: ALL_NOTES_FILTER_ID });
+		}
+	}
+
+	public async onAlarmDialogAccept(date: Date) {
+		if (Platform.OS === 'android') {
+			const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+
+			// The POST_NOTIFICATIONS permission isn't supported on Android API < 33.
+			// (If unsupported, returns NEVER_ASK_AGAIN).
+			// On earlier releases, notifications should work without this permission.
+			if (response === PermissionsAndroid.RESULTS.DENIED) {
+				logger.warn('POST_NOTIFICATIONS permission was not granted');
+				return;
+			}
+		}
+
+		if (Platform.OS === 'web') {
+			alert('Warning: The due-date has been saved, but showing notifications is not supported by Joplin Web.');
+		}
+
+		const newNote = { ...this.state.note };
+		newNote.todo_due = date ? date.getTime() : 0;
+
+		await this.saveOneProperty('todo_due', date ? date.getTime() : 0);
+
+		this.setState({ alarmDialogShown: false });
+	}
+
+	public onAlarmDialogReject() {
+		this.setState({ alarmDialogShown: false });
+	}
+
+	private async showOnMap_onPress() {
+		if (!this.state.note.id) return;
+
+		const note = await Note.load(this.state.note.id);
+		try {
+			const url = Note.geolocationUrl(note);
+			await Linking.openURL(url);
+		} catch (error) {
+			this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+			await this.props.dialogs.error(error.message);
+		}
+	}
+
+	private async showSource_onPress() {
+		if (!this.state.note.id) return;
+
+		const note = await Note.load(this.state.note.id);
+		try {
+			await Linking.openURL(note.source_url);
+		} catch (error) {
+			await this.props.dialogs.error(error.message);
+		}
+	}
+
+	private copyMarkdownLink_onPress() {
+		const note = this.state.note;
+		Clipboard.setString(Note.markdownTag(note));
+	}
+
+	private copyExternalLink_onPress() {
+		const note = this.state.note;
+		Clipboard.setString(getNoteCallbackUrl(note.id));
+	}
+
+	public sideMenuOptions() {
+		const note = this.state.note;
+		if (!note) return [];
+
+		const output = [];
+
+		const createdDateString = time.formatMsToLocal(note.user_created_time);
+		const updatedDateString = time.formatMsToLocal(note.user_updated_time);
+
+		output.push({ title: _('Created: %s', createdDateString) });
+		output.push({ title: _('Updated: %s', updatedDateString) });
+		output.push({ isDivider: true });
+
+		output.push({
+			title: _('View on map'),
+			onPress: () => {
+				void this.showOnMap_onPress();
+			},
+		});
+		output.push({
+			title: _('Previous versions'),
+			onPress: () => {
+				this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+				void NavService.go('NoteRevisionViewer', {
+					noteId: this.props.noteId,
+				});
+			},
+		});
+		if (note.source_url) {
+			output.push({
+				title: _('Go to source URL'),
+				onPress: () => {
+					void this.showSource_onPress();
+				},
+			});
+		}
+		if (this.props.canPublish) {
+			output.push({
+				title: _('Publish/unpublish'),
+				onPress: this.onPublishDialogShow_,
+			});
+		}
+
+		return output;
+	}
+
+	public onAttach = async (filePath?: string) => {
+		await CommandService.instance().execute('attachFile', filePath);
+	};
+
+	public menuOptions() {
+		const note = this.state.note;
+		const isTodo = note && !!note.is_todo;
+		const isSaved = note && note.id;
+		const readOnly = this.state.readOnly;
+		const isDeleted = !!this.state.note.deleted_time;
+		const isCodeView = this.props.editorType === EditorType.Markdown;
+
+		const pluginCommands = pluginUtils.commandNamesFromViews(this.props.plugins, 'noteToolbar');
+
+		const cacheKey = md5([isTodo, isSaved, pluginCommands.join(','), readOnly, this.state.mode, isCodeView].join('_'));
+		if (!this.menuOptionsCache_) this.menuOptionsCache_ = {};
+
+		if (this.menuOptionsCache_[cacheKey]) return this.menuOptionsCache_[cacheKey];
+
+		const output: MenuOption[] = [];
+
+		// The file attachment modules only work in Android >= 5 (Version 21)
+		// https://github.com/react-community/react-native-image-picker/issues/606
+
+		// As of 2020-10-13, support for attaching images from the gallery is removed
+		// as the package react-native-image-picker has permission issues. It's still
+		// possible to attach files, which has often a similar UI, with thumbnails for
+		// images so normally it should be enough.
+		let canAttachPicture = true;
+		if (Platform.OS === 'android' && Platform.Version < 21) canAttachPicture = false;
+		if (canAttachPicture) {
+			output.push({
+				title: _('Attach...'),
+				icon: 'material paperclip',
+				onPress: () => this.onAttach(),
+				disabled: readOnly,
+			});
+		}
+
+		output.push({
+			title: _('Draw picture'),
+			onPress: () => this.drawPicture_onPress(),
+			disabled: readOnly,
+			icon: 'material draw',
+		});
+
+		if (isTodo) {
+			output.push({
+				title: _('Set alarm'),
+				onPress: () => {
+					this.setState({ alarmDialogShown: true });
+				},
+				disabled: readOnly,
+				icon: 'material bell-outline',
+			});
+		}
+
+		const shareSupported = Platform.OS !== 'web' || !!navigator.share;
+		if (shareSupported) {
+			output.push({
+				title: _('Share'),
+				icon: 'material share-outline',
+				onPress: () => {
+					void this.share_onPress();
+				},
+				disabled: readOnly,
+			});
+		}
+
+		if (VoiceTyping.supported()) {
+			output.push({
+				title: _('Voice typing...'),
+				icon: 'material microphone-outline',
+				onPress: () => {
+					// this.voiceRecording_onPress();
+					this.setState({ showSpeechToTextDialog: true });
+				},
+				disabled: readOnly,
+			});
+		}
+
+		const commandService = CommandService.instance();
+		const whenContext = commandService.currentWhenClauseContext();
+
+
+		const addButtonFromCommand = (commandName: string, overrides: Partial<MenuOptionButton> = {}) => {
+			if (commandName === '-') {
+				output.push({ isDivider: true });
+			} else {
+				output.push({
+					isDivider: false,
+					title: commandService.description(commandName),
+					icon: commandService.iconName(commandName),
+					onPress: async () => {
+						void commandService.execute(commandName);
+					},
+					disabled: !commandService.isEnabled(commandName, whenContext),
+					...overrides,
+				});
+			}
+		};
+
+		if (isSaved && !isDeleted) {
+			addButtonFromCommand('setTags', { icon: 'material tag-outline' });
+		}
+
+		output.push({
+			title: isTodo ? _('Convert to note') : _('Convert to todo'),
+			icon: isTodo ? 'material file-document-outline' : 'material file-send-outline',
+			onPress: () => {
+				this.toggleIsTodo_onPress();
+			},
+			disabled: readOnly,
+		});
+
+		if (isSaved && !isDeleted) {
+			output.push({
+				title: _('Copy Markdown link'),
+				icon: 'material content-copy',
+				onPress: () => {
+					this.copyMarkdownLink_onPress();
+				},
+			});
+
+			// External links are not supported on web.
+			if (Platform.OS !== 'web') {
+				output.push({
+					title: _('Copy external link'),
+					icon: 'material content-copy',
+					onPress: () => {
+						this.copyExternalLink_onPress();
+					},
+				});
+			}
+		}
+
+		if (this.state.mode === 'edit') {
+			const newCodeView = !isCodeView;
+			output.push({
+				title: newCodeView ? _('Edit as Markdown') : _('Edit as Rich Text'),
+				icon: newCodeView ? 'material file-edit-outline' : 'material file-edit',
+				onPress: () => {
+					Setting.setValue('editor.codeView', newCodeView);
+				},
+			});
+		}
+
+		if (pluginCommands.length) {
+			output.push({ isDivider: true });
+
+			for (const commandName of pluginCommands) {
+				addButtonFromCommand(commandName);
+			}
+		}
+
+		output.push({ isDivider: true });
+
+		output.push({
+			title: _('Properties'),
+			icon: 'material information-outline',
+			onPress: () => {
+				this.properties_onPress();
+			},
+		});
+
+		output.push({
+			title: _('Reveal in notebook'),
+			icon: 'material folder-file-outline',
+			onPress: () => {
+				this.revealInNotebook_onPress();
+			},
+		});
+
+		output.push({ isDivider: true });
+
+		if (isDeleted) {
+			output.push({
+				title: _('Restore'),
+				icon: 'material delete-off-outline',
+				onPress: async () => {
+					await restoreItems(ModelType.Note, [this.state.note.id]);
+					this.props.dispatch({
+						type: 'NAV_GO',
+						routeName: 'Notes',
+					});
+				},
+			});
+		}
+
+		if (whenContext.inTrash) {
+			addButtonFromCommand('permanentlyDeleteNote', { icon: 'material delete-outline', style: MenuOptionStyle.Destructive });
+		} else {
+			addButtonFromCommand('deleteNote', { title: _('Delete'), icon: 'material delete-outline', style: MenuOptionStyle.Destructive });
+		}
+
+		this.menuOptionsCache_ = {};
+		this.menuOptionsCache_[cacheKey] = output;
+
+		return output;
+	}
+
+	private async todoCheckbox_change(checked: boolean) {
+		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
+	}
+
+	private toggleVisiblePanes = () => {
+		const isSwitchingToEdit = this.state.mode === 'view';
+		void CommandService.instance().execute('toggleVisiblePanes');
+		if (isSwitchingToEdit) {
+			this.doFocusUpdate_ = true;
+		}
+	};
+
+	public scheduleFocusUpdate() {
+		if (this.focusUpdateIID_) shim.clearInterval(this.focusUpdateIID_);
+
+		const startTime = Date.now();
+
+		this.focusUpdateIID_ = shim.setInterval(() => {
+			if (!this.state.note) return;
+
+			let fieldToFocus = this.state.note.is_todo ? 'title' : 'body';
+			if (this.state.mode === 'view') fieldToFocus = '';
+
+			let done = false;
+
+			if (fieldToFocus === 'title' && this.titleTextFieldRef?.current) {
+				done = true;
+				focus('Note::focusUpdate::title', this.titleTextFieldRef.current);
+			} else if (fieldToFocus === 'body' && this.editorRef?.current) {
+				done = true;
+				focus('Note::focusUpdate::body', this.editorRef.current);
+			}
+
+			if (Date.now() - startTime > 5000) {
+				logger.warn(`Timeout while trying to set focus on ${fieldToFocus}`);
+				done = true;
+			}
+
+			if (!this.noteEditorVisible()) {
+				logger.info(`Note editor is not visible - not setting focus on ${fieldToFocus}`);
+				done = true;
+			}
+
+			if (done) {
+				shim.clearInterval(this.focusUpdateIID_);
+				this.focusUpdateIID_ = null;
+			}
+		}, 50);
+	}
+
+	private async folderPickerOptions_valueChanged(itemValue: string) {
+		const note = this.state.note;
+		const isProvisionalNote = this.props.provisionalNoteIds.includes(note.id);
+
+		if (isProvisionalNote) {
+			await this.saveNoteButton_press(itemValue);
+		} else {
+			await Note.moveToFolder(
+				note.id,
+				itemValue,
+				{ dispatchOptions: { preserveSelection: true } },
+			);
+		}
+
+		note.parent_id = itemValue;
+
+		const folder = await Folder.load(note.parent_id);
+
+		this.setState({
+			lastSavedNote: { ...note },
+			note: note,
+			folder: folder,
+		});
+	}
+
+	public folderPickerOptions() {
+		const options = {
+			visible: !this.state.readOnly,
+			disabled: false,
+			selectedFolderId: this.state.folder ? this.state.folder.id : null,
+			onValueChange: this.folderPickerOptions_valueChanged,
+		};
+
+		if (
+			this.folderPickerOptions_
+			&& options.selectedFolderId === this.folderPickerOptions_.selectedFolderId
+			&& options.visible === this.folderPickerOptions_.visible
+		) {
+			return this.folderPickerOptions_;
+		}
+
+		this.folderPickerOptions_ = options;
+		return this.folderPickerOptions_;
+	}
+
+	private onBodyViewerScroll = (event: ScrollEventSlice) => {
+		this.lastBodyScroll = event.fraction;
+
+		NotePositionService.instance().updateScrollPosition(
+			this.props.noteId, defaultWindowId, event.fraction,
+		);
+	};
+
+	private onMarkdownEditorScroll = () => {};
+
+	public onBodyViewerCheckboxChange(newBody: string) {
+		void this.saveOneProperty('body', newBody);
+	}
+
+	private speechToTextDialog_onText(text: string) {
+		if (this.state.mode === 'view') {
+			const newNote: NoteEntity = { ...this.state.note };
+			newNote.body = `${newNote.body} ${text}`;
+			this.setState({ note: newNote });
+			this.scheduleSave(this.state);
+		} else {
+			if (this.useEditorBeta()) {
+				// We add a space so that if the feature is used twice in a row,
+				// the sentences are not stuck to each others.
+				this.editorRef.current.insertText(`${text} `);
+			} else {
+				logger.warn('Voice typing is not supported in plaintext editor');
+			}
+		}
+	}
+
+	private audioRecordingDialog_onFile = (file: PickerResponse) => {
+		return this.attachFile(file, 'audio');
+	};
+
+	private audioRecorderDialog_onDismiss = () => {
+		this.setState({ showSpeechToTextDialog: false, showAudioRecorder: false });
+	};
+
+	private speechToTextDialog_onDismiss = () => {
+		this.setState({ showSpeechToTextDialog: false });
+	};
+
+	private noteEditorVisible() {
+		return !this.state.showCamera && !this.state.showImageEditor;
+	}
+
+	public render() {
+		// Commands must be registered before child components can render.
+		// Calling this in the constructor won't work in strict mode, where
+		// componentWillUnmount (which removes the commands) can be called
+		// multiple times.
+		this.registerCommands();
+
+		const { editorPlugin, editorView } = getShownPluginEditorView(this.props.plugins, this.props.windowId);
+
+		if (this.state.isLoading) {
+			return (
+				<View style={this.styles().screen}>
+					<ScreenHeader />
+				</View>
+			);
+		}
+
+		const theme = themeStyle(this.props.themeId);
+		const note: NoteEntity = this.state.note;
+		const isTodo = !!Number(note.is_todo);
+
+		if (this.state.showCamera) {
+			return <CameraView
+				onPhoto={this.cameraView_onPhoto}
+				onInsertBarcode={this.cameraView_onInsertBarcode}
+				onCancel={this.cameraView_onCancel}
+				style={{ flex: 1 }}
+			/>;
+		} else if (this.state.showImageEditor) {
+			return <ImageEditor
+				resourceFilename={this.state.imageEditorResourceFilepath}
+				themeId={this.props.themeId}
+				onSave={this.onSaveDrawing}
+				onExit={this.onCloseDrawing}
+			/>;
+		}
+
+		const renderPluginEditor = () => {
+			this.editorPluginHandler_.onEditorPluginShown(editorView.id);
+			return <PluginUserWebView
+				viewInfo={{ plugin: editorPlugin, view: editorView }}
+				themeId={this.props.themeId}
+				onLoadEnd={() => {}}
+				pluginHtmlContents={this.props.pluginHtmlContents}
+				setDialogControl={() => {}}
+				style={{}}
+			/>;
+		};
+
+		// Currently keyword highlighting is supported only when FTS is available.
+		const keywords = this.props.searchQuery && !!this.props.ftsEnabled ? this.props.highlightedWords : emptyArray;
+
+		const increaseSpaceForEditor = this.props.lowVerticalSpace
+			&& this.state.mode === 'edit'
+			// For now, only dismiss other UI when search is visible. This provides a way to re-show the hidden UI (by dismissing search).
+			&& this.state.searchVisible
+			// Tapping on the title input when search is visible should edit the title, even if showing the keyboard decreases the
+			// available space.
+			&& !this.titleTextFieldRef.current?.isFocused();
+
+		let bodyComponent = null;
+
+		if (editorView) {
+			bodyComponent = renderPluginEditor();
+		} else {
+			if (this.state.mode === 'view') {
+				// Note: as of 2018-12-29 it's important not to display the viewer if the note body is empty,
+				// to avoid the HACK_webviewLoadingState related bug.
+				bodyComponent =
+					!note || !note.body.trim() ? null : (
+						<NoteBodyViewer
+							style={this.styles().noteBodyViewer}
+							paddingBottom={150}
+							noteBody={note.body}
+							noteMarkupLanguage={note.markup_language}
+							noteResources={this.state.noteResources}
+							highlightedKeywords={keywords}
+							noteHash={this.props.noteHash}
+							onCheckboxChange={this.onBodyViewerCheckboxChange}
+							onMarkForDownload={this.onMarkForDownload}
+							onRequestEditResource={this.onEditResource}
+							onScroll={this.onBodyViewerScroll}
+							initialScrollPercent={this.lastBodyScroll}
+						/>
+					);
+			} else {
+				// Note: In theory ScrollView can be used to provide smoother scrolling of the TextInput.
+				// However it causes memory or rendering issues on older Android devices, probably because
+				// the whole text input has to be in memory for the scrollview to work. So we keep it as
+				// a plain TextInput for now.
+				// See https://github.com/laurent22/joplin/issues/3041
+
+				// IMPORTANT: The TextInput selection is unreliable and cannot be used in a controlled component
+				// context. In other words, the selection should be considered read-only. For example, if the selection
+				// is saved to the state in onSelectionChange and the current text in onChangeText, then set
+				// back in `selection` and `value` props, it will mostly work. But when typing fast, sooner or
+				// later the real selection will be different from what is stored in the state, thus making
+				// the cursor jump around. Eg, when typing "abcdef", it will do this:
+				//     abcd|
+				//     abcde|
+				//     abcde|f
+
+				if (!this.useEditorBeta()) {
+					bodyComponent = (
+						<TextInput
+							autoCapitalize="sentences"
+							style={this.styles().bodyTextInput}
+							multiline={true}
+							value={note.body}
+							onChangeText={this.onPlainEditorTextChange}
+							onSelectionChange={this.onPlainEditorSelectionChange}
+							blurOnSubmit={false}
+							selectionColor={theme.textSelectionColor}
+							keyboardAppearance={theme.keyboardAppearance}
+							placeholder={_('Add body')}
+							placeholderTextColor={theme.colorFaded}
+							editable={!this.state.readOnly && !this.state.reloadInProgress}
+							// need some extra padding for iOS so that the keyboard won't cover last line of the note
+							// see https://github.com/laurent22/joplin/issues/3607
+							// Property is gone as of RN 0.72?
+							// paddingBottom={ (Platform.OS === 'ios' ? 40 : 0) as any}
+						/>
+					);
+				} else {
+					const editorStyle = this.styles().bodyTextInput;
+					const globalSearch = SearchEngine.instance().createQueryFromTerms(this.props.highlightedWords);
+
+					bodyComponent = <NoteEditor
+						ref={this.editorRef}
+						toolbarEnabled={this.props.toolbarEnabled && !increaseSpaceForEditor}
+						noteId={this.props.noteId}
+						noteHash={this.props.noteHash}
+						initialText={note.body}
+						initialSelection={this.selection}
+						markupLanguage={this.state.note.markup_language}
+						globalSearch={globalSearch}
+						onChange={this.onMarkdownEditorTextChange}
+						onSelectionChange={this.onEditorSelectionChange}
+						onUndoRedoDepthChange={this.onUndoRedoDepthChange}
+						onSearchVisibleChange={this.onSearchVisibleChange_}
+						onAttach={this.onAttach}
+						noteResources={this.state.noteResources}
+						readOnly={this.state.readOnly || this.state.reloadInProgress}
+						plugins={this.props.plugins}
+						style={{
+							...editorStyle,
+
+							// Allow the editor to set its own padding
+							paddingLeft: 0,
+							paddingRight: 0,
+						}}
+
+						// For now, only save/restore the scroll location for the Rich Text editor since that editor's
+						// scroll should roughly match the viewer. In the future, it may make sense to refactor this to
+						// use mapsToLine (similar to what's done on desktop) to sync the Markdown editor scroll, but this
+						// will require refactoring.
+						initialScroll={this.props.editorType === EditorType.RichText ? this.lastBodyScroll : undefined}
+						onScroll={this.props.editorType === EditorType.RichText ? this.onBodyViewerScroll : this.onMarkdownEditorScroll}
+
+						mode={this.props.editorType}
+						refreshKey={this.refreshKey}
+						onLoadEnd={() => this.editorReloadComplete(this.refreshKey)}
+					/>;
+				}
+			}
+		}
+
+		const titleContainerStyle = isTodo ? this.styles().titleContainerTodo : this.styles().titleContainer;
+
+		const dueDate = Note.dueDateObject(note);
+
+		const textWrapCalculator_updateState = (showToggle: boolean, enableMultiline: boolean) => {
+			this.setState({ showMultilineToggle: showToggle, multiline: enableMultiline });
+		};
+
+		const titleToggleButton = !this.state.showMultilineToggle ? null :
+			<IconButton
+				icon={(!this.state.multiline && 'menu-down') || (this.state.multiline && 'menu-up')}
+				accessibilityLabel={(!this.state.multiline && _('Expand title')) || (this.state.multiline && _('Collapse title'))}
+				onPress={() => this.setState({ multiline: !this.state.multiline })}
+				size={30}
+				style={{ width: 30, height: 30, alignSelf: 'center' }}
+			/>;
+
+		const titleComp = (
+			<View
+				style={titleContainerStyle}
+				onLayout={(e) => {
+					const width = e.nativeEvent.layout.width;
+					if (width !== this.state.titleContainerWidth) {
+						this.setState({ titleContainerWidth: width });
+					}
+				}}
+
+				// Making this focusable works around a tab ordering bug on Android
+				// See https://github.com/laurent22/joplin/issues/14548
+				accessible={Platform.OS === 'android'}
+				// Since the group is focusable, it also needs a label (otherwise TalkBack reads "unlabelled"):
+				aria-label={_('Title')}
+			>
+				<TextWrapCalculator
+					textCompStyle={this.styles().titleTextInput}
+					textCompContainerWidth={this.state.titleContainerWidth}
+					showMultilineToggle={this.state.showMultilineToggle}
+					multiline={this.state.multiline}
+					text={note.title}
+					updateState={textWrapCalculator_updateState}
+					readOnly={false}
+				/>
+				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
+				<TextInput
+					key={this.state.multiline ? 'multiLine' : 'singleLine'}
+					ref={this.titleTextFieldRef}
+					underlineColorAndroid="#ffffff00"
+					autoCapitalize="sentences"
+					style={this.styles().titleTextInput}
+					value={note.title}
+					onChangeText={this.title_changeText}
+					selectionColor={theme.textSelectionColor}
+					keyboardAppearance={theme.keyboardAppearance}
+					placeholder={_('Add title')}
+					placeholderTextColor={theme.colorFaded}
+					editable={!this.state.readOnly && !this.state.reloadInProgress}
+					multiline={this.state.multiline}
+					submitBehavior = "blurAndSubmit"
+				/>
+				{ titleToggleButton }
+			</View>
+		);
+
+		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
+
+		const renderVoiceTypingDialogs = () => {
+			const result = [];
+			if (this.state.showAudioRecorder) {
+				result.push(<AudioRecordingBanner
+					key='audio-recorder'
+					onFileSaved={this.audioRecordingDialog_onFile}
+					onDismiss={this.audioRecorderDialog_onDismiss}
+				/>);
+			}
+			if (this.state.showSpeechToTextDialog) {
+				result.push(<SpeechToTextBanner
+					key='speech-to-text'
+					locale={currentLocale()}
+					onText={this.speechToTextDialog_onText}
+					onDismiss={this.speechToTextDialog_onDismiss}
+				/>);
+			}
+			return result;
+		};
+
+		const { editorPlugin: activeEditorPlugin } = getActivePluginEditorView(this.props.plugins, this.props.windowId);
+
+		let viewEditToggleMode = this.state.mode === 'edit' ? ViewToggleButtonMode.ShowViewer : ViewToggleButtonMode.ShowEditor;
+		if (!this.state.note || this.state.note.deleted_time > 0 || editorView) {
+			viewEditToggleMode = ViewToggleButtonMode.Hidden;
+		}
+
+		const header = <ScreenHeader
+			folderPickerOptions={this.folderPickerOptions()}
+			menuOptions={this.menuOptions()}
+			showSideMenuButton={false}
+			showSearchButton={false}
+			showUndoButton={(this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo) && this.state.mode === 'edit'}
+			showRedoButton={this.state.undoRedoButtonState.canRedo && this.state.mode === 'edit'}
+			showPluginEditorButton={!!activeEditorPlugin}
+			undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
+			onUndoButtonPress={this.screenHeader_undoButtonPress}
+			onRedoButtonPress={this.screenHeader_redoButtonPress}
+			viewToggleButtonMode={viewEditToggleMode}
+			onViewTogglePress={this.toggleVisiblePanes}
+			title={getDisplayParentTitle(this.state.note, this.state.folder)}
+		/>;
+
+		return (
+			<View style={this.rootStyle(this.props.themeId).root}>
+				{!increaseSpaceForEditor && header}
+				{!increaseSpaceForEditor && titleComp}
+				{bodyComponent}
+				{renderVoiceTypingDialogs()}
+
+				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
+
+				{noteTagDialog}
+				<ShareNoteDialog
+					noteId={this.props.noteId}
+					visible={this.state.publishDialogShown}
+					onClose={this.onPublishDialogClose_}
+				/>
+			</View>
+		);
+	}
+}
+
+const useHasLowAvailableSpace = () => {
+	const windowDimensions = useWindowDimensions();
+	const keyboardState = useKeyboardState();
+	const verticalSpaceAvailable = windowDimensions.height - keyboardState.dockedKeyboardHeight;
+
+	const lowVerticalScreenSpace = verticalSpaceAvailable < 270;
+	// Debounce state updates to avoid multiple re-renders when the keyboard is hidden, then quickly
+	// re-shown (e.g. when moving focus between text inputs).
+	return useDebounced(lowVerticalScreenSpace, Second / 10);
+};
+
+// We added this change to reset the component state when the props.noteId is changed.
+// NoteScreenComponent original implementation assumed that noteId would never change,
+// which can cause some bugs where previously set state to another note would interfere
+// how the new note should be rendered
+const NoteScreenWrapper = (props: Props) => {
+	const dialogs = useContext(DialogContext);
+	const visibleEditorPluginIds = useVisiblePluginEditorViewIds(props.plugins, props.windowId);
+	const lowVerticalSpace = useHasLowAvailableSpace();
+
+	return (
+		<NoteScreenComponent
+			key={props.noteId}
+			dialogs={dialogs}
+			visibleEditorPluginIds={visibleEditorPluginIds}
+			lowVerticalSpace={lowVerticalSpace}
+			{...props}
+		/>
+	);
+};
+
+const NoteScreen = connect((state: AppState) => {
+	const whenClause = stateToWhenClauseContext(state);
+	return {
+		windowId: state.windowId,
+		noteId: state.selectedNoteIds.length ? state.selectedNoteIds[0] : null,
+		noteHash: state.selectedNoteHash,
+		itemType: state.selectedItemType,
+		folders: state.folders,
+		searchQuery: state.searchQuery,
+		themeId: state.settings.theme,
+		editorFont: state.settings['style.editor.fontFamily'] as number,
+		editorFontSize: state.settings['style.editor.fontSize'],
+		viewerFontSize: state.settings['style.viewer.fontSize'],
+		toolbarEnabled: state.settings['editor.mobile.toolbarEnabled'],
+		ftsEnabled: state.settings['db.ftsEnabled'],
+		sharedData: state.sharedData,
+		showSideMenu: state.showSideMenu,
+		provisionalNoteIds: state.provisionalNoteIds,
+		highlightedWords: state.highlightedWords,
+		plugins: state.pluginService.plugins,
+		pluginHtmlContents: state.pluginService.pluginHtmlContents,
+		editorNoteReloadTimeRequest: state.editorNoteReloadTimeRequest,
+		noteVisiblePanes: state.noteVisiblePanes,
+
+		editorType: state.settings['editor.codeView'] ? EditorType.Markdown : EditorType.RichText,
+
+		// What we call "beta editor" in this component is actually the (now
+		// default) CodeMirror editor. That should be refactored to make it less
+		// confusing.
+		useEditorBeta: !state.settings['editor.usePlainText'],
+		canPublish: whenClause.joplinServerConnected && !whenClause.inTrash,
+	};
+})(NoteScreenWrapper);
+
+export default NoteScreen;

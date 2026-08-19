@@ -1,10 +1,11 @@
-import { ChangeType, Item, ItemType, UserItem, Uuid } from '../services/database/types';
+import { ChangeType, Item, UserItem, Uuid, ItemType } from '../services/database/types';
 import BaseModel, { DeleteOptions, LoadOptions, SaveOptions } from './BaseModel';
 import { unique } from '../utils/array';
 import { ErrorNotFound } from '../utils/errors';
 import { Knex } from 'knex';
 import { PerformanceTimer } from '../utils/time';
 import Logger from '@joplin/utils/Logger';
+import { isUniqueConstraintError } from '../db';
 
 const logger = Logger.create('UserItemModel');
 
@@ -21,6 +22,12 @@ export interface UserItemDeleteOptions extends DeleteOptions {
 	byUserItemIds?: number[];
 	byShare?: DeleteByShare;
 	recordChanges?: boolean;
+}
+
+interface UserItemSaveOptions extends SaveOptions {
+	// Ignore unique constraint errors if a (user_id, item_id) pair already
+	// exists.
+	ignoreAlreadyExists?: boolean;
 }
 
 export default class UserItemModel extends BaseModel<UserItem> {
@@ -66,6 +73,11 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			.select(this.selectFields(options, this.defaultFields, 'user_items'))
 			.where('items.jop_share_id', '=', shareId)
 			.where('user_items.user_id', '=', userId);
+	}
+
+	public async countWithUserId(userId: Uuid): Promise<number> {
+		const count = await this.db(this.tableName).count('*').where('user_id', '=', userId);
+		return count[0].count;
 	}
 
 	public async byUserId(userId: Uuid): Promise<UserItem[]> {
@@ -116,7 +128,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.deleteBy({ byShareId: shareId, byUserId: userId });
 	}
 
-	public async add(userId: Uuid, itemId: Uuid, options: SaveOptions = {}): Promise<void> {
+	public async add(userId: Uuid, itemId: Uuid, options: UserItemSaveOptions = {}): Promise<void> {
 		const item = await this.models().item().load(itemId, { fields: ['id', 'name'] });
 		if (!item) {
 			throw new ErrorNotFound(`No such item: ${itemId}`);
@@ -124,7 +136,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.addMulti(userId, [item], options);
 	}
 
-	public async addMulti(userId: Uuid, itemsQuery: Knex.QueryBuilder | Item[], options: SaveOptions = {}): Promise<void> {
+	public async addMulti(userId: Uuid, itemsQuery: Knex.QueryBuilder | Item[], options: UserItemSaveOptions = {}): Promise<void> {
 		const perfTimer = new PerformanceTimer(logger, 'addMulti');
 
 		perfTimer.push('Main');
@@ -132,31 +144,38 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		const items: Item[] = Array.isArray(itemsQuery) ? itemsQuery : await itemsQuery.whereNotIn('id', this.db('user_items').select('item_id').where('user_id', '=', userId));
 		if (!items.length) return;
 
-		await this.withTransaction(async () => {
-			perfTimer.push(`Processing ${items.length} items`);
+		perfTimer.push(`Processing ${items.length} items`);
 
-			for (const item of items) {
-				if (!('name' in item) || !('id' in item)) throw new Error('item.id and item.name must be set');
+		for (const item of items) {
+			if (!('name' in item) || !('id' in item)) throw new Error('item.id and item.name must be set');
 
-				await super.save({
-					user_id: userId,
-					item_id: item.id,
-				}, options);
-
-				if (this.models().item().shouldRecordChange(item.name)) {
-					await this.models().change().save({
-						item_type: ItemType.UserItem,
-						item_id: item.id,
-						item_name: item.name,
-						type: ChangeType.Create,
-						previous_item: '',
+			await this.withTransaction(async () => {
+				try {
+					await super.save({
 						user_id: userId,
-					});
-				}
-			}
+						item_id: item.id,
+					}, options);
 
-			perfTimer.pop();
-		}, 'UserItemModel::addMulti');
+					if (this.models().item().shouldRecordChange(item.name)) {
+						await this.models().change().recordChange({
+							itemName: item.name,
+							itemId: item.id,
+							sourceUserId: userId,
+							shareId: item.jop_share_id ?? '',
+							previousItem: { jop_share_id: '' },
+							type: ChangeType.Create,
+							itemType: ItemType.UserItem,
+						});
+					}
+				} catch (error) {
+					if (!options.ignoreAlreadyExists || !isUniqueConstraintError(error)) {
+						throw error;
+					}
+				}
+			}, 'UserItemModel::addMulti');
+		}
+
+		perfTimer.pop();
 
 		perfTimer.pop();
 	}
@@ -191,14 +210,13 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		} else if (options.byUserItem) {
 			userItems = [options.byUserItem];
 		} else if (options.byUserItemIds) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			userItems = await this.loadByIds(options.byUserItemIds as any);
+			userItems = await this.loadByIds(options.byUserItemIds);
 		} else {
 			throw new Error('Invalid options');
 		}
 
 		const itemIds = unique(userItems.map(ui => ui.item_id));
-		const items = await this.models().item().loadByIds(itemIds, { fields: ['id', 'name'] });
+		const items = await this.models().item().loadByIds(itemIds, { fields: ['id', 'name', 'jop_share_id'] });
 
 		await this.withTransaction(async () => {
 			for (const userItem of userItems) {
@@ -208,19 +226,21 @@ export default class UserItemModel extends BaseModel<UserItem> {
 				if (!item) continue;
 
 				if (options.recordChanges && this.models().item().shouldRecordChange(item.name)) {
-					await this.models().change().save({
-						item_type: ItemType.UserItem,
-						item_id: userItem.item_id,
-						item_name: item.name,
+					const shareId = item.jop_share_id;
+					await this.models().change().recordChange({
+						itemName: item.name,
+						itemId: userItem.item_id,
+						sourceUserId: userItem.user_id,
+						shareId,
+						previousItem: { jop_share_id: shareId },
 						type: ChangeType.Delete,
-						previous_item: '',
-						user_id: userItem.user_id,
+						itemType: ItemType.UserItem,
 					});
 				}
 			}
 
 			await this.db(this.tableName).whereIn('id', userItems.map(ui => ui.id)).delete();
-		}, 'ItemModel::delete');
+		}, 'UserItemModel::delete');
 	}
 
 }

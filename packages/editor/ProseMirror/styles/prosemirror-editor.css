@@ -1,0 +1,8 @@
+
+.prosemirror-editor {
+	outline: none;
+	padding-left: 15px;
+	padding-right: 15px;
+
+	color: var(--joplin-color);
+}

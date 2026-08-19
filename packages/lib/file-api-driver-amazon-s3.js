@@ -299,9 +299,6 @@ class FileApiDriverAmazonS3 {
 		const remotePath = this.makePath_(path);
 		if (!options) options = {};
 
-		// See https://github.com/facebook/react-native/issues/14445#issuecomment-352965210
-		if (typeof content === 'string') content = shim.Buffer.from(content, 'utf8');
-
 		try {
 			if (options.source === 'file') {
 				await this.s3UploadFileFrom(options.path, remotePath);

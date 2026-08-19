@@ -3,6 +3,11 @@ import { NoteEntity, SqlQuery } from '../services/database/types';
 import BaseItem from './BaseItem';
 import { LoadOptions } from './utils/types';
 
+export type AssociatedResourceNote = Partial<NoteEntity> & {
+	resource_id: string;
+	note_id: string;
+};
+
 // - If is_associated = 1, note_resources indicates which note_id is currently associated with the given resource_id
 // - If is_associated = 0, note_resources indicates which note_id *was* associated with the given resource_id
 // - last_seen_time tells the last time that resource was associated with this note.
@@ -74,12 +79,10 @@ export default class NoteResource extends BaseModel {
 
 	public static async associatedNoteIds(resourceId: string): Promise<string[]> {
 		const rows = await this.modelSelectAll('SELECT note_id FROM note_resources WHERE resource_id = ? AND is_associated = 1', [resourceId]);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return rows.map((r: any) => r.note_id);
+		return rows.map((r: { note_id: string }) => r.note_id);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async associatedResourceNotes(resourceIds: string[], options: LoadOptions = null): Promise<Record<string, any>> {
+	public static async associatedResourceNotes(resourceIds: string[], options: LoadOptions = null): Promise<Record<string, AssociatedResourceNote[]>> {
 		if (!resourceIds.length) return {};
 
 		const fields: string[] = options && options.fields ? (options.fields as string[]).slice() : [];
@@ -91,10 +94,10 @@ export default class NoteResource extends BaseModel {
 			FROM note_resources
 			LEFT JOIN notes
 			ON notes.id = note_resources.note_id
-			WHERE resource_id IN ('${resourceIds.join('\', \'')}') AND is_associated = 1
+			WHERE resource_id IN (${this.escapeIdsForSql(resourceIds)}) AND is_associated = 1
 		`);
 
-		const output: Record<string, NoteEntity[]> = {};
+		const output: Record<string, AssociatedResourceNote[]> = {};
 		for (const row of rows) {
 			if (!output[row.resource_id]) output[row.resource_id] = [];
 			output[row.resource_id].push(row);
@@ -170,8 +173,7 @@ export default class NoteResource extends BaseModel {
 		`,
 			[cutOffTime],
 		);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return output.map((r: any) => r.resource_id);
+		return output.map((r: { resource_id: string }) => r.resource_id);
 	}
 
 	public static async deleteByResource(resourceId: string) {

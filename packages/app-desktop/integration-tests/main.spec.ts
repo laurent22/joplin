@@ -4,10 +4,11 @@ import { _electron as electron } from '@playwright/test';
 import { writeFile } from 'fs-extra';
 import { join } from 'path';
 import createStartupArgs from './util/createStartupArgs';
-import firstNonDevToolsWindow from './util/firstNonDevToolsWindow';
+import getMainWindow from './util/getMainWindow';
 import setFilePickerResponse from './util/setFilePickerResponse';
 import setMessageBoxResponse from './util/setMessageBoxResponse';
 import getImageSourceSize from './util/getImageSourceSize';
+import setSettingValue from './util/setSettingValue';
 
 
 test.describe('main', () => {
@@ -15,12 +16,19 @@ test.describe('main', () => {
 		// A window should open with the correct title
 		expect(await mainWindow.title()).toMatch(/^Joplin/);
 
-		const mainPage = new MainScreen(mainWindow);
+		const mainPage = await new MainScreen(mainWindow).setup();
 		await mainPage.waitFor();
 	});
 
+	test('app should support French localization', async ({ mainWindow, electronApp }) => {
+		await setSettingValue(electronApp, mainWindow, 'locale', 'fr_FR');
+		// The "Notebooks" header should be localized
+		const localizedText = mainWindow.getByText('Carnets').first();
+		await expect(localizedText).toBeAttached();
+	});
+
 	test('should be able to create and edit a new note', async ({ mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		const editor = await mainScreen.createNewNote('Test note');
 
 		// Note list should contain the new note
@@ -41,7 +49,7 @@ test.describe('main', () => {
 	});
 
 	test('mermaid and KaTeX should render', async ({ mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		const editor = await mainScreen.createNewNote('🚧 Test 🚧');
 
 		const testCommitId = 'bf59b2';
@@ -97,7 +105,7 @@ test.describe('main', () => {
 	});
 
 	test('should correctly resize large images', async ({ electronApp, mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.createNewNote('Image resize test (part 1)');
 		const editor = mainScreen.noteEditor;
 
@@ -116,7 +124,10 @@ test.describe('main', () => {
 		await editor.attachFileButton.click();
 
 		const viewerFrame = editor.getNoteViewerFrameLocator();
-		const renderedImage = viewerFrame.getByAltText(filename);
+		const renderedImage = viewerFrame
+			.getByAltText(filename)
+			// Work around occasional "resolved to 2 elements" errors in CI
+			.last();
 
 		const fullSize = await getImageSourceSize(renderedImage);
 
@@ -138,7 +149,7 @@ test.describe('main', () => {
 
 	for (const target of ['', '_blank']) {
 		test(`clicking on an external link with target=${JSON.stringify(target)} should try to launch a browser`, async ({ electronApp, mainWindow }) => {
-			const mainScreen = new MainScreen(mainWindow);
+			const mainScreen = await new MainScreen(mainWindow).setup();
 			await mainScreen.waitFor();
 
 			// Mock openExternal
@@ -193,13 +204,42 @@ test.describe('main', () => {
 		// Open the app ourselves:
 		const startupArgs = createStartupArgs(profileDirectory);
 		const electronApp = await electron.launch({ args: startupArgs });
-		const mainWindow = await firstNonDevToolsWindow(electronApp);
+		const mainWindow = await getMainWindow(electronApp);
 
 		const safeModeDisableLink = mainWindow.getByText('Disable safe mode and restart');
 		await safeModeDisableLink.waitFor();
 		await expect(safeModeDisableLink).toBeInViewport();
 
 		await electronApp.close();
+	});
+
+	test('should import an HTML directory', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.importHtmlDirectory(electronApp, join(__dirname, 'resources', 'html-import'));
+		const importedFolder = mainScreen.sidebar.container.getByText('html-import');
+		await importedFolder.click();
+		await mainScreen.noteList.focusContent(electronApp);
+
+		const importedNote1 = mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
+		const importedNote2 = mainScreen.noteList.getNoteItemByTitle('test-html-file-2');
+		await expect.poll(async () => importedNote1.count(), { timeout: 60_000 }).toBeGreaterThan(0);
+		await expect.poll(async () => importedNote2.count(), { timeout: 60_000 }).toBeGreaterThan(0);
+
+		await expect(importedNote1).toBeVisible();
+		await expect(importedNote2).toBeVisible();
+	});
+
+	test('should import a single HTML file', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.waitFor();
+
+		await mainScreen.importHtmlFile(electronApp, join(__dirname, 'resources', 'html-import', 'test-html-file-with-image.html'));
+
+		const importedNote = mainScreen.noteList.getNoteItemByTitle('test-html-file-with-image');
+		await expect.poll(async () => importedNote.count(), { timeout: 60_000 }).toBeGreaterThan(0);
+		await expect(importedNote).toBeVisible({ timeout: 60_000 });
 	});
 });
 

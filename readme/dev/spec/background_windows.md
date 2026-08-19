@@ -72,7 +72,7 @@ For example, if a user switches from `window1` to `window2`, the state change lo
 		// </shared state>
 	}
 	```
-2. The reducer receives the `WINDOW_FOCUS` action and swaps which window state is in `backgroundWindows`. notice that only the window state is moved (the shared state is unmodified):
+2. The reducer receives the `WINDOW_FOCUS` action and swaps which window state is in `backgroundWindows`. Notice that only the window state is moved (the shared state is unmodified):
    ```js
 	state = {
 		backgroundWindows: {
@@ -160,4 +160,4 @@ Suppose `<MyComponent>` could be displayed in any window of the app and we want 
 
 - **All windows have the same menubar:** Currently, Joplin sets the application menubar with `Menu.setApplicationMenu`. This allows the menu to be updated later with `Menu.getApplicationMenu`, but means that all windows have the same menu.
 	- An alternative might be to set menus on individual windows with [`BrowserWindow.setMenu`](https://www.electronjs.org/docs/latest/api/browser-window#winsetmenumenu-linux-windows), but this doesn't allow accessing the menu later (e.g. from Playwright) with `Menu.getApplicationMenu` and does not work on MacOS.
-- **Certain UI only available on the main window:** At present, certain parts of the UI (e.g. sidebars, warning banners, etc.) are only visible on the main window.While this simplifies multi-window support by limiting which components need to work in secondary windows, it makes secondary windows more limited than primary windows.
+- **Certain UI only available on the main window:** At present, certain parts of the UI (e.g. sidebars, warning banners, etc.) are only visible on the main window. While this simplifies multi-window support by limiting which components need to work in secondary windows, it makes secondary windows more limited than primary windows.

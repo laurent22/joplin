@@ -52,6 +52,7 @@ const globalStyle = (() => {
 		mainPadding: 12,
 		topRowHeight: 50,
 		editorPaddingLeft: 8,
+		listTabSize: '1.7em',
 
 		margin: margin,
 		marginRight: margin,
@@ -97,7 +98,50 @@ const globalStyle = (() => {
 	};
 })();
 
-export function extraStyles(theme: Theme) {
+export const withDerivedColors = (theme: Theme) => {
+	const backgroundColor5 = theme.backgroundColor5 ?? theme.color4;
+	const backgroundColor4 = theme.backgroundColor4;
+
+	// Colors need to be converted to string to work in some cases (in particular
+	// on mobile)
+	const rgbString = (color: typeof Color): string => color.rgb().string();
+	const hexString = (color: typeof Color): string => color.hex();
+
+	return {
+		...theme,
+		borderColor4: rgbString(Color(theme.color).alpha(0.3)),
+		iconColor: rgbString(Color(theme.color).alpha(0.8)),
+		focusOutlineColor: theme.colorWarn,
+		focusOutlineColorDimmed: rgbString(Color(theme.colorWarn).alpha(0.4)),
+
+		backgroundColor5,
+		backgroundColorHover5: hexString(Color(backgroundColor5).darken(0.2)),
+		backgroundColorActive5: hexString(Color(backgroundColor5).darken(0.4)),
+
+		colorFaded2: rgbString(Color(theme.color2).alpha(0.52)),
+		colorHover2: rgbString(Color(theme.color2).alpha(0.7)),
+		colorActive2: rgbString(Color(theme.color2).alpha(0.9)),
+
+		backgroundColorHoverDim3: rgbString(Color(theme.backgroundColorHover3).alpha(0.3)),
+		backgroundColorActive3: rgbString(Color(theme.backgroundColorHover3).alpha(0.5)),
+		backgroundColorHover2: rgbString(Color(theme.selectedColor2).alpha(0.4)),
+		backgroundColorHover4: rgbString(Color(theme.backgroundColorHover3).alpha(0.3)),
+		backgroundColorActive4: rgbString(Color(theme.backgroundColorHover3).alpha(0.8)),
+
+		scrollbarThumbColor: rgbString(Color(theme.color).alpha(0.54)),
+		scrollbarThumbColorHover: rgbString(Color(theme.color).alpha(0.63)),
+		scrollbarThumbColor2: rgbString(Color(theme.color2).alpha(0.46)),
+		scrollbarThumbColorHover2: rgbString(Color(theme.color2).alpha(0.63)),
+
+		selectedDividerColor: hexString(Color(theme.dividerColor).darken(0.2)),
+		color5: theme.color5 ?? backgroundColor4,
+		colorHover3: theme.color3,
+	};
+};
+
+type ThemeAndDerivedColors = ReturnType<typeof withDerivedColors>;
+
+export function extraStyles(theme: ThemeAndDerivedColors) {
 	const zoomRatio = 1;
 
 	const baseFontSize = Math.round(12 * zoomRatio);
@@ -106,15 +150,6 @@ export function extraStyles(theme: Theme) {
 		toolbarIconSize: 18,
 		noteViewerFontSize: Math.round(baseFontSize * 1.25),
 	};
-
-	const bgColor4 = theme.backgroundColor4;
-	const borderColor4: string = Color(theme.color).alpha(0.3);
-	const iconColor = Color(theme.color).alpha(0.8);
-	const focusOutlineColor = theme.colorWarn;
-
-	const backgroundColor5 = theme.backgroundColor5 ?? theme.color4;
-	const backgroundColorHover5 = Color(backgroundColor5).darken(0.2).hex();
-	const backgroundColorActive5 = Color(backgroundColor5).darken(0.4).hex();
 
 	const inputStyle = {
 		...globalStyle.inputStyle,
@@ -133,7 +168,7 @@ export function extraStyles(theme: Theme) {
 		...globalStyle.buttonStyle,
 		color: theme.color4,
 		backgroundColor: theme.backgroundColor4,
-		borderColor: borderColor4,
+		borderColor: theme.borderColor4,
 		userSelect: literal('none'),
 		// cursor: 'pointer',
 
@@ -213,25 +248,6 @@ export function extraStyles(theme: Theme) {
 	return {
 		zoomRatio,
 		...fontSizes,
-		selectedDividerColor: Color(theme.dividerColor).darken(0.2).hex(),
-		iconColor,
-		colorFaded2: Color(theme.color2).alpha(0.5).rgb(),
-		colorHover2: Color(theme.color2).alpha(0.7).rgb(),
-		colorActive2: Color(theme.color2).alpha(0.9).rgb(),
-
-		backgroundColorHoverDim3: Color(theme.backgroundColorHover3).alpha(0.3).rgb(),
-		backgroundColorActive3: Color(theme.backgroundColorHover3).alpha(0.5).rgb(),
-		backgroundColorHover2: Color(theme.selectedColor2).alpha(0.4).rgb(),
-		backgroundColorHover4: Color(theme.backgroundColorHover3).alpha(0.3).rgb(),
-		backgroundColorActive4: Color(theme.backgroundColorHover3).alpha(0.8).rgb(),
-		colorHover3: theme.color3,
-		borderColor4,
-		backgroundColor4: bgColor4,
-		color5: theme.color5 ?? bgColor4,
-		backgroundColor5,
-		backgroundColorHover5,
-		backgroundColorActive5,
-		focusOutlineColor,
 
 		icon: {
 			...globalStyle.icon,
@@ -306,7 +322,7 @@ export function extraStyles(theme: Theme) {
 			flexDirection: literal('column'),
 		},
 		buttonIconStyle: {
-			color: iconColor,
+			color: theme.iconColor,
 			marginRight: 6,
 		},
 		notificationBox: {
@@ -316,7 +332,7 @@ export function extraStyles(theme: Theme) {
 			padding: 10,
 			fontSize: baseFontSize,
 		},
-		dialogTitle: { ...h1Style, marginBottom: '1.2em' },
+		dialogTitle: { ...h1Style, marginBottom: '1.2em', marginTop: '0' },
 		dropdownList: { ...inputStyle },
 		colorHover: theme.color,
 		backgroundHover: `${theme.selectedColor2}44`,
@@ -324,12 +340,14 @@ export function extraStyles(theme: Theme) {
 		// but some times, depending on the theme, it might be too dark or too light, so it can be
 		// specified directly by the theme too.
 		highlightedColor: theme.highlightedColor ?? theme.selectedColor2,
+		markHighlightColor: theme.searchMarkerColor,
+		markHighlightBackgroundColor: theme.searchMarkerBackgroundColor,
 	};
 }
 
 type ExtraStyles = ReturnType<typeof extraStyles>;
 type GlobalStyle = typeof globalStyle;
-export type ThemeStyle = Theme & ExtraStyles & GlobalStyle & { cacheKey: number };
+export type ThemeStyle = ThemeAndDerivedColors & ExtraStyles & GlobalStyle & { cacheKey: number };
 
 const themeCache_: Record<string, ThemeStyle> = {};
 
@@ -339,22 +357,26 @@ export function themeStyle(themeId: number): ThemeStyle {
 	const cacheKey = themeId;
 	if (themeCache_[cacheKey]) return themeCache_[cacheKey];
 
+	const theme = withDerivedColors(themes[themeId]);
 	const output: ThemeStyle = {
 		cacheKey,
 		...globalStyle,
-		...themes[themeId],
+		...theme,
 
 		// All theme are based on the light style, and just override the
 		// relevant properties
-		...extraStyles(themes[themeId]),
+		...extraStyles(theme),
 	};
 
 	themeCache_[cacheKey] = output;
 	return themeCache_[cacheKey];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const cachedStyles_: any = {
+const cachedStyles_: {
+	themeId: number | null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Cached styles are heterogeneous per call site; see buildStyle below
+	styles: Record<string, { style: any; timestamp: number }>;
+} = {
 	themeId: null,
 	styles: {},
 };
@@ -362,10 +384,9 @@ const cachedStyles_: any = {
 // cacheKey must be a globally unique key, and must change whenever
 // the dependencies of the style change. If the style depends only
 // on the theme, a static string can be provided as a cache key.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored code from before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Style shape varies per call site (CSSProperties for React, styled-components objects, plain CSS strings)
 type BuildStyleCallback = (style: ThemeStyle)=> any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code from before rule was applied
-export function buildStyle(cacheKey: any, themeId: number, callback: BuildStyleCallback) {
+export function buildStyle(cacheKey: string | (string | number)[], themeId: number, callback: BuildStyleCallback) {
 	cacheKey = Array.isArray(cacheKey) ? cacheKey.join('_') : cacheKey;
 
 	// We clear the cache whenever switching themes

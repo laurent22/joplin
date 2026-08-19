@@ -15,10 +15,14 @@ interface LogEntry {
 enum Platform {
 	Unknown = 'unknown',
 	Android = 'android',
+	Windows = 'windows',
+	MacOs = 'macos',
+	Linux = 'linux',
 	Ios = 'ios',
 	Desktop = 'desktop',
 	Clipper = 'clipper',
 	Server = 'server',
+	Transcribe = 'transcribe',
 	Cloud = 'cloud',
 	Cli = 'cli',
 	PluginGenerator = 'plugin-generator',
@@ -94,10 +98,14 @@ async function gitTags() {
 function platformFromTag(tagName: string): Platform {
 	if (tagName.indexOf('v') === 0) return Platform.Desktop;
 	if (tagName.indexOf('android') >= 0) return Platform.Android;
+	if (tagName.indexOf('windows') >= 0) return Platform.Windows;
+	if (tagName.indexOf('linux') >= 0) return Platform.Linux;
+	if (tagName.indexOf('macos') >= 0) return Platform.MacOs;
 	if (tagName.indexOf('ios') >= 0) return Platform.Ios;
 	if (tagName.indexOf('clipper') === 0) return Platform.Clipper;
 	if (tagName.indexOf('cli') === 0) return Platform.Cli;
 	if (tagName.indexOf('server') === 0) return Platform.Server;
+	if (tagName.indexOf('transcribe') === 0) return Platform.Transcribe;
 	if (tagName.indexOf('cloud') === 0) return Platform.Cloud;
 	if (tagName.indexOf('plugin-generator') === 0) return Platform.PluginGenerator;
 	if (tagName.indexOf('plugin-repo-cli') === 0) return Platform.PluginRepoCli;
@@ -106,7 +114,7 @@ function platformFromTag(tagName: string): Platform {
 }
 
 export const filesApplyToPlatform = (files: string[], platform: string): boolean => {
-	const isMainApp = ['android', 'ios', 'desktop', 'cli', 'server'].includes(platform);
+	const isMainApp = ['android', 'ios', 'windows', 'linux', 'macos', 'desktop', 'cli', 'server'].includes(platform);
 	const isMobile = ['android', 'ios'].includes(platform);
 
 	for (const file of files) {
@@ -122,6 +130,7 @@ export const filesApplyToPlatform = (files: string[], platform: string): boolean
 		if (file.startsWith('packages/react-native-') && isMobile) return true;
 		if (file.startsWith('packages/renderer') && isMainApp) return true;
 		if (file.startsWith('packages/server') && platform === 'server') return true;
+		if (file.startsWith('packages/transcribe') && platform === 'transcribe') return true;
 		if (file.startsWith('packages/tools') && isMainApp) return true;
 		if (file.startsWith('packages/turndown') && isMainApp) return true;
 	}
@@ -136,9 +145,9 @@ export interface RenovateMessage {
 
 export const parseRenovateMessage = (message: string): RenovateMessage => {
 	const regexes = [
-		/^Update dependency ([^\s]+) to ([^\s]+)/,
-		/^Update ([^\s]+) monorepo to ([^\s]+)/,
-		/^Update ([^\s]+)/,
+		/^(?:(?:fix|chore)\(deps\): )?[Uu]pdate dependency ([^\s]+) to ([^\s]+)/,
+		/^(?:(?:fix|chore)\(deps\): )?[Uu]pdate ([^\s]+) monorepo to ([^\s]+)/,
+		/^(?:(?:fix|chore)\(deps\): )?[Uu]pdate ([^\s]+)/,
 	];
 
 	for (const regex of regexes) {
@@ -249,15 +258,16 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		let addIt = false;
 
 		// "All" refers to desktop, CLI and mobile app. Clipper and Server are not included.
-		if (prefix.indexOf('all') >= 0 && (platform !== 'clipper' && platform !== 'server' && platform !== 'cloud')) addIt = true;
+		if (prefix.indexOf('all') >= 0 && (platform !== 'clipper' && platform !== 'server' && platform !== 'cloud' && platform !== 'transcribe')) addIt = true;
 		if ((platform === 'android' || platform === 'ios') && prefix.indexOf('mobile') >= 0) addIt = true;
 		if (platform === 'android' && prefix.indexOf('android') >= 0) addIt = true;
 		if (platform === 'ios' && prefix.indexOf('ios') >= 0) addIt = true;
 		if (platform === 'desktop' && prefix.indexOf('desktop') >= 0) addIt = true;
-		if (platform === 'desktop' && (prefix.indexOf('desktop') >= 0 || prefix.indexOf('api') >= 0 || prefix.indexOf('plugins') >= 0 || prefix.indexOf('macos') >= 0)) addIt = true;
+		if (platform === 'desktop' && (prefix.indexOf('desktop') >= 0 || prefix.indexOf('api') >= 0 || prefix.indexOf('plugins') >= 0 || prefix.indexOf('macos') >= 0 || prefix.indexOf('windows') >= 0 || prefix.indexOf('linux') >= 0)) addIt = true;
 		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
 		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
 		if (platform === 'server' && prefix.indexOf('server') >= 0) addIt = true;
+		if (platform === 'transcribe' && prefix.indexOf('transcribe') >= 0) addIt = true;
 		if (platform === 'cloud' && (prefix.indexOf('cloud') >= 0 || prefix.indexOf('server') >= 0)) addIt = true;
 
 		if (isRenovate && filesApplyToPlatform(log.files, platform)) {
@@ -271,6 +281,7 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		// bundle them all up in a single "Updated translations" at the end.
 		if (log.message.match(/Translation:\sUpdate\s.*?(\.po|[a-zA-Z][a-zA-Z]|[a-zA-Z][a-zA-Z]_[a-zA-Z][a-zA-Z])/)
 			|| log.message.match(/Update.+\.po/)
+			|| log.message.match(/^All: Update translations/)
 		) {
 			// updatedTranslations = true;
 			addIt = false;
@@ -312,7 +323,7 @@ function formatCommitMessage(commit: string, msg: string, author: Author, option
 	const isPlatformPrefix = (prefixString: string) => {
 		const prefix = prefixString.split(',').map(p => p.trim().toLowerCase());
 		for (const p of prefix) {
-			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all', 'api', 'plugins', 'server', 'cloud'].indexOf(p) >= 0) return true;
+			if (['android', 'mobile', 'ios', 'desktop', 'windows', 'linux', 'macos', 'cli', 'clipper', 'all', 'api', 'plugins', 'server', 'transcribe', 'cloud'].indexOf(p) >= 0) return true;
 		}
 		return false;
 	};
@@ -467,8 +478,15 @@ async function findFirstRelevantTag(baseTag: string, platform: Platform, allTags
 	for (let i = baseTagIndex - 1; i >= 0; i--) {
 		const tag = allTags[i];
 		if (platformFromTag(tag) !== platform) continue;
+
 		const currentVersion = versionFromTag(tag);
-		if (compareVersions(baseVersion, currentVersion) <= 0) continue;
+
+		try {
+			if (compareVersions(baseVersion, currentVersion) <= 0) continue;
+		} catch (error) {
+			console.warn(`Skipping invalid tag: ${tag}`);
+			continue;
+		}
 
 		try {
 			const logs = await gitLog(tag);

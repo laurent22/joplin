@@ -9,7 +9,8 @@ WebDAV-compatible services that are known to work with Joplin:
 - [Fastmail](https://www.fastmail.com/)
 - [HiDrive](https://www.strato.fr/stockage-en-ligne/) from Strato. [Setup help](https://github.com/laurent22/joplin/issues/309)
 - [InfiniCLOUD](https://infini-cloud.net/)
-- [Nginx WebDAV Module](https://nginx.org/en/docs/http/ngx_http_dav_module.html)
+- [Mailbox.org WebDAV](https://kb.mailbox.org/en/private/drive/) [Setup help](https://userforum-en.mailbox.org/topic/2766-unable-to-sync-joplin-notes-with-mailbox-org-via-webdav#comment-10946)
+- [Nginx WebDAV Module](https://nginx.org/en/docs/http/ngx_http_dav_module.html), requires [http_dav_ext_module](https://github.com/arut/nginx-dav-ext-module)
 - [Nextcloud](https://nextcloud.com/)
 - [OwnCloud](https://owncloud.org/)
 - [Seafile](https://www.seafile.com/)
@@ -17,3 +18,4 @@ WebDAV-compatible services that are known to work with Joplin:
 - [Synology WebDAV Server](https://www.synology.com/en-us/dsm/packages/WebDAVServer)
 - [WebDAV Nav](https://www.schimera.com/products/webdav-nav-server/), a macOS server.
 - [Zimbra](https://www.zimbra.com/)
+- [Infomaniak kDrive](https://www.infomaniak.com/fr/ksuite/kdrive)

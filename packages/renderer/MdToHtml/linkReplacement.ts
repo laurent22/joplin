@@ -1,28 +1,27 @@
 import { LinkRenderingType } from '../MdToHtml';
-import { ItemIdToUrlHandler, OptionsResourceModel } from '../types';
+import { ItemIdToUrlHandler, OptionsResourceModel, ResourceEntity, ResourceInfos } from '../types';
 import * as utils from '../utils';
 import createEventHandlingAttrs from './createEventHandlingAttrs';
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 const urlUtils = require('../urlUtils.js');
 const { getClassNameForMimeType } = require('font-awesome-filetypes');
 
 export interface Options {
 	title?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	resources?: any;
+	resources?: ResourceInfos;
 	ResourceModel?: OptionsResourceModel;
 	linkRenderingType?: LinkRenderingType;
 	plainResourceRendering?: boolean;
 	postMessageSyntax?: string;
 	enableLongPress?: boolean;
 	itemIdToUrl?: ItemIdToUrlHandler;
+	showNoteLinkIcon?: boolean;
 }
 
 export interface LinkReplacementResult {
 	html: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	resource: any;
+	resource: ResourceEntity | null;
 	resourceReady: boolean;
 	resourceFullPath: string;
 }
@@ -36,6 +35,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	options.plainResourceRendering ??= false;
 	options.postMessageSyntax ??= 'postMessage';
 	options.enableLongPress ??= false;
+	options.showNoteLinkIcon ??= true;
 
 	const resourceHrefInfo = urlUtils.parseResourceUrl(href);
 	const isResourceUrl = options.resources && !!resourceHrefInfo;
@@ -75,12 +75,16 @@ export default function(href: string, options: Options = null): LinkReplacementR
 			if (resourceHrefInfo.hash) href += `#${resourceHrefInfo.hash}`;
 			resourceIdAttr = `data-resource-id='${resourceId}'`;
 
-			const iconType = mime ? getClassNameForMimeType(mime) : 'fa-joplin';
-
+			let iconType;
+			if (mime) {
+				iconType = getClassNameForMimeType(mime);
+			} else {
+				iconType = options.showNoteLinkIcon ? 'fa-joplin' : '';
+			}
 			// Icons are defined in lib/renderers/noteStyle using inline svg
 			// The icons are taken from fork-awesome but use the font-awesome naming scheme in order
 			// to be more compatible with the getClass library
-			icon = `<span class="resource-icon ${iconType}"></span>`;
+			icon = iconType ? `<span class="resource-icon ${iconType}"></span>` : '';
 		}
 	} else {
 		// If the link is a plain URL (as opposed to a resource link), set the href to the actual

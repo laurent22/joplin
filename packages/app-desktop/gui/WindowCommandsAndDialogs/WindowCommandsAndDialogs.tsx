@@ -4,6 +4,7 @@ import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
 import NotePropertiesDialog from '../NotePropertiesDialog';
 import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
 import ShareNoteDialog from '../ShareNoteDialog';
+import PublishFolderDialog from '../PublishFolderDialog';
 import { PluginHtmlContents, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DialogState } from './types';
@@ -13,13 +14,14 @@ import { Dispatch } from 'redux';
 import ModalMessageOverlay from './ModalMessageOverlay';
 import { EditorNoteStatuses, stateUtils } from '@joplin/lib/reducer';
 import dialogs from '../dialogs';
-import useDocument from '../hooks/useDocument';
+import useDocument from '@joplin/lib/hooks/dom/useDocument';
 import useWindowCommands from './utils/useWindowCommands';
 import PluginDialogs from './PluginDialogs';
 import useSyncDialogState from './utils/useSyncDialogState';
 import AppDialogs from './AppDialogs';
+import PopupNotificationList from '../PopupNotification/PopupNotificationList';
 
-const PluginManager = require('@joplin/lib/services/PluginManager');
+import PluginManager from '@joplin/lib/services/PluginManager';
 
 interface Props {
 	dispatch: Dispatch;
@@ -28,7 +30,7 @@ interface Props {
 	pluginHtmlContents: PluginHtmlContents;
 	visibleDialogs: VisibleDialogs;
 	appDialogStates: AppStateDialog[];
-	pluginsLegacy: unknown;
+	pluginsLegacy: Record<string, { dialogOpen?: boolean; userData?: unknown }>;
 	modalMessage: string|null;
 
 	customCss: string;
@@ -46,6 +48,9 @@ const defaultDialogState: DialogState = {
 		visible: false,
 	},
 	shareFolderDialogOptions: {
+		visible: false,
+	},
+	publishFolderDialogOptions: {
 		visible: false,
 	},
 	promptOptions: null,
@@ -111,9 +116,12 @@ const WindowCommandsAndDialogs: React.FC<Props> = props => {
 	}, [dialogState.promptOptions]);
 
 	const dialogInfo = PluginManager.instance().pluginDialogToShow(props.pluginsLegacy);
-	const pluginDialog = !dialogInfo ? null : <dialogInfo.Dialog {...dialogInfo.props} />;
+	const Dialog = dialogInfo?.Dialog as React.ComponentType<Record<string, unknown>> | undefined;
+	const pluginDialog = !dialogInfo || !Dialog ? null : <Dialog {...dialogInfo.props} />;
 
-	const { noteContentPropertiesDialogOptions, notePropertiesDialogOptions, shareNoteDialogOptions, shareFolderDialogOptions, promptOptions } = dialogState;
+	const {
+		noteContentPropertiesDialogOptions, notePropertiesDialogOptions, shareNoteDialogOptions, shareFolderDialogOptions, publishFolderDialogOptions, promptOptions,
+	} = dialogState;
 
 
 	return <>
@@ -161,6 +169,13 @@ const WindowCommandsAndDialogs: React.FC<Props> = props => {
 				onClose={onDialogHideCallbacks.shareFolderDialogOptions}
 			/>
 		)}
+		{publishFolderDialogOptions.visible && (
+			<PublishFolderDialog
+				themeId={props.themeId}
+				folderId={publishFolderDialogOptions.folderId}
+				onClose={onDialogHideCallbacks.publishFolderDialogOptions}
+			/>
+		)}
 
 		<PromptDialog
 			autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null}
@@ -173,6 +188,8 @@ const WindowCommandsAndDialogs: React.FC<Props> = props => {
 			buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null}
 			inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null}
 		/>
+
+		<PopupNotificationList/>
 	</>;
 };
 

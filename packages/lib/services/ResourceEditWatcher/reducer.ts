@@ -1,10 +1,11 @@
-import produce, { Draft } from 'immer';
+import { produce, Draft } from 'immer';
+import { defaultWindowId, stateUtils } from '../../reducer';
 
 export const defaultState = {
 	watchedResources: {},
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Redux reducer composed across app-desktop/app-mobile with different state shapes; action types are heterogeneous
 const reducer = produce((draft: Draft<any>, action: any) => {
 	if (action.type.indexOf('RESOURCE_EDIT_WATCHER_') !== 0) return;
 
@@ -20,14 +21,28 @@ const reducer = produce((draft: Draft<any>, action: any) => {
 			break;
 
 		case 'RESOURCE_EDIT_WATCHER_REMOVE':
+			// RESOURCE_EDIT_WATCHER_REMOVE signals that a resource is no longer being watched.
+			// As such, it should be removed from all windows' resource lists:
+			for (const windowId in draft.backgroundWindows) {
+				// watchedResources is per-window only on desktop:
+				if ('watchedResources' in draft.backgroundWindows[windowId]) {
+					delete draft.backgroundWindows[windowId].watchedResources[action.id];
+				}
+			}
 
 			delete draft.watchedResources[action.id];
 			break;
 
-		case 'RESOURCE_EDIT_WATCHER_CLEAR':
+		case 'RESOURCE_EDIT_WATCHER_CLEAR': {
+			const windowState = stateUtils.windowStateById(draft, action.windowId ?? defaultWindowId);
 
-			draft.watchedResources = {};
+			// The window may have already been closed.
+			const windowExists = !!windowState;
+			if (windowExists) {
+				windowState.watchedResources = {};
+			}
 			break;
+		}
 
 		}
 	} catch (error) {

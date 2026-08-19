@@ -176,6 +176,11 @@ module.exports = class extends Generator {
 			this.templatePath('api'),
 			this.destinationPath('api'),
 		);
+
+		this.fs.copy(
+			this.templatePath('script'),
+			this.destinationPath('script'),
+		);
 	}
 
 };

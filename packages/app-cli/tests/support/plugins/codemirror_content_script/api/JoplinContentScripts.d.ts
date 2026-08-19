@@ -21,7 +21,8 @@ export default class JoplinContentScripts {
      * for more information.
      *
      * * [View the renderer demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/content_script)
-     * * [View the editor demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script)
+     * * [View the editor plugin tutorial](https://joplinapp.org/help/api/tutorials/cm6_plugin)
+     * * [View the legacy editor demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/codemirror_content_script)
      *
      * See also the [postMessage demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages)
      *

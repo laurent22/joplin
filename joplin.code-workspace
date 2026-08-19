@@ -5,6 +5,9 @@
 		},
 	],
 	"settings": {
+		"rust-analyzer.linkedProjects": [
+			"./packages/onenote-converter/Cargo.toml",
+		],
 		"files.exclude": {
 			"_mydocs/mdtest/": true,
 			"_releases/": true,
@@ -13,6 +16,7 @@
 			"./packages/app-cli/**/*.mo": true,
 			"./packages/app-cli/**/build/": true,
 			"./packages/app-cli/**/config.json": true,
+			"**/.watchman-cookie-*": true,
 			"./packages/app-cli/**/linkToLocal.sh": true,
 			"./packages/app-cli/**/node_modules/": true,
 			"./packages/app-cli/**/out.txt": true,
@@ -104,7 +108,7 @@
 			"./packages/renderer/**/.vscode/": true,
 			"./packages/renderer/**/copyLib.bat": true,
 			"./packages/renderer/**/node_modules/": true,
-			".eslintignore": true,
+			".ignore.eslint": true,
 			".gitignore": true,
 			".yarn/cache": true,
 			".yarn/install-state.gz": true,
@@ -336,6 +340,7 @@
 			"packages/renderer/MdToHtml/rules/fence.js": true,
 			"packages/renderer/MdToHtml/rules/mermaid.js": true,
 			"packages/renderer/MdToHtml/rules/sanitize_html.js": true,
+			"packages/transcribe/dist": true,
 			"packages/server/db-*.sqlite": true,
 			"packages/server/dist/": true,
 			"packages/utils/dist/": true,

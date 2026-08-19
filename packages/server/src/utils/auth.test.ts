@@ -1,6 +1,6 @@
 import { hashPassword } from './auth';
 
-describe('hashPassword', () => {
+describe('auth', () => {
 
 	// cSpell:disable
 	it.each(
@@ -16,5 +16,4 @@ describe('hashPassword', () => {
 		expect((await hashPassword(plainText)).startsWith('$2a$10')).toBe(true);
 	});
 	// cSpell:enable
-
 });

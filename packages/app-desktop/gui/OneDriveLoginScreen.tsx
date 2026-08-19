@@ -1,20 +1,30 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import { reg } from '@joplin/lib/registry';
 import Setting from '@joplin/lib/models/Setting';
-const bridge = require('@electron/remote').require('./bridge').default;
-const { themeStyle } = require('@joplin/lib/theme');
-const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
+import bridge from '../services/bridge';
+import { themeStyle } from '@joplin/lib/theme';
+import { OneDriveApiNodeUtils } from '@joplin/lib/onedrive-api-node-utils';
 
 interface Props {
-	themeId: string;
+	themeId: number;
+	dispatch: Dispatch;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-class OneDriveLoginScreenComponent extends React.Component<any, any> {
+interface AuthLogEntry {
+	key: string;
+	text: string;
+}
+
+interface State {
+	authLog: AuthLogEntry[];
+}
+
+class OneDriveLoginScreenComponent extends React.Component<Props, State> {
 	public constructor(props: Props) {
 		super(props);
 
@@ -24,10 +34,8 @@ class OneDriveLoginScreenComponent extends React.Component<any, any> {
 	}
 
 	public async componentDidMount() {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const log = (s: any) => {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			this.setState((state: any) => {
+		const log = (s: string) => {
+			this.setState((state) => {
 				const authLog = state.authLog.slice();
 				authLog.push({ key: (Date.now() + Math.random()).toString(), text: s });
 				return { authLog: authLog };
@@ -38,8 +46,7 @@ class OneDriveLoginScreenComponent extends React.Component<any, any> {
 		const syncTarget = reg.syncTarget(syncTargetId);
 		const oneDriveApiUtils = new OneDriveApiNodeUtils(syncTarget.api());
 		const auth = await oneDriveApiUtils.oauthDance({
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			log: (s: any) => log(s),
+			log: (s: string) => log(s),
 		});
 
 		Setting.setValue(`sync.${syncTargetId}.auth`, auth ? JSON.stringify(auth) : null);
@@ -66,7 +73,7 @@ class OneDriveLoginScreenComponent extends React.Component<any, any> {
 		const logComps = [];
 		for (const l of this.state.authLog) {
 			if (l.text.indexOf('http:') === 0) {
-				logComps.push(<a key={l.key} style={theme.urlStyle} href="#" onClick={() => { bridge().openExternal(l.text); }}>{l.text}</a>);
+				logComps.push(<a key={l.key} style={theme.urlStyle} href="#" onClick={() => { void bridge().openExternal(l.text); }}>{l.text}</a>);
 			} else {
 				logComps.push(<p key={l.key} style={theme.textStyle}>{l.text}</p>);
 			}
@@ -85,8 +92,7 @@ class OneDriveLoginScreenComponent extends React.Component<any, any> {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: { settings: { theme: number } }) => {
 	return {
 		themeId: state.settings.theme,
 	};

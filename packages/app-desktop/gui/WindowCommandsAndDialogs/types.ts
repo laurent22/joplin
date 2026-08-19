@@ -20,12 +20,17 @@ export interface DialogState {
 		visible: boolean;
 		folderId?: string;
 	};
+	publishFolderDialogOptions: {
+		visible: boolean;
+		folderId?: string;
+	};
 	promptOptions: {
 		inputType?: string;
 		buttons?: unknown[];
 		description?: string;
 		label?: string;
 		value?: string;
+		autocomplete?: unknown;
 		onClose?: (answer: unknown, buttonType: unknown)=> void;
 	}|null;
 }

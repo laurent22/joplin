@@ -1,0 +1,16 @@
+
+table .selectedCell {
+	outline: 2px solid var(--joplin-text-selection-color);
+}
+
+/* Prevent table entries from having more spacing in the Rich Text Editor
+   than in the note viewer. Unlike the note viewer, the Rich Text Editor
+   always adds a <p> wrapper element around the table cells. */
+th > p:only-child, td > p:only-child {
+	margin: unset;
+}
+
+/* Tables used with ProseMirror do not have a thead, so zebra striping needs be styled separately to the global noteStyle css */
+table tr:nth-child(odd) {
+	background-color: var(--joplin-table-background-color);
+}

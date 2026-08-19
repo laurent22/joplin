@@ -1,7 +1,7 @@
 import BaseCommand from './base-command';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import BaseModel from '@joplin/lib/BaseModel';
-const { toTitleCase } = require('@joplin/lib/string-utils.js');
+import { toTitleCase } from '@joplin/lib/string-utils';
 import { reg } from '@joplin/lib/registry.js';
 import markdownUtils, { MarkdownTableRow } from '@joplin/lib/markdownUtils';
 import Database from '@joplin/lib/database';
@@ -37,8 +37,7 @@ class Command extends BaseCommand {
 		return markdownUtils.createMarkdownTable(headers, tableFields);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { file: string }) {
 		const models = [
 			{
 				type: BaseModel.TYPE_NOTE,
@@ -189,9 +188,9 @@ async function fetchAllNotes() {
 
 		lines.push('## Searching');
 		lines.push('');
-		lines.push('Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/help/#searching');
+		lines.push('Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/help/apps/search');
 		lines.push('');
-		lines.push('To retrieve non-notes items, such as notebooks or tags, add a `type` parameter and set it to the required [item type name](#item-type-id). In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use `*` as a wildcard. This is convenient for example to retrieve notebooks or tags by title.');
+		lines.push('To retrieve non-notes items, such as notebooks or tags, add a `type` parameter and set it to the required [item type name](#item-type-ids). In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use `*` as a wildcard. This is convenient for example to retrieve notebooks or tags by title.');
 		lines.push('');
 		lines.push('For example, to retrieve the notebook named `recipes`: **GET /search?query=recipes&type=folder**');
 		lines.push('');
@@ -251,7 +250,7 @@ async function fetchAllNotes() {
 
 			lines.push('### Properties');
 			lines.push('');
-			lines.push(this.createPropertiesTable(tableFields));
+			lines.push(this.createPropertiesTable(tableFields as unknown as MarkdownTableRow[]));
 			lines.push('');
 
 			lines.push(`### GET /${tableName}`);
@@ -402,7 +401,17 @@ async function fetchAllNotes() {
 				lines.push('');
 			}
 
-			if (model.type === BaseModel.TYPE_NOTE || model.type === BaseModel.TYPE_FOLDER) {
+			if (model.type === BaseModel.TYPE_NOTE) {
+				lines.push(`By default, the ${singular} will be moved **to the trash**. To permanently delete it, add the query parameter \`permanent=1\``);
+				lines.push('');
+
+				lines.push('### DELETE /notes/:id/revisions');
+				lines.push('');
+				lines.push('Deletes all the revisions attached to this note.');
+				lines.push('');
+			}
+
+			if (model.type === BaseModel.TYPE_FOLDER) {
 				lines.push(`By default, the ${singular} will be moved **to the trash**. To permanently delete it, add the query parameter \`permanent=1\``);
 				lines.push('');
 			}
@@ -417,7 +426,7 @@ async function fetchAllNotes() {
 			lines.push('');
 			lines.push('### Properties');
 			lines.push('');
-			lines.push(this.createPropertiesTable(tableFields));
+			lines.push(this.createPropertiesTable(tableFields as unknown as MarkdownTableRow[]));
 			lines.push('');
 			lines.push('### GET /events');
 			lines.push('');

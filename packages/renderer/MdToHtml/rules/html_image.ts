@@ -1,6 +1,8 @@
 import { RuleOptions } from '../../MdToHtml';
 import { attributesHtml } from '../../htmlUtils';
 import * as utils from '../../utils';
+import type * as MarkdownIt from 'markdown-it';
+import type Renderer = require('markdown-it/lib/renderer');
 
 function renderImageHtml(before: string, src: string, after: string, ruleOptions: RuleOptions) {
 	const r = utils.imageReplacement(ruleOptions.ResourceModel, { src, before, after }, ruleOptions.resources, ruleOptions.resourceBaseUrl, ruleOptions.itemIdToUrl);
@@ -9,37 +11,31 @@ function renderImageHtml(before: string, src: string, after: string, ruleOptions
 	return `[Image: ${src}]`;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function plugin(markdownIt: any, ruleOptions: RuleOptions) {
+function plugin(markdownIt: MarkdownIt, ruleOptions: RuleOptions) {
 	const Resource = ruleOptions.ResourceModel;
 
-	const htmlBlockDefaultRender =
+	const htmlBlockDefaultRender: Renderer.RenderRule =
 		markdownIt.renderer.rules.html_block ||
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function(tokens: any[], idx: number, options: any, _env: any, self: any) {
+		function(tokens, idx, options, _env, self) {
 			return self.renderToken(tokens, idx, options);
 		};
 
-	const htmlInlineDefaultRender =
+	const htmlInlineDefaultRender: Renderer.RenderRule =
 		markdownIt.renderer.rules.html_inline ||
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function(tokens: any[], idx: number, options: any, _env: any, self: any) {
+		function(tokens, idx, options, _env, self) {
 			return self.renderToken(tokens, idx, options);
 		};
 
 	const imageRegex = /<img(.*?)src=["'](.*?)["'](.*?)>/gi;
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	const handleImageTags = function(defaultRender: Function) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return function(tokens: any[], idx: number, options: any, env: any, self: any) {
+	const handleImageTags = function(defaultRender: Renderer.RenderRule): Renderer.RenderRule {
+		return function(tokens, idx, options, env, self) {
 			const token = tokens[idx];
 			const content = token.content;
 
 			if (!content.match(imageRegex)) return defaultRender(tokens, idx, options, env, self);
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			return content.replace(imageRegex, (_v: any, before: string, src: string, after: string) => {
+			return content.replace(imageRegex, (_v: string, before: string, src: string, after: string) => {
 				if (!Resource.isResourceUrl(src)) return `<img${before}src="${src}"${after}>`;
 				return renderImageHtml(before, src, after, ruleOptions);
 			});

@@ -1,14 +1,15 @@
 import { execCommand } from '@joplin/utils';
-import waitForCliInput from '../utils/waitForCliInput';
 import { copy } from 'fs-extra';
 import { join } from 'path';
+import { waitForCliInput } from '@joplin/utils/cli';
 import buildDefaultPlugins from '../buildDefaultPlugins';
 import getPathToPatchFileFor from '../utils/getPathToPatchFileFor';
 
 const editPatch = async (targetPluginId: string, outputParentDir: string|null) => {
 	let patchedPlugin = false;
 
-	await buildDefaultPlugins(outputParentDir, {
+	await buildDefaultPlugins({
+		outputParentDir: outputParentDir,
 		beforePatch: async () => {
 			// To make updating just the patch possible, a commit is created just before applying
 			// the patch.
@@ -34,7 +35,7 @@ const editPatch = async (targetPluginId: string, outputParentDir: string|null) =
 	});
 
 	if (!patchedPlugin) {
-		throw new Error(`No default plugin with ID ${targetPluginId} found!`);
+		throw new Error(`No patchable default plugin with ID ${targetPluginId} found! Make sure that the plugin has a "cloneUrl" and "branch" in pluginRepositories.json.`);
 	}
 };
 

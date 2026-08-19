@@ -1,8 +1,10 @@
 import { ErrorCode } from '../errors';
 import { FolderEntity } from '../services/database/types';
-import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree, simulateReadOnlyShareEnv, expectThrow } from '../testing/test-utils';
+import getTrashFolderId from '../services/trash/getTrashFolderId';
+import { createNTestNotes, setupDatabaseAndSynchronizer, sleep, switchClient, checkThrowAsync, createFolderTree, simulateReadOnlyShareEnv, expectThrow, withWarningSilenced } from '../testing/test-utils';
 import Folder from './Folder';
 import Note from './Note';
+import Setting from './Setting';
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -138,8 +140,7 @@ describe('models/Folder', () => {
 		{
 			const folders = await Folder.all({ includeConflictFolder: false });
 			await Folder.addNoteCounts(folders);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const foldersById: any = {};
+			const foldersById: Record<string, FolderEntity & { note_count?: number }> = {};
 			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			folders.forEach((f: FolderEntity) => { foldersById[f.id] = f; });
 
@@ -153,8 +154,7 @@ describe('models/Folder', () => {
 		{
 			const folders = await Folder.all({ includeConflictFolder: true });
 			await Folder.addNoteCounts(folders);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const foldersById: any = {};
+			const foldersById: Record<string, FolderEntity & { note_count?: number }> = {};
 			// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 			folders.forEach((f: FolderEntity) => { foldersById[f.id] = f; });
 
@@ -162,6 +162,25 @@ describe('models/Folder', () => {
 			expect(foldersById[Folder.conflictFolderId()].note_count).toBe(1);
 		}
 	}));
+
+	it('folder hierarchy cycles should not cause addNoteCounts to loop infinitely', async () => {
+		const f1 = await Folder.save({ title: 'folder1' });
+		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
+		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
+		await Note.save({ title: 'test', parent_id: f1.id });
+
+		// Create a cycle.
+		// Note: This has been observed to happen, likely as a result of a bug in other code.
+		await Folder.save({ id: f1.id, parent_id: f3.id });
+
+		const folders = await Folder.all();
+		// Should not loop indefinitely, okay to warn:
+		await withWarningSilenced(/has itself as a parent/, async () => {
+			await Folder.addNoteCounts(folders);
+		});
+		// Note count may be incorrect
+		expect(folders.find(folder => folder.id === f1.id)).toHaveProperty('note_count');
+	});
 
 	it('should not count completed to-dos', (async () => {
 
@@ -180,8 +199,7 @@ describe('models/Folder', () => {
 		const folders = await Folder.all();
 		await Folder.addNoteCounts(folders, false);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const foldersById: any = {};
+		const foldersById: Record<string, FolderEntity & { note_count?: number }> = {};
 		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
 		folders.forEach((f: FolderEntity) => { foldersById[f.id] = f; });
 
@@ -206,13 +224,16 @@ describe('models/Folder', () => {
 		expect(folderPath[2].id).toBe(f3.id);
 	}));
 
-	it('should sort folders alphabetically', (async () => {
+	it('should sort folders alphabetically including deleted folders', (async () => {
 		const f1 = await Folder.save({ title: 'folder1' });
 		const f2 = await Folder.save({ title: 'folder2', parent_id: f1.id });
 		const f3 = await Folder.save({ title: 'folder3', parent_id: f1.id });
 		const f4 = await Folder.save({ title: 'folder4' });
 		const f5 = await Folder.save({ title: 'folder5', parent_id: f4.id });
 		const f6 = await Folder.save({ title: 'folder6' });
+
+		await Folder.delete(f1.id, { toTrash: true });
+		await Folder.delete(f5.id, { toTrash: true });
 
 		const folders = await Folder.allAsTree();
 		const sortedFolderTree = await Folder.sortFolderTree(folders);
@@ -224,6 +245,24 @@ describe('models/Folder', () => {
 		expect(sortedFolderTree[1].id).toBe(f4.id);
 		expect(sortedFolderTree[1].children[0].id).toBe(f5.id);
 		expect(sortedFolderTree[2].id).toBe(f6.id);
+	}));
+
+	it('should sort folders alphabetically excluding deleted folders', (async () => {
+		const f1 = await Folder.save({ title: 'folder1' });
+		const f2 = await Folder.save({ title: 'folder2' });
+		const f3 = await Folder.save({ title: 'folder3', parent_id: f2.id });
+		const f4 = await Folder.save({ title: 'folder4' });
+
+		await Folder.delete(f1.id, { toTrash: true });
+		await Folder.delete(f3.id, { toTrash: true });
+
+		const folders = await Folder.allAsTree();
+		const sortedFolderTree = await Folder.sortFolderTree(folders, { includeDeleted: false });
+
+		expect(sortedFolderTree.length).toBe(2);
+		expect(sortedFolderTree[0].id).toBe(f2.id);
+		expect(sortedFolderTree[0].children.length).toBe(0);
+		expect(sortedFolderTree[1].id).toBe(f4.id);
 	}));
 
 	it('should sort folders with special chars alphabetically', (async () => {
@@ -371,6 +410,22 @@ describe('models/Folder', () => {
 		expect((await Note.load(note3.id)).deleted_time).toBe(0);
 	});
 
+	it('should allow deleting multiple folders to trash', async () => {
+		const folder1 = await Folder.save({});
+		const folder2 = await Folder.save({});
+		const folder3 = await Folder.save({ parent_id: folder2.id });
+		const folder4 = await Folder.save({ parent_id: folder2.id });
+
+		const beforeTime = Date.now();
+		await Folder.batchDelete([folder1.id, folder2.id, folder3.id], { toTrash: true, deleteChildren: true });
+
+		const folders = await Folder.loadItemsByIds([folder1.id, folder2.id, folder3.id, folder4.id]);
+		expect(folders[0].deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect(folders[1].deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect(folders[2].deleted_time).toBeGreaterThanOrEqual(beforeTime);
+		expect(folders[3].deleted_time).toBeGreaterThanOrEqual(beforeTime);
+	});
+
 	it('should delete and set the parent ID', async () => {
 		const folder1 = await Folder.save({});
 		const folder2 = await Folder.save({});
@@ -419,6 +474,49 @@ describe('models/Folder', () => {
 		await Folder.delete(f1.id, { toTrash: true });
 		folders = await Folder.all({ includeTrash: true });
 		expect(Folder.atLeastOneRealFolderExists(folders)).toBe(false);
+	});
+
+	it('should get active folder when activeFolderId is valid', async () => {
+		const activeFolder = await Folder.save({ title: 'folder' });
+		Setting.setValue('activeFolderId', activeFolder.id);
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder.id).toBe(activeFolder.id);
+	});
+
+	it('should get default folder when activeFolderId is trashed', async () => {
+		const defaultFolder = await Folder.save({ title: 'default' });
+		const activeFolder = await Folder.save({ title: 'folder' });
+		await Folder.delete(activeFolder.id, { toTrash: true });
+		Setting.setValue('activeFolderId', activeFolder.id);
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder.id).toBe(defaultFolder.id);
+	});
+
+	it('should get no folder when activeFolderId is undefined', async () => {
+		Setting.setValue('activeFolderId', undefined);
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder).toBeNull();
+	});
+
+	it('should get no folder when activeFolderId is trashed and there are no other not trashed folders', async () => {
+		const activeFolder = await Folder.save({ title: 'folder' });
+		const otherFolder = await Folder.save({ title: 'other' });
+		await Folder.delete(activeFolder.id, { toTrash: true });
+		await Folder.delete(otherFolder.id, { toTrash: true });
+		Setting.setValue('activeFolderId', activeFolder.id);
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder).toBeNull();
+	});
+
+	it('should get no folder when activeFolderId is a virtual folder', async () => {
+		Setting.setValue('activeFolderId', getTrashFolderId());
+
+		const validFolder = await Folder.getValidActiveFolder();
+		expect(validFolder).toBeNull();
 	});
 
 });

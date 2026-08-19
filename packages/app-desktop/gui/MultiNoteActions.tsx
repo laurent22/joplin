@@ -3,6 +3,8 @@ import * as React from 'react';
 import NoteListUtils from './utils/NoteListUtils';
 import { Dispatch } from 'redux';
 import { ThemeStyle } from '@joplin/lib/theme';
+import { NoteEntity } from '@joplin/lib/services/database/types';
+import { MenuItem } from 'electron';
 
 import { buildStyle } from '@joplin/lib/theme';
 import bridge from '../services/bridge';
@@ -10,8 +12,7 @@ import bridge from '../services/bridge';
 interface MultiNoteActionsProps {
 	themeId: number;
 	selectedNoteIds: string[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	notes: any[];
+	notes: NoteEntity[];
 	dispatch: Dispatch;
 	watchedNoteFiles: string[];
 	plugins: PluginStates;
@@ -22,15 +23,17 @@ interface MultiNoteActionsProps {
 function styles_(props: MultiNoteActionsProps) {
 	return buildStyle('MultiNoteActions', props.themeId, (theme: ThemeStyle) => {
 		return {
-			root: {
-				display: 'inline-flex',
-				justifyContent: 'center',
-				paddingTop: theme.marginTop,
-				width: '100%',
-			},
 			itemList: {
 				display: 'flex',
 				flexDirection: 'column',
+			},
+			divider: {
+				borderTopWidth: 1,
+				borderTopStyle: 'solid',
+				borderTopColor: theme.dividerColor,
+				width: '100%',
+				height: 1,
+				marginBottom: 10,
 			},
 			button: {
 				...theme.buttonStyle,
@@ -43,8 +46,7 @@ function styles_(props: MultiNoteActionsProps) {
 export default function MultiNoteActions(props: MultiNoteActionsProps) {
 	const styles = styles_(props);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const multiNotesButton_click = (item: any) => {
+	const multiNotesButton_click = (item: MenuItem) => {
 		if (item.submenu) {
 			item.submenu.popup({ window: bridge().activeWindow() });
 		} else {
@@ -68,15 +70,21 @@ export default function MultiNoteActions(props: MultiNoteActionsProps) {
 		const item = menuItems[i];
 		if (!item.enabled) continue;
 
-		itemComps.push(
-			<button key={item.label} style={styles.button} onClick={() => multiNotesButton_click(item)}>
-				{item.label}
-			</button>,
-		);
+		if (item.type === 'separator') {
+			itemComps.push(
+				<div key={`divider${i}`} style={styles.divider}/>,
+			);
+		} else {
+			itemComps.push(
+				<button key={item.label} style={styles.button} onClick={() => multiNotesButton_click(item)}>
+					{item.label}
+				</button>,
+			);
+		}
 	}
 
 	return (
-		<div style={styles.root}>
+		<div style={styles.root} className='multi-note-actions'>
 			<div style={styles.itemList}>{itemComps}</div>
 		</div>
 	);

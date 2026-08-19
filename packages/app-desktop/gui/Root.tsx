@@ -1,3 +1,5 @@
+import * as React from 'react';
+import { Dispatch } from 'redux';
 import app from '../app';
 import { AppState, AppStateDialog } from '../app.reducer';
 import MainScreen from './MainScreen';
@@ -7,36 +9,36 @@ import OneDriveLoginScreen from './OneDriveLoginScreen';
 import DropboxLoginScreen from './DropboxLoginScreen';
 import ErrorBoundary from './ErrorBoundary';
 import { themeStyle } from '@joplin/lib/theme';
-import { Size } from './ResizableLayout/utils/types';
 import MenuBar from './MenuBar';
 import { _ } from '@joplin/lib/locale';
-const React = require('react');
-const { createRoot } = require('react-dom/client');
-const { connect, Provider } = require('react-redux');
+import { createRoot } from 'react-dom/client';
+import { connect, Provider } from 'react-redux';
 import Setting from '@joplin/lib/models/Setting';
-import shim from '@joplin/lib/shim';
 import ClipperServer from '@joplin/lib/ClipperServer';
 import DialogTitle from './DialogTitle';
 import DialogButtonRow, { ButtonSpec, ClickEvent, ClickEventHandler } from './DialogButtonRow';
-import Dialog from './Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 import StyleSheetContainer from './StyleSheets/StyleSheetContainer';
 import ImportScreen from './ImportScreen';
-const { ResourceScreen } = require('./ResourceScreen.js');
+import ResourceScreen from './ResourceScreen';
+import ProfileEditor from './ProfileEditor';
 import Navigator from './Navigator';
 import WelcomeUtils from '@joplin/lib/WelcomeUtils';
 import JoplinCloudLoginScreen from './JoplinCloudLoginScreen';
+import InteropService from '@joplin/lib/services/interop/InteropService';
 import WindowCommandsAndDialogs from './WindowCommandsAndDialogs/WindowCommandsAndDialogs';
 import { defaultWindowId, stateUtils, WindowState } from '@joplin/lib/reducer';
-import bridge from '../services/bridge';
 import EditorWindow from './NoteEditor/EditorWindow';
-const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
+import SsoLoginScreen from './SsoLoginScreen/SsoLoginScreen';
+import SamlShared from '@joplin/lib/components/shared/SamlShared';
+import PopupNotificationProvider from './PopupNotification/PopupNotificationProvider';
+import { ThemeProvider, StyleSheetManager, createGlobalStyle } from 'styled-components';
 
 interface Props {
 	themeId: number;
 	appState: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
-	size: Size;
+	profileConfigCurrentProfileId: string;
+	dispatch: Dispatch;
 	zoomFactor: number;
 	needApiAuth: boolean;
 	dialogs: AppStateDialog[];
@@ -57,31 +59,9 @@ const GlobalStyle = createGlobalStyle`
 	}
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let wcsTimeoutId_: any = null;
+const navigatorStyle = { width: '100vw', height: '100vh' };
 
 async function initialize() {
-	bridge().activeWindow().on('resize', () => {
-		if (wcsTimeoutId_) shim.clearTimeout(wcsTimeoutId_);
-
-		wcsTimeoutId_ = shim.setTimeout(() => {
-			store.dispatch({
-				type: 'WINDOW_CONTENT_SIZE_SET',
-				size: bridge().windowContentSize(),
-			});
-			wcsTimeoutId_ = null;
-		}, 10);
-	});
-
-	// Need to dispatch this to make sure the components are
-	// displayed at the right size. The windowContentSize is
-	// also set in the store default state, but at that point
-	// the window might not be at its final size.
-	store.dispatch({
-		type: 'WINDOW_CONTENT_SIZE_SET',
-		size: bridge().windowContentSize(),
-	});
-
 	store.dispatch({
 		type: 'EDITOR_CODE_VIEW_CHANGE',
 		value: Setting.value('editor.codeView'),
@@ -91,9 +71,12 @@ async function initialize() {
 		type: 'NOTE_VISIBLE_PANES_SET',
 		panes: Setting.value('noteVisiblePanes'),
 	});
+
+	InteropService.instance().domParser = new DOMParser();
+	InteropService.instance().xmlSerializer = new XMLSerializer();
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old class component with implicit state shape; tightening requires structural change to the screen
 class RootComponent extends React.Component<Props, any> {
 	public async componentDidMount() {
 		if (this.props.appState === 'starting') {
@@ -172,11 +155,6 @@ class RootComponent extends React.Component<Props, any> {
 	}
 
 	public render() {
-		const navigatorStyle = {
-			width: this.props.size.width / this.props.zoomFactor,
-			height: this.props.size.height / this.props.zoomFactor,
-		};
-
 		const theme = themeStyle(this.props.themeId);
 
 		const screens = {
@@ -184,22 +162,26 @@ class RootComponent extends React.Component<Props, any> {
 			OneDriveLogin: { screen: OneDriveLoginScreen, title: () => _('OneDrive Login') },
 			DropboxLogin: { screen: DropboxLoginScreen, title: () => _('Dropbox Login') },
 			JoplinCloudLogin: { screen: JoplinCloudLoginScreen, title: () => _('Joplin Cloud Login') },
+			JoplinServerSamlLogin: { screen: SsoLoginScreen(new SamlShared()), title: () => _('Joplin Server Login') },
 			Import: { screen: ImportScreen, title: () => _('Import') },
 			Config: { screen: ConfigScreen, title: () => _('Options') },
 			Resources: { screen: ResourceScreen, title: () => _('Note attachments') },
+			ProfileEditor: { screen: ProfileEditor, title: () => _('Manage profiles') },
 			Status: { screen: StatusScreen, title: () => _('Synchronisation Status') },
 		};
 
 		return (
 			<StyleSheetManager disableVendorPrefixes>
 				<ThemeProvider theme={theme}>
-					<StyleSheetContainer/>
-					<MenuBar/>
-					<GlobalStyle/>
-					<WindowCommandsAndDialogs windowId={defaultWindowId} />
-					<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
-					{this.renderSecondaryWindows()}
-					{this.renderModalMessage(this.modalDialogProps())}
+					<PopupNotificationProvider>
+						<StyleSheetContainer/>
+						<MenuBar/>
+						<GlobalStyle/>
+						<WindowCommandsAndDialogs windowId={defaultWindowId} />
+						<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
+						{this.renderSecondaryWindows()}
+						{this.renderModalMessage(this.modalDialogProps())}
+					</PopupNotificationProvider>
 				</ThemeProvider>
 			</StyleSheetManager>
 		);
@@ -208,7 +190,6 @@ class RootComponent extends React.Component<Props, any> {
 
 const mapStateToProps = (state: AppState) => {
 	return {
-		size: state.windowContentSize,
 		zoomFactor: state.settings.windowContentZoomFactor / 100,
 		appState: state.appState,
 		themeId: state.settings.theme,

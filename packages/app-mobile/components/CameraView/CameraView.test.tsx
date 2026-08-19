@@ -1,10 +1,10 @@
 import * as React from 'react';
 import CameraView from './CameraView';
 import { CameraResult } from './types';
-import { fireEvent, render, screen } from '@testing-library/react-native';
-import '@testing-library/jest-native/extend-expect';
+import { fireEvent, render, screen } from '../../utils/testing/testingLibrary';
 import createMockReduxStore from '../../utils/testing/createMockReduxStore';
 import TestProviderStack from '../testing/TestProviderStack';
+import { acceptCameraPermission, rejectCameraPermission, setQrCodeData, startCamera } from './utils/testing';
 
 interface WrapperProps {
 	onPhoto?: (result: CameraResult)=> void;
@@ -25,26 +25,6 @@ const CameraViewWrapper: React.FC<WrapperProps> = props => {
 	</TestProviderStack>;
 };
 
-const rejectCameraPermission = () => {
-	const rejectPermissionButton = screen.getByRole('button', { name: 'Reject permission' });
-	fireEvent.press(rejectPermissionButton);
-};
-
-const acceptCameraPermission = () => {
-	const acceptPermissionButton = screen.getByRole('button', { name: 'Accept permission' });
-	fireEvent.press(acceptPermissionButton);
-};
-
-const startCamera = () => {
-	const startCameraButton = screen.getByRole('button', { name: 'On camera ready' });
-	fireEvent.press(startCameraButton);
-};
-
-const setQrCodeData = (data: string) => {
-	const qrCodeDataInput = screen.getByPlaceholderText('QR code data');
-	fireEvent.changeText(qrCodeDataInput, data);
-};
-
 describe('CameraView', () => {
 	test('should hide permissions error if camera permission is granted', async () => {
 		const view = render(<CameraViewWrapper/>);
@@ -59,7 +39,7 @@ describe('CameraView', () => {
 
 		expect(await screen.findByRole('button', { name: 'Back' })).toBeVisible();
 		startCamera();
-		expect(await screen.findByRole('button', { name: 'Take picture' })).toBeVisible();
+		expect(await screen.findByRole('button', { name: 'Take photo' })).toBeVisible();
 
 		view.unmount();
 	});
@@ -86,3 +66,4 @@ describe('CameraView', () => {
 		view.unmount();
 	});
 });
+

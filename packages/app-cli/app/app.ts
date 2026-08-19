@@ -1,35 +1,37 @@
 import BaseApplication from '@joplin/lib/BaseApplication';
 import { refreshFolders } from '@joplin/lib/folders-screen-utils.js';
 import ResourceService from '@joplin/lib/services/ResourceService';
-import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { Env } from '@joplin/lib/models/Setting';
 import { reg } from '@joplin/lib/registry.js';
-import { fileExtension } from '@joplin/lib/path-utils';
-import { splitCommandString } from '@joplin/utils';
+import { dirname, fileExtension } from '@joplin/lib/path-utils';
 import { _ } from '@joplin/lib/locale';
 import { pathExists, readFile, readdirSync } from 'fs-extra';
 import RevisionService from '@joplin/lib/services/RevisionService';
 import shim from '@joplin/lib/shim';
 import setupCommand from './setupCommand';
+import BaseCommand from './base-command';
 import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
-const { cliUtils } = require('./cli-utils.js');
-const Cache = require('@joplin/lib/Cache');
-const { splitCommandBatch } = require('@joplin/lib/string-utils');
+import initializeCommandService from './utils/initializeCommandService';
+import { cliUtils } from './cli-utils';
+import Cache from '@joplin/lib/Cache';
 
-class Application extends BaseApplication {
+type FolderOrNoteType = ModelType.Note | ModelType.Folder | 'folderOrNote';
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private commands_: Record<string, any> = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private commandMetadata_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private activeCommand_: any = null;
+type CommandMetadata = ReturnType<BaseCommand['metadata']>;
+
+
+export class Application extends BaseApplication {
+
+	private commands_: Record<string, BaseCommand> = {};
+	private commandMetadata_: Record<string, CommandMetadata> = null;
+	private activeCommand_: BaseCommand = null;
 	private allCommandsLoaded_ = false;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Dynamic GUI type with many optional methods
 	private gui_: any = null;
 	private cache_ = new Cache();
 
@@ -41,18 +43,16 @@ class Application extends BaseApplication {
 		return this.gui().stdoutMaxWidth();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async guessTypeAndLoadItem(pattern: string, options: any = null) {
-		let type = BaseModel.TYPE_NOTE;
+	public async guessTypeAndLoadItem(pattern: string, options: { parent?: FolderEntity } | null = null) {
+		let type: FolderOrNoteType = ModelType.Note;
 		if (pattern.indexOf('/') === 0) {
-			type = BaseModel.TYPE_FOLDER;
+			type = ModelType.Folder;
 			pattern = pattern.substr(1);
 		}
 		return this.loadItem(type, pattern, options);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async loadItem(type: ModelType | 'folderOrNote', pattern: string, options: any = null) {
+	public async loadItem(type: FolderOrNoteType, pattern: string, options: { parent?: FolderEntity } | null = null) {
 		const output = await this.loadItems(type, pattern, options);
 
 		if (output.length > 1) {
@@ -76,31 +76,36 @@ class Application extends BaseApplication {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async loadItems(type: ModelType | 'folderOrNote', pattern: string, options: any = null): Promise<(FolderEntity | NoteEntity)[]> {
+	public async loadItemOrFail(type: FolderOrNoteType, pattern: string) {
+		const output = await this.loadItem(type, pattern);
+		if (!output) throw new Error(_('Cannot find "%s".', pattern));
+		return output;
+	}
+
+	public async loadItems(type: FolderOrNoteType, pattern: string, options: { parent?: FolderEntity } | null = null): Promise<(FolderEntity | NoteEntity)[]> {
 		if (type === 'folderOrNote') {
-			const folders: FolderEntity[] = await this.loadItems(BaseModel.TYPE_FOLDER, pattern, options);
+			const folders: FolderEntity[] = await this.loadItems(ModelType.Folder, pattern, options);
 			if (folders.length) return folders;
-			return await this.loadItems(BaseModel.TYPE_NOTE, pattern, options);
+			return await this.loadItems(ModelType.Note, pattern, options);
 		}
 
 		pattern = pattern ? pattern.toString() : '';
 
-		if (type === BaseModel.TYPE_FOLDER && (pattern === Folder.conflictFolderTitle() || pattern === Folder.conflictFolderId())) return [Folder.conflictFolder()];
+		if (type === ModelType.Folder && (pattern === Folder.conflictFolderTitle() || pattern === Folder.conflictFolderId())) return [Folder.conflictFolder()];
 
 		if (!options) options = {};
 
 		const parent = options.parent ? options.parent : app().currentFolder();
 		const ItemClass = BaseItem.itemClass(type);
 
-		if (type === BaseModel.TYPE_NOTE && pattern.indexOf('*') >= 0) {
+		if (type === ModelType.Note && pattern.indexOf('*') >= 0) {
 			// Handle it as pattern
 			if (!parent) throw new Error(_('No notebook selected.'));
 			return await Note.previews(parent.id, { titlePattern: pattern });
 		} else {
 			// Single item
 			let item = null;
-			if (type === BaseModel.TYPE_NOTE) {
+			if (type === ModelType.Note) {
 				if (!parent) throw new Error(_('No notebook has been specified.'));
 				item = await (ItemClass as typeof Note).loadFolderNoteByField(parent.id, 'title', pattern);
 			} else {
@@ -119,7 +124,7 @@ class Application extends BaseApplication {
 		return [];
 	}
 
-	public setupCommand(cmd: string) {
+	public setupCommand(cmd: BaseCommand) {
 		return setupCommand(cmd, (t: string) => this.stdout(t), () => this.store(), () => this.gui());
 	}
 
@@ -167,8 +172,7 @@ class Application extends BaseApplication {
 		}
 
 		if (uiType !== null) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const temp: Record<string, any> = {};
+			const temp: Record<string, BaseCommand> = {};
 			for (const n in this.commands_) {
 				if (!this.commands_.hasOwnProperty(n)) continue;
 				const c = this.commands_[n];
@@ -194,7 +198,7 @@ class Application extends BaseApplication {
 	public async commandMetadata() {
 		if (this.commandMetadata_) return this.commandMetadata_;
 
-		let output = await this.cache_.getItem('metadata');
+		let output = await this.cache_.getItem('metadata') as Record<string, CommandMetadata>;
 		if (output) {
 			this.commandMetadata_ = output;
 			return { ...this.commandMetadata_ };
@@ -215,6 +219,7 @@ class Application extends BaseApplication {
 		return { ...this.commandMetadata_ };
 	}
 
+
 	public hasGui() {
 		return this.gui() && !this.gui().isDummy();
 	}
@@ -227,8 +232,7 @@ class Application extends BaseApplication {
 			CommandClass = require(`${__dirname}/command-${name}.js`);
 		} catch (error) {
 			if (error.message && error.message.indexOf('Cannot find module') >= 0) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const e: any = new Error(_('No such command: %s', name));
+				const e: Error & { type?: string } = new Error(_('No such command: %s', name));
 				e.type = 'notFound';
 				throw e;
 			} else {
@@ -247,8 +251,7 @@ class Application extends BaseApplication {
 			isDummy: () => {
 				return true;
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			prompt: (initialText = '', promptString = '', options: any = null) => {
+			prompt: (initialText = '', promptString = '', options: Record<string, unknown> | null = null) => {
 				return cliUtils.prompt(initialText, promptString, options);
 			},
 			showConsole: () => {},
@@ -270,8 +273,7 @@ class Application extends BaseApplication {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async execCommand(argv: string[]): Promise<any> {
+	public async execCommand(argv: string[]): Promise<void> {
 		if (!argv.length) return this.execCommand(['help']);
 		// reg.logger().debug('execCommand()', argv);
 		const commandName = argv[0];
@@ -325,6 +327,7 @@ class Application extends BaseApplication {
 			{ keys: ['mb'], type: 'prompt', command: 'mkbook ""', cursorPosition: -2 },
 			{ keys: ['yn'], type: 'prompt', command: 'cp $n ""', cursorPosition: -2 },
 			{ keys: ['dn'], type: 'prompt', command: 'mv $n ""', cursorPosition: -2 },
+			{ keys: ['z'], type: 'function', command: 'toggle_folder_collapse' },
 		];
 
 		// Filter the keymap item by command so that items in keymap.json can override
@@ -374,22 +377,6 @@ class Application extends BaseApplication {
 		return output;
 	}
 
-	public async commandList(argv: string[]) {
-		if (argv.length && argv[0] === 'batch') {
-			const commands = [];
-			const commandLines = splitCommandBatch(await readFile(argv[1], 'utf-8'));
-
-			for (const commandLine of commandLines) {
-				if (!commandLine.trim()) continue;
-				const splitted = splitCommandString(commandLine.trim());
-				commands.push(splitted);
-			}
-			return commands;
-		} else {
-			return [argv];
-		}
-	}
-
 	// We need this special case here because by the time the `version` command
 	// runs, the keychain has already been setup.
 	public checkIfKeychainEnabled(argv: string[]) {
@@ -397,31 +384,40 @@ class Application extends BaseApplication {
 	}
 
 	public async start(argv: string[]) {
-		const keychainEnabled = this.checkIfKeychainEnabled(argv);
+		// TODO: Currently, `pluginAssetDir` needs to be set differently for each platform and requires
+		// a call to Setting.setConstant. Ideally, this would be done in a way that requires users to
+		// set this constant on startup.
+		Setting.setConstant('pluginAssetDir', `${dirname(require.resolve('@joplin/renderer'))}/assets`);
 
+		const keychainEnabled = this.checkIfKeychainEnabled(argv);
 		argv = await super.start(argv, { keychainEnabled });
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		cliUtils.setStdout((object: any) => {
+		cliUtils.setStdout((object: string) => {
 			return this.stdout(object);
 		});
 
 		this.initRedux();
+
+		// Since the settings need to be loaded before the store is created, it will never
+		// receive the SETTING_UPDATE_ALL even, which mean state.settings will not be
+		// initialised. So we manually call dispatchUpdateAll() to force an update.
+		Setting.dispatchUpdateAll();
+
+		if (!shim.sharpEnabled()) this.logger().warn('Sharp is disabled - certain image-related features will not be available');
+
+		initializeCommandService(this.store(), Setting.value('env') === Env.Dev);
 
 		// If we have some arguments left at this point, it's a command
 		// so execute it.
 		if (argv.length) {
 			this.gui_ = this.dummyGui();
 
-			this.currentFolder_ = await Folder.load(Setting.value('activeFolderId'));
-
+			const initialFolder = await Folder.load(Setting.value('activeFolderId'));
+			await this.switchCurrentFolder(initialFolder);
 			await this.applySettingsSideEffects();
 
 			try {
-				const commands = await this.commandList(argv);
-				for (const command of commands) {
-					await this.execCommand(command);
-				}
+				await this.execCommand(argv);
 			} catch (error) {
 				if (this.showStackTraces_) {
 					console.error(error);
@@ -433,6 +429,7 @@ class Application extends BaseApplication {
 			}
 
 			await Setting.saveAll();
+			await this.database_.close();
 
 			// Need to call exit() explicitly, otherwise Node wait for any timeout to complete
 			// https://stackoverflow.com/questions/18050095
@@ -441,18 +438,12 @@ class Application extends BaseApplication {
 			// Otherwise open the GUI
 			const keymap = await this.loadKeymaps();
 
-			const AppGui = require('./app-gui.js');
+			const AppGui = require('./app-gui.js').default;
 			this.gui_ = new AppGui(this, this.store(), keymap);
 			this.gui_.setLogger(this.logger());
 			await this.gui_.start();
 
-			// Since the settings need to be loaded before the store is created, it will never
-			// receive the SETTING_UPDATE_ALL even, which mean state.settings will not be
-			// initialised. So we manually call dispatchUpdateAll() to force an update.
-			Setting.dispatchUpdateAll();
-
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			await refreshFolders((action: any) => this.store().dispatch(action), '');
+			await refreshFolders(action => this.store().dispatch(action), '');
 
 			const tags = await Tag.allWithNotes();
 

@@ -23,29 +23,6 @@ const useStyles = (props: NoteBodyEditorProps) => {
 					display: 'flex',
 					flexDirection: 'row',
 				},
-				rowEditorViewer: {
-					position: 'relative',
-					display: 'flex',
-					flexDirection: 'row',
-					flex: 1,
-					paddingTop: 10,
-
-					// Allow the editor container to shrink (allowing the editor to scroll)
-					minHeight: 0,
-				},
-				cellEditor: {
-					position: 'relative',
-					display: 'flex',
-					flex: 1,
-				},
-				cellViewer: {
-					position: 'relative',
-					display: 'flex',
-					flex: 1,
-					borderLeftWidth: 1,
-					borderLeftColor: theme.dividerColor,
-					borderLeftStyle: 'solid',
-				},
 				viewer: {
 					display: 'flex',
 					overflow: 'hidden',

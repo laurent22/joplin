@@ -1,7 +1,7 @@
 import { attributesHtml } from './htmlUtils';
-import { ItemIdToUrlHandler, OptionsResourceModel } from './types';
+import { ItemIdToUrlHandler, OptionsResourceModel, ResourceInfo, ResourceInfos } from './types';
 
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 
 // Imported from models/Resource.js
@@ -12,7 +12,7 @@ const FetchStatuses = {
 	FETCH_STATUS_ERROR: 3,
 };
 
-export const getAttr = function(attrs: string[], name: string, defaultValue: string = null) {
+export const getAttr = function(attrs: [string, string][], name: string, defaultValue: string = null) {
 	for (let i = 0; i < attrs.length; i++) {
 		if (attrs[i][0] === name) return attrs[i].length > 1 ? attrs[i][1] : null;
 	}
@@ -98,8 +98,7 @@ export const resourceStatusName = function(index: number) {
 	throw new Error(`Unknown index: ${index}`);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const resourceStatus = function(ResourceModel: OptionsResourceModel, resourceInfo: any) {
+export const resourceStatus = function(ResourceModel: OptionsResourceModel, resourceInfo: ResourceInfo) {
 	if (!ResourceModel) return 'ready';
 
 	let status = 'ready';
@@ -130,8 +129,7 @@ type ImageMarkupData = {
 	title: string;
 }|{ src: string; before: string; after: string };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const imageReplacement = function(ResourceModel: OptionsResourceModel, markup: ImageMarkupData, resources: any, resourceBaseUrl: string, itemIdToUrl: ItemIdToUrlHandler = null) {
+export const imageReplacement = function(ResourceModel: OptionsResourceModel, markup: ImageMarkupData, resources: ResourceInfos, resourceBaseUrl: string, itemIdToUrl: ItemIdToUrlHandler = null) {
 	if (!ResourceModel || !resources) return null;
 
 	const src = markup.src;
@@ -160,11 +158,13 @@ export const imageReplacement = function(ResourceModel: OptionsResourceModel, ma
 		}
 
 		// contenteditable="false": Improves support for the Rich Text Editor -- without this,
-		// users can add content within the <div>, which breaks the html-to-md conversion.
+		// users can add content within the <span>, which breaks the html-to-md conversion.
+		//
+		// Use a <span> and not a <div> to allow the placeholder to appear in <p> elements.
 		return (
-			`<div ${attributesHtml(attrs)} contenteditable="false">`
+			`<span ${attributesHtml(attrs)} contenteditable="false">`
 				+ `<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>`
-			+ '</div>'
+			+ '</span>'
 		);
 	}
 	const mime = resource.mime ? resource.mime.toLowerCase() : '';

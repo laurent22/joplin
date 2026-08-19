@@ -1,3 +1,5 @@
+import type { Editor } from 'tinymce';
+
 // eslint-disable-next-line import/prefer-default-export
 export enum TinyMceEditorEvents {
 	KeyUp = 'keyup',
@@ -14,3 +16,5 @@ export enum TinyMceEditorEvents {
 	ExecCommand = 'ExecCommand',
 	SetAttrib = 'SetAttrib',
 }
+
+export type DispatchDidUpdateCallback = (editor: Editor)=> void;

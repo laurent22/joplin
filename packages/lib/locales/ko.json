@@ -2,20 +2,11 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"\"%s\"에 \"%s\" 필수 속성이 없습니다."
 	],
-	"%d days": [
-		"%d 일"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB 저장 공간"
-	],
-	"%d hour": [
-		"%d 시간"
-	],
-	"%d hours": [
-		"%d 시간"
 	],
 	"%d MB": [
 		"%d MB"
@@ -23,11 +14,8 @@
 	"%d MB per note or attachment": [
 		"노트 또는 첨부 파일당 %d MB"
 	],
-	"%d minutes": [
-		"%d 분"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d개의 노트가 이 패턴과 일치합니다. 이를 삭제할까요?"
+	"%d photo(s) taken": [
+		""
 	],
 	"%s": [
 		"%s"
@@ -62,17 +50,20 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s 는 많은 작은 파일을 동기화하는 데 최적화되어 있지 않으므로 초기 동기화 속도가 느려집니다."
+	],
+	"%s must be a valid whole number": [
+		""
 	],
 	"%s tab opened": [
 		""
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d 노트"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -110,8 +101,14 @@
 	"(In plugin: %s)": [
 		"(플러그: %s)"
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
 		"(없음)"
+	],
+	"(Read-only)": [
+		""
 	],
 	"(wysiwyg: %s)": [
 		"(위지윅: %s)"
@@ -134,6 +131,12 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command>로 \"toggle\" 이나 \"clear\"를 사용하실 수 있습니다. \"toggle\"은 주어진 목록의 상태를 '완료됨' 또는 '완료되지 않음'으로 바꾸는 데 사용됩니다.(만약 대상이 일반적인 노트일 경우에는 목록으로 전환됩니다).\"clear\"는 목록을 일반적인 노트로 변환하는 데 사용됩니다."
 	],
+	"A brief description of the image:": [
+		""
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
+	],
 	"A3": [
 		"A3"
 	],
@@ -142,6 +145,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		"정보"
@@ -185,6 +191,9 @@
 	"Add body": [
 		"내용 추가"
 	],
+	"Add column": [
+		""
+	],
 	"Add new": [
 		"새로 추가"
 	],
@@ -199,6 +208,12 @@
 	],
 	"Add to dictionary": [
 		"사전에 추가"
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
 	],
 	"Admin": [
 		"관리자"
@@ -223,6 +238,9 @@
 	],
 	"All potential ports are in use - please report the issue at %s": [
 		"모든 포트들이 사용 중입니다 - %s에 문제를 공유해주시면 감사하겠습니다"
+	],
+	"All shared folders:": [
+		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		""
@@ -253,6 +271,9 @@
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"자동 저장된 그림을 찾았습니다. 노트에 사본을 첨부하시겠습니까?"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
 	],
 	"An error occurred: %s": [
 		"오류가 발생했습니다: %s"
@@ -286,6 +307,12 @@
 	],
 	"Aritim Dark": [
 		"Aritim Dark"
+	],
+	"Associated tags:": [
+		""
+	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		""
 	],
 	"Attach": [
 		"첨부"
@@ -335,8 +362,14 @@
 	"Auto-add disabled accounts for deletion": [
 		"삭제를 위해 비활성화된 계정을 자동으로 추가"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"괄호, 중괄호, 인용 부호 등의 자동 완성."
+	],
+	"Autocomplete Markdown and HTML": [
+		""
 	],
 	"Automatically check for updates": [
 		"자동으로 업데이트를 확인"
@@ -356,8 +389,8 @@
 	"Beta": [
 		""
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
-		"장치에 생체 인식 잠금 해제가 설정되어 있지 않습니다. Joplin 잠금해제를 위해 설정해주세요. 장치가 잠겨 있는 경우 장치를 껐다가 켜서 생체 인식 스캔을 재설정하는 것이 좋습니다."
+	"Block code": [
+		""
 	],
 	"Bold": [
 		"굵게"
@@ -377,6 +410,12 @@
 	"by %s": [
 		""
 	],
+	"by word": [
+		""
+	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		"공유 가능"
 	],
@@ -391,6 +430,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"백그라운드 동기화를 취소하는 중입니다... 잠시만 기다려주세요."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"취소하는 중..."
@@ -452,11 +494,17 @@
 	"Change language": [
 		"언어 전환"
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		"문자"
 	],
 	"Characters excluding spaces": [
 		"공백을 제외한 문자"
+	],
+	"Check elements to display in the toolbar": [
+		""
 	],
 	"Check for updates...": [
 		"업데이트 확인..."
@@ -473,6 +521,9 @@
 	"Checking... Please wait.": [
 		"확인 중입니다... 잠시만 기다리세요."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"옵션 선택"
 	],
@@ -488,6 +539,9 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"\"%s\"를 클릭해서 노트를 복구하세요. 노트는 \"%s\" 이름을 가진 노트북에 복사됩니다. 노트의 현재 버전이 이동 혹은 수정되지는 않습니다."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		"태그를 추가하려면 클릭하세요..."
 	],
@@ -500,11 +554,17 @@
 	"Close dropdown": [
 		"드롭다운 닫기"
 	],
+	"Close side menu": [
+		""
+	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		"프로그램을 닫은 다음 \"%s\"에서 프로필을 삭제하고 프로그램을 다시 시작하십시오. 먼저 모든 메모를 JEX로 내보내 백업을 생성하세요."
 	],
 	"Close Window": [
 		"창 닫기"
+	],
+	"Closing session...": [
+		""
 	],
 	"Cmd-click to open": [
 		""
@@ -527,9 +587,6 @@
 	"Collaborate on notebooks with others": [
 		"다른 사람과 노트북들에서 협업하기"
 	],
-	"Collapse": [
-		"무너지다"
-	],
 	"Coming alarms": [
 		"예정된 알람"
 	],
@@ -542,11 +599,17 @@
 	"Command": [
 		"명령"
 	],
+	"COMMAND": [
+		""
+	],
 	"Command palette": [
 		"명령 팔레트"
 	],
 	"Command palette...": [
 		"명령 팔레트..."
+	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
 	],
 	"Compact": [
 		"간단히 보기"
@@ -572,6 +635,9 @@
 	"Configuration": [
 		"설정"
 	],
+	"Configures the size of scrollbars used in the app.": [
+		""
+	],
 	"Confirm password cannot be empty": [
 		"비밀번호 확인칸은 비어져 있으면 안됩니다"
 	],
@@ -589,6 +655,9 @@
 	],
 	"Conflicts (attachments)": [
 		"충돌 (첨부파일)"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		"통합결제"
@@ -794,6 +863,9 @@
 	"Default": [
 		"기본값"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"기본값:  %s"
 	],
@@ -829,6 +901,9 @@
 	],
 	"Delete selected notes": [
 		"선택된 노트 삭제"
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"인박스 노트북을 삭제하시겠습니까?\n\n인박스 노트북을 삭제하면 최근에 해당 노트북으로 전송된 모든 이메일이 손실될 수 있습니다."
@@ -868,6 +943,9 @@
 	],
 	"Detailed": [
 		"상세히 보기"
+	],
+	"Device: %s": [
+		""
 	],
 	"Directory": [
 		"폴더"
@@ -917,6 +995,9 @@
 	"Displays the complete information about note.": [
 		"노트와 관련된 모든 정보를 표시합니다."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"주어진 노트를 표시합니다."
 	],
@@ -937,6 +1018,18 @@
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"비밀번호는 데이터를 복호화할 수 있는 *유일한* 수단이므로 절대로 비밀번호를 잃어버리지 마세요.암호화를 사용하려면 아래에 비밀번호를 넣어주세요."
+	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
+	"Document scanner: Title template": [
+		""
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
+		""
 	],
 	"Donate, website": [
 		"Joplin 웹사이트에 기부하기"
@@ -1004,8 +1097,8 @@
 	"Edit": [
 		"편집"
 	],
-	"Edit in external editor": [
-		"외부 편집기에서 편집하기"
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"링크 편집"
@@ -1097,6 +1190,9 @@
 	"Enable encryption": [
 		"암호화 사용"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"각주 활성화"
 	],
@@ -1156,6 +1252,12 @@
 	],
 	"Enabled": [
 		"활성화됨"
+	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
+	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"암호화를 활성화하면 *모든* 노트와 첨부들이 다시 동기화되고 동기화 대상으로 암호화되어 전송됩니다."
@@ -1229,9 +1331,6 @@
 	"Exits the application.": [
 		"애플리케이션을 종료합니다."
 	],
-	"Expand": [
-		"확장"
-	],
 	"Export": [
 		"내보내기"
 	],
@@ -1277,11 +1376,20 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"안전 장치: 동기화할 대상이 비어 있다면, 로컬 데이터를 지우지 않습니다. (종종 잘못된 설정이나 버그로 인해 발생됩니다)"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"치명적인 오류:"
 	],
 	"Feature flags": [
 		"기능 플래그"
+	],
+	"Feedback": [
+		""
 	],
 	"Fetched items: %d/%d.": [
 		"가져온 항목: %d/%d."
@@ -1298,14 +1406,11 @@
 	"Filter": [
 		"필터"
 	],
-	"Filter tags": [
-		"태그 필터"
-	],
-	"Find and replace": [
-		"찾기 및 바꾸기"
-	],
 	"Find: ": [
 		"찾기: "
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Firefox 확장"
@@ -1325,6 +1430,12 @@
 	"Focus title": [
 		"제목에 포커스"
 	],
+	"Folder \"%s\" is shared with:": [
+		""
+	],
+	"Follow link": [
+		""
+	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"디버깅 목적으로만 사용: 프로파일을 외장 SD 카드에 내보냅니다."
 	],
@@ -1342,9 +1453,6 @@
 	],
 	"Force path style": [
 		"경로 스타일을 강제"
-	],
-	"Formatting": [
-		"포맷"
 	],
 	"Forward": [
 		"앞으로 가기"
@@ -1373,6 +1481,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		"지리적 위치, 맞춤법 검사, 편집기 도구 모음, 이미지 크기 조정"
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"설치하기:"
 	],
@@ -1381,6 +1492,18 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"설정값을 가져오거나 지정합니다. 만약 [value] 가 제공되지 않았다면, [name]의 값을 표시할 것입니다. [name] 과 [value] 모두 제공되지 않았다면, 현재 설정을 표시할 것입니다."
+	],
+	"Glossary:": [
+		""
+	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
+	"Go to line": [
+		""
 	],
 	"Go to source URL": [
 		"소스 URL로 이동"
@@ -1396,9 +1519,6 @@
 	],
 	"Header %d": [
 		"헤더 %d"
-	],
-	"Headers": [
-		"헤더"
 	],
 	"Heading": [
 		"표제"
@@ -1430,9 +1550,6 @@
 	"Hide keyboard": [
 		"키보드 숨기기"
 	],
-	"Hide more actions": [
-		"더 많은 작업 숨기기"
-	],
 	"Highlight": [
 		"하이라이트"
 	],
@@ -1462,6 +1579,9 @@
 	],
 	"Idle": [
 		"대기"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		"이미 승인하셨다면, 애플리케이션이 Joplin Cloud에 동기화될 때까지 기다려주세요Joplin Cloud."
@@ -1502,9 +1622,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"어느 명령어에서든, 노트 또는 노트북에서 제목이나 ID를 통해 참조할 수 있습니다. 현재 선택된 노트 또는 노트북의 경우 `$n` 이나 `$b`같은 바로가기로, 현재 선택된 항목의 경우 `$c`로 참조할 수 있습니다."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"노트에 지리적 위치 정보를 포함하기 위해서는 위치 정보에 접근이 필요하고, 이를 위해선 권한이 요구됩니다.\n\n설정 화면에서 언제든지 이 설정을 끌 수 있습니다."
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"전체 데이터가 암호 및 동기화되므로, 충분한 시간을 가지고 실행하는게 좋습니다.\n시작하기 위해 아래 방법으로 할 수 있습니다.\n\n1. 모든 디바이스를 동기화.\n2. Click \"%s\".\n3. 충돌을 방지하기 위해, 암호화가 진행되는 동안 다른 장치에서 노트를 변경하지 말아주세요.\n4. 하나의 디바이스에서 동기화가 완료되면, 다른 모든 디바이스에서 동기화하세요.\n\n중요: 암호화는 하나의 디바이스에서만 실행하면 됩니다."
 	],
@@ -1534,6 +1651,9 @@
 	],
 	"Indent more": [
 		"들여쓰기 추가"
+	],
+	"Info": [
+		""
 	],
 	"Information": [
 		"정보"
@@ -1574,6 +1694,9 @@
 	"Invalid command: \"%s\"": [
 		"올바르지 않은 명령어: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"올바르지 않은 옵션 값: \"%s\". 가능한 값은 다음과 같습니다: %s."
 	],
@@ -1594,9 +1717,6 @@
 	],
 	"Items that cannot be synchronised": [
 		"동기화 할 수 없는 항목"
-	],
-	"Join us on Twitter": [
-		"트위터에 참여하기"
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		"Joplin은 다양한 서비스 제공자들을 통해 노트를 동기화할 수 있습니다. 아래의 목록에서 하나를 선택하세요."
@@ -1634,6 +1754,12 @@
 	"Joplin Server URL": [
 		"Joplin 서버 URL"
 	],
+	"Joplin SSO Authentication": [
+		""
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin 웹 수집기는 브라우저에서 웹 페이지 및 스크린샷을 Joplin에 저장할 수 있게 해줍니다."
 	],
@@ -1642,9 +1768,6 @@
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
 		"Joplin의 자체 동기화 서비스. 노트 발행이나 노트북 협업과 같은 Joplin에서만 지원하는 기능들을 제공합니다."
-	],
-	"KaTeX": [
-		"KaTeX"
 	],
 	"Keep note history for": [
 		"다음 기간 동안 노트 변경 이력을 유지"
@@ -1664,8 +1787,14 @@
 	"Keychain Supported: %s": [
 		"키체인 지원: %s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"키 업그레이드가 필요합니다"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"가로 방향"
@@ -1675,6 +1804,9 @@
 	],
 	"Language, date format": [
 		"언어, 날짜 형식"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"최근 오류: %s"
@@ -1724,14 +1856,8 @@
 	"Link text": [
 		"텍스트 링크"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"링크를 위한 프로토콜 “%s”는 지원하지 않습니다"
-	],
 	"List item": [
 		"아이템 리스트"
-	],
-	"Lists": [
-		"목록"
 	],
 	"Loaded": [
 		"로딩됨"
@@ -1781,6 +1907,9 @@
 	"Manage your plugins": [
 		"플러그인 관리"
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"E2EE(종단간 암호화) 설정을 관리합니다. `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, `target-status`와 같은 명령들이 있습니다."
 	],
@@ -1792,6 +1921,9 @@
 	],
 	"Markdown + Front Matter": [
 		"마크다운 + Front Matter"
+	],
+	"Markdown editor: Render markup in editor": [
+		""
 	],
 	"Marks a to-do as done.": [
 		"목록 항목을 완료로 표시합니다."
@@ -1811,6 +1943,12 @@
 	"Master password:": [
 		"마스터 비밀번호:"
 	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
+	],
 	"Max concurrent connections": [
 		"최대 동시 연결수"
 	],
@@ -1825,6 +1963,9 @@
 	],
 	"Media player, math, diagrams, table of contents": [
 		"미디어 플레이어, 수학, 도표, 목차"
+	],
+	"Medium": [
+		""
 	],
 	"Minimise": [
 		"최소화"
@@ -1856,11 +1997,14 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"%d개의 노트를 \"%s\" 노트북으로 옮길까요?"
+	"Move left": [
+		""
 	],
 	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
 		"\"%s\" 노트북을 휴지통으로 이동할까요?\n\n이 노트북 안에 있는 모든 노트와 더불어 하위 노트북들도 함께 휴지통으로 이동합니다."
+	],
+	"Move right": [
+		""
 	],
 	"Move to notebook": [
 		"노트북으로 옮기기"
@@ -1870,6 +2014,9 @@
 	],
 	"Move to notebook:": [
 		"노트북으로 옮기기:"
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"주어진 <item>을 [notebook]으로 이동합니다."
@@ -1882,9 +2029,6 @@
 	],
 	"Never resize": [
 		"크기 조정 안 함"
-	],
-	"New": [
-		""
 	],
 	"New note": [
 		"새 노트"
@@ -1901,14 +2045,14 @@
 	"New sub-notebook": [
 		"새 하위 노트북"
 	],
-	"New tags:": [
-		"새 태그:"
-	],
 	"New to-do": [
 		"새 목록"
 	],
 	"New version: %s": [
 		"새 버전: %s"
+	],
+	"next": [
+		""
 	],
 	"Next match": [
 		"다음 매치"
@@ -1933,9 +2077,6 @@
 	],
 	"No active notebook.": [
 		"활성화된 노트북이 없습니다."
-	],
-	"No item with ID %s": [
-		"식별자 %s에 해당하는 항목이 없습니다"
 	],
 	"No new invitations": [
 		""
@@ -1967,11 +2108,17 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"텍스트 편집기가 지정되지 않았습니다. `config editor <editor-path>` 명령어로 지정해주세요"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
 	"Nord": [
 		"노드"
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"%s과 인증되지 않았습니다. 증명서를 제공해주세요."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"다운로드되지 않았습니다"
@@ -1981,6 +2128,9 @@
 	],
 	"Not now": [
 		"지금은 아닙니다"
+	],
+	"Not useful": [
+		""
 	],
 	"note": [
 		"노트"
@@ -2066,6 +2216,9 @@
 	"Numbered List": [
 		"번호 매기기 목록"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"확인"
 	],
@@ -2074,6 +2227,9 @@
 	],
 	"On %s: %s": [
 		"%s: %s"
+	],
+	"on line": [
+		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"마스터 키 중 하나가 오래된 암호화 방식을 사용합니다."
@@ -2099,14 +2255,26 @@
 	"Open %s": [
 		"%s 열기"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
 		"PDF 뷰어 열기"
+	],
+	"Open primary app instance...": [
+		""
 	],
 	"Open profile directory": [
 		"프로파일 디렉터리 열기"
 	],
+	"Open secondary app instance...": [
+		""
+	],
 	"Open Sync Wizard...": [
 		"동기화 마법사 열기..."
+	],
+	"Open-source licences": [
+		""
 	],
 	"Open...": [
 		"열기..."
@@ -2120,8 +2288,14 @@
 	"Options": [
 		"옵션"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
 		"정렬 목록"
+	],
+	"Other": [
+		""
 	],
 	"Other applications...": [
 		"다른 애플리케이션..."
@@ -2134,6 +2308,12 @@
 	],
 	"Page size for PDF export": [
 		"PDF로 내보낼때 페이지 크기"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"비밀번호"
@@ -2159,23 +2339,14 @@
 	"PDF File": [
 		"PDF 파일"
 	],
-	"Per user. Minimum of %d users.": [
-		"사용자당 최소 %d명의 사용자 수입니다."
-	],
 	"Permanently delete note": [
 		"선택된 노트를 영구적으로 삭제"
 	],
 	"Permanently delete note \"%s\"?": [
 		"\"%s\" 노트를 영구적으로 삭제하시겠습니까?"
 	],
-	"Permanently delete these %d notes?": [
-		"\"%d\"개의 노트 영구적으로 삭제하시겠습니까?"
-	],
-	"Permission needed": [
-		"권한 요구"
-	],
-	"Permission to use camera": [
-		"카메라 사용 허가"
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"계속하려면 \"%s\"(을)를 클릭하거나 아래 \"%s\" 목록에서 비밀번호를 설정하세요."
@@ -2191,6 +2362,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"다음의 URL을 브라우저에서 열어 애플리케이션을 허가해주세요. 애플리케이션은 \"Apps/Joplin\" 경로에 폴더를 만들게 되며 이 폴더 안에 있는 파일만 읽고 쓸 것입니다. 다른 경로에 있는 파일 및 다른 개인 정보에는 접근할 권한이 없으며, 이 데이터는 제3자와 공유되지 않습니다."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		"목소리를 녹음하세요..."
@@ -2212,6 +2386,9 @@
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"모든 첨부 파일들을 내려받아서 복호화할 때까지 기다려주세요. %s를 통해 이 노트를 편집하도록 전환할 수 있습니다."
+	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
 	],
 	"Please wait...": [
 		"잠시만 기다려주세요..."
@@ -2246,6 +2423,9 @@
 	"Possible values: %s.": [
 		"가능한 값: %s."
 	],
+	"Prefer JSON output.": [
+		""
+	],
 	"Preferences": [
 		"설정"
 	],
@@ -2257,6 +2437,9 @@
 	],
 	"Preferred light theme": [
 		"선호하는 밝은 테마"
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		""
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"Ctrl+D 키를 누르거나 혹은 \"exit\"를 입력해서 종료해주세요"
@@ -2339,8 +2522,17 @@
 	"Publish notes to the internet": [
 		"인터넷에 노트를 발행합니다"
 	],
+	"Publish/unpublish": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
 	"Quit": [
 		"종료"
+	],
+	"Re-download model": [
+		""
 	],
 	"Re-encrypt data": [
 		"데이터를 다시 암호화"
@@ -2371,6 +2563,9 @@
 	],
 	"Recommended": [
 		"추천"
+	],
+	"Record audio": [
+		""
 	],
 	"Redo": [
 		"다시 실행"
@@ -2405,6 +2600,9 @@
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"해당 <item> (노트 또는 노트북)의 이름을 <name>로 바꿉니다."
 	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
+	],
 	"Renew token": [
 		"인증 토큰 새로 고침"
 	],
@@ -2419,6 +2617,12 @@
 	],
 	"Replace: ": [
 		"바꾸기: "
+	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
+		""
 	],
 	"Report an issue": [
 		""
@@ -2489,6 +2693,12 @@
 	"Revision: %s (%s)": [
 		"개정판: %s (%s)"
 	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"텍스트 파일에 포함된 명령들을 실행합니다. 한 줄에 하나씩 명령이 실행됩니다."
 	],
@@ -2533,6 +2743,12 @@
 	],
 	"Save geo-location with notes": [
 		"노트에 지리적 위치 정보 포함시키기"
+	],
+	"Scanned code": [
+		""
+	],
+	"Scrollbar size": [
+		""
 	],
 	"Search": [
 		"검색"
@@ -2579,8 +2795,17 @@
 	"Select file...": [
 		"파일 선택..."
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
 		"상위 노트북 선택"
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
+	"Self-hosted": [
+		""
 	],
 	"Send bug report": [
 		"버그 리포트 보내기"
@@ -2609,6 +2834,9 @@
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"주어진 <note>의 <name> 속성을 주어진 [value]로 설정합니다. 가능한 속성은 다음과 같습니다:\n\n%s"
 	],
+	"Settings": [
+		""
+	],
 	"Share": [
 		"공유"
 	],
@@ -2626,6 +2854,9 @@
 	],
 	"Share permissions": [
 		"공유 권한"
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
+		""
 	],
 	"Sharing notebook...": [
 		"노트북을 공유하는 중..."
@@ -2650,9 +2881,6 @@
 	],
 	"Show disabled keys": [
 		"비활성화된 키 보기"
-	],
-	"Show more actions": [
-		"더 많은 작업 표시"
 	],
 	"Show note counts": [
 		"노트 수 보이기"
@@ -2690,6 +2918,9 @@
 	"Skipped: %d.": [
 		"넘겨짐: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"부드러운 다크"
 	],
@@ -2714,6 +2945,12 @@
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		"일부 항목들을 동기화할 수 없습니다. 먼저 동기화를 시도해 보세요."
 	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
+	],
 	"Sort notebooks by": [
 		"노트북을 다음 기준으로 정렬"
 	],
@@ -2735,6 +2972,9 @@
 	"Source: ": [
 		"원본: "
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -2749,6 +2989,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Joplin을 최소화된 상태로 트레이 아이콘에서 시작"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"API 서버를 시작, 중지 혹은 확인할수 있습니다. 실행할 포트를 지정하실려면, api.port 변수 설정을 변경해주세요. 명령어는 (%s) 입니다."
@@ -2828,6 +3071,9 @@
 	"Switch profile": [
 		"프로파일 전환"
 	],
+	"Switch to back-facing camera": [
+		""
+	],
 	"Switch to note type": [
 		"노트 형식으로 전환합니다"
 	],
@@ -2839,6 +3085,9 @@
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"[notebook]으로 전환 - 앞으로의 모든 작업은 이 노트북 안에서만 해당됩니다."
+	],
+	"Sync": [
+		""
 	],
 	"Sync as many devices as you want": [
 		"원하는 만큼 많은 장치를 동기화하세요"
@@ -2900,11 +3149,14 @@
 	"Synchronizing...": [
 		"동기화 중..."
 	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
+	],
 	"Tabloid": [
 		"Tabloid"
-	],
-	"tag1, tag2, ...": [
-		"태그1, 태그2, ..."
 	],
 	"Tagged: %d.": [
 		"태그됨: %d."
@@ -2933,17 +3185,14 @@
 	"Text editor command": [
 		"텍스트 편집기 명령어"
 	],
-	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
-		"[Web Clipper](%s)는 브라우저에서 웹페이지와 스크린샷을 저장할 수 있는 브라우저 확장 프로그램입니다."
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"활성 프로필은 삭제할 수 없습니다. 다른 프로필로 전환하고 다시 시도하세요."
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"애플리케이션이 곧 종료됩니다. 프로세스를 완료하려면 다시 실행해주세요."
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"Joplin이 제대로 닫히지 않았습니다. 안전 모드에서 시작하시겠어요?"
 	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"애플리케이션이 허가되었습니다 - 브라우저 탭을 닫으셔도 됩니다."
@@ -2990,14 +3239,17 @@
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		"다음 키들이 오래된 암호화 알고리즘을 사용하고 있기 때문에 업그레이드를 권장합니다. 업그레이드된 마스터 키는 기존 데이터의 암호화 및 복호화에 그대로 사용될 수 있습니다."
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"Joplin 모바일 앱에서는 현재 해당 형식의 링크를 지원하지 않습니다: %s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Joplin 팀은 이 플러그인을 검사했으며 보안 및 성능에 대한 표준을 충족합니다."
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"이 ID와 연관된 키는 일부 항목을 암호화하는데에 사용되었으나, 현재 애플리케이션이 해당 키에 접근할 수 없습니다. 이는 추후에 동기화를 통해 내려받을 가능성이 있습니다."
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
 	],
 	"The master key has been upgraded successfully!": [
 		"마스터 키가 성공적으로 업그레이드되었습니다!"
@@ -3043,6 +3295,9 @@
 	],
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		"동기화를 할 대상을 선택합니다. 각각의 동기화 대상은 `sync.NUM.NAME` 형식으로 된 추가적인 매개 변수를 포함할 수 있습니다. (아래에 문서화되어 있습니다)."
+	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"웹 클리퍼가 데이터에 접근하기 위해 승인이 필요합니다."
@@ -3095,14 +3350,20 @@
 	"This attachment is not downloaded or not decrypted yet": [
 		"이 첨부 파일은 아직 내려받기 또는 복호화되지 않았습니다"
 	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"이 첨부 파일은 아직 내려받기 또는 복호화되지 않았습니다."
-	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"이 인증 토큰은 서드파티 애플리케이션에서 Joplin에 접근할 때만 필요합니다."
 	],
 	"This drawing may have unsaved changes.": [
 		"이 그림에는 저장되지 않은 변경사항이 있을 수 있습니다."
+	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"노트에 링크된 첨부 파일을 보여주는 고급 도구입니다. 여기에서 보여지는 항목을 삭제할 경우, 나중에 복원할 수 없으므로 주의하시기 바랍니다."
@@ -3127,6 +3388,9 @@
 	],
 	"This note has no history": [
 		"이 노트의 변경 내역이 없습니다"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -3169,6 +3433,9 @@
 	],
 	"To continue, please enter your master password below.": [
 		"계속하려면 아래에 마스터 비밀번호를 입력해주세요."
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"태그를 삭제하려면 먼저 연결된 노트의 태그를 해제해주세요."
@@ -3263,6 +3530,9 @@
 	"Try it now": [
 		"지금 시도하기"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"명령어에 관한 정보는 `help [command]`를 입력하시면 찾으실 수 있습니다. 'help all'을 입력하시면 완전한 명령어 용법에 대한 정보를 보실 수 있습니다."
 	],
@@ -3271,9 +3541,6 @@
 	],
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"노트 제목이나 내용의 일부를 입력하여 바로 이동하세요. 혹은 #으로 시작하는 태그 이름이나 @로 시작하는 노트북 이름을 입력하거나, :을 입력하여 명령을 검색하세요."
-	],
-	"Type new tags or select from list": [
-		"새 태그를 입력하거나 목록에서 선택하세요"
 	],
 	"Type: %s.": [
 		"형태: %s."
@@ -3284,6 +3551,9 @@
 	"Unable to share log data. Reason: %s": [
 		"로그 데이터를 공유할 수 없습니다. 이유: %s"
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"완료되지 않은 목록을 맨 위에"
 	],
@@ -3292,6 +3562,9 @@
 	],
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
 		"애플리케이션을 삭제했다가 다시 설치합니다. 데스크톱 애플리케이션에서 모든 노트를 JEX로 내보내 백업을 먼저 만드세요."
+	],
+	"Unknown": [
+		"알 수 없음"
 	],
 	"Unknown flag: %s": [
 		"알 수 없는 플래그: %s"
@@ -3307,6 +3580,9 @@
 	],
 	"Unshare": [
 		"공유 해제"
+	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"이 노트북의 공유를 해제하시겠어요? 공유 수신자들은 더 이상 해당 노트북에 접근할 수 없게 됩니다."
@@ -3392,6 +3668,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"텍스트를 읽기 쉽게 폭이 변경될 글꼴을 선택합니다 (표, 체크박스, 코드 등). 글꼴을 찾지 못할 경우, 기본 모노스페이스 (폭이 변경된) 글꼴이 사용됩니다."
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"사용자 삭제"
 	],
@@ -3421,6 +3700,9 @@
 	],
 	"Vim": [
 		"Vim"
+	],
+	"Voice recorder": [
+		""
 	],
 	"Voice typing language files (URL)": [
 		"음성 입력 언어 파일(URL)"
@@ -3476,6 +3758,9 @@
 	"When creating a new to-do:": [
 		"새 목록을 만들 때:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"이 기능을 활성화하면 애플리케이션이 첨부파일을 스캔하고 첨부파일에서 텍스트를 추출합니다. 이렇게 하면 첨부 파일에 있는 텍스트를 검색할 수 있습니다."
 	],
@@ -3502,6 +3787,15 @@
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
 		"Joplin Cloud에 로그인되어 있으므로 지금 이 화면을 종료해도 됩니다."
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
+		""
 	],
 	"You currently have no notebooks.": [
 		"현재 노트북이 없습니다."
@@ -3535,9 +3829,6 @@
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		"일부 데이터를 복호화하려면 암호가 필요합니다. `:e2ee decrypt` 를 입력하여 설정합니다."
-	],
-	"Your permission to use your camera is required.": [
-		"카메라 사용 허가가 필요합니다."
 	],
 	"Your version: %s": [
 		"현재 버전: %s"

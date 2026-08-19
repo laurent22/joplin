@@ -6,24 +6,31 @@ import time from '../time';
 import { NoteEntity } from './database/types';
 import Note from '../models/Note';
 import { openFileWithExternalEditor } from './ExternalEditWatcher/utils';
-const EventEmitter = require('events');
-const chokidar = require('chokidar');
+import AsyncActionQueue from '../AsyncActionQueue';
+import { EventEmitter } from 'events';
+import * as chokidar from 'chokidar';
 const { ErrorNotFound } = require('./rest/utils/errors');
+
+interface ChangeEventContext {
+	path: string;
+}
+
+type DispatchFn = (action: { type: string; [key: string]: unknown })=> void;
+// Bridge() returns the desktop bridge with methods openItem/openExternal/etc. used by the external-editor helper.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Concrete bridge type lives in app-desktop; lib references it structurally
+type BridgeFn = ()=> any;
 
 export default class ExternalEditWatcher {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private dispatch: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	private bridge_: Function;
+	private dispatch: DispatchFn;
+	private bridge_: BridgeFn;
 	private logger_: Logger = new Logger();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- chokidar typings vary across platforms; we use a small subset (watch/on/unwatch/close) treated structurally
 	private watcher_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private eventEmitter_: any = new EventEmitter();
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private skipNextChangeEvent_: any = {};
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	private changeEventQueue_: AsyncActionQueue<ChangeEventContext>;
+	private eventEmitter_: EventEmitter = new EventEmitter();
+	private skipNextChangeEvent_: Record<string, boolean> = {};
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See watcher_ above
 	private chokidar_: any = chokidar;
 
 	private static instance_: ExternalEditWatcher;
@@ -34,10 +41,33 @@ export default class ExternalEditWatcher {
 		return this.instance_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public initialize(bridge: Function, dispatch: Function) {
+	public initialize(bridge: BridgeFn, dispatch: DispatchFn) {
 		this.bridge_ = bridge;
 		this.dispatch = dispatch;
+
+		// Chokidar skips repeated events for the same file.
+		// As a result, it may be possible for something similar to the following to happen:
+		// 1. A user makes a change to a file in an external editor.
+		// 2. The external editor truncates the file to just before the change.
+		// 3. Joplin receives an event from Chokidar and reads the truncated file.
+		// 4. The external editor writes the remainder of the file (with the user's change).
+		// 5. The change event is ignored (throttled by Chokidar) since it happened within
+		//    50 ms of the change from step 2.
+		// 6. The note remains truncated in Joplin.
+		//
+		// To avoid this, we use an AsyncActionQueue to delay processing change events received
+		// from Chokidar.
+		// The timeout must be at least the throttling delay used internally by chokidar.
+		// With Chokidar 3.6.0, this throttling delay is 50ms.
+		// https://github.com/laurent22/joplin/issues/14954
+		const timeout = 55;
+		this.changeEventQueue_ = new AsyncActionQueue<ChangeEventContext>(timeout);
+		this.changeEventQueue_.setCanSkipTaskHandler((task1, task2) => {
+			// Only skip change events for the same path
+			const context1 = task1.context;
+			const context2 = task2.context;
+			return context1.path === context2.path;
+		});
 	}
 
 	public externalApi() {
@@ -48,17 +78,14 @@ export default class ExternalEditWatcher {
 		};
 
 		return {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			openAndWatch: async (args: any) => {
+			openAndWatch: async (args: { noteId: string }) => {
 				const note = await loadNote(args.noteId);
 				return this.openAndWatch(note);
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			stopWatching: async (args: any) => {
+			stopWatching: async (args: { noteId: string }) => {
 				return this.stopWatching(args.noteId);
 			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			noteIsWatched: async (args: any) => {
+			noteIsWatched: async (args: { noteId: string }) => {
 				const note = await loadNote(args.noteId);
 				return this.noteIsWatched(note);
 			},
@@ -69,13 +96,13 @@ export default class ExternalEditWatcher {
 		return Setting.value('profileDir');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public on(eventName: string, callback: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- EventEmitter events carry heterogeneous payloads by name; per-event typing would need a string-literal map across all callers
+	public on(eventName: string, callback: (...args: any[])=> void) {
 		return this.eventEmitter_.on(eventName, callback);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public off(eventName: string, callback: Function) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See on() above
+	public off(eventName: string, callback: (...args: any[])=> void) {
 		return this.eventEmitter_.removeListener(eventName, callback);
 	}
 
@@ -109,47 +136,7 @@ export default class ExternalEditWatcher {
 					const id = this.noteFilePathToId_(path);
 
 					if (!this.skipNextChangeEvent_[id]) {
-						const note = await Note.load(id);
-
-						if (!note) {
-							this.logger().warn(`ExternalEditWatcher: Watched note has been deleted: ${id}`);
-							void this.stopWatching(id);
-							return;
-						}
-
-						let noteContent = await shim.fsDriver().readFile(path, 'utf-8');
-
-						// In some very rare cases, the "change" event is going to be emitted but the file will be empty.
-						// This is likely to be the editor that first clears the file, then writes the content to it, so if
-						// the file content is read very quickly after the change event, we'll get empty content.
-						// Usually, re-reading the content again will fix the issue and give back the file content.
-						// To replicate on Windows: associate Typora as external editor, and leave Ctrl+S pressed -
-						// it will keep on saving very fast and the bug should happen at some point.
-						// Below we re-read the file multiple times until we get the content, but in my tests it always
-						// work in the first try anyway. The loop is just for extra safety.
-						// https://github.com/laurent22/joplin/issues/1854
-						if (!noteContent) {
-							this.logger().warn(`ExternalEditWatcher: Watched note is empty - this is likely to be a bug and re-reading the note should fix it. Trying again... ${id}`);
-
-							for (let i = 0; i < 10; i++) {
-								noteContent = await shim.fsDriver().readFile(path, 'utf-8');
-								if (noteContent) {
-									this.logger().info(`ExternalEditWatcher: Note is now readable: ${id}`);
-									break;
-								}
-								await time.msleep(100);
-							}
-
-							if (!noteContent) this.logger().warn(`ExternalEditWatcher: Could not re-read note - user might have purposely deleted note content: ${id}`);
-						}
-
-						this.logger().debug('ExternalEditWatcher: Updating note object.');
-
-						const updatedNote = await Note.unserializeForEdit(noteContent);
-						updatedNote.id = id;
-						updatedNote.parent_id = note.parent_id;
-						await Note.save(updatedNote);
-						this.eventEmitter_.emit('noteChange', { id: updatedNote.id, note: updatedNote });
+						this.changeEventQueue_.push(() => this.onNoteChange_(path), { path });
 					} else {
 						this.logger().debug('ExternalEditWatcher: Skipping this event.');
 					}
@@ -166,19 +153,73 @@ export default class ExternalEditWatcher {
 		return this.watcher_;
 	}
 
+	private async onNoteChange_(path: string) {
+		const id = this.noteFilePathToId_(path);
+		const note = await Note.load(id);
+
+		if (!note) {
+			this.logger().warn(`ExternalEditWatcher: Watched note has been deleted: ${id}`);
+			void this.stopWatching(id);
+			return;
+		}
+
+		let noteContent: string;
+		try {
+			noteContent = await shim.fsDriver().readFile(path, 'utf-8');
+		} catch (error) {
+			if (error.code === 'ENOENT') {
+				this.logger().warn(`ExternalEditWatcher: Watched file no longer exists: ${path}`);
+				void this.stopWatching(id);
+				return;
+			}
+			throw error;
+		}
+
+		// In some very rare cases, the "change" event is going to be emitted but the file will be empty.
+		// This is likely to be the editor that first clears the file, then writes the content to it, so if
+		// the file content is read very quickly after the change event, we'll get empty content.
+		// Usually, re-reading the content again will fix the issue and give back the file content.
+		// To replicate on Windows: associate Typora as external editor, and leave Ctrl+S pressed -
+		// it will keep on saving very fast and the bug should happen at some point.
+		// Below we re-read the file multiple times until we get the content, but in my tests it always
+		// work in the first try anyway. The loop is just for extra safety.
+		// https://github.com/laurent22/joplin/issues/1854
+		if (!noteContent) {
+			this.logger().warn(`ExternalEditWatcher: Watched note is empty - this is likely to be a bug and re-reading the note should fix it. Trying again... ${id}`);
+
+			for (let i = 0; i < 10; i++) {
+				noteContent = await shim.fsDriver().readFile(path, 'utf-8');
+				if (noteContent) {
+					this.logger().info(`ExternalEditWatcher: Note is now readable: ${id}`);
+					break;
+				}
+				await time.msleep(100);
+			}
+
+			if (!noteContent) this.logger().warn(`ExternalEditWatcher: Could not re-read note - user might have purposely deleted note content: ${id}`);
+		}
+
+		this.logger().debug('ExternalEditWatcher: Updating note object.');
+
+		const updatedNote = await Note.unserializeForEdit(noteContent);
+		updatedNote.id = id;
+		updatedNote.parent_id = note.parent_id;
+		await Note.save(updatedNote);
+		this.eventEmitter_.emit('noteChange', { id: updatedNote.id, note: updatedNote });
+	}
+
 	private noteIdToFilePath_(noteId: string) {
 		return `${this.tempDir()}/edit-${noteId}.md`;
 	}
 
 	private noteFilePathToId_(path: string) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let id: any = toSystemSlashes(path, 'linux').split('/');
-		if (!id.length) throw new Error(`Invalid path: ${path}`);
-		id = id[id.length - 1];
-		id = id.split('.');
-		id.pop();
-		id = id[0].split('-');
-		return id[1];
+		const pathParts = toSystemSlashes(path, 'linux').split('/');
+		if (!pathParts.length) throw new Error(`Invalid path: ${path}`);
+		const fileName = pathParts[pathParts.length - 1];
+		const fileNameParts = fileName.split('.');
+		fileNameParts.pop();
+		const idParts = fileNameParts[0].split('-');
+		return idParts[1];
 	}
 
 	public watchedFiles() {
@@ -241,6 +282,8 @@ export default class ExternalEditWatcher {
 	public async stopWatching(noteId: string) {
 		if (!noteId) return;
 
+		await this.changeEventQueue_.processAllNow();
+
 		const filePath = this.noteIdToFilePath_(noteId);
 		if (this.watcher_) this.watcher_.unwatch(filePath);
 		await shim.fsDriver().remove(filePath);
@@ -252,6 +295,8 @@ export default class ExternalEditWatcher {
 	}
 
 	public async stopWatchingAll() {
+		await this.changeEventQueue_.processAllNow();
+
 		const filePaths = this.watchedFiles();
 		for (let i = 0; i < filePaths.length; i++) {
 			await shim.fsDriver().remove(filePaths[i]);

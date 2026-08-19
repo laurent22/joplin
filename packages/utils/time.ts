@@ -3,12 +3,16 @@
 // added here, and should be based on dayjs (not moment)
 // -----------------------------------------------------------------------------------------------
 
-import * as dayjs from 'dayjs';
+import type dayjsImport from 'dayjs';
+import dayJsUtc from 'dayjs/plugin/utc';
+
+// A require() is needed here for this to work in React Native.
+const dayjs: typeof dayjsImport = require('dayjs');
 
 // Separating this into a type import and a require seems to be necessary to support mobile:
 // - import = require syntax doesn't work when bundling
 // - import * as dayJsRelativeTimeType causes a runtime error.
-import type * as dayJsRelativeTimeType from 'dayjs/plugin/relativeTime';
+import type dayJsRelativeTimeType from 'dayjs/plugin/relativeTime';
 const dayJsRelativeTime: typeof dayJsRelativeTimeType = require('dayjs/plugin/relativeTime');
 
 const supportedLocales: Record<string, unknown> = {
@@ -64,6 +68,7 @@ export const Month = 30 * Day;
 
 function initDayJs() {
 	dayjs.extend(dayJsRelativeTime);
+	dayjs.extend(dayJsUtc);
 }
 
 initDayJs();
@@ -144,4 +149,35 @@ const dateTimeFormat = () => {
 export const formatMsToLocal = (ms: number, format: string|null = null) => {
 	if (format === null) format = dateTimeFormat();
 	return dayjs(ms).format(format);
+};
+
+export const formatMsToDateTimeLocal = (ms: number) => {
+	return formatMsToLocal(ms, 'YYYY-MM-DDTHH:mm');
+};
+
+export const isValidDate = (anything: string) => {
+	return dayjs(anything).isValid();
+};
+
+export const formatDateTimeLocalToMs = (anything: string) => {
+	return dayjs(anything).unix() * 1000;
+};
+
+export const formatMsToDurationCompat = (ms: number) => {
+	// Avoid using dayjs (and @joplin/utils/time) for formatting here.
+	// See https://github.com/laurent22/joplin/issues/11864
+	const seconds = Math.floor(ms / Second) % 60;
+	const minutes = Math.floor(ms / Minute);
+	const paddedSeconds = `${seconds}`.padStart(2, '0');
+	return `${minutes}:${paddedSeconds}`;
+};
+
+
+export const goBackInTime = (startDateMs: number, n: number, period: dayjsImport.ManipulateType) => {
+	return dayjs(startDateMs).subtract(n, period);
+};
+
+export const formatMsToUTC = (ms: number, format: string|null = null) => {
+	if (format === null) format = dateTimeFormat();
+	return dayjs(ms).utc().format(format);
 };

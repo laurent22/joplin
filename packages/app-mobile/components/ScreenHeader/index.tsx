@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { PureComponent, ReactElement } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ViewStyle, Platform } from 'react-native';
-const Icon = require('react-native-vector-icons/Ionicons').default;
+import { View, Text, StyleSheet, TouchableOpacity, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import BackButtonService from '../../services/BackButtonService';
 import NavService from '@joplin/lib/services/NavService';
 import { _, _n } from '@joplin/lib/locale';
@@ -10,7 +9,6 @@ import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import { themeStyle } from '../global-style';
 import { OnValueChangedListener } from '../Dropdown';
-const DialogBox = require('react-native-dialogbox').default;
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { State } from '@joplin/lib/reducer';
 import IconButton from '../IconButton';
@@ -22,11 +20,13 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { ContainerType } from '@joplin/lib/services/plugins/WebviewController';
 import { Dispatch } from 'redux';
 import WarningBanner from './WarningBanner';
-import WebBetaButton from './WebBetaButton';
 
-import Menu, { MenuOptionType } from './Menu';
 import shim from '@joplin/lib/shim';
-export { MenuOptionType };
+import CommandService from '@joplin/lib/services/CommandService';
+import Icon from '../Icon';
+import Menu from './Menu';
+import { MenuOption, MenuOptionStyle } from '../BottomDrawerMenu';
+export { MenuOption, MenuOptionStyle };
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -35,12 +35,20 @@ export { MenuOptionType };
 const PADDING_V = 10;
 
 type OnPressCallback=()=> void;
+type ScreenHeaderStyles = ReturnType<typeof StyleSheet.create>;
 
 export interface FolderPickerOptions {
-	enabled: boolean;
+	visible: boolean;
+	disabled?: boolean;
 	selectedFolderId?: string;
 	onValueChange?: OnValueChangedListener;
 	mustSelect?: boolean;
+}
+
+export enum ViewToggleButtonMode {
+	Hidden = 'hidden',
+	ShowViewer = 'show-viewer',
+	ShowEditor = 'show-editor',
 }
 
 interface ScreenHeaderProps {
@@ -51,7 +59,7 @@ interface ScreenHeaderProps {
 	showUndoButton: boolean;
 	undoButtonDisabled?: boolean;
 	showRedoButton: boolean;
-	menuOptions: MenuOptionType[];
+	menuOptions: MenuOption[];
 	title?: string|null;
 	folders: FolderEntity[];
 	folderPickerOptions?: FolderPickerOptions;
@@ -63,11 +71,15 @@ interface ScreenHeaderProps {
 	onSaveButtonPress: OnPressCallback;
 	sortButton_press?: OnPressCallback;
 	onSearchButtonPress?: OnPressCallback;
+	onDeleteButtonPress?: OnPressCallback;
 
 	showSideMenuButton?: boolean;
 	showSearchButton?: boolean;
 	showContextMenuButton?: boolean;
+	showPluginEditorButton?: boolean;
 	showBackButton?: boolean;
+	viewToggleButtonMode?: ViewToggleButtonMode;
+	onViewTogglePress?: OnPressCallback;
 
 	saveButtonDisabled?: boolean;
 	showSaveButton?: boolean;
@@ -82,9 +94,7 @@ interface ScreenHeaderState {
 }
 
 class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeaderState> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private cachedStyles: any;
-	public dialogbox?: typeof DialogBox;
+	private cachedStyles: Record<number, ReturnType<typeof StyleSheet.create>>;
 	public constructor(props: ScreenHeaderProps) {
 		super(props);
 		this.cachedStyles = {};
@@ -97,13 +107,24 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		const theme = themeStyle(themeId);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const styleObject: any = {
-			container: {
+		const styleObject: Record<string, ViewStyle | TextStyle | ImageStyle> = {
+			outerContainer: {
 				flexDirection: 'column',
+			},
+			innerContainer: {
+				flexDirection: 'row',
+				alignItems: 'center',
 				backgroundColor: theme.backgroundColor2,
 				shadowColor: '#000000',
 				elevation: 5,
+			},
+			// A small border above the header: Covers the part of the shadow that would otherwise
+			// be shown above the header on Android.
+			aboveHeader: {
+				backgroundColor: theme.backgroundColor2,
+				paddingBottom: 6,
+				marginTop: -6,
+				zIndex: 2,
 			},
 			sideMenuButton: {
 				flex: 1,
@@ -127,7 +148,10 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				flex: 0,
 				flexDirection: 'row',
 				alignItems: 'center',
-				padding: 10,
+				justifyContent: 'center',
+				minWidth: 40,
+				minHeight: 40,
+
 				borderWidth: 1,
 				borderColor: theme.colorBright2,
 				borderRadius: 4,
@@ -145,12 +169,13 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				height: 18,
 			},
 			saveButtonIcon: {
-				width: 18,
-				height: 18,
+				...theme.icon,
+				fontSize: 25,
+				color: theme.colorBright2,
 			},
 			contextMenuTrigger: {
 				fontSize: 30,
-				paddingLeft: 10,
+				paddingLeft: 5,
 				paddingRight: theme.marginRight,
 				color: theme.color2,
 				fontWeight: 'bold',
@@ -165,13 +190,25 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				paddingTop: 15,
 				paddingBottom: 15,
 			},
+			viewToggleButton: {
+				flex: 1,
+				backgroundColor: theme.backgroundColor2,
+				paddingLeft: 22,
+				paddingRight: 10,
+				paddingTop: PADDING_V,
+				paddingBottom: PADDING_V,
+			},
+			viewToggleIcon: {
+				fontSize: 27,
+				color: theme.colorBright2,
+				flex: 1,
+				textAlignVertical: 'center',
+			},
 		};
 
 
-		styleObject.topIcon = { ...theme.icon };
-		styleObject.topIcon.flex = 1;
-		styleObject.topIcon.textAlignVertical = 'center';
-		styleObject.topIcon.color = theme.colorBright2;
+		const topIcon: TextStyle = { ...theme.icon, flex: 1, textAlignVertical: 'center', color: theme.colorBright2 };
+		styleObject.topIcon = topIcon;
 
 		styleObject.backButton = { ...styleObject.iconButton };
 		styleObject.backButton.marginRight = 1;
@@ -254,8 +291,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 	public render() {
 		const themeId = this.props.themeId;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function sideMenuButton(styles: any, onPress: OnPressCallback) {
+		function sideMenuButton(styles: ScreenHeaderStyles, onPress: OnPressCallback) {
 			return (
 				<TouchableOpacity
 					onPress={onPress}
@@ -264,14 +300,13 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					accessibilityHint={_('Show/hide the sidebar')}
 					accessibilityRole="button">
 					<View style={styles.sideMenuButton}>
-						<Icon name="menu" style={styles.topIcon} />
+						<Icon name="ionicon menu" style={styles.topIcon} accessibilityLabel={null} />
 					</View>
 				</TouchableOpacity>
 			);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function backButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
+		function backButton(styles: ScreenHeaderStyles, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<TouchableOpacity
 					onPress={onPress}
@@ -281,8 +316,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					accessibilityRole="button">
 					<View style={disabled ? styles.backButtonDisabled : styles.backButton}>
 						<Icon
-							name="arrow-back"
+							name="ionicon arrow-back"
 							style={styles.topIcon}
+							accessibilityLabel={null}
 						/>
 					</View>
 				</TouchableOpacity>
@@ -290,23 +326,22 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		}
 
 		function saveButton(
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			styles: any, onPress: OnPressCallback, disabled: boolean, show: boolean,
+			styles: ScreenHeaderStyles, onPress: OnPressCallback, disabled: boolean, show: boolean,
 		) {
 			if (!show) return null;
 
-			const icon = disabled ? <Icon name="checkmark" style={styles.savedButtonIcon} /> : <Image style={styles.saveButtonIcon} source={require('./SaveIcon.png')} />;
-
 			return (
-				<TouchableOpacity
+				<IconButton
 					onPress={onPress}
-					disabled={disabled}
-					style={{ padding: 0 }}
 
-					accessibilityLabel={_('Save changes')}
-					accessibilityRole="button">
-					<View style={disabled ? styles.saveButtonDisabled : styles.saveButton}>{icon}</View>
-				</TouchableOpacity>
+					themeId={themeId}
+					description={_('Save changes')}
+					disabled={disabled}
+					contentWrapperStyle={disabled ? styles.saveButtonDisabled : styles.saveButton}
+					iconStyle={disabled ? styles.savedButtonIcon : styles.saveButtonIcon}
+
+					iconName={disabled ? 'ionicon checkmark' : 'material content-save'}
+				/>
 			);
 		}
 
@@ -355,8 +390,24 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			});
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function selectAllButton(styles: any, onPress: OnPressCallback) {
+		const renderViewToggleButton = () => {
+			const mode = this.props.viewToggleButtonMode ?? ViewToggleButtonMode.Hidden;
+			if (mode === ViewToggleButtonMode.Hidden || !this.props.onViewTogglePress) return null;
+
+			return (
+				<IconButton
+					onPress={this.props.onViewTogglePress}
+					containerStyle={{ padding: 0 }}
+					contentWrapperStyle={this.styles().viewToggleButton}
+					themeId={themeId}
+					description={mode === ViewToggleButtonMode.ShowViewer ? _('Stop editing') : _('Edit')}
+					iconName={mode === ViewToggleButtonMode.ShowViewer ? 'ionicon book-outline' : 'ionicon create-outline'}
+					iconStyle={this.styles().viewToggleIcon}
+				/>
+			);
+		};
+
+		function selectAllButton(styles: ScreenHeaderStyles, onPress: OnPressCallback) {
 			return (
 				<IconButton
 					onPress={onPress}
@@ -371,8 +422,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function searchButton(styles: any, onPress: OnPressCallback) {
+		function searchButton(styles: ScreenHeaderStyles, onPress: OnPressCallback) {
 			return (
 				<IconButton
 					onPress={onPress}
@@ -387,8 +437,22 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const pluginPanelToggleButton = (styles: any, onPress: OnPressCallback) => {
+		const customDeleteButton = (styles: ScreenHeaderStyles, onPress: OnPressCallback) => {
+			return (
+				<IconButton
+					onPress={onPress}
+
+					description={_('Delete')}
+					themeId={themeId}
+					contentWrapperStyle={styles.iconButton}
+
+					iconName='fas trash'
+					iconStyle={styles.topIcon}
+				/>
+			);
+		};
+
+		const pluginPanelToggleButton = (styles: ScreenHeaderStyles, onPress: OnPressCallback) => {
 			const allPluginViews = Object.values(this.props.plugins).map(plugin => Object.values(plugin.views)).flat();
 			const allVisiblePanels = allPluginViews.filter(
 				view => view.containerType === ContainerType.Panel && view.opened,
@@ -408,20 +472,25 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		};
 
-		const betaIconButton = () => {
-			if (Platform.OS !== 'web') return null;
+		const renderTogglePluginEditorButton = (styles: ScreenHeaderStyles, onPress: OnPressCallback, disabled: boolean) => {
+			if (!this.props.showPluginEditorButton) return null;
 
 			return (
-				<WebBetaButton
+				<IconButton
+					onPress={onPress}
+					disabled={disabled}
+
 					themeId={themeId}
-					wrapperStyle={this.styles().iconButton}
-					iconStyle={this.styles().topIcon}
+					description={_('Toggle plugin editor')}
+					contentWrapperStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
+
+					iconName='ionicon eye'
+					iconStyle={styles.topIcon}
 				/>
 			);
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function deleteButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
+		function deleteButton(styles: ScreenHeaderStyles, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<IconButton
 					onPress={onPress}
@@ -440,8 +509,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function restoreButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
+		function restoreButton(styles: ScreenHeaderStyles, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<IconButton
 					onPress={onPress}
@@ -460,8 +528,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function duplicateButton(styles: any, onPress: OnPressCallback, disabled: boolean) {
+		function duplicateButton(styles: ScreenHeaderStyles, onPress: OnPressCallback, disabled: boolean) {
 			return (
 				<IconButton
 					onPress={onPress}
@@ -479,48 +546,45 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function sortButton(styles: any, onPress: OnPressCallback) {
+		function sortButton(styles: ScreenHeaderStyles, onPress: OnPressCallback) {
 			return (
-				<TouchableOpacity
+				<IconButton
 					onPress={onPress}
+					themeId={themeId}
 
-					accessibilityLabel={_('Sort notes by')}
-					accessibilityRole="button">
-					<View style={styles.iconButton}>
-						<Icon name="filter-outline" style={styles.topIcon} />
-					</View>
-				</TouchableOpacity>
+					description={_('Sort notes by')}
+					iconName='ionicon filter-outline'
+					contentWrapperStyle={styles.iconButton}
+					iconStyle={styles.topIcon}
+				/>
 			);
 		}
 
-		const menuOptions: MenuOptionType[] = [...this.props.menuOptions];
+		const menuOptions: MenuOption[] = [...this.props.menuOptions];
 
 		const selectedFolder = this.props.notesParentType === 'Folder' ? Folder.byId(this.props.folders, this.props.selectedFolderId) : null;
 		const selectedFolderInTrash = itemIsInTrash(selectedFolder);
 
-		if (!this.props.noteSelectionEnabled) {
-			if (menuOptions.length) {
-				menuOptions.push({ isDivider: true });
-			}
-		} else {
+		if (this.props.noteSelectionEnabled) {
 			menuOptions.push({
 				key: 'delete',
 				title: _('Delete'),
-				onPress: this.deleteButton_press,
+				onPress: () => this.deleteButton_press(),
 			});
 
 			menuOptions.push({
 				key: 'duplicate',
 				title: _('Duplicate'),
-				onPress: this.duplicateButton_press,
+				onPress: () => this.duplicateButton_press(),
 			});
 		}
 
-		const createTitleComponent = (disabled: boolean, hideableAfterTitleComponents: ReactElement) => {
+		const createTitleComponent = (hideableAfterTitleComponents: ReactElement) => {
 			const folderPickerOptions = this.props.folderPickerOptions;
 
-			if (folderPickerOptions && folderPickerOptions.enabled) {
+			if (folderPickerOptions && folderPickerOptions.visible) {
+				const hasSelectedNotes = this.props.selectedNoteIds.length > 0;
+				const disabled = this.props.folderPickerOptions.disabled ?? !hasSelectedNotes;
 				return (
 					<FolderPicker
 						themeId={themeId}
@@ -542,14 +606,21 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 							const folder = await Folder.load(folderId);
 
-							const ok = noteIds.length > 1 ? await shim.showConfirmationDialog(_('Move %d notes to notebook "%s"?', noteIds.length, folder.title)) : true;
+							const ok = noteIds.length > 1 ? await shim.showConfirmationDialog(_n('Move %d note to notebook "%s"?', 'Move %d notes to notebook "%s"?', noteIds.length, noteIds.length, folder.title)) : true;
 							if (!ok) return;
 
 							this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 
 							try {
 								for (let i = 0; i < noteIds.length; i++) {
-									await Note.moveToFolder(noteIds[i], folderId);
+									await Note.moveToFolder(
+										noteIds[i],
+										folderId,
+										// By default, the note selection is preserved on mobile when a note is moved to
+										// a different folder. However, when moving notes from the note list, this shouldn't be
+										// the case:
+										{ dispatchOptions: { preserveSelection: false } },
+									);
 								}
 							} catch (error) {
 								alert(_n('This note could not be moved: %s', 'These notes could not be moved: %s', noteIds.length, error.message));
@@ -564,7 +635,12 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				const title = 'title' in this.props && this.props.title !== null ? this.props.title : '';
 				return (
 					<>
-						<Text ellipsizeMode={'tail'} numberOfLines={1} style={this.styles().titleText}>{title}</Text>
+						<Text
+							ellipsizeMode={'tail'}
+							numberOfLines={1}
+							style={this.styles().titleText}
+							accessibilityRole='header'
+						>{title}</Text>
 						{hideableAfterTitleComponents}
 					</>
 				);
@@ -576,6 +652,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const showSearchButton = !!this.props.showSearchButton && !this.props.noteSelectionEnabled;
 		const showContextMenuButton = this.props.showContextMenuButton !== false;
 		const showBackButton = !!this.props.noteSelectionEnabled || this.props.showBackButton !== false;
+		const showStandardDeleteButton = !this.props.onDeleteButtonPress && !selectedFolderInTrash && this.props.noteSelectionEnabled;
 
 		let backButtonDisabled = !this.props.historyCanGoBack;
 		if (this.props.noteSelectionEnabled) backButtonDisabled = false;
@@ -584,22 +661,28 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const sideMenuComp = !showSideMenuButton ? null : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
 		const backButtonComp = !showBackButton ? null : backButton(this.styles(), () => this.backButton_press(), backButtonDisabled);
 		const pluginPanelsComp = pluginPanelToggleButton(this.styles(), () => this.pluginPanelToggleButton_press());
-		const betaIconComp = betaIconButton();
 		const selectAllButtonComp = !showSelectAllButton ? null : selectAllButton(this.styles(), () => this.selectAllButton_press());
 		const searchButtonComp = !showSearchButton ? null : searchButton(this.styles(), () => this.searchButton_press());
-		const deleteButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? deleteButton(this.styles(), () => this.deleteButton_press(), headerItemDisabled) : null;
+		const customDeleteButtonComp = this.props.onDeleteButtonPress ? customDeleteButton(this.styles(), this.props.onDeleteButtonPress) : null;
+		const deleteButtonComp = showStandardDeleteButton ? deleteButton(this.styles(), () => this.deleteButton_press(), headerItemDisabled) : null;
 		const restoreButtonComp = selectedFolderInTrash && this.props.noteSelectionEnabled ? restoreButton(this.styles(), () => this.restoreButton_press(), headerItemDisabled) : null;
 		const duplicateButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press(), headerItemDisabled) : null;
 		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
+		const togglePluginEditorButton = renderTogglePluginEditorButton(this.styles(), () => CommandService.instance().execute('toggleEditorPlugin'), false);
 
 		// To allow the notebook dropdown (and perhaps other components) to have sufficient
 		// space while in use, we allow certain buttons to be hidden.
 		const hideableRightComponents = <>
 			{pluginPanelsComp}
-			{betaIconComp}
+			{togglePluginEditorButton}
+			{selectAllButtonComp}
+			{searchButtonComp}
+			{deleteButtonComp}
+			{customDeleteButtonComp}
+			{renderViewToggleButton()}
 		</>;
 
-		const titleComp = createTitleComponent(headerItemDisabled, hideableRightComponents);
+		const titleComp = createTitleComponent(hideableRightComponents);
 
 		const contextMenuStyle: ViewStyle = {
 			paddingTop: PADDING_V,
@@ -612,15 +695,23 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const menuComp =
 			!menuOptions.length || !showContextMenuButton ? null : (
 				<Menu themeId={this.props.themeId} options={menuOptions}>
-					<View style={contextMenuStyle} accessibilityLabel={_('Actions')}>
-						<Icon name="ellipsis-vertical" style={this.styles().contextMenuTrigger} />
+					<View style={contextMenuStyle}>
+						<Icon name="ionicon ellipsis-vertical" style={this.styles().contextMenuTrigger} accessibilityLabel={_('Actions')}/>
 					</View>
 				</Menu>
 			);
 
+		// Updating the state of this component can result in the left most element becoming hidden, so add a dummy as the first element to prevent this
+		// See https://github.com/laurent22/joplin/issues/14153
+		const zeroWidthSpacer = (
+			<View style={{ width: 0 }} pointerEvents="none"/>
+		);
+
 		return (
-			<View style={this.styles().container}>
-				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+			<View style={this.styles().outerContainer}>
+				<View style={this.styles().aboveHeader}/>
+				<View style={this.styles().innerContainer}>
+					{zeroWidthSpacer}
 					{sideMenuComp}
 					{backButtonComp}
 					{renderUndoButton()}
@@ -634,9 +725,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 						this.props.showSaveButton === true,
 					)}
 					{titleComp}
-					{selectAllButtonComp}
-					{searchButtonComp}
-					{deleteButtonComp}
 					{restoreButtonComp}
 					{duplicateButtonComp}
 					{sortButtonComp}
@@ -644,11 +732,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				</View>
 				<WarningBanner
 					showShouldUpgradeSyncTargetMessage={this.props.showShouldUpgradeSyncTargetMessage}
-				/>
-				<DialogBox
-					ref={(dialogbox: typeof DialogBox) => {
-						this.dialogbox = dialogbox;
-					}}
 				/>
 			</View>
 		);

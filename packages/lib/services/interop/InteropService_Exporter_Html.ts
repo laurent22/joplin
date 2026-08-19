@@ -6,15 +6,25 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import { MarkupToHtml } from '@joplin/renderer';
-import { NoteEntity, ResourceEntity } from '../database/types';
+import { ExportOptions } from './types';
+import { NoteEntity, ResourceEntity, ResourceLocalStateEntity } from '../database/types';
 import { contentScriptsToRendererRules } from '../plugins/utils/loadContentScripts';
+import { ThemeStyle } from '../../theme';
 import { basename, friendlySafeFilename, rtrimSlashes, dirname } from '../../path-utils';
-import htmlpack from '@joplin/htmlpack';
+import packToWriter from '@joplin/htmlpack/packToWriter';
 const { themeStyle } = require('../../theme');
-const { escapeHtml } = require('../../string-utils.js');
+import { escapeHtml } from '../../string-utils';
 import { assetsToHeaders } from '@joplin/renderer';
 import getPluginSettingValue from '../plugins/utils/getPluginSettingValue';
 import { LinkRenderingType } from '@joplin/renderer/MdToHtml';
+import Logger from '@joplin/utils/Logger';
+import { parseRenderedNoteMetadata } from './utils';
+import ResourceLocalState from '../../models/ResourceLocalState';
+import { getGlobalSettings, ResourceInfos } from '@joplin/renderer/types';
+import { fromFilename } from '../../mime-utils';
+const { isImageMimeType } = require('../../resourceUtils');
+
+const logger = Logger.create('InteropService_Exporter_Html');
 
 export default class InteropService_Exporter_Html extends InteropService_Exporter_Base {
 
@@ -24,19 +34,19 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 	private createdDirs_: string[] = [];
 	private resourceDir_: string;
 	private markupToHtml_: MarkupToHtml;
-	private resources_: ResourceEntity[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private style_: any;
+	private resources_: ResourceInfos = {};
+	private style_: ThemeStyle;
 	private packIntoSingleFile_ = false;
+	private shouldEmbedOnlyImages_ = false;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async init(path: string, options: any = {}) {
+	public async init(path: string, options: ExportOptions = {}) {
 		this.customCss_ = options.customCss ? options.customCss : '';
 
 		if (this.metadata().target === 'file') {
 			this.destDir_ = dirname(path);
 			this.filePath_ = path;
 			this.packIntoSingleFile_ = 'packIntoSingleFile' in options ? options.packIntoSingleFile : true;
+			this.shouldEmbedOnlyImages_ = !!options.shouldEmbedOnlyImages;
 		} else {
 			this.destDir_ = path;
 			this.filePath_ = null;
@@ -89,8 +99,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		return newBody;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async processItem(_itemType: number, item: any) {
+	public async processItem(_itemType: number, item: NoteEntity) {
 		if ([BaseModel.TYPE_NOTE, BaseModel.TYPE_FOLDER].indexOf(item.type_) < 0) return;
 
 		let dirPath = '';
@@ -124,23 +133,29 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 						linkRenderingType: LinkRenderingType.HrefHandler,
 					},
 				},
+				globalSettings: getGlobalSettings(Setting),
 			});
-			const noteContent = [];
-			if (item.title) noteContent.push(`<div class="exported-note-title">${escapeHtml(item.title)}</div>`);
-			if (result.html) noteContent.push(result.html);
 
-			const libRootPath = dirname(dirname(__dirname));
+			const noteContent = [];
+			const metadata = parseRenderedNoteMetadata(result.html ? result.html : '');
+			if (!metadata.printTitle) logger.info('Not printing title because joplin-metadata-print-title tag is set to false');
+			if (metadata.printTitle && item.title) noteContent.push(`<div class="exported-note-title">${escapeHtml(item.title)}</div>`);
+			if (result.html) noteContent.push(result.html);
 
 			// We need to export all the plugin assets too and refer them from the header
 			// The source path is a bit hard-coded but shouldn't change.
 			for (let i = 0; i < result.pluginAssets.length; i++) {
 				const asset = result.pluginAssets[i];
-				const filePath = asset.pathIsAbsolute ? asset.path : `${libRootPath}/node_modules/@joplin/renderer/assets/${asset.name}`;
-				const destPath = `${dirname(noteFilePath)}/pluginAssets/${asset.name}`;
-				const dir = dirname(destPath);
-				await shim.fsDriver().mkdir(dir);
-				this.createdDirs_.push(dir);
-				await shim.fsDriver().copy(filePath, destPath);
+				const filePath = asset.pathIsAbsolute ? asset.path : `${Setting.value('pluginAssetDir')}/${asset.name}`;
+				if (!(await shim.fsDriver().exists(filePath))) {
+					logger.warn(`File does not exist and cannot be exported: ${filePath}`);
+				} else {
+					const destPath = `${dirname(noteFilePath)}/pluginAssets/${asset.name}`;
+					const dir = dirname(destPath);
+					await shim.fsDriver().mkdir(dir);
+					this.createdDirs_.push(dir);
+					await shim.fsDriver().copy(filePath, destPath);
+				}
 			}
 
 			const fullHtml = `
@@ -162,19 +177,89 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async processResource(resource: any, filePath: string) {
+	public async processResource(resource: ResourceEntity, filePath: string) {
+		if (!this.resourceDir_) return;
+		if (!await shim.fsDriver().exists(this.resourceDir_)) {
+			await shim.fsDriver().mkdir(this.resourceDir_);
+		}
+
 		const destResourcePath = `${this.resourceDir_}/${basename(filePath)}`;
 		await shim.fsDriver().copy(filePath, destResourcePath);
-		this.resources_.push(resource);
+		const localState: ResourceLocalStateEntity = await ResourceLocalState.load(resource.id);
+		this.resources_[resource.id] = {
+			localState,
+			item: resource,
+		};
 	}
 
 	public async close() {
 		if (this.packIntoSingleFile_) {
-			const tempFilePath = `${this.filePath_}.tmp`;
-			await shim.fsDriver().move(this.filePath_, tempFilePath);
-			await htmlpack(tempFilePath, this.filePath_);
-			await shim.fsDriver().remove(tempFilePath);
+			const mainHtml = await shim.fsDriver().readFile(this.filePath_, 'utf8');
+			const resolveToAllowedDir = (path: string) => {
+				// TODO: Enable this for all platforms -- at present, this is mobile-only.
+				const restrictToDestDir = !!shim.mobilePlatform();
+				if (restrictToDestDir) {
+					return shim.fsDriver().resolveRelativePathWithinDir(this.destDir_, path);
+				} else {
+					return shim.fsDriver().resolve(this.destDir_, path);
+				}
+			};
+			// Chunk size must be divisible by 3 so base64 encoding does not add padding in the middle of the stream.
+			const chunkBytes = 3 * 1024 * 1024;
+			const tempFilePath = await shim.fsDriver().findUniqueFilename(`${this.filePath_}.tmp`);
+			await shim.fsDriver().writeFile(tempFilePath, '', 'utf8');
+
+			try {
+				await packToWriter(
+					this.destDir_,
+					mainHtml,
+					{
+						exists: async (path) => {
+							path = resolveToAllowedDir(path);
+							const isFound = await shim.fsDriver().exists(path);
+							if (!isFound) return false;
+							const isDir = await shim.fsDriver().isDirectory(path);
+							return !isDir;
+						},
+						readFileDataUri: async (path) => {
+							path = resolveToAllowedDir(path);
+							const mimeType = fromFilename(path);
+							const content = await shim.fsDriver().readFile(path, 'base64');
+							return `data:${mimeType};base64,${content}`;
+						},
+						readFileText: (path) => {
+							path = resolveToAllowedDir(path);
+							return shim.fsDriver().readFile(path, 'utf8');
+						},
+						streamFileDataUri: async (path, onChunk) => {
+							path = resolveToAllowedDir(path);
+							if (this.shouldEmbedOnlyImages_ && !isImageMimeType(fromFilename(path))) return;
+							const handle = await shim.fsDriver().open(path, 'r');
+							try {
+								const mimeType = fromFilename(path);
+								await onChunk(`data:${mimeType};base64,`);
+								while (true) {
+									const chunk = await shim.fsDriver().readFileChunk(handle, chunkBytes, 'base64');
+									if (!chunk) break;
+									await onChunk(chunk);
+								}
+							} finally {
+								await shim.fsDriver().close(handle);
+							}
+						},
+						async writeChunk(chunk) {
+							await shim.fsDriver().appendFile(tempFilePath, chunk, 'utf8');
+						},
+					},
+				);
+
+				await shim.fsDriver().move(tempFilePath, this.filePath_);
+			} catch (error) {
+				if (await shim.fsDriver().exists(tempFilePath)) {
+					await shim.fsDriver().remove(tempFilePath);
+				}
+				throw error;
+			}
 
 			for (const d of this.createdDirs_) {
 				await shim.fsDriver().remove(d);

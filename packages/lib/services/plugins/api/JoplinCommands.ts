@@ -18,7 +18,7 @@ import Plugin from '../Plugin';
  * now, are not well documented. You can find the list directly on GitHub
  * though at the following locations:
  *
- * * [Main screen commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/gui/MainScreen/commands)
+ * * [Main screen commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/gui/WindowCommandsAndDialogs/commands)
  * * [Global commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/commands)
  * * [Editor commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts)
  *
@@ -29,7 +29,12 @@ import Plugin from '../Plugin';
  * commands can be found in these places:
  *
  * * [Global commands](https://github.com/laurent22/joplin/tree/dev/packages/app-mobile/commands)
+ * * [Note screen commands](https://github.com/laurent22/joplin/tree/dev/packages/app-mobile/components/screens/Note/commands)
  * * [Editor commands](https://github.com/laurent22/joplin/blob/dev/packages/app-mobile/components/NoteEditor/commandDeclarations.ts)
+ *
+ * Additionally, certain global commands have the same implementation on both platforms:
+ *
+ * * [Shared global commands](https://github.com/laurent22/joplin/tree/dev/packages/lib/commands)
  *
  * ## Executing editor commands
  *
@@ -80,7 +85,7 @@ export default class JoplinCommands {
 	 * await joplin.commands.execute('newFolder', "SOME_FOLDER_ID");
 	 * ```
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: each command has its own args/return shape, matches CommandService.execute
 	public async execute(commandName: string, ...args: any[]): Promise<any | void> {
 		return CommandService.instance().execute(commandName, ...args);
 	}
@@ -110,7 +115,7 @@ export default class JoplinCommands {
 		if ('iconName' in command) declaration.iconName = command.iconName;
 
 		const runtime: CommandRuntime = {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See execute above
 			execute: (_context: CommandContext, ...args: any[]) => {
 				return command.execute(...args);
 			},
@@ -122,6 +127,7 @@ export default class JoplinCommands {
 		CommandService.instance().registerRuntime(declaration.name, runtime);
 		this.plugin_.addOnUnloadListener(() => {
 			CommandService.instance().unregisterRuntime(declaration.name);
+			CommandService.instance().unregisterDeclaration(declaration.name);
 		});
 	}
 

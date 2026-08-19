@@ -7,6 +7,7 @@ import ItemChange from '../ItemChange';
 import Setting from '../Setting';
 import { checkObjectHasProperties } from '@joplin/utils/object';
 import isTrashableItem from '../../services/trash/isTrashableItem';
+import isJoplinServerVariant from './isJoplinServerVariant';
 
 const logger = Logger.create('models/utils/readOnly');
 
@@ -21,7 +22,7 @@ export interface ItemSlice {
 // synchronising with Joplin Cloud or if not sharing any notebook.
 export const needsShareReadOnlyChecks = (itemType: ModelType, changeSource: number, shareState: ShareState, disableReadOnlyCheck = false) => {
 	if (disableReadOnlyCheck) return false;
-	if (Setting.value('sync.target') !== 10) return false;
+	if (!isJoplinServerVariant(Setting.value('sync.target'))) return false;
 	if (changeSource === ItemChange.SOURCE_SYNC) return false;
 	if (!Setting.value('sync.userId')) return false;
 	if (![ModelType.Note, ModelType.Folder, ModelType.Resource].includes(itemType)) return false;
@@ -46,8 +47,7 @@ export const checkIfItemCanBeChanged = (itemType: ModelType, changeSource: numbe
 	}
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder: any, changeSource: number, shareState: ShareState, parentId: string) => {
+export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder: typeof import('../Folder').default, changeSource: number, shareState: ShareState, parentId: string) => {
 	if (needsShareReadOnlyChecks(itemType, changeSource, shareState) && parentId) {
 		const parentFolder = await Folder.load(parentId, { fields: ['id', 'share_id'] });
 
@@ -62,7 +62,7 @@ export const checkIfItemCanBeAddedToFolder = async (itemType: ModelType, Folder:
 			return;
 		}
 
-		if (itemIsReadOnlySync(itemType, changeSource, parentFolder, Setting.value('sync.userId'), shareState, true)) {
+		if (itemIsReadOnlySync(itemType, changeSource, parentFolder as ItemSlice, Setting.value('sync.userId'), shareState, true)) {
 			throw new JoplinError('Cannot add an item as a child of a read-only item', ErrorCode.IsReadOnly);
 		}
 	}
@@ -92,7 +92,8 @@ export const itemIsReadOnlySync = (itemType: ModelType, changeSource: number, it
 	if (!item.share_id) return false;
 
 	// Item belongs to the user
-	if (shareState.shares.find(s => s.user.id === userId)) return false;
+	const parentShare = shareState.shares.find(s => s.id === item.share_id);
+	if (parentShare && parentShare.user?.id === userId) return false;
 
 	const shareUser = shareState.shareInvitations.find(si => si.share.id === item.share_id);
 
@@ -102,8 +103,7 @@ export const itemIsReadOnlySync = (itemType: ModelType, changeSource: number, it
 	return !shareUser.can_write;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const itemIsReadOnly = async (BaseItem: any, itemType: ModelType, changeSource: number, itemId: string, userId: string, shareState: ShareState): Promise<boolean> => {
+export const itemIsReadOnly = async (BaseItem: typeof import('../BaseItem').default, itemType: ModelType, changeSource: number, itemId: string, userId: string, shareState: ShareState): Promise<boolean> => {
 	// if (!needsShareReadOnlyChecks(itemType, changeSource, shareState)) return false;
 	const item: ItemSlice = await BaseItem.loadItem(itemType, itemId, { fields: ['id', 'share_id', 'deleted_time'] });
 	if (!item) throw new JoplinError(`No such item: ${itemType}: ${itemId}`, ErrorCode.NotFound);

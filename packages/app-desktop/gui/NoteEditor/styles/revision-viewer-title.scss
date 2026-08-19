@@ -1,0 +1,20 @@
+
+.revision-viewer-title {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-bottom: 10px;
+	border-width: 1px;
+	border-bottom-style: solid;
+	border-color: var(--joplin-divider-color);
+	padding-bottom: 10px;
+
+	> .revisions {
+		margin-left: 10px;
+		flex: 0.5;
+	}
+
+	> .title {
+		flex: 1;
+	}
+}

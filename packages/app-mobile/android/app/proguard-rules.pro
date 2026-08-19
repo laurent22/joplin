@@ -8,3 +8,7 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
+
+# Keep classes referenced by JNI
+# (see https://developer.android.com/topic/performance/app-optimization/add-keep-rules)
+-keep class com.margelo.nitro.whispervoicetyping.AudioRecorder

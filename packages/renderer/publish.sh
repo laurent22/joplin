@@ -4,7 +4,7 @@ set -e
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR"
 yarn buildAssets
-npm version patch
+yarn version patch
 npm publish
 
 NEW_VERSION=$(cat package.json | jq -r .version)

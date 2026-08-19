@@ -77,6 +77,7 @@ export default class UserDeletionService extends BaseService {
 		await this.models.userFlag().add(userId, UserFlagType.UserDeletionInProgress);
 
 		await this.models.session().deleteByUserId(userId);
+		await this.models.application().deleteByUserId(userId);
 		await this.models.notification().deleteByUserId(userId);
 		await this.models.user().delete(userId);
 		await this.models.userFlag().deleteByUserId(userId);
@@ -104,8 +105,7 @@ export default class UserDeletionService extends BaseService {
 			return;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let error: any = null;
+		let error: Error = null;
 		let success = true;
 
 		try {

@@ -1,23 +1,22 @@
 import * as React from 'react';
 
 import { UpdateSettingValueCallback } from './types';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text } from 'react-native';
 import Setting, { AppType } from '@joplin/lib/models/Setting';
 import Dropdown from '../../Dropdown';
 import { ConfigScreenStyles } from './configScreenStyles';
-import Slider from '@react-native-community/slider';
 import SettingsToggle from './SettingsToggle';
 import FileSystemPathSelector from './FileSystemPathSelector';
+import ValidatedIntegerInput from './ValidatedIntegerInput';
+import SettingTextInput from './SettingTextInput';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '../../global-style';
-import { useId } from 'react';
 
 interface Props {
 	settingId: string;
 
 	// The value associated with the given settings key
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	value: any;
+	value: unknown;
 
 	styles: ConfigScreenStyles;
 	themeId: number;
@@ -29,8 +28,7 @@ interface Props {
 const SettingComponent: React.FunctionComponent<Props> = props => {
 	const themeId = props.themeId;
 	const theme = themeStyle(themeId);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = null;
+	const output: React.ReactElement | null = null;
 
 	const md = Setting.settingMetadata(props.settingId);
 	const settingDescription = md.description ? md.description(AppType.Mobile) : '';
@@ -38,9 +36,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 	const styleSheet = props.styles.styleSheet;
 
 	const descriptionComp = !settingDescription ? null : <Text style={styleSheet.settingDescriptionText}>{settingDescription}</Text>;
-	const containerStyle = props.styles.getContainerStyle(!!settingDescription);
-
-	const labelId = useId();
+	const containerStyles = props.styles.getContainerStyle(!!settingDescription);
 
 	if (md.isEnum) {
 		const value = props.value?.toString();
@@ -49,15 +45,14 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 		const label = md.label();
 
 		return (
-			<View key={props.settingId} style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
-				<View style={containerStyle}>
+			<View key={props.settingId} style={containerStyles.outerContainer}>
+				<View style={containerStyles.innerContainer}>
 					<Text key="label" style={styleSheet.settingText}>
 						{label}
 					</Text>
 					<Dropdown
 						key="control"
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						items={items as any}
+						items={items}
 						selectedValue={value}
 						itemListStyle={{
 							backgroundColor: theme.backgroundColor,
@@ -83,7 +78,7 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 		return (
 			<SettingsToggle
 				settingId={props.settingId}
-				value={props.value}
+				value={!!props.value}
 				themeId={props.themeId}
 				styles={props.styles}
 				label={md.label()}
@@ -92,69 +87,41 @@ const SettingComponent: React.FunctionComponent<Props> = props => {
 			/>
 		);
 	} else if (md.type === Setting.TYPE_INT) {
-		const unitLabel = md.unitLabel ? md.unitLabel(props.value) : props.value;
-		const minimum = 'minimum' in md ? md.minimum : 0;
-		const maximum = 'maximum' in md ? md.maximum : 10;
-		const label = md.label();
-
-		// Note: Do NOT add the minimumTrackTintColor and maximumTrackTintColor props
-		// on the Slider as they are buggy and can crash the app on certain devices.
-		// https://github.com/laurent22/joplin/issues/2733
-		// https://github.com/react-native-community/react-native-slider/issues/161
 		return (
-			<View key={props.settingId} style={styleSheet.settingContainer}>
-				<Text key="label" style={styleSheet.settingText} nativeID={labelId}>
-					{label}
-				</Text>
-				<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-					<Text style={styleSheet.sliderUnits}>{unitLabel}</Text>
-					<Slider
-						key="control"
-						style={{ flex: 1 }}
-						step={md.step}
-						minimumValue={minimum}
-						maximumValue={maximum}
-						value={props.value}
-						onValueChange={newValue => void props.updateSettingValue(props.settingId, newValue)}
-						accessibilityHint={label}
-					/>
-				</View>
-			</View>
+			<ValidatedIntegerInput
+				settingId={props.settingId}
+				value={props.value as number}
+				themeId={props.themeId}
+				styles={props.styles}
+				label={md.label()}
+				updateSettingValue={props.updateSettingValue}
+				description={descriptionComp}
+			/>
 		);
 	} else if (md.type === Setting.TYPE_STRING) {
 		if (['sync.2.path', 'plugins.devPluginPaths'].includes(md.key) && (shim.fsDriver().isUsingAndroidSAF() || shim.mobilePlatform() === 'web')) {
 			return (
 				<FileSystemPathSelector
+					themeId={props.themeId}
 					mode={md.key === 'sync.2.path' ? 'readwrite' : 'read'}
 					styles={props.styles}
 					settingMetadata={md}
 					updateSettingValue={props.updateSettingValue}
+					description={descriptionComp}
 				/>
 			);
 		}
 
 		return (
-			<View key={props.settingId} style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
-				<View key={props.settingId} style={containerStyle}>
-					<Text key="label" style={styleSheet.settingText} nativeID={labelId}>
-						{md.label()}
-					</Text>
-					<TextInput
-						autoCorrect={false}
-						autoComplete="off"
-						selectionColor={theme.textSelectionColor}
-						keyboardAppearance={theme.keyboardAppearance}
-						autoCapitalize="none"
-						key="control"
-						style={styleSheet.settingControl}
-						value={props.value}
-						onChangeText={(newValue: string) => void props.updateSettingValue(props.settingId, newValue)}
-						secureTextEntry={!!md.secure}
-						aria-labelledby={labelId}
-					/>
-				</View>
-				{descriptionComp}
-			</View>
+			<SettingTextInput
+				settingId={props.settingId}
+				value={props.value as string}
+				themeId={props.themeId}
+				styles={props.styles}
+				label={md.label()}
+				updateSettingValue={props.updateSettingValue}
+				description={descriptionComp}
+			/>
 		);
 	} else if (md.type === Setting.TYPE_BUTTON) {
 		// TODO: Not yet supported

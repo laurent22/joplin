@@ -1,4 +1,6 @@
-# Debugging Server project with vscode
+# Debugging Server project
+
+## Debugging with vscode
 
 Using a debugger sometimes is much easier than trying to just print things to understand a bug, 
 for the server project we have a configuration that makes it easy for everyone to run in debug mode inside vscode.
@@ -42,3 +44,35 @@ the configuration into two files, one for the `launch.json` and other for the `t
 ![image](https://github.com/laurent22/joplin/assets/5051088/b3a12b9f-704c-4dc8-b2bd-14ba7a1c4759)
 ![image](https://github.com/laurent22/joplin/assets/5051088/c45becc4-44b7-4f95-9d49-421517e29592)
 
+## Running debug commands
+
+When running in development mode, several debug commands can be run by sending requests to `/api/debug`. These include:
+- The `populateDatabase` command adds content to the database, creating test users with initial data.
+	- Among other things, this allows testing how Joplin Server handles a large number of users, items, and changes. A larger `size` parameter creates more items. `size` can be either 1, 2, or 3.
+	- Example: `curl --data '{"action": "populateDatabase", "size": 2}' -H 'Content-Type: application/json' http://localhost:22300/api/debug`.
+- The `benchmarkDeltaPerformance` command tests the performance of `models.change().delta` by calling `delta` multiple times for each user account. Data is saved in `packages/server/delta-perf.csv`.
+	- `ChangeModel.delta` is called during sync and has historically been a performance bottleneck.
+	- Example: `curl --data '{"action":"benchmarkDeltaPerformance"}' -H 'Content-Type: application/json' http://localhost:22300/api/debug`.
+
+## Fuzzing
+
+The sync fuzzer looks for sync bugs. It works by:
+
+- Starting an instance of Joplin Server in development mode.
+- Starting instances of the CLI app and connecting them to the server.
+- Performing pseudorandom actions (e.g. "create note", "delete note", "sync").
+
+The fuzzer maintains a model of the expected state of the CLI apps. When the actual state of the CLI apps no longer matches this model, the fuzzer stops.
+
+To start the fuzzer, run `yarn syncFuzzer start` from the main Joplin workspace directory. See `yarn syncFuzzer start --help` for more information.
+
+**Note**: If you encounter an "unauthorized" error, it may be necessary to set the `FUZZER_SERVER_ADMIN_PASSWORD` environment variable before running the fuzzer.
+
+### Fuzzing with breakpoints
+
+To pause the fuzzer at breakpoints in the client/server logic, use a "JavaScript Debug Terminal" in VS Code:
+
+1. Open a debug terminal in VS Code (command palette > "Debug: JavaScript Debug Terminal").
+2. Start the sync fuzzer (`yarn syncFuzzer start`).
+
+When debugging, the `--setup=<path to setup file>`, `--snapshot-after=<steps>` and `--restore-from-snapshot` options can be particularly helpful (see `yarn syncFuzzer start --help`).

@@ -2,23 +2,29 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<!--
-		No CPS because we need to allow everything due to some dependencies (eg. depd, which comes from maybe Node or Electron
-		uses 'eval'.
-		<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'">
-		-->
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="
+				default-src 'self' joplin-content://* ;
+				connect-src 'self' * http://* https://* joplin-content://* blob: ;
+				style-src 'unsafe-inline' 'self' blob: joplin-content://* https://* http://* ;
+				child-src 'self' joplin-content://* https://*.youtube.com https://*.youtube-nocookie.com ;
+				script-src 'self' joplin-plugin://* joplin-content://* ;
+				media-src 'self' * blob: data: https://* http://* joplin-content://* ;
+				img-src 'self' blob: data: http://* https://* joplin-content://* ;
+				font-src 'self' http://* https://* blob: data: joplin-content://* ;
+			"
+		/>
 		<title>Joplin</title>
 		<!-- Note: Add new dynamic CSS imports to style.scss to allow them to be included in secondary windows. -->
 		<link rel="stylesheet" href="style.min.css">
-		<link rel="stylesheet" href="./node_modules/notyf/notyf.min.css">
 
 		<script src="vendor/lib/smalltalk/dist/smalltalk.min.js"></script>
-		<script src="./node_modules/tesseract.js/dist/tesseract.min.js"></script>
+		<script src="vendor/lib/tesseract.js/dist/tesseract.min.js"></script>
 	</head>
 	<body>
 		<div id="react-root"></div>
 		<script src="./utils/window/eventHandlerOverrides.js"></script>
-		<script src="main-html.js"></script>
-		<script src="./node_modules/notyf/notyf.min.js"></script>
+		<script src="./main-html.bundle.js"></script>
 	</body>
 </html>

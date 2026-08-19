@@ -10,7 +10,9 @@ import Folder from '@joplin/lib/models/Folder';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 import NoteCount from './NoteCount';
-import ListItemWrapper, { ListItemRef } from './ListItemWrapper';
+import ListItemWrapper, { ItemSelectionState, ListItemRef } from './ListItemWrapper';
+import { useId } from 'react';
+import { ItemClickEvent } from '../hooks/useOnItemClick';
 
 const renderFolderIcon = (folderIcon: FolderIcon) => {
 	if (!folderIcon) {
@@ -41,20 +43,23 @@ interface FolderItemProps {
 	onFolderDragOver_: ItemDragListener;
 	onFolderDrop_: ItemDragListener;
 	itemContextMenu: ItemContextMenuListener;
-	folderItem_click: (folderId: string)=> void;
+	folderItem_click: (event: ItemClickEvent)=> void;
 	onFolderToggleClick_: ItemClickListener;
 	shareId: string;
-	selected: boolean;
+	isPublished: boolean;
+	selectionState: ItemSelectionState;
 
 	index: number;
 	itemCount: number;
 }
 
 function FolderItem(props: FolderItemProps) {
-	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selected, folderId, folderTitle, folderIcon, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
+	const { hasChildren, showFolderIcon, isExpanded, parentId, depth, selectionState, folderId, folderTitle, folderIcon, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId, isPublished } = props;
 
 	const shareTitle = _('Shared');
 	const shareIcon = shareId && !parentId ? <StyledShareIcon aria-label={shareTitle} title={shareTitle} className="fas fa-share-alt"/> : null;
+	const publishedTitle = _('Published');
+	const publishedIcon = isPublished ? <StyledShareIcon aria-label={publishedTitle} title={publishedTitle} className="fas fa-globe"/> : null;
 	const draggable = ![getTrashFolderId(), Folder.conflictFolderId()].includes(folderId);
 
 	const doRenderFolderIcon = () => {
@@ -65,17 +70,18 @@ function FolderItem(props: FolderItemProps) {
 		if (!showFolderIcon) return null;
 		return renderFolderIcon(folderIcon);
 	};
+	const titleId = useId();
 
 	return (
 		<ListItemWrapper
 			containerRef={props.anchorRef}
 			// Folders are contained within the "Notebooks" section (which has depth 0):
 			depth={depth + 1}
-			selected={selected}
+			selectionState={selectionState}
 			itemIndex={props.index}
 			itemCount={props.itemCount}
 			expanded={hasChildren ? props.isExpanded : undefined}
-			className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`}
+			className={`list-item-container list-item-depth-${depth} ${selectionState.selected ? 'selected' : ''}`}
 			highlightOnHover={true}
 			onDragStart={onFolderDragStart_}
 			onDragOver={onFolderDragOver_}
@@ -85,27 +91,34 @@ function FolderItem(props: FolderItemProps) {
 			data-folder-id={folderId}
 			data-id={folderId}
 			data-type={ModelType.Folder}
+			// Accessibility labels: Don't include the expand/collapse link in the description,
+			// since this information is already conveyed by aria-* props.
+			aria-labelledby={titleId}
 		>
 			<StyledListItemAnchor
 				className="list-item"
+				id={titleId}
 				isConflictFolder={folderId === Folder.conflictFolderId()}
-				selected={selected}
+				selected={selectionState.selected}
 				shareId={shareId}
+				isPublished={isPublished}
+				data-folder-id={folderId}
 				onDoubleClick={onFolderToggleClick_}
 
-				onClick={() => {
-					folderItem_click(folderId);
+				onClick={(event: React.MouseEvent) => {
+					folderItem_click({
+						id: folderId, type: ModelType.Folder, event,
+					});
 				}}
 			>
 				{doRenderFolderIcon()}<StyledSpanFix className="title">{folderTitle}</StyledSpanFix>
-				{shareIcon} <NoteCount count={noteCount}/>
+				{publishedIcon}{shareIcon} <NoteCount count={noteCount}/>
 			</StyledListItemAnchor>
 			<ExpandLink
 				// The ExpandLink is included after the title so that the screen reader reads the
 				// title first.
 				className='toggle'
 				hasChildren={hasChildren}
-				folderTitle={folderTitle}
 				folderId={folderId}
 				onClick={onFolderToggleClick_}
 				isExpanded={isExpanded}

@@ -1,9 +1,12 @@
 import { RuleOptions } from '../../MdToHtml';
+import { RendererTheme } from '../../types';
+import type * as MarkdownIt from 'markdown-it';
+import type Token = require('markdown-it/lib/token');
+import type Renderer = require('markdown-it/lib/renderer');
 
 export default {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	assets: function(theme: any) {
+	assets: function(theme: RendererTheme) {
 		return [
 			{
 				name: 'mermaid.min.js',
@@ -55,23 +58,20 @@ export default {
 		});
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	plugin: function(markdownIt: any, ruleOptions: RuleOptions) {
-		// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-		const defaultRender: Function = markdownIt.renderer.rules.fence || function(tokens: any[], idx: number, options: any, env: any, self: any) {
-			return self.renderToken(tokens, idx, options, env, self);
+	plugin: function(markdownIt: MarkdownIt, ruleOptions: RuleOptions) {
+		const defaultRender: Renderer.RenderRule = markdownIt.renderer.rules.fence || function(tokens, idx, options, env, self): string {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- this fallback passes extra `env, self` args to renderToken which the type signature does not declare; preserved for parity with other rule fallbacks
+			return (self.renderToken as any)(tokens, idx, options, env, self);
 		};
-
 		const exportButtonMarkup = isDesktop(ruleOptions.platformName) ? exportGraphButton(ruleOptions) : '';
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		markdownIt.renderer.rules.fence = function(tokens: any[], idx: number, options: any, env: any, self: any) {
+		markdownIt.renderer.rules.fence = function(tokens: Token[], idx: number, options: MarkdownIt.Options, env: unknown, self: Renderer) {
 			const token = tokens[idx];
 			if (token.info !== 'mermaid') return defaultRender(tokens, idx, options, env, self);
 
 			ruleOptions.context.pluginWasUsed.mermaid = true;
 
-			const contentHtml = markdownIt.utils.escapeHtml(token.content);
+			const contentHtml = markdownIt.utils.escapeHtml((token.content as string).trimEnd());
 
 			const cssClasses = ['mermaid'];
 			if (ruleOptions.theme.appearance === 'dark') {
@@ -87,7 +87,7 @@ export default {
 			// See PR #4670 https://github.com/laurent22/joplin/pull/4670
 			return `
 				<div class="joplin-editable">
-					<pre class="joplin-source" data-joplin-language="mermaid" data-joplin-source-open="\`\`\`mermaid&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${contentHtml}</pre>
+					<pre class="joplin-source" hidden data-joplin-language="mermaid" data-joplin-source-open="\`\`\`mermaid&#10;" data-joplin-source-close="&#10;\`\`\`&#10;">${contentHtml}</pre>
 					${exportButtonMarkup}
 					<pre class="${cssClasses.join(' ')}">${contentHtml}</pre>
 				</div>
@@ -98,17 +98,6 @@ export default {
 
 const exportGraphButton = (ruleOptions: RuleOptions) => {
 	const theme = ruleOptions.theme;
-	// Clicking on export button manually triggers a right click context menu event
-	const onClickHandler = `
-		const target = arguments[0].target;
-		const button = target.closest("div.mermaid-export-graph");
-		if (!button) return false;
-		const $mermaid_elem = button.nextElementSibling;
-		const rightClickEvent = new PointerEvent("contextmenu", {bubbles: true});
-		rightClickEvent.target = $mermaid_elem;
-		$mermaid_elem.dispatchEvent(rightClickEvent);
-		return false;
-	`.trim();
 	const style = `
 		display: block;	
 		margin-left: auto;
@@ -119,16 +108,17 @@ const exportGraphButton = (ruleOptions: RuleOptions) => {
 		border: ${theme.buttonStyle.border};
 	`.trim();
 
+	// OnClick is handled in the renderer script
 	return `
 		<div class="mermaid-export-graph">
-			<button onclick='${onClickHandler}' style="${style}" alt="Export mermaid graph">${downloadIcon()}</button>
+			<button type="button" style="${style}" aria-label="Download Mermaid chart" title="Download Mermaid chart">${downloadIcon()}</button>
 		</div>
 	`;
 };
 
 const downloadIcon = () => {
 	// https://www.svgrepo.com/svg/505363/download
-	return '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M20 15V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18L4 15M8 11L12 15M12 15L16 11M12 15V3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>';
+	return '<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M20 15V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18L4 15M8 11L12 15M12 15L16 11M12 15V3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>';
 };
 
 const isDesktop = (platformName?: string) => {

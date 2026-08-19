@@ -1,4 +1,5 @@
 import { execCommand } from '@joplin/utils';
+import { versionPatch } from '@joplin/utils/version';
 import { gitCurrentBranch, githubRelease, gitPullTry, rootDir } from './tool-utils';
 
 const appDir = `${rootDir}/packages/app-desktop`;
@@ -6,13 +7,11 @@ const appDir = `${rootDir}/packages/app-desktop`;
 async function main() {
 	await gitPullTry(false);
 
-	const argv = require('yargs').argv;
-
 	process.chdir(appDir);
 
 	console.info(`Running from: ${process.cwd()}`);
 
-	const version = (await execCommand('npm version patch')).trim();
+	const version = await versionPatch();
 	const tagName = version;
 
 	console.info(`New version number: ${version}`);
@@ -23,7 +22,7 @@ async function main() {
 	await execCommand('git push');
 	await execCommand('git push --tags');
 
-	const releaseOptions = { isDraft: true, isPreRelease: !!argv.beta };
+	const releaseOptions = { isDraft: true, isPreRelease: true };
 
 	console.info('Release options: ', releaseOptions);
 

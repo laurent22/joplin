@@ -1,7 +1,8 @@
 import { Knex } from 'knex';
-import { DbConnection, defaultAdminEmail, defaultAdminPassword } from '../db';
+import { DbConnection, defaultAdminEmail } from '../db';
 import { hashPassword } from '../utils/auth';
 import { uuidgen } from '@joplin/lib/uuid';
+import config from '../config';
 
 export const up = async (db: DbConnection) => {
 	await db.schema.createTable('users', (table: Knex.CreateTableBuilder) => {
@@ -98,7 +99,7 @@ export const up = async (db: DbConnection) => {
 	await db('users').insert({
 		id: adminId,
 		email: defaultAdminEmail,
-		password: await hashPassword(defaultAdminPassword),
+		password: await hashPassword(config().defaultAdminPassword),
 		full_name: 'Admin',
 		is_admin: 1,
 		updated_time: now,

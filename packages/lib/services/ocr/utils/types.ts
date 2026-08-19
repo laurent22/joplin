@@ -1,11 +1,15 @@
+import { ResourceOcrStatus } from '../../database/types';
+
 export const emptyRecognizeResult = (): RecognizeResult => {
 	return {
-		text: '',
-		lines: [],
+		ocr_status: ResourceOcrStatus.Todo,
+		ocr_text: '',
+		ocr_details: '',
+		ocr_error: '',
 	};
 };
 
-export type RecognizeResultBoundingBox = [number, number, number, number]; // x0, y0, x1, y1
+export type RecognizeResultBoundingBox = [number, number, number, number]; // x0, x1, y0, y1
 
 export interface RecognizeResultWord {
 	t: string;
@@ -18,6 +22,18 @@ export interface RecognizeResultLine {
 }
 
 export interface RecognizeResult {
-	text: string;
-	lines?: RecognizeResultLine[]; // We do not store detailed data for PDFs
+	ocr_status: ResourceOcrStatus;
+	ocr_text: string;
+	ocr_details: string;
+	ocr_error: string;
+}
+
+// PDF OCR details contain per-page text positions
+export interface PdfOcrPage {
+	lines: RecognizeResultLine[];
+}
+
+export interface PdfOcrDetails {
+	version: 1;
+	pages: PdfOcrPage[];
 }

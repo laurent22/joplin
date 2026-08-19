@@ -1,5 +1,6 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import RevisionService from '@joplin/lib/services/RevisionService';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
 
 export const declaration: CommandDeclaration = {
 	name: 'restoreNoteRevision',
@@ -11,9 +12,9 @@ export const runtime = (): CommandRuntime => {
 		execute: async (_context: CommandContext, noteId: string, reverseRevIndex = 0) => {
 			try {
 				const note = await RevisionService.instance().restoreNoteById(noteId, reverseRevIndex);
-				alert(RevisionService.instance().restoreSuccessMessage(note));
+				await shim.showMessageBox(RevisionService.instance().restoreSuccessMessage(note), { type: MessageBoxType.Info });
 			} catch (error) {
-				alert(error.message);
+				await shim.showErrorDialog(error.message);
 			}
 		},
 	};

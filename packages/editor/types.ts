@@ -1,9 +1,8 @@
 import type { Theme } from '@joplin/lib/themes/type';
 import type { EditorEvent } from './events';
 
-// Editor commands. For compatibility, the string values of these commands
-// should correspond with the CodeMirror 5 commands:
-// https://codemirror.net/5/doc/manual.html#commands
+// Editor commands. Plugins can access these commands using editor.execCommand
+// or, in some cases, by prefixing the command name with `editor.`.
 export enum EditorCommandType {
 	Undo = 'undo',
 	Redo = 'redo',
@@ -31,14 +30,25 @@ export enum EditorCommandType {
 	ToggleHeading5 = 'textHeading5',
 
 	InsertHorizontalRule = 'textHorizontalRule',
+	InsertTable = 'textTable',
+	InsertCodeBlock = 'textCodeBlock',
+
+	// Table editing commands
+	TableAddRow = 'tableAddRow',
+	TableAddColumn = 'tableAddColumn',
+	TableDeleteRow = 'tableDeleteRow',
+	TableDeleteColumn = 'tableDeleteColumn',
 
 	// Find commands
+	ToggleSearch = 'textSearch',
 	ShowSearch = 'find',
 	HideSearch = 'hideSearchDialog',
 	FindNext = 'findNext',
 	FindPrevious = 'findPrev',
 	ReplaceNext = 'replace',
 	ReplaceAll = 'replaceAll',
+
+	EditLink = 'textLink',
 
 	// Editing and navigation commands
 	ScrollSelectionIntoView = 'scrollSelectionIntoView',
@@ -72,19 +82,44 @@ export enum EditorCommandType {
 	SelectedText = 'selectedText',
 	InsertText = 'insertText',
 	ReplaceSelection = 'replaceSelection',
-
 	SetText = 'setText',
+
+	JumpToHash = 'jumpToHash',
 }
+
+export interface ContentScriptLoadOptions {
+	// The startJs/endJs options are responsible for setting up the content script
+	// environment and, among other things, should:
+	// - Set up `joplin.require`.
+	// - Forward `module.exports` to the editor.
+	// - Notify the editor when the content script has finished loading.
+	//
+	// The content script should be built similar to the following:
+	//
+	//    const scriptContent = `${contentScriptStartJs}${content}${contentScriptEndJs}`;
+	//
+	contentScriptStartJs: string;
+	contentScriptEndJs: string;
+}
+
+type ContentScriptUriSource = {
+	sourceJs?: undefined;
+	uri: string;
+};
+type ContentScriptInlineSource = {
+	sourceJs: string;
+	uri?: undefined;
+};
+type ContentScriptJs = ContentScriptUriSource|ContentScriptInlineSource;
 
 // Because the editor package can run in a WebView, plugin content scripts
 // need to be provided as text, rather than as file paths.
 export interface ContentScriptData {
 	pluginId: string;
 	contentScriptId: string;
-	contentScriptJs: ()=> Promise<string>;
+	contentScriptJs: (context: ContentScriptLoadOptions)=> Promise<ContentScriptJs>;
 	loadCssAsset: (name: string)=> Promise<string>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	postMessageHandler: (message: any)=> any;
+	postMessageHandler: (message: unknown)=> unknown;
 }
 
 // Intended to correspond with https://codemirror.net/docs/ref/#state.Transaction%5EuserEvent
@@ -93,9 +128,13 @@ export enum UserEventSource {
 	Drop = 'input.drop',
 }
 
+export interface UpdateBodyOptions {
+	noteId?: string;
+}
+
 export interface EditorControl {
 	supportsCommand(name: EditorCommandType|string): boolean|Promise<boolean>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Commands have varying argument types
 	execCommand(name: EditorCommandType|string, ...args: any[]): void|Promise<any>;
 
 	undo(): void;
@@ -107,7 +146,7 @@ export interface EditorControl {
 	setScrollPercent(fraction: number): void;
 
 	insertText(text: string, source?: UserEventSource): void;
-	updateBody(newBody: string): void;
+	updateBody(newBody: string, UpdateBodyOptions?: UpdateBodyOptions): void;
 
 	updateSettings(newSettings: EditorSettings): void;
 
@@ -115,9 +154,16 @@ export interface EditorControl {
 	// the given [label] and [url].
 	updateLink(label: string, url: string): void;
 
-	setSearchState(state: SearchState): void;
+	setSearchState(state: SearchState, changeSource: string): void;
 
 	setContentScripts(plugins: ContentScriptData[]): Promise<void>;
+
+	// Called when a resource associated with the current note finishes downloading
+	// or has been updated in an external editor.
+	onResourceChanged(id: string): void;
+
+	remove(): void;
+	focus(): void;
 }
 
 export enum EditorLanguageType {
@@ -132,14 +178,17 @@ export enum EditorKeymap {
 }
 
 export interface EditorTheme extends Theme {
+	themeId: number;
 	fontFamily: string;
-	fontSize?: number;
+	fontSize: number;
 	fontSizeUnits?: string;
 	isDesktop?: boolean;
 	monospaceFont?: string;
 	contentMaxWidth?: number;
 	marginLeft?: number;
 	marginRight?: number;
+	listTabSize?: string;
+	paddingBottom: number;
 }
 
 export interface EditorSettings {
@@ -162,10 +211,18 @@ export interface EditorSettings {
 	language: EditorLanguageType;
 
 	keymap: EditorKeymap;
+	preferMacShortcuts: boolean;
+	tabMovesFocus: boolean;
 
+	markdownMarkEnabled: boolean;
+	markdownInsertEnabled: boolean;
 	katexEnabled: boolean;
 	spellcheckEnabled: boolean;
+	inlineRenderingEnabled: boolean;
+	tableEditingEnabled: boolean;
+	imageRenderingEnabled: boolean;
 	readOnly: boolean;
+	highlightActiveLine: boolean;
 
 	indentWithTabs: boolean;
 
@@ -176,6 +233,8 @@ export type LogMessageCallback = (message: string)=> void;
 export type OnEventCallback = (event: EditorEvent)=> void;
 export type PasteFileCallback = (data: File)=> Promise<void>;
 type OnScrollPastBeginningCallback = ()=> void;
+export type LocalizationResult = Promise<string>|string;
+export type OnLocalize = (input: string)=> LocalizationResult;
 
 interface Localisations {
 	[editorString: string]: string;
@@ -184,6 +243,8 @@ interface Localisations {
 export interface EditorProps {
 	settings: EditorSettings;
 	initialText: string;
+	initialNoteId: string;
+	onLocalize: OnLocalize;
 	// Used mostly for internal editor library strings
 	localisations?: Localisations;
 

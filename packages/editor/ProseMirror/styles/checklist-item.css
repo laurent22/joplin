@@ -1,0 +1,10 @@
+
+.checklist-item.-flex {
+	display: flex;
+	flex-direction: row;
+	align-items: baseline;
+}
+
+.checklist-item > .content {
+	flex-grow: 1;
+}

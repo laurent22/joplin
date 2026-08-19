@@ -1,5 +1,5 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
-import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, LdapConfig, RouteType, StripeConfig } from './utils/types';
+import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, LdapConfig, RouteType, StripeConfig, SamlConfig } from './utils/types';
 import * as pathUtils from 'path';
 import { loadStripeConfig, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import { EnvVariables } from './env';
@@ -9,6 +9,7 @@ interface PackageJson {
 	version: string;
 	joplinServer: {
 		forkVersion: string;
+		businessServerVersion?: string;
 	};
 }
 
@@ -50,6 +51,7 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables, slav
 		name: '',
 		slowQueryLogEnabled: env.DB_SLOW_QUERY_LOG_ENABLED,
 		slowQueryLogMinDuration: env.DB_SLOW_QUERY_LOG_MIN_DURATION,
+		maxConnections: env.DB_MAX_CONNECTIONS,
 		autoMigration: env.DB_AUTO_MIGRATION,
 	};
 
@@ -125,6 +127,7 @@ function ldapConfigFromEnv(env: EnvVariables): LdapConfig[] {
 			baseDN: env.LDAP_1_BASE_DN,
 			bindDN: env.LDAP_1_BIND_DN,
 			bindPW: env.LDAP_1_BIND_PW,
+			tlsCaFile: env.LDAP_1_TLS_CA_FILE,
 		});
 	}
 
@@ -138,14 +141,46 @@ function ldapConfigFromEnv(env: EnvVariables): LdapConfig[] {
 			baseDN: env.LDAP_2_BASE_DN,
 			bindDN: env.LDAP_2_BIND_DN,
 			bindPW: env.LDAP_2_BIND_PW,
+			tlsCaFile: env.LDAP_2_TLS_CA_FILE,
 		});
 	}
 	return ldapConfig;
 }
 
+function samlConfigFromEnv(env: EnvVariables): SamlConfig {
+	if (env.SAML_ENABLED) {
+		return {
+			enabled: true,
+			identityProviderConfigFile: env.SAML_IDP_CONFIG_FILE,
+			serviceProviderConfigFile: env.SAML_SP_CONFIG_FILE,
+			organizationDisplayName: env.SAML_ORGANIZATION_DISPLAY_NAME,
+		};
+	} else {
+		return {
+			enabled: false,
+			identityProviderConfigFile: '',
+			serviceProviderConfigFile: '',
+			organizationDisplayName: '',
+		};
+	}
+}
+
+export const isUsingExternalAuth = (env: EnvVariables) => {
+	return !!env.SAML_ENABLED || !!env.LDAP_1_ENABLED || !!env.LDAP_2_ENABLED;
+};
+
+const determineAppVersion = (isJoplinServerBusiness: boolean) => {
+	const forkVersion = packageJson.joplinServer?.forkVersion;
+	const businessServerVersion = packageJson.joplinServer?.businessServerVersion;
+
+	if (isJoplinServerBusiness) return businessServerVersion;
+	if (forkVersion) return forkVersion;
+	return packageJson.version;
+};
+
 let config_: Config = null;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- `Partial<Config>` would be ideal, but `Config` requires `resourceDir: string` which is only set via `overrides` in some test paths — tightening would expose a pre-existing missing-field issue
 export async function initConfig(envType: Env, env: EnvVariables, overrides: any = null) {
 	runningInDocker_ = !!env.RUNNING_IN_DOCKER;
 
@@ -153,24 +188,27 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const stripePublicConfig = loadStripeConfig(envType === Env.BuildTypes ? Env.Dev : envType, `${rootDir}/stripeConfig.json`);
 	const appName = env.APP_NAME;
 	const viewDir = `${rootDir}/src/views`;
+	const assetsDir = `${rootDir}/assets`;
 	const appPort = env.APP_PORT;
 	const baseUrl = baseUrlFromEnv(env, appPort);
 	const apiBaseUrl = env.API_BASE_URL ? env.API_BASE_URL : baseUrl;
 	const supportEmail = env.SUPPORT_EMAIL;
-	const forkVersion = packageJson.joplinServer?.forkVersion;
 	const dbConfig = databaseConfigFromEnv(runningInDocker_, env, false);
 
 	config_ = {
 		...env,
-		appVersion: forkVersion ? forkVersion : packageJson.version,
+		appVersion: determineAppVersion(false),
 		joplinServerVersion: packageJson.version,
 		appName,
 		isJoplinCloud: apiBaseUrl.includes('.joplincloud.com') || apiBaseUrl.includes('.joplincloud.local'),
+		defaultAdminPassword: env.DEFAULT_ADMIN_PASSWORD || 'admin',
 		env: envType,
 		rootDir: rootDir,
 		viewDir: viewDir,
+		assetsDir: assetsDir,
 		layoutDir: `${viewDir}/layouts`,
 		tempDir: `${rootDir}/temp`,
+		resourceDir: `${rootDir}/resource`,
 		logDir: `${rootDir}/logs`,
 		database: dbConfig,
 		databaseSlave: env.DB_USE_SLAVE ? databaseConfigFromEnv(runningInDocker_, env, true) : dbConfig,
@@ -190,11 +228,18 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		supportName: env.SUPPORT_NAME || appName,
 		businessEmail: env.BUSINESS_EMAIL || supportEmail,
 		cookieSecure: env.COOKIES_SECURE,
+
+		// We need "lax" when using external auth due to the redirects from the auth provider to
+		// /api/saml, which then redirects to /home. And because the "origin" is going to be the
+		// auth provider URL, the cookies won't be set property. "Lax" solves this and this is what
+		// most web apps use these days. It is still reasonably secure.
+		cookieSameSite: isUsingExternalAuth(env) ? 'lax' : true,
 		storageDriver: parseStorageDriverConnectionString(env.STORAGE_DRIVER),
 		storageDriverFallback: parseStorageDriverConnectionString(env.STORAGE_DRIVER_FALLBACK),
 		itemSizeHardLimit: 250000000, // Beyond this the Postgres driver will crash the app
 		maxTimeDrift: env.MAX_TIME_DRIFT,
 		ldap: ldapConfigFromEnv(env),
+		saml: samlConfigFromEnv(env),
 		...overrides,
 	};
 }

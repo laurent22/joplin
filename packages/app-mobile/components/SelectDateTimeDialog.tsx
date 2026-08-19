@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { themeStyle } from './global-style';
 import { _ } from '@joplin/lib/locale';
-const { View, Button, Text, StyleSheet } = require('react-native');
+import { View, Button, Text, StyleSheet } from 'react-native';
 import time from '@joplin/lib/time';
 import { Platform } from 'react-native';
 import Modal from './Modal';
 import { formatMsToLocal } from '@joplin/utils/time';
-const DateTimePickerModal = require('react-native-modal-datetime-picker').default;
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const styles = StyleSheet.create({
 	centeredView: {
@@ -52,11 +52,23 @@ const styles = StyleSheet.create({
 	},
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default class SelectDateTimeDialog extends React.PureComponent<any, any> {
+interface SelectDateTimeDialogProps {
+	themeId: number;
+	shown: boolean;
+	date: Date | null;
+	onAccept?: (date: Date | null)=> void;
+	onReject?: ()=> void;
+}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(props: any) {
+interface SelectDateTimeDialogState {
+	date: Date | null;
+	mode: 'date' | 'datetime' | 'time';
+	showPicker: boolean;
+}
+
+export default class SelectDateTimeDialog extends React.PureComponent<SelectDateTimeDialogProps, SelectDateTimeDialogState> {
+
+	public constructor(props: SelectDateTimeDialogProps) {
 		super(props);
 
 		this.state = {
@@ -71,8 +83,7 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 		this.onSetDate = this.onSetDate.bind(this);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public UNSAFE_componentWillReceiveProps(newProps: any) {
+	public UNSAFE_componentWillReceiveProps(newProps: SelectDateTimeDialogProps) {
 		if (newProps.date !== this.state.date) {
 			this.setState({ date: newProps.date });
 		}
@@ -149,19 +160,18 @@ export default class SelectDateTimeDialog extends React.PureComponent<any, any> 
 
 		return (
 			<Modal
-				transparent={true}
 				visible={modalVisible}
 				containerStyle={styles.centeredView}
-				onRequestClose={() => {
+				onClose={() => {
 					this.onReject();
 				}}
 			>
 				<View style={{ ...styles.modalView, backgroundColor: theme.backgroundColor }}>
-					<View style={{ padding: 15, flexBasis: 'auto', paddingBottom: 0, flexGrow: 0, width: '100%', borderBottomWidth: 1, borderBottomColor: theme.dividerColor, borderBottomStyle: 'solid' }}>
+					<View style={{ padding: 15, flexBasis: 'auto', paddingBottom: 0, flexGrow: 0, width: '100%', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
 						<Text style={{ ...styles.modalText, color: theme.color, fontSize: 14, fontWeight: 'bold' }}>{_('Set alarm')}</Text>
 					</View>
 					{this.renderContent()}
-					<View style={{ padding: 20, flexBasis: 'auto', borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: theme.dividerColor }}>
+					<View style={{ padding: 20, flexBasis: 'auto', borderTopWidth: 1, borderTopColor: theme.dividerColor }}>
 						<View style={{ marginBottom: 10 }}>
 							<Button title={_('Save alarm')} onPress={() => this.onAccept()} key="saveButton" />
 						</View>

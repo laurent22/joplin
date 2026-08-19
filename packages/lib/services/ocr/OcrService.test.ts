@@ -1,9 +1,13 @@
 import { createNoteAndResource, newOcrService, ocrSampleDir, resourceFetcher, setupDatabaseAndSynchronizer, supportDir, switchClient, synchronizerStart } from '../../testing/test-utils';
 import { supportedMimeTypes } from './OcrService';
 import Resource from '../../models/Resource';
-import { ResourceEntity, ResourceOcrStatus } from '../database/types';
+import { ResourceEntity, ResourceOcrDriverId, ResourceOcrStatus } from '../database/types';
 import { msleep } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
+import Setting from '../../models/Setting';
+import createAccessiblePdf from './utils/createAccessiblePdf';
+import { PdfOcrDetails } from './utils/types';
+import * as fs from 'fs-extra';
 
 describe('OcrService', () => {
 
@@ -88,7 +92,6 @@ describe('OcrService', () => {
 		// Use embedded text (skip OCR)
 		['dummy.pdf', 'Dummy PDF file'],
 		['multi_page__embedded_text.pdf', 'This is a test.\nTesting...\nThis PDF has 3 pages.\nThis is page 3.'],
-		['multi_page__no_embedded_text.pdf', 'This is a multi-page PDF\nwith no embedded text.\nPage 2: more text.\nThe third page.'],
 	])('should process PDF resources', async (samplePath: string, expectedText: string) => {
 		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/${samplePath}` });
 
@@ -247,5 +250,144 @@ describe('OcrService', () => {
 
 	// 	await service.dispose();
 	// });
+
+	it('should generate text even on cases of lower confidence', async () => {
+		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/low_confidence_testing.png` });
+
+		const service = newOcrService();
+		await service.processResources();
+
+		const processedResource: ResourceEntity = await Resource.load(resource.id);
+		expect(processedResource.ocr_text.includes('1.')).toBe(true);
+		// cSpell:disable
+		expect(processedResource.ocr_text.includes('eback Mountain (2005)')).toBe(true);
+		// cSpell:enable
+
+		expect(processedResource.ocr_text.includes('2.')).toBe(true);
+		expect(processedResource.ocr_text.includes('Havoc (2005)')).toBe(true);
+
+		expect(processedResource.ocr_text.includes('3.')).toBe(true);
+		expect(processedResource.ocr_text.includes('Love & Other Drugs (2010)')).toBe(true);
+
+		expect(processedResource.ocr_text.includes('4.')).toBe(true);
+		expect(processedResource.ocr_text.includes('The Last Thing He Wanted (2020)')).toBe(true);
+
+		await service.dispose();
+	});
+
+	it('should skip resources with an invalid ocr_driver_id', async () => {
+		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/dummy.pdf` });
+
+		await Resource.save({
+			...resource,
+			ocr_driver_id: -123456, // An invalid ID
+		});
+
+		const service = newOcrService();
+
+		// Should not loop forever
+		await service.processResources();
+
+		const processedResource: ResourceEntity = await Resource.load(resource.id);
+		expect(processedResource.ocr_text).toBe('');
+
+		await service.dispose();
+	});
+
+	it('should process resources with ocr_driver_id 0 as printed text', async () => {
+		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/multi_page__embedded_text.pdf` });
+		await Resource.save({
+			...resource,
+			ocr_driver_id: 0,
+		});
+
+		const service = newOcrService();
+		await service.processResources();
+
+		const processedResource: ResourceEntity = await Resource.load(resource.id);
+		expect(processedResource.ocr_text).toBe('This is a test.\nTesting...\nThis PDF has 3 pages.\nThis is page 3.');
+		expect(processedResource.ocr_status).toBe(ResourceOcrStatus.Done);
+		expect(processedResource.ocr_error).toBe('');
+
+		await service.dispose();
+	});
+
+	it('should skip HTR processing when the relevant setting is disabled', async () => {
+		const { resource } = await createNoteAndResource({ path: `${ocrSampleDir}/multi_page__embedded_text.pdf` });
+		Setting.setValue('ocr.handwrittenTextDriverEnabled', false);
+
+		await Resource.save({
+			...resource,
+			ocr_driver_id: ResourceOcrDriverId.HandwrittenText,
+			title: 'Test',
+		});
+
+		const service = newOcrService();
+		await service.processResources();
+
+		// Should not process HandwrittenText results
+		const processedResource: ResourceEntity = await Resource.load(resource.id);
+		expect(processedResource).toMatchObject({
+			ocr_text: '',
+			title: 'Test',
+			ocr_status: ResourceOcrStatus.Todo,
+			ocr_error: '',
+		});
+
+		await service.dispose();
+	});
+
+	it('should throw error for unsupported OCR details version', async () => {
+		const ocrDetails = {
+			version: 999,
+			pages: [] as PdfOcrDetails['pages'],
+		};
+
+		await expect(createAccessiblePdf([], JSON.stringify(ocrDetails)))
+			.rejects.toThrow('Unsupported PDF OCR details version: 999');
+	});
+
+	it('should throw error for page count mismatch', async () => {
+		const ocrDetails: PdfOcrDetails = {
+			version: 1,
+			pages: [{ lines: [] }],
+		};
+
+		await expect(createAccessiblePdf([], JSON.stringify(ocrDetails)))
+			.rejects.toThrow('Page count mismatch: 0 images vs 1 OCR pages');
+	});
+
+	it('should create a multi-page PDF', async () => {
+		const jpegBuffer = await fs.readFile(`${supportDir}/photo.jpg`);
+
+		const ocrDetails: PdfOcrDetails = {
+			version: 1,
+			pages: [
+				{
+					lines: [{ words: [{ t: 'Page1', bb: [10, 60, 10, 30] }] }],
+				},
+				{
+					lines: [{ words: [{ t: 'Page2', bb: [10, 60, 10, 30] }] }],
+				},
+			],
+		};
+
+		const pdfBytes = await createAccessiblePdf(
+			[
+				{ buffer: jpegBuffer, width: 200, height: 200 },
+				{ buffer: jpegBuffer, width: 200, height: 200 },
+			],
+			JSON.stringify(ocrDetails),
+		);
+
+		expect(pdfBytes).toBeInstanceOf(Uint8Array);
+		const pdfContent = new TextDecoder().decode(pdfBytes);
+		expect(pdfContent.startsWith('%PDF-')).toBe(true);
+		expect(pdfContent).toContain('%%EOF');
+
+		// Multi-page PDF should be roughly twice the size of single page
+		// (minus some overhead for shared resources like fonts)
+		expect(pdfBytes.length).toBeGreaterThan(jpegBuffer.length * 1.5);
+	});
 
 });

@@ -9,6 +9,56 @@ body, :root {
 	overflow: hidden;
 }
 
+*:focus-visible {
+	/* Override the focus indicator color. The default is invisible for
+	   some buttons on some platforms. For example, on MacOS/Chrome, the
+	   default focus indicator has the same color as some of Joplin's
+	   buttons. */
+	outline: 2px solid orange;
+}
+
+/* Dialog styling */
+
+dialog.dialog-modal-layer {
+	width: 100%;
+	height: 100%;
+	max-width: unset;
+	max-height: unset;
+
+	margin: 0;
+	padding: 0;
+
+	border: none;
+	background-color: transparent;
+}
+
+dialog.dialog-modal-layer::backdrop {
+	background-color: transparent;
+}
+
+/* Dialog animation
+   (see "Animating dialogs" on MDN: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog#animating_dialogs) */
+dialog.dialog-modal-layer {
+	transition:
+		opacity 0.2s ease-out,
+		display 0.22s ease allow-discrete,
+		overlay 0.22s ease allow-discrete;
+}
+
+dialog.dialog-modal-layer:not([open]) {
+	opacity: 0;
+}
+
+dialog.dialog-modal-layer[open] {
+	opacity: 1;
+}
+
+@starting-style {
+	dialog.dialog-modal-layer[open] {
+		opacity: 0;
+	}
+}
+
 
 /* Scrollbar styling */
 

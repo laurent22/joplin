@@ -1,0 +1,21 @@
+{
+  "name": "@joplin/onenote-converter",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Used to import a OneNote archive into Joplin",
+  "version": "3.7.0",
+  "license": "MPL-2.0-no-copyleft-exception",
+  "repository": "https://github.com/laurent22/joplin/tree/dev/packages/onenote-converter",
+  "main": "./renderer/pkg/renderer.js",
+  "scripts": {
+    "build": "node ./tools/build.js --profile=release",
+    "buildDev": "node ./tools/build.js --profile=dev",
+    "test": "node ./tools/test.js"
+  },
+  "devDependencies": {
+    "wasm-pack": "0.13.1",
+    "yargs": "17.7.2"
+  },
+  "gitHead": "500e4c02809d3ebe463aa590e86f541d1ef0661c"
+}

@@ -1,4 +1,4 @@
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 const stringUtilsCommon = require('./string-utils-common.js');
 
@@ -100,23 +100,8 @@ export function removeDiacritics(str: string) {
 	return str;
 }
 
-export function escapeFilename(s: string, maxLength = 32) {
-	let output = removeDiacritics(s);
-	output = output.replace('\n\r', ' ');
-	output = output.replace('\r\n', ' ');
-	output = output.replace('\r', ' ');
-	output = output.replace('\n', ' ');
-	output = output.replace('\t', ' ');
-	output = output.replace('\0', '');
-
-	const unsafe = '/\\:*"\'?<>|'; // In Windows
-	for (let i = 0; i < unsafe.length; i++) {
-		output = output.replace(unsafe[i], '_');
-	}
-
-	if (output.toLowerCase() === 'nul') output = 'n_l'; // For Windows...
-
-	return output.substr(0, maxLength);
+export function escapeRegExp(keyword: string) {
+	return keyword.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 
 export function wrap(text: string, indent: string, width: number) {
@@ -293,7 +278,7 @@ export function camelCaseToDash(s: string) {
 	return output.join('');
 }
 
-export function formatCssSize(v: string) {
+export function formatCssSize(v: string | number) {
 	if (typeof v === 'string') {
 		if (v.includes('px') || v.includes('em') || v.includes('%')) return v;
 	}
@@ -322,4 +307,38 @@ export const stripBom = (text: string) => {
 	// Remove the UTF-16 BOM --- NodeJS seems to convert UTF-8 BOMs to UTF-16 BOMs
 	// when reading files.
 	return text.replace(/^\ufeff/u, '');
+};
+
+// *Roughly* splits the given `text` into words. This function does no parsing and
+// will not be correct in all cases.
+export const splitByMarkdownFormattingApproximate = (text: string) => {
+	const regexParts = [
+		// Headers
+		'^#+',
+		// Block quotes
+		'^>',
+		// Code blocks
+		'^```{1,4}\\w*',
+		// Lists
+		'^\\s{0,5}[-*] (?:\\[[xX ]\\])?',
+		'^\\s{0,5}\\d{1,4}\\. ',
+		// HTML
+		'<[^>]{0,128}>',
+		// Inline formatting
+		'\\*+',
+		'`+',
+		'\\$([^$]){0,128}\\$',
+		// Links
+		'\\[([^\\]]{0,128})\\]\\([^)]{0,128}\\)',
+		// Tables
+		'\\|([^|]{0,128})\\|',
+	];
+	const regex = new RegExp(regexParts.join('|'));
+	return text
+		.split('\n')
+		.flatMap(line => line
+			.split(regex)
+			.filter(entry => !!entry)
+			.map(entry => entry.trim()),
+		);
 };

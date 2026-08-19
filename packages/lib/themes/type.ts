@@ -13,6 +13,7 @@ export interface Theme {
 	oddBackgroundColor: string;
 	color: string; // For regular text
 	colorError: string;
+	colorErrorSelected: string; // On a selectedColor background
 	colorCorrect: string;
 	colorWarn: string;
 	colorWarnUrl: string; // For URL displayed over a warningBackgroundColor
@@ -24,9 +25,11 @@ export interface Theme {
 	// Color scheme "2" is used for the sidebar. It's white text over
 	// dark blue background.
 	backgroundColor2: string;
+	backgroundColorTransparent2: string; // Used for dimmed region outside modals
 	color2: string;
 	selectedColor2: string;
 	colorError2: string;
+	colorPublished2?: string; // Published items on the sidebar
 	colorWarn2: string; // On a darker background (eg. sidebar)
 	colorWarn3: string; // On a lighter background (eg. note list)
 
@@ -38,8 +41,9 @@ export interface Theme {
 
 	// Color scheme "4" is used for secondary-style buttons. It makes a white
 	// button with blue text.
-	backgroundColor4: string;
 	color4: string;
+	backgroundColor4: string;
+	backgroundColor4Dimmed: string;
 
 	backgroundColor5?: string;
 	color5?: string;

@@ -1,4 +1,5 @@
 import InteropService_Importer_Md from '../../services/interop/InteropService_Importer_Md';
+import { ImportModuleOutputFormat } from './types';
 import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import * as fs from 'fs-extra';
@@ -15,7 +16,22 @@ describe('InteropService_Importer_Md', () => {
 		const importer = new InteropService_Importer_Md();
 		await importer.init(path, {
 			format: 'md',
-			outputFormat: 'md',
+			outputFormat: ImportModuleOutputFormat.Markdown,
+			path,
+			destinationFolder: newFolder,
+			destinationFolderId: newFolder.id,
+		});
+		importer.setMetadata({ fileExtensions: ['md'] });
+		await importer.exec({ warnings: [] });
+		const allNotes: NoteEntity[] = await Note.all();
+		return allNotes[0];
+	}
+	async function importHTMLNote(path: string) {
+		const newFolder = await Folder.save({ title: 'folder' });
+		const importer = new InteropService_Importer_Md();
+		await importer.init(path, {
+			format: 'html',
+			outputFormat: ImportModuleOutputFormat.Html,
 			path,
 			destinationFolder: newFolder,
 			destinationFolderId: newFolder.id,
@@ -29,7 +45,7 @@ describe('InteropService_Importer_Md', () => {
 		const importer = new InteropService_Importer_Md();
 		await importer.init(path, {
 			format: 'md',
-			outputFormat: 'md',
+			outputFormat: ImportModuleOutputFormat.Markdown,
 			path,
 		});
 		importer.setMetadata({ fileExtensions: ['md', 'html'] });
@@ -194,5 +210,82 @@ describe('InteropService_Importer_Md', () => {
 		const resource: ResourceEntity = await Resource.load(links[0]);
 		// The invalid image is imported as-is
 		expect(resource.title).toBe('invalid-image.jpg');
+	});
+
+	it('should not fail to import file that contains a malformed URI', async () => {
+		// The first implicit test is that the below call doesn't throw due to the malformed URI
+		const note = await importNote(`${supportDir}/test_notes/md/sample-malformed-uri.md`);
+		const itemIds = Note.linkedItemIds(note.body);
+		expect(itemIds.length).toBe(0);
+		// The malformed link is imported as-is
+		expect(note.body).toContain('![malformed link](https://malformed_uri/%E0%A4%A.jpg)');
+	});
+
+	it('should import resources from links with Windows path', async () => {
+		const note = await importNote(`${supportDir}/test_notes/md/windows_path.html`);
+		const items = await Note.linkedItems(note.body);
+		expect(items.length).toBe(2);
+		expect(items.find(i => i.title === 'sample.txt')).toBeTruthy();
+		expect(items.find(i => i.title === 'photo.jpg')).toBeTruthy();
+	});
+
+	it.each([
+		['<a name="525"/>', '<a name="525"></a>'],
+		['<a name="525" id="test" class="link"/>', '<a name="525" id="test" class="link"></a>'],
+		['<a name="test@#$%^&*()" data-value="hello&world"/>', '<a name="test@#$%^&*()" data-value="hello&world"></a>'],
+		['<a name="525 href="#test"/>', '<a name="525 href="#test"></a>'],
+		['<a name="525" <!-- comment --> href="#"/>', '<a name="525" <!-- comment --> href="#"></a>'],
+		['<a name="525" title="a > b"/>', '<a name="525" title="a > b"></a>'],
+
+		// Shouldn't break anything
+		['<a/><a></a>', '<a/><a></a>'],
+		['<a><br/></a>', '<a><br/></a>'],
+		['<a><span>test</span></a>', '<a><span>test</span></a>'],
+		['<a name="525"></a>', '<a name="525"></a>'],
+		['<a>test</a>', '<a>test</a>'],
+		[
+			'<div><a href=":/0be7f50730194dd9b7d3b2834b8bfd58" rev="en_rl_none">First note</a> </div>',
+			'<div><a href=":/0be7f50730194dd9b7d3b2834b8bfd58" rev="en_rl_none">First note</a> </div>',
+		],
+		[
+			`<a name="525">
+</a>`,
+			`<a name="525">
+</a>`,
+		],
+	])('should transform self closing a tag into two', async (original: string, result: string) => {
+		const importer = new InteropService_Importer_Md();
+
+		expect(importer.applyImportFixes(original)).toBe(result);
+	});
+
+	it('should import apply import fix on note imported from Yinxiang', async () => {
+		const note = await importHTMLNote(`${supportDir}/test_notes/md/self-closing-anchor.html`);
+		expect(note.body).toContain(`<body>
+<a name="519"></a>
+<h1>Second note</h1>
+</body>`);
+	});
+
+	it('should handle importing resources without extension', async () => {
+		await importNoteDirectory(`${supportDir}/test_notes/md/resources_without_extension`);
+		const notes = await Note.all();
+		const resources = await Resource.all();
+
+		expect(notes.length).toBe(1);
+		expect(resources.length).toBe(3);
+		expect(resources[0].title).toBe('file1');
+		expect(resources[0].file_extension).toBe('');
+		expect(resources[1].title).toBe('file2');
+		expect(resources[1].file_extension).toBe('');
+		expect(resources[2].title).toBe('file3.text');
+		expect(resources[2].file_extension).toBe('text');
+	});
+
+	it('should not fail when importing a file with a long URL', async () => {
+		await importNote(`${supportDir}/test_notes/md/long-url.md`);
+		const note: NoteEntity = (await Note.all())[0];
+		expect(note.title).toBe('long-url');
+		expect(note.body).toBe('# test for joplin import\n\n[https://l.facebook.com/l.php?u=https%3A%2F%2Fix.sk%2FNiBZH%3Futm\\_source%3DYouTube%2520Instagram%26utm\\_medium%3D2HIqFSGVVB2mFsVTJClrQ7ZnuGJaUt6hu1MNH0vUMjcrgWnUsK%26utm\\_campaign%3D%25F0%259F%2598%25A9%25F0%259F%2598%258E%25F0%259F%2598%25BF%25F0%259F%25A4%2594%25F0%259F%2598%25A9%25F0%259F%2599%2583%25F0%259F%25A4%25AF%25F0%259F%25A5%25B0%25F0%259F%2598%25AB%25F0%259F%2598%25BA%26utm\\_id%3D%25F0%259F%2598%258B%25F0%259F%2598%25A5%25F0%259F%25A4%25A1%25F0%259F%2598%25A0%25F0%259F%2598%2587%25F0%259F%25A5%25B4%25F0%259F%25A7%2590%25F0%259F%2598%258E%25F0%259F%2598%2582%25F0%259F%2598%259E%26utm\\_term%3D%25F0%259F%2598%2584%25F0%259F%25A4%25A9%25F0%259F%2599%2580%25F0%259F%2598%2593%25F0%259F%25A4%25AF%25F0%259F%25A4%25A5%25F0%259F%2591%25BE%25F0%259F%2591%25BF%25F0%259F%2598%25BD%25F0%259F%25A4%25A5%26utm\\_content%3D%25F0%259F%2591%25BD%25F0%259F%2598%25AB%25F0%259F%2591%25BF%25F0%259F%2598%25BD%25F0%259F%2598%25A9%25F0%259F%2599%2589%26fbclid%3DIwAR0I3l5DBLypLaTjDTCGPQ1i1MmPB2-pE8iqrxrgUK9Kkvq3OX5Mjejibzw&h=AT3nNxW4G-9nAkhXU1EVN-aVGl1o\\_-DzDAaWFx9xbprpN3JRBOh17lCQQHNAlIMv6iE4P2vobBAAivLvdzy00K8xqIqb-CvGj6YnnBX6R9wwtj5Y&\\_\\_tn\\_\\_=H-y-R&c[0]=AT0eE6OXx\\_t9HzpPmMgTdOWAw2ZRNPRDIHJWf699NZYkYzugbWS6g3rOndhPA8fwrCIgk1zn2D1To7phLW9wXkqfgZU1ayT3887\\_dxrfN-x822Pos0lCjTIhoQcxfBl516pTz1XrRG\\_MbtPpLzUFAGu4nw5W86UR1EkBCZhustNbgTX4wVReiVSuwAWu7Sp1yiWvUm5JXlo76663333hhsgsu](<https://l.facebook.com/l.php?u=https%3A%2F%2Fix.sk%2FNiBZH%3Futm_source%3DYouTube%2520Instagram%26utm_medium%3D2HIqFSGVVB2mFsVTJClrQ7ZnuGJaUt6hu1MNH0vUMjcrgWnUsK%26utm_campaign%3D%25F0%259F%2598%25A9%25F0%259F%2598%258E%25F0%259F%2598%25BF%25F0%259F%25A4%2594%25F0%259F%2598%25A9%25F0%259F%2599%2583%25F0%259F%25A4%25AF%25F0%259F%25A5%25B0%25F0%259F%2598%25AB%25F0%259F%2598%25BA%26utm_id%3D%25F0%259F%2598%258B%25F0%259F%2598%25A5%25F0%259F%25A4%25A1%25F0%259F%2598%25A0%25F0%259F%2598%2587%25F0%259F%25A5%25B4%25F0%259F%25A7%2590%25F0%259F%2598%258E%25F0%259F%2598%2582%25F0%259F%2598%259E%26utm_term%3D%25F0%259F%2598%2584%25F0%259F%25A4%25A9%25F0%259F%2599%2580%25F0%259F%2598%2593%25F0%259F%25A4%25AF%25F0%259F%25A4%25A5%25F0%259F%2591%25BE%25F0%259F%2591%25BF%25F0%259F%2598%25BD%25F0%259F%25A4%25A5%26utm_content%3D%25F0%259F%2591%25BD%25F0%259F%2598%25AB%25F0%259F%2591%25BF%25F0%259F%2598%25BD%25F0%259F%2598%25A9%25F0%259F%2599%2589%26fbclid%3DIwAR0I3l5DBLypLaTjDTCGPQ1i1MmPB2-pE8iqrxrgUK9Kkvq3OX5Mjejibzw&h=AT3nNxW4G-9nAkhXU1EVN-aVGl1o_-DzDAaWFx9xbprpN3JRBOh17lCQQHNAlIMv6iE4P2vobBAAivLvdzy00K8xqIqb-CvGj6YnnBX6R9wwtj5Y&__tn__=H-y-R&c[0]=AT0eE6OXx_t9HzpPmMgTdOWAw2ZRNPRDIHJWf699NZYkYzugbWS6g3rOndhPA8fwrCIgk1zn2D1To7phLW9wXkqfgZU1ayT3887_dxrfN-x822Pos0lCjTIhoQcxfBl516pTz1XrRG_MbtPpLzUFAGu4nw5W86UR1EkBCZhustNbgTX4wVReiVSuwAWu7Sp1yiWvUm5JXlo>)');
 	});
 });

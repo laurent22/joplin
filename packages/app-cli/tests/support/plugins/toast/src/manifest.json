@@ -1,0 +1,10 @@
+{
+	"id": "org.joplinapp.plugins.DialogDemo",
+	"manifest_version": 1,
+	"app_min_version": "1.4",
+	"name": "Dialog Demo",
+	"description": "Demonstrate how to create and use a custom dialog box",
+	"version": "1.0.0",
+	"author": "Laurent Cozic",
+	"homepage_url": "https://joplinapp.org"
+}

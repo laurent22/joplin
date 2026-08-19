@@ -43,7 +43,7 @@ const PluginUploadButton: React.FC<Props> = props => {
 		const selectedFile = pluginFiles[0];
 
 		const localFilePath = Platform.select({
-			ios: decodeURI(selectedFile.uri),
+			ios: decodeURIComponent(selectedFile.uri),
 			default: selectedFile.uri,
 		});
 		logger.info('Installing plugin from file', localFilePath);
@@ -91,7 +91,7 @@ const PluginUploadButton: React.FC<Props> = props => {
 	}, [props.pluginSettings, props.updatePluginStates]);
 
 	return (
-		<View style={props.styles.getContainerStyle(false)}>
+		<View style={props.styles.getContainerStyle(false).innerContainer}>
 			<TextButton
 				type={ButtonType.Primary}
 				onPress={onInstallFromFile}

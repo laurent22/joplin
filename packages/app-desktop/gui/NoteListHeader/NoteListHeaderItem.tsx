@@ -54,7 +54,16 @@ export default (props: Props) => {
 			classes.push(props.isReverse ? 'fa-chevron-down' : 'fa-chevron-up');
 			chevron = <i className={classes.join(' ')}></i>;
 		}
-		return <span className="titlewrapper">{getColumnTitle(column.name, true)}{chevron}</span>;
+		const title = getColumnTitle(column.name);
+		let titleElement: React.ReactNode = title;
+
+		if (column.name === 'note.checkboxes') {
+			titleElement = <i className="fas fa-adjust" aria-label={title} title={title}></i>;
+		} else if (column.name === 'note.is_todo') {
+			titleElement = <i className="fas fa-check" aria-label={title} title={title}></i>;
+		}
+
+		return <span className="titlewrapper">{titleElement}{chevron}</span>;
 	};
 
 	const renderResizer = () => {
@@ -77,6 +86,7 @@ export default (props: Props) => {
 			draggable={true}
 			className={classes.join(' ')}
 			style={style}
+			title={getColumnTitle(column.name)}
 			onClick={onClick}
 			onDragStart={props.onDragStart}
 			onDragOver={props.onDragOver}

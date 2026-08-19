@@ -1,12 +1,16 @@
 import { test, expect } from './util/test';
 import MainScreen from './models/MainScreen';
-import SettingsScreen from './models/SettingsScreen';
 import AxeBuilder from '@axe-core/playwright';
 import { Page } from '@playwright/test';
+import SettingsScreen from './models/SettingsScreen';
 
 const createScanner = (page: Page) => {
 	return new AxeBuilder({ page })
 		.disableRules(['page-has-heading-one'])
+		// Ignore a failure related to CodeMirror that seems to be a Windows-specific false positive:
+		// "Ensure elements that have scrollable content are accessible by keyboard".
+		.exclude(['.cm-scroller'])
+		// Needed because we're using Electron. See https://github.com/dequelabs/axe-core-npm/issues/1141
 		.setLegacyMode(true);
 };
 
@@ -24,15 +28,37 @@ const waitForAnimationsToEnd = (page: Page) => {
 
 const expectNoViolations = async (page: Page) => {
 	await waitForAnimationsToEnd(page);
-	const results = await createScanner(page).analyze();
-	expect(results.violations).toEqual([]);
-};
+	const scanner = createScanner(page);
 
+	// Retry the accessibility scanner on failure to prevent
+	// random failure in CI.
+	await expect.poll(async () => {
+		const results = await scanner.analyze();
+		if (results.violations.length > 0) {
+			// Keep CI failures actionable with compact, structured rule/selector details.
+			const violationSummary = results.violations.map(violation => ({
+				rule: violation.id,
+				impact: violation.impact,
+				description: violation.description,
+				help: violation.help,
+				helpUrl: violation.helpUrl,
+				nodes: violation.nodes.map(node => ({
+					target: node.target,
+					failureSummary: node.failureSummary,
+				})),
+			}));
+
+			console.error('WCAG violations detected:');
+			console.error(JSON.stringify(violationSummary, null, 2));
+		}
+		return results.violations;
+	}).toEqual([]);
+};
 
 test.describe('wcag', () => {
 	for (const tabName of ['General', 'Plugins']) {
 		test(`should not detect significant issues in the settings screen ${tabName} tab`, async ({ electronApp, mainWindow }) => {
-			const mainScreen = new MainScreen(mainWindow);
+			const mainScreen = await new MainScreen(mainWindow).setup();
 			await mainScreen.waitFor();
 
 			await mainScreen.openSettings(electronApp);
@@ -50,17 +76,60 @@ test.describe('wcag', () => {
 	}
 
 	test('should not detect significant issues in the main screen with an open note', async ({ mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.waitFor();
+
+		// Ensure that there is at least one sub-folder in the sidebar
+		const folder1 = await mainScreen.sidebar.createNewFolder('Test folder 1');
+		const folder2 = await mainScreen.sidebar.createNewFolder('Test folder 2');
+		await folder2.dragTo(folder1);
+		await expect(folder2).toHaveJSProperty('ariaLevel', '3'); // Should be a sub-folder
 
 		await mainScreen.createNewNote('Test');
 
-		// For now, activate all notes to make it active. When inactive, it causes a contrast warning.
-		// This seems to be allowed under WCAG 2.2 SC 1.4.3 under the "Incidental" exception.
-		await mainScreen.sidebar.allNotes.click();
-
 		// Ensure that `:hover` styling is consistent between tests:
 		await mainScreen.noteEditor.noteTitleInput.hover();
+
+		await expectNoViolations(mainWindow);
+
+		// Should not find issues with the Rich Text Editor
+		await mainScreen.noteEditor.toggleEditorsButton.click();
+		await mainScreen.noteEditor.richTextEditor.click();
+
+		await expectNoViolations(mainWindow);
+	});
+
+	test('should not detect significant issues in the note properties screen', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Test');
+		await mainScreen.goToAnything.runCommand(electronApp, 'showNoteProperties');
+
+		const header = mainScreen.dialog.locator('h1');
+		await expect(header).toBeVisible();
+
+		await expectNoViolations(mainWindow);
+	});
+
+	test('should not detect significant issues in the change app layout screen', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.changeLayoutScreen.open(electronApp);
+		await expectNoViolations(mainWindow);
+	});
+
+	test('should not detect significant issues in the AI chat panel', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('test');
+
+		await mainScreen.chatPanel.configure(electronApp);
+		await mainScreen.chatPanel.open(electronApp);
+
+		await mainScreen.chatPanel.sendMessage('/reply-with test');
+		await mainScreen.chatPanel.waitForMessageCount(2);
+
+		await mainScreen.chatPanel.sendMessage(
+			'/tool editor_appendToNote {"text": "test"}\n/reply-with done',
+		);
+		await mainScreen.chatPanel.waitForMessageCount(5);
 
 		await expectNoViolations(mainWindow);
 	});

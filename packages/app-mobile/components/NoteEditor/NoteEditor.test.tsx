@@ -1,16 +1,47 @@
 import * as React from 'react';
 
 import { describe, it, expect, beforeEach } from '@jest/globals';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
-import '@testing-library/jest-native';
+import { act, fireEvent, render, screen, waitFor } from '../../utils/testing/testingLibrary';
 
 import NoteEditor from './NoteEditor';
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
-import { MenuProvider } from 'react-native-popup-menu';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import commandDeclarations from './commandDeclarations';
-import CommandService from '@joplin/lib/services/CommandService';
+import CommandService, { RegisteredRuntime } from '@joplin/lib/services/CommandService';
+import TestProviderStack from '../testing/TestProviderStack';
+import createMockReduxStore from '../../utils/testing/createMockReduxStore';
+import mockCommandRuntimes from '../EditorToolbar/testing/mockCommandRuntimes';
+import setupGlobalStore from '../../utils/testing/setupGlobalStore';
+import { Store } from 'redux';
+import { AppState } from '../../utils/types';
+import { MarkupLanguage } from '@joplin/renderer';
+import { EditorControl, EditorType } from './types';
+
+let store: Store<AppState>;
+let registeredRuntime: RegisteredRuntime;
+
+const defaultEditorProps = {
+	themeId: Setting.THEME_ARITIM_DARK,
+	markupLanguage: MarkupLanguage.Markdown,
+	initialText: 'Testing...',
+	globalSearch: '',
+	noteId: '',
+	noteHash: '',
+	initialScroll: 0,
+	style: {},
+	toolbarEnabled: true,
+	readOnly: false,
+	onChange: ()=>{},
+	onSelectionChange: ()=>{},
+	onUndoRedoDepthChange: ()=>{},
+	onScroll: ()=>{},
+	onAttach: async ()=>{},
+	onSearchVisibleChange: ()=>{},
+	noteResources: {},
+	plugins: {},
+	mode: EditorType.Markdown,
+};
 
 describe('NoteEditor', () => {
 	beforeAll(() => {
@@ -24,24 +55,45 @@ describe('NoteEditor', () => {
 		// Required to use ExtendedWebView
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
+
+		store = createMockReduxStore();
+		setupGlobalStore(store);
+		registeredRuntime = mockCommandRuntimes(store);
+	});
+
+	afterEach(() => {
+		registeredRuntime.deregister();
+	});
+
+	it('should provide an editor ref', () => {
+		let editorRef: EditorControl;
+		const onSetEditorRef = (ref: EditorControl) => {
+			editorRef = ref;
+		};
+
+		const wrappedNoteEditor = render(
+			<TestProviderStack store={store}>
+				<NoteEditor
+					ref={onSetEditorRef}
+					{...defaultEditorProps}
+					mode={EditorType.RichText}
+				/>
+			</TestProviderStack>,
+		);
+
+		expect(editorRef).toBeTruthy();
+
+		wrappedNoteEditor.unmount();
 	});
 
 	it('should hide the markdown toolbar when the window is small', async () => {
 		const wrappedNoteEditor = render(
-			<MenuProvider>
+			<TestProviderStack store={store}>
 				<NoteEditor
-					themeId={Setting.THEME_ARITIM_DARK}
-					initialText='Testing...'
-					style={{}}
-					toolbarEnabled={true}
-					readOnly={false}
-					onChange={()=>{}}
-					onSelectionChange={()=>{}}
-					onUndoRedoDepthChange={()=>{}}
-					onAttach={async ()=>{}}
-					plugins={{}}
+					ref={undefined}
+					{...defaultEditorProps}
 				/>
-			</MenuProvider>,
+			</TestProviderStack>,
 		);
 
 		// Maps from screen height to whether the markdown toolbar should be visible.
@@ -70,14 +122,37 @@ describe('NoteEditor', () => {
 			setRootHeight(height);
 
 			await waitFor(async () => {
-				const showMoreButton = await screen.queryByLabelText(_('Show more actions'));
+				const toolbarButton = await screen.queryByLabelText(_('Bold'));
 				if (visible) {
-					expect(showMoreButton).not.toBeNull();
+					expect(toolbarButton).not.toBeNull();
 				} else {
-					expect(showMoreButton).toBeNull();
+					expect(toolbarButton).toBeNull();
 				}
 			});
 		}
+
+		wrappedNoteEditor.unmount();
+	});
+
+	it('should show a warning banner the first time the Rich Text Editor is used', () => {
+		const wrappedNoteEditor = render(
+			<TestProviderStack store={store}>
+				<NoteEditor
+					ref={undefined}
+					{...defaultEditorProps}
+					mode={EditorType.RichText}
+				/>
+			</TestProviderStack>,
+		);
+
+		const warningBannerQuery = /This Rich Text editor has a number of limitations.*/;
+		const warning = screen.getByText(warningBannerQuery);
+		expect(warning).toBeVisible();
+
+		// Pressing dismiss should dismiss the warning
+		const dismissButton = screen.getByHintText('Hides warning');
+		fireEvent.press(dismissButton);
+		expect(screen.queryByText(warningBannerQuery)).toBeNull();
 
 		wrappedNoteEditor.unmount();
 	});

@@ -139,3 +139,11 @@ export const extractVersionInfo = (releases: GitHubRelease[], platform: Platform
 
 	return output;
 };
+
+export const handleReleaseResponseError = (status: number, responseText: string): never => {
+	if ((status === 403 || status === 429) && responseText.toLowerCase().includes('rate limit')) {
+		throw new Error('Could not check for updates. The server rate limit has been exceeded — this is a temporary issue, please try again later.');
+	}
+
+	throw new Error(`Could not check for updates. Please try again later (Error ${status}).`);
+};

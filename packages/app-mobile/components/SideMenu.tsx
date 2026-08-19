@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { AccessibilityInfo, Animated, Dimensions, Easing, I18nManager, LayoutChangeEvent, PanResponder, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { AccessibilityInfo, Animated, Dimensions, Easing, I18nManager, LayoutChangeEvent, PanResponder, PanResponderGestureState, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { State } from '@joplin/lib/reducer';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AccessibleView from './accessibility/AccessibleView';
@@ -21,14 +21,14 @@ interface Props {
 
 	menu: React.ReactNode;
 	children: React.ReactNode|React.ReactNode[];
-	edgeHitWidth: number;
 	toleranceX: number;
-	toleranceY: number;
+	minHorizontalSwipe: number;
 	openMenuOffset: number;
 	menuPosition: SideMenuPosition;
 
 	onChange: OnChangeCallback;
 	disableGestures: boolean;
+	disableOpenGesture: boolean;
 }
 
 interface UseStylesProps {
@@ -40,6 +40,7 @@ interface UseStylesProps {
 
 const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStylesProps) => {
 	const { height: windowHeight, width: windowWidth } = useWindowDimensions();
+
 	return useMemo(() => {
 		const theme = themeStyle(themeId);
 		return StyleSheet.create({
@@ -53,7 +54,7 @@ const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStyl
 			contentOuterWrapper: {
 				flexGrow: 1,
 				flexShrink: 1,
-				width: windowWidth,
+				width: '100%',
 				height: windowHeight,
 				transform: [{
 					translateX: menuOpenFraction.interpolate({
@@ -71,6 +72,8 @@ const useStyles = ({ themeId, isLeftMenu, menuWidth, menuOpenFraction }: UseStyl
 				flexShrink: 1,
 			},
 			menuWrapper: {
+				backgroundColor: theme.backgroundColor,
+
 				position: 'absolute',
 				top: 0,
 				bottom: 0,
@@ -174,7 +177,6 @@ const SideMenuComponent: React.FC<Props> = props => {
 	}, [props.isOpen]);
 
 	const [menuWidth, setMenuWidth] = useState(0);
-	const [contentWidth, setContentWidth] = useState(0);
 
 	// In right-to-left layout, swap left and right to be consistent with other parts of
 	// the app's layout.
@@ -185,13 +187,22 @@ const SideMenuComponent: React.FC<Props> = props => {
 		const openMenuOffsetPercentage = props.openMenuOffset / Dimensions.get('window').width;
 		const menuWidth = Math.floor(width * openMenuOffsetPercentage);
 
-		setContentWidth(width);
 		setMenuWidth(menuWidth);
 	}, [props.openMenuOffset]);
 
 	const { animating, setIsAnimating, menuDragOffset, updateMenuPosition, menuOpenFraction } = useAnimations({
 		isLeftMenu, menuWidth, open,
 	});
+
+	const onGestureEnd = useCallback((gestureState: PanResponderGestureState) => {
+		const newOpen = (gestureState.dx > 0) === isLeftMenu;
+
+		if (newOpen === open) {
+			updateMenuPosition();
+		} else {
+			setIsOpen(newOpen);
+		}
+	}, [isLeftMenu, open, updateMenuPosition]);
 
 	const panResponder = useMemo(() => {
 		return PanResponder.create({
@@ -200,35 +211,37 @@ const SideMenuComponent: React.FC<Props> = props => {
 					return false;
 				}
 
-				let startX;
+				if (props.disableOpenGesture && !open) {
+					return false;
+				}
+
 				let dx;
 				const dy = gestureState.dy;
-
-				// Untransformed start position of the gesture -- moveX is the current position of
-				// the pointer. Subtracting dx gives us the original start position.
-				const gestureStartScreenX = gestureState.moveX - gestureState.dx;
 
 				// Transform x, dx such that they are relative to the target screen edge -- this simplifies later
 				// math.
 				if (isLeftMenu) {
-					startX = gestureStartScreenX;
 					dx = gestureState.dx;
 				} else {
-					startX = contentWidth - gestureStartScreenX;
 					dx = -gestureState.dx;
 				}
 
-				const motionWithinToleranceY = Math.abs(dy) <= props.toleranceY;
-				let startWithinTolerance, motionWithinToleranceX;
+				// Allowed horizontal swipe gestures can be made from anywhere on the screen
+				const horizontalEnough = Math.abs(dx) >= props.minHorizontalSwipe; // Check that the dead zone has passed before starting the gesture, catering for curved swipes
+				const horizontalDominant = Math.abs(dx) > Math.abs(dy) * 2; // Check the direction is horizontal, allowing diagonal swipes up to a certain angle
+				let motionWithinToleranceX; // Check the correct direction is used in relation to whether swiping open / closed
+
 				if (open) {
-					startWithinTolerance = startX >= menuWidth - props.edgeHitWidth;
 					motionWithinToleranceX = dx <= -props.toleranceX;
 				} else {
-					startWithinTolerance = startX <= props.edgeHitWidth;
 					motionWithinToleranceX = dx >= props.toleranceX;
 				}
 
-				return startWithinTolerance && motionWithinToleranceX && motionWithinToleranceY;
+				return (
+					motionWithinToleranceX &&
+					horizontalEnough &&
+					horizontalDominant
+				);
 			},
 			onPanResponderGrant: () => {
 				setIsAnimating(true);
@@ -239,15 +252,14 @@ const SideMenuComponent: React.FC<Props> = props => {
 				{ dx: menuDragOffset },
 			], { useNativeDriver: false }),
 			onPanResponderEnd: (_event, gestureState) => {
-				const newOpen = (gestureState.dx > 0) === isLeftMenu;
-				if (newOpen === open) {
-					updateMenuPosition();
-				} else {
-					setIsOpen(newOpen);
-				}
+				onGestureEnd(gestureState);
+			},
+			onPanResponderTerminate: (_event, gestureState) => {
+				// This prevents the gesture from leaving the menu partially open on web
+				onGestureEnd(gestureState);
 			},
 		});
-	}, [isLeftMenu, menuDragOffset, menuWidth, props.toleranceX, props.toleranceY, contentWidth, open, props.disableGestures, props.edgeHitWidth, updateMenuPosition, setIsAnimating]);
+	}, [isLeftMenu, menuDragOffset, props.toleranceX, props.minHorizontalSwipe, open, props.disableGestures, props.disableOpenGesture, onGestureEnd, setIsAnimating]);
 
 	const onChangeRef = useRef(props.onChange);
 	onChangeRef.current = props.onChange;
@@ -271,12 +283,14 @@ const SideMenuComponent: React.FC<Props> = props => {
 		<AccessibleView
 			inert={!open}
 			style={styles.menuWrapper}
+			testID='menu-wrapper'
 		>
 			<AccessibleView
 				// Auto-focuses an empty view at the beginning of the sidemenu -- if we instead
 				// focus the container view, VoiceOver fails to focus to any components within
 				// the sidebar.
 				refocusCounter={!open ? 1 : undefined}
+				testID='sidemenu-menu-focus-region'
 			/>
 
 			{props.menu}
@@ -287,8 +301,9 @@ const SideMenuComponent: React.FC<Props> = props => {
 		<AccessibleView
 			inert={open}
 			style={styles.contentWrapper}
+			testID='content-wrapper'
 		>
-			<AccessibleView refocusCounter={open ? 1 : undefined} />
+			<AccessibleView refocusCounter={open ? 1 : undefined} testID='sidemenu-content-focus-region' />
 			{props.children}
 		</AccessibleView>
 	);
@@ -323,7 +338,6 @@ const SideMenuComponent: React.FC<Props> = props => {
 const SideMenu = connect((state: State) => {
 	return {
 		themeId: state.settings.theme,
-		isOpen: state.showSideMenu,
 	};
 })(SideMenuComponent);
 

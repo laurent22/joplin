@@ -11,7 +11,7 @@ export const setRandomBytesImplementation = (implementation: RandomBytesImplemen
 	randomBytesImplementation = implementation;
 };
 
-export const generateNonce = async (nonce: Uint8Array) => {
+export const generateNonce = async (nonce: CryptoBuffer) => {
 	const randomLength = nonce.length - nonceTimestampLength - nonceCounterLength;
 	if (randomLength < 1) {
 		throw new Error(`Nonce length should be greater than ${(nonceTimestampLength + nonceCounterLength) * 8} bits`);
@@ -35,13 +35,12 @@ export const generateNonce = async (nonce: Uint8Array) => {
 	return nonce;
 };
 
-export const increaseNonce = async (nonce: Uint8Array) => {
-	const carry = 1;
+export const increaseNonce = async (nonce: CryptoBuffer) => {
 	const end = nonce.length - nonceCounterLength;
 	let i = nonce.length;
 	while (i-- > end) {
-		nonce[i] += carry;
-		if (nonce[i] !== 0 || carry !== 1) {
+		nonce[i] += 1;
+		if (nonce[i] !== 0) {
 			break;
 		}
 	}

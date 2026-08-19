@@ -79,7 +79,11 @@ export default class KeychainService extends BaseService {
 		let i = 0;
 		let didSet = false;
 		for (; i < this.drivers_.length && !didSet; i++) {
-			didSet = await this.drivers_[i].setPassword(name, password);
+			try {
+				didSet = await this.drivers_[i].setPassword(name, password);
+			} catch (error) {
+				logger.warn('Failed to set password using driver marked as "supported"', this.drivers_[i].driverId, error);
+			}
 		}
 
 		if (didSet && this.keysNeedingMigration_.has(name)) {
@@ -103,7 +107,18 @@ export default class KeychainService extends BaseService {
 		let foundInPreferredDriver = true;
 		let password: string|null = null;
 		for (const driver of this.drivers_) {
-			password = await driver.password(name);
+			try {
+				password = await driver.password(name);
+			} catch (error) {
+				// If MacOS prompts a user for keychain access, but the user clicks "Disallow", a password request
+				// can fail.
+				logger.warn(
+					'Failed to read password for entry',
+					{ name, driverId: driver.driverId },
+					error,
+				);
+			}
+
 			if (password) {
 				break;
 			}

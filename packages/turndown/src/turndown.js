@@ -3,6 +3,18 @@ import Rules from './rules'
 import { extend, isCodeBlock, trimLeadingNewlines, trimTrailingNewlines } from './utilities'
 import RootNode from './root-node'
 import Node from './node'
+
+// Allows falling back to a more-compatible [fallbackRegex] on platforms that fail to compile
+// the primary [regexString].
+const regexWithFallback = (regexString, regexFlags, fallbackRegex) => {
+  try {
+    return new RegExp(regexString, regexFlags);
+  } catch (error) {
+    console.error('Failed to compile regular expression. Falling back to a compatibility regex. Error: ', error);
+    return fallbackRegex;
+  }
+};
+
 var reduce = Array.prototype.reduce
 var escapes = [
   [/\\/g, '\\\\'],
@@ -17,8 +29,9 @@ var escapes = [
   [/\]/g, '\\]'],
   [/^>/g, '\\>'],
   // A list of valid \p values can be found here: https://unicode.org/reports/tr44/#GC_Values_Table
-  [/(^|\p{Punctuation}|\p{Separator}|\p{Symbol})_(\P{Separator})/ug, '$1\\_$2'],
-  [/^(\d+)\. /g, '$1\\. ']
+  [regexWithFallback('(^|\\p{Punctuation}|\\p{Separator}|\\p{Symbol})_(\\P{Separator})', 'ug', /(^|\s)_(\S)/), '$1\\_$2'],
+  [/^(\d+)\. /g, '$1\\. '],
+  [/\$/g, '\\$$'], // Math
 ]
 
 export default function TurndownService (options) {
@@ -41,6 +54,8 @@ export default function TurndownService (options) {
     preformattedCode: false,
     preserveNestedTables: false,
     preserveColorStyles: false,
+    tightLists: false,
+    collapseMultipleBlankLines: false,
     blankReplacement: function (content, node) {
       return node.isBlock ? '\n\n' : ''
     },
@@ -225,7 +240,14 @@ function postProcess (output) {
     }
   })
 
-  return output.replace(/^[\t\r\n]+/, '').replace(/[\t\r\n\s]+$/, '')
+  output = output.replace(/^[\t\r\n]+/, '').replace(/[\t\r\n\s]+$/, '')
+
+  // Collapse multiple blank lines (or lines with only whitespace) into a single blank line
+  if (this.options.collapseMultipleBlankLines) {
+    output = output.replace(/(\n\s*){3,}/g, '\n\n')
+  }
+
+  return output
 }
 
 /**

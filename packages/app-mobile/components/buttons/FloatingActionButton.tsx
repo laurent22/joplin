@@ -1,15 +1,16 @@
-const React = require('react');
-import { useState, useCallback, useMemo } from 'react';
-import { FAB, Portal } from 'react-native-paper';
+import * as React from 'react';
+import { useState, useCallback, useMemo, useRef, RefObject, useLayoutEffect } from 'react';
+import { FAB } from 'react-native-paper';
 import { _ } from '@joplin/lib/locale';
 import { Dispatch } from 'redux';
-import { Platform, View, ViewStyle } from 'react-native';
-import shim from '@joplin/lib/shim';
-import AccessibleWebMenu from '../accessibility/AccessibleModalMenu';
-const Icon = require('react-native-vector-icons/Ionicons').default;
-
-// eslint-disable-next-line no-undef -- Don't know why it says React is undefined when it's defined above
-type FABGroupProps = React.ComponentProps<typeof FAB.Group>;
+import { AccessibilityActionEvent, AccessibilityActionInfo, Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { connect } from 'react-redux';
+import { MenuAlignment, MenuType } from '../BottomDrawer';
+import { Ionicons as Icon } from '@react-native-vector-icons/ionicons';
+import BottomDrawerMenu, { MenuOption } from '../BottomDrawerMenu';
+import { AppState } from '../../utils/types';
+import { themeStyle } from '../global-style';
+import useSafeAreaPadding from '../../utils/hooks/useSafeAreaPadding';
 
 type OnButtonPress = ()=> void;
 interface ButtonSpec {
@@ -20,19 +21,25 @@ interface ButtonSpec {
 }
 
 interface ActionButtonProps {
-	buttons?: ButtonSpec[];
+	themeId: number;
 
 	// If not given, an "add" button will be used.
-	mainButton?: ButtonSpec;
+	mainButton: ButtonSpec;
 	dispatch: Dispatch;
-}
 
-const defaultOnPress = () => {};
+	menuContent?: MenuOption[];
+	onMenuShow?: ()=> void;
+
+	accessibilityActions?: readonly AccessibilityActionInfo[];
+	// Can return a Promise to simplify unit testing
+	onAccessibilityAction?: (event: AccessibilityActionEvent)=> void|Promise<void>;
+	accessibilityHint?: string;
+}
 
 // Returns a render function compatible with React Native Paper.
 const getIconRenderFunction = (iconName: string) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return (props: any) => <Icon name={iconName} {...props} />;
+	type NameProp = React.ComponentProps<typeof Icon>['name'];
+	return (props: Omit<React.ComponentProps<typeof Icon>, 'name'>) => <Icon name={iconName as NameProp} {...props} />;
 };
 
 const useIcon = (iconName: string) => {
@@ -41,97 +48,123 @@ const useIcon = (iconName: string) => {
 	}, [iconName]);
 };
 
+const useMenuMarginBottom = (buttonContainerRef: RefObject<View>, themeId: number) => {
+	const { height: windowHeight } = useWindowDimensions();
+	const safeAreaPadding = useSafeAreaPadding();
+	const [menuMarginBottom, setMenuMarginBottom] = useState(0);
+
+	const recomputeMargin = useCallback(() => {
+		const theme = themeStyle(themeId);
+
+		buttonContainerRef.current?.measure((_x, _y, _width, _height, _pageX, pageY) => {
+			// On Android, the safe area padding doesn't seem to be included in windowHeight,
+			// but **does** seem to be taken into account when determining absolute/relative positioning
+			const includeSafeArea = Platform.OS === 'android';
+			const extraMargin = theme.marginBottom + (includeSafeArea ? safeAreaPadding.paddingBottom : 0);
+
+			setMenuMarginBottom(windowHeight - pageY + extraMargin);
+		});
+	}, [windowHeight, buttonContainerRef, themeId, safeAreaPadding]);
+
+	useLayoutEffect(() => {
+		recomputeMargin();
+	}, [recomputeMargin]);
+
+	const recomputeMarginRef = useRef(recomputeMargin);
+	recomputeMarginRef.current = recomputeMargin;
+
+	const onMenuContainerLayout = useCallback(() => {
+		recomputeMarginRef.current();
+	}, []);
+
+	return { onMenuContainerLayout, menuMarginBottom };
+};
+
+
+interface StylesProps {
+	menuMarginBottom: number;
+}
+
+const useStyles = ({ menuMarginBottom }: StylesProps) => {
+	return useMemo(() => {
+		return StyleSheet.create({
+			menu: {
+				marginBottom: menuMarginBottom,
+				// Always float right:
+				alignSelf: 'flex-end',
+			},
+			buttonContainer: {
+				position: 'absolute',
+				bottom: 10,
+				right: 10,
+			},
+			button: {
+				alignSelf: 'flex-end',
+			},
+		});
+	}, [menuMarginBottom]);
+};
+
 const FloatingActionButton = (props: ActionButtonProps) => {
 	const [open, setOpen] = useState(false);
-	const onMenuToggled: FABGroupProps['onStateChange'] = useCallback(state => {
-		props.dispatch({
-			type: 'SIDE_MENU_CLOSE',
-		});
-		setOpen(state.open);
-	}, [setOpen, props.dispatch]);
+	const onMenuToggled = useCallback(() => {
+		const newOpen = !open;
+		if (newOpen) {
+			props.dispatch({
+				type: 'SIDE_MENU_CLOSE',
+			});
+		}
+		setOpen(newOpen);
+	}, [setOpen, open, props.dispatch]);
 
-	const actions = useMemo(() => (props.buttons ?? []).map(button => {
-		return {
-			...button,
-			icon: getIconRenderFunction(button.icon),
-			onPress: button.onPress ?? defaultOnPress,
-		};
-	}), [props.buttons]);
+	const onDismiss = useCallback(() => {
+		if (open) onMenuToggled();
+	}, [open, onMenuToggled]);
+
+	const mainButtonRef = useRef<View>(null);
 
 	const closedIcon = useIcon(props.mainButton?.icon ?? 'add');
 	const openIcon = useIcon('close');
 
-	// To work around an Android accessibility bug, we decrease the
-	// size of the container for the FAB. According to the documentation for
-	// RN Paper, a large action button has size 96x96. As such, we allocate
-	// a larger than this space for the button.
-	//
-	// To prevent the accessibility issue from regressing (which makes it
-	// very hard to access some UI features), we also enable this when Talkback
-	// is disabled.
-	//
-	// See https://github.com/callstack/react-native-paper/issues/4064
-	// May be possible to remove if https://github.com/callstack/react-native-paper/pull/4514
-	// is merged.
-	const adjustMargins = !open && shim.mobilePlatform() === 'android';
-	const marginStyles = useMemo((): ViewStyle => {
-		if (!adjustMargins) {
-			return {};
-		}
-
-		// Internally, React Native Paper uses absolute positioning to make its
-		// (usually invisible) view fill the screen. Setting top and left to
-		// undefined causes the view to take up only part of the screen.
-		return {
-			top: undefined,
-			left: undefined,
-		};
-	}, [adjustMargins]);
-
 	const label = props.mainButton?.label ?? _('Add new');
 
-	// On Web, FAB.Group can't be used at all with accessibility tools. Work around this
-	// by hiding the FAB for accessibility, and providing a screen-reader-only custom menu.
-	const isWeb = Platform.OS === 'web';
-	const accessibleMenu = isWeb ? (
-		<AccessibleWebMenu
-			label={label}
-			onPress={props.mainButton?.onPress}
-			actions={props.buttons}
-		/>
-	) : null;
+	const buttonContainerRef = useRef<View|null>(null);
 
-	const menuContent = <FAB.Group
-		open={open}
+	const { menuMarginBottom, onMenuContainerLayout } = useMenuMarginBottom(buttonContainerRef, props.themeId);
+	const styles = useStyles({ menuMarginBottom });
+
+	const menuButton = <FAB
+		ref={mainButtonRef}
+		icon={open ? openIcon : closedIcon}
 		accessibilityLabel={label}
-		style={marginStyles}
-		icon={ open ? openIcon : closedIcon }
-		fabStyle={{
-			backgroundColor: props.mainButton?.color ?? 'rgba(231,76,60,1)',
-		}}
-		onStateChange={onMenuToggled}
-		actions={actions}
-		onPress={props.mainButton?.onPress ?? defaultOnPress}
-		// The long press delay is too short by default (and we don't use the long press event). See https://github.com/laurent22/joplin/issues/11183.
-		// Increase to a large value:
-		delayLongPress={10_000}
-		visible={true}
+		onPress={props.mainButton?.onPress ?? onMenuToggled}
+		style={styles.button}
+		accessibilityActions={props.accessibilityActions}
+		onAccessibilityAction={props.onAccessibilityAction}
 	/>;
-	const mainMenu = isWeb ? (
-		<View
-			aria-hidden={true}
-			pointerEvents='box-none'
-			tabIndex={-1}
-			style={{ flex: 1 }}
-		>{menuContent}</View>
-	) : menuContent;
 
-	return (
-		<Portal>
-			{mainMenu}
-			{accessibleMenu}
-		</Portal>
-	);
+	return <>
+		<View
+			style={styles.buttonContainer}
+			ref={buttonContainerRef}
+			onLayout={onMenuContainerLayout}
+		>
+			{menuButton}
+		</View>
+		{ props.menuContent && <BottomDrawerMenu
+			visible={open}
+			onDismiss={onDismiss}
+			alignment={MenuAlignment.Right}
+			style={styles.menu}
+			menuType={MenuType.Floating}
+			themeId={props.themeId}
+			options={props.menuContent}
+			autoScrollToEnd
+		/> }
+	</>;
 };
 
-export default FloatingActionButton;
+const ConnectedComponent: React.FC<Omit<ActionButtonProps, 'themeId'|'dispatch'>> = (
+	connect((state: AppState) => ({ themeId: state.settings.theme }))(FloatingActionButton)
+);
+export default ConnectedComponent;

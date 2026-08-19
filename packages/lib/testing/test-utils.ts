@@ -6,7 +6,7 @@ import Setting, { AppType, Env } from '../models/Setting';
 import BaseService from '../services/BaseService';
 import FsDriverNode from '../fs-driver-node';
 import time from '../time';
-import shim from '../shim';
+import shim, { MobilePlatform } from '../shim';
 import uuid from '../uuid';
 import ResourceService from '../services/ResourceService';
 import KeymapService from '../services/KeymapService';
@@ -18,7 +18,7 @@ import OneDriveApi from '../onedrive-api';
 import SyncTargetOneDrive from '../SyncTargetOneDrive';
 import JoplinDatabase from '../JoplinDatabase';
 import * as fs from 'fs-extra';
-const { DatabaseDriverNode } = require('../database-driver-node.js');
+import { DatabaseDriverNode } from '../database-driver-node';
 import Folder from '../models/Folder';
 import Note from '../models/Note';
 import ItemChange from '../models/ItemChange';
@@ -33,34 +33,34 @@ const FileApiDriverMemory = require('../file-api-driver-memory').default;
 import FileApiDriverLocal from '../file-api-driver-local';
 const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('../file-api-driver-dropbox.js');
-const { FileApiDriverOneDrive } = require('../file-api-driver-onedrive.js');
+import FileApiDriverOneDrive from '../file-api-driver-onedrive';
 import SyncTargetRegistry from '../SyncTargetRegistry';
-const SyncTargetMemory = require('../SyncTargetMemory.js');
+import SyncTargetMemory from '../SyncTargetMemory';
 import SyncTargetFilesystem from '../SyncTargetFilesystem';
-const SyncTargetNextcloud = require('../SyncTargetNextcloud.js');
-const SyncTargetDropbox = require('../SyncTargetDropbox.js');
+import SyncTargetNextcloud from '../SyncTargetNextcloud';
+import SyncTargetDropbox from '../SyncTargetDropbox';
 const SyncTargetAmazonS3 = require('../SyncTargetAmazonS3.js');
-const SyncTargetWebDAV = require('../SyncTargetWebDAV.js');
+import SyncTargetWebDAV from '../SyncTargetWebDAV';
 import SyncTargetJoplinServer from '../SyncTargetJoplinServer';
 import EncryptionService from '../services/e2ee/EncryptionService';
 import DecryptionWorker from '../services/DecryptionWorker';
 import RevisionService from '../services/RevisionService';
 import ResourceFetcher from '../services/ResourceFetcher';
-const WebDavApi = require('../WebDavApi');
+import WebDavApi from '../WebDavApi';
 const DropboxApi = require('../DropboxApi');
-import JoplinServerApi from '../JoplinServerApi';
+import JoplinServerApi, { Session } from '../JoplinServerApi';
 import { FolderEntity, ResourceEntity } from '../services/database/types';
 import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
 import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
 import KeychainService from '../services/keychain/KeychainService';
 import { loadKeychainServiceAndSettings } from '../services/SettingUtils';
 import { setActiveMasterKeyId, setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
-import Synchronizer from '../Synchronizer';
+import Synchronizer, { SyncStartOptions } from '../Synchronizer';
 import SyncTargetNone from '../SyncTargetNone';
-import { setRSA } from '../services/e2ee/ppk';
+import { setRSA } from '../services/e2ee/ppk/ppk';
 const md5 = require('md5');
 const { Dirnames } = require('../services/synchronizer/utils/types');
-import RSA from '../services/e2ee/RSA.node';
+import RSA from '../services/e2ee/ppk/RSA.node';
 import { State as ShareState } from '../services/share/reducer';
 import initLib from '../initLib';
 import OcrDriverTesseract from '../services/ocr/drivers/OcrDriverTesseract';
@@ -68,6 +68,10 @@ import OcrService from '../services/ocr/OcrService';
 import { createWorker } from 'tesseract.js';
 import { reg } from '../registry';
 import { Store } from 'redux';
+import { dirname } from '@joplin/utils/path';
+import SyncTargetJoplinServerSAML from '../SyncTargetJoplinServerSAML';
+import { MarkupLanguage } from '@joplin/renderer';
+import SearchEngine from '../services/search/SearchEngine';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -129,6 +133,7 @@ SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
+SyncTargetRegistry.addClass(SyncTargetJoplinServerSAML);
 SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 let syncTargetName_ = '';
@@ -146,7 +151,7 @@ function setSyncTargetName(name: string) {
 	syncTargetName_ = name;
 	syncTargetId_ = SyncTargetRegistry.nameToId(syncTargetName_);
 	sleepTime = syncTargetId_ === SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
-	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'onedrive', 'amazon_s3', 'joplinServer', 'joplinCloud'].includes(syncTargetName_);
+	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'onedrive', 'amazon_s3', 'joplinServer', 'joplinServerSaml', 'joplinCloud'].includes(syncTargetName_);
 	synchronizers_ = [];
 	return previousName;
 }
@@ -164,10 +169,10 @@ setSyncTargetName('memory');
 
 const syncDir = `${oldTestDir}/sync/${suiteName_}`;
 
-// 90 seconds now that the tests are running in parallel and have been
-// split into smaller suites might not be necessary but for now leave it
-// anyway.
-let defaultJestTimeout = 90 * 1000;
+// Tests run in parallel across many suites, so individual tests can be
+// starved of CPU/IO on contended CI runners. 180s leaves headroom for
+// that without hiding genuinely hung tests.
+let defaultJestTimeout = 180 * 1000;
 if (isNetworkSyncTarget_) defaultJestTimeout = 60 * 1000 * 10;
 if (typeof jest !== 'undefined') jest.setTimeout(defaultJestTimeout);
 
@@ -196,6 +201,7 @@ Setting.setConstant('tempDir', baseTempDir);
 Setting.setConstant('cacheDir', baseTempDir);
 Setting.setConstant('resourceDir', baseTempDir);
 Setting.setConstant('pluginDataDir', `${profileDir}/profile/plugin-data`);
+Setting.setConstant('pluginAssetDir', `${dirname(require.resolve('@joplin/renderer'))}/assets`);
 Setting.setConstant('profileDir', profileDir);
 Setting.setConstant('rootProfileDir', rootProfileDir);
 Setting.setConstant('env', Env.Dev);
@@ -270,8 +276,7 @@ const settingFilename = (id: number): string => {
 	return `settings-${id}.json`;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function switchClient(id: number, options: any = null) {
+async function switchClient(id: number, options: { keychainEnabled?: boolean } = null) {
 	options = { keychainEnabled: false, ...options };
 
 	if (!databases_[id]) throw new Error(`Call setupDatabaseAndSynchronizer(${id}) first!!`);
@@ -282,11 +287,13 @@ async function switchClient(id: number, options: any = null) {
 	currentClient_ = id;
 	BaseModel.setDb(databases_[id]);
 	KvStore.instance().setDb(databases_[id]);
+	SearchEngine.instance().setDb(databases_[id]);
 
 	BaseItem.encryptionService_ = encryptionServices_[id];
 	Resource.encryptionService_ = encryptionServices_[id];
 	BaseItem.revisionService_ = revisionServices_[id];
 	ResourceFetcher.instance_ = resourceFetchers_[id];
+	DecryptionWorker.instance_ = decryptionWorker(id);
 
 	await Setting.reset();
 	Setting.settingFilename = settingFilename(id);
@@ -340,8 +347,7 @@ async function clearDatabase(id: number = null) {
 	await databases_[id].transactionExecBatch(queries);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function setupDatabase(id: number = null, options: any = null) {
+async function setupDatabase(id: number = null, options: { keychainEnabled?: boolean } = null) {
 	options = { keychainEnabled: false, ...options };
 
 	if (id === null) id = currentClient_;
@@ -392,8 +398,13 @@ async function clearSettingFile(id: number) {
 	await fs.remove(Setting.settingFilePath);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function createFolderTree(parentId: string, tree: any[], num = 0): Promise<FolderEntity> {
+interface FolderTreeNode {
+	title?: string;
+	body?: string;
+	children?: FolderTreeNode[];
+	[key: string]: unknown;
+}
+export async function createFolderTree(parentId: string, tree: FolderTreeNode[], num = 0): Promise<FolderEntity> {
 	let rootFolder: FolderEntity = null;
 
 	for (const item of tree) {
@@ -438,23 +449,28 @@ function pluginDir(id: number = null) {
 
 export interface CreateNoteAndResourceOptions {
 	path?: string;
+	markupLanguage?: MarkupLanguage;
+	parentId?: string;
 }
 
 const createNoteAndResource = async (options: CreateNoteAndResourceOptions = null) => {
 	options = {
 		path: `${supportDir}/photo.jpg`,
+		markupLanguage: MarkupLanguage.Markdown,
 		...options,
 	};
 
-	let note = await Note.save({});
+	let note = await Note.save({
+		markup_language: options.markupLanguage,
+		parent_id: options.parentId ?? '',
+	});
 	note = await shim.attachFileToNote(note, options.path);
 	const resourceIds = await Note.linkedItemIds(note.body);
 	const resource: ResourceEntity = await Resource.load(resourceIds[0]);
 	return { note, resource };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
+async function setupDatabaseAndSynchronizer(id: number, options: { keychainEnabled?: boolean } = null) {
 	if (id === null) id = currentClient_;
 
 	BaseService.logger_ = logger;
@@ -512,8 +528,7 @@ function synchronizer(id: number = null) {
 // This is like calling synchronizer.start() but it handles the
 // complexity of passing around the sync context depending on
 // the client.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function synchronizerStart(id: number = null, extraOptions: any = null) {
+async function synchronizerStart(id: number = null, extraOptions: SyncStartOptions = null) {
 	if (id === null) id = currentClient_;
 
 	const contextKey = `sync.${syncTargetId()}.context`;
@@ -549,7 +564,7 @@ function revisionService(id: number = null) {
 function decryptionWorker(id: number = null) {
 	if (id === null) id = currentClient_;
 	const o = decryptionWorkers_[id];
-	o.setKvStore(kvStore(id));
+	o?.setKvStore(kvStore(id));
 	return o;
 }
 
@@ -696,6 +711,8 @@ async function initFileApi() {
 			userContentBaseUrl: () => joplinServerAuth.userContentBaseUrl,
 			username: () => joplinServerAuth.email,
 			password: () => joplinServerAuth.password,
+			apiKey: () => '',
+			session: (): Session => null,
 		});
 
 		fileApi = new FileApi('', new FileApiDriverJoplinServer(api));
@@ -713,8 +730,7 @@ function fileApi() {
 	return fileApis_[syncTargetId_];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function objectsEqual(o1: any, o2: any) {
+function objectsEqual(o1: Record<string, unknown>, o2: Record<string, unknown>) {
 	if (Object.getOwnPropertyNames(o1).length !== Object.getOwnPropertyNames(o2).length) return false;
 	for (const n in o1) {
 		if (!o1.hasOwnProperty(n)) continue;
@@ -723,8 +739,7 @@ function objectsEqual(o1: any, o2: any) {
 	return true;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function checkThrowAsync(asyncFn: Function) {
+async function checkThrowAsync(asyncFn: ()=> Promise<unknown>) {
 	let hasThrown = false;
 	try {
 		await asyncFn();
@@ -734,8 +749,7 @@ async function checkThrowAsync(asyncFn: Function) {
 	return hasThrown;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-async function expectThrow(asyncFn: Function, errorCode: any = undefined, errorMessage: string = undefined) {
+async function expectThrow(asyncFn: ()=> unknown | Promise<unknown>, errorCode: string | number = undefined, errorMessage: string = undefined) {
 	let hasThrown = false;
 	let thrownError = null;
 	try {
@@ -761,8 +775,7 @@ async function expectThrow(asyncFn: Function, errorCode: any = undefined, errorM
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-async function expectNotThrow(asyncFn: Function) {
+async function expectNotThrow(asyncFn: ()=> Promise<unknown>) {
 	let thrownError = null;
 	try {
 		await asyncFn();
@@ -778,8 +791,7 @@ async function expectNotThrow(asyncFn: Function) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-function checkThrow(fn: Function) {
+function checkThrow(fn: ()=> unknown) {
 	let hasThrown = false;
 	try {
 		fn();
@@ -828,23 +840,19 @@ async function allSyncTargetItemsEncrypted() {
 	return totalCount === encryptedCount;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function id(a: any) {
+function id(a: { id?: string }) {
 	return a.id;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function ids(a: any[]) {
+function ids(a: { id?: string }[]) {
 	return a.map(n => n.id);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function sortedIds(a: any[]) {
+function sortedIds(a: { id?: string }[]) {
 	return ids(a).sort();
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function at(a: any[], indexes: any[]) {
+function at<T>(a: T[], indexes: number[]) {
 	const out = [];
 	for (let i = 0; i < indexes.length; i++) {
 		out.push(a[indexes[i]]);
@@ -862,8 +870,7 @@ async function createNTestFolders(n: number) {
 	return folders;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function createNTestNotes(n: number, folder: any, tagIds: string[] = null, title = 'note') {
+async function createNTestNotes(n: number, folder: FolderEntity, tagIds: string[] = null, title = 'note') {
 	const notes = [];
 	for (let i = 0; i < n; i++) {
 		const title_ = n > 1 ? `${title}${i}` : title;
@@ -948,8 +955,7 @@ export async function naughtyStrings() {
 class TestApp extends BaseApplication {
 
 	private hasGui_: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private middlewareCalls_: any[];
+	private middlewareCalls_: boolean[];
 	private logger_: LoggerWrapper;
 
 	public constructor(hasGui = true) {
@@ -965,8 +971,7 @@ class TestApp extends BaseApplication {
 		return this.hasGui_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async start(argv: any[]) {
+	public async start(argv: string[]) {
 		this.logger_.info('Test app starting...');
 
 		if (!argv.includes('--profile')) {
@@ -987,7 +992,7 @@ class TestApp extends BaseApplication {
 		this.logger_.info('Test app started...');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Matches the base class signature with heterogeneous action union
 	public async generalMiddleware(store: any, next: any, action: any) {
 		this.middlewareCalls_.push(true);
 		try {
@@ -1023,21 +1028,23 @@ class TestApp extends BaseApplication {
 }
 
 const createTestShareData = (shareId: string): ShareState => {
+	const share = {
+		id: shareId,
+		folder_id: '',
+		master_key_id: '',
+		note_id: '',
+		type: 1,
+	};
+
 	return {
 		processingShareInvitationResponse: false,
-		shares: [],
+		shares: [share],
 		shareInvitations: [
 			{
 				id: '',
 				master_key: {},
 				status: 0,
-				share: {
-					id: shareId,
-					folder_id: '',
-					master_key_id: '',
-					note_id: '',
-					type: 1,
-				},
+				share,
 				can_read: 1,
 				can_write: 0,
 			},
@@ -1046,10 +1053,40 @@ const createTestShareData = (shareId: string): ShareState => {
 	};
 };
 
-const simulateReadOnlyShareEnv = (shareId: string, store?: Store) => {
+const mergeShareData = (state1: ShareState, state2: ShareState) => {
+	return {
+		...state1,
+		shares: [...state1.shares, ...state2.shares],
+		shareInvitations: [
+			...state1.shareInvitations,
+			...state2.shareInvitations,
+		],
+		shareUsers: {
+			...state1.shareUsers,
+			...state2.shareUsers,
+		},
+	};
+};
+
+const simulateReadOnlyShareEnv = (shareIds: string[]|string, store?: Store) => {
+	if (!Array.isArray(shareIds)) {
+		shareIds = [shareIds];
+	}
+
 	Setting.setValue('sync.target', 10);
 	Setting.setValue('sync.userId', 'abcd');
-	const shareData = createTestShareData(shareId);
+
+	// Create all shares
+	let shareData: ShareState|null = null;
+	for (const shareId of shareIds) {
+		const newShareData = createTestShareData(shareId);
+		if (!shareData) {
+			shareData = newShareData;
+		} else {
+			shareData = mergeShareData(shareData, newShareData);
+		}
+	}
+
 	BaseItem.syncShareCache = shareData;
 
 	if (store) {
@@ -1075,10 +1112,10 @@ const simulateReadOnlyShareEnv = (shareId: string, store?: Store) => {
 
 export const newOcrService = () => {
 	const driver = new OcrDriverTesseract({ createWorker }, { workerPath: null, corePath: null, languageDataPath: null });
-	return new OcrService(driver);
+	return new OcrService([driver]);
 };
 
-export const mockMobilePlatform = (platform: string) => {
+export const mockMobilePlatform = (platform: MobilePlatform) => {
 	const originalMobilePlatform = shim.mobilePlatform;
 	const originalIsNode = shim.isNode;
 
@@ -1091,34 +1128,6 @@ export const mockMobilePlatform = (platform: string) => {
 			shim.isNode = originalIsNode;
 		},
 	};
-};
-
-// Waits for callback to not throw. Similar to react-native-testing-library's waitFor, but works better
-// with Joplin's mix of real and fake Jest timers.
-const realSetTimeout = setTimeout;
-export const waitFor = async (callback: ()=> Promise<void>) => {
-	const timeout = 10_000;
-	const startTime = performance.now();
-	let passed = false;
-	let lastError: Error|null = null;
-
-	while (!passed && performance.now() - startTime < timeout) {
-		try {
-			await callback();
-			passed = true;
-			lastError = null;
-		} catch (error) {
-			lastError = error;
-
-			await new Promise<void>(resolve => {
-				realSetTimeout(() => resolve(), 10);
-			});
-		}
-	}
-
-	if (lastError) {
-		throw lastError;
-	}
 };
 
 export const runWithFakeTimers = async (callback: ()=> Promise<void>) => {
@@ -1149,6 +1158,62 @@ export const runWithFakeTimers = async (callback: ()=> Promise<void>) => {
 		shim.clearTimeout = originalClearTimeout;
 		shim.clearInterval = originalClearInterval;
 		jest.useRealTimers();
+	}
+};
+
+// null => Use default
+type MockFetchRequestHandler = (request: Request)=> Response|null;
+
+// Mocks shim.fetch, but may not mock other fetch-related methods
+export const mockFetch = (requestHandler: MockFetchRequestHandler) => {
+	const originalFetch = shim.fetch;
+
+	shim.fetch = (url: string, options) => {
+		const request = new Request(url, options);
+		const mockResponse = requestHandler(request);
+		if (mockResponse) {
+			return Promise.resolve(mockResponse);
+		} else {
+			return originalFetch(url, options);
+		}
+	};
+
+	return {
+		reset: () => {
+			shim.fetch = originalFetch;
+		},
+	};
+};
+
+export const withWarningSilenced = async <T> (warningRegex: RegExp, task: ()=> Promise<T>): Promise<T> => {
+	type MockSlice = { mockRestore(): void };
+	const mocks: MockSlice[] = [];
+
+	const mockConsoleFunction = (key: 'warn'|'error') => {
+		const mock = jest.spyOn(console, key);
+		mocks.push(mock);
+
+		// See https://jestjs.io/docs/jest-object#spied-methods-and-the-using-keyword, which
+		// shows how to use .spyOn to hide warnings
+		mock.mockImplementation((message?: unknown, ...args: unknown[]) => {
+			const fullMessage = [message, ...args].join(' ');
+			if (!fullMessage.match(warningRegex)) {
+				// Avoid recursively calling the mock:
+				mock.mockRestore();
+
+				console.error(`Unexpected warning: ${message}\nNote: Further warnings will not be silenced.`, ...args);
+			}
+		});
+	};
+
+	try {
+		mockConsoleFunction('warn');
+		mockConsoleFunction('error');
+		return await task();
+	} finally {
+		for (const mock of mocks) {
+			mock.mockRestore();
+		}
 	}
 };
 

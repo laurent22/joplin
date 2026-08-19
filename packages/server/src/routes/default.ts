@@ -8,6 +8,8 @@ import { AppContext, RouteType } from '../utils/types';
 import { localFileFromUrl } from '../utils/joplinUtils';
 import { homeUrl, loginUrl } from '../utils/urlUtils';
 import * as mime from '@joplin/lib/mime-utils';
+import { hasOwnProperty } from '@joplin/utils/object';
+import { toForwardSlashes } from '@joplin/utils/path';
 
 const publicDir = `${dirname(dirname(__dirname))}/public`;
 
@@ -19,12 +21,13 @@ interface PathToFileMap {
 // example if they are in node_modules, use the map below.
 const pathToFileMap: PathToFileMap = {
 	'css/bulma.min.css': 'node_modules/bulma/css/bulma.min.css',
-	'css/bulma-prefers-dark.min.css': 'node_modules/bulma-prefers-dark/css/bulma-prefers-dark.min.css',
 	'css/fontawesome/css/all.min.css': 'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
+	'css/wunderbaum.css': 'node_modules/wunderbaum/dist/wunderbaum.css',
 	'js/zxcvbn.js': 'node_modules/zxcvbn/dist/zxcvbn.js',
 	'js/zxcvbn.js.map': 'node_modules/zxcvbn/dist/zxcvbn.js.map',
 	'js/jquery.min.js': 'node_modules/jquery/dist/jquery.min.js',
 	'js/jquery.min.map': 'node_modules/jquery/dist/jquery.min.map',
+	'js/wunderbaum.umd.min.js': 'node_modules/wunderbaum/dist/wunderbaum.umd.min.js',
 
 	// Hard-coded for now but it could be made dynamic later on
 	// 'apps/joplin/css/note.css': 'src/apps/joplin/css/note.css',
@@ -34,13 +37,18 @@ async function findLocalFile(path: string): Promise<string> {
 	const appFilePath = await localFileFromUrl(path);
 	if (appFilePath) return appFilePath;
 
-	if (path in pathToFileMap) return pathToFileMap[path];
-	// For now a bit of a hack to load FontAwesome fonts.
-	if (path.indexOf('css/fontawesome/webfonts/fa-') === 0) return `node_modules/@fortawesome/fontawesome-free/${path.substr(16)}`;
-
-	let localPath = normalize(path);
+	let localPath = toForwardSlashes(normalize(path));
 	if (localPath.indexOf('..') >= 0) throw new ErrorNotFound(`Cannot resolve path: ${path}`);
-	localPath = `${publicDir}/${localPath}`;
+
+	if (hasOwnProperty(pathToFileMap, path)) return pathToFileMap[path];
+
+	// For now a bit of a hack to load FontAwesome fonts.
+	if (localPath.indexOf('css/fontawesome/webfonts/fa-') === 0) {
+		localPath = `node_modules/@fortawesome/fontawesome-free/${localPath.substring(16)}`;
+	} else {
+		localPath = `${publicDir}/${localPath}`;
+	}
+
 	if (!(await pathExists(localPath))) throw new ErrorNotFound(`Path not found: ${path}`);
 
 	const stat = await fs.stat(localPath);
@@ -48,6 +56,23 @@ async function findLocalFile(path: string): Promise<string> {
 
 	return localPath;
 }
+
+const patchFile = (path: string, fileContent: Buffer): Buffer => {
+	const patches: Record<string, (fileContent: Buffer)=> Buffer> = {
+		'css/bulma.min.css': fileContent => {
+			// We apply the patch here rather than with `yarn patch` because that would mean
+			// modifying a minified file, which is likely to break on each new update of Bulma. Dark
+			// theme is disabled mostly because we don't want it in published notes, which may have
+			// their own style inherited from clipped web pages. Having dark theme in the web UI is
+			// not that useful because it's not frequently accessed by users.
+			return Buffer.from(fileContent.toString().replace('prefers-color-scheme:dark', 'prefers-color-scheme:dark-disabled-by-patch'), 'utf-8');
+		},
+	};
+
+	if (patches[path]) return patches[path](fileContent);
+
+	return fileContent;
+};
 
 const router = new Router(RouteType.Web);
 
@@ -70,7 +95,8 @@ router.get('', async (path: SubPath, ctx: AppContext) => {
 	let mimeType: string = mime.fromFilename(localPath);
 	if (!mimeType) mimeType = 'application/octet-stream';
 
-	const fileContent: Buffer = await fs.readFile(localPath);
+	let fileContent: Buffer = await fs.readFile(localPath);
+	fileContent = patchFile(path.raw, fileContent);
 
 	const koaResponse = ctx.response;
 	koaResponse.body = fileContent;

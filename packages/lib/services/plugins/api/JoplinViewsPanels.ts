@@ -1,7 +1,9 @@
 /* eslint-disable multiline-comment-style */
 
-import Plugin from '../Plugin';
+import { defaultWindowId } from '../../../reducer';
+import Plugin, { MessageListenerCallback } from '../Plugin';
 import createViewHandle from '../utils/createViewHandle';
+import { PluginStore } from '../ViewController';
 import WebviewController, { ContainerType } from '../WebviewController';
 import { ViewHandle } from './types';
 
@@ -21,12 +23,10 @@ import { ViewHandle } from './types';
  */
 export default class JoplinViewsPanels {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private store: any;
+	private store: PluginStore;
 	private plugin: Plugin;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(plugin: Plugin, store: any) {
+	public constructor(plugin: Plugin, store: PluginStore) {
 		this.store = store;
 		this.plugin = plugin;
 	}
@@ -45,7 +45,7 @@ export default class JoplinViewsPanels {
 		}
 
 		const handle = createViewHandle(this.plugin, id);
-		const controller = new WebviewController(handle, this.plugin.id, this.store, this.plugin.baseDir, ContainerType.Panel);
+		const controller = new WebviewController(handle, this.plugin.id, this.store, this.plugin.baseDir, ContainerType.Panel, defaultWindowId);
 		this.plugin.addViewController(controller);
 		return handle;
 	}
@@ -83,8 +83,7 @@ export default class JoplinViewsPanels {
 	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages) for more details.
 	 *
 	 */
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public async onMessage(handle: ViewHandle, callback: Function): Promise<void> {
+	public async onMessage(handle: ViewHandle, callback: MessageListenerCallback): Promise<void> {
 		return this.controller(handle).onMessage(callback);
 	}
 
@@ -104,7 +103,7 @@ export default class JoplinViewsPanels {
 	 *
 	 * It is particularly useful when the webview needs to react to events emitted by the plugin or the joplin api.
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Plugin API: messages exchanged with webview can be of any serialisable type
 	public postMessage(handle: ViewHandle, message: any): void {
 		return this.controller(handle).postMessage(message);
 	}
@@ -113,7 +112,7 @@ export default class JoplinViewsPanels {
 	 * Shows the panel
 	 */
 	public async show(handle: ViewHandle, show = true): Promise<void> {
-		await this.controller(handle).show(show);
+		await this.controller(handle).setOpen(show);
 	}
 
 	/**
@@ -128,6 +127,14 @@ export default class JoplinViewsPanels {
 	 */
 	public async visible(handle: ViewHandle): Promise<boolean> {
 		return this.controller(handle).visible;
+	}
+
+	/**
+	 * Assuming that the current panel is an editor plugin view, returns
+	 * whether the editor plugin view supports editing the current note.
+	 */
+	public async isActive(handle: ViewHandle): Promise<boolean> {
+		return this.controller(handle).active;
 	}
 
 }

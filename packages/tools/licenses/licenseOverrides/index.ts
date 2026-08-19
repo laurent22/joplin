@@ -42,12 +42,6 @@ const allPackageOverrides: LicenseOverride[] = [
 	// license field was not changed).
 	excludeDevelopment(/^fb-watchman/),
 	excludeDevelopment(/^bser/),
-	mitLicenseOverride(
-		'tkwidgets',
-		'https://github.com/laurent22/tkwidgets',
-		'2017-2018 Laurent Cozic',
-		/^tkwidgets[@]?.*$/,
-	),
 ];
 
 const licenseOverrides: LicenseOverrides = {
@@ -78,6 +72,12 @@ const licenseOverrides: LicenseOverrides = {
 		// Octicons: Seems to be MIT, unused
 		// Zocial icons: Mostly MIT, one icon under CC BY. Do not use without attributing
 		// Simple line icons: MIT, unused
+		// antIcons: Licensed under the MIT
+		mitLicenseOverride(
+			'whisper.cpp',
+			'https://github.com/ggerganov/whisper.cpp/blob/master/LICENSE',
+			'Copyright (c) 2023-2024 The ggml authors',
+		),
 
 		...allPackageOverrides,
 	],
@@ -86,6 +86,12 @@ const licenseOverrides: LicenseOverrides = {
 	],
 	'app-cli': [
 		...allPackageOverrides,
+		mitLicenseOverride(
+			'tkwidgets',
+			'https://github.com/laurent22/tkwidgets',
+			'2017-2018 Laurent Cozic',
+			/^tkwidgets[@]?.*$/,
+		),
 	],
 };
 

@@ -14,8 +14,7 @@ interface Props {
 
 	width: number|undefined;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	settings: Record<string, any>;
+	settings: Record<string, unknown>;
 	selectedSectionName: string|null;
 	openSection: (sectionName: string)=> void;
 }
@@ -98,7 +97,6 @@ const SectionSelector: FunctionComponent<Props> = props => {
 	return (
 		<View style={containerStyle}>
 			<FlatList
-				role='tablist'
 				ref={setFlatListRef}
 				data={sections}
 				renderItem={onRenderButton}

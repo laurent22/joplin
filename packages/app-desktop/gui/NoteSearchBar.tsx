@@ -5,28 +5,22 @@ import { focus } from '@joplin/lib/utils/focusHandler';
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onNext: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onPrevious: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onClose: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onChange: Function;
+	onNext: ()=> void;
+	onPrevious: ()=> void;
+	onClose: ()=> void;
+	onChange: (query: string)=> void;
 	query: string;
 	searching: boolean;
 	resultCount: number;
 	selectedIndex: number;
 	visiblePanes: string[];
 	editorType: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	style: any;
+	style: React.CSSProperties;
 }
 
 class NoteSearchBar extends React.Component<Props> {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private backgroundColor: any;
+	private backgroundColor: string;
 	private searchInputRef: React.RefObject<HTMLInputElement>;
 
 	public constructor(props: Props) {
@@ -56,8 +50,7 @@ class NoteSearchBar extends React.Component<Props> {
 		return style;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public buttonIconComponent(iconName: string, clickHandler: any, isEnabled: boolean) {
+	public buttonIconComponent(iconName: string, clickHandler: ()=> void, isEnabled: boolean) {
 		const theme = themeStyle(this.props.themeId);
 
 		const searchButton = {
@@ -85,14 +78,12 @@ class NoteSearchBar extends React.Component<Props> {
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private searchInput_change(event: any) {
+	private searchInput_change(event: React.ChangeEvent<HTMLInputElement>) {
 		const query = event.currentTarget.value;
 		this.triggerOnChange(query);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private searchInput_keyDown(event: any) {
+	private searchInput_keyDown(event: React.KeyboardEvent<HTMLInputElement>) {
 		if (event.keyCode === 13) {
 			// ENTER
 			event.preventDefault();
@@ -114,7 +105,7 @@ class NoteSearchBar extends React.Component<Props> {
 		if (event.keyCode === 70) {
 			// F key
 			if (event.ctrlKey) {
-				event.target.select();
+				event.currentTarget.select();
 			}
 		}
 	}

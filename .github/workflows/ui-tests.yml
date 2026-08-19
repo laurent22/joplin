@@ -1,0 +1,65 @@
+name: Joplin UI tests
+on: [push, pull_request]
+
+permissions:
+  contents: read
+jobs:
+  Main:
+    # Don't run on forks
+    if: github.repository == 'laurent22/joplin'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, windows-2025]
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup build environment
+        uses: ./.github/workflows/shared/setup-build-environment
+      - name: Build (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          SKIP_ONENOTE_CONVERTER_BUILD: 1
+        run: |
+          . "${env:GITHUB_WORKSPACE}/.github/scripts/build_windows.ps1"
+          Install-WindowsDeps
+      - name: Build
+        if: runner.os != 'Windows'
+        run: |
+          source "${GITHUB_WORKSPACE}/.github/scripts/retry.sh"
+          retry yarn install
+        env:
+          # The onenote-converter package uses Rust, which isn't installed on all CI
+          # runners. Since the onenote-converter doesn't have UI tests, it can be excluded
+          # from build:
+          SKIP_ONENOTE_CONVERTER_BUILD: 1
+      - name: Run desktop UI tests
+        shell: bash
+        run: |
+          cd ${GITHUB_WORKSPACE}/packages/app-desktop/
+          bash ./integration-tests/run-ci.sh
+      # See https://playwright.dev/docs/ci-intro#setting-up-github-actions
+      - uses: actions/upload-artifact@v6
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-${{ matrix.os }}
+          path: packages/app-desktop/playwright-report/
+          retention-days: 7
+  Mobile:
+    if: github.repository == 'laurent22/joplin'
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup build environment
+        uses: ./.github/workflows/shared/setup-build-environment
+      - name: Build
+        run: |
+          source "${GITHUB_WORKSPACE}/.github/scripts/retry.sh"
+          retry yarn install
+        env:
+          SKIP_ONENOTE_CONVERTER_BUILD: 1
+      - name: Run mobile UI tests
+        shell: bash
+        run: |
+          cd ${GITHUB_WORKSPACE}/packages/app-mobile/
+          yarn test-ui-ios

@@ -1,0 +1,22 @@
+
+.popup-notification-list {
+	display: flex;
+	align-items: end;
+	flex-direction: column;
+	list-style-type: none;
+	padding-left: 0;
+	padding-right: 0;
+
+	&.-overlay {
+		// Focus should jump to the bottom item first
+		flex-direction: column-reverse;
+		
+		position: absolute;
+		bottom: 0;
+		inset-inline-end: 0; // right: 0 in ltr, left: 0 in rtl
+		z-index: 10;
+
+		max-height: 100vh;
+		overflow-y: auto;
+	}
+}

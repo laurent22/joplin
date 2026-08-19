@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 import Setting from '../../../models/Setting';
 import shim from '../../../shim';
 import PluginService, { defaultPluginSetting, DefaultPluginsInfo, Plugins, PluginSettings } from '../PluginService';

@@ -10,8 +10,11 @@ import Tag from '../../models/Tag';
 import NoteTag from '../../models/NoteTag';
 import ResourceService from '../../services/ResourceService';
 import SearchEngine from '../search/SearchEngine';
-const { MarkupToHtml } = require('@joplin/renderer');
-import { ResourceEntity } from '../database/types';
+import { MarkupToHtml } from '@joplin/renderer';
+import { NoteEntity, ResourceEntity } from '../database/types';
+import { toFileProtocolPath } from '@joplin/utils/path';
+import { join } from 'path';
+import { htmlentities } from '@joplin/utils/html';
 
 const createFolderForPagination = async (num: number, time: number) => {
 	await Folder.save({
@@ -170,8 +173,7 @@ describe('services/rest/Api', () => {
 	}));
 
 	it('should allow setting note properties', (async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let response: any = null;
+		let response: NoteEntity = null;
 		const f = await Folder.save({ title: 'mon carnet' });
 
 		response = await api.route(RequestMethod.POST, 'notes', null, JSON.stringify({
@@ -512,10 +514,11 @@ describe('services/rest/Api', () => {
 		let response = null;
 		const f = await Folder.save({ title: 'pdf test1' });
 
+		const url = toFileProtocolPath(join(supportDir, 'welcome.pdf'));
 		response = await api.route(RequestMethod.POST, 'notes', null, JSON.stringify({
 			title: 'testing PDF embeds',
 			parent_id: f.id,
-			body_html: `<div> <embed src="file://${supportDir}/welcome.pdf" type="application/pdf" /> </div>`,
+			body_html: `<div> <embed src="${htmlentities(url)}" type="application/pdf" /> </div>`,
 		}));
 
 		const resources = await Resource.all();
@@ -581,8 +584,7 @@ describe('services/rest/Api', () => {
 		expect(response3.items.length).toBe(2);
 
 		// Also check that it only returns the required fields
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		response3.items.sort((a: any, b: any) => {
+		response3.items.sort((a: { id: string }, b: { id: string }) => {
 			return a.id < b.id ? -1 : +1;
 		});
 
@@ -960,5 +962,26 @@ describe('services/rest/Api', () => {
 
 		await SearchEngine.instance().destroy();
 
+	}));
+
+	it('should not fail when both deleted and conflict notes are included', (async () => {
+		const folder = await Folder.save({});
+		const note1 = await Note.save({ parent_id: folder.id });
+		await msleep(1);
+		const note2 = await Note.save({ parent_id: folder.id, deleted_time: 1 });
+		await msleep(1);
+		const note3 = await Note.save({ parent_id: folder.id, is_conflict: 1 });
+
+		const r1 = await api.route(RequestMethod.GET, 'notes', {
+			limit: 3,
+			include_conflicts: '1',
+			include_deleted: '1',
+		});
+
+		expect(r1.items.map((item: NoteEntity) => item.id)).toEqual([
+			note1.id,
+			note2.id,
+			note3.id,
+		]);
 	}));
 });

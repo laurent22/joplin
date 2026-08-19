@@ -1,4 +1,5 @@
 import InteropService from '@joplin/lib/services/interop/InteropService';
+import { Dispatch } from 'redux';
 import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import { ExportModuleOutputFormat, ExportOptions, FileSystemItem } from '@joplin/lib/services/interop/types';
@@ -9,11 +10,11 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import bridge from './services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
-const { friendlySafeFilename } = require('@joplin/lib/path-utils');
+import { friendlySafeFilename } from '@joplin/lib/path-utils';
 import time from '@joplin/lib/time';
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
 const md5 = require('md5');
-const url = require('url');
+import * as url from 'url';
 
 interface ExportNoteOptions {
 	customCss?: string;
@@ -58,18 +59,20 @@ export default class InteropServiceHelper {
 			const exportOptions = {
 				customCss: options.customCss ? options.customCss : '',
 				plugins: options.plugins,
+				shouldEmbedOnlyImages: true,
 			};
 
 			htmlFile = await this.exportNoteToHtmlFile(noteId, exportOptions);
 
-			const windowOptions = {
-				show: false,
+			const windowOptions: BrowserWindowConstructorOptions = {
+				// Work around a printing issue: As of Electron 39, if the window is initially hidden, printing crashes the app.
+				// This only seems to be necessary on Linux.
+				show: shim.isLinux(),
 			};
 
 			win = bridge().newBrowserWindow(windowOptions);
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			return new Promise<any>((resolve, reject) => {
+			return new Promise<Buffer | null>((resolve, reject) => {
 				win.webContents.on('did-finish-load', () => {
 
 					// did-finish-load will trigger when most assets are done loading, probably
@@ -86,8 +89,17 @@ export default class InteropServiceHelper {
 								// pdfs.
 								// https://github.com/laurent22/joplin/issues/6254.
 								await win.webContents.executeJavaScript('document.querySelectorAll(\'details\').forEach(el=>el.setAttribute(\'open\',\'\'))');
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-								const data = await win.webContents.printToPDF(options as any);
+								const data = await win.webContents.printToPDF({
+									...options,
+									// eslint-disable-next-line @typescript-eslint/no-explicit-any -- options.pageSize is a string (user setting); Electron's PrintToPDFOptions.pageSize is a stricter union
+									pageSize: options.pageSize as any,
+									// Allows users to override the CSS page size.
+									// See https://github.com/laurent22/joplin/issues/13096
+									preferCSSPageSize: true,
+
+									// Include accessibility information in the output:
+									generateTaggedPDF: true,
+								});
 								resolve(data);
 							} catch (error) {
 								reject(error);
@@ -111,8 +123,15 @@ export default class InteropServiceHelper {
 							// 2024-01-31: Printing with webContents.print still
 							// fails on Linux (even if run in the main process).
 							// As such, we use window.print(), which seems to work.
+							//
+							// 2025-05-03: Windows and MacOS also need the window.print() workaround.
+							// See https://github.com/electron/electron/pull/46937.
+							//
+							// 2025-10-30: window.print() now causes a crash on Linux -- switch back to the
+							// other method.
 
-							if (shim.isLinux()) {
+							const applyWorkaround = true;
+							if (applyWorkaround) {
 								await win.webContents.executeJavaScript(`
 									// Blocks while the print dialog is open
 									window.print();
@@ -128,7 +147,7 @@ export default class InteropServiceHelper {
 									resolve(null);
 								}, 1000);
 							} else {
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- ExportNoteOptions is broader than Electron's WebContentsPrintOptions; the runtime tolerates the extra fields
 								win.webContents.print(options as any, (success: boolean, reason: string) => {
 									cleanup();
 									if (!success && reason !== 'cancelled') reject(new Error(`Could not print: ${reason}`));
@@ -174,8 +193,7 @@ export default class InteropServiceHelper {
 		return `${filename}.${fileExtension}`;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public static async export(_dispatch: Function, module: ExportModule, options: ExportNoteOptions = null) {
+	public static async export(_dispatch: Dispatch, module: ExportModule, options: ExportNoteOptions = null) {
 		if (!options) options = {};
 
 		let path = null;

@@ -1,7 +1,7 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '../services/CommandService';
 import { _ } from '../locale';
 import Note from '../models/Note';
-import shim from '../shim';
+import shim, { MessageBoxType } from '../shim';
 
 export const declaration: CommandDeclaration = {
 	name: 'permanentlyDeleteNote',
@@ -21,13 +21,13 @@ export const runtime = (): CommandRuntime => {
 				buttons: [_('Delete'), _('Cancel')],
 				defaultId: 1,
 				cancelId: 1,
-				type: 'question',
+				type: MessageBoxType.Confirm,
 			});
 
 			if (result === deleteIndex) {
 				await Note.batchDelete(noteIds, { toTrash: false, sourceDescription: 'permanentlyDeleteNote command' });
 			}
 		},
-		enabledCondition: '(!noteIsReadOnly || inTrash) && someNotesSelected',
+		enabledCondition: '(!noteIsReadOnlyShare || inTrash) && someNotesSelected',
 	};
 };

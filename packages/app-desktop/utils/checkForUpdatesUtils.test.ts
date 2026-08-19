@@ -1,11 +1,10 @@
-import { extractVersionInfo, Release, Platform, Architecture, GitHubRelease } from './checkForUpdatesUtils';
+import { extractVersionInfo, Release, Platform, Architecture, GitHubRelease, handleReleaseResponseError } from './checkForUpdatesUtils';
 import { releases1, releases2 } from './checkForUpdatesUtilsTestData';
 
 describe('checkForUpdates', () => {
 
 	it('should extract version info and return the non-arm64 version', async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const testCases: [any, Platform, Architecture, boolean, Release][] = [
+		const testCases: [GitHubRelease[], Platform, Architecture, boolean, Release][] = [
 			[
 				releases1,
 				'darwin',
@@ -148,4 +147,13 @@ describe('checkForUpdates', () => {
 		});
 	});
 
+	test.each([
+		[403, '{"message":"API rate limit exceeded"}', 'rate limit has been exceeded', 'rate limit error for 403 with rate limit JSON'],
+		[429, 'Rate Limit reached', 'rate limit has been exceeded', 'rate limit error for 429 with rate limit text'],
+		[403, 'Rate LIMIT exceeded', 'rate limit has been exceeded', 'case-insensitive rate limit detection'],
+		[500, 'Internal Server Error', 'Error 500', 'generic error for non-rate-limit status'],
+		[403, 'Forbidden', 'Error 403', 'generic error for 403 without rate limit text'],
+	])('should throw expected error for %s (%s)', (status, body, expectedError, _description) => {
+		expect(() => handleReleaseResponseError(status, body)).toThrow(expectedError);
+	});
 });

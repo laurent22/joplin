@@ -6,9 +6,13 @@ import { beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, expect
 import { AppContext } from '../../utils/types';
 import { uuidgen } from '@joplin/lib/uuid';
 import { postHandlers } from './stripe';
+import Stripe from 'stripe';
+import { SubPath } from '../../utils/routeUtils';
+import { Hour, Month, Second } from '@joplin/utils/time';
 
 interface StripeOptions {
 	userEmail?: string;
+	source?: string;
 }
 
 function mockStripe(options: StripeOptions = null) {
@@ -23,60 +27,84 @@ function mockStripe(options: StripeOptions = null) {
 				return {
 					name: 'Toto',
 					email: options.userEmail,
+					metadata: { source: options.source || '' },
+				};
+			},
+			update: jest.fn(),
+		},
+		subscriptions: {
+			cancel: jest.fn(),
+			retrieve: async () => {
+				return {
+					stripe_subscription_id: 'sub_new',
+					items: {
+						data: [
+							{
+								id: 'item_123456',
+							},
+						],
+					},
 				};
 			},
 		},
-		subscriptions: {
-			del: jest.fn(),
+		subscriptionItems: {
+			update: jest.fn(),
 		},
 	};
 }
 
 interface WebhookOptions {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	stripe?: any;
+	stripe?: ReturnType<typeof mockStripe>;
 	eventId?: string;
 	subscriptionId?: string;
+	currentPeriodEndSeconds?: number;
 	customerId?: string;
 	sessionId?: string;
 	userEmail?: string;
+	accountType?: AccountType;
+	quantity?: number;
+	source?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function simulateWebhook(ctx: AppContext, type: string, object: any, options: WebhookOptions = {}) {
+async function simulateWebhook(ctx: AppContext, type: string, object: Record<string, unknown>, options: WebhookOptions = {}) {
 	options = {
-		stripe: mockStripe({ userEmail: options.userEmail }),
+		stripe: mockStripe({ userEmail: options.userEmail, source: options.source }),
 		eventId: uuidgen(),
 		...options,
 	};
 
-	await postHandlers.webhook(options.stripe, {}, ctx, {
+	// The stripe client, sub-path and event are stubbed for this test, so cast past their full production types.
+	await postHandlers.webhook(options.stripe as unknown as Stripe, {} as unknown as SubPath, ctx, {
 		id: options.eventId,
 		type,
 		data: {
 			object,
 		},
-	}, false);
+	} as unknown as Stripe.Event, false);
 }
 
 async function createUserViaSubscription(ctx: AppContext, options: WebhookOptions = {}) {
 	options = {
 		subscriptionId: `sub_${uuidgen()}`,
 		customerId: `cus_${uuidgen()}`,
+		accountType: AccountType.Pro,
+		quantity: 1,
 		...options,
 	};
 
 	const stripeSessionId = 'sess_123';
-	const stripePrice = findPrice(stripeConfig(), { accountType: 2, period: PricePeriod.Monthly });
+	const stripePrice = findPrice(stripeConfig(), { accountType: options.accountType, period: PricePeriod.Monthly });
 	await models().keyValue().setValue(`stripeSessionToPriceId::${stripeSessionId}`, stripePrice.id);
 
 	await simulateWebhook(ctx, 'customer.subscription.created', {
 		id: options.subscriptionId,
 		customer: options.customerId,
+		current_period_end: options.currentPeriodEndSeconds ?? Math.floor((Date.now() + Month) / Second),
 		items: {
 			data: [
 				{
 					price: stripePrice,
+					quantity: options.quantity,
 				},
 			],
 		},
@@ -115,13 +143,40 @@ describe('index/stripe', () => {
 		expect(sub.last_payment_failed_time).toBe(0);
 	});
 
+	test('should store the signup source on the subscription', async () => {
+		const ctx = await koaAppContext();
+		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com', source: 'desktop-wizard' });
+
+		const user = await models().user().loadByEmail('toto@example.com');
+		const sub = await models().subscription().byUserId(user.id);
+		expect(sub.source).toBe('desktop-wizard');
+	});
+
+	test('should default the source to an empty string when none is provided', async () => {
+		const ctx = await koaAppContext();
+		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com' });
+
+		const user = await models().user().loadByEmail('toto@example.com');
+		const sub = await models().subscription().byUserId(user.id);
+		expect(sub.source).toBe('');
+	});
+
 	test('should not process the same event twice', async () => {
 		const ctx = await koaAppContext();
 		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com', eventId: 'evt_1' });
-		const v = await models().keyValue().value('stripeEventDone::evt_1');
-		expect(v).toBe(1);
+		const loadUser = () => models().user().loadByEmail('toto@example.com');
+
+		let user = await loadUser();
+		expect(user).toMatchObject({
+			account_type: AccountType.Pro,
+		});
+		await models().user().delete(user.id);
+
 		// This event should simply be skipped
 		await expectNotThrow(async () => createUserViaSubscription(ctx, { userEmail: 'toto@example.com', eventId: 'evt_1' }));
+
+		user = await loadUser();
+		expect(user).toBeUndefined();
 	});
 
 	test('should check if it is a beta user', async () => {
@@ -170,12 +225,12 @@ describe('index/stripe', () => {
 		expect((await models().user().all()).length).toBe(1);
 		const user = (await models().user().all())[0];
 		const subBefore = await models().subscription().byUserId(user.id);
-		expect(stripe.subscriptions.del).toHaveBeenCalledTimes(0);
+		expect(stripe.subscriptions.cancel).toHaveBeenCalledTimes(0);
 
 		await createUserViaSubscription(ctx, { userEmail: 'toto@example.com', stripe });
 		expect((await models().user().all()).length).toBe(1);
 		const subAfter = await models().subscription().byUserId(user.id);
-		expect(stripe.subscriptions.del).toHaveBeenCalledTimes(1);
+		expect(stripe.subscriptions.cancel).toHaveBeenCalledTimes(1);
 
 		expect(subBefore.stripe_subscription_id).toBe(subAfter.stripe_subscription_id);
 	});
@@ -261,6 +316,7 @@ describe('index/stripe', () => {
 		await simulateWebhook(ctx, 'customer.subscription.created', {
 			id: 'sub_new',
 			customer: 'cus_toto',
+			current_period_end: Math.floor((Date.now() + Month) / Second),
 			items: { data: [{ price: { id: stripePrice.id } }] },
 		}, { stripe });
 
@@ -302,11 +358,40 @@ describe('index/stripe', () => {
 		await simulateWebhook(ctx, 'customer.subscription.created', {
 			id: 'sub_1',
 			customer: 'cus_toto',
+			current_period_end: Math.floor((Date.now() + Month) / Second),
+			trial_end: Math.floor((Date.now() + Month) / Second),
 			items: { data: [{ price: { id: stripePrice.id } }] },
 		}, { stripe });
 
 		// Verify that we didn't try to delete that new subscription
-		expect(stripe.subscriptions.del).toHaveBeenCalledTimes(0);
+		expect(stripe.subscriptions.cancel).toHaveBeenCalledTimes(0);
 	});
 
+	test('should update subscription period end/trial end dates in the database when updated in Stripe', async () => {
+		const stripe = mockStripe({ userEmail: 'toto@example.com' });
+		const ctx = await koaAppContext();
+
+		const stripePrice = findPrice(stripeConfig(), { accountType: AccountType.Basic, period: PricePeriod.Monthly });
+		const sendWebhookEvent = (eventType: 'created'|'updated', currentPeriodEndSeconds: number) => {
+			return simulateWebhook(ctx, `customer.subscription.${eventType}`, {
+				id: 'sub_1',
+				customer: 'cus_toto',
+				current_period_end: currentPeriodEndSeconds,
+				items: { data: [{ price: { id: stripePrice.id } }] },
+			}, { stripe });
+		};
+
+		// Should update the subscription on created events
+		let periodEndSeconds = Math.floor((Date.now() + Hour) / Second);
+		await sendWebhookEvent('created', periodEndSeconds);
+
+		const subscription = () => models().subscription().byStripeSubscriptionId('sub_1');
+		expect(await subscription()).toMatchObject({ current_period_end: periodEndSeconds * Second });
+
+		periodEndSeconds += 300;
+
+		// Should update the subscription on updated events
+		await sendWebhookEvent('updated', periodEndSeconds);
+		expect(await subscription()).toMatchObject({ current_period_end: periodEndSeconds * Second });
+	});
 });

@@ -6,40 +6,74 @@ import CommandService from '@joplin/lib/services/CommandService';
 interface Props {
 	selectedIndex: number;
 	onKeyDown: React.KeyboardEventHandler;
+	allFoldersCollapsed: boolean;
+	hasSubFolders: boolean;
 }
 
 const onAddFolderButtonClick = () => {
 	void CommandService.instance().execute('newFolder');
 };
 
+const onToggleAllFolders = (allFoldersCollapsed: boolean) => {
+	void CommandService.instance().execute('toggleAllFolders', !allFoldersCollapsed);
+};
+
+interface CollapseExpandAllButtonProps {
+	allFoldersCollapsed: boolean;
+	hasSubFolders: boolean;
+}
+
+const CollapseExpandAllButton = (props: CollapseExpandAllButtonProps) => {
+	// To allow it to be accessed by accessibility tools, the toggle button
+	// is not included in the portion of the list with role='tree'.
+	const icon = props.allFoldersCollapsed ? 'far fa-caret-square-right' : 'far fa-caret-square-down';
+	const label = props.allFoldersCollapsed ? _('Expand all notebooks') : _('Collapse all notebooks');
+
+	return <button
+		onClick={() => onToggleAllFolders(props.allFoldersCollapsed)}
+		className={`sidebar-header-button -collapseall ${props.hasSubFolders ? '' : '-disabled'}`}
+		title={label}
+		disabled={!props.hasSubFolders}
+	>
+		<i
+			aria-label={label}
+			role='img'
+			className={icon}
+		/>
+	</button>;
+};
+
 const NewFolderButton = () => {
 	// To allow it to be accessed by accessibility tools, the new folder button
 	// is not included in the portion of the list with role='tree'.
-	return <button onClick={onAddFolderButtonClick} className='new-folder-button'>
+	const label = _('New notebook');
+
+	return <button onClick={onAddFolderButtonClick} className='sidebar-header-button -newfolder' title={label}>
 		<i
-			aria-label={_('New notebook')}
+			aria-label={label}
 			role='img'
 			className='fas fa-plus'
 		/>
 	</button>;
 };
 
-const useOnRenderListWrapper = ({ selectedIndex, onKeyDown }: Props) => {
+const useOnRenderListWrapper = (props: Props) => {
 	return useCallback((listItems: React.ReactNode[]) => {
-		const listHasValidSelection = selectedIndex >= 0;
+		const listHasValidSelection = props.selectedIndex >= 0;
 		const allowContainerFocus = !listHasValidSelection;
 		return <>
+			<CollapseExpandAllButton allFoldersCollapsed={props.allFoldersCollapsed} hasSubFolders={props.hasSubFolders}/>
 			<NewFolderButton/>
 			<div
 				role='tree'
 				className='sidebar-list-items-wrapper'
 				tabIndex={allowContainerFocus ? 0 : undefined}
-				onKeyDown={onKeyDown}
+				onKeyDown={props.onKeyDown}
 			>
 				{...listItems}
 			</div>
 		</>;
-	}, [selectedIndex, onKeyDown]);
+	}, [props.selectedIndex, props.onKeyDown, props.allFoldersCollapsed, props.hasSubFolders]);
 };
 
 export default useOnRenderListWrapper;

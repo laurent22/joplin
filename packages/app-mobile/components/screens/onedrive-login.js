@@ -8,9 +8,17 @@ const { ScreenHeader } = require('../ScreenHeader');
 const { reg } = require('@joplin/lib/registry');
 const { _ } = require('@joplin/lib/locale');
 const { BaseScreenComponent } = require('../base-screen');
-const parseUri = require('@joplin/lib/parseUri');
 const { themeStyle } = require('../global-style');
 const shim = require('@joplin/lib/shim').default;
+
+const authCodeFromUrl = (url) => {
+	if (!url) return null;
+	try {
+		return new URL(url).searchParams.get('code');
+	} catch (error) {
+		return null;
+	}
+};
 
 class OneDriveLoginScreenComponent extends BaseScreenComponent {
 	static navigationOptions() {
@@ -58,10 +66,10 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 		// doesn't exist, use this for now. The whole component is completely undocumented
 		// at the moment so it's likely to change.
 		const url = noIdeaWhatThisIs.url;
-		const parsedUrl = parseUri(url);
+		const authCode = authCodeFromUrl(url);
 
-		if (!this.authCode_ && parsedUrl && parsedUrl.queryKey && parsedUrl.queryKey.code) {
-			this.authCode_ = parsedUrl.queryKey.code;
+		if (!this.authCode_ && authCode) {
+			this.authCode_ = authCode;
 
 			try {
 				await reg

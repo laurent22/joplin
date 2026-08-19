@@ -10,16 +10,19 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { fileExtension, friendlySafeFilename, safeFileExtension } from './path-utils';
 import { extractUrls as extractUrlsFromHtml } from '@joplin/utils/html';
 import { extractUrls as extractUrlsFromMarkdown } from '@joplin/utils/markdown';
-const moment = require('moment');
-const { wrapError } = require('./errorUtils');
+import moment from 'moment';
+import { wrapError } from './errorUtils';
 const { enexXmlToHtml } = require('./import-enex-html-gen.js');
 const md5 = require('md5');
 const { Base64Decode } = require('base64-stream');
-const md5File = require('md5-file');
 import * as mime from './mime-utils';
+import type * as FsExtra from 'fs-extra';
 
-// const Promise = require('promise');
-const fs = require('fs-extra');
+let fs_: typeof FsExtra = null;
+const fs = () => {
+	fs_ ??= shim.requireDynamic('fs-extra');
+	return fs_;
+};
 
 function dateToTimestamp(s: string, defaultValue: number = null): number {
 	// Most dates seem to be in this format
@@ -60,9 +63,9 @@ async function decodeBase64File(sourceFilePath: string, destFilePath: string) {
 		// to disk, thus resulting in the calling code to find a
 		// file with size 0.
 
-		const destFile = fs.openSync(destFilePath, 'w');
-		const sourceStream = fs.createReadStream(sourceFilePath);
-		const destStream = fs.createWriteStream(destFile, {
+		const destFile = fs().openSync(destFilePath, 'w');
+		const sourceStream = fs().createReadStream(sourceFilePath);
+		const destStream = fs().createWriteStream(destFilePath, {
 			fd: destFile,
 			autoClose: false,
 		});
@@ -72,29 +75,25 @@ async function decodeBase64File(sourceFilePath: string, destFilePath: string) {
 		// because even if the source has finished sending data, the destination might not have
 		// finished receiving it and writing it to disk.
 		destStream.on('finish', () => {
-			fs.fdatasyncSync(destFile);
-			fs.closeSync(destFile);
+			fs().fdatasyncSync(destFile);
+			fs().closeSync(destFile);
 			resolve(null);
 		});
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		sourceStream.on('error', (error: any) => reject(error));
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		destStream.on('error', (error: any) => reject(error));
+		sourceStream.on('error', (error: Error) => reject(error));
+		destStream.on('error', (error: Error) => reject(error));
 	});
 }
 
-function removeUndefinedProperties(note: NoteEntity) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = {};
+function removeUndefinedProperties<T>(note: T): T {
+	const output: Record<string, unknown> = {};
 	for (const n in note) {
 		if (!note.hasOwnProperty(n)) continue;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const v = (note as any)[n];
+		const v = (note as Record<string, unknown>)[n];
 		if (v === undefined || v === null) continue;
 		output[n] = v;
 	}
-	return output;
+	return output as T;
 }
 
 interface ExtractedResource {
@@ -122,6 +121,7 @@ interface ExtractedNote extends NoteEntity {
 	tags?: string[];
 	title?: string;
 	bodyXml?: string;
+	evernoteId?: string;
 }
 
 // Those are the notes that have been parsed and saved to Joplin. We don't keep
@@ -140,29 +140,33 @@ async function processNoteResource(resource: ExtractedResource) {
 		if (setId) resource.id = md5(Date.now() + Math.random());
 		resource.size = 0;
 		resource.dataFilePath = `${Setting.value('tempDir')}/${resource.id}.empty`;
-		await fs.writeFile(resource.dataFilePath, '');
+		await shim.fsDriver().writeFile(resource.dataFilePath, '');
 	};
 
 	if (!resource.hasData) {
 		// Some resources have no data, go figure, so we need a special case for this.
 		await handleNoDataResource(resource, true);
 	} else {
-		if (resource.dataEncoding === 'base64') {
+		// If encoding is not specified, it defaults to base64.
+		// Source: enex.dtd: <!ATTLIST data encoding (base64) "base64">
+		const dataEncoding = resource.dataEncoding ? resource.dataEncoding : 'base64';
+
+		if (dataEncoding === 'base64') {
 			const decodedFilePath = `${resource.dataFilePath}.decoded`;
 			await decodeBase64File(resource.dataFilePath, decodedFilePath);
 			resource.dataFilePath = decodedFilePath;
-		} else if (resource.dataEncoding) {
-			throw new Error(`Cannot decode resource with encoding: ${resource.dataEncoding}`);
+		} else if (dataEncoding) {
+			throw new Error(`Cannot decode resource with encoding: ${dataEncoding}`);
 		}
 
-		const stats = fs.statSync(resource.dataFilePath);
+		const stats = await shim.fsDriver().stat(resource.dataFilePath);
 		resource.size = stats.size;
 
 		if (!resource.id) {
 			// If no resource ID is present, the resource ID is actually the MD5
 			// of the data. This ID will match the "hash" attribute of the
 			// corresponding <en-media> tag. resourceId = md5(decodedData);
-			resource.id = await md5File(resource.dataFilePath);
+			resource.id = await shim.fsDriver().md5File(resource.dataFilePath);
 		}
 
 		if (!resource.id || !resource.size) {
@@ -183,13 +187,10 @@ async function saveNoteResources(note: ExtractedNote) {
 	for (let i = 0; i < note.resources.length; i++) {
 		const resource = note.resources[i];
 
-		const toSave: ResourceEntity = { ...resource };
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		delete (toSave as any).dataFilePath;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		delete (toSave as any).dataEncoding;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		delete (toSave as any).hasData;
+		const toSave: ResourceEntity & Partial<Pick<ExtractedResource, 'dataFilePath' | 'dataEncoding' | 'hasData'>> = { ...resource };
+		delete toSave.dataFilePath;
+		delete toSave.dataEncoding;
+		delete toSave.hasData;
 		toSave.file_extension = resource.filename ? safeFileExtension(fileExtension(resource.filename)) : '';
 
 		// ENEX resource filenames can contain slashes, which may confuse other
@@ -203,7 +204,7 @@ async function saveNoteResources(note: ExtractedNote) {
 		const existingResource = await Resource.load(toSave.id);
 		if (existingResource) continue;
 
-		await fs.move(resource.dataFilePath, Resource.fullPath(toSave), { overwrite: true });
+		await shim.fsDriver().move(resource.dataFilePath, Resource.fullPath(toSave));
 		await Resource.save(toSave, { isNew: true });
 		resourcesCreated++;
 	}
@@ -225,18 +226,24 @@ async function saveNoteTags(note: ExtractedNote) {
 	return notesTagged;
 }
 
+export interface ImportProgressState {
+	loaded: number;
+	created: number;
+	updated: number;
+	skipped: number;
+	resourcesCreated: number;
+	notesTagged: number;
+}
+
 export interface ImportOptions {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onProgress?: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onError?: Function;
+	onProgress?: (progressState: ImportProgressState)=> void;
+	onError?: (error: Error)=> void;
 	outputFormat?: string;
 	batchSize?: number;
 }
 
 async function saveNoteToStorage(note: ExtractedNote) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	note = Note.filter(note as any);
+	note = Note.filter(note) as ExtractedNote;
 
 	const result = {
 		resourcesCreated: 0,
@@ -259,8 +266,7 @@ async function saveNoteToStorage(note: ExtractedNote) {
 
 interface Node {
 	name: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	attributes: Record<string, any>;
+	attributes: Record<string, string>;
 }
 
 interface NoteResourceRecognition {
@@ -303,30 +309,38 @@ const preProcessFile = async (filePath: string): Promise<string> => {
 };
 
 const isEvernoteUrl = (url: string) => {
-	return url.toLowerCase().startsWith('evernote://');
+	url = url.toLowerCase();
+	return url.startsWith('evernote://') || url.startsWith('https://share.evernote.com/note/');
 };
 
-const restoreNoteLinks = async (notes: SavedNote[], noteTitlesToIds: Record<string, string[]>, importOptions: ImportOptions) => {
+type NoteId = string;
+type OnLoadNoteIdsByTitle = (title: string)=> NoteId[]|Promise<NoteId[]>;
+
+export const restoreEnexNoteLinks = async (notes: AsyncIterable<SavedNote>, noteTitlesToIds: OnLoadNoteIdsByTitle, importOptions: ImportOptions) => {
 	// --------------------------------------------------------
 	// Convert the Evernote note links to Joplin note links. If
 	// we don't find a matching note, or if there are multiple
 	// matching notes, we leave the Evernote links as is.
 	// --------------------------------------------------------
 
-	for (const note of notes) {
+	const noteIdsWithUnresolvedLinks = [];
+	for await (const note of notes) {
 		const links = importOptions.outputFormat === 'html' ?
 			extractUrlsFromHtml(note.body) :
 			extractUrlsFromMarkdown(note.body);
 
 		let noteChanged = false;
+		let hasUnresolvedLink = false;
 
 		for (const link of links) {
 			if (!isEvernoteUrl(link.url)) continue;
 
-			const matchingNoteIds = noteTitlesToIds[link.title];
-			if (matchingNoteIds && matchingNoteIds.length === 1) {
+			const matchingNoteIds = await noteTitlesToIds(link.title);
+			if (matchingNoteIds.length === 1) {
 				note.body = note.body.replace(link.url, `:/${matchingNoteIds[0]}`);
 				noteChanged = true;
+			} else {
+				hasUnresolvedLink = true;
 			}
 		}
 
@@ -339,22 +353,27 @@ const restoreNoteLinks = async (notes: SavedNote[], noteTitlesToIds: Record<stri
 				autoTimestamp: false,
 			});
 		}
+
+		if (hasUnresolvedLink) {
+			noteIdsWithUnresolvedLinks.push(note.id);
+		}
 	}
+
+	return { noteIdsWithUnresolvedLinks };
 };
 
 interface ParseNotesResult {
 	savedNotes: SavedNote[];
-	noteTitlesToIds: Record<string, string[]>;
+	noteTitlesToIds: Map<string, string[]>;
 }
 
 const parseNotes = async (parentFolderId: string, filePath: string, importOptions: ImportOptions = null): Promise<ParseNotesResult> => {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	function handleSaxStreamEvent(fn: Function) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return function(...args: any[]) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- sax event handlers receive heterogeneous payloads (Node, Tag, string, Error); wrapped here so any throw is funnelled to onError
+	function handleSaxStreamEvent(fn: (...args: any[])=> void) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See above
+		return function(this: { _parser?: unknown }, ...args: any[]) {
 			// Pass the parser to the wrapped function for debugging purposes
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			if (this._parser) (fn as any)._parser = this._parser;
+			if (this._parser) (fn as unknown as { _parser?: unknown })._parser = this._parser;
 
 			try {
 				fn.call(this, ...args);
@@ -381,7 +400,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 			notesTagged: 0,
 		};
 
-		const stream = fs.createReadStream(fileToProcess);
+		const stream = fs().createReadStream(fileToProcess);
 
 		const options = {};
 		const strict = true;
@@ -389,21 +408,18 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 
 		const nodes: Node[] = []; // LIFO list of nodes so that we know in which node we are in the onText event
 		let note: ExtractedNote = null;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let noteAttributes: Record<string, any> = null;
+		let noteAttributes: Record<string, string> = null;
 		let noteResource: ExtractedResource = null;
 		let noteTask: ExtractedTask = null;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let noteResourceAttributes: Record<string, any> = null;
+		let noteResourceAttributes: Record<string, string> = null;
 		let noteResourceRecognition: NoteResourceRecognition = null;
 		const notes: ExtractedNote[] = [];
 		let processingNotes = false;
 		const savedNotes: SavedNote[] = [];
 		const createdNoteIds: string[] = [];
-		const noteTitlesToIds: Record<string, string[]> = {};
+		const noteTitlesToIds = new Map<string, string[]>();
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const createErrorWithNoteTitle = (fnThis: any, error: any) => {
+		const createErrorWithNoteTitle = (fnThis: { _parser?: { line: number; column: number } } | null, error: Error) => {
 			const line = [];
 
 			const parser = fnThis ? fnThis._parser : null;
@@ -422,9 +438,8 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 			return error;
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		stream.on('error', function(error: any) {
-			importOptions.onError(createErrorWithNoteTitle(this, error));
+		stream.on('error', function(error: Error) {
+			importOptions.onError(createErrorWithNoteTitle(this as { _parser?: { line: number; column: number } }, error));
 		});
 
 		function currentNodeName() {
@@ -495,8 +510,8 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 					const result = await saveNoteToStorage(note);
 
 					createdNoteIds.push(note.id);
-					if (!noteTitlesToIds[note.title]) noteTitlesToIds[note.title] = [];
-					noteTitlesToIds[note.title].push(note.id);
+					if (!noteTitlesToIds.has(note.title)) noteTitlesToIds.set(note.title, []);
+					noteTitlesToIds.get(note.title).push(note.id);
 					savedNotes.push({
 						id: note.id,
 						body: note.body,
@@ -517,9 +532,8 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 			return true;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		saxStream.on('error', function(error: any) {
-			importOptions.onError(createErrorWithNoteTitle(this, error));
+		saxStream.on('error', function(error: Error) {
+			importOptions.onError(createErrorWithNoteTitle(this as { _parser?: { line: number; column: number } }, error));
 
 			// We need to reject the promise here, or parsing will get stuck
 			// ("end" handler will never be called).
@@ -547,12 +561,11 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 
 					noteResource.hasData = true;
 
-					fs.appendFileSync(noteResource.dataFilePath, text);
+					fs().appendFileSync(noteResource.dataFilePath, text);
 				} else {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					if (!(n in noteResource)) (noteResource as any)[n] = '';
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					(noteResource as any)[n] += text;
+					const r = noteResource as unknown as Record<string, string>;
+					if (!(n in r)) r[n] = '';
+					r[n] += text;
 				}
 			} else if (noteTask) {
 				if (n === 'title') {
@@ -611,8 +624,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 			}
 		}));
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		saxStream.on('cdata', handleSaxStreamEvent((data: any) => {
+		saxStream.on('cdata', handleSaxStreamEvent((data: string) => {
 			const n = currentNodeName();
 
 			if (noteResourceRecognition) {
@@ -638,7 +650,7 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 				if (notes.length >= importOptions.batchSize) {
 					// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
 					processNotes().catch(error => {
-						importOptions.onError(createErrorWithNoteTitle(this, error));
+						importOptions.onError(createErrorWithNoteTitle(this as { _parser?: { line: number; column: number } }, error));
 					});
 				}
 				note = null;
@@ -650,12 +662,11 @@ const parseNotes = async (parentFolderId: string, filePath: string, importOption
 				if (noteResourceAttributes['source-url']) noteResource.sourceUrl = noteResourceAttributes['source-url'];
 				noteResourceAttributes = null;
 			} else if (n === 'note-attributes') {
-				note.latitude = noteAttributes.latitude;
-				note.longitude = noteAttributes.longitude;
-				note.altitude = noteAttributes.altitude;
+				note.latitude = noteAttributes.latitude as unknown as number;
+				note.longitude = noteAttributes.longitude as unknown as number;
+				note.altitude = noteAttributes.altitude as unknown as number;
 				note.author = noteAttributes.author ? noteAttributes.author.trim() : '';
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				note.is_todo = noteAttributes['reminder-order'] !== '0' && !!noteAttributes['reminder-order'] as any;
+				note.is_todo = (noteAttributes['reminder-order'] !== '0' && !!noteAttributes['reminder-order']) ? 1 : 0;
 				note.todo_due = dateToTimestamp(noteAttributes['reminder-time'], 0);
 				note.todo_completed = dateToTimestamp(noteAttributes['reminder-done-time'], 0);
 				note.order = dateToTimestamp(noteAttributes['reminder-order'], 0);
@@ -726,5 +737,18 @@ export default async function importEnex(parentFolderId: string, filePath: strin
 	if (!('batchSize' in importOptions)) importOptions.batchSize = 10;
 
 	const result = await parseNotes(parentFolderId, filePath, importOptions);
-	await restoreNoteLinks(result.savedNotes, result.noteTitlesToIds, importOptions);
+
+	const noteIterator = (async function*() {
+		for (const note of result.savedNotes) {
+			yield note;
+		}
+	})();
+	const titleToIds = (title: string) => result.noteTitlesToIds.get(title) ?? [];
+
+	const { noteIdsWithUnresolvedLinks } = await restoreEnexNoteLinks(
+		noteIterator,
+		titleToIds,
+		importOptions,
+	);
+	return { noteIdsWithUnresolvedLinks, parentFolderId };
 }

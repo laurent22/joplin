@@ -22,7 +22,7 @@ const pathContainsUnsupportedProvider = (path: string, unsupportedProviders: str
 export const checkProviderIsSupported = (path: string): void => {
 	if (Setting.value('sync.allowUnsupportedProviders') === 1) return;
 
-	const unsupportedProviders = ['pcloud', 'jianguoyun'];
+	const unsupportedProviders = ['jianguoyun'];
 	for (const p of unsupportedProviders) {
 		if (pathContainsUnsupportedProvider(path, unsupportedProviders)) {
 			throw new Error(_('The WebDAV implementation of %s is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.', p));

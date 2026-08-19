@@ -24,7 +24,7 @@ var rules = {}
 rules.paragraph = {
   filter: 'p',
 
-  replacement: function (content) {
+  replacement: function (content, node, options) {
     // If the line starts with a nonbreaking space, replace it. By default, the
     // markdown renderer removes leading non-HTML-escaped nonbreaking spaces. However,
     // because the space is nonbreaking, we want to keep it.
@@ -36,6 +36,18 @@ rules.paragraph = {
     // take up by default no space. Output nothing.
     if (content === '') {
       return '';
+    }
+
+    // When tightLists is enabled, paragraphs inside list items should not add
+    // extra blank lines, but only if the list item contains a single paragraph
+    if (options.tightLists && node.parentNode && node.parentNode.nodeName === 'LI') {
+      const parentLi = node.parentNode;
+      const paragraphs = Array.from(parentLi.childNodes).filter(
+        child => child.nodeName === 'P'
+      );
+      if (paragraphs.length === 1) {
+        return content;
+      }
     }
 
     return '\n\n' + content + '\n\n'
@@ -103,6 +115,11 @@ rules.insert = {
     //
     // https://github.com/laurent22/joplin/issues/5480
     if (node.nodeName === 'INS') return true;
+    if (node.nodeName === 'A' && (
+      node.getAttribute('href') ||
+      node.getAttribute('name') ||
+      node.getAttribute('id')
+    )) return false;
     return getStyleProp(node, 'text-decoration') === 'underline';
   },
 
@@ -177,6 +194,27 @@ rules.resourcePlaceholder = {
   }
 }
 
+// Math renderers often include:
+// - MathML
+// - Stylized display HTML for browsers that don't suppport MathML.
+//
+// Joplin usually can't properly import the display HTML (and the MathML can usually
+// be imported separately). Skip it:
+rules.ignoreMathDisplay = {
+  filter: function (node) {
+    const hidden = node.getAttribute('aria-hidden') === 'true';
+    const hasClass = (className) => node.classList.contains(className);
+
+    const isWikipediaMathFallback = node.nodeName === 'IMG' && (
+      hasClass('mwe-math-fallback-image-display') || hasClass('mwe-math-fallback-image-inline')
+    ) && hidden;
+    const isKatexDisplay = node.nodeName === 'SPAN' && hasClass('katex-html') && hidden;
+    return isWikipediaMathFallback || isKatexDisplay;
+  },
+
+  replacement: () => '',
+};
+
 // ==============================
 // END Joplin format support
 // ==============================
@@ -217,6 +255,25 @@ function isOrderedList(e) {
   if (e.nodeName === 'OL') return true;
   return e.style && e.style.listStyleType === 'decimal';
 }
+
+// `content` should be the part of the item after the list marker (e.g. "[ ] test" in "- [ ] test").
+const removeListItemLeadingNewlines = (content) => {
+  const itemStartRegex = /(^\[[Xx ]\]|^)([ \n]+)/;
+  const startingSpaceMatch = content.match(itemStartRegex);
+  if (!startingSpaceMatch) return content;
+
+  const checkbox = startingSpaceMatch[1];
+  const space = startingSpaceMatch[2];
+  if (space.includes('\n')) {
+    content = content.replace(itemStartRegex, `${checkbox} `);
+  }
+
+  return content;
+};
+
+const isEmptyTaskListItem = (content) => {
+  return content.match(/^\[[xX \][ \n\t]*$/);
+};
 
 rules.listItem = {
   filter: 'li',
@@ -266,7 +323,16 @@ rules.listItem = {
           prefix = indexStr + '.' + ' '.repeat(3 - indexStr.length)
         }
       }
-    } 
+    }
+
+    // Prevent the item from starting with a blank line (which breaks rendering)
+    content = removeListItemLeadingNewlines(content);
+
+    // Prevent the item from being empty (which also prevents the item from rendering as a list
+    // item).
+    if (isEmptyTaskListItem(content)) {
+      content += '&nbsp;';
+    }
 
     return (
       prefix + content + (node.nextSibling && !/\n$/.test(content) ? '\n' : '')
@@ -357,12 +423,13 @@ function filterLinkHref (href) {
   return href
 }
 
-function filterImageTitle(title) {
+function filterTitleAttribute(title) {
   if (!title) return ''
   title = title.trim()
   title = title.replace(/\"/g, '&quot;');
   title = title.replace(/\(/g, '&#40;');
   title = title.replace(/\)/g, '&#41;');
+  title = title.replace(/\n{2,}/g, '\n');
   return title
 }
 
@@ -403,7 +470,7 @@ rules.inlineLink = {
     if (!href) {
       return getNamedAnchorFromLink(node, options) + filterLinkContent(content)
     } else {
-      var title = node.title && node.title !== href ? ' "' + node.title + '"' : ''
+      var title = node.title && node.title !== href ? ' "' + filterTitleAttribute(node.title) + '"' : ''
       if (!href) title = ''
       let output = getNamedAnchorFromLink(node, options) + '[' + filterLinkContent(content) + '](' + href + title + ')'
 
@@ -551,7 +618,7 @@ function imageMarkdownFromAttributes(attributes) {
   var alt = attributes.alt || ''
   var src = filterLinkHref(attributes.src || '')
   var title = attributes.title || ''
-  var titlePart = title ? ' "' + filterImageTitle(title) + '"' : ''
+  var titlePart = title ? ' "' + filterTitleAttribute(title) + '"' : ''
   return src ? '![' + alt.replace(/([[\]])/g, '\\$1') + ']' + '(' + src + titlePart + ')' : ''
 }
 
@@ -561,12 +628,45 @@ function imageMarkdownFromNode(node, options = null) {
   }, options);
 
   if (options.preserveImageTagsWithSize && (node.getAttribute('width') || node.getAttribute('height'))) {
-    return node.outerHTML;
+    let html = node.outerHTML;
+
+    // To prevent markup immediately after the image from being interpreted as HTML, a closing tag
+    // is sometimes necessary.
+    const needsClosingTag = () => {
+      const parent = node.parentElement;
+      if (!parent || parent.nodeName !== 'LI') return false;
+      const hasClosingTag = html.match(/<\/[a-z]+\/>$/ig);
+      if (hasClosingTag) {
+        return false;
+      }
+
+      const allChildren = [...parent.childNodes];
+      const nonEmptyChildren = allChildren.filter(item => {
+        // Even if surrounded by #text nodes that only contain whitespace, Markdown after
+        // an <img> can still be incorrectly interpreted as HTML. Only non-empty #texts seem
+        // to prevent this.
+        return item.nodeName !== '#text' || item.textContent.trim() !== '';
+      });
+
+      const imageIndex = nonEmptyChildren.indexOf(node);
+      const hasNextSibling = imageIndex + 1 < nonEmptyChildren.length;
+      const nextSiblingName = hasNextSibling ? (
+        nonEmptyChildren[imageIndex + 1].nodeName
+      ) : null;
+
+      const nextSiblingIsNewLine = nextSiblingName === 'UL' || nextSiblingName === 'OL' || nextSiblingName === 'BR';
+      return imageIndex === 0 && nextSiblingIsNewLine;
+    };
+
+    if (needsClosingTag()) {
+      html = html.replace(/[/]?>$/, `></${node.nodeName.toLowerCase()}>`);
+    }
+    return html;
   }
 
   return imageMarkdownFromAttributes({
     alt: node.alt,
-    src: node.getAttribute('src'),
+    src: node.getAttribute('src') || node.getAttribute('data-src'),
     title: node.title,
   });
 }
@@ -628,7 +728,7 @@ rules.picture = {
 
 function findFirstDescendant(node, byType, name) {
   for (const childNode of node.childNodes) {
-    if (byType === 'class' && childNode.classList.contains(name)) return childNode;
+    if (byType === 'class' && childNode.classList && childNode.classList.contains(name)) return childNode;
     if (byType === 'nodeName' && childNode.nodeName === name) return childNode;
 
     const sub = findFirstDescendant(childNode, byType, name);
@@ -713,6 +813,35 @@ rules.mathjaxScriptBlock = {
 // ===============================================================================
 
 // ===============================================================================
+// MathML support (Wikipedia & KaTeX math)
+// ===============================================================================
+
+// Returns the contents of a <semantics><annotation>...</annotation></semantics> within
+// a math block.
+const getSourceText = (mathNode) => {
+  const semantics = findFirstDescendant(mathNode, 'nodeName', 'semantics');
+  if (!semantics) return '';
+
+  const annotation = findFirstDescendant(semantics, 'nodeName', 'annotation');
+  if (!annotation) return '';
+  return annotation.textContent;
+};
+
+rules.mathMlScriptBlock = {
+  filter: function (node) {
+    return node.nodeName === 'math' && !!getSourceText(node);
+  },
+
+  escapeContent: function() {
+    return false;
+  },
+
+  replacement: function (_content, node, _options) {
+    return '$' + getSourceText(node) + '$';
+  }
+};
+
+// ===============================================================================
 // Joplin "noMdConv" support
 // 
 // Tags that have the class "jop-noMdConv" are not converted to Markdown
@@ -752,7 +881,7 @@ function joplinEditableBlockInfo(node) {
   let sourceNode = null;
   let isInline = false;
   for (const childNode of node.childNodes) {
-    if (childNode.classList.contains('joplin-source')) {
+    if (childNode.classList && childNode.classList.contains('joplin-source')) {
       sourceNode = childNode;
       break;
     }
@@ -803,8 +932,12 @@ function joplinCheckboxInfo(liNode) {
     };
   }
 
+  // Should handle both <ul class='joplin-checklist'><li>...</li></ul>
+  // and <ul><li class='joplin-checklist-item'>...</li></ul>. The second is present
+  // in certain types of imported notes.
   const parentChecklist = findParent(liNode, 'class', 'joplin-checklist');
-  if (parentChecklist) {
+  const currentChecklist = liNode.classList.contains('joplin-checklist-item');
+  if (parentChecklist || currentChecklist) {
     return {
       checked: !!liNode.classList && liNode.classList.contains('checked'),
       renderingType: 2,

@@ -1,0 +1,19 @@
+.sso-login-screen {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .container {
+        padding: var(--joplin-font-size);
+        height: inherit;
+    
+        ol > li {
+            margin-bottom: var(--joplin-margin);
+
+            input {
+                width: 100px;
+                margin-left: var(--joplin-margin);
+            }
+        }
+    }
+}

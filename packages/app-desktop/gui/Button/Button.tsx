@@ -1,9 +1,50 @@
 import * as React from 'react';
-const styled = require('styled-components').default;
+import styled from 'styled-components';
 const { space } = require('styled-system');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-type StyleProps = any;
+type SpaceValue = number | string;
+// The props for styled-system's space
+interface SpaceProps {
+	m?: SpaceValue;
+	mt?: SpaceValue;
+	mr?: SpaceValue;
+	mb?: SpaceValue;
+	ml?: SpaceValue;
+	mx?: SpaceValue;
+	my?: SpaceValue;
+	p?: SpaceValue;
+	pt?: SpaceValue;
+	pr?: SpaceValue;
+	pb?: SpaceValue;
+	pl?: SpaceValue;
+	px?: SpaceValue;
+	py?: SpaceValue;
+}
+
+interface StyleProps {
+	theme: {
+		toolbarIconSize: number;
+		backgroundColor3: string;
+		backgroundColor4: string;
+		backgroundColor5: string;
+		backgroundColorActive3: string;
+		backgroundColorActive4: string;
+		backgroundColorActive5: string;
+		backgroundColorHover4: string;
+		backgroundColorHover5: string;
+		backgroundColorHoverDim3: string;
+		borderColor4: string;
+		color: string;
+		color2: string;
+		color3: string;
+		color4: string;
+		color5: string;
+		colorActive2: string;
+		colorHover2: string;
+		warningBackgroundColor: string;
+	};
+	animation?: string;
+}
 
 export enum ButtonLevel {
 	Primary = 'primary',
@@ -18,27 +59,21 @@ export enum ButtonSize {
 	Normal = 2,
 }
 
-interface Props {
+type ReactButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+interface Props extends Omit<ReactButtonProps, 'onClick'>, SpaceProps {
 	title?: string;
 	iconName?: string;
 	level?: ButtonLevel;
 	iconLabel?: string;
-	className?: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onClick?: Function;
+	onClick?: ()=> void;
 	color?: string;
 	iconAnimation?: string;
 	tooltip?: string;
 	disabled?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-	style?: any;
 	size?: ButtonSize;
 	isSquare?: boolean;
 	iconOnly?: boolean;
 	fontSize?: number;
-
-	'aria-controls'?: string;
-	'aria-expanded'?: string;
 }
 
 const StyledTitle = styled.span`
@@ -78,16 +113,17 @@ const StyledButtonBase = styled.button`
 	${(props: Props) => props.fontSize ? `font-size: ${props.fontSize}px;` : ''}
 `;
 
-const StyledIcon = styled(styled.span(space))`
-	font-size: ${(props: StyleProps) => props.theme.toolbarIconSize}px;
-	${(props: StyleProps) => props.animation ? `animation: ${props.animation}` : ''};
+const StyledIcon = styled.span<SpaceProps & StyleProps>`
+	${space}
+	font-size: ${(props) => props.theme.toolbarIconSize}px;
+	${(props) => props.animation ? `animation: ${props.animation}` : ''};
 `;
 
 const StyledButtonPrimary = styled(StyledButtonBase)`
 	border: none;
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor5};
 
-	${(props: StyleProps) => props.disabled} {
+	&:not(:disabled) {
 		&:hover {
 			background-color: ${(props: StyleProps) => props.theme.backgroundColorHover5};
 		}
@@ -110,7 +146,7 @@ const StyledButtonSecondary = styled(StyledButtonBase)`
 	border: 1px solid ${(props: StyleProps) => props.theme.borderColor4};
 	background-color: ${(props: StyleProps) => props.theme.backgroundColor4};
 
-	${(props: StyleProps) => props.disabled} {
+	&:not(:disabled) {
 		&:hover {
 			background-color: ${(props: StyleProps) => props.theme.backgroundColorHover4};
 		}
@@ -215,54 +251,51 @@ function buttonClass(level: ButtonLevel) {
 	return StyledButtonSecondary;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied;
-const Button = React.forwardRef((props: Props, ref: any) => {
-	const iconOnly = props.iconName && !props.title;
+const Button = React.forwardRef(({
+	iconName, iconLabel, iconAnimation, color, title, level, fontSize, isSquare, tooltip, disabled, onClick: propsOnClick, ...unusedProps
+}: Props, ref: React.Ref<HTMLButtonElement>) => {
+	const iconOnly = iconName && !title;
 
-	const StyledButton = buttonClass(props.level);
+	const StyledButton = buttonClass(level);
 
 	function renderIcon() {
-		if (!props.iconName) return null;
+		if (!iconName) return null;
 		return <StyledIcon
-			aria-label={props.iconLabel ?? undefined}
-			aria-hidden={!props.iconLabel}
-			animation={props.iconAnimation}
+			aria-label={iconLabel ?? undefined}
+			aria-hidden={!iconLabel}
+			animation={iconAnimation}
 			mr={iconOnly ? '0' : '6px'}
-			color={props.color}
-			className={props.iconName}
+			color={color}
+			className={`${iconName} icon`}
 			role='img'
 		/>;
 	}
 
 	function renderTitle() {
-		if (!props.title) return null;
-		return <StyledTitle color={props.color}>{props.title}</StyledTitle>;
+		if (!title) return null;
+		return <StyledTitle color={color}>{title}</StyledTitle>;
 	}
 
 	function onClick() {
-		if (props.disabled) return;
-		props.onClick();
+		if (disabled) return;
+		propsOnClick();
 	}
 
 	return (
 		<StyledButton
 			ref={ref}
-			fontSize={props.fontSize}
-			isSquare={props.isSquare}
-			size={props.size}
-			style={props.style}
-			disabled={props.disabled}
-			title={props.tooltip}
-			className={props.className}
+			fontSize={fontSize}
+			isSquare={isSquare}
+			disabled={disabled}
+			title={tooltip}
 			iconOnly={iconOnly}
 			onClick={onClick}
 
 			// When there's no title, the button needs a label. In this case, fall back
 			// to the tooltip.
-			aria-label={props.title ? undefined : props.tooltip}
-			aria-disabled={props.disabled}
-			aria-expanded={props['aria-expanded']}
-			aria-controls={props['aria-controls']}
+			aria-label={title ? undefined : tooltip}
+			aria-disabled={disabled}
+			{...unusedProps}
 		>
 			{renderIcon()}
 			{renderTitle()}

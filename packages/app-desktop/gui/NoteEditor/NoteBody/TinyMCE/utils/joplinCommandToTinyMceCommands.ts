@@ -1,7 +1,6 @@
 export interface TinyMceCommand {
 	name: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	value?: any;
+	value?: string;
 	ui?: boolean;
 }
 
@@ -22,4 +21,8 @@ export const joplinCommandToTinyMceCommands: JoplinCommandToTinyMceCommands = {
 	'search': { name: 'SearchReplace' },
 	'attachFile': { name: 'joplinAttach' },
 	'insertDateTime': true,
+	'textCopy': true,
+	'textCut': true,
+	'textPaste': true,
+	'textSelectAll': true,
 };

@@ -1,13 +1,15 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 
-const { connect } = require('react-redux');
-const { themeStyle } = require('@joplin/lib/theme');
+import { connect } from 'react-redux';
+import { themeStyle } from '@joplin/lib/theme';
 import bridge from '../services/bridge';
-const prettyBytes = require('pretty-bytes');
+import prettyBytes = require('pretty-bytes');
 import Resource from '@joplin/lib/models/Resource';
 import { LoadOptions } from '@joplin/lib/models/utils/types';
+import { AppState } from '../app.reducer';
 
 interface Style {
 	width: number;
@@ -17,8 +19,7 @@ interface Style {
 interface Props {
 	themeId: number;
 	style: Style;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 }
 
 interface InnerResource {
@@ -38,12 +39,9 @@ interface State {
 interface ResourceTable {
 	resources: InnerResource[];
 	sorting: ActiveSorting;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	onResourceClick: (resource: InnerResource)=> any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	onResourceDelete: (resource: InnerResource)=> any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	onToggleSorting: (order: SortingOrder)=> any;
+	onResourceClick: (resource: InnerResource)=> void;
+	onResourceDelete: (resource: InnerResource)=> void;
+	onToggleSorting: (order: SortingOrder)=> void;
 	filter: string;
 	themeId: number;
 	style: Style;
@@ -60,7 +58,7 @@ interface ActiveSorting {
 const ResourceTableComp = (props: ResourceTable) => {
 	const theme = themeStyle(props.themeId);
 
-	const titleCellStyle = {
+	const titleCellStyle: React.CSSProperties = {
 		...theme.textStyle,
 		textOverflow: 'ellipsis',
 		overflowX: 'hidden',
@@ -69,14 +67,14 @@ const ResourceTableComp = (props: ResourceTable) => {
 		whiteSpace: 'nowrap',
 	};
 
-	const cellStyle = {
+	const cellStyle: React.CSSProperties = {
 		...theme.textStyle,
 		whiteSpace: 'nowrap',
 		color: theme.colorFaded,
 		width: 1,
 	};
 
-	const headerStyle = {
+	const headerStyle: React.CSSProperties = {
 		...theme.textStyle,
 		whiteSpace: 'nowrap',
 		width: 1,
@@ -84,7 +82,13 @@ const ResourceTableComp = (props: ResourceTable) => {
 	};
 
 	const filteredResources = props.resources.filter(
-		(resource: InnerResource) => !props.filter || resource.title?.includes(props.filter) || resource.id.includes(props.filter),
+		(resource: InnerResource) => {
+			if (props.filter) {
+				const filterLowerCase = props.filter.toLowerCase();
+				return resource.title?.toLowerCase().includes(filterLowerCase) || resource.id.toLowerCase().includes(filterLowerCase);
+			}
+			return true;
+		},
 	);
 
 	const renderSortableHeader = (title: string, order: SortingOrder) => {
@@ -116,7 +120,7 @@ const ResourceTableComp = (props: ResourceTable) => {
 			<tbody>
 				{filteredResources.map((resource: InnerResource, index: number) =>
 					<tr key={index}>
-						<td style={titleCellStyle} className="titleCell">
+						<td id={`title-${resource.id}`} style={titleCellStyle} className="titleCell">
 							<a
 								style={{ color: theme.urlColor }}
 								href="#"
@@ -126,7 +130,14 @@ const ResourceTableComp = (props: ResourceTable) => {
 						<td style={cellStyle} className="dataCell">{prettyBytes(resource.size)}</td>
 						<td style={cellStyle} className="dataCell">{resource.id}</td>
 						<td style={cellStyle} className="dataCell">
-							<button style={theme.buttonStyle} onClick={() => props.onResourceDelete(resource)}>{_('Delete')}</button>
+							<button
+								id={`delete-${resource.id}`}
+								aria-labelledby={`delete-${resource.id} title-${resource.id}`}
+								style={theme.buttonStyle}
+								onClick={() => props.onResourceDelete(resource)}
+							>
+								{_('Delete')}
+							</button>
 						</td>
 					</tr>,
 				)}
@@ -269,8 +280,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 		const style = this.props.style;
 		const theme = themeStyle(this.props.themeId);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const rootStyle: any = {
+		const rootStyle: React.CSSProperties & { height?: number; width?: number } = {
 			...style,
 			overflowY: 'scroll',
 			color: theme.color,
@@ -290,7 +300,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 					<div style={{ ...theme.notificationBox, marginBottom: 10 }}>{
 						_('This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.')
 					}</div>
-					<div style={{ float: 'right' }}>
+					<p style={{ float: 'left', paddingRight: 10 }}>
 						<input
 							style={theme.inputStyle}
 							type="search"
@@ -298,7 +308,7 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 							onChange={this.onFilterUpdate}
 							placeholder={_('Search...')}
 						/>
-					</div>
+					</p>
 					{this.state.isLoading && <div>{_('Please wait...')}</div>}
 					{!this.state.isLoading && <div>
 						{!this.state.resources && <div>
@@ -329,11 +339,10 @@ class ResourceScreenComponent extends React.Component<Props, State> {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: AppState) => ({
 	themeId: state.settings.theme,
 });
 
 const ResourceScreen = connect(mapStateToProps)(ResourceScreenComponent);
 
-module.exports = { ResourceScreen };
+export default ResourceScreen;

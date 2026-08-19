@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, MutableRefObject, useCallback } from 'react';
+import { useEffect, useRef, useState, MutableRefObject, useCallback, CSSProperties } from 'react';
 import * as React from 'react';
 import useIsVisible from './hooks/useIsVisible';
 import useVisibleOnSelect, { VisibleOnSelect } from './hooks/useVisibleOnSelect';
@@ -121,8 +121,7 @@ export default function Page(props: PageProps) {
 		if (props.onClick) props.onClick(props.pageNo);
 	}, [props.onClick, props.pageNo]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	let style: any = {};
+	let style: CSSProperties = {};
 	if (props.scaledSize) {
 		style = {
 			...style,

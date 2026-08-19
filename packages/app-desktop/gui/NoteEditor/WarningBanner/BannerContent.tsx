@@ -5,7 +5,8 @@ interface Props {
 	children: React.ReactNode;
 	acceptMessage: string;
 	onAccept: ()=> void;
-	onDismiss: ()=> void;
+	onDismiss?: ()=> void;
+	dismissMessage?: string;
 	visible: boolean;
 }
 
@@ -17,7 +18,7 @@ const BannerContent: React.FC<Props> = props => {
 	return <div className='warning-banner'>
 		{props.children}
 		&nbsp;&nbsp;<a onClick={props.onAccept} className='warning-banner-link' href="#">[ {props.acceptMessage} ]</a>
-		&nbsp;&nbsp;<a onClick={props.onDismiss} className='warning-banner-link' href="#">[ {_('Dismiss')} ]</a>
+		&nbsp;&nbsp;{ props.onDismiss ? <a onClick={props.onDismiss} className='warning-banner-link' href="#">[ {props.dismissMessage ?? _('Dismiss')} ]</a> : null }
 	</div>;
 };
 

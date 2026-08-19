@@ -24,6 +24,10 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 
+	> .toolbar-icon {
+		font-size: 16px;
+	}
+
 	&.-has-title {
 		width: auto;
 		max-width: unset;

@@ -1,4 +1,4 @@
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItem, makeTempFileWithContent, makeNoteSerializedBody, createItemTree, expectHttpError, createNote, expectNoHttpError, getItem } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItem, makeTempFileWithContent, createItemTree, expectHttpError, createNote, expectNoHttpError, getItem, deleteItem, createBaseAppContext } from '../../utils/testing/testUtils';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { deleteApi, getApi, putApi } from '../../utils/testing/apiUtils';
@@ -8,6 +8,7 @@ import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../../utils/joplinUtils';
 import { ErrorForbidden, ErrorPayloadTooLarge } from '../../utils/errors';
 import { PaginatedResults } from '../../models/utils/pagination';
+import { makeNoteSerializedBody } from '../../utils/testing/serializedItems';
 
 describe('api/items', () => {
 
@@ -83,8 +84,7 @@ describe('api/items', () => {
 	test('should delete an item', async () => {
 		const { user, session } = await createUserAndSession(1, true);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const tree: any = {
+		const tree: Record<string, Record<string, null>> = {
 			'000000000000000000000000000000F1': {
 				'00000000000000000000000000000001': null,
 			},
@@ -126,6 +126,23 @@ describe('api/items', () => {
 		expect(ids.sort()).toEqual(['000000000000000000000000000000F2', '00000000000000000000000000000002'].sort());
 	});
 
+	test('delete should not error if an item does not exist', async () => {
+		const { user, session } = await createUserAndSession(1, true);
+
+		const tree = {
+			'000000000000000000000000000000F1': { },
+		};
+
+		const itemModel = models().item();
+
+		await createItemTree(user.id, '', tree);
+		await deleteApi(session.id, 'items/root:/12345600000000000000000000000000.md:');
+
+		// Should not have deleted the folder
+		expect((await itemModel.all()).length).toBe(1);
+		expect((await itemModel.all())[0].jop_id).toBe('000000000000000000000000000000F1');
+	});
+
 	test('should get back the serialized note', async () => {
 		const { session } = await createUserAndSession(1, true);
 
@@ -155,8 +172,7 @@ describe('api/items', () => {
 	test('should batch upload items', async () => {
 		const { session: session1 } = await createUserAndSession(1, false);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const result: PaginatedResults<any> = await putApi(session1.id, 'batch_items', {
+		const result: PaginatedResults<unknown> = await putApi(session1.id, 'batch_items', {
 			items: [
 				{
 					name: '00000000000000000000000000000001.md',
@@ -179,8 +195,7 @@ describe('api/items', () => {
 		const note1 = makeNoteSerializedBody({ id: '00000000000000000000000000000001' });
 		await models().user().save({ id: user1.id, max_item_size: note1.length });
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const result: PaginatedResults<any> = await putApi(session1.id, 'batch_items', {
+		const result: PaginatedResults<unknown> = await putApi(session1.id, 'batch_items', {
 			items: [
 				{
 					name: '00000000000000000000000000000001.md',
@@ -193,8 +208,7 @@ describe('api/items', () => {
 			],
 		});
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const items: SaveFromRawContentResult = result.items as any;
+		const items: SaveFromRawContentResult = result.items as unknown as SaveFromRawContentResult;
 
 		expect(Object.keys(items).length).toBe(2);
 		expect(Object.keys(items).sort()).toEqual(['00000000000000000000000000000001.md', '00000000000000000000000000000002.md']);
@@ -395,6 +409,34 @@ describe('api/items', () => {
 			}),
 			ErrorForbidden.httpCode,
 		);
+	});
+
+	test('should support multiple delete requests for the same item at the same time', async () => {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+
+		await createItemTree(user1.id, '', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+				'00000000000000000000000000000002': null,
+				'00000000000000000000000000000003': null,
+			},
+		});
+
+		const baseAppContext = await createBaseAppContext();
+
+		// Should not fail
+		await Promise.all([
+			deleteItem(session1.id, '00000000000000000000000000000001', baseAppContext),
+			deleteItem(session1.id, '00000000000000000000000000000001', baseAppContext),
+			deleteItem(session1.id, '00000000000000000000000000000002', baseAppContext),
+			deleteItem(session1.id, '00000000000000000000000000000002', baseAppContext),
+		]);
+
+		// Should have deleted the items
+		expect(await models().item().loadByJopId(user1.id, '00000000000000000000000000000001')).toBeNull();
+		expect(await models().item().loadByJopId(user1.id, '00000000000000000000000000000002')).toBeNull();
+		// Should not have deleted the other item
+		expect(await models().item().loadByJopId(user1.id, '00000000000000000000000000000003')).toBeTruthy();
 	});
 
 });

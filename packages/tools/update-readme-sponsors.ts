@@ -1,7 +1,7 @@
 import { insertContentIntoFile, rootDir } from './tool-utils';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableJustify, MarkdownTableRow } from '@joplin/lib/markdownUtils';
 import { GithubSponsor, loadSponsors, OrgSponsor } from './utils/loadSponsors';
-const { escapeHtml } = require('@joplin/lib/string-utils');
+import { escapeHtml } from '@joplin/lib/string-utils';
 
 const readmePath = `${rootDir}/README.md`;
 
@@ -51,7 +51,8 @@ async function createOrgSponsorTable(sponsors: OrgSponsor[]): Promise<string> {
 	const output: string[] = [];
 
 	for (const sponsor of sponsors) {
-		output.push(`<a href="${escapeHtml(sponsor.url)}"><img title="${escapeHtml(sponsor.title)}" width="256" src="https://joplinapp.org/images/sponsors/${escapeHtml(sponsor.imageName)}"/></a>`);
+		const altHtml = sponsor.alt ? ` alt="${escapeHtml(sponsor.alt)}"` : '';
+		output.push(`<a href="${escapeHtml(sponsor.url)}"><img title="${escapeHtml(sponsor.title)}" width="256" src="https://joplinapp.org/images/sponsors/${escapeHtml(sponsor.imageName)}"${altHtml}/></a>`);
 	}
 
 	return output.join(' ');

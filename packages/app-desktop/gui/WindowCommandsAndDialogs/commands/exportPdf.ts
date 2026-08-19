@@ -4,14 +4,14 @@ import InteropServiceHelper from '../../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
 import bridge from '../../../services/bridge';
+import { WindowControl } from '../utils/useWindowControl';
 
 export const declaration: CommandDeclaration = {
 	name: 'exportPdf',
 	label: () => `PDF - ${_('PDF File')}`,
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const runtime = (comp: any): CommandRuntime => {
+export const runtime = (comp: WindowControl): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext, noteIds: string[] = null) => {
 			try {
@@ -53,7 +53,7 @@ export const runtime = (comp: any): CommandRuntime => {
 						pdfPath = await shim.fsDriver().findUniqueFilename(`${path}/${n}`);
 					}
 
-					await comp.printTo_('pdf', { path: pdfPath, noteId: note.id });
+					await comp.printTo('pdf', { path: pdfPath, noteId: note.id });
 				}
 			} catch (error) {
 				console.error(error);

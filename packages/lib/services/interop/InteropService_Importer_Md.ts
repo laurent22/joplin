@@ -5,7 +5,7 @@ import InteropService_Importer_Base from './InteropService_Importer_Base';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { NoteEntity } from '../database/types';
-import { basename, filename, rtrimSlashes, fileExtension, dirname } from '../../path-utils';
+import { basename, filename, rtrimSlashes, fileExtension, dirname, toForwardSlashes } from '../../path-utils';
 import shim from '../../shim';
 import markdownUtils from '../../markdownUtils';
 import htmlUtils from '../../htmlUtils';
@@ -76,7 +76,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		}
 	}
 
-	private async isDirectoryEmpty(dirPath: string) {
+	protected async isDirectoryEmpty(dirPath: string) {
 		const supportedFileExtension = this.metadata().fileExtensions;
 		const innerStats = await shim.fsDriver().readDirStats(dirPath);
 		for (let i = 0; i < innerStats.length; i++) {
@@ -110,16 +110,28 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		const htmlLinks = htmlUtils.extractFileUrls(md);
 		const fileLinks = unique(markdownLinks.concat(htmlLinks));
 		for (const encodedLink of fileLinks) {
-			const link = decodeURI(encodedLink);
+			let link = '';
+			try {
+				link = decodeURI(encodedLink);
+			} catch (error) {
+				// If the URI cannot be decoded, leave it as it is.
+				continue;
+			}
 
 			if (isDataUrl(link)) {
 				// Just leave it as it is. We could potentially import
 				// it as a resource but for now that's good enough.
+				continue;
 			} else {
 				// Handle anchor links appropriately
-				const trimmedLink = this.trimAnchorLink(link);
-				const attachmentPath = filename(`${dirname(filePath)}/${trimmedLink}`, true);
-				const pathWithExtension = `${attachmentPath}.${fileExtension(trimmedLink)}`;
+				const linkPosix = toForwardSlashes(link);
+				const trimmedLink = this.trimAnchorLink(linkPosix);
+				const pathWithExtension = shim.fsDriver().resolve(`${dirname(filePath)}/${trimmedLink}`);
+
+				// This check also means that non-files, such as web URLs, will not be processed by
+				// the code below and simply inserted as links.
+				if (!(await shim.fsDriver().exists(pathWithExtension))) continue;
+
 				const stat = await shim.fsDriver().stat(pathWithExtension);
 				const isDir = stat ? stat.isDirectory() : false;
 				if (stat && !isDir) {
@@ -170,10 +182,12 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		const title = filename(resolvedPath);
 		const body = stripBom(await shim.fsDriver().readFile(resolvedPath));
 
+		const fixedBody = this.applyImportFixes(body);
+
 		const note = {
 			parent_id: parentFolderId,
 			title: title,
-			body: body,
+			body: fixedBody,
 			updated_time: stat.mtime.getTime(),
 			created_time: stat.birthtime.getTime(),
 			user_updated_time: stat.mtime.getTime(),
@@ -183,5 +197,17 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		this.importedNotes[resolvedPath] = await Note.save(note, { autoTimestamp: false });
 
 		return this.importedNotes[resolvedPath];
+	}
+
+	public applyImportFixes(body: string) {
+		const edgeCases = [
+			// https://github.com/laurent22/joplin/issues/12363
+			// Necessary to clean up self-closing anchor tag always present in the start of the export generate by YinXiang.
+			{ findPattern: /^<a\b(.*)\/>$/m, replaceWith: '<a$1></a>' },
+		];
+
+		return edgeCases.reduce((modifiedBody, edgeCase) => {
+			return modifiedBody.replace(edgeCase.findPattern, edgeCase.replaceWith);
+		}, body);
 	}
 }

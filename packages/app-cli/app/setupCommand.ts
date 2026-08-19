@@ -1,13 +1,21 @@
 import { _ } from '@joplin/lib/locale';
+import BaseCommand from './base-command';
+import { Store } from 'redux';
 
-// eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-explicit-any -- Old code before rule was applied, Old code before rule was applied
-export default (cmd: any, stdout: Function, store: Function, gui: Function) => {
+interface PromptOptions {
+	type?: string;
+	booleanAnswerDefault?: string;
+	answers?: string[];
+	secure?: boolean;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- gui() returns AppGui, which is an untyped JS module (app-gui.js)
+export default (cmd: BaseCommand, stdout: (text: string)=> void, store: ()=> Store, gui: ()=> any) => {
 	cmd.setStdout((text: string) => {
 		return stdout(text);
 	});
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	cmd.setDispatcher((action: any) => {
+	cmd.setDispatcher(action => {
 		if (store()) {
 			return store().dispatch(action);
 		} else {
@@ -15,8 +23,7 @@ export default (cmd: any, stdout: Function, store: Function, gui: Function) => {
 		}
 	});
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	cmd.setPrompt(async (message: string, options: any) => {
+	cmd.setPrompt(async (message: string, options: PromptOptions) => {
 		if (!options) options = {};
 		if (!options.type) options.type = 'boolean';
 		if (!options.booleanAnswerDefault) options.booleanAnswerDefault = 'y';

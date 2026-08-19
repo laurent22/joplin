@@ -1,7 +1,7 @@
+import { RendererTheme } from './types';
 
 // TODO: copied from string-utils
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function formatCssSize(v: any): string {
+function formatCssSize(v: string | number): string {
 	if (typeof v === 'string') {
 		if (v.includes('px') || v.includes('em') || v.includes('%')) return v;
 	}
@@ -11,9 +11,33 @@ function formatCssSize(v: any): string {
 export interface Options {
 	contentMaxWidth?: number;
 	contentMaxWidthTarget?: string;
+	contentWrapperSelector?: string;
+	scrollbarSize?: number;
+	baseFontFamily?: string;
 	themeId?: number;
 	whiteBackgroundNoteRendering?: boolean;
 }
+
+const notLoadedCss = `
+	.not-loaded-resource img {
+		width: 1.15em;
+		height: 1.15em;
+		background: white;
+		padding: 2px !important;
+		border-radius: 2px;
+		box-shadow: 0 1px 3px #000000aa;
+	}
+
+	a.not-loaded-resource img {
+		margin-right: .2em;
+	}
+
+	a.not-loaded-resource {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+`;
 
 // If we are viewing an HTML note, it means it comes from the web clipper or
 // emil-to-note, in which case we don't apply any specific theme. We just need
@@ -24,6 +48,8 @@ export const whiteBackgroundNoteStyle = () => {
 		body {
 			background-color: #ffffff;
 		}
+
+		${notLoadedCss}
 
 		/* TinyMCE adds a dashed border for tables that have no borders
 		to make it easier to view where the cells are and edit them.
@@ -49,8 +75,7 @@ export const whiteBackgroundNoteStyle = () => {
 	`;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default function(theme: any, options: Options = null) {
+export default function(theme: RendererTheme, options: Options = null) {
 	options = {
 		contentMaxWidth: 0,
 		...options,
@@ -58,9 +83,10 @@ export default function(theme: any, options: Options = null) {
 
 	theme = theme ? theme : {};
 
-	const fontFamily = '\'Avenir Next\', \'Avenir\', \'Arial\', sans-serif';
+	const fontFamily = options.baseFontFamily || '\'Avenir Next\', \'Avenir\', \'Arial\', sans-serif';
 
-	const maxWidthTarget = options.contentMaxWidthTarget ? options.contentMaxWidthTarget : '#rendered-md';
+	const contentWrapperTarget = options.contentWrapperSelector ?? '#rendered-md';
+	const maxWidthTarget = options.contentMaxWidthTarget ? options.contentMaxWidthTarget : contentWrapperTarget;
 	const maxWidthCss = options.contentMaxWidth ? `
 		${maxWidthTarget} {
 			max-width: ${options.contentMaxWidth}px;
@@ -94,9 +120,17 @@ export default function(theme: any, options: Options = null) {
 			border-radius: 3px;
 			background-color: ${theme.codeBackgroundColor};
 		}
+
+		:root {
+			--scrollbar-size: ${Number(options.scrollbarSize ?? 7)}px;
+		}
+
 		::-webkit-scrollbar {
-			width: 7px;
-			height: 7px;
+			width: var(--scrollbar-size);
+			height: var(--scrollbar-size);
+		}
+		::-webkit-scrollbar-thumb {
+			border-radius: calc(var(--scrollbar-size) / 2);
 		}
 		::-webkit-scrollbar-corner {
 			background: none;
@@ -105,30 +139,29 @@ export default function(theme: any, options: Options = null) {
 			border: none;
 		}
 		::-webkit-scrollbar-thumb {
-			background: rgba(100, 100, 100, 0.3); 
-			border-radius: 5px;
+			background: ${theme.scrollbarThumbColor}; 
 		}
 		::-webkit-scrollbar-track:hover {
 			background: rgba(0, 0, 0, 0.1); 
 		}
 		::-webkit-scrollbar-thumb:hover {
-			background: rgba(100, 100, 100, 0.7); 
+			background: ${theme.scrollbarThumbColorHover}; 
 		}
 
 		${maxWidthCss}
 
 		/* Remove top padding and margin from first child so that top of rendered text is aligned to top of text editor text */
 
-		#rendered-md > h1:first-child,
-		#rendered-md > h2:first-child,
-		#rendered-md > h3:first-child,
-		#rendered-md > h4:first-child,
-		#rendered-md > ul:first-child,
-		#rendered-md > ol:first-child,
-		#rendered-md > table:first-child,
-		#rendered-md > blockquote:first-child,
-		#rendered-md > img:first-child,
-		#rendered-md > p:first-child {
+		${contentWrapperTarget} > h1:first-child,
+		${contentWrapperTarget} > h2:first-child,
+		${contentWrapperTarget} > h3:first-child,
+		${contentWrapperTarget} > h4:first-child,
+		${contentWrapperTarget} > ul:first-child,
+		${contentWrapperTarget} > ol:first-child,
+		${contentWrapperTarget} > table:first-child,
+		${contentWrapperTarget} > blockquote:first-child,
+		${contentWrapperTarget} > img:first-child,
+		${contentWrapperTarget} > p:first-child {
 			margin-top: 0;
 			padding-top: 0;
 		}
@@ -185,7 +218,7 @@ export default function(theme: any, options: Options = null) {
 		}
 		ul, ol {
 			padding-left: 0;
-			margin-left: 1.7em;
+			margin-left: ${theme.listTabSize};
 		}
 		li {
 			margin-bottom: .4em;
@@ -193,6 +226,16 @@ export default function(theme: any, options: Options = null) {
 		li p {
 			margin-top: 0.2em;
 			margin-bottom: 0;
+		}
+
+		dt {
+			font-weight: bold;
+			margin-bottom: 0.25em;
+		}
+
+		dd {
+			margin-inline-start: 2.5em;
+			margin-bottom: 0.5em;
 		}
 
 		.resource-icon {
@@ -300,7 +343,7 @@ export default function(theme: any, options: Options = null) {
 		}
 
 		.jop-tinymce table tr:nth-child(even),
-		table tr:nth-child(even) {
+		table:has(thead) tr:nth-child(even) {
 			background-color: ${theme.tableBackgroundColor};
 		}
 
@@ -334,24 +377,7 @@ export default function(theme: any, options: Options = null) {
 			color: black;
 		}
 
-		.not-loaded-resource img {
-			width: 1.15em;
-			height: 1.15em;
-			background: white;
-			padding: 2px !important;
-			border-radius: 2px;
-			box-shadow: 0 1px 3px #000000aa;
-		}
-
-		a.not-loaded-resource img {
-			margin-right: .2em;
-		}
-
-		a.not-loaded-resource {
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-		}
+		${notLoadedCss}
 
 		.md-checkbox input[type=checkbox]:checked {
 			opacity: 0.7;
@@ -371,8 +397,8 @@ export default function(theme: any, options: Options = null) {
 		}
 
 		mark {
-			background: #F7D26E;
-			color: black;
+			background: ${theme.markHighlightBackgroundColor};
+			color: ${theme.searchMarkerColor};
 		}
 
 		/* =============================================== */

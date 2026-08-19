@@ -1,5 +1,5 @@
 import { EditorSelection } from '@codemirror/state';
-import createTestEditor from '../testUtil/createTestEditor';
+import createTestEditor from '../testing/createTestEditor';
 import insertLineAfter from './insertLineAfter';
 
 describe('insertLineAfter', () => {

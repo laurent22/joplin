@@ -2,20 +2,11 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		"%s 缺少必須的屬性 %s。"
 	],
-	"%d days": [
-		"%d 天"
-	],
 	"%d GB": [
 		"%d GB"
 	],
 	"%d GB storage space": [
 		"%d GB 儲存空間"
-	],
-	"%d hour": [
-		"%d 小時"
-	],
-	"%d hours": [
-		"%d 小時"
 	],
 	"%d MB": [
 		"%d MB"
@@ -23,11 +14,8 @@
 	"%d MB per note or attachment": [
 		"每個筆記或附件 %d MB"
 	],
-	"%d minutes": [
-		"%d 分鐘"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"相符的記事共有 %d 則，要刪除嗎？"
+	"%d photo(s) taken": [
+		""
 	],
 	"%s": [
 		"%s"
@@ -62,17 +50,20 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
 		"%s 沒有針對同步許多小文件進行優化，因此初始同步速度會比較慢。"
 	],
-	"%s tab opened": [
+	"%s must be a valid whole number": [
 		""
+	],
+	"%s tab opened": [
+		"%s 在分頁打開"
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s：%d 則記事"
 	],
 	"%s: %d/%d": [
 		"%s：%d/%d"
@@ -104,14 +95,23 @@
 	"&View": [
 		"檢視 (&V)"
 	],
+	"&Window": [
+		"&視窗"
+	],
 	"(%s)": [
 		"(%s)"
 	],
 	"(In plugin: %s)": [
 		"(在延伸模組：%s)"
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
 		"(無)"
+	],
+	"(Read-only)": [
+		""
 	],
 	"(wysiwyg: %s)": [
 		"(支援所見即所得: %s)"
@@ -134,6 +134,12 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<todo-command> 可以是 \"toggle\" (切換完成與否，或將記事轉換為待辦事項)或 \"clear\" (將待辦事項轉換為記事)。"
 	],
+	"A brief description of the image:": [
+		""
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
+	],
 	"A3": [
 		"A3"
 	],
@@ -143,8 +149,11 @@
 	"A5": [
 		"A5"
 	],
-	"About": [
+	"ABC musical notation: Options": [
 		""
+	],
+	"About": [
+		"關於"
 	],
 	"About Joplin": [
 		"關於 Joplin"
@@ -161,6 +170,9 @@
 	"Accept": [
 		"接受"
 	],
+	"Accepted invitations": [
+		"共享對象已接受邀請"
+	],
 	"Access denied: Please check your username and password": [
 		"存取被拒絕：請檢查您的使用者名稱和密碼"
 	],
@@ -168,6 +180,12 @@
 		"存取被拒絕：請重新輸入您的密碼和/或使用者名稱"
 	],
 	"Account": [
+		"帳戶"
+	],
+	"Account information": [
+		"帳戶訊息"
+	],
+	"Account type": [
 		"帳戶"
 	],
 	"Action": [
@@ -185,6 +203,9 @@
 	"Add body": [
 		"新增內文"
 	],
+	"Add column": [
+		""
+	],
 	"Add new": [
 		"新增"
 	],
@@ -200,6 +221,12 @@
 	"Add to dictionary": [
 		"添加到字典"
 	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
+		""
+	],
 	"Admin": [
 		"管理員"
 	],
@@ -209,14 +236,17 @@
 	"Advanced options": [
 		"顯示進階選項"
 	],
+	"Advanced settings": [
+		"顯示進階選項"
+	],
 	"Advanced tools": [
 		"進階工具"
 	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
-		"所有資料，包括筆記、筆記本和標籤將被永久刪除。"
+		"所有資料，包括記事、記事本和標籤將被永久刪除。"
 	],
 	"All item sync failures have been marked as \"ignored\".": [
-		""
+		"所有項目同步失敗，將被標記忽略。"
 	],
 	"All notes": [
 		"全部記事"
@@ -224,8 +254,11 @@
 	"All potential ports are in use - please report the issue at %s": [
 		"所有預設埠號都在使用中 - 請到 %s 回報此問題"
 	],
-	"Allows debugging mobile plugins. See %s for details.": [
+	"All shared folders:": [
 		""
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		"允許對移動延伸模組進行偵錯。請參考%s以取得更多信息。"
 	],
 	"Also displays unset and hidden config variables.": [
 		"亦顯示未設定和隱藏的設定變數。"
@@ -240,19 +273,22 @@
 		"總是詢問"
 	],
 	"Always open %s files without asking.": [
-		""
+		"總是開啟 %s 檔案，不再詢問。"
 	],
 	"Always resize": [
 		"總是調整大小"
 	],
 	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
-		"不明確的筆記本 \"%s\"。請使用筆記本 ID - 按下 \"ti\" 以查看簡短的筆記本 ID，或使用 $b 來使用當前選定的筆記本"
+		"不明確的記事本 \"%s\"。請使用記事本 ID - 按下 \"ti\" 以查看簡短的記事本 ID，或使用 $b 來使用當前選定的記事本"
 	],
 	"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the short notebook id": [
-		"不明確的筆記本 \"%s\"。請使用簡短的筆記本 ID - 按下 \"ti\" 以查看簡短的筆記本 ID"
+		"不明確的記事本 \"%s\"。請使用簡短的記事本 ID - 按下 \"ti\" 以查看簡短的記事本 ID"
 	],
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		"發現一個自動保存的繪圖。要將其附加到記事嗎？"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
 	],
 	"An error occurred: %s": [
 		"發生錯誤：%s"
@@ -261,7 +297,7 @@
 		"已有更新，您想立即下載嗎？"
 	],
 	"Android API level: %d": [
-		""
+		"安卓 API 版本: %d"
 	],
 	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
 		"任何寄送到此地址的電子郵件都將被轉換為筆記，並加入到您的收藏中。該筆記將被保存到收件匣筆記本中"
@@ -286,6 +322,12 @@
 	],
 	"Aritim Dark": [
 		"暗黑 (Aritim)"
+	],
+	"Associated tags:": [
+		""
+	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		""
 	],
 	"Attach": [
 		"附加"
@@ -326,20 +368,29 @@
 	"Authorisation token:": [
 		"授權 Token："
 	],
+	"Authorise": [
+		"授權 Token"
+	],
 	"Auto": [
 		"自動"
 	],
 	"Auto-add disabled accounts for deletion": [
 		"自動於刪除清單中加入已停用帳戶"
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
 		"自動配對大括號、括號、引號等。"
+	],
+	"Autocomplete Markdown and HTML": [
+		""
 	],
 	"Automatically check for updates": [
 		"自動檢查更新"
 	],
 	"Automatically delete notes in the trash after a number of days": [
-		""
+		"幾天後自動刪除垃圾桶裡的筆記"
 	],
 	"Automatically switch theme to match system theme": [
 		"自動切換以配合系統主題"
@@ -351,10 +402,10 @@
 		"基本"
 	],
 	"Beta": [
-		""
+		"測試"
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
-		"此裝置未設定生物辨識解鎖。請設定生物辨識以解鎖 Joplin。如果裝置處於鎖定狀態，請考慮將其關閉然後再重新開啟以重設生物辨識掃描。"
+	"Block code": [
+		""
 	],
 	"Bold": [
 		"粗體"
@@ -366,12 +417,18 @@
 		"瀏覽..."
 	],
 	"Built-in": [
-		""
+		"內建"
 	],
 	"Bulleted List": [
 		"項目清單"
 	],
 	"by %s": [
+		"經由 %s"
+	],
+	"by word": [
+		""
+	],
+	"Camera": [
 		""
 	],
 	"Can Share": [
@@ -388,6 +445,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"正在取消同步...請稍等。"
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"正在取消..."
@@ -449,11 +509,17 @@
 	"Change language": [
 		"更換語言"
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		"字元數"
 	],
 	"Characters excluding spaces": [
 		"不含空格的字元"
+	],
+	"Check elements to display in the toolbar": [
+		""
 	],
 	"Check for updates...": [
 		"檢查更新..."
@@ -470,6 +536,9 @@
 	"Checking... Please wait.": [
 		"檢查中...請稍候。"
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"選擇一個選項"
 	],
@@ -482,8 +551,14 @@
 	"Clear alarm": [
 		"清除提醒"
 	],
+	"Clear search": [
+		"清除搜尋"
+	],
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"點選「%s」將記事還原後複製到名為「%s」的記事本中。此記事當前的版本將保留，不會被取代或修改。"
+	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
 	],
 	"Click to add tags...": [
 		"新增標籤..."
@@ -497,17 +572,23 @@
 	"Close dropdown": [
 		"關閉下拉式選單"
 	],
-	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+	"Close side menu": [
 		""
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		"關閉應用程式，然後刪除在「%s」中的個人檔案，並重新啟動應用程式。首先，創建備份，將所有筆記匯出為 JEX。"
 	],
 	"Close Window": [
 		"關閉視窗"
 	],
-	"Cmd-click to open": [
+	"Closing session...": [
 		""
 	],
+	"Cmd-click to open": [
+		"Cmd-click 開啟"
+	],
 	"Cmd-click to open: %s": [
-		""
+		"Cmd-click 開啟:%s"
 	],
 	"Code": [
 		"程式碼"
@@ -524,9 +605,6 @@
 	"Collaborate on notebooks with others": [
 		"與其他人在記事本協作"
 	],
-	"Collapse": [
-		"收合"
-	],
 	"Coming alarms": [
 		"未來提醒"
 	],
@@ -539,11 +617,20 @@
 	"Command": [
 		"命令"
 	],
+	"COMMAND": [
+		""
+	],
 	"Command palette": [
 		"命令模式"
 	],
 	"Command palette...": [
 		"命令選擇區..."
+	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
+	"Compact": [
+		"緊湊"
 	],
 	"Completed": [
 		"完成"
@@ -552,19 +639,22 @@
 		"解密完成。"
 	],
 	"Completed with warnings:\n%s": [
-		""
+		"已完成但出現警告\n%s"
 	],
 	"Completed: %s (%s)": [
 		"已完成: %s"
 	],
 	"completion date": [
-		""
+		"完成日期"
 	],
 	"Compress old changes": [
 		"壓縮舊的更改"
 	],
 	"Configuration": [
 		"設置"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
 	],
 	"Confirm password cannot be empty": [
 		"確認密碼不能空白"
@@ -584,10 +674,19 @@
 	"Conflicts (attachments)": [
 		"衝突 (附件)"
 	],
+	"Connect to Joplin Cloud": [
+		"連結到Joplin Cloud"
+	],
+	"Connect using your organisation account": [
+		""
+	],
 	"Consolidated billing": [
 		"合併帳單"
 	],
 	"Content provided by %s": [
+		"%s 提供的內容"
+	],
+	"Content provided by: %s": [
 		"%s 提供的內容"
 	],
 	"Continue": [
@@ -617,6 +716,9 @@
 	"Copy Link Address": [
 		"複製鏈結位址"
 	],
+	"Copy link to website": [
+		"Joplin 官方網站"
+	],
 	"Copy Markdown link": [
 		"複製 Markdown 連結"
 	],
@@ -631,6 +733,9 @@
 	],
 	"Copy token": [
 		"複製 Token"
+	],
+	"Copy version info": [
+		"複製版本資訊"
 	],
 	"Could not authorise application:\n\n%s\n\nPlease try again.": [
 		"無法授權:\n\n%s\n\n請再次重試。"
@@ -720,13 +825,13 @@
 		"建立新的待辦事項..."
 	],
 	"Creating report...": [
-		"正在建立新報告 %s..."
+		"正在建立新報告..."
 	],
 	"Ctrl-click to open": [
-		""
+		"Ctrl-cilck 開啟"
 	],
 	"Ctrl-click to open: %s": [
-		""
+		"Ctrl-click 開啟:%s"
 	],
 	"Current version is up-to-date.": [
 		"目前是最新版。"
@@ -782,6 +887,9 @@
 	"Default": [
 		"預設"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"預設：%s"
 	],
@@ -818,6 +926,9 @@
 	"Delete selected notes": [
 		"刪除選定的筆記"
 	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
 		"刪除收件匣筆記本？\n\n如果您刪除收件匣筆記本，最近發送到該筆記本的任何電子郵件可能會遺失。"
 	],
@@ -825,7 +936,10 @@
 		"確定刪除這份邀請嗎？此舉將會使共享對象無法再存取這份共享記事本。"
 	],
 	"Delete this profile?": [
-		"刪除此設定檔「%s」？"
+		"刪除此設定檔？"
+	],
+	"Deleted": [
+		"刪除"
 	],
 	"Deleted local items: %d.": [
 		"已刪除的本地項目: %d 項。"
@@ -834,7 +948,7 @@
 		"已刪除的遠端項目: %d 項。"
 	],
 	"Deletes notes permanently, skipping the trash.": [
-		""
+		"永久刪除筆記，跳過垃圾桶。"
 	],
 	"Deletes the given notebook.": [
 		"刪除特定的記事本。"
@@ -853,6 +967,9 @@
 	],
 	"Detailed": [
 		"詳細的"
+	],
+	"Device: %s": [
+		""
 	],
 	"Directory": [
 		"目錄"
@@ -902,6 +1019,9 @@
 	"Displays the complete information about note.": [
 		"顯示有關記事的完整資訊。"
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"顯示特定的記事。"
 	],
@@ -922,6 +1042,18 @@
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
 		"不要遺失此密碼，為了安全起見，這將是 *唯一* 解密資料的方法！若要啟用加密，請在下方輸入您的密碼。"
+	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
+	"Document scanner: Title template": [
+		""
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
+		""
 	],
 	"Donate, website": [
 		"捐贈，網站"
@@ -972,7 +1104,10 @@
 		"Dropbox 登入"
 	],
 	"Due": [
-		""
+		"到期日"
+	],
+	"due date": [
+		"到期日"
 	],
 	"Duplicate": [
 		"新增複本"
@@ -989,8 +1124,8 @@
 	"Edit": [
 		"編輯"
 	],
-	"Edit in external editor": [
-		"使用外部編輯器編輯"
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit link": [
 		"編輯連結"
@@ -1043,6 +1178,9 @@
 	"Email to Note": [
 		"電子郵件轉筆記"
 	],
+	"Email To Note, login information": [
+		"電子郵件轉換為記事，登入信息"
+	],
 	"Emails": [
 		"電子信箱"
 	],
@@ -1050,7 +1188,7 @@
 		"強調文字"
 	],
 	"Empty trash": [
-		""
+		"清空垃圾桶"
 	],
 	"Enable": [
 		"啟用"
@@ -1079,6 +1217,9 @@
 	"Enable encryption": [
 		"啟用加密"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"啟用註腳"
 	],
@@ -1106,8 +1247,14 @@
 	"Enable optical character recognition (OCR)": [
 		"啟用光學字符識別（OCR）"
 	],
+	"Enable or disable plugins": [
+		"管理您的延伸模組"
+	],
 	"Enable PDF viewer": [
 		"啟用 PDF 查看器"
+	],
+	"Enable plugin support": [
+		"啟用延伸模組支援"
 	],
 	"Enable soft breaks": [
 		"啟用軟中斷"
@@ -1135,6 +1282,12 @@
 	],
 	"Enabled": [
 		"已啟用"
+	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
+	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		"停用加密代表您 *所有* 的記事和附件都會重新重新同步，並且發送未加密的資料到同步目標。"
@@ -1184,6 +1337,9 @@
 	"Error opening note in editor: %s": [
 		"在編輯器中開啟記事時出錯：%s"
 	],
+	"Error starting camera: %s": [
+		""
+	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"錯誤。請檢查網址、使用者名稱、密碼等是否正確，以及同步目標是否可以存取。錯誤回報訊息為："
 	],
@@ -1199,11 +1355,17 @@
 	"Evernote Export File (as Markdown)": [
 		"Evernote 匯出檔案 (Markdown)"
 	],
+	"Evernote Export Files (Directory, as HTML)": [
+		"Evernote 匯出檔案 (HTML)"
+	],
+	"Evernote Export Files (Directory, as Markdown)": [
+		"Evernote 匯出檔案 (Markdown)"
+	],
 	"Exits the application.": [
 		"離開本程式。"
 	],
-	"Expand": [
-		"擴展"
+	"Expand %s": [
+		"擴展 %s"
 	],
 	"Export": [
 		"匯出"
@@ -1250,11 +1412,20 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		"故障保護 (Fail-safe)：當同步目標為空時 (通常發生在設定錯誤或 Bug)，不要清除本機資料"
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"嚴重錯誤："
 	],
 	"Feature flags": [
 		"功能旗標"
+	],
+	"Feedback": [
+		""
 	],
 	"Fetched items: %d/%d.": [
 		"已擷取的本地項目: %d/%d 項。"
@@ -1268,14 +1439,14 @@
 	"File system": [
 		"檔案系統"
 	],
-	"Filter tags": [
-		"篩選標籤"
-	],
-	"Find and replace": [
-		"尋找和取代"
+	"Filter": [
+		"篩選"
 	],
 	"Find: ": [
 		"尋找："
+	],
+	"Finishes recording": [
+		""
 	],
 	"Firefox Extension": [
 		"Firefox 附加元件"
@@ -1295,6 +1466,12 @@
 	"Focus title": [
 		"游標置於標題"
 	],
+	"Folder \"%s\" is shared with:": [
+		""
+	],
+	"Follow link": [
+		""
+	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		"僅用於除錯：將您的設定檔匯出至外部 SD 卡。"
 	],
@@ -1312,9 +1489,6 @@
 	],
 	"Force path style": [
 		"使用路徑樣式存取 (Force path style)"
-	],
-	"Formatting": [
-		"格式化"
 	],
 	"Forward": [
 		"向前"
@@ -1343,6 +1517,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		"地理位置、拼字檢查、編輯器工具列、圖片大小調整"
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		"立即取得："
 	],
@@ -1351,6 +1528,21 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"取得或設定一個設定值。如果沒有指明 [value]，則會顯示 [name] 的值。如果 [name] 和 [vallue] 兩者均沒有指明，則會列出當前設定。"
+	],
+	"Glossary:": [
+		""
+	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
+	"Go to Joplin Cloud profile": [
+		"前往Joplin Cloud profile"
+	],
+	"Go to line": [
+		""
 	],
 	"Go to source URL": [
 		"前往來源網址"
@@ -1362,13 +1554,10 @@
 		"授權"
 	],
 	"Have you authorised the application login in the above URL?": [
-		""
+		"你已經授權應用程式登入上述URL了嗎？"
 	],
 	"Header %d": [
 		"標題 %d"
-	],
-	"Headers": [
-		"標題"
 	],
 	"Heading": [
 		"標題"
@@ -1400,9 +1589,6 @@
 	"Hide keyboard": [
 		"隱藏鍵盤"
 	],
-	"Hide more actions": [
-		"隱藏更多操作"
-	],
 	"Highlight": [
 		"強調標記"
 	],
@@ -1433,8 +1619,11 @@
 	"Idle": [
 		"閒置"
 	],
-	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		""
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		"如果您已經授權，請等待應用程式同步到Joplin Cloud。"
 	],
 	"Ignore": [
 		"忽略"
@@ -1442,26 +1631,41 @@
 	"Ignore TLS certificate errors": [
 		"忽略 TLS 證書錯誤"
 	],
+	"Ignored items that cannot be synchronised": [
+		"忽略無法同步的項目"
+	],
 	"Images": [
 		"圖片"
 	],
 	"Import": [
 		"匯入"
 	],
+	"Import and Export": [
+		"導入與導出"
+	],
 	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
-		""
+		"導入失敗。請確保選擇了 JEX 文件。\n詳細：%s"
 	],
 	"Import from JEX": [
-		""
+		"導入JEX檔"
 	],
 	"Import notes from a JEX (Joplin Export) file.": [
-		""
+		"從JEX (Joplin Export)檔案導入筆記。"
+	],
+	"Import or export your data": [
+		"導入或者導出你的資料"
+	],
+	"Imported successfully!": [
+		"導入成功！"
 	],
 	"Importing from \"%s\" as \"%s\" format. Please wait...": [
 		"從「%s」匯入（格式為 %s），請稍候..."
 	],
 	"Importing notes...": [
 		"正在匯入記事..."
+	],
+	"Importing...": [
+		"導入中..."
 	],
 	"Imports data into Joplin.": [
 		"匯入資料至 Joplin。"
@@ -1472,14 +1676,11 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"在任何一個命令中，可以通過標題或 ID 來指定記事或記事本，或使用快捷鍵 `$n`（選定記事）or `$b`（選定記事本）。您亦可以用 `$c` 代表當前選擇的項目。"
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		"為了將地理位置資訊加入此筆記，您必須允許程式存取位置資料。\n\n您隨時可以到設定畫面關閉此選項。"
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		"由於必須對整個資料集進行加密和同步，所以最好在夜間睡覺的時候進行。\n\n首先，請依照以下說明進行操作：\n\n1. 同步您的所有設備。\n2. 點選「%s」。\n3. 等待執行完成。在執行過程中，請避免在其他設備上更改任何記事，以免發生衝突。\n4. 待此設備完成重新加密與同步後，同步所有其他設備，並等待其執行完成。\n\n重要提示：您只需要在一台設備上執行此操作一次。"
 	],
 	"In order to synchronise, please upgrade your application to version %s+": [
-		""
+		"為了同步，請升級您的應用程式版本到 %s 以上"
 	],
 	"In order to use file system synchronisation your permission to write to external storage is required.": [
 		"為了使用檔案系統同步，您需要具有寫入外部儲存裝置的權限。"
@@ -1494,7 +1695,7 @@
 		"在: %s"
 	],
 	"Incompatible": [
-		""
+		"不相容"
 	],
 	"Increase indent level": [
 		"增加縮排層級"
@@ -1504,6 +1705,9 @@
 	],
 	"Indent more": [
 		"增加縮排"
+	],
+	"Info": [
+		""
 	],
 	"Information": [
 		"資訊"
@@ -1529,6 +1733,9 @@
 	"Installed": [
 		"已安裝"
 	],
+	"Installed (%d):": [
+		"已安裝："
+	],
 	"Installing...": [
 		"安裝中..."
 	],
@@ -1544,11 +1751,17 @@
 	"Invalid command: \"%s\"": [
 		"無效的命令：\"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"不正確選項值: \"%s\"。可能的值為: %s。"
 	],
 	"Invalid password": [
 		"無效的密碼"
+	],
+	"iOS version: %s": [
+		"iOS最新版本: %s"
 	],
 	"Italic": [
 		"斜體"
@@ -1565,17 +1778,20 @@
 	"Items that cannot be synchronised": [
 		"無法同步的項目"
 	],
-	"Join us on Twitter": [
-		"在 Twitter 上加入我們"
-	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
 		"Joplin 可以使用各種服務來同步您的筆記。從下面的列表中選擇一個。"
 	],
 	"Joplin Cloud": [
 		"Joplin Cloud"
 	],
+	"Joplin Cloud Login": [
+		"Joplin Cloud 登入"
+	],
+	"Joplin Desktop": [
+		"Joplin 官方網站"
+	],
 	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
-		""
+		"Joplin 無法識別%s 延伸模組。開啟這個檔案可能危險。您想要做什麼？"
 	],
 	"Joplin Export Directory": [
 		"Joplin 匯出目錄"
@@ -1589,6 +1805,9 @@
 	"Joplin Forum": [
 		"Joplin 討論區"
 	],
+	"Joplin Mobile": [
+		"Joplin 行動版"
+	],
 	"Joplin Server": [
 		"Joplin 主機"
 	],
@@ -1601,6 +1820,12 @@
 	"Joplin Server URL": [
 		"Joplin 主機 URL"
 	],
+	"Joplin SSO Authentication": [
+		""
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		"Joplin 網頁剪輯可以讓您從瀏覽器保存網頁和螢幕截圖到 Joplin。"
 	],
@@ -1610,11 +1835,11 @@
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
 		"Joplin 自己的同步服務。還可以使用 Joplin 的專屬功能，例如發布筆記或與他人在筆記本上協作。"
 	],
-	"KaTeX": [
-		"KaTeX"
-	],
 	"Keep note history for": [
 		"保留記事歷史記錄"
+	],
+	"Keep notes in the trash for": [
+		"將筆記n"
 	],
 	"Keyboard Mode": [
 		"鍵盤模式"
@@ -1628,8 +1853,14 @@
 	"Keychain Supported: %s": [
 		"鑰匙圈支援：%s"
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
 		"需要升級的密鑰"
+	],
+	"Label": [
+		""
 	],
 	"Landscape": [
 		"橫向"
@@ -1640,6 +1871,9 @@
 	"Language, date format": [
 		"語言、日期格式"
 	],
+	"Large": [
+		""
+	],
 	"Last error: %s": [
 		"上次錯誤: %s"
 	],
@@ -1647,7 +1881,7 @@
 		"稍後"
 	],
 	"Latitude": [
-		""
+		"緯度"
 	],
 	"Layout": [
 		"頁面佈局"
@@ -1655,8 +1889,14 @@
 	"Layout button sequence": [
 		"頁面佈局"
 	],
+	"Learn more": [
+		"更多訊息"
+	],
 	"Leave it blank to download the language files from the default website": [
 		"留空以從預設網站下載語言檔案"
+	],
+	"Leave notebook": [
+		"離開記事本"
 	],
 	"Leave notebook...": [
 		"離開記事本..."
@@ -1671,7 +1911,7 @@
 		"光亮"
 	],
 	"Like any software you install, plugins can potentially cause security issues or data loss.": [
-		""
+		"就像安裝任何軟體一樣，延伸模組也可能導致安全性問題或資料損失。"
 	],
 	"Lines": [
 		"行數"
@@ -1688,14 +1928,8 @@
 	"Link text": [
 		"連結文字"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"不支援「%s」協定的鏈結"
-	],
 	"List item": [
 		"清單項目"
-	],
-	"Lists": [
-		"清單"
 	],
 	"Loaded": [
 		"已讀取"
@@ -1712,6 +1946,9 @@
 	"Log": [
 		"日誌"
 	],
+	"Login to Joplin Cloud.": [
+		"登入Joplin Cloud."
+	],
 	"Login with Dropbox": [
 		"以 Dropbox 登入"
 	],
@@ -1725,7 +1962,7 @@
 		"日誌、設定檔、同步狀態"
 	],
 	"Longitude": [
-		""
+		"經度"
 	],
 	"Make a donation": [
 		"捐助"
@@ -1742,8 +1979,14 @@
 	"Manage profiles": [
 		"管理設定檔"
 	],
+	"Manage shared notebooks": [
+		"管理分享記事本"
+	],
 	"Manage your plugins": [
 		"管理您的延伸模組"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
 		"管理 E2EE 設定。指令包含 `enable`，`disable`，`decrypt`，`status` 和 `target-status`。"
@@ -1756,6 +1999,9 @@
 	],
 	"Markdown + Front Matter": [
 		"Markdown + Front Matter"
+	],
+	"Markdown editor: Render markup in editor": [
+		""
 	],
 	"Marks a to-do as done.": [
 		"標記待辦事項為完成。"
@@ -1775,6 +2021,12 @@
 	"Master password:": [
 		"主密碼："
 	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
+	],
 	"Max concurrent connections": [
 		"最大同時連接數"
 	],
@@ -1790,8 +2042,11 @@
 	"Media player, math, diagrams, table of contents": [
 		"媒體播放器、數學、圖表、目錄"
 	],
-	"Minimise": [
+	"Medium": [
 		""
+	],
+	"Minimise": [
+		"最小化"
 	],
 	"Missing keys": [
 		"遺失的密鑰"
@@ -1818,10 +2073,16 @@
 		"與 \"%s\" 相符的項目超過一個，請縮小查詢範圍。"
 	],
 	"Most plugins have source code available for review on the plugin website.": [
+		"大多數延伸模組在延伸模組網站上提供源代碼供您進行評估。"
+	],
+	"Move left": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"要將 %d 移動到「%s」記事本嗎？"
+	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		"移動記事本到垃圾桶?\n\n此記事本中的所有記事和子記事本也將移動到垃圾桶。"
+	],
+	"Move right": [
+		""
 	],
 	"Move to notebook": [
 		"移動至記事本"
@@ -1831,6 +2092,9 @@
 	],
 	"Move to notebook:": [
 		"移動至記事本："
+	],
+	"Move up": [
+		""
 	],
 	"Moves the given <item> to [notebook]": [
 		"將給定的 <item> 移到 [notebook]"
@@ -1844,8 +2108,8 @@
 	"Never resize": [
 		"永不調整大小"
 	],
-	"New": [
-		""
+	"New invitations": [
+		"新邀請"
 	],
 	"New note": [
 		"新增記事"
@@ -1862,14 +2126,14 @@
 	"New sub-notebook": [
 		"新增子記事本"
 	],
-	"New tags:": [
-		"新增標籤："
-	],
 	"New to-do": [
 		"新增待辦事項"
 	],
 	"New version: %s": [
 		"最新版本: %s"
+	],
+	"next": [
+		""
 	],
 	"Next match": [
 		"下一個符合"
@@ -1895,11 +2159,8 @@
 	"No active notebook.": [
 		"無使用中的記事本。"
 	],
-	"No item with ID %s": [
-		"沒有 ID 為 %s 的項目"
-	],
 	"No new invitations": [
-		""
+		"沒有新的邀請"
 	],
 	"No notebook has been specified.": [
 		"未指定記事本。"
@@ -1911,7 +2172,7 @@
 		"目前沒有任何記事，請點選「新增記事」即可建立。"
 	],
 	"No plugins are installed.": [
-		""
+		"沒有安裝延伸模組。"
 	],
 	"No resources!": [
 		"沒有任何附件！"
@@ -1925,14 +2186,23 @@
 	"No suggestions": [
 		"沒有建議"
 	],
+	"No tab selected": [
+		"未選擇分頁"
+	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"未設定文字編輯器。請用 `config editor <editor-path>` 來設定"
+	],
+	"No URL for SAML authentication set.": [
+		""
 	],
 	"Nord": [
 		"北歐藍"
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"與 %s 認證失敗，請提供完整的身份驗證資訊。"
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		"尚未下載"
@@ -1942,6 +2212,9 @@
 	],
 	"Not now": [
 		"不要現在"
+	],
+	"Not useful": [
+		""
 	],
 	"note": [
 		"記事"
@@ -2009,6 +2282,9 @@
 	"Notebook: %s": [
 		"記事本: %s"
 	],
+	"Notebook: %s (%s)": [
+		"記事本: %s"
+	],
 	"Notebooks": [
 		"記事本"
 	],
@@ -2027,6 +2303,9 @@
 	"Numbered List": [
 		"編號清單"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"確定"
 	],
@@ -2035,6 +2314,9 @@
 	],
 	"On %s: %s": [
 		"在 %s：%s"
+	],
+	"on line": [
+		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		"您其中一組主密鑰使用了過時的加密方法。"
@@ -2060,14 +2342,32 @@
 	"Open %s": [
 		"開啟 %s"
 	],
+	"Open in new window": [
+		""
+	],
+	"Open it": [
+		"開啟"
+	],
 	"Open PDF viewer": [
 		"開啟 PDF 查看器"
+	],
+	"Open primary app instance...": [
+		""
 	],
 	"Open profile directory": [
 		"開啟個人資料目錄"
 	],
+	"Open secondary app instance...": [
+		""
+	],
+	"Open Source": [
+		"來源"
+	],
 	"Open Sync Wizard...": [
 		"開啟同步精靈..."
+	],
+	"Open-source licences": [
+		""
 	],
 	"Open...": [
 		"開啟舊檔..."
@@ -2081,8 +2381,14 @@
 	"Options": [
 		"選項"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
 		"有序清單"
+	],
+	"Other": [
+		""
 	],
 	"Other applications...": [
 		"其他應用程式..."
@@ -2095,6 +2401,12 @@
 	],
 	"Page size for PDF export": [
 		"匯出 PDF 的頁面大小"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"密碼"
@@ -2120,14 +2432,20 @@
 	"PDF File": [
 		"PDF 檔案"
 	],
-	"Per user. Minimum of %d users.": [
-		"每位使用者。最少 %d 位使用者。"
+	"Permanently delete note": [
+		"永久刪除記事"
 	],
-	"Permission needed": [
-		"需要權限"
+	"Permanently delete note \"%s\"?": [
+		"永久刪除此記事「%s」?"
 	],
-	"Permission to use camera": [
-		"允許使用相機"
+	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
+		"永久刪除記事本？\n\n此舉亦會永久刪除其中的所有記事和子記事本。"
+	],
+	"Permanently deletes the notebook, skipping the trash.": [
+		"永久刪除這些記事本 ，不要移到垃圾桶。"
+	],
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		"請點擊「%s」繼續，或在下方的「%s」列表中設定密碼。"
@@ -2143,6 +2461,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"請在瀏覽器開啟以下 URL 驗證應用程式。應用程式將在「Apps/Joplin」中建立一個目錄，並只會在該目錄中進行讀取和寫入。應用程式將無法訪問此目錄之外的任何檔案，同時也無法使用任何其他個人資料。我們不會與任何第三方廠商共用任何資料。"
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		"請錄製您的聲音..."
@@ -2162,26 +2483,44 @@
 	"Please specify the notebook where the notes should be imported to.": [
 		"請指定要匯入的記事本。"
 	],
+	"Please upgrade Joplin to version %s or later to use this plugin.": [
+		"使用此延伸模組，請升級 Joplin 版本到%s以上，。"
+	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		"請等待所有附件下載並解密。您也可以切換到 %s 以編輯記事。"
+	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
 	],
 	"Please wait...": [
 		"請稍候..."
 	],
+	"Plugin message": [
+		"延伸模組訊息"
+	],
+	"Plugin panels": [
+		"延伸模組分頁"
+	],
 	"Plugin repository failed to load": [
-		""
+		"延伸模組庫載入失敗"
+	],
+	"Plugin search": [
+		"搜尋延伸模組"
+	],
+	"Plugin security": [
+		"延伸模組安全性"
 	],
 	"Plugin tools": [
 		"延伸模組"
 	],
 	"Plugin WebView debugging": [
-		""
+		"延伸模組 WebView 偵錯中"
 	],
 	"Plugins": [
 		"延伸模組"
 	],
 	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
-		""
+		"延伸模組可以擴展Joplin功能，提供預設功能以外的功能。延伸模組可以擴展Joplin的編輯器與查看器 等功能。"
 	],
 	"Portrait": [
 		"直向"
@@ -2191,6 +2530,9 @@
 	],
 	"Possible values: %s.": [
 		"可能的值：%s。"
+	],
+	"Prefer JSON output.": [
+		""
 	],
 	"Preferences": [
 		"偏好設定"
@@ -2203,6 +2545,9 @@
 	],
 	"Preferred light theme": [
 		"偏好的亮色主題"
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		""
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
 		"按 Ctrl+D 或輸入「exit」以退出應用程式"
@@ -2244,7 +2589,7 @@
 		"處理使用者刪除"
 	],
 	"Processing": [
-		""
+		"處理中"
 	],
 	"Profile": [
 		"設定檔"
@@ -2285,8 +2630,17 @@
 	"Publish notes to the internet": [
 		"將記事發布至網路上"
 	],
+	"Publish/unpublish": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
 	"Quit": [
 		"結束"
+	],
+	"Re-download model": [
+		""
 	],
 	"Re-encrypt data": [
 		"重新加密資料"
@@ -2314,6 +2668,15 @@
 	],
 	"Recipients:": [
 		"共享對象："
+	],
+	"Recommended": [
+		"推薦"
+	],
+	"Recommended plugins": [
+		"延伸模組推薦"
+	],
+	"Record audio": [
+		""
 	],
 	"Redo": [
 		"恢復"
@@ -2348,6 +2711,9 @@
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"將特定的 <item> (記事或記事本) 重新命名為 <name>。"
 	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
+	],
 	"Renew token": [
 		"換一組 token"
 	],
@@ -2363,14 +2729,26 @@
 	"Replace: ": [
 		"取代："
 	],
-	"Report an issue": [
+	"replaced $ matches": [
 		""
+	],
+	"replaced match on line $": [
+		""
+	],
+	"Report an issue": [
+		"回報問題"
 	],
 	"Report any issues concerning the plugin.": [
-		""
+		"回報延伸模組問題。"
 	],
 	"Report fraudulent plugin": [
-		""
+		"回報惡意延伸模組"
+	],
+	"Report system": [
+		"回報系統"
+	],
+	"Reports": [
+		"回報"
 	],
 	"Reset application layout": [
 		"重設應用程式佈局"
@@ -2396,11 +2774,23 @@
 	"Restore": [
 		"還原"
 	],
+	"Restore note": [
+		"恢復的記事"
+	],
+	"Restore notebook": [
+		"恢復記事本"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		"從垃圾桶恢復符合 <note-pattern> 的記事。"
+	],
+	"Restored items": [
+		"恢復的項目"
+	],
 	"Restored Notes": [
 		"恢復的記事"
 	],
 	"Results (%d):": [
-		""
+		"結果 (%d):"
 	],
 	"Retry": [
 		"重試"
@@ -2419,6 +2809,12 @@
 	],
 	"Revision: %s (%s)": [
 		"修訂版：%s (%s)"
+	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		"執行文字檔中的命令，每條命令各佔一行。"
@@ -2465,6 +2861,12 @@
 	"Save geo-location with notes": [
 		"在記事中保存地理位置資訊"
 	],
+	"Scanned code": [
+		""
+	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"搜尋"
 	],
@@ -2474,11 +2876,17 @@
 	"Search for...": [
 		"搜尋..."
 	],
+	"Search hidden": [
+		"隱藏搜尋"
+	],
 	"Search in all the notes": [
 		"在所有記事中搜尋"
 	],
 	"Search in current note": [
 		"在目前記事中搜尋"
+	],
+	"Search shown": [
+		"顯示搜尋"
 	],
 	"Search...": [
 		"搜尋..."
@@ -2504,8 +2912,17 @@
 	"Select file...": [
 		"選擇檔案..."
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
 		"選擇父筆記本"
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
+	"Self-hosted": [
+		""
 	],
 	"Send bug report": [
 		"發送出錯報告"
@@ -2534,6 +2951,9 @@
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"將特定 <note> 的屬性 <name> 設置為特定的 [值]。可能的屬性有:\n\n%s"
 	],
+	"Settings": [
+		""
+	],
 	"Share": [
 		"分享"
 	],
@@ -2543,6 +2963,9 @@
 	"Share a notebook with others": [
 		"分享筆記本給其他人"
 	],
+	"Share from %s (%s)": [
+		"從%s = %s (%s) 分享"
+	],
 	"Share Notebook": [
 		"分享記事本"
 	],
@@ -2551,6 +2974,12 @@
 	],
 	"Share permissions": [
 		"共享權限"
+	],
+	"Shares": [
+		"分享"
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
+		""
 	],
 	"Sharing notebook...": [
 		"分享記事本..."
@@ -2576,8 +3005,8 @@
 	"Show disabled keys": [
 		"顯示已停用密鑰"
 	],
-	"Show more actions": [
-		"顯示更多操作"
+	"Show monospace fonts only.": [
+		"只顯示monospace字型系列。"
 	],
 	"Show note counts": [
 		"顯示記事數量"
@@ -2615,6 +3044,9 @@
 	"Skipped: %d.": [
 		"略過：%d。"
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"黃昏黑"
 	],
@@ -2622,10 +3054,10 @@
 		"日光白"
 	],
 	"Some attachments could not be downloaded. Please try to download them again.": [
-		""
+		"某些附件下載失敗。請您重新下載。"
 	],
 	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
-		""
+		"一些附件需要下載，將附件下載模式設為「總是」然後再試。"
 	],
 	"Some items cannot be decrypted.": [
 		"有些項目無法解密。"
@@ -2635,6 +3067,15 @@
 	],
 	"Some items cannot be synchronised. Press for more info.": [
 		"有些項目不能同步。請按此查看更多資訊。"
+	],
+	"Some items could not be synchronised. Please try to synchronise them first.": [
+		"有些項目不能同步。請先嘗試同步這些項目。"
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"記事本排序方式"
@@ -2657,6 +3098,9 @@
 	"Source: ": [
 		"來源："
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -2671,6 +3115,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"啟動應用程式時最小化到系統匣"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		"開始、停止或檢查 API 伺服器。若要指定在哪個連接埠上執行，請設定 api.port 設定變數。指令為 (%s)"
@@ -2750,6 +3197,9 @@
 	"Switch profile": [
 		"切換使用者"
 	],
+	"Switch to back-facing camera": [
+		""
+	],
 	"Switch to note type": [
 		"切換為記事"
 	],
@@ -2761,6 +3211,9 @@
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"切換到 [notebook] - 所有進一步的操作將在此記事本中發生。"
+	],
+	"Sync": [
+		""
 	],
 	"Sync as many devices as you want": [
 		"同步任意數量的設備"
@@ -2822,11 +3275,14 @@
 	"Synchronizing...": [
 		"同步中..."
 	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
+	],
 	"Tabloid": [
 		"Tabloid"
-	],
-	"tag1, tag2, ...": [
-		"標籤 1、標籤 2、..."
 	],
 	"Tagged: %d.": [
 		"已標籤：%d。"
@@ -2838,7 +3294,7 @@
 		"拍攝相片"
 	],
 	"Task \"%s\" failed with error: %s": [
-		""
+		"任務\"%s\" 失敗 ，錯誤: %s"
 	],
 	"Task list": [
 		"任務清單"
@@ -2855,14 +3311,14 @@
 	"Text editor command": [
 		"文字編輯器命令"
 	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
+	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		"無法刪除目前的設定檔。切換至不同的設定檔並重試。"
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
 		"程式即將關閉，請重新啟動以完成此過程。"
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
-		"應用程式並未正確關閉，請問你要開啟安全模式嗎？"
 	],
 	"The application has been authorised - you may now close this browser tab.": [
 		"程式已取得權限 - 您現在可以關閉此瀏覽器分頁。"
@@ -2900,20 +3356,26 @@
 	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
 		"因數屬性決定了清單上的一項如何增長或縮小，以適應其容器中相對於其他項目的可用空間。因此因數為 2 的的一項是因數為 1 的一項的佔用空間的兩倍。重啟程式以查看變化。"
 	],
+	"The following attachment matches your search query:": [
+		"以下附件符合您的查詢："
+	],
 	"The following attachments are being watched for changes:": [
 		"已監控下列附件的變動："
 	],
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		"以下密鑰使用了過時的加密演算法，建議升級。升級後的主密鑰仍可照常加解密您的資料。"
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"Joplin 行動 App 暫不支援此類型的鏈結：%s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		"Joplin 團隊已經完成這個擴充插件的審查，此插件符合我們的安全與效能標準。"
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
 		"以下帶有 ID 的密鑰目前正被使用於加密你的部分項目，然而應用程式目前無法存取這些項目。它們最終很可能會透過同步的方式來下載。"
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		""
 	],
 	"The master key has been upgraded successfully!": [
 		"主密鑰已成功升級!"
@@ -2923,6 +3385,12 @@
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
 		"已成功將「%s」還原至「%s」筆記本中。"
+	],
+	"The note was successfully moved to the trash.": [
+		"已成功將「%s」還原至「%s」記事本中。"
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		"記事本和內容已成功移到垃圾桶中。"
 	],
 	"The notebook could not be saved: %s": [
 		"無法儲存記事本：%s"
@@ -2954,6 +3422,9 @@
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		"要同步的目標。每個同步目標可能有額外參數命名為 `sync.NUM.NAME`（參考下方描述）。"
 	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
+	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		"Web Clipper  需要你的授權才得以存取你的資料。"
 	],
@@ -2975,6 +3446,9 @@
 	"There are currently no notes. Create one by clicking on the (+) button.": [
 		"您當前沒有任何記事。點擊 (+) 鈕即可新增。"
 	],
+	"There are no notes in the trash folder.": [
+		"垃圾桶中沒記事。"
+	],
 	"There are unsaved changes.": [
 		"有未儲存的變更。"
 	],
@@ -2988,7 +3462,7 @@
 		"下載此附件時出現錯誤："
 	],
 	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
-		""
+		"這些項目未能同步，但已經被標記為“忽略”。"
 	],
 	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
 		"這些頊目將保留在設備上，但不會上傳到同步目標。要尋找這些項目，請以標題或 ID （在上面的括弧中顯示）搜尋。"
@@ -3000,13 +3474,10 @@
 		"這允許其他使用者與您共享筆記本，然後您們可以一同協作。然而，這並不允許您將筆記本與其他人分享，除非您具有 \"%s\" 功能。"
 	],
 	"This attachment does not have OCR data (Status: %s)": [
-		""
+		"這個附件沒有OCR 資料(狀態:%s)"
 	],
 	"This attachment is not downloaded or not decrypted yet": [
 		"此附件尚未完成下載或解密"
-	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"此附件尚未下載或解密完成。"
 	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"此授權 Token 僅在需要允許第三方程式存取 Joplin 資料時才用得上。"
@@ -3014,8 +3485,26 @@
 	"This drawing may have unsaved changes.": [
 		"該繪圖可能有未儲存的變更。"
 	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
+		""
+	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
 		"此為顯示記事相關附件的進階工具，刪除後將無法復原，請謹慎使用。"
+	],
+	"This note could not be deleted: %s": [
+		"無法刪除這個記事：%s"
+	],
+	"This note could not be duplicated: %s": [
+		"這些記事無法製作副本：%s"
+	],
+	"This note could not be moved: %s": [
+		"無法移動這些記事：%s"
 	],
 	"This note does not have geolocation information.": [
 		"此記事沒有地理位置定位資訊。"
@@ -3029,8 +3518,11 @@
 	"This note has no history": [
 		"此記事沒有歷史紀錄"
 	],
-	"This plugin doesn't support %s.": [
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
 		""
+	],
+	"This plugin doesn't support %s.": [
+		"延伸模組不支援 %s。"
 	],
 	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
 		"這個編輯模式尚有許多限制，建議使用前先深入了解。"
@@ -3039,7 +3531,7 @@
 		"此服務允許瀏覽器外掛與 Joplin 溝通。當啟用它時，您的防火牆可能要求您授予 Joplin 偵聽特定埠的許可權。"
 	],
 	"This subfolder of the trash has no notes.": [
-		""
+		"垃圾桶裡的子文件夾沒有筆記。"
 	],
 	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
 		"這將會允許 Joplin 在背景執行。建議啟用此設定，以便不斷同步您的記事，從而減少衝突次數。"
@@ -3048,7 +3540,7 @@
 		"這將會開啟新視窗。儲存您目前的變更嗎？"
 	],
 	"This will permanently delete all items in the trash. Continue?": [
-		""
+		"這將永久刪除垃圾桶裡所有項目，要繼續嗎？"
 	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		"此動作將會從你的收藏庫中移除記事本，並且未來將無法再存取其內容。確定要繼續嗎？"
@@ -3065,8 +3557,14 @@
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"請按照以下步驟，設定 Joplin 與 Dropbox 同步所需的選項："
 	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		"為了讓Joplin與Joplin Cloud進行同步，請使用以下網址登入："
+	],
 	"To continue, please enter your master password below.": [
 		"若要繼續，請在下方輸入你的主密碼。"
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"要刪除標籤，請清除相關記事的這個標籤。"
@@ -3101,6 +3599,9 @@
 	"to-do": [
 		"待辦事項"
 	],
+	"To-do": [
+		"待辦事項"
+	],
 	"to-do: %s": [
 		"待辦事項：%s"
 	],
@@ -3118,6 +3619,12 @@
 	],
 	"Toggle external editing": [
 		"切換外部編輯模式"
+	],
+	"Toggle menu bar": [
+		"顯示 / 隱藏上方工具列"
+	],
+	"Toggle note history, keep notes for": [
+		"保留記事歷史記錄"
 	],
 	"Toggle note list": [
 		"切換記事清單"
@@ -3147,13 +3654,16 @@
 		"總數：%d/%d"
 	],
 	"Trash": [
-		""
+		"垃圾桶"
 	],
 	"Try again": [
 		"再試一次"
 	],
 	"Try it now": [
 		"現在就試試"
+	],
+	"TYPE": [
+		""
 	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"輸入 `help [command]` 查看關於命令的更多資訊; 或者輸入 `help all` 獲取完整的使用說明。"
@@ -3164,9 +3674,6 @@
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		"輸入記事標題、部分記事內容、# 後輸入標籤名稱、@ 後輸入筆記本名稱等方式，可前往相應搜尋結果。或者可輸入 : 以搜尋其他指令。"
 	],
-	"Type new tags or select from list": [
-		"輸入新標籤，或在清單中選擇"
-	],
 	"Type: %s.": [
 		"類型：%s。"
 	],
@@ -3176,6 +3683,9 @@
 	"Unable to share log data. Reason: %s": [
 		"無法分享日誌資料。原因：%s"
 	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		"最上方顯示未完成的待辦事項"
 	],
@@ -3183,7 +3693,13 @@
 		"復原"
 	],
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
-		""
+		"移除與重新安裝應用程式。首先確保你在桌面應用程式導出所有筆記來建立備份。"
+	],
+	"Unknown": [
+		"不明"
+	],
+	"Unknown file type": [
+		"未知的檔案類型"
 	],
 	"Unknown flag: %s": [
 		"未知的標誌：%s"
@@ -3200,6 +3716,9 @@
 	"Unshare": [
 		"停止分享"
 	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
+	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		"確定要停止共享嗎？此舉將會使共享對象無法再存取這份共享記事本。"
 	],
@@ -3214,6 +3733,9 @@
 	],
 	"Update": [
 		"更新"
+	],
+	"Update available": [
+		"可用更新"
 	],
 	"Update profile": [
 		"更新使用者"
@@ -3284,6 +3806,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		"用在需要固定字寬的狀況（表格、待辦事項、程式碼等）。如果尋無此字型，將顯示為通用的固定寬度字型。"
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		"使用者移除"
 	],
@@ -3300,7 +3825,7 @@
 		"檢視"
 	],
 	"View OCR text": [
-		""
+		"顯示光學字元辨識文字"
 	],
 	"View on map": [
 		"在地圖上顯示"
@@ -3314,11 +3839,17 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		"語音輸入語言檔案(URL)"
 	],
 	"Voice typing...": [
 		"語音輸入..."
+	],
+	"Waiting for authorisation...": [
+		"等待授權..."
 	],
 	"Warning": [
 		"警告"
@@ -3327,10 +3858,10 @@
 		"警告：為確保效能，將不會顯示所有資源（限制：%s）。"
 	],
 	"We have a system for reporting and removing problematic plugins.": [
-		""
+		"我們有一個用於報告與刪除問題延伸模組系統。"
 	],
 	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
-		""
+		"我們將受信任的Joplin 社群成員開發延伸模組標記為\"推薦\"。"
 	],
 	"Web Clipper": [
 		"網頁剪輯"
@@ -3351,7 +3882,10 @@
 		"官方網站及線上說明"
 	],
 	"WebView package: %s": [
-		""
+		"WebView 封包:%s"
+	],
+	"WebView version: %s": [
+		"WebView版本: %s"
 	],
 	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
 		"Joplin 歡迎您!\n\n鍵入: `:help shortcuts` 檢視鍵盤快速鍵清單，或輸入 `:help` 檢視使用說明。\n\n例如，您可輸入: `mb` 新增一本記事本; 輸入 `mn` 新增記事。"
@@ -3359,11 +3893,17 @@
 	"Welcome!": [
 		"歡迎！"
 	],
+	"What are plugins?": [
+		"什麼是延伸模組？"
+	],
 	"When creating a new note:": [
 		"當新增記事時："
 	],
 	"When creating a new to-do:": [
 		"當新增待辦事項時："
+	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
 	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		"啟用後，應用程式將掃描您的附件並提取其中的文字。這將使您能夠在這些附件中搜索文本。"
@@ -3390,6 +3930,15 @@
 		"您將附加大型圖片 (%dx%d pixels)，附加之前是否要把尺寸縮小為 %d pixels？"
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		"您已經登入 Joplin Cloud，您可以離開這個畫面。"
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You currently have no notebooks.": [
@@ -3404,8 +3953,11 @@
 	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
 		"若您需要重新加密資料（例如：發現某些記事使用了過時的加密方式），可使用下面的工具。"
 	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		"無法連線到 Joplin Cloud. 請檢查您的認證信息並再試一次。錯誤:"
+	],
 	"Your account doesn't have access to this feature": [
-		""
+		"您的帳戶無法訪問此功能"
 	],
 	"Your choice: ": [
 		"您的選擇： "
@@ -3414,16 +3966,13 @@
 		"您的資料將被重新加密並再次同步。"
 	],
 	"Your Joplin Cloud credentials are invalid, please login.": [
-		""
+		"你的 Joplin Cloud 憑證無效，請重新登入。"
 	],
 	"Your password is needed to decrypt some of your data.": [
 		"需要輸入你的密碼，才能解密你的部分資料。"
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		"需要輸入你的密碼，才能解密你的部分資料。輸入 `:e2ee decrypt`  來進行設定。"
-	],
-	"Your permission to use your camera is required.": [
-		"您必須允許程式使用相機。"
 	],
 	"Your version: %s": [
 		"您目前的版本: %s"

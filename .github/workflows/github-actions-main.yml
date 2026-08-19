@@ -1,5 +1,6 @@
 name: Joplin Continuous Integration
 on: [push, pull_request]
+
 jobs:
   Main:
     # We always process server or desktop release tags, because they also publish the release
@@ -9,50 +10,14 @@ jobs:
       matrix:
         # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
         # https://github.com/actions/runner-images/issues/6709
-        os: [macos-13, ubuntu-20.04, windows-2019]
+        os: [macos-15-intel, ubuntu-22.04, windows-2025, ubuntu-22.04-arm]
     steps:
+      - uses: actions/checkout@v6
 
-      # Trying to fix random networking issues on Windows
-      # https://github.com/actions/runner-images/issues/1187#issuecomment-686735760
-      - name: Disable TCP/UDP offload on Windows
-        if: runner.os == 'Windows'
-        run: Disable-NetAdapterChecksumOffload -Name * -TcpIPv4 -UdpIPv4 -TcpIPv6 -UdpIPv6
-
-      - name: Disable TCP/UDP offload on Linux
-        if: runner.os == 'Linux'
-        run: sudo ethtool -K eth0 tx off rx off
-
-      - name: Disable TCP/UDP offload on macOS
-        if: runner.os == 'macOS'
-        run: |
-          sudo sysctl -w net.link.generic.system.hwcksum_tx=0
-          sudo sysctl -w net.link.generic.system.hwcksum_rx=0
-
-      # Silence apt-get update errors (for example when a module doesn't
-      # exist) since otherwise it will make the whole build fails, even though
-      # it might work without update. libsecret-1-dev is required for keytar -
-      # https://github.com/atom/node-keytar
-
-      - name: Install Linux dependencies
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update || true
-          sudo apt-get install -y gettext
-          sudo apt-get install -y libsecret-1-dev
-          sudo apt-get install -y translate-toolkit
-          sudo apt-get install -y rsync
-          # Provides a virtual display on Linux. Used for Playwright integration
-          # testing.
-          sudo apt-get install -y xvfb
-
-      - name: Install macOs dependencies
-        if: runner.os == 'macOS'
-        run: |
-          # Required for building the canvas package
-          brew install pango
+      - name: Setup build environment
+        uses: ./.github/workflows/shared/setup-build-environment
 
       - name: Install Docker Engine
-        # if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
         if: runner.os == 'Linux'
         run: |
           sudo apt-get install -y apt-transport-https
@@ -62,42 +27,45 @@ jobs:
           sudo apt-get install -y lsb-release
           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
           echo \
-              "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+              "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
               $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
           sudo apt-get update || true
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin
 
-      - uses: actions/checkout@v4
-      - uses: olegtarasov/get-tag@v2.1.3
-      - uses: actions/setup-node@v4
-        with:
-          # We need to pin the version to 18.15, because 18.16+ fails with this error:
-          # https://github.com/facebook/react-native/issues/36440
-          node-version: '18.15.0'
-          cache: 'yarn'
-
-      - name: Install Yarn
+      - name: Free disk space
+        if: runner.os == 'Linux'
         run: |
-          # https://yarnpkg.com/getting-started/install
-          corepack enable
-      
+          sudo rm -rf /usr/local/lib/android || true
+          sudo rm -rf /usr/share/dotnet || true
+          sudo rm -rf /opt/ghc || true
+          docker system prune -af || true
+          docker builder prune -af || true
+          sudo rm -rf /var/lib/docker/tmp/* || true
+
       # Login to Docker only if we're on a server release tag. If we run this on
       # a pull request it will fail because the PR doesn't have access to
       # secrets
       - uses: docker/login-action@v3
-        if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
+        if: runner.os == 'Linux' && (startsWith(github.ref, 'refs/tags/server-v') || startsWith(github.ref, 'refs/tags/transcribe-v'))
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # macos-latest ships with Python 3.12 by default, but this removes a
-      # utility that's used by electron-builder (distutils) so we need to pin
-      # Python to an earlier version.
-      # Fixes error `ModuleNotFoundError: No module named 'distutils'`
-      # Ref: https://github.com/nodejs/node-gyp/issues/2869
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+      # - name: Test Windows app signing
+      #   if: runner.os == 'Windows'
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      #     IS_CONTINUOUS_INTEGRATION: 1
+      #     BUILD_SEQUENCIAL: 1
+      #     SSL_ESIGNER_USER_NAME: ${{ secrets.SSL_ESIGNER_USER_NAME }}
+      #     SSL_ESIGNER_USER_PASSWORD: ${{ secrets.SSL_ESIGNER_USER_PASSWORD }}
+      #     SSL_ESIGNER_CREDENTIAL_ID: ${{ secrets.SSL_ESIGNER_CREDENTIAL_ID }}
+      #     SSL_ESIGNER_USER_TOTP: ${{ secrets.SSL_ESIGNER_USER_TOTP }}
+      #     SIGN_APPLICATION: 1
+      #   # To ensure that the operations stop on failure, all commands
+      #   # should be on one line with "&&" in between.
+      #   run: |
+      #     yarn install && cd packages/app-desktop && yarn dist
 
       - name: Run tests, build and publish Linux and macOS apps
         if: runner.os == 'Linux' || runner.os == 'macOs'
@@ -120,15 +88,19 @@ jobs:
       - name: Build and publish Windows app
         if: runner.os == 'Windows' && startsWith(github.ref, 'refs/tags/v')
         env:
-          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CSC_KEY_PASSWORD }}
-          CSC_LINK: ${{ secrets.WINDOWS_CSC_LINK }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
-        # To ensure that the operations stop on failure, all commands
-        # should be on one line with "&&" in between.
+          SSL_ESIGNER_USER_NAME: ${{ secrets.SSL_ESIGNER_USER_NAME }}
+          SSL_ESIGNER_USER_PASSWORD: ${{ secrets.SSL_ESIGNER_USER_PASSWORD }}
+          SSL_ESIGNER_CREDENTIAL_ID: ${{ secrets.SSL_ESIGNER_CREDENTIAL_ID }}
+          SSL_ESIGNER_USER_TOTP: ${{ secrets.SSL_ESIGNER_USER_TOTP }}
+          SIGN_APPLICATION: 1
+        # `yarn install` can fail randomly on CI when node-pre-gyp downloads
+        # prebuilt sqlite3 binaries from GitHub Releases - retry a few times.
         run: |
-          yarn install && cd packages/app-desktop && yarn dist
+          . "${env:GITHUB_WORKSPACE}/.github/scripts/build_windows.ps1"
+          Build-WindowsApp
 
       # Build and package the Windows app, without publishing it, just to
       # verify that the build process hasn't been broken.
@@ -140,7 +112,17 @@ jobs:
           SERVER_REPOSITORY: joplin/server
           SERVER_TAG_PREFIX: server
         run: |
-          yarn install && cd packages/app-desktop && yarn dist --publish=never
+          . "${env:GITHUB_WORKSPACE}/.github/scripts/build_windows.ps1"
+          Build-WindowsApp -DistArgs "--publish=never"
+
+      - name: Publish Docker manifest
+        if: runner.os == 'Linux'
+        env:
+          SERVER_REPOSITORY: joplin/server
+          SERVER_TAG_PREFIX: server
+        run: |
+          chmod 700 "${GITHUB_WORKSPACE}/.github/scripts/publish_docker_manifest.sh"
+          "${GITHUB_WORKSPACE}/.github/scripts/publish_docker_manifest.sh"
 
   ServerDockerImage:
     if: github.repository == 'laurent22/joplin'
@@ -149,7 +131,7 @@ jobs:
       matrix:
         # Do not use unbuntu-latest because it causes `The operation was canceled` failures:
         # https://github.com/actions/runner-images/issues/6709
-        os: [ubuntu-20.04]
+        os: [ubuntu-22.04, ubuntu-22.04-arm]
     steps:
 
       - name: Install Docker Engine
@@ -161,41 +143,56 @@ jobs:
           sudo apt-get install -y lsb-release
           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
           echo \
-              "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+              "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
               $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
           sudo apt-get update || true
-          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '18'
-          cache: 'yarn'
+          node-version: '24'
 
-      - name: Install Yarn
+      - name: Free disk space
+        if: runner.os == 'Linux'
         run: |
-          # https://yarnpkg.com/getting-started/install
-          corepack enable
+          sudo rm -rf /usr/local/lib/android || true
+          sudo rm -rf /usr/share/dotnet || true
+          sudo rm -rf /opt/ghc || true
+          docker system prune -af || true
+          docker builder prune -af || true
+          sudo rm -rf /var/lib/docker/tmp/* || true
+
+      - uses: ./.github/workflows/shared/install-yarn
 
       - name: Build Docker Image
         env:
           BUILD_SEQUENCIAL: 1
         run: |
-          yarn install
-          yarn buildServerDocker --tag-name server-v0.0.0 --repository joplin/server
+          if [ "$RUNNER_ARCH" == "ARM64" ]; then
+            DOCKER_IMAGE_PLATFORM="linux/arm64"
+          fi
+
+          echo "RUNNER_OS=$RUNNER_OS"
+          echo "RUNNER_ARCH=$RUNNER_ARCH"
+          echo "DOCKER_IMAGE_PLATFORM=$DOCKER_IMAGE_PLATFORM"
+
+          source "${GITHUB_WORKSPACE}/.github/scripts/retry.sh"
+          retry yarn install
+          yarn buildServerDocker --docker-file Dockerfile.server --platform $DOCKER_IMAGE_PLATFORM --tag-name server-v0.0.0 --repository joplin/server
 
           # Basic test to ensure that the created build is valid. It should exit with
-          # code 0  if it works.
-          docker run joplin/server:0.0.0-beta node dist/app.js migrate list
+          # code 0 if it works.
+          docker run joplin/server:$(dpkg --print-architecture)-0.0.0 node dist/index.js migrate list
  
       - name: Check HTTP request
         run: |
           # Need to pass environment variables:
-          docker run -p 22300:22300 joplin/server:0.0.0-beta node dist/app.js --env dev &
+          docker run --env MAX_TIME_DRIFT=0 --publish 22300:22300 joplin/server:$(dpkg --print-architecture)-0.0.0 node dist/index.js --env dev &
 
           # Wait for server to start
-          sleep 30
+          sleep 120
 
           # Check if status code is correct
           # if the actual_status DOES NOT include the expected_status
@@ -219,4 +216,7 @@ jobs:
             echo 'Failed while checking the body response after request to /api/ping'
             exit 1;
           fi
-
+      
+      - name: Check sync
+        run: |
+          yarn syncFuzzer start --use-running-server --steps 5

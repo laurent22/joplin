@@ -25,8 +25,7 @@ export enum SettingStorage {
 
 // This is the definition of a setting item
 export interface SettingItem {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	value: any;
+	value: unknown;
 	type: SettingItemType;
 	public: boolean;
 
@@ -36,13 +35,13 @@ export interface SettingItem {
 	section?: string;
 	label?(): string;
 	description?: (_appType: AppType)=> string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Options vary per setting (enum keys, label-by-locale, etc.); each call site handles its own shape
 	options?(): any;
 	optionsOrder?(): string[];
 	appTypes?: AppType[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Show callbacks access multiple settings by name with their concrete types; tightening forces a cast at every call site
 	show?(settings: any): boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- filter receives/returns the setting's own value type (varies per setting)
 	filter?(value: any): any;
 	secure?: boolean;
 	advanced?: boolean;

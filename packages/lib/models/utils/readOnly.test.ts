@@ -10,8 +10,7 @@ import { setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, switchClient, t
 import BaseItem from '../BaseItem';
 
 
-const checkReadOnly = (itemType: ModelType, item: ItemSlice, shareData: ShareState = defaultShareState) => {
-	const syncUserId = '';
+const checkReadOnly = (itemType: ModelType, item: ItemSlice, shareData: ShareState = defaultShareState, syncUserId = '') => {
 	return itemIsReadOnlySync(itemType, ItemChange.SOURCE_UNSPECIFIED, item, syncUserId, shareData);
 };
 
@@ -20,6 +19,21 @@ const createTestResource = async () => {
 	await shim.fsDriver().writeFile(tempFile, 'Test', 'utf8');
 	const note1 = await Note.save({ title: 'note' });
 	await shim.attachFileToNote(note1, tempFile);
+};
+
+const makeOwnerOfShare = (shareId: string, syncUserId: string) => {
+	BaseItem.syncShareCache.shares = BaseItem.syncShareCache.shares.map(share => {
+		if (share.id === shareId) {
+			return {
+				...share,
+				user: {
+					id: syncUserId,
+					email: 'test@example.com',
+				},
+			};
+		}
+		return share;
+	});
 };
 
 describe('readOnly', () => {
@@ -62,6 +76,24 @@ describe('readOnly', () => {
 
 		const cleanup = simulateReadOnlyShareEnv(share_id);
 		expect(checkReadOnly(ModelType.Resource, resource, BaseItem.syncShareCache)).toBe(true);
+		cleanup();
+	});
+
+	test('should support checking that items are read-only when there are multiple shares', async () => {
+		const shareId1 = '123456';
+		const shareId2 = '234567';
+		const note = await Note.save({ body: 'test', share_id: shareId1 });
+
+		const syncUserId = 'test-user-id';
+		const cleanup = simulateReadOnlyShareEnv([shareId1, shareId2]);
+
+		// If the owner of a different share, should be read-only
+		makeOwnerOfShare(shareId2, syncUserId);
+		expect(checkReadOnly(ModelType.Note, note as ItemSlice, BaseItem.syncShareCache, syncUserId)).toBe(true);
+
+		// If also the owner of the same share, it should not be read-only
+		makeOwnerOfShare(shareId1, syncUserId);
+		expect(checkReadOnly(ModelType.Note, note as ItemSlice, BaseItem.syncShareCache, syncUserId)).toBe(false);
 		cleanup();
 	});
 });

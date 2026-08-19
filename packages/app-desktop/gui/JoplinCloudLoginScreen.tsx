@@ -1,18 +1,20 @@
-import { Fragment, useEffect, useMemo, useReducer, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useMemo, useReducer, useState } from 'react';
 import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 import { clipboard } from 'electron';
 import Button, { ButtonLevel } from './Button/Button';
-const bridge = require('@electron/remote').require('./bridge').default;
 import { uuidgen } from '@joplin/lib/uuid';
 import { Dispatch } from 'redux';
-import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful } from '@joplin/lib/services/joplinCloudUtils';
+import { reducer, defaultState, generateApplicationConfirmUrl, checkIfLoginWasSuccessful, saveApplicationAuthId } from '@joplin/lib/services/joplinCloudUtils';
 import { AppState } from '../app.reducer';
 import Logger from '@joplin/utils/Logger';
 import { reg } from '@joplin/lib/registry';
+import JoplinCloudSignUpCallToAction from './JoplinCloudSignUpCallToAction';
+import bridge from '../services/bridge';
 
 const logger = Logger.create('JoplinCloudLoginScreen');
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 
 interface Props {
 	dispatch: Dispatch;
@@ -51,23 +53,24 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		setIntervalIdentifier(interval);
 	};
 
-	const onButtonUsed = () => {
+	const onButtonUsed = async () => {
 		if (state.next === 'LINK_USED') {
 			dispatch({ type: 'LINK_USED' });
 		}
+		await saveApplicationAuthId(applicationAuthId);
 		periodicallyCheckForCredentials();
 	};
 
 	const onAuthorizeClicked = async () => {
 		const url = await generateApplicationConfirmUrl(confirmUrl(applicationAuthId));
-		bridge().openExternal(url);
-		onButtonUsed();
+		await onButtonUsed();
+		void bridge().openExternal(url);
 	};
 
 	const onCopyToClipboardClicked = async () => {
 		const url = await generateApplicationConfirmUrl(confirmUrl(applicationAuthId));
+		await onButtonUsed();
 		clipboard.writeText(url);
-		onButtonUsed();
 	};
 
 	useEffect(() => {
@@ -80,7 +83,7 @@ const JoplinCloudScreenComponent = (props: Props) => {
 		<div className="login-page">
 			<div className="page-container">
 				{state.active !== 'COMPLETED' ? (
-					<Fragment>
+					<>
 						<p className="text">{_('To allow Joplin to synchronise with Joplin Cloud, please login using this URL:')}</p>
 						<div className="buttons-container">
 							<Button
@@ -97,14 +100,15 @@ const JoplinCloudScreenComponent = (props: Props) => {
 							/>
 
 						</div>
-					</Fragment>
+					</>
 				) : null}
 				<p className={state.className}>{state.message()}
 					{state.active === 'ERROR' ? (
 						<span className={state.className}>{state.errorMessage}</span>
 					) : null}
 				</p>
-				{state.active === 'LINK_USED' ? <div id="loading-animation" /> : null}
+				{state.active === 'LINK_USED' ? <div className="loading-animation" /> : null}
+				{state.active !== 'COMPLETED' ? <JoplinCloudSignUpCallToAction source='desktop-login-screen' withLeadIn={true} /> : null}
 			</div>
 			<ButtonBar onCancelClick={() => props.dispatch({ type: 'NAV_BACK' })} />
 		</div>

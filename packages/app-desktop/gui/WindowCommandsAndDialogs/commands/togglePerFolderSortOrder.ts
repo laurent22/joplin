@@ -1,6 +1,6 @@
 import { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
-import PerFolderSortOrderService from '../../../services/sortOrder/PerFolderSortOrderService';
+import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
 
 export const declaration: CommandDeclaration = {
 	name: 'togglePerFolderSortOrder',

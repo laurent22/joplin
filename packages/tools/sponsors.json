@@ -1,70 +1,31 @@
 {
 	"github": [
 		{
-			"name": "tateisu"
-		},
-		{
-			"name": "matmoly"
-		},
-		{
-			"name": "KentBrockman"
-		},
-		{
-			"name": "CyberXZT"
+			"name": "felixstorm"
 		},
 		{
 			"name": "avanderberg"
 		},
 		{
-			"name": "dbrandonjohnson"
-		},
-		{
 			"name": "chr15m"
-		},
-		{
-			"name": "maxtruxa"
-		},
-		{
-			"name": "konishi-t"
 		},
 		{
 			"name": "marcdw1289"
 		},
 		{
-			"name": "taskcruncher"
+			"name": "andypiper"
 		},
 		{
-			"name": "sif"
+			"name": "ugoertz"
 		},
 		{
-			"name": "saarantras"
-		},
-		{
-			"name": "Hegghammer"
-		},
-		{
-			"name": "jknowles"
-		},
-		{
-			"name": "fats"
-		},
-		{
-			"name": "dchecks"
+			"name": "GPrimola"
 		},
 		{
 			"name": "Galliver7"
 		},
 		{
-			"name": "mu88"
-		},
-		{
-			"name": "andypiper"
-		},
-		{
-			"name": "jamesandariese"
-		},
-		{
-			"name": "Akhil-CM"
+			"name": "Hegghammer"
 		}
 	],
 	"orgs": [
@@ -73,12 +34,6 @@
 			"title": "Serei Network",
 			"imageName": "SeireiNetwork.png",
 			"githubUser": "konishi-t"
-		},
-		{
-			"url": "https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&mtm_kwd=joplinapp&mtm_source=joplinapp-github&mtm_medium=banner",
-			"urlWebsite": "https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&mtm_kwd=joplinapp&mtm_source=joplinapp-webseite&mtm_medium=banner",
-			"title": "Hosting.de",
-			"imageName": "HostingDe.png"
 		},
 		{
 			"url": "https://citricsheep.com",
@@ -105,62 +60,42 @@
 			"githubUser": "BestKru"
 		},
 		{
-			"url": "https://www.socialfollowers.uk/buy-tiktok-followers/",
-			"title": "Social Followers",
-			"imageName": "SocialFollowers.png",
-			"githubUser": "hashcode5"
-		},
-		{
-			"url": "https://stormlikes.com/",
-			"title": "Stormlikes",
-			"imageName": "Stormlikes.png",
-			"githubUser": "Stormlikes"
-		},
-		{
 			"url": "https://route4me.com",
 			"title": "Route4Me",
 			"imageName": "Route4Me.png",
 			"githubUser": "route4me"
 		},
 		{
-			"url": "https://buyyoutubviews.com",
-			"title": "BYTV",
-			"imageName": "BYTV.png",
-			"githubUser": "bytv1"
+			"url": "https://socialboom.io/",
+			"title": "Buy YouTube, Instagram, TikTok & Facebook Growth Services at Socialboom",
+			"imageName": "Socialboom.png",
+			"githubUser": "doleocent1",
+			"alt": "Buy YouTube, Instagram, TikTok & Facebook Growth Services at Socialboom"
 		},
 		{
-			"url": "https://www.famegear.com",
-			"title": "Famegear",
-			"imageName": "Famegear.png",
-			"githubUser": "rankmediateknologi"
+			"url": "https://essaypro.com/",
+			"title": "write my essay EssayPro",
+			"imageName": "EssayPro.png",
+			"alt": "write my essay EssayPro"
 		},
 		{
-			"url": "https://casinoreviews.net",
-			"title": "Casino Reviews",
-			"imageName": "CasinoReviews.png"
-		}
-	],
-	"orgsOld": [
-		{
-			"url": "https://usrigging.com/",
-			"title": "U.S. Ringing Supply",
-			"imageName": "RingingSupply.svg"
+			"url": "https://writepaper.com/",
+			"title": "write my paper",
+			"imageName": "WritePaper.png",
+			"alt": "write my paper"
 		},
 		{
-			"url": "https://residence-greece.com/",
-			"title": "Greece Golden Visa",
-			"imageName": "ResidenceGreece.jpg"
+			"url": "https://mypaperhelp.com/",
+			"title": "MyPaperHelp",
+			"imageName": "MyPaperHelp.png",
+			"alt": "MyPaperHelp"
 		},
 		{
-			"url": "https://tranio.com/spain/",
-			"title": "Property for sale in Spain",
-			"imageName": "TranioOverseasProperty.jpg"
-		},
-		{
-			"url": "https://grundstueckspreise.info/",
-			"title": "SP Software GmbH",
-			"imageName": "Grundstueckspreise.png",
-			"githubUser": "PeterSchumacher22"
+			"url": "https://essaypay.com/",
+			"title": "EssayPay",
+			"imageName": "EssayPay.png",
+			"githubUser": "collegeboom",
+			"alt": "EssayPay"
 		}
 	]
 }

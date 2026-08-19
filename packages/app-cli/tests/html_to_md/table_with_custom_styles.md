@@ -1,0 +1,1 @@
+<div class="joplin-table-wrapper"><table style="border-collapse: collapse"><thead><tr><th>Name</th><th>Value</th></tr></thead><tbody><tr><td style="background-color: #e03e2d">Red cell</td><td style="padding: 10px 15px">Padded cell</td></tr><tr><td style="border-color: #2dc26b; border-style: solid">Green border</td><td>Normal cell</td></tr></tbody></table></div>

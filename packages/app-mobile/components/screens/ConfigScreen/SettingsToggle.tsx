@@ -8,8 +8,7 @@ import { ConfigScreenStyles } from './configScreenStyles';
 
 interface Props {
 	settingId: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	value: any;
+	value: boolean;
 
 	themeId: number;
 	styles: ConfigScreenStyles;
@@ -24,9 +23,11 @@ const SettingsToggle: FunctionComponent<Props> = props => {
 	const theme = themeStyle(props.themeId);
 	const styleSheet = props.styles.styleSheet;
 
+	const containerStyles = props.styles.getContainerStyle(!!props.description);
+
 	return (
-		<View>
-			<View style={props.styles.getContainerStyle(false)}>
+		<View style={containerStyles.outerContainer}>
+			<View style={containerStyles.innerContainer}>
 				<Text key="label" style={styleSheet.switchSettingText}>
 					{props.label}
 				</Text>

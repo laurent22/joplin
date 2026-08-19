@@ -1,9 +1,6 @@
+import Plugin from '../Plugin';
 import { FolderEntity } from '../../database/types';
-import { Disposable, MenuItem } from './types';
-export interface EditContextMenuFilterObject {
-    items: MenuItem[];
-}
-type FilterHandler<T> = (object: T) => Promise<void>;
+import { Disposable, EditContextMenuFilterObject, FilterHandler } from './types';
 declare enum ItemChangeEventType {
     Create = 1,
     Update = 2,
@@ -13,15 +10,25 @@ interface ItemChangeEvent {
     id: string;
     event: ItemChangeEventType;
 }
-interface SyncStartEvent {
-    withErrors: boolean;
-}
 interface ResourceChangeEvent {
     id: string;
 }
-type ItemChangeHandler = (event: ItemChangeEvent) => void;
-type SyncStartHandler = (event: SyncStartEvent) => void;
-type ResourceChangeHandler = (event: ResourceChangeEvent) => void;
+interface NoteContentChangeEvent {
+    note: any;
+}
+interface NoteSelectionChangeEvent {
+    value: string[];
+}
+interface NoteAlarmTriggerEvent {
+    noteId: string;
+}
+interface SyncCompleteEvent {
+    withErrors: boolean;
+}
+type WorkspaceEventHandler<EventType> = (event: EventType) => void;
+type ItemChangeHandler = WorkspaceEventHandler<ItemChangeEvent>;
+type SyncStartHandler = () => void;
+type ResourceChangeHandler = WorkspaceEventHandler<ResourceChangeEvent>;
 /**
  * The workspace service provides access to all the parts of Joplin that
  * are being worked on - i.e. the currently selected notes or notebooks as
@@ -32,16 +39,17 @@ type ResourceChangeHandler = (event: ResourceChangeEvent) => void;
  */
 export default class JoplinWorkspace {
     private store;
-    constructor(store: any);
+    private plugin;
+    constructor(plugin: Plugin, store: any);
     /**
      * Called when a new note or notes are selected.
      */
-    onNoteSelectionChange(callback: Function): Promise<Disposable>;
+    onNoteSelectionChange(callback: WorkspaceEventHandler<NoteSelectionChangeEvent>): Promise<Disposable>;
     /**
      * Called when the content of a note changes.
      * @deprecated Use `onNoteChange()` instead, which is reliably triggered whenever the note content, or any note property changes.
      */
-    onNoteContentChange(callback: Function): Promise<void>;
+    onNoteContentChange(callback: WorkspaceEventHandler<NoteContentChangeEvent>): Promise<void>;
     /**
      * Called when the content of the current note changes.
      */
@@ -54,7 +62,7 @@ export default class JoplinWorkspace {
     /**
      * Called when an alarm associated with a to-do is triggered.
      */
-    onNoteAlarmTrigger(handler: Function): Promise<Disposable>;
+    onNoteAlarmTrigger(handler: WorkspaceEventHandler<NoteAlarmTriggerEvent>): Promise<Disposable>;
     /**
      * Called when the synchronisation process is starting.
      */
@@ -62,14 +70,16 @@ export default class JoplinWorkspace {
     /**
      * Called when the synchronisation process has finished.
      */
-    onSyncComplete(callback: Function): Promise<Disposable>;
+    onSyncComplete(callback: WorkspaceEventHandler<SyncCompleteEvent>): Promise<Disposable>;
     /**
      * Called just before the editor context menu is about to open. Allows
      * adding items to it.
+     *
+     * <span class="platform-desktop">desktop</span>
      */
     filterEditorContextMenu(handler: FilterHandler<EditContextMenuFilterObject>): void;
     /**
-     * Gets the currently selected note
+     * Gets the currently selected note. Will be `null` if no note is selected.
      */
     selectedNote(): Promise<any>;
     /**

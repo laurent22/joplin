@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { Dispatch } from 'redux';
 import { AppState } from '../app.reducer';
 import CommandService, { SearchResult as CommandSearchResult } from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import { _ } from '@joplin/lib/locale';
 import { themeStyle } from '@joplin/lib/theme';
 import SearchEngine, { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
@@ -13,17 +14,17 @@ import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import ItemList from '../gui/ItemList';
 import HelpButton from '../gui/HelpButton';
-import { surroundKeywords, nextWhitespaceIndex, removeDiacritics } from '@joplin/lib/string-utils';
+import { surroundKeywords, nextWhitespaceIndex, removeDiacritics, escapeRegExp, KeywordType } from '@joplin/lib/string-utils';
 import { mergeOverlappingIntervals } from '@joplin/lib/ArrayUtils';
 import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
 import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
 import Logger from '@joplin/utils/Logger';
 import { MarkupLanguage, MarkupToHtml } from '@joplin/renderer';
 import Resource from '@joplin/lib/models/Resource';
-import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
-import Dialog from '../gui/Dialog';
+import { FolderEntity, NoteEntity, ResourceEntity, TagEntity } from '@joplin/lib/services/database/types';
+import Dialog from '@joplin/lib/components/Dialog';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
-import { htmlentities } from '@joplin/utils/html';
+import { PluginManifest } from '@joplin/lib/services/PluginManager';
 
 const logger = Logger.create('GotoAnything');
 
@@ -41,22 +42,52 @@ interface GotoAnythingSearchResult {
 	item_type?: ModelType;
 }
 
+// GotoAnything supports several modes:
+//
+// - Default: Search in note title, body. Can search for folders, tags, etc. This is the full
+//   featured GotoAnything.
+//
+// - TitleOnly: Search in note titles only.
+//
+// These different modes can be set from the `gotoAnything` command.
+
+export enum Mode {
+	Default = 0,
+	TitleOnly,
+}
+
+export interface UserDataCallbackEvent {
+	type: ModelType;
+	item: NoteEntity | FolderEntity | ResourceEntity | TagEntity;
+}
+
+export type UserDataCallbackResolve = (event: UserDataCallbackEvent)=> void;
+export type UserDataCallbackReject = (error: Error)=> void;
+export interface UserDataCallback {
+	resolve: UserDataCallbackResolve;
+	reject: UserDataCallbackReject;
+}
+
+export interface GotoAnythingUserData {
+	startString?: string;
+	mode?: Mode;
+	callback?: UserDataCallback;
+	alwaysShowHelp?: boolean;
+}
+
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	folders: any[];
+	dispatch: Dispatch;
+	folders: FolderEntity[];
 	showCompletedTodos: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	userData: any;
+	userData: GotoAnythingUserData;
 }
 
 interface State {
 	query: string;
 	results: GotoAnythingSearchResult[];
 	selectedItemId: string;
-	keywords: string[];
+	keywords: (string | ComplexTerm)[];
 	listType: number;
 	showHelp: boolean;
 	resultsInBody: boolean;
@@ -103,15 +134,11 @@ const itemListId = 'goto-anything-item-list';
 
 class GotoAnything {
 
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public dispatch: Function;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static Dialog: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static manifest: any;
+	public dispatch: Dispatch;
+	public static Dialog: React.ComponentType<Props>;
+	public static manifest: PluginManifest;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public onTrigger(event: any) {
+	public onTrigger(event: { userData: GotoAnythingUserData }) {
 		this.dispatch({
 			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: true,
@@ -124,16 +151,16 @@ class GotoAnything {
 
 class DialogComponent extends React.PureComponent<Props, State> {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous style blocks; styles_ holds different shapes per styling key
 	private styles_: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private inputRef: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private itemListRef: any;
+	private inputRef: React.RefObject<HTMLInputElement>;
+	private itemListRef: React.RefObject<ItemList<GotoAnythingSearchResult>>;
 	private listUpdateQueue_: AsyncActionQueue;
 	private markupToHtml_: MarkupToHtml;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private userCallback_: any = null;
+	private userCallback_: UserDataCallback|null = null;
+	private mode_: Mode;
+	private alwaysShowHelp_: boolean;
+	private lastMouseCoords_: { x: number; y: number } | null = null;
 
 	public constructor(props: Props) {
 		super(props);
@@ -142,6 +169,9 @@ class DialogComponent extends React.PureComponent<Props, State> {
 
 		this.userCallback_ = props?.userData?.callback;
 		this.listUpdateQueue_ = new AsyncActionQueue(100);
+
+		this.mode_ = props?.userData?.mode ? props.userData.mode : Mode.Default;
+		this.alwaysShowHelp_ = !!props?.userData?.alwaysShowHelp;
 
 		this.state = {
 			query: startString,
@@ -163,6 +193,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		this.input_onKeyDown = this.input_onKeyDown.bind(this);
 		this.renderItem = this.renderItem.bind(this);
 		this.listItem_onClick = this.listItem_onClick.bind(this);
+		this.listItem_onMouseMove = this.listItem_onMouseMove.bind(this);
 		this.helpButton_onClick = this.helpButton_onClick.bind(this);
 
 		if (startString) this.scheduleListUpdate();
@@ -256,8 +287,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		this.setState({ showHelp: !this.state.showHelp });
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private input_onChange(event: any) {
+	private input_onChange(event: React.ChangeEvent<HTMLInputElement>) {
 		this.setState({ query: event.target.value });
 
 		this.scheduleListUpdate();
@@ -312,42 +342,51 @@ class DialogComponent extends React.PureComponent<Props, State> {
 					return {
 						id: result.commandName,
 						title: result.title,
-						parent_id: null,
-						fields: [],
+						parent_id: null as string,
+						fields: [] as string[],
 						type: BaseModel.TYPE_COMMAND,
 					};
 				});
 			} else if (this.state.query.indexOf('#') === 0) { // TAGS
 				listType = BaseModel.TYPE_TAG;
 				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
-				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery });
+				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery }) as unknown as GotoAnythingSearchResult[];
 			} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
 				listType = BaseModel.TYPE_FOLDER;
-				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
-				results = await Folder.search({ titlePattern: searchQuery });
+				searchQuery = this.state.query.substr(1).trim();
+				const normalizedSearchQuery = removeDiacritics(searchQuery).toLowerCase();
 
-				for (let i = 0; i < results.length; i++) {
-					const row = results[i];
-					const path = Folder.folderPathString(this.props.folders, row.parent_id);
-					results[i] = { ...row, path: path ? path : '/' };
+				results = [];
+				for (const folder of this.props.folders) {
+					if (folder.deleted_time) continue;
+
+					const normalizedTitle = removeDiacritics(folder.title).toLowerCase();
+					if (normalizedSearchQuery && normalizedTitle.indexOf(normalizedSearchQuery) < 0) continue;
+
+					const path = Folder.folderPathString(this.props.folders, folder.parent_id);
+					results.push({ ...folder, path: path ? path : '/' } as unknown as GotoAnythingSearchResult);
 				}
 			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;
 				searchQuery = gotoAnythingStyleQuery(this.state.query);
 				// SearchEngine returns the title normalized, that is why we need to
 				// override this field below with the original title
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				results = (await SearchEngine.instance().search(searchQuery)) as any[];
+				results = (await SearchEngine.instance().search(searchQuery)) as unknown as GotoAnythingSearchResult[];
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
+				resultsInBody = !!results.find((row) => row.fields.includes('body'));
+
+				if (this.mode_ === Mode.TitleOnly) {
+					resultsInBody = false;
+					results = results.filter(r => {
+						return r.fields.includes('title');
+					});
+				}
 
 				const resourceIds = results.filter(r => r.item_type === ModelType.Resource).map(r => r.item_id);
 				const resources = await Resource.resourceOcrTextsByIds(resourceIds);
 
 				if (!resultsInBody || this.state.query.length <= 1) {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					const notes = await Note.byIds(results.map((result: any) => result.id), { fields: ['id', 'title'] });
+					const notes = await Note.byIds(results.map(result => result.id), { fields: ['id', 'title'] });
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
 						const path = Folder.folderPathString(this.props.folders, row.parent_id);
@@ -361,24 +400,29 @@ class DialogComponent extends React.PureComponent<Props, State> {
 					// going to apply a limit to the number of fetched notes.
 					// https://github.com/laurent22/joplin/issues/9944
 					if (!this.props.showCompletedTodos) {
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-						results = results.filter((row: any) => !row.is_todo || !row.todo_completed);
+						results = results.filter((row: GotoAnythingSearchResult & { is_todo?: boolean; todo_completed?: number }) => !row.is_todo || !row.todo_completed);
 					}
 
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					const notes = await Note.byIds(results.map((result: any) => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed', 'title'] });
-					// Can't make any sense of this code so...
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					const notesById = notes.reduce((obj, { id, body, markup_language, title }) => ((obj[[id] as any] = { id, body, markup_language, title }), obj), {});
+					const notes = await Note.byIds(results.map(result => result.id).slice(0, limit), { fields: ['id', 'body', 'markup_language', 'is_todo', 'todo_completed', 'title'] });
+					const notesById = notes.reduce((obj: Record<string, { id: string; body: string; markup_language: number; title: string }>, { id, body, markup_language, title }) => {
+						obj[id] = { id, body, markup_language, title };
+						return obj;
+					}, {});
 
 					// Filter out search results that are associated with non-existing notes.
 					// https://github.com/laurent22/joplin/issues/5417
 					results = results.filter(r => !!notesById[r.id])
 						.map(r => ({ ...r, title: notesById[r.id].title }));
 
-					const normalizedKeywords = (await this.keywords(searchQuery)).map(
-						({ valueRegex }: ComplexTerm) => new RegExp(removeDiacritics(valueRegex), 'ig'),
-					);
+					const keywordRegexes = (await this.keywords(searchQuery)).map(term => {
+						if (typeof term === 'string') {
+							return new RegExp(escapeRegExp(term), 'ig');
+						} else if (term.valueRegex) {
+							return new RegExp(removeDiacritics(term.valueRegex), 'ig');
+						} else {
+							return new RegExp(escapeRegExp(term.value), 'ig');
+						}
+					});
 
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
@@ -388,12 +432,12 @@ class DialogComponent extends React.PureComponent<Props, State> {
 							let fragments = '...';
 
 							const loadFragments = (markupLanguage: MarkupLanguage, content: string) => {
-								const indices = [];
+								const indices: [number, number][] = [];
 								const body = this.markupToHtml().stripMarkup(markupLanguage, content, { collapseWhiteSpaces: true });
 								const normalizedBody = removeDiacritics(body);
 
 								// Iterate over all matches in the body for each search keyword
-								for (const keywordRegex of normalizedKeywords) {
+								for (const keywordRegex of keywordRegexes) {
 									for (const match of normalizedBody.matchAll(keywordRegex)) {
 										// Populate 'indices' with [begin index, end index] of each note fragment
 										// Begins at the regex matching index, ends at the next whitespace after seeking 15 characters to the right
@@ -406,8 +450,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 								// e.g. 'Joplin is a free, open source' and 'open source note taking application'
 								// will result in 'Joplin is a free, open source note taking application'
 								const mergedIndices = mergeOverlappingIntervals(indices, 3);
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-								fragments = mergedIndices.map((f: any) => body.slice(f[0], f[1])).join(' ... ');
+								fragments = mergedIndices.map((f: [number, number]) => body.slice(f[0], f[1])).join(' ... ');
 								// Add trailing ellipsis if the final fragment doesn't end where the note is ending
 								if (mergedIndices.length && mergedIndices[mergedIndices.length - 1][1] !== body.length) fragments += ' ...';
 							};
@@ -460,8 +503,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		this.itemListRef.current.makeItemIndexVisible(index);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async gotoItem(item: any) {
+	public async gotoItem(item: GotoAnythingSearchResult & { commandArgs?: string[] }) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
 			type: 'PLUGINLEGACY_DIALOG_SET',
@@ -480,8 +522,14 @@ class DialogComponent extends React.PureComponent<Props, State> {
 
 		if (item.type === BaseModel.TYPE_COMMAND) {
 			logger.info('gotoItem: execute command', item);
-			void CommandService.instance().execute(item.id, ...item.commandArgs);
-			void focusEditorIfEditorCommand(item.id, CommandService.instance());
+			// Defer so the close above renders before the command runs — otherwise
+			// commands that reopen the dialog (e.g. linkToNote) get batched with the
+			// close, the dialog never remounts, and its constructor-read userData is
+			// stale. See https://github.com/laurent22/joplin/issues/15780
+			setTimeout(() => {
+				void CommandService.instance().execute(item.id, ...item.commandArgs);
+				void focusEditorIfEditorCommand(item.id, CommandService.instance());
+			}, 0);
 			return;
 		}
 
@@ -524,18 +572,24 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private listItem_onClick(event: any) {
-		const itemId = event.currentTarget.getAttribute('data-id');
-		const parentId = event.currentTarget.getAttribute('data-parent-id');
-		const itemType = Number(event.currentTarget.getAttribute('data-type'));
+	private listItem_onClick(event: React.MouseEvent<HTMLDivElement>) {
+		const targetResultId = event.currentTarget.getAttribute('id');
+		void this.gotoItem(this.selectedItem(targetResultId));
+	}
 
-		void this.gotoItem({
-			id: itemId,
-			parent_id: parentId,
-			type: itemType,
-			commandArgs: this.state.commandArgs,
-		});
+	private listItem_onMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+		// Only update selection when the mouse actually moves. Without this, a stationary
+		// cursor over a row that gets re-mounted (e.g. after keyboard navigation re-renders
+		// the list) would steal the keyboard selection.
+		if (this.lastMouseCoords_ && this.lastMouseCoords_.x === event.clientX && this.lastMouseCoords_.y === event.clientY) {
+			return;
+		}
+		this.lastMouseCoords_ = { x: event.clientX, y: event.clientY };
+
+		const targetResultId = event.currentTarget.getAttribute('id');
+		if (targetResultId && targetResultId !== this.state.selectedItemId) {
+			this.setState({ selectedItemId: targetResultId });
+		}
 	}
 
 	public renderItem(item: GotoAnythingSearchResult, index: number) {
@@ -547,7 +601,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 
 		const wrapKeywordMatches = (unescapedContent: string) => {
 			return surroundKeywords(
-				this.state.keywords,
+				this.state.keywords as KeywordType,
 				unescapedContent,
 				`<span class="match-highlight" style="font-weight: bold; color: ${theme.searchMarkerColor}; background-color: ${theme.searchMarkerBackgroundColor}">`,
 				'</span>',
@@ -555,9 +609,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 			);
 		};
 
-		const titleHtml = item.fragments
-			? `<span style="font-weight: bold; color: ${theme.color};">${htmlentities(item.title)}</span>`
-			: wrapKeywordMatches(item.title);
+		const titleHtml = wrapKeywordMatches(item.title);
 
 		const fragmentsHtml = !item.fragments ? null : wrapKeywordMatches(item.fragments);
 
@@ -571,6 +623,7 @@ class DialogComponent extends React.PureComponent<Props, State> {
 				className={isSelected ? 'selected' : null}
 				style={rowStyle}
 				onClick={this.listItem_onClick}
+				onMouseMove={this.listItem_onMouseMove}
 
 				data-id={item.id}
 				data-parent-id={item.parent_id}
@@ -581,14 +634,13 @@ class DialogComponent extends React.PureComponent<Props, State> {
 				aria-posinset={index + 1}
 			>
 				<div style={style.rowTitle} dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
-				{fragmentComp}
-				{pathComp}
+				{this.mode_ === Mode.TitleOnly ? null : fragmentComp}
+				{this.mode_ === Mode.TitleOnly ? null : pathComp}
 			</div>
 		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public selectedItemIndex(results: any[] = undefined, itemId: string = undefined) {
+	public selectedItemIndex(results: GotoAnythingSearchResult[] = undefined, itemId: string = undefined) {
 		if (typeof results === 'undefined') results = this.state.results;
 		if (typeof itemId === 'undefined') itemId = this.state.selectedItemId;
 		for (let i = 0; i < results.length; i++) {
@@ -598,14 +650,13 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		return -1;
 	}
 
-	public selectedItem() {
-		const index = this.selectedItemIndex();
+	public selectedItem(itemId: string = undefined) {
+		const index = this.selectedItemIndex(undefined, itemId);
 		if (index < 0) return null;
 		return { ...this.state.results[index], commandArgs: this.state.commandArgs };
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private input_onKeyDown(event: any) {
+	private input_onKeyDown(event: React.KeyboardEvent) {
 		const keyCode = event.keyCode;
 
 		if (this.state.results.length > 0 && (keyCode === 40 || keyCode === 38)) { // DOWN / UP
@@ -665,6 +716,14 @@ class DialogComponent extends React.PureComponent<Props, State> {
 		);
 	}
 
+	private helpText() {
+		if (this.mode_ === Mode.TitleOnly) {
+			return _('Type a note title to search for it.');
+		} else {
+			return _('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.');
+		}
+	}
+
 	public render() {
 		const style = this.style();
 		const helpTextId = 'goto-anything-help-text';
@@ -674,8 +733,8 @@ class DialogComponent extends React.PureComponent<Props, State> {
 				aria-live='polite'
 				id={helpTextId}
 				style={style.help}
-				hidden={!this.state.showHelp}
-			>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>
+				hidden={!this.alwaysShowHelp_ && !this.state.showHelp}
+			>{this.helpText()}</div>
 		);
 
 		return (
@@ -696,11 +755,11 @@ class DialogComponent extends React.PureComponent<Props, State> {
 						aria-controls={itemListId}
 						aria-activedescendant={this.state.selectedItemId}
 					/>
-					<HelpButton
+					{this.alwaysShowHelp_ ? null : <HelpButton
 						onClick={this.helpButton_onClick}
 						aria-controls={helpTextId}
 						aria-expanded={this.state.showHelp}
-					/>
+					/>}
 				</div>
 				{this.renderList()}
 			</Dialog>

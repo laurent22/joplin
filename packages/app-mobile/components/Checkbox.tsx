@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { TouchableHighlight, StyleSheet, TextStyle } from 'react-native';
-const Icon = require('react-native-vector-icons/Ionicons').default;
+import { TouchableHighlight, StyleSheet, TextStyle, AccessibilityInfo } from 'react-native';
+import Icon from './Icon';
+import { _ } from '@joplin/lib/locale';
 
 interface Props {
 	checked: boolean;
 	accessibilityLabel?: string;
+	accessibilityHint?: string;
 	onChange?: (checked: boolean)=> void;
 	style?: TextStyle;
 	iconStyle?: TextStyle;
@@ -40,11 +42,20 @@ const Checkbox: React.FC<Props> = props => {
 		setChecked(checked => {
 			const newChecked = !checked;
 			props.onChange?.(newChecked);
+
+			// An .announceForAccessibility is necessary here because VoiceOver doesn't announce this
+			// change on its own, even though we change [accessibilityState].
+			if (newChecked) {
+				AccessibilityInfo.announceForAccessibility(_('Checked'));
+			} else {
+				AccessibilityInfo.announceForAccessibility(_('Unchecked'));
+			}
+
 			return newChecked;
 		});
 	}, [props.onChange]);
 
-	const iconName = checked ? 'checkbox-outline' : 'square-outline';
+	const iconName = checked ? 'ionicon checkbox-outline' : 'ionicon square-outline';
 	const styles = useStyles(props.style, props.iconStyle);
 
 	const accessibilityState = useMemo(() => ({
@@ -58,8 +69,11 @@ const Checkbox: React.FC<Props> = props => {
 			accessibilityRole="checkbox"
 			accessibilityState={accessibilityState}
 			accessibilityLabel={props.accessibilityLabel ?? ''}
+			accessibilityHint={props.accessibilityHint}
+			// Web requires aria-checked
+			aria-checked={checked}
 		>
-			<Icon name={iconName} style={styles.icon} />
+			<Icon name={iconName} style={styles.icon} accessibilityLabel={null} />
 		</TouchableHighlight>
 	);
 };

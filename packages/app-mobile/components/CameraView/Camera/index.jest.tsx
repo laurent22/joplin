@@ -9,10 +9,13 @@ import { TextInput } from 'react-native';
 const Camera = (props: Props, ref: ForwardedRef<CameraRef>) => {
 	useImperativeHandle(ref, () => ({
 		takePictureAsync: async () => {
-			const path = `${shim.fsDriver().getCacheDirectoryPath()}/test-photo.svg`;
+			const parentDir = shim.fsDriver().getCacheDirectoryPath();
+			await shim.fsDriver().mkdir(parentDir);
+			const path = `${parentDir}/test-photo.svg`;
 			await shim.fsDriver().writeFile(
 				path,
-				`<svg viewBox="0 0 232 78" width="232" height="78" version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">
+				`<svg viewBox="0 -70 232 78" width="232" height="78" version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">
+					<rect width="232" height="78" y="-70" rx="32" style="fill: #ccc;"/>
 					<text style="font-family: serif; font-size: 104px; fill: rgb(128, 51, 128);">Test!</text>
 				</svg>`,
 				'utf8',

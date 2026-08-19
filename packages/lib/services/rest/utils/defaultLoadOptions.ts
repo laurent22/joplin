@@ -1,9 +1,9 @@
 import { Request } from '../Api';
+import { LoadOptions } from '../../../models/utils/types';
 import requestFields from './requestFields';
 
-export default function(request: Request, modelType: number) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const options: any = {};
+export default function(request: Request, modelType: number): LoadOptions {
+	const options: LoadOptions = {};
 	const fields = requestFields(request, modelType);
 	if (fields.length) options.fields = fields;
 	return options;

@@ -13,13 +13,13 @@ jobs:
       - name: "CLA Assistant"
         if: (github.event.comment.body == 'recheck' || github.event.comment.body == 'I have read the CLA Document and I hereby sign the CLA') || github.event_name == 'pull_request_target'
         # Beta Release
-        uses: contributor-assistant/github-action@v2.3.2
+        uses: contributor-assistant/github-action@v2.6.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # the below token should have repo scope and must be manually added by you in the repository's secret
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
-          path-to-signatures: 'readme/cla_signatures.json'
+          path-to-signatures: 'readme/cla/signatures.json'
           path-to-document: 'https://github.com/laurent22/joplin/blob/dev/readme/cla.md' # e.g. a CLA or a DCO document
           # branch should not be protected
           branch: 'cla_signatures'

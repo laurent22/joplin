@@ -10,9 +10,11 @@ import bridge from '../../services/bridge';
 import BaseModel from '@joplin/lib/BaseModel';
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 import { Dispatch } from 'redux';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import { MarkupLanguage } from '@joplin/renderer';
+import hasLockedNoteWhileSessionLocked from '@joplin/lib/services/noteLock/hasLockedNoteWhileSessionLocked';
 
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
@@ -42,44 +44,38 @@ export default class NoteListUtils {
 		const menu = new Menu();
 
 		if (!includeEncryptedNotes && !includeDeletedNotes) {
-			menu.append(
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', noteIds) as any),
-			);
-
-			menu.append(
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', noteIds) as any),
-			);
-
-			menu.append(
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds) as any),
-			);
-
 			if (singleNoteId) {
-				const editInMenu = new Menu();
-
-				const cmd = props.watchedNoteFiles.includes(singleNoteId) ? 'stopExternalEditing' : 'startExternalEditing';
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				editInMenu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, singleNoteId) as any));
-				editInMenu.append(
+				menu.append(
 					new MenuItem(menuUtils.commandToStatefulMenuItem('openNoteInNewWindow', singleNoteId)),
 				);
 
-				menu.append(new MenuItem({ label: _('Edit in...'), submenu: editInMenu }));
+				const cmd = props.watchedNoteFiles.includes(singleNoteId) ? 'stopExternalEditing' : 'startExternalEditing';
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem(cmd, singleNoteId) as any));
+
+				menu.append(new MenuItem({ type: 'separator' }));
 			}
 
+			menu.append(
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
+				new MenuItem(menuUtils.commandToStatefulMenuItem('setTags', noteIds) as any),
+			);
+
+			menu.append(new MenuItem({ type: 'separator' }));
 
 			if (noteIds.length <= 1) {
 				menu.append(
 					new MenuItem(
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
 						menuUtils.commandToStatefulMenuItem('toggleNoteType', noteIds) as any,
 					),
 				);
 			} else {
 				const switchNoteType = async (noteIds: string[], type: string) => {
+					if (await hasLockedNoteWhileSessionLocked(noteIds)) {
+						bridge().showErrorMessageBox(_('Cannot change a locked note while the session is locked'));
+						return;
+					}
 					for (let i = 0; i < noteIds.length; i++) {
 						const note = await Note.load(noteIds[i]);
 						const newNote = Note.changeNoteType(note, type);
@@ -108,6 +104,25 @@ export default class NoteListUtils {
 			}
 
 			menu.append(
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
+				new MenuItem(menuUtils.commandToStatefulMenuItem('moveToFolder', noteIds) as any),
+			);
+
+			menu.append(
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
+				new MenuItem(menuUtils.commandToStatefulMenuItem('duplicateNote', noteIds) as any),
+			);
+
+			menu.append(
+				new MenuItem(
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
+					menuUtils.commandToStatefulMenuItem('deleteNote', noteIds) as any,
+				),
+			);
+
+			menu.append(new MenuItem({ type: 'separator' }));
+
+			menu.append(
 				new MenuItem({
 					label: _('Copy Markdown link'),
 					click: async () => {
@@ -132,10 +147,22 @@ export default class NoteListUtils {
 				);
 			}
 
-			if ([9, 10].includes(Setting.value('sync.target'))) {
+			menu.append(new MenuItem({ type: 'separator' }));
+
+			const includesHtmlNotes = notes.some(n => n.markup_language === MarkupLanguage.Html);
+			if (includesHtmlNotes) {
 				menu.append(
 					new MenuItem(
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+						menuUtils.commandToStatefulMenuItem('convertNoteToMarkdown', noteIds),
+					),
+				);
+				menu.append(new MenuItem({ type: 'separator' }));
+			}
+
+			if ([9, 10, 11].includes(Setting.value('sync.target'))) {
+				menu.append(
+					new MenuItem(
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
 						menuUtils.commandToStatefulMenuItem('showShareNoteDialog', noteIds.slice()) as any,
 					),
 				);
@@ -167,7 +194,7 @@ export default class NoteListUtils {
 
 			exportMenu.append(
 				new MenuItem(
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
 					menuUtils.commandToStatefulMenuItem('exportPdf', noteIds) as any,
 				),
 			);
@@ -180,22 +207,15 @@ export default class NoteListUtils {
 		if (includeDeletedNotes) {
 			menu.append(
 				new MenuItem(
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
 					menuUtils.commandToStatefulMenuItem('restoreNote', noteIds) as any,
 				),
 			);
 
 			menu.append(
 				new MenuItem(
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
 					menuUtils.commandToStatefulMenuItem('permanentlyDeleteNote', noteIds) as any,
-				),
-			);
-		} else {
-			menu.append(
-				new MenuItem(
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					menuUtils.commandToStatefulMenuItem('deleteNote', noteIds) as any,
 				),
 			);
 		}
@@ -208,7 +228,7 @@ export default class NoteListUtils {
 
 			if (cmdService.isEnabled(info.view.commandName)) {
 				menu.append(
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- commandToStatefulMenuItem returns lib's MenuItem shape which doesn't structurally match Electron's MenuItemConstructorOptions
 					new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds) as any),
 				);
 			}

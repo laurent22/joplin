@@ -2,6 +2,10 @@
 	"io.github.jackgruber.backup": {
 		"cloneUrl": "https://github.com/JackGruber/joplin-plugin-backup.git",
 		"branch": "master",
-		"commit": "5ba57c18ac0f24f20832f012e015a080b138f0c4"
+		"commit": "2c3da7056e7ac39c86c2051a4fdb99d9534dd0a1"
+	},
+	"io.github.personalizedrefrigerator.js-draw": {
+		"cloneUrl": "https://github.com/personalizedrefrigerator/joplin-plugin-freehand-drawing.git",
+		"package": "joplin-plugin-freehand-drawing"
 	}
 }

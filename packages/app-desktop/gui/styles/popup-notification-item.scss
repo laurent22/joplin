@@ -1,0 +1,126 @@
+@keyframes slide-in {
+	from {
+		opacity: 0;
+		transform: translateY(25%);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes slide-out {
+	from {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	to {
+		opacity: 0;
+		transform: translateY(25%);
+	}
+}
+
+@keyframes grow {
+	from {
+		transform: scale(0);
+	}
+	to {
+		transform: scale(1);
+	}
+}
+
+.popup-notification-item {
+	margin: 12px;
+	padding: 13px 15px;
+	border-radius: 4px;
+
+	overflow: clip;
+	position: relative;
+	display: flex;
+	align-items: center;
+
+	box-shadow: 0 3px 7px 0px rgba(0, 0, 0, 0.25);
+
+	--text-color: var(--joplin-color5);
+	--ripple-color: var(--joplin-background-color5);
+	background-color: color-mix(in srgb, var(--ripple-color) 20%, transparent 70%);
+	color: var(--text-color);
+
+	animation: slide-in 0.3s ease-in both;
+
+	> .icon {
+		font-size: 14px;
+		text-align: center;
+
+		width: 24px;
+		height: 24px;
+		// Make the line hight slightly larger than the icon size
+		// to vertically center the text
+		line-height: 26px;
+
+		margin-inline-end: 13px;
+		border-radius: 50%;
+
+		color: var(--ripple-color);
+		background-color: var(--text-color);
+	}
+
+	> .content {
+		padding: 10px 0;
+		max-width: min(280px, 70vw);
+		font-size: 1.1em;
+		font-weight: 500;
+	}
+
+	> .ripple {
+		--ripple-size: 500px;
+
+		position: absolute;
+		transform-origin: bottom right;
+		top: calc(var(--ripple-size) / -2);
+		right: -40px;
+		z-index: -1;
+
+		background-color: var(--ripple-color);
+		width: var(--ripple-size);
+		height: var(--ripple-size);
+		border-radius: calc(var(--ripple-size) / 2);
+
+		transform: scale(0);
+		animation: grow 0.4s ease-out forwards;
+	}
+
+	&.-dismissing {
+		// Animate the icon and content first
+		animation: slide-out 0.25s ease-out both;
+		animation-delay: 0.25s;
+
+		& > .content, & > .icon {
+			animation: slide-out 0.3s ease-out both;
+		}
+	}
+
+	&.-success {
+		--ripple-color: var(--joplin-color-correct);
+	}
+
+	&.-error {
+		--ripple-color: var(--joplin-color-error);
+	}
+
+	&.-info {
+		--text-color: var(--joplin-color5);
+		--ripple-color: var(--joplin-background-color5);
+	}
+
+	@media (prefers-reduced-motion) {
+		&, & > .content, & > .icon {
+			transform: none !important;
+		}
+
+		> .ripple {
+			transform: scale(1);
+			animation: none;
+		}
+	}
+}

@@ -1,71 +1,97 @@
 import * as React from 'react';
 
 import { describe, it, beforeEach } from '@jest/globals';
-import { render, screen, waitFor } from '@testing-library/react-native';
-import '@testing-library/jest-native/extend-expect';
+import { render, screen, waitFor } from '../../utils/testing/testingLibrary';
 
 
 import NoteBodyViewer from './NoteBodyViewer';
 import Setting from '@joplin/lib/models/Setting';
-import { MenuProvider } from 'react-native-popup-menu';
 import { resourceFetcher, setupDatabaseAndSynchronizer, supportDir, switchClient, synchronizerStart } from '@joplin/lib/testing/test-utils';
 import { MarkupLanguage } from '@joplin/renderer';
-import { HandleMessageCallback, OnMarkForDownloadCallback } from './hooks/useOnMessage';
+import { OnMarkForDownloadCallback } from './hooks/useOnMessage';
 import Resource from '@joplin/lib/models/Resource';
 import shim from '@joplin/lib/shim';
 import Note from '@joplin/lib/models/Note';
 import { ResourceInfo } from './hooks/useRerenderHandler';
 import getWebViewDomById from '../../utils/testing/getWebViewDomById';
+import TestProviderStack from '../testing/TestProviderStack';
+import createMockReduxStore from '../../utils/testing/createMockReduxStore';
+import Plugin from '@joplin/lib/services/plugins/Plugin';
+import { Store } from 'redux';
+import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
+import { basename, dirname, join } from 'path';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import mockPluginServiceSetup from '../../utils/testing/mockPluginServiceSetup';
 
 interface WrapperProps {
 	noteBody: string;
 	highlightedKeywords?: string[];
 	noteResources?: Record<string, ResourceInfo>;
-	onJoplinLinkClick?: HandleMessageCallback;
-	onScroll?: (percent: number)=> void;
+	onScroll?: ()=> void;
 	onMarkForDownload?: OnMarkForDownloadCallback;
 }
 
 const emptyObject = {};
 const emptyArray: string[] = [];
 const noOpFunction = () => {};
+let testStore: Store;
 const WrappedNoteViewer: React.FC<WrapperProps> = (
 	{
 		noteBody,
 		highlightedKeywords = emptyArray,
 		noteResources = emptyObject,
-		onJoplinLinkClick = noOpFunction,
 		onScroll = noOpFunction,
 		onMarkForDownload,
 	}: WrapperProps,
 ) => {
-	return <MenuProvider>
+	return <TestProviderStack store={testStore}>
 		<NoteBodyViewer
-			themeId={Setting.THEME_LIGHT}
 			style={emptyObject}
 			noteBody={noteBody}
 			noteMarkupLanguage={MarkupLanguage.Markdown}
 			highlightedKeywords={highlightedKeywords}
 			noteResources={noteResources}
 			paddingBottom={0}
-			initialScroll={0}
+			initialScrollPercent={0}
 			noteHash={''}
-			onJoplinLinkClick={onJoplinLinkClick}
 			onMarkForDownload={onMarkForDownload}
 			onScroll={onScroll}
-			pluginStates={emptyObject}
 		/>
-	</MenuProvider>;
+	</TestProviderStack>;
 };
 
 const getNoteViewerDom = async () => {
 	return await getWebViewDomById('NoteBodyViewer');
 };
 
+const loadTestContentScript = async (path: string, pluginId: string) => {
+	const plugin = new Plugin(
+		dirname(path),
+		{
+			manifest_version: 1,
+			id: pluginId,
+			name: 'Test plugin',
+			version: '1',
+			app_min_version: '1',
+		},
+		'',
+		testStore.dispatch,
+		'',
+	);
+	await PluginService.instance().runPlugin(plugin);
+	await plugin.registerContentScript(
+		ContentScriptType.MarkdownItPlugin,
+		`${pluginId}-markdown-it`,
+		basename(path),
+	);
+};
+
 describe('NoteBodyViewer', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(0);
 		await switchClient(0);
+		testStore = createMockReduxStore();
+		mockPluginServiceSetup(testStore);
 	});
 
 	afterEach(() => {
@@ -87,6 +113,17 @@ describe('NoteBodyViewer', () => {
 		await expectHeaderToBe('Test 2');
 		screen.rerender(<WrappedNoteViewer noteBody='# Test 3'/>);
 		await expectHeaderToBe('Test 3');
+	});
+
+	it('should support basic renderer plugins', async () => {
+		await loadTestContentScript(join(supportDir, 'plugins', 'markdownItTestPlugin.js'), 'test-plugin');
+
+		render(<WrappedNoteViewer noteBody={'```justtesting\ntest\n```\n'}/>);
+
+		const noteViewer = await getNoteViewerDom();
+		await waitFor(async () => {
+			expect(noteViewer.querySelector('div.just-testing')).toBeTruthy();
+		});
 	});
 
 	it.each([

@@ -1,0 +1,6 @@
+
+.joplin-editable {
+	position: relative;
+	/* Override the "white-space" setting for the editor */
+	white-space: normal;
+}

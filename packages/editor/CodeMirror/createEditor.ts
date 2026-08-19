@@ -8,7 +8,7 @@ import {
 	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command, rectangularSelection,
 	dropCursor,
 } from '@codemirror/view';
-import { history, undoDepth, redoDepth, standardKeymap, insertTab } from '@codemirror/commands';
+import { history, undoDepth, redoDepth, standardKeymap, insertTab, simplifySelection } from '@codemirror/commands';
 
 import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
@@ -21,19 +21,28 @@ import {
 	insertOrIncreaseIndent,
 	toggleBolded, toggleCode,
 	toggleItalicized, toggleMath,
-} from './markdown/markdownCommands';
-import decoratorExtension from './markdown/decoratorExtension';
-import computeSelectionFormatting from './markdown/computeSelectionFormatting';
+} from './editorCommands/markdownCommands';
+import { tableNextCell, tablePreviousCell } from './editorCommands/tableCommands';
+import decoratorExtension from './extensions/markdownDecorationExtension';
+import computeSelectionFormatting from './utils/formatting/computeSelectionFormatting';
 import { selectionFormattingEqual } from '../SelectionFormatting';
 import configFromSettings from './configFromSettings';
 import getScrollFraction from './getScrollFraction';
 import CodeMirrorControl from './CodeMirrorControl';
 import insertLineAfter from './editorCommands/insertLineAfter';
 import handlePasteEvent from './utils/handlePasteEvent';
-import biDirectionalTextExtension from './utils/biDirectionalTextExtension';
-import searchExtension from './utils/searchExtension';
+import biDirectionalTextExtension from './extensions/biDirectionalTextExtension';
+import searchExtension from './extensions/searchExtension';
 import isCursorAtBeginning from './utils/isCursorAtBeginning';
-import overwriteModeExtension from './utils/overwriteModeExtension';
+import overwriteModeExtension from './extensions/overwriteModeExtension';
+import handleLinkEditRequests, { showLinkEditor } from './utils/handleLinkEditRequests';
+import selectedNoteIdExtension, { setNoteIdEffect } from './extensions/selectedNoteIdExtension';
+import ctrlKeyStateClassExtension from './extensions/modifierKeyCssExtension';
+import followLinkTooltip from './extensions/links/followLinkTooltipExtension';
+import ctrlClickLinksExtension from './extensions/links/ctrlClickLinksExtension';
+import { RenderedContentContext } from './extensions/rendering/types';
+import ctrlClickCheckboxExtension from './extensions/ctrlClickCheckboxExtension';
+import editorSettingsExtension, { setEditorSettingsEffect } from './extensions/editorSettingsExtension';
 
 // Newer versions of CodeMirror by default use Chrome's EditContext API.
 // While this might be stable enough for desktop use, it causes significant
@@ -45,13 +54,28 @@ import overwriteModeExtension from './utils/overwriteModeExtension';
 type ExtendedEditorView = typeof EditorView & { EDIT_CONTEXT: boolean };
 (EditorView as ExtendedEditorView).EDIT_CONTEXT = false;
 
+export type ResolveImageCallback = (imageSrc: string, reloadCounter: number)=> Promise<string>;
+
+interface CodeMirrorProps {
+	resolveImageSrc: ResolveImageCallback;
+}
+
 const createEditor = (
-	parentElement: HTMLElement, props: EditorProps,
+	parentElement: HTMLElement, props: EditorProps&CodeMirrorProps,
 ): CodeMirrorControl => {
 	const initialText = props.initialText;
 	let settings = props.settings;
 
 	props.onLogMessage('Initializing CodeMirror...');
+
+	const context: RenderedContentContext = {
+		resolveImageSrc: (src, counter) => {
+			return props.resolveImageSrc(src, counter);
+		},
+		openLink: (link) => {
+			props.onEvent({ kind: EditorEventType.FollowLink, link });
+		},
+	};
 
 
 	// Handles firing an event when the undo/redo stack changes
@@ -95,12 +119,6 @@ const createEditor = (
 
 			schedulePostUndoRedoDepthChange(editor);
 		}
-	};
-
-	const notifyLinkEditRequest = () => {
-		props.onEvent({
-			kind: EditorEventType.EditLink,
-		});
 	};
 
 
@@ -184,11 +202,17 @@ const createEditor = (
 		keyCommand('Mod-`', toggleCode),
 		keyCommand('Mod-[', decreaseIndent),
 		keyCommand('Mod-]', increaseIndent),
-		keyCommand('Mod-k', (_: EditorView) => {
-			notifyLinkEditRequest();
-			return true;
-		}),
+		keyCommand('Mod-k', showLinkEditor),
 		keyCommand('Tab', (view: EditorView) => {
+			if (settings.tabMovesFocus) {
+				return false;
+			}
+
+			// Try table cell navigation first
+			if (tableNextCell(view)) {
+				return true;
+			}
+
 			if (settings.autocompleteMarkup) {
 				return insertOrIncreaseIndent(view);
 			}
@@ -196,6 +220,15 @@ const createEditor = (
 			return insertTab(view);
 		}, true),
 		keyCommand('Shift-Tab', (view) => {
+			if (settings.tabMovesFocus) {
+				return false;
+			}
+
+			// Try table cell navigation first
+			if (tablePreviousCell(view)) {
+				return true;
+			}
+
 			// When at the beginning of the editor, allow shift-tab to act
 			// normally.
 			if (isCursorAtBeginning(view.state)) {
@@ -218,6 +251,11 @@ const createEditor = (
 		}, true),
 
 		...standardKeymap, ...historyKeymap, ...searchKeymap,
+
+		// The escape -> simplifySelection mapping is present in "defaultKeymap",
+		// which is disabled on desktop but enabled on mobile. Enable this mapping
+		// globally for consistency:
+		keyCommand('Escape', simplifySelection, true),
 	]));
 
 	const editor = new EditorView({
@@ -227,7 +265,7 @@ const createEditor = (
 			extensions: [
 				keymapConfig,
 
-				dynamicConfig.of(configFromSettings(props.settings)),
+				dynamicConfig.of(configFromSettings(props.settings, context)),
 				historyCompartment.of(history()),
 				searchExtension(props.onEvent, props.settings),
 
@@ -236,6 +274,10 @@ const createEditor = (
 				EditorState.allowMultipleSelections.of(true),
 				rectangularSelection(),
 				drawSelection(),
+				(settings.themeData.isDesktop ? ctrlClickLinksExtension : followLinkTooltip)(link => {
+					props.onEvent({ kind: EditorEventType.FollowLink, link });
+				}),
+				ctrlClickCheckboxExtension(),
 
 				highlightSpecialChars(),
 				indentOnInput(),
@@ -267,14 +309,16 @@ const createEditor = (
 					},
 				}),
 
-				EditorState.tabSize.of(4),
-
 				// Apply styles to entire lines (block-display decorations)
 				decoratorExtension,
 				dropCursor(),
 
 				biDirectionalTextExtension,
 				overwriteModeExtension,
+				ctrlKeyStateClassExtension,
+				editorSettingsExtension(settings),
+
+				selectedNoteIdExtension,
 
 				props.localisations ? EditorState.phrases.of(props.localisations) : [],
 
@@ -289,11 +333,20 @@ const createEditor = (
 					notifySelectionFormattingChange(viewUpdate);
 				}),
 
+				handleLinkEditRequests(() => {
+					props.onEvent({
+						kind: EditorEventType.EditLink,
+					});
+				}),
 			],
 			doc: initialText,
 		}),
 		parent: parentElement,
 	});
+
+	editor.dispatch(editor.state.update({
+		effects: setNoteIdEffect.of(props.initialNoteId),
+	}));
 
 	const editorControls = new CodeMirrorControl(editor, {
 		onClearHistory: () => {
@@ -309,9 +362,12 @@ const createEditor = (
 		onSettingsChange: (newSettings: EditorSettings) => {
 			settings = newSettings;
 			editor.dispatch({
-				effects: dynamicConfig.reconfigure(
-					configFromSettings(newSettings),
-				),
+				effects: [
+					dynamicConfig.reconfigure(
+						configFromSettings(newSettings, context),
+					),
+					setEditorSettingsEffect.of(newSettings),
+				],
 			});
 		},
 		onUndoRedo: () => {
@@ -322,6 +378,9 @@ const createEditor = (
 		onLogMessage: props.onLogMessage,
 		onRemove: () => {
 			editor.destroy();
+			props.onEvent({
+				kind: EditorEventType.Remove,
+			});
 		},
 	});
 

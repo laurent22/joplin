@@ -1,10 +1,12 @@
+interface FakeNodeRequest {
+	method?: string;
+}
+
 export default class FakeRequest {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private req_: any;
+	private req_: FakeNodeRequest;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(nodeRequest: any) {
+	public constructor(nodeRequest: FakeNodeRequest) {
 		this.req_ = nodeRequest;
 	}
 

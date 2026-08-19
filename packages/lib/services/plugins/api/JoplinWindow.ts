@@ -3,13 +3,13 @@
 import shim from '../../../shim';
 import Plugin from '../Plugin';
 
+type DispatchStore = { dispatch: (action: { type: string; [k: string]: unknown })=> void };
+
 export default class JoplinWindow {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private store_: any;
+	private store_: DispatchStore;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(_plugin: Plugin, store: any) {
+	public constructor(_plugin: Plugin, store: DispatchStore) {
 		this.store_ = store;
 	}
 

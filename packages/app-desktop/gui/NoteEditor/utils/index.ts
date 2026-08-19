@@ -1,11 +1,10 @@
 import { FormNote } from './types';
 
-import HtmlToMd from '@joplin/lib/HtmlToMd';
+import HtmlToMd, { ParseOptions } from '@joplin/lib/HtmlToMd';
 import Note from '@joplin/lib/models/Note';
-import { NoteEntity } from '@joplin/lib/services/database/types';
-const { MarkupToHtml } = require('@joplin/renderer');
+import { MarkupToHtml } from '@joplin/renderer';
 
-export async function htmlToMarkdown(markupLanguage: number, html: string, originalCss: string): Promise<string> {
+export async function htmlToMarkdown(markupLanguage: number, html: string, originalCss: string, parseOptions: ParseOptions = null): Promise<string> {
 	let newBody = '';
 
 	if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN) {
@@ -13,7 +12,9 @@ export async function htmlToMarkdown(markupLanguage: number, html: string, origi
 		newBody = htmlToMd.parse(html, {
 			preserveImageTagsWithSize: true,
 			preserveNestedTables: true,
+			preserveTableStyles: true,
 			preserveColorStyles: true,
+			...parseOptions,
 		});
 		newBody = await Note.replaceResourceExternalToInternalLinks(newBody, { useAbsolutePaths: true });
 	} else {
@@ -24,7 +25,7 @@ export async function htmlToMarkdown(markupLanguage: number, html: string, origi
 	return newBody;
 }
 
-export async function formNoteToNote(formNote: FormNote): Promise<NoteEntity> {
+export async function formNoteToNote(formNote: FormNote) {
 	return {
 		id: formNote.id,
 		// Should also include parent_id and deleted_time so that the reducer
@@ -35,5 +36,7 @@ export async function formNoteToNote(formNote: FormNote): Promise<NoteEntity> {
 		is_conflict: formNote.is_conflict,
 		title: formNote.title,
 		body: formNote.body,
+		is_locked: formNote.is_locked,
+		isDecrypted: formNote.isDecrypted,
 	};
 }

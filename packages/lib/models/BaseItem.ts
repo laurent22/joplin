@@ -8,6 +8,8 @@ import { _ } from '../locale';
 import Database from '../database';
 import ItemChange from './ItemChange';
 import ShareService from '../services/share/ShareService';
+import type EncryptionService from '../services/e2ee/EncryptionService';
+import type RevisionService from '../services/RevisionService';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import JoplinError from '../JoplinError';
@@ -17,17 +19,17 @@ import { checkIfItemCanBeAddedToFolder, checkIfItemCanBeChanged, checkIfItemsCan
 import { checkObjectHasProperties } from '@joplin/utils/object';
 
 const { sprintf } = require('sprintf-js');
-const moment = require('moment');
+import moment = require('moment');
 
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	items: any[];
+	items: BaseItemEntity[];
 }
 
 export interface ItemThatNeedSync {
 	id: string;
 	sync_time: number;
+	remote_item_updated_time: number;
 	type_: ModelType;
 	updated_time: number;
 	encryption_applied: number;
@@ -40,6 +42,12 @@ export interface ItemsThatNeedSyncResult {
 	neverSyncedItemIds: string[];
 }
 
+export interface RemoteItemMetadata {
+	item_id: string;
+	updated_time: number;
+	sync_time: number;
+}
+
 export interface EncryptedItemsStats {
 	encrypted: number;
 	total: number;
@@ -47,10 +55,8 @@ export interface EncryptedItemsStats {
 
 export default class BaseItem extends BaseModel {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static encryptionService_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static revisionService_: any = null;
+	public static encryptionService_: EncryptionService = null;
+	public static revisionService_: RevisionService = null;
 	public static shareService_: ShareService = null;
 	private static syncShareCache_: ShareState | null = null;
 
@@ -58,7 +64,7 @@ export default class BaseItem extends BaseModel {
 	// - itemsThatNeedSync()
 	// - syncedItems()
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- classRef is loaded lazily by loadClass(); the entries grow a classRef field that's a typeof Folder/Note/Tag/... discriminated by type
 	public static syncItemDefinitions_: any[] = [
 		{ type: BaseModel.TYPE_NOTE, className: 'Note' },
 		{ type: BaseModel.TYPE_FOLDER, className: 'Folder' },
@@ -81,7 +87,7 @@ export default class BaseItem extends BaseModel {
 		return true;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- classRef is a typeof BaseItem subclass (Folder/Note/Tag/...); see syncItemDefinitions_
 	public static loadClass(className: string, classRef: any) {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
 			if (BaseItem.syncItemDefinitions_[i].className === className) {
@@ -125,7 +131,7 @@ export default class BaseItem extends BaseModel {
 	}
 
 	// Need to dynamically load the classes like this to avoid circular dependencies
-	public static getClass(name: string) {
+	public static getClass<T extends typeof BaseItem>(name: string): T {
 		for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
 			if (BaseItem.syncItemDefinitions_[i].className === name) {
 				const classRef = BaseItem.syncItemDefinitions_[i].classRef;
@@ -157,7 +163,7 @@ export default class BaseItem extends BaseModel {
 		return r.total;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Accepts an id string or any entity with `id`; BaseItemEntity.id is optional which conflicts with `{ id: string }`
 	public static systemPath(itemOrId: any, extension: string = null) {
 		if (extension === null) extension = 'md';
 
@@ -168,15 +174,14 @@ export default class BaseItem extends BaseModel {
 	public static isSystemPath(path: string) {
 		// 1b175bb38bba47baac22b0b47f778113.md
 		if (!path || !path.length) return false;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let p: any = path.split('/');
-		p = p[p.length - 1];
-		p = p.split('.');
+		const parts = path.split('/');
+		const last = parts[parts.length - 1];
+		const p = last.split('.');
 		if (p.length !== 2) return false;
 		return p[0].length === 32 && p[1] === 'md';
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- item is either a number (ModelType) or any BaseItemEntity subclass
 	public static itemClass(item: any): typeof BaseItem {
 		if (!item) throw new Error('Item cannot be null');
 
@@ -203,6 +208,21 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
+	public static async remoteItemMetadata(syncTarget: number): Promise<Map<string, RemoteItemMetadata>> {
+		if (!syncTarget) throw new Error('No syncTarget specified');
+		const temp = await this.db().selectAll('SELECT item_id, remote_item_updated_time, sync_time FROM sync_items WHERE sync_time > 0 AND sync_target = ?', [syncTarget]);
+		const output = new Map<string, RemoteItemMetadata>();
+		for (let i = 0; i < temp.length; i++) {
+			const metadata: RemoteItemMetadata = {
+				item_id: temp[i].item_id,
+				updated_time: temp[i].remote_item_updated_time,
+				sync_time: temp[i].sync_time,
+			};
+			output.set(temp[i].item_id, metadata);
+		}
+		return output;
+	}
+
 	public static async syncItem(syncTarget: number, itemId: string, options: LoadOptions = null): Promise<SyncItemEntity> {
 		options = {
 			fields: '*',
@@ -219,11 +239,10 @@ export default class BaseItem extends BaseModel {
 	public static pathToId(path: string): string {
 		const p = path.split('/');
 		const s = p[p.length - 1].split('.');
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let name: any = s[0];
+		const name = s[0];
 		if (!name) return name;
-		name = name.split('-');
-		return name[name.length - 1];
+		const parts = name.split('-');
+		return parts[parts.length - 1];
 	}
 
 	public static loadItemByPath(path: string) {
@@ -243,25 +262,38 @@ export default class BaseItem extends BaseModel {
 		if (!ids.length) return [];
 
 		const classes = this.syncItemClassNames();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Mixed array of per-class entities (Folder/Note/Tag/...); downstream callers narrow on `type_` to discriminate
 		let output: any[] = [];
 		for (let i = 0; i < classes.length; i++) {
 			const ItemClass = this.getClass(classes[i]);
-			const sql = `SELECT * FROM ${ItemClass.tableName()} WHERE id IN ('${ids.join('\',\'')}')`;
+			const sql = `SELECT * FROM ${ItemClass.tableName()} WHERE id IN (${this.escapeIdsForSql(ids)})`;
 			const models = await ItemClass.modelSelectAll(sql);
 			output = output.concat(models);
 		}
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	public static async loadItemsByIdsOrFail(ids: string[]) {
+		const items = await this.loadItemsByIds(ids);
+		if (items.length < ids.length) {
+			for (let i = 0; i < ids.length; i++) {
+				if (items[i]?.id !== ids[i]) {
+					throw new Error(`No such item: ${ids[i]}`);
+				}
+			}
+		}
+		return items;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Return type is the per-itemType entity (NoteEntity/FolderEntity/...); downstream callers like ItemUploader narrow further with required-id slices that BaseItemEntity doesn't satisfy
 	public static async loadItemsByTypeAndIds(itemType: ModelType, ids: string[], options: LoadOptions = null): Promise<any[]> {
 		if (!ids.length) return [];
 
 		const fields = options && options.fields ? options.fields : [];
 		const ItemClass = this.getClassByItemType(itemType);
 		const fieldsSql = fields.length ? this.db().escapeFields(fields) : '*';
-		const sql = `SELECT ${fieldsSql} FROM ${ItemClass.tableName()} WHERE id IN ('${ids.join('\',\'')}')`;
+		const sql = `SELECT ${fieldsSql} FROM ${ItemClass.tableName()} WHERE id IN (${this.escapeIdsForSql(ids)})`;
 		return ItemClass.modelSelectAll(sql);
 	}
 
@@ -270,8 +302,7 @@ export default class BaseItem extends BaseModel {
 		return result.length ? result[0] : null;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static loadItemByField(itemType: number, field: string, value: any) {
+	public static loadItemByField(itemType: number, field: string, value: string | number | boolean) {
 		const ItemClass = this.itemClass(itemType);
 		return ItemClass.loadByField(field, value);
 	}
@@ -300,7 +331,7 @@ export default class BaseItem extends BaseModel {
 		// since no other client have (or should have) them.
 		let conflictNoteIds: string[] = [];
 		if (this.modelType() === BaseModel.TYPE_NOTE) {
-			const conflictNotes = await this.db().selectAll(`SELECT id FROM notes WHERE id IN ('${ids.join('\',\'')}') AND is_conflict = 1`);
+			const conflictNotes = await this.db().selectAll(`SELECT id FROM notes WHERE id IN (${this.escapeIdsForSql(ids)}) AND is_conflict = 1`);
 			conflictNoteIds = conflictNotes.map((n: NoteEntity) => {
 				return n.id;
 			});
@@ -360,11 +391,16 @@ export default class BaseItem extends BaseModel {
 		};
 	}
 
-	public static remoteDeletedItem(syncTarget: number, itemId: string) {
-		return this.db().exec('DELETE FROM deleted_items WHERE item_id = ? AND sync_target = ?', [itemId, syncTarget]);
+	public static async remoteDeletedItems(syncTarget: number, itemIds: string[]) {
+		if (itemIds.length === 0) return;
+
+		await this.db().exec(
+			`DELETE FROM deleted_items WHERE item_id IN (${this.escapeIdsForSql(itemIds)}) AND sync_target = ?`,
+			[syncTarget],
+		);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- propValue is the raw entity value (string|number|null|object for diffs); the function reassigns it through coercions then calls .replace on it
 	public static serialize_format(propName: string, propValue: any) {
 		if (['created_time', 'updated_time', 'sync_time', 'user_updated_time', 'user_created_time'].indexOf(propName) >= 0) {
 			if (!propValue) return '';
@@ -387,7 +423,7 @@ export default class BaseItem extends BaseModel {
 			.replace(/\r/g, '\\r');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See serialize_format; propValue is reassigned through coercions
 	public static unserialize_format(type: ModelType, propName: string, propValue: any) {
 		if (propName[propName.length - 1] === '_') return propValue; // Private property
 
@@ -416,7 +452,7 @@ export default class BaseItem extends BaseModel {
 			: propValue;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- item is a BaseItemEntity subclass plus type_; shownKeys is a heterogeneous list of property names
 	public static async serialize(item: any, shownKeys: any[] = null) {
 		if (shownKeys === null) {
 			shownKeys = this.itemClass(item).fieldNames();
@@ -425,8 +461,7 @@ export default class BaseItem extends BaseModel {
 
 		item = this.filter(item);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {};
+		const output: Record<string, unknown> = {};
 
 		if ('title' in item && shownKeys.indexOf('title') >= 0) {
 			output.title = item.title;
@@ -436,7 +471,8 @@ export default class BaseItem extends BaseModel {
 			output.body = item.body;
 		}
 
-		output.props = [];
+		const outputProps: string[] = [];
+		output.props = outputProps;
 
 		for (let i = 0; i < shownKeys.length; i++) {
 			let key = shownKeys[i];
@@ -451,14 +487,14 @@ export default class BaseItem extends BaseModel {
 				value = this.serialize_format(key, item[key]);
 			}
 
-			output.props.push(`${key}: ${value}`);
+			outputProps.push(`${key}: ${value}`);
 		}
 
 		const temp = [];
 
 		if (typeof output.title === 'string') temp.push(output.title);
 		if (output.body) temp.push(output.body);
-		if (output.props.length) temp.push(output.props.join('\n'));
+		if (outputProps.length) temp.push(outputProps.join('\n'));
 
 		return temp.join('\n\n');
 	}
@@ -493,8 +529,7 @@ export default class BaseItem extends BaseModel {
 		}
 
 		if (item.encryption_applied) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const e: any = new Error('Trying to encrypt item that is already encrypted');
+			const e = new Error('Trying to encrypt item that is already encrypted') as Error & { code: string };
 			e.code = 'cannotEncryptEncrypted';
 			throw e;
 		}
@@ -522,15 +557,13 @@ export default class BaseItem extends BaseModel {
 
 		// List of keys that won't be encrypted - mostly foreign keys required to link items
 		// with each others and timestamp required for synchronisation.
-		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'share_id', 'updated_time', 'deleted_time', 'type_'];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const reducedItem: any = {};
+		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'share_id', 'updated_time', 'deleted_time', 'type_', 'is_locked', 'extracted_resource_ids'];
+		const reducedItem: Record<string, unknown> = {};
 
 		for (let i = 0; i < keepKeys.length; i++) {
 			const n = keepKeys[i];
 			if (!item.hasOwnProperty(n)) continue;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			reducedItem[n] = (item as any)[n];
+			reducedItem[n] = (item as unknown as Record<string, unknown>)[n];
 		}
 
 		reducedItem.encryption_applied = 1;
@@ -538,7 +571,7 @@ export default class BaseItem extends BaseModel {
 		return ItemClass.serialize(reducedItem);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- item is a BaseItemEntity subclass with encryption_cipher_text/encryption_applied; saved back via ItemClass.save which is per-subclass
 	public static async decrypt(item: any) {
 		if (!item.encryption_cipher_text) throw new Error(`Item is not encrypted: ${item.id}`);
 
@@ -555,30 +588,26 @@ export default class BaseItem extends BaseModel {
 
 	public static async unserialize(content: string) {
 		const lines = content.split('\n');
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- output is built piece by piece into a BaseItemEntity subclass; each property goes through unserialize_format and is assigned dynamically
 		let output: any = {};
-		let state = 'readingProps';
-		const body: string[] = [];
+		let body: string[] = [];
 
 		for (let i = lines.length - 1; i >= 0; i--) {
 			let line = lines[i];
 
-			if (state === 'readingProps') {
-				line = line.trim();
+			line = line.trim();
 
-				if (line === '') {
-					state = 'readingBody';
-					continue;
-				}
-
-				const p = line.indexOf(':');
-				if (p < 0) throw new Error(`Invalid property format: ${line}: ${content}`);
-				const key = line.substr(0, p).trim();
-				const value = line.substr(p + 1).trim();
-				output[key] = value;
-			} else if (state === 'readingBody') {
-				body.splice(0, 0, line);
+			// Props are separated from the body by a single blank line
+			if (line === '') {
+				body = lines.slice(0, i);
+				break;
 			}
+
+			const p = line.indexOf(':');
+			if (p < 0) throw new Error(`Invalid property format: ${line}: ${content}`);
+			const key = line.substr(0, p).trim();
+			const value = line.substr(p + 1).trim();
+			output[key] = value;
 		}
 
 		if (!output.type_) throw new Error(`Missing required property: type_: ${content}`);
@@ -593,6 +622,19 @@ export default class BaseItem extends BaseModel {
 
 		const ItemClass = this.itemClass(output.type_);
 		output = ItemClass.removeUnknownFields(output);
+
+		// Reject any field that could be used to escape the resource directory
+		// when concatenated into a file path (resourceFullPath uses raw string
+		// concat on id and file_extension). The id format is universally a 32
+		// char hex string; the extension must not contain path separators.
+		// Throws a malformedItem JoplinError so the sync loop can log+skip the
+		// item rather than abort the whole batch.
+		if ('id' in output && output.id !== '' && !/^[a-fA-F0-9]{32}$/.test(output.id)) {
+			throw new JoplinError(`Invalid item ID format: ${JSON.stringify(output.id)}`, 'malformedItem');
+		}
+		if ('file_extension' in output && /[/\\]|\.\./.test(output.file_extension)) {
+			throw new JoplinError(`Invalid file extension: ${JSON.stringify(output.file_extension)}`, 'malformedItem');
+		}
 
 		for (const n in output) {
 			if (!output.hasOwnProperty(n)) continue;
@@ -661,7 +703,9 @@ export default class BaseItem extends BaseModel {
 				whereSql = [`(encryption_applied = 1 OR (${blobDownloadedButEncryptedSql})`];
 			}
 
-			if (exclusions.length) whereSql.push(`id NOT IN ('${exclusions.join('\',\'')}')`);
+			if (exclusions.length) {
+				whereSql.push(`id NOT IN (${this.escapeIdsForSql(exclusions)})`);
+			}
 
 			const sql = sprintf(
 				`
@@ -707,8 +751,7 @@ export default class BaseItem extends BaseModel {
 			// // CHANGED:
 			// 'SELECT * FROM [ITEMS] items JOIN sync_items s ON s.item_id = items.id WHERE sync_target = ? AND'
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			let extraWhere: any = [];
+			let extraWhere: string[]|string = [];
 			if (className === 'Note') extraWhere.push('is_conflict = 0');
 			if (className === 'Resource') extraWhere.push('encryption_blob_encrypted = 0');
 			if (ItemClass.encryptionSupported()) extraWhere.push('encryption_applied = 0');
@@ -749,6 +792,7 @@ export default class BaseItem extends BaseModel {
 
 			if (newLimit > 0) {
 				fieldNames.push('sync_time');
+				fieldNames.push('remote_item_updated_time');
 
 				const sql = sprintf(
 					`
@@ -771,8 +815,7 @@ export default class BaseItem extends BaseModel {
 				changedItems = await ItemClass.modelSelectAll(sql);
 			}
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const neverSyncedItemIds = neverSyncedItem.map((it: any) => it.id);
+			const neverSyncedItemIds = neverSyncedItem.map((it: BaseItemEntity) => it.id);
 			const items = neverSyncedItem.concat(changedItems);
 
 			if (i >= classNames.length - 1) {
@@ -786,8 +829,7 @@ export default class BaseItem extends BaseModel {
 	}
 
 	public static syncItemClassNames(): string[] {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return BaseItem.syncItemDefinitions_.map((def: any) => {
+		return BaseItem.syncItemDefinitions_.map((def: { className: string }) => {
 			return def.className;
 		});
 	}
@@ -803,8 +845,7 @@ export default class BaseItem extends BaseModel {
 	}
 
 	public static syncItemTypes(): ModelType[] {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return BaseItem.syncItemDefinitions_.map((def: any) => {
+		return BaseItem.syncItemDefinitions_.map((def: { type: ModelType }) => {
 			return def.type;
 		});
 	}
@@ -848,8 +889,8 @@ export default class BaseItem extends BaseModel {
 		return this.syncDisabledItemsCount(syncTargetId, true);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- item is an entity slice with id/type_ — tests pass loose objects with `id` as number
+	public static updateSyncTimeQueries(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0, syncDisabled = false, syncDisabledReason = '', itemLocation: number = null) {
 		const itemType = item.type_;
 		const itemId = item.id;
 		if (!itemType || !itemId || syncTime === undefined) throw new Error(sprintf('Invalid parameters in updateSyncTimeQueries(): %d, %s, %d', syncTarget, JSON.stringify(item), syncTime));
@@ -862,22 +903,22 @@ export default class BaseItem extends BaseModel {
 				params: [syncTarget, itemType, itemId],
 			},
 			{
-				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?, ?)',
-				params: [syncTarget, itemType, itemId, itemLocation, syncTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`],
+				sql: 'INSERT INTO sync_items (sync_target, item_type, item_id, item_location, sync_time, remote_item_updated_time, sync_disabled, sync_disabled_reason) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+				params: [syncTarget, itemType, itemId, itemLocation, syncTime, remoteItemUpdatedTime, syncDisabled ? 1 : 0, `${syncDisabledReason}`],
 			},
 		];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async saveSyncTime(syncTarget: number, item: any, syncTime: number) {
-		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See updateSyncTimeQueries; tests pass loose objects with `id` as number
+	public static async saveSyncTime(syncTarget: number, item: any, syncTime: number, remoteItemUpdatedTime = 0) {
+		const queries = this.updateSyncTimeQueries(syncTarget, item, syncTime, remoteItemUpdatedTime);
 		return this.db().transactionExecBatch(queries);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async saveSyncDisabled(syncTargetId: number, item: any, syncDisabledReason: string, itemLocation: number = null) {
+	public static async saveSyncDisabled(syncTargetId: number, item: { id?: string; type_?: number; sync_time?: number; remote_item_updated_time?: number }, syncDisabledReason: string, itemLocation: number = null) {
 		const syncTime = 'sync_time' in item ? item.sync_time : 0;
-		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, true, syncDisabledReason, itemLocation);
+		const remoteItemUpdatedTime = 'remote_item_updated_time' in item ? item.remote_item_updated_time : 0;
+		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, remoteItemUpdatedTime, true, syncDisabledReason, itemLocation);
 		return this.db().transactionExecBatch(queries);
 	}
 
@@ -914,8 +955,7 @@ export default class BaseItem extends BaseModel {
 		await this.db().transactionExecBatch(queries);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static displayTitle(item: any) {
+	public static displayTitle(item: { title?: string; encryption_applied?: number | boolean }) {
 		if (!item) return '';
 		if (item.encryption_applied) return `🔑 ${_('Encrypted')}`;
 		return item.title ? item.title : _('Untitled');
@@ -936,14 +976,11 @@ export default class BaseItem extends BaseModel {
 				this.db().escapeField(ItemClass.tableName()),
 			);
 
-			const items = await ItemClass.modelSelectAll(sql);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const ids = items.map((item: any) => {
-				return item.id;
-			});
+			const items = await ItemClass.modelSelectAll<{ id: string }>(sql);
+			const ids = items.map(item => item.id);
 			if (!ids.length) continue;
 
-			await this.db().exec(`UPDATE sync_items SET force_sync = 1 WHERE item_id IN ('${ids.join('\',\'')}')`);
+			await this.db().exec(`UPDATE sync_items SET force_sync = 1 WHERE item_id IN (${this.escapeIdsForSql(ids)})`);
 		}
 	}
 
@@ -974,7 +1011,7 @@ export default class BaseItem extends BaseModel {
 		await this.db().exec('UPDATE sync_items SET force_sync = 1');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- save() accepts any BaseItemEntity subclass plus disable-readonly options; subclasses override with stricter per-entity types
 	public static async save(o: any, options: SaveOptions = null) {
 		if (!options) options = {};
 
@@ -984,7 +1021,7 @@ export default class BaseItem extends BaseModel {
 
 		const isNew = this.isNew(o, options);
 
-		if (needsShareReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache)) {
+		if (needsShareReadOnlyChecks(this.modelType(), options.changeSource, this.syncShareCache, options.disableReadOnlyCheck)) {
 			if (!isNew) {
 				const previousItem = await this.loadItemByTypeAndId(this.modelType(), o.id, { fields: ['id', 'share_id'] });
 				checkIfItemCanBeChanged(this.modelType(), options.changeSource, previousItem, this.syncShareCache);
@@ -1006,9 +1043,8 @@ export default class BaseItem extends BaseModel {
 		return super.save(o, options);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static markdownTag(itemOrId: any) {
-		const item = typeof itemOrId === 'object' ? itemOrId : {
+	public static markdownTag(itemOrId: string | { id?: string; title?: string }) {
+		const item: { id: string; title: string } = typeof itemOrId === 'object' ? { id: itemOrId.id, title: itemOrId.title ?? '' } : {
 			id: itemOrId,
 			title: '',
 		};
@@ -1021,10 +1057,19 @@ export default class BaseItem extends BaseModel {
 		return output.join('');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static isMarkdownTag(md: any) {
+	public static isMarkdownTag(md: string | null | undefined) {
 		if (!md) return false;
 		return !!md.match(/^\[.*?\]\(:\/[0-9a-zA-Z]{32}\)$/);
+	}
+
+	// When needing to set sync_time to the updated_time of the remote item (after an item is downloaded from remote), because this timestamp usually originates
+	// from another device, we need to cap it at the local device time, to avoid sync issues if there is time drift. In all other cases use the remote updated_time,
+	// as syncing an incoming change to a note can happen much later than the change was actually made, and if we use the device time in all cases, this can result
+	// in conflicts not occurring when they should.
+	// Please note: The remoteUpdatedTime must come from the updated_time within the server object, not the RemoteItem updated_time from the result of the delta api
+	public static remoteItemSyncTime(remoteUpdatedTime: number) {
+		const currentTime = Date.now();
+		return remoteUpdatedTime > currentTime ? currentTime : remoteUpdatedTime;
 	}
 
 }

@@ -338,6 +338,8 @@ const updateVersion = () => {
 
 	if (packageJson.version !== manifest.version) {
 		console.warn(chalk.yellow(`Version numbers have been updated but they do not match: package.json (${packageJson.version}), manifest.json (${manifest.version}). Set them to the required values to get them in sync.`));
+	} else {
+		console.info(packageJson.version);
 	}
 };
 

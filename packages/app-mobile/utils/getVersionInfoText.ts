@@ -45,8 +45,7 @@ const getVersionInfoText = (pluginStates: PluginSettings) => {
 
 	versionInfoLines.push(
 		_('FTS enabled: %d', Setting.value('db.ftsEnabled')),
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partially refactored old code before rule was applied
-		_('Hermes enabled: %d', (global as any).HermesInternal ? 1 : 0),
+		_('Hermes enabled: %d', (global as { HermesInternal?: unknown }).HermesInternal ? 1 : 0),
 	);
 
 	return versionInfoLines.join('\n');

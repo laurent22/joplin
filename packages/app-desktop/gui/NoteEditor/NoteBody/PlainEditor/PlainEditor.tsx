@@ -7,7 +7,7 @@ import { useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 
 import { NoteBodyEditorProps, NoteBodyEditorRef } from '../../utils/types';
 
 const PlainEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditorRef>) => {
-	const editorRef = useRef<HTMLTextAreaElement>();
+	const editorRef = useRef<HTMLTextAreaElement|null>(null);
 
 	useImperativeHandle(ref, () => {
 		return {
@@ -36,8 +36,7 @@ const PlainEditor = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEdito
 		}
 	}, [props.content]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const onChange = useCallback((event: any) => {
+	const onChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		props.onChange({ changeId: null, content: event.target.value });
 	}, [props.onChange]);
 

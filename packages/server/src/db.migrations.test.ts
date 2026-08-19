@@ -2,16 +2,18 @@ import { afterAllTests, beforeAllDb, beforeEachDb, db } from './utils/testing/te
 import sqlts from '@rmp135/sql-ts';
 import { DbConnection, migrateDown, migrateLatest, migrateUp, needsMigration, nextMigration } from './db';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-async function dbSchemaSnapshot(db: DbConnection): Promise<any> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return sqlts.toTypeScript({}, db as any);
+async function dbSchemaSnapshot(db: DbConnection): Promise<Awaited<ReturnType<typeof sqlts.toTypeScript>>> {
+	return sqlts.toTypeScript({}, db as unknown as Parameters<typeof sqlts.toTypeScript>[1]);
 }
 
 describe('db.migrations', () => {
 
+	let testIndex = 0;
 	beforeEach(async () => {
-		await beforeAllDb('db.migrations', { autoMigrate: false });
+		// Use `beforeAllDb` in `beforeEach` to ensure each test has its own database.
+		// To work around file locking issues on Windows, each test needs its own database instance:
+		const databaseKey = `db.migrations.${testIndex ++}`;
+		await beforeAllDb(databaseKey, { autoMigrate: false });
 		await beforeEachDb();
 	});
 
@@ -32,6 +34,8 @@ describe('db.migrations', () => {
 			'20211111134329_storage_index',
 			'20220121172409_email_recipient_default',
 			'20240413141308_changes_optimization',
+			'20250219183745_changes_optimization',
+			'20251107113000_fix_delta_performance',
 		];
 
 		let startProcessing = false;
@@ -76,6 +80,22 @@ describe('db.migrations', () => {
 		await migrateLatest(db());
 
 		expect(await needsMigration(db())).toBe(false);
+	});
+
+	it('should recover from a stuck migration lock', async () => {
+		// Run one migration so that knex_migrations_lock exists.
+		await migrateUp(db());
+
+		// Simulate a server that crashed mid-migration: the lock row was set to
+		// is_locked=1 and never released. Without auto-unlock, the next migration
+		// call would hang forever waiting on the lock.
+		await db()('knex_migrations_lock').update({ is_locked: 1 });
+		expect((await db()('knex_migrations_lock').first()).is_locked).toBe(1);
+
+		await migrateLatest(db());
+
+		expect(await needsMigration(db())).toBe(false);
+		expect((await db()('knex_migrations_lock').first()).is_locked).toBe(0);
 	});
 
 });

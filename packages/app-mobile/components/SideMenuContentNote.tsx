@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import { TouchableOpacity, Text, StyleSheet, ScrollView, View, ViewStyle } from 'react-native';
 import { connect } from 'react-redux';
-const Icon = require('react-native-vector-icons/Ionicons').default;
+import { Ionicons as Icon } from '@react-native-vector-icons/ionicons';
 import { themeStyle } from './global-style';
 import { AppState } from '../utils/types';
 
@@ -15,9 +15,11 @@ type Option = {
 	isDivider: true;
 };
 
+export type SideMenuContentOptions = Option[];
+
 interface Props {
 	themeId: number;
-	options: Option[];
+	options: SideMenuContentOptions;
 }
 
 const useStyles = (themeId: number) => {
@@ -80,7 +82,8 @@ const SideMenuContentNoteComponent: React.FC<Props> = props => {
 		return <View style={styles.divider} key={key}/>;
 	};
 
-	const renderSidebarButton = (key: string, title: string, iconName: string, onPressHandler: ()=> void) => {
+	type IconNameProp = React.ComponentProps<typeof Icon>['name'];
+	const renderSidebarButton = (key: string, title: string, iconName: IconNameProp, onPressHandler: ()=> void) => {
 		const content = (
 			<View key={key} style={onPressHandler ? styles.sideButton : styles.sideButtonDisabled}>
 				{!iconName ? null : <Icon name={iconName} style={styles.sidebarIcon} />}
@@ -91,7 +94,11 @@ const SideMenuContentNoteComponent: React.FC<Props> = props => {
 		if (!onPressHandler) return content;
 
 		return (
-			<TouchableOpacity key={key} onPress={onPressHandler}>
+			<TouchableOpacity
+				key={key}
+				onPress={onPressHandler}
+				accessibilityRole='button'
+			>
 				{content}
 			</TouchableOpacity>
 		);

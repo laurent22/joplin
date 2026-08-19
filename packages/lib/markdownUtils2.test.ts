@@ -106,23 +106,26 @@ describe('markdownUtils', () => {
 		}
 	}));
 
-	it('replace markdown link with description', (async () => {
-
-		const testCases = [
-			['Test case [one](link)', 'Test case one'],
-			['Test case ![two](imagelink)', 'Test case two'],
-			['**# -Test case three', 'Test case three'],
-			['This is a looooooong tiiitlllle with moore thaaaaaaan eighty characters and a [link](linkurl) at the end', 'This is a looooooong tiiitlllle with moore thaaaaaaan eighty characters and a li'],
-			['', ''],
-			['These are [link1](one), [link2](two) and ![link3](three)', 'These are link1, link2 and link3'],
-			['No description link to [](https://joplinapp.org)', 'No description link to https://joplinapp.org'],
-		];
-
-		for (let i = 0; i < testCases.length; i++) {
-			const md = testCases[i][0];
-			const expected = testCases[i][1];
-			expect(markdownUtils.titleFromBody(md)).toBe(expected);
-		}
-	}));
+	it.each([
+		['Test case [one](link)', 'Test case one'],
+		['Test case ![two](imagelink)', 'Test case two'],
+		['**# -Test case three', 'Test case three'],
+		['This is a looooooong tiiitlllle with moore thaaaaaaan eighty characters and a [link](linkurl) at the end', 'This is a looooooong tiiitlllle with moore thaaaaaaan eighty characters and a li'],
+		['', ''],
+		['These are [link1](one), [link2](two) and ![link3](three)', 'These are link1, link2 and link3'],
+		['No description link to [](https://joplinapp.org)', 'No description link to https://joplinapp.org'],
+		['&nbsp;\n\nThis is a test &nbsp; test.', 'This is a test   test.'],
+		['***Example title***', 'Example title'],
+		['==~~Formatted title~~==', 'Formatted title'],
+		['<ins>Important note title</ins>', 'Important note title'],
+		['`Inline code title`', 'Inline code title'],
+		['<ins>~~==***Deeply formatted title***==~~</ins>', 'Deeply formatted title'],
+		['C++ <vector> usage guide', 'C++ <vector> usage guide'],
+		['C# programming basics', 'C# programming basics'],
+		['Understanding a ~ b relationship', 'Understanding a ~ b relationship'],
+		['***~~***', ''],
+	])('should create a default note title from the note body (%j -> %j)', (body, expectedTitle) => {
+		expect(markdownUtils.titleFromBody(body)).toBe(expectedTitle);
+	});
 
 });

@@ -25,7 +25,7 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 	}
 
 	static label() {
-		return `${_('S3')} (Beta)`;
+		return _('S3');
 	}
 
 	static description() {

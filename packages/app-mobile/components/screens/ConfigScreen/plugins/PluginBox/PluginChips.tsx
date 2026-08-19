@@ -92,12 +92,20 @@ const PluginChips: React.FC<Props> = props => {
 		return <PluginChip faded={true}>{_('Installed')}</PluginChip>;
 	};
 
+	const renderDevChip = () => {
+		if (!item.devMode) {
+			return null;
+		}
+		return <PluginChip faded={true}>{_('Dev')}</PluginChip>;
+	};
+
 	return <View style={containerStyle}>
 		{renderIncompatibleChip()}
 		{renderInstalledChip()}
 		{renderErrorsChip()}
 		{renderBuiltInChip()}
 		{renderUpdatableChip()}
+		{renderDevChip()}
 		{renderDisabledChip()}
 	</View>;
 };

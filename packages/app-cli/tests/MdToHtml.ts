@@ -1,23 +1,23 @@
-import MdToHtml, { LinkRenderingType } from '@joplin/renderer/MdToHtml';
-const { filename } = require('@joplin/lib/path-utils');
+import MdToHtml, { LinkRenderingType, Options as MdToHtmlConstructorOptions } from '@joplin/renderer/MdToHtml';
+import { filename } from '@joplin/lib/path-utils';
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import shim from '@joplin/lib/shim';
 import { RenderOptions } from '@joplin/renderer/types';
 import { isResourceUrl, resourceUrlToId } from '@joplin/lib/models/utils/resourceUtils';
-const { themeStyle } = require('@joplin/lib/theme');
+import { themeStyle } from '@joplin/lib/theme';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function newTestMdToHtml(options: any = null) {
-	options = {
+function newTestMdToHtml(options: Partial<MdToHtmlConstructorOptions> = null) {
+	const merged: MdToHtmlConstructorOptions = {
 		ResourceModel: {
 			isResourceUrl: isResourceUrl,
 			urlToId: resourceUrlToId,
-		},
+			fullPath: () => '/some/path/here',
+		} as unknown as MdToHtmlConstructorOptions['ResourceModel'],
 		fsDriver: shim.fsDriver(),
 		...options,
 	};
 
-	return new MdToHtml(options);
+	return new MdToHtml(merged);
 }
 
 describe('MdToHtml', () => {
@@ -41,7 +41,6 @@ describe('MdToHtml', () => {
 
 			// if (mdFilename !== 'sanitize_9.md') continue;
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 			const mdToHtmlOptions: RenderOptions = {
 				bodyOnly: true,
 			};
@@ -56,6 +55,21 @@ describe('MdToHtml', () => {
 				mdToHtmlOptions.mapsToLine = true;
 			} else if (mdFilename.startsWith('resource_')) {
 				mdToHtmlOptions.resources = {};
+			} else if (mdFilename.startsWith('pdf_')) {
+				mdToHtmlOptions.resources = {
+					'00000000000000000000000000000001': {
+						item: { mime: 'application/pdf' },
+						localState: { },
+					},
+				};
+				mdToHtmlOptions.pdfViewerEnabled = true;
+			} else if (mdFilename.startsWith('video_')) {
+				mdToHtmlOptions.resources = {
+					'00000000000000000000000000000001': {
+						item: { mime: 'video/mp4' },
+						localState: { },
+					},
+				};
 			}
 
 			const markdown = await shim.fsDriver().readFile(mdFilePath);
@@ -83,10 +97,14 @@ describe('MdToHtml', () => {
 					'',
 				];
 
+				// Use this to generate the needed file:
+
+				// await writeFile('/path/to/actual.html', actualHtml, 'utf-8');
+
 				// eslint-disable-next-line no-console
 				console.info(msg.join('\n'));
 
-				expect(false).toBe(true);
+				expect(actualHtml).toBe(expectedHtml);
 				// return;
 			} else {
 				expect(true).toBe(true);
@@ -95,8 +113,7 @@ describe('MdToHtml', () => {
 	}));
 
 	it('should return enabled plugin assets', (async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const pluginOptions: any = {};
+		const pluginOptions: Record<string, { enabled: boolean }> = {};
 		const pluginNames = MdToHtml.pluginNames();
 
 		for (const n of pluginNames) pluginOptions[n] = { enabled: false };
@@ -318,7 +335,7 @@ describe('MdToHtml', () => {
 		for (const [tex, input] of tests) {
 			const html = await mdToHtml.render(input, null, { bodyOnly: true });
 
-			const opening = '<pre class="joplin-source" data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">';
+			const opening = '<pre class="joplin-source" hidden data-joplin-language="katex" data-joplin-source-open="$$&#10;" data-joplin-source-close="&#10;$$&#10;">';
 			const closing = '</pre>';
 
 			// Remove any single leading and trailing newlines, those are included in data-joplin-source-open
@@ -359,5 +376,28 @@ describe('MdToHtml', () => {
 
 		// Should not contain the HTML in unsanitized form
 		expect(renderResult.html).not.toContain('<svg>');
+	});
+
+	// KaTeX's \href bypasses the Markdown URL allowlist because it renders HTML
+	// directly. With trust enabled unconditionally, a file:// or javascript: URL
+	// could leak NTLM credentials on Windows or trigger arbitrary URL handlers.
+	it.each([
+		['https://example.com/page', true],
+		['http://example.com/page', true],
+		['mailto:foo@example.com', true],
+		['joplin://x-callback-url/openNote?id=abc', true],
+		['file:///etc/passwd', false],
+		['file://attacker.example.com/share/x.txt', false],
+		['javascript:alert(1)', false],
+		['vscode://foo', false],
+		['ms-msdt:/id', false],
+	])('should only allow safe URL schemes in KaTeX \\href (%s -> allowed=%s)', async (url, allowed) => {
+		const { html } = await newTestMdToHtml().render(`$\\href{${url}}{click}$`, null, { bodyOnly: true });
+
+		if (allowed) {
+			expect(html).toContain(`href="${url}"`);
+		} else {
+			expect(html).not.toContain(`href="${url}"`);
+		}
 	});
 });

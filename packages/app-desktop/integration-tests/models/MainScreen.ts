@@ -6,6 +6,9 @@ import GoToAnything from './GoToAnything';
 import setFilePickerResponse from '../util/setFilePickerResponse';
 import NoteList from './NoteList';
 import { expect } from '../util/test';
+import ChangeAppLayoutScreen from './ChangeAppLayoutScreen';
+import waitForNextWindowMatching from '../util/waitForNextWindowMatching';
+import ChatPanel from './ChatPanel';
 
 export default class MainScreen {
 	public readonly newNoteButton: Locator;
@@ -14,6 +17,8 @@ export default class MainScreen {
 	public readonly dialog: Locator;
 	public readonly noteEditor: NoteEditorScreen;
 	public readonly goToAnything: GoToAnything;
+	public readonly changeLayoutScreen: ChangeAppLayoutScreen;
+	public readonly chatPanel: ChatPanel;
 
 	public constructor(private page: Page) {
 		this.newNoteButton = page.locator('.new-note-button');
@@ -22,20 +27,35 @@ export default class MainScreen {
 		this.dialog = page.locator('.dialog-modal-layer');
 		this.noteEditor = new NoteEditorScreen(page);
 		this.goToAnything = new GoToAnything(page, this);
+		this.changeLayoutScreen = new ChangeAppLayoutScreen(page, this);
+		this.chatPanel = new ChatPanel(page, this);
+	}
+
+	public async setup() {
+		await this.waitFor();
+		const folder = await this.sidebar.createNewFolder('Test');
+		await folder.waitFor();
+		return this;
 	}
 
 	public async waitFor() {
-		await this.newNoteButton.waitFor();
 		await this.noteList.waitFor();
 	}
 
 	// Follows the steps a user would use to create a new note.
 	public async createNewNote(title: string) {
 		await this.waitFor();
+		// The new note button is only visible when a folder is selected -- wait for it explicitly.
+		await this.newNoteButton.waitFor();
 
-		await this.newNoteButton.click();
-		await expect(this.noteEditor.noteTitleInput).toHaveValue('');
-		await expect(this.noteEditor.noteTitleInput).toHaveJSProperty('placeholder', 'Creating new note...');
+		// Create the new note. Retry this -- creating new notes can sometimes fail if done just after
+		// application startup.
+		await expect.poll(async () => {
+			await this.newNoteButton.click();
+			await expect(this.noteEditor.noteTitleInput).toHaveValue('', { timeout: 4_000 });
+			await expect(this.noteEditor.noteTitleInput).toHaveJSProperty('placeholder', 'Creating new note...', { timeout: 4_000 });
+			return true;
+		}, { timeout: 10_000 }).toBe(true);
 
 		// Fill the title
 		await this.noteEditor.noteTitleInput.click();
@@ -49,13 +69,34 @@ export default class MainScreen {
 		await activateMainMenuItem(electronApp, /^(Preferences\.\.\.|Options)$/);
 	}
 
+	public async openNewWindow(electronApp: ElectronApplication) {
+		const pagePromise = waitForNextWindowMatching(/^Joplin -/, electronApp);
+
+		await activateMainMenuItem(electronApp, 'Open in new window');
+		return pagePromise;
+	}
+
 	public async search(text: string) {
 		const searchBar = this.page.getByPlaceholder('Search...');
 		await searchBar.fill(text);
 	}
 
-	public async importHtmlDirectory(electronApp: ElectronApplication, path: string) {
+	private async importFromModule_(electronApp: ElectronApplication, moduleName: string, path: string) {
 		await setFilePickerResponse(electronApp, [path]);
-		await activateMainMenuItem(electronApp, 'HTML - HTML document (Directory)', 'Import');
+		await activateMainMenuItem(electronApp, moduleName, 'Import');
+	}
+
+	public async importHtmlDirectory(electronApp: ElectronApplication, path: string) {
+		return this.importFromModule_(electronApp, 'HTML - HTML document (Directory)', path);
+	}
+
+	public async importHtmlFile(electronApp: ElectronApplication, path: string) {
+		return this.importFromModule_(electronApp, 'HTML - HTML document (File)', path);
+	}
+
+	public async pluginPanelLocator(pluginId: string) {
+		return this.page.locator(
+			`iframe[id^=${JSON.stringify(`plugin-view-${pluginId}`)}]`,
+		);
 	}
 }

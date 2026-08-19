@@ -5,7 +5,7 @@ import { useCallback, useMemo } from 'react';
 import { Card, Divider, List, Portal, Switch, Text } from 'react-native-paper';
 import getPluginIssueReportUrl from '@joplin/lib/services/plugins/utils/getPluginIssueReportUrl';
 import { Linking, ScrollView, StyleSheet, View, ViewStyle } from 'react-native';
-import DismissibleDialog, { DialogSize } from '../../../DismissibleDialog';
+import DismissibleDialog, { DialogVariant } from '../../../DismissibleDialog';
 import openWebsiteForPlugin from './utils/openWebsiteForPlugin';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import PluginTitle from './PluginBox/PluginTitle';
@@ -39,8 +39,6 @@ const styles = (() => {
 		display: 'flex',
 		flexDirection: 'column',
 		gap: 20,
-		marginLeft: 10,
-		marginRight: 10,
 	};
 	return StyleSheet.create({
 		descriptionText: {
@@ -64,7 +62,7 @@ const styles = (() => {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			alignItems: 'center',
-			padding: 10,
+			paddingVertical: 10,
 			marginTop: 12,
 			marginBottom: 14,
 		},
@@ -123,7 +121,7 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 	});
 
 	const aboutPlugin = (
-		<Card mode='outlined' style={{ margin: 8 }} testID='plugin-card'>
+		<Card mode='outlined' style={{ marginVertical: 8 }} testID='plugin-card'>
 			<Card.Content>
 				<PluginTitle manifest={manifest}/>
 				<Text variant='bodyMedium'>{_('by %s', manifest.author)}</Text>
@@ -203,7 +201,7 @@ const PluginInfoModalContent: React.FC<Props> = props => {
 			item={item}
 			type={ButtonType.Delete}
 			onPress={props.pluginCallbacks.onDelete}
-			disabled={item.builtIn || (item?.deleted ?? true)}
+			disabled={item.builtIn || item.devMode || (item?.deleted ?? true)}
 			title={item?.deleted ? _('Deleted') : _('Delete')}
 		/>
 	);
@@ -253,7 +251,7 @@ const PluginInfoModal: React.FC<Props> = props => {
 			<DismissibleDialog
 				themeId={props.themeId}
 				visible={props.visible}
-				size={DialogSize.Small}
+				size={DialogVariant.Small}
 				onDismiss={props.onModalDismiss}
 			>
 				{ props.item ? <PluginInfoModalContent {...props}/> : null }

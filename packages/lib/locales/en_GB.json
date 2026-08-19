@@ -2,7 +2,8 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		""
 	],
-	"%d days": [
+	"%d day": [
+		"",
 		""
 	],
 	"%d GB": [
@@ -12,9 +13,7 @@
 		""
 	],
 	"%d hour": [
-		""
-	],
-	"%d hours": [
+		"",
 		""
 	],
 	"%d MB": [
@@ -23,13 +22,19 @@
 	"%d MB per note or attachment": [
 		""
 	],
-	"%d minutes": [
+	"%d minute": [
+		"",
 		""
 	],
-	"%d notes match this pattern. Delete them?": [
+	"%d note matches this pattern. Delete it?": [
+		"",
 		""
 	],
-	"%d notes will be permanently deleted. Continue?": [
+	"%d note will be permanently deleted. Continue?": [
+		"",
+		""
+	],
+	"%d photo(s) taken": [
 		""
 	],
 	"%s": [
@@ -65,7 +70,19 @@
 	"%s = %s (%s)": [
 		""
 	],
+	"%s cannot be greater than %s": [
+		""
+	],
+	"%s cannot be less than %s": [
+		""
+	],
+	"%s from %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -74,7 +91,8 @@
 	"%s: %d": [
 		""
 	],
-	"%s: %d notes": [
+	"%s: %d note": [
+		"",
 		""
 	],
 	"%s: %d/%d": [
@@ -116,7 +134,13 @@
 	"(In plugin: %s)": [
 		""
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
+		""
+	],
+	"(Read-only)": [
 		""
 	],
 	"(wysiwyg: %s)": [
@@ -140,6 +164,18 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		""
 	],
+	"[None]": [
+		""
+	],
+	"A brief description of the image:": [
+		""
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
+	],
+	"A new update (%s) is available": [
+		""
+	],
 	"A3": [
 		""
 	],
@@ -147,6 +183,9 @@
 		""
 	],
 	"A5": [
+		""
+	],
+	"ABC musical notation: Options": [
 		""
 	],
 	"About": [
@@ -168,6 +207,12 @@
 		""
 	],
 	"Accepted invitations": [
+		""
+	],
+	"Accepted: Notebook %s from %s": [
+		""
+	],
+	"Accepting share...": [
 		""
 	],
 	"Access denied: Please check your username and password": [
@@ -200,6 +245,9 @@
 	"Add body": [
 		""
 	],
+	"Add column": [
+		""
+	],
 	"Add new": [
 		""
 	],
@@ -209,10 +257,28 @@
 	"Add recipient:": [
 		""
 	],
+	"Add row": [
+		""
+	],
+	"Add tags:": [
+		""
+	],
 	"Add title": [
 		""
 	],
 	"Add to dictionary": [
+		""
+	],
+	"Add to note": [
+		""
+	],
+	"Added new: %s": [
+		""
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
 		""
 	],
 	"Admin": [
@@ -230,6 +296,9 @@
 	"Advanced tools": [
 		""
 	],
+	"all": [
+		""
+	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		""
 	],
@@ -242,6 +311,9 @@
 	"All potential ports are in use - please report the issue at %s": [
 		""
 	],
+	"All shared folders:": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		""
 	],
@@ -249,6 +321,9 @@
 		""
 	],
 	"Also publish linked notes": [
+		""
+	],
+	"Alternative instance ID: %s": [
 		""
 	],
 	"Always": [
@@ -272,6 +347,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
+	],
 	"An error occurred: %s": [
 		""
 	],
@@ -293,6 +371,12 @@
 	"Apply": [
 		""
 	],
+	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
+		""
+	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
+		""
+	],
 	"Are you sure you want to renew the authorisation token?": [
 		""
 	],
@@ -303,6 +387,12 @@
 		""
 	],
 	"Aritim Dark": [
+		""
+	],
+	"Associated tags:": [
+		""
+	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
 	],
 	"Attach": [
@@ -321,6 +411,9 @@
 		""
 	],
 	"attachment": [
+		""
+	],
+	"Attachment": [
 		""
 	],
 	"Attachment conflict: \"%s\"": [
@@ -353,7 +446,13 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
+		""
+	],
+	"Autocomplete Markdown and HTML": [
 		""
 	],
 	"Automatically check for updates": [
@@ -374,7 +473,7 @@
 	"Beta": [
 		""
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
+	"Block code": [
 		""
 	],
 	"Bold": [
@@ -395,6 +494,12 @@
 	"by %s": [
 		""
 	],
+	"by word": [
+		""
+	],
+	"Camera": [
+		""
+	],
 	"Can Share": [
 		""
 	],
@@ -410,6 +515,9 @@
 	"Cancelling background synchronisation... Please wait.": [
 		""
 	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
+	],
 	"Cancelling...": [
 		""
 	],
@@ -420,6 +528,9 @@
 		""
 	],
 	"Cannot change encrypted item": [
+		""
+	],
+	"Cannot convert read-only item: \"%s\"": [
 		""
 	],
 	"Cannot copy note to \"%s\" notebook": [
@@ -470,10 +581,22 @@
 	"Change language": [
 		""
 	],
+	"Change ratio": [
+		""
+	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		""
 	],
 	"Characters excluding spaces": [
+		""
+	],
+	"Check": [
+		""
+	],
+	"Check elements to display in the toolbar": [
 		""
 	],
 	"Check for updates...": [
@@ -488,7 +611,13 @@
 	"Checkbox list": [
 		""
 	],
+	"Checked": [
+		""
+	],
 	"Checking... Please wait.": [
+		""
+	],
+	"Chinese/Japanese/Korean characters": [
 		""
 	],
 	"Choose an option": [
@@ -509,22 +638,37 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		""
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Click to add tags...": [
 		""
 	],
 	"Client ID: %s": [
 		""
 	],
+	"close": [
+		""
+	],
 	"Close": [
 		""
 	],
+	"Close dialog": [
+		""
+	],
 	"Close dropdown": [
+		""
+	],
+	"Close side menu": [
 		""
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		""
 	],
 	"Close Window": [
+		""
+	],
+	"Closing session...": [
 		""
 	],
 	"Cmd-click to open": [
@@ -548,10 +692,13 @@
 	"Collaborate on notebooks with others": [
 		""
 	],
-	"Collapse": [
+	"Collapse all notebooks": [
 		""
 	],
-	"Collapse %s": [
+	"Collapse title": [
+		""
+	],
+	"Collapsed": [
 		""
 	],
 	"Coming alarms": [
@@ -566,13 +713,25 @@
 	"Command": [
 		""
 	],
+	"COMMAND": [
+		""
+	],
 	"Command palette": [
 		""
 	],
 	"Command palette...": [
 		""
 	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		""
+	],
 	"Compact": [
+		""
+	],
+	"Complete": [
+		""
+	],
+	"Complete to-do": [
 		""
 	],
 	"Completed": [
@@ -596,6 +755,12 @@
 	"Configuration": [
 		""
 	],
+	"Configured keyboard shortcuts:": [
+		""
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
+	],
 	"Confirm password cannot be empty": [
 		""
 	],
@@ -617,7 +782,14 @@
 	"Connect to Joplin Cloud": [
 		""
 	],
+	"Connect using your organisation account": [
+		""
+	],
 	"Consolidated billing": [
+		""
+	],
+	"Contains %d note": [
+		"",
 		""
 	],
 	"Content provided by %s": [
@@ -627,6 +799,15 @@
 		""
 	],
 	"Continue": [
+		""
+	],
+	"Control character": [
+		""
+	],
+	"Convert it": [
+		""
+	],
+	"Convert to Markdown": [
 		""
 	],
 	"Convert to note": [
@@ -684,6 +865,9 @@
 	"Could not connect to plugin repository.": [
 		""
 	],
+	"Could not convert notes to Markdown: %s": [
+		""
+	],
 	"Could not export notes: %s": [
 		""
 	],
@@ -714,7 +898,13 @@
 	"Create a notebook": [
 		""
 	],
+	"Create new notebook": [
+		""
+	],
 	"Create new profile...": [
+		""
+	],
+	"Create note": [
 		""
 	],
 	"Create notebook": [
@@ -747,6 +937,9 @@
 	"Created: %s": [
 		""
 	],
+	"Creates a new note with an attachment of type %s": [
+		""
+	],
 	"Creates a new note.": [
 		""
 	],
@@ -762,6 +955,12 @@
 	"Creating new to-do...": [
 		""
 	],
+	"Creating note \"%s\"...": [
+		""
+	],
+	"Creating note.": [
+		""
+	],
 	"Creating report...": [
 		""
 	],
@@ -769,6 +968,12 @@
 		""
 	],
 	"Ctrl-click to open: %s": [
+		""
+	],
+	"current match": [
+		""
+	],
+	"Current password": [
 		""
 	],
 	"Current version is up-to-date.": [
@@ -825,6 +1030,9 @@
 	"Default": [
 		""
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		""
 	],
@@ -834,10 +1042,16 @@
 	"Delete attachment \"%s\"?": [
 		""
 	],
+	"Delete column": [
+		""
+	],
 	"Delete expired sessions": [
 		""
 	],
 	"Delete expired tokens": [
+		""
+	],
+	"Delete history": [
 		""
 	],
 	"Delete line": [
@@ -858,7 +1072,16 @@
 	"Delete profile \"%s\"": [
 		""
 	],
+	"Delete profile \"%s\"?\n\nAll data, including notes, notebooks and tags will be permanently deleted.": [
+		""
+	],
+	"Delete row": [
+		""
+	],
 	"Delete selected notes": [
+		""
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
 		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
@@ -894,10 +1117,22 @@
 	"Deletes the notes without asking for confirmation.": [
 		""
 	],
+	"Deletion log": [
+		""
+	],
+	"Deselect": [
+		""
+	],
 	"Destination format: %s": [
 		""
 	],
 	"Detailed": [
+		""
+	],
+	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -915,10 +1150,16 @@
 	"Disable safe mode and restart": [
 		""
 	],
+	"Disable synchronisation": [
+		""
+	],
 	"Disable Web Clipper Service": [
 		""
 	],
 	"Disabled": [
+		""
+	],
+	"Disabled keys": [
 		""
 	],
 	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
@@ -948,6 +1189,9 @@
 	"Displays the complete information about note.": [
 		""
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		""
 	],
@@ -966,7 +1210,22 @@
 	"Do not ask for confirmation.": [
 		""
 	],
+	"Do not ask for user confirmation.": [
+		""
+	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
+		""
+	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
+	"Document scanner: Title template": [
+		""
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Donate, website": [
@@ -979,6 +1238,9 @@
 		""
 	],
 	"Download and install the relevant extension for your browser:": [
+		""
+	],
+	"Download it now": [
 		""
 	],
 	"Downloaded": [
@@ -1035,10 +1297,16 @@
 	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
 		""
 	],
+	"Duration: %s": [
+		""
+	],
 	"Edit": [
 		""
 	],
-	"Edit in external editor": [
+	"Edit as Markdown": [
+		""
+	],
+	"Edit as Rich Text": [
 		""
 	],
 	"Edit link": [
@@ -1056,7 +1324,13 @@
 	"Edit profile configuration...": [
 		""
 	],
+	"Edit tag": [
+		""
+	],
 	"Editor": [
+		""
+	],
+	"Editor actions": [
 		""
 	],
 	"Editor font": [
@@ -1119,6 +1393,9 @@
 	"Enable abbreviation syntax": [
 		""
 	],
+	"Enable ABC musical notation support": [
+		""
+	],
 	"Enable audio player": [
 		""
 	],
@@ -1131,10 +1408,19 @@
 	"Enable encryption": [
 		""
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		""
 	],
 	"Enable Fountain syntax support": [
+		""
+	],
+	"Enable handwritten transcription": [
+		""
+	],
+	"Enable HTML-to-Markdown conversion banner": [
 		""
 	],
 	"Enable Linkify": [
@@ -1170,6 +1456,9 @@
 	"Enable soft breaks": [
 		""
 	],
+	"Enable spell checking in Markdown editor": [
+		""
+	],
 	"Enable spellcheck in the text editor": [
 		""
 	],
@@ -1192,6 +1481,12 @@
 		""
 	],
 	"Enabled": [
+		""
+	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
+	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
 		""
 	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
@@ -1221,6 +1516,9 @@
 	"End-to-end encryption": [
 		""
 	],
+	"Ends voice typing": [
+		""
+	],
 	"Enter code here": [
 		""
 	],
@@ -1233,6 +1531,15 @@
 	"Enter password": [
 		""
 	],
+	"Enter the code": [
+		""
+	],
+	"Enter the code:": [
+		""
+	],
+	"Entering selection mode": [
+		""
+	],
 	"Enum": [
 		""
 	],
@@ -1240,6 +1547,9 @@
 		""
 	],
 	"Error opening note in editor: %s": [
+		""
+	],
+	"Error starting camera: %s": [
 		""
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
@@ -1266,10 +1576,16 @@
 	"Exits the application.": [
 		""
 	],
-	"Expand": [
+	"Expand %s": [
 		""
 	],
-	"Expand %s": [
+	"Expand all notebooks": [
+		""
+	],
+	"Expand title": [
+		""
+	],
+	"Expanded": [
 		""
 	],
 	"Export": [
@@ -1285,6 +1601,9 @@
 		""
 	],
 	"Export Debug Report": [
+		""
+	],
+	"Export deletion log": [
 		""
 	],
 	"Export profile": [
@@ -1317,10 +1636,19 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		""
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		""
 	],
 	"Feature flags": [
+		""
+	],
+	"Feedback": [
 		""
 	],
 	"Fetched items: %d/%d.": [
@@ -1338,13 +1666,13 @@
 	"Filter": [
 		""
 	],
-	"Filter tags": [
-		""
-	],
-	"Find and replace": [
+	"Find": [
 		""
 	],
 	"Find: ": [
+		""
+	],
+	"Finishes recording": [
 		""
 	],
 	"Firefox Extension": [
@@ -1365,6 +1693,12 @@
 	"Focus title": [
 		""
 	],
+	"Folder \"%s\" is shared with:": [
+		""
+	],
+	"Follow link": [
+		""
+	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		""
 	],
@@ -1381,9 +1715,6 @@
 		""
 	],
 	"Force path style": [
-		""
-	],
-	"Formatting": [
 		""
 	],
 	"Forward": [
@@ -1414,6 +1745,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		""
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		""
 	],
@@ -1423,7 +1757,19 @@
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		""
 	],
+	"Glossary:": [
+		""
+	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
 	"Go to Joplin Cloud profile": [
+		""
+	],
+	"Go to line": [
 		""
 	],
 	"Go to source URL": [
@@ -1439,9 +1785,6 @@
 		""
 	],
 	"Header %d": [
-		""
-	],
-	"Headers": [
 		""
 	],
 	"Heading": [
@@ -1474,7 +1817,10 @@
 	"Hide keyboard": [
 		""
 	],
-	"Hide more actions": [
+	"Hide password": [
+		""
+	],
+	"Hides warning": [
 		""
 	],
 	"Highlight": [
@@ -1505,6 +1851,9 @@
 		""
 	],
 	"Idle": [
+		""
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
 		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
@@ -1540,6 +1889,9 @@
 	"Import or export your data": [
 		""
 	],
+	"Import...": [
+		""
+	],
 	"Imported successfully!": [
 		""
 	],
@@ -1561,9 +1913,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		""
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		""
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		""
 	],
@@ -1582,7 +1931,16 @@
 	"In: %s": [
 		""
 	],
+	"Incoming shares:": [
+		""
+	],
 	"Incompatible": [
+		""
+	],
+	"Incomplete": [
+		""
+	],
+	"Incomplete to-do": [
 		""
 	],
 	"Increase indent level": [
@@ -1592,6 +1950,9 @@
 		""
 	],
 	"Indent more": [
+		""
+	],
+	"Info": [
 		""
 	],
 	"Information": [
@@ -1636,6 +1997,9 @@
 	"Invalid command: \"%s\"": [
 		""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		""
 	],
@@ -1660,7 +2024,10 @@
 	"Items that cannot be synchronised": [
 		""
 	],
-	"Join us on Twitter": [
+	"Items with error: %s": [
+		""
+	],
+	"Join us on %s": [
 		""
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
@@ -1690,19 +2057,37 @@
 	"Joplin Forum": [
 		""
 	],
+	"Joplin is already running.": [
+		""
+	],
 	"Joplin Mobile": [
 		""
 	],
 	"Joplin Server": [
 		""
 	],
+	"Joplin Server (SAML)": [
+		""
+	],
+	"Joplin Server Business": [
+		""
+	],
 	"Joplin Server email": [
+		""
+	],
+	"Joplin Server Login": [
 		""
 	],
 	"Joplin Server password": [
 		""
 	],
 	"Joplin Server URL": [
+		""
+	],
+	"Joplin SSO Authentication": [
+		""
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
 		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
@@ -1712,9 +2097,6 @@
 		""
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
-		""
-	],
-	"KaTeX": [
 		""
 	],
 	"Keep note history for": [
@@ -1735,7 +2117,13 @@
 	"Keychain Supported: %s": [
 		""
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
+		""
+	],
+	"Label": [
 		""
 	],
 	"Landscape": [
@@ -1745,6 +2133,9 @@
 		""
 	],
 	"Language, date format": [
+		""
+	],
+	"Large": [
 		""
 	],
 	"Last error: %s": [
@@ -1792,6 +2183,10 @@
 	"Link": [
 		""
 	],
+	"Link created!": [
+		"",
+		""
+	],
 	"Link description": [
 		""
 	],
@@ -1802,13 +2197,13 @@
 	"Link text": [
 		""
 	],
-	"Links with protocol \"%s\" are not supported": [
+	"Link to note...": [
+		""
+	],
+	"Links": [
 		""
 	],
 	"List item": [
-		""
-	],
-	"Lists": [
 		""
 	],
 	"Loaded": [
@@ -1824,6 +2219,9 @@
 		""
 	],
 	"Log": [
+		""
+	],
+	"Log in with your web browser": [
 		""
 	],
 	"Login to Joplin Cloud.": [
@@ -1862,7 +2260,13 @@
 	"Manage shared notebooks": [
 		""
 	],
+	"Manage toolbar options": [
+		""
+	],
 	"Manage your plugins": [
+		""
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
 		""
 	],
 	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
@@ -1875,6 +2279,18 @@
 		""
 	],
 	"Markdown + Front Matter": [
+		""
+	],
+	"Markdown editor": [
+		""
+	],
+	"Markdown editor: Highlight active line": [
+		""
+	],
+	"Markdown editor: Render images": [
+		""
+	],
+	"Markdown editor: Render markup in editor": [
 		""
 	],
 	"Marks a to-do as done.": [
@@ -1895,6 +2311,12 @@
 	"Master password:": [
 		""
 	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
+	],
 	"Max concurrent connections": [
 		""
 	],
@@ -1910,13 +2332,22 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
+		""
+	],
+	"Missing camera permission": [
 		""
 	],
 	"Missing keys": [
 		""
 	],
 	"Missing Master Keys": [
+		""
+	],
+	"Missing permission to record audio.": [
 		""
 	],
 	"Missing required argument: %s": [
@@ -1940,10 +2371,23 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
+	"Move %d note to notebook \"%s\"?": [
+		"",
+		""
+	],
+	"Move %d notebooks to the trash?\n\nAll notes and sub-notebooks within these notebooks will also be moved to the trash.": [
+		""
+	],
+	"Move down": [
+		""
+	],
+	"Move left": [
 		""
 	],
 	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		""
+	],
+	"Move right": [
 		""
 	],
 	"Move to notebook": [
@@ -1953,6 +2397,9 @@
 		""
 	],
 	"Move to notebook:": [
+		""
+	],
+	"Move up": [
 		""
 	],
 	"Moves the given <item> to [notebook]": [
@@ -1967,10 +2414,16 @@
 	"Never resize": [
 		""
 	],
-	"New": [
+	"New attachment": [
+		""
+	],
+	"New drawing": [
 		""
 	],
 	"New invitations": [
+		""
+	],
+	"New model available\nA new voice typing model is available. Do you want to download it?": [
 		""
 	],
 	"New note": [
@@ -1985,16 +2438,28 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		""
 	],
-	"New sub-notebook": [
+	"New notebook title": [
 		""
 	],
-	"New tags:": [
+	"New photo": [
+		""
+	],
+	"New profile": [
+		""
+	],
+	"New sub-notebook": [
 		""
 	],
 	"New to-do": [
 		""
 	],
 	"New version: %s": [
+		""
+	],
+	"next": [
+		""
+	],
+	"Next": [
 		""
 	],
 	"Next match": [
@@ -2021,9 +2486,6 @@
 	"No active notebook.": [
 		""
 	],
-	"No item with ID %s": [
-		""
-	],
 	"No new invitations": [
 		""
 	],
@@ -2045,6 +2507,9 @@
 	"No results": [
 		""
 	],
+	"No revision selected": [
+		""
+	],
 	"No such command: %s": [
 		""
 	],
@@ -2054,13 +2519,28 @@
 	"No tab selected": [
 		""
 	],
+	"No tags": [
+		""
+	],
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
+		""
+	],
+	"No updates available": [
+		""
+	],
+	"No URL for SAML authentication set.": [
+		""
+	],
+	"None": [
 		""
 	],
 	"Nord": [
 		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
+		""
+	],
+	"Not checked": [
 		""
 	],
 	"Not downloaded": [
@@ -2070,6 +2550,9 @@
 		""
 	],
 	"Not now": [
+		""
+	],
+	"Not useful": [
 		""
 	],
 	"note": [
@@ -2099,7 +2582,13 @@
 	"Note has been saved.": [
 		""
 	],
+	"Note history": [
+		""
+	],
 	"Note History": [
+		""
+	],
+	"Note history has been deleted.": [
 		""
 	],
 	"Note is not a to-do: \"%s\"": [
@@ -2114,10 +2603,19 @@
 	"Note list style": [
 		""
 	],
+	"Note not published: %s": [
+		""
+	],
+	"Note preview": [
+		""
+	],
 	"Note properties": [
 		""
 	],
 	"Note title": [
+		""
+	],
+	"Note viewer": [
 		""
 	],
 	"Note&book": [
@@ -2156,7 +2654,19 @@
 	"Notes can only be created within a notebook.": [
 		""
 	],
+	"Notifications": [
+		""
+	],
 	"Numbered List": [
+		""
+	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
+	"OCR: Language data URL or path": [
+		""
+	],
+	"OCR: Search in extracted content": [
 		""
 	],
 	"OK": [
@@ -2166,6 +2676,9 @@
 		""
 	],
 	"On %s: %s": [
+		""
+	],
+	"on line": [
 		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
@@ -2183,6 +2696,9 @@
 	"OneDrive Login": [
 		""
 	],
+	"OneNote Notebook": [
+		""
+	],
 	"Only one note can be printed at a time.": [
 		""
 	],
@@ -2192,13 +2708,31 @@
 	"Open %s": [
 		""
 	],
+	"Open in external editor": [
+		""
+	],
+	"Open in new window": [
+		""
+	],
 	"Open it": [
+		""
+	],
+	"Open log": [
 		""
 	],
 	"Open PDF viewer": [
 		""
 	],
+	"Open primary app instance...": [
+		""
+	],
 	"Open profile directory": [
+		""
+	],
+	"Open secondary app instance...": [
+		""
+	],
+	"Open settings": [
 		""
 	],
 	"Open Source": [
@@ -2207,10 +2741,22 @@
 	"Open Sync Wizard...": [
 		""
 	],
+	"Open-source licences": [
+		""
+	],
 	"Open...": [
 		""
 	],
 	"Opening section %s": [
+		""
+	],
+	"Opens dropdown": [
+		""
+	],
+	"Opens note": [
+		""
+	],
+	"Opens notebook": [
 		""
 	],
 	"Operation cancelled": [
@@ -2219,7 +2765,13 @@
 	"Options": [
 		""
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
 	"Ordered list": [
+		""
+	],
+	"Other": [
 		""
 	],
 	"Other applications...": [
@@ -2232,6 +2784,12 @@
 		""
 	],
 	"Page size for PDF export": [
+		""
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
 		""
 	],
 	"Password": [
@@ -2258,7 +2816,7 @@
 	"PDF File": [
 		""
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
 	"Permanently delete note": [
@@ -2270,16 +2828,14 @@
 	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
 		""
 	],
-	"Permanently delete these %d notes?": [
+	"Permanently delete this note?": [
+		"",
 		""
 	],
 	"Permanently deletes the notebook, skipping the trash.": [
 		""
 	],
-	"Permission needed": [
-		""
-	],
-	"Permission to use camera": [
+	"Photo %d": [
 		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
@@ -2295,6 +2851,9 @@
 		""
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
+		""
+	],
+	"Please provide the recipient email": [
 		""
 	],
 	"Please record your voice...": [
@@ -2319,6 +2878,9 @@
 		""
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
+		""
+	],
+	"Please wait while we load your organisation sign-in page...": [
 		""
 	],
 	"Please wait...": [
@@ -2360,6 +2922,9 @@
 	"Possible values: %s.": [
 		""
 	],
+	"Prefer JSON output.": [
+		""
+	],
 	"Preferences": [
 		""
 	],
@@ -2370,6 +2935,9 @@
 		""
 	],
 	"Preferred light theme": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
@@ -2384,7 +2952,13 @@
 	"Press to set the decryption password.": [
 		""
 	],
+	"previous": [
+		""
+	],
 	"Previous match": [
+		""
+	],
+	"Previous versions": [
 		""
 	],
 	"Previous versions of this note": [
@@ -2414,10 +2988,16 @@
 	"Processing": [
 		""
 	],
+	"Processing photo...": [
+		""
+	],
 	"Profile": [
 		""
 	],
 	"Profile name": [
+		""
+	],
+	"Profile name cannot be empty": [
 		""
 	],
 	"Profile name:": [
@@ -2444,6 +3024,12 @@
 	"Public-private key pair:": [
 		""
 	],
+	"Publish Note": [
+		""
+	],
+	"Publish note \"%s\" (in notebook \"%s\")?": [
+		""
+	],
 	"Publish note...": [
 		""
 	],
@@ -2453,7 +3039,22 @@
 	"Publish notes to the internet": [
 		""
 	],
+	"Publish/unpublish": [
+		""
+	],
+	"Published at URL: %s": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
+	"QR Code": [
+		""
+	],
 	"Quit": [
+		""
+	],
+	"Re-download model": [
 		""
 	],
 	"Re-encrypt data": [
@@ -2462,13 +3063,22 @@
 	"Re-encryption": [
 		""
 	],
+	"Re-enter password": [
+		""
+	],
 	"Re-upload local data to sync target": [
+		""
+	],
+	"Read more": [
 		""
 	],
 	"Read more about it": [
 		""
 	],
 	"Read time: %s min": [
+		""
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
 		""
 	],
 	"Recipient has accepted the invitation": [
@@ -2483,10 +3093,25 @@
 	"Recipients:": [
 		""
 	],
+	"Recognise text:": [
+		""
+	],
+	"Recognize handwritten image": [
+		""
+	],
 	"Recommended": [
 		""
 	],
 	"Recommended plugins": [
+		""
+	],
+	"Record audio": [
+		""
+	],
+	"Recording": [
+		""
+	],
+	"Recording...": [
 		""
 	],
 	"Redo": [
@@ -2501,13 +3126,31 @@
 	"Reject": [
 		""
 	],
+	"Rejecting share...": [
+		""
+	],
 	"Remove": [
+		""
+	],
+	"Remove %d tags from all notes? This cannot be undone.": [
+		""
+	],
+	"Remove %s": [
+		""
+	],
+	"Remove %s from share": [
 		""
 	],
 	"Remove tag \"%s\" from all notes?": [
 		""
 	],
 	"Remove this search from the sidebar?": [
+		""
+	],
+	"Removed %s from share.": [
+		""
+	],
+	"Removed tag: %s": [
 		""
 	],
 	"Rename": [
@@ -2522,10 +3165,19 @@
 	"Renames the given <item> (note or notebook) to <name>.": [
 		""
 	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
+	],
 	"Renew token": [
 		""
 	],
+	"replace": [
+		""
+	],
 	"Replace": [
+		""
+	],
+	"replace all": [
 		""
 	],
 	"Replace all": [
@@ -2535,6 +3187,12 @@
 		""
 	],
 	"Replace: ": [
+		""
+	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
 		""
 	],
 	"Report an issue": [
@@ -2576,6 +3234,9 @@
 	"Restore": [
 		""
 	],
+	"Restore defaults": [
+		""
+	],
 	"Restore note": [
 		""
 	],
@@ -2609,7 +3270,16 @@
 	"Reverses the sorting order.": [
 		""
 	],
+	"Revision:": [
+		""
+	],
 	"Revision: %s (%s)": [
+		""
+	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
 		""
 	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
@@ -2657,6 +3327,18 @@
 	"Save geo-location with notes": [
 		""
 	],
+	"Save geolocation?": [
+		""
+	],
+	"Scan notebook": [
+		""
+	],
+	"Scanned code": [
+		""
+	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		""
 	],
@@ -2675,7 +3357,13 @@
 	"Search in current note": [
 		""
 	],
+	"Search results": [
+		""
+	],
 	"Search shown": [
+		""
+	],
+	"Search tags": [
 		""
 	],
 	"Search...": [
@@ -2687,10 +3375,16 @@
 	"Searches for the given <pattern> in all the notes.": [
 		""
 	],
+	"See changelog": [
+		""
+	],
 	"See the pre-release page for more details: %s": [
 		""
 	],
 	"Select": [
+		""
+	],
+	"Select a revision...": [
 		""
 	],
 	"Select all": [
@@ -2702,7 +3396,28 @@
 	"Select file...": [
 		""
 	],
+	"Select notebook": [
+		""
+	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
 	"Select parent notebook": [
+		""
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
+	"Selected: %s": [
+		""
+	],
+	"Selection deleted": [
+		""
+	],
+	"Selects a notebook": [
+		""
+	],
+	"Self-hosted": [
 		""
 	],
 	"Send bug report": [
@@ -2732,6 +3447,9 @@
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		""
 	],
+	"Settings": [
+		""
+	],
 	"Share": [
 		""
 	],
@@ -2753,7 +3471,13 @@
 	"Share permissions": [
 		""
 	],
+	"Shared": [
+		""
+	],
 	"Shares": [
+		""
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
 		""
 	],
 	"Sharing notebook...": [
@@ -2783,10 +3507,13 @@
 	"Show monospace fonts only.": [
 		""
 	],
-	"Show more actions": [
+	"Show note counts": [
 		""
 	],
-	"Show note counts": [
+	"Show notebook options": [
+		""
+	],
+	"Show password": [
 		""
 	],
 	"Show sort order buttons": [
@@ -2796,6 +3523,9 @@
 		""
 	],
 	"Show/hide the sidebar": [
+		""
+	],
+	"Shows notes for tag": [
 		""
 	],
 	"Shrink large images before adding them to notes.": [
@@ -2810,6 +3540,9 @@
 	"Sidebar": [
 		""
 	],
+	"Sign up to Joplin Cloud": [
+		""
+	],
 	"Size": [
 		""
 	],
@@ -2820,6 +3553,9 @@
 		""
 	],
 	"Skipped: %d.": [
+		""
+	],
+	"Small": [
 		""
 	],
 	"Solarised Dark": [
@@ -2846,6 +3582,12 @@
 	"Some items could not be synchronised. Please try to synchronise them first.": [
 		""
 	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
+	],
 	"Sort notebooks by": [
 		""
 	],
@@ -2861,10 +3603,16 @@
 	"Source": [
 		""
 	],
+	"Source code available": [
+		""
+	],
 	"Source format: %s": [
 		""
 	],
 	"Source: ": [
+		""
+	],
+	"SPACE": [
 		""
 	],
 	"Spacer": [
@@ -2880,6 +3628,9 @@
 		""
 	],
 	"Start application minimised in the tray icon": [
+		""
+	],
+	"Start recording": [
 		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
@@ -2942,7 +3693,13 @@
 	"Subscript": [
 		""
 	],
+	"Success": [
+		""
+	],
 	"Success! Synchronisation configuration appears to be correct.": [
+		""
+	],
+	"Suggestions": [
 		""
 	],
 	"Superscript": [
@@ -2960,16 +3717,34 @@
 	"Switch profile": [
 		""
 	],
+	"Switch to back-facing camera": [
+		""
+	],
+	"Switch to front-facing camera": [
+		""
+	],
 	"Switch to note type": [
 		""
 	],
 	"Switch to profile %d": [
 		""
 	],
+	"Switch to the %s Editor": [
+		""
+	],
+	"Switch to the legacy editor": [
+		""
+	],
+	"Switch to the new editor": [
+		""
+	],
 	"Switch to to-do type": [
 		""
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
+		""
+	],
+	"Sync": [
 		""
 	],
 	"Sync as many devices as you want": [
@@ -3032,10 +3807,19 @@
 	"Synchronizing...": [
 		""
 	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
+	],
+	"Table": [
+		""
+	],
 	"Tabloid": [
 		""
 	],
-	"tag1, tag2, ...": [
+	"Tag: %s": [
 		""
 	],
 	"Tagged: %d.": [
@@ -3045,6 +3829,9 @@
 		""
 	],
 	"Take photo": [
+		""
+	],
+	"Take survey": [
 		""
 	],
 	"Task \"%s\" failed with error: %s": [
@@ -3065,16 +3852,13 @@
 	"Text editor command": [
 		""
 	],
-	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
 		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
-		""
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
 		""
 	],
 	"The application has been authorised - you may now close this browser tab.": [
@@ -3123,13 +3907,16 @@
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		""
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
+	"The following plugins may not support the current markdown editor:": [
 		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		""
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		""
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		""
 	],
 	"The master key has been upgraded successfully!": [
@@ -3139,6 +3926,10 @@
 		""
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
+		""
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
+		"",
 		""
 	],
 	"The note was successfully moved to the trash.": [
@@ -3178,7 +3969,13 @@
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		""
 	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
+	],
 	"The Web Clipper needs your authorisation to access your data.": [
+		""
+	],
+	"The web clipper service cannot be enabled in this instance of Joplin.": [
 		""
 	],
 	"The web clipper service is enabled and set to auto-start.": [
@@ -3232,13 +4029,19 @@
 	"This attachment is not downloaded or not decrypted yet": [
 		""
 	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		""
-	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		""
 	],
 	"This drawing may have unsaved changes.": [
+		""
+	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
 		""
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
@@ -3268,6 +4071,9 @@
 	"This note has no history": [
 		""
 	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
+	],
 	"This plugin doesn't support %s.": [
 		""
 	],
@@ -3289,9 +4095,6 @@
 	"This will permanently delete all items in the trash. Continue?": [
 		""
 	],
-	"This will permanently delete the note \"%s\". Continue?": [
-		""
-	],
 	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
 		""
 	],
@@ -3310,7 +4113,13 @@
 	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
 		""
 	],
+	"To allow Joplin to synchronise with your account, please follow these steps:": [
+		""
+	],
 	"To continue, please enter your master password below.": [
+		""
+	],
+	"To create a new tag, type the name and press enter.": [
 		""
 	],
 	"To delete a tag, untag the associated notes.": [
@@ -3352,6 +4161,9 @@
 	"to-do: %s": [
 		""
 	],
+	"Toggle all notebooks": [
+		""
+	],
 	"Toggle comment": [
 		""
 	],
@@ -3359,6 +4171,12 @@
 		""
 	],
 	"Toggle editor layout": [
+		""
+	],
+	"Toggle editor plugin": [
+		""
+	],
+	"Toggle editor tab key navigation": [
 		""
 	],
 	"Toggle editors": [
@@ -3379,6 +4197,9 @@
 	"Toggle own sort order": [
 		""
 	],
+	"Toggle plugin editor": [
+		""
+	],
 	"Toggle safe mode": [
 		""
 	],
@@ -3389,6 +4210,9 @@
 		""
 	],
 	"Token has been copied to the clipboard!": [
+		""
+	],
+	"Toolbar": [
 		""
 	],
 	"Tools": [
@@ -3409,6 +4233,9 @@
 	"Try it now": [
 		""
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		""
 	],
@@ -3418,7 +4245,7 @@
 	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
 		""
 	],
-	"Type new tags or select from list": [
+	"Type a note title to search for it.": [
 		""
 	],
 	"Type: %s.": [
@@ -3430,6 +4257,12 @@
 	"Unable to share log data. Reason: %s": [
 		""
 	],
+	"Unable to share note data. Reason: %s": [
+		""
+	],
+	"Unchecked": [
+		""
+	],
 	"Uncompleted to-dos on top": [
 		""
 	],
@@ -3437,6 +4270,9 @@
 		""
 	],
 	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		""
+	],
+	"Unknown": [
 		""
 	],
 	"Unknown file type": [
@@ -3448,13 +4284,25 @@
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		""
 	],
+	"Unknown platform": [
+		""
+	],
 	"Unordered list": [
+		""
+	],
+	"Unpublish": [
+		""
+	],
+	"Unpublish \"%s\"": [
 		""
 	],
 	"Unpublish note": [
 		""
 	],
 	"Unshare": [
+		""
+	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
 		""
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
@@ -3466,6 +4314,9 @@
 	"Unsupported link or message: %s": [
 		""
 	],
+	"Unsupported link or message: %s.\nError: %s": [
+		""
+	],
 	"Untitled": [
 		""
 	],
@@ -3473,6 +4324,9 @@
 		""
 	],
 	"Update available": [
+		""
+	],
+	"Update later": [
 		""
 	],
 	"Update profile": [
@@ -3511,6 +4365,9 @@
 	"Upgrade the sync target to the latest version.": [
 		""
 	],
+	"Upload photo": [
+		""
+	],
 	"URL": [
 		""
 	],
@@ -3532,6 +4389,9 @@
 	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
 		""
 	],
+	"Use the legacy Markdown editor": [
+		""
+	],
 	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
 		""
 	],
@@ -3542,6 +4402,9 @@
 		""
 	],
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
+		""
+	],
+	"Useful": [
 		""
 	],
 	"User deletions": [
@@ -3571,7 +4434,16 @@
 	"Viewer": [
 		""
 	],
+	"Viewer and Rich Text Editor font family": [
+		""
+	],
+	"Viewer font size": [
+		""
+	],
 	"Vim": [
+		""
+	],
+	"Voice recorder": [
 		""
 	],
 	"Voice typing language files (URL)": [
@@ -3580,7 +4452,13 @@
 	"Voice typing...": [
 		""
 	],
+	"Voice typing: Glossary": [
+		""
+	],
 	"Waiting for authorisation...": [
+		""
+	],
+	"Waiting: Notebook %s from %s": [
 		""
 	],
 	"Warning": [
@@ -3634,6 +4512,9 @@
 	"When creating a new to-do:": [
 		""
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
@@ -3659,6 +4540,15 @@
 		""
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You currently have no notebooks.": [
@@ -3692,9 +4582,6 @@
 		""
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
-		""
-	],
-	"Your permission to use your camera is required.": [
 		""
 	],
 	"Your version: %s": [

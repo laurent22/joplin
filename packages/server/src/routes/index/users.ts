@@ -5,20 +5,21 @@ import { AppContext, HttpMethod } from '../../utils/types';
 import { bodyFields, contextSessionId, formParse } from '../../utils/requestUtils';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../utils/errors';
 import { User, UserFlag, Uuid } from '../../services/database/types';
-import config from '../../config';
+import config, { isUsingExternalAuth } from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
 import { NotificationKey } from '../../models/NotificationModel';
-import { AccountType, accountTypeOptions } from '../../models/UserModel';
+import { accountTypeOptions, accountTypeToString, getNextSubscriptionPlan } from '../../models/UserModel';
 import { confirmUrl, stripePortalUrl } from '../../utils/urlUtils';
-import { updateCustomerEmail } from '../../utils/stripe';
+import { initStripe, updateCustomerEmail } from '../../utils/stripe';
 import { createCsrfTag } from '../../utils/csrf';
 import { formatDateTime } from '../../utils/time';
 import { cookieSet } from '../../utils/cookies';
 import { userFlagToString } from '../../models/UserFlagModel';
 import { stopImpersonating } from '../admin/utils/users/impersonate';
 import { _ } from '@joplin/lib/locale';
+import { getIsMFAEnabled } from '../../models/utils/user';
 
 export interface CheckRepeatPasswordInput {
 	password: string;
@@ -36,14 +37,13 @@ export function checkRepeatPassword(fields: CheckRepeatPasswordInput, required: 
 	return '';
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function makeUser(userId: Uuid, fields: any): User {
+function makeUser(userId: Uuid, fields: Record<string, unknown>): User {
 	const user: User = {};
 
-	if ('email' in fields) user.email = fields.email;
-	if ('full_name' in fields) user.full_name = fields.full_name;
+	if ('email' in fields) user.email = fields.email as string;
+	if ('full_name' in fields) user.full_name = fields.full_name as string;
 
-	const password = checkRepeatPassword(fields, false);
+	const password = checkRepeatPassword(fields as unknown as CheckRepeatPasswordInput, false);
 	if (password) user.password = password;
 
 	user.id = userId;
@@ -51,10 +51,18 @@ function makeUser(userId: Uuid, fields: any): User {
 	return user;
 }
 
+interface FormFields {
+	id: Uuid;
+	post_button: string;
+	update_subscription_basic_button: string;
+	update_subscription_pro_button: string;
+	stop_impersonate_button: string;
+	send_account_confirmation_email: string;
+}
+
 const router = new Router(RouteType.Web);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-router.get('users/:id', async (path: SubPath, ctx: AppContext, formUser: User = null, error: any = null) => {
+router.get('users/:id', async (path: SubPath, ctx: AppContext, formUser: User = null, error: Error | null = null) => {
 	const owner = ctx.joplin.owner;
 	if (path.id !== 'me' && path.id !== owner.id) throw new ErrorForbidden();
 
@@ -93,13 +101,19 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, formUser: User = 
 	view.content.postUrl = postUrl;
 	view.content.csrfTag = await createCsrfTag(ctx);
 	view.content.showSendAccountConfirmationEmailButton = !user.email_confirmed;
+	view.content.isMFAFeatureEnabled = config().MFA_ENABLED;
+	view.content.hasMFAEnabled = getIsMFAEnabled(user);
 
 	if (subscription) {
 		const lastPaymentAttempt = models.subscription().lastPaymentAttempt(subscription);
 
 		view.content.subscription = subscription;
-		view.content.showUpdateSubscriptionBasic = user.account_type !== AccountType.Basic;
-		view.content.showUpdateSubscriptionPro = user.account_type !== AccountType.Pro;
+
+		const { downgradeTo, upgradeTo } = getNextSubscriptionPlan(user.account_type);
+		view.content.showUpgradeSubscription = !!upgradeTo;
+		view.content.showDowngradeSubscription = !!downgradeTo;
+		view.content.upgradeSubscriptionPlan = upgradeTo && accountTypeToString(upgradeTo);
+
 		view.content.subLastPaymentStatus = lastPaymentAttempt.status;
 		view.content.subLastPaymentDate = formatDateTime(lastPaymentAttempt.time);
 	}
@@ -108,13 +122,15 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, formUser: User = 
 	view.content.userFlagViews = userFlagViews;
 	view.content.stripePortalUrl = stripePortalUrl();
 
+	const isExternalAuth = isUsingExternalAuth(config());
+	view.content.disabledIfExternalAuth = isExternalAuth && user.is_external ? 'disabled' : '';
+
 	view.jsFiles.push('zxcvbn');
 	view.cssFiles.push('index/user');
 
 	if (config().accountTypesEnabled) {
 		view.content.showAccountTypes = true;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		view.content.accountTypes = accountTypeOptions().map((o: any) => {
+		view.content.accountTypes = accountTypeOptions().map((o: { value: number; selected?: boolean }) => {
 			o.selected = user.account_type === o.value;
 			return o;
 		});
@@ -135,7 +151,8 @@ router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Er
 	const beforeChangingEmailHandler = async (newEmail: string) => {
 		if (config().stripe.enabled) {
 			try {
-				await updateCustomerEmail(models, userId, newEmail);
+				const stripe = initStripe();
+				await updateCustomerEmail(stripe, models, userId, newEmail);
 			} catch (error) {
 				if (['no_sub', 'no_stripe_sub'].includes(error.code)) {
 					// ok - the user just doesn't have a subscription
@@ -211,15 +228,6 @@ router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 
 router.alias(HttpMethod.POST, 'users/:id', 'users');
 
-interface FormFields {
-	id: Uuid;
-	post_button: string;
-	update_subscription_basic_button: string;
-	update_subscription_pro_button: string;
-	stop_impersonate_button: string;
-	send_account_confirmation_email: string;
-}
-
 router.post('users', async (path: SubPath, ctx: AppContext) => {
 	const owner = ctx.joplin.owner;
 
@@ -234,7 +242,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 
 		if (fields.id && fields.id !== owner.id) throw new ErrorForbidden();
 
-		user = makeUser(owner.id, fields);
+		user = makeUser(owner.id, fields as unknown as Record<string, unknown>);
 
 		if (fields.post_button) {
 			const userToSave: User = models.user().fromApiInput(user);
@@ -250,12 +258,15 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 			// When changing the password, we also clear all session IDs for
 			// that user, except the current one (otherwise they would be
 			// logged out).
-			if (userToSave.password) await models.session().deleteByUserId(userToSave.id, contextSessionId(ctx));
+			if (userToSave.password) {
+				await models.session().deleteByUserId(userToSave.id, contextSessionId(ctx));
+				await models.application().deleteByUserId(userToSave.id);
+			}
 		} else if (fields.send_account_confirmation_email) {
 			await models.user().sendAccountConfirmationEmail(user);
 		} else if (fields.stop_impersonate_button) {
-			await stopImpersonating(ctx);
-			return redirect(ctx, config().baseUrl);
+			const returnUrl = await stopImpersonating(ctx);
+			return redirect(ctx, returnUrl ? returnUrl : config().baseUrl);
 		} else {
 			throw new Error('Invalid form button');
 		}

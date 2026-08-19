@@ -182,9 +182,6 @@ class FileApiDriverDropbox {
 	}
 
 	async put(path, content, options = null) {
-		// See https://github.com/facebook/react-native/issues/14445#issuecomment-352965210
-		if (typeof content === 'string') content = shim.Buffer.from(content, 'utf8');
-
 		try {
 			await this.api().exec(
 				'POST',

@@ -23,7 +23,7 @@
     "react-redux": "9.0.4",
     "redux": "5.0.1",
     "style-loader": "3.3.3",
-    "webpack": "5.89.0",
+    "webpack": "5.97.1",
     "webpack-cli": "5.1.4"
   },
   "browserslist": [

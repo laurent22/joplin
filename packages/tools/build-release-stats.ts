@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 import { writeFile, readFile, pathExists } from 'fs-extra';
 import { dirname } from '@joplin/lib/path-utils';
 import markdownUtils from '@joplin/lib/markdownUtils';
-const yargParser = require('yargs-parser');
+import yargParser = require('yargs-parser');
 import { stripOffFrontMatter } from './website/utils/frontMatter';
 import dayjs = require('dayjs');
 import utc = require('dayjs/plugin/utc');
@@ -248,7 +248,7 @@ async function main() {
 			{ name: 'mac_count', label: 'macOS' },
 			{ name: 'linux_count', label: 'Linux' },
 			{ name: 'total_count', label: 'Total' },
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- createMarkdownTable expects MarkdownTableRow (Record<string, string>) but Release rows contain numeric counts; widening createMarkdownTable's signature is out of scope
 		], rows as any[]),
 	];
 

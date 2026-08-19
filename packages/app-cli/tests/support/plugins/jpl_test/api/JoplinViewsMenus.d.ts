@@ -4,6 +4,8 @@ import Plugin from '../Plugin';
  * Allows creating menus.
  *
  * [View the demo plugin](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/menu)
+ *
+ * <span class="platform-desktop">desktop</span>
  */
 export default class JoplinViewsMenus {
     private store;

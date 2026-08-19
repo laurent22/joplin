@@ -1,13 +1,12 @@
 import { expectThrow } from '../../utils/testing/testUtils';
-import { defaultPagination, Pagination, createPaginationLinks, requestPagination } from './pagination';
+import { defaultPagination, Pagination, createPaginationLinks, requestPagination, PaginationOrderDir } from './pagination';
 
 describe('pagination', () => {
 
 	test('should create options from request query parameters', async () => {
 		const d = defaultPagination();
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const testCases: any = [
+		const testCases: [Record<string, unknown> | null, Pagination][] = [
 			[
 				null,
 				d,
@@ -33,7 +32,7 @@ describe('pagination', () => {
 					...d,
 					order: [{
 						by: 'title',
-						dir: 'asc',
+						dir: PaginationOrderDir.ASC,
 					}],
 				},
 			],
@@ -58,10 +57,9 @@ describe('pagination', () => {
 		];
 
 		for (const t of testCases) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const input: any = t[0];
+			const input = t[0];
 			const expected: Pagination = t[1];
-			const actual: Pagination = requestPagination(input);
+			const actual: Pagination = requestPagination(input as Parameters<typeof requestPagination>[0]);
 
 			expect(actual).toEqual(expected);
 		}

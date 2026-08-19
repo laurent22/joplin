@@ -2,7 +2,36 @@ import { ListRendererDependency } from '@joplin/lib/services/plugins/api/noteLis
 import { FolderEntity, NoteEntity, TagEntity } from '@joplin/lib/services/database/types';
 import { Size } from '@joplin/utils/types';
 import Note from '@joplin/lib/models/Note';
+import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
+
+interface CheckboxStats {
+	total: number;
+	checked: number;
+	percent: number;
+	isComplete: boolean;
+}
+
+const countCheckboxes = (body: string): CheckboxStats | null => {
+	if (!body) return null;
+
+	// Match unchecked: - [ ] and checked: - [x] or - [X]
+	const uncheckedMatches = body.match(/(^|\n)[ \t>]*- \[ \]/g);
+	const checkedMatches = body.match(/(^|\n)[ \t>]*- \[[xX]\]/g);
+
+	const unchecked = uncheckedMatches ? uncheckedMatches.length : 0;
+	const checked = checkedMatches ? checkedMatches.length : 0;
+	const total = unchecked + checked;
+
+	if (total === 0) return null;
+
+	return {
+		total,
+		checked,
+		percent: Math.round((checked / total) * 100),
+		isComplete: checked === total,
+	};
+};
 
 const prepareViewProps = async (
 	dependencies: ListRendererDependency[],
@@ -14,9 +43,12 @@ const prepareViewProps = async (
 	noteTags: TagEntity[],
 	folder: FolderEntity | null,
 	itemIndex: number,
+	noteIsPublished = false,
 ) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const output: any = {};
+	const output: {
+		note?: Record<string, unknown> & { folder?: Record<string, unknown> };
+		item?: { size?: Record<string, unknown>; selected?: boolean; index?: number };
+	} = {};
 
 	for (const dep of dependencies) {
 		if (dep.startsWith('note.')) {
@@ -29,6 +61,8 @@ const prepareViewProps = async (
 				output.note.titleHtml = noteTitleHtml;
 			} else if (dep === 'note.isWatched') {
 				output.note[propName] = noteIsWatched;
+			} else if (dep === 'note.is_published') {
+				output.note[propName] = noteIsPublished;
 			} else if (dep === 'note.tags') {
 				output.note[propName] = noteTags;
 			} else if (dep === 'note.folder.title') {
@@ -40,6 +74,14 @@ const prepareViewProps = async (
 					taskStatus = note.todo_completed ? _('Complete to-do') : _('Incomplete to-do');
 				}
 				output.note[propName] = taskStatus;
+			} else if (dep === 'note.checkboxes') {
+				// Only load the note body and compute checkbox stats if the setting is enabled
+				if (Setting.value('notes.showCheckboxCompletionChart')) {
+					if (!('body' in note)) note = await Note.load(note.id);
+					output.note[propName] = countCheckboxes(note.body);
+				} else {
+					output.note[propName] = null;
+				}
 			} else {
 				// The notes in the state only contain the properties defined in
 				// Note.previewFields(). It means that if a view request a
@@ -48,8 +90,7 @@ const prepareViewProps = async (
 				// load by default.
 				if (!(propName in note)) note = await Note.load(note.id);
 				if (!(propName in note)) throw new Error(`Invalid dependency name: ${dep}`);
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				output.note[propName] = (note as any)[propName];
+				output.note[propName] = (note as unknown as Record<string, unknown>)[propName];
 			}
 		}
 
@@ -60,8 +101,7 @@ const prepareViewProps = async (
 			if (!output.item) output.item = {};
 			if (!output.item.size) output.item.size = {};
 			if (!(propName in itemSize)) throw new Error(`Invalid dependency name: ${dep}`);
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			output.item.size[propName] = (itemSize as any)[propName];
+			output.item.size[propName] = (itemSize as unknown as Record<string, unknown>)[propName];
 		}
 
 		if (dep === 'item.selected') {

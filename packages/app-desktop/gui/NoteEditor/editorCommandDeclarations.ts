@@ -4,20 +4,37 @@ import { joplinCommandToTinyMceCommands } from './NoteBody/TinyMCE/utils/joplinC
 
 const workWithHtmlNotes = [
 	'attachFile',
+	'textCopy',
+	'textCut',
+	'textPaste',
+	'textSelectAll',
+];
+
+// Commands that should remain enabled in viewer mode and when the note is read-only.
+const worksInViewerAndReadOnlyMode = [
+	'textCopy',
+	'textSelectAll',
 ];
 
 export const enabledCondition = (commandName: string) => {
 	const markdownEditorOnly = !Object.keys(joplinCommandToTinyMceCommands).includes(commandName);
 	const noteMustBeMarkdown = !workWithHtmlNotes.includes(commandName);
+	const allowInViewerAndReadOnlyMode = worksInViewerAndReadOnlyMode.includes(commandName);
+
+	const editorPaneCondition = markdownEditorOnly
+		? '(markdownEditorPaneVisible || hasActivePluginEditor)'
+		: allowInViewerAndReadOnlyMode
+			? '(markdownEditorPaneVisible || richTextEditorVisible || markdownViewerPaneVisible || hasActivePluginEditor)'
+			: '(markdownEditorPaneVisible || richTextEditorVisible || hasActivePluginEditor)';
 
 	const output = [
 		// gotoAnythingVisible: Enable if the command palette (which is a modal dialog) is visible
 		'(!modalDialogVisible || gotoAnythingVisible)',
 
-		markdownEditorOnly ? 'markdownEditorPaneVisible' : '(markdownEditorPaneVisible || richTextEditorVisible)',
+		editorPaneCondition,
 		'oneNoteSelected',
 		noteMustBeMarkdown ? 'noteIsMarkdown' : '',
-		'!noteIsReadOnly',
+		allowInViewerAndReadOnlyMode ? '' : '!noteIsReadOnly',
 	];
 
 	return output.filter(c => !!c).join(' && ');
@@ -155,10 +172,41 @@ const declarations: CommandDeclaration[] = [
 		name: 'editor.setText',
 	},
 	{
+		name: 'editor.scrollToText',
+	},
+	{
 		name: 'editor.focus',
 	},
 	{
 		name: 'editor.execCommand',
+	},
+	{
+		name: 'viewer.focus',
+	},
+	{
+		name: 'editor.textTable',
+		label: () => _('Insert table'),
+		iconName: 'fas fa-table',
+	},
+	{
+		name: 'editor.tableAddRow',
+		label: () => _('Table: Add row'),
+		iconName: 'fas fa-plus',
+	},
+	{
+		name: 'editor.tableAddColumn',
+		label: () => _('Table: Add column'),
+		iconName: 'fas fa-columns',
+	},
+	{
+		name: 'editor.tableDeleteRow',
+		label: () => _('Table: Delete row'),
+		iconName: 'fas fa-minus',
+	},
+	{
+		name: 'editor.tableDeleteColumn',
+		label: () => _('Table: Delete column'),
+		iconName: 'fas fa-times',
 	},
 ];
 

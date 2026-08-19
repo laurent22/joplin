@@ -1,23 +1,34 @@
 /* eslint-disable multiline-comment-style */
 
+import { JoplinViews as JoplinViewsImplementation } from '../BasePlatformImplementation';
 import Plugin from '../Plugin';
+import { PluginStore } from '../ViewController';
 import JoplinViewsDialogs from './JoplinViewsDialogs';
 import JoplinViewsMenuItems from './JoplinViewsMenuItems';
 import JoplinViewsMenus from './JoplinViewsMenus';
 import JoplinViewsToolbarButtons from './JoplinViewsToolbarButtons';
 import JoplinViewsPanels from './JoplinViewsPanels';
 import JoplinViewsNoteList from './JoplinViewsNoteList';
+import JoplinViewsEditors from './JoplinViewsEditor';
 
 /**
  * This namespace provides access to view-related services.
  *
- * All view services provide a `create()` method which you would use to create the view object, whether it's a dialog, a toolbar button or a menu item.
- * In some cases, the `create()` method will return a [[ViewHandle]], which you would use to act on the view, for example to set certain properties or call some methods.
+ * ## Creating a view
+ *
+ * All view services provide a `create()` method which you would use to create the view object,
+ * whether it's a dialog, a toolbar button or a menu item. In some cases, the `create()` method will
+ * return a [[ViewHandle]], which you would use to act on the view, for example to set certain
+ * properties or call some methods.
+ *
+ * ## The `webviewApi` object
+ *
+ * Within a view, you can use the global object `webviewApi` for various utility functions, such as
+ * sending messages or displaying context menu. Refer to [[WebviewApi]] for the full documentation.
  */
 export default class JoplinViews {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private store: any;
+	private store: PluginStore;
 	private plugin: Plugin;
 
 	private panels_: JoplinViewsPanels = null;
@@ -25,12 +36,11 @@ export default class JoplinViews {
 	private menus_: JoplinViewsMenus = null;
 	private toolbarButtons_: JoplinViewsToolbarButtons = null;
 	private dialogs_: JoplinViewsDialogs = null;
+	private editors_: JoplinViewsEditors = null;
 	private noteList_: JoplinViewsNoteList = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private implementation_: any = null;
+	private implementation_: JoplinViewsImplementation = null;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public constructor(implementation: any, plugin: Plugin, store: any) {
+	public constructor(implementation: JoplinViewsImplementation, plugin: Plugin, store: PluginStore) {
 		this.store = store;
 		this.plugin = plugin;
 		this.implementation_ = implementation;
@@ -44,6 +54,11 @@ export default class JoplinViews {
 	public get panels() {
 		if (!this.panels_) this.panels_ = new JoplinViewsPanels(this.plugin, this.store);
 		return this.panels_;
+	}
+
+	public get editors() {
+		if (!this.editors_) this.editors_ = new JoplinViewsEditors(this.plugin, this.store);
+		return this.editors_;
 	}
 
 	public get menuItems() {

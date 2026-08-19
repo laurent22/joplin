@@ -40,15 +40,13 @@ export enum ResponderComponentType {
 
 export interface MessageResponse {
 	responseId: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	response: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	error: any;
+	response: unknown;
+	error: Error | null;
 }
 
 type MessageResponder = (message: MessageResponse)=> void;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Callers register handlers with concrete payload types (MessageResponse, SerializableData); making this generic would force changes at every dispatch site
 type ViewMessageHandler = (message: any)=> void;
 
 interface Message {
@@ -59,8 +57,7 @@ interface Message {
 	from: MessageParticipant;
 	to: MessageParticipant;
 	id: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	content: any;
+	content: unknown;
 }
 
 export default class PostMessageService {
@@ -115,8 +112,7 @@ export default class PostMessageService {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private sendResponse(message: Message, responseContent: any, error: any) {
+	private sendResponse(message: Message, responseContent: unknown, error: Error | null) {
 
 		let responder: MessageResponder = null;
 
@@ -127,14 +123,15 @@ export default class PostMessageService {
 		}
 
 		if (!responder) {
-			logger.warn('Cannot respond to message because no responder was found', message);
+			logger.info('Cannot respond to message because no responder was found', message);
+			logger.info('Error was:', error);
+		} else {
+			responder({
+				responseId: message.id,
+				response: responseContent,
+				error,
+			});
 		}
-
-		responder({
-			responseId: message.id,
-			response: responseContent,
-			error,
-		});
 	}
 
 	private responder(type: ResponderComponentType, viewId: string, windowId: string) {

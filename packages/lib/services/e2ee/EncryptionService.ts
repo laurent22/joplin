@@ -1,4 +1,4 @@
-import { CipherAlgorithm, Digest, MasterKeyEntity } from './types';
+import { CipherAlgorithm, CryptoBuffer, Digest, MasterKeyEntity } from './types';
 import Logger from '@joplin/utils/Logger';
 import shim from '../../shim';
 import Setting from '../../models/Setting';
@@ -6,9 +6,11 @@ import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
 import JoplinError from '../../JoplinError';
 import { getActiveMasterKeyId, setActiveMasterKeyId } from '../synchronizer/syncInfoUtils';
-const { padLeft } = require('../../string-utils.js');
+import PerformanceLogger from '../../PerformanceLogger';
+import { padLeft } from '../../string-utils';
 
 const logger = Logger.create('EncryptionService');
+const perfLogger = PerformanceLogger.create();
 
 const emptyUint8Array = new Uint8Array(0);
 
@@ -27,13 +29,10 @@ interface DecryptedMasterKey {
 	plainText: string;
 }
 
-export interface EncryptionCustomHandler {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	context?: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	encrypt(context: any, hexaBytes: string, password: string): Promise<string>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	decrypt(context: any, hexaBytes: string, password: string): Promise<string>;
+export interface EncryptionCustomHandler<Context = unknown> {
+	context?: Context;
+	encrypt(context: Context, hexaBytes: string, password: string): Promise<string>;
+	decrypt(context: Context, data: string, password: string): Promise<string>;
 }
 
 export enum EncryptionMethod {
@@ -51,10 +50,10 @@ export enum EncryptionMethod {
 
 export interface EncryptOptions {
 	encryptionMethod?: EncryptionMethod;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onProgress?: Function;
+	onProgress?: (event: { doneSize: number })=> void;
 	encryptionHandler?: EncryptionCustomHandler;
 	masterKeyId?: string;
+	decryptedMasterKey?: string;
 }
 
 type GetPasswordCallback = ()=> string|Promise<string>;
@@ -67,16 +66,16 @@ export default class EncryptionService {
 
 	public static instance_: EncryptionService = null;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- fsDriver concrete shape varies per-platform (node FsDriverBase subclasses, RN, web); used as ambient property
 	public static fsDriver_: any = null;
 
 	private encryptedMasterKeys_: Map<string, EncryptedMasterKey> = new Map();
 	private decryptedMasterKeys_: Map<string, DecryptedMasterKey> = new Map();
-	public defaultEncryptionMethod_ = Setting.value('featureFlag.useBetaEncryptionMethod') ? EncryptionMethod.StringV1 : EncryptionMethod.SJCL1a; // public because used in tests
-	public defaultFileEncryptionMethod_ = Setting.value('featureFlag.useBetaEncryptionMethod') ? EncryptionMethod.FileV1 : EncryptionMethod.SJCL1a; // public because used in tests
-	private defaultMasterKeyEncryptionMethod_ = Setting.value('featureFlag.useBetaEncryptionMethod') ? EncryptionMethod.KeyV1 : EncryptionMethod.SJCL4;
+	public defaultEncryptionMethod_ = EncryptionMethod.StringV1; // public because used in tests
+	public defaultFileEncryptionMethod_ = EncryptionMethod.FileV1; // public because used in tests
+	private defaultMasterKeyEncryptionMethod_ = EncryptionMethod.KeyV1;
 
-	private encryptionNonce_: Uint8Array = null;
+	private encryptionNonce_: CryptoBuffer = null;
 
 	private headerTemplates_ = {
 		// Template version 1
@@ -157,8 +156,7 @@ export default class EncryptionService {
 	public activeMasterKeyId() {
 		const id = getActiveMasterKeyId();
 		if (!id) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const error: any = new Error('No master key is defined as active. Check this: Either one or more master keys exist but no password was provided for any of them. Or no master key exist. Or master keys and password exist, but none was set as active.');
+			const error = new Error('No master key is defined as active. Check this: Either one or more master keys exist but no password was provided for any of them. Or no master key exist. Or master keys and password exist, but none was set as active.') as Error & { code: string };
 			error.code = 'noActiveMasterKey';
 			throw error;
 		}
@@ -177,7 +175,7 @@ export default class EncryptionService {
 	public async loadMasterKey(model: MasterKeyEntity, getPassword: string|GetPasswordCallback, makeActive = false) {
 		if (!model.id) throw new Error('Master key does not have an ID - save it first');
 
-		const loadKey = async () => {
+		const loadKey = () => perfLogger.track('EncryptionService/loadKey', async () => {
 			logger.info(`Loading master key: ${model.id}. Make active:`, makeActive);
 
 			const password = typeof getPassword === 'string' ? getPassword : (await getPassword());
@@ -197,7 +195,7 @@ export default class EncryptionService {
 			}
 
 			this.encryptedMasterKeys_.delete(model.id);
-		};
+		});
 
 		if (!makeActive) {
 			this.encryptedMasterKeys_.set(model.id, {
@@ -227,8 +225,7 @@ export default class EncryptionService {
 		const key = this.decryptedMasterKeys_.get(id);
 
 		if (!key) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const error: any = new Error(`Master key is not loaded: ${id}`);
+			const error = new Error(`Master key is not loaded: ${id}`) as Error & { code: string; masterKeyId: string };
 			error.code = 'masterKeyNotLoaded';
 			error.masterKeyId = id;
 			throw error;
@@ -256,8 +253,7 @@ export default class EncryptionService {
 	}
 
 	private async randomHexString(byteCount: number) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const bytes: any[] = await shim.randomBytes(byteCount);
+		const bytes = (await shim.randomBytes(byteCount)) as number[];
 		return bytes
 			.map(a => {
 				return hexPad(a.toString(16), 2);
@@ -272,7 +268,9 @@ export default class EncryptionService {
 	public async reencryptMasterKey(model: MasterKeyEntity, decryptionPassword: string, encryptionPassword: string, decryptOptions: EncryptOptions = null, encryptOptions: EncryptOptions = null): Promise<MasterKeyEntity> {
 		const newEncryptionMethod = this.defaultMasterKeyEncryptionMethod_;
 		const plainText = await this.decryptMasterKeyContent(model, decryptionPassword, decryptOptions);
-		const newContent = await this.encryptMasterKeyContent(newEncryptionMethod, plainText, encryptionPassword, encryptOptions);
+		const newContent = await this.encryptMasterKeyContent(
+			newEncryptionMethod, plainText, encryptionPassword, encryptOptions,
+		);
 		return { ...model, ...newContent };
 	}
 
@@ -300,8 +298,7 @@ export default class EncryptionService {
 	private async generateMasterKeyContent_(password: string, options: EncryptOptions = null) {
 		options = { encryptionMethod: this.defaultMasterKeyEncryptionMethod_, ...options };
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const bytes: any[] = await shim.randomBytes(256);
+		const bytes = (await shim.randomBytes(256)) as number[];
 		const hexaBytes = bytes.map(a => hexPad(a.toString(16), 2)).join('');
 
 		return this.encryptMasterKeyContent(options.encryptionMethod, hexaBytes, password, options);
@@ -337,17 +334,19 @@ export default class EncryptionService {
 	}
 
 	public async checkMasterKeyPassword(model: MasterKeyEntity, password: string) {
+		const task = perfLogger.taskStart('EncryptionService/checkMasterKeyPassword');
 		try {
 			await this.decryptMasterKeyContent(model, password);
 		} catch (error) {
 			return false;
+		} finally {
+			task.onEnd();
 		}
 
 		return true;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private wrapSjclError(sjclError: any) {
+	private wrapSjclError(sjclError: { message: string; stack?: string }) {
 		const error = new Error(sjclError.message);
 		error.stack = sjclError.stack;
 		return error;
@@ -526,39 +525,39 @@ export default class EncryptionService {
 		return handlers[method]();
 	}
 
-	public async decrypt(method: EncryptionMethod, key: string, cipherText: string) {
+	public async decrypt(method: EncryptionMethod, key: string, cipherText: string): Promise<string> {
 		if (!method) throw new Error('Encryption method is required');
 		if (!key) throw new Error('Encryption key is required');
 
 		const sjcl = shim.sjclModule;
 		const crypto = shim.crypto;
 		if (method === EncryptionMethod.KeyV1) {
-			return (await crypto.decrypt(key, JSON.parse(cipherText), {
+			return crypto.bufferToString(await crypto.decrypt(key, JSON.parse(cipherText), {
 				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
 				associatedData: emptyUint8Array,
 				iterationCount: 220000,
-			})).toString('hex');
+			}), 'hex');
 		} else if (method === EncryptionMethod.FileV1) {
-			return (await crypto.decrypt(key, JSON.parse(cipherText), {
+			return crypto.bufferToString(await crypto.decrypt(key, JSON.parse(cipherText), {
 				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
 				associatedData: emptyUint8Array,
 				iterationCount: 3,
-			})).toString('base64');
+			}), 'base64');
 		} else if (method === EncryptionMethod.StringV1) {
-			return (await crypto.decrypt(key, JSON.parse(cipherText), {
+			return crypto.bufferToString(await crypto.decrypt(key, JSON.parse(cipherText), {
 				cipherAlgorithm: CipherAlgorithm.AES_256_GCM,
 				authTagLength: 16,
 				digestAlgorithm: Digest.sha512,
 				keyLength: 32,
 				associatedData: emptyUint8Array,
 				iterationCount: 3,
-			})).toString('utf16le');
+			}), 'utf16le');
 		} else if (this.isValidSjclEncryptionMethod(method)) {
 			try {
 				const output = sjcl.json.decrypt(key, cipherText);
@@ -577,13 +576,13 @@ export default class EncryptionService {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- source/destination are duck-typed readers/writers (stringReader_/stringWriter_/fileReader_/fileWriter_) with a small structural API; passing the union here would require touching all four call sites
 	private async encryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
 		options = { encryptionMethod: this.defaultEncryptionMethod(), ...options };
 
 		const method = options.encryptionMethod;
 		const masterKeyId = options.masterKeyId ? options.masterKeyId : this.activeMasterKeyId();
-		const masterKeyPlainText = (await this.loadedMasterKey(masterKeyId)).plainText;
+		const masterKeyPlainText = await this.masterKeyPlainText_(masterKeyId, options);
 		const chunkSize = this.chunkSize(method);
 		const crypto = shim.crypto;
 
@@ -615,13 +614,12 @@ export default class EncryptionService {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See encryptAbstract_ above
 	private async decryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
 		if (!options) options = {};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const header: any = await this.decodeHeaderSource_(source);
-		const masterKeyPlainText = (await this.loadedMasterKey(header.masterKeyId)).plainText;
+		const header = await this.decodeHeaderSource_(source) as { encryptionMethod: number; masterKeyId: string };
+		const masterKeyPlainText = await this.masterKeyPlainText_(header.masterKeyId, options);
 
 		let doneSize = 0;
 
@@ -644,6 +642,14 @@ export default class EncryptionService {
 		}
 	}
 
+	private async masterKeyPlainText_(masterKeyId: string, options: EncryptOptions) {
+		if (options.decryptedMasterKey !== undefined) {
+			if (options.masterKeyId !== masterKeyId) throw new Error(`Supplied master key ID does not match encrypted content: ${masterKeyId}`);
+			return options.decryptedMasterKey;
+		}
+		return (await this.loadedMasterKey(masterKeyId)).plainText;
+	}
+
 	private stringReader_(string: string, sync = false) {
 		const reader = {
 			index: 0,
@@ -658,11 +664,9 @@ export default class EncryptionService {
 	}
 
 	private stringWriter_() {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {
-			data: [],
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			append: async function(data: any) {
+		const output = {
+			data: [] as string[],
+			append: async function(data: string) {
 				output.data.push(data);
 			},
 			result: function() {
@@ -673,8 +677,7 @@ export default class EncryptionService {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async fileReader_(path: string, encoding: any) {
+	private async fileReader_(path: string, encoding: string) {
 		const handle = await this.fsDriver().open(path, 'r');
 		const reader = {
 			handle: handle,
@@ -688,27 +691,23 @@ export default class EncryptionService {
 		return reader;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async fileWriter_(path: string, encoding: any) {
+	private async fileWriter_(path: string, encoding: string) {
 		return {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			append: async (data: any) => {
+			append: async (data: string) => {
 				return this.fsDriver().appendFile(path, data, encoding);
 			},
 			close: function() {},
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async encryptString(plainText: any, options: EncryptOptions = null): Promise<string> {
+	public async encryptString(plainText: string, options: EncryptOptions = null): Promise<string> {
 		const source = this.stringReader_(plainText);
 		const destination = this.stringWriter_();
 		await this.encryptAbstract_(source, destination, options);
 		return destination.result();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async decryptString(cipherText: any, options: EncryptOptions = null): Promise<string> {
+	public async decryptString(cipherText: string, options: EncryptOptions = null): Promise<string> {
 		const source = this.stringReader_(cipherText);
 		const destination = this.stringWriter_();
 		await this.decryptAbstract_(source, destination, options);
@@ -768,14 +767,12 @@ export default class EncryptionService {
 	}
 
 	public headerTemplate(version: number) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const r = (this.headerTemplates_ as any)[version];
+		const r = (this.headerTemplates_ as Record<number, { fields: (string | number)[][] }>)[version];
 		if (!r) throw new Error(`Unknown header version: ${version}`);
 		return r;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public encodeHeader_(header: any) {
+	public encodeHeader_(header: { encryptionMethod: number; masterKeyId: string }) {
 		// Sanity check
 		if (header.masterKeyId.length !== 32) throw new Error(`Invalid master key ID size: ${header.masterKeyId}`);
 
@@ -786,13 +783,12 @@ export default class EncryptionService {
 		return `JED01${encryptionMetadata}`;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async decodeHeaderString(cipherText: any) {
+	public async decodeHeaderString(cipherText: string) {
 		const source = this.stringReader_(cipherText);
 		return this.decodeHeaderSource_(source);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See encryptAbstract_ source/destination
 	private async decodeHeaderSource_(source: any) {
 		const identifier = await source.read(5);
 		if (!isValidHeaderIdentifier(identifier)) throw new JoplinError(`Invalid encryption identifier. Data is not actually encrypted? ID was: ${identifier}`, 'invalidIdentifier');
@@ -803,10 +799,8 @@ export default class EncryptionService {
 		return this.decodeHeaderBytes_(identifier + mdSizeHex + md);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public decodeHeaderBytes_(headerHexaBytes: any) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const reader: any = this.stringReader_(headerHexaBytes, true);
+	public decodeHeaderBytes_(headerHexaBytes: string) {
+		const reader = this.stringReader_(headerHexaBytes, true) as { read: (size: number)=> string };
 		const identifier = reader.read(3);
 		const version = parseInt(reader.read(2), 16);
 		if (identifier !== 'JED') throw new Error(`Invalid header (missing identifier): ${headerHexaBytes.substr(0, 64)}`);
@@ -814,15 +808,14 @@ export default class EncryptionService {
 
 		parseInt(reader.read(6), 16); // Read the size and move the reader pointer forward
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {};
+		const output: Record<string, string | number> = {};
 
 		for (let i = 0; i < template.fields.length; i++) {
 			const m = template.fields[i];
-			const name = m[0];
-			const size = m[1];
-			const type = m[2];
-			let v = reader.read(size);
+			const name = m[0] as string;
+			const size = m[1] as number;
+			const type = m[2] as string;
+			let v: string | number = reader.read(size);
 
 			if (type === 'int') {
 				v = parseInt(v, 16);
@@ -842,8 +835,7 @@ export default class EncryptionService {
 		return [EncryptionMethod.SJCL, EncryptionMethod.SJCL1a, EncryptionMethod.SJCL1b, EncryptionMethod.SJCL2, EncryptionMethod.SJCL3, EncryptionMethod.SJCL4].indexOf(method) >= 0;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async itemIsEncrypted(item: any) {
+	public async itemIsEncrypted(item: { encryption_applied?: number | boolean; encryption_cipher_text?: string; type_?: number }) {
 		if (!item) throw new Error('No item');
 		const ItemClass = BaseItem.itemClass(item);
 		if (!ItemClass.encryptionSupported()) return false;

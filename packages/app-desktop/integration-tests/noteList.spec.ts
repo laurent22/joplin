@@ -4,7 +4,7 @@ import setMessageBoxResponse from './util/setMessageBoxResponse';
 
 test.describe('noteList', () => {
 	test('should be possible to edit notes in a different notebook when searching', async ({ mainWindow, electronApp }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		const sidebar = mainScreen.sidebar;
 
 		const folderAHeader = await sidebar.createNewFolder('Folder A');
@@ -39,7 +39,7 @@ test.describe('noteList', () => {
 	});
 
 	test('shift-delete should ask to permanently delete notes, but only when the note list is focused', async ({ electronApp, mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		const sidebar = mainScreen.sidebar;
 
 		const folderBHeader = await sidebar.createNewFolder('Folder B');
@@ -75,8 +75,63 @@ test.describe('noteList', () => {
 		await expect(noteList.getNoteItemByTitle('test note 1')).toBeVisible();
 	});
 
+	test('deleting a note to the trash should show a notification', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('test note 1');
+
+		const noteList = mainScreen.noteList;
+		await noteList.focusContent(electronApp);
+		const testNoteItem = noteList.getNoteItemByTitle('test note 1');
+		await expect(testNoteItem).toBeVisible();
+
+		// Should be removed after deleting
+		await testNoteItem.press('Delete');
+		await expect(testNoteItem).not.toBeVisible();
+
+		// Should show a deleted notification
+		const notification = mainWindow.locator('[role=alert]', {
+			hasText: /The note was successfully moved to the trash./i,
+		});
+		await expect(notification).toBeVisible();
+
+		// Should be possible to un-delete
+		const undeleteButton = notification.getByRole('button', { name: 'Cancel' });
+		await undeleteButton.click();
+
+		await expect(testNoteItem).toBeVisible();
+	});
+
+	test('should remain focused after deleting a note to the trash', async ({ electronApp, mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('test note 1');
+		await mainScreen.createNewNote('test note 2');
+		await mainScreen.createNewNote('test note 3');
+
+		const noteList = mainScreen.noteList;
+		await noteList.sortByTitle(electronApp);
+		await noteList.focusContent(electronApp);
+
+		// The most-recently created note should be selected
+		await noteList.expectNoteToBeSelected('test note 3');
+
+		// All three notes should be visible
+		const getNote = (i: number) => noteList.getNoteItemByTitle(`test note ${i}`);
+		await expect(getNote(1)).toBeVisible();
+		await expect(getNote(2)).toBeVisible();
+		await expect(getNote(3)).toBeVisible();
+
+		await getNote(3).press('Delete');
+		await expect(getNote(3)).not.toBeVisible();
+
+		// Pressing the up arrow should change the selection
+		// (Regression test for https://github.com/laurent22/joplin/issues/10753)
+		await noteList.expectNoteToBeSelected('test note 2');
+		await noteList.container.press('ArrowUp');
+		await noteList.expectNoteToBeSelected('test note 1');
+	});
+
 	test('arrow keys should navigate the note list', async ({ electronApp, mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		const sidebar = mainScreen.sidebar;
 
 		await sidebar.createNewFolder('Folder');
@@ -89,6 +144,7 @@ test.describe('noteList', () => {
 		const noteList = mainScreen.noteList;
 		await noteList.sortByTitle(electronApp);
 		await noteList.focusContent(electronApp);
+
 		// The most recently-created note should be visible
 		const note4Item = noteList.getNoteItemByTitle('note_4');
 		const note3Item = noteList.getNoteItemByTitle('note_3');

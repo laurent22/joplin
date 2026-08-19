@@ -4,7 +4,7 @@ import SettingsScreen from './models/SettingsScreen';
 
 test.describe('settings', () => {
 	test('should be possible to remove sort order buttons in settings', async ({ electronApp, mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.waitFor();
 
 		// Sort order buttons should be visible by default
@@ -35,7 +35,7 @@ test.describe('settings', () => {
 	});
 
 	test('clicking the sync wizard button in settings should open a dialog', async ({ electronApp, mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.waitFor();
 		await mainScreen.openSettings(electronApp);
 
@@ -52,7 +52,7 @@ test.describe('settings', () => {
 	});
 
 	test('should be possible to navigate settings screen tabs with the arrow keys', async ({ electronApp, mainWindow, startupPluginsLoaded }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		await startupPluginsLoaded;
 
 		await mainScreen.waitFor();
@@ -75,7 +75,7 @@ test.describe('settings', () => {
 
 		// Pressing Up when the first item is focused should focus the last item
 		await mainWindow.keyboard.press('ArrowUp');
-		await expect(focusedItem).toHaveText('Backup');
+		await expect(settingsScreen.getLastTab()).toBeFocused();
 
 		await mainWindow.keyboard.press('ArrowDown');
 		await mainWindow.keyboard.press('ArrowDown');

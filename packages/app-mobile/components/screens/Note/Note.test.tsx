@@ -1,0 +1,603 @@
+import * as React from 'react';
+
+import { describe, it, beforeEach } from '@jest/globals';
+import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../utils/testing/testingLibrary';
+
+import NoteScreen from './Note';
+import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers } from '@joplin/lib/testing/test-utils';
+import waitForWithRealTimers from '@joplin/lib/testing/waitFor';
+import Note from '@joplin/lib/models/Note';
+import { AppState } from '../../../utils/types';
+import { Store } from 'redux';
+import createMockReduxStore from '../../../utils/testing/createMockReduxStore';
+import getWebViewDomById from '../../../utils/testing/getWebViewDomById';
+import { NoteEntity } from '@joplin/lib/services/database/types';
+import Folder from '@joplin/lib/models/Folder';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import { ModelType } from '@joplin/lib/BaseModel';
+import ItemChange from '@joplin/lib/models/ItemChange';
+import { getDisplayParentId } from '@joplin/lib/services/trash';
+import { itemIsReadOnlySync, ItemSlice } from '@joplin/lib/models/utils/readOnly';
+import { LayoutChangeEvent } from 'react-native';
+import shim from '@joplin/lib/shim';
+import getWebViewWindowById from '../../../utils/testing/getWebViewWindowById';
+import CodeMirrorControl from '@joplin/editor/CodeMirror/CodeMirrorControl';
+import Setting from '@joplin/lib/models/Setting';
+import Resource from '@joplin/lib/models/Resource';
+import TestProviderStack from '../../testing/TestProviderStack';
+import setupGlobalStore from '../../../utils/testing/setupGlobalStore';
+import CommandService from '@joplin/lib/services/CommandService';
+
+jest.retryTimes(2);
+
+interface WrapperProps {
+}
+
+let store: Store<AppState>;
+
+const mockNavigation = { state: { } };
+const WrappedNoteScreen: React.FC<WrapperProps> = _props => {
+	return <TestProviderStack store={store}>
+		<NoteScreen navigation={mockNavigation}/>
+	</TestProviderStack>;
+};
+
+const getNoteViewerDom = async () => {
+	return await getWebViewDomById('NoteBodyViewer');
+};
+
+const getMarkdownEditorControl = async () => {
+	const noteEditor = await getWebViewWindowById('MarkdownEditor');
+	const getEditorControl = () => {
+		if ('cm' in noteEditor.window && noteEditor.window.cm) {
+			return noteEditor.window.cm as CodeMirrorControl;
+		}
+		return null;
+	};
+	await waitFor(async () => {
+		expect(getEditorControl()).toBeTruthy();
+	});
+	return getEditorControl();
+};
+
+const waitForNoteToMatch = async (noteId: string, note: Partial<NoteEntity>) => {
+	await act(() => waitForWithRealTimers(async () => {
+		const loadedNote = await Note.load(noteId);
+		expect(loadedNote).toMatchObject(note);
+	}));
+};
+
+const openExistingNote = async (noteId: string) => {
+	const note = await Note.load(noteId);
+	const displayParentId = getDisplayParentId(note, await Folder.load(note.parent_id));
+
+	store.dispatch({
+		type: 'NOTE_UPDATE_ALL',
+		notes: await Note.previews(displayParentId),
+	});
+
+	store.dispatch({
+		type: 'FOLDER_AND_NOTE_SELECT',
+		id: note.id,
+		folderId: displayParentId,
+	});
+};
+
+const openNewNote = async (noteProperties: NoteEntity) => {
+	const note = await Note.save({
+		parent_id: (await Folder.defaultFolder()).id,
+		...noteProperties,
+	});
+
+	await openExistingNote(note.id);
+	await waitForNoteToMatch(note.id, { parent_id: note.parent_id, title: note.title, body: note.body });
+
+	return note.id;
+};
+
+const openNoteActionsMenu = async () => {
+	// It doesn't seem possible to find the menu trigger with role/label.
+	const actionMenuButton = await screen.findByTestId('screen-header-menu-trigger');
+
+	// react-native-action-menu only shows the menu content after receiving onLayout
+	// events from various components (including a View that wraps the screen).
+	let cursor = actionMenuButton;
+	while (cursor.parent) {
+		if (cursor.props.onLayout) {
+			const mockedEvent = { nativeEvent: { layout: { x: 0, y: 0, width: 120, height: 100 } } };
+			cursor.props.onLayout(mockedEvent as LayoutChangeEvent);
+		}
+		cursor = cursor.parent;
+	}
+
+	// Wrap in act(...) -- this tells the test library that component state is intended to update (prevents
+	// warnings).
+	await waitFor(async () => {
+		await runWithFakeTimers(async () => {
+			await userEvent.press(actionMenuButton);
+		});
+
+		// State can update until the menu content is marked as open (part of the
+		// menu transition).
+		await waitFor(async () => {
+			expect(await screen.findByTestId('menu-content-open')).toBeVisible();
+		});
+	});
+};
+
+const expectToBeEditing = async (editing: boolean) => {
+	if (editing) {
+		await getMarkdownEditorControl();
+	} else {
+		await getNoteViewerDom();
+	}
+};
+
+const openEditor = async () => {
+	const editToggle = await screen.findByLabelText('Edit');
+
+	fireEvent.press(editToggle);
+	await expectToBeEditing(true);
+};
+
+const runEditorCommand = async (commandName: string) => {
+	await act(() => {
+		return CommandService.instance().execute(commandName);
+	});
+};
+
+const setupNoteWithPanes = async (panes: string[], noteTitle = 'Test note') => {
+	store.dispatch({
+		type: 'NOTE_VISIBLE_PANES_SET',
+		panes: panes,
+	});
+	await openNewNote({ title: noteTitle, body: 'Test body' });
+	const renderResult = render(<WrappedNoteScreen />);
+	const titleInput = await screen.findByDisplayValue(noteTitle);
+	expect(titleInput).toBeVisible();
+	return renderResult;
+};
+
+describe('screens/Note', () => {
+	beforeEach(async () => {
+		await setupDatabaseAndSynchronizer(1);
+		await setupDatabaseAndSynchronizer(0);
+		await switchClient(0);
+		Setting.setValue('editor.mobile.defaultEditState', 'view');
+
+		store = createMockReduxStore();
+		setupGlobalStore(store);
+
+		// In order for note changes to be saved, note-screen-shared requires
+		// that at least one folder exist.
+		await Folder.save({ title: 'test', parent_id: '' });
+		jest.useRealTimers();
+	});
+
+	it('should show the currently selected note', async () => {
+		await openNewNote({ title: 'Test note (title)', body: '# Testing...' });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		const titleInput = await screen.findByDisplayValue('Test note (title)');
+		expect(titleInput).toBeVisible();
+
+		const renderedNote = await getNoteViewerDom();
+		expect(renderedNote.querySelector('h1')).toMatchObject({ textContent: 'Testing...' });
+
+		unmount();
+	});
+
+	it('changing the note title input should update the note\'s title', async () => {
+		const noteId = await openNewNote({ title: 'Change me!', body: 'Unchanged body' });
+
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		const titleInput = await screen.findByDisplayValue('Change me!');
+
+		const user = userEvent.setup();
+		await user.clear(titleInput);
+		await user.type(titleInput, 'New title');
+
+		await waitForNoteToMatch(noteId, { title: 'New title', body: 'Unchanged body' });
+
+		// Use fake timers to allow advancing timers without pausing the test
+		await runWithFakeTimers(async () => {
+			let expectedTitle = 'New title';
+			for (let i = 0; i <= 10; i++) {
+				for (const chunk of ['!', ' test', '!!!', ' Testing']) {
+					jest.advanceTimersByTime(i % 5);
+					await user.type(titleInput, chunk);
+					expectedTitle += chunk;
+
+					// Don't verify after each input event -- this allows the save action queue to fill.
+					if (i % 4 === 0) {
+						await waitForNoteToMatch(noteId, { title: expectedTitle });
+					}
+				}
+				await waitForNoteToMatch(noteId, { title: expectedTitle });
+			}
+		});
+
+		unmount();
+	});
+
+	it('should discard a queued save when the reload time has moved on', async () => {
+		const noteId = await openNewNote({ title: 'Original title', body: 'Body' });
+		const { unmount } = render(<WrappedNoteScreen />);
+		const titleInput = await screen.findByDisplayValue('Original title');
+
+		await act(async () => {
+			fireEvent.changeText(titleInput, 'Stale local title');
+			const remotelyUpdatedNote = await Note.load(noteId);
+			remotelyUpdatedNote.title = 'Remote title';
+			await Note.save(remotelyUpdatedNote);
+			store.dispatch({ type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId });
+		});
+
+		await waitForNoteToMatch(noteId, { title: 'Remote title' });
+		unmount();
+		await waitForNoteToMatch(noteId, { title: 'Remote title' });
+	});
+
+	it('changing the note body in the editor should update the note\'s body', async () => {
+		const defaultBody = 'Change me!';
+		const noteId = await openNewNote({ title: 'Unchanged title', body: defaultBody });
+
+		const noteScreen = render(<WrappedNoteScreen />);
+		await openEditor();
+		const editor = await getMarkdownEditorControl();
+		await act(async () => {
+			editor.select(defaultBody.length, defaultBody.length);
+			editor.insertText(' Testing!!!');
+
+			expect(editor.editor.state.doc.toString()).toBe('Change me! Testing!!!');
+		});
+
+		await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!!' });
+
+		await act(async () => {
+			editor.insertText(' This is a test.');
+			await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!! This is a test.' });
+
+			// should also save changes made shortly before unmounting
+			editor.insertText(' Test!');
+
+			noteScreen.unmount();
+			await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!! This is a test. Test!' });
+		});
+	});
+
+	it('pressing "delete" should move the note to the trash', async () => {
+		const noteId = await openNewNote({ title: 'To be deleted', body: '...' });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		await openNoteActionsMenu();
+		const deleteButton = await screen.findByText('Delete');
+		fireEvent.press(deleteButton);
+
+		await waitFor(async () => {
+			expect((await Note.load(noteId)).deleted_time).toBeGreaterThan(0);
+		});
+
+		unmount();
+	});
+
+	it('pressing "delete permanently" should permanently delete a note', async () => {
+		const noteId = await openNewNote({ title: 'To be deleted', body: '...', deleted_time: Date.now() });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		// Permanently delete note shows a confirmation dialog -- mock it.
+		const deleteId = 0;
+		shim.showMessageBox = jest.fn(async () => deleteId);
+
+		await openNoteActionsMenu();
+		const deleteButton = await screen.findByText('Permanently delete note');
+		fireEvent.press(deleteButton);
+
+		await waitFor(async () => {
+			expect(await Note.load(noteId)).toBeUndefined();
+		});
+		expect(shim.showMessageBox).toHaveBeenCalled();
+
+		unmount();
+	});
+
+	it('delete should be disabled in a read-only note', async () => {
+		const shareId = 'testShare';
+		const noteId = await openNewNote({
+			title: 'Title: Read-only note',
+			body: 'A **read-only** note.',
+			share_id: shareId,
+		});
+		const cleanup = simulateReadOnlyShareEnv(shareId, store);
+		expect(
+			itemIsReadOnlySync(
+				ModelType.Note,
+				ItemChange.SOURCE_UNSPECIFIED,
+				await Note.load(noteId) as ItemSlice,
+				'',
+				BaseItem.syncShareCache,
+			),
+		).toBe(true);
+
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		const titleInput = await screen.findByDisplayValue('Title: Read-only note');
+		expect(titleInput).toBeVisible();
+		expect(titleInput).toBeDisabled();
+
+		await openNoteActionsMenu();
+		const deleteButton = await screen.findByText('Delete');
+		expect(deleteButton).toHaveProp('disabled', true);
+
+		act(() => cleanup());
+		unmount();
+	});
+
+	it.each([
+		'auto',
+		'manual',
+	])('should correctly auto-download or not auto-download resources in %j mode', async (downloadMode) => {
+		let note = await Note.save({ title: 'Note 1', parent_id: (await Folder.defaultFolder()).id });
+		note = await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+
+		await synchronizerStart();
+		await switchClient(1);
+		Setting.setValue('sync.resourceDownloadMode', downloadMode);
+		await synchronizerStart();
+
+		// Before opening the note, the resource should not be marked for download
+		const allResources = await Resource.all();
+		expect(allResources.length).toBe(1);
+		const resource = allResources[0];
+		expect(await Resource.localState(resource)).toMatchObject({ fetch_status: Resource.FETCH_STATUS_IDLE });
+
+		await openExistingNote(note.id);
+
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		// Note should render
+		const titleInput = await screen.findByDisplayValue('Note 1');
+		expect(titleInput).toBeVisible();
+
+		// Wrap in act() -- the component may update in the background during this.
+		await act(async () => {
+			await resourceFetcher().waitForAllFinished();
+
+			// After opening the note, the resource should be marked for download only in automatic mode
+			if (downloadMode === 'auto') {
+				await waitFor(async () => {
+					expect(await Resource.localState(resource.id)).toMatchObject({ fetch_status: Resource.FETCH_STATUS_DONE });
+				});
+			} else if (downloadMode === 'manual') {
+				// In manual mode, should not mark for download
+				expect(await Resource.localState(resource)).toMatchObject({ fetch_status: Resource.FETCH_STATUS_IDLE });
+			} else {
+				throw new Error(`Should not be testing downloadMode: ${downloadMode}.`);
+			}
+		});
+
+		unmount();
+	});
+
+	it('the toggleVisiblePanes command should start and stop editing', async () => {
+		await openNewNote({ title: 'To be edited', body: '...' });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		await expectToBeEditing(false);
+		await runEditorCommand('toggleVisiblePanes');
+		await expectToBeEditing(true);
+		await runEditorCommand('toggleVisiblePanes');
+		await expectToBeEditing(false);
+
+		unmount();
+	});
+
+	it.each([
+		[['viewer']],
+		[['editor']],
+	])('should initialize in the correct mode when noteVisiblePanes is %j, when default edit state is set to last', async (panes) => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
+		const { unmount } = await setupNoteWithPanes(panes);
+		await expectToBeEditing(panes.includes('editor'));
+		unmount();
+	});
+
+	it('should show edit button when in view mode', async () => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
+		const { unmount } = await setupNoteWithPanes(['viewer']);
+		const editButton = await screen.findByLabelText('Edit');
+		expect(editButton).toBeVisible();
+		unmount();
+	});
+
+	it.each([
+		[['viewer']],
+		[['editor']],
+	])('should switch modes when toggle button is pressed, when default edit state is set to last', async (panes) => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
+		const initialEditing = panes.includes('editor');
+		const expectedEditing = !initialEditing;
+		const { unmount } = await setupNoteWithPanes(panes);
+		await expectToBeEditing(initialEditing);
+		const toggleButton = await screen.findByLabelText(/Edit|Stop editing/);
+		fireEvent.press(toggleButton);
+		await expectToBeEditing(expectedEditing);
+		unmount();
+	});
+
+	it('should set title, body, and parent_id correctly when a note is created via share', async () => {
+		const folder = await Folder.save({ title: 'Share target folder', parent_id: '' });
+		const note = await Note.save({ parent_id: folder.id }, { provisional: true });
+
+		store.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Note',
+			noteId: note.id,
+			sharedData: { title: 'Shared title', text: 'https://example.com' },
+		});
+		store.dispatch({ type: 'NOTE_UPDATE_ONE', note: { ...note }, provisional: true });
+
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		await waitForNoteToMatch(note.id, {
+			title: 'Shared title',
+			body: 'https://example.com',
+			parent_id: folder.id,
+		});
+
+		unmount();
+	});
+
+	it('should always start in edit mode for provisional notes regardless of noteVisiblePanes', async () => {
+		store.dispatch({
+			type: 'NOTE_VISIBLE_PANES_SET',
+			panes: ['viewer'],
+		});
+		const noteId = await openNewNote({ title: 'Provisional note', body: 'Test body' });
+		// Mark note as provisional by dispatching NOTE_UPDATE_ONE with provisional flag
+		const note = await Note.load(noteId);
+		store.dispatch({
+			type: 'NOTE_UPDATE_ONE',
+			note: note,
+			provisional: true,
+		});
+		const { unmount } = render(<WrappedNoteScreen />);
+		const titleInput = await screen.findByDisplayValue('Provisional note');
+		expect(titleInput).toBeVisible();
+		await expectToBeEditing(true);
+		unmount();
+	});
+
+	it.each([
+		[['viewer']],
+		[['editor']],
+	])('should preserve noteVisiblePanes state when leaving and returning to the same note, when default edit state is set to last', async (panes) => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
+
+		const firstRender = await setupNoteWithPanes(panes);
+		await expectToBeEditing(panes.includes('editor'));
+		// Navigate away
+		await act(async () => {
+			store.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Notes',
+			});
+		});
+		firstRender.unmount();
+
+		// Navigate back to the same note
+		const currentState = store.getState();
+		const noteId = currentState.selectedNoteIds[0];
+		await act(async () => {
+			await openExistingNote(noteId);
+		});
+		const { unmount } = render(<WrappedNoteScreen />);
+		const titleInput = await screen.findByDisplayValue('Test note');
+		expect(titleInput).toBeVisible();
+		// Should still be in the same mode
+		await expectToBeEditing(panes.includes('editor'));
+		expect(store.getState().noteVisiblePanes).toEqual(panes);
+		unmount();
+	});
+
+	it.each([
+		[['viewer']],
+		[['editor']],
+	])('should preserve noteVisiblePanes state when navigating from note 1 to note 2, when default edit state is set to last', async (panes) => {
+		Setting.setValue('editor.mobile.defaultEditState', 'last');
+
+		// Open note 1
+		await act(async () => {
+			store.dispatch({
+				type: 'NOTE_VISIBLE_PANES_SET',
+				panes: panes,
+			});
+		});
+		await act(async () => {
+			return await openNewNote({ title: 'Note 1', body: 'Test body 1' });
+		});
+		const render1 = render(<WrappedNoteScreen />);
+		const titleInput1 = await screen.findByDisplayValue('Note 1');
+		expect(titleInput1).toBeVisible();
+		await expectToBeEditing(panes.includes('editor'));
+		render1.unmount();
+
+		// Open note 2
+		const note2Id = await act(async () => {
+			return await openNewNote({ title: 'Note 2', body: 'Test body 2' });
+		});
+		await act(async () => {
+			await openExistingNote(note2Id);
+		});
+		const { unmount } = render(<WrappedNoteScreen />);
+		const titleInput2 = await screen.findByDisplayValue('Note 2');
+		expect(titleInput2).toBeVisible();
+		// Note 2 should be in the same mode
+		await expectToBeEditing(panes.includes('editor'));
+		expect(store.getState().noteVisiblePanes).toEqual(panes);
+		unmount();
+	});
+
+	// Regression test: when a provisional note has no title, saving derives the
+	// title from the body. The provisional-note branch of saveNoteButton_press
+	// also kicks off a background geolocation update; that callback used to
+	// close over a stale `state.note` (captured before the title was derived)
+	// and wipe the derived title back to empty when it resolved.
+	it('should not clear the auto-derived title when the background geolocation update resolves', async () => {
+		Setting.setValue('trackLocation', true);
+
+		const originalGeolocation = shim.Geolocation;
+		let resolveGeoloc: (v: unknown)=> void = () => {};
+		shim.Geolocation = {
+			currentPosition: () => new Promise(resolve => { resolveGeoloc = resolve; }),
+		};
+
+		let unmount = () => {};
+		try {
+			const noteId = await openNewNote({ title: '', body: '' });
+			store.dispatch({
+				type: 'NOTE_UPDATE_ONE',
+				note: await Note.load(noteId),
+				provisional: true,
+			});
+
+			({ unmount } = render(<WrappedNoteScreen />));
+			const editor = await getMarkdownEditorControl();
+
+			await act(async () => {
+				editor.insertText('Derived from body');
+			});
+
+			await screen.findByDisplayValue('Derived from body');
+
+			await act(async () => {
+				resolveGeoloc({ timestamp: Date.now(), coords: { latitude: 1, longitude: 2, altitude: 3 } });
+			});
+			await waitForNoteToMatch(noteId, { title: 'Derived from body' });
+			await waitFor(async () => {
+				const loaded = await Note.load(noteId);
+				expect(Number(loaded.latitude)).toBe(1);
+			});
+
+			expect(screen.getByDisplayValue('Derived from body')).toBeVisible();
+		} finally {
+			unmount();
+			shim.Geolocation = originalGeolocation;
+			Setting.setValue('trackLocation', false);
+		}
+	});
+
+	it('should set the initial editor cursor location to the specified hash', async () => {
+		await openNewNote({ title: 'To be edited', body: 'a test\n\n# Test\n\n# Test 2\n\n# Test 3' });
+		store.dispatch({ type: 'NAV_GO', noteHash: 'test-2' });
+		const { unmount } = render(<WrappedNoteScreen />);
+
+		await openEditor();
+		const editor = await getMarkdownEditorControl();
+
+		expect(editor.getCursor().line).toBe(4);
+
+		unmount();
+	});
+});

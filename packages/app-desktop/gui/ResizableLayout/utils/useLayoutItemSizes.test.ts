@@ -1,6 +1,6 @@
 import useLayoutItemSizes, { itemSize, calculateMaxSizeAvailableForItem } from './useLayoutItemSizes';
 import { LayoutItem, LayoutItemDirection } from './types';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import validateLayout from './validateLayout';
 
 describe('useLayoutItemSizes', () => {
@@ -134,8 +134,11 @@ describe('useLayoutItemSizes', () => {
 		expect(itemSize(layout.children[0], layout, sizes, true)).toEqual({ width: 100, height: 100 });
 
 		const parent = layout.children[0];
-		expect(itemSize(parent.children[0], parent, sizes, false)).toEqual({ width: 95, height: 45 });
-		expect(itemSize(parent.children[1], parent, sizes, false)).toEqual({ width: 95, height: 50 });
+		// row1: inside a column that has a right divider, and row1 itself has a
+		// bottom divider (there's a visible sibling below it).
+		expect(itemSize(parent.children[0], parent, sizes, false, { ownRight: false, ownBottom: true, parentRight: true, parentBottom: false })).toEqual({ width: 95, height: 45 });
+		// row2: same column, no bottom divider (it is the last row).
+		expect(itemSize(parent.children[1], parent, sizes, false, { ownRight: false, ownBottom: false, parentRight: true, parentBottom: false })).toEqual({ width: 95, height: 50 });
 	});
 
 	test('should decrease size of the largest item if the total size would be larger than the container', () => {
@@ -347,6 +350,168 @@ describe('useLayoutItemSizes', () => {
 
 		// maxSize = totalSize - ( [size of items with set size, except for the current item] + [minimum size of items with no set size] )
 		expect(maxSize1.width).toBe(160); // 160 = layout.width - col2.minWidth(=40)
+	});
+
+	test('flexible child absorbs remaining space regardless of position', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 1000,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{ key: 'sideBar', width: 250 },
+				{ key: 'noteList', width: 250 },
+				{ key: 'editor', flexible: true },
+				{ key: 'chatPanel', width: 340 },
+			],
+		});
+
+		const editor = layout.children.find(c => c.key === 'editor');
+		expect(editor).not.toHaveProperty('width');
+
+		const sizes = renderHook(() => useLayoutItemSizes(layout)).result.current;
+		expect(sizes.editor.width).toBe(160);
+		expect(sizes.chatPanel.width).toBe(340);
+
+		const enlarged = validateLayout({ ...layout, width: 1200 });
+		const enlargedSizes = renderHook(() => useLayoutItemSizes(enlarged)).result.current;
+		expect(enlargedSizes.editor.width).toBe(360);
+		expect(enlargedSizes.chatPanel.width).toBe(340);
+		expect(enlargedSizes.sideBar.width).toBe(250);
+		expect(enlargedSizes.noteList.width).toBe(250);
+	});
+
+	test('flexible child still gets a draggable right edge so the divider against the next sibling stays usable', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 1000,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{ key: 'sideBar', width: 250 },
+				{ key: 'editor', flexible: true },
+				{ key: 'chatPanel', width: 340 },
+			],
+		});
+
+		const editor = layout.children.find(c => c.key === 'editor');
+		expect(editor.resizableRight).toBe(true);
+
+		const chatPanel = layout.children.find(c => c.key === 'chatPanel');
+		expect(chatPanel.resizableRight).toBe(false);
+	});
+
+	test('width-less non-absorber siblings get a fallback width so the explicit absorber alone absorbs', () => {
+		// Mimics state after a move-mode rearrangement that wipes sibling widths.
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 1000,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{ key: 'sideBar' },
+				{ key: 'editor', flexible: true, width: 408 },
+				{ key: 'noteList' },
+				{ key: 'chatPanel', width: 113 },
+			],
+		});
+
+		expect(layout.children.find(c => c.key === 'editor')).not.toHaveProperty('width');
+		expect(layout.children.find(c => c.key === 'sideBar').width).toBeGreaterThan(0);
+		expect(layout.children.find(c => c.key === 'noteList').width).toBeGreaterThan(0);
+
+		const enlarged = validateLayout({ ...layout, width: 1200 });
+		const before = renderHook(() => useLayoutItemSizes(layout)).result.current;
+		const after = renderHook(() => useLayoutItemSizes(enlarged)).result.current;
+		expect(after.editor.width - before.editor.width).toBe(200);
+		expect(after.sideBar.width).toBe(before.sideBar.width);
+		expect(after.noteList.width).toBe(before.noteList.width);
+		expect(after.chatPanel.width).toBe(before.chatPanel.width);
+	});
+
+	test('container holding a flexible descendant inherits the absorber role at the root level', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 1000,
+			height: 600,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{ key: 'sideBar', width: 218 },
+				{
+					key: 'col',
+					width: 667,
+					children: [
+						{ key: 'noteList', height: 250 },
+						{ key: 'editor', flexible: true },
+					],
+				},
+				{ key: 'chatPanel' },
+			],
+		});
+
+		expect(layout.children.find(c => c.key === 'col')).not.toHaveProperty('width');
+		expect(layout.children.find(c => c.key === 'chatPanel').width).toBeGreaterThan(0);
+
+		const before = renderHook(() => useLayoutItemSizes(layout)).result.current;
+		const after = renderHook(() => useLayoutItemSizes(validateLayout({ ...layout, width: 1300 }))).result.current;
+
+		expect(after.col.width - before.col.width).toBe(300);
+		expect(after.sideBar.width).toBe(before.sideBar.width);
+		expect(after.chatPanel.width).toBe(before.chatPanel.width);
+		expect(after.editor.width).toBe(after.col.width);
+	});
+
+	test('itemSize propagates the ancestor divider gap through last-child same-axis nesting', () => {
+		// Same-axis nesting is unusual but valid; a row nested at the end of
+		// another row should inherit its outer sibling's right gap.
+		const sizes = { outer: { width: 200, height: 100 }, inner: { width: 200, height: 100 } };
+		const inner: LayoutItem = { key: 'inner' };
+		// The outer has its own trailing gap because it has a sibling to its right.
+		const edgesFromLastRowChild = { ownRight: false, ownBottom: false, parentRight: true, parentBottom: false };
+		const size = itemSize(inner, null, sizes, false, edgesFromLastRowChild);
+		// 5px reserved for the propagated right gap.
+		expect(size.width).toBe(195);
+	});
+
+	test('multiple width-less siblings stay within the container width even when combined fallbacks exceed it', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 400,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				// Three unsized non-absorber siblings would want 250 each (=750),
+				// far above the 400 container. The absorber (editor) must still
+				// get at least its minimum.
+				{ key: 'a' },
+				{ key: 'b' },
+				{ key: 'c' },
+				{ key: 'editor', flexible: true },
+			],
+		});
+
+		const { result } = renderHook(() => useLayoutItemSizes(layout));
+		const sizes = result.current;
+		const total = sizes.a.width + sizes.b.width + sizes.c.width + sizes.editor.width;
+		expect(total).toBeLessThanOrEqual(400);
+		expect(sizes.editor.width).toBeGreaterThanOrEqual(40); // itemMinWidth
+	});
+
+	test('flexible flag on a hidden child falls back to the last visible sibling', () => {
+		const layout: LayoutItem = validateLayout({
+			key: 'root',
+			width: 200,
+			height: 100,
+			direction: LayoutItemDirection.Row,
+			children: [
+				{ key: 'col1', width: 50 },
+				{ key: 'col2', flexible: true, visible: false },
+				{ key: 'col3', width: 60 },
+			],
+		});
+
+		const col3 = layout.children.find(c => c.key === 'col3');
+		expect(col3).not.toHaveProperty('width');
 	});
 
 });

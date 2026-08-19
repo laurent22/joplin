@@ -11,7 +11,7 @@
 		"tools/*.ts",
 	],
 	"compilerOptions": {
-		"types": ["jest", "node"],
+		"types": ["jest", "node", "react"],
 		"moduleSuffixes": [".ios", ".android", ".native", ""]
 	}
 }

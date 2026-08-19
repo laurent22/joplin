@@ -34,6 +34,9 @@ function baseUrl() {
 		output2.pop();
 		output = output2.join('/');
 	}
+	if (output[output.length - 1] === '/') {
+		output = output.slice(0, -1);
+	}
 	return output;
 }
 
@@ -139,4 +142,5 @@ export function getStyleSheets(doc: Document) {
 
 // Required to run in Firefox with tabs.executeScript. See
 // https://stackoverflow.com/a/44774834
+// eslint-disable-next-line no-unused-expressions -- Old code before rule was applied
 undefined;

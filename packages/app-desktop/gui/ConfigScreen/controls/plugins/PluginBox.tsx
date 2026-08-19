@@ -8,6 +8,7 @@ import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import bridge from '../../../../services/bridge';
 import { ItemEvent, PluginItem } from '@joplin/lib/components/shared/config/plugins/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
+import getPluginHelpUrl from '@joplin/lib/services/plugins/utils/getPluginHelpUrl';
 
 export enum InstallState {
 	NotInstalled = 1,
@@ -99,8 +100,7 @@ const BoxedLabel = styled.div`
 	margin-top: auto;
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const StyledNameAndVersion = styled.div<{ mb: any }>`
+const StyledNameAndVersion = styled.div<{ mb: string | number }>`
 	font-family: ${props => props.theme.fontFamily};
 	color: ${props => props.theme.color};
 	font-size: ${props => props.theme.fontSize}px;
@@ -150,8 +150,7 @@ export default function(props: Props) {
 
 	const onNameClick = useCallback(() => {
 		const manifest = item.manifest;
-		if (!manifest.homepage_url) return;
-		void bridge().openExternal(manifest.homepage_url);
+		void bridge().openExternal(getPluginHelpUrl(manifest.id));
 	}, [item]);
 
 	const onRecommendedClick = useCallback(() => {
@@ -173,7 +172,7 @@ export default function(props: Props) {
 			themeId={props.themeId}
 			value={item.enabled}
 			onToggle={() => props.onToggle({ item })}
-			aria-label={_('Enabled')}
+			aria-label={item.enabled ? _('Disable %s', item.manifest.name) : _('Enable %s', item.manifest.name)}
 		/>;
 	}
 

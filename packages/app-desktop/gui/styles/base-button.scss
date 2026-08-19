@@ -1,0 +1,16 @@
+// Corresponds to theme.buttonStyle
+.base-button {
+	border: 1px solid;
+	min-height: 26px;
+	min-width: 80px;
+	padding-left: 12px;
+	padding-right: 12px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	border-radius: 4px;
+
+	color: var(--joplin-color4);
+	background-color: var(--joplin-background-color4);
+	border-color: var(--joplin-border-color4);
+	user-select: none;
+}

@@ -1,23 +1,7 @@
 const sass = require('sass');
 const fs = require('fs-extra');
+const { basename } = require('path');
 
-// The SASS doc claims that renderSync is twice as fast as render, so if speed
-// turns out to be an issue we could use that instead. The advantage of async is
-// that we can run complation of each file in parallel (and running other async
-// gulp tasks in parallel too).
-
-// sasss.render is old school async, so convert it to a promise here.
-async function sassRender(options) {
-	return new Promise((resolve, reject) => {
-		sass.render(options, ((error, result) => {
-			if (error) {
-				reject(error);
-			} else {
-				resolve(result);
-			}
-		}));
-	});
-}
 
 // module.exports = async function compileSass(inputPaths, outputPath) {
 // 	const promises = [];
@@ -45,16 +29,23 @@ async function sassRender(options) {
 // };
 
 module.exports = async function compileSass(inputPath, outputPath) {
-	const result = await sassRender({
-		file: inputPath,
+	// The SASS doc claims that compile is twice as fast as compileAsync, so if speed
+	// turns out to be an issue we could use that instead. The advantage of async is
+	// that we can run compilation of each file in parallel (and running other async
+	// gulp tasks in parallel too).
+	const result = await sass.compileAsync(inputPath, {
 		sourceMap: true,
-		outFile: outputPath,
-		outputStyle: 'compressed',
-		indentType: 'tab',
+		style: 'expanded',
+		sourceMapIncludeSources: true,
 	});
 
-	const cssString = result.css.toString();
-	const mapString = result.map.toString();
+	const cssString = [
+		result.css.toString(),
+		// The .compileAsync API doesn't automatically add the source mapping comment.
+		// Without this, the Electron dev tools can't load the original sources.
+		`/*# sourceMappingURL=${basename(outputPath)}.map*/`,
+	].join('\n');
+	const mapString = JSON.stringify(result.sourceMap);
 
 	await Promise.all([
 		fs.writeFile(outputPath, cssString, 'utf8'),

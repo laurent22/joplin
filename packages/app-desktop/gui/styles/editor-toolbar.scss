@@ -7,15 +7,21 @@
 	padding: var(--joplin-toolbar-padding);
 	padding-right: var(--joplin-main-padding);
 
+	&.-scrollable {
+		overflow-x: auto;
+	}
+
 	> .group {
 		display: flex;
 		flex-direction: row;
 		box-sizing: border-box;
-		min-width: 0;
 
-		&.-right {
-			flex: 1;
-			justify-content: flex-end;
-		}
+		min-width: 0;
+		flex-shrink: 0;
+	}
+
+	> .spacer {
+		flex-grow: 1;
+		min-width: 7px;
 	}
 }

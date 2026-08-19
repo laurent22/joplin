@@ -1,4 +1,4 @@
-const BaseCommand = require('./base-command').default;
+import BaseCommand from './base-command';
 import { _ } from '@joplin/lib/locale';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
@@ -26,15 +26,14 @@ class Command extends BaseCommand {
 			['-v, --verbose', 'More verbose output for the `target-status` command'],
 			['-o, --output <directory>', 'Output directory'],
 			['--retry-failed-items', 'Applies to `decrypt` command - retries decrypting items that previously could not be decrypted.'],
+			['-f, --force', 'Do not ask for input on failure'],
 		];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async action(args: any) {
+	public async action(args: { command: string; path?: string; options: { password?: string; verbose?: boolean; output?: string; 'retry-failed-items'?: boolean; force?: boolean } }) {
 		const options = args.options;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const askForMasterKey = async (error: any) => {
+		const askForMasterKey = async (error: { masterKeyId: string }) => {
 			const masterKeyId = error.masterKeyId;
 			const password = await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
 			if (!password) {
@@ -67,7 +66,7 @@ class Command extends BaseCommand {
 					this.stdout(line.join('\n'));
 					break;
 				} catch (error) {
-					if (error.code === 'masterKeyNotLoaded') {
+					if (error.code === 'masterKeyNotLoaded' && !args.options.force) {
 						const ok = await askForMasterKey(error);
 						if (!ok) return;
 						continue;

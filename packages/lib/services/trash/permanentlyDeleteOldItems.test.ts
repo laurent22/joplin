@@ -1,7 +1,7 @@
 import { Day, msleep } from '@joplin/utils/time';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
-import { setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, simulateReadOnlyShareEnv, switchClient } from '../../testing/test-utils';
 import permanentlyDeleteOldItems from './permanentlyDeleteOldItems';
 import Setting from '../../models/Setting';
 
@@ -75,4 +75,42 @@ describe('permanentlyDeleteOldItems', () => {
 		expect(await Folder.count()).toBe(1);
 	});
 
+	it('should not auto-delete read-only items', async () => {
+		const shareId = 'testShare';
+
+		// Simulates a folder having been deleted a long time ago
+		const longTimeAgo = 1000;
+
+		const readOnlyFolder = await Folder.save({
+			title: 'Read-only folder',
+			share_id: shareId,
+			deleted_time: longTimeAgo,
+		});
+		const readOnlyNote1 = await Note.save({
+			title: 'Read-only note',
+			parent_id: readOnlyFolder.id,
+			share_id: shareId,
+			deleted_time: longTimeAgo,
+		});
+		const readOnlyNote2 = await Note.save({
+			title: 'Read-only note 2',
+			share_id: shareId,
+			deleted_time: longTimeAgo,
+		});
+		const writableNote = await Note.save({
+			title: 'Editable note',
+			deleted_time: longTimeAgo,
+		});
+
+		const cleanup = simulateReadOnlyShareEnv(shareId);
+		await permanentlyDeleteOldItems(Day);
+
+		// Should preserve only the read-only items.
+		expect(await Folder.load(readOnlyFolder.id)).toBeTruthy();
+		expect(await Note.load(readOnlyNote1.id)).toBeTruthy();
+		expect(await Note.load(readOnlyNote2.id)).toBeTruthy();
+		expect(await Note.load(writableNote.id)).toBeFalsy();
+
+		cleanup();
+	});
 });

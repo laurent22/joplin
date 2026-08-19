@@ -1,6 +1,6 @@
-import { screen, waitFor } from '@testing-library/react-native';
+import { screen, waitFor } from './testingLibrary';
 
-const getWebViewWindowById = async (id: string): Promise<Window> => {
+const getWebViewWindowById = async (id: string): Promise<Window & typeof globalThis> => {
 	const webviewContent = await screen.findByTestId(id);
 	expect(webviewContent).toBeVisible();
 

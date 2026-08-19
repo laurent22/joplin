@@ -1,3 +1,4 @@
+import { Second } from '@joplin/utils/time';
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, syncTargetId, synchronizerStart, msleep } from '../testing/test-utils';
 import BaseItem from './BaseItem';
 import Folder from './Folder';
@@ -42,6 +43,19 @@ describe('BaseItem', () => {
 		expect(unserialized2.title).toBe(folder2.title);
 	});
 
+	it.each([
+		'',
+		'\n\na\nb\nc\nç\nTest!\n Testing. \n',
+		'Test! ☺',
+		'Test! ☺\n\n\n',
+	])('should not modify body when unserializing (body: %j)', async (body) => {
+		const note = await Note.save({ title: 'note1', body });
+
+		expect(await Note.unserialize(await Note.serialize(note))).toMatchObject({
+			body,
+		});
+	});
+
 	it('should correctly unserialize note timestamps', async () => {
 		const folder = await Folder.save({ title: 'folder' });
 		const note = await Note.save({ title: 'note', parent_id: folder.id });
@@ -53,6 +67,22 @@ describe('BaseItem', () => {
 		expect(unserialized.updated_time).toEqual(note.updated_time);
 		expect(unserialized.user_created_time).toEqual(note.user_created_time);
 		expect(unserialized.user_updated_time).toEqual(note.user_updated_time);
+	});
+
+	it('should unserialize a very large note quickly', async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', parent_id: folder.id });
+
+		const serialized = await Note.serialize({
+			...note,
+			// 2 MiB
+			body: '\n.'.repeat(1 * 1024 * 1024),
+		});
+
+		const start = performance.now();
+		await Note.unserialize(serialized);
+		// Locally, this passes in in < 2s, so 30s should be a safe upper bound.
+		expect(performance.now() - start).toBeLessThan(30 * Second);
 	});
 
 	it('should serialize geolocation fields', async () => {
@@ -149,4 +179,54 @@ three line \\n no escape`)).toBe(0);
 		expect(await syncTime(note1.id)).toBe(newTime);
 	});
 
+	it.each([
+		'test-test!',
+		'This ID has    spaces\ttabs\nand newlines',
+		'Test`;',
+		'Test"',
+		'Test\'',
+		'Test\'\'\'a\'\'',
+		'% test',
+	])('should support querying items with IDs containing special characters (id: %j)', async (id) => {
+		const note = await Note.save({ id }, { isNew: true });
+		expect(await BaseItem.loadItemById(note.id)).toMatchObject({ id });
+	});
+
+	// Sync ingestion concatenates resource.id and resource.file_extension into
+	// a local file path; a malformed id like `../../foo` would escape the
+	// resource directory. unserialize() must reject these.
+	it.each([
+		'../../escape',
+		'../foo',
+		'foo/bar',
+		'foo\\bar',
+		'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ',
+		'short',
+	])('should reject items with malformed IDs during unserialize (id: %j)', async (id) => {
+		const serialized = `poc-resource\n\nid: ${id}\ntype_: 4`;
+		await expect(BaseItem.unserialize(serialized)).rejects.toMatchObject({
+			code: 'malformedItem',
+			message: expect.stringMatching(/Invalid item ID/),
+		});
+	});
+
+	it.each([
+		'../foo',
+		'foo/bar',
+		'foo\\bar',
+		'..',
+	])('should reject items with malformed file_extension during unserialize (ext: %j)', async (ext) => {
+		const serialized = `poc-resource\n\nid: 00000000000000000000000000000001\nfile_extension: ${ext}\ntype_: 4`;
+		await expect(BaseItem.unserialize(serialized)).rejects.toMatchObject({
+			code: 'malformedItem',
+			message: expect.stringMatching(/Invalid file extension/),
+		});
+	});
+
+	it('should accept well-formed resource items', async () => {
+		const serialized = 'poc-resource\n\nid: 00000000000000000000000000000001\nfile_extension: txt\ntype_: 4';
+		const out = await BaseItem.unserialize(serialized);
+		expect(out.id).toBe('00000000000000000000000000000001');
+		expect(out.file_extension).toBe('txt');
+	});
 });

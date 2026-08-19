@@ -6,10 +6,14 @@
 
 // So there's basically still a one way flux: React => SQLite => Redux => React
 
+import './utils/initReact';
 import './utils/polyfills';
 
-import { LogBox, AppRegistry } from 'react-native';
-const Root = require('./root').default;
+import Root from './root';
+import { LogBox } from 'react-native';
+import { registerRootComponent } from 'expo';
+// Allows loading image assets. See https://github.com/expo/expo/issues/31240
+import 'expo-asset';
 
 // Seems JavaScript developers love adding warnings everywhere, even when these warnings can't be fixed
 // or don't really matter. Because we want important warnings to actually be fixed, we disable
@@ -45,7 +49,7 @@ LogBox.ignoreLogs([
 	'Did not receive response to shouldStartLoad in time, defaulting to YES',
 ]);
 
-AppRegistry.registerComponent('Joplin', () => Root);
+registerRootComponent(Root);
 
 // Using streams on react-native requires to polyfill process.nextTick()
 global.process.nextTick = setImmediate;

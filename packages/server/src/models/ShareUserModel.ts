@@ -24,7 +24,14 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		}
 
 		if (action === AclAction.Update) {
-			if (user.id !== resource.user_id) throw new ErrorForbidden('cannot change share user');
+			if (user.id === resource.user_id) {
+				// OK - a share recipient can modify its own object
+			} else {
+				// Otherwise check if the user owns the share
+				const share = await this.models().share().load(resource.share_id);
+				if (!share) throw new ErrorBadRequest(`No such share: ${resource.share_id}`);
+				if (share.owner_id !== user.id) throw new ErrorForbidden('cannot change someone else\'s share');
+			}
 		}
 
 		if (action === AclAction.Delete) {

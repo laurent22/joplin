@@ -2,28 +2,19 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		""
 	],
-	"%d days": [
-		"%d วัน"
-	],
 	"%d GB": [
 		""
 	],
 	"%d GB storage space": [
 		""
 	],
-	"%d hour": [
-		"%d ชั่วโมง"
-	],
-	"%d hours": [
-		"%d ชั่วโมง"
-	],
 	"%d MB": [
 		""
 	],
-	"%d minutes": [
-		"%d นาที"
+	"%d note matches this pattern. Delete it?": [
+		""
 	],
-	"%d notes match this pattern. Delete them?": [
+	"%d photo(s) taken": [
 		""
 	],
 	"%s": [
@@ -50,7 +41,13 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
@@ -58,9 +55,6 @@
 	],
 	"%s: %d": [
 		"%s: %d"
-	],
-	"%s: %d notes": [
-		"%s: %d บันทึก"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -92,7 +86,13 @@
 	"(In plugin: %s)": [
 		""
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
+		""
+	],
+	"(Read-only)": [
 		""
 	],
 	"(wysiwyg: %s)": [
@@ -116,6 +116,15 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		""
 	],
+	"[None]": [
+		""
+	],
+	"A brief description of the image:": [
+		""
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
+	],
 	"A3": [
 		"A3"
 	],
@@ -124,6 +133,9 @@
 	],
 	"A5": [
 		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
 	],
 	"About": [
 		""
@@ -161,6 +173,9 @@
 	"Add body": [
 		"เพิ่มเนื้อความ"
 	],
+	"Add column": [
+		""
+	],
 	"Add or remove tags:": [
 		"เพิ่มหรือลบแท็ก:"
 	],
@@ -171,6 +186,12 @@
 		"เพิ่มชื่อเรื่อง"
 	],
 	"Add to dictionary": [
+		""
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
 		""
 	],
 	"Admin": [
@@ -194,6 +215,9 @@
 	"All potential ports are in use - please report the issue at %s": [
 		""
 	],
+	"All shared folders:": [
+		""
+	],
 	"Allows debugging mobile plugins. See %s for details.": [
 		""
 	],
@@ -212,6 +236,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
+	],
 	"An error occurred: %s": [
 		""
 	],
@@ -227,6 +254,12 @@
 	"Apply": [
 		"ใช้"
 	],
+	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
+		""
+	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
+		""
+	],
 	"Are you sure you want to renew the authorisation token?": [
 		""
 	],
@@ -237,6 +270,12 @@
 		""
 	],
 	"Aritim Dark": [
+		""
+	],
+	"Associated tags:": [
+		""
+	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
 	],
 	"Attach file": [
@@ -269,6 +308,12 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
+	"Autocomplete Markdown and HTML": [
+		""
+	],
 	"Automatically delete notes in the trash after a number of days": [
 		""
 	],
@@ -281,7 +326,7 @@
 	"Beta": [
 		""
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
+	"Block code": [
 		""
 	],
 	"Bold": [
@@ -296,6 +341,12 @@
 	"by %s": [
 		""
 	],
+	"by word": [
+		""
+	],
+	"Camera": [
+		""
+	],
 	"Can view": [
 		""
 	],
@@ -304,6 +355,9 @@
 	],
 	"Cancel": [
 		"ยกเลิก"
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"กำลังยกเลิก..."
@@ -341,11 +395,17 @@
 	"Change application layout": [
 		""
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		"ตัวอักษร"
 	],
 	"Characters excluding spaces": [
 		"ตัวอักษรไม่รวมวรรค"
+	],
+	"Check elements to display in the toolbar": [
+		""
 	],
 	"Check for updates...": [
 		"ตรวจสอบการอัพเดท..."
@@ -359,6 +419,9 @@
 	"Checking... Please wait.": [
 		"กำลังตรวจสอบ... โปรดรอสักครู่..."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Choose an option": [
 		"เลือก"
 	],
@@ -371,17 +434,26 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		""
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
 	"Client ID: %s": [
 		"Client ID: %s"
 	],
 	"Close": [
 		"ปิด"
 	],
+	"Close side menu": [
+		""
+	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
 		""
 	],
 	"Close Window": [
 		"ปิดหน้าต่าง"
+	],
+	"Closing session...": [
+		""
 	],
 	"Cmd-click to open": [
 		""
@@ -395,10 +467,7 @@
 	"Code Block": [
 		""
 	],
-	"Collapse": [
-		""
-	],
-	"Collapse %s": [
+	"Collapsed": [
 		""
 	],
 	"Coming alarms": [
@@ -413,10 +482,16 @@
 	"Command": [
 		""
 	],
+	"COMMAND": [
+		""
+	],
 	"Command palette": [
 		""
 	],
 	"Command palette...": [
+		""
+	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
 		""
 	],
 	"Compact": [
@@ -440,6 +515,9 @@
 	"Configuration": [
 		"การตั้งค่า"
 	],
+	"Configures the size of scrollbars used in the app.": [
+		""
+	],
 	"Confirm password cannot be empty": [
 		"รหัสผ่านยืนยันไม่สามารถเว้นว่างได้"
 	],
@@ -451,6 +529,9 @@
 	],
 	"Conflicts": [
 		"ขัดแย้ง"
+	],
+	"Connect using your organisation account": [
+		""
 	],
 	"Consolidated billing": [
 		""
@@ -542,6 +623,9 @@
 	"Ctrl-click to open: %s": [
 		""
 	],
+	"current match": [
+		""
+	],
 	"custom order": [
 		""
 	],
@@ -581,6 +665,9 @@
 	"Default": [
 		"ค่าเริ่มต้น"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		""
 	],
@@ -588,6 +675,9 @@
 		"ลบ"
 	],
 	"Delete local data and re-download from sync target": [
+		""
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
 		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
@@ -618,6 +708,12 @@
 		"ลบสมุดบันทึกโดยไม่ถามยืนยัน"
 	],
 	"Detailed": [
+		""
+	],
+	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -659,6 +755,9 @@
 	"Displays the complete information about note.": [
 		"แสดงข้อมูลทั้งหมดของบันทึก"
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"แสดงบันทึกที่เลือก"
 	],
@@ -672,6 +771,18 @@
 		"ทำตอนนี้"
 	],
 	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
+		""
+	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
+	"Document scanner: Title template": [
+		""
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
 		""
 	],
 	"Done": [
@@ -724,6 +835,9 @@
 	],
 	"Edit": [
 		"แก้ไข"
+	],
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit note.": [
 		"แก้ไขบันทึก"
@@ -788,6 +902,9 @@
 	"Enable deflist syntax": [
 		"เปิดใช้งาน deflist syntax"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"เปิดใช้งาน Footnotes"
 	],
@@ -839,6 +956,12 @@
 	"Enabled": [
 		"เปิด"
 	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
+	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
 		""
 	],
@@ -851,6 +974,9 @@
 	"Encryption Config": [
 		"ตั้งค่าการเข้ารหัส"
 	],
+	"Ends voice typing": [
+		""
+	],
 	"Enter code here": [
 		"กรอกรหัสที่นี่"
 	],
@@ -860,6 +986,9 @@
 	"Enter notebook title": [
 		"กรอกชื่อของสมุดบันทึก"
 	],
+	"Entering selection mode": [
+		""
+	],
 	"Enum": [
 		"Enum"
 	],
@@ -867,6 +996,9 @@
 		"ผิดพลาด"
 	],
 	"Error opening note in editor: %s": [
+		""
+	],
+	"Error starting camera: %s": [
 		""
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
@@ -881,10 +1013,10 @@
 	"Exits the application.": [
 		"ออกจากแอปพลิเคชั่น"
 	],
-	"Expand": [
+	"Expand %s": [
 		""
 	],
-	"Expand %s": [
+	"Expanded": [
 		""
 	],
 	"Export": [
@@ -911,10 +1043,19 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		""
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"ผิดพลาดร้ายแรง:"
 	],
 	"Feature flags": [
+		""
+	],
+	"Feedback": [
 		""
 	],
 	"Fetched items: %d/%d.": [
@@ -929,7 +1070,7 @@
 	"File system": [
 		""
 	],
-	"Find and replace": [
+	"Finishes recording": [
 		""
 	],
 	"Firefox Extension": [
@@ -942,6 +1083,12 @@
 		"กำลังซ่อมดัชนีค้นหา..."
 	],
 	"Focus": [
+		""
+	],
+	"Folder \"%s\" is shared with:": [
+		""
+	],
+	"Follow link": [
 		""
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
@@ -980,6 +1127,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		""
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		""
 	],
@@ -987,6 +1137,18 @@
 		""
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
+		""
+	],
+	"Glossary:": [
+		""
+	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
+	"Go to line": [
 		""
 	],
 	"Go to source URL": [
@@ -999,9 +1161,6 @@
 		""
 	],
 	"Header %d": [
-		""
-	],
-	"Headers": [
 		""
 	],
 	"Heading": [
@@ -1025,9 +1184,6 @@
 	"Hide keyboard": [
 		""
 	],
-	"Hide more actions": [
-		""
-	],
 	"Highlight": [
 		""
 	],
@@ -1048,6 +1204,9 @@
 	],
 	"Icon": [
 		"ไอคอน"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
@@ -1094,9 +1253,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		""
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		""
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		""
 	],
@@ -1115,7 +1271,13 @@
 	"In: %s": [
 		"ใน: %s"
 	],
+	"Incoming shares:": [
+		""
+	],
 	"Incompatible": [
+		""
+	],
+	"Incomplete": [
 		""
 	],
 	"Increase indent level": [
@@ -1125,6 +1287,9 @@
 		""
 	],
 	"Indent more": [
+		""
+	],
+	"Info": [
 		""
 	],
 	"Information": [
@@ -1157,6 +1322,9 @@
 	"Invalid command: \"%s\"": [
 		"คำสั่งไม่ถูกต้อง: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Italic": [
 		"ตัวเอียง"
 	],
@@ -1169,7 +1337,7 @@
 	"Items that cannot be synchronised": [
 		"รายการที่ไม่สามารถทำการซิงโครไนซ์"
 	],
-	"Join us on Twitter": [
+	"Join us on %s": [
 		""
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
@@ -1190,6 +1358,12 @@
 	"Joplin Server URL": [
 		""
 	],
+	"Joplin SSO Authentication": [
+		""
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		""
+	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
 		""
 	],
@@ -1199,16 +1373,19 @@
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
 		""
 	],
-	"KaTeX": [
-		""
-	],
 	"Keyboard Mode": [
 		"โหมดของคีย์บอร์ด"
 	],
 	"Keychain Supported: %s": [
 		""
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
+		""
+	],
+	"Label": [
 		""
 	],
 	"Landscape": [
@@ -1216,6 +1393,9 @@
 	],
 	"Language": [
 		"ภาษา"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"ข้อผิดพลาดล่าสุด: %s"
@@ -1253,13 +1433,7 @@
 	"Link has been copied to clipboard!": [
 		"ลิงก์ได้ถูกคัดลอกไปที่คลิปบอร์ดแล้ว"
 	],
-	"Links with protocol \"%s\" are not supported": [
-		"ไม่รองรับลิงก์ที่ใช้โปรโตคอลนี้ “%s”"
-	],
 	"List item": [
-		""
-	],
-	"Lists": [
 		""
 	],
 	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
@@ -1286,6 +1460,9 @@
 	"Manage your plugins": [
 		""
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manual": [
 		"ทำด้วยตนเอง"
 	],
@@ -1293,6 +1470,9 @@
 		"Markdown"
 	],
 	"Markdown + Front Matter": [
+		""
+	],
+	"Markdown editor: Render markup in editor": [
 		""
 	],
 	"Marks a to-do as done.": [
@@ -1307,6 +1487,12 @@
 	"Master Key %s": [
 		"มาสเตอร์คีย์ %s"
 	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
+	],
 	"Max concurrent connections": [
 		""
 	],
@@ -1316,13 +1502,22 @@
 	"Media player, math, diagrams, table of contents": [
 		""
 	],
+	"Medium": [
+		""
+	],
 	"Minimise": [
+		""
+	],
+	"Missing camera permission": [
 		""
 	],
 	"Missing keys": [
 		""
 	],
 	"Missing Master Keys": [
+		""
+	],
+	"Missing permission to record audio.": [
 		""
 	],
 	"Missing required argument: %s": [
@@ -1343,11 +1538,17 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"ย้ายบันทึก %d ไปที่สมุดบันทึก “%s”?"
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
 	],
 	"Move to notebook...": [
 		"ย้ายไปสมุดบันทึก..."
+	],
+	"Move up": [
+		""
 	],
 	"n": [
 		"n"
@@ -1356,9 +1557,6 @@
 		"N"
 	],
 	"Never resize": [
-		""
-	],
-	"New": [
 		""
 	],
 	"New note": [
@@ -1373,14 +1571,14 @@
 	"New sub-notebook": [
 		"สร้างสมุดบันทึกย่อยใหม่"
 	],
-	"New tags:": [
-		"แท็กใหม่:"
-	],
 	"New to-do": [
 		"สร้าง to-do"
 	],
 	"New version: %s": [
 		"เวอร์ชั่นใหม่: %s"
+	],
+	"next": [
+		""
 	],
 	"Next match": [
 		""
@@ -1403,9 +1601,6 @@
 	"No active notebook.": [
 		"ไม่มีสมุดบันทึกที่ถูกใช้งาน"
 	],
-	"No item with ID %s": [
-		"ไม่มีรายการที่มี ID %s"
-	],
 	"No new invitations": [
 		""
 	],
@@ -1427,16 +1622,28 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		""
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
+	"None": [
+		""
+	],
 	"Nord": [
 		"Nord"
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		""
 	],
+	"Not checked": [
+		""
+	],
 	"Not downloaded": [
 		"ยังไม่ได้ดาวน์โหลด"
 	],
 	"Not generated": [
+		""
+	],
+	"Not useful": [
 		""
 	],
 	"note": [
@@ -1487,11 +1694,17 @@
 	"Numbered List": [
 		"รายการแบบตัวเลข"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"ตกลง"
 	],
 	"OLED Dark": [
 		"OLED Dark"
+	],
+	"on line": [
+		""
 	],
 	"One of your master keys use an obsolete encryption method.": [
 		""
@@ -1514,10 +1727,22 @@
 	"Open %s": [
 		"เปิด %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
 		""
 	],
+	"Open primary app instance...": [
+		""
+	],
+	"Open secondary app instance...": [
+		""
+	],
 	"Open Sync Wizard...": [
+		""
+	],
+	"Open-source licences": [
 		""
 	],
 	"Open...": [
@@ -1532,8 +1757,20 @@
 	"Options": [
 		"ตัวเลือก"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
+	"Other": [
+		""
+	],
 	"Page size for PDF export": [
 		"ขนาดของหน้า สำหรับการส่งออก PDF"
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
+		""
 	],
 	"Password": [
 		"รหัสผ่าน"
@@ -1556,11 +1793,11 @@
 	"PDF File": [
 		"ไฟล์ PDF"
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
-	"Permission to use camera": [
-		"สิทธิ์การเข้าใช้งานกล้อง"
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		""
@@ -1575,6 +1812,9 @@
 		""
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
+		""
+	],
+	"Please provide the recipient email": [
 		""
 	],
 	"Please record your voice...": [
@@ -1593,6 +1833,9 @@
 		""
 	],
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
+		""
+	],
+	"Please wait while we load your organisation sign-in page...": [
 		""
 	],
 	"Please wait...": [
@@ -1619,6 +1862,9 @@
 	"Possible values: %s.": [
 		"ค่าที่เป็นไปได้: %s"
 	],
+	"Prefer JSON output.": [
+		""
+	],
 	"Preferences": [
 		"การตั้งค่า"
 	],
@@ -1629,6 +1875,9 @@
 		""
 	],
 	"Preferred light theme": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
@@ -1642,6 +1891,9 @@
 	],
 	"Press to set the decryption password.": [
 		"โปรดตั้งรหัสผ่านสำหรับการถอดรหัส"
+	],
+	"previous": [
+		""
 	],
 	"Previous match": [
 		""
@@ -1697,10 +1949,25 @@
 	"Publish notes to the internet": [
 		""
 	],
+	"Publish/unpublish": [
+		""
+	],
+	"Published at URL: %s": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
 	"Quit": [
 		"ออก"
 	],
+	"Re-download model": [
+		""
+	],
 	"Re-upload local data to sync target": [
+		""
+	],
+	"Read more": [
 		""
 	],
 	"Read more about it": [
@@ -1721,10 +1988,19 @@
 	"Recipients:": [
 		""
 	],
+	"Recognise text:": [
+		""
+	],
+	"Recognize handwritten image": [
+		""
+	],
 	"Recommended": [
 		""
 	],
 	"Recommended plugins": [
+		""
+	],
+	"Record audio": [
 		""
 	],
 	"Redo": [
@@ -1754,6 +2030,9 @@
 	"Renames the given <item> (note or notebook) to <name>.": [
 		""
 	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
+	],
 	"Renew token": [
 		""
 	],
@@ -1764,6 +2043,12 @@
 		""
 	],
 	"Replace: ": [
+		""
+	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
 		""
 	],
 	"Report an issue": [
@@ -1808,6 +2093,12 @@
 	"Reverses the sorting order.": [
 		""
 	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		""
 	],
@@ -1841,6 +2132,12 @@
 	"Save changes": [
 		"บันทึกการเปลี่ยนแปลง"
 	],
+	"Scanned code": [
+		""
+	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"ค้นหา"
 	],
@@ -1865,6 +2162,18 @@
 	"Select all": [
 		"เลือกทั้งหมด"
 	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
+	"Selection deleted": [
+		""
+	],
+	"Self-hosted": [
+		""
+	],
 	"Server is already running on port %d": [
 		"เซิร์ฟเวอร์กำลังทำงานอยู่แล้วที่พอร์ต %d"
 	],
@@ -1886,6 +2195,9 @@
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		""
 	],
+	"Settings": [
+		""
+	],
 	"Share": [
 		"แบ่งปัน"
 	],
@@ -1893,6 +2205,9 @@
 		""
 	],
 	"Share permissions": [
+		""
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
 		""
 	],
 	"Show all": [
@@ -1928,6 +2243,9 @@
 	"Skipped: %d.": [
 		"ข้าม: %d"
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		"Solarised Dark"
 	],
@@ -1942,6 +2260,12 @@
 	],
 	"Some items cannot be synchronised. Press for more info.": [
 		"มีบางรายการที่ไม่สามารถทำการซิงโครไนซ์ได้ กดเพื่อดูข้อมูลเพิ่มเติม"
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"จัดเรียงสมุดบันทึกโดย"
@@ -1958,6 +2282,9 @@
 	"Source format: %s": [
 		"ฟอร์แมตต้นฉบับ: %s"
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -1972,6 +2299,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"เริ่มต้นแอปพลิเคชั่นโดยย่อไว้ที่ไอคอน System tray"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		""
@@ -2024,6 +2354,12 @@
 	"Subscript": [
 		""
 	],
+	"Success": [
+		""
+	],
+	"Suggestions": [
+		""
+	],
 	"Superscript": [
 		""
 	],
@@ -2033,7 +2369,13 @@
 	"Swap line up": [
 		""
 	],
+	"Switch to back-facing camera": [
+		""
+	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
+		""
+	],
+	"Sync": [
 		""
 	],
 	"Sync as many devices as you want": [
@@ -2084,11 +2426,14 @@
 	"Synchronising...": [
 		"กำลังซิงโครไนซ์..."
 	],
+	"Tab indents": [
+		""
+	],
+	"Tab moves focus": [
+		""
+	],
 	"Tabloid": [
 		"Tabloid"
-	],
-	"tag1, tag2, ...": [
-		""
 	],
 	"Tagged: %d.": [
 		"แท็ก: %d"
@@ -2111,16 +2456,13 @@
 	"Text editor command": [
 		""
 	],
-	"The [Web Clipper](%s) is a browser extension that allows you to save web pages and screenshots from your browser.": [
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
 		""
 	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
-		""
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
 		""
 	],
 	"The application has been authorised - you may now close this browser tab.": [
@@ -2168,13 +2510,16 @@
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		""
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"แอป Joplin mobile ยังไม่รองรับชนิดของลิงก์นี้: %s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
 		""
 	],
 	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		""
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		""
 	],
 	"The master key has been upgraded successfully!": [
@@ -2184,6 +2529,9 @@
 		""
 	],
 	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
+		""
+	],
+	"The note has been converted to Markdown and the original note has been moved to the trash": [
 		""
 	],
 	"The note was successfully moved to the trash.": [
@@ -2219,7 +2567,13 @@
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		""
 	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
+	],
 	"The Web Clipper needs your authorisation to access your data.": [
+		""
+	],
+	"The web clipper service cannot be enabled in this instance of Joplin.": [
 		""
 	],
 	"The web clipper service is enabled and set to auto-start.": [
@@ -2264,13 +2618,19 @@
 	"This attachment is not downloaded or not decrypted yet": [
 		""
 	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"ไฟล์แนบนี้ยังไม่ได้ดาวน์โหลดหรือยังไม่ได้ถอดรหัส"
-	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Token สำหรับการขออนุมัตินี้ ใช้เพื่ออนุญาตแอปพลิเคชั่น third-party เพื่อเข้าถึง Joplin"
 	],
 	"This drawing may have unsaved changes.": [
+		""
+	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
 		""
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
@@ -2284,6 +2644,9 @@
 	],
 	"This note has no history": [
 		"บันทึกนี้ไม่มีประวัติย้อนหลัง"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -2310,6 +2673,9 @@
 		"รูปแบบเวลา"
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
+		""
+	],
+	"To create a new tag, type the name and press enter.": [
 		""
 	],
 	"To delete a tag, untag the associated notes.": [
@@ -2363,6 +2729,9 @@
 	"Try again": [
 		"ลองอีกครั้ง"
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"พิมพ์ `help [คำสั่ง]` สำหรับข้อมูลเพิ่มเติมของคำสั่งนั้นๆ หรือพิมพ์ `help all` สำหรับข้อมูลการใช้งานทั้งหมด"
 	],
@@ -2378,6 +2747,12 @@
 	"Unable to share log data. Reason: %s": [
 		""
 	],
+	"Unable to share note data. Reason: %s": [
+		""
+	],
+	"Unchecked": [
+		""
+	],
 	"Undo": [
 		""
 	],
@@ -2391,6 +2766,9 @@
 		""
 	],
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
+		""
+	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
 		""
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
@@ -2453,6 +2831,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		""
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		""
 	],
@@ -2474,10 +2855,16 @@
 	"Vim": [
 		"Vim"
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		""
 	],
 	"Voice typing...": [
+		""
+	],
+	"Voice typing: Glossary": [
 		""
 	],
 	"We have a system for reporting and removing problematic plugins.": [
@@ -2516,6 +2903,9 @@
 	"When creating a new to-do:": [
 		"เมื่อสร้าง to-do ใหม่:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
@@ -2538,6 +2928,15 @@
 		""
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You do not have any installed plugin.": [
@@ -2563,9 +2962,6 @@
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		""
-	],
-	"Your permission to use your camera is required.": [
-		"จำเป็นต้องมีสิทธ์การเข้าถึงกล้อง"
 	],
 	"Your version: %s": [
 		"เวอร์ชั่นของคุณ: %s"

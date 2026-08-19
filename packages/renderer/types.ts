@@ -1,24 +1,102 @@
-import { MarkupLanguage } from './MarkupToHtml';
 import { Options as NoteStyleOptions } from './noteStyle';
+
+export enum MarkupLanguage {
+	Markdown = 1,
+	Html = 2,
+	Any = 3,
+}
 
 export type ItemIdToUrlHandler = (resourceId: string, urlParameters?: string)=> string;
 
-interface ResourceEntity {
-	id: string;
+// Subset of the application theme object accessed by the renderer. Fields are
+// marked optional because the renderer is called from many entry points (lib,
+// server, app-mobile, app-desktop, tests) with theme objects of varying
+// shapes — including bare {} in tests, ThemeStyle from @joplin/lib, and
+// merges with `defaultNoteStyle` done inside MdToHtml. Treat this as a loose
+// structural description rather than a strict contract.
+export interface RendererTheme {
+	cacheKey?: number;
+	appearance?: string;
+
+	color?: string;
+	backgroundColor?: string;
+	backgroundColorHover3?: string;
+	codeBackgroundColor?: string;
+	codeBorderColor?: string;
+	codeColor?: string;
+	codeFontSize?: string | number;
+	dividerColor?: string;
+	raisedBackgroundColor?: string;
+	tableBackgroundColor?: string;
+	urlColor?: string;
+	markHighlightBackgroundColor?: string;
+	searchMarkerColor?: string;
+
+	scrollbarThumbColor?: string;
+	scrollbarThumbColorHover?: string;
+
+	fontSize?: number;
+	noteViewerFontSize?: string | number;
+	lineHeight?: string;
+	listTabSize?: string;
+	bodyPaddingTop?: string | number;
+	bodyPaddingBottom?: string | number;
+	blockQuoteOpacity?: number;
+
+	buttonStyle?: {
+		backgroundColor: string;
+		border: string;
+		borderRadius: number;
+	};
+}
+
+export interface ResourceEntity {
+	id?: string;
 	title?: string;
 	mime?: string;
 	file_extension?: string;
+	updated_time?: number;
+
+	encryption_applied?: number;
+	encryption_blob_encrypted?: number;
 }
+
+interface ResourceLocalState {
+	fetch_status?: number;
+}
+
+export interface ResourceInfo {
+	localState: ResourceLocalState;
+	item: ResourceEntity;
+}
+
+export type ResourceInfos = Record<string, ResourceInfo>;
 
 export interface FsDriver {
 	writeFile: (path: string, content: string, encoding: string)=> Promise<void>;
 	exists: (path: string)=> Promise<boolean>;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Return is used loosely as a RenderResultPluginAsset; tightening it would force logic changes
 	cacheCssToFile: (cssStrings: string[])=> Promise<any>;
 }
 
+export interface RenderOptionsGlobalSettings {
+	'markdown.plugin.abc.options': string;
+}
+
+interface SettingModel {
+	value: <T>(key: string)=> T;
+}
+
+export const getGlobalSettings = (settingModel?: SettingModel): RenderOptionsGlobalSettings => {
+	return {
+		'markdown.plugin.abc.options': settingModel ? settingModel.value<string>('markdown.plugin.abc.options') : '',
+	};
+};
+
 export interface RenderOptions {
 	contentMaxWidth?: number;
+	scrollbarSize?: number;
+	baseFontFamily?: string;
 	bodyOnly?: boolean;
 	splitted?: boolean;
 	enableLongPress?: boolean;
@@ -27,11 +105,9 @@ export interface RenderOptions {
 	externalAssetsOnly?: boolean;
 	highlightedKeywords?: string[];
 	codeTheme?: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	theme?: any;
+	theme?: RendererTheme;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	plugins?: Record<string, any>;
+	plugins?: Record<string, Record<string, unknown>>;
 	audioPlayerEnabled?: boolean;
 	videoPlayerEnabled?: boolean;
 	pdfViewerEnabled?: boolean;
@@ -45,13 +121,23 @@ export interface RenderOptions {
 	vendorDir?: string;
 	itemIdToUrl?: ItemIdToUrlHandler;
 	allowedFilePrefixes?: string[];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	settingValue?: (pluginId: string, key: string)=> any;
+	settingValue?: (pluginId: string, key: string)=> unknown;
 
-	resources?: Record<string, ResourceEntity>;
+	resources?: ResourceInfos;
+
+	editPopupFiletypes?: string[];
+	createEditPopupSyntax?: string;
+	destroyEditPopupSyntax?: string;
+
+	platformName?: string;
+
+	showNoteLinkIcon?: boolean;
 
 	// HtmlToHtml only
 	whiteBackgroundNoteRendering?: boolean;
+
+	// This can be used to give access to global settings to Markdown renderer plugins
+	globalSettings?: RenderOptionsGlobalSettings;
 }
 
 export interface RenderResultPluginAsset {
@@ -75,11 +161,9 @@ export interface RenderResult {
 }
 
 export interface MarkupRenderer {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	render(markup: string, theme: any, options: RenderOptions): Promise<RenderResult>;
+	render(markup: string, theme: RendererTheme, options: RenderOptions): Promise<RenderResult>;
 	clearCache(): void;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	allAssets(theme: any, noteStyleOptions: NoteStyleOptions|null): Promise<RenderResultPluginAsset[]>;
+	allAssets(theme: RendererTheme, noteStyleOptions: NoteStyleOptions|null): Promise<RenderResultPluginAsset[]>;
 }
 
 interface StripMarkupOptions {
@@ -87,12 +171,10 @@ interface StripMarkupOptions {
 }
 
 export interface MarkupToHtmlConverter {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: any): Promise<RenderResult>;
+	render(markupLanguage: MarkupLanguage, markup: string, theme: RendererTheme, options: RenderOptions): Promise<RenderResult>;
 	clearCache(markupLanguage: MarkupLanguage): void;
 	stripMarkup(markupLanguage: MarkupLanguage, markup: string, options: StripMarkupOptions): string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	allAssets(markupLanguage: MarkupLanguage, theme: any, noteStyleOptions: NoteStyleOptions|null): Promise<RenderResultPluginAsset[]>;
+	allAssets(markupLanguage: MarkupLanguage, theme: RendererTheme, noteStyleOptions: NoteStyleOptions|null): Promise<RenderResultPluginAsset[]>;
 }
 
 export interface OptionsResourceModel {

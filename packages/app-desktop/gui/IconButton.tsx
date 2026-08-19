@@ -3,11 +3,9 @@ import { themeStyle } from '@joplin/lib/theme';
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	style: any;
+	style?: React.CSSProperties;
 	iconName: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onClick: Function;
+	onClick: ()=> void;
 }
 
 class IconButton extends React.Component<Props> {
@@ -20,7 +18,7 @@ class IconButton extends React.Component<Props> {
 		};
 		const icon = <i style={iconStyle} className={`fas ${this.props.iconName}`}></i>;
 
-		const rootStyle = {
+		const rootStyle: React.CSSProperties = {
 			display: 'flex',
 			textDecoration: 'none',
 			padding: 10,

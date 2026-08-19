@@ -1,5 +1,5 @@
 import shim from '@joplin/lib/shim';
-const { dirname } = require('@joplin/lib/path-utils');
+import { dirname } from '@joplin/lib/path-utils';
 import Setting from '@joplin/lib/models/Setting';
 const pluginAssets = require('./pluginAssets/index');
 import KvStore from '@joplin/lib/services/KvStore';
@@ -19,7 +19,7 @@ export default class PluginAssetsLoader {
 	}
 
 	private destDir_() {
-		return `${Setting.value('resourceDir')}/pluginAssets`;
+		return Setting.value('pluginAssetDir');
 	}
 
 	private async importAssetsMobile_() {

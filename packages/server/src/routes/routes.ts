@@ -11,6 +11,9 @@ import apiSessions from './api/sessions';
 import apiShares from './api/shares';
 import apiShareUsers from './api/share_users';
 import apiUsers from './api/users';
+import apiApplicationAuth from './api/application_auth';
+import apiLogin from './api/login';
+import apiTranscribe from './api/transcribe';
 
 import adminDashboard from './admin/dashboard';
 import adminEmails from './admin/emails';
@@ -34,6 +37,9 @@ import indexStripe from './index/stripe';
 import indexTerms from './index/terms';
 import indexUpgrade from './index/upgrade';
 import indexUsers from './index/users';
+import indexMFA from './index/mfa';
+import indexApplications from './index/applications';
+import indexRecoveryCodes from './index/recovery_codes';
 
 import defaultRoute from './default';
 
@@ -45,10 +51,14 @@ const routes: Routers = {
 	'api/items': apiItems,
 	'api/locks': apiLocks,
 	'api/ping': apiPing,
+	'api/saml': apiLogin,
+	'api/login_with_code': apiLogin,
 	'api/sessions': apiSessions,
 	'api/share_users': apiShareUsers,
 	'api/shares': apiShares,
 	'api/users': apiUsers,
+	'api/application_auth': apiApplicationAuth,
+	'api/transcribe': apiTranscribe,
 
 	'admin/dashboard': adminDashboard,
 	'admin/emails': adminEmails,
@@ -72,6 +82,10 @@ const routes: Routers = {
 	'terms': indexTerms,
 	'upgrade': indexUpgrade,
 	'users': indexUsers,
+	'mfa': indexMFA,
+	'applications': indexApplications,
+	'recovery_codes/auth': indexRecoveryCodes,
+	'recovery_codes': indexRecoveryCodes,
 
 	'': defaultRoute,
 };

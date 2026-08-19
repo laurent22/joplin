@@ -1,6 +1,7 @@
-const React = require('react');
+import * as React from 'react';
+import { Dispatch } from 'redux';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-const { View, StyleSheet } = require('react-native');
+import { View, StyleSheet } from 'react-native';
 import createRootStyle from '../../utils/createRootStyle';
 import ScreenHeader from '../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
@@ -19,8 +20,7 @@ interface Navigation {
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 	navigation: Navigation;
 }
 

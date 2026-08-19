@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, useMemo, ForwardedRef, useContext } from 'react';
+import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, ForwardedRef, useContext } from 'react';
 
+import { RenderResultPluginAsset } from '@joplin/renderer/types';
 import { EditorCommand, MarkupToHtmlOptions, NoteBodyEditorProps, NoteBodyEditorRef, OnChangeEvent } from '../../../utils/types';
-import { getResourcesFromPasteEvent } from '../../../utils/resourceHandling';
+import { getResourceFromClipboardImage, getResourcesFromPasteEvent, plainTextLooksLikeAffinityImageData } from '../../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../../utils/types';
 import NoteTextViewer from '../../../../NoteTextViewer';
 import Editor from './Editor';
@@ -12,11 +13,10 @@ import Note from '@joplin/lib/models/Note';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../../../../services/bridge';
 import shim from '@joplin/lib/shim';
-import { MarkupToHtml } from '@joplin/renderer';
-const { clipboard } = require('electron');
+import { clipboard } from 'electron';
 import { reg } from '@joplin/lib/registry';
 import ErrorBoundary from '../../../../ErrorBoundary';
-import { EditorKeymap, EditorLanguageType, EditorSettings, SearchState, UserEventSource } from '@joplin/editor/types';
+import { SearchState, UserEventSource } from '@joplin/editor/types';
 import useStyles from '../utils/useStyles';
 import { EditorEvent, EditorEventType } from '@joplin/editor/events';
 import useScrollHandler from '../utils/useScrollHandler';
@@ -30,14 +30,17 @@ import useEditorSearchHandler from '../utils/useEditorSearchHandler';
 import CommandService from '@joplin/lib/services/CommandService';
 import useRefocusOnVisiblePaneChange from './utils/useRefocusOnVisiblePaneChange';
 import { WindowIdContext } from '../../../../NewWindowOrIFrame';
+import eventManager, { EventName, ResourceChangeEvent } from '@joplin/lib/eventManager';
+import useSyncEditorValue from './utils/useSyncEditorValue';
+import { getGlobalSettings } from '@joplin/renderer/types';
+import useEditorSettings from './utils/useEditorSettings';
 
 const logger = Logger.create('CodeMirror6');
 const logDebug = (message: string) => logger.debug(message);
 
 interface RenderedBody {
 	html: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	pluginAssets: any[];
+	pluginAssets: RenderResultPluginAsset[];
 }
 
 function defaultRenderedBody(): RenderedBody {
@@ -91,47 +94,21 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	const editorCutText = useCallback(() => {
 		if (editorRef.current) {
-			const selections = editorRef.current.getSelections();
-			if (selections.length > 0 && selections[0]) {
-				clipboard.writeText(selections[0]);
-				// Easy way to wipe out just the first selection
-				selections[0] = '';
-				editorRef.current.replaceSelections(selections);
-			} else {
-				const cursor = editorRef.current.getCursor();
-				const line = editorRef.current.getLine(cursor.line);
-				clipboard.writeText(`${line}\n`);
-				const startLine = editorRef.current.getCursor('head');
-				startLine.ch = 0;
-				const endLine = {
-					line: startLine.line + 1,
-					ch: 0,
-				};
-				editorRef.current.replaceRange('', startLine, endLine);
-			}
+			editorRef.current.cutText(text => clipboard.writeText(text));
 		}
 	}, []);
 
 	const editorCopyText = useCallback(() => {
 		if (editorRef.current) {
-			const selections = editorRef.current.getSelections();
-
-			// Handle the case when there is a selection - copy the selection to the clipboard
-			// When there is no selection, the selection array contains an empty string.
-			if (selections.length > 0 && selections[0]) {
-				clipboard.writeText(selections[0]);
-			} else {
-				// This is the case when there is no selection - copy the current line to the clipboard
-				const cursor = editorRef.current.getCursor();
-				const line = editorRef.current.getLine(cursor.line);
-				clipboard.writeText(line);
-			}
+			editorRef.current.copyText(text => clipboard.writeText(text));
 		}
 	}, []);
 
 	const editorPasteText = useCallback(async () => {
 		if (editorRef.current) {
-			const modifiedMd = await Note.replaceResourceExternalToInternalLinks(clipboard.readText(), { useAbsolutePaths: true });
+			const pastedText = clipboard.readText();
+			const resourceMd = plainTextLooksLikeAffinityImageData(pastedText) ? await getResourceFromClipboardImage() : null;
+			const modifiedMd = resourceMd || await Note.replaceResourceExternalToInternalLinks(pastedText, { useAbsolutePaths: true });
 			editorRef.current.insertText(modifiedMd, UserEventSource.Paste);
 		}
 	}, []);
@@ -166,8 +143,9 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			},
 			scrollTo: (options: ScrollOptions) => {
 				if (options.type === ScrollOptionTypes.Hash) {
-					if (!webviewRef.current) return;
-					webviewRef.current.send('scrollToHash', options.value as string);
+					const hash: string = options.value;
+					webviewRef.current?.send('scrollToHash', hash);
+					editorRef.current.jumpToHash(hash);
 				} else if (options.type === ScrollOptionTypes.Percent) {
 					const percent = options.value as number;
 					setEditorPercentScroll(percent);
@@ -190,8 +168,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 				let commandOutput = null;
 				if (cmd.name in commands) {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					commandOutput = (commands as any)[cmd.name](cmd.value);
+					commandOutput = (commands as unknown as Record<string, (value: unknown)=> unknown>)[cmd.name](cmd.value);
 				} else if (editorRef.current.supportsCommand(cmd.name)) {
 					commandOutput = editorRef.current.execCommand(cmd.name);
 				} else if (editorRef.current.supportsJoplinCommand(cmd.name)) {
@@ -245,6 +222,8 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				useCustomPdfViewer: props.useCustomPdfViewer,
 				noteId: props.noteId,
 				vendorDir: bridge().vendorDir(),
+				globalSettings: getGlobalSettings(Setting),
+				showNoteLinkIcon: props.showNoteLinkIcon,
 			}));
 
 			if (cancelled) return;
@@ -267,8 +246,19 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 	}, [
 		props.content, props.contentKey, renderedBodyContentKey, props.contentMarkupLanguage,
 		props.visiblePanes, props.resourceInfos, props.markupToHtml, props.contentMaxWidth,
-		props.noteId, props.useCustomPdfViewer,
+		props.noteId, props.useCustomPdfViewer, props.showNoteLinkIcon,
 	]);
+
+	useEffect(() => {
+		const listener = (event: ResourceChangeEvent) => {
+			editorRef.current?.onResourceChanged(event.id);
+		};
+
+		eventManager.on(EventName.ResourceChange, listener);
+		return () => {
+			eventManager.off(EventName.ResourceChange, listener);
+		};
+	}, [props.resourceInfos]);
 
 	useEffect(() => {
 		if (!webviewReady) return;
@@ -278,8 +268,12 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 			lineCount = editorRef.current.editor.state.doc.lines;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const options: any = {
+		const options: {
+			pluginAssets: RenderResultPluginAsset[];
+			downloadResources: string;
+			markupLineCount: number;
+			percent?: number;
+		} = {
 			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),
 			markupLineCount: lineCount,
@@ -301,25 +295,6 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		}
 	}, [renderedBody, webviewReady, getLineScrollPercent, setEditorPercentScroll]);
 
-	const cellEditorStyle = useMemo(() => {
-		const output = { ...styles.cellEditor };
-		if (!props.visiblePanes.includes('editor')) {
-			output.display = 'none'; // Seems to work fine since the refactoring
-		}
-
-		return output;
-	}, [styles.cellEditor, props.visiblePanes]);
-
-	const cellViewerStyle = useMemo(() => {
-		const output = { ...styles.cellViewer };
-		if (!props.visiblePanes.includes('viewer')) {
-			output.display = 'none';
-		} else if (!props.visiblePanes.includes('editor')) {
-			output.borderLeftStyle = 'none';
-		}
-		return output;
-	}, [styles.cellViewer, props.visiblePanes]);
-
 	useRefocusOnVisiblePaneChange({ editorRef, webviewRef, visiblePanes: props.visiblePanes });
 
 	useEditorSearchHandler({
@@ -334,6 +309,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	useContextMenu({
 		plugins: props.plugins,
+		dispatch: props.dispatch,
 		editorCutText, editorCopyText, editorPaste,
 		editorRef,
 		editorClassName: 'cm-editor',
@@ -347,6 +323,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		} else if (event.kind === EditorEventType.Change) {
 			codeMirror_change(event.value);
 		} else if (event.kind === EditorEventType.SelectionRangeChange) {
+			props.onCursorMotion({ markdown: event.from });
 			setSelectionRange({ from: event.from, to: event.to });
 		} else if (event.kind === EditorEventType.UpdateSearchDialog) {
 			if (lastSearchState.current?.searchText !== event.searchState.searchText) {
@@ -357,61 +334,45 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 				props.setShowLocalSearch(event.searchState.dialogVisible);
 			}
 			lastSearchState.current = event.searchState;
+		} else if (event.kind === EditorEventType.FollowLink) {
+			void CommandService.instance().execute('openItem', event.link);
 		}
-	}, [editor_scroll, codeMirror_change, props.setLocalSearch, props.setShowLocalSearch]);
+	}, [editor_scroll, codeMirror_change, props.setLocalSearch, props.setShowLocalSearch, props.onCursorMotion]);
 
 	const onSelectPastBeginning = useCallback(() => {
 		void CommandService.instance().execute('focusElement', 'noteTitle');
 	}, []);
 
-	const editorSettings = useMemo((): EditorSettings => {
-		const isHTMLNote = props.contentMarkupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML;
+	const initialCursorLocationRef = useRef(0);
+	initialCursorLocationRef.current = props.initialCursorLocation.markdown ?? 0;
 
-		let keyboardMode = EditorKeymap.Default;
-		if (props.keyboardMode === 'vim') {
-			keyboardMode = EditorKeymap.Vim;
-		} else if (props.keyboardMode === 'emacs') {
-			keyboardMode = EditorKeymap.Emacs;
-		}
+	useSyncEditorValue({
+		content: props.content,
+		visiblePanes: props.visiblePanes,
+		onMessage: props.onMessage,
+		editorRef,
+		noteId: props.noteId,
+		initialCursorLocationRef,
+	});
 
-		return {
-			language: isHTMLNote ? EditorLanguageType.Html : EditorLanguageType.Markdown,
-			readOnly: props.disabled,
-			katexEnabled: Setting.value('markdown.plugin.katex'),
-			themeData: {
-				...styles.globalTheme,
-				marginLeft: 0,
-				marginRight: 0,
-				monospaceFont: Setting.value('style.editor.monospaceFontFamily'),
-			},
-			automatchBraces: Setting.value('editor.autoMatchingBraces'),
-			autocompleteMarkup: Setting.value('editor.autocompleteMarkup'),
-			useExternalSearch: false,
-			ignoreModifiers: true,
-			spellcheckEnabled: Setting.value('editor.spellcheckBeta'),
-			keymap: keyboardMode,
-			indentWithTabs: true,
-			editorLabel: _('Markdown editor'),
-		};
-	}, [
-		props.contentMarkupLanguage, props.disabled, props.keyboardMode, styles.globalTheme,
-	]);
-
-	// Update the editor's value
-	useEffect(() => {
-		if (editorRef.current?.updateBody(props.content)) {
-			editorRef.current?.clearHistory();
-		}
-	}, [props.content]);
+	const settings = useEditorSettings({
+		baseTheme: styles.globalTheme,
+		contentMarkupLanguage: props.contentMarkupLanguage,
+		disabled: props.disabled,
+		keyboardMode: props.keyboardMode,
+		tabMovesFocus: props.tabMovesFocus,
+	});
 
 	const renderEditor = () => {
 		return (
-			<div style={cellEditorStyle}>
+			<div className='editor'>
 				<Editor
 					style={styles.editor}
 					initialText={props.content}
+					initialSelectionRef={initialCursorLocationRef}
+					initialNoteId={props.noteId}
 					ref={editorRef}
-					settings={editorSettings}
+					settings={settings}
 					pluginStates={props.plugins}
 					onPasteFile={null}
 					onEvent={onEditorEvent}
@@ -420,6 +381,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 					onSelectPastBeginning={onSelectPastBeginning}
 					externalSearch={props.searchMarkers}
 					useLocalSearch={props.useLocalSearch}
+					onLocalize={_}
 				/>
 			</div>
 		);
@@ -427,7 +389,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 
 	const renderViewer = () => {
 		return (
-			<div style={cellViewerStyle}>
+			<div className='viewer'>
 				<NoteTextViewer
 					ref={webviewRef}
 					themeId={props.themeId}
@@ -440,8 +402,18 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 		);
 	};
 
-	const windowId = useContext(WindowIdContext);
+	const editorViewerRow = (
+		<div className={[
+			'note-editor-viewer-row',
+			props.visiblePanes.includes('editor') ? '-show-editor' : '',
+			props.visiblePanes.includes('viewer') ? '-show-viewer' : '',
+		].join(' ')}>
+			{renderEditor()}
+			{renderViewer()}
+		</div>
+	);
 
+	const windowId = useContext(WindowIdContext);
 	return (
 		<ErrorBoundary message="The text editor encountered a fatal error and could not continue. The error might be due to a plugin, so please try to disable some of them and try again.">
 			<div style={styles.root} ref={rootRef}>
@@ -449,10 +421,7 @@ const CodeMirror = (props: NoteBodyEditorProps, ref: ForwardedRef<NoteBodyEditor
 					<Toolbar themeId={props.themeId} windowId={windowId}/>
 					{props.noteToolbar}
 				</div>
-				<div style={styles.rowEditorViewer}>
-					{renderEditor()}
-					{renderViewer()}
-				</div>
+				{editorViewerRow}
 			</div>
 		</ErrorBoundary>
 	);

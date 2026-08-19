@@ -2,7 +2,7 @@ import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/utils/Logger';
 import { FunctionComponent } from 'react';
-import { join } from 'path';
+import { join, basename } from 'path';
 import { ConfigScreenStyles } from '../configScreenStyles';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import pickDocument from '../../../../utils/pickDocument';
@@ -10,68 +10,106 @@ import makeImportExportCacheDirectory from './utils/makeImportExportCacheDirecto
 import shim from '@joplin/lib/shim';
 import TaskButton, { OnProgressCallback, SetAfterCompleteListenerCallback, TaskStatus } from './TaskButton';
 import { Platform } from 'react-native';
+import { FolderEntity } from '@joplin/lib/services/database/types';
+import Folder from '@joplin/lib/models/Folder';
+import { fileExtension } from '@joplin/lib/path-utils';
 
 const logger = Logger.create('NoteImportButton');
 
 interface Props {
 	styles: ConfigScreenStyles;
+	defaultTitle: string;
+	description: string;
+	format: string;
+	activeFolder?: FolderEntity;
 }
 
-// Exported for search filtering
-export const importButtonDefaultTitle = () => _('Import from JEX');
-export const importButtonDescription = () => _('Import notes from a JEX (Joplin Export) file.');
-
-const getTitle = (taskStatus: TaskStatus) => {
-	if (taskStatus === TaskStatus.InProgress) {
-		return _('Importing...');
-	} else {
-		return importButtonDefaultTitle();
-	}
+export const importedFolderTitle = () => {
+	return _('Imported Notes');
 };
 
-const runImportTask = async (
-	_onProgress: OnProgressCallback,
-	setAfterCompleteListener: SetAfterCompleteListenerCallback,
-) => {
-	const importTargetPath = join(await makeImportExportCacheDirectory(), 'to-import.jex');
-	logger.info('Importing...');
+export const textImportExtensions = ['md', 'markdown', 'txt', 'html'];
 
-	setAfterCompleteListener(async (_success: boolean) => {
-		await shim.fsDriver().remove(importTargetPath);
+const importedFolder = async () => {
+	let folder = await Folder.loadByFields({
+		title: importedFolderTitle(),
+		deleted_time: 0,
 	});
-
-	const importFiles = await pickDocument({ multiple: false });
-	if (importFiles.length === 0) {
-		logger.info('Canceled.');
-		return { success: false, warnings: [] };
+	if (!folder) {
+		folder = await Folder.save({ title: importedFolderTitle() });
 	}
-
-	const sourceFileUri = importFiles[0].uri;
-	const sourceFilePath = Platform.select({
-		default: sourceFileUri,
-		ios: decodeURI(sourceFileUri),
-	});
-	await shim.fsDriver().copy(sourceFilePath, importTargetPath);
-
-	try {
-		const status = await InteropService.instance().import({
-			path: importTargetPath,
-			format: 'jex',
-		});
-
-		logger.info('Imported successfully');
-		return { success: true, warnings: status.warnings };
-	} catch (error) {
-		logger.error('Import failed with error', error);
-		throw new Error(_('Import failed. Make sure a JEX file was selected.\nDetails: %s', error.toString()));
-	}
+	return folder;
 };
 
 const NoteImportButton: FunctionComponent<Props> = props => {
+	const getTitle = (taskStatus: TaskStatus) => {
+		if (taskStatus === TaskStatus.InProgress) {
+			return _('Importing...');
+		} else {
+			return props.defaultTitle;
+		}
+	};
+
+	const runImportTask = async (
+		_onProgress: OnProgressCallback,
+		setAfterCompleteListener: SetAfterCompleteListenerCallback,
+	) => {
+		logger.info(`Importing ${props.format}...`);
+
+		const importFiles = await pickDocument({ multiple: false });
+		if (importFiles.length === 0) {
+			logger.info('Canceled.');
+			return { success: false, warnings: [] };
+		}
+
+		const sourceFileUri = importFiles[0].uri;
+		const sourceFilePath = Platform.select({
+			default: sourceFileUri,
+			ios: decodeURIComponent(sourceFileUri),
+		});
+
+		let validExtensions = ['jex'];
+		if (props.format === 'txt') validExtensions = textImportExtensions;
+
+		// importFiles[0].fileName can be null on iOS
+		const sourceFileName = importFiles[0].fileName ?? basename(sourceFilePath);
+		const extension = fileExtension(sourceFileName).toLowerCase();
+
+		if (!validExtensions.includes(extension)) {
+			throw new Error(_('Unsupported file extension. Expected: %s', validExtensions.join(', ')));
+		}
+
+		const importTargetPath = join(await makeImportExportCacheDirectory(), sourceFileName);
+		setAfterCompleteListener(async (_success: boolean) => {
+			await shim.fsDriver().remove(importTargetPath);
+		});
+
+		await shim.fsDriver().copy(sourceFilePath, importTargetPath);
+
+		let activeFolderId = props.activeFolder ? props.activeFolder.id : null;
+		if (props.format === 'txt' && !activeFolderId) {
+			activeFolderId = (await importedFolder()).id;
+		}
+
+		try {
+			const status = await InteropService.instance().import({
+				path: importTargetPath,
+				format: props.format,
+				destinationFolderId: activeFolderId,
+			});
+
+			logger.info('Imported successfully');
+			return { success: true, warnings: status.warnings };
+		} catch (error) {
+			logger.error('Import failed with error', error);
+			throw new Error(_('Import failed. Make sure a %s file was selected.\nDetails: %s', props.format, error.toString()));
+		}
+	};
+
 	return (
 		<TaskButton
-			taskName={importButtonDefaultTitle()}
-			description={importButtonDescription()}
+			taskName={props.defaultTitle}
+			description={props.description}
 			buttonLabel={getTitle}
 			finishedLabel={_('Imported successfully!')}
 			styles={props.styles}

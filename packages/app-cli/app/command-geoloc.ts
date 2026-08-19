@@ -1,7 +1,7 @@
 import BaseCommand from './base-command';
 import app from './app';
 import { _ } from '@joplin/lib/locale';
-import BaseModel from '@joplin/lib/BaseModel';
+import { ModelType } from '@joplin/lib/BaseModel';
 import Note from '@joplin/lib/models/Note';
 
 class Command extends BaseCommand {
@@ -13,11 +13,10 @@ class Command extends BaseCommand {
 		return _('Displays a geolocation URL for the note.');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { note: string }) {
 		const title = args['note'];
 
-		const item = await app().loadItem(BaseModel.TYPE_NOTE, title, { parent: app().currentFolder() });
+		const item = await app().loadItem(ModelType.Note, title, { parent: app().currentFolder() });
 		if (!item) throw new Error(_('Cannot find "%s".', title));
 		const url = Note.geolocationUrl(item);
 		this.stdout(url);

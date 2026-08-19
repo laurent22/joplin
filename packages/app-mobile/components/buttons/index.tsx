@@ -12,3 +12,4 @@ const makeTextButtonComponent = (type: ButtonType) => {
 export const PrimaryButton = makeTextButtonComponent(ButtonType.Primary);
 export const SecondaryButton = makeTextButtonComponent(ButtonType.Secondary);
 export const LinkButton = makeTextButtonComponent(ButtonType.Link);
+export const DeleteButton = makeTextButtonComponent(ButtonType.Delete);

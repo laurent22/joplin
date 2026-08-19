@@ -2,10 +2,11 @@
 
 import { execCommand, getRootDir } from '@joplin/utils';
 import { readFile, readdir, stat, writeFile } from 'fs/promises';
-import * as MarkdownIt from 'markdown-it';
+import MarkdownIt from 'markdown-it';
 import { htmlentities, isSelfClosingTag } from '@joplin/utils/html';
 import { compileWithFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
 import StateCore = require('markdown-it/lib/rules_core/state_core');
+import Token = require('markdown-it/lib/token');
 import { copy, mkdirp, remove, pathExists } from 'fs-extra';
 import { basename, dirname } from 'path';
 import markdownUtils, { MarkdownTable } from '@joplin/lib/markdownUtils';
@@ -14,10 +15,10 @@ import { chdir } from 'process';
 import yargs = require('yargs');
 import { extractOpenGraphTags } from './utils/openGraph';
 
-const md5File = require('md5-file');
-const htmlparser2 = require('@joplin/fork-htmlparser2');
-const styleToJs = require('style-to-js').default;
-const crypto = require('crypto');
+import md5File = require('md5-file');
+import * as htmlparser2 from '@joplin/fork-htmlparser2';
+import styleToJs = require('style-to-js');
+import * as crypto from 'crypto';
 
 interface Config {
 	baseUrl: string;
@@ -36,9 +37,9 @@ interface Context {
 	inHeader?: boolean;
 	listStack?: List[];
 	listStarting?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	currentLinkAttrs?: any;
+	currentLinkAttrs?: [string, string][] | null;
 	inFence?: boolean;
+	fenceStarting?: string;
 	processedFiles?: string[];
 	isNews?: boolean;
 	donateLinks?: string;
@@ -78,8 +79,7 @@ const parseHtml = (html: string) => {
 
 	const parser = new htmlparser2.Parser({
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		onopentag: (name: string, attrs: Record<string, any>) => {
+		onopentag: (name: string, attrs: Record<string, string>) => {
 			tagStack.push({ name });
 
 			const closingSign = isSelfClosingTag(name) ? '/>' : '>';
@@ -95,7 +95,9 @@ const parseHtml = (html: string) => {
 				attrHtml.push(`${n}=${escapedValue}`);
 			}
 
-			output.push(`<${name} ${attrHtml.join(' ')}${closingSign}`);
+			const closingSpace = isSelfClosingTag(name) || !!attrHtml.length ? ' ' : '';
+
+			output.push(`<${name}${attrHtml.length ? ` ${attrHtml.join(' ')}` : ''}${closingSpace}${closingSign}`);
 		},
 
 		ontext: (decodedText: string) => {
@@ -130,8 +132,7 @@ const paragraphBreak = '///PARAGRAPH_BREAK///';
 const blockQuoteStart = '///BLOCK_QUOTE_START///';
 const blockQuoteEnd = '///BLOCK_QUOTE_END///';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const processToken = (token: any, output: string[], context: Context): void => {
+const processToken = (token: Token, output: string[], context: Context): void => {
 	if (!context.listStack) context.listStack = [];
 
 	let contentProcessed = false;
@@ -157,15 +158,16 @@ const processToken = (token: any, output: string[], context: Context): void => {
 		}
 	} else if (type === 'fence') {
 		context.inFence = true;
-		content.push(`\`\`\`${token.info || ''}\n`);
+		context.fenceStarting = token.markup;
+		content.push(`${token.markup}${token.info || ''}\n`);
 	} else if (type === 'html_block') {
-		contentProcessed = true,
+		contentProcessed = true;
 		content.push(parseHtml(token.content.trim()));
 	} else if (type === 'html_inline') {
-		contentProcessed = true,
+		contentProcessed = true;
 		content.push(parseHtml(token.content.trim()));
 	} else if (type === 'code_inline') {
-		contentProcessed = true,
+		contentProcessed = true;
 		content.push(`\`${token.content}\``);
 	} else if (type === 'code_block') {
 		contentProcessed = true;
@@ -250,7 +252,7 @@ const processToken = (token: any, output: string[], context: Context): void => {
 	}
 
 	if (type === 'fence') {
-		content.push('```');
+		content.push(context.fenceStarting);
 		content.push(paragraphBreak);
 		context.inFence = false;
 	}
@@ -448,7 +450,7 @@ const copyFile = async (sourceFile: string, destFile: string) => {
 const getDonateLinks = () => {
 	return `<div className="donate-links">
 
-[![Donate using PayPal](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?business=E8JMYD2LQ8MMA&no_recurring=0&item_name=I+rely+on+donations+to+maintain+and+improve+the+Joplin+open+source+project.+Thank+you+for+your+help+-+it+makes+a+difference%21&currency_code=EUR) [![Sponsor on GitHub](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg)](https://github.com/sponsors/laurent22/) [![Become a patron](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg)](https://www.patreon.com/joplin) [![Donate using IBAN](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg)](https://joplinapp.org/donate/#donations)
+[![Donate using PayPal](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=WQCERTSSLCC7U) [![Sponsor on GitHub](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg)](https://github.com/sponsors/laurent22/) [![Become a patron](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg)](https://www.patreon.com/joplin) [![Donate using IBAN](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg)](https://joplinapp.org/donate/#donations)
 
 </div>`;
 };

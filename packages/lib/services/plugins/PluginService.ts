@@ -8,15 +8,21 @@ import { filename, dirname, rtrimSlashes } from '../../path-utils';
 import Setting from '../../models/Setting';
 import Logger from '@joplin/utils/Logger';
 import RepositoryApi from './RepositoryApi';
-import produce from 'immer';
+import { produce } from 'immer';
 import { PluginManifest } from './utils/types';
 import isCompatible from './utils/isCompatible';
 import { AppType } from './api/types';
 import minVersionForPlatform from './utils/isCompatible/minVersionForPlatform';
 import { _ } from '../../locale';
+import ViewController from './ViewController';
 const uslug = require('@joplin/fork-uslug');
 
 const logger = Logger.create('PluginService');
+
+interface PluginExtractionState {
+	size: number;
+	timestamp: number;
+}
 
 // Plugin data is split into two:
 //
@@ -95,17 +101,18 @@ export default class PluginService extends BaseService {
 	}
 
 	private appVersion_: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Test fixtures across app-cli/app-mobile pass partial { dispatch, getState } stores here, so Store<unknown> would be too strict
 	private store_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Test fixtures across app-cli/app-mobile pass `{ joplin: {} }` here, so BasePlatformImplementation would be too strict
 	private platformImplementation_: any = null;
 	private plugins_: Plugins = {};
 	private runner_: BasePluginRunner = null;
 	private startedPlugins_: Record<string, boolean> = {};
 	private isSafeMode_ = false;
 	private pluginsChangeListeners_: LoadedPluginsChangeListener[] = [];
+	private extractionStates_: Record<string, PluginExtractionState> = null;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See platformImplementation_ and store_ above
 	public initialize(appVersion: string, platformImplementation: any, runner: BasePluginRunner, store: any) {
 		this.appVersion_ = appVersion;
 		this.store_ = store;
@@ -196,10 +203,50 @@ export default class PluginService extends BaseService {
 		await shim.fsDriver().remove(plugin.baseDir);
 	}
 
+	private extractionStatePath(): string {
+		return `${Setting.value('cacheDir')}/plugin-extraction-state.json`;
+	}
+
+	private async loadExtractionStates(): Promise<Record<string, PluginExtractionState>> {
+		if (!this.extractionStates_) {
+			try {
+				const text = await shim.fsDriver().readFile(this.extractionStatePath(), 'utf8');
+				this.extractionStates_ = JSON.parse(text);
+			} catch {
+				this.extractionStates_ = {};
+			}
+		}
+		return this.extractionStates_;
+	}
+
+	private async saveExtractionStates(states: Record<string, PluginExtractionState>): Promise<void> {
+		this.extractionStates_ = states;
+		try {
+			await shim.fsDriver().writeFile(this.extractionStatePath(), JSON.stringify(states), 'utf8');
+		} catch (error) {
+			logger.error('Failed to save extraction states:', error);
+		}
+	}
+
 	public pluginById(id: string): Plugin {
 		if (!this.plugins_[id]) throw new Error(`Plugin not found: ${id}`);
 
 		return this.plugins_[id];
+	}
+
+	public safePluginNameById(id: string) {
+		if (!this.plugins_[id]) {
+			return id;
+		}
+
+		return this.pluginById(id).manifest?.name ?? 'Unknown';
+	}
+
+	public viewControllerByViewId(id: string): ViewController|null {
+		for (const [, plugin] of Object.entries(this.plugins_)) {
+			if (plugin.hasViewController(id)) return plugin.viewController(id);
+		}
+		return null;
 	}
 
 	public unserializePluginSettings(settings: SerializedPluginSettings): PluginSettings {
@@ -271,19 +318,38 @@ export default class PluginService extends BaseService {
 		return this.loadPlugin(baseDir, r.manifestText, r.scriptText, pluginIdIfNotSpecified);
 	}
 
-	public async loadPluginFromPackage(baseDir: string, path: string): Promise<Plugin> {
+	public async loadPluginFromPackage(baseDir: string, path: string, manifestOnly = false): Promise<Plugin> {
 		baseDir = rtrimSlashes(baseDir);
 
 		const fname = filename(path);
-		const hash = await shim.fsDriver().md5File(path);
-
 		const unpackDir = `${Setting.value('cacheDir')}/${fname}`;
 		const manifestFilePath = `${unpackDir}/manifest.json`;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let manifest: any = await this.loadManifestToObject(manifestFilePath);
+		// Use file size + mtime to check if the .jpl has changed, to
+		// avoid computing an MD5 hash of the full file on every startup.
+		const stat = await shim.fsDriver().stat(path);
+		const extractionStates = await this.loadExtractionStates();
+		const extractionState = extractionStates[fname];
+		const scriptFilePath = `${unpackDir}/index.js`;
+		const extractionValid = extractionState
+			&& extractionState.size === stat.size
+			&& extractionState.timestamp === stat.mtime.getTime()
+			&& await shim.fsDriver().exists(manifestFilePath)
+			&& (manifestOnly || await shim.fsDriver().exists(scriptFilePath));
 
-		if (!manifest || manifest._package_hash !== hash) {
+		if (manifestOnly && extractionValid) {
+			// When loading only the manifest (e.g. for disabled plugins), use
+			// the already-extracted manifest from cache to avoid the tar
+			// extraction.
+			const manifest = await this.loadManifestToObject(manifestFilePath);
+			if (manifest) {
+				return this.loadPlugin(unpackDir, JSON.stringify(manifest), '', makePluginId(fname));
+			}
+		}
+
+		if (!extractionValid) {
+			logger.info(`Extracting plugin: ${fname}`);
+
 			await shim.fsDriver().remove(unpackDir);
 			await shim.fsDriver().mkdir(unpackDir);
 
@@ -294,21 +360,24 @@ export default class PluginService extends BaseService {
 				cwd: unpackDir,
 			});
 
-			manifest = await this.loadManifestToObject(manifestFilePath);
+			const manifest = await this.loadManifestToObject(manifestFilePath);
 			if (!manifest) throw new Error(`Missing manifest file at: ${manifestFilePath}`);
 
-			manifest._package_hash = hash;
-
-			await shim.fsDriver().writeFile(manifestFilePath, JSON.stringify(manifest, null, '\t'), 'utf8');
+			extractionStates[fname] = {
+				size: stat.size,
+				timestamp: stat.mtime.getTime(),
+			};
+			await this.saveExtractionStates(extractionStates);
+		} else {
+			logger.info(`Using already extracted plugin: ${fname}`);
 		}
 
-		return this.loadPluginFromPath(unpackDir);
+		return this.loadPluginFromPath(unpackDir, manifestOnly);
 	}
 
 	// Loads the manifest as a simple object with no validation. Used only
 	// when unpacking a package.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private async loadManifestToObject(path: string): Promise<any> {
+	private async loadManifestToObject(path: string): Promise<Record<string, unknown>> {
 		try {
 			const manifestText = await shim.fsDriver().readFile(path, 'utf8');
 			return JSON.parse(manifestText);
@@ -317,7 +386,7 @@ export default class PluginService extends BaseService {
 		}
 	}
 
-	public async loadPluginFromPath(path: string): Promise<Plugin> {
+	public async loadPluginFromPath(path: string, manifestOnly = false): Promise<Plugin> {
 		path = rtrimSlashes(path);
 
 		const fsDriver = shim.fsDriver();
@@ -325,7 +394,7 @@ export default class PluginService extends BaseService {
 		if (path.toLowerCase().endsWith('.js')) {
 			return this.loadPluginFromJsBundle(dirname(path), await fsDriver.readFile(path), filename(path));
 		} else if (path.toLowerCase().endsWith('.jpl')) {
-			return this.loadPluginFromPackage(dirname(path), path);
+			return this.loadPluginFromPackage(dirname(path), path, manifestOnly);
 		} else {
 			let distPath = path;
 			if (!(await fsDriver.exists(`${distPath}/manifest.json`))) {
@@ -334,8 +403,17 @@ export default class PluginService extends BaseService {
 
 			logger.info(`Loading plugin from ${path}`);
 
-			const scriptText = await fsDriver.readFile(`${distPath}/index.js`);
 			const manifestText = await fsDriver.readFile(`${distPath}/manifest.json`);
+			// On mobile, plugin scripts are loaded directly by the WebView
+			// from the filesystem, so we don't need to read them here.
+			const indexPath = `${distPath}/index.js`;
+			const loadMainScript = !shim.mobilePlatform() || shim.mobilePlatform() === 'web';
+			if (loadMainScript) {
+				if (!(await fsDriver.exists(indexPath))) {
+					throw new Error(`Plugin bundle not found at: ${indexPath}`);
+				}
+			}
+			const scriptText = (manifestOnly || !loadMainScript) ? '' : await fsDriver.readFile(indexPath);
 			const pluginId = makePluginId(filename(path));
 
 			return this.loadPlugin(distPath, manifestText, scriptText, pluginId);
@@ -377,8 +455,7 @@ export default class PluginService extends BaseService {
 
 		const dataDir = `${Setting.value('pluginDataDir')}/${manifest.id}`;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const plugin = new Plugin(baseDir, manifest, scriptText, (action: any) => this.store_.dispatch(action), dataDir);
+		const plugin = new Plugin(baseDir, manifest, scriptText, (action: { type: string; [key: string]: unknown }) => this.store_.dispatch(action), dataDir);
 
 		for (const notice of deprecationNotices) {
 			plugin.deprecationNotice(notice.goneInVersion, notice.message, notice.isError);
@@ -415,15 +492,13 @@ export default class PluginService extends BaseService {
 			pluginPaths = pluginDirOrPaths;
 		} else {
 			pluginPaths = (await shim.fsDriver().readDirStats(pluginDirOrPaths))
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				.filter((stat: any) => {
+				.filter(stat => {
 					if (stat.isDirectory()) return true;
 					if (stat.path.toLowerCase().endsWith('.js')) return true;
 					if (stat.path.toLowerCase().endsWith('.jpl')) return true;
 					return false;
 				})
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				.map((stat: any) => `${pluginDirOrPaths}/${stat.path}`);
+				.map(stat => `${pluginDirOrPaths}/${stat.path}`);
 		}
 
 		for (const pluginPath of pluginPaths) {
@@ -433,8 +508,16 @@ export default class PluginService extends BaseService {
 			}
 
 			try {
-				const plugin = await this.loadPluginFromPath(pluginPath);
+				// Load only the manifest first to check if the plugin is
+				// enabled before doing the expensive full load.
+				let plugin = await this.loadPluginFromPath(pluginPath, true);
 				const enabled = this.pluginEnabled(settings, plugin.id);
+				if (enabled) {
+					logger.info(`Loading full plugin: ${plugin.id}`);
+					plugin = await this.loadPluginFromPath(pluginPath, false);
+				} else {
+					logger.info(`Loading manifest only for disabled plugin: ${plugin.id}`);
+				}
 
 				const existingPlugin = this.plugins_[plugin.id];
 				if (existingPlugin) {
@@ -479,6 +562,7 @@ export default class PluginService extends BaseService {
 				logger.error(`Could not load plugin: ${pluginPath}`, error);
 			}
 		}
+
 	}
 
 	public async loadAndRunDevPlugins(settings: PluginSettings) {
@@ -503,7 +587,19 @@ export default class PluginService extends BaseService {
 		return isCompatible(this.appVersion_, this.appType_, manifest);
 	}
 
+	private validateManifest(manifest: unknown): void {
+		manifestFromObject(manifest as Record<string, unknown>);
+	}
+
 	public describeIncompatibility(manifest: PluginManifest) {
+
+		try {
+			this.validateManifest(manifest);
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			return _('Invalid plugin manifest: %s', message);
+		}
+
 		if (this.isCompatible(manifest)) return null;
 
 		const minVersion = minVersionForPlatform(this.appType_, manifest);
@@ -554,7 +650,17 @@ export default class PluginService extends BaseService {
 
 		plugin.running = true;
 		const pluginApi = new Global(this.platformImplementation_, plugin, this.store_);
-		return this.runner_.run(plugin, pluginApi);
+		try {
+			await this.runner_.run(plugin, pluginApi);
+		} catch (error) {
+			logger.error(`Plugin "${plugin.id}" failed to start:`, error);
+			// Mark as started so this failed plugin doesn't block
+			// allPluginsStarted and prevent other plugins from working.
+			// See: https://github.com/laurent22/joplin/issues/12793
+			this.startedPlugins_[plugin.id] = true;
+			plugin.off('started', onStarted);
+			plugin.running = false;
+		}
 	}
 
 	public async installPluginFromRepo(repoApi: RepositoryApi, pluginId: string): Promise<Plugin> {
@@ -576,7 +682,17 @@ export default class PluginService extends BaseService {
 		// from where it is now to check that it is valid and to retrieve
 		// the plugin ID.
 		const preloadedPlugin = await this.loadPluginFromPath(jplPath);
-		await this.deletePluginFiles(preloadedPlugin);
+		try {
+			await this.deletePluginFiles(preloadedPlugin);
+		} catch (error) {
+			// Deleting the plugin appears to occasionally fail on Windows (maybe because the files
+			// are still loaded?), and it prevents the plugin from being installed. Because of this
+			// we just ignore the error - it means that there will be unnecessary files in the cache
+			// directory, which is not a big issue.
+			//
+			// Ref: https://discourse.joplinapp.org/t/math-mode-plugin-no-longer-works-in-windows-v3-1-23/41853
+			logger.warn('Could not delete plugin temp directory:', error);
+		}
 
 		// On mobile, it's necessary to create the plugin directory before we can copy
 		// into it.
@@ -648,6 +764,17 @@ export default class PluginService extends BaseService {
 
 	public async destroy() {
 		await this.runner_.waitForSandboxCalls();
+	}
+
+	// Test-only: resets the singleton's transient state between tests that share the
+	// same PluginService instance. Without this, a late callback from an in-flight
+	// install in the previous test can re-populate `plugins_` and dispatch into the
+	// new test's components, triggering "already exists" errors and "not wrapped in
+	// act(...)" warnings.
+	public resetForTesting() {
+		this.plugins_ = {};
+		this.startedPlugins_ = {};
+		this.pluginsChangeListeners_ = [];
 	}
 
 }

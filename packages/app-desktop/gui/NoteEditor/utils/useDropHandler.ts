@@ -2,10 +2,12 @@ import { useCallback } from 'react';
 import Note from '@joplin/lib/models/Note';
 import { DragEvent as ReactDragEvent } from 'react';
 import { DropCommandValue } from './types';
+import { webUtils } from 'electron';
+import { RefObject } from 'react';
+import { NoteBodyEditorRef } from './types';
 
 interface HookDependencies {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	editorRef: any;
+	editorRef: RefObject<NoteBodyEditorRef>;
 }
 
 // Returns true if Joplin handled the event
@@ -41,7 +43,7 @@ export default function useDropHandler(dependencies: HookDependencies): DropHand
 					markdownTags: noteMarkdownTags,
 				};
 
-				editorRef.current.execCommand({
+				void editorRef.current.execCommand({
 					name: 'dropItems',
 					value: props,
 				});
@@ -56,22 +58,25 @@ export default function useDropHandler(dependencies: HookDependencies): DropHand
 			const paths = [];
 			for (let i = 0; i < files.length; i++) {
 				const file = files[i];
-				if (!file.path) continue;
-				paths.push(file.path);
+				const path = webUtils.getPathForFile(file);
+				if (!path) continue;
+				paths.push(path);
 			}
 
-			const props: DropCommandValue = {
-				type: 'files',
-				pos: eventPosition,
-				paths: paths,
-				createFileURL: createFileURL,
-			};
+			if (paths.length > 0) {
+				const props: DropCommandValue = {
+					type: 'files',
+					pos: eventPosition,
+					paths: paths,
+					createFileURL: createFileURL,
+				};
 
-			editorRef.current.execCommand({
-				name: 'dropItems',
-				value: props,
-			});
-			return true;
+				void editorRef.current.execCommand({
+					name: 'dropItems',
+					value: props,
+				});
+				return true;
+			}
 		}
 
 		return false;

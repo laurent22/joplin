@@ -1,0 +1,215 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Milo Ivir <mail@mivirtype.de>\n"
+"Language-Team: \n"
+"Language: hr_HR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.6\n"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/partials/plan.mustache:13
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/partials/plan.mustache:9
+msgid "/month"
+msgstr "/mjesec"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/partials/plan.mustache:19
+msgid "/year"
+msgstr "/godina"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:8
+msgid ""
+"<a href=\"https://joplincloud.com\">Joplin Cloud</a> allows you to "
+"synchronise your notes across devices. It also lets you publish notes, and "
+"collaborate on notebooks with your friends, family or colleagues."
+msgstr ""
+"<a href=\"https://joplincloud.com\">Joplin Cloud</a> omogućuje "
+"sinkronizaciju bilješki na različitim uređajima. Omogućuje i objavljivanje "
+"bilješki i suradnju na bilježnicama s prijateljima, obitelji ili kolegama."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:205
+msgid "<span class=\"frame-bg frame-bg-yellow-lg\">Customise</span> it"
+msgstr "<span class=\"frame-bg frame-bg-yellow-lg\">Prilagodi</span> uslugu"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:104
+msgid "<span class=\"frame-bg frame-bg-yellow\">Multimedia</span> notes"
+msgstr "<span class=\"frame-bg frame-bg-yellow\">Multimedijske</span> bilješke"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:256
+msgid "100% <span class=\"frame-bg frame-bg-yellow-lg\">your data</span>"
+msgstr "100 % <span class=\"frame-bg frame-bg-yellow-lg\">tvoji podaci</span>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:298
+msgid "A <span class=\"frame-bg frame-bg-yellow-lg\">French</span> Alternative"
+msgstr ""
+"<span class=\"frame-bg frame-bg-yellow-lg\">Francuska</span> alternativa"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:236
+msgid ""
+"Access your notes from your computer, phone or tablet by synchronising with "
+"various services, including Joplin Cloud, Dropbox and OneDrive. The app is "
+"available on Windows, macOS, Linux, Android and iOS. A terminal app is also "
+"available!"
+msgstr ""
+"Pristupi svojim bilješkama s računala, mobitela ili tableta sinkronizacijom "
+"s raznim uslugama, uključujući Joplin Cloud, Dropbox i OneDrive. Program je "
+"dostupan za Windows, macOS, Linux, Android i iOS sustave. Dostupan je i "
+"program za terminal!"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:49
+msgid ""
+"Already have a Joplin Cloud account? <a href=\"https://"
+"joplincloud.com\">Login now</a>"
+msgstr ""
+"Već imaš Joplin Cloud račun? <a href=\"https://joplincloud.com\">Prijavi se "
+"sada</a>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:208
+msgid ""
+"Customise the app with plugins, custom themes and multiple text editors "
+"(Rich Text or Markdown). Or create your own scripts and plugins using the "
+"Extension API."
+msgstr ""
+"Prilagodi program pomoću dodataka, prilagođenih tema i uređivača teksta "
+"(formatirani tekst ili Markdown). Ili izradi vlastita skripta i dodatke "
+"pomoću API-ja za proširenja."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:242
+msgid "Download it now"
+msgstr "Preuzmi sada"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:112
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:63
+msgid "Download the app"
+msgstr "Preuzmi program"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:213
+msgid "Find out more"
+msgstr "Saznaj više"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:54
+msgid "Free your <span class=\"frame-bg frame-bg-blue\">notes</span>"
+msgstr "Oslobodi svoje <span class=\"frame-bg frame-bg-blue\">bilješke</span>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:175
+msgid "Get the clipper"
+msgstr "Nabavi Clipper"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:107
+msgid ""
+"Images, videos, PDFs and audio files are supported. Create math expressions "
+"and diagrams directly from the app. Take photos with the mobile app and save "
+"them to a note."
+msgstr ""
+"Podržane su slike, videozapisi, PDF-ovi i audio datoteke. Stvori matematičke "
+"izraze i dijagrame izravno iz programa. Snimaj fotografije s programom za "
+"mobitel i spremi ih u bilješku."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:327
+msgid "In the <span class=\"frame-bg frame-bg-yellow\">Press</span>"
+msgstr "<span class=\"frame-bg frame-bg-yellow\">Recenzije</span>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:5
+msgid "Joplin Cloud <span class=\"frame-bg frame-bg-yellow\">plans</span>"
+msgstr "Joplin Cloud <span class=\"frame-bg frame-bg-yellow\">tarife</span>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:301
+msgid ""
+"Joplin Cloud is based in France. This means your data is protected by strict "
+"European Union privacy laws. In addition, Joplin Cloud implements strong end-"
+"to-end encryption so that not even us can have access to your data."
+msgstr ""
+"Joplin Cloud ima sjedište u Francuskoj. To znači da su tvoji podaci "
+"zaštićeni strogim zakonima o privatnosti Europske unije. Osim toga, Joplin "
+"Cloud implementira snažno sveobuhvatno šifriranje (end-to-end encryption) "
+"tako da čak ni mi ne možemo pristupiti tvojim podacima."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:57
+msgid ""
+"Joplin is an open source note-taking app. Capture your thoughts and securely "
+"access them from any device."
+msgstr ""
+"Joplin je program za bilješke otvorenog koda. Zabilježi svoje misli i "
+"sigurno im pristupi s bilo kojeg uređaja."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:262
+msgid "More about E2EE"
+msgstr "Više o E2EE"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:391
+msgid "Our <span class=\"frame-bg frame-bg-blue-lg\">sponsors</span>"
+msgstr "Naši <span class=\"frame-bg frame-bg-blue-lg\">sponzori</span>"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:23
+msgid "Pay Monthly"
+msgstr "Plaćaj mjesečno"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/plans.mustache:30
+msgid "Pay Yearly"
+msgstr "Plaćaj godišnje"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:167
+msgid ""
+"Save <span class=\"frame-bg frame-bg-blue\">web pages</span> <br>as notes"
+msgstr ""
+"Spremaj <span class=\"frame-bg frame-bg-blue\">web stranice</span> <br>kao "
+"bilješke"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:65
+msgid "Sign up with Joplin Cloud"
+msgstr "Registriraj se na Joplin Cloud"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:394
+msgid "Thank you for your support!"
+msgstr "Hvala ti na podršci!"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:257
+msgid ""
+"The app is open source and your notes are saved to an open format, so you'll "
+"always have access to them. Uses End-To-End Encryption (E2EE) to secure your "
+"notes and ensure no-one but yourself can access them."
+msgstr ""
+"Program je otvorenog koda i tvoje se bilješke spremaju u otvorenom formatu, "
+"tako da ćeš im uvijek moći pristupiti. Program koristi sveobuhvatno "
+"šifriranje – engl. End-To-End Encryption (E2EE) – kako bi zaštitila tvoje "
+"bilješke i osigurala da im nitko osim tebe ne može pristupiti."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:144
+msgid "Try it now"
+msgstr "Isprobaj sada"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:170
+msgid ""
+"Use the web clipper extension, available on Chrome and Firefox, to save web "
+"pages or take screenshots as notes."
+msgstr ""
+"Koristi proširenje Web Clipper, dostupno za Chrome i Firefox, za spremanje "
+"web stranica ili snimanje ekrana kao bilješku."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:138
+msgid ""
+"With Joplin Cloud, share your notes with your friends, family or colleagues "
+"and collaborate on them."
+msgstr ""
+"Joplin Cloud ti omogućuje da dijeliš bilješke s prijateljima, obitelji ili "
+"kolegama te da na njima surađujete."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:137
+msgid "Work <span class=\"frame-bg frame-bg-yellow\">together</span>"
+msgstr "<span class=\"frame-bg frame-bg-yellow\">Surađuj</span> s drugima"
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:141
+msgid ""
+"You can also publish a note to the internet and share the URL with others."
+msgstr "Bilješke možeš objaviti i na internetu te dijeliti URL s drugima."
+
+#: /Users/laurent/src/joplin/Assets/WebsiteAssets/templates/front.mustache:233
+msgid ""
+"Your notes, <span class=\"frame-bg frame-bg-blue-lg\">everywhere</span> you "
+"are"
+msgstr ""
+"Tvoje bilješke, <span class=\"frame-bg frame-bg-blue-lg\">gdje god</span> se "
+"nalaziš"

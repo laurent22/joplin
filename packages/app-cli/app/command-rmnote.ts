@@ -1,8 +1,8 @@
 import BaseCommand from './base-command';
 import app from './app';
-import { _ } from '@joplin/lib/locale';
+import { _, _n } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
-import BaseModel, { DeleteOptions } from '@joplin/lib/BaseModel';
+import { DeleteOptions, ModelType } from '@joplin/lib/BaseModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 
 class Command extends BaseCommand {
@@ -21,23 +21,22 @@ class Command extends BaseCommand {
 		];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public override async action(args: any) {
+	public override async action(args: { 'note-pattern': string; options?: { force?: boolean; permanent?: boolean } }) {
 		const pattern = args['note-pattern'];
 		const force = args.options && args.options.force === true;
 
-		const notes: NoteEntity[] = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
+		const notes: NoteEntity[] = await app().loadItems(ModelType.Note, pattern);
 		if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
 
 		let ok = true;
 		if (!force && notes.length > 1) {
-			ok = await this.prompt(_('%d notes match this pattern. Delete them?', notes.length), { booleanAnswerDefault: 'n' });
+			ok = await this.prompt(_n('%d note matches this pattern. Delete it?', '%d notes match this pattern. Delete them?', notes.length, notes.length), { booleanAnswerDefault: 'n' });
 		}
 
 		const permanent = (args.options?.permanent === true) || notes.every(n => !!n.deleted_time);
 		if (!force && permanent) {
 			const message = (
-				notes.length === 1 ? _('This will permanently delete the note "%s". Continue?', notes[0].title) : _('%d notes will be permanently deleted. Continue?', notes.length)
+				_n('%d note will be permanently deleted. Continue?', '%d notes will be permanently deleted. Continue?', notes.length, notes.length)
 			);
 			ok = await this.prompt(message, { booleanAnswerDefault: 'n' });
 		}

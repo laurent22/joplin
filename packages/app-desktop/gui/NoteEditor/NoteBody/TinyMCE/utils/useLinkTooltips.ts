@@ -5,6 +5,7 @@ import shim from '@joplin/lib/shim';
 
 const useLinkTooltips = (editor: Editor|null) => {
 	const resetModifiedTitles = useCallback(() => {
+		if (!editor) return;
 		for (const element of editor.getDoc().querySelectorAll('a[data-joplin-original-title]')) {
 			element.setAttribute('title', element.getAttribute('data-joplin-original-title') ?? '');
 			element.removeAttribute('data-joplin-original-title');

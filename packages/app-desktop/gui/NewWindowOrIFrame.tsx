@@ -1,5 +1,4 @@
 import { defaultWindowId } from '@joplin/lib/reducer';
-import shim from '@joplin/lib/shim';
 import * as React from 'react';
 import { useState, useEffect, useRef, createContext } from 'react';
 import { createPortal } from 'react-dom';
@@ -13,7 +12,7 @@ import { SecondaryWindowApi } from '../utils/window/types';
 export const WindowIdContext = createContext(defaultWindowId);
 
 type OnCloseCallback = ()=> void;
-type OnFocusCallback = ()=> void;
+type OnSetWindowCallback = (window: Window)=> void;
 
 export enum WindowMode {
 	Iframe, NewWindow,
@@ -27,7 +26,7 @@ interface Props {
 	mode: WindowMode;
 	windowId: string;
 	onClose: OnCloseCallback;
-	onFocus?: OnFocusCallback;
+	onWindow: OnSetWindowCallback;
 }
 
 const useDocument = (
@@ -42,11 +41,17 @@ const useDocument = (
 
 	useEffect(() => {
 		let openedWindow: Window|null = null;
-		const unmounted = false;
+		let unmounted = false;
 		if (iframeElement) {
 			setDoc(iframeElement?.contentWindow?.document);
 		} else if (mode === WindowMode.NewWindow) {
 			openedWindow = window.open('about:blank');
+
+			// Required to support TinyMCE:
+			openedWindow.document.open();
+			openedWindow.document.write('<!DOCTYPE html><html><head></head><body></body></html>');
+			openedWindow.document.close();
+
 			setDoc(openedWindow.document);
 
 			// .onbeforeunload and .onclose events don't seem to fire when closed by a user -- rely on polling
@@ -54,11 +59,16 @@ const useDocument = (
 			void (async () => {
 				while (!unmounted) {
 					await new Promise<void>(resolve => {
-						shim.setTimeout(() => resolve(), 2000);
+						setTimeout(() => resolve(), 2000);
 					});
 
+					// Re-check after sleep to avoid duplicate WINDOW_CLOSE if IPC already fired.
+					if (unmounted) break;
+
 					if (openedWindow?.closed) {
-						onCloseRef.current?.();
+						// Null out doc first so React stops rendering into the destroyed window
+						// before WINDOW_CLOSE triggers unmounting (prevents renderer crash on Windows).
+						setDoc(null);
 						openedWindow = null;
 						break;
 					}
@@ -67,6 +77,8 @@ const useDocument = (
 		}
 
 		return () => {
+			unmounted = true;
+
 			// Delay: Closing immediately causes Electron to crash
 			setTimeout(() => {
 				if (!openedWindow?.closed) {
@@ -86,16 +98,9 @@ const useDocument = (
 };
 
 type OnSetLoaded = (loaded: boolean)=> void;
-const useDocumentSetup = (doc: Document|null, setLoaded: OnSetLoaded, onFocus?: OnFocusCallback) => {
-	const onFocusRef = useRef(onFocus);
-	onFocusRef.current = onFocus;
-
+const useDocumentSetup = (doc: Document|null, setLoaded: OnSetLoaded) => {
 	useEffect(() => {
 		if (!doc) return;
-
-		doc.open();
-		doc.write('<!DOCTYPE html><html><head></head><body></body></html>');
-		doc.close();
 
 		const cssUrls = [
 			'style.min.css',
@@ -120,14 +125,6 @@ const useDocumentSetup = (doc: Document|null, setLoaded: OnSetLoaded, onFocus?: 
 
 		doc.body.style.height = '100vh';
 
-		const containerWindow = doc.defaultView;
-		containerWindow.addEventListener('focus', () => {
-			onFocusRef.current?.();
-		});
-		if (doc.hasFocus()) {
-			onFocusRef.current?.();
-		}
-
 		setLoaded(true);
 	}, [doc, setLoaded]);
 };
@@ -137,7 +134,7 @@ const NewWindowOrIFrame: React.FC<Props> = props => {
 	const [loaded, setLoaded] = useState(false);
 
 	const doc = useDocument(props.mode, iframeRef, props.onClose);
-	useDocumentSetup(doc, setLoaded, props.onFocus);
+	useDocumentSetup(doc, setLoaded);
 
 	useEffect(() => {
 		if (!doc) return;
@@ -152,11 +149,19 @@ const NewWindowOrIFrame: React.FC<Props> = props => {
 		}
 	}, [doc, props.windowId]);
 
+	const onWindowRef = useRef(props.onWindow);
+	onWindowRef.current = props.onWindow;
+	useEffect(() => {
+		const win = doc?.defaultView;
+		if (win && onWindowRef.current) {
+			onWindowRef.current(win);
+		}
+	}, [doc]);
+
 	const parentNode = loaded ? doc?.body : null;
 	const wrappedChildren = <WindowIdContext.Provider value={props.windowId}>{props.children}</WindowIdContext.Provider>;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Needed to allow adding the portal to the DOM
-	const contentPortal = parentNode && createPortal(wrappedChildren, parentNode) as any;
+	const contentPortal = parentNode && createPortal(wrappedChildren, parentNode);
 	if (props.mode === WindowMode.NewWindow) {
 		return <div style={{ display: 'none' }}>{contentPortal}</div>;
 	} else {

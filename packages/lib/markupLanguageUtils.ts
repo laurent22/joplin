@@ -1,11 +1,12 @@
 import markdownUtils from './markdownUtils';
 import Setting from './models/Setting';
 import shim from './shim';
-import MarkupToHtml, { MarkupLanguage, Options } from '@joplin/renderer/MarkupToHtml';
+import MarkupToHtml, { Options } from '@joplin/renderer/MarkupToHtml';
 
 import htmlUtils from './htmlUtils';
 import Resource from './models/Resource';
 import { PluginStates } from './services/plugins/reducer';
+import { MarkupLanguage } from '@joplin/renderer';
 
 export class MarkupLanguageUtils {
 
@@ -43,10 +44,9 @@ export class MarkupLanguageUtils {
 	// desktop and mobile applications.
 	public newMarkupToHtml(_plugins: PluginStates = null, options: Options = null) {
 		const subValues = Setting.subValues('markdown.plugin', Setting.toPlainObject());
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const pluginOptions: any = {};
+		const pluginOptions: Record<string, { enabled: boolean }> = {};
 		for (const n in subValues) {
-			pluginOptions[n] = { enabled: subValues[n] };
+			pluginOptions[n] = { enabled: !!subValues[n] };
 		}
 
 		options = { ResourceModel: Resource,

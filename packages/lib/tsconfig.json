@@ -1,8 +1,11 @@
 {
 	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"types": ["node", "jest", "jest-expect-message"]
+	},
 	"include": [
 		"**/*.ts",
-		"**/*.tsx", "../app-desktop/commands/emptyTrash.ts",
+		"**/*.tsx"
 	],
 	"exclude": [
 		"**/node_modules",

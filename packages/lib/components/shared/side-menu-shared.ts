@@ -6,11 +6,11 @@ export type RenderFolderItem<T> = (folder: FolderEntity, hasChildren: boolean, d
 export type RenderTagItem<T> = (tag: TagsWithNoteCountEntity)=> T;
 
 interface FolderSelectedContext {
-	selectedFolderId: string;
+	selectedFolderIds: string[];
 	notesParentType: string;
 }
 export const isFolderSelected = (folder: FolderEntity, context: FolderSelectedContext) => {
-	return context.selectedFolderId === folder.id && context.notesParentType === 'Folder';
+	return context.selectedFolderIds.includes(folder.id) && context.notesParentType === 'Folder';
 };
 
 
@@ -105,11 +105,11 @@ const sortTags = (tags: TagEntity[]) => {
 };
 
 interface TagSelectedContext {
-	selectedTagId: string;
+	selectedTagIds: string[];
 	notesParentType: string;
 }
 export const isTagSelected = (tag: TagEntity, context: TagSelectedContext) => {
-	return context.selectedTagId === tag.id && context.notesParentType === 'Tag';
+	return context.selectedTagIds.includes(tag.id) && context.notesParentType === 'Tag';
 };
 
 export const renderTags = <T> (unsortedTags: TagsWithNoteCountEntity[], renderItem: RenderTagItem<T>): ItemsWithOrder<T> => {

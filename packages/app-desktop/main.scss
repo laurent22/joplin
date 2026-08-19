@@ -31,8 +31,8 @@ a {
 }
 
 ::-webkit-scrollbar {
-	width: 7px;
-	height: 7px;
+	width: var(--scrollbar-size, 7px);
+	height: var(--scrollbar-size, 7px);
 }
 
 ::-webkit-scrollbar-corner {
@@ -44,8 +44,8 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-	background: rgba(100, 100, 100, 0.3);
-	border-radius: 5px;
+	background: var(--scrollbar-thumb-color);
+	border-radius: calc(var(--scrollbar-size, 7px) * 0.7);
 }
 
 ::-webkit-scrollbar-track:hover {
@@ -53,7 +53,19 @@ a {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: rgba(100, 100, 100, 0.7);
+	background: var(--scrollbar-thumb-color-hover);
+}
+
+:root {
+	--scrollbar-thumb-color: var(--joplin-scrollbar-thumb-color);
+	--scrollbar-thumb-color-hover: var(--joplin-scrollbar-thumb-color-hover);
+}
+
+// Uses a scrollbar with secondary colors. Should be used for content with
+// background matching joplin-background-color2.
+._scrollbar2 {
+	--scrollbar-thumb-color: var(--joplin-scrollbar-thumb-color2);
+	--scrollbar-thumb-color-hover: var(--joplin-scrollbar-thumb-color-hover2);
 }
 
 .fade_out {
@@ -85,12 +97,6 @@ a {
 	border-radius: 5px;
 }
 
-@keyframes icon-infinite-rotation{
-	to {
-		transform: rotate(360deg);
-	}
-}
-
 .rdtPicker {
 	min-width: 250px;
 	width: auto !important;
@@ -98,10 +104,6 @@ a {
 
 .smalltalk {
 	font-family: sans-serif;
-}
-
-.note-property-box .rdt {
-	display: inline-block;
 }
 
 .help-tooltip {
@@ -126,10 +128,12 @@ a {
 	margin: 40px 20px;
 }
 
-#loading-animation {
+.loading-animation {
 	margin-right: 20px;
 	width: 20px;
 	height: 20px;
+	display: inline-block;
+	vertical-align: middle;
 	border: 5px solid lightgrey;
 	border-top: 4px solid white;
 	border-radius: 50%;
@@ -138,6 +142,10 @@ a {
 	animation-duration: 1.2s;
 	animation-iteration-count: infinite;
 	animation-timing-function: linear;
+
+	@media (prefers-reduced-motion: reduce) {
+		animation-name: none;
+	}
 }
 
 @keyframes rotate {
@@ -278,18 +286,18 @@ Component-specific classes
 	padding-bottom: 20px;
 }
 
-.master-password-dialog .dialog-root {
+.master-password-dialog .dialog-root, .enable-encryption-dialog .dialog-root, .disable-encryption-dialog .dialog-root {
 	min-width: 500px;
 	max-width: 600px;
 }
 
-.master-password-dialog .dialog-content {
+.master-password-dialog .dialog-content, .enable-encryption-dialog .dialog-content, .disable-encryption-dialog .dialog-content {
 	background-color: var(--joplin-background-color3);
 	padding: 1em;
 	padding-bottom: 1px;
 }
 
-.master-password-dialog .current-password-wrapper {
+.master-password-dialog .current-password-wrapper, .enable-encryption-dialog .current-password-wrapper, .disable-encryption-dialog .current-password-wrapper {
 	display: flex;
 	flex-direction: row;
 	align-items: center;

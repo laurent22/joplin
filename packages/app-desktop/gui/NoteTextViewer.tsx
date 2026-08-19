@@ -5,16 +5,20 @@ import bridge from '../services/bridge';
 import { focus } from '@joplin/lib/utils/focusHandler';
 import { ForwardedRef, forwardRef, RefObject, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { WindowIdContext } from './NewWindowOrIFrame';
-import useDocument from './hooks/useDocument';
+import useDocument from '@joplin/lib/hooks/dom/useDocument';
 import { _ } from '@joplin/lib/locale';
+import getAssetPath from '../utils/getAssetPath';
+import { toForwardSlashes } from '@joplin/utils/path';
+
+interface IpcMessageEvent {
+	channel?: string;
+	args?: unknown[];
+}
 
 interface Props {
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onDomReady: Function;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	onIpcMessage: Function;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	viewerStyle: any;
+	onDomReady: (event: Event)=> void;
+	onIpcMessage: (event: IpcMessageEvent)=> void;
+	viewerStyle: React.CSSProperties;
 	contentMaxWidth?: number;
 	themeId: number;
 }
@@ -28,6 +32,7 @@ export interface NoteViewerControl {
 	domReady(): boolean;
 	setHtml(html: string, options: SetHtmlOptions): void;
 	send(channel: string, arg0?: unknown, arg1?: unknown): void;
+	focusLine(editorLine: number): void;
 	focus(): void;
 	hasFocus(): boolean;
 }
@@ -55,6 +60,17 @@ const usePluginMessageResponder = (webviewRef: RefObject<HTMLIFrameElement>) => 
 	}, [webviewRef, windowId]);
 };
 
+const useAllowAttribute = () => {
+	// Specifies what content in the note viewer can do. See
+	// https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/allow
+	// allow=fullscreen: Required to allow the user to fullscreen videos.
+	return [
+		'clipboard-write', 'fullscreen', 'autoplay', 'local-fonts', 'encrypted-media',
+	].map(
+		attr => `${attr} joplin-content://note-viewer/`,
+	).join('; ');
+};
+
 const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerControl>) => {
 	const [webview, setWebview] = useState<HTMLIFrameElement|null>(null);
 	const webviewRef = useRef<HTMLIFrameElement|null>(null);
@@ -72,7 +88,7 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 		const result: NoteViewerControl = {
 			domReady: () => domReadyRef.current,
 			setHtml: (html: string, options: SetHtmlOptions) => {
-				const protocolHandler = bridge().electronApp().getCustomProtocolHandler();
+				const protocolHandler = bridge().electronApp().getContentProtocolHandler();
 
 				// Grant & remove asset access.
 				if (options.pluginAssets) {
@@ -107,6 +123,10 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 					win.postMessage({ target: 'webview', name: 'focus', data: {} }, '*');
 				}
 
+				if (channel === 'focusLine') {
+					win.postMessage({ target: 'webview', name: 'focusLine', data: { line: arg0 } }, '*');
+				}
+
 				// External code should use .setHtml (rather than send('setHtml', ...))
 				if (channel === 'setHtml') {
 					win.postMessage({ target: 'webview', name: 'setHtml', data: { html: arg0, options: arg1 } }, '*');
@@ -139,28 +159,38 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 			hasFocus: () => {
 				return webviewRef.current?.contains(parentDoc.activeElement);
 			},
+			focusLine: (lineNumber: number) => {
+				if (webviewRef.current) {
+					focus('NoteTextViewer::focusLine', webviewRef.current);
+					// A timeout seems necessary after focusing the viewer to prevent focus from jumping to the top
+					setTimeout(() => {
+						result.send('focusLine', lineNumber);
+					}, 100);
+				}
+			},
 		};
 		return result;
 	}, [parentDoc]);
 
-	const webview_domReadyRef = useRef<EventListener>();
+	const webview_domReadyRef = useRef<EventListener>(null);
 	webview_domReadyRef.current = (event: Event) => {
 		domReadyRef.current = true;
 		if (props.onDomReady) props.onDomReady(event);
 	};
 
-	const webview_ipcMessageRef = useRef<EventListener>();
+	const webview_ipcMessageRef = useRef<EventListener>(null);
 	webview_ipcMessageRef.current = (event: Event) => {
-		if (props.onIpcMessage) props.onIpcMessage(event);
+		// The webview 'ipc-message' event carries channel/args, though it is statically typed as a bare Event here.
+		if (props.onIpcMessage) props.onIpcMessage(event as IpcMessageEvent);
 	};
 
-	const webview_loadRef = useRef<EventListener>();
+	const webview_loadRef = useRef<EventListener>(null);
 	webview_loadRef.current = (event: Event) => {
 		webview_domReadyRef.current(event);
 	};
 
 	type MessageEventListener = (event: MessageEvent)=> void;
-	const webview_messageRef = useRef<MessageEventListener>();
+	const webview_messageRef = useRef<MessageEventListener>(null);
 	webview_messageRef.current = (event: MessageEvent) => {
 		if (event.source !== webviewRef.current?.contentWindow) return;
 		if (!event.data || event.data.target !== 'main') return;
@@ -217,16 +247,15 @@ const NoteTextViewer = forwardRef((props: Props, ref: ForwardedRef<NoteViewerCon
 		return { border: 'none', ...props.viewerStyle };
 	}, [props.viewerStyle]);
 
-	// allow=fullscreen: Required to allow the user to fullscreen videos.
+	const allow = useAllowAttribute();
 	return (
 		<iframe
 			className="noteTextViewer"
 			ref={setWebview}
 			style={viewerStyle}
-			allow='clipboard-write=(self) fullscreen=(self) autoplay=(self) local-fonts=(self) encrypted-media=(self)'
-			allowFullScreen={true}
-			aria-label={_('Note editor')}
-			src={`joplin-content://note-viewer/${__dirname}/note-viewer/index.html`}
+			allow={allow}
+			aria-label={_('Note viewer')}
+			src={`joplin-content://note-viewer/${toForwardSlashes(getAssetPath('gui/note-viewer/index.html'))}`}
 		></iframe>
 	);
 });

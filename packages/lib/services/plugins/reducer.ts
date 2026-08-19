@@ -2,18 +2,38 @@ import { Draft } from 'immer';
 import { ContainerType } from './WebviewController';
 import { ButtonSpec } from './api/types';
 
-export interface PluginViewState {
+interface PluginViewStateBase {
 	id: string;
 	type: string;
-	opened: boolean;
 	buttons: ButtonSpec[];
 	fitToContent?: boolean;
 	scripts?: string[];
 	html?: string;
 	commandName?: string;
 	location?: string;
-	containerType: ContainerType;
+	opened: boolean;
 }
+
+export interface PluginEditorViewState extends PluginViewStateBase {
+	containerType: ContainerType.Editor;
+
+	parentWindowId: string;
+	active: boolean;
+
+	// A non-unique ID determined by the type of the editor. Unlike the id property,
+	// this is the same for editor views of the same type opened in different windows.
+	editorTypeId: string;
+}
+
+interface PluginDialogViewState extends PluginViewStateBase {
+	containerType: ContainerType.Dialog;
+}
+
+interface PluginPanelViewState extends PluginViewStateBase {
+	containerType: ContainerType.Panel;
+}
+
+export type PluginViewState = PluginEditorViewState|PluginDialogViewState|PluginPanelViewState;
 
 interface PluginViewStates {
 	[key: string]: PluginViewState;
@@ -28,7 +48,7 @@ interface PluginContentScriptStates {
 	[type: string]: PluginContentScriptState[];
 }
 
-interface PluginState {
+export interface PluginState {
 	id: string;
 	contentScripts: PluginContentScriptStates;
 	views: PluginViewStates;
@@ -88,9 +108,9 @@ export const utils = {
 		return output;
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- View shape varies per type ('menu' has menuItems, 'menuItem' has commandName, etc.); the typed PluginViewState union doesn't cover menus
 	viewsByType: function(plugins: PluginStates, type: string): any[] {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See viewsByType above
 		const output: any[] = [];
 
 		for (const pluginId in plugins) {
@@ -139,7 +159,7 @@ export const utils = {
 	},
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- PLUGIN_* action shapes vary by type (view, contentScript, etc.); typed union would force updates at every dispatch site
 const reducer = (draftRoot: Draft<any>, action: any) => {
 	if (action.type.indexOf('PLUGIN_') !== 0) return;
 
@@ -162,11 +182,14 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 			draft.plugins[action.pluginId].views[action.view.id] = { ...action.view };
 			break;
 
+		case 'PLUGIN_VIEW_REMOVE':
+			delete draft.plugins[action.pluginId].views[action.viewId];
+			break;
+
 		case 'PLUGIN_VIEW_PROP_SET':
 
 			if (action.name !== 'html') {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				(draft.plugins[action.pluginId].views[action.id] as any)[action.name] = action.value;
+				(draft.plugins[action.pluginId].views[action.id] as unknown as Record<string, unknown>)[action.name] = action.value;
 			} else {
 				draft.pluginHtmlContents[action.pluginId] ??= {};
 				draft.pluginHtmlContents[action.pluginId][action.id] = action.value;
@@ -175,8 +198,7 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 
 		case 'PLUGIN_VIEW_PROP_PUSH':
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			(draft.plugins[action.pluginId].views[action.id] as any)[action.name].push(action.value);
+			(draft.plugins[action.pluginId].views[action.id] as unknown as Record<string, unknown[]>)[action.name].push(action.value);
 			break;
 
 		case 'PLUGIN_All_STARTED_SET':
@@ -198,6 +220,7 @@ const reducer = (draftRoot: Draft<any>, action: any) => {
 
 		case 'PLUGIN_UNLOAD':
 			delete draft.plugins[action.pluginId];
+			delete draft.pluginHtmlContents[action.pluginId];
 			break;
 
 		}

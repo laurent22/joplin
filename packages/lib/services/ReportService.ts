@@ -7,8 +7,8 @@ import BaseModel from '../BaseModel';
 import DecryptionWorker from './DecryptionWorker';
 import ResourceFetcher from './ResourceFetcher';
 import Resource from '../models/Resource';
-import { _ } from '../locale';
-const { toTitleCase } = require('../string-utils.js');
+import { _, _n } from '../locale';
+import { toTitleCase } from '../string-utils';
 
 enum CanRetryType {
 	E2EE = 'e2ee',
@@ -16,7 +16,7 @@ enum CanRetryType {
 	ItemSync = 'itemSync',
 }
 
-enum ReportItemType {
+export enum ReportItemType {
 	OpenList = 'openList',
 	CloseList = 'closeList',
 }
@@ -68,15 +68,15 @@ export default class ReportService {
 		return v.toString();
 	}
 
-	public csvCreateLine(row: string[]) {
+	public csvCreateLine(row: (string | number | boolean)[]) {
+		const escaped: string[] = [];
 		for (let i = 0; i < row.length; i++) {
-			row[i] = this.csvEscapeCell(row[i]);
+			escaped.push(this.csvEscapeCell(String(row[i])));
 		}
-		return row.join(',');
+		return escaped.join(',');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public csvCreate(rows: any[]) {
+	public csvCreate(rows: (string | number | boolean)[][]) {
 		const output = [];
 		for (let i = 0; i < rows.length; i++) {
 			output.push(this.csvCreateLine(rows[i]));
@@ -84,8 +84,7 @@ export default class ReportService {
 		return output.join('\n');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async basicItemList(option: any = null) {
+	public async basicItemList(option: { format?: 'array' | 'csv' } | null = null) {
 		if (!option) option = {};
 		if (!option.format) option.format = 'array';
 
@@ -109,10 +108,14 @@ export default class ReportService {
 	}
 
 	public async syncStatus(syncTarget: number) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {
+		const output: {
+			items: Record<string, { total: number; synced: number }>;
+			total: { total: number; synced: number };
+			toDelete?: { total: number };
+			conflicted?: { total: number };
+		} = {
 			items: {},
-			total: {},
+			total: { total: 0, synced: 0 },
 		};
 
 		let itemCount = 0;
@@ -152,8 +155,7 @@ export default class ReportService {
 	}
 
 	private addRetryAllHandler(section: ReportSection): ReportSection {
-		// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-		const retryHandlers: Function[] = [];
+		const retryHandlers: RetryHandler[] = [];
 
 		for (let i = 0; i < section.body.length; i++) {
 			const item: ReportItemOrString = section.body[i];
@@ -255,17 +257,51 @@ export default class ReportService {
 
 			section.body.push('');
 
+			const errorMessagesToItems: Map<string, ReportItem[]> = new Map();
+
 			for (let i = 0; i < decryptionDisabledItems.length; i++) {
 				const row = decryptionDisabledItems[i];
-				section.body.push({
-					text: _('%s: %s', toTitleCase(BaseModel.modelTypeToName(row.type_)), row.id),
+
+				const resourceTypeName = toTitleCase(BaseModel.modelTypeToName(row.type_));
+				const message = _('%s: %s', resourceTypeName, row.id);
+
+				const item: ReportItem = {
+					text: message,
 					canRetry: true,
 					canRetryType: CanRetryType.E2EE,
 					retryHandler: async () => {
 						await DecryptionWorker.instance().clearDisabledItem(row.type_, row.id);
 						void DecryptionWorker.instance().scheduleStart();
 					},
-				});
+				};
+
+				const itemError = row.reason;
+				if (itemError) {
+					// If the error message is known, postpone adding the report item.
+					// Instead, add it under the error message as a heading
+					if (errorMessagesToItems.has(itemError)) {
+						errorMessagesToItems.get(itemError).push(item);
+					} else {
+						errorMessagesToItems.set(itemError, [item]);
+					}
+				} else {
+					// If there's no known error, add directly:
+					section.body.push(item);
+				}
+			}
+
+			// Categorize any items under each known error:
+			let errorIdx = 0;
+			for (const itemError of errorMessagesToItems.keys()) {
+				section.body.push(_('Items with error: %s', itemError));
+
+				errorIdx++;
+				section.body.push({ type: ReportItemType.OpenList, key: `itemsWithError${errorIdx}` });
+
+				// Add all items associated with the header
+				section.body.push(...errorMessagesToItems.get(itemError));
+
+				section.body.push({ type: ReportItemType.CloseList });
 			}
 
 			section = this.addRetryAllHandler(section);
@@ -340,7 +376,8 @@ export default class ReportService {
 		});
 
 		for (let i = 0; i < folders.length; i++) {
-			section.body.push(_('%s: %d notes', folders[i].title, await Folder.noteCount(folders[i].id)));
+			const noteCount = await Folder.noteCount(folders[i].id);
+			section.body.push(_n('%s: %d note', '%s: %d notes', noteCount, folders[i].title, noteCount));
 		}
 
 		sections.push(section);

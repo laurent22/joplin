@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { StyleSheet, View, TextInput } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import ScreenHeader from '../../ScreenHeader';
 import { _ } from '@joplin/lib/locale';
@@ -8,9 +8,10 @@ import { ThemeStyle, themeStyle } from '../../global-style';
 import { AppState } from '../../../utils/types';
 import { Dispatch } from 'redux';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import IconButton from '../../IconButton';
 import SearchResults from './SearchResults';
 import AccessibleView from '../../accessibility/AccessibleView';
+import { ComplexTerm } from '@joplin/lib/services/search/SearchEngine';
+import SearchBar from './SearchBar';
 
 interface Props {
 	themeId: number;
@@ -28,28 +29,33 @@ const useStyles = (theme: ThemeStyle, visible: boolean) => {
 			body: {
 				flex: 1,
 			},
-			searchContainer: {
-				flexDirection: 'row',
-				alignItems: 'center',
-				borderWidth: 1,
-				borderColor: theme.dividerColor,
-			},
-			searchTextInput: {
-				...theme.lineInput,
-				paddingLeft: theme.marginLeft,
-				flex: 1,
-				backgroundColor: theme.backgroundColor,
-				color: theme.color,
-			},
-			clearIcon: {
-				...theme.icon,
-				color: theme.colorFaded,
-				paddingRight: theme.marginRight,
-				backgroundColor: theme.backgroundColor,
-			},
 			rootStyle: visible ? theme.rootStyle : theme.hiddenRootStyle,
 		});
 	}, [theme, visible]);
+};
+
+// Workaround for https://github.com/laurent22/joplin/issues/12823:
+// Disable search-as-you-type for short 0-2 character searches that
+// are likely to match the start of a large number of words.
+const useSearchPaused = (query: string) => {
+	const [pauseDisabled, setPauseDisabled] = useState(false);
+	// Only disable search-as-you-type for a subset of all characters.
+	// This is, for example, to ensure that search-as-you-type remains
+	// enabled for CJK characters (e.g. U+6570 has length 1).
+	const paused = query.match(/^[a-z0-9]{0,2}$/i);
+
+	const onOverridePause = useCallback(() => {
+		setPauseDisabled(true);
+	}, []);
+
+	useEffect(() => {
+		setPauseDisabled(false);
+	}, [query]);
+
+	return {
+		paused: paused && !pauseDisabled,
+		onOverridePause,
+	};
 };
 
 const SearchScreenComponent: React.FC<Props> = props => {
@@ -57,6 +63,7 @@ const SearchScreenComponent: React.FC<Props> = props => {
 	const styles = useStyles(theme, props.visible);
 
 	const [query, setQuery] = useState(props.query);
+	const { paused, onOverridePause } = useSearchPaused(query);
 
 	const globalQueryRef = useRef(props.query);
 	globalQueryRef.current = props.query;
@@ -73,7 +80,7 @@ const SearchScreenComponent: React.FC<Props> = props => {
 		setQuery('');
 	}, []);
 
-	const onHighlightedWordsChange = useCallback((words: string[]) => {
+	const onHighlightedWordsChange = useCallback((words: (ComplexTerm | string)[]) => {
 		props.dispatch({
 			type: 'SET_HIGHLIGHTED',
 			words,
@@ -85,34 +92,25 @@ const SearchScreenComponent: React.FC<Props> = props => {
 			<ScreenHeader
 				title={_('Search')}
 				folderPickerOptions={{
-					enabled: props.noteSelectionEnabled,
+					visible: props.noteSelectionEnabled,
 					mustSelect: true,
 				}}
 				showSideMenuButton={false}
 				showSearchButton={false}
 			/>
 			<View style={styles.body}>
-				<View style={styles.searchContainer}>
-					<TextInput
-						style={styles.searchTextInput}
-						autoFocus={props.visible}
-						underlineColorAndroid="#ffffff00"
-						onChangeText={setQuery}
-						value={query}
-						selectionColor={theme.textSelectionColor}
-						keyboardAppearance={theme.keyboardAppearance}
-					/>
-					<IconButton
-						themeId={props.themeId}
-						iconStyle={styles.clearIcon}
-						iconName='ionicon close-circle'
-						onPress={clearButton_press}
-						description={_('Clear')}
-					/>
-				</View>
-
+				<SearchBar
+					themeId={props.themeId}
+					autoFocus={props.visible}
+					value={query}
+					onChangeText={setQuery}
+					onSubmitEditing={onOverridePause}
+					onClearButtonPress={clearButton_press}
+					placeholder={_('Search notes, notebooks...')}
+				/>
 				<SearchResults
 					query={query}
+					paused={paused}
 					ftsEnabled={props.ftsEnabled}
 					onHighlightedWordsChange={onHighlightedWordsChange}
 				/>

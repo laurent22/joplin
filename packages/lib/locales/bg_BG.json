@@ -2,29 +2,17 @@
 	"\"%s\" is missing the required \"%s\" property.": [
 		""
 	],
-	"%d days": [
-		"%d дни"
-	],
 	"%d GB": [
 		""
 	],
 	"%d GB storage space": [
 		""
 	],
-	"%d hour": [
-		"%d час"
-	],
-	"%d hours": [
-		"%d часа"
-	],
 	"%d MB": [
 		""
 	],
-	"%d minutes": [
-		"%d минути"
-	],
-	"%d notes match this pattern. Delete them?": [
-		"%d бележки съответстват на този шаблон. Да ги изтрия ли?"
+	"%d photo(s) taken": [
+		""
 	],
 	"%s": [
 		""
@@ -53,14 +41,17 @@
 	"%s = %s (%s)": [
 		"%s = %s (%s)"
 	],
+	"%s cannot be less than %s": [
+		""
+	],
 	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		""
+	],
+	"%s must be a valid whole number": [
 		""
 	],
 	"%s tab opened": [
 		""
-	],
-	"%s: %d notes": [
-		"%s: %d бележки"
 	],
 	"%s: %d/%d": [
 		"%s: %d/%d"
@@ -92,7 +83,13 @@
 	"(In plugin: %s)": [
 		""
 	],
+	"(level %d)": [
+		""
+	],
 	"(None)": [
+		""
+	],
+	"(Read-only)": [
 		""
 	],
 	"(wysiwyg: %s)": [
@@ -113,6 +110,15 @@
 	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
 		"<задача-команда> може да е \"toggle\" или \"clear\". Използвайте \"toggle\" за да сменяте състоянието на задачата между изпълнена и неизпълнена (ако целевия обект е обикновена бележка, тя ще бъде конвертирана в задача). Използвайте \"clear\" за да конвертирате задача обратно в обикновена бележка."
 	],
+	"[None]": [
+		""
+	],
+	"A brief description of the image:": [
+		""
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		""
+	],
 	"A3": [
 		""
 	],
@@ -120,6 +126,9 @@
 		""
 	],
 	"A5": [
+		""
+	],
+	"ABC musical notation: Options": [
 		""
 	],
 	"About": [
@@ -164,6 +173,9 @@
 	"Add body": [
 		""
 	],
+	"Add column": [
+		""
+	],
 	"Add or remove tags:": [
 		"Добавяне и махане на тагове:"
 	],
@@ -171,6 +183,12 @@
 		""
 	],
 	"Add to dictionary": [
+		""
+	],
+	"Added tag: %s": [
+		""
+	],
+	"Adds tag": [
 		""
 	],
 	"Admin": [
@@ -182,6 +200,9 @@
 	"Advanced options": [
 		"Настройки за напреднали"
 	],
+	"all": [
+		""
+	],
 	"All data, including notes, notebooks and tags will be permanently deleted.": [
 		""
 	],
@@ -189,6 +210,9 @@
 		""
 	],
 	"All potential ports are in use - please report the issue at %s": [
+		""
+	],
+	"All shared folders:": [
 		""
 	],
 	"Allows debugging mobile plugins. See %s for details.": [
@@ -212,6 +236,9 @@
 	"An autosaved drawing was found. Attach a copy of it to the note?": [
 		""
 	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		""
+	],
 	"An error occurred: %s": [
 		""
 	],
@@ -233,6 +260,12 @@
 	"Apply": [
 		"Приложи"
 	],
+	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
+		""
+	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
+		""
+	],
 	"Are you sure you want to renew the authorisation token?": [
 		""
 	],
@@ -243,6 +276,12 @@
 		""
 	],
 	"Aritim Dark": [
+		""
+	],
+	"Associated tags:": [
+		""
+	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
 		""
 	],
 	"Attach file": [
@@ -272,7 +311,13 @@
 	"Auto-add disabled accounts for deletion": [
 		""
 	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		""
+	],
 	"Auto-pair braces, parentheses, quotations, etc.": [
+		""
+	],
+	"Autocomplete Markdown and HTML": [
 		""
 	],
 	"Automatically delete notes in the trash after a number of days": [
@@ -290,7 +335,7 @@
 	"Beta": [
 		""
 	],
-	"Biometric unlock is not setup on the device. Please set it up in order to unlock Joplin. If the device is on lockout, consider switching it off and on to reset biometrics scanning.": [
+	"Block code": [
 		""
 	],
 	"Bold": [
@@ -311,6 +356,12 @@
 	"by %s": [
 		""
 	],
+	"by word": [
+		""
+	],
+	"Camera": [
+		""
+	],
 	"Can view": [
 		""
 	],
@@ -322,6 +373,9 @@
 	],
 	"Cancelling background synchronisation... Please wait.": [
 		"Отменя се синхронизацията течаща на заден план... Моля изчакайте."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		""
 	],
 	"Cancelling...": [
 		"Отменям..."
@@ -365,10 +419,16 @@
 	"Change application layout": [
 		""
 	],
+	"Change shortcut for \"%s\"": [
+		""
+	],
 	"Characters": [
 		""
 	],
 	"Characters excluding spaces": [
+		""
+	],
+	"Check elements to display in the toolbar": [
 		""
 	],
 	"Check for updates...": [
@@ -383,6 +443,9 @@
 	"Checking... Please wait.": [
 		"Проверявам... Моля изчакайте."
 	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
 	"Chrome Web Store": [
 		""
 	],
@@ -395,7 +458,16 @@
 	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
 		"Натиснете \"%s\" за да възстановите бележката. Тя ще бъде копирана в тетрадка с име \"%s\". Настоящата версия на бележката няма да бъде подменена или променена."
 	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		""
+	],
+	"close": [
+		""
+	],
 	"Close": [
+		""
+	],
+	"Close side menu": [
 		""
 	],
 	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
@@ -403,6 +475,9 @@
 	],
 	"Close Window": [
 		"Затвори прозорец"
+	],
+	"Closing session...": [
+		""
 	],
 	"Cmd-click to open": [
 		""
@@ -416,10 +491,7 @@
 	"Code Block": [
 		""
 	],
-	"Collapse": [
-		""
-	],
-	"Collapse %s": [
+	"Collapsed": [
 		""
 	],
 	"Coming alarms": [
@@ -434,10 +506,16 @@
 	"Command": [
 		""
 	],
+	"COMMAND": [
+		""
+	],
 	"Command palette": [
 		""
 	],
 	"Command palette...": [
+		""
+	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
 		""
 	],
 	"Completed decryption.": [
@@ -455,16 +533,28 @@
 	"Configuration": [
 		"Настройки"
 	],
+	"Configured keyboard shortcuts:": [
+		""
+	],
+	"Configures the size of scrollbars used in the app.": [
+		""
+	],
 	"Conflicted: %d": [
 		"Конфликти: %d"
 	],
 	"Conflicts": [
 		"Конфликти"
 	],
+	"Connect using your organisation account": [
+		""
+	],
 	"Consolidated billing": [
 		""
 	],
 	"Continue": [
+		""
+	],
+	"Control character": [
 		""
 	],
 	"Convert to note": [
@@ -545,6 +635,9 @@
 	"Ctrl-click to open: %s": [
 		""
 	],
+	"current match": [
+		""
+	],
 	"Current version is up-to-date.": [
 		"Настоящата версия е най-новата."
 	],
@@ -593,6 +686,9 @@
 	"Decrypting items: %d/%d": [
 		"Декриптиране на обекти: %d/%d"
 	],
+	"Default title to use for documents created by the scanner.": [
+		""
+	],
 	"Default: %s": [
 		"Стойност по подразбиране: %s"
 	],
@@ -600,6 +696,9 @@
 		"Изтрий"
 	],
 	"Delete local data and re-download from sync target": [
+		""
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
 		""
 	],
 	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
@@ -633,6 +732,12 @@
 		"Целеви формат: %s"
 	],
 	"Detailed": [
+		""
+	],
+	"Dev": [
+		""
+	],
+	"Device: %s": [
 		""
 	],
 	"Directory": [
@@ -677,6 +782,9 @@
 	"Displays the complete information about note.": [
 		"Показва пълната информация за бележката."
 	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
 	"Displays the given note.": [
 		"Показва зададената бележка."
 	],
@@ -694,6 +802,18 @@
 	],
 	"Do not ask for confirmation.": [
 		"Не питай за потвърждение."
+	],
+	"Do you find the Joplin web app useful?": [
+		""
+	],
+	"Document scanner: Title template": [
+		""
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		""
+	],
+	"Don't show this message again": [
+		""
 	],
 	"Done": [
 		""
@@ -743,8 +863,8 @@
 	"Edit": [
 		"Редактиране"
 	],
-	"Edit in external editor": [
-		"Редактирай във външен редактор"
+	"Edit as Rich Text": [
+		""
 	],
 	"Edit note.": [
 		"Редактиране на бележка."
@@ -806,6 +926,9 @@
 	"Enable encryption": [
 		"Включване на криптирането"
 	],
+	"Enable file:// URLs for images and videos": [
+		""
+	],
 	"Enable footnotes": [
 		"Пусни бележки под линията"
 	],
@@ -851,6 +974,12 @@
 	"Enabled": [
 		"Включено"
 	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		""
+	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		""
+	],
 	"Encrypted": [
 		"Криптирана"
 	],
@@ -863,17 +992,26 @@
 	"Encryption is: %s": [
 		"Криптирането е: %s"
 	],
+	"Ends voice typing": [
+		""
+	],
 	"Enter code here": [
 		"Въведете кода тук"
 	],
 	"Enter master password:": [
 		"Въведете главната парола:"
 	],
+	"Entering selection mode": [
+		""
+	],
 	"Enum": [
 		"Изброим"
 	],
 	"Error opening note in editor: %s": [
 		"Грешка при отварянето на бележката в редактор: %s"
+	],
+	"Error starting camera: %s": [
+		""
 	],
 	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
 		"Грешка. Моля проверете дали уеб адреса(URL), потребителското име, паролата и т.н. са правили и че целта за синхронизация е достъпна. Получената грешка беше:"
@@ -884,10 +1022,10 @@
 	"Exits the application.": [
 		"Напуска приложението."
 	],
-	"Expand": [
+	"Expand %s": [
 		""
 	],
-	"Expand %s": [
+	"Expanded": [
 		""
 	],
 	"Export": [
@@ -917,10 +1055,19 @@
 	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
 		""
 	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		""
+	],
+	"Failed to connect to your account. Please try again.": [
+		""
+	],
 	"Fatal error:": [
 		"Фатална грешка:"
 	],
 	"Feature flags": [
+		""
+	],
+	"Feedback": [
 		""
 	],
 	"Fetched items: %d/%d.": [
@@ -935,7 +1082,7 @@
 	"File system": [
 		"Файловата система"
 	],
-	"Find and replace": [
+	"Finishes recording": [
 		""
 	],
 	"Firefox Extension": [
@@ -955,6 +1102,12 @@
 	],
 	"Focus title": [
 		"Фокусирай заглавието"
+	],
+	"Folder \"%s\" is shared with:": [
+		""
+	],
+	"Follow link": [
+		""
 	],
 	"For debugging purpose only: export your profile to an external SD card.": [
 		""
@@ -995,6 +1148,9 @@
 	"Geolocation, spellcheck, editor toolbar, image resize": [
 		""
 	],
+	"Get a quote": [
+		""
+	],
 	"Get it now:": [
 		""
 	],
@@ -1003,6 +1159,18 @@
 	],
 	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
 		"Показва или променя конфигурационна стойност. Ако [стойност] не е дадена, ще покаже стойността на [име]. Ако нито [име] нито [стойност] са дадени, изрежда цялата настояща конфигурация."
+	],
+	"Glossary:": [
+		""
+	],
+	"go": [
+		""
+	],
+	"Go back": [
+		""
+	],
+	"Go to line": [
+		""
 	],
 	"Go to source URL": [
 		"Иди на уеб адреса (URL)"
@@ -1016,9 +1184,6 @@
 	"Header %d": [
 		""
 	],
-	"Headers": [
-		""
-	],
 	"Heading": [
 		"Заглавие"
 	],
@@ -1029,6 +1194,9 @@
 		"Скрий %s"
 	],
 	"Hide disabled keys": [
+		""
+	],
+	"Hides warning": [
 		""
 	],
 	"Highlight": [
@@ -1054,6 +1222,9 @@
 	],
 	"Idle": [
 		"В момента не прави нищо"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		""
 	],
 	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
 		""
@@ -1097,9 +1268,6 @@
 	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
 		"Във всяка команда може да реферирате бележка или тетрадка по заглавие или по идентификатор, или използвайки някоя от кратките команди `$n` и `$b`, представляващи съответно настоящата бележка и настоящата тетрадка. `$c` може да се ползва за рефериране на избрания обект."
 	],
-	"In order to associate a geo-location with the note, the app needs your permission to access your location.\n\nYou may turn off this option at any time in the Configuration screen.": [
-		""
-	],
 	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
 		""
 	],
@@ -1130,6 +1298,9 @@
 	"Indent more": [
 		""
 	],
+	"Info": [
+		""
+	],
 	"Inline Code": [
 		""
 	],
@@ -1154,6 +1325,9 @@
 	"Invalid command: \"%s\"": [
 		"Невалидна команда: \"%s\""
 	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		""
+	],
 	"Invalid option value: \"%s\". Possible values are: %s.": [
 		"Невалидна стойност на настройката: \"%s\". Възможните стойности са: %s."
 	],
@@ -1172,7 +1346,7 @@
 	"Items that cannot be synchronised": [
 		"Някои обекти не можаха да бъдат синхронизирани"
 	],
-	"Join us on Twitter": [
+	"Join us on %s": [
 		""
 	],
 	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
@@ -1190,7 +1364,16 @@
 	"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": [
 		"Joplin не успя да декриптира тези обекти след няколко опита. Възможните причини са че са данните са развалени или че обектите са прекалено големи. Тези обекти ще останат на устройството, но Joplin вече няма да се опитва да ги декриптира."
 	],
+	"Joplin is already running.": [
+		""
+	],
 	"Joplin Server URL": [
+		""
+	],
+	"Joplin SSO Authentication": [
+		""
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
 		""
 	],
 	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
@@ -1200,9 +1383,6 @@
 		"Уебсайта на Joplin"
 	],
 	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
-		""
-	],
-	"KaTeX": [
 		""
 	],
 	"Keep note history for": [
@@ -1220,7 +1400,13 @@
 	"Keychain Supported: %s": [
 		""
 	],
+	"KEYS": [
+		""
+	],
 	"Keys that need upgrading": [
+		""
+	],
+	"Label": [
 		""
 	],
 	"Landscape": [
@@ -1228,6 +1414,9 @@
 	],
 	"Language": [
 		"Език"
+	],
+	"Large": [
+		""
 	],
 	"Last error: %s": [
 		"Последна грешка: %s"
@@ -1265,14 +1454,8 @@
 	"Lines": [
 		""
 	],
-	"Links with protocol \"%s\" are not supported": [
-		""
-	],
 	"List item": [
 		"Елемент на списък"
-	],
-	"Lists": [
-		""
 	],
 	"Loaded": [
 		""
@@ -1307,6 +1490,9 @@
 	"Manage your plugins": [
 		""
 	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
 	"Manual": [
 		"Ръчен"
 	],
@@ -1314,6 +1500,9 @@
 		"Markdown"
 	],
 	"Markdown + Front Matter": [
+		""
+	],
+	"Markdown editor: Render markup in editor": [
 		""
 	],
 	"Marks a to-do as done.": [
@@ -1328,6 +1517,12 @@
 	"Master Key %s": [
 		"Главен ключ %s"
 	],
+	"match case": [
+		""
+	],
+	"Math": [
+		""
+	],
 	"Max concurrent connections": [
 		"Максимален брой едновременни връзки"
 	],
@@ -1335,6 +1530,9 @@
 		""
 	],
 	"Media player, math, diagrams, table of contents": [
+		""
+	],
+	"Medium": [
 		""
 	],
 	"Minimise": [
@@ -1358,11 +1556,17 @@
 	"Most plugins have source code available for review on the plugin website.": [
 		""
 	],
-	"Move %d notes to notebook \"%s\"?": [
-		"Да преместя ли %d бележки в тетрадка \"%s\"?"
+	"Move left": [
+		""
+	],
+	"Move right": [
+		""
 	],
 	"Move to notebook...": [
 		"Премести в тетрадка..."
+	],
+	"Move up": [
+		""
 	],
 	"n": [
 		"н"
@@ -1371,9 +1575,6 @@
 		"Н"
 	],
 	"Never resize": [
-		""
-	],
-	"New": [
 		""
 	],
 	"New note": [
@@ -1385,14 +1586,14 @@
 	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
 		"Нова тетрадка \"%s\" ще бъде създадена и файл \"%s\" ще бъде импортиран в нея"
 	],
-	"New tags:": [
-		"Нови тагове:"
-	],
 	"New to-do": [
 		"Нова задача"
 	],
 	"New version: %s": [
 		"Нова версия: %s"
+	],
+	"next": [
+		""
 	],
 	"Next match": [
 		""
@@ -1414,9 +1615,6 @@
 	],
 	"No active notebook.": [
 		"Няма активна тетрадка."
-	],
-	"No item with ID %s": [
-		"Няма обект с идентификатор %s"
 	],
 	"No new invitations": [
 		""
@@ -1448,11 +1646,20 @@
 	"No text editor is defined. Please set it using `config editor <editor-path>`": [
 		"Няма зададен текстови редактор. Моля задайте го с командата: `config editor <път-до-редактора>`"
 	],
+	"No URL for SAML authentication set.": [
+		""
+	],
+	"None": [
+		""
+	],
 	"Nord": [
 		""
 	],
 	"Not authenticated with %s. Please provide any missing credentials.": [
 		"Не сме оторизирани за %s. Моля въведете липсващите оторизационни данни."
+	],
+	"Not checked": [
+		""
 	],
 	"Not downloaded": [
 		""
@@ -1461,6 +1668,9 @@
 		""
 	],
 	"Not now": [
+		""
+	],
+	"Not useful": [
 		""
 	],
 	"note": [
@@ -1520,11 +1730,17 @@
 	"Numbered List": [
 		"Номериран списък"
 	],
+	"OCR: Clear cache and re-download language data files": [
+		""
+	],
 	"OK": [
 		"Добре"
 	],
 	"On %s: %s": [
 		"На %s: %s"
+	],
+	"on line": [
+		""
 	],
 	"One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon.": [
 		"Един или повече обекти са криптирани в момента и може да е необходимо да въведете главната парола. За да го направите, напишете `e2ee decrypt`. Ако вече сте задали паролата, то криптираните обекти вече се декриптират на заден план и скоро ще са на разположение."
@@ -1541,10 +1757,22 @@
 	"Open %s": [
 		"Отвори %s"
 	],
+	"Open in new window": [
+		""
+	],
 	"Open PDF viewer": [
 		""
 	],
+	"Open primary app instance...": [
+		""
+	],
+	"Open secondary app instance...": [
+		""
+	],
 	"Open Sync Wizard...": [
+		""
+	],
+	"Open-source licences": [
 		""
 	],
 	"Open...": [
@@ -1559,10 +1787,22 @@
 	"Options": [
 		"Конфигурация"
 	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
+	"Other": [
+		""
+	],
 	"Page orientation for PDF export": [
 		""
 	],
 	"Page size for PDF export": [
+		""
+	],
+	"Panel \"%s\" is visible": [
+		""
+	],
+	"Panel %s is hidden": [
 		""
 	],
 	"Password": [
@@ -1586,11 +1826,11 @@
 	"PDF File": [
 		"PDF файл"
 	],
-	"Per user. Minimum of %d users.": [
+	"Per user. Minimum of 2 users.": [
 		""
 	],
-	"Permission to use camera": [
-		"Разрешение за употреба на камерата"
+	"Photo %d": [
+		""
 	],
 	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
 		""
@@ -1606,6 +1846,9 @@
 	],
 	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
 		"Моля отворете следния адрес в браузър и оторизирайте приложението. Приложението ще създаде директория \"Apps/Joplin\" и ще чете и пише файлове в тази директория. Приложението няма да има достъп до файлове извън тази директория, нито до друга лична информация. Никакви данни няма да бъдат споделени с трети страни."
+	],
+	"Please provide the recipient email": [
+		""
 	],
 	"Please record your voice...": [
 		""
@@ -1631,6 +1874,9 @@
 	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
 		""
 	],
+	"Please wait while we load your organisation sign-in page...": [
+		""
+	],
 	"Plugin repository failed to load": [
 		""
 	],
@@ -1652,6 +1898,9 @@
 	"Possible values: %s.": [
 		"Възможни стойности: %s."
 	],
+	"Prefer JSON output.": [
+		""
+	],
 	"Preferences...": [
 		"Настройки..."
 	],
@@ -1659,6 +1908,9 @@
 		""
 	],
 	"Preferred light theme": [
+		""
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
 		""
 	],
 	"Press Ctrl+D or type \"exit\" to exit the application": [
@@ -1672,6 +1924,9 @@
 	],
 	"Press to set the decryption password.": [
 		"Натиснете за да зададете паролата за декриптиране."
+	],
+	"previous": [
+		""
 	],
 	"Previous match": [
 		""
@@ -1721,10 +1976,25 @@
 	"Publish notes to the internet": [
 		""
 	],
+	"Publish/unpublish": [
+		""
+	],
+	"Published at URL: %s": [
+		""
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		""
+	],
 	"Quit": [
 		"Изход"
 	],
+	"Re-download model": [
+		""
+	],
 	"Re-upload local data to sync target": [
+		""
+	],
+	"Read more": [
 		""
 	],
 	"Read more about it": [
@@ -1745,10 +2015,16 @@
 	"Recipients:": [
 		""
 	],
+	"Recognize handwritten image": [
+		""
+	],
 	"Recommended": [
 		""
 	],
 	"Recommended plugins": [
+		""
+	],
+	"Record audio": [
 		""
 	],
 	"Redo": [
@@ -1781,6 +2057,9 @@
 	"Renames the given <item> (note or notebook) to <name>.": [
 		"Преименува дадения <обект> (бележка или тетрадка) на <име>."
 	],
+	"Renders markup on all lines that don't include the cursor.": [
+		""
+	],
 	"Renew token": [
 		""
 	],
@@ -1791,6 +2070,12 @@
 		""
 	],
 	"Replace: ": [
+		""
+	],
+	"replaced $ matches": [
+		""
+	],
+	"replaced match on line $": [
 		""
 	],
 	"Report an issue": [
@@ -1835,6 +2120,12 @@
 	"Reverses the sorting order.": [
 		"Обръща реда на сортиране."
 	],
+	"Rich Text": [
+		""
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		""
+	],
 	"Runs the commands contained in the text file. There should be one command per line.": [
 		""
 	],
@@ -1874,6 +2165,12 @@
 	"Save geo-location with notes": [
 		"Запазвай геолокация в бележките"
 	],
+	"Scanned code": [
+		""
+	],
+	"Scrollbar size": [
+		""
+	],
 	"Search": [
 		"Търсене"
 	],
@@ -1897,6 +2194,15 @@
 	],
 	"Select all": [
 		"Избери всичко"
+	],
+	"Select one of the other supported sync targets.": [
+		""
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
+	"Self-hosted": [
+		""
 	],
 	"Server is already running on port %d": [
 		""
@@ -1922,6 +2228,9 @@
 	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
 		"Задава зададената [стойност] за атрибут <име> на дадената <бележка>. Възможните атрибути са:\n\n%s"
 	],
+	"Settings": [
+		""
+	],
 	"Share": [
 		"Сподели"
 	],
@@ -1929,6 +2238,9 @@
 		""
 	],
 	"Share permissions": [
+		""
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
 		""
 	],
 	"Shortcuts are not available in CLI mode.": [
@@ -1967,6 +2279,9 @@
 	"Skipped: %d.": [
 		"Пропуснати: %d."
 	],
+	"Small": [
+		""
+	],
 	"Solarised Dark": [
 		""
 	],
@@ -1981,6 +2296,12 @@
 	],
 	"Some items cannot be synchronised.": [
 		"Някои обекти не можаха да бъдат синхронизирани."
+	],
+	"Sort \"%s\" in ascending order": [
+		""
+	],
+	"Sort \"%s\" in descending order": [
+		""
 	],
 	"Sort notebooks by": [
 		"Сортирай тетрадките по"
@@ -2000,6 +2321,9 @@
 	"Source format: %s": [
 		"Формат на източника: %s"
 	],
+	"SPACE": [
+		""
+	],
 	"Spacer": [
 		""
 	],
@@ -2014,6 +2338,9 @@
 	],
 	"Start application minimised in the tray icon": [
 		"Пускай приложението минимизирано до иконката"
+	],
+	"Start recording": [
+		""
 	],
 	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
 		""
@@ -2069,8 +2396,14 @@
 	"Subscript": [
 		""
 	],
+	"Success": [
+		""
+	],
 	"Success! Synchronisation configuration appears to be correct.": [
 		"Успех! Изглежда че настройките за синхронизация са правили."
+	],
+	"Suggestions": [
+		""
 	],
 	"Superscript": [
 		""
@@ -2084,6 +2417,9 @@
 	"Switch between note and to-do type": [
 		"Конвертирай между бележка и задача"
 	],
+	"Switch to back-facing camera": [
+		""
+	],
 	"Switch to note type": [
 		"Конвертирай към бележка"
 	],
@@ -2092,6 +2428,9 @@
 	],
 	"Switches to [notebook] - all further operations will happen within this notebook.": [
 		"Превключва на [тетрадка] - всички нататъчни команди ще се извършват в тази тетрадка."
+	],
+	"Sync": [
+		""
 	],
 	"Sync as many devices as you want": [
 		""
@@ -2135,10 +2474,13 @@
 	"Synchronises with remote storage.": [
 		"Синхронизира с отдалеченото хранилище."
 	],
-	"Tabloid": [
+	"Tab indents": [
 		""
 	],
-	"tag1, tag2, ...": [
+	"Tab moves focus": [
+		""
+	],
+	"Tabloid": [
 		""
 	],
 	"Tagged: %d.": [
@@ -2162,13 +2504,13 @@
 	"Text editor command": [
 		"Команда за стартиране на текстов редактор"
 	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		""
+	],
 	"The active profile cannot be deleted. Switch to a different profile and try again.": [
 		""
 	],
 	"The app is now going to close. Please relaunch it to complete the process.": [
-		""
-	],
-	"The application did not close properly. Would you like to start in safe mode?": [
 		""
 	],
 	"The application has been authorised - you may now close this browser tab.": [
@@ -2217,10 +2559,13 @@
 	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
 		""
 	],
-	"The Joplin mobile app does not currently support this type of link: %s": [
-		"Мобилното приложение на Joplin в момента не поддържа този вид линкове: %s"
+	"The following plugins may not support the current markdown editor:": [
+		""
 	],
 	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
+		""
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
 		""
 	],
 	"The master key has been upgraded successfully!": [
@@ -2258,6 +2603,9 @@
 	],
 	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
 		"Целта за синхронизация. Всяка цел за синхронизация може да има допълнителни параметри с имена `sync.NUM.NAME` (всички такива са документирани по долу)."
+	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		""
 	],
 	"The Web Clipper needs your authorisation to access your data.": [
 		""
@@ -2304,13 +2652,19 @@
 	"This attachment does not have OCR data (Status: %s)": [
 		""
 	],
-	"This attachment is not downloaded or not decrypted yet.": [
-		"Прикаченият файл не е свален или все още не е декриптиран."
-	],
 	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
 		"Оторизационният жетон е необходим само ако искате да дадете достъп до Joplin на приложения от трети страни."
 	],
 	"This drawing may have unsaved changes.": [
+		""
+	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		""
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		""
+	],
+	"This image type is not supported by the recognition system.": [
 		""
 	],
 	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
@@ -2327,6 +2681,9 @@
 	],
 	"This note has no history": [
 		"Тази бележка няма история"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		""
 	],
 	"This plugin doesn't support %s.": [
 		""
@@ -2360,6 +2717,9 @@
 	],
 	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
 		"За да позволите на Joplin да синхронизира с Dropbox, моля изпълнете следните стъпки:"
+	],
+	"To create a new tag, type the name and press enter.": [
+		""
 	],
 	"To delete a tag, untag the associated notes.": [
 		"За да изтриете таг, премахнете го от всички бележки."
@@ -2421,14 +2781,14 @@
 	"Try it now": [
 		""
 	],
+	"TYPE": [
+		""
+	],
 	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
 		"Въведете `help [команда]` за повече информация относно командата, или въведете `help all` за пълната информация за ползването на командния ред."
 	],
 	"Type `joplin help` for usage information.": [
 		"Въведете `joplin help` за информация за употребата."
-	],
-	"Type new tags or select from list": [
-		"Напишете нови тагове или изберете от списъка"
 	],
 	"Type: %s.": [
 		"Тип: %s."
@@ -2437,6 +2797,12 @@
 		""
 	],
 	"Unable to share log data. Reason: %s": [
+		""
+	],
+	"Unable to share note data. Reason: %s": [
+		""
+	],
+	"Unchecked": [
 		""
 	],
 	"Uncompleted to-dos on top": [
@@ -2453,6 +2819,9 @@
 	],
 	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
 		"Неизвестен тип на свален обект - моля обновете Joplin до най-новата версия"
+	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		""
 	],
 	"Unshare this notebook? The recipients will no longer have access to its content.": [
 		""
@@ -2520,6 +2889,9 @@
 	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
 		""
 	],
+	"Useful": [
+		""
+	],
 	"User deletions": [
 		""
 	],
@@ -2541,10 +2913,16 @@
 	"Vim": [
 		""
 	],
+	"Voice recorder": [
+		""
+	],
 	"Voice typing language files (URL)": [
 		""
 	],
 	"Voice typing...": [
+		""
+	],
+	"Voice typing: Glossary": [
 		""
 	],
 	"Warning": [
@@ -2586,6 +2964,9 @@
 	"When creating a new to-do:": [
 		"Когато се създава нова задача:"
 	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		""
+	],
 	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
 		""
 	],
@@ -2608,6 +2989,15 @@
 		""
 	],
 	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		""
+	],
+	"You are now logged into your account.": [
+		""
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		""
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
 		""
 	],
 	"You do not have any installed plugin.": [
@@ -2636,9 +3026,6 @@
 	],
 	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
 		""
-	],
-	"Your permission to use your camera is required.": [
-		"Трябва да разрешените употребата на камерата."
 	],
 	"Your version: %s": [
 		"Вашата версия: %s"

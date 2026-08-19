@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { useEffect, useImperativeHandle, useState, useRef, useCallback, forwardRef } from 'react';
+import { useEffect, useImperativeHandle, useState, useRef, useCallback, forwardRef, RefObject } from 'react';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 
-import * as CodeMirror from 'codemirror';
+import CodeMirror from 'codemirror';
 
 import 'codemirror/addon/comment/comment';
 import 'codemirror/addon/dialog/dialog';
@@ -16,7 +16,7 @@ import useListIdent from './utils/useListIdent';
 import useScrollUtils from './utils/useScrollUtils';
 import useCursorUtils from './utils/useCursorUtils';
 import useLineSorting from './utils/useLineSorting';
-import useEditorSearch from '../utils/useEditorSearchExtension';
+import { OnSetMarkers } from '../utils/useEditorSearchExtension';
 import useJoplinMode from './utils/useJoplinMode';
 import useKeymap from './utils/useKeymap';
 import useExternalPlugins from './utils/useExternalPlugins';
@@ -32,86 +32,87 @@ import Setting from '@joplin/lib/models/Setting';
 
 // import eventManager from '@joplin/lib/eventManager';
 
-import { reg } from '@joplin/lib/registry';
 import { focus } from '@joplin/lib/utils/focusHandler';
 
 // Based on http://pypl.github.io/PYPL.html
-const topLanguages = [
-	'python',
-	'clike',
-	'javascript',
-	'jsx',
-	'php',
-	'r',
-	'swift',
-	'go',
-	'vb',
-	'vbscript',
-	'ruby',
-	'rust',
-	'dart',
-	'lua',
-	'groovy',
-	'perl',
-	'cobol',
-	'julia',
-	'haskell',
-	'pascal',
-	'css',
+import 'codemirror/mode/python/python';
+import 'codemirror/mode/clike/clike';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/jsx/jsx';
+import 'codemirror/mode/php/php';
+import 'codemirror/mode/r/r';
+import 'codemirror/mode/swift/swift';
+import 'codemirror/mode/go/go';
+import 'codemirror/mode/vb/vb';
+import 'codemirror/mode/vbscript/vbscript';
+import 'codemirror/mode/ruby/ruby';
+import 'codemirror/mode/rust/rust';
+import 'codemirror/mode/dart/dart';
+import 'codemirror/mode/lua/lua';
+import 'codemirror/mode/groovy/groovy';
+import 'codemirror/mode/perl/perl';
+import 'codemirror/mode/cobol/cobol';
+import 'codemirror/mode/julia/julia';
+import 'codemirror/mode/haskell/haskell';
+import 'codemirror/mode/pascal/pascal';
+import 'codemirror/mode/css/css';
 
-	// Additional languages, not in the PYPL list
-	'xml', // For HTML too
-	'markdown',
-	'yaml',
-	'shell',
-	'dockerfile',
-	'diff',
-	'erlang',
-	'sql',
-];
-// Load Top Modes
-for (let i = 0; i < topLanguages.length; i++) {
-	const mode = topLanguages[i];
+// Additional languages, not in the PYPL lis;
+import 'codemirror/mode/xml/xml'; // For HTML too
+import 'codemirror/mode/markdown/markdown';
+import 'codemirror/mode/yaml/yaml';
+import 'codemirror/mode/shell/shell';
+import 'codemirror/mode/dockerfile/dockerfile';
+import 'codemirror/mode/diff/diff';
+import 'codemirror/mode/erlang/erlang';
+import 'codemirror/mode/sql/sql';
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	if (CodeMirror.modeInfo.find((m: any) => m.mode === mode)) {
-		require(`codemirror/mode/${mode}/${mode}`);
-	} else {
-		reg.logger().error('Cannot find CodeMirror mode: ', mode);
-	}
+interface ExtendedWindow {
+	CodeMirror?: unknown;
 }
+declare const window: ExtendedWindow;
+
 
 export interface EditorProps {
 	value: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	searchMarkers: any;
+	onSetMarkersRef: RefObject<OnSetMarkers>;
 	mode: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	style: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	codeMirrorTheme: any;
 	readOnly: boolean;
 	autoMatchBraces: boolean | object;
 	keyMap: string;
 	plugins: PluginStates;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	onChange: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	onScroll: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	onEditorPaste: any;
 	isSafeMode: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	onResize: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	onUpdate: any;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 function Editor(props: EditorProps, ref: any) {
 	const [editor, setEditor] = useState(null);
 	const editorParent = useRef(null);
 	const lastEditTime = useRef(NaN);
+
+	useEffect(() => {
+		window.CodeMirror = CodeMirror;
+
+		return () => {
+			window.CodeMirror = undefined;
+		};
+	}, []);
 
 	// Codemirror plugins add new commands to codemirror (or change it's behavior)
 	// This command adds the smartListIndent function which will be bound to tab
@@ -119,9 +120,8 @@ function Editor(props: EditorProps, ref: any) {
 	useScrollUtils(CodeMirror);
 	useCursorUtils(CodeMirror);
 	useLineSorting(CodeMirror);
-	useEditorSearch(CodeMirror);
 	useJoplinMode(CodeMirror);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	const pluginOptions: any = useExternalPlugins(CodeMirror, props.plugins);
 	useKeymap(CodeMirror);
 	useJoplinCommands(CodeMirror);
@@ -130,7 +130,7 @@ function Editor(props: EditorProps, ref: any) {
 		return editor;
 	});
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	const editor_change = useCallback((cm: any, change: any) => {
 		if (props.onChange && change.origin !== 'setValue') {
 			props.onChange(cm.getValue());
@@ -138,22 +138,22 @@ function Editor(props: EditorProps, ref: any) {
 		}
 	}, [props.onChange]);
 
-	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	const editor_scroll = useCallback((_cm: any) => {
 		props.onScroll();
 	}, [props.onScroll]);
 
-	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	const editor_paste = useCallback((_cm: any, _event: any) => {
 		props.onEditorPaste();
 	}, [props.onEditorPaste]);
 
-	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	const editor_drop = useCallback((cm: any, _event: any) => {
 		focus('v5/Editor::editor_drop', cm);
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	const editor_drag = useCallback((cm: any, event: any) => {
 		// This is the type for all drag and drops that are external to codemirror
 		// setting the cursor allows us to drop them in the right place
@@ -165,12 +165,12 @@ function Editor(props: EditorProps, ref: any) {
 		event.dataTransfer.dropEffect = 'copy';
 	}, []);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	const editor_resize = useCallback((cm: any) => {
 		props.onResize(cm);
 	}, [props.onResize]);
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 	const editor_update = useCallback((cm: any) => {
 		const edited = Date.now() - lastEditTime.current <= 100;
 		props.onUpdate(cm, edited);
@@ -181,13 +181,13 @@ function Editor(props: EditorProps, ref: any) {
 
 		const userOptions = {};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 		const safeOptions: Record<string, any> = {
 			value: props.value,
 			readOnly: props.readOnly,
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 		const unsafeOptions: Record<string, any> = {
 			screenReaderLabel: props.value,
 			theme: props.codeMirrorTheme,
@@ -204,7 +204,7 @@ function Editor(props: EditorProps, ref: any) {
 			keyMap: props.keyMap ? props.keyMap : 'default',
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- CodeMirror 5 dynamic editor / event / options shapes; no @types/codemirror in this repo
 		let cmOptions: Record<string, any> = { ...safeOptions };
 
 		if (!props.isSafeMode) {
@@ -228,7 +228,7 @@ function Editor(props: EditorProps, ref: any) {
 		// It's possible for searchMarkers to be available before the editor
 		// In these cases we set the markers asap so the user can see them as
 		// soon as the editor is ready
-		if (props.searchMarkers) { cm.setMarkers(props.searchMarkers.keywords, props.searchMarkers.options); }
+		if (props.searchMarkers) { props.onSetMarkersRef.current(cm, props.searchMarkers.keywords, props.searchMarkers.options); }
 
 		return () => {
 			// Clean up codemirror

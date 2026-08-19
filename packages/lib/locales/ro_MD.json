@@ -1,0 +1,4562 @@
+{
+	"\"%s\" is missing the required \"%s\" property.": [
+		"„%s” nu are proprietatea necesară „%s”."
+	],
+	"%d day": [
+		"%d zi",
+		"%d zile",
+		"%d de zile"
+	],
+	"%d GB": [
+		"%d GO"
+	],
+	"%d GB storage space": [
+		"spațiu de stocare %d GO"
+	],
+	"%d hour": [
+		"%d oră",
+		"%d ore",
+		"%d de ore"
+	],
+	"%d MB": [
+		"%d MO"
+	],
+	"%d MB per note or attachment": [
+		"%d MO per notiță sau atașament"
+	],
+	"%d minute": [
+		"%d minut",
+		"%d minute",
+		"%d de minute"
+	],
+	"%d note matches this pattern. Delete it?": [
+		"%d notiță se potrivește acestui șablon. Dorești să o ștergi?",
+		"%d notițe se potrivesc acestui șablon. Dorești să le ștergi?",
+		"%d de notițe se potrivesc acestui șablon. Dorești să le ștergi?"
+	],
+	"%d note will be permanently deleted. Continue?": [
+		"%d notiță va fi ștearsă permanent. Continui?",
+		"%d notițe vor fi șterse permanent. Continui?",
+		"%d de notițe vor fi șterse permanent. Continui?"
+	],
+	"%d photo(s) taken": [
+		"%d poze făcute"
+	],
+	"%s": [
+		"%s"
+	],
+	"%s %s (%s, %s)": [
+		"%s %s (%s, %s)"
+	],
+	"%s (%s) could not be uploaded: %s": [
+		"Acest fișier nu a putut fi încărcat: %s"
+	],
+	"%s (%s) would like to share a notebook with you.": [
+		"%s (%s) ar dori să partajeze un caiet cu tine."
+	],
+	"%s (%s): %s": [
+		"%s (%s): %s"
+	],
+	"%s (pre-release)": [
+		"%s (pre-lansare)"
+	],
+	"%s - Copy": [
+		"%s - copie"
+	],
+	"%s / %s": [
+		"%s / %s"
+	],
+	"%s / %s / %s": [
+		"%s / %s / %s"
+	],
+	"%s = %s": [
+		"%s = %s"
+	],
+	"%s = %s (%s)": [
+		"%s = %s (%s)"
+	],
+	"%s cannot be greater than %s": [
+		"%s nu poate fi mai mare decît %s"
+	],
+	"%s cannot be less than %s": [
+		"%s nu poate fi mai mic decît %s"
+	],
+	"%s from %s": [
+		"%s din %s"
+	],
+	"%s is not optimised for synchronising many small files so your initial synchronisation will be slow.": [
+		"%s nu este optimizat pentru sincronizarea multor fișiere mici, așa că sincronizarea inițială va fi lentă."
+	],
+	"%s must be a valid whole number": [
+		"%s trebuie să fie un număr întreg valid"
+	],
+	"%s tab opened": [
+		"Fila %s a fost deschisă"
+	],
+	"%s: %d": [
+		"%s: %d"
+	],
+	"%s: %d note": [
+		"%s: %d notiță",
+		"%s: %d notițe",
+		"%s: %d de notițe"
+	],
+	"%s: %d/%d": [
+		"%s: %d/%d"
+	],
+	"%s: %s": [
+		"%s: %s"
+	],
+	"%s: Missing password.": [
+		"%s: Parolă lipsă."
+	],
+	"&Edit": [
+		"&Editează"
+	],
+	"&File": [
+		"&Fișier"
+	],
+	"&Go": [
+		"Navi&ghează"
+	],
+	"&Help": [
+		"&Ajutor"
+	],
+	"&Note": [
+		"&Notiță"
+	],
+	"&Tools": [
+		"&Unelte"
+	],
+	"&View": [
+		"&Vizualizează"
+	],
+	"&Window": [
+		"&Fereastră"
+	],
+	"(%s)": [
+		"(%s)"
+	],
+	"(In plugin: %s)": [
+		"(în plugin-ul: %s)"
+	],
+	"(level %d)": [
+		"(nivel %d)"
+	],
+	"(None)": [
+		"(nimic)"
+	],
+	"(Read-only)": [
+		"(doar citire)"
+	],
+	"(wysiwyg: %s)": [
+		"(wysiwyg: %s)"
+	],
+	"(You may disable this prompt in the options)": [
+		"(Poți dezactiva această solicitare în opțiuni)"
+	],
+	"- Camera: to allow taking a picture and attaching it to a note.": [
+		"- Aparat foto: pentru a permite realizarea unei fotografii și atașarea acesteia la o notă."
+	],
+	"- Location: to allow attaching geo-location information to a note.": [
+		"- Locație: pentru a permite atașarea de informații de localizare geografică la o notă."
+	],
+	"- Storage: to allow attaching files to notes and to enable filesystem synchronisation.": [
+		"- Stocare: pentru a permite atașarea de fișiere la note și pentru a permite sincronizarea sistemului de fișiere."
+	],
+	"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove [tag] from [note], to list notes associated with [tag], or to list tags associated with [note]. The command `tag list` can be used to list all the tags (use -l for long option).": [
+		"<tag-command> poate fi be \"add\", \"remove\", \"list\", sau \"notetags\" pentru a aloca sau a elimina [tag] dela [note], pentru a afișa lista de notițe asociate cu [tag], sau pentru a afișa lista de etichete asociate cu [note]. Comanda `tag list` poate fi utilizată pentru a afișa toată lista de etichete (folosește -l pentru opțiunea long)."
+	],
+	"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-do between completed and uncompleted state (If the target is a regular note it will be converted to a to-do). Use \"clear\" to convert the to-do back to a regular note.": [
+		"<todo-command> poate fi \"toggle\" sau \"clear\". Folosește „toggle” pentru a comuta între starea finalizată și cea nefinalizată (dacă ținta este o notiță obișnuită, aceasta va fi transformată în listă de făcut). Folosește „clear” pentru a converti lista de făcut înapoi la o notiță obișnuită."
+	],
+	"[None]": [
+		"[niciuna]"
+	],
+	"A brief description of the image:": [
+		"O descriere sumară a imaginii:"
+	],
+	"A comma-separated list of words. May be used for uncommon words, to help voice typing spell them correctly.": [
+		"O listă de cuvinte separate de virgule. Poate fi folosită pentru cuvinte mai puțin comune, pentru a ajuta transcrierea prin dictare să le scrie corect."
+	],
+	"A new update (%s) is available": [
+		"O nouă actualizare (%s) este disponibilă"
+	],
+	"A3": [
+		"A3"
+	],
+	"A4": [
+		"A4"
+	],
+	"A5": [
+		"A5"
+	],
+	"ABC musical notation: Options": [
+		""
+	],
+	"About": [
+		"Despre"
+	],
+	"About Joplin": [
+		"Despre Joplin"
+	],
+	"accelerator": [
+		"accelerator"
+	],
+	"Accelerator \"%s\" is not valid.": [
+		"Acceleratorul „%s” nu este valid."
+	],
+	"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to unexpected behaviour.": [
+		"Acceleratorul „%s” este utilizat pentru comenzile „%s” și „%s”. Acest lucru poate duce la un comportament neașteptat."
+	],
+	"Accept": [
+		"Accept"
+	],
+	"Accepted invitations": [
+		"Invitații acceptate"
+	],
+	"Accepted: Notebook %s from %s": [
+		"Acceptat: Caiet: %s de la %s"
+	],
+	"Accepting share...": [
+		"Se acceptă partajarea..."
+	],
+	"Access denied: Please check your username and password": [
+		"Acces refuzat: Te rog să îți verifici numele de utilizator și parola"
+	],
+	"Access denied: Please re-enter your password and/or username": [
+		"Acces refuzat: Te rog să reîntroduci parola și/sau numele de utilizator"
+	],
+	"Account": [
+		"Cont"
+	],
+	"Account information": [
+		"Informații cont"
+	],
+	"Account type": [
+		"Tip cont"
+	],
+	"Action": [
+		"Acțiune"
+	],
+	"Actions": [
+		"Acțiuni"
+	],
+	"Active": [
+		"Activ"
+	],
+	"Actual Size": [
+		"Dimensiunea actuală"
+	],
+	"Add body": [
+		"Adaugă corp"
+	],
+	"Add column": [
+		""
+	],
+	"Add new": [
+		"Adaugă un nou"
+	],
+	"Add or remove tags:": [
+		"Adaugă sau elimină etichete:"
+	],
+	"Add recipient:": [
+		"Adaugă destinatar:"
+	],
+	"Add tags:": [
+		"Adaugă etichete:"
+	],
+	"Add title": [
+		"Adaugă titlu"
+	],
+	"Add to dictionary": [
+		"Adaugă în dicționar"
+	],
+	"Add to note": [
+		"Adaugă la notiță"
+	],
+	"Added new: %s": [
+		"Adaugă nou: %s"
+	],
+	"Added tag: %s": [
+		"Etichetă adăugată: %s"
+	],
+	"Adds tag": [
+		"Adaugă etichete"
+	],
+	"Admin": [
+		"Admin"
+	],
+	"Admin dashboard": [
+		"Panou de control administrativ"
+	],
+	"Advanced options": [
+		"Opțiuni avansate"
+	],
+	"Advanced settings": [
+		"Setări avansate"
+	],
+	"Advanced tools": [
+		"Instrumente avansate"
+	],
+	"all": [
+		"toate"
+	],
+	"All data, including notes, notebooks and tags will be permanently deleted.": [
+		"Toate datele, inclusiv notițele, caietele de notițe și etichetele vor fi șterse definitiv."
+	],
+	"All item sync failures have been marked as \"ignored\".": [
+		"Toate erorile de sincronizare ale elementelor au fost marcate ca „ignorate”."
+	],
+	"All notes": [
+		"Toate notițele"
+	],
+	"All potential ports are in use - please report the issue at %s": [
+		"Toate porturile potențiale sînt în uz - te rog să raportezi problema la %s"
+	],
+	"All shared folders:": [
+		"Toate dosarele partajate:"
+	],
+	"Allows debugging mobile plugins. See %s for details.": [
+		"Permite depanarea plugin-urilor mobile. Vezi %s pentru mai multe detalii."
+	],
+	"Also displays unset and hidden config variables.": [
+		"Afișează, de asemenea, variabile de configurare nesetate și ascunse."
+	],
+	"Also publish linked notes": [
+		"Publică, de asemenea, notițele asociate"
+	],
+	"Alternative instance ID: %s": [
+		"ID instanță alternativ: %s"
+	],
+	"Always": [
+		"Mereu"
+	],
+	"Always ask": [
+		"Întreabă"
+	],
+	"Always open %s files without asking.": [
+		"Deschide mereu fișierele %s fără să mai întrebi."
+	],
+	"Always resize": [
+		"Mereu"
+	],
+	"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see the short notebook id or use $b for current selected notebook": [
+		"Caiet ambiguu „%s”. Te rog să utilizezi ID-ul caietului în loc - tastează „ti” pentru a vedea ID-ul scurt al caietului sau utilizează $b pentru caietul selectat curent"
+	],
+	"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" to see the short notebook id": [
+		"Caiet ambiguu „%s”. Te rog să folosești în schimb ID-ul scurt al caietului - tastează „ti” pentru a vedea ID-ul scurt al caietului"
+	],
+	"An autosaved drawing was found. Attach a copy of it to the note?": [
+		"A fost găsit un desen salvat automat. Atașezi o copie a acestuia la notiță?"
+	],
+	"An error occurred while sending the response. This can happen if the app is offline or cannot connect to the server.\nError: %s": [
+		"A apărut o eroare la trimiterea răspunsului. Acest lucru se poate întîmpla dacă aplicația este offline sau nu se poate conecta la server.\nEroare: %s"
+	],
+	"An error occurred: %s": [
+		"S-a produs o eroare: %s"
+	],
+	"An update is available, do you want to download it now?": [
+		"Este disponibilă o nouă actualizare, dorești să o descarci acum?"
+	],
+	"Android API level: %d": [
+		"Nivel API Android: %d"
+	],
+	"Any email sent to this address will be converted into a note and added to your collection. The note will be saved into the Inbox notebook": [
+		"Orice e-mail trimis la această adresă va fi convertit într-o notiță și va fi adăugat la colecția ta. Notița va fi salvată în caietul Inbox"
+	],
+	"Appearance": [
+		"Aspect"
+	],
+	"Application": [
+		"Aplicație"
+	],
+	"Apply": [
+		"Aplică"
+	],
+	"Are you sure that you want to restore the default toolbar layout?\nThis cannot be undone.": [
+		"Ești sigur că dorești să restaurezi aspectul implicit al barelor de unelte?\nAcest lucru nu poate fi anulat."
+	],
+	"Are you sure you want to delete all history for this note? This cannot be undone.": [
+		"Ești sigur că dorești să ștergi tot istoricul pentru această notă? Acest lucru nu poate fi anulat."
+	],
+	"Are you sure you want to renew the authorisation token?": [
+		"Ești sigur că dorești să reînnoiești jetonul de autorizare?"
+	],
+	"Are you sure you want to return to the default layout? The current layout configuration will be lost.": [
+		"Ești sigur că dorești să revii la aspectul implicit? Configurația actuală a aspectului va fi pierdută."
+	],
+	"Arguments:": [
+		"Argumente:"
+	],
+	"Aritim Dark": [
+		"Aritim întunecat"
+	],
+	"Associated tags:": [
+		"Etichete asociate:"
+	],
+	"At present, Joplin Web can only be open in one tab at a time. Please close the other instance of Joplin.": [
+		"La momentul actual, Joplin Web poate fi deschis într-o singură filă deodată. Te rog închide orice alte instanțe de Joplin."
+	],
+	"Attach": [
+		"Atașează"
+	],
+	"Attach file": [
+		"Atașează fișier..."
+	],
+	"Attach photo": [
+		"Atașează imagine"
+	],
+	"Attach...": [
+		"Atașează..."
+	],
+	"Attaches the given file to the note.": [
+		"Atașează fișierul în notiță."
+	],
+	"attachment": [
+		"atașament"
+	],
+	"Attachment": [
+		"Atașament"
+	],
+	"Attachment conflict: \"%s\"": [
+		"Conflict atașament: „%s”"
+	],
+	"Attachment download behaviour": [
+		"Comportamentul de descărcare ale atașamentelor"
+	],
+	"Attachments": [
+		"Atașament"
+	],
+	"Attachments that could not be downloaded": [
+		"Acest fișier nu a putut fi descărcat: %s"
+	],
+	"Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: %s": [
+		"Atenție: dacă modifici această locație, asigură-te că copiezi tot conținutul în ea înainte de sincronizare, altfel toate fișierele vor fi șterse! Consultă FAQ pentru mai multe detalii: %s"
+	],
+	"Authentication was not completed (did not receive an authentication token).": [
+		"Autentificarea nu a fost finalizată (nu a primit un token de autentificare)."
+	],
+	"Authorisation token:": [
+		"Token autorizare:"
+	],
+	"Authorise": [
+		"Autorizează"
+	],
+	"Auto": [
+		"Auto"
+	],
+	"Auto-add disabled accounts for deletion": [
+		"Adaugă automat conturile dezactivate pentru ștergere"
+	],
+	"Auto-format Markdown in the Rich Text Editor": [
+		"Formatează automat Markdown în editorul de text îmbogățit"
+	],
+	"Auto-pair braces, parentheses, quotations, etc.": [
+		"Împerechează automat parantezele, ghilimelele etc."
+	],
+	"Autocomplete Markdown and HTML": [
+		"Autocompletare Markdown și HTML"
+	],
+	"Automatically check for updates": [
+		"Verificarea automată a actualizărilor"
+	],
+	"Automatically delete notes in the trash after a number of days": [
+		"Șterge automat notițele din coșul de gunoi după un anumit număr de zile"
+	],
+	"Automatically switch theme to match system theme": [
+		"Comută automat tema pentru a se potrivi cu tema sistemului"
+	],
+	"Back": [
+		"Înapoi"
+	],
+	"Basic": [
+		"De bază"
+	],
+	"Beta": [
+		"Beta"
+	],
+	"Block code": [
+		""
+	],
+	"Bold": [
+		"Aldin"
+	],
+	"Browse all plugins": [
+		"Răsfoiește toate plugin-urile"
+	],
+	"Browse...": [
+		"Răsfoiește..."
+	],
+	"Built-in": [
+		"Inclus"
+	],
+	"Bulleted List": [
+		"Listă cu marcatori"
+	],
+	"by %s": [
+		"după %s"
+	],
+	"by word": [
+		"cuvînt întreg"
+	],
+	"Camera": [
+		"Aparat foto"
+	],
+	"Can Share": [
+		"Se poate partaja"
+	],
+	"Can view": [
+		"Se poate vizualiza"
+	],
+	"Can view and edit": [
+		"Se poate vizualiza și edita"
+	],
+	"Cancel": [
+		"Anulează"
+	],
+	"Cancelling background synchronisation... Please wait.": [
+		"Se anulează sincronizarea... Te rog să aștepți."
+	],
+	"Cancelling will discard the recording. This cannot be undone. Are you sure you want to proceed?": [
+		"Anularea va duce la pierderea înregistrării. Acest lucru nu poate fi recuperat. Ești sigur că dorești să continui?"
+	],
+	"Cancelling...": [
+		"Se amînă..."
+	],
+	"Cancelling... Please wait.": [
+		"Se anulează... Te rog să aștepți."
+	],
+	"Cannot access %s": [
+		"Nu se poate accesa %s"
+	],
+	"Cannot change encrypted item": [
+		"Nu se poate schimba itemul criptat"
+	],
+	"Cannot copy note to \"%s\" notebook": [
+		"Nu se poate copia notița în caietul de notițe „%s”"
+	],
+	"Cannot create a new note: %s": [
+		"Nu se poate create o notiță nouă: %s"
+	],
+	"Cannot find \"%s\".": [
+		"Nu poate fi găsit „%s”."
+	],
+	"Cannot find: \"%s\"": [
+		"Nu poate fi găsit „%s”"
+	],
+	"Cannot initialise synchroniser.": [
+		"Nu se poate inițializa sincronizatorul."
+	],
+	"Cannot load \"%s\" module for format \"%s\" and output \"%s\"": [
+		"Nu se poate încărca modulul „%s” pentru formatul „%s” și ieșirea „%s”"
+	],
+	"Cannot load \"%s\" module for format \"%s\" and target \"%s\"": [
+		"Nu se poate încărca modulul „%s” pentru formatul „%s” și ținta „%s”"
+	],
+	"Cannot move note to \"%s\" notebook": [
+		"Nu se poate muta notița în caietul de notițe „%s”"
+	],
+	"Cannot move notebook to this location": [
+		"Nu se poate muta caietul de notițe în această locație"
+	],
+	"Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.": [
+		"Nu se poate reactualiza token-ul: lipsesc datele de autentificare. Este posibil ca problema să fie rezolvată prin reluarea sincronizării."
+	],
+	"Cannot save %s \"%s\" because it is larger than the allowed limit (%s)": [
+		"Nu se poate salva %s „%s” deoarece este mai mare decît limita permisă (%s)"
+	],
+	"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for this account": [
+		"Nu se poate salva %s „%s” pentru că ar depăși dimensiunea totală permisă (%s) pentru acest cont"
+	],
+	"Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.": [
+		"Nu se poate partaja caietul criptat cu destinatarul %s deoarece acesta nu a activat criptarea end-to-end. Acesta poate face acest lucru din ecranul Configurare > Criptare."
+	],
+	"Case sensitive": [
+		"Case sensitive"
+	],
+	"Change application layout": [
+		"Modifică aspectul aplicației"
+	],
+	"Change language": [
+		"Alte limbi"
+	],
+	"Change ratio": [
+		"Schimbă raport"
+	],
+	"Change shortcut for \"%s\"": [
+		"Schimbă scurtătura pentru „%s”"
+	],
+	"Characters": [
+		"Caractere"
+	],
+	"Characters excluding spaces": [
+		"Caractere cu excepția spațiilor libere"
+	],
+	"Check": [
+		"Bifează"
+	],
+	"Check elements to display in the toolbar": [
+		"Bifează elementele ce vor fi afișate în bara de unelte"
+	],
+	"Check for updates...": [
+		"Verifică pentru actualizări..."
+	],
+	"Check synchronisation configuration": [
+		"Verifică configurația de sincronizare"
+	],
+	"Checkbox": [
+		"Căsuțe de selecție"
+	],
+	"Checkbox list": [
+		"Listă cu căsuțe de selecție"
+	],
+	"Checked": [
+		"Bifat"
+	],
+	"Checking... Please wait.": [
+		"Se verifică... Te rog să aștepți."
+	],
+	"Chinese/Japanese/Korean characters": [
+		""
+	],
+	"Choose an option": [
+		"Selectează o opțiune"
+	],
+	"Chrome Web Store": [
+		"Chrome Web Store"
+	],
+	"Clear": [
+		"Șterge"
+	],
+	"Clear alarm": [
+		"Șterge alarma"
+	],
+	"Clear search": [
+		"Șterge căutarea"
+	],
+	"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The current version of the note will not be replaced or modified.": [
+		"Fă clic pe „%s” pentru a restaura notița. Aceasta fi copiată în caietul numit „%s”. Versiunea curentă a notiței nu va fi înlocuită sau modificată."
+	],
+	"Click \"start\" to attach a new voice memo to the note.": [
+		"Apasă pe „start” pentru a atașa un memo vocal la notiță."
+	],
+	"Click to add tags...": [
+		"Click pentru a adăuga etichete…"
+	],
+	"Client ID: %s": [
+		"Client ID: %s"
+	],
+	"close": [
+		"închide"
+	],
+	"Close": [
+		"Închide"
+	],
+	"Close dialog": [
+		"Închide dialogul"
+	],
+	"Close dropdown": [
+		"Închide meniul derulant"
+	],
+	"Close side menu": [
+		"Închide meniul lateral"
+	],
+	"Close the application, then delete your profile in \"%s\", and start the application again. Make sure you create a backup first by exporting all your notes as JEX.": [
+		"Închide aplicația, apoi șterge profilul tău din „%s” și pornește din nou aplicația. Asigură-te că creezi o copie de siguranță mai întîi prin exportarea tuturor notițelor ca fișier JEX."
+	],
+	"Close Window": [
+		"Închide fereastra"
+	],
+	"Closing session...": [
+		"Se închide sesiunea..."
+	],
+	"Cmd-click to open": [
+		"Cmd-clic pentru a deschide"
+	],
+	"Cmd-click to open: %s": [
+		"Cmd-clic pentru a deschide: %s"
+	],
+	"Code": [
+		"Cod"
+	],
+	"Code Block": [
+		"Bloc de cod"
+	],
+	"Code View": [
+		"Vizualizare code"
+	],
+	"Collaborate on a notebook with others": [
+		"Colaborează la caiet cu alte persoane"
+	],
+	"Collaborate on notebooks with others": [
+		"Colaborează la caiete cu alte persoane"
+	],
+	"Collapse all notebooks": [
+		"Restrînge toate caietele"
+	],
+	"Collapse title": [
+		"Restrînge titlul"
+	],
+	"Collapsed": [
+		"Restrîns"
+	],
+	"Coming alarms": [
+		"Alarmele următoare"
+	],
+	"Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on \"Check synchronisation configuration\".": [
+		"Listă separată de virgule de căi de acces la dosare din care se încarcă certificatele sau calea de acces la fișierele de certificate individuale. De exemplu: /my/cert_dir, /other/custom.pem. Reține că, dacă faci modificări la setările TLS, trebuie să salvezi modificările înainte de a face clic pe „Verifică configurația de sincronizare”."
+	],
+	"command": [
+		"command"
+	],
+	"Command": [
+		"Comandă"
+	],
+	"COMMAND": [
+		""
+	],
+	"Command palette": [
+		"Paleta de comenzi"
+	],
+	"Command palette...": [
+		"Paleta de comenzi…"
+	],
+	"Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`.": [
+		"Comenzi: `add`, `remove`, `list`, `delete`, `accept`, `leave` și `reject`."
+	],
+	"Compact": [
+		"Compact"
+	],
+	"Complete": [
+		"Finalizat"
+	],
+	"Complete to-do": [
+		"Sarcini de făcut finalizate"
+	],
+	"Completed": [
+		"Finalizat"
+	],
+	"Completed decryption.": [
+		"Decriptare finalizată."
+	],
+	"Completed with warnings:\n%s": [
+		"Finalizată cu atenționări:\n%s"
+	],
+	"Completed: %s (%s)": [
+		"Finalizat: %s (%s)"
+	],
+	"completion date": [
+		"data realizării"
+	],
+	"Compress old changes": [
+		"Comprimă modificările vechi"
+	],
+	"Configuration": [
+		"Configurare"
+	],
+	"Configures the size of scrollbars used in the app.": [
+		"Configurează mărimea barelor de derulare folosite în aplicație."
+	],
+	"Confirm password cannot be empty": [
+		"Confirmarea parolei nu poate fi un cîmp gol"
+	],
+	"Confirm password:": [
+		"Confirmare parolă:"
+	],
+	"Confirmation": [
+		"Confirmare"
+	],
+	"Conflicted: %d": [
+		"În conflict: %d"
+	],
+	"Conflicts": [
+		"Conflicte"
+	],
+	"Conflicts (attachments)": [
+		"Conflicte (atașamente)"
+	],
+	"Connect to Joplin Cloud": [
+		"Conectare la Joplin Cloud"
+	],
+	"Connect using your organisation account": [
+		"Conectează-te folosind contul tău organizațional"
+	],
+	"Consolidated billing": [
+		"Facturare consolidată"
+	],
+	"Contains %d note": [
+		"Conține %d notiță",
+		"Conține %d notițe",
+		"Conține %d de notițe"
+	],
+	"Content provided by %s": [
+		"Conținut asigurat de %s"
+	],
+	"Content provided by: %s": [
+		"Conținut asigurat de: %s"
+	],
+	"Continue": [
+		"Continuă"
+	],
+	"Control character": [
+		"Caracter de control"
+	],
+	"Convert it": [
+		"Convertește-o"
+	],
+	"Convert to note": [
+		"Convertește în notiță"
+	],
+	"Convert to todo": [
+		"Conversie în todo"
+	],
+	"Converting speech to text...": [
+		"Conversia vorbirii în text…"
+	],
+	"Copy": [
+		"Copiază"
+	],
+	"Copy dev mode command to clipboard": [
+		"Copiază comanda dev mode în clipboard"
+	],
+	"Copy external link": [
+		"Copiază link-ul extern"
+	],
+	"Copy image": [
+		"Copiază imaginea"
+	],
+	"Copy Link Address": [
+		"Copiază adresa link-ului"
+	],
+	"Copy link to website": [
+		"Copiază legătură către website"
+	],
+	"Copy Markdown link": [
+		"Copiază link-ul Markdown"
+	],
+	"Copy path to clipboard": [
+		"Copiază locația în clipboard"
+	],
+	"Copy Shareable Link": [
+		"Copiază legătura partajabilă",
+		"Copiază legăturile partajabile",
+		"Copiază legăturile partajabile"
+	],
+	"Copy to clipboard": [
+		"Copiază locația în clipboard"
+	],
+	"Copy token": [
+		"Copie token"
+	],
+	"Copy version info": [
+		"Copiază informații versiune"
+	],
+	"Could not authorise application:\n\n%s\n\nPlease try again.": [
+		"Nu s-a putut autoriza aplicația:\n\n%s\n\nTe rog să încerci din nou."
+	],
+	"Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s": [
+		"Nu s-a putut conecta la serverul Joplin. Te rog să verifici opțiunile de sincronizare din ecranul de configurare. Eroarea completă a fost:\n\n%s"
+	],
+	"Could not connect to plugin repository.": [
+		"Nu s-a putut conecta la repozitoriul de plugin-uri."
+	],
+	"Could not export notes: %s": [
+		"Nu s-au putut exporta notițele: %s"
+	],
+	"Could not install plugin: %s": [
+		"Nu s-a putut instala plugin-ul: %s"
+	],
+	"Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: \"%s\"": [
+		"Nu s-a putut răspunde la invitație. Te rog să încerci din nou sau să verifici cu deținătorul caietului îl mai partajează.\n\nEroarea a fost: „%s”"
+	],
+	"Could not switch profile: %s": [
+		"Nu s-a putut schimba profilul: %s"
+	],
+	"Could not upgrade master key: %s": [
+		"Nu s-a putut actualiza cheia principală: %s"
+	],
+	"Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.": [
+		"Nu s-a putut verifica starea de partajare a acestui caiet - se anulează. Te rog să încerci din nou cînd ești conectat la internet."
+	],
+	"Could not verify your identity: %s": [
+		"Nu ți-am putut verifica identitatea: %s"
+	],
+	"Create": [
+		"Create"
+	],
+	"Create a new notebook under a parent notebook.": [
+		"Creează un nou sub-caiet într-un caiet."
+	],
+	"Create a notebook": [
+		"Creează un caiet"
+	],
+	"Create new notebook": [
+		"Creează un nou caiet"
+	],
+	"Create new profile...": [
+		"Creează un nou profil…"
+	],
+	"Create note": [
+		"Creează o notiță"
+	],
+	"Create notebook": [
+		"Creează un caiet"
+	],
+	"Create user": [
+		"Creează un utilizator"
+	],
+	"Created": [
+		"Creat"
+	],
+	"created date": [
+		"data creării"
+	],
+	"Created local items: %d.": [
+		"Elemente locale create: %d."
+	],
+	"Created locally": [
+		"Creat local"
+	],
+	"Created remote items: %d.": [
+		"Elemente la distanță create: %d."
+	],
+	"Created: ": [
+		"Creat: "
+	],
+	"Created: %d.": [
+		"Creat: %d."
+	],
+	"Created: %s": [
+		"Creat: %s"
+	],
+	"Creates a new note with an attachment of type %s": [
+		"Creează o nouă notiță cu un atașament de tipul %s"
+	],
+	"Creates a new note.": [
+		"Creează o nouă notiță."
+	],
+	"Creates a new notebook.": [
+		"Creează un nou caiet."
+	],
+	"Creates a new to-do.": [
+		"Creează o nouă listă de făcut."
+	],
+	"Creating new note...": [
+		"Se creează o nouă notiță…"
+	],
+	"Creating new to-do...": [
+		"Se creează o nouă listă de făcut…"
+	],
+	"Creating note \"%s\"...": [
+		"Se creează notița „%s”..."
+	],
+	"Creating note.": [
+		"Se creează notița."
+	],
+	"Creating report...": [
+		"Se creează un raport..."
+	],
+	"Ctrl-click to open": [
+		"Ctrl-clic pentru a deschide"
+	],
+	"Ctrl-click to open: %s": [
+		"Ctrl-clic pentru a deschide: %s"
+	],
+	"current match": [
+		"potrivirea curentă"
+	],
+	"Current password": [
+		"Parola curentă"
+	],
+	"Current version is up-to-date.": [
+		"Versiunea curentă este actualizată."
+	],
+	"custom order": [
+		"comandă personalizată"
+	],
+	"Custom order": [
+		"Comandă personalizată"
+	],
+	"Custom stylesheet for Joplin-wide app styles": [
+		"Stylesheet personalizat pentru stilurile aplicației Joplin-wide"
+	],
+	"Custom stylesheet for rendered Markdown": [
+		"Stylesheet personalizat pentru Markdown redat"
+	],
+	"Custom TLS certificates": [
+		"Certificate TLS cusomizate"
+	],
+	"Customise the note publishing banner": [
+		"Personalizează banner-ul de publicare a notițelor"
+	],
+	"Cut": [
+		"Decupează"
+	],
+	"Dark": [
+		"Întunecat"
+	],
+	"Dashboard": [
+		"Dashboard"
+	],
+	"Date": [
+		"Data"
+	],
+	"Date format": [
+		"Format dată"
+	],
+	"days": [
+		"zile"
+	],
+	"Decrease indent level": [
+		"Micșorează nivelul de indentare"
+	],
+	"Decrypted items: %d": [
+		"Elemente decriptate: %d"
+	],
+	"Decrypted items: %s / %s": [
+		"Se decriptează elementele: %s / %s"
+	],
+	"Decrypting items: %d/%d": [
+		"Se decriptează elementele: %d/%d"
+	],
+	"Default": [
+		"Mod implicit"
+	],
+	"Default title to use for documents created by the scanner.": [
+		"Titlul implicit de folosit pentru documentele create de la scanner."
+	],
+	"Default: %s": [
+		"Mod implicit: %s"
+	],
+	"Delete": [
+		"Șterge"
+	],
+	"Delete attachment \"%s\"?": [
+		"Ștergi atașamentul „%s”?"
+	],
+	"Delete expired sessions": [
+		"Șterge sesiunile expirate"
+	],
+	"Delete expired tokens": [
+		"Șterge token-urile expirate"
+	],
+	"Delete history": [
+		"Șterge istoricul"
+	],
+	"Delete line": [
+		"Șterge linia"
+	],
+	"Delete local data and re-download from sync target": [
+		"Șterge datele locale și descarcă din nou de la destinația de sincronizare"
+	],
+	"Delete note": [
+		"Șterge notița"
+	],
+	"Delete notebook": [
+		"Șterge caietul"
+	],
+	"Delete plugin \"%s\"?": [
+		"Ștergi plugin-ul „%s”?"
+	],
+	"Delete profile \"%s\"": [
+		"Ștergi profilul „%s”?"
+	],
+	"Delete selected notes": [
+		"Șterge aceste notițe"
+	],
+	"Delete tag \"%s\"?\n\nAll notes associated with this tag will remain, but the tag will be removed from all notes.": [
+		""
+	],
+	"Delete the Inbox notebook?\n\nIf you delete the inbox notebook, any email that's recently been sent to it may be lost.": [
+		"Ștergi caietul Inbox?\n\nDacă ștergi caietul de notițe Inbox, orice e-mail trimis recent în acesta poate fi pierdut."
+	],
+	"Delete this invitation? The recipient will no longer have access to this shared notebook.": [
+		"Ștergi această invitație? Destinatarul nu va mai avea acces la acest caiet partajat."
+	],
+	"Delete this profile?": [
+		"Ștergi acest profil?"
+	],
+	"Deleted": [
+		"Șters"
+	],
+	"Deleted local items: %d.": [
+		"Elemente locale șterse: %d."
+	],
+	"Deleted remote items: %d.": [
+		"Elemente șterse de la distanță: %d."
+	],
+	"Deletes notes permanently, skipping the trash.": [
+		"Șterge notițele permanent, omițînd coșul de gunoi."
+	],
+	"Deletes the given notebook.": [
+		"Șterge caietul dat."
+	],
+	"Deletes the notebook without asking for confirmation.": [
+		"Șterge caietele de notițe fără a mai cere confirmarea."
+	],
+	"Deletes the notes matching <note-pattern>.": [
+		"Șterge notițele care se potrivesc cu <note-pattern>."
+	],
+	"Deletes the notes without asking for confirmation.": [
+		"Șterge notițele fără a cere confirmare."
+	],
+	"Deletion log": [
+		"Jurnal ștergeri"
+	],
+	"Deselect": [
+		"Deselectează"
+	],
+	"Destination format: %s": [
+		"Format la destinație: %s"
+	],
+	"Detailed": [
+		"Detaliat"
+	],
+	"Dev": [
+		"Dezvoltator"
+	],
+	"Device: %s": [
+		"Dispozitiv: %s"
+	],
+	"Directory": [
+		"dosar"
+	],
+	"Directory to synchronise with (absolute path)": [
+		"Directorul cu care se sincronizează (cale absolută)"
+	],
+	"Disable": [
+		"Dezactivează"
+	],
+	"Disable encryption": [
+		"Dezactivează criptarea"
+	],
+	"Disable safe mode and restart": [
+		"Dezactivează modul de siguranță și repornește"
+	],
+	"Disable synchronisation": [
+		"Dezactivează sincronizarea"
+	],
+	"Disable Web Clipper Service": [
+		"Dezactivează serviciul Web Clipper"
+	],
+	"Disabled": [
+		"Dezactivat"
+	],
+	"Disabled keys": [
+		"Taste dezactivate"
+	],
+	"Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?": [
+		"Dezactivarea criptării înseamnă că *toate* notițele și atașamentele tale vor fi resincronizate și trimise necriptate către destinația de sincronizare. Dorești să continui?"
+	],
+	"Discard": [
+		"Renunță"
+	],
+	"Discard changes": [
+		"Renunță la schimbări"
+	],
+	"Dismiss": [
+		"Respinge"
+	],
+	"Displays a geolocation URL for the note.": [
+		"Afișează o adresă URL de geolocație pentru notiță."
+	],
+	"Displays only the first top <num> notes.": [
+		"Afișează numai primele <num> notițe."
+	],
+	"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would display notes and to-dos.": [
+		"Afișează numai elementele de tipul (tipurile) specific(e). Tipuri acceptate: \"n\" pentru notițe, \"t\" pentru to-dos, sau \"nt\" pentru notițe și to-dos (de exemplu, `-tt` afișează numai to-dos, în timp ce `-tnt` afișează notițe și to-dos."
+	],
+	"Displays summary about the notes and notebooks.": [
+		"Afișează un rezumat despre notițe și caiete."
+	],
+	"Displays the complete information about note.": [
+		"Afișează informațiile complete despre notiță."
+	],
+	"Displays the configured keyboard shortcuts.": [
+		""
+	],
+	"Displays the given note.": [
+		"Afișează notițele specificate."
+	],
+	"Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.": [
+		"Afișează notițele din caietul curent. Folosește 'ls /' pentru a afișa lista de caiete."
+	],
+	"Displays usage information.": [
+		"Afișează informațiile de utilizare."
+	],
+	"Displays version information": [
+		"Afișează informații despre versiune"
+	],
+	"Do it now": [
+		"Fă-o acum"
+	],
+	"Do not ask for confirmation.": [
+		"Nu cere confirmarea."
+	],
+	"Do not ask for user confirmation.": [
+		"Nu cere confirmarea utilizatorului."
+	],
+	"Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.": [
+		"Nu pierde parola, deoarece din motive de securitate, aceasta este *unica* modalitate de decriptare a datelor! Pentru a activa criptarea, te rog să întroduci parola mai jos."
+	],
+	"Do you find the Joplin web app useful?": [
+		"Consideri că aplicația web Joplin este utilă?"
+	],
+	"Document scanner: Title template": [
+		"Scanner documente: Șablon titlu"
+	],
+	"Don't allow the share recipient to write to the shared notebook. Valid only for the `add` subcommand.": [
+		"Nu permite destinatarii partajării să scrie în caietul comun. Valid doar pentru subcomanda `add`."
+	],
+	"Don't show this message again": [
+		"Nu mai afișa acest mesaj"
+	],
+	"Donate, website": [
+		"Donează, website"
+	],
+	"Done": [
+		"Realizat"
+	],
+	"Download": [
+		"Descarcă"
+	],
+	"Download and install the relevant extension for your browser:": [
+		"Descarcă și instalează extensia relevantă pentru navigatorul tău web:"
+	],
+	"Download it now": [
+		"Descarc-o acum"
+	],
+	"Downloaded": [
+		"Descărcat"
+	],
+	"Downloaded and decrypted": [
+		"Descărcat și decriptat"
+	],
+	"Downloaded and encrypted": [
+		"Descărcat și criptat"
+	],
+	"Downloading": [
+		"Descărcare"
+	],
+	"Downloading %s language files...": [
+		"Descărcarea fișierelor de limbă %s…"
+	],
+	"Downloading resources...": [
+		"Se descarcă resursele..."
+	],
+	"Dracula": [
+		"Dracula"
+	],
+	"Draw picture": [
+		"Desenează imagine"
+	],
+	"Drawing": [
+		"Desen"
+	],
+	"Drop notes or files here": [
+		"Plasează notițe sau fișiere aici"
+	],
+	"Dropbox": [
+		"Dropbox"
+	],
+	"Dropbox Login": [
+		"Autentificare Dropbox"
+	],
+	"Due": [
+		"Scadență"
+	],
+	"due date": [
+		"data scadentă"
+	],
+	"Duplicate": [
+		"Duplică"
+	],
+	"Duplicate line": [
+		"Duplică linia"
+	],
+	"Duplicate selected notes": [
+		"Duplicarea notelor selectate"
+	],
+	"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is duplicated in the current notebook.": [
+		"Duplică notițele care se potrivesc cu <note> în [notebook]. Dacă nu este specificat niciun caiet, notița va fi duplicată în caietul curent."
+	],
+	"Duration: %s": [
+		"Durată: %s"
+	],
+	"Edit": [
+		"Editează"
+	],
+	"Edit as Markdown": [
+		"Editează ca Markdown"
+	],
+	"Edit as Rich Text": [
+		"Editează ca text îmbogățit"
+	],
+	"Edit link": [
+		"Editează legătura"
+	],
+	"Edit note.": [
+		"Editează notiță."
+	],
+	"Edit notebook": [
+		"Editează caietul de notițe"
+	],
+	"Edit profile": [
+		"Editează profilul"
+	],
+	"Edit profile configuration...": [
+		"Editează configurările profilului…"
+	],
+	"Editor": [
+		"Editor"
+	],
+	"Editor actions": [
+		"Acțiuni editor"
+	],
+	"Editor font": [
+		"Font editor"
+	],
+	"Editor font family": [
+		"Familie font editor"
+	],
+	"Editor font size": [
+		"Mărime font editor"
+	],
+	"Editor maximum width": [
+		"Lățimea maximă a editorului"
+	],
+	"Editor monospace font family": [
+		"Familie font monospațiere editor"
+	],
+	"Editor: %s": [
+		"Editor: %s"
+	],
+	"Either \"text\" or \"json\"": [
+		"Sau \"text\", sau \"json\""
+	],
+	"Emacs": [
+		"Emacs"
+	],
+	"Email": [
+		"Email"
+	],
+	"Email to note": [
+		"Email to note"
+	],
+	"Email to Note": [
+		"Email to Note"
+	],
+	"Email To Note, login information": [
+		"Email To Note, login information"
+	],
+	"Emails": [
+		"Email"
+	],
+	"emphasised text": [
+		"text accentuat"
+	],
+	"Empty trash": [
+		"Golește coșul"
+	],
+	"Enable": [
+		"Activează"
+	],
+	"Enable ++insert++ syntax": [
+		"Activează sintaxa ++insert++"
+	],
+	"Enable ==mark== syntax": [
+		"Activează sintaxa ==mark=="
+	],
+	"Enable ^sup^ syntax": [
+		"Activează sintaxa ^sup^"
+	],
+	"Enable abbreviation syntax": [
+		"Activează sintaxa abrevierii"
+	],
+	"Enable audio player": [
+		"Activează playerul audio"
+	],
+	"Enable biometrics authentication?": [
+		"Activează autentificarea biometrică?"
+	],
+	"Enable deflist syntax": [
+		"Activează sintaxa deflist"
+	],
+	"Enable encryption": [
+		"Activează criptarea"
+	],
+	"Enable file:// URLs for images and videos": [
+		"Activează URL-uri de tip file:// pentru imagini și videouri"
+	],
+	"Enable footnotes": [
+		"Activează notele de subsol"
+	],
+	"Enable Fountain syntax support": [
+		"Activează suportul pentru sintaxa Fountain"
+	],
+	"Enable handwritten transcription": [
+		"Activează transcrierea scrisului de mînă"
+	],
+	"Enable HTML-to-Markdown conversion banner": [
+		"Activează banner-ul de conversie HTML-la-Markdown"
+	],
+	"Enable Linkify": [
+		"Activează Linkify"
+	],
+	"Enable markdown emoji": [
+		"Activează emoji markdown"
+	],
+	"Enable math expressions": [
+		"Activează expresiile matematice"
+	],
+	"Enable Mermaid diagrams support": [
+		"Activează suportul pentru diagramele Mermaid"
+	],
+	"Enable multimarkdown table extension": [
+		"Activează extensia de tabel multimarkdown"
+	],
+	"Enable note history": [
+		"Activează istoricul notițelor"
+	],
+	"Enable optical character recognition (OCR)": [
+		"Activează recunoașterea optică a caracterelor (OCR)"
+	],
+	"Enable or disable plugins": [
+		"Activează sau dezactivează plugin-uri"
+	],
+	"Enable PDF viewer": [
+		"Activează vizualizatorul PDF"
+	],
+	"Enable plugin support": [
+		"Activează suportul pentru plugin-uri"
+	],
+	"Enable soft breaks": [
+		"Activează întreruperile ușoare"
+	],
+	"Enable spell checking in Markdown editor": [
+		"Activează verificarea ortografică în editorul Markdown"
+	],
+	"Enable spellcheck in the text editor": [
+		"Activează verificarea ortografică în editorul de text"
+	],
+	"Enable table of contents extension": [
+		"Activează extensia tabelului de conținut"
+	],
+	"Enable the Markdown toolbar": [
+		"Activează bara de instrumente Markdown"
+	],
+	"Enable typographer support": [
+		"Activează suportul pentru tipografii"
+	],
+	"Enable video player": [
+		"Activează playerul video"
+	],
+	"Enable Web Clipper Service": [
+		"Activează Web Clipper Service"
+	],
+	"Enable ~sub~ syntax": [
+		"Activează sintaxa ~sub~"
+	],
+	"Enabled": [
+		"Activat"
+	],
+	"Enables Markdown list continuation, auto-closing HTML tags, and other markup autocompletions.": [
+		"Activează continuarea listei Markdown, auto-închiderea a tag-urilor HTML și alte auto-completări în markup."
+	],
+	"Enables Markdown pattern replacement in the Rich Text Editor. For example, when enabled, typing **bold** creates bold text.": [
+		"Activează înlocuire cu șablon Markdown în editorul de text îmbogățit. De exemplu, dacă este activat, tastînd **aldin** va crea text aldin."
+	],
+	"Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.": [
+		"Activarea criptării înseamnă că *toate* notele și atașamentele dvs. vor fi resincronizate și trimise criptate către destinația de sincronizare."
+	],
+	"Encrypted": [
+		"Criptat"
+	],
+	"Encrypted items cannot be modified": [
+		"Elementele criptate nu pot fi editate"
+	],
+	"Encryption": [
+		"Criptare"
+	],
+	"Encryption Config": [
+		"Configurație de criptare"
+	],
+	"Encryption is: %s": [
+		"Criptarea este: %s"
+	],
+	"Encryption keys": [
+		"Cheile de criptare"
+	],
+	"Encryption:": [
+		"Criptare:"
+	],
+	"End-to-end encryption": [
+		"Criptare end-to-end"
+	],
+	"Ends voice typing": [
+		"Termină transcrierea vocală"
+	],
+	"Enter code here": [
+		"Întrodu codul aici"
+	],
+	"Enter master password:": [
+		"Întrodu parola principală:"
+	],
+	"Enter notebook title": [
+		"Întrodu titlul caietului"
+	],
+	"Enter password": [
+		"Întrodu parola"
+	],
+	"Enter the code": [
+		"Întrodu codul"
+	],
+	"Enter the code:": [
+		"Întrodu codul:"
+	],
+	"Entering selection mode": [
+		"Se intră în modul de selecție"
+	],
+	"Enum": [
+		"Enum"
+	],
+	"Error": [
+		"Eroare"
+	],
+	"Error opening note in editor: %s": [
+		"Eroare deschidere notiță în editor: %s"
+	],
+	"Error starting camera: %s": [
+		"Eroare la pornirea camerei: %s"
+	],
+	"Error. Please check that URL, username, password, etc. are correct and that the sync target is accessible. The reported error was:": [
+		"Eroare. Te rog să verifici dacă adresa URL, numele de utilizator, parola etc. sînt corecte și că destinația de sincronizare este accesibilă. Eroarea raportată a fost:"
+	],
+	"Error: %s": [
+		"Eroare: %s"
+	],
+	"Errors only": [
+		"Doar erori"
+	],
+	"Evernote Export File (as HTML)": [
+		"Fișier export Evernote (ca HTML)"
+	],
+	"Evernote Export File (as Markdown)": [
+		"Fișier export Evernote (ca Markdown)"
+	],
+	"Evernote Export Files (Directory, as HTML)": [
+		"Fișiere export Evernote (dosar, ca HTML)"
+	],
+	"Evernote Export Files (Directory, as Markdown)": [
+		"Fișiere export Evernote (dosar, ca Markdown)"
+	],
+	"Exits the application.": [
+		"Ieșire din aplicație."
+	],
+	"Expand %s": [
+		"Extinde %s"
+	],
+	"Expand all notebooks": [
+		"Extinde toate caietele"
+	],
+	"Expand title": [
+		"Extinde titlul"
+	],
+	"Expanded": [
+		"Extins"
+	],
+	"Export": [
+		"Exportă"
+	],
+	"Export all": [
+		"Exportă tot"
+	],
+	"Export all notes as JEX": [
+		"Exportă toate notițele în format JEX"
+	],
+	"Export debug report": [
+		"Export debug report"
+	],
+	"Export Debug Report": [
+		"Export Debug Report"
+	],
+	"Export deletion log": [
+		"Exportă jurnal ștergeri"
+	],
+	"Export profile": [
+		"Exportă profilul"
+	],
+	"Exported successfully!": [
+		"Exportat cu succes!"
+	],
+	"Exporting profile...": [
+		"Se exportă profilul..."
+	],
+	"Exporting to \"%s\" as \"%s\" format. Please wait...": [
+		"Se exportă către „%s” în format „%s”. Te rog să aștepți..."
+	],
+	"Exporting...": [
+		"Se exportă..."
+	],
+	"Exports Joplin data to the given path. By default, it will export the complete database including notebooks, notes, tags and resources.": [
+		"Exportă datele din Joplin în calea dată. În mod implicit, va exporta baza de date completă, inclusiv caietele, notițele, etichetele și resursele."
+	],
+	"Exports only the given note.": [
+		"Exportă numai notița specificată."
+	],
+	"Exports only the given notebook.": [
+		"Exportă doar caietul specificat."
+	],
+	"Fail-safe": [
+		"Fail-safe"
+	],
+	"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a misconfiguration or bug)": [
+		"Fail-safe: Nu șterge datele locale atunci cînd destinația de sincronizare este goală (adesea rezultatul unei configurații greșite sau al unei erori)."
+	],
+	"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.": [
+		"Fail-safe: Sincronizarea a fost întreruptă pentru a preveni pierderea de date, deoarece destinația sincronizării este goală sau eronată. Pentru a anula acest comportament, dezactivează mecanismul de fail-safe din setările de sincronizare."
+	],
+	"Failed to connect to your account. Please try again.": [
+		"A eșuat conectarea la contul tău. Te rog încearcă din nou."
+	],
+	"Fatal error:": [
+		"Eroare fatală:"
+	],
+	"Feature flags": [
+		"Feature Flags"
+	],
+	"Feedback": [
+		"Feedback"
+	],
+	"Fetched items: %d/%d.": [
+		"Elemente preluate: %d/%d."
+	],
+	"Fetching resources: %d/%d": [
+		"Încărcarea resurselor: %d/%d"
+	],
+	"File": [
+		"fișier"
+	],
+	"File system": [
+		"Sistem de fișiere"
+	],
+	"Filter": [
+		"Filtrează"
+	],
+	"Find": [
+		"Găsește"
+	],
+	"Find: ": [
+		"Găsește: "
+	],
+	"Finishes recording": [
+		"Finalizează înregistrarea"
+	],
+	"Firefox Extension": [
+		"Extensie Firefox"
+	],
+	"Fix search index": [
+		"Fix search index"
+	],
+	"Fixing search index...": [
+		"Fixing search index…"
+	],
+	"Focus": [
+		"Focalizează pe"
+	],
+	"Focus body": [
+		"Focalizează pe corp"
+	],
+	"Focus title": [
+		"Focalizează pe titlu"
+	],
+	"Folder \"%s\" is shared with:": [
+		"Dosarul „%s” este partajat cu:"
+	],
+	"Follow link": [
+		"Urmează legătura"
+	],
+	"For debugging purpose only: export your profile to an external SD card.": [
+		"Numai în scop de depanare: exportă profilul pe un card SD extern."
+	],
+	"For example \"%s\"": [
+		"De exemplu, „%s”"
+	],
+	"For information on how to customise the shortcuts please visit %s": [
+		"Pentru informații despre cum să personalizezi comenzile rapide, vizitează %s"
+	],
+	"For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:": [
+		"Pentru mai multe informații despre criptarea de la un capăt la altul (E2EE) și sfaturi despre cum să o activezi, te rog să consulți documentația:"
+	],
+	"For the list of keyboard shortcuts and config options, type `help keymap`": [
+		"Pentru lista de scurtături de la tastatură și opțiuni de configurare, tastează `help keymap`"
+	],
+	"Force path style": [
+		"Forțează stil cale"
+	],
+	"Forward": [
+		"Înainte"
+	],
+	"Found: %d.": [
+		"Găsit: %d."
+	],
+	"FTS enabled: %d": [
+		"FTS activat: %d"
+	],
+	"Full changelog": [
+		"Lista completă a modificărilor"
+	],
+	"Full name": [
+		"Nume și prenume"
+	],
+	"General": [
+		"General"
+	],
+	"Generated": [
+		"Generate"
+	],
+	"Generating link...": [
+		"Se generează legătura...",
+		"Se generează legăturile...",
+		"Se generează legăturile..."
+	],
+	"Geolocation, spellcheck, editor toolbar, image resize": [
+		"Geolocație, verificare ortografică, bara de instrumente a editorului, redimensionare imagine"
+	],
+	"Get a quote": [
+		"Obține un estimat"
+	],
+	"Get it now:": [
+		"Obține acum:"
+	],
+	"Get pre-releases when checking for updates": [
+		"Obține versiuni preliminare la verificarea actualizărilor"
+	],
+	"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": [
+		"Obține sau setează o valoare de configurare. Dacă [valoare] nu este furnizată, va afișa valoarea [nume]. Dacă nu este furnizat nici [nume], nici [valoare], va afișa configurația curentă."
+	],
+	"Glossary:": [
+		"Glosar:"
+	],
+	"go": [
+		"mergi"
+	],
+	"Go back": [
+		"Mergi înapoi"
+	],
+	"Go to Joplin Cloud profile": [
+		"Mergi la profilul Joplin Cloud"
+	],
+	"Go to line": [
+		"Mergi la linia"
+	],
+	"Go to source URL": [
+		"Mergi la URL-ul sursă"
+	],
+	"Goto Anything...": [
+		"Mergi la..."
+	],
+	"Grant authorisation": [
+		"Acordarea autorizării"
+	],
+	"Have you authorised the application login in the above URL?": [
+		"Ai autorizat autentificarea aplicației în URL-ul de mai sus?"
+	],
+	"Header %d": [
+		"Antet %d"
+	],
+	"Heading": [
+		"Titlu"
+	],
+	"Help": [
+		"Ajutor"
+	],
+	"Here's what we do to make plugins safer:": [
+		"Uite ceea ce facem pentru a face plugin-urile mai sigure:"
+	],
+	"Hermes enabled: %d": [
+		"Hermes activat: %d"
+	],
+	"Hide %s": [
+		"Ascunde %s"
+	],
+	"Hide advanced": [
+		"Ascunde avansat"
+	],
+	"Hide disabled": [
+		"Ascunde dezactivat"
+	],
+	"Hide disabled keys": [
+		"Ascunde cheile dezactivate"
+	],
+	"Hide Joplin": [
+		"Ascunde Joplin"
+	],
+	"Hide keyboard": [
+		"Ascunde tastatura"
+	],
+	"Hide password": [
+		"Ascunde parola"
+	],
+	"Hides warning": [
+		"Ascunde atenționarea"
+	],
+	"Highlight": [
+		"Evidențiază"
+	],
+	"Home": [
+		"Acasă"
+	],
+	"Horizontal Rule": [
+		"Linie orizontală"
+	],
+	"HTML Directory": [
+		"Dosar HTML"
+	],
+	"HTML document": [
+		"Document HTML"
+	],
+	"HTML File": [
+		"Fișier HTML"
+	],
+	"Hyperlink": [
+		"Hyperlink"
+	],
+	"Icon": [
+		"Pictogramă"
+	],
+	"ID": [
+		"ID"
+	],
+	"Idle": [
+		"Inactiv"
+	],
+	"If an image attachment is on its own line and followed by a blank line, it will be rendered just below its Markdown source.": [
+		"Dacă un atașament imagine este pe linia proprie și urmat de o linie goală, va fi redat imediat sub sursa lui Markdown."
+	],
+	"If you have already authorised, please wait for the application to sync to Joplin Cloud.": [
+		"Dacă ai autorizat deja, te rog așteaptă ca aplicația să se sincronizeze cu Joplin Cloud."
+	],
+	"Ignore": [
+		"Ignoră"
+	],
+	"Ignore TLS certificate errors": [
+		"Ignoră erorile de certificat TLS"
+	],
+	"Ignored items that cannot be synchronised": [
+		"Elemente ignorate care nu pot fi sincronizate"
+	],
+	"Images": [
+		"Imagini"
+	],
+	"Import": [
+		"Importă"
+	],
+	"Import and Export": [
+		"Import și export"
+	],
+	"Import failed. Make sure a JEX file was selected.\nDetails: %s": [
+		"Importul a eșuat. Asigură-te că ai selectat un fișier JEX.\nDetalii: %s"
+	],
+	"Import from JEX": [
+		"Importă din JEX"
+	],
+	"Import notes from a JEX (Joplin Export) file.": [
+		"Importă notițe dintr-un fișier JEX (Joplin Export)."
+	],
+	"Import or export your data": [
+		"Importă sau exportă datele tale"
+	],
+	"Imported successfully!": [
+		"Importat cu succes!"
+	],
+	"Importing from \"%s\" as \"%s\" format. Please wait...": [
+		"Se exportă către „%s” în format „%s”. Te rog să aștepți..."
+	],
+	"Importing notes...": [
+		"Se importă notițe..."
+	],
+	"Importing...": [
+		"Se importă..."
+	],
+	"Imports data into Joplin.": [
+		"Importă date în Joplin."
+	],
+	"In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", they are downloaded when you open the note. In \"Always\", all the attachments are downloaded whether you open the note or not.": [
+		"În modul „Manual”, atașamentele sînt descărcate numai atunci cînd faci clic pe ele. În modul „Auto”, acestea sînt descărcate cînd deschizi notița. În modul „Mereu”, toate atașamentele sînt descărcate indiferent dacă deschizi notița sau nu."
+	],
+	"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.": [
+		"În orice comandă, se poate face referire la o notă sau la un caiet de notițe prin titlu sau ID, sau folosind comenzile rapide `$n` sau `$b` pentru nota sau caietul selectat în acel moment. Se poate utiliza `$c` pentru a se referi la elementul selectat în mod curent."
+	],
+	"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n\nTo start, please follow these instructions:\n\n1. Synchronise all your devices.\n2. Click \"%s\".\n3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n4. Once sync is done on this device, sync all your other devices and let it run to completion.\n\nImportant: you only need to run this ONCE on one device.": [
+		"Pentru a face acest lucru, întregul set de date va trebui să fie criptat și sincronizat, așa că cel mai bine este să îl execuți peste noapte.\n\nPentru a începe, te rog să urmezi aceste instrucțiuni:\n\n1. Sincronizează-ți toate dispozitivele.\n2. Fă clic pe „%s”.\n3. Lasă-l să se execute pînă la finalizare. În timp ce se execută, evită să modifici orice notiță pe celelalte dispozitive, pentru a evita conflictele.\n4. Odată ce sincronizarea este finalizată pe acest dispozitiv, sincronizează toate celelalte dispozitive și las-o să se execute pînă la finalizare.\n\nImportant: nu trebuie să execuți acest lucru decît O SINGURĂ dată pe un singur dispozitiv."
+	],
+	"In order to synchronise, please upgrade your application to version %s+": [
+		"Pentru a utiliza sincronizarea, te rog actualizează aplicația la versiunea %s sau mai nouă"
+	],
+	"In order to use file system synchronisation your permission to write to external storage is required.": [
+		"Pentru a utiliza sincronizarea cu sistemul de fișiere, este necesară permisiunea de a scrie în spațiul de stocare extern."
+	],
+	"In order to use the web clipper, you need to do the following:": [
+		"Pentru a utiliza web clipper, trebuie să faci următoarele:"
+	],
+	"In progress": [
+		"În progres"
+	],
+	"In: %s": [
+		"În: %s"
+	],
+	"Incoming shares:": [
+		"Partajări sosite:"
+	],
+	"Incompatible": [
+		"Incompatibil"
+	],
+	"Incomplete": [
+		"Incomplet"
+	],
+	"Incomplete to-do": [
+		"Sarcini de făcut incomplete"
+	],
+	"Increase indent level": [
+		"Mărește nivelul de indentare"
+	],
+	"Indent less": [
+		"Indentează la stînga"
+	],
+	"Indent more": [
+		"Indentează la dreapta"
+	],
+	"Info": [
+		"Info"
+	],
+	"Information": [
+		"Informație"
+	],
+	"Inline Code": [
+		"Inline Cod"
+	],
+	"Insert": [
+		"Inserează"
+	],
+	"Insert Hyperlink": [
+		"Inserează hyperlink"
+	],
+	"Insert time": [
+		"Inserează data și ora"
+	],
+	"Install": [
+		"Instalează"
+	],
+	"Install from file": [
+		"Instalează din fișier"
+	],
+	"Installed": [
+		"Instalat"
+	],
+	"Installed (%d):": [
+		"Instalat (%d):"
+	],
+	"Installing...": [
+		"Se instalează…"
+	],
+	"Invalid": [
+		"Invalid"
+	],
+	"Invalid %s: %s.": [
+		"Invalid %s: %s."
+	],
+	"Invalid answer: %s": [
+		"Răspuns invalid: %s"
+	],
+	"Invalid command: \"%s\"": [
+		"Comandă invalidă: „%s”"
+	],
+	"Invalid format. E.g.: 48.8581372, 2.2926735": [
+		"Format invalid. ex.: 48.8581372, 2.2926735"
+	],
+	"Invalid option value: \"%s\". Possible values are: %s.": [
+		"Valoare nevalabilă a opțiunii: „%s”. Valorile posibile sînt: %s."
+	],
+	"Invalid password": [
+		"Parolă invalidă"
+	],
+	"iOS version: %s": [
+		"Versiune iOS: %s"
+	],
+	"Italic": [
+		"Cursiv"
+	],
+	"Item \"%s\" could not be downloaded: %s": [
+		"Elementul „%s” nu a putut fi descărcat: %s"
+	],
+	"Items": [
+		"Elemente"
+	],
+	"Items that cannot be decrypted": [
+		"Elemente care nu pot fi decriptate"
+	],
+	"Items that cannot be synchronised": [
+		"Elementele nu pot fi sincronizate"
+	],
+	"Items with error: %s": [
+		"Elemente cu eroarea: %s"
+	],
+	"Join us on %s": [
+		"Alătură-te nouă pe %s"
+	],
+	"Joplin can synchronise your notes using various providers. Select one from the list below.": [
+		"Joplin îți poate sincroniza notițele folosind diverși furnizori. Selectează unul din lista de mai jos."
+	],
+	"Joplin Cloud": [
+		"Joplin Cloud"
+	],
+	"Joplin Cloud Login": [
+		"Autentificare Joplin Cloud"
+	],
+	"Joplin Desktop": [
+		"Joplin Desktop"
+	],
+	"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. What would you like to do?": [
+		"Joplin nu recunoaște extensia %s. Deschiderea acestui fișier poate fi periculoasă. Ce dorești să faci?"
+	],
+	"Joplin Export Directory": [
+		"Dosar export Joplin"
+	],
+	"Joplin Export File": [
+		"Fișier export Joplin"
+	],
+	"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or too large. These items will remain on the device but Joplin will no longer attempt to decrypt them.": [
+		"Joplin nu a reușit să decripteze aceste elemente de mai multe ori, probabil din cauză că sînt corupte sau prea mari. Aceste elemente vor rămîne pe dispozitiv, dar Joplin nu va mai încerca să le decripteze."
+	],
+	"Joplin Forum": [
+		"Forum Joplin"
+	],
+	"Joplin is already running.": [
+		"Joplin deja rulează."
+	],
+	"Joplin Mobile": [
+		"Joplin mobil"
+	],
+	"Joplin Server": [
+		"Server Joplin"
+	],
+	"Joplin Server (SAML)": [
+		"Server Joplin (SAML)"
+	],
+	"Joplin Server Business": [
+		"Server Joplin Business"
+	],
+	"Joplin Server email": [
+		"Email Joplin Server"
+	],
+	"Joplin Server Login": [
+		"Login server Joplin"
+	],
+	"Joplin Server password": [
+		"Parolă Joplin Server"
+	],
+	"Joplin Server URL": [
+		"URL server Joplin"
+	],
+	"Joplin SSO Authentication": [
+		"Autentificare SSO Joplin"
+	],
+	"Joplin supports saving the location at which notes are saved or created. Do you want to enable it? This can be changed at any time in settings.": [
+		"Joplin suportă salvarea locației în care notițele sînt salvate sau create. Dorești să o activezi? Acest lucru poate fi modificat oricînd din setări."
+	],
+	"Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin.": [
+		"Joplin Web Clipper permite salvarea paginilor web și a capturilor de ecran din navigatorul tău web în Joplin."
+	],
+	"Joplin website": [
+		"Website Joplin"
+	],
+	"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.": [
+		"Serviciul propriu de sincronizare al Joplin. Oferă de asemenea acces la caracteristici specifice Joplin, cum ar fi publicarea de notițe sau colaborarea la caiete cu alte persoane."
+	],
+	"Keep note history for": [
+		"Păstrează istoricul notițelor pentru"
+	],
+	"Keep notes in the trash for": [
+		"Păstrează notițele în coș pentru"
+	],
+	"Keyboard Mode": [
+		"Mod tastatură"
+	],
+	"Keyboard Shortcut": [
+		"Scurtătură de la tastatură"
+	],
+	"Keyboard Shortcuts": [
+		"Scurtături tastatură"
+	],
+	"Keychain Supported: %s": [
+		"Lanț de chei suportat: %s"
+	],
+	"KEYS": [
+		""
+	],
+	"Keys that need upgrading": [
+		"Chei care trebuie actualizate"
+	],
+	"Label": [
+		"Etichetă"
+	],
+	"Landscape": [
+		"Peisaj"
+	],
+	"Language": [
+		"Limbă"
+	],
+	"Language, date format": [
+		"Limbă, format dată"
+	],
+	"Large": [
+		"Mare"
+	],
+	"Last error: %s": [
+		"Ultima eroare: %s"
+	],
+	"Later": [
+		"Mai tîrziu"
+	],
+	"Latitude": [
+		"Latitudine"
+	],
+	"Layout": [
+		"Aspect"
+	],
+	"Layout button sequence": [
+		"Secvența butoanelor de aspect"
+	],
+	"Learn more": [
+		"Află mai multe"
+	],
+	"Leave it blank to download the language files from the default website": [
+		"Lăsați-l gol pentru a descărca fișierele de limbă de pe site-ul web implicit"
+	],
+	"Leave notebook": [
+		"Părăsește caietul"
+	],
+	"Leave notebook...": [
+		"Părăsește caietul…"
+	],
+	"Legal": [
+		"Legal"
+	],
+	"Letter": [
+		"Letter"
+	],
+	"Light": [
+		"Luminos"
+	],
+	"Like any software you install, plugins can potentially cause security issues or data loss.": [
+		"Ca orice software instalezi, plugin-urile pot cauza probleme de securitate sau pierderi de date."
+	],
+	"Lines": [
+		"Linii"
+	],
+	"Link": [
+		"Legătură"
+	],
+	"Link created!": [
+		"Legătură creată!",
+		"Legături create!",
+		"Legături create!"
+	],
+	"Link description": [
+		"Descriere legătură"
+	],
+	"Link has been copied to clipboard!": [
+		"Legătura a fost copiată în Clipboard!",
+		"Legăturile au fost copiate în Clipboard!",
+		"Legăturile au fost copiate în Clipboard!"
+	],
+	"Link text": [
+		"Text legătură"
+	],
+	"Link to note...": [
+		"Leagă la notița..."
+	],
+	"Links": [
+		"Legături"
+	],
+	"List item": [
+		"Element listă"
+	],
+	"Loaded": [
+		"Încărcat"
+	],
+	"Loading...": [
+		"Se încarcă…"
+	],
+	"Location": [
+		"Locație"
+	],
+	"Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at \"%s\" and resume the operation.": [
+		"Fișierul de blocare este deja luat. Dacă știi că nu are loc nicio sincronizare, poți șterge fișierul de blocare de la „%s” și relua operația."
+	],
+	"Log": [
+		"Jurnal"
+	],
+	"Log in with your web browser": [
+		"Autentifică-te cu navigatorul tău web"
+	],
+	"Login to Joplin Cloud.": [
+		"Autentificare în Joplin Cloud."
+	],
+	"Login with Dropbox": [
+		"Autentifică-te cu Dropbox"
+	],
+	"Login with OneDrive": [
+		"Autentifică-te cu OneDrive"
+	],
+	"Logout": [
+		"Logout"
+	],
+	"Logs, profiles, sync status": [
+		"Locuri, profiluri, stare de sincronizare"
+	],
+	"Longitude": [
+		"Longitudine"
+	],
+	"Make a donation": [
+		"Donează"
+	],
+	"Manage master password": [
+		"Gestionează parola master"
+	],
+	"Manage master password...": [
+		"Gestionează parola master…"
+	],
+	"Manage multiple users": [
+		"Gestionează mai mulți utilizatori"
+	],
+	"Manage profiles": [
+		"Gestionează profilul"
+	],
+	"Manage shared notebooks": [
+		"Gestionează caiete partajate"
+	],
+	"Manage toolbar options": [
+		"Gestionează opțiunile barei de unelte"
+	],
+	"Manage your plugins": [
+		"Gestionează-ți plugin-urile"
+	],
+	"Manage your profiles. You can rename or delete profiles. The active profile cannot be deleted.": [
+		""
+	],
+	"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`.": [
+		"Gestionează configurația E2EE. Comenzile sînt `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, and `target-status`."
+	],
+	"Manual": [
+		"Manual"
+	],
+	"Markdown": [
+		"Markdown"
+	],
+	"Markdown + Front Matter": [
+		"Markdown + Front Matter"
+	],
+	"Markdown editor": [
+		"Editor Markdown"
+	],
+	"Markdown editor: Highlight active line": [
+		"Editor Markdown: Evidențiază linia activă"
+	],
+	"Markdown editor: Render images": [
+		"Editor Markdown: Redă imaginile"
+	],
+	"Markdown editor: Render markup in editor": [
+		"Editor Markdown: Redă markup în editor"
+	],
+	"Marks a to-do as done.": [
+		"Marchează o sarcină ca fiind terminată."
+	],
+	"Marks a to-do as non-completed.": [
+		"Marchează o sarcină ca fiind neterminată."
+	],
+	"Markup": [
+		"Markup"
+	],
+	"Master Key %s": [
+		"Cheia principală %s"
+	],
+	"Master password": [
+		"Parola principală"
+	],
+	"Master password:": [
+		"Parola principală:"
+	],
+	"match case": [
+		"sensibil la verzale"
+	],
+	"Math": [
+		"Matematică"
+	],
+	"Max concurrent connections": [
+		"Conexiuni maxime simultane"
+	],
+	"Max Item Size": [
+		"Dimensiunea maximă a itemului"
+	],
+	"Max note or attachment size": [
+		"Dimensiunea maximă a notiței sau a atașamentului"
+	],
+	"Max Total Size": [
+		"Dimensiunea totală maximă"
+	],
+	"Media player, math, diagrams, table of contents": [
+		"Media player, matematică, diagrame, cuprins"
+	],
+	"Medium": [
+		"Medie"
+	],
+	"Minimise": [
+		"Minimizează"
+	],
+	"Missing camera permission": [
+		"Permisiune cameră lipsă"
+	],
+	"Missing keys": [
+		"Lipsesc cheile"
+	],
+	"Missing Master Keys": [
+		"Cheile master lipsă"
+	],
+	"Missing permission to record audio.": [
+		"Permisiune lipsă pentru a înregistra audio."
+	],
+	"Missing required argument: %s": [
+		"Lipsește argumentul necesar: %s"
+	],
+	"Missing required flag value: %s": [
+		"Lipsește valoarea indicatorului necesar: %s"
+	],
+	"Mobile data - auto-sync disabled": [
+		"Mobile data - auto-sync disabled"
+	],
+	"More info": [
+		"Informații suplimentare"
+	],
+	"More information": [
+		"Informații suplimentare"
+	],
+	"More than one item match \"%s\". Please narrow down your query.": [
+		"Mai multe elemente se potrivesc cu „%s\". Te rog să restrîngi interogarea."
+	],
+	"Most plugins have source code available for review on the plugin website.": [
+		"Majoritatea plugin-urilor au codul sursă disponibil pentru revizuire pe website-ul plugin-ului."
+	],
+	"Move %d note to notebook \"%s\"?": [
+		"Muți %d notiță în caietul „%s”?",
+		"Muți %d notițe în caietul „%s”?",
+		"Muți %d de notițe în caietul „%s”?"
+	],
+	"Move down": [
+		"Mută în jos"
+	],
+	"Move left": [
+		"Mută la stînga"
+	],
+	"Move notebook \"%s\" to the trash?\n\nAll notes and sub-notebooks within this notebook will also be moved to the trash.": [
+		"Muți caietul „%s” în coșul de gunoi?\n\nToate notițele și secțiunile din acest caiet vor fi de asemenea mutate în coș."
+	],
+	"Move right": [
+		"Mută la dreapta"
+	],
+	"Move to notebook": [
+		"Mută în alt caiet..."
+	],
+	"Move to notebook...": [
+		"Mută în alt caiet…"
+	],
+	"Move to notebook:": [
+		"Mută în caietul:"
+	],
+	"Move up": [
+		"Mută în sus"
+	],
+	"Moves the given <item> to [notebook]": [
+		"Mută <item> dat în [notebook]"
+	],
+	"n": [
+		"n"
+	],
+	"N": [
+		"N"
+	],
+	"Never resize": [
+		"Niciodată"
+	],
+	"New attachment": [
+		"Atașament nou"
+	],
+	"New drawing": [
+		"Desen nou"
+	],
+	"New invitations": [
+		"Invitații noi"
+	],
+	"New model available\nA new voice typing model is available. Do you want to download it?": [
+		"Este disponibil un nou model\nUn nou model de transcriere vocală este disponibil. Dorești să îl descarci?"
+	],
+	"New note": [
+		"Notiță nouă"
+	],
+	"New notebook": [
+		"Caiet nou"
+	],
+	"New Notebook": [
+		"Caiet nou"
+	],
+	"New notebook \"%s\" will be created and file \"%s\" will be imported into it": [
+		"Un nou caiet „%s” va fi creat și fișierul „%s” va fi importat în el"
+	],
+	"New notebook title": [
+		"Titlu caiet nou"
+	],
+	"New photo": [
+		"Fotografie nouă"
+	],
+	"New profile": [
+		"Profil nou"
+	],
+	"New sub-notebook": [
+		"Sub-caiet nou"
+	],
+	"New to-do": [
+		"Listă de făcut nouă"
+	],
+	"New version: %s": [
+		"Versiune nouă: %s"
+	],
+	"next": [
+		"următoarea"
+	],
+	"Next": [
+		"Urnătorul"
+	],
+	"Next match": [
+		"Următoarea potrivire"
+	],
+	"Nextcloud": [
+		"Nextcloud"
+	],
+	"Nextcloud password": [
+		"Parolă Nextcloud"
+	],
+	"Nextcloud username": [
+		"Nume utilizator Nextcloud"
+	],
+	"Nextcloud WebDAV URL": [
+		"URL NextCloud WebDAV"
+	],
+	"no": [
+		"nu"
+	],
+	"No": [
+		"Nu"
+	],
+	"No active notebook.": [
+		"Niciun caiet de notițe activ."
+	],
+	"No new invitations": [
+		"Nicio nouă invitație"
+	],
+	"No notebook has been specified.": [
+		"Niciun caiet de notițe nu a fost specificat."
+	],
+	"No notebook selected.": [
+		"Niciun caiet de notițe nu a fost selectat."
+	],
+	"No notes in here. Create one by clicking on \"New note\".": [
+		"Nu ai niciun caiet de notițe creat. Creează unul făcînd click pe „Notiță nouă”."
+	],
+	"No plugins are installed.": [
+		"Niciun plugin instalat."
+	],
+	"No resources!": [
+		"Fără resurse!"
+	],
+	"No results": [
+		"Fără rezultate"
+	],
+	"No revision selected": [
+		"Nicio revizie selectată"
+	],
+	"No such command: %s": [
+		"Nu există o asemenea comandă: %s"
+	],
+	"No suggestions": [
+		"Fără sugestii"
+	],
+	"No tab selected": [
+		"Nicio filă selectată"
+	],
+	"No tags": [
+		"Fără etichete"
+	],
+	"No text editor is defined. Please set it using `config editor <editor-path>`": [
+		"Nu este definit niciun editor de text. Te rog să definești unul folosind comanda `config editor <editor-path>`"
+	],
+	"No updates available": [
+		"Nu există actualizări"
+	],
+	"No URL for SAML authentication set.": [
+		""
+	],
+	"None": [
+		"Niciuna"
+	],
+	"Nord": [
+		"Nord"
+	],
+	"Not authenticated with %s. Please provide any missing credentials.": [
+		"Neautentificat cu %s. Te rog să furnizezi orice acreditări lipsă."
+	],
+	"Not checked": [
+		"Nebifat"
+	],
+	"Not downloaded": [
+		"Nu este descărcat"
+	],
+	"Not generated": [
+		"Nu sînt generate"
+	],
+	"Not now": [
+		"Nu acum"
+	],
+	"Not useful": [
+		"Nu este utilă"
+	],
+	"note": [
+		"notiță"
+	],
+	"Note": [
+		"Notițe"
+	],
+	"Note area growth factor": [
+		"Factor de creștere zonă notiță"
+	],
+	"Note attachments": [
+		"Atașamente notiță"
+	],
+	"Note attachments...": [
+		"Atașamente notițe..."
+	],
+	"Note body": [
+		"Corp notiță"
+	],
+	"Note does not exist: \"%s\". Create it?": [
+		"Notița nu există: „%s”. Dorești să o creezi?"
+	],
+	"Note editor": [
+		"Editor notiță"
+	],
+	"Note has been saved.": [
+		"Notița a fost salvată."
+	],
+	"Note history": [
+		"Istoric notiță"
+	],
+	"Note History": [
+		"Istoric notițe"
+	],
+	"Note history has been deleted.": [
+		"Istoricul notiței a fost șters."
+	],
+	"Note is not a to-do: \"%s\"": [
+		"Notița nu este o sarcină: „%s”"
+	],
+	"Note list": [
+		"Listă de notițe"
+	],
+	"Note list growth factor": [
+		"Factor de creștere listă notițe"
+	],
+	"Note list style": [
+		"Stilul listei de notițe"
+	],
+	"Note not published: %s": [
+		"Notița nu a fost publicată: %s"
+	],
+	"Note preview": [
+		"Previzualizare notiță"
+	],
+	"Note properties": [
+		"Proprietăți notiță"
+	],
+	"Note title": [
+		"Titlul notiței"
+	],
+	"Note viewer": [
+		"Vizualizator notiță"
+	],
+	"Note&book": [
+		"&Caiet"
+	],
+	"Note: Does not work in all desktop environments.": [
+		"Notă: Nu funcționează în toate mediile desktop."
+	],
+	"Note: When a note is shared, it will no longer be encrypted on the server.": [
+		"Notă: Cînd o notă este partajată, aceasta nu va mai fi criptată pe server."
+	],
+	"Notebook": [
+		"Caiet"
+	],
+	"Notebook list growth factor": [
+		"Factor de mărire listă caiete de notițe"
+	],
+	"Notebook: %s": [
+		"Caiet: %s"
+	],
+	"Notebook: %s (%s)": [
+		"Caiet: %s (%s)"
+	],
+	"Notebooks": [
+		"Caiete"
+	],
+	"Notebooks cannot be named \"%s\", which is a reserved title.": [
+		"Caietele nu pot fi denumite „%s” deoarece este un titlu rezervat."
+	],
+	"Notes": [
+		"Notițe"
+	],
+	"Notes and settings are stored in: %s": [
+		"Notițele și setările sînt stocate în: %s"
+	],
+	"Notes can only be created within a notebook.": [
+		"Notițele pot fi create numai în cadrul unui caiet de notițe."
+	],
+	"Notifications": [
+		"Notificări"
+	],
+	"Numbered List": [
+		"Listă numerotată"
+	],
+	"OCR: Clear cache and re-download language data files": [
+		"OCR: Golește cache-ul și descarcă din nou fișierele cu date lingvistice"
+	],
+	"OCR: Language data URL or path": [
+		"OCR: URL sau cale date lingvistice"
+	],
+	"OCR: Search in extracted content": [
+		"OCR: Caută în conținutul extras"
+	],
+	"OK": [
+		"OK"
+	],
+	"OLED Dark": [
+		"OLED întunecat"
+	],
+	"On %s: %s": [
+		"Pe %s: %s"
+	],
+	"on line": [
+		"pe linie"
+	],
+	"One of your master keys use an obsolete encryption method.": [
+		"Una dintre cheile dvs. master utilizează o metodă de criptare învechită."
+	],
+	"One or more items are currently encrypted and you may need to supply a master password. To do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted items are being decrypted in the background and will be available soon.": [
+		"Unul sau mai multe elemente sînt criptate și este posibil să fie necesar să furnizezi o parolă master. Pentru a face acest lucru, te rog să tastezi `e2ee decrypt`. Dacă ai furnizat deja parola, elementele criptate sînt decriptate în fundal și vor fi disponibile în curînd."
+	],
+	"One or more master keys need a password.": [
+		"Una sau mai multe chei master au nevoie de o parolă."
+	],
+	"OneDrive": [
+		"OneDrive"
+	],
+	"OneDrive Login": [
+		"Autentificare OneDrive"
+	],
+	"OneNote Notebook": [
+		"Caiet OneNote"
+	],
+	"Only one note can be printed at a time.": [
+		"Doar o singură notiță se poate imprima."
+	],
+	"Open": [
+		"Deschide"
+	],
+	"Open %s": [
+		"Deschide %s"
+	],
+	"Open in external editor": [
+		"Deschide într-un editor extern"
+	],
+	"Open in new window": [
+		"Deschide într-o fereastră nouă"
+	],
+	"Open it": [
+		"Deschide-l"
+	],
+	"Open log": [
+		"Deschide jurnal"
+	],
+	"Open PDF viewer": [
+		"Deschide vizualizator PDF"
+	],
+	"Open primary app instance...": [
+		"Deschide instanța primară a aplicației..."
+	],
+	"Open profile directory": [
+		"Deschide dosarul profilului"
+	],
+	"Open secondary app instance...": [
+		"Deschide instanța secundară a aplicației..."
+	],
+	"Open settings": [
+		"Deschide setări"
+	],
+	"Open Source": [
+		"Deschide sursa"
+	],
+	"Open Sync Wizard...": [
+		"Deschide ghidul de sincronizare…"
+	],
+	"Open-source licences": [
+		""
+	],
+	"Open...": [
+		"Deschide..."
+	],
+	"Opening section %s": [
+		"Se deschide secțiunea %s"
+	],
+	"Opens dropdown": [
+		"Deschide caseta de derulare"
+	],
+	"Opens note": [
+		"Deschide notița"
+	],
+	"Opens notebook": [
+		"Deschide un caiet de notițe"
+	],
+	"Operation cancelled": [
+		"Operațiunea a fost amînată"
+	],
+	"Options": [
+		"Opțiuni"
+	],
+	"Options that should be used whenever rendering ABC code. It must be a JSON5 object. The full list of options is available at: %s": [
+		""
+	],
+	"Ordered list": [
+		"Listă ordonată"
+	],
+	"Other": [
+		"Alta"
+	],
+	"Other applications...": [
+		"Alte aplicații…"
+	],
+	"Output format: %s": [
+		"Formatul sursei: %s"
+	],
+	"Page orientation for PDF export": [
+		"Orientarea paginii pentru export PDF"
+	],
+	"Page size for PDF export": [
+		"Dimensiunea paginii pentru exportul PDF"
+	],
+	"Panel \"%s\" is visible": [
+		"Panoul „%s” este vizibil"
+	],
+	"Panel %s is hidden": [
+		"Panoul „%s” este ascuns"
+	],
+	"Password": [
+		"Parolă"
+	],
+	"Password cannot be empty": [
+		"Parolă nu poate fi un cîmp gol"
+	],
+	"Password:": [
+		"Parolă:"
+	],
+	"Passwords do not match!": [
+		"Parolele nu se potrivesc!"
+	],
+	"Paste": [
+		"Lipește"
+	],
+	"Paste as text": [
+		"Lipește ca text"
+	],
+	"Path:": [
+		"Cale:"
+	],
+	"PDF File": [
+		"Fișier PDF"
+	],
+	"Per user. Minimum of 2 users.": [
+		"Per utilizator. Minim 2 utilizatori."
+	],
+	"Permanently delete note": [
+		"Șterge notița permanent"
+	],
+	"Permanently delete note \"%s\"?": [
+		"Șterge notițele „%s”?"
+	],
+	"Permanently delete notebook \"%s\"?\n\nAll notes and sub-notebooks within this notebook will be permanently deleted.": [
+		"Ștergi caietul „%s” permanent?\n\nToate notițele și secțiunile din acest caiet vor fi șterse permanent."
+	],
+	"Permanently delete this note?": [
+		"Ștergi permanent această notiță?",
+		"Ștergi permanent aceste %d notițe?",
+		"Ștergi permanent aceste %d de notițe?"
+	],
+	"Permanently deletes the notebook, skipping the trash.": [
+		"Șterge permanent caietul, omițînd coșul."
+	],
+	"Photo %d": [
+		"Fotografia %d"
+	],
+	"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below.": [
+		"Te rog să faci clic pe „%s” pentru a continua sau să setezi parolele în lista „%s” de mai jos."
+	],
+	"Please confirm that you would like to re-encrypt your complete database.": [
+		"Te rog să confirmi că dorești să criptezi din nou întreaga bază de date."
+	],
+	"Please enter your password in the master key list below before upgrading the key.": [
+		"Te rog să îți întroduci parola în lista de chei principale de mai jos înainte de a-ți actualiza cheia."
+	],
+	"Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient's device.": [
+		"Te rog ia aminte că dacă este vorba de un caiet de notițe mare, este posibil să dureze cîteva minute pentru ca toate notițele să apară pe dispozitivul destinatarului."
+	],
+	"Please open the following URL in your browser to authenticate the application. The application will create a directory in \"Apps/Joplin\" and will only read and write files in this directory. It will have no access to any files outside this directory nor to any other personal data. No data will be shared with any third party.": [
+		"Te rog să deschizi următoarea adresă URL în browser pentru a autentifica aplicația. Aplicația va crea un dosar în „Apps/Joplin” și va citi și scrie doar fișiere în acest dosar. Nu va avea acces la nici un fișier din afara acestui dosar și nici la alte date personale. Nu se vor partaja date cu nicio terță parte."
+	],
+	"Please provide the recipient email": [
+		"Te rog furnizează adresa de e-mail a destinatarului"
+	],
+	"Please record your voice...": [
+		"Te rog să îți înregistrezi vocea…"
+	],
+	"Please select a notebook first.": [
+		"Te rog să selectezi mai întîi un caiet de notițe."
+	],
+	"Please select the note or notebook to be deleted first.": [
+		"Te rog să selectezi mai întîi notița sau caietul care trebuie șters."
+	],
+	"Please select where the sync status should be exported to": [
+		"Te rog să selectezi unde trebuie exportată starea sincronizării"
+	],
+	"Please specify import format for %s": [
+		"Te rog să specifici formatul de import pentru %s"
+	],
+	"Please specify the notebook where the notes should be imported to.": [
+		"Te rog să specifici caietul în care trebuie importate notițele."
+	],
+	"Please upgrade Joplin to version %s or later to use this plugin.": [
+		"Te rog să actualizezi Joplin la versiunea %s sau mai nouă pentru a utiliza acest plugin."
+	],
+	"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to edit the note.": [
+		"Te rog să aștepți descărcarea și decriptarea tuturor atașamentelor. De asemenea, poți comuta la %s pentru a edita notița."
+	],
+	"Please wait while we load your organisation sign-in page...": [
+		"Te rog așteaptă cît timp se încarcă pagina de autentificare a organizației tale..."
+	],
+	"Please wait...": [
+		"Te rog să aștepți..."
+	],
+	"Plugin message": [
+		"Mesaj plugin"
+	],
+	"Plugin panels": [
+		"Panouri plugin"
+	],
+	"Plugin repository failed to load": [
+		"Repository-ul plugin-ului a eșuat să se încarce"
+	],
+	"Plugin search": [
+		"Plugin"
+	],
+	"Plugin security": [
+		"Plugin"
+	],
+	"Plugin tools": [
+		"Instrumente Plugin"
+	],
+	"Plugin WebView debugging": [
+		"Plugin depanare WebView"
+	],
+	"Plugins": [
+		"Plugin-uri"
+	],
+	"Plugins extend Joplin with features that are not present by default. Plugins can extend Joplin's editor, viewer, and more.": [
+		"Plugin-urile extind Joplin cu funcții care nu sînt implicit prezente. Plugin-urile pot extinde funcționalitatea editorului, vizualizatorului și mai multe."
+	],
+	"Portrait": [
+		"Portret"
+	],
+	"Possible keys/values:": [
+		"Posibile chei/valori:"
+	],
+	"Possible values: %s.": [
+		"Valori posibile: %s."
+	],
+	"Prefer JSON output.": [
+		"Prefer date de ieșire JSON."
+	],
+	"Preferences": [
+		"Preferințe"
+	],
+	"Preferences...": [
+		"Preferințe..."
+	],
+	"Preferred dark theme": [
+		"Tema întunecată preferată"
+	],
+	"Preferred light theme": [
+		"Tema luminoasă preferată"
+	],
+	"Preserve colours when pasting text in Rich Text Editor": [
+		"Păstrează culorile la lipirea textului în editorul de text îmbogățit"
+	],
+	"Press Ctrl+D or type \"exit\" to exit the application": [
+		"Apasă Ctrl+D sau tastează „exit” pentru a ieși din aplicație"
+	],
+	"Press the shortcut": [
+		"Apasă scurtătura"
+	],
+	"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the shortcut.": [
+		"Apasă scurtătura și apoi apasă ENTER. Sau apasă BACKSPACE pentru a șterge scurtătura."
+	],
+	"Press to set the decryption password.": [
+		"Apasă pentru a seta parola de decriptare."
+	],
+	"previous": [
+		"anterioara"
+	],
+	"Previous match": [
+		"Potrivirea anterioară"
+	],
+	"Previous versions": [
+		"Versiuni anterioare"
+	],
+	"Previous versions of this note": [
+		"Versiunile anterioare ale acestei notițe"
+	],
+	"Print": [
+		"Tipărește"
+	],
+	"Priority support": [
+		"Suport prioritar"
+	],
+	"Privacy Policy": [
+		"Politica de confidențialitate"
+	],
+	"Pro": [
+		"Pro"
+	],
+	"Process failed payment subscriptions": [
+		"Procesarea subscripțiilor de plată eșuate"
+	],
+	"Process oversized accounts": [
+		"Procesarea conturilor de dimensiuni prea mari"
+	],
+	"Process user deletions": [
+		"Procesarea ștergerilor de utilizator"
+	],
+	"Processing": [
+		"Se procesează"
+	],
+	"Processing photo...": [
+		"Se procesează imaginea..."
+	],
+	"Profile": [
+		"Profil"
+	],
+	"Profile name": [
+		"Numele profilului"
+	],
+	"Profile name:": [
+		"Numele profilului:"
+	],
+	"Profile Version: %s": [
+		"Versiune profil: %s"
+	],
+	"Profiles": [
+		"Profiluri"
+	],
+	"Properties": [
+		"Proprietăți"
+	],
+	"Proxy enabled": [
+		"Proxy activat"
+	],
+	"Proxy timeout (seconds)": [
+		"Timeout proxy (secunde)"
+	],
+	"Proxy URL": [
+		"URL proxy"
+	],
+	"Public-private key pair:": [
+		"Pereche de chei publice-private:"
+	],
+	"Publish Note": [
+		"Publică notița"
+	],
+	"Publish note \"%s\" (in notebook \"%s\")?": [
+		"Publici notița „%s” (în caietul „%s”)?"
+	],
+	"Publish note...": [
+		"Publică notița…"
+	],
+	"Publish Notes": [
+		"Publică notițele"
+	],
+	"Publish notes to the internet": [
+		"Publică notițele pe internet"
+	],
+	"Publish/unpublish": [
+		"Publică/Retrage"
+	],
+	"Published at URL: %s": [
+		"Publicat la URL: %s"
+	],
+	"Publishes a note to Joplin Server or Joplin Cloud": [
+		"Publică o notiță pe un server Joplin sau în Cloud-ul Joplin"
+	],
+	"QR Code": [
+		"Cod QR"
+	],
+	"Quit": [
+		"Ieșire"
+	],
+	"Re-download model": [
+		"Descarcă din nou modelul"
+	],
+	"Re-encrypt data": [
+		"Re-criptează datele"
+	],
+	"Re-encryption": [
+		"Re-criptare"
+	],
+	"Re-enter password": [
+		"Întrodu parola din nou"
+	],
+	"Re-upload local data to sync target": [
+		"Reîncărcarea datelor locale către destinația de sincronizare"
+	],
+	"Read more": [
+		"Citește mai multe"
+	],
+	"Read more about it": [
+		"Citește mai multe despre acestea"
+	],
+	"Read time: %s min": [
+		"Durata lecturii: %s min"
+	],
+	"Reading commands from standard input is only available in CLI mode.": [
+		"Citirea comenzilor de la intrarea standard este disponibilă doar în modul CLI."
+	],
+	"Recipient has accepted the invitation": [
+		"Destinatarul a acceptat invitația"
+	],
+	"Recipient has not yet accepted the invitation": [
+		"Destinatarul nu a acceptat încă invitația"
+	],
+	"Recipient has rejected the invitation": [
+		"Destinatarul a respins invitația"
+	],
+	"Recipients:": [
+		"Destinatari:"
+	],
+	"Recognise text:": [
+		"Recunoaște textul:"
+	],
+	"Recognize handwritten image": [
+		"Recunoaște imagine cu text scris de mînă"
+	],
+	"Recommended": [
+		"Recomandat"
+	],
+	"Recommended plugins": [
+		"Plugin-uri recomandate"
+	],
+	"Record audio": [
+		"Înregistrează audio"
+	],
+	"Recording": [
+		"Înregistrare"
+	],
+	"Recording...": [
+		"Se înregistrează…"
+	],
+	"Redo": [
+		"Refă"
+	],
+	"Refresh": [
+		"Reîmprospătează"
+	],
+	"Regular expression": [
+		"Expresie regulată"
+	],
+	"Reject": [
+		"Respinge"
+	],
+	"Rejecting share...": [
+		"Se respinge partajarea..."
+	],
+	"Remove": [
+		"Șterge"
+	],
+	"Remove %s": [
+		"Șterge %s"
+	],
+	"Remove %s from share": [
+		"Elimină %s din partajare"
+	],
+	"Remove tag \"%s\" from all notes?": [
+		"Elimini eticheta „%s” din toate notițele?"
+	],
+	"Remove this search from the sidebar?": [
+		"Elimini această căutare din panoul lateral?"
+	],
+	"Removed %s from share.": [
+		"S-a eliminat %s din partajare."
+	],
+	"Removed tag: %s": [
+		"Etichetă ștearsă: %s"
+	],
+	"Rename": [
+		"Redenumește"
+	],
+	"Rename notebook:": [
+		"Redenumește caietul:"
+	],
+	"Rename tag:": [
+		"Redenumește eticheta:"
+	],
+	"Renames the given <item> (note or notebook) to <name>.": [
+		"Redenumește <item> dat (notiță sau caiet) în <name>."
+	],
+	"Renders markup on all lines that don't include the cursor.": [
+		"Redă markup pe toate liniile care nu includ cursorul."
+	],
+	"Renew token": [
+		"Reînnoiește jetonul"
+	],
+	"replace": [
+		"înlocuiește"
+	],
+	"Replace": [
+		"Înlocuiește"
+	],
+	"replace all": [
+		"înlocuiește toate"
+	],
+	"Replace all": [
+		"Înlocuiește toate"
+	],
+	"Replace with...": [
+		"Înlocuiește cu…"
+	],
+	"Replace: ": [
+		"Înlocuiește: "
+	],
+	"replaced $ matches": [
+		"s-au înlocuit $ potriviri"
+	],
+	"replaced match on line $": [
+		"s-a înlocuit potrivirea pe linia $"
+	],
+	"Report an issue": [
+		"Raportează o problemă"
+	],
+	"Report any issues concerning the plugin.": [
+		"Raportează orice problemă legată de plugin."
+	],
+	"Report fraudulent plugin": [
+		"Raportează plugin fraudulos"
+	],
+	"Report system": [
+		"Raportează sistem"
+	],
+	"Reports": [
+		"Rapoarte"
+	],
+	"Reset application layout": [
+		"Resetează aspectul aplicației"
+	],
+	"Reset master password": [
+		"Resetare parolei master"
+	],
+	"Resize large images:": [
+		"Redimensionează imaginile mari:"
+	],
+	"Resources: %d.": [
+		"Resurse: %d."
+	],
+	"Restart and upgrade": [
+		"Repornește și actualizează"
+	],
+	"Restart in safe mode": [
+		"Repornește în modul sigur"
+	],
+	"Restart now": [
+		"Repornește acum"
+	],
+	"Restore": [
+		"Restaurează"
+	],
+	"Restore defaults": [
+		"Restaurează implicitele"
+	],
+	"Restore note": [
+		"Restaurează notița"
+	],
+	"Restore notebook": [
+		"Restaurează caietul"
+	],
+	"Restore the items matching <pattern> from the trash.": [
+		"Restaurează elementele care se potrivesc cu <pattern> din coșul de gunoi."
+	],
+	"Restored items": [
+		"Elemente restaurate"
+	],
+	"Restored Notes": [
+		"Notițe restaurate"
+	],
+	"Results (%d):": [
+		"Rezultate (%d):"
+	],
+	"Retry": [
+		"Reîncearcă"
+	],
+	"Retry All": [
+		"Reîncearcă toate"
+	],
+	"Reveal file in folder": [
+		"Afișează fișierul în dosar"
+	],
+	"Reverse sort order": [
+		"Inversează ordinea sortării"
+	],
+	"Reverses the sorting order.": [
+		"Inversează ordinea sortării."
+	],
+	"Revision:": [
+		"Revizie:"
+	],
+	"Revision: %s (%s)": [
+		"Revizie: %s (%s)"
+	],
+	"Rich Text": [
+		"Text îmbogățit"
+	],
+	"Rich Text editor. Press Escape then Tab to escape focus.": [
+		"Editor text îmbogățit. Apasă Escape, apoi Tab pentru a pierde focusul."
+	],
+	"Runs the commands contained in the text file. There should be one command per line.": [
+		"Execută comenzile conținute în fișierul text. Ar trebui să existe cîte o comandă pe linie."
+	],
+	"S3": [
+		"S3"
+	],
+	"S3 access key": [
+		"Cheie acces S3"
+	],
+	"S3 bucket": [
+		"Bucket S3"
+	],
+	"S3 region": [
+		"Regiune S3"
+	],
+	"S3 secret key": [
+		"Cheie secretă S3"
+	],
+	"S3 URL": [
+		"URL S3"
+	],
+	"Safe mode is currently active. Note rendering and all plugins are temporarily disabled.": [
+		"Modul safe este activ în prezent. Notă redarea și toate plugin-urile sînt temporar dezactivate."
+	],
+	"Save": [
+		"Salvează"
+	],
+	"Save alarm": [
+		"Salvează alarma"
+	],
+	"Save as %s": [
+		"Salvează ca %s"
+	],
+	"Save as...": [
+		"Salvează ca..."
+	],
+	"Save changes": [
+		"Salvează schimbările"
+	],
+	"Save changes?": [
+		"Salvezi schimbările?"
+	],
+	"Save geo-location with notes": [
+		"Salvează geo-locația în notițe"
+	],
+	"Save geolocation?": [
+		"Salvezi geo-locația?"
+	],
+	"Scan notebook": [
+		"Scanează un caiet"
+	],
+	"Scanned code": [
+		"Cod scanat"
+	],
+	"Scrollbar size": [
+		"Mărime bară derulare"
+	],
+	"Search": [
+		"Caută"
+	],
+	"Search for plugins...": [
+		"Caută plugin-uri…"
+	],
+	"Search for...": [
+		"Caută după…"
+	],
+	"Search hidden": [
+		"Căutare ascunsă"
+	],
+	"Search in all the notes": [
+		"Caută în toate notițele"
+	],
+	"Search in current note": [
+		"Caută în notița curentă"
+	],
+	"Search results": [
+		"Rezultate căutare"
+	],
+	"Search shown": [
+		"Căutare afișată"
+	],
+	"Search tags": [
+		"Caută etichete"
+	],
+	"Search...": [
+		"Caută..."
+	],
+	"Search:": [
+		"Caută:"
+	],
+	"Searches for the given <pattern> in all the notes.": [
+		"Caută după <pattern> dat în toate notițele."
+	],
+	"See changelog": [
+		"Vezi lista de schimbări"
+	],
+	"See the pre-release page for more details: %s": [
+		"Pentru mai multe detalii, consultă pagina de pre-release: %s"
+	],
+	"Select": [
+		"Selectează"
+	],
+	"Select a revision...": [
+		"Alege o revizie…"
+	],
+	"Select all": [
+		"Selectează tot"
+	],
+	"Select emoji...": [
+		"Alege un emoji…"
+	],
+	"Select file...": [
+		"Alege o imagine…"
+	],
+	"Select notebook": [
+		"Selectează caiet"
+	],
+	"Select one of the other supported sync targets.": [
+		"Selectează una din celelalte destinații de sincronizare suportate."
+	],
+	"Select parent notebook": [
+		"Selectează caietul părinte"
+	],
+	"Select the type of file to be imported:": [
+		""
+	],
+	"Selected: %s": [
+		"Selectat: %s"
+	],
+	"Selection deleted": [
+		"Selecția a fost ștearsă"
+	],
+	"Selects a notebook": [
+		"Selectează un caiet"
+	],
+	"Self-hosted": [
+		"Auto-găzduit"
+	],
+	"Send bug report": [
+		"Trimite un raport de eroare"
+	],
+	"Server is already running on port %d": [
+		"Serverul rulează deja pe portul %d"
+	],
+	"Server is not running.": [
+		"Serverul nu rulează."
+	],
+	"Server is running on port %d": [
+		"Serverul rulează pe portul %d"
+	],
+	"Set alarm": [
+		"Setează alarma"
+	],
+	"Set alarm:": [
+		"Setează alarma:"
+	],
+	"Set it to 0 to make it take the complete available space. Recommended width is 600.": [
+		"Setează-o la 0 pentru a ocupa tot spațiul disponibil. Lățimea recomandată este de 600."
+	],
+	"Set the password": [
+		"Setează parola"
+	],
+	"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n\n%s": [
+		"Setează proprietatea <name> a <note> date la [value] dată. Proprietățile posibile sînt:\n\n%s"
+	],
+	"Settings": [
+		"Setări"
+	],
+	"Share": [
+		"Distribuie"
+	],
+	"Share a copy of all notes in a file format that can be imported by Joplin on a computer.": [
+		"Partajează o copie a tuturor notițelor într-un format de fișier care poate fi importat de Joplin pe un calculator."
+	],
+	"Share a notebook with others": [
+		"Partajează un caiet cu alții"
+	],
+	"Share from %s (%s)": [
+		"Partajează din %s (%s)"
+	],
+	"Share Notebook": [
+		"Partajează caiet"
+	],
+	"Share notebook...": [
+		"Partajează caiet..."
+	],
+	"Share permissions": [
+		"Permisiuni de partajare"
+	],
+	"Shared": [
+		"Partajat"
+	],
+	"Shares": [
+		"Partajări"
+	],
+	"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud or Joplin Server.": [
+		"Partajează sau anulează partajarea pentru [caietul] specificat cu [utilizatorul]. Necesită Joplin Cloud sau server Joplin."
+	],
+	"Sharing notebook...": [
+		"Se partajează caietul..."
+	],
+	"Shortcuts are not available in CLI mode.": [
+		"Scurtăturile nu sînt disponibile în modul CLI."
+	],
+	"Show advanced": [
+		"Afișează avansat"
+	],
+	"Show Advanced Settings": [
+		"Afișează opțiunile avansate"
+	],
+	"Show all": [
+		"Afișează tot"
+	],
+	"Show completed to-dos": [
+		"Afișează sarcinile terminate"
+	],
+	"Show disabled": [
+		"Afișează dezactivatele"
+	],
+	"Show disabled keys": [
+		"Afișează cheile dezactivate"
+	],
+	"Show monospace fonts only.": [
+		"Afișează doar fonturi monospațiere."
+	],
+	"Show note counts": [
+		"Afișează numărul de notițe"
+	],
+	"Show notebook options": [
+		"Afișează opțiuni caiet"
+	],
+	"Show password": [
+		"Afișează parola"
+	],
+	"Show sort order buttons": [
+		"Afișează butoanele de ordonare"
+	],
+	"Show tray icon": [
+		"Afișează pictograma în zona de notificări"
+	],
+	"Show/hide the sidebar": [
+		"Afișează/Ascunde panoul lateral"
+	],
+	"Shows notes for tag": [
+		"Afișează notițele pentru etichetă"
+	],
+	"Shrink large images before adding them to notes.": [
+		"Micșorează imaginile mari înainte de a le adăuga la notițe."
+	],
+	"Side menu closed": [
+		"Meniu lateral închis"
+	],
+	"Side menu opened": [
+		"Meniu lateral deschis"
+	],
+	"Sidebar": [
+		"Panou lateral"
+	],
+	"Sign up to Joplin Cloud": [
+		"Creează cont Joplin Cloud"
+	],
+	"Size": [
+		"Mărime"
+	],
+	"Skip this version": [
+		"Sari peste această versiune"
+	],
+	"Skipped items: %d (use --retry-failed-items to retry decrypting them)": [
+		"Elemente omise: %d (folosește --retry-failed-items pentru a reîncerca decriptarea acestora)"
+	],
+	"Skipped: %d.": [
+		"Omise: %d."
+	],
+	"Small": [
+		"Mică"
+	],
+	"Solarised Dark": [
+		"Solarizat întunecat"
+	],
+	"Solarised Light": [
+		"Solarizat luminos"
+	],
+	"Some attachments could not be downloaded. Please try to download them again.": [
+		"Unele atașamente nu au putut fi descărcate. Te rog încearcă să le descarci din nou."
+	],
+	"Some attachments need to be downloaded. Set the attachment download mode to \"always\" and try again.": [
+		"Unele atașamente trebuie să fie descărcate. Setează module de descărcare al atașamentelor la „mereu” și încearcă din nou."
+	],
+	"Some items cannot be decrypted.": [
+		"Unele elemente nu pot fi decriptate."
+	],
+	"Some items cannot be synchronised.": [
+		"Unele elemente nu pot fi sincronizate."
+	],
+	"Some items cannot be synchronised. Press for more info.": [
+		"Unele elemente nu pot fi sincronizate. Apasă pentru mai multe informații."
+	],
+	"Some items could not be synchronised. Please try to synchronise them first.": [
+		"Unele elemente nu au putut fi sincronizate. Te rog încearcă să le sincronizezi mai întîi."
+	],
+	"Sort \"%s\" in ascending order": [
+		"Sortează „%s” în ordine ascendentă"
+	],
+	"Sort \"%s\" in descending order": [
+		"Sortează „%s” în ordine descendentă"
+	],
+	"Sort notebooks by": [
+		"Sortează notițele după"
+	],
+	"Sort notes by": [
+		"Sortează notițele după"
+	],
+	"Sort selected lines": [
+		"Sortează liniile selectate"
+	],
+	"Sorts the item by <field> (eg. title, updated_time, created_time).": [
+		"Sortează elementul după <field> (ex: titlu, data_actualizării, data_creării)."
+	],
+	"Source": [
+		"Sursă"
+	],
+	"Source code available": [
+		"Cod sursă disponibil"
+	],
+	"Source format: %s": [
+		"Formatul sursei: %s"
+	],
+	"Source: ": [
+		"Sursă: "
+	],
+	"SPACE": [
+		""
+	],
+	"Spacer": [
+		"Distanțier"
+	],
+	"Specify the port that should be used by the API server. If not set, a default will be used.": [
+		"Specifică portul care trebuie utilizat de serverul API. Dacă nu este setat, se va utiliza un port implicit."
+	],
+	"Spell checker": [
+		"Corector ortografic"
+	],
+	"Split View": [
+		"Divizare vizualizare"
+	],
+	"Start application minimised in the tray icon": [
+		"Pornește aplicația minimizat în zona de notificări a sistemului"
+	],
+	"Start recording": [
+		"Începe înregistrarea"
+	],
+	"Start, stop or check the API server. To specify on which port it should run, set the api.port config variable. Commands are (%s).": [
+		"Pornește, oprește sau verifică server-ul API. Pentru a specifica pe ce port trebuie să ruleze, setează variabila de configurare api.port. Comenzile sînt (%s)."
+	],
+	"Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.": [
+		"Se începe decriptarea... Te rog să aștepți, deoarece poate dura cîteva minute, în funcție de cît este de decriptat."
+	],
+	"Starting synchronisation...": [
+		"Se începe sincronizarea..."
+	],
+	"Starting to edit note. Close the editor to get back to the prompt.": [
+		"Se începe editarea notiței. Închide editorul pentru a reveni la prompt."
+	],
+	"Statistics": [
+		"Statistici"
+	],
+	"Statistics...": [
+		"Statistici..."
+	],
+	"Status": [
+		"Stare"
+	],
+	"Status: %s": [
+		"Stare: %s"
+	],
+	"Status: Started on port %d": [
+		"Stare: Portul %d"
+	],
+	"Step 1: Enable the clipper service": [
+		"Pasul 1: Activează clipper service"
+	],
+	"Step 1: Open this URL in your browser to authorise the application:": [
+		"Pasul 1: Deschide adresa URL în navigatorul tău web pentru a autoriza aplicația:"
+	],
+	"Step 2: Enter the code provided by Dropbox:": [
+		"Pasul 2: Întrodu codul oferit de Dropbox:"
+	],
+	"Step 2: Install the extension": [
+		"Pasul 2: Instalează extensia"
+	],
+	"Stop": [
+		"Stop"
+	],
+	"Stop external editing": [
+		"Oprește editarea externă"
+	],
+	"Storage space": [
+		"Spațiu de stocare"
+	],
+	"Strikethrough": [
+		"Tăietură oblică"
+	],
+	"strong text": [
+		"text strong"
+	],
+	"Submit": [
+		"Trimite"
+	],
+	"Subscript": [
+		"Subscripție"
+	],
+	"Success": [
+		"Succes"
+	],
+	"Success! Synchronisation configuration appears to be correct.": [
+		"Succes! Configurația de sincronizare pare a fi corectă."
+	],
+	"Suggestions": [
+		"Sugestii"
+	],
+	"Superscript": [
+		"Superscript"
+	],
+	"Swap line down": [
+		"Interschimbă cu linia de jos"
+	],
+	"Swap line up": [
+		"Interschimbă cu linia de sus"
+	],
+	"Switch between note and to-do type": [
+		"Comută între notiță și listă de făcut"
+	],
+	"Switch profile": [
+		"Comută profilul"
+	],
+	"Switch to back-facing camera": [
+		"Comută la camera din spate"
+	],
+	"Switch to front-facing camera": [
+		"Comută la camera din față"
+	],
+	"Switch to note type": [
+		"Comută la tipul „notiță”"
+	],
+	"Switch to profile %d": [
+		"Comută la profilul %d"
+	],
+	"Switch to the %s Editor": [
+		"Comută la editorul %s"
+	],
+	"Switch to the legacy editor": [
+		"Comută la editorul învechit"
+	],
+	"Switch to the new editor": [
+		"Comută la noul editor"
+	],
+	"Switch to to-do type": [
+		"Comută la tipul „de făcut”"
+	],
+	"Switches to [notebook] - all further operations will happen within this notebook.": [
+		"Comută la [notebook] - toate operațiunile ulterioare vor avea loc în acest caiet."
+	],
+	"Sync": [
+		"Sincronizează"
+	],
+	"Sync as many devices as you want": [
+		"Sincronizează cît de multe dispozitive dorești"
+	],
+	"Sync Status": [
+		"Sync Status"
+	],
+	"Sync status (synced items / total items)": [
+		"Starea de sincronizare (elemente sincronizate / total elemente)"
+	],
+	"Sync target must be upgraded! Run `%s` to proceed.": [
+		"Destinația de sincronizare trebuie să fie actualizată! Rulează `%s` pentru a continua."
+	],
+	"Sync Target Upgrade": [
+		"Sync Target Upgrade"
+	],
+	"Sync to provided target (defaults to sync.target config value)": [
+		"Sincronizarea cu o destinație specificată (presetat la valoarea de configurare sync.target)"
+	],
+	"Sync Version: %s": [
+		"Versiunea de sincronizare: %s"
+	],
+	"Sync your notes": [
+		"Sincronizează-ți notițele"
+	],
+	"Sync, encryption, proxy": [
+		"Sincronizare, criptare, proxy"
+	],
+	"Synchronisation": [
+		"Sincronizare"
+	],
+	"Synchronisation interval": [
+		"Interval de sincronizare"
+	],
+	"Synchronisation is already in progress.": [
+		"Sincronizarea este deja în progres."
+	],
+	"Synchronisation Status": [
+		"Starea sincronizării"
+	],
+	"Synchronisation target": [
+		"Destinație sincronizare"
+	],
+	"Synchronisation target: %s (%s)": [
+		"Destinație sincronizare: %s (%s)"
+	],
+	"Synchronise": [
+		"Sincronizează"
+	],
+	"Synchronise only over WiFi connection": [
+		"Sincronizare numai prin conexiune WiFi"
+	],
+	"Synchronises with remote storage.": [
+		"Sincronizarea cu stocarea de la distanță."
+	],
+	"Synchronising...": [
+		"Se sincronizează..."
+	],
+	"Synchronizing...": [
+		"Se sincronizează..."
+	],
+	"Tab indents": [
+		"Tasta tab indentează"
+	],
+	"Tab moves focus": [
+		"Tasta tab mută focalizarea"
+	],
+	"Tabloid": [
+		"Tabloid"
+	],
+	"Tagged: %d.": [
+		"Etichetate: %d."
+	],
+	"Tags": [
+		"Etichete"
+	],
+	"Take photo": [
+		"Fotografiază"
+	],
+	"Take survey": [
+		"Completează chestionarul"
+	],
+	"Task \"%s\" failed with error: %s": [
+		"Sarcina „%s” a eșuat cu eroarea: %s"
+	],
+	"Task list": [
+		"Listă de sarcini"
+	],
+	"Tasks": [
+		"Sarcini"
+	],
+	"Teams": [
+		"Echipe"
+	],
+	"Text document": [
+		"Document text"
+	],
+	"Text editor command": [
+		"Comandă editor de text"
+	],
+	"Thank you for the feedback!\nDo you have time to complete a short survey?": [
+		"Mulțumim pentru feedback!\nAi timp să completezi un scurt chestionar?"
+	],
+	"The active profile cannot be deleted. Switch to a different profile and try again.": [
+		"Profilul activ nu poate fi șters. Comută la un alt profil și încearcă din nou."
+	],
+	"The app is now going to close. Please relaunch it to complete the process.": [
+		"Aplicația se va închide acum. Te rog să o lansezi din nou pentru a finaliza procesul."
+	],
+	"The application has been authorised - you may now close this browser tab.": [
+		"Aplicația a fost autorizată - acum poți închide această fereastră browserului."
+	],
+	"The application has been authorised!": [
+		"Aplicația a fost autorizată!"
+	],
+	"The application has been successfully authorised.": [
+		"Aplicația a fost autorizată cu succes."
+	],
+	"The application must be restarted for these changes to take effect.": [
+		"Aplicația trebuie repornită pentru ca aceste modificări să intre în vigoare."
+	],
+	"The attachments will no longer be watched when you switch to a different note.": [
+		"Atașamentele nu vor mai fi urmărite atunci cînd treci la o altă notiță."
+	],
+	"The command \"%s\" is only available in GUI mode": [
+		"Comanda „%s” este disponibilă doar în modul GUI"
+	],
+	"The default admin password is insecure and has not been changed! [Change it now](%s)": [
+		"Parola implicită a administratorului este nesigură și nu a fost schimbată! [Change it now](%s)"
+	],
+	"The default encryption method has been changed to a more secure one and it is recommended that you apply it to your data.": [
+		"Metoda implicită de criptare a fost schimbată într-una mai sigură și se recomandă să o aplici datelor tale."
+	],
+	"The default encryption method has been changed, you should re-encrypt your data.": [
+		"Metoda implicită de criptare a fost modificată, ar trebui să îți criptezi din nou datele."
+	],
+	"The default profile cannot be deleted": [
+		"Profilul implicit nu poate fi șters"
+	],
+	"The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.": [
+		"Comanda editorului (poate include argumente) care va fi utilizată pentru a deschide o notă. Dacă nu este furnizat niciunul, se va încerca să se detecteze automat editorul implicit."
+	],
+	"The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes.": [
+		"Proprietatea factor stabilește modul în care elementul va crește sau se va micșora pentru a se potrivi spațiului disponibil în containerul său în raport cu celelalte elemente. Astfel, un element cu un factor de 2 va ocupa de două ori mai mult spațiu decît un element cu un factor de 1. Repornește aplicația pentru a vedea modificările."
+	],
+	"The following attachment matches your search query:": [
+		"Următorul atașament corespunde căutării tale:",
+		"Următoarele atașamente corespund căutării tale:",
+		"Următoarele atașamente corespund căutării tale:"
+	],
+	"The following attachments are being watched for changes:": [
+		"Următoarele atașamente sînt urmărite pentru modificări:"
+	],
+	"The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.": [
+		"Următoarele chei utilizează un algoritm de criptare depășit și se recomandă actualizarea lor. Cheia actualizată va fi în continuare capabilă să decripteze și să cripteze datele tale ca de obicei."
+	],
+	"The following plugins may not support the current markdown editor:": [
+		"Următoarele plugin-uri ar putea să nu fie suportate de editorul curent Markdown:"
+	],
+	"The Joplin team has vetted this plugin and it meets our standards for security and performance.": [
+		"Echipa Joplin a verificat acest plugin și acesta îndeplinește standardele noastre de securitate și performanță."
+	],
+	"The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		"Cheile cu aceste ID-uri sînt folosite pentru a cripta unele dintre elementele dvs., însă aplicația nu are în prezent acces la ele. Este probabil ca acestea să fie descărcate în cele din urmă prin sincronizare."
+	],
+	"The legacy Markdown editor appears to have crashed due to an incompatibility with a plugin. We recommend using the new editor.": [
+		"Se pare că editorul markdown învechit a crăpat din cauza unei incompatibilități cu un plugin. Îți recomandăm să folosești noul editor."
+	],
+	"The master key has been upgraded successfully!": [
+		"Cheia master a fost actualizată cu succes!"
+	],
+	"The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.": [
+		"Cheile master cu aceste ID-uri sînt utilizate pentru a cripta unele dintre elementele dvs., însă aplicația nu are în prezent acces la ele. Este probabil ca acestea să fie descărcate în cele din urmă prin sincronizare."
+	],
+	"The note \"%s\" has been successfully restored to the notebook \"%s\".": [
+		"Notița „%s” a fost restaurată cu succes în caietul „%s”."
+	],
+	"The note was successfully moved to the trash.": [
+		"Notița a fost mutată cu succes în coșul de gunoi.",
+		"Notițele au fost mutate cu succes în coșul de gunoi.",
+		"Notițele au fost mutate cu succes în coșul de gunoi."
+	],
+	"The notebook and its content was successfully moved to the trash.": [
+		"Caietul și conținutul său au fost mutate cu succes în coșul de gunoi."
+	],
+	"The notebook could not be saved: %s": [
+		"Caietul de notițe nu a puut fi salvat: %s"
+	],
+	"The notes have been imported: %s": [
+		"Notițele au fost importante: %s"
+	],
+	"The possible commands are:": [
+		"Comenzile posibile sînt:"
+	],
+	"The recipient could not be removed from the list. Please try again.\n\nThe error was: \"%s\"": [
+		"Destinatarul nu a putut fi eliminat din listă. Te rog să încerci din nou.\n\nEroarea a fost: „%s”"
+	],
+	"The sync target cannot be changed for the following reason: %s\n\nIf the issue cannot be resolved, you may need to clear your data first by following these instructions:\n\n%s": [
+		"Destinația de sincronizare nu poate fi schimbată din următorul motiv: %s\n\nDacă problema nu poate fi rezolvată, va trebui să cureți datele mai întîi, urmînd următoarele instrucțiuni:\n\n%s"
+	],
+	"The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.": [
+		"Destinația de sincronizare trebuie să fie actualizată înainte ca Joplin să se poată sincroniza. Este posibil ca operațiunea să dureze cîteva minute pentru a fi finalizată, iar aplicația trebuie repornită. Pentru a continua, te rog să faci clic pe legătură."
+	],
+	"The sync target needs to be upgraded. Press this banner to proceed.": [
+		"Destinația de sincronizare trebuie să fie actualizată. Apasă pe acest banner pentru a continua."
+	],
+	"The synchronisation password is missing.": [
+		"Lipsește parola de sincronizare."
+	],
+	"The tag \"%s\" already exists. Please choose a different name.": [
+		"Eticheta „%s” există deja. Te rog să alegi un alt nume."
+	],
+	"The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).": [
+		"Destinația la care se sincronizează. Fiecare destinație de sincronizare poate avea parametri suplimentari care sînt numiți `sync.NUM.NAME` (toți documentați mai jos)."
+	],
+	"The web client does not support accepting encrypted shared notebooks. Please switch to the desktop or mobile app before accepting the share.\n\nError: \"%s\"": [
+		"Acceptarea caietelor partajate criptate din clientul web nu este suportată . Te rog comută la aplicația Desktop sau mobilă înainte de a accepta caietul partajat.\n\nEroare: „%s”"
+	],
+	"The Web Clipper needs your authorisation to access your data.": [
+		"Web Clipper are nevoie de aprobarea ta pentru a-ți accesa datele."
+	],
+	"The web clipper service cannot be enabled in this instance of Joplin.": [
+		"Serviciul web clipper nu poate fi activat în această instanță de Joplin."
+	],
+	"The web clipper service is enabled and set to auto-start.": [
+		"Serviciul web clipper este activat și setat la pornire automată."
+	],
+	"The web clipper service is not enabled.": [
+		"Serviciul web clipper nu este activat."
+	],
+	"The WebDAV implementation of %s is incompatible with Joplin, and as such is no longer supported. Please use a different sync method.": [
+		"Implementarea WebDAV a lui %s este incompatibilă cu Joplin și, ca atare, nu mai este suportată. Te rog să folosești o altă metodă de sincronizare."
+	],
+	"Theme": [
+		"Temă"
+	],
+	"Themes, editor font": [
+		"Teme, editor font"
+	],
+	"There are currently no notes. Create one by clicking on the (+) button.": [
+		"Momentan nu există notițe. Creează făcînd clic pe butonul (+)."
+	],
+	"There are no notes in the trash folder.": [
+		"Nu există notițe în coșul de gunoi."
+	],
+	"There are unsaved changes.": [
+		"Există schimbări nesalvate."
+	],
+	"There is no data to export.": [
+		"Nu există date de exportat."
+	],
+	"There was a [conflict](%s) on the attachment below.\n\n%s": [
+		"A existat un [conflict](%s) în atașamentul de mai jos.\n\n%s"
+	],
+	"There was an error downloading this attachment:": [
+		"A apărut o eroare la descărcarea acestui atașament:"
+	],
+	"These items failed to sync, but have been marked as \"ignored\". They won't cause the sync warning to appear, but still aren't synced. To unignore, click \"retry\".": [
+		"Sincronizarea acestor elemente a eșuat și au fost marcate ca „ignorate”. Astfel ele nu vor mai cauza apariția atenționărilor de sincronizare, dar nici nu vor fi sincronizate. Pentru a nu le marca ca ignorate, apară pe „reîncearcă”."
+	],
+	"These items will remain on the device but will not be uploaded to the sync target. In order to find these items, either search for the title or the ID (which is displayed in brackets above).": [
+		"Aceste elemente vor rămîne pe dispozitiv, dar nu vor fi încărcate în destinația de sincronizare. Pentru a găsi aceste elemente, caută fie titlul, fie ID-ul (care este afișat în paranteze mai sus)."
+	],
+	"These plugins enhance the Markdown renderer with additional features. Please note that, while these features might be useful, they are not standard Markdown and thus most of them will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG editor. If you open a note that uses one of these plugins in that editor, you will lose the plugin formatting. It is indicated below which plugins are compatible or not with the WYSIWYG editor.": [
+		"Aceste plugin-uri îmbunătățesc funcția de redare Markdown cu caracteristici suplimentare. Te rog să reții că, deși aceste caracteristici ar putea fi utile, ele nu sînt Markdown standard și, prin urmare, cele mai multe dintre ele vor funcționa numai în Joplin. În plus, unele dintre ele sînt *incompatibile* cu editorul WYSIWYG. Dacă deschizi o notiță care utilizează unul dintre aceste plugin-uri în acel editor, vei pierde formatarea plugin-ului. Mai jos este indicat ce plugin-uri sînt compatibile sau nu cu editorul WYSIWYG."
+	],
+	"This allows another user to share a notebook with you, and you can then both collaborate on it. It does not however allow you to share a notebook with someone else, unless you have the feature \"%s\".": [
+		"Acest lucru permite unui alt utilizator să partajeze un caiet cu tine, iar apoi veți putea colabora amîndoi la el. Cu toate acestea, nu îți permite să partajezi un caiet cu altcineva, cu excepția cazului în care ai caracteristica „%s”."
+	],
+	"This attachment does not have OCR data (Status: %s)": [
+		"Acest atașament nu are date OCR (Stare: %s)"
+	],
+	"This attachment is not downloaded or not decrypted yet": [
+		"Acest atașament nu este descărcat sau nu este încă decriptat"
+	],
+	"This authorisation token is only needed to allow third-party applications to access Joplin.": [
+		"Acest token de autorizare este necesar doar pentru a permite aplicațiilor terțe părți să acceseze Joplin."
+	],
+	"This drawing may have unsaved changes.": [
+		"Acest desen poate avea modificări nesalvate."
+	],
+	"This feature is disabled by default, you need to manually enable it by turning on the option to 'Enable handwritten transcription'.": [
+		"Această funcție este implicit dezactivată. Trebuie să o activezi manual prin opțiunea „Activează transcrierea scrisului de mînă”."
+	],
+	"This feature is only available on Joplin Cloud and Joplin Server.": [
+		"Această funcție este disponibilă doar pe cloud-ul Joplin și server-ul Joplin."
+	],
+	"This image type is not supported by the recognition system.": [
+		"Acest tip de imagine nu este suportat de sistemul de recunoaștere."
+	],
+	"This is an advanced tool to show the attachments that are linked to your notes. Please be careful when deleting one of them as they cannot be restored afterwards.": [
+		"Acesta este un instrument avansat de listare al atașamentelor care sînt legate la notițele tale. Te rog să fii atent dacă intenționezi să ștergi vreunul din ele, deoarece acestea nu pot fi restaurate ulterior."
+	],
+	"This note could not be deleted: %s": [
+		"Această notiță nu a putut fi ștearsă: %s",
+		"Aceste notiție nu au putut fi șterse: %s",
+		"Aceste notițe nu au putut fi șterse: %s"
+	],
+	"This note could not be duplicated: %s": [
+		"Această notiță nu a putut fi duplicată: %s",
+		"Aceste notițe nu au putut fi duplicate: %s",
+		"Aceste notițe nu au putut fi duplicate: %s"
+	],
+	"This note could not be moved: %s": [
+		"Această notiță nu a putut fi mutată: %s",
+		"Aceste notițe nu au putut fi mutate: %s",
+		"Aceste notițe nu au putut fi mutate: %s"
+	],
+	"This note does not have geolocation information.": [
+		"Această notă nu conține informații despre geolocalizare."
+	],
+	"This note has been modified:": [
+		"Această notiță a fost modificată:"
+	],
+	"This note has no content. Click on \"%s\" to toggle the editor and edit the note.": [
+		"Această notiță nu are conținut. Fă clic pe „%s” pentru a comuta editorul și a edita notița."
+	],
+	"This note has no history": [
+		"Această notă nu are istoric"
+	],
+	"This note is in HTML format. Convert it to Markdown to edit it more easily.": [
+		"Această notiță este în format HTML. Convertește-o în Markdown pentru a o putea edita mai ușor."
+	],
+	"This plugin doesn't support %s.": [
+		"Acest plugin nu suportă %s."
+	],
+	"This Rich Text editor has a number of limitations and it is recommended to be aware of them before using it.": [
+		"Acest editor de text îmbogățit are o serie de limitări și este recomandat să le cunoști înainte de a-l utiliza."
+	],
+	"This service allows the browser extension to communicate with Joplin. When enabling it your firewall may ask you to give permission to Joplin to listen to a particular port.": [
+		"Acest serviciu permite extensia browserul-ui pentru a comunica cu Joplin. Atunci cînd se permite firewall poate cere să dea permisiunea Joplin pentru a asculta un anumit port."
+	],
+	"This subfolder of the trash has no notes.": [
+		"Acest sub-dosar din coșul de gunoi nu conține notițe."
+	],
+	"This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.": [
+		"Acest lucru va permite ca Joplin să ruleze în fundal. Se recomandă să  această setare pentru ca notele dvs. să fie sincronizate în mod constant, reducînd astfel numărul de conflicte."
+	],
+	"This will open a new screen. Save your current changes?": [
+		"Se va deschide un nou ecran. Dorești să îți salvezi modificările actuale?"
+	],
+	"This will permanently delete all items in the trash. Continue?": [
+		"Acest lucru va șterge permanent toate elementele din coșul de gunoi. Continui?"
+	],
+	"This will remove the notebook from your collection and you will no longer have access to its content. Do you wish to continue?": [
+		"Aceasta va elimina caietul din colecția ta și nu vei mai avea acces la conținutul său. Dorești să continui?"
+	],
+	"Time format": [
+		"Format oră"
+	],
+	"title": [
+		"titlu"
+	],
+	"Title": [
+		"Titlu"
+	],
+	"To allow Joplin to synchronise with Dropbox, please follow the steps below:": [
+		"Pentru a permite Joplin să se sincronizeze cu Dropbox, te rog urmează pașii de mai jos:"
+	],
+	"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:": [
+		"Pentru a permite Joplin să se sincronizeze cu Joplin Cloud, te rog autentifică-te folosind acest URL:"
+	],
+	"To allow Joplin to synchronise with your account, please follow these steps:": [
+		"Pentru a permite Joplin să se sincronizeze cu contul tău, te rog urmează pașii de mai jos:"
+	],
+	"To continue, please enter your master password below.": [
+		"Pentru a continua, te rog să întroduci parola principală mai jos."
+	],
+	"To create a new tag, type the name and press enter.": [
+		"Pentru a crea o etichetă nouă, tastează numele acesteia și apasă enter."
+	],
+	"To delete a tag, untag the associated notes.": [
+		"Pentru a șterge o eticheta, elimină eticheta respectivă din cadrul notițelor aferente."
+	],
+	"To delete: %d": [
+		"De șters: %d"
+	],
+	"To enter command line mode, press \":\"": [
+		"Pentru a intra în linia de comandă, tastează „:”"
+	],
+	"To exit command line mode, press ESCAPE": [
+		"Pentru a ieși din modul linie de comandă, apasă ESCAPE"
+	],
+	"To manually sort the notes, the sort order must be changed to \"%s\" in the menu \"%s\" > \"%s\"": [
+		"Pentru a sorta notițele manual, ordinea trebuie sa fie schimbată în „%s” în meniu „%s” > „%s”"
+	],
+	"To maximise/minimise the console, press \"tc\".": [
+		"Pentru a maximiza/minimiza consola, tastează „tc”."
+	],
+	"To move from one pane to another, press Tab or Shift+Tab.": [
+		"Pentru a te muta dintr-un panou în altul, apasă Tab sau Shift+Tab."
+	],
+	"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`": [
+		"Pentru a reîncerca decriptarea acestor elemente. Rulează `e2ee decrypt --retry-failed-items`"
+	],
+	"To switch the profile, the app is going to close and you will need to restart it.": [
+		"Pentru a schimba profilul, aplicația se va închide și va trebui să o reporniți."
+	],
+	"To work correctly, the app needs the following permissions. Please enable them in your phone settings, in Apps > Joplin > Permissions": [
+		"Pentru a funcționa corect, aplicația are nevoie de următoarele permisiuni. Te rog să le activezi din setările telefonului tău în Aplicații > Joplin > Permisiuni"
+	],
+	"to-do": [
+		"de făcut"
+	],
+	"To-do": [
+		"De făcut"
+	],
+	"to-do: %s": [
+		"de făcut: %s"
+	],
+	"Toggle all notebooks": [
+		"Comută toate caietele"
+	],
+	"Toggle comment": [
+		"Comută comentariu"
+	],
+	"Toggle development tools": [
+		"Comută instrumentele de dezvoltare"
+	],
+	"Toggle editor layout": [
+		"Comută aspect editor"
+	],
+	"Toggle editor plugin": [
+		"Comută plugin editor"
+	],
+	"Toggle editor tab key navigation": [
+		"Comută navigarea în editor cu tasta tab"
+	],
+	"Toggle editors": [
+		"Comută editoarele"
+	],
+	"Toggle external editing": [
+		"Comută editare externă"
+	],
+	"Toggle menu bar": [
+		"Comută bară meniu"
+	],
+	"Toggle note history, keep notes for": [
+		"Comută istoricul notițelor, păstrează notițele pentru"
+	],
+	"Toggle note list": [
+		"Comută listă de notițe"
+	],
+	"Toggle own sort order": [
+		"Comută propria ordine de sortare"
+	],
+	"Toggle plugin editor": [
+		"Comută editor plugin"
+	],
+	"Toggle safe mode": [
+		"Comută modul safe"
+	],
+	"Toggle sidebar": [
+		"Comută panou lateral"
+	],
+	"Toggle sort order field": [
+		"Comută cîmpul de ordine de sortare"
+	],
+	"Token has been copied to the clipboard!": [
+		"Token-ul a fost copiat în clipboard!"
+	],
+	"Toolbar": [
+		"Bara de instrumente"
+	],
+	"Tools": [
+		"Instrumente"
+	],
+	"Total Size": [
+		"Dimensiunea totală"
+	],
+	"Total: %d/%d": [
+		"Total: %d/%d"
+	],
+	"Trash": [
+		"Coș de gunoi"
+	],
+	"Try again": [
+		"Încearcă din nou"
+	],
+	"Try it now": [
+		"Încearcă acum"
+	],
+	"TYPE": [
+		""
+	],
+	"Type `help [command]` for more information about a command; or type `help all` for the complete usage information.": [
+		"Tastează `help [command]` pentru mai multe informații despre o comandă; sau tastează `help all` pentru informații complete de utilizare."
+	],
+	"Type `joplin help` for usage information.": [
+		"Tastează `joplin help` pentru informații de utilizare."
+	],
+	"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.": [
+		"Tastează titlul unei notițe sau o parte din conținutul acesteia pentru a trece la ea. Sau tastează # urmat de numele unei etichete sau @ urmat de numele unui caiet. Sau tastează : pentru a căuta comenzi."
+	],
+	"Type a note title to search for it.": [
+		"Tastează un titlu de notiță pentru a-l căuta."
+	],
+	"Type: %s.": [
+		"Tip: %s."
+	],
+	"Unable to edit resource of type %s": [
+		"Nu se poate edita resursa de tip %s"
+	],
+	"Unable to share log data. Reason: %s": [
+		"Imposibil de a partaja datele din jurnal. Motivul: %s"
+	],
+	"Unable to share note data. Reason: %s": [
+		"Imposibil de a partaja datele din notiță. Motivul: %s"
+	],
+	"Unchecked": [
+		"Debifat"
+	],
+	"Uncompleted to-dos on top": [
+		"Sarcini nefinalizate în partea de sus"
+	],
+	"Undo": [
+		"Anulează"
+	],
+	"Uninstall and reinstall the application. Make sure you create a backup first by exporting all your notes as JEX from the desktop application.": [
+		"Dezinstalează și reinstalează aplicația. Asigură-te că creezi mai întîi o copie de siguranță prin exportarea tuturor notițelor ca fișiere JEX din aplicația Desktop."
+	],
+	"Unknown": [
+		"Necunoscut"
+	],
+	"Unknown file type": [
+		"Tip de fișier necunoscut"
+	],
+	"Unknown flag: %s": [
+		"Unknown flag: %s"
+	],
+	"Unknown item type downloaded - please upgrade Joplin to the latest version": [
+		"Tip de element necunoscut descărcat - te rog să actualizezi Joplin la cea mai recentă versiune"
+	],
+	"Unknown platform": [
+		"Platformă necunoscută"
+	],
+	"Unordered list": [
+		"Listă neordonată"
+	],
+	"Unpublish": [
+		"Retrage publicarea"
+	],
+	"Unpublish \"%s\"": [
+		"Retrage publicarea pentru „%s”"
+	],
+	"Unpublish note": [
+		"Notă de retragere a publicării"
+	],
+	"Unshare": [
+		"Unsoare"
+	],
+	"Unshare notebook \"%s\"? This may cause other users to lose access to the notebook.": [
+		"Retragi partajarea pentru caietul „%s”? Acest lucru va face ca alți utilizatori să piardă accesul la caiet."
+	],
+	"Unshare this notebook? The recipients will no longer have access to its content.": [
+		"Anulezi partajarea acestui caiet? Destinatarii nu vor mai avea acces la conținutul acestuia."
+	],
+	"Unsupported image type: %s": [
+		"Tip de imagine neacceptat: %s"
+	],
+	"Unsupported link or message: %s": [
+		"Legătură sau mesaj nesuportat: %s"
+	],
+	"Unsupported link or message: %s.\nError: %s": [
+		"Legătură sau mesaj nesuportat: %s.\nEroare: %s"
+	],
+	"Untitled": [
+		"Fără nume"
+	],
+	"Update": [
+		"Actualizează"
+	],
+	"Update available": [
+		"Actualizare disponibilă"
+	],
+	"Update later": [
+		"Actualizează mai tîrziu"
+	],
+	"Update profile": [
+		"Actualizează profilul"
+	],
+	"Update total sizes": [
+		"Actualizează dimensiunile totale"
+	],
+	"Updated": [
+		"Actualizat"
+	],
+	"updated date": [
+		"data actualizării"
+	],
+	"Updated local items: %d.": [
+		"Elemente locale actualizate: %d."
+	],
+	"Updated remote items: %d.": [
+		"Elemente la distanță actualizate: %d."
+	],
+	"Updated: ": [
+		"Actualizat: "
+	],
+	"Updated: %d.": [
+		"Actualizat: %d."
+	],
+	"Updated: %s": [
+		"Actualizat: %s"
+	],
+	"Updating...": [
+		"Se actualizează…"
+	],
+	"Upgrade": [
+		"Actualizare majoră"
+	],
+	"Upgrade the sync target to the latest version.": [
+		"Actualizează destinația de sincronizare la cea mai recentă versiune."
+	],
+	"Upload photo": [
+		"Încarcă fotografie"
+	],
+	"URL": [
+		"URL"
+	],
+	"Usage: %s": [
+		"Utilizare: %s"
+	],
+	"Use biometrics to secure access to the app": [
+		"Folosește date biometrice pentru a securiza accesul la aplicație"
+	],
+	"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE": [
+		"Utilizează formatul lung al listei. Formatul este ID, NOTE_COUNT (pentru caiet), DATE, TODO_CHECKED (pentru liste de făcut), TITLE"
+	],
+	"Use spell checker": [
+		"Folosește corectorul ortografic"
+	],
+	"Use the arrows and page up/down to scroll the lists and text areas (including this console).": [
+		"Folosește săgețile și tastele „page up/down” pentru a derula listele și zonele de text (inclusiv această consolă)."
+	],
+	"Use the arrows to move the layout items. Press \"Escape\" to exit.": [
+		"Folosește săgețile pentru a muta elementele de aspect. Apasă „Escape” pentru a ieși."
+	],
+	"Use the legacy Markdown editor": [
+		"Folosește editorul Markdown învechit"
+	],
+	"Use this to rebuild the search index if there is a problem with search. It may take a long time depending on the number of notes.": [
+		"Folosește această opțiune pentru a reconstrui indexul de căutare dacă există o problemă cu căutarea. Poate dura mult timp, în funcție de numărul de notițe."
+	],
+	"Use your biometrics to secure access to your application. You can always set it up later in Settings.": [
+		"Folosește datele biometrice pentru a securiza accesul la aplicație. Poți oricînd să le configurezi mai tîrziu în Setări."
+	],
+	"Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.": [
+		"Folosit pentru majoritatea textului din editorul markdown. Dacă nu se găsește, se utilizează un font generic proporțional (cu lățime variabilă)."
+	],
+	"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.": [
+		"Se utilizează atunci cînd este necesar un font cu lățime fixă pentru a prezenta textul în mod lizibil (de exemplu, tabele, căsuțe de selectare, coduri). Dacă nu se găsește, se utilizează un font generic monospace (lățime fixă)."
+	],
+	"Useful": [
+		"Utilă"
+	],
+	"User deletions": [
+		"Ștergeri de utilizatori"
+	],
+	"Users": [
+		"Utilizatori"
+	],
+	"Valid": [
+		"Valid"
+	],
+	"Verify your identity": [
+		"Verifică-ți identitatea"
+	],
+	"View": [
+		"Vizualizează"
+	],
+	"View OCR text": [
+		"Vizualizează textul OCR"
+	],
+	"View on map": [
+		"Vizualizează pe hartă"
+	],
+	"View them now": [
+		"Vizualizează-le acum"
+	],
+	"Viewer": [
+		"Vizualizator"
+	],
+	"Viewer and Rich Text Editor font family": [
+		"Familie font vizualizator și editor text îmbogățit"
+	],
+	"Viewer font size": [
+		"Mărime font vizualizator"
+	],
+	"Vim": [
+		"Vim"
+	],
+	"Voice recorder": [
+		"Înregistrator vocal"
+	],
+	"Voice typing language files (URL)": [
+		"Fișiere de limbă de tastare vocală (URL)"
+	],
+	"Voice typing...": [
+		"Tastarea vocală…"
+	],
+	"Voice typing: Glossary": [
+		"Transcriere vocală: Glosar"
+	],
+	"Waiting for authorisation...": [
+		"Se așteaptă autorizarea..."
+	],
+	"Waiting: Notebook %s from %s": [
+		"Se așteaptă: Caiet %s de la %s"
+	],
+	"Warning": [
+		"Atenție"
+	],
+	"Warning: not all resources shown for performance reasons (limit: %s).": [
+		"Atenție: nu toate resursele sînt afișate din motive de performanță (limită: %s)."
+	],
+	"We have a system for reporting and removing problematic plugins.": [
+		"Dispunem de un sistem pentru raportarea și eliminarea plugin-urilor problematice."
+	],
+	"We mark plugins developed by trusted Joplin community members as \"recommended\".": [
+		"Marcăm plugin-urile dezvoltate de membri de încredere ai comunității Joplin ca „recomandate”."
+	],
+	"Web Clipper": [
+		"Web Clipper"
+	],
+	"WebDAV": [
+		"WebDAV"
+	],
+	"WebDAV password": [
+		"Parolă WebDAV"
+	],
+	"WebDAV URL": [
+		"URL-ul WebDAV"
+	],
+	"WebDAV username": [
+		"Nume utilizator WebDAV"
+	],
+	"Website and documentation": [
+		"Website și documentație"
+	],
+	"WebView package: %s": [
+		"Pachet WebView: %s"
+	],
+	"WebView version: %s": [
+		"Versiune WebView: %s"
+	],
+	"Welcome to Joplin!\n\nType `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n\nFor example, to create a notebook press `mb`; to create a note press `mn`.": [
+		"Bine ai venit în Joplin!\n\nTastează `:help shortcuts` pentru afișarea listei de scurtături sau doar `:help` pentru informații despre utilizare.\n\nDe exemplu, pentru a crea un caiet de notițe apasă `mb`; pentru a crea o notiță apasă `mn`."
+	],
+	"Welcome!": [
+		"Bine ai venit!"
+	],
+	"What are plugins?": [
+		"Ce sînt plugin-urile?"
+	],
+	"When creating a new note:": [
+		"Cînd este creată o nouă notiță:"
+	],
+	"When creating a new to-do:": [
+		"Cînd este creată o nouă listă de făcut:"
+	],
+	"When enabled, requests that the images in the note be transcribed with a higher-quality on-server transcription service. Requires sync with a copy of the desktop app.": [
+		"Cînd este activat, solicită ca imaginile din notiță să fie transcrise cu un serviciu de calitate mai bună de pe server. Necesită sincronizare cu aplicația desktop."
+	],
+	"When enabled, the application will scan your attachments and extract the text from it. This will allow you to search for text in these attachments.": [
+		"Atunci cînd este activată, aplicația va scana atașamentele și va extrage textul din ele. Acest lucru îți va permite să cauți text în atașamente."
+	],
+	"Window unresponsive.": [
+		"Fereastra nu răspunde."
+	],
+	"Words": [
+		"Cuvinte"
+	],
+	"y": [
+		"y"
+	],
+	"Y": [
+		"Y"
+	],
+	"yes": [
+		"da"
+	],
+	"Yes": [
+		"Da"
+	],
+	"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d pixels before attaching it?": [
+		"Ești pe cale să atașezi o imagine mare (%dx%d pixeli). Dorești să o redimensionezi la %d pixeli înainte de a o atașa?"
+	],
+	"You are logged in into Joplin Cloud, you can leave this screen now.": [
+		"Ești autentificat la Joplin Cloud, poți acum să părăsești acest ecran."
+	],
+	"You are now logged into your account.": [
+		"Ești acum autentificat în cont."
+	],
+	"You are now using the latest version of the Markdown editor.": [
+		"Folosești acum cea mai nouă versiune de editor markdown."
+	],
+	"You are running the Intel version of Joplin on an Apple Silicon processor. Download the Apple Silicon one for better performance.": [
+		"Rulezi versiunea Intel a Joplin pe un procesor cu siliciu Apple. Descarcă versiunea pentru procesoare Apple pentru o performanță mai mare."
+	],
+	"You currently have no notebooks.": [
+		"Nu ai niciun caiet de notițe."
+	],
+	"You do not have any installed plugin.": [
+		"Nu ai niciun plugin instalat."
+	],
+	"You may also type `status` for more information.": [
+		"De asemenea, poți tasta `status` pentru mai multe informații."
+	],
+	"You may use the tool below to re-encrypt your data, for example if you know that some of your notes are encrypted with an obsolete encryption method.": [
+		"Poți utiliza instrumentul de mai jos pentru a îți cripta din nou datele, de exemplu, dacă știi că unele notițe sînt criptate cu o metodă de criptare învechită."
+	],
+	"You were unable to connect to Joplin Cloud. Please check your credentials and try again. Error:": [
+		"Nu ai putut să te conectezi la Joplin Cloud. Te rog verifică-ți datele de conectare și încearcă din nou. Eroare:"
+	],
+	"Your account doesn't have access to this feature": [
+		"Contul tău nu are acces la această funcție"
+	],
+	"Your choice: ": [
+		"Alegerea ta: "
+	],
+	"Your data is going to be re-encrypted and synced again.": [
+		"Datele tale vor fi recriptate și sincronizate din nou."
+	],
+	"Your Joplin Cloud credentials are invalid, please login.": [
+		"Datele tale de conectare la Joplin Cloud sînt invalide, te rog autentifică-te din nou."
+	],
+	"Your password is needed to decrypt some of your data.": [
+		"Parola dvs. este necesară pentru a decripta unele dintre datele dvs."
+	],
+	"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.": [
+		"Parola ta este necesară pentru a decripta unele dintre date. Tastează `:e2ee decrypt` pentru a o seta."
+	],
+	"Your version: %s": [
+		"Versiunea ta: %s"
+	],
+	"Zoom In": [
+		"Mărește"
+	],
+	"Zoom Out": [
+		"Micșorează"
+	]
+}

@@ -1,9 +1,8 @@
-import { net, protocol } from 'electron';
+import { net, Session } from 'electron';
 import { dirname, resolve, normalize } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
-import { contentProtocolName } from './constants';
+import { contentProtocolName, pluginProtocolName } from './constants';
 import resolvePathWithinDir from '@joplin/lib/utils/resolvePathWithinDir';
-import { LoggerWrapper } from '@joplin/utils/Logger';
 import * as fs from 'fs-extra';
 import { createReadStream } from 'fs';
 import { fromFilename } from '@joplin/lib/mime-utils';
@@ -13,14 +12,29 @@ export interface AccessController {
 	remove(): void;
 }
 
-export interface CustomProtocolHandler {
+export interface CustomContentProtocolHandler {
 	// note-viewer/ URLs
 	allowReadAccessToDirectory(path: string): void;
 	allowReadAccessToFile(path: string): AccessController;
+	allowReadAccessToFiles(paths: string[]): AccessController;
 
 	// file-media/ URLs
 	setMediaAccessEnabled(enabled: boolean): void;
 	getMediaAccessKey(): string;
+}
+
+export interface ContentScriptRegistration {
+	uri: string;
+	revoke: ()=> void;
+}
+
+export interface CustomPluginProtocolHandler {
+	registerContentScript(id: string, js: string): ContentScriptRegistration;
+}
+
+export interface CustomProtocolHandlers {
+	appContent: CustomContentProtocolHandler;
+	pluginContent: CustomPluginProtocolHandler;
 }
 
 
@@ -124,30 +138,33 @@ const handleRangeRequest = async (request: Request, targetPath: string) => {
 	);
 };
 
-// Creating a custom protocol allows us to isolate iframes by giving them
-// different domain names from the main Joplin app.
-//
-// For example, an iframe with url joplin-content://note-viewer/path/to/iframe.html will run
-// in a different process from a parent frame with url file://path/to/iframe.html.
-//
-// See note_viewer_isolation.md for why this is important.
-//
-// TODO: Use Logger.create (doesn't work for now because Logger is only initialized
-// in the main process.)
-const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => {
-	logger = {
-		...logger,
-		debug: () => {},
-	};
+const makeAccessDeniedResponse = (message: string) => {
+	return new Response(message, {
+		status: 403, // Forbidden
+	});
+};
 
+const makeNotFoundResponse = () => {
+	return new Response('not found', {
+		status: 404,
+	});
+};
+
+type LoggerSlice = {
+	debug: (...message: unknown[])=> void;
+};
+
+const handleContentProtocol = (logger: LoggerSlice, session: Session) => {
 	// Allow-listed files/directories for joplin-content://note-viewer/
 	const readableDirectories: string[] = [];
 	const readableFiles = new Map<string, number>();
 	// Access for joplin-content://file-media/
 	let mediaAccessKey: string|false = false;
 
-	// See also the protocol.handle example: https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
-	protocol.handle(contentProtocolName, async request => {
+	const appBundleDirectory = dirname(dirname(__dirname));
+
+	// Serves main app content (e.g. the note viewer)
+	session.protocol.handle(contentProtocolName, async request => {
 		const url = new URL(request.url);
 		const host = url.host;
 
@@ -155,14 +172,16 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 
 		// See https://security.stackexchange.com/a/123723
 		if (pathname.startsWith('..')) {
-			throw new Error(`Invalid URL (not absolute), ${request.url}`);
+			return new Response('Invalid URL (not absolute)', {
+				status: 400,
+			});
 		}
 
 		pathname = resolve(appBundleDirectory, pathname);
 
 		let canRead = false;
 		let mediaOnly = true;
-		if (host === 'note-viewer') {
+		if (host === 'note-viewer' || host === 'plugin-webview') {
 			if (readableFiles.has(pathname)) {
 				canRead = true;
 			} else {
@@ -177,7 +196,7 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 			mediaOnly = false;
 		} else if (host === 'file-media') {
 			if (!mediaAccessKey) {
-				throw new Error('Media access denied. This must be enabled with .setMediaAccessEnabled');
+				return makeAccessDeniedResponse('Media access denied. This must be enabled with .setMediaAccessEnabled');
 			}
 
 			canRead = true;
@@ -185,14 +204,16 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 
 			const accessKey = url.searchParams.get('access-key');
 			if (accessKey !== mediaAccessKey) {
-				throw new Error(`Invalid or missing media access key (was ${accessKey}). An allow-listed ?access-key= parameter must be provided.`);
+				return makeAccessDeniedResponse('Invalid or missing media access key. An allow-listed ?access-key= parameter must be provided.');
 			}
 		} else {
-			throw new Error(`Invalid URL ${request.url}`);
+			return new Response(`Invalid request URL (${request.url})`, {
+				status: 400,
+			});
 		}
 
 		if (!canRead) {
-			throw new Error(`Read access not granted for URL ${request.url}`);
+			return makeAccessDeniedResponse(`Read access not granted for URL (${request.url})`);
 		}
 
 		const asFileUrl = pathToFileURL(pathname).toString();
@@ -200,10 +221,24 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 
 		const rangeHeader = request.headers.get('Range');
 		let response;
-		if (!rangeHeader) {
-			response = await net.fetch(asFileUrl);
-		} else {
-			response = await handleRangeRequest(request, pathname);
+		try {
+			if (!rangeHeader) {
+				response = await net.fetch(asFileUrl);
+			} else {
+				response = await handleRangeRequest(request, pathname);
+			}
+		} catch (error) {
+			if (
+				// Errors from NodeJS fs methods (e.g. fs.stat()
+				error.code === 'ENOENT'
+				// Errors from Electron's net.fetch(). Use error.message since these errors don't
+				// seem to have a specific .code or .name.
+				|| error.message === 'net::ERR_FILE_NOT_FOUND'
+			) {
+				response = makeNotFoundResponse();
+			} else {
+				throw error;
+			}
 		}
 
 		if (mediaOnly) {
@@ -214,15 +249,14 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 			// This is an extra check to prevent loading text/html and arbitrary non-media content from the URL.
 			const contentType = response.headers.get('Content-Type');
 			if (!contentType || !contentType.match(/^(image|video|audio)\//)) {
-				throw new Error(`Attempted to access non-media file from ${request.url}, which is media-only. Content type was ${contentType}.`);
+				return makeAccessDeniedResponse(`Attempted to access non-media file from ${request.url}, which is media-only. Content type was ${contentType}.`);
 			}
 		}
 
 		return response;
 	});
 
-	const appBundleDirectory = dirname(dirname(__dirname));
-	return {
+	const result: CustomContentProtocolHandler = {
 		allowReadAccessToDirectory: (path: string) => {
 			path = resolve(appBundleDirectory, path);
 			logger.debug('protocol handler: Allow read access to directory', path);
@@ -250,6 +284,18 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 				},
 			};
 		},
+		allowReadAccessToFiles: (paths: string[]) => {
+			const handles = paths.map(path => {
+				return result.allowReadAccessToFile(path);
+			});
+			return {
+				remove: () => {
+					for (const handle of handles) {
+						handle.remove();
+					}
+				},
+			};
+		},
 		setMediaAccessEnabled: (enabled: boolean) => {
 			if (enabled) {
 				mediaAccessKey ||= createSecureRandom();
@@ -263,6 +309,87 @@ const handleCustomProtocols = (logger: LoggerWrapper): CustomProtocolHandler => 
 			return mediaAccessKey || null;
 		},
 	};
+	return result;
+};
+
+const handlePluginProtocol = (logger: LoggerSlice, session: Session) => {
+	const hostedContentScriptJs = new Map<string, string>(); // Maps from content script IDs to content script data
+	session.protocol.handle(pluginProtocolName, async request => {
+		const url = new URL(request.url);
+		const host = url.host;
+
+		if (host !== 'plugins') {
+			return new Response('Unknown hostname', { status: 400 });
+		}
+
+		if (request.method !== 'GET') {
+			return new Response('Unsupported request method', { status: 405 });
+		}
+
+		const contentScriptPath = '/content-script/';
+		if (url.pathname.startsWith(contentScriptPath)) {
+			const contentScriptId = url.pathname.substring(contentScriptPath.length);
+			logger.debug('Request for content script with ID', contentScriptId);
+
+			const js = hostedContentScriptJs.get(contentScriptId);
+			if (!js) {
+				return new Response('Content script not found', { status: 404 });
+			}
+
+			return new Response(js, {
+				headers: [
+					['Content-Type', 'application/javascript'],
+				],
+			});
+		} else {
+			return new Response('Path not found', { status: 404 });
+		}
+	});
+
+	const handler: CustomPluginProtocolHandler = {
+		// Hosts a content script with the given `js` using the plugin protocol.
+		// This can be used to allow loading trusted plugin JavaScript without relying on eval,
+		// inline scripts, or other techniques that would violate the application's
+		// Content-Security-Policy.
+		//
+		// Caution: This assumes that `js` is provided by a trusted source. Be careful
+		// when building/providing `js` to this function.
+		registerContentScript: (id: string, js: string) => {
+			id = encodeURIComponent(id);
+			logger.debug('Registering content script with ID', id);
+
+			hostedContentScriptJs.set(id, js);
+
+			return {
+				uri: `${pluginProtocolName}://plugins/content-script/${id}`,
+				revoke: () => {
+					hostedContentScriptJs.delete(id);
+				},
+			};
+		},
+	};
+	return handler;
+};
+
+// Creating a custom protocol allows us to isolate iframes by giving them
+// different domain names from the main Joplin app.
+//
+// For example, an iframe with url joplin-content://note-viewer/path/to/iframe.html will run
+// in a different process from a parent frame with url file://path/to/iframe.html.
+//
+// See note_viewer_isolation.md for why this is important.
+//
+// See also the protocol.handle example: https://www.electronjs.org/docs/latest/api/protocol#protocolhandlescheme-handler
+//
+const handleCustomProtocols = (session: Session): CustomProtocolHandlers => {
+	const logger = {
+		// Disabled for now
+		debug: (..._message: unknown[]) => {},
+	};
+
+	const appContent = handleContentProtocol(logger, session);
+	const pluginContent = handlePluginProtocol(logger, session);
+	return { appContent, pluginContent };
 };
 
 export default handleCustomProtocols;

@@ -12,7 +12,7 @@ export default class NoteTag extends BaseItem {
 
 	public static async byNoteIds(noteIds: string[]) {
 		if (!noteIds.length) return [];
-		return this.modelSelectAll(`SELECT * FROM note_tags WHERE note_id IN ('${noteIds.join('\',\'')}')`);
+		return this.modelSelectAll(`SELECT * FROM note_tags WHERE note_id IN (${this.escapeIdsForSql(noteIds)})`);
 	}
 
 	public static async tagIdsByNoteId(noteId: string) {

@@ -1,20 +1,24 @@
 import * as React from 'react';
 import useSyncTargetUpgrade from '@joplin/lib/services/synchronizer/gui/useSyncTargetUpgrade';
 import { _ } from '@joplin/lib/locale';
-const { View, Text, ScrollView } = require('react-native');
+import { View, Text, ScrollView, TextStyle } from 'react-native';
 
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 import { themeStyle } from '../global-style';
 import ScreenHeader from '../ScreenHeader';
+import { AppState } from '../../utils/types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function UpgradeSyncTargetScreen(props: any) {
+interface Props {
+	themeId: number;
+}
+
+function UpgradeSyncTargetScreen(props: Props) {
 	const upgradeResult = useSyncTargetUpgrade();
 
 	const theme = themeStyle(props.themeId);
 
 	const lineStyle = { ...theme.normalText, marginBottom: 20 };
-	const stackTraceStyle = { ...theme.normalText, flexWrap: 'nowrap', fontSize: theme.fontSize * 0.5, color: theme.colorFaded };
+	const stackTraceStyle: TextStyle = { ...theme.normalText, flexWrap: 'nowrap', fontSize: theme.fontSize * 0.5, color: theme.colorFaded };
 	const headerStyle = { ...theme.headerStyle, marginBottom: 20 };
 
 	function renderUpgradeError() {
@@ -66,8 +70,7 @@ function UpgradeSyncTargetScreen(props: any) {
 	);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export default connect((state: any) => {
+export default connect((state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 	};

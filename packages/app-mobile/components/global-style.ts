@@ -1,27 +1,42 @@
 import Setting from '@joplin/lib/models/Setting';
 import { Platform, TextStyle, ViewStyle } from 'react-native';
-import { themeById } from '@joplin/lib/theme';
+import { withDerivedColors, themeById } from '@joplin/lib/theme';
 import { Theme as BaseTheme } from '@joplin/lib/themes/type';
+
+const Color = require('color');
 
 const baseStyle = {
 	appearance: 'light',
 	fontSize: 16,
-	noteViewerFontSize: 16,
-	margin: 15, // No text and no interactive component should be within this margin
-	itemMarginTop: 10,
-	itemMarginBottom: 10,
+	fontSizeLarger: 18,
+	fontSizeLarge: 20,
 	fontSizeSmaller: 14,
+
+	margin: 16, // No text and no interactive component should be within this margin
+	// Smaller margins for spacing between/around items:
+	marginSmall: 8,
+	marginMedium: 12,
+	marginExtraSmall: 6,
+
 	disabledOpacity: 0.2,
 	lineHeight: '1.6em',
+	listTabSize: '1.7em',
+	// The default, may be overridden in settings:
+	noteViewerFontSize: 16,
 };
 
 export type ThemeStyle = BaseTheme & typeof baseStyle & {
+	backgroundColorHover4: string;
+
 	fontSize: number;
 	fontSizeSmaller: number;
 	marginRight: number;
 	marginLeft: number;
 	marginTop: number;
 	marginBottom: number;
+	borderRadius: number;
+	itemMarginBottom: number;
+	itemMarginTop: number;
 	icon: TextStyle;
 	lineInput: ViewStyle;
 	buttonRow: ViewStyle;
@@ -99,6 +114,9 @@ function extraStyles(theme: BaseTheme) {
 		marginTop: baseStyle.margin,
 		marginBottom: baseStyle.margin,
 
+		itemMarginTop: baseStyle.marginMedium,
+		itemMarginBottom: baseStyle.marginMedium,
+
 		icon,
 		lineInput,
 		buttonRow,
@@ -112,6 +130,9 @@ function extraStyles(theme: BaseTheme) {
 		keyboardAppearance: theme.appearance,
 		color5: theme.color5 ?? theme.backgroundColor4,
 		backgroundColor5: theme.backgroundColor5 ?? theme.color4,
+
+		backgroundColorHover4: Color(theme.color4).alpha(0.12).rgb().string(),
+		borderRadius: 8,
 	};
 }
 
@@ -144,6 +165,7 @@ function themeStyle(theme: number) {
 	const output: ThemeStyle = {
 		...baseStyle,
 		...baseTheme,
+		...withDerivedColors(baseTheme),
 		...extraStyles(baseTheme),
 	};
 	themeCache_[cacheKey] = output;

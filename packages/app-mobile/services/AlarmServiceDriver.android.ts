@@ -3,6 +3,11 @@ import { Notification } from '@joplin/lib/models/Alarm';
 
 const ReactNativeAN = require('@joplin/react-native-alarm-notification').default;
 
+interface ScheduledAlarm {
+	id: string;
+	data?: { joplinNotificationId?: number };
+}
+
 export default class AlarmServiceDriver {
 
 	private logger_: Logger;
@@ -29,8 +34,7 @@ export default class AlarmServiceDriver {
 	}
 
 	// Returns -1 if could not be found
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private alarmJoplinAlarmId(alarm: any): number {
+	private alarmJoplinAlarmId(alarm: ScheduledAlarm): number {
 		if (!alarm.data || !alarm.data.joplinNotificationId) {
 			return -1;
 		} else {
@@ -39,8 +43,7 @@ export default class AlarmServiceDriver {
 	}
 
 	private async alarmByJoplinNotificationId(joplinNotificationId: number) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const alarms: any[] = await ReactNativeAN.getScheduledAlarms();
+		const alarms: ScheduledAlarm[] = await ReactNativeAN.getScheduledAlarms();
 		for (const alarm of alarms) {
 			const id = this.alarmJoplinAlarmId(alarm);
 			if (id === joplinNotificationId) return alarm;

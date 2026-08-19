@@ -8,6 +8,7 @@ import Logger from '@joplin/utils/Logger';
 import mergeGlobalAndLocalSettings from '../services/profileConfig/mergeGlobalAndLocalSettings';
 import splitGlobalAndLocalSettings from '../services/profileConfig/splitGlobalAndLocalSettings';
 import JoplinError from '../JoplinError';
+import type KeychainService from '../services/keychain/KeychainService';
 import builtInMetadata, { BuiltInMetadataKeys, BuiltInMetadataValues } from './settings/builtInMetadata';
 import { toSystemSlashes } from '@joplin/utils/path';
 import { AppType, Env, SettingItem, SettingItemType, SettingItems, SettingSection, SettingSectionSource, SettingStorage, SettingsRecord } from './settings/types';
@@ -24,10 +25,12 @@ export type SettingValueType<T extends string> = (
 		: (T extends keyof Constants ? Constants[T] : any)
 );
 
-interface OptionsToValueLabelsOptions {
-	valueKey: string;
-	labelKey: string;
+interface OptionsToValueLabelsOptions<TValueKey extends string = 'value', TLabelKey extends string = 'label'> {
+	valueKey: TValueKey;
+	labelKey: TLabelKey;
 }
+
+type EnumValueLabel<TValueKey extends string, TLabelKey extends string> = { [K in TValueKey | TLabelKey]: string };
 
 interface KeysOptions {
 	secureOnly?: boolean;
@@ -35,10 +38,9 @@ interface KeysOptions {
 
 // This is where the actual setting values are stored.
 // They are saved to database at regular intervals.
-interface CacheItem {
+interface CacheItem<T extends string|unknown> {
 	key: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	value: any;
+	value: T extends string ? SettingValueType<T> : unknown;
 }
 
 export interface Constants {
@@ -49,6 +51,7 @@ export interface Constants {
 	appType: AppType;
 	resourceDirName: string;
 	resourceDir: string;
+	pluginAssetDir: string;
 	profileDir: string;
 	rootProfileDir: string;
 	tempDir: string;
@@ -60,6 +63,11 @@ export interface Constants {
 	syncVersion: number;
 	startupDevPlugins: string[];
 	isSubProfile: boolean;
+	isJoplinCloudWebApp: boolean;
+
+	'sync.9.apiKey': string;
+	'sync.10.apiKey': string;
+	'sync.11.apiKey': string;
 }
 
 interface SettingSections {
@@ -91,8 +99,7 @@ interface SettingSections {
 
 interface DefaultMigration {
 	name: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	previousDefault: any;
+	previousDefault: string | boolean | number;
 }
 
 // To create a default migration:
@@ -117,6 +124,39 @@ const defaultMigrations: DefaultMigration[] = [
 		name: 'themeAutoDetect',
 		previousDefault: false,
 	},
+	{
+		name: 'ocr.enabled',
+		previousDefault: false,
+	},
+];
+
+// Global migrations migrate a setting from a global (all-profile) setting to a
+// local (per-profile) setting. When adding a new global migration, the setting
+// should be set to "isGlobal: true" in "builtInMetadata.ts".
+interface GlobalMigration {
+	name: string;
+	// At present, this should always be true:
+	wasGlobal: true;
+}
+
+// The array index is the migration ID -- items should not be removed from this array.
+const globalMigrations: GlobalMigration[] = [
+	{
+		name: 'ui.layout',
+		wasGlobal: true,
+	},
+	{
+		name: 'notes.sortOrder.field',
+		wasGlobal: true,
+	},
+	{
+		name: 'notes.sortOrder.reverse',
+		wasGlobal: true,
+	},
+	{
+		name: 'notes.listRendererId',
+		wasGlobal: true,
+	},
 ];
 
 // "UserSettingMigration" are used to migrate existing user setting to a new setting. With a way
@@ -124,15 +164,56 @@ const defaultMigrations: DefaultMigration[] = [
 interface UserSettingMigration {
 	oldName: string;
 	newName: string;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	transformValue: Function;
+	transformValue: (value: unknown)=> unknown;
+
+	// Currently the migration code only supports migrating a plugin setting to the regular settings
+	// (not a plugin setting to a different name). So "oldName" should be the plugin setting name
+	// and "newName" should be the regular setting name. Additionally, it's expected that the
+	// setting is stored in the database (as they all are as of Nov 2025).
+	isPluginSetting: boolean;
+}
+
+interface SubValuesOptions {
+	includeBaseKeyInName?: boolean;
+	includeConstants?: boolean;
 }
 
 const userSettingMigration: UserSettingMigration[] = [
 	{
 		oldName: 'spellChecker.language',
 		newName: 'spellChecker.languages',
-		transformValue: (value: string) => { return [value]; },
+		transformValue: (value) => { return [value]; },
+		isPluginSetting: false,
+	},
+	{
+		oldName: 'plugin-org.joplinapp.plugins.AbcSheetMusic.options',
+		newName: 'markdown.plugin.abc.options',
+		transformValue: (value) => { return value; },
+		isPluginSetting: true,
+	},
+];
+
+// Certain settings for similar (or the same) functionality can conflict. This map
+// allows automatically adjusting settings when conflicting settings are changed.
+// See https://github.com/laurent22/joplin/issues/13048
+const conflictingSettings = [
+	{
+		key1: 'plugin-io.github.personalizedrefrigerator.codemirror6-settings.hideMarkdown',
+		value1: 'some',
+		alternate1: 'none',
+
+		key2: 'editor.inlineRendering',
+		value2: true,
+		alternate2: false,
+	},
+	{
+		key1: 'plugin-plugin.calebjohn.rich-markdown.inlineImages',
+		value1: true,
+		alternate1: false,
+
+		key2: 'editor.imageRendering',
+		value2: true,
+		alternate2: false,
 	},
 ];
 
@@ -210,10 +291,10 @@ class Setting extends BaseModel {
 		isDemo: false,
 		appName: 'joplin',
 		appId: 'SET_ME', // Each app should set this identifier
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		appType: 'SET_ME' as any, // 'cli' or 'mobile'
+		appType: 'SET_ME' as AppType, // 'cli' or 'mobile'
 		resourceDirName: '',
 		resourceDir: '',
+		pluginAssetDir: '',
 		profileDir: '',
 		rootProfileDir: '',
 		tempDir: '',
@@ -225,20 +306,23 @@ class Setting extends BaseModel {
 		syncVersion: 3,
 		startupDevPlugins: [],
 		isSubProfile: false,
+		isJoplinCloudWebApp: false,
+
+		'sync.9.apiKey': '',
+		'sync.10.apiKey': '',
+		'sync.11.apiKey': '',
 	};
 
 	public static autoSaveEnabled = true;
 	public static allowFileStorage = true;
 
 	private static metadata_: SettingItems = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static keychainService_: any = null;
+	// Type-only import: KeychainService imports Setting, so a value import would create a runtime cycle.
+	private static keychainService_: KeychainService = null;
 	private static keys_: string[] = null;
-	private static cache_: CacheItem[] = [];
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static saveTimeoutId_: any = null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static changeEventTimeoutId_: any = null;
+	private static cache_: CacheItem<unknown>[] = [];
+	private static saveTimeoutId_: ReturnType<typeof shim.setTimeout> = null;
+	private static changeEventTimeoutId_: ReturnType<typeof shim.setTimeout> = null;
 	private static customMetadata_: SettingItems = {};
 	private static customSections_: SettingSections = {};
 	private static changedKeys_: string[] = [];
@@ -304,8 +388,7 @@ class Setting extends BaseModel {
 		return this.keychainService_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static setKeychainService(s: any) {
+	public static setKeychainService(s: KeychainService) {
 		this.keychainService_ = s;
 	}
 
@@ -337,44 +420,100 @@ class Setting extends BaseModel {
 		return `${this.value('rootProfileDir')}/${filename}`;
 	}
 
-	public static skipDefaultMigrations() {
+	public static skipMigrations() {
 		logger.info('Skipping all default migrations...');
 
 		this.setValue('lastSettingDefaultMigration', defaultMigrations.length - 1);
+		this.setValue('lastSettingGlobalMigration', globalMigrations.length - 1);
 	}
 
-	public static applyDefaultMigrations() {
-		logger.info('Applying default migrations...');
-		const lastSettingDefaultMigration: number = this.value('lastSettingDefaultMigration');
+	public static async applyMigrations() {
+		const applyDefaultMigrations = () => {
+			logger.info('Applying default migrations...');
+			const lastSettingDefaultMigration: number = this.value('lastSettingDefaultMigration');
 
-		for (let i = 0; i < defaultMigrations.length; i++) {
-			if (i <= lastSettingDefaultMigration) continue;
+			for (let i = 0; i < defaultMigrations.length; i++) {
+				if (i <= lastSettingDefaultMigration) continue;
 
-			const migration = defaultMigrations[i];
+				const migration = defaultMigrations[i];
 
-			logger.info(`Applying default migration: ${migration.name}`);
+				logger.info(`Applying default migration: ${migration.name}`);
 
-			if (this.isSet(migration.name)) {
-				logger.info('Skipping because value is already set');
-				continue;
-			} else {
-				logger.info(`Applying previous default: ${migration.previousDefault}`);
-				this.setValue(migration.name, migration.previousDefault);
+				if (this.isSet(migration.name)) {
+					logger.info('Skipping because value is already set');
+					continue;
+				} else {
+					logger.info(`Applying previous default: ${migration.previousDefault}`);
+					this.setValue(migration.name, migration.previousDefault);
+				}
 			}
-		}
 
-		this.setValue('lastSettingDefaultMigration', defaultMigrations.length - 1);
-	}
+			this.setValue('lastSettingDefaultMigration', defaultMigrations.length - 1);
+		};
 
-	public static applyUserSettingMigration() {
-		// Function to translate existing user settings to new setting.
-		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
-		userSettingMigration.forEach(userMigration => {
-			if (!this.isSet(userMigration.newName) && this.isSet(userMigration.oldName)) {
-				this.setValue(userMigration.newName, userMigration.transformValue(this.value(userMigration.oldName)));
-				logger.info(`Migrating ${userMigration.oldName} to ${userMigration.newName}`);
+		const applyGlobalMigrations = async () => {
+			const lastGlobalMigration = this.value('lastSettingGlobalMigration');
+			let rootFileSettings_: SettingValues|null = null;
+			const rootFileSettings = async () => {
+				rootFileSettings_ ??= await this.rootFileHandler.load();
+				return rootFileSettings_;
+			};
+
+			for (let i = 0; i < globalMigrations.length; i++) {
+				if (i <= lastGlobalMigration) continue;
+				const migration = globalMigrations[i];
+
+				// Skip migrations if the setting is stored in the database and thus
+				// probably can't be fetched from the root profile. This is, for example,
+				// the case on mobile.
+				if (this.keyStorage(migration.name) !== SettingStorage.File) {
+					logger.info('Skipped global value migration -- setting is not stored as a file.');
+					continue;
+				}
+
+				logger.info(`Applying global migration: ${migration.name}`);
+				if (!migration.wasGlobal) {
+					throw new Error('Converting a non-global setting to a global setting is not supported.');
+				}
+
+				const rootSettings = await rootFileSettings();
+				if (Object.prototype.hasOwnProperty.call(rootSettings, migration.name)) {
+					this.setValue(migration.name, rootSettings[migration.name]);
+				}
 			}
-		});
+
+			this.setValue('lastSettingGlobalMigration', globalMigrations.length - 1);
+		};
+
+		const applyUserSettingMigrations = async () => {
+			for (const migration of userSettingMigration) {
+				let applyMigration = false;
+				let newValue: unknown = null;
+
+				if (migration.isPluginSetting) {
+					const oldItem = await this.loadOneFromDb(migration.oldName);
+
+					if (oldItem) {
+						if (!this.isSet(migration.newName)) {
+							newValue = oldItem.value;
+							applyMigration = true;
+						}
+					}
+				} else if (!this.isSet(migration.newName) && this.isSet(migration.oldName)) {
+					newValue = this.value(migration.oldName);
+					applyMigration = true;
+				}
+
+				if (applyMigration) {
+					this.setValue(migration.newName, migration.transformValue(newValue as string));
+					logger.info(`applyUserSettingMigrations: Migrated ${migration.oldName} to ${migration.newName}`);
+				}
+			}
+		};
+
+		applyDefaultMigrations();
+		await applyGlobalMigrations();
+		await applyUserSettingMigrations();
 	}
 
 	public static featureFlagKeys(appType: AppType): string[] {
@@ -501,9 +640,17 @@ class Setting extends BaseModel {
 		return this.keys(true).indexOf(key) >= 0;
 	}
 
+	// This allows loading a setting without doing any check on anything - this can be useful to
+	// retrieve a value for a setting that was previously registered, but no longer is. Also to
+	// retrieve setting values for plugins before the plugin is actually loaded.
+	private static async loadOneFromDb<T extends string>(key: T): Promise<CacheItem<T> | null> {
+		const row = await this.modelSelectOne('SELECT key, value FROM settings WHERE key = ?', [key]);
+		return row ? row : null;
+	}
+
 	// Low-level method to load a setting directly from the database. Should not be used in most cases.
 	// Does not apply setting default values.
-	public static async loadOne(key: string): Promise<CacheItem | null> {
+	public static async loadOne<T extends string>(key: T): Promise<CacheItem<T> | null> {
 		if (this.keyStorage(key) === SettingStorage.File) {
 			let fileSettings = await this.fileHandler.load();
 
@@ -517,7 +664,7 @@ class Setting extends BaseModel {
 				return {
 					key,
 					value: fileSettings[key],
-				};
+				} as CacheItem<T>;
 			} else {
 				return null;
 			}
@@ -535,7 +682,9 @@ class Setting extends BaseModel {
 			return {
 				key,
 				value: await this.keychainService().password(`setting.${key}`),
-			};
+				// TODO: KeychainService currently only supports string-valued settings
+				// For now, cast to preserve existing behavior:
+			} as CacheItem<unknown> as CacheItem<T>;
 		}
 
 		return null;
@@ -546,7 +695,7 @@ class Setting extends BaseModel {
 		this.cancelScheduleChangeEvent();
 
 		this.cache_ = [];
-		const rows: CacheItem[] = await this.modelSelectAll('SELECT * FROM settings');
+		const rows: CacheItem<unknown>[] = await this.modelSelectAll('SELECT * FROM settings');
 
 
 		// Keys in the database takes precedence over keys in the keychain because
@@ -554,10 +703,9 @@ class Setting extends BaseModel {
 		// saving to database shouldn't). When the keychain works, the secure keys
 		// are deleted from the database and transferred to the keychain in saveAll().
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const rowKeys = rows.map((r: any) => r.key);
+		const rowKeys = (rows as { key: string }[]).map(r => r.key);
 		const secureKeys = this.keys(false, null, { secureOnly: true });
-		const secureItems: CacheItem[] = [];
+		const secureItems: CacheItem<unknown>[] = [];
 		for (const key of secureKeys) {
 			if (rowKeys.includes(key)) continue;
 
@@ -570,7 +718,7 @@ class Setting extends BaseModel {
 			}
 		}
 
-		const itemsFromFile: CacheItem[] = [];
+		const itemsFromFile: CacheItem<unknown>[] = [];
 
 		if (this.canUseFileStorage()) {
 			let fileSettings = await this.fileHandler.load();
@@ -591,7 +739,7 @@ class Setting extends BaseModel {
 
 		this.cache_ = [];
 		const cachedKeys = new Set();
-		const pushItemsToCache = (items: CacheItem[]) => {
+		const pushItemsToCache = (items: CacheItem<unknown>[]) => {
 			for (let i = 0; i < items.length; i++) {
 				const c = items[i];
 
@@ -626,8 +774,7 @@ class Setting extends BaseModel {
 
 	public static toPlainObject() {
 		const keys = this.keys();
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const keyToValues: any = {};
+		const keyToValues: Record<string, unknown> = {};
 		for (let i = 0; i < keys.length; i++) {
 			keyToValues[keys[i]] = this.value(keys[i]);
 		}
@@ -649,65 +796,85 @@ class Setting extends BaseModel {
 	public static setValue<T extends string>(key: T, value: SettingValueType<T>) {
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
 
-		value = this.formatValue(key, value);
-		value = this.filterValue(key, value);
+		const md = this.settingMetadata(key);
+		const processValue = <Key extends string> (value: SettingValueType<Key>) => {
+			value = this.formatValue(key, value);
+			value = this.filterValue(key, value);
 
-		for (let i = 0; i < this.cache_.length; i++) {
-			const c = this.cache_[i];
-			if (c.key === key) {
-				const md = this.settingMetadata(key);
+			if ('minimum' in md && value < md.minimum) value = md.minimum as SettingValueType<Key>;
+			if ('maximum' in md && value > md.maximum) value = md.maximum as SettingValueType<Key>;
 
-				if (md.isEnum === true) {
-					if (!this.isAllowedEnumOption(key, value)) {
-						throw new Error(_('Invalid option value: "%s". Possible values are: %s.', value, this.enumOptionsDoc(key)));
+			return value;
+		};
+
+		const setValueInternal = <Key extends string> (key: Key, value: SettingValueType<Key>) => {
+			value = processValue(value);
+			for (let i = 0; i < this.cache_.length; i++) {
+				const c = this.cache_[i];
+				if (c.key === key) {
+					if (md.isEnum === true) {
+						if (!this.isAllowedEnumOption(key, value)) {
+							throw new Error(_('Invalid option value: "%s". Possible values are: %s.', value, this.enumOptionsDoc(key)));
+						}
 					}
+
+					if (c.value === value) return;
+
+					this.changedKeys_.push(key);
+
+					// Don't log this to prevent sensitive info (passwords, auth tokens...) to end up in logs
+					// logger.info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
+
+					c.value = value;
+
+					this.dispatch({
+						type: 'SETTING_UPDATE_ONE',
+						key: key,
+						value: c.value,
+					});
+
+					this.scheduleSave();
+					this.scheduleChangeEvent();
+					return;
 				}
+			}
 
-				if (c.value === value) return;
+			this.cache_.push({
+				key: key,
+				value: this.formatValue(key, value),
+			});
 
-				this.changedKeys_.push(key);
+			this.dispatch({
+				type: 'SETTING_UPDATE_ONE',
+				key: key,
+				value: this.formatValue(key, value),
+			});
 
-				// Don't log this to prevent sensitive info (passwords, auth tokens...) to end up in logs
-				// logger.info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
+			this.changedKeys_.push(key);
 
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
-				if ('minimum' in md && value < md.minimum) value = md.minimum as any;
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Partial refactor of old code before rule was applied
-				if ('maximum' in md && value > md.maximum) value = md.maximum as any;
+			this.scheduleSave();
+			this.scheduleChangeEvent();
+		};
 
-				c.value = value;
+		const setValueInternalIfExists = <Key extends string> (key: Key, value: SettingValueType<Key>) => {
+			if (!this.keyExists(key)) return;
+			setValueInternal(key, value);
+		};
 
-				this.dispatch({
-					type: 'SETTING_UPDATE_ONE',
-					key: key,
-					value: c.value,
-				});
+		setValueInternal(key, value);
 
-				this.scheduleSave();
-				this.scheduleChangeEvent();
-				return;
+		// Prevent conflicts. Use setValueInternal to avoid infinite recursion in the case
+		// where conflictingSettings has invalid data.
+		for (const conflict of conflictingSettings) {
+			if (conflict.key1 === key && conflict.value1 === value) {
+				setValueInternalIfExists(conflict.key2, conflict.alternate2);
+			} else if (conflict.key2 === key && conflict.value2 === value) {
+				setValueInternalIfExists(conflict.key1, conflict.alternate1);
 			}
 		}
-
-		this.cache_.push({
-			key: key,
-			value: this.formatValue(key, value),
-		});
-
-		this.dispatch({
-			type: 'SETTING_UPDATE_ONE',
-			key: key,
-			value: this.formatValue(key, value),
-		});
-
-		this.changedKeys_.push(key);
-
-		this.scheduleSave();
-		this.scheduleChangeEvent();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static incValue(key: string, inc: any) {
+	public static incValue(key: string, inc: number) {
 		return this.setValue(key, this.value(key) + inc);
 	}
 
@@ -719,23 +886,20 @@ class Setting extends BaseModel {
 	// If yes, then it just returns 'true'. If its not present then, it will
 	// update it and return 'false'
 	public static setArrayValue(settingName: string, value: string): boolean {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const settingValue: any[] = this.value(settingName);
+		const settingValue: string[] = this.value(settingName);
 		if (settingValue.includes(value)) return true;
 		settingValue.push(value);
 		this.setValue(settingName, settingValue);
 		return false;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static objectValue(settingKey: string, objectKey: string, defaultValue: any = null) {
+	public static objectValue(settingKey: string, objectKey: string, defaultValue: unknown = null) {
 		const o = this.value(settingKey);
 		if (!o || !(objectKey in o)) return defaultValue;
 		return o[objectKey];
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static setObjectValue(settingKey: string, objectKey: string, value: any) {
+	public static setObjectValue(settingKey: string, objectKey: string, value: unknown) {
 		let o = this.value(settingKey);
 		if (typeof o !== 'object') o = {};
 		o[objectKey] = value;
@@ -756,22 +920,22 @@ class Setting extends BaseModel {
 		}
 	}
 
-	public static enumOptionsToValueLabels(enumOptions: Record<string, string>, order: string[], options: OptionsToValueLabelsOptions = null) {
-		options = {
-			labelKey: 'label',
-			valueKey: 'value',
+	public static enumOptionsToValueLabels<TValueKey extends string = 'value', TLabelKey extends string = 'label'>(enumOptions: Record<string, string>, order: string[], options: OptionsToValueLabelsOptions<TValueKey, TLabelKey> = null): EnumValueLabel<TValueKey, TLabelKey>[] {
+		const resolvedOptions = {
+			labelKey: 'label' as TLabelKey,
+			valueKey: 'value' as TValueKey,
 			...options,
 		};
 
-		const output = [];
+		const output: EnumValueLabel<TValueKey, TLabelKey>[] = [];
 
 		for (const value of order) {
 			if (!Object.prototype.hasOwnProperty.call(enumOptions, value)) continue;
 
 			output.push({
-				[options.valueKey]: value,
-				[options.labelKey]: enumOptions[value],
-			});
+				[resolvedOptions.valueKey]: value,
+				[resolvedOptions.labelKey]: enumOptions[value],
+			} as EnumValueLabel<TValueKey, TLabelKey>);
 		}
 
 		for (const k in enumOptions) {
@@ -779,35 +943,32 @@ class Setting extends BaseModel {
 			if (order.includes(k)) continue;
 
 			output.push({
-				[options.valueKey]: k,
-				[options.labelKey]: enumOptions[k],
-			});
+				[resolvedOptions.valueKey]: k,
+				[resolvedOptions.labelKey]: enumOptions[k],
+			} as EnumValueLabel<TValueKey, TLabelKey>);
 		}
 
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static valueToString(key: string, value: any) {
+	public static valueToString(key: string, value: unknown) {
 		const md = this.settingMetadata(key);
-		value = this.formatValue(key, value);
-		if (md.type === SettingItemType.Int) return value.toFixed(0);
-		if (md.type === SettingItemType.Bool) return value ? '1' : '0';
-		if (md.type === SettingItemType.Array) return value ? JSON.stringify(value) : '[]';
-		if (md.type === SettingItemType.Object) return value ? JSON.stringify(value) : '{}';
-		if (md.type === SettingItemType.String) return value ? `${value}` : '';
+		const formatted = this.formatValue(key, value);
+		if (md.type === SettingItemType.Int) return formatted.toFixed(0);
+		if (md.type === SettingItemType.Bool) return formatted ? '1' : '0';
+		if (md.type === SettingItemType.Array) return formatted ? JSON.stringify(formatted) : '[]';
+		if (md.type === SettingItemType.Object) return formatted ? JSON.stringify(formatted) : '{}';
+		if (md.type === SettingItemType.String) return formatted ? `${formatted}` : '';
 
 		throw new Error(`Unhandled value type: ${md.type}`);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static filterValue(key: string, value: any) {
+	public static filterValue(key: string, value: unknown) {
 		const md = this.settingMetadata(key);
 		return md.filter ? md.filter(value) : value;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static formatValue(key: string | SettingItemType, value: any) {
+	public static formatValue(key: string | SettingItemType, value: unknown) {
 		const type = typeof key === 'string' ? this.settingMetadata(key).type : key;
 
 		if (type === SettingItemType.Int) return !value ? 0 : Math.floor(Number(value));
@@ -849,17 +1010,15 @@ class Setting extends BaseModel {
 		// with strict equality and the value is updated only if changed. However if the caller acquire
 		// an object and change a key, the objects will be detected as equal. By returning a copy
 		// we avoid this problem.
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		function copyIfNeeded(value: any) {
+		function copyIfNeeded<T>(value: T): T {
 			if (value === null || value === undefined) return value;
-			if (Array.isArray(value)) return value.slice();
-			if (typeof value === 'object') return { ...value };
+			if (Array.isArray(value)) return value.slice() as T;
+			if (typeof value === 'object') return { ...value } as T;
 			return value;
 		}
 
 		if (key in this.constants_) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			const v = (this.constants_ as any)[key];
+			const v: unknown = this.constants_[key as keyof Constants];
 			const output = typeof v === 'function' ? v() : v;
 			if (output === 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
 			return output;
@@ -869,12 +1028,12 @@ class Setting extends BaseModel {
 
 		for (let i = 0; i < this.cache_.length; i++) {
 			if (this.cache_[i].key === key) {
-				return copyIfNeeded(this.cache_[i].value);
+				return copyIfNeeded(this.cache_[i].value) as SettingValueType<T>;
 			}
 		}
 
 		const md = this.settingMetadata(key);
-		return copyIfNeeded(md.value);
+		return copyIfNeeded(md.value) as SettingValueType<T>;
 	}
 
 	// This function returns the default value if the setting key does not exist.
@@ -898,8 +1057,7 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static enumOptionLabel(key: string, value: any) {
+	public static enumOptionLabel(key: string, value: unknown) {
 		const options = this.enumOptions(key);
 		for (const n in options) {
 			if (n === value) return options[n];
@@ -925,8 +1083,7 @@ class Setting extends BaseModel {
 		return output.join(', ');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static isAllowedEnumOption(key: string, value: any) {
+	public static isAllowedEnumOption(key: string, value: string) {
 		const options = this.enumOptions(key);
 		return !!options[value];
 	}
@@ -935,29 +1092,32 @@ class Setting extends BaseModel {
 	// { sync.5.path: 'http://example', sync.5.username: 'testing' }
 	// and baseKey is 'sync.5', the function will return
 	// { path: 'http://example', username: 'testing' }
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static subValues(baseKey: string, settings: Partial<SettingsRecord>, options: any = null) {
+	public static subValues(baseKey: string, settings: Partial<SettingsRecord>, options: SubValuesOptions|null = null) {
 		const includeBaseKeyInName = !!options && !!options.includeBaseKeyInName;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {};
-		for (const key in settings) {
-			if (!settings.hasOwnProperty(key)) continue;
-			if (key.indexOf(baseKey) === 0) {
-				const subKey = includeBaseKeyInName ? key : key.substr(baseKey.length + 1);
-				output[subKey] = settings[key];
+		const subKey = (key: string) => {
+			return includeBaseKeyInName ? key : key.substring(baseKey.length + 1);
+		};
+
+		const output: Record<string, unknown> = {};
+		for (const [key, value] of Object.entries(settings)) {
+			if (key.startsWith(baseKey)) {
+				output[subKey(key)] = value;
 			}
 		}
+
+		if (options?.includeConstants) {
+			for (const [key, value] of Object.entries(this.constants_)) {
+				if (key.startsWith(baseKey)) {
+					output[subKey(key)] = value;
+				}
+			}
+		}
+
 		return output;
 	}
 
-	public static async saveAll() {
-		if (Setting.autoSaveEnabled && !this.saveTimeoutId_) return Promise.resolve();
-
-		logger.debug('Saving settings...');
-		shim.clearTimeout(this.saveTimeoutId_);
-		this.saveTimeoutId_ = null;
-
+	private static async getFileValuesAndDbUpdateQueries() {
 		const keys = this.keys();
 
 		const valuesForFile: SettingValues = {};
@@ -1003,6 +1163,18 @@ class Setting extends BaseModel {
 			}
 		}
 
+		return { valuesForFile, queries };
+	}
+
+	public static async saveAll() {
+		if (Setting.autoSaveEnabled && !this.saveTimeoutId_) return Promise.resolve();
+
+		logger.debug('Saving settings...');
+		shim.clearTimeout(this.saveTimeoutId_);
+		this.saveTimeoutId_ = null;
+
+		const { valuesForFile, queries } = await Setting.getFileValuesAndDbUpdateQueries();
+
 		await BaseModel.db().transactionExecBatch(queries);
 
 		if (this.canUseFileStorage()) {
@@ -1026,6 +1198,15 @@ class Setting extends BaseModel {
 		}
 
 		logger.debug('Settings have been saved.');
+	}
+
+	public static async resetDefaultProfileSettings() {
+		const { valuesForFile } = await Setting.getFileValuesAndDbUpdateQueries();
+
+		if (this.canUseFileStorage()) {
+			const { globalSettings } = splitGlobalAndLocalSettings(valuesForFile);
+			await this.rootFileHandler.save(globalSettings, { overwrite: true });
+		}
 	}
 
 	public static scheduleChangeEvent() {
@@ -1110,7 +1291,12 @@ class Setting extends BaseModel {
 			'appearance',
 			'sync',
 			'encryption',
+			'noteLock',
 			'joplinCloud',
+			'ai',
+			'ai.tools',
+			'mcp',
+			'editor',
 			'plugins',
 			'markdownPlugins',
 			'note',
@@ -1129,15 +1315,13 @@ class Setting extends BaseModel {
 	}
 
 	public static isSubSection(sectionName: string) {
-		return ['encryption', 'application', 'appearance', 'joplinCloud'].includes(sectionName);
+		return ['encryption', 'application', 'appearance', 'joplinCloud', 'ai.tools'].includes(sectionName);
 	}
 
 	public static groupMetadatasBySections(metadatas: SettingItem[]): MetadataBySection {
-		const sections = [];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const generalSection: any = { name: 'general', metadatas: [] };
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const nameToSections: any = {};
+		const sections: SettingMetadataSection[] = [];
+		const generalSection: SettingMetadataSection = { name: 'general', metadatas: [] };
+		const nameToSections: Record<string, SettingMetadataSection> = {};
 		nameToSections['general'] = generalSection;
 		sections.push(generalSection);
 		for (let i = 0; i < metadatas.length; i++) {
@@ -1172,6 +1356,7 @@ class Setting extends BaseModel {
 		if (name === 'general') return _('General');
 		if (name === 'sync') return _('Synchronisation');
 		if (name === 'appearance') return _('Appearance');
+		if (name === 'editor') return _('Editor');
 		if (name === 'note') return _('Note');
 		if (name === 'folder') return _('Notebook');
 		if (name === 'markdownPlugins') return _('Markdown');
@@ -1179,12 +1364,15 @@ class Setting extends BaseModel {
 		if (name === 'application') return _('Application');
 		if (name === 'revisionService') return _('Note History');
 		if (name === 'encryption') return _('Encryption');
+		if (name === 'noteLock') return _('Note lock');
 		if (name === 'server') return _('Web Clipper');
 		if (name === 'keymap') return _('Keyboard Shortcuts');
 		if (name === 'joplinCloud') return _('Joplin Cloud');
 		if (name === 'tools') return _('Tools');
 		if (name === 'importOrExport') return _('Import and Export');
 		if (name === 'moreInfo') return _('More information');
+		if (name === 'ai') return _('AI');
+		if (name === 'ai.tools') return _('Tools');
 
 		if (this.customSections_[name] && this.customSections_[name].label) return this.customSections_[name].label;
 
@@ -1198,6 +1386,12 @@ class Setting extends BaseModel {
 		if (name === 'general' && appType === AppType.Desktop) {
 			return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
 		}
+		if (name === 'noteLock') {
+			return _('Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.');
+		}
+		if (name === 'ai.tools') {
+			return _('Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin\'s MCP server (if enabled).');
+		}
 
 		if (this.customSections_[name] && this.customSections_[name].description) return this.customSections_[name].description;
 
@@ -1208,11 +1402,13 @@ class Setting extends BaseModel {
 		// TODO: This is currently specific to the mobile app
 		const sectionNameToSummary: Record<string, string> = {
 			'general': _('Language, date format'),
-			'appearance': _('Themes, editor font'),
+			'appearance': _('Themes, notebook sort order'),
 			'sync': _('Sync, encryption, proxy'),
+			'noteLock': _('Note lock password, auto lock'),
 			'joplinCloud': _('Email To Note, login information'),
+			'editor': _('Typography, spellcheck, layout'),
 			'markdownPlugins': _('Media player, math, diagrams, table of contents'),
-			'note': _('Geolocation, spellcheck, editor toolbar, image resize'),
+			'note': _('Geolocation, image resize'),
 			'revisionService': _('Toggle note history, keep notes for'),
 			'tools': _('Logs, profiles, sync status'),
 			'importOrExport': _('Import or export your data'),
@@ -1246,6 +1442,7 @@ class Setting extends BaseModel {
 			'general': 'icon-general',
 			'sync': 'icon-sync',
 			'appearance': 'icon-appearance',
+			'editor': 'fas fa-edit',
 			'note': 'icon-note',
 			'folder': 'icon-notebooks',
 			'plugins': 'icon-plugins',
@@ -1253,12 +1450,15 @@ class Setting extends BaseModel {
 			'application': 'icon-application',
 			'revisionService': 'icon-note-history',
 			'encryption': 'icon-encryption',
+			'noteLock': 'fa fa-lock',
 			'server': 'far fa-hand-scissors',
 			'keymap': 'fa fa-keyboard',
 			'joplinCloud': 'fa fa-cloud',
 			'tools': 'fa fa-toolbox',
 			'importOrExport': 'fa fa-file-export',
 			'moreInfo': 'fa fa-info-circle',
+			'ai': 'fa fa-robot',
+			'ai.tools': 'fa fa-plug',
 		};
 
 		// Icomoon icons are currently not present in the mobile app -- we override these
@@ -1270,6 +1470,7 @@ class Setting extends BaseModel {
 			'general': 'fa fa-sliders-h',
 			'sync': 'fa fa-sync',
 			'appearance': 'fa fa-ruler',
+			'editor': 'fas fa-pen',
 			'note': 'fa fa-sticky-note',
 			'revisionService': 'far fa-history',
 			'plugins': 'fa fa-puzzle-piece',

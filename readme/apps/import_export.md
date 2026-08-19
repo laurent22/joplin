@@ -24,6 +24,10 @@ In both cases you can either import a single file or a directory that contains m
 
 - If you import a directory, Joplin will create a notebook per file and import the notes into them.
 
+Watch this short video to learn how to export your notebooks from Evernote and import them on Joplin:
+
+[![Watch the video](https://img.youtube.com/vi/_nSrvfUwORM/hqdefault.jpg)](https://www.youtube.com/watch?v=_nSrvfUwORM)  
+
 ### Importing from Markdown files
 
 Joplin can import notes from plain Markdown file. You can either import a complete directory of Markdown files or individual files.
@@ -37,14 +41,39 @@ In the **terminal application**, in [command-line mode](https://github.com/laure
 
 Type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
 
+### Importing from OneNote
+
+Joplin can also import OneNote notebooks:
+
+#### Importing from OneNote Online
+
+This requires Joplin >= v3.5.1 and a OneNote notebook stored on OneDrive. This approach [may not work for notebooks larger than 2-4 GB](https://learn.microsoft.com/en-us/answers/questions/5437286/why-cant-i-fully-download-my-onenote-files-from-on).
+
+1. Visit [OneNote Web](https://www.onenote.com/notebooks). 
+2. Click on "Show all notebooks". This should open a OneDrive page.
+3. On OneDrive, go to "My Files" and download the folder containing the OneNote notebooks. This should download a ZIP file.
+	- Right-click on the folder, then click "download". (Move the OneNote notebooks to a new folder, if necessary).
+4. Follow the instructions to download the backup. It should be a ZIP file.
+5. Open the **desktop application** and go to File > Import > ZIP - OneNote Notebook, and select the exported file.
+
+#### Importing from the OneNote Windows desktop app
+
+This requires Joplin >=v3.5.5 and the OneNote Windows desktop app. Be aware that the OneNote desktop app [is not the same as "OneNote for Windows 10"](https://support.microsoft.com/en-us/office/what-s-the-difference-between-the-onenote-versions-a624e692-b78b-4c09-b07f-46181958118f#id0ebd=windows).
+
+1. Open the OneNote desktop application.
+2. Open the "File" menu, then open the "Export" tab.
+3. Select "Section", then "OneNote 2010-2016 Section (`*.one`/`*.onex`)".
+	- Alternatively, select "Notebook", then "OneNote Package (`*.onepkg`)". `*.onepkg` files can only be imported if Joplin is running on Windows.
+4. Open the Joplin desktop application.
+5. From the "File" > "Import" menu, select "ZIP - OneNote Notebook". In the file picker, select the just-exported file.
+
+Watch this short video to learn how to export your notebooks from Onenote and import them on Joplin:
+
+[![Watch the video](https://img.youtube.com/vi/xgYcLZsw0IA/hqdefault.jpg)](https://www.youtube.com/watch?v=xgYcLZsw0IA&t=2s)
+
 ### Importing from other applications
 
-In general the way to import notes from any application into Joplin is to convert the notes to ENEX files (Evernote format) and to import these ENEX files into Joplin using the method above. Most note-taking applications support ENEX files so it should be relatively straightforward. For help about specific applications, see below:
-
-* Standard Notes: Please see [this tutorial](https://programadorwebvalencia.com/migrate-notes-from-standard-notes-to-joplin/)
-* Tomboy Notes: Export the notes to ENEX files [as described here](https://askubuntu.com/questions/243691/how-can-i-export-my-tomboy-notes-into-evernote/608551) for example, and import these ENEX files into Joplin.
-* OneNote: First [import the notes from OneNote into Evernote](https://discussion.evernote.com/topic/107736-is-there-a-way-to-import-from-onenote-into-evernote-on-the-mac/). Then export the ENEX file from Evernote and import it into Joplin.
-* NixNote: Synchronise with Evernote, then export the ENEX files and import them into Joplin. More info [in this thread](https://discourse.joplinapp.org/t/import-from-nixnote/183/3).
+In general the way to import notes from other applications into Joplin is to convert the notes to ENEX files (Evernote format), HTML or Markdown, and to import these files into Joplin. For help about specific applications, see this wiki document: [Importing notes from other notebook applications](https://discourse.joplinapp.org/t/importing-notes-from-other-notebook-applications/22425).
 
 ## Exporting
 

@@ -1,7 +1,7 @@
 import { AppState } from '../../app.reducer';
+import { Dispatch } from 'redux';
 
 export interface DesktopCommandContext {
 	state: AppState;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 }

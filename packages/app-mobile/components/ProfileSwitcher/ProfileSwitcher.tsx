@@ -1,22 +1,29 @@
-const React = require('react');
+import * as React from 'react';
 import { useCallback, useContext, useMemo, useState } from 'react';
-const { View, FlatList, StyleSheet } = require('react-native');
+import { View, FlatList, StyleSheet } from 'react-native';
 import createRootStyle from '../../utils/createRootStyle';
 import ScreenHeader from '../ScreenHeader';
-const { FAB, List } = require('react-native-paper');
-import { Profile } from '@joplin/lib/services/profileConfig/types';
+import { Profile, ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 import useProfileConfig from './useProfileConfig';
 import { _ } from '@joplin/lib/locale';
-import { deleteProfileById } from '@joplin/lib/services/profileConfig';
-import { saveProfileConfig, switchProfile } from '../../services/profiles';
+import { switchProfile } from '../../services/profiles';
 import { themeStyle } from '../global-style';
 import shim from '@joplin/lib/shim';
 import { DialogContext } from '../DialogManager';
+import { FAB, List } from 'react-native-paper';
+import { TextStyle } from 'react-native';
+import useOnLongPressProps from '../../utils/hooks/useOnLongPressProps';
+import { Dispatch } from 'redux';
+import NavService from '@joplin/lib/services/NavService';
+import Logger from '@joplin/utils/Logger';
+import deleteProfile from './utils/deleteProfile';
+import DatabaseDriverReactNative from '../../utils/database-driver-react-native';
+
+const logger = Logger.create('ProfileSwitcher');
 
 interface Props {
 	themeId: number;
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	dispatch: Function;
+	dispatch: Dispatch;
 }
 
 const useStyle = (themeId: number) => {
@@ -31,12 +38,148 @@ const useStyle = (themeId: number) => {
 				right: 0,
 				bottom: 0,
 			},
+			profileList: {
+				flex: 1,
+			},
 			profileListItem: {
 				paddingLeft: theme.margin,
 				paddingRight: theme.margin,
 			},
 		});
 	}, [themeId]);
+};
+
+
+interface ProfileItemProps {
+	themeId: number;
+	profile: Profile;
+	profileConfig: ProfileConfig;
+	setProfileConfigTime: (time: number)=> void;
+}
+
+const ProfileListItem: React.FC<ProfileItemProps> = ({ profile, profileConfig, setProfileConfigTime, themeId }) => {
+	const dialogs = useContext(DialogContext);
+
+	const onProfileItemPress = useCallback(async (profile: Profile) => {
+		const doIt = async () => {
+			try {
+				await switchProfile(profile.id);
+			} catch (error) {
+				dialogs.prompt(_('Error'), _('Could not switch profile: %s', error.message));
+			}
+		};
+
+		const switchProfileMessage = _('To switch the profile, the app is going to restart.');
+		if (shim.mobilePlatform() === 'web') {
+			if (confirm(switchProfileMessage)) {
+				void doIt();
+			}
+		} else {
+			dialogs.prompt(
+				_('Confirmation'),
+				switchProfileMessage,
+				[
+					{
+						text: _('Cancel'),
+						onPress: () => {},
+						style: 'cancel',
+					},
+					{
+						text: _('Continue'),
+						onPress: () => doIt(),
+						style: 'default',
+					},
+				],
+			);
+		}
+	}, [dialogs]);
+
+	const onEditProfile = useCallback(async (profileId: string) => {
+		await NavService.go('ProfileEditor', {
+			profileId,
+		});
+	}, []);
+
+	const onDeleteProfile = useCallback(async (profile: Profile) => {
+		const doIt = async () => {
+			try {
+				await deleteProfile({
+					toDelete: profile,
+					profileConfig,
+					databaseDriver: new DatabaseDriverReactNative(),
+				});
+				setProfileConfigTime(Date.now());
+			} catch (error) {
+				logger.error(error);
+				dialogs.prompt(_('Error'), error.message);
+			}
+		};
+
+		dialogs.prompt(
+			_('Delete this profile?'),
+			_('All data, including notes, notebooks and tags will be permanently deleted.'),
+			[
+				{
+					text: _('Cancel'),
+					onPress: () => {},
+					style: 'cancel',
+				},
+				{
+					text: _('Delete profile "%s"', profile.name),
+					onPress: () => doIt(),
+					style: 'destructive',
+				},
+			],
+		);
+	}, [dialogs, profileConfig, setProfileConfigTime]);
+
+	const onConfigure = () => {
+		dialogs.prompt(
+			_('Configuration'),
+			'',
+			[
+				{
+					text: _('Close'),
+					onPress: () => {},
+					style: 'cancel',
+				},
+				{
+					text: _('Delete'),
+					onPress: () => onDeleteProfile(profile),
+					style: 'destructive',
+				},
+				{
+					text: _('Edit'),
+					onPress: () => onEditProfile(profile.id),
+					style: 'default',
+				},
+			],
+		);
+	};
+
+	const longPressProps = useOnLongPressProps({
+		onLongPress: () => onConfigure(),
+		actionDescription: _('Edit'),
+	});
+
+	const style = useStyle(themeId);
+	const isSelected = profile.id === profileConfig.currentProfileId;
+	const titleStyle: TextStyle = { fontWeight: isSelected ? 'bold' : 'normal' };
+	return (
+		<List.Item
+			title={profile.name}
+			style={style.profileListItem}
+			titleStyle={titleStyle}
+			left={() => <List.Icon icon="file-account-outline" />}
+			key={profile.id}
+			onPress={() => { void onProfileItemPress(profile); }}
+			{...longPressProps}
+
+			accessibilityRole='button'
+			accessibilityState={isSelected ? { selected: true } : null}
+			aria-selected={isSelected ? true : null}
+		/>
+	);
 };
 
 export default (props: Props) => {
@@ -49,136 +192,35 @@ export default (props: Props) => {
 		return profileConfig ? profileConfig.profiles : [];
 	}, [profileConfig]);
 
-	const dialogs = useContext(DialogContext);
+	const extraListItemData = useMemo(() => {
+		return { profileConfig, themeId: props.themeId };
+	}, [props.themeId, profileConfig]);
 
-	const onProfileItemPress = useCallback(async (profile: Profile) => {
-		const doIt = async () => {
-			try {
-				await switchProfile(profile.id);
-			} catch (error) {
-				dialogs.prompt(_('Error'), _('Could not switch profile: %s', error.message));
-			}
-		};
 
-		const switchProfileMessage = _('To switch the profile, the app is going to close and you will need to restart it.');
-		if (shim.mobilePlatform() === 'web') {
-			if (confirm(switchProfileMessage)) {
-				void doIt();
-			}
-		} else {
-			dialogs.prompt(
-				_('Confirmation'),
-				switchProfileMessage,
-				[
-					{
-						text: _('Continue'),
-						onPress: () => doIt(),
-						style: 'default',
-					},
-					{
-						text: _('Cancel'),
-						onPress: () => {},
-						style: 'cancel',
-					},
-				],
-			);
-		}
-	}, [dialogs]);
-
-	const onEditProfile = useCallback(async (profileId: string) => {
-		props.dispatch({
-			type: 'NAV_GO',
-			routeName: 'ProfileEditor',
-			profileId: profileId,
-		});
-	}, [props.dispatch]);
-
-	const onDeleteProfile = useCallback(async (profile: Profile) => {
-		const doIt = async () => {
-			try {
-				const newConfig = deleteProfileById(profileConfig, profile.id);
-				await saveProfileConfig(newConfig);
-				setProfileConfigTime(Date.now());
-			} catch (error) {
-				dialogs.prompt(_('Error'), error.message);
-			}
-		};
-
-		dialogs.prompt(
-			_('Delete this profile?'),
-			_('All data, including notes, notebooks and tags will be permanently deleted.'),
-			[
-				{
-					text: _('Delete profile "%s"', profile.name),
-					onPress: () => doIt(),
-					style: 'destructive',
-				},
-				{
-					text: _('Cancel'),
-					onPress: () => {},
-					style: 'cancel',
-				},
-			],
-		);
-	}, [dialogs, profileConfig]);
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const renderProfileItem = (event: any) => {
-		const profile = event.item as Profile;
-		const onConfigure = (event: Event) => {
-			event.preventDefault();
-
-			dialogs.prompt(
-				_('Configuration'),
-				'',
-				[
-					{
-						text: _('Edit'),
-						onPress: () => onEditProfile(profile.id),
-						style: 'default',
-					},
-					{
-						text: _('Delete'),
-						onPress: () => onDeleteProfile(profile),
-						style: 'default',
-					},
-					{
-						text: _('Close'),
-						onPress: () => {},
-						style: 'cancel',
-					},
-				],
-			);
-		};
-
-		const titleStyle = { fontWeight: profile.id === profileConfig.currentProfileId ? 'bold' : 'normal' };
-		return (
-			<List.Item
-				title={profile.name}
-				style={style.profileListItem}
-				titleStyle={titleStyle}
-				left={() => <List.Icon icon="file-account-outline" />}
-				key={profile.id}
-				profileId={profile.id}
-				onPress={() => { void onProfileItemPress(profile); }}
-				onLongPress={onConfigure}
-				onContextMenu={onConfigure}
-			/>
-		);
+	const renderProfileItem = (event: { item: Profile }) => {
+		return <ProfileListItem
+			profile={event.item}
+			themeId={extraListItemData.themeId}
+			profileConfig={extraListItemData.profileConfig}
+			setProfileConfigTime={setProfileConfigTime}
+		/>;
 	};
 
 	return (
 		<View style={style.root}>
 			<ScreenHeader title={_('Profiles')} showSaveButton={false} showSideMenuButton={false} showSearchButton={false} />
-			<View>
-				<FlatList
-					data={profiles}
-					renderItem={renderProfileItem}
-					keyExtractor={(profile: Profile) => profile.id}
-				/>
-			</View>
+			<FlatList
+				style={style.profileList}
+				data={profiles}
+				renderItem={renderProfileItem}
+				keyExtractor={profile => profile.id}
+				// Needed so that the list rerenders when its dependencies change:
+				extraData={extraListItemData}
+				contentContainerStyle={{ paddingBottom: 80 }}
+			/>
 			<FAB
 				icon="plus"
+				accessibilityLabel={_('New profile')}
 				style={style.fab}
 				onPress={() => {
 					props.dispatch({
@@ -187,7 +229,6 @@ export default (props: Props) => {
 					});
 				}}
 			/>
-
 		</View>
 	);
 };

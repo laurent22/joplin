@@ -67,10 +67,62 @@ showHelp() {
   fi
 }
 
+# Accepts two versions in symver (a.b.c).
+# Echos -1 if the first version is less than the second,
+#        0 if they're equal,
+#        1 if the first version is greater than second.
+compareVersions() {
+  V_MAJOR1=$(echo "$1"|cut -d. -f1)
+  V_MAJOR2=$(echo "$2"|cut -d. -f1)
+
+  if [[ $V_MAJOR1 -lt $V_MAJOR2 ]] ; then
+    echo -1
+    return
+  elif [[ $V_MAJOR1 -gt $V_MAJOR2 ]] ; then
+    echo 1
+    return
+  fi
+
+  V_MINOR1=$(echo "$1"|cut -d. -f2)
+  V_MINOR2=$(echo "$2"|cut -d. -f2)
+
+  if [[ $V_MINOR1 -lt $V_MINOR2 ]] ; then
+    echo -1
+    return
+  elif [[ $V_MINOR1 -gt $V_MINOR2 ]] ; then
+    echo 1
+    return
+  fi
+
+  V_PATCH1=$(echo "$1"|cut -d. -f3)
+  V_PATCH2=$(echo "$2"|cut -d. -f3)
+
+  if [[ $V_PATCH1 -lt $V_PATCH2 ]] ; then
+    echo -1
+  elif [[ $V_PATCH1 -gt $V_PATCH2 ]] ; then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
+#-----------------------------------------------------
+# Setup Download Helper: DL
+#-----------------------------------------------------
+if [[ `command -v wget2` ]]; then
+  DL='wget2 -qO'
+elif [[ `command -v wget` ]]; then
+  DL='wget -qO'
+elif [[ `command -v curl` ]]; then
+  DL='curl -sLo'
+else
+  print "${COLOR_RED}Error: wget2, wget, and curl not found. Please install one of these tools.${COLOR_RESET}"
+  exit 1
+fi
+
 #-----------------------------------------------------
 # PARSE ARGUMENTS
 #-----------------------------------------------------
-
 optspec=":h-:"
 while getopts "${optspec}" OPT; do
   [ "${OPT}" = " " ] && continue
@@ -120,38 +172,50 @@ elif [[ $ARCHITECTURE =~ .*i386.*|.*i686.* ]]; then
 fi
 
 #-----------------------------------------------------
+# Get the latest version to download
+if [[ "$INCLUDE_PRE_RELEASE" == true ]]; then
+  RELEASE_VERSION=$($DL - "https://api.github.com/repos/laurent22/joplin/releases" | grep -Po '"tag_name": ?"v\K.*?(?=")' | sort -rV | head -1)
+else
+  RELEASE_VERSION=$($DL - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
+fi
+
+#-----------------------------------------------------
 print "Checking dependencies..."
-## Check if libfuse2 is present.
-if [[ $(command -v ldconfig) ]]; then
-  LIBFUSE=$(ldconfig -p | grep "libfuse.so.2" || echo '')
-fi
-if [[ $LIBFUSE == "" ]]; then
-  LIBFUSE=$(find /lib /usr/lib /lib64 /usr/lib64 /usr/local/lib -name "libfuse.so.2" 2>/dev/null | grep "libfuse.so.2" || echo '')
-fi
-if [[ $LIBFUSE == "" ]]; then
-  print "${COLOR_RED}Error: Can't get libfuse2 on system, please install libfuse2${COLOR_RESET}"
-  print "See https://joplinapp.org/help/faq/#desktop-application-will-not-launch-on-linux and https://github.com/AppImage/AppImageKit/wiki/FUSE for more information"
-  exit 1
+## Check for libfuse2 for Joplin versions lesser than 3.7.10, which transitioned to a new AppImage runtime without libfuse2 dependency
+if [[ $(compareVersions "$RELEASE_VERSION" "3.7.10") -lt 0 ]]; then
+  if [[ $(command -v ldconfig) ]]; then
+    LIBFUSE=$(ldconfig -p | grep "libfuse.so.2" || echo '')
+  fi
+  if [[ $LIBFUSE == "" ]]; then
+    LIBFUSE=$(find /lib /usr/lib /lib64 /usr/lib64 /usr/local/lib -name "libfuse.so.2" 2>/dev/null | grep "libfuse.so.2" || echo '')
+  fi
+  if [[ $LIBFUSE == "" ]]; then
+    print "${COLOR_RED}Error: Can't get libfuse2 on system, please install libfuse2${COLOR_RESET}"
+    print "See https://joplinapp.org/help/faq/#desktop-application-will-not-launch-on-linux and https://github.com/AppImage/AppImageKit/wiki/FUSE for more information"
+    exit 1
+  fi
 fi
 
 #-----------------------------------------------------
 # Download Joplin
 #-----------------------------------------------------
 
-# Get the latest version to download
-if [[ "$INCLUDE_PRE_RELEASE" == true ]]; then
-  RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases" | grep -Po '"tag_name": ?"v\K.*?(?=")' | sort -rV | head -1)
-else
-  RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
-fi
-
 # Check if it's in the latest version
-if [[ -e "${INSTALL_DIR}/VERSION" ]] && [[ $(< "${INSTALL_DIR}/VERSION") == "${RELEASE_VERSION}" ]]; then
-  print "${COLOR_GREEN}You already have the latest version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
-  ([[ "$FORCE" == true ]] && print "Forcing installation...") || exit 0
+if [[ -e "${INSTALL_DIR}/VERSION" ]]; then
+  CURRENT_VERSION=$(< "${INSTALL_DIR}/VERSION")
+  VERSION_COMPARISON=$(compareVersions "$CURRENT_VERSION" "$RELEASE_VERSION")
+
+  if [[ "$VERSION_COMPARISON" == "0" ]]; then
+    print "${COLOR_GREEN}You already have the latest version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
+    ([[ "$FORCE" == true ]] && print "Forcing installation...") || exit 0
+  elif [[ "$VERSION_COMPARISON" == "1" ]]; then
+    print "${COLOR_YELLOW}You have version ${CURRENT_VERSION} installed, which is newer than the latest published version ${RELEASE_VERSION}.${COLOR_RESET}"
+    print "${COLOR_YELLOW}Skipping installation to avoid downgrade.${COLOR_RESET}"
+  else
+    print "The latest version is ${RELEASE_VERSION}, but you have ${CURRENT_VERSION} installed."
+  fi
 else
-  [[ -e "${INSTALL_DIR}/VERSION" ]] && CURRENT_VERSION=$(< "${INSTALL_DIR}/VERSION")
-  print "The latest version is ${RELEASE_VERSION}, but you have ${CURRENT_VERSION:-no version} installed."
+  print "The latest version is ${RELEASE_VERSION}, but you have no version installed."
 fi
 
 # Check if it's an update or a new install
@@ -163,8 +227,8 @@ fi
 #-----------------------------------------------------
 print 'Downloading Joplin...'
 TEMP_DIR=$(mktemp -d)
-wget -O "${TEMP_DIR}/Joplin.AppImage" "https://objects.joplinusercontent.com/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage?source=LinuxInstallScript&type=$DOWNLOAD_TYPE"
-wget -O "${TEMP_DIR}/joplin.png" https://joplinapp.org/images/Icon512.png
+$DL "${TEMP_DIR}/Joplin.AppImage" "https://objects.joplinusercontent.com/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage?source=LinuxInstallScript&type=$DOWNLOAD_TYPE"
+$DL "${TEMP_DIR}/joplin.png" https://joplinapp.org/images/Icon512.png
 
 #-----------------------------------------------------
 print 'Installing Joplin...'
@@ -223,7 +287,7 @@ if command -v lsb_release &> /dev/null; then
   # without writing the AppImage to a non-user-writable location (without invalidating other security
   # controls). See https://discourse.joplinapp.org/t/possible-future-requirement-for-no-sandbox-flag-for-ubuntu-23-10/.
   HAS_USERNS_RESTRICTIONS=false
-  if [[ "$DISTVER" =~ ^Ubuntu && $DISTMAJOR -ge 23 ]]; then
+  if [[ "$DISTVER" =~ ^(Ubuntu|Tuxedo) && $DISTMAJOR -ge 23 ]]; then
     HAS_USERNS_RESTRICTIONS=true
   fi
 
@@ -245,6 +309,15 @@ fi
 if [[ $DESKTOP =~ .*gnome.*|.*kde.*|.*xfce.*|.*mate.*|.*lxqt.*|.*unity.*|.*x-cinnamon.*|.*deepin.*|.*pantheon.*|.*lxde.*|.*i3.*|.*sway.* ]] || [[ `command -v update-desktop-database` ]]; then
   DATA_HOME=${XDG_DATA_HOME:-~/.local/share}
   DESKTOP_FILE_LOCATION="$DATA_HOME/applications"
+
+  # Only later versions of Joplin default to Wayland
+  IS_WAYLAND_BY_DEFAULT=$(compareVersions "$RELEASE_VERSION" "3.5.6")
+  # Joplin has a different startup WM class on Wayland and X11:
+  STARTUP_WM_CLASS=Joplin
+  if [[ $XDG_SESSION_TYPE != "x11" && $IS_WAYLAND_BY_DEFAULT == "1" ]]; then
+    STARTUP_WM_CLASS=@joplin/app-desktop
+  fi
+
   # Only delete the desktop file if it will be replaced
   rm -f "$DESKTOP_FILE_LOCATION/appimagekit-joplin.desktop"
 
@@ -259,7 +332,9 @@ Name=Joplin
 Comment=Joplin for Desktop
 Exec=env APPIMAGELAUNCHER_DISABLE=TRUE "${INSTALL_DIR}/Joplin.AppImage" ${SANDBOXPARAM} %u
 Icon=joplin
-StartupWMClass=Joplin
+# This will be different between Wayland and X11. On Wayland, the startup
+# WM class is "@joplin/app-desktop". On X11, it's "Joplin".
+StartupWMClass=${STARTUP_WM_CLASS}
 Type=Application
 Categories=Office;
 MimeType=x-scheme-handler/joplin;
@@ -287,7 +362,7 @@ echo "$RELEASE_VERSION" > "${INSTALL_DIR}/VERSION"
 
 #-----------------------------------------------------
 if [[ "$SHOW_CHANGELOG" == true ]]; then
-  NOTES=$(wget -qO - https://api.github.com/repos/laurent22/joplin/releases/latest | grep -Po '"body": "\K.*(?=")')
+  NOTES=$($DL - https://api.github.com/repos/laurent22/joplin/releases/latest | grep -Po '"body": "\K.*(?=")')
   print "${COLOR_BLUE}Changelog:${COLOR_RESET}\n${NOTES}"
 fi
 

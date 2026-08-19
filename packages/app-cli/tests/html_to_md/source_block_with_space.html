@@ -1,0 +1,11 @@
+<div class="joplin-editable">
+	<!-- Regression test: Historically, text nodes before the first "joplin-source" block caused
+	     conversion to fail. -->
+	A text node!
+	<pre class="joplin-source" data-joplin-language="test" data-joplin-source-open="```&#10;" data-joplin-source-close="&#10;```">
+		Test!
+	</pre>
+	<div class="joplin-rendered">
+		<p>Test content</p>
+	</div>
+</div>

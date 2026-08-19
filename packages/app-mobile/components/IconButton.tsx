@@ -4,9 +4,8 @@
 
 import * as React from 'react';
 import { themeStyle } from '@joplin/lib/theme';
-import { Theme } from '@joplin/lib/themes/type';
-import { useState, useMemo, useCallback, useRef } from 'react';
-import { Text, Pressable, ViewStyle, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole, TextStyle, GestureResponderEvent, Platform } from 'react-native';
+import { useState, useMemo, useCallback, useRef, Ref } from 'react';
+import { Text, Pressable, ViewStyle, StyleSheet, LayoutChangeEvent, LayoutRectangle, Animated, AccessibilityState, AccessibilityRole, TextStyle, GestureResponderEvent, Platform, Role, StyleProp, View } from 'react-native';
 import { Menu, MenuOptions, MenuTrigger, renderers } from 'react-native-popup-menu';
 import Icon from './Icon';
 import AccessibleView from './accessibility/AccessibleView';
@@ -15,11 +14,13 @@ type ButtonClickListener = ()=> void;
 interface ButtonProps {
 	onPress: ButtonClickListener;
 
+	pressableRef?: Ref<View>;
+
 	// Accessibility label and text shown in a tooltip
 	description: string;
 
 	iconName: string;
-	iconStyle: TextStyle;
+	iconStyle: StyleProp<TextStyle>;
 
 	themeId: number;
 
@@ -36,6 +37,8 @@ interface ButtonProps {
 	// Role of the button. Defaults to 'button'.
 	accessibilityRole?: AccessibilityRole;
 	accessibilityState?: AccessibilityState;
+	'aria-pressed'?: boolean;
+	role?: Role;
 
 	disabled?: boolean;
 }
@@ -43,31 +46,28 @@ interface ButtonProps {
 const IconButton = (props: ButtonProps) => {
 	const [tooltipVisible, setTooltipVisible] = useState(false);
 	const [buttonLayout, setButtonLayout] = useState<LayoutRectangle|null>(null);
-	const tooltipStyles = useTooltipStyles(props.themeId);
+	const { styles, fadeAnimation } = useStyles(props.themeId, props.contentWrapperStyle);
 
-	// See https://blog.logrocket.com/react-native-touchable-vs-pressable-components/
-	// for more about animating Pressable buttons.
-	const fadeAnim = useRef(new Animated.Value(1)).current;
 
 	const animationDuration = 100; // ms
 	const onPressIn = useCallback(() => {
 		// Fade out.
-		Animated.timing(fadeAnim, {
+		Animated.timing(fadeAnimation.current, {
 			toValue: 0.5,
 			duration: animationDuration,
 			useNativeDriver: true,
 		}).start();
-	}, [fadeAnim]);
+	}, [fadeAnimation]);
 	const onPressOut = useCallback(() => {
 		// Fade in.
-		Animated.timing(fadeAnim, {
+		Animated.timing(fadeAnimation.current, {
 			toValue: 1,
 			duration: animationDuration,
 			useNativeDriver: true,
 		}).start();
 
 		setTooltipVisible(false);
-	}, [fadeAnim]);
+	}, [fadeAnimation]);
 	const onLongPress = useCallback(() => {
 		setTooltipVisible(true);
 	}, []);
@@ -83,8 +83,17 @@ const IconButton = (props: ButtonProps) => {
 		props.preventKeyboardDismiss, props.onPress, props.disabled,
 	);
 
+	let icon = <Icon
+		name={props.iconName}
+		style={props.iconStyle}
+		accessibilityLabel={null}
+	/>;
+	// Include browser-provided tooltips on web.
+	icon = Platform.OS === 'web' ? <span title={props.description}>{icon}</span> : icon;
+
 	const button = (
 		<Pressable
+			ref={props.pressableRef}
 			onPress={props.onPress}
 			onLongPress={onLongPress}
 			onPressIn={onPressIn}
@@ -94,7 +103,7 @@ const IconButton = (props: ButtonProps) => {
 			onTouchMove={onTouchMove}
 			onTouchEnd={onTouchEnd}
 
-			style={ props.containerStyle }
+			style={[styles.pressable, props.containerStyle]}
 
 			disabled={ props.disabled ?? false }
 			onLayout={ onButtonLayout }
@@ -102,17 +111,12 @@ const IconButton = (props: ButtonProps) => {
 			accessibilityLabel={props.description}
 			accessibilityHint={props.accessibilityHint}
 			accessibilityRole={props.accessibilityRole ?? 'button'}
+			role={props.role}
 			accessibilityState={props.accessibilityState}
+			aria-pressed={props['aria-pressed']}
 		>
-			<Animated.View style={{
-				opacity: fadeAnim,
-				...props.contentWrapperStyle,
-			}}>
-				<Icon
-					name={props.iconName}
-					style={props.iconStyle}
-					accessibilityLabel={null}
-				/>
+			<Animated.View style={[props.contentWrapperStyle, styles.animatedContentWrapper]}>
+				{icon}
 			</Animated.View>
 		</Pressable>
 	);
@@ -141,7 +145,7 @@ const IconButton = (props: ButtonProps) => {
 					renderer={renderers.Popover}
 					rendererProps={{
 						preferredPlacement: 'bottom',
-						anchorStyle: tooltipStyles.anchor,
+						anchorStyle: styles.tooltipAnchor,
 					}}>
 					<MenuTrigger
 						// Don't show/hide when pressed (let the Pressable handle opening/closing)
@@ -153,9 +157,9 @@ const IconButton = (props: ButtonProps) => {
 						}}
 					/>
 					<MenuOptions
-						customStyles={{ optionsContainer: tooltipStyles.optionsContainer }}
+						customStyles={{ optionsContainer: styles.tooltipOptionsContainer }}
 					>
-						<Text style={tooltipStyles.text}>
+						<Text style={styles.tooltipText}>
 							{props.description}
 						</Text>
 					</MenuOptions>
@@ -172,30 +176,43 @@ const IconButton = (props: ButtonProps) => {
 	);
 };
 
-const useTooltipStyles = (themeId: number) => {
-	return useMemo(() => {
-		const themeData: Theme = themeStyle(themeId);
+const useStyles = (themeId: number, contentWrapperStyle: ViewStyle|null) => {
+	const theme = themeStyle(themeId);
 
+	// See https://blog.logrocket.com/react-native-touchable-vs-pressable-components/
+	// for more about animating Pressable buttons.
+	const fadeAnimation = useRef(new Animated.Value(1));
+
+	const buttonOpacity = contentWrapperStyle?.opacity ?? 1;
+
+	const styles = useMemo(() => {
 		return StyleSheet.create({
-			text: {
-				color: themeData.raisedColor,
+			// Apply the contentWrapperOpacity to the pressable to avoid conflicts
+			// with the fade animation.
+			pressable: { opacity: buttonOpacity },
+			animatedContentWrapper: { opacity: fadeAnimation.current },
+
+			tooltipText: {
+				color: theme.raisedColor,
 				padding: 4,
 			},
-			anchor: {
-				backgroundColor: themeData.raisedBackgroundColor,
+			tooltipAnchor: {
+				backgroundColor: theme.raisedBackgroundColor,
 			},
-			optionsContainer: {
-				backgroundColor: themeData.raisedBackgroundColor,
+			tooltipOptionsContainer: {
+				backgroundColor: theme.raisedBackgroundColor,
 			},
 		});
-	}, [themeId]);
+	}, [theme, buttonOpacity]);
+
+	return { styles, fadeAnimation };
 };
 
 // On web, by default, pressing buttons defocuses the active edit control, dismissing the
 // virtual keyboard. This hook creates listeners that optionally prevent the keyboard from dismissing.
 const usePreventKeyboardDismissTouchListeners = (preventKeyboardDismiss: boolean, onPress: ()=> void, disabled: boolean) => {
-	const touchStartPointRef = useRef<[number, number]>();
-	const isTapRef = useRef<boolean>();
+	const touchStartPointRef = useRef<[number, number]>([-1, -1]);
+	const isTapRef = useRef<boolean>(false);
 	const onTouchStart = useCallback((event: GestureResponderEvent) => {
 		if (Platform.OS === 'web' && preventKeyboardDismiss) {
 			const touch = event.nativeEvent.touches[0];

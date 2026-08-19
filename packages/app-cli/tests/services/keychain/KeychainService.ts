@@ -5,8 +5,7 @@ import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import { db, setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function describeIfCompatible(name: string, fn: any, elseFn: any) {
+function describeIfCompatible(name: string, fn: ()=> void, elseFn: ()=> void) {
 	if (['win32', 'darwin'].includes(shim.platformName())) {
 		return describe(name, fn);
 	} else {

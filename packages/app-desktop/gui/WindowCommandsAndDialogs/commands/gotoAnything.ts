@@ -1,6 +1,7 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
-const PluginManager = require('@joplin/lib/services/PluginManager');
+import { GotoAnythingUserData, Mode, UserDataCallbackReject, UserDataCallbackResolve } from '../../../plugins/GotoAnything';
+import PluginManager from '@joplin/lib/services/PluginManager';
 
 export enum UiType {
 	GotoAnything = 'gotoAnything',
@@ -8,14 +9,24 @@ export enum UiType {
 	ControlledApi = 'controlledApi',
 }
 
+export interface GotoAnythingOptions {
+	mode?: Mode;
+	alwaysShowHelp?: boolean;
+}
+
 export const declaration: CommandDeclaration = {
 	name: 'gotoAnything',
 	label: () => _('Goto Anything...'),
 };
 
-function menuItemById(id: string) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	return PluginManager.instance().menuItems().find((i: any) => i.id === id);
+interface PluginMenuItem {
+	id: string;
+	click: ()=> void;
+	userData?: GotoAnythingUserData;
+}
+
+function menuItemById(id: string): PluginMenuItem {
+	return PluginManager.instance().menuItems().find((i: PluginMenuItem) => i.id === id);
 }
 
 // The way this command is implemented is a bit hacky due to the PluginManager
@@ -24,19 +35,25 @@ function menuItemById(id: string) {
 // calling the click() handler.
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (_context: CommandContext, uiType: UiType = UiType.GotoAnything) => {
+		execute: async (_context: CommandContext, uiType: UiType = UiType.GotoAnything, options: GotoAnythingOptions = null) => {
+			options = {
+				mode: Mode.Default,
+				...options,
+			};
+
 			if (uiType === UiType.GotoAnything) {
 				menuItemById('gotoAnything').click();
 			} else if (uiType === UiType.CommandPalette) {
 				menuItemById('commandPalette').click();
 			} else if (uiType === UiType.ControlledApi) {
-				// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-				return new Promise((resolve: Function, reject: Function) => {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-					const menuItem = PluginManager.instance().menuItems().find((i: any) => i.id === 'controlledApi');
-					menuItem.userData = {
+				return new Promise((resolve: UserDataCallbackResolve, reject: UserDataCallbackReject) => {
+					const menuItem: PluginMenuItem = PluginManager.instance().menuItems().find((i: PluginMenuItem) => i.id === 'controlledApi');
+					const userData: GotoAnythingUserData = {
 						callback: { resolve, reject },
+						mode: options.mode,
+						alwaysShowHelp: options.alwaysShowHelp,
 					};
+					menuItem.userData = userData;
 					menuItem.click();
 				});
 			}

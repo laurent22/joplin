@@ -3,12 +3,13 @@
 const { afterEachCleanUp, afterAllCleanUp } = require('@joplin/lib/testing/test-utils.js');
 const shim = require('@joplin/lib/shim').default;
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
-const injectedJs = require('./utils/injectedJs.js').default;
+const injectedJs = require('./utils/shim-init-react/injectedJs.js').default;
 const { mkdir, rm } = require('fs-extra');
 const path = require('path');
 const sharp = require('sharp');
 const { tmpdir } = require('os');
 const uuid = require('@joplin/lib/uuid').default;
+const Setting = require('@joplin/lib/models/Setting').default;
 const sqlite3 = require('sqlite3');
 const React = require('react');
 require('../../jest.base-setup.js')();
@@ -29,7 +30,19 @@ shim.injectedJs = (name) => {
 	if (!(name in injectedJs)) {
 		throw new Error(`Cannot find injected JS with ID ${name}`);
 	}
-	return injectedJs[name];
+	return injectedJs[name].js;
+};
+shim.injectedCss = (name) => {
+	if (!(name in injectedJs)) {
+		throw new Error(`Cannot find injected CSS with ID ${name}`);
+	}
+	return injectedJs[name].css;
+};
+shim.fsDriver().getAppDirectoryPath = () => {
+	// On mobile, the rootProfileDirectory and the app directory
+	// (RNFetchBlob's DocumentDir) match the root profile directory
+	// by default.
+	return Setting.value('rootProfileDir');
 };
 
 // This library has the following error when running within Jest:
@@ -60,15 +73,45 @@ jest.mock('./components/CameraView/Camera', () => {
 });
 
 jest.mock('@react-native-clipboard/clipboard', () => {
-	return { default: { getString: jest.fn(), setString: jest.fn() } };
+	return { getString: jest.fn(), setString: jest.fn() };
+});
+
+jest.doMock('expo-audio', () => {
+	return {
+		AudioQuality: {
+			MIN: 'min',
+		},
+		IOSOutputFormat: {
+			MPEG4AAC: 'mpeg4aac',
+		},
+		getRecordingPermissionsAsync: jest.fn(async () => ({
+			status: 'granted',
+			granted: true,
+		})),
+		requestRecordingPermissionsAsync: jest.fn(async () => ({
+			status: 'granted',
+			granted: true,
+		})),
+		setAudioModeAsync: jest.fn(async () => null),
+		useAudioRecorder: jest.fn(() => ({
+			prepareToRecordAsync: jest.fn(async () => null),
+			record: jest.fn(),
+			stop: jest.fn(async () => null),
+			uri: null,
+		})),
+		useAudioRecorderState: jest.fn(() => ({
+			durationMillis: 0,
+		})),
+	};
 });
 
 const emptyMockPackages = [
 	'react-native-share',
 	'react-native-file-viewer',
 	'react-native-image-picker',
-	'react-native-document-picker',
+	'@react-native-documents/picker',
 	'@joplin/react-native-saf-x',
+	'expo-image-manipulator',
 ];
 for (const packageName of emptyMockPackages) {
 	jest.doMock(packageName, () => {
@@ -88,22 +131,34 @@ jest.mock('react-native-zip-archive', () => {
 	return { default: { } };
 });
 
-jest.mock('react-native-document-picker', () => ({ default: { } }));
+jest.mock('@react-native-documents/picker', () => ({ default: { } }));
 
-// Used by the renderer
-jest.doMock('react-native-vector-icons/Ionicons', () => {
-	return {
-		default: class extends require('react-native').View {
-			static getImageSourceSync = () => ({ uri: '' });
-		},
-	};
+// This is one of the icon libraries that react-native-paper attempts to use.
+// Throwing an Error causes react-native-paper to select a different icon library
+// that better supports our automated testing environment.
+jest.doMock('@expo/vector-icons/MaterialCommunityIcons', () => {
+	throw new Error('Not supported in testing environments.');
 });
+
+const mockIconLibrary = (libraryName, exportName) => {
+	jest.doMock(libraryName, () => {
+		const MockIconComponent = require('react-native').View;
+		return {
+			default: MockIconComponent,
+			[exportName]: MockIconComponent,
+		};
+	});
+};
+
+mockIconLibrary('@react-native-vector-icons/ionicons', 'Ionicons');
+mockIconLibrary('@react-native-vector-icons/material-design-icons', 'MaterialDesignIcons');
+mockIconLibrary('@react-native-vector-icons/fontawesome5', 'FontAwesome5');
 
 // react-native-fs's CachesDirectoryPath export doesn't work in a testing environment.
 // Use a temporary folder instead.
 const tempDirectoryPath = path.join(tmpdir(), `appmobile-test-${uuid.createNano()}`);
 
-jest.doMock('react-native-fs', () => {
+jest.doMock('@dr.pogodin/react-native-fs', () => {
 	return {
 		CachesDirectoryPath: tempDirectoryPath,
 	};

@@ -1,5 +1,5 @@
-import SearchEngine from './SearchEngine';
-import Note from '../../models/Note';
+import SearchEngine, { SearchType } from './SearchEngine';
+import Note, { PreviewsOptions } from '../../models/Note';
 import Setting from '../../models/Setting';
 
 export interface NotesForQueryOptions {
@@ -18,10 +18,9 @@ export default class SearchEngineUtils {
 			searchEngine = SearchEngine.instance();
 		}
 
-		let searchType = SearchEngine.SEARCH_TYPE_FTS;
+		let searchType = SearchType.Auto;
 		if (query.length && query[0] === '/') {
-			query = query.substr(1);
-			searchType = SearchEngine.SEARCH_TYPE_BASIC;
+			searchType = SearchType.Basic;
 		}
 
 		const results = await searchEngine.search(query, {
@@ -55,10 +54,10 @@ export default class SearchEngineUtils {
 			todoCompletedAutoAdded = true;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const previewOptions: any = { order: [],
+		const previewOptions: PreviewsOptions = { order: [],
 			fields: fields,
-			conditions: [`id IN ('${noteIds.join('\',\'')}')`], ...options };
+			conditions: [`id IN (${Note.escapeIdsForSql(noteIds)})`],
+			...options };
 
 		const notes = await Note.previews(null, previewOptions);
 

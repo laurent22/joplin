@@ -23,6 +23,10 @@ describe('Synchronizer.conflicts', () => {
 		await switchClient(2);
 
 		await synchronizerStart();
+
+		let syncItem = await BaseItem.syncItem(syncTargetId(), note1.id, { fields: ['sync_time'] });
+		expect(syncItem.sync_time).toBe(note1.updated_time);
+
 		let note2 = await Note.load(note1.id);
 		note2.title = 'Updated on client 2';
 		await Note.save(note2);
@@ -36,6 +40,10 @@ describe('Synchronizer.conflicts', () => {
 		await Note.save(note2conf);
 		note2conf = await Note.load(note1.id);
 		await synchronizerStart();
+
+		syncItem = await BaseItem.syncItem(syncTargetId(), note2.id, { fields: ['sync_time'] });
+		expect(syncItem.sync_time).toBe(note2.updated_time);
+
 		const conflictedNotes = await Note.conflictedNotes();
 		expect(conflictedNotes.length).toBe(1);
 
@@ -47,16 +55,64 @@ describe('Synchronizer.conflicts', () => {
 		for (const n in conflictedNote) {
 			if (!conflictedNote.hasOwnProperty(n)) continue;
 			if (n === 'id' || n === 'is_conflict' || n === 'conflict_original_id') continue;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			expect(conflictedNote[n]).toBe((note2conf as any)[n]);
+			expect((conflictedNote as Record<string, unknown>)[n]).toBe((note2conf as Record<string, unknown>)[n]);
 		}
 
 		const noteUpdatedFromRemote = await Note.load(note1.id);
 		for (const n in noteUpdatedFromRemote) {
 			if (!noteUpdatedFromRemote.hasOwnProperty(n)) continue;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			expect((noteUpdatedFromRemote as any)[n]).toBe((note2 as any)[n]);
+			expect((noteUpdatedFromRemote as Record<string, unknown>)[n]).toBe((note2 as Record<string, unknown>)[n]);
 		}
+	}));
+
+	it('should cap sync_time to the current device time in the delta step', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'un', parent_id: folder1.id, updated_time: time.unixMs() + 100_000 }, { autoTimestamp: false });
+		await synchronizerStart();
+
+		await switchClient(2);
+
+		await synchronizerStart();
+
+		const syncItem = await BaseItem.syncItem(syncTargetId(), note1.id, { fields: ['sync_time'] });
+		expect(syncItem.sync_time).toBeLessThan(note1.updated_time);
+	}));
+
+	it('should leave changes made after the upload phase for the next sync', (async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'original', parent_id: folder.id });
+		await synchronizerStart();
+
+		await switchClient(2);
+		await synchronizerStart();
+		await sleep(0.1);
+		await Note.save({ id: note.id, title: 'remote change' });
+		await synchronizerStart();
+
+		await switchClient(1);
+		let localChange: NoteEntity = null;
+		const loadItemsByIds = BaseItem.loadItemsByIds.bind(BaseItem);
+		const loadItemsByIdsMock = jest.spyOn(BaseItem, 'loadItemsByIds').mockImplementation(async ids => {
+			const items = await loadItemsByIds(ids);
+			if (ids.includes(note.id)) {
+				await sleep(0.1);
+				localChange = await Note.save({ id: note.id, title: 'local change' });
+			}
+			return items;
+		});
+
+		await synchronizerStart(null, { syncSteps: ['delta'] });
+		loadItemsByIdsMock.mockRestore();
+
+		expect((await Note.load(note.id)).title).toBe('local change');
+		const syncItem = await BaseItem.syncItem(syncTargetId(), note.id, { fields: ['sync_time'] });
+		expect(syncItem.sync_time).toBeLessThan(localChange.updated_time);
+
+		// The following upload phase sees both changes and uses the existing
+		// conflict handling path.
+		await synchronizerStart();
+		expect((await Note.load(note.id)).title).toBe('remote change');
+		expect((await Note.conflictedNotes()).map(note => note.title)).toContain('local change');
 	}));
 
 	it('should resolve folders conflicts', (async () => {
@@ -169,8 +225,9 @@ describe('Synchronizer.conflicts', () => {
 
 	it('should handle conflict when remote folder is deleted then local folder is renamed', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
-		await Folder.save({ title: 'folder2' });
-		await Note.save({ title: 'un', parent_id: folder1.id });
+		const folder2 = await Folder.save({ title: 'folder2', parent_id: folder1.id });
+		const note1 = await Note.save({ title: 'note1', parent_id: folder2.id });
+		const note2 = await Note.save({ title: 'note2', parent_id: folder1.id });
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -179,7 +236,7 @@ describe('Synchronizer.conflicts', () => {
 
 		await sleep(0.1);
 
-		await Folder.delete(folder1.id);
+		await Folder.delete(folder1.id, { deleteChildren: false });
 
 		await synchronizerStart();
 
@@ -192,9 +249,15 @@ describe('Synchronizer.conflicts', () => {
 
 		await synchronizerStart();
 
-		const items = await allNotesFolders();
+		const remainingFolder1 = await Folder.load(folder1.id);
+		const remainingFolder2 = await Folder.load(folder2.id);
+		const remainingNote1 = await Note.load(note1.id);
+		const remainingNote2 = await Note.load(note2.id);
 
-		expect(items.length).toBe(1);
+		expect(remainingFolder1).toBeUndefined();
+		expect(remainingFolder2?.id).toBe(folder2.id);
+		expect(remainingNote1?.id).toBe(note1.id);
+		expect(remainingNote2?.id).toBe(note2.id);
 	}));
 
 	it('should not sync notes with conflicts', (async () => {

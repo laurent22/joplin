@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 import Logger from '@joplin/utils/Logger';
 import { ItemEvent, OnPluginSettingChangeHandler } from './types';
 import type * as React from 'react';
@@ -22,8 +22,7 @@ const useOnInstallHandler = (
 	return React.useCallback(async (event: ItemEvent) => {
 		const pluginId = event.item.manifest.id;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		setInstallingPluginIds((prev: any) => {
+		setInstallingPluginIds(prev => {
 			return {
 				...prev, [pluginId]: true,
 			};
@@ -59,8 +58,7 @@ const useOnInstallHandler = (
 			onPluginSettingsChange({ value: newSettings });
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		setInstallingPluginIds((prev: any) => {
+		setInstallingPluginIds(prev => {
 			return {
 				...prev, [pluginId]: false,
 			};

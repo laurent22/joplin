@@ -6,7 +6,7 @@ import { basename, join } from 'path';
 
 test.describe('richTextEditor', () => {
 	test('HTML links should be preserved when editing a note', async ({ electronApp, mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.createNewNote('Testing!');
 		const editor = mainScreen.noteEditor;
 
@@ -50,7 +50,7 @@ test.describe('richTextEditor', () => {
 	});
 
 	test('should watch resources for changes when opened with ctrl+click', async ({ electronApp, mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.createNewNote('Testing!');
 		const editor = mainScreen.noteEditor;
 
@@ -61,6 +61,9 @@ test.describe('richTextEditor', () => {
 		const pathToAttach = join(__dirname, 'resources', 'test-file.txt');
 		await setFilePickerResponse(electronApp, [pathToAttach]);
 		await editor.attachFileButton.click();
+
+		// Wait for it to render
+		await expect(editor.getNoteViewerFrameLocator().getByText('test-file.txt')).toBeVisible();
 
 		// Switch to the RTE
 		await editor.toggleEditorsButton.click();
@@ -82,8 +85,46 @@ test.describe('richTextEditor', () => {
 		expect(await openPathResult).toContain(basename(pathToAttach));
 	});
 
+	test('should not remove text when pressing [enter] at the end of a line with an image', async ({ mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Testing pressing enter!');
+		const editor = mainScreen.noteEditor;
+
+		// Set the initial content
+		await editor.codeMirrorEditor.click();
+		await mainWindow.keyboard.type([
+			'<img',
+			' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKLW/AAAAEklEQVQIW2P8z8AARBDAiJMDAIzoBf635fcVAAAAAElFTkSuQmCC"',
+			' width="200"',
+			' height="200"',
+			' alt="test image"',
+			'/>',
+		].join(' '));
+		await mainWindow.keyboard.press('Enter');
+		await mainWindow.keyboard.press('Enter');
+		await mainWindow.keyboard.type('Test secondary paragraph.');
+
+		// Switch to the RTE
+		await editor.toggleEditorsButton.click();
+		await editor.richTextEditor.waitFor();
+
+		const richTextEditorFrame = editor.getRichTextFrameLocator();
+		const testParagraph = richTextEditorFrame.getByText('Test secondary paragraph.');
+		await expect(testParagraph).toBeAttached();
+
+		// Move the cursor just after the image, then press enter.
+		const testImage = richTextEditorFrame.getByRole('img', { name: 'test image' });
+		await testImage.click();
+		await mainWindow.keyboard.press('ArrowRight');
+		await mainWindow.keyboard.press('Enter');
+
+		// Should not have removed the image or the test paragraph.
+		await expect(testImage).toBeAttached();
+		await expect(testParagraph).toBeAttached();
+	});
+
 	test('pressing Tab should indent', async ({ mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.createNewNote('Testing tabs!');
 		const editor = mainScreen.noteEditor;
 
@@ -120,8 +161,77 @@ test.describe('richTextEditor', () => {
 		await expect(editor.codeMirrorEditor).toHaveText('This is a        test.        Test! Another:        !');
 	});
 
+	test('should be possible to disable tab indentation from the menu', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Testing keyboard navigation!');
+
+		const editor = mainScreen.noteEditor;
+		await editor.toggleEditorsButton.click();
+		await editor.richTextEditor.click();
+
+		await editor.enableTabNavigation(electronApp);
+		await mainWindow.keyboard.type('This is a');
+
+		// Tab should navigate
+		await expect(editor.richTextEditor).toBeFocused();
+		await mainWindow.keyboard.press('Tab');
+		await expect(editor.richTextEditor).not.toBeFocused();
+
+		await editor.disableTabNavigation(electronApp);
+
+		// Tab should not navigate
+		await editor.richTextEditor.click();
+		await mainWindow.keyboard.press('Tab');
+		await expect(editor.richTextEditor).toBeFocused();
+	});
+
+	test('double-clicking a code block should edit it', async ({ mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Testing code blocks');
+
+		const editor = mainScreen.noteEditor;
+		await editor.toggleEditorsButton.click();
+
+		// Make the code block
+		await editor.toggleCodeBlockButton.click();
+		const codeEditor = editor.richTextCodeEditor;
+		await codeEditor.textArea.fill('This is a test code block!');
+		await codeEditor.submit();
+
+		// Double-clicking the code block should open it
+		const renderedCode = editor.getRichTextFrameLocator().locator('pre.hljs', { hasText: 'This is a test code block!' });
+		await renderedCode.first().dblclick();
+		await codeEditor.waitFor();
+	});
+
+	test('disabling tab indentation should also disable it in code dialogs', async ({ mainWindow, electronApp }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Testing code blocks');
+
+		const editor = mainScreen.noteEditor;
+		await editor.toggleEditorsButton.click();
+		await editor.richTextEditor.click();
+
+		await editor.toggleCodeBlockButton.click();
+		const codeEditor = editor.richTextCodeEditor;
+		await codeEditor.waitFor();
+
+		// Initially, pressing <tab> in the textarea should add a tab
+		await codeEditor.textArea.click();
+		await mainWindow.keyboard.press('Tab');
+		await expect(codeEditor.textArea).toHaveValue('\t');
+		await expect(codeEditor.textArea).toBeFocused();
+
+		await editor.enableTabNavigation(electronApp);
+
+		// After enabling tab navigation, pressing tab should navigate.
+		await expect(codeEditor.textArea).toBeFocused();
+		await mainWindow.keyboard.press('Tab');
+		await expect(codeEditor.textArea).not.toBeFocused();
+	});
+
 	test('should be possible to navigate between the note title and rich text editor with enter/down/up keys', async ({ mainWindow }) => {
-		const mainScreen = new MainScreen(mainWindow);
+		const mainScreen = await new MainScreen(mainWindow).setup();
 		await mainScreen.createNewNote('Testing keyboard navigation!');
 
 		const editor = mainScreen.noteEditor;
@@ -143,5 +253,62 @@ test.describe('richTextEditor', () => {
 		await expect(editor.noteTitleInput).not.toBeFocused();
 		await expect(editor.richTextEditor).toBeFocused();
 	});
+
+	test('note should have correct content even if opened quickly after last edit', async ({ mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Test 1');
+		await mainScreen.createNewNote('Test 2');
+		const test1Header = mainScreen.noteList.getNoteItemByTitle('Test 1');
+		const test2Header = mainScreen.noteList.getNoteItemByTitle('Test 2');
+
+		const editor = mainScreen.noteEditor;
+		await editor.toggleEditorsButton.click();
+		await editor.richTextEditor.waitFor();
+
+		const editorBody = editor.getRichTextEditorBody();
+		const setEditorText = async (targetText: string) => {
+			await editorBody.pressSequentially(targetText);
+			await expect(editorBody).toHaveText(targetText);
+		};
+
+		await test1Header.click();
+		await expect(editorBody).toHaveText('');
+		await setEditorText('Test 1');
+
+		await test2Header.click();
+		// Previously, after switching to note 2, the "Test 1" text would remain present in the
+		// editor.
+		await expect(editorBody).toHaveText('');
+	});
+
+	test('should save rich text changes when switching notes immediately after typing', async ({ mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Test 1');
+		await mainScreen.createNewNote('Test 2');
+		const test1Header = mainScreen.noteList.getNoteItemByTitle('Test 1');
+		const test2Header = mainScreen.noteList.getNoteItemByTitle('Test 2');
+
+		const editor = mainScreen.noteEditor;
+		await editor.toggleEditorsButton.click();
+		await editor.richTextEditor.waitFor();
+		const editorBody = editor.getRichTextEditorBody();
+
+		await test1Header.click();
+		await expect(editor.noteTitleInput).toHaveValue('Test 1');
+		await expect(editorBody).toHaveText('');
+		await expect(editor.toggleEditorsButton).toBeEnabled();
+		await editorBody.pressSequentially('Unsaved text');
+		// This confirms that onWillChange has reached the parent without waiting for
+		// TinyMCE's delayed onChange/save.
+		await expect(editor.toggleEditorsButton).toBeDisabled();
+		await test2Header.click();
+
+		await expect(editor.noteTitleInput).toHaveValue('Test 2');
+		await expect(editorBody).toHaveText('');
+		await test1Header.click();
+		await expect(editor.noteTitleInput).toHaveValue('Test 1');
+		await expect(editorBody).toHaveText('Unsaved text');
+	});
+
 });
 

@@ -2,10 +2,10 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow from './DialogButtonRow';
-const { themeStyle } = require('@joplin/lib/theme');
+import { themeStyle } from '@joplin/lib/theme';
 const Countable = require('@joplin/lib/countable/Countable');
 import markupLanguageUtils from '@joplin/lib/utils/markupLanguageUtils';
-import Dialog from './Dialog';
+import Dialog from '@joplin/lib/components/Dialog';
 
 interface NoteContentPropertiesDialogProps {
 	themeId: number;
@@ -22,23 +22,28 @@ interface KeyToLabelMap {
 	[key: string]: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let markupToHtml_: any = null;
+let markupToHtml_: ReturnType<typeof markupLanguageUtils.newMarkupToHtml> = null;
 function markupToHtml() {
 	if (markupToHtml_) return markupToHtml_;
 	markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
 	return markupToHtml_;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-function countElements(text: string, wordSetter: Function, characterSetter: Function, characterNoSpaceSetter: Function, lineSetter: Function) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	Countable.count(text, (counter: any) => {
+interface CounterResult {
+	words: number;
+	all: number;
+	characters: number;
+}
+
+function countElements(text: string, wordSetter: React.Dispatch<React.SetStateAction<number>>, characterSetter: React.Dispatch<React.SetStateAction<number>>, characterNoSpaceSetter: React.Dispatch<React.SetStateAction<number>>, cjkCharacterSetter: React.Dispatch<React.SetStateAction<number>>, lineSetter: React.Dispatch<React.SetStateAction<number>>) {
+	Countable.count(text, (counter: CounterResult) => {
 		wordSetter(counter.words);
 		characterSetter(counter.all);
 		characterNoSpaceSetter(counter.characters);
 	});
-	text === '' ? lineSetter(0) : lineSetter(text.split('\n').length);
+	const cjkMatches = text.match(/[\p{Script=Han}\p{Script=Bopomofo}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/gu);
+	cjkCharacterSetter(cjkMatches ? cjkMatches.length : 0);
+	lineSetter(text === '' ? 0 : text.split('\n').length);
 }
 
 function formatReadTime(readTimeMinutes: number) {
@@ -51,30 +56,31 @@ function formatReadTime(readTimeMinutes: number) {
 
 export default function NoteContentPropertiesDialog(props: NoteContentPropertiesDialogProps) {
 	const theme = themeStyle(props.themeId);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const tableBodyComps: any[] = [];
+	const tableBodyComps: React.JSX.Element[] = [];
 	// For the source Markdown
 	const [lines, setLines] = useState<number>(0);
 	const [words, setWords] = useState<number>(0);
 	const [characters, setCharacters] = useState<number>(0);
 	const [charactersNoSpace, setCharactersNoSpace] = useState<number>(0);
+	const [cjkCharacters, setCjkCharacters] = useState<number>(0);
 	// For source with Markdown syntax stripped out
 	const [strippedLines, setStrippedLines] = useState<number>(0);
 	const [strippedWords, setStrippedWords] = useState<number>(0);
 	const [strippedCharacters, setStrippedCharacters] = useState<number>(0);
 	const [strippedCharactersNoSpace, setStrippedCharactersNoSpace] = useState<number>(0);
+	const [strippedCjkCharacters, setStrippedCjkCharacters] = useState<number>(0);
 	const [strippedReadTime, setStrippedReadTime] = useState<number>(0);
 	// This amount based on the following paper:
 	// https://www.researchgate.net/publication/332380784_How_many_words_do_we_read_per_minute_A_review_and_meta-analysis_of_reading_rate
 	const wordsPerMinute = 250;
 
 	useEffect(() => {
-		countElements(props.text, setWords, setCharacters, setCharactersNoSpace, setLines);
+		countElements(props.text, setWords, setCharacters, setCharactersNoSpace, setCjkCharacters, setLines);
 	}, [props.text]);
 
 	useEffect(() => {
 		const strippedText: string = markupToHtml().stripMarkup(props.markupLanguage, props.text);
-		countElements(strippedText, setStrippedWords, setStrippedCharacters, setStrippedCharactersNoSpace, setStrippedLines);
+		countElements(strippedText, setStrippedWords, setStrippedCharacters, setStrippedCharactersNoSpace, setStrippedCjkCharacters, setStrippedLines);
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
 	}, [props.text]);
 
@@ -88,6 +94,7 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 		words: words,
 		characters: characters,
 		charactersNoSpace: charactersNoSpace,
+		cjkCharacters: cjkCharacters,
 	};
 
 	const strippedTextProperties: TextPropertiesMap = {
@@ -99,12 +106,14 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 		words: strippedWords,
 		characters: strippedCharacters,
 		charactersNoSpace: strippedCharactersNoSpace,
+		cjkCharacters: strippedCjkCharacters,
 	};
 
 	const keyToLabel: KeyToLabelMap = {
 		words: _('Words'),
 		characters: _('Characters'),
 		charactersNoSpace: _('Characters excluding spaces'),
+		cjkCharacters: _('Chinese/Japanese/Korean characters'),
 		lines: _('Lines'),
 	};
 
@@ -118,7 +127,7 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 		width: '10em',
 	};
 
-	const controlCompStyle = {
+	const controlCompStyle: React.CSSProperties = {
 		...theme.textStyle,
 		textAlign: 'center',
 	};
@@ -133,7 +142,7 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 		);
 	};
 
-	const tableHeaderStyle = {
+	const tableHeaderStyle: React.CSSProperties = {
 		...theme.textStyle,
 		textAlign: 'center',
 	};
@@ -147,11 +156,12 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 	);
 
 	for (const key in textProperties) {
+		if (key === 'cjkCharacters' && textProperties[key] === 0 && strippedTextProperties[key] === 0) continue;
 		const comp = createTableBodyRow(key, textProperties[key], strippedTextProperties[key]);
 		tableBodyComps.push(comp);
 	}
 
-	const dialogBoxHeadingStyle = {
+	const dialogBoxHeadingStyle: React.CSSProperties = {
 		...theme.dialogTitle,
 		textAlign: 'center',
 	};
@@ -172,7 +182,12 @@ export default function NoteContentPropertiesDialog(props: NoteContentProperties
 			<div style={{ ...labelCompStyle, marginTop: 10 }}>
 				{readTimeLabel}
 			</div>
-			<DialogButtonRow themeId={props.themeId} onClick={buttonRow_click} okButtonShow={false} cancelButtonLabel={_('Close')}/>
+			<DialogButtonRow
+				themeId={props.themeId}
+				onClick={buttonRow_click}
+				okButtonShow={false}
+				cancelButtonLabel={_('Close')}
+			/>
 		</Dialog>
 	);
 }

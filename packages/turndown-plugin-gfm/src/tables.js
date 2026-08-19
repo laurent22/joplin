@@ -4,6 +4,7 @@ var rules = {}
 var alignMap = { left: ':---', right: '---:', center: ':---:' };
 
 let isCodeBlock_ = null;
+let options_ = null;
 
 // We need to cache the result of tableShouldBeSkipped() as it is expensive.
 // Caching it means we went from about 9000 ms for rendering down to 90 ms.
@@ -72,36 +73,58 @@ rules.tableRow = {
 }
 
 rules.table = {
-  // Only convert tables that can result in valid Markdown
-  // Other tables are kept as HTML using `keep` (see below).
   filter: function (node, options) {
-    return node.nodeName === 'TABLE' && !tableShouldBeHtml(node, options);
+    return node.nodeName === 'TABLE';
   },
 
   replacement: function (content, node) {
-    if (tableShouldBeSkipped(node)) return content;
-
-    // Ensure there are no blank lines
-    content = content.replace(/\n+/g, '\n')
-
-    // If table has no heading, add an empty one so as to get a valid Markdown table
-    var secondLine = content.trim().split('\n');
-    if (secondLine.length >= 2) secondLine = secondLine[1]
-    var secondLineIsDivider = /\| :?---/.test(secondLine);
-
-    var columnCount = tableColCount(node);
-    var emptyHeader = ''
-    if (columnCount && !secondLineIsDivider) {
-      emptyHeader = '|' + '     |'.repeat(columnCount) + '\n' + '|'
-      for (var columnIndex = 0; columnIndex < columnCount; ++columnIndex) {
-        emptyHeader += ' ' + getBorder(getColumnAlignment(node, columnIndex)) + ' |';
+    // Only convert tables that can result in valid Markdown
+    // Other tables are kept as HTML using `keep` (see below).
+    if (tableShouldBeHtml(node, options_)) {
+      let html = node.outerHTML;
+      let divParent = nodeParentDiv(node)
+      // Make table in HTML format horizontally scrollable by give table a div parent, so the width of the table is limited to the screen width.
+	    // see https://github.com/laurent22/joplin/pull/10161
+      // test cases:
+      // packages/app-cli/tests/html_to_md/preserve_nested_tables.html
+      // packages/app-cli/tests/html_to_md/table_with_blockquote.html
+      // packages/app-cli/tests/html_to_md/table_with_code_1.html
+      // packages/app-cli/tests/html_to_md/table_with_code_2.html
+      // packages/app-cli/tests/html_to_md/table_with_code_3.html
+      // packages/app-cli/tests/html_to_md/table_with_heading.html
+      // packages/app-cli/tests/html_to_md/table_with_hr.html
+      // packages/app-cli/tests/html_to_md/table_with_list.html
+      if (divParent === null || !divParent.classList.contains('joplin-table-wrapper')){
+        return `\n\n<div class="joplin-table-wrapper">${html}</div>\n\n`;
+      } else {
+        return html
       }
-    }
+    } else {
+      if (tableShouldBeSkipped(node)) return content;
 
-    const captionContent = node.caption ? node.caption.textContent || '' : '';
-    const caption = captionContent ? `${captionContent}\n\n` : '';
-    const tableContent = `${emptyHeader}${content}`.trimStart();
-    return `\n\n${caption}${tableContent}\n\n`;
+      // Ensure there are no blank lines
+      content = content.replace(/\n+/g, '\n')
+
+      // If table has no heading, add an empty one so as to get a valid Markdown table
+      var secondLine = content.trim().split('\n');
+      if (secondLine.length >= 2) secondLine = secondLine[1]
+      var secondLineIsDivider = /\| :?---/.test(secondLine);
+
+      var columnCount = tableColCount(node);
+      var emptyHeader = ''
+      if (columnCount && !secondLineIsDivider) {
+        emptyHeader = '|' + '     |'.repeat(columnCount) + '\n' + '|'
+        for (var columnIndex = 0; columnIndex < columnCount; ++columnIndex) {
+          emptyHeader += ' ' + getBorder(getColumnAlignment(node, columnIndex)) + ' |';
+        }
+      }
+
+      const captionNode = node.querySelector ? node.querySelector('caption') : node.caption;
+      const captionContent = captionNode ? captionNode.textContent || '' : '';
+      const caption = captionContent ? `${captionContent}\n\n` : '';
+      const tableContent = `${emptyHeader}${content}`.trimStart();
+      return `\n\n${caption}${tableContent}\n\n`;
+    }
   }
 }
 
@@ -179,13 +202,100 @@ const nodeContains = (node, types) => {
 
   for (let i = 0; i < node.childNodes.length; i++) {
     const child = node.childNodes[i];
-    if (types === 'code' && isCodeBlock_(child)) return true;
+    if (types === 'code' && isCodeBlock_ && isCodeBlock_(child)) return true;
     if (types.includes(child.nodeName)) return true;
     if (nodeContains(child, types)) return true;
   }
 
   return false;
 }
+
+// Style properties that count as user customization.
+// Excludes TinyMCE/Joplin defaults:
+//   - border-collapse: set by default on all tables
+//   - width: set on every cell by TinyMCE
+//   - text-align: converted to Markdown alignment (:---, :---:, ---:)
+//   - height: false positives from TinyMCE defaults
+const customStyleProperties = [
+  'background-color', 'background',
+  'border-color', 'border',
+  'border-top', 'border-right', 'border-bottom', 'border-left',
+  'border-style', 'border-width',
+  'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+  'float', 'margin-left', 'margin-right',
+];
+
+// HTML attributes TinyMCE may set instead of CSS.
+const customAttributeNames = [
+  'bgcolor',
+  'bordercolor',
+  'background',
+];
+
+const nodeHasCustomStyle = (node) => {
+  if (!node || !node.getAttribute) return false;
+  const styleAttr = node.getAttribute('style');
+  if (!styleAttr) return false;
+  // Extract property names from the raw style string
+  const properties = styleAttr.split(';')
+    .map(s => s.split(':')[0].trim().toLowerCase())
+    .filter(s => s.length > 0);
+  for (let i = 0; i < properties.length; i++) {
+    if (customStyleProperties.includes(properties[i])) return true;
+  }
+  return false;
+};
+
+const hasNonDefaultSpacingAttribute = (node, name) => {
+  if (!node || !node.getAttribute) return false;
+  const value = node.getAttribute(name);
+  if (value === null) return false;
+  const normalisedValue = `${value}`.trim().toLowerCase();
+  if (!normalisedValue) return false;
+  if (normalisedValue === '0' || normalisedValue === '0px') return false;
+  return true;
+};
+
+const nodeHasCustomAttributes = (node) => {
+  if (!node || !node.getAttribute) return false;
+
+  for (let i = 0; i < customAttributeNames.length; i++) {
+    const value = node.getAttribute(customAttributeNames[i]);
+    if (value !== null && `${value}`.trim() !== '') return true;
+  }
+
+  if (node.nodeName === 'TABLE') {
+    if (hasNonDefaultSpacingAttribute(node, 'cellpadding')) return true;
+    if (hasNonDefaultSpacingAttribute(node, 'cellspacing')) return true;
+  }
+
+  return false;
+};
+
+const nodeHasCustomFormatting = (node) => {
+  return nodeHasCustomStyle(node) || nodeHasCustomAttributes(node);
+};
+
+// Returns true if the table or any of its rows/cells have custom formatting.
+const tableHasCustomStyles = (tableNode) => {
+  if (nodeHasCustomFormatting(tableNode)) return true;
+
+  const rows = tableNode.rows;
+  if (!rows) return false;
+
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    if (nodeHasCustomFormatting(row)) return true;
+    for (let j = 0; j < row.childNodes.length; j++) {
+      const cell = row.childNodes[j];
+      if ((cell.nodeName === 'TD' || cell.nodeName === 'TH') && nodeHasCustomFormatting(cell)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+};
 
 const tableShouldBeHtml = (tableNode, options) => {
   const possibleTags = [
@@ -209,7 +319,8 @@ const tableShouldBeHtml = (tableNode, options) => {
   if (options.preserveNestedTables) possibleTags.push('TABLE');
 
   return nodeContains(tableNode, 'code') ||
-    nodeContains(tableNode, possibleTags);
+    nodeContains(tableNode, possibleTags) ||
+    (options.preserveTableStyles && tableHasCustomStyles(tableNode));
 }
 
 // Various conditions under which a table should be skipped - i.e. each cell
@@ -230,6 +341,15 @@ function tableShouldBeSkipped_(tableNode) {
   if (tableNode.rows.length === 1 && tableNode.rows[0].childNodes.length <= 1) return true; // Table with only one cell
   if (nodeContainsTable(tableNode)) return true;
   return false;
+}
+
+function nodeParentDiv(node) {
+  let parent = node.parentNode;
+  while (parent.nodeName !== 'DIV') {
+    parent = parent.parentNode;
+    if (!parent) return null;
+  }
+  return parent;
 }
 
 function nodeParentTable(node) {
@@ -261,6 +381,7 @@ function tableColCount(node) {
 
 export default function tables (turndownService) {
   isCodeBlock_ = turndownService.isCodeBlock;
+  options_ = turndownService.options;
 
   turndownService.keep(function (node) {
     if (node.nodeName === 'TABLE' && tableShouldBeHtml(node, turndownService.options)) return true;

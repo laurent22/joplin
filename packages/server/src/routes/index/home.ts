@@ -22,12 +22,51 @@ function setupMessageHtml() {
 	}
 }
 
+// Note: Take the list from `packages/doc-builder/docusaurus.config.js`
+const socialFeeds = () => {
+	return [
+		{
+			label: 'Bluesky',
+			href: 'https://bsky.app/profile/joplinapp.bsky.social',
+		},
+		{
+			label: 'Patreon',
+			href: 'https://www.patreon.com/joplin',
+		},
+		{
+			label: 'YouTube',
+			href: 'https://www.youtube.com/@joplinapp',
+		},
+		{
+			label: 'LinkedIn',
+			href: 'https://www.linkedin.com/company/joplin',
+		},
+		{
+			label: 'Discord',
+			href: 'https://discord.gg/VSj7AFHvpq',
+		},
+		{
+			label: 'Mastodon',
+			href: 'https://mastodon.social/@joplinapp',
+		},
+		{
+			label: 'Lemmy',
+			href: 'https://sopuli.xyz/c/joplinapp',
+		},
+		{
+			label: 'GitHub',
+			href: 'https://github.com/laurent22/joplin/',
+		},
+	];
+};
+
 router.get('home', async (_path: SubPath, ctx: AppContext) => {
 	contextSessionId(ctx);
 
 	if (ctx.method === 'GET') {
 		const user = ctx.joplin.owner;
 		const subscription = await ctx.joplin.models.subscription().byUserId(user.id);
+		const isExternal = false;
 
 		const view = defaultView('home', 'Home');
 		view.content = {
@@ -45,33 +84,33 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 				{
 					label: 'Max item size',
 					value: formatMaxItemSize(user),
-					show: true,
+					show: !isExternal,
 				},
 				{
 					label: 'Total size',
 					classes: [totalSizeClass(user)],
 					value: `${formatTotalSize(user)} (${formatTotalSizePercent(user)})`,
-					show: true,
+					show: !isExternal,
 				},
 				{
 					label: 'Max total size',
 					value: formatMaxTotalSize(user),
-					show: true,
+					show: !isExternal,
 				},
 				{
 					label: 'Can publish notes',
 					value: yesOrNo(true),
-					show: true,
+					show: !isExternal,
 				},
 				{
 					label: 'Can share notebooks',
 					value: yesOrNo(getCanShareFolder(user)),
-					show: true,
+					show: !isExternal,
 				},
 				{
 					label: 'Can receive notebooks',
-					value: yesOrNo(getCanReceiveFolder(user)),
-					show: true,
+					value: !!yesOrNo(getCanReceiveFolder(user)),
+					show: !isExternal,
 				},
 			],
 			showUpgradeProButton: subscription && user.account_type === AccountType.Basic,
@@ -79,6 +118,10 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 			betaExpiredDays: betaUserTrialPeriodDays(user.created_time, 0, 0),
 			betaStartSubUrl: betaStartSubUrl(user.email, user.account_type),
 			setupMessageHtml: setupMessageHtml(),
+			syncTargetName: isExternal ? 'Joplin Server Business' : config().appName,
+			isExternal,
+			isJoplinCloud: config().isJoplinCloud,
+			socialFeeds: socialFeeds(),
 		};
 
 		view.cssFiles = ['index/home'];

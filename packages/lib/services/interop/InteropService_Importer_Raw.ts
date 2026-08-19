@@ -10,15 +10,15 @@ import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 const { sprintf } = require('sprintf-js');
 import shim from '../../shim';
-const { fileExtension } = require('../../path-utils');
+import { Stat } from '../../fs-driver-base';
+import { ResourceEntity } from '../database/types';
+import { fileExtension } from '../../path-utils';
 import uuid from '../../uuid';
 
 export default class InteropService_Importer_Raw extends InteropService_Importer_Base {
 	public async exec(result: ImportExportResult) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const itemIdMap: any = {};
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const createdResources: any = {};
+		const itemIdMap: Record<string, string> = {};
+		const createdResources: Record<string, ResourceEntity> = {};
 		const noteTagsToCreate = [];
 		const destinationFolderId = this.options_.destinationFolderId;
 
@@ -37,8 +37,7 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 
 		const stats = await shim.fsDriver().readDirStats(this.sourcePath_);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const folderExists = function(stats: any[], folderId: string) {
+		const folderExists = function(stats: Stat[], folderId: string) {
 			folderId = folderId.toLowerCase();
 			for (let i = 0; i < stats.length; i++) {
 				const stat = stats[i];
@@ -48,8 +47,7 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 			return false;
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		let defaultFolder_: any = null;
+		let defaultFolder_: import('../database/types').FolderEntity | null = null;
 		const defaultFolder = async () => {
 			if (defaultFolder_) return defaultFolder_;
 			const folderTitle = await Folder.findUniqueItemTitle(this.options_.defaultFolderTitle ? this.options_.defaultFolderTitle : 'Imported', '');
@@ -80,65 +78,75 @@ export default class InteropService_Importer_Raw extends InteropService_Importer
 
 		for (let i = 0; i < stats.length; i++) {
 			const stat = stats[i];
-			if (stat.isDirectory()) continue;
-			if (fileExtension(stat.path).toLowerCase() !== 'md') continue;
 
-			const content = await shim.fsDriver().readFile(`${this.sourcePath_}/${stat.path}`);
-			const item = await BaseItem.unserialize(content);
-			const itemType = item.type_;
-			const ItemClass = BaseItem.itemClass(item);
+			try {
+				if (stat.isDirectory()) continue;
+				if (fileExtension(stat.path).toLowerCase() !== 'md') continue;
 
-			delete item.type_;
+				const content = await shim.fsDriver().readFile(`${this.sourcePath_}/${stat.path}`);
+				const item = await BaseItem.unserialize(content);
+				const itemType = item.type_;
+				const ItemClass = BaseItem.itemClass(item);
 
-			if (itemType === BaseModel.TYPE_NOTE) {
-				await setFolderToImportTo(item.parent_id);
+				delete item.type_;
 
-				if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
-				item.id = itemIdMap[item.id];
-				item.parent_id = itemIdMap[item.parent_id];
-				item.body = await replaceLinkedItemIds(item.body);
-			} else if (itemType === BaseModel.TYPE_FOLDER) {
-				if (destinationFolderId) continue;
-
-				if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
-				item.id = itemIdMap[item.id];
-
-				if (item.parent_id) {
+				if (itemType === BaseModel.TYPE_NOTE) {
 					await setFolderToImportTo(item.parent_id);
+
+					if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
+					item.id = itemIdMap[item.id];
 					item.parent_id = itemIdMap[item.parent_id];
-				}
+					item.body = await replaceLinkedItemIds(item.body);
+				} else if (itemType === BaseModel.TYPE_FOLDER) {
+					if (destinationFolderId) continue;
 
-				item.title = await Folder.findUniqueItemTitle(item.title, item.parent_id);
-			} else if (itemType === BaseModel.TYPE_RESOURCE) {
-				const sourceId = item.id;
-				if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
-				item.id = itemIdMap[item.id];
-				createdResources[item.id] = item;
+					if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
+					item.id = itemIdMap[item.id];
 
-				const sourceResourcePath = `${this.sourcePath_}/resources/${Resource.filename({ ...item, id: sourceId })}`;
-				const destPath = Resource.fullPath(item);
+					if (item.parent_id) {
+						await setFolderToImportTo(item.parent_id);
+						item.parent_id = itemIdMap[item.parent_id];
+					}
 
-				if (await shim.fsDriver().exists(sourceResourcePath)) {
-					await shim.fsDriver().copy(sourceResourcePath, destPath);
-				} else {
-					result.warnings.push(sprintf('Could not find resource file: %s', sourceResourcePath));
-				}
-			} else if (itemType === BaseModel.TYPE_TAG) {
-				const tag = await Tag.loadByTitle(item.title);
-				if (tag) {
-					itemIdMap[item.id] = tag.id;
+					item.title = await Folder.findUniqueItemTitle(item.title, item.parent_id);
+				} else if (itemType === BaseModel.TYPE_RESOURCE) {
+					const sourceId = item.id;
+					if (!itemIdMap[item.id]) itemIdMap[item.id] = uuid.create();
+					item.id = itemIdMap[item.id];
+					createdResources[item.id] = item;
+
+					const sourceResourcePath = `${this.sourcePath_}/resources/${Resource.filename({ ...item, id: sourceId })}`;
+					const destPath = Resource.fullPath(item);
+
+					if (await shim.fsDriver().exists(sourceResourcePath)) {
+						await shim.fsDriver().copy(sourceResourcePath, destPath);
+					} else {
+						result.warnings.push(sprintf('Could not find resource file: %s', sourceResourcePath));
+					}
+				} else if (itemType === BaseModel.TYPE_TAG) {
+					const tag = await Tag.loadByTitle(item.title);
+					if (tag) {
+						itemIdMap[item.id] = tag.id;
+						continue;
+					}
+
+					const tagId = uuid.create();
+					itemIdMap[item.id] = tagId;
+					item.id = tagId;
+				} else if (itemType === BaseModel.TYPE_NOTE_TAG) {
+					noteTagsToCreate.push(item);
 					continue;
 				}
 
-				const tagId = uuid.create();
-				itemIdMap[item.id] = tagId;
-				item.id = tagId;
-			} else if (itemType === BaseModel.TYPE_NOTE_TAG) {
-				noteTagsToCreate.push(item);
-				continue;
+				await ItemClass.save(item, { isNew: true, autoTimestamp: false });
+			} catch (error) {
+				if (error.code === 'malformedItem') {
+					result.warnings.push(sprintf('Skipped malformed item: %s: %s', stat.path, error.message));
+					continue;
+				}
+				error.message = `Could not import: ${stat.path}: ${error.message}`;
+				throw error;
 			}
-
-			await ItemClass.save(item, { isNew: true, autoTimestamp: false });
 		}
 
 		for (let i = 0; i < noteTagsToCreate.length; i++) {

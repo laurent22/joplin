@@ -58,7 +58,7 @@ const toLicensesMap = (info: licenseChecker.ModuleInfos, overrides: LicenseOverr
 const getLicenses = async (
 	directory: string,
 	mode: DependencyType,
-	excludeLicenses: string[],
+	excludePackages: string[],
 	overrides: LicenseOverride[] = [],
 ) => {
 
@@ -68,7 +68,7 @@ const getLicenses = async (
 
 			licenseChecker.init({
 				start: directory,
-				excludeLicenses: excludeLicenses.join(','),
+				excludePackages: excludePackages.join(','),
 				excludePackagesStartingWith: '@joplin/',
 				development: isDevelopmentMode,
 				production: !isDevelopmentMode,

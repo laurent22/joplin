@@ -6,6 +6,12 @@ import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('share/reducer');
 
+export enum ShareType {
+	Note = 1,
+	Folder = 3,
+	PublishedFolder = 4,
+}
+
 interface StateShareUserUser {
 	id: string;
 	email: string;
@@ -66,11 +72,9 @@ export const defaultState: State = {
 };
 
 export const parseShareCache = (serialized: string): State => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	let raw: any = {};
+	let raw: Partial<State> = {};
 	try {
-		raw = JSON.parse(serialized);
-		if (!raw) raw = {};
+		raw = JSON.parse(serialized) || {};
 	} catch (error) {
 		logger.info('Could not load share cache from settings - will return a default value. Error was:', error);
 	}
@@ -99,7 +103,27 @@ export function isRootSharedFolder(folder: FolderEntity): boolean {
 	return !!folder.share_id && !folder.parent_id;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// Returns true if folderId itself, or any of its ancestors, is directly published.
+export function isFolderPublished(state: RootState, folderId: string): boolean {
+	const publishedIds = new Set(
+		state[stateRootKey].shares
+			.filter(s => s.type === ShareType.PublishedFolder && !!s.folder_id)
+			.map(s => s.folder_id),
+	);
+	const visitedFolderIds = new Set<string>();
+	let currentId = folderId;
+	while (currentId) {
+		if (publishedIds.has(currentId)) return true;
+		if (visitedFolderIds.has(currentId)) break;
+		visitedFolderIds.add(currentId);
+		const folder = state.folders.find(f => f.id === currentId);
+		if (!folder) break;
+		currentId = folder.parent_id;
+	}
+	return false;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Heterogeneous redux action shape across SHARE_* types; typed action union would require touching every dispatch site
 const reducer = (draftRoot: Draft<RootState>, action: any) => {
 	if (action.type.indexOf('SHARE_') !== 0) return;
 
@@ -121,18 +145,24 @@ const reducer = (draftRoot: Draft<RootState>, action: any) => {
 		case 'SHARE_USER_UPDATE_ONE':
 
 			{
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const shareUser = (draft.shareUsers as any)[action.shareId].find((su: StateShareUser) => su.id === action.shareUser.id);
+				const shareUser = draft.shareUsers[action.shareId].find((su: StateShareUser) => su.id === action.shareUser.id);
 				if (!shareUser) throw new Error(`No such user: ${JSON.stringify(action)}`);
 
 				for (const [name, value] of Object.entries(action.shareUser)) {
-					shareUser[name] = value;
+					(shareUser as Record<string, unknown>)[name] = value;
 				}
 			}
 			break;
 
 		case 'SHARE_INVITATION_SET':
 
+			draft.shareInvitations = action.shareInvitations;
+			break;
+
+		case 'SHARE_CACHE_RESTORE':
+
+			draft.shares = action.shares;
+			draft.shareUsers = action.shareUsers;
 			draft.shareInvitations = action.shareInvitations;
 			break;
 

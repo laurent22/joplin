@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+        html, body { margin: 0; padding: 0; }
+
+        body {
+            display: flex;
+        }
+
+        nav {
+            height: 100vh;
+            min-width: 200px;
+            max-width: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            border-right: 1px solid rgb(235, 235, 235);
+        }
+
+        nav ul {
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        nav li {
+            padding: 10px 20px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        nav li.active {
+            background-color: rgb(233, 233, 233);
+        }
+
+        nav a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .content {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+{% block content %}{% endblock %}
+</body>
+</html>

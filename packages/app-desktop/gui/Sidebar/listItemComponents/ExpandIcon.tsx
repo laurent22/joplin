@@ -1,15 +1,10 @@
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 
-type ExpandIconProps = {
+interface ExpandIconProps {
 	isExpanded: boolean;
-	isVisible: true;
-	targetTitle: string;
-}|{
-	isExpanded: boolean;
-	isVisible: false;
-	targetTitle?: string;
-};
+	isVisible: boolean;
+}
 
 const ExpandIcon: React.FC<ExpandIconProps> = props => {
 	const classNames = ['sidebar-expand-icon'];
@@ -23,12 +18,17 @@ const ExpandIcon: React.FC<ExpandIconProps> = props => {
 			return undefined;
 		}
 		if (props.isExpanded) {
-			return _('Expanded, press space to collapse.');
+			return _('Expanded');
 		}
-		return _('Collapsed, press space to expand.');
+		return _('Collapsed');
 	};
 	const label = getLabel();
-	return <i className={classNames.join(' ')} aria-label={label} role='img'></i>;
+	return <i
+		className={classNames.join(' ')}
+		aria-hidden={!props.isVisible}
+		aria-label={label}
+		role='img'
+	></i>;
 };
 
 export default ExpandIcon;

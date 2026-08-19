@@ -1,9 +1,8 @@
 // Dialog allowing the user to update/create links
 
-const React = require('react');
-const { useState, useEffect, useMemo, useRef } = require('react');
-const { StyleSheet } = require('react-native');
-const { View, Text, TextInput, Button } = require('react-native');
+import * as React from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
 import Modal from '../Modal';
 import { themeStyle } from '@joplin/lib/theme';
@@ -26,7 +25,7 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 	const [linkLabel, setLinkLabel] = useState('');
 	const [linkURL, setLinkURL] = useState('');
 
-	const linkInputRef = useRef();
+	const linkInputRef = useRef<TextInput|null>(null);
 
 	// Reset the label and URL when shown/hidden
 	useEffect(() => {
@@ -52,10 +51,6 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 				},
 				shadowOpacity: 0.4,
 				shadowRadius: 1,
-			},
-			button: {
-				color: theme.color2,
-				backgroundColor: theme.backgroundColor2,
 			},
 			text: {
 				color: theme.color,
@@ -84,6 +79,7 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 	const onSubmit = useCallback(() => {
 		props.editorControl.updateLink(linkLabel, linkURL);
 		props.editorControl.hideLinkDialog();
+		focus('EditLinkDialog::onSubmit', props.editorControl);
 	}, [props.editorControl, linkLabel, linkURL]);
 
 	// See https://www.hingehealth.com/engineering-blog/accessible-react-native-textinput/
@@ -132,20 +128,18 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 
 	return (
 		<Modal
-			animationType="fade"
 			containerStyle={styles.modalContent}
-			transparent={true}
 			visible={props.visible}
-			onRequestClose={() => {
+			onClose={() => {
 				props.editorControl.hideLinkDialog();
-			}}>
+			}}
+		>
 			<Text style={styles.header}>{_('Edit link')}</Text>
 			<View>
 				{linkTextInput}
 				{linkURLInput}
 			</View>
 			<Button
-				style={styles.button}
 				onPress={onSubmit}
 				title={_('Done')}
 			/>

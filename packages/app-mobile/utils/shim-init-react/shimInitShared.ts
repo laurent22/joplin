@@ -9,17 +9,11 @@ import * as mimeUtils from '@joplin/lib/mime-utils';
 import Resource from '@joplin/lib/models/Resource';
 import { getLocales } from 'react-native-localize';
 import type Setting from '@joplin/lib/models/Setting';
-import shim from '@joplin/lib/shim';
+import shim, { MobilePlatform } from '@joplin/lib/shim';
 import { closestSupportedLocale, defaultLocale, setLocale } from '@joplin/lib/locale';
 
 const shimInitShared = () => {
 	shim.sjclModule = require('@joplin/lib/vendor/sjcl-rn.js');
-
-	shim.stringByteLength = function(string) {
-		return Buffer.byteLength(string, 'utf-8');
-	};
-
-	shim.Buffer = Buffer;
 
 	shim.stringByteLength = function(string) {
 		return Buffer.byteLength(string, 'utf-8');
@@ -76,12 +70,21 @@ const shimInitShared = () => {
 	};
 
 	shim.mobilePlatform = () => {
-		return Platform.OS;
+		return Platform.OS as MobilePlatform;
+	};
+
+	shim.platformArch = () => {
+		return ''; // Not supported
 	};
 
 	shim.injectedJs = function(name) {
 		if (!(name in injectedJs)) throw new Error(`Cannot find injectedJs file (add it to "injectedJs" object): ${name}`);
-		return injectedJs[name as keyof typeof injectedJs];
+		return injectedJs[name as keyof typeof injectedJs].js;
+	};
+
+	shim.injectedCss = function(name) {
+		if (!(name in injectedJs)) throw new Error(`Cannot find CSS file (add it to "injectedJs" object): ${name}`);
+		return injectedJs[name as keyof typeof injectedJs].css;
 	};
 
 	shim.setTimeout = (fn, interval) => {
@@ -107,8 +110,7 @@ const shimInitShared = () => {
 		const resourceId = defaultProps.id ? defaultProps.id : uuid.create();
 
 		const ext = fileExtension(filePath);
-		let mimeType = mimeUtils.fromFileExtension(ext);
-		if (!mimeType) mimeType = 'image/jpeg';
+		const mimeType = defaultProps.mime ?? mimeUtils.fromFileExtension(ext) ?? 'image/jpeg';
 
 		let resource = Resource.new();
 		resource.id = resourceId;

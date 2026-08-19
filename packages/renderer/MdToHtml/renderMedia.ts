@@ -1,7 +1,8 @@
 import { Link } from '../MdToHtml';
 import { toForwardSlashes } from '@joplin/utils/path';
 import { LinkIndexes } from './rules/link_close';
-const Entities = require('html-entities').AllHtmlEntities;
+import { RendererTheme } from '../types';
+import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
 
 export interface Options {
@@ -11,26 +12,50 @@ export interface Options {
 	useCustomPdfViewer: boolean;
 	noteId: string;
 	vendorDir: string;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	theme: any;
+	theme: RendererTheme;
 }
 
 function resourceUrl(resourceFullPath: string): string {
 	if (
 		resourceFullPath.indexOf('http://') === 0 || resourceFullPath.indexOf('https://') === 0 || resourceFullPath.indexOf('joplin-content://') === 0 ||
-		resourceFullPath.indexOf('file://') === 0
+		resourceFullPath.indexOf('file://') === 0 ||
+		// On web, resources are loaded as blob URLs.
+		resourceFullPath.startsWith('blob:null/')
 	) {
 		return resourceFullPath;
 	}
 	return `file://${toForwardSlashes(resourceFullPath)}`;
 }
 
+const resourceHash = (link: string) => {
+	// Preserve certain #hash strings when rendering resources.
+	// These patterns can be used to customize the starting/ending points for
+	// audio/video/PDF embeds:
+	const patterns = [
+		// Starting PDF page
+		/#page=\d+$/,
+		// Staring/ending playback time
+		/#t=[0-9:,]+$/,
+	];
+
+	for (const pattern of patterns) {
+		const match = link.match(pattern);
+		if (match) {
+			return match[0];
+		}
+	}
+
+	return '';
+};
+
 export default function(link: Link, options: Options, linkIndexes: LinkIndexes) {
 	const resource = link.resource;
 
 	if (!link.resourceReady || !resource || !resource.mime) return '';
 
-	const escapedResourcePath = htmlentities(resourceUrl(link.resourceFullPath));
+	const escapedResourcePath = htmlentities(
+		resourceUrl(link.resourceFullPath) + resourceHash(link.href),
+	);
 	const escapedMime = htmlentities(resource.mime);
 
 	if (options.videoPlayerEnabled && resource.mime.indexOf('video/') === 0) {

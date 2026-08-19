@@ -7,7 +7,6 @@ interface StringToStringMap {
 interface CodeToCountryMap {
 	[key: string]: string[];
 }
-type ParsePluralFormFunction = (n: number)=> number;
 
 interface Iso639Item {
 	alpha3: string;
@@ -462,40 +461,17 @@ const codeToCountry_: CodeToCountryMap = {
 	ZW: ['Zimbabwe', 'Zimbabwe'],
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let supportedLocales_: any = null;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-let localeStats_: any = null;
+let supportedLocales_: Record<string, Record<string, string[]>> | null = null;
+let localeStats_: Record<string, Record<string, unknown>> | null = null;
 
 const loadedLocales_: Record<string, Record<string, string[]>> = {};
 
+type ParsePluralFormFunction = (n: number)=> number;
 const pluralFunctions_: Record<string, ParsePluralFormFunction> = {};
 
 const defaultLocale_ = 'en_GB';
 
 let currentLocale_ = defaultLocale_;
-
-// Copied from https://github.com/eugeny-dementev/parse-gettext-plural-form
-// along with the tests
-export const parsePluralForm = (form: string): ParsePluralFormFunction => {
-	const pluralFormRegex = /^(\s*nplurals\s*=\s*[0-9]+\s*;\s*plural\s*=\s*(?:\s|[-?|&=!<>+*/%:;a-zA-Z0-9_()])+)$/m;
-
-	if (!pluralFormRegex.test(form)) throw new Error(`Plural-Forms is invalid: ${form}`);
-
-	if (!/;\s*$/.test(form)) {
-		form += ';';
-	}
-
-	const code = [
-		'var plural;',
-		'var nplurals;',
-		form,
-		'return (plural === true ? 1 : plural ? plural : 0);',
-	].join('\n');
-
-	// eslint-disable-next-line no-new-func -- There's a regex to check the form but it's still slightly unsafe, eventually we should automatically generate all the functions in advance in build-translations.ts
-	return (new Function('n', code)) as ParsePluralFormFunction;
-};
 
 const iso639LineToObject = (line: Iso639Line) => {
 	// TODO: filter name in English (remove brackets, commas,)
@@ -525,7 +501,7 @@ const getPluralFunction = (lang: string) => {
 		if (!stats.pluralForms) {
 			pluralFunctions_[lang] = null;
 		} else {
-			pluralFunctions_[lang] = parsePluralForm(stats.pluralForms);
+			pluralFunctions_[lang] = stats.pluralForms as ParsePluralFormFunction;
 		}
 	}
 
@@ -575,6 +551,11 @@ function supportedLocalesToLanguages(options: SupportedLocalesToLanguagesOptions
 
 function closestSupportedLocale(canonicalName: string, defaultToEnglish = true, locales: string[] = null) {
 	locales = locales === null ? supportedLocales() : locales;
+
+	// Normalize the locale name: system locales often use hyphens (e.g. "zh-TW")
+	// but Joplin's supported locales use underscores (e.g. "zh_TW").
+	canonicalName = canonicalName.replace(/-/g, '_');
+
 	if (locales.indexOf(canonicalName) >= 0) return canonicalName;
 
 	const requiredLanguage = languageCodeOnly(canonicalName).toLowerCase();
@@ -683,13 +664,11 @@ export const toIso639Alpha3 = (code: string) => {
 	return info.alpha3;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function _(s: string, ...args: any[]): string {
+function _(s: string, ...args: unknown[]): string {
 	return stringByLocale(currentLocale_, s, ...args);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-function _n(singular: string, plural: string, n: number, ...args: any[]) {
+function _n(singular: string, plural: string, n: number, ...args: unknown[]) {
 	if (['en_GB', 'en_US'].includes(currentLocale_)) {
 		if (n !== 1) return _(plural, ...args);
 		return _(singular, ...args);
@@ -714,8 +693,7 @@ function _n(singular: string, plural: string, n: number, ...args: any[]) {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-const stringByLocale = (locale: string, s: string, ...args: any[]): string => {
+const stringByLocale = (locale: string, s: string, ...args: unknown[]): string => {
 	const strings = localeStrings(locale);
 	const result = strings[s];
 	let translatedString = '';
@@ -733,4 +711,4 @@ const stringByLocale = (locale: string, s: string, ...args: any[]): string => {
 	}
 };
 
-export { _, _n, supportedLocales, languageName, currentLocale, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, languageCode, countryCodeOnly };
+export { _, _n, supportedLocales, languageName, currentLocale, localesFromLanguageCode, languageCodeOnly, countryDisplayName, localeStrings, setLocale, supportedLocalesToLanguages, defaultLocale, closestSupportedLocale, stringByLocale, languageCode, countryCodeOnly };

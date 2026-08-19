@@ -11,6 +11,7 @@ const input: Theme = {
 	oddBackgroundColor: '#eeeeee',
 	color: '#32373F', // For regular text
 	colorError: 'red',
+	colorErrorSelected: '#d00000',
 	colorCorrect: 'green',
 	colorWarn: 'rgb(228,86,0)',
 	colorWarnUrl: '#155BDA',
@@ -27,6 +28,7 @@ const input: Theme = {
 	colorError2: '#ff6c6c',
 	colorWarn2: '#ffcb81',
 	colorWarn3: '#ff7626',
+	backgroundColorTransparent2: 'rgba(0, 0, 0, 0.1)',
 
 	// Color scheme "3" is used for the config screens for example/
 	// It's dark text over gray background.
@@ -37,6 +39,7 @@ const input: Theme = {
 	// Color scheme "4" is used for secondary-style buttons. It makes a white
 	// button with blue text.
 	backgroundColor4: '#ffffff',
+	backgroundColor4Dimmed: '#e3eaff',
 	color4: '#2D6BDC',
 
 	raisedBackgroundColor: '#e5e5e5',
@@ -69,8 +72,10 @@ const expected = `
 	--joplin-background-color2: #313640;
 	--joplin-background-color3: #F4F5F6;
 	--joplin-background-color4: #ffffff;
+	--joplin-background-color4-dimmed: #e3eaff;
 	--joplin-background-color-hover3: #CBDAF1;
 	--joplin-background-color-transparent: rgba(255,255,255,0.9);
+	--joplin-background-color-transparent2: rgba(0, 0, 0, 0.1);
 	--joplin-block-quote-opacity: 0.7;
 	--joplin-code-background-color: rgb(243, 243, 243);
 	--joplin-code-border-color: rgb(220, 220, 220);
@@ -85,6 +90,7 @@ const expected = `
 	--joplin-color-correct: green;
 	--joplin-color-error: red;
 	--joplin-color-error2: #ff6c6c;
+	--joplin-color-error-selected: #d00000;
 	--joplin-color-faded: #7C8B9E;
 	--joplin-color-warn: rgb(228,86,0);
 	--joplin-color-warn2: #ffcb81;

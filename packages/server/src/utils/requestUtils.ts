@@ -1,16 +1,17 @@
 import { cookieGet } from './cookies';
 import { ErrorForbidden } from './errors';
 import { AppContext } from './types';
-import * as formidable from 'formidable';
+import formidable from 'formidable';
 import { Fields, Files } from 'formidable';
 import { IncomingMessage } from 'http';
+import { uuidgen } from './uuid';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Many route handlers read fields without narrowing (e.g. `body.fields.email`); tightening to `unknown` propagates casts through every handler
 export type BodyFields = Record<string, any>;
 
 interface FormParseResult {
 	fields: BodyFields;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Callers access `.filepath` on the value which is `File | File[]` in the typed Files; narrowing forces casts at every call site
 	files: any;
 }
 
@@ -23,8 +24,7 @@ interface FormParseRequest extends IncomingMessage {
 	__isMocked: boolean;
 	__parsed: ParsedBody;
 	files: Files;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	body: any;
+	body: unknown;
 }
 
 // Previously Formidable would return the files and fields as key/value pairs. With v3, the value
@@ -37,8 +37,9 @@ interface FormParseRequest extends IncomingMessage {
 //
 // As of 2024-01-18, this may no longer be necessary since we reverted to Formidable v2, but keeping
 // it anyway just in case.
-const convertFieldsToKeyValue = (fields: Files | Fields) => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Returned in place of `Fields`/`Files` and consumed by callers expecting those types; tightening to `unknown` cascades through to formidable's API
+const convertFieldsToKeyValue = (fields: Files | Fields): Record<string, any> => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See convertFieldsToKeyValue return type
 	const convertedFields: Record<string, any> = {};
 	for (const [k, v] of Object.entries(fields)) {
 		if (Array.isArray(v)) {
@@ -53,18 +54,16 @@ const convertFieldsToKeyValue = (fields: Files | Fields) => {
 
 // Input should be Koa ctx.req, which corresponds to the native Node request
 export async function formParse(request: IncomingMessage): Promise<FormParseResult> {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const req: FormParseRequest = request as any;
+	const req: FormParseRequest = request as unknown as FormParseRequest;
 
 	// It's not clear how to get mocked requests to be parsed successfully by
 	// formidable so we use this small hack. If it's mocked, we are running test
 	// units and the request body is already an object and can be returned.
 	if (req.__isMocked) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const output: any = {};
+		const output: Partial<FormParseResult> = {};
 		if (req.files) output.files = req.files;
-		output.fields = req.body || {};
-		return output;
+		output.fields = (req.body || {}) as BodyFields;
+		return output as FormParseResult;
 	}
 
 	if (req.__parsed) return req.__parsed;
@@ -73,42 +72,69 @@ export async function formParse(request: IncomingMessage): Promise<FormParseResu
 
 	// Note that for Formidable to work, the content-type must be set in the
 	// headers
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	return new Promise((resolve: Function, reject: Function) => {
+	return new Promise<FormParseResult>((resolve, reject) => {
+		let promiseCompleted = false;
+
 		const form = formidable({
 			allowEmptyFiles: true,
 			minFileSize: 0,
+			filename: (_name) => {
+				// Joplin uses a version of Formidable in which the default filename generation
+				// logic is insecure. See:
+				// 1. https://github.com/node-formidable/formidable/commit/022c2c5577dfe14d2947f10909d81b03b6070bf5
+				// 2. https://github.com/node-formidable/formidable/commit/720cdfdfb9d8c8ae99817f2b70ac76153d50ad13
+				//
+				// Issue 2 should only impact Joplin if returning untrusted values from `filename`. Issue 1
+				// is related to possible collisions in how formidable generates random filenames.
+				return `upload-${uuidgen()}`;
+			},
 		});
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		form.parse(req, (error: any, fields: Fields, files: Files) => {
-			if (error) {
-				error.message = `Could not parse form: ${error.message}`;
-				reject(error);
-				return;
-			}
 
-			// Formidable seems to be doing some black magic and once a request
-			// has been parsed it cannot be parsed again. Doing so will do
-			// nothing, the code will just end there, or maybe wait
-			// indefinitely. So we cache the result on success and return it if
-			// some code somewhere tries again to parse the form.
-			req.__parsed = {
-				fields: isFormContentType ? convertFieldsToKeyValue(fields) : fields,
-				files: convertFieldsToKeyValue(files),
-			};
-			resolve(req.__parsed);
-		});
+		try {
+			form.on('error', (error) => {
+				if (promiseCompleted) return;
+				promiseCompleted = true;
+				const wrapped = new Error(`Could not parse form (1): ${error.message}`);
+				reject(wrapped);
+			});
+
+			form.parse(req, (error: Error, fields: Fields, files: Files) => {
+				if (promiseCompleted) return;
+				promiseCompleted = true;
+
+				if (error) {
+					error.message = `Could not parse form (2): ${error.message}`;
+					reject(error);
+					return;
+				}
+
+				// Formidable seems to be doing some black magic and once a request
+				// has been parsed it cannot be parsed again. Doing so will do
+				// nothing, the code will just end there, or maybe wait
+				// indefinitely. So we cache the result on success and return it if
+				// some code somewhere tries again to parse the form.
+				req.__parsed = {
+					fields: isFormContentType ? convertFieldsToKeyValue(fields) : fields,
+					files: convertFieldsToKeyValue(files),
+				};
+				resolve(req.__parsed);
+			});
+		} catch (error) {
+			if (promiseCompleted) return;
+			promiseCompleted = true;
+
+			const wrapped = new Error(`Could not parse form (3): ${error.message}`);
+			reject(wrapped);
+		}
 	});
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export async function bodyFields<T>(req: any/* , filter:string[] = null*/): Promise<T> {
+export async function bodyFields<T>(req: IncomingMessage/* , filter:string[] = null*/): Promise<T> {
 	const form = await formParse(req);
 	return form.fields as T;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export const bodyFiles = async <T>(req: any/* , filter:string[] = null*/): Promise<T> => {
+export const bodyFiles = async <T>(req: IncomingMessage/* , filter:string[] = null*/): Promise<T> => {
 	const form = await formParse(req);
 	return form.files as T;
 };
@@ -117,9 +143,8 @@ export function ownerRequired(ctx: AppContext) {
 	if (!ctx.joplin.owner) throw new ErrorForbidden();
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-export function headerSessionId(headers: any): string {
-	return headers['x-api-auth'] ? headers['x-api-auth'] : '';
+export function headerSessionId(headers: Record<string, string | string[]>): string {
+	return headers['x-api-auth'] ? headers['x-api-auth'] as string : '';
 }
 
 export function contextSessionId(ctx: AppContext, throwIfNotFound = true): string {

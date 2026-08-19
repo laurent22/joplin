@@ -1,6 +1,6 @@
 import Setting from '../../models/Setting';
 import shim from '../../shim';
-import { switchClient, setupDatabaseAndSynchronizer } from '../../testing/test-utils';
+import { switchClient, setupDatabaseAndSynchronizer, withWarningSilenced } from '../../testing/test-utils';
 import KeychainService from './KeychainService';
 import KeychainServiceDriverDummy from './KeychainServiceDriver.dummy';
 import KeychainServiceDriverElectron from './KeychainServiceDriver.electron';
@@ -131,6 +131,21 @@ describe('KeychainService', () => {
 		// Should re-run the check if safeStorage and keytar are both no longer available.
 		await KeychainService.instance().initialize([]);
 		await KeychainService.instance().detectIfKeychainSupported();
+		expect(Setting.value('keychain.supported')).toBe(0);
+	});
+
+	test('should handle the case where safeStorage.encryptString throws', async () => {
+		mockSafeStorage({
+			encryptString: () => {
+				throw new Error('Failed!');
+			},
+		});
+		Setting.setValue('keychain.supported', -1);
+
+		await KeychainService.instance().initialize(makeDrivers());
+		await withWarningSilenced(/Encrypting a setting failed/, async () => {
+			await KeychainService.instance().detectIfKeychainSupported();
+		});
 		expect(Setting.value('keychain.supported')).toBe(0);
 	});
 

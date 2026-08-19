@@ -28,12 +28,19 @@ const useScrollToSelectionHandler = (
 			return lastSelectedItemKey.current;
 		}
 	}, [listItems, selectedIndex]);
-	lastSelectedItemKey.current = selectedItemKey;
 
 	const selectedIndexRef = useRef(selectedIndex);
 	selectedIndexRef.current = selectedIndex;
 
 	useEffect(() => {
+		// Skip scrolling if the selected item hasn't actually changed. When a folder is
+		// expanded or collapsed the selected item's index may shift, but its key stays
+		// the same — in that case we don't want to scroll the view.
+		if (selectedItemKey === lastSelectedItemKey.current) {
+			return;
+		}
+		lastSelectedItemKey.current = selectedItemKey;
+
 		if (!itemListRef.current || !selectedItemKey) return;
 
 		const hasFocus = !!itemListRef.current.container.contains(document.activeElement);

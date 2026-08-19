@@ -1,8 +1,8 @@
 import { connectDb, disconnectDb, migrateLatest } from '../db';
 import * as fs from 'fs-extra';
 import { DatabaseConfig } from '../utils/types';
+import { execCommand } from '@joplin/utils';
 
-const { execCommand } = require('@joplin/tools/tool-utils');
 
 export interface CreateDbOptions {
 	dropIfExists?: boolean;
@@ -16,6 +16,7 @@ export interface DropDbOptions {
 
 const getPostgresToolPath = async (name: string) => {
 	const candidates = [
+		'/opt/homebrew/opt/postgresql@16/bin',
 		'/usr/local/opt/postgresql@16/bin',
 	];
 
@@ -47,7 +48,7 @@ export async function createDb(config: DatabaseConfig, options: CreateDbOptions 
 			await dropDb(config, { ignoreIfNotExists: true });
 		}
 
-		await execCommand(cmd.join(' '), { env: { PGPASSWORD: config.password } });
+		await execCommand(cmd, { env: { PGPASSWORD: config.password }, quiet: true });
 	} else if (config.client === 'sqlite3') {
 		const filePath = config.name;
 
@@ -86,7 +87,7 @@ export async function dropDb(config: DatabaseConfig, options: DropDbOptions = nu
 		];
 
 		try {
-			await execCommand(cmd.join(' '), { env: { PGPASSWORD: config.password } });
+			await execCommand(cmd, { env: { PGPASSWORD: config.password }, quiet: true });
 		} catch (error) {
 			if (options.ignoreIfNotExists && error.message.includes('does not exist')) return;
 			throw error;

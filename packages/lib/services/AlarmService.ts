@@ -1,17 +1,26 @@
 import Logger from '@joplin/utils/Logger';
 import Alarm from '../models/Alarm';
+import { Notification } from '../models/Alarm';
+import { NoteEntity } from './database/types';
 
 import Note from '../models/Note';
 
+export interface AlarmServiceDriver {
+	setService?(service: typeof AlarmService): void;
+	setInAppNotificationHandler?(handler: unknown): void;
+	clearNotification(id: number): Promise<void> | void;
+	scheduleNotification(notification: Notification): Promise<void> | void;
+	hasPersistentNotifications(): boolean;
+	notificationIsSet(id: number): boolean;
+}
+
 export default class AlarmService {
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private static driver_: any;
+	private static driver_: AlarmServiceDriver;
 	private static logger_: Logger;
 	// private static inAppNotificationHandler_:any;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static setDriver(v: any) {
+	public static setDriver(v: AlarmServiceDriver) {
 		this.driver_ = v;
 
 		if (this.driver_.setService) this.driver_.setService(this);
@@ -30,8 +39,7 @@ export default class AlarmService {
 		return this.logger_;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static setInAppNotificationHandler(v: any) {
+	public static setInAppNotificationHandler(v: unknown) {
 		// this.inAppNotificationHandler_ = v;
 		if (this.driver_.setInAppNotificationHandler) this.driver_.setInAppNotificationHandler(v);
 	}
@@ -48,13 +56,12 @@ export default class AlarmService {
 			this.logger().info(`Clearing notification for non-existing note. Alarm ${alarmIds[i]}`);
 			await this.driver().clearNotification(alarmIds[i]);
 		}
-		await Alarm.batchDelete(alarmIds, { sourceDescription: 'AlarmService/garbageCollect' });
+		await Alarm.batchDelete(alarmIds as unknown as string[], { sourceDescription: 'AlarmService/garbageCollect' });
 	}
 
 	// When passing a note, make sure it has all the required properties
 	// (better to pass a complete note or else just the ID)
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async updateNoteNotification(noteOrId: any, isDeleted = false) {
+	public static async updateNoteNotification(noteOrId: NoteEntity | string, isDeleted = false) {
 		try {
 			let note = null;
 			let noteId = null;
@@ -88,7 +95,7 @@ export default class AlarmService {
 				if (!driver.hasPersistentNotifications() && !driver.notificationIsSet(alarm.id)) {
 					const notification = await Alarm.makeNotification(alarm, note);
 					this.logger().info(`Scheduling (non-persistent) notification for note ${note.id}`, notification);
-					driver.scheduleNotification(notification);
+					await driver.scheduleNotification(notification);
 				}
 
 				return;

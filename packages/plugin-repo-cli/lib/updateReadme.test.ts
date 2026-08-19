@@ -1,11 +1,11 @@
 import * as fs from 'fs-extra';
 import updateReadme from './updateReadme';
+import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 
 describe('updateReadme', () => {
 
 	test('should update the README file', async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const manifests: any = {
+		const manifests: Record<string, PluginManifest> = {
 			'io.github.jackgruber.copytags': {
 				'manifest_version': 1,
 				'id': 'io.github.jackgruber.copytags',

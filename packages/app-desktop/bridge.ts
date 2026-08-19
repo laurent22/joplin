@@ -1,20 +1,20 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
-import shim from '@joplin/lib/shim';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
-import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage } from 'electron';
+import { BrowserWindow, nativeTheme, nativeImage, shell, dialog, MessageBoxSyncOptions, safeStorage, Menu, MenuItemConstructorOptions, MenuItem, BrowserWindowConstructorOptions, FileFilter, SaveDialogOptions, globalShortcut } from 'electron';
 import { dirname, toSystemSlashes } from '@joplin/lib/path-utils';
 import { fileUriToPath } from '@joplin/utils/url';
 import { urlDecode } from '@joplin/lib/string-utils';
 import * as Sentry from '@sentry/electron/main';
-import { ErrorEvent } from '@sentry/types/types';
 import { homedir } from 'os';
 import { msleep } from '@joplin/utils/time';
-import { pathExists, pathExistsSync, writeFileSync } from 'fs-extra';
-import { extname, normalize } from 'path';
+import { pathExists, pathExistsSync, writeFileSync, ensureDirSync } from 'fs-extra';
+import { extname, normalize, join } from 'path';
 import isSafeToOpen from './utils/isSafeToOpen';
 import { closeSync, openSync, readSync, statSync } from 'fs';
 import { KB } from '@joplin/utils/bytes';
 import { defaultWindowId } from '@joplin/lib/reducer';
+import { execCommand } from '@joplin/utils';
 
 interface LastSelectedPath {
 	file: string;
@@ -25,8 +25,7 @@ interface OpenDialogOptions {
 	properties?: string[];
 	defaultPath?: string;
 	createDirectory?: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	filters?: any[];
+	filters?: FileFilter[];
 }
 
 type OnAllowedExtensionsChange = (newExtensions: string[])=> void;
@@ -43,16 +42,19 @@ export class Bridge {
 	private appName_: string;
 	private appId_: string;
 	private logFilePath_ = '';
+	private altInstanceId_ = '';
 
 	private extraAllowedExtensions_: string[] = [];
 	private onAllowedExtensionsChangeListener_: OnAllowedExtensionsChange = ()=>{};
+	private registeredGlobalHotkey_ = '';
 
-	public constructor(electronWrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean) {
+	public constructor(electronWrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean, altInstanceId: string) {
 		this.electronWrapper_ = electronWrapper;
 		this.appId_ = appId;
 		this.appName_ = appName;
 		this.rootProfileDir_ = rootProfileDir;
 		this.autoUploadCrashDumps_ = autoUploadCrashDumps;
+		this.altInstanceId_ = altInstanceId;
 		this.lastSelectedPaths_ = {
 			file: null,
 			directory: null,
@@ -63,6 +65,30 @@ export class Bridge {
 
 	public setLogFilePath(v: string) {
 		this.logFilePath_ = v;
+	}
+
+	private getCrashDumpDirectory(): string {
+		try {
+			const platformName = shim.platformName();
+			switch (platformName) {
+			case 'win32':
+				// Windows: Use %LOCALAPPDATA%\CrashDumps
+				return join(process.env.LOCALAPPDATA || join(homedir(), 'AppData', 'Local'), 'CrashDumps');
+			case 'darwin':
+				// macOS: Use ~/Library/Logs/DiagnosticReports
+				return join(homedir(), 'Library', 'Logs', 'DiagnosticReports');
+			case 'linux':
+				// Linux: Use XDG_STATE_HOME (for logs) or fallback to ~/.local/state
+				return join(process.env.XDG_STATE_HOME || join(homedir(), '.local', 'state'), 'joplin');
+			default:
+				// For unknown platforms, default to the home directory
+				return homedir();
+			}
+		} catch (error) {
+			// If we can't get the platform name, fallback to the home directory
+			return homedir();
+		}
+
 	}
 
 	private sentryInit() {
@@ -98,16 +124,19 @@ export class Bridge {
 					if (logAttachment) hint.attachments = [logAttachment];
 					const date = (new Date()).toISOString().replace(/[:-]/g, '').split('.')[0];
 
-					interface ErrorEventWithLog extends ErrorEvent {
+					type ErrorEventWithLog = (typeof event) & {
 						log: string[];
-					}
+					};
 
 					const errorEventWithLog: ErrorEventWithLog = {
 						...event,
 						log: logAttachment ? logAttachment.data.trim().split('\n') : [],
 					};
 
-					writeFileSync(`${homedir()}/joplin_crash_dump_${date}.json`, JSON.stringify(errorEventWithLog, null, '\t'), 'utf-8');
+					const crashDumpDir = this.getCrashDumpDirectory();
+					ensureDirSync(crashDumpDir);
+					const crashDumpPath = join(crashDumpDir, `joplin_crash_dump_${date}.json`);
+					writeFileSync(crashDumpPath, JSON.stringify(errorEventWithLog, null, '\t'), 'utf-8');
 				} catch (error) {
 					// Ignore the error since we can't handle it here
 				}
@@ -118,6 +147,12 @@ export class Bridge {
 					return event;
 				}
 			},
+
+			integrations: [Sentry.electronMinidumpIntegration()],
+
+			// Using the default ipcMode value causes <iframe>s that use custom protocols to
+			// have isSecureOrigin: false, limiting which browser APIs are available.
+			ipcMode: Sentry.IPCMode.Classic,
 		};
 
 		if (this.autoUploadCrashDumps_) options.dsn = 'https://cceec550871b1e8a10fee4c7a28d5cf2@o4506576757522432.ingest.sentry.io/4506594281783296';
@@ -173,8 +208,53 @@ export class Bridge {
 		this.onAllowedExtensionsChangeListener_ = listener;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async captureException(error: any) {
+	public updateGlobalHotkey(accelerator: string) {
+		// Skip if the accelerator hasn't changed
+		if (accelerator === this.registeredGlobalHotkey_) return;
+
+		// Unregister the previous shortcut (only Joplin's own)
+		this.unregisterGlobalHotkey();
+
+		if (!accelerator) return;
+
+		try {
+			const registered = globalShortcut.register(accelerator, () => {
+				const win = this.mainWindow();
+				if (!win) return;
+
+				if (win.isVisible() && win.isFocused()) {
+					win.hide();
+				} else {
+					if (win.isMinimized()) win.restore();
+					win.show();
+					// eslint-disable-next-line no-restricted-properties
+					win.focus();
+				}
+			});
+
+			if (registered) {
+				this.registeredGlobalHotkey_ = accelerator;
+			} else {
+				console.warn(`Bridge: Failed to register global shortcut: ${accelerator}`);
+			}
+		} catch (error) {
+			console.error(`Bridge: Error registering global shortcut "${accelerator}":`, error);
+		}
+	}
+
+	public unregisterGlobalHotkey() {
+		if (this.registeredGlobalHotkey_) {
+			try {
+				globalShortcut.unregister(this.registeredGlobalHotkey_);
+			} catch (error) {
+
+				console.warn('Bridge: Error removing global shortcut:', error);
+			}
+			this.registeredGlobalHotkey_ = '';
+		}
+	}
+
+	public async captureException(error: unknown) {
 		Sentry.captureException(error);
 		// We wait to give the "beforeSend" event handler time to process the crash dump and write
 		// it to file.
@@ -216,6 +296,10 @@ export class Bridge {
 		return this.electronApp().electronApp().getLocale();
 	};
 
+	public altInstanceId() {
+		return this.altInstanceId_;
+	}
+
 	// Applies to electron-context-menu@3:
 	//
 	// For now we have to disable spell checking in non-editor text
@@ -232,15 +316,13 @@ export class Bridge {
 	// Perhaps the easiest would be to patch electron-context-menu to
 	// support the renderer process again. Or possibly revert to an old
 	// version of electron-context-menu.
-	// eslint-disable-next-line @typescript-eslint/ban-types -- Old code before rule was applied
-	public setupContextMenu(_spellCheckerMenuItemsHandler: Function) {
-		require('electron-context-menu')({
+	public setupContextMenu(_spellCheckerMenuItemsHandler: (misspelledWord: string, dictionarySuggestions: string[])=> void) {
+		require('./services/electron-context-menu')({
 			allWindows: [this.mainWindow()],
 
 			electronApp: this.electronApp(),
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			shouldShowMenu: (_event: any, params: any) => {
+			shouldShowMenu: (_event: unknown, params: { isEditable: boolean }) => {
 				return params.isEditable;
 			},
 
@@ -285,20 +367,19 @@ export class Bridge {
 		this.switchToWindow(defaultWindowId);
 	}
 
+	// zoom should be in the range [0..1]
+	public setZoomFactor(zoom: number) {
+		for (const window of this.electronWrapper_.allAppWindows()) {
+			window.webContents.setZoomFactor(zoom);
+		}
+	}
+
 	public showItemInFolder(fullPath: string) {
 		return require('electron').shell.showItemInFolder(toSystemSlashes(fullPath));
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public newBrowserWindow(options: any) {
+	public newBrowserWindow(options: BrowserWindowConstructorOptions) {
 		return new BrowserWindow(options);
-	}
-
-	// Note: This provides the size of the main window. Prefer CSS where possible.
-	public windowContentSize() {
-		if (!this.mainWindow()) return { width: 0, height: 0 };
-		const s = this.mainWindow().getContentSize();
-		return { width: s[0], height: s[1] };
 	}
 
 	public windowSetSize(width: number, height: number) {
@@ -314,8 +395,7 @@ export class Bridge {
 		return this.activeWindow().webContents.closeDevTools();
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public async showSaveDialog(options: any) {
+	public async showSaveDialog(options: SaveDialogOptions) {
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPaths_.file) options.defaultPath = this.lastSelectedPaths_.file;
 		const { filePath } = await dialog.showSaveDialog(this.activeWindow(), options);
@@ -327,23 +407,20 @@ export class Bridge {
 
 	public async showOpenDialog(options: OpenDialogOptions = null) {
 		if (!options) options = {};
-		let fileType = 'file';
+		let fileType: keyof LastSelectedPath = 'file';
 		if (options.properties && options.properties.includes('openDirectory')) fileType = 'directory';
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (!('defaultPath' in options) && (this.lastSelectedPaths_ as any)[fileType]) options.defaultPath = (this.lastSelectedPaths_ as any)[fileType];
+		if (!('defaultPath' in options) && this.lastSelectedPaths_[fileType]) options.defaultPath = this.lastSelectedPaths_[fileType];
 		if (!('createDirectory' in options)) options.createDirectory = true;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- App-internal OpenDialogOptions.properties is string[]; Electron's is a stricter union
 		const { filePaths } = await dialog.showOpenDialog(this.activeWindow(), options as any);
 		if (filePaths && filePaths.length) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-			(this.lastSelectedPaths_ as any)[fileType] = dirname(filePaths[0]);
+			this.lastSelectedPaths_[fileType] = dirname(filePaths[0]);
 		}
 		return filePaths;
 	}
 
 	// Don't use this directly - call one of the showXxxxxxxMessageBox() instead
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	private showMessageBox_(window: any, options: MessageDialogOptions): number {
+	private showMessageBox_(window: BrowserWindow, options: MessageDialogOptions): number {
 		if (!window) window = this.activeWindow();
 		return dialog.showMessageBoxSync(window, { message: '', ...options });
 	}
@@ -377,15 +454,19 @@ export class Bridge {
 
 	/* returns the index of the clicked button */
 	public showMessageBox(message: string, options: MessageDialogOptions = {}) {
+		const defaultButtons = [_('OK')];
+		if (options.type !== MessageBoxType.Error && options.type !== MessageBoxType.Info) {
+			defaultButtons.push(_('Cancel'));
+		}
+
 		const result = this.showMessageBox_(this.activeWindow(), { type: 'question',
 			message: message,
-			buttons: [_('OK'), _('Cancel')], ...options });
+			buttons: defaultButtons, ...options });
 
 		return result;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public showInfoMessageBox(message: string, options: any = {}) {
+	public showInfoMessageBox(message: string, options: MessageDialogOptions = {}) {
 		const result = this.showMessageBox_(this.activeWindow(), { type: 'info',
 			message: message,
 			buttons: [_('OK')], ...options });
@@ -396,12 +477,16 @@ export class Bridge {
 		setLocale(locale);
 	}
 
+	public setEnableUnresponsiveCheck(enabled: boolean) {
+		this.electronWrapper_.setEnableUnresponsiveCheck(enabled);
+	}
+
 	public get Menu() {
-		return require('electron').Menu;
+		return Menu;
 	}
 
 	public get MenuItem() {
-		return require('electron').MenuItem;
+		return MenuItem;
 	}
 
 	public async openExternal(url: string) {
@@ -477,7 +562,58 @@ export class Bridge {
 		}
 	}
 
-	public restart(linuxSafeRestart = true) {
+	public appLaunchCommand(env: string, altInstanceId = '') {
+		const altInstanceArgs = altInstanceId ? ['--alt-instance-id', altInstanceId] : [];
+
+		if (env === 'dev') {
+			// This is convenient to quickly test on dev, but the path needs to be adjusted
+			// depending on how things are setup.
+
+			return {
+				execPath: `${homedir()}/.npm-global/bin/electron`,
+				args: [
+					`${homedir()}/src/joplin/packages/app-desktop`,
+					'--env', 'dev',
+					'--log-level', 'debug',
+					'--open-dev-tools',
+					'--no-welcome',
+				].concat(altInstanceArgs),
+			};
+		} else {
+			return {
+				execPath: bridge().electronApp().electronApp().getPath('exe'),
+				args: [].concat(altInstanceArgs),
+			};
+		}
+	}
+
+	private async launchAppInstanceById(env: string, altInstanceId: string) {
+		if (this.electronApp().ipcServerStarted()) {
+			const cmd = this.appLaunchCommand(env, altInstanceId);
+			await execCommand([cmd.execPath].concat(cmd.args), { detached: true });
+		} else {
+			const buttonIndex = this.showErrorMessageBox('Cannot launch another instance because IPC server could not start.', {
+				buttons: [
+					_('OK'),
+					_('Open log'),
+				],
+			});
+
+			if (buttonIndex === 1) {
+				void this.openItem(this.electronApp().mainProcessLogFilePath());
+			}
+		}
+	}
+
+	public async launchAltAppInstance(env: string) {
+		await this.launchAppInstanceById(env, 'alt1');
+	}
+
+	public async launchMainAppInstance(env: string) {
+		await this.launchAppInstanceById(env, '');
+	}
+
+	public async restart() {
 		// Note that in this case we are not sending the "appClose" event
 		// to notify services and component that the app is about to close
 		// but for the current use-case it's not really needed.
@@ -488,17 +624,53 @@ export class Bridge {
 				execPath: process.env.PORTABLE_EXECUTABLE_FILE,
 			};
 			app.relaunch(options);
-		} else if (shim.isLinux() && linuxSafeRestart) {
-			this.showInfoMessageBox(_('The app is now going to close. Please relaunch it to complete the process.'));
+		} else if (process.env.APPIMAGE && !this.altInstanceId_) {
+			app.relaunch({
+				execPath: process.env.APPIMAGE,
+				args: ['--appimage-extract-and-run'],
+			});
+		} else if (this.altInstanceId_) {
+			// Couldn't get it to work using relaunch() - it would just "close" the app, but it
+			// would still be open in the tray except unusable. Or maybe it reopens it quickly but
+			// in a broken state. It might be due to the way it is launched from the main instance.
+			// So here we ask the main instance to relaunch this app after a short delay.
+
+			const responses = await this.electronApp().sendCrossAppIpcMessage({
+				action: 'restartAltInstance',
+				data: null,
+			});
+
+			// However is the main instance is not running, we're stuck, so the user needs to
+			// manually restart. `relaunch()` doesn't appear to work even when the main instance is
+			// not running.
+			const r = responses.find(r => !!r.response);
+
+			if (!r || !r.response) {
+				this.showInfoMessageBox(_('The app is now going to close. Please relaunch it to complete the process.'));
+
+				// Note: this should work, but doesn't:
+
+				// const cmd = this.appLaunchCommand(this.env(), this.altInstanceId_);
+
+				// app.relaunch({
+				// 	execPath: cmd.execPath,
+				// 	args: cmd.args,
+				// });
+			}
 		} else {
 			app.relaunch();
 		}
 
-		app.exit();
+		this.electronApp().exit();
 	}
 
 	public createImageFromPath(path: string) {
 		return nativeImage.createFromPath(path);
+	}
+
+	public menuPopupFromTemplate(template: ((MenuItemConstructorOptions) | (MenuItem))[]) {
+		const menu = Menu.buildFromTemplate(template);
+		return menu.popup({ window: this.mainWindow() });
 	}
 
 	public safeStorage = {
@@ -520,9 +692,9 @@ export class Bridge {
 
 let bridge_: Bridge = null;
 
-export function initBridge(wrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean) {
+export function initBridge(wrapper: ElectronAppWrapper, appId: string, appName: string, rootProfileDir: string, autoUploadCrashDumps: boolean, altInstanceId: string) {
 	if (bridge_) throw new Error('Bridge already initialized');
-	bridge_ = new Bridge(wrapper, appId, appName, rootProfileDir, autoUploadCrashDumps);
+	bridge_ = new Bridge(wrapper, appId, appName, rootProfileDir, autoUploadCrashDumps, altInstanceId);
 	return bridge_;
 }
 

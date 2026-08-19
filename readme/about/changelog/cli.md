@@ -1,5 +1,131 @@
 # Joplin Terminal App Changelog
 
+## [cli-v3.6.2](https://github.com/laurent22/joplin/releases/tag/cli-v3.6.2) - 2026-05-08T16:56:16Z
+
+- New: Add `clear` command to clear console output (#14844 by [@querysmith-sys](https://github.com/querysmith-sys))
+- New: Add more error information when the profile is corrupted (f075b56)
+- New: Add support for FrontMatter block rendering in notes (#14256)
+- New: Add support for external embeds, eg. YouTube videos (#14012)
+- New: Added keymap command to print existing keybinds in CLI and TUI (#13984 by Alejandro Saucedo)
+- Improved: Allow using share permission with Joplin Server Business (f340960)
+- Improved: Ensure that sync process ends up properly when Joplin Server shares cannot be accessed (42d8df3)
+- Improved: Improve Fountain notes exported as PDF (#14120) (#14106)
+- Improved: Move editor settings to dedicated editor section (#14403) (#13216 by [@kanishka0411](https://github.com/kanishka0411))
+- Improved: Open the connection screen when a SAML session has expired (fc0014c)
+- Improved: Store note history settings in sync info (#14449) (#14336 by Yugal Kaushik)
+- Improved: Sync: Make resource processing in read-only shares more reliable (#14204 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Updated packages @adobe/css-tools (v4.4.4), @rollup/plugin-commonjs (v28.0.9), @rollup/plugin-node-resolve (v16.0.3), @rollup/plugin-replace (v6.0.3), dayjs (v1.11.19), follow-redirects (v1.15.11), form-data (v4.0.5), fs-extra (v11.3.3), glob (v11.1.0), katex (v0.16.23), mermaid (v11.9.0), react (v19.1.5), sass (v1.95.1), sharp (v0.34.5), style-to-js (v1.1.21), turndown (v7.2.2)
+- Improved: Upgrade tar to v7.5.7 (#14313 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Added validation for Joplin Server URL protocol (#14612) (#14419 by [@Ash092016](https://github.com/Ash092016))
+- Fixed: Application crashes when profile database has been analyzed (#14144)
+- Fixed: Change default content-type for Webdav connector to application/octet-stream (#13053) (#12249 by pedr)
+- Fixed: Fix "cannot add an item as a child of a read-only item" error when updating share IDs (#13523) (#13522 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix ++insert++ syntax rendering fix in markdown (#14547) (#14543 by [@justin212407](https://github.com/justin212407))
+- Fixed: Fix changes made in an external editor are sometimes ignored (#14957) (#14954 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix help text for `unpublish` command (#14293 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix issue with shared notebooks and SAML sync (9f36b44)
+- Fixed: Fix missing conflict scenario (#13624) (#13611 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix null crash in e2ee decrypt command (#14461) (#13158 by Sriram Varun Kumar)
+- Fixed: Fix startup failure (#13749 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix status 400 error on Tomcat WebDAV servers (#14332 by [@horvatkm](https://github.com/horvatkm))
+- Fixed: Fix text highlighting in basic search mode (#13703 by Self Not Found)
+- Fixed: Fix trailing spaces in ls -l output (#14559 by Sriram Varun Kumar)
+- Fixed: Fix unexpected conflicts created during sync (#14453 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix unexpected conflicts sometimes created after a full sync (#14388) (#14383 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Handle missing script assets in HTML export (#14442) (#12545 by [@kanishka0411](https://github.com/kanishka0411))
+- Fixed: Import Error: Note date incorrect when import notes with import MD - Markdown + Front Matter (#12770)
+- Fixed: Importing MD + frontmatter fails on empty variable (#13008)
+- Fixed: Improve performance of item deserialization (#13585) (#13291 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Markdown import incorrectly parses a link as a file path (#12172)
+- Fixed: Prevent duplicate tags caused by Unicode normalization (#14599) (#14540 by [@itisrohit](https://github.com/itisrohit))
+- Fixed: Remove empty hidden divs from ENEX imports (#14411) (#14139 by Yugal Kaushik)
+- Fixed: Skip share consistency check when not using Joplin Server/Cloud (#14649) (#14412 by [@Ahmed-Idani](https://github.com/Ahmed-Idani))
+- Fixed: Support include_deleted parameter for GET /folders endpoint (#14421) (#14335 by Sriram Varun Kumar)
+- Fixed: Sync: Fix notebook sharing can fail due to incorrect read-only share state (#14770 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Treat unclosed quotes as fully quoted search terms, to prevent malformed match expression error (#13564) (#13319 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Unlinked resource deletion: Fix resources attached only via reference links are auto-deleted (#14178 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: When cleaning old revisions, ensure revisions are merged for all revision branches (#13795) (#13782 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: When creating a conflict, ensure the latest note contents are used to create the conflict (#13552) (#13531 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: YouTube videos are displayed inline too (#14370) (#14352)
+
+## [cli-v3.5.1](https://github.com/laurent22/joplin/releases/tag/cli-v3.5.1) - 2025-10-18T09:11:42Z
+
+- Improved: Avoid excessive data usage when automatically triggering another sync (#13261 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Correctly import Evernote resources that do not have the encoding specified (3097c3e)
+- Improved: Delete all note revisions when the note is permanently deleted (#12609) (#8718 by [@pedr](https://github.com/pedr))
+- Improved: Remove Beta mention for Joplin Server (#13367)
+- Improved: Support accepting shares with a new key format (#12829 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update translations (5f66c51 by Helmut K. C. Tessarek)
+- Improved: Updated packages @rollup/plugin-commonjs (v28.0.6), form-data (v4.0.4), glob (v11.0.3), sass (v1.93.0), sharp (v0.34.3), style-to-js (v1.1.17)
+- Fixed: Ensure notebook conflicts do not delete child notes and notebooks when resolved (#13167) (#11902 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Ensure the sync shows an error when the server is down, when using a local WebDAV server (#13301 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix "use" command when not in TUI mode (#13091) (#13086 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix last change sometimes lost when not in TUI mode (#13090 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix notes are moved to the conflict folder when a folder is unshared (#12993 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fixed importing certain Evernote images that have invalid dimension attributes (#13472)
+- Fixed: Implement the config check for Joplin Server with SAML enabled (#13360) (#13328 by [@ttcchhmm](https://github.com/ttcchhmm))
+- Fixed: Prevent Joplin from missing changes when syncing with file system or WebDAV (#13054) (#6517 by [@mrjo118](https://github.com/mrjo118))
+
+## [cli-v3.4.1](https://github.com/laurent22/joplin/releases/tag/cli-v3.4.1) - 2025-08-27T06:48:52Z
+
+- New: Add Joplin Server SAML support (#11865 by [@ttcchhmm](https://github.com/ttcchhmm))
+- New: Add collapsible notebooks functionality (#12718 by [@miguelammatos](https://github.com/miguelammatos))
+- New: Add commands for publishing and unpublishing notes with Joplin Server (#13060 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Add information about failing tests of OneNote importer inside test names  (#12159) (#12157 by [@pedr](https://github.com/pedr))
+- Improved: Falls back to filename for the title when importing Markdown files with FrontMatter (#12698 by [@khemarato](https://github.com/khemarato))
+- Improved: If no notebook is provided when importing a file, use the default one (30000c3)
+- Improved: Refresh shares when running the sync command (#12667 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Set new encryption methods as default (#12229 by Self Not Found)
+- Improved: Support managing shared notebooks (#12637 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Update translations (9f649c9 by Helmut K. C. Tessarek)
+- Improved: Updated packages @adobe/css-tools (v4.4.3), @rollup/plugin-commonjs (v28.0.3), @rollup/plugin-node-resolve (v16.0.1), @rollup/plugin-replace (v6.0.2), dayjs (v1.11.13), domutils (v3.2.2), form-data (v4.0.2), glob (v11.0.2), highlight.js (v11.11.1), jsdom (v26.1.0), katex (v0.16.22), license-checker-rseidelsohn (v4.4.2), mermaid (v11.6.0), nanoid (v3.3.9), node (v18.20.7), react, sass (v1.87.0), sharp (v0.34.2), standard (v17.1.2), style-to-js (v1.1.16), terminal-kit (v3.1.2), tesseract.js (v5.1.1), uuid (v11.1.0)
+- Fixed: Fix Yinxiang HTML imported notes being enclosed by a open anchor tag (#12395) (#12363 by [@pedr](https://github.com/pedr))
+- Fixed: Fix data API failure when including both conflicts and deleted notes in results (#12650 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix unshare action requires two syncs to be reflected locally (#12999) (#12648 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Moving sub-notebook of shared notebook should unshare it (#12647) (#12089)
+- Fixed: Shared folders: Fix moving shared subfolder to top-level briefly marks it as a top-level share (#12964 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [cli-v3.3.1](https://github.com/laurent22/joplin/releases/tag/cli-v3.3.1) - 2025-05-01T21:18:35Z
+
+- New: Add plural forms for notes, users, hours, minutes, days (#12171 by [@SilverGreen93](https://github.com/SilverGreen93))
+- New: Add setting migration for ocr.enabled (ab86b95)
+- Improved: Logging: Log less information at level `warn` when a decryption error occurs (#11771 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Move S3 sync target out of beta (798e1b8)
+- Improved: Updated packages @adobe/css-tools (v4.4.1)
+- Fixed: Adjust how items are queried by ID (#11734) (#11630 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Restoring a note which was in a deleted notebook  (#12016) (#11934)
+
+## [cli-v3.2.3](https://github.com/laurent22/joplin/releases/tag/cli-v3.2.3) - 2025-01-16T01:14:35Z
+
+- Improved: Updated packages @rollup/plugin-node-resolve (v15.2.4), adm-zip (v0.5.16)
+- Fixed: Revert deprecation warning suppression (#11620) (#11577 by [@pedr](https://github.com/pedr))
+
+## [cli-v3.2.2](https://github.com/laurent22/joplin/releases/tag/cli-v3.2.2) - 2024-12-12T15:44:50Z
+
+- Improved: Make Sharp package optional (388d124)
+
+## [cli-v3.2.1](https://github.com/laurent22/joplin/releases/tag/cli-v3.2.1) - 2024-12-12T14:16:34Z
+
+- New: Add new encryption methods based on native crypto libraries (#10696 by Self Not Found)
+- Improved: Added feature flag to disable sync lock support (#10925) (#10407)
+- Improved: Deprecated OneDrive sync method (e36f377)
+- Improved: Make feature flags advanced settings by default (700ffa2)
+- Improved: Mermaid version update (#11367 by [@LEVIII007](https://github.com/LEVIII007))
+- Improved: Prevent PDF and HTML export from failing when a plugin references a non-existent file (d1fc69f)
+- Improved: Reactivate pCloud synchronisation (23032b9)
+- Improved: Remove the need for sync locks (#11377)
+- Improved: Removed deprecation notice on OneDrive sync method (ceea0bc)
+- Improved: Set min version for synchronising to 3.0.0 (a1f9c9c)
+- Improved: Updated packages @adobe/css-tools (v4.4.0), @rollup/plugin-commonjs (v25.0.8), @rollup/plugin-replace (v5.0.7), async-mutex (v0.5.0), compare-versions (v6.1.1), dayjs (v1.11.12), glob (v10.4.5), highlight.js (v11.10.0), jsdom (v24.1.1), katex (v0.16.11), markdown-it-ins (v4), markdown-it-sup (v2), react, sass (v1.77.8), sharp (v0.33.4), style-to-js (v1.1.12), tar (v6.2.1), terminal-kit (v3.1.1), tesseract.js (v5.1.0), turndown (v7.2.0)
+- Fixed: Change Resource filetype detecting strategy (#10907) (#10653 by [@pedr](https://github.com/pedr))
+- Fixed: Decrypt master keys only as needed (#10990) (#10856 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Delete revisions on the sync target when deleted locally (#11035) (#11017 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Disable deprecation warning when running Joplin from CLI (#11074) (#10992 by [@pedr](https://github.com/pedr))
+- Fixed: Fix "Enable auto-updates" enabled by default and visible on unsupported platforms (#10897) (#10896 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix `undefined` errors in translations (#11407 by Self Not Found)
+- Fixed: Fix the error caused by undefined isCodeBlock_ (turndown-plugin-gfm) (#11471 by Manabu Nakazawa)
+- Fixed: WebDAV synchronisation not working because of URL encoding differences (#11076) (#10608 by [@pedr](https://github.com/pedr))
+
 ## [cli-v3.0.1](https://github.com/laurent22/joplin/releases/tag/cli-v3.0.1) - 2024-07-02T18:42:44Z
 
 - Improved: Add trash folder (#9671) (#483)

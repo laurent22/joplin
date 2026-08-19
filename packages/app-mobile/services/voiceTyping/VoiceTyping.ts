@@ -1,7 +1,7 @@
 import shim from '@joplin/lib/shim';
 import Logger from '@joplin/utils/Logger';
 import { PermissionsAndroid, Platform } from 'react-native';
-import { unzip } from 'react-native-zip-archive';
+import unzip from './utils/unzip';
 const md5 = require('md5');
 
 const logger = Logger.create('voiceTyping');
@@ -18,6 +18,7 @@ export interface SpeechToTextCallbacks {
 export interface VoiceTypingSession {
 	start(): Promise<void>;
 	stop(): Promise<void>;
+	cancel(): Promise<void>;
 }
 
 export interface BuildProviderOptions {
@@ -30,6 +31,7 @@ export interface VoiceTypingProvider {
 	modelName: string;
 	supported(): boolean;
 	modelLocalFilepath(locale: string): string;
+	deleteCachedModels(locale: string): Promise<void>;
 	getDownloadUrl(locale: string): string;
 	getUuidPath(locale: string): string;
 	build(options: BuildProviderOptions): Promise<VoiceTypingSession>;
@@ -37,15 +39,17 @@ export interface VoiceTypingProvider {
 
 export default class VoiceTyping {
 	private provider: VoiceTypingProvider|null = null;
-	public constructor(
-		private locale: string,
-		providers: VoiceTypingProvider[],
-	) {
-		this.provider = providers.find(p => p.supported()) ?? null;
+	public constructor(private locale: string) {
+		this.provider = VoiceTyping.providers_.find(p => p.supported()) ?? null;
 	}
 
-	public supported() {
-		return this.provider !== null;
+	private static providers_: VoiceTypingProvider[] = [];
+	public static initialize(providers: VoiceTypingProvider[]) {
+		this.providers_ = providers;
+	}
+
+	public static supported() {
+		return this.providers_.some(p => p.supported());
 	}
 
 	private getModelPath() {
@@ -67,8 +71,24 @@ export default class VoiceTyping {
 		);
 	}
 
+	public async isDownloadedFromOutdatedUrl() {
+		const uuidPath = this.getUuidPath();
+		if (!await shim.fsDriver().exists(uuidPath)) {
+			// Not downloaded at all
+			return false;
+		}
+
+		const modelUrl = this.provider.getDownloadUrl(this.locale);
+		const urlHash = await shim.fsDriver().readFile(uuidPath);
+		return urlHash.trim() !== md5(modelUrl);
+	}
+
 	public async isDownloaded() {
 		return await shim.fsDriver().exists(this.getUuidPath());
+	}
+
+	public async clearDownloads() {
+		await this.provider.deleteCachedModels(this.locale);
 	}
 
 	public async download() {
@@ -104,15 +124,17 @@ export default class VoiceTyping {
 
 				logger.info(`Moving ${fullUnzipPath} => ${modelPath}`);
 				await shim.fsDriver().move(fullUnzipPath, modelPath);
-
-				await shim.fsDriver().writeFile(this.getUuidPath(), md5(modelUrl), 'utf8');
-				if (!await this.isDownloaded()) {
-					logger.warn('Model should be downloaded!');
-				}
 			} finally {
 				await shim.fsDriver().remove(unzipDir);
 				await shim.fsDriver().remove(downloadPath);
 			}
+		}
+
+		await shim.fsDriver().writeFile(this.getUuidPath(), md5(modelUrl), 'utf8');
+		if (!await this.isDownloaded()) {
+			logger.warn('Model should be downloaded!');
+		} else {
+			logger.info('Model stats', await shim.fsDriver().stat(modelPath));
 		}
 	}
 

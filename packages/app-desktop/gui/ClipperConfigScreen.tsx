@@ -1,7 +1,7 @@
-const React = require('react');
+import * as React from 'react';
 import { CSSProperties } from 'react';
-const { connect } = require('react-redux');
-const { clipboard } = require('electron');
+import { connect } from 'react-redux';
+import { clipboard } from 'electron';
 import ExtensionBadge from './ExtensionBadge';
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
@@ -9,10 +9,18 @@ import ClipperServer from '@joplin/lib/ClipperServer';
 import Setting from '@joplin/lib/models/Setting';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { AppState } from '../app.reducer';
+import shim, { MessageBoxType } from '@joplin/lib/shim';
 
-class ClipperConfigScreenComponent extends React.Component {
-	public constructor() {
-		super();
+interface Props {
+	themeId: number;
+	apiToken: string;
+	clipperServer: AppState['clipperServer'];
+	clipperServerAutoStart: boolean;
+}
+
+class ClipperConfigScreenComponent extends React.Component<Props> {
+	public constructor(props: Props) {
+		super(props);
 
 		this.copyToken_click = this.copyToken_click.bind(this);
 	}
@@ -23,6 +31,7 @@ class ClipperConfigScreenComponent extends React.Component {
 	}
 
 	private enableClipperServer_click() {
+		if (!ClipperServer.instance().enabled()) return;
 		Setting.setValue('clipperServer.autoStart', true);
 		void ClipperServer.instance().start();
 	}
@@ -30,11 +39,11 @@ class ClipperConfigScreenComponent extends React.Component {
 	private copyToken_click() {
 		clipboard.writeText(this.props.apiToken);
 
-		alert(_('Token has been copied to the clipboard!'));
+		void shim.showMessageBox(_('Token has been copied to the clipboard!'), { type: MessageBoxType.Info });
 	}
 
-	private renewToken_click() {
-		if (confirm(_('Are you sure you want to renew the authorisation token?'))) {
+	private async renewToken_click() {
+		if (await shim.showConfirmationDialog(_('Are you sure you want to renew the authorisation token?'))) {
 			void EncryptionService.instance()
 				.generateApiToken()
 			// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
@@ -69,6 +78,8 @@ class ClipperConfigScreenComponent extends React.Component {
 
 		const webClipperStatusComps = [];
 
+		const clipperEnabled = ClipperServer.instance().enabled();
+
 		if (this.props.clipperServerAutoStart) {
 			webClipperStatusComps.push(
 				<p key="text_1" style={theme.textStyle}>
@@ -94,13 +105,22 @@ class ClipperConfigScreenComponent extends React.Component {
 				</button>,
 			);
 		} else {
+			if (!clipperEnabled) {
+				webClipperStatusComps.push(
+					<p key="text_4" style={theme.textStyle}>
+						{_('The web clipper service cannot be enabled in this instance of Joplin.')}
+					</p>,
+				);
+			} else {
+				webClipperStatusComps.push(
+					<p key="text_4" style={theme.textStyle}>
+						{_('The web clipper service is not enabled.')}
+					</p>,
+				);
+			}
+
 			webClipperStatusComps.push(
-				<p key="text_4" style={theme.textStyle}>
-					{_('The web clipper service is not enabled.')}
-				</p>,
-			);
-			webClipperStatusComps.push(
-				<button key="enable_button" style={buttonStyle} onClick={this.enableClipperServer_click}>
+				<button key="enable_button" style={buttonStyle} onClick={this.enableClipperServer_click} disabled={!clipperEnabled}>
 					{_('Enable Web Clipper Service')}
 				</button>,
 			);

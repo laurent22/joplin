@@ -2,14 +2,15 @@ import Logger from '@joplin/utils/Logger';
 import { FileApi } from '../../file-api';
 import JoplinDatabase from '../../JoplinDatabase';
 import Setting from '../../models/Setting';
+import BaseItem from '../../models/BaseItem';
 import { State } from '../../reducer';
-import { PublicPrivateKeyPair } from '../e2ee/ppk';
+import { PublicPrivateKeyPair } from '../e2ee/ppk/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 import { compareVersions } from 'compare-versions';
 import { _ } from '../../locale';
 import JoplinError from '../../JoplinError';
 import { ErrorCode } from '../../errors';
-const fastDeepEqual = require('fast-deep-equal');
+import fastDeepEqual = require('fast-deep-equal');
 
 const logger = Logger.create('syncInfoUtils');
 
@@ -20,6 +21,11 @@ export interface SyncInfoValueBoolean {
 
 export interface SyncInfoValueString {
 	value: string;
+	updatedTime: number;
+}
+
+export interface SyncInfoValueInt {
+	value: number;
 	updatedTime: number;
 }
 
@@ -37,11 +43,28 @@ export interface SyncInfoValuePublicPrivateKeyPair {
 //
 // `appMinVersion_` should really just be a constant but for testing purposes it can be changed
 // using `setAppMinVersion()`
-let appMinVersion_ = '3.0.0';
+let appMinVersion_ = '3.7.0';
 
 export const setAppMinVersion = (v: string) => {
 	appMinVersion_ = v;
 };
+
+export function onRevisionServiceSettingsChanged(key: string, value: unknown) {
+	if (key !== 'revisionService.enabled' && key !== 'revisionService.ttlDays') return;
+	const s = localSyncInfo();
+	let changed = false;
+	if (key === 'revisionService.enabled' && s.revisionServiceEnabled !== value) {
+		if (typeof value !== 'boolean') return;
+		s.revisionServiceEnabled = value;
+		changed = true;
+	}
+	if (key === 'revisionService.ttlDays' && s.revisionServiceTtlDays !== value) {
+		if (typeof value !== 'number') return;
+		s.revisionServiceTtlDays = value;
+		changed = true;
+	}
+	if (changed) saveLocalSyncInfo(s);
+}
 
 export async function migrateLocalSyncInfo(db: JoplinDatabase) {
 	if (Setting.value('syncInfoCache')) return; // Already initialized
@@ -49,10 +72,9 @@ export async function migrateLocalSyncInfo(db: JoplinDatabase) {
 	// TODO: if the sync info is changed, there should be steps to migrate from
 	// v3 to v4, v4 to v5, etc.
 
-	const masterKeys = await db.selectAll('SELECT * FROM master_keys');
+	const masterKeys: MasterKeyEntity[] = await db.selectAll('SELECT * FROM master_keys');
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	const masterKeyMap: Record<string, any> = {};
+	const masterKeyMap: Record<string, MasterKeyEntity> = {};
 	for (const mk of masterKeys) masterKeyMap[mk.id] = mk;
 
 	const syncInfo = new SyncInfo();
@@ -75,6 +97,16 @@ export async function migrateLocalSyncInfo(db: JoplinDatabase) {
 	syncInfo.setKeyTimestamp('e2ee', 0);
 	syncInfo.setKeyTimestamp('activeMasterKeyId', 0);
 
+	// For revisionService.*: stamp the timestamp only when the local value
+	// has been customised. A default value uploaded with a real timestamp
+	// would overwrite another client's customised value on first sync.
+	const localRevisionEnabled = Setting.value('revisionService.enabled');
+	const localRevisionTtlDays = Setting.value('revisionService.ttlDays');
+	syncInfo.revisionServiceEnabled = localRevisionEnabled;
+	syncInfo.revisionServiceTtlDays = localRevisionTtlDays;
+	syncInfo.setKeyTimestamp('revisionServiceEnabled', localRevisionEnabled === Setting.settingMetadata('revisionService.enabled').value ? 0 : Date.now());
+	syncInfo.setKeyTimestamp('revisionServiceTtlDays', localRevisionTtlDays === Setting.settingMetadata('revisionService.ttlDays').value ? 0 : Date.now());
+
 	await saveLocalSyncInfo(syncInfo);
 }
 
@@ -86,8 +118,7 @@ export async function fetchSyncInfo(api: FileApi): Promise<SyncInfo> {
 	const syncTargetInfoText = await api.get('info.json');
 
 	// Returns version 0 if the sync target is empty
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	let output: any = { version: 0 };
+	let output: { version: number; [key: string]: unknown } = { version: 0 };
 
 	if (syncTargetInfoText) {
 		output = JSON.parse(syncTargetInfoText);
@@ -96,10 +127,42 @@ export async function fetchSyncInfo(api: FileApi): Promise<SyncInfo> {
 		// If info.json is not present, this might be an old sync target, in
 		// which case we can at least get the version number from version.txt
 		const oldVersion = await api.get('.sync/version.txt');
-		if (oldVersion) output = { version: 1 };
+
+		// Where info.json is missing, but .sync/version.txt is not, the sync target will be set as needing upgrade, and will be upgraded upon restarting the app
+		// If both info.json and .sync/version.txt are missing, it can be assumed that something has gone wrong with the sync target, so do not mark as needing upgrade and raise a failsafe error if not the initial sync
+		// When performing 'Delete local data and re-download from sync target' or 'Re-upload local data to sync target' actions, all sync_items are cleared down as if it were the initial sync
+		if (oldVersion) {
+			output = { version: 1 };
+		} else if (!(await isInitialSync(api.syncTargetId()))) {
+			throwFailsafeError();
+		}
 	}
 
 	return fixSyncInfo(new SyncInfo(JSON.stringify(output)));
+}
+
+export async function checkSyncTargetIsValid(api: FileApi): Promise<void> {
+	const syncTargetInfoText = await api.get('info.json');
+
+	if (!syncTargetInfoText) {
+		throwFailsafeError();
+	}
+}
+
+async function isInitialSync(syncTargetId: number) {
+	const syncedItems = await BaseItem.syncedItemIds(syncTargetId);
+	return syncedItems.length === 0;
+}
+
+// This failsafe validation producing this error will be performed regardless of which sync target is selected
+// Other failsafe validation is performed based on the percentage of items deleted in the "basicDelta" function
+// The basicDelta is not executed for all sync target types, but the validation in this function is superior at protecting against data loss
+// However it is still beneficial to keep the failsafe check which is driven by count of deleted items in place, as it can protect against deliberate deletion of all notes by the user,
+// where they are not aware of the implications of 2 way sync. This is just "nice to have" though, so would not be worth adding complexity to make it work for all sync target types
+function throwFailsafeError() {
+	if (Setting.value('sync.wipeOutFailSafe')) {
+		throw new JoplinError(_('Fail-safe: Sync was interrupted to prevent data loss, because the sync target is empty or damaged. To override this behaviour disable the fail-safe in the sync settings.'), 'failSafe');
+	}
 }
 
 export function saveLocalSyncInfo(syncInfo: SyncInfo) {
@@ -186,6 +249,8 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 
 	output.setWithTimestamp(s1.keyTimestamp('e2ee') > s2.keyTimestamp('e2ee') ? s1 : s2, 'e2ee');
 	output.setWithTimestamp(s1.keyTimestamp('ppk') > s2.keyTimestamp('ppk') ? s1 : s2, 'ppk');
+	output.setWithTimestamp(s1.keyTimestamp('revisionServiceEnabled') > s2.keyTimestamp('revisionServiceEnabled') ? s1 : s2, 'revisionServiceEnabled');
+	output.setWithTimestamp(s1.keyTimestamp('revisionServiceTtlDays') > s2.keyTimestamp('revisionServiceTtlDays') ? s1 : s2, 'revisionServiceTtlDays');
 	output.version = s1.version > s2.version ? s1.version : s2.version;
 
 	mergeActiveMasterKeys(s1, s2, output);
@@ -200,6 +265,16 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 			const mk2 = output.masterKeys[idx];
 			output.masterKeys[idx] = mk.updated_time > mk2.updated_time ? mk : mk2;
 		}
+	}
+
+	const noteLockKey1 = s1.noteLockKey;
+	const noteLockKey2 = s2.noteLockKey;
+	if (!noteLockKey1) {
+		output.noteLockKey = noteLockKey2;
+	} else if (!noteLockKey2) {
+		output.noteLockKey = noteLockKey1;
+	} else {
+		output.noteLockKey = (noteLockKey1.updated_time || 0) >= (noteLockKey2.updated_time || 0) ? noteLockKey1 : noteLockKey2;
 	}
 
 	// We use >= so that the version from s1 (local) is preferred to the version in s2 (remote).
@@ -220,26 +295,33 @@ export class SyncInfo {
 	private e2ee_: SyncInfoValueBoolean;
 	private activeMasterKeyId_: SyncInfoValueString;
 	private masterKeys_: MasterKeyEntity[] = [];
+	private noteLockKey_: MasterKeyEntity = null;
 	private ppk_: SyncInfoValuePublicPrivateKeyPair;
 	private appMinVersion_: string = appMinVersion_;
+	private revisionServiceEnabled_: SyncInfoValueBoolean;
+	private revisionServiceTtlDays_: SyncInfoValueInt;
 
 	public constructor(serialized: string = null) {
 		this.e2ee_ = { value: false, updatedTime: 0 };
 		this.activeMasterKeyId_ = { value: '', updatedTime: 0 };
 		this.ppk_ = { value: null, updatedTime: 0 };
+		this.revisionServiceEnabled_ = { value: true, updatedTime: 0 };
+		this.revisionServiceTtlDays_ = { value: 90, updatedTime: 0 };
 
 		if (serialized) this.load(serialized);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public toObject(): any {
+	public toObject() {
 		return {
 			version: this.version,
 			e2ee: this.e2ee_,
 			activeMasterKeyId: this.activeMasterKeyId_,
 			masterKeys: this.masterKeys,
+			noteLockKey: this.noteLockKey,
 			ppk: this.ppk_,
 			appMinVersion: this.appMinVersion,
+			revisionServiceEnabled: this.revisionServiceEnabled_,
+			revisionServiceTtlDays: this.revisionServiceTtlDays_,
 		};
 	}
 
@@ -253,6 +335,11 @@ export class SyncInfo {
 				delete mk.checksum;
 				return mk;
 			});
+		}
+
+		if (filtered.noteLockKey) {
+			delete filtered.noteLockKey.content;
+			delete filtered.noteLockKey.checksum;
 		}
 
 		// Truncate the private key and public key
@@ -269,7 +356,7 @@ export class SyncInfo {
 
 	public load(serialized: string) {
 		// We probably should add validation after parsing at some point, but for now we are going to keep it simple
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Parsed JSON shape varies by sync target version (v0/v1/v2/v3 migrations); fields are validated per-field below via 'in' checks
 		let s: any = {};
 		try {
 			s = JSON.parse(serialized);
@@ -280,8 +367,11 @@ export class SyncInfo {
 		this.e2ee_ = 'e2ee' in s ? s.e2ee : { value: false, updatedTime: 0 };
 		this.activeMasterKeyId_ = 'activeMasterKeyId' in s ? s.activeMasterKeyId : { value: '', updatedTime: 0 };
 		this.masterKeys_ = 'masterKeys' in s ? s.masterKeys : [];
+		this.noteLockKey_ = 'noteLockKey' in s ? s.noteLockKey : null;
 		this.ppk_ = 'ppk' in s ? s.ppk : { value: null, updatedTime: 0 };
 		this.appMinVersion_ = s.appMinVersion ? s.appMinVersion : '0.0.0';
+		this.revisionServiceEnabled_ = 'revisionServiceEnabled' in s ? s.revisionServiceEnabled : { value: true, updatedTime: 0 };
+		this.revisionServiceTtlDays_ = 'revisionServiceTtlDays' in s ? s.revisionServiceTtlDays : { value: 90, updatedTime: 0 };
 
 		// Migration for master keys that didn't have "hasBeenUsed" property -
 		// in that case we assume they've been used at least once.
@@ -293,11 +383,9 @@ export class SyncInfo {
 	}
 
 	public setWithTimestamp(fromSyncInfo: SyncInfo, propName: string) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (!(propName in (this as any))) throw new Error(`Invalid prop name: ${propName}`);
+		if (!(propName in (this as unknown as Record<string, unknown>))) throw new Error(`Invalid prop name: ${propName}`);
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		(this as any)[propName] = (fromSyncInfo as any)[propName];
+		(this as unknown as Record<string, unknown>)[propName] = (fromSyncInfo as unknown as Record<string, unknown>)[propName];
 		this.setKeyTimestamp(propName, fromSyncInfo.keyTimestamp(propName));
 	}
 
@@ -349,6 +437,26 @@ export class SyncInfo {
 		this.activeMasterKeyId_ = { value: v, updatedTime: Date.now() };
 	}
 
+	public get revisionServiceEnabled(): boolean {
+		return this.revisionServiceEnabled_.value;
+	}
+
+	public set revisionServiceEnabled(v: boolean) {
+		if (v === this.revisionServiceEnabled) return;
+
+		this.revisionServiceEnabled_ = { value: v, updatedTime: Date.now() };
+	}
+
+	public get revisionServiceTtlDays(): number {
+		return this.revisionServiceTtlDays_.value;
+	}
+
+	public set revisionServiceTtlDays(v: number) {
+		if (v === this.revisionServiceTtlDays) return;
+
+		this.revisionServiceTtlDays_ = { value: v, updatedTime: Date.now() };
+	}
+
 	public get masterKeys(): MasterKeyEntity[] {
 		return this.masterKeys_;
 	}
@@ -359,18 +467,26 @@ export class SyncInfo {
 		this.masterKeys_ = v;
 	}
 
+	public get noteLockKey(): MasterKeyEntity {
+		return this.noteLockKey_;
+	}
+
+	public set noteLockKey(v: MasterKeyEntity) {
+		if (JSON.stringify(v) === JSON.stringify(this.noteLockKey_)) return;
+
+		this.noteLockKey_ = v;
+	}
+
 	public keyTimestamp(name: string): number {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (!(`${name}_` in (this as any))) throw new Error(`Invalid name: ${name}`);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		return (this as any)[`${name}_`].updatedTime;
+		const self = this as unknown as Record<string, { updatedTime: number }>;
+		if (!(`${name}_` in self)) throw new Error(`Invalid name: ${name}`);
+		return self[`${name}_`].updatedTime;
 	}
 
 	public setKeyTimestamp(name: string, timestamp: number) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		if (!(`${name}_` in (this as any))) throw new Error(`Invalid name: ${name}`);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		(this as any)[`${name}_`].updatedTime = timestamp;
+		const self = this as unknown as Record<string, { updatedTime: number }>;
+		if (!(`${name}_` in self)) throw new Error(`Invalid name: ${name}`);
+		self[`${name}_`].updatedTime = timestamp;
 	}
 }
 
@@ -427,6 +543,7 @@ export function setMasterKeyEnabled(mkId: string, enabled = true) {
 export const setMasterKeyHasBeenUsed = (s: SyncInfo, mkId: string) => {
 	const idx = s.masterKeys.findIndex(mk => mk.id === mkId);
 	if (idx < 0) throw new Error(`No such master key: ${mkId}`);
+	if (s.masterKeys[idx].hasBeenUsed) return s;
 
 	s.masterKeys[idx] = {
 		...s.masterKeys[idx],

@@ -1,13 +1,13 @@
-import { defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity, ResourceEntity } from '../services/database/types';
-import BaseModel, { DeleteOptions } from '../BaseModel';
-import { FolderLoadOptions } from './utils/types';
+import { BaseItemEntity, defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity, ResourceEntity } from '../services/database/types';
+import BaseModel, { DeleteOptions, ModelType } from '../BaseModel';
+import { FolderLoadOptions, SaveOptions } from './utils/types';
 import time from '../time';
 import { _ } from '../locale';
 import Note from './Note';
 import Database from '../database';
 import BaseItem from './BaseItem';
 import Resource from './Resource';
-import { isRootSharedFolder } from '../services/share/reducer';
+import { isRootSharedFolder, ShareType, StateShare } from '../services/share/reducer';
 import Logger from '@joplin/utils/Logger';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
 import ResourceService from '../services/ResourceService';
@@ -18,12 +18,20 @@ import { getTrashFolder } from '../services/trash';
 import getConflictFolderId from './utils/getConflictFolderId';
 import getTrashFolderId from '../services/trash/getTrashFolderId';
 import { getCollator } from './utils/getCollator';
-const { substrWithEllipsis } = require('../string-utils.js');
+import Setting from './Setting';
+import { itemIsReadOnlySync, ItemSlice } from './utils/readOnly';
+import ItemChange from './ItemChange';
+import { substrWithEllipsis } from '../string-utils';
+import { unique } from '../ArrayUtils';
 
 const logger = Logger.create('models/Folder');
 
 export interface FolderEntityWithChildren extends FolderEntity {
 	children?: FolderEntity[];
+}
+
+export interface SortFolderOptions {
+	includeDeleted?: boolean;
 }
 
 export default class Folder extends BaseItem {
@@ -43,8 +51,7 @@ export default class Folder extends BaseItem {
 	}
 
 	public static fieldToLabel(field: string) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const fieldsToLabels: any = {
+		const fieldsToLabels: Record<string, string> = {
 			title: _('title'),
 			last_note_user_updated_time: _('updated date'),
 		};
@@ -88,6 +95,20 @@ export default class Folder extends BaseItem {
 		return r ? r.total : 0;
 	}
 
+	// Returns a map of folder id → number of indexable notes (excluding trash
+	// and conflicts). Folders with zero notes are omitted from the map.
+	public static async noteCountsByFolderId() {
+		const rows = await this.db().selectAll<{ parent_id: string; total: number }>(
+			`SELECT parent_id, count(*) as total
+			 FROM notes
+			 WHERE is_conflict = 0 AND (deleted_time IS NULL OR deleted_time = 0)
+			 GROUP BY parent_id`,
+		);
+		const counts: Record<string, number> = {};
+		for (const r of rows) counts[r.parent_id] = r.total;
+		return counts;
+	}
+
 	public static markNotesAsConflict(parentId: string) {
 		const query = Database.updateQuery('notes', { is_conflict: 1 }, { parent_id: parentId });
 		return this.db().exec(query);
@@ -99,8 +120,7 @@ export default class Folder extends BaseItem {
 	}
 
 	public static async deleteAllByShareId(shareId: string, deleteOptions: DeleteOptions = null) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const tableNameToClasses: Record<string, any> = {
+		const tableNameToClasses: Record<string, typeof BaseItem> = {
 			'folders': Folder,
 			'notes': Note,
 			'resources': Resource,
@@ -114,21 +134,21 @@ export default class Folder extends BaseItem {
 		}
 	}
 
-	public static async delete(folderId: string, options?: DeleteOptions) {
+	public static async batchDelete(folderIds: string[], options: DeleteOptions): Promise<void> {
 		options = {
 			deleteChildren: true,
 			...options,
 		};
 
-		if (folderId === getTrashFolderId()) throw new Error('The trash folder cannot be deleted');
+		if (folderIds.includes(getTrashFolderId())) throw new Error('The trash folder cannot be deleted');
 
 		const toTrash = !!options.toTrash;
 
-		const folder = await Folder.load(folderId);
-		if (!folder) return; // noop
+		const folders: FolderEntity[] = await Folder.loadItemsByIds(folderIds);
+		if (!folders.length) return; // noop
 
 		const actionLogger = ActionLogger.from(options.sourceDescription);
-		actionLogger.addDescription(`folder title: ${JSON.stringify(folder.title)}`);
+		actionLogger.addDescription(`folder titles: ${JSON.stringify(folders.map(folder => folder.title))}`);
 		options.sourceDescription = actionLogger;
 
 		if (options.deleteChildren) {
@@ -139,28 +159,37 @@ export default class Folder extends BaseItem {
 				toTrash,
 			};
 
-			const noteIds = await Folder.noteIds(folderId);
-			await Note.batchDelete(noteIds, childrenDeleteOptions);
+			for (const folderId of folderIds) {
+				const noteIds = await Folder.noteIds(folderId);
+				await Note.batchDelete(noteIds, childrenDeleteOptions);
 
-			const subFolderIds = await Folder.subFolderIds(folderId);
-			for (let i = 0; i < subFolderIds.length; i++) {
-				await Folder.delete(subFolderIds[i], childrenDeleteOptions);
+				const subFolderIds = await Folder.subFolderIds(folderId);
+				await Folder.batchDelete(subFolderIds, childrenDeleteOptions);
 			}
 		}
 
 		if (toTrash) {
-			const newFolder: FolderEntity = { id: folderId, deleted_time: Date.now() };
-			if ('toTrashParentId' in options) newFolder.parent_id = options.toTrashParentId;
-			if (options.toTrashParentId === newFolder.id) throw new Error('Parent ID cannot be the same as ID');
-			await this.save(newFolder);
-		} else {
-			await super.delete(folderId, options);
-		}
+			for (const folderId of folderIds) {
+				const newFolder: FolderEntity = { id: folderId, deleted_time: Date.now() };
+				if ('toTrashParentId' in options) newFolder.parent_id = options.toTrashParentId;
+				if (options.toTrashParentId === newFolder.id) throw new Error('Parent ID cannot be the same as ID');
+				await this.save(newFolder);
 
-		this.dispatch({
-			type: 'FOLDER_DELETE',
-			id: folderId,
-		});
+				this.dispatch({
+					type: 'FOLDER_DELETE',
+					id: folderId,
+				});
+			}
+		} else {
+			await super.batchDelete(folderIds, options);
+
+			for (const folderId of folderIds) {
+				this.dispatch({
+					type: 'FOLDER_DELETE',
+					id: folderId,
+				});
+			}
+		}
 	}
 
 	public static conflictFolderTitle() {
@@ -185,6 +214,24 @@ export default class Folder extends BaseItem {
 			is_shared: 0,
 			deleted_time: 0,
 		};
+	}
+
+	// Checks for invalid state -- whether startId or its parents is part of a cycle
+	// in the folder graph (which should be a tree).
+	private static checkForFolderHierarchyCycle_(
+		idToFolder: Record<string, FolderEntity>,
+		startId: string,
+	) {
+		let folderId = startId;
+		const seenIds = new Set();
+		for (; idToFolder[folderId]; folderId = idToFolder[folderId].parent_id) {
+			if (seenIds.has(folderId)) {
+				return true;
+			}
+			seenIds.add(folderId);
+		}
+
+		return false;
 	}
 
 	// Calculates note counts for all folders and adds the note_count attribute to each folder
@@ -226,10 +273,22 @@ export default class Folder extends BaseItem {
 		}
 
 		const noteCounts: NoteCount[] = await this.db().selectAll(sql);
-		// eslint-disable-next-line github/array-foreach -- Old code before rule was applied
-		noteCounts.forEach((noteCount) => {
+		for (const noteCount of noteCounts) {
 			let parentId = noteCount.folder_id;
+
+			let i = 0;
+			let checkedForCycle = false;
 			do {
+				// Handle invalid state, preventing infinite loops -- check whether the current
+				// folder has itself as a parent.
+				if (i++ > 100 && !checkedForCycle) {
+					if (Folder.checkForFolderHierarchyCycle_(foldersById, parentId)) {
+						logger.warn(`Invalid state: Folder ${parentId} has itself as a parent.`);
+						break;
+					}
+					checkedForCycle = true;
+				}
+
 				const folder = foldersById[parentId];
 				if (!folder) break; // https://github.com/laurent22/joplin/issues/2079
 				folder.note_count = (folder.note_count || 0) + noteCount.note_count;
@@ -240,7 +299,7 @@ export default class Folder extends BaseItem {
 
 				parentId = folder.parent_id;
 			} while (parentId);
-		});
+		}
 	}
 
 	// Folders that contain notes that have been modified recently go on top.
@@ -303,8 +362,7 @@ export default class Folder extends BaseItem {
 		return output;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static handleTitleNaturalSorting(items: FolderEntity[], options: any) {
+	public static handleTitleNaturalSorting(items: FolderEntity[], options: { order?: { by: string; dir: string }[] }) {
 		if (options.order?.length > 0 && options.order[0].by === 'title') {
 			const collator = getCollator();
 			items.sort((a, b) => ((options.order[0].dir === 'ASC') ? 1 : -1) * collator.compare(a.title, b.title));
@@ -327,7 +385,7 @@ export default class Folder extends BaseItem {
 
 		if (options && options.includeConflictFolder) {
 			const conflictCount = await Note.conflictedCount();
-			if (conflictCount) output.push(this.conflictFolder());
+			if (conflictCount) output.unshift(this.conflictFolder());
 		}
 
 		return output;
@@ -387,18 +445,74 @@ export default class Folder extends BaseItem {
 		return this.db().selectAll(sql, [folderId]);
 	}
 
-	public static async rootSharedFolders(): Promise<FolderEntity[]> {
-		return this.db().selectAll('SELECT id, share_id FROM folders WHERE parent_id = \'\' AND share_id != \'\'');
+	public static async rootSharedFolders(activeShares: StateShare[]): Promise<FolderEntity[]> {
+		return this.removeDuplicateRootFolders(await this.db().selectAll('SELECT id, share_id FROM folders WHERE parent_id = \'\' AND share_id != \'\''), activeShares);
 	}
 
 	public static async rootShareFoldersByKeyId(keyId: string): Promise<FolderEntity[]> {
 		return this.db().selectAll('SELECT id, share_id FROM folders WHERE master_key_id = ?', [keyId]);
 	}
 
-	public static async updateFolderShareIds(): Promise<void> {
+	// We need this function for this situation:
+	//
+	// - Folder is shared
+	// - Subfolder is created in the shared folder
+	// - Subfolder is moved to the root
+	//
+	// In that situation the subfolder will have "parent_id" = "" and so will be considered a "root
+	// shared folder". However it is not - a "root shared folder" is one that has been explicitly
+	// shared by the user.
+	//
+	// So we have this function to check for root folders that have the same "shared_id" - it
+	// indicates that one of them was a child of the other. We remove the formerly children folders.
+	private static removeDuplicateRootFolders(rootFolders: FolderEntity[], activeShares: StateShare[]) {
+		const folderIdsToRemove: string[] = [];
+
+		for (let i = 0; i < rootFolders.length - 1; i++) {
+			const f1 = rootFolders[i];
+			for (let j = i + 1; j < rootFolders.length; j++) {
+				const f2 = rootFolders[j];
+
+				if (f1.share_id === f2.share_id) {
+					logger.info('Found two root folders with the same share_id:', f1, f2);
+					const share = activeShares.find(s => s.id === f1.share_id);
+					if (!share) {
+						logger.warn('Could not find matching share object');
+						continue;
+					}
+
+					if (share.folder_id === f1.id) {
+						folderIdsToRemove.push(f2.id);
+					} else if (share.folder_id === f2.id) {
+						folderIdsToRemove.push(f1.id);
+					} else {
+						logger.warn('Could not find folder associated with share:', share);
+					}
+				}
+			}
+		}
+
+		if (folderIdsToRemove.length) {
+			logger.info('Removing folders from the list of root folders:', folderIdsToRemove);
+
+			const newRootFolders: FolderEntity[] = [];
+
+			for (const f of rootFolders) {
+				if (!folderIdsToRemove.includes(f.id)) {
+					newRootFolders.push(f);
+				}
+			}
+
+			return newRootFolders;
+		}
+
+		return rootFolders;
+	}
+
+	public static async updateFolderShareIds(activeShares: StateShare[]): Promise<void> {
 		// Get all the sub-folders of the shared folders, and set the share_id
 		// property.
-		const rootFolders = await this.rootSharedFolders();
+		const rootFolders = await this.rootSharedFolders(activeShares);
 
 		let sharedFolderIds: string[] = [];
 
@@ -433,7 +547,7 @@ export default class Folder extends BaseItem {
 
 		const sql = ['SELECT id, parent_id FROM folders WHERE share_id != \'\''];
 		if (sharedFolderIds.length) {
-			sql.push(` AND id NOT IN ('${sharedFolderIds.join('\',\'')}')`);
+			sql.push(` AND id NOT IN (${Folder.escapeIdsForSql(sharedFolderIds)})`);
 		}
 
 		const foldersToUnshare: FolderEntity[] = await this.db().selectAll(sql.join(' '));
@@ -446,7 +560,12 @@ export default class Folder extends BaseItem {
 				share_id: '',
 				updated_time: Date.now(),
 				parent_id: item.parent_id,
-			}, { autoTimestamp: false });
+			}, {
+				autoTimestamp: false,
+				// Required, to handle the case where the item's share_id points
+				// to a read-only share:
+				disableReadOnlyCheck: true,
+			});
 		}
 
 		logger.debug('updateFolderShareIds:', report);
@@ -470,7 +589,10 @@ export default class Folder extends BaseItem {
 				share_id: row.share_id || '',
 				parent_id: row.parent_id,
 				updated_time: Date.now(),
-			}, { autoTimestamp: false });
+			}, {
+				autoTimestamp: false,
+				disableReadOnlyCheck: true,
+			});
 		}
 	}
 
@@ -493,6 +615,16 @@ export default class Folder extends BaseItem {
 		// note has its own instance. When such duplication happens, we need to
 		// resume the process from the start (thus the loop) so that we deal
 		// with the right note/resource associations.
+
+		const isReadOnly = (type: ModelType, item: NoteEntity|ResourceEntity) => {
+			return itemIsReadOnlySync(
+				type,
+				ItemChange.SOURCE_UNSPECIFIED,
+				item as ItemSlice,
+				Setting.value('sync.userId'),
+				BaseItem.syncShareCache,
+			);
+		};
 
 		interface Row {
 			id: string;
@@ -540,12 +672,21 @@ export default class Folder extends BaseItem {
 			// one note. If it is not, we create duplicate resources so that
 			// each note has its own separate resource.
 
+			// Order unshared items first: This makes conflicts less likely, since shared
+			// items are more likely to be duplicated by multiple users.
+			const orderingSql = 'ORDER BY is_shared ASC';
+
 			const noteResourceAssociations = await this.db().selectAll(`
-				SELECT resource_id, note_id, notes.share_id
+				SELECT
+					resource_id,
+					note_id,
+					notes.share_id,
+					(notes.share_id != '') AS is_shared
 				FROM note_resources
 				LEFT JOIN notes ON notes.id = note_resources.note_id
-				WHERE resource_id IN ('${resourceIds.join('\',\'')}')
+				WHERE resource_id IN (${this.escapeIdsForSql(resourceIds)})
 				AND is_associated = 1
+				${orderingSql}
 			`) as NoteResourceRow[];
 
 			const resourceIdToNotes: Record<string, NoteResourceRow[]> = {};
@@ -564,7 +705,20 @@ export default class Folder extends BaseItem {
 					const row = rows[i];
 					const note: NoteEntity = await Note.load(row.note_id);
 					if (!note) continue; // probably got deleted in the meantime?
-					const newResource = await Resource.duplicateResource(resourceId);
+					// Don't update read-only notes:
+					if (isReadOnly(ModelType.Note, note)) continue;
+
+					const newResource = await Resource.duplicateResource(resourceId, {
+						// Ensure that the resource starts with the correct share_id and is_shared.
+						// This reduces the number of resources to be processed in the next loop iteration
+						// and seems to fix an issue related to resources not syncing with read-only shares.
+						//
+						// These properties are set directly in the "duplicateResource" call to prevent
+						// race conditions.
+						is_shared: note.is_shared,
+						share_id: note.share_id,
+					});
+
 					logger.info(`updateResourceShareIds: Automatically created resource "${newResource.id}" to replace resource "${resourceId}" because it is shared and duplicate across notes:`, row);
 					const regex = new RegExp(resourceId, 'gi');
 					const newBody = note.body.replace(regex, newResource.id);
@@ -613,7 +767,9 @@ export default class Folder extends BaseItem {
 						resource.blob_updated_time = now;
 					}
 
-					await Resource.save(resource, { autoTimestamp: false });
+					if (!isReadOnly(ModelType.Resource, resource)) {
+						await Resource.save(resource, { autoTimestamp: false });
+					}
 				}
 				return;
 			}
@@ -622,24 +778,46 @@ export default class Folder extends BaseItem {
 		throw new Error('Failed to update resource share IDs');
 	}
 
-	public static async updateAllShareIds(resourceService: ResourceService) {
-		await this.updateFolderShareIds();
+	public static async updateAllShareIds(resourceService: ResourceService, activeShares: StateShare[]) {
+		await this.updateFolderShareIds(activeShares);
 		await this.updateNoteShareIds();
 		await this.updateResourceShareIds(resourceService);
+
+		// Don't update note publication status here: Doing so can cause conflicts if updateAllShareIds
+		// is called just before sync
+		await this.updateFolderPublishStatus_(activeShares);
+	}
+
+	private static async updateFolderPublishStatus_(activeShares: StateShare[]) {
+		const publishedFolderRootIds = activeShares
+			.filter(share => share.type === ShareType.PublishedFolder && !!share.folder_id)
+			.map(share => share.folder_id);
+		const publishedFolderIds = unique(publishedFolderRootIds.concat(
+			(await Promise.all(
+				publishedFolderRootIds.map(id => this.allChildrenFolders(id)),
+			)).flatMap(folders => folders.map(f => f.id)),
+		));
+
+		const publishedFolderIdSet = new Set(publishedFolderIds);
+
+		if (publishedFolderIds.length) {
+			for (const folder of await this.all({ fields: ['id', 'is_shared'] })) {
+				if (!publishedFolderIdSet.has(folder.id)) continue;
+				await this.updateShareStatus({ ...folder, type_: BaseModel.TYPE_FOLDER }, true);
+			}
+		}
 	}
 
 	// Clear the "share_id" property for the items that are associated with a
 	// share that no longer exists.
 	public static async updateNoLongerSharedItems(activeShareIds: string[]) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const tableNameToClasses: Record<string, any> = {
+		const tableNameToClasses: Record<string, typeof BaseItem> = {
 			'folders': Folder,
 			'notes': Note,
 			'resources': Resource,
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const report: any = {};
+		const report: Record<string, number> = {};
 
 		for (const tableName of ['folders', 'notes', 'resources']) {
 			const ItemClass = tableNameToClasses[tableName];
@@ -650,7 +828,7 @@ export default class Folder extends BaseItem {
 
 			const query = activeShareIds.length ? `
 				SELECT ${this.db().escapeFields(fields)} FROM ${tableName}
-				WHERE share_id != '' AND share_id NOT IN ('${activeShareIds.join('\',\'')}')
+				WHERE share_id != '' AND share_id NOT IN (${this.escapeIdsForSql(activeShareIds)})
 			` : `
 				SELECT ${this.db().escapeFields(fields)} FROM ${tableName}
 				WHERE share_id != ''
@@ -661,14 +839,18 @@ export default class Folder extends BaseItem {
 			report[tableName] = rows.length;
 
 			for (const row of rows) {
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-				const toSave: any = {
+				const toSave: BaseItemEntity = {
 					id: row.id,
 					share_id: '',
-					updated_time: Date.now(),
+					// Don't change the updated_time.
+					// This prevents conflicts in the case where the item was unshared remotely.
+					// See https://github.com/laurent22/joplin/issues/12648
+					// updated_time: Date.now(),
 				};
 
-				if (hasParentId) toSave.parent_id = row.parent_id;
+				if (hasParentId) {
+					(toSave as FolderEntity|NoteEntity).parent_id = row.parent_id;
+				}
 
 				await ItemClass.save(toSave, { autoTimestamp: false });
 			}
@@ -677,8 +859,7 @@ export default class Folder extends BaseItem {
 		logger.debug('updateNoLongerSharedItems:', report);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async allAsTree(folders: FolderEntity[] = null, options: any = null) {
+	public static async allAsTree(folders: FolderEntity[] = null, options: FolderLoadOptions & { includeNotes?: boolean } = null) {
 		interface FolderWithNotes extends FolderEntity {
 			notes?: NoteEntity[];
 		}
@@ -757,8 +938,7 @@ export default class Folder extends BaseItem {
 	}
 
 	public static buildTree(folders: FolderEntity[]): FolderEntityWithChildren[] {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const idToFolders: Record<string, any> = {};
+		const idToFolders: Record<string, FolderEntityWithChildren> = {};
 		for (let i = 0; i < folders.length; i++) {
 			idToFolders[folders[i].id] = { ...folders[i] };
 			idToFolders[folders[i].id].children = [];
@@ -785,11 +965,13 @@ export default class Folder extends BaseItem {
 		return rootFolders;
 	}
 
-	public static async sortFolderTree(folders: FolderEntityWithChildren[] = null) {
-		const output = folders ? folders : await this.allAsTree();
+	public static async sortFolderTree(folders: FolderEntityWithChildren[] = null, options: SortFolderOptions = null) {
+		let output = folders ? folders : await this.allAsTree();
 
 		const sortFoldersAlphabetically = (folders: FolderEntityWithChildren[]) => {
 			const collator = getCollator();
+			if (options && options.includeDeleted === false) folders = folders.filter(folder => !folder.deleted_time);
+
 			folders.sort((a: FolderEntityWithChildren, b: FolderEntityWithChildren) => {
 				if (a.parent_id === b.parent_id) {
 					return collator.compare(a.title, b.title);
@@ -810,7 +992,7 @@ export default class Folder extends BaseItem {
 			return folders;
 		};
 
-		sortFolders(sortFoldersAlphabetically(output));
+		output = sortFolders(sortFoldersAlphabetically(output));
 		return output;
 	}
 
@@ -825,7 +1007,7 @@ export default class Folder extends BaseItem {
 	}
 
 	public static defaultFolder() {
-		return this.modelSelectOne('SELECT * FROM folders ORDER BY created_time DESC LIMIT 1');
+		return this.modelSelectOne('SELECT * FROM folders WHERE deleted_time = 0 ORDER BY created_time DESC LIMIT 1');
 	}
 
 	public static async canNestUnder(folderId: string, targetFolderId: string) {
@@ -852,14 +1034,27 @@ export default class Folder extends BaseItem {
 	public static async moveToFolder(folderId: string, targetFolderId: string) {
 		if (!(await this.canNestUnder(folderId, targetFolderId))) throw new Error(_('Cannot move notebook to this location'));
 
-		// When moving a note to a different folder, the user timestamp is not updated.
-		// However updated_time is updated so that the note can be synced later on.
-
-		const modifiedFolder = {
+		const original = await this.load(folderId);
+		const modifiedFolder: FolderEntity = {
 			id: folderId,
 			parent_id: targetFolderId,
+
+			// When moving a note to a different folder, the user timestamp is not updated.
+			// However updated_time is updated so that the note can be synced later on.
 			updated_time: time.unixMs(),
+			share_id: original.share_id,
 		};
+
+		const wasShared = !!modifiedFolder.share_id;
+		const movedToTopLevel = original.parent_id !== '' && targetFolderId === '';
+		if (wasShared && movedToTopLevel) {
+			// When a shared subfolder is converted to a toplevel folder, clear its share_id
+			// as soon as possible. Without this, modifiedFolder would be incorrectly treated
+			// as a root shared folder by some logic.
+			// Since the folder's children aren't toplevel, they won't be considered root
+			// shared folders and are updated later.
+			modifiedFolder.share_id = '';
+		}
 
 		return Folder.save(modifiedFolder, { autoTimestamp: false });
 	}
@@ -868,8 +1063,7 @@ export default class Folder extends BaseItem {
 	// manually creating a folder. They shouldn't be done for example when the folders
 	// are being synced to avoid any strange side-effects. Technically it's possible to
 	// have folders and notes with duplicate titles (or no title), or with reserved words.
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-	public static async save(o: FolderEntity, options: any = null) {
+	public static async save(o: FolderEntity, options: SaveOptions & { duplicateCheck?: boolean; reservedTitleCheck?: boolean; stripLeftSlashes?: boolean } = null) {
 		if (!options) options = {};
 
 		if (options.userSideValidation === true) {
@@ -968,6 +1162,21 @@ export default class Folder extends BaseItem {
 	public static atLeastOneRealFolderExists(folders: FolderEntity[]) {
 		// returns true if at least one folder exists other than trash folder and deleted folders
 		return this.getRealFolders(folders).length > 0;
+	}
+
+	public static async getValidActiveFolder() {
+		const folderId = Setting.value('activeFolderId');
+		if (!folderId) return null;
+
+		// Use super.load because the local load function returns folders which do not actually exist in the db, such as the trash
+		const folder = await super.load(folderId);
+		if (!folder || !!folder.deleted_time) {
+			const defaultFolder = await Folder.defaultFolder();
+			if (!defaultFolder) return null;
+			return defaultFolder;
+		}
+
+		return folder;
 	}
 
 }

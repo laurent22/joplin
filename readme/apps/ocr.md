@@ -4,19 +4,53 @@ Optical Character Recognition (OCR) involves transforming an image containing te
 
 ## Enabling OCR
 
-You can enable OCR from the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md), under the "General" section. Once you do so, Joplin is going to scan your images and PDF files to extract text data from it. That data will not be visible but will be associated with those files.
+OCR should be enabled by default. If it is not you can enable it from the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/apps/config_screen.md), under the "General" section. Once you do so, Joplin is going to scan your images (PNG and JPEG) and PDF files to extract text data from it.
 
-Then, when you search, the application will be able to tell you what notes but also what attachments match the query. In this case, a banner will be displayed at the top of the note that contains the attachment(s):
-
-![](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/ocr/search_results.png)
-
-Searching in OCR text is enabled on the desktop and mobile app. Scanning documents however is only available on the desktop app since this is a relatively resource-intensive process. The mobile app will have access to that OCR data via sync.
+Scanning documents is only available on the desktop app since this is a relatively resource-intensive process. The mobile app will have access to that OCR data via sync.
 
 For now OCR is reliable when scanning printed text, PDFs in particular, or images where the text is clear such as screenshots. We do not currently support handwritten text, and text on photos may or may not be recognized depending on how clear it is.
 
+## Searching
+
+When you search, the application will be able to tell you what notes but also what attachments match the query. In this case, a banner will be displayed at the top of the note that contains the attachment(s):
+
+![](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/ocr/search_results.png)
+
+Searching in OCR text is enabled on the desktop and mobile app.
+
+## Viewing OCR text
+
+The application allows you to view the OCR text associated with an image. To do so, right-click on a PDF link or image and select "View OCR text". This will create a new text file with that OCR text, and open it in your text editor.
+
+![](https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/ocr/view_ocr_text.png)
+
+## Creating accessible PDF documents
+
+For scanned PDFs that contain only images, you can create an accessible version that allows text selection, copying, and screen reader support. To do this:
+
+1. Right-click on a PDF attachment that has been processed by OCR
+2. Select "Create accessible document"
+3. Choose where to save the new PDF
+
+The generated PDF contains the original page images with an invisible text layer overlaid on top. This allows you to:
+
+- Select and copy text from the PDF
+- Search within the PDF using your PDF viewer
+- Use screen readers to read the document
+
+If the PDF was processed before this feature was available, you will be prompted to re-run OCR to generate the required word coordinate data.
+
+To have all future PDFs automatically processed with word coordinates (so you don't need to re-run OCR), enable the "OCR: PDF processing mode" setting (under General > Advanced) and set it to "Accessible". Note that this increases database size by approximately 10 to 50 KB per page.
+
+## Video tutorial
+
+Watch this short video to learn how to use the Optical Character Recognition (OCR) in Joplin:
+
+[![Watch the video](https://img.youtube.com/vi/kmNsWo2KlF8/hqdefault.jpg)](https://www.youtube.com/watch?v=kmNsWo2KlF8)
+
 ## Initial processing
 
-As mentioned above processing images and PDF may be resource intensive, especially if you have a lot of attachments. So the first time you enable the feature don't be surprised if Joplin CPU usage is higher than usual. Once the initial scan of all your attachments is done, this will go back to normal. Late,r whenever you attach a file it will be scanned quickly in a way that's not noticeable.
+Processing images and PDF may be resource intensive, especially if you have a lot of attachments. So the first time the feature is enabled don't be surprised if Joplin CPU usage is higher than usual. Once the initial scan of all your attachments is done, this will go back to normal. Later, whenever you attach a file it will be scanned quickly in a way that's not noticeable.
 
 ## Offline first
 

@@ -1,0 +1,72 @@
+name: 'Setup build environment'
+description: 'Install Joplin build dependencies'
+runs:
+  using: 'composite'
+  steps:
+    # Trying to fix random networking issues on Windows
+    # https://github.com/actions/runner-images/issues/1187#issuecomment-686735760
+    # - name: Disable TCP/UDP offload on Windows
+    #   if: runner.os == 'Windows'
+    #   shell: pwsh
+    #   run: Disable-NetAdapterChecksumOffload -Name * -TcpIPv4 -UdpIPv4 -TcpIPv6 -UdpIPv6
+
+    - name: Disable TCP/UDP offload on Linux
+      if: runner.os == 'Linux'
+      shell: bash
+      run: sudo ethtool -K eth0 tx off rx off
+
+    - name: Disable TCP/UDP offload on macOS
+      if: runner.os == 'macOS'
+      shell: bash
+      run: |
+        sudo sysctl -w net.link.generic.system.hwcksum_tx=0
+        sudo sysctl -w net.link.generic.system.hwcksum_rx=0
+
+    # libsecret-1-dev is required for keytar - https://github.com/atom/node-keytar
+    # xvfb provides a virtual display on Linux, used for Playwright tests.
+    # The apt-get update is allowed to fail (some sources may be temporarily
+    # unreachable, especially on arm64) but the install is retried to absorb
+    # transient mirror failures.
+
+    - name: Install Linux dependencies
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        source "${GITHUB_WORKSPACE}/.github/scripts/retry.sh"
+        sudo apt-get update || true
+        retry 5 15 sudo apt-get install -y \
+          gettext \
+          libsecret-1-dev \
+          translate-toolkit \
+          rsync \
+          xvfb
+
+    - name: Install macOs dependencies
+      if: runner.os == 'macOS'
+      shell: bash
+      run: |
+        # Required for building the canvas package
+        brew install pango
+
+    - uses: olegtarasov/get-tag@v2.1.4
+    - uses: dtolnay/rust-toolchain@stable
+      if: ${{ runner.os != 'Windows' }}
+
+    - uses: actions/setup-node@v6
+      with:
+        node-version: '24.15'
+        # Disable the cache on ARM runners. For now, we don't run "yarn install" on these
+        # environments and this breaks actions/setup-node.
+        # See https://github.com/laurent22/joplin/commit/47d0d3eb9e89153a609fb5441344da10904c6308#commitcomment-159577783.
+        # cache: ${{ (!contains(runner.os, 'arm') && 'yarn') || '' }}
+
+    - uses: ./.github/workflows/shared/install-yarn
+
+    # macos-latest ships with Python 3.12 by default, but this removes a
+    # utility that's used by electron-builder (distutils) so we need to pin
+    # Python to an earlier version.
+    # Fixes error `ModuleNotFoundError: No module named 'distutils'`
+    # Ref: https://github.com/nodejs/node-gyp/issues/2869
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.14'

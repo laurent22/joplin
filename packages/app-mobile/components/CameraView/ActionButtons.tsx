@@ -108,7 +108,7 @@ const ActionButtons: React.FC<Props> = props => {
 		<IconButton
 			iconName={props.takingPicture ? 'ionicon checkmark' : 'ionicon camera'}
 			onPress={props.onTakePicture}
-			description={props.takingPicture ? _('Processing photo...') : _('Take picture')}
+			description={props.takingPicture ? _('Processing photo...') : _('Take photo')}
 			themeId={props.themeId}
 			iconStyle={styles.takePhotoButtonContent}
 			containerStyle={styles.takePhotoButtonContainer}
@@ -136,17 +136,16 @@ const ActionButtons: React.FC<Props> = props => {
 		</View>
 	);
 
-
 	return <>
 		<View style={styles.buttonRowContainerTop}>
-			<IconButton
+			{props.onCancelPhoto && <IconButton
 				themeId={props.themeId}
 				iconName='ionicon arrow-back'
 				containerStyle={styles.buttonContainer}
 				iconStyle={styles.buttonContent}
 				onPress={props.onCancelPhoto}
 				description={_('Back')}
-			/>
+			/>}
 		</View>
 		{props.cameraReady ? cameraActions : <ActivityIndicator/>}
 	</>;

@@ -6,8 +6,7 @@ import { expectThrow } from './testing/testUtils';
 describe('routeUtils', () => {
 
 	it('should parse a route path', async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const testCases: any[] = [
+		const testCases: [string, string, string, ItemAddressingType][] = [
 			['123456/content', '123456', 'content', ItemAddressingType.Id],
 			['123456', '123456', '', ItemAddressingType.Id],
 			['root:/Documents/MyFile.md:/content', 'root:/Documents/MyFile.md:', 'content', ItemAddressingType.Path],
@@ -29,8 +28,7 @@ describe('routeUtils', () => {
 	});
 
 	it('should find a matching route', async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const testCases: any[] = [
+		const testCases: [string, { route: number; basePath: string; subPath: { id: string; link: string; addressingType: number; raw: string; schema: string } }][] = [
 			['/admin/organizations', {
 				route: 1,
 				basePath: 'admin/organizations',
@@ -68,8 +66,7 @@ describe('routeUtils', () => {
 			}],
 		];
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const routes: Record<string, any> = {
+		const routes: Record<string, number> = {
 			'admin/organizations': 1,
 			'api/users': 2,
 			'help': 3,
@@ -77,17 +74,16 @@ describe('routeUtils', () => {
 
 		for (const testCase of testCases) {
 			const [path, expected] = testCase;
-			const actual = findMatchingRoute(path, routes);
+			const actual = findMatchingRoute(path, routes as unknown as Parameters<typeof findMatchingRoute>[1]);
 			expect(actual).toEqual(expected);
 		}
 
-		await expectThrow(async () => findMatchingRoute('help', routes));
-		await expectThrow(async () => findMatchingRoute('api/users/123', routes));
+		await expectThrow(async () => findMatchingRoute('help', routes as unknown as Parameters<typeof findMatchingRoute>[1]));
+		await expectThrow(async () => findMatchingRoute('api/users/123', routes as unknown as Parameters<typeof findMatchingRoute>[1]));
 	});
 
 	it('should split an item path', async () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
-		const testCases: any[] = [
+		const testCases: [string, string[]][] = [
 			['root:/Documents/MyFile.md:', ['root', 'Documents', 'MyFile.md']],
 			['documents:/CV.doc:', ['documents', 'CV.doc']],
 			['', []],
