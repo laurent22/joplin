@@ -128,13 +128,16 @@ const useHighlighter = (editor: Editor, searchRegexes: RegExp[]) => {
 		};
 
 		const onNodeRemoved = (node: Node, parent: Node) => {
-			ranges.delete(node);
+			const removeFromRanges = (node: Node) => {
+				ranges.delete(node);
+				for (const child of node.childNodes) {
+					removeFromRanges(child);
+				}
+			};
+			removeFromRanges(node);
 
 			// Handle the case where removing a node created a match:
-			const parentParagraph = closestParagraph(parent);
-			if (parentParagraph) {
-				onNodeChanged(parentParagraph);
-			}
+			onNodeChanged(closestParagraph(parent) ?? parent);
 		};
 
 		const clearHighlights = () => {
