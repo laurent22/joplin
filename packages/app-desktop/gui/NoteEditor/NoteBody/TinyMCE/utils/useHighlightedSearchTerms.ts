@@ -1,3 +1,4 @@
+import { HighlightedWord } from '@joplin/lib/reducer';
 import SearchEngine from '@joplin/lib/services/search/SearchEngine';
 import { themeStyle } from '@joplin/lib/theme';
 import { Theme } from '@joplin/lib/themes/type';
@@ -14,13 +15,16 @@ declare global {
 	}
 }
 
-const useHighlightedSearchTerms = (editor: Editor, searchTerms: string[], themeId: number) => {
+const useHighlightedSearchTerms = (editor: Editor, searchTerms: HighlightedWord[], themeId: number) => {
 	const searchRegexes = useMemo(() => {
-		return searchTerms.map((term: unknown) => {
-			if (typeof term === 'object' && term !== null && 'value' in term) {
-				term = term.value;
+		return searchTerms.map((term: HighlightedWord) => {
+			let text;
+			if (typeof term === 'string') {
+				text = term;
+			} else {
+				text = term.value;
 			}
-			return new RegExp(SearchEngine.instance().queryTermToRegex(term), 'ig');
+			return new RegExp(SearchEngine.instance().queryTermToRegex(text), 'ig');
 		});
 	}, [searchTerms]);
 
