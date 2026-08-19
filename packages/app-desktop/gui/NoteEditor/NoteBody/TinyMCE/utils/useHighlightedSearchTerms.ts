@@ -22,7 +22,16 @@ const useSearchRegexes = (searchTerms: HighlightedWord[]) => {
 			} else {
 				text = term.value;
 			}
-			return new RegExp(SearchEngine.instance().queryTermToRegex(text), 'ig');
+
+			let regex = SearchEngine.instance().queryTermToRegex(text);
+			// Only highlight short matches at word boundaries (roughly matching the note viewer
+			// behavior)
+			if (text.length <= 2) {
+				// (?<!\w): Checks whether a non-word character is before the regex, without including it in the match
+				// (?!\w): Check whether a non-word character is after the regex, also without including it.
+				regex = `(?<!\\w)${regex}(?!\\w)`;
+			}
+			return new RegExp(regex, 'ig');
 		});
 	}, [searchTerms]);
 };
