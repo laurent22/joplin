@@ -1094,6 +1094,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 		case 'SMART_FILTER_SELECT':
 			draft.notesParentType = 'SmartFilter';
 			draft.selectedSmartFilterId = action.id;
+			draft.selectedNoteIds = [];
 			break;
 
 		case 'FOLDER_SELECT_ADD':

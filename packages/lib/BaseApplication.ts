@@ -548,7 +548,6 @@ export default class BaseApplication {
 
 		if (action.type === 'SMART_FILTER_SELECT') {
 			refreshNotes = true;
-			refreshNotesUseSelectedNoteId = true;
 		}
 
 		// Switching windows can also change which note(s) and which note parent type is selected.
