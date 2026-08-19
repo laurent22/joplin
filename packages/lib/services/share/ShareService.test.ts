@@ -483,9 +483,10 @@ describe('ShareService', () => {
 		expect((await Note.load(noteB.id)).is_shared).toBe(0);
 	});
 
-	it('should keep a separately published child folder published', async () => {
+	it('should keep a separately published child folder and child note published', async () => {
 		const folderA = await Folder.save({ title: 'folder A' });
 		const folderB = await Folder.save({ title: 'folder B', parent_id: folderA.id });
+		const noteA = await Note.save({ title: 'note A', parent_id: folderA.id });
 		const publishedFolderAShare = {
 			id: 'published-folder-a',
 			type: ShareType.PublishedFolder,
@@ -496,7 +497,12 @@ describe('ShareService', () => {
 			type: ShareType.PublishedFolder,
 			folder_id: folderB.id,
 		};
-		let sharesReturnedByServer = [publishedFolderAShare, publishedFolderBShare];
+		const publishedNoteAShare = {
+			id: 'published-note-a',
+			type: ShareType.Note,
+			note_id: noteA.id,
+		};
+		let sharesReturnedByServer = [publishedFolderAShare, publishedFolderBShare, publishedNoteAShare];
 		const service = mockShareService({
 			getShares: async () => ({ items: sharesReturnedByServer }),
 			postShares: async () => null,
@@ -506,13 +512,15 @@ describe('ShareService', () => {
 		await service.refreshShares();
 		await Folder.save({ id: folderA.id, is_shared: 1 });
 		await Folder.save({ id: folderB.id, is_shared: 1 });
-		sharesReturnedByServer = [publishedFolderBShare];
+		await Note.save({ id: noteA.id, parent_id: folderA.id, is_shared: 1 });
+		sharesReturnedByServer = [publishedFolderBShare, publishedNoteAShare];
 
 		await service.unpublishFolder(folderA.id);
 
-		expect(service.shares).toEqual([publishedFolderBShare]);
+		expect(service.shares).toEqual([publishedFolderBShare, publishedNoteAShare]);
 		expect((await Folder.load(folderA.id)).is_shared).toBe(0);
 		expect((await Folder.load(folderB.id)).is_shared).toBe(1);
+		expect((await Note.load(noteA.id)).is_shared).toBe(1);
 	});
 
 	it('should throw when the folder or its published share does not exist', async () => {
