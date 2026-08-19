@@ -13,9 +13,20 @@ import Folder from '@joplin/lib/models/Folder';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import { ShareType, StateShare } from '@joplin/lib/services/share/reducer';
 
-const mockServiceForNoteSharing = (shares: StateShare[]) => {
+enum ShareServiceMockMode {
+	// Behave like older Joplin Server versions
+	Legacy,
+	Modern,
+}
+
+const mockServiceForNoteSharing = (shares: StateShare[], mode: ShareServiceMockMode) => {
 	mockShareService({
-		getShares: async () => {
+		getShares: async (query) => {
+			// Legacy server versions don't support filtering
+			if (mode === ShareServiceMockMode.Modern && query && 'item' in query) {
+				return { items: shares.filter(s => s.note_id === query.item || s.folder_id === query.item) };
+			}
+
 			return { items: shares };
 		},
 		postShares: async () => ({ id: 'test-id' }),
@@ -48,7 +59,7 @@ describe('ShareNoteDialog', () => {
 		store = createMockReduxStore();
 		setupGlobalStore(store);
 
-		mockServiceForNoteSharing([]);
+		mockServiceForNoteSharing([], ShareServiceMockMode.Legacy);
 	});
 
 	test('pressing "Copy Shareable Link" should publish the note', async () => {
@@ -80,8 +91,14 @@ describe('ShareNoteDialog', () => {
 		{
 			label: 'should show an "Unpublish" button for published notes',
 			published: true,
+			mode: ShareServiceMockMode.Legacy,
 		},
-	])('$label', async ({ published }) => {
+		{
+			label: 'should show an "Unpublish" button for published notes, for a server that supports filtering shares',
+			published: true,
+			mode: ShareServiceMockMode.Modern,
+		},
+	])('$label', async ({ published, mode }) => {
 		const folder = await Folder.save({ title: 'Folder' });
 		const note = await Note.save({ title: 'Test', parent_id: folder.id });
 
@@ -91,7 +108,7 @@ describe('ShareNoteDialog', () => {
 
 			mockServiceForNoteSharing([
 				{ id: '1234', note_id: note.id, folder_id: '', master_key_id: '', type: ShareType.Note },
-			]);
+			], mode);
 		}
 
 		const { unmount } = render(<WrappedShareDialog noteId={note.id}/>);
