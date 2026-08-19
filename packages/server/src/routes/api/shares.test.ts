@@ -1,7 +1,7 @@
-import { Session, Share, ShareType, ShareUserStatus } from '../../services/database/types';
+import { Share, ShareType, ShareUserStatus } from '../../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItemTree, createFolder } from '../../utils/testing/testUtils';
 import { postApi, getApi } from '../../utils/testing/apiUtils';
-import { shareWithUserAndAccept, updateItemShareId } from '../../utils/testing/shareApiUtils';
+import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';
 import { PaginatedResults } from '../../models/utils/pagination';
 
 describe('shares', () => {
@@ -87,34 +87,4 @@ describe('shares', () => {
 		expect(result.type).toBe(ShareType.PublishedFolder);
 	});
 
-	test('should allow a share member to list shares associated with a note', async () => {
-		const { user: user1, session: session1 } = await createUserAndSession(1);
-		const { user: user2, session: session2 } = await createUserAndSession(2);
-		await createItemTree(session1.user_id, '', {
-			'000000000000000000000000000000F1': {
-				'00000000000000000000000000000001': null,
-			},
-		});
-		const note = await models().item().loadByJopId(user1.id, '00000000000000000000000000000001');
-		const noteShare = await models().share().shareNote(user1, '00000000000000000000000000000001', '', false);
-
-		const queryNoteShare = async (fromSession: Session) => {
-			const result = await getApi(fromSession.id, 'shares', { query: { note: '00000000000000000000000000000001' } });
-			return (result as { items: Share[] }).items;
-		};
-
-		expect(await queryNoteShare(session1)).toMatchObject([{ id: noteShare.id }]);
-		// Before joining the share, user 2 should not see any shares associated with the note
-		expect(await queryNoteShare(session2)).toMatchObject([]);
-
-		const folderShareRoot = await models().item().loadByJopId(session1.user_id, '000000000000000000000000000000F1');
-		const { share: folderShare } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, folderShareRoot);
-		// Update share IDs so that the user_items table has the correct entries:
-		await updateItemShareId(session1, folderShareRoot.id, folderShare.id);
-		await updateItemShareId(session1, note.id, folderShare.id);
-		await models().share().updateSharedItems3();
-
-		// After joining the share, user 2 should be able to list the note-shares associated with the note
-		expect(await queryNoteShare(session2)).toMatchObject([{ id: noteShare.id }]);
-	});
 });

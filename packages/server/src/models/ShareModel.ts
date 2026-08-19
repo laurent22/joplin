@@ -38,25 +38,7 @@ export default class ShareModel extends BaseModel<Share> {
 		}
 
 		if (action === AclAction.Delete) {
-			// Users with access to a share can unpublish folders and notes contained within the share:
-			const isUnpublishingItemInShare = async () => {
-				if (resource.type !== ShareType.Note && resource.type !== ShareType.PublishedFolder) return false;
-				const joplinId = resource.type === ShareType.Note ? resource.note_id : resource.folder_id;
-
-				const item = await this.models().item().loadByJopId(user.id, joplinId, { fields: ['jop_share_id'] });
-				if (!item || !item.jop_share_id) return false;
-
-				const share = await this.models().share().load(item.jop_share_id);
-				if (share.owner_id === user.id) return true;
-
-				const shareUser = await this.models().shareUser().byShareAndUserId(share.id, user.id);
-				if (!shareUser || shareUser.status !== ShareUserStatus.Accepted) return false;
-
-				return true;
-			};
-			if (user.id !== resource.owner_id && !await isUnpublishingItemInShare()) {
-				throw new ErrorForbidden('no access to this share');
-			}
+			if (user.id !== resource.owner_id) throw new ErrorForbidden('no access to this share');
 		}
 	}
 

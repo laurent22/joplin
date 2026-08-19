@@ -6,7 +6,6 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { AclAction } from '../../models/BaseModel';
-import isItemId from '@joplin/lib/models/utils/isItemId';
 
 interface ShareApiInput extends Share {
 	folder_id?: string;
@@ -122,38 +121,15 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 
 // This end points returns both the shares owned by the user, and those they
 // participate in.
-// By default, only published items owned by the user are returned. To access
-// published items owned by another user, query using the ?note=... filter.
 router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
-	const parseFilter = () => {
-		const itemIdQuery = ctx.query.item;
-		if (typeof itemIdQuery !== 'string') return { itemId: null };
-		if (!isItemId(itemIdQuery)) throw new ErrorBadRequest('Invalid item ID');
-		return { itemId: itemIdQuery };
-	};
-
-	const models = ctx.joplin.models;
-
-	const filter = parseFilter();
-	let rawShares: Share[] = [];
-	if (filter.itemId) {
-		const item = await models.item().loadByJopId(ctx.joplin.owner.id, filter.itemId, { fields: ['id'] });
-		if (item) {
-			const shares = await models.share().byItemIds([item.id]);
-			rawShares.push(...shares.filter(s => s.type === ShareType.Note));
-		}
-	} else {
-		const ownedShares = await models.share().sharesByUser(ctx.joplin.owner.id);
-		const participatedShares = await models.share().participatedSharesByUser(ctx.joplin.owner.id);
-		rawShares = ownedShares.concat(participatedShares);
-	}
+	const ownedShares = (await ctx.joplin.models.share().toApiOutput(await ctx.joplin.models.share().sharesByUser(ctx.joplin.owner.id))) as Share[];
+	const participatedShares = (await ctx.joplin.models.share().toApiOutput(await ctx.joplin.models.share().participatedSharesByUser(ctx.joplin.owner.id)));
 
 	// Fake paginated results so that it can be added later on, if needed.
-	const shares = await models.share().toApiOutput(rawShares);
 	return {
-		items: shares.map(share => {
+		items: ownedShares.concat(participatedShares).map(share => {
 			return {
 				...share,
 				user: {
