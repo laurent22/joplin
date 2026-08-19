@@ -336,13 +336,16 @@ export default class ShareService {
 		const folders = await Folder.loadItemsByIds(folderIds) as FolderEntity[];
 		const noteIds = (await Promise.all(folderIds.map(id => Folder.noteIds(id, { includeConflicts: true, includeDeleted: true })))).flat();
 		const notes = await Note.loadItemsByIds(noteIds) as NoteEntity[];
+		const directlyPublishedNoteIds = new Set(remainingShares
+			.filter(s => s.type === ShareType.Note && !!s.note_id)
+			.map(s => s.note_id));
 
 		for (const folderItem of folders) {
 			await Folder.updateShareStatus({ ...folderItem, type_: ModelType.Folder }, false);
 		}
 
 		for (const note of notes) {
-			await Note.updateShareStatus({ ...note, type_: ModelType.Note }, false);
+			await Note.updateShareStatus({ ...note, type_: ModelType.Note }, directlyPublishedNoteIds.has(note.id));
 		}
 
 		await Folder.updateAllShareIds(ResourceService.instance(), remainingShares);
