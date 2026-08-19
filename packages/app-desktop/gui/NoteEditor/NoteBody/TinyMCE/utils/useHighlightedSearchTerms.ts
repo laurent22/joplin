@@ -95,19 +95,19 @@ const useHighlighter = (editor: Editor, searchRegexes: RegExp[]) => {
 			// Process highlights at the paragraph level, where possible, to pick up formatting that crosses Markdown boundaries
 			const isLeaf = node.nodeName === '#text' || node.nodeName === 'P';
 			if (isLeaf) {
+				const childRanges = [];
 				for (const term of searchRegexes) {
 					const matches = node.textContent.matchAll(term);
-					const childRanges = [];
 
 					for (const match of matches) {
 						const startIndex = match.index ?? 0;
 						const endIndex = (match.index ?? 0) + match[0].length;
 						childRanges.push(buildRange(node, startIndex, endIndex));
 					}
+				}
 
-					if (childRanges.length > 0) {
-						ranges.set(node, childRanges);
-					}
+				if (childRanges.length > 0) {
+					ranges.set(node, childRanges);
 				}
 			} else {
 				for (const child of node.childNodes) {
