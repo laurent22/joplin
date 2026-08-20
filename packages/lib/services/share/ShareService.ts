@@ -329,9 +329,7 @@ export default class ShareService {
 		const share = this.shares.find(s => s.type === ShareType.PublishedFolder && s.folder_id === folderId);
 		if (!share) throw new Error(`No published share for folder: ${folderId}`);
 
-		await this.deleteShare(share.id);
-
-		const remainingShares = await this.refreshShares();
+		const remainingShares = this.shares.filter(s => s.id !== share.id);
 		const folderIds = [folderId, ...(await Folder.allChildrenFolders(folderId)).map(f => f.id)];
 		const folders = await Folder.loadItemsByIds(folderIds) as FolderEntity[];
 		const noteIds = (await Promise.all(folderIds.map(id => Folder.noteIds(id, { includeConflicts: true, includeDeleted: true })))).flat();
@@ -349,6 +347,10 @@ export default class ShareService {
 		}
 
 		await Folder.updateAllShareIds(ResourceService.instance(), remainingShares);
+
+		// Clean local state first so next sync can recover if deletion stops midway
+		await this.deleteShare(share.id);
+		await this.refreshShares();
 	}
 
 	public async unshareNote(noteId: string) {

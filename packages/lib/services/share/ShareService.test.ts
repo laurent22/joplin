@@ -483,6 +483,54 @@ describe('ShareService', () => {
 		expect((await Note.load(noteB.id)).is_shared).toBe(0);
 	});
 
+	it('should recover if app closes while unpublishing a folder', async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		const note = await Note.save({ title: 'note', parent_id: folder.id });
+		const share = {
+			id: 'published-folder',
+			type: ShareType.PublishedFolder,
+			folder_id: folder.id,
+		};
+		let serverShares = [share];
+		const service = mockShareService({
+			onExec: async (method, path) => {
+				if (method === 'GET' && path === 'api/shares') return { items: serverShares };
+				if (method === 'DELETE' && path === `api/shares/${share.id}`) {
+					serverShares = [];
+					return null;
+				}
+				throw new Error(`Unhandled: ${method} ${path}`);
+			},
+		});
+
+		await service.refreshShares();
+		await Folder.save({ id: folder.id, is_shared: 1 });
+		await Note.save({ id: note.id, parent_id: folder.id, is_shared: 1 });
+
+		const updateShareStatusSpy = jest.spyOn(Folder, 'updateShareStatus').mockImplementationOnce(async (item, isShared) => {
+			await BaseItem.updateShareStatus(item, isShared);
+			throw new Error('App closed');
+		});
+		try {
+			await expect(service.unpublishFolder(folder.id)).rejects.toThrow('App closed');
+		} finally {
+			updateShareStatusSpy.mockRestore();
+		}
+
+		expect(serverShares).toEqual([share]);
+
+		const restartedService = mockShareService({
+			getShares: async () => ({ items: serverShares }),
+			postShares: async () => null,
+			getShareInvitations: async () => ({ items: [] }),
+		});
+		await restartedService.refreshShares();
+		await Folder.updateAllShareIds(resourceService(), restartedService.shares);
+
+		expect((await Folder.load(folder.id)).is_shared).toBe(1);
+		expect((await Note.load(note.id)).is_shared).toBe(1);
+	});
+
 	it('should keep a separately published child folder and child note published', async () => {
 		const folderA = await Folder.save({ title: 'folder A' });
 		const folderB = await Folder.save({ title: 'folder B', parent_id: folderA.id });
