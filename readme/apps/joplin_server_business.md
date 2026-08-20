@@ -8,7 +8,7 @@ Joplin Server Business is the self-hosted solution for businesses and organisati
 
 Your teams can collaborate on notebooks and share information. They can also publish notes to the internet or within your own intranet. All that secured by Joplin end-to-end encryption.
 
-Interested? Try Joplin Server Business free for 14 days, with no commitment. [Start your free trial or purchase a licence directly](https://joplinapp.org/plans/?hosting=self).
+Interested? Try Joplin Server Business free for 14 days. [Start your free trial](https://joplinapp.org/plans/?hosting=self) and cancel anytime during the trial without being charged.
 
 </div>
 
@@ -88,7 +88,7 @@ Keep all your resources in one place. Save and share images, PDFs, videos, audio
 
 To find out more about Joplin Server Business and how it can be integrated to your organisation, feel free to contact us. Our experts can prepare a demo for you. We can provide a quote to accommodate your company’s needs.
 
-Try Joplin Server Business free for 14 days, with no commitment. [Start your free trial or purchase a licence directly](https://joplinapp.org/plans/?hosting=self).
+Try Joplin Server Business free for 14 days. [Start your free trial](https://joplinapp.org/plans/?hosting=self) and cancel anytime during the trial without being charged.
 
 ## Difference with Joplin Server
 
