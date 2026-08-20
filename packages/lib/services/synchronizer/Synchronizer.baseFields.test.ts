@@ -227,6 +227,7 @@ describe('Synchronizer.baseFields', () => {
 		await switchClient(2);
 		await synchronizerStart();
 
+		expect(await Note.conflictedNotes()).toEqual([]);
 		expect((await Note.load(note.id)).body).toBe('one\nthree\nfour EDITED');
 	}));
 
