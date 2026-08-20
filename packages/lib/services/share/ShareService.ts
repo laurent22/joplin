@@ -1,4 +1,5 @@
 import { Store } from 'redux';
+import { ModelType } from '../../BaseModel';
 import JoplinServerApi from '../../JoplinServerApi';
 import { _ } from '../../locale';
 import Logger from '@joplin/utils/Logger';
@@ -319,6 +320,37 @@ export default class ShareService {
 		await this.refreshShares();
 
 		return share;
+	}
+
+	public async unpublishFolder(folderId: string): Promise<void> {
+		const folder = await Folder.load(folderId);
+		if (!folder) throw new Error(`No such folder: ${folderId}`);
+
+		const share = this.shares.find(s => s.type === ShareType.PublishedFolder && s.folder_id === folderId);
+		if (!share) throw new Error(`No published share for folder: ${folderId}`);
+
+		const remainingShares = this.shares.filter(s => s.id !== share.id);
+		const folderIds = [folderId, ...(await Folder.allChildrenFolders(folderId)).map(f => f.id)];
+		const folders = await Folder.loadItemsByIds(folderIds) as FolderEntity[];
+		const noteIds = (await Promise.all(folderIds.map(id => Folder.noteIds(id, { includeConflicts: true, includeDeleted: true })))).flat();
+		const notes = await Note.loadItemsByIds(noteIds) as NoteEntity[];
+		const directlyPublishedNoteIds = new Set(remainingShares
+			.filter(s => s.type === ShareType.Note && !!s.note_id)
+			.map(s => s.note_id));
+
+		for (const folderItem of folders) {
+			await Folder.updateShareStatus({ ...folderItem, type_: ModelType.Folder }, false);
+		}
+
+		for (const note of notes) {
+			await Note.updateShareStatus({ ...note, type_: ModelType.Note }, directlyPublishedNoteIds.has(note.id));
+		}
+
+		await Folder.updateAllShareIds(ResourceService.instance(), remainingShares);
+
+		// Clean local state first so next sync can recover if deletion stops midway
+		await this.deleteShare(share.id);
+		await this.refreshShares();
 	}
 
 	public async unshareNote(noteId: string) {
