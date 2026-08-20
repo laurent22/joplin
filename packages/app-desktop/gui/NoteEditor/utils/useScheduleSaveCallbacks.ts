@@ -76,6 +76,7 @@ const useScheduleSaveCallbacks = (props: Props) => {
 			bodyWillChangeId: 0,
 			bodyChangeId: 0,
 		});
+		await formNote.saveActionQueue.processAllNow();
 	}, [scheduleSaveNote, props.editorRef]);
 
 	return { saveNoteIfWillChange, scheduleSaveNote };

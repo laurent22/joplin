@@ -1428,6 +1428,7 @@ packages/lib/components/shared/config/plugins/useOnInstallHandler.js
 packages/lib/components/shared/config/shouldShowMissingPasswordWarning.test.js
 packages/lib/components/shared/config/shouldShowMissingPasswordWarning.js
 packages/lib/components/shared/dropbox-login-shared.js
+packages/lib/components/shared/note-screen-shared.test.js
 packages/lib/components/shared/note-screen-shared.js
 packages/lib/components/shared/reduxSharedMiddleware.js
 packages/lib/components/shared/side-menu-shared.test.js
