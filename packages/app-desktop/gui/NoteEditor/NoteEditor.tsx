@@ -122,6 +122,10 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const effectiveNoteId = useEffectiveNoteId(props);
 	const { editorPlugin, editorView } = usePluginEditorView(props.plugins);
 	const builtInEditorVisible = !editorPlugin;
+	const whiteboardEditorVisible = builtInEditorVisible
+		&& hasWhiteboardFence(formNoteRef.current?.body ?? '')
+		&& !props.whiteboardForceMarkdown?.[formNoteRef.current?.id];
+	const formNoteRefreshEnabled = builtInEditorVisible && !whiteboardEditorVisible;
 	const windowId = useContext(WindowIdContext);
 	const onDecryptFailedChange = useCallback((value: boolean) => {
 		props.dispatch({ type: 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE', value, windowId });
@@ -159,7 +163,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		editorRef: editorRef,
 		onBeforeLoad: formNote_beforeLoad,
 		onAfterLoad: formNote_afterLoad,
-		builtInEditorVisible,
+		builtInEditorVisible: formNoteRefreshEnabled,
 		editorId,
 		noteLockSessionUnlocked: props.noteLockSessionUnlocked,
 		onDecryptFailedChange,
@@ -787,7 +791,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		}
 	}
 
-	if (formNote.encryption_applied || !formNote.id || !effectiveNoteId) {
+	if ((!editorPlugin && (formNote.encryption_applied || reloadInProgress)) || !formNote.id || !effectiveNoteId) {
 		return renderNoNotes(styles.root);
 	}
 

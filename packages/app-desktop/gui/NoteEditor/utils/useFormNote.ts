@@ -165,8 +165,9 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 	useEffect(() => {
 		if (editorNoteReloadTimeRequest === previousEditorNoteReloadTimeRequestRef.current) return;
 		previousEditorNoteReloadTimeRequestRef.current = editorNoteReloadTimeRequest;
+		if (!builtInEditorVisible) return;
 		refreshFormNote(true);
-	}, [editorNoteReloadTimeRequest, refreshFormNote]);
+	}, [editorNoteReloadTimeRequest, builtInEditorVisible, refreshFormNote]);
 
 	// When switching from the plugin editor to the built-in editor, we refresh the note since the
 	// plugin may have modified it via the data API.
@@ -192,6 +193,7 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 
 		type ChangeEventSlice = { itemId: string; changeId: string };
 		const listener = ({ itemId, changeId }: ChangeEventSlice) => {
+			if (!builtInEditorVisible) return;
 			// If this change came from the current editor, it should already be
 			// handled by calls to `setFormNote`. If events from the current editor
 			// aren't ignored, most user-activated note changes (e.g. a keypress)
@@ -208,7 +210,7 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 			eventManager.off(EventName.ItemChange, listener);
 			cancelled = true;
 		};
-	}, [formNoteRef, noteId, editorId, refreshFormNote]);
+	}, [formNoteRef, noteId, editorId, refreshFormNote, builtInEditorVisible]);
 };
 
 export default function useFormNote(dependencies: HookDependencies) {

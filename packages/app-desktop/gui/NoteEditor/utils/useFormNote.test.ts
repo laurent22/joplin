@@ -138,6 +138,7 @@ describe('useFormNote', () => {
 			return {
 				...defaultFormNoteProps,
 				noteId: testNote.id,
+				builtInEditorVisible: true,
 			};
 		};
 
@@ -227,6 +228,7 @@ describe('useFormNote', () => {
 		const props = {
 			...defaultFormNoteProps,
 			noteId: note.id,
+			builtInEditorVisible: true,
 			onReloadInProgressChange,
 		};
 
@@ -254,7 +256,7 @@ describe('useFormNote', () => {
 	it('should force a reload when editorNoteReloadTimeRequest changes', async () => {
 		const note = await Note.save({ title: 'Original', body: '...' });
 		const onReloadInProgressChange = jest.fn();
-		const props = { ...defaultFormNoteProps, noteId: note.id, editorNoteReloadTimeRequest: 0, onReloadInProgressChange };
+		const props = { ...defaultFormNoteProps, noteId: note.id, builtInEditorVisible: true, editorNoteReloadTimeRequest: 0, onReloadInProgressChange };
 		const formNote = renderHook(hookProps => useFormNote(hookProps), { initialProps: props });
 		await waitFor(() => expect(formNote.result.current.formNote.title).toBe('Original'));
 
@@ -273,7 +275,7 @@ describe('useFormNote', () => {
 	it('should clear reloadInProgress after overlapping reload requests', async () => {
 		const note = await Note.save({ title: 'Original', body: '...' });
 		const onReloadInProgressChange = jest.fn();
-		const props = { ...defaultFormNoteProps, noteId: note.id, editorNoteReloadTimeRequest: 0, onReloadInProgressChange };
+		const props = { ...defaultFormNoteProps, noteId: note.id, builtInEditorVisible: true, editorNoteReloadTimeRequest: 0, onReloadInProgressChange };
 		const formNote = renderHook(hookProps => useFormNote(hookProps), { initialProps: props });
 		await waitFor(() => expect(formNote.result.current.formNote.title).toBe('Original'));
 
