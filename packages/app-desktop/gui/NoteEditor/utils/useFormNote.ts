@@ -36,6 +36,8 @@ export interface HookDependencies {
 	builtInEditorVisible: boolean;
 	noteLockSessionUnlocked: boolean;
 	onDecryptFailedChange(value: boolean): void;
+	onReloadInProgressChange?(value: boolean): void;
+	editorNoteReloadTimeRequest?: number;
 }
 
 type MapFormNoteCallback = (previousFormNote: FormNote)=> FormNote;
@@ -95,18 +97,21 @@ const loadNoteForForm = async (noteId: string): Promise<{ note: NoteEntity|null;
 	return { note, blocked: false, decryptFailed: false };
 };
 
-type InitNoteStateCallback = (note: NoteEntity, isNew: boolean)=> Promise<FormNote>;
-const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: string, noteId: string, initNoteState: InitNoteStateCallback, clearFormNote: ()=> void, builtInEditorVisible: boolean, noteLockSessionUnlocked: boolean, setDecryptFailed: (value: boolean)=> void, setLoadBlocked: (value: boolean)=> void) => {
+type InitNoteStateCallback = (note: NoteEntity, isNew: boolean, force?: boolean)=> Promise<FormNote>;
+const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: string, noteId: string, initNoteState: InitNoteStateCallback, clearFormNote: ()=> void, builtInEditorVisible: boolean, noteLockSessionUnlocked: boolean, setDecryptFailed: (value: boolean)=> void, setLoadBlocked: (value: boolean)=> void, onReloadInProgressChange: (value: boolean)=> void, editorNoteReloadTimeRequest: number) => {
 	// Increasing the value of this counter cancels any ongoing note refreshes and starts
 	// a new refresh.
-	const [formNoteRefreshScheduled, setFormNoteRefreshScheduled] = useState<number>(0);
+	const [formNoteRefreshRequest, setFormNoteRefreshRequest] = useState({ counter: 0, force: false });
+	const previousEditorNoteReloadTimeRequestRef = useRef(editorNoteReloadTimeRequest);
 	const prevBuiltInEditorVisible = usePrevious<boolean>(builtInEditorVisible);
 	// Seeded because usePrevious defaults to null, which would read as a session change on mount.
 	const prevNoteLockSessionUnlocked = usePrevious<boolean>(noteLockSessionUnlocked, noteLockSessionUnlocked);
 
 	useQueuedAsyncEffect(async (event) => {
-		if (formNoteRefreshScheduled <= 0) return;
-		if (formNoteRef.current.hasChanged) {
+		if (event.cancelled) return;
+		if (formNoteRefreshRequest.counter <= 0) return;
+		const forceRefresh = formNoteRefreshRequest.force;
+		if (formNoteRef.current.hasChanged && !forceRefresh) {
 			logger.info('Form note changed between scheduling a refresh and the refresh itself. Cancelling the refresh.');
 			return;
 		}
@@ -116,7 +121,7 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 		const loadNote = async () => {
 			setDecryptFailed(false);
 			const { note: n, blocked, decryptFailed } = await loadNoteForForm(noteId);
-			if (event.cancelled || formNoteRef.current.hasChanged) return;
+			if (event.cancelled || (formNoteRef.current.hasChanged && !forceRefresh)) return;
 
 			setLoadBlocked(blocked);
 			setDecryptFailed(decryptFailed);
@@ -133,28 +138,39 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 					return;
 				}
 
-				await initNoteState(n, false);
+				await initNoteState(n, false, forceRefresh);
 				if (event.cancelled) return;
 			}
-			setFormNoteRefreshScheduled(oldValue => {
+			setFormNoteRefreshRequest(oldValue => {
 				// If a new refresh was scheduled between initNoteState
 				// and now:
-				if (oldValue !== formNoteRefreshScheduled) {
+				if (oldValue.counter !== formNoteRefreshRequest.counter) {
 					return oldValue;
 				}
 				// A refresh is no longer scheduled
-				return 0;
+				return { counter: 0, force: false };
 			});
 		};
 
-		await loadNote();
-	}, [formNoteRefreshScheduled, noteId, editorId, initNoteState, clearFormNote, setDecryptFailed]);
+		try {
+			await loadNote();
+		} finally {
+			if (forceRefresh && !event.cancelled) onReloadInProgressChange(false);
+		}
+	}, [formNoteRefreshRequest, noteId, editorId, initNoteState, clearFormNote, setDecryptFailed, onReloadInProgressChange]);
 
-	const refreshFormNote = useCallback(() => {
+	const refreshFormNote = useCallback((force = false) => {
 		// Increase the counter to cancel any ongoing refresh attempts
 		// and start a new one.
-		setFormNoteRefreshScheduled(count => count + 1);
-	}, []);
+		if (force) onReloadInProgressChange(true);
+		setFormNoteRefreshRequest(previous => ({ counter: previous.counter + 1, force: previous.force || force }));
+	}, [onReloadInProgressChange]);
+
+	useEffect(() => {
+		if (editorNoteReloadTimeRequest === previousEditorNoteReloadTimeRequestRef.current) return;
+		previousEditorNoteReloadTimeRequestRef.current = editorNoteReloadTimeRequest;
+		refreshFormNote(true);
+	}, [editorNoteReloadTimeRequest, refreshFormNote]);
 
 	// When switching from the plugin editor to the built-in editor, we refresh the note since the
 	// plugin may have modified it via the data API.
@@ -203,6 +219,8 @@ export default function useFormNote(dependencies: HookDependencies) {
 	const {
 		noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad, builtInEditorVisible, editorId, noteLockSessionUnlocked, onDecryptFailedChange,
 	} = dependencies;
+	const onReloadInProgressChange = dependencies.onReloadInProgressChange ?? (() => {});
+	const editorNoteReloadTimeRequest = dependencies.editorNoteReloadTimeRequest ?? 0;
 
 	const [formNote, setFormNote] = useState<FormNote>(defaultFormNote());
 	const [isNewNote, setIsNewNote] = useState(false);
@@ -220,7 +238,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 	const formNoteRef = useRef(formNote);
 	formNoteRef.current = formNote;
 
-	const initNoteState: InitNoteStateCallback = useCallback(async (n, isNewNote) => {
+	const initNoteState: InitNoteStateCallback = useCallback(async (n, isNewNote, force = false) => {
 		let noteLockKey = null;
 		if (isNoteLockEnabled() && NoteLockNote.isLocked(n)) {
 			// The session can lock between the gated load and here (e.g. lock-on-switch) - drop
@@ -269,7 +287,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 		// If the user changes the note while resources are loading, this can lead to
 		// a note being incorrectly marked as "unchanged".
-		if (!isNewNote && formNoteRef.current?.hasChanged) {
+		if (!isNewNote && formNoteRef.current?.hasChanged && !force) {
 			logger.info('Cancelled note refresh -- form note changed while loading attached resources.');
 			return null;
 		}
@@ -289,7 +307,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		setFormNote(formNoteRef.current);
 	}, []);
 
-	useRefreshFormNoteOnChange(formNoteRef, editorId, noteId, initNoteState, clearFormNote, builtInEditorVisible, noteLockSessionUnlocked, setDecryptFailed, setLoadBlocked);
+	useRefreshFormNoteOnChange(formNoteRef, editorId, noteId, initNoteState, clearFormNote, builtInEditorVisible, noteLockSessionUnlocked, setDecryptFailed, setLoadBlocked, onReloadInProgressChange, editorNoteReloadTimeRequest);
 
 	useEffect(() => {
 		if (!noteId) {

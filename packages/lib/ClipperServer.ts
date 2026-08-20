@@ -150,7 +150,7 @@ export default class ClipperServer {
 			};
 
 			const writeResponseJson = (code: number, object: unknown) => {
-				writeCorsHeaders(code);
+				writeCorsHeaders(code, 'application/json');
 				response.write(JSON.stringify(object));
 				response.end();
 			};

@@ -94,6 +94,7 @@ import { Platform } from 'react-native';
 import VoiceTyping from '../services/voiceTyping/VoiceTyping';
 import whisper from '../services/voiceTyping/whisper';
 import PerFolderSortOrderService from '@joplin/lib/services/sortOrder/PerFolderSortOrderService';
+import getConflictFolderId from '@joplin/lib/models/utils/getConflictFolderId';
 const { runStartupTests } = require('@joplin/mobile-config');
 
 
@@ -402,7 +403,12 @@ const buildStartupTasks = (
 
 		const notesParent = await getNotesParent();
 
-		if (notesParent && notesParent.type === 'SmartFilter') {
+		// Do not navigate to the conflicts folder if stored, because it has special behaviour and will disappear when the last note
+		// is removed from it, without being purged from notesParent and activeFolderId
+		const conflictFolderId = getConflictFolderId();
+		if (notesParent?.selectedItemId === conflictFolderId || folder?.id === conflictFolderId) {
+			dispatch(DEFAULT_ROUTE);
+		} else if (notesParent && notesParent.type === 'SmartFilter') {
 			dispatch({
 				type: 'NAV_GO',
 				routeName: 'Notes',

@@ -1,7 +1,7 @@
 import shim from '../../../shim';
 import JoplinError from '../../../JoplinError';
 import Logger from '@joplin/utils/Logger';
-import { ChatMessage, ChatOptions, ChatResult, ChatRole, ChatToolCall, ProviderClassification } from '../types';
+import { ChatMessage, ChatOptions, ChatResult, ChatRole, ChatToolCall, ChatToolMessage, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 
 const logger = Logger.create('AnthropicProvider');
@@ -23,10 +23,19 @@ interface AnthropicToolUseContentBlock {
 	input: Record<string, unknown>;
 }
 
+interface AnthropicImageContent {
+	type: 'image';
+	source: {
+		type: 'base64';
+		media_type: string;
+		data: string;
+	};
+}
+
 interface AnthropicToolResultContentBlock {
 	type: 'tool_result';
 	tool_use_id: string;
-	content: string;
+	content: string|AnthropicImageContent[];
 }
 
 type AnthropicContentBlock = AnthropicToolUseContentBlock|AnthropicToolResultContentBlock|AnthropicTextContentBlock;
@@ -98,21 +107,39 @@ const convertMessages = (messages: ChatMessage[]) => {
 		};
 	};
 
+	const convertToolResponse = (message: ChatToolMessage): AnthropicMessage => {
+		let content;
+		if (typeof message.content === 'string') {
+			content = message.content;
+		} else {
+			content = [{
+				type: 'image' as const,
+				source: {
+					type: 'base64' as const,
+					media_type: message.content.mimeType,
+					data: message.content.base64Only,
+				},
+			}];
+		}
+
+		return {
+			role: 'user',
+			content: [
+				{
+					type: 'tool_result',
+					tool_use_id: message.toolCallId,
+					content,
+					...(message.isError ? { is_error: true } : {}),
+				},
+			],
+		};
+	};
+
 	const result = messages
 		.map((message): AnthropicMessage => {
 			if (message.role === ChatRole.System) return null;
 			if (message.role === ChatRole.Tool) {
-				return {
-					role: 'user',
-					content: [
-						{
-							type: 'tool_result',
-							tool_use_id: message.toolCallId,
-							content: message.content,
-							...(message.isError ? { is_error: true } : {}),
-						},
-					],
-				};
+				return convertToolResponse(message);
 			} else if (message.role === ChatRole.Assistant || message.role === ChatRole.User) {
 				return {
 					role: message.role,

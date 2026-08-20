@@ -7,7 +7,7 @@ export interface HtmlNodeInfo {
 	closing: boolean;
 	from: number;
 	to: number;
-	tagName: ()=> string;
+	tagName: ()=> string|null;
 	getAttr: (attributeName: string)=> string;
 }
 

@@ -5,6 +5,7 @@ import Tag from '../../models/Tag';
 import AiService from './AiService';
 import { EmbeddingProvider } from './types';
 import { EmbeddingsPage, GetEmbeddingsOptions, SearchOptions, SearchQuery, SearchRelevance, SearchResult, SearchScope } from '../plugins/api/types';
+import { splitByMarkdownFormattingApproximate } from '../../string-utils';
 
 export type { EmbeddingsPage, GetEmbeddingsOptions, SearchOptions, SearchQuery, SearchRelevance, SearchResult, SearchScope };
 
@@ -20,8 +21,10 @@ interface RelevanceTuning {
 }
 
 // Tuned for multilingual-e5-small. Becomes a per-model map when we add more.
+// multilingual-e5-small usually returns results in the range [0.7,1]
 const RELEVANCE_DEFAULTS: Record<SearchRelevance, RelevanceTuning> = {
-	strict: { k: 5, minScore: 0.55 },
+	strict: { k: 5, minScore: 0.86 },
+	// TODO: Adjust minScore to avoid returning irrelevant results:
 	normal: { k: 10, minScore: 0.40 },
 	loose: { k: 20, minScore: 0.25 },
 };
@@ -58,6 +61,28 @@ const cosineFromDistance = (distance: number) => {
 	return score;
 };
 
+const cosineSimilarity = (a: number[], b: number[]) => {
+	const dot = (a: number[], b: number[]) => {
+		if (a.length !== b.length) throw new Error(`Length mismatch: ${a.length} != ${b.length}`);
+
+		let sum = 0;
+		for (let i = 0; i < a.length; i++) {
+			sum += a[i] * b[i];
+		}
+
+		return sum;
+	};
+	const norm = (v: number[]) => Math.sqrt(dot(v, v));
+
+	return dot(a, b) / norm(a) / norm(b);
+};
+
+class MissingProviderError extends Error {
+	public constructor() {
+		super('No embedding provider is active. Enable AI features in Settings → AI.');
+	}
+}
+
 export default class SearchService {
 
 	private static instance_: SearchService;
@@ -70,7 +95,7 @@ export default class SearchService {
 	public async getEmbeddings(options: GetEmbeddingsOptions = {}): Promise<EmbeddingsPage> {
 		const provider = AiService.instance().getActiveEmbeddingProvider();
 		if (!provider) {
-			throw new Error('No embedding provider is active. Enable AI features in Settings → AI.');
+			throw new MissingProviderError();
 		}
 
 		const limit = resolveEmbeddingsLimit(options.limit);
@@ -169,6 +194,70 @@ export default class SearchService {
 		return Array.from(best.values())
 			.sort((a, b) => b.score - a.score)
 			.slice(0, tuning.k);
+	}
+
+	public async bestMatchInResult(query: string, result: SearchResult) {
+		return this.bestSubMatchInText_(query, result.chunkText);
+	}
+
+	private async bestSubMatchInText_(query: string, text: string) {
+		const provider = AiService.instance().getActiveEmbeddingProvider();
+		if (!provider) {
+			throw new MissingProviderError();
+		}
+
+		const queryVectors = await this.resolveQueryVectors({ text: query }, provider);
+
+		const scoreChunk = (embedding: number[]) => {
+			let bestScore = 0;
+			for (const query of queryVectors) {
+				const score = cosineSimilarity(query, embedding);
+				if (score >= bestScore) {
+					bestScore = score;
+				}
+			}
+			return bestScore;
+		};
+
+		const findBestIndex = (scores: number[]) => {
+			let bestIndex = 0;
+			let bestScore = -Infinity;
+			for (let i = 0; i < scores.length; i++) {
+				if (scores[i] > bestScore) {
+					bestScore = scores[i];
+					bestIndex = i;
+				}
+			}
+			return bestIndex;
+		};
+
+		const getBestSubtext = async (chunks: string[]) => {
+			const embeddings = await provider.embed(chunks);
+			const scores = embeddings.map(scoreChunk);
+
+			return chunks[findBestIndex(scores)];
+		};
+
+		const lines = text.split('\n')
+			.map(line => line.trim())
+			.filter(line => line.length > 0);
+		if (lines.length) {
+			text = await getBestSubtext(lines);
+		}
+
+		// Try to get a sub-section that doesn't include Markdown formatting. Results including
+		// Markdown are more difficult to highlight after rendering:
+		const segments = splitByMarkdownFormattingApproximate(text)
+			.map(segment => segment.trim())
+			// Marking short or single-character matches usually isn't helpful
+			.filter(segment => segment.length > 1);
+		if (segments.length > 1) {
+			text = await getBestSubtext(segments);
+		} else if (segments.length > 0) {
+			text = segments[0];
+		}
+
+		return text;
 	}
 
 	private async resolveQueryVectors(

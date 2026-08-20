@@ -543,6 +543,7 @@ export function setMasterKeyEnabled(mkId: string, enabled = true) {
 export const setMasterKeyHasBeenUsed = (s: SyncInfo, mkId: string) => {
 	const idx = s.masterKeys.findIndex(mk => mk.id === mkId);
 	if (idx < 0) throw new Error(`No such master key: ${mkId}`);
+	if (s.masterKeys[idx].hasBeenUsed) return s;
 
 	s.masterKeys[idx] = {
 		...s.masterKeys[idx],

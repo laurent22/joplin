@@ -52,24 +52,43 @@ const convertTool = (tool: ToolSpec) => {
 			name: tool.id,
 			description: tool.description,
 			parameters: tool.inputSchema,
-			strict: true,
 		},
 	};
 };
 
 const convertMessage = (message: ChatMessage) => {
 	if (message.role === 'tool') {
-		return {
-			role: 'tool',
-			name: message.toolName,
-			content: message.content,
-			tool_call_id: message.toolCallId,
-		};
+		const content = message.content;
+		if (typeof content === 'string') {
+			return [{
+				role: 'tool',
+				name: message.toolName,
+				content,
+				tool_call_id: message.toolCallId,
+			}];
+		} else {
+			// Joplin currently uses the older OpenAI chat responses API, which does not support
+			// images in tool results. Attach the image in a user message instead:
+			return [{
+				role: 'tool',
+				name: message.toolName,
+				content: 'success: will be attached in user message',
+				tool_call_id: message.toolCallId,
+			}, {
+				role: 'user',
+				content: [
+					{
+						type: 'image_url',
+						image_url: { url: content.dataUrl },
+					},
+				],
+			}];
+		}
 	} else {
-		return {
+		return [{
 			role: message.role,
 			content: message.content,
-			...(message.toolCalls ? {
+			...(message.toolCalls?.length ? {
 				tool_calls: message.toolCalls.map(call => {
 					return {
 						id: call.callId,
@@ -81,7 +100,7 @@ const convertMessage = (message: ChatMessage) => {
 					};
 				}),
 			} : {}),
-		};
+		}];
 	}
 };
 
@@ -128,7 +147,7 @@ export default class OpenAiCompatibleProvider extends ChatProviderBase {
 
 		const body: Record<string, unknown> = {
 			model: this.model_,
-			messages: messages.map(convertMessage),
+			messages: messages.flatMap((message): unknown[] => convertMessage(message)),
 			stream: false,
 		};
 		if (options?.temperature !== undefined) body.temperature = options.temperature;

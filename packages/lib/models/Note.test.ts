@@ -197,6 +197,14 @@ describe('models/Note', () => {
 		expect(!!changedNote.is_todo).toBe(false);
 	}));
 
+	it('should still save a note after a save was rejected by validation', (async () => {
+		const note = await Note.save({ title: 'ok' });
+		await expect(Note.save({ id: note.id, title: `bad${String.fromCharCode(0)}title` }, { userSideValidation: true })).rejects.toThrow(/null byte/);
+		// Deadlocks on the note's save mutex if the rejected save above failed to release it.
+		const saved = await Note.save({ id: note.id, title: 'fixed' });
+		expect(saved.title).toBe('fixed');
+	}));
+
 	it('should serialize and unserialize without modifying data', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const testCases = [
@@ -1000,4 +1008,22 @@ describe('models/Note', () => {
 		const revisionsCountAfter = await Revision.countRevisions(Note.modelType(), note.id);
 		expect(revisionsCountAfter).toBe(1);
 	}));
+
+	test('allByTitleAndParent should query by title and parent ID', async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const folder2 = await Folder.save({ title: 'folder2' });
+		const note1 = await Note.save({ title: 'note', parent_id: folder1.id });
+		await Note.save({ title: 'note', parent_id: folder2.id });
+
+		// Filtering on no parents should return an empty array
+		expect(
+			await Note.allByTitleAndParent({ title: 'note', whereParentIn: [], fields: ['id'] }),
+		).toEqual([]);
+
+		const allInFolder1 = (await Note.allByTitleAndParent({
+			title: 'note', whereParentIn: [folder1.id], fields: ['id'],
+		})).map(n => n.id);
+
+		expect(allInFolder1).toEqual([note1.id]);
+	});
 });
