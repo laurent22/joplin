@@ -36,6 +36,8 @@ describe('useFormNote', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		// Pinned off regardless of the build's default so the fixtures below save raw bodies.
+		Setting.setValue('featureFlag.noteLock', false);
 	});
 
 	// The session and decryption internals are covered by the lib tests; here they are mocked to
