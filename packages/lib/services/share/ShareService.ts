@@ -6,7 +6,7 @@ import Folder from '../../models/Folder';
 import MasterKey from '../../models/MasterKey';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
-import { FolderEntity } from '../database/types';
+import { FolderEntity, NoteEntity } from '../database/types';
 import EncryptionService from '../e2ee/EncryptionService';
 import { PublicPrivateKeyPair, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword, supportsPpkAlgorithm } from '../e2ee/ppk/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
@@ -325,8 +325,8 @@ export default class ShareService {
 		const note = await Note.load(noteId);
 		if (!note) throw new Error(`No such note: ${noteId}`);
 
-		const shares = await this.refreshShares();
-		const noteShares = shares.filter(s => s.note_id === noteId);
+		const noteShares = (await this.loadSharesByItem(noteId))
+			.filter(s => s.type === ShareType.Note);
 
 		const promises: Promise<void>[] = [];
 
@@ -413,6 +413,43 @@ export default class ShareService {
 
 	public async deleteShare(shareId: string) {
 		await this.api().exec('DELETE', `api/shares/${shareId}`);
+	}
+
+	public async isPublished(item: NoteEntity|FolderEntity, shares: StateShare[]) {
+		// Try to determine whether the item is published without doing a network request:
+		const isPublishedItemShare = (s: StateShare) => s.type === ShareType.Note || s.type === ShareType.PublishedFolder;
+		if (shares.some(s => (
+			isPublishedItemShare(s) &&
+			(s.folder_id === item.id || s.note_id === item.id)
+		))) {
+			return true;
+		}
+
+		// In some cases, an item can have is_shared = 1, but no share in `shares`. In this case,
+		// either the item has been unpublished remotely and not yet synced, or the item was published
+		// by another user. Send a network request to determine whether the item is actually published:
+		if (item.is_shared) {
+			const shares = (await this.loadSharesByItem(item.id))
+				.filter(isPublishedItemShare);
+			return shares.length > 0;
+		}
+
+		return false;
+	}
+
+	private async loadSharesByItem(itemId: string) {
+		const shares = await this.api().exec('GET', 'api/shares', { item: itemId });
+		if (!Array.isArray(shares?.items)) throw new Error(`Invalid response: Shares list is not an array. Was ${typeof shares?.items}.`);
+
+		const items: StateShare[] = shares.items.filter(
+			// For compatibility with older server versions that don't support search
+			(i: StateShare) => (
+				(i.type === ShareType.Note && i.note_id === itemId)
+				|| (i.type === ShareType.PublishedFolder && i.folder_id === itemId)
+				|| (i.type === ShareType.Folder && i.folder_id === itemId)
+			),
+		);
+		return items;
 	}
 
 	private async loadShares() {

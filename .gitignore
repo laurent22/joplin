@@ -1390,6 +1390,7 @@ packages/lib/components/shared/SamlShared.js
 packages/lib/components/shared/ShareNoteDialog/onUnshareNoteClick.js
 packages/lib/components/shared/ShareNoteDialog/types.js
 packages/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage.js
+packages/lib/components/shared/ShareNoteDialog/useIsPublished.js
 packages/lib/components/shared/ShareNoteDialog/useOnShareLinkClick.js
 packages/lib/components/shared/ShareNoteDialog/useShareStatusMessage.js
 packages/lib/components/shared/SsoScreenShared.js
