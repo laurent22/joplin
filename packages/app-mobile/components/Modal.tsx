@@ -4,7 +4,7 @@
 
 import * as React from 'react';
 import { RefObject, useCallback, useMemo, useRef, useState } from 'react';
-import { Animated, GestureResponderEvent, Modal, Platform, Pressable, ScrollView, ScrollViewProps, StyleSheet, View, ViewStyle } from 'react-native';
+import { Animated, GestureResponderEvent, Modal, Platform, Pressable, ScrollView, ScrollViewProps, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import FocusControl from './accessibility/FocusControl/FocusControl';
 import { msleep, Second } from '@joplin/utils/time';
 import useAsyncEffect from '@joplin/lib/hooks/useAsyncEffect';
@@ -14,6 +14,8 @@ import { _ } from '@joplin/lib/locale';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
 import Dialog from '@joplin/lib/components/Dialog';
 import useKeyboardState from '../utils/hooks/useKeyboardState';
+
+type AllScrollViewProps = ScrollViewProps & { ref?: React.Ref<ScrollView> };
 
 type OnClose = ()=> void;
 type OnShow = ()=> void;
@@ -30,7 +32,7 @@ export interface ModalElementProps {
 	statusBarTranslucent?: boolean;
 
 	children: React.ReactNode;
-	containerStyle?: ViewStyle;
+	containerStyle?: StyleProp<ViewStyle>;
 	backgroundColor?: string;
 	modalBackgroundStyle?: ViewStyle;
 	// Extra styles for the accessibility tools dismiss button. For example,
@@ -41,7 +43,7 @@ export interface ModalElementProps {
 	// If scrollOverflow is provided, the modal is wrapped in a vertical
 	// ScrollView. This allows the user to scroll parts of dialogs into
 	// view that would otherwise be clipped by the screen edge.
-	scrollOverflow?: boolean|ScrollViewProps;
+	scrollOverflow?: boolean|AllScrollViewProps;
 }
 
 const useStyles = (hasScrollView: boolean, backgroundColor: string|undefined) => {

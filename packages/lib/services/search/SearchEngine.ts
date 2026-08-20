@@ -18,14 +18,18 @@ import { htmlentitiesDecode } from '@joplin/utils/html';
 const { sprintf } = require('sprintf-js');
 import { pregQuote, scriptType, removeDiacritics } from '../../string-utils';
 import PerformanceLogger from '../../PerformanceLogger';
+import SearchService from '../ai/SearchService';
+import { unique } from '../../ArrayUtils';
+import { embeddingAvailability } from '../ai/availability';
 
 const perfLogger = PerformanceLogger.create();
 
-enum SearchType {
+export enum SearchType {
 	Auto = 'auto',
 	Basic = 'basic',
 	Nonlatin = 'nonlatin',
 	Fts = 'fts',
+	Semantic = 'semantic',
 }
 
 interface SearchOptions {
@@ -54,15 +58,18 @@ export interface ProcessResultsRow {
 	fields?: string[];
 	weight?: number;
 	fuzziness?: number;
+	searchType: SearchType[];
 	is_todo?: number;
 	todo_completed?: number;
 }
 
 export interface ComplexTerm {
-	type: 'regex' | 'text';
+	type: 'regex' | 'text' | 'fuzzy';
 	value: string;
-	scriptType: string;
+	scriptType?: string;
 	valueRegex?: string;
+	accuracy?: string;
+	source?: 'semantic';
 }
 
 export interface Terms {
@@ -457,7 +464,7 @@ export default class SearchEngine {
 		}
 	}
 
-	private processBasicSearchResults_(rows: ProcessResultsRow[], parsedQuery: ParsedQuery) {
+	private processNonFtsSearchResults_(rows: ProcessResultsRow[], parsedQuery: ParsedQuery) {
 		const valueRegexs = parsedQuery.keys.includes('_') ? parsedQuery.terms['_'].map(term => (typeof term === 'string' ? term : term.valueRegex || term.value)) : [];
 		const isTitleSearch = parsedQuery.keys.includes('title');
 		const isOnlyTitle = parsedQuery.keys.length === 1 && isTitleSearch;
@@ -466,46 +473,31 @@ export default class SearchEngine {
 			const row = rows[i];
 			const testTitle = (regex: string) => new RegExp(regex, 'ig').test(row.title);
 			const matchedFields: Record<string, boolean> = {
-				title: isTitleSearch || valueRegexs.some(testTitle),
-				body: !isOnlyTitle,
+				title: isTitleSearch || valueRegexs.some(testTitle) || row.fields?.includes('title'),
+				body: !isOnlyTitle || row.fields?.includes('body'),
 			};
 
 			row.fields = Object.keys(matchedFields).filter(key => matchedFields[key]);
-			row.weight = 0;
-			row.fuzziness = 0;
+			row.weight ??= 0;
+			row.fuzziness ??= 0;
+			row.searchType ??= [SearchType.Basic];
 		}
 	}
 
-	private processResults_(rows: ProcessResultsRow[], parsedQuery: ParsedQuery, isBasicSearchResults = false) {
-		if (isBasicSearchResults) {
-			this.processBasicSearchResults_(rows, parsedQuery);
-		} else {
+	private processResults_(rows: ProcessResultsRow[], parsedQuery: ParsedQuery, isFtsSearchResults = false) {
+		if (isFtsSearchResults) {
 			this.calculateWeightBM25_(rows);
 			for (let i = 0; i < rows.length; i++) {
 				const row = rows[i];
 				const offsets = row.offsets.split(' ').map(o => Number(o));
 				row.fields = this.fieldNamesFromOffsets_(offsets);
+				row.searchType = [SearchType.Fts];
 			}
+		} else {
+			this.processNonFtsSearchResults_(rows, parsedQuery);
 		}
 
-		rows.sort((a, b) => {
-			const aIsNote = a.item_type === ModelType.Note;
-			const bIsNote = b.item_type === ModelType.Note;
-
-			if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
-			if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
-			if (a.weight < b.weight) return +1;
-			if (a.weight > b.weight) return -1;
-
-			if (aIsNote && bIsNote) {
-				if (a.is_todo && a.todo_completed) return +1;
-				if (b.is_todo && b.todo_completed) return -1;
-			}
-
-			if (a.user_updated_time < b.user_updated_time) return +1;
-			if (a.user_updated_time > b.user_updated_time) return -1;
-			return 0;
-		});
+		sortRows(rows);
 	}
 
 	// https://stackoverflow.com/a/13818704/561309
@@ -674,12 +666,61 @@ export default class SearchEngine {
 			if (key === 'body') searchOptions.bodyPattern = `*${term}*`;
 		}
 
-		return Note.previews(null, searchOptions);
+		return await Note.previews(null, searchOptions);
 	}
 
-	private determineSearchType_(query: string, preferredSearchType: SearchType) {
-		if (preferredSearchType === SearchEngine.SEARCH_TYPE_BASIC) return SearchEngine.SEARCH_TYPE_BASIC;
-		if (preferredSearchType === SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT) return SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT;
+	public async semanticSearch(query: string, parsedQuery: ParsedQuery) {
+		const rows: ProcessResultsRow[] = [];
+		const results = await SearchService.instance().search({ query: { text: query }, relevance: 'strict' });
+
+		const seenNotes = new Map<string, ProcessResultsRow>();
+		for (const result of results) {
+			let row = seenNotes.get(result.noteId);
+			// Results are received in order of relevance, so ignore the less-relevant result
+			if (row) continue;
+
+			const item = await Note.load(
+				result.noteId,
+				{ fields: ['id', 'parent_id', 'title', 'user_updated_time', 'user_created_time', 'is_todo', 'todo_completed'] },
+			);
+			// Handle the case where the item was deleted after search started
+			if (!item) continue;
+
+			row = {
+				id: item.id,
+				item_id: item.id,
+				parent_id: item.parent_id,
+				title: item.title,
+				user_updated_time: item.user_updated_time,
+				user_created_time: item.user_created_time,
+				matchinfo: null,
+				item_type: ModelType.Note,
+				// Standard results weights are usually 0-10, semantic search scores are usually
+				// 0.7-1.
+				weight: result.score * 5,
+				is_todo: item.is_todo,
+				todo_completed: item.todo_completed,
+				searchType: [SearchType.Semantic],
+
+				// For now, estimate whether the match is in the title or the body.
+				// For performance, we avoid loading 'body'.
+				fields: item.title.includes(result.chunkText) ? ['title'] : ['body'],
+				offsets: '',
+			};
+			seenNotes.set(result.noteId, row);
+			rows.push(row);
+		}
+		this.processResults_(rows, parsedQuery, false);
+
+		return rows;
+	}
+
+	private determineSearchType_(query: string, parsedQuery: ParsedQuery, preferredSearchType: SearchType) {
+		if (preferredSearchType === SearchType.Basic) return SearchType.Basic;
+		if (preferredSearchType === SearchType.Nonlatin) return SearchType.Nonlatin;
+		if (preferredSearchType === SearchType.Semantic && this.canSemanticSearch_(parsedQuery)) {
+			return SearchType.Semantic;
+		}
 
 		// If preferredSearchType is "fts" we auto-detect anyway
 		// because it's not always supported.
@@ -704,6 +745,16 @@ export default class SearchEngine {
 		}
 
 		return SearchEngine.SEARCH_TYPE_FTS;
+	}
+
+	private canSemanticSearch_(parsedQuery: ParsedQuery) {
+		// Disable semantic search if the user has explicitly specified a field to search in
+		if (parsedQuery.allTerms.some(term => term.name !== 'text')) {
+			return false;
+		}
+
+		return Setting.value('featureFlag.enableSemanticSearch')
+			&& embeddingAvailability().available;
 	}
 
 	private async searchFromItemIds(searchString: string): Promise<ProcessResultsRow[]> {
@@ -737,6 +788,7 @@ export default class SearchEngine {
 						user_updated_time: item.user_updated_time || item.updated_time,
 						user_created_time: item.user_created_time || item.created_time,
 						fields: ['id'],
+						searchType: [SearchType.Basic],
 					},
 				];
 			}
@@ -755,15 +807,18 @@ export default class SearchEngine {
 			...options,
 		};
 
-		const searchType = this.determineSearchType_(searchString, options.searchType);
 		const parsedQuery = await this.parseQuery(searchString);
+		const searchType = this.determineSearchType_(searchString, parsedQuery, options.searchType);
 
 		let rows: ProcessResultsRow[] = [];
 
 		if (searchType === SearchEngine.SEARCH_TYPE_BASIC) {
-			searchString = this.normalizeText_(searchString);
-			rows = (await this.basicSearch(searchString)) as unknown as ProcessResultsRow[];
-			this.processResults_(rows, parsedQuery, true);
+			rows = (await this.basicSearch(
+				this.normalizeText_(searchString),
+			)) as unknown as ProcessResultsRow[];
+			this.processResults_(rows, parsedQuery, false);
+		} else if (searchType === SearchType.Semantic) {
+			rows = await this.semanticSearch(searchString, parsedQuery);
 		} else {
 			// SEARCH_TYPE_FTS
 			// FTS will ignore all special characters, like "-" in the index. So if
@@ -785,7 +840,7 @@ export default class SearchEngine {
 				});
 			}
 
-			const useFts = searchType === SearchEngine.SEARCH_TYPE_FTS;
+			const useFts = searchType === SearchType.Fts;
 			try {
 				const { query, params } = queryBuilder(parsedQuery.allTerms, useFts);
 
@@ -796,6 +851,7 @@ export default class SearchEngine {
 					return {
 						...r,
 						item_type: ModelType.Note,
+						searchType: [searchType],
 					};
 				});
 
@@ -849,7 +905,7 @@ export default class SearchEngine {
 					rows = rows.concat(itemRows);
 				}
 
-				this.processResults_(rows as ProcessResultsRow[], parsedQuery, !useFts);
+				this.processResults_(rows as ProcessResultsRow[], parsedQuery, useFts);
 			} catch (error) {
 				this.logger().warn(`Cannot execute MATCH query: ${searchString}: ${error.message}`);
 				rows = [];
@@ -858,6 +914,18 @@ export default class SearchEngine {
 
 		if (!rows.length) {
 			rows = await this.searchFromItemIds(searchString);
+		}
+
+		if (this.canSemanticSearch_(parsedQuery)
+			// Don't use semantic search if another search type was explicitly requested
+			&& options.searchType === SearchType.Auto
+			// Avoid doing semantic search twice
+			&& searchType !== SearchType.Semantic
+		) {
+			rows = rows.concat(await this.semanticSearch(searchString, parsedQuery));
+
+			// Merge duplicate rows
+			rows = deduplicateAndSort(rows);
 		}
 
 		return rows;
@@ -886,3 +954,47 @@ export default class SearchEngine {
 		return terms.map(term => typeof term === 'string' ? term : term.value).join(' ');
 	}
 }
+
+const sortRows = (rows: ProcessResultsRow[]) => {
+	rows.sort((a, b) => {
+		const aIsNote = a.item_type === ModelType.Note;
+		const bIsNote = b.item_type === ModelType.Note;
+
+		if (a.fields.includes('title') && !b.fields.includes('title')) return -1;
+		if (!a.fields.includes('title') && b.fields.includes('title')) return +1;
+		if (a.weight < b.weight) return +1;
+		if (a.weight > b.weight) return -1;
+
+		if (aIsNote && bIsNote) {
+			if (a.is_todo && a.todo_completed) return +1;
+			if (b.is_todo && b.todo_completed) return -1;
+		}
+
+		if (a.user_updated_time < b.user_updated_time) return +1;
+		if (a.user_updated_time > b.user_updated_time) return -1;
+		return 0;
+	});
+};
+
+const deduplicateAndSort = (rows: ProcessResultsRow[]) => {
+	const idToRow = new Map<string, ProcessResultsRow>();
+	for (let row of rows) {
+		const existing = idToRow.get(row.id);
+		if (existing) {
+			row = {
+				...row,
+				weight: Math.max(existing.weight ?? 0, row.weight ?? 0),
+				fields: unique([...(row.fields ?? []), ...(existing.fields ?? [])]),
+				searchType: unique([...row.searchType, ...existing.searchType]),
+			};
+		}
+		idToRow.set(row.id, row);
+	}
+
+	const result = [];
+	for (const row of idToRow.values()) {
+		result.push(row);
+	}
+	sortRows(result);
+	return result;
+};

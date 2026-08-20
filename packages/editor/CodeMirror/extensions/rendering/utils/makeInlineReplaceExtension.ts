@@ -4,45 +4,15 @@
 import { EditorView, Decoration, DecorationSet, WidgetType } from '@codemirror/view';
 import { ViewPlugin, ViewUpdate } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
-import { EditorSelection, Range, SelectionRange, StateEffect, TransactionSpec } from '@codemirror/state';
+import { Range, StateEffect } from '@codemirror/state';
 import { SyntaxNodeRef } from '@lezer/common';
 import { ReplacementExtension } from '../types';
 import nodeIntersectsSelection from './nodeIntersectsSelection';
 
 const updateInlineDecorationsEffect = StateEffect.define();
 
-const isHiddenDecoration = (decoration: Decoration) => (
-	!Object.keys(decoration.spec).length || decoration.spec.widget instanceof WidgetType
-);
-
-const expandSelectionToFormattingCharacters = (decorations: DecorationSet, selection: SelectionRange, docLength: number) => {
-	if (selection.empty) return null;
-
-	const hiddenRanges: { from: number; to: number }[] = [];
-	decorations.between(0, docLength, (from, to, decoration) => {
-		if (isHiddenDecoration(decoration)) hiddenRanges.push({ from, to });
-	});
-
-	let coveredTo = selection.from;
-	for (const range of hiddenRanges) {
-		if (range.from <= coveredTo) coveredTo = Math.max(coveredTo, range.to);
-	}
-	if (coveredTo >= selection.to) return EditorSelection.single(selection.head);
-
-	let { from, to } = selection;
-	for (let index = hiddenRanges.length - 1; index >= 0; index--) {
-		if (hiddenRanges[index].to === from) from = hiddenRanges[index].from;
-	}
-	for (const range of hiddenRanges) {
-		if (range.from === to) to = range.to;
-	}
-
-	if (from === selection.from && to === selection.to) return null;
-	return selection.anchor <= selection.head ? EditorSelection.single(from, to) : EditorSelection.single(to, from);
-};
-
 export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) => ViewPlugin.fromClass(class {
-	public decorations: DecorationSet;
+	public decorations: DecorationSet = Decoration.set([]);
 	private mouseSelectionInProgress = false;
 
 	public constructor(private view: EditorView) {
@@ -64,56 +34,13 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 
 	private onMouseUp = () => {
 		if (this.mouseSelectionInProgress) {
-			const selection = this.view.state.selection.main;
-			let selectionUpdate: TransactionSpec['selection'] = expandSelectionToFormattingCharacters(
-				this.decorations, selection, this.view.state.doc.length,
-			) ?? undefined;
-
-			const hasHiddenDecoration = (from: number, to: number) => {
-				let found = false;
-				this.decorations.between(from, to, (_from, _to, decoration) => {
-					if (isHiddenDecoration(decoration)) {
-						found = true;
-						return false;
-					}
-					return undefined;
+			// To prevent unnecessary scroll on iOS, decoration changes need to
+			// happen *after* the gesture ends.
+			requestAnimationFrame(() => {
+				this.mouseSelectionInProgress = false;
+				this.view.dispatch({
+					effects: updateInlineDecorationsEffect.of(null),
 				});
-				return found;
-			};
-
-			const line = this.view.state.doc.lineAt(selection.from);
-			syntaxTree(this.view.state).iterate({
-				from: line.from,
-				to: line.to,
-				enter: node => {
-					if (selectionUpdate) return;
-
-					const isHiddenPrefixBeforeSelection = (node.name === 'QuoteMark' || node.name === 'ListMark')
-						&& (node.name === 'ListMark' || node.from === line.from)
-						&& node.to < selection.from
-						&& !this.view.state.sliceDoc(node.to, selection.from).trim()
-						&& hasHiddenDecoration(node.from, node.to);
-					if (isHiddenPrefixBeforeSelection) {
-						selectionUpdate = selection.anchor <= selection.head
-							? EditorSelection.single(node.from, selection.to)
-							: EditorSelection.single(selection.to, node.from);
-						return;
-					}
-
-					if (node.name !== 'Link') return;
-					const closingBracket = node.node.getChildren('LinkMark').find(mark => (
-						this.view.state.sliceDoc(mark.from, mark.to) === ']'
-					));
-					if (closingBracket && selection.from >= closingBracket.from && selection.to <= node.to && hasHiddenDecoration(closingBracket.from, node.to)) {
-						selectionUpdate = { anchor: node.to };
-					}
-				},
-			});
-
-			this.mouseSelectionInProgress = false;
-			this.view.dispatch({
-				selection: selectionUpdate,
-				effects: updateInlineDecorationsEffect.of(null),
 			});
 		}
 	};
@@ -136,7 +63,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			}
 
 			if (decoration) {
-				const range = extensionSpec.getDecorationRange?.(node, view.state) ?? [node.from, node.to];
+				const range = extensionSpec.getDecorationRange?.(node, view.state, parentTagCounts) ?? [node.from, node.to];
 				const rangeLineFrom = doc.lineAt(range[0]);
 				const rangeLineTo = range.length === 2 ? doc.lineAt(range[1]) : rangeLineFrom;
 
@@ -151,7 +78,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			}
 		};
 
-		const widgets: Range<Decoration>[] = [];
+		let widgets: Range<Decoration>[] = [];
 		for (const { from, to } of view.visibleRanges) {
 			parentTagCounts.clear();
 			syntaxTree(view.state).iterate({
@@ -159,7 +86,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 				enter: node => {
 					parentTagCounts.set(node.name, (parentTagCounts.get(node.name) ?? 0) + 1);
 
-					const strategy = extensionSpec.getRevealStrategy?.(node, view.state) ?? 'line';
+					const strategy = extensionSpec.getRevealStrategy?.(node, view.state, parentTagCounts) ?? 'line';
 
 					let isSelected = false;
 					if (typeof strategy === 'boolean') {
@@ -189,6 +116,34 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			});
 		}
 		this.decorations = Decoration.set(widgets, true);
+
+		if (extensionSpec.mergeNeighbors && widgets.length > 0) {
+			const originalLength = widgets.length;
+			widgets = [];
+
+			const iter = this.decorations.iter();
+			let previous = iter.value;
+			let previousFrom = iter.from;
+			let previousTo = iter.to;
+			widgets.push(iter.value.range(iter.from, iter.to));
+
+			for (iter.next(); iter.value; iter.next()) {
+				let from = iter.from;
+				if (previousTo === iter.from && previous.eq(iter.value)) {
+					from = previousFrom;
+					widgets.pop();
+				}
+				widgets.push(iter.value.range(from, iter.to));
+
+				previous = iter.value;
+				previousTo = iter.to;
+				previousFrom = from;
+			}
+
+			if (widgets.length < originalLength) {
+				this.decorations = Decoration.set(widgets, true);
+			}
+		}
 	}
 
 	public update(update: ViewUpdate) {
@@ -196,7 +151,7 @@ export const makeInlineReplaceExtension = (extensionSpec: ReplacementExtension) 
 			transaction.effects.some(effect => effect.is(updateInlineDecorationsEffect))
 			|| extensionSpec.shouldFullReRender?.(transaction)
 		));
-		if (this.mouseSelectionInProgress && !update.docChanged && (update.selectionSet || forceUpdate)) {
+		if (this.mouseSelectionInProgress && !update.docChanged && !forceUpdate) {
 			return;
 		}
 

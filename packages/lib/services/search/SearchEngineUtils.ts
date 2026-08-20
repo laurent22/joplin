@@ -1,4 +1,4 @@
-import SearchEngine from './SearchEngine';
+import SearchEngine, { SearchType } from './SearchEngine';
 import Note, { PreviewsOptions } from '../../models/Note';
 import Setting from '../../models/Setting';
 
@@ -18,9 +18,9 @@ export default class SearchEngineUtils {
 			searchEngine = SearchEngine.instance();
 		}
 
-		let searchType = SearchEngine.SEARCH_TYPE_FTS;
+		let searchType = SearchType.Auto;
 		if (query.length && query[0] === '/') {
-			searchType = SearchEngine.SEARCH_TYPE_BASIC;
+			searchType = SearchType.Basic;
 		}
 
 		const results = await searchEngine.search(query, {

@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -1492,7 +1492,7 @@ msgstr "建立時間"
 
 #: packages/app-cli/app/command-mkbook.ts:19
 msgid "Create a new notebook under a parent notebook."
-msgstr "在父記事本下創建一個新的記事本。"
+msgstr "在該記事本下建立新的記事本。"
 
 #: packages/app-mobile/components/NoteList.tsx:102
 msgid "Create a notebook"
@@ -5387,7 +5387,7 @@ msgstr "選擇其他支援的同步目標。"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
-msgstr "選擇父記事本"
+msgstr "選擇所屬記事本"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:42
 msgid "Select the type of file to be imported:"

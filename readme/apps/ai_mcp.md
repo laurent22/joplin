@@ -33,7 +33,7 @@ Joplin's MCP server is HTTP-based and listens on the same port as the Web Clippe
 
 ## Connecting Claude Desktop
 
-Claude Desktop doesn't speak HTTP MCP servers directly; it needs a small bridge called [`mcp-remote`](https://www.npmjs.com/package/mcp-remote). You don't need to install it — it'll be downloaded automatically the first time.
+Claude Desktop doesn't speak to HTTP MCP servers directly; it needs a small bridge called [`mcp-remote`](https://www.npmjs.com/package/mcp-remote). You don't need to install it — it'll be downloaded automatically the first time.
 
 Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or the equivalent on Windows / Linux, and add:
 

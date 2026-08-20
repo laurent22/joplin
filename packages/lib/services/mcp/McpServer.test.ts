@@ -3,9 +3,11 @@ import Note from '../../models/Note';
 import Folder from '../../models/Folder';
 import Tag from '../../models/Tag';
 import SearchEngine from '../search/SearchEngine';
-import { db, setupDatabaseAndSynchronizer, switchClient, withWarningSilenced } from '../../testing/test-utils';
+import { db, setupDatabaseAndSynchronizer, supportDir, switchClient, withWarningSilenced } from '../../testing/test-utils';
 import McpServer from './McpServer';
 import { McpProtocolVersion } from './types';
+import shim from '../../shim';
+import { join } from 'path';
 
 const allToolSettings = [
 	'ai.tool.search_notes.enabled',
@@ -13,6 +15,7 @@ const allToolSettings = [
 	'ai.tool.read_note.enabled',
 	'ai.tool.list_notebooks.enabled',
 	'ai.tool.list_tags.enabled',
+	'ai.tool.read_image.enabled',
 	'ai.tool.create_note.enabled',
 	'ai.tool.update_note.enabled',
 	'ai.tool.delete_note.enabled',
@@ -356,5 +359,23 @@ describe('McpServer', () => {
 		const updated = await Note.load(note.id);
 		expect(updated.title).toBe('New');
 		expect(updated.body).toBe('Keep');
+	});
+
+	test('read_image returns image data as base64', async () => {
+		const folder = await Folder.save({ title: 'Folder' });
+		let note = await Note.save({ title: 'Test', body: 'Test', parent_id: folder.id });
+		note = await shim.attachFileToNote(note, join(supportDir, 'photo.jpg'));
+		const resourceId = Note.linkedItemIds(note.body)[0];
+
+		const response = await McpServer.instance().handleRequest({
+			jsonrpc: '2.0', id: 1, method: 'tools/call',
+			params: { name: 'read_image', arguments: { id: resourceId, resolution: 'low' } },
+		});
+
+		expect(response.error).toBeFalsy();
+		const content = response.result.content[0];
+		expect(content.type).toBe('image');
+		expect(content.mimeType).toContain('image/');
+		expect(content.data).toBeTruthy();
 	});
 });

@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 import { _, _n } from '@joplin/lib/locale';
 import Folder from '@joplin/lib/models/Folder';
+import shim from '@joplin/lib/shim';
 import DialogButtonRow, { ClickEvent } from './DialogButtonRow';
 import Dialog from '@joplin/lib/components/Dialog';
 import DialogTitle from './DialogTitle';
@@ -15,6 +17,7 @@ import { clipboard } from 'electron';
 import useOnPublishFolderLinkClick from '@joplin/lib/components/shared/PublishFolderDialog/useOnPublishFolderLinkClick';
 import useShareStatusMessage from '@joplin/lib/components/shared/ShareNoteDialog/useShareStatusMessage';
 import { SharingStatus } from '@joplin/lib/components/shared/ShareNoteDialog/types';
+import Button from './Button/Button';
 
 interface Props {
 	themeId: number;
@@ -28,6 +31,7 @@ export function PublishFolderDialog(props: Props) {
 	const [folder, setFolder] = useState<FolderEntity>(null);
 	const [noteCount, setNoteCount] = useState<number>(0);
 	const [publishFolderStatus, setPublishFolderStatus] = useState<SharingStatus>(SharingStatus.Unknown);
+	const [isUnpublishing, setIsUnpublishing] = useState(false);
 
 	const encryptionWarning = useEncryptionWarningMessage();
 	const publishedShare = useMemo(() => {
@@ -68,19 +72,37 @@ export function PublishFolderDialog(props: Props) {
 		props.onClose();
 	}, [props]);
 
+	const onUnpublishFolderClick = useCallback(async () => {
+		setIsUnpublishing(true);
+		try {
+			await ShareService.instance().unpublishFolder(props.folderId);
+		} catch (error) {
+			void shim.showErrorDialog(JoplinServerApi.connectionErrorMessage(error as Error));
+		} finally {
+			setIsUnpublishing(false);
+		}
+	}, [props.folderId]);
+
 	const statusMessage = useShareStatusMessage({ sharesState: publishFolderStatus, noteCount: 1 });
 
 	return (
 		<Dialog>
 			<div className="form share-note-dialog">
 				<DialogTitle title={_('Publish Notebook')}/>
-				<div className="folder-info">
-					<p>{_('Notebook: %s', folder ? folder.title : '...')}</p>
-					<p>{_('Status: %s', publishedShare ? _('Published') : _('Not published'))}</p>
-					<p>{_n('%d note in notebook', '%d notes in notebook', noteCount, noteCount)}</p>
+				<div className="shared-note-list-item">
+					<div className="title">
+						<div className="folder-info">
+							<p>{_('Notebook: %s', folder ? folder.title : '...')}</p>
+							<p>{_('Status: %s', publishedShare ? _('Published') : _('Not published'))}</p>
+							<p>{_n('%d note in notebook', '%d notes in notebook', noteCount, noteCount)}</p>
+						</div>
+					</div>
+					{publishedShare && (
+						<Button disabled={isUnpublishing} tooltip={_('Unpublish notebook')} iconName="fas fa-share-alt" onClick={onUnpublishFolderClick}/>
+					)}
 				</div>
 				<button
-					disabled={!folder || [SharingStatus.Creating, SharingStatus.Synchronizing].indexOf(publishFolderStatus) >= 0}
+					disabled={isUnpublishing || !folder || [SharingStatus.Creating, SharingStatus.Synchronizing].indexOf(publishFolderStatus) >= 0}
 					className="share"
 					onClick={publishFolderLinkButton_click}
 				>{publishedShare ? _('Copy Shareable Link') : _('Publish notebook')}</button>

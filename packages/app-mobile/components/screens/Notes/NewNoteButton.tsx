@@ -1,21 +1,17 @@
 import * as React from 'react';
 import { _ } from '@joplin/lib/locale';
 import CommandService from '@joplin/lib/services/CommandService';
-import { Divider } from 'react-native-paper';
 import FloatingActionButton from '../../buttons/FloatingActionButton';
-import { AccessibilityActionEvent, AccessibilityActionInfo, StyleSheet, View } from 'react-native';
+import { AccessibilityActionEvent, AccessibilityActionInfo } from 'react-native';
 import { AttachFileAction } from '../Note/commands/attachFile';
-import LabelledIconButton from '../../buttons/LabelledIconButton';
-import TextButton, { ButtonSize, ButtonType } from '../../buttons/TextButton';
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo } from 'react';
 import Logger from '@joplin/utils/Logger';
-import focusView from '../../../utils/focusView';
 import NavService from '@joplin/lib/services/NavService';
+import { MenuOption } from '../../BottomDrawerMenu';
 
 const logger = Logger.create('NewNoteButton');
 
 interface Props {
-
 }
 
 const makeNewNote = (isTodo: boolean, action?: AttachFileAction) => {
@@ -24,85 +20,35 @@ const makeNewNote = (isTodo: boolean, action?: AttachFileAction) => {
 	return CommandService.instance().execute('newNote', body, isTodo, { attachFileAction: action });
 };
 
-const styles = StyleSheet.create({
-	buttonRow: {
-		flexDirection: 'row',
-		flexWrap: 'wrap-reverse',
-		justifyContent: 'space-between',
-		gap: 2,
-	},
-	mainButtonRow: {
-		flexWrap: 'wrap',
-		gap: 12,
-	},
-	shortcutButton: {
-		flexGrow: 0,
-		flexShrink: 1,
-		width: 88,
-	},
-	mainButton: {
-		flexShrink: 1,
-		flexGrow: 1,
-	},
-	mainButtonLabel: {
-		fontSize: 16,
-		fontWeight: 'bold',
-	},
-	menuContent: {
-		gap: 12,
-		flexShrink: 1,
-		flexGrow: 1,
-		flexDirection: 'column',
-	},
-});
+const NewNoteButton: React.FC<Props> = () => {
 
-const NewNoteButton: React.FC<Props> = _props => {
-	const newNoteRef = useRef<View|null>(null);
+	const menuContent = useMemo(() => {
+		const menuItem = (icon: string, title: string, action: ()=> void) => {
+			return {
+				icon,
+				title,
+				onPress: action,
+			};
+		};
+		const attachmentMenuItem = (icon: string, title: string, action: AttachFileAction, attachmentLabel: string|null = null) => {
+			return {
+				...menuItem(icon, title, () => makeNewNote(false, action)),
+				accessibilityHint: _('Creates a new note with an attachment of type %s', attachmentLabel ?? title),
+			};
+		};
 
-	type ActionType = AttachFileAction|(()=> void);
-	const renderShortcutButton = (action: ActionType, icon: string, title: string) => {
-		const actionSource = typeof action === 'function' ? null : action;
-		action = typeof action === 'function' ? action : () => makeNewNote(false, actionSource);
-		return <LabelledIconButton
-			onPress={action}
-			style={styles.shortcutButton}
-			title={title}
-			accessibilityHint={_('Creates a new note with an attachment of type %s', title)}
-			icon={icon}
-		/>;
-	};
-
-	const menuContent = <View style={styles.menuContent}>
-		<View style={styles.buttonRow}>
-			{renderShortcutButton(AttachFileAction.AttachFile, 'material attachment', _('Attachment'))}
-			{renderShortcutButton(AttachFileAction.RecordAudio, 'material microphone', _('Recording'))}
-			{renderShortcutButton(AttachFileAction.TakePhoto, 'material camera', _('Camera'))}
-			{renderShortcutButton(AttachFileAction.AttachDrawing, 'material draw', _('Drawing'))}
-			{renderShortcutButton(() => NavService.go('DocumentScanner'), 'material data-matrix-scan', _('Scan notebook'))}
-		</View>
-		<Divider/>
-		<View style={[styles.buttonRow, styles.mainButtonRow]}>
-			<TextButton
-				icon='checkbox-outline'
-				style={styles.mainButton}
-				onPress={() => {
-					void makeNewNote(true);
-				}}
-				type={ButtonType.Secondary}
-				size={ButtonSize.Larger}
-			>{_('New to-do')}</TextButton>
-			<TextButton
-				touchableRef={newNoteRef}
-				icon='file-document-outline'
-				style={styles.mainButton}
-				onPress={() => {
-					void makeNewNote(false);
-				}}
-				type={ButtonType.Primary}
-				size={ButtonSize.Larger}
-			>{_('New note')}</TextButton>
-		</View>
-	</View>;
+		const items: MenuOption[] = [
+			attachmentMenuItem('material camera-outline', _('Camera'), AttachFileAction.TakePhoto),
+			attachmentMenuItem('material attachment', _('Attachment'), AttachFileAction.AttachFile, _('File')),
+			{ icon: 'material data-matrix-scan', title: _('Scan notebook'), onPress: () => NavService.go('DocumentScanner') },
+			attachmentMenuItem('material draw', _('Drawing'), AttachFileAction.AttachDrawing),
+			attachmentMenuItem('material microphone-outline', _('Recording'), AttachFileAction.RecordAudio),
+			{ isDivider: true },
+			{ icon: 'material file-document-check-outline', title: _('New to-do'), onPress: () => makeNewNote(true), autoFocus: true },
+			{ icon: 'material file-document-outline', title: _('New note'), onPress: () => makeNewNote(false) },
+		];
+		return items;
+	}, []);
 
 	// Android and iOS: Accessibility actions simplify creating new notes and to-dos. These
 	// are extra important because the "note with attachment" items are annoyingly first in
@@ -125,14 +71,6 @@ const NewNoteButton: React.FC<Props> = _props => {
 		}
 		return Promise.resolve();
 	}, []);
-	const onMenuShown = useCallback(() => {
-		focusView(
-			'NewNoteButton',
-			newNoteRef.current,
-			// Don't scroll into view: This breaks the slide-in animation on web
-			{ scrollIntoView: false },
-		);
-	}, []);
 
 	return <FloatingActionButton
 		mainButton={{
@@ -140,7 +78,6 @@ const NewNoteButton: React.FC<Props> = _props => {
 			label: _('Add new'),
 		}}
 		menuContent={menuContent}
-		onMenuShow={onMenuShown}
 		accessibilityActions={accessibilityActions}
 		onAccessibilityAction={onAccessibilityAction}
 	/>;
