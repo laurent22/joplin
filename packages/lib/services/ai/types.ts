@@ -1,4 +1,4 @@
-import { ToolSpec } from './tools/types';
+import { ToolImageResponse, ToolSpec } from './tools/types';
 
 export enum ChatRole {
 	System = 'system',
@@ -8,17 +8,18 @@ export enum ChatRole {
 }
 
 interface ChatBaseMessage {
-	content: string;
 }
 
 export interface ChatStandardMessage extends ChatBaseMessage {
 	role: ChatRole.System | ChatRole.User | ChatRole.Assistant;
+	content: string;
 	hide?: boolean;
 	toolCalls?: ChatToolCall[];
 }
 
 export interface ChatToolMessage extends ChatBaseMessage {
 	role: ChatRole.Tool;
+	content: string|ToolImageResponse;
 	toolName: string;
 	toolCallId: string;
 	isError: boolean;

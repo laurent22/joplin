@@ -1,5 +1,52 @@
 # Joplin Desktop Changelog
 
+## [v3.7.12](https://github.com/laurent22/joplin/releases/tag/v3.7.12) (Pre-release) - 2026-08-18T10:21:48Z
+
+- New: Add support for translating Markdown editor table context menu items ([140ff45](https://github.com/laurent22/joplin/commit/140ff45))
+- Improved: Add data loader and word-level diff for Conflict resolution UI ([#16135](https://github.com/laurent22/joplin/issues/16135)) ([#16134](https://github.com/laurent22/joplin/issues/16134) by Sriram Varun Kumar)
+- Improved: Chat panel: Support reading images ([#16141](https://github.com/laurent22/joplin/issues/16141) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Enable semantic search in the sidebar and go-to-anything ([#16118](https://github.com/laurent22/joplin/issues/16118)) ([#15824](https://github.com/laurent22/joplin/issues/15824) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Evernote import: Support importing cross-notebook links in some cases ([#16151](https://github.com/laurent22/joplin/issues/16151)) ([#16148](https://github.com/laurent22/joplin/issues/16148) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Improve rendering of Markdown editor table context menu ([15756bb](https://github.com/laurent22/joplin/commit/15756bb))
+- Improved: MCP: Return correct API response type ([#16144](https://github.com/laurent22/joplin/issues/16144) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Mark AI features as Beta ([#16097](https://github.com/laurent22/joplin/issues/16097)) ([#16065](https://github.com/laurent22/joplin/issues/16065) by [@Rygaa](https://github.com/Rygaa))
+- Improved: Prevent the remote version of a note being overwritten if typing while the sync changes the open note ([#16206](https://github.com/laurent22/joplin/issues/16206) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Chat panel: Allow closing the chat panel in small windows ([#16189](https://github.com/laurent22/joplin/issues/16189)) ([#16016](https://github.com/laurent22/joplin/issues/16016) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Chat panel: Fix OpenAI, Anthropic compatibility ([#16188](https://github.com/laurent22/joplin/issues/16188) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix conflict created when syncing a just-published note ([#16182](https://github.com/laurent22/joplin/issues/16182)) ([#16167](https://github.com/laurent22/joplin/issues/16167) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Plugin API: Fix panels hidden on startup are incorrectly shown in some cases ([#16072](https://github.com/laurent22/joplin/issues/16072) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Release the save mutex when a save fails validation ([#16147](https://github.com/laurent22/joplin/issues/16147)) ([#16145](https://github.com/laurent22/joplin/issues/16145) by [@keshav0479](https://github.com/keshav0479))
+- Fixed: Skip the note lock session effect on the first render ([#16100](https://github.com/laurent22/joplin/issues/16100)) ([#16099](https://github.com/laurent22/joplin/issues/16099) by [@keshav0479](https://github.com/keshav0479))
+
+## [v3.7.10](https://github.com/laurent22/joplin/releases/tag/v3.7.10) (Pre-release) - 2026-07-28T16:50:54Z
+
+- New: Add getCurrentNote and createNote x-callback-url commands ([#16041](https://github.com/laurent22/joplin/issues/16041))
+- Improved: AI chat panel: Improve accessibility ([#15956](https://github.com/laurent22/joplin/issues/15956) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: AI chat panel: Stop retry loop after several repeated failures ([#15944](https://github.com/laurent22/joplin/issues/15944) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: AI chat panel: Support cancelling in-progress responses ([#15946](https://github.com/laurent22/joplin/issues/15946) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Add hidden feature flag for conflict resolution ([#16040](https://github.com/laurent22/joplin/issues/16040)) ([#16039](https://github.com/laurent22/joplin/issues/16039) by Sriram Varun Kumar)
+- Improved: Add note lock UI ([#15961](https://github.com/laurent22/joplin/issues/15961)) ([#15872](https://github.com/laurent22/joplin/issues/15872) by [@keshav0479](https://github.com/keshav0479))
+- Improved: Add note lock configuration screen ([#15852](https://github.com/laurent22/joplin/issues/15852)) ([#15786](https://github.com/laurent22/joplin/issues/15786) by [@keshav0479](https://github.com/keshav0479))
+- Improved: Avoid including unused `onnxruntime-node` files in the built application ([#15997](https://github.com/laurent22/joplin/issues/15997)) ([#15880](https://github.com/laurent22/joplin/issues/15880) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Make links in the table editor clickable with Ctrl/Cmd+click ([#15977](https://github.com/laurent22/joplin/issues/15977))
+- Improved: Provide a clear message on what needs to be done when sync fails due to wrong version ([#15837](https://github.com/laurent22/joplin/issues/15837)) ([#15828](https://github.com/laurent22/joplin/issues/15828) by [@Rygaa](https://github.com/Rygaa))
+- Improved: Publish a notebook ([#15276](https://github.com/laurent22/joplin/issues/15276) by [@Rygaa](https://github.com/Rygaa))
+- Improved: Record which app screen a Joplin Cloud sign-up started from ([b5ed2c9](https://github.com/laurent22/joplin/commit/b5ed2c9))
+- Improved: Selection sometimes misses markdown starting formatting characters ([#15858](https://github.com/laurent22/joplin/issues/15858)) ([#15788](https://github.com/laurent22/joplin/issues/15788) by [@Rygaa](https://github.com/Rygaa))
+- Improved: Sync Wizard: Make Joplin Cloud the primary sync option ([#16004](https://github.com/laurent22/joplin/issues/16004))
+- Improved: Whiteboard: Allow selecting which arrow to move when two arrows share an anchor ([3515c6a](https://github.com/laurent22/joplin/commit/3515c6a))
+- Fixed: AI chat panel: Fix changing the note body causes a cache miss ([#15969](https://github.com/laurent22/joplin/issues/15969)) ([#15874](https://github.com/laurent22/joplin/issues/15874) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: AI chat panel: Fix failure when tool responses are invalid JSON ([#15886](https://github.com/laurent22/joplin/issues/15886) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Chat panel: Fix rate limit handling ([#16031](https://github.com/laurent22/joplin/issues/16031) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix WebDAV support for Koofr ([#15983](https://github.com/laurent22/joplin/issues/15983)) ([#15975](https://github.com/laurent22/joplin/issues/15975) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix cycling of the active note when other notes in the notebook are moved ([#15868](https://github.com/laurent22/joplin/issues/15868)) ([#15867](https://github.com/laurent22/joplin/issues/15867) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix layout divider behaviour in nested layouts and move mode ([#15955](https://github.com/laurent22/joplin/issues/15955))
+- Fixed: Keep trailing spaces in table cells while editing ([#15964](https://github.com/laurent22/joplin/issues/15964)) ([#15918](https://github.com/laurent22/joplin/issues/15918))
+- Fixed: Upgrade CodeMirror View to v6.43.6 ([#16017](https://github.com/laurent22/joplin/issues/16017)) ([#16009](https://github.com/laurent22/joplin/issues/16009) by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Upgrade `electron-builder` ([#15043](https://github.com/laurent22/joplin/issues/15043)) ([#15030](https://github.com/laurent22/joplin/issues/15030) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Whiteboard: Fix edge keeping the blue selection colour after reconnecting ([2268981](https://github.com/laurent22/joplin/commit/2268981))
+- Fixed: Whiteboard: Fixed newline handling within cards ([f410ace](https://github.com/laurent22/joplin/commit/f410ace))
+
 ## [v3.7.9](https://github.com/laurent22/joplin/releases/tag/v3.7.9) (Pre-release) - 2026-07-14T10:21:16Z
 
 - Fixed: Fix dependencies used for semantic search ([#15891](https://github.com/laurent22/joplin/issues/15891) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

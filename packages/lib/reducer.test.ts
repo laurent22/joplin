@@ -1063,6 +1063,7 @@ describe('reducer', () => {
 		let state = initTestState(folders, 0, notes, [0]);
 
 		const previousReloadTime = state.editorNoteReloadTimeRequest;
+		const previousWindowReloadTime = state.windowEditorNoteReloadTimeRequest;
 		const now = Date.now();
 
 		state = reducer(state, {
@@ -1073,6 +1074,46 @@ describe('reducer', () => {
 		expect(state.editorNoteReloadTimeRequest).toBe(
 			shouldReload ? now : previousReloadTime,
 		);
+		expect(state.windowEditorNoteReloadTimeRequest).toBe(
+			noteIndex === 0 ? now : previousWindowReloadTime,
+		);
+
+		jest.useRealTimers();
+	});
+
+	it('should request reload only in windows displaying the specified note', async () => {
+		jest.useFakeTimers();
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(2, folders[0]);
+		let state = initTestState(folders, 0, notes, [0]);
+		state = createBackgroundWindow(state, 'secondary', notes[1], notes);
+		const previousPrimaryReloadTime = state.windowEditorNoteReloadTimeRequest;
+		const now = Date.now();
+
+		state = reducer(state, {
+			type: 'EDITOR_NOTE_NEEDS_RELOAD',
+			noteId: notes[1].id,
+		});
+
+		expect(state.windowEditorNoteReloadTimeRequest).toBe(previousPrimaryReloadTime);
+		expect(state.backgroundWindows.secondary.windowEditorNoteReloadTimeRequest).toBe(now);
+		jest.useRealTimers();
+	});
+
+	it('should generate unique reload tokens within the same millisecond', async () => {
+		jest.useFakeTimers();
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(1, folders[0]);
+		let state = initTestState(folders, 0, notes, [0]);
+		const now = Date.now();
+
+		state = reducer(state, { type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId: notes[0].id });
+		expect(state.editorNoteReloadTimeRequest).toBe(now);
+		expect(state.windowEditorNoteReloadTimeRequest).toBe(now);
+
+		state = reducer(state, { type: 'EDITOR_NOTE_NEEDS_RELOAD', noteId: notes[0].id });
+		expect(state.editorNoteReloadTimeRequest).toBe(now + 1);
+		expect(state.windowEditorNoteReloadTimeRequest).toBe(now + 1);
 
 		jest.useRealTimers();
 	});

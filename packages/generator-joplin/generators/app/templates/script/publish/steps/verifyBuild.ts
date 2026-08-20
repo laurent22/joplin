@@ -25,7 +25,7 @@ const verifyBuild = async () => {
 const validateMetadata = async () => {
 	logger.info('Validating metadata...');
 
-	// process.cwd() is the plugin root dir when run via `npm run publish`
+	// process.cwd() is the plugin root dir when run via `npm run submit`
 	const manifestPath = join(process.cwd(), 'src/manifest.json');
 	const packageJsonPath = join(process.cwd(), 'package.json');
 

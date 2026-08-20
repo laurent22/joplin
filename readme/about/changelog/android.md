@@ -1,5 +1,44 @@
 # Joplin Android Changelog
 
+## [android-v3.7.6](https://github.com/laurent22/joplin/releases/tag/android-v3.7.6) - 2026-08-18T14:29:57Z
+
+- New: Add shadows to the new note and note actions menus (#16067 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Dialogs: Bold and add margin below titles (#16113) (#16107 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Implement redesigned new note menu (#16082 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Implement redesigned notebook long-press menu (#16027 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Make the editor state update, if the current note is updated by the sync (#16150 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Make the startup location the first entry in the navigation history instead of 'All Notes' (#16083 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Prevent race which allows changes to be lost, during a long delta step (#16208 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Prevent the remote version of a note being overwritten if typing while the sync changes the open note (#16193 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Remove single-word titles from error/warning dialogs (#16096 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix blank screen being shown when navigating back after tag changes and other edge cases (#16080) (#15265 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix empty navigation when navigating to settings from the conflicts folder after it was removed (#16197 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix inconsistent button order in profile switcher, tag screen, and deletion confirmation dialogs (#16076 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix note screen is not properly refreshed when updated by the sync, when E2EE is enabled (#16179 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Prevent incrementing the master key updated_time when the key has not actually changed (#16223) (#16194 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Prevent scrolling the cursor into view on the markdown editor when unnecessary to do so (#16091) (#15923 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Release the save mutex when a save fails validation (#16147) (#16145 by [@keshav0479](https://github.com/keshav0479))
+
+## [android-v3.7.4](https://github.com/laurent22/joplin/releases/tag/android-v3.7.4) - 2026-07-28T12:43:17Z
+
+- New: Add shadow to note actions menu (#16053 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Add note lock configuration section (#15963) (#15853 by [@keshav0479](https://github.com/keshav0479))
+- Improved: Consider tags and smart filters when opening the last open location on app start (#16058 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Note action menu: Vertically align icons (#15996 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Note actions menu: Decrease padding size (#15998 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Provide a clear message on what needs to be done when sync fails due to wrong version (#15837) (#15828 by [@Rygaa](https://github.com/Rygaa))
+- Improved: Update Search screen (#15736 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Add file extension validation to import actions (#15960) (#15915 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Avoid reverting to the default editor state when the editor reloads the same note (#15986) (#15968 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix WebDAV support for Koofr (#15983) (#15975 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix auto navigate to latest notebook shortly after app start, when the selected notebook was previously deleted (#15950) (#15914 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix menu animations and drag-to-dismiss  (#15971) (#15928 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Increase minimum prompt button width (#15966) (#15959 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: New note list design does not include the padding in the touch target to open notes (#15987) (#15972 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: New note list design does not look good in multi select mode (#15990) (#15973 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Prevent update to note via the api from refreshing the editor if the change is for a different note (#15985) (#15968 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Upgrade CodeMirror View to v6.43.6 (#16017) (#16009 by [@mrjo118](https://github.com/mrjo118))
+
 ## [android-v3.7.3](https://github.com/laurent22/joplin/releases/tag/android-v3.7.3) - 2026-07-13T15:04:29Z
 
 - Improved: Adjust UI padding to match the mobile app redesign (#15741 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

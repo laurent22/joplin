@@ -6,6 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: wh201906 <wh201906@yandex.com>\n"
 "Language-Team: zh_CN <clsty@celestialy.top>\n"
 "Language: zh_CN\n"
@@ -13,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.9\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -1487,7 +1489,7 @@ msgstr "创建"
 
 #: packages/app-cli/app/command-mkbook.ts:19
 msgid "Create a new notebook under a parent notebook."
-msgstr "在父笔记本下创建新笔记本。"
+msgstr "在该笔记本下创建新笔记本。"
 
 #: packages/app-mobile/components/NoteList.tsx:102
 msgid "Create a notebook"
@@ -5384,7 +5386,7 @@ msgstr "选择另外一种支持的同步目标。"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Select parent notebook"
-msgstr "选择父笔记本"
+msgstr "选择所属笔记本"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/importFrom.ts:42
 msgid "Select the type of file to be imported:"

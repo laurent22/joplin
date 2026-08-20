@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { memo, useCallback, useContext, useMemo, useState } from 'react';
+import { memo, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { Text, StyleSheet, TextStyle, View, ViewStyle, AccessibilityInfo } from 'react-native';
 import Checkbox from './Checkbox';
@@ -115,6 +115,7 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 	const styles = useStyles(props.themeId, props.index !== 0);
 	const dialogs = useContext(DialogContext);
 	const [checkboxKey, setCheckboxKey] = useState(0);
+	const suppressPressUntilRef = useRef(0);
 
 	const todoCheckbox_change = useCallback(async (checked: boolean) => {
 		if (!props.note) return;
@@ -140,6 +141,8 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 	}, [props.note, props.dispatch, dialogs]);
 
 	const onPress = useCallback(() => {
+		// Suppress touch release triggers during interval, to avoid conflicting with right click event handling on web
+		if (Date.now() < suppressPressUntilRef.current) return;
 		if (!props.note) return;
 		if (props.note.encryption_applied) return;
 
@@ -158,6 +161,11 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 	}, [props.note, props.noteSelectionEnabled, props.dispatch]);
 
 	const onLongPress = useCallback(() => {
+		const now = Date.now();
+		// Suppress duplicate long press triggers during interval, to avoid conflicting with right click event handling on web
+		if (now < suppressPressUntilRef.current) return;
+		suppressPressUntilRef.current = now + 500;
+
 		if (!props.note) return;
 
 		if (!props.noteSelectionEnabled) {

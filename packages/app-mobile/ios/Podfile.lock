@@ -4,7 +4,7 @@ PODS:
   - EXImageLoader (6.0.0):
     - ExpoModulesCore
     - React-Core
-  - Expo (54.0.33):
+  - Expo (54.0.34):
     - ExpoModulesCore
     - hermes-engine
     - RCTRequired
@@ -29,7 +29,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - ExpoAsset (12.0.12):
+  - ExpoAsset (12.0.13):
     - ExpoModulesCore
   - ExpoAudio (1.1.1):
     - ExpoModulesCore
@@ -37,7 +37,7 @@ PODS:
     - ExpoModulesCore
     - ZXingObjC/OneD
     - ZXingObjC/PDF417
-  - ExpoFileSystem (19.0.21):
+  - ExpoFileSystem (19.0.23):
     - ExpoModulesCore
   - ExpoFont (14.0.11):
     - ExpoModulesCore
@@ -47,7 +47,7 @@ PODS:
     - SDWebImageWebPCoder
   - ExpoLocalAuthentication (17.0.8):
     - ExpoModulesCore
-  - ExpoModulesCore (3.0.29):
+  - ExpoModulesCore (3.0.30):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -114,7 +114,7 @@ PODS:
     - ReactNativeDependencies
     - Yoga
   - OpenSSL-Universal (3.6.0000)
-  - QuickCrypto (1.1.2):
+  - QuickCrypto (1.1.4):
     - hermes-engine
     - NitroModules
     - OpenSSL-Universal (~> 3.6)
@@ -1420,7 +1420,7 @@ PODS:
     - ReactNativeDependencies
   - react-native-alarm-notification (3.7.0):
     - React
-  - react-native-document-picker (11.0.4):
+  - react-native-document-picker (12.0.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -1629,10 +1629,10 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-vector-icons-fontawesome5 (12.3.3)
-  - react-native-vector-icons-ionicons (12.4.3)
-  - react-native-vector-icons-material-design-icons (12.4.3)
-  - react-native-vector-icons-material-icons (12.4.3)
+  - react-native-vector-icons-fontawesome5 (12.4.0)
+  - react-native-vector-icons-ionicons (12.5.0)
+  - react-native-vector-icons-material-design-icons (12.5.0)
+  - react-native-vector-icons-material-icons (12.5.0)
   - react-native-version-info (1.1.1):
     - React-Core
   - react-native-webview (13.16.1):
@@ -2129,7 +2129,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - RNSVG (15.15.4):
+  - RNSVG (15.15.5):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2150,9 +2150,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
-    - RNSVG/common (= 15.15.4)
+    - RNSVG/common (= 15.15.5)
     - Yoga
-  - RNSVG/common (15.15.4):
+  - RNSVG/common (15.15.5):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2564,15 +2564,15 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   EXConstants: fce59a631a06c4151602843667f7cfe35f81e271
   EXImageLoader: 189e3476581efe3ad4d1d3fb4735b7179eb26f05
-  Expo: aadbcc8c6c14ff3105a9154f1683cb1424ff0d2a
-  ExpoAsset: f867e55ceb428aab99e1e8c082b5aee7c159ea18
+  Expo: 514ae3ec54a086aab509f255abfbf37be0fcc0e2
+  ExpoAsset: 9e5a7c9c0a9fb83ad5b2bb365141f2bd7f289b66
   ExpoAudio: e4cfe3a2f3317b8487460685385a9867a07fb4fb
   ExpoCamera: 6a326deb45ba840749652e4c15198317aa78497e
-  ExpoFileSystem: 858a44267a3e6e9057e0888ad7c7cfbf55d52063
+  ExpoFileSystem: a8e7fb1e958471764fb48d281cf9fa81a9e4d77c
   ExpoFont: f543ce20a228dd702813668b1a07b46f51878d47
   ExpoImageManipulator: 607a5c8c88085381639458a46cc55fb9d3869148
   ExpoLocalAuthentication: 8a31808565da7af926dd9b595e98594d8b1553b6
-  ExpoModulesCore: f3da4f1ab5a8375d0beafab763739dbee8446583
+  ExpoModulesCore: 9e6a5514828e7dd5ded9e99d33557be2d284e660
   FBLazyVector: 14ce6e3675cacb2683ad30272f04274a4ee5b67d
   hermes-engine: 7219f6e751ad6ec7f3d7ec121830ee34dae40749
   JoplinCommonShareExtension: a8b60b02704d85a7305627912c0240e94af78db7
@@ -2580,7 +2580,7 @@ SPEC CHECKSUMS:
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   NitroModules: 97978583f36f88f7a348d5bf986d94bc4b340d0a
   OpenSSL-Universal: 9110d21982bb7e8b22a962b6db56a8aa805afde7
-  QuickCrypto: b0350170c64587fca880913d51d054189b3f9663
+  QuickCrypto: f63d1366c8cd969ba7d74db0bcd8fa9b3aeb5138
   RCTDeprecation: ff38238d8b6ddfe1fcfeb2718d1c14da9564c1c3
   RCTRequired: 5916f53ff05efcc2bf095b0de01a0e5b00112a55
   RCTTypeSafety: bfbd8d69504a7459a65040705fc6ce10806c383b
@@ -2615,7 +2615,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 90837747b018e7061eca67d45bc7e5dab93c4a06
   React-microtasksnativemodule: f86ccf2ec5f619f6df1dd06ae770c326e3eca0b8
   react-native-alarm-notification: 5236274a333fd40a14c3faafd8984edfc1b6ec62
-  react-native-document-picker: 8b6d1b52aee2c055f647ecf0db83867de5b5a432
+  react-native-document-picker: 29b2ee2573287f2b34c7716c98ffc3d9322fbe72
   react-native-geolocation: cfc39041210bd9f591ec2beb7d417291251da8e5
   react-native-get-random-values: a603782b2b222a34533c66371614790282dba3f1
   react-native-image-picker: 48d850454b4a389753053e1d7378b624d3b47d77
@@ -2626,10 +2626,10 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: ae7587b95fb580d1800c5b0b2a7bd48c2868e67a
   react-native-sqlite-storage: 0c84826214baaa498796c7e46a5ccc9a82e114ed
   react-native-vector-icons: 8215b0e62bf79d3be628cf658ec23777f9bec53c
-  react-native-vector-icons-fontawesome5: 61456ec9a12f6a1b7783fcc41102cdac24c9299b
-  react-native-vector-icons-ionicons: 5edcb84ec72c42601fef1c2251e3fd14a79823c4
-  react-native-vector-icons-material-design-icons: fa15a032cbf6699a246edb98bff482c1dc69816a
-  react-native-vector-icons-material-icons: dc9f5fd0eabeb46fcf177886e55488c8033b19fe
+  react-native-vector-icons-fontawesome5: 787102f6050e011721d7368d990532debd19bc08
+  react-native-vector-icons-ionicons: 7e633927db6ab96e0255b5920c053777cacca505
+  react-native-vector-icons-material-design-icons: 95914f2f6b18e26e5c9563afe33184e110afe674
+  react-native-vector-icons-material-icons: 8717ed6d0adafdea7a20475dababba112992a372
   react-native-version-info: f0b04e16111c4016749235ff6d9a757039189141
   react-native-webview: 0ed52ddb2eafc64a502871218440b8b4d37961c3
   React-NativeModulesApple: 2f4d69fb420f671980452a14efacd7a2273c4fbb
@@ -2674,7 +2674,7 @@ SPEC CHECKSUMS:
   RNQuickAction: c2c8f379e614428be0babe4d53a575739667744d
   RNSecureRandom: b64d263529492a6897e236a22a2c4249aa1b53dc
   RNShare: aad7f2a80ae80be5e2bf57583be28b1a18f95de1
-  RNSVG: f2641bf17a3e397882659348d7668667a0805f00
+  RNSVG: 1b2772436cb0cebfae91616c4fdd99feeef5ee6d
   SDWebImage: e9c98383c7572d713c1a0d7dd2783b10599b9838
   SDWebImageWebPCoder: 0e06e365080397465cc73a7a9b472d8a3bd0f377
   WhisperVoiceTyping: 29015e8468ff2fd2786d3aaace16fcbdd6a712d6

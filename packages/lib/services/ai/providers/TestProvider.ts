@@ -1,19 +1,21 @@
 import { ToolSpec } from '../tools/types';
-import { ChatMessage, ChatOptions, ChatResult, ChatRole, ChatToolCall, ProviderClassification } from '../types';
+import { ChatMessage, ChatOptions, ChatResult, ChatRole, ChatStandardMessage, ChatToolCall, ProviderClassification } from '../types';
 import ChatProviderBase from './ChatProviderBase';
 
-const parseUserCommand = (message: ChatMessage, availableTools: ToolSpec[]) => {
+const parseUserCommand = (message: ChatStandardMessage, availableTools: ToolSpec[]) => {
 	const toolCalls: ChatToolCall[] = [];
 	const reply = [];
 	let repeat = 0;
 	for (const line of message.content.split('\n')) {
-		const command = line.match(/^\/(tool|describe-tool|reply-with|repeat) (.*)$/);
-		if (!command) continue;
+		const commandMatch = line.match(/^\/(tool|describe-tool|list-tools|reply-with|repeat)( .*)?$/);
+		if (!commandMatch) continue;
+		const command = commandMatch[1];
+		const argument = (commandMatch[2] ?? '').replace(/^ /, '');
 
-		const isToolCall = command[1] === 'tool';
-		const isDescribeToolRequest = command[1] === 'describe-tool';
+		const isToolCall = command === 'tool';
+		const isDescribeToolRequest = command === 'describe-tool';
 		if (isToolCall || isDescribeToolRequest) {
-			const args = command[2].split(' ');
+			const args = argument.split(' ');
 			const toolName = args[0];
 			const tool = availableTools.find(t => t.id === toolName);
 			if (!tool) {
@@ -28,10 +30,12 @@ const parseUserCommand = (message: ChatMessage, availableTools: ToolSpec[]) => {
 					parseError: null,
 				});
 			}
-		} else if (command[1] === 'reply-with') {
-			reply.push(command[2]);
-		} else if (command[1] === 'repeat') {
-			repeat = Number(command[2]);
+		} else if (command === 'list-tools') {
+			reply.push(JSON.stringify(availableTools));
+		} else if (command === 'reply-with') {
+			reply.push(argument);
+		} else if (command === 'repeat') {
+			repeat = Number(argument);
 		}
 	}
 
@@ -61,11 +65,12 @@ export default class TestProvider extends ChatProviderBase {
 			let lastUserMessage;
 			let replyCount = 0;
 			for (let i = messages.length - 1; i >= 0; i--) {
-				if (messages[i].role === ChatRole.User) {
-					lastUserMessage = messages[i];
+				const message = messages[i];
+				if (message.role === ChatRole.User) {
+					lastUserMessage = message;
 					break;
 				}
-				if (messages[i].role === ChatRole.Assistant) {
+				if (message.role === ChatRole.Assistant) {
 					replyCount ++;
 				}
 			}
@@ -80,7 +85,8 @@ export default class TestProvider extends ChatProviderBase {
 		}
 
 		const output = content.join(' ');
-		const inputTokens = lastMessage.content.length;
+		const lastContent = lastMessage.content;
+		const inputTokens = typeof lastContent === 'string' ? lastContent.length : lastContent.dataUrl.length;
 		const outputTokens = output.length + toolCalls.length;
 		return { text: output, toolCalls, usage: { inputTokens, outputTokens } };
 	}

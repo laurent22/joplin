@@ -1,10 +1,10 @@
-import { EditorSelection } from '@codemirror/state';
+import { EditorSelection, EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import createTestEditor from '../../testing/createTestEditor';
 import renderTables, { renderInlineMarkdown } from './renderTables';
 import { RenderedContentContext } from './types';
 
-const createEditor = async (initialMarkdown: string, context?: Partial<RenderedContentContext>) => {
+const createEditor = async (initialMarkdown: string, context?: Partial<RenderedContentContext>, readOnly = false) => {
 	const fullContext: RenderedContentContext = {
 		resolveImageSrc: async () => '',
 		openLink: () => {},
@@ -14,7 +14,7 @@ const createEditor = async (initialMarkdown: string, context?: Partial<RenderedC
 		initialMarkdown,
 		EditorSelection.cursor(0),
 		['TableHeader'],
-		[renderTables(fullContext)],
+		[EditorState.readOnly.of(readOnly), renderTables(fullContext)],
 	);
 };
 
@@ -111,6 +111,16 @@ describe('renderTables', () => {
 		expect(cells[1].querySelector('em')?.textContent).toBe('italic');
 		expect(cells[2].querySelector('code')?.textContent).toBe('code');
 		expect(cells[3].textContent).toBe('plain');
+	});
+
+	test('table editing controls should be hidden when read-only', async () => {
+		const editor = await createEditor('| A | B |\n|---|---|\n| C | D |', undefined, true);
+		const cells = findCellTextDivs(editor);
+		expect([...cells].every(cell => cell.contentEditable === 'false')).toBe(true);
+		expect(editor.dom.querySelector('.cm-tw-ac-wrap, .cm-tw-ar-wrap')).toBeNull();
+
+		cells[0].dispatchEvent(new MouseEvent('contextmenu', { bubbles: true }));
+		expect(editor.dom.querySelector('.cm-tw-ctx')).toBeNull();
 	});
 
 	test('focusing a cell should swap rendered DOM for raw markdown source', async () => {

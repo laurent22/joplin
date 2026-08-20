@@ -17,6 +17,7 @@ import onUnshareNoteClick from '@joplin/lib/components/shared/ShareNoteDialog/on
 import useShareStatusMessage from '@joplin/lib/components/shared/ShareNoteDialog/useShareStatusMessage';
 import useEncryptionWarningMessage from '@joplin/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage';
 import { SharingStatus } from '@joplin/lib/components/shared/ShareNoteDialog/types';
+import useIsPublished from '@joplin/lib/components/shared/ShareNoteDialog/useIsPublished';
 import { clipboard } from 'electron';
 
 interface Props {
@@ -66,22 +67,10 @@ export function ShareNoteDialog(props: Props) {
 		recursiveShare,
 	});
 
-	const renderNote = (note: NoteEntity) => {
-		const unshareButton = !props.shares.find(s => s.note_id === note.id) ? null : (
-			<Button tooltip={_('Unpublish note')} iconName="fas fa-share-alt" onClick={() => onUnshareNoteClick({ noteId: note.id })}/>
-		);
-
-		return (
-			<div key={note.id} className='shared-note-list-item'>
-				<span className='title'>{note.title}</span>{unshareButton}
-			</div>
-		);
-	};
-
 	const renderNoteList = (notes: NoteEntity[]) => {
 		const noteComps = [];
 		for (const note of notes) {
-			noteComps.push(renderNote(note));
+			noteComps.push(<NoteItem key={note.id} note={note} shares={props.shares}/>);
 		}
 		return <div className="notes">{noteComps}</div>;
 	};
@@ -135,6 +124,25 @@ export function ShareNoteDialog(props: Props) {
 		<Dialog>{renderContent()}</Dialog>
 	);
 }
+
+interface NoteItemProps {
+	note: NoteEntity;
+	shares: StateShare[];
+}
+
+const NoteItem: React.FC<NoteItemProps> = ({ note, shares }) => {
+	const published = useIsPublished(note, shares);
+
+	const unshareButton = published && (
+		<Button tooltip={_('Unpublish note')} iconName='fas fa-share-alt' onClick={() => onUnshareNoteClick({ noteId: note.id })}/>
+	);
+
+	return (
+		<div className='shared-note-list-item'>
+			<span className='title'>{note.title}</span>{unshareButton}
+		</div>
+	);
+};
 
 const mapStateToProps = (state: AppState) => {
 	return {
