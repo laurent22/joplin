@@ -136,6 +136,89 @@ describe('services/ResourceService', () => {
 		expect(before.last_seen_time).toBe(after.last_seen_time);
 	}));
 
+	it('should index locked note resources when note lock is disabled', (async () => {
+		const service = new ResourceService();
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const resource1 = await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
+		const resource2 = await shim.createResourceFromPath(`${supportDir}/welcome.pdf`);
+		const note1 = await Note.save({
+			title: 'locked note',
+			parent_id: folder1.id,
+			body: `encrypted body [](:/${resource2.id})`,
+			is_locked: 1,
+			extracted_resource_ids: ` ${resource1.id},not-a-resource-id,${folder1.id},${resource1.id} `,
+		});
+
+		await service.indexNoteResources();
+
+		expect(await NoteResource.associatedNoteIds(resource1.id)).toEqual([note1.id]);
+		expect(await NoteResource.associatedNoteIds(resource2.id)).toEqual([]);
+		expect(await NoteResource.associatedNoteIds('not-a-resource-id')).toEqual([]);
+		expect(await NoteResource.associatedNoteIds(folder1.id)).toEqual([]);
+
+		await Note.save({
+			id: note1.id,
+			body: 'modified encrypted body',
+		});
+		await service.indexNoteResources();
+
+		expect(await NoteResource.associatedNoteIds(resource1.id)).toEqual([note1.id]);
+
+		await Note.save({
+			id: note1.id,
+			body: 'encrypted body',
+			is_locked: 1,
+			extracted_resource_ids: '',
+		});
+		await service.indexNoteResources();
+
+		expect(await NoteResource.associatedNoteIds(resource1.id)).toEqual([]);
+	}));
+
+	it('should continue indexing after a locked encrypted note', (async () => {
+		const service = new ResourceService();
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const lockedResource = await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
+		const normalResource = await shim.createResourceFromPath(`${supportDir}/welcome.pdf`);
+		const lockedNote = await Note.save({
+			title: 'locked note',
+			parent_id: folder1.id,
+			body: 'encrypted body',
+			encryption_applied: 1,
+			is_locked: 1,
+			extracted_resource_ids: lockedResource.id,
+		});
+		const normalNote = await Note.save({
+			title: 'normal note',
+			parent_id: folder1.id,
+			body: `[](:/${normalResource.id})`,
+		});
+
+		await service.indexNoteResources();
+
+		expect(await NoteResource.associatedNoteIds(lockedResource.id)).toEqual([lockedNote.id]);
+		expect(await NoteResource.associatedNoteIds(normalResource.id)).toEqual([normalNote.id]);
+	}));
+
+	it('should index locked note resources after sync', (async () => {
+		const resource = await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
+		const note = await Note.save({
+			title: 'locked note',
+			body: 'encrypted body',
+			is_locked: 1,
+			extracted_resource_ids: resource.id,
+		});
+		await synchronizer().start();
+
+		await switchClient(2);
+		await synchronizer().start();
+		await resourceService().indexNoteResources();
+
+		expect(await NoteResource.associatedNoteIds(resource.id)).toEqual([note.id]);
+	}));
+
 	it('should not delete resources that are associated with an encrypted note', (async () => {
 		// https://github.com/laurent22/joplin/issues/1433
 		//

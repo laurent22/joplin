@@ -1,6 +1,6 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep, fileApi } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { checkIfCanSync, localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo, onRevisionServiceSettingsChanged } from './syncInfoUtils';
+import { checkIfCanSync, localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo, onRevisionServiceSettingsChanged, setAppMinVersion } from './syncInfoUtils';
 import Setting from '../../models/Setting';
 import BaseItem from '../../models/BaseItem';
 import BaseModel from '../../models/BaseItem';
@@ -121,6 +121,25 @@ describe('syncInfoUtils', () => {
 		expect(mergeSyncInfos(syncInfo1, syncInfo2).appMinVersion).toBe('0.0.0');
 	});
 
+	it('should merge sync target info and keep the latest note lock key', () => {
+		const syncInfo1 = new SyncInfo();
+		syncInfo1.noteLockKey = {
+			id: '1',
+			content: 'content1',
+			updated_time: 100,
+		};
+
+		const syncInfo2 = new SyncInfo();
+		syncInfo2.noteLockKey = {
+			id: '2',
+			content: 'content2',
+			updated_time: 200,
+		};
+
+		expect(mergeSyncInfos(syncInfo1, syncInfo2).noteLockKey).toEqual(syncInfo2.noteLockKey);
+		expect(mergeSyncInfos(new SyncInfo(), syncInfo1).noteLockKey).toEqual(syncInfo1.noteLockKey);
+	});
+
 	it('should merge sync target info and takes into account usage of master key - 1', async () => {
 		const syncInfo1 = new SyncInfo();
 		syncInfo1.masterKeys = [{
@@ -229,6 +248,15 @@ describe('syncInfoUtils', () => {
 					'hasBeenUsed': true,
 				},
 			],
+			'noteLockKey': {
+				'id': '400227d8a77c4d3bb7346514861c643c',
+				'created_time': 1515008161362,
+				'updated_time': 1708103706234,
+				'source_application': 'net.cozic.joplin-desktop',
+				'encryption_method': 4,
+				'checksum': '',
+				'content': '{"iv":"M1uezlW1Pu1g3dwrCTqcHg=="}',
+			},
 			'ppk': {
 				'value': {
 					'id': 'SNQ5ZCs61KDVUW2qqqqHd3',
@@ -270,6 +298,13 @@ describe('syncInfoUtils', () => {
 					'updated_time': 1708103706234,
 				},
 			],
+			'noteLockKey': {
+				'created_time': 1515008161362,
+				'encryption_method': 4,
+				'id': '400227d8a77c4d3bb7346514861c643c',
+				'source_application': 'net.cozic.joplin-desktop',
+				'updated_time': 1708103706234,
+			},
 			'ppk': {
 				'updatedTime': 1633274368892,
 				'value': {
@@ -300,6 +335,8 @@ describe('syncInfoUtils', () => {
 		['1.0.0', '1.0.4', true],
 		['1.0.0', '0.0.5', false],
 		['1.0.0', '1.0.0', true],
+		['3.7.0', '3.6.4', true],
+		['3.7.1', '3.6.4', false],
 	])('should check if it can sync', async (appMinVersion, appVersion, expected) => {
 		let succeeded = true;
 		try {
@@ -311,6 +348,21 @@ describe('syncInfoUtils', () => {
 		}
 
 		expect(succeeded).toBe(expected);
+	});
+
+	test('should update appMinVersion in the sync info cache with a new minimum version', () => {
+		const { reset } = setAppMinVersion('3.5.0');
+		try {
+			Setting.setValue('syncInfoCache', JSON.stringify({ appMinVersion: '3.0.0' }));
+			expect(localSyncInfo()).toMatchObject({ appMinVersion: '3.5.0' });
+		} finally {
+			reset();
+		}
+	});
+
+	test('should preserve a v3.7.0 version stored in the sync info cache', () => {
+		Setting.setValue('syncInfoCache', JSON.stringify({ appMinVersion: '3.7.0' }));
+		expect(localSyncInfo()).toMatchObject({ appMinVersion: '3.7.0' });
 	});
 
 	test('should not throw if the sync info being parsed is invalid', async () => {
@@ -334,6 +386,7 @@ describe('syncInfoUtils', () => {
 		expect(result.e2ee).toEqual(false);
 		expect(result.appMinVersion).toEqual('3.0.0');
 		expect(result.masterKeys).toEqual([]);
+		expect(result.noteLockKey).toEqual(null);
 
 		Logger.globalLogger.enabled = true;
 	});

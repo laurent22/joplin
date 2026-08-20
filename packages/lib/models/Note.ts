@@ -20,6 +20,7 @@ import { LoadOptions, SaveOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
 import { getDisplayParentId, getTrashFolderId } from '../services/trash';
 import { getCollator } from './utils/getCollator';
+import isItemId from './utils/isItemId';
 const urlUtils = require('../urlUtils.js');
 const { isImageMimeType } = require('../resourceUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -147,6 +148,15 @@ export default class Note extends BaseItem {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Old code before rule was applied
 		const itemIds = links.map((l: any) => l.itemId);
 		return unique(itemIds);
+	}
+
+	public static serializeExtractedResourceIds(resourceIds: string[]) {
+		return unique(resourceIds.map(id => id.trim()).filter(id => !!isItemId(id))).join(',');
+	}
+
+	public static unserializeExtractedResourceIds(serializedIds: string) {
+		if (!serializedIds) return [];
+		return unique(serializedIds.split(',').map(id => id.trim()).filter(id => !!isItemId(id)));
 	}
 
 	public static async linkedItems(body: string) {
