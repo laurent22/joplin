@@ -4,7 +4,7 @@
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/joplin_server_business/main.png" width="200px" style="float: left; margin-right: 16px; margin-bottom: 16px;"/>
 
-Joplin Server Business is a synchronisation server that you can install on your own infrastructure, so that your data remains private and secure within your business.
+Joplin Server Business is the self-hosted solution for businesses and organisations. Install it on your own infrastructure, keeping your data private and secure within your organisation while retaining full control over where it is stored.
 
 Your teams can collaborate on notebooks and share information. They can also publish notes to the internet or within your own intranet. All that secured by Joplin end-to-end encryption.
 
