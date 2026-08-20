@@ -56,6 +56,7 @@ export interface Plan {
 	featureLabelsOn: FeatureRow[];
 	featureLabelsOff: FeatureRow[];
 	cfaLabel: string;
+	cfaDescription?: string;
 	cfaUrl: string;
 	footnote: string;
 	learnMoreUrl?: string;
@@ -617,7 +618,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Basic, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Basic, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Basic, false),
-			cfaLabel: _('Try it now'),
+			cfaLabel: _('Start free trial'),
 			cfaUrl: '',
 			footnote: '',
 			hostingType: PlanHostingType.Managed,
@@ -640,7 +641,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Pro, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Pro, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Pro, false),
-			cfaLabel: _('Try it now'),
+			cfaLabel: _('Start free trial'),
 			cfaUrl: '',
 			footnote: '',
 			hostingType: PlanHostingType.Managed,
@@ -663,7 +664,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Pro100Gb, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Pro100Gb, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Pro100Gb, false),
-			cfaLabel: _('Try it now'),
+			cfaLabel: _('Start free trial'),
 			cfaUrl: '',
 			footnote: '',
 			hostingType: PlanHostingType.Managed,
@@ -686,7 +687,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featuresOff: getFeatureIdsByPlan(PlanName.Teams, false),
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Teams, true),
 			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Teams, false),
-			cfaLabel: _('Try it now'),
+			cfaLabel: _('Start free trial'),
 			cfaUrl: '',
 			footnote: _('Per user. Minimum of 2 users.'),
 			hostingType: PlanHostingType.Managed,
@@ -710,7 +711,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 						period: PricePeriod.Yearly,
 					})),
 				},
-				cfaLabel: _('Try it now'),
+				cfaLabel: _('Start free trial'),
 				cfaUrl: '',
 				priceYearly: findPrice(stripeConfig, {
 					accountType: 5,
@@ -722,6 +723,7 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			}),
 			footnote: '',
 			learnMoreUrl: 'https://joplinapp.org/help/apps/joplin_server_business',
+			cfaDescription: _('14-day free trial. Cancel anytime during the trial and you won\'t be charged.'),
 			hostingType: PlanHostingType.Self,
 		},
 	};

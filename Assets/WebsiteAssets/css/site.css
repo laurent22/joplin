@@ -1304,6 +1304,15 @@ footer .bottom-links-row p {
 	opacity: 0.4;
 }
 
+.cfa-button {
+	margin-top: 10px;
+}
+
+.cfa-description {
+	font-style: italic;
+	text-align: center;
+}
+
 @media (max-width: 1400px) {
 	.price-row .plan-type {
 		font-size: 16px;
@@ -1391,9 +1400,4 @@ footer .bottom-links-row p {
 
 :lang(zh-cn) #plans-section .faq {
 	display: none;
-}
-
-
-.cfa-button {
-	margin-top: 10px;
 }
