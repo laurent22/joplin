@@ -40,12 +40,16 @@
 		{{#pricingTable}}
 			<strong translate>Pricing</strong>
 			<table class="table">
+				<thead>
+					<tr><th translate>Users</th><th translate>Price</th></tr>
+				</thead>
 				<tbody>
 					{{#rows}}
-						<tr><td>{{condition}}</td><td>{{priceYearly}}</td></tr>
+						<tr><td>{{condition}}</td><td>{{priceMonthly}}</td></tr>
 					{{/rows}}
 				</tbody>
 			</table>
+			<p class="pricing-table-billed-annually">{{billedAnnually}}</p>
 		{{/pricingTable}}
 
 		<p class="text-center subscribe-wrapper">

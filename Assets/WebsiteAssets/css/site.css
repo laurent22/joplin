@@ -1212,6 +1212,13 @@ footer .bottom-links-row p {
 	margin-top: 2em;
 }
 
+.price-container p.pricing-table-billed-annually {
+	font-size: 14px;
+	font-style: italic;
+	opacity: 0.7;
+	margin-top: 0.5em;
+}
+
 .price-row {
 	display: flex;
 	flex-direction: row;

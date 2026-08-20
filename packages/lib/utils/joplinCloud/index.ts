@@ -40,7 +40,7 @@ enum PlanHostingType {
 
 export interface PlanTieredPricingTableRow {
 	condition: string;
-	priceYearly: string;
+	priceMonthly: string;
 }
 
 export interface Plan {
@@ -48,7 +48,7 @@ export interface Plan {
 	title: string;
 	priceMonthly?: StripePublicConfigPrice;
 	priceYearly?: StripePublicConfigPrice;
-	pricingTable?: { rows: PlanTieredPricingTableRow[] };
+	pricingTable?: { rows: PlanTieredPricingTableRow[]; billedAnnually: string };
 	featured: boolean;
 	iconName: string;
 	featuresOn: FeatureId[];
@@ -578,24 +578,32 @@ export const createFeatureTableMd = () => {
 const getTieredPricingTable = (price: StripePublicConfigPrice) => {
 	if (!isTieredPrice(price)) throw new Error(`Not a tiered price: ${price.id}`);
 
+	const formatUserCount = (count: number) => {
+		if (count === Number.POSITIVE_INFINITY) {
+			return '∞';
+		}
+		return String(count);
+	};
+
 	const rows: PlanTieredPricingTableRow[] = [];
 	for (const amount of price.amounts) {
-		const formatUserCount = (count: number) => {
-			if (count === Number.POSITIVE_INFINITY) {
-				return '∞';
-			}
-			return String(count);
-		};
+		// The tiered amounts are yearly per-user prices, so derive the monthly
+		// price shown in the table by dividing by 12.
+		const monthlyAmount = formatPrice(Math.round(Number(amount.amount) / 12 * 100) / 100, price.currency);
 		rows.push({
 			condition: `${
 				formatUserCount(amount.userRange.min)
 			}—${
 				formatUserCount(amount.userRange.max)
 			} users`,
-			priceYearly: `${amount.formattedAmount} / user / year`,
+			priceMonthly: `${monthlyAmount} / user / month`,
 		});
 	}
-	return rows;
+
+	const yearlyAmounts = price.amounts.map(amount => amount.formattedAmount).join(' / ');
+	const billedAnnually = _('Billed annually (%s per user per year respectively).', yearlyAmounts);
+
+	return { rows, billedAnnually };
 };
 
 export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Plan> {
@@ -705,12 +713,10 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			featureLabelsOn: getFeatureLabelsByPlan(PlanName.JoplinServerBusiness, true),
 			featureLabelsOff: [],
 			...(selfServiceSelfHostingEnabled ? {
-				pricingTable: {
-					rows: getTieredPricingTable(findPrice(stripeConfig, {
-						accountType: 5,
-						period: PricePeriod.Yearly,
-					})),
-				},
+				pricingTable: getTieredPricingTable(findPrice(stripeConfig, {
+					accountType: 5,
+					period: PricePeriod.Yearly,
+				})),
 				cfaLabel: _('Start free trial'),
 				cfaUrl: '',
 				priceYearly: findPrice(stripeConfig, {
