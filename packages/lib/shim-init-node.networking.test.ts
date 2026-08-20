@@ -1,4 +1,4 @@
-import { Interceptable, MockAgent } from '@joplin/bundled-undici';
+import { Interceptable, MockAgent } from 'undici';
 import { shimInit } from './shim-init-node';
 import shim from './shim';
 import { createTempDir } from './testing/test-utils';

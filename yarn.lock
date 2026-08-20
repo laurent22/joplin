@@ -12707,15 +12707,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/bundled-undici@npm:~3.7.0, @joplin/bundled-undici@workspace:packages/bundled-undici":
-  version: 0.0.0-use.local
-  resolution: "@joplin/bundled-undici@workspace:packages/bundled-undici"
-  dependencies:
-    esbuild: "npm:0.27.5"
-    undici: "npm:8.10.0"
-  languageName: unknown
-  linkType: soft
-
 "@joplin/default-plugins@npm:~3.7, @joplin/default-plugins@workspace:packages/default-plugins":
   version: 0.0.0-use.local
   resolution: "@joplin/default-plugins@workspace:packages/default-plugins"
@@ -12870,7 +12861,6 @@ __metadata:
     "@aws-sdk/client-s3": "npm:3.296.0"
     "@aws-sdk/s3-request-presigner": "npm:3.296.0"
     "@huggingface/transformers": "npm:4.2.0"
-    "@joplin/bundled-undici": "npm:~3.7.0"
     "@joplin/fork-htmlparser2": "npm:^4.1.63"
     "@joplin/fork-sax": "npm:^1.2.67"
     "@joplin/fork-uslug": "npm:^2.0.6"
@@ -12951,6 +12941,7 @@ __metadata:
     tesseract.js: "npm:7.0.0"
     typescript: "npm:5.9.3"
     uglifycss: "npm:0.0.29"
+    undici: "npm:8.10.0"
     url-parse: "npm:1.5.10"
     uuid: "npm:11.1.1"
     word-wrap: "npm:1.2.5"
