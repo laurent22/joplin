@@ -1,4 +1,4 @@
-import { setupDatabaseAndSynchronizer, switchClient, db, msleep } from '../../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, db, msleep, withWarningSilenced } from '../../testing/test-utils';
 import Setting from '../../models/Setting';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
@@ -342,7 +342,9 @@ describe('EmbeddingIndexer', () => {
 		AiService.instance().setEmbeddingProvider(failingProvider);
 
 		// First tick processes both — bad fails, good succeeds.
-		await EmbeddingIndexer.instance().maintenance();
+		await withWarningSilenced(/synthetic failure/, async () => {
+			await EmbeddingIndexer.instance().maintenance();
+		});
 		// Second tick must NOT retry the bad note (would re-incur failureCalls).
 		await EmbeddingIndexer.instance().maintenance();
 		await EmbeddingIndexer.instance().maintenance();
