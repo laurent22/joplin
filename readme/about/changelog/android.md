@@ -1,5 +1,9 @@
 # Joplin Android Changelog
 
+## [android-v3.6.22](https://github.com/laurent22/joplin/releases/tag/android-v3.6.22) - 2026-08-20T18:18:17Z
+
+- Improved: Support syncing with Joplin v3.7 (#15889) (#15753 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.6.21](https://github.com/laurent22/joplin/releases/tag/android-v3.6.21) - 2026-06-20T10:38:19Z
 
 - Improved: Improve how resource filenames are determined (#15672 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
