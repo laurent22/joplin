@@ -149,6 +149,36 @@ describe('autoMerge', () => {
 		expect(result.sections.some(s => s.type === 'conflict')).toBe(true);
 	});
 
+	test.each([
+		['at the start of the note', ['x', 'x', 'a', 'b', 'c'], 0],
+		['at the end of the note', ['a', 'b', 'c', 'x', 'x'], 3],
+		['a run of four', ['x', 'x', 'x', 'x', 'a'], 1],
+		['a run of five', ['x', 'x', 'x', 'x', 'x'], 2],
+	])('should conflict when an edit lands on a duplicate run %s', (_name, lines, editLine) => {
+		const base = lines.join('\n');
+		const local = lines.map((l, i) => i === editLine ? `${l} local` : l).join('\n');
+		const remote = lines.map((l, i) => i === lines.length - 1 ? `${l} remote` : l).join('\n');
+		const result = autoMerge(base, local, remote);
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(true);
+	});
+
+	test('should conflict when both sides insert before a single repeated line', () => {
+		const result = autoMerge('x', 'A\nx', 'B\nx');
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(true);
+	});
+
+	test('should still merge when both sides made the same change to a duplicate run', () => {
+		const result = autoMerge('x\nx', 'A\nx\nx', 'A\nx\nx');
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
+		expect(result.mergedText).toBe('A\nx\nx');
+	});
+
+	test('should still merge when identical lines are not adjacent', () => {
+		const result = autoMerge('x\nhello\nx', 'x local\nhello\nx', 'x\nhello\nx remote');
+		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
+		expect(result.mergedText).toBe('x local\nhello\nx remote');
+	});
+
 	test('should still merge when only one side changed a note with duplicate lines', () => {
 		const result = autoMerge('aaa\naaa\naaa', 'aaa --local\naaa\naaa', 'aaa\naaa\naaa');
 		expect(result.sections.some(s => s.type === 'conflict')).toBe(false);
