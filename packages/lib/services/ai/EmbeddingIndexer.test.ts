@@ -364,7 +364,9 @@ describe('EmbeddingIndexer', () => {
 		Setting.setValue('ai.enabled', true);
 		const spy = jest.spyOn(NoteEmbedding, 'vectorSearchAvailable').mockReturnValue(false);
 		try {
-			await EmbeddingIndexer.instance().runInBackground();
+			await withWarningSilenced(/Not starting background indexer: sqlite-vec extension is not loaded/, async () => {
+				await EmbeddingIndexer.instance().runInBackground();
+			});
 			const status = await EmbeddingIndexer.instance().getStatus();
 			expect(status.indexerState).toBe('vector-search-unavailable');
 		} finally {
