@@ -843,7 +843,7 @@ export default class Note extends BaseItem {
 
 	public static async load(id: string, options: LoadOptions = null): Promise<NoteEntity> {
 		const note = await super.load(id, options);
-		if (isNoteLockEnabled() && !!options?.useNoteLock) return NoteLockNote.decryptBody(note);
+		if (isNoteLockEnabled() && !!options?.useNoteLock && note) return NoteLockNote.decryptBody(note);
 		return note;
 	}
 
@@ -902,7 +902,7 @@ export default class Note extends BaseItem {
 		// An ungated save with a plaintext body goes through the note lock path too, so a missed
 		// gate on a new feature encrypts instead of leaking plaintext. Ciphertext bodies pass
 		// through untouched, the same way data saved via sync does.
-		if (isNoteLockEnabled() && (options?.useNoteLock || ('body' in o && !isValidHeaderIdentifier((o.body ?? '').substring(0, 5))))) {
+		if (isNoteLockEnabled() && (options?.useNoteLock || ('body' in o && !isValidHeaderIdentifier((o.body ?? '').substring(0, 5), false, true)))) {
 			if (o.is_locked === undefined && !isNew && oldNote) o.is_locked = oldNote.is_locked;
 			// Callers use the returned note to update UI state, so it must carry the plaintext
 			// body even though the encrypted one is what gets persisted.

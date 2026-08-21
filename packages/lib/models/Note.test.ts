@@ -305,6 +305,8 @@ describe('models/Note', () => {
 
 		await expect(Note.load(note.id, { fields: ['id', 'is_locked'], useNoteLock: true })).rejects.toThrow();
 		await expect(Note.load(note.id, { fields: ['id', 'body'], useNoteLock: true })).rejects.toThrow('Gated note lock load is missing lock state');
+		// Resolves empty like a plain load, so callers keep their deleted-note handling.
+		await expect(Note.load('0123456789abcdef0123456789abcdef', { useNoteLock: true })).resolves.toBeUndefined();
 
 		await Note.save(await Note.load(note.id, { useNoteLock: true }), { useNoteLock: true });
 		expect((await Note.load(note.id)).body).not.toBe(plainTextBody);

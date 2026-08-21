@@ -90,10 +90,9 @@ const loadNoteForForm = async (noteId: string): Promise<{ note: NoteEntity|null;
 			}
 		}
 	}
-	const note = await Note.load(noteId);
 	// An unlocked note still goes through the gate, so the form note carries the marker
 	// that its gated scheduled saves require.
-	if (isNoteLockEnabled() && note) return { note: await NoteLockNote.decryptBody(note), blocked: false, decryptFailed: false };
+	const note = await Note.load(noteId, isNoteLockEnabled() ? { useNoteLock: true } : null);
 	return { note, blocked: false, decryptFailed: false };
 };
 

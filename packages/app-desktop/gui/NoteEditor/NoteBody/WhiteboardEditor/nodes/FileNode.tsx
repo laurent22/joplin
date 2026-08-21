@@ -214,7 +214,7 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 			if (resolved.lockedState) {
 				const message = resolved.lockedState === 'sessionLocked'
 					? _('This linked item cannot be displayed because the note is locked. Unlock the session to view it')
-					: _('This linked item cannot be displayed because the note is locked and could not be decrypted');
+					: _('This linked item cannot be displayed because the note is locked and could not be unlocked');
 				return (
 					<>
 						<div className="header -note-title" title={resolved.title}>{resolved.title}</div>
