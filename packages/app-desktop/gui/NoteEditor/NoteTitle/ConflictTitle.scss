@@ -1,0 +1,126 @@
+.conflict-title {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-width: 0;
+	padding-top: 5px;
+	padding-bottom: 12px;
+
+	> .-header {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		gap: 8px;
+	}
+
+	.-title {
+		margin: 0;
+		font-size: 1.8em;
+		font-weight: bold;
+		color: var(--joplin-color);
+	}
+
+	> .-subheader {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 8px;
+		padding-top: 14px;
+		padding-bottom: 14px;
+		border-bottom: 1px solid var(--joplin-divider-color);
+	}
+
+	.-instructions-title {
+		font-size: 1.1em;
+		font-weight: bold;
+		color: var(--joplin-color);
+	}
+
+	.-instructions-detail {
+		padding-top: 4px;
+		color: var(--joplin-color-faded);
+	}
+
+	.-help {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 8px 14px;
+		cursor: pointer;
+		border: 1px solid var(--joplin-divider-color);
+		border-radius: 6px;
+		background-color: var(--joplin-background-color);
+		color: var(--joplin-color);
+
+		&:hover {
+			background-color: var(--joplin-background-color-hover3);
+		}
+	}
+
+	> .-versions {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-end;
+		gap: 12px;
+		padding-top: 14px;
+		padding-bottom: 14px;
+		border-bottom: 1px solid var(--joplin-divider-color);
+	}
+
+	> .-single-title {
+		display: flex;
+		padding-top: 6px;
+		padding-bottom: 14px;
+		border-bottom: 1px solid var(--joplin-divider-color);
+	}
+
+	.-field {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		flex: 1;
+		min-width: 0;
+	}
+
+	.-label {
+		font-weight: bold;
+		color: var(--joplin-color);
+	}
+
+	.-input {
+		width: 100%;
+		box-sizing: border-box;
+		padding: 10px 12px;
+		border: 1px solid var(--joplin-divider-color);
+		border-radius: 6px;
+		background-color: var(--joplin-background-color);
+		color: var(--joplin-color);
+		font-size: 1.1em;
+		overflow-x: auto;
+		text-overflow: clip;
+	}
+
+	.-input.-readonly {
+		background-color: var(--joplin-background-color3);
+		color: var(--joplin-color-faded);
+	}
+
+	.-copy {
+		flex-shrink: 0;
+		padding: 11px 18px;
+		cursor: pointer;
+		border: none;
+		border-radius: 6px;
+		background-color: var(--joplin-color4);
+		color: var(--joplin-background-color);
+		font-size: 1.1em;
+		line-height: 1;
+
+		&:hover {
+			background-color: var(--joplin-background-color-hover5);
+		}
+	}
+}
