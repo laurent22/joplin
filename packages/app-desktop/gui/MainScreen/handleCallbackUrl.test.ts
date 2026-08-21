@@ -1,12 +1,12 @@
 import { utils as commandUtils } from '@joplin/lib/services/CommandService';
 import executeCallbackUrl from './handleCallbackUrl';
 
-const openExternal = jest.fn();
+const mockOpenExternal = jest.fn();
 
 jest.mock('../../services/bridge', () => ({
 	__esModule: true,
 	default: () => ({
-		openExternal: (url: string) => openExternal(url),
+		openExternal: (url: string) => mockOpenExternal(url),
 	}),
 }));
 
@@ -16,13 +16,12 @@ const setSelectedNoteId = (noteId: string | null) => {
 	// the caller-supplied target through respond() without touching the DB.
 	commandUtils.store = {
 		getState: () => ({ selectedNoteIds: noteId ? [noteId] : [] }),
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- partial store is enough for this path
-	} as any;
+	};
 };
 
 describe('handleCallbackUrl', () => {
 	beforeEach(() => {
-		openExternal.mockClear();
+		mockOpenExternal.mockClear();
 		setSelectedNoteId(null);
 	});
 
@@ -34,7 +33,7 @@ describe('handleCallbackUrl', () => {
 		'not a url',
 	])('should not dispatch a callback target with a disallowed scheme (%s)', async (target) => {
 		await executeCallbackUrl(`joplin://x-callback-url/getCurrentNote?x-error=${encodeURIComponent(target)}`);
-		expect(openExternal).not.toHaveBeenCalled();
+		expect(mockOpenExternal).not.toHaveBeenCalled();
 	});
 
 	test.each([
@@ -42,22 +41,22 @@ describe('handleCallbackUrl', () => {
 		'https://example.com/cb',
 	])('should dispatch a callback target with an allowed scheme (%s)', async (target) => {
 		await executeCallbackUrl(`joplin://x-callback-url/getCurrentNote?x-error=${encodeURIComponent(target)}`);
-		expect(openExternal).toHaveBeenCalledTimes(1);
-		expect(openExternal.mock.calls[0][0]).toContain(`${target}?`);
+		expect(mockOpenExternal).toHaveBeenCalledTimes(1);
+		expect(mockOpenExternal.mock.calls[0][0]).toContain(`${target}?`);
 	});
 
 	it('should not leak the raw error message on the error path', async () => {
 		// Force a throw inside the try block so the catch path builds the response.
 		commandUtils.store = {
 			getState: () => { throw new Error('secret path /home/victim/.config/joplin/database.sqlite'); },
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- partial store is enough for this path
-		} as any;
+		};
 
 		await executeCallbackUrl(`joplin://x-callback-url/getCurrentNote?x-error=${encodeURIComponent('https://example.com/cb')}`);
 
-		expect(openExternal).toHaveBeenCalledTimes(1);
-		const responseUrl = openExternal.mock.calls[0][0];
+		expect(mockOpenExternal).toHaveBeenCalledTimes(1);
+		const responseUrl = mockOpenExternal.mock.calls[0][0];
 		expect(responseUrl).not.toContain('secret path');
 		expect(responseUrl).not.toContain('database.sqlite');
+		expect(new URL(responseUrl).searchParams.get('errorMessage')).toBe('The command could not be completed');
 	});
 });

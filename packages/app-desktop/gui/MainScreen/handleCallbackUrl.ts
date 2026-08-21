@@ -21,11 +21,13 @@ const respond = (target: string, params: Record<string, string> = {}) => {
 	try {
 		protocol = new URL(target).protocol;
 	} catch (error) {
-		logger.warn('Rejected malformed callback target:', target);
+		// Don't log the caller-supplied target: it's untrusted and may contain
+		// secrets in its query or fragment.
+		logger.warn('Rejected malformed callback target');
 		return;
 	}
 	if (protocol !== 'http:' && protocol !== 'https:') {
-		logger.warn(`Rejected callback target with disallowed scheme "${protocol}":`, target);
+		logger.warn(`Rejected callback target with disallowed scheme "${protocol}"`);
 		return;
 	}
 
