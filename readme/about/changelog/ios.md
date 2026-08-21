@@ -1,5 +1,9 @@
 # Joplin iOS Changelog
 
+## [ios-v13.6.11](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.11) - 2026-08-20T18:25:52Z
+
+- Improved: Support syncing with Joplin v3.7 (#15889) (#15753 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.7.2](https://github.com/laurent22/joplin/releases/tag/ios-v13.7.2) - 2026-07-28T13:07:01Z
 
 - New: Add shadow to note actions menu (#16053 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
