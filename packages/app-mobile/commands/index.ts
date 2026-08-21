@@ -4,6 +4,7 @@ import * as newNote from './newNote';
 import * as openItem from './openItem';
 import * as openNote from './openNote';
 import * as scrollToHash from './scrollToHash';
+import * as synchronizeEditor from './synchronizeEditor';
 
 const index: any[] = [
 	dismissPluginPanels,
@@ -11,6 +12,7 @@ const index: any[] = [
 	openItem,
 	openNote,
 	scrollToHash,
+	synchronizeEditor,
 ];
 
 export default index;

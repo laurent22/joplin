@@ -4,6 +4,7 @@ import { EditorCommandType } from '@joplin/editor/types';
 
 const builtInCommandNames = [
 	'attachFile',
+	'synchronizeEditor',
 	'-',
 	'editor.textHeading1',
 	'editor.textHeading2',

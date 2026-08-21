@@ -150,4 +150,21 @@ describe('EditorToolbar', () => {
 
 		toolbar.unmount();
 	});
+
+	it('should enable the synchronize button based on sync events', async () => {
+		Setting.setValue('editor.toolbarButtons', ['synchronizeEditor']);
+
+		const toolbar = render(<WrappedToolbar/>);
+		const syncButton = () => screen.getByRole('button', { name: 'Synchronise' });
+
+		expect(syncButton()).toBeEnabled();
+
+		await act(async () => store.dispatch({ type: 'SYNC_STARTED' }));
+		expect(syncButton()).toBeDisabled();
+
+		await act(async () => store.dispatch({ type: 'SYNC_COMPLETED' }));
+		expect(syncButton()).toBeEnabled();
+
+		toolbar.unmount();
+	});
 });

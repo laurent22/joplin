@@ -6,12 +6,18 @@ import allToolbarCommandNamesFromState from '../utils/allToolbarCommandNamesFrom
 // The toolbar expects all toolbar command runtimes to be registered before it can be
 // rendered:
 const mockCommandRuntimes = (store: Store<AppState>) => {
-	const makeMockRuntime = (commandName: string) => ({
-		declaration: { name: commandName },
-		runtime: (_props: null): CommandRuntime => ({
-			execute: jest.fn(),
-		}),
-	});
+	const makeMockRuntime = (commandName: string) => {
+		const registeredRuntime = CommandService.instance().commandByName(commandName).runtime;
+		const runtimeProperties = Array.isArray(registeredRuntime) ? {} : registeredRuntime;
+
+		return {
+			declaration: { name: commandName },
+			runtime: (_props: null): CommandRuntime => ({
+				...runtimeProperties,
+				execute: jest.fn(),
+			}),
+		};
+	};
 
 	const isSeparator = (commandName: string) => commandName === '-';
 
