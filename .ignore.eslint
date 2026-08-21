@@ -343,6 +343,8 @@ packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/LinkNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/handlePositions.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/stripUnsafeStyles.test.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/stripUnsafeStyles.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/useCardWheel.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.test.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.js
