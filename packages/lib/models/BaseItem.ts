@@ -7,6 +7,7 @@ import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
 import Database from '../database';
 import ItemChange from './ItemChange';
+import ConflictNoteState from './ConflictNoteState';
 import ShareService from '../services/share/ShareService';
 import type EncryptionService from '../services/e2ee/EncryptionService';
 import type RevisionService from '../services/RevisionService';
@@ -343,6 +344,9 @@ export default class BaseItem extends BaseModel {
 		}
 
 		await super.batchDelete(ids, options);
+
+		// The conflict state is only useful while its conflict note exists
+		await ConflictNoteState.deleteByNoteIds(conflictNoteIds);
 
 		if (trackDeleted) {
 			const syncTargetIds = Setting.enumOptionValues('sync.target');
