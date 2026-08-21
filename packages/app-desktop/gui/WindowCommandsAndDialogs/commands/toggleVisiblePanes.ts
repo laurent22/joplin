@@ -15,6 +15,7 @@ export const runtime = (): CommandRuntime => {
 			});
 		},
 
-		enabledCondition: 'markdownEditorVisible && oneNoteSelected',
+		// Showing the merged text would hide which side each conflict came from.
+		enabledCondition: 'markdownEditorVisible && oneNoteSelected && !activeNoteIsConflict',
 	};
 };
