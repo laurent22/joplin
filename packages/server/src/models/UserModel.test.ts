@@ -1,6 +1,7 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow, expectHttpError, createUser, koaAppContext } from '../utils/testing/testUtils';
 import { EmailSender, UserFlagType } from '../services/database/types';
-import { ErrorBadRequest, ErrorUnprocessableEntity } from '../utils/errors';
+import { ErrorBadRequest, ErrorNotFound, ErrorUnprocessableEntity } from '../utils/errors';
+import { TokenPurpose } from './TokenModel';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
 import { accountByType, AccountType } from './UserModel';
 import { failedPaymentFinalAccount, failedPaymentWarningInterval } from './SubscriptionModel';
@@ -550,6 +551,29 @@ describe('UserModel', () => {
 
 		applications = await models().application().all();
 		expect(applications.length).toBe(0);
+	});
+
+	test('should not reset the password using a token that was not issued for that purpose', async () => {
+		const user = await models().user().save({
+			email: 'test@example.com',
+			password: '111111',
+		});
+		const ctx = await koaAppContext();
+
+		// A CSRF or confirmation token has no purpose and must be rejected here.
+		const genericToken = await models().token().generate(user.id);
+
+		await expectHttpError(async () => {
+			await models().user().resetPassword(genericToken, { password: '222222', password2: '222222' });
+		}, ErrorNotFound.httpCode);
+
+		// The password must be unchanged.
+		expect(await models().user().login('test@example.com', '111111', ctx.joplin.services)).toBeTruthy();
+
+		// A token generated for the reset purpose still works.
+		const resetToken = await models().token().generate(user.id, TokenPurpose.PasswordReset);
+		await models().user().resetPassword(resetToken, { password: '222222', password2: '222222' });
+		expect(await models().user().login('test@example.com', '222222', ctx.joplin.services)).toBeTruthy();
 	});
 
 	test('should not log in an user using a email/password combo when the local auth is disabled', async () => {
