@@ -1117,4 +1117,22 @@ describe('reducer', () => {
 
 		jest.useRealTimers();
 	});
+
+	it('should update the manual sync start time only for manual syncs', () => {
+		jest.useFakeTimers();
+		const now = Date.now();
+		let state = reducer(defaultState, { type: 'SYNC_STARTED' });
+		expect(state.lastManualSyncStartedTime).toBe(0);
+		expect(state.manualSyncStarted).toBe(false);
+
+		state = reducer(state, { type: 'SYNC_STARTED', manualSync: true });
+		expect(state.lastManualSyncStartedTime).toBe(now);
+		expect(state.manualSyncStarted).toBe(true);
+		state = reducer(state, { type: 'SYNC_STARTED', manualSync: true });
+		expect(state.lastManualSyncStartedTime).toBe(now + 1);
+
+		state = reducer(state, { type: 'SYNC_COMPLETED' });
+		expect(state.manualSyncStarted).toBe(false);
+		jest.useRealTimers();
+	});
 });

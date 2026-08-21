@@ -272,6 +272,40 @@ describe('useFormNote', () => {
 		formNote.unmount();
 	});
 
+	it('should force a reload for a plugin editor', async () => {
+		const note = await Note.save({ title: 'Original', body: '...' });
+		const onReloadInProgressChange = jest.fn();
+		const props = { ...defaultFormNoteProps, noteId: note.id, builtInEditorVisible: false, forceReloadRequest: 0, onReloadInProgressChange };
+		const formNote = renderHook(hookProps => useFormNote(hookProps), { initialProps: props });
+		await waitFor(() => expect(formNote.result.current.formNote.title).toBe('Original'));
+
+		await Note.save({ id: note.id, title: 'Stored title' }, { changeId: 'test-editor' });
+		formNote.rerender({ ...props, forceReloadRequest: 1 });
+
+		await waitFor(() => expect(onReloadInProgressChange).toHaveBeenCalledWith(true));
+		await waitFor(() => expect(formNote.result.current.formNote.title).toBe('Stored title'));
+		await waitFor(() => expect(onReloadInProgressChange).toHaveBeenLastCalledWith(false));
+		formNote.unmount();
+	});
+
+	it('should refresh a pending plugin editor after decryption finishes', async () => {
+		const note = await Note.save({ title: 'Original', body: '...' });
+		const onReloadInProgressChange = jest.fn();
+		const onPluginRefreshPendingChange = jest.fn();
+		const props = { ...defaultFormNoteProps, noteId: note.id, builtInEditorVisible: false, pluginRefreshPending: true, onPluginRefreshPendingChange, onReloadInProgressChange };
+		const formNote = renderHook(hookProps => useFormNote(hookProps), { initialProps: props });
+		await waitFor(() => expect(formNote.result.current.formNote.title).toBe('Original'));
+
+		await act(async () => {
+			await Note.save({ id: note.id, title: 'Decrypted', encryption_applied: 0 });
+			await ItemChange.waitForAllSaved();
+		});
+		await waitFor(() => expect(formNote.result.current.formNote.title).toBe('Decrypted'));
+		expect(onPluginRefreshPendingChange).toHaveBeenCalledWith(false);
+		await waitFor(() => expect(onReloadInProgressChange).toHaveBeenLastCalledWith(false));
+		formNote.unmount();
+	});
+
 	it('should clear reloadInProgress after overlapping reload requests', async () => {
 		const note = await Note.save({ title: 'Original', body: '...' });
 		const onReloadInProgressChange = jest.fn();

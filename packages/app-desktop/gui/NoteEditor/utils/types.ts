@@ -77,6 +77,8 @@ export interface NoteEditorProps {
 	noteLockSessionUnlocked: boolean;
 	hasNoteLockKey: boolean;
 	editorNoteReloadTimeRequest: number;
+	lastManualSyncStartedTime: number;
+	manualSyncStarted: boolean;
 }
 
 export interface NoteBodyEditorRef {
@@ -172,6 +174,7 @@ export interface FormNote {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Editor-specific content shape (e.g. TinyMCE retains the raw editor object here); per-editor type
 	bodyEditorContent?: any;
 	markup_language: number;
+	updated_time: number;
 	user_updated_time: number;
 	encryption_applied: number;
 	is_locked: number;
@@ -230,6 +233,7 @@ export function defaultFormNote(): FormNote {
 		saveActionQueue: null,
 		originalCss: '',
 		hasChanged: false,
+		updated_time: 0,
 		user_updated_time: 0,
 		encryption_applied: 0,
 		is_locked: 0,

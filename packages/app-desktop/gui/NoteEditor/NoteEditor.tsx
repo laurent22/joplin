@@ -86,6 +86,8 @@ function NoteEditorContent(props: NoteEditorProps) {
 	const [titleHasBeenManuallyChanged, setTitleHasBeenManuallyChanged] = useState(false);
 	const [isReadOnly, setIsReadOnly] = useState<boolean>(false);
 	const [reloadInProgress, setReloadInProgress] = useState(false);
+	const [pluginForceReloadRequest, setPluginForceReloadRequest] = useState(0);
+	const [pluginRefreshPending, setPluginRefreshPending] = useState(false);
 
 	const editorRef = useRef<NoteBodyEditorRef|null>(null);
 	const titleInputRef = useRef<HTMLInputElement|null>(null);
@@ -120,8 +122,34 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, []);
 
 	const effectiveNoteId = useEffectiveNoteId(props);
+	const currentNoteSelection = useMemo(() => ({ noteId: effectiveNoteId, time: Date.now() }), [effectiveNoteId]);
 	const { editorPlugin, editorView } = usePluginEditorView(props.plugins);
 	const builtInEditorVisible = !editorPlugin;
+	const forcePluginReload = useCallback(() => {
+		setPluginForceReloadRequest(previous => previous + 1);
+	}, []);
+	const refreshPluginWhenDecrypted = useCallback(async () => {
+		if (!effectiveNoteId) return;
+		setPluginRefreshPending(true);
+		try {
+			const storedNote = await Note.load(effectiveNoteId, { fields: ['encryption_applied', 'updated_time'] });
+			if (formNoteRef.current.id !== effectiveNoteId) return;
+			if (!storedNote || storedNote.updated_time <= formNoteRef.current.updated_time) {
+				setPluginRefreshPending(false);
+				return;
+			}
+			if (!storedNote.encryption_applied) {
+				setPluginRefreshPending(false);
+				forcePluginReload();
+			}
+		} catch (error) {
+			setPluginRefreshPending(false);
+			logger.warn('Could not check whether the plugin note has been decrypted', error);
+		}
+	}, [effectiveNoteId, forcePluginReload]);
+	useEffect(() => {
+		setPluginRefreshPending(false);
+	}, [editorPlugin, effectiveNoteId]);
 	const windowId = useContext(WindowIdContext);
 	const onDecryptFailedChange = useCallback((value: boolean) => {
 		props.dispatch({ type: 'SET_ACTIVE_NOTE_IS_UNDECRYPTABLE', value, windowId });
@@ -165,9 +193,35 @@ function NoteEditorContent(props: NoteEditorProps) {
 		onDecryptFailedChange,
 		onReloadInProgressChange,
 		editorNoteReloadTimeRequest: props.editorNoteReloadTimeRequest,
+		forceReloadRequest: pluginForceReloadRequest,
+		pluginRefreshPending,
+		onPluginRefreshPendingChange: setPluginRefreshPending,
 	});
 	setFormNoteRef.current = setFormNote;
 	formNoteRef.current = { ...formNote };
+
+	const previousManualSyncStartedTimeRef = useRef(props.lastManualSyncStartedTime);
+	useEffect(() => {
+		if (props.lastManualSyncStartedTime === previousManualSyncStartedTimeRef.current) return () => {};
+		previousManualSyncStartedTimeRef.current = props.lastManualSyncStartedTime;
+		if (!editorPlugin || !effectiveNoteId) return () => {};
+		void refreshPluginWhenDecrypted();
+		return () => {};
+	}, [editorPlugin, effectiveNoteId, props.lastManualSyncStartedTime, refreshPluginWhenDecrypted]);
+
+	const previousEditorNoteReloadTimeRequestRef = useRef(props.editorNoteReloadTimeRequest);
+	useEffect(() => {
+		if (props.editorNoteReloadTimeRequest === previousEditorNoteReloadTimeRequestRef.current) return;
+		const previousEditorNoteReloadTimeRequest = previousEditorNoteReloadTimeRequestRef.current;
+		previousEditorNoteReloadTimeRequestRef.current = props.editorNoteReloadTimeRequest;
+		if (editorPlugin
+			&& props.manualSyncStarted
+			&& props.lastManualSyncStartedTime > previousEditorNoteReloadTimeRequest
+			&& props.lastManualSyncStartedTime > currentNoteSelection.time
+		) {
+			void refreshPluginWhenDecrypted();
+		}
+	}, [currentNoteSelection.time, editorPlugin, props.editorNoteReloadTimeRequest, props.lastManualSyncStartedTime, props.manualSyncStarted, refreshPluginWhenDecrypted]);
 
 	useEffect(() => {
 		if (!isNoteLockEnabled()) return () => {};
@@ -923,6 +977,8 @@ const mapStateToProps = (state: AppState, ownProps: ConnectProps) => {
 		noteLockSessionUnlocked: state.noteLockSessionUnlocked,
 		hasNoteLockKey: hasNoteLockKey(state.settings['syncInfoCache']),
 		editorNoteReloadTimeRequest: windowState.windowEditorNoteReloadTimeRequest,
+		lastManualSyncStartedTime: state.lastManualSyncStartedTime,
+		manualSyncStarted: state.manualSyncStarted,
 	};
 };
 

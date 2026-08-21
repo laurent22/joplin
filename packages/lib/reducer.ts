@@ -169,6 +169,8 @@ export interface State extends WindowState {
 	screens: Record<string, { screen: string; props?: Record<string, unknown> }>;
 	historyCanGoBack: boolean;
 	syncStarted: boolean;
+	manualSyncStarted: boolean;
+	lastManualSyncStartedTime: number;
 	syncPending: boolean;
 	showQuitSyncDialog: boolean;
 	syncReport: ProgressReport;
@@ -222,6 +224,8 @@ export const defaultState: State = {
 	screens: {},
 	historyCanGoBack: false,
 	syncStarted: false,
+	manualSyncStarted: false,
+	lastManualSyncStartedTime: 0,
 	syncPending: false,
 	showQuitSyncDialog: false,
 	syncReport: { errors: [] },
@@ -1436,10 +1440,15 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'SYNC_STARTED':
 			draft.syncStarted = true;
+			draft.manualSyncStarted = !!action.manualSync;
+			if (action.manualSync) {
+				draft.lastManualSyncStartedTime = Math.max(Date.now(), draft.lastManualSyncStartedTime + 1);
+			}
 			break;
 
 		case 'SYNC_COMPLETED':
 			draft.syncStarted = false;
+			draft.manualSyncStarted = false;
 			break;
 
 		case 'SYNC_PENDING_UPDATE':

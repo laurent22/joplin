@@ -61,6 +61,7 @@ export interface SyncStartOptions {
 	syncSteps?: string[];
 	throwOnError?: boolean;
 	saveContextHandler?: (newContext: SyncContext)=> void;
+	manualSync?: boolean;
 }
 
 function isCannotSyncError(error: { code?: string; type?: string; message?: string } | null): boolean {
@@ -433,7 +434,7 @@ export default class Synchronizer {
 
 		this.progressReport_.startTime = time.unixMs();
 
-		this.dispatch({ type: 'SYNC_STARTED' });
+		this.dispatch({ type: 'SYNC_STARTED', ...(options.manualSync ? { manualSync: true } : {}) });
 		eventManager.emit(EventName.SyncStart);
 
 		this.logSyncOperation('starting', null, null, `Starting synchronisation to target ${syncTargetId}... supportsAccurateTimestamp = ${this.api().supportsAccurateTimestamp}; supportsMultiPut = ${this.api().supportsMultiPut}} [${synchronizationId}]`);

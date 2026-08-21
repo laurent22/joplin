@@ -38,6 +38,9 @@ export interface HookDependencies {
 	onDecryptFailedChange(value: boolean): void;
 	onReloadInProgressChange?(value: boolean): void;
 	editorNoteReloadTimeRequest?: number;
+	forceReloadRequest?: number;
+	pluginRefreshPending?: boolean;
+	onPluginRefreshPendingChange?(value: boolean): void;
 }
 
 type MapFormNoteCallback = (previousFormNote: FormNote)=> FormNote;
@@ -94,11 +97,12 @@ const loadNoteForForm = async (noteId: string): Promise<{ note: NoteEntity|null;
 };
 
 type InitNoteStateCallback = (note: NoteEntity, isNew: boolean, force?: boolean)=> Promise<FormNote>;
-const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: string, noteId: string, initNoteState: InitNoteStateCallback, clearFormNote: ()=> void, builtInEditorVisible: boolean, noteLockSessionUnlocked: boolean, setDecryptFailed: (value: boolean)=> void, setLoadBlocked: (value: boolean)=> void, onReloadInProgressChange: (value: boolean)=> void, editorNoteReloadTimeRequest: number) => {
+const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: string, noteId: string, initNoteState: InitNoteStateCallback, clearFormNote: ()=> void, builtInEditorVisible: boolean, noteLockSessionUnlocked: boolean, setDecryptFailed: (value: boolean)=> void, setLoadBlocked: (value: boolean)=> void, onReloadInProgressChange: (value: boolean)=> void, editorNoteReloadTimeRequest: number, forceReloadRequest: number, pluginRefreshPending: boolean, onPluginRefreshPendingChange: (value: boolean)=> void) => {
 	// Increasing the value of this counter cancels any ongoing note refreshes and starts
 	// a new refresh.
 	const [formNoteRefreshRequest, setFormNoteRefreshRequest] = useState({ counter: 0, force: false });
 	const previousEditorNoteReloadTimeRequestRef = useRef(editorNoteReloadTimeRequest);
+	const previousForceReloadRequestRef = useRef(forceReloadRequest);
 	const prevBuiltInEditorVisible = usePrevious<boolean>(builtInEditorVisible);
 	// Seeded because usePrevious defaults to null, which would read as a session change on mount.
 	const prevNoteLockSessionUnlocked = usePrevious<boolean>(noteLockSessionUnlocked, noteLockSessionUnlocked);
@@ -169,6 +173,12 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 		refreshFormNote(true);
 	}, [editorNoteReloadTimeRequest, builtInEditorVisible, refreshFormNote]);
 
+	useEffect(() => {
+		if (forceReloadRequest === previousForceReloadRequestRef.current) return;
+		previousForceReloadRequestRef.current = forceReloadRequest;
+		refreshFormNote(true);
+	}, [forceReloadRequest, refreshFormNote]);
+
 	// When switching from the plugin editor to the built-in editor, we refresh the note since the
 	// plugin may have modified it via the data API.
 	useEffect(() => {
@@ -190,10 +200,11 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 		if (!noteId) return ()=>{};
 
 		let cancelled = false;
+		let pendingRefreshHandled = false;
 
 		type ChangeEventSlice = { itemId: string; changeId: string };
-		const listener = ({ itemId, changeId }: ChangeEventSlice) => {
-			if (!builtInEditorVisible) return;
+		const listener = async ({ itemId, changeId }: ChangeEventSlice) => {
+			if (!builtInEditorVisible && !pluginRefreshPending) return;
 			// If this change came from the current editor, it should already be
 			// handled by calls to `setFormNote`. If events from the current editor
 			// aren't ignored, most user-activated note changes (e.g. a keypress)
@@ -201,7 +212,19 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 			const isExternalChange = !(changeId ?? 'unknown').endsWith(editorId);
 			if (itemId === noteId && !cancelled && isExternalChange) {
 				if (formNoteRef.current.hasChanged) return;
-				refreshFormNote();
+				if (pluginRefreshPending) {
+					try {
+						const storedNote = await Note.load(noteId, { fields: ['encryption_applied'] });
+						if (cancelled || pendingRefreshHandled || storedNote?.encryption_applied) return;
+						pendingRefreshHandled = true;
+						onPluginRefreshPendingChange(false);
+						refreshFormNote(true);
+					} catch (error) {
+						logger.warn('Could not check whether the plugin note has been decrypted', error);
+					}
+				} else {
+					refreshFormNote();
+				}
 			}
 		};
 		eventManager.on(EventName.ItemChange, listener);
@@ -210,7 +233,7 @@ const useRefreshFormNoteOnChange = (formNoteRef: RefObject<FormNote>, editorId: 
 			eventManager.off(EventName.ItemChange, listener);
 			cancelled = true;
 		};
-	}, [formNoteRef, noteId, editorId, refreshFormNote, builtInEditorVisible]);
+	}, [formNoteRef, noteId, editorId, refreshFormNote, builtInEditorVisible, pluginRefreshPending, onPluginRefreshPendingChange]);
 };
 
 export default function useFormNote(dependencies: HookDependencies) {
@@ -219,6 +242,9 @@ export default function useFormNote(dependencies: HookDependencies) {
 	} = dependencies;
 	const onReloadInProgressChange = dependencies.onReloadInProgressChange ?? (() => {});
 	const editorNoteReloadTimeRequest = dependencies.editorNoteReloadTimeRequest ?? 0;
+	const forceReloadRequest = dependencies.forceReloadRequest ?? 0;
+	const pluginRefreshPending = dependencies.pluginRefreshPending ?? false;
+	const onPluginRefreshPendingChange = dependencies.onPluginRefreshPendingChange ?? (() => {});
 
 	const [formNote, setFormNote] = useState<FormNote>(defaultFormNote());
 	const [isNewNote, setIsNewNote] = useState(false);
@@ -265,6 +291,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 			bodyWillChangeId: 0,
 			bodyChangeId: 0,
 			markup_language: n.markup_language,
+			updated_time: n.updated_time,
 			saveActionQueue: new AsyncActionQueue(300),
 			originalCss: originalCss,
 			hasChanged: false,
@@ -305,7 +332,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		setFormNote(formNoteRef.current);
 	}, []);
 
-	useRefreshFormNoteOnChange(formNoteRef, editorId, noteId, initNoteState, clearFormNote, builtInEditorVisible, noteLockSessionUnlocked, setDecryptFailed, setLoadBlocked, onReloadInProgressChange, editorNoteReloadTimeRequest);
+	useRefreshFormNoteOnChange(formNoteRef, editorId, noteId, initNoteState, clearFormNote, builtInEditorVisible, noteLockSessionUnlocked, setDecryptFailed, setLoadBlocked, onReloadInProgressChange, editorNoteReloadTimeRequest, forceReloadRequest, pluginRefreshPending, onPluginRefreshPendingChange);
 
 	useEffect(() => {
 		if (!noteId) {

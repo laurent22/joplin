@@ -69,7 +69,7 @@ export const runtime = (): CommandRuntime => {
 				sync.cancel();
 				return 'cancel';
 			} else {
-				void reg.scheduleSync(0);
+				void reg.scheduleSync(0, { manualSync: true });
 				return 'sync';
 			}
 		},

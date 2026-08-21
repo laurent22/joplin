@@ -47,7 +47,7 @@ const useScheduleSaveCallbacks = (props: Props) => {
 				const savedNote = await Note.save(note, { changeId: `editorChange-${props.editorId}`, useNoteLock: true, noteLockKey: latestFormNote.noteLockKey });
 
 				props.setFormNote.current((prev: FormNote) => {
-					return { ...prev, user_updated_time: savedNote.user_updated_time, hasChanged: false };
+					return { ...prev, updated_time: savedNote.updated_time, user_updated_time: savedNote.user_updated_time, hasChanged: false };
 				});
 
 				void ExternalEditWatcher.instance().updateNoteFile(savedNote);
