@@ -263,7 +263,14 @@ describe('InteropService_Importer_Obsidian', () => {
 		});
 
 		const note = await Note.loadByTitle('bom');
-		expect(note.body).toContain('cssclasses:\n  - test');
+		expect(note.body).toBe([
+			'---',
+			'cssclasses:',
+			'  - test',
+			'---',
+			'',
+			'Body',
+		].join('\n'));
 	});
 
 	it('should import inline tag and keep text', async () => {
@@ -834,6 +841,37 @@ describe('InteropService_Importer_Obsidian', () => {
 		expect(note.body).toBe([
 			`<img src=":/${resourceIds[0]}" width="100" alt="photo.png"/>`,
 			`<img src=":/${resourceIds[0]}" width="100" height="200" alt="photo.png"/>`,
+		].join('\n'));
+	});
+
+	it('should safely escape sized image attributes without breaking resource paths', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		const ampersandFilename = 'photo&copy.png';
+		const quoteFilename = 'photo.png" onerror="alert(1)" x=".png';
+		const missingFilename = 'missing&photo.png" onerror="alert(1)" x=".png';
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/embed-size-safe.md`, [
+			`![[${ampersandFilename}|100]]`,
+			`![[${quoteFilename}|100x200]]`,
+			`![[${missingFilename}|300]]`,
+		].join('\n'));
+		await fs.writeFile(`${vaultPath}/${ampersandFilename}`, 'Ampersand photo content');
+		await fs.writeFile(`${vaultPath}/${quoteFilename}`, 'Quote photo content');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const note = await Note.loadByTitle('embed-size-safe');
+		const resources = await Promise.all((await Note.linkedResourceIds(note.body)).map(id => Resource.load(id)));
+		const resourceIdsByTitle = new Map(resources.map(resource => [resource.title, resource.id]));
+
+		expect(resources).toHaveLength(2);
+		expect(note.body).toBe([
+			`<img src=":/${resourceIdsByTitle.get(ampersandFilename)}" width="100" alt="photo&amp;copy.png"/>`,
+			`<img src=":/${resourceIdsByTitle.get(quoteFilename)}" width="100" height="200" alt="photo.png&quot; onerror=&quot;alert(1)&quot; x=&quot;.png"/>`,
+			'<img src="missing&photo.png%22%20onerror=%22alert%281%29%22%20x=%22.png" width="300" alt="missing&amp;photo.png&quot; onerror=&quot;alert(1)&quot; x=&quot;.png"/>',
 		].join('\n'));
 	});
 

@@ -195,7 +195,8 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 	private convertSizedImageEmbed(target: string, shownName: string | undefined, attachmentPath: string) {
 		if (!shownName || !imageDimensionRegex.test(shownName)) return null;
 		const [width, height] = shownName.split('x');
-		return `<img src="${markdownUtils.escapeLinkUrl(attachmentPath)}" width="${htmlentities(width)}"${height ? ` height="${htmlentities(height)}"` : ''} alt="${markdownUtils.escapeTitleText(target)}"/>`;
+		const escapedAttachmentPath = markdownUtils.escapeLinkUrl(encodeURI(attachmentPath));
+		return `<img src="${escapedAttachmentPath}" width="${htmlentities(width)}"${height ? ` height="${htmlentities(height)}"` : ''} alt="${htmlentities(target)}"/>`;
 	}
 
 	public async importLocalFiles(filePath: string, body: string, parentFolderId: string) {
