@@ -76,6 +76,59 @@ describe('InteropService_Importer_Obsidian', () => {
 	});
 
 	test.each([
+		['block quote', '> ```\n> [[Target]]\n> ```'],
+		['list item', '- ~~~typescript\n  [[Target]]\n  ~~~'],
+	])('should keep wikilinks literal inside code blocks in %s', async (_type, codeBlock) => {
+		const vaultPath = `${tempDir}/My vault`;
+		const sourceBody = `${codeBlock}\n\n[[Target]]`;
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/Source.md`, sourceBody);
+		await fs.writeFile(`${vaultPath}/Target.md`, 'Target note.');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const sourceNote = await Note.loadByTitle('Source');
+		const targetNote = await Note.loadByTitle('Target');
+
+		expect(sourceNote.body).toBe(`${codeBlock}\n\n[Target](:/${targetNote.id})`);
+	});
+
+	it('should process list text but keep nested code content literal', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		const sourceBody = [
+			'- [[Target]] #real',
+			'- ~~~typescript',
+			'  [[Target]] #fake ![[photo.png]]',
+			'  ~~~',
+		].join('\n');
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/Source.md`, sourceBody);
+		await fs.writeFile(`${vaultPath}/Target.md`, 'Target note.');
+		await fs.writeFile(`${vaultPath}/photo.png`, 'Photo content');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const sourceNote = await Note.loadByTitle('Source');
+		const targetNote = await Note.loadByTitle('Target');
+		const tags = (await Tag.tagsByNoteId(sourceNote.id)).map(tag => tag.title);
+
+		expect(sourceNote.body).toBe([
+			`- [Target](:/${targetNote.id}) #real`,
+			'- ~~~typescript',
+			'  [[Target]] #fake ![[photo.png]]',
+			'  ~~~',
+		].join('\n'));
+		expect(tags).toEqual(['real']);
+		expect(await Note.linkedResourceIds(sourceNote.body)).toEqual([]);
+	});
+
+	test.each([
 		['backtick', '```text', '````'],
 		['tilde', '~~~text', '~~~~'],
 	])('should close %s code fence longer than opening fence', async (_type, openingFence, closingFence) => {
@@ -197,6 +250,20 @@ describe('InteropService_Importer_Obsidian', () => {
 			'Tags: work, home. YAML removed.',
 		].join('\n'));
 		expect(tags).toEqual(['home', 'work']);
+	});
+
+	it('should import front matter after a byte order mark', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/bom.md`, '\uFEFF---\ncssclasses: [test]\n---\n\nBody');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const note = await Note.loadByTitle('bom');
+		expect(note.body).toContain('cssclasses:\n  - test');
 	});
 
 	it('should import inline tag and keep text', async () => {
@@ -496,6 +563,80 @@ describe('InteropService_Importer_Obsidian', () => {
 		const targetNote = await Note.loadByTitle('md-link-target');
 
 		expect(sourceNote.body).toBe(`[MD target](:/${targetNote.id}${fragment})`);
+	});
+
+	it('should resolve multiple Markdown note links with an uppercase extension', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		const sourceBody = '[First](md-link-target.MD) [Second](md-link-target.md#Notes)';
+		await fs.mkdirp(`${vaultPath}/utils`);
+		await fs.writeFile(`${vaultPath}/Source.md`, sourceBody);
+		await fs.writeFile(`${vaultPath}/utils/md-link-target.md`, '# Notes');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const sourceNote = await Note.loadByTitle('Source');
+		const targetNote = await Note.loadByTitle('md-link-target');
+
+		expect(sourceNote.body).toBe(`[First](:/${targetNote.id}) [Second](:/${targetNote.id}#notes)`);
+	});
+
+	it('should keep unsupported Markdown note link forms unchanged', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		const sourceBody = [
+			'![Image](md-link-target.md)',
+			'[Empty fragment](md-link-target.md#)',
+			'[Wrong type](md-link-target.txt)',
+			'[Missing close](md-link-target.md',
+			'[Line',
+			'break](md-link-target.md)',
+		].join('\n');
+		await fs.mkdirp(`${vaultPath}/utils`);
+		await fs.writeFile(`${vaultPath}/Source.md`, sourceBody);
+		await fs.writeFile(`${vaultPath}/utils/md-link-target.md`, 'Target note.');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const sourceNote = await Note.loadByTitle('Source');
+
+		expect(sourceNote.body).toBe(sourceBody);
+	});
+
+	it('should update anchors in valid internal links', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		const itemId = 'A'.repeat(32);
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/Source.md`, `[First](:/${itemId}#First heading) [Second](:/${itemId}#Second heading)`);
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const sourceNote = await Note.loadByTitle('Source');
+
+		expect(sourceNote.body).toBe(`[First](:/${itemId}#first-heading) [Second](:/${itemId}#second-heading)`);
+	});
+
+	it('should keep internal link unchanged when item ID is not hexadecimal', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		const sourceBody = `[Invalid](:/${'g'.repeat(32)}#MyHeading)`;
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/Source.md`, sourceBody);
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const sourceNote = await Note.loadByTitle('Source');
+
+		expect(sourceNote.body).toBe(sourceBody);
 	});
 
 	it('should import linked attachment', async () => {

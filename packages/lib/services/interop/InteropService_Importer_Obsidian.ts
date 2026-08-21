@@ -6,9 +6,12 @@ import markdownUtils from '../../markdownUtils';
 import { fromFilename } from '../../mime-utils';
 import { basename, dirname, toForwardSlashes } from '../../path-utils';
 import shim from '../../shim';
+import { stripBom } from '../../string-utils';
 import * as yaml from 'js-yaml';
 import { NoteEntity } from '../database/types';
 import { relative } from 'path';
+import { htmlentities } from '@joplin/utils/html';
+import MarkdownIt from 'markdown-it';
 
 const uslug = require('@joplin/fork-uslug');
 const tagRegex = /(?:^|\s)#([\p{L}\p{M}\p{N}\p{Pc}\p{Pd}\p{S}\u200D/]+)/gu;
@@ -17,22 +20,86 @@ const normalizedTag = (tag: string) => tag.toLowerCase();
 const normalizedWikilinkTarget = (target: string) => target.toLowerCase();
 const wikilinkRegex = /(?<![!\\])(!?)\[\[([^|\r\n]+?)(?:\|([^\r\n]+?))?\]\]/g;
 const imageDimensionRegex = /^\d+(?:x\d+)?$/;
-const markdownLinkRegex = /(?<!!)\[([^\]\r\n]+)\]\(([^)\r\n#]+\.md)(#[^)\r\n]+)?\)/gi;
-const internalLinkAnchorRegex = /(\[[^\]\r\n]+\]\(:\/[0-9a-f]{32})#([^)\r\n]+)\)/gi;
-const codeRegex = /^ {0,3}((`|~)\2{2,})[^\r\n]*(?:\r?\n|$)[\s\S]*?(?:^ {0,3}\1\2*[ \t]*(?:\r?\n|$)|(?![\s\S]))|^(?: {4}|\t)[^\r\n]*(?:\r?\n|$)|(`+)[^\r\n]*?\3/gm;
-const frontMatterRegex = /^\uFEFF?---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/;
+const joplinItemIdRegex = /^[0-9a-f]{32}$/i;
+const markdownLinkTargetRegex = /\[([^\]\r\n]+)\]\(([^)\r\n]+)\)/g;
+const inlineCodeRegex = /(`+)[^\r\n]*?\1/g;
 const withoutMarkdownExtension = (path: string) => path.replace(/\.md$/i, '');
 const ignoredFolderNames = new Set(['.obsidian', '.trash']);
+const markdownIt = new MarkdownIt('commonmark', { html: false });
 
-const replaceOutsideCode = (body: string, replace: (text: string)=> string) => {
+const readFrontMatter = (text: string) => {
+	const lines = text.split(/\r?\n/);
+	if (lines[0] !== '---') return '';
+
+	const end = lines.indexOf('---', 1);
+	return end < 0 ? '' : lines.slice(1, end).join('\n');
+};
+
+const replaceMarkdownNoteLinks = (text: string, replace: (link: string, label: string, target: string, fragment: string)=> string) => {
 	let output = '';
 	let previousEnd = 0;
-	for (const code of body.matchAll(codeRegex)) {
+
+	for (let linkStart = 0; linkStart < text.length; linkStart++) {
+		// Find one Markdown link and where it end.
+		if (text[linkStart] !== '[' || text[linkStart - 1] === '!') continue;
+		const labelEnd = text.indexOf('](', linkStart + 1);
+		if (labelEnd < 0) continue;
+		const linkEnd = text.indexOf(')', labelEnd + 2);
+		if (linkEnd < 0) continue;
+
+		// Read link label and target. Skip invalid link.
+		const label = text.slice(linkStart + 1, labelEnd);
+		const fullTarget = text.slice(labelEnd + 2, linkEnd);
+		const hasLineBreak = label.includes('\r') || label.includes('\n') || fullTarget.includes('\r') || fullTarget.includes('\n');
+		if (!label || label.includes(']') || hasLineBreak) continue;
+
+		// Separate optional #heading from note link.
+		const fragmentStart = fullTarget.indexOf('#');
+		const target = fragmentStart < 0 ? fullTarget : fullTarget.slice(0, fragmentStart);
+		const fragment = fragmentStart < 0 ? '' : fullTarget.slice(fragmentStart);
+		if (target.length <= '.md'.length || !target.toLowerCase().endsWith('.md') || fragment === '#') continue;
+
+		// Add changed link. Then search after this link.
+		output += text.slice(previousEnd, linkStart);
+		output += replace(text.slice(linkStart, linkEnd + 1), label, target, fragment);
+		previousEnd = linkEnd + 1;
+		linkStart = linkEnd;
+	}
+
+	return output + text.slice(previousEnd);
+};
+
+const replaceJoplinInternalLinkAnchors = (text: string) => text.replace(markdownLinkTargetRegex, (link, label: string, target: string) => {
+	const anchorStart = target.indexOf('#');
+	if (!target.startsWith(':/') || anchorStart < 0) return link;
+
+	const itemId = target.slice(2, anchorStart);
+	const anchor = target.slice(anchorStart + 1);
+	if (!joplinItemIdRegex.test(itemId) || !anchor) return link;
+
+	return `[${label}](:/${itemId}#${uslug(anchor)})`;
+});
+
+const replaceOutsideInlineCode = (body: string, replace: (text: string)=> string) => {
+	let output = '';
+	let previousEnd = 0;
+	for (const code of body.matchAll(inlineCodeRegex)) {
 		output += replace(body.slice(previousEnd, code.index));
 		output += code[0];
 		previousEnd = code.index + code[0].length;
 	}
 	return output + replace(body.slice(previousEnd));
+};
+
+const replaceOutsideCode = (body: string, replace: (text: string)=> string) => {
+	const lines = body.split('\n');
+	for (const token of markdownIt.parse(body, {})) {
+		if (token.type !== 'inline' || !token.map) continue;
+		const [start, end] = token.map;
+		const replacedLines = replaceOutsideInlineCode(lines.slice(start, end).join('\n'), replace).split('\n');
+		lines.splice(start, end - start, ...replacedLines);
+	}
+	return lines.join('\n');
 };
 
 const addToIndex = (index: Map<string, string[]>, key: string, noteId: string) => {
@@ -101,13 +168,13 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 				return `[${label}](:/${matchingNoteIds[0]}${anchor})`;
 			}));
 			// Obsidian can find the linked note in another folder when no other note has the same name.
-			body = replaceOutsideCode(body, text => text.replace(markdownLinkRegex, (markdownLink, label: string, target: string, fragment = '') => {
+			body = replaceOutsideCode(body, text => replaceMarkdownNoteLinks(text, (markdownLink, label, target, fragment) => {
 				const normalizedTarget = normalizedWikilinkTarget(withoutMarkdownExtension(markdownUtils.unescapeLinkUrl(target)));
 				const matchingNoteIds = noteIdsByWikilinkTarget.get(normalizedTarget);
 				return matchingNoteIds?.length === 1 ? `[${label}](:/${matchingNoteIds[0]}${fragment})` : markdownLink;
 			}));
 			// Make link anchors match the way Joplin writes heading links.
-			body = replaceOutsideCode(body, text => text.replace(internalLinkAnchorRegex, (_link, linkStart: string, anchor: string) => `${linkStart}#${uslug(anchor)})`));
+			body = replaceOutsideCode(body, replaceJoplinInternalLinkAnchors);
 
 			if (body === note.body) continue;
 			this.importedNotes[sourcePath] = await Note.save({ ...note, body }, { isNew: false, autoTimestamp: false });
@@ -128,7 +195,7 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 	private convertSizedImageEmbed(target: string, shownName: string | undefined, attachmentPath: string) {
 		if (!shownName || !imageDimensionRegex.test(shownName)) return null;
 		const [width, height] = shownName.split('x');
-		return `<img src="${markdownUtils.escapeLinkUrl(attachmentPath)}" width="${width}"${height ? ` height="${height}"` : ''} alt="${markdownUtils.escapeTitleText(target)}"/>`;
+		return `<img src="${markdownUtils.escapeLinkUrl(attachmentPath)}" width="${htmlentities(width)}"${height ? ` height="${htmlentities(height)}"` : ''} alt="${markdownUtils.escapeTitleText(target)}"/>`;
 	}
 
 	public async importLocalFiles(filePath: string, body: string, parentFolderId: string) {
@@ -152,8 +219,8 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 	}
 
 	private async handleCssClasses(filePath: string, note: NoteEntity) {
-		const frontMatter = (await shim.fsDriver().readFile(filePath)).match(frontMatterRegex);
-		const { cssclasses = [] } = (frontMatter ? yaml.load(frontMatter[1], { schema: yaml.FAILSAFE_SCHEMA }) as { cssclasses?: string[] } : {}) ?? {};
+		const frontMatter = readFrontMatter(stripBom(await shim.fsDriver().readFile(filePath)));
+		const { cssclasses = [] } = (yaml.load(frontMatter, { schema: yaml.FAILSAFE_SCHEMA }) as { cssclasses?: string[] }) ?? {};
 		if (!cssclasses.length) return note;
 
 		note.body = `---\n${yaml.dump({ cssclasses }, { schema: yaml.FAILSAFE_SCHEMA }).trimEnd()}\n---\n\n${note.body}`;
@@ -166,7 +233,14 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 		const existingTags = await Tag.tagsByNoteId(note.id);
 		const existingTagNames = new Set(existingTags.map(tag => normalizedTag(tag.title)));
 
-		for (const [, tag] of note.body.replace(codeRegex, '').matchAll(tagRegex)) {
+		const bodyTags: string[] = [];
+		replaceOutsideCode(note.body, text => {
+			for (const [, tag] of text.matchAll(tagRegex)) bodyTags.push(tag);
+			return text;
+		});
+
+		for (const tag of bodyTags) {
+			// Obsidian does not allow tags containing only numbers, but tagRegex matches them.
 			if (/^\p{N}+$/u.test(tag)) continue;
 
 			const key = normalizedTag(tag);
