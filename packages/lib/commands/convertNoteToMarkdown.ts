@@ -12,7 +12,6 @@ import Setting from '../models/Setting';
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
 import NoteLockNote from '../services/noteLock/NoteLockNote';
 import NoteLockSession from '../services/noteLock/NoteLockSession';
-import type { DecryptedNoteLockKey } from '../services/noteLock/NoteLockKey';
 import Logger from '@joplin/utils/Logger';
 
 const logger = Logger.create('convertNoteToMarkdown');
@@ -35,9 +34,14 @@ export const runtime = (): CommandRuntime => {
 			const notes: NoteEntity[] = await Note.loadItemsByIdsOrFail(noteIds);
 
 			try {
+				const firstLockedNote = isNoteLockEnabled() ? notes.find(note => note.markup_language !== MarkupLanguage.Markdown && NoteLockNote.isLocked(note)) : null;
+				if (firstLockedNote && !NoteLockSession.instance().isUnlocked()) {
+					throw new Error(_('Cannot convert locked note: "%s"', firstLockedNote.title));
+				}
+				// Captured once so a session lock mid-run cannot fail the remaining conversions.
+				const noteLockKey = firstLockedNote ? NoteLockSession.instance().decryptedKey() : null;
 				let isFirst = true;
 				let processedCount = 0;
-				let noteLockKey: DecryptedNoteLockKey = null;
 				for (const note of notes) {
 					if (note.markup_language === MarkupLanguage.Markdown) {
 						logger.warn('Skipping item: Already Markdown.');
@@ -47,13 +51,6 @@ export const runtime = (): CommandRuntime => {
 						throw new Error(_('Cannot convert read-only item: "%s"', note.title));
 					}
 					const noteIsLocked = isNoteLockEnabled() && NoteLockNote.isLocked(note);
-					if (noteIsLocked && !noteLockKey) {
-						if (!NoteLockSession.instance().isUnlocked()) {
-							throw new Error(_('Cannot convert locked note: "%s"', note.title));
-						}
-						// Captured once so a session lock mid-run cannot fail the remaining conversions.
-						noteLockKey = NoteLockSession.instance().decryptedKey();
-					}
 
 					// A locked note converts through a full gated load and save, so the body is
 					// decrypted for the conversion and the converted copy is encrypted again.

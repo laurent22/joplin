@@ -128,6 +128,22 @@ describe('convertNoteToMarkdown', () => {
 		expect((await Note.load(htmlNote.id)).deleted_time === 0).toBe(blocked);
 	});
 
+	it('should not convert any of the selected notes when one is locked and the session is locked', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		shim.showErrorDialog = jest.fn();
+		NoteLockSession.destroyInstance();
+		const folder = await Folder.save({ title: 'test_folder' });
+		const plainNote = await Note.save({ title: 'plain', body: '<p>plain</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
+		const lockedNote = await Note.save({ title: 'locked', body: '<p>locked</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html, is_locked: 1 });
+		state.selectedNoteIds = [plainNote.id, lockedNote.id];
+
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
+
+		expect(shim.showErrorDialog).toHaveBeenCalledTimes(1);
+		expect((await Note.load(plainNote.id)).deleted_time).toBe(0);
+		expect((await Note.load(lockedNote.id)).deleted_time).toBe(0);
+	});
+
 	it('should convert a locked note when the session is unlocked', async () => {
 		Setting.setValue('featureFlag.noteLock', true);
 		shim.showErrorDialog = jest.fn();
