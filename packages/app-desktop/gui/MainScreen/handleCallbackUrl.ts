@@ -12,6 +12,23 @@ const logger = Logger.create('handleCallbackUrl');
 // Opens the caller's x-success / x-error URL with the result appended as query params.
 const respond = (target: string, params: Record<string, string> = {}) => {
 	if (!target) return;
+
+	// The callback target is untrusted input from the x-callback-url. Anything
+	// that is not file: is handed straight to shell.openExternal(), i.e. the OS
+	// URI dispatcher, so restrict it to schemes we're willing to invoke. This
+	// also covers the x-error path below, which fires on any thrown exception.
+	let protocol;
+	try {
+		protocol = new URL(target).protocol;
+	} catch (error) {
+		logger.warn('Rejected malformed callback target:', target);
+		return;
+	}
+	if (protocol !== 'http:' && protocol !== 'https:') {
+		logger.warn(`Rejected callback target with disallowed scheme "${protocol}":`, target);
+		return;
+	}
+
 	const query = Object.entries(params)
 		.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
 		.join('&');
@@ -95,7 +112,9 @@ const executeCallbackUrl = async (url: string) => {
 		}
 	} catch (error) {
 		logger.error(`Error handling callback URL command "${info.command}":`, error);
-		respond(info.params['x-error'], { errorMessage: error.message });
+		// Return an opaque status rather than error.message, which can leak
+		// profile paths and item ids to the caller-supplied x-error target.
+		respond(info.params['x-error'], { errorMessage: 'The command could not be completed' });
 	}
 };
 
