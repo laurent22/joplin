@@ -931,6 +931,14 @@ export default class ElectronAppWrapper {
 		const alreadyRunning = await this.ensureSingleInstance();
 		if (alreadyRunning) return;
 
+		// If the previous instance had launched an alt instance before restarting,
+		// relaunch it now. The alt instance was killed when the old primary exited
+		const relaunchFlagPath = path.join(this.profilePath_, '.relaunch_alt_instance');
+		if (fs.existsSync(relaunchFlagPath)) {
+			fs.removeSync(relaunchFlagPath);
+			void bridge().launchAltAppInstance(this.env_);
+		}
+
 		await this.fixLinuxAccessibility_();
 
 		// Session must be created before handleCustomProtocols() so both use the same object.

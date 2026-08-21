@@ -14,6 +14,7 @@ import isSafeToOpen from './utils/isSafeToOpen';
 import { closeSync, openSync, readSync, statSync } from 'fs';
 import { KB } from '@joplin/utils/bytes';
 import { defaultWindowId } from '@joplin/lib/reducer';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 import { execCommand } from '@joplin/utils';
 
 interface LastSelectedPath {
@@ -43,6 +44,7 @@ export class Bridge {
 	private appId_: string;
 	private logFilePath_ = '';
 	private altInstanceId_ = '';
+	private altInstanceWasLaunched_ = false;
 
 	private extraAllowedExtensions_: string[] = [];
 	private onAllowedExtensionsChangeListener_: OnAllowedExtensionsChange = ()=>{};
@@ -582,15 +584,17 @@ export class Bridge {
 		} else {
 			return {
 				execPath: bridge().electronApp().electronApp().getPath('exe'),
-				args: [].concat(altInstanceArgs),
+				args: ['.'].concat(altInstanceArgs),
 			};
 		}
 	}
 
 	private async launchAppInstanceById(env: string, altInstanceId: string) {
 		if (this.electronApp().ipcServerStarted()) {
+			const { spawn } = require('child_process');
 			const cmd = this.appLaunchCommand(env, altInstanceId);
-			await execCommand([cmd.execPath].concat(cmd.args), { detached: true });
+			const child = spawn(cmd.execPath, cmd.args, { detached: true, stdio: 'ignore' });
+			child.unref();
 		} else {
 			const buttonIndex = this.showErrorMessageBox('Cannot launch another instance because IPC server could not start.', {
 				buttons: [
@@ -607,10 +611,21 @@ export class Bridge {
 
 	public async launchAltAppInstance(env: string) {
 		await this.launchAppInstanceById(env, 'alt1');
+		this.altInstanceWasLaunched_ = true;
 	}
 
 	public async launchMainAppInstance(env: string) {
 		await this.launchAppInstanceById(env, '');
+	}
+
+	private saveAltInstanceRelaunchFlag() {
+		if (!this.altInstanceWasLaunched_) return;
+		try {
+			const flagPath = join(this.rootProfileDir_, '.relaunch_alt_instance');
+			writeFileSync(flagPath, 'alt1');
+		} catch (_e) {
+			void 0;
+		}
 	}
 
 	public async restart() {
@@ -620,11 +635,13 @@ export class Bridge {
 		const { app } = require('electron');
 
 		if (shim.isPortable()) {
+			this.saveAltInstanceRelaunchFlag();
 			const options = {
 				execPath: process.env.PORTABLE_EXECUTABLE_FILE,
 			};
 			app.relaunch(options);
 		} else if (process.env.APPIMAGE && !this.altInstanceId_) {
+			this.saveAltInstanceRelaunchFlag();
 			app.relaunch({
 				execPath: process.env.APPIMAGE,
 				args: ['--appimage-extract-and-run'],
@@ -658,6 +675,7 @@ export class Bridge {
 				// });
 			}
 		} else {
+			this.saveAltInstanceRelaunchFlag();
 			app.relaunch();
 		}
 
