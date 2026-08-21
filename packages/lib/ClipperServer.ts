@@ -15,6 +15,23 @@ export enum StartState {
 
 type ClipperDispatch = (action: { type: string; [key: string]: unknown })=> void;
 
+// The pairing endpoints hand out the permanent API token and are reachable
+// without a token, so they must not be callable from an arbitrary website. The
+// browser extension calls them from an extension origin; a web page would carry
+// an http(s) origin. Requests with no Origin (native clients, curl) are not a
+// browser CSRF vector so they are allowed.
+const pairingPaths = ['/auth', '/auth/check'];
+
+export const isAllowedPairingOrigin = (origin: string) => {
+	if (!origin) return true;
+	try {
+		const protocol = new URL(origin).protocol;
+		return protocol !== 'http:' && protocol !== 'https:';
+	} catch (error) {
+		return false;
+	}
+};
+
 export default class ClipperServer {
 
 	private logger_: Logger;
@@ -190,6 +207,12 @@ export default class ClipperServer {
 			this.logger().info(`Request: ${request.method} ${request.url}`);
 
 			const url = urlParser.parse(request.url, true);
+
+			if (request.method !== 'OPTIONS' && pairingPaths.includes(url.pathname) && !isAllowedPairingOrigin(request.headers.origin)) {
+				this.logger().warn(`Rejected pairing request from disallowed origin: ${request.headers.origin}`);
+				writeResponse(403, { error: 'This endpoint cannot be called from a web page' });
+				return;
+			}
 
 			const execRequest = async (request: import('http').IncomingMessage, body = '', files: RequestFile[] = []) => {
 				try {
