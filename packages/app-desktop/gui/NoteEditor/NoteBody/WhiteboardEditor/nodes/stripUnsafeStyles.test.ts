@@ -19,6 +19,16 @@ describe('stripUnsafeStyles', () => {
 			'<p>x</p>',
 		],
 		[
+			'removes an uppercase STYLE element',
+			'<P>x</P><STYLE>@import url(http://evil.example/x.css);</STYLE>',
+			'<p>x</p>',
+		],
+		[
+			'removes a mixed-case Style element',
+			'<Style>a{}</Style><p>y</p>',
+			'<p>y</p>',
+		],
+		[
 			'keeps rich card content (images, formatting, links)',
 			'<p><strong>Bold</strong> <a href="https://example.com">link</a> <img src="x.png"></p>',
 			'<p><strong>Bold</strong> <a href="https://example.com">link</a> <img src="x.png"></p>',
