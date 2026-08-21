@@ -2,6 +2,7 @@ import Setting from './models/Setting';
 import Logger from '@joplin/utils/Logger';
 import Api, { RequestFile } from './services/rest/Api';
 import ApiResponse from './services/rest/ApiResponse';
+import { ltrimSlashes } from './path-utils';
 import * as urlParser from 'url';
 const { randomClipperPort, startPort } = require('./randomClipperPort');
 const enableServerDestroy = require('server-destroy');
@@ -15,12 +16,19 @@ export enum StartState {
 
 type ClipperDispatch = (action: { type: string; [key: string]: unknown })=> void;
 
-// The pairing endpoints hand out the permanent API token and are reachable
-// without a token, so they must not be callable from an arbitrary website. The
-// browser extension calls them from an extension origin; a web page would carry
-// an http(s) origin. Requests with no Origin (native clients, curl) are not a
-// browser CSRF vector so they are allowed.
-const pairingPaths = ['/auth', '/auth/check'];
+// The pairing endpoints hand out the permanent API token without requiring one,
+// so they must not be callable from a website. The extension calls them from an
+// extension origin; a web page carries an http(s) origin. No-Origin requests
+// (native clients) aren't a browser CSRF vector, so they're allowed.
+//
+// Stored without leading slashes and compared via ltrimSlashes, matching how the
+// router normalises paths - otherwise //auth would skip this check but still
+// reach the auth handler.
+const pairingPaths = ['auth', 'auth/check'];
+
+export const isPairingPath = (pathname: string) => {
+	return pairingPaths.includes(ltrimSlashes(pathname || ''));
+};
 
 export const isAllowedPairingOrigin = (origin: string) => {
 	if (!origin) return true;
@@ -208,7 +216,7 @@ export default class ClipperServer {
 
 			const url = urlParser.parse(request.url, true);
 
-			if (request.method !== 'OPTIONS' && pairingPaths.includes(url.pathname) && !isAllowedPairingOrigin(request.headers.origin)) {
+			if (request.method !== 'OPTIONS' && isPairingPath(url.pathname) && !isAllowedPairingOrigin(request.headers.origin)) {
 				this.logger().warn(`Rejected pairing request from disallowed origin: ${request.headers.origin}`);
 				writeResponse(403, { error: 'This endpoint cannot be called from a web page' });
 				return;

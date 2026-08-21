@@ -1,6 +1,21 @@
-import { isAllowedPairingOrigin } from './ClipperServer';
+import { isAllowedPairingOrigin, isPairingPath } from './ClipperServer';
 
 describe('ClipperServer', () => {
+
+	test.each([
+		// The router strips all leading slashes, so the gate must too, otherwise
+		// e.g. //auth would skip the check but still reach the auth handler.
+		['/auth', true],
+		['/auth/check', true],
+		['//auth', true],
+		['///auth/check', true],
+		['auth', true],
+		['/notes', false],
+		['/auth_other', false],
+		['', false],
+	])('should identify pairing path %s -> %s', (pathname, expected) => {
+		expect(isPairingPath(pathname)).toBe(expected);
+	});
 
 	test.each([
 		// Web origins must be rejected: these are the CSRF vector.
