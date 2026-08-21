@@ -1,5 +1,9 @@
 # Joplin Desktop Changelog
 
+## [v3.6.16](https://github.com/laurent22/joplin/releases/tag/v3.6.16) - 2026-08-20T19:26:15Z
+
+- Improved: Support syncing with Joplin v3.7 ([#15889](https://github.com/laurent22/joplin/issues/15889)) ([#15753](https://github.com/laurent22/joplin/issues/15753) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.7.12](https://github.com/laurent22/joplin/releases/tag/v3.7.12) (Pre-release) - 2026-08-18T10:21:48Z
 
 - New: Add support for translating Markdown editor table context menu items ([140ff45](https://github.com/laurent22/joplin/commit/140ff45))
