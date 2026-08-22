@@ -14,6 +14,7 @@ import { getDefaultMasterKey, setupAndDisableEncryption, toggleAndSetupEncryptio
 import { useMemo, useState } from 'react';
 import { Divider, List } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
+import { createSelector } from 'reselect';
 
 interface Props {
 	themeId: number;
@@ -396,8 +397,13 @@ const EncryptionConfigScreen = (props: Props) => {
 	);
 };
 
+const syncInfoSelector = createSelector(
+	(state: State) => state.settings['syncInfoCache'],
+	cache => new SyncInfo(cache),
+);
+
 export default connect((state: State) => {
-	const syncInfo = new SyncInfo(state.settings['syncInfoCache']);
+	const syncInfo = syncInfoSelector(state);
 
 	return {
 		themeId: state.settings.theme,

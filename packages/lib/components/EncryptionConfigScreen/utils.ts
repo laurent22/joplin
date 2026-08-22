@@ -162,7 +162,6 @@ export const useInputPasswords = (propsPasswords: Record<string, string>) => {
 
 export const usePasswordChecker = (masterKeys: MasterKeyEntity[], activeMasterKeyId: string, masterPassword: string, passwords: Record<string, string>) => {
 	const [passwordChecks, setPasswordChecks] = useState<PasswordChecks>({});
-	const masterKeysDependency = JSON.stringify(masterKeys);
 
 	// "masterPasswordKeys" are the master key that can be decrypted with the
 	// master password. It should be all of them normally, but in previous
@@ -203,7 +202,7 @@ export const usePasswordChecker = (masterKeys: MasterKeyEntity[], activeMasterKe
 		});
 
 		setMasterPasswordStatus(await getMasterPasswordStatus(masterPassword));
-	}, [masterKeysDependency, masterPassword, passwords]);
+	}, [masterKeys, masterPassword, passwords]);
 
 	return { passwordChecks, masterPasswordKeys, masterPasswordStatus };
 };

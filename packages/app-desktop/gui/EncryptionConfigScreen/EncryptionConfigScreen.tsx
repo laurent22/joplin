@@ -24,6 +24,7 @@ import Dialog from '@joplin/lib/components/Dialog';
 import DialogButtonRow from '../DialogButtonRow';
 import DialogTitle from '../DialogTitle';
 import PasswordInput from '../PasswordInput/PasswordInput';
+import { createSelector } from 'reselect';
 
 interface Props {
 	themeId: number;
@@ -605,8 +606,13 @@ export const EncryptionConfigScreen = (props: Props) => {
 	);
 };
 
+const syncInfoSelector = createSelector(
+	(state: AppState) => state.settings['syncInfoCache'],
+	cache => new SyncInfo(cache),
+);
+
 const mapStateToProps = (state: AppState) => {
-	const syncInfo = new SyncInfo(state.settings['syncInfoCache']);
+	const syncInfo = syncInfoSelector(state);
 
 	return {
 		themeId: state.settings.theme,
