@@ -14,14 +14,14 @@ export default class NoteLockNote {
 		return this.isLocked(note) && !oldNote.is_locked;
 	}
 
-	public static async decryptBody(note: NoteEntity): Promise<NoteEntity> {
+	public static async decryptBody(note: NoteEntity, key: DecryptedNoteLockKey = null): Promise<NoteEntity> {
 		if (!note) throw new Error('Gated note lock load is missing note');
 		if (note.is_locked === undefined) throw new Error('Gated note lock load is missing lock state');
 		const isLocked = this.isLocked(note);
 		const result = { ...note, isDecrypted: isLocked };
 		if (isLocked) {
 			// A missing body here means the gated load did not request enough fields, so pass an empty string and let decryption fail explicitly.
-			result.body = await NoteLockService.instance().decryptString(note.body ?? '');
+			result.body = await NoteLockService.withDecryptedKey(scoped => scoped.decryptString(note.body ?? ''), key);
 		}
 		return result;
 	}
