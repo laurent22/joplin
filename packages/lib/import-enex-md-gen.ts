@@ -666,6 +666,14 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[], tasks: Extra
 			}
 
 			text = !state.inPre ? unwrapInnerText(text) : text;
+
+			// Square brackets inside a link title would close the link early, so
+			// that only part of the title is turned into a link. Code blocks are
+			// excluded because their content is not rendered as Markdown.
+			if (state.anchorAttributes.length && !state.inPre && !state.inCode.length) {
+				text = markdownUtils.escapeTitleText(text);
+			}
+
 			section.lines = collapseWhiteSpaceAndAppend(section.lines, state, text);
 		});
 
