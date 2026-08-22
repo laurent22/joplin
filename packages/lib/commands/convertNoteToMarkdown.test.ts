@@ -2,10 +2,15 @@ import * as convertHtmlToMarkdown from './convertNoteToMarkdown';
 import { defaultState, State } from '../reducer';
 import Note from '../models/Note';
 import { MarkupLanguage } from '@joplin/renderer';
-import { setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
+import { encryptionService, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import { NoteEntity } from '../services/database/types';
 import shim from '../shim';
+import Setting from '../models/Setting';
+import EncryptionService from '../services/e2ee/EncryptionService';
+import NoteLockKey from '../services/noteLock/NoteLockKey';
+import NoteLockService from '../services/noteLock/NoteLockService';
+import NoteLockSession from '../services/noteLock/NoteLockSession';
 
 describe('convertNoteToMarkdown', () => {
 	let state: State = undefined;
@@ -104,6 +109,133 @@ describe('convertNoteToMarkdown', () => {
 		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
 
 		expect(shim.showToast).toHaveBeenCalled();
+	});
+
+	it.each([
+		{ label: 'not convert a locked note', flagEnabled: true, blocked: true },
+		{ label: 'convert a locked note when note lock is disabled', flagEnabled: false, blocked: false },
+	])('should $label', async ({ flagEnabled, blocked }) => {
+		Setting.setValue('featureFlag.noteLock', flagEnabled);
+		shim.showErrorDialog = jest.fn();
+		const folder = await Folder.save({ title: 'test_folder' });
+		const htmlNote = await Note.save({ title: 'test', body: '<p>Hello</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html, is_locked: flagEnabled ? 0 : 1 });
+		if (flagEnabled) {
+			// An ungated plaintext save now auto-encrypts, so the locked row is created through
+			// the gate while unlocked, and the session locks afterwards.
+			NoteLockService.destroyInstance();
+			NoteLockSession.destroyInstance();
+			NoteLockKey.destroyInstance();
+			EncryptionService.instance_ = encryptionService();
+			await NoteLockKey.instance().create('123456');
+			await NoteLockSession.instance().unlock('123456');
+			const lockedNote = { ...(await Note.load(htmlNote.id)), is_locked: 1, isDecrypted: true };
+			await Note.save(lockedNote, { useNoteLock: true });
+			NoteLockSession.instance().lock();
+		}
+		state.selectedNoteIds = [htmlNote.id];
+
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
+
+		expect(shim.showErrorDialog).toHaveBeenCalledTimes(blocked ? 1 : 0);
+		// The original note is only moved to the trash once it has been converted.
+		expect((await Note.load(htmlNote.id)).deleted_time === 0).toBe(blocked);
+	});
+
+	it('should not convert any of the selected notes when one is locked and the session is locked', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		shim.showErrorDialog = jest.fn();
+		NoteLockService.destroyInstance();
+		NoteLockSession.destroyInstance();
+		NoteLockKey.destroyInstance();
+		EncryptionService.instance_ = encryptionService();
+		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
+		const folder = await Folder.save({ title: 'test_folder' });
+		const plainNote = await Note.save({ title: 'plain', body: '<p>plain</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
+		const lockedSeed = await Note.save({ title: 'locked', body: '<p>locked</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
+		const lockedNote = { ...(await Note.load(lockedSeed.id)), is_locked: 1, isDecrypted: true };
+		await Note.save(lockedNote, { useNoteLock: true });
+		NoteLockSession.instance().lock();
+		state.selectedNoteIds = [plainNote.id, lockedSeed.id];
+
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
+
+		expect(shim.showErrorDialog).toHaveBeenCalledTimes(1);
+		expect((await Note.load(plainNote.id)).deleted_time).toBe(0);
+		expect((await Note.load(lockedNote.id)).deleted_time).toBe(0);
+	});
+
+	it('should convert a locked note when the session is unlocked', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		shim.showErrorDialog = jest.fn();
+		NoteLockService.destroyInstance();
+		NoteLockSession.destroyInstance();
+		NoteLockKey.destroyInstance();
+		EncryptionService.instance_ = encryptionService();
+		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
+
+		const folder = await Folder.save({ title: 'test_folder' });
+		const htmlNote = await Note.save({ title: 'test', body: '<p>Hello</p>', parent_id: folder.id, markup_language: MarkupLanguage.Html });
+		const lockedNote = { ...(await Note.load(htmlNote.id)), is_locked: 1, isDecrypted: true };
+		await Note.save(lockedNote, { useNoteLock: true });
+		state.selectedNoteIds = [htmlNote.id];
+
+		await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
+
+		expect(shim.showErrorDialog).not.toHaveBeenCalled();
+		const notes = await Note.previews(folder.id);
+		expect(notes).toHaveLength(1);
+		const converted = await Note.load(notes[0].id, { useNoteLock: true });
+		expect(converted.is_locked).toBe(1);
+		expect(converted.markup_language).toBe(MarkupLanguage.Markdown);
+		expect(converted.body).toContain('Hello');
+		// The stored row keeps a ciphertext body.
+		expect((await Note.load(notes[0].id)).body).not.toContain('Hello');
+		expect((await Note.load(htmlNote.id)).deleted_time).not.toBe(0);
+	});
+
+	it('should finish converting the remaining locked notes when the session locks mid-run', async () => {
+		Setting.setValue('featureFlag.noteLock', true);
+		shim.showErrorDialog = jest.fn();
+		NoteLockService.destroyInstance();
+		NoteLockSession.destroyInstance();
+		NoteLockKey.destroyInstance();
+		EncryptionService.instance_ = encryptionService();
+		await NoteLockKey.instance().create('123456');
+		await NoteLockSession.instance().unlock('123456');
+
+		const folder = await Folder.save({ title: 'test_folder' });
+		const noteIds = [];
+		for (const title of ['one', 'two']) {
+			const htmlNote = await Note.save({ title, body: `<p>${title}</p>`, parent_id: folder.id, markup_language: MarkupLanguage.Html });
+			const lockedNote = { ...(await Note.load(htmlNote.id)), is_locked: 1, isDecrypted: true };
+			await Note.save(lockedNote, { useNoteLock: true });
+			noteIds.push(htmlNote.id);
+		}
+		state.selectedNoteIds = noteIds;
+
+		const originalSave = Note.save.bind(Note);
+		const spy = jest.spyOn(Note, 'save').mockImplementation(async (note, options) => {
+			const saved = await originalSave(note, options);
+			NoteLockSession.instance().lock();
+			return saved;
+		});
+		try {
+			await convertHtmlToMarkdown.runtime().execute({ state, dispatch: jest.fn() });
+		} finally {
+			spy.mockRestore();
+		}
+
+		expect(shim.showErrorDialog).not.toHaveBeenCalled();
+		await NoteLockSession.instance().unlock('123456');
+		const notes = await Note.previews(folder.id);
+		expect(notes).toHaveLength(2);
+		for (const preview of notes) {
+			const converted = await Note.load(preview.id, { useNoteLock: true });
+			expect(converted.markup_language).toBe(MarkupLanguage.Markdown);
+			expect(converted.is_locked).toBe(1);
+		}
 	});
 
 });

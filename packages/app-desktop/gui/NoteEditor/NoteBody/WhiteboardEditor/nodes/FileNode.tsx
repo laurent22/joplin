@@ -23,6 +23,7 @@ import { WhiteboardNodeData } from '../canvasFlow';
 import useCheckboxToggle from '../useCheckboxToggle';
 import handlePositions from './handlePositions';
 import useCardWheel from './useCardWheel';
+import stripUnsafeStyles from './stripUnsafeStyles';
 
 const logger = Logger.create('WhiteboardFileNode');
 
@@ -158,7 +159,7 @@ const FileNode = ({ data, selected }: NodeProps<{ id: string; type: 'wbFile'; da
 				const result = await ctx.markupToHtml(MarkupLanguage.Markdown, resolved.body, {
 					resourceInfos: linkedResources,
 				});
-				if (!cancelled) setNoteHtml(result?.html ?? '');
+				if (!cancelled) setNoteHtml(stripUnsafeStyles(result?.html ?? ''));
 			} catch {
 				if (!cancelled) setNoteHtml('');
 			}

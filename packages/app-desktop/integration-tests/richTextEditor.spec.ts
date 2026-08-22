@@ -310,5 +310,32 @@ test.describe('richTextEditor', () => {
 		await expect(editorBody).toHaveText('Unsaved text');
 	});
 
+	test('should highlight search matches', async ({ mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Testing');
+
+		const editor = mainScreen.noteEditor;
+		await editor.switchToRichTextEditor();
+		const editorBody = editor.getRichTextEditorBody();
+		await editorBody.pressSequentially('search-match1 note search-match2');
+
+		// Should highlight initial matches
+		await mainScreen.search('/search-match');
+		await expect.poll(
+			() => editor.getRichTextEditorSearchMatches(),
+		).toEqual(['search-match', 'search-match']);
+
+		// Should highlight new matches
+		await editorBody.pressSequentially('search-match');
+		await expect.poll(
+			() => editor.getRichTextEditorSearchMatches(),
+		).toHaveLength(3);
+
+		// Should stop highlighting old matches
+		await editorBody.press('Backspace');
+		await expect.poll(
+			() => editor.getRichTextEditorSearchMatches(),
+		).toHaveLength(2);
+	});
 });
 

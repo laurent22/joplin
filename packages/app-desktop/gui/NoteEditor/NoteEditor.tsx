@@ -800,6 +800,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		const note = props.notes.find(n => n.id === props.selectedNoteIds[0]);
 		if (!note) return null;
 		if (note.markup_language !== MarkupLanguage.Html) return null;
+		if (isNoteLockEnabled() && note.is_locked && !props.noteLockSessionUnlocked) return null;
 
 		return (
 			<div style={styles.resourceWatchBanner}>

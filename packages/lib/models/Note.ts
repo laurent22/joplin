@@ -843,7 +843,7 @@ export default class Note extends BaseItem {
 
 	public static async load(id: string, options: LoadOptions = null): Promise<NoteEntity> {
 		const note = await super.load(id, options);
-		if (isNoteLockEnabled() && !!options?.useNoteLock && note) return NoteLockNote.decryptBody(note);
+		if (isNoteLockEnabled() && !!options?.useNoteLock && note) return NoteLockNote.decryptBody(note, options.noteLockKey);
 		return note;
 	}
 

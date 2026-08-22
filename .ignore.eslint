@@ -110,6 +110,7 @@ packages/app-cli/app/cli-utils.js
 packages/app-cli/app/command-apidoc.js
 packages/app-cli/app/command-attach.js
 packages/app-cli/app/command-batch.js
+packages/app-cli/app/command-cat.test.js
 packages/app-cli/app/command-cat.js
 packages/app-cli/app/command-clear.js
 packages/app-cli/app/command-config.js
@@ -118,6 +119,7 @@ packages/app-cli/app/command-done.test.js
 packages/app-cli/app/command-done.js
 packages/app-cli/app/command-dump.js
 packages/app-cli/app/command-e2ee.js
+packages/app-cli/app/command-edit.test.js
 packages/app-cli/app/command-edit.js
 packages/app-cli/app/command-exit.js
 packages/app-cli/app/command-export-sync-status.js
@@ -142,6 +144,7 @@ packages/app-cli/app/command-rmnote.test.js
 packages/app-cli/app/command-rmnote.js
 packages/app-cli/app/command-search.js
 packages/app-cli/app/command-server.js
+packages/app-cli/app/command-set.test.js
 packages/app-cli/app/command-set.js
 packages/app-cli/app/command-settingschema.js
 packages/app-cli/app/command-share.test.js
@@ -274,6 +277,7 @@ packages/app-desktop/gui/KeymapConfig/utils/useCommandStatus.js
 packages/app-desktop/gui/KeymapConfig/utils/useKeymap.js
 packages/app-desktop/gui/MainLayoutPane.js
 packages/app-desktop/gui/MainScreen.js
+packages/app-desktop/gui/MainScreen/handleCallbackUrl.test.js
 packages/app-desktop/gui/MainScreen/handleCallbackUrl.js
 packages/app-desktop/gui/MasterPasswordDialog/Dialog.js
 packages/app-desktop/gui/MenuBar.js
@@ -327,6 +331,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useCursorPositioning.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialogEventListeners.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useHighlightedSearchTerms.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useKeyboardRefocusHandler.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
@@ -343,6 +348,8 @@ packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/GroupNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/LinkNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/TextNode.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/handlePositions.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/stripUnsafeStyles.test.js
+packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/stripUnsafeStyles.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/nodes/useCardWheel.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.test.js
 packages/app-desktop/gui/NoteEditor/NoteBody/WhiteboardEditor/useCheckboxToggle.js
@@ -1348,6 +1355,7 @@ packages/lib/BaseModel.test.js
 packages/lib/BaseModel.js
 packages/lib/BaseSyncTarget.js
 packages/lib/Cache.js
+packages/lib/ClipperServer.test.js
 packages/lib/ClipperServer.js
 packages/lib/CssUtils.js
 packages/lib/EventDispatcher.test.js
@@ -1885,6 +1893,7 @@ packages/lib/services/rest/routes/notes.test.js
 packages/lib/services/rest/routes/notes.js
 packages/lib/services/rest/routes/ping.js
 packages/lib/services/rest/routes/resources.js
+packages/lib/services/rest/routes/revisions.test.js
 packages/lib/services/rest/routes/revisions.js
 packages/lib/services/rest/routes/search.js
 packages/lib/services/rest/routes/tags.js

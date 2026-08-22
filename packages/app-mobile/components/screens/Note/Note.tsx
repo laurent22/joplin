@@ -766,6 +766,11 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 		this.commandRegistration_?.deregister();
 		this.commandRegistration_ = null;
 
+		if (this.focusUpdateIID_) {
+			shim.clearInterval(this.focusUpdateIID_);
+			this.focusUpdateIID_ = null;
+		}
+
 		this.props.dispatch({
 			type: 'SET_NOTE_EDITOR_VISIBLE',
 			visible: false,

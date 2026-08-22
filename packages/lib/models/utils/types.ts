@@ -33,6 +33,8 @@ export interface LoadOptions {
 	includeConflicts?: boolean;
 	includeDeleted?: boolean;
 	useNoteLock?: boolean;
+	// Decrypt with this key captured while the session was unlocked, instead of the live session key.
+	noteLockKey?: DecryptedNoteLockKey;
 }
 
 export interface FolderLoadOptions extends LoadOptions {

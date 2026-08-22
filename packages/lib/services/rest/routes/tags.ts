@@ -5,6 +5,8 @@ import { Request, RequestMethod } from '../Api';
 import collectionToPaginatedResults from '../utils/collectionToPaginatedResults';
 import Note from '../../../models/Note';
 import Tag from '../../../models/Tag';
+import isNoteLockEnabled from '../../noteLock/isNoteLockEnabled';
+import NoteLockNote from '../../noteLock/NoteLockNote';
 const { ErrorBadRequest, ErrorNotFound } = require('../utils/errors');
 
 export default async function(request: Request, id: string = null, link: string = null) {
@@ -30,6 +32,11 @@ export default async function(request: Request, id: string = null, link: string 
 			const noteIds = await Tag.noteIds(tag.id);
 			const output = [];
 			for (let i = 0; i < noteIds.length; i++) {
+				if (isNoteLockEnabled()) {
+					// The preview fields come from the request, so the lock state needs its own load.
+					const lockState = await Note.load(noteIds[i], { fields: ['is_locked'] });
+					if (NoteLockNote.isLocked(lockState)) continue;
+				}
 				const n = await Note.preview(noteIds[i], defaultLoadOptions(request, ModelType.Note));
 				if (!n) continue;
 				output.push(n);
