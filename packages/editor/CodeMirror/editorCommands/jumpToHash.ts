@@ -7,7 +7,7 @@ const jumpToHash = (view: EditorView, hash: string) => {
 		hash.startsWith('#') ? hash : `#${hash}`, view.state,
 	);
 
-	if (targetLocation !== undefined) {
+	if (targetLocation !== null) {
 		view.dispatch({
 			selection: EditorSelection.cursor(targetLocation),
 			effects: [
