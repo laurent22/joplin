@@ -1153,8 +1153,6 @@ packages/editor/CodeMirror/extensions/links/ctrlClickLinksExtension.js
 packages/editor/CodeMirror/extensions/links/followLinkTooltipExtension.test.js
 packages/editor/CodeMirror/extensions/links/followLinkTooltipExtension.js
 packages/editor/CodeMirror/extensions/links/referenceLinksStateField.js
-packages/editor/CodeMirror/extensions/links/utils/findLineMatchingLink.test.js
-packages/editor/CodeMirror/extensions/links/utils/findLineMatchingLink.js
 packages/editor/CodeMirror/extensions/links/utils/getUrlAtPosition.js
 packages/editor/CodeMirror/extensions/links/utils/openLink.js
 packages/editor/CodeMirror/extensions/markdownDecorationExtension.test.js
@@ -1207,6 +1205,8 @@ packages/editor/CodeMirror/testing/pressReleaseKey.js
 packages/editor/CodeMirror/testing/typeText.js
 packages/editor/CodeMirror/testing/visibleEditorText.js
 packages/editor/CodeMirror/theme.js
+packages/editor/CodeMirror/utils/findPositionMatchingLink.test.js
+packages/editor/CodeMirror/utils/findPositionMatchingLink.js
 packages/editor/CodeMirror/utils/formatting/RegionSpec.js
 packages/editor/CodeMirror/utils/formatting/computeSelectionFormatting.test.js
 packages/editor/CodeMirror/utils/formatting/computeSelectionFormatting.js
