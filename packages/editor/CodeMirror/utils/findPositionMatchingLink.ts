@@ -2,7 +2,7 @@ import { EditorState } from '@codemirror/state';
 import uslug from '@joplin/fork-uslug/lib/uslug';
 import { SyntaxNodeRef } from '@lezer/common';
 import htmlNodeInfo from './htmlNodeInfo';
-import { ensureSyntaxTree } from '@codemirror/language';
+import { ensureSyntaxTree, syntaxTree } from '@codemirror/language';
 
 // Searches the given `state` for a line that matches the target link.
 const findPositionMatchingLink = (link: string, state: EditorState): number|null => {
@@ -73,7 +73,8 @@ const findPositionMatchingHash = (hash: string, state: EditorState) => {
 
 	// Iterate over the entire syntax tree.
 	const timeout = 1_000; // Maximum time to spend parsing the syntax tree
-	ensureSyntaxTree(state, state.doc.length, timeout).iterate({
+	const tree = ensureSyntaxTree(state, state.doc.length, timeout) ?? syntaxTree(state);
+	tree.iterate({
 		enter: makeEnterNode(0),
 	});
 
