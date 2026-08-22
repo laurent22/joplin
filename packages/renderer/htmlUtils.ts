@@ -463,8 +463,8 @@ const replaceElements = (html: string, tagMapping: OnMapTag) => {
 			output.push(replacement);
 		},
 
-		ontext: (encodedText: string) => {
-			output.push(encodedText);
+		ontext: (decodedText: string) => {
+			output.push(htmlentities(decodedText));
 		},
 
 		onclosetag: (name: string) => {
@@ -474,7 +474,7 @@ const replaceElements = (html: string, tagMapping: OnMapTag) => {
 			}
 		},
 
-	}, { decodeEntities: false });
+	}, { decodeEntities: true });
 
 	parser.write(html);
 	parser.end();

@@ -143,6 +143,14 @@ describe('htmlUtils', () => {
 			mapper: (): null => null,
 			expected: '<div><a>test <a href="href-1"> test</a>',
 		},
+		{
+			label: 'should escape "s and >s in attribute names',
+			input: '<a data-test=">&gt;">Test</a>',
+			mapper: (): ProcessAnchorTagsAction => (
+				{ type: 'replaceSource', href: '">' }
+			),
+			expected: '<a data-test="&gt;&gt;" href="&quot;&gt;">Test</a>',
+		},
 	])('should replace anchor tags: $label', ({ input, mapper, expected }) => {
 		expect(htmlUtils.processAnchorTags(input, mapper)).toBe(expected);
 	});
