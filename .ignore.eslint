@@ -328,6 +328,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useContextMenu.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useCursorPositioning.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialog.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useEditDialogEventListeners.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useHighlightedSearchTerms.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useKeyboardRefocusHandler.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useScroll.js
