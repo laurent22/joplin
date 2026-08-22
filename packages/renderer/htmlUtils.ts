@@ -5,9 +5,9 @@ import * as htmlparser2 from '@joplin/fork-htmlparser2';
 
 // [\s\S] instead of . for multiline matching
 // https://stackoverflow.com/a/16119722/561309
-const imageRegex = /<img([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
+const imageRegex = /<img([^>]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 
-const anchorRegex = /<a([\s\S]*?)href=["']([\s\S]*?)["']([\s\S]*?)>/gi;
+const anchorRegex = /<a([^>]*?)href=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 
 const selfClosingElements = [
 	'area',
@@ -338,15 +338,6 @@ class HtmlUtils {
 						classAttr += ' jop-noMdConv';
 						attrs['class'] = classAttr.trim();
 					}
-				}
-
-				// For some reason, entire parts of HTML notes don't show up in
-				// the viewer when there's an anchor tag without an "href"
-				// attribute. It doesn't always happen and it seems to depend on
-				// what else is in the note but in any case adding the "href"
-				// fixes it. https://github.com/laurent22/joplin/issues/5687
-				if (name === 'a' && !attrs['href']) {
-					attrs['href'] = '#';
 				}
 
 				let attrHtml = attributesHtml(attrs);
