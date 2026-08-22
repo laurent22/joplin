@@ -85,6 +85,7 @@ packages/app-cli/app/cli-utils.js
 packages/app-cli/app/command-apidoc.js
 packages/app-cli/app/command-attach.js
 packages/app-cli/app/command-batch.js
+packages/app-cli/app/command-cat.test.js
 packages/app-cli/app/command-cat.js
 packages/app-cli/app/command-clear.js
 packages/app-cli/app/command-config.js
@@ -93,6 +94,7 @@ packages/app-cli/app/command-done.test.js
 packages/app-cli/app/command-done.js
 packages/app-cli/app/command-dump.js
 packages/app-cli/app/command-e2ee.js
+packages/app-cli/app/command-edit.test.js
 packages/app-cli/app/command-edit.js
 packages/app-cli/app/command-exit.js
 packages/app-cli/app/command-export-sync-status.js
@@ -117,6 +119,7 @@ packages/app-cli/app/command-rmnote.test.js
 packages/app-cli/app/command-rmnote.js
 packages/app-cli/app/command-search.js
 packages/app-cli/app/command-server.js
+packages/app-cli/app/command-set.test.js
 packages/app-cli/app/command-set.js
 packages/app-cli/app/command-settingschema.js
 packages/app-cli/app/command-share.test.js
@@ -1865,6 +1868,7 @@ packages/lib/services/rest/routes/notes.test.js
 packages/lib/services/rest/routes/notes.js
 packages/lib/services/rest/routes/ping.js
 packages/lib/services/rest/routes/resources.js
+packages/lib/services/rest/routes/revisions.test.js
 packages/lib/services/rest/routes/revisions.js
 packages/lib/services/rest/routes/search.js
 packages/lib/services/rest/routes/tags.js
