@@ -130,7 +130,8 @@ class HtmlUtils {
 					return { attrs: action.attrs };
 				}
 
-				throw new Error(`Invalid action: ${(action as ProcessAnchorTagsAction).type}`);
+				const exhaustivenessCheck: never = action;
+				throw new Error(`Invalid action: ${(exhaustivenessCheck as ProcessAnchorTagsAction).type}`);
 			} else {
 				return { attrs: event.attrs };
 			}
