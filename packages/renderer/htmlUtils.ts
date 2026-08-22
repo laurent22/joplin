@@ -5,7 +5,7 @@ import * as htmlparser2 from '@joplin/fork-htmlparser2';
 
 // [\s\S] instead of . for multiline matching
 // https://stackoverflow.com/a/16119722/561309
-const imageRegex = /<img([^>]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
+const imageRegex = /<img([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 
 const selfClosingElements = [
 	'area',
