@@ -7,7 +7,8 @@ import { setupDatabaseAndSynchronizer, switchClient } from '../../../testing/tes
 import { RevisionEntity } from '../../database/types';
 
 const createNoteAndRevision = async (isLocked: number) => {
-	const note = await Note.save({ title: 'note', body: 'body', is_locked: isLocked });
+	// A JLD-prefixed body passes the save path untouched, standing in for real ciphertext.
+	const note = await Note.save({ title: 'note', body: isLocked ? 'JLD01body' : 'body', is_locked: isLocked });
 	const revision = await Revision.save({
 		item_type: BaseModel.TYPE_NOTE,
 		item_id: note.id,
