@@ -1324,6 +1324,7 @@ packages/lib/BaseModel.test.js
 packages/lib/BaseModel.js
 packages/lib/BaseSyncTarget.js
 packages/lib/Cache.js
+packages/lib/ClipperServer.test.js
 packages/lib/ClipperServer.js
 packages/lib/CssUtils.js
 packages/lib/EventDispatcher.test.js
