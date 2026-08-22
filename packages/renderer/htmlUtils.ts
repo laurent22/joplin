@@ -73,7 +73,7 @@ interface ProcessImageEvent {
 type ProcessImageCallback = (data: ProcessImageEvent)=> ProcessImageResult;
 
 export interface ProcessAnchorTagsEvent {
-	href: string;
+	href: string|undefined;
 }
 
 export type ProcessAnchorTagsAction =
