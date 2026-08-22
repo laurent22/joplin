@@ -2,7 +2,7 @@
   "name": "@joplin/plugin-repo-cli",
   "version": "3.7.2",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "bin": "./dist/index.js",
   "publishConfig": {
     "access": "public"
