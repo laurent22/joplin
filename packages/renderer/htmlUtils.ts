@@ -1,5 +1,6 @@
 import { AllHtmlEntities as Entities } from 'html-entities';
 const htmlentities = new Entities().encode;
+const decodeEntities = new Entities().decode;
 import { fileUriToPath } from '@joplin/utils/url';
 import * as htmlparser2 from '@joplin/fork-htmlparser2';
 
@@ -71,7 +72,7 @@ interface ProcessImageEvent {
 }
 type ProcessImageCallback = (data: ProcessImageEvent)=> ProcessImageResult;
 
-interface ProcessAnchorTagsEvent {
+export interface ProcessAnchorTagsEvent {
 	href: string;
 }
 
@@ -447,6 +448,11 @@ const replaceElements = (html: string, tagMapping: OnMapTag) => {
 			// "toLowerCase" on them.
 			stack.push({ name });
 
+			for (const key of Object.keys(attrs)) {
+				if (typeof attrs[key] !== 'string') continue;
+				attrs[key] = decodeEntities(attrs[key]);
+			}
+
 			const mapping = tagMapping({ name, attrs });
 			let replacement;
 			if (mapping.openingTagHtml) {
@@ -463,8 +469,8 @@ const replaceElements = (html: string, tagMapping: OnMapTag) => {
 			output.push(replacement);
 		},
 
-		ontext: (decodedText: string) => {
-			output.push(htmlentities(decodedText));
+		ontext: (encodedText: string) => {
+			output.push(encodedText);
 		},
 
 		onclosetag: (name: string) => {
@@ -474,7 +480,7 @@ const replaceElements = (html: string, tagMapping: OnMapTag) => {
 			}
 		},
 
-	}, { decodeEntities: true });
+	}, { decodeEntities: false });
 
 	parser.write(html);
 	parser.end();

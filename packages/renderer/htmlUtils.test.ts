@@ -1,4 +1,4 @@
-import htmlUtils, { extractHtmlBody, htmlDocIsImageOnly, ProcessAnchorTagsAction, removeWrappingParagraphAndTrailingEmptyElements } from './htmlUtils';
+import htmlUtils, { extractHtmlBody, htmlDocIsImageOnly, ProcessAnchorTagsAction, ProcessAnchorTagsEvent, removeWrappingParagraphAndTrailingEmptyElements } from './htmlUtils';
 
 describe('htmlUtils', () => {
 
@@ -145,11 +145,11 @@ describe('htmlUtils', () => {
 		},
 		{
 			label: 'should escape "s and >s in attribute names',
-			input: '<a data-test=">&gt;">Test</a>',
-			mapper: (): ProcessAnchorTagsAction => (
-				{ type: 'replaceSource', href: '">' }
+			input: '<a data-test=">&gt;" href="http://example.com/?test=3&test2=4&amp;test3=5">Test</a>',
+			mapper: (event: ProcessAnchorTagsEvent): ProcessAnchorTagsAction => (
+				{ type: 'replaceSource', href: `${event.href}">` }
 			),
-			expected: '<a data-test="&gt;&gt;" href="&quot;&gt;">Test</a>',
+			expected: '<a data-test="&gt;&gt;" href="http://example.com/?test=3&amp;test2=4&amp;test3=5&quot;&gt;">Test</a>',
 		},
 	])('should replace anchor tags: $label', ({ input, mapper, expected }) => {
 		expect(htmlUtils.processAnchorTags(input, mapper)).toBe(expected);
