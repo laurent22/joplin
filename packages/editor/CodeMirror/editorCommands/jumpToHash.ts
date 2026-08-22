@@ -31,7 +31,7 @@ const jumpToHash = (view: EditorView, hash: string) => {
 			node.node.enter(node.from, 1)?.toTree()?.iterate({ enter: makeEnterNode(node.from) });
 		} else if (node.name === 'OpenTag' || node.name === 'HTMLTag') {
 			const htmlNodeDetails = htmlNodeInfo(node, state);
-			matches = htmlNodeDetails.getAttr('id') === hash || htmlNodeDetails.getAttr('name') === hash;
+			matches = htmlNodeDetails?.getAttr('id') === hash || htmlNodeDetails?.getAttr('name') === hash;
 		}
 
 		if (matches) {
