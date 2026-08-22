@@ -1,4 +1,4 @@
-import htmlUtils, { extractHtmlBody, htmlDocIsImageOnly, removeWrappingParagraphAndTrailingEmptyElements } from './htmlUtils';
+import htmlUtils, { extractHtmlBody, htmlDocIsImageOnly, ProcessAnchorTagsAction, removeWrappingParagraphAndTrailingEmptyElements } from './htmlUtils';
 
 describe('htmlUtils', () => {
 
@@ -112,5 +112,38 @@ describe('htmlUtils', () => {
 			expect(output).not.toContain(`href="${href}"`);
 			expect(output).toContain('href="#"');
 		}
+	});
+
+	it.each([
+		{
+			label: 'should replace anchor href attributes',
+			input: '<a>test <a href="href-1"></a></a><div><a href="href-1">another</a></div>',
+			mapper: (): ProcessAnchorTagsAction => (
+				{ type: 'replaceSource', href: 'updated' }
+			),
+			expected: '<a href="updated">test <a href="updated"></a></a><div><a href="updated">another</a></div>',
+		},
+		{
+			label: 'should replace full anchor opening tags',
+			input: '<a>test</a>',
+			mapper: (): ProcessAnchorTagsAction => (
+				{ type: 'replaceElement', html: '<a data-test>' }
+			),
+			expected: '<a data-test>test</a>',
+		},
+		{
+			label: 'should preserve comments',
+			input: '<a>test <a href="href-1"><!-- test --></a></a><!-- Test! -->',
+			mapper: (): null => null,
+			expected: '<a>test <a href="href-1"><!-- test --></a></a><!-- Test! -->',
+		},
+		{
+			label: 'should gracefully handle unbalanced tags',
+			input: '<div><a>test <a href="href-1"> test</a></span>',
+			mapper: (): null => null,
+			expected: '<div><a>test <a href="href-1"> test</a>',
+		},
+	])('should replace anchor tags: $label', ({ input, mapper, expected }) => {
+		expect(htmlUtils.processAnchorTags(input, mapper)).toBe(expected);
 	});
 });

@@ -7,8 +7,6 @@ import * as htmlparser2 from '@joplin/fork-htmlparser2';
 // https://stackoverflow.com/a/16119722/561309
 const imageRegex = /<img([^>]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 
-const anchorRegex = /<a([^>]*?)href=["']([\s\S]*?)["']([\s\S]*?)>/gi;
-
 const selfClosingElements = [
 	'area',
 	'base',
@@ -77,7 +75,7 @@ interface ProcessAnchorTagsEvent {
 	href: string;
 }
 
-type ProcessAnchorTagsAction =
+export type ProcessAnchorTagsAction =
 	| { type: 'replaceElement'; html: string }
 	| { type: 'replaceSource'; href: string }
 	| { type: 'setAttributes'; attrs: Record<string, string> };
@@ -114,25 +112,28 @@ class HtmlUtils {
 	public processAnchorTags(html: string, callback: ProcessAnchorTagsCallback) {
 		if (!html) return '';
 
-		return html.replace(anchorRegex, (_v, before, href, after) => {
-			const action = callback({ href: href });
+		return replaceElements(html, (event) => {
+			if (event.name === 'a') {
+				const action = callback({ href: event.attrs['href'] });
 
-			if (!action) return `<a${before}href="${href}"${after}>`;
+				if (!action) return { attrs: event.attrs };
 
-			if (action.type === 'replaceElement') {
-				return action.html;
+				if (action.type === 'replaceElement') {
+					return { openingTagHtml: action.html };
+				}
+
+				if (action.type === 'replaceSource') {
+					return { attrs: { ...event.attrs, href: action.href } };
+				}
+
+				if (action.type === 'setAttributes') {
+					return { attrs: action.attrs };
+				}
+
+				throw new Error(`Invalid action: ${(action as ProcessAnchorTagsAction).type}`);
+			} else {
+				return { attrs: event.attrs };
 			}
-
-			if (action.type === 'replaceSource') {
-				return `<img${before}href="${action.href}"${after}>`;
-			}
-
-			if (action.type === 'setAttributes') {
-				const attrHtml = attributesHtml(action.attrs);
-				return `<img${before}${attrHtml}${after}>`;
-			}
-
-			throw new Error(`Invalid action: ${(action as ProcessAnchorTagsAction).type}`);
 		});
 	}
 
@@ -410,6 +411,74 @@ const makeHtmlTag = (name: string, attrs: Record<string, string>) => {
 	if (attrHtml) attrHtml = ` ${attrHtml}`;
 	const closingSign = isSelfClosingTag(name) ? '/>' : '>';
 	return `<${name}${attrHtml}${closingSign}`;
+};
+
+
+interface TagRecord {
+	name: string;
+	attrs: Record<string, string>;
+}
+interface AttrsReplacement {
+	attrs: Record<string, string>;
+	openingTagHtml?: undefined;
+}
+interface OpeningTagReplacement {
+	attrs?: undefined;
+	openingTagHtml: string;
+}
+
+type OnMapTag = (tag: TagRecord)=> OpeningTagReplacement|AttrsReplacement;
+
+const replaceElements = (html: string, tagMapping: OnMapTag) => {
+	const output: string[] = [];
+	type StackEntry = { name: string };
+	const stack: StackEntry[] = [];
+
+	const parser = new htmlparser2.Parser({
+
+		oncomment: (data: string) => {
+			output.push(`<!--${htmlentities(data)}-->`);
+		},
+
+		onopentag: (name: string, attrs: Record<string, string>) => {
+			// Note: "name" and attribute names are always lowercase even
+			// when the input is not. So there is no need to call
+			// "toLowerCase" on them.
+			stack.push({ name });
+
+			const mapping = tagMapping({ name, attrs });
+			let replacement;
+			if (mapping.openingTagHtml) {
+				replacement = mapping.openingTagHtml;
+			} else {
+				attrs = mapping.attrs;
+
+				let attrHtml = attributesHtml(attrs);
+				if (attrHtml) attrHtml = ` ${attrHtml}`;
+				const closingSign = isSelfClosingTag(name) ? '/>' : '>';
+				replacement = `<${name}${attrHtml}${closingSign}`;
+			}
+
+			output.push(replacement);
+		},
+
+		ontext: (encodedText: string) => {
+			output.push(encodedText);
+		},
+
+		onclosetag: (name: string) => {
+			stack.pop();
+			if (!isSelfClosingTag(name)) {
+				output.push(`</${name}>`);
+			}
+		},
+
+	}, { decodeEntities: false });
+
+	parser.write(html);
+	parser.end();
+
+	return output.join('');
 };
 
 // Will return either the content of the <BODY> tag if it exists, or the whole
