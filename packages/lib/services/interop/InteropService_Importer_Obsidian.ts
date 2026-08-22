@@ -12,9 +12,10 @@ import { NoteEntity } from '../database/types';
 import { relative } from 'path';
 import { htmlentities } from '@joplin/utils/html';
 import MarkdownIt from 'markdown-it';
+import uslug from '@joplin/fork-uslug/lib/uslug';
 
-const uslug = require('@joplin/fork-uslug');
 const tagRegex = /(?:^|\s)#([\p{L}\p{M}\p{N}\p{Pc}\p{Pd}\p{S}\u200D/]+)/gu;
+const numberOnlyTagRegex = /^\p{N}+$/u;
 const normalizedTag = (tag: string) => tag.toLowerCase();
 // Obsidian resolves internal links case-insensitively, so index and look up wikilink targets in lower case.
 const normalizedWikilinkTarget = (target: string) => target.toLowerCase();
@@ -93,13 +94,18 @@ const replaceOutsideInlineCode = (body: string, replace: (text: string)=> string
 
 const replaceOutsideCode = (body: string, replace: (text: string)=> string) => {
 	const lines = body.split('\n');
+	const result: string[] = [];
+	let previousEnd = 0;
 	for (const token of markdownIt.parse(body, {})) {
+		// Only process normal text so code blocks stay unchanged
 		if (token.type !== 'inline' || !token.map) continue;
 		const [start, end] = token.map;
-		const replacedLines = replaceOutsideInlineCode(lines.slice(start, end).join('\n'), replace).split('\n');
-		lines.splice(start, end - start, ...replacedLines);
+		result.push(...lines.slice(previousEnd, start));
+		result.push(...replaceOutsideInlineCode(lines.slice(start, end).join('\n'), replace).split('\n'));
+		previousEnd = end;
 	}
-	return lines.join('\n');
+	result.push(...lines.slice(previousEnd));
+	return result.join('\n');
 };
 
 const addToIndex = (index: Map<string, string[]>, key: string, noteId: string) => {
@@ -241,8 +247,7 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 		});
 
 		for (const tag of bodyTags) {
-			// Obsidian does not allow tags containing only numbers, but tagRegex matches them.
-			if (/^\p{N}+$/u.test(tag)) continue;
+			if (numberOnlyTagRegex.test(tag)) continue;
 
 			const key = normalizedTag(tag);
 			if (existingTagNames.has(key)) continue;
