@@ -28,7 +28,7 @@ const jumpToHash = (view: EditorView, hash: string) => {
 			// CodeMirror adds HTML information to Markdown documents using overlays attached
 			// to HTMLTag and HTMLBlock nodes.
 			// Use .enter to enter the overlay and visit the HTML nodes:
-			node.node.enter(node.from, 1).toTree().iterate({ enter: makeEnterNode(node.from) });
+			node.node.enter(node.from, 1)?.toTree()?.iterate({ enter: makeEnterNode(node.from) });
 		} else if (node.name === 'OpenTag' || node.name === 'HTMLTag') {
 			const htmlNodeDetails = htmlNodeInfo(node, state);
 			matches = htmlNodeDetails.getAttr('id') === hash || htmlNodeDetails.getAttr('name') === hash;
