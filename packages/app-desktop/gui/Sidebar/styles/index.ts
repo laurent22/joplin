@@ -112,10 +112,6 @@ export const StyledShareIcon = styled.i`
 
 export const StyledSynchronizeButton = styled(Button)`
 	width: 100%;
-
-	&.-error > .icon {
-		font-size: 1.25em;
-	}
 `;
 
 export const StyledAddButton = styled(Button)`
