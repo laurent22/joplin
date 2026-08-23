@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { useCallback, useMemo, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { themeStyle } from '../../global-style';
 import { _ } from '@joplin/lib/locale';
 import NoteLockKey from '@joplin/lib/services/noteLock/NoteLockKey';
 import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { PrimaryButton } from '../../buttons';
 import { State } from '@joplin/lib/reducer';
 
 interface Props {
@@ -131,8 +132,8 @@ const NoteLockConfig = (props: Props) => {
 				/>
 				{passwordMismatch ? <Text style={styles.errorText}>{_('Passwords do not match')}</Text> : null}
 				{error ? <Text style={styles.errorText}>{error}</Text> : null}
-				<Button title={_('Save')} disabled={!canSave} onPress={onCreate} />
-				<Text style={styles.reminderText}>{_('Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.')}</Text>
+				<PrimaryButton disabled={!canSave} onPress={onCreate}>{_('Save')}</PrimaryButton>
+				<Text style={styles.reminderText}>{_('Please make sure you remember your password. It cannot be recovered if lost, and any locked notes will become inaccessible.')}</Text>
 			</View>
 		);
 	};

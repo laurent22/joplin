@@ -12,7 +12,7 @@ import { itemIsReadOnlySync, ItemSlice } from '../../models/utils/readOnly';
 import ItemChange from '../../models/ItemChange';
 import BaseItem from '../../models/BaseItem';
 import isNoteLockEnabled from '../../services/noteLock/isNoteLockEnabled';
-import NoteLockNote from '../../services/noteLock/NoteLockNote';
+import NoteLockNote, { NoteLockNoteEntity } from '../../services/noteLock/NoteLockNote';
 import NoteLockSession from '../../services/noteLock/NoteLockSession';
 import type { DecryptedNoteLockKey } from '../../services/noteLock/NoteLockKey';
 
@@ -50,8 +50,8 @@ export interface SaveNoteOptions {
 }
 
 export interface BaseState {
-	note: NoteEntity;
-	lastSavedNote: NoteEntity;
+	note: NoteLockNoteEntity;
+	lastSavedNote: NoteLockNoteEntity;
 	newAndNoTitleChangeNoteId: boolean;
 	mode: string;
 	folder: FolderEntity;
@@ -180,7 +180,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 			// The lock state may change between scheduling and execution (e.g. encryption enabled
 			// from the note menu), so the save uses the latest values.
 			note.is_locked = comp.state.note.is_locked;
-			(note as Record<string, unknown>).isDecrypted = (comp.state.note as Record<string, unknown>).isDecrypted;
+			note.isDecrypted = comp.state.note.isDecrypted;
 		}
 
 		// A gated save cannot persist the lock state or body partially: the encrypted body, its
@@ -226,7 +226,7 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 		note.body = stateNote.body;
 		note.todo_completed = stateNote.todo_completed;
 		note.is_locked = stateNote.is_locked;
-		(note as Record<string, unknown>).isDecrypted = (stateNote as Record<string, unknown>).isDecrypted;
+		note.isDecrypted = stateNote.isDecrypted;
 	}
 
 	const newState: Partial<BaseState> = {
@@ -272,21 +272,6 @@ shared.saveNoteButton_press = async function(comp: BaseNoteScreenComponent, stat
 	releaseMutex();
 };
 
-const saveNotePartial = async (comp: BaseNoteScreenComponent, note: NoteEntity, name: string, toSave: Record<string, unknown>) => {
-	if (isNoteLockEnabled() && name === 'body' && NoteLockNote.isLocked(note)) {
-		// An ungated partial body save would persist the plaintext of a locked note (e.g. a
-		// checkbox toggled in the viewer), so the body goes through a gated save instead.
-		toSave.is_locked = note.is_locked;
-		toSave.isDecrypted = (note as Record<string, unknown>).isDecrypted;
-		return await Note.save(toSave, {
-			useNoteLock: true,
-			noteLockKey: comp.state.noteLockKey,
-			fields: ['body', 'is_locked', 'extracted_resource_ids'],
-		}) as Record<string, unknown>;
-	}
-	return await Note.save(toSave) as Record<string, unknown>;
-};
-
 shared.saveOneProperty = async function(comp: BaseNoteScreenComponent, name: string, value: unknown) {
 	let note = { ...comp.state.note };
 
@@ -296,7 +281,7 @@ shared.saveOneProperty = async function(comp: BaseNoteScreenComponent, name: str
 	const toSave: Record<string, unknown> = { id: note.id };
 	toSave[name] = value;
 
-	const saved = await saveNotePartial(comp, note, name, toSave);
+	const saved = await Note.save(toSave) as Record<string, unknown>;
 	(note as Record<string, unknown>)[name] = saved[name];
 
 	const stateNote = { ...note };
@@ -304,7 +289,7 @@ shared.saveOneProperty = async function(comp: BaseNoteScreenComponent, name: str
 		// The lock state may have changed during the save - keep the latest value in the state
 		// note (but not in lastSavedNote, so the next save still detects the change).
 		stateNote.is_locked = comp.state.note.is_locked;
-		(stateNote as Record<string, unknown>).isDecrypted = (comp.state.note as Record<string, unknown>).isDecrypted;
+		stateNote.isDecrypted = comp.state.note.isDecrypted;
 	}
 
 	comp.setState({

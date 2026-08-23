@@ -120,6 +120,10 @@ const NoteItemComponent: React.FC<Props> = memo(props => {
 	const todoCheckbox_change = useCallback(async (checked: boolean) => {
 		if (!props.note) return;
 
+		// Ignore the row press emitted by the checkbox gesture without blocking a deliberate
+		// follow-up tap on the row.
+		if (isNoteLockEnabled()) suppressPressUntilRef.current = Date.now() + 100;
+
 		// Duplicates the locked-note guard in app-desktop/gui/NoteListItem/NoteListItem.tsx.
 		if (isNoteLockEnabled()) {
 			const lockState = await Note.load(props.note.id, { fields: ['is_locked'] });

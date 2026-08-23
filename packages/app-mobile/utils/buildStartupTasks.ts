@@ -1,6 +1,6 @@
 import PluginAssetsLoader from '../PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
-import eventManager, { EventName } from '@joplin/lib/eventManager';
+import eventManager, { EventName, NoteLockSessionChangeEvent } from '@joplin/lib/eventManager';
 import Logger, { LogLevel, TargetType } from '@joplin/utils/Logger';
 import BaseModel from '@joplin/lib/BaseModel';
 import BaseService from '@joplin/lib/services/BaseService';
@@ -51,6 +51,8 @@ import initLib from '@joplin/lib/initLib';
 import SyncTargetNone from '@joplin/lib/SyncTargetNone';
 
 const logger = Logger.create('buildStartupTasks');
+
+let noteLockSessionChangeListener_: ((event: NoteLockSessionChangeEvent)=> void)|null = null;
 
 SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
@@ -350,12 +352,16 @@ const buildStartupTasks = (
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', decryptionWorker_resourceMetadataButNotBlobDecrypted);
 	});
 	addTask('buildStartupTasks/listen for note lock session events', async () => {
-		eventManager.on(EventName.NoteLockSessionChange, (event) => {
+		// Startup can run again (e.g. on profile switch) while eventManager survives it, so the
+		// previous run's listener is dropped to keep the dispatch single-fire.
+		if (noteLockSessionChangeListener_) eventManager.off(EventName.NoteLockSessionChange, noteLockSessionChangeListener_);
+		noteLockSessionChangeListener_ = (event) => {
 			dispatch({
 				type: 'SET_NOTE_LOCK_SESSION_UNLOCKED',
 				value: event.unlocked,
 			});
-		});
+		};
+		eventManager.on(EventName.NoteLockSessionChange, noteLockSessionChangeListener_);
 	});
 	addTask('buildStartupTasks/set up sharing', async () => {
 		await ShareService.instance().initialize(store, EncryptionService.instance());

@@ -1,11 +1,15 @@
 import * as React from 'react';
-import { useCallback, useMemo, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { themeStyle } from '../../global-style';
 import { _ } from '@joplin/lib/locale';
 import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
 import NavService from '@joplin/lib/services/NavService';
 import Icon from '../../Icon';
+import { PrimaryButton } from '../../buttons';
+import Logger from '@joplin/utils/Logger';
+
+const logger = Logger.create('NoteLockPanel');
 
 interface Props {
 	themeId: number;
@@ -24,7 +28,9 @@ const NoteLockPanel = (props: Props) => {
 	const styles = useMemo(() => {
 		return StyleSheet.create({
 			container: {
-				flex: 1,
+				// flexGrow rather than flex, so the panel fills the note screen but keeps its
+				// natural height inside the auto-sized unlock dialog.
+				flexGrow: 1,
 				padding: theme.margin,
 				alignItems: 'center',
 				justifyContent: 'center',
@@ -65,15 +71,24 @@ const NoteLockPanel = (props: Props) => {
 		void NavService.go('Config', { sectionName: 'noteLock' });
 	}, []);
 
+	const mountedRef = useRef(true);
+	useEffect(() => {
+		return () => { mountedRef.current = false; };
+	}, []);
+
 	const onUnlock = useCallback(async () => {
 		if (!password || unlocking) return;
 		setUnlocking(true);
 		try {
 			await NoteLockSession.instance().unlock(password);
+			if (!mountedRef.current) return;
 			props.onUnlocked?.();
 		} catch (error) {
-			// WebCrypto reports a wrong password as a generic OperationError.
-			setErrorMessage(error.name === 'OperationError' ? _('Invalid password') : error.message);
+			logger.warn('Could not unlock the note lock session:', error);
+			if (!mountedRef.current) return;
+			// WebCrypto reports a wrong password as a generic OperationError. Other errors stay
+			// out of the UI, e.g. the native crypto backends word theirs differently.
+			setErrorMessage(error.name === 'OperationError' ? _('Invalid password') : _('Could not unlock. Please try again.'));
 			setUnlocking(false);
 		}
 	}, [password, unlocking, props.onUnlocked]);
@@ -81,7 +96,7 @@ const NoteLockPanel = (props: Props) => {
 	const renderForm = () => {
 		if (props.undecryptable) {
 			return (
-				<Text style={styles.message}>{_('This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.')}</Text>
+				<Text style={styles.message}>{_('This note could not be unlocked. If it was locked prior to a password reset, the content is no longer recoverable.')}</Text>
 			);
 		}
 
@@ -90,7 +105,7 @@ const NoteLockPanel = (props: Props) => {
 				<>
 					<Text style={styles.message}>{_('Reading this note requires the note lock password, which has not been set up on this device yet.')}</Text>
 					<View style={styles.buttonContainer}>
-						<Button title={_('Set up note lock')} onPress={onSetUp} />
+						<PrimaryButton onPress={onSetUp}>{_('Set up note lock')}</PrimaryButton>
 					</View>
 				</>
 			);
@@ -98,7 +113,7 @@ const NoteLockPanel = (props: Props) => {
 
 		return (
 			<>
-				<Text style={styles.message}>{_('This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.')}</Text>
+				<Text style={styles.message}>{_('This note is locked. Enter your password to unlock your notes for this session.')}</Text>
 				<TextInput
 					style={styles.passwordInput}
 					secureTextEntry={true}
@@ -114,7 +129,7 @@ const NoteLockPanel = (props: Props) => {
 				/>
 				{!!errorMessage && <Text style={styles.errorText} role='alert'>{errorMessage}</Text>}
 				<View style={styles.buttonContainer}>
-					<Button title={_('Unlock')} onPress={onUnlock} disabled={!password || unlocking} />
+					<PrimaryButton onPress={onUnlock} disabled={!password || unlocking}>{_('Unlock')}</PrimaryButton>
 				</View>
 			</>
 		);

@@ -4,7 +4,12 @@ import { describe, it, beforeEach } from '@jest/globals';
 import { act, fireEvent, render, screen, userEvent, waitFor } from '../../../utils/testing/testingLibrary';
 
 import NoteScreen from './Note';
-import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers } from '@joplin/lib/testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, simulateReadOnlyShareEnv, supportDir, synchronizerStart, resourceFetcher, runWithFakeTimers, encryptionService } from '@joplin/lib/testing/test-utils';
+import NoteLockKey from '@joplin/lib/services/noteLock/NoteLockKey';
+import NoteLockSession from '@joplin/lib/services/noteLock/NoteLockSession';
+import NoteLockService from '@joplin/lib/services/noteLock/NoteLockService';
+import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
+import { enableNoteLock } from '@joplin/lib/services/noteLock/setNoteLockState';
 import waitForWithRealTimers from '@joplin/lib/testing/waitFor';
 import Note from '@joplin/lib/models/Note';
 import { AppState } from '../../../utils/types';
@@ -123,6 +128,16 @@ const openNoteActionsMenu = async () => {
 			expect(await screen.findByTestId('menu-content-open')).toBeVisible();
 		});
 	});
+};
+
+const setupUnlockedNoteLock = async (password: string) => {
+	Setting.setValue('featureFlag.noteLock', true);
+	NoteLockService.destroyInstance();
+	NoteLockSession.destroyInstance();
+	NoteLockKey.destroyInstance();
+	EncryptionService.instance_ = encryptionService();
+	await NoteLockKey.instance().create(password);
+	await NoteLockSession.instance().unlock(password);
 };
 
 const expectToBeEditing = async (editing: boolean) => {
@@ -265,6 +280,64 @@ describe('screens/Note', () => {
 			noteScreen.unmount();
 			await waitForNoteToMatch(noteId, { body: 'Change me! Testing!!! This is a test. Test!' });
 		});
+	});
+
+	it('should re-encrypt a pending save with the captured key when the session locks right after enabling the note lock', async () => {
+		await setupUnlockedNoteLock('123456');
+
+		const defaultBody = 'plain body';
+		const noteId = await openNewNote({ title: 'To lock', body: defaultBody });
+
+		const { unmount } = render(<WrappedNoteScreen />);
+		await openEditor();
+		const editor = await getMarkdownEditorControl();
+		await act(async () => {
+			editor.select(defaultBody.length, defaultBody.length);
+			// The insert queues a save that is still pending when the session locks below, so it
+			// can only complete through the key captured by the state change handler.
+			editor.insertText(' edited');
+			await enableNoteLock(noteId);
+			NoteLockSession.instance().lock();
+		});
+
+		await act(() => waitForWithRealTimers(async () => {
+			const row = await Note.load(noteId);
+			expect(row.is_locked).toBe(1);
+			expect(row.body.includes('edited')).toBe(false);
+		}));
+
+		await NoteLockSession.instance().unlock('123456');
+		expect((await Note.load(noteId, { useNoteLock: true })).body).toBe('plain body edited');
+
+		unmount();
+		Setting.setValue('featureFlag.noteLock', false);
+	});
+
+	it('should disable tags for a note that cannot be unlocked while the session is unlocked', async () => {
+		await setupUnlockedNoteLock('111111');
+		const noteId = await openNewNote({ title: 'Old key note', body: 'secret' });
+		// enableNoteLock only emits an event for a mounted screen, so the fixture locks the row
+		// directly with a gated save.
+		const lockedNote = { ...await Note.load(noteId, { useNoteLock: true }), is_locked: 1, isDecrypted: true };
+		await Note.save(lockedNote, { useNoteLock: true });
+
+		// The reset rotates the key, so the note above stays present but can no longer be
+		// unlocked with the fresh session.
+		await act(async () => {
+			await NoteLockSession.instance().reset('222222');
+			await NoteLockSession.instance().unlock('222222');
+		});
+		store.dispatch({ type: 'SET_NOTE_LOCK_SESSION_UNLOCKED', value: true });
+
+		const { unmount } = render(<WrappedNoteScreen />);
+		expect(await screen.findByText('This note could not be unlocked. If it was locked prior to a password reset, the content is no longer recoverable.')).toBeVisible();
+
+		await openNoteActionsMenu();
+		const tagsButton = await screen.findByText('Tags');
+		expect(tagsButton).toHaveProp('disabled', true);
+
+		unmount();
+		Setting.setValue('featureFlag.noteLock', false);
 	});
 
 	it('pressing "delete" should move the note to the trash', async () => {
