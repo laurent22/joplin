@@ -216,7 +216,7 @@ export async function execRequest(routes: Routers, ctx: AppContext): Promise<Exe
 	const endPoint = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
 	if (ctx.URL && !isValidOrigin(ctx.URL.origin, baseUrl(endPoint.type), endPoint.type)) throw new ErrorNotFound(`Invalid origin: ${ctx.URL.origin}`, ErrorCode.InvalidOrigin);
 
-	const isPublicRoute = match.route.isPublic(match.subPath.schema);
+	const isPublicRoute = match.route.isPublic(match.subPath.schema, ctx.request.method as HttpMethod);
 
 	// This is a generic catch-all for all private end points - if we
 	// couldn't get a valid session, we exit now. Individual end points

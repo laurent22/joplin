@@ -640,4 +640,19 @@ describe('services/SearchEngine', () => {
 		] as (ComplexTerm | string)[];
 		expect(engine.createQueryFromTerms(terms)).toBe('hello world test query*');
 	});
+
+	test('queryTermToRegex should support anchoring to word boundaries', () => {
+		const matchAnchoredTerm = (term: string, text: string) => {
+			const regex = engine.queryTermToRegex(term, { anchorToWordBoundary: true });
+			const matches = text.matchAll(new RegExp(regex, 'ig'));
+			const result = [];
+			for (const match of matches) {
+				result.push(match[0]);
+			}
+			return result;
+		};
+
+		expect(matchAnchoredTerm('test', 'testing')).toEqual([]);
+		expect(matchAnchoredTerm('test', 'test...')).toEqual(['test']);
+	});
 });

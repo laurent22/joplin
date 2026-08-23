@@ -33,6 +33,7 @@ import SsoLoginScreen from './SsoLoginScreen/SsoLoginScreen';
 import SamlShared from '@joplin/lib/components/shared/SamlShared';
 import PopupNotificationProvider from './PopupNotification/PopupNotificationProvider';
 import { ThemeProvider, StyleSheetManager, createGlobalStyle } from 'styled-components';
+import QuitSyncDialog from './QuitSyncDialog';
 
 interface Props {
 	themeId: number;
@@ -178,6 +179,7 @@ class RootComponent extends React.Component<Props, any> {
 						<MenuBar/>
 						<GlobalStyle/>
 						<WindowCommandsAndDialogs windowId={defaultWindowId} />
+						<QuitSyncDialog themeId={this.props.themeId} />
 						<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
 						{this.renderSecondaryWindows()}
 						{this.renderModalMessage(this.modalDialogProps())}
