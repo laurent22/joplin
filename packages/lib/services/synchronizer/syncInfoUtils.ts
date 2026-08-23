@@ -46,8 +46,20 @@ export interface SyncInfoValuePublicPrivateKeyPair {
 let appMinVersion_ = '3.7.0';
 
 export const setAppMinVersion = (v: string) => {
+	const previous = appMinVersion_;
 	appMinVersion_ = v;
+
+	return {
+		reset: () => {
+			appMinVersion_ = previous;
+		},
+	};
 };
+
+// 2026-07-10: Joplin 3.6 now supports the Joplin 3.7.0 sync format. This allows the 3.6 stable release
+// to sync with clients that have been upgraded to Joplin 3.7.
+const forwardCompatibleAppMinVersion = '3.7.0';
+
 
 export function onRevisionServiceSettingsChanged(key: string, value: unknown) {
 	if (key !== 'revisionService.enabled' && key !== 'revisionService.ttlDays') return;
@@ -181,7 +193,11 @@ const fixSyncInfo = (syncInfo: SyncInfo) => {
 
 export function localSyncInfo(): SyncInfo {
 	const output = new SyncInfo(Setting.value('syncInfoCache'));
-	output.appMinVersion = appMinVersion_;
+	// Avoid resetting appMinVersion when operating in forward-compatibility mode. This avoids data loss if the user
+	// switches sync targets (v3.7.0 sync targets contain properties/data unsupported by most older Joplin versions)
+	if (output.appMinVersion !== forwardCompatibleAppMinVersion || compareVersions(appMinVersion_, forwardCompatibleAppMinVersion) > 0) {
+		output.appMinVersion = appMinVersion_;
+	}
 	return fixSyncInfo(output);
 }
 
@@ -543,6 +559,7 @@ export function setMasterKeyEnabled(mkId: string, enabled = true) {
 export const setMasterKeyHasBeenUsed = (s: SyncInfo, mkId: string) => {
 	const idx = s.masterKeys.findIndex(mk => mk.id === mkId);
 	if (idx < 0) throw new Error(`No such master key: ${mkId}`);
+	if (s.masterKeys[idx].hasBeenUsed) return s;
 
 	s.masterKeys[idx] = {
 		...s.masterKeys[idx],
@@ -579,5 +596,15 @@ export function masterKeyById(id: string) {
 }
 
 export const checkIfCanSync = (s: SyncInfo, appVersion: string) => {
-	if (compareVersions(appVersion, s.appMinVersion) < 0) throw new JoplinError(_('In order to synchronise, please upgrade your application to version %s+', s.appMinVersion), ErrorCode.MustUpgradeApp);
+	const isForwardCompatible = () => {
+		// Forward compatibility: This version of Joplin supports the Joplin 3.7 sync target format
+		if (s.appMinVersion !== forwardCompatibleAppMinVersion) return false;
+		// Older Joplin versions don't support sync targets with locked notes
+		if (s.noteLockKey !== null) return false;
+		return true;
+	};
+
+	if (compareVersions(appVersion, s.appMinVersion) < 0 && !isForwardCompatible()) {
+		throw new JoplinError(_('In order to synchronise, please upgrade your application to version %s+', s.appMinVersion), ErrorCode.MustUpgradeApp);
+	}
 };

@@ -12,7 +12,7 @@ import { MasterKeyEntity } from './services/e2ee/types';
 import type { ProgressReport } from './Synchronizer';
 import type { SharedData } from './components/shared/note-screen-shared';
 
-interface SearchEntry {
+export interface SearchEntry {
 	id: string;
 	type_: number;
 	title: string;
@@ -21,7 +21,7 @@ interface SearchEntry {
 	parent_id?: string;
 }
 import { getListRendererIds } from './services/noteList/renderers';
-import { ProcessResultsRow } from './services/search/SearchEngine';
+import { ComplexTerm, ProcessResultsRow } from './services/search/SearchEngine';
 import { getDisplayParentId } from './services/trash';
 import Logger from '@joplin/utils/Logger';
 import { SettingsRecord } from './models/settings/types';
@@ -90,6 +90,8 @@ export interface StateLastDeletion {
 	timestamp: number;
 }
 
+export type HighlightedWord = ComplexTerm|string;
+
 export interface WindowState {
 	windowId: string;
 	notes: NoteEntity[];
@@ -112,11 +114,12 @@ export interface WindowState {
 	selectedItemType: string;
 	selectedSmartFilterId: string;
 
-	highlightedWords: string[];
+	highlightedWords: HighlightedWord[];
 
 	backwardHistoryNotes: NoteEntity[];
 	forwardHistoryNotes: NoteEntity[];
 	lastSelectedNotesIds: StateLastSelectedNotesIds;
+	windowEditorNoteReloadTimeRequest: number;
 }
 
 export const defaultWindowId = 'default';
@@ -145,6 +148,7 @@ export const defaultWindowState: WindowState = {
 		Tag: {},
 		Search: {},
 	},
+	windowEditorNoteReloadTimeRequest: 0,
 };
 
 export interface EditorNoteStatuses {
@@ -197,7 +201,6 @@ export interface State extends WindowState {
 	mustAuthenticate: boolean;
 	toast: Toast | null;
 	editorNoteReloadTimeRequest: number;
-
 	allowSelectionInOtherFolders: boolean;
 	noteHtmlToMarkdownDone: string;
 
@@ -271,8 +274,8 @@ export const defaultState: State = {
 	lastDeletionNotificationTime: 0,
 	mustUpgradeAppMessage: '',
 	mustAuthenticate: false,
-	allowSelectionInOtherFolders: false,
 	editorNoteReloadTimeRequest: 0,
+	allowSelectionInOtherFolders: false,
 	noteHtmlToMarkdownDone: '',
 
 	pluginService: pluginServiceDefaultState,
@@ -1617,8 +1620,21 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'EDITOR_NOTE_NEEDS_RELOAD':
 			{
-				if (!action.noteId || (draft.selectedNoteIds.length && draft.selectedNoteIds[0] === action.noteId)) {
-					draft.editorNoteReloadTimeRequest = Date.now();
+				const nextReloadRequest = (previous: number) => Math.max(Date.now(), previous + 1);
+
+				// Mobile uses the root field and supports reload requests without a note ID.
+				if (!action.noteId || stateUtils.selectedNoteId(draft) === action.noteId) {
+					draft.editorNoteReloadTimeRequest = nextReloadRequest(draft.editorNoteReloadTimeRequest);
+				}
+
+				// Desktop reload requests must identify the note so that only windows
+				// displaying that note are invalidated.
+				if (action.noteId) {
+					for (const windowState of stateUtils.allWindowStates(draft)) {
+						if (stateUtils.selectedNoteId(windowState) === action.noteId) {
+							windowState.windowEditorNoteReloadTimeRequest = nextReloadRequest(windowState.windowEditorNoteReloadTimeRequest);
+						}
+					}
 				}
 			}
 			break;

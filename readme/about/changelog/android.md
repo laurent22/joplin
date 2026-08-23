@@ -1,5 +1,28 @@
 # Joplin Android Changelog
 
+## [android-v3.6.22](https://github.com/laurent22/joplin/releases/tag/android-v3.6.22) - 2026-08-20T18:18:17Z
+
+- Improved: Support syncing with Joplin v3.7 (#15889) (#15753 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
+## [android-v3.7.6](https://github.com/laurent22/joplin/releases/tag/android-v3.7.6) - 2026-08-18T14:29:57Z
+
+- New: Add shadows to the new note and note actions menus (#16067 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Dialogs: Bold and add margin below titles (#16113) (#16107 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Implement redesigned new note menu (#16082 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Implement redesigned notebook long-press menu (#16027 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Make the editor state update, if the current note is updated by the sync (#16150 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Make the startup location the first entry in the navigation history instead of 'All Notes' (#16083 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Prevent race which allows changes to be lost, during a long delta step (#16208 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Prevent the remote version of a note being overwritten if typing while the sync changes the open note (#16193 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Remove single-word titles from error/warning dialogs (#16096 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix blank screen being shown when navigating back after tag changes and other edge cases (#16080) (#15265 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix empty navigation when navigating to settings from the conflicts folder after it was removed (#16197 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix inconsistent button order in profile switcher, tag screen, and deletion confirmation dialogs (#16076 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix note screen is not properly refreshed when updated by the sync, when E2EE is enabled (#16179 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Prevent incrementing the master key updated_time when the key has not actually changed (#16223) (#16194 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Prevent scrolling the cursor into view on the markdown editor when unnecessary to do so (#16091) (#15923 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Release the save mutex when a save fails validation (#16147) (#16145 by [@keshav0479](https://github.com/keshav0479))
+
 ## [android-v3.7.4](https://github.com/laurent22/joplin/releases/tag/android-v3.7.4) - 2026-07-28T12:43:17Z
 
 - New: Add shadow to note actions menu (#16053 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

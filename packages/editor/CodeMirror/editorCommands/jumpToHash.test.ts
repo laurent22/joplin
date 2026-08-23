@@ -38,4 +38,13 @@ describe('jumpToHash', () => {
 		expect(jumpToHash(editor, 'line-2')).toBe(true);
 		expect(editor.state.selection.main.anchor).toBe(editor.state.doc.length);
 	});
+
+	test('should return false when no link target is found', async () => {
+		const editor = await createTestEditor(
+			'Line 1',
+			EditorSelection.cursor(0),
+			[],
+		);
+		expect(jumpToHash(editor, 'does-not-exist')).toBe(false);
+	});
 });

@@ -38,6 +38,10 @@
 		font-size: 0.85em;
 	}
 
+	&.-error > .icon {
+		font-size: 1.25em;
+	}
+
 	&:not(.-syncing):not(.-synced) > .icon {
 		animation: icon-fade-in-b 300ms ease-in-out;
 	}

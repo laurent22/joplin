@@ -281,5 +281,61 @@ test.describe('richTextEditor', () => {
 		await expect(editorBody).toHaveText('');
 	});
 
+	test('should save rich text changes when switching notes immediately after typing', async ({ mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Test 1');
+		await mainScreen.createNewNote('Test 2');
+		const test1Header = mainScreen.noteList.getNoteItemByTitle('Test 1');
+		const test2Header = mainScreen.noteList.getNoteItemByTitle('Test 2');
+
+		const editor = mainScreen.noteEditor;
+		await editor.toggleEditorsButton.click();
+		await editor.richTextEditor.waitFor();
+		const editorBody = editor.getRichTextEditorBody();
+
+		await test1Header.click();
+		await expect(editor.noteTitleInput).toHaveValue('Test 1');
+		await expect(editorBody).toHaveText('');
+		await expect(editor.toggleEditorsButton).toBeEnabled();
+		await editorBody.pressSequentially('Unsaved text');
+		// This confirms that onWillChange has reached the parent without waiting for
+		// TinyMCE's delayed onChange/save.
+		await expect(editor.toggleEditorsButton).toBeDisabled();
+		await test2Header.click();
+
+		await expect(editor.noteTitleInput).toHaveValue('Test 2');
+		await expect(editorBody).toHaveText('');
+		await test1Header.click();
+		await expect(editor.noteTitleInput).toHaveValue('Test 1');
+		await expect(editorBody).toHaveText('Unsaved text');
+	});
+
+	test('should highlight search matches', async ({ mainWindow }) => {
+		const mainScreen = await new MainScreen(mainWindow).setup();
+		await mainScreen.createNewNote('Testing');
+
+		const editor = mainScreen.noteEditor;
+		await editor.switchToRichTextEditor();
+		const editorBody = editor.getRichTextEditorBody();
+		await editorBody.pressSequentially('search-match1 note search-match2');
+
+		// Should highlight initial matches
+		await mainScreen.search('/search-match');
+		await expect.poll(
+			() => editor.getRichTextEditorSearchMatches(),
+		).toEqual(['search-match', 'search-match']);
+
+		// Should highlight new matches
+		await editorBody.pressSequentially('search-match');
+		await expect.poll(
+			() => editor.getRichTextEditorSearchMatches(),
+		).toHaveLength(3);
+
+		// Should stop highlighting old matches
+		await editorBody.press('Backspace');
+		await expect.poll(
+			() => editor.getRichTextEditorSearchMatches(),
+		).toHaveLength(2);
+	});
 });
 

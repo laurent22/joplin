@@ -1,6 +1,6 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep, fileApi } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { checkIfCanSync, localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo, onRevisionServiceSettingsChanged } from './syncInfoUtils';
+import { checkIfCanSync, localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo, onRevisionServiceSettingsChanged, setAppMinVersion } from './syncInfoUtils';
 import Setting from '../../models/Setting';
 import BaseItem from '../../models/BaseItem';
 import BaseModel from '../../models/BaseItem';
@@ -36,6 +36,26 @@ describe('syncInfoUtils', () => {
 
 		expect(masterKeyEnabled(await MasterKey.load(mk1.id))).toBe(true);
 		expect(masterKeyEnabled(await MasterKey.load(mk2.id))).toBe(false);
+	});
+
+	it('should not update an already-used master key', () => {
+		const syncInfo = new SyncInfo();
+		syncInfo.masterKeys = [{
+			id: '1',
+			content: 'content',
+			hasBeenUsed: true,
+			updated_time: 123,
+		}];
+		const setValueSpy = jest.spyOn(Setting, 'setValue');
+
+		try {
+			setMasterKeyHasBeenUsed(syncInfo, '1');
+
+			expect(syncInfo.masterKeys[0].updated_time).toBe(123);
+			expect(setValueSpy).not.toHaveBeenCalledWith('syncInfoCache', expect.anything());
+		} finally {
+			setValueSpy.mockRestore();
+		}
 	});
 
 	it('should tell if two sync info are equal', async () => {
@@ -335,6 +355,8 @@ describe('syncInfoUtils', () => {
 		['1.0.0', '1.0.4', true],
 		['1.0.0', '0.0.5', false],
 		['1.0.0', '1.0.0', true],
+		['3.7.0', '3.6.4', true],
+		['3.7.1', '3.6.4', false],
 	])('should check if it can sync', async (appMinVersion, appVersion, expected) => {
 		let succeeded = true;
 		try {
@@ -346,6 +368,21 @@ describe('syncInfoUtils', () => {
 		}
 
 		expect(succeeded).toBe(expected);
+	});
+
+	test('should update appMinVersion in the sync info cache with a new minimum version', () => {
+		const { reset } = setAppMinVersion('3.5.0');
+		try {
+			Setting.setValue('syncInfoCache', JSON.stringify({ appMinVersion: '3.0.0' }));
+			expect(localSyncInfo()).toMatchObject({ appMinVersion: '3.5.0' });
+		} finally {
+			reset();
+		}
+	});
+
+	test('should preserve a v3.7.0 version stored in the sync info cache', () => {
+		Setting.setValue('syncInfoCache', JSON.stringify({ appMinVersion: '3.7.0' }));
+		expect(localSyncInfo()).toMatchObject({ appMinVersion: '3.7.0' });
 	});
 
 	test('should not throw if the sync info being parsed is invalid', async () => {

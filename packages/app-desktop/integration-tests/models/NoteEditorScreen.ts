@@ -46,8 +46,18 @@ export default class NoteEditorScreen {
 		this.richTextCodeEditor = new EditorCodeDialog(page_);
 	}
 
+	public async undo(electronApp: ElectronApplication) {
+		await activateMainMenuItem(electronApp, 'Undo');
+	}
+
 	public toolbarButtonLocator(title: string) {
 		return this.containerLocator.getByRole('button', { name: title });
+	}
+
+	public async switchToRichTextEditor() {
+		await expect(this.codeMirrorEditor).toBeAttached();
+		await this.toggleEditorsButton.click();
+		await this.richTextEditor.waitFor();
 	}
 
 	public async contentLocator() {
@@ -140,5 +150,17 @@ export default class NoteEditorScreen {
 		await expect(this.noteViewerContainer).toBeVisible();
 		await this.toggleEditorLayout();
 		await expect(this.noteViewerContainer).not.toBeVisible();
+	}
+
+	public async getRichTextEditorSearchMatches() {
+		const body = this.getRichTextEditorBody();
+		return body.evaluate(() => {
+			const highlights = CSS.highlights.get('jop-search-highlight') ?? new Set();
+			const result = [];
+			for (const highlight of highlights) {
+				result.push(highlight.toString());
+			}
+			return result;
+		});
 	}
 }

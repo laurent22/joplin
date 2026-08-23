@@ -45,6 +45,7 @@ export interface ItemsThatNeedSyncResult {
 export interface RemoteItemMetadata {
 	item_id: string;
 	updated_time: number;
+	sync_time: number;
 }
 
 export interface EncryptedItemsStats {
@@ -209,12 +210,13 @@ export default class BaseItem extends BaseModel {
 
 	public static async remoteItemMetadata(syncTarget: number): Promise<Map<string, RemoteItemMetadata>> {
 		if (!syncTarget) throw new Error('No syncTarget specified');
-		const temp = await this.db().selectAll('SELECT item_id, remote_item_updated_time FROM sync_items WHERE sync_time > 0 AND sync_target = ?', [syncTarget]);
+		const temp = await this.db().selectAll('SELECT item_id, remote_item_updated_time, sync_time FROM sync_items WHERE sync_time > 0 AND sync_target = ?', [syncTarget]);
 		const output = new Map<string, RemoteItemMetadata>();
 		for (let i = 0; i < temp.length; i++) {
 			const metadata: RemoteItemMetadata = {
 				item_id: temp[i].item_id,
 				updated_time: temp[i].remote_item_updated_time,
+				sync_time: temp[i].sync_time,
 			};
 			output.set(temp[i].item_id, metadata);
 		}

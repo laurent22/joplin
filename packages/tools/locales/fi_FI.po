@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:621
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -159,13 +159,13 @@ msgstr[1] "%d minuuttia"
 msgid "%d note matches this pattern. Delete it?"
 msgid_plural "%d notes match this pattern. Delete them?"
 msgstr[0] "%d muistiinpano vastaa tätä mallia. Poistetaanko se?"
-msgstr[1] "%d muistiinpanot vastaavat tätä mallia. Poistetaanko ne?"
+msgstr[1] "%d muistiinpanoa vastaa tätä mallia. Poistetaanko ne?"
 
 #: packages/app-cli/app/command-rmnote.ts:40
 msgid "%d note will be permanently deleted. Continue?"
 msgid_plural "%d notes will be permanently deleted. Continue?"
 msgstr[0] "%d muistiinpano poistetaan pysyvästi. Jatka?"
-msgstr[1] "%d muistiinpanot poistetaan pysyvästi. Jatka?"
+msgstr[1] "%d muistiinpanoa poistetaan pysyvästi. Jatka?"
 
 #: packages/app-mobile/components/CameraView/PhotoPreview.tsx:60
 msgid "%d photo(s) taken"
@@ -264,8 +264,7 @@ msgstr[1] "%s: %d muistiinpanoja"
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
-#: packages/app-cli/app/cli-utils.js:156
-#: packages/lib/services/ReportService.ts:264
+#: packages/app-cli/app/cli-utils.js:156 packages/lib/services/ReportService.ts:264
 msgid "%s: %s"
 msgstr "%s: %s"
 
@@ -276,28 +275,28 @@ msgstr "%s: Puuttuva salasana."
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
-"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
-"assign or remove [tag] from [note], to list notes associated with [tag], or "
-"to list tags associated with [note]. The command `tag list` can be used to "
-"list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or "
+"remove [tag] from [note], to list notes associated with [tag], or to list tags "
+"associated with [note]. The command `tag list` can be used to list all the tags "
+"(use -l for long option)."
 msgstr ""
-"<tag-command> voidaan \"add\", \"remove\", \"list\", tai \"notetags\" "
-"määrittää tai poistaa [tag] kohteesta [note], luetteloinnin "
-"muistiinpanoista, jotka liittyvät [tag], tai luetteloida tunnisteita, jotka "
-"liittyvät [note]. Komento `tag list` voidaan käyttää kaikkien tunnisteiden "
-"luetteloinnissa (Käytä -l pitkälle vaihtoehdolle)."
+"<tag-command> voi olla \"add\", \"remove\", \"list\" tai \"notetags\". "
+"Komennolla voi lisätä tai poistaa tunnisteen [tag] muistiinpanosta [note], "
+"listata tunnisteeseen [tag] liittyvät muistiinpanot tai listata kohteeseen "
+"[note] liittyvät tunnisteet. Komentoa `tag list` voidaan käyttää kaikkien "
+"tunnisteiden listaamiseen (käytä -l pitkälle muodolle)."
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
-"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given to-do between completed and uncompleted state (If the "
-"target is a regular note it will be converted to a to-do). Use \"clear\" to "
-"convert the to-do back to a regular note."
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle "
+"the given to-do between completed and uncompleted state (If the target is a "
+"regular note it will be converted to a to-do). Use \"clear\" to convert the to-"
+"do back to a regular note."
 msgstr ""
-"<todo-command> voidaan joko \"toggle\" tai \"clear\". Käytä \"toggle\" "
-"vaihtaa annettua tehtävättä valmistuneen ja keskeneräisen tilan välillä (Jos "
-"kohde on säännöllinen huomautus, se muunnetaan tehtäväksi). Käytä \"clear\" "
-"voit muuntaa tehtäväkokeen takaisin tavalliseksi. muistiinpanoksi.."
+"<todo-command> voi olla joko \"toggle\" tai \"clear\". Käytä \"toggle\" "
+"vaihtaaksesi tehtävää valmistuneen ja keskeneräisen tilan välillä (Jos kohde on "
+"tavallinen muistiinpano, niin se muunnetaan tehtäväksi). Käytä \"clear\" "
+"muuntaaksesi tehtävän takaisin tavalliseksi muistiinpanoksi."
 
 #: packages/editor/ProseMirror/plugins/imagePlugin.ts:148
 msgid "A brief description of the image:"
@@ -305,11 +304,11 @@ msgstr "Lyhyt kuvaus kuvasta:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1993
 msgid ""
-"A comma-separated list of words. May be used for uncommon words, to help "
-"voice typing spell them correctly."
+"A comma-separated list of words. May be used for uncommon words, to help voice "
+"typing spell them correctly."
 msgstr ""
-"Pilkuilla erotettu sanaluettelo. Voidaan käyttää epätavallisille sanoille, "
-"jotta ne voidaan kirjoittaa oikein äänikirjoituksella."
+"Pilkuilla erotettu sanaluettelo. Voidaan käyttää epätavallisille sanoille, jotta "
+"ne voidaan kirjoittaa oikein äänikirjoituksella."
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:37
 msgid "A new update (%s) is available"
@@ -329,7 +328,7 @@ msgstr "A5"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1121
 msgid "ABC musical notation: Options"
-msgstr ""
+msgstr "Musiikin ABC-nuotinnus: Asetukset"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/index.tsx:62
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:240
@@ -355,8 +354,8 @@ msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
-"Pikatoimintoa %s käytetään komennoissa %s ja %s. Tämä voi johtaa "
-"odottamattomaan käytökseen."
+"Pikatoimintoa %s käytetään komennoissa %s ja %s. Tämä voi johtaa odottamattomaan "
+"käytökseen."
 
 #: packages/app-desktop/gui/MainScreen.tsx:564
 #: packages/app-mobile/components/screens/ShareManager/IncomingShareItem.tsx:40
@@ -498,8 +497,7 @@ msgid "all"
 msgstr "kaikki"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:108
-msgid ""
-"All data, including notes, notebooks and tags will be permanently deleted."
+msgid "All data, including notes, notebooks and tags will be permanently deleted."
 msgstr ""
 "Kaikki tiedot, mukaan lukien muistiinpanot, muistikirjat ja tunnisteet, "
 "poistetaan pysyvästi."
@@ -558,21 +556,20 @@ msgstr "Muuta kokoa aina"
 
 #: packages/app-cli/app/command-mv.ts:37
 msgid ""
-"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to "
-"see the short notebook id or use $b for current selected notebook"
+"Ambiguous notebook \"%s\". Please use notebook id instead - press \"ti\" to see "
+"the short notebook id or use $b for current selected notebook"
 msgstr ""
 "Epäselvä muistikirja \"%s\". Käytä sen sijaan muistikirjan tunnusta - paina "
 "\"ti\" nähdäksesi lyhyen muistikirjan tunnuksen tai käytä $b nykyiselle "
 "valitulle muistikirjalle"
 
-#: packages/app-cli/app/command-mkbook.ts:33
-#: packages/app-cli/app/command-mv.ts:30
+#: packages/app-cli/app/command-mkbook.ts:33 packages/app-cli/app/command-mv.ts:30
 msgid ""
-"Ambiguous notebook \"%s\". Please use short notebook id instead - press "
-"\"ti\" to see the short notebook id"
+"Ambiguous notebook \"%s\". Please use short notebook id instead - press \"ti\" "
+"to see the short notebook id"
 msgstr ""
-"Epäselvä muistikirja \"%s\". Käytä sen sijaan lyhyttä muistikirjan tunnusta "
-"- paina \"ti\" nähdäksesi lyhyen muistikirjan tunnuksen"
+"Epäselvä muistikirja \"%s\". Käytä sen sijaan lyhyttä muistikirjan tunnusta - "
+"paina \"ti\" nähdäksesi lyhyen muistikirjan tunnuksen"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:13
 msgid "An autosaved drawing was found. Attach a copy of it to the note?"
@@ -605,11 +602,11 @@ msgstr "Android API-taso: %d"
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:48
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:24
 msgid ""
-"Any email sent to this address will be converted into a note and added to "
-"your collection. The note will be saved into the Inbox notebook"
+"Any email sent to this address will be converted into a note and added to your "
+"collection. The note will be saved into the Inbox notebook"
 msgstr ""
-"Tähän osoitteeseen lähetetyt sähköpostit muunnetaan muistiinpanoksi ja "
-"lisätään kokoelmaasi. Muistiinpano tallennetaan Saapuneet-muistikirjaan."
+"Tähän osoitteeseen lähetetyt sähköpostit muunnetaan muistiinpanoksi ja lisätään "
+"kokoelmaasi. Muistiinpano tallennetaan Saapuneet-muistikirjaan"
 
 #: packages/lib/models/Setting.ts:1354
 msgid "Appearance"
@@ -632,11 +629,10 @@ msgstr "Haluatko varmasti palata oletus ulkoasuun? Toimintoa ei voi kumota."
 
 #: packages/lib/components/shared/NoteRevisionViewer/useDeleteHistoryClick.ts:19
 msgid ""
-"Are you sure you want to delete all history for this note? This cannot be "
-"undone."
+"Are you sure you want to delete all history for this note? This cannot be undone."
 msgstr ""
-"Oletko varma, että haluat poistaa tämän muistiinpanon koko historian? "
-"Toimintoa ei voi kumota."
+"Oletko varma, että haluat poistaa tämän muistiinpanon koko historian? Toimintoa "
+"ei voi kumota."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:39
 msgid "Are you sure you want to renew the authorisation token?"
@@ -647,8 +643,7 @@ msgid ""
 "Are you sure you want to return to the default layout? The current layout "
 "configuration will be lost."
 msgstr ""
-"Haluatko varmasti palata oletus ulkoasuun? Nykyinen ulkoasun määritys "
-"menetetään."
+"Haluatko varmasti palata oletus ulkoasuun? Nykyinen ulkoasun määritys menetetään."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/SettingComponent.tsx:235
 msgid "Arguments:"
@@ -664,11 +659,11 @@ msgstr "Liittyvät tunnisteet:"
 
 #: packages/app-mobile/utils/lockToSingleInstance.ts:16
 msgid ""
-"At present, Joplin Web can only be open in one tab at a time. Please close "
-"the other instance of Joplin."
+"At present, Joplin Web can only be open in one tab at a time. Please close the "
+"other instance of Joplin."
 msgstr ""
-"Tällä hetkellä Joplin Web voi olla auki vain yhdessä välilehdessä "
-"kerrallaan. Sulje toinen Joplin-instanssi."
+"Tällä hetkellä Joplin Web voi olla auki vain yhdessä välilehdessä kerrallaan. "
+"Sulje toinen Joplin-instanssi."
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:25
 msgid "Attach"
@@ -720,19 +715,17 @@ msgstr "Liitteet, joita ei voitu ladata"
 
 #: packages/lib/models/settings/builtInMetadata.ts:58
 msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
+"Attention: If you change this location, make sure you copy all your content to "
+"it before syncing, otherwise all files will be removed! See the FAQ for more "
+"details: %s"
 msgstr ""
 "Huomio: Jos muutat tätä sijaintia, varmista, että kopioit kaiken sisältösi "
-"siihen ennen synkronointia, muuten kaikki tiedostot poistetaan! Lisätietoja "
-"on usein kysytyissä kysymyksissä: %s"
+"siihen ennen synkronointia, muuten kaikki tiedostot poistetaan! Lisätietoja on "
+"usein kysytyissä kysymyksissä: %s"
 
-#: packages/app-cli/app/command-sync.ts:73
-#: packages/app-cli/app/command-sync.ts:87
+#: packages/app-cli/app/command-sync.ts:73 packages/app-cli/app/command-sync.ts:87
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:49
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
+msgid "Authentication was not completed (did not receive an authentication token)."
 msgstr "Todennusta ei suoritettu loppuun (todennustunnusta ei saatu)."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:152
@@ -753,18 +746,16 @@ msgid "Auto-add disabled accounts for deletion"
 msgstr "Lisää käytöstä poistetut tilit automaattisesti poistettavaksi"
 
 #: packages/lib/models/settings/builtInMetadata.ts:786
-#, fuzzy
 msgid "Auto-format Markdown in the Rich Text Editor"
-msgstr "Markdownin automaattinen muotoilu Rich Text Editorissa"
+msgstr "Muotoile Markdown automaattisesti Rich Text Editorissa"
 
 #: packages/lib/models/settings/builtInMetadata.ts:743
 msgid "Auto-pair braces, parentheses, quotations, etc."
 msgstr "Yhdistä sulut, sulkeet, lainaukset jne."
 
 #: packages/lib/models/settings/builtInMetadata.ts:754
-#, fuzzy
 msgid "Autocomplete Markdown and HTML"
-msgstr "Markdownin ja HTML:n automaattinen täydennys"
+msgstr "Täydennä Markdown ja HTML automaattisesti"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1383
 msgid "Automatically check for updates"
@@ -801,7 +792,7 @@ msgstr "Beta-versio"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:123
 msgid "Block code"
-msgstr ""
+msgstr "Koodilohko"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:55
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:80
@@ -828,9 +819,8 @@ msgid "Bulleted List"
 msgstr "Luettelomerkitty luettelo"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginInfoModal.tsx:129
-#, fuzzy
 msgid "by %s"
-msgstr "%s"
+msgstr "tekijä %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:20
 msgid "by word"
@@ -852,9 +842,8 @@ msgstr "Voi katsella"
 msgid "Can view and edit"
 msgstr "Voi katsella ja muokata"
 
-#: packages/app-cli/app/utils/shimInitCli.ts:12
-#: packages/app-desktop/bridge.ts:405 packages/app-desktop/bridge.ts:421
-#: packages/app-desktop/bridge.ts:484
+#: packages/app-cli/app/utils/shimInitCli.ts:12 packages/app-desktop/bridge.ts:405
+#: packages/app-desktop/bridge.ts:421 packages/app-desktop/bridge.ts:484
 #: packages/app-desktop/checkForUpdates.ts:109
 #: packages/app-desktop/commands/emptyTrash.ts:17
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:478
@@ -896,11 +885,10 @@ msgstr "Peruutetaan taustasynkronointi... Odota."
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:200
 msgid ""
-"Cancelling will discard the recording. This cannot be undone. Are you sure "
-"you want to proceed?"
+"Cancelling will discard the recording. This cannot be undone. Are you sure you "
+"want to proceed?"
 msgstr ""
-"Peruuttaminen hylkää tallenteen. Tätä ei voi kumota. Haluatko varmasti "
-"jatkaa?"
+"Peruuttaminen hylkää tallenteen. Tätä ei voi kumota. Haluatko varmasti jatkaa?"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotificationMessage.tsx:23
 #: packages/lib/Synchronizer.ts:208
@@ -933,27 +921,20 @@ msgstr "Uutta muistiinpanoa ei voida luoda: %s"
 
 #: packages/app-cli/app/app.ts:80 packages/app-cli/app/command-attach.ts:22
 #: packages/app-cli/app/command-cat.ts:26 packages/app-cli/app/command-cp.ts:25
-#: packages/app-cli/app/command-cp.ts:28
-#: packages/app-cli/app/command-done.ts:22
+#: packages/app-cli/app/command-cp.ts:28 packages/app-cli/app/command-done.ts:22
 #: packages/app-cli/app/command-export.ts:38
 #: packages/app-cli/app/command-export.ts:43
 #: packages/app-cli/app/command-geoloc.ts:21
 #: packages/app-cli/app/command-help.ts:67
-#: packages/app-cli/app/command-import.ts:38
-#: packages/app-cli/app/command-mv.ts:25 packages/app-cli/app/command-mv.ts:46
-#: packages/app-cli/app/command-ren.ts:24
+#: packages/app-cli/app/command-import.ts:38 packages/app-cli/app/command-mv.ts:25
+#: packages/app-cli/app/command-mv.ts:46 packages/app-cli/app/command-ren.ts:24
 #: packages/app-cli/app/command-restore.ts:20
 #: packages/app-cli/app/command-rmnote.ts:30
-#: packages/app-cli/app/command-search.js:27
-#: packages/app-cli/app/command-set.ts:33
-#: packages/app-cli/app/command-tag.js:33
-#: packages/app-cli/app/command-tag.js:36
-#: packages/app-cli/app/command-tag.js:42
-#: packages/app-cli/app/command-tag.js:43
-#: packages/app-cli/app/command-tag.js:81
-#: packages/app-cli/app/command-tag.js:87
-#: packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-use.ts:23
+#: packages/app-cli/app/command-search.js:27 packages/app-cli/app/command-set.ts:33
+#: packages/app-cli/app/command-tag.js:33 packages/app-cli/app/command-tag.js:36
+#: packages/app-cli/app/command-tag.js:42 packages/app-cli/app/command-tag.js:43
+#: packages/app-cli/app/command-tag.js:81 packages/app-cli/app/command-tag.js:87
+#: packages/app-cli/app/command-todo.js:21 packages/app-cli/app/command-use.ts:23
 #: packages/lib/services/interop/InteropService.ts:305
 #: packages/lib/services/interop/InteropService.ts:324
 msgid "Cannot find \"%s\"."
@@ -989,8 +970,8 @@ msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
-"Tunnusta ei voi päivittää: todennustiedot puuttuvat. Synkronoinnin "
-"aloittaminen uudelleen saattaa korjata ongelman."
+"Tunnusta ei voi päivittää: todennustiedot puuttuvat. Synkronoinnin aloittaminen "
+"uudelleen saattaa korjata ongelman."
 
 #: packages/server/src/models/UserModel.ts:330
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
@@ -999,21 +980,20 @@ msgstr ""
 
 #: packages/server/src/models/UserModel.ts:347
 msgid ""
-"Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
-"for this account"
+"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for "
+"this account"
 msgstr ""
-"Kohdetta %s \"%s\" ei voida tallentaa, koska se ylittäisi tämän tilin "
-"sallitun kokonaiskoon (%s)"
+"Kohdetta %s \"%s\" ei voida tallentaa, koska se ylittäisi tämän tilin sallitun "
+"kokonaiskoon (%s)"
 
 #: packages/lib/services/share/ShareService.ts:367
 msgid ""
-"Cannot share encrypted notebook with recipient %s because they have not "
-"enabled end-to-end encryption. They may do so from the screen Configuration "
-"> Encryption."
+"Cannot share encrypted notebook with recipient %s because they have not enabled "
+"end-to-end encryption. They may do so from the screen Configuration > Encryption."
 msgstr ""
-"Salattua muistikirjaa ei voi jakaa vastaanottajan %s kanssa, koska hän ei "
-"ole ottanut päästä päähän -salausta käyttöön. Sen voi tehdä Asetukset> "
-"Salauksen määritys."
+"Salattua muistikirjaa ei voi jakaa vastaanottajan %s kanssa, koska hän ei ole "
+"ottanut päästä päähän -salausta käyttöön. Sen voi tehdä Asetukset> Salauksen "
+"määritys."
 
 #: packages/app-mobile/components/NoteEditor/SearchPanel.tsx:342
 msgid "Case sensitive"
@@ -1028,9 +1008,8 @@ msgid "Change language"
 msgstr "Vaihda kieltä"
 
 #: packages/app-mobile/components/CameraView/ActionButtons.tsx:124
-#, fuzzy
 msgid "Change ratio"
-msgstr "Muutossuhde"
+msgstr "Muuta suhdetta"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:98
 msgid "Change shortcut for \"%s\""
@@ -1113,7 +1092,7 @@ msgid ""
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
 "Napsauta \"%s\" palauttaaksesi muistiinpanon. Se kopioidaan muistikirjaan "
-"nimeltä \"%s\". Huomautuksen nykyistä versiota ei korvata tai muuteta."
+"nimeltä \"%s\". Muistiinpanon nykyistä versiota ei korvata tai muuteta."
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:234
 msgid "Click \"start\" to attach a new voice memo to the note."
@@ -1158,15 +1137,14 @@ msgid "Close side menu"
 msgstr "Sulje sivuvalikko"
 
 #: packages/lib/models/settings/settingValidations.ts:33
-#, fuzzy
 msgid ""
 "Close the application, then delete your profile in \"%s\", and start the "
 "application again. Make sure you create a backup first by exporting all your "
 "notes as JEX."
 msgstr ""
 "Sulje sovellus, poista profiilisi kansiosta \"%s\" ja käynnistä sovellus "
-"uudelleen. Muista ensin luoda varmuuskopio viemällä kaikki muistiinpanosi "
-"JEX-tiedostona."
+"uudelleen. Muista ensin luoda varmuuskopio viemällä kaikki muistiinpanosi JEX-"
+"tiedostoiksi."
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
 #: packages/app-desktop/gui/MenuBar.tsx:648
@@ -1226,16 +1204,15 @@ msgstr "Tulevat hälytykset"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1595
 msgid ""
-"Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/"
-"custom.pem. Note that if you make changes to the TLS settings, you must save "
-"your changes before clicking on \"Check synchronisation configuration\"."
+"Comma-separated list of paths to directories to load the certificates from, or "
+"path to individual cert files. For example: /my/cert_dir, /other/custom.pem. "
+"Note that if you make changes to the TLS settings, you must save your changes "
+"before clicking on \"Check synchronisation configuration\"."
 msgstr ""
-"Pilkuilla erotettu luettelo hakemistoiden poluista, joilta varmenteet "
-"ladataan, tai polku yksittäisiin varmennetiedostoihin. Esimerkiksi: /my/"
-"cert_dir, /other/custom.pem. Huomaa, että jos teet muutoksia TLS asetuksiin, "
-"sinun on tallennettava muutokset ennen kuin napsautat \"Tarkista "
-"synkronointiasetukset\"."
+"Pilkuilla erotettu luettelo hakemistoiden poluista, joilta varmenteet ladataan, "
+"tai polku yksittäisiin varmennetiedostoihin. Esimerkiksi: /my/cert_dir, /other/"
+"custom.pem. Huomaa, että jos teet muutoksia TLS asetuksiin, sinun on "
+"tallennettava muutokset ennen kuin napsautat \"Tarkista synkronointiasetukset\"."
 
 #: packages/lib/services/KeymapService.ts:333
 msgid "command"
@@ -1247,7 +1224,7 @@ msgstr "Komento"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "COMMAND"
-msgstr ""
+msgstr "KOMENTO"
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:783
 msgid "Command palette"
@@ -1261,6 +1238,7 @@ msgstr "Komentovalikoima..."
 msgid ""
 "Commands: `add`, `remove`, `list`, `delete`, `accept`, `leave`, and `reject`."
 msgstr ""
+"Komennot: `add`, `remove`, `list`, `delete`, `accept`, `leave` ja `reject`."
 
 #: packages/lib/services/noteList/defaultListRenderer.ts:24
 msgid "Compact"
@@ -1272,9 +1250,8 @@ msgstr "Valmis"
 
 # If this is used as a command
 #: packages/app-desktop/gui/NoteListItem/utils/prepareViewProps.ts:40
-#, fuzzy
 msgid "Complete to-do"
-msgstr "Suorita tehtävä"
+msgstr "Merkitse tehtävä tehdyksi"
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:12
 #: packages/app-desktop/gui/NotePropertiesDialog.tsx:84
@@ -1290,6 +1267,8 @@ msgid ""
 "Completed with warnings:\n"
 "%s"
 msgstr ""
+"Valmis varoituksin:\n"
+"%s"
 
 #: packages/lib/Synchronizer.ts:209
 msgid "Completed: %s (%s)"
@@ -1345,14 +1324,13 @@ msgstr "Ristiriidat (liitteet)"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:253
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:483
-#, fuzzy
 msgid "Connect to Joplin Cloud"
-msgstr "Joplin Cloud"
+msgstr "Yhdistä Joplin Cloudiin"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:277
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:485
 msgid "Connect using your organisation account"
-msgstr ""
+msgstr "Kirjaudu organisaatiotilillä"
 
 #: packages/lib/utils/joplinCloud/index.ts:224
 msgid "Consolidated billing"
@@ -1361,8 +1339,8 @@ msgstr "Yhdistetty laskutus"
 #: packages/app-desktop/gui/Sidebar/listItemComponents/NoteCount.tsx:11
 msgid "Contains %d note"
 msgid_plural "Contains %d notes"
-msgstr[0] "Sisältää %d muistiinpanoa"
-msgstr[1] "Muunna muistiinpanoksi"
+msgstr[0] "Sisältää %d muistiinpanon"
+msgstr[1] "Sisältää %d muistiinpanoa"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:106
 msgid "Content provided by %s"
@@ -1431,9 +1409,8 @@ msgstr "Kopioi linkin osoite"
 
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:96
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:169
-#, fuzzy
 msgid "Copy link to website"
-msgstr "Joplin verkkosivusto"
+msgstr "Kopioi linkki verkkosivulle"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:122
 #: packages/app-mobile/components/screens/Note/Note.tsx:1359
@@ -1461,9 +1438,8 @@ msgid "Copy token"
 msgstr "Kopioi tunnus"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:640
-#, fuzzy
 msgid "Copy version info"
-msgstr "Näyttää versiotiedot"
+msgstr "Kopioi versiotiedot"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:43
 msgid ""
@@ -1481,13 +1457,13 @@ msgstr ""
 
 #: packages/lib/JoplinServerApi.ts:122
 msgid ""
-"Could not connect to Joplin Server. Please check the Synchronisation options "
-"in the config screen. Full error was:\n"
+"Could not connect to Joplin Server. Please check the Synchronisation options in "
+"the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"Yhteyden muodostaminen Joplinin palvelimelle epäonnistui. Tarkista "
-"synkronoinnin asetukset. Koko virhe oli:\n"
+"Yhteyden muodostaminen Joplinin palvelimelle epäonnistui. Tarkista synkronoinnin "
+"asetukset. Koko virhe oli:\n"
 "\n"
 "%s"
 
@@ -1514,8 +1490,8 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
-"Kutsuun ei voitu vastata. Yritä uudelleen tai tarkista muistikirjan "
-"omistajalta, jakaako hän sitä edelleen.\n"
+"Kutsuun ei voitu vastata. Yritä uudelleen tai tarkista muistikirjan omistajalta, "
+"jakaako hän sitä edelleen.\n"
 "\n"
 "Virhe oli: \"%s\""
 
@@ -1529,8 +1505,8 @@ msgstr "Pääavainta ei voitu päivittää: %s"
 
 #: packages/lib/commands/leaveSharedFolder.ts:33
 msgid ""
-"Could not verify the share status of this notebook - aborting. Please try "
-"again when you are connected to the internet."
+"Could not verify the share status of this notebook - aborting. Please try again "
+"when you are connected to the internet."
 msgstr ""
 "Tämän muistikirjan jaon tilaa ei voitu vahvistaa - keskeytetään. Yritä "
 "uudelleen, kun olet muodostanut yhteyden Internetiin."
@@ -1624,24 +1600,20 @@ msgid "Creates a new to-do."
 msgstr "Luo uuden tehtävän."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:123
-#, fuzzy
 msgid "Creating new note..."
-msgstr "Luodaan uusi %s..."
+msgstr "Luodaan uutta muistiinpanoa..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:123
-#, fuzzy
 msgid "Creating new to-do..."
-msgstr "Luodaan uusi %s..."
+msgstr "Luodaan uutta tehtävää..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:79
-#, fuzzy
 msgid "Creating note \"%s\"..."
-msgstr "Luodaan uusi %s..."
+msgstr "Luodaan muistiinpano \"%s\"..."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:142
-#, fuzzy
 msgid "Creating note."
-msgstr "Luodaan uusi %s..."
+msgstr "Luodaan muistiinpano."
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/ExportDebugReportButton.tsx:29
 msgid "Creating report..."
@@ -1649,11 +1621,11 @@ msgstr "Luodaan raporttia..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:42
 msgid "Ctrl-click to open"
-msgstr ""
+msgstr "Avaa painamalla Ctrl ja napsauttamalla"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/useLinkTooltips.ts:48
 msgid "Ctrl-click to open: %s"
-msgstr ""
+msgstr "Avaa painamalla Ctrl ja napsauttamalla: %s"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:24
 msgid "current match"
@@ -1798,7 +1770,7 @@ msgstr "Poista paikalliset tiedot ja lataa uudelleen synkronointikohteesta"
 
 #: packages/lib/commands/deleteNote.ts:7
 msgid "Delete note"
-msgstr "Poista merkintä"
+msgstr "Poista muistiinpano"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:10
 msgid "Delete notebook"
@@ -1835,21 +1807,20 @@ msgstr "Poista valitut muistiinpanot"
 msgid ""
 "Delete tag \"%s\"?\n"
 "\n"
-"All notes associated with this tag will remain, but the tag will be removed "
-"from all notes."
+"All notes associated with this tag will remain, but the tag will be removed from "
+"all notes."
 msgstr ""
 "Haluatko poistaa tunnisteen “%s”?\n"
 "\n"
-"Kaikki siihen liitetyt muistiinpanot säilyvät, mutta tunniste poistetaan "
-"niistä."
+"Kaikki siihen liitetyt muistiinpanot säilyvät, mutta tunniste poistetaan niistä."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:38
 #: packages/app-mobile/components/side-menu-content.tsx:414
 msgid ""
 "Delete the Inbox notebook?\n"
 "\n"
-"If you delete the inbox notebook, any email that's recently been sent to it "
-"may be lost."
+"If you delete the inbox notebook, any email that's recently been sent to it may "
+"be lost."
 msgstr ""
 "Poistetaanko Saapuneet-muistikirja?\n"
 "\n"
@@ -1858,8 +1829,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:236
 msgid ""
-"Delete this invitation? The recipient will no longer have access to this "
-"shared notebook."
+"Delete this invitation? The recipient will no longer have access to this shared "
+"notebook."
 msgstr ""
 "Poistetaanko tämä kutsu? Vastaanottaja ei voi enää käyttää tätä jaettua "
 "muistikirjaa."
@@ -1971,13 +1942,11 @@ msgstr "Käytöstä poistetut näppäimet"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:200
 #: packages/app-mobile/components/screens/encryption-config.tsx:276
 msgid ""
-"Disabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent unencrypted to the sync target. Do you wish to "
-"continue?"
+"Disabling encryption means *all* your notes and attachments are going to be re-"
+"synchronised and sent unencrypted to the sync target. Do you wish to continue?"
 msgstr ""
-"Salaus poistetaan käytöstä *kaikista* muistiinpanosi ja liitteesi "
-"synkronoidaan uudelleen ja lähetetään salaamattomina synkronointikohteeseen. "
-"Haluatko jatkaa?"
+"Salaus poistetaan käytöstä *kaikista* muistiinpanosi ja liitteesi synkronoidaan "
+"uudelleen ja lähetetään salaamattomina synkronointikohteeseen. Haluatko jatkaa?"
 
 #: packages/app-mobile/components/NoteEditor/ImageEditor/promptRestoreAutosave.ts:19
 msgid "Discard"
@@ -2007,14 +1976,13 @@ msgstr "Näyttää vain ensimmäiset <num> muistiinpanot."
 
 #: packages/app-cli/app/command-ls.ts:31
 msgid ""
-"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-tnt` would display notes and to-dos."
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` for "
+"to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, "
+"while `-tnt` would display notes and to-dos."
 msgstr ""
-"Näyttää vain tietyn tyyppisen kohteen (kohteet). Voi olla `n` "
-"muistiinpanoja, `t` tehtäviä, tai `nt` muistiinpanoja ja tehtäviä (esim. `-"
-"tt` näyttäisi vain tehtävät, kun taas `-tnt` näyttää muistiinpanoja ja "
-"tehtäviä."
+"Näyttää vain tietyn tyyppisen kohteen (kohteet). Voi olla `n` muistiinpanoja, "
+"`t` tehtäviä, tai `nt` muistiinpanoja ja tehtäviä (esim. `-tt` näyttäisi vain "
+"tehtävät, kun taas `-tnt` näyttää muistiinpanoja ja tehtäviä."
 
 #: packages/app-cli/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
@@ -2030,15 +1998,15 @@ msgstr "Näyttää määritetyt pikanäppäimet."
 
 #: packages/app-cli/app/command-cat.ts:14
 msgid "Displays the given note."
-msgstr "Näyttää annetun huomautuksen."
+msgstr "Näyttää annetun muistiinpanon."
 
 #: packages/app-cli/app/command-ls.ts:19
 msgid ""
-"Displays the notes in the current notebook. Use `ls /` to display the list "
-"of notebooks."
+"Displays the notes in the current notebook. Use `ls /` to display the list of "
+"notebooks."
 msgstr ""
-"Näyttää nykyisen muistikirjan muistiinpanot. Käytä `ls /` näyttääksesi "
-"luettelon muistikirjoista."
+"Näyttää nykyisen muistikirjan muistiinpanot. Käytä `ls /` näyttääksesi luettelon "
+"muistikirjoista."
 
 #: packages/app-cli/app/command-help.ts:13
 msgid "Displays usage information."
@@ -2061,17 +2029,15 @@ msgstr "Älä pyydä vahvistusta."
 #: packages/app-cli/app/command-share.ts:66
 #: packages/app-cli/app/command-unpublish.ts:29
 msgid "Do not ask for user confirmation."
-msgstr "Älä pyydä käyttäjän vahvistusta"
+msgstr "Älä pyydä käyttäjän vahvistusta."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:55
 msgid ""
-"Do not lose the password as, for security purposes, this will be the *only* "
-"way to decrypt the data! To enable encryption, please enter your password "
-"below."
+"Do not lose the password as, for security purposes, this will be the *only* way "
+"to decrypt the data! To enable encryption, please enter your password below."
 msgstr ""
 "Älä kadota salasanaa, sillä tämä on turvallisuussyistä *ainoa* tapa purkaa "
-"tietojen salaus! Voit ottaa salauksen käyttöön kirjoittamalla salasanasi "
-"alle."
+"tietojen salaus! Voit ottaa salauksen käyttöön kirjoittamalla salasanasi alle."
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:167
 msgid "Do you find the Joplin web app useful?"
@@ -2083,8 +2049,8 @@ msgstr "Asiakirjaskanneri: Otsikkopohja"
 
 #: packages/app-cli/app/command-share.ts:65
 msgid ""
-"Don't allow the share recipient to write to the shared notebook. Valid only "
-"for the `add` subcommand."
+"Don't allow the share recipient to write to the shared notebook. Valid only for "
+"the `add` subcommand."
 msgstr ""
 "Älä salli vastaanottajan muokata jaettua muistikirjaa. Voimassa vain add-"
 "alikäskylle."
@@ -2193,12 +2159,11 @@ msgstr "Monista valitut muistiinpanot"
 
 #: packages/app-cli/app/command-cp.ts:13
 msgid ""
-"Duplicates the notes matching <note> to [notebook]. If no notebook is "
-"specified the note is duplicated in the current notebook."
+"Duplicates the notes matching <note> to [notebook]. If no notebook is specified "
+"the note is duplicated in the current notebook."
 msgstr ""
 "Kopioi muistiinpanot, jotka vastaavat <note> arvoon [notebook]. Jos mitään "
-"muistikirjaa ei ole määritetty, muistiinpano kopioidaan nykyiseen "
-"muistikirjaan."
+"muistikirjaa ei ole määritetty, muistiinpano kopioidaan nykyiseen muistikirjaan."
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:224
 msgid "Duration: %s"
@@ -2260,9 +2225,8 @@ msgid "Editor"
 msgstr "Editoija"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/Toolbar.tsx:40
-#, fuzzy
 msgid "Editor actions"
-msgstr "Muokkaajan toiminnot"
+msgstr "Editorin toiminnot"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1221
 msgid "Editor font"
@@ -2365,7 +2329,7 @@ msgstr "Ota ABC-muusikkonotaatio käyttöön"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1095
 msgid "Enable audio player"
-msgstr "Ota käyttöön audiosoitin"
+msgstr "Ota äänisoitin käyttöön"
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:82
 msgid "Enable biometrics authentication?"
@@ -2382,7 +2346,7 @@ msgstr "Ota salaus käyttöön"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1118
 msgid "Enable file:// URLs for images and videos"
-msgstr "Ota file:// URL-osoitteet käyttöön kuville ja videoille"
+msgstr "Ota käyttöön file:// URL-osoitteet kuville ja videoille"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1099
 msgid "Enable footnotes"
@@ -2402,11 +2366,11 @@ msgstr "Ota HTML–Markdown-muunnosbanneri käyttöön"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1088
 msgid "Enable Linkify"
-msgstr "Ota käyttöön Linkify"
+msgstr "Ota Linkify käyttöön"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1105
 msgid "Enable markdown emoji"
-msgstr "Ota merkinnän hymiö käyttöön"
+msgstr "Ota Markdown-emojit käyttöön"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1090
 msgid "Enable math expressions"
@@ -2414,7 +2378,7 @@ msgstr "Ota matemaattiset lausekkeet käyttöön"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1092
 msgid "Enable Mermaid diagrams support"
-msgstr "Ota Mermaid kaavioiden tuki käyttöön"
+msgstr "Ota Mermaid-kaavioiden tuki käyttöön"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1107
 msgid "Enable multimarkdown table extension"
@@ -2422,7 +2386,7 @@ msgstr "Ota multimarkdown taulukon laajennus käyttöön"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1690
 msgid "Enable note history"
-msgstr "Muistiinpanohistorian ottaminen käyttöön"
+msgstr "Ota muistiinpanohistoria käyttöön"
 
 #: packages/lib/models/settings/builtInMetadata.ts:576
 msgid "Enable optical character recognition (OCR)"
@@ -2434,7 +2398,7 @@ msgstr "Ota käyttöön tai poista käytöstä laajennuksia"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1097
 msgid "Enable PDF viewer"
-msgstr "Ota käyttöön PDF katseluohjelma"
+msgstr "Ota PDF katseluohjelma käyttöön"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:119
 #: packages/lib/models/settings/builtInMetadata.ts:1044
@@ -2447,11 +2411,11 @@ msgstr "Ota pehmeät tauot käyttöön"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1488
 msgid "Enable spell checking in Markdown editor"
-msgstr "Ota oikeinkirjoituksen tarkistus käyttöön Markdown -editorissa"
+msgstr "Ota käyttöön oikeinkirjoituksen tarkistus Markdown -editorissa"
 
 #: packages/lib/models/settings/builtInMetadata.ts:928
 msgid "Enable spellcheck in the text editor"
-msgstr "Ota oikeinkirjoituksen tarkistus käyttöön tekstieditorissa"
+msgstr "Ota käyttöön oikeinkirjoituksen tarkistus tekstieditorissa"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1100
 msgid "Enable table of contents extension"
@@ -2467,11 +2431,11 @@ msgstr "Ota typografiatuki käyttöön"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1096
 msgid "Enable video player"
-msgstr "Ota käyttöön videosoitin"
+msgstr "Ota videosoitin käyttöön"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:117
 msgid "Enable Web Clipper Service"
-msgstr "Ota käyttöön Web Clipper työkalu"
+msgstr "Ota Web Clipper-työkalu käyttöön"
 
 #: packages/app-cli/app/command-e2ee.ts:129
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:176
@@ -2491,17 +2455,17 @@ msgstr ""
 
 #: packages/lib/models/settings/builtInMetadata.ts:787
 msgid ""
-"Enables Markdown pattern replacement in the Rich Text Editor. For example, "
-"when enabled, typing **bold** creates bold text."
+"Enables Markdown pattern replacement in the Rich Text Editor. For example, when "
+"enabled, typing **bold** creates bold text."
 msgstr ""
 "Ottaa käyttöön Markdown-kuviomerkintöjen korvauksen Rich Text -editorissa. "
-"Esimerkiksi, kun toiminto on käytössä, kirjoittamalla **lihavoi** teksti "
-"muuttuu lihavoiduksi."
+"Esimerkiksi, kun toiminto on käytössä, kirjoittamalla **lihavoi** teksti muuttuu "
+"lihavoiduksi."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:50
 msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent encrypted to the sync target."
+"Enabling encryption means *all* your notes and attachments are going to be re-"
+"synchronised and sent encrypted to the sync target."
 msgstr ""
 "Salauksen ottaminen käyttöön tarkoittaa, että *kaikki* muistiinpanosi ja "
 "liitteesi synkronoidaan uudelleen ja lähetetään salattuina "
@@ -2550,8 +2514,7 @@ msgstr "Äänikirjoituksen lopettaminen"
 msgid "Enter code here"
 msgstr "Syötä koodi tähän"
 
-#: packages/app-cli/app/command-e2ee.ts:40
-#: packages/app-cli/app/command-e2ee.ts:86
+#: packages/app-cli/app/command-e2ee.ts:40 packages/app-cli/app/command-e2ee.ts:86
 msgid "Enter master password:"
 msgstr "Kirjoita pääsalasana:"
 
@@ -2609,8 +2572,8 @@ msgstr "Virhe: %s"
 
 #: packages/lib/components/shared/config/config-shared.ts:101
 msgid ""
-"Error. Please check that URL, username, password, etc. are correct and that "
-"the sync target is accessible. The reported error was:"
+"Error. Please check that URL, username, password, etc. are correct and that the "
+"sync target is accessible. The reported error was:"
 msgstr ""
 "Virhe. Tarkista URL osoite, käyttäjänimi, salasana jne. ovat oikeita ja "
 "synkronointi kohde on käytettävissä. Raportoitu virhe oli:"
@@ -2621,21 +2584,19 @@ msgstr "Vain virheet"
 
 #: packages/lib/services/interop/InteropService.ts:80
 msgid "Evernote Export File (as HTML)"
-msgstr "Evernote vie tiedosto (kuten HTML)"
+msgstr "Evernote vie tiedosto (HTML)"
 
 #: packages/lib/services/interop/InteropService.ts:89
 msgid "Evernote Export File (as Markdown)"
-msgstr "Evernote vie tiedosto (kuten Markdown)"
+msgstr "Evernote vie tiedosto (Markdown)"
 
 #: packages/lib/services/interop/InteropService.ts:98
-#, fuzzy
 msgid "Evernote Export Files (Directory, as HTML)"
-msgstr "Evernote vie tiedosto (kuten HTML)"
+msgstr "Evernote vie tiedosto (hakemisto, HTML)"
 
 #: packages/lib/services/interop/InteropService.ts:107
-#, fuzzy
 msgid "Evernote Export Files (Directory, as Markdown)"
-msgstr "Evernote vie tiedosto (kuten Markdown)"
+msgstr "Evernote vie tiedosto (hakemisto, Markdown)"
 
 #: packages/app-cli/app/command-exit.ts:11
 msgid "Exits the application."
@@ -2672,7 +2633,7 @@ msgstr "Vie kaikki"
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.test.tsx:38
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:20
 msgid "Export all notes as JEX"
-msgstr "Vie kaikki muistiot JEX-muodossa"
+msgstr "Vie kaikki muistiinpanot JEX-muodossa"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:205
 msgid "Export debug report"
@@ -2709,15 +2670,15 @@ msgstr "Viedään..."
 
 #: packages/app-cli/app/command-export.ts:14
 msgid ""
-"Exports Joplin data to the given path. By default, it will export the "
-"complete database including notebooks, notes, tags and resources."
+"Exports Joplin data to the given path. By default, it will export the complete "
+"database including notebooks, notes, tags and resources."
 msgstr ""
-"Vie Joplinin tiedot annettuun polkuun. Oletuksena se vie koko tietokannan, "
-"joka sisältää muistikirjat, muistiinpanot, tunnisteet ja resurssit."
+"Vie Joplinin tiedot annettuun polkuun. Oletuksena se vie koko tietokannan, joka "
+"sisältää muistikirjat, muistiinpanot, tunnisteet ja resurssit."
 
 #: packages/app-cli/app/command-export.ts:24
 msgid "Exports only the given note."
-msgstr "Vie vain annetun huomautuksen."
+msgstr "Vie vain annetun muistiinpanon."
 
 #: packages/app-cli/app/command-export.ts:24
 msgid "Exports only the given notebook."
@@ -2725,25 +2686,25 @@ msgstr "Vie vain annetun muistikirjan."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1661
 msgid "Fail-safe"
-msgstr "Vikatila"
+msgstr "Vikasietotila"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1662
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Vikatila: Älä pyyhi paikallisia tietoja, kun synkronointikohde on tyhjä "
+"Vikasietotila: Älä pyyhi paikallisia tietoja, kun synkronointikohde on tyhjä "
 "(usein virheellisen määritysvirheen tai virheen seurauksena)"
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:134
 msgid ""
-"Fail-safe: Sync was interrupted to prevent data loss, because the sync "
-"target is empty or damaged. To override this behaviour disable the fail-safe "
-"in the sync settings."
+"Fail-safe: Sync was interrupted to prevent data loss, because the sync target is "
+"empty or damaged. To override this behaviour disable the fail-safe in the sync "
+"settings."
 msgstr ""
-"Vikatila: Synkronointi keskeytettiin tietojen menetyksen estämiseksi, koska "
+"Vikasietotila: Synkronointi keskeytettiin tietojen menetyksen estämiseksi, koska "
 "synkronointikohde on tyhjä tai vahingoittunut. Jos haluat ohittaa tämän "
-"toiminnon, poista vikatilan esto käytöstä synkronointiasetuksista."
+"toiminnon, poista vikasietotilan esto käytöstä synkronointiasetuksista."
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:29
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:54
@@ -2858,8 +2819,7 @@ msgstr ""
 "liittyvistä ohjeista saat seuraavista ohjeista:"
 
 #: packages/app-cli/app/command-help.ts:85
-msgid ""
-"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgid "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 "Saat luettelon pikanäppäimistä ja config vaihtoehtoja, kirjoita `help keymap`"
 
@@ -2906,6 +2866,8 @@ msgstr[1] "Luodaan linkkejä..."
 #: packages/lib/models/Setting.ts:1395
 msgid "Geolocation, spellcheck, editor toolbar, image resize"
 msgstr ""
+"Maantieteellinen sijainti, oikeinkirjoituksen tarkistus, työkalupalkki muokkaus, "
+"kuvan koon muuttaminen"
 
 #: packages/lib/utils/joplinCloud/index.ts:461
 msgid "Get a quote"
@@ -2921,13 +2883,12 @@ msgstr "Hanki ennakkojulkaisuja, kun etsit päivityksiä"
 
 #: packages/app-cli/app/command-config.ts:14
 msgid ""
-"Gets or sets a config value. If [value] is not provided, it will show the "
-"value of [name]. If neither [name] nor [value] is provided, it will list the "
-"current configuration."
+"Gets or sets a config value. If [value] is not provided, it will show the value "
+"of [name]. If neither [name] nor [value] is provided, it will list the current "
+"configuration."
 msgstr ""
 "Hakee tai määrittää määritysarvon. Jos [value] ei anneta, se näyttää arvon "
-"[name]. Jos [name] tai [value] ei ole annettu, se luettelee nykyisen "
-"kokoonpanon."
+"[name]. Jos [name] tai [value] ei ole annettu, se luettelee nykyisen kokoonpanon."
 
 #: packages/app-mobile/services/voiceTyping/whisper.ts:189
 msgid "Glossary:"
@@ -2948,7 +2909,7 @@ msgstr "Siirry Joplin Cloud -profiiliin"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:12
 msgid "Go to line"
-msgstr ""
+msgstr "Mene riville"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:1237
 msgid "Go to source URL"
@@ -3073,15 +3034,19 @@ msgstr "Käyttämättömänä"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1509
 msgid ""
-"If an image attachment is on its own line and followed by a blank line, it "
-"will be rendered just below its Markdown source."
+"If an image attachment is on its own line and followed by a blank line, it will "
+"be rendered just below its Markdown source."
 msgstr ""
+"Jos kuvaliite on omalla rivillään ja sen jälkeen on tyhjä rivi, se renderöidään "
+"suoraan sen Markdown-koodin alapuolelle."
 
 #: packages/lib/services/joplinCloudUtils.ts:37
 msgid ""
 "If you have already authorised, please wait for the application to sync to "
 "Joplin Cloud."
 msgstr ""
+"Jos olet jo valtuuttanut sovelluksen, odota, että se synkronoituu Joplin "
+"Cloudiin."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:184
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:360
@@ -3104,8 +3069,7 @@ msgstr "Kuvat"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:181
 #: packages/app-desktop/gui/MenuBar.tsx:598
-#: packages/app-desktop/gui/MenuBar.tsx:655
-#: packages/app-desktop/gui/Root.tsx:166
+#: packages/app-desktop/gui/MenuBar.tsx:655 packages/app-desktop/gui/Root.tsx:166
 msgid "Import"
 msgstr "Tuo"
 
@@ -3118,14 +3082,16 @@ msgid ""
 "Import failed. Make sure a JEX file was selected.\n"
 "Details: %s"
 msgstr ""
+"Tuonti epäonnistui. Varmista, että valitsit JEX-tiedoston.\n"
+"\vLisätiedot: %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:21
 msgid "Import from JEX"
-msgstr ""
+msgstr "Tuo JEX-tiedostosta"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteImportButton.tsx:22
 msgid "Import notes from a JEX (Joplin Export) file."
-msgstr ""
+msgstr "Tuo muistiinpanoja JEX (Joplin Export)-tiedostosta."
 
 #: packages/lib/models/Setting.ts:1398
 msgid "Import or export your data"
@@ -3157,9 +3123,9 @@ msgstr "Tuo tiedot Jopliniin."
 
 #: packages/lib/models/settings/builtInMetadata.ts:468
 msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
+"In \"Manual\" mode, attachments are downloaded only when you click on them. In "
+"\"Auto\", they are downloaded when you open the note. In \"Always\", all the "
+"attachments are downloaded whether you open the note or not."
 msgstr ""
 "Manuaalisessa tilassa liitteet ladataan vain, kun napsautat niitä. \"Auto\" "
 "valinnassa ne ladataan, kun avaat muistiinpanon. \"Aina\" valinnassa kaikki "
@@ -3167,14 +3133,14 @@ msgstr ""
 
 #: packages/app-cli/app/command-help.ts:78
 msgid ""
-"In any command, a note or notebook can be referred to by title or ID, or "
-"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
-"note or notebook. `$c` can be used to refer to the currently selected item."
+"In any command, a note or notebook can be referred to by title or ID, or using "
+"the shortcuts `$n` or `$b` for, respectively, the currently selected note or "
+"notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 "Missä tahansa komennossa muistiinpanoon tai muistikirjaan voidaan viitata "
 "otsikon tai tunnuksen avulla tai käyttämällä pikakuvakkeita `$n` tai `$b` "
-"vastaavasti valitulle muistilappulle tai muistikirjalle. `$c` voidaan "
-"käyttää viittaamaan valittuun kohtaan."
+"vastaavasti valitulle muistilappulle tai muistikirjalle. `$c` voidaan käyttää "
+"viittaamaan valittuun kohtaan."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:346
 msgid ""
@@ -3187,13 +3153,13 @@ msgid ""
 "2. Click \"%s\".\n"
 "3. Let it run to completion. While it runs, avoid changing any note on your "
 "other devices, to avoid conflicts.\n"
-"4. Once sync is done on this device, sync all your other devices and let it "
-"run to completion.\n"
+"4. Once sync is done on this device, sync all your other devices and let it run "
+"to completion.\n"
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"Tätä varten koko tietojoukko on salattava ja synkronoitava, joten se on "
-"parasta suorittaa yön yli.\n"
+"Tätä varten koko tietojoukko on salattava ja synkronoitava, joten se on parasta "
+"suorittaa yön yli.\n"
 "\n"
 "Aloita noudattamalla seuraavia ohjeita:\n"
 "\n"
@@ -3201,23 +3167,23 @@ msgstr ""
 "2. Napsauta \"%s\".\n"
 "3. Anna sen ajaa loppuun. Kun se suoritetaan, vältä muiden laitteiden "
 "muistiinpanojen vaihtamista ristiriitojen välttämiseksi.\n"
-"4. Kun synkronointi on tehty tällä laitteella, synkronoi kaikki muut "
-"laitteesi ja anna sen suorittaa loppuun.\n"
+"4. Kun synkronointi on tehty tällä laitteella, synkronoi kaikki muut laitteesi "
+"ja anna sen suorittaa loppuun.\n"
 "\n"
 "Tärkeää: sinun tarvitsee suorittaa tämä kerran vain yhdellä laitteella."
 
 #: packages/lib/services/synchronizer/syncInfoUtils.ts:499
 msgid "In order to synchronise, please upgrade your application to version %s+"
-msgstr "Synkronointia varten päivitä sovelluksesi versioon %s tai uudempaan."
+msgstr "Synkronointia varten päivitä sovelluksesi versioon %s tai uudempaan"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:143
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:245
 msgid ""
-"In order to use file system synchronisation your permission to write to "
-"external storage is required."
+"In order to use file system synchronisation your permission to write to external "
+"storage is required."
 msgstr ""
-"Tiedostojärjestelmän synkronoinnin käyttäminen edellyttää oikeutta "
-"kirjoittaa ulkoiseen tallennustilaan."
+"Tiedostojärjestelmän synkronoinnin käyttäminen edellyttää oikeutta kirjoittaa "
+"ulkoiseen tallennustilaan."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid "In order to use the web clipper, you need to do the following:"
@@ -3237,7 +3203,7 @@ msgstr "Saapuvat jaot:"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/PluginChips.tsx:69
 msgid "Incompatible"
-msgstr ""
+msgstr "Yhteensopimaton"
 
 #: packages/app-desktop/gui/NoteList/utils/useOnKeyDown.ts:174
 msgid "Incomplete"
@@ -3379,8 +3345,8 @@ msgstr "Liity seuraamme %s-palvelussa"
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:310
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:114
 msgid ""
-"Joplin can synchronise your notes using various providers. Select one from "
-"the list below."
+"Joplin can synchronise your notes using various providers. Select one from the "
+"list below."
 msgstr ""
 "Joplin voi synkronoida muistiinpanosi eri palveluntarjoajien avulla. Valitse "
 "yksi alla olevasta luettelosta."
@@ -3401,8 +3367,8 @@ msgstr "Joplin työpöytäsovellus"
 
 #: packages/app-desktop/bridge.ts:480
 msgid ""
-"Joplin doesn't recognise the %s extension. Opening this file could be "
-"dangerous. What would you like to do?"
+"Joplin doesn't recognise the %s extension. Opening this file could be dangerous. "
+"What would you like to do?"
 msgstr ""
 "Joplin ei tunnista tiedostopäätettä %s. Tiedoston avaaminen voi olla "
 "vaarallista. Mitä haluat tehdä?"
@@ -3419,9 +3385,9 @@ msgstr "Joplin vie tiedosto"
 
 #: packages/lib/services/ReportService.ts:254
 msgid ""
-"Joplin failed to decrypt these items multiple times, possibly because they "
-"are corrupted or too large. These items will remain on the device but Joplin "
-"will no longer attempt to decrypt them."
+"Joplin failed to decrypt these items multiple times, possibly because they are "
+"corrupted or too large. These items will remain on the device but Joplin will no "
+"longer attempt to decrypt them."
 msgstr ""
 "Joplin ei onnistunut purkamaan näitä kohteita useita kertoja, mahdollisesti "
 "siksi, että ne ovat vioittuneet tai liian suuria. Nämä kohteet pysyvät "
@@ -3475,19 +3441,19 @@ msgstr "Joplin SSO-todennus"
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:572
 msgid ""
-"Joplin supports saving the location at which notes are saved or created. Do "
-"you want to enable it? This can be changed at any time in settings."
+"Joplin supports saving the location at which notes are saved or created. Do you "
+"want to enable it? This can be changed at any time in settings."
 msgstr ""
-"Joplin tukee muistiinpanojen tallennus- tai luontipaikan tallentamista. "
-"Haluatko ottaa tämän käyttöön? Asetuksia voi muuttaa milloin tahansa."
+"Joplin tukee muistiinpanojen tallennus- tai luontipaikan tallentamista. Haluatko "
+"ottaa tämän käyttöön? Asetuksia voi muuttaa milloin tahansa."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid ""
-"Joplin Web Clipper allows saving web pages and screenshots from your browser "
-"to Joplin."
+"Joplin Web Clipper allows saving web pages and screenshots from your browser to "
+"Joplin."
 msgstr ""
-"Joplin Web Clipper mahdollistaa verkkosivujen ja kuvakaappausten "
-"tallentamisen selaimesta Jopliniin."
+"Joplin Web Clipper mahdollistaa verkkosivujen ja kuvakaappausten tallentamisen "
+"selaimesta Jopliniin."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:633
 msgid "Joplin website"
@@ -3496,12 +3462,12 @@ msgstr "Joplin verkkosivusto"
 #: packages/app-mobile/components/SyncWizard/SyncWizard.tsx:119
 #: packages/lib/SyncTargetJoplinCloud.ts:35
 msgid ""
-"Joplin's own sync service. Also gives access to Joplin-specific features "
-"such as publishing notes or collaborating on notebooks with others."
+"Joplin's own sync service. Also gives access to Joplin-specific features such as "
+"publishing notes or collaborating on notebooks with others."
 msgstr ""
-"Joplinin oma synkronointipalvelu. Voit myös käyttää Joplin "
-"erityisominaisuuksia, kuten muistiinpanojen julkaisemista tai muistikirjojen "
-"yhteiskäyttöä muiden kanssa."
+"Joplinin oma synkronointipalvelu. Voit myös käyttää Joplin erityisominaisuuksia, "
+"kuten muistiinpanojen julkaisemista tai muistikirjojen yhteiskäyttöä muiden "
+"kanssa."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1702
 msgid "Keep note history for"
@@ -3529,7 +3495,7 @@ msgstr "Avainnippu tuettu: %s"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "KEYS"
-msgstr ""
+msgstr "AVAIMET"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:74
 msgid "Keys that need upgrading"
@@ -3584,7 +3550,7 @@ msgstr "Lue lisää"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1962
 msgid "Leave it blank to download the language files from the default website"
-msgstr "Jätä kenttä tyhjäksi ladataksesi kielitiedostot oletussivustolta."
+msgstr "Jätä kenttä tyhjäksi ladataksesi kielitiedostot oletussivustolta"
 
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:90
 msgid "Leave notebook"
@@ -3608,8 +3574,8 @@ msgstr "Vaalea"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:110
 msgid ""
-"Like any software you install, plugins can potentially cause security issues "
-"or data loss."
+"Like any software you install, plugins can potentially cause security issues or "
+"data loss."
 msgstr ""
 "Kuten mikä tahansa asentamasi ohjelmisto, laajennukset voivat mahdollisesti "
 "aiheuttaa tietoturvaongelmia tai tietojen menetyksen."
@@ -3674,12 +3640,11 @@ msgstr "Sijainti"
 
 #: packages/app-cli/app/command-sync.ts:156
 msgid ""
-"Lock file is already being hold. If you know that no synchronisation is "
-"taking place, you may delete the lock file at \"%s\" and resume the "
-"operation."
+"Lock file is already being hold. If you know that no synchronisation is taking "
+"place, you may delete the lock file at \"%s\" and resume the operation."
 msgstr ""
-"Lukitustiedosto on jo pidossa. Jos tiedät, että synkronointia ei tapahdu, "
-"voit poistaa lukitustiedoston kohdasta \"%s\" ja jatkaa toimintaa."
+"Lukitustiedosto on jo pidossa. Jos tiedät, että synkronointia ei tapahdu, voit "
+"poistaa lukitustiedoston kohdasta \"%s\" ja jatkaa toimintaa."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:578
 #: packages/app-mobile/components/screens/LogScreen.tsx:215
@@ -3694,7 +3659,7 @@ msgstr "Kirjaudu verkkoselaimella"
 
 #: packages/app-desktop/gui/MainScreen.tsx:592
 msgid "Login to Joplin Cloud."
-msgstr "Kirjaudu Joplin Cloud:iin"
+msgstr "Kirjaudu Joplin Cloud:iin."
 
 #: packages/app-mobile/components/screens/dropbox-login.tsx:59
 msgid "Login with Dropbox"
@@ -3757,6 +3722,8 @@ msgid ""
 "Manage your profiles. You can rename or delete profiles. The active profile "
 "cannot be deleted."
 msgstr ""
+"Hallitse profiilejasi. Voit uudelleennimetä tai poistaa profiileja. Aktiivista "
+"profiilia ei voi poistaa."
 
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:19
@@ -3785,23 +3752,20 @@ msgstr "Markdown + Front Matter"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:372
 #: packages/app-mobile/components/NoteEditor/NoteEditor.tsx:307
-#, fuzzy
 msgid "Markdown editor"
-msgstr "Markdown"
+msgstr "Markdown editori"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1519
-#, fuzzy
 msgid "Markdown editor: Highlight active line"
-msgstr "Markdown"
+msgstr "Markdown editori: Korosta aktiivinen rivi"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1508
-#, fuzzy
 msgid "Markdown editor: Render images"
-msgstr "Markdown"
+msgstr "Markdown editori: Renderöi kuvat"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1498
 msgid "Markdown editor: Render markup in editor"
-msgstr ""
+msgstr "Markdown editori: Renderöi markup editorissa"
 
 #: packages/app-cli/app/command-done.ts:15
 msgid "Marks a to-do as done."
@@ -3832,11 +3796,11 @@ msgstr "Pääsalasana:"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/utils/localisation.ts:19
 msgid "match case"
-msgstr ""
+msgstr "huomioi kirjainkoko"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:98
 msgid "Math"
-msgstr "Matikka"
+msgstr "Matematiikka"
 
 #: packages/lib/models/settings/builtInMetadata.ts:497
 msgid "Max concurrent connections"
@@ -3859,7 +3823,6 @@ msgid "Media player, math, diagrams, table of contents"
 msgstr "Mediatoistin, matematiikka, kaaviot, sisällysluettelo"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1291
-#, fuzzy
 msgid "Medium"
 msgstr "Keskikokoinen"
 
@@ -3881,7 +3844,7 @@ msgstr "Pääavaimet puuttuvat"
 
 #: packages/app-mobile/components/voiceTyping/AudioRecordingBanner.tsx:121
 msgid "Missing permission to record audio."
-msgstr "Äänen tallentamisen käyttöoikeus puuttuu"
+msgstr "Äänen tallentamisen käyttöoikeus puuttuu."
 
 #: packages/app-cli/app/cli-utils.js:112
 msgid "Missing required argument: %s"
@@ -3908,17 +3871,16 @@ msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr "Useampi kuin yksi kohta vastaa \"%s\". Tarkenna kyselyäsi."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:115
-msgid ""
-"Most plugins have source code available for review on the plugin website."
+msgid "Most plugins have source code available for review on the plugin website."
 msgstr ""
-"Useimmilla laajennuksilla on lähdekoodi saatavilla tarkasteltavaksi "
-"laajennuksen verkkosivustolla."
+"Useimmilla laajennuksilla on lähdekoodi saatavilla tarkasteltavaksi laajennuksen "
+"verkkosivustolla."
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:601
 msgid "Move %d note to notebook \"%s\"?"
 msgid_plural "Move %d notes to notebook \"%s\"?"
-msgstr[0] "Siirrä %d muistiinpanot muistikirjaan \"%s\"?"
-msgstr[1] "Siirrä %d muistiinpanot muistikirjaan \"%s\"?"
+msgstr[0] "Siirrä %d muistiinpano muistikirjaan \"%s\"?"
+msgstr[1] "Siirrä %d muistiinpanoa muistikirjaan \"%s\"?"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/deleteFolder.ts:34
 msgid ""
@@ -3929,8 +3891,8 @@ msgid ""
 msgstr ""
 "Siirretäänkö %d muistikirjaa roskakoriin?\n"
 "\n"
-"Kaikki näiden muistikirjojen muistiinpanot ja alimuistikirjat siirretään "
-"myös roskakoriin."
+"Kaikki näiden muistikirjojen muistiinpanot ja alimuistikirjat siirretään myös "
+"roskakoriin."
 
 #: packages/app-desktop/gui/ResizableLayout/MoveButtons.tsx:73
 msgid "Move down"
@@ -3946,8 +3908,7 @@ msgstr "Siirry vasemmalle"
 msgid ""
 "Move notebook \"%s\" to the trash?\n"
 "\n"
-"All notes and sub-notebooks within this notebook will also be moved to the "
-"trash."
+"All notes and sub-notebooks within this notebook will also be moved to the trash."
 msgstr ""
 "Siirretäänkö muistikirja \"%s\" roskakoriin?\n"
 "\n"
@@ -3978,8 +3939,7 @@ msgstr "Siirry ylös"
 msgid "Moves the given <item> to [notebook]"
 msgstr "Siirtää annetun <item> [notebook]"
 
-#: packages/app-cli/app/cli-utils.js:177
-#: packages/app-cli/app/setupCommand.ts:23
+#: packages/app-cli/app/cli-utils.js:177 packages/app-cli/app/setupCommand.ts:23
 msgid "n"
 msgstr "e"
 
@@ -4160,8 +4120,7 @@ msgstr "Ei tunnisteita"
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"Tekstieditoria ei ole määritetty. Aseta se käyttäen `config editor <editor-"
-"path>`"
+"Tekstieditoria ei ole määritetty. Aseta se käyttäen `config editor <editor-path>`"
 
 #: packages/app-desktop/gui/UpdateNotification/UpdateNotification.tsx:63
 msgid "No updates available"
@@ -4210,17 +4169,17 @@ msgstr "Ei hyödyllinen"
 #: packages/server/src/models/UserModel.ts:331
 #: packages/server/src/models/UserModel.ts:348
 msgid "note"
-msgstr "merkintä"
+msgstr "muistiinpano"
 
 #: packages/app-desktop/gui/MainScreen.tsx:678
 #: packages/app-desktop/gui/NoteToolbar/NoteToolbar.tsx:41
 #: packages/lib/models/Setting.ts:1355
 msgid "Note"
-msgstr "Huomautus"
+msgstr "Muistiinpano"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1766
 msgid "Note area growth factor"
-msgstr "Huomautus alueen kasvutekijä"
+msgstr "Muistiinpanoalueen kasvukerroin"
 
 #: packages/app-desktop/gui/Root.tsx:168
 msgid "Note attachments"
@@ -4236,7 +4195,7 @@ msgstr "Muistiinpanon kappale"
 
 #: packages/app-cli/app/command-edit.ts:47
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "Huomautusta ei ole: \"%s\". Luodaanko se?"
+msgstr "Muistiinpanoa \"%s\" ei ole olemassa. Luodaanko se?"
 
 #: packages/app-mobile/components/NoteEditor/MarkdownEditor.tsx:92
 #: packages/app-mobile/components/NoteEditor/RichTextEditor.tsx:68
@@ -4245,7 +4204,7 @@ msgstr "Muistiinpano editori"
 
 #: packages/app-cli/app/command-edit.ts:98
 msgid "Note has been saved."
-msgstr "Huomautus on tallennettu."
+msgstr "Muistiinpano on tallennettu."
 
 #: packages/app-mobile/components/screens/NoteRevisionViewer.tsx:257
 msgid "Note history"
@@ -4262,7 +4221,7 @@ msgstr "Muistiinpanohistoria on tyhjennetty."
 
 #: packages/app-cli/app/command-done.ts:23
 msgid "Note is not a to-do: \"%s\""
-msgstr "Huomautus ei ole tehtävä: \"%s\""
+msgstr "Muistiinpano ei ole tehtävä: \"%s\""
 
 #: packages/app-desktop/gui/MainScreen.tsx:128
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:9
@@ -4273,7 +4232,7 @@ msgstr "Muistiinpanot"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1751
 msgid "Note list growth factor"
-msgstr "Huomautus luettelon kasvutekijä"
+msgstr "Muistiinpanoluettelon kasvukerroin"
 
 #: packages/app-desktop/gui/MenuBar.tsx:746
 msgid "Note list style"
@@ -4307,10 +4266,8 @@ msgid "Note: Does not work in all desktop environments."
 msgstr "Huomautus: Ei toimi kaikissa työpöytäympäristöissä."
 
 #: packages/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage.ts:6
-msgid ""
-"Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr ""
-"Huomautus: Kun muistiinpano on jaettu, sitä ei enää salata palvelimella."
+msgid "Note: When a note is shared, it will no longer be encrypted on the server."
+msgstr "Huomautus: Kun muistiinpano on jaettu, sitä ei enää salata palvelimella."
 
 #: packages/app-desktop/gui/MenuBar.tsx:831
 msgid "Note&book"
@@ -4379,10 +4336,9 @@ msgstr "OCR: Kielitietojen URL-osoite tai polku"
 msgid "OCR: Search in extracted content"
 msgstr "OCR: Hae poimitusta sisällöstä"
 
-#: packages/app-cli/app/utils/shimInitCli.ts:12
-#: packages/app-desktop/bridge.ts:392 packages/app-desktop/bridge.ts:405
-#: packages/app-desktop/bridge.ts:419 packages/app-desktop/bridge.ts:435
-#: packages/app-desktop/bridge.ts:556
+#: packages/app-cli/app/utils/shimInitCli.ts:12 packages/app-desktop/bridge.ts:392
+#: packages/app-desktop/bridge.ts:405 packages/app-desktop/bridge.ts:419
+#: packages/app-desktop/bridge.ts:435 packages/app-desktop/bridge.ts:556
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:34
 #: packages/app-desktop/gui/DialogButtonRow.tsx:80
 #: packages/app-desktop/gui/MenuBar.tsx:550
@@ -4426,15 +4382,14 @@ msgstr "Yksi pääavaimista käyttää vanhentunutta salaustapaa."
 
 #: packages/app-cli/app/gui/NoteWidget.js:48
 msgid ""
-"One or more items are currently encrypted and you may need to supply a "
-"master password. To do so please type `e2ee decrypt`. If you have already "
-"supplied the password, the encrypted items are being decrypted in the "
-"background and will be available soon."
+"One or more items are currently encrypted and you may need to supply a master "
+"password. To do so please type `e2ee decrypt`. If you have already supplied the "
+"password, the encrypted items are being decrypted in the background and will be "
+"available soon."
 msgstr ""
 "Yksi tai useampi kohde on tällä hetkellä salattu, sinun on ehkä annettava "
-"pääsalasana. Voit tehdä niin kirjoittamalla `e2ee decrypt`. Jos olet jo "
-"antanut salasanan, salatut kohteet puretaan taustalla ja ne ovat pian "
-"saatavilla."
+"pääsalasana. Voit tehdä niin kirjoittamalla `e2ee decrypt`. Jos olet jo antanut "
+"salasanan, salatut kohteet puretaan taustalla ja ne ovat pian saatavilla."
 
 #: packages/app-desktop/gui/MainScreen.tsx:577
 msgid "One or more master keys need a password."
@@ -4527,21 +4482,19 @@ msgstr "Avaa pudotusvalikko"
 
 #: packages/app-mobile/components/NoteItem.tsx:164
 msgid "Opens note"
-msgstr "Avaa muistio"
+msgstr "Avaa muistiinpano"
 
 #: packages/app-mobile/components/side-menu-content.tsx:278
 msgid "Opens notebook"
-msgstr "Avaa muistiinpano"
+msgstr "Avaa muistikirja"
 
-#: packages/app-cli/app/command-e2ee.ts:42
-#: packages/app-cli/app/command-e2ee.ts:88
+#: packages/app-cli/app/command-e2ee.ts:42 packages/app-cli/app/command-e2ee.ts:88
 #: packages/app-cli/app/command-e2ee.ts:98
 msgid "Operation cancelled"
 msgstr "Toiminto peruutettu"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:28
-#: packages/app-desktop/gui/MenuBar.tsx:512
-#: packages/app-desktop/gui/Root.tsx:167
+#: packages/app-desktop/gui/MenuBar.tsx:512 packages/app-desktop/gui/Root.tsx:167
 msgid "Options"
 msgstr "Asetukset"
 
@@ -4550,6 +4503,8 @@ msgid ""
 "Options that should be used whenever rendering ABC code. It must be a JSON5 "
 "object. The full list of options is available at: %s"
 msgstr ""
+"Asetukset, joita tulisi käyttää aina, kun ABC-koodia renderöidään. Sen on oltava "
+"JSON5-objekti. Täydellinen luettelo asetuksista löytyy osoitteesta: %s"
 
 #: packages/app-mobile/components/NoteEditor/commandDeclarations.ts:103
 msgid "Ordered list"
@@ -4642,7 +4597,7 @@ msgid ""
 msgstr ""
 "Poistetaanko muistikirja \"%s\" pysyvästi?\n"
 "\n"
-"Kaikki tämän muistikirjan muistiot ja alimuistikirjat poistetaan pysyvästi."
+"Kaikki tämän muistikirjan muistiinpanot ja alimuistikirjat poistetaan pysyvästi."
 
 #: packages/lib/models/Note.ts:967
 msgid "Permanently delete this note?"
@@ -4652,7 +4607,7 @@ msgstr[1] "Poista muistiinpanot pysyvästi?"
 
 #: packages/app-cli/app/command-rmbook.ts:20
 msgid "Permanently deletes the notebook, skipping the trash."
-msgstr "Poistaa muistikirjan pysyvästi ohittaen roskakorin"
+msgstr "Poistaa muistikirjan pysyvästi ohittaen roskakorin."
 
 #: packages/app-mobile/components/screens/DocumentScanner/DocumentScanner.tsx:105
 msgid "Photo %d"
@@ -4660,45 +4615,39 @@ msgstr "Kuva %d"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:261
 msgid ""
-"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
-"below."
-msgstr ""
-"Jatka napsauttamalla \"%s\" tai aseta salasana oheiseen \"%s\" luetteloon."
+"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list below."
+msgstr "Jatka napsauttamalla \"%s\" tai aseta salasana oheiseen \"%s\" luetteloon."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:64
-msgid ""
-"Please confirm that you would like to re-encrypt your complete database."
+msgid "Please confirm that you would like to re-encrypt your complete database."
 msgstr "Varmista, että haluat salata koko tietokannan uudelleen."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:213
 msgid ""
-"Please enter your password in the master key list below before upgrading the "
-"key."
+"Please enter your password in the master key list below before upgrading the key."
 msgstr ""
-"Kirjoita salasana alla olevaan pääavainluetteloon ennen avaimen "
-"päivittämistä."
+"Kirjoita salasana alla olevaan pääavainluetteloon ennen avaimen päivittämistä."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:370
 msgid ""
-"Please note that if it is a large notebook, it may take a few minutes for "
-"all the notes to show up on the recipient's device."
+"Please note that if it is a large notebook, it may take a few minutes for all "
+"the notes to show up on the recipient's device."
 msgstr ""
 "Huomaa, että jos kyseessä on suuri muistikirja, voi kestää minuutteja, ennen "
 "kuin kaikki muistiinpanot näkyvät vastaanottajan laitteessa."
 
 #: packages/lib/onedrive-api-node-utils.js:118
 msgid ""
-"Please open the following URL in your browser to authenticate the "
-"application. The application will create a directory in \"Apps/Joplin\" and "
-"will only read and write files in this directory. It will have no access to "
-"any files outside this directory nor to any other personal data. No data "
-"will be shared with any third party."
+"Please open the following URL in your browser to authenticate the application. "
+"The application will create a directory in \"Apps/Joplin\" and will only read "
+"and write files in this directory. It will have no access to any files outside "
+"this directory nor to any other personal data. No data will be shared with any "
+"third party."
 msgstr ""
 "Todenna sovellus avaamalla selaimessasi seuraava URL-osoite. Sovellus luo "
-"hakemiston \"Sovellukset / Joplin\" ja lukee ja kirjoittaa vain tiedostoja "
-"tähän hakemistoon. Sillä ei ole pääsyä tämän hakemiston ulkopuolisiin "
-"tiedostoihin eikä muihin henkilötietoihin. Tietoja ei jaeta kolmannen "
-"osapuolen kanssa."
+"hakemiston \"Sovellukset / Joplin\" ja lukee ja kirjoittaa vain tiedostoja tähän "
+"hakemistoon. Sillä ei ole pääsyä tämän hakemiston ulkopuolisiin tiedostoihin "
+"eikä muihin henkilötietoihin. Tietoja ei jaeta kolmannen osapuolen kanssa."
 
 #: packages/lib/services/share/ShareService.ts:361
 msgid "Please provide the recipient email"
@@ -4737,8 +4686,8 @@ msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
-"Odota, että kaikki liitteet ladataan ja puretaan. Voit myös vaihtaa kohtaan "
-"%s muokkaamaan muistiinpanoa."
+"Odota, että kaikki liitteet ladataan ja puretaan. Voit myös vaihtaa kohtaan %s "
+"muokkaamaan muistiinpanoa."
 
 #: packages/server/src/utils/saml.ts:58
 msgid "Please wait while we load your organisation sign-in page..."
@@ -4786,8 +4735,8 @@ msgstr "Laajennukset"
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:103
 msgid ""
-"Plugins extend Joplin with features that are not present by default. Plugins "
-"can extend Joplin's editor, viewer, and more."
+"Plugins extend Joplin with features that are not present by default. Plugins can "
+"extend Joplin's editor, viewer, and more."
 msgstr ""
 "Laajennukset lisäävät Jopliniin ominaisuuksia, joita ei ole oletuksena. Ne "
 "voivat laajentaa editoria, katselutilaa ja muita toimintoja."
@@ -4985,8 +4934,7 @@ msgstr "Julkaisee muistiinpanon Joplin Serverille tai Joplin Cloudiin"
 msgid "QR Code"
 msgstr "QR-koodi"
 
-#: packages/app-desktop/app.ts:215
-#: packages/app-desktop/ElectronAppWrapper.ts:180
+#: packages/app-desktop/app.ts:215 packages/app-desktop/ElectronAppWrapper.ts:180
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
 #: packages/app-desktop/gui/MenuBar.tsx:363
 msgid "Quit"
@@ -5027,8 +4975,7 @@ msgstr "Lukuaika: %s min"
 #: packages/app-cli/app/command-batch.ts:45
 msgid "Reading commands from standard input is only available in CLI mode."
 msgstr ""
-"Komentojen lukeminen standarditulosteesta on mahdollista vain "
-"komentorivitilassa."
+"Komentojen lukeminen standarditulosteesta on mahdollista vain komentorivitilassa."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:303
 msgid "Recipient has accepted the invitation"
@@ -5108,8 +5055,7 @@ msgstr "Poista"
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:134
 msgid "Remove %d tags from all notes? This cannot be undone."
 msgstr ""
-"Poistetaanko tunniste \"%s\" kaikista muistiinpanoista? Toimintoa ei voi "
-"perua."
+"Poistetaanko tunniste \"%s\" kaikista muistiinpanoista? Toimintoa ei voi perua."
 
 #: packages/app-mobile/components/TagEditor.tsx:136
 msgid "Remove %s"
@@ -5325,13 +5271,12 @@ msgstr "Rich Text"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:716
 msgid "Rich Text editor. Press Escape then Tab to escape focus."
-msgstr ""
-"Rich Text -editori. Paina Esc ja sen jälkeen Tab poistuaksesi fokuksesta."
+msgstr "Rich Text -editori. Paina Esc ja sen jälkeen Tab poistuaksesi fokuksesta."
 
 #: packages/app-cli/app/command-batch.ts:29
 msgid ""
-"Runs the commands contained in the text file. There should be one command "
-"per line."
+"Runs the commands contained in the text file. There should be one command per "
+"line."
 msgstr ""
 "Suorittaa tekstitiedoston komennot. Riviä kohden pitäisi olla yksi komento."
 
@@ -5361,11 +5306,11 @@ msgstr "S3 URL"
 
 #: packages/app-desktop/gui/MainScreen.tsx:524
 msgid ""
-"Safe mode is currently active. Note rendering and all plugins are "
-"temporarily disabled."
+"Safe mode is currently active. Note rendering and all plugins are temporarily "
+"disabled."
 msgstr ""
-"Turvallinen tila on tällä hetkellä aktiivinen. Huomautusten renderöinti ja "
-"kaikki laajennukset on tilapäisesti poistettu käytöstä."
+"Vikasietotila on tällä hetkellä aktiivinen. Muistiinpanojen renderöinti ja "
+"kaikki liitännäiset on väliaikaisesti poistettu käytöstä."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:129
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:93
@@ -5571,8 +5516,8 @@ msgstr "Aseta hälytys:"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1279
 msgid ""
-"Set it to 0 to make it take the complete available space. Recommended width "
-"is 600."
+"Set it to 0 to make it take the complete available space. Recommended width is "
+"600."
 msgstr ""
 "Aseta se arvoksi 0, jotta se vie koko käytettävissä olevan tilan. Suositeltu "
 "leveys on 600."
@@ -5607,8 +5552,8 @@ msgstr "Jaa"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/NoteExportButton.tsx:21
 msgid ""
-"Share a copy of all notes in a file format that can be imported by Joplin on "
-"a computer."
+"Share a copy of all notes in a file format that can be imported by Joplin on a "
+"computer."
 msgstr ""
 "Jaa kopio kaikista muistiinpanoista tiedostomuodossa, jonka Joplin voi tuoda "
 "tietokoneelle."
@@ -5644,8 +5589,8 @@ msgstr "Jaot"
 
 #: packages/app-cli/app/command-share.ts:58
 msgid ""
-"Shares or unshares the specified [notebook] with [user]. Requires Joplin "
-"Cloud or Joplin Server."
+"Shares or unshares the specified [notebook] with [user]. Requires Joplin Cloud "
+"or Joplin Server."
 msgstr ""
 "Jakaa tai poistaa määritetyn [notebook] jakamisen käyttäjän [user] kanssa. "
 "Vaatii Joplin Cloud:in tai Joplin Server:in."
@@ -5749,8 +5694,8 @@ msgstr "Ohita tämä versio"
 #: packages/app-cli/app/command-e2ee.ts:67
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
-"Ohitetut kohteet: %d (käytä --retry-failed-items niiden salauksen "
-"purkamiseksi uudelleen)"
+"Ohitetut kohteet: %d (käytä --retry-failed-items niiden salauksen purkamiseksi "
+"uudelleen)"
 
 #: packages/app-cli/app/command-import.ts:56
 #: packages/app-desktop/gui/ImportScreen.tsx:92
@@ -5779,8 +5724,8 @@ msgid ""
 "Some attachments need to be downloaded. Set the attachment download mode to "
 "\"always\" and try again."
 msgstr ""
-"Jotkin liitteet täytyy ladata. Aseta liitteiden lataustilaksi \"aina\" ja "
-"yritä uudelleen."
+"Jotkin liitteet täytyy ladata. Aseta liitteiden lataustilaksi \"aina\" ja yritä "
+"uudelleen."
 
 #: packages/app-desktop/gui/MainScreen.tsx:542
 #: packages/app-mobile/components/ScreenHeader/WarningBanner.tsx:52
@@ -5796,8 +5741,7 @@ msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Joitakin kohteita ei voida synkronoida. Paina saadaksesi lisätietoja."
 
 #: packages/lib/models/settings/settingValidations.ts:24
-msgid ""
-"Some items could not be synchronised. Please try to synchronise them first."
+msgid "Some items could not be synchronised. Please try to synchronise them first."
 msgstr "Joitakin kohteita ei voitu synkronoida. Yritä synkronoida ne ensin."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:98
@@ -5826,8 +5770,7 @@ msgstr "Lajittele valitut rivit"
 #: packages/app-cli/app/command-ls.ts:29
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
-"Lajittelee kohteen <field> mukaan (esim. Otsikko, päivitetty aika, luotu "
-"aika)."
+"Lajittelee kohteen <field> mukaan (esim. Otsikko, päivitetty aika, luotu aika)."
 
 #: packages/app-desktop/gui/NoteListHeader/utils/getColumnTitle.ts:9
 msgid "Source"
@@ -5847,7 +5790,7 @@ msgstr "Lähde: "
 
 #: packages/app-cli/app/command-keymap.ts:35
 msgid "SPACE"
-msgstr ""
+msgstr "VÄLI"
 
 #: packages/app-desktop/gui/Sidebar/hooks/useOnRenderItem.tsx:456
 msgid "Spacer"
@@ -5855,11 +5798,11 @@ msgstr "Välitys"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1680
 msgid ""
-"Specify the port that should be used by the API server. If not set, a "
-"default will be used."
+"Specify the port that should be used by the API server. If not set, a default "
+"will be used."
 msgstr ""
-"Määritä portti, jota API palvelimen on käytettävä. Jos sitä ei ole "
-"määritetty, käytetään oletusarvoa."
+"Määritä portti, jota API palvelimen on käytettävä. Jos sitä ei ole määritetty, "
+"käytetään oletusarvoa."
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/showSpellCheckerMenu.ts:11
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:218
@@ -5882,17 +5825,16 @@ msgstr "Aloita tallennus"
 
 #: packages/app-cli/app/command-server.js:14
 msgid ""
-"Start, stop or check the API server. To specify on which port it should run, "
-"set the api.port config variable. Commands are (%s)."
+"Start, stop or check the API server. To specify on which port it should run, set "
+"the api.port config variable. Commands are (%s)."
 msgstr ""
-"Käynnistä, pysäytä tai tarkista API-palvelin. Määritä api.port-"
-"asetusmuuttuja määrittääksesi, missä portissa sen pitäisi toimia. Komennot "
-"ovat (% s)."
+"Käynnistä, pysäytä tai tarkista API-palvelin. Määritä api.port-asetusmuuttuja "
+"määrittääksesi, missä portissa sen pitäisi toimia. Komennot ovat (% s)."
 
 #: packages/app-cli/app/command-e2ee.ts:58
 msgid ""
-"Starting decryption... Please wait as it may take several minutes depending "
-"on how much there is to decrypt."
+"Starting decryption... Please wait as it may take several minutes depending on "
+"how much there is to decrypt."
 msgstr ""
 "Aloitetaan salauksen purkua... Odota, koska se voi kestää useita minuutteja "
 "riippuen siitä, kuinka paljon on purettavaa."
@@ -5903,8 +5845,7 @@ msgstr "Aloitetaan synkronointi..."
 
 #: packages/app-cli/app/command-edit.ts:76
 msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
-"Aloitetaan muokkauksen tekeminen. Palaa kehotteeseen sulkemalla editori."
+msgstr "Aloitetaan muokkauksen tekeminen. Palaa kehotteeseen sulkemalla editori."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:171
 msgid "Statistics"
@@ -6048,8 +5989,7 @@ msgstr "Vaihda tehtävätyyppiin"
 
 #: packages/app-cli/app/command-use.ts:13
 msgid ""
-"Switches to [notebook] - all further operations will happen within this "
-"notebook."
+"Switches to [notebook] - all further operations will happen within this notebook."
 msgstr ""
 "Vaihtaa tilaan [notebook] - kaikki muut toiminnot tapahtuvat tässä "
 "muistikirjassa."
@@ -6080,8 +6020,7 @@ msgstr "Synkronoi kohteen päivitys"
 
 #: packages/app-cli/app/command-sync.ts:42
 msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr ""
-"Synkronoi annettuun kohteeseen (oletusarvo on sync.target config value)"
+msgstr "Synkronoi annettuun kohteeseen (oletusarvo on sync.target config value)"
 
 #: packages/lib/versionInfo.ts:90
 msgid "Sync Version: %s"
@@ -6108,8 +6047,7 @@ msgstr "Synkronoinnin aikaväli"
 msgid "Synchronisation is already in progress."
 msgstr "Synkronointi on jo käynnissä."
 
-#: packages/app-desktop/gui/MenuBar.tsx:475
-#: packages/app-desktop/gui/Root.tsx:170
+#: packages/app-desktop/gui/MenuBar.tsx:475 packages/app-desktop/gui/Root.tsx:170
 msgid "Synchronisation Status"
 msgstr "Synkronoinnin tila"
 
@@ -6187,9 +6125,8 @@ msgid "Take photo"
 msgstr "Ota valokuva"
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:164
-#, fuzzy
 msgid "Take survey"
-msgstr "Ota kysely"
+msgstr "Täytä kysely"
 
 #: packages/app-mobile/components/screens/ConfigScreen/NoteExportSection/TaskButton.tsx:73
 msgid "Task \"%s\" failed with error: %s"
@@ -6234,14 +6171,12 @@ msgstr ""
 "uudelleen."
 
 #: packages/app-desktop/bridge.ts:603
-msgid ""
-"The app is now going to close. Please relaunch it to complete the process."
+msgid "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
 "Sovellus suljetaan nyt. Käynnistä se uudelleen prosessin loppuun saamiseksi."
 
 #: packages/lib/onedrive-api-node-utils.js:87
-msgid ""
-"The application has been authorised - you may now close this browser tab."
+msgid "The application has been authorised - you may now close this browser tab."
 msgstr "Sovellus on hyväksytty - voit nyt sulkea tämän välilehden."
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
@@ -6259,8 +6194,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:583
 msgid ""
-"The attachments will no longer be watched when you switch to a different "
-"note."
+"The attachments will no longer be watched when you switch to a different note."
 msgstr "Liitteitä ei enää katsota, kun vaihdat toiseen muistiinpanoon."
 
 #: packages/app-cli/app/app.ts:288
@@ -6269,26 +6203,24 @@ msgstr "Komento \"%s\" on käytettävissä vain graafisessa tilassa"
 
 #: packages/server/src/middleware/notificationHandler.ts:25
 msgid ""
-"The default admin password is insecure and has not been changed! [Change it "
-"now](%s)"
+"The default admin password is insecure and has not been changed! [Change it now]"
+"(%s)"
 msgstr ""
-"Järjestelmänvalvojan oletussalasana on turvaton, eikä sitä ole muutettu "
-"[Vaihda se nyt](%s)"
+"Järjestelmänvalvojan oletussalasana on turvaton, eikä sitä ole muutettu [Vaihda "
+"se nyt](%s)"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:344
 msgid ""
-"The default encryption method has been changed to a more secure one and it "
-"is recommended that you apply it to your data."
+"The default encryption method has been changed to a more secure one and it is "
+"recommended that you apply it to your data."
 msgstr ""
-"Oletussalausmenetelmä on muutettu turvallisemmaksi, ja on suositeltavaa, "
-"että käytät sitä tietoihin."
+"Oletussalausmenetelmä on muutettu turvallisemmaksi, ja on suositeltavaa, että "
+"käytät sitä tietoihin."
 
 #: packages/app-desktop/gui/MainScreen.tsx:554
 msgid ""
-"The default encryption method has been changed, you should re-encrypt your "
-"data."
-msgstr ""
-"Oletussalausmenetelmää on muutettu, sinun on salattava tiedot uudelleen."
+"The default encryption method has been changed, you should re-encrypt your data."
+msgstr "Oletussalausmenetelmää on muutettu, sinun on salattava tiedot uudelleen."
 
 #: packages/lib/services/profileConfig/index.ts:105
 msgid "The default profile cannot be deleted"
@@ -6296,8 +6228,8 @@ msgstr "Oletusprofiilia ei voi poistaa"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1433
 msgid ""
-"The editor command (may include arguments) that will be used to open a note. "
-"If none is provided it will try to auto-detect the default editor."
+"The editor command (may include arguments) that will be used to open a note. If "
+"none is provided it will try to auto-detect the default editor."
 msgstr ""
 "Editorikomento (voi sisältää argumentteja), jota käytetään muistiinpanon "
 "avaamiseen. Jos mitään ei ole annettu, se yrittää tunnistaa oletuseditorin "
@@ -6307,15 +6239,15 @@ msgstr ""
 #: packages/lib/models/settings/builtInMetadata.ts:1753
 #: packages/lib/models/settings/builtInMetadata.ts:1768
 msgid ""
-"The factor property sets how the item will grow or shrink to fit the "
-"available space in its container with respect to the other items. Thus an "
-"item with a factor of 2 will take twice as much space as an item with a "
-"factor of 1.Restart app to see changes."
+"The factor property sets how the item will grow or shrink to fit the available "
+"space in its container with respect to the other items. Thus an item with a "
+"factor of 2 will take twice as much space as an item with a factor of 1.Restart "
+"app to see changes."
 msgstr ""
 "Kerroin ominaisuus määrittää, miten kohde kasvaa tai kutistuu niin, että se "
-"sopii säiliössä olevaan tilaan suhteessa muihin kohteisiin. Näin ollen "
-"kohde, jonka kerroin on 2, vie kaksi kertaa enemmän tilaa kuin kohde, jonka "
-"kerroin on 1.Restart sovellus muutosten näkemistä varten."
+"sopii säiliössä olevaan tilaan suhteessa muihin kohteisiin. Näin ollen kohde, "
+"jonka kerroin on 2, vie kaksi kertaa enemmän tilaa kuin kohde, jonka kerroin on "
+"1.Restart sovellus muutosten näkemistä varten."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:598
 msgid "The following attachment matches your search query:"
@@ -6329,13 +6261,13 @@ msgstr "Seuraavia liitteitä tarkkaillaan muutosten vuoksi:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:75
 msgid ""
-"The following keys use an out-dated encryption algorithm and it is "
-"recommended to upgrade them. The upgraded key will still be able to decrypt "
-"and encrypt your data as usual."
+"The following keys use an out-dated encryption algorithm and it is recommended "
+"to upgrade them. The upgraded key will still be able to decrypt and encrypt your "
+"data as usual."
 msgstr ""
 "Seuraavat avaimet käyttävät vanhentunutta salausalgoritmia, ja ne on "
-"suositeltavaa päivittää. Päivitetty avain pystyy edelleen purkamaan ja "
-"salaamaan tietosi tavalliseen tapaan."
+"suositeltavaa päivittää. Päivitetty avain pystyy edelleen purkamaan ja salaamaan "
+"tietosi tavalliseen tapaan."
 
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:76
 msgid "The following plugins may not support the current markdown editor:"
@@ -6344,11 +6276,11 @@ msgstr "Seuraavat lisäosat eivät välttämättä tue nykyistä Markdown-editor
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:257
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/PluginBox/RecommendedBadge.tsx:49
 msgid ""
-"The Joplin team has vetted this plugin and it meets our standards for "
-"security and performance."
+"The Joplin team has vetted this plugin and it meets our standards for security "
+"and performance."
 msgstr ""
-"Joplin tiimi on käynyt läpi tämän laajennuksen ja se täyttää turvallisuus- "
-"ja suorituskykystandardimme."
+"Joplin tiimi on käynyt läpi tämän laajennuksen ja se täyttää turvallisuus- ja "
+"suorituskykystandardimme."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:321
 msgid ""
@@ -6374,9 +6306,9 @@ msgstr "Pääavain on päivitetty onnistuneesti!"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:308
 msgid ""
-"The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely "
-"they will eventually be downloaded via synchronisation."
+"The master keys with these IDs are used to encrypt some of your items, however "
+"the application does not currently have access to them. It is likely they will "
+"eventually be downloaded via synchronisation."
 msgstr ""
 "Näillä tunnuksilla varustettuja pääavaimia käytetään joidenkin kohteiden "
 "salaamiseen, mutta sovelluksella ei tällä hetkellä ole pääsyä niihin. On "
@@ -6388,17 +6320,17 @@ msgstr "Muistiinpano \"%s\" on palautettu muistikirjaan \"%s\"."
 
 #: packages/lib/commands/convertNoteToMarkdown.ts:64
 msgid ""
-"The note has been converted to Markdown and the original note has been moved "
-"to the trash"
+"The note has been converted to Markdown and the original note has been moved to "
+"the trash"
 msgid_plural ""
-"The notes have been converted to Markdown and the original notes have been "
-"moved to the trash"
+"The notes have been converted to Markdown and the original notes have been moved "
+"to the trash"
 msgstr[0] ""
 "Muistiinpano on muunnettu Markdown-muotoon ja alkuperäinen muistiinpano on "
 "siirretty roskakoriin"
 msgstr[1] ""
-"Muistiinpano on muunnettu Markdown-muotoon ja alkuperäinen muistiinpano on "
-"siirretty roskakoriin."
+"Muistiinpanot ovat muunnettu Markdown-muotoon ja alkuperäiset muistiinpanot ovat "
+"siirretty roskakoriin"
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:45
 msgid "The note was successfully moved to the trash."
@@ -6408,7 +6340,7 @@ msgstr[1] "Muistiinpanot siirrettiin roskakoriin onnistuneesti."
 
 #: packages/app-desktop/gui/TrashNotification/TrashNotification.tsx:43
 msgid "The notebook and its content was successfully moved to the trash."
-msgstr "Muistiinpano ja sen sisältö siirrettiin roskakoriin onnistuneesti"
+msgstr "Muistikirja ja sen sisältö siirrettiin roskakoriin onnistuneesti."
 
 #: packages/app-mobile/components/screens/folder.js:76
 msgid "The notebook could not be saved: %s"
@@ -6451,9 +6383,9 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen.tsx:536
 msgid ""
-"The sync target needs to be upgraded before Joplin can sync. The operation "
-"may take a few minutes to complete and the app needs to be restarted. To "
-"proceed please click on the link."
+"The sync target needs to be upgraded before Joplin can sync. The operation may "
+"take a few minutes to complete and the app needs to be restarted. To proceed "
+"please click on the link."
 msgstr ""
 "Synkronointikohde on päivitettävä, ennen kuin Joplin voidaan synkronoida. "
 "Toiminnon suorittamiseen voi mennä muutama minuutti, ja sovellus on "
@@ -6473,12 +6405,11 @@ msgstr "Tunniste \"%s\" on jo olemassa. Valitse toinen nimi."
 
 #: packages/lib/models/settings/builtInMetadata.ts:130
 msgid ""
-"The target to synchronise to. Each sync target may have additional "
-"parameters which are named as `sync.NUM.NAME` (all documented below)."
+"The target to synchronise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 "Kohde, johon synkronoidaan. Jokaisella synkronointikohteella voi olla muita "
-"parametreja, jotka on nimetty `sync.NUM.NAME` (kaikki dokumentoitu "
-"jäljempänä)."
+"parametreja, jotka on nimetty `sync.NUM.NAME` (kaikki dokumentoitu jäljempänä)."
 
 #: packages/lib/services/share/invitationRespond.ts:22
 msgid ""
@@ -6487,8 +6418,8 @@ msgid ""
 "\n"
 "Error: \"%s\""
 msgstr ""
-"Verkkosovellus ei tue salattujen jaettujen muistikirjojen hyväksymistä. "
-"Vaihda työpöytä- tai mobiilisovellukseen ennen jaon hyväksymistä.\n"
+"Verkkosovellus ei tue salattujen jaettujen muistikirjojen hyväksymistä. Vaihda "
+"työpöytä- tai mobiilisovellukseen ennen jaon hyväksymistä.\n"
 "\n"
 "Virhe: \"%s\""
 
@@ -6498,14 +6429,12 @@ msgstr "Web Clipper tarvitsee valtuutuksen tietojen käyttöön."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:104
 msgid "The web clipper service cannot be enabled in this instance of Joplin."
-msgstr ""
-"Web Clipper työkalua ei voida ottaa käyttöön tässä Joplin-instanssissa."
+msgstr "Web Clipper työkalua ei voida ottaa käyttöön tässä Joplin-instanssissa."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:79
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
-"Web Clipper työkalu on käytössä ja se on asetettu käynnistymään "
-"automaattisesti."
+"Web Clipper työkalu on käytössä ja se on asetettu käynnistymään automaattisesti."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:110
 msgid "The web clipper service is not enabled."
@@ -6513,8 +6442,8 @@ msgstr "Web Clipper työkalu ei ole käytössä."
 
 #: packages/lib/utils/webDAVUtils.ts:28
 msgid ""
-"The WebDAV implementation of %s is incompatible with Joplin, and as such is "
-"no longer supported. Please use a different sync method."
+"The WebDAV implementation of %s is incompatible with Joplin, and as such is no "
+"longer supported. Please use a different sync method."
 msgstr ""
 "%s WebDAV toteutus ei ole yhteensopiva Joplinin kanssa, joten sitä ei enää "
 "tueta. Käytä toista synkronointitapaa."
@@ -6562,12 +6491,12 @@ msgstr "Tämän liitteen lataamisessa tapahtui virhe:"
 #: packages/lib/services/ReportService.ts:237
 msgid ""
 "These items failed to sync, but have been marked as \"ignored\". They won't "
-"cause the sync warning to appear, but still aren't synced. To unignore, "
-"click \"retry\"."
+"cause the sync warning to appear, but still aren't synced. To unignore, click "
+"\"retry\"."
 msgstr ""
-"Näiden kohteiden synkronointi epäonnistui, mutta ne on merkitty ohitetuiksi. "
-"Ne eivät aiheuta synkronointivaroitusta, mutta niitä ei silti synkronoida. "
-"Voit poistaa ohituksen napsauttamalla \"yritä uudelleen\"."
+"Näiden kohteiden synkronointi epäonnistui, mutta ne on merkitty ohitetuiksi. Ne "
+"eivät aiheuta synkronointivaroitusta, mutta niitä ei silti synkronoida. Voit "
+"poistaa ohituksen napsauttamalla \"yritä uudelleen\"."
 
 #: packages/lib/services/ReportService.ts:187
 msgid ""
@@ -6575,27 +6504,26 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"Nämä kohteet pysyvät laitteessa, mutta niitä ei ladata "
-"synkronointikohteeseen. Löytääksesi nämä kohteet, etsi joko otsikko tai "
-"tunnus (joka näkyy edellä olevissa hakasulkeissa)."
+"Nämä kohteet pysyvät laitteessa, mutta niitä ei ladata synkronointikohteeseen. "
+"Löytääksesi nämä kohteet, etsi joko otsikko tai tunnus (joka näkyy edellä "
+"olevissa hakasulkeissa)."
 
 #: packages/lib/models/Setting.ts:1376
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
-"note that, while these features might be useful, they are not standard "
-"Markdown and thus most of them will only work in Joplin. Additionally, some "
-"of them are *incompatible* with the WYSIWYG editor. If you open a note that "
-"uses one of these plugins in that editor, you will lose the plugin "
-"formatting. It is indicated below which plugins are compatible or not with "
-"the WYSIWYG editor."
+"note that, while these features might be useful, they are not standard Markdown "
+"and thus most of them will only work in Joplin. Additionally, some of them are "
+"*incompatible* with the WYSIWYG editor. If you open a note that uses one of "
+"these plugins in that editor, you will lose the plugin formatting. It is "
+"indicated below which plugins are compatible or not with the WYSIWYG editor."
 msgstr ""
-"Nämä laajennukset parantavat Markdown renderöijää lisäominaisuuksilla. "
-"Huomaa, että vaikka nämä ominaisuudet voivat olla hyödyllisiä, ne eivät ole "
-"tavallisia markdown ja siksi suurin osa niistä toimii vain Joplinissa. "
-"Lisäksi jotkut niistä ovat *yhteensopimattomia* WYSIWYG editorin kanssa. Jos "
-"avaat viestin, joka käyttää jotakin näistä laajennuksia editorissa, menetät "
-"laajennuksen muotoilun. Alla on ilmoitettu, mitkä laajennukset ovat "
-"yhteensopivia tai eivät ole yhteensopivia WYSIWYG editorin kanssa."
+"Nämä laajennukset parantavat Markdown renderöijää lisäominaisuuksilla. Huomaa, "
+"että vaikka nämä ominaisuudet voivat olla hyödyllisiä, ne eivät ole tavallisia "
+"markdown ja siksi suurin osa niistä toimii vain Joplinissa. Lisäksi jotkut "
+"niistä ovat *yhteensopimattomia* WYSIWYG editorin kanssa. Jos avaat viestin, "
+"joka käyttää jotakin näistä laajennuksia editorissa, menetät laajennuksen "
+"muotoilun. Alla on ilmoitettu, mitkä laajennukset ovat yhteensopivia tai eivät "
+"ole yhteensopivia WYSIWYG editorin kanssa."
 
 #: packages/lib/utils/joplinCloud/index.ts:185
 msgid ""
@@ -6603,9 +6531,9 @@ msgid ""
 "collaborate on it. It does not however allow you to share a notebook with "
 "someone else, unless you have the feature \"%s\"."
 msgstr ""
-"Tämän avulla toinen käyttäjä voi jakaa muistikirjan kanssasi, ja voitte "
-"tehdä yhteistyötä sen parissa. Se ei kuitenkaan mahdollista muistikirjan "
-"jakamista muille, ellei sinulla ole ominaisuutta ”%s”."
+"Tämän avulla toinen käyttäjä voi jakaa muistikirjan kanssasi, ja voitte tehdä "
+"yhteistyötä sen parissa. Se ei kuitenkaan mahdollista muistikirjan jakamista "
+"muille, ellei sinulla ole ominaisuutta ”%s”."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:193
 msgid "This attachment does not have OCR data (Status: %s)"
@@ -6630,18 +6558,17 @@ msgstr "Tässä piirroksessa saattaa olla tallentamattomia muutoksia."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:151
 msgid ""
-"This feature is disabled by default, you need to manually enable it by "
-"turning on the option to 'Enable handwritten transcription'."
+"This feature is disabled by default, you need to manually enable it by turning "
+"on the option to 'Enable handwritten transcription'."
 msgstr ""
-"Tämä ominaisuus on oletuksena poistettu käytöstä. Sinun on otettava se "
-"käyttöön manuaalisesti ottamalla käyttöön asetus \"Ota käsin kirjoitettu "
-"transkriptio käyttöön\"."
+"Tämä ominaisuus on oletuksena poistettu käytöstä. Sinun on otettava se käyttöön "
+"manuaalisesti ottamalla käyttöön asetus \"Ota käsin kirjoitettu transkriptio "
+"käyttöön\"."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:146
 msgid "This feature is only available on Joplin Cloud and Joplin Server."
 msgstr ""
-"Tämä ominaisuus on käytettävissä vain Joplin Cloud:issa ja Joplin "
-"Server:issä."
+"Tämä ominaisuus on käytettävissä vain Joplin Cloud:issa ja Joplin Server:issä."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "This image type is not supported by the recognition system."
@@ -6649,9 +6576,9 @@ msgstr "Tunnistusjärjestelmä ei tue tätä kuvatyyppiä."
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:304
 msgid ""
-"This is an advanced tool to show the attachments that are linked to your "
-"notes. Please be careful when deleting one of them as they cannot be "
-"restored afterwards."
+"This is an advanced tool to show the attachments that are linked to your notes. "
+"Please be careful when deleting one of them as they cannot be restored "
+"afterwards."
 msgstr ""
 "Tämä on kehittynyt työkalu muistiinpanoihin linkitettyjen liitteiden "
 "näyttämiseen. Ole varovainen, kun poistat yhden niistä, koska niitä ei voi "
@@ -6660,20 +6587,20 @@ msgstr ""
 #: packages/app-mobile/components/ScreenHeader/index.tsx:256
 msgid "This note could not be deleted: %s"
 msgid_plural "These notes could not be deleted: %s"
-msgstr[0] "Tätä tiedostoa ei voitu poistaa: %s"
-msgstr[1] "Näitä tiedostoja ei voitu poistaa: %s"
+msgstr[0] "Tätä muistiinpanoa ei voitu poistaa: %s"
+msgstr[1] "Näitä muistiinpanoja ei voitu poistaa: %s"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:243
 msgid "This note could not be duplicated: %s"
 msgid_plural "These notes could not be duplicated: %s"
-msgstr[0] "Muistikirjaa ei voitu kopioida: %s"
-msgstr[1] "Muistikirjoja ei voitu kopioida: %s"
+msgstr[0] "Tätä muistiinpanoa ei voitu kopioida: %s"
+msgstr[1] "Näitä muistiinpanoja ei voitu kopioida: %s"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:618
 msgid "This note could not be moved: %s"
 msgid_plural "These notes could not be moved: %s"
-msgstr[0] "Muistikirjaa ei voitu siirtää: %s"
-msgstr[1] "Muistikirjoja ei voitu siirtää: %s"
+msgstr[0] "Tätä muistiinpanoa ei voitu siirtää: %s"
+msgstr[1] "Näitä muistiinpanoja ei voitu siirtää: %s"
 
 #: packages/lib/models/Note.ts:131
 msgid "This note does not have geolocation information."
@@ -6686,22 +6613,20 @@ msgstr "Tätä muistiinpanoa on muutettu:"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v5/CodeMirror.tsx:639
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/v6/CodeMirror.tsx:213
 msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
+"This note has no content. Click on \"%s\" to toggle the editor and edit the note."
 msgstr ""
-"Tällä muistiinpanolla ei ole sisältöä. Napsauta \"%s\" vaihtaaksesi editoria "
-"ja muokataksesi muistiinpanoa."
+"Tällä muistiinpanolla ei ole sisältöä. Napsauta \"%s\" vaihtaaksesi editoria ja "
+"muokataksesi muistiinpanoa."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.tsx:72
 msgid "This note has no history"
 msgstr "Tällä muistiinpanolla ei ole historiaa"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:664
-msgid ""
-"This note is in HTML format. Convert it to Markdown to edit it more easily."
+msgid "This note is in HTML format. Convert it to Markdown to edit it more easily."
 msgstr ""
-"Tämä muistiinpano on HTML-muodossa. Muunna se Markdown-muotoon muokataksesi "
-"sitä helpommin."
+"Tämä muistiinpano on HTML-muodossa. Muunna se Markdown-muotoon muokataksesi sitä "
+"helpommin."
 
 #: packages/lib/services/plugins/PluginService.ts:535
 msgid "This plugin doesn't support %s."
@@ -6710,8 +6635,8 @@ msgstr "Tämä lisäosa ei tue %s."
 #: packages/app-desktop/gui/NoteEditor/WarningBanner/WarningBanner.tsx:45
 #: packages/app-mobile/components/NoteEditor/WarningBanner.tsx:38
 msgid ""
-"This Rich Text editor has a number of limitations and it is recommended to "
-"be aware of them before using it."
+"This Rich Text editor has a number of limitations and it is recommended to be "
+"aware of them before using it."
 msgstr ""
 "Tällä Rich Text -editorilla on useita rajoituksia, on suositeltavaa olla "
 "tietoinen niistä ennen sen käyttöä."
@@ -6719,12 +6644,12 @@ msgstr ""
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:137
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
-"enabling it your firewall may ask you to give permission to Joplin to listen "
-"to a particular port."
+"enabling it your firewall may ask you to give permission to Joplin to listen to "
+"a particular port."
 msgstr ""
 "Tämän palvelun avulla selainlaajennus voi olla yhteydessä Jopliniin. Kun se "
-"otetaan käyttöön, palomuuri voi pyytää sinua antamaan Joplinille luvan "
-"kuunnella tiettyä porttia."
+"otetaan käyttöön, palomuuri voi pyytää sinua antamaan Joplinille luvan kuunnella "
+"tiettyä porttia."
 
 #: packages/lib/components/shared/NoteList/getEmptyFolderMessage.ts:11
 msgid "This subfolder of the trash has no notes."
@@ -6733,12 +6658,12 @@ msgstr "Tässä roskakorin alikansiossa ei ole muistiinpanoja."
 #: packages/lib/models/settings/builtInMetadata.ts:1135
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
-"this setting so that your notes are constantly being synchronised, thus "
-"reducing the number of conflicts."
+"this setting so that your notes are constantly being synchronised, thus reducing "
+"the number of conflicts."
 msgstr ""
-"Antaa Joplinille mahdollisuuden toimia taustalla. On suositeltavaa ottaa "
-"tämä asetus käyttöön, jotta muistiinpanoja synkronoidaan jatkuvasti, näin "
-"vähennetään ristiriitojen määrää."
+"Antaa Joplinille mahdollisuuden toimia taustalla. On suositeltavaa ottaa tämä "
+"asetus käyttöön, jotta muistiinpanoja synkronoidaan jatkuvasti, näin vähennetään "
+"ristiriitojen määrää."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:148
 msgid "This will open a new screen. Save your current changes?"
@@ -6752,8 +6677,8 @@ msgstr "Tämä poistaa kaikki roskakorissa olevat kohteet pysyvästi. Jatka?"
 #: packages/app-mobile/components/screens/ShareManager/AcceptedShareItem.tsx:60
 #: packages/lib/commands/leaveSharedFolder.ts:22
 msgid ""
-"This will remove the notebook from your collection and you will no longer "
-"have access to its content. Do you wish to continue?"
+"This will remove the notebook from your collection and you will no longer have "
+"access to its content. Do you wish to continue?"
 msgstr ""
 "Tämä poistaa muistikirjan kokoelmasta, etkä voi enää käyttää sen sisältöä. "
 "Haluatko jatkaa?"
@@ -6776,8 +6701,7 @@ msgstr "Otsikko"
 #: packages/app-cli/app/command-sync.ts:82
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:45
 #: packages/app-mobile/components/screens/dropbox-login.tsx:62
-msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgid "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
 "Jos haluat, että Joplin voi synkronoida Dropboxin kanssa, toimi seuraavasti:"
 
@@ -6785,8 +6709,7 @@ msgstr ""
 #: packages/app-desktop/gui/JoplinCloudLoginScreen.tsx:86
 #: packages/app-mobile/components/screens/JoplinCloudLoginScreen.tsx:153
 msgid ""
-"To allow Joplin to synchronise with Joplin Cloud, please login using this "
-"URL:"
+"To allow Joplin to synchronise with Joplin Cloud, please login using this URL:"
 msgstr ""
 "Jos haluat, että Joplin voi synkronoida Joplin Cloud:in kanssa, toimi "
 "seuraavasti:"
@@ -6823,8 +6746,8 @@ msgstr "Poistu komentorivitilasta painamalla ESCAPE"
 
 #: packages/app-desktop/gui/NoteList/utils/canManuallySortNotes.ts:10
 msgid ""
-"To manually sort the notes, the sort order must be changed to \"%s\" in the "
-"menu \"%s\" > \"%s\""
+"To manually sort the notes, the sort order must be changed to \"%s\" in the menu "
+"\"%s\" > \"%s\""
 msgstr ""
 "Jos haluat lajitella muistiinpanot manuaalisesti, lajittelujärjestys on "
 "muutettava \"%s\" valikossa \"%s\" > \"%s\""
@@ -6838,28 +6761,24 @@ msgid "To move from one pane to another, press Tab or Shift+Tab."
 msgstr "Voit siirtyä ruudusta toiseen painamalla Tab tai Shift + Tab."
 
 #: packages/app-cli/app/command-status.js:44
-msgid ""
-"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
+msgid "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"Yritä uudelleen purkaa nämä kohteet. Suorita `e2ee decrypt --retry-failed-"
-"items`"
+"Yritä uudelleen purkaa nämä kohteet. Suorita `e2ee decrypt --retry-failed-items`"
 
 #: packages/app-mobile/components/ProfileSwitcher/ProfileSwitcher.tsx:64
 msgid ""
-"To switch the profile, the app is going to close and you will need to "
-"restart it."
+"To switch the profile, the app is going to close and you will need to restart it."
 msgstr ""
-"Jos haluat vaihtaa profiilia, sovellus suljetaan ja sinun on käynnistettävä "
-"se uudelleen."
+"Jos haluat vaihtaa profiilia, sovellus suljetaan ja sinun on käynnistettävä se "
+"uudelleen."
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:615
 msgid ""
-"To work correctly, the app needs the following permissions. Please enable "
-"them in your phone settings, in Apps > Joplin > Permissions"
+"To work correctly, the app needs the following permissions. Please enable them "
+"in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
-"Toimiakseen oikein sovellus tarvitsee seuraavat käyttöoikeudet. Ota ne "
-"käyttöön puhelimesi asetuksissa, valitsemalla Sovellukset> Joplin> Luvat "
-"(käyttöoikeudet)"
+"Toimiakseen oikein sovellus tarvitsee seuraavat käyttöoikeudet. Ota ne käyttöön "
+"puhelimesi asetuksissa, valitsemalla Sovellukset> Joplin> Luvat (käyttöoikeudet)"
 
 #: packages/app-desktop/gui/NoteListControls/NoteListControls.tsx:120
 #: packages/app-desktop/gui/NoteListWrapper/NoteListWrapper.tsx:71
@@ -6891,14 +6810,12 @@ msgid "Toggle editor layout"
 msgstr "Vaihda editorin asettelua"
 
 #: packages/lib/commands/toggleEditorPlugin.ts:11
-#, fuzzy
 msgid "Toggle editor plugin"
-msgstr "Vaihda editorin asettelua"
+msgstr "Ota muokkaimen lisäosa käyttöön / pois käytöstä"
 
 #: packages/app-desktop/commands/toggleTabMovesFocus.ts:8
-#, fuzzy
 msgid "Toggle editor tab key navigation"
-msgstr "Vaihda editorin asettelua"
+msgstr "Ota muokkaimen Tab-näppäinselattavuus käyttöön / pois käytöstä"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleEditors.ts:8
 msgid "Toggle editors"
@@ -6913,9 +6830,8 @@ msgid "Toggle menu bar"
 msgstr "Näytä/piilota valikkopalkki"
 
 #: packages/lib/models/Setting.ts:1396
-#, fuzzy
 msgid "Toggle note history, keep notes for"
-msgstr "Säilytä muistiinpanohistoria"
+msgstr "Kytke muistiinpanojen historia päälle / pois, säilytä muistiinpanoja"
 
 #: packages/app-desktop/gui/WindowCommandsAndDialogs/commands/toggleNoteList.ts:10
 msgid "Toggle note list"
@@ -6926,9 +6842,8 @@ msgid "Toggle own sort order"
 msgstr "Vaihda omaa lajittelujärjestystä"
 
 #: packages/app-mobile/components/ScreenHeader/index.tsx:468
-#, fuzzy
 msgid "Toggle plugin editor"
-msgstr "Vaihda editoria"
+msgstr "Kytke lisäosan muokkain päälle / pois"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
@@ -6969,7 +6884,7 @@ msgstr "Roskakori"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:319
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:123
 msgid "Try again"
-msgstr "Yritä uudestaan"
+msgstr "Yritä uudelleen"
 
 #: packages/lib/utils/joplinCloud/index.ts:400
 #: packages/lib/utils/joplinCloud/index.ts:423
@@ -6979,15 +6894,15 @@ msgstr "Kokeile nyt"
 
 #: packages/app-cli/app/command-keymap.ts:30
 msgid "TYPE"
-msgstr ""
+msgstr "TYYPPI"
 
 #: packages/app-cli/app/command-help.ts:72
 msgid ""
-"Type `help [command]` for more information about a command; or type `help "
-"all` for the complete usage information."
+"Type `help [command]` for more information about a command; or type `help all` "
+"for the complete usage information."
 msgstr ""
-"Kirjoita `help [command]` saadaksesi lisätietoja komennosta; tai kirjoita "
-"`help all` saadaksesi täydelliset käyttötiedot."
+"Kirjoita `help [command]` saadaksesi lisätietoja komennosta; tai kirjoita `help "
+"all` saadaksesi täydelliset käyttötiedot."
 
 #: packages/app-cli/app/main.js:105
 msgid "Type `joplin help` for usage information."
@@ -6995,13 +6910,12 @@ msgstr "Valitse `joplin help` saadaksesi käytöstä lisätietoja."
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:708
 msgid ""
-"Type a note title or part of its content to jump to it. Or type # followed "
-"by a tag name, or @ followed by a notebook name. Or type : to search for "
-"commands."
+"Type a note title or part of its content to jump to it. Or type # followed by a "
+"tag name, or @ followed by a notebook name. Or type : to search for commands."
 msgstr ""
-"Kirjoita muistiinpanon otsikko, jos haluat siirtyä siihen. Voit myös "
-"kirjoittaa # ja sen jälkeen tunnisteen nimen tai @ ja sen jälkeen "
-"muistikirjan nimen. Voit myös etsiä komentoja kirjoittamalla : ."
+"Kirjoita muistiinpanon otsikko, jos haluat siirtyä siihen. Voit myös kirjoittaa "
+"# ja sen jälkeen tunnisteen nimen tai @ ja sen jälkeen muistikirjan nimen. Voit "
+"myös etsiä komentoja kirjoittamalla : ."
 
 #: packages/app-desktop/plugins/GotoAnything.tsx:706
 msgid "Type a note title to search for it."
@@ -7039,14 +6953,12 @@ msgid "Undo"
 msgstr "Kumoa"
 
 #: packages/lib/models/settings/settingValidations.ts:32
-#, fuzzy
 msgid ""
-"Uninstall and reinstall the application. Make sure you create a backup first "
-"by exporting all your notes as JEX from the desktop application."
+"Uninstall and reinstall the application. Make sure you create a backup first by "
+"exporting all your notes as JEX from the desktop application."
 msgstr ""
-"Poista sovelluksen asennus ja asenna se uudelleen. Varmista ensin, että luot "
-"varmuuskopion viemällä kaikki muistiinpanosi JEX-tiedostona "
-"työpöytäsovelluksesta."
+"Poista sovellus ja asenna se uudelleen. Varmista ensin, että luot varmuuskopion "
+"viemällä kaikki muistiinpanosi JEX-tiedostona käyttäen työpöytäsovellusta."
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:13
 #: packages/app-mobile/utils/getVersionInfoText.ts:14
@@ -7062,8 +6974,7 @@ msgid "Unknown flag: %s"
 msgstr "Tuntematon merkintä: %s"
 
 #: packages/lib/Synchronizer.ts:1182
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgid "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr "Tuntematon kohdetyyppi ladattu - päivitä Joplin uusimpaan versioon"
 
 #: packages/app-mobile/utils/getVersionInfoText.ts:28
@@ -7095,16 +7006,15 @@ msgid ""
 "Unshare notebook \"%s\"? This may cause other users to lose access to the "
 "notebook."
 msgstr ""
-"Poistetaanko muistikirjan \"%s\" jakaminen? Tämä voi aiheuttaa sen, että "
-"muut käyttäjät menettävät pääsyn muistikirjaan."
+"Poistetaanko muistikirjan \"%s\" jakaminen? Tämä voi aiheuttaa sen, että muut "
+"käyttäjät menettävät pääsyn muistikirjaan."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:377
 msgid ""
-"Unshare this notebook? The recipients will no longer have access to its "
-"content."
+"Unshare this notebook? The recipients will no longer have access to its content."
 msgstr ""
-"Poistetaanko tämän muistikirjan jakaminen? Vastaanottajilla ei ole enää "
-"pääsyä sen sisältöön."
+"Poistetaanko tämän muistikirjan jakaminen? Vastaanottajilla ei ole enää pääsyä "
+"sen sisältöön."
 
 #: packages/app-mobile/components/screens/Note/Note.tsx:959
 msgid "Unsupported image type: %s"
@@ -7232,11 +7142,11 @@ msgstr "Käytä oikolukua"
 
 #: packages/app-cli/app/command-help.ts:81
 msgid ""
-"Use the arrows and page up/down to scroll the lists and text areas "
-"(including this console)."
+"Use the arrows and page up/down to scroll the lists and text areas (including "
+"this console)."
 msgstr ""
-"Käytä nuolia ja page up/down vierittämällä luetteloita ja tekstialueita "
-"(mukaan lukien tämä konsoli)."
+"Käytä nuolia ja page up/down vierittämällä luetteloita ja tekstialueita (mukaan "
+"lukien tämä konsoli)."
 
 #: packages/app-desktop/gui/MainScreen.tsx:794
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
@@ -7248,37 +7158,36 @@ msgstr "Käytä perinteistä Markdown-editoria"
 
 #: packages/app-mobile/components/screens/ConfigScreen/ConfigScreen.tsx:580
 msgid ""
-"Use this to rebuild the search index if there is a problem with search. It "
-"may take a long time depending on the number of notes."
+"Use this to rebuild the search index if there is a problem with search. It may "
+"take a long time depending on the number of notes."
 msgstr ""
-"Tämän avulla voit muodostaa hakuindeksin uudelleen, jos haussa on ongelma. "
-"Se voi kestää kauan muistiinpanojen määrästä riippuen."
+"Tämän avulla voit muodostaa hakuindeksin uudelleen, jos haussa on ongelma. Se "
+"voi kestää kauan muistiinpanojen määrästä riippuen."
 
 #: packages/app-mobile/components/biometrics/BiometricPopup.tsx:83
 msgid ""
-"Use your biometrics to secure access to your application. You can always set "
-"it up later in Settings."
+"Use your biometrics to secure access to your application. You can always set it "
+"up later in Settings."
 msgstr ""
-"Käytä biometrisiä tunnisteita suojataksesi pääsyn sovellukseen. Voit "
-"määrittää sen myöhemmin asetuksissa."
+"Käytä biometrisiä tunnisteita suojataksesi pääsyn sovellukseen. Voit määrittää "
+"sen myöhemmin asetuksissa."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1249
 msgid ""
-"Used for most text in the markdown editor. If not found, a generic "
-"proportional (variable width) font is used."
+"Used for most text in the markdown editor. If not found, a generic proportional "
+"(variable width) font is used."
 msgstr ""
 "Käytetään useimmissa teksteissä markdown editorissa. Jos sitä ei löydy, "
 "käytetään yleistä suhteellista fonttia (vaihtelevaa leveyttä)."
 
 #: packages/lib/models/settings/builtInMetadata.ts:1262
 msgid ""
-"Used where a fixed width font is needed to lay out text legibly (e.g. "
-"tables, checkboxes, code). If not found, a generic monospace (fixed width) "
-"font is used."
+"Used where a fixed width font is needed to lay out text legibly (e.g. tables, "
+"checkboxes, code). If not found, a generic monospace (fixed width) font is used."
 msgstr ""
 "Käytetään, kun tekstiin tarvitaan kiinteäleveyksinen fontti (esim. taulukot, "
-"valintaruudut, koodi). Jos sitä ei löydy, käytetään yleistä monospace "
-"fonttia (kiinteäleveyksinen)."
+"valintaruudut, koodi). Jos sitä ei löydy, käytetään yleistä monospace fonttia "
+"(kiinteäleveyksinen)."
 
 #: packages/app-mobile/components/FeedbackBanner.tsx:195
 msgid "Useful"
@@ -7327,7 +7236,7 @@ msgstr "Näytä ne nyt"
 #: packages/lib/models/settings/builtInMetadata.ts:707
 #: packages/lib/models/settings/builtInMetadata.ts:709
 msgid "Viewer"
-msgstr "Editori"
+msgstr "Lukutila"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1273
 msgid "Viewer and Rich Text Editor font family"
@@ -7346,9 +7255,8 @@ msgid "Voice recorder"
 msgstr "Äänitallennin"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1963
-#, fuzzy
 msgid "Voice typing language files (URL)"
-msgstr "Äänikirjoituskielitiedostot (URL)"
+msgstr "Äänikirjoituksen kielitiedostot (URL)"
 
 #: packages/lib/models/settings/builtInMetadata.ts:1992
 msgid "Voice typing: Glossary"
@@ -7376,8 +7284,7 @@ msgstr "Varoitus"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:322
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr ""
-"Varoitus: kaikkia resursseja ei näytetä suorituskyvyn vuoksi (raja: %s)."
+msgstr "Varoitus: kaikkia resursseja ei näytetä suorituskyvyn vuoksi (raja: %s)."
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:116
 msgid "We have a system for reporting and removing problematic plugins."
@@ -7386,8 +7293,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen/plugins/EnablePluginSupportPage.tsx:114
 msgid ""
-"We mark plugins developed by trusted Joplin community members as "
-"\"recommended\"."
+"We mark plugins developed by trusted Joplin community members as \"recommended\"."
 msgstr ""
 "Merkitsemme luotettavien Joplin-yhteisön jäsenten kehittämät lisäosat "
 "\"suositelluiksi\"."
@@ -7429,8 +7335,8 @@ msgstr "WebView versio: %s"
 msgid ""
 "Welcome to Joplin!\n"
 "\n"
-"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
-"for usage information.\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for "
+"usage information.\n"
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
@@ -7457,18 +7363,21 @@ msgstr "Kun luot uuden tehtävän:"
 
 #: packages/app-mobile/components/screens/DocumentScanner/NotePreview.tsx:167
 msgid ""
-"When enabled, requests that the images in the note be transcribed with a "
-"higher-quality on-server transcription service. Requires sync with a copy of "
-"the desktop app."
+"When enabled, requests that the images in the note be transcribed with a higher-"
+"quality on-server transcription service. Requires sync with a copy of the "
+"desktop app."
 msgstr ""
+"Kun käytössä, niin muistiinpanon kuville pyydetään laadukkaampi, palvelimella "
+"suoritettava tekstintunnistus. Tämä vaatii synkronoinnin työpöytäsovelluksen "
+"kanssa."
 
 #: packages/lib/models/settings/builtInMetadata.ts:577
 msgid ""
-"When enabled, the application will scan your attachments and extract the "
-"text from it. This will allow you to search for text in these attachments."
+"When enabled, the application will scan your attachments and extract the text "
+"from it. This will allow you to search for text in these attachments."
 msgstr ""
-"Kun tämä on käytössä, sovellus skannaa liitteesi ja poimii tekstin niistä. "
-"Näin voit hakea tekstiä näistä liitteistä."
+"Kun tämä on käytössä, sovellus skannaa liitteesi ja poimii tekstin niistä. Näin "
+"voit hakea tekstiä näistä liitteistä."
 
 #: packages/app-desktop/ElectronAppWrapper.ts:281
 msgid "Window unresponsive."
@@ -7482,8 +7391,7 @@ msgstr "Sanat"
 msgid "y"
 msgstr "k"
 
-#: packages/app-cli/app/cli-utils.js:177
-#: packages/app-cli/app/setupCommand.ts:23
+#: packages/app-cli/app/cli-utils.js:177 packages/app-cli/app/setupCommand.ts:23
 msgid "Y"
 msgstr "K"
 
@@ -7502,16 +7410,15 @@ msgstr "Kyllä"
 #: packages/app-mobile/components/screens/Note/Note.tsx:859
 #: packages/lib/shim-init-node.ts:277
 msgid ""
-"You are about to attach a large image (%dx%d pixels). Would you like to "
-"resize it down to %d pixels before attaching it?"
+"You are about to attach a large image (%dx%d pixels). Would you like to resize "
+"it down to %d pixels before attaching it?"
 msgstr ""
 "Olet liittämässä suurta kuvaa (%dx%d pikseliä). Haluatko muuttaa sen koon %d "
 "pikseliä ennen sen liittämistä?"
 
 #: packages/lib/services/joplinCloudUtils.ts:45
 msgid "You are logged in into Joplin Cloud, you can leave this screen now."
-msgstr ""
-"Olet kirjautunut sisään Joplin Cloud:iin, voit nyt poistua tältä näytöltä."
+msgstr "Olet kirjautunut sisään Joplin Cloud:iin, voit nyt poistua tältä näytöltä."
 
 #: packages/app-desktop/gui/SsoLoginScreen/SsoLoginScreen.tsx:24
 #: packages/app-mobile/components/screens/SsoLoginScreen.tsx:48
@@ -7527,8 +7434,8 @@ msgid ""
 "You are running the Intel version of Joplin on an Apple Silicon processor. "
 "Download the Apple Silicon one for better performance."
 msgstr ""
-"Käytät Joplinin Intel-versiota Apple Silicon-prosessorilla. Lataa Apple "
-"Silicon-versio paremman suorituskyvyn saavuttamiseksi."
+"Käytät Joplinin Intel-versiota Apple Silicon-prosessorilla. Lataa Apple Silicon-"
+"versio paremman suorituskyvyn saavuttamiseksi."
 
 #: packages/app-mobile/components/NoteList.tsx:98
 msgid "You currently have no notebooks."
@@ -7544,22 +7451,20 @@ msgstr "Voit myös kirjoittaa `status` saadaksesi lisätietoja."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:344
 msgid ""
-"You may use the tool below to re-encrypt your data, for example if you know "
-"that some of your notes are encrypted with an obsolete encryption method."
+"You may use the tool below to re-encrypt your data, for example if you know that "
+"some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"Voit käyttää alla olevaa työkalua tietojen salaamiseen uudelleen, "
-"esimerkiksi jos tiedät, että osa muistiinpanoistasi on salattu "
-"vanhentuneella salausmenetelmällä."
+"Voit käyttää alla olevaa työkalua tietojen salaamiseen uudelleen, esimerkiksi "
+"jos tiedät, että osa muistiinpanoistasi on salattu vanhentuneella "
+"salausmenetelmällä."
 
 #: packages/lib/services/joplinCloudUtils.ts:53
 msgid ""
-"You were unable to connect to Joplin Cloud. Please check your credentials "
-"and try again. Error:"
+"You were unable to connect to Joplin Cloud. Please check your credentials and "
+"try again. Error:"
 msgstr ""
-"Joplin Cloud tilisi määrittämisessä tapahtui virhe. Tarkista "
-"käyttäjätunnuksesi ja yritä uudelleen. Virhe oli:\n"
-"\n"
-"%s"
+"Joplin Cloud tilisi määrittämisessä tapahtui virhe. Tarkista käyttäjätunnuksesi "
+"ja yritä uudelleen. Virhe oli:"
 
 #: packages/app-desktop/gui/JoplinCloudConfigScreen.tsx:55
 #: packages/app-mobile/components/screens/ConfigScreen/JoplinCloudConfig.tsx:70
@@ -7585,8 +7490,8 @@ msgstr "Salasanaasi tarvitaan joidenkin tietojen salauksen purkamiseen."
 
 #: packages/app-cli/app/command-sync.ts:267
 msgid ""
-"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
-"to set it."
+"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to "
+"set it."
 msgstr ""
 "Salasanaa tarvitaan joidenkin tietojen salauksen purkamiseen. Aseta se "
 "kirjoittamalla `:e2ee decrypt`."
@@ -7654,7 +7559,7 @@ msgstr "Loitonna"
 
 #, fuzzy
 #~ msgid "notes"
-#~ msgstr "merkintä"
+#~ msgstr "muistiinpanot"
 
 #, fuzzy
 #~ msgid "operator"
@@ -7678,10 +7583,8 @@ msgstr "Loitonna"
 #~ "tallentamisen selaimesta Jopliniin."
 
 #~ msgid ""
-#~ "The application did not close properly. Would you like to start in safe "
-#~ "mode?"
-#~ msgstr ""
-#~ "Sovellus ei sulkeutunut kunnolla. Haluatko aloittaa vikasietotilassa?"
+#~ "The application did not close properly. Would you like to start in safe mode?"
+#~ msgstr "Sovellus ei sulkeutunut kunnolla. Haluatko aloittaa vikasietotilassa?"
 
 #~ msgid "%d hours"
 #~ msgstr "%d tuntia"
@@ -7732,8 +7635,7 @@ msgstr "Loitonna"
 #~ msgid "Show more actions"
 #~ msgstr "Näytä lisää toimintoja"
 
-#~ msgid ""
-#~ "The Joplin mobile app does not currently support this type of link: %s"
+#~ msgid "The Joplin mobile app does not currently support this type of link: %s"
 #~ msgstr ""
 #~ "Joplin mobiilisovellus ei tällä hetkellä tue tämän tyyppistä linkkiä: %s"
 
@@ -7785,8 +7687,7 @@ msgstr "Loitonna"
 #~ msgstr "Tietokanta v%s"
 
 #~ msgid ""
-#~ "There is currently no notebook. Create one by clicking on \"New "
-#~ "notebook\"."
+#~ "There is currently no notebook. Create one by clicking on \"New notebook\"."
 #~ msgstr ""
 #~ "Tällä hetkellä ei ole muistikirjaa. Luo uusi napsauttamalla \"Uusi "
 #~ "muistikirja\"."
@@ -7801,11 +7702,10 @@ msgstr "Loitonna"
 #~ msgid ""
 #~ "To allow Joplin to synchronise with Joplin Cloud, open this URL in your "
 #~ "browser to authorise the application:"
-#~ msgstr ""
-#~ "Vaihe 1: Avaa tämä URL osoite selaimessa valtuuttaaksesi sovelluksen:"
+#~ msgstr "Vaihe 1: Avaa tämä URL osoite selaimessa valtuuttaaksesi sovelluksen:"
 
 #~ msgid "Delete note?"
-#~ msgstr "Poistetaanko merkintä?"
+#~ msgstr "Poistetaanko muistiinpano?"
 
 #~ msgid "Joplin Cloud email"
 #~ msgstr "Joplin Cloud sähköposti"
@@ -7851,14 +7751,13 @@ msgstr "Loitonna"
 #~ msgstr "Salasana OK"
 
 #~ msgid ""
-#~ "Note: Only one master key is going to be used for encryption (the one "
-#~ "marked as \"active\"). Any of the keys might be used for decryption, "
-#~ "depending on how the notes or notebooks were originally encrypted."
+#~ "Note: Only one master key is going to be used for encryption (the one marked "
+#~ "as \"active\"). Any of the keys might be used for decryption, depending on "
+#~ "how the notes or notebooks were originally encrypted."
 #~ msgstr ""
 #~ "Huomaa: Vain yhtä pääavainta käytetään salaukseen (se, joka on merkitty "
-#~ "\"aktiiviseksi\"). Mitä tahansa avainta voidaan käyttää salauksen "
-#~ "purkamiseen sen mukaan, miten muistiinpanot tai muistikirjat alun perin "
-#~ "salattiin."
+#~ "\"aktiiviseksi\"). Mitä tahansa avainta voidaan käyttää salauksen purkamiseen "
+#~ "sen mukaan, miten muistiinpanot tai muistikirjat alun perin salattiin."
 
 #~ msgid "AWS S3"
 #~ msgstr "AWS S3"
@@ -7911,20 +7810,19 @@ msgstr "Loitonna"
 #~ "Jos fontti on väärä tai tyhjä, se on oletuksena yleinen monospace fontti."
 
 #~ msgid ""
-#~ "This should be a *monospace* font or some elements will render "
-#~ "incorrectly. If the font is incorrect or empty, it will default to a "
-#~ "generic monospace font."
+#~ "This should be a *monospace* font or some elements will render incorrectly. "
+#~ "If the font is incorrect or empty, it will default to a generic monospace "
+#~ "font."
 #~ msgstr ""
-#~ "Tämän on oltava *monospace* fontti, muuten se ei toimi oikein. Jos "
-#~ "kirjasin on väärä tai tyhjä, se on oletusarvoisesti yleinen monospace "
-#~ "fontti."
+#~ "Tämän on oltava *monospace* fontti, muuten se ei toimi oikein. Jos kirjasin "
+#~ "on väärä tai tyhjä, se on oletusarvoisesti yleinen monospace fontti."
 
 #~ msgid "Checking..."
 #~ msgstr "Tarkistetaan..."
 
 #~ msgid ""
-#~ "The Joplin Nextcloud App is either not installed or misconfigured. Please "
-#~ "see the full error message below:"
+#~ "The Joplin Nextcloud App is either not installed or misconfigured. Please see "
+#~ "the full error message below:"
 #~ msgstr ""
 #~ "Joplin Nextcloud -sovellusta ei ole joko asennettu tai se on määritetty "
 #~ "väärin. Katso koko virhesanoma:"
@@ -7942,12 +7840,12 @@ msgstr "Loitonna"
 #~ msgstr "OneDrive Dev (Vain testausta varten)"
 
 #~ msgid ""
-#~ "Type a note title or part of its content to jump to it. Or type # "
-#~ "followed by a tag name, or @ followed by a notebook name."
+#~ "Type a note title or part of its content to jump to it. Or type # followed by "
+#~ "a tag name, or @ followed by a notebook name."
 #~ msgstr ""
 #~ "Siirry muistiinpanon otsikkoon tai sen sisältöön kirjoittamalla osa sen "
-#~ "sisällöstä. Voit myös kirjoittaa # ja sen jälkeen tunnisteen nimen tai @ "
-#~ "ja sen jälkeen muistikirjan nimen."
+#~ "sisällöstä. Voit myös kirjoittaa # ja sen jälkeen tunnisteen nimen tai @ ja "
+#~ "sen jälkeen muistikirjan nimen."
 
 #~ msgid "Name"
 #~ msgstr "Nimi"
@@ -7989,8 +7887,8 @@ msgstr "Loitonna"
 #~ msgstr ""
 #~ "Synkronointi OneDrive:en ei onnistunut.\n"
 #~ "\n"
-#~ "Tämä virhe tapahtuu usein käytettäessä OneDrive for Business -ohjelmaa, "
-#~ "jota ei valitettavasti voida tukea.\n"
+#~ "Tämä virhe tapahtuu usein käytettäessä OneDrive for Business -ohjelmaa, jota "
+#~ "ei valitettavasti voida tukea.\n"
 #~ "\n"
 #~ "Harkitse tavallisen OneDrive-tilin käyttöä."
 
@@ -7998,8 +7896,8 @@ msgstr "Loitonna"
 #~ msgstr "Json Vie hakemisto"
 
 #~ msgid ""
-#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
-#~ "be decrypted and try again."
+#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+#~ "decrypted and try again."
 #~ msgstr ""
 #~ "Tämä kohde on tällä hetkellä salattu: %s \"%s\". Odota, että kaikkien "
 #~ "kohteiden salaus puretaan, ja yritä uudelleen."
