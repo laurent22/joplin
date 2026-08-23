@@ -208,7 +208,7 @@ const NoteLockSettings: React.FC<Props> = props => {
 		return (
 			<div className='section'>
 				<h2>{_('Key upgrade')}</h2>
-				<p>{_('The note lock key uses an out-dated algorithm and it is recommended to upgrade it. The upgraded key will still lock and unlock your notes as usual.')}</p>
+				<p>{_('For better security, your note lock protection can be upgraded to a newer method. Enter your password to upgrade it. Your notes will keep locking and unlocking as usual.')}</p>
 				<div className='form'>
 					<LabelledPasswordInput
 						labelText={_('Password')}

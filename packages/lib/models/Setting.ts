@@ -1404,7 +1404,7 @@ class Setting extends BaseModel {
 			'general': _('Language, date format'),
 			'appearance': _('Themes, notebook sort order'),
 			'sync': _('Sync, encryption, proxy'),
-			'noteLock': _('Note lock password, auto lock'),
+			'noteLock': _('Note lock password, auto relock'),
 			'joplinCloud': _('Email To Note, login information'),
 			'editor': _('Typography, spellcheck, layout'),
 			'markdownPlugins': _('Media player, math, diagrams, table of contents'),
