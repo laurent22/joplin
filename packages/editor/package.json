@@ -55,7 +55,7 @@
     "prosemirror-keymap": "1.2.3",
     "prosemirror-model": "1.25.3",
     "prosemirror-schema-list": "1.5.1",
-    "prosemirror-search": "1.1.0",
+    "prosemirror-search": "1.1.1",
     "prosemirror-state": "1.4.3",
     "prosemirror-tables": "1.7.1",
     "prosemirror-transform": "1.11.0",
