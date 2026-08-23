@@ -10,6 +10,7 @@ import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import bridge from './services/bridge';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
+import darkTheme from '@joplin/lib/themes/dark';
 import { friendlySafeFilename } from '@joplin/lib/path-utils';
 import time from '@joplin/lib/time';
 import { BrowserWindow, BrowserWindowConstructorOptions } from 'electron';
@@ -43,6 +44,7 @@ export default class InteropServiceHelper {
 		const result = await service.export(fullExportOptions);
 		// eslint-disable-next-line no-console
 		console.info('Export HTML result: ', result);
+
 		return tempFile;
 	}
 
@@ -81,6 +83,31 @@ export default class InteropServiceHelper {
 					// So we need to add an additional timer to make sure fonts are loaded
 					// as it doesn't seem there's any easy way to figure that out.
 					shim.setTimeout(async () => {
+						try {
+							// Add a dark background behind js-draw images so light ink stays visible when printing.
+							await win.webContents.executeJavaScript(`
+								const embeddedSvgSelector = 'img[src^="data:image/svg+xml;base64,"]';
+								for (const image of document.querySelectorAll(embeddedSvgSelector)) {
+									const base64Svg = image.src.substring(image.src.indexOf(',') + 1);
+									let svg;
+									try {
+										svg = atob(base64Svg);
+									} catch {
+										continue;
+									}
+									const isJsDrawImage = svg.includes('id="js-draw-style-sheet"');
+
+									if (isJsDrawImage) {
+										image.style.backgroundColor = '${darkTheme.backgroundColor}';
+									}
+								}
+							`);
+						} catch (error) {
+							cleanup();
+							reject(error);
+							return;
+						}
+
 						if (target === 'pdf') {
 							try {
 								// The below line "opens" all <details> tags
