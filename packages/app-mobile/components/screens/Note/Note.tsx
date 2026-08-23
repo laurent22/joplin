@@ -1864,8 +1864,9 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 			// available space.
 			&& !this.titleTextFieldRef.current?.isFocused();
 
-		// Unsaved changes keep the editor rather than the panel - their save re-encrypts with the captured key.
-		const noteLockPanelVisible = isNoteLockEnabled() && !!note.is_locked && (!this.props.noteLockSessionUnlocked || !this.state.noteLockKey) && !this.isModified();
+		// Unsaved changes keep the editor rather than the panel - their save re-encrypts with the
+		// captured key. An undecryptable note has no plaintext to edit, so it always keeps the panel.
+		const noteLockPanelVisible = isNoteLockEnabled() && !!note.is_locked && (!this.props.noteLockSessionUnlocked || !this.state.noteLockKey) && (!this.isModified() || this.state.noteLockUndecryptable);
 
 		let bodyComponent = null;
 

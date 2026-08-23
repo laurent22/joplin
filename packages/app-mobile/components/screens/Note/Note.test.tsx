@@ -140,6 +140,21 @@ const setupUnlockedNoteLock = async (password: string) => {
 	await NoteLockSession.instance().unlock(password);
 };
 
+// enableNoteLock only emits an event for a mounted screen, so the fixture locks the row
+// directly with a gated save, then rotates the key from under it.
+const setupUndecryptableNote = async (noteProperties: NoteEntity) => {
+	await setupUnlockedNoteLock('111111');
+	const noteId = await openNewNote(noteProperties);
+	const lockedNote = { ...await Note.load(noteId, { useNoteLock: true }), is_locked: 1, isDecrypted: true };
+	await Note.save(lockedNote, { useNoteLock: true });
+	await act(async () => {
+		await NoteLockSession.instance().reset('222222');
+		await NoteLockSession.instance().unlock('222222');
+	});
+	store.dispatch({ type: 'SET_NOTE_LOCK_SESSION_UNLOCKED', value: true });
+	return noteId;
+};
+
 const expectToBeEditing = async (editing: boolean) => {
 	if (editing) {
 		await getMarkdownEditorControl();
@@ -314,20 +329,7 @@ describe('screens/Note', () => {
 	});
 
 	it('should disable tags for a note that cannot be unlocked while the session is unlocked', async () => {
-		await setupUnlockedNoteLock('111111');
-		const noteId = await openNewNote({ title: 'Old key note', body: 'secret' });
-		// enableNoteLock only emits an event for a mounted screen, so the fixture locks the row
-		// directly with a gated save.
-		const lockedNote = { ...await Note.load(noteId, { useNoteLock: true }), is_locked: 1, isDecrypted: true };
-		await Note.save(lockedNote, { useNoteLock: true });
-
-		// The reset rotates the key, so the note above stays present but can no longer be
-		// unlocked with the fresh session.
-		await act(async () => {
-			await NoteLockSession.instance().reset('222222');
-			await NoteLockSession.instance().unlock('222222');
-		});
-		store.dispatch({ type: 'SET_NOTE_LOCK_SESSION_UNLOCKED', value: true });
+		await setupUndecryptableNote({ title: 'Old key note', body: 'secret' });
 
 		const { unmount } = render(<WrappedNoteScreen />);
 		expect(await screen.findByText('This note could not be unlocked. If it was locked prior to a password reset, the content is no longer recoverable.')).toBeVisible();
@@ -335,6 +337,28 @@ describe('screens/Note', () => {
 		await openNoteActionsMenu();
 		const tagsButton = await screen.findByText('Tags');
 		expect(tagsButton).toHaveProp('disabled', true);
+
+		unmount();
+		Setting.setValue('featureFlag.noteLock', false);
+	});
+
+	it('should keep the locked panel when toggling the checkbox of an undecryptable to-do', async () => {
+		const noteId = await setupUndecryptableNote({ title: 'Old key todo', body: 'secret', is_todo: 1 });
+
+		const { unmount } = render(<WrappedNoteScreen />);
+		const undecryptableMessage = 'This note could not be unlocked. If it was locked prior to a password reset, the content is no longer recoverable.';
+		expect(await screen.findByText(undecryptableMessage)).toBeVisible();
+
+		fireEvent.press(screen.getByRole('checkbox'));
+		await act(() => waitForWithRealTimers(async () => {
+			expect((await Note.load(noteId)).todo_completed).toBeGreaterThan(0);
+		}));
+
+		// The metadata save must not hide the panel and expose the encrypted body.
+		expect(screen.getByText(undecryptableMessage)).toBeVisible();
+		const row = await Note.load(noteId);
+		expect(row.is_locked).toBe(1);
+		expect(row.body.includes('secret')).toBe(false);
 
 		unmount();
 		Setting.setValue('featureFlag.noteLock', false);
