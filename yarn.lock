@@ -12785,7 +12785,7 @@ __metadata:
     prosemirror-keymap: "npm:1.2.3"
     prosemirror-model: "npm:1.25.3"
     prosemirror-schema-list: "npm:1.5.1"
-    prosemirror-search: "npm:1.1.0"
+    prosemirror-search: "npm:1.1.1"
     prosemirror-state: "npm:1.4.3"
     prosemirror-tables: "npm:1.7.1"
     prosemirror-transform: "npm:1.11.0"
@@ -48749,14 +48749,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prosemirror-search@npm:1.1.0":
-  version: 1.1.0
-  resolution: "prosemirror-search@npm:1.1.0"
+"prosemirror-search@npm:1.1.1":
+  version: 1.1.1
+  resolution: "prosemirror-search@npm:1.1.1"
   dependencies:
     prosemirror-model: "npm:^1.21.0"
     prosemirror-state: "npm:^1.4.3"
     prosemirror-view: "npm:^1.33.6"
-  checksum: 10/2988194d37a7966176d29618f2c57d91e01d2f7bb4e7d3d71f73d23799606fea4edc1bab7e058fc0c34174e91b4786b440ed695d36a9d6a3b5edfb4ae35b77e9
+  checksum: 10/68e725c7d82fd574fe9a983d0446f3a10118e8f7c01c7eed5eba39d9a49122761ef558c95b6db440400082e20b7a02478bfe9d7b829f57d01cf6c609b08cc253
   languageName: node
   linkType: hard
 
