@@ -2309,7 +2309,7 @@ const builtInMetadata = (Setting: typeof SettingType) => {
 			public: true,
 			appTypes: [AppType.Desktop, AppType.Mobile],
 			section: 'noteLock',
-			label: () => _('Auto lock when switching note'),
+			label: () => _('Auto relock when switching notes'),
 			show: (settings) => !!settings['featureFlag.noteLock'],
 			storage: SettingStorage.File,
 		},

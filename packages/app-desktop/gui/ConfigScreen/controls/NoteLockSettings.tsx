@@ -197,7 +197,7 @@ const NoteLockSettings: React.FC<Props> = props => {
 						/>
 					)}
 				</div>
-				<p className='reminder'><strong>{_('Please make sure you remember your password. It cannot be recovered if lost, and any data encrypted with it will become inaccessible.')}</strong></p>
+				<p className='reminder'><strong>{_('Please make sure you remember your password. It cannot be recovered if lost, and any locked notes will become inaccessible.')}</strong></p>
 			</div>
 		);
 	};
@@ -208,7 +208,7 @@ const NoteLockSettings: React.FC<Props> = props => {
 		return (
 			<div className='section'>
 				<h2>{_('Key upgrade')}</h2>
-				<p>{_('The note lock key uses an out-dated encryption algorithm and it is recommended to upgrade it. The upgraded key will still be able to decrypt and encrypt your data as usual.')}</p>
+				<p>{_('The note lock key uses an out-dated algorithm and it is recommended to upgrade it. The upgraded key will still lock and unlock your notes as usual.')}</p>
 				<div className='form'>
 					<LabelledPasswordInput
 						labelText={_('Password')}

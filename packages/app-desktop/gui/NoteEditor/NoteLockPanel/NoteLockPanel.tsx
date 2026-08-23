@@ -50,7 +50,7 @@ export default function NoteLockPanel(props: Props) {
 
 	const renderAction = () => {
 		if (props.undecryptable) {
-			return <p className="message">{_('This note could not be decrypted. If it was encrypted prior to a password reset, the contents are no longer recoverable.')}</p>;
+			return <p className="message">{_('This note could not be unlocked. If it was locked prior to a password reset, the contents are no longer recoverable.')}</p>;
 		}
 
 		if (!props.hasNoteLockKey) {
@@ -64,7 +64,7 @@ export default function NoteLockPanel(props: Props) {
 
 		return (
 			<form className="form unlock-form" onSubmit={onSubmit}>
-				<p className="message">{_('This note is encrypted. Enter the note lock password to unlock encrypted notes for this session.')}</p>
+				<p className="message">{_('This note is locked. Enter the note lock password to unlock your notes for this session.')}</p>
 				<div className="field">
 					<LabelledPasswordInput
 						labelText={_('Note lock password')}

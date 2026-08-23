@@ -1387,7 +1387,7 @@ class Setting extends BaseModel {
 			return _('Notes and settings are stored in: %s', toSystemSlashes(this.value('profileDir'), process.platform));
 		}
 		if (name === 'noteLock') {
-			return _('Locked notes are encrypted on this device and can only be read after entering your note lock password. The password is required again after locking or restarting Joplin.');
+			return _('Locked notes are specific notes that are encrypted on the device and protected by your note lock password. They can only be read after entering this password. The password is required again after relocking notes or restarting Joplin.');
 		}
 		if (name === 'ai.tools') {
 			return _('Tools and services to expose to AI. AI agents can use these tools either via the note chat panel or Joplin\'s MCP server (if enabled).');

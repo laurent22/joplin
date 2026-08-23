@@ -10,7 +10,7 @@ import bridge from '../../../services/bridge';
 
 export const declaration: CommandDeclaration = {
 	name: 'enableNoteEncryption',
-	label: () => _('Enable encryption'),
+	label: () => _('Lock this note'),
 };
 
 export const runtime = (): CommandRuntime => {
@@ -30,7 +30,7 @@ export const runtime = (): CommandRuntime => {
 			}
 
 			if (!NoteLockKey.instance().load()) {
-				const setUpNow = bridge().showConfirmMessageBox(_('Encrypting a note requires a note lock password, which has not yet been set. Set it up now?'), {
+				const setUpNow = bridge().showConfirmMessageBox(_('Locking a note requires the note lock password, which has not been set up yet. Set it up now?'), {
 					buttons: [_('Yes'), _('No')],
 				});
 				if (setUpNow) {
