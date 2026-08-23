@@ -13133,7 +13133,7 @@ __metadata:
     mustache: "npm:4.2.0"
     node-cron: "npm:4.2.1"
     node-mocks-http: "npm:1.17.2"
-    nodemailer: "npm:6.10.1"
+    nodemailer: "npm:8.0.0"
     nodemon: "npm:3.1.14"
     otplib: "npm:12.0.1"
     pg: "npm:8.20.0"
@@ -44221,10 +44221,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nodemailer@npm:6.10.1":
-  version: 6.10.1
-  resolution: "nodemailer@npm:6.10.1"
-  checksum: 10/d9911701641e06143a2deb0bd5deb518310972316c6e6eabc594af24353b0d67867f26cb8d72b0cfa385abef945149ac51ae40a40d2199e1088aef5829e58a3d
+"nodemailer@npm:8.0.0":
+  version: 8.0.0
+  resolution: "nodemailer@npm:8.0.0"
+  checksum: 10/fcfae7326a1c376d2a21fbe38596a65070048f6d733fc49f961c3cc983e99dc966bc2508add157ba58b30bf0c42de8f6ef7109cef3dfcff7b6381586384f7a9c
   languageName: node
   linkType: hard
 
