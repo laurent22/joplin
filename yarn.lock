@@ -12772,7 +12772,7 @@ __metadata:
     "@types/react": "npm:19.1.10"
     "@types/react-redux": "npm:7.1.34"
     "@types/styled-components": "npm:5.1.32"
-    dompurify: "npm:3.4.5"
+    dompurify: "npm:3.4.6"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     orderedmap: "npm:2.1.1"
@@ -29218,15 +29218,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:3.4.5":
-  version: 3.4.5
-  resolution: "dompurify@npm:3.4.5"
+"dompurify@npm:3.4.6":
+  version: 3.4.6
+  resolution: "dompurify@npm:3.4.6"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10/b39c9bbd5c87dd29d1fda6446ddd7319a86c85a4c12af5cfef17697cfefbd13b8baf698d5a3cb4ee0b941f8b6e49af6a63c844246e6aee83ddb417e03470613a
+  checksum: 10/950bfadc9ad6ee5706ccdfde09313c9c8f6a299206f77ccb621b1355947443753163031770cbb46236f1b6910e57e6710c34970b13c8a9e0fd7c93fac77c4815
   languageName: node
   linkType: hard
 
