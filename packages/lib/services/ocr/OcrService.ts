@@ -9,8 +9,12 @@ import { Minute } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
 import TaskQueue from '../../TaskQueue';
 import eventManager, { EventName } from '../../eventManager';
+import { MB } from '@joplin/utils/bytes';
+import { substrWithEllipsis } from '../../string-utils';
 
 const logger = Logger.create('OcrService');
+
+const ocrTextMaxLength = 10 * MB;
 
 // From: https://github.com/naptha/tesseract.js/blob/master/docs/image-format.md
 export const supportedMimeTypes = [
@@ -113,7 +117,7 @@ export default class OcrService {
 					return {
 						...emptyRecognizeResult(),
 						ocr_status: ResourceOcrStatus.Done,
-						ocr_text: pageTexts.join('\n'),
+						ocr_text: substrWithEllipsis(pageTexts.join('\n'), 0, ocrTextMaxLength),
 					};
 				}
 			}
@@ -164,7 +168,7 @@ export default class OcrService {
 			return {
 				...emptyRecognizeResult(),
 				ocr_status: ResourceOcrStatus.Done,
-				ocr_text: results.map(r => r.ocr_text).join('\n'),
+				ocr_text: substrWithEllipsis(results.map(r => r.ocr_text).join('\n'), 0, ocrTextMaxLength),
 				ocr_details: ocrDetails,
 			};
 		} else {
