@@ -3,6 +3,7 @@ import uuid from '../../../uuid';
 import EncryptionService, { EncryptionCustomHandler, EncryptionMethod } from '../EncryptionService';
 import { MasterKeyEntity, PublicKeyAlgorithm, PublicKeyCrypto, PublicKeyCryptoProvider } from '../types';
 import PerformanceLogger from '../../../PerformanceLogger';
+import { _ } from '../../../locale';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -56,12 +57,15 @@ export const setRSA = (rsa: PublicKeyCryptoProvider) => {
 };
 
 const supportsAlgorithm = (algorithm: PublicKeyAlgorithm) => {
-	return Object.prototype.hasOwnProperty.call(rsa_, algorithm);
+	return Object.prototype.hasOwnProperty.call(rsa_, algorithm) && algorithm !== PublicKeyAlgorithm.Unknown;
 };
 
 // Exported for testing purposes
 export const rsa = (algorithm: PublicKeyAlgorithm): PublicKeyCrypto => {
 	if (!rsa_) throw new Error('RSA handler has not been set!!');
+	if (algorithm === PublicKeyAlgorithm.Unknown) {
+		throw new Error(_('Unsupported key format. Joplin may need to be updated.'));
+	}
 	if (!supportsAlgorithm(algorithm)) throw new Error(`Unsupported algorithm: ${algorithm}`);
 	return rsa_[algorithm];
 };
