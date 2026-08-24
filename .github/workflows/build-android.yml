@@ -30,7 +30,7 @@ jobs:
           docker system prune -af || true
           df -h /
 
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
           java-version: '20'
