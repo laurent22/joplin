@@ -11,7 +11,7 @@ const nodeEmoji = require('node-emoji');
 
 // Very old browsers (e.g. Chrome < 64, which is from 2018) may not support
 // \p{} regexes.
-let regexes_: Record<string, RegExp> | undefined;
+let regexes_: Record<string, RegExp>;
 try {
 	regexes_ = {
 		// eslint-disable-next-line prefer-regex-literals -- Needed to prevent syntax errors
