@@ -12666,7 +12666,7 @@ __metadata:
     react-native-localize: "npm:3.7.0"
     react-native-modal-datetime-picker: "npm:18.0.0"
     react-native-nitro-modules: "npm:0.33.9"
-    react-native-paper: "npm:5.15.2"
+    react-native-paper: "npm:5.15.3"
     react-native-popup-menu: "npm:0.17.0"
     react-native-quick-actions: "npm:0.3.13"
     react-native-quick-base64: "npm:2.2.2"
@@ -49707,9 +49707,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:5.15.2":
-  version: 5.15.2
-  resolution: "react-native-paper@npm:5.15.2"
+"react-native-paper@npm:5.15.3":
+  version: 5.15.3
+  resolution: "react-native-paper@npm:5.15.3"
   dependencies:
     "@callstack/react-theme-provider": "npm:^3.0.9"
     color: "npm:^3.1.2"
@@ -49718,7 +49718,7 @@ __metadata:
     react: "*"
     react-native: "*"
     react-native-safe-area-context: "*"
-  checksum: 10/084fb2e9982df5a59cfef11d9c1f2ddd527c3fb4f47e5cdd3cb8795d197299e86ccb5c83cdfeb82c7b1405a336228adab87fd31311a61cd95a83d249733febc8
+  checksum: 10/6e34e04f4c9a969e6d0bd4d5b716a3283d2c25d27b39603038a2674427986d4af67ee9f9f214f8bcf4a48198d81c5cbe9bf02f0cdb60332d8019da3e7a5bf775
   languageName: node
   linkType: hard
 
