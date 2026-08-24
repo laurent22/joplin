@@ -64,7 +64,8 @@ const supportsAlgorithm = (algorithm: PublicKeyAlgorithm) => {
 export const rsa = (algorithm: PublicKeyAlgorithm): PublicKeyCrypto => {
 	if (!rsa_) throw new Error('RSA handler has not been set!!');
 	if (algorithm === PublicKeyAlgorithm.Unknown) {
-		throw new Error(_('Unsupported key format. Joplin may need to be updated.'));
+		// "Unknown" PPK algorithms may be caused by either a corrupted key or an outdated version of Joplin.
+		throw new Error(_('Unsupported public key format. Please check that Joplin is updated to the latest version and try again.'));
 	}
 	if (!supportsAlgorithm(algorithm)) throw new Error(`Unsupported algorithm: ${algorithm}`);
 	return rsa_[algorithm];
