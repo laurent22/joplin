@@ -25,7 +25,7 @@ export interface PublicPrivateKeyPair {
 // To indicate that clients should migrate to a new PublicKeyAlgorithm, add it to the end of
 // "ppkMigrations".
 let ppkMigrations = [
-	PublicKeyAlgorithm.RsaV1, // RSA-PKCS#1-v1.5-2048
+	PublicKeyAlgorithm.RsaV1, // RSA-PKCS#1-v1.5-2048, not supported on all platforms
 	// RsaV2 uses a newer padding type
 	PublicKeyAlgorithm.RsaV2, // RSA-OAEP-2048
 
