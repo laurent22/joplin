@@ -438,7 +438,9 @@
 				if (!element.paused) element.pause();
 			}
 
-			for (const iframe of contentElement.querySelectorAll('iframe')) {
+			// Exclude .media-pdf: it's the interactive PDF viewer, not a media
+			// player, and reloading it would reset the current page and scroll.
+			for (const iframe of contentElement.querySelectorAll('iframe:not(.media-pdf)')) {
 				const src = iframe.getAttribute('src');
 				if (src) iframe.setAttribute('src', src);
 			}
