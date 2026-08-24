@@ -56,6 +56,36 @@ const getOcrDriverId = (resource: ResourceEntity) => {
 	return resource.ocr_driver_id === 0 ? ResourceOcrDriverId.PrintedText : resource.ocr_driver_id;
 };
 
+const truncateLongOcrDetails = (details: PdfOcrDetails) => {
+	const result: PdfOcrDetails = {
+		...details,
+		pages: [],
+	};
+
+	let size = 0;
+	for (const page of result.pages) {
+		size += 2;
+		const newPage: PdfOcrPage = { ...page, lines: [] };
+		for (const line of page.lines) {
+			size += 2;
+
+			const newLine: RecognizeResultLine = { ...line, words: [] };
+			for (const word of line.words) {
+				size += word.t.length;
+				newLine.words.push(word);
+			}
+
+			newPage.lines.push(newLine);
+
+			if (size > ocrTextMaxLength) break;
+		}
+
+		result.pages.push(newPage);
+	}
+
+	return result;
+};
+
 export default class OcrService {
 
 	private drivers_: OcrDriverBase[];
@@ -158,10 +188,10 @@ export default class OcrService {
 			// Only create PDF OCR details structure if setting is enabled
 			let ocrDetails = '';
 			if (saveOcrDetails) {
-				const pdfOcrDetails: PdfOcrDetails = {
+				const pdfOcrDetails = truncateLongOcrDetails({
 					version: 1,
 					pages: pdfOcrPages,
-				};
+				});
 				ocrDetails = JSON.stringify(pdfOcrDetails);
 			}
 
