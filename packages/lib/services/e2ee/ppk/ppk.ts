@@ -26,8 +26,8 @@ export interface PublicPrivateKeyPair {
 // "ppkMigrations".
 let ppkMigrations = [
 	PublicKeyAlgorithm.RsaV1,
-	// Uncomment to migrate to RsaV2, which uses a different padding type from RsaV1
-	// PublicKeyAlgorithm.RsaV2,
+	// RsaV2 uses a newer padding type
+	PublicKeyAlgorithm.RsaV2,
 
 	// Uncomment to migrate to RsaV3, which uses different encryption libraries, padding type,
 	// and a larger key size. Before migrating:
