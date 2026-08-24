@@ -81,7 +81,7 @@ export default class TaskService extends BaseService {
 	}
 
 	// Null when task state is managed through the main connection pool.
-	public get taskStateDb(): DbConnection {
+	public get taskStateDb() {
 		return this.taskStateDb_;
 	}
 
