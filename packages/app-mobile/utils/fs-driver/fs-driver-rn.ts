@@ -73,6 +73,17 @@ export default class FsDriverRN extends FsDriverBase {
 		}
 	}
 
+	private async safDirectoryUri_(path: string) {
+		const normalizedPath = path.replace(/\/$/, '');
+		const cachedUri = this.safDirectoryUris_.get(normalizedPath);
+		if (cachedUri) return cachedUri;
+
+		const directory = await RNSAF.stat(normalizedPath);
+		const directoryUri = directory.documentUri ?? directory.uri;
+		this.safDirectoryUris_.set(normalizedPath, directoryUri);
+		return directoryUri;
+	}
+
 	private async writeSafFile_(path: string, content: string, encoding: SupportedEncoding) {
 		if (this.safDocumentUris_.has(path)) {
 			return this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding }));
@@ -80,7 +91,12 @@ export default class FsDriverRN extends FsDriverBase {
 
 		const lastSlashIndex = path.lastIndexOf('/');
 		const parentPath = path.substring(0, lastSlashIndex);
-		const parentUri = this.safDirectoryUris_.get(parentPath);
+		let parentUri: string = null;
+		try {
+			parentUri = await this.safDirectoryUri_(parentPath);
+		} catch (error) {
+			// Fall back to path-based creation below.
+		}
 		if (parentUri) {
 			try {
 				const document = await RNSAF.writeFileInDirectory(parentUri, path.substring(lastSlashIndex + 1), content, { encoding });
@@ -104,7 +120,12 @@ export default class FsDriverRN extends FsDriverBase {
 
 		const lastSlashIndex = dest.lastIndexOf('/');
 		const parentPath = dest.substring(0, lastSlashIndex);
-		const parentUri = this.safDirectoryUris_.get(parentPath);
+		let parentUri: string = null;
+		try {
+			parentUri = await this.safDirectoryUri_(parentPath);
+		} catch (error) {
+			// Fall back to path-based creation below.
+		}
 		if (parentUri) {
 			try {
 				const document = await RNSAF.copyFileToDirectory(source, parentUri, dest.substring(lastSlashIndex + 1));
@@ -184,8 +205,7 @@ export default class FsDriverRN extends FsDriverBase {
 		try {
 			if (isScoped) {
 				stats = await RNSAF.listFiles(path);
-				const directory = await RNSAF.stat(path);
-				this.safDirectoryUris_.set(path.replace(/\/$/, ''), directory.documentUri ?? directory.uri);
+				await this.safDirectoryUri_(path);
 			} else {
 				stats = await RNFS.readDir(path);
 			}
