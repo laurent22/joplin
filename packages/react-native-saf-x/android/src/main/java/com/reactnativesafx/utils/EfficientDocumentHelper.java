@@ -480,7 +480,9 @@ public class EfficientDocumentHelper {
   private void copyFileContents(final Uri sourceUri, final Uri destinationUri) throws IOException {
     try (InputStream inStream = context.getContentResolver().openInputStream(sourceUri);
          OutputStream outStream = context.getContentResolver().openOutputStream(destinationUri, "wt")) {
-      byte[] buffer = new byte[1024 * 64];
+      // Some SAF providers have significant overhead for each write. A larger
+      // buffer substantially reduces the number of provider calls for resources.
+      byte[] buffer = new byte[1024 * 1024];
       int length;
       while ((length = inStream.read(buffer)) > 0) {
         outStream.write(buffer, 0, length);
@@ -886,16 +888,7 @@ public class EfficientDocumentHelper {
 
           }
 
-          try (InputStream inStream =
-                 context.getContentResolver().openInputStream(srcUri);
-               OutputStream outStream =
-                 context.getContentResolver().openOutputStream(destUri, "wt")) {
-            byte[] buffer = new byte[1024 * 4];
-            int length;
-            while ((length = inStream.read(buffer)) > 0) {
-              outStream.write(buffer, 0, length);
-            }
-          }
+          copyFileContents(srcUri, destUri);
 
           if (!copy) {
             unlink(srcUri);
