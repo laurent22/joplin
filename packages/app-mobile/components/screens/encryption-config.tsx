@@ -9,12 +9,11 @@ import time from '@joplin/lib/time';
 import { decryptedStatText, enableEncryptionConfirmationMessages, onSavePasswordClick, useInputMasterPassword, useInputPasswords, usePasswordChecker, useStats } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { State } from '@joplin/lib/reducer';
-import { masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { localSyncInfoSelector, masterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import { useMemo, useState } from 'react';
 import { Divider, List } from 'react-native-paper';
 import shim from '@joplin/lib/shim';
-import { createSelector } from 'reselect';
 
 interface Props {
 	themeId: number;
@@ -397,13 +396,8 @@ const EncryptionConfigScreen = (props: Props) => {
 	);
 };
 
-const syncInfoSelector = createSelector(
-	(state: State) => state.settings['syncInfoCache'],
-	cache => new SyncInfo(cache),
-);
-
 export default connect((state: State) => {
-	const syncInfo = syncInfoSelector(state);
+	const syncInfo = localSyncInfoSelector(state);
 
 	return {
 		themeId: state.settings.theme,

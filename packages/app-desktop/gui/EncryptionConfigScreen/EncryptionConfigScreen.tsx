@@ -7,7 +7,7 @@ import shim, { MessageBoxType } from '@joplin/lib/shim';
 import dialogs from '../dialogs';
 import { decryptedStatText, determineKeyPassword, dontReencryptData, enableEncryptionConfirmationMessages, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
-import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { getEncryptionEnabled, localSyncInfoSelector, masterKeyEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import Button, { ButtonLevel } from '../Button/Button';
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
@@ -24,7 +24,6 @@ import Dialog from '@joplin/lib/components/Dialog';
 import DialogButtonRow from '../DialogButtonRow';
 import DialogTitle from '../DialogTitle';
 import PasswordInput from '../PasswordInput/PasswordInput';
-import { createSelector } from 'reselect';
 
 interface Props {
 	themeId: number;
@@ -606,13 +605,8 @@ export const EncryptionConfigScreen = (props: Props) => {
 	);
 };
 
-const syncInfoSelector = createSelector(
-	(state: AppState) => state.settings['syncInfoCache'],
-	cache => new SyncInfo(cache),
-);
-
 const mapStateToProps = (state: AppState) => {
-	const syncInfo = syncInfoSelector(state);
+	const syncInfo = localSyncInfoSelector(state);
 
 	return {
 		themeId: state.settings.theme,

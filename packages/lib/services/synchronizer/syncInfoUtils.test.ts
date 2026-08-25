@@ -1,12 +1,21 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, logger, switchClient, encryptionService, msleep, fileApi } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { checkIfCanSync, localSyncInfo, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo, onRevisionServiceSettingsChanged, setAppMinVersion } from './syncInfoUtils';
+import { checkIfCanSync, localSyncInfo, localSyncInfoSelector, masterKeyEnabled, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyEnabled, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, checkSyncTargetIsValid, fetchSyncInfo, onRevisionServiceSettingsChanged, setAppMinVersion } from './syncInfoUtils';
 import Setting from '../../models/Setting';
 import BaseItem from '../../models/BaseItem';
 import BaseModel from '../../models/BaseItem';
 import Logger from '@joplin/utils/Logger';
+import { State } from '../../reducer';
 
 describe('syncInfoUtils', () => {
+	it('should keep selected sync info stable while the cache is unchanged', () => {
+		const cache = JSON.stringify({ version: 3 });
+		const state = { settings: { syncInfoCache: cache } } as State;
+		const firstResult = localSyncInfoSelector(state);
+
+		expect(localSyncInfoSelector({ ...state, syncStarted: true })).toBe(firstResult);
+		expect(localSyncInfoSelector({ settings: { syncInfoCache: JSON.stringify({ version: 4 }) } } as State)).not.toBe(firstResult);
+	});
 
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
