@@ -390,4 +390,28 @@ describe('OcrService', () => {
 		expect(pdfBytes.length).toBeGreaterThan(jpegBuffer.length * 1.5);
 	});
 
+	it('should truncate long OCR text', async () => {
+		const service = newOcrService();
+		const { reset } = service.testing_setOcrMaxSize(10);
+		try {
+			const { resource: resource1 } = await createNoteAndResource({ path: `${ocrSampleDir}/multi_page__embedded_text.pdf` });
+			const { resource: resource2 } = await createNoteAndResource({ path: `${ocrSampleDir}/testocr.png` });
+			await msleep(1);
+			expect(await Resource.needOcrCount(supportedMimeTypes)).toBe(2);
+
+			await service.processResources();
+
+			expect(await Resource.load(resource1.id)).toMatchObject({
+				ocr_text: 'This is...',
+			});
+			// PNG resources are unlikely to go over the actual ocr_text length limit, but the logic should
+			// support them anyway:
+			expect(await Resource.load(resource2.id)).toMatchObject({
+				ocr_text: 'This is...',
+			});
+		} finally {
+			reset();
+		}
+	});
+
 });

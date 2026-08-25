@@ -9,12 +9,11 @@ import { Minute } from '@joplin/utils/time';
 import Logger from '@joplin/utils/Logger';
 import TaskQueue from '../../TaskQueue';
 import eventManager, { EventName } from '../../eventManager';
-import { MB } from '@joplin/utils/bytes';
+import { bytesToHuman, MB } from '@joplin/utils/bytes';
 import { substrWithEllipsis } from '../../string-utils';
 
 const logger = Logger.create('OcrService');
 
-const ocrTextMaxLength = 10 * MB;
 
 // From: https://github.com/naptha/tesseract.js/blob/master/docs/image-format.md
 export const supportedMimeTypes = [
@@ -56,41 +55,6 @@ const getOcrDriverId = (resource: ResourceEntity) => {
 	return resource.ocr_driver_id === 0 ? ResourceOcrDriverId.PrintedText : resource.ocr_driver_id;
 };
 
-const truncateLongOcrDetails = (details: PdfOcrDetails, targetLength: number) => {
-	const result: PdfOcrDetails = {
-		...details,
-		pages: [],
-	};
-
-	let size = 0;
-	for (const page of result.pages) {
-		size += 2;
-		const newPage: PdfOcrPage = { ...page, lines: [] };
-		for (const line of page.lines) {
-			if (size > targetLength) break;
-			size += 2;
-
-			const newLine: RecognizeResultLine = { ...line, words: [] };
-			for (const word of line.words) {
-				// Slightly increase the size to account for larger size when JSON
-				size += word.t.length + 3;
-
-				newLine.words.push(word);
-			}
-
-			newPage.lines.push(newLine);
-		}
-
-		result.pages.push(newPage);
-		if (size > targetLength) {
-			logger.warn('Truncating long ocr_details at roughly', size, 'bytes');
-			break;
-		}
-	}
-
-	return result;
-};
-
 export default class OcrService {
 
 	private drivers_: OcrDriverBase[];
@@ -112,6 +76,16 @@ export default class OcrService {
 		this.handwrittenTextQueue_.keepTaskResults = false;
 	}
 
+	private ocrDataMaxSize_: number = 10 * MB;
+	public testing_setOcrMaxSize(value: number) {
+		const original = this.ocrDataMaxSize_;
+		this.ocrDataMaxSize_ = value;
+
+		return {
+			reset: () => { this.ocrDataMaxSize_ = original; },
+		};
+	}
+
 	private async pdfExtractDir(): Promise<string> {
 		if (this.pdfExtractDir_ !== null) return this.pdfExtractDir_;
 		const p = `${Setting.value('tempDir')}/ocr_pdf_extract`;
@@ -122,6 +96,10 @@ export default class OcrService {
 
 	public get running() {
 		return this.runInBackground;
+	}
+
+	private mapOcrText_(text: string) {
+		return substrWithEllipsis(text, 0, this.ocrDataMaxSize_);
 	}
 
 	private async recognize(language: string, resource: ResourceEntity): Promise<RecognizeResult|null> {
@@ -152,7 +130,7 @@ export default class OcrService {
 					return {
 						...emptyRecognizeResult(),
 						ocr_status: ResourceOcrStatus.Done,
-						ocr_text: substrWithEllipsis(pageTexts.join('\n'), 0, ocrTextMaxLength),
+						ocr_text: substrWithEllipsis(pageTexts.join('\n'), 0, this.ocrDataMaxSize_),
 					};
 				}
 			}
@@ -164,7 +142,13 @@ export default class OcrService {
 
 			try {
 				let pageIndex = 0;
+				let sizeEstimate = 0;
 				for (const imagePath of imageFilePaths) {
+					if (sizeEstimate > this.ocrDataMaxSize_) {
+						logger.warn(`Recognize: Truncated: ${resourceInfo(resource)} after ${pageIndex + 1} pages (at roughly ${bytesToHuman(sizeEstimate)} of OCR data).`);
+						break;
+					}
+
 					logger.info(`Recognize: ${resourceInfo(resource)}: Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
 					const result = await driver.recognize(language, imagePath, resource.id);
 					results.push(result);
@@ -180,8 +164,11 @@ export default class OcrService {
 						pdfOcrPages.push({
 							lines: pageLines,
 						});
+
+						sizeEstimate += result.ocr_details.length;
 					}
 
+					sizeEstimate += result.ocr_text.length;
 					pageIndex++;
 				}
 			} finally {
@@ -193,21 +180,25 @@ export default class OcrService {
 			// Only create PDF OCR details structure if setting is enabled
 			let ocrDetails = '';
 			if (saveOcrDetails) {
-				const pdfOcrDetails = truncateLongOcrDetails({
+				const pdfOcrDetails: PdfOcrDetails = {
 					version: 1,
 					pages: pdfOcrPages,
-				}, ocrTextMaxLength);
+				};
 				ocrDetails = JSON.stringify(pdfOcrDetails);
 			}
 
 			return {
 				...emptyRecognizeResult(),
 				ocr_status: ResourceOcrStatus.Done,
-				ocr_text: substrWithEllipsis(results.map(r => r.ocr_text).join('\n'), 0, ocrTextMaxLength),
+				ocr_text: this.mapOcrText_(results.map(r => r.ocr_text).join('\n')),
 				ocr_details: ocrDetails,
 			};
 		} else {
-			return driver.recognize(language, resourceFilePath, resource.id);
+			const result = await driver.recognize(language, resourceFilePath, resource.id);
+			return {
+				...result,
+				ocr_text: this.mapOcrText_(result.ocr_text),
+			};
 		}
 	}
 
