@@ -1,6 +1,6 @@
 import { autoMerge } from './diffNotes';
 
-describe('autoMerge', () => {
+describe('diffNotes', () => {
 
 	test('should auto-apply non-conflicting changes on different lines', () => {
 		const base = 'one\ntwo\nthree';

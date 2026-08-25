@@ -9,7 +9,7 @@ const createEditorState = async (initialText: string, expectedTags: string[]): P
 	return (await createTestEditor(initialText, EditorSelection.cursor(0), expectedTags)).state;
 };
 
-describe('MarkdownMathExtension', () => {
+describe('markdownMathExtension', () => {
 
 	jest.retryTimes(2);
 
