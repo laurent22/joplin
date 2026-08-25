@@ -69,6 +69,7 @@ import Resource from '@joplin/lib/models/Resource';
 import AiService from '@joplin/lib/services/ai/AiService';
 import LocalEmbeddingProvider from '@joplin/lib/services/ai/LocalEmbeddingProvider';
 import { installAiStatusBridge, AiStatusStore } from './services/aiStatusBridge';
+import ItemChange from '@joplin/lib/models/ItemChange';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -168,6 +169,15 @@ class Application extends BaseApplication {
 
 		const result = await super.generalMiddleware(store, next, action);
 		const newState = store.getState();
+
+		if (
+			action.type === 'NOTE_UPDATE_ONE' &&
+			action.changeSource === ItemChange.SOURCE_SYNC &&
+			!action.note.encryption_applied &&
+			action.changedFields.some((field: string) => ['title', 'body'].includes(field))
+		) {
+			await ExternalEditWatcher.instance().updateNoteFile(action.note);
+		}
 
 		if (['NOTE_VISIBLE_PANES_TOGGLE', 'NOTE_VISIBLE_PANES_SET'].indexOf(action.type) >= 0) {
 			Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
