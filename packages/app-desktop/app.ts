@@ -172,7 +172,7 @@ class Application extends BaseApplication {
 
 		if (
 			action.type === 'NOTE_UPDATE_ONE' &&
-			action.changeSource === ItemChange.SOURCE_SYNC &&
+			[ItemChange.SOURCE_SYNC, ItemChange.SOURCE_DECRYPTION].includes(action.changeSource) &&
 			!action.note.encryption_applied &&
 			action.changedFields.some((field: string) => ['title', 'body'].includes(field))
 		) {
