@@ -412,9 +412,11 @@ public class EfficientDocumentHelper {
 
     Uri parentDirOfFile = getDocumentUri(unknownStr, true, false);
 
-    // it should be safe because user cannot select sd root or primary root
-    // and any other path would have at least one '/' to provide a file name in a folder
     String fileName = UriHelper.getFileName(unknownStr);
+    return createFileInDirectory(parentDirOfFile, fileName, mimeType);
+  }
+
+  private Uri createFileInDirectory(final Uri parentDirOfFile, final String fileName, final String mimeType) throws IOException {
     if (fileName.indexOf(':') != -1) {
       throw new IOExceptionFast(
         "Invalid file name: Could not extract filename from uri string provided");
@@ -462,6 +464,28 @@ public class EfficientDocumentHelper {
     }
 
     return createdFile;
+  }
+
+  private void writeToFile(final Uri uri, final String data, final String encoding, final boolean append) throws IOException {
+    byte[] bytes = GeneralHelper.stringToBytes(data, encoding);
+
+    try (OutputStream out =
+           context
+             .getContentResolver()
+             .openOutputStream(uri, append ? "wa" : "wt")) {
+      out.write(bytes);
+    }
+  }
+
+  private void copyFileContents(final Uri sourceUri, final Uri destinationUri) throws IOException {
+    try (InputStream inStream = context.getContentResolver().openInputStream(sourceUri);
+         OutputStream outStream = context.getContentResolver().openOutputStream(destinationUri, "wt")) {
+      byte[] buffer = new byte[1024 * 4];
+      int length;
+      while ((length = inStream.read(buffer)) > 0) {
+        outStream.write(buffer, 0, length);
+      }
+    }
   }
 
   // all public methods SHOULD be below here
@@ -744,16 +768,71 @@ public class EfficientDocumentHelper {
             uri = createFile(unknownStr, mimeType);
           }
 
-          byte[] bytes = GeneralHelper.stringToBytes(data, encoding);
-
-          try (OutputStream out =
-                 context
-                   .getContentResolver()
-                   .openOutputStream(uri, append ? "wa" : "wt")) {
-            out.write(bytes);
-          }
+          writeToFile(uri, data, encoding, append);
 
           return null;
+        } catch (Exception e) {
+          return e;
+        }
+      }
+
+      @Override
+      public void doSync(Object o) {
+        if (o instanceof Exception) {
+          rejectWithException((Exception) o, promise);
+        } else {
+          promise.resolve(o);
+        }
+      }
+    });
+  }
+
+  public void writeFileInDirectory(
+    String directoryUriString,
+    String fileName,
+    String data,
+    String encoding,
+    String mimeType,
+    final Promise promise) {
+    Async.execute(new Async.Task<Object>() {
+      @Override
+      public Object doAsync() {
+        try {
+          Uri directoryUri = getDocumentUri(directoryUriString, false, true);
+          Uri fileUri = createFileInDirectory(directoryUri, fileName, mimeType);
+          writeToFile(fileUri, data, encoding, false);
+          return getStat(fileUri).getWritableMap();
+        } catch (Exception e) {
+          return e;
+        }
+      }
+
+      @Override
+      public void doSync(Object o) {
+        if (o instanceof Exception) {
+          rejectWithException((Exception) o, promise);
+        } else {
+          promise.resolve(o);
+        }
+      }
+    });
+  }
+
+  public void copyFileToDirectory(
+    String sourceUriString,
+    String directoryUriString,
+    String fileName,
+    final Promise promise) {
+    Async.execute(new Async.Task<Object>() {
+      @Override
+      public Object doAsync() {
+        try {
+          Uri sourceUri = getDocumentUri(sourceUriString, false, true);
+          DocumentStat sourceStat = getStat(sourceUri);
+          Uri directoryUri = getDocumentUri(directoryUriString, false, true);
+          Uri destinationUri = createFileInDirectory(directoryUri, fileName, sourceStat.getMimeType());
+          copyFileContents(sourceUri, destinationUri);
+          return getStat(destinationUri).getWritableMap();
         } catch (Exception e) {
           return e;
         }

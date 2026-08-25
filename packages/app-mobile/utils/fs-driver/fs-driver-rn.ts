@@ -54,6 +54,7 @@ const normalizeEncoding = (encoding: string): SupportedEncoding => {
 
 export default class FsDriverRN extends FsDriverBase {
 	private safDocumentUris_ = new Map<string, string>();
+	private safDirectoryUris_ = new Map<string, string>();
 
 	private cachedSafUri_(path: string) {
 		return this.safDocumentUris_.get(path) ?? path;
@@ -72,6 +73,51 @@ export default class FsDriverRN extends FsDriverBase {
 		}
 	}
 
+	private async writeSafFile_(path: string, content: string, encoding: SupportedEncoding) {
+		if (this.safDocumentUris_.has(path)) {
+			return this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding }));
+		}
+
+		const lastSlashIndex = path.lastIndexOf('/');
+		const parentPath = path.substring(0, lastSlashIndex);
+		const parentUri = this.safDirectoryUris_.get(parentPath);
+		if (parentUri) {
+			try {
+				const document = await RNSAF.writeFileInDirectory(parentUri, path.substring(lastSlashIndex + 1), content, { encoding });
+				this.safDocumentUris_.set(path, document.documentUri ?? document.uri);
+				return;
+			} catch (error) {
+				// The directory may have been replaced since it was listed. Fall back to
+				// resolving the destination by path.
+				this.safDirectoryUris_.delete(parentPath);
+			}
+		}
+
+		return RNSAF.writeFile(path, content, { encoding });
+	}
+
+	private async copyToSaf_(source: string, dest: string): Promise<void> {
+		if (this.safDocumentUris_.has(dest)) {
+			await this.withCachedSafUri_(dest, resolvedDest => RNSAF.copyFile(source, resolvedDest, { replaceIfDestinationExists: true }));
+			return;
+		}
+
+		const lastSlashIndex = dest.lastIndexOf('/');
+		const parentPath = dest.substring(0, lastSlashIndex);
+		const parentUri = this.safDirectoryUris_.get(parentPath);
+		if (parentUri) {
+			try {
+				const document = await RNSAF.copyFileToDirectory(source, parentUri, dest.substring(lastSlashIndex + 1));
+				this.safDocumentUris_.set(dest, document.documentUri ?? document.uri);
+				return;
+			} catch (error) {
+				this.safDirectoryUris_.delete(parentPath);
+			}
+		}
+
+		await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
+	}
+
 	public appendFileSync() {
 		throw new Error('Not implemented: appendFileSync');
 	}
@@ -83,7 +129,7 @@ export default class FsDriverRN extends FsDriverBase {
 		const encoding = normalizeEncoding(rawEncoding);
 
 		if (isScopedUri(path)) {
-			return RNSAF.writeFile(path, content, { encoding, append: true });
+			return this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding, append: true }));
 		}
 		return RNFS.appendFile(path, content, encoding);
 	}
@@ -93,7 +139,7 @@ export default class FsDriverRN extends FsDriverBase {
 		const encoding = normalizeEncoding(rawEncoding);
 
 		if (isScopedUri(path)) {
-			return RNSAF.writeFile(path, content, { encoding: encoding });
+			return this.writeSafFile_(path, content, encoding);
 		}
 
 		// We need to use rn-fetch-blob here due to this bug:
@@ -138,6 +184,8 @@ export default class FsDriverRN extends FsDriverBase {
 		try {
 			if (isScoped) {
 				stats = await RNSAF.listFiles(path);
+				const directory = await RNSAF.stat(path);
+				this.safDirectoryUris_.set(path.replace(/\/$/, ''), directory.documentUri ?? directory.uri);
 			} else {
 				stats = await RNFS.readDir(path);
 			}
@@ -296,7 +344,7 @@ export default class FsDriverRN extends FsDriverBase {
 				if (isScopedUri(source)) {
 					await this.withCachedSafUri_(source, resolvedSource => RNSAF.copyFile(resolvedSource, dest, { replaceIfDestinationExists: true }));
 				} else {
-					await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
+					await this.copyToSaf_(source, dest);
 				}
 				return;
 			}

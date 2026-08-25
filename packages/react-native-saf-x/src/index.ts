@@ -50,6 +50,14 @@ interface SafxInterface {
 		mimeType?: string,
 		append?: boolean,
 	): Promise<void>;
+	writeFileInDirectory(
+		directoryUri: string,
+		fileName: string,
+		data: string,
+		encoding?: Encoding,
+		mimeType?: string,
+	): Promise<DocumentFileDetail>;
+	copyFileToDirectory(sourceUri: string, directoryUri: string, fileName: string): Promise<DocumentFileDetail>;
 	createFile(uriString: string, mimeType?: string): Promise<DocumentFileDetail>;
 	unlink(uriString: string): Promise<boolean>;
 	mkdir(uriString: string): Promise<DocumentFileDetail>;
@@ -154,6 +162,21 @@ export function writeFile(
 	return SafX.writeFile(uriString, data, encoding, mimeType, !!append);
 }
 
+export function writeFileInDirectory(
+	directoryUri: string,
+	fileName: string,
+	data: string,
+	options?: Pick<FileOperationOptions, 'encoding' | 'mimeType'>,
+) {
+	if (!options) options = {};
+	const { encoding, mimeType } = options;
+	return SafX.writeFileInDirectory(directoryUri, fileName, data, encoding, mimeType);
+}
+
+export function copyFileToDirectory(sourceUri: string, directoryUri: string, fileName: string) {
+	return SafX.copyFileToDirectory(sourceUri, directoryUri, fileName);
+}
+
 // Creates an empty file at given uri.
 // Rejects if a file or directory exist at given uri.
 export function createFile(
@@ -244,6 +267,8 @@ export default {
 	exists,
 	readFile,
 	writeFile,
+	writeFileInDirectory,
+	copyFileToDirectory,
 	createFile,
 	unlink,
 	mkdir,
