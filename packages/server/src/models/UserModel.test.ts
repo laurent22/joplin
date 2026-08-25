@@ -679,4 +679,18 @@ describe('UserModel', () => {
 		});
 		expect(await models().user().enabledUserCount({ excludeMainAdmin: true })).toBe(0);
 	});
+
+	test('should return the number of enabled non-admin users from enabledNonAdminUserCount', async () => {
+		const user1 = await createUser(1);
+		await createUser(2);
+		await createUser(3, true);
+
+		expect(await models().user().enabledNonAdminUserCount()).toBe(2);
+
+		await models().user().save({
+			id: user1.id,
+			enabled: 0,
+		});
+		expect(await models().user().enabledNonAdminUserCount()).toBe(1);
+	});
 });

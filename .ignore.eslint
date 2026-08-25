@@ -620,6 +620,7 @@ packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/dragAndDrop.js
 packages/app-desktop/gui/utils/loadScript.js
 packages/app-desktop/gulpfile.js
+packages/app-desktop/integration-tests/chatPanel.spec.js
 packages/app-desktop/integration-tests/goToAnything.spec.js
 packages/app-desktop/integration-tests/main.spec.js
 packages/app-desktop/integration-tests/markdownEditor.spec.js
@@ -649,6 +650,7 @@ packages/app-desktop/integration-tests/util/getMainWindow.js
 packages/app-desktop/integration-tests/util/ignoreFlakyReporter.js
 packages/app-desktop/integration-tests/util/mockClipboard.js
 packages/app-desktop/integration-tests/util/retryOnFailure.js
+packages/app-desktop/integration-tests/util/seedProfileSettings.js
 packages/app-desktop/integration-tests/util/setDarkMode.js
 packages/app-desktop/integration-tests/util/setFilePickerResponse.js
 packages/app-desktop/integration-tests/util/setMessageBoxResponse.js
@@ -1179,6 +1181,7 @@ packages/editor/CodeMirror/extensions/rendering/replaceLinks.test.js
 packages/editor/CodeMirror/extensions/rendering/replaceLinks.js
 packages/editor/CodeMirror/extensions/rendering/types.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeBlockReplaceExtension.js
+packages/editor/CodeMirror/extensions/rendering/utils/makeHideReplaceExtension.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.test.js
 packages/editor/CodeMirror/extensions/rendering/utils/makeInlineReplaceExtension.js
 packages/editor/CodeMirror/extensions/rendering/utils/nodeIntersectsSelection.js
@@ -1198,6 +1201,7 @@ packages/editor/CodeMirror/testing/forceFullParse.js
 packages/editor/CodeMirror/testing/loadLanguages.js
 packages/editor/CodeMirror/testing/pressReleaseKey.js
 packages/editor/CodeMirror/testing/typeText.js
+packages/editor/CodeMirror/testing/visibleEditorText.js
 packages/editor/CodeMirror/theme.js
 packages/editor/CodeMirror/utils/formatting/RegionSpec.js
 packages/editor/CodeMirror/utils/formatting/computeSelectionFormatting.test.js
@@ -1414,6 +1418,7 @@ packages/lib/components/shared/SamlShared.js
 packages/lib/components/shared/ShareNoteDialog/onUnshareNoteClick.js
 packages/lib/components/shared/ShareNoteDialog/types.js
 packages/lib/components/shared/ShareNoteDialog/useEncryptionWarningMessage.js
+packages/lib/components/shared/ShareNoteDialog/useIsPublished.js
 packages/lib/components/shared/ShareNoteDialog/useOnShareLinkClick.js
 packages/lib/components/shared/ShareNoteDialog/useShareStatusMessage.js
 packages/lib/components/shared/SsoScreenShared.js

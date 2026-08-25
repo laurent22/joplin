@@ -186,6 +186,7 @@ export interface Config extends EnvVariables {
 	supportName: string;
 	businessEmail: string;
 	isJoplinCloud: boolean;
+	isJoplinServerBusiness: boolean;
 	cookieSecure: boolean;
 	cookieSameSite: 'strict' | 'lax' | 'none' | boolean;
 	storageDriver: StorageDriverConfig;

@@ -104,6 +104,7 @@ class TableWidget extends WidgetType {
 		private from: number,
 		private to: number,
 		private context: RenderedContentContext,
+		private readOnly: boolean,
 	) {
 		super();
 		this.cacheKey_ = `table_${from}_${to}_${tableText.length}`;
@@ -114,7 +115,8 @@ class TableWidget extends WidgetType {
 	public eq(other: TableWidget) {
 		return this.tableText === other.tableText
 			&& this.from === other.from
-			&& this.to === other.to;
+			&& this.to === other.to
+			&& this.readOnly === other.readOnly;
 	}
 
 	public get estimatedHeight() {
@@ -242,7 +244,7 @@ class TableWidget extends WidgetType {
 			// Editable text lives in its own div — cell itself is NOT editable
 			const textDiv = doc.createElement('div');
 			textDiv.classList.add('cm-tw-text');
-			textDiv.contentEditable = 'true';
+			textDiv.contentEditable = this.readOnly ? 'false' : 'true';
 			textDiv.spellcheck = false;
 			// When not focused, show rendered inline markdown. On focus we
 			// swap to the raw source so the user edits the markdown text.
@@ -506,13 +508,13 @@ class TableWidget extends WidgetType {
 			el.appendChild(textDiv);
 			// Clicking anywhere in the cell (including empty space in tall rows)
 			// should activate the text editor
-			el.onmousedown = (e) => {
+			el.onmousedown = this.readOnly ? null : (e) => {
 				if (e.target === el) {
 					e.preventDefault();
 					focus('TableWidget', textDiv);
 				}
 			};
-			el.oncontextmenu = (e) => showCtx(e, r, c);
+			if (!this.readOnly) el.oncontextmenu = (e) => showCtx(e, r, c);
 
 			return el;
 		};
@@ -587,9 +589,9 @@ class TableWidget extends WidgetType {
 		for (let c = 0; c < numCols; c++) {
 			const cell = mkCell(table.header.cells[c].content, 0, c, true);
 			// "+" on right edge of every header cell → add column
-			mkAddColBtn(c, cell);
+			if (!this.readOnly) mkAddColBtn(c, cell);
 			// "+" on bottom edge of first header cell → add row below header
-			if (c === 0) mkAddRowBtn(-1, cell);
+			if (!this.readOnly && c === 0) mkAddRowBtn(-1, cell);
 			allCells[0].push(cell);
 			headerTr.appendChild(cell);
 		}
@@ -605,7 +607,7 @@ class TableWidget extends WidgetType {
 				const content = c < table.body[r].cells.length ? table.body[r].cells[c].content : '';
 				const cell = mkCell(content, r + 1, c, false);
 				// "+" on bottom edge of first column cell → add row
-				if (c === 0) mkAddRowBtn(r, cell);
+				if (!this.readOnly && c === 0) mkAddRowBtn(r, cell);
 				allCells[r + 1].push(cell);
 				tr.appendChild(cell);
 			}
@@ -1139,8 +1141,9 @@ const renderTables = (context: RenderedContentContext) => [
 			}
 			const text = state.doc.sliceString(startLine.from, endLine.to);
 			if (!parseTable(text)) return null;
-			return new TableWidget(text, startLine.from, endLine.to, context);
+			return new TableWidget(text, startLine.from, endLine.to, context, state.readOnly);
 		},
+		shouldFullReRender: transaction => transaction.startState.readOnly !== transaction.state.readOnly,
 		getDecorationRange: (node: SyntaxNodeRef, state: EditorState) => {
 			if (node.name !== 'TableHeader') return null;
 			const startLine = state.doc.lineAt(node.from);

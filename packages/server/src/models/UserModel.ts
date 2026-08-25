@@ -949,4 +949,12 @@ export default class UserModel extends BaseModel<User> {
 
 		return count;
 	}
+
+	public async enabledNonAdminUserCount() {
+		const result = await this.db('users')
+			.where('enabled', '=', 1)
+			.where('is_admin', '=', 0)
+			.count('*', { as: 'count' });
+		return Number(result[0].count);
+	}
 }
