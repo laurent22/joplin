@@ -68,6 +68,7 @@ interface SafxInterface {
 
 export type DocumentFileDetail = {
 	uri: string;
+	documentUri?: string;
 	name: string;
 	type: 'directory' | 'file';
 	lastModified: number;

@@ -53,6 +53,25 @@ const normalizeEncoding = (encoding: string): SupportedEncoding => {
 };
 
 export default class FsDriverRN extends FsDriverBase {
+	private safDocumentUris_ = new Map<string, string>();
+
+	private cachedSafUri_(path: string) {
+		return this.safDocumentUris_.get(path) ?? path;
+	}
+
+	private async withCachedSafUri_<T>(path: string, callback: (resolvedPath: string)=> Promise<T>): Promise<T> {
+		const cachedUri = this.cachedSafUri_(path);
+		try {
+			return await callback(cachedUri);
+		} catch (error) {
+			// A document URI can become invalid if another client replaces the file.
+			// Discard it and fall back to resolving the path by name in that case.
+			if (cachedUri === path) throw error;
+			this.safDocumentUris_.delete(path);
+			return callback(path);
+		}
+	}
+
 	public appendFileSync() {
 		throw new Error('Not implemented: appendFileSync');
 	}
@@ -149,6 +168,10 @@ export default class FsDriverRN extends FsDriverBase {
 			const stat = stats[i];
 
 			const relativePath = toRelativePath(stat);
+			if (isScoped) {
+				const document = stat as DocumentFileDetail;
+				this.safDocumentUris_.set(`${path.replace(/\/$/, '')}/${relativePath}`, document.documentUri ?? document.uri);
+			}
 			const standardStat = this.rnfsStatToStd_(stat, relativePath);
 			output.push(standardStat);
 
@@ -260,7 +283,7 @@ export default class FsDriverRN extends FsDriverBase {
 		const encoding = normalizeEncoding(rawEncoding);
 
 		if (isScopedUri(path)) {
-			return RNSAF.readFile(path, { encoding: encoding });
+			return this.withCachedSafUri_(path, resolvedPath => RNSAF.readFile(resolvedPath, { encoding: encoding }));
 		}
 		return RNFS.readFile(path, encoding);
 	}
@@ -270,7 +293,11 @@ export default class FsDriverRN extends FsDriverBase {
 		let retry = false;
 		try {
 			if (isScopedUri(source) || isScopedUri(dest)) {
-				await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
+				if (isScopedUri(source)) {
+					await this.withCachedSafUri_(source, resolvedSource => RNSAF.copyFile(resolvedSource, dest, { replaceIfDestinationExists: true }));
+				} else {
+					await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
+				}
 				return;
 			}
 			await RNFS.copyFile(source, dest);
