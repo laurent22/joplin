@@ -25,6 +25,7 @@ ruleTester.run('describe-filename', rule, {
 		// placeholder or a $tag may follow the file name.
 		{ code: 'describe.each([1])(\'Tag (%j)\', () => {});', filename },
 		{ code: 'describe.each([1])(\'Tag $name\', () => {});', filename },
+		{ code: 'describe.each`\\na\\n${1}\\n`(\'Tag $a\', () => {});', filename },
 
 		// Nested describes are unrestricted.
 		{ code: 'describe(\'Tag\', () => { describe(\'anything\', () => {}); });', filename },
@@ -39,6 +40,7 @@ ruleTester.run('describe-filename', rule, {
 		{ code: 'describe(\'services/Tag\', () => {});', filename, errors: [{ messageId: 'mismatch' }] },
 		{ code: 'describe.skip(\'nope\', () => {});', filename, errors: [{ messageId: 'mismatch' }] },
 		{ code: 'describe.each([1])(\'nope (%j)\', () => {});', filename, errors: [{ messageId: 'mismatch' }] },
+		{ code: 'describe.each`\\na\\n${1}\\n`(\'nope $a\', () => {});', filename, errors: [{ messageId: 'mismatch' }] },
 
 		// Dynamic titles cannot be validated, so they are reported.
 		{ code: 'describe(`Tag ${x}`, () => {});', filename, errors: [{ messageId: 'dynamic' }] },

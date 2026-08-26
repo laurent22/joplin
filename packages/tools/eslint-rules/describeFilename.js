@@ -27,8 +27,10 @@ const eachTitle = (title, allowed) => {
 
 const isDescribe = (callee) => {
 	if (callee.type === 'Identifier') return callee.name === 'describe';
-	// describe.each(...)(...) - the callee is itself a call expression.
+	// describe.each(...)(...) - the callee is itself a call expression, and
+	// describe.each`...`(...) - a tagged template expression.
 	if (callee.type === 'CallExpression') return isDescribe(callee.callee);
+	if (callee.type === 'TaggedTemplateExpression') return isDescribe(callee.tag);
 	if (callee.type === 'MemberExpression' && !callee.computed) {
 		return isDescribe(callee.object);
 	}
@@ -37,6 +39,7 @@ const isDescribe = (callee) => {
 
 const isEach = (callee) => {
 	if (callee.type === 'CallExpression') return isEach(callee.callee);
+	if (callee.type === 'TaggedTemplateExpression') return isEach(callee.tag);
 	if (callee.type === 'MemberExpression' && !callee.computed) {
 		return callee.property.name === 'each' || isEach(callee.object);
 	}
