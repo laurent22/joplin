@@ -431,15 +431,19 @@ public class EfficientDocumentHelper {
         "Invalid file name: Could not extract filename from uri string provided");
     }
 
-    // maybe edited maybe not
+    String creationMimeType = "*/*";
+
+    // Some providers append the extension associated with the MIME type. Pass
+    // the MIME type only when the requested name already has an extension;
+    // extensionless Joplin resource IDs must remain extensionless.
     String correctFileName = fileName;
 
-    // only files with mime type are special, so we treat it special
     if (mimeType != null && !mimeType.equals("")) {
-      int indexOfDot = fileName.indexOf('.');
+      int indexOfDot = fileName.lastIndexOf('.');
       // len - 1 because there should be an extension that has at least 1 letter
-      if (indexOfDot != -1 && indexOfDot < fileName.length() - 1) {
+      if (indexOfDot > 0 && indexOfDot < fileName.length() - 1) {
         correctFileName = fileName.substring(0, indexOfDot);
+        creationMimeType = mimeType;
       }
     }
 
@@ -463,7 +467,7 @@ public class EfficientDocumentHelper {
     Uri createdFile = DocumentsContract.createDocument(
       context.getContentResolver(),
       parentDirOfFile,
-      mimeType != null && !mimeType.equals("") ? mimeType : "*/*",
+      creationMimeType,
       correctFileName
     );
 
