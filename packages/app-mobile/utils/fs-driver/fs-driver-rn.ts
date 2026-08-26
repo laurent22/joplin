@@ -172,6 +172,9 @@ export default class FsDriverRN extends FsDriverBase {
 			if (error?.code !== 'ENOENT') throw error;
 			return RNSAF.writeFile(path, content, { encoding });
 		}
+		if (this.safDocumentUris_.has(path)) {
+			return this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding }));
+		}
 
 		const parentUri = this.safDirectoryUris_.get(parentPath);
 		if (parentUri) {
@@ -204,6 +207,10 @@ export default class FsDriverRN extends FsDriverBase {
 		} catch (error) {
 			if (error?.code !== 'ENOENT') throw error;
 			await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
+			return;
+		}
+		if (this.safDocumentUris_.has(dest)) {
+			await this.withCachedSafUri_(dest, resolvedDest => RNSAF.copyFile(source, resolvedDest, { replaceIfDestinationExists: true }));
 			return;
 		}
 
