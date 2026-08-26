@@ -111,6 +111,68 @@ describe('FsDriverRN SAF destination lookup', () => {
 		expect(mockSaf.writeFile).toHaveBeenLastCalledWith(destinationUri, 'retried', { encoding: 'utf8' });
 	});
 
+	it('should resolve a replacement document after a cached URI becomes stale', async () => {
+		const driver = new FsDriverRN();
+		const replacementUri = 'content://provider/document/replacement';
+		await driver.writeFile(destinationPath, 'first', 'utf8');
+		mockSaf.writeFile.mockRejectedValueOnce(Object.assign(new Error('Document no longer exists'), { code: 'ENOENT' }));
+
+		await expect(driver.writeFile(destinationPath, 'failed', 'utf8')).rejects.toThrow('Document no longer exists');
+		expect(mockSaf.writeFile).toHaveBeenCalledTimes(2);
+		expect(mockSaf.writeFileInDirectory).not.toHaveBeenCalled();
+
+		mockSaf.listFiles.mockResolvedValueOnce([{
+			name: 'existing.md',
+			uri: destinationPath,
+			documentUri: replacementUri,
+		}]);
+		await driver.writeFile(destinationPath, 'retried', 'utf8');
+
+		expect(mockSaf.listFiles).toHaveBeenCalledTimes(2);
+		expect(mockSaf.writeFile).toHaveBeenLastCalledWith(replacementUri, 'retried', { encoding: 'utf8' });
+		expect(mockSaf.writeFileInDirectory).not.toHaveBeenCalled();
+	});
+
+	it('should not replay or fall back after an ambiguous cached copy failure', async () => {
+		const driver = new FsDriverRN();
+		const sourcePath = '/local/source.md';
+		await driver.copy(sourcePath, destinationPath);
+		mockSaf.copyFile.mockRejectedValueOnce(Object.assign(new Error('Copy close failed'), { code: 'EIO' }));
+
+		await expect(driver.copy(sourcePath, destinationPath)).rejects.toThrow('Copy close failed');
+
+		expect(mockSaf.copyFile).toHaveBeenCalledTimes(2);
+		expect(mockSaf.copyFileToDirectory).not.toHaveBeenCalled();
+
+		await driver.copy(sourcePath, destinationPath);
+		expect(mockSaf.listFiles).toHaveBeenCalledTimes(2);
+		expect(mockSaf.copyFile).toHaveBeenLastCalledWith(sourcePath, destinationUri, { replaceIfDestinationExists: true });
+		expect(mockSaf.copyFileToDirectory).not.toHaveBeenCalled();
+	});
+
+	it('should invalidate a failed directory mutation without retrying it through another route', async () => {
+		const driver = new FsDriverRN();
+		const newPath = `${parentPath}/new.md`;
+		mockSaf.listFiles.mockResolvedValue([]);
+		mockSaf.writeFileInDirectory.mockRejectedValueOnce(Object.assign(new Error('Close failed'), { code: 'EIO' }));
+
+		await expect(driver.writeFile(newPath, 'new', 'utf8')).rejects.toThrow('Close failed');
+
+		expect(mockSaf.writeFileInDirectory).toHaveBeenCalledTimes(1);
+		expect(mockSaf.writeFile).not.toHaveBeenCalled();
+
+		mockSaf.listFiles.mockResolvedValueOnce([{
+			name: 'new.md',
+			uri: newPath,
+			documentUri: 'content://provider/document/new',
+		}]);
+		await driver.writeFile(newPath, 'retried', 'utf8');
+
+		expect(mockSaf.listFiles).toHaveBeenCalledTimes(2);
+		expect(mockSaf.writeFile).toHaveBeenCalledWith('content://provider/document/new', 'retried', { encoding: 'utf8' });
+		expect(mockSaf.writeFileInDirectory).toHaveBeenCalledTimes(1);
+	});
+
 	it('should reject a directory entry whose URI is not relative to the listed directory', async () => {
 		const driver = new FsDriverRN();
 		mockSaf.listFiles.mockResolvedValueOnce([{
