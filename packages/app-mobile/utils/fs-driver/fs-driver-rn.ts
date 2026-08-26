@@ -61,6 +61,36 @@ export default class FsDriverRN extends FsDriverBase {
 		return this.safDocumentUris_.get(path) ?? path;
 	}
 
+	private normalizeSafPath_(path: string) {
+		return path.replace(/\/$/, '');
+	}
+
+	private safParentPath_(path: string) {
+		const normalizedPath = this.normalizeSafPath_(path);
+		return normalizedPath.substring(0, normalizedPath.lastIndexOf('/'));
+	}
+
+	private invalidateSafDirectory_(path: string) {
+		const normalizedPath = this.normalizeSafPath_(path);
+		this.safDirectoryUris_.delete(normalizedPath);
+		this.listedSafDirectories_.delete(normalizedPath);
+	}
+
+	private invalidateSafPath_(path: string) {
+		const normalizedPath = this.normalizeSafPath_(path);
+		const pathPrefix = `${normalizedPath}/`;
+		for (const cachedPath of this.safDocumentUris_.keys()) {
+			if (cachedPath === normalizedPath || cachedPath.startsWith(pathPrefix)) this.safDocumentUris_.delete(cachedPath);
+		}
+		for (const cachedPath of this.safDirectoryUris_.keys()) {
+			if (cachedPath === normalizedPath || cachedPath.startsWith(pathPrefix)) this.safDirectoryUris_.delete(cachedPath);
+		}
+		for (const cachedPath of this.listedSafDirectories_) {
+			if (cachedPath === normalizedPath || cachedPath.startsWith(pathPrefix)) this.listedSafDirectories_.delete(cachedPath);
+		}
+		this.invalidateSafDirectory_(this.safParentPath_(normalizedPath));
+	}
+
 	private async withCachedSafUri_<T>(path: string, callback: (resolvedPath: string)=> Promise<T>): Promise<T> {
 		const cachedUri = this.cachedSafUri_(path);
 		try {
@@ -70,7 +100,7 @@ export default class FsDriverRN extends FsDriverBase {
 			// errors could repeat an operation that succeeded before failing while
 			// closing the stream (and, for appends, duplicate the appended content).
 			if (cachedUri === path || error?.code !== 'ENOENT') throw error;
-			this.safDocumentUris_.delete(path);
+			this.invalidateSafPath_(path);
 			return callback(path);
 		}
 	}
@@ -102,12 +132,17 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	private async ensureSafDirectoryListed_(path: string) {
-		const normalizedPath = path.replace(/\/$/, '');
+		const normalizedPath = this.normalizeSafPath_(path);
 		if (this.listedSafDirectories_.has(normalizedPath)) return;
 
-		const documents = await RNSAF.listFiles(normalizedPath);
-		this.cacheSafDirectoryListing_(normalizedPath, documents);
-		await this.safDirectoryUri_(normalizedPath);
+		try {
+			await this.safDirectoryUri_(normalizedPath);
+			const documents = await RNSAF.listFiles(normalizedPath);
+			this.cacheSafDirectoryListing_(normalizedPath, documents);
+		} catch (error) {
+			this.invalidateSafDirectory_(normalizedPath);
+			throw error;
+		}
 	}
 
 	private async writeSafFile_(path: string, content: string, encoding: SupportedEncoding) {
@@ -116,19 +151,15 @@ export default class FsDriverRN extends FsDriverBase {
 		try {
 			await this.ensureSafDirectoryListed_(parentPath);
 		} catch (error) {
-			// Fall back to resolving the destination by path below.
+			if (error?.code !== 'ENOENT') throw error;
+			return RNSAF.writeFile(path, content, { encoding });
 		}
 
 		if (this.safDocumentUris_.has(path)) {
 			return this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding }));
 		}
 
-		let parentUri: string = null;
-		try {
-			parentUri = await this.safDirectoryUri_(parentPath);
-		} catch (error) {
-			// Fall back to path-based creation below.
-		}
+		const parentUri = this.safDirectoryUris_.get(parentPath);
 		if (parentUri) {
 			try {
 				const document = await RNSAF.writeFileInDirectory(parentUri, path.substring(lastSlashIndex + 1), content, { encoding });
@@ -137,9 +168,8 @@ export default class FsDriverRN extends FsDriverBase {
 			} catch (error) {
 				// Only retry when the cached parent no longer exists. Other failures may
 				// occur after the write succeeded and must not replay the mutation.
+				this.invalidateSafDirectory_(parentPath);
 				if (error?.code !== 'ENOENT') throw error;
-				this.safDirectoryUris_.delete(parentPath);
-				this.listedSafDirectories_.delete(parentPath);
 			}
 		}
 
@@ -152,7 +182,9 @@ export default class FsDriverRN extends FsDriverBase {
 		try {
 			await this.ensureSafDirectoryListed_(parentPath);
 		} catch (error) {
-			// Fall back to resolving the destination by path below.
+			if (error?.code !== 'ENOENT') throw error;
+			await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
+			return;
 		}
 
 		if (this.safDocumentUris_.has(dest)) {
@@ -160,12 +192,7 @@ export default class FsDriverRN extends FsDriverBase {
 			return;
 		}
 
-		let parentUri: string = null;
-		try {
-			parentUri = await this.safDirectoryUri_(parentPath);
-		} catch (error) {
-			// Fall back to path-based creation below.
-		}
+		const parentUri = this.safDirectoryUris_.get(parentPath);
 		if (parentUri) {
 			try {
 				const document = await RNSAF.copyFileToDirectory(source, parentUri, dest.substring(lastSlashIndex + 1));
@@ -174,9 +201,8 @@ export default class FsDriverRN extends FsDriverBase {
 			} catch (error) {
 				// Only retry when the cached parent no longer exists. Other failures may
 				// occur after the copy succeeded and must not replay the mutation.
+				this.invalidateSafDirectory_(parentPath);
 				if (error?.code !== 'ENOENT') throw error;
-				this.safDirectoryUris_.delete(parentPath);
-				this.listedSafDirectories_.delete(parentPath);
 			}
 		}
 
@@ -310,6 +336,9 @@ export default class FsDriverRN extends FsDriverBase {
 	public async move(source: string, dest: string) {
 		if (isScopedUri(source) || isScopedUri(dest)) {
 			await RNSAF.moveFile(source, dest, { replaceIfDestinationExists: true });
+			this.invalidateSafPath_(source);
+			this.invalidateSafPath_(dest);
+			return;
 		}
 		return RNFS.moveFile(source, dest);
 	}
@@ -317,6 +346,9 @@ export default class FsDriverRN extends FsDriverBase {
 	public async rename(source: string, dest: string) {
 		if (isScopedUri(source) || isScopedUri(dest)) {
 			await RNSAF.rename(source, dest);
+			this.invalidateSafPath_(source);
+			this.invalidateSafPath_(dest);
+			return;
 		}
 		return RNFS.moveFile(source, dest);
 	}
@@ -426,10 +458,12 @@ export default class FsDriverRN extends FsDriverBase {
 		try {
 			if (isScopedUri(path)) {
 				await RNSAF.unlink(path);
+				this.invalidateSafPath_(path);
 				return;
 			}
 			await RNFS.unlink(path);
 		} catch (error) {
+			if (isScopedUri(path)) this.invalidateSafPath_(path);
 			if (error && ((error.message && error.message.indexOf('exist') >= 0) || error.code === 'ENOENT')) {
 				// Probably { [Error: File does not exist] framesToPop: 1, code: 'EUNSPECIFIED' }
 				// which unfortunately does not have a proper error code. Can be ignored.
