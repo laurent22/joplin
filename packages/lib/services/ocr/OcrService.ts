@@ -75,7 +75,9 @@ export default class OcrService {
 		this.handwrittenTextQueue_.keepTaskResults = false;
 	}
 
-	private ocrDataMaxSize_: number = 10 * MB;
+	// The maximum OCR data length in characters. Depending on the encoded text, the byte length can
+	// larger than this:
+	private ocrDataMaxSize_: number = 6 * MB;
 	public testing_setOcrMaxSize(value: number) {
 		this.ocrDataMaxSize_ = value;
 	}
