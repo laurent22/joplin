@@ -150,6 +150,7 @@ export default function NoteTitleBar(props: Props) {
 			<div className='note-title-wrapper -conflict'>
 				<ConflictTitle
 					conflictTitle={hasTitleConflict ? props.conflictTitle : null}
+					disabled={props.disabled}
 					resolvedTitle={props.resolvedTitle}
 					onResolvedTitleChange={props.onResolvedTitleChange}
 					infoGroup={infoGroup}

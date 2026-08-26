@@ -5,6 +5,7 @@ import { _ } from '@joplin/lib/locale';
 interface Props {
 	// Null when the two versions agree on the title
 	conflictTitle: string|null;
+	disabled: boolean;
 	resolvedTitle: string;
 	onResolvedTitleChange: (title: string)=> void;
 	infoGroup: ReactNode;
@@ -15,7 +16,7 @@ interface Props {
 
 // The heading shown above every conflict note. Differing titles replace the
 // title input with the two versions
-const ConflictTitle: React.FC<Props> = ({ conflictTitle, resolvedTitle, onResolvedTitleChange, infoGroup, titleInput, onHelp }) => {
+const ConflictTitle: React.FC<Props> = ({ conflictTitle, disabled, resolvedTitle, onResolvedTitleChange, infoGroup, titleInput, onHelp }) => {
 	const onChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
 		onResolvedTitleChange(event.target.value);
 	}, [onResolvedTitleChange]);
@@ -56,13 +57,14 @@ const ConflictTitle: React.FC<Props> = ({ conflictTitle, resolvedTitle, onResolv
 					<button
 						className='-copy'
 						onClick={onCopy}
+						disabled={disabled}
 						title={_('Use this title')}
 						aria-label={_('Use this title')}
 					><i className='fas fa-arrow-right'></i></button>
 
 					<label className='-field'>
 						<span className='-label'>{_('Resolved note title')}</span>
-						<input className='-input' type='text' value={resolvedTitle} onChange={onChange} />
+						<input className='-input' type='text' value={resolvedTitle} onChange={onChange} readOnly={disabled} />
 					</label>
 				</div>
 			) : (

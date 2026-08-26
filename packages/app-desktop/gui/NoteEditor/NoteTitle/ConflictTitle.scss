@@ -122,5 +122,14 @@
 		&:hover {
 			background-color: var(--joplin-background-color-hover5);
 		}
+
+		&:disabled {
+			cursor: default;
+			opacity: 0.5;
+
+			&:hover {
+				background-color: var(--joplin-color4);
+			}
+		}
 	}
 }
