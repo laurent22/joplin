@@ -59,4 +59,21 @@ describe('FsDriverRN SAF destination lookup', () => {
 		expect(mockSaf.copyFile).toHaveBeenCalledWith(sourcePath, destinationUri, { replaceIfDestinationExists: true });
 		expect(mockSaf.copyFileToDirectory).not.toHaveBeenCalled();
 	});
+
+	it('should reject a directory entry whose URI is not relative to the listed directory', async () => {
+		const driver = new FsDriverRN();
+		mockSaf.listFiles.mockResolvedValueOnce([{
+			name: 'existing.md',
+			uri: destinationUri,
+			documentUri: destinationUri,
+		}]);
+
+		await expect(driver.readDirStats(parentPath)).rejects.toThrow('Document URI does not start with directory path');
+		await driver.writeFile(destinationPath, 'updated', 'utf8');
+
+		// The invalid listing must not be treated as complete or populate the
+		// document cache. A subsequent operation obtains a fresh listing.
+		expect(mockSaf.listFiles).toHaveBeenCalledTimes(2);
+		expect(mockSaf.writeFile).toHaveBeenCalledWith(destinationUri, 'updated', { encoding: 'utf8' });
+	});
 });

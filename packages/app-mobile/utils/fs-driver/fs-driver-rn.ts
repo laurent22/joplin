@@ -73,10 +73,11 @@ export default class FsDriverRN extends FsDriverBase {
 
 	private safRelativePath_(directoryPath: string, document: DocumentFileDetail) {
 		directoryPath = this.normalizeSafPath_(directoryPath);
-		if (!document.uri.startsWith(directoryPath)) {
-			logger.warn('safRelativePath_: Document URI does not start with directory path:', { uri: document.uri, directoryPath });
+		const pathPrefix = `${directoryPath}/`;
+		if (!document.uri.startsWith(pathPrefix)) {
+			throw new Error(`Cannot derive SAF relative path: Document URI does not start with directory path: ${document.uri}`);
 		}
-		return document.uri.substring(directoryPath.length + 1);
+		return document.uri.substring(pathPrefix.length);
 	}
 
 	private invalidateSafDirectory_(path: string) {
