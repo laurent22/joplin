@@ -18,6 +18,31 @@ const filePathTitles = (filePath) => {
 	return output;
 };
 
+// `describe.each` builds its title from the test data, so a printf placeholder
+// such as "%j", or a "$variable" tag, may follow the file name.
+const eachTitle = (title, allowed) => {
+	const match = /^(.*?)\s*[([]?[%$]/.exec(title);
+	return !!match && allowed.includes(match[1]);
+};
+
+const isDescribe = (callee) => {
+	if (callee.type === 'Identifier') return callee.name === 'describe';
+	// describe.each(...)(...) - the callee is itself a call expression.
+	if (callee.type === 'CallExpression') return isDescribe(callee.callee);
+	if (callee.type === 'MemberExpression' && !callee.computed) {
+		return isDescribe(callee.object);
+	}
+	return false;
+};
+
+const isEach = (callee) => {
+	if (callee.type === 'CallExpression') return isEach(callee.callee);
+	if (callee.type === 'MemberExpression' && !callee.computed) {
+		return callee.property.name === 'each' || isEach(callee.object);
+	}
+	return false;
+};
+
 module.exports = {
 	meta: {
 		type: 'problem',
@@ -27,6 +52,7 @@ module.exports = {
 		schema: [],
 		messages: {
 			mismatch: 'The describe() title should be "{{expected}}", or a longer path suffix to the file (eg. "{{alternative}}").',
+			dynamic: 'The describe() title should be a string literal matching the file name ("{{expected}}").',
 		},
 	},
 
@@ -35,21 +61,26 @@ module.exports = {
 		if (!/\.test\.[jt]sx?$/.test(filePath)) return {};
 
 		const allowed = filePathTitles(filePath);
+		const data = { expected: allowed[0], alternative: allowed[1] ?? allowed[0] };
 
 		return {
 			// Only top-level describe() calls - nested ones are inside a function
 			// body so their ancestor chain includes a CallExpression.
 			'Program > ExpressionStatement > CallExpression'(node) {
-				if (node.callee.type !== 'Identifier' || node.callee.name !== 'describe') return;
-				const [title] = node.arguments;
-				if (!title || title.type !== 'Literal' || typeof title.value !== 'string') return;
-				if (allowed.includes(title.value)) return;
+				if (!isDescribe(node.callee)) return;
 
-				context.report({
-					node: title,
-					messageId: 'mismatch',
-					data: { expected: allowed[0], alternative: allowed[1] ?? allowed[0] },
-				});
+				const [title] = node.arguments;
+				if (!title) return;
+
+				if (title.type !== 'Literal' || typeof title.value !== 'string') {
+					context.report({ node: title, messageId: 'dynamic', data });
+					return;
+				}
+
+				if (allowed.includes(title.value)) return;
+				if (isEach(node.callee) && eachTitle(title.value, allowed)) return;
+
+				context.report({ node: title, messageId: 'mismatch', data });
 			},
 		};
 	},
