@@ -78,12 +78,7 @@ export default class OcrService {
 
 	private ocrDataMaxSize_: number = 10 * MB;
 	public testing_setOcrMaxSize(value: number) {
-		const original = this.ocrDataMaxSize_;
 		this.ocrDataMaxSize_ = value;
-
-		return {
-			reset: () => { this.ocrDataMaxSize_ = original; },
-		};
 	}
 
 	private async pdfExtractDir(): Promise<string> {
@@ -137,7 +132,7 @@ export default class OcrService {
 
 			const imageFilePaths = await shim.pdfToImages(resourceFilePath, await this.pdfExtractDir());
 
-			const results: RecognizeResult[] = [];
+			const resultText: string[] = [];
 			const pdfOcrPages: PdfOcrPage[] = [];
 
 			try {
@@ -146,12 +141,13 @@ export default class OcrService {
 				for (const imagePath of imageFilePaths) {
 					if (sizeEstimate > this.ocrDataMaxSize_) {
 						logger.warn(`Recognize: Truncated: ${resourceInfo(resource)} after ${pageIndex + 1} pages (at roughly ${bytesToHuman(sizeEstimate)} of OCR data).`);
+						resultText.push('...');
 						break;
 					}
 
 					logger.info(`Recognize: ${resourceInfo(resource)}: Processing PDF page ${pageIndex + 1} / ${imageFilePaths.length}...`);
 					const result = await driver.recognize(language, imagePath, resource.id);
-					results.push(result);
+					resultText.push(result.ocr_text);
 
 					if (saveOcrDetails) {
 						// Parse OCR details for this page
@@ -190,7 +186,7 @@ export default class OcrService {
 			return {
 				...emptyRecognizeResult(),
 				ocr_status: ResourceOcrStatus.Done,
-				ocr_text: this.mapOcrText_(results.map(r => r.ocr_text).join('\n')),
+				ocr_text: this.mapOcrText_(resultText.join('\n')),
 				ocr_details: ocrDetails,
 			};
 		} else {
