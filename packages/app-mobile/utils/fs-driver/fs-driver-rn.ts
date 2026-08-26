@@ -281,19 +281,20 @@ export default class FsDriverRN extends FsDriverBase {
 		if (!options) options = { recursive: false };
 
 		const isScoped = isScopedUri(path);
+		const directoryPath = isScoped ? this.normalizeSafPath_(path) : path;
 
 		let stats: RnfsStatLike[] = [];
 		try {
 			if (isScoped) {
-				await this.safDirectoryUri_(path);
-				stats = await RNSAF.listFiles(path);
-				this.cacheSafDirectoryListing_(path, stats as DocumentFileDetail[]);
+				await this.safDirectoryUri_(directoryPath);
+				stats = await RNSAF.listFiles(directoryPath);
+				this.cacheSafDirectoryListing_(directoryPath, stats as DocumentFileDetail[]);
 			} else {
-				stats = await RNFS.readDir(path);
+				stats = await RNFS.readDir(directoryPath);
 			}
 		} catch (error) {
-			if (isScoped) this.invalidateSafDirectory_(path);
-			throw new Error(`Could not read directory: ${path}: ${error.message}`);
+			if (isScoped) this.invalidateSafDirectory_(directoryPath);
+			throw new Error(`Could not read directory: ${directoryPath}: ${error.message}`);
 		}
 
 		const toRelativePath = (stat: RnfsStatLike) => {
@@ -301,15 +302,15 @@ export default class FsDriverRN extends FsDriverBase {
 
 			// Workaround: Paths returned by RNFS.readDir can include a leading /private/, when this isn't included
 			// in the original path variable:
-			if (relativePath.startsWith('/private/') && !path.startsWith('/private/')) {
+			if (relativePath.startsWith('/private/') && !directoryPath.startsWith('/private/')) {
 				relativePath = relativePath.replace(/^\/private/, '');
 			}
 
-			if (!relativePath.startsWith(path)) {
-				logger.warn('readDirStats: Relative path does not start with original:', { relativePath, path });
+			if (!relativePath.startsWith(directoryPath)) {
+				logger.warn('readDirStats: Relative path does not start with original:', { relativePath, path: directoryPath });
 			}
 
-			relativePath = relativePath.substring(path.length + 1);
+			relativePath = relativePath.substring(directoryPath.length + 1);
 			return relativePath;
 		};
 
@@ -327,7 +328,7 @@ export default class FsDriverRN extends FsDriverBase {
 				// Use the original stat.
 				output = await this.readUriDirStatsHandleRecursion_(stat as DocumentFileDetail, output, options);
 			} else {
-				output = await this.readDirStatsHandleRecursion_(path, standardStat, output, options);
+				output = await this.readDirStatsHandleRecursion_(directoryPath, standardStat, output, options);
 			}
 		}
 		return output;
