@@ -119,7 +119,7 @@ export default class FsDriverRN extends FsDriverBase {
 		return directoryUri;
 	}
 
-	private cacheSafDirectoryListing_(path: string, documents: DocumentFileDetail[]) {
+	private cacheSafDirectoryListing_(path: string, documents: DocumentFileDetail[], relativePaths: string[] = null) {
 		const normalizedPath = path.replace(/\/$/, '');
 		const pathPrefix = `${normalizedPath}/`;
 		for (const cachedPath of this.safDocumentUris_.keys()) {
@@ -128,8 +128,9 @@ export default class FsDriverRN extends FsDriverBase {
 			}
 		}
 
-		for (const document of documents) {
-			this.safDocumentUris_.set(`${pathPrefix}${document.name}`, document.documentUri ?? document.uri);
+		for (let i = 0; i < documents.length; i++) {
+			const document = documents[i];
+			this.safDocumentUris_.set(`${pathPrefix}${relativePaths?.[i] ?? document.name}`, document.documentUri ?? document.uri);
 		}
 		this.listedSafDirectories_.add(normalizedPath);
 	}
@@ -294,7 +295,6 @@ export default class FsDriverRN extends FsDriverBase {
 			if (isScoped) {
 				await this.safDirectoryUri_(directoryPath);
 				stats = await RNSAF.listFiles(directoryPath);
-				this.cacheSafDirectoryListing_(directoryPath, stats as DocumentFileDetail[]);
 			} else {
 				stats = await RNFS.readDir(directoryPath);
 			}
@@ -319,17 +319,15 @@ export default class FsDriverRN extends FsDriverBase {
 			relativePath = relativePath.substring(directoryPath.length + 1);
 			return relativePath;
 		};
+		const relativePaths = stats.map(toRelativePath);
+		if (isScoped) this.cacheSafDirectoryListing_(directoryPath, stats as DocumentFileDetail[], relativePaths);
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Output combines DocumentFileDetail (SAF) or normalized Stat (RNFS) entries
 		let output: any[] = [];
 		for (let i = 0; i < stats.length; i++) {
 			const stat = stats[i];
 
-			const relativePath = toRelativePath(stat);
-			if (isScoped) {
-				const document = stat as DocumentFileDetail;
-				this.safDocumentUris_.set(`${directoryPath}/${relativePath}`, document.documentUri ?? document.uri);
-			}
+			const relativePath = relativePaths[i];
 			const standardStat = this.rnfsStatToStd_(stat, relativePath);
 			output.push(standardStat);
 
