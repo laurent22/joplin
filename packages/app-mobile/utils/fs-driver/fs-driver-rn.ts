@@ -309,41 +309,41 @@ export default class FsDriverRN extends FsDriverBase {
 		if (!options) options = { recursive: false };
 
 		const isScoped = isScopedUri(path);
-		const directoryPath = isScoped ? this.normalizeSafPath_(path) : path;
+		if (isScoped) path = this.normalizeSafPath_(path);
 
 		let stats: RnfsStatLike[] = [];
 		try {
 			if (isScoped) {
-				await this.safDirectoryUri_(directoryPath);
-				stats = await RNSAF.listFiles(directoryPath);
+				await this.safDirectoryUri_(path);
+				stats = await RNSAF.listFiles(path);
 			} else {
-				stats = await RNFS.readDir(directoryPath);
+				stats = await RNFS.readDir(path);
 			}
 		} catch (error) {
-			if (isScoped) this.invalidateSafDirectory_(directoryPath);
-			throw new Error(`Could not read directory: ${directoryPath}: ${error.message}`);
+			if (isScoped) this.invalidateSafDirectory_(path);
+			throw new Error(`Could not read directory: ${path}: ${error.message}`);
 		}
 
 		const toRelativePath = (stat: RnfsStatLike) => {
-			if (isScoped) return this.safRelativePath_(directoryPath, stat as DocumentFileDetail);
+			if (isScoped) return this.safRelativePath_(path, stat as DocumentFileDetail);
 
 			let relativePath = (stat as StatResultT | ReadDirResItemT).path;
 
 			// Workaround: Paths returned by RNFS.readDir can include a leading /private/, when this isn't included
 			// in the original path variable:
-			if (relativePath.startsWith('/private/') && !directoryPath.startsWith('/private/')) {
+			if (relativePath.startsWith('/private/') && !path.startsWith('/private/')) {
 				relativePath = relativePath.replace(/^\/private/, '');
 			}
 
-			if (!relativePath.startsWith(directoryPath)) {
-				logger.warn('readDirStats: Relative path does not start with original:', { relativePath, path: directoryPath });
+			if (!relativePath.startsWith(path)) {
+				logger.warn('readDirStats: Relative path does not start with original:', { relativePath, path });
 			}
 
-			relativePath = relativePath.substring(directoryPath.length + 1);
+			relativePath = relativePath.substring(path.length + 1);
 			return relativePath;
 		};
 		const relativePaths = stats.map(toRelativePath);
-		if (isScoped) this.cacheSafDirectoryListing_(directoryPath, stats as DocumentFileDetail[], relativePaths);
+		if (isScoped) this.cacheSafDirectoryListing_(path, stats as DocumentFileDetail[], relativePaths);
 
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Output combines DocumentFileDetail (SAF) or normalized Stat (RNFS) entries
 		let output: any[] = [];
@@ -359,7 +359,7 @@ export default class FsDriverRN extends FsDriverBase {
 				// Use the original stat.
 				output = await this.readUriDirStatsHandleRecursion_(stat as DocumentFileDetail, output, options);
 			} else {
-				output = await this.readDirStatsHandleRecursion_(directoryPath, standardStat, output, options);
+				output = await this.readDirStatsHandleRecursion_(path, standardStat, output, options);
 			}
 		}
 		return output;
