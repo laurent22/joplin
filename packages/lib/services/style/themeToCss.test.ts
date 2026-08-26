@@ -19,6 +19,7 @@ const input: Theme = {
 	dividerColor: '#dddddd',
 	selectedColor: '#e5e5e5',
 	urlColor: '#155BDA',
+	shadowColor: 'rgba(0,0,0,0.2)',
 
 	// Color scheme "2" is used for the sidebar. It's white text over
 	// dark blue background.
@@ -106,6 +107,7 @@ const expected = `
 	--joplin-search-marker-color: black;
 	--joplin-selected-color: #e5e5e5;
 	--joplin-selected-color2: #131313;
+	--joplin-shadow-color: rgba(0,0,0,0.2);
 	--joplin-table-background-color: rgb(247, 247, 247);
 	--joplin-text-selection-color: #a0a0ff;
 	--joplin-url-color: #155BDA;
