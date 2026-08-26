@@ -41,9 +41,11 @@ describe('FsDriverRN SAF destination lookup', () => {
 		const driver = new FsDriverRN();
 
 		await driver.writeFile(destinationPath, 'updated', 'utf8');
+		await driver.writeFile(destinationPath, 'updated again', 'utf8');
 
-		expect(mockSaf.listFiles).toHaveBeenCalledWith(parentPath);
-		expect(mockSaf.writeFile).toHaveBeenCalledWith(destinationUri, 'updated', { encoding: 'utf8' });
+		expect(mockSaf.listFiles).toHaveBeenCalledTimes(1);
+		expect(mockSaf.writeFile).toHaveBeenNthCalledWith(1, destinationUri, 'updated', { encoding: 'utf8' });
+		expect(mockSaf.writeFile).toHaveBeenNthCalledWith(2, destinationUri, 'updated again', { encoding: 'utf8' });
 		expect(mockSaf.writeFileInDirectory).not.toHaveBeenCalled();
 	});
 

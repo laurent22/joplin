@@ -760,14 +760,22 @@ public class EfficientDocumentHelper {
       public Object doAsync() {
         try {
           Uri uri;
+          Uri suppliedUri = UriHelper.getUnifiedUri(unknownStr);
 
-          try {
-            uri = getDocumentUri(unknownStr, false, true);
-            if (uri == null) {
-              throw new FileNotFoundExceptionFast();
+          if (UriHelper.isDocumentUri(suppliedUri)) {
+            // A direct document URI already identifies the destination. Opening its
+            // output stream validates it, so querying it first only adds provider
+            // overhead to every cached overwrite.
+            uri = suppliedUri;
+          } else {
+            try {
+              uri = getDocumentUri(unknownStr, false, true);
+              if (uri == null) {
+                throw new FileNotFoundExceptionFast();
+              }
+            } catch (FileNotFoundException e) {
+              uri = createFile(unknownStr, mimeType);
             }
-          } catch (FileNotFoundException e) {
-            uri = createFile(unknownStr, mimeType);
           }
 
           writeToFile(uri, data, encoding, append);
