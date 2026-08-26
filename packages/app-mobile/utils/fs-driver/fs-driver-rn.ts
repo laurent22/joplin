@@ -135,8 +135,9 @@ export default class FsDriverRN extends FsDriverBase {
 				this.safDocumentUris_.set(path, document.documentUri ?? document.uri);
 				return;
 			} catch (error) {
-				// The directory may have been replaced since it was listed. Fall back to
-				// resolving the destination by path.
+				// Only retry when the cached parent no longer exists. Other failures may
+				// occur after the write succeeded and must not replay the mutation.
+				if (error?.code !== 'ENOENT') throw error;
 				this.safDirectoryUris_.delete(parentPath);
 				this.listedSafDirectories_.delete(parentPath);
 			}
@@ -171,6 +172,9 @@ export default class FsDriverRN extends FsDriverBase {
 				this.safDocumentUris_.set(dest, document.documentUri ?? document.uri);
 				return;
 			} catch (error) {
+				// Only retry when the cached parent no longer exists. Other failures may
+				// occur after the copy succeeded and must not replay the mutation.
+				if (error?.code !== 'ENOENT') throw error;
 				this.safDirectoryUris_.delete(parentPath);
 				this.listedSafDirectories_.delete(parentPath);
 			}
@@ -395,16 +399,17 @@ export default class FsDriverRN extends FsDriverBase {
 
 	// Always overwrite destination
 	public async copy(source: string, dest: string) {
+		if (isScopedUri(source) || isScopedUri(dest)) {
+			if (isScopedUri(source)) {
+				await this.withCachedSafUri_(source, resolvedSource => RNSAF.copyFile(resolvedSource, dest, { replaceIfDestinationExists: true }));
+			} else {
+				await this.copyToSaf_(source, dest);
+			}
+			return;
+		}
+
 		let retry = false;
 		try {
-			if (isScopedUri(source) || isScopedUri(dest)) {
-				if (isScopedUri(source)) {
-					await this.withCachedSafUri_(source, resolvedSource => RNSAF.copyFile(resolvedSource, dest, { replaceIfDestinationExists: true }));
-				} else {
-					await this.copyToSaf_(source, dest);
-				}
-				return;
-			}
 			await RNFS.copyFile(source, dest);
 		} catch (error) {
 			// On iOS it will throw an error if the file already exist
@@ -413,11 +418,7 @@ export default class FsDriverRN extends FsDriverBase {
 		}
 
 		if (retry) {
-			if (isScopedUri(source) || isScopedUri(dest)) {
-				await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
-			} else {
-				await RNFS.copyFile(source, dest);
-			}
+			await RNFS.copyFile(source, dest);
 		}
 	}
 
