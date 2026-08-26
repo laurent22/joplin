@@ -5,7 +5,7 @@ const sync = {
 	start: jest.fn().mockReturnValue({}),
 };
 
-describe('Registry', () => {
+describe('registry', () => {
 	let originalSyncTarget: typeof reg.syncTarget;
 
 	beforeAll(() => {

@@ -44,7 +44,7 @@ const compareOutputToExpected = (options: CompareOutputOptions) => {
 	}));
 };
 
-describe('EnexToHtml', () => {
+describe('import-enex-html-gen', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);

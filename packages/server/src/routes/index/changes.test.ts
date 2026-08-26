@@ -1,6 +1,6 @@
 // Disabled for now
 
-describe('index_changes', () => {
+describe('changes', () => {
 
 	it('should pass', () => {
 		expect(true).toBe(true);

@@ -5,7 +5,7 @@ import { getLoginRequest } from './saml';
 import { afterAllTests, beforeAllDb, beforeEachDb } from './testing/testUtils';
 import { SamlRelayState } from './types';
 
-describe('getLoginRequest', () => {
+describe('saml', () => {
 	let dir: string;
 
 	beforeAll(async () => {

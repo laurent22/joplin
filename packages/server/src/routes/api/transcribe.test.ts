@@ -36,7 +36,7 @@ const fetchSpyOn = (response: FetchResponse) => {
 	);
 };
 
-describe('api_transcribe', () => {
+describe('transcribe', () => {
 
 	beforeAll(async () => {
 		await beforeAllDb('api_transcribe', {

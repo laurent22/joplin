@@ -31,7 +31,7 @@ const WrappedSearchResults: React.FC<WrapperProps> = props => (
 	</TestProviderStack>
 );
 
-describe('SearchResult', () => {
+describe('SearchResults', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);

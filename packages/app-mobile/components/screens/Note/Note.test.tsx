@@ -158,7 +158,7 @@ const setupNoteWithPanes = async (panes: string[], noteTitle = 'Test note') => {
 	return renderResult;
 };
 
-describe('screens/Note', () => {
+describe('screens/Note/Note', () => {
 	beforeEach(async () => {
 		await setupDatabaseAndSynchronizer(1);
 		await setupDatabaseAndSynchronizer(0);
