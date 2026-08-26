@@ -55,6 +55,7 @@ const normalizeEncoding = (encoding: string): SupportedEncoding => {
 export default class FsDriverRN extends FsDriverBase {
 	private safDocumentUris_ = new Map<string, string>();
 	private safDirectoryUris_ = new Map<string, string>();
+	private listedSafDirectories_ = new Set<string>();
 
 	private cachedSafUri_(path: string) {
 		return this.safDocumentUris_.get(path) ?? path;
@@ -65,9 +66,10 @@ export default class FsDriverRN extends FsDriverBase {
 		try {
 			return await callback(cachedUri);
 		} catch (error) {
-			// A document URI can become invalid if another client replaces the file.
-			// Discard it and fall back to resolving the path by name in that case.
-			if (cachedUri === path) throw error;
+			// ENOENT confirms that the cached document URI is stale. Retrying other
+			// errors could repeat an operation that succeeded before failing while
+			// closing the stream (and, for appends, duplicate the appended content).
+			if (cachedUri === path || error?.code !== 'ENOENT') throw error;
 			this.safDocumentUris_.delete(path);
 			return callback(path);
 		}
@@ -84,13 +86,43 @@ export default class FsDriverRN extends FsDriverBase {
 		return directoryUri;
 	}
 
+	private cacheSafDirectoryListing_(path: string, documents: DocumentFileDetail[]) {
+		const normalizedPath = path.replace(/\/$/, '');
+		const pathPrefix = `${normalizedPath}/`;
+		for (const cachedPath of this.safDocumentUris_.keys()) {
+			if (cachedPath.startsWith(pathPrefix) && !cachedPath.substring(pathPrefix.length).includes('/')) {
+				this.safDocumentUris_.delete(cachedPath);
+			}
+		}
+
+		for (const document of documents) {
+			this.safDocumentUris_.set(`${pathPrefix}${document.name}`, document.documentUri ?? document.uri);
+		}
+		this.listedSafDirectories_.add(normalizedPath);
+	}
+
+	private async ensureSafDirectoryListed_(path: string) {
+		const normalizedPath = path.replace(/\/$/, '');
+		if (this.listedSafDirectories_.has(normalizedPath)) return;
+
+		const documents = await RNSAF.listFiles(normalizedPath);
+		this.cacheSafDirectoryListing_(normalizedPath, documents);
+		await this.safDirectoryUri_(normalizedPath);
+	}
+
 	private async writeSafFile_(path: string, content: string, encoding: SupportedEncoding) {
+		const lastSlashIndex = path.lastIndexOf('/');
+		const parentPath = path.substring(0, lastSlashIndex);
+		try {
+			await this.ensureSafDirectoryListed_(parentPath);
+		} catch (error) {
+			// Fall back to resolving the destination by path below.
+		}
+
 		if (this.safDocumentUris_.has(path)) {
 			return this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding }));
 		}
 
-		const lastSlashIndex = path.lastIndexOf('/');
-		const parentPath = path.substring(0, lastSlashIndex);
 		let parentUri: string = null;
 		try {
 			parentUri = await this.safDirectoryUri_(parentPath);
@@ -106,6 +138,7 @@ export default class FsDriverRN extends FsDriverBase {
 				// The directory may have been replaced since it was listed. Fall back to
 				// resolving the destination by path.
 				this.safDirectoryUris_.delete(parentPath);
+				this.listedSafDirectories_.delete(parentPath);
 			}
 		}
 
@@ -113,13 +146,19 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	private async copyToSaf_(source: string, dest: string): Promise<void> {
+		const lastSlashIndex = dest.lastIndexOf('/');
+		const parentPath = dest.substring(0, lastSlashIndex);
+		try {
+			await this.ensureSafDirectoryListed_(parentPath);
+		} catch (error) {
+			// Fall back to resolving the destination by path below.
+		}
+
 		if (this.safDocumentUris_.has(dest)) {
 			await this.withCachedSafUri_(dest, resolvedDest => RNSAF.copyFile(source, resolvedDest, { replaceIfDestinationExists: true }));
 			return;
 		}
 
-		const lastSlashIndex = dest.lastIndexOf('/');
-		const parentPath = dest.substring(0, lastSlashIndex);
 		let parentUri: string = null;
 		try {
 			parentUri = await this.safDirectoryUri_(parentPath);
@@ -133,6 +172,7 @@ export default class FsDriverRN extends FsDriverBase {
 				return;
 			} catch (error) {
 				this.safDirectoryUris_.delete(parentPath);
+				this.listedSafDirectories_.delete(parentPath);
 			}
 		}
 
@@ -205,6 +245,7 @@ export default class FsDriverRN extends FsDriverBase {
 		try {
 			if (isScoped) {
 				stats = await RNSAF.listFiles(path);
+				this.cacheSafDirectoryListing_(path, stats as DocumentFileDetail[]);
 				await this.safDirectoryUri_(path);
 			} else {
 				stats = await RNFS.readDir(path);
@@ -236,10 +277,6 @@ export default class FsDriverRN extends FsDriverBase {
 			const stat = stats[i];
 
 			const relativePath = toRelativePath(stat);
-			if (isScoped) {
-				const document = stat as DocumentFileDetail;
-				this.safDocumentUris_.set(`${path.replace(/\/$/, '')}/${relativePath}`, document.documentUri ?? document.uri);
-			}
 			const standardStat = this.rnfsStatToStd_(stat, relativePath);
 			output.push(standardStat);
 
