@@ -1,6 +1,6 @@
 import { isHashedPassword } from '../../utils/auth';
 
-describe('isHashedPassword', () => {
+describe('user', () => {
 
 	// cSpell:disable
 	it('should be true if password starts with $2a$10', () => {
