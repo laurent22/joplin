@@ -422,6 +422,8 @@ describe('OcrService', () => {
 	it('should truncate long OCR text in accessible-mode PDFs', async () => {
 		Setting.setValue('ocr.pdfMode', 'accessible');
 
+		// Converting PDFs to images requires the <canvas> element, which isn't available in a testing
+		// environment.
 		const pdfToImages = jest.spyOn(shim, 'pdfToImages');
 		pdfToImages.mockImplementation(async (_pdfPath, outputDirectory) => {
 			const paths = [];
