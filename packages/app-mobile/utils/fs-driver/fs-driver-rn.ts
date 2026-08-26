@@ -146,6 +146,10 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	private async writeSafFile_(path: string, content: string, encoding: SupportedEncoding) {
+		if (this.safDocumentUris_.has(path)) {
+			return this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding }));
+		}
+
 		const lastSlashIndex = path.lastIndexOf('/');
 		const parentPath = path.substring(0, lastSlashIndex);
 		try {
@@ -153,10 +157,6 @@ export default class FsDriverRN extends FsDriverBase {
 		} catch (error) {
 			if (error?.code !== 'ENOENT') throw error;
 			return RNSAF.writeFile(path, content, { encoding });
-		}
-
-		if (this.safDocumentUris_.has(path)) {
-			return this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding }));
 		}
 
 		const parentUri = this.safDirectoryUris_.get(parentPath);
@@ -177,6 +177,11 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	private async copyToSaf_(source: string, dest: string): Promise<void> {
+		if (this.safDocumentUris_.has(dest)) {
+			await this.withCachedSafUri_(dest, resolvedDest => RNSAF.copyFile(source, resolvedDest, { replaceIfDestinationExists: true }));
+			return;
+		}
+
 		const lastSlashIndex = dest.lastIndexOf('/');
 		const parentPath = dest.substring(0, lastSlashIndex);
 		try {
@@ -184,11 +189,6 @@ export default class FsDriverRN extends FsDriverBase {
 		} catch (error) {
 			if (error?.code !== 'ENOENT') throw error;
 			await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
-			return;
-		}
-
-		if (this.safDocumentUris_.has(dest)) {
-			await this.withCachedSafUri_(dest, resolvedDest => RNSAF.copyFile(source, resolvedDest, { replaceIfDestinationExists: true }));
 			return;
 		}
 
@@ -484,7 +484,7 @@ export default class FsDriverRN extends FsDriverBase {
 	public async unlink(path: string) {
 		try {
 			if (isScopedUri(path)) {
-				await RNSAF.unlink(path);
+				await this.withCachedSafUri_(path, resolvedPath => RNSAF.unlink(resolvedPath));
 				return;
 			}
 			await RNFS.unlink(path);
