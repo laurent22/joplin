@@ -23,6 +23,12 @@ import renderBlockImages from './extensions/rendering/renderBlockImages';
 const closingFencedBlock = StateField.define<boolean>({
 	create: () => false,
 	update: (_, tr) => {
+		// With a selection, a backtick wraps the selection rather than closing a
+		// block, so the two backticks before it are the ones a previous keystroke
+		// added. Treating that as a closing fence stops the third backtick
+		// wrapping and it overwrites the selection instead.
+		if (!tr.state.selection.main.empty) return false;
+
 		const pos = tr.state.selection.main.from;
 		const textBefore = tr.state.doc.sliceString(Math.max(0, pos - 2), pos);
 		const backticksBefore = textBefore.length - textBefore.replace(/`+$/, '').length;
