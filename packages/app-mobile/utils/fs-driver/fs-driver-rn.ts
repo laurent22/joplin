@@ -209,6 +209,17 @@ export default class FsDriverRN extends FsDriverBase {
 		await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
 	}
 
+	private async appendSafFile_(path: string, content: string, encoding: SupportedEncoding) {
+		const hasCachedUri = this.safDocumentUris_.has(path);
+		try {
+			return await this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding, append: true }));
+		} finally {
+			// A cache-cold append resolves by path and may create the destination.
+			// Force the parent listing to be refreshed before a later create/update.
+			if (!hasCachedUri) this.invalidateSafPath_(path);
+		}
+	}
+
 	public appendFileSync() {
 		throw new Error('Not implemented: appendFileSync');
 	}
@@ -220,7 +231,7 @@ export default class FsDriverRN extends FsDriverBase {
 		const encoding = normalizeEncoding(rawEncoding);
 
 		if (isScopedUri(path)) {
-			return this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding, append: true }));
+			return this.appendSafFile_(path, content, encoding);
 		}
 		return RNFS.appendFile(path, content, encoding);
 	}
