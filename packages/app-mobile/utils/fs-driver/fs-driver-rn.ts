@@ -222,8 +222,12 @@ export default class FsDriverRN extends FsDriverBase {
 		const parentUri = this.safDirectoryUris_.get(parentPath);
 		if (parentUri) {
 			try {
-				const document = await RNSAF.copyFileToDirectory(source, parentUri, dest.substring(lastSlashIndex + 1), { replaceIfDestinationExists: true });
-				this.safDocumentUris_.set(dest, document.documentUri ?? document.uri);
+				const documentUri = await RNSAF.copyFileToDirectory(source, parentUri, dest.substring(lastSlashIndex + 1), {
+					replaceIfDestinationExists: true,
+					returnDocumentUriOnly: true,
+				});
+				if (typeof documentUri !== 'string') throw new Error('Expected copyFileToDirectory to return a document URI');
+				this.safDocumentUris_.set(dest, documentUri);
 				return;
 			} catch (error) {
 				// The operation may have created and copied the destination before

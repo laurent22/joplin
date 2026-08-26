@@ -58,7 +58,13 @@ interface SafxInterface {
 		mimeType?: string,
 		replaceIfDestinationExists?: boolean,
 	): Promise<DocumentFileDetail>;
-	copyFileToDirectory(sourceUri: string, directoryUri: string, fileName: string, replaceIfDestinationExists?: boolean): Promise<DocumentFileDetail>;
+	copyFileToDirectory(
+		sourceUri: string,
+		directoryUri: string,
+		fileName: string,
+		replaceIfDestinationExists?: boolean,
+		returnDocumentUriOnly?: boolean,
+	): Promise<DocumentFileDetail | string>;
 	createFile(uriString: string, mimeType?: string): Promise<DocumentFileDetail>;
 	unlink(uriString: string): Promise<boolean>;
 	mkdir(uriString: string): Promise<DocumentFileDetail>;
@@ -175,7 +181,13 @@ export function writeFileInDirectory(
 }
 
 export function copyFileToDirectory(sourceUri: string, directoryUri: string, fileName: string, options: FileTransferOptions = {}) {
-	return SafX.copyFileToDirectory(sourceUri, directoryUri, fileName, !!options.replaceIfDestinationExists);
+	return SafX.copyFileToDirectory(
+		sourceUri,
+		directoryUri,
+		fileName,
+		!!options.replaceIfDestinationExists,
+		!!options.returnDocumentUriOnly,
+	);
 }
 
 // Creates an empty file at given uri.
@@ -232,6 +244,8 @@ export function stat(uriString: string) {
 
 type FileTransferOptions = {
 	replaceIfDestinationExists?: boolean;
+	/** Return only the direct destination URI, avoiding a final metadata query. */
+	returnDocumentUriOnly?: boolean;
 };
 
 // Copy file from source uri to destination uri.
