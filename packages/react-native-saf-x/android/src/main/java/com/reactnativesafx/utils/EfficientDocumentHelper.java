@@ -447,23 +447,6 @@ public class EfficientDocumentHelper {
       }
     }
 
-    // Do not rely on createDocument() changing the display name when a sibling
-    // already exists. SAF providers may allow exact duplicate display names, in
-    // which case the newly-created URI would otherwise be mistaken for the
-    // intended overwrite destination. Resolve the existing document before
-    // creating anything and write to its document ID directly when replacement
-    // is requested.
-    DocumentStat existingFile = findFile(parentDirOfFile, fileName);
-    if (existingFile != null) {
-      if (existingFile.isDirectory()) {
-        throw new IOExceptionFast(
-          "a directory with the same name already exists in destination: " + fileName);
-      }
-      if (replaceIfDestinationExists) return existingFile.getInternalUri();
-      throw new IOExceptionFast(
-        "a document with the same name already exists in destination: " + fileName);
-    }
-
     Uri createdFile = DocumentsContract.createDocument(
       context.getContentResolver(),
       parentDirOfFile,
@@ -494,7 +477,7 @@ public class EfficientDocumentHelper {
             + createdFileName
             + "'");
       }
-      existingFile = findFile(parentDirOfFile, fileName);
+      DocumentStat existingFile = findFile(parentDirOfFile, fileName);
       if (existingFile == null || existingFile.isDirectory()) {
         throw new IOExceptionFast(
           "The created file name was not as expected and the existing destination could not be resolved: input name was '"
