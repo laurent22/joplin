@@ -60,6 +60,27 @@ describe('FsDriverRN SAF destination lookup', () => {
 		expect(mockSaf.copyFileToDirectory).not.toHaveBeenCalled();
 	});
 
+	it('should overwrite a destination discovered by stat after an older listing', async () => {
+		const driver = new FsDriverRN();
+		mockSaf.listFiles.mockResolvedValueOnce([]);
+		await driver.readDirStats(parentPath);
+		mockSaf.stat.mockResolvedValueOnce({
+			name: 'existing.md',
+			uri: destinationPath,
+			documentUri: destinationUri,
+			type: 'file',
+			size: 0,
+			lastModified: 0,
+		});
+
+		await driver.stat(destinationPath);
+		await driver.writeFile(destinationPath, 'updated', 'utf8');
+
+		expect(mockSaf.listFiles).toHaveBeenCalledTimes(1);
+		expect(mockSaf.writeFile).toHaveBeenCalledWith(destinationUri, 'updated', { encoding: 'utf8' });
+		expect(mockSaf.writeFileInDirectory).not.toHaveBeenCalled();
+	});
+
 	it('should reject a directory entry whose URI is not relative to the listed directory', async () => {
 		const driver = new FsDriverRN();
 		mockSaf.listFiles.mockResolvedValueOnce([{

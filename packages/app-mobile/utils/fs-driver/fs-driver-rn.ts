@@ -421,10 +421,22 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public async stat(path: string) {
+		const isScoped = isScopedUri(path);
 		try {
 			let r;
-			if (isScopedUri(path)) {
+			if (isScoped) {
 				r = await RNSAF.stat(path);
+				const normalizedPath = this.normalizeSafPath_(path);
+				const documentUri = r.documentUri ?? r.uri;
+				if (r.type === 'directory') {
+					this.safDirectoryUris_.set(normalizedPath, documentUri);
+				} else {
+					// stat() is used immediately before upload conflict resolution.
+					// Retain the document found by that live lookup so an accepted
+					// upload overwrites it rather than creating another document from
+					// an older parent listing.
+					this.safDocumentUris_.set(normalizedPath, documentUri);
+				}
 			} else {
 				r = await RNFS.stat(path);
 			}
@@ -434,6 +446,7 @@ export default class FsDriverRN extends FsDriverBase {
 				// Probably { [Error: File does not exist] framesToPop: 1, code: 'EUNSPECIFIED' }
 				//     or   { [Error: The file {file} couldn’t be opened because there is no such file.], code: 'ENSCOCOAERRORDOMAIN260' }
 				// which unfortunately does not have a proper error code. Can be ignored.
+				if (isScoped) this.invalidateSafPath_(path);
 				return null;
 			} else {
 				throw error;
