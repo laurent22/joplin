@@ -27,7 +27,7 @@ const createDesktopActionHandler = () => {
 	return middleware(jest.fn());
 };
 
-describe('Application external editing after sync', () => {
+describe('app', () => {
 	const watcher = ExternalEditWatcher.instance();
 	const originalTextEncoder = globalThis.TextEncoder;
 	const originalNoteDispatch = Note.dispatch;
