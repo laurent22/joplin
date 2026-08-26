@@ -447,6 +447,13 @@ public class EfficientDocumentHelper {
       }
     }
 
+    // Directory-based callers have already listed the parent and rechecked its
+    // document cache. Querying the directory again here would make bulk creation
+    // quadratic on providers that cannot filter children. A provider that permits
+    // exact same-name siblings could still race with an unrelated external writer
+    // between that listing and createDocument(). This is an inherent, pre-existing
+    // SAF limitation shared by other createDocument call sites; provider-renamed
+    // collisions are detected and cleaned up below.
     Uri createdFile = DocumentsContract.createDocument(
       context.getContentResolver(),
       parentDirOfFile,
