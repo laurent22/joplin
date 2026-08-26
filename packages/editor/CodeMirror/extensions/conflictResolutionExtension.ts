@@ -75,7 +75,7 @@ class LocalVersionWidget extends WidgetType {
 
 		const button = document.createElement('button');
 		button.className = 'cm-conflictUseVersionButton';
-		button.textContent = 'Use my version';
+		button.textContent = view.state.phrase('Use my version');
 		button.onclick = () => {
 			view.dispatch({ effects: useLocalVersion.of(this.regionId_) });
 		};
@@ -95,10 +95,10 @@ class CurrentVersionWidget extends WidgetType {
 		return true;
 	}
 
-	public toDOM() {
+	public toDOM(view: EditorView) {
 		const label = document.createElement('div');
 		label.className = 'cm-conflictCurrentVersion';
-		label.textContent = '✓ Current version';
+		label.textContent = `✓ ${view.state.phrase('Current version')}`;
 		return label;
 	}
 
