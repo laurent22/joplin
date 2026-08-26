@@ -110,9 +110,13 @@ export default class FsDriverRN extends FsDriverBase {
 			// Only non-mutating operations may retry a stale URI immediately. A
 			// mutating native operation can report ENOENT during its final metadata
 			// check, after it has already changed the destination.
-			if (cachedUri === path || error?.code !== 'ENOENT') throw error;
+			if (cachedUri === path) throw error;
 			this.invalidateSafPath_(path);
-			if (!retryIfStale) throw error;
+			// Providers do not consistently report stale documents as ENOENT. Clear
+			// the cached URI after any failure so a later operation resolves fresh
+			// state, but only replay this operation when staleness is confirmed and
+			// the caller has declared an immediate retry safe.
+			if (error?.code !== 'ENOENT' || !retryIfStale) throw error;
 			return callback(path);
 		}
 	}

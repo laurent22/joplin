@@ -98,6 +98,19 @@ describe('FsDriverRN SAF destination lookup', () => {
 		);
 	});
 
+	it('should refresh a cached destination after a non-ENOENT write failure without replaying it', async () => {
+		const driver = new FsDriverRN();
+		await driver.writeFile(destinationPath, 'first', 'utf8');
+		mockSaf.writeFile.mockRejectedValueOnce(Object.assign(new Error('Provider failure'), { code: 'EIO' }));
+
+		await expect(driver.writeFile(destinationPath, 'failed', 'utf8')).rejects.toThrow('Provider failure');
+		expect(mockSaf.writeFile).toHaveBeenCalledTimes(2);
+
+		await driver.writeFile(destinationPath, 'retried', 'utf8');
+		expect(mockSaf.listFiles).toHaveBeenCalledTimes(2);
+		expect(mockSaf.writeFile).toHaveBeenLastCalledWith(destinationUri, 'retried', { encoding: 'utf8' });
+	});
+
 	it('should reject a directory entry whose URI is not relative to the listed directory', async () => {
 		const driver = new FsDriverRN();
 		mockSaf.listFiles.mockResolvedValueOnce([{
