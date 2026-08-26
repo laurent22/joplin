@@ -91,16 +91,17 @@ export default class FsDriverRN extends FsDriverBase {
 		this.invalidateSafDirectory_(this.safParentPath_(normalizedPath));
 	}
 
-	private async withCachedSafUri_<T>(path: string, callback: (resolvedPath: string)=> Promise<T>): Promise<T> {
+	private async withCachedSafUri_<T>(path: string, callback: (resolvedPath: string)=> Promise<T>, retryIfStale = false): Promise<T> {
 		const cachedUri = this.cachedSafUri_(path);
 		try {
 			return await callback(cachedUri);
 		} catch (error) {
-			// ENOENT confirms that the cached document URI is stale. Retrying other
-			// errors could repeat an operation that succeeded before failing while
-			// closing the stream (and, for appends, duplicate the appended content).
+			// Only non-mutating operations may retry a stale URI immediately. A
+			// mutating native operation can report ENOENT during its final metadata
+			// check, after it has already changed the destination.
 			if (cachedUri === path || error?.code !== 'ENOENT') throw error;
 			this.invalidateSafPath_(path);
+			if (!retryIfStale) throw error;
 			return callback(path);
 		}
 	}
@@ -166,10 +167,10 @@ export default class FsDriverRN extends FsDriverBase {
 				this.safDocumentUris_.set(path, document.documentUri ?? document.uri);
 				return;
 			} catch (error) {
-				// Only retry when the cached parent no longer exists. Other failures may
-				// occur after the write succeeded and must not replay the mutation.
+				// The operation may have created and written the destination before
+				// failing during close or its final metadata check. Never replay it here.
 				this.invalidateSafDirectory_(parentPath);
-				if (error?.code !== 'ENOENT') throw error;
+				throw error;
 			}
 		}
 
@@ -199,10 +200,10 @@ export default class FsDriverRN extends FsDriverBase {
 				this.safDocumentUris_.set(dest, document.documentUri ?? document.uri);
 				return;
 			} catch (error) {
-				// Only retry when the cached parent no longer exists. Other failures may
-				// occur after the copy succeeded and must not replay the mutation.
+				// The operation may have created and copied the destination before
+				// failing during close or its final metadata check. Never replay it here.
 				this.invalidateSafDirectory_(parentPath);
-				if (error?.code !== 'ENOENT') throw error;
+				throw error;
 			}
 		}
 
@@ -447,7 +448,7 @@ export default class FsDriverRN extends FsDriverBase {
 		const encoding = normalizeEncoding(rawEncoding);
 
 		if (isScopedUri(path)) {
-			return this.withCachedSafUri_(path, resolvedPath => RNSAF.readFile(resolvedPath, { encoding: encoding }));
+			return this.withCachedSafUri_(path, resolvedPath => RNSAF.readFile(resolvedPath, { encoding: encoding }), true);
 		}
 		return RNFS.readFile(path, encoding);
 	}
@@ -484,7 +485,9 @@ export default class FsDriverRN extends FsDriverBase {
 	public async unlink(path: string) {
 		try {
 			if (isScopedUri(path)) {
-				await this.withCachedSafUri_(path, resolvedPath => RNSAF.unlink(resolvedPath));
+				// Deletion is idempotent and unlink does not perform a post-delete stat,
+				// so retrying a confirmed stale document URI is safe here.
+				await this.withCachedSafUri_(path, resolvedPath => RNSAF.unlink(resolvedPath), true);
 				return;
 			}
 			await RNFS.unlink(path);
