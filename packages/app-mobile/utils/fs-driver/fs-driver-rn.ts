@@ -58,7 +58,8 @@ export default class FsDriverRN extends FsDriverBase {
 	private listedSafDirectories_ = new Set<string>();
 
 	private cachedSafUri_(path: string) {
-		return this.safDocumentUris_.get(path) ?? path;
+		const normalizedPath = this.normalizeSafPath_(path);
+		return this.safDocumentUris_.get(normalizedPath) ?? normalizedPath;
 	}
 
 	private normalizeSafPath_(path: string) {
@@ -92,6 +93,7 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	private async withCachedSafUri_<T>(path: string, callback: (resolvedPath: string)=> Promise<T>, retryIfStale = false): Promise<T> {
+		path = this.normalizeSafPath_(path);
 		const cachedUri = this.cachedSafUri_(path);
 		try {
 			return await callback(cachedUri);
@@ -147,6 +149,7 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	private async writeSafFile_(path: string, content: string, encoding: SupportedEncoding) {
+		path = this.normalizeSafPath_(path);
 		if (this.safDocumentUris_.has(path)) {
 			return this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding }));
 		}
@@ -178,6 +181,7 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	private async copyToSaf_(source: string, dest: string): Promise<void> {
+		dest = this.normalizeSafPath_(dest);
 		if (this.safDocumentUris_.has(dest)) {
 			await this.withCachedSafUri_(dest, resolvedDest => RNSAF.copyFile(source, resolvedDest, { replaceIfDestinationExists: true }));
 			return;
@@ -211,6 +215,7 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	private async appendSafFile_(path: string, content: string, encoding: SupportedEncoding) {
+		path = this.normalizeSafPath_(path);
 		const hasCachedUri = this.safDocumentUris_.has(path);
 		try {
 			return await this.withCachedSafUri_(path, resolvedPath => RNSAF.writeFile(resolvedPath, content, { encoding, append: true }));
@@ -321,6 +326,10 @@ export default class FsDriverRN extends FsDriverBase {
 			const stat = stats[i];
 
 			const relativePath = toRelativePath(stat);
+			if (isScoped) {
+				const document = stat as DocumentFileDetail;
+				this.safDocumentUris_.set(`${directoryPath}/${relativePath}`, document.documentUri ?? document.uri);
+			}
 			const standardStat = this.rnfsStatToStd_(stat, relativePath);
 			output.push(standardStat);
 
