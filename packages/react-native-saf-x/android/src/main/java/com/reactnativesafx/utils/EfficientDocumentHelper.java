@@ -513,13 +513,7 @@ public class EfficientDocumentHelper {
   private void copyFileContents(final Uri sourceUri, final Uri destinationUri) throws IOException {
     try (InputStream inStream = context.getContentResolver().openInputStream(sourceUri);
          OutputStream outStream = context.getContentResolver().openOutputStream(destinationUri, "wt")) {
-      // Some SAF providers have significant overhead for each write. A larger
-      // buffer substantially reduces the number of provider calls for large
-      // resources. Avoid allocating 1 MiB for every small resource, which can
-      // otherwise cause GC pauses during a batch upload. available() is only a
-      // sizing hint; reads still continue until EOF.
-      int bufferSize = Math.max(64 * 1024, Math.min(1024 * 1024, inStream.available()));
-      byte[] buffer = new byte[bufferSize];
+      byte[] buffer = new byte[1024 * 4];
       int length;
       while ((length = inStream.read(buffer)) > 0) {
         outStream.write(buffer, 0, length);
