@@ -36,7 +36,7 @@ describe('FsDriverRN SAF destination lookup', () => {
 		mockSaf.writeFile.mockResolvedValue(undefined);
 		mockSaf.copyFile.mockResolvedValue(undefined);
 		mockSaf.writeFileInDirectory.mockResolvedValue({ uri: `${parentPath}/new.md` });
-		mockSaf.copyFileToDirectory.mockResolvedValue(`${parentPath}/new.md`);
+		mockSaf.copyFileToDirectory.mockResolvedValue({ uri: `${parentPath}/new.md` });
 	});
 
 	it('should overwrite an existing file discovered while warming an empty cache', async () => {
@@ -136,7 +136,7 @@ describe('FsDriverRN SAF destination lookup', () => {
 			parentPath, 'new.md', 'new', { encoding: 'utf8', replaceIfDestinationExists: true },
 		);
 		expect(mockSaf.copyFileToDirectory).toHaveBeenCalledWith(
-			'/local/source.md', parentPath, 'copied.md', { replaceIfDestinationExists: true, returnDocumentUriOnly: true },
+			'/local/source.md', parentPath, 'copied.md', { replaceIfDestinationExists: true },
 		);
 	});
 

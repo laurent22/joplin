@@ -873,7 +873,6 @@ public class EfficientDocumentHelper {
     String directoryUriString,
     String fileName,
     boolean replaceIfDestinationExists,
-    boolean returnDocumentUriOnly,
     final Promise promise) {
     Async.execute(new Async.Task<Object>() {
       @Override
@@ -894,7 +893,6 @@ public class EfficientDocumentHelper {
             directoryUri, fileName, sourceMimeType, replaceIfDestinationExists
           );
           copyFileContents(sourceUri, destinationUri);
-          if (returnDocumentUriOnly) return destinationUri.toString();
           return getStat(destinationUri).getWritableMap();
         } catch (Exception e) {
           return e;

@@ -102,10 +102,9 @@ public class SafXModule extends ReactContextBaseJavaModule {
     String directoryUri,
     String fileName,
     boolean replaceIfDestinationExists,
-    boolean returnDocumentUriOnly,
     final Promise promise) {
     this.efficientDocumentHelper.copyFileToDirectory(
-      sourceUri, directoryUri, fileName, replaceIfDestinationExists, returnDocumentUriOnly, promise
+      sourceUri, directoryUri, fileName, replaceIfDestinationExists, promise
     );
   }
 
