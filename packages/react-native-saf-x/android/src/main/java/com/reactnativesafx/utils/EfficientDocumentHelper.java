@@ -514,8 +514,12 @@ public class EfficientDocumentHelper {
     try (InputStream inStream = context.getContentResolver().openInputStream(sourceUri);
          OutputStream outStream = context.getContentResolver().openOutputStream(destinationUri, "wt")) {
       // Some SAF providers have significant overhead for each write. A larger
-      // buffer substantially reduces the number of provider calls for resources.
-      byte[] buffer = new byte[1024 * 1024];
+      // buffer substantially reduces the number of provider calls for large
+      // resources. Avoid allocating 1 MiB for every small resource, which can
+      // otherwise cause GC pauses during a batch upload. available() is only a
+      // sizing hint; reads still continue until EOF.
+      int bufferSize = Math.max(64 * 1024, Math.min(1024 * 1024, inStream.available()));
+      byte[] buffer = new byte[bufferSize];
       int length;
       while ((length = inStream.read(buffer)) > 0) {
         outStream.write(buffer, 0, length);
@@ -875,10 +879,18 @@ public class EfficientDocumentHelper {
       public Object doAsync() {
         try {
           Uri sourceUri = getDocumentUri(sourceUriString, false, true);
-          DocumentStat sourceStat = getStat(sourceUri);
+          String sourceMimeType = null;
+          // Extensionless Joplin resources are deliberately created with */* so
+          // providers do not append an extension. A source stat cannot affect the
+          // destination in that case and only adds another provider round trip.
+          int extensionIndex = fileName.lastIndexOf('.');
+          if (extensionIndex > 0 && extensionIndex < fileName.length() - 1) {
+            DocumentStat sourceStat = getStat(sourceUri);
+            sourceMimeType = sourceStat.getMimeType();
+          }
           Uri directoryUri = getDocumentUri(directoryUriString, false, true);
           Uri destinationUri = createFileInDirectory(
-            directoryUri, fileName, sourceStat.getMimeType(), replaceIfDestinationExists
+            directoryUri, fileName, sourceMimeType, replaceIfDestinationExists
           );
           copyFileContents(sourceUri, destinationUri);
           return getStat(destinationUri).getWritableMap();
