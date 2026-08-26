@@ -335,9 +335,12 @@ export default class FsDriverRN extends FsDriverBase {
 
 	public async move(source: string, dest: string) {
 		if (isScopedUri(source) || isScopedUri(dest)) {
-			await RNSAF.moveFile(source, dest, { replaceIfDestinationExists: true });
-			this.invalidateSafPath_(source);
-			this.invalidateSafPath_(dest);
+			try {
+				await RNSAF.moveFile(source, dest, { replaceIfDestinationExists: true });
+			} finally {
+				this.invalidateSafPath_(source);
+				this.invalidateSafPath_(dest);
+			}
 			return;
 		}
 		return RNFS.moveFile(source, dest);
@@ -345,9 +348,12 @@ export default class FsDriverRN extends FsDriverBase {
 
 	public async rename(source: string, dest: string) {
 		if (isScopedUri(source) || isScopedUri(dest)) {
-			await RNSAF.rename(source, dest);
-			this.invalidateSafPath_(source);
-			this.invalidateSafPath_(dest);
+			try {
+				await RNSAF.rename(source, dest);
+			} finally {
+				this.invalidateSafPath_(source);
+				this.invalidateSafPath_(dest);
+			}
 			return;
 		}
 		return RNFS.moveFile(source, dest);
