@@ -14,7 +14,6 @@ import { substrWithEllipsis } from '../../string-utils';
 
 const logger = Logger.create('OcrService');
 
-
 // From: https://github.com/naptha/tesseract.js/blob/master/docs/image-format.md
 export const supportedMimeTypes = [
 	'application/pdf',
