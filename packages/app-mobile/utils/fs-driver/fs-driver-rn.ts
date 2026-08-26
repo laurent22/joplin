@@ -71,6 +71,14 @@ export default class FsDriverRN extends FsDriverBase {
 		return normalizedPath.substring(0, normalizedPath.lastIndexOf('/'));
 	}
 
+	private safRelativePath_(directoryPath: string, document: DocumentFileDetail) {
+		directoryPath = this.normalizeSafPath_(directoryPath);
+		if (!document.uri.startsWith(directoryPath)) {
+			logger.warn('safRelativePath_: Document URI does not start with directory path:', { uri: document.uri, directoryPath });
+		}
+		return document.uri.substring(directoryPath.length + 1);
+	}
+
 	private invalidateSafDirectory_(path: string) {
 		const normalizedPath = this.normalizeSafPath_(path);
 		this.safDirectoryUris_.delete(normalizedPath);
@@ -130,7 +138,8 @@ export default class FsDriverRN extends FsDriverBase {
 
 		for (let i = 0; i < documents.length; i++) {
 			const document = documents[i];
-			this.safDocumentUris_.set(`${pathPrefix}${relativePaths?.[i] ?? document.name}`, document.documentUri ?? document.uri);
+			const relativePath = relativePaths?.[i] ?? this.safRelativePath_(normalizedPath, document);
+			this.safDocumentUris_.set(`${pathPrefix}${relativePath}`, document.documentUri ?? document.uri);
 		}
 		this.listedSafDirectories_.add(normalizedPath);
 	}
@@ -304,7 +313,9 @@ export default class FsDriverRN extends FsDriverBase {
 		}
 
 		const toRelativePath = (stat: RnfsStatLike) => {
-			let relativePath = isScoped ? (stat as DocumentFileDetail).uri : (stat as StatResultT | ReadDirResItemT).path;
+			if (isScoped) return this.safRelativePath_(directoryPath, stat as DocumentFileDetail);
+
+			let relativePath = (stat as StatResultT | ReadDirResItemT).path;
 
 			// Workaround: Paths returned by RNFS.readDir can include a leading /private/, when this isn't included
 			// in the original path variable:
