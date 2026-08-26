@@ -11,7 +11,6 @@ import * as fs from 'fs-extra';
 import shim from '../../shim';
 import { copyFile } from 'fs/promises';
 import { join } from 'path';
-import { KB } from '@joplin/utils/bytes';
 
 const highConfidenceTestOcrResource = {
 	expectedText: 'This is a lot of 12 point text to test the\n' +
@@ -427,7 +426,7 @@ describe('OcrService', () => {
 		const pdfToImages = jest.spyOn(shim, 'pdfToImages');
 		pdfToImages.mockImplementation(async (_pdfPath, outputDirectory) => {
 			const paths = [];
-			for (let i = 0; i < 10; i++) {
+			for (let i = 0; i < 5; i++) {
 				const outputPath = join(outputDirectory, `page-${i}.png`);
 				await copyFile(`${ocrSampleDir}/testocr.png`, outputPath);
 				paths.push(outputPath);
@@ -436,8 +435,7 @@ describe('OcrService', () => {
 		});
 
 		const service = newOcrService();
-		const estimatedMetadataSizePerPage = 2 * KB;
-		const maxSize = (highConfidenceTestOcrResource.expectedText.length + estimatedMetadataSizePerPage) * 2;
+		const maxSize = highConfidenceTestOcrResource.expectedText.length * 2 + '.\n...'.length;
 		service.testing_setOcrMaxSize(maxSize);
 
 		try {
@@ -457,8 +455,10 @@ describe('OcrService', () => {
 					'...',
 				].join('\n'),
 			});
+
+			// Should **not** truncate ocr_details
 			const parsedOcrDetails: PdfOcrDetails = JSON.parse(reloaded.ocr_details);
-			expect(parsedOcrDetails.pages).toHaveLength(2);
+			expect(parsedOcrDetails.pages).toHaveLength(5);
 		} finally {
 			pdfToImages.mockRestore();
 		}

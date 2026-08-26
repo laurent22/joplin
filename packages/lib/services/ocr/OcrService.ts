@@ -140,7 +140,8 @@ export default class OcrService {
 				let pageIndex = 0;
 				let sizeEstimate = 0;
 				for (const imagePath of imageFilePaths) {
-					if (sizeEstimate > this.ocrDataMaxSize_) {
+					// TODO: Fow now, do not truncate ocr_details, since doing so breaks creating accessible PDFs
+					if (!saveOcrDetails && sizeEstimate > this.ocrDataMaxSize_) {
 						logger.warn(`Recognize: Truncated: ${resourceInfo(resource)} after ${pageIndex + 1} pages (at roughly ${bytesToHuman(sizeEstimate)} of OCR data).`);
 						resultText.push('...');
 						break;
