@@ -274,13 +274,14 @@ export default class FsDriverRN extends FsDriverBase {
 		let stats: RnfsStatLike[] = [];
 		try {
 			if (isScoped) {
+				await this.safDirectoryUri_(path);
 				stats = await RNSAF.listFiles(path);
 				this.cacheSafDirectoryListing_(path, stats as DocumentFileDetail[]);
-				await this.safDirectoryUri_(path);
 			} else {
 				stats = await RNFS.readDir(path);
 			}
 		} catch (error) {
+			if (isScoped) this.invalidateSafDirectory_(path);
 			throw new Error(`Could not read directory: ${path}: ${error.message}`);
 		}
 
@@ -368,7 +369,11 @@ export default class FsDriverRN extends FsDriverBase {
 
 	public async mkdir(path: string) {
 		if (isScopedUri(path)) {
-			await RNSAF.mkdir(path);
+			try {
+				await RNSAF.mkdir(path);
+			} finally {
+				this.invalidateSafPath_(path);
+			}
 			return;
 		}
 
