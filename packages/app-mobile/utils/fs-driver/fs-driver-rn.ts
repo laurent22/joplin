@@ -429,8 +429,11 @@ export default class FsDriverRN extends FsDriverBase {
 		try {
 			let r;
 			if (isScoped) {
-				r = await RNSAF.stat(path);
 				const normalizedPath = this.normalizeSafPath_(path);
+				// A direct document URI avoids resolving the filename by walking the
+				// parent directory. stat() still queries the provider for fresh metadata,
+				// and a confirmed stale URI is safely retried through the logical path.
+				r = await this.withCachedSafUri_(normalizedPath, resolvedPath => RNSAF.stat(resolvedPath), true);
 				const documentUri = r.documentUri ?? r.uri;
 				if (r.type === 'directory') {
 					this.safDirectoryUris_.set(normalizedPath, documentUri);

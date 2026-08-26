@@ -83,6 +83,48 @@ describe('FsDriverRN SAF destination lookup', () => {
 		expect(mockSaf.writeFileInDirectory).not.toHaveBeenCalled();
 	});
 
+	it('should obtain fresh metadata through the cached document URI', async () => {
+		const driver = new FsDriverRN();
+		await driver.writeFile(destinationPath, 'first', 'utf8');
+		mockSaf.stat.mockResolvedValueOnce({
+			name: 'existing.md',
+			uri: destinationUri,
+			documentUri: destinationUri,
+			type: 'file',
+			size: 5,
+			lastModified: 123,
+		});
+
+		const stat = await driver.stat(destinationPath);
+
+		expect(mockSaf.stat).toHaveBeenLastCalledWith(destinationUri);
+		expect(stat.size).toBe(5);
+		expect(stat.mtime.getTime()).toBe(123);
+	});
+
+	it('should retry a stat through the logical path after a cached URI becomes stale', async () => {
+		const driver = new FsDriverRN();
+		const replacementUri = 'content://provider/document/replacement';
+		await driver.writeFile(destinationPath, 'first', 'utf8');
+		mockSaf.stat
+			.mockRejectedValueOnce(Object.assign(new Error('Document no longer exists'), { code: 'ENOENT' }))
+			.mockResolvedValueOnce({
+				name: 'existing.md',
+				uri: destinationPath,
+				documentUri: replacementUri,
+				type: 'file',
+				size: 7,
+				lastModified: 456,
+			});
+
+		await driver.stat(destinationPath);
+		await driver.writeFile(destinationPath, 'updated', 'utf8');
+
+		expect(mockSaf.stat).toHaveBeenNthCalledWith(2, destinationUri);
+		expect(mockSaf.stat).toHaveBeenNthCalledWith(3, destinationPath);
+		expect(mockSaf.writeFile).toHaveBeenLastCalledWith(replacementUri, 'updated', { encoding: 'utf8' });
+	});
+
 	it('should explicitly enable replacement for directory-based writes and copies', async () => {
 		const driver = new FsDriverRN();
 		mockSaf.listFiles.mockResolvedValue([]);
