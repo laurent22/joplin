@@ -35,6 +35,8 @@ describe('FsDriverRN SAF destination lookup', () => {
 		}]);
 		mockSaf.writeFile.mockResolvedValue(undefined);
 		mockSaf.copyFile.mockResolvedValue(undefined);
+		mockSaf.writeFileInDirectory.mockResolvedValue({ uri: `${parentPath}/new.md` });
+		mockSaf.copyFileToDirectory.mockResolvedValue({ uri: `${parentPath}/new.md` });
 	});
 
 	it('should overwrite an existing file discovered while warming an empty cache', async () => {
@@ -79,6 +81,21 @@ describe('FsDriverRN SAF destination lookup', () => {
 		expect(mockSaf.listFiles).toHaveBeenCalledTimes(1);
 		expect(mockSaf.writeFile).toHaveBeenCalledWith(destinationUri, 'updated', { encoding: 'utf8' });
 		expect(mockSaf.writeFileInDirectory).not.toHaveBeenCalled();
+	});
+
+	it('should explicitly enable replacement for directory-based writes and copies', async () => {
+		const driver = new FsDriverRN();
+		mockSaf.listFiles.mockResolvedValue([]);
+
+		await driver.writeFile(`${parentPath}/new.md`, 'new', 'utf8');
+		await driver.copy('/local/source.md', `${parentPath}/copied.md`);
+
+		expect(mockSaf.writeFileInDirectory).toHaveBeenCalledWith(
+			parentPath, 'new.md', 'new', { encoding: 'utf8', replaceIfDestinationExists: true },
+		);
+		expect(mockSaf.copyFileToDirectory).toHaveBeenCalledWith(
+			'/local/source.md', parentPath, 'copied.md', { replaceIfDestinationExists: true },
+		);
 	});
 
 	it('should reject a directory entry whose URI is not relative to the listed directory', async () => {

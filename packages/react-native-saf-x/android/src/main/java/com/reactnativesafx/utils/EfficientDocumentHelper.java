@@ -386,7 +386,9 @@ public class EfficientDocumentHelper {
     return newUri;
   }
 
-  private Uri createFile(final String unknownStr, final String mimeType) throws IOException {
+  private Uri createFile(
+    final String unknownStr, final String mimeType, final boolean replaceIfDestinationExists
+  ) throws IOException {
     Uri uri = null;
 
     try {
@@ -395,6 +397,7 @@ public class EfficientDocumentHelper {
     }
 
     if (uri != null) {
+      if (replaceIfDestinationExists) return uri;
       throw new IOExceptionFast("a file or directory already exist at: " + uri);
     }
 
@@ -405,6 +408,7 @@ public class EfficientDocumentHelper {
       file.getParentFile().mkdirs();
       boolean created = file.createNewFile();
       if (!created) {
+        if (replaceIfDestinationExists && file.exists() && file.isFile()) return uri;
         throw new IOExceptionFast("could not create file at: " + unknownStr);
       }
       return uri;
@@ -413,10 +417,15 @@ public class EfficientDocumentHelper {
     Uri parentDirOfFile = getDocumentUri(unknownStr, true, false);
 
     String fileName = UriHelper.getFileName(unknownStr);
-    return createFileInDirectory(parentDirOfFile, fileName, mimeType);
+    return createFileInDirectory(parentDirOfFile, fileName, mimeType, replaceIfDestinationExists);
   }
 
-  private Uri createFileInDirectory(final Uri parentDirOfFile, final String fileName, final String mimeType) throws IOException {
+  private Uri createFileInDirectory(
+    final Uri parentDirOfFile,
+    final String fileName,
+    final String mimeType,
+    final boolean replaceIfDestinationExists
+  ) throws IOException {
     if (fileName.indexOf(':') != -1) {
       throw new IOExceptionFast(
         "Invalid file name: Could not extract filename from uri string provided");
@@ -449,18 +458,31 @@ public class EfficientDocumentHelper {
     String createdFileName = UriHelper.getFileName(createdFile.toString());
 
     if (!createdFileName.equals(fileName)) {
-      // some times setting mimetypes causes name changes, this is to prevent that.
-      try {
-        createdFile = renameTo(createdFile, fileName);
-      } catch (RenameFailedException e) {
-        unlink(e.getResultUri());
+      // A provider can change the name when a document with the requested name
+      // already exists. Do not try to rename this document into the occupied
+      // destination: a rename can partially succeed before reporting an error.
+      // Delete the document returned by this create call. Replacement-capable
+      // callers can then resolve and overwrite the intended destination;
+      // create-only callers retain their collision failure semantics.
+      unlink(createdFile);
+      if (!replaceIfDestinationExists) {
         throw new IOExceptionFast(
           "The created file name was not as expected: input name was '"
-            + e.getInputName()
-            + "' "
-            + "but got: '"
-            + e.getResultName());
+            + fileName
+            + "' but got: '"
+            + createdFileName
+            + "'");
       }
+      DocumentStat existingFile = findFile(parentDirOfFile, fileName);
+      if (existingFile == null || existingFile.isDirectory()) {
+        throw new IOExceptionFast(
+          "The created file name was not as expected and the existing destination could not be resolved: input name was '"
+            + fileName
+            + "' but got: '"
+            + createdFileName
+            + "'");
+      }
+      return existingFile.getInternalUri();
     }
 
     return createdFile;
@@ -601,7 +623,7 @@ public class EfficientDocumentHelper {
       @Override
       public Object doAsync() {
         try {
-          Uri uri = createFile(unknownStr, mimeType);
+          Uri uri = createFile(unknownStr, mimeType, false);
           return getStat(uri).getWritableMap();
         } catch (Exception e) {
           return e;
@@ -774,7 +796,7 @@ public class EfficientDocumentHelper {
                 throw new FileNotFoundExceptionFast();
               }
             } catch (FileNotFoundException e) {
-              uri = createFile(unknownStr, mimeType);
+              uri = createFile(unknownStr, mimeType, true);
             }
           }
 
@@ -803,13 +825,16 @@ public class EfficientDocumentHelper {
     String data,
     String encoding,
     String mimeType,
+    boolean replaceIfDestinationExists,
     final Promise promise) {
     Async.execute(new Async.Task<Object>() {
       @Override
       public Object doAsync() {
         try {
           Uri directoryUri = getDocumentUri(directoryUriString, false, true);
-          Uri fileUri = createFileInDirectory(directoryUri, fileName, mimeType);
+          Uri fileUri = createFileInDirectory(
+            directoryUri, fileName, mimeType, replaceIfDestinationExists
+          );
           writeToFile(fileUri, data, encoding, false);
           return getStat(fileUri).getWritableMap();
         } catch (Exception e) {
@@ -832,6 +857,7 @@ public class EfficientDocumentHelper {
     String sourceUriString,
     String directoryUriString,
     String fileName,
+    boolean replaceIfDestinationExists,
     final Promise promise) {
     Async.execute(new Async.Task<Object>() {
       @Override
@@ -840,7 +866,9 @@ public class EfficientDocumentHelper {
           Uri sourceUri = getDocumentUri(sourceUriString, false, true);
           DocumentStat sourceStat = getStat(sourceUri);
           Uri directoryUri = getDocumentUri(directoryUriString, false, true);
-          Uri destinationUri = createFileInDirectory(directoryUri, fileName, sourceStat.getMimeType());
+          Uri destinationUri = createFileInDirectory(
+            directoryUri, fileName, sourceStat.getMimeType(), replaceIfDestinationExists
+          );
           copyFileContents(sourceUri, destinationUri);
           return getStat(destinationUri).getWritableMap();
         } catch (Exception e) {
@@ -888,10 +916,10 @@ public class EfficientDocumentHelper {
             }
           } catch (FileNotFoundException e) {
             if (srcStats != null) {
-              destUri = createFile(unknownDestUri, srcStats.getMimeType());
+              destUri = createFile(unknownDestUri, srcStats.getMimeType(), replaceIfDestExists);
             } else {
               // createFile() will treat mimetype null as "*/*"
-              destUri = createFile(unknownDestUri, null);
+              destUri = createFile(unknownDestUri, null, replaceIfDestExists);
             }
 
           }

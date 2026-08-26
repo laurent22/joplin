@@ -180,7 +180,7 @@ export default class FsDriverRN extends FsDriverBase {
 		const parentUri = this.safDirectoryUris_.get(parentPath);
 		if (parentUri) {
 			try {
-				const document = await RNSAF.writeFileInDirectory(parentUri, path.substring(lastSlashIndex + 1), content, { encoding });
+				const document = await RNSAF.writeFileInDirectory(parentUri, path.substring(lastSlashIndex + 1), content, { encoding, replaceIfDestinationExists: true });
 				this.safDocumentUris_.set(path, document.documentUri ?? document.uri);
 				return;
 			} catch (error) {
@@ -218,7 +218,7 @@ export default class FsDriverRN extends FsDriverBase {
 		const parentUri = this.safDirectoryUris_.get(parentPath);
 		if (parentUri) {
 			try {
-				const document = await RNSAF.copyFileToDirectory(source, parentUri, dest.substring(lastSlashIndex + 1));
+				const document = await RNSAF.copyFileToDirectory(source, parentUri, dest.substring(lastSlashIndex + 1), { replaceIfDestinationExists: true });
 				this.safDocumentUris_.set(dest, document.documentUri ?? document.uri);
 				return;
 			} catch (error) {

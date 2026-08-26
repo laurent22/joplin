@@ -89,9 +89,10 @@ public class SafXModule extends ReactContextBaseJavaModule {
     String data,
     String encoding,
     String mimeType,
+    boolean replaceIfDestinationExists,
     final Promise promise) {
     this.efficientDocumentHelper.writeFileInDirectory(
-      directoryUri, fileName, data, encoding, mimeType, promise
+      directoryUri, fileName, data, encoding, mimeType, replaceIfDestinationExists, promise
     );
   }
 
@@ -100,9 +101,10 @@ public class SafXModule extends ReactContextBaseJavaModule {
     String sourceUri,
     String directoryUri,
     String fileName,
+    boolean replaceIfDestinationExists,
     final Promise promise) {
     this.efficientDocumentHelper.copyFileToDirectory(
-      sourceUri, directoryUri, fileName, promise
+      sourceUri, directoryUri, fileName, replaceIfDestinationExists, promise
     );
   }
 
