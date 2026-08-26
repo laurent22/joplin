@@ -439,7 +439,11 @@ export default class FsDriverRN extends FsDriverBase {
 	public async copy(source: string, dest: string) {
 		if (isScopedUri(source) || isScopedUri(dest)) {
 			if (isScopedUri(source)) {
-				await this.withCachedSafUri_(source, resolvedSource => RNSAF.copyFile(resolvedSource, dest, { replaceIfDestinationExists: true }));
+				try {
+					await this.withCachedSafUri_(source, resolvedSource => RNSAF.copyFile(resolvedSource, dest, { replaceIfDestinationExists: true }));
+				} finally {
+					if (isScopedUri(dest)) this.invalidateSafPath_(dest);
+				}
 			} else {
 				await this.copyToSaf_(source, dest);
 			}
@@ -464,18 +468,18 @@ export default class FsDriverRN extends FsDriverBase {
 		try {
 			if (isScopedUri(path)) {
 				await RNSAF.unlink(path);
-				this.invalidateSafPath_(path);
 				return;
 			}
 			await RNFS.unlink(path);
 		} catch (error) {
-			if (isScopedUri(path)) this.invalidateSafPath_(path);
 			if (error && ((error.message && error.message.indexOf('exist') >= 0) || error.code === 'ENOENT')) {
 				// Probably { [Error: File does not exist] framesToPop: 1, code: 'EUNSPECIFIED' }
 				// which unfortunately does not have a proper error code. Can be ignored.
 			} else {
 				throw error;
 			}
+		} finally {
+			if (isScopedUri(path)) this.invalidateSafPath_(path);
 		}
 	}
 
