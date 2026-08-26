@@ -77,7 +77,7 @@ export default class OcrService {
 
 	// The maximum OCR data length in characters. Depending on the encoded text, the byte length can
 	// larger than this:
-	private ocrDataMaxSize_: number = 6 * MB;
+	private ocrDataMaxSize_: number = 7 * MB;
 	public testing_setOcrMaxSize(value: number) {
 		this.ocrDataMaxSize_ = value;
 	}
