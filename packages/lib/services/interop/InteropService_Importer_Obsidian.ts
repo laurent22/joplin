@@ -14,8 +14,7 @@ import { htmlentities } from '@joplin/utils/html';
 import MarkdownIt from 'markdown-it';
 import uslug from '@joplin/fork-uslug/lib/uslug';
 
-// eslint-disable-next-line no-misleading-character-class -- Emoji tags intentionally contain joined Unicode characters.
-const tagRegex = /(?:^|\s)#((?:[\p{L}\p{M}\p{N}\p{So}_\u200D/-]|\p{Emoji_Modifier})+)/gu;
+const tagRegex = /(?:^|\s)#((?:[\p{L}\p{M}\p{N}\p{So}_/-]|\u200D|\p{Emoji_Modifier})+)/gu;
 const numberOnlyTagRegex = /^\p{N}+$/u;
 const normalizedTag = (tag: string) => tag.toLowerCase();
 // Obsidian resolves internal links case-insensitively, so index and look up wikilink targets in lower case.
