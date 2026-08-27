@@ -114,7 +114,7 @@ PODS:
     - ReactNativeDependencies
     - Yoga
   - OpenSSL-Universal (3.6.0000)
-  - QuickCrypto (1.1.2):
+  - QuickCrypto (1.1.4):
     - hermes-engine
     - NitroModules
     - OpenSSL-Universal (~> 3.6)
@@ -2129,7 +2129,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - RNSVG (15.15.4):
+  - RNSVG (15.15.5):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2150,9 +2150,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
-    - RNSVG/common (= 15.15.4)
+    - RNSVG/common (= 15.15.5)
     - Yoga
-  - RNSVG/common (15.15.4):
+  - RNSVG/common (15.15.5):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2580,7 +2580,7 @@ SPEC CHECKSUMS:
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   NitroModules: 97978583f36f88f7a348d5bf986d94bc4b340d0a
   OpenSSL-Universal: 9110d21982bb7e8b22a962b6db56a8aa805afde7
-  QuickCrypto: b0350170c64587fca880913d51d054189b3f9663
+  QuickCrypto: f63d1366c8cd969ba7d74db0bcd8fa9b3aeb5138
   RCTDeprecation: ff38238d8b6ddfe1fcfeb2718d1c14da9564c1c3
   RCTRequired: 5916f53ff05efcc2bf095b0de01a0e5b00112a55
   RCTTypeSafety: bfbd8d69504a7459a65040705fc6ce10806c383b
@@ -2674,7 +2674,7 @@ SPEC CHECKSUMS:
   RNQuickAction: c2c8f379e614428be0babe4d53a575739667744d
   RNSecureRandom: b64d263529492a6897e236a22a2c4249aa1b53dc
   RNShare: aad7f2a80ae80be5e2bf57583be28b1a18f95de1
-  RNSVG: f2641bf17a3e397882659348d7668667a0805f00
+  RNSVG: 1b2772436cb0cebfae91616c4fdd99feeef5ee6d
   SDWebImage: e9c98383c7572d713c1a0d7dd2783b10599b9838
   SDWebImageWebPCoder: 0e06e365080397465cc73a7a9b472d8a3bd0f377
   WhisperVoiceTyping: 29015e8468ff2fd2786d3aaace16fcbdd6a712d6

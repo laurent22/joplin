@@ -20,6 +20,7 @@ import { LoadOptions, SaveOptions } from './utils/types';
 import ActionLogger from '../utils/ActionLogger';
 import { getDisplayParentId, getTrashFolderId } from '../services/trash';
 import { getCollator } from './utils/getCollator';
+import isItemId from './utils/isItemId';
 const urlUtils = require('../urlUtils.js');
 import { hasWhiteboardFence, parseWhiteboard } from '../services/whiteboard/parse';
 import { resolveFileRef, RefKind } from '../services/whiteboard/resolveRef';
@@ -28,7 +29,6 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { ALL_NOTES_FILTER_ID } from '../reserved-ids';
 import NoteLockNote from '../services/noteLock/NoteLockNote';
 import isNoteLockEnabled from '../services/noteLock/isNoteLockEnabled';
-import isItemId from './utils/isItemId';
 import { ShareType, StateShare } from '../services/share/reducer';
 
 export interface PreviewsOrder {
@@ -842,7 +842,7 @@ export default class Note extends BaseItem {
 
 	public static async load(id: string, options: LoadOptions = null): Promise<NoteEntity> {
 		const note = await super.load(id, options);
-		if (isNoteLockEnabled() && !!options?.useNoteLock) return NoteLockNote.decryptBody(note);
+		if (isNoteLockEnabled() && !!options?.useNoteLock) return NoteLockNote.decryptBody(note, options.noteLockKey);
 		return note;
 	}
 

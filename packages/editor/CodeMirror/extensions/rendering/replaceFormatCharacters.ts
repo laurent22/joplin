@@ -1,7 +1,6 @@
-import makeInlineReplaceExtension from './utils/makeInlineReplaceExtension';
 import { SyntaxNodeRef } from '@lezer/common';
 import { EditorState } from '@codemirror/state';
-import { Decoration } from '@codemirror/view';
+import makeHideReplaceExtension from './utils/makeHideReplaceExtension';
 
 const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	const getNodeStartLine = () => state.doc.lineAt(node.from);
@@ -17,10 +16,8 @@ const shouldFullReplace = (node: SyntaxNodeRef, state: EditorState) => {
 	return false;
 };
 
-const hideDecoration = Decoration.replace({});
-
 const replaceFormatCharacters = [
-	makeInlineReplaceExtension({
+	makeHideReplaceExtension({
 		getRevealStrategy: (node) => {
 			if (node.name === 'QuoteMark') {
 				return 'line';
@@ -33,11 +30,8 @@ const replaceFormatCharacters = [
 
 			return 'active';
 		},
-		createDecoration: (node, state) => {
-			if (shouldFullReplace(node, state)) {
-				return hideDecoration;
-			}
-			return null;
+		shouldHide: (node, state) => {
+			return shouldFullReplace(node, state);
 		},
 		getDecorationRange: (node, state) => {
 			// Headers in the form "## Header" should have the "##"s and the

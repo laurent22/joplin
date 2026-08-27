@@ -3,6 +3,13 @@ import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { uuidgen } from '../utils/uuid';
 import BaseModel from './BaseModel';
 
+// A token minted for one purpose must not be accepted for another - e.g. a CSRF
+// or confirmation token (both purpose-less) must not be usable to reset a
+// password.
+export enum TokenPurpose {
+	PasswordReset = 'password_reset',
+}
+
 export default class TokenModel extends BaseModel<Token> {
 
 	private tokenTtl_: number = 7 * 24 * 60 * 60 * 1000;
@@ -15,10 +22,11 @@ export default class TokenModel extends BaseModel<Token> {
 		return false;
 	}
 
-	public async generate(userId: Uuid): Promise<string> {
+	public async generate(userId: Uuid, purpose = ''): Promise<string> {
 		const token = await this.save({
 			value: uuidgen(32),
 			user_id: userId,
+			purpose,
 		});
 
 		return token.value;
@@ -49,14 +57,15 @@ export default class TokenModel extends BaseModel<Token> {
 	private async byToken(tokenValue: string): Promise<Token> {
 		return this
 			.db(this.tableName)
-			.select(['user_id', 'value'])
+			.select(['user_id', 'value', 'purpose'])
 			.where('value', '=', tokenValue)
 			.first();
 	}
 
-	public async userFromToken(tokenValue: string): Promise<User> {
+	public async userFromToken(tokenValue: string, purpose = ''): Promise<User> {
 		const token = await this.byToken(tokenValue);
 		if (!token) throw new ErrorNotFound(`No such token: ${tokenValue}`);
+		if ((token.purpose || '') !== purpose) throw new ErrorNotFound(`No such token: ${tokenValue}`);
 		const user = this.models().user().load(token.user_id);
 		if (!user) throw new ErrorNotFound('No user associated with this token');
 		return user;
