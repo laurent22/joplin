@@ -124,6 +124,10 @@ const NoteLockSettings: React.FC<Props> = props => {
 
 	const resetPasswordTitle = `⚠️ ${_('Reset password')} ⚠️`;
 	const actionButtonTitle = mode === ActionMode.Reset ? resetPasswordTitle : _('Save');
+	// The sync advice only applies to a first setup, where there may be nothing to lose yet.
+	const passwordReminder = mode === ActionMode.Create ?
+		_('Please make sure you remember your password. It cannot be recovered if lost, and any locked notes will become inaccessible. If you have already set up the note lock password on another device, there is no need to set it again, as the information required to access your locked notes is updated when you set up sync.') :
+		_('Please make sure you remember your password. It cannot be recovered if lost, and any locked notes will become inaccessible.');
 
 	const getSectionTitle = () => {
 		if (mode === ActionMode.Reset) return resetPasswordTitle;
@@ -197,7 +201,7 @@ const NoteLockSettings: React.FC<Props> = props => {
 						/>
 					)}
 				</div>
-				<p className='reminder'><strong>{_('Please make sure you remember your password. It cannot be recovered if lost, and any locked notes will become inaccessible.')}</strong></p>
+				<p className='reminder'><strong>{passwordReminder}</strong></p>
 			</div>
 		);
 	};
