@@ -12549,7 +12549,7 @@ __metadata:
     node-fetch: "npm:2.6.7"
     node-notifier: "npm:10.0.1"
     node-rsa: "npm:1.1.1"
-    onnxruntime-node: "npm:1.24.3"
+    onnxruntime-node: "npm:1.25.1"
     pdfjs-dist: "npm:3.11.174"
     pretty-bytes: "npm:5.6.0"
     re-resizable: "npm:6.11.2"
@@ -12922,7 +12922,7 @@ __metadata:
     node-notifier: "npm:10.0.1"
     node-persist: "npm:3.1.3"
     node-rsa: "npm:1.1.1"
-    onnxruntime-node: "npm:1.24.3"
+    onnxruntime-node: "npm:1.25.1"
     pdf-lib: "npm:1.17.1"
     pdfjs-dist: "npm:3.11.174"
     query-string: "npm:7.1.3"
@@ -34164,6 +34164,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"global-agent@npm:^4.1.3":
+  version: 4.1.3
+  resolution: "global-agent@npm:4.1.3"
+  dependencies:
+    globalthis: "npm:^1.0.2"
+    matcher: "npm:^4.0.0"
+    semver: "npm:^7.3.5"
+    serialize-error: "npm:^8.1.0"
+  checksum: 10/ab36715c87d1afa10d005d6670461be9571a343b0e59f141ba0e88787d6bb05f922cccb38fd7f2a7391d188f4a5e97b3669aeb941fd761b68b8c8b71551d767d
+  languageName: node
+  linkType: hard
+
 "global-dirs@npm:^0.1.1":
   version: 0.1.1
   resolution: "global-dirs@npm:0.1.1"
@@ -34254,7 +34266,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globalthis@npm:^1.0.1, globalthis@npm:^1.0.4":
+"globalthis@npm:^1.0.1, globalthis@npm:^1.0.2, globalthis@npm:^1.0.4":
   version: 1.0.4
   resolution: "globalthis@npm:1.0.4"
   dependencies:
@@ -41113,6 +41125,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"matcher@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "matcher@npm:4.0.0"
+  dependencies:
+    escape-string-regexp: "npm:^4.0.0"
+  checksum: 10/d338aff31d8dfd3626873e43777f46b123579734d53bb8d18d64b08a822ba5e8d39f5fe2e23403258e6143aa0cbe20a15662720d825cd0d3af961d5a44230328
+  languageName: node
+  linkType: hard
+
 "math-intrinsics@npm:^1.1.0":
   version: 1.1.0
   resolution: "math-intrinsics@npm:1.1.0"
@@ -45170,21 +45191,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"onnxruntime-common@npm:1.24.3":
-  version: 1.24.3
-  resolution: "onnxruntime-common@npm:1.24.3"
-  checksum: 10/699fe72ebf1e27a2b97d026bfeaeeb74c68487606cbf811b6e3c7e5578dab1690bdc57053936db5f3523bf08b8e4b31fd0f9a9b6791d7ab43f62cc5eb81b88e9
+"onnxruntime-common@npm:1.25.1":
+  version: 1.25.1
+  resolution: "onnxruntime-common@npm:1.25.1"
+  checksum: 10/0762a7b34fc6523f39730b89570b6e142c9682473b33232ab4de4fb684bbe1c14f239e0998ce9055d775569d74b083599fc501c2454786f23c55293e51e7ec7d
   languageName: node
   linkType: hard
 
-"onnxruntime-node@npm:1.24.3":
-  version: 1.24.3
-  resolution: "onnxruntime-node@npm:1.24.3"
+"onnxruntime-node@npm:1.25.1":
+  version: 1.25.1
+  resolution: "onnxruntime-node@npm:1.25.1"
   dependencies:
     adm-zip: "npm:^0.5.16"
-    global-agent: "npm:^3.0.0"
-    onnxruntime-common: "npm:1.24.3"
-  checksum: 10/56a7941955e3990d50bb33c140230d1cd957448a15bd9e009e0ba92e6c43ed916af28b979c145f141320f7d839cb171f772ccfded793f5c2eb998ae5b9b2f787
+    global-agent: "npm:^4.1.3"
+    onnxruntime-common: "npm:1.25.1"
+  checksum: 10/1851de04603aa69c295f731f53c297302af7c79faa11aefbab328f4f4f930e5532ca4b2e209508dffe1aa646e700befbd45f5bef62242941395ddb038ffbf035
   conditions: (os=win32 | os=darwin | os=linux)
   languageName: node
   linkType: hard
