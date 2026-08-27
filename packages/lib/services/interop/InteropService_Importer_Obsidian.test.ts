@@ -252,6 +252,37 @@ describe('InteropService_Importer_Obsidian', () => {
 		expect(tags).toEqual(['home', 'work']);
 	});
 
+	test.each([
+		['longer front matter closing line', '----'],
+		['front matter closing line with trailing spaces', '---   '],
+	])('should preserve cssclasses with a %s', async (_case, closingLine) => {
+		const vaultPath = `${tempDir}/My vault`;
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/cssclasses.md`, [
+			'---',
+			'cssclasses:',
+			'  - wide',
+			closingLine,
+			'',
+			'Body',
+		].join('\n'));
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const note = await Note.loadByTitle('cssclasses');
+		expect(note.body).toBe([
+			'---',
+			'cssclasses:',
+			'  - wide',
+			'---',
+			'',
+			'Body',
+		].join('\n'));
+	});
+
 	it('should import front matter after a byte order mark', async () => {
 		const vaultPath = `${tempDir}/My vault`;
 		await fs.mkdirp(vaultPath);
@@ -288,6 +319,24 @@ describe('InteropService_Importer_Obsidian', () => {
 
 		expect(note.body).toBe('Hello #work.');
 		expect(tags).toEqual(['work']);
+	});
+
+	it('should stop inline tags at unsupported symbols', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		const sourceBody = '#x=1 #tag~~strike~~ #<div> #100k+ #price$ #normal-tag';
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/unsupported-symbols.md`, sourceBody);
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const note = await Note.loadByTitle('unsupported-symbols');
+		const tags = (await Tag.tagsByNoteId(note.id)).map(tag => tag.title).sort();
+
+		expect(note.body).toBe(sourceBody);
+		expect(tags).toEqual(['100k', 'normal-tag', 'price', 'tag', 'x']);
 	});
 
 	it('should merge tags ignoring letter case', async () => {
@@ -532,6 +581,30 @@ describe('InteropService_Importer_Obsidian', () => {
 		].join('\n'));
 	});
 
+	it('should resolve a Markdown note link with brackets in its label', async () => {
+		const vaultPath = `${tempDir}/My vault`;
+		const sourceBody = [
+			'See [the [draft] version](draft.md)',
+			'See [the [latest [draft]] version](draft.md)',
+		].join('\n');
+		await fs.mkdirp(`${vaultPath}/Folder`);
+		await fs.writeFile(`${vaultPath}/Source.md`, sourceBody);
+		await fs.writeFile(`${vaultPath}/Folder/draft.md`, 'Draft note.');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const sourceNote = await Note.loadByTitle('Source');
+		const targetNote = await Note.loadByTitle('draft');
+
+		expect(sourceNote.body).toBe([
+			`See [the [draft] version](:/${targetNote.id})`,
+			`See [the [latest [draft]] version](:/${targetNote.id})`,
+		].join('\n'));
+	});
+
 	test.each([
 		['without fragment', '[Overview](../Overview.md)', ''],
 		['with fragment', '[Overview](../Overview.md#Install)', '#install'],
@@ -628,6 +701,28 @@ describe('InteropService_Importer_Obsidian', () => {
 		const sourceNote = await Note.loadByTitle('Source');
 
 		expect(sourceNote.body).toBe(`[First](:/${itemId}#first-heading) [Second](:/${itemId}#second-heading)`);
+	});
+
+	test.each([
+		['PDF page anchor', 'document.pdf', '#page=5'],
+		['MP4 start-time anchor', 'video.mp4', '#t=10'],
+		['MP4 time-range anchor', 'video.mp4', '#t=10,20'],
+	])('should keep the %s on a resource link', async (_case, fileName, anchor) => {
+		const vaultPath = `${tempDir}/My vault`;
+		await fs.mkdirp(vaultPath);
+		await fs.writeFile(`${vaultPath}/Source.md`, `[Media](${fileName}${anchor})`);
+		await fs.writeFile(`${vaultPath}/${fileName}`, 'Media content');
+
+		await InteropService.instance().import({
+			format: 'obsidian',
+			path: vaultPath,
+		});
+
+		const sourceNote = await Note.loadByTitle('Source');
+		const resourceIds = await Note.linkedResourceIds(sourceNote.body);
+
+		expect(resourceIds).toHaveLength(1);
+		expect(sourceNote.body).toBe(`[Media](:/${resourceIds[0]}${anchor})`);
 	});
 
 	it('should keep internal link unchanged when item ID is not hexadecimal', async () => {

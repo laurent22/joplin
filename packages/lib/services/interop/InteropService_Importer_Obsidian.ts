@@ -14,7 +14,8 @@ import { htmlentities } from '@joplin/utils/html';
 import MarkdownIt from 'markdown-it';
 import uslug from '@joplin/fork-uslug/lib/uslug';
 
-const tagRegex = /(?:^|\s)#([\p{L}\p{M}\p{N}\p{Pc}\p{Pd}\p{S}\u200D/]+)/gu;
+// eslint-disable-next-line no-misleading-character-class -- Emoji tags intentionally contain joined Unicode characters.
+const tagRegex = /(?:^|\s)#((?:[\p{L}\p{M}\p{N}\p{So}_\u200D/-]|\p{Emoji_Modifier})+)/gu;
 const numberOnlyTagRegex = /^\p{N}+$/u;
 const normalizedTag = (tag: string) => tag.toLowerCase();
 // Obsidian resolves internal links case-insensitively, so index and look up wikilink targets in lower case.
@@ -32,19 +33,24 @@ const readFrontMatter = (text: string) => {
 	const lines = text.split(/\r?\n/);
 	if (lines[0] !== '---') return '';
 
-	const end = lines.indexOf('---', 1);
+	const end = lines.findIndex((line, index) => index > 0 && line.startsWith('---'));
 	return end < 0 ? '' : lines.slice(1, end).join('\n');
 };
 
 const replaceMarkdownNoteLinks = (text: string, replace: (link: string, label: string, target: string, fragment: string)=> string) => {
 	let output = '';
 	let previousEnd = 0;
+	const labelStarts: number[] = [];
 
-	for (let linkStart = 0; linkStart < text.length; linkStart++) {
+	for (let labelEnd = 0; labelEnd < text.length; labelEnd++) {
 		// Find one Markdown link and where it end.
-		if (text[linkStart] !== '[' || text[linkStart - 1] === '!') continue;
-		const labelEnd = text.indexOf('](', linkStart + 1);
-		if (labelEnd < 0) continue;
+		if (text[labelEnd] === '[') labelStarts.push(labelEnd);
+		if (text[labelEnd] !== ']') continue;
+		const linkStart = labelStarts.pop();
+		if (text[labelEnd + 1] !== '(') continue;
+		if (linkStart === undefined) continue;
+		if (linkStart < previousEnd) continue;
+		if (text[linkStart - 1] === '!') continue;
 		const linkEnd = text.indexOf(')', labelEnd + 2);
 		if (linkEnd < 0) continue;
 
@@ -52,7 +58,7 @@ const replaceMarkdownNoteLinks = (text: string, replace: (link: string, label: s
 		const label = text.slice(linkStart + 1, labelEnd);
 		const fullTarget = text.slice(labelEnd + 2, linkEnd);
 		const hasLineBreak = label.includes('\r') || label.includes('\n') || fullTarget.includes('\r') || fullTarget.includes('\n');
-		if (!label || label.includes(']') || hasLineBreak) continue;
+		if (!label || hasLineBreak) continue;
 
 		// Separate optional #heading from note link.
 		const fragmentStart = fullTarget.indexOf('#');
@@ -64,19 +70,20 @@ const replaceMarkdownNoteLinks = (text: string, replace: (link: string, label: s
 		output += text.slice(previousEnd, linkStart);
 		output += replace(text.slice(linkStart, linkEnd + 1), label, target, fragment);
 		previousEnd = linkEnd + 1;
-		linkStart = linkEnd;
+		labelEnd = linkEnd;
 	}
 
 	return output + text.slice(previousEnd);
 };
 
-const replaceJoplinInternalLinkAnchors = (text: string) => text.replace(markdownLinkTargetRegex, (link, label: string, target: string) => {
+const replaceJoplinInternalLinkAnchors = (text: string, resourceIds: string[]) => text.replace(markdownLinkTargetRegex, (link, label: string, target: string) => {
 	const anchorStart = target.indexOf('#');
 	if (!target.startsWith(':/') || anchorStart < 0) return link;
 
 	const itemId = target.slice(2, anchorStart);
 	const anchor = target.slice(anchorStart + 1);
 	if (!joplinItemIdRegex.test(itemId) || !anchor) return link;
+	if (resourceIds.includes(itemId)) return link;
 
 	return `[${label}](:/${itemId}#${uslug(anchor)})`;
 });
@@ -180,7 +187,8 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 				return matchingNoteIds?.length === 1 ? `[${label}](:/${matchingNoteIds[0]}${fragment})` : markdownLink;
 			}));
 			// Make link anchors match the way Joplin writes heading links.
-			body = replaceOutsideCode(body, replaceJoplinInternalLinkAnchors);
+			const resourceIds = await Note.linkedResourceIds(body);
+			body = replaceOutsideCode(body, text => replaceJoplinInternalLinkAnchors(text, resourceIds));
 
 			if (body === note.body) continue;
 			this.importedNotes[sourcePath] = await Note.save({ ...note, body }, { isNew: false, autoTimestamp: false });
