@@ -10,6 +10,7 @@ import { getIsMFAEnabled, getMaxItemSize, getMaxTotalItemSize } from './utils/us
 import zxcvbn from 'zxcvbn';
 import { confirmUrl, resetPasswordUrl } from '../utils/urlUtils';
 import { checkRepeatPassword, CheckRepeatPasswordInput } from '../routes/index/users';
+import { TokenPurpose } from './TokenModel';
 import accountConfirmationTemplate from '../views/emails/accountConfirmationTemplate';
 import resetPasswordTemplate from '../views/emails/resetPasswordTemplate';
 import { betaStartSubUrl, betaUserDateRange, betaUserTrialPeriodDays, isBetaUser, stripeConfig } from '../utils/stripe';
@@ -586,7 +587,7 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async generateLinkForPasswordReset(userId: Uuid) {
-		const validationToken = await this.models().token().generate(userId);
+		const validationToken = await this.models().token().generate(userId, TokenPurpose.PasswordReset);
 		return resetPasswordUrl(validationToken);
 	}
 
@@ -604,7 +605,7 @@ export default class UserModel extends BaseModel<User> {
 
 	public async resetPassword(token: string, fields: CheckRepeatPasswordInput) {
 		checkRepeatPassword(fields, true);
-		const user = await this.models().token().userFromToken(token);
+		const user = await this.models().token().userFromToken(token, TokenPurpose.PasswordReset);
 
 		await this.withTransaction(async () => {
 			await this.models().user().save({ id: user.id, password: fields.password });
@@ -948,5 +949,13 @@ export default class UserModel extends BaseModel<User> {
 		}
 
 		return count;
+	}
+
+	public async enabledNonAdminUserCount() {
+		const result = await this.db('users')
+			.where('enabled', '=', 1)
+			.where('is_admin', '=', 0)
+			.count('*', { as: 'count' });
+		return Number(result[0].count);
 	}
 }

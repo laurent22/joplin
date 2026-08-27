@@ -6,6 +6,7 @@ import createStartupArgs from './createStartupArgs';
 import getMainWindow from './getMainWindow';
 import setDarkMode from './setDarkMode';
 import evaluateWithRetry from './evaluateWithRetry';
+import seedProfileSettings from './seedProfileSettings';
 
 
 type StartWithPluginsResult = { app: ElectronApplication; mainWindow: Page };
@@ -74,6 +75,10 @@ export const test = base.extend<JoplinFixtures>({
 		const profilePath = resolve(join(testDir, 'test-profile'));
 		const profileSubdir = join(profilePath, uuid.createNano());
 		await mkdirp(profileSubdir);
+
+		// Many integration tests interact with the note viewer, which is hidden by the
+		// app's default layout (editor only). Force the editor+viewer layout for tests.
+		await seedProfileSettings(profileSubdir, { noteVisiblePanes: ['editor', 'viewer'] });
 
 		await use(profileSubdir);
 

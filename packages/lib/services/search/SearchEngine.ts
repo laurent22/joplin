@@ -89,6 +89,10 @@ export interface ParsedQuery {
 	any: boolean;
 }
 
+interface QueryTermToRegexOptions {
+	anchorToWordBoundary?: boolean;
+}
+
 export default class SearchEngine {
 
 	public static instance_: SearchEngine = null;
@@ -501,7 +505,7 @@ export default class SearchEngine {
 	}
 
 	// https://stackoverflow.com/a/13818704/561309
-	public queryTermToRegex(term: string) {
+	public queryTermToRegex(term: string, { anchorToWordBoundary }: QueryTermToRegexOptions = {}) {
 		while (term.length && term.indexOf('*') === 0) {
 			term = term.substr(1);
 		}
@@ -510,6 +514,12 @@ export default class SearchEngine {
 		if (regexString[regexString.length - 1] === '*') {
 			regexString = `${regexString.substr(0, regexString.length - 2)}[^${pregQuote(' \t\n\r,.,+-*?!={}<>|:"\'()[]')}]` + '*?';
 			// regexString = regexString.substr(0, regexString.length - 2) + '.*?';
+		}
+
+		if (regexString && anchorToWordBoundary) {
+			// (?<!\w): Checks whether a non-word character is before the regex, without including it in the match
+			// (?!\w): Check whether a non-word character is after the regex, also without including it.
+			regexString = `(?<!\\w)${regexString}(?!\\w)`;
 		}
 
 		return regexString;

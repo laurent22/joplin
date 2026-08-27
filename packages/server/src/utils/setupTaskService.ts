@@ -4,7 +4,7 @@ import { TaskId } from '../services/database/types';
 import TaskService, { Task, taskIdToLabel } from '../services/TaskService';
 import { Services } from '../services/types';
 import { logHeartbeat as logHeartbeatMessage } from './metrics';
-import { Config, Env } from './types';
+import { Config, DatabaseConfigClient, Env } from './types';
 import { Day } from './time';
 
 export default async function(env: Env, models: Models, config: Config, services: Services): Promise<TaskService> {
@@ -12,7 +12,15 @@ export default async function(env: Env, models: Models, config: Config, services
 	// management so that it is not affected by failed transactions in the
 	// main connection pool. In dev/test, we reuse the main connection to
 	// avoid exhausting Postgres connection slots in CI.
-	const taskStateDb = env === Env.Prod ? await connectDb({ ...config.database, maxConnections: 1 }) : null;
+	//
+	// SQLite is excluded because it only allows one writer per database file. A
+	// second pool makes concurrent writes fail with "SQLITE_BUSY: database is
+	// locked", and a COMMIT that fails that way leaves the connection inside a
+	// transaction, so every later BEGIN fails with "cannot start a transaction
+	// within a transaction" until the server is restarted.
+	// https://github.com/laurent22/joplin/issues/15226
+	const useSeparateTaskStateDb = env === Env.Prod && config.database.client !== DatabaseConfigClient.SQLite;
+	const taskStateDb = useSeparateTaskStateDb ? await connectDb({ ...config.database, maxConnections: 1 }) : null;
 	const taskService = new TaskService(env, models, config, services, taskStateDb);
 
 	let tasks: Task[] = [
