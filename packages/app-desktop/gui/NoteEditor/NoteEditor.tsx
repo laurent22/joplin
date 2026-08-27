@@ -787,7 +787,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 		}
 	}
 
-	if (formNote.encryption_applied || !formNote.id || !effectiveNoteId) {
+	if ((!editorPlugin && reloadInProgress) || formNote.encryption_applied || !formNote.id || !effectiveNoteId) {
 		return renderNoNotes(styles.root);
 	}
 
