@@ -26,15 +26,15 @@ export interface PublicPrivateKeyPair {
 // To indicate that clients should migrate to a new PublicKeyAlgorithm, add it to the end of
 // "ppkMigrations".
 let ppkMigrations = [
-	PublicKeyAlgorithm.RsaV1,
-	// Uncomment to migrate to RsaV2, which uses a different padding type from RsaV1
-	// PublicKeyAlgorithm.RsaV2,
+	PublicKeyAlgorithm.RsaV1, // RSA-PKCS#1-v1.5-2048, not supported on all platforms
+	// RsaV2 uses a newer padding type
+	PublicKeyAlgorithm.RsaV2, // RSA-OAEP-2048
 
 	// Uncomment to migrate to RsaV3, which uses different encryption libraries, padding type,
 	// and a larger key size. Before migrating:
 	// - Check whether generating keys with this method still blocks the UI on Android/iOS
 	//   (it might not after migrating to React Native's New Architecture).
-	// PublicKeyAlgorithm.RsaV3,
+	// PublicKeyAlgorithm.RsaV3, // RSA-OAEP-4096
 ];
 export const getDefaultPpkAlgorithm = () => ppkMigrations[ppkMigrations.length - 1];
 
