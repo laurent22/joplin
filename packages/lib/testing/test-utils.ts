@@ -1196,6 +1196,24 @@ export const withWarningSilenced = async <T> (
 	const mocks: MockSlice[] = [];
 	const warnings: string[] = [];
 
+	const removeMocks = () => {
+		for (const mock of mocks) {
+			mock.mockRestore();
+		}
+	};
+
+	const applyMocks = () => {
+		mockConsoleFunction('warn');
+		mockConsoleFunction('error');
+	};
+
+	// Log an error without recursively calling the mock:
+	const logError = (...args: unknown[]) => {
+		removeMocks();
+		console.error(...args);
+		applyMocks();
+	};
+
 	const mockConsoleFunction = (key: 'warn'|'error') => {
 		const mock = jest.spyOn(console, key);
 		mocks.push(mock);
@@ -1206,21 +1224,13 @@ export const withWarningSilenced = async <T> (
 			const fullMessage = [message, ...args].join(' ');
 			warnings.push(fullMessage);
 			if (!fullMessage.match(warningRegex)) {
-				// Avoid recursively calling the mock:
-				if (key === 'error') {
-					mock.mockRestore();
-				}
-				console.error(`Unexpected warning: ${message}`, ...args);
-				if (key === 'error') {
-					mockConsoleFunction('error');
-				}
+				logError(`Unexpected warning: ${message}`, ...args);
 			}
 		});
 	};
 
 	try {
-		mockConsoleFunction('warn');
-		mockConsoleFunction('error');
+		applyMocks();
 		const result = await task();
 
 		if (requireWarning) {
@@ -1229,9 +1239,7 @@ export const withWarningSilenced = async <T> (
 
 		return result;
 	} finally {
-		for (const mock of mocks) {
-			mock.mockRestore();
-		}
+		removeMocks();
 	}
 };
 
