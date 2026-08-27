@@ -1,5 +1,5 @@
 import AsyncActionQueue from './AsyncActionQueue';
-import { runWithFakeTimers } from './testing/test-utils';
+import { runWithFakeTimers, withWarningSilenced } from './testing/test-utils';
 
 describe('AsyncActionQueue', () => {
 	beforeEach(() => {
@@ -62,11 +62,13 @@ describe('AsyncActionQueue', () => {
 			throw error;
 		});
 
-		const processPromise = queue.processAllNow();
-		const rejectionExpectation = expect(processPromise).rejects.toBe(error);
-		await jest.runAllTimersAsync();
-		await rejectionExpectation;
-		expect(queue.isEmpty).toBe(true);
+		await withWarningSilenced(/Unhandled error: Error: Task failed/, async () => {
+			const processPromise = queue.processAllNow();
+			const rejectionExpectation = expect(processPromise).rejects.toBe(error);
+			await jest.runAllTimersAsync();
+			await rejectionExpectation;
+			expect(queue.isEmpty).toBe(true);
+		});
 	});
 
 	test('should handle failures when queue processing is not awaited', async () => {
