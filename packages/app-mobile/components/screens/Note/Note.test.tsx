@@ -32,6 +32,8 @@ import Resource from '@joplin/lib/models/Resource';
 import TestProviderStack from '../../testing/TestProviderStack';
 import setupGlobalStore from '../../../utils/testing/setupGlobalStore';
 import CommandService from '@joplin/lib/services/CommandService';
+import BackButtonService from '../../../services/BackButtonService';
+import shared from '@joplin/lib/components/shared/note-screen-shared';
 
 jest.retryTimes(2);
 
@@ -359,6 +361,35 @@ describe('screens/Note', () => {
 		const row = await Note.load(noteId);
 		expect(row.is_locked).toBe(1);
 		expect(row.body.includes('secret')).toBe(false);
+
+		// The metadata save must leave the screen unmodified: otherwise going back gate-saves the
+		// still encrypted body and throws. Stubbed so a regression cannot leak the save mutex.
+		const defaultBackHandler = jest.fn(async () => true);
+		BackButtonService.initialize(defaultBackHandler);
+		const saveSpy = jest.spyOn(shared, 'saveNoteButton_press').mockResolvedValue(undefined);
+		try {
+			await act(async () => {
+				await BackButtonService.back();
+			});
+			expect(saveSpy).not.toHaveBeenCalled();
+			expect(defaultBackHandler).toHaveBeenCalled();
+		} finally {
+			saveSpy.mockRestore();
+		}
+
+		unmount();
+		Setting.setValue('featureFlag.noteLock', false);
+	});
+
+	it('should offer relocking from a note that is not locked', async () => {
+		await setupUnlockedNoteLock('123456');
+		await openNewNote({ title: 'Plain note', body: 'not locked' });
+		store.dispatch({ type: 'SET_NOTE_LOCK_SESSION_UNLOCKED', value: true });
+
+		const { unmount } = render(<WrappedNoteScreen />);
+		await openNoteActionsMenu();
+
+		expect(await screen.findByText('Relock all notes')).toHaveProp('disabled', false);
 
 		unmount();
 		Setting.setValue('featureFlag.noteLock', false);

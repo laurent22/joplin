@@ -293,6 +293,19 @@ describe('note-screen-shared', () => {
 		expect(shared.isModified(comp)).toBe(false);
 	});
 
+	it('should not report an undecryptable note as modified after a property save', async () => {
+		const saved = await Note.save({ title: 'Old key', body: 'enc(secret)', is_locked: 1, parent_id: folderId });
+		// Backdated so the property save below is guaranteed to stamp newer timestamps.
+		await Note.save({ id: saved.id, updated_time: 1000, user_updated_time: 1000 }, { autoTimestamp: false });
+		const comp = makeComp(await Note.load(saved.id), { noteLockUndecryptable: true });
+
+		await shared.saveOneProperty(comp, 'todo_completed', Date.now());
+
+		expect(comp.state.note.updated_time).toBe(comp.state.lastSavedNote.updated_time);
+		expect(comp.state.note.user_updated_time).toBe(comp.state.lastSavedNote.user_updated_time);
+		expect(shared.isModified(comp)).toBe(false);
+	});
+
 	it('should save with the latest lock state when it changed after scheduling', async () => {
 		const testNote = await Note.save({ title: 'Plain', body: 'plain text', parent_id: folderId });
 

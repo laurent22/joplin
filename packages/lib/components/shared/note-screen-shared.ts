@@ -290,6 +290,13 @@ shared.saveOneProperty = async function(comp: BaseNoteScreenComponent, name: str
 		// note (but not in lastSavedNote, so the next save still detects the change).
 		stateNote.is_locked = comp.state.note.is_locked;
 		stateNote.isDecrypted = comp.state.note.isDecrypted;
+
+		// An undecryptable note has no editable body, so a stale timestamp here only makes the
+		// screen look modified, and going back would then gate-save the still encrypted body.
+		if (comp.state.noteLockUndecryptable) {
+			stateNote.updated_time = saved.updated_time as number;
+			stateNote.user_updated_time = saved.user_updated_time as number;
+		}
 	}
 
 	comp.setState({

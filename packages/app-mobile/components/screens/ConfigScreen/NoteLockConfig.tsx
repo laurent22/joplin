@@ -133,7 +133,7 @@ const NoteLockConfig = (props: Props) => {
 				{passwordMismatch ? <Text style={styles.errorText}>{_('Passwords do not match')}</Text> : null}
 				{error ? <Text style={styles.errorText}>{error}</Text> : null}
 				<PrimaryButton disabled={!canSave} onPress={onCreate}>{_('Save')}</PrimaryButton>
-				<Text style={styles.reminderText}>{_('Please make sure you remember your password. It cannot be recovered if lost, and any locked notes will become inaccessible.')}</Text>
+				<Text style={styles.reminderText}>{_('Please make sure you remember your password. It cannot be recovered if lost, and any locked notes will become inaccessible. If you have already set up the note lock password on another device, there is no need to set it again, as the information required to access your locked notes is updated when you set up sync.')}</Text>
 			</View>
 		);
 	};

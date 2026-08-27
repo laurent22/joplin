@@ -1575,20 +1575,25 @@ class NoteScreenComponent extends BaseScreenComponent<ComponentProps, State> imp
 					},
 					disabled: readOnly || !this.props.noteLockSessionUnlocked,
 				});
-				output.push({
-					title: _('Relock all notes'),
-					icon: 'material lock-outline',
-					onPress: () => {
-						void (async () => {
-							// Lock only after the queue drains, so a pending save cannot leave the note
-							// visible because it still counted as modified.
-							await this.saveActionQueue(this.state.note.id).processAllNow();
-							NoteLockSession.instance().lock();
-						})();
-					},
-					disabled: !this.props.noteLockSessionUnlocked,
-				});
 			}
+		}
+
+		// Relocking applies to the session rather than the open note, so it stays available
+		// whichever note is being viewed.
+		if (isNoteLockEnabled()) {
+			output.push({
+				title: _('Relock all notes'),
+				icon: 'material lock-outline',
+				onPress: () => {
+					void (async () => {
+						// Lock only after the queue drains, so a pending save cannot leave the note
+						// visible because it still counted as modified.
+						await this.saveActionQueue(this.state.note.id).processAllNow();
+						NoteLockSession.instance().lock();
+					})();
+				},
+				disabled: !this.props.noteLockSessionUnlocked,
+			});
 		}
 
 		if (this.state.mode === 'edit') {
