@@ -45,6 +45,11 @@ export interface FolderPickerOptions {
 	mustSelect?: boolean;
 }
 
+export interface SortButtonOptions {
+	onPress: OnPressCallback;
+	ascending: boolean;
+}
+
 export enum ViewToggleButtonMode {
 	Hidden = 'hidden',
 	ShowViewer = 'show-viewer',
@@ -62,14 +67,15 @@ interface ScreenHeaderProps {
 	menuOptions: MenuOption[];
 	title?: string|null;
 	folders: FolderEntity[];
-	folderPickerOptions?: FolderPickerOptions;
 	plugins: PluginStates;
+
+	folderPickerOptions?: FolderPickerOptions;
+	sortButtonOptions?: SortButtonOptions;
 
 	dispatch: Dispatch;
 	onUndoButtonPress: OnPressCallback;
 	onRedoButtonPress: OnPressCallback;
 	onSaveButtonPress: OnPressCallback;
-	sortButton_press?: OnPressCallback;
 	onSearchButtonPress?: OnPressCallback;
 	onDeleteButtonPress?: OnPressCallback;
 
@@ -548,14 +554,14 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		function sortButton(styles: ScreenHeaderStyles, onPress: OnPressCallback) {
+		function sortButton(styles: ScreenHeaderStyles, options: SortButtonOptions) {
 			return (
 				<IconButton
-					onPress={onPress}
+					onPress={options.onPress}
 					themeId={themeId}
 
 					description={_('Sort notes by')}
-					iconName='ionicon filter-outline'
+					iconName={options.ascending ? 'material sort-ascending' : 'material sort-descending'}
 					contentWrapperStyle={styles.iconButton}
 					iconStyle={styles.topIcon}
 				/>
@@ -671,7 +677,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const deleteButtonComp = showStandardDeleteButton ? deleteButton(this.styles(), () => this.deleteButton_press(), headerItemDisabled) : null;
 		const restoreButtonComp = selectedFolderInTrash && this.props.noteSelectionEnabled ? restoreButton(this.styles(), () => this.restoreButton_press(), headerItemDisabled) : null;
 		const duplicateButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press(), headerItemDisabled) : null;
-		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
+		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButtonOptions ? sortButton(this.styles(), this.props.sortButtonOptions) : null;
 		const togglePluginEditorButton = renderTogglePluginEditorButton(this.styles(), () => CommandService.instance().execute('toggleEditorPlugin'), false);
 
 		// To allow the notebook dropdown (and perhaps other components) to have sufficient

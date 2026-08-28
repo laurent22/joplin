@@ -318,6 +318,11 @@ class NotesScreenComponent extends BaseScreenComponent<ComponentProps, State> {
 				<ScreenHeader
 					title={iconString + title}
 					showBackButton={false}
+					sortButtonOptions={{
+						onPress: this.sortButton_press,
+						ascending: this.props.notesOrder.length > 0 && this.props.notesOrder[0].dir === 'ASC',
+					}}
+					sortButton_order={this.props.notesOrder}
 					sortButton_press={this.sortButton_press}
 					folderPickerOptions={this.folderPickerOptions()}
 					showSearchButton={true}

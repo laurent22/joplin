@@ -33,7 +33,7 @@ import { ShareType, StateShare } from '../services/share/reducer';
 
 export interface PreviewsOrder {
 	by: string;
-	dir: string;
+	dir: 'ASC'|'DESC';
 }
 
 export interface DuplicateOptions {
