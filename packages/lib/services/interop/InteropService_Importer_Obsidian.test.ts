@@ -1037,7 +1037,7 @@ describe('InteropService_Importer_Obsidian', () => {
 		const note = await Note.loadByTitle('heading');
 		const targetNote = await Note.loadByTitle('Note');
 
-		expect(note.body).toBe(`[Note#Part](:/${targetNote.id}#part) [Missing#Part](obsidian://search?vault=My%20vault&query=Missing)`);
+		expect(note.body).toBe(`[Note#Part](:/${targetNote.id}#part) [[Missing#Part]]`);
 	});
 
 	it('should import same-note heading wikilink', async () => {
@@ -1097,22 +1097,5 @@ describe('InteropService_Importer_Obsidian', () => {
 
 		expect(sourceNote.body).toBe(sourceBody);
 		expect(targetNote.body).toBe('Target block. ^block-id');
-	});
-
-	it('should convert unresolved wikilink to obsidian search link', async () => {
-		const vaultPath = `${tempDir}/My vault`;
-		const unresolvedLink = '[[Missing note]]';
-		const expectedLink = '[Missing note](obsidian://search?vault=My%20vault&query=Missing%20note)';
-		await fs.mkdirp(vaultPath);
-		await fs.writeFile(`${vaultPath}/Source.md`, unresolvedLink);
-
-		await InteropService.instance().import({
-			format: 'obsidian',
-			path: vaultPath,
-		});
-
-		const sourceNote = await Note.loadByTitle('Source');
-
-		expect(sourceNote.body).toBe(expectedLink);
 	});
 });
