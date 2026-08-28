@@ -128,6 +128,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			},
 			folderPicker: {
 				marginRight: theme.marginMedium,
+				fontSize: 22,
 			},
 			sideMenuButton: {
 				flex: 1,
@@ -188,7 +189,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				marginLeft: 10,
 				color: theme.color,
 				fontWeight: 'bold',
-				fontSize: theme.fontSize,
+				fontSize: theme.fontSizeLarge,
 				paddingTop: 15,
 				paddingBottom: 15,
 			},
@@ -209,7 +210,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		};
 
 
-		const topIcon: TextStyle = { ...theme.icon, flex: 1, textAlignVertical: 'center', color: theme.color };
+		const topIcon: TextStyle = { ...theme.icon, fontSize: 36, flex: 1, textAlignVertical: 'center', color: theme.color };
 		styleObject.topIcon = topIcon;
 
 		styleObject.backButton = { ...styleObject.iconButton };

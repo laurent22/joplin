@@ -90,13 +90,12 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 			headerStyle={{
 				color: darkText ? theme.color : theme.colorFaded,
 				fontWeight: darkText ? 'bold' : 'normal',
-				fontSize: theme.fontSize,
 				opacity: disabled ? theme.disabledOpacity : 1,
 				...headerStyle,
 			}}
 			itemStyle={{
 				color: theme.color,
-				fontSize: theme.fontSize,
+				fontSize: theme.fontSizeLarge,
 			}}
 			onValueChange={(folderId) => {
 				if (onValueChange) {
