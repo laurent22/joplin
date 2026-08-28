@@ -1,5 +1,6 @@
 import { utils as commandUtils } from '@joplin/lib/services/CommandService';
 import executeCallbackUrl from './handleCallbackUrl';
+import { withWarningSilenced } from '@joplin/lib/testing/test-utils';
 
 const mockOpenExternal = jest.fn();
 
@@ -32,7 +33,9 @@ describe('handleCallbackUrl', () => {
 		'mailto:someone@example.com',
 		'not a url',
 	])('should not dispatch a callback target with a disallowed scheme (%s)', async (target) => {
-		await executeCallbackUrl(`joplin://x-callback-url/getCurrentNote?x-error=${encodeURIComponent(target)}`);
+		await withWarningSilenced(/Rejected malformed callback|Rejected callback target with disallowed scheme/, async () => {
+			await executeCallbackUrl(`joplin://x-callback-url/getCurrentNote?x-error=${encodeURIComponent(target)}`);
+		}, { requireWarning: true });
 		expect(mockOpenExternal).not.toHaveBeenCalled();
 	});
 
@@ -51,7 +54,9 @@ describe('handleCallbackUrl', () => {
 			getState: () => { throw new Error('secret path /home/victim/.config/joplin/database.sqlite'); },
 		};
 
-		await executeCallbackUrl(`joplin://x-callback-url/getCurrentNote?x-error=${encodeURIComponent('https://example.com/cb')}`);
+		await withWarningSilenced(/Error handling callback URL command "getCurrentNote":.*secret path \/home\/victim/, async () => {
+			await executeCallbackUrl(`joplin://x-callback-url/getCurrentNote?x-error=${encodeURIComponent('https://example.com/cb')}`);
+		}, { requireWarning: true });
 
 		expect(mockOpenExternal).toHaveBeenCalledTimes(1);
 		const responseUrl = mockOpenExternal.mock.calls[0][0];
