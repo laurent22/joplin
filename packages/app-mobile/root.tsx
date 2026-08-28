@@ -781,7 +781,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 
 
 		// const statusBarStyle = theme.appearance === 'light-content';
-		const statusBarStyle = 'light-content';
+		const statusBarStyle = theme.appearance === ThemeAppearance.Light ? 'dark-content' : 'light-content';
 
 		const shouldShowMainContent = !biometricsEnabled(this.state.sensorInfo) || this.props.biometricsDone;
 
