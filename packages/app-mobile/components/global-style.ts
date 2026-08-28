@@ -9,7 +9,7 @@ const baseStyle = {
 	appearance: 'light',
 	fontSize: 16,
 	fontSizeLarger: 18,
-	fontSizeLarge: 22,
+	fontSizeLarge: 20,
 	fontSizeSmaller: 14,
 
 	margin: 16, // No text and no interactive component should be within this margin

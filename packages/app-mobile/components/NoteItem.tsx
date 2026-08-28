@@ -63,7 +63,7 @@ const useStyles = (themeId: number, showTopBorder: boolean) => {
 		const listItemText: TextStyle = {
 			flexShrink: 1,
 			color: theme.color,
-			fontSize: 18,
+			fontSize: theme.fontSize,
 		};
 
 		const listItemTextWithCheckbox = { ...listItemText };
