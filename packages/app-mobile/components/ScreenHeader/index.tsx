@@ -127,7 +127,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				zIndex: 2,
 			},
 			folderPicker: {
+				marginLeft: theme.marginMedium,
 				marginRight: theme.marginMedium,
+				fontSize: theme.fontSizeLarger,
 			},
 			sideMenuButton: {
 				flex: 1,
@@ -188,7 +190,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				marginLeft: 10,
 				color: theme.color,
 				fontWeight: 'bold',
-				fontSize: theme.fontSize,
+				fontSize: theme.fontSizeLarger,
 				paddingTop: 15,
 				paddingBottom: 15,
 			},
