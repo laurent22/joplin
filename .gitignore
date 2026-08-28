@@ -2121,6 +2121,7 @@ packages/tools/checkIgnoredFiles.js
 packages/tools/checkLibPaths.test.js
 packages/tools/checkLibPaths.js
 packages/tools/convertThemesToCss.js
+packages/tools/eslint-rules/describeFilename.test.js
 packages/tools/fuzzer/ActionRunner.js
 packages/tools/fuzzer/Fuzzer.js
 packages/tools/fuzzer/cli.js
@@ -2198,8 +2199,8 @@ packages/tools/updateMarkdownDoc.js
 packages/tools/utils/discourse.test.js
 packages/tools/utils/discourse.js
 packages/tools/utils/loadSponsors.js
+packages/tools/utils/parsePluralLocalizationForm.test.js
 packages/tools/utils/parsePluralLocalizationForm.js
-packages/tools/utils/parsePlurallLocalizationForm.test.js
 packages/tools/utils/translation.js
 packages/tools/validateFilenames.js
 packages/tools/website/build.js

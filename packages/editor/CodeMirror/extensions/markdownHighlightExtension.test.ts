@@ -9,7 +9,7 @@ const createEditorState = async (initialText: string, expectedTags: string[]): P
 };
 
 
-describe('MarkdownHighlightExtension', () => {
+describe('markdownHighlightExtension', () => {
 	jest.retryTimes(2);
 
 	it.each([

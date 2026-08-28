@@ -12666,7 +12666,7 @@ __metadata:
     react-native-localize: "npm:3.7.0"
     react-native-modal-datetime-picker: "npm:18.0.0"
     react-native-nitro-modules: "npm:0.33.9"
-    react-native-paper: "npm:5.15.2"
+    react-native-paper: "npm:5.15.3"
     react-native-popup-menu: "npm:0.17.0"
     react-native-quick-actions: "npm:0.3.13"
     react-native-quick-base64: "npm:2.2.2"
@@ -12772,7 +12772,7 @@ __metadata:
     "@types/react": "npm:19.1.10"
     "@types/react-redux": "npm:7.1.34"
     "@types/styled-components": "npm:5.1.32"
-    dompurify: "npm:3.4.5"
+    dompurify: "npm:3.4.7"
     jest: "npm:29.7.0"
     jest-environment-jsdom: "npm:29.7.0"
     orderedmap: "npm:2.1.1"
@@ -12785,7 +12785,7 @@ __metadata:
     prosemirror-keymap: "npm:1.2.3"
     prosemirror-model: "npm:1.25.3"
     prosemirror-schema-list: "npm:1.5.1"
-    prosemirror-search: "npm:1.1.0"
+    prosemirror-search: "npm:1.1.1"
     prosemirror-state: "npm:1.4.3"
     prosemirror-tables: "npm:1.7.1"
     prosemirror-transform: "npm:1.11.0"
@@ -13117,7 +13117,7 @@ __metadata:
     bcryptjs: "npm:2.4.3"
     bulma: "npm:1.0.4"
     compare-versions: "npm:6.1.1"
-    dayjs: "npm:1.11.20"
+    dayjs: "npm:1.11.21"
     formidable: "npm:2.1.2"
     fs-extra: "npm:11.3.5"
     gulp: "npm:4.0.2"
@@ -13174,7 +13174,7 @@ __metadata:
     "@types/node-fetch": "npm:2.6.13"
     "@types/yargs": "npm:17.0.35"
     compare-versions: "npm:6.1.1"
-    dayjs: "npm:1.11.20"
+    dayjs: "npm:1.11.21"
     execa: "npm:4.1.0"
     fs-extra: "npm:11.3.5"
     gettext-extractor: "npm:4.0.6"
@@ -13272,7 +13272,7 @@ __metadata:
     "@types/markdown-it": "npm:13.0.9"
     "@types/node-fetch": "npm:2.6.13"
     async-mutex: "npm:0.5.0"
-    dayjs: "npm:1.11.20"
+    dayjs: "npm:1.11.21"
     execa: "npm:5.1.1"
     fs-extra: "npm:11.3.5"
     glob: "npm:11.1.0"
@@ -28063,10 +28063,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:1.11.20":
-  version: 1.11.20
-  resolution: "dayjs@npm:1.11.20"
-  checksum: 10/5347533f21a55b8bb1b1ef559be9b805514c3a8fb7e68b75fb7e73808131c59e70909c073aa44ce8a0d159195cd110cdd4081cf87ab96cb06fee3edacae791c6
+"dayjs@npm:1.11.21":
+  version: 1.11.21
+  resolution: "dayjs@npm:1.11.21"
+  checksum: 10/dd16f9f2706b61b90e3c346a3211ac3afd9e26193136ce0e87f70bf74d1c17a447bceb230a88b175467fc9f5e3243d8c1544b9897092a12d9c80ee44d338dcb6
   languageName: node
   linkType: hard
 
@@ -29218,15 +29218,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:3.4.5":
-  version: 3.4.5
-  resolution: "dompurify@npm:3.4.5"
+"dompurify@npm:3.4.7":
+  version: 3.4.7
+  resolution: "dompurify@npm:3.4.7"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10/b39c9bbd5c87dd29d1fda6446ddd7319a86c85a4c12af5cfef17697cfefbd13b8baf698d5a3cb4ee0b941f8b6e49af6a63c844246e6aee83ddb417e03470613a
+  checksum: 10/7432e2a2fe1f4235e09e54d40c285eb76812afab46605fb52449891ca922e474fd5cab2cc297ae9ae1e235d1186e9e9924c32178903359d18e4587cd5119471b
   languageName: node
   linkType: hard
 
@@ -48749,14 +48749,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prosemirror-search@npm:1.1.0":
-  version: 1.1.0
-  resolution: "prosemirror-search@npm:1.1.0"
+"prosemirror-search@npm:1.1.1":
+  version: 1.1.1
+  resolution: "prosemirror-search@npm:1.1.1"
   dependencies:
     prosemirror-model: "npm:^1.21.0"
     prosemirror-state: "npm:^1.4.3"
     prosemirror-view: "npm:^1.33.6"
-  checksum: 10/2988194d37a7966176d29618f2c57d91e01d2f7bb4e7d3d71f73d23799606fea4edc1bab7e058fc0c34174e91b4786b440ed695d36a9d6a3b5edfb4ae35b77e9
+  checksum: 10/68e725c7d82fd574fe9a983d0446f3a10118e8f7c01c7eed5eba39d9a49122761ef558c95b6db440400082e20b7a02478bfe9d7b829f57d01cf6c609b08cc253
   languageName: node
   linkType: hard
 
@@ -49707,9 +49707,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-paper@npm:5.15.2":
-  version: 5.15.2
-  resolution: "react-native-paper@npm:5.15.2"
+"react-native-paper@npm:5.15.3":
+  version: 5.15.3
+  resolution: "react-native-paper@npm:5.15.3"
   dependencies:
     "@callstack/react-theme-provider": "npm:^3.0.9"
     color: "npm:^3.1.2"
@@ -49718,7 +49718,7 @@ __metadata:
     react: "*"
     react-native: "*"
     react-native-safe-area-context: "*"
-  checksum: 10/084fb2e9982df5a59cfef11d9c1f2ddd527c3fb4f47e5cdd3cb8795d197299e86ccb5c83cdfeb82c7b1405a336228adab87fd31311a61cd95a83d249733febc8
+  checksum: 10/6e34e04f4c9a969e6d0bd4d5b716a3283d2c25d27b39603038a2674427986d4af67ee9f9f214f8bcf4a48198d81c5cbe9bf02f0cdb60332d8019da3e7a5bf775
   languageName: node
   linkType: hard
 
