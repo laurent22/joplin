@@ -124,8 +124,8 @@ const useStyles = (themeId: number) => {
 			},
 			folderToggleIcon: {
 				...theme.icon,
-				color: theme.colorFaded,
-				paddingTop: 3,
+				fontSize: theme.fontSize,
+				color: theme.color,
 			},
 			sideButton: sideButtonStyle,
 			sideButtonSelected: {
@@ -190,8 +190,9 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 				paddingLeft: props.depth * 10 + theme.marginLeft,
 			},
 			iconWrapper: {
-				paddingLeft: 10,
-				paddingRight: 10,
+				paddingLeft: theme.margin,
+				paddingRight: theme.margin,
+				justifyContent: 'center',
 				backgroundColor: props.selected ? theme.selectedColor : undefined,
 			},
 			conflictFolderButtonText: {
@@ -235,7 +236,11 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 			if (folderId === getTrashFolderId()) {
 				folderIcon = getTrashFolderIcon(FolderIconType.FontAwesome);
 			} else if (props.alwaysShowFolderIcons) {
-				return <Icon name="ionicon folder-outline" style={baseStyles.folderBaseIcon} accessibilityLabel={null} />;
+				return <Icon
+					name={collapsed ? 'ionicon folder-outline' : 'ionicon folder-open-outline'}
+					style={baseStyles.folderBaseIcon}
+					accessibilityLabel={null}
+				/>;
 			} else {
 				return null;
 			}
@@ -311,7 +316,7 @@ const FolderItem: React.FC<FolderItemProps> = props => {
 };
 
 const SideMenuContentComponent = (props: Props) => {
-	const alwaysShowFolderIcons = useMemo(() => Folder.shouldShowFolderIcons(props.folders), [props.folders]);
+	const alwaysShowFolderIcons = true;
 	const styles_ = useStyles(props.themeId);
 
 	useEffect(() => {
@@ -700,10 +705,6 @@ const SideMenuContentComponent = (props: Props) => {
 	}));
 
 	items.push(makeDivider('divider_all'));
-
-	items.push(renderSidebarButton('folder_header', _('Notebooks'), 'folder', {
-		isHeader: true,
-	}));
 
 	const folderTree = useMemo(() => {
 		return buildFolderTree(props.folders);
