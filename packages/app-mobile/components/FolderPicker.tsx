@@ -5,7 +5,7 @@ import Folder, { FolderEntityWithChildren } from '@joplin/lib/models/Folder';
 import { themeStyle } from './global-style';
 import Dropdown, { DropdownListItem, OnValueChangedListener } from './Dropdown';
 import { FolderEntity } from '@joplin/lib/services/database/types';
-import { View } from 'react-native';
+import { TextStyle, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { DialogContext } from './DialogManager';
 
@@ -18,6 +18,7 @@ interface FolderPickerProps {
 	placeholder?: string;
 	darkText?: boolean;
 	themeId?: number;
+	headerStyle?: TextStyle;
 	coverableChildrenRight?: ReactElement|ReactElement[];
 	onNewFolder?: (title: string)=> void;
 }
@@ -30,6 +31,7 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 	mustSelect,
 	folders,
 	placeholder,
+	headerStyle,
 	darkText,
 	coverableChildrenRight,
 	onNewFolder,
@@ -86,9 +88,11 @@ const FolderPicker: FunctionComponent<FolderPickerProps> = ({
 				backgroundColor: theme.backgroundColor,
 			}}
 			headerStyle={{
-				color: darkText ? theme.colorFaded : theme.colorBright2,
+				color: darkText ? theme.color : theme.colorFaded,
+				fontWeight: darkText ? 'bold' : 'normal',
 				fontSize: theme.fontSize,
 				opacity: disabled ? theme.disabledOpacity : 1,
+				...headerStyle,
 			}}
 			itemStyle={{
 				color: theme.color,

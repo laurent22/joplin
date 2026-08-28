@@ -126,6 +126,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				marginTop: -6,
 				zIndex: 2,
 			},
+			folderPicker: {
+				marginRight: theme.marginMedium,
+			},
 			sideMenuButton: {
 				flex: 1,
 				alignItems: 'center',
@@ -192,7 +195,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			viewToggleButton: {
 				flex: 1,
 				backgroundColor: theme.backgroundColor,
-				paddingLeft: 22,
+				paddingLeft: 10,
 				paddingRight: 10,
 				paddingTop: PADDING_V,
 				paddingBottom: PADDING_V,
@@ -588,7 +591,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					<FolderPicker
 						themeId={themeId}
 						disabled={disabled}
+						headerStyle={this.styles().folderPicker}
 						selectedFolderId={'selectedFolderId' in folderPickerOptions ? folderPickerOptions.selectedFolderId : null}
+						darkText
 						onValueChange={async (folderId) => {
 							// If onValueChange is specified, use this as a callback, otherwise do the default
 							// which is to take the selectedNoteIds from the state and move them to the
