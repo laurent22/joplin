@@ -45,6 +45,11 @@ export interface FolderPickerOptions {
 	mustSelect?: boolean;
 }
 
+export interface SortButtonOptions {
+	onPress: OnPressCallback;
+	ascending: boolean;
+}
+
 export enum ViewToggleButtonMode {
 	Hidden = 'hidden',
 	ShowViewer = 'show-viewer',
@@ -62,14 +67,15 @@ interface ScreenHeaderProps {
 	menuOptions: MenuOption[];
 	title?: string|null;
 	folders: FolderEntity[];
-	folderPickerOptions?: FolderPickerOptions;
 	plugins: PluginStates;
+
+	folderPickerOptions?: FolderPickerOptions;
+	sortButtonOptions?: SortButtonOptions;
 
 	dispatch: Dispatch;
 	onUndoButtonPress: OnPressCallback;
 	onRedoButtonPress: OnPressCallback;
 	onSaveButtonPress: OnPressCallback;
-	sortButton_press?: OnPressCallback;
 	onSearchButtonPress?: OnPressCallback;
 	onDeleteButtonPress?: OnPressCallback;
 
@@ -114,14 +120,14 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			innerContainer: {
 				flexDirection: 'row',
 				alignItems: 'center',
-				backgroundColor: theme.backgroundColor2,
-				shadowColor: '#000000',
-				elevation: 5,
+				backgroundColor: theme.backgroundColor,
+				borderBottomColor: theme.dividerColor,
+				borderBottomWidth: 1,
 			},
 			// A small border above the header: Covers the part of the shadow that would otherwise
 			// be shown above the header on Android.
 			aboveHeader: {
-				backgroundColor: theme.backgroundColor2,
+				backgroundColor: theme.backgroundColor,
 				paddingBottom: 6,
 				marginTop: -6,
 				zIndex: 2,
@@ -129,7 +135,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			sideMenuButton: {
 				flex: 1,
 				alignItems: 'center',
-				backgroundColor: theme.backgroundColor2,
+				backgroundColor: theme.backgroundColor,
 				paddingLeft: theme.marginLeft,
 				paddingRight: 5,
 				marginRight: 2,
@@ -138,7 +144,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			},
 			iconButton: {
 				flex: 1,
-				backgroundColor: theme.backgroundColor2,
+				backgroundColor: theme.backgroundColor,
 				paddingLeft: 10,
 				paddingRight: 10,
 				paddingTop: PADDING_V,
@@ -153,38 +159,37 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				minHeight: 40,
 
 				borderWidth: 1,
-				borderColor: theme.colorBright2,
+				borderColor: theme.color,
 				borderRadius: 4,
 				marginRight: 8,
 			},
 			saveButtonText: {
 				textAlignVertical: 'center',
-				color: theme.colorBright2,
+				color: theme.color,
 				fontWeight: 'bold',
 			},
 			savedButtonIcon: {
+				...theme.icon,
 				fontSize: 20,
-				color: theme.colorBright2,
 				width: 18,
 				height: 18,
 			},
 			saveButtonIcon: {
 				...theme.icon,
 				fontSize: 25,
-				color: theme.colorBright2,
 			},
 			contextMenuTrigger: {
 				fontSize: 30,
 				paddingLeft: 5,
 				paddingRight: theme.marginRight,
-				color: theme.color2,
+				color: theme.color,
 				fontWeight: 'bold',
 			},
 			titleText: {
 				flex: 1,
 				textAlignVertical: 'center',
 				marginLeft: 10,
-				color: theme.colorBright2,
+				color: theme.color,
 				fontWeight: 'bold',
 				fontSize: theme.fontSize,
 				paddingTop: 15,
@@ -192,7 +197,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			},
 			viewToggleButton: {
 				flex: 1,
-				backgroundColor: theme.backgroundColor2,
+				backgroundColor: theme.backgroundColor,
 				paddingLeft: 22,
 				paddingRight: 10,
 				paddingTop: PADDING_V,
@@ -200,14 +205,14 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			},
 			viewToggleIcon: {
 				fontSize: 27,
-				color: theme.colorBright2,
+				color: theme.color,
 				flex: 1,
 				textAlignVertical: 'center',
 			},
 		};
 
 
-		const topIcon: TextStyle = { ...theme.icon, flex: 1, textAlignVertical: 'center', color: theme.colorBright2 };
+		const topIcon: TextStyle = { ...theme.icon, flex: 1, textAlignVertical: 'center', color: theme.color };
 		styleObject.topIcon = topIcon;
 
 		styleObject.backButton = { ...styleObject.iconButton };
@@ -546,14 +551,14 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 			);
 		}
 
-		function sortButton(styles: ScreenHeaderStyles, onPress: OnPressCallback) {
+		function sortButton(styles: ScreenHeaderStyles, options: SortButtonOptions) {
 			return (
 				<IconButton
-					onPress={onPress}
+					onPress={options.onPress}
 					themeId={themeId}
 
 					description={_('Sort notes by')}
-					iconName='ionicon filter-outline'
+					iconName={options.ascending ? 'material sort-ascending' : 'material sort-descending'}
 					contentWrapperStyle={styles.iconButton}
 					iconStyle={styles.topIcon}
 				/>
@@ -667,7 +672,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 		const deleteButtonComp = showStandardDeleteButton ? deleteButton(this.styles(), () => this.deleteButton_press(), headerItemDisabled) : null;
 		const restoreButtonComp = selectedFolderInTrash && this.props.noteSelectionEnabled ? restoreButton(this.styles(), () => this.restoreButton_press(), headerItemDisabled) : null;
 		const duplicateButtonComp = !selectedFolderInTrash && this.props.noteSelectionEnabled ? duplicateButton(this.styles(), () => this.duplicateButton_press(), headerItemDisabled) : null;
-		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButton_press ? sortButton(this.styles(), () => this.props.sortButton_press()) : null;
+		const sortButtonComp = !this.props.noteSelectionEnabled && this.props.sortButtonOptions ? sortButton(this.styles(), this.props.sortButtonOptions) : null;
 		const togglePluginEditorButton = renderTogglePluginEditorButton(this.styles(), () => CommandService.instance().execute('toggleEditorPlugin'), false);
 
 		// To allow the notebook dropdown (and perhaps other components) to have sufficient
