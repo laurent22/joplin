@@ -35,6 +35,10 @@ const normalise = (v: number[]): number[] => {
 	return v.map(x => x / norm);
 };
 
+const addUnitX = (v: number[]) => {
+	return v.map((x, i) => (i === 0 ? x + 1 : x));
+};
+
 const embedOne = (text: string, dimension: number): number[] => {
 	const vec = new Array<number>(dimension).fill(0);
 	const lower = text.toLowerCase();
@@ -49,7 +53,12 @@ const embedOne = (text: string, dimension: number): number[] => {
 	// still produce a non-zero vector (otherwise normalise() returns zeros
 	// and similarity is undefined).
 	vec[0] += 1;
-	return normalise(vec);
+
+	// Add a constant post-normalization to increase the similarity scores to more
+	// closely match the production model (which distributes scores roughly sin [0.7, 1])
+	return normalise(
+		addUnitX(normalise(vec)),
+	);
 };
 
 export interface TestEmbeddingProviderOptions {
