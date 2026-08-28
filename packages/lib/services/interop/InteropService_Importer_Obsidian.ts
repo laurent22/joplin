@@ -173,7 +173,12 @@ export default class InteropService_Importer_Obsidian extends InteropService_Imp
 
 				const normalizedTarget = normalizedWikilinkTarget(withoutMarkdownExtension(noteTarget));
 				const matchingNoteIds = noteTarget ? noteIdsByWikilinkTarget.get(normalizedTarget) : [note.id];
-				if (matchingNoteIds?.length !== 1) return wikilink;
+				if (!matchingNoteIds) {
+					const searchUrl = `obsidian://search?vault=${encodeURIComponent(basename(vaultPath))}&query=${encodeURIComponent(noteTarget)}`;
+					const label = markdownUtils.escapeTitleText(shownName || target);
+					return `[${label}](${markdownUtils.escapeLinkUrl(searchUrl)})`;
+				}
+				if (matchingNoteIds.length !== 1) return wikilink;
 
 				const label = markdownUtils.escapeTitleText(shownName || target);
 				const anchor = heading ? `#${uslug(heading)}` : '';
