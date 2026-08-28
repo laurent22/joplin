@@ -1,7 +1,7 @@
 import { produce, Draft, original } from 'immer';
 import pluginServiceReducer, { stateRootKey as pluginServiceStateRootKey, defaultState as pluginServiceDefaultState, State as PluginServiceState } from './services/plugins/reducer';
 import shareServiceReducer, { stateRootKey as shareServiceStateRootKey, defaultState as shareServiceDefaultState, State as ShareServiceState } from './services/share/reducer';
-import Note, { PreviewsOrder } from './models/Note';
+import Note from './models/Note';
 import Folder from './models/Folder';
 import BaseModel from './BaseModel';
 import { Store } from 'redux';
@@ -349,7 +349,7 @@ class StateUtils {
 
 	public notesOrder(stateSettings: Partial<SettingsRecord>) {
 		if (stateSettings['notes.sortOrder.field'] === 'order') {
-			return cacheEnabledOutput<PreviewsOrder[]>('notesOrder', [
+			return cacheEnabledOutput('notesOrder', [
 				{
 					by: 'order',
 					dir: 'DESC',
@@ -360,7 +360,7 @@ class StateUtils {
 				},
 			]);
 		} else {
-			return cacheEnabledOutput<PreviewsOrder[]>('notesOrder', [
+			return cacheEnabledOutput('notesOrder', [
 				{
 					by: stateSettings['notes.sortOrder.field'],
 					dir: stateSettings['notes.sortOrder.reverse'] ? 'DESC' : 'ASC',
