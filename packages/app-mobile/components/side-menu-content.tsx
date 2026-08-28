@@ -635,15 +635,15 @@ const SideMenuContentComponent = (props: Props) => {
 
 		items.push(makeDivider('divider_1'));
 
-		items.push(renderSidebarButton('newFolder_button', _('New Notebook'), 'folder-open', { onPress: newFolderButton_press }));
+		items.push(renderSidebarButton('newFolder_button', _('New Notebook'), 'folder-open-outline', { onPress: newFolderButton_press }));
 
-		items.push(renderSidebarButton('tag_button', _('Tags'), 'pricetag', { onPress: tagButton_press }));
+		items.push(renderSidebarButton('tag_button', _('Tags'), 'pricetag-outline', { onPress: tagButton_press }));
 
 		if (props.profileConfig && props.profileConfig.profiles.length > 1) {
 			items.push(renderSidebarButton('switchProfile_button', _('Switch profile'), 'people-circle-outline', { onPress: switchProfileButton_press }));
 		}
 
-		items.push(renderSidebarButton('config_button', _('Configuration'), 'settings', { onPress: configButton_press }));
+		items.push(renderSidebarButton('config_button', _('Configuration'), 'settings-outline', { onPress: configButton_press }));
 
 		items.push(makeDivider('divider_2'));
 
@@ -694,7 +694,7 @@ const SideMenuContentComponent = (props: Props) => {
 	// using padding. So instead creating blank elements for padding bottom and top.
 	items.push(<View style={{ height: theme.marginTop }} key="bottom_top_hack" />);
 
-	items.push(renderSidebarButton('all_notes', _('All notes'), 'document', {
+	items.push(renderSidebarButton('all_notes', _('All notes'), 'document-outline', {
 		onPress: allNotesButton_press,
 		selected: props.notesParentType === 'SmartFilter',
 	}));
