@@ -793,7 +793,7 @@ class AppComponent extends React.Component<AppComponentProps, AppComponentState>
 		const mainContent = (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<View style={{ flexGrow: 1, flexShrink: 1, flexBasis: '100%' }}>
-					<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor2}>
+					<SafeAreaView style={{ flex: 1 }} titleBarUnderlayColor={theme.backgroundColor}>
 						<SideMenu
 							menu={sideMenuContent}
 							toleranceX={4}
