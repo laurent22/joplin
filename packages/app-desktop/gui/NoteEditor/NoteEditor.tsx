@@ -583,7 +583,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 	}, [noteHasWhiteboardFence, props.dispatch]);
 
 	if (useWhiteboardEditor) {
-		editor = <WhiteboardEditor {...editorProps}/>;
+		editor = <WhiteboardEditor key={formNote.id} {...editorProps}/>;
 	} else if (builtInEditorVisible) {
 		if (props.bodyEditor === 'TinyMCE') {
 			editor = <TinyMCE {...editorProps}/>;
