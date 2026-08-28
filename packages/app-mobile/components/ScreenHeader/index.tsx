@@ -117,14 +117,9 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				backgroundColor: theme.backgroundColor,
 				borderBottomColor: theme.dividerColor,
 				borderBottomWidth: 1,
-			},
-			// A small border above the header: Covers the part of the shadow that would otherwise
-			// be shown above the header on Android.
-			aboveHeader: {
-				backgroundColor: theme.backgroundColor,
-				paddingBottom: 6,
-				marginTop: -6,
-				zIndex: 2,
+				// 2026-08-28: Including a fully transparent shadow avoids a crash on iOS when opening settings:
+				shadowColor: '#000',
+				shadowOpacity: 0,
 			},
 			folderPicker: {
 				marginRight: theme.marginMedium,
@@ -714,7 +709,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 
 		return (
 			<View style={this.styles().outerContainer}>
-				<View style={this.styles().aboveHeader}/>
 				<View style={this.styles().innerContainer}>
 					{zeroWidthSpacer}
 					{sideMenuComp}
