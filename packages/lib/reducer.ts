@@ -1182,8 +1182,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					const isViewingAllNotes = (windowDraft.notesParentType === 'SmartFilter' && windowDraft.selectedSmartFilterId === ALL_NOTES_FILTER_ID);
 					const isViewingConflictFolder = windowDraft.notesParentType === 'Folder' && windowDraft.selectedFolderId === Folder.conflictFolderId();
 
-					const noteIsInFolder = function(note: NoteEntity, folderId: string) {
-						if (note.is_conflict && isViewingConflictFolder) return true;
+					const noteIsInCurrentView = function(note: NoteEntity, folderId: string) {
+						if (note.is_conflict) return isViewingConflictFolder;
+						if (isViewingAllNotes) return true;
 						const noteDisplayParentId = getDisplayParentId(note, draft.folders.find(f => f.id === note.parent_id));
 						return folderId === noteDisplayParentId;
 					};
@@ -1202,7 +1203,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 								newNotes.splice(i, 1);
 								noteFolderHasChanged = true;
 								movedNotePreviousIndex = i;
-							} else if (isViewingAllNotes || noteIsInFolder(modNote, previousDisplayParentId)) {
+							} else if (noteIsInCurrentView(modNote, previousDisplayParentId)) {
 								// Note is still in the same folder
 								// Merge the properties that have changed (in modNote) into
 								// the object we already have.
@@ -1226,7 +1227,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					// Note was not found - if the current folder is the same as the note folder,
 					// add it to it.
 					if (!found) {
-						if (isViewingAllNotes || noteIsInFolder(modNote, windowDraft.selectedFolderId)) {
+						if (noteIsInCurrentView(modNote, windowDraft.selectedFolderId)) {
 							newNotes.push(modNote);
 						}
 					}
