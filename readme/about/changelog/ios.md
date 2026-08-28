@@ -1,5 +1,33 @@
 # Joplin iOS Changelog
 
+## [ios-v13.7.3](https://github.com/laurent22/joplin/releases/tag/ios-v13.7.3) - 2026-08-28T18:17:16Z
+
+- Improved: Implement readonly state for mobile RTE and disable the MDE interactive table editor for readonly notes (#16231 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Implement redesigned new note menu (#16082 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Implement redesigned notebook long-press menu (#16027 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Make the editor state update, if the current note is updated by the sync (#16150 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Make the startup location the first entry in the navigation history instead of 'All Notes' (#16083 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Markdown editor: Support opening same-note links to elements with `id="..."` attributes (#16287 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Prevent race which allows changes to be lost, during a long delta step (#16208 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Prevent the remote version of a note being overwritten if typing while the sync changes the open note (#16193 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Remove single-word titles from error/warning dialogs (#16096 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support syncing with Joplin v3.7 (#15889) (#15753 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Sync: Enable new notebook sharing key format (#16305) (#16251 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Editor: Avoid crash when editing certain partially-loaded documents (#16286) (#16285 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Markdown editor selection issues (#16126) (#16070 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix blank screen being shown when navigating back after tag changes and other edge cases (#16080) (#15265 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix empty navigation when navigating to settings from the conflicts folder after it was removed (#16197 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Fix inconsistent button order in profile switcher, tag screen, and deletion confirmation dialogs (#16076 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix note screen is not properly refreshed when updated by the sync, when E2EE is enabled (#16179 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: HTML notes: Fix certain content incorrectly renders as linked text (#16289) (#15770 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Improve shadow colors in dark mode (#16326) (#16312 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Mobile: When toggling a checkbox which is not at the cursor position, it will scroll away from the checkbox back to the cursor position (#16173) (#15920 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Prevent conflicts initially showing alongside the original note in the notebook when created (#16330) (#16155 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Prevent incrementing the master key updated_time when the key has not actually changed (#16223) (#16194 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Prevent scrolling the cursor into view on the markdown editor when unnecessary to do so (#16091) (#15923 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Release the save mutex when a save fails validation (#16147) (#16145 by [@keshav0479](https://github.com/keshav0479))
+- Fixed: Support unpublishing notes published by other users (#16246) (#16153 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [ios-v13.6.11](https://github.com/laurent22/joplin/releases/tag/ios-v13.6.11) - 2026-08-20T18:25:52Z
 
 - Improved: Support syncing with Joplin v3.7 (#15889) (#15753 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
