@@ -127,7 +127,6 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 				zIndex: 2,
 			},
 			folderPicker: {
-				marginLeft: theme.marginMedium,
 				marginRight: theme.marginMedium,
 				fontSize: theme.fontSizeLarger,
 			},
