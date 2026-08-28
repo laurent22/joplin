@@ -555,7 +555,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					themeId={themeId}
 
 					description={_('Sort notes by')}
-					iconName='ionicon filter-outline'
+					iconName='ionicon filter'
 					contentWrapperStyle={styles.iconButton}
 					iconStyle={styles.topIcon}
 				/>
