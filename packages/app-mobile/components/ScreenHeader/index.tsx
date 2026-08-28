@@ -419,7 +419,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					description={_('Select all')}
 					contentWrapperStyle={styles.iconButton}
 
-					iconName='material check-circle-outline'
+					iconName="ionicon checkmark-circle-outline"
 					iconStyle={styles.topIcon}
 				/>
 			);
@@ -449,7 +449,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					themeId={themeId}
 					contentWrapperStyle={styles.iconButton}
 
-					iconName='material delete-outline'
+					iconName='fas trash'
 					iconStyle={styles.topIcon}
 				/>
 			);
@@ -506,7 +506,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					}
 					contentWrapperStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
 
-					iconName='material delete-outline'
+					iconName='ionicon trash'
 					iconStyle={styles.topIcon}
 				/>
 			);
@@ -525,7 +525,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 					}
 					contentWrapperStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
 
-					iconName='material restore'
+					iconName='ionicon reload-circle'
 					iconStyle={styles.topIcon}
 				/>
 			);
@@ -543,7 +543,7 @@ class ScreenHeaderComponent extends PureComponent<ScreenHeaderProps, ScreenHeade
 						disabled ? null : _('Duplicate selected notes')
 					}
 					contentWrapperStyle={disabled ? styles.iconButtonDisabled : styles.iconButton}
-					iconName='material content-copy'
+					iconName='ionicon copy'
 					iconStyle={styles.topIcon}
 				/>
 			);
