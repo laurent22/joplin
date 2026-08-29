@@ -126,8 +126,12 @@ describe('ExternalEditWatcher', () => {
 
 			// Updating the file without changing its content should not overwrite the new content
 			// in the note:
-			await utimes(filePaths[0], new Date().getTime() + Second, new Date().getTime() + Second);
-			await msleep(500);
+			await utimes(filePaths[0], new Date(new Date().getTime() + Second), new Date(new Date().getTime() + Second));
+
+			// Should be unchanged after a brief delay
+			await msleep(200);
+			// ...and after any pending change events are applied
+			await watcher.stopWatching(notes[0].id);
 			expect(await Note.load(notes[0].id)).toMatchObject({ body: 'Out-of-sync' });
 		} finally {
 			await watcher.stopWatchingAll();

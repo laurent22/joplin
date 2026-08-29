@@ -208,7 +208,6 @@ export default class ExternalEditWatcher {
 			this.logger().info('ExternalEditWatcher: No changes since last write');
 			return;
 		}
-		this.lastNoteContentHash_.set(id, contentHash);
 
 		this.logger().debug('ExternalEditWatcher: Updating note object.');
 
@@ -217,6 +216,8 @@ export default class ExternalEditWatcher {
 		updatedNote.parent_id = note.parent_id;
 		await Note.save(updatedNote);
 		this.eventEmitter_.emit('noteChange', { id: updatedNote.id, note: updatedNote });
+
+		this.lastNoteContentHash_.set(id, contentHash);
 	}
 
 	private noteIdToFilePath_(noteId: string) {
@@ -300,6 +301,7 @@ export default class ExternalEditWatcher {
 		await shim.fsDriver().remove(filePath);
 
 		this.lastNoteContentHash_.delete(noteId);
+		this.skipNextChangeEvent_.delete(noteId);
 		this.dispatch({
 			type: 'NOTE_FILE_WATCHER_REMOVE',
 			id: noteId,
