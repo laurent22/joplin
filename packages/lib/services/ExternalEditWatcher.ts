@@ -353,8 +353,8 @@ export default class ExternalEditWatcher {
 		const filePath = this.noteIdToFilePath_(note.id);
 		const noteContent = await Note.serializeForEdit(note);
 
-		this.lastNoteContentHash_.set(note.id, hashNoteContent(noteContent));
 		await shim.fsDriver().writeFile(filePath, noteContent, 'utf-8');
+		this.lastNoteContentHash_.set(note.id, hashNoteContent(noteContent));
 
 		return filePath;
 	}
