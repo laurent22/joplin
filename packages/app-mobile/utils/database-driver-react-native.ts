@@ -27,10 +27,9 @@ export default class DatabaseDriverReactNative implements DatabaseDriver {
 			},
 			databaseDirectory(),
 		);
-		// Enable write-ahead logging (sqlite.org/wal.html).
-		// WAL provides performance and concurrency benefits and,
-		// on iOS, this matches the behavior of react-native-sqlite-storage
-		// before migrating to expo-sqlite:
+		// Write-ahead logging (https://sqlite.org/wal.html) helps avoid "database locked" errors
+		// on Android (and, on iOS, seems to match the behavior of react-native-sqlite-storage
+		// before migrating to expo-sqlite):
 		await database.execAsync('PRAGMA journal_mode=WAL;');
 		this.db_ = database;
 	}
