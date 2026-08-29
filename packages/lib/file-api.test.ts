@@ -18,6 +18,7 @@ const defaultItem = (): RemoteItem => {
 };
 
 const validNoteId = '1b175bb38bba47baac22b0b47f778113';
+const validNoteId2 = '1b175bb38bba47baac22b0b47f778114';
 const basePath = '/';
 const baseTimestamp = new Date().getTime();
 
@@ -42,9 +43,11 @@ const statItem = (noteId: string, remoteUpdatedTime: number) => {
 	return stat;
 };
 
-const dirStatFunc = (statItem: ItemStat) => {
+const dirStatFunc = (statItem: ItemStat | ItemStat[]) => {
 	return (): ItemStat[] => {
-		if (statItem) {
+		if (Array.isArray(statItem)) {
+			return [...statItem];
+		} else if (statItem) {
 			return [statItem];
 		} else {
 			return [];
@@ -308,6 +311,15 @@ describe('file-api', () => {
 		setupWebDavSync(true);
 		const stat = statItem(validNoteId, baseTimestamp);
 		const context = await basicDelta(basePath, dirStatFunc(stat), syncOptions(validNoteId, undefined, baseTimestamp + 1));
+		expect(context.items.length).toBe(1);
+		expect(context.items[0]).toBe(stat);
+	});
+
+	test('basicDelta (enhancedAlgorithm: false) should return old item where local item does not exist, and not return it when it does', async () => {
+		setupWebDavSync(false);
+		const stat = statItem(validNoteId, baseTimestamp - 1);
+		const stat2 = statItem(validNoteId2, baseTimestamp - 1);
+		const context = await basicDelta(basePath, dirStatFunc([stat, stat2]), syncOptions(validNoteId2, baseTimestamp));
 		expect(context.items.length).toBe(1);
 		expect(context.items[0]).toBe(stat);
 	});
