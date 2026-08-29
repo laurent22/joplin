@@ -67,6 +67,7 @@ import getResourceBaseUrl from './utils/getResourceBaseUrl';
 import useInitialCursorLocation from './utils/useInitialCursorLocation';
 import NotePositionService, { EditorCursorLocations } from '@joplin/lib/services/NotePositionService';
 import { blur } from '@joplin/lib/utils/focusHandler';
+import bridge from '../../services/bridge';
 
 const debounce = require('debounce');
 
@@ -709,9 +710,9 @@ function NoteEditorContent(props: NoteEditorProps) {
 		);
 	};
 
-	function renderSearchInfo() {
+	function renderFolderInfo() {
 		const theme = themeStyle(props.themeId);
-		if (formNoteFolder && ['Search', 'Tag', 'SmartFilter'].includes(props.notesParentType)) {
+		if (formNoteFolder) {
 			return (
 				<div style={{ paddingTop: 10, paddingBottom: 10, paddingLeft: theme.editorPaddingLeft }}>
 					<Button
@@ -720,10 +721,15 @@ function NoteEditorContent(props: NoteEditorProps) {
 						title={_('In: %s', substrWithEllipsis(formNoteFolder.title, 0, 100))}
 						onClick={() => {
 							props.dispatch({
+								type: 'WINDOW_FOCUS',
+								windowId: defaultWindowId,
+							});
+							props.dispatch({
 								type: 'FOLDER_AND_NOTE_SELECT',
 								folderId: formNoteFolder.id,
 								noteId: formNote.id,
 							});
+							bridge().switchToMainWindow();
 						}}
 					/>
 					<div style={{ flex: 1 }}></div>
@@ -830,7 +836,7 @@ function NoteEditorContent(props: NoteEditorProps) {
 					onTitleChange={onTitleChange}
 					disabled={isReadOnly || reloadInProgress}
 				/>
-				{renderSearchInfo()}
+				{renderFolderInfo()}
 				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%', minHeight: '0' }}>
 					{editor}
 					{renderPluginEditor()}
