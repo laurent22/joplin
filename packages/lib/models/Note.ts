@@ -238,7 +238,7 @@ export default class Note extends BaseItem {
 			// needed for other resources since they are simple links.
 			const timestampParam = isImage ? `?t=${resource.updated_time}` : '';
 			const resourcePath = options.useAbsolutePaths ? toFileProtocolPath(Resource.fullPath(resource)) + timestampParam : Resource.relativePath(resource);
-			body = body.replace(new RegExp(`:/${id}`, 'gi'), markdownUtils.escapeLinkUrl(resourcePath));
+			body = body.replace(new RegExp(`(joplin://|:/)${id}`, 'gi'), markdownUtils.escapeLinkUrl(resourcePath));
 		}
 
 		// this.logger().debug('replaceResourceInternalToExternalLinks result', body);

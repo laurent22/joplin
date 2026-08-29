@@ -93,7 +93,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 				continue;
 			}
 			const resourceContent = `${relativePath ? `${relativePath}/` : ''}_resources/${basename(resourcePaths[id])}`;
-			newBody = newBody.replace(new RegExp(`:/${id}`, 'g'), resourceContent);
+			newBody = newBody.replace(new RegExp(`(joplin://|:/)${id}`, 'g'), resourceContent);
 		}
 
 		return newBody;

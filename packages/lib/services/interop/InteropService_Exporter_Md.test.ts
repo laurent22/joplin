@@ -377,6 +377,33 @@ describe('interop/InteropService_Exporter_Md', () => {
 		expect(note2_body).toContain('[link](../folder%20with%20space1/note1%20name%20with%20space.md)');
 	}));
 
+	it('should replace joplin:// note and resource links with relative paths', (async () => {
+		const exporter = new InteropService_Exporter_Md();
+		await exporter.init(exportDir());
+
+		const { items: itemsToExport, queue: queueExportItem } = createExportItems();
+
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({ title: 'target_note', parent_id: folder1.id });
+		const note2 = await Note.save({
+			title: 'source_note',
+			parent_id: folder1.id,
+			body: `[A joplin note link](joplin://${note1.id})`,
+		});
+		queueExportItem(BaseModel.TYPE_FOLDER, folder1.id);
+		queueExportItem(BaseModel.TYPE_NOTE, note1);
+		queueExportItem(BaseModel.TYPE_NOTE, note2);
+
+		await exporter.processItem(Folder.modelType(), folder1);
+		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
+		await exporter.processItem(Note.modelType(), note1);
+		await exporter.processItem(Note.modelType(), note2);
+
+		const note2_body = await shim.fsDriver().readFile(`${exportDir()}/${exporter.context().notePaths[note2.id]}`);
+		expect(note2_body).toContain('[A joplin note link](../folder1/target_note.md)');
+		expect(note2_body).not.toContain(`joplin://${note1.id}`);
+	}));
+
 	it('should preserve resource file extension', (async () => {
 		const folder = await Folder.save({ title: 'testing' });
 		const note = await Note.save({ title: 'mynote', parent_id: folder.id });
