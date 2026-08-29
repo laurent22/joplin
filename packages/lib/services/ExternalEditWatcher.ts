@@ -9,6 +9,7 @@ import { openFileWithExternalEditor } from './ExternalEditWatcher/utils';
 import AsyncActionQueue from '../AsyncActionQueue';
 import { EventEmitter } from 'events';
 import * as chokidar from 'chokidar';
+const md5 = require('md5');
 const { ErrorNotFound } = require('./rest/utils/errors');
 
 interface ChangeEventContext {
@@ -20,6 +21,9 @@ type DispatchFn = (action: { type: string; [key: string]: unknown })=> void;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Concrete bridge type lives in app-desktop; lib references it structurally
 type BridgeFn = ()=> any;
 
+const hashNoteContent = (content: string) => md5(content);
+type ItemId = string;
+
 export default class ExternalEditWatcher {
 
 	private dispatch: DispatchFn;
@@ -29,7 +33,8 @@ export default class ExternalEditWatcher {
 	private watcher_: any = null;
 	private changeEventQueue_: AsyncActionQueue<ChangeEventContext>;
 	private eventEmitter_: EventEmitter = new EventEmitter();
-	private skipNextChangeEvent_: Record<string, boolean> = {};
+	private skipNextChangeEvent_: Map<ItemId, boolean> = new Map();
+	private lastNoteContentHash_: Map<ItemId, string> = new Map();
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- See watcher_ above
 	private chokidar_: any = chokidar;
 
@@ -135,13 +140,12 @@ export default class ExternalEditWatcher {
 				} else if (event === 'change') {
 					const id = this.noteFilePathToId_(path);
 
-					if (!this.skipNextChangeEvent_[id]) {
+					if (!this.skipNextChangeEvent_.has(id)) {
 						this.changeEventQueue_.push(() => this.onNoteChange_(path), { path });
 					} else {
 						this.logger().debug('ExternalEditWatcher: Skipping this event.');
+						this.skipNextChangeEvent_.delete(id);
 					}
-
-					this.skipNextChangeEvent_ = {};
 				} else if (event === 'error') {
 					this.logger().error('ExternalEditWatcher: error');
 				}
@@ -198,6 +202,13 @@ export default class ExternalEditWatcher {
 
 			if (!noteContent) this.logger().warn(`ExternalEditWatcher: Could not re-read note - user might have purposely deleted note content: ${id}`);
 		}
+
+		const contentHash = hashNoteContent(noteContent);
+		if (contentHash === this.lastNoteContentHash_.get(id)) {
+			this.logger().info('ExternalEditWatcher: No changes since last write');
+			return;
+		}
+		this.lastNoteContentHash_.set(id, contentHash);
 
 		this.logger().debug('ExternalEditWatcher: Updating note object.');
 
@@ -287,6 +298,8 @@ export default class ExternalEditWatcher {
 		const filePath = this.noteIdToFilePath_(noteId);
 		if (this.watcher_) this.watcher_.unwatch(filePath);
 		await shim.fsDriver().remove(filePath);
+
+		this.lastNoteContentHash_.delete(noteId);
 		this.dispatch({
 			type: 'NOTE_FILE_WATCHER_REMOVE',
 			id: noteId,
@@ -304,6 +317,8 @@ export default class ExternalEditWatcher {
 
 		if (this.watcher_) this.watcher_.close();
 		this.watcher_ = null;
+		this.skipNextChangeEvent_.clear();
+		this.lastNoteContentHash_.clear();
 		this.logger().info('ExternalEditWatcher: Stopped watching all files');
 		this.dispatch({
 			type: 'NOTE_FILE_WATCHER_CLEAR',
@@ -322,7 +337,7 @@ export default class ExternalEditWatcher {
 
 		// When the note file is updated programmatically, we skip the next change event to
 		// avoid update loops. We only want to listen to file changes made by the user.
-		this.skipNextChangeEvent_[note.id] = true;
+		this.skipNextChangeEvent_.set(note.id, true);
 
 		await this.writeNoteToFile_(note);
 	}
@@ -335,7 +350,10 @@ export default class ExternalEditWatcher {
 
 		const filePath = this.noteIdToFilePath_(note.id);
 		const noteContent = await Note.serializeForEdit(note);
+
+		this.lastNoteContentHash_.set(note.id, hashNoteContent(noteContent));
 		await shim.fsDriver().writeFile(filePath, noteContent, 'utf-8');
+
 		return filePath;
 	}
 }
