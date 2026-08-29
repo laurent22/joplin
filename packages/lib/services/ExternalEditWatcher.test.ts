@@ -101,7 +101,12 @@ describe('ExternalEditWatcher', () => {
 		}
 	});
 
-	test('should ignore change events that don\'t change the note', async () => {
+	// In some cases, multiple "update" events are received when Joplin updates an external
+	// editor's temporary file. If an update event doesn't change the temp file's content (e.g.
+	// if the update event only adjusts the timestamp), Joplin should ignore the event to avoid
+	// overwriting the note with old content.
+	// See #16350.
+	test('should ignore change events that don\'t change the file\'s content', async () => {
 		const { filePaths, watcher, notes } = await createAndWatchNotes([
 			{ title: 'Test', body: 'Initial content' },
 		]);
