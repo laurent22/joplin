@@ -22,7 +22,7 @@ export default class DatabaseDriverReactNative implements DatabaseDriver {
 		const database = await SQLite.openDatabaseAsync(
 			options.name,
 			{
-				// Workaround for https://github.com/expo/expo/38168
+				// Work around an FTS-related crash when closing the database (see https://github.com/expo/expo/38168)
 				finalizeUnusedStatementsBeforeClosing: false,
 			},
 			databaseDirectory(),
