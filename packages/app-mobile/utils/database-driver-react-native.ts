@@ -1,9 +1,15 @@
 import * as SQLite from 'expo-sqlite';
 import DatabaseDriver, { DatabaseCloseOptions, DatabaseOpenOptions, SqlSelectParams } from '@joplin/lib/database-driver';
 import * as RNFS from '@dr.pogodin/react-native-fs';
+import { Platform } from 'react-native';
+import { dirname } from 'path';
 
 // For compatibility with react-native-sqlite-storage
-const databaseDirectory = () => `${RNFS.LibraryDirectoryPath}/LocalDatabase/`;
+const databaseDirectory = () =>
+	Platform.select({
+		ios: `${RNFS.LibraryDirectoryPath}/LocalDatabase/`,
+		android: `${dirname(RNFS.DocumentDirectoryPath)}/databases/`,
+	});
 
 export default class DatabaseDriverReactNative implements DatabaseDriver {
 	private lastInsertId_: string;
