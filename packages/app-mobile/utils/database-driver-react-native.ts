@@ -21,7 +21,10 @@ export default class DatabaseDriverReactNative implements DatabaseDriver {
 	public async open(options: DatabaseOpenOptions) {
 		const database = await SQLite.openDatabaseAsync(
 			options.name,
-			{},
+			{
+				// Workaround for https://github.com/expo/expo/38168
+				finalizeUnusedStatementsBeforeClosing: false,
+			},
 			databaseDirectory(),
 		);
 		// Enable write-ahead logging (sqlite.org/wal.html).
