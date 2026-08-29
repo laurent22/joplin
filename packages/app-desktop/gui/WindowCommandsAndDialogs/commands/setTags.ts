@@ -81,6 +81,6 @@ export const runtime = (comp: WindowControl): CommandRuntime => {
 				},
 			});
 		},
-		enabledCondition: 'someNotesSelected && !inTrash',
+		enabledCondition: 'someNotesSelected && !allSelectedNotesAreDeleted && !inTrash',
 	};
 };

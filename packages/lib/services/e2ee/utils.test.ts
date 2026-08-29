@@ -61,6 +61,24 @@ describe('e2ee/utils', () => {
 		}
 	});
 
+	it('should not undo ppk migration when the most recent public key algorithm is not in the migrations list', async () => {
+		const { reset } = testing__setPpkMigrations_([PublicKeyAlgorithm.RsaV1]);
+
+		try {
+			const syncInfo = localSyncInfo();
+			const testPassword = 'test--TEST';
+			Setting.setValue('encryption.masterPassword', testPassword);
+			syncInfo.ppk = await generateKeyPairWithAlgorithm(PublicKeyAlgorithm.RsaV2, encryptionService(), testPassword);
+			saveLocalSyncInfo(syncInfo);
+
+			expect(getPpkAlgorithm(localSyncInfo().ppk)).toBe(PublicKeyAlgorithm.RsaV2);
+			await migratePpk();
+			expect(getPpkAlgorithm(localSyncInfo().ppk)).toBe(PublicKeyAlgorithm.RsaV2);
+		} finally {
+			reset();
+		}
+	});
+
 	it('should not migrate ppk if the key is up-to-date', async () => {
 		const syncInfo = localSyncInfo();
 		const testPassword = 'test 🔑';

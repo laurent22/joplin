@@ -14,6 +14,8 @@ const github = require('eslint-plugin-github');
 const { fixupPluginRules, includeIgnoreFile } = require('@eslint/compat');
 const js = require('@eslint/js');
 
+const joplin = require('./packages/tools/eslint-rules');
+
 const { join } = require('path');
 
 // As of ESLint v9, .eslintignore is no longer supported and the presence of
@@ -246,6 +248,7 @@ module.exports = defineConfig([{
 		promise,
 		jest,
 		github: fixupPluginRules(github),
+		joplin,
 	},
 }, {
 	files: [
@@ -256,6 +259,12 @@ module.exports = defineConfig([{
 
 	rules: {
 		'no-console': 'off',
+	},
+}, {
+	files: ['**/*.test.ts', '**/*.test.tsx', '**/*.test.js', '**/*.test.jsx'],
+
+	rules: {
+		'joplin/describe-filename': ['error'],
 	},
 }, {
 	// .jsx files should be linted with the default rules

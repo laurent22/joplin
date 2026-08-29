@@ -86,16 +86,19 @@ test.describe('wcag', () => {
 		await expect(folder2).toHaveJSProperty('ariaLevel', '3'); // Should be a sub-folder
 
 		await mainScreen.createNewNote('Test');
+		await mainScreen.noteEditor.showMarkdownEditor();
 
 		// Ensure that `:hover` styling is consistent between tests:
 		await mainScreen.noteEditor.noteTitleInput.hover();
 
 		await expectNoViolations(mainWindow);
 
-		// Should not find issues with the Rich Text Editor
-		await mainScreen.noteEditor.toggleEditorsButton.click();
-		await mainScreen.noteEditor.richTextEditor.click();
+		// Should not find issues after showing the note viewer
+		await mainScreen.noteEditor.showNoteViewer();
+		await expectNoViolations(mainWindow);
 
+		// Should not find issues with the Rich Text Editor
+		await mainScreen.noteEditor.showRichTextEditor();
 		await expectNoViolations(mainWindow);
 	});
 

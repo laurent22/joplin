@@ -3,6 +3,7 @@ import uuid from '../../../uuid';
 import EncryptionService, { EncryptionCustomHandler, EncryptionMethod } from '../EncryptionService';
 import { MasterKeyEntity, PublicKeyAlgorithm, PublicKeyCrypto, PublicKeyCryptoProvider } from '../types';
 import PerformanceLogger from '../../../PerformanceLogger';
+import { _ } from '../../../locale';
 
 const perfLogger = PerformanceLogger.create();
 
@@ -25,15 +26,15 @@ export interface PublicPrivateKeyPair {
 // To indicate that clients should migrate to a new PublicKeyAlgorithm, add it to the end of
 // "ppkMigrations".
 let ppkMigrations = [
-	PublicKeyAlgorithm.RsaV1,
-	// Uncomment to migrate to RsaV2, which uses a different padding type from RsaV1
-	// PublicKeyAlgorithm.RsaV2,
+	PublicKeyAlgorithm.RsaV1, // RSA-PKCS#1-v1.5-2048, not supported on all platforms
+	// RsaV2 uses a newer padding type
+	PublicKeyAlgorithm.RsaV2, // RSA-OAEP-2048
 
 	// Uncomment to migrate to RsaV3, which uses different encryption libraries, padding type,
 	// and a larger key size. Before migrating:
 	// - Check whether generating keys with this method still blocks the UI on Android/iOS
 	//   (it might not after migrating to React Native's New Architecture).
-	// PublicKeyAlgorithm.RsaV3,
+	// PublicKeyAlgorithm.RsaV3, // RSA-OAEP-4096
 ];
 export const getDefaultPpkAlgorithm = () => ppkMigrations[ppkMigrations.length - 1];
 
@@ -56,12 +57,16 @@ export const setRSA = (rsa: PublicKeyCryptoProvider) => {
 };
 
 const supportsAlgorithm = (algorithm: PublicKeyAlgorithm) => {
-	return Object.prototype.hasOwnProperty.call(rsa_, algorithm);
+	return Object.prototype.hasOwnProperty.call(rsa_, algorithm) && algorithm !== PublicKeyAlgorithm.Unknown;
 };
 
 // Exported for testing purposes
 export const rsa = (algorithm: PublicKeyAlgorithm): PublicKeyCrypto => {
 	if (!rsa_) throw new Error('RSA handler has not been set!!');
+	if (algorithm === PublicKeyAlgorithm.Unknown) {
+		// "Unknown" PPK algorithms may be caused by either a corrupted key or an outdated version of Joplin.
+		throw new Error(_('Unsupported public key format. Please check that Joplin is updated to the latest version and try again.'));
+	}
 	if (!supportsAlgorithm(algorithm)) throw new Error(`Unsupported algorithm: ${algorithm}`);
 	return rsa_[algorithm];
 };

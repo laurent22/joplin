@@ -1,5 +1,19 @@
 # Joplin Android Changelog
 
+## [android-v3.7.7](https://github.com/laurent22/joplin/releases/tag/android-v3.7.7) - 2026-08-28T18:05:26Z
+
+- Improved: Implement readonly state for mobile RTE and disable the MDE interactive table editor for readonly notes (#16231 by [@mrjo118](https://github.com/mrjo118))
+- Improved: Markdown editor: Support opening same-note links to elements with `id="..."` attributes (#16287 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Support syncing with Joplin v3.7 (#15889) (#15753 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Improved: Sync: Enable new notebook sharing key format (#16305) (#16251 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Editor: Avoid crash when editing certain partially-loaded documents (#16286) (#16285 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Fix Markdown editor selection issues (#16126) (#16070 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: HTML notes: Fix certain content incorrectly renders as linked text (#16289) (#15770 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Improve shadow colors in dark mode (#16326) (#16312 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+- Fixed: Mobile: When toggling a checkbox which is not at the cursor position, it will scroll away from the checkbox back to the cursor position (#16173) (#15920 by [@Rygaa](https://github.com/Rygaa))
+- Fixed: Prevent conflicts initially showing alongside the original note in the notebook when created (#16330) (#16155 by [@mrjo118](https://github.com/mrjo118))
+- Fixed: Support unpublishing notes published by other users (#16246) (#16153 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [android-v3.6.22](https://github.com/laurent22/joplin/releases/tag/android-v3.6.22) - 2026-08-20T18:18:17Z
 
 - Improved: Support syncing with Joplin v3.7 (#15889) (#15753 by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))

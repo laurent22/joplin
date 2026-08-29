@@ -1,7 +1,7 @@
 import { extractVersionInfo, Release, Platform, Architecture, GitHubRelease, handleReleaseResponseError } from './checkForUpdatesUtils';
 import { releases1, releases2 } from './checkForUpdatesUtilsTestData';
 
-describe('checkForUpdates', () => {
+describe('checkForUpdatesUtils', () => {
 
 	it('should extract version info and return the non-arm64 version', async () => {
 		const testCases: [GitHubRelease[], Platform, Architecture, boolean, Release][] = [

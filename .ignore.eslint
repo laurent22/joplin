@@ -83,6 +83,7 @@ packages/lib/welcomeAssets.js
 packages/editor/*/vendor/
 packages/plugins/**/api
 packages/plugins/**/dist
+packages/plugin-repo-cli/dist/
 packages/server/dist/
 packages/utils/dist/
 packages/transcribe/dist/
@@ -633,10 +634,14 @@ packages/app-desktop/integration-tests/main.spec.js
 packages/app-desktop/integration-tests/markdownEditor.spec.js
 packages/app-desktop/integration-tests/models/ChangeAppLayoutScreen.js
 packages/app-desktop/integration-tests/models/ChatPanel.js
-packages/app-desktop/integration-tests/models/EditorCodeDialog.js
 packages/app-desktop/integration-tests/models/GoToAnything.js
 packages/app-desktop/integration-tests/models/MainScreen.js
-packages/app-desktop/integration-tests/models/NoteEditorScreen.js
+packages/app-desktop/integration-tests/models/NoteEditor/BaseEditor.js
+packages/app-desktop/integration-tests/models/NoteEditor/EditorCodeDialog.js
+packages/app-desktop/integration-tests/models/NoteEditor/MarkdownEditor.js
+packages/app-desktop/integration-tests/models/NoteEditor/NoteEditorScreen.js
+packages/app-desktop/integration-tests/models/NoteEditor/NoteViewer.js
+packages/app-desktop/integration-tests/models/NoteEditor/RichTextEditor.js
 packages/app-desktop/integration-tests/models/NoteList.js
 packages/app-desktop/integration-tests/models/SettingsScreen.js
 packages/app-desktop/integration-tests/models/Sidebar.js
@@ -657,7 +662,6 @@ packages/app-desktop/integration-tests/util/getMainWindow.js
 packages/app-desktop/integration-tests/util/ignoreFlakyReporter.js
 packages/app-desktop/integration-tests/util/mockClipboard.js
 packages/app-desktop/integration-tests/util/retryOnFailure.js
-packages/app-desktop/integration-tests/util/seedProfileSettings.js
 packages/app-desktop/integration-tests/util/setDarkMode.js
 packages/app-desktop/integration-tests/util/setFilePickerResponse.js
 packages/app-desktop/integration-tests/util/setMessageBoxResponse.js
@@ -1749,6 +1753,8 @@ packages/lib/services/interop/InteropService_Importer_Md.test.js
 packages/lib/services/interop/InteropService_Importer_Md.js
 packages/lib/services/interop/InteropService_Importer_Md_frontmatter.test.js
 packages/lib/services/interop/InteropService_Importer_Md_frontmatter.js
+packages/lib/services/interop/InteropService_Importer_Obsidian.test.js
+packages/lib/services/interop/InteropService_Importer_Obsidian.js
 packages/lib/services/interop/InteropService_Importer_OneNote.postprocessHtml.test.js
 packages/lib/services/interop/InteropService_Importer_OneNote.test.js
 packages/lib/services/interop/InteropService_Importer_OneNote.js
@@ -2148,6 +2154,7 @@ packages/tools/checkIgnoredFiles.js
 packages/tools/checkLibPaths.test.js
 packages/tools/checkLibPaths.js
 packages/tools/convertThemesToCss.js
+packages/tools/eslint-rules/describeFilename.test.js
 packages/tools/fuzzer/ActionRunner.js
 packages/tools/fuzzer/Fuzzer.js
 packages/tools/fuzzer/cli.js
@@ -2225,8 +2232,8 @@ packages/tools/updateMarkdownDoc.js
 packages/tools/utils/discourse.test.js
 packages/tools/utils/discourse.js
 packages/tools/utils/loadSponsors.js
+packages/tools/utils/parsePluralLocalizationForm.test.js
 packages/tools/utils/parsePluralLocalizationForm.js
-packages/tools/utils/parsePlurallLocalizationForm.test.js
 packages/tools/utils/translation.js
 packages/tools/validateFilenames.js
 packages/tools/website/build.js

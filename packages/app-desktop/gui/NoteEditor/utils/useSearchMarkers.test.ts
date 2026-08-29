@@ -55,7 +55,7 @@ describe('useSearchMarkers', () => {
 			await waitFor(() => {
 				const result = test.result.current;
 				expect(result.keywords).toMatchObject(expected);
-			});
+			}, { timeout: 30 * Second });
 			test.unmount();
 		});
 	});
