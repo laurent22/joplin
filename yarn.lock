@@ -24054,13 +24054,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer-crc32@npm:~0.2.3":
-  version: 0.2.13
-  resolution: "buffer-crc32@npm:0.2.13"
-  checksum: 10/06252347ae6daca3453b94e4b2f1d3754a3b146a111d81c68924c22d91889a40623264e95e67955b1cb4a68cbedf317abeabb5140a9766ed248973096db5ce1c
-  languageName: node
-  linkType: hard
-
 "buffer-equal@npm:^1.0.0":
   version: 1.0.0
   resolution: "buffer-equal@npm:1.0.0"
@@ -60922,13 +60915,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yauzl@npm:3.3.1":
-  version: 3.3.1
-  resolution: "yauzl@npm:3.3.1"
+"yauzl@npm:3.3.2":
+  version: 3.3.2
+  resolution: "yauzl@npm:3.3.2"
   dependencies:
-    buffer-crc32: "npm:~0.2.3"
     pend: "npm:~1.2.0"
-  checksum: 10/b9ecac2dca8cf0ce83d29e24ab66af50c2488f12630d0778c5190cc3ca898308986a3955fb6bbc8ee6fe21eae1691ec26068760a54d873f3930718be3bbd1ce3
+  checksum: 10/81a313d9a2fa65f72d4049ce22609227eccdf8676a95bddf7ad13cbf21f77819c3da1a872627cfcc8b85e4922336e4f3657322a168f5ee77bf850b6239538011
   languageName: node
   linkType: hard
 
