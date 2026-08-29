@@ -1,105 +1,48 @@
-const SQLite = require('react-native-sqlite-storage');
-import DatabaseDriver, { DatabaseCloseOptions, DatabaseOpenOptions } from '@joplin/lib/database-driver';
+import * as SQLite from 'expo-sqlite';
+import DatabaseDriver, { DatabaseCloseOptions, DatabaseOpenOptions, SqlSelectParams } from '@joplin/lib/database-driver';
+import * as RNFS from '@dr.pogodin/react-native-fs';
 
-interface SqliteResultSet {
-	rows: { length: number; item: (i: number)=> unknown };
-	insertId?: string;
-}
-
-interface SqliteDb {
-	executeSql: (
-		sql: string,
-		params: unknown,
-		success: (r: SqliteResultSet)=> void,
-		error: (e: Error)=> void,
-	)=> void;
-}
+// For compatibility with react-native-sqlite-storage
+const databaseDirectory = () => `${RNFS.LibraryDirectoryPath}/LocalDatabase/`;
 
 export default class DatabaseDriverReactNative implements DatabaseDriver {
 	private lastInsertId_: string;
-	private db_: SqliteDb;
+	private db_: SQLite.SQLiteDatabase;
 	public constructor() {
 		this.lastInsertId_ = null;
 	}
 
-	public open(options: DatabaseOpenOptions) {
-		// SQLite.DEBUG(true);
-		return new Promise<void>((resolve, reject) => {
-			SQLite.openDatabase(
-				{ name: options.name },
-				(db: SqliteDb) => {
-					this.db_ = db;
-					resolve();
-				},
-				(error: Error) => {
-					reject(error);
-				},
-			);
-		});
+	public async open(options: DatabaseOpenOptions) {
+		const database = await SQLite.openDatabaseAsync(
+			options.name,
+			{},
+			databaseDirectory(),
+		);
+		this.db_ = database;
 	}
 
-	public deleteDatabase(options: DatabaseCloseOptions) {
-		return new Promise<void>((resolve, reject) => {
-			SQLite.deleteDatabase(
-				{ name: options.name },
-				() => {
-					resolve();
-				},
-				(error: Error) => {
-					reject(error);
-				},
-			);
-		});
+	public async deleteDatabase(options: DatabaseCloseOptions) {
+		await SQLite.deleteDatabaseAsync(options.name, databaseDirectory());
 	}
 
 	public sqliteErrorToJsError(error: Error) {
 		return error;
 	}
 
-	public selectOne(sql: string, params: unknown = null) {
-		return new Promise<unknown>((resolve, reject) => {
-			this.db_.executeSql(
-				sql,
-				params,
-				(r: SqliteResultSet) => {
-					resolve(r.rows.length ? r.rows.item(0) : null);
-				},
-				(error: Error) => {
-					reject(error);
-				},
-			);
-		});
+	public async selectOne(sql: string, params: SqlSelectParams = []) {
+		return await this.db_.getFirstAsync(sql, params);
 	}
 
-	public selectAll(sql: string, params: unknown = null) {
-		// eslint-disable-next-line promise/prefer-await-to-then -- Old code before rule was applied
-		return this.exec(sql, params).then(r => {
-			const output = [];
-			for (let i = 0; i < r.rows.length; i++) {
-				output.push(r.rows.item(i));
-			}
-			return output;
-		});
+	public async selectAll(sql: string, params: SqlSelectParams = []) {
+		return await this.db_.getAllAsync(sql, params);
 	}
 
 	public loadExtension(path: string) {
 		throw new Error(`No extension support for ${path} in react-native-sqlite-storage`);
 	}
 
-	public exec(sql: string, params: unknown = null) {
-		return new Promise<SqliteResultSet>((resolve, reject) => {
-			this.db_.executeSql(
-				sql,
-				params,
-				(r: SqliteResultSet) => {
-					if ('insertId' in r) this.lastInsertId_ = r.insertId;
-					resolve(r);
-				},
-				(error: Error) => {
-					reject(error);
-				},
-			);
-		});
+	public async exec(sql: string, params: SqlSelectParams = []) {
+		await this.db_.runAsync(sql, params);
 	}
 
 	public lastInsertId() {

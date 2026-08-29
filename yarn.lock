@@ -12641,6 +12641,7 @@ __metadata:
     expo-camera: "npm:17.0.10"
     expo-image-manipulator: "npm:14.0.8"
     expo-local-authentication: "npm:17.0.8"
+    expo-sqlite: "npm:16.0.10"
     fast-deep-equal: "npm:3.1.3"
     fs-extra: "npm:11.3.5"
     gulp: "npm:4.0.2"
@@ -12675,7 +12676,6 @@ __metadata:
     react-native-safe-area-context: "npm:5.7.0"
     react-native-securerandom: "npm:1.0.1"
     react-native-share: "npm:12.2.6"
-    react-native-sqlite-storage: "npm:6.0.1"
     react-native-svg: "npm:15.15.5"
     react-native-url-polyfill: "npm:2.0.0"
     react-native-version-info: "npm:1.1.1"
@@ -22527,6 +22527,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"await-lock@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "await-lock@npm:2.2.2"
+  checksum: 10/feb11f36768a8545879ed2d214b46aae484e6564ffa466af9212d5782897203770795cae01f813de04a46f66c0b8ee6bc690a0c435b04e00cad5a18ef0842e25
+  languageName: node
+  linkType: hard
+
 "aws-sdk@npm:2.1340.0":
   version: 2.1340.0
   resolution: "aws-sdk@npm:2.1340.0"
@@ -31833,6 +31840,19 @@ __metadata:
   version: 1.0.7
   resolution: "expo-server@npm:1.0.7"
   checksum: 10/fe8bfb25bfac2eaad5717a8ea6ec80661c80488fd380eea2755f57a5d8159056afbdf02cdc96d02cc4d1e34c493783fcb93ab51510254eff9fbf31c23622f885
+  languageName: node
+  linkType: hard
+
+"expo-sqlite@npm:16.0.10":
+  version: 16.0.10
+  resolution: "expo-sqlite@npm:16.0.10"
+  dependencies:
+    await-lock: "npm:^2.2.2"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+  checksum: 10/84057f4b4c04995f1464329ef8a9521859a38f8e608277081891de6f9b4c4d094310ac2e5a583ed02a1ac5414d0f55599987aa0abbdf99200126506735a386c0
   languageName: node
   linkType: hard
 
@@ -49821,24 +49841,6 @@ __metadata:
   version: 12.2.6
   resolution: "react-native-share@npm:12.2.6"
   checksum: 10/fdea43120ce6938d8857f4df4ab6171b69ec762ce0d6b4a45de533587c5eab40cb2f84b4837de141720d9b1195d733b412813f00d172fe58628b3ae13c98cfef
-  languageName: node
-  linkType: hard
-
-"react-native-sqlite-storage@npm:6.0.1":
-  version: 6.0.1
-  resolution: "react-native-sqlite-storage@npm:6.0.1"
-  peerDependencies:
-    react-native: ">=0.14.0"
-  checksum: 10/0bc3fc7e0986ab1d7ebd0ccc75c69b300b1bd6d1701f45402cf2c9071ee6a03dd63caa924725805bef8bb0ca8f548e4bc7e21b41a1cee55a59660531c71b4106
-  languageName: node
-  linkType: hard
-
-"react-native-sqlite-storage@patch:react-native-sqlite-storage@npm%3A6.0.1#./.yarn/patches/react-native-sqlite-storage-npm-6.0.1-8369d747bd.patch::locator=root%40workspace%3A.":
-  version: 6.0.1
-  resolution: "react-native-sqlite-storage@patch:react-native-sqlite-storage@npm%3A6.0.1#./.yarn/patches/react-native-sqlite-storage-npm-6.0.1-8369d747bd.patch::version=6.0.1&hash=da72a2&locator=root%40workspace%3A."
-  peerDependencies:
-    react-native: ">=0.14.0"
-  checksum: 10/1f9453652cadb9b3eb3b43c62f856cbf498e8ca6efc916a081306507708d709b4e636431202cf7ce086a8748516069c3cc7d6f730ae501592b1757aa77f5deaa
   languageName: node
   linkType: hard
 
