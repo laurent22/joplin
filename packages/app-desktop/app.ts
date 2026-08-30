@@ -162,6 +162,10 @@ class Application extends BaseApplication {
 			await AlarmService.updateNoteNotification(action.id, action.type === 'NOTE_DELETE');
 		}
 
+		if (action.type === 'NOTE_DELETE' && store.getState().watchedNoteFiles.includes(action.id)) {
+			await ExternalEditWatcher.instance().stopWatching(action.id);
+		}
+
 		if (action.type === 'SETTING_UPDATE_ONE' && action.key === 'featureFlag.autoUpdaterServiceEnabled' || action.type === 'SETTING_UPDATE_ALL') {
 			if (Setting.value('featureFlag.autoUpdaterServiceEnabled')) this.setupAutoUpdaterService();
 		}
