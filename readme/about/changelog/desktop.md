@@ -1,5 +1,9 @@
 # Joplin Desktop Changelog
 
+## [v3.7.14](https://github.com/laurent22/joplin/releases/tag/v3.7.14) (Pre-release) - 2026-08-30T13:12:04Z
+
+- Improved: External editor: Add additional logic to avoid overwriting a note with older content ([#16352](https://github.com/laurent22/joplin/issues/16352)) ([#16350](https://github.com/laurent22/joplin/issues/16350) by [@personalizedrefrigerator](https://github.com/personalizedrefrigerator))
+
 ## [v3.7.13](https://github.com/laurent22/joplin/releases/tag/v3.7.13) (Pre-release) - 2026-08-28T21:31:31Z
 
 - Improved: Add fail-closed guardrails for locked notes ([#16098](https://github.com/laurent22/joplin/issues/16098)) ([#16054](https://github.com/laurent22/joplin/issues/16054) by [@keshav0479](https://github.com/keshav0479))
