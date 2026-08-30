@@ -174,9 +174,13 @@ class Application extends BaseApplication {
 			action.type === 'NOTE_UPDATE_ONE' &&
 			[ItemChange.SOURCE_SYNC, ItemChange.SOURCE_DECRYPTION].includes(action.changeSource) &&
 			!action.note.encryption_applied &&
+			!action.note.is_locked &&
 			action.changedFields.some((field: string) => ['title', 'body'].includes(field))
 		) {
-			await ExternalEditWatcher.instance().updateNoteFile(action.note);
+			const externalEditWatcher = ExternalEditWatcher.instance();
+			if (externalEditWatcher.noteIsWatched(action.note)) {
+				await externalEditWatcher.updateNoteFile(action.note);
+			}
 		}
 
 		if (['NOTE_VISIBLE_PANES_TOGGLE', 'NOTE_VISIBLE_PANES_SET'].indexOf(action.type) >= 0) {

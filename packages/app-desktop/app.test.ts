@@ -84,6 +84,42 @@ describe('app', () => {
 		expect(await readFile(externalFilePath, 'utf8')).toBe(await Note.serializeForEdit(syncedNote));
 	});
 
+	test('should not update the external edit file when the note is not watched', async () => {
+		const note = await Note.save({
+			title: 'Test note',
+			body: 'Changed on another device',
+		}, { changeSource: ItemChange.SOURCE_SYNC });
+		const updateNoteFile = jest.spyOn(watcher, 'updateNoteFile');
+
+		const handleDesktopAction = createDesktopActionHandler();
+		await handleDesktopAction({
+			type: 'NOTE_UPDATE_ONE',
+			changeSource: ItemChange.SOURCE_SYNC,
+			changedFields: ['body'],
+			note,
+		});
+
+		expect(watcher.noteIsWatched(note)).toBe(false);
+		expect(updateNoteFile).not.toHaveBeenCalled();
+		updateNoteFile.mockRestore();
+	});
+
+	test('should not update the external edit file when the synced note is locked', async () => {
+		const { originalNote } = await startExternalEditing();
+		const updateNoteFile = jest.spyOn(watcher, 'updateNoteFile');
+
+		const handleDesktopAction = createDesktopActionHandler();
+		await handleDesktopAction({
+			type: 'NOTE_UPDATE_ONE',
+			changeSource: ItemChange.SOURCE_SYNC,
+			changedFields: ['body', 'is_locked'],
+			note: { ...originalNote, body: 'Locked note ciphertext', is_locked: 1 },
+		});
+
+		expect(updateNoteFile).not.toHaveBeenCalled();
+		updateNoteFile.mockRestore();
+	});
+
 	test('should wait for a synced encrypted note to be decrypted before updating the external edit file', async () => {
 		const { originalNote, externalFilePath } = await startExternalEditing();
 		const noteActions = jest.fn();
@@ -114,9 +150,14 @@ describe('app', () => {
 
 		noteActions.mockClear();
 		const decryptedNote = await Note.decrypt(savedEncryptedNote);
-		const decryptedAction = noteActions.mock.calls[0][0] as NoteUpdateAction;
+		const decryptedUpdateActions = noteActions.mock.calls
+			.map(call => call[0] as NoteUpdateAction)
+			.filter(action => action.type === 'NOTE_UPDATE_ONE');
+		expect(decryptedUpdateActions).toHaveLength(1);
+		const decryptedAction = decryptedUpdateActions[0];
 
-		expect(decryptedAction.changeSource).toBe(ItemChange.SOURCE_DECRYPTION);
+		expect(decryptedAction.note).toEqual(decryptedNote);
+		expect(decryptedAction.note.body).toBe('Changed on another device');
 		expect(decryptedAction.note.encryption_applied).toBe(0);
 		expect(decryptedAction.changedFields).toEqual(expect.arrayContaining(['body', 'encryption_applied']));
 
