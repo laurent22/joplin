@@ -80,6 +80,7 @@ export default function() {
 		'exportDeletionLog',
 		'toggleSafeMode',
 		'showShareNoteDialog',
+		'revealInNotebook',
 		'showShareFolderDialog',
 		'leaveSharedFolder',
 		'gotoAnything',
