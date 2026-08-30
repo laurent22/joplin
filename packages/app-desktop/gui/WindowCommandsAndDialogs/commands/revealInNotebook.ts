@@ -1,5 +1,6 @@
 import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
+import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import { defaultWindowId, stateUtils } from '@joplin/lib/reducer';
 import { getTrashFolderId } from '@joplin/lib/services/trash';
@@ -16,7 +17,7 @@ export const runtime = (): CommandRuntime => {
 			noteId = noteId || stateUtils.selectedNoteId(context.state);
 			const note = await Note.load(noteId);
 			if (!note) throw new Error(`No such note: ${noteId}`);
-			const folderId = note.deleted_time ? getTrashFolderId() : note.parent_id;
+			const folderId = note.deleted_time ? getTrashFolderId() : note.is_conflict ? Folder.conflictFolderId() : note.parent_id;
 			const mainWindowState = stateUtils.windowStateById(context.state, defaultWindowId);
 			const folderAlreadySelected = mainWindowState.selectedFolderId === folderId;
 			const noteAlreadySelected = stateUtils.selectedNoteId(mainWindowState) === note.id;
