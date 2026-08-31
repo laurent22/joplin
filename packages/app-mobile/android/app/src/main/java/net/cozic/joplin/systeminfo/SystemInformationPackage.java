@@ -1,5 +1,6 @@
-package net.cozic.joplin.versioninfo;
+package net.cozic.joplin.systeminfo;
 
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.webkit.WebView;
@@ -49,7 +50,10 @@ public class SystemInformationPackage implements ReactPackage {
 					result.put("webViewPackage", webViewPackage.packageName);
 				}
 			}
+
+			Context context = getReactApplicationContext();
 			result.put("databaseDirectory", context.getDatabasePath("log.sqlite").getParent());
+
 			return result;
 		}
 

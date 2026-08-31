@@ -14,7 +14,7 @@ import com.facebook.react.common.ReleaseLevel
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
-import net.cozic.joplin.versioninfo.SystemInformationPackage
+import net.cozic.joplin.systeminfo.SystemInformationPackage
 import net.cozic.joplin.share.SharePackage
 import net.cozic.joplin.ssl.SslPackage
 

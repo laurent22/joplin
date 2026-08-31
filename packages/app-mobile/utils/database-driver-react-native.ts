@@ -16,8 +16,8 @@ const databaseDirectory = async () => {
 			await RNFS.mkdir(path, { NSURLIsExcludedFromBackupKey: true });
 		}
 	} else if (Platform.OS === 'android') {
-		const databaseDirectory = NativeModules.SystemInformationModule?.getConstants()?.databaseDirectory;
-		if (!databaseDirectory) throw new Error('Unable to determine database path');
+		const databaseDirectory = NativeModules.SystemInformationPackage?.getConstants()?.databaseDirectory;
+		if (!databaseDirectory) throw new Error('Unable to determine database path.');
 		return databaseDirectory;
 	}
 };
